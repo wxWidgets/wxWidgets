@@ -117,7 +117,7 @@ int wxDirDialog::ShowModal()
 
     if ( !ok )
     {
-        wxLogLastError("SHGetPathFromIDList");
+        wxLogLastError(wxT("SHGetPathFromIDList"));
 
         return wxID_CANCEL;
     }
@@ -174,7 +174,7 @@ static void ItemListFree(LPITEMIDLIST pidl)
         }
         else
         {
-            wxLogLastError("SHGetMalloc");
+            wxLogLastError(wxT("SHGetMalloc"));
         }
     }
 }

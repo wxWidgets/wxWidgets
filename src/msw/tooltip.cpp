@@ -32,7 +32,7 @@
 #include "wx/tooltip.h"
 #include "wx/msw/private.h"
 
-#if defined(__WIN95__) && (!defined(__GNUWIN32__) || defined(__MINGW32__))
+#if defined(__WIN95__) && (!defined(__GNUWIN32_OLD__) || defined(__MINGW32__))
     #include <commctrl.h>
 #endif
 
@@ -207,7 +207,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
     if ( !ms_hwndTT )
     {
         ms_hwndTT = (WXHWND)::CreateWindow(TOOLTIPS_CLASS,
-                                           (LPSTR)NULL,
+                                           (LPCTSTR)NULL,
                                            TTS_ALWAYSTIP,
                                            CW_USEDEFAULT, CW_USEDEFAULT,
                                            CW_USEDEFAULT, CW_USEDEFAULT,
@@ -303,25 +303,25 @@ void wxToolTip::Add(WXHWND hWnd)
                     hfont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
                     if ( !hfont )
                     {
-                        wxLogLastError("GetStockObject(DEFAULT_GUI_FONT)");
+                        wxLogLastError(wxT("GetStockObject(DEFAULT_GUI_FONT)"));
                     }
                 }
 
                 HDC hdc = CreateCompatibleDC(NULL);
                 if ( !hdc )
                 {
-                    wxLogLastError("CreateCompatibleDC(NULL)");
+                    wxLogLastError(wxT("CreateCompatibleDC(NULL)"));
                 }
 
                 if ( !SelectObject(hdc, hfont) )
                 {
-                    wxLogLastError("SelectObject(hfont)");
+                    wxLogLastError(wxT("SelectObject(hfont)"));
                 }
 
                 SIZE sz;
                 if ( !GetTextExtentPoint(hdc, m_text, index, &sz) )
                 {
-                    wxLogLastError("GetTextExtentPoint");
+                    wxLogLastError(wxT("GetTextExtentPoint"));
                 }
 
                 DeleteDC(hdc);
@@ -373,6 +373,21 @@ void wxToolTip::SetWindow(wxWindow *win)
 
             Add((WXHWND)hwnd);
         }
+    }
+
+    // VZ: it's ugly to do it here, but I don't want any major changes right
+    //     now, later we will probably want to have wxWindow::OnGotToolTip() or
+    //     something like this where the derived class can do such things
+    //     itself instead of wxToolTip "knowing" about them all
+    wxComboBox *combo = wxDynamicCast(control, wxComboBox);
+    if ( combo )
+    {
+        WXHWND hwndComboEdit = combo->GetEditHWND();
+        if ( hwndComboEdit )
+        {
+            Add(hwndComboEdit);
+        }
+        //else: it's ok for a combo to be read only, of course
     }
 }
 

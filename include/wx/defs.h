@@ -22,8 +22,8 @@
 
 // OS: first test for generic Unix defines, then for particular flavours and
 //     finally for Unix-like systems
-#if defined(__unix) || defined(__unix__) || defined(____SVR4____) || \
-    defined(__LINUX__) || defined(__sgi) || \
+#if defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
+    defined(____SVR4____) || defined(__LINUX__) || defined(__sgi) || \
     defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
     defined(__EMX__) || defined(__VMS) || defined(__BEOS__)
 
@@ -47,6 +47,10 @@
             #endif // Sun CC
         #endif
     #endif // Sun
+
+    #ifdef __EMX__
+        #define OS2EMX_PLAIN_CHAR
+    #endif
 
 #elif defined(applec) || defined(THINK_C) || ( defined( __MWERKS__ ) && !defined(__INTEL__) )
         // MacOS
@@ -96,8 +100,9 @@
 #   pragma warning(disable:4100)    // unreferenced formal parameter
 #   pragma warning(disable:4511)    // copy ctor couldn't be generated
 #   pragma warning(disable:4512)    // operator=() couldn't be generated
-#   pragma warning(disable:4699)    // Using precompiled header
+#   pragma warning(disable:4699)    // using precompiled header
 #   pragma warning(disable:4134)    // conversion between pointers to members of same class
+#   pragma warning(disable:4710)    // function not inlined
 #ifndef WIN32
 #   pragma warning(disable:4135)    // conversion between different integral types
 #   pragma warning(disable:4769)    // assignment of near pointer to long integer
@@ -138,7 +143,7 @@
 // Mingw32 gcc-2.95 uses new windows headers which are more ms-like
 // we are setting this define because of the complex check
 // using NORLANDER as Cygwin may follow. (header author is Anders Norlander)
-#if defined(__MINGW32__) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+#if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
     #ifndef wxUSE_NORLANDER_HEADERS
         #define wxUSE_NORLANDER_HEADERS 1
     #endif
@@ -380,25 +385,8 @@ typedef int wxWindowID;
 
 #if defined(__WXMSW__)
 
-// _declspec works in BC++ 5 and later, as well as VC++
-#if defined(__VISUALC__) || defined(__BORLANDC__)
-
-#  ifdef WXMAKINGDLL
-#    define WXDLLEXPORT _declspec( dllexport )
-#    define WXDLLEXPORT_DATA(type) _declspec( dllexport ) type
-#    define WXDLLEXPORT_CTORFN
-#  elif defined(WXUSINGDLL)
-#    define WXDLLEXPORT _declspec( dllimport )
-#    define WXDLLEXPORT_DATA(type) _declspec( dllimport ) type
-#    define WXDLLEXPORT_CTORFN
-#  else
-#    define WXDLLEXPORT
-#    define WXDLLEXPORT_DATA(type) type
-#    define WXDLLEXPORT_CTORFN
-#  endif
-
-#elif defined(__GNUC__)
-
+// __declspec works in BC++ 5 and later, as well as VC++ and gcc
+#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__)
 #  ifdef WXMAKINGDLL
 #    define WXDLLEXPORT __declspec( dllexport )
 #    define WXDLLEXPORT_DATA(type) __declspec( dllexport ) type
@@ -412,34 +400,46 @@ typedef int wxWindowID;
 #    define WXDLLEXPORT_DATA(type) type
 #    define WXDLLEXPORT_CTORFN
 #  endif
-
-#elif defined(__WXPM__)
-
-#  ifdef WXMAKINGDLL
-#    define WXDLLEXPORT _Export
-#    define WXDLLEXPORT_DATA(type) _Export type
-#    define WXDLLEXPORT_CTORFN
-#  elif defined(WXUSINGDLL)
-#    define WXDLLEXPORT _Export
-#    define WXDLLEXPORT_DATA(type) _Export type
-#    define WXDLLEXPORT_CTORFN
-#  else
+#else
 #    define WXDLLEXPORT
 #    define WXDLLEXPORT_DATA(type) type
 #    define WXDLLEXPORT_CTORFN
-#  endif
-
-#else
-#  define WXDLLEXPORT
-#  define WXDLLEXPORT_DATA(type) type
-#  define WXDLLEXPORT_CTORFN
 #endif
 
-#else // !Windows
+#elif defined(__WXPM__)
+
+#  if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
+
+#    ifdef WXMAKINGDLL
+#      define WXDLLEXPORT _Export
+#      define WXDLLEXPORT_DATA(type) _Export type
+#      define WXDLLEXPORT_CTORFN
+#    elif defined(WXUSINGDLL)
+#      define WXDLLEXPORT _Export
+#      define WXDLLEXPORT_DATA(type) _Export type
+#      define WXDLLEXPORT_CTORFN
+#    else
+#      define WXDLLEXPORT
+#      define WXDLLEXPORT_DATA(type) type
+#      define WXDLLEXPORT_CTORFN
+#    endif
+
+#  else
+
+#    define WXDLLEXPORT
+#    define WXDLLEXPORT_DATA(type) type
+#    define WXDLLEXPORT_CTORFN
+
+#  endif
+
+#else  // !(MSW or OS2)
+
 #  define WXDLLEXPORT
 #  define WXDLLEXPORT_DATA(type) type
 #  define WXDLLEXPORT_CTORFN
-#endif // Win/!Win
+
+#endif
+
 
 // For ostream, istream ofstream
 #if defined(__BORLANDC__) && defined( _RTLDLL )
@@ -456,8 +456,12 @@ class WXDLLEXPORT wxEvent;
 #define wxNOT_FOUND       (-1)
 
 // ----------------------------------------------------------------------------
-/** @name Very common macros */
+// Very common macros
 // ----------------------------------------------------------------------------
+
+// everybody gets the assert and other debug macros
+#include "wx/debug.h"
+
 //@{
 /// delete pointer if it is not NULL and NULL it afterwards
 // (checking that it's !NULL before passing it to delete is just a
@@ -489,10 +493,6 @@ class WXDLLEXPORT wxEvent;
 /// size of statically declared array
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
 
-// Use of these suppresses some compiler warnings
-WXDLLEXPORT_DATA(extern const bool) wxTrue;
-WXDLLEXPORT_DATA(extern const bool) wxFalse;
-
 // ----------------------------------------------------------------------------
 // compiler specific settings
 // ----------------------------------------------------------------------------
@@ -519,9 +519,13 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 // where should i put this? we need to make sure of this as it breaks
 // the <iostream> code.
 #if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)
-#ifndef __MWERKS__
-#undef __WXDEBUG__
-#endif
+#  ifndef __MWERKS__
+// #undef __WXDEBUG__
+#    ifdef wxUSE_DEBUG_NEW_ALWAYS
+#    undef wxUSE_DEBUG_NEW_ALWAYS
+#    define wxUSE_DEBUG_NEW_ALWAYS 0
+#    endif
+#  endif
 #endif
 
 // Callback function type definition
@@ -893,16 +897,21 @@ enum wxStretch
 #define wxICONIZE               0x4000
 #define wxMINIMIZE              wxICONIZE
 #define wxMAXIMIZE              0x2000
-#define wxTHICK_FRAME           0x1000
+// free value: 0x1000
 #define wxSYSTEM_MENU           0x0800
 #define wxMINIMIZE_BOX          0x0400
 #define wxMAXIMIZE_BOX          0x0200
 #define wxTINY_CAPTION_HORIZ    0x0100
 #define wxTINY_CAPTION_VERT     0x0080
-#define wxRESIZE_BOX            wxMAXIMIZE_BOX
 #define wxRESIZE_BORDER         0x0040
+
+// deprecated versions defined for compatibility reasons
+#define wxRESIZE_BOX            wxMAXIMIZE_BOX
+#define wxTHICK_FRAME           wxRESIZE_BORDER
+
 #define wxDIALOG_MODAL          0x0020
 #define wxDIALOG_MODELESS       0x0000
+
 // Add for normal Windows frame behaviour
 #define wxFRAME_FLOAT_ON_PARENT 0x0020
 
@@ -918,14 +927,16 @@ enum wxStretch
 #endif
 
 #define wxDEFAULT_FRAME_STYLE \
-  (wxSYSTEM_MENU | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
+  (wxSYSTEM_MENU | wxRESIZE_BORDER | \
+   wxMINIMIZE_BOX | wxMAXIMIZE_BOX | \
+   wxCAPTION | wxCLIP_CHILDREN)
 
 #ifdef __WXMSW__
-#   define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU|wxCAPTION|wxTHICK_FRAME)
+#   define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU | wxCAPTION)
 #else
-// Under Unix, the dialogs don't have a system menu. Specifying
-// wxSYSTEM_MENU here, will make a close button appear.
-#   define wxDEFAULT_DIALOG_STYLE  (wxCAPTION|wxTHICK_FRAME)
+//  Under Unix, the dialogs don't have a system menu. Specifying wxSYSTEM_MENU
+//  here will make a close button appear.
+#   define wxDEFAULT_DIALOG_STYLE  wxCAPTION
 #endif
 
 /*
@@ -1062,6 +1073,10 @@ enum wxStretch
  */
 #define wxBU_AUTODRAW        0x0004
 #define wxBU_NOAUTODRAW      0x0000
+#define wxBU_LEFT            0x0040
+#define wxBU_TOP             0x0080
+#define wxBU_RIGHT           0x0100
+#define wxBU_BOTTOM          0x0200
 
 /*
  * wxTreeCtrl flags
@@ -1118,10 +1133,14 @@ enum wxStretch
  * wxSplitterWindow flags
  */
 #define wxSP_NOBORDER         0x0000
-#define wxSP_3D               0x0010
+#define wxSP_NOSASH           0x0010
 #define wxSP_BORDER           0x0020
 #define wxSP_PERMIT_UNSPLIT   0x0040
 #define wxSP_LIVE_UPDATE      0x0080
+#define wxSP_3DSASH           0x0100
+#define wxSP_3DBORDER         0x0200
+#define wxSP_FULLSASH         0x0400
+#define wxSP_3D               (wxSP_3DBORDER | wxSP_3DSASH)
 
 /*
  * wxFrame extra flags
@@ -1678,27 +1697,27 @@ typedef enum {
 #ifdef __WXMAC__
 
 typedef WindowPtr       WXHWND;
-typedef Handle               WXHANDLE;
-typedef CIconHandle        WXHICON;
+typedef Handle          WXHANDLE;
+typedef CIconHandle     WXHICON;
 //typedef unsigned long   WXHFONT;
-typedef MenuHandle       WXHMENU;
+typedef MenuHandle      WXHMENU;
 //typedef unsigned long   WXHPEN;
 //typedef unsigned long   WXHBRUSH;
 //typedef unsigned long   WXHPALETTE;
-typedef CursHandle       WXHCURSOR;
+typedef CursHandle      WXHCURSOR;
 typedef RgnHandle       WXHRGN;
 //typedef unsigned long   WXHACCEL;
 //typedef unsigned long   WXHINSTANCE;
-typedef GWorldPtr   WXHBITMAP;
+typedef GWorldPtr       WXHBITMAP;
 //typedef unsigned long   WXHIMAGELIST;
 //typedef unsigned long   WXHGLOBAL;
-typedef GrafPtr           WXHDC;
+typedef GrafPtr         WXHDC;
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 //typedef unsigned int    WXWPARAM;
 //typedef long            WXLPARAM;
-typedef RGBColor           WXCOLORREF;
+typedef RGBColor        WXCOLORREF;
 //typedef void *          WXRGNDATA;
 //typedef void *          WXMSG;
 //typedef unsigned long   WXHCONV;
@@ -1708,12 +1727,26 @@ typedef RGBColor           WXCOLORREF;
 //typedef void *          WXLPCREATESTRUCT;
 typedef int (*WXFARPROC)();
 
-typedef WindowPtr           WXWindow;
-typedef ControlHandle       WXWidget;
+typedef WindowPtr       WXWindow;
+typedef ControlHandle   WXWidget;
 
 #endif
 
 #if defined(__WXMSW__) || defined(__WXPM__)
+
+// the keywords needed for WinMain() declaration
+#ifdef __WIN16__
+#  ifdef __VISUALC__
+#    define WXFAR __far
+#  else
+#    define WXFAR _far
+#  endif
+#else  // Win32
+#  ifndef WXFAR
+#    define WXFAR
+#  endif
+#endif // Win16/32
+
 // Stand-ins for Windows types or OS/2, to avoid #including all of windows.h or os2.h
 typedef unsigned long   WXHWND;
 typedef unsigned long   WXHANDLE;
@@ -1726,7 +1759,7 @@ typedef unsigned long   WXHPALETTE;
 typedef unsigned long   WXHCURSOR;
 typedef unsigned long   WXHRGN;
 typedef unsigned long   WXHACCEL;
-typedef unsigned long   WXHINSTANCE;
+typedef void WXFAR  *   WXHINSTANCE;
 typedef unsigned long   WXHBITMAP;
 typedef unsigned long   WXHIMAGELIST;
 typedef unsigned long   WXHGLOBAL;
@@ -1814,29 +1847,15 @@ typedef struct tagLOGPALETTE
 typedef WXHWND WXWidget;
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
-#ifndef LPTSTR
-#define LPTSTR LPSTR
-#endif
-#ifndef LPCTSTR
-#define LPCTSTR LPSTR
-#endif
+#  ifndef LPTSTR
+#    define LPTSTR LPSTR
+#  endif
+#  ifndef LPCTSTR
+#    define LPCTSTR LPSTR
+#  endif
 #endif
 
-// the keywords needed for WinMain() declaration
-
-#ifdef __WIN16__
-        #ifdef __VISUALC__
-            #define WXFAR __far
-        #else // !VC++
-            #define WXFAR _far
-        #endif
-#else // Win32
-    #ifndef WXFAR
-        #define WXFAR
-    #endif
-#endif // Win16/32
-
-#endif // MSW
+#endif // MSW or OS2
 
 #ifdef __WXMOTIF__
 /* Stand-ins for X/Xt/Motif types */
@@ -1862,6 +1881,8 @@ typedef unsigned long   Atom;  /* this might fail on a few architectures */
 
 #ifdef __WXGTK__
 /* Stand-ins for GLIB types */
+typedef char           gchar;
+typedef signed char    gint8;
 typedef int            gint;
 typedef unsigned       guint;
 typedef unsigned long  gulong;

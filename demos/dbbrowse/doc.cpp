@@ -63,7 +63,8 @@ MainDoc::~MainDoc()
  // ----------------------------------------------------------
  // -E-> The Tree Controls take to long to close : Why ??
  // ----------------------------------------------------------
- // wxMessageBox("-I-> end Doc");
+ delete ft_Doc;
+ ft_Doc  = NULL;
  p_TabArea->Show(FALSE);    // Deactivate the Window
  p_PageArea->Show(FALSE);    // Deactivate the Window
  p_PgmCtrl = NULL;
@@ -108,6 +109,8 @@ bool MainDoc::OnInitView()
  wxBitmap *p_FolderClose = new wxBitmap("PgmCtrl"); //, wxBITMAP_TYPE_BMP_RESOURCE); // BJO20000115
  //---------------------------------------------------------------------------------------
  p_TabArea->AddTab(p_PgmCtrl,"PgmCtrl",p_FolderClose);
+ delete p_FolderClose;      // Memory leak
+ p_FolderClose = NULL;
  //---------------------------------------------------------------------------------------
  // now create "output" window
  //---------------------------------------------------------------------------------------

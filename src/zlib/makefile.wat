@@ -25,9 +25,9 @@ LIBTARGET=..\..\lib\zlib.lib
 OBJ1=adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) 
 OBJ2=trees$(O) zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) 
 OBJ3=infutil$(O) inffast$(O)
-OBJP1=adler32$(O)+compress$(O)+crc32$(O)+gzio$(O)+uncompr$(O)+deflate$(O)
-OBJP2=trees$(O)+zutil$(O)+inflate$(O)+infblock$(O)+inftrees$(O)+infcodes$(O)
-OBJP3=infutil$(O)+inffast$(O)
+OBJP1=adler32$(O) +compress$(O) +crc32$(O) +gzio$(O) +uncompr$(O) +deflate$(O)
+OBJP2=trees$(O) +zutil$(O) +inflate$(O) +infblock$(O) +inftrees$(O) +infcodes$(O)
+OBJP3=infutil$(O) +inffast$(O)
 
 # all: test
 

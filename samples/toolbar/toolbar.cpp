@@ -35,6 +35,13 @@
 // define this to 1 to use wxToolBarSimple instead of the native one
 #define USE_GENERIC_TBAR 0
 
+// define this to use XPMs everywhere (by default, BMPs are used under Win)
+#ifdef __WXMSW__
+    #define USE_XPM_BITMAPS 0
+#else
+    #define USE_XPM_BITMAPS 1
+#endif
+
 #if USE_GENERIC_TBAR
     #if !wxUSE_TOOLBAR_SIMPLE
         #error wxToolBarSimple is not compiled in, set wxUSE_TOOLBAR_SIMPLE \
@@ -44,11 +51,15 @@
     #endif
 #endif // USE_GENERIC_TBAR
 
+#if USE_XPM_BITMAPS && defined(__WXMSW__) && !wxUSE_XPM_IN_MSW
+    #error You need to enable XPM support to use XPM bitmaps with toolbar!
+#endif // USE_XPM_BITMAPS
+
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if USE_XPM_BITMAPS
     #include "mondrian.xpm"
     #include "bitmaps/new.xpm"
     #include "bitmaps/open.xpm"
@@ -58,7 +69,7 @@
     #include "bitmaps/preview.xpm"  // paste XPM
     #include "bitmaps/print.xpm"
     #include "bitmaps/help.xpm"
-#endif // GTK or Motif
+#endif // USE_XPM_BITMAPS
 
 // ----------------------------------------------------------------------------
 // classes
@@ -86,6 +97,10 @@ public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+
+    void OnSize(wxSizeEvent& event);
+
+    void OnToggleAnotherToolbar(wxCommandEvent& event);
 
     void OnToggleToolbarSize(wxCommandEvent& event);
     void OnToggleToolbarOrient(wxCommandEvent& event);
@@ -116,11 +131,15 @@ private:
     void DoDeletePrint();
     void DoToggleHelp();
 
+    void LayoutChildren();
+
     bool                m_smallToolbar,
                         m_horzToolbar;
     size_t              m_rows;             // 1 or 2 only
 
-    wxTextCtrl*         m_textWindow;
+    wxTextCtrl         *m_textWindow;
+
+    wxToolBar          *m_tbar;
 
     DECLARE_EVENT_TABLE()
 };
@@ -141,6 +160,7 @@ enum
     IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
     IDM_TOOLBAR_TOGGLEFULLSCREEN,
+    IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
 
     ID_COMBO = 1000
 };
@@ -153,8 +173,12 @@ enum
 // help button.
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_SIZE(MyFrame::OnSize)
+
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(wxID_HELP, MyFrame::OnAbout)
+
+    EVT_MENU(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR, MyFrame::OnToggleAnotherToolbar)
 
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARSIZE, MyFrame::OnToggleToolbarSize)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARORIENT, MyFrame::OnToggleToolbarOrient)
@@ -221,6 +245,16 @@ void MyFrame::RecreateToolbar()
     // Set up toolbar
     wxBitmap toolBarBitmaps[8];
 
+#if USE_XPM_BITMAPS
+    toolBarBitmaps[0] = wxBitmap(new_xpm);
+    toolBarBitmaps[1] = wxBitmap(open_xpm);
+    toolBarBitmaps[2] = wxBitmap(save_xpm);
+    toolBarBitmaps[3] = wxBitmap(copy_xpm);
+    toolBarBitmaps[4] = wxBitmap(cut_xpm);
+    toolBarBitmaps[5] = wxBitmap(paste_xpm);
+    toolBarBitmaps[6] = wxBitmap(print_xpm);
+    toolBarBitmaps[7] = wxBitmap(help_xpm);
+#else // !USE_XPM_BITMAPS
     toolBarBitmaps[0] = wxBITMAP(new);
     toolBarBitmaps[1] = wxBITMAP(open);
     toolBarBitmaps[2] = wxBITMAP(save);
@@ -229,6 +263,7 @@ void MyFrame::RecreateToolbar()
     toolBarBitmaps[5] = wxBITMAP(paste);
     toolBarBitmaps[6] = wxBITMAP(print);
     toolBarBitmaps[7] = wxBITMAP(help);
+#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
 
     if ( !m_smallToolbar )
     {
@@ -304,6 +339,7 @@ MyFrame::MyFrame(wxFrame* parent,
                  long style)
        : wxFrame(parent, id, title, pos, size, style)
 {
+    m_tbar = NULL;
     m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
 
     m_smallToolbar = TRUE;
@@ -318,6 +354,11 @@ MyFrame::MyFrame(wxFrame* parent,
 
     // Make a menubar
     wxMenu *tbarMenu = new wxMenu;
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
+                     "Toggle &another toolbar\tCtrl-A",
+                     "Show/hide another test toolbar",
+                     TRUE);
+
     tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBARSIZE,
                      "&Toggle toolbar size\tCtrl-S",
                      "Toggle between big/small toolbar",
@@ -374,6 +415,61 @@ wxToolBar* MyFrame::OnCreateToolBar(long style,
 }
 
 #endif // USE_GENERIC_TBAR
+
+void MyFrame::LayoutChildren()
+{
+    wxSize size = GetClientSize();
+
+    int offset;
+    if ( m_tbar )
+    {
+        m_tbar->SetSize(-1, size.y);
+        m_tbar->Move(0, 0);
+
+        offset = m_tbar->GetSize().x;
+    }
+    else
+    {
+        offset = 0;
+    }
+
+    m_textWindow->SetSize(offset, 0, size.x - offset, size.y);
+}
+
+void MyFrame::OnSize(wxSizeEvent& event)
+{
+    if ( m_tbar )
+    {
+        LayoutChildren();
+    }
+    else
+    {
+        event.Skip();
+    }
+}
+
+void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_tbar )
+    {
+        delete m_tbar;
+        m_tbar = NULL;
+    }
+    else
+    {
+        m_tbar = new wxToolBar(this, -1,
+                               wxDefaultPosition, wxDefaultSize,
+                               wxTB_VERTICAL);
+        m_tbar->AddTool(wxID_HELP, wxBITMAP(help),
+                        wxNullBitmap, FALSE,
+                        NULL,
+                        "This is the help button",
+                        "This is the long help for the help button");
+        m_tbar->Realize();
+    }
+
+    LayoutChildren();
+}
 
 void MyFrame::OnToggleToolbarSize(wxCommandEvent& WXUNUSED(event))
 {

@@ -573,7 +573,7 @@ bool wxRegKey::Copy(wxRegKey& keyDst)
         wxRegKey key(*this, strKey);
         wxString keyName;
         keyName << GetFullName(&keyDst) << REG_SEPARATOR << strKey;
-        ok = key.Copy((const char*) keyName);
+        ok = key.Copy((const wxChar*) keyName);
 
         if ( ok )
             bCont = GetNextKey(strKey, lIndex);
@@ -596,8 +596,7 @@ bool wxRegKey::Copy(wxRegKey& keyDst)
     }
 
     if ( !ok ) {
-        wxLogError(_("Failed to copy the contents of registry key '%s' to "
-                     "'%s'."), GetFullName(this), GetFullName(&keyDst));
+        wxLogError(_("Failed to copy the contents of registry key '%s' to '%s'."), GetFullName(this), GetFullName(&keyDst));
     }
 
     return ok;
@@ -621,9 +620,7 @@ bool wxRegKey::DeleteSelf()
   // key except HKCR (HKCR has some "deleteable" subkeys)
   if ( m_strKey.IsEmpty() || (m_hRootKey != HKCR &&
        m_strKey.Find(REG_SEPARATOR) == wxNOT_FOUND) ) {
-      wxLogError(_("Registry key '%s' is needed for normal system operation,\n"
-                   "deleting it will leave your system in unusable state:\n"
-                   "operation aborted."), GetFullName(this));
+      wxLogError(_("Registry key '%s' is needed for normal system operation,\ndeleting it will leave your system in unusable state:\noperation aborted."), GetFullName(this));
 
       return FALSE;
   }
@@ -709,12 +706,14 @@ bool wxRegKey::HasValue(const wxChar *szValue) const
   wxLogNull nolog;
 
   #ifdef  __WIN32__
-    if ( CONST_CAST Open() ) {
-      return RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
-                             NULL, NULL, NULL) == ERROR_SUCCESS;
-    }
-    else
-      return FALSE;
+    if ( !CONST_CAST Open() )
+        return FALSE;
+
+    LONG dwRet = ::RegQueryValueEx((HKEY) m_hKey,
+                                   WXSTRINGCAST szValue,
+                                   RESERVED,
+                                   NULL, NULL, NULL);
+    return dwRet == ERROR_SUCCESS;
   #else   // WIN16
     // only unnamed value exists
     return IsEmpty(szValue);
@@ -751,10 +750,10 @@ bool wxRegKey::HasSubKey(const wxChar *szKey) const
   // this function should be silent, so suppress possible messages from Open()
   wxLogNull nolog;
 
-  if ( CONST_CAST Open() )
-    return KeyExists(m_hKey, szKey);
-  else
+  if ( !CONST_CAST Open() )
     return FALSE;
+
+  return KeyExists(m_hKey, szKey);
 }
 
 wxRegKey::ValueType wxRegKey::GetValueType(const wxChar *szValue) const
@@ -879,7 +878,7 @@ bool wxRegKey::SetValue(const wxChar *szValue, const wxString& strValue)
 #if defined( __WIN32__) && !defined(__TWIN32__)
       m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_SZ,
                                     (RegString)strValue.c_str(),
-                                    strValue.Len() + 1);
+                                    (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
         return TRUE;
     #else   //WIN16
@@ -1018,8 +1017,13 @@ bool wxRegKey::IsNumericValue(const wxChar *szValue) const
 // ============================================================================
 // implementation of global private functions
 // ============================================================================
+
 bool KeyExists(WXHKEY hRootKey, const wxChar *szKey)
 {
+  // don't close this key itself for the case of empty szKey!
+  if ( wxIsEmpty(szKey) )
+    return TRUE;
+
   HKEY hkeyDummy;
   if ( RegOpenKey( (HKEY) hRootKey, szKey, &hkeyDummy) == ERROR_SUCCESS ) {
     RegCloseKey(hkeyDummy);

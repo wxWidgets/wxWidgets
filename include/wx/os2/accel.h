@@ -53,28 +53,32 @@ class WXDLLEXPORT wxAcceleratorTable: public wxObject
 DECLARE_DYNAMIC_CLASS(wxAcceleratorTable)
 public:
     wxAcceleratorTable();
-    wxAcceleratorTable(const wxString& resource); // Load from .rc resource
-    wxAcceleratorTable(int n, wxAcceleratorEntry entries[]); // Load from array
+    wxAcceleratorTable(const wxString& rsResource); // Load from .rc resource
+    wxAcceleratorTable( int                n
+                       ,wxAcceleratorEntry vaEntries[]
+                      ); // Load from array
 
     // Copy constructors
-    inline wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }
-    inline wxAcceleratorTable(const wxAcceleratorTable* accel) { if (accel) Ref(*accel); }
+    inline wxAcceleratorTable(const wxAcceleratorTable& rAccel) { Ref(rAccel); }
+    inline wxAcceleratorTable(const wxAcceleratorTable* pAccel) { if (pAccel) Ref(*pAccel); }
 
     ~wxAcceleratorTable();
 
-    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& accel)
-    { if (*this == accel) return (*this); Ref(accel); return *this; };
-    inline bool operator == (const wxAcceleratorTable& accel)
-    { return m_refData == accel.m_refData; };
-    inline bool operator != (const wxAcceleratorTable& accel)
-    { return m_refData != accel.m_refData; };
+    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& rAccel)
+    { if (*this == rAccel) return (*this); Ref(rAccel); return *this; };
+    inline bool operator == (const wxAcceleratorTable& rAccel)
+    { return m_refData == rAccel.m_refData; };
+    inline bool operator != (const wxAcceleratorTable& rAccel)
+    { return m_refData != rAccel.m_refData; };
 
     bool Ok() const;
     void SetHACCEL(WXHACCEL hAccel);
-    WXHACCEL GetHACCEL() const;
+    WXHACCEL GetHACCEL(void) const;
 
     // translate the accelerator, return TRUE if done
-    bool Translate(wxWindow *window, WXMSG *msg) const;
+    bool Translate( WXHWND hWnd
+                   ,WXMSG* pMsg
+                  ) const;
 };
 
 WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;

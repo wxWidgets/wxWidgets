@@ -42,9 +42,9 @@ the application-wide policy is for 3D controls. Windows only.}
 wants to get all char events - even for keys like TAB or ENTER which are
 usually used for dialog navigation and which wouldn't be generated without
 this style}
-\twocolitem{\windowstyle{wxNO\_FULLREPAINT\_ON\_RESIZE}}{Disables repainting
+\twocolitem{\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE}}{Disables repainting
 the window completely when its size is changed - you will have to repaint the
-new window area manually if you use style. Currently only has effect for
+new window area manually if you use this style. Currently only has an effect for
 Windows.}
 \twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar. (Still used?) }
 \twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar. (Still used?) }
@@ -60,7 +60,7 @@ See also \helpref{window styles overview}{windowstyles}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxWindow::wxWindow}
+\membersection{wxWindow::wxWindow}\label{wxwindowctor}
 
 \func{}{wxWindow}{\void}
 
@@ -480,6 +480,12 @@ control label is not truncated. For windows containing subwindows (typically
 \helpref{wxPanel}{wxpanel}), the size returned by this function will be the
 same as the size the window would have had after calling
 \helpref{Fit}{wxwindowfit}.
+
+\membersection{wxWindow::GetCaret}\label{wxwindowgetcaret}
+
+\constfunc{wxCaret *}{GetCaret}{\void}
+
+Returns the \helpref{caret}{wxcaret} associated with the window.
 
 \membersection{wxWindow::GetCharHeight}
 
@@ -1534,6 +1540,11 @@ Note that the size passed is of
 the whole window: call \helpref{wxWindow::GetClientSize}{wxwindowgetclientsize} for the area which may be
 used by the application.
 
+When a window is resized, usually only a small part of the window is damaged and you
+may only need to repaint that area. However, if your drawing depends on the size of the window,
+you may need to clear the DC explicitly and repaint the whole window. In which case, you
+may need to call \helpref{wxWindow::Refresh}{wxwindowrefresh} to invalidate the entire window.
+
 \wxheading{See also}
 
 \helpref{wxSizeEvent}{wxsizeevent},\rtfsp
@@ -1738,7 +1749,7 @@ Physically scrolls the pixels in the window and move child windows accordingly.
 
 \docparam{rect}{Rectangle to invalidate. If this is NULL, the whole window is invalidated. If you
 pass a rectangle corresponding to the area of the window exposed by the scroll, your painting handler
-can optimise painting by checking for the invalidated region. This paramter is ignored under GTK.}
+can optimize painting by checking for the invalidated region. This parameter is ignored under GTK.}
 
 \wxheading{Remarks}
 
@@ -1758,7 +1769,7 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
 be called automatically when the window is resized. Use in connection with 
 \helpref{wxWindow::SetSizer}{wxwindowsetsizer} and 
-\helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for layouting subwindows.
+\helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for laying out subwindows.
 
 \wxheading{Parameters}
 
@@ -1801,6 +1812,12 @@ look as the user wishes with run-time loadable modules.
 \helpref{wxWindow::Clear}{wxwindowclear},\rtfsp
 \helpref{wxWindow::Refresh}{wxwindowrefresh},\rtfsp
 \helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground}
+
+\membersection{wxWindow::SetCaret}\label{wxwindowsetcaret}
+
+\constfunc{void}{SetCaret}{\param{wxCaret *}{caret}}
+
+Sets the \helpref{caret}{wxcaret} associated with the window.
 
 \membersection{wxWindow::SetClientSize}\label{wxwindowsetclientsize}
 
@@ -1849,36 +1866,6 @@ be reset back to default.
 
 \helpref{::wxSetCursor}{wxsetcursor}, \helpref{wxCursor}{wxcursor}
 
-\membersection{wxWindow::SetEventHandler}\label{wxwindowseteventhandler}
-
-\func{void}{SetEventHandler}{\param{wxEvtHandler* }{handler}}
-
-Sets the event handler for this window.
-
-\wxheading{Parameters}
-
-\docparam{handler}{Specifies the handler to be set.}
-
-\wxheading{Remarks}
-
-An event handler is an object that is capable of processing the events
-sent to a window. By default, the window is its own event handler, but
-an application may wish to substitute another, for example to allow
-central implementation of event-handling for a variety of different
-window classes.
-
-It is usually better to use \helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler} since
-this sets up a chain of event handlers, where an event not handled by one event handler is
-handed to the next one in the chain.
-
-\wxheading{See also}
-
-\helpref{wxWindow::GetEventHandler}{wxwindowgeteventhandler},\rtfsp
-\helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler},\rtfsp
-\helpref{wxWindow::PopEventHandler}{wxwindowpusheventhandler},\rtfsp
-\helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent},\rtfsp
-\helpref{wxEvtHandler}{wxevthandler}
-
 \membersection{wxWindow::SetConstraints}\label{wxwindowsetconstraints}
 
 \func{void}{SetConstraints}{\param{wxLayoutConstraints* }{constraints}}
@@ -1912,6 +1899,36 @@ If the window already has a drop target, it is deleted.
 
 \helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget}, 
 \helpref{Drag and drop overview}{wxdndoverview}
+
+\membersection{wxWindow::SetEventHandler}\label{wxwindowseteventhandler}
+
+\func{void}{SetEventHandler}{\param{wxEvtHandler* }{handler}}
+
+Sets the event handler for this window.
+
+\wxheading{Parameters}
+
+\docparam{handler}{Specifies the handler to be set.}
+
+\wxheading{Remarks}
+
+An event handler is an object that is capable of processing the events
+sent to a window. By default, the window is its own event handler, but
+an application may wish to substitute another, for example to allow
+central implementation of event-handling for a variety of different
+window classes.
+
+It is usually better to use \helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler} since
+this sets up a chain of event handlers, where an event not handled by one event handler is
+handed to the next one in the chain.
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetEventHandler}{wxwindowgeteventhandler},\rtfsp
+\helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler},\rtfsp
+\helpref{wxWindow::PopEventHandler}{wxwindowpusheventhandler},\rtfsp
+\helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent},\rtfsp
+\helpref{wxEvtHandler}{wxevthandler}
 
 \membersection{wxWindow::SetExtraStyle}\label{wxwindowsetextrastyle}
 
@@ -2296,6 +2313,26 @@ Sets the window's title. Applicable only to frames and dialogs.
 
 Deletes the current validator (if any) and sets the window validator, having called wxValidator::Clone to
 create a new validator of this type.
+
+\membersection{wxWindow::SetToolTip}\label{wxwindowsettooltip}
+
+\func{void}{SetToolTip}{\param{const wxString\& }{tip}}
+
+\func{void}{SetToolTip}{\param{wxToolTip* }{tip}}
+
+Attach a tooltip to the window. 
+
+See also: \helpref{GetToolTip}{wxwindowgettooltip}, 
+          \helpref{wxToolTip}{wxtooltip}
+
+
+\membersection{wxWindow::GetToolTip}\label{wxwindowgettooltip}
+
+\constfunc{wxToolTip*}{GetToolTip}{\void}
+
+Get the associated tooltip or NULL if none.
+
+
 
 \membersection{wxWindow::SetWindowStyle}\label{wxwindowsetwindowstyle}
 

@@ -66,7 +66,6 @@
 #endif // AIX
 
 #include "wx/defs.h"        // everybody should include this
-#include "wx/debug.h"       // for wxASSERT()
 #include "wx/wxchar.h"      // for wxChar
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
@@ -205,6 +204,12 @@ struct WXDLLEXPORT wxStringData
 
   // lock/unlock
   void  Lock()   { if ( !IsEmpty() ) nRefs++;                    }
+
+  // VC++ will refuse to inline this function but profiling shows that it
+  // is wrong
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
+  __forceinline
+#endif
   void  Unlock() { if ( !IsEmpty() && --nRefs == 0) free(this);  }
 
   // if we had taken control over string memory (GetWriteBuf), it's
@@ -315,6 +320,8 @@ public:
     // (default value of wxSTRING_MAXLEN means take all the string)
   wxString(const wxChar *psz, size_t nLength = wxSTRING_MAXLEN)
     { InitWith(psz, 0, nLength); }
+  wxString(const wxChar *psz, wxMBConv& WXUNUSED(conv), size_t nLength = wxSTRING_MAXLEN)
+    { InitWith(psz, 0, nLength); }
 
 #if wxUSE_UNICODE
     // from multibyte string
@@ -328,13 +335,10 @@ public:
     // from C string (for compilers using unsigned char)
   wxString(const unsigned char* psz, size_t nLength = wxSTRING_MAXLEN)
     { InitWith((const char*)psz, 0, nLength); }
-    // from multibyte string
-  wxString(const char *psz, wxMBConv& WXUNUSED(conv) , size_t nLength = wxSTRING_MAXLEN)
-    { InitWith(psz, 0, nLength); }
 
 #if wxUSE_WCHAR_T
     // from wide (Unicode) string
-  wxString(const wchar_t *pwz);
+  wxString(const wchar_t *pwz, wxMBConv& conv = wxConvLibc);
 #endif // !wxUSE_WCHAR_T
 
     // from wxCharBuffer
@@ -423,18 +427,30 @@ public:
     operator const wxChar*() const { return m_pchData; }
     // explicit conversion to C string (use this with printf()!)
     const wxChar* c_str()   const { return m_pchData; }
-    // (and this with [wx]Printf()!)
+    // identical to c_str()
     const wxChar* wx_str()  const { return m_pchData; }
     // identical to c_str()
     const wxChar* GetData() const { return m_pchData; }
 
     // conversions with (possible) format convertions: have to return a
     // buffer with temporary data
+    //
+    // the functions defined (in either Unicode or ANSI) mode are mb_str() to
+    // return an ANSI (multibyte) string, wc_str() to return a wide string and
+    // fn_str() to return a string which should be used with the OS APIs
+    // accepting the file names. The return value is always the same, but the
+    // type differs because a function may either return pointer to the buffer
+    // directly or have to use intermediate buffer for translation.
 #if wxUSE_UNICODE
-    const wxCharBuffer mb_str(wxMBConv& conv = wxConvLibc) const { return conv.cWC2MB(m_pchData); }
+    const wxCharBuffer mb_str(wxMBConv& conv = wxConvLibc) const
+        { return conv.cWC2MB(m_pchData); }
+
     const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
 
-    const wxChar* wc_str(wxMBConv& WXUNUSED(conv) = wxConvLibc) const { return m_pchData; }
+    const wxChar* wc_str() const { return m_pchData; }
+
+    // for compatibility with !wxUSE_UNICODE version
+    const wxChar* wc_str(wxMBConv& WXUNUSED(conv)) const { return m_pchData; }
 
 #if wxMBFILES
     const wxCharBuffer fn_str() const { return mb_str(wxConvFile); }
@@ -442,17 +458,18 @@ public:
     const wxChar* fn_str() const { return m_pchData; }
 #endif // wxMBFILES/!wxMBFILES
 #else // ANSI
-#if wxUSE_MULTIBYTE
-    const wxChar* mb_str(wxMBConv& WXUNUSED(conv) = wxConvLibc) const
-        { return m_pchData; }
-    const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
-#else // !mmultibyte
     const wxChar* mb_str() const { return m_pchData; }
+
+    // for compatibility with wxUSE_UNICODE version
+    const wxChar* mb_str(wxMBConv& WXUNUSED(conv)) const { return m_pchData; }
+
     const wxWX2MBbuf mbc_str() const { return mb_str(); }
-#endif // multibyte/!multibyte
+
 #if wxUSE_WCHAR_T
-    const wxWCharBuffer wc_str(wxMBConv& conv) const { return conv.cMB2WC(m_pchData); }
+    const wxWCharBuffer wc_str(wxMBConv& conv) const
+        { return conv.cMB2WC(m_pchData); }
 #endif // wxUSE_WCHAR_T
+
     const wxChar* fn_str() const { return m_pchData; }
 #endif // Unicode/ANSI
 
@@ -580,9 +597,14 @@ public:
       // if nCount = default value)
   wxString Mid(size_t nFirst, size_t nCount = wxSTRING_MAXLEN) const;
 
-    // operator version of Mid()
+      // operator version of Mid()
   wxString  operator()(size_t start, size_t len) const
     { return Mid(start, len); }
+
+      // check that the tring starts with prefix and return the rest of the
+      // string in the provided pointer if it is not NULL, otherwise return
+      // FALSE
+  bool StartsWith(const wxChar *prefix, wxString *rest = NULL) const;
 
       // get first nCount characters
   wxString Left(size_t nCount) const;
@@ -994,6 +1016,12 @@ public:
     // sort array elements using specified comparaison function
   void Sort(CompareFunction compareFunction);
 
+  // comparison
+    // compare two arrays case sensitively
+  bool operator==(const wxArrayString& a) const;
+    // compare two arrays case sensitively
+  bool operator!=(const wxArrayString& a) const { return !(*this == a); }
+
 protected:
   void Copy(const wxArrayString& src);  // copies the contents of another array
 
@@ -1072,11 +1100,19 @@ inline bool operator==(const wxString& s1, const wxWCharBuffer& s2)
     { return (s1.Cmp((const wchar_t *)s2) == 0); }
 inline bool operator==(const wxWCharBuffer& s1, const wxString& s2)
     { return (s2.Cmp((const wchar_t *)s1) == 0); }
+inline bool operator!=(const wxString& s1, const wxWCharBuffer& s2)
+    { return (s1.Cmp((const wchar_t *)s2) != 0); }
+inline bool operator!=(const wxWCharBuffer& s1, const wxString& s2)
+    { return (s2.Cmp((const wchar_t *)s1) != 0); }
 #else
 inline bool operator==(const wxString& s1, const wxCharBuffer& s2)
     { return (s1.Cmp((const char *)s2) == 0); }
 inline bool operator==(const wxCharBuffer& s1, const wxString& s2)
     { return (s2.Cmp((const char *)s1) == 0); }
+inline bool operator!=(const wxString& s1, const wxCharBuffer& s2)
+    { return (s1.Cmp((const char *)s2) != 0); }
+inline bool operator!=(const wxCharBuffer& s1, const wxString& s2)
+    { return (s2.Cmp((const char *)s1) != 0); }
 #endif
 
 wxString WXDLLEXPORT operator+(const wxString& string1,  const wxString& string2);

@@ -39,11 +39,12 @@
     foreach $file (sort keys %wxMSW) {
         next if $wxMSW{$file} =~ /\b16\b/;
 
-        if ( $file =~ /^automtn/ ) {
-            #! comment in old makefile.b32 seems to imply that this file can't
-            #! be compiled with Borland (leads to crash in oleauto sample)
-            next;
-        }
+#!        if ( $file =~ /^automtn/ ) {
+#!            #! comment in old makefile.b32 seems to imply that this file can not
+#!            #! be compiled with Borland (leads to crash in oleauto sample)
+#!            No longer true, at least for BC++ 5.2
+#!            next;
+#!        }
 
         $isCFile = $file =~ /\.c$/;
 
@@ -111,12 +112,12 @@ PERIPH_CLEAN_TARGET=clean_ctl3d $(PERIPH_CLEAN_TARGET)
 !endif
 
 !if "$(USE_XPM_IN_MSW)" == "1"
-PERIPH_LIBS=$(WXLIB)\xpm.lib $(PERIPH_LIBS)
+PERIPH_LIBS=$(WXDIR)\lib\xpm.lib $(PERIPH_LIBS)
 PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
 
-#PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\jpeg.lib $(PERIPH_LIBS)
+#PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\jpeg.lib $(WXDIR)\lib\tiff.lib $(PERIPH_LIBS)
 PERIPH_LIBS=
 PERIPH_TARGET=zlib png jpeg tiff $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg clean_tiff $(PERIPH_CLEAN_TARGET)
@@ -125,7 +126,7 @@ PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg clean_tiff $(PERIPH_CLEAN_TA
 DUMMY=dummy
 !else
 DUMMY=dummydll
-LIBS= cw32 import32 ole2w32
+LIBS= cw32mti import32 ole2w32 odbc32 xpm zlib winpng jpeg tiff
 !endif
 
 LIBTARGET=$(WXLIB)
@@ -163,7 +164,6 @@ OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 default:	wx
 
-#wx:    $(CFG) $(LNKCFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
 all:	all_libs all_execs
@@ -181,7 +181,7 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 	-erase $(LIBTARGET)
 	-erase $(WXLIBDIR)\wx.dll
-        tlink32 $(LINK_FLAGS) /v @&&!
+        $(LINK) $(LINK_FLAGS) /L$(WXLIBDIR);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk /v @&&!
 c0d32.obj $(OBJECTS)
 $(WXLIBDIR)\wx
 nul
@@ -343,6 +343,7 @@ clean_tiff:
 
 $(CFG): makefile.b32
 	copy &&!
+-Hc
 -H=$(WXDIR)\src\msw\wx32.csm
 -3
 -d
@@ -368,13 +369,11 @@ $(DEBUG_FLAGS)
 $(WIN95FLAG)
 ! $(CFG)
 
-#$(LNKCFG): makefile.b32
-#	copy &&!
-#-L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
-#! $(LNKCFG)
-
 clean: $(PERIPH_CLEAN_TARGET)
     -erase $(LIBTARGET)
+    -erase $(WXLIBDIR)\wx.dll
+    -erase $(WXLIBDIR)\wx.tds
+    -erase $(WXLIBDIR)\wx.il?
     -erase *.obj
     -erase *.pch
     -erase *.csm

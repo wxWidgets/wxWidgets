@@ -73,6 +73,7 @@ static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
 
     wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
     cevent.SetEventObject( win );
+    cevent.SetInt( value );
     win->GetEventHandler()->ProcessEvent( cevent );
 }
 

@@ -30,7 +30,7 @@ class SVector {
 			return;
 		}
 		size = newSize;
-		for (int i=0; i<len; i++) {
+		for (unsigned int i=0; i<len; i++) {
 			newv[i] = v[i];
 		}
 		delete []v;
@@ -94,13 +94,13 @@ public:
 		size = 0;
 		len = 0;
 	}
-	void SetLength(int newLen) {
-		if (newLen > len) {
-			if (newLen >= size) {
-				SizeTo(newLen);
+	void SetLength(unsigned int newLength) {
+		if (newLength > len) {
+			if (newLength >= size) {
+				SizeTo(newLength);
 			}
 		}
-		len = newLen;
+		len = newLength;
 	}
 	int Length() const {
 		return len;

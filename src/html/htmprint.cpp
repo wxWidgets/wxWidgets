@@ -26,7 +26,7 @@
 #include "wx/wx.h"
 #endif
 
-#if wxUSE_HTML & wxUSE_PRINTING_ARCHITECTURE
+#if wxUSE_HTML && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
 
 #include "wx/print.h"
 #include "wx/printdlg.h"
@@ -436,77 +436,79 @@ wxHtmlEasyPrinting::~wxHtmlEasyPrinting()
 
 
 
-void wxHtmlEasyPrinting::PreviewFile(const wxString &htmlfile)
+bool wxHtmlEasyPrinting::PreviewFile(const wxString &htmlfile)
 {
     wxHtmlPrintout *p1 = CreatePrintout();
     p1 -> SetHtmlFile(htmlfile);
     wxHtmlPrintout *p2 = CreatePrintout();
     p2 -> SetHtmlFile(htmlfile);
-    DoPreview(p1, p2);
+    return DoPreview(p1, p2);
 }
 
 
 
-void wxHtmlEasyPrinting::PreviewText(const wxString &htmltext, const wxString &basepath)
+bool wxHtmlEasyPrinting::PreviewText(const wxString &htmltext, const wxString &basepath)
 {
     wxHtmlPrintout *p1 = CreatePrintout();
     p1 -> SetHtmlText(htmltext, basepath, TRUE);
     wxHtmlPrintout *p2 = CreatePrintout();
     p2 -> SetHtmlText(htmltext, basepath, TRUE);
-    DoPreview(p1, p2);
+    return DoPreview(p1, p2);
 }
 
 
 
-void wxHtmlEasyPrinting::PrintFile(const wxString &htmlfile)
+bool wxHtmlEasyPrinting::PrintFile(const wxString &htmlfile)
 {
     wxHtmlPrintout *p = CreatePrintout();
     p -> SetHtmlFile(htmlfile);
-    DoPrint(p);
+    return DoPrint(p);
 }
 
 
 
-void wxHtmlEasyPrinting::PrintText(const wxString &htmltext, const wxString &basepath)
+bool wxHtmlEasyPrinting::PrintText(const wxString &htmltext, const wxString &basepath)
 {
     wxHtmlPrintout *p = CreatePrintout();
     p -> SetHtmlText(htmltext, basepath, TRUE);
-    DoPrint(p);
+    return DoPrint(p);
 }
 
 
 
-void wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2)
+bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2)
 {
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(*m_PrintData);
     wxPrintPreview *preview = new wxPrintPreview(printout1, printout2, &printDialogData);
     if (!preview -> Ok()) {
         delete preview;
-        wxMessageBox(_("There was a problem previewing.\nPerhaps your current printer is not set correctly?"), _("Previewing"), wxOK);
+        return FALSE;
     }
-    
-    else {
-        wxPreviewFrame *frame = new wxPreviewFrame(preview, m_Frame, 
-                                                   m_Name + _(" Preview"), 
-                                                   wxPoint(100, 100), wxSize(650, 500));
-        frame -> Centre(wxBOTH);
-        frame -> Initialize();
-        frame -> Show(TRUE);
-    }
+
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, m_Frame, 
+                                               m_Name + _(" Preview"), 
+                                               wxPoint(100, 100), wxSize(650, 500));
+    frame -> Centre(wxBOTH);
+    frame -> Initialize();
+    frame -> Show(TRUE);
+    return TRUE;
 }
 
 
 
-void wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
+bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
 {
     wxPrintDialogData printDialogData(*m_PrintData);
     wxPrinter printer(&printDialogData);
 
     if (!printer.Print(m_Frame, printout, TRUE))
-        wxMessageBox(_("There was a problem printing.\nPerhaps your current printer is not set correctly?"), _("Printing"), wxOK);
-    else
-        (*m_PrintData) = printer.GetPrintDialogData().GetPrintData();
+    {
+        return FALSE;
+    }
+
+    (*m_PrintData) = printer.GetPrintDialogData().GetPrintData();
+    return TRUE;
 }
 
 

@@ -15,6 +15,7 @@ AutoComplete::AutoComplete() {
 	active = false;
 	posStart = 0;
 	strcpy(stopChars, "");
+	separator = ' ';
 }
 
 AutoComplete::~AutoComplete() {
@@ -44,6 +45,14 @@ bool AutoComplete::IsStopChar(char ch) {
 	return ch && strchr(stopChars, ch);
 }
 
+void AutoComplete::SetSeparator(char separator_) {
+	separator = separator_;
+}
+
+char AutoComplete::GetSeparator() {
+	return separator;
+}
+
 int AutoComplete::SetList(const char *list) {
 	int maxStrLen = 12;
 	lb.Clear();
@@ -53,7 +62,7 @@ int AutoComplete::SetList(const char *list) {
 		char *startword = words;
 		int i = 0;
 		for (; words && words[i]; i++) {
-			if (words[i] == ' ') {
+			if (words[i] == separator) {
 				words[i] = '\0';
 				lb.Append(startword);
 				maxStrLen = Platform::Maximum(maxStrLen, strlen(startword));

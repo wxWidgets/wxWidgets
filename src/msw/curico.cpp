@@ -99,7 +99,7 @@ HANDLE ReadIcon( wxChar *szFileName, int *W, int *H)
                  nDirEntries = 0;
 
    // Open and read the .ICO file header and the first ICONFILERES
-  hFile  = _lopen( wxFNCONV(szFileName), OF_READ);
+  hFile  = _lopen( wxConvertWX2MB(szFileName), OF_READ);
   cbHead = _lread( hFile, (LPSTR)&iconFileHead, sizeof(ICONFILEHEADER));
   cbRes  = _lread( hFile, (LPSTR)&iconFileRes, sizeof(ICONFILERES));
   ++nDirEntries;
@@ -346,7 +346,7 @@ HANDLE ReadCur( wxChar *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
                   nDirEntries = 0;
 
   // Open and read the .ICO file header and the first ICONFILERES
-  hFile  = _lopen( wxFNCONV(szFileName), OF_READ);
+  hFile  = _lopen( wxConvertWX2MB(szFileName), OF_READ);
   cbHead = _lread( hFile,  (LPSTR )&curFileHead, sizeof( CURFILEHEADER));
   cbRes  = _lread( hFile,  (LPSTR )&curFileRes,  sizeof( CURFILERES));
   ++nDirEntries;

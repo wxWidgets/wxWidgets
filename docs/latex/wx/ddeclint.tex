@@ -7,7 +7,7 @@ To create a client which can communicate with a suitable server,
 you need to derive a class from wxDDEConnection and another from wxDDEClient.
 The custom wxDDEConnection class will intercept communications in
 a `conversation' with a server, and the custom wxDDEServer is required
-so that a user-overriden \helpref{wxDDEClient::OnMakeConnection}{wxddeclientonmakeconnection} member can return
+so that a user-overridden \helpref{wxDDEClient::OnMakeConnection}{wxddeclientonmakeconnection} member can return
 a wxDDEConnection of the required class, when a connection is made.
 
 This DDE-based implementation is

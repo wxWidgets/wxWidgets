@@ -222,8 +222,7 @@ wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
   }
   else {
     if ( FAILED(hr) ) {
-      wxLogApiError("DoDragDrop", hr);
-      wxLogError(wxT("Drag & drop operation failed."));
+      wxLogSysError(wxT("Drag & drop operation failed."));
     }
     else {
       wxLogDebug(wxT("Unexpected success return code %08lx from DoDragDrop."),

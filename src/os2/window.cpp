@@ -1699,7 +1699,7 @@ bool wxWindow::OS2TranslateMessage(
   WXMSG*                            pMsg
 )
 {
-    return m_acceleratorTable.Translate(this, pMsg);
+    return m_acceleratorTable.Translate(m_hWnd, pMsg);
 } // end of wxWindow::OS2TranslateMessage
 
 // ---------------------------------------------------------------------------
@@ -1813,7 +1813,7 @@ MRESULT EXPENTRY wxWndProc(
     {
         if (pWnd)
             rc = pWnd->OS2WindowProc(ulMsg, wParam, lParam);
-        else
+        if (!rc)
             rc = ::WinDefWindowProc(hWnd, ulMsg, wParam, lParam);
     }
     return rc;
@@ -1954,7 +1954,6 @@ MRESULT wxWindow::OS2WindowProc(
                 bProcessed = HandleMouseEvent(uMsg, x, y, (WXUINT)wParam);
             }
             break;
-
         case WM_SYSCOMMAND:
             bProcessed = HandleSysCommand(wParam, lParam);
             break;
@@ -2154,7 +2153,7 @@ MRESULT wxWindow::OS2WindowProc(
 
         // wxFrame specific message
         case WM_MINMAXFRAME:
-            bProcessed = HandleGetMinMaxInfo((PSWP)lParam);
+            bProcessed = HandleGetMinMaxInfo((PSWP)wParam);
             break;
 
         case WM_SYSVALUECHANGED:
@@ -2357,7 +2356,7 @@ bool wxWindow::OS2Create(
         (ULONG)zClass == (ULONG)WC_COMBOBOX ||
         (ULONG)zClass == (ULONG)WC_CONTAINER ||
         (ULONG)zClass == (ULONG)WC_ENTRYFIELD ||
-	(ULONG)zClass == (ULONG)WC_FRAME ||
+        (ULONG)zClass == (ULONG)WC_FRAME ||
         (ULONG)zClass == (ULONG)WC_LISTBOX ||
         (ULONG)zClass == (ULONG)WC_MENU ||
         (ULONG)zClass == (ULONG)WC_NOTEBOOK ||
@@ -2395,6 +2394,7 @@ bool wxWindow::OS2Create(
         wxLogError("Can't create window of class %s!. Error: %s\n", zClass, sError);
         return FALSE;
     }
+    ::WinSetWindowULong(m_hWnd, QWL_USER, (ULONG) this);
     wxWndHook = NULL;
 
 #ifdef __WXDEBUG__
@@ -2796,6 +2796,7 @@ void wxWindow::OnSysColourChanged(
 bool wxWindow::HandlePaint()
 {
     HRGN                            hRgn = NULLHANDLE;
+    wxPaintEvent                    vEvent;
 
     if (::WinQueryUpdateRegion(GetHwnd(), hRgn) == RGN_NULL)
     {
@@ -2803,8 +2804,6 @@ bool wxWindow::HandlePaint()
          return FALSE;
     }
     m_updateRegion = wxRegion(hRgn);
-
-    wxPaintEvent                    vEvent;
 
     vEvent.SetEventObject(this);
     return (GetEventHandler()->ProcessEvent(vEvent));

@@ -19,17 +19,17 @@ class wxResourceEditorProjectTree: public wxTreeCtrl
 public:
     wxResourceEditorProjectTree(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
         long style = wxTR_HAS_BUTTONS);
-
+    
     void LeftDClick(wxMouseEvent& event);
     void OnSelChanged(wxTreeEvent& event);
-
+    
     inline void SetInvalid(bool invalid) { m_invalid = invalid; }
-
+    
 protected:
     bool        m_invalid; // While TRUE, don't respond to selections etc.
-
-DECLARE_EVENT_TABLE()
-
+    
+    DECLARE_EVENT_TABLE()
+        
 };
 
 #endif

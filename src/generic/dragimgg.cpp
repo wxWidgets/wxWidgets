@@ -68,11 +68,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxGenericDragImage, wxObject)
 // wxGenericDragImage ctors/dtor
 // ----------------------------------------------------------------------------
 
-wxGenericDragImage::wxGenericDragImage()
-{
-    Init();
-}
-
 wxGenericDragImage::~wxGenericDragImage()
 {
     if (m_windowDC)
@@ -88,6 +83,7 @@ void wxGenericDragImage::Init()
     m_windowDC = (wxDC*) NULL;
     m_window = (wxWindow*) NULL;
     m_fullScreen = FALSE;
+    m_pBackingBitmap = (wxBitmap*) NULL;
 }
 
 // Attributes
@@ -96,6 +92,15 @@ void wxGenericDragImage::Init()
 
 // Operations
 ////////////////////////////////////////////////////////////////////////////
+
+// Create a drag image with a virtual image (need to override DoDrawImage, GetImageRect)
+bool wxGenericDragImage::Create(const wxCursor& cursor, const wxPoint& hotspot)
+{
+    m_cursor = cursor;
+    m_hotspot = hotspot;
+
+    return TRUE;
+}
 
 // Create a drag image from a bitmap and optional cursor
 bool wxGenericDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& hotspot)
@@ -183,13 +188,15 @@ bool wxGenericDragImage::Create(const wxListCtrl& listCtrl, long id)
 }
 
 // Begin drag
-bool wxGenericDragImage::BeginDrag(const wxPoint& WXUNUSED(hotspot),
+bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
                                    wxWindow* window,
                                    bool fullScreen,
                                    wxRect* rect)
 {
     wxASSERT_MSG( (window != 0), wxT("Window must not be null in BeginDrag."));
 
+    // The image should be offset by this amount
+    m_offset = hotspot;
     m_window = window;
     m_fullScreen = fullScreen;
 
@@ -238,8 +245,10 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& WXUNUSED(hotspot),
         }
     }
 
-    if (!m_backingBitmap.Ok() || (m_backingBitmap.GetWidth() < clientSize.x || m_backingBitmap.GetHeight() < clientSize.y))
-        m_backingBitmap = wxBitmap(clientSize.x, clientSize.y);
+    wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
+
+    if (!backing->Ok() || (backing->GetWidth() < clientSize.x || backing->GetHeight() < clientSize.y))
+        (*backing) = wxBitmap(clientSize.x, clientSize.y);
 
     if (!m_fullScreen)
         m_windowDC = new wxClientDC(window);
@@ -308,7 +317,7 @@ bool wxGenericDragImage::EndDrag()
 // is non-NULL, or in screen coordinates if NULL.
 bool wxGenericDragImage::Move(const wxPoint& pt)
 {
-    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), "No window DC in wxGenericDragImage::Move()" );
+    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), wxT("No window DC in wxGenericDragImage::Move()") );
 
     // Erase at old position, then show at the current position
     wxPoint oldPos = m_position;
@@ -316,7 +325,7 @@ bool wxGenericDragImage::Move(const wxPoint& pt)
     bool eraseOldImage = (m_isDirty && m_isShown);
     
     if (m_isShown)
-        RedrawImage(oldPos, pt, eraseOldImage, TRUE);
+        RedrawImage(oldPos - m_offset, pt - m_offset, eraseOldImage, TRUE);
 
     m_position = pt;
 
@@ -328,7 +337,7 @@ bool wxGenericDragImage::Move(const wxPoint& pt)
 
 bool wxGenericDragImage::Show()
 {
-    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), "No window DC in wxGenericDragImage::Show()" );
+    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), wxT("No window DC in wxGenericDragImage::Show()") );
     
     // Show at the current position
 
@@ -337,12 +346,16 @@ bool wxGenericDragImage::Show()
         // This is where we restore the backing bitmap, in case
         // something has changed on the window.
 
+        wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
         wxMemoryDC memDC;
-        memDC.SelectObject(m_backingBitmap);
-        memDC.Blit(0, 0, m_boundingRect.width, m_boundingRect.height, m_windowDC, m_boundingRect.x, m_boundingRect.y);
+        memDC.SelectObject(* backing);
+
+        UpdateBackingFromWindow(* m_windowDC, memDC, m_boundingRect, wxRect(0, 0, m_boundingRect.width, m_boundingRect.height));
+
+        //memDC.Blit(0, 0, m_boundingRect.width, m_boundingRect.height, m_windowDC, m_boundingRect.x, m_boundingRect.y);
         memDC.SelectObject(wxNullBitmap);
 
-        RedrawImage(m_position, m_position, FALSE, TRUE);
+        RedrawImage(m_position - m_offset, m_position - m_offset, FALSE, TRUE);
     }
 
     m_isShown = TRUE;
@@ -351,15 +364,21 @@ bool wxGenericDragImage::Show()
     return TRUE;
 }
 
+bool wxGenericDragImage::UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC,
+    const wxRect& sourceRect, const wxRect& destRect) const
+{
+    return destDC.Blit(destRect.x, destRect.y, destRect.width, destRect.height, & windowDC, sourceRect.x, sourceRect.y);
+}
+
 bool wxGenericDragImage::Hide()
 {
-    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), "No window DC in wxGenericDragImage::Hide()" );
+    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), wxT("No window DC in wxGenericDragImage::Hide()") );
 
     // Repair the old position
 
     if (m_isShown && m_isDirty)
     {
-        RedrawImage(m_position, m_position, TRUE, FALSE);
+        RedrawImage(m_position - m_offset, m_position - m_offset, TRUE, FALSE);
     }
 
     m_isShown = FALSE;
@@ -375,7 +394,8 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos, const wxPoint& newPo
     if (!m_windowDC)
         return FALSE;
 
-    if (!m_backingBitmap.Ok())
+    wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
+    if (!backing->Ok())
         return FALSE;
 
     wxRect oldRect(GetImageRect(oldPos));
@@ -413,7 +433,7 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos, const wxPoint& newPo
     }
 
     wxMemoryDC memDC;
-    memDC.SelectObject(m_backingBitmap);
+    memDC.SelectObject(* backing);
 
     wxMemoryDC memDCTemp;
     memDCTemp.SelectObject(m_repairBitmap);
@@ -429,12 +449,8 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos, const wxPoint& newPo
     // If drawing, draw the image onto the mem DC
     if (drawNew)
     {
-        int x = newPos.x - fullRect.x;
-        int y = newPos.y - fullRect.y;
-        if (m_bitmap.Ok())
-            memDCTemp.DrawBitmap(m_bitmap, x, y, (m_bitmap.GetMask() != 0));
-        else if (m_icon.Ok())
-            memDCTemp.DrawIcon(m_icon, x, y);
+        wxPoint pos(newPos.x - fullRect.x, newPos.y - fullRect.y) ;
+        DoDrawImage(memDCTemp, pos);
     }
 
     // Now blit to the window
@@ -447,6 +463,24 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos, const wxPoint& newPo
     return TRUE;
 }
 
+// Override this if you are using a virtual image (drawing your own image)
+bool wxGenericDragImage::DoDrawImage(wxDC& dc, const wxPoint& pos) const
+{
+    if (m_bitmap.Ok())
+    {
+        dc.DrawBitmap(m_bitmap, pos.x, pos.y, (m_bitmap.GetMask() != 0));
+        return TRUE;
+    }
+    else if (m_icon.Ok())
+    {
+        dc.DrawIcon(m_icon, pos.x, pos.y);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+// Override this if you are using a virtual image (drawing your own image)
 wxRect wxGenericDragImage::GetImageRect(const wxPoint& pos) const
 {
     if (m_bitmap.Ok())

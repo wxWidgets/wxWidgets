@@ -7,7 +7,7 @@
 #
 # Include file for Cygwin/Mingw32 libraries
 
-WXDIR = $(WXWIN)
+# WXDIR = $(WXWIN)
 
 # All common UNIX compiler flags and options are now in
 # this central makefile.

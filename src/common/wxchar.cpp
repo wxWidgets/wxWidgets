@@ -97,13 +97,13 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 bool WXDLLEXPORT wxOKlibc()
 {
 #if wxUSE_WCHAR_T && defined(__UNIX__) && defined(__GLIBC__)
-  // GNU libc uses UTF-8 even when it shouldn't
-  wchar_t res;
+  // glibc 2.0 uses UTF-8 even when it shouldn't
+  wchar_t res = 0;
   if ((MB_CUR_MAX == 2) &&
-      (wxMB2WC(&res, "\xdd\xa5", 1)>0) &&
+      (wxMB2WC(&res, "\xdd\xa5", 1) == 1) &&
       (res==0x765)) {
     // this is UTF-8 allright, check whether that's what we want
-    char *cur_locale = setlocale(LC_ALL, NULL);
+    char *cur_locale = setlocale(LC_CTYPE, NULL);
     if ((strlen(cur_locale) < 4) ||
 	(strcasecmp(cur_locale + strlen(cur_locale) - 4, "utf8"))) {
       // nope, don't use libc conversion
@@ -171,6 +171,10 @@ int WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2)
 #ifndef wxStrtok
 WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr)
 {
+  if (!(save_ptr && *save_ptr)) {
+    return (wxChar *) NULL;
+  }
+
   if (!psz) psz = *save_ptr;
   psz += wxStrspn(psz, delim);
   if (!*psz) {
@@ -352,6 +356,16 @@ WXDLLEXPORT FILE * wxFopen(const wxChar *path, const wxChar *mode)
 WXDLLEXPORT FILE * wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream)
 {
   return freopen(wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode), stream);
+}
+
+WXDLLEXPORT int wxRemove(const wxChar *path)
+{
+  return remove(wxConvFile.cWX2MB(path));
+}
+
+WXDLLEXPORT int wxRename(const wxChar *oldpath, const wxChar *newpath)
+{
+  return rename(wxConvFile.cWX2MB(oldpath), wxConvFile.cWX2MB(newpath));
 }
 
 int WXDLLEXPORT wxPrintf(const wxChar *fmt, ...)

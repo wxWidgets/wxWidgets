@@ -113,7 +113,7 @@ extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
 //       function wxVsnprintfA (A for ANSI), should also find one for Unicode
 //       strings in Unicode build
 #ifdef __WXMSW__
-    #if defined(__VISUALC__) || wxUSE_NORLANDER_HEADERS
+    #if defined(__VISUALC__) || (defined(__MINGW32__) && wxUSE_NORLANDER_HEADERS)
         #define wxVsnprintfA     _vsnprintf
     #endif
 #else   // !Windows
@@ -290,10 +290,12 @@ void wxString::InitWith(const wxChar *psz, size_t nPos, size_t nLength)
 {
   Init();
 
-  if ( nLength == wxSTRING_MAXLEN )
-    nLength = wxStrlen(psz + nPos);
+  // if the length is not given, assume the string to be NUL terminated
+  if ( nLength == wxSTRING_MAXLEN ) {
+    wxASSERT_MSG( nPos <= wxStrlen(psz), _T("index out of bounds") );
 
-  wxASSERT_MSG( nPos + nLength <= wxStrlen(psz), _T("index out of bounds") );
+    nLength = wxStrlen(psz + nPos);
+  }
 
   STATISTICS_ADD(InitialLength, nLength);
 
@@ -341,15 +343,15 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 
 #if wxUSE_WCHAR_T
 // from wide string
-wxString::wxString(const wchar_t *pwz)
+wxString::wxString(const wchar_t *pwz, wxMBConv& conv)
 {
   // first get necessary size
-  size_t nLen = pwz ? wxWC2MB((char *) NULL, pwz, 0) : 0;
+  size_t nLen = pwz ? conv.WC2MB((char *) NULL, pwz, 0) : 0;
 
   // empty?
   if ( (nLen != 0) && (nLen != (size_t)-1) ) {
     AllocBuffer(nLen);
-    wxWC2MB(m_pchData, pwz, nLen);
+    conv.WC2MB(m_pchData, pwz, nLen);
   }
   else {
     Init();
@@ -772,6 +774,35 @@ wxString wxString::Mid(size_t nFirst, size_t nCount) const
   AllocCopy(dest, nCount, nFirst);
 
   return dest;
+}
+
+// check that the tring starts with prefix and return the rest of the string
+// in the provided pointer if it is not NULL, otherwise return FALSE
+bool wxString::StartsWith(const wxChar *prefix, wxString *rest) const
+{
+    wxASSERT_MSG( prefix, _T("invalid parameter in wxString::StartsWith") );
+
+    // first check if the beginning of the string matches the prefix: note
+    // that we don't have to check that we don't run out of this string as
+    // when we reach the terminating NUL, either prefix string ends too (and
+    // then it's ok) or we break out of the loop because there is no match
+    const wxChar *p = c_str();
+    while ( *prefix )
+    {
+        if ( *prefix++ != *p++ )
+        {
+            // no match
+            return FALSE;
+        }
+    }
+
+    if ( rest )
+    {
+        // put the rest of the string into provided pointer
+        *rest = p;
+    }
+
+    return TRUE;
 }
 
 // extract nCount last (rightmost) characters
@@ -1715,13 +1746,15 @@ wxString& wxString::erase(size_t nStart, size_t nLen)
 
 wxString& wxString::replace(size_t nStart, size_t nLen, const wxChar *sz)
 {
-  wxASSERT( nStart + nLen <= wxStrlen(sz) );
+  wxASSERT_MSG( nStart + nLen <= Len(),
+                _T("index out of bounds in wxString::replace") );
 
   wxString strTmp;
+  strTmp.Alloc(Len());      // micro optimisation to avoid multiple mem allocs
+
   if ( nStart != 0 )
     strTmp.append(c_str(), nStart);
-  strTmp += sz;
-  strTmp.append(c_str() + nStart + nLen);
+  strTmp << sz << c_str() + nStart + nLen;
 
   *this = strTmp;
   return *this;
@@ -2095,6 +2128,9 @@ void wxArrayString::Sort(CompareFunction compareFunction)
 
   DoSort();
 
+  // reset it to NULL so that Sort(bool) will work the next time
+  gs_compareFunction = NULL;
+
   END_SORT();
 }
 
@@ -2117,5 +2153,19 @@ void wxArrayString::DoSort()
   // just sort the pointers using qsort() - of course it only works because
   // wxString() *is* a pointer to its data
   qsort(m_pItems, m_nCount, sizeof(wxChar *), wxStringCompareFunction);
+}
+
+bool wxArrayString::operator==(const wxArrayString& a) const
+{
+    if ( m_nCount != a.m_nCount )
+        return FALSE;
+
+    for ( size_t n = 0; n < m_nCount; n++ )
+    {
+        if ( Item(n) != a[n] )
+            return FALSE;
+    }
+
+    return TRUE;
 }
 

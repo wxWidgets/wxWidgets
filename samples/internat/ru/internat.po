@@ -1,0 +1,81 @@
+# Message catalog file template for the wxWindows i18n sample
+# Copyright (C) 1999 wxWindows development team
+# Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+msgid ""
+msgstr ""
+"Project-Id-Version: wxWindows 2.0 i18n sample\n"
+"POT-Creation-Date: 2000-08-10 15:56+0200\n"
+"PO-Revision-Date: 2000-08-10 15:56+0200\n"
+"Last-Translator: Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>\n"
+"Language-Team: <wx-translators@wxwindows.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:128
+msgid "International wxWindows App"
+msgstr "éÎÔÅÒÎÁÃÉÏÎÁÌØÎÏÅ ĞÒÉÌÏÖÅÎÉÅ wxWindows"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:136
+msgid "&About..."
+msgstr "&ï ĞÒÏÇÒÁÍÍÅ..."
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:138
+msgid "E&xit"
+msgstr "&÷ÙÊÔÉ"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:141
+msgid "&Open bogus file"
+msgstr "&ïÔËÒÙÔØ ÆÁÊÌ"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:142
+msgid "&Play a game"
+msgstr "&ğÏÉÇÒÁÔØ × ÉÇÒÕ"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:145
+msgid "&File"
+msgstr "&æÁÊÌ"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:146
+msgid "&Test"
+msgstr "&ôÅÓÔ"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:169
+msgid ""
+"I18n sample\n"
+"¡© 1998, 1999 Vadim Zeitlin and Julian Smart"
+msgstr ""
+"ğÒÉÍÅÒ i18n\n"
+"¡© 1998, 1999 ÷ÁÄÉÍ úÅÊÔÌÉÎ É äÖÕÌÉÁÎ óÍÁÒÔ"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:171
+msgid "About Internat"
+msgstr "ğÒÏ Internat"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:176
+msgid "Enter your number:"
+msgstr "÷×ÅÄÉ Ó×ÏÅ ŞÉÓÌÏ:"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:177
+msgid "Try to guess my number!"
+msgstr "ğÏĞÒÏÂÕÊ ÕÇÁÄÁÔØ ÍÏÅ ŞÉÓÌÏ!"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:185
+msgid "You've probably entered an invalid number."
+msgstr "îÁ×ÅÒÎÏ ÔÙ ××ÅÌ ÎÅÄÏĞÕÓÔÉÍÏÅ ŞÉÓÌÏ."
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:193
+msgid "Congratulations! you've won. Here is the magic phrase:"
+msgstr "ğÏÚÄÒÁ×ÌÑÀ! ÷Ù ×ÙÉÇÒÁÌÉ. á ×ÏÔ ÍÁÇÉŞÅÓËÁÑ ÆÒÁÚÁ: "
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:194
+#, c-format
+msgid "cannot create fifo `%s'"
+msgstr "ÎÅ ÍÏÇÕ ÓÏÚÄÁÔØ fifo `%s'"
+
+#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:197
+msgid "Result"
+msgstr "òÅÚÕÌØÔÁÔ"
+
+#~ msgid "Bad luck! try again..."
+#~ msgstr "îÅ ×ÅÚÅÔ! ğÏĞÒÏÂÕÊ ÓÎÏ×Á..."

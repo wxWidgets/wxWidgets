@@ -80,6 +80,12 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
     EVT_MENU(MDI_REFRESH, MyChild::OnRefresh)
+    EVT_MENU(MDI_CHANGE_TITLE, MyChild::OnChangeTitle)
+    EVT_MENU(MDI_CHANGE_POSITION, MyChild::OnChangePosition)
+    EVT_MENU(MDI_CHANGE_SIZE, MyChild::OnChangeSize)
+
+    EVT_SIZE(MyChild::OnSize)
+    EVT_MOVE(MyChild::OnMove)
 
     EVT_CLOSE(MyChild::OnClose)
 END_EVENT_TABLE()
@@ -123,11 +129,11 @@ bool MyApp::OnInit()
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(MDI_NEW_WINDOW, "&New window", "Create a new child window");
-    file_menu->Append(MDI_QUIT, "&Exit", "Quit the program");
+    file_menu->Append(MDI_NEW_WINDOW, "&New window\tCtrl-N", "Create a new child window");
+    file_menu->Append(MDI_QUIT, "&Exit\tAlt-X", "Quit the program");
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(MDI_ABOUT, "&About");
+    help_menu->Append(MDI_ABOUT, "&About\tF1");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
@@ -233,8 +239,11 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 
     wxMenu *option_menu = new wxMenu;
 
-    // Dummy option
     option_menu->Append(MDI_REFRESH, "&Refresh picture");
+    option_menu->Append(MDI_CHANGE_TITLE, "Change &title...\tCtrl-T");
+    option_menu->AppendSeparator();
+    option_menu->Append(MDI_CHANGE_POSITION, "Move frame\tCtrl-M");
+    option_menu->Append(MDI_CHANGE_SIZE, "Resize frame\tCtrl-S");
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(MDI_ABOUT, "&About");
@@ -242,7 +251,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     wxMenuBar *menu_bar = new wxMenuBar;
 
     menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(option_menu, "&Options");
+    menu_bar->Append(option_menu, "&Child");
     menu_bar->Append(help_menu, "&Help");
 
     // Associate the menu bar with the frame
@@ -415,15 +424,68 @@ void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(TRUE);
 }
 
-void MyChild::OnRefresh(wxCommandEvent& event)
+void MyChild::OnRefresh(wxCommandEvent& WXUNUSED(event))
 {
-    Refresh();
+    if ( canvas )
+        canvas->Refresh();
+}
+
+void MyChild::OnChangePosition(wxCommandEvent& WXUNUSED(event))
+{
+    Move(10, 10);
+}
+
+void MyChild::OnChangeSize(wxCommandEvent& WXUNUSED(event))
+{
+    SetClientSize(100, 100);
+}
+
+void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
+{
+    static wxString s_title = _T("Canvas Frame");
+
+    wxString title = wxGetTextFromUser(_T("Enter the new title for MDI child"),
+                                       _T("MDI sample question"),
+                                       s_title,
+                                       GetParent()->GetParent());
+    if ( !title )
+        return;
+
+    s_title = title;
+    SetTitle(s_title);
 }
 
 void MyChild::OnActivate(wxActivateEvent& event)
 {
     if ( event.GetActive() && canvas )
         canvas->SetFocus();
+}
+
+void MyChild::OnMove(wxMoveEvent& event)
+{
+    // VZ: here everything is totally wrong under MSW, the positions are
+    //     different and both wrong (pos2 is off by 2 pixels for me which seems
+    //     to be the width of the MDI canvas border)
+    wxPoint pos1 = event.GetPosition(),
+            pos2 = GetPosition();
+    wxLogStatus("position from event: (%d, %d), from frame (%d, %d)",
+                pos1.x, pos1.y, pos2.x, pos2.y);
+
+    event.Skip();
+}
+
+void MyChild::OnSize(wxSizeEvent& event)
+{
+    // VZ: under MSW the size event carries the client size (quite
+    //     unexpectedly) *except* for the very first one which has the full
+    //     size... what should it really be? TODO: check under wxGTK
+    wxSize size1 = event.GetSize(),
+           size2 = GetSize(),
+           size3 = GetClientSize();
+    wxLogStatus("size from event: %dx%d, from frame %dx%d, client %dx%d",
+                size1.x, size1.y, size2.x, size2.y, size3.x, size3.y);
+
+    event.Skip();
 }
 
 void MyChild::OnClose(wxCloseEvent& event)

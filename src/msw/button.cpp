@@ -74,19 +74,42 @@ bool wxButton::Create(wxWindow *parent,
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
 
+    long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD /* | WS_CLIPSIBLINGS */ ;
+
+#ifdef __WIN32__
+    if(m_windowStyle & wxBU_LEFT)
+        msStyle |= BS_LEFT;
+    if(m_windowStyle & wxBU_RIGHT)
+        msStyle |= BS_RIGHT;
+    if(m_windowStyle & wxBU_TOP)
+        msStyle |= BS_TOP;
+    if(m_windowStyle & wxBU_BOTTOM)
+        msStyle |= BS_BOTTOM;
+#endif
 
     m_hWnd = (WXHWND)CreateWindowEx
                      (
                       MakeExtendedStyle(m_windowStyle),
                       wxT("BUTTON"),
                       label,
-                      WS_VISIBLE | WS_TABSTOP | WS_CHILD,
+                      msStyle,
                       0, 0, 0, 0,
                       GetWinHwnd(parent),
                       (HMENU)m_windowId,
                       wxGetInstance(),
                       NULL
                      );
+
+    if (m_hWnd == 0)
+    {
+        wxString msg;
+#ifdef __WIN16__
+        msg.Printf(wxT("CreateWindowEx failed"));
+#else
+        msg.Printf(wxT("CreateWindowEx failed with error number %ld"), (long) GetLastError());
+#endif
+        wxFAIL_MSG(msg);
+    }
 
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
@@ -259,8 +282,11 @@ long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     }
     else if ( nMsg == WM_LBUTTONDBLCLK )
     {
-        // trick the base class into thinking that this was just a click
-        nMsg = WM_LBUTTONDOWN;
+        // emulate a click event to force an owner-drawn button to change its
+        // appearance - without this, it won't do it
+        (void)wxControl::MSWWindowProc(WM_LBUTTONDOWN, wParam, lParam);
+
+        // and conitnue with processing the message normally as well
     }
 
     // let the base class do all real processing

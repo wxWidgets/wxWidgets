@@ -154,6 +154,11 @@ private:
     //
     WXHMENU                         m_hMenu;
 
+    //
+    // The helper variable for creating unique IDs.
+    //
+    static USHORT		    m_nextMenuId;
+
 #if wxUSE_ACCEL
     //
     // The accelerators for our menu items

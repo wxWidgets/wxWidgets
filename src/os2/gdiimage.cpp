@@ -335,7 +335,9 @@ void wxGDIImage::CleanUpHandlers()
         wxNode*                     pNext    = pNode->Next();
 
         delete pHandler;
+#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
         delete pNode;
+#endif
         pNode = pNext;
     }
 }

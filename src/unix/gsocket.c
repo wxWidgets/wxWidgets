@@ -351,7 +351,6 @@ GAddress *GSocket_GetPeer(GSocket *socket)
  */
 GSocketError GSocket_SetServer(GSocket *sck)
 {
-  int type;
   int arg = 1;
 
   assert(sck != NULL);

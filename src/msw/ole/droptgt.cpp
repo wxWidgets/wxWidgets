@@ -161,7 +161,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
     // we need client coordinates to pass to wxWin functions
     if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
     {
-        wxLogLastError("ScreenToClient");
+        wxLogLastError(wxT("ScreenToClient"));
     }
 
     // give some visual feedback
@@ -201,7 +201,7 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
     // we need client coordinates to pass to wxWin functions
     if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
     {
-        wxLogLastError("ScreenToClient");
+        wxLogLastError(wxT("ScreenToClient"));
     }
 
     *pdwEffect = ConvertDragResultToEffect(
@@ -254,7 +254,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
     // we need client coordinates to pass to wxWin functions
     if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
     {
-        wxLogLastError("ScreenToClient");
+        wxLogLastError(wxT("ScreenToClient"));
     }
 
     // first ask the drop target if it wants data
@@ -309,7 +309,7 @@ bool wxDropTarget::Register(WXHWND hwnd)
 {
     HRESULT hr = ::CoLockObjectExternal(m_pIDropTarget, TRUE, FALSE);
     if ( FAILED(hr) ) {
-        wxLogApiError("CoLockObjectExternal", hr);
+        wxLogApiError(_T("CoLockObjectExternal"), hr);
         return FALSE;
     }
 
@@ -317,7 +317,7 @@ bool wxDropTarget::Register(WXHWND hwnd)
     if ( FAILED(hr) ) {
         ::CoLockObjectExternal(m_pIDropTarget, FALSE, FALSE);
 
-        wxLogApiError("RegisterDragDrop", hr);
+        wxLogApiError(_T("RegisterDragDrop"), hr);
         return FALSE;
     }
 
@@ -332,7 +332,7 @@ void wxDropTarget::Revoke(WXHWND hwnd)
     HRESULT hr = ::RevokeDragDrop((HWND) hwnd);
 
     if ( FAILED(hr) ) {
-        wxLogApiError("RevokeDragDrop", hr);
+        wxLogApiError(_T("RevokeDragDrop"), hr);
     }
 
     ::CoLockObjectExternal(m_pIDropTarget, FALSE, TRUE);
@@ -381,11 +381,11 @@ bool wxDropTarget::GetData()
             rc = TRUE;
         }
         else {
-            wxLogLastError("IDataObject::SetData()");
+            wxLogLastError(wxT("IDataObject::SetData()"));
         }
     }
     else {
-        wxLogLastError("IDataObject::GetData()");
+        wxLogLastError(wxT("IDataObject::GetData()"));
     }
 
     return rc;

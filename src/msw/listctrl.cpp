@@ -209,8 +209,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 
     if ( !m_hWnd )
     {
-        wxLogError(_("Can't create list control window, check "
-                     "that comctl32.dll is installed."));
+        wxLogError(_("Can't create list control window, check that comctl32.dll is installed."));
 
         return FALSE;
     }
@@ -952,7 +951,7 @@ bool wxListCtrl::DeleteAllColumns()
     {
         if ( ListView_DeleteColumn(GetHwnd(), 0) == 0 )
         {
-            wxLogLastError("ListView_DeleteColumn");
+            wxLogLastError(wxT("ListView_DeleteColumn"));
 
             return FALSE;
         }
@@ -1040,10 +1039,13 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 
     findInfo.flags = LVFI_STRING;
     if ( partial )
-        findInfo.flags |= LVFI_STRING;
-    findInfo.psz = WXSTRINGCAST str;
+        findInfo.flags |= LVFI_PARTIAL;
+    findInfo.psz = str;
 
-    return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
+    // ListView_FindItem() excludes the first item from search and to look
+    // through all the items you need to start from -1 which is unnatural and
+    // inconsitent with the generic version - so we adjust the index
+    return ListView_FindItem(GetHwnd(), (int) start - 1, &findInfo);
 }
 
 // Find an item whose data matches this data, starting from the item after 'start'
@@ -1436,7 +1438,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     event.m_code = wxCharCodeMSWToWX(wVKey);
                 }
 
-                event.m_item.m_data = GetItemData(lItem);
+                if ( lItem != -1 )
+                {
+                    // fill the other fields too
+                    event.m_item.m_text = GetItemText(lItem);
+                    event.m_item.m_data = GetItemData(lItem);
+                }
             }
             break;
 
@@ -1458,6 +1465,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
             event.m_itemIndex = nmLV->iItem;
+            event.m_item.m_text = GetItemText(nmLV->iItem);
             event.m_item.m_data = GetItemData(nmLV->iItem);
             break;
 

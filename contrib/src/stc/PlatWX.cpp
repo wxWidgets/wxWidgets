@@ -4,12 +4,13 @@
 //                        Robin Dunn <robin@aldunn.com>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <ctype.h>
 
 #include "Platform.h"
 #include "wx/stc/stc.h"
 
 Point Point::FromLong(long lpoint) {
-    return Point(lpoint & 0xFFFF, lpoint >> 32);
+    return Point(lpoint & 0xFFFF, lpoint >> 16);
 }
 
 wxRect wxRectFromPRectangle(PRectangle prc) {
@@ -105,14 +106,15 @@ Font::Font() {
 Font::~Font() {
 }
 
-void Font::Create(const char *faceName, int size, bool bold, bool italic) {
+void Font::Create(const char *faceName, int characterSet, int size, bool bold, bool italic) {
     Release();
     id = new wxFont(size,
                     wxDEFAULT,
                     italic ? wxITALIC :  wxNORMAL,
                     bold ? wxBOLD : wxNORMAL,
                     false,
-                    faceName);
+                    faceName,
+                    wxFONTENCODING_DEFAULT);
 }
 
 
@@ -167,7 +169,7 @@ void Surface::InitPixMap(int width, int height, Surface *surface_) {
     Release();
     hdc = new wxMemoryDC(surface_->hdc);
     hdcOwned = true;
-    bitmap = new wxBitmap(width, height);
+    bitmap = new wxBitmap(width, height+1);
     ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
     // **** ::SetTextAlign(hdc, TA_BASELINE);
 }
@@ -181,12 +183,25 @@ void Surface::BrushColor(Colour back) {
 }
 
 void Surface::SetFont(Font &font_) {
-    hdc->SetFont(*font_.GetID());
+
+  // I think the following check is valid.
+  // It eliminates a crash for me.  -- eric@sourcegear.com
+
+  if (font_.GetID())
+    {
+      hdc->SetFont(*font_.GetID());
+    }
 }
 
 int Surface::LogPixelsY() {
     return hdc->GetPPI().y;
 }
+
+
+int Surface::DeviceHeightFont(int points) {
+    return points * LogPixelsY() / 72;
+}
+
 
 void Surface::MoveTo(int x_, int y_) {
     x = x_;
@@ -232,7 +247,7 @@ void Surface::FillRectangle(PRectangle rc, Surface &surfacePattern) {
 void Surface::RoundedRectangle(PRectangle rc, Colour fore, Colour back) {
     PenColour(fore);
     BrushColor(back);
-    hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 8);
+    hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 4);
 }
 
 void Surface::Ellipse(PRectangle rc, Colour fore, Colour back) {
@@ -242,7 +257,8 @@ void Surface::Ellipse(PRectangle rc, Colour fore, Colour back) {
 }
 
 void Surface::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
-    hdc->Blit(rc.left, rc.top, rc.Width(), rc.Height(),
+    wxRect r = wxRectFromPRectangle(rc);
+    hdc->Blit(r.x, r.y, r.width, r.height,
               surfaceSource.hdc, from.x, from.y, wxCOPY);
 }
 
@@ -344,7 +360,11 @@ void Surface::SetClip(PRectangle rc) {
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 }
 
-
+void Surface::FlushCachedState() {
+  // TODO Is there anything we need to do here? eric@sourcegear.com
+  // TODO I had to add this method when I merged new Scintilla code
+  // TODO from Neil.
+}
 
 Window::~Window() {
 }
@@ -365,7 +385,8 @@ PRectangle Window::GetPosition() {
 }
 
 void Window::SetPosition(PRectangle rc) {
-    id->SetSize(rc.left, rc.top, rc.Width(), rc.Height());
+    wxRect r = wxRectFromPRectangle(rc);
+    id->SetSize(r);
 }
 
 void Window::SetPositionRelative(PRectangle rc, Window) {
@@ -386,7 +407,8 @@ void Window::InvalidateAll() {
 }
 
 void Window::InvalidateRectangle(PRectangle rc) {
-    id->Refresh(false, &wxRectFromPRectangle(rc));
+    wxRect r = wxRectFromPRectangle(rc);
+    id->Refresh(false, &r);
 }
 
 void Window::SetFont(Font &font) {
@@ -442,6 +464,7 @@ ListBox::~ListBox() {
 void ListBox::Create(Window &parent, int ctrlID) {
     id = new wxListBox(parent.id, ctrlID, wxDefaultPosition, wxDefaultSize,
                        0, NULL, wxLB_SINGLE | wxLB_SORT);
+    ((wxListBox*)id)->Show(FALSE);
 }
 
 void ListBox::Clear() {
@@ -465,7 +488,12 @@ int ListBox::GetSelection() {
 }
 
 int ListBox::Find(const char *prefix) {
-    return ((wxListBox*)id)->FindString(prefix);
+    for (int x=0; x < ((wxListBox*)id)->Number(); x++) {
+        wxString text = ((wxListBox*)id)->GetString(x);
+        if (text.StartsWith(prefix))
+            return x;
+    }
+    return -1;
 }
 
 void ListBox::GetValue(int n, char *value, int len) {

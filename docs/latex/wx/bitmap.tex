@@ -55,7 +55,7 @@ portable programs: in this case the {\it bits} parameter should contain an XBM
 image.
 
 For other bit depths, the behaviour is platform dependent: under Windows, the
-data is passed withotu any changes to the underlying {\tt CreateBitmap()} API.
+data is passed without any changes to the underlying {\tt CreateBitmap()} API.
 Under other platforms, only monochrome bitmaps may be created using this
 constructor and \helpref{wxImage}{wximage} should be used for creating colour
 bitmaps from static data.
@@ -505,19 +505,13 @@ Sets the validity member (does not affect the bitmap data).
 
 \membersection{wxBitmap::SetPalette}\label{wxbitmapsetpalette}
 
-\func{void}{SetPalette}{\param{wxPalette* }{palette}}
+\func{void}{SetPalette}{\param{const wxPalette\& }{palette}}
 
-Sets the associated palette: it will be deleted in the wxBitmap
-destructor, so if you do not wish it to be deleted automatically,
-reset the palette to NULL before the bitmap is deleted.
+Sets the associated palette.
 
 \wxheading{Parameters}
 
 \docparam{palette}{The palette to set.}
-
-\wxheading{Remarks}
-
-The bitmap object owns the palette once this has been called.
 
 \wxheading{See also}
 

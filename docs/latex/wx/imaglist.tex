@@ -131,6 +131,26 @@ that the background is solid.}
 
 Returns the number of images in the list.
 
+\membersection{wxImageList::GetSize}\label{wximagelistgetsize}
+
+\constfunc{bool}{GetSize}{\param{int }{index}, \param{int\& }{width}, \param{int \&}{height}}
+
+Retrieves the size of the images in the list. Currently, the {\it index} 
+parameter is ignored as all images in the list have the same size.
+
+\wxheading{Parameters}
+
+\docparam{index}{currently unused, should be 0}
+
+\docparam{width}{receives the width of the images in the list}
+
+\docparam{height}{receives the height of the images in the list}
+
+\wxheading{Return value}
+
+TRUE if the function succeeded, FALSE if it failed (for example, if the image
+list was not yet initialized).
+
 \membersection{wxImageList::Remove}\label{wximagelistremove}
 
 \func{bool}{Remove}{\param{int}{ index}}
