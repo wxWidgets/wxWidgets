@@ -12,6 +12,10 @@
 #ifndef __WXSTLLST_G__
 #define __WXSTLLST_G__
 
+#ifdef new
+#undef new
+#endif
+
 #include <stddef.h>
 #include <sys/types.h>
 #include <memory.h>

@@ -12,12 +12,15 @@
 #ifndef __WXSTLAC_G__
 #define __WXSTLAC_G__
 
+#ifdef new
+#undef new
+#endif
+
 #include <stddef.h>
 #include <sys/types.h>
 #include <memory.h>
 #include <limits.h>
 #include <new.h>
-
 
 // the below macro used internally (see actual interface after this macro)
 

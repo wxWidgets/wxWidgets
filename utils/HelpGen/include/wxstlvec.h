@@ -12,6 +12,10 @@
 #ifndef __WXSTLVEC_G__
 #define __WXSTLVEC_G__
 
+#ifdef new
+#undef new
+#endif
+
 #include <memory.h>
 #include <string.h>  // imports memmove()
 #include <stddef.h>

@@ -76,7 +76,7 @@
 
 #include "wx/settings.h"
 
-#if (defined(__BORLANDC__) && defined(__WIN16__))
+#if ((defined(__BORLANDC__) || defined(__SC__)) && defined(__WIN16__))
 
 // Forward (private) declarations
 bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db);
@@ -704,7 +704,7 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
   wxItemResource *item = table->FindResource(resource);
   if (item)
   {
-    if (!item->GetType() || strcmp(item->GetType(), "wxBitmap") != 0)
+    if ((item->GetType() == "") || (item->GetType() != "wxBitmap"))
     {
       wxLogWarning(_("%s not a bitmap resource specification."), (const char*) resource);
       return wxNullBitmap;
@@ -859,7 +859,7 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
   wxItemResource *item = table->FindResource(resource);
   if (item)
   {
-    if ((item->GetType() == "") || strcmp(item->GetType(), "wxIcon") != 0)
+    if ((item->GetType() == "") || (item->GetType() != "wxIcon"))
     {
       wxLogWarning(_("%s not an icon resource specification."), (const char*) resource);
       return wxNullIcon;
@@ -1482,7 +1482,7 @@ bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, 
 
   wxItemResource *resource = table->FindResource((const char *)resourceName);
 //  if (!resource || (resource->GetType() != wxTYPE_DIALOG_BOX))
-  if (!resource || !resource->GetType() ||
+  if (!resource || (resource->GetType() == "") ||
     ! ((strcmp(resource->GetType(), "wxDialog") == 0) || (strcmp(resource->GetType(), "wxPanel") == 0)))
     return FALSE;
 

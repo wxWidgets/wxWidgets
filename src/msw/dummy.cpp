@@ -39,8 +39,11 @@
 #pragma hdrstop
 #endif
 
-// Foils optimizations in Visual C++ (see also wx_main.cc)
+// Foils optimizations in Visual C++ (see also app.cpp). Without it,
+// dummy.obj isn't linked and we get a linker error.
+#if defined(_MSC_VER) && defined(__WIN16__)
 char wxDummyChar=0;
+#endif
 
 #if defined(WXUSINGDLL)
 

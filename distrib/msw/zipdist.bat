@@ -36,7 +36,7 @@ zip32 -@ %dest\wx200cw.zip < %src\distrib\msw\cw.rsp
 zip32 -@ %dest\ogl3.zip < %src\utils\ogl\distrib\ogl.rsp
 
 rem Tex2RTF
-zip32 -@ %dest\tex2rtf.zip < %src\distrib\msw\tex2rtf.rsp
+zip32 -@ %dest\tex2rtf2.zip < %src\distrib\msw\tex2rtf.rsp
 
 copy %src\docs\changes.txt %dest
 copy %src\docs\msw\install.txt %dest\install_msw.txt

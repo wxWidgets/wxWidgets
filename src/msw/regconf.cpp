@@ -28,6 +28,9 @@
 #include <wx/app.h>
 #include <wx/log.h>
 #include <wx/config.h>
+
+#ifndef __WIN16__
+
 #include <wx/msw/registry.h>
 #include <wx/msw/regconf.h>
 
@@ -471,3 +474,7 @@ bool wxRegConfig::DeleteAll()
 
   return bOk;
 }
+
+#endif
+  // __WIN16__
+

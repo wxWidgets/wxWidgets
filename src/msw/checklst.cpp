@@ -22,8 +22,6 @@
 
 #if wxUSE_OWNER_DRAWN
 
-#include <windows.h>
-
 #include "wx/object.h"
 #include "wx/colour.h"
 #include "wx/font.h"
@@ -34,6 +32,8 @@
 #include "wx/settings.h"
 #include "wx/dcmemory.h"
 #include "wx/msw/checklst.h"
+
+#include <windows.h>
 
 // ============================================================================
 // implementation

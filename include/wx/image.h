@@ -18,6 +18,7 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/gdicmn.h"
+#include "wx/stream.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -43,8 +44,8 @@ class WXDLLEXPORT wxImageHandler: public wxObject
 public:
   wxImageHandler() { m_name = ""; m_extension = ""; m_type = 0; }
 
-  virtual bool LoadFile( wxImage *image, const wxString& name );
-  virtual bool SaveFile( wxImage *image, const wxString& name );
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
 
   inline void SetName(const wxString& name) { m_name = name; }
   inline void SetExtension(const wxString& ext) { m_extension = ext; }
@@ -78,8 +79,8 @@ public:
       m_type = wxBITMAP_TYPE_PNG;
   };
 
-  virtual bool LoadFile( wxImage *image, const wxString& name );
-  virtual bool SaveFile( wxImage *image, const wxString& name );
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
 };
 #endif
 
@@ -100,7 +101,7 @@ public:
       m_type = wxBITMAP_TYPE_BMP;
   };
 
-  virtual bool LoadFile( wxImage *image, const wxString& name );
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
 };
 
 //-----------------------------------------------------------------------------
@@ -118,6 +119,7 @@ public:
   wxImage();
   wxImage( int width, int height );
   wxImage( const wxString& name, long type = wxBITMAP_TYPE_PNG );
+  wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_PNG );
   
   wxImage( const wxImage& image );
   wxImage( const wxImage* image );
@@ -138,7 +140,9 @@ public:
   unsigned char GetBlue( int x, int y );
   
   virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_PNG );
+  virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_PNG );
   virtual bool SaveFile( const wxString& name, int type );
+  virtual bool SaveFile( wxOutputStream& stream, int type );
 
   bool Ok() const;
   int GetWidth() const;

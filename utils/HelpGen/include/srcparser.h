@@ -15,7 +15,6 @@
 #define __SRCPARSER_G__
 
 #if defined( wxUSE_TEMPLATE_STL )
-
 	#include <vector>
 
 	#ifdef WIN32
@@ -28,7 +27,6 @@
 	#endif
 
 #else
-
 	#include "wx/string.h"
 	#include "wxstlvec.h"
 

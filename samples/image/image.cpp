@@ -7,7 +7,17 @@
  *
  */
 
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
 #include "wx/wx.h"
+#endif
+
 #include "wx/image.h"
 
 // derived classes
@@ -77,6 +87,8 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, const wxSize &size ) 
   : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER ) 
 {
+  SetBackgroundColour(* wxWHITE);
+
   wxBitmap bitmap( 100, 100 );
   
   wxMemoryDC dc;
@@ -85,14 +97,20 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, c
   dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 0, 0, 100, 100 );
   dc.SelectObject( wxNullBitmap );
-  
+
+  wxString dir("");
+
+#ifdef __WXGTK__
+  dir = wxString("../");
+#endif
+
   wxImage image( bitmap );
-  image.SaveFile( "../test.png", wxBITMAP_TYPE_PNG );
+  image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   
-  image.LoadFile( "../horse.png", wxBITMAP_TYPE_PNG );
+  image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG );
   my_horse = new wxBitmap( image.ConvertToBitmap() );
   
-  image.LoadFile( "../test.png", wxBITMAP_TYPE_PNG );
+  image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   my_square = new wxBitmap( image.ConvertToBitmap() );
 }
 
@@ -140,8 +158,7 @@ MyFrame::MyFrame(void) :
   
   wxMenuBar *menu_bar = new wxMenuBar();
   menu_bar->Append(file_menu, "File");
-  menu_bar->Show( TRUE );
-  
+
   SetMenuBar( menu_bar );
   
   CreateStatusBar(2);
@@ -166,7 +183,8 @@ void MyFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
   int w,h;
   GetClientSize( &w, &h );
-  m_canvas->SetSize( w, h );
+  if (m_canvas)
+    m_canvas->SetSize( w, h );
 }
 
 //-----------------------------------------------------------------------------
@@ -187,8 +205,4 @@ bool MyApp::OnInit(void)
   
   return TRUE;
 }
-
-
-
-
 

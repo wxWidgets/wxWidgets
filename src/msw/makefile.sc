@@ -77,6 +77,7 @@ COMMONOBJS = \
   $(COMMDIR)\object.obj \
   $(COMMDIR)\prntbase.obj \
   $(COMMDIR)\resource.obj \
+  $(COMMDIR)\resourc2.obj \
   $(COMMDIR)\tbarbase.obj \
   $(COMMDIR)\tbarsmpl.obj \
   $(COMMDIR)\textfile.obj \
@@ -88,14 +89,6 @@ COMMONOBJS = \
   $(COMMDIR)\hash.obj \
   $(COMMDIR)\list.obj \
   $(COMMDIR)\string.obj \
-  $(COMMDIR)\socket.obj \
-  $(COMMDIR)\sckaddr.obj \
-  $(COMMDIR)\sckfile.obj \
-  $(COMMDIR)\sckipc.obj \
-  $(COMMDIR)\sckstrm.obj \
-  $(COMMDIR)\url.obj \
-  $(COMMDIR)\http.obj \
-  $(COMMDIR)\protocol.obj \
   $(COMMDIR)\time.obj \
   $(COMMDIR)\tokenzr.obj \
   $(COMMDIR)\wxexpr.obj \
@@ -110,6 +103,16 @@ COMMONOBJS = \
   $(COMMDIR)\objstrm.obj \
   $(COMMDIR)\variant.obj \
   $(COMMDIR)\wincmn.obj
+
+# Don't compile for WIN16
+#  $(COMMDIR)\socket.obj \
+#  $(COMMDIR)\sckaddr.obj \
+#  $(COMMDIR)\sckfile.obj \
+#  $(COMMDIR)\sckipc.obj \
+#  $(COMMDIR)\sckstrm.obj \
+#  $(COMMDIR)\url.obj \
+#  $(COMMDIR)\http.obj \
+#  $(COMMDIR)\protocol.obj \
 
 # Don't compile
 #  $(COMMDIR)\db.obj \

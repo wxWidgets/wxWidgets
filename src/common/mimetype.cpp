@@ -34,6 +34,9 @@
     #include  "wx/icon.h"
 #endif //WX_PRECOMP
 
+// Doesn't compile in WIN16 mode
+#ifndef __WIN16__
+
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
@@ -1210,5 +1213,5 @@ void wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName)
 
 #endif // OS type
 
-/* vi: set cin tw=80 ts=4 sw=4: */
-
+#endif
+  // __WIN16__

@@ -40,9 +40,10 @@
 #ifndef WX_PRECOMP
     #include <wx/string.h>
     #include <wx/log.h>
-    #include <wx/file.h>
     #include <wx/dynarray.h>
 #endif // WX_PRECOMP
+
+#include <wx/file.h>
 
 // C++ parsing classes
 #include "cjparser.h"
@@ -69,6 +70,10 @@ static wxString GetAllComments(const spContext& ctx);
 
 // get the string with current time (returns pointer to static buffer)
 // timeFormat is used for the call of strftime(3)
+#ifdef GetCurrentTime
+#undef GetCurrentTime
+#endif
+
 static const char *GetCurrentTime(const char *timeFormat);
 
 // -----------------------------------------------------------------------------

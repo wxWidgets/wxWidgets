@@ -1431,7 +1431,7 @@ wxFont wxResourceInterpretFontSpec(wxExpr *expr)
 
 // Separate file for the remainder of this, for BC++/Win16
 
-#if !(defined(__BORLANDC__) && defined(__WIN16__))
+#if !((defined(__BORLANDC__) || defined(__SC__)) && defined(__WIN16__))
 /*
  * (Re)allocate buffer for reading in from resource file
  */

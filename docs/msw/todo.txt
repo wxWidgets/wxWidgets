@@ -41,6 +41,12 @@ image, using Borland Image Editor. WIN16 doesn't have a function
 for specifying which image to use, so the larger one gets used
 erroneously.
 
+Add headers to VC++ project files.
+
+Test GLCanvas.
+
+Distribution naming?
+
 LOW PRIORITY (MEDIUM TERM)
 --------------------------
 

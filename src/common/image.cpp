@@ -26,6 +26,7 @@
 #include "../png/png.h"
 #endif
 #include "wx/filefn.h"
+#include "wx/wfstream.h"
 
 #ifdef __WXMSW__
 #include <windows.h>
@@ -89,6 +90,11 @@ wxImage::wxImage( int width, int height )
 wxImage::wxImage( const wxString& name, long type )
 {
     LoadFile( name, type );
+}
+
+wxImage::wxImage( wxInputStream& stream, long type )
+{
+    LoadFile( stream, type );
 }
 
 wxImage::wxImage( const wxImage& image )  
@@ -296,15 +302,23 @@ int wxImage::GetHeight() const
 
 bool wxImage::LoadFile( const wxString& filename, long type )
 {
-    UnRef();
-  
-    if (!wxFileExists(filename))
+    if (wxFileExists(filename))
     {
+        wxFileInputStream stream(filename);
+        return LoadFile(stream, type);
+    }
+
+    else {
         wxLogWarning( "Image file does not exist." );
 
         return FALSE;
     }
+}
 
+bool wxImage::LoadFile( wxInputStream& stream, long type )
+{
+    UnRef();
+  
     m_refData = new wxImageRefData;
 
     wxImageHandler *handler = FindHandler(type);
@@ -316,10 +330,20 @@ bool wxImage::LoadFile( const wxString& filename, long type )
         return FALSE;
     }
 
-    return handler->LoadFile( this, filename );
+    return handler->LoadFile( this, stream );
 }
 
 bool wxImage::SaveFile( const wxString& filename, int type )
+{
+    wxFileOutputStream stream(filename);
+
+    if ( stream.LastError() == wxStream_NOERROR )
+        return SaveFile(stream, type);
+    else
+        return FALSE;
+}
+
+bool wxImage::SaveFile( wxOutputStream& stream, int type )
 {
     wxCHECK_MSG( Ok(), FALSE, "invalid image" );
     
@@ -332,7 +356,7 @@ bool wxImage::SaveFile( const wxString& filename, int type )
       return FALSE;
     }
 
-    return handler->SaveFile( this, filename );
+    return handler->SaveFile( this, stream );
 }
 
 void wxImage::AddHandler( wxImageHandler *handler )
@@ -424,12 +448,12 @@ void wxImage::CleanUpHandlers()
 IMPLEMENT_DYNAMIC_CLASS(wxImageHandler,wxObject)
 #endif
 
-bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), const wxString& WXUNUSED(name) )
+bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream) )
 {
     return FALSE;
 }
 
-bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), const wxString& WXUNUSED(name) )
+bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream) )
 {
     return FALSE;
 }
@@ -443,9 +467,27 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), const wxString& WXUNUSE
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #endif
-  
-bool wxPNGHandler::LoadFile( wxImage *image, const wxString& name )
+
+
+static void _PNG_stream_reader( png_structp png_ptr, png_bytep data, png_size_t length )
 {
+   ((wxInputStream*) png_get_io_ptr( png_ptr )) -> Read(data, length);
+}
+  
+static void _PNG_stream_writer( png_structp png_ptr, png_bytep data, png_size_t length )
+{
+   ((wxOutputStream*) png_get_io_ptr( png_ptr )) -> Write(data, length);
+}
+  
+bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
+{
+//   png_structp         png_ptr;
+ //  png_infop           info_ptr;
+  // unsigned char      *ptr, **lines, *ptr2;
+  // int                 transp,bit_depth,color_type,interlace_type;
+   //png_uint_32         width, height;
+   //unsigned int	       i;
+
     image->Destroy();
    
     png_structp png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING, 
@@ -469,10 +511,8 @@ bool wxPNGHandler::LoadFile( wxImage *image, const wxString& name )
     {
         png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
         return FALSE;
-    }
-   
-    FILE *f = fopen( name, "rb" );
-    png_init_io( png_ptr, f );
+    }   
+    png_set_read_fn( png_ptr, &stream, _PNG_stream_reader);
    
     png_uint_32 width,height;
     int bit_depth,color_type,interlace_type;
@@ -591,35 +631,30 @@ bool wxPNGHandler::LoadFile( wxImage *image, const wxString& name )
 }
 
 
-bool wxPNGHandler::SaveFile( wxImage *image, const wxString& name )
+bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
 {
-    FILE *f = fopen( name, "wb" );
-    if (!f) return FALSE;
-    
-    png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, 
-                                                       (voidp) NULL, (png_error_ptr) NULL, (png_error_ptr) NULL);
+  {
+    png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr) 
     { 
-        fclose( f ); 
-        return FALSE; 
+      return FALSE; 
     }
     
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL)
     {
-        fclose(f);
-        png_destroy_write_struct( &png_ptr, (png_infopp) NULL );
-        return FALSE;
+      png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
+      return FALSE;
     }
     
     if (setjmp(png_ptr->jmpbuf))
     {
-        fclose( f );
-        png_destroy_write_struct( &png_ptr, (png_infopp) NULL );
-        return FALSE;
+      png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
+      return FALSE;
     }
     
-    png_init_io( png_ptr, f );
+    png_set_write_fn( png_ptr, &stream, _PNG_stream_writer, NULL);
+
     png_set_IHDR( png_ptr, info_ptr, image->GetWidth(), image->GetHeight(), 8,
 	          PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
 		  PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
@@ -637,9 +672,8 @@ bool wxPNGHandler::SaveFile( wxImage *image, const wxString& name )
     unsigned char *data = (unsigned char *)malloc( image->GetWidth()*4 );
     if (!data)
     {
-        fclose( f );
-        png_destroy_write_struct( &png_ptr, (png_infopp) NULL );
-        return FALSE;
+      png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
+      return FALSE;
     }
     
     for (int y = 0; y < image->GetHeight(); y++)
@@ -667,11 +701,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, const wxString& name )
     
     free(data);
     png_write_end( png_ptr, info_ptr );
-    png_destroy_write_struct( &png_ptr, (png_infopp) NULL );
-
-    fclose(f);
-    
-    return TRUE;
+    png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
+  }
+  return TRUE;
 }
 
 #endif 
@@ -686,9 +718,8 @@ bool wxPNGHandler::SaveFile( wxImage *image, const wxString& name )
 IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 #endif
   
-bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
+bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
 {
-   FILE               *file;
    unsigned char      *data, *ptr;
    int                 done, i, bpp, planes, comp, ncolors, line, column,
                        linesize, linepos, rshift = 0, gshift = 0, bshift = 0;
@@ -696,6 +727,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    short int           word;
    long int            dbuf[4], dword, rmask = 0, gmask = 0, bmask = 0, offset,
                        size;
+   off_t               start_offset = stream.TellI();
    signed char         bbuf[4];
    struct _cmap
      {
@@ -714,56 +746,48 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 
   image->Destroy();
 
-   file = fopen(name, "r");
-   if (!file)
-      return NULL;
-
    done = 0;
    /* 
     * Reading the bmp header 
     */
 
-   fread(&bbuf, 1, 2, file);
+   stream.Read(&bbuf, 2);
 
-   fread(dbuf, 4, 4, file);
+   stream.Read(dbuf, 4 * 4);
 
    size = dbuf[0];
    offset = dbuf[2];
 
-   fread(dbuf, 4, 2, file);
+   stream.Read(dbuf, 4 * 2);
    int width = (int)dbuf[0];
    int height = (int)dbuf[1];
    if (width > 32767)
      {
 	wxLogError( "Image width > 32767 pixels for file\n" );
-	fclose(file);
 	return FALSE;
      }
    if (height > 32767)
      {
 	wxLogError( "Image height > 32767 pixels for file\n" );
-	fclose(file);
 	return FALSE;
      }
-   fread(&word, 2, 1, file);
+   stream.Read(&word, 2);
    planes = (int)word;
-   fread(&word, 2, 1, file);
+   stream.Read(&word, 2);
    bpp = (int)word;
    if (bpp != 1 && bpp != 4 && bpp != 8 && bpp && 16 && bpp != 24 && bpp != 32)
      {
 	wxLogError( "unknown bitdepth in file\n" );
-	fclose(file);
 	return FALSE;
      }
-   fread(dbuf, 4, 4, file);
+   stream.Read(dbuf, 4 * 4);
    comp = (int)dbuf[0];
    if (comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 && comp != BI_BITFIELDS)
      {
         wxLogError( "unknown encoding in Windows BMP file\n" );
-	fclose(file);
 	return FALSE;
      }
-   fread(dbuf, 4, 2, file);
+   stream.Read(dbuf, 4 * 2);
    ncolors = (int)dbuf[0];
    if (ncolors == 0)
       ncolors = 1 << bpp;
@@ -771,7 +795,6 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    if (((comp == BI_RLE4) && (bpp != 4)) || ((comp == BI_RLE8) && (bpp != 8)) || ((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
      {
         wxLogError( "encoding of BMP doesn't match bitdepth\n" );
-	fclose(file);
 	return FALSE;
      }
    if (bpp < 16)
@@ -781,7 +804,6 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 	if (!cmap)
 	  {
 	     wxLogError( "Cannot allocate RAM for color map in BMP file\n" );
-	     fclose(file);
 	     return FALSE;
 	  }
      }
@@ -793,7 +815,6 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    if (!ptr)
      {
         wxLogError( "Cannot allocate RAM for RGB data in file\n" );
-	fclose(file);
 	if (cmap)
 	   free(cmap);
 	return FALSE;
@@ -806,7 +827,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
      {
 	for (i = 0; i < ncolors; i++)
 	  {
-	     fread(bbuf, 1, 4, file);
+	     stream.Read(bbuf, 4);
 	     cmap[i].b = bbuf[0];
 	     cmap[i].g = bbuf[1];
 	     cmap[i].r = bbuf[2];
@@ -818,7 +839,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 	  {
 	     int                 bit = 0;
 
-	     fread(dbuf, 4, 3, file);
+	     stream.Read(dbuf, 4 * 3);
 	     bmask = dbuf[0];
 	     gmask = dbuf[1];
 	     rmask = dbuf[2];
@@ -856,7 +877,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    /*
     * Reading the image data
     */
-   fseek(file, offset, SEEK_SET);
+   stream.SeekI(start_offset + offset);
    data = ptr;
 
    /* set the whole image to the background color */
@@ -889,7 +910,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 		  int                 index;
 
 		  linepos++;
-		  aByte = getc(file);
+		  aByte = stream.GetC();
 		  if (bpp == 1)
 		    {
 		       int                 bit = 0;
@@ -935,7 +956,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 			    unsigned char       first;
 
 			    first = aByte;
-			    aByte = getc(file);
+			    aByte = stream.GetC();
 			    if (first == 0)
 			      {
 				 if (aByte == 0)
@@ -949,10 +970,10 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 				   }
 				 else if (aByte == 2)
 				   {
-				      aByte = getc(file);
+				      aByte = stream.GetC();
 				      column += aByte;
 				      linepos = column * bpp / 8;
-				      aByte = getc(file);
+				      aByte = stream.GetC();
 				      line += aByte;
 				   }
 				 else
@@ -962,14 +983,14 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 				      for (i = 0; i < absolute; i++)
 					{
 					   linepos++;
-					   aByte = getc(file);
+					   aByte = stream.GetC();
 					   ptr[poffset] = cmap[aByte].r;
 					   ptr[poffset + 1] = cmap[aByte].g;
 					   ptr[poffset + 2] = cmap[aByte].b;
 					   column++;
 					}
 				      if (absolute & 0x01)
-					 aByte = getc(file);
+					 aByte = stream.GetC();
 				   }
 			      }
 			    else
@@ -996,7 +1017,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 	       }
 	     else if (bpp == 24)
 	       {
-		  linepos += fread(&bbuf, 1, 3, file);
+	      stream.Read(&bbuf, 3);
+		  linepos += 3;		
 		  ptr[poffset] = (unsigned char)bbuf[2];
 		  ptr[poffset + 1] = (unsigned char)bbuf[1];
 		  ptr[poffset + 2] = (unsigned char)bbuf[0];
@@ -1006,7 +1028,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 	       {
 		  unsigned char       temp;
 
-		  linepos += fread(&word, 2, 1, file);
+		  stream.Read(&word, 2);
+		  linepos += 2;
 		  temp = (word & rmask) >> rshift;
 		  ptr[poffset] = temp;
 		  temp = (word & gmask) >> gshift;
@@ -1019,7 +1042,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 	       {
 		  unsigned char       temp;
 
-		  linepos += fread(&dword, 4, 1, file);
+		  stream.Read(&dword, 4);
+		  linepos += 4;
 		  temp = (dword & rmask) >> rshift;
 		  ptr[poffset] = temp;
 		  temp = (dword & gmask) >> gshift;
@@ -1031,10 +1055,9 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 	  }
 	while ((linepos < linesize) && (comp != 1) && (comp != 2))
 	  {
-	     int                 temp = fread(&aByte, 1, 1, file);
-
-	     linepos += temp;
-	     if (!temp)
+	     stream.Read(&aByte, 1);
+	     linepos += 1;
+	     if (stream.LastError() != wxStream_NOERROR)
 		break;
 	  }
      }
@@ -1042,7 +1065,6 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
       
    image->SetMask( FALSE );
    
-   fclose(file);
    return TRUE;
 }
 

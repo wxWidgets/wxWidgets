@@ -33,6 +33,7 @@
   #include "wx/dc.h"
   #include "wx/dialog.h"
   #include "wx/msgdlg.h"
+  #include "wx/intl.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -248,7 +249,8 @@ bool wxApp::Initialize()
 
     // This is to foil optimizations in Visual C++ that
     // throw out dummy.obj.
-#if (_MSC_VER >= 800) && !defined(WXMAKINGDLL)
+// #if (_MSC_VER >= 800) && !defined(WXMAKINGDLL)
+#if defined(_MSC_VER) && defined(__WIN16__) && !defined(WXMAKINGDLL)
     extern char wxDummyChar;
     if (wxDummyChar) wxDummyChar++;
 #endif

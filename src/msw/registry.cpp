@@ -27,8 +27,9 @@
 #include  "wx/string.h"
 #include  "wx/intl.h"
 #include  "wx/log.h"
-
 #include  "wx/config.h"    // for wxExpandEnvVars
+
+#ifndef __WIN16__
 
 // Windows headers
 /*
@@ -799,3 +800,7 @@ void RemoveTrailingSeparator(wxString& str)
   if ( !str.IsEmpty() && str.Last() == REG_SEPARATOR )
     str.Truncate(str.Len() - 1);
 }
+
+#endif
+  // __WIN16__
+
