@@ -18362,6 +18362,10 @@ else
                 va_end(ap2);
                 va_end(ap1);
             }
+            int main()
+            {
+                return foo("hi", 17);
+            }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
 if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
