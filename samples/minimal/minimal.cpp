@@ -151,9 +151,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Minimal_About, "&About...");
+    menuFile->Append(Minimal_About, "&About...", "Show about dialog");
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_Quit, "E&xit");
+    menuFile->Append(Minimal_Quit, "E&xit", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
