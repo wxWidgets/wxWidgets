@@ -47,7 +47,7 @@
     #include "wx/textctrl.h"
 #endif
 
-#include "wx/generic/listctrl.h"
+#include "wx/listctrl.h"
 
 #if defined(__WXGTK__)
     #include <gtk/gtk.h>
