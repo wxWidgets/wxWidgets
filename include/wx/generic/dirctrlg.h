@@ -20,6 +20,8 @@
 #endif
 
 #include "wx/treectrl.h"
+#include "wx/dirdlg.h"
+#include "wx/choice.h"
 
 //-----------------------------------------------------------------------------
 // classes
