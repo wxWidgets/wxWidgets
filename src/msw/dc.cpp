@@ -638,6 +638,10 @@ void wxDC::DoDrawText(const wxString& text, long x, long y)
     if (m_textBackgroundColour.Ok())
         (void)SetBkColor(GetHdc(), old_background);
 
+    // background colour is used only for DrawText, otherwise
+    // always TRANSPARENT, RR
+    SetBkMode(GetHdc(), TRANSPARENT);
+
     CalcBoundingBox(x, y);
 
     long w, h;
@@ -821,10 +825,15 @@ void wxDC::SetBackgroundMode(int mode)
 {
     m_backgroundMode = mode;
 
+    // SetBackgroundColour now only refers to text background
+    // and m_backgroundMode is used there
+
+/*
     if (m_backgroundMode == wxTRANSPARENT)
         ::SetBkMode(GetHdc(), TRANSPARENT);
     else
-        ::SetBkMode(GetHdc(), OPAQUE);
+	::SetBkMode(GetHdc(), OPAQUE);
+*/
 }
 
 void wxDC::SetLogicalFunction(int function)

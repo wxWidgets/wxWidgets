@@ -38,6 +38,11 @@ wxScreenDC::wxScreenDC(void)
 {
   m_hDC = (WXHDC) ::GetDC((HWND) NULL);
   m_hDCCount ++;
+
+  // the background mode is only used for text background
+  // and is set in DrawText() to OPAQUE as required, other-
+  // wise always TRANSPARENT, RR
+  ::SetBkMode( GetHdc(), TRANSPARENT );
 }
 
 wxScreenDC::~wxScreenDC(void)

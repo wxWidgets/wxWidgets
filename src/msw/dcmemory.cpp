@@ -24,10 +24,9 @@
 #include "wx/utils.h"
 #endif
 
-#include "wx/dcmemory.h"
+#include "wx/msw/private.h"
 
-#include <windows.h>
-#include "wx/msw/winundef.h"
+#include "wx/dcmemory.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
@@ -46,6 +45,12 @@ wxMemoryDC::wxMemoryDC(void)
 
   SetBrush(*wxWHITE_BRUSH);
   SetPen(*wxBLACK_PEN);
+
+  // the background mode is only used for text background
+  // and is set in DrawText() to OPAQUE as required, other-
+  // wise always TRANSPARENT, RR
+  ::SetBkMode( GetHdc(), TRANSPARENT );
+
 }
 
 wxMemoryDC::wxMemoryDC(wxDC *old_dc)
@@ -59,6 +64,12 @@ wxMemoryDC::wxMemoryDC(wxDC *old_dc)
 
   SetBrush(*wxWHITE_BRUSH);
   SetPen(*wxBLACK_PEN);
+
+  // the background mode is only used for text background
+  // and is set in DrawText() to OPAQUE as required, other-
+  // wise always TRANSPARENT, RR
+  ::SetBkMode( GetHdc(), TRANSPARENT );
+
 }
 
 wxMemoryDC::~wxMemoryDC(void)

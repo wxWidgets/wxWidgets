@@ -17,6 +17,10 @@ a stand alone port without the infamous Cygwin.dll from
 
   http://agnes.dida.physik.uni-essen.de/~janjaap/mingw32
 
+The makefile has small problems with Cygwin´s tools
+so it is recommended not to use these (but MingGW32
+and its make.exe).
+
 -> Set your path so that it includes the directory
    where your compiler and tools reside
 -> Assume that you installed the wxWindows sources
@@ -25,16 +29,18 @@ a stand alone port without the infamous Cygwin.dll from
    to   c:\wxWin\include\wx\msw\setup.h
 -> Edit c:\wxWin\include\wx\msw\setup.h so that
    most features are enabled (i.e. defined to 1) with
-   #define wxUSE_SOCKETS       1
-   #define wxUSE_HTML          1
+   #define wxUSE_SOCKETS       0
+   #define wxUSE_HTML          0
    #define wxUSE_THREADS       1
-   #define wxUSE_FS_INET       1
-   #define wxUSE_FS_ZIP        1
+   #define wxUSE_FS_INET       0
+   #define wxUSE_FS_ZIP        0
    #define wxUSE_BUSYINFO      1
    #define wxUSE_DYNLIB_CLASS  1
    #define wxUSE_ZIPSTREAM     1
+   #define wxUSE_JPEGLIB       1
+   #define wxUSE_PNGLIB        1
 
-   and disbale iostreams with
+   and disable iostreams with
    #define wxUSE_STD_IOSTREAM   0
 -> type: cd c:\wxWin\src\msw
 -> type: make -f makefile.g95

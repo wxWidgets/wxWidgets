@@ -69,7 +69,7 @@ wxPenRefData::~wxPenRefData()
 
 wxPen::wxPen()
 {
-  if ( wxThePenList )
+  if (wxThePenList)
     wxThePenList->AddPen(this);
 }
 
@@ -125,145 +125,168 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
 
 wxPen::wxPen(const wxBitmap& stipple, int Width)
 {
-  m_refData = new wxPenRefData;
+    m_refData = new wxPenRefData;
 
 //  M_PENDATA->m_colour = col;
-  M_PENDATA->m_stipple = stipple;
-  M_PENDATA->m_width = Width;
-  M_PENDATA->m_style = wxSTIPPLE;
-  M_PENDATA->m_join = wxJOIN_ROUND ;
-  M_PENDATA->m_cap = wxCAP_ROUND ;
-  M_PENDATA->m_nbDash = 0 ;
-  M_PENDATA->m_dash = 0 ;
-  M_PENDATA->m_hPen = 0 ;
+    M_PENDATA->m_stipple = stipple;
+    M_PENDATA->m_width = Width;
+    M_PENDATA->m_style = wxSTIPPLE;
+    M_PENDATA->m_join = wxJOIN_ROUND ;
+    M_PENDATA->m_cap = wxCAP_ROUND ;
+    M_PENDATA->m_nbDash = 0 ;
+    M_PENDATA->m_dash = 0 ;
+    M_PENDATA->m_hPen = 0 ;
 
-  RealizeResource();
+    RealizeResource();
 
-  if ( wxThePenList )
-    wxThePenList->AddPen(this);
+    if (wxThePenList)
+       wxThePenList->AddPen(this);
 }
 
 bool wxPen::RealizeResource()
 {
-  if (M_PENDATA && (M_PENDATA->m_hPen == 0))
-  {
-    if (M_PENDATA->m_style==wxTRANSPARENT)
-    {
-      M_PENDATA->m_hPen = (WXHPEN) ::GetStockObject(NULL_PEN);
-      return TRUE;
-    }
+   if (M_PENDATA && (M_PENDATA->m_hPen == 0))
+   {
+       if (M_PENDATA->m_style==wxTRANSPARENT)
+       {
+           M_PENDATA->m_hPen = (WXHPEN) ::GetStockObject(NULL_PEN);
+           return TRUE;
+       }
 
-    COLORREF ms_colour = 0 ;
-    ms_colour = M_PENDATA->m_colour.GetPixel() ;
+       COLORREF ms_colour = 0;
+       ms_colour = M_PENDATA->m_colour.GetPixel();
 
-    // Join style, Cap style, Pen Stippling only on Win32.
-    // Currently no time to find equivalent on Win3.1, sorry
-    // [if such equiv exist!!]
+       // Join style, Cap style, Pen Stippling only on Win32.
+       // Currently no time to find equivalent on Win3.1, sorry
+       // [if such equiv exist!!]
 #ifdef __WIN32__
-    if (M_PENDATA->m_join==wxJOIN_ROUND        &&
-        M_PENDATA->m_cap==wxCAP_ROUND          &&
-        M_PENDATA->m_style!=wxUSER_DASH        &&
-        M_PENDATA->m_style!=wxSTIPPLE          &&
-        M_PENDATA->m_width <= 1
-       )
-      M_PENDATA->m_hPen = (WXHPEN) CreatePen(wx2msPenStyle(M_PENDATA->m_style), M_PENDATA->m_width, ms_colour);
-    else
-    {
-      DWORD ms_style = PS_GEOMETRIC|wx2msPenStyle(M_PENDATA->m_style) ;
+       if (M_PENDATA->m_join==wxJOIN_ROUND        &&
+           M_PENDATA->m_cap==wxCAP_ROUND          &&
+           M_PENDATA->m_style!=wxUSER_DASH        &&
+           M_PENDATA->m_style!=wxSTIPPLE          &&
+	   M_PENDATA->m_width <= 1)
+       {
+	   M_PENDATA->m_hPen =
+	     (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
+				 M_PENDATA->m_width,
+				 ms_colour );
+       }
+       else
+       {
+	   DWORD ms_style = PS_GEOMETRIC | wx2msPenStyle(M_PENDATA->m_style);
 
-      LOGBRUSH logb ;
+	   switch(M_PENDATA->m_join)
+           {
+               case wxJOIN_BEVEL: ms_style |= PS_JOIN_BEVEL; break;
+               case wxJOIN_MITER: ms_style |= PS_JOIN_MITER; break;
+               default:
+               case wxJOIN_ROUND: ms_style |= PS_JOIN_ROUND; break;
+           }
 
-      switch(M_PENDATA->m_join)
-      {
-        case wxJOIN_BEVEL: ms_style |= PS_JOIN_BEVEL ; break ;
-        case wxJOIN_MITER: ms_style |= PS_JOIN_MITER ; break ;
-        default:
-        case wxJOIN_ROUND: ms_style |= PS_JOIN_ROUND ; break ;
-      }
+           switch(M_PENDATA->m_cap)
+           {
+               case wxCAP_PROJECTING: ms_style |= PS_ENDCAP_SQUARE;  break;
+               case wxCAP_BUTT:       ms_style |= PS_ENDCAP_FLAT;    break;
+               default:
+               case wxCAP_ROUND:      ms_style |= PS_ENDCAP_ROUND;   break;
+           }
 
-      switch(M_PENDATA->m_cap)
-      {
-        case wxCAP_PROJECTING: ms_style |= PS_ENDCAP_SQUARE ; break ;
-        case wxCAP_BUTT:       ms_style |= PS_ENDCAP_FLAT ;   break ;
-        default:
-        case wxCAP_ROUND:      ms_style |= PS_ENDCAP_ROUND ;  break ;
-      }
+	   LOGBRUSH logb;
 
-      switch(M_PENDATA->m_style)
-      {
-        case wxSTIPPLE:
-          logb.lbStyle = BS_PATTERN ;
-          if (M_PENDATA->m_stipple.Ok())
-            logb.lbHatch = (LONG)M_PENDATA->m_stipple.GetHBITMAP() ;
-          else
-            logb.lbHatch = (LONG)0 ;
-        break ;
-        case wxBDIAGONAL_HATCH:
-          logb.lbStyle = BS_HATCHED ;
-          logb.lbHatch = HS_BDIAGONAL ;
-        break ;
-        case wxCROSSDIAG_HATCH:
-          logb.lbStyle = BS_HATCHED ;
-          logb.lbHatch = HS_DIAGCROSS ;
-        break ;
-        case wxFDIAGONAL_HATCH:
-          logb.lbStyle = BS_HATCHED ;
-          logb.lbHatch = HS_FDIAGONAL ;
-        break ;
-        case wxCROSS_HATCH:
-          logb.lbStyle = BS_HATCHED ;
-          logb.lbHatch = HS_CROSS ;
-        break ;
-        case wxHORIZONTAL_HATCH:
-          logb.lbStyle = BS_HATCHED ;
-          logb.lbHatch = HS_HORIZONTAL ;
-        break ;
-        case wxVERTICAL_HATCH:
-          logb.lbStyle = BS_HATCHED ;
-          logb.lbHatch = HS_VERTICAL ;
-        break ;
-        default:
-          logb.lbStyle = BS_SOLID ;
-          // this should be unnecessary (it's unused) but suppresses the Purigy
-          // messages about uninitialized memory read
+	   switch(M_PENDATA->m_style)
+           {
+               case wxSTIPPLE:
+                   logb.lbStyle = BS_PATTERN ;
+                   if (M_PENDATA->m_stipple.Ok())
+                       logb.lbHatch = (LONG)M_PENDATA->m_stipple.GetHBITMAP();
+                   else
+                       logb.lbHatch = (LONG)0;
+                   break;
+               case wxBDIAGONAL_HATCH:
+		   logb.lbStyle = BS_HATCHED;
+		   logb.lbHatch = HS_BDIAGONAL;
+		   break;
+	       case wxCROSSDIAG_HATCH:
+		   logb.lbStyle = BS_HATCHED;
+		   logb.lbHatch = HS_DIAGCROSS;
+		   break;
+	       case wxFDIAGONAL_HATCH:
+		   logb.lbStyle = BS_HATCHED;
+		   logb.lbHatch = HS_FDIAGONAL;
+		   break;
+	       case wxCROSS_HATCH:
+		   logb.lbStyle = BS_HATCHED;
+		   logb.lbHatch = HS_CROSS;
+		   break;
+	       case wxHORIZONTAL_HATCH:
+		   logb.lbStyle = BS_HATCHED;
+		   logb.lbHatch = HS_HORIZONTAL;
+		   break;
+	       case wxVERTICAL_HATCH:
+		   logb.lbStyle = BS_HATCHED;
+		   logb.lbHatch = HS_VERTICAL;
+		   break;
+	       default:
+                   logb.lbStyle = BS_SOLID;
 #ifdef __WXDEBUG__
-          logb.lbHatch = 0;
+		   // this should be unnecessary (it's unused) but suppresses the Purigy
+                   // messages about uninitialized memory read
+		   logb.lbHatch = 0;
 #endif
-        break ;
-      }
-      logb.lbColor = ms_colour ;
-      wxDash *real_dash ;
-      if (M_PENDATA->m_style==wxUSER_DASH && M_PENDATA->m_nbDash && M_PENDATA->m_dash)
-      {
-	wxBell();
-        real_dash = new wxDash[M_PENDATA->m_nbDash] ;
-        int i;
-        for (i=0;i<M_PENDATA->m_nbDash;i++)
-          real_dash[i] = M_PENDATA->m_dash[i] * M_PENDATA->m_width ;
-      }
-      else
-        real_dash = 0 ;
+		   break;
+	   }
 
-      // Win32s doesn't have ExtCreatePen function...
-      if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
-        M_PENDATA->m_hPen = (WXHPEN) ExtCreatePen(ms_style,M_PENDATA->m_width,&logb,
-                            M_PENDATA->m_style==wxUSER_DASH ? M_PENDATA->m_nbDash:0, (const DWORD *)real_dash);
-      else
-        M_PENDATA->m_hPen = (WXHPEN) CreatePen(wx2msPenStyle(M_PENDATA->m_style), M_PENDATA->m_width, ms_colour);
+	   logb.lbColor = ms_colour;
 
-      if (real_dash)
-        delete [] real_dash ;
-    }
+	   wxDash *real_dash;
+           if (M_PENDATA->m_style==wxUSER_DASH && M_PENDATA->m_nbDash && M_PENDATA->m_dash)
+	   {
+	       real_dash = new wxDash[M_PENDATA->m_nbDash];
+               int i;
+               for (i=0; i<M_PENDATA->m_nbDash; i++)
+               real_dash[i] = M_PENDATA->m_dash[i] * M_PENDATA->m_width;
+           }
+	   else
+           {
+	       real_dash = 0;
+           }
+
+           // Win32s doesn't have ExtCreatePen function...
+	   if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
+	   {
+	       M_PENDATA->m_hPen =
+		 (WXHPEN) ExtCreatePen( ms_style,
+		                        M_PENDATA->m_width,
+		                        &logb,
+					M_PENDATA->m_style==wxUSER_DASH
+					  ? M_PENDATA->m_nbDash
+					  : 0,
+					(const DWORD*)real_dash );
+	   }
+	   else
+           {
+	       M_PENDATA->m_hPen =
+		  (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
+				      M_PENDATA->m_width,
+				      ms_colour );
+           }
+
+           if (real_dash)
+               delete [] real_dash;
+       }
 #else
-    M_PENDATA->m_hPen = (WXHPEN) CreatePen(wx2msPenStyle(M_PENDATA->m_style), M_PENDATA->m_width, ms_colour);
+       M_PENDATA->m_hPen =
+	 (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
+			     M_PENDATA->m_width,
+			     ms_colour );
 #endif
 #ifdef WXDEBUG_CREATE
-    if (M_PENDATA->m_hPen==0)
-      wxError("Cannot create pen","Internal error") ;
+       if (M_PENDATA->m_hPen==0)
+           wxError("Cannot create pen","Internal error") ;
 #endif
-    return TRUE;
-  }
-  return FALSE;
+       return TRUE;
+    }
+    return FALSE;
 }
 
 WXHANDLE wxPen::GetResourceHandle()
@@ -381,45 +404,42 @@ void wxPen::SetCap(int Cap)
 
 int wx2msPenStyle(int wx_style)
 {
-  int cstyle;
-/***
+    int cstyle;
+    switch (wx_style)
+    { 
+       case wxDOT:
+           cstyle = PS_DOT;
+	   break;
+
+       case wxDOT_DASH:
+	   cstyle = PS_DASHDOT;
+	   break;
+
+       case wxSHORT_DASH:
+       case wxLONG_DASH:
+           cstyle = PS_DASH;
+	   break;
+
+       case wxTRANSPARENT:
+           cstyle = PS_NULL;
+	   break;
+
+       case wxUSER_DASH:
 #ifdef __WIN32__
-  DWORD vers = GetVersion() ;
-  WORD  high = HIWORD(vers) ; // high bit=0 for NT, 1 for Win32s
-#endif
-***/
-  switch (wx_style)
-  {
-    case wxDOT:
-      cstyle = PS_DOT;
-      break;
-    case wxSHORT_DASH:
-    case wxLONG_DASH:
-      cstyle = PS_DASH;
-      break;
-    case wxTRANSPARENT:
-      cstyle = PS_NULL;
-      break;
-    case wxUSER_DASH:
-      // User dash style not supported on Win3.1, sorry...
-#ifdef __WIN32__
-      // Win32s doesn't have PS_USERSTYLE
-/***
-      if ((high&0x8000)==0)
-***/
-      if (wxGetOsVersion()==wxWINDOWS_NT)
-        cstyle = PS_USERSTYLE ;
-      else
-        cstyle = PS_DOT ; // We must make a choice... This is mine!
+           // Win32s doesn't have PS_USERSTYLE
+	   if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
+	       cstyle = PS_USERSTYLE;
+	   else
+               cstyle = PS_DOT; // We must make a choice... This is mine!
 #else
-      cstyle = PS_DASH ;
+           cstyle = PS_DASH;
 #endif
-      break ;
-    case wxSOLID:
-    default:
-      cstyle = PS_SOLID;
-      break;
-  }
-  return cstyle;
+           break;
+       case wxSOLID:
+       default:
+           cstyle = PS_SOLID;
+           break;
+   }
+   return cstyle;
 }
 

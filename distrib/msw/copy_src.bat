@@ -144,6 +144,11 @@ md \wxmsw_dist\wxMSW\src\jpeg
 copy *.* \wxmsw_dist\wxMSW\src\jpeg
 cd ..
 
+cd xpm
+md \wxmsw_dist\wxMSW\src\xpm
+copy *.* \wxmsw_dist\wxMSW\src\xpm
+cd ..
+
 cd ..
 
 echo Samples dir..

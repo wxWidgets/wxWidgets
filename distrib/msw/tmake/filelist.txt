@@ -102,7 +102,6 @@ protocol.cpp	C	S
 resource.cpp	C
 sckaddr.cpp	C	S
 sckfile.cpp	C	S
-sckint.cpp	C	S
 sckipc.cpp	C	S
 sckstrm.cpp	C	S
 socket.cpp	C	S

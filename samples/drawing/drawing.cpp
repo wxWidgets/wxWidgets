@@ -276,15 +276,33 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     dc.DrawText( "This is text", 110, 10 );
 
-    dc.DrawIcon( wxICON(mondrian), 110, 40 );
+    dc.SetFont( wxFont( 18, wxSWISS, 0, 0 ) );
+
+    dc.DrawText( "This is Swiss 18pt text.", 110, 40 );
+
+    long length;
+    long height;
+    long descent;
+    dc.GetTextExtent( "This is Swiss 18pt text.", &length, &height, &descent );
+    wxString text;
+    text.Printf( "Dimensions are length %ld, height %ld, descent %ld", length, height, descent );
+    dc.DrawText( text, 110, 80 );
+
+    dc.DrawRectangle( 100, 40, 4, height );
+
+    text.Printf( "CharHeight() returns: %d", dc.GetCharHeight() );
+    dc.DrawText( text, 110, 120 );
+
+
+    dc.DrawIcon( wxICON(mondrian), 310, 40 );
     
-    DrawTestLines( 0, 20, 0, dc );
+    DrawTestLines( 0, 200, 0, dc );
 
-    DrawTestLines( 0, 220, 1, dc );
+    DrawTestLines( 0, 400, 1, dc );
 
-    DrawTestLines( 0, 420, 2, dc );
+    DrawTestLines( 0, 600, 2, dc );
 
-    DrawTestLines( 0, 620, 6, dc );
+    DrawTestLines( 0, 800, 6, dc );
 
 }
 

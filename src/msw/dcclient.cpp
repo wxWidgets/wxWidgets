@@ -135,6 +135,11 @@ wxClientDC::wxClientDC(wxWindow *the_canvas)
   m_canvas = the_canvas;
   m_hDC = (WXHDC) ::GetDC(GetWinHwnd(the_canvas));
 
+  // the background mode is only used for text background
+  // and is set in DrawText() to OPAQUE as required, other-
+  // wise always TRANSPARENT, RR
+  ::SetBkMode( GetHdc(), TRANSPARENT );
+
   SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
@@ -204,6 +209,11 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
         m_hDC = (WXHDC)::BeginPaint(GetWinHwnd(m_canvas), &g_paintStruct);
         ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
     }
+
+    // the background mode is only used for text background
+    // and is set in DrawText() to OPAQUE as required, other-
+    // wise always TRANSPARENT, RR
+    ::SetBkMode( GetHdc(), TRANSPARENT );
 
     SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
