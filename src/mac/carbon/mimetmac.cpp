@@ -28,6 +28,8 @@
 #endif //WX_PRECOMP
 
 
+#if wxUSE_MIMETYPE
+
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/intl.h"
@@ -222,3 +224,4 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
     return FALSE;
 }
 
+#endif //wxUSE_MIMETYPE
