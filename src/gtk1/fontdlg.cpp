@@ -84,7 +84,7 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
         }
         else
         {
-            wxFAIL_MSG(_T("no registry in X font spec?"));
+            wxFAIL_MSG( wxT("no registry in X font spec?") );
         }
 
         // restore the dash we changed to NUL above
@@ -92,7 +92,7 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
     }
     else
     {
-        wxFAIL_MSG(_T("no encoding in X font spec?"));
+        wxFAIL_MSG( wxT("no encoding in X font spec?") );
     }
 
     // transfer the X registry/encoding to wxFontData - they are used by
@@ -150,9 +150,7 @@ wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *fontdata )
         wxFAIL_MSG( wxT("wxXX creation failed") );
         return;
     }
-#ifndef __WXGTK12__
-    wxFAIL_MSG( wxT("TODO") );
-#else // GTK+ 1.2
+    
     wxString m_message( _("Choose font") );
     m_widget = gtk_font_selection_dialog_new( m_message.mbc_str() );
 
@@ -176,7 +174,6 @@ wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *fontdata )
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_fontdialog_delete_callback), (gpointer)this );
-#endif // GTK+ version
 }
 
 wxFontDialog::~wxFontDialog()

@@ -162,7 +162,7 @@ bool wxURL::PrepHost(wxString& url)
   wxString temp_url;
   int pos, pos2;
 
-  if ((url.GetChar(0) != '/') || (url.GetChar(1) != '/'))
+  if ((url.GetChar(0) != wxT('/')) || (url.GetChar(1) != wxT('/')))
     return FALSE;
 
   url = url(2, url.Length());
@@ -240,7 +240,7 @@ bool wxURL::FetchProtocol()
 // --------- wxURL get ------------------------------------------
 // --------------------------------------------------------------
 
-wxInputStream *wxURL::GetInputStream(void)
+wxInputStream *wxURL::GetInputStream()
 {
   wxInputStream *the_i_stream = NULL;
 

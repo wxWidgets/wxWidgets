@@ -19,6 +19,7 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/palette.h"
+#include "wx/gdiobj.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -57,7 +58,7 @@ private:
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class wxBitmap: public wxObject
+class wxBitmap: public wxGDIObject
 {
 public:
     wxBitmap();

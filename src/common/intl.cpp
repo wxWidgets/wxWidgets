@@ -308,8 +308,8 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0)
       FIXME: UNICODE SUPPORT: must use CHARSET specifier!
    */
    wxString szName = szName0;
-   if(szName.Find('.') != -1) // contains a dot
-      szName = szName.Left(szName.Find('.'));
+   if(szName.Find(wxT('.')) != -1) // contains a dot
+      szName = szName.Left(szName.Find(wxT('.')));
 
   // FIXME VZ: I forgot the exact meaning of LC_PATH - anyone to remind me?
   // KB: search path where to find the mo files, probably : delimited

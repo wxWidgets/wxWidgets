@@ -92,7 +92,6 @@ void wxColour::InitFromName( const wxString &colourName )
         if (!gdk_color_parse( colourName.mb_str(), &M_COLDATA->m_color ))
         {
             wxFAIL_MSG( wxT("wxColour: couldn't find colour") );
-	    wxPrintf( wxT("Colourname %s.\n"), WXSTRINGCAST colourName );
       
             delete m_refData;
             m_refData = (wxObjectRefData *) NULL;

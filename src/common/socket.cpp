@@ -33,6 +33,7 @@
 #include "wx/utils.h"
 #include "wx/module.h"
 #include "wx/log.h"
+#include "wx/intl.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -315,7 +316,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
 
   if (sig != 0xfeeddead)
   {
-    wxLogMessage(wxT("Warning: invalid signature returned to ReadMsg"));
+    wxLogWarning( _("TCP: invalid signature returned to ReadMsg."));
     goto exit;
   }
 
@@ -451,8 +452,8 @@ wxUint32 wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
   m_defer_timer = NULL;
   m_defering = NO_DEFER;
 
-  wxString s;
-  s.Printf(wxT("Saliendo de DeferWrite: total %d bytes"), nbytes-m_defer_nbytes);
+  //wxString s;
+  //s.Printf(wxT("Saliendo de DeferWrite: total %d bytes"), nbytes-m_defer_nbytes);
   //wxLogMessage(s);
 
   return nbytes-m_defer_nbytes;

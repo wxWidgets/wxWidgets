@@ -146,7 +146,7 @@ void wxDirItemData::SetNewDirName( wxString path )
 
 bool wxDirItemData::HasSubDirs()
 {
-    wxString search = m_path + "/*";
+    wxString search = m_path + wxT("/*");
     wxLogNull log;
     wxString path = wxFindFirstFile( search, wxDIR );
     return (bool)(!path.IsNull());

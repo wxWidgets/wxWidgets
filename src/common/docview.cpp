@@ -522,7 +522,7 @@ wxView::wxView()
     //  SetDocument(doc);
     m_viewDocument = (wxDocument*) NULL;
 
-    m_viewTypeName = "";
+    m_viewTypeName = wxT("");
     m_viewFrame = (wxFrame *) NULL;
 }
 
@@ -1989,7 +1989,7 @@ void wxFileHistory::Load(wxConfigBase& config)
         m_fileHistory[m_fileHistoryN] = copystring((const wxChar*) historyFile);
         m_fileHistoryN ++;
         buf.Printf(wxT("file%d"), m_fileHistoryN+1);
-        historyFile = "";
+        historyFile = wxT("");
     }
     AddFilesToMenu();
 }

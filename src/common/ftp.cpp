@@ -65,7 +65,7 @@ wxFTP::wxFTP()
 
   m_user = wxT("anonymous");
   m_passwd = wxGetUserId();
-  m_passwd += '@';
+  m_passwd += wxT('@');
   m_passwd += wxGetHostName();
 
   SetNotify(0);

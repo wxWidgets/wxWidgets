@@ -17,7 +17,6 @@
 #if wxUSE_SPINCTRL
 
 #include "wx/utils.h"
-#include "wx/spinbutt.h"
 
 #include <math.h>
 
@@ -37,8 +36,6 @@ extern bool g_isIdle;
 
 extern bool   g_blockEventsOnDrag;
 
-static const float sensitivity = 0.02;
-
 //-----------------------------------------------------------------------------
 // "value_changed"
 //-----------------------------------------------------------------------------
@@ -50,34 +47,10 @@ static void gtk_spinctrl_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win 
     if (!win->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    float diff = win->m_adjust->value - win->m_oldPos;
-    if (fabs(diff) < sensitivity) return;
-    win->m_oldPos = win->m_adjust->value;
-
-    wxEventType command = wxEVT_NULL;
-
-    float line_step = win->m_adjust->step_increment;
-
-    if (fabs(diff-line_step) < sensitivity) command = wxEVT_SCROLL_LINEDOWN;
-    else if (fabs(diff+line_step) < sensitivity) command = wxEVT_SCROLL_LINEUP;
-    else command = wxEVT_SCROLL_THUMBTRACK;
-
-    int value = (int)ceil(win->m_adjust->value);
-
-    wxSpinEvent event( command, win->GetId());
-    event.SetPosition( value );
+    wxCommandEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, win->GetId());
     event.SetEventObject( win );
+    event.SetInt( win->GetValue() );
     win->GetEventHandler()->ProcessEvent( event );
-
-    /* always send a thumbtrack event */
-    if (command != wxEVT_SCROLL_THUMBTRACK)
-    {
-        command = wxEVT_SCROLL_THUMBTRACK;
-        wxSpinEvent event2( command, win->GetId());
-        event2.SetPosition( value );
-        event2.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event2 );
-    }
 }
 
 //-----------------------------------------------------------------------------

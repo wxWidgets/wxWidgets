@@ -25,7 +25,7 @@
 
 
 wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
-    : wxFrame(parent, -1, "", wxPoint(0, 0), wxSize(400, 80), wxTHICK_FRAME | wxSIMPLE_BORDER | wxFRAME_TOOL_WINDOW)
+    : wxFrame(parent, -1, wxT(""), wxPoint(0, 0), wxSize(400, 80), wxTHICK_FRAME | wxSIMPLE_BORDER | wxFRAME_TOOL_WINDOW)
 {
     wxPanel *p = new wxPanel( this );
     wxStaticText *s = new wxStaticText( p, -1, message, wxPoint(20, 20), wxSize(360, 40), wxALIGN_CENTER );

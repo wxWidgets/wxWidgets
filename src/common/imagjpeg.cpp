@@ -169,7 +169,8 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
       /* If we get here, the JPEG code has signaled an error.
        * We need to clean up the JPEG object, close the input file, and return.
        */
-      if (verbose) wxLogError(_("Couldn't load a JPEG image - probably file is corrupted."));
+      if (verbose) 
+        wxLogError(_("JPEG: Couldn't load - file is probably corrupted."));
       jpeg_destroy_decompress(&cinfo);
       if (image->Ok()) image->Destroy();
       return FALSE;
@@ -280,13 +281,15 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if (!verbose) cinfo.err->output_message=NULL;
 
     /* Establish the setjmp return context for my_error_exit to use. */
-    if (setjmp(jerr.setjmp_buffer)) {
-      /* If we get here, the JPEG code has signaled an error.
-       * We need to clean up the JPEG object, close the input file, and return.
-       */
-      if (verbose) wxLogError(_("Couldn't save a JPEG image - probably file is corrupted."));
-      jpeg_destroy_compress(&cinfo);
-      return FALSE;
+    if (setjmp(jerr.setjmp_buffer)) 
+    {
+        /* If we get here, the JPEG code has signaled an error.
+         * We need to clean up the JPEG object, close the input file, and return.
+         */
+         if (verbose) 
+            wxLogError(_("JPEG: Couldn't save image."));
+         jpeg_destroy_compress(&cinfo);
+         return FALSE;
     }
 
     jpeg_create_compress(&cinfo);

@@ -243,7 +243,8 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
  error_nolines:
     lines = NULL; // called from before it was set
  error:
-    wxLogError(_("Couldn't load a PNG image - probably file is corrupted."));
+    if (verbose)
+       wxLogError(_("Couldn't load a PNG image - file is corrupted or not enough memory."));
 
     if ( image->Ok() )
     {

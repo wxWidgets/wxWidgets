@@ -190,7 +190,7 @@ wxDllLoader::GetProgramHandle(void)
    // shl_findsymbol with NULL handle looks up in main program
    return 0; 
 #else
-   wxFAIL_MSG(_("This method is not implemented under Windows or OS/2"));
+   wxFAIL_MSG( wxT("This method is not implemented under Windows or OS/2"));
    return 0;
 #endif
 }
@@ -321,13 +321,13 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     wxString libPath("/lib:/usr/lib"); // system path first
     const char *envLibPath = getenv("LD_LIBRARY_PATH");
     if ( envLibPath )
-        libPath << ':' << envLibPath;
+        libPath << wxT(':') << envLibPath;
     wxStringTokenizer tokenizer(libPath, wxT(':'));
     while ( tokenizer.HasMoreToken() )
     {
         wxString fullname(tokenizer.NextToken());
 
-        fullname << '/' << libname;
+        fullname << wxT('/') << libname;
         if ( wxFileExists(fullname) )
         {
             libname = fullname;

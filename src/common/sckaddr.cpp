@@ -33,6 +33,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/log.h"
+#include "wx/intl.h"
 #include "wx/gsocket.h"
 #include "wx/sckaddr.h"
 
@@ -103,8 +104,9 @@ wxIPV4address::~wxIPV4address()
 bool wxIPV4address::Hostname(const wxString& name)
 {
   // Some people are sometimes fool.
-  if (name == wxT("")) {
-    wxLogWarning( wxT("Trying to solve a NULL hostname: giving up") );
+  if (name == wxT("")) 
+  {
+    wxLogWarning( _("Trying to solve a NULL hostname: giving up") );
     return FALSE;
   }
 

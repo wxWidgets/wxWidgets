@@ -455,7 +455,6 @@ wxBitmapList::wxBitmapList ()
 
 wxBitmapList::~wxBitmapList ()
 {
-#if defined(__WXMSW__) || defined(__WXMOTIF__)
   wxNode *node = First ();
   while (node)
     {
@@ -465,13 +464,11 @@ wxBitmapList::~wxBitmapList ()
         delete bitmap;
       node = next;
     }
-#endif
 }
 
 // Pen and Brush lists
 wxPenList::~wxPenList ()
 {
-#if defined(__WXMSW__) || defined(__WXMOTIF__)
   wxNode *node = First ();
   while (node)
     {
@@ -481,7 +478,6 @@ wxPenList::~wxPenList ()
         delete pen;
       node = next;
     }
-#endif
 }
 
 void wxPenList::AddPen (wxPen * pen)
@@ -521,7 +517,6 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 
 wxBrushList::~wxBrushList ()
 {
-#if defined(__WXMSW__) || defined(__WXMOTIF__)
   wxNode *node = First ();
   while (node)
     {
@@ -531,7 +526,6 @@ wxBrushList::~wxBrushList ()
         delete brush;
       node = next;
     }
-#endif
 }
 
 void wxBrushList::AddBrush (wxBrush * brush)

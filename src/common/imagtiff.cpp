@@ -128,7 +128,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!tif)
     {
         if (verbose)
-            wxLogError( _("Error loading TIFF image.") );
+            wxLogError( _("TIFF: Error loading image.") );
 	    
 	return FALSE;
     }
@@ -157,7 +157,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!raster)
     {
         if (verbose)
-            wxLogError( _("Not enough memory for loading TIFF image.") );
+            wxLogError( _("TIFF: Couldn't allocate memory.") );
 	    
 	return FALSE;
     }
@@ -166,7 +166,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!image->Ok()) 
     {
         if (verbose)
-            wxLogError( _("Not enough memory for loading TIFF image.") );
+            wxLogError( _("TIFF: Couldn't allocate memory.") );
 	    
 	_TIFFfree( raster );
 	
@@ -176,7 +176,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!TIFFReadRGBAImage( tif, w, h, raster, 0 ))
     {
         if (verbose)
-            wxLogError( _("Error reading TIFF image.") );
+            wxLogError( _("TIFF: Error reading image.") );
 	    
 	_TIFFfree( raster );
 	image->Destroy();

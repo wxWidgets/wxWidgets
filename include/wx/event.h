@@ -66,6 +66,7 @@ const wxEventType wxEVT_COMMAND_VLBOX_SELECTED =            wxEVT_FIRST + 14;
 const wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED =         wxEVT_FIRST + 15;
 const wxEventType wxEVT_COMMAND_TOOL_RCLICKED =             wxEVT_FIRST + 16;
 const wxEventType wxEVT_COMMAND_TOOL_ENTER =                wxEVT_FIRST + 17;
+const wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED =          wxEVT_FIRST + 18;
 
 /* Sockets send events, too */
 const wxEventType wxEVT_SOCKET =                            wxEVT_FIRST + 50;
@@ -1649,6 +1650,7 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_TOOL_RCLICKED_RANGE(id1, id2, fn) { wxEVT_COMMAND_TOOL_RCLICKED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
 #define EVT_TOOL_ENTER(id, fn) { wxEVT_COMMAND_TOOL_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
 #define EVT_CHECKLISTBOX(id, fn) { wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
+#define EVT_SPINCTRL(id, fn) { wxEVT_COMMAND_SPINCTRL_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
 
 // Generic command events
 #define EVT_COMMAND_LEFT_CLICK(id, fn) { wxEVT_COMMAND_LEFT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },

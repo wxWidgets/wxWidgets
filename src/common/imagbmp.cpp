@@ -64,7 +64,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 
 #define poffset (line * width * 3 + column * 3)
 
-bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSED(verbose), int WXUNUSED(index) )
+bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
     int             rshift = 0, gshift = 0, bshift = 0;
     wxUint8         aByte;
@@ -97,12 +97,14 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     int height = (int)wxINT32_SWAP_ON_BE( dbuf[1] );
     if (width > 32767)
     {
-        wxLogError( wxT("Image width > 32767 pixels for file.") );
+        if (verbose)
+            wxLogError( _("BMP: Image width > 32767 pixels for file.") );
         return FALSE;
     }
     if (height > 32767)
     {
-        wxLogError( wxT("Image height > 32767 pixels for file.") );
+        if (verbose)
+            wxLogError( _("BMP: Image height > 32767 pixels for file.") );
         return FALSE;
     }
 
@@ -115,7 +117,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     int bpp = (int)wxUINT16_SWAP_ON_BE( aWord );
     if (bpp != 1 && bpp != 4 && bpp != 8 && bpp != 16 && bpp != 24 && bpp != 32)
     {
-        wxLogError( wxT("unknown bitdepth in file.") );
+        if (verbose)
+            wxLogError( _("BMP: Unknown bitdepth in file.") );
         return FALSE;
     }
 
@@ -123,7 +126,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     int comp = (int)wxINT32_SWAP_ON_BE( dbuf[0] );
     if (comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 && comp != BI_BITFIELDS)
     {
-        wxLogError( wxT("unknown encoding in Windows BMP file.") );
+        if (verbose)
+            wxLogError( _("BMP: Unknown encoding in file.") );
         return FALSE;
     }
 
@@ -136,7 +140,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
         ((comp == BI_RLE8) && (bpp != 8)) ||
         ((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
     {
-        wxLogError( wxT("encoding of BMP doesn't match bitdepth.") );
+        if (verbose)
+            wxLogError( _("BMP: Encoding doesn't match bitdepth.") );
         return FALSE;
     }
     if (bpp < 16)
@@ -144,7 +149,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
         cmap = (struct _cmap *)malloc(sizeof(struct _cmap) * ncolors);
         if (!cmap)
         {
-            wxLogError( wxT("Cannot allocate RAM for color map in BMP file.") );
+            if (verbose)
+                wxLogError( _("BMP: Couldn't allocate memory.") );
             return FALSE;
         }
     }
@@ -155,7 +161,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     unsigned char *ptr = image->GetData();
     if (!ptr)
     {
-        wxLogError( wxT("Cannot allocate RAM for RGB data in file.") );
+        if (verbose)
+            wxLogError( _("BMP: Couldn't allocate memory.") );
         if (cmap)
             free(cmap);
         return FALSE;
@@ -263,7 +270,8 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
                 {
                     if (comp == BI_RLE4)
                     {
-                        wxLogError( wxT("Can't deal with 4bit encoded yet.") );
+                        if (verbose)
+                            wxLogError( _("BMP: Cannot deal with 4bit encoded yet.") );
                         image->Destroy();
                         free(cmap);
                         return FALSE;

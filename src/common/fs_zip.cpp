@@ -61,7 +61,7 @@ wxZipFSHandler::~wxZipFSHandler()
 bool wxZipFSHandler::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
-    return (p == "zip");
+    return (p == wxT("zip") );
 }
 
 
@@ -73,14 +73,14 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
     wxString left = GetLeftLocation(location);
     wxInputStream *s;
 
-    if (GetProtocol(left) != "file") {
+    if (GetProtocol(left) != wxT("file")) {
         return NULL;
     }
 
     s = new wxZipInputStream(left, right);
     if (s && (s -> LastError() == wxStream_NOERROR)) {
         return new wxFSFile(s,
-                            left + "#zip:" + right,
+                            left + wxT("#zip:") + right,
                             GetMimeTypeFromExt(location),
                             GetAnchor(location));
     }
@@ -101,7 +101,7 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
         m_Archive = NULL;
     }
 
-    if (GetProtocol(left) != "file") {
+    if (GetProtocol(left) != wxT("file")) {
         return wxEmptyString;
     }
 
@@ -146,7 +146,7 @@ wxString wxZipFSHandler::DoFind()
     while (match == wxEmptyString)
     {
         unzGetCurrentFileInfo((unzFile)m_Archive, NULL, namebuf, 1024, NULL, 0, NULL, 0);
-        for (c = namebuf; *c; c++) if (*c == '\\') *c = '/';
+        for (c = namebuf; *c; c++) if (*c == wxT('\\')) *c = wxT('/');
         fn = namebuf;
         if (fn.Last() == wxT('/')) {
             fn.RemoveLast();

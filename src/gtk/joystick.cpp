@@ -201,7 +201,7 @@ int wxJoystick::GetProductId(void) const
 
 wxString wxJoystick::GetProductName(void) const
 {
-  return "";
+  return wxT("");
 }
 
 int wxJoystick::GetXMin(void) const

@@ -45,7 +45,6 @@
 
 class wxImageRefData: public wxObjectRefData
 {
-
 public:
     wxImageRefData();
     ~wxImageRefData();
@@ -72,7 +71,8 @@ wxImageRefData::wxImageRefData()
 
 wxImageRefData::~wxImageRefData()
 {
-    if (m_data) free( m_data );
+    if (m_data) 
+        free( m_data );
 }
 
 wxList wxImage::sm_handlers;
@@ -195,8 +195,8 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
 
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
-    wxCHECK_MSG( (rect.GetLeft()>=0) && (rect.GetTop()>=0) && (rect.GetRight()<=GetWidth()) && (rect.GetBottom()<=GetHeight())
-                 , image, wxT("invalid subimage size") );
+    wxCHECK_MSG( (rect.GetLeft()>=0) && (rect.GetTop()>=0) && (rect.GetRight()<=GetWidth()) && (rect.GetBottom()<=GetHeight()),
+                 image, wxT("invalid subimage size") );
 
     int subwidth=rect.GetWidth();
     const int subheight=rect.GetHeight();
@@ -383,9 +383,9 @@ bool wxImage::LoadFile( const wxString& filename, long type )
         wxFileInputStream stream(filename);
         return LoadFile(stream, type);
     }
-
-    else {
-        wxLogError( wxT("Can't load image from file '%s': file does not exist."), filename.c_str() );
+    else 
+    {
+        wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
         return FALSE;
     }
@@ -402,9 +402,9 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
         wxFileInputStream stream(filename);
         return LoadFile(stream, mimetype);
     }
-
-    else {
-        wxLogError( wxT("Can't load image from file '%s': file does not exist."), filename.c_str() );
+    else 
+    {
+        wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
         return FALSE;
     }
@@ -483,7 +483,7 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
 
         }
 
-        wxLogWarning( wxT("No handler found for this image.") );
+        wxLogWarning( _("No handler found for image type.") );
         return FALSE;
     }
 
@@ -491,7 +491,7 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
 
     if (handler == NULL)
     {
-        wxLogWarning( wxT("No image handler for type %d defined."), type );
+        wxLogWarning( _("No image handler for type %d defined."), type );
 
         return FALSE;
     }
@@ -509,7 +509,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype )
 
     if (handler == NULL)
     {
-        wxLogWarning( wxT("No image handler for type %s defined."), mimetype.GetData() );
+        wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
 
         return FALSE;
     }
@@ -525,7 +525,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type )
 
     if (handler == NULL)
     {
-        wxLogWarning( wxT("No image handler for type %d defined."), type );
+        wxLogWarning( _("No image handler for type %d defined."), type );
 
         return FALSE;
     }
@@ -541,7 +541,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype )
 
     if (handler == NULL)
     {
-        wxLogWarning( wxT("No image handler for type %s defined."), mimetype.GetData() );
+        wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
 
         return FALSE;
     }
@@ -680,7 +680,7 @@ bool wxImageHandler::CanRead( const wxString& name )
     }
 
     else {
-        wxLogError( wxT("Can't check image format of file '%s': file does not exist."), name.c_str() );
+        wxLogError( _("Can't check image format of file '%s': file does not exist."), name.c_str() );
 
         return FALSE;
     }

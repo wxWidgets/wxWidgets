@@ -363,14 +363,14 @@ void wxPreviewControlBar::CreateButtons()
 
     if (m_buttonFlags & wxPREVIEW_PREVIOUS)
     {
-        m_previousPageButton = new wxButton(this, wxID_PREVIEW_PREVIOUS, "<<", wxPoint(x, y),
+        m_previousPageButton = new wxButton(this, wxID_PREVIEW_PREVIOUS, wxT("<<"), wxPoint(x, y),
             wxSize(buttonWidth, buttonHeight));
         x += gap + buttonWidth;
     }
 
     if (m_buttonFlags & wxPREVIEW_NEXT)
     {
-        m_nextPageButton = new wxButton(this, wxID_PREVIEW_NEXT, ">>",
+        m_nextPageButton = new wxButton(this, wxID_PREVIEW_NEXT, wxT(">>"),
             wxPoint(x, y), wxSize(buttonWidth, buttonHeight));
         x += gap + buttonWidth;
     }

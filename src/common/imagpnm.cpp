@@ -27,6 +27,7 @@
 
 #include "wx/image.h"
 #include "wx/log.h"
+#include "wx/intl.h"
 #include "wx/txtstrm.h"
 
 //-----------------------------------------------------------------------------
@@ -50,7 +51,7 @@ void Skip_Comment(wxInputStream &stream)
     }
 }
 
-bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSED(verbose), int WXUNUSED(index) )
+bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
     wxUint32  width, height;
     wxUint16  maxval;
@@ -69,18 +70,19 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     if (buf_stream.GetC()==wxT('P')) c=buf_stream.GetC();
 
     switch (c)
-      {
-      case wxT('2'):
-        wxLogError(wxT("Loading Grey Ascii PNM image is not yet implemented."));
-        return FALSE;
-      case wxT('5'):
-        wxLogError(wxT("Loading Grey Raw PNM image is not yet implemented."));
-        return FALSE;
-      case wxT('3'): case wxT('6'): break;
-        default :
-        wxLogError(wxT("Loading PNM image : file not recognized."));
-        return FALSE;
-      }
+    {
+        case wxT('2'):
+            if (verbose) wxLogError(_("Loading Grey Ascii PNM image is not yet implemented."));
+            return FALSE;
+        case wxT('5'):
+            if (verbose) wxLogError(_("Loading Grey Raw PNM image is not yet implemented."));
+            return FALSE;
+        case wxT('3'): 
+	case wxT('6'): break;
+        default:
+            if (verbose) wxLogError(_("PNM: File format is not recognized."));
+            return FALSE;
+    }
 
     text_stream.ReadLine(); // for the \n
     Skip_Comment(buf_stream);
@@ -93,7 +95,8 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     unsigned char *ptr = image->GetData();
     if (!ptr)
     {
-        wxLogError( wxT("Cannot allocate RAM for RGB data in PNM file.") );
+        if (verbose)
+           wxLogError( _("PNM: Couldn't allocate memory.") );
         return FALSE;
     }
 
@@ -109,7 +112,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
 
             if (buf_stream.LastError()!=wxSTREAM_NOERROR)
               {
-                wxLogError(wxT("Loading PNM image : file seems truncated."));
+                if (verbose) wxLogError(_("PNM: File seems truncated."));
                 return FALSE;
               }
           }

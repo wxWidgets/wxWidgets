@@ -124,7 +124,7 @@ wxGenericColourDialog::wxGenericColourDialog()
 }
 
 wxGenericColourDialog::wxGenericColourDialog(wxWindow *parent, wxColourData *data):
-  wxDialog(parent, -1, "Colour", wxPoint(0, 0), wxSize(900, 900), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+  wxDialog(parent, -1, wxT("Colour"), wxPoint(0, 0), wxSize(900, 900), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
 {
   whichKind = 1;
   colourSelection = 0;
