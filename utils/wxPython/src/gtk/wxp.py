@@ -587,6 +587,8 @@ wxEVT_COMMAND_TREE_GET_INFO = wxpc.wxEVT_COMMAND_TREE_GET_INFO
 wxEVT_COMMAND_TREE_SET_INFO = wxpc.wxEVT_COMMAND_TREE_SET_INFO
 wxEVT_COMMAND_TREE_ITEM_EXPANDED = wxpc.wxEVT_COMMAND_TREE_ITEM_EXPANDED
 wxEVT_COMMAND_TREE_ITEM_EXPANDING = wxpc.wxEVT_COMMAND_TREE_ITEM_EXPANDING
+wxEVT_COMMAND_TREE_ITEM_COLLAPSED = wxpc.wxEVT_COMMAND_TREE_ITEM_COLLAPSED
+wxEVT_COMMAND_TREE_ITEM_COLLAPSING = wxpc.wxEVT_COMMAND_TREE_ITEM_COLLAPSING
 wxEVT_COMMAND_TREE_SEL_CHANGED = wxpc.wxEVT_COMMAND_TREE_SEL_CHANGED
 wxEVT_COMMAND_TREE_SEL_CHANGING = wxpc.wxEVT_COMMAND_TREE_SEL_CHANGING
 wxEVT_COMMAND_TREE_KEY_DOWN = wxpc.wxEVT_COMMAND_TREE_KEY_DOWN
@@ -1104,8 +1106,12 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.6  1998/10/20 07:39:22  RD
-# newly generated files from SWIG
+# Revision 1.7  1998/11/11 04:40:53  RD
+# wxTreeCtrl now works (sort of) for wxPython-GTK.  This is the new
+# TreeCtrl in src/gtk/treectrl.cpp not the old generic one.
+#
+# Revision 1.5  1998/10/20 07:38:02  RD
+# bug fix
 #
 # Revision 1.4  1998/10/20 06:43:54  RD
 # New wxTreeCtrl wrappers (untested)

@@ -2886,7 +2886,7 @@ static PyObject *_wrap_wxSplitterWindow_SplitHorizontally(PyObject *self, PyObje
     wxSplitterWindow * _arg0;
     wxWindow * _arg1;
     wxWindow * _arg2;
-    int  _arg3 = -1;
+    int  _arg3 = 0;
     char * _argc0 = 0;
     char * _argc1 = 0;
     char * _argc2 = 0;
@@ -2924,7 +2924,7 @@ static PyObject *_wrap_wxSplitterWindow_SplitVertically(PyObject *self, PyObject
     wxSplitterWindow * _arg0;
     wxWindow * _arg1;
     wxWindow * _arg2;
-    int  _arg3 = -1;
+    int  _arg3 = 0;
     char * _argc0 = 0;
     char * _argc1 = 0;
     char * _argc2 = 0;

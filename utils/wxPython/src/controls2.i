@@ -80,20 +80,12 @@ public:
 
 class wxListCtrl : public wxControl {
 public:
-#ifdef __WXMSW__
     wxListCtrl(wxWindow* parent, wxWindowID id,
                const wxPoint& pos = wxPyDefaultPosition,
                const wxSize& size = wxPyDefaultSize,
                long style = wxLC_ICON,
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "listCtrl");
-#else
-    wxListCtrl(wxWindow* parent, wxWindowID id,
-               const wxPoint& pos = wxPyDefaultPosition,
-               const wxSize& size = wxPyDefaultSize,
-               long style = wxLC_ICON,
-               char* name = "listctrl");
-#endif
 
     %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
@@ -189,16 +181,16 @@ public:
 //----------------------------------------------------------------------
 
 
-#ifdef __WXMSW__
+//#ifdef __WXMSW__
 class wxTreeItemId {
 public:
     wxTreeItemId();
     ~wxTreeItemId();
     bool IsOk() const { return m_itemId != 0; }
 
-    %addmethods {
-        long GetId() { return (long)(*self); }
-    }
+//    %addmethods {
+//        long GetId() { return (long)(*self); }
+//    }
 };
 
 
@@ -315,13 +307,13 @@ public:
     wxTextCtrl* GetEditControl();
     void EndEditLabel(const wxTreeItemId& item, bool discardChanges = FALSE);
 
-    void SortChildren(const wxTreeItemId& item);
+//    void SortChildren(const wxTreeItemId& item);
                       // **** And this too
                       // wxTreeItemCmpFunc *cmpFunction = NULL);
 
 };
 
-#endif
+//#endif
 
 //----------------------------------------------------------------------
 
@@ -383,7 +375,12 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1998/11/11 04:40:20  RD
+// wxTreeCtrl now works (sort of) for wxPython-GTK.  This is the new
+// TreeCtrl in src/gtk/treectrl.cpp not the old generic one.
+//
 // Revision 1.7  1998/11/11 03:12:25  RD
+//
 // Additions for wxTreeCtrl
 //
 // Revision 1.6  1998/10/20 06:43:55  RD

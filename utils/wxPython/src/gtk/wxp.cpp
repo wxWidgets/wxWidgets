@@ -33,8 +33,9 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.6  1998/10/20 07:39:19  RD
- * newly generated files from SWIG
+ * Revision 1.7  1998/11/11 04:40:51  RD
+ * wxTreeCtrl now works (sort of) for wxPython-GTK.  This is the new
+ * TreeCtrl in src/gtk/treectrl.cpp not the old generic one.
  *
  ************************************************************************/
 
@@ -1651,6 +1652,8 @@ SWIGEXPORT(void,initwxpc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_SET_INFO", PyInt_FromLong((long) wxEVT_COMMAND_TREE_SET_INFO));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_EXPANDED", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_EXPANDED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_EXPANDING", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_EXPANDING));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_COLLAPSED", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_COLLAPSED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_COLLAPSING", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_COLLAPSING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_SEL_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_TREE_SEL_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TREE_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_KEY_DOWN", PyInt_FromLong((long) wxEVT_COMMAND_TREE_KEY_DOWN));
@@ -1712,6 +1715,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
+	 SWIG_RegisterMapping("_class_wxTreeCtrl","_wxTreeCtrl",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxGrid","_class_wxGrid",0);
 	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
@@ -1763,6 +1767,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_wxPoint","_class_wxPoint",0);
 	 SWIG_RegisterMapping("_class_wxButton","_wxButton",0);
 	 SWIG_RegisterMapping("_wxRadioBox","_class_wxRadioBox",0);
+	 SWIG_RegisterMapping("_wxTreeItemData","_class_wxTreeItemData",0);
 	 SWIG_RegisterMapping("_class_wxFontData","_wxFontData",0);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
@@ -1792,6 +1797,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxDC","_wxDC",0);
 	 SWIG_RegisterMapping("_wxPyApp","_class_wxPyApp",0);
 	 SWIG_RegisterMapping("_wxMDIParentFrame","_class_wxMDIParentFrame",0);
+	 SWIG_RegisterMapping("_class_wxTreeEvent","_wxTreeEvent",0);
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
@@ -1843,6 +1849,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
+	 SWIG_RegisterMapping("_wxTreeItemId","_class_wxTreeItemId",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
 	 SWIG_RegisterMapping("_class_wxMenu","_wxMenu",0);
 	 SWIG_RegisterMapping("_wxControl","_class_wxControl",0);
@@ -1888,6 +1895,8 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxInitDialogEvent","_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_class_wxComboBox","_wxComboBox",0);
 	 SWIG_RegisterMapping("_class_wxRadioButton","_wxRadioButton",0);
+	 SWIG_RegisterMapping("_class_wxTreeItemId","_wxTreeItemId",0);
+	 SWIG_RegisterMapping("_wxTreeCtrl","_class_wxTreeCtrl",0);
 	 SWIG_RegisterMapping("_class_wxLayoutConstraints","_wxLayoutConstraints",0);
 	 SWIG_RegisterMapping("_wxIconizeEvent","_class_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxControl","_wxControl",0);
@@ -1907,11 +1916,13 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxClientDC","_wxClientDC",0);
 	 SWIG_RegisterMapping("_class_wxSizeEvent","_wxSizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxListCtrl","_wxListCtrl",0);
+	 SWIG_RegisterMapping("_class_wxTreeItemData","_wxTreeItemData",0);
 	 SWIG_RegisterMapping("_class_wxGridCell","_wxGridCell",0);
 	 SWIG_RegisterMapping("_class_wxSize","_wxSize",0);
 	 SWIG_RegisterMapping("_class_wxBitmap","_wxBitmap",0);
 	 SWIG_RegisterMapping("_class_wxMemoryDC","_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxMenuBar","_class_wxMenuBar",0);
+	 SWIG_RegisterMapping("_wxTreeEvent","_class_wxTreeEvent",0);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxPyApp",SwigwxPyAppTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxPyApp",SwigwxPyAppTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxEvtHandler",0);
