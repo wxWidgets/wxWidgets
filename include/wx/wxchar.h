@@ -147,6 +147,10 @@
     #define wxHAVE_TCHAR_SUPPORT
 #endif // compilers with (good) TCHAR support
 
+#ifdef __MWERKS__
+    #define HAVE_WPRINTF
+#endif
+
 #ifdef wxHAVE_TCHAR_SUPPORT
     // get TCHAR definition if we've got it
     #include <tchar.h>
@@ -434,7 +438,7 @@
             #define wxNEED_WX_STDIO_H
             #define wxNEED_WX_STDLIB_H
             #define wxNEED_WX_TIME_H
-        #elif defined(__MWERKS__) && defined(macintosh)
+        #elif defined(__MWERKS__) && ( defined(macintosh) || defined(__MACH__) )
             // ctype.h functions (wctype.h)
             #define  wxIsalnum   iswalnum
             #define  wxIsalpha   iswalpha
@@ -480,6 +484,29 @@
             #define  wxGets      getws
             #define  wxUngetc    ungetwc
 
+            #define wxNEED_PRINTF_CONVERSION
+
+            #define  wxPutc      putwc
+            #define  wxPutchar   putwchar
+            #define  wxFputs     fputws
+            
+            // stdio.h functions
+            
+             #define wxNEED_WX_STDIO_H
+
+            // stdlib.h functions
+            #define  wxAtof      watof
+            #define  wxAtoi      watoi
+            #define  wxAtol      watol
+            #define  wxGetenv(a)    ((wxChar*)NULL)
+            #define  wxSystem(a)    ((int)NULL)
+
+            // time.h functions
+            #define  wxAsctime   wasciitime
+            #define  wxCtime     wctime
+            #define  wxStrftime  wcsftime
+
+            /*
             #define wxNEED_FPUTWC
 
             #include <stdio.h>
@@ -497,6 +524,7 @@
             #define wxNEED_WX_STDIO_H
             #define wxNEED_WX_STDLIB_H
             #define wxNEED_WX_TIME_H
+            */
         #else // !metrowerks for apple
             #error  "Please define wide character functions for your environment"
         #endif
