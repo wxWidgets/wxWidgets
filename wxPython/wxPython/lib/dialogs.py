@@ -6,11 +6,7 @@ import string
 
 class wxScrolledMessageDialog(wxDialog):
 
-    def __init__(self, parent, msg, caption, pos = None, size = None):
-        if not pos:
-            pos = wxDefaultPosition
-        if not size:
-            size = wxSize(500,300)
+    def __init__(self, parent, msg, caption, pos = wxDefaultPosition, size = (500,300)):
         wxDialog.__init__(self, parent, -1, caption, pos, size)
         text = wxTextCtrl(self, -1, msg, wxDefaultPosition,
                              wxDefaultSize,
@@ -24,11 +20,7 @@ class wxScrolledMessageDialog(wxDialog):
 
 class wxMultipleChoiceDialog(wxDialog):
 
-    def __init__(self, parent, msg, title, lst, pos = None, size = None):
-        if not pos:
-            pos = wxDefaultPosition
-        if not size:
-            size = wxSize(200,200)
+    def __init__(self, parent, msg, title, lst, pos = wxDefaultPosition, size = (200,200)):
         wxDialog.__init__(self, parent, -1, title, pos, size)
         dc = wxClientDC(self)
         height = 0
@@ -48,10 +40,6 @@ class wxMultipleChoiceDialog(wxDialog):
         self.SetAutoLayout(TRUE)
         self.lst = lst
         self.Layout()
-        EVT_SIZE(self, self.OnSize)
-
-    def OnSize(self, event):
-        self.Layout()
 
     def GetValue(self):
         return self.lbox.GetSelections()
@@ -62,6 +50,7 @@ class wxMultipleChoiceDialog(wxDialog):
         for i in sel:
             val.append(self.lst[i])
         return tuple(val)
+
 
 if __name__ == '__main__':
     class MyFrame(wxFrame):
