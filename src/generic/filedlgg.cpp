@@ -56,6 +56,7 @@
 #include "wx/dir.h"
 #include "wx/artprov.h"
 #include "wx/hash.h"
+#include "wx/file.h"        // for wxS_IXXX constants only
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
