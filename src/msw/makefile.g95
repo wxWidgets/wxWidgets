@@ -31,7 +31,7 @@ DLL_BASE_LDLIBS = $(DLL_EXTRA_LIBS) -lstdc++ -lwsock32
 ifeq ($(wxUSE_GUI),0)
   DLL_LDLIBS = $(DLL_BASE_LDLIBS)
 else
-  DLL_LDLIBS = -mwindows -lcomctl32 -lctl3d32 -lole32 -loleaut32 \
+  DLL_LDLIBS = -lcomctl32 -lctl3d32 -lole32 -loleaut32 \
               -luuid -lrpcrt4 -lodbc32 -lwinmm -lopengl32 \
                $(DLL_BASE_LDLIBS)
 endif
@@ -62,15 +62,12 @@ DOCDIR = $(WXDIR)/docs
 
 # Only use the WIN32 wxDirDialog if we have a recent
 # version of Mingw32
-ifeq ($(MINGW32),1)
-  ifneq "$(_GCC295)$(_GCC3)" ""
+ifeq "$(strip $(RECENT_MINGW))" "yes"
 		DIRDLGOBJ = $(MSWDIR)/dirdlg.$(OBJSUFF)
-  else
-		DIRDLGOBJ = $(GENDIR)/dirdlgg.$(OBJSUFF)
-  endif
 else
 		DIRDLGOBJ = $(GENDIR)/dirdlgg.$(OBJSUFF)
 endif
+
 ifeq ($(wxUSE_GUI),0)
   DIRDLGOBJ =
 endif
@@ -507,12 +504,8 @@ TIFFOBJS = $(TIFFDIR)/tif_aux.o \
 		$(TIFFDIR)/tif_write.o \
 		$(TIFFDIR)/tif_zip.o
 
-ifeq ($(MINGW32),1)
-  ifneq "$(_GCC295)$(_GCC3)" ""
-    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) $(ADVANCEDOBJS)
-  else
-    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
-  endif
+ifeq "$(strip $(RECENT_MINGW))" "yes"
+  OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) $(ADVANCEDOBJS)
 else
   OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
 endif
@@ -547,7 +540,7 @@ $(ARCHINCDIR)/wx:
 
 # Copy ALWAYS uses forward slashes now.
 
-$(SETUP_H): $(ARCHINCDIR)/wx
+$(SETUP_H): $(ARCHINCDIR)/wx $(WXDIR)/include/wx/msw/setup.h
 	$(COPY) $(WXDIR)/include/wx/msw/setup.h $(subst $(BACKSLASH),/,$@)
 
 #	$(COPY) $(WXDIR)/include/wx/msw/setup.h $@
@@ -566,11 +559,12 @@ else
 ifeq "$(strip $(LD_SUPPORTS_SHARED))" "yes"
 
 $(WXDLL): $(OBJECTS) $(EXTRAOBJS)
-	$(CC) -shared -o $@ \
+	$(CXX) -shared -o $@ \
 	  -Wl,--output-def,$(WXDEF) \
 	  -Wl,--out-implib,$(WXLIB) \
 	  $(OBJECTS) $(EXTRAOBJS) \
-	  $(DLL_LDFLAGS) $(DLL_LDLIBS)
+	  $(DLL_LDFLAGS) $(DLL_LDLIBS) \
+      $(ALL_LDFLAGS_DLL)
 else
 
 ifeq ($(MINGW32),1)
@@ -591,11 +585,11 @@ $(WXDEF) $(WXLIB): $(OBJECTS) $(EXTRAOBJS)
 	  $(OBJECTS) $(EXTRAOBJS) $(DLL_EXTRA_LIBS)
 
 $(WXDLL): $(OBJECTS) $(EXTRAOBJS) $(WXDEF)
-	$(CC) -mdll -Wl,--base-file,wx.base -s -o $@ $(LD_STUFF)
+	$(CC) -mdll -Wl,--base-file,wx.base -s -o $@ $(LD_STUFF) $(ALL_LDFLAGS_DLL)
 	$(DLLTOOL) $(DLL_STUFF)
-	$(CC) -mdll -Wl,--base-file,wx.base wx.exp -s -o $@ $(LD_STUFF)
+	$(CC) -mdll -Wl,--base-file,wx.base wx.exp -s -o $@ $(LD_STUFF) $(ALL_LDFLAGS_DLL)
 	$(DLLTOOL) $(DLL_STUFF)
-	$(CC) -mdll wx.exp -o $@ $(LD_STUFF)
+	$(CC) -mdll wx.exp -o $@ $(LD_STUFF) $(ALL_LDFLAGS_DLL)
 	-$(RM) wx.base
 	-$(RM) wx.exp
 
@@ -626,7 +620,7 @@ $(REGEXLIB):
 $(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(ARCHINCDIR)/wx/setup.h
 
 $(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
-	$(CCLEX) -c $(CPPFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ $(COMMDIR)/y_tab.c
+	$(CCLEX) -c $(ALL_CPPFLAGS) $(ALL_CFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ $(COMMDIR)/y_tab.c
 
 $(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
 	$(COPY) ../common/dosyacc.c ../common/y_tab.c
