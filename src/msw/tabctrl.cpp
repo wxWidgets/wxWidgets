@@ -440,10 +440,10 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 #endif
 
 // Tab event
-IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxNotifyEvent)
 
 wxTabEvent::wxTabEvent(wxEventType commandType, int id):
-  wxCommandEvent(commandType, id)
+  wxNotifyEvent(commandType, id)
 {
 }
 

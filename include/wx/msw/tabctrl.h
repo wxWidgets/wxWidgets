@@ -126,7 +126,7 @@ protected:
 DECLARE_EVENT_TABLE()
 };
 
-class WXDLLEXPORT wxTabEvent: public wxCommandEvent
+class WXDLLEXPORT wxTabEvent: public wxNotifyEvent
 {
   DECLARE_DYNAMIC_CLASS(wxTabEvent)
 
