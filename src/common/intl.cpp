@@ -1119,8 +1119,8 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
   if ( !fileMsg.IsOpened() )
     return false;
 
-  // get the file size
-  wxFileSize_t nSize = fileMsg.Length();
+  // get the file size (assume it is less than 4Gb...)
+  size_t nSize = fileMsg.Length();
   if ( nSize == wxInvalidOffset )
     return false;
 
