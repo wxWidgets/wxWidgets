@@ -191,6 +191,15 @@
                         <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
                         <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
                     </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>:(Debugger Extras):MetroNub Utilities:</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
                 </SETTING>
 
                 <!-- Settings for "Target Settings" panel -->
@@ -678,7 +687,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>ЧЂш</VALUE></SETTING>
+                    <SETTING><VALUE>гаш</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -1786,15 +1795,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -1805,15 +1805,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -3280,6 +3271,15 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:textbuf.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -4060,13 +4060,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
@@ -4075,13 +4068,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -5222,6 +5208,13 @@
                     <PATH>:textbuf.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
         </TARGET>
         <TARGET>
@@ -5361,6 +5354,15 @@
                     <SETTING>
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:MacOS Support:</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>:(Debugger Extras):MetroNub Utilities:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
                         </SETTING>
@@ -5845,7 +5847,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>ЧЂш</VALUE></SETTING>
+                    <SETTING><VALUE>гаш</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -6953,15 +6955,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -6972,15 +6965,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -8407,6 +8391,15 @@
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>winpars.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -9187,13 +9180,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
@@ -9202,13 +9188,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -10309,6 +10288,13 @@
                     <PATH>winpars.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
         </TARGET>
         <TARGET>
@@ -10585,7 +10571,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>ЧЂш</VALUE></SETTING>
+                    <SETTING><VALUE>гаш</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -11063,7 +11049,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>ЧЂш</VALUE></SETTING>
+                    <SETTING><VALUE>гаш</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -11342,6 +11328,15 @@
                     <SETTING>
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:MacOS Support:</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>:(Debugger Extras):MetroNub Utilities:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
                         </SETTING>
@@ -11826,7 +11821,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>ЧЂш</VALUE></SETTING>
+                    <SETTING><VALUE>гаш</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -12961,15 +12956,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -12980,15 +12966,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -14411,6 +14388,15 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:textbuf.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -15212,13 +15198,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
@@ -15227,13 +15206,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -16342,6 +16314,13 @@
                     <PATH>:textbuf.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
         </TARGET>
         <TARGET>
@@ -16481,6 +16460,15 @@
                     <SETTING>
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:MacOS Support:</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>:(Debugger Extras):MetroNub Utilities:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
                         </SETTING>
@@ -16965,7 +16953,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>ЧЂш</VALUE></SETTING>
+                    <SETTING><VALUE>гаш</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -18055,15 +18043,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -18074,15 +18053,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -19567,6 +19537,15 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:textbuf.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -20333,13 +20312,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
@@ -20348,13 +20320,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -21509,6 +21474,13 @@
                     <PATH>:textbuf.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
         </TARGET>
         <TARGET>
@@ -21648,6 +21620,15 @@
                     <SETTING>
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:MacOS Support:</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>:(Debugger Extras):MetroNub Utilities:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>CodeWarrior</VALUE></SETTING>
                         </SETTING>
@@ -22132,7 +22113,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>ЧЂш</VALUE></SETTING>
+                    <SETTING><VALUE>гаш</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -23231,15 +23212,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -23250,15 +23222,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -24736,6 +24699,15 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:textbuf.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -25509,13 +25481,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:serbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:mstream.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
@@ -25524,13 +25489,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:lboxcmn.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:objstrm.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -26680,6 +26638,13 @@
                     <PATH>:textbuf.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:bmpbase.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
         </TARGET>
         <TARGET>
@@ -27027,7 +26992,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>ЧЂш</VALUE></SETTING>
+                    <SETTING><VALUE>гаш</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -27264,6 +27229,14 @@
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:common:</ACCESSPATH>
                 <PATH>:appcmn.cpp</PATH>
+                <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Classic Debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>:common:</ACCESSPATH>
+                <PATH>:bmpbase.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
@@ -27883,14 +27856,6 @@
                 <PATHTYPE>PathRelative</PATHTYPE>
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:common:</ACCESSPATH>
-                <PATH>:objstrm.cpp</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Debug</TARGETNAME>
-                <PATHTYPE>PathRelative</PATHTYPE>
-                <PATHROOT>Project</PATHROOT>
-                <ACCESSPATH>:common:</ACCESSPATH>
                 <PATH>:odbc.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
@@ -27996,14 +27961,6 @@
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:common:</ACCESSPATH>
                 <PATH>:sckstrm.cpp</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Debug</TARGETNAME>
-                <PATHTYPE>PathRelative</PATHTYPE>
-                <PATHROOT>Project</PATHROOT>
-                <ACCESSPATH>:common:</ACCESSPATH>
-                <PATH>:serbase.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
