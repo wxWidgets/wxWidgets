@@ -27,6 +27,7 @@ WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 // Maintains a hashmap of className to swig_type_info pointers.  Given the
 // name of a class either looks up the type info in the cache, or scans the
 // SWIG tables for it.
+extern PyObject* wxPyPtrTypeMap; 
 static
 swig_type_info* wxPyFindSwigType(const wxChar* className) {
 
@@ -42,6 +43,19 @@ swig_type_info* wxPyFindSwigType(const wxChar* className) {
         // it wasn't in the cache, so look it up from SWIG
         name.Append(wxT(" *"));
         swigType = SWIG_Python_TypeQuery(name.mb_str());
+        
+        // if it still wasn't found, try looking for a mapped name
+        if (!swigType) {
+            PyObject* item;
+            name = className;
+            
+            if ((item = PyDict_GetItemString(wxPyPtrTypeMap,
+                               (char*)(const char*)name.mbc_str())) != NULL) {
+                name = wxString(PyString_AsString(item), *wxConvCurrent);
+                name.Append(wxT(" *"));
+                swigType = SWIG_Python_TypeQuery(name.mb_str());
+            }
+        }
         if (swigType) {
             // and add it to the map if found
             (*typeInfoCache)[className] = swigType;
@@ -51,25 +65,10 @@ swig_type_info* wxPyFindSwigType(const wxChar* className) {
 }
 
 
-extern PyObject* wxPyPtrTypeMap; 
-
 // Check if a class name is a type known to SWIG
 bool wxPyCheckSwigType(const wxChar* className) {
 
-    // Try the name as-is first
     swig_type_info* swigType = wxPyFindSwigType(className);
-
-    // if not found see if there is a mapped name for it
-    if (! swigType) {
-        PyObject* item;
-        wxString name(className);
-        
-        if ((item = PyDict_GetItemString(wxPyPtrTypeMap,
-                                         (char*)(const char*)name.mbc_str())) != NULL) {
-            name = wxString(PyString_AsString(item), *wxConvCurrent);
-            swigType = wxPyFindSwigType(name);
-        }
-    }                 
     return swigType != NULL;
 }
  

@@ -365,6 +365,7 @@ WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 // Maintains a hashmap of className to swig_type_info pointers.  Given the
 // name of a class either looks up the type info in the cache, or scans the
 // SWIG tables for it.
+extern PyObject* wxPyPtrTypeMap; 
 static
 swig_type_info* wxPyFindSwigType(const wxChar* className) {
 
@@ -380,6 +381,19 @@ swig_type_info* wxPyFindSwigType(const wxChar* className) {
         // it wasn't in the cache, so look it up from SWIG
         name.Append(wxT(" *"));
         swigType = SWIG_Python_TypeQuery(name.mb_str());
+        
+        // if it still wasn't found, try looking for a mapped name
+        if (!swigType) {
+            PyObject* item;
+            name = className;
+            
+            if ((item = PyDict_GetItemString(wxPyPtrTypeMap,
+                               (char*)(const char*)name.mbc_str())) != NULL) {
+                name = wxString(PyString_AsString(item), *wxConvCurrent);
+                name.Append(wxT(" *"));
+                swigType = SWIG_Python_TypeQuery(name.mb_str());
+            }
+        }
         if (swigType) {
             // and add it to the map if found
             (*typeInfoCache)[className] = swigType;
@@ -388,7 +402,6 @@ swig_type_info* wxPyFindSwigType(const wxChar* className) {
     return swigType;    
 }
 
-    
 
 // Check if a class name is a type known to SWIG
 bool wxPyCheckSwigType(const wxChar* className) {
@@ -961,7 +974,7 @@ wxPyApp *new_wxPyApp(){
 
 PyObject *wxWindow_GetChildren(wxWindow *self){
             wxWindowList& list = self->GetChildren();
-            return wxPy_ConvertList(&list, "wxWindow");
+            return wxPy_ConvertList(&list);
         }
 bool wxWindow_RegisterHotKey(wxWindow *self,int hotkeyId,int modifiers,int keycode){
         
@@ -1018,7 +1031,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPyValidator, wxValidator);
 void wxMenu_Destroy(wxMenu *self){ delete self; }
 PyObject *wxMenu_GetMenuItems(wxMenu *self){
             wxMenuItemList& list = self->GetMenuItems();
-            return wxPy_ConvertList(&list, "wxMenuItem");
+            return wxPy_ConvertList(&list);
         }
 
     DECLARE_DEF_STRING(ControlNameStr);
@@ -1210,7 +1223,7 @@ void wxSizer__SetItemMinSize(wxSizer *self,PyObject *item,wxSize size){
         }
 PyObject *wxSizer_GetChildren(wxSizer *self){
             wxSizerItemList& list = self->GetChildren();
-            return wxPy_ConvertList(&list, "wxSizerItem");
+            return wxPy_ConvertList(&list);
         }
 void wxSizer_Show(wxSizer *self,PyObject *item,bool show){
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
