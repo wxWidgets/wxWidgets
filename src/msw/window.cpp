@@ -3433,15 +3433,20 @@ bool wxWindowMSW::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
     }
 #endif // wxUSE_MENUS_NATIVE
 
-#if wxUSE_CONTROLS
-    wxWindow *item = FindItem(id);
-    if ( item && item->IsKindOf(CLASSINFO(wxControl)) )
-    {
-        return ((wxControl *)item)->MSWOnDraw(itemStruct);
-    }
-#endif // wxUSE_CONTROLS
-
 #endif // USE_OWNER_DRAWN
+
+#if wxUSE_CONTROLS
+
+    wxWindow *item = FindItem(id);
+#if wxUSE_OWNER_DRAWN
+    if ( item && item->IsKindOf(CLASSINFO(wxControl)) )
+        return ((wxControl *)item)->MSWOnDraw(itemStruct);
+#else
+    if ( item && item->IsKindOf(CLASSINFO(wxButton)) )
+        return ((wxButton *)item)->MSWOnDraw(itemStruct);
+#endif // USE_OWNER_DRAWN
+
+#endif // wxUSE_CONTROLS
 
     return FALSE;
 }
