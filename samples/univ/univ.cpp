@@ -384,7 +384,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                    wxPoint(550, 150), wxDefaultSize);
 #else // TEST_TEXT_ONLY
-#if 1
+#if 0
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                                       wxPoint(10, 40));
     text->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT,
@@ -394,11 +394,11 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     text->SetSize(sizeText);
 #else
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello,\nMultiverse!"),
-                                      wxPoint(10, 10), wxDefaultSize,
+                                      wxPoint(10, 30), wxDefaultSize,
                                       wxTE_MULTILINE);
 #endif
     text->SetFocus();
-    text->SetEditable(FALSE);
+    //text->SetEditable(FALSE);
 #endif // !TEST_TEXT_ONLY/TEST_TEXT_ONLY
 }
 

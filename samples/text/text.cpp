@@ -190,6 +190,7 @@ bool MyApp::OnInit()
             "Text wxWindows sample", 50, 50, 660, 420);
     frame->SetSizeHints( 500, 400 );
 
+#if wxUSE_MENUS
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(TEXT_CLEAR, "&Clear the log\tCtrl-C",
                       "Clear the log window contents");
@@ -234,6 +235,7 @@ bool MyApp::OnInit()
     menu_bar->Append(menuText, "&Text");
 
     frame->SetMenuBar(menu_bar);
+#endif // wxUSE_MENUS
 
     frame->Show(TRUE);
 
@@ -791,7 +793,9 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h)
        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h) )
 {
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     m_panel = new MyPanel( this, 10, 10, 300, 100 );
 }
@@ -928,7 +932,9 @@ void MyFrame::OnIdle( wxIdleEvent& event )
 #endif
                   );
 
+#if wxUSE_STATUSBAR
         SetStatusText(msg);
+#endif // wxUSE_STATUSBAR
     }
     event.Skip();
 }

@@ -239,11 +239,7 @@ private:
             m_lbox->AppendAndEnsureVisible(msg);
         #else // other ports don't have this method yet
             m_lbox->Append(msg);
-
-            // SetFirstItem() isn't implemented in wxGTK
-            #ifndef __WXGTK__
-                m_lbox->SetFirstItem(m_lbox->GetCount() - 1);
-            #endif
+            m_lbox->SetFirstItem(m_lbox->GetCount() - 1);
         #endif
     }
 
@@ -316,7 +312,7 @@ bool LboxTestApp::OnInit()
     frame->Show();
 
     //wxLog::AddTraceMask(_T("listbox"));
-    wxLog::AddTraceMask(_T("scrollbar"));
+    //wxLog::AddTraceMask(_T("scrollbar"));
 
     return TRUE;
 }

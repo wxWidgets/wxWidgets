@@ -72,11 +72,14 @@ public:
     virtual int CalcScrollInc(wxScrollWinEvent& event);
 
     // Normally the wxScrolledWindow will scroll itself, but in some rare
-    // occasions you might want it to scroll another window (e.g. a child of it
-    // in order to scroll only a portion the area between the scrollbars
-    // (spreadsheet: only cell area will move).
-    virtual void SetTargetWindow( wxWindow *target );
+    // occasions you might want it to scroll [part of] another window (e.g. a
+    // child of it in order to scroll only a portion the area between the
+    // scrollbars (spreadsheet: only cell area will move).
+    virtual void SetTargetWindow(wxWindow *target);
     virtual wxWindow *GetTargetWindow() const;
+
+    void SetTargetRect(const wxRect& rect) { m_rectToScroll = rect; }
+    wxRect GetTargetRect() const { return m_rectToScroll; }
 
     // Override this function to draw the graphic (or just process EVT_PAINT)
     virtual void OnDraw(wxDC& WXUNUSED(dc)) { }
@@ -91,8 +94,16 @@ public:
     void HandleOnChar(wxKeyEvent& event);
 
 protected:
+    // get pointer to our scroll rect if we use it or NULL
+    const wxRect *GetRect() const
+    {
+        return m_rectToScroll.width != 0 ? &m_rectToScroll : NULL;
+    }
+
     wxWindow             *m_win,
                          *m_targetWindow;
+
+    wxRect                m_rectToScroll;
 
     int                   m_xScrollPixelsPerLine;
     int                   m_yScrollPixelsPerLine;

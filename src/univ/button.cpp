@@ -31,6 +31,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
+    #include "wx/dcscreen.h"
     #include "wx/button.h"
     #include "wx/validate.h"
 #endif

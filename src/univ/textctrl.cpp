@@ -438,7 +438,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         // (4) refresh the lines: if we had replaced exactly the same number of
         //     lines that we had before, we can just refresh these lines,
         //     otherwise the lines below will change as well, so we have to
-        //     refresh them too (by passing -1 as RefreshLineRange() argument)
+        //     refresh them too
         if ( refreshAllBelow || (lineStart < lineEnd - 1) )
         {
             RefreshLineRange(lineStart + 1, refreshAllBelow ? -1 : lineEnd - 1);
@@ -629,9 +629,10 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         }
         else
         {
-            // number of lines did change, we need to refresh everything below the
-            // start line
-            RefreshLineRange(lineStart + 1);
+            // number of lines did change, we need to refresh everything below
+            // the start line
+            RefreshLineRange(lineStart + 1,
+                             wxMax(m_lines.GetCount(), countOld) - 1);
 
             // the vert scrollbar might [dis]appear
             m_updateScrollbarY = TRUE;
@@ -1342,8 +1343,9 @@ wxSize wxTextCtrl::DoGetBestClientSize() const
     int wChar = GetCharWidth(),
         hChar = GetCharHeight();
 
-    if ( w < wChar )
-        w = 8*wChar;
+    int widthMin = wxMin(10*wChar, 100);
+    if ( w < widthMin )
+        w = widthMin;
     if ( h < hChar )
         h = hChar;
 
@@ -1370,6 +1372,9 @@ void wxTextCtrl::UpdateTextRect()
     m_rectText = GetRenderer()->
                     GetTextClientArea(this,
                                       wxRect(wxPoint(0, 0), GetClientSize()));
+
+    // only scroll this rect when the window is scrolled
+    SetTargetRect(m_rectText);
 
     UpdateLastVisible();
 }
@@ -1776,11 +1781,17 @@ void wxTextCtrl::CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
 
 void wxTextCtrl::DoPrepareDC(wxDC& dc)
 {
-    // adjust the DC origin if the text is shifted
+    // for single line controls we only have to deal with m_ofsHorz and it's
+    // useless to call base class version as they don't use normal scrolling
     if ( m_ofsHorz )
     {
+        // adjust the DC origin if the text is shifted
         wxPoint pt = dc.GetDeviceOrigin();
         dc.SetDeviceOrigin(pt.x - m_ofsHorz, pt.y);
+    }
+    else
+    {
+        wxScrollHelper::DoPrepareDC(dc);
     }
 }
 
@@ -1889,15 +1900,20 @@ void wxTextCtrl::OnIdle(wxIdleEvent& event)
 
 void wxTextCtrl::RefreshLineRange(long lineFirst, long lineLast)
 {
-    wxASSERT_MSG( (lineLast == -1) || (lineFirst <= lineLast),
-                  _T("no lines to refresh") );
+    wxASSERT_MSG( lineFirst <= lineLast, _T("no lines to refresh") );
 
     wxRect rect;
     // rect.x is already 0
     rect.width = m_rectText.width;
     wxCoord h = GetCharHeight();
     rect.y = lineFirst*h;
-    rect.SetBottom(lineLast == -1 ? m_rectText.height : (lineLast + 1)*h);
+
+    // don't refresh beyond the window boundary
+    wxCoord bottom = (lineLast + 1)*h;
+    if ( bottom > m_rectText.height )
+        bottom = m_rectText.height;
+
+    rect.SetBottom(bottom);
 
     RefreshTextRect(rect);
 }
@@ -2079,11 +2095,11 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 {
     // debugging trick to see the update rect visually
 #ifdef WXDEBUG_TEXT
-    if ( 0 )
+    static int s_countUpdates = -1;
+    if ( s_countUpdates != -1 )
     {
         wxWindowDC dc(this);
-        static int s_count = 0;
-        dc.SetBrush(*(++s_count % 2 ? wxRED_BRUSH : wxGREEN_BRUSH));
+        dc.SetBrush(*(++s_countUpdates % 2 ? wxRED_BRUSH : wxGREEN_BRUSH));
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.DrawRectangle(rectUpdate);
     }

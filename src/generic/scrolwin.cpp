@@ -276,20 +276,41 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
         m_yScrollPosition += nScrollInc;
     }
 
+    bool needsRefresh = FALSE;
+    int dx = 0,
+        dy = 0;
     if (orient == wxHORIZONTAL)
     {
-       if (m_xScrollingEnabled)
-            m_targetWindow->ScrollWindow(-m_xScrollPixelsPerLine * nScrollInc, 0, (const wxRect *) NULL);
+       if ( m_xScrollingEnabled )
+       {
+            dx = -m_xScrollPixelsPerLine * nScrollInc;
+       }
        else
-            m_targetWindow->Refresh();
+       {
+           needsRefresh = TRUE;
+       }
     }
     else
     {
-        if (m_yScrollingEnabled)
-            m_targetWindow->ScrollWindow(0, -m_yScrollPixelsPerLine * nScrollInc, (const wxRect *) NULL);
+        if ( m_yScrollingEnabled )
+        {
+            dy = -m_yScrollPixelsPerLine * nScrollInc;
+        }
         else
-            m_targetWindow->Refresh();
+        {
+            needsRefresh = TRUE;
+        }
     }
+
+    if ( needsRefresh )
+    {
+        m_targetWindow->Refresh(GetRect());
+    }
+    else
+    {
+        m_targetWindow->ScrollWindow(dx, dy, GetRect());
+    }
+
 #ifdef __WXMAC__
     m_targetWindow->MacUpdateImmediately() ;
 #endif
