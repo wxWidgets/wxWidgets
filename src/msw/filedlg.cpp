@@ -126,10 +126,13 @@ wxString wxFileSelector(const wxChar *title,
         return wxGetEmptyString();
 }
 
+/*
 # if __BORLANDC__
 #   include <dir.h>  // for MAXPATH etc. ( Borland 3.1 )
 # endif
+*/
 
+/* These numbers are too small.
 # ifndef MAXPATH
 # define MAXPATH   400
 # endif
@@ -145,6 +148,17 @@ wxString wxFileSelector(const wxChar *title,
 # ifndef MAXEXT
 # define MAXEXT    5
 # endif
+*/
+
+#if __WIN32__
+# define wxMAXPATH   4096
+#else
+# define wxMAXPATH   1024
+#endif
+
+# define wxMAXFILE   1024
+
+# define wxMAXEXT    5
 
 
 wxString wxFileSelectorEx(const wxChar *title,
@@ -206,9 +220,11 @@ int wxFileDialog::ShowModal()
 {
     HWND hWnd = 0;
     if (m_parent) hWnd = (HWND) m_parent->GetHWND();
+    if (!hWnd && wxTheApp->GetTopWindow())
+        hWnd = (HWND) wxTheApp->GetTopWindow()->GetHWND();
 
-    static wxChar fileNameBuffer [ MAXPATH ];           // the file-name
-    wxChar        titleBuffer    [ MAXFILE+1+MAXEXT ];  // the file-name, without path
+    static wxChar fileNameBuffer [ wxMAXPATH ];           // the file-name
+    wxChar        titleBuffer    [ wxMAXFILE+1+wxMAXEXT ];  // the file-name, without path
 
     *fileNameBuffer = wxT('\0');
     *titleBuffer    = wxT('\0');
@@ -241,7 +257,7 @@ int wxFileDialog::ShowModal()
 
 
     of.lpstrFileTitle    = titleBuffer;
-    of.nMaxFileTitle     = MAXFILE + 1 + MAXEXT;    // Windows 3.0 and 3.1
+    of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;    // Windows 3.0 and 3.1
 
     // Convert forward slashes to backslashes (file selector doesn't like
     // forward slashes)
@@ -298,11 +314,11 @@ int wxFileDialog::ShowModal()
 
     //=== Setting defaultFileName >>=========================================
 
-    wxStrncpy( fileNameBuffer, (const wxChar *)m_fileName, MAXPATH-1 );
-    fileNameBuffer[ MAXPATH-1 ] = wxT('\0');
+    wxStrncpy( fileNameBuffer, (const wxChar *)m_fileName, wxMAXPATH-1 );
+    fileNameBuffer[ wxMAXPATH-1 ] = wxT('\0');
 
     of.lpstrFile = fileNameBuffer;  // holds returned filename
-    of.nMaxFile  = MAXPATH;
+    of.nMaxFile  = wxMAXPATH;
 
     //== Execute FileDialog >>=================================================
 
@@ -379,8 +395,8 @@ int wxFileDialog::ShowModal()
                     m_fileName = wxString(fileNameBuffer) + extension;
 
                     int len = wxStrlen( fileNameBuffer );
-                    wxStrncpy( fileNameBuffer + len, extension, MAXPATH - len );
-                    fileNameBuffer[ MAXPATH -1 ] = wxT('\0');
+                    wxStrncpy( fileNameBuffer + len, extension, wxMAXPATH - len );
+                    fileNameBuffer[ wxMAXPATH -1 ] = wxT('\0');
                 }
             }
 
