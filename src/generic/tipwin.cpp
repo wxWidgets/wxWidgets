@@ -33,6 +33,9 @@
 #endif // WX_PRECOMP
 
 #include "wx/tipwin.h"
+
+#if wxUSE_TIPWINDOW
+
 #include "wx/timer.h"
 #include "wx/settings.h"
 
@@ -205,4 +208,5 @@ void wxTipWindow::Close()
     Destroy();
 }
 
+#endif // wxUSE_TIPWINDOW
 

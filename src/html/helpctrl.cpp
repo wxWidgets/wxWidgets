@@ -195,7 +195,7 @@ bool wxHtmlHelpController::DisplaySection(int sectionNo)
 
 bool wxHtmlHelpController::DisplayTextPopup(const wxString& text, const wxPoint& WXUNUSED(pos))
 {
-#if wxUSE_HELP
+#if wxUSE_TIPWINDOW
     static wxTipWindow* s_tipWindow = NULL;
 
     if (s_tipWindow)
@@ -213,7 +213,8 @@ bool wxHtmlHelpController::DisplayTextPopup(const wxString& text, const wxPoint&
 
         return TRUE;
     }
-#endif
+#endif // wxUSE_TIPWINDOW
+
     return FALSE;
 }
 

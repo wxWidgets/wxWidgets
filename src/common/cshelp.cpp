@@ -305,6 +305,7 @@ void wxSimpleHelpProvider::AddHelp(wxWindowID id, const wxString& text)
 
 bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
 {
+#if wxUSE_TIPWINDOW
     static wxTipWindow* s_tipWindow = NULL;
 
     if (s_tipWindow)
@@ -323,6 +324,7 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
 
         return TRUE;
     }
+#endif // wxUSE_TIPWINDOW
 
     return FALSE;
 }
