@@ -810,11 +810,15 @@ typedef wxUint16 wxWord;
         typedef int wxInt32;
         typedef unsigned int wxUint32;
 
-        #if wxUSE_WCHAR_T
-            // also assume that sizeof(wchar_t) == 4 under Unix, this is by far
+        #if wxUSE_WCHAR_T && !defined(SIZEOF_WCHAR_T)
+            // also assume that sizeof(wchar_t) == 2 (under Unix the most
+            // common case is 4 but there configure would have defined
+            // SIZEOF_WCHAR_T for us)
             // the most common case
-            wxCOMPILE_TIME_ASSERT( sizeof(wchar_t) == 4,
-                                    Wchar_tMustBeExactly4Bytes);
+            wxCOMPILE_TIME_ASSERT( sizeof(wchar_t) == 2,
+                                    Wchar_tMustBeExactly2Bytes);
+
+            #define SIZEOF_WCHAR_T 2
         #endif // wxUSE_WCHAR_T
     #endif
 #endif // Win/!Win
