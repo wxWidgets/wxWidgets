@@ -206,10 +206,10 @@ wxArrayString wxStringTokenize(const wxString& str,
                                wxStringTokenizerMode mode)
 {
     wxArrayString tokens;
-    wxStringTokenizer tk(str, delimes, mode);
+    wxStringTokenizer tk(str, delims, mode);
     while ( tk.HasMoreTokens() )
     {
-        tokens.Add(GetNextToken());
+        tokens.Add(tk.GetNextToken());
     }
 
     return tokens;

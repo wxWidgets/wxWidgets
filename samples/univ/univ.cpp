@@ -53,7 +53,7 @@
 
 #include "wx/univ/theme.h"
 
-//#define TEST_TEXT_ONLY
+#define TEST_TEXT_ONLY
 
 //#define DEBUG_SCROLL
 //#define DEBUG_LISTBOX
@@ -233,14 +233,14 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #ifndef TEST_TEXT_ONLY
                      wxSize(700, 700)
 #else
-                     wxSize(240, 200)
+                     wxSize(240, 300)
 #endif
                     )
 {
     SetBackgroundColour(wxGetApp().GetBgColour());
 
-    new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
 #ifndef TEST_TEXT_ONLY
+    new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
     new wxStaticText(this,
                      _T("&Multi line\n(and very very very very long)\nstatic text"),
                      wxPoint(210, 10));
@@ -383,6 +383,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                    wxPoint(550, 150), wxDefaultSize);
 #else // TEST_TEXT_ONLY
+#if 0
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                                       wxPoint(10, 40));
     text->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT,
@@ -390,6 +391,12 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     wxSize sizeText = text->GetBestSize();
     sizeText.x = 200;
     text->SetSize(sizeText);
+#else
+    wxTextCtrl *
+#endif
+    text = new wxTextCtrl(this, -1, _T("Hello,\nMultiverse!"),
+                          wxPoint(10, 10), wxDefaultSize,
+                          wxTE_MULTILINE);
 #endif // !TEST_TEXT_ONLY/TEST_TEXT_ONLY
 }
 

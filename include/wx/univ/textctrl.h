@@ -326,7 +326,7 @@ private:
 
     // current position
     long m_curPos,
-         m_curLine,
+         m_curCol,
          m_curRow;
 
     // selection
