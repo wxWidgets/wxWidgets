@@ -1,635 +1,260 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcclient.cpp
 // Purpose:     wxClientDC class
-// Author:      AUTHOR
+// Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) Julian Smart and Markus Holzem
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ===========================================================================
+// declarations
+// ===========================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "dcclient.h"
+    #pragma implementation "dcclient.h"
 #endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#include "wx/string.h"
+#include "wx/log.h"
+#include "wx/window.h"
+
+#include "wx/msw/private.h"
 
 #include "wx/dcclient.h"
-#include "wx/dcmemory.h"
-#include "wx/region.h"
-#include <math.h>
 
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// array/list types
+// ----------------------------------------------------------------------------
 
-#define RAD2DEG 57.2957795131
+struct WXDLLEXPORT wxPaintDCInfo
+{
+    wxPaintDCInfo(wxWindow *win, wxDC *dc)
+    {
+        hwnd = win->GetHWND();
+        hdc = dc->GetHDC();
+        count = 1;
+    }
 
-//-----------------------------------------------------------------------------
-// wxPaintDC
-//-----------------------------------------------------------------------------
+    WXHWND    hwnd;       // window for this DC
+    WXHDC     hdc;        // the DC handle
+    size_t    count;      // usage count
+};
+
+#include "wx/arrimpl.cpp"
+
+WX_DEFINE_OBJARRAY(wxArrayDCInfo);
+
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
+    IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
+    IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
 #endif
 
-/*
- * wxWindowDC
- */
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
 
-wxWindowDC::wxWindowDC(void)
+static PAINTSTRUCT g_paintStruct;
+
+#ifdef __WXDEBUG__
+    // a global variable which we check to verify that wxPaintDC are only
+    // created in resopnse to WM_PAINT message - doing this from elsewhere is a
+    // common programming error among wxWindows programmers and might lead to
+    // very subtle and difficult to debug refresh/repaint bugs.
+    int g_isPainting = 0;
+#endif // __WXDEBUG__
+
+// ===========================================================================
+// implementation
+// ===========================================================================
+
+// ----------------------------------------------------------------------------
+// wxWindowDC
+// ----------------------------------------------------------------------------
+
+wxWindowDC::wxWindowDC()
 {
-};
+  m_canvas = NULL;
+}
 
-wxWindowDC::wxWindowDC( wxWindow *window )
+wxWindowDC::wxWindowDC(wxWindow *the_canvas)
 {
-};
+  m_canvas = the_canvas;
+  m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas) );
+  m_hDCCount++;
 
-wxWindowDC::~wxWindowDC(void)
+  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+}
+
+wxWindowDC::~wxWindowDC()
 {
-};
-
-void wxWindowDC::FloodFill( long WXUNUSED(x1), long WXUNUSED(y1),
-  const wxColour& WXUNUSED(col), int WXUNUSED(style) )
-{
-};
-
-bool wxWindowDC::GetPixel( long WXUNUSED(x1), long WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
-{
-  return FALSE;
-};
-
-void wxWindowDC::DrawLine( long x1, long y1, long x2, long y2 )
-{
-  if (!Ok()) return;
-
-};
-
-void wxWindowDC::CrossHair( long x, long y )
-{
-  if (!Ok()) return;
-
-};
-
-void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
-{
-  if (!Ok()) return;
-
-  long xx1 = XLOG2DEV(x1);
-  long yy1 = YLOG2DEV(y1);
-  long xx2 = XLOG2DEV(x2);
-  long yy2 = YLOG2DEV(y2);
-  long xxc = XLOG2DEV((long)xc);
-  long yyc = YLOG2DEV((long)yc);
-  double dx = xx1 - xxc;
-  double dy = yy1 - yyc;
-  double radius = sqrt(dx*dx+dy*dy);
-  long   r      = (long)radius;
-  double radius1, radius2;
-
-  if (xx1 == xx2 && yy1 == yy2)
+  if (m_canvas && m_hDC)
   {
-    radius1 = 0.0;
-    radius2 = 360.0;
-  }
-  else
-  if (radius == 0.0)
-  {
-    radius1 = radius2 = 0.0;
-  }
-  else
-  {
-    radius1 = (xx1 - xxc == 0) ?
-	    (yy1 - yyc < 0) ? 90.0 : -90.0 :
-	    -atan2(double(yy1-yyc), double(xx1-xxc)) * RAD2DEG;
-    radius2 = (xx2 - xxc == 0) ?
-	    (yy2 - yyc < 0) ? 90.0 : -90.0 :
-	    -atan2(double(yy2-yyc), double(xx2-xxc)) * RAD2DEG;
-  };
-  long alpha1 = long(radius1 * 64.0);
-  long alpha2 = long((radius2 - radius1) * 64.0);
-  while (alpha2 <= 0) alpha2 += 360*64;
-  while (alpha1 > 360*64) alpha1 -= 360*64;
+    SelectOldObjects(m_hDC);
 
-  if (m_brush.GetStyle() != wxTRANSPARENT) {};
-
-  if (m_pen.GetStyle() != wxTRANSPARENT) {};
-
-};
-
-void wxWindowDC::DrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
-{
-  if (!Ok()) return;
-
-  long xx = XLOG2DEV(x);
-  long yy = YLOG2DEV(y);
-  long ww = m_signX * XLOG2DEVREL(width);
-  long hh = m_signY * YLOG2DEVREL(height);
-
-  // CMB: handle -ve width and/or height
-  if (ww < 0) { ww = -ww; xx = xx - ww; }
-  if (hh < 0) { hh = -hh; yy = yy - hh; }
-
-  long start = long(sa * 64.0);
-  long end = long(ea * 64.0);
-  if (m_brush.GetStyle() != wxTRANSPARENT) {};
-
-  if (m_pen.GetStyle() != wxTRANSPARENT) {};
-};
-
-void wxWindowDC::DrawPoint( long x, long y )
-{
-  if (!Ok()) return;
-
-  if (m_pen.GetStyle() != wxTRANSPARENT) {};
-};
-
-void wxWindowDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
-{
-  if (!Ok()) return;
-
-  if (m_pen.GetStyle() == wxTRANSPARENT) return;
-
-  for (int i = 0; i < n-1; i++)
-  {
-    long x1 = XLOG2DEV(points[i].x + xoffset);
-    long x2 = XLOG2DEV(points[i+1].x + xoffset);
-    long y1 = YLOG2DEV(points[i].y + yoffset);     // oh, what a waste
-    long y2 = YLOG2DEV(points[i+1].y + yoffset);
-  };
-};
-
-void wxWindowDC::DrawLines( wxList *points, long xoffset, long yoffset )
-{
-  if (!Ok()) return;
-
-  if (m_pen.GetStyle() == wxTRANSPARENT) return;
-
-  wxNode *node = points->First();
-  while (node->Next())
-  {
-    wxPoint *point = (wxPoint*)node->Data();
-    wxPoint *npoint = (wxPoint*)node->Next()->Data();
-    long x1 = XLOG2DEV(point->x + xoffset);
-    long x2 = XLOG2DEV(npoint->x + xoffset);
-    long y1 = YLOG2DEV(point->y + yoffset);    // and again...
-    long y2 = YLOG2DEV(npoint->y + yoffset);
-    node = node->Next();
-  };
-};
-
-void wxWindowDC::DrawPolygon( int WXUNUSED(n), wxPoint WXUNUSED(points)[],
-  long WXUNUSED(xoffset), long WXUNUSED(yoffset), int WXUNUSED(fillStyle) )
-{
-  if (!Ok()) return;
-};
-
-void wxWindowDC::DrawPolygon( wxList *WXUNUSED(lines), long WXUNUSED(xoffset),
-                             long WXUNUSED(yoffset), int WXUNUSED(fillStyle) )
-{
-  if (!Ok()) return;
-};
-
-void wxWindowDC::DrawRectangle( long x, long y, long width, long height )
-{
-  if (!Ok()) return;
-
-  long xx = XLOG2DEV(x);
-  long yy = YLOG2DEV(y);
-  long ww = m_signX * XLOG2DEVREL(width);
-  long hh = m_signY * YLOG2DEVREL(height);
-
-  // CMB: draw nothing if transformed w or h is 0
-  if (ww == 0 || hh == 0) return;
-
-  // CMB: handle -ve width and/or height
-  if (ww < 0) { ww = -ww; xx = xx - ww; }
-  if (hh < 0) { hh = -hh; yy = yy - hh; }
-
-  if (m_brush.GetStyle() != wxTRANSPARENT) {};
-
-  if (m_pen.GetStyle() != wxTRANSPARENT) {};
-};
-
-void wxWindowDC::DrawRoundedRectangle( long x, long y, long width, long height, double radius )
-{
-  if (!Ok()) return;
-
-  if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
-
-  long xx = XLOG2DEV(x);
-  long yy = YLOG2DEV(y);
-  long ww = m_signX * XLOG2DEVREL(width);
-  long hh = m_signY * YLOG2DEVREL(height);
-  long rr = XLOG2DEVREL((long)radius);
-
-  // CMB: handle -ve width and/or height
-  if (ww < 0) { ww = -ww; xx = xx - ww; }
-  if (hh < 0) { hh = -hh; yy = yy - hh; }
-
-  // CMB: if radius is zero use DrawRectangle() instead to avoid
-  // X drawing errors with small radii
-  if (rr == 0)
-  {
-    DrawRectangle( x, y, width, height );
-    return;
+    //
+    // In PM one does not explicitly close or release an open WindowDC
+    // They automatically close with the window, unless explicitly detached
+    //
+    m_hDC = 0;
   }
 
-  // CMB: draw nothing if transformed w or h is 0
-  if (ww == 0 || hh == 0) return;
+  m_hDCCount--;
+}
 
-  // CMB: adjust size if outline is drawn otherwise the result is
-  // 1 pixel too wide and high
-  if (m_pen.GetStyle() != wxTRANSPARENT)
+// ----------------------------------------------------------------------------
+// wxClientDC
+// ----------------------------------------------------------------------------
+
+wxClientDC::wxClientDC()
+{
+  m_canvas = NULL;
+}
+
+wxClientDC::wxClientDC(wxWindow *the_canvas)
+{
+  m_canvas = the_canvas;
+  m_hDC = (WXHDC) ::GetDC(GetWinHwnd(the_canvas));
+
+  // the background mode is only used for text background
+  // and is set in DrawText() to OPAQUE as required, other-
+  // wise always TRANSPARENT, RR
+  ::SetBkMode( GetHdc(), TRANSPARENT );
+
+  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+}
+
+wxClientDC::~wxClientDC()
+{
+  if ( m_canvas && GetHdc() )
   {
-    ww--;
-    hh--;
+    SelectOldObjects(m_hDC);
+
+    ::ReleaseDC(GetWinHwnd(m_canvas), GetHdc());
+    m_hDC = 0;
   }
+}
 
-  // CMB: ensure dd is not larger than rectangle otherwise we
-  // get an hour glass shape
-  long dd = 2 * rr;
-  if (dd > ww) dd = ww;
-  if (dd > hh) dd = hh;
-  rr = dd / 2;
+// ----------------------------------------------------------------------------
+// wxPaintDC
+// ----------------------------------------------------------------------------
 
-  if (m_brush.GetStyle() != wxTRANSPARENT)
-  {
-  };
+// VZ: initial implementation (by JACS) only remembered the last wxPaintDC
+//     created and tried to reuse - this was supposed to take care of a
+//     situation when a derived class OnPaint() calls base class OnPaint()
+//     because in this case ::BeginPaint() shouldn't be called second time.
+//
+//     I'm not sure how useful this is, however we must remember the HWND
+//     associated with the last HDC as well - otherwise we may (and will!) try
+//     to reuse the HDC for another HWND which is a nice recipe for disaster.
+//
+//     So we store a list of windows for which we already have the DC and not
+//     just one single hDC. This seems to work, but I'm really not sure about
+//     the usefullness of the whole idea - IMHO it's much better to not call
+//     base class OnPaint() at all, or, if we really want to allow it, add a
+//     "wxPaintDC *" parameter to wxPaintEvent which should be used if it's
+//     !NULL instead of creating a new DC.
 
-  if (m_pen.GetStyle() != wxTRANSPARENT)
-  {
-  };
-};
+wxArrayDCInfo wxPaintDC::ms_cache;
 
-void wxWindowDC::DrawEllipse( long x, long y, long width, long height )
+wxPaintDC::wxPaintDC()
 {
-  if (!Ok()) return;
+    m_canvas = NULL;
+    m_hDC = 0;
+}
 
-  long xx = XLOG2DEV(x);
-  long yy = YLOG2DEV(y);
-  long ww = m_signX * XLOG2DEVREL(width);
-  long hh = m_signY * YLOG2DEVREL(height);
-
-  // CMB: handle -ve width and/or height
-  if (ww < 0) { ww = -ww; xx = xx - ww; }
-  if (hh < 0) { hh = -hh; yy = yy - hh; }
-
-  if (m_brush.GetStyle() != wxTRANSPARENT) {};
-
-  if (m_pen.GetStyle() != wxTRANSPARENT) {};
-};
-
-bool wxWindowDC::CanDrawBitmap(void) const
+wxPaintDC::wxPaintDC(wxWindow *canvas)
 {
-  return TRUE;
-};
+    wxCHECK_RET( canvas, _T("NULL canvas in wxPaintDC ctor") );
 
-void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
-{
-  if (!Ok()) return;
-
-  if (!icon.Ok()) return;
-
-  int xx = XLOG2DEV(x);
-  int yy = YLOG2DEV(y);
-
-};
-
-bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
-       wxDC *source, long xsrc, long ysrc, int WXUNUSED(logical_func), bool WXUNUSED(useMask) )
-{
-  if (!Ok()) return FALSE;
-
-  // CMB 20/5/98: add blitting of bitmaps
-  if (source->IsKindOf(CLASSINFO(wxMemoryDC)))
-  {
-    wxMemoryDC* srcDC = (wxMemoryDC*)source;
-    /*
-     GdkBitmap* bmap = srcDC->m_selected.GetBitmap();
-    if (bmap)
+#ifdef __WXDEBUG__
+    if ( g_isPainting <= 0 )
     {
-      gdk_draw_bitmap (
-          m_window,
-          m_textGC,
-          bmap,
-          source->DeviceToLogicalX(xsrc), source->DeviceToLogicalY(ysrc),
-          XLOG2DEV(xdest), YLOG2DEV(ydest),
-          source->DeviceToLogicalXRel(width), source->DeviceToLogicalYRel(height)
-          );
-      return TRUE;
+        wxFAIL_MSG( _T("wxPaintDC may be created only in EVT_PAINT handler!") );
+
+        return;
     }
-    */
-  }
+#endif // __WXDEBUG__
 
-  return TRUE;
-};
+    m_canvas = canvas;
 
-void wxWindowDC::DrawText( const wxString &text, long x, long y, bool
-WXUNUSED(use16) )
-{
-  if (!Ok()) return;
-
-};
-
-
-
-bool wxWindowDC::CanGetTextExtent(void) const
-{
-  return TRUE;
-};
-
-void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *height,
-                     long *WXUNUSED(descent), long *WXUNUSED(externalLeading),
-                     wxFont *WXUNUSED(theFont), bool WXUNUSED(use16) ) const
-{
-  if (!Ok()) return;
-
-};
-
-long wxWindowDC::GetCharWidth(void) const
-{
-  if (!Ok()) return 0;
-  return 0;
-};
-
-long wxWindowDC::GetCharHeight(void) const
-{
-  if (!Ok()) return 0;
-  return 0;
-};
-
-void wxWindowDC::Clear(void)
-{
-  if (!Ok()) return;
-
-};
-
-void wxWindowDC::SetFont( const wxFont &font )
-{
-  if (!Ok()) return;
-
-  m_font = font;
-};
-
-void wxWindowDC::SetPen( const wxPen &pen )
-{
-  if (!Ok()) return;
-
-  if (m_pen == pen) return;
-
-  m_pen = pen;
-
-  if (!m_pen.Ok()) return;
-};
-
-void wxWindowDC::SetBrush( const wxBrush &brush )
-{
-  if (!Ok()) return;
-
-  if (m_brush == brush) return;
-
-  m_brush = brush;
-
-  if (!m_brush.Ok()) return;
-
-};
-
-void wxWindowDC::SetBackground( const wxBrush &brush )
-{
-  if (!Ok()) return;
-
-  if (m_backgroundBrush == brush) return;
-
-  m_backgroundBrush = brush;
-
-  if (!m_backgroundBrush.Ok()) return;
-
-};
-
-void wxWindowDC::SetLogicalFunction( int function )
-{
-  if (m_logicalFunction == function) return;
-};
-
-void wxWindowDC::SetTextForeground( const wxColour &col )
-{
-  if (!Ok()) return;
-
-  if (m_textForegroundColour == col) return;
-
-  m_textForegroundColour = col;
-  if (!m_textForegroundColour.Ok()) return;
-};
-
-void wxWindowDC::SetTextBackground( const wxColour &col )
-{
-  if (!Ok()) return;
-
-  if (m_textBackgroundColour == col) return;
-
-  m_textBackgroundColour = col;
-  if (!m_textBackgroundColour.Ok()) return;
-};
-
-void wxWindowDC::SetBackgroundMode( int mode )
-{
-  m_backgroundMode = mode;
-
-  if (m_brush.GetStyle() != wxSOLID && m_brush.GetStyle() != wxTRANSPARENT)
-  {
-  }
-};
-
-void wxWindowDC::SetPalette( const wxPalette& WXUNUSED(palette) )
-{
-};
-
-void wxWindowDC::SetClippingRegion( long x, long y, long width, long height )
-{
-  wxDC::SetClippingRegion( x, y, width, height );
-
-  // TODO
-
-};
-
-void wxWindowDC::SetClippingRegion( const wxRegion& region )
-{
-  wxRect box = region.GetBox();
-
-  wxDC::SetClippingRegion( box.x, box.y, box.width, box.height );
-
-  // TODO
-}
-
-void wxWindowDC::DestroyClippingRegion(void)
-{
-  wxDC::DestroyClippingRegion();
-
-};
-
-// ----------------------------------- spline code ----------------------------------------
-
-void wx_quadratic_spline(double a1, double b1, double a2, double b2,
-                         double a3, double b3, double a4, double b4);
-void wx_clear_stack(void);
-int wx_spline_pop(double *x1, double *y1, double *x2, double *y2, double *x3,
-        double *y3, double *x4, double *y4);
-void wx_spline_push(double x1, double y1, double x2, double y2, double x3, double y3,
-          double x4, double y4);
-static bool wx_spline_add_point(double x, double y);
-static void wx_spline_draw_point_array(wxDC *dc);
-
-wxList wx_spline_point_list;
-
-#define		half(z1, z2)	((z1+z2)/2.0)
-#define		THRESHOLD	5
-
-/* iterative version */
-
-void wx_quadratic_spline(double a1, double b1, double a2, double b2, double a3, double b3, double a4,
-                 double b4)
-{
-    register double  xmid, ymid;
-    double           x1, y1, x2, y2, x3, y3, x4, y4;
-
-    wx_clear_stack();
-    wx_spline_push(a1, b1, a2, b2, a3, b3, a4, b4);
-
-    while (wx_spline_pop(&x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4)) {
-        xmid = (double)half(x2, x3);
-        ymid = (double)half(y2, y3);
-	if (fabs(x1 - xmid) < THRESHOLD && fabs(y1 - ymid) < THRESHOLD &&
-	    fabs(xmid - x4) < THRESHOLD && fabs(ymid - y4) < THRESHOLD) {
-            wx_spline_add_point( x1, y1 );
-            wx_spline_add_point( xmid, ymid );
-	} else {
-            wx_spline_push(xmid, ymid, (double)half(xmid, x3), (double)half(ymid, y3),
-                 (double)half(x3, x4), (double)half(y3, y4), x4, y4);
-            wx_spline_push(x1, y1, (double)half(x1, x2), (double)half(y1, y2),
-                 (double)half(x2, xmid), (double)half(y2, ymid), xmid, ymid);
-	}
-    }
-}
-
-/* utilities used by spline drawing routines */
-
-typedef struct wx_spline_stack_struct {
-    double           x1, y1, x2, y2, x3, y3, x4, y4;
-} Stack;
-
-#define         SPLINE_STACK_DEPTH             20
-static Stack    wx_spline_stack[SPLINE_STACK_DEPTH];
-static Stack   *wx_stack_top;
-static int      wx_stack_count;
-
-void wx_clear_stack(void)
-{
-    wx_stack_top = wx_spline_stack;
-    wx_stack_count = 0;
-}
-
-void wx_spline_push(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
-{
-    wx_stack_top->x1 = x1;
-    wx_stack_top->y1 = y1;
-    wx_stack_top->x2 = x2;
-    wx_stack_top->y2 = y2;
-    wx_stack_top->x3 = x3;
-    wx_stack_top->y3 = y3;
-    wx_stack_top->x4 = x4;
-    wx_stack_top->y4 = y4;
-    wx_stack_top++;
-    wx_stack_count++;
-}
-
-int wx_spline_pop(double *x1, double *y1, double *x2, double *y2,
-                  double *x3, double *y3, double *x4, double *y4)
-{
-    if (wx_stack_count == 0)
-	return (0);
-    wx_stack_top--;
-    wx_stack_count--;
-    *x1 = wx_stack_top->x1;
-    *y1 = wx_stack_top->y1;
-    *x2 = wx_stack_top->x2;
-    *y2 = wx_stack_top->y2;
-    *x3 = wx_stack_top->x3;
-    *y3 = wx_stack_top->y3;
-    *x4 = wx_stack_top->x4;
-    *y4 = wx_stack_top->y4;
-    return (1);
-}
-
-static bool wx_spline_add_point(double x, double y)
-{
-  wxPoint *point = new wxPoint ;
-  point->x = (int) x;
-  point->y = (int) y;
-  wx_spline_point_list.Append((wxObject*)point);
-  return TRUE;
-}
-
-static void wx_spline_draw_point_array(wxDC *dc)
-{
-  dc->DrawLines(&wx_spline_point_list, 0, 0 );
-  wxNode *node = wx_spline_point_list.First();
-  while (node)
-  {
-    wxPoint *point = (wxPoint *)node->Data();
-    delete point;
-    delete node;
-    node = wx_spline_point_list.First();
-  }
-}
-
-void wxWindowDC::DrawSpline( wxList *points )
-{
-    wxPoint *p;
-    double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
-    double           x1, y1, x2, y2;
-
-    wxNode *node = points->First();
-    p = (wxPoint *)node->Data();
-
-    x1 = p->x;
-    y1 = p->y;
-
-    node = node->Next();
-    p = (wxPoint *)node->Data();
-
-    x2 = p->x;
-    y2 = p->y;
-    cx1 = (double)((x1 + x2) / 2);
-    cy1 = (double)((y1 + y2) / 2);
-    cx2 = (double)((cx1 + x2) / 2);
-    cy2 = (double)((cy1 + y2) / 2);
-
-    wx_spline_add_point(x1, y1);
-
-    while ((node = node->Next()) != NULL)
+    // do we have a DC for this window in the cache?
+    wxPaintDCInfo *info = FindInCache();
+    if ( info )
     {
-        p = (wxPoint *)node->Data();
-	x1 = x2;
-	y1 = y2;
-	x2 = p->x;
-	y2 = p->y;
-        cx4 = (double)(x1 + x2) / 2;
-        cy4 = (double)(y1 + y2) / 2;
-        cx3 = (double)(x1 + cx4) / 2;
-        cy3 = (double)(y1 + cy4) / 2;
-
-        wx_quadratic_spline(cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4);
-
-	cx1 = cx4;
-	cy1 = cy4;
-        cx2 = (double)(cx1 + x2) / 2;
-        cy2 = (double)(cy1 + y2) / 2;
+        m_hDC = info->hdc;
+        info->count++;
+    }
+    else // not in cache, create a new one
+    {
+        m_hDC = (WXHDC)::BeginPaint(GetWinHwnd(m_canvas), &g_paintStruct);
+        ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
     }
 
-    wx_spline_add_point( cx1, cy1 );
-    wx_spline_add_point( x2, y2 );
+    // the background mode is only used for text background
+    // and is set in DrawText() to OPAQUE as required, other-
+    // wise always TRANSPARENT, RR
+    ::SetBkMode( GetHdc(), TRANSPARENT );
 
-    wx_spline_draw_point_array( this );
-};
+    SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+}
+
+wxPaintDC::~wxPaintDC()
+{
+    if ( m_hDC )
+    {
+        SelectOldObjects(m_hDC);
+
+        size_t index;
+        wxPaintDCInfo *info = FindInCache(&index);
+
+        wxCHECK_RET( info, _T("existing DC should have a cache entry") );
+
+        if ( !--info->count )
+        {
+            ::EndPaint(GetWinHwnd(m_canvas), &g_paintStruct);
+
+            ms_cache.Remove(index);
+        }
+        //else: cached DC entry is still in use
+
+        // prevent the base class dtor from ReleaseDC()ing it again
+        m_hDC = 0;
+    }
+}
+
+wxPaintDCInfo *wxPaintDC::FindInCache(size_t *index) const
+{
+    wxPaintDCInfo *info = NULL;
+    size_t nCache = ms_cache.GetCount();
+    for ( size_t n = 0; n < nCache; n++ )
+    {
+        info = &ms_cache[n];
+        if ( info->hwnd == m_canvas->GetHWND() )
+        {
+            if ( index )
+                *index = n;
+            break;
+        }
+    }
+
+    return info;
+}

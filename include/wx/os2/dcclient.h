@@ -1,139 +1,84 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcclient.h
-// Purpose:     wxClientDC, wxPaintDC and wxWindowDC classes
-// Author:      AUTHOR
+// Purpose:     wxClientDC class
+// Author:      Julian Smart
 // Modified by:
-// Created:     ??/??/98
+// Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) Julian Smart and Markus Holzem
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DCCLIENT_H_
 #define _WX_DCCLIENT_H_
 
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma interface "dcclient.h"
+    #pragma interface "dcclient.h"
 #endif
 
 #include "wx/dc.h"
+#include "wx/dynarray.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// array types
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPaintDC;
-class WXDLLEXPORT wxWindow;
+// this one if used by wxPaintDC only
+struct WXDLLEXPORT wxPaintDCInfo;
 
-// Under Windows, wxClientDC, wxPaintDC and wxWindowDC are implemented differently.
-// On many platforms, however, they will be the same.
+WX_DECLARE_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
 
-class WXDLLEXPORT wxWindowDC: public wxDC
+// ----------------------------------------------------------------------------
+// DC classes
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxWindowDC : public wxDC
 {
-  DECLARE_DYNAMIC_CLASS(wxWindowDC)
+    DECLARE_DYNAMIC_CLASS(wxWindowDC)
 
-  public:
+public:
+    wxWindowDC();
 
-    wxWindowDC(void);
-    wxWindowDC( wxWindow *win );
+    // Create a DC corresponding to the whole window
+    wxWindowDC(wxWindow *win);
 
-    ~wxWindowDC(void);
-
-    virtual void FloodFill( long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE );
-    virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
-
-    virtual void DrawLine( long x1, long y1, long x2, long y2 );
-    virtual void CrossHair( long x, long y );
-    virtual void DrawArc( long x1, long y1, long x2, long y2, long xc, long yc );
-    virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea );
-    virtual void DrawPoint( long x, long y );
-
-    virtual void DrawLines( int n, wxPoint points[], long xoffset = 0, long yoffset = 0 );
-    virtual void DrawLines( wxList *points, long xoffset = 0, long yoffset = 0 );
-    virtual void DrawPolygon( int n, wxPoint points[], long xoffset = 0, long yoffset = 0,
-                              int fillStyle=wxODDEVEN_RULE );
-    virtual void DrawPolygon( wxList *lines, long xoffset = 0, long yoffset = 0,
-                              int fillStyle=wxODDEVEN_RULE );
-
-    virtual void DrawRectangle( long x, long y, long width, long height );
-    virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 );
-    virtual void DrawEllipse( long x, long y, long width, long height );
-
-    virtual bool CanDrawBitmap(void) const;
-    virtual void DrawIcon( const wxIcon &icon, long x, long y, bool useMask=FALSE );
-    virtual bool Blit( long xdest, long ydest, long width, long height,
-       wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE );
-
-    virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE );
-    virtual bool CanGetTextExtent(void) const;
-    virtual void GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16 = FALSE ) const;
-    virtual long GetCharWidth(void) const;
-    virtual long GetCharHeight(void) const;
-
-    virtual void Clear(void);
-
-    virtual void SetFont( const wxFont &font );
-    virtual void SetPen( const wxPen &pen );
-    virtual void SetBrush( const wxBrush &brush );
-    virtual void SetBackground( const wxBrush &brush );
-    virtual void SetLogicalFunction( int function );
-    virtual void SetTextForeground( const wxColour &col );
-    virtual void SetTextBackground( const wxColour &col );
-    virtual void SetBackgroundMode( int mode );
-    virtual void SetPalette( const wxPalette& palette );
-
-    virtual void SetClippingRegion( long x, long y, long width, long height );
-    virtual void SetClippingRegion( const wxRegion& region ) ;
-    virtual void DestroyClippingRegion(void);
-
-    virtual void DrawSpline( wxList *points );
-private:
-    // to supress virtual function hiding, do not use
-    void DrawEllipticArc(const wxPoint& pt, const wxSize& sz,
-                         double sa, double ea)
-    { wxDC::DrawEllipticArc(pt, sz, sa, ea); };
-    void DrawPoint(wxPoint& pt)
-    { wxDC:DrawPoint(pt); };
-    void DrawSpline(int n, wxPoint points[])
-    { wxDC::DrawSpline(n, points); };
-    void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3)
-    { wxDC::DrawSpline(x1, y1, x2, y2, x3, y3); };
-    virtual void GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL) const
-    { GetTextExtent(string, width, height, descent, externalLeading, theFont, FALSE); };
+    virtual ~wxWindowDC();
 };
 
-//-----------------------------------------------------------------------------
-// wxPaintDC
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxPaintDC: public wxWindowDC
+class WXDLLEXPORT wxClientDC : public wxWindowDC
 {
-  DECLARE_DYNAMIC_CLASS(wxPaintDC)
+    DECLARE_DYNAMIC_CLASS(wxClientDC)
 
-  public:
+public:
+    wxClientDC();
 
-    wxPaintDC(void):wxWindowDC() {};
-    wxPaintDC( wxWindow *win ): wxWindowDC(win) {};
+    // Create a DC corresponding to the client area of the window
+    wxClientDC(wxWindow *win);
 
+    virtual ~wxClientDC();
 };
 
-//-----------------------------------------------------------------------------
-// wxClientDC
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxClientDC: public wxWindowDC
+class WXDLLEXPORT wxPaintDC : public wxWindowDC
 {
-  DECLARE_DYNAMIC_CLASS(wxClientDC)
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
 
-  public:
+public:
+    wxPaintDC();
 
-    wxClientDC(void):wxWindowDC() {};
-    wxClientDC( wxWindow *win ): wxWindowDC(win) {};
+    // Create a DC corresponding for painting the window in OnPaint()
+    wxPaintDC(wxWindow *win);
 
+    virtual ~wxPaintDC();
+
+protected:
+    static wxArrayDCInfo ms_cache;
+
+    // find the entry for this DC in the cache (keyed by the window)
+    wxPaintDCInfo *FindInCache(size_t *index = NULL) const;
 };
 
 #endif
