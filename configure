@@ -35645,14 +35645,6 @@ _ACEOF
 
 fi
 
-if test "$wxUSE_DIALUP_MANAGER" = "yes" ; then
-  cat >>confdefs.h <<\_ACEOF
-#define wxUSE_DIALUP_MANAGER 1
-_ACEOF
-
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dialup"
-fi
-
 if test "$wxUSE_STREAMS" = "yes" ; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_STREAMS 1
@@ -38146,6 +38138,19 @@ _ACEOF
 
             USES_CONTROLS=1
         fi
+    fi
+fi
+
+if test "$wxUSE_DIALUP" = "yes"; then
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
+        { echo "$as_me:$LINENO: WARNING: Dialup manager not yet supported under Mac OS X... disabled" >&5
+echo "$as_me: WARNING: Dialup manager not yet supported under Mac OS X... disabled" >&2;}
+    else
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_DIALUP_MANAGER 1
+_ACEOF
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dialup"
     fi
 fi
 
