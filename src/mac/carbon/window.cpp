@@ -66,7 +66,6 @@
 #include <string.h>
 
 extern wxList wxPendingDelete;
-wxWindowMac* gFocusWindow = NULL ;
 
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowMac, wxWindowBase)
@@ -82,7 +81,7 @@ BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
 // TODO    EVT_PAINT(wxWindowMac::OnPaint)
     EVT_SYS_COLOUR_CHANGED(wxWindowMac::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowMac::OnInitDialog)
-    EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
+//    EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
 END_EVENT_TABLE()
 
@@ -102,25 +101,27 @@ END_EVENT_TABLE()
 extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
 pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessage , SInt16 iDepth , Boolean iIsColor ) ;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_3
+#if TARGET_API_MAC_OSX
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_3 
 enum {
   kEventControlVisibilityChanged = 157
 };
 #endif
 
+#endif
+
 static const EventTypeSpec eventList[] =
 {
+    { kEventClassControl , kEventControlHit } ,
 #if TARGET_API_MAC_OSX
     { kEventClassControl , kEventControlDraw } ,
     { kEventClassControl , kEventControlVisibilityChanged } ,
     { kEventClassControl , kEventControlEnabledStateChanged } ,
     { kEventClassControl , kEventControlHiliteChanged } ,
+    { kEventClassControl , kEventControlSetFocusPart } ,
 //	{ kEventClassControl , kEventControlInvalidateForSizeChange } , // 10.3 only
 //  { kEventClassControl , kEventControlBoundsChanged } ,
-
-    {}
-#else
-    {}
 #endif
 } ;
 
@@ -137,6 +138,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
     switch( GetEventKind( event ) )
     {
+#if TARGET_API_MAC_OSX
         case kEventControlDraw :
             {
                 RgnHandle updateRgn = NULL ;
@@ -183,6 +185,50 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
             break ;
         case kEventControlHiliteChanged :
                 thisWindow->MacHiliteChanged() ;
+            break ;
+        case kEventControlSetFocusPart :
+            {
+                Boolean focusEverything = false ;
+                ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
+                if ( cEvent.GetParameter<Boolean>(kEventParamControlFocusEverything , &focusEverything ) == noErr )
+                {
+                }
+                if ( controlPart == kControlFocusNoPart )
+                {
+        #if wxUSE_CARET
+                    if ( thisWindow->GetCaret() )
+                    {
+                        thisWindow->GetCaret()->OnKillFocus();
+                    }
+        #endif // wxUSE_CARET
+                    wxFocusEvent event(wxEVT_KILL_FOCUS, thisWindow->GetId());
+                    event.SetEventObject(thisWindow);
+                    thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                }
+                else
+                {
+                    // panel wants to track the window which was the last to have focus in it
+                    wxChildFocusEvent eventFocus(thisWindow);
+                    thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
+                    
+        #if wxUSE_CARET
+                    if ( thisWindow->GetCaret() )
+                    {
+                        thisWindow->GetCaret()->OnSetFocus();
+                    }
+        #endif // wxUSE_CARET
+
+                    wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
+                    event.SetEventObject(thisWindow);
+                    thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                }
+            }
+            break ;
+#endif
+        case kEventControlHit :
+            {
+                result = thisWindow->MacControlHit( handler , event ) ;
+            }
             break ;
         default :
             break ;
@@ -521,11 +567,6 @@ wxWindowMac::~wxWindowMac()
             frame->SetLastFocus( NULL ) ;
     }
 
-    if ( gFocusWindow == this )
-    {
-        gFocusWindow = NULL ;
-    }
-
     DestroyChildren();
 
     // delete our drop target if we've got one
@@ -790,73 +831,59 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
 
 bool wxWindowMac::MacCanFocus() const
 {
-    wxASSERT( m_macControl != NULL ) ;
-
-    return true ; 
+#if 0
+    // there is currently no way to determinate whether the window is running in full keyboard
+    // access mode, therefore we cannot rely on these features yet
+    UInt32 features = 0 ;
+    GetControlFeatures( (ControlRef) m_macControl , &features ) ;
+    return features & ( kControlSupportsFocus | kControlGetsFocusOnClick ) ; 
+#endif
+    return true ;
 }
 
 
 void wxWindowMac::SetFocus()
 {
-    if ( gFocusWindow == this )
-        return ;
-
     if ( AcceptsFocus() )
     {
-        if (gFocusWindow )
-        {
-#if wxUSE_CARET
-                // Deal with caret
-                if ( gFocusWindow->m_caret )
-                {
-                      gFocusWindow->m_caret->OnKillFocus();
-                }
-#endif // wxUSE_CARET
-#ifndef __WXUNIVERSAL__
-            wxWindow* control = wxDynamicCast( gFocusWindow , wxWindow ) ;
-            // TODO we must use the built-in focusing
-            if ( control && control->GetHandle() /* && control->MacIsReallyShown() */ )
-            {
-                UMASetKeyboardFocus( (WindowRef) gFocusWindow->MacGetTopLevelWindowRef() , (ControlRef) control->GetHandle()  , kControlFocusNoPart ) ;
-                control->MacRedrawControl() ;
-            }
+#if !TARGET_API_MAC_OSX
+        wxWindow* former = FindFocus() ;
 #endif
-            // Without testing the window id, for some reason
-            // a kill focus event can still be sent to
-            // the control just being focussed.
-            int thisId = this->m_windowId;
-            int gFocusWindowId = gFocusWindow->m_windowId;
-            if (gFocusWindowId != thisId)
-            {
-                wxFocusEvent event(wxEVT_KILL_FOCUS, gFocusWindow->m_windowId);
-                event.SetEventObject(gFocusWindow);
-                gFocusWindow->GetEventHandler()->ProcessEvent(event) ;
-            }
-        }
-        gFocusWindow = this ;
-        {
-            #if wxUSE_CARET
-            // Deal with caret
-            if ( m_caret )
-            {
-                m_caret->OnSetFocus();
-            }
-            #endif // wxUSE_CARET
-            // panel wants to track the window which was the last to have focus in it
-            wxChildFocusEvent eventFocus(this);
-            GetEventHandler()->ProcessEvent(eventFocus);
+        OSStatus err = SetKeyboardFocus(  (WindowRef) MacGetTopLevelWindowRef() , (ControlRef) GetHandle()  , kControlFocusNextPart ) ;
+        // as we cannot rely on the control features to find out whether we are in full keyboard mode, we can only
+        // leave in case of an error
+        if ( err == errCouldntSetFocus )
+            return ;
 
-      #ifndef __WXUNIVERSAL__
-            wxControl* control = wxDynamicCast( gFocusWindow , wxControl ) ;
-            if ( control && control->GetHandle() )
-            {
-                UMASetKeyboardFocus( (WindowRef) gFocusWindow->MacGetTopLevelWindowRef() , (ControlRef) control->GetHandle()  , kControlFocusNextPart ) ;
-            }
-      #endif
-            wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
-            event.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(event) ;
+#if !TARGET_API_MAC_OSX
+        // emulate carbon events when running under carbonlib where they are not natively available
+        if ( former )
+        {
+            EventRef evRef = NULL ;
+            verify_noerr( MacCreateEvent( NULL , kEventClassControl , kEventControlSetFocusPart , TicksToEventTime( TickCount() ) , kEventAttributeUserEvent ,
+                &evRef ) );
+
+            wxMacCarbonEvent cEvent( evRef ) ;
+            cEvent.SetParameter<ControlRef>( kEventParamDirectObject , (ControlRef) former->GetHandle() ) ;
+            cEvent.SetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode , kControlFocusNoPart ) ;
+            
+            wxMacWindowEventHandler( NULL , evRef , former ) ;
+            ReleaseEvent(evRef) ;
         }
+        // send new focus event
+        {
+            EventRef evRef = NULL ;
+            verify_noerr( MacCreateEvent( NULL , kEventClassControl , kEventControlSetFocusPart , TicksToEventTime( TickCount() ) , kEventAttributeUserEvent ,
+                &evRef ) );
+
+            wxMacCarbonEvent cEvent( evRef ) ;
+            cEvent.SetParameter<ControlRef>( kEventParamDirectObject , (ControlRef) GetHandle() ) ;
+            cEvent.SetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode , kControlFocusNextPart ) ;
+            
+            wxMacWindowEventHandler( NULL , evRef , this ) ;
+            ReleaseEvent(evRef) ;
+        }
+#endif
     }
 }
 
@@ -2261,7 +2288,9 @@ void wxWindowMac::MacOnScroll(wxScrollEvent &event )
 // Get the window with the focus
 wxWindowMac *wxWindowBase::FindFocus()
 {
-    return gFocusWindow ;
+    ControlRef control ;
+    GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
+    return wxFindControlFromMacControl( control ) ;
 }
 
 void wxWindowMac::OnSetFocus(wxFocusEvent& event)
@@ -2765,62 +2794,6 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
         if ( ! GetEventHandler()->ProcessEvent(evtCtx) )
             event.Skip() ;
 	}
-    else if (event.GetEventType() == wxEVT_LEFT_DOWN || event.GetEventType() == wxEVT_LEFT_DCLICK )
-    {
-            
-        int x = event.m_x ;
-        int y = event.m_y ;
-
-        if ( MacGetTopLevelWindow()->MacUsesCompositing() == false )
-        {
-            // OS Needs it in tlw content area coordinates
-            MacClientToRootWindow( &x , &y ) ;
-        }
-        else
-        {
-            // OS Needs it in window not client coordinates
-            wxPoint origin = GetClientAreaOrigin() ;
-            x += origin.x ;
-            y += origin.y ;
-        }
-        Point       localwhere ;
-        SInt16      controlpart ;
-        
-        localwhere.h = x ;
-        localwhere.v = y ;
-    
-        short modifiers = 0;
-        
-        if ( !event.m_leftDown && !event.m_rightDown )
-            modifiers  |= btnState ;
-    
-        if ( event.m_shiftDown )
-            modifiers |= shiftKey ;
-            
-        if ( event.m_controlDown )
-            modifiers |= controlKey ;
-    
-        if ( event.m_altDown )
-            modifiers |= optionKey ;
-    
-        if ( event.m_metaDown )
-            modifiers |= cmdKey ;
-
-        bool handled = false ;
-
-        if ( ::IsControlActive( (ControlRef) m_macControl ) )
-        {
-            controlpart = ::HandleControlClick( (ControlRef) m_macControl , localwhere , modifiers , (ControlActionUPP) -1 ) ;
-            wxTheApp->s_lastMouseDown = 0 ;
-            if ( controlpart != kControlNoPart ) 
-            {
-                MacHandleControlClick((WXWidget)  (ControlRef) m_macControl , controlpart , false /* mouse not down anymore */ ) ;
-                handled = true ;
-            }
-        }
-        if ( !handled )
-            event.Skip() ;
-    }
     else
     {
     	event.Skip() ;
@@ -2829,7 +2802,6 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
 
 void wxWindowMac::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED( mouseStillDown ) ) 
 {
-    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
 }
 
 Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin ) 
@@ -2839,6 +2811,11 @@ Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxS
     window->MacGetBoundsForControl( pos , size , x , y, w, h , adjustForOrigin) ;
     Rect bounds =  { y , x , y+h , x+w  };
     return bounds ;
+}
+
+wxInt32 wxWindowMac::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
+{
+    return eventNotHandledErr ;
 }
 
 
