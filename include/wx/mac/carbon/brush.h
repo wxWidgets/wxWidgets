@@ -48,8 +48,8 @@ public:
   virtual void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
   virtual void SetStyle(int style)  ;
   virtual void SetStipple(const wxBitmap& stipple)  ;
-  virtual void SetMacTheme(short macThemeBrush) ;
-  virtual void SetMacThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
+  virtual void MacSetTheme(short macThemeBrush) ;
+  virtual void MacSetThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
 
   wxBrush& operator = (const wxBrush& brush)
   { if (*this == brush) return (*this); Ref(brush); return *this; }
@@ -60,8 +60,8 @@ public:
 
   wxMacBrushKind MacGetBrushKind()  const ;
 
-  unsigned long GetMacThemeBackground(WXRECTPTR extent)  const ;
-  short GetMacTheme()  const ;
+  unsigned long MacGetThemeBackground(WXRECTPTR extent)  const ;
+  short MacGetTheme()  const ;
   wxColour& GetColour() const ;
   int GetStyle() const ;
   wxBitmap *GetStipple() const ;

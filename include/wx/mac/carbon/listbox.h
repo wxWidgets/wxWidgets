@@ -127,7 +127,6 @@ public:
 
     // Windows callbacks
 
-    virtual void    SetupColours();
     virtual void    MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
        virtual bool MacCanFocus() const { return true ; }
     void OnChar(wxKeyEvent& event);
@@ -136,9 +135,11 @@ public:
     wxArrayString   m_stringArray ;
     wxListDataArray m_dataArray ;
     wxArrayInt      m_selectionPreImage ;
+    wxArrayLong     m_idArray ;
+    wxUint32        m_nextId ;
+    
     void            MacSetRedraw( bool doDraw ) ;
 protected:
-    void            MacDestroy() ;
     void            MacDelete( int n ) ;
     void            MacInsert( int n , const wxString& item) ;
     void            MacAppend( const wxString& item) ;

@@ -41,8 +41,6 @@ class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
   ////////////////////////////////////////////////////////////////////////
   // Implementation
 
-  virtual void MacSuperEnabled( bool enable ) ;
-
   void OnPaint(wxPaintEvent& event);
 protected:
 

@@ -40,12 +40,7 @@ class WXDLLEXPORT wxWindowMac: public wxWindowBase
 public:
     
     wxWindowMac()
-        : m_macBackgroundBrush()
-        , m_macVisibleRegion()
-        , m_x(0), m_y(0), m_width(0), m_height(0)
-        , m_hScrollBar(NULL), m_vScrollBar(NULL)
-        , m_label(wxEmptyString)
-        { Init(); }
+    { Init(); }
 
     wxWindowMac(wxWindowMac *parent,
                 wxWindowID id,
@@ -86,8 +81,10 @@ public:
                           const wxRect *rect = (const wxRect *) NULL );
 
     virtual bool SetCursor( const wxCursor &cursor );
-    virtual bool SetFont(const wxFont& font)
-           { return wxWindowBase::SetFont(font); }
+    virtual bool SetFont( const wxFont &font ) ;
+    virtual bool SetBackgroundColour( const wxColour &colour );
+    virtual bool SetForegroundColour( const wxColour &colour );
+
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
     virtual void GetTextExtent(const wxString& string,
@@ -115,30 +112,29 @@ public:
     // Accept files for dragging
     virtual void DragAcceptFiles(bool accept);
 
-    // Native resource loading (implemented in src/msw/nativdlg.cpp)
-    // FIXME: should they really be all virtual?
-    wxWindowMac* GetWindowChild1(wxWindowID id);
-    wxWindowMac* GetWindowChild(wxWindowID id);
-
     // implementation from now on
     // --------------------------
 
     void MacClientToRootWindow( int *x , int *y ) const ;
     void MacRootWindowToClient( int *x , int *y ) const ;
+
     void MacWindowToRootWindow( int *x , int *y ) const ;
+    void MacWindowToRootWindow( short *x , short *y ) const ;
+
     void MacRootWindowToWindow( int *x , int *y ) const ;
+    void MacRootWindowToWindow( short *x , short *y ) const ;
     
     virtual wxString MacGetToolTipString( wxPoint &where ) ;
 
     // simple accessors
     // ----------------
 
-//    WXHWND GetHWND() const { return m_hWnd; }
-//    void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
-    virtual WXWidget GetHandle() const { return (WXWidget) NULL ; }
+    virtual WXWidget GetHandle() const { return m_macControl ; }
 
+#if WXWIN_COMPATIBILITY_2_4
     bool GetTransparentBackground() const { return m_backgroundTransparent; }
     void SetTransparent(bool t = TRUE) { m_backgroundTransparent = t; }
+#endif
 
     // event handlers
     // --------------
@@ -161,79 +157,101 @@ public:
     wxWindowMac *FindItem(long id) const;
     wxWindowMac *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
 
-    // Make a Windows extended style from the given wxWindows window style
-    static WXDWORD MakeExtendedStyle(long style,
-                                     bool eliminateBorders = TRUE);
-    // Determine whether 3D effects are wanted
-    WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D) const;
-
-    // MSW only: TRUE if this control is part of the main control
-    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
-
-    // Setup background and foreground colours correctly
-    virtual void SetupColours();
-
 public:
-    static bool          MacGetWindowFromPoint( const wxPoint &point , wxWindowMac** outWin ) ;
-    virtual bool         MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac** outWin ) ;
-    virtual void         MacRedraw( WXHRGN updatergn , long time , bool erase) ;
-    virtual bool         MacCanFocus() const { return true ; }
+    virtual void        MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
+    virtual bool        MacDoRedraw( WXHRGN updatergn , long time ) ;
+    virtual void        MacRedraw( WXHRGN updatergn , long time , bool erase) ;
+    virtual bool        MacCanFocus() const ;
     
-    virtual bool         MacDispatchMouseEvent(wxMouseEvent& event ) ;
     // this should not be overriden in classes above wxWindowMac because it is called from its destructor via DeleteChildren
-    virtual void         RemoveChild( wxWindowBase *child );
-    virtual void         MacPaintBorders( int left , int top ) ;
-    WXWindow             MacGetRootWindow() const  ;
+    virtual void        RemoveChild( wxWindowBase *child );
+    virtual void        MacPaintBorders( int left , int top ) ;
+    WXWindow            MacGetTopLevelWindowRef() const  ;
     wxTopLevelWindowMac* MacGetTopLevelWindow() const ;
     
-    virtual WXWidget     MacGetContainerForEmbedding() ;
+    virtual long        MacGetLeftBorderSize() const ;
+    virtual long        MacGetRightBorderSize() const ;
+    virtual long        MacGetTopBorderSize() const ;
+    virtual long        MacGetBottomBorderSize() const ;
     
-    virtual long         MacGetLeftBorderSize() const ;
-    virtual long         MacGetRightBorderSize() const ;
-    virtual long         MacGetTopBorderSize() const ;
-    virtual long         MacGetBottomBorderSize() const ;
-    
-    static long          MacRemoveBordersFromStyle( long style ) ;
-    virtual void         MacSuperChangedPosition() ;
-    // the absolute coordinates of this item within the toplevel window may have changed
-    virtual void         MacUpdateDimensions() {}
-    // the absolute coortinates of this window's root have changed
-    virtual void         MacTopLevelWindowChangedPosition() ;
-    virtual void         MacSuperShown( bool show ) ;
-    virtual void         MacSuperEnabled( bool enable ) ;
-    bool                 MacIsReallyShown() const ;
-    virtual void         Update() ;
-    // for compatibility
-    void                 MacUpdateImmediately() { Update() ; }
-    virtual bool         MacSetupCursor( const wxPoint& pt ) ;
-        
-//    virtual bool         MacSetPortDrawingParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindowMac* rootwin )  ;
-//    virtual void         MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;
-//    virtual void         MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
-    const wxBrush&       MacGetBackgroundBrush() ;
-    const wxRegion&      MacGetVisibleRegion( bool respectChildrenAndSiblings = true ) ;
-    bool                 MacIsWindowScrollbar( const wxScrollBar* sb )
-        { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
-    static wxWindowMac*  s_lastMouseWindow ;
-private:
-protected:
-    wxBrush              m_macBackgroundBrush ;
-    wxRegion             m_macVisibleRegion ;
-    int                  m_x ;
-    int                  m_y ;
-    int                  m_width ;
-    int                  m_height ;
-    
-    wxScrollBar*         m_hScrollBar ;
-    wxScrollBar*         m_vScrollBar ;
-    wxString             m_label ;
-    
-    void                 MacCreateScrollBars( long style ) ;
-    void                 MacRepositionScrollBars() ;
+    static long         MacRemoveBordersFromStyle( long style ) ;
 
+    virtual void        MacSuperChangedPosition() ;
+    // the absolute coortinates of this window's root have changed
+    virtual void        MacTopLevelWindowChangedPosition() ;
+    
+    virtual void        MacVisibilityChanged() ;
+    virtual void        MacEnabledStateChanged() ;
+    
+    bool                MacIsReallyShown() ;
+    bool                MacIsReallyEnabled() ;
+    
+    bool		        MacIsUserPane() { return m_macIsUserPane; }
+
+    virtual void        Update() ;
+    virtual bool        MacSetupCursor( const wxPoint& pt ) ;
+        
+    virtual void        MacSetBackgroundBrush( const wxBrush &brush ) { m_macBackgroundBrush = brush ; }
+    const wxBrush&      MacGetBackgroundBrush() const { return m_macBackgroundBrush ; }
+    
+    // returns the visible region of this control in window ie non-client coordinates
+    
+    wxRegion            MacGetVisibleRegion( bool includeOuterStructures = false ) ;
+    bool                MacIsWindowScrollbar( const wxScrollBar* sb )
+        { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
+
+    wxList&             GetSubcontrols() { return m_subControls; }
+    virtual void		MacInstallEventHandler() ;
+	virtual void		MacRedrawControl();
+    WXEVENTHANDLERREF   MacGetControlEventHandler() { return m_macControlEventHandler ; }
+    void                MacPostControlCreate(const wxPoint& pos, const wxSize& size) ;
+
+    virtual void            MacControlUserPaneDrawProc(wxInt16 part) ;
+    virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) ;
+    virtual wxInt16         MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc) ;
+    virtual void            MacControlUserPaneIdleProc() ;
+    virtual wxInt16         MacControlUserPaneKeyDownProc(wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers) ;
+    virtual void            MacControlUserPaneActivateProc(bool activating) ;
+    virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) ;
+    virtual void            MacControlUserPaneBackgroundProc(void* info) ;
+
+    // translate wxWindows coords into ones suitable to be passed to
+    // the CreateControl calls
+    //
+    // returns TRUE if non default coords are returned, FALSE otherwise
+    bool                MacGetBoundsForControl(const wxPoint& pos,
+                                           const wxSize& size,
+                                           int& x, int& y,
+                                           int& w, int& h) const ;
+    // calculates the real window position and size from the native control
+    void                MacGetPositionAndSizeFromControl(int& x, int& y,
+                                           int& w, int& h) const ;
+protected:
+    // For controls like radiobuttons which are really composite
+    wxList              m_subControls;
+
+    WXWidget            m_macControl ;
+	bool				m_macIsUserPane ;
+    wxBrush             m_macBackgroundBrush ;
+    
+    wxScrollBar*        m_hScrollBar ;
+    wxScrollBar*        m_vScrollBar ;
+    wxString            m_label ;
+    
+    void                MacCreateScrollBars( long style ) ;
+    void                MacRepositionScrollBars() ;
+    void                MacUpdateControlFont() ;
+    void                MacPropagateVisibilityChanged() ;
+    void                MacPropagateEnabledStateChanged() ;
+ 
+
+#if WXWIN_COMPATIBILITY_2_4
     bool                 m_backgroundTransparent ;
+#endif
 
     // implement the base class pure virtuals
+ 	virtual wxSize DoGetBestSize() const;
+ 	virtual wxSize DoGetSizeFromClientSize( const wxSize & size ) const;
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
     virtual void DoGetPosition( int *x, int *y ) const;
@@ -252,14 +270,21 @@ protected:
     // ::MoveWindow() except for composite controls which will want to arrange
     // themselves inside the given rectangle
     virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoSetWindowVariant( wxWindowVariant variant ) ;
+ 
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
+private :
+
 private:
     // common part of all ctors
     void Init();
+
+    WXEVENTHANDLERREF    m_macControlEventHandler ;
+
 
     DECLARE_NO_COPY_CLASS(wxWindowMac)
     DECLARE_EVENT_TABLE()

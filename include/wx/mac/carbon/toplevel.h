@@ -53,6 +53,8 @@ public:
 
     virtual ~wxTopLevelWindowMac();
 
+    virtual wxPoint GetClientAreaOrigin() const;
+
     // implement base class pure virtuals
     virtual void Maximize(bool maximize = TRUE);
     virtual bool IsMaximized() const;
@@ -77,36 +79,35 @@ public:
                                       const wxSize& size,
                                       long style,
                                       const wxString& name ) ;
-    static WXWindow MacGetWindowInUpdate() { return s_macWindowInUpdate ; }
-    virtual void MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXWindow *window , wxWindowMac** rootwin ) ;
     virtual void ClearBackground() ;
-    virtual WXWidget MacGetContainerForEmbedding() ;
+
     WXWindow MacGetWindowRef() { return m_macWindow ; }
     virtual void MacActivate( long timestamp , bool inIsActivating ) ;
-    virtual void MacUpdate( long timestamp ) ;
-#if !TARGET_CARBON
-    virtual void MacMouseDown( WXEVENTREF ev , short windowPart ) ;
-    virtual void MacMouseUp( WXEVENTREF ev , short windowPart ) ;
-    virtual void MacMouseMoved( WXEVENTREF ev , short windowPart ) ;
-    virtual void MacKeyDown( WXEVENTREF ev ) ;
-#endif
-    virtual void MacFireMouseEvent( wxUint16 kind , wxInt32 x , wxInt32 y ,wxUint32 modifiers , long timestamp ) ;
+
     virtual void Raise();
     virtual void Lower();
     virtual void SetTitle( const wxString& title);
     virtual bool Show( bool show = TRUE );
-    virtual void DoMoveWindow(int x, int y, int width, int height);
-    void MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) ;
-    short MacGetWindowBackgroundTheme() const { return m_macWindowBackgroundTheme ; }
-    static bool MacEnableCompositing( bool useCompositing ); 
+
+    virtual void MacSetBackgroundBrush( const wxBrush &brush ) ;
+
     bool MacUsesCompositing() { return m_macUsesCompositing; } 
 
-#if TARGET_CARBON
+    void MacSetMetalAppearance( bool on ) ;
+
+    void MacChangeWindowAttributes( wxUint32 attributesToSet , wxUint32 attributesToClear ) ;
+    wxUint32 MacGetWindowAttributes() const ;
+
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
-#endif
+
 protected:
     // common part of all ctors
     void Init();
+
+    virtual void DoGetPosition( int *x, int *y ) const;
+    virtual void DoGetSize( int *width, int *height ) const;
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoGetClientSize(int *width, int *height) const;
 
     // is the frame currently iconized?
     bool m_iconized;
@@ -116,31 +117,19 @@ protected:
     bool m_maximizeOnShow;
     bool m_macUsesCompositing ;
 
-    short m_macWindowBackgroundTheme ;
     WXWindow m_macWindow ;
-    WXWidget m_macRootControl ;
-    wxWindowMac* m_macFocus ;
-    WXHRGN m_macNoEraseUpdateRgn ;
-    bool m_macNeedsErasing ;
 
-    static WXWindow s_macWindowInUpdate ;
+    wxWindowMac* m_macFocus ;
+
     static wxTopLevelWindowMac *s_macDeactivateWindow;
-    static bool s_macWindowCompositing ;
 private :
-#if TARGET_CARBON
     WXEVENTHANDLERREF    m_macEventHandler ;
-#endif
+
+    DECLARE_EVENT_TABLE()
 };
 
 // list of all frames and modeless dialogs
 extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
-
-// associate mac windows with wx counterparts
-
-wxTopLevelWindowMac* wxFindWinFromMacWindow( WXWindow inWindow ) ;
-void wxAssociateWinWithMacWindow(WXWindow inWindow, wxTopLevelWindowMac *win) ;
-void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win) ;
-
 
 #endif // _WX_MSW_TOPLEVEL_H_
 

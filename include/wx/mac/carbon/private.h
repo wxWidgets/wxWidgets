@@ -20,6 +20,7 @@
 #ifdef __DARWIN__
 #    include <Carbon/Carbon.h>
 #else
+#    include <Debugging.h>
 #    include <Quickdraw.h>
 #    include <Appearance.h>
 #    include <Folders.h>
@@ -62,6 +63,24 @@ private:
     short           m_textMode ;
 } ;
 
+class WXDLLEXPORT wxMacPortSaver
+{
+    DECLARE_NO_COPY_CLASS(wxMacPortSaver)
+        
+public:
+    wxMacPortSaver( GrafPtr port ) 
+    {
+        ::GetPort( &m_port ) ;
+        ::SetPort( port ) ;
+    }
+    ~wxMacPortSaver()
+    {
+        ::SetPort( m_port ) ;
+    }
+private :
+    GrafPtr m_port ;
+} ;
+
 class WXDLLEXPORT wxMacPortSetter
 {
     DECLARE_NO_COPY_CLASS(wxMacPortSetter)
@@ -74,7 +93,11 @@ private:
     const wxDC* m_dc ;
 } ;
 
-class WXDLLEXPORT wxMacWindowClipper
+/*
+ Clips to the visible region of a control within the current port
+ */
+ 
+class WXDLLEXPORT wxMacWindowClipper : public wxMacPortSaver
 {
     DECLARE_NO_COPY_CLASS(wxMacWindowClipper)
         
@@ -86,6 +109,7 @@ private:
     RgnHandle m_newClip ;
 } ;
 
+/*
 class wxMacDrawingHelper
 {
     DECLARE_NO_COPY_CLASS(wxMacDrawingHelper)
@@ -105,6 +129,7 @@ private:
     PenState  m_savedPenState ;
     bool      m_ok ;
 } ;
+*/
 
 // app.h
 bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec) ;
@@ -118,9 +143,9 @@ WXDLLEXPORT void wxMacFilename2FSSpec( const wxChar *path , FSSpec *spec ) ;
 #  ifndef __DARWIN__
 // Mac file names are POSIX (Unix style) under Darwin, so these are not needed
 WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
-WXDLLEXPORT void wxUnixFilename2FSSpec( const wxChar *path , FSSpec *spec ) ;
-WXDLLEXPORT wxString wxMac2UnixFilename( const wxChar *s) ;
-WXDLLEXPORT wxString wxUnix2MacFilename( const wxChar *s);
+WXDLLEXPORT void wxUnixFilename2FSSpec( const char *path , FSSpec *spec ) ;
+WXDLLEXPORT wxString wxMac2UnixFilename( const char *s) ;
+WXDLLEXPORT wxString wxUnix2MacFilename( const char *s);
 #  endif
 
 // utils.h
@@ -148,6 +173,105 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
 #define MAC_WXRECPTR(a) ((Rect*)a)
 #define MAC_WXPOINTPTR(a) ((Point*)a)
 #define MAC_WXHMENU(a) ((MenuHandle)a)
+
+struct wxOpaqueWindowRef
+{
+    wxOpaqueWindowRef( WindowRef ref ) { m_data = ref ; }
+    operator WindowRef() { return m_data ; } 
+private :
+    WindowRef m_data ;
+} ;
+
+wxWindow *wxFindControlFromMacControl(ControlRef inControl ) ;
+wxTopLevelWindowMac* wxFindWinFromMacWindow( WindowRef inWindow ) ;
+extern wxWindow* g_MacLastWindow ;
+pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
+Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size ) ;
+
+template<typename T> EventParamType wxMacGetEventParamType() { wxFAIL_MSG( wxT("Unknown Param Type") ) ; return 0 ; }
+template<> inline EventParamType wxMacGetEventParamType<RgnHandle>() { return typeQDRgnHandle ; }
+template<> inline EventParamType wxMacGetEventParamType<ControlRef>() { return typeControlRef ; }
+template<> inline EventParamType wxMacGetEventParamType<WindowRef>() { return typeWindowRef ; }
+template<> inline EventParamType wxMacGetEventParamType<MenuRef>() { return typeMenuRef ; }
+template<> inline EventParamType wxMacGetEventParamType<EventRef>() { return typeEventRef ; }
+template<> inline EventParamType wxMacGetEventParamType<Point>() { return typeQDPoint ; }
+template<> inline EventParamType wxMacGetEventParamType<Rect>() { return typeQDRectangle ; }
+template<> inline EventParamType wxMacGetEventParamType<Boolean>() { return typeBoolean ; }
+#if TARGET_API_MAC_OSX
+template<> inline EventParamType wxMacGetEventParamType<HIPoint>() { return typeHIPoint ; }
+template<> inline EventParamType wxMacGetEventParamType<HISize>() { return typeHISize ; }
+template<> inline EventParamType wxMacGetEventParamType<HIRect>() { return typeHIRect ; }
+template<> inline EventParamType wxMacGetEventParamType<void*>() { return typeVoidPtr ; }
+#endif
+template<> inline EventParamType wxMacGetEventParamType<Collection>() { return typeCollection ; }
+template<> inline EventParamType wxMacGetEventParamType<CGContextRef>() { return typeCGContextRef ; }
+/*
+These are ambiguous
+template<> EventParamType wxMacGetEventParamType<GrafPtr>() { return typeGrafPtr ; }
+template<> EventParamType wxMacGetEventParamType<OSStatus>() { return typeOSStatus ; }
+template<> EventParamType wxMacGetEventParamType<CFIndex>() { return typeCFIndex ; }
+template<> EventParamType wxMacGetEventParamType<GWorldPtr>() { return typeGWorldPtr ; }
+*/
+
+class wxMacCarbonEvent
+{
+    
+public :
+    wxMacCarbonEvent( EventRef event ) 
+    {
+        m_eventRef = event ;
+    }
+    
+    OSStatus GetParameter( EventParamName inName, EventParamType inDesiredType, UInt32 inBufferSize, void * outData) ;
+    
+    template <typename T> OSStatus GetParameter( EventParamName inName, EventParamType type , T *data )
+    {
+        return GetParameter( inName, type , sizeof( T ) , data ) ;
+    }
+    template <typename T> OSStatus GetParameter( EventParamName inName, T *data )
+    {
+        return GetParameter<T>( inName, wxMacGetEventParamType<T>() , data ) ;
+    }
+    
+    template <typename T> T GetParameter( EventParamName inName )
+    {
+        T value ;
+        verify_noerr( GetParameter<T>( inName, &value ) ) ;
+        return value ;
+    }
+    template <typename T> T GetParameter( EventParamName inName, EventParamType inDesiredType )
+    {
+        T value ;
+        verify_noerr( GetParameter<T>( inName, inDesiredType , &value ) ) ;
+        return value ;
+    }
+
+
+    OSStatus SetParameter( EventParamName inName, EventParamType inType, UInt32 inSize, void * inData) ;
+    template <typename T> OSStatus SetParameter( EventParamName inName, EventParamType type , T *data )
+    {
+        return SetParameter( inName, type , sizeof( T ) , data ) ;
+    }
+    template <typename T> OSStatus SetParameter( EventParamName inName, T *data )
+    {
+        return SetParameter<T>( inName, wxMacGetEventParamType<T>() , data ) ;
+    }
+    
+    EventKind GetKind()
+    {
+        return ::GetEventKind( m_eventRef ) ;
+    }
+    EventTime GetTime()
+    {
+        return ::GetEventTime( m_eventRef ) ;
+    }
+    UInt32 GetTicks()
+    {
+        return EventTimeToTicks( GetTime() ) ;
+    }
+protected :
+    EventRef m_eventRef ;
+} ;
 
 #endif // wxUSE_GUI
 

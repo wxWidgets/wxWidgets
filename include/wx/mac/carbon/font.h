@@ -64,6 +64,8 @@ public:
 
     bool Create(const wxNativeFontInfo& info);
 
+    bool MacCreateThemeFont( wxUint16 themeFontID ) ;
+    
     virtual ~wxFont();
 
     // assignment
@@ -97,11 +99,12 @@ public:
     virtual bool GetNoAntiAliasing() ;
 
     // Mac-specific, risks to change, don't use in portable code
-    short GetMacFontNum() const;
-    short GetMacFontSize() const;
-    wxByte  GetMacFontStyle() const;
-    wxUint32 GetMacATSUFontID() const;
-
+    short MacGetFontNum() const;
+    short MacGetFontSize() const;
+    wxByte  MacGetFontStyle() const;
+    wxUint32 MacGetATSUFontID() const;
+    wxUint32 MacGetATSUAdditionalQDStyles() const;
+    wxUint16 MacGetThemeFontID() const ;
 protected:
     // common part of all ctors
     void Init();

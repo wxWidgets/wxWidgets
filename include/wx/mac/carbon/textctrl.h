@@ -87,6 +87,7 @@ public:
   // text control under some platforms supports the text styles: these
   // methods allow to apply the given text style to the given selection or to
   // set/get the style which will be used for all appended text
+  virtual bool SetFont( const wxFont &font ) ;
   virtual bool SetStyle(long start, long end, const wxTextAttr& style);
   virtual bool SetDefaultStyle(const wxTextAttr& style);
 
@@ -153,11 +154,20 @@ public:
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
-       virtual bool MacCanFocus() const { return true ; }
+    virtual bool MacCanFocus() const { return true ; }
     virtual bool MacSetupCursor( const wxPoint& pt ) ;
 
-    virtual void      MacSuperShown( bool show ) ;
-    virtual bool     Show(bool show = TRUE) ;
+    virtual void         MacVisibilityChanged() ;
+    virtual void         MacEnabledStateChanged() ;
+
+    virtual void            MacControlUserPaneDrawProc(wxInt16 part) ;
+    virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) ;
+    virtual wxInt16         MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc) ;
+    virtual void            MacControlUserPaneIdleProc() ;
+    virtual wxInt16         MacControlUserPaneKeyDownProc(wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers) ;
+    virtual void            MacControlUserPaneActivateProc(bool activating) ;
+    virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) ;
+    virtual void            MacControlUserPaneBackgroundProc(void* info) ;
 
 protected:
     // common part of all ctors
@@ -171,12 +181,12 @@ protected:
   bool m_dirty;
 
   // one of the following objects is used for representation, the other one is NULL
-  void*  m_macTE ;
   void*  m_macTXN ;
-  void*  m_macTXNvars ;
-  bool  m_macUsesTXN ;
   unsigned long  m_maxLength ;
-  
+  // need to make this public because of the current implementation via callbacks
+public :  
+  void*  m_macTXNvars ;
+private :
   DECLARE_EVENT_TABLE()
 };
 

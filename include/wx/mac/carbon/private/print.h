@@ -23,10 +23,8 @@
 #  include "Printing.h"
 #endif
 
-#if TARGET_CARBON 
 #if !PM_USE_SESSION_APIS
 #error "only Carbon Printing Session API is supported"
-#endif
 #endif
 
 class wxNativePrintData
@@ -51,8 +49,6 @@ public :
    
     static wxNativePrintData* Create() ;
 } ;
-
-#if TARGET_CARBON
 
 class wxMacCarbonPrintData : public wxNativePrintData 
 {
@@ -79,29 +75,5 @@ public :
     PMPageFormat            m_macPageFormat ;
     PMPrintSettings         m_macPrintSettings ;
 } ;
-
-#else
-
-class wxMacClassicPrintData : public wxNativePrintData
-{
-public :
-                            wxMacClassicPrintData() ;
-                            ~wxMacClassicPrintData() ;
-    virtual void            TransferFrom( wxPrintData * ) ;
-    virtual void            TransferTo( wxPrintData * )  ;
-    virtual void            TransferFrom( wxPageSetupDialogData * ) ;
-    virtual void            TransferTo( wxPageSetupDialogData * ) ;
-    virtual void            TransferFrom( wxPrintDialogData * )  ;
-    virtual void            TransferTo( wxPrintDialogData * ) ;
-    virtual void            CopyFrom( wxNativePrintData * ) ;
-    virtual int             ShowPrintDialog() ;
-    virtual int             ShowPageSetupDialog() ;
-private :
-    virtual void            ValidateOrCreate() ;
-public :
-    THPrint                 m_macPrintSettings ;
-} ;
-
-#endif
 
 #endif

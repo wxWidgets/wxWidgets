@@ -69,15 +69,10 @@ class WXDLLEXPORT wxApp: public wxAppBase
     void OnEndSession(wxCloseEvent& event);
     void OnQueryEndSession(wxCloseEvent& event);
 
-    // Windows only, but for compatibility...
-    inline void SetAuto3D(bool flag) { m_auto3D = flag; }
-    inline bool GetAuto3D() const { return m_auto3D; }
-
 protected:
     bool                  m_showOnInit;
     int                   m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
-    bool                  m_auto3D ;   // Always use 3D controls, except
-                                       // where overriden
+
 public:
 
     static bool           sm_isEmbedded;
@@ -86,13 +81,12 @@ public:
     virtual void CleanUp();
 
     bool IsExiting() { return !m_keepGoing ; }
-#if TARGET_CARBON
+
     // the installed application event handler
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
     WXEVENTHANDLERREF    MacGetCurrentEventHandlerCallRef() { return m_macCurrentEventHandlerCallRef ; }
     void MacSetCurrentEvent( WXEVENTREF event , WXEVENTHANDLERCALLREF handler )
     { m_macCurrentEvent = event ; m_macCurrentEventHandlerCallRef = handler ; }
-#endif
 
 public:
     static long           sm_lastMessageTime;
@@ -107,10 +101,9 @@ private:
     bool                  m_keepGoing ;
 
     // mac specifics
-#if TARGET_CARBON
+
     WXEVENTHANDLERREF     m_macEventHandler ;
     WXEVENTHANDLERCALLREF m_macCurrentEventHandlerCallRef ;
-#endif
     WXEVENTREF            m_macCurrentEvent ;
 
 public:
@@ -135,11 +128,6 @@ public:
     WXHRGN                m_macSleepRgn ;
     WXHRGN                m_macHelpRgn ;
 
-    virtual void          MacSuspend( bool convertClipboard ) ;
-    virtual void          MacResume( bool convertClipboard ) ;
-    virtual void          MacConvertPrivateToPublicScrap() ;
-    virtual void          MacConvertPublicToPrivateScrap() ;
-
     void                  MacDoOneEvent() ;
     WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
     void                  MacHandleOneEvent( WXEVENTREF ev ) ;
@@ -147,28 +135,8 @@ public:
     // For embedded use. By default does nothing.
     virtual void          MacHandleUnhandledEvent( WXEVENTREF ev );
 
-#if !TARGET_CARBON
-    virtual void          MacHandleMenuSelect( int menuid , int menuitem ) ;
-    virtual void          MacHandleMouseUpEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleOSEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleDiskEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleActivateEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleUpdateEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleMouseDownEvent( WXEVENTREF ev ) ;
-
-    void                  MacHandleModifierEvents( WXEVENTREF ev ) ;
-
-    virtual void          MacHandleKeyDownEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleKeyUpEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleHighLevelEvent( WXEVENTREF ev ) ;
-
-#else
-    virtual void          MacHandleMouseMovedEvent( wxInt32 x , wxInt32 y ,wxUint32 modifiers , long timestamp ) ;
-#endif
-
-    void                  MacHandleMenuCommand( wxUint32 command ) ;
-    bool                    MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
-    bool                    MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
+    bool    MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
+    bool    MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
 
     virtual short         MacHandleAEODoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;

@@ -49,14 +49,6 @@ public:
 
     virtual void SetBitmapLabel(const wxBitmap& bitmap);
 
-/*
-  // TODO: Implementation
-  virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-  virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-  virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-  virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
-*/
-
 protected:
     virtual wxSize DoGetBestSize() const;    
 };

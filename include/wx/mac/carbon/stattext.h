@@ -18,11 +18,10 @@
 
 class WXDLLEXPORT wxStaticText: public wxStaticTextBase
 {
-  DECLARE_DYNAMIC_CLASS(wxStaticText)
- public:
-  inline wxStaticText() : m_label() { }
+public:
+    wxStaticText() { }
 
-  inline wxStaticText(wxWindow *parent, wxWindowID id,
+    wxStaticText(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
@@ -43,19 +42,12 @@ class WXDLLEXPORT wxStaticText: public wxStaticTextBase
   void SetLabel( const wxString &str ) ;
   bool SetFont( const wxFont &font );
 
-  // operations
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
-  // events
-  void DrawParagraph(wxDC &dc, wxString paragraph, int &y);
-  void OnPaint( wxPaintEvent &event ) ;
-  void OnDraw( wxDC &dc ) ;
+protected :
+
   virtual wxSize DoGetBestSize() const ;
   virtual bool AcceptsFocus() const { return FALSE; }
- private :
-     wxString    m_label ;
 
-   DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText)
 };
 
 #endif

@@ -53,11 +53,6 @@ void            UMASetMenuItemText(  MenuRef menu,  MenuItemIndex item, const wx
 void            UMAShowWatchCursor() ;
 void            UMAShowArrowCursor() ;
 
-#if !TARGET_CARBON
-OSStatus        UMAPrOpen() ;
-OSStatus        UMAPrClose() ;
-#endif
-
 // window manager
 
 GrafPtr        UMAGetWindowPort( WindowRef inWindowRef ) ;
@@ -69,32 +64,34 @@ void            UMAShowHide( WindowRef inWindowRef , Boolean show) ;
 
 // appearance manager
 
-void             UMADrawControl( ControlHandle inControl ) ;
+void             UMADrawControl( ControlRef inControl ) ;
 
-void             UMAEnableControl( ControlHandle inControl ) ;
-void            UMADisableControl( ControlHandle inControl ) ;
-void             UMAActivateControl( ControlHandle inControl ) ;
-void            UMADeactivateControl( ControlHandle inControl ) ;
+void             UMAEnableControl( ControlRef inControl ) ;
+void            UMADisableControl( ControlRef inControl ) ;
+void             UMAActivateControl( ControlRef inControl ) ;
+void            UMADeactivateControl( ControlRef inControl ) ;
 //                                 ControlPartCode         hiliteState)    ;
-void UMAShowControl                        (ControlHandle             theControl)    ;
-void UMAHideControl                        (ControlHandle             theControl);
-void UMAActivateControl                    (ControlHandle             inControl);
-void UMADeactivateControl                (ControlHandle             inControl);
-void UMASetControlTitle( ControlHandle inControl , const wxString& title , wxFontEncoding encoding) ;
+void UMAShowControl                        (ControlRef             theControl)    ;
+void UMAHideControl                        (ControlRef             theControl);
+void UMAActivateControl                    (ControlRef             inControl);
+void UMADeactivateControl                (ControlRef             inControl);
+void UMASetControlTitle( ControlRef inControl , const wxString& title , wxFontEncoding encoding) ;
 
-void UMAMoveControl( ControlHandle inControl , short x , short y ) ;
-void UMASizeControl( ControlHandle inControl , short x , short y ) ;
+void UMAMoveControl( ControlRef inControl , short x , short y ) ;
+void UMASizeControl( ControlRef inControl , short x , short y ) ;
 // control hierarchy
+
+Rect * UMAGetControlBoundsInWindowCoords(ControlRef theControl, Rect *bounds) ;
 
 // keyboard focus
 OSErr UMASetKeyboardFocus                (WindowPtr                 inWindow,
-                                 ControlHandle             inControl,
+                                 ControlRef             inControl,
                                  ControlFocusPart         inPart)    ;
 
 // events
 
 void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn ) ;
-OSErr UMAGetRootControl( WindowPtr inWindow , ControlHandle *outControl ) ;
+OSErr UMAGetRootControl( WindowPtr inWindow , ControlRef *outControl ) ;
 
 // handling control data
 bool            UMAIsWindowFloating( WindowRef inWindow ) ;
@@ -114,16 +111,6 @@ OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 
 OSStatus UMAPutScrap( Size size , OSType type , void *data ) ;
 
-// accessor helpers
-
-#if !TARGET_CARBON
-#define ClearCurrentScrap() ZeroScrap() ;
-#define GetApplicationScript() smSystemScript
-#else
-
-// calls not in carbon
-
-#endif
 #define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn )
 
 #endif // wxUSE_GUI

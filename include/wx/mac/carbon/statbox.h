@@ -26,31 +26,29 @@ class WXDLLEXPORT wxStaticBox: public wxControl
   DECLARE_DYNAMIC_CLASS(wxStaticBox)
 
  public:
-  inline wxStaticBox() {}
-  inline wxStaticBox(wxWindow *parent, wxWindowID id,
+    inline wxStaticBox() {}
+    inline wxStaticBox(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
            const wxString& name = wxStaticBoxNameStr)
-  {
-    Create(parent, id, label, pos, size, style, name);
-  }
+    {
+        Create(parent, id, label, pos, size, style, name);
+    }
 
-  bool Create(wxWindow *parent, wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
            const wxString& name = wxStaticBoxNameStr);
 
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+    virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
+    virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
 
 
 protected:
-
-DECLARE_EVENT_TABLE()
 };
 
 #endif
