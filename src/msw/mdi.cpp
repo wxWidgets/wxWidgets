@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_MDI_ARCHITECTURE && !defined(__WXUNIVERSAL__)
+
 #ifndef WX_PRECOMP
     #include "wx/setup.h"
     #include "wx/frame.h"
@@ -42,8 +44,6 @@
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif
-
-#if wxUSE_MDI_ARCHITECTURE && !defined(__WXUNIVERSAL__)
 
 #include "wx/mdi.h"
 #include "wx/msw/private.h"
