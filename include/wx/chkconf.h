@@ -1460,6 +1460,17 @@
 #   endif
 #endif /* wxUSE_FILEDLG */
 
+#if !wxUSE_GAUGE
+#   if wxUSE_PROGRESSDLG
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "Progress dialog require wxUSE_GAUGE"
+#       else
+#           undef wxUSE_GAUGE
+#           define wxUSE_GAUGE 1
+#       endif
+#   endif
+#endif /* !wxUSE_GAUGE */
+
 #if !wxUSE_BUTTON
 #   if wxUSE_PROGRESSDLG || \
        wxUSE_FONTDLG || \
@@ -1477,7 +1488,7 @@
 #           define wxUSE_BUTTON 1
 #       endif
 #   endif
-#endif /* wxUSE_PROGRESSDLG */
+#endif /* !wxUSE_BUTTON */
 
 #if !wxUSE_TOOLBAR
 #   if wxUSE_TOOLBAR_NATIVE
