@@ -4869,8 +4869,13 @@ if test "$wxUSE_STACKWALKER" = "yes"; then
 fi
 
 if test "$wxUSE_DEBUGREPORT" = "yes"; then
-    AC_DEFINE(wxUSE_DEBUGREPORT)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS debugrpt"
+    if test "$USE_OS2" = "1"; then
+        AC_MSG_WARN([Creating debug reports not supported under OS/2 yet, disabled])
+        wxUSE_DEBUGREPORT=no
+    else
+        AC_DEFINE(wxUSE_DEBUGREPORT)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS debugrpt"
+    fi
 fi
 
 if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
