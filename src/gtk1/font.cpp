@@ -786,8 +786,13 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
     wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
 
 #ifndef __WXGTK20__
-    if ( M_FONTDATA->m_nativeFontInfo.GetXFontName().empty() )
+    if ( !M_FONTDATA->HasNativeFont() )
+    {
+        // NB: this call has important side-effect: it not only finds
+        //     GdkFont representation, it also initializes m_nativeFontInfo
+        //     by calling its SetXFontName method
         GetInternalFont();
+    }
 #endif
 
     return &(M_FONTDATA->m_nativeFontInfo);
@@ -938,7 +943,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
         if ( !font )
         {
             // do we have the XLFD?
-            if ( M_FONTDATA->HasNativeFont() )
+            if ( int_scale == 100 && M_FONTDATA->HasNativeFont() )
             {
                 font = wxLoadFont(M_FONTDATA->m_nativeFontInfo.GetXFontName());
             }
@@ -955,6 +960,10 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
                                                M_FONTDATA->m_faceName,
                                                M_FONTDATA->m_encoding,
                                                &xfontname);
+                // NB: wxFont::GetNativeFontInfo relies on this 
+                //     side-effect of GetInternalFont
+                if ( int_scale == 100 )
+                    M_FONTDATA->m_nativeFontInfo.SetXFontName(xfontname);
             }
         }
 
