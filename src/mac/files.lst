@@ -139,6 +139,7 @@ ALL_SOURCES = \
 		common/wincmn.cpp \
 		common/wxchar.cpp \
 		common/wxexpr.cpp \
+		common/xpmdecod.cpp \
 		common/zipstrm.cpp \
 		common/zstream.cpp \
 		html/helpctrl.cpp \
@@ -367,6 +368,7 @@ ALL_HEADERS = \
 		wx_cw_d.h \
 		wxchar.h \
 		wxexpr.h \
+		xpmdecod.h \
 		wxhtml.h \
 		wxprec.h \
 		xpmhand.h \
@@ -528,6 +530,7 @@ COMMONOBJS = \
 		wincmn.o \
 		wxchar.o \
 		wxexpr.o \
+		xpmdecod.o \
 		zipstrm.o \
 		zstream.o
 
@@ -634,6 +637,7 @@ COMMONDEPS = \
 		wincmn.d \
 		wxchar.d \
 		wxexpr.d \
+		xpmdecod.d \
 		zipstrm.d \
 		zstream.d
 
@@ -726,7 +730,6 @@ GENERICDEPS = \
 # Not included for Mac OS X
 #		dirmac.o
 #		filedlg.o
-#		notebook.o
 #		statline.o
 #		treectrl.o
 GUIOBJS = \
@@ -936,4 +939,9 @@ HTMLDEPS = \
 		m_pre.d \
 		m_tables.d \
 		winpars.d
+
+MACRESOURCES = \
+		apprsrc.r \
+		carbrsrc.r \
+		corersrc.r
 
