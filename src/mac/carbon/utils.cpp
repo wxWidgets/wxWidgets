@@ -27,6 +27,9 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include "morefile.h"
+#include "moreextr.h"
+
 #ifndef __DARWIN__
 // defined in unix/utilsunx.cpp for Mac OS X
 
@@ -343,6 +346,40 @@ char *wxGetUserHome (const wxString& user)
     return NULL;
 }
 #endif
+
+bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
+{
+    if ( path.empty() )
+        return FALSE;
+        
+    wxString p = path ;
+    if (p[0] == ':' ) {
+      p = wxGetCwd() + p ;
+    }
+    
+    int pos = p.Find(':') ;
+    if ( pos != wxNOT_FOUND ) {
+      p = p.Mid(1,pos) ;
+    }
+    
+    p = p + ":" ;
+    
+    Str255 volumeName ;
+    XVolumeParam pb ;
+
+    wxMacStringToPascal( p  , volumeName ) ;
+    OSErr err = XGetVolumeInfoNoName( volumeName , 0 , &pb ) ;
+    if ( err == noErr ) {
+      if ( pTotal ) {
+        (*pTotal) = wxLongLong( pb.ioVTotalBytes ) ;
+      }
+      if ( pFree ) {
+        (*pFree) = wxLongLong( pb.ioVFreeBytes ) ;
+      }
+    }
+
+    return err == noErr ;
+}
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
