@@ -483,7 +483,9 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::SetData( wxDataObject *data )
 {
+#if !wxUSE_OLE_CLIPBOARD
     (void)wxEmptyClipboard();
+#endif // wxUSE_OLE_CLIPBOARD
 
     if ( data )
         return AddData(data);

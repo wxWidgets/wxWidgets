@@ -433,6 +433,19 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
 
         case TYMED_HGLOBAL:
             {
+                wxDataFormat format = pformatetc->cfFormat;
+
+                // this is quite weird, but for file drag and drop, explorer
+                // calls our SetData() with the formats we do *not* support!
+                //
+                // as we can't fix this bug in explorer (it's a bug because it
+                // should only use formats returned by EnumFormatEtc), do the
+                // check here
+                if ( !m_pDataObject->IsSupportedFormat(format) ) {
+                    // go away!
+                    return DV_E_FORMATETC;
+                }
+
                 // copy data
                 void *pBuf = GlobalLock(pmedium->hGlobal);
                 if ( pBuf == NULL ) {
@@ -447,7 +460,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                 // synthetise it for known formats and we suppose that all data
                 // in custom formats starts with a DWORD containing the size
                 size_t size;
-                switch ( pformatetc->cfFormat )
+                switch ( format )
                 {
                     case CF_TEXT:
                     case CF_OEMTEXT:
@@ -480,7 +493,6 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                         }
                 }
 
-                wxDataFormat format = pformatetc->cfFormat;
                 bool ok = m_pDataObject->SetData(format, size, pBuf);
 
                 GlobalUnlock(pmedium->hGlobal);
@@ -927,6 +939,8 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
 
     // get number of files (magic value -1)
     UINT nFiles = ::DragQueryFile(hdrop, (unsigned)-1, NULL, 0u);
+
+    wxCHECK_MSG ( nFiles != (UINT)-1, FALSE, wxT("wrong HDROP handle") );
 
     // for each file get the length, allocate memory and then get the name
     wxString str;

@@ -95,10 +95,14 @@ public:
     void OnNewFrame(wxCommandEvent& event);
     void OnHelp (wxCommandEvent& event);
     void OnLogClear(wxCommandEvent& event);
+
     void OnCopy(wxCommandEvent& event);
     void OnPaste(wxCommandEvent& event);
+
     void OnCopyBitmap(wxCommandEvent& event);
     void OnPasteBitmap(wxCommandEvent& event);
+
+    void OnCopyFiles(wxCommandEvent& event);
 
     void OnLeftDown(wxMouseEvent& event);
     void OnRightDown(wxMouseEvent& event);
@@ -577,8 +581,7 @@ enum
     Menu_Paste,
     Menu_CopyBitmap,
     Menu_PasteBitmap,
-    Menu_ToBeGreyed,   /* for testing */
-    Menu_ToBeDeleted,  /* for testing */
+    Menu_CopyFiles,
     Menu_Shape_New = 500,
     Menu_Shape_Edit,
     Menu_Shape_Clear,
@@ -598,6 +601,7 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_Paste,      DnDFrame::OnPaste)
     EVT_MENU(Menu_CopyBitmap, DnDFrame::OnCopyBitmap)
     EVT_MENU(Menu_PasteBitmap,DnDFrame::OnPasteBitmap)
+    EVT_MENU(Menu_CopyFiles,  DnDFrame::OnCopyFiles)
 
     EVT_UPDATE_UI(Menu_Paste,       DnDFrame::OnUpdateUIPasteText)
     EVT_UPDATE_UI(Menu_PasteBitmap, DnDFrame::OnUpdateUIPasteBitmap)
@@ -702,6 +706,8 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     clip_menu->AppendSeparator();
     clip_menu->Append(Menu_CopyBitmap, "&Copy bitmap\tAlt+C");
     clip_menu->Append(Menu_PasteBitmap, "&Paste bitmap\tAlt+V");
+    clip_menu->AppendSeparator();
+    clip_menu->Append(Menu_CopyFiles, "&Copy files\tCtrl+F");
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
@@ -897,18 +903,13 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 
 void DnDFrame::OnRightDown(wxMouseEvent &event )
 {
-    wxMenu *menu = new wxMenu;
+    wxMenu menu("Dnd sample menu");
 
-    menu->Append(Menu_Drag, "&Test drag...");
-    menu->Append(Menu_About, "&About");
-    menu->Append(Menu_Quit, "E&xit");
-    menu->Append(Menu_ToBeDeleted, "To be deleted");
-    menu->Append(Menu_ToBeGreyed, "To be greyed");
+    menu.Append(Menu_Drag, "&Test drag...");
+    menu.AppendSeparator();
+    menu.Append(Menu_About, "&About");
 
-    menu->Delete( Menu_ToBeDeleted );
-    menu->Enable( Menu_ToBeGreyed, FALSE );
-
-    PopupMenu( menu, event.GetX(), event.GetY() );
+    PopupMenu( &menu, event.GetX(), event.GetY() );
 }
 
 DnDFrame::~DnDFrame()
@@ -1022,6 +1023,50 @@ void DnDFrame::OnPasteBitmap(wxCommandEvent& WXUNUSED(event))
     }
 
     wxTheClipboard->Close();
+}
+
+// ----------------------------------------------------------------------------
+// file clipboard
+// ----------------------------------------------------------------------------
+
+void DnDFrame::OnCopyFiles(wxCommandEvent& WXUNUSED(event))
+{
+#ifdef __WXMSW__
+    wxFileDataObject *dobj = new wxFileDataObject;
+
+    wxFileDialog dialog(this, "Select a file to copy", "", "",
+                         "All files (*.*)|*.*", 0);
+
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        wxString filename = dialog.GetPath();
+        dobj->AddFile(filename);
+
+        wxClipboardLocker locker;
+        if ( !locker )
+        {
+            wxLogError("Can't open clipboard");
+        }
+        else
+        {
+            if ( !wxTheClipboard->AddData(dobj) )
+            {
+                wxLogError("Can't copy file to the clipboard");
+            }
+            else
+            {
+                wxLogStatus(this, "File '%s' copied to the clipboard",
+                            filename.c_str());
+            }
+        }
+    }
+    else
+    {
+        wxLogStatus(this, "Aborted");
+    }
+#else // !MSW
+    wxLogError("Sorry, not implemented");
+#endif // MSW/!MSW
 }
 
 // ---------------------------------------------------------------------------
