@@ -85,7 +85,7 @@ static wxString SQLLOGfn = SQL_LOG_FILENAME;
 // will overwrite the errors of the previously destroyed wxDb object in
 // this variable.  NOTE: This occurs during a CLOSE, not a FREEing of the
 // connection
-wxChar DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
+wxChar DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN+1];
 
 
 // This type defines the return row-struct form
@@ -287,8 +287,16 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
 
     if (i_dbDataType == 0)                                        // Filter unsupported dbDataTypes
     {
-        if ((i_sqlDataType == SQL_VARCHAR) || (i_sqlDataType == SQL_LONGVARCHAR) ||
-            (i_sqlDataType == SQL_WCHAR) || (i_sqlDataType == SQL_WVARCHAR))
+        if ((i_sqlDataType == SQL_VARCHAR)
+#if wxUSE_UNICODE
+    #if defined(SQL_WCHAR)
+            || (i_sqlDataType == SQL_WCHAR) 
+    #endif
+    #if defined(SQL_WVARCHAR)
+            || (i_sqlDataType == SQL_WVARCHAR)
+    #endif
+#endif
+            || (i_sqlDataType == SQL_LONGVARCHAR))
             i_dbDataType = DB_DATA_TYPE_VARCHAR;
         if ((i_sqlDataType == SQL_C_DATE) || (i_sqlDataType == SQL_C_TIMESTAMP))
             i_dbDataType = DB_DATA_TYPE_DATE;
@@ -2272,8 +2280,14 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
 
         switch (Sdword)
         {
+#if wxUSE_UNICODE
+    #if defined(SQL_WCHAR)
             case SQL_WCHAR:
+    #endif
+    #if defined(SQL_WVARCHAR)
             case SQL_WVARCHAR:
+    #endif
+#endif
             case SQL_VARCHAR:
             case SQL_CHAR:
                 pColInf[colNum].dbDataType = DB_DATA_TYPE_VARCHAR;
@@ -3049,8 +3063,14 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
                     // Get the intern datatype
                     switch (colInf[colNo].sqlDataType)
                     {
+#if wxUSE_UNICODE
+    #if defined(SQL_WCHAR)
                         case SQL_WCHAR:
+    #endif
+    #if defined(SQL_WVARCHAR)
                         case SQL_WVARCHAR:
+    #endif
+#endif
                         case SQL_VARCHAR:
                         case SQL_CHAR:
                             colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
