@@ -40908,10 +40908,6 @@ fi
                    "
 
 
-          ac_config_links="$ac_config_links include/wx-$WX_RELEASE$WX_FLAVOUR:include"
-
-          ac_config_links="$ac_config_links contrib/include"
-
 
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -41495,9 +41491,6 @@ $config_files
 Configuration headers:
 $config_headers
 
-Configuration links:
-$config_links
-
 Configuration commands:
 $config_commands
 
@@ -41625,8 +41618,6 @@ do
   "version-script" ) CONFIG_FILES="$CONFIG_FILES version-script" ;;
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "$mk" ) CONFIG_FILES="$CONFIG_FILES $mk" ;;
-  "include/wx-$WX_RELEASE$WX_FLAVOUR" ) CONFIG_LINKS="$CONFIG_LINKS include/wx-$WX_RELEASE$WX_FLAVOUR:include" ;;
-  "contrib/include" ) CONFIG_LINKS="$CONFIG_LINKS contrib/include" ;;
   "wx-config" ) CONFIG_COMMANDS="$CONFIG_COMMANDS wx-config" ;;
   "lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h" ) CONFIG_HEADERS="$CONFIG_HEADERS lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
@@ -41642,7 +41633,6 @@ done
 if $ac_need_defaults; then
   test "${CONFIG_FILES+set}" = set || CONFIG_FILES=$config_files
   test "${CONFIG_HEADERS+set}" = set || CONFIG_HEADERS=$config_headers
-  test "${CONFIG_LINKS+set}" = set || CONFIG_LINKS=$config_links
   test "${CONFIG_COMMANDS+set}" = set || CONFIG_COMMANDS=$config_commands
 fi
 
@@ -42473,144 +42463,6 @@ echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
     cat $tmp/config.h
     rm -f $tmp/config.h
   fi
-done
-_ACEOF
-cat >>$CONFIG_STATUS <<\_ACEOF
-
-#
-# CONFIG_LINKS section.
-#
-
-for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
-  ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
-  ac_source=`echo "$ac_file" | sed 's,[^:]*:,,'`
-
-  { echo "$as_me:$LINENO: linking $srcdir/$ac_source to $ac_dest" >&5
-echo "$as_me: linking $srcdir/$ac_source to $ac_dest" >&6;}
-
-  if test ! -r $srcdir/$ac_source; then
-    { { echo "$as_me:$LINENO: error: $srcdir/$ac_source: file not found" >&5
-echo "$as_me: error: $srcdir/$ac_source: file not found" >&2;}
-   { (exit 1); exit 1; }; }
-  fi
-  rm -f $ac_dest
-
-  # Make relative symlinks.
-  ac_dest_dir=`(dirname "$ac_dest") 2>/dev/null ||
-$as_expr X"$ac_dest" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$ac_dest" : 'X\(//\)[^/]' \| \
-	 X"$ac_dest" : 'X\(//\)$' \| \
-	 X"$ac_dest" : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
-echo X"$ac_dest" |
-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
-  { if $as_mkdir_p; then
-    mkdir -p "$ac_dest_dir"
-  else
-    as_dir="$ac_dest_dir"
-    as_dirs=
-    while test ! -d "$as_dir"; do
-      as_dirs="$as_dir $as_dirs"
-      as_dir=`(dirname "$as_dir") 2>/dev/null ||
-$as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$as_dir" : 'X\(//\)[^/]' \| \
-	 X"$as_dir" : 'X\(//\)$' \| \
-	 X"$as_dir" : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
-echo X"$as_dir" |
-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
-    done
-    test ! -n "$as_dirs" || mkdir $as_dirs
-  fi || { { echo "$as_me:$LINENO: error: cannot create directory \"$ac_dest_dir\"" >&5
-echo "$as_me: error: cannot create directory \"$ac_dest_dir\"" >&2;}
-   { (exit 1); exit 1; }; }; }
-
-  ac_builddir=.
-
-if test "$ac_dest_dir" != .; then
-  ac_dir_suffix=/`echo "$ac_dest_dir" | sed 's,^\.[\\/],,'`
-  # A "../" for each directory in $ac_dir_suffix.
-  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
-else
-  ac_dir_suffix= ac_top_builddir=
-fi
-
-case $srcdir in
-  .)  # No --srcdir option.  We are building in place.
-    ac_srcdir=.
-    if test -z "$ac_top_builddir"; then
-       ac_top_srcdir=.
-    else
-       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
-    fi ;;
-  [\\/]* | ?:[\\/]* )  # Absolute path.
-    ac_srcdir=$srcdir$ac_dir_suffix;
-    ac_top_srcdir=$srcdir ;;
-  *) # Relative path.
-    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
-    ac_top_srcdir=$ac_top_builddir$srcdir ;;
-esac
-
-# Do not use `cd foo && pwd` to compute absolute paths, because
-# the directories may not exist.
-case `pwd` in
-.) ac_abs_builddir="$ac_dest_dir";;
-*)
-  case "$ac_dest_dir" in
-  .) ac_abs_builddir=`pwd`;;
-  [\\/]* | ?:[\\/]* ) ac_abs_builddir="$ac_dest_dir";;
-  *) ac_abs_builddir=`pwd`/"$ac_dest_dir";;
-  esac;;
-esac
-case $ac_abs_builddir in
-.) ac_abs_top_builddir=${ac_top_builddir}.;;
-*)
-  case ${ac_top_builddir}. in
-  .) ac_abs_top_builddir=$ac_abs_builddir;;
-  [\\/]* | ?:[\\/]* ) ac_abs_top_builddir=${ac_top_builddir}.;;
-  *) ac_abs_top_builddir=$ac_abs_builddir/${ac_top_builddir}.;;
-  esac;;
-esac
-case $ac_abs_builddir in
-.) ac_abs_srcdir=$ac_srcdir;;
-*)
-  case $ac_srcdir in
-  .) ac_abs_srcdir=$ac_abs_builddir;;
-  [\\/]* | ?:[\\/]* ) ac_abs_srcdir=$ac_srcdir;;
-  *) ac_abs_srcdir=$ac_abs_builddir/$ac_srcdir;;
-  esac;;
-esac
-case $ac_abs_builddir in
-.) ac_abs_top_srcdir=$ac_top_srcdir;;
-*)
-  case $ac_top_srcdir in
-  .) ac_abs_top_srcdir=$ac_abs_builddir;;
-  [\\/]* | ?:[\\/]* ) ac_abs_top_srcdir=$ac_top_srcdir;;
-  *) ac_abs_top_srcdir=$ac_abs_builddir/$ac_top_srcdir;;
-  esac;;
-esac
-
-
-  case $srcdir in
-  [\\/$]* | ?:[\\/]* ) ac_rel_source=$srcdir/$ac_source ;;
-      *) ac_rel_source=$ac_top_builddir$srcdir/$ac_source ;;
-  esac
-
-  # Try a symlink, then a hard link, then a copy.
-  ln -s $ac_rel_source $ac_dest 2>/dev/null ||
-    ln $srcdir/$ac_source $ac_dest 2>/dev/null ||
-    cp -p $srcdir/$ac_source $ac_dest ||
-    { { echo "$as_me:$LINENO: error: cannot link or copy $srcdir/$ac_source to $ac_dest" >&5
-echo "$as_me: error: cannot link or copy $srcdir/$ac_source to $ac_dest" >&2;}
-   { (exit 1); exit 1; }; }
 done
 _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF

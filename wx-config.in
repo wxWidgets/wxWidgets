@@ -311,7 +311,7 @@ get_mask()
 
 # Determine the base directories we require.
 prefix=${input_option_prefix-${this_prefix:-@prefix@}}
-exec_prefix=${input_option_exec_prefix-${input_option_prefix-@exec_prefix@}}
+exec_prefix=${input_option_exec_prefix-${input_option_prefix-${this_exec_prefix:-@exec_prefix@}}}
 wxconfdir="@libdir@/wx/config"
 
 installed_configs=$( cd "$wxconfdir" 2> /dev/null && ls | grep -v "^inplace-" )
@@ -708,7 +708,7 @@ fi
 # tree prefix to provide the correct output for using this
 # uninstalled wx build.  Or put more simply:
 prefix=${this_prefix-$prefix}
-exec_prefix=${this_prefix-$exec_prefix}
+exec_prefix=${this_exec_prefix-$exec_prefix}
 
 includedir="@includedir@"
 libdir="@libdir@"
@@ -883,9 +883,14 @@ fi
 
 [ -n "$this_linkage"   ] || _static_cppflags="@TOOLCHAIN_DLL_DEFS@"
 [ "$using_gui" = "yes" ] || _gui_cppflags="-DwxUSE_GUI=0"
-[ -z "$this_prefix"    ] || _intree_cppflags="-I${prefix}/contrib/include"
 
-_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@ -I${includedir}/wx-@WX_RELEASE@@WX_FLAVOUR@" $_intree_cppflags "@WXDEBUG_DEFINE@" "@TOOLCHAIN_DEFS@" $_static_cppflags $_gui_cppflags "@WXCONFIG_INCLUDE@" "@WX_LARGEFILE_FLAGS@" "@GCC_PRAGMA_FLAGS@")  
+if [ -n "$this_prefix" ]; then
+    _include_cppflags="-I${includedir} -I${prefix}/contrib/include"
+else
+    _include_cppflags="-I${includedir}/wx-@WX_RELEASE@@WX_FLAVOUR@"
+fi
+
+_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflags "@WXDEBUG_DEFINE@" "@TOOLCHAIN_DEFS@" $_static_cppflags $_gui_cppflags "@WXCONFIG_INCLUDE@" "@WX_LARGEFILE_FLAGS@" "@GCC_PRAGMA_FLAGS@")  
 
 # now without further ado, we can answer these too.
 [ -z "$output_option_cppflags" ] || echo $_cppflags

@@ -14,13 +14,18 @@
 # local tree by default and then source the real wx-config if it all still
 # looks sane.
 
-this_prefix=$( cd "@abs_top_builddir@" 2> /dev/null && pwd )
+check_dirname()
+{
+    if [ ! -d "$1" ]; then
+        printf "\n  *** Error: Directory '$1'\n"    1>&2
+        printf "             no longer exists.\n\n" 1>&2
+        exit 1
+    fi
+    ( cd $1 && pwd )
+}
 
-if [ -z "$this_prefix" ]; then
-    printf "\n  *** Error: Directory '@abs_top_builddir@'\n" 1>&2
-    printf "             no longer exists.\n\n"              1>&2
-    exit 1
-fi
+this_prefix=$(check_dirname "@abs_top_srcdir@")         || exit
+this_exec_prefix=$(check_dirname "@abs_top_builddir@")  || exit
 
-. "$this_prefix/lib/wx/config/@TOOLCHAIN_FULLNAME@"
+. "$this_exec_prefix/lib/wx/config/@TOOLCHAIN_FULLNAME@"
 

@@ -6139,8 +6139,12 @@ AC_CONFIG_COMMANDS([ wx-config
                      LN_S="${LN_S}"
                    ])
 
-AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR:include ])
-AC_CONFIG_LINKS([ contrib/include ])
+dnl This would give us us build dir that in every significant way
+dnl resembles an installed wx in prefix=$builddir.  It is troublesome
+dnl though in this form because AC_CONFIG_LINKS will fail for directories
+dnl on platforms that do not have symlinks.
+dnl AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR:include ])
+dnl AC_CONFIG_LINKS([ contrib/include ])
 
 
 dnl Configure samples, contrib etc. directories, but only if they are present:
