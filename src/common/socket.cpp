@@ -122,14 +122,6 @@ bool wxSocketBase::Initialize()
 {
     if ( !m_countInit++ )
     {
-#ifdef __WXMSW__
-        /*
-            The following asserting might be neccessary for linux as well,
-            but I cannot verify this.
-        */
-        wxASSERT(wxThread::IsMain(), 
-            wxT("To use sockets in a secondary thread, ")
-            wxT("call wxSocketBase::Initialize() from the main thread."));
         /*
             Details: Initialize() creates a hidden window as a sink for socket
             events, such as 'read completed'. wxMSW has only one message loop
@@ -138,16 +130,18 @@ bool wxSocketBase::Initialize()
             since there is no message loop on this thread, it will never
             receive events and all socket operations will time out.
             BTW, the main thread must not be stopped using sleep or block
-            on a semaphore (a bad idea in any case) or socket operations 
+            on a semaphore (a bad idea in any case) or socket operations
             will time out.
         */
-#endif
+        wxASSERT_MSG( wxThread::IsMain(),
+            wxT("Call wxSocketBase::Initialize() from the main thread first!"));
+
         wxAppTraits *traits = wxAppConsole::GetInstance() ?
                               wxAppConsole::GetInstance()->GetTraits() : NULL;
-        GSocketGUIFunctionsTable *functions = 
+        GSocketGUIFunctionsTable *functions =
             traits ? traits->GetSocketGUIFunctionsTable() : NULL;
         GSocket_SetGUIFunctions(functions);
-        
+
         if ( !GSocket_Init() )
         {
             m_countInit--;
@@ -700,7 +694,7 @@ bool wxSocketBase::_Wait(long seconds,
 
 #if !defined(wxUSE_GUI) || !wxUSE_GUI
   GSocket_SetTimeout(m_socket, timeout);
-#endif 
+#endif
 
   // Wait in an active polling loop.
   //
@@ -860,7 +854,7 @@ void wxSocketBase::RestoreState()
   m_notify     = state->m_notify;
   m_eventmask  = state->m_eventmask;
   m_clientData = state->m_clientData;
-  
+
   m_states.Erase(node);
   delete state;
 }
@@ -1149,7 +1143,7 @@ bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
 
 bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
 {
-    if (GSocket_GetSockOpt(m_socket, level, optname, optval, optlen) 
+    if (GSocket_GetSockOpt(m_socket, level, optname, optval, optlen)
         != GSOCK_NOERROR)
     {
         return FALSE;
@@ -1157,10 +1151,10 @@ bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
     return TRUE;
 }
 
-bool wxSocketBase::SetOption(int level, int optname, const void *optval, 
+bool wxSocketBase::SetOption(int level, int optname, const void *optval,
                               int optlen)
 {
-    if (GSocket_SetSockOpt(m_socket, level, optname, optval, optlen) 
+    if (GSocket_SetSockOpt(m_socket, level, optname, optval, optlen)
         != GSOCK_NOERROR)
     {
         return FALSE;
