@@ -514,4 +514,11 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         </if>
     </define-tag>
 
+
+    <!-- A hack to keep autoconf happy (we pass CPPFLAGS that contain
+         {top_srcdir} from configure, poor bakefile can't know that
+         and won't output top_srcdir = @top_srcdir@ line): -->
+    <set var="VARS_DONT_ELIMINATE" append="1">top_srcdir</set>
+
+
 </makefile>
