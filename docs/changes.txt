@@ -55,6 +55,7 @@ wxUniv:
 - wxBU_... button align flags support
 - vertical notebook orientation support
 - 3rd state support for checkboxes
+- wxLB_SORT and wxCB_SORT now cause case-insensitive sorting
 
 
 2.5.3
