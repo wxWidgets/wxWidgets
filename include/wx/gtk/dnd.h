@@ -17,6 +17,14 @@
 
 #include "wx/defs.h"
 
+//-------------------------------------------------------------------------
+// conditional compilation
+//-------------------------------------------------------------------------
+
+#if (GTK_MINOR_VERSION > 0)
+#define NEW_GTK_DND_CODE
+#endif
+
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/object.h"
@@ -25,16 +33,6 @@
 #include "wx/cursor.h"
 #include "wx/icon.h"
 #include "wx/gdicmn.h"
-
-//-------------------------------------------------------------------------
-// conditional compilation
-//-------------------------------------------------------------------------
-
-#if (GTK_MINOR_VERSION == 1)
-#if (GTK_MICRO_VERSION >= 3)
-#define NEW_GTK_DND_CODE
-#endif
-#endif
 
 //-------------------------------------------------------------------------
 // classes

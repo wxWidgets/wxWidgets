@@ -125,10 +125,8 @@
 // conditional compilation
 //-------------------------------------------------------------------------
 
-#if (GTK_MINOR_VERSION == 1)
-#if (GTK_MICRO_VERSION >= 5)
+#if (GTK_MINOR_VERSION > 0)
 #define NEW_GTK_SCROLL_CODE
-#endif
 #endif
 
 //-----------------------------------------------------------------------------
@@ -1435,7 +1433,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
 #ifdef NEW_GTK_SCROLL_CODE
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(m_widget), m_wxwindow );
-    GtkViewport *viewport = GTK_VIEWPORT(s_window->child);
+    GtkViewport *viewport = GTK_VIEWPORT( GTK_BIN(s_window)->child );
 #else
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
     GtkViewport *viewport = GTK_VIEWPORT(s_window->viewport);
@@ -1931,7 +1929,7 @@ void wxWindow::DoSetClientSize( int width, int height )
             GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
 #ifdef NEW_GTK_SCROLL_CODE
-            GtkWidget *viewport = scroll_window->child;
+            GtkWidget *viewport = GTK_BIN(scroll_window)->child;
 #else
             GtkWidget *viewport = scroll_window->viewport;
 #endif
@@ -1996,7 +1994,7 @@ void wxWindow::GetClientSize( int *width, int *height ) const
             GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
 #ifdef NEW_GTK_SCROLL_CODE
-            GtkWidget *viewport = scroll_window->child;
+            GtkWidget *viewport = GTK_BIN(scroll_window)->child;
 #else
             GtkWidget *viewport = scroll_window->viewport;
 #endif

@@ -33,10 +33,8 @@
 // conditional compilation
 //-------------------------------------------------------------------------
 
-#if (GTK_MINOR_VERSION == 1)
-    #if (GTK_MICRO_VERSION >= 5)
-        #define NEW_GTK_SCROLL_CODE
-    #endif
+#if (GTK_MINOR_VERSION > 0)
+#define NEW_GTK_SCROLL_CODE
 #endif
 
 //-----------------------------------------------------------------------------
@@ -224,7 +222,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     debug_focus_in( s_window->vscrollbar, "wxWindow::vsrcollbar", name );
 
 #ifdef NEW_GTK_SCROLL_CODE
-    GtkViewport *viewport = GTK_VIEWPORT(s_window->child);
+    GtkViewport *viewport = GTK_VIEWPORT( GTK_BIN(s_window)->child );
 #else
     GtkViewport *viewport = GTK_VIEWPORT(s_window->viewport);
 #endif

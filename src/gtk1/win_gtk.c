@@ -14,10 +14,8 @@
 // conditional compilation
 //------------------------------------------------------------------------- */
 
-#if (GTK_MINOR_VERSION == 1)
-#if (GTK_MICRO_VERSION >= 5)
+#if (GTK_MINOR_VERSION > 0)
 #define NEW_GTK_CONSTRUCT_CODE
-#endif
 #endif
 
 #ifdef __cplusplus
@@ -46,7 +44,7 @@ static void gtk_myfixed_add           (GtkContainer     *container,
 static void gtk_myfixed_remove        (GtkContainer     *container,
 				     GtkWidget        *widget);
 static void gtk_myfixed_foreach       (GtkContainer     *container,
-#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MINOR_VERSION > 0)
 				     gboolean	      include_internals,
 #endif
 				     GtkCallback      callback,
@@ -118,7 +116,7 @@ gtk_myfixed_class_init (GtkMyFixedClass *klass)
 
   container_class->add = gtk_myfixed_add;
   container_class->remove = gtk_myfixed_remove;
-#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MINOR_VERSION > 0)
   container_class->forall = gtk_myfixed_foreach;
 #else
   container_class->foreach = gtk_myfixed_foreach;
@@ -508,7 +506,7 @@ gtk_myfixed_remove (GtkContainer *container,
 
 static void
 gtk_myfixed_foreach (GtkContainer *container,
-#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MINOR_VERSION > 0)
 		   gboolean	 include_internals,
 #endif
 		   GtkCallback   callback,

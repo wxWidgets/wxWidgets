@@ -674,7 +674,7 @@ void wxTextCtrl::Cut()
 {
     wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MINOR_VERSION > 0)
     gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) );
 #else
     gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
@@ -685,7 +685,7 @@ void wxTextCtrl::Copy()
 {
     wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MINOR_VERSION > 0)
     gtk_editable_copy_clipboard( GTK_EDITABLE(m_text) );
 #else
     gtk_editable_copy_clipboard( GTK_EDITABLE(m_text), 0 );
@@ -696,7 +696,7 @@ void wxTextCtrl::Paste()
 {
     wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MINOR_VERSION > 0)
     gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) );
 #else
     gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );

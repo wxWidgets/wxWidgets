@@ -6755,7 +6755,7 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
-  min_gtk_version=1.0.4
+  min_gtk_version=1.0.0
   echo $ac_n "checking for GTK - version >= $min_gtk_version""... $ac_c" 1>&6
 echo "configure:6761: checking for GTK - version >= $min_gtk_version" >&5
   no_gtk=""
@@ -6786,7 +6786,7 @@ main ()
      exit(1);
    }
 
-   if (gtk_minor_version > 0) return FALSE;
+   if (gtk_minor_version == 1) return FALSE;
 
    return !((gtk_major_version > major) ||
 	    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
@@ -6821,7 +6821,7 @@ fi
      echo "$ac_t""no" 1>&6
      GTK_CFLAGS=""
      GTK_LIBS=""
-     { echo "configure: error: Is gtk-config in path and GTK+ is version 1.0.4 up-to 1.0.6?" 1>&2; exit 1; }
+     { echo "configure: error: Is gtk-config in path and GTK+ is version 1.2.X or 1.0.X?" 1>&2; exit 1; }
   fi
   
   

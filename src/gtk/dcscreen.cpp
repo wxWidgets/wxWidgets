@@ -126,7 +126,7 @@ gdk_window_transparent_new ( GdkWindow     *parent,
   gprivate->window_type = attributes->window_type;
   gprivate->extension_events = FALSE;
   
-#ifndef NEW_GTK_DND_CODE
+#if (GTK_MINOR_VERSION == 0)
   gprivate->dnd_drag_data_type = None;
   gprivate->dnd_drag_data_typesavail =
     gprivate->dnd_drop_data_typesavail = NULL;
@@ -215,7 +215,7 @@ gdk_window_transparent_new ( GdkWindow     *parent,
   if (attributes_mask & GDK_WA_TITLE)
     title = attributes->title;
   else
-#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MINOR_VERSION > 0)
     title = "Unknown"; // GLH: Well I don't know for the moment what to write here.
 #else
     title = gdk_progname;

@@ -385,6 +385,26 @@ bool wxClipboard::AddData( wxDataObject *data )
     
     /* Add handlers if someone requests data */
   
+
+#if (GTK_MINOR_VERSION > 0)
+
+    gtk_selection_add_target( GTK_WIDGET(m_clipboardWidget), 
+                              GDK_SELECTION_PRIMARY,
+			      format, 
+			      0 );  /* what is info ? */
+			     
+    gtk_selection_add_target( GTK_WIDGET(m_clipboardWidget), 
+                              g_clipboardAtom,
+			      format, 
+			      0 );  /* what is info ? */
+			     
+    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
+                        "selection_get",
+		        GTK_SIGNAL_FUNC(selection_handler), 
+		        (gpointer) NULL );
+
+#else
+
     gtk_selection_add_handler( m_clipboardWidget, 
                                g_clipboardAtom,
 			       format,
@@ -396,6 +416,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 			       format,
 			       selection_handler,
 			       (gpointer) NULL );
+#endif
 			       
     /* Tell the world we offer clipboard data */
   

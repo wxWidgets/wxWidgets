@@ -287,9 +287,11 @@ void wxApp::OnIdle( wxIdleEvent &event )
 
     inOnIdle = TRUE;
 
+#if wxUSE_THREADS
     /* Resend in the main thread events which have been prepared in other
        threads */
     ProcessPendingEvents();
+#endif
 
     /* 'Garbage' collection of windows deleted with Close(). */
     DeletePendingObjects();

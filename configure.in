@@ -62,7 +62,7 @@ main ()
      exit(1);
    }
 
-   if (gtk_minor_version > 0) return FALSE;
+   if (gtk_minor_version == 1) return FALSE;
 
    return !((gtk_major_version > major) ||
 	    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
@@ -1101,10 +1101,10 @@ WX_LINK=
 MAKEINCLUDE=
 
 if test "$wxUSE_GTK" = 1; then
-  AM_PATH_GTK(1.0.4, [
+  AM_PATH_GTK(1.0.0, [
        GUI_TK_INCLUDE="$GTK_CFLAGS"
        GUI_TK_LIBRARY="$GTK_LIBS"
-  ], AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.0.4 up-to 1.0.6?))
+  ], AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.X or 1.0.X?))
   TOOLKIT=GTK
   TOOLKIT_DEF=__WXGTK__
   WX_LINK=-lwx_gtk2
