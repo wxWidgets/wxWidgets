@@ -112,6 +112,24 @@ Get the number of lines this window contains (previously set by
 \helpref{SetLineCount()}{wxvscrolledwindowsetlinecount})
 
 
+\membersection{wxVScrolledWindow::HitTest}\label{wxvscrolledwindowhittest}
+
+\constfunc{int}{HitTest}{\param{wxCoord }{x}, \param{wxCoord }{y}}
+
+\constfunc{int}{HitTest}{\param{const wxPoint\& }{pt}}
+
+Return the item at the specified (in physical coordinates) position or
+{\tt wxNOT\_FOUND} if none, i.e. if it is below the last item.
+
+
+\membersection{wxVScrolledWindow::IsVisible}\label{wxvscrolledwindowisvisible}
+
+\constfunc{bool}{IsVisible}{\param{size\_t }{line}}
+
+Returns {\tt true} if the given line is (at least partially) visible or 
+{\tt false} otherwise.
+
+
 \membersection{wxVScrolledWindow::OnGetLineHeight}\label{wxvscrolledwindowongetlineheight}
 
 \constfunc{wxCoord}{OnGetLineHeight}{\param{size\_t }{n}}
@@ -142,6 +160,30 @@ hint, not a promise.
 
 Finally note that {\it lineMin} is inclusive, while {\it lineMax} is exclusive,
 as usual.
+
+
+\membersection{wxVScrolledWindow::RefreshLine}\label{wxvscrolledwindowrefreshline}
+
+\func{void}{RefreshLine}{\param{size\_t }{line}}
+
+Refreshes the specified line -- it will be redrawn during the next main loop
+iteration.
+
+\wxheading{See also}
+
+\helpref{RefreshLines}{wxvscrolledwindowrefreshlines}
+
+
+\membersection{wxVScrolledWindow::RefreshLines}\label{wxvscrolledwindowrefreshlines}
+
+\func{void}{RefreshLines}{\param{size\_t }{from}, \param{size\_t }{to}}
+
+Refreshes all lines between {\it from} and {\it to}, inclusive. {\it from}
+should be less than or equal to {\it to}.
+
+\wxheading{See also}
+
+\helpref{RefreshLine}{wxvscrolledwindowrefreshline}
 
 
 \membersection{wxVScrolledWindow::RefreshAll}\label{wxvscrolledwindowrefreshall}
