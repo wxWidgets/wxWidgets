@@ -431,14 +431,9 @@ void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef __WXUNIVERSAL__
-    // wxMessageBox not implemented yet
-    wxLogMessage("wxWindows menu sample\n© 1999-2001 Vadim Zeitlin");
-#else
     (void)wxMessageBox("wxWindows menu sample\n© 1999-2001 Vadim Zeitlin",
                        "About wxWindows menu sample",
                        wxICON_INFORMATION);
-#endif
 }
 
 void MyFrame::OnDeleteMenu(wxCommandEvent& WXUNUSED(event))
