@@ -24,12 +24,14 @@ With a popup menu, there is a variety of ways to handle a menu selection event
 (wxEVT\_COMMAND\_MENU\_SELECTED).
 
 \begin{enumerate}\itemsep=0pt
-\item Define a callback of type wxFunction, which you pass to the wxMenu constructor.
-The callback takes a reference to the menu, and a reference to a \helpref{wxCommandEvent}{wxcommandevent}.
 \item Derive a new class from wxMenu and define event table entries using the EVT\_MENU macro.
 \item Set a new event handler for wxMenu, using an object whose class has EVT\_MENU entries.
 \item Provide EVT\_MENU handlers in the window which pops up the menu, or in an ancestor of
 this window.
+\item Define a callback of type wxFunction, which you pass to the wxMenu constructor.
+The callback takes a reference to the menu, and a reference to a 
+\helpref{wxCommandEvent}{wxcommandevent}. This method is deprecated and should
+not be used in the new code, it is provided for backwards compatibility only.
 \end{enumerate}
 
 \wxheading{See also}
@@ -49,7 +51,7 @@ Constructs a wxMenu object.
 
 \docparam{title}{A title for the popup menu: the empty string denotes no title.}
 
-\docparam{style}{If set to \tt{wxMENU_TEAROFF}, the menu will be detachable.}
+\docparam{style}{If set to \tt{wxMENU\_TEAROFF}, the menu will be detachable.}
 
 
 \func{}{wxMenu}{\param{long}{ style}}
@@ -58,7 +60,7 @@ Constructs a wxMenu object.
 
 \wxheading{Parameters}
 
-\docparam{style}{If set to \tt{wxMENU_TEAROFF}, the menu will be detachable.}
+\docparam{style}{If set to \tt{wxMENU\_TEAROFF}, the menu will be detachable.}
 
 \membersection{wxMenu::\destruct{wxMenu}}
 
@@ -87,7 +89,9 @@ Adds a pull-right submenu to the end of the menu.
 
 \func{void}{Append}{\param{wxMenuItem*}{ menuItem}}
 
-Adds a menu item object. You can specify various extra properties of a menu item this way,
+Adds a menu item object. This is the most generic variant of Append() method
+because it may be used for both items (including separators) and submenus and
+because you can also specify various extra properties of a menu item this way,
 such as bitmaps and fonts.
 
 \wxheading{Parameters}
@@ -114,7 +118,9 @@ creation of a menu or menubar.
 
 \wxheading{See also}
 
-\helpref{wxMenu::AppendSeparator}{wxmenuappendseparator}, \helpref{wxMenu::SetLabel}{wxmenusetlabel}, \helpref{wxMenu::GetHelpString}{wxmenugethelpstring},\rtfsp
+\helpref{wxMenu::AppendSeparator}{wxmenuappendseparator},\rtfsp
+\helpref{wxMenu::Insert}{wxmenuinsert},\rtfsp
+\helpref{wxMenu::SetLabel}{wxmenusetlabel}, \helpref{wxMenu::GetHelpString}{wxmenugethelpstring},\rtfsp
 \helpref{wxMenu::SetHelpString}{wxmenusethelpstring}, \helpref{wxMenuItem}{wxmenuitem}
 
 \pythonnote{In place of a single overloaded method name, wxPython
@@ -162,19 +168,45 @@ Checks or unchecks the menu item.
 
 \func{void}{Delete}{\param{int }{id}}
 
-Deletes the menu item from the menu.
+\func{void}{Delete}{\param{wxMenuItem *}{item}}
+
+Deletes the menu item from the menu. If the item is a submenu, it will 
+{\bf not} be deleted. Use \helpref{Destroy}{wxmenudestroy} if you want to
+delete a submenu.
 
 \wxheading{Parameters}
 
-\docparam{id}{Menu item to be deleted.}
+\docparam{id}{Id of the menu item to be deleted.}
 
-\wxheading{Remarks}
-
-Does not delete a sub menu, if any.
+\docparam{item}{Menu item to be deleted.}
 
 \wxheading{See also}
 
-\helpref{wxMenu::FindItemForId}{wxmenufinditemforid}
+\helpref{wxMenu::FindItem}{wxmenufinditem},\rtfsp
+\helpref{wxMenu::Destroy}{wxmenudestroy},\rtfsp
+\helpref{wxMenu::Remove}{wxmenuremove}
+
+\membersection{wxMenu::Destroy}\label{wxmenudestroy}
+
+\func{void}{Destroy}{\param{int }{id}}
+
+\func{void}{Destroy}{\param{wxMenuItem *}{item}}
+
+Deletes the menu item from the menu. If the item is a submenu, it will 
+be deleted. Use \helpref{Remove}{wxmenuremove} if you want to keep the submenu
+(for example, to reuse it later).
+
+\wxheading{Parameters}
+
+\docparam{id}{Id of the menu item to be deleted.}
+
+\docparam{item}{Menu item to be deleted.}
+
+\wxheading{See also}
+
+\helpref{wxMenu::FindItem}{wxmenufinditem},\rtfsp
+\helpref{wxMenu::Deletes}{wxmenudelete},\rtfsp
+\helpref{wxMenu::Remove}{wxmenuremove}
 
 \membersection{wxMenu::Enable}\label{wxmenuenable}
 
@@ -204,7 +236,7 @@ Finds the menu item id for a menu item string.
 
 \wxheading{Return value}
 
-Menu item identifier, or wxNOT_FOUND if none is found.
+Menu item identifier, or wxNOT\_FOUND if none is found.
 
 \wxheading{Remarks}
 
@@ -213,19 +245,21 @@ before matching.
 
 \wxheading{See also}
 
-\helpref{wxMenu::FindItemForId}{wxmenufinditemforid}
+\helpref{wxMenu::FindItem}{wxmenufinditem}
 
-\membersection{wxMenu::FindItemForId}\label{wxmenufinditemforid}
+\membersection{wxMenu::FindItem}\label{wxmenufinditem}
 
-\constfunc{wxMenuItem*}{FindItemForId}{\param{int}{ id}}
+\constfunc{wxMenuItem *}{FindItem}{\param{int}{ id}, \param{wxMenu **}{menu = NULL}}
 
-\constfunc{wxMenuItem*}{FindItem}{\param{int}{ id}}
-
-Finds the menu item object associated with the given menu item identifier.
+Finds the menu item object associated with the given menu item identifier and,
+optionally, the (sub)menu it belongs to.
 
 \wxheading{Parameters}
 
 \docparam{id}{Menu item identifier.}
+
+\docparam{menu}{If the pointer is not NULL, it will be filled with the items
+parent menu (if the item was found)}
 
 \wxheading{Return value}
 
@@ -272,6 +306,19 @@ The item label, or the empty string if the item was not found.
 
 \helpref{wxMenu::SetLabel}{wxmenusetlabel}
 
+\membersection{wxMenu::GetMenuItemCount}\label{wxmenugetmenuitemcount}
+
+\constfunc{size\_t}{GetMenuItemCount}{\void}
+
+Returns the number of items in the menu.
+
+\membersection{wxMenu::GetMenuItems}\label{wxmenugetmenuitems}
+
+\constfunc{wxMenuItemList\&}{GetMenuItems}{\void}
+
+Returns the list of items in the menu. wxMenuItemList is a pseudo-template
+list class containing wxMenuItem pointers.
+
 \membersection{wxMenu::GetTitle}\label{wxmenugettitle}
 
 \constfunc{wxString}{GetTitle}{\void}
@@ -285,6 +332,18 @@ This is relevant only to popup menus.
 \wxheading{See also}
 
 \helpref{wxMenu::SetTitle}{wxmenusettitle}
+
+\membersection{wxMenu::Insert}\label{wxmenuinsert}
+
+\func{bool}{Insert}{\param{size\_t }{pos}, \param{wxMenuItem *}{item}}
+
+Inserts the given {\it item} before the position {\it pos}. Inserting the item
+at the position \helpref{GetMenuItemCount}{wxmenugetmenuitemcount} is the same
+as appending it.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Append}{wxmenuappend}
 
 \membersection{wxMenu::IsChecked}\label{wxmenuischecked}
 
@@ -321,6 +380,26 @@ TRUE if the menu item is enabled, FALSE otherwise.
 \wxheading{See also}
 
 \helpref{wxMenu::Enable}{wxmenuenable}
+
+\membersection{wxMenu::Remove}\label{wxmenuremove}
+
+\func{wxMenuItem *}{Remove}{\param{int }{id}}
+
+\func{wxMenuItem *}{Remove}{\param{wxMenuItem *}{item}}
+
+Removes the menu item from the menu but doesn't delete the associated C++
+object. This allows to reuse the same item later by adding it back to the menu
+(especially useful with submenus).
+
+\wxheading{Parameters}
+
+\docparam{id}{The identifier of the menu item to remove.}
+
+\docparam{item}{The menu item to remove.}
+
+\wxheading{Return value}
+
+The item which was detached from the menu.
 
 \membersection{wxMenu::SetHelpString}\label{wxmenusethelpstring}
 
@@ -446,7 +525,7 @@ Destructor, destroying the menu bar and removing it from the parent frame (if an
 
 \membersection{wxMenuBar::Append}\label{wxmenubarappend}
 
-\func{void}{Append}{\param{wxMenu *}{menu}, \param{const wxString\& }{title}}
+\func{bool}{Append}{\param{wxMenu *}{menu}, \param{const wxString\& }{title}}
 
 Adds the item to the end of the menu bar.
 
@@ -455,6 +534,14 @@ Adds the item to the end of the menu bar.
 \docparam{menu}{The menu to add. Do not deallocate this menu after calling {\bf Append}.}
 
 \docparam{title}{The title of the menu.}
+
+\wxheading{Return value}
+
+TRUE on success, FALSE if an error occured.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::Insert}{wxmenubarinsert}
 
 \membersection{wxMenuBar::Check}\label{wxmenubarcheck}
 
@@ -521,7 +608,7 @@ Finds the menu item id for a menu name/menu item string pair.
 
 \wxheading{Return value}
 
-The menu item identifier, or wxNOT_FOUND if none was found.
+The menu item identifier, or wxNOT\_FOUND if none was found.
 
 \wxheading{Remarks}
 
@@ -615,6 +702,31 @@ Returns the menu at {\it menuIndex} (zero-based).
 
 Returns the number of menus in this menubar.
 
+\membersection{wxMenuBar::Insert}{wxmenubarinsert}
+
+\func{bool}{Insert}{\param{size\_t }{pos}, \param{wxMenu *}{menu}, \param{const wxString\& }{title}}
+
+Inserts the menu at the given position into the menu bar. Inserting menu at
+position $0$ will insert it in the very beginning of it, inserting at position 
+\helpref{GetMenuCount()}{wxmenubargetmenucount} is the same as calling 
+\helpref{Append()}{wxmenubarappend}.
+
+\wxheading{Parameters}
+
+\docparam{pos}{The position of the new menu in the menu bar}
+
+\docparam{menu}{The menu to add. wxMenuBar owns the menu and will free it.}
+
+\docparam{title}{The title of the menu.}
+
+\wxheading{Return value}
+
+TRUE on success, FALSE if an error occured.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::Append}{wxmenubarappend}
+
 \membersection{wxMenuBar::IsChecked}\label{wxmenubarischecked}
 
 \constfunc{bool}{IsChecked}{\param{int}{ id}}
@@ -648,6 +760,45 @@ TRUE if the item was found and is enabled, FALSE otherwise.
 \func{void}{Refresh}{\void}
 
 Redraw the menu bar
+
+\membersection{wxMenuBar::Remove}\label{wxmenubarremove}
+
+\func{wxMenu *}{Remove}{\param{size\_t }{pos}}
+
+Removes the menu from the menu bar and returns the menu object - the caller is
+reposnbile for deleting it. This function may be used together with 
+\helpref{wxMenuBar::Insert}{wxmenubarinsert} to change the menubar
+dynamically.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::Replace}[wxmenubarreplace}
+
+\membersection{wxMenuBar::Replace}\label{wxmenubarreplace}
+
+\func{wxMenu *}{Replace}{\param{size\_t }{pos}, \param{wxMenu *}{menu}, \param{const wxString\& }{title}}
+
+Replaces the menu at givenm position with another one.
+
+\wxheading{Parameters}
+
+\docparam{pos}{The position of the new menu in the menu bar}
+
+\docparam{menu}{The menu to add.}
+
+\docparam{title}{The title of the menu.}
+
+\wxheading{Return value}
+
+The menu which was previously at the position {\it pos}. The caller is
+responsible for deleting it.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::Insert}{wxmenubarinsert},\rtfsp
+\helpref{wxMenuBar::Remove}{wxmenubarremove}
+
+\membersection{wxMenuBar::IsChecked}\label{wxmenubarischecked}
 
 \membersection{wxMenuBar::SetHelpString}\label{wxmenubarsethelpstring}
 

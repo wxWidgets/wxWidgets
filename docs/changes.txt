@@ -4,15 +4,18 @@ wxWindows 2 Change Log
 next release (2.1.12 or 2.2?)
 -----------------------------
 
-all:
+wxBase:
 
 - wxThread class modified to support both detached and joinable threads
-- wxLog functions are now MT-safe
+- wxLog functions are now (more) MT-safe
 - wxStopWatch class, timer functions have more chances to return correct
   results for your platform (use ANSI function where available)
 - buffer overflows in wxString and wxLog classes fixed (if snprintf() function
   is available)
 - wxArray::RemoveAt() replaces deprectaed wxArray::Remove(index)
+
+all (GUI):
+- wxMenu(Bar)::Insert() and Remove() functions for dynamic menu menagament
 
 wxMSW:
 
