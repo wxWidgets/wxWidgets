@@ -329,9 +329,9 @@ bool wxBitmap::CreateFromXpm( const char **bits )
     if (!M_BMPDATA->m_pixmap)
     {
         UnRef();
-        
+
         wxFAIL_MSG( wxT("couldn't create pixmap") );
-        
+
         return FALSE;
     }
 
@@ -869,7 +869,7 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
     if (!M_BMPDATA->m_bitmap)
     {
         UnRef();
-        
+
         wxFAIL_MSG( wxT("couldn't create bitmap") );
     }
 }
@@ -998,7 +998,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
 
     if (newy==M_BMPDATA->m_width && newy==M_BMPDATA->m_height)
         return *this;
-        
+
     GdkImage *img = (GdkImage*) NULL;
     if (GetPixmap())
         img = gdk_image_get( GetPixmap(), 0, 0, GetWidth(), GetHeight() );
@@ -1016,7 +1016,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
     int height = wxMax(newy, 1);
     width = wxMin(width, clipwidth);
     height = wxMin(height, clipheight);
-    
+
     GdkGC *gc = NULL;
     GdkPixmap *dstpix = NULL;
     if (GetPixmap())
@@ -1033,7 +1033,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
 
     char *dst = NULL;
     long dstbyteperline = 0;
-    
+
     if (GetBitmap())
     {
         bpp = 1;
@@ -1042,7 +1042,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
             dstbyteperline++;
         dst = (char*) malloc(dstbyteperline*height);
     }
-             
+
     // be careful to use the right scaling factor
     float scx = (float)M_BMPDATA->m_width/(float)newx;
     float scy = (float)M_BMPDATA->m_height/(float)newy;
@@ -1059,9 +1059,9 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
     // Main rescaling routine starts here
     for (int h = 0; h < height; h++)
     {
-        char outbyte = 0;
-        int old_x = -1;
-        guint32 old_pixval;
+        char    outbyte = 0;
+        int     old_x = -1;
+        guint32 old_pixval = 0;
 
         for (int w = 0; w < width; w++)
         {
@@ -1075,7 +1075,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
                 old_pixval = pixval;
                 old_x = x;
             }
-                
+
             if (bpp == 1)
             {
                 if (!pixval)
@@ -1084,7 +1084,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
                     char shift = bit << w % 8;
                     outbyte |= shift;
                 }
-                
+
                 if ((w+1)%8==0)
                 {
                     dst[h*dstbyteperline+w/8] = outbyte;
@@ -1099,12 +1099,12 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
                 gdk_draw_point( dstpix, gc, w, h);
             }
         }
-    
+
         // do not forget the last byte
         if ((bpp == 1) && (width % 8 != 0))
             dst[h*dstbyteperline+width/8] = outbyte;
     }
-    
+
     gdk_image_destroy( img );
     if (gc) gdk_gc_unref( gc );
 
@@ -1113,7 +1113,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
         bmp = wxBitmap( (const char *)dst, width, height, 1 );
         free( dst );
     }
-    
+
     if (GetMask())
     {
         dstbyteperline = width/8;
@@ -1124,10 +1124,10 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
 
         for (int h = 0; h < height; h++)
         {
-            char outbyte = 0;
-            int old_x = -1;
-            guint32 old_pixval;
-    
+            char    outbyte = 0;
+            int     old_x = -1;
+            guint32 old_pixval = 0;
+
             for (int w = 0; w < width; w++)
             {
                 guint32 pixval;
@@ -1140,21 +1140,21 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
                     old_pixval = pixval;
                     old_x = x;
                 }
-                
+
                 if (pixval)
                 {
                     char bit=1;
                     char shift = bit << w % 8;
                     outbyte |= shift;
                 }
-                
+
                 if ((w+1)%8 == 0)
                 {
                     dst[h*dstbyteperline+w/8] = outbyte;
                     outbyte = 0;
                 }
             }
-        
+
             // do not forget the last byte
             if (width % 8 != 0)
                 dst[h*dstbyteperline+width/8] = outbyte;
@@ -1169,8 +1169,8 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
 
     free( tablex );
     free( tabley );
-    
-    return bmp; 
+
+    return bmp;
 }
 
 
