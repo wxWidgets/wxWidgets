@@ -62,7 +62,7 @@ protected:
 };
 
 
-#if defined(__WXUNIVERSAL__)
+#if defined(__WXUNIVERSAL__) && !defined(__WXMICROWIN__)
     #include "wx/univ/dialog.h"
 #else
     #if defined(__WXMSW__)

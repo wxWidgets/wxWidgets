@@ -35,6 +35,8 @@
     #include "wx/textctrl.h"
 #endif //WX_PRECOMP
 
+#if wxUSE_SPINCTRL
+
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 
@@ -348,4 +350,5 @@ void wxSpinCtrl::SetRange(int min, int max)
     m_btn->SetRange(min, max);
 }
 
+#endif // wxUSE_SPINCTRL
 #endif // !wxPort-with-native-spinctrl

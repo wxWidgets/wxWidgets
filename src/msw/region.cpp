@@ -105,6 +105,10 @@ wxRegion::wxRegion(const wxRect& rect)
 
 wxRegion::wxRegion(size_t n, const wxPoint *points, int fillStyle)
 {
+#ifdef __WXMICROWIN__
+    m_refData = NULL;
+    M_REGION = NULL;
+#else
     m_refData = new wxRegionRefData;
     M_REGION = ::CreatePolygonRgn
                (
@@ -112,6 +116,7 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, int fillStyle)
                     n,
                     fillStyle == wxODDEVEN_RULE ? ALTERNATE : WINDING
                );
+#endif
 }
 
 /*

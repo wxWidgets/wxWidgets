@@ -225,11 +225,14 @@ typedef struct tagMINMAXINFO {
 #define VERTSIZE      6     /* Vertical size in millimeters             */
 
 /* Ternary raster operations */
+/* Now defined by MicroWindows */
+#if 0
 #define DSTINVERT           (DWORD)0x00550009 /* dest = (NOT dest)               */
 #define WHITENESS           (DWORD)0x00FF0062 /* dest = WHITE                    */
 #define SRCERASE            (DWORD)0x00440328 /* dest = source AND (NOT dest )   */
 #define MERGEPAINT          (DWORD)0x00BB0226 /* dest = (NOT source) OR dest     */
 #define SRCPAINT            (DWORD)0x00EE0086 /* dest = source OR dest           */
 #define NOTSRCCOPY          (DWORD)0x00330008 /* dest = (NOT source)             */
+#endif
 
 #endif /* _WX_MICROWIN_H_ */

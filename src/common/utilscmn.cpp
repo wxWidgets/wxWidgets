@@ -606,6 +606,7 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
 
     // Hack for wxNotebook case: at least in wxGTK, all pages
     // claim to be shown, so we must only deal with the selected one.
+#if wxUSE_NOTEBOOK
     if (win->IsKindOf(CLASSINFO(wxNotebook)))
     {
       wxNotebook* nb = (wxNotebook*) win;
@@ -618,6 +619,8 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
            return foundWin;
       }
     }
+#endif
+
     /* Doesn't work
     // Frame case
     else if (win->IsKindOf(CLASSINFO(wxFrame)))

@@ -3,7 +3,8 @@
 # Copyright (c) 2000 Martin Jolicoeur, Greg Haerr
 ##############################################################################
 
-TOP=/home/julians/local/microwindows/microwin/src
+TOP=/home/julians/microwindows/microwindows-0.89pre8/src
+
 CONFIG = $(TOP)/config
 WXDIR = ../..
 OBJSUFF = o
@@ -55,7 +56,6 @@ GENERICOBJS = \
 		$(GENDIR)/spinctlg.$(OBJSUFF) \
 		$(GENDIR)/splash.$(OBJSUFF) \
 		$(GENDIR)/splitter.$(OBJSUFF) \
-		$(GENDIR)/statusbr.$(OBJSUFF) \
 		$(GENDIR)/tabg.$(OBJSUFF) \
 		$(GENDIR)/tbarsmpl.$(OBJSUFF) \
 		$(GENDIR)/textdlgg.$(OBJSUFF) \
@@ -68,11 +68,13 @@ GENERICOBJS = \
 COMMONOBJS  = \
 		$(COMMDIR)/appcmn.$(OBJSUFF) \
 		$(COMMDIR)/choiccmn.$(OBJSUFF) \
+		$(COMMDIR)/clntdata.$(OBJSUFF) \
 		$(COMMDIR)/clipcmn.$(OBJSUFF) \
 		$(COMMDIR)/cmdline.$(OBJSUFF) \
 		$(COMMDIR)/cmdproc.$(OBJSUFF) \
 		$(COMMDIR)/cmndata.$(OBJSUFF) \
 		$(COMMDIR)/config.$(OBJSUFF) \
+		$(COMMDIR)/containr.$(OBJSUFF) \
 		$(COMMDIR)/cshelp.$(OBJSUFF) \
 		$(COMMDIR)/ctrlcmn.$(OBJSUFF) \
 		$(COMMDIR)/ctrlsub.$(OBJSUFF) \
@@ -138,14 +140,18 @@ COMMONOBJS  = \
 		$(COMMDIR)/radiocmn.$(OBJSUFF) \
 		$(COMMDIR)/resource.$(OBJSUFF) \
 		$(COMMDIR)/sizer.$(OBJSUFF) \
+		$(COMMDIR)/statbar.$(OBJSUFF) \
 		$(COMMDIR)/strconv.$(OBJSUFF) \
 		$(COMMDIR)/stream.$(OBJSUFF) \
 		$(COMMDIR)/string.$(OBJSUFF) \
+		$(COMMDIR)/sysopt.$(OBJSUFF) \
 		$(COMMDIR)/tbarbase.$(OBJSUFF) \
+		$(COMMDIR)/textbuf.$(OBJSUFF) \
 		$(COMMDIR)/textcmn.$(OBJSUFF) \
 		$(COMMDIR)/textfile.$(OBJSUFF) \
 		$(COMMDIR)/timercmn.$(OBJSUFF) \
 		$(COMMDIR)/tokenzr.$(OBJSUFF) \
+		$(COMMDIR)/toplvcmn.$(OBJSUFF) \
 		$(COMMDIR)/treebase.$(OBJSUFF) \
 		$(COMMDIR)/txtstrm.$(OBJSUFF) \
 		$(COMMDIR)/utilscmn.$(OBJSUFF) \
@@ -203,7 +209,6 @@ MSWOBJS     = \
 		$(MICROWINDIR)/font.$(OBJSUFF) \
 		$(MICROWINDIR)/fontenum.$(OBJSUFF) \
 		$(MICROWINDIR)/fontutil.$(OBJSUFF) \
-		$(MICROWINDIR)/frame.$(OBJSUFF) \
 		$(MICROWINDIR)/gdiimage.$(OBJSUFF) \
 		$(MICROWINDIR)/gdiobj.$(OBJSUFF) \
 		$(MICROWINDIR)/icon.$(OBJSUFF) \
@@ -211,12 +216,12 @@ MSWOBJS     = \
 		$(MICROWINDIR)/microwin.$(OBJSUFF) \
 		$(MICROWINDIR)/palette.$(OBJSUFF) \
 		$(MICROWINDIR)/pen.$(OBJSUFF) \
-		$(MICROWINDIR)/regconf.$(OBJSUFF) \
 		$(MICROWINDIR)/region.$(OBJSUFF) \
 		$(MICROWINDIR)/settings.$(OBJSUFF) \
 		$(MICROWINDIR)/snglinst.$(OBJSUFF) \
 		$(MICROWINDIR)/thread.$(OBJSUFF) \
 		$(MICROWINDIR)/timer.$(OBJSUFF) \
+		$(MICROWINDIR)/toplevel.$(OBJSUFF) \
 		$(MICROWINDIR)/utils.$(OBJSUFF) \
 		$(MICROWINDIR)/window.$(OBJSUFF) \
 		$(OLEDIR)/dataobj.$(OBJSUFF)
@@ -236,6 +241,7 @@ UNIVOBJS     = \
 		$(UNIVDIR)/framuniv.$(OBJSUFF) \
 		$(UNIVDIR)/gauge.$(OBJSUFF) \
 		$(UNIVDIR)/inphand.$(OBJSUFF) \
+		$(UNIVDIR)/inpcons.$(OBJSUFF) \
 		$(UNIVDIR)/listbox.$(OBJSUFF) \
 		$(UNIVDIR)/menu.$(OBJSUFF) \
 		$(UNIVDIR)/notebook.$(OBJSUFF) \
@@ -251,8 +257,10 @@ UNIVOBJS     = \
 		$(UNIVDIR)/statbox.$(OBJSUFF) \
 		$(UNIVDIR)/statline.$(OBJSUFF) \
 		$(UNIVDIR)/stattext.$(OBJSUFF) \
+		$(UNIVDIR)/statusbr.$(OBJSUFF) \
 		$(UNIVDIR)/textctrl.$(OBJSUFF) \
 		$(UNIVDIR)/theme.$(OBJSUFF) \
+		$(UNIVDIR)/topluniv.$(OBJSUFF) \
 		$(UNIVDIR)/winuniv.$(OBJSUFF) \
 		$(UNIVDIR)/themes/gtk.$(OBJSUFF) \
 		$(UNIVDIR)/themes/win32.$(OBJSUFF)

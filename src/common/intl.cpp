@@ -1240,7 +1240,7 @@ wxString wxLocale::GetSystemEncodingName()
 {
     wxString encname;
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // FIXME: what is the error return value for GetACP()?
     UINT codepage = ::GetACP();
     encname.Printf(_T("windows-%u"), codepage);
@@ -1292,7 +1292,7 @@ wxString wxLocale::GetSystemEncodingName()
 /* static */
 wxFontEncoding wxLocale::GetSystemEncoding()
 {
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     UINT codepage = ::GetACP();
 
     // wxWindows only knows about CP1250-1257, 932, 936, 949, 950

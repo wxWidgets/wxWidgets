@@ -49,7 +49,7 @@
 
 #include "wx/msw/private.h" // needs to be before #include <commdlg.h>
 
-#if wxUSE_COMMON_DIALOGS
+#if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
     #include <commdlg.h>
 #endif
 

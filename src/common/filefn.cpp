@@ -69,7 +69,7 @@
     #include <process.h>
     #include "wx/os2/private.h"
 #endif
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
 #if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
     #include <direct.h>
     #include <dos.h>
@@ -272,7 +272,7 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
 bool
 wxFileExists (const wxString& filename)
 {
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     // GetFileAttributes can copy with network paths
     DWORD ret = GetFileAttributes(filename);
     DWORD isDir = (ret & FILE_ATTRIBUTE_DIRECTORY);
@@ -1239,7 +1239,7 @@ bool wxPathExists(const wxChar *pszPathName)
     }
 #endif // __WINDOWS__
 
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     // Stat can't cope with network paths
     DWORD ret = GetFileAttributes(strPath.c_str());
     DWORD isDir = (ret & FILE_ATTRIBUTE_DIRECTORY);

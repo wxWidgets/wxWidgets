@@ -69,7 +69,7 @@
 
 // small helper class which opens and closes the file - we use it just to get
 // a file handle for the given file name to pass it to some Win32 API function
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
 
 class wxFileHandle
 {
@@ -121,7 +121,7 @@ private:
 // private functions
 // ----------------------------------------------------------------------------
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
 
 // convert between wxDateTime and FILETIME which is a 64-bit value representing
 // the number of 100-nanosecond intervals since January 1, 1601.

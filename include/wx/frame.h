@@ -203,7 +203,7 @@ protected:
 };
 
 // include the real class declaration
-#ifdef __WXUNIVERSAL__
+#if defined(__WXUNIVERSAL__) // && !defined(__WXMICROWIN__)
     #include "wx/univ/frame.h"
 #else // !__WXUNIVERSAL__
     #if defined(__WXMSW__)

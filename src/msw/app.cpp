@@ -463,6 +463,7 @@ bool wxApp::UnregisterWindowClasses()
 {
     bool retval = TRUE;
 
+#ifndef __WXMICROWIN__
     // frame window class.
     if ( !UnregisterClass(wxFrameClassName, wxhInstance) )
     {
@@ -541,7 +542,8 @@ bool wxApp::UnregisterWindowClasses()
 
         retval = FALSE;
     }
-
+#endif
+    // __WXMICROWIN__
     return retval;
 }
 

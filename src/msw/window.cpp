@@ -1233,7 +1233,9 @@ void wxWindowMSW::Clear()
 
 static inline void SendSetRedraw(HWND hwnd, bool on)
 {
+#ifndef __WXMICROWIN__
     ::SendMessage(hwnd, WM_SETREDRAW, (WPARAM)on, 0);
+#endif
 }
 
 void wxWindowMSW::Freeze()
@@ -4288,11 +4290,13 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
         // FIXME: this is clearly not the best way to do it but I think we'll
         //        need to change HWND <-> wxWindow code more heavily than I can
         //        do it now to fix it
+#ifndef __WXMICROWIN__
         if ( ::GetWindow(hwnd, GW_OWNER) )
         {
             // it's a dialog box, don't go upwards
             break;
         }
+#endif
 
         hwnd = ::GetParent(hwnd);
         win = wxFindWinFromHandle((WXHWND)hwnd);

@@ -45,7 +45,7 @@
 
 #ifdef __WXMICROWIN__
 
-static inline bool IsIconic(HWND WXUNUSED(hwnd)) { return FALSE; }
+// static inline bool IsIconic(HWND WXUNUSED(hwnd)) { return FALSE; }
 static inline bool IsZoomed(HWND WXUNUSED(hwnd)) { return FALSE; }
 
 #endif // __WXMICROWIN__

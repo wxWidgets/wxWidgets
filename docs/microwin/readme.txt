@@ -45,7 +45,10 @@ MicroWindows:
 
 wxMicroWindows:
 
-- untar the wxMicroWindows port/download from CVS
+- Download wxMSW 2.3.3 or greater, or get it from CVS
+
+- Copy include/wx/msw/setup_microwin.h to include/wx/setup.h if
+  include/wx/setup.h doesn't exist
 
 - change the TOP variable at the top of src/msw/makefile.mic
   to reflect where MicroWindows is installed
