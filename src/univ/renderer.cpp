@@ -38,6 +38,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/image.h"
+#include "wx/log.h"
 
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"

@@ -1268,7 +1268,7 @@ bool wxAddWindowToTable(Window w, wxWindow *win)
     wxWidgetHashTable->Put((long) w, win);
 
     wxLogTrace("widget", "XWindow 0x%08x <-> window %p (%s)",
-               w, win, win->GetClassInfo()->GetClassName());
+               (unsigned int) w, win, win->GetClassInfo()->GetClassName());
 
     return TRUE;
 }
@@ -1300,7 +1300,7 @@ bool wxAddClientWindowToTable(Window w, wxWindow *win)
     wxClientWidgetHashTable->Put((long) w, win);
 
     wxLogTrace("widget", "XWindow 0x%08x <-> window %p (%s)",
-               w, win, win->GetClassInfo()->GetClassName());
+               (unsigned int) w, win, win->GetClassInfo()->GetClassName());
 
     return TRUE;
 }

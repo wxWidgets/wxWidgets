@@ -568,9 +568,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
         {
             printf( "GraphicExpose event\n" );
 
-            wxLogTrace( _T("expose"), _T("GraphicsExpose from %s"), win->GetName().c_str(),
-                                          event->xgraphicsexpose.x, event->xgraphicsexpose.y,
-                                          event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+            wxLogTrace( _T("expose"), _T("GraphicsExpose from %s"), win->GetName().c_str());
 
             win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
                                           event->xgraphicsexpose.width, event->xgraphicsexpose.height);
