@@ -1,7 +1,0 @@
-SUFFIXES = .cpp
-
-DEFS = @DEFS@ $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
-
-noinst_PROGRAMS = controls
-
-controls_SOURCES = controls.cpp
