@@ -53,6 +53,13 @@ public:
                                          const wxString& name = wxStatusLineNameStr);
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_TOOLBAR
+    // create main toolbar bycalling OnCreateToolBar()
+    virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL,
+                                     wxWindowID id = -1,
+                                     const wxString& name = wxToolBarNameStr);
+    virtual void PositionToolBar();
+#endif // wxUSE_TOOLBAR
 
 protected:
     void OnSize(wxSizeEvent& event);
