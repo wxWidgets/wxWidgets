@@ -67,6 +67,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     MENU_LINK(Quit)
     MENU_LINK(About)
+
     MENU_LINK(TogButtons)
     MENU_LINK(TogTwist)
     MENU_LINK(TogLines)
@@ -77,6 +78,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(TogFullHighlight)
     MENU_LINK(SetFgColour)
     MENU_LINK(SetBgColour)
+    MENU_LINK(ResetStyle)
+
     MENU_LINK(Dump)
 #ifndef NO_MULTIPLE_SELECTION
     MENU_LINK(DumpSelected)
@@ -179,24 +182,26 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     file_menu->AppendSeparator();
     file_menu->Append(TreeTest_Quit, wxT("E&xit\tAlt-X"));
 
-    style_menu->Append(TreeTest_TogButtons, "Toggle &normal buttons");
-    style_menu->Append(TreeTest_TogTwist, "Toggle &twister buttons");
-    style_menu->Append(TreeTest_ToggleButtons, "Toggle image &buttons");
+    style_menu->Append(TreeTest_TogButtons, "Toggle &normal buttons", _T(""), TRUE);
+    style_menu->Append(TreeTest_TogTwist, "Toggle &twister buttons", _T(""), TRUE);
+    style_menu->Append(TreeTest_ToggleButtons, "Toggle image &buttons", _T(""), TRUE);
     style_menu->AppendSeparator();
-    style_menu->Append(TreeTest_TogLines, "Toggle &connecting lines");
-    style_menu->Append(TreeTest_TogRootLines, "Toggle &lines at root");
-    style_menu->Append(TreeTest_TogHideRoot, "Toggle &hidden root");
-    style_menu->Append(TreeTest_TogBorder, "Toggle &item border");
-    style_menu->Append(TreeTest_TogFullHighlight, "Toggle &full row highlight");
-    style_menu->Append(TreeTest_TogEdit, "Toggle &edit mode");
+    style_menu->Append(TreeTest_TogLines, "Toggle &connecting lines", _T(""), TRUE);
+    style_menu->Append(TreeTest_TogRootLines, "Toggle &lines at root", _T(""), TRUE);
+    style_menu->Append(TreeTest_TogHideRoot, "Toggle &hidden root", _T(""), TRUE);
+    style_menu->Append(TreeTest_TogBorder, "Toggle &item border", _T(""), TRUE);
+    style_menu->Append(TreeTest_TogFullHighlight, "Toggle &full row highlight", _T(""), TRUE);
+    style_menu->Append(TreeTest_TogEdit, "Toggle &edit mode", _T(""), TRUE);
 #ifndef NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleSel, wxT("Toggle &selection mode"));
+    style_menu->Append(TreeTest_ToggleSel, wxT("Toggle &selection mode"), _T(""), TRUE);
 #endif // NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleImages, wxT("Toggle show ima&ges"));
+    style_menu->Append(TreeTest_ToggleImages, wxT("Toggle show ima&ges"), _T(""), TRUE);
     style_menu->Append(TreeTest_SetImageSize, wxT("Set image si&ze..."));
     style_menu->AppendSeparator();
     style_menu->Append(TreeTest_SetFgColour, wxT("Set &foreground colour..."));
     style_menu->Append(TreeTest_SetBgColour, wxT("Set &background colour..."));
+    style_menu->AppendSeparator();
+    style_menu->Append(TreeTest_ResetStyle, wxT("&Reset to default\tF10"));
 
     tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
     tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
@@ -243,21 +248,16 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     menu_bar->Append(tree_menu, "&Tree");
     menu_bar->Append(item_menu, "&Item");
     SetMenuBar(menu_bar);
-
-    //menu_bar->Check(TreeTest_ToggleImages, TRUE);
 #endif // wxUSE_MENUS
 
-    m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
-                                wxDefaultPosition, wxDefaultSize,
-                                wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS |
-#ifndef NO_VARIABLE_HEIGHT
-                                wxTR_HAS_VARIABLE_ROW_HEIGHT |
-#endif
-                                wxSUNKEN_BORDER);
-
+    // create the controls
     m_textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
+
+    CreateTreeWithDefStyle();
+
+    menu_bar->Check(TreeTest_ToggleImages, TRUE);
 
     // create a status bar with 3 panes
     CreateStatusBar(3);
@@ -279,23 +279,66 @@ MyFrame::~MyFrame()
     delete wxLog::SetActiveTarget(NULL);
 }
 
-void MyFrame::TogStyle(long flag)
+void MyFrame::CreateTreeWithDefStyle()
 {
-        m_treeCtrl->SetWindowStyle(m_treeCtrl->GetWindowStyle() ^ flag);
+    long style = wxTR_DEFAULT_STYLE |
+#ifndef NO_VARIABLE_HEIGHT
+                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
+#endif
+                 wxTR_EDIT_LABELS;
+
+    CreateTree(style | wxSUNKEN_BORDER);
+
+    // as we don't know what wxTR_DEFAULT_STYLE could contain, test for
+    // everything
+    wxMenuBar *mbar = GetMenuBar();
+    mbar->Check(TreeTest_TogButtons, (style & wxTR_HAS_BUTTONS) != 0);
+    mbar->Check(TreeTest_TogButtons, (style & wxTR_TWIST_BUTTONS) != 0);
+    mbar->Check(TreeTest_TogLines, (style & wxTR_NO_LINES) == 0);
+    mbar->Check(TreeTest_TogRootLines, (style & wxTR_LINES_AT_ROOT) != 0);
+    mbar->Check(TreeTest_TogHideRoot, (style & wxTR_HIDE_ROOT) != 0);
+    mbar->Check(TreeTest_TogEdit, (style & wxTR_EDIT_LABELS) != 0);
+    mbar->Check(TreeTest_TogBorder, (style & wxTR_ROW_LINES) != 0);
+    mbar->Check(TreeTest_TogFullHighlight, (style & wxTR_FULL_ROW_HIGHLIGHT) != 0);
+}
+
+void MyFrame::CreateTree(long style)
+{
+    m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
+                                wxDefaultPosition, wxDefaultSize,
+                                style);
+    Resize();
+}
+
+void MyFrame::TogStyle(int id, long flag)
+{
+    long style = m_treeCtrl->GetWindowStyle() ^ flag;
+
+    // most treectrl styles can't be changed on the fly using the native
+    // control and the tree must be recreated
+#ifndef __WXMSW__
+    m_treeCtrl->SetWindowStyle(style);
+#else // MSW
+    delete m_treeCtrl;
+    CreateTree(style);
+#endif // !MSW/MSW
+
+    GetMenuBar()->Check(id, (style & flag) != 0);
 }
 
 void MyFrame::OnSize(wxSizeEvent& event)
 {
     if ( m_treeCtrl && m_textCtrl )
     {
-        Resize(GetClientSize());
+        Resize();
     }
 
     event.Skip();
 }
 
-void MyFrame::Resize(const wxSize& size)
+void MyFrame::Resize()
 {
+    wxSize size = GetClientSize();
     m_treeCtrl->SetSize(0, 0, size.x, 2*size.y/3);
     m_textCtrl->SetSize(0, 2*size.y/3, size.x, size.y/3);
 }
@@ -376,23 +419,9 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 
 #ifndef NO_MULTIPLE_SELECTION
 
-void MyFrame::OnToggleSel(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnToggleSel(wxCommandEvent& event)
 {
-    TogStyle(wxTR_MULTIPLE);
-#if 0
-    long style = m_treeCtrl->GetWindowStyle();
-    if ( style & wxTR_MULTIPLE )
-        style &= ~wxTR_MULTIPLE;
-    else
-        style |= wxTR_MULTIPLE;
-
-    delete m_treeCtrl;
-
-    m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
-                                wxDefaultPosition, wxDefaultSize,
-                                style);
-    Resize(GetClientSize());
-#endif
+    TogStyle(event.GetId(), wxTR_MULTIPLE);
 }
 
 void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))

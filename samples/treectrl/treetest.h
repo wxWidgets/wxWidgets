@@ -146,14 +146,25 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
-    void OnTogButtons(wxCommandEvent& event)   { TogStyle(wxTR_HAS_BUTTONS); }
-    void OnTogTwist(wxCommandEvent& event)     { TogStyle(wxTR_TWIST_BUTTONS); }
-    void OnTogLines(wxCommandEvent& event)     { TogStyle(wxTR_NO_LINES); }
-    void OnTogEdit(wxCommandEvent& event)      { TogStyle(wxTR_EDIT_LABELS); }
-    void OnTogHideRoot(wxCommandEvent& event)  { TogStyle(wxTR_HIDE_ROOT); }
-    void OnTogRootLines(wxCommandEvent& event) { TogStyle(wxTR_LINES_AT_ROOT); }
-    void OnTogBorder(wxCommandEvent& event)    { TogStyle(wxTR_ROW_LINES); }
-    void OnTogFullHighlight(wxCommandEvent& event)    { TogStyle(wxTR_FULL_ROW_HIGHLIGHT); }
+    void OnTogButtons(wxCommandEvent& event)
+        { TogStyle(event.GetId(), wxTR_HAS_BUTTONS); }
+    void OnTogTwist(wxCommandEvent& event)
+        { TogStyle(event.GetId(), wxTR_TWIST_BUTTONS); }
+    void OnTogLines(wxCommandEvent& event)
+        { TogStyle(event.GetId(), wxTR_NO_LINES); }
+    void OnTogEdit(wxCommandEvent& event)
+        { TogStyle(event.GetId(), wxTR_EDIT_LABELS); }
+    void OnTogHideRoot(wxCommandEvent& event)
+        { TogStyle(event.GetId(), wxTR_HIDE_ROOT); }
+    void OnTogRootLines(wxCommandEvent& event)
+        { TogStyle(event.GetId(), wxTR_LINES_AT_ROOT); }
+    void OnTogBorder(wxCommandEvent& event)
+        { TogStyle(event.GetId(), wxTR_ROW_LINES); }
+    void OnTogFullHighlight(wxCommandEvent& event)
+        { TogStyle(event.GetId(), wxTR_FULL_ROW_HIGHLIGHT); }
+
+    void OnResetStyle(wxCommandEvent& WXUNUSED(event))
+        { CreateTreeWithDefStyle(); }
 
     void OnSetFgColour(wxCommandEvent& event);
     void OnSetBgColour(wxCommandEvent& event);
@@ -201,11 +212,14 @@ public:
     void OnSize(wxSizeEvent& event);
 
 private:
-    void TogStyle(long flag);
+    void TogStyle(int id, long flag);
 
     void DoSort(bool reverse = FALSE);
 
-    void Resize(const wxSize& size);
+    void Resize();
+
+    void CreateTreeWithDefStyle();
+    void CreateTree(long style);
 
     MyTreeCtrl *m_treeCtrl;
     wxTextCtrl *m_textCtrl;
@@ -230,6 +244,7 @@ enum
     TreeTest_TogFullHighlight,
     TreeTest_SetFgColour,
     TreeTest_SetBgColour,
+    TreeTest_ResetStyle,
     TreeTest_Dump,
     TreeTest_DumpSelected,
     TreeTest_Count,
