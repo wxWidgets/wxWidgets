@@ -23,10 +23,6 @@
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 
-#ifndef __UNIX__
-  #define OBSOLETE_XPM_DATA_HANDLER
-#endif
-
 extern "C"
 {
 #ifdef OBSOLETE_XPM_DATA_HANDLER
