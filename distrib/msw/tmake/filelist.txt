@@ -85,7 +85,7 @@ scrolwin.cpp	G
 splitter.cpp	G
 statline.cpp	G	U,R
 statusbr.cpp	G
-tabg.cpp	G	R
+tabg.cpp	G
 numdlgg.cpp	G
 textdlgg.cpp	G
 tipdlg.cpp	G
