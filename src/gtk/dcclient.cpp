@@ -1435,16 +1435,43 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     wxCHECK_RET( m_context, wxT("no Pango context") );
     wxCHECK_RET( m_layout, wxT("o Pango layout") );
     wxCHECK_RET( m_fontdesc, wxT("no Pango font description") );
-    
-    {
+
 #if wxUSE_UNICODE
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
-        pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
+    pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
 #else
-        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( text );
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-        pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
+    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( text );
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
+    pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
 #endif
+
+    if (m_scaleY != 1.0)
+    {
+         // If there is a user or actually any scale applied to
+         // the device context, scale the font.
+         
+         // scale font description
+         gint oldSize = pango_font_description_get_size( m_fontdesc );
+         double size = oldSize;
+         size = size * m_scaleY;
+         pango_font_description_set_size( m_fontdesc, (gint)size );
+         
+         // actually apply scaled font
+         pango_layout_set_font_description( m_layout, m_fontdesc );
+         
+         // Draw layout.
+         gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
+         
+         // reset unscaled size
+         pango_font_description_set_size( m_fontdesc, oldSize );
+         
+         // actually apply scaled font
+         pango_layout_set_font_description( m_layout, m_fontdesc );
+    }
+    else
+    {
+         // Draw layout.
+         gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
     }
     
     // Measure layout.
@@ -1452,9 +1479,6 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     pango_layout_get_pixel_size( m_layout, &w, &h );
     wxCoord width = w;
     wxCoord height = h;
-    
-    // Draw layout.
-    gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
     
 #else // GTK+ 1.x
     wxCoord width = gdk_string_width( font, text.mbc_str() );
@@ -1621,12 +1645,12 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
         
     // Set layout's text
 #if wxUSE_UNICODE
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
-        pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+    pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
 #else
-        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-        pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
+    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
+    pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
 #endif
  
     int w,h;
@@ -1736,14 +1760,6 @@ void wxWindowDC::SetFont( const wxFont &font )
         
         m_fontdesc = pango_font_description_copy( m_font.GetNativeFontInfo()->description );
         
-        // If there is a user or actually any scale applied to
-        // the device context, scale the font.
-        if (m_scaleY != 1.0)
-        {
-            double size = (double) pango_font_description_get_size( m_fontdesc );
-            size = size * m_scaleY;
-            pango_font_description_set_size( m_fontdesc, (int)size );
-        }
    
         if (m_owner)
         {
