@@ -177,9 +177,6 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
     m_printToFileCheckBox = new wxCheckBox( this, wxPRINTID_PRINTTOFILE, _("Print to File") );
     flex->Add( m_printToFileCheckBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
     
-    if (factory->HasOwnPrintToFile())
-        m_printToFileCheckBox->Enable( false );
-
     m_setupButton = new wxButton(this, wxPRINTID_SETUP, _("Setup...") );
     flex->Add( m_setupButton, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
     

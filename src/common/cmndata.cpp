@@ -267,7 +267,10 @@ wxPrintDialogData::wxPrintDialogData()
     m_printSelection = false;
     m_printEnableSelection = false;
     m_printEnablePageNumbers = true;
-    m_printEnablePrintToFile = true;
+    
+    wxPrintFactory* factory = wxPrintFactory::GetFactory();
+    m_printEnablePrintToFile = ! factory->HasOwnPrintToFile();
+    
     m_printEnableHelp = false;
     m_printSetupDialog = false;
 }
