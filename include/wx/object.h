@@ -72,16 +72,7 @@ public:
         , m_baseInfo1(0)
         , m_baseInfo2(0)
         , m_next(sm_first)
-        {
-#ifdef __WXDEBUG__
-            if (sm_classTable != NULL) {
-                wxString msg(_T("too late binding of class info (lazy binding) for "));
-                msg += className;
-                wxFAIL_MSG(msg);
-            }
-#endif
-            sm_first = this;
-        }
+        { sm_first = this; }
 
     wxObject *CreateObject() { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
 
