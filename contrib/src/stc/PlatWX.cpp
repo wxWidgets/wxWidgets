@@ -1233,7 +1233,7 @@ wxString stc2wx(const char* str, size_t len)
     strncpy(buffer, str, len);
     buffer[len]=0;
 
-    wxString cstr(buffer, wxConvUTF8);
+    wxString cstr(buffer, wxConvUTF8, len);
 
     delete[] buffer;
     return cstr;
