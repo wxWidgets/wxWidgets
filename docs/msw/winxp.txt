@@ -1,5 +1,5 @@
-Microsoft Windows XP Support from wxWindows 2.3.2
--------------------------------------------------
+Microsoft Windows XP Support from wxWindows
+-------------------------------------------
 
 Windows XP introduces the themes (called "visual styles" in the Microsoft
 documentation) in Windows world. As wxWindows uses the standard Windows
@@ -9,6 +9,9 @@ want your program to honour the visual style setting of Windows XP is to
 add the manifest file to your program (this is not at all specific to
 wxWindows programs but is required for all Windows applications).
 
+wxWindows now includes manifest resources in wx.rc, so it should be enough to
+include "wx/msw/wx.rc" in your application's resource file and you get
+XP look automatically. If it doesn't work, follow the instructions below:
 
 For your convenience, below is an example manifest. It should be put in a
 file called "yourapp.exe.manifest" and put in the same directory where
@@ -18,7 +21,6 @@ applications resource section. Please see the MSDN documentation at
 http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnwxp/html/xptheming.asp
 
 for more details.
-
 
 Here is the example manifest which you can put into controls.exe.manifest
 file to test theme support using the controls sample:
