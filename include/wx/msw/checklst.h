@@ -16,19 +16,15 @@
 #pragma interface "checklst.h"
 #endif
 
-#include "wx/setup.h"
-
 #if !wxUSE_OWNER_DRAWN
   #error  "wxCheckListBox class requires owner-drawn functionality."
 #endif
 
-#include "wx/listbox.h"
+class WXDLLEXPORT wxOwnerDrawn;
+class WXDLLEXPORT wxCheckListBoxItem; // fwd decl, defined in checklst.cpp
 
-class wxCheckListBoxItem; // fwd decl, defined in checklst.cpp
-
-class WXDLLEXPORT wxCheckListBox : public wxListBox
+class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
 {
-  DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 public:
   // ctors
   wxCheckListBox();
@@ -47,8 +43,8 @@ public:
   virtual bool SetFont( const wxFont &font );
 
   // items may be checked
-  bool IsChecked(size_t uiIndex) const;
-  void Check(size_t uiIndex, bool bCheck = TRUE);
+  virtual bool IsChecked(size_t uiIndex) const;
+  virtual void Check(size_t uiIndex, bool bCheck = TRUE);
 
   // accessors
   size_t GetItemHeight() const { return m_nItemHeight; }
@@ -60,13 +56,14 @@ protected:
   virtual bool          MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
 
   // pressing space or clicking the check box toggles the item
-  void OnChar(wxKeyEvent& event);
+  void OnKeyDown(wxKeyEvent& event);
   void OnLeftClick(wxMouseEvent& event);
 
 private:
   size_t    m_nItemHeight;  // height of checklistbox items (the same for all)
 
   DECLARE_EVENT_TABLE()
+  DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 };
 
 #endif    //_CHECKLST_H

@@ -453,21 +453,32 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
 
     if ( HasMultipleSelection() )
     {
-        int no_sel = ListBox_GetSelCount(GetHwnd());
-        if (no_sel != 0) {
-            int *selections = new int[no_sel];
-            int rc = ListBox_GetSelItems(GetHwnd(), no_sel, selections);
+        int countSel = ListBox_GetSelCount(GetHwnd());
+        if ( countSel == LB_ERR )
+        {
+            wxLogDebug(_T("ListBox_GetSelCount failed"));
+        }
+        else if ( countSel != 0 )
+        {
+            int *selections = new int[countSel];
 
-            wxCHECK_MSG(rc != LB_ERR, -1, wxT("ListBox_GetSelItems failed"));
-
-            aSelections.Alloc(no_sel);
-            for ( int n = 0; n < no_sel; n++ )
-                aSelections.Add(selections[n]);
+            if ( ListBox_GetSelItems(GetHwnd(),
+                                     countSel, selections) == LB_ERR )
+            {
+                wxLogDebug(wxT("ListBox_GetSelItems failed"));
+                countSel = -1;
+            }
+            else
+            {
+                aSelections.Alloc(countSel);
+                for ( int n = 0; n < countSel; n++ )
+                    aSelections.Add(selections[n]);
+            }
 
             delete [] selections;
         }
 
-        return no_sel;
+        return countSel;
     }
     else  // single-selection listbox
     {

@@ -30,17 +30,22 @@
 
 #if wxUSE_OWNER_DRAWN
 
-#include "wx/object.h"
-#include "wx/colour.h"
-#include "wx/font.h"
-#include "wx/bitmap.h"
-#include "wx/window.h"
-#include "wx/listbox.h"
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+    #include "wx/colour.h"
+    #include "wx/font.h"
+    #include "wx/bitmap.h"
+    #include "wx/window.h"
+    #include "wx/listbox.h"
+    #include "wx/dcmemory.h"
+
+    #include "wx/settings.h"
+
+    #include "wx/log.h"
+#endif
+
 #include "wx/ownerdrw.h"
-#include "wx/settings.h"
-#include "wx/dcmemory.h"
-#include "wx/msw/checklst.h"
-#include "wx/log.h"
+#include "wx/checklst.h"
 
 #include <windows.h>
 #include <windowsx.h>
@@ -262,7 +267,7 @@ void wxCheckListBoxItem::Check(bool check)
 // define event table
 // ------------------
 BEGIN_EVENT_TABLE(wxCheckListBox, wxListBox)
-  EVT_CHAR(wxCheckListBox::OnChar)
+  EVT_KEY_DOWN(wxCheckListBox::OnKeyDown)
   EVT_LEFT_DOWN(wxCheckListBox::OnLeftClick)
 END_EVENT_TABLE()
 
@@ -270,7 +275,7 @@ END_EVENT_TABLE()
 // ----------------
 
 // def ctor: use Create() to really create the control
-wxCheckListBox::wxCheckListBox() : wxListBox()
+wxCheckListBox::wxCheckListBox()
 {
 }
 
@@ -280,7 +285,6 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                                int nStrings, const wxString choices[],
                                long style, const wxValidator& val,
                                const wxString& name)
-              : wxListBox()
 {
     Create(parent, id, pos, size, nStrings, choices,
            style | wxLB_OWNERDRAW, val, name);
@@ -344,23 +348,95 @@ bool wxCheckListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 
 bool wxCheckListBox::IsChecked(size_t uiIndex) const
 {
-  return GetItem(uiIndex)->IsChecked();
+    wxCHECK_MSG( uiIndex < (size_t)GetCount(), FALSE, _T("bad wxCheckListBox index") );
+
+    return GetItem(uiIndex)->IsChecked();
 }
 
 void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
 {
-  GetItem(uiIndex)->Check(bCheck);
+    wxCHECK_RET( uiIndex < (size_t)GetCount(), _T("bad wxCheckListBox index") );
+
+    GetItem(uiIndex)->Check(bCheck);
 }
 
 // process events
 // --------------
 
-void wxCheckListBox::OnChar(wxKeyEvent& event)
+void wxCheckListBox::OnKeyDown(wxKeyEvent& event)
 {
-  if ( event.KeyCode() == WXK_SPACE )
-    GetItem(GetSelection())->Toggle();
-  else
-    event.Skip();
+    // what do we do?
+    enum
+    {
+        None,
+        Toggle,
+        Set,
+        Clear
+    } oper;
+
+    switch ( event.KeyCode() )
+    {
+        case WXK_SPACE:
+            oper = Toggle;
+            break;
+
+        case WXK_NUMPAD_ADD:
+        case '+':
+            oper = Set;
+            break;
+
+        case WXK_NUMPAD_SUBTRACT:
+        case '-':
+            oper = Clear;
+            break;
+
+        default:
+            oper = None;
+    }
+
+    if ( oper != None )
+    {
+        wxArrayInt selections;
+        int count;
+        if ( HasMultipleSelection() )
+        {
+            count = GetSelections(selections);
+        }
+        else
+        {
+            count = 1;
+            selections.Add(GetSelection());
+        }
+
+        for ( int i = 0; i < count; i++ )
+        {
+            wxCheckListBoxItem *item = GetItem(selections[i]);
+            if ( !item )
+            {
+                wxFAIL_MSG( _T("no wxCheckListBoxItem?") );
+                continue;
+            }
+
+            switch ( oper )
+            {
+                case Toggle:
+                    item->Toggle();
+                    break;
+
+                case Set:
+                case Clear:
+                    item->Check( oper == Set );
+                    break;
+
+                default:
+                    wxFAIL_MSG( _T("what should this key do?") );
+            }
+        }
+    }
+    else // nothing to do
+    {
+        event.Skip();
+    }
 }
 
 void wxCheckListBox::OnLeftClick(wxMouseEvent& event)

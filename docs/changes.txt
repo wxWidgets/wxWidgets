@@ -190,6 +190,7 @@ wxMSW:
 - Multiline labels in buttons are now supoprted (simply use "\n" in the label)
 - Implemented wxMouseCaptureChangedEvent and made wxGenericDragImage check it
   has the capture before release it.
+- fixed bugs in multiple selection wxCheckListBox
 
 wxGTK:
 
