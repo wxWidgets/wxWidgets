@@ -116,6 +116,15 @@ void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
     if(need_debug) wxLogDebug("wxWindowCocoa=%p::SetNSView [cocoaNSView=%p retainCount]=%d",this,cocoaNSView,[cocoaNSView retainCount]);
 }
 
+bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
+{
+    wxLogDebug("Cocoa_drawRect");
+    //FIXME: should probably turn that rect into the update region
+    wxPaintEvent event(m_windowId);
+    event.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(event);
+}
+
 void wxWindowCocoa::Cocoa_FrameChanged(void)
 {
     wxLogDebug("Cocoa_FrameChanged");

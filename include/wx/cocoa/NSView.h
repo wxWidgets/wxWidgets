@@ -15,6 +15,8 @@
 #include "wx/hashmap.h"
 #include "wx/cocoa/ObjcPose.h"
 
+typedef struct _NSRect NSRect;
+
 WX_DECLARE_OBJC_HASHMAP(NSView);
 class wxCocoaNSView
 {
@@ -27,6 +29,7 @@ protected:
     static void *sm_cocoaObserver;
 public:
     virtual void Cocoa_FrameChanged(void) = 0;
+    virtual bool Cocoa_drawRect(const NSRect &rect) = 0;
 };
 
 #endif // _WX_COCOA_NSVIEW_H_

@@ -53,8 +53,9 @@ public:
     inline WX_NSView GetNSView() { return m_cocoaNSView; }
     void CocoaAddChild(wxWindowCocoa *child);
     void CocoaRemoveFromParent(void);
-    virtual void Cocoa_FrameChanged(void);
 protected:
+    virtual void Cocoa_FrameChanged(void);
+    virtual bool Cocoa_drawRect(const NSRect &rect);
     void SetNSView(WX_NSView cocoaNSView);
     WX_NSView m_cocoaNSView;
     WX_NSView m_dummyNSView;

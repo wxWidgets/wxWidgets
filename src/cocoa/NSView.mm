@@ -53,10 +53,18 @@ void wxCocoaNSView::DisassociateNSView(WX_NSView cocoaNSView)
 {
 }
 
+- (void)drawRect: (NSRect)rect;
 @end // wxPoserNSView
 
 WX_IMPLEMENT_POSER(wxPoserNSView);
 @implementation wxPoserNSView : NSView
+
+- (void)drawRect: (NSRect)rect
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_drawRect(rect) )
+        [super drawRect:rect];
+}
 
 @end // implementation wxPoserNSView
 
