@@ -1041,6 +1041,34 @@ MANUAL_DIST:
 	cp $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
 	cp $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
 
+# this target does not generate a complete wxPython dist, it only includes
+# those files needed for the Debian source package.
+# see utils/wxPython/distrib for scripts to make a proper wxPython dist.
+PYTHON_DIST:
+	mkdir $(DISTDIR)/utils/wxPython
+	mkdir $(DISTDIR)/utils/wxPython/distrib
+	mkdir $(DISTDIR)/utils/wxPython/lib
+	mkdir $(DISTDIR)/utils/wxPython/lib/editor
+	mkdir $(DISTDIR)/utils/wxPython/lib/sizers
+	mkdir $(DISTDIR)/utils/wxPython/modules
+	mkdir $(DISTDIR)/utils/wxPython/modules/html
+	mkdir $(DISTDIR)/utils/wxPython/modules/utils
+	mkdir $(DISTDIR)/utils/wxPython/modules/utils/gtk
+	mkdir $(DISTDIR)/utils/wxPython/src
+	mkdir $(DISTDIR)/utils/wxPython/src/gtk
+
+	cp $(UTILSDIR)/wxPython/*.txt $(DISTDIR)/utils/wxPython
+	cp $(UTILSDIR)/wxPython/distrib/build.py $(DISTDIR)/utils/wxPython/distrib
+	cp $(UTILSDIR)/wxPython/lib/*.py $(DISTDIR)/utils/wxPython/lib
+	cp $(UTILSDIR)/wxPython/lib/editor/*.py $(DISTDIR)/utils/wxPython/lib/editor
+	cp $(UTILSDIR)/wxPython/lib/sizers/*.py $(DISTDIR)/utils/wxPython/lib/sizers
+	-cp $(UTILSDIR)/wxPython/modules/html/* $(DISTDIR)/utils/wxPython/modules/html
+	-cp $(UTILSDIR)/wxPython/modules/utils/* $(DISTDIR)/utils/wxPython/modules/utils
+	cp $(UTILSDIR)/wxPython/modules/utils/gtk/utils.* $(DISTDIR)/utils/wxPython/modules/utils/gtk
+	-cp $(UTILSDIR)/wxPython/src/* $(DISTDIR)/utils/wxPython/src
+	cp $(UTILSDIR)/wxPython/src/gtk/*.py $(DISTDIR)/utils/wxPython/src/gtk
+	cp $(UTILSDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/utils/wxPython/src/gtk
+
 distclean:
 	$(RM) -r _dist_dir
 
@@ -1057,14 +1085,14 @@ dist: @GUIDIST@
 	mv wxDemos demos; \
 	fi
 
-debian-dist: GTK_DIST DEMOS_DIST UTILS_DIST MISC_DIST MANUAL_DIST
+debian-dist: @GUIDIST@ MANUAL_DIST PYTHON_DIST
 	mkdir $(DISTDIR)/debian
 	-cp $(WXDIR)/debian/* $(DISTDIR)/debian
 	cp $(DOCDIR)/licence.txt $(DISTDIR)/docs
 	cp $(DOCDIR)/licendoc.txt $(DISTDIR)/docs
 	cp $(DOCDIR)/preamble.txt $(DISTDIR)/docs
-	rm -rf $(WXDIR)/../wxwindows-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
-	mv $(DISTDIR) $(WXDIR)/../wxwindows-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
+	rm -rf $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
+	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 
 clean:
 	$(RM) *.o
