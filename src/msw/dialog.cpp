@@ -44,24 +44,18 @@ wxList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList WXDLLEXPORT wxPendingDelete;
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
+    IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
 
-BEGIN_EVENT_TABLE(wxDialog, wxPanel)
-  EVT_SIZE(wxDialog::OnSize)
-  EVT_BUTTON(wxID_OK, wxDialog::OnOK)
-  EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
-  EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-  EVT_CHAR_HOOK(wxDialog::OnCharHook)
-  EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
-  EVT_CLOSE(wxDialog::OnCloseWindow)
-END_EVENT_TABLE()
-
+    BEGIN_EVENT_TABLE(wxDialog, wxPanel)
+        EVT_SIZE(wxDialog::OnSize)
+        EVT_BUTTON(wxID_OK, wxDialog::OnOK)
+        EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
+        EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
+        EVT_CHAR_HOOK(wxDialog::OnCharHook)
+        EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
+        EVT_CLOSE(wxDialog::OnCloseWindow)
+    END_EVENT_TABLE()
 #endif
-
-long wxDialog::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-  return ::CallWindowProc(CASTWNDPROC m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
-}
 
 bool wxDialog::MSWProcessMessage(WXMSG* pMsg)
 {
@@ -82,65 +76,80 @@ wxDialog::wxDialog(void)
 }
 
 bool wxDialog::Create(wxWindow *parent, wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+                      const wxString& title,
+                      const wxPoint& pos,
+                      const wxSize& size,
+                      long style,
+                      const wxString& name)
 {
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-  SetName(name);
-  
-  if (!parent)
-    wxTopLevelWindows.Append(this);
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetName(name);
+    
+    if (!parent)
+        wxTopLevelWindows.Append(this);
 
-//  windowFont = wxTheFontList->FindOrCreateFont(11, wxSWISS, wxNORMAL, wxNORMAL);
+    //  windowFont = wxTheFontList->FindOrCreateFont(11, wxSWISS, wxNORMAL, wxNORMAL);
 
-  if (parent) parent->AddChild(this);
+    if (parent) parent->AddChild(this);
 
-  if ( id == -1 )
-    m_windowId = (int)NewControlId();
-  else
-  m_windowId = id;
+    if ( id == -1 )
+        m_windowId = (int)NewControlId();
+    else
+        m_windowId = id;
 
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
+    int x = pos.x;
+    int y = pos.y;
+    int width = size.x;
+    int height = size.y;
 
-  if (x < 0) x = wxDIALOG_DEFAULT_X;
-  if (y < 0) y = wxDIALOG_DEFAULT_Y;
+    if (x < 0) x = wxDIALOG_DEFAULT_X;
+    if (y < 0) y = wxDIALOG_DEFAULT_Y;
 
-  m_windowStyle = style;
+    m_windowStyle = style;
 
-  m_isShown = FALSE;
-  m_modalShowing = FALSE;
+    m_isShown = FALSE;
+    m_modalShowing = FALSE;
 
-  if (width < 0)
-    width = 500;
-  if (height < 0)
-    height = 500;
+    if (width < 0)
+        width = 500;
+    if (height < 0)
+        height = 500;
 
-  WXDWORD extendedStyle = MakeExtendedStyle(m_windowStyle);
-  if (m_windowStyle & wxSTAY_ON_TOP)
-    extendedStyle |= WS_EX_TOPMOST;
+    WXDWORD extendedStyle = MakeExtendedStyle(m_windowStyle);
+    if (m_windowStyle & wxSTAY_ON_TOP)
+        extendedStyle |= WS_EX_TOPMOST;
 
-  // Allows creation of dialogs with & without captions under MSWindows
-  if(style & wxCAPTION){
-    MSWCreate(m_windowId, (wxWindow *)parent, NULL, this, NULL, x, y, width, height, 0, "wxCaptionDialog",
-    extendedStyle);
-  }
-  else{
-    MSWCreate(m_windowId, (wxWindow *)parent, NULL, this, NULL, x, y, width, height, 0, "wxNoCaptionDialog",
-    extendedStyle);
-  }
+    // Allows creation of dialogs with & without captions under MSWindows,
+    // resizeable or not (but a resizeable dialog always has caption -
+    // otherwise it would look too strange)
+    const char *dlg;
+    if ( style & wxTHICK_FRAME )
+        dlg = "wxResizeableDialog";
+    else if ( style & wxCAPTION )
+        dlg = "wxCaptionDialog";
+    else
+        dlg = "wxNoCaptionDialog";
+    MSWCreate(m_windowId, parent, NULL, this, NULL,
+              x, y, width, height,
+              0, // style is not used if we have dlg template
+              dlg,
+              extendedStyle);
 
-  SubclassWin(GetHWND());
+    HWND hwnd = (HWND)GetHWND();
 
-  SetWindowText((HWND) GetHWND(), (const char *)title);
-  SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    if ( !hwnd )
+    {
+        wxLogError(_("Failed to created dialog."));
 
-  return TRUE;
+        return FALSE;
+    }
+
+    SubclassWin(GetHWND());
+    
+    SetWindowText(hwnd, title);
+    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+
+    return TRUE;
 }
 
 void wxDialog::SetModal(bool flag)
@@ -611,9 +620,3 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
   Refresh();
 #endif
 }
-
-long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-  return wxWindow::MSWWindowProc(message, wParam, lParam);
-}
-
