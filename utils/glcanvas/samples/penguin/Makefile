@@ -1,0 +1,23 @@
+
+CPP = g++
+CC = gcc
+
+Penguin: penguin.o trackball.o lw.o glcanvas.o
+	$(CPP) -o Penguin \
+	penguin.o trackball.o lw.o glcanvas.o \
+	`wx-config --libs` -lMesaGL -lMesaGLU
+
+penguin.o: penguin.cpp
+	$(CPP) `wx-config --cflags` -I../../src -c penguin.cpp
+
+lw.o: lw.c
+	$(CC) `wx-config --cflags` -I../../src -c lw.c
+
+trackball.o: trackball.c
+	$(CC) `wx-config --cflags` -I../../src -c trackball.c
+
+glcanvas.o: ../../src/glcanvas.cpp
+	$(CPP) `wx-config --cflags` `gtk-config --cflags` -I../../src -c ../../src/glcanvas.cpp
+
+clean: 
+	rm -f *.o penguin

@@ -44,9 +44,6 @@ wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 extern wxList wxPendingDelete;
 extern wxResourceCache *wxTheResourceCache;
 
-GdkVisual *wxVisualSetByExternal = (GdkVisual*) NULL;
-GdkColormap *wxColormapSetByExternal = (GdkColormap*) NULL;
-
 unsigned char g_palette[64*3] =
 {
   0x0,  0x0,  0x0,
@@ -174,45 +171,28 @@ wxApp::~wxApp(void)
 
 bool wxApp::InitVisual()
 {
-    if (wxVisualSetByExternal)
-    {
-        /* this happens in the wxModule code of the OpenGl canvas. 
-	   it chooses the best display for OpenGl and stores it 
-	   in wxDisplaySetByExternal. we then have to make it the
-	   default for the system */
-	   
-	gtk_widget_set_default_visual( wxVisualSetByExternal );
-    }
-    
-    if (wxColormapSetByExternal)
-    {
-        /* OpenGl also gives us a colormap */
-	
-	gtk_widget_set_default_colormap( wxColormapSetByExternal );
-    }
-    else
-    {
-        /* this initiates the standard palette as defined by GdkImlib
-	   in the GNOME libraries. it ensures that all GNOME applications
-	   use the same 64 colormap entries on 8-bit displays so you
-	   can use several rather graphics-heavy applications at the
-	   same time */
-    
-        GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
+    return TRUE;
 
-        for (int i = 0; i < 64; i++)
-        {
-            GdkColor col;
-            col.red    = g_palette[i*3 + 0] << 8;
-            col.green  = g_palette[i*3 + 1] << 8;
-            col.blue   = g_palette[i*3 + 2] << 8;
-            col.pixel  = 0;
+    /* this initiates the standard palette as defined by GdkImlib
+       in the GNOME libraries. it ensures that all GNOME applications
+       use the same 64 colormap entries on 8-bit displays so you
+       can use several rather graphics-heavy applications at the
+       same time */
+    
+    GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
 
-            gdk_color_alloc( cmap, &col );
-        }
-	
-        gtk_widget_set_default_colormap( cmap );
+    for (int i = 0; i < 64; i++)
+    {
+        GdkColor col;
+        col.red    = g_palette[i*3 + 0] << 8;
+        col.green  = g_palette[i*3 + 1] << 8;
+        col.blue   = g_palette[i*3 + 2] << 8;
+        col.pixel  = 0;
+
+        gdk_color_alloc( cmap, &col );
     }
+	
+    gtk_widget_set_default_colormap( cmap );
     
     return TRUE;
 }
@@ -467,15 +447,15 @@ int wxEntry( int argc, char *argv[] )
 
     gtk_init( &argc, &argv );
 
-    wxModule::RegisterModules();
-    if (!wxModule::InitializeModules()) return FALSE;
-    
     if (!wxTheApp->InitVisual()) return 0;
 
     wxApp::CommonInit();
 
     if (!wxTheApp->OnInitGui()) return 0;
 
+    wxModule::RegisterModules();
+    if (!wxModule::InitializeModules()) return FALSE;
+    
     // Here frames insert themselves automatically
     // into wxTopLevelWindows by getting created
     // in OnInit().

@@ -29,8 +29,6 @@
 
 #include "cube.h"
 
-IMPLEMENT_APP(MyApp)
-
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit(void)
 {
@@ -54,7 +52,7 @@ bool MyApp::OnInit(void)
 
   frame->m_canvas = new TestGLCanvas(frame, -1, wxPoint(0, 0), wxSize(200, 200));
 
-  InitGL();
+//  InitGL();
 
   // Show the frame
   frame->Show(TRUE);
@@ -80,6 +78,8 @@ void MyApp::InitGL(void)
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 }
+
+IMPLEMENT_APP(MyApp)
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
@@ -169,8 +169,11 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     int width, height;
     GetClientSize(& width, & height);
 
-    if ( GetContext() )
+    if (GetContext())
+    {
+        SetCurrent();
         glViewport(0, 0, width, height);
+    }
 }
 
 void TestGLCanvas::OnEraseBackground(wxEraseEvent& event)

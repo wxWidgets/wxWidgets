@@ -288,6 +288,7 @@ gtk_myfixed_realize (GtkWidget *widget)
   attributes.event_mask |= 
   GDK_EXPOSURE_MASK	|
   GDK_POINTER_MOTION_MASK	|
+  GDK_POINTER_MOTION_HINT_MASK  |
   GDK_BUTTON_MOTION_MASK	|
   GDK_BUTTON1_MOTION_MASK	|
   GDK_BUTTON2_MOTION_MASK	|

@@ -31,9 +31,6 @@ class wxLog;
 
 extern wxApp *wxTheApp;
 
-extern GdkVisual *wxVisualSetByExternal;
-extern GdkColormap *wxColormapSetByExternal;
-
 //-----------------------------------------------------------------------------
 // global functions
 //-----------------------------------------------------------------------------
@@ -66,8 +63,7 @@ class wxApp: public wxEvtHandler
 
     /* this may have to be overwritten when special, non-default visuals have
        to be set. it is also platform dependent as only X knows about displays
-       and visuals. by standard, this routine looks at wxVisualSetByExternal
-       which might have been set in the wxModule code of the OpenGL canvas */
+       and visuals. */
     virtual bool InitVisual();
 
     virtual bool OnInit();

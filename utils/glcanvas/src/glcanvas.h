@@ -19,9 +19,11 @@
 #include "wx/defs.h"
 #include "wx/scrolwin.h"
 
+extern "C" {
 #include "GL/gl.h"
 #include "GL/glx.h"
 #include "GL/glu.h"
+}
 
 //---------------------------------------------------------------------------
 // classes
@@ -75,9 +77,20 @@ class wxGLCanvas: public wxScrolledWindow
    DECLARE_CLASS(wxGLCanvas)
    
  public:
-   wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = 0,
-        const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette);
+   wxGLCanvas( wxWindow *parent, wxWindowID id = -1, 
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, 
+	long style = 0, const wxString& name = "GLCanvas", 
+	int *attribList = (int*) NULL, 
+	const wxPalette& palette = wxNullPalette );
+	
+   bool Create( wxWindow *parent, wxWindowID id = -1, 
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, 
+	long style = 0, const wxString& name = "GLCanvas", 
+	int *attribList = (int*) NULL,
+	const wxPalette& palette = wxNullPalette );
+	
    ~wxGLCanvas();
 
    void SetCurrent();
@@ -86,11 +99,19 @@ class wxGLCanvas: public wxScrolledWindow
 
    void OnSize(wxSizeEvent& event);
 
-   inline wxGLContext* GetContext() const { return m_glContext; }
+   inline wxGLContext* GetContext() const { return m_glContext; } 
 
-  protected:
+ // implementation
   
-    wxGLContext*   m_glContext;  // this is typedef-ed ptr, in fact
+    virtual void SetSize( int x, int y, int width, int height,
+      int sizeFlags = wxSIZE_AUTO );
+    virtual void SetSize( int width, int height );
+    
+    virtual GtkWidget *GetConnectWidget();
+    bool IsOwnGtkWindow( GdkWindow *window );
+  
+    wxGLContext      *m_glContext; 
+    GtkWidget        *m_glWidget;
 
   DECLARE_EVENT_TABLE()
 };

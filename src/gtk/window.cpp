@@ -634,6 +634,17 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
 static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxWindow *win )
 {
+    if (gdk_event->is_hint) 
+    {
+       int x = 0;
+       int y = 0;
+       GdkModifierType state;
+       gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+       gdk_event->x = x;
+       gdk_event->y = y;
+       gdk_event->state = state;
+    }
+    
     if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
 
     if (g_blockEventsOnDrag) return TRUE;
@@ -646,7 +657,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
       printf( win->GetClassInfo()->GetClassName() );
     printf( ".\n" );
-*/    
+*/
 
     wxMouseEvent event( wxEVT_MOTION );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
