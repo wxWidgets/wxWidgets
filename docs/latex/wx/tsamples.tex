@@ -129,6 +129,21 @@ classes written by Remstar Intl.  Obviously, this sample requires a
 database with ODBC support to be correctly installed on your system.
 
 
+\subsection{DebugRpt sample}\label{sampledebugrpt}
+
+This sample shows how to use \helpref{wxDebugReport}{wxdebugreport} class to
+generate a debug report in case of a program crash or otherwise. On start up,
+it proposes to either crash itself (by dereferencing a NULL pointer) or
+generate debug report without doing it. Next it initializes the debug report
+with standard information adding a custom file to it (just a timestamp) and
+allows to view the information gathered using 
+\helpref{wxDebugReportPreview}{wxdebugreportpreview}.
+
+For the report processing part of the sample to work you should make available
+a Web server accepting form uploads, otherwise 
+\helpref{wxDebugReportUpload}{wxdebugreportupload} will report an error.
+
+
 \subsection{Dialogs sample}\label{sampledialogs}
 
 This sample shows how to use the common dialogs available from wxWidgets. These
