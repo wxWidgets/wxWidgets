@@ -59,6 +59,9 @@ public:
         : wxTextCtrl( cb , 1 )
     {
         m_cb = cb;
+
+        // remove the default minsize, the combobox will have one instead
+        SetSizeHints(-1,-1);
     }
 
 protected:
@@ -139,6 +142,9 @@ public:
         : wxChoice( cb , 1 )
     {
         m_cb = cb;
+
+        // remove the default minsize, the combobox will have one instead
+        SetSizeHints(-1,-1);
     }
 
 protected:
@@ -156,7 +162,8 @@ protected:
     virtual wxSize DoGetBestSize() const
     {
         wxSize sz = wxChoice::DoGetBestSize() ;
-        sz.x = POPUPWIDTH ;
+        if (! m_cb->HasFlag(wxCB_READONLY) )
+            sz.x = POPUPWIDTH;
         return sz ;
     }  
 
