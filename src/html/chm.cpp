@@ -595,7 +595,9 @@ wxChmInputStream::CreateHHPStream()
         {
             // Read #SYSTEM-Code and length
             i->Read(&code, 2);
+            code = wxUINT16_SWAP_ON_BE( code ) ;
             i->Read(&len, 2);
+            len = wxUINT16_SWAP_ON_BE( len ) ;
             // data
             buf = malloc(len);
             i->Read(buf, len);
@@ -625,7 +627,19 @@ wxChmInputStream::CreateHHPStream()
                     out->Write( (const void *) tmp, strlen(tmp));
                     tmp = NULL;
                     break;
-                case 4: // STRUCT
+                case 4: // STRUCT SYSTEM INFO
+                    tmp = NULL ;
+                    if ( len >= 28 )
+                    {
+                        char *structptr = (char*) buf ;
+                        // LCID at position 0
+                        wxUint32 dummy = *((wxUint32 *)(structptr+0)) ;
+                        wxUint32 lcid = wxUINT32_SWAP_ON_BE( dummy ) ;
+                        wxString msg ;
+                        msg.Printf("Language=0x%X\r\n",lcid) ;
+                        out->Write(msg.c_str() , msg.Length() ) ;
+                    }
+                    break ;
                 default:
                     tmp=NULL;
             }
@@ -659,7 +673,7 @@ wxChmInputStream::CreateHHPStream()
             tmp = "Index File=*.hhk\r\n";
             out->Write((const void *) tmp, strlen(tmp));
         }
-
+        
         // Now copy the Data from the memory
         out->SeekO(0, wxFromEnd);
         m_size = out->TellO();
