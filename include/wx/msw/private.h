@@ -569,6 +569,9 @@ private:
 #define GetHfont()              ((HFONT)GetHFONT())
 #define GetHfontOf(font)        ((HFONT)(font).GetHFONT())
 
+#define GetHimagelist()         ((HIMAGELIST)GetHIMAGELIST())
+#define GetHimagelistOf(imgl)   ((HIMAGELIST)imgl->GetHIMAGELIST())
+
 #define GetHpalette()           ((HPALETTE)GetHPALETTE())
 #define GetHpaletteOf(pal)      ((HPALETTE)(pal).GetHPALETTE())
 
