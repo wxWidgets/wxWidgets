@@ -78,11 +78,12 @@ int name::Index(T lItem, bool bFromEnd) const                               \
 }                                                                           \
                                                                             \
 /* add item assuming the array is sorted with fnCompare function */         \
-void name::Add(T lItem, CMPFUNC fnCompare)                                  \
+size_t name::Add(T lItem, CMPFUNC fnCompare)                                \
 {                                                                           \
-  Insert(lItem, IndexForInsert(lItem, fnCompare));                          \
-}                                                                           \
-                                                                            \
+  size_t idx = IndexForInsert(lItem, fnCompare);                            \
+  Insert(lItem, idx);                                                       \
+  return idx;                                                               \
+}
 
 #if wxUSE_STL
 

@@ -114,7 +114,7 @@ protected:                                                          \
   size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
   void Add(T lItem, size_t nInsert = 1)                             \
     { insert(end(), nInsert, lItem); }                              \
-  void Add(T lItem, CMPFUNC fnCompare);                             \
+  size_t Add(T lItem, CMPFUNC fnCompare);                           \
   void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)          \
     { insert(begin() + uiIndex, nInsert, lItem); }                  \
   void Remove(T lItem);                                             \
@@ -170,7 +170,7 @@ protected:                                                          \
   int Index(T lItem, CMPFUNC fnCompare) const;                      \
   size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
   void Add(T lItem, size_t nInsert = 1);                            \
-  void Add(T lItem, CMPFUNC fnCompare);                             \
+  size_t Add(T lItem, CMPFUNC fnCompare);                           \
   void Insert(T lItem, size_t uiIndex, size_t nInsert = 1);         \
   void Remove(T lItem);                                             \
   void RemoveAt(size_t uiIndex, size_t nRemove = 1);                \
@@ -488,8 +488,8 @@ public:                                                               \
   void AddAt(T item, size_t index)                                    \
     { base::insert(begin() + index, item); }                          \
                                                                       \
-  void Add(T Item)                                                    \
-    { base::Add(Item, (CMPFUNC)m_fnCompare); }                        \
+  size_t Add(T Item)                                                  \
+    { return base::Add(Item, (CMPFUNC)m_fnCompare); }                 \
                                                                       \
   void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
     { base::erase(begin() + uiIndex, begin() + uiIndex + nRemove); }  \
