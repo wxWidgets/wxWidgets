@@ -306,7 +306,6 @@ public:
 // the virtual methods in Python derived classes.
 
 //      Which (any?) of these should be done also???
-//      AddChild
 //      Destroy
 //      DoCaptureMouse
 //      DoClientToScreen
@@ -323,7 +322,6 @@ public:
 //      GetClientAreaOrigin
 //      GetDefaultItem
 //      IsTopLevel
-//      RemoveChild
 //      SetBackgroundColour
 //      SetDefaultItem
 //      SetFocus
@@ -369,6 +367,9 @@ public:
     DEC_PYCALLBACK_BOOL_const(AcceptsFocusFromKeyboard);
     DEC_PYCALLBACK_SIZE_const(GetMaxSize);
 
+    DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
+    DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
+
     PYPRIVATE;
 };
 
@@ -394,6 +395,9 @@ IMP_PYCALLBACK_BOOL_(wxPyWindow, wxWindow, Validate);
 IMP_PYCALLBACK_BOOL_const(wxPyWindow, wxWindow, AcceptsFocus);
 IMP_PYCALLBACK_BOOL_const(wxPyWindow, wxWindow, AcceptsFocusFromKeyboard);
 IMP_PYCALLBACK_SIZE_const(wxPyWindow, wxWindow, GetMaxSize);
+
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, AddChild);
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, RemoveChild);
 
 %}
 
@@ -433,6 +437,9 @@ public:
     bool base_AcceptsFocus() const;
     bool base_AcceptsFocusFromKeyboard() const;
     wxSize base_GetMaxSize() const;
+
+    void base_AddChild(wxWindow* child);
+    void base_RemoveChild(wxWindow* child);
 }
 
 //---------------------------------------------------------------------------
@@ -475,6 +482,9 @@ public:
     DEC_PYCALLBACK_BOOL_const(AcceptsFocusFromKeyboard);
     DEC_PYCALLBACK_SIZE_const(GetMaxSize);
 
+    DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
+    DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
+
     PYPRIVATE;
 };
 
@@ -500,6 +510,9 @@ IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, Validate);
 IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, AcceptsFocus);
 IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, AcceptsFocusFromKeyboard);
 IMP_PYCALLBACK_SIZE_const(wxPyControl, wxControl, GetMaxSize);
+
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, AddChild);
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
 %}
 
@@ -540,6 +553,9 @@ public:
     bool base_AcceptsFocus() const;
     bool base_AcceptsFocusFromKeyboard() const;
     wxSize base_GetMaxSize() const;
+
+    void base_AddChild(wxWindow* child);
+    void base_RemoveChild(wxWindow* child);
 }
 
 //---------------------------------------------------------------------------
@@ -580,6 +596,9 @@ public:
     DEC_PYCALLBACK_BOOL_const(AcceptsFocusFromKeyboard);
     DEC_PYCALLBACK_SIZE_const(GetMaxSize);
 
+    DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
+    DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
+
     PYPRIVATE;
 };
 
@@ -605,6 +624,9 @@ IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, Validate);
 IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, AcceptsFocus);
 IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, AcceptsFocusFromKeyboard);
 IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, GetMaxSize);
+
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, AddChild);
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, RemoveChild);
 
 %}
 
@@ -644,6 +666,9 @@ public:
     bool base_AcceptsFocus() const;
     bool base_AcceptsFocusFromKeyboard() const;
     wxSize base_GetMaxSize() const;
+
+    void base_AddChild(wxWindow* child);
+    void base_RemoveChild(wxWindow* child);
 }
 
 

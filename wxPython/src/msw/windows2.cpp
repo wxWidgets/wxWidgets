@@ -136,6 +136,9 @@ public:
     DEC_PYCALLBACK_BOOL_const(AcceptsFocusFromKeyboard);
     DEC_PYCALLBACK_SIZE_const(GetMaxSize);
 
+    DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
+    DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
+
     PYPRIVATE;
 };
 
@@ -161,6 +164,9 @@ IMP_PYCALLBACK_BOOL_(wxPyWindow, wxWindow, Validate);
 IMP_PYCALLBACK_BOOL_const(wxPyWindow, wxWindow, AcceptsFocus);
 IMP_PYCALLBACK_BOOL_const(wxPyWindow, wxWindow, AcceptsFocusFromKeyboard);
 IMP_PYCALLBACK_SIZE_const(wxPyWindow, wxWindow, GetMaxSize);
+
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, AddChild);
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, RemoveChild);
 
  // C++ version of Python aware wxControl
 class wxPyControl : public wxControl
@@ -198,6 +204,9 @@ public:
     DEC_PYCALLBACK_BOOL_const(AcceptsFocusFromKeyboard);
     DEC_PYCALLBACK_SIZE_const(GetMaxSize);
 
+    DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
+    DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
+
     PYPRIVATE;
 };
 
@@ -223,6 +232,9 @@ IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, Validate);
 IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, AcceptsFocus);
 IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, AcceptsFocusFromKeyboard);
 IMP_PYCALLBACK_SIZE_const(wxPyControl, wxControl, GetMaxSize);
+
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, AddChild);
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
  // C++ version of Python aware wxPanel
 class wxPyPanel : public wxPanel
@@ -259,6 +271,9 @@ public:
     DEC_PYCALLBACK_BOOL_const(AcceptsFocusFromKeyboard);
     DEC_PYCALLBACK_SIZE_const(GetMaxSize);
 
+    DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
+    DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
+
     PYPRIVATE;
 };
 
@@ -284,6 +299,9 @@ IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, Validate);
 IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, AcceptsFocus);
 IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, AcceptsFocusFromKeyboard);
 IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, GetMaxSize);
+
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, AddChild);
+IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, RemoveChild);
 
 #ifdef __cplusplus
 extern "C" {
@@ -3326,6 +3344,80 @@ static PyObject *_wrap_wxPyWindow_base_GetMaxSize(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+#define wxPyWindow_base_AddChild(_swigobj,_swigarg0)  (_swigobj->base_AddChild(_swigarg0))
+static PyObject *_wrap_wxPyWindow_base_AddChild(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyWindow * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","child", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyWindow_base_AddChild",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyWindow_base_AddChild. Expected _wxPyWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyWindow_base_AddChild. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyWindow_base_AddChild(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyWindow_base_RemoveChild(_swigobj,_swigarg0)  (_swigobj->base_RemoveChild(_swigarg0))
+static PyObject *_wrap_wxPyWindow_base_RemoveChild(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyWindow * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","child", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyWindow_base_RemoveChild",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyWindow_base_RemoveChild. Expected _wxPyWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyWindow_base_RemoveChild. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyWindow_base_RemoveChild(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxPyControlTowxControl(void *ptr) {
     wxPyControl *src;
     wxControl *dest;
@@ -3999,6 +4091,80 @@ static PyObject *_wrap_wxPyControl_base_GetMaxSize(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxPyControl_base_AddChild(_swigobj,_swigarg0)  (_swigobj->base_AddChild(_swigarg0))
+static PyObject *_wrap_wxPyControl_base_AddChild(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyControl * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","child", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyControl_base_AddChild",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyControl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyControl_base_AddChild. Expected _wxPyControl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyControl_base_AddChild. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyControl_base_AddChild(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyControl_base_RemoveChild(_swigobj,_swigarg0)  (_swigobj->base_RemoveChild(_swigarg0))
+static PyObject *_wrap_wxPyControl_base_RemoveChild(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyControl * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","child", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyControl_base_RemoveChild",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyControl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyControl_base_RemoveChild. Expected _wxPyControl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyControl_base_RemoveChild. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyControl_base_RemoveChild(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxPyPanelTowxPanel(void *ptr) {
     wxPyPanel *src;
     wxPanel *dest;
@@ -4663,7 +4829,83 @@ static PyObject *_wrap_wxPyPanel_base_GetMaxSize(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxPyPanel_base_AddChild(_swigobj,_swigarg0)  (_swigobj->base_AddChild(_swigarg0))
+static PyObject *_wrap_wxPyPanel_base_AddChild(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","child", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyPanel_base_AddChild",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_AddChild. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPanel_base_AddChild. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_AddChild(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPanel_base_RemoveChild(_swigobj,_swigarg0)  (_swigobj->base_RemoveChild(_swigarg0))
+static PyObject *_wrap_wxPyPanel_base_RemoveChild(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","child", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyPanel_base_RemoveChild",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_RemoveChild. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPanel_base_RemoveChild. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_RemoveChild(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef windows2cMethods[] = {
+	 { "wxPyPanel_base_RemoveChild", (PyCFunction) _wrap_wxPyPanel_base_RemoveChild, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_AddChild", (PyCFunction) _wrap_wxPyPanel_base_AddChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyPanel_base_GetMaxSize", (PyCFunction) _wrap_wxPyPanel_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyPanel_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_wxPyPanel_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyPanel_base_AcceptsFocus", (PyCFunction) _wrap_wxPyPanel_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS },
@@ -4682,6 +4924,8 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxPyPanel_base_DoMoveWindow", (PyCFunction) _wrap_wxPyPanel_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyPanel__setCallbackInfo", (PyCFunction) _wrap_wxPyPanel__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyPanel", (PyCFunction) _wrap_new_wxPyPanel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyControl_base_RemoveChild", (PyCFunction) _wrap_wxPyControl_base_RemoveChild, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyControl_base_AddChild", (PyCFunction) _wrap_wxPyControl_base_AddChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControl_base_GetMaxSize", (PyCFunction) _wrap_wxPyControl_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControl_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_wxPyControl_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControl_base_AcceptsFocus", (PyCFunction) _wrap_wxPyControl_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS },
@@ -4700,6 +4944,8 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxPyControl_base_DoMoveWindow", (PyCFunction) _wrap_wxPyControl_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControl__setCallbackInfo", (PyCFunction) _wrap_wxPyControl__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyControl", (PyCFunction) _wrap_new_wxPyControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyWindow_base_RemoveChild", (PyCFunction) _wrap_wxPyWindow_base_RemoveChild, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyWindow_base_AddChild", (PyCFunction) _wrap_wxPyWindow_base_AddChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyWindow_base_GetMaxSize", (PyCFunction) _wrap_wxPyWindow_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyWindow_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_wxPyWindow_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyWindow_base_AcceptsFocus", (PyCFunction) _wrap_wxPyWindow_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS },

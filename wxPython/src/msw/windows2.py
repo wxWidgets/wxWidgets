@@ -342,6 +342,12 @@ class wxPyWindowPtr(wxWindowPtr):
         val = apply(windows2c.wxPyWindow_base_GetMaxSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
+    def base_AddChild(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_AddChild,(self,) + _args, _kwargs)
+        return val
+    def base_RemoveChild(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_RemoveChild,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxPyWindow instance at %s>" % (self.this,)
 class wxPyWindow(wxPyWindowPtr):
@@ -412,6 +418,12 @@ class wxPyControlPtr(wxControlPtr):
         val = apply(windows2c.wxPyControl_base_GetMaxSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
+    def base_AddChild(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_AddChild,(self,) + _args, _kwargs)
+        return val
+    def base_RemoveChild(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_RemoveChild,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxPyControl instance at %s>" % (self.this,)
 class wxPyControl(wxPyControlPtr):
@@ -481,6 +493,12 @@ class wxPyPanelPtr(wxPanelPtr):
     def base_GetMaxSize(self, *_args, **_kwargs):
         val = apply(windows2c.wxPyPanel_base_GetMaxSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def base_AddChild(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyPanel_base_AddChild,(self,) + _args, _kwargs)
+        return val
+    def base_RemoveChild(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyPanel_base_RemoveChild,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxPyPanel instance at %s>" % (self.this,)

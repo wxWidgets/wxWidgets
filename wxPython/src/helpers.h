@@ -1315,6 +1315,30 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_VOID_WXWINBASE(CBNAME)                      \
+    void CBNAME(wxWindowBase* a);                                  \
+    void base_##CBNAME(wxWindowBase* a);
+
+
+#define IMP_PYCALLBACK_VOID_WXWINBASE(CLASS, PCLASS, CBNAME)                    \
+    void CLASS::CBNAME(wxWindowBase* a) {                                       \
+        bool found;                                                             \
+        wxPyBeginBlockThreads();                                                \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* obj = wxPyMake_wxObject(a);                               \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));          \
+            Py_DECREF(obj);                                                     \
+        }                                                                       \
+        wxPyEndBlockThreads();                                                  \
+        if (! found)                                                            \
+            PCLASS::CBNAME(a);                                                  \
+    }                                                                           \
+    void CLASS::base_##CBNAME(wxWindowBase* a) {                                \
+        PCLASS::CBNAME(a);                                                      \
+    }
+
+//---------------------------------------------------------------------------
+
 #define DEC_PYCALLBACK_BOOL_(CBNAME)                      \
     bool CBNAME();                                        \
     bool base_##CBNAME();
