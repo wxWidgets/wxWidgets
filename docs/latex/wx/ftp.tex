@@ -1,4 +1,89 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        ftp.tex
+%% Purpose:     wxFTP documentation
+%% Author:      Guilhem Lavaux, Vadim Zeitlin
+%% Modified by:
+%% Created:     ~1997
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWindows team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxFTP}}\label{wxftp}
+
+wxFTP can be used to establish a connection to an FTP server and perform all the
+usual operations. Please consult the RFC 959 for more details about the FTP
+protocol.
+
+To use a commands which doesn't involve file transfer (i.e. directory oriented
+commands) you just need to call a corresponding member function or use the
+generic \helpref{SendCommand}{wxftpsendcommand} method. However to actually
+transfer files you just get or give a stream to or from this class and the
+actual data are read or written using the usual stream methods.
+
+Example of using wxFTP for file downloading:
+
+\begin{verbatim}
+    wxFTP ftp;
+
+    // if you don't use these lines anonymous login will be used
+    ftp.SetUser("user");
+    ftp.SetPassword("password");
+
+    if ( !ftp.Connect("ftp.wxwindows.org") )
+    {
+        wxLogError("Couldn't connect");
+        return;
+    }
+
+    ftp.ChDir("/pub");
+    wxInputStream *in = ftp.GetInputStream("wxWindows-4.2.0.tar.gz");
+    if ( !in )
+    {
+        wxLogError("Coudln't get file");
+    }
+    else
+    {
+        size_t size = in->StreamSize();
+        char *data = new char[size];
+        if ( !in->Read(data, size) )
+        {
+            wxLogError("Read error");
+        }
+        else
+        {
+            // file data is in the buffer
+            ...
+        }
+
+        delete [] data;
+        delete in;
+    }
+\end{verbatim}
+
+To upload a file you would do (assuming the connection to the server was opened
+successfully):
+
+\begin{verbatim}
+        wxOutputStream *out = ftp.GetOutputStream("filename");
+        if ( out )
+        {
+            out->Write(...); // your data
+            delete out;
+        }
+\end{verbatim}
+
+\wxheading{Constants}
+
+wxFTP defines constants corresponding to the two supported transfer modes:
+
+\begin{verbatim}
+enum TransferMode
+{
+    ASCII,
+    BINARY
+};
+\end{verbatim}
 
 \wxheading{Derived from}
 
@@ -18,9 +103,21 @@
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxFTP::SendCommand}
+\membersection{wxFTP::wxFTP}
 
-\func{bool}{SendCommand}{\param{const wxString\&}{ command}, \param{char }{ret}}
+\func{}{wxFTP}{\void}
+
+Default constructor.
+
+\membersection{wxFTP::\destruct{wxFTP}}
+
+\func{}{\destruct{wxFTP}}{\void}
+
+Destructor will close the connection if connected.
+
+\membersection{wxFTP::CheckCommand}
+
+\func{bool}{CheckCommand}{\param{const wxString\&}{ command}, \param{char }{ret}}
 
 Send the specified {\it command} to the FTP server. {\it ret} specifies
 the expected result.
@@ -29,13 +126,19 @@ the expected result.
 
 TRUE if the command has been sent successfully, else FALSE.
 
-% ----------------------------------------------------------------------------
+\membersection{wxFTP::SendCommand}\label{wxftpsendcommand}
+
+\func{char}{SendCommand}{\param{const wxString\&}{ command}}
+
+Send the specified {\it command} to the FTP server and return the first
+character of the return code.
 
 \membersection{wxFTP::GetLastResult}
 
 \func{const wxString\&}{GetLastResult}{\void}
 
-Returns the last command result.
+Returns the last command result, i.e. the full server reply for the last
+command.
 
 % ----------------------------------------------------------------------------
 
@@ -84,6 +187,29 @@ Delete the file specified by {\it path}. Returns TRUE if successful.
 
 % ----------------------------------------------------------------------------
 
+\membersection{wxFTP::SetAscii}
+
+\func{bool}{SetAscii}{\void}
+
+Sets the transfer mode to ASCII. It will be used for the next transfer.
+
+\membersection{wxFTP::SetBinary}
+
+\func{bool}{SetBinary}{\void}
+
+Sets the transfer mode to binary (IMAGE). It will be used for the next transfer.
+
+\membersection{wxFTP::SetTransferMode}
+
+\func{bool}{SetTransferMode}{\param{TransferMode }{mode}}
+
+Sets the transfer mode to the specified one. It will be used for the next
+transfer.
+
+If this function is never called, binary transfer mode is used by default.
+
+% ----------------------------------------------------------------------------
+
 \membersection{wxFTP::SetUser}
 
 \func{void}{SetUser}{\param{const wxString\&}{ user}}
@@ -119,9 +245,10 @@ For example, you can use: "ftp://a\_user:a\_password@a.host:service/a\_directory
 to specify a user and a password.
 
 % ----------------------------------------------------------------------------
-\membersection{wxFTP::GetList}
 
-\func{bool}{GetList}{\param{wxArrayString\& }{files}, \param{const wxString\&}{ wildcard = ""}}
+\membersection{wxFTP::GetDirList}\label{wxftpgetdirlist}
+
+\func{bool}{GetDirList}{\param{wxArrayString\& }{files}, \param{const wxString\&}{ wildcard = ""}}
 
 The GetList function is quite low-level. It returns the list of the files in
 the current directory. The list can be filtered using the {\it wildcard} string.
@@ -145,6 +272,22 @@ But on Windows system, it will look like this:
 winamp~1 exe    520196 02-25-1999  19:28  winamp204.exe
         1 file(s)           520 196 bytes
 \end{verbatim}
+
+Return value: TRUE if the file list was successfully retrieved, FALSE
+otherwise.
+
+\wxheading{See also}
+
+\helpref{GetFilesList}{wxftpgetfileslist}
+
+\membersection{wxFTP::GetFilesList}\label{wxftpgetfileslist}
+
+\func{bool}{GetFilesList}{\param{wxArrayString\& }{files}, \param{const wxString\&}{ wildcard = ""}}
+
+This function returns the computer-parsable list of the files in the current
+directory (optionally only of the files matching the {\it wildcard}, all files
+by default). This list always has the same format and contains one full
+(including the directory path) file name per line.
 
 Return value: TRUE if the file list was successfully retrieved, FALSE
 otherwise.
