@@ -189,6 +189,7 @@ All:
 - wxHTTP input stream didn't detect EOF correctly
 - wxString::find_last_of() ignored "start" parameter (Robert Vazan)
 - a bug in wxArrayString::Shrink() fixed (Gunnar Roth)
+- added wxIPV4address::IPAddress()
 
 All (GUI):
 
