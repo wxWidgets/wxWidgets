@@ -214,7 +214,7 @@ protected:
     // we implement OnGetLineHeight() in terms of OnMeasureItem() because this
     // allows us to add borders to the items easily
     //
-    // this function is not upposed to be overridden by the derived classes
+    // this function is not supposed to be overridden by the derived classes
     virtual wxCoord OnGetLineHeight(size_t line) const;
 
 
@@ -278,6 +278,7 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxVListBox)
+    DECLARE_ABSTRACT_CLASS(wxVListBox)
 };
 
 #endif // _WX_VLBOX_H_

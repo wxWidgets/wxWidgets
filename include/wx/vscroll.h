@@ -196,6 +196,7 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxVScrolledWindow)
+    DECLARE_ABSTRACT_CLASS(wxVScrolledWindow)
 };
 
 #endif // _WX_VSCROLL_H_

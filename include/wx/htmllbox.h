@@ -25,6 +25,7 @@ class WXDLLIMPEXP_HTML wxHtmlListBoxStyle;
 
 class WXDLLIMPEXP_HTML wxHtmlListBox : public wxVListBox
 {
+    DECLARE_ABSTRACT_CLASS(wxHtmlListBox)
 public:
     // constructors and such
     // ---------------------
