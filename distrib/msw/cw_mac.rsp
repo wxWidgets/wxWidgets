@@ -96,6 +96,8 @@ samples/listctrl/*M?.xml
 samples/listctrl/*.mcp
 samples/mdi/*M?.xml
 samples/mdi/*.mcp
+samples/mediaplayer/*M?.xml
+samples/mediaplayer/*.mcp
 samples/memcheck/*M?.xml
 samples/memcheck/*.mcp
 samples/menu/*M?.xml

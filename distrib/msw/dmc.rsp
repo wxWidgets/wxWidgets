@@ -85,6 +85,7 @@ samples/listbox/makefile.dmc
 samples/listctrl/makefile.dmc
 samples/makefile.dmc
 samples/mdi/makefile.dmc
+samples/mediaplayer/makefile.dmc
 samples/memcheck/makefile.dmc
 samples/menu/makefile.dmc
 samples/mfc/makefile.dmc

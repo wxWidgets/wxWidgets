@@ -25,6 +25,7 @@ src/wxWindows.xcode/project.pbxproj
 src/mac/wxmac.icns
 
 src/mac/carbon/*.cpp
+src/mac/carbon/*.mm
 src/mac/carbon/*.c
 src/mac/carbon/*.r
 src/mac/carbon/*.h
@@ -47,6 +48,8 @@ src/mac/classic/morefile/*.h
 src/mac/classic/Info.plist.in
 src/mac/classic/wxmac.icns
 
+src/mac/corefoundation/*.cpp
+
 include/wx_pb.h
 include/wx/mac/*.h
 include/wx/mac/carbon/*.h
@@ -55,5 +58,8 @@ include/wx/mac/classic/*.h
 include/wx/mac/classic/private/*.h
 include/wx/mac/private/*.h
 
+include/wx/mac/corefoundation/*.h
+
 samples/minimal/minimal.pbproj/project.pbxproj
+samples/minimal/minimal.xcode/project.pbxproj
 

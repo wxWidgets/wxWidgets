@@ -151,6 +151,9 @@ samples/listctrl/listctrl.dsw
 samples/mdi/mdi.dsp
 samples/mdi/mdi.dsw
 
+samples/mediaplayer/mediaplayer.dsp
+samples/mediaplayer/mediaplayer.dsw
+
 samples/memcheck/memcheck.dsp
 samples/memcheck/memcheck.dsw
 

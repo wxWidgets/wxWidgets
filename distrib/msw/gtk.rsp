@@ -9,12 +9,14 @@ docs/gtk/makewxgtk
 
 include/wx/gtk/*.h
 include/wx/gtk/*.xpm
+include/wx/gtk/gnome/*.h
 
 src/gtk/files.lst
 src/gtk/*.cpp
 src/gtk/*.c
 src/gtk/*.xbm
 src/gtk/*.h
+src/gtk/gnome/*.cpp
 
 misc/afm/*.afm
 misc/gs_afm/*.afm

@@ -49,6 +49,7 @@ samples/layout/*W7.xml
 samples/listbox/*W7.xml
 samples/listctrl/*W7.xml
 samples/mdi/*W7.xml
+samples/mediaplayer/*W7.xml
 samples/memcheck/*W7.xml
 samples/menu/*W7.xml
 samples/mfc/*W7.xml

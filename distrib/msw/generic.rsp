@@ -842,6 +842,16 @@ samples/mdi/bitmaps/*.xpm
 samples/mdi/bitmaps/*.xbm
 samples/mdi/*.bkl
 
+samples/mediaplayer/*.cpp
+samples/mediaplayer/*.h
+samples/mediaplayer/*.def
+samples/mediaplayer/makefile*
+samples/mediaplayer/*.xbm
+samples/mediaplayer/*.xpm
+samples/mediaplayer/*.ico
+samples/mediaplayer/*.rc
+samples/mediaplayer/*.bkl
+
 samples/menu/*.cpp
 samples/menu/*.h
 samples/menu/makefile*
@@ -1422,6 +1432,7 @@ tests/test.dsw
 tests/*.cpp
 tests/*.fc
 
+tests/archive/*.cpp
 tests/arrays/*.cpp
 tests/datetime/*.cpp
 tests/filename/*.cpp
@@ -1441,4 +1452,6 @@ tests/streams/*.cpp
 tests/streams/*.h
 
 tests/strings/*.cpp
+
+tests/uris/*.cpp
 

@@ -47,6 +47,7 @@ samples/layout/Makefile.in
 samples/listbox/Makefile.in
 samples/listctrl/Makefile.in
 samples/mdi/Makefile.in
+samples/mediaplayer/Makefile.in
 samples/minifram/Makefile.in
 samples/minimal/Makefile.in
 samples/mobile/Makefile.in
