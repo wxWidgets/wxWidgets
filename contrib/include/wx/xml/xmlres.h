@@ -249,9 +249,12 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         // Get colour in HTML syntax (#RRGGBB)
         wxColour GetColour(const wxString& param);
         
-        // Get size/position:
+        // Get size/position (may be in dlg units):
         wxSize GetSize(const wxString& param = _T("size"));
         wxPoint GetPosition(const wxString& param = _T("pos"));
+
+        // Get dimension (may be in dlg units):
+        wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0);
         
         // Get bitmap:
         wxBitmap GetBitmap(const wxString& param = _T("bitmap"), wxSize size = wxDefaultSize);

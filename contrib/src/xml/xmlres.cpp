@@ -552,7 +552,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
 
 wxIcon wxXmlResourceHandler::GetIcon(const wxString& param, wxSize size)
 {
-#ifdef __WXMSW__
+#if wxCHECK_VERSION(2,3,0) || defined(__WXMSW__)
     wxIcon icon;
     icon.CopyFromBitmap(GetBitmap(param, size));
 #else
@@ -647,6 +647,39 @@ wxPoint wxXmlResourceHandler::GetPosition(const wxString& param)
 
 
 
+wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaultv)
+{
+    wxString s = GetParamValue(param);
+    if (s.IsEmpty()) return defaultv;
+    bool is_dlg;
+    long sx;
+    
+    is_dlg = s[s.Length()-1] == _T('d');
+    if (is_dlg) s.RemoveLast();
+    
+    if (!s.ToLong(&sx))
+    {
+        wxLogError(_("Cannot parse dimension from '%s'."), s.mb_str());
+        return defaultv;
+    }
+    
+    if (is_dlg)
+    {
+        if (m_InstanceAsWindow)
+            return wxDLG_UNIT(m_InstanceAsWindow, wxSize(sx, 0)).x;
+        else if (m_ParentAsWindow)
+            return wxDLG_UNIT(m_ParentAsWindow, wxSize(sx, 0)).x;
+        else
+        {
+            wxLogError(_("Cannot convert dialog units: dialog unknown."));
+            return defaultv;
+        }
+    }
+    else return sx;
+}
+
+
+
 void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
 {
     //FIXME : add font, cursor
@@ -730,9 +763,6 @@ static int XMLID_LastID = wxID_HIGHEST;
     {
         if (strcmp(rec->key, str_id) == 0)
         {
-#ifdef DEBUG_XMLID_HASH
-            printf("XMLID: matched '%s' (%ith item)\n", rec->key, matchcnt);
-#endif
             return rec->id;
         }
         matchcnt++;
@@ -745,10 +775,6 @@ static int XMLID_LastID = wxID_HIGHEST;
     (*rec_var)->id = ++XMLID_LastID;
     (*rec_var)->key = strdup(str_id);
     (*rec_var)->next = NULL;
-#ifdef DEBUG_XMLID_HASH
-    printf("XMLID: new key for '%s': %i at %i (%ith item)\n", 
-           (*rec_var)->key, (*rec_var)->id, index, matchcnt);
-#endif
     
     return (*rec_var)->id;
 }
@@ -758,9 +784,6 @@ static void CleanXMLID_Record(XMLID_record *rec)
 {
     if (rec)
     {
-#ifdef DEBUG_XMLID_HASH
-        printf("XMLID: clearing '%s'\n", rec->key);
-#endif
         CleanXMLID_Record(rec->next);
         free (rec->key);
         delete rec;

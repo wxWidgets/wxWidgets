@@ -44,7 +44,7 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
 
     if( HasParam( _T("borders") ))
     {
-        control->SetBorders( GetLong( _T("borders" )));
+        control->SetBorders( GetDimension( _T("borders" )));
     }
 
     if( HasParam( _T("url") ))

@@ -211,6 +211,66 @@ wxPanel *CoordPropertyHandler::CreateEditPanel(wxWindow *parent, PropsListInfo *
 
 
 
+class DimensionPropPanel : public PropertyPanel
+{
+    public:
+        DimensionPropPanel(wxWindow *parent, PropertyHandler *hnd, PropsListInfo *pli) : PropertyPanel(parent, hnd, pli)
+        {    
+            wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+            m_ed1 = NULL; m_chb = NULL;
+    
+            sizer->Add(new wxStaticText(this, -1, _("Value:")), 0, wxLEFT, 5);
+            sizer->Add(m_ed1 = new wxTextCtrl(this, ID_XEDIT, "",
+                                 wxDefaultPosition, wxDefaultSize, 0,
+                                 wxTextValidator(wxFILTER_NUMERIC)),
+                    0, wxEXPAND, 5);
+            m_ed1->SetFocus();
+    
+            sizer->Add(m_chb = new wxCheckBox(this, ID_USEDLG, _("Use dialog units")), 0, wxLEFT|wxTOP, 5);
+    
+            SetAutoLayout(TRUE);
+            SetSizer(sizer);
+            Layout();
+            
+            wxString val = XmlReadValue(pli->m_Node, pli->m_PropInfo->Name);
+            m_chb->SetValue(val.Len()>0 && val[val.Len()-1] == 'd');
+            m_ed1->SetValue(val.BeforeFirst('d'));
+        }
+        
+        void OnEdit(wxCommandEvent &event)
+        {
+            wxString val;
+            
+            if (m_ed1 == NULL || m_chb == NULL) return;
+            
+            val = m_ed1->GetValue();
+            if (val.IsEmpty()) return;
+            if (m_chb->GetValue()) val << 'd';
+            Update(val);
+        }
+        
+        wxTextCtrl *m_ed1;
+        wxCheckBox *m_chb;
+        
+        DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(DimensionPropPanel, PropertyPanel)
+    EVT_TEXT(ID_XEDIT, DimensionPropPanel::OnEdit)
+    EVT_TEXT(ID_YEDIT, DimensionPropPanel::OnEdit)
+    EVT_CHECKBOX(ID_USEDLG, DimensionPropPanel::OnEdit)
+END_EVENT_TABLE()
+
+wxPanel *DimensionPropertyHandler::CreateEditPanel(wxWindow *parent, PropsListInfo *pli)
+{
+    return new DimensionPropPanel(parent, this, pli);
+}
+
+
+
+
+
+
 
 class BoolPropPanel : public PropertyPanel
 {

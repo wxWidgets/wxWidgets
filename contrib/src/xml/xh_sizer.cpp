@@ -95,14 +95,14 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
                 if (sizer)
                 {
                     m_ParentSizer->Add(sizer, GetLong(_T("option")), 
-                                       GetStyle(_T("flag")), GetLong(_T("border")));
+                                       GetStyle(_T("flag")), GetDimension(_T("border")));
                     if (!(minsize == wxDefaultSize))
                         m_ParentSizer->SetItemMinSize(sizer, minsize.x, minsize.y);
                 }
                 else if (wnd)
                 {
                     m_ParentSizer->Add(wnd, GetLong(_T("option")), 
-                                       GetStyle(_T("flag")), GetLong(_T("border")));
+                                       GetStyle(_T("flag")), GetDimension(_T("border")));
                     if (!(minsize == wxDefaultSize))
                         m_ParentSizer->SetItemMinSize(wnd, minsize.x, minsize.y);
                 }
@@ -122,7 +122,7 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
         wxCHECK_MSG(m_ParentSizer, NULL, _T("Incorrect syntax of XML resource: spacer not within sizer!"));
         wxSize sz = GetSize();
         m_ParentSizer->Add(sz.x, sz.y,
-            GetLong(_T("option")), GetStyle(_T("flag")), GetLong(_T("border")));
+            GetLong(_T("option")), GetStyle(_T("flag")), GetDimension(_T("border")));
         return NULL;
     }
     
@@ -150,11 +150,11 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
         
         else if (m_Node->GetName() == _T("gridsizer"))
             sizer = new wxGridSizer(GetLong(_T("rows")), GetLong(_T("cols")),
-                                    GetLong(_T("vgap")), GetLong(_T("hgap")));
+                                    GetDimension(_T("vgap")), GetDimension(_T("hgap")));
                                     
         else if (m_Node->GetName() == _T("flexgridsizer"))
             sizer = new wxFlexGridSizer(GetLong(_T("rows")), GetLong(_T("cols")),
-                                    GetLong(_T("vgap")), GetLong(_T("hgap")));
+                                    GetDimension(_T("vgap")), GetDimension(_T("hgap")));
 
         wxSize minsize = GetSize(_T("minsize"));
         if (!(minsize == wxDefaultSize))

@@ -102,11 +102,14 @@ void NodeInfo::Read(const wxString& filename)
             tkn.GetNextToken();
             wxString typ = tkn.GetNextToken();
             if (tkn.HasMoreTokens()) pi.MoreInfo = tkn.GetNextToken();
+            /* ADD NEW PROPERTY TYPES HERE 
+               (search for other occurences of this comment in _all_ files) */
             if (typ == "color") pi.Type = PROP_COLOR;
             else if (typ == "flags") pi.Type = PROP_FLAGS;
             else if (typ == "bool") pi.Type = PROP_BOOL;
             else if (typ == "integer") pi.Type = PROP_INTEGER;
             else if (typ == "coord") pi.Type = PROP_COORD;
+            else if (typ == "dimension") pi.Type = PROP_DIMENSION;
             else if (typ == "not_implemented") pi.Type = PROP_NOT_IMPLEMENTED;
             else /*if (typ == "text")*/ pi.Type = PROP_TEXT;
             
@@ -195,12 +198,15 @@ NodeHandler::NodeHandler(EditorFrame *frame, NodeInfo *ni) :
 
 void NodeHandler::CreatePropHandlers()
 {
+    /* ADD NEW PROPERTY TYPES HERE 
+       (search for other occurences of this comment in _all_ files) */
     s_PropHandlers[PROP_TEXT] = new TextPropertyHandler;
     s_PropHandlers[PROP_FLAGS] = new FlagsPropertyHandler;
     s_PropHandlers[PROP_COLOR] = new TextPropertyHandler;
     s_PropHandlers[PROP_BOOL] = new BoolPropertyHandler;
     s_PropHandlers[PROP_INTEGER] = new TextPropertyHandler;
     s_PropHandlers[PROP_COORD] = new CoordPropertyHandler;
+    s_PropHandlers[PROP_DIMENSION] = new DimensionPropertyHandler;
     s_PropHandlers[PROP_NOT_IMPLEMENTED] = new NotImplPropertyHandler;
 }
 
