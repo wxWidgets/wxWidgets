@@ -196,6 +196,11 @@ int wxDialog::ShowModal()
 
     wxASSERT_MSG( !m_windowDisabler, _T("disabling windows twice?") );
 
+#ifdef __WXGTK__
+    wxBusyCursorSuspender suspender;
+    // FIXME - make sure busy cursor disappears under MSW too
+#endif
+
     m_windowDisabler = new wxWindowDisabler(this);
     if ( !m_eventLoop )
         m_eventLoop = new wxEventLoop;

@@ -3153,7 +3153,7 @@ int wxWin32Renderer::HitTestFrame(const wxRect& rect, const wxPoint& pt, int fla
             btnRect.x -= FRAME_BUTTON_WIDTH;
         }
 
-        if ( pt.y < client.y + FRAME_TITLEBAR_HEIGHT )
+        if ( pt.y >= client.y && pt.y < client.y + FRAME_TITLEBAR_HEIGHT )
             return wxHT_TOPLEVEL_TITLEBAR;
     }
 
@@ -3161,17 +3161,15 @@ int wxWin32Renderer::HitTestFrame(const wxRect& rect, const wxPoint& pt, int fla
     {
         // we are certainly at one of borders, lets decide which one:
         
-        wxCoord midX = client.x + client.width/2,
-                midY = client.y + client.height/2;
         int border = 0;
         // dirty trick, relies on the way wxHT_TOPLEVEL_XXX are defined!
-        if ( pt.x < midX )
+        if ( pt.x < client.x )
             border |= wxHT_TOPLEVEL_BORDER_W;
-        else
+        else if ( pt.x >= client.width + client.x )
             border |= wxHT_TOPLEVEL_BORDER_E;
-        if ( pt.y < midY )
+        if ( pt.y < client.y )
             border |= wxHT_TOPLEVEL_BORDER_N;
-        else
+        else if ( pt.y >= client.height + client.y )
             border |= wxHT_TOPLEVEL_BORDER_S;
         return border;
     }

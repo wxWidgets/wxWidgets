@@ -334,11 +334,8 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
     {
         if ( m_isActive != isActive )
         {
-            Refresh();
             m_isActive = isActive;
-            wxNcPaintEvent event(GetId());
-            event.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(event);
+            RefreshTitleBar();
         }
         return TRUE;
     }
@@ -364,7 +361,28 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
         ClickTitleBarButton(numArg);
         return TRUE;
     }
-
+    
+    else if ( action == wxACTION_TOPLEVEL_MOVE )
+    {
+        InteractiveMove(wxINTERACTIVE_MOVE);
+        return TRUE;
+    }
+    
+    else if ( action == wxACTION_TOPLEVEL_RESIZE )
+    {
+        int flags = wxINTERACTIVE_RESIZE;
+        if ( numArg & wxHT_TOPLEVEL_BORDER_N )
+            flags |= wxINTERACTIVE_RESIZE_N;
+        if ( numArg & wxHT_TOPLEVEL_BORDER_S )
+            flags |= wxINTERACTIVE_RESIZE_S;
+        if ( numArg & wxHT_TOPLEVEL_BORDER_W )
+            flags |= wxINTERACTIVE_RESIZE_W;
+        if ( numArg & wxHT_TOPLEVEL_BORDER_E )
+            flags |= wxINTERACTIVE_RESIZE_E;
+        InteractiveMove(flags);
+        return TRUE;
+    }
+    
     else
         return FALSE;
 }
@@ -380,6 +398,7 @@ wxStdFrameInputHandler::wxStdFrameInputHandler(wxInputHandler *inphand)
     m_winCapture = NULL;
     m_winHitTest = 0;
     m_winPressed = 0;
+    m_borderCursorOn = FALSE;
 }
 
 bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
@@ -409,6 +428,17 @@ bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
                 consumer->PerformAction(wxACTION_TOPLEVEL_BUTTON_PRESS, m_winPressed);
                 return TRUE;
             }
+            else if ( hit & wxHT_TOPLEVEL_TITLEBAR )
+            {
+                consumer->PerformAction(wxACTION_TOPLEVEL_MOVE);
+                return TRUE;
+            }
+            else if ( (consumer->GetInputWindow()->GetWindowStyle() & wxRESIZE_BORDER)
+                      && (hit & wxHT_TOPLEVEL_ANY_BORDER) )
+            {
+                consumer->PerformAction(wxACTION_TOPLEVEL_RESIZE, hit);
+                return TRUE;
+            }
         }
 
         else // up
@@ -435,8 +465,6 @@ bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
 bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                                              const wxMouseEvent& event)
 {
-    // we only have to do something when the mouse leaves/enters the pressed
-    // button and don't care about the other ones
     if ( event.GetEventObject() == m_winCapture )
     {
         long hit = m_winCapture->HitTest(event.GetPosition());
@@ -452,6 +480,57 @@ bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer,
             return TRUE;
         }
     }
+    else if ( consumer->GetInputWindow()->GetWindowStyle() & wxRESIZE_BORDER )
+    {
+        wxTopLevelWindow *win = wxStaticCast(consumer->GetInputWindow(), 
+                                             wxTopLevelWindow);
+        long hit = win->HitTest(event.GetPosition());
+        
+        if ( hit != m_winHitTest )
+        {
+            m_winHitTest = hit;
+            
+            if ( m_borderCursorOn )
+            {
+                m_borderCursorOn = FALSE;
+                win->SetCursor(m_origCursor);
+            }
+            
+            if ( hit & wxHT_TOPLEVEL_ANY_BORDER )
+            {
+                m_borderCursorOn = TRUE;
+                wxCursor cur;
+            
+                switch (hit)
+                {
+                    case wxHT_TOPLEVEL_BORDER_N:
+                    case wxHT_TOPLEVEL_BORDER_S:
+                        cur = wxCursor(wxCURSOR_SIZENS);
+                        break;
+                    case wxHT_TOPLEVEL_BORDER_W:
+                    case wxHT_TOPLEVEL_BORDER_E:
+                        cur = wxCursor(wxCURSOR_SIZEWE);
+                        break;
+                    case wxHT_TOPLEVEL_BORDER_NE:
+                    case wxHT_TOPLEVEL_BORDER_SW:
+                        cur = wxCursor(wxCURSOR_SIZENESW);
+                        break;
+                    case wxHT_TOPLEVEL_BORDER_NW:
+                    case wxHT_TOPLEVEL_BORDER_SE:
+                        cur = wxCursor(wxCURSOR_SIZENWSE);
+                        break;
+                    default:
+                        m_borderCursorOn = FALSE;
+                        break;
+                }
+                if ( m_borderCursorOn )
+                {
+                    m_origCursor = win->GetCursor();
+                    win->SetCursor(cur);
+                }
+            }
+        }
+    }
 
     return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
@@ -459,6 +538,11 @@ bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 bool wxStdFrameInputHandler::HandleActivation(wxInputConsumer *consumer,
                                               bool activated)
 {
+    if ( m_borderCursorOn )
+    {
+        consumer->GetInputWindow()->SetCursor(m_origCursor);
+        m_borderCursorOn = FALSE;
+    }
     consumer->PerformAction(wxACTION_TOPLEVEL_ACTIVATE, activated);
     return FALSE;
 }
