@@ -59,6 +59,10 @@ public:
     virtual bool CanUndo() const = 0;
     virtual bool CanRedo() const = 0;
 
+
+    // redeclare inherited SetSelection() overload here as well to avoid
+    // virtual function hiding
+    virtual void SetSelection(int n) = 0;
 };
 
 // ----------------------------------------------------------------------------

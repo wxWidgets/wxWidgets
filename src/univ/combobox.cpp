@@ -122,12 +122,14 @@ public:
     virtual ~wxComboListBox();
 
     // implement wxComboPopup methods
-    virtual bool SetSelection(const wxString& value);
-    virtual void SetSelection(int n, bool select)
-        { wxListBox::SetSelection( n, select); };
+    virtual bool SetSelection(const wxString& s);
     virtual wxControl *GetControl() { return this; }
     virtual void OnShow();
     virtual wxCoord GetBestWidth() const;
+
+    // fix virtual function hiding
+    virtual void SetSelection(int n) { DoSetSelection(n, true); }
+    void SetSelection(int n, bool select) { DoSetSelection(n, select); }
 
 protected:
     // we shouldn't return height too big from here
