@@ -106,9 +106,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_CACHE_HINT)
 // // the height of the header window (FIXME: should depend on its font!)
 // static const int HEADER_HEIGHT = 23;
 
-// the scrollbar units
 static const int SCROLL_UNIT_X = 15;
-static const int SCROLL_UNIT_Y = 15;
 
 // the spacing between the lines (in report mode)
 static const int LINE_SPACING = 0;
@@ -1147,8 +1145,6 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             else // has label
             {
                 dc->GetTextExtent( s, &lw, &lh );
-                if (lh < SCROLL_UNIT_Y)
-                    lh = SCROLL_UNIT_Y;
                 lw += EXTRA_WIDTH;
                 lh += EXTRA_HEIGHT;
 
@@ -1189,8 +1185,6 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             s = item->GetTextForMeasuring();
 
             dc->GetTextExtent( s, &lw, &lh );
-            if (lh < SCROLL_UNIT_Y)
-                lh = SCROLL_UNIT_Y;
             lw += EXTRA_WIDTH;
             lh += EXTRA_HEIGHT;
 
@@ -2199,7 +2193,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
     wxSize sz = size;
     sz.y = 25;
 
-    SetScrollbars( SCROLL_UNIT_X, SCROLL_UNIT_Y, 0, 0, 0, 0 );
+    SetScrollbars( 0, 0, 0, 0, 0, 0 );
 
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
 }
@@ -2279,9 +2273,6 @@ wxCoord wxListMainWindow::GetLineHeight() const
 
         wxCoord y;
         dc.GetTextExtent(_T("H"), NULL, &y);
-
-        if ( y < SCROLL_UNIT_Y )
-            y = SCROLL_UNIT_Y;
 
         if ( m_small_image_list && m_small_image_list->GetImageCount() )
         {
@@ -3036,8 +3027,10 @@ void wxListMainWindow::MoveToItem(size_t item)
     int client_w, client_h;
     GetClientSize( &client_w, &client_h );
 
+    const int hLine = GetLineHeight();
+
     int view_x = SCROLL_UNIT_X*GetScrollPos( wxHORIZONTAL );
-    int view_y = SCROLL_UNIT_Y*GetScrollPos( wxVERTICAL );
+    int view_y = hLine*GetScrollPos( wxVERTICAL );
 
     if ( HasFlag(wxLC_REPORT) )
     {
@@ -3046,9 +3039,9 @@ void wxListMainWindow::MoveToItem(size_t item)
         ResetVisibleLinesRange();
 
         if (rect.y < view_y )
-            Scroll( -1, rect.y/SCROLL_UNIT_Y );
+            Scroll( -1, rect.y/hLine );
         if (rect.y+rect.height+5 > view_y+client_h)
-            Scroll( -1, (rect.y+rect.height-client_h+SCROLL_UNIT_Y)/SCROLL_UNIT_Y );
+            Scroll( -1, (rect.y+rect.height-client_h+hLine)/hLine );
     }
     else // !report
     {
@@ -3862,11 +3855,11 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
         clientHeight;
     GetSize( &clientWidth, &clientHeight );
 
+    const int lineHeight = GetLineHeight();
+
     if ( HasFlag(wxLC_REPORT) )
     {
         // all lines have the same height and we scroll one line per step
-        int lineHeight = GetLineHeight();
-
         int entireHeight = count*lineHeight + LINE_SPACING;
 
         m_linesPerPage = clientHeight / lineHeight;
@@ -3930,9 +3923,9 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
             SetScrollbars
             (
                 SCROLL_UNIT_X,
-                SCROLL_UNIT_Y,
+                lineHeight,
                 (x + SCROLL_UNIT_X) / SCROLL_UNIT_X,
-                (y + SCROLL_UNIT_Y) / SCROLL_UNIT_Y,
+                (y + lineHeight) / lineHeight,
                 GetScrollPos( wxHORIZONTAL ),
                 GetScrollPos( wxVERTICAL ),
                 TRUE
@@ -3945,18 +3938,10 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
             // scrollbar
 
             int entireWidth = 0;
-            #if 0
-            // entireHeight is not used so no need to define it
-            int entireHeight = 0;
-            #endif
 
             for (int tries = 0; tries < 2; tries++)
             {
                 entireWidth = 2*EXTRA_BORDER_X;
-                #if 0
-                // entireHeight is not used so no need to define it
-                entireHeight = 2*EXTRA_BORDER_Y;
-                #endif
 
                 if (tries == 1)
                 {
@@ -4019,7 +4004,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
             SetScrollbars
             (
                 SCROLL_UNIT_X,
-                SCROLL_UNIT_Y,
+                lineHeight,
                 (entireWidth + SCROLL_UNIT_X) / SCROLL_UNIT_X,
                 0,
                 GetScrollPos( wxHORIZONTAL ),
