@@ -26,6 +26,10 @@
 wxButtonXmlHandler::wxButtonXmlHandler() 
 : wxXmlResourceHandler() 
 {
+    ADD_STYLE(wxBU_LEFT);
+    ADD_STYLE(wxBU_RIGHT);
+    ADD_STYLE(wxBU_TOP);
+    ADD_STYLE(wxBU_BOTTOM);
     AddWindowStyles();
 }
 
