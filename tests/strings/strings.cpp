@@ -47,6 +47,7 @@ private:
         CPPUNIT_TEST( Extraction );
         CPPUNIT_TEST( Find );
         CPPUNIT_TEST( Tokenizer );
+        CPPUNIT_TEST( TokenizerGetPosition );
         CPPUNIT_TEST( Replace );
         CPPUNIT_TEST( Match );
         CPPUNIT_TEST( CaseChanges );
@@ -66,6 +67,7 @@ private:
     void Find();
     void SingleTokenizerTest( wxChar *str, wxChar *delims, size_t count , wxStringTokenizerMode mode );
     void Tokenizer();
+    void TokenizerGetPosition();
     void Replace();
     void Match();
     void CaseChanges();
@@ -300,6 +302,44 @@ void StringTestCase::Tokenizer()
     SingleTokenizerTest( _T("1 \t3\t4  6   "),                             wxDEFAULT_DELIMITERS, 9, wxTOKEN_RET_EMPTY_ALL );
     SingleTokenizerTest( _T("01/02/99"),                                   _T("/-"),             3, wxTOKEN_DEFAULT       );
     SingleTokenizerTest( _T("01-02/99"),                                   _T("/-"),             3, wxTOKEN_RET_DELIMS    );
+}
+
+// call this with the string to tokenize, delimeters to use and the expected
+// positions (i.e. results of GetPosition()) after each GetNextToken() call,
+// terminate positions with 0
+static void
+DoTokenizerGetPosition(const wxChar *s, const wxChar *delims, int pos, ...)
+{
+    wxStringTokenizer tkz(s, delims);
+
+    CPPUNIT_ASSERT( tkz.GetPosition() == 0 );
+
+    va_list ap;
+    va_start(ap, pos);
+
+    for ( ;; )
+    {
+        if ( !pos )
+        {
+            CPPUNIT_ASSERT( !tkz.HasMoreTokens() );
+            break;
+        }
+
+        tkz.GetNextToken();
+
+        CPPUNIT_ASSERT( tkz.GetPosition() == (size_t)pos );
+
+        pos = va_arg(ap, int);
+    }
+
+    va_end(ap);
+}
+
+void StringTestCase::TokenizerGetPosition()
+{
+    DoTokenizerGetPosition(_T("foo"), _T("_"), 3, 0);
+    DoTokenizerGetPosition(_T("foo_bar"), _T("_"), 3, 7, 0);
+    DoTokenizerGetPosition(_T("foo_bar_"), _T("_"), 3, 7,8,  0);
 }
 
 void StringTestCase::Replace()
