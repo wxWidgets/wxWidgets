@@ -176,11 +176,17 @@ OTHER CHANGES
 All:
 
 - added (partial) Indonesian translations (Bambang Purnomosidi D. P.)
+- added wxSizer::Show by Carl Godkin, to make it easy to
+  ynamically show and hide sizers and windows (see samples/controls, wxSizer tab)
 
 Unix (Base/GUI):
 
 - minor OpenBSD compilation/linking fixes, now builds OOB under OpenBSD 3.1
 - don't include -I/usr/include nor -I/usr/local/include in wx-config output
+
+wxMSW:
+
+- fixed crashes in wxListCtrl under XP
 
 2.3.3
 -----
