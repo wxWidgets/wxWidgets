@@ -735,16 +735,16 @@ public:
                 m_width *= ((wxInt32)num)/((wxInt32)denum); m_height *= ((wxInt32)num)/((wxInt32)denum);}
 
        wxRect2DInt& operator = (const wxRect2DInt& rect);
-       bool operator == (const wxRect2DInt& rect);
-       bool operator != (const wxRect2DInt& rect);
+       bool operator == (const wxRect2DInt& rect) const;
+       bool operator != (const wxRect2DInt& rect) const;
 
-        void WriteTo( wxDataOutputStream &stream ) const;
-        void ReadFrom( wxDataInputStream &stream );
+       void WriteTo( wxDataOutputStream &stream ) const;
+       void ReadFrom( wxDataInputStream &stream );
 
        wxInt32 m_x;
-        wxInt32 m_y;
-        wxInt32 m_width;
-        wxInt32 m_height;
+       wxInt32 m_y;
+       wxInt32 m_width;
+       wxInt32 m_height;
 };
 
 inline wxRect2DInt::wxRect2DInt( const wxRect2DInt &r )
@@ -761,6 +761,17 @@ inline wxRect2DInt::wxRect2DInt( const wxPoint2DInt &a , const wxPoint2DInt &b)
     m_y = wxMin( a.m_y , b.m_y );
     m_width = abs( a.m_x - b.m_x );
     m_height = abs( a.m_y - b.m_y );
+}
+
+inline bool wxRect2DInt::operator == (const wxRect2DInt& rect) const
+{ 
+    return (m_x==rect.m_x && m_y==rect.m_y && 
+            m_width==rect.m_width && m_height==rect.m_height);
+}
+
+inline bool wxRect2DInt::operator != (const wxRect2DInt& rect) const
+{
+    return !(*this == rect);
 }
 
 class wxTransform2D
