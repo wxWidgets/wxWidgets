@@ -175,7 +175,7 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
 
 #ifdef __WXMSW__
 bool wxCheckForInterrupt(wxWindow *wnd);
-void wxFlushEvents();
+// link error? void wxFlushEvents();
 #endif
 
 wxWindow* wxGetTopLevelParent(wxWindow *win);

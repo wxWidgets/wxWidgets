@@ -198,7 +198,11 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 }
 
 #include <wx/metafile.h>
+
+#if 0
 extern wxClipboard * wxTheClipboard; 
+
+#endif
 
 class wxPyDropSource : public wxDropSource {
 public:

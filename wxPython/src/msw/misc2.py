@@ -1243,8 +1243,6 @@ def wxFindWindowAtPoint(*_args, **_kwargs):
 
 wxCheckForInterrupt = misc2c.wxCheckForInterrupt
 
-wxFlushEvents = misc2c.wxFlushEvents
-
 def wxGetTopLevelParent(*_args, **_kwargs):
     val = misc2c.wxGetTopLevelParent(*_args,**_kwargs)
     return val

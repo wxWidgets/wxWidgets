@@ -420,8 +420,14 @@ public:
 
 
 %readonly
+%{
+#if 0
+%}
 // See also wxPy_ReinitStockObjects in helpers.cpp
 extern wxClipboard* wxTheClipboard;
+%{
+#endif
+%}
 %readwrite
 
 //----------------------------------------------------------------------
