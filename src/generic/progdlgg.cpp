@@ -169,7 +169,6 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     {
         // set it to the current time
         m_timeStart = wxGetCurrentTime();
-
         sizeDlg.y += nTimeLabels * (sizeLabel.y + LAYOUT_Y_MARGIN);
     }
 
