@@ -3819,11 +3819,9 @@ void wxWindowGTK::GtkSendPaintEvents()
     // Clip to paint region in wxClientDC
     m_clipPaintRegion = TRUE;
 
-#ifndef __WXGTK20__
     // widget to draw on
     GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
 
-    // later for GTK 2.0, too.
     if (GetThemeEnabled())
     {
         // find ancestor from which to steal background
@@ -3844,7 +3842,7 @@ void wxWindowGTK::GtkSendPaintEvents()
 
             gtk_paint_flat_box( parent->m_widget->style,
                         pizza->bin_window,
-                        GTK_STATE_NORMAL,
+                        (GtkStateType)GTK_WIDGET_STATE(m_wxwindow),
                         GTK_SHADOW_NONE,
                         &rect,
                         parent->m_widget,
@@ -3855,7 +3853,6 @@ void wxWindowGTK::GtkSendPaintEvents()
         }
     }
     else
-#endif
 
 #ifdef __WXGTK20__
     {
