@@ -13,7 +13,7 @@ do the following:
    it:
    a) copy the makefiles from samples/minimal, replace all occurences of
       minimal with foo
-   b) use makegen
+   b) use makegen (sources are under utils/makegen)
    c) use projgen
 
 4. Modify configure.in and samples/configure.in for Unix compilation:
@@ -30,7 +30,10 @@ do the following:
 
 Author:  VZ
 Version: $Id$
-History: $Log$
-History: Revision 1.1  2000/03/01 19:22:41  VZ
-History: created 'how to add a sample' technote
-History:
+
+$Log$
+Revision 1.2  2000/03/01 19:24:07  VZ
+added a note about where to find makegen
+
+Revision 1.1  2000/03/01 19:22:41  VZ
+created 'how to add a sample' technote
