@@ -437,7 +437,7 @@ class wxPythonDemo(wx.Frame):
 
         if wx.Platform != '__WXMAC__':
             # setup a taskbar icon, and catch some events from it
-            dim = 16  # (may want to use 22 on wxGTK...)
+            dim = 16  # (may want to use 22 on wxGTK, but 16b looks okay too)
             icon = wx.IconFromBitmap(
                 images.getMondrianImage().Scale(dim,dim).ConvertToBitmap() )
             #icon = wx.Icon('bmp_source/mondrian.ico', wx.BITMAP_TYPE_ICO)
