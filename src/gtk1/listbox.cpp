@@ -39,24 +39,6 @@ extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
 //-----------------------------------------------------------------------------
-// private functions
-//-----------------------------------------------------------------------------
-
-#if wxUSE_CHECKLISTBOX
-
-// checklistboxes have "[±] " prepended to their lables, this macro removes it
-// (NB: 4 below is the length of wxCHECKLBOX_STRING above)
-//
-// the argument to it is a "const char *" pointer
-#define GET_REAL_LABEL(label) ((m_hasCheckBoxes)?(label)+4 : (label))
-
-#else // !wxUSE_CHECKLISTBOX
-
-#define GET_REAL_LABEL(label) (label)
-
-#endif // wxUSE_CHECKLISTBOX
-
-//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -267,12 +249,12 @@ static void gtk_listitem_select_cb( GtkWidget *widget, wxListBox *listbox, bool 
 
     if (!listbox->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
-    
+
     if (listbox->m_blockEvent) return;
 
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
     event.SetEventObject( listbox );
-    
+
 //    MSW doesn't do that either
 //    event.SetExtraLong( (long) is_selection );
 
@@ -430,6 +412,10 @@ wxListBox::~wxListBox()
     if (m_strings)
       delete m_strings;
 }
+
+// ----------------------------------------------------------------------------
+// adding items
+// ----------------------------------------------------------------------------
 
 void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 {
@@ -612,58 +598,15 @@ void wxListBox::DoSetItems( const wxArrayString& items,
 }
 
 // ----------------------------------------------------------------------------
-// client data
+// deleting items
 // ----------------------------------------------------------------------------
-
-void wxListBox::DoSetItemClientData( int n, void* clientData )
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
-
-    wxNode *node = m_clientList.Nth( n );
-    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetItemClientData") );
-
-    node->SetData( (wxObject*) clientData );
-}
-
-void* wxListBox::DoGetItemClientData( int n ) const
-{
-    wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid listbox control") );
-
-    wxNode *node = m_clientList.Nth( n );
-    wxCHECK_MSG( node, NULL, wxT("invalid index in wxListBox::DoGetItemClientData") );
-
-    return node->Data();
-}
-
-void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
-
-    wxNode *node = m_clientList.Nth( n );
-    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetItemClientObject") );
-
-    // wxItemContainer already deletes data for us
-
-    node->SetData( (wxObject*) clientData );
-}
-
-wxClientData* wxListBox::DoGetItemClientObject( int n ) const
-{
-    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid listbox control") );
-
-    wxNode *node = m_clientList.Nth( n );
-    wxCHECK_MSG( node, (wxClientData *)NULL,
-                 wxT("invalid index in wxListBox::DoGetItemClientObject") );
-
-    return (wxClientData*) node->Data();
-}
 
 void wxListBox::Clear()
 {
     wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
 
     gtk_list_clear_items( m_list, 0, GetCount() );
-    
+
     if ( GTK_LIST(m_list)->last_focus_child != NULL  )
     {
         // This should be NULL, I think.
@@ -717,8 +660,79 @@ void wxListBox::Delete( int n )
 }
 
 // ----------------------------------------------------------------------------
+// client data
+// ----------------------------------------------------------------------------
+
+void wxListBox::DoSetItemClientData( int n, void* clientData )
+{
+    wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
+
+    wxNode *node = m_clientList.Nth( n );
+    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetItemClientData") );
+
+    node->SetData( (wxObject*) clientData );
+}
+
+void* wxListBox::DoGetItemClientData( int n ) const
+{
+    wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid listbox control") );
+
+    wxNode *node = m_clientList.Nth( n );
+    wxCHECK_MSG( node, NULL, wxT("invalid index in wxListBox::DoGetItemClientData") );
+
+    return node->Data();
+}
+
+void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
+{
+    wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
+
+    wxNode *node = m_clientList.Nth( n );
+    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetItemClientObject") );
+
+    // wxItemContainer already deletes data for us
+
+    node->SetData( (wxObject*) clientData );
+}
+
+wxClientData* wxListBox::DoGetItemClientObject( int n ) const
+{
+    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid listbox control") );
+
+    wxNode *node = m_clientList.Nth( n );
+    wxCHECK_MSG( node, (wxClientData *)NULL,
+                 wxT("invalid index in wxListBox::DoGetItemClientObject") );
+
+    return (wxClientData*) node->Data();
+}
+
+// ----------------------------------------------------------------------------
 // string list access
 // ----------------------------------------------------------------------------
+
+wxString wxListBox::GetRealLabel(GList *item) const
+{
+    GtkBin *bin = GTK_BIN( item->data );
+    GtkLabel *label = GTK_LABEL( bin->child );
+
+    wxString str;
+
+#ifdef __WXGTK20__
+    str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
+#else
+    str = wxString( label->label );
+#endif
+
+#if wxUSE_CHECKLISTBOX
+    // checklistboxes have "[±] " prepended to their lables, remove it
+    //
+    // NB: 4 below is the length of wxCHECKLBOX_STRING from wx/gtk/checklst.h
+    if ( m_hasCheckBoxes )
+        str.erase(0, 4);
+#endif // wxUSE_CHECKLISTBOX
+
+    return str;
+}
 
 void wxListBox::SetString( int n, const wxString &string )
 {
@@ -752,16 +766,7 @@ wxString wxListBox::GetString( int n ) const
     GList *child = g_list_nth( m_list->children, n );
     if (child)
     {
-        GtkBin *bin = GTK_BIN( child->data );
-        GtkLabel *label = GTK_LABEL( bin->child );
-
-#ifdef __WXGTK20__
-        wxString str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
-#else
-        wxString str = wxString( label->label );
-#endif
-
-        return str;
+        return GetRealLabel(child);
     }
 
     wxFAIL_MSG(wxT("wrong listbox index"));
@@ -785,16 +790,7 @@ int wxListBox::FindString( const wxString &item ) const
     int count = 0;
     while (child)
     {
-        GtkBin *bin = GTK_BIN( child->data );
-        GtkLabel *label = GTK_LABEL( bin->child );
-
-#ifdef __WXGTK20__
-        wxString str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
-#else
-        wxString str = wxString( label->label );
-#endif
-
-        if (str == item)
+        if ( GetRealLabel(child) == item )
             return count;
 
         count++;
@@ -882,7 +878,7 @@ void wxListBox::SetSelection( int n, bool select )
     else
         gtk_list_unselect_item( m_list, n );
 
-    m_blockEvent = FALSE;    
+    m_blockEvent = FALSE;
 }
 
 void wxListBox::DoSetFirstItem( int n )
@@ -919,7 +915,7 @@ void wxListBox::DoSetFirstItem( int n )
     float y = item->allocation.y;
     if (y > adjustment->upper - adjustment->page_size)
         y = adjustment->upper - adjustment->page_size;
-	gtk_adjustment_set_value( adjustment, y );
+    gtk_adjustment_set_value( adjustment, y );
 }
 
 // ----------------------------------------------------------------------------

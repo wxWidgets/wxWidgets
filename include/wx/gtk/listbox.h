@@ -96,11 +96,14 @@ public:
 
     int        m_prevSelection;
     bool       m_blockEvent;
-    
+
     virtual void FixUpMouseEvent(GtkWidget *widget, wxCoord& x, wxCoord& y);
 
 protected:
     virtual wxSize DoGetBestSize() const;
+
+    // return the string label for the given item
+    wxString GetRealLabel(struct _GList *item) const;
 
 private:
     // this array is only used for controls with wxCB_SORT style, so only
