@@ -96,6 +96,7 @@ public:
            long style = 0,
            const wxString& name = wxPanelNameStr)
   {
+      Init();
       Create(parent, id, pos, size, style, name);
   }
 

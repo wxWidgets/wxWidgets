@@ -95,16 +95,15 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxEvtHandler)
+#endif
 
 BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
-EVT_CHAR(wxWindow::OnChar)
-EVT_ERASE_BACKGROUND(wxWindow::OnEraseBackground)
-EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
-EVT_INIT_DIALOG(wxWindow::OnInitDialog)
-EVT_IDLE(wxWindow::OnIdle)
+    EVT_CHAR(wxWindow::OnChar)
+    EVT_ERASE_BACKGROUND(wxWindow::OnEraseBackground)
+    EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
+    EVT_INIT_DIALOG(wxWindow::OnInitDialog)
+    EVT_IDLE(wxWindow::OnIdle)
 END_EVENT_TABLE()
-
-#endif
 
 // Find an item given the MS Windows id
 wxWindow *wxWindow::FindItem(int id) const
@@ -364,8 +363,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
-    Init();
-
     wxCHECK_MSG( parent, FALSE, "can't create wxWindow without parent" );
 
     parent->AddChild(this);
@@ -1590,7 +1587,8 @@ long wxWindow::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
 
     if ( win )
     {
-        win->MSWNotify(wParam, lParam, &result);
+        if ( win->MSWNotify(wParam, lParam, &result) )
+            return result;
     }
     else
     {
@@ -1601,14 +1599,17 @@ long wxWindow::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
         {
             wxWindow *child = (wxWindow *)node->Data();
             if ( child->MSWNotify(wParam, lParam, &result) )
-                break;
+                return result;
             node = node->Next();
         }
-    }
 
-    return result;
+        // finally try this window too (catches toolbar case)
+        if ( MSWNotify(wParam, lParam, &result) )
+            return result;
+    }
 #endif  // Win95
 
+    // not processed
     return FALSE;
 }
 
