@@ -1113,7 +1113,7 @@ wxULongLongWx::ToString() const
 
     while ( ll != 0 )
     {
-        result.Prepend((wxChar)(_T('0') + (ll % 10).ToLong()));
+        result.Prepend((wxChar)(_T('0') + (ll % 10).ToULong()));
         ll /= 10;
     }
 
