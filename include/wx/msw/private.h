@@ -16,14 +16,6 @@
 
 #include "wx/msw/wrapwin.h"
 
-#if defined (__WXWINCE__)
-    #include <wingdi.h>     // RGB, COLORREF
-    #define ERRFALSE(x)
-    #include <winuser.h>    // Global Namespaces ::GetKeyState, ::GetWindowRect
-    #include "wx/msw/winundef.h"
-#endif
-
-
 #ifdef __WXMICROWIN__
     // Extra prototypes and symbols not defined by MicroWindows
     #include "wx/msw/microwin.h"
@@ -390,7 +382,6 @@ private:
    DECLARE_NO_COPY_CLASS(SelectInHDC)
 };
 
-#ifndef __WXWINCE__
 // when working with global pointers (which is unfortunately still necessary
 // sometimes, e.g. for clipboard) it is important to unlock them exactly as
 // many times as we lock them which just asks for using a "smart lock" class
@@ -399,7 +390,7 @@ class GlobalPtr
 public:
     GlobalPtr(HGLOBAL hGlobal) : m_hGlobal(hGlobal)
     {
-        m_ptr = ::GlobalLock(hGlobal);
+        m_ptr = GlobalLock(hGlobal);
         if ( !m_ptr )
         {
             wxLogLastError(_T("GlobalLock"));
@@ -408,7 +399,7 @@ public:
 
     ~GlobalPtr()
     {
-        if ( !::GlobalUnlock(m_hGlobal) )
+        if ( !GlobalUnlock(m_hGlobal) )
         {
 #ifdef __WXDEBUG__
             // this might happen simply because the block became unlocked
@@ -429,7 +420,6 @@ private:
 
     DECLARE_NO_COPY_CLASS(GlobalPtr)
 };
-#endif
 
 // ---------------------------------------------------------------------------
 // macros to make casting between WXFOO and FOO a bit easier: the GetFoo()
@@ -553,58 +543,6 @@ WXDLLEXPORT extern wxSize wxGetHiconSize(HICON hicon);
 
 // Lines are drawn differently for WinCE and regular WIN32
 WXDLLEXPORT void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
-
-// LocalAlloc should be used on WinCE
-#ifdef __WXWINCE__
-#include <winbase.h>
-
-#if _WIN32_WCE <= 211
-#define GlobalAlloc LocalAlloc
-#define GlobalFree LocalFree
-#define GlobalLock(mem) mem
-#define GlobalUnlock(mem)
-#define GlobalSize LocalSize
-#define GPTR LPTR
-#define GHND LPTR
-#define GMEM_MOVEABLE 0
-#define GMEM_SHARE 0
-#endif
-
-#if 0
-
-HLOCAL
-WINAPI
-LocalAlloc (
-    UINT fuFlags,
-    UINT cbBytes
-    );
-
-HLOCAL
-WINAPI
-LocalFree (
-    HLOCAL hMem
-    );
-
-#ifndef LMEM_FIXED
-#define LMEM_FIXED          0x0000
-#define LMEM_MOVEABLE       0x0002
-#define LMEM_NOCOMPACT      0x0010       /**** Used for Moveable Memory  ***/
-#define LMEM_NODISCARD      0x0020       /**** Ignored *****/
-#define LMEM_ZEROINIT       0x0040
-#define LMEM_MODIFY         0x0080       /*** Used only in LocalReAlloc() **/
-#define LMEM_DISCARDABLE    0x0F00       /**** Ignored ****/
-#define LMEM_VALID_FLAGS    0x0F72
-#define LMEM_INVALID_HANDLE 0x8000
-
-#define LHND                (LMEM_MOVEABLE | LMEM_ZEROINIT)
-#define LPTR                (LMEM_FIXED | LMEM_ZEROINIT)
-#endif
-
-#endif
-    // 0
-
-#endif
-    // __WXWINCE__
 
 // ----------------------------------------------------------------------------
 // 32/64 bit helpers
