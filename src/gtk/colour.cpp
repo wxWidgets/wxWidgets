@@ -53,7 +53,17 @@ wxColourRefData::~wxColourRefData()
 
 void wxColourRefData::FreeColour()
 {
-//  if (m_hasPixel) gdk_colors_free( m_colormap, &m_color, 1, 0 );
+    if (m_colormap)
+    {
+        GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) m_colormap;
+        if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
+            (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
+        {
+            // What happens if the colour has not been allocated
+            // anew but has been found? RR.
+            gdk_colormap_free_colors( m_colormap, &m_color, 1 );
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -184,21 +194,7 @@ void wxColour::CalcPixel( GdkColormap *cmap )
     if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
         (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
     {
-        GdkColor *colors = cmap->colors;
-        int max = 3 * (65536);
-        int index = -1;
-
-        for (int i = 0; i < cmap->size; i++)
-        {
-            int rdiff = (M_COLDATA->m_color.red - colors[i].red);
-            int gdiff = (M_COLDATA->m_color.green - colors[i].green);
-            int bdiff = (M_COLDATA->m_color.blue - colors[i].blue);
-            int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
-            if (sum < max) { index = i; max = sum; }
-        }
-
-        M_COLDATA->m_hasPixel = TRUE;
-        M_COLDATA->m_color.pixel = index;
+        M_COLDATA->m_hasPixel = gdk_colormap_alloc_color( cmap, &M_COLDATA->m_color, FALSE, TRUE );
     }
     else
     { 
