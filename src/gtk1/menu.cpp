@@ -1145,6 +1145,7 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
 // ----------------------------------------------------------------------------
 
 #if (GTK_MINOR_VERSION > 0) && wxUSE_ACCEL
+
 static wxString GetHotKey( const wxMenuItem& item )
 {
     wxString hotkey;
@@ -1178,7 +1179,9 @@ static wxString GetHotKey( const wxMenuItem& item )
                 hotkey << wxT('F') << code - WXK_F1 + 1;
                 break;
                 
-                // GTK seems to use XStringToKeySym here
+                // TODO: we should use gdk_keyval_name() (a.k.a.
+                //       XKeysymToString) here as well as hardcoding the keysym
+                //       names this might be not portable
             case WXK_NUMPAD_INSERT:
                 hotkey << wxT("KP_Insert" );
                 break;
@@ -1192,15 +1195,18 @@ static wxString GetHotKey( const wxMenuItem& item )
                 hotkey << wxT("Delete" );
                 break;
 
-                // if there are any other keys wxGetAccelFromString() may return,
-                // we should process them here
+                // if there are any other keys wxGetAccelFromString() may
+                // return, we should process them here
 
             default:
-                if ( wxIsalnum(code) )
+                if ( code < 127 )
                 {
-                    hotkey << (wxChar)code;
-
-                    break;
+                    gchar *name = gdk_keyval_name((guint)code);
+                    if ( name )
+                    {
+                        hotkey << name;
+                        break;
+                    }
                 }
 
                 wxFAIL_MSG( wxT("unknown keyboard accel") );
@@ -1211,6 +1217,7 @@ static wxString GetHotKey( const wxMenuItem& item )
 
     return hotkey;
 }
+
 #endif // wxUSE_ACCEL
 
 

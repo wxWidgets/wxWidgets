@@ -82,11 +82,25 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                 else if ( current == _("shift") )
                     accelFlags |= wxACCEL_SHIFT;
                 else {
-                    wxLogDebug(wxT("Unknown accel modifier: '%s'"),
-                               current.c_str());
+                    // we may have "Ctrl-+", for example, but we still want to
+                    // catch typos like "Crtl-A" so only give the warning if we
+                    // have something before the current '+' or '-', else take
+                    // it as a literal symbol
+                    if ( current.empty() )
+                    {
+                        current += label[n];
+
+                        // skip clearing it below
+                        continue;
+                    }
+                    else
+                    {
+                        wxLogDebug(wxT("Unknown accel modifier: '%s'"),
+                                   current.c_str());
+                    }
                 }
 
-                current.Empty();
+                current.clear();
             }
             else {
                 current += wxTolower(label[n]);

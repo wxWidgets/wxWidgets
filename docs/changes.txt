@@ -140,6 +140,7 @@ wxGTK:
 - wxDirDialog now presents the file system in standard Unix way
 - wxButton now honours wxBU_EXACTFIT
 - wxStaticBox now honours wxALIGN_XXX styles
+- added support for non alphanumeric simple character accelerators ('-', '=')
 
 wxHTML:
 
