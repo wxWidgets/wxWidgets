@@ -543,8 +543,8 @@ typedef enum {
   wxNAND,       // (NOT src) OR (NOT dst)
   wxOR,         // src OR dst
   wxSET,        // 1
-  wxSRC_OR,     // source _bitmap_ OR destination
-  wxSRC_AND     // source _bitmap_ AND destination
+//  wxSRC_OR,     // source _bitmap_ OR destination
+//  wxSRC_AND     // source _bitmap_ AND destination
 } form_ops_t;
 
 enum _Virtual_keycodes {
@@ -830,6 +830,7 @@ enum wxEventType {
  wxEVT_SCROLL_PAGEUP,
  wxEVT_SCROLL_PAGEDOWN,
  wxEVT_SCROLL_THUMBTRACK,
+ wxEVT_SCROLL_THUMBRELEASE,
 
  /*
   * Scrolled Window
@@ -841,6 +842,7 @@ enum wxEventType {
  wxEVT_SCROLLWIN_PAGEUP,
  wxEVT_SCROLLWIN_PAGEDOWN,
  wxEVT_SCROLLWIN_THUMBTRACK,
+ wxEVT_SCROLLWIN_THUMBRELEASE,
 
  wxEVT_SIZE = wxEVT_FIRST + 200,
  wxEVT_MOVE,

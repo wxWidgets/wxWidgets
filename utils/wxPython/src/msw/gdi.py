@@ -680,11 +680,11 @@ class wxScreenDCPtr(wxDCPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def StartDrawingOnTopWin(self, *_args, **_kwargs):
+        val = apply(gdic.wxScreenDC_StartDrawingOnTopWin,(self,) + _args, _kwargs)
+        return val
     def StartDrawingOnTop(self, *_args, **_kwargs):
         val = apply(gdic.wxScreenDC_StartDrawingOnTop,(self,) + _args, _kwargs)
-        return val
-    def StartDrawingOnTopRect(self, *_args, **_kwargs):
-        val = apply(gdic.wxScreenDC_StartDrawingOnTopRect,(self,) + _args, _kwargs)
         return val
     def EndDrawingOnTop(self, *_args, **_kwargs):
         val = apply(gdic.wxScreenDC_EndDrawingOnTop,(self,) + _args, _kwargs)

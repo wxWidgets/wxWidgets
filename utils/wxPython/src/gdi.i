@@ -365,11 +365,13 @@ public:
     // I'll do it this way to use long-lived objects and not have to
     // worry about when python may delete the object.
     %addmethods {
-        wxBrush(wxColour* colour, int style=wxSOLID) {
+        wxBrush(const wxColour* colour, int style=wxSOLID) {
             return wxTheBrushList->FindOrCreateBrush(*colour, style);
         }
         // NO Destructor.
     }
+
+//      wxBrush(const wxColour& colour, int style=wxSOLID);
 
     wxColour& GetColour();
     wxBitmap * GetStipple();
@@ -522,8 +524,8 @@ class wxScreenDC : public wxDC {
 public:
     wxScreenDC();
 
-    bool StartDrawingOnTop(wxWindow* window);
-    %name(StartDrawingOnTopRect) bool StartDrawingOnTop(wxRect* rect = NULL);
+    %name(StartDrawingOnTopWin) bool StartDrawingOnTop(wxWindow* window);
+    bool StartDrawingOnTop(wxRect* rect = NULL);
     bool EndDrawingOnTop();
 };
 

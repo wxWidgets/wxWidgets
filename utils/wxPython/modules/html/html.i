@@ -566,6 +566,9 @@ public:
     #if wxUSE_FS_ZIP
        wxFileSystem::AddHandler(new wxZipFSHandler);
     #endif
+    #if wxUSE_FS_INET
+//       wxFileSystem::AddHandler(new wxInternetFSHandler);
+    #endif
 %}
 
 //----------------------------------------------------------------------

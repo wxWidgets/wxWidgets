@@ -278,104 +278,57 @@ static PyObject *_wrap_wxStatusBar_GetStatusText(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
-#define wxStatusBar_DrawField(_swigobj,_swigarg0,_swigarg1)  (_swigobj->DrawField(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStatusBar_DrawField(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStatusBar_GetBorderX(_swigobj)  (_swigobj->GetBorderX())
+static PyObject *_wrap_wxStatusBar_GetBorderX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxStatusBar * _arg0;
-    wxDC * _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","dc","i", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxStatusBar_DrawField",_kwnames,&_argo0,&_argo1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStatusBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStatusBar_DrawField. Expected _wxStatusBar_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStatusBar_DrawField. Expected _wxDC_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStatusBar_DrawField(_arg0,*_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStatusBar_DrawFieldText(_swigobj,_swigarg0,_swigarg1)  (_swigobj->DrawFieldText(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStatusBar_DrawFieldText(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStatusBar * _arg0;
-    wxDC * _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","dc","i", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxStatusBar_DrawFieldText",_kwnames,&_argo0,&_argo1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStatusBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStatusBar_DrawFieldText. Expected _wxStatusBar_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStatusBar_DrawFieldText. Expected _wxDC_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStatusBar_DrawFieldText(_arg0,*_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStatusBar_InitColours(_swigobj)  (_swigobj->InitColours())
-static PyObject *_wrap_wxStatusBar_InitColours(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
+    int  _result;
     wxStatusBar * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStatusBar_InitColours",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStatusBar_GetBorderX",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStatusBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStatusBar_InitColours. Expected _wxStatusBar_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStatusBar_GetBorderX. Expected _wxStatusBar_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStatusBar_InitColours(_arg0);
+        _result = (int )wxStatusBar_GetBorderX(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStatusBar_GetBorderY(_swigobj)  (_swigobj->GetBorderY())
+static PyObject *_wrap_wxStatusBar_GetBorderY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStatusBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStatusBar_GetBorderY",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStatusBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStatusBar_GetBorderY. Expected _wxStatusBar_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStatusBar_GetBorderY(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -493,6 +446,34 @@ static PyObject *_wrap_wxStatusBar_SetStatusWidths(PyObject *self, PyObject *arg
 {
     delete [] _arg2;
 }
+    return _resultobj;
+}
+
+#define wxStatusBar_SetMinHeight(_swigobj,_swigarg0)  (_swigobj->SetMinHeight(_swigarg0))
+static PyObject *_wrap_wxStatusBar_SetMinHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStatusBar * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStatusBar_SetMinHeight",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStatusBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStatusBar_SetMinHeight. Expected _wxStatusBar_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStatusBar_SetMinHeight(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -3114,12 +3095,12 @@ static PyMethodDef stattoolcMethods[] = {
 	 { "wxToolBarToolBase_GetControl", (PyCFunction) _wrap_wxToolBarToolBase_GetControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarToolBase_GetId", (PyCFunction) _wrap_wxToolBarToolBase_GetId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarToolBase_Destroy", (PyCFunction) _wrap_wxToolBarToolBase_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStatusBar_SetMinHeight", (PyCFunction) _wrap_wxStatusBar_SetMinHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStatusBar_SetStatusWidths", (PyCFunction) _wrap_wxStatusBar_SetStatusWidths, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStatusBar_SetStatusText", (PyCFunction) _wrap_wxStatusBar_SetStatusText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStatusBar_SetFieldsCount", (PyCFunction) _wrap_wxStatusBar_SetFieldsCount, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStatusBar_InitColours", (PyCFunction) _wrap_wxStatusBar_InitColours, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStatusBar_DrawFieldText", (PyCFunction) _wrap_wxStatusBar_DrawFieldText, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStatusBar_DrawField", (PyCFunction) _wrap_wxStatusBar_DrawField, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStatusBar_GetBorderY", (PyCFunction) _wrap_wxStatusBar_GetBorderY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStatusBar_GetBorderX", (PyCFunction) _wrap_wxStatusBar_GetBorderX, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStatusBar_GetStatusText", (PyCFunction) _wrap_wxStatusBar_GetStatusText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStatusBar_GetFieldsCount", (PyCFunction) _wrap_wxStatusBar_GetFieldsCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStatusBar_GetFieldRect", (PyCFunction) _wrap_wxStatusBar_GetFieldRect, METH_VARARGS | METH_KEYWORDS },

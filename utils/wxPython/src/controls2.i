@@ -412,6 +412,7 @@ public:
     //size_t GetSelections(wxArrayTreeItemIds& selection);
     %addmethods {
         PyObject* GetSelections() {
+            bool doSave = wxPyRestoreThread();
             PyObject*           rval = PyList_New(0);
             wxArrayTreeItemIds  array;
             size_t              num, x;
@@ -421,6 +422,7 @@ public:
                                                      "wxTreeItemId");
                 PyList_Append(rval, item);
             }
+            wxPySaveThread(doSave);
             return rval;
         }
     }

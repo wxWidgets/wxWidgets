@@ -27,14 +27,11 @@ class wxStatusBarPtr(wxWindowPtr):
     def GetStatusText(self, *_args, **_kwargs):
         val = apply(stattoolc.wxStatusBar_GetStatusText,(self,) + _args, _kwargs)
         return val
-    def DrawField(self, *_args, **_kwargs):
-        val = apply(stattoolc.wxStatusBar_DrawField,(self,) + _args, _kwargs)
+    def GetBorderX(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxStatusBar_GetBorderX,(self,) + _args, _kwargs)
         return val
-    def DrawFieldText(self, *_args, **_kwargs):
-        val = apply(stattoolc.wxStatusBar_DrawFieldText,(self,) + _args, _kwargs)
-        return val
-    def InitColours(self, *_args, **_kwargs):
-        val = apply(stattoolc.wxStatusBar_InitColours,(self,) + _args, _kwargs)
+    def GetBorderY(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxStatusBar_GetBorderY,(self,) + _args, _kwargs)
         return val
     def SetFieldsCount(self, *_args, **_kwargs):
         val = apply(stattoolc.wxStatusBar_SetFieldsCount,(self,) + _args, _kwargs)
@@ -44,6 +41,9 @@ class wxStatusBarPtr(wxWindowPtr):
         return val
     def SetStatusWidths(self, *_args, **_kwargs):
         val = apply(stattoolc.wxStatusBar_SetStatusWidths,(self,) + _args, _kwargs)
+        return val
+    def SetMinHeight(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxStatusBar_SetMinHeight,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxStatusBar instance at %s>" % (self.this,)

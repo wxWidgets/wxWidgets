@@ -53,13 +53,17 @@ public:
     }
     int GetFieldsCount(void);
     wxString GetStatusText(int ir = 0);
-    void DrawField(wxDC& dc, int i);
-    void DrawFieldText(wxDC& dc, int i);
-    void InitColours(void);
+    int GetBorderX();
+    int GetBorderY();
+
+//      void DrawField(wxDC& dc, int i);
+//      void DrawFieldText(wxDC& dc, int i);
+//      void InitColours(void);
 
     void SetFieldsCount(int number = 1);
     void SetStatusText(const wxString& text, int i = 0);
     void SetStatusWidths(int LCOUNT, int* choices);
+    void SetMinHeight(int height);
 };
 
 

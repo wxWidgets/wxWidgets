@@ -572,6 +572,9 @@ class wxScrollBarPtr(wxControlPtr):
     def GetThumbSize(self, *_args, **_kwargs):
         val = apply(controlsc.wxScrollBar_GetThumbSize,(self,) + _args, _kwargs)
         return val
+    def GetThumbLength(self, *_args, **_kwargs):
+        val = apply(controlsc.wxScrollBar_GetThumbLength,(self,) + _args, _kwargs)
+        return val
     def SetThumbPosition(self, *_args, **_kwargs):
         val = apply(controlsc.wxScrollBar_SetThumbPosition,(self,) + _args, _kwargs)
         return val

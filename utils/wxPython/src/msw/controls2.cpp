@@ -4469,6 +4469,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemParent(PyObject *self, PyObject *args, 
 }
 
 static PyObject * wxTreeCtrl_GetSelections(wxTreeCtrl *self) {
+            bool doSave = wxPyRestoreThread();
             PyObject*           rval = PyList_New(0);
             wxArrayTreeItemIds  array;
             size_t              num, x;
@@ -4478,6 +4479,7 @@ static PyObject * wxTreeCtrl_GetSelections(wxTreeCtrl *self) {
                                                      "wxTreeItemId");
                 PyList_Append(rval, item);
             }
+            wxPySaveThread(doSave);
             return rval;
         }
 static PyObject *_wrap_wxTreeCtrl_GetSelections(PyObject *self, PyObject *args, PyObject *kwargs) {
