@@ -2322,10 +2322,13 @@ def Image_GetImageExtWildcard(*args, **kwargs):
     """Image_GetImageExtWildcard() -> String"""
     return _core_.Image_GetImageExtWildcard(*args, **kwargs)
 
+def InitAllImageHandlers():
+    """
+    The former functionality of InitAllImageHanders is now done internal to
+    the _core_ extension module and so this function has become a simple NOP.
+    """
+    pass
 
-def InitAllImageHandlers(*args, **kwargs):
-    """InitAllImageHandlers()"""
-    return _core_.InitAllImageHandlers(*args, **kwargs)
 IMAGE_RESOLUTION_INCHES = _core_.IMAGE_RESOLUTION_INCHES
 IMAGE_RESOLUTION_CM = _core_.IMAGE_RESOLUTION_CM
 BMP_24BPP = _core_.BMP_24BPP
@@ -5198,7 +5201,6 @@ class PySimpleApp(wx.App):
         wx.App.__init__(self, redirect, filename, useBestVisual, clearSigInt)
         
     def OnInit(self):
-        wx.InitAllImageHandlers()
         return True
 
 

@@ -3,7 +3,7 @@
 
 """
 The `XmlResource` class allows program resources defining menus, layout of
-controls on a panel, etc.
+controls on a panel, etc. to be loaded from an XML file.
 """
 
 import _xrc
