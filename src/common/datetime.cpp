@@ -3157,14 +3157,27 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 // it's a month
                 if ( haveMon )
                 {
-                    break;
+                    // but we already have a month - maybe we guessed wrong?
+                    if ( !haveDay )
+                    {
+                    	// no need to check in month range as always < 12, but
+                        // the days are counted from 1 unlike the months
+                        day = (wxDateTime_t)mon + 1;
+                        haveDay = TRUE;
+                    }
+                    else
+                    {
+                        // could possible be the year (doesn't the year come
+                        // before the month in the japanese format?) (FIXME)
+                        break;
+                	}
                 }
 
                 mon = mon2;
 
                 haveMon = TRUE;
             }
-            else
+            else // not a valid month name
             {
                 wday = GetWeekDayFromName(token, Name_Full | Name_Abbr);
                 if ( wday != Inv_WeekDay )
@@ -3177,7 +3190,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
                     haveWDay = TRUE;
                 }
-                else
+                else // not a valid weekday name
                 {
                     // try the ordinals
                     static const wxChar *ordinals[] =
@@ -3203,7 +3216,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                         wxTRANSLATE("nineteenth"),
                         wxTRANSLATE("twentieth"),
                         // that's enough - otherwise we'd have problems with
-                        // composite (or not) ordinals otherwise
+                        // composite (or not) ordinals
                     };
 
                     size_t n;
