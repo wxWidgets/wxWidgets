@@ -28,7 +28,7 @@
 %import windows.i
 %import frames.i
 
-%pragma(python) code = "import wxp"
+%pragma(python) code = "import wx"
 
 //----------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ public:
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const char* name = "frame");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdFrameCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
 
     void ActivateNext();
     void ActivatePrevious();
@@ -74,7 +74,7 @@ public:
                     long style = wxDEFAULT_FRAME_STYLE,
                     const char* name = "frame");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdFrameCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
 
     void Activate();
     void Maximize();
@@ -92,15 +92,35 @@ public:
 class wxMDIClientWindow : public wxWindow {
 public:
     wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:wxp._StdOnScrollCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdOnScrollCallbacks(self)"
 };
 
 //---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/12/15 20:41:21  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.4  1998/10/02 06:40:41  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.3  1998/08/18 19:48:18  RD

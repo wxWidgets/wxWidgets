@@ -12,7 +12,7 @@
 #----------------------------------------------------------------------------
 
 
-from wxPython import *
+from wxPython.wx import *
 
 
 #---------------------------------------------------------------------------
@@ -23,6 +23,7 @@ class MyCanvas(wxWindow):
     def __init__(self, parent):
         wxWindow.__init__(self, parent, -1, wxPoint(0, 0), wxPyDefaultSize, wxSUNKEN_BORDER)
 
+        self.SetBackgroundColour(wxNamedColor("WHITE"))
         self.Connect(-1, -1, wxEVT_LEFT_DOWN, self.OnLeftButtonEvent)
         self.Connect(-1, -1, wxEVT_LEFT_UP,   self.OnLeftButtonEvent)
         self.Connect(-1, -1, wxEVT_MOTION,    self.OnLeftButtonEvent)
@@ -118,9 +119,8 @@ class MyFrame(wxFrame):
         self.Destroy()
 
     def OnSize(self, event):
-        w,h = self.GetClientSize()
-        #self.canvas.SetSize(5, 5, w-10, h-10)
-        self.canvas.SetDimensions(0, 0, w, h)
+        size = self.GetClientSize()
+        self.canvas.SetDimensions(5, 5, size.width-10, size.height-10)
 
 
 #---------------------------------------------------------------------------
@@ -152,6 +152,25 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.2  1998/12/15 20:44:34  RD
+# Changed the import semantics from "from wxPython import *" to "from
+# wxPython.wx import *"  This is for people who are worried about
+# namespace pollution, they can use "from wxPython import wx" and then
+# prefix all the wxPython identifiers with "wx."
+#
+# Added wxTaskbarIcon for wxMSW.
+#
+# Made the events work for wxGrid.
+#
+# Added wxConfig.
+#
+# Added wxMiniFrame for wxGTK, (untested.)
+#
+# Changed many of the args and return values that were pointers to gdi
+# objects to references to reflect changes in the wxWindows API.
+#
+# Other assorted fixes and additions.
+#
 # Revision 1.1  1998/08/09 08:28:05  RD
 # Initial version
 #

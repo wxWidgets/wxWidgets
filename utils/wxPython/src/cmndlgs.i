@@ -31,6 +31,7 @@
 %import gdi.i
 %import windows.i
 
+%pragma(python) code = "import wx"
 
 //----------------------------------------------------------------------
 
@@ -52,7 +53,7 @@ class wxColourDialog : public wxDialog {
 public:
     wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
 #ifdef __WXMSW__
     wxColourData& GetColourData();
@@ -74,7 +75,7 @@ public:
                 long style = 0,
                 const wxPoint& pos = wxPyDefaultPosition);
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
     wxString GetPath();
     wxString GetMessage();
@@ -97,7 +98,7 @@ public:
                  long style = 0,
                  const wxPoint& pos = wxPyDefaultPosition);
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
     wxString GetDirectory();
     wxString GetFilename();
@@ -140,7 +141,7 @@ public:
         }
     }
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
     int GetSelection();
     wxString GetStringSelection();
@@ -160,7 +161,7 @@ public:
                       long style = wxOK | wxCANCEL | wxCENTRE,
                       const wxPoint& pos = wxPyDefaultPosition);
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
     wxString GetValue();
     void SetValue(const wxString& value);
@@ -194,7 +195,7 @@ class wxFontDialog : public wxDialog {
 public:
     wxFontDialog(wxWindow* parent, wxFontData* data = NULL);
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
     wxFontData& GetFontData();
     int ShowModal();
@@ -241,7 +242,7 @@ class wxPageSetupDialog : public wxDialog {
 public:
     wxPageSetupDialog(wxWindow* parent, wxPageSetupData* data = NULL);
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
     wxPageSetupData& GetPageSetupData();
     int ShowModal();
@@ -282,7 +283,7 @@ class wxPrintDialog : public wxDialog {
 public:
     wxPrintDialog(wxWindow* parent, wxPrintData* data = NULL);
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
     wxPrintData& GetPrintData();
     %new wxDC* GetPrintDC();
@@ -299,7 +300,7 @@ public:
                     long style = wxOK | wxCANCEL | wxCENTRE,
                     const wxPoint& pos = wxPyDefaultPosition);
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
     int ShowModal();
 };
@@ -310,7 +311,27 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/12/15 20:41:14  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.6  1998/11/25 08:45:22  RD
+//
 // Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
 // Added events for wxGrid
 // Other various fixes and additions

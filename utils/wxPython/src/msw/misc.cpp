@@ -450,7 +450,7 @@ static PyObject *_wrap_wxSetCursor(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSetCursor(_arg0);
+    wxSetCursor(*_arg0);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;

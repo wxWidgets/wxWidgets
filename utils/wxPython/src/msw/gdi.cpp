@@ -1318,7 +1318,7 @@ static PyObject *_wrap_wxBitmap_SetPalette(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxBitmap_SetPalette(_arg0,_arg1);
+    wxBitmap_SetPalette(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2536,7 +2536,7 @@ static PyObject *_wrap_wxPen_SetStipple(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxPen_SetStipple(_arg0,_arg1);
+    wxPen_SetStipple(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2776,7 +2776,7 @@ static PyObject *_wrap_wxBrush_SetStipple(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxBrush_SetStipple(_arg0,_arg1);
+    wxBrush_SetStipple(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -3476,7 +3476,8 @@ static PyObject *_wrap_wxDC_GetBackground(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxBrush *)wxDC_GetBackground(_arg0);
+    wxBrush & _result_ref = wxDC_GetBackground(_arg0);
+    _result = (wxBrush *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -3499,7 +3500,8 @@ static PyObject *_wrap_wxDC_GetBrush(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxBrush *)wxDC_GetBrush(_arg0);
+    wxBrush & _result_ref = wxDC_GetBrush(_arg0);
+    _result = (wxBrush *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -3625,7 +3627,8 @@ static PyObject *_wrap_wxDC_GetFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxFont *)wxDC_GetFont(_arg0);
+    wxFont & _result_ref = wxDC_GetFont(_arg0);
+    _result = (wxFont *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -3711,7 +3714,8 @@ static PyObject *_wrap_wxDC_GetPen(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxPen *)wxDC_GetPen(_arg0);
+    wxPen & _result_ref = wxDC_GetPen(_arg0);
+    _result = (wxPen *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxPen_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -4521,12 +4525,12 @@ static PyObject *_wrap_wxDC_StartPage(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static void  wxDC_DrawBitmap(wxDC *self,wxBitmap * bitmap,long  x,long  y,bool  swapPalette) {
+static void  wxDC_DrawBitmap(wxDC *self,wxBitmap & bitmap,long  x,long  y,bool  swapPalette) {
             wxMemoryDC* memDC = new wxMemoryDC;
             memDC->SelectObject(bitmap);
             if (swapPalette)
-                self->SetPalette(bitmap->GetPalette());
-            self->Blit(x, y, bitmap->GetWidth(), bitmap->GetHeight(), memDC,
+                self->SetPalette(*bitmap.GetPalette());
+            self->Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), memDC,
                     0, 0, self->GetLogicalFunction());
             memDC->SelectObject(wxNullBitmap);
             delete memDC;
@@ -4558,7 +4562,7 @@ static PyObject *_wrap_wxDC_DrawBitmap(PyObject *self, PyObject *args) {
         }
     }
     _arg4 = (bool ) tempbool4;
-    wxDC_DrawBitmap(_arg0,_arg1,_arg2,_arg3,_arg4);
+    wxDC_DrawBitmap(_arg0,*_arg1,_arg2,_arg3,_arg4);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -5329,6 +5333,7 @@ SWIGEXPORT(void,initgdic)() {
  */
 	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
+	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
@@ -5374,6 +5379,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
+	 SWIG_RegisterMapping("_class_wxRegion","_wxRegion",0);
 	 SWIG_RegisterMapping("_wxFont","_class_wxFont",0);
 	 SWIG_RegisterMapping("_unsigned_long","_wxDash",0);
 	 SWIG_RegisterMapping("_unsigned_long","_long",0);
@@ -5439,6 +5445,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_int","_unsigned_int",0);
 	 SWIG_RegisterMapping("_int","_signed_int",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
+	 SWIG_RegisterMapping("_wxRegionIterator","_class_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxPrinterDC","_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxPaintDC","_wxPaintDC",0);
 	 SWIG_RegisterMapping("_class_wxLayoutConstraints","_wxLayoutConstraints",0);
@@ -5446,6 +5453,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_class_wxColour","_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxScreenDC","_wxScreenDC",0);
 	 SWIG_RegisterMapping("_wxPalette","_class_wxPalette",0);
+	 SWIG_RegisterMapping("_wxRegion","_class_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxClientDC","_wxClientDC",0);
 	 SWIG_RegisterMapping("_class_wxSize","_wxSize",0);
 	 SWIG_RegisterMapping("_class_wxBitmap","_class_wxCursor",SwigwxCursorTowxBitmap);

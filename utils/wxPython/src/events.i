@@ -54,11 +54,14 @@ public:
 
 class wxCloseEvent : public wxEvent {
 public:
-// ??? it's in the docs ???    bool GetSessionEnding();
+    bool CanVeto();
+// ****    bool GetSessionEnding();
     bool GetLoggingOff();
     void Veto(bool veto = TRUE);
     bool GetVeto();
     void SetForce(bool force);
+    void SetCanVeto(bool canVeto);
+    void SetLoggingOff(bool loggingOff);
     bool GetForce();
 };
 
@@ -297,6 +300,25 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/12/15 20:41:17  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.4  1998/11/16 00:00:55  RD
 // Generic treectrl for wxPython/GTK compiles...
 //

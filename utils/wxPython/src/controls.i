@@ -36,7 +36,7 @@
 %import gdi.i
 %import events.i
 
-%pragma(python) code = "import wxp"
+%pragma(python) code = "import wx"
 
 //----------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ public:
              const wxValidator& validator = wxPyDefaultValidator,
              char* name = "button");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void SetDefault();
 };
@@ -80,7 +80,7 @@ public:
                    const wxValidator& validator = wxPyDefaultValidator,
                    char* name = "button");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     wxBitmap& GetBitmapLabel();
 #ifdef __WXMSW__
@@ -106,7 +106,7 @@ public:
                const wxValidator& val = wxPyDefaultValidator,
                char* name = "checkBox");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     bool GetValue();
     void SetValue(const bool state);
@@ -124,7 +124,7 @@ public:
              const wxValidator& validator = wxPyDefaultValidator,
              char* name = "choice");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void Append(const wxString& item);
     void Clear();
@@ -151,7 +151,7 @@ public:
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "comboBox");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void Append(const wxString& item);
     // TODO: void Append(const wxString& item, char* clientData);
@@ -191,7 +191,7 @@ public:
             const wxValidator& validator = wxPyDefaultValidator,
             char* name = "gauge");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     int GetBezelFace();
     int GetRange();
@@ -225,7 +225,7 @@ public:
                  long style = 0,
                  char* name = "staticText");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     wxString GetLabel();
     void SetLabel(const wxString& label);
@@ -243,7 +243,7 @@ public:
               const wxValidator& validator = wxPyDefaultValidator,
               char* name = "listBox");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void Append(const wxString& item);
     // TODO:    void Append(const wxString& item, char* clientData);
@@ -282,7 +282,7 @@ public:
                    const wxValidator& validator = wxPyDefaultValidator,
                    char* name = "listBox");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     bool  IsChecked(int uiIndex);
     void  Check(int uiIndex, bool bCheck = TRUE);
@@ -302,7 +302,7 @@ public:
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "text");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void Clear();
     void Copy();
@@ -342,13 +342,13 @@ public:
                 const wxValidator& validator = wxPyDefaultValidator,
                 char* name = "scrollBar");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     int GetRange();
     int GetPageSize();
-    int GetPosition();
+    int GetThumbPosition();
     int GetThumbSize();
-    void SetPosition(int viewStart);
+    void SetThumbPosition(int viewStart);
     void SetScrollbar(int position, int thumbSize,
                       int range,    int pageSize,
                       bool refresh = TRUE);
@@ -382,7 +382,7 @@ public:
                    long style = 0,
                    char* name = "staticBitmap");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     wxBitmap& GetBitmap();
     void SetBitmap(const wxBitmap& bitmap);
@@ -402,7 +402,7 @@ public:
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "radioBox");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     %name(EnableBox)void Enable(bool enable);
     void Enable(int n, bool enable);
@@ -435,7 +435,7 @@ public:
                   const wxValidator& validator = wxPyDefaultValidator,
                   char* name = "radioButton");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     bool GetValue();
     void SetValue(bool value);
@@ -453,7 +453,7 @@ public:
              const wxValidator& validator = wxPyDefaultValidator,
              char* name = "slider");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void ClearSel();
     void ClearTicks();
@@ -483,6 +483,25 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1998/12/15 20:41:15  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.7  1998/11/16 00:00:53  RD
 // Generic treectrl for wxPython/GTK compiles...
 //

@@ -42,6 +42,28 @@ application will cause problems.  However there is a plan to support
 this in the future.
 
 
+What's new in 0.5.0
+-------------------
+Changed the import semantics from "from wxPython import *" to "from
+wxPython.wx import *"  This is for people who are worried about
+namespace pollution, they can use "from wxPython import wx" and then
+prefix all the wxPython identifiers with "wx."
+
+Added wxTaskbarIcon for wxMSW.
+
+Made the events work for wxGrid.
+
+Added wxConfig.
+
+Added wxMiniFrame for wxGTK, (untested.)
+
+Changed many of the args and return values that were pointers to gdi
+objects to references to reflect changes in the wxWindows API.
+
+Other assorted fixes and additions.
+
+
+
 
 What's new in 0.4.2
 -------------------

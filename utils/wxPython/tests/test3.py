@@ -12,21 +12,25 @@
 #----------------------------------------------------------------------------
 
 
-from wxPython import *
+from wxPython.wx import *
 
 
 #---------------------------------------------------------------------------
 
 class MyCanvas(wxWindow):
+    def __init__(self, parent, ID):
+        wxWindow.__init__(self, parent, ID)
+        self.SetBackgroundColour(wxNamedColor("WHITE"))
+
     def OnPaint(self, event):
         dc = wxPaintDC(self)
         dc.BeginDrawing()
-        w, h = self.GetClientSize()
+        size = self.GetClientSize()
         font = wxFont(42, wxSWISS, wxNORMAL, wxNORMAL)
         dc.SetFont(font)
         st = "Python Rules!"
         tw,th, d,e = dc.GetTextExtent(st)
-        dc.DrawText(st, (w-tw)/2, (h-th)/2)
+        dc.DrawText(st, (size.width-tw)/2, (size.height-th)/2)
         dc.EndDrawing()
 
 #---------------------------------------------------------------------------
@@ -54,7 +58,7 @@ class MyFrame(wxFrame):
         wxFrame.__init__(self, parent, id, title, wxPyDefaultPosition,
                          wxSize(420, 200))
         self.canvas = MyCanvas(self, -1)
-        self.CreateStatusBar(3)
+        self.CreateStatusBar(2)
         mainmenu = wxMenuBar()
         menu = wxMenu()
         menu.Append(100, 'A &Menu Item', 'the help text')
@@ -80,9 +84,9 @@ class MyFrame(wxFrame):
 
 
     def OnSize(self, event):
-        w,h = self.GetClientSize()
-        self.canvas.SetSize(wxSize(w, h))
-        self.SetStatusText("hello, this is a test: (%d, %d)" % (w,h))
+        size = self.GetClientSize()
+        self.canvas.SetSize(size)
+        self.SetStatusText("hello, this is a test: (%d, %d)" % (size.width, size.height), 1)
 
 ##     def OnMenuHighlight(self, event):
 ##         mainmenu = self.GetMenuBar()
@@ -143,6 +147,25 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.3  1998/12/15 20:44:35  RD
+# Changed the import semantics from "from wxPython import *" to "from
+# wxPython.wx import *"  This is for people who are worried about
+# namespace pollution, they can use "from wxPython import wx" and then
+# prefix all the wxPython identifiers with "wx."
+#
+# Added wxTaskbarIcon for wxMSW.
+#
+# Made the events work for wxGrid.
+#
+# Added wxConfig.
+#
+# Added wxMiniFrame for wxGTK, (untested.)
+#
+# Changed many of the args and return values that were pointers to gdi
+# objects to references to reflect changes in the wxWindows API.
+#
+# Other assorted fixes and additions.
+#
 # Revision 1.2  1998/08/22 19:51:17  RD
 # some tweaks for wxGTK
 #

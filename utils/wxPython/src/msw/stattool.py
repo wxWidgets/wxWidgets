@@ -10,6 +10,7 @@ from gdi import *
 from controls import *
 
 from events import *
+import wx
 class wxStatusBarPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
@@ -55,7 +56,7 @@ class wxStatusBar(wxStatusBarPtr):
         args = tuple(argl)
         self.this = apply(stattoolc.new_wxStatusBar,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -261,7 +262,7 @@ class wxToolBar(wxToolBarPtr):
         args = tuple(argl)
         self.this = apply(stattoolc.new_wxToolBar,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 

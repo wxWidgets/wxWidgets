@@ -230,7 +230,8 @@ static PyObject *_wrap_wxGridCell_GetFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxFont *)wxGridCell_GetFont(_arg0);
+    wxFont & _result_ref = wxGridCell_GetFont(_arg0);
+    _result = (wxFont *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -259,7 +260,7 @@ static PyObject *_wrap_wxGridCell_SetFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGridCell_SetFont(_arg0,_arg1);
+    wxGridCell_SetFont(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -388,7 +389,8 @@ static PyObject *_wrap_wxGridCell_GetBackgroundBrush(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    _result = (wxBrush *)wxGridCell_GetBackgroundBrush(_arg0);
+    wxBrush & _result_ref = wxGridCell_GetBackgroundBrush(_arg0);
+    _result = (wxBrush *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -1021,7 +1023,8 @@ static PyObject *_wrap_wxGrid_GetCellTextFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxFont *)wxGrid_GetCellTextFont(_arg0,_arg1,_arg2);
+    wxFont & _result_ref = wxGrid_GetCellTextFont(_arg0,_arg1,_arg2);
+    _result = (wxFont *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -1044,7 +1047,8 @@ static PyObject *_wrap_wxGrid_GetDefCellTextFont(PyObject *self, PyObject *args)
         return NULL;
         }
     }
-    _result = (wxFont *)wxGrid_GetDefCellTextFont(_arg0);
+    wxFont & _result_ref = wxGrid_GetDefCellTextFont(_arg0);
+    _result = (wxFont *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -1338,7 +1342,8 @@ static PyObject *_wrap_wxGrid_GetLabelTextFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxFont *)wxGrid_GetLabelTextFont(_arg0);
+    wxFont & _result_ref = wxGrid_GetLabelTextFont(_arg0);
+    _result = (wxFont *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -1768,7 +1773,7 @@ static PyObject *_wrap_wxGrid_SetCellTextFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGrid_SetCellTextFont(_arg0,_arg1,_arg2,_arg3);
+    wxGrid_SetCellTextFont(_arg0,*_arg1,_arg2,_arg3);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1797,7 +1802,7 @@ static PyObject *_wrap_wxGrid_SetDefCellTextFont(PyObject *self, PyObject *args)
         return NULL;
         }
     }
-    wxGrid_SetDefCellTextFont(_arg0,_arg1);
+    wxGrid_SetDefCellTextFont(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1885,7 +1890,7 @@ static PyObject *_wrap_wxGrid_SetDividerPen(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGrid_SetDividerPen(_arg0,_arg1);
+    wxGrid_SetDividerPen(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2065,7 +2070,7 @@ static PyObject *_wrap_wxGrid_SetLabelTextFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGrid_SetLabelTextFont(_arg0,_arg1);
+    wxGrid_SetLabelTextFont(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;

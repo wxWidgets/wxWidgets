@@ -30,6 +30,7 @@
 %import windows.i
 %import controls.i
 
+%pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ public:
                 long style = wxST_SIZEGRIP,
                 char* name = "statusBar");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     %addmethods {
         %new wxRect* GetFieldRect(long item) {
@@ -110,7 +111,7 @@ public:
               long style = wxTB_HORIZONTAL | wxNO_BORDER,
               char* name = "toolBar");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
 
     void AddSeparator(void);
@@ -184,7 +185,7 @@ public:
 //                long style = wxTB_HORIZONTAL | wxNO_BORDER,
 //                char* name = "toolBar");
 
-//      %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+//      %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
 //  };
 
@@ -198,7 +199,7 @@ public:
 //                      long style = wxTB_HORIZONTAL | wxNO_BORDER,
 //                      char* name = "toolBar");
 
-//      %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+//      %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
 //  };
 
@@ -208,6 +209,25 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/12/15 20:41:23  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.2  1998/10/07 07:34:34  RD
 // Version 0.4.1 for wxGTK
 //

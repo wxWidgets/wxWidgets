@@ -31,7 +31,7 @@
 %import events.i
 %import controls.i
 
-%pragma(python) code = "import wxp"
+%pragma(python) code = "import wx"
 
 //----------------------------------------------------------------------
 
@@ -84,7 +84,7 @@ public:
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "listCtrl");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
     bool DeleteItem(long item);
@@ -238,7 +238,7 @@ public:
                //const wxValidator& validator = wxPyDefaultValidator,
                char* name = "wxTreeCtrl");
 #endif
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     size_t GetCount();
     unsigned int GetIndent();
@@ -316,6 +316,9 @@ public:
                       // **** And this too
                       // wxTreeItemCmpFunc *cmpFunction = NULL);
 
+    void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
+    bool IsBold(const wxTreeItemId& item) const;
+    wxTreeItemId HitTest(const wxPoint& point);
 };
 
 
@@ -337,7 +340,7 @@ public:
               long style = 0,
               char* name = "tabCtrl");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     bool DeleteAllItems();
     bool DeleteItem(int item);
@@ -379,7 +382,27 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.11  1998/12/15 20:41:16  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.10  1998/11/25 08:45:23  RD
+//
 // Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
 // Added events for wxGrid
 // Other various fixes and additions

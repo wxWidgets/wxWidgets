@@ -10,7 +10,7 @@ from windows import *
 from controls import *
 
 from events import *
-import wxp
+import wx
 class wxGridCellPtr :
     def __init__(self,this):
         self.this = this
@@ -294,16 +294,16 @@ class wxGrid(wxGridPtr):
         args = tuple(argl)
         self.this = apply(windows2c.new_wxGrid,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
-        wxp._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)
-        wxp._checkForCallback(self, 'OnCreateCell',           wxEVT_GRID_CREATE_CELL)
-        wxp._checkForCallback(self, 'OnChangeLabels',         wxEVT_GRID_CHANGE_LABELS)
-        wxp._checkForCallback(self, 'OnChangeSelectionLabel', wxEVT_GRID_CHANGE_SEL_LABEL)
-        wxp._checkForCallback(self, 'OnCellChange',           wxEVT_GRID_CELL_CHANGE)
-        wxp._checkForCallback(self, 'OnCellLeftClick',        wxEVT_GRID_CELL_LCLICK)
-        wxp._checkForCallback(self, 'OnCellRightClick',       wxEVT_GRID_CELL_RCLICK)
-        wxp._checkForCallback(self, 'OnLabelLeftClick',       wxEVT_GRID_LABEL_LCLICK)
-        wxp._checkForCallback(self, 'OnLabelRightClick',      wxEVT_GRID_LABEL_RCLICK)
+        wx._StdWindowCallbacks(self)
+        wx._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)
+        wx._checkForCallback(self, 'OnCreateCell',           wxEVT_GRID_CREATE_CELL)
+        wx._checkForCallback(self, 'OnChangeLabels',         wxEVT_GRID_CHANGE_LABELS)
+        wx._checkForCallback(self, 'OnChangeSelectionLabel', wxEVT_GRID_CHANGE_SEL_LABEL)
+        wx._checkForCallback(self, 'OnCellChange',           wxEVT_GRID_CELL_CHANGE)
+        wx._checkForCallback(self, 'OnCellLeftClick',        wxEVT_GRID_CELL_LCLICK)
+        wx._checkForCallback(self, 'OnCellRightClick',       wxEVT_GRID_CELL_RCLICK)
+        wx._checkForCallback(self, 'OnLabelLeftClick',       wxEVT_GRID_LABEL_LCLICK)
+        wx._checkForCallback(self, 'OnLabelRightClick',      wxEVT_GRID_LABEL_RCLICK)
 
 
 
@@ -443,7 +443,7 @@ class wxNotebook(wxNotebookPtr):
         args = tuple(argl)
         self.this = apply(windows2c.new_wxNotebook,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -521,7 +521,7 @@ class wxSplitterWindow(wxSplitterWindowPtr):
         args = tuple(argl)
         self.this = apply(windows2c.new_wxSplitterWindow,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -545,13 +545,13 @@ class wxTaskBarIcon(wxTaskBarIconPtr):
     def __init__(self) :
         self.this = windows2c.new_wxTaskBarIcon()
         self.thisown = 1
-        wxp._checkForCallback(self, 'OnMouseMove',    wxEVT_TASKBAR_MOVE)
-        wxp._checkForCallback(self, 'OnLButtonDown',  wxEVT_TASKBAR_LEFT_DOWN)
-        wxp._checkForCallback(self, 'OnLButtonUp',    wxEVT_TASKBAR_LEFT_UP)
-        wxp._checkForCallback(self, 'OnRButtonDown',  wxEVT_TASKBAR_RIGHT_DOWN)
-        wxp._checkForCallback(self, 'OnRButtonUp',    wxEVT_TASKBAR_RIGHT_UP)
-        wxp._checkForCallback(self, 'OnLButtonDClick',wxEVT_TASKBAR_LEFT_DCLICK)
-        wxp._checkForCallback(self, 'OnRButtonDClick',wxEVT_TASKBAR_RIGHT_DCLICK)
+        wx._checkForCallback(self, 'OnMouseMove',    wxEVT_TASKBAR_MOVE)
+        wx._checkForCallback(self, 'OnLButtonDown',  wxEVT_TASKBAR_LEFT_DOWN)
+        wx._checkForCallback(self, 'OnLButtonUp',    wxEVT_TASKBAR_LEFT_UP)
+        wx._checkForCallback(self, 'OnRButtonDown',  wxEVT_TASKBAR_RIGHT_DOWN)
+        wx._checkForCallback(self, 'OnRButtonUp',    wxEVT_TASKBAR_RIGHT_UP)
+        wx._checkForCallback(self, 'OnLButtonDClick',wxEVT_TASKBAR_LEFT_DCLICK)
+        wx._checkForCallback(self, 'OnRButtonDClick',wxEVT_TASKBAR_RIGHT_DCLICK)
 
 
 

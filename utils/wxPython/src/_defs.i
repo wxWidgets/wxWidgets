@@ -152,6 +152,9 @@ enum {
     wxDIALOG_MODELESS,
     wxDEFAULT_FRAME_STYLE,
     wxDEFAULT_DIALOG_STYLE,
+
+    wxFRAME_TOOL_WINDOW,
+
     wxRETAINED,
     wxBACKINGSTORE,
     wxTB_3DBUTTONS,
@@ -333,7 +336,6 @@ enum {
     wxACCEL_ALT,
     wxACCEL_CTRL,
     wxACCEL_SHIFT,
-
 };
 
 
@@ -699,6 +701,25 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9  1998/12/15 20:41:13  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.8  1998/11/15 23:03:42  RD
 // Removing some ifdef's for wxGTK
 //

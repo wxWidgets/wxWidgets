@@ -10,7 +10,7 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-%module wxp
+%module wx
 
 
 %{
@@ -36,7 +36,9 @@
 %import cmndlgs.i
 %import stattool.i
 %import frames.i
-
+#ifndef SEPARATE
+%import utils.i
+#endif
 
 
 %native(_wxStart)           __wxStart;
@@ -44,7 +46,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "0.4.2"
+#define __version__ "0.5.0"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -111,6 +113,7 @@ extern "C" SWIGEXPORT(void,initcontrols2c)();
 extern "C" SWIGEXPORT(void,initcmndlgsc)();
 extern "C" SWIGEXPORT(void,initstattoolc)();
 extern "C" SWIGEXPORT(void,initframesc)();
+extern "C" SWIGEXPORT(void,initutilsc)();
 
 %}
 
@@ -134,7 +137,9 @@ extern "C" SWIGEXPORT(void,initframesc)();
     initcmndlgsc();
     initstattoolc();
     initframesc();
-
+#ifndef SEPARATE
+    initutilsc();
+#endif
 %}
 
 //----------------------------------------------------------------------
@@ -147,6 +152,25 @@ extern "C" SWIGEXPORT(void,initframesc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.1  1998/12/15 20:41:27  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.9  1998/10/20 07:38:04  RD
 // bug fix
 //

@@ -36,7 +36,7 @@
 %import misc.i
 %import gdi.i
 
-%pragma(python) code = "import wxp"
+%pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ public:
              long style = 0,
              char* name = "panel");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void CaptureMouse();
     void Center(int direction = wxHORIZONTAL);
@@ -86,25 +86,29 @@ public:
     wxColour GetBackgroundColour();
     int  GetCharHeight();
     int  GetCharWidth();
-    void GetClientSize(int *OUTPUT, int *OUTPUT);
+    %name(GetClientSizeTuple) void GetClientSize(int *OUTPUT, int *OUTPUT);
+    wxSize GetClientSize();
     wxLayoutConstraints * GetConstraints();
 #ifdef __WXMSW__
     wxButton* GetDefaultItem();
 #endif
     //wxEvtHandler* GetEventHandler();
-    wxFont* GetFont();
+    wxFont& GetFont();
     wxColour GetForegroundColour();
     wxWindow * GetGrandParent();
     int GetId();
-    void GetPosition(int *OUTPUT, int *OUTPUT);
     wxString GetLabel();
     wxString GetName();
     wxWindow * GetParent();
+    %name(GetPositionTuple) void GetPosition(int *OUTPUT, int *OUTPUT);
+    wxPoint GetPosition();
+    wxRect GetRect();
     int  GetReturnCode();
     int GetScrollThumb(int orientation);
     int GetScrollPos(int orientation);
     int GetScrollRange(int orientation);
-    void GetSize(int *OUTPUT, int *OUTPUT);
+    %name(GetSizeTuple) void GetSize(int *OUTPUT, int *OUTPUT);
+    wxSize GetSize();
     void GetTextExtent(const wxString& string, int *OUTPUT, int *OUTPUT); // int* descent = NULL, int* externalLeading = NULL, const wxFont* font = NULL, bool use16 = FALSE)
     wxString GetTitle();
     long GetWindowStyleFlag();
@@ -127,6 +131,7 @@ public:
     void ReleaseMouse();
     void ScreenToClient(int *BOTH, int *BOTH);
     void ScrollWindow(int dx, int dy, const wxRect* rect = NULL);
+    void SetAcceleratorTable(const wxAcceleratorTable& accel);
     void SetAutoLayout(bool autoLayout);
     void SetBackgroundColour(const wxColour& colour);
     void SetConstraints(wxLayoutConstraints *constraints);
@@ -157,7 +162,6 @@ public:
     void SetSizeHints(int minW=-1, int minH=-1, int maxW=-1, int maxH=-1, int incW=-1, int incH=-1);
     void SetClientSize(int width, int height);
     //void SetPalette(wxPalette* palette);
-    //void SetColourMap(wxColourMap *colourMap);
     void SetCursor(const wxCursor&cursor);
     //void SetEventHandler(wxEvtHandler* handler);
     void SetTitle(const wxString& title);
@@ -169,8 +173,21 @@ public:
     void WarpPointer(int x, int y);
 #endif
 
+    %name(ConvertDialogPointToPixels) wxPoint ConvertDialogToPixels(const wxPoint& pt);
+    %name(ConvertDialogSizeToPixels)  wxSize  ConvertDialogToPixels(const wxSize& sz);
+
+    %name(ConvertPixelPointToDialog) wxPoint ConvertPixelsToDialog(const wxPoint& pt);
+    %name(ConvertPixelSizeToDialog)  wxSize  ConvertPixelsToDialog(const wxSize& sz);
+
 };
 
+%pragma(python) code = "
+def wxDLG_PNT(win, point):
+    return win.ConvertDialogPointToPixels(point)
+
+def wxDLG_SZE(win, size):
+    return win.ConvertDialogPointToPixels(size)
+"
 
 // Static method(s)
 #ifdef __WXMSW__
@@ -193,7 +210,7 @@ public:
             long style = wxTAB_TRAVERSAL,
             const char* name = "panel");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void InitDialog();
 };
@@ -210,7 +227,7 @@ public:
              long style = wxDEFAULT_DIALOG_STYLE,
              const char* name = "dialogBox");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
     void Centre(int direction = wxBOTH);
     void EndModal(int retCode);
@@ -235,8 +252,8 @@ public:
                      long style = wxHSCROLL | wxVSCROLL,
                      char* name = "scrolledWindow");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:wxp._StdOnScrollCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdOnScrollCallbacks(self)"
 
     void EnableScrolling(bool xScrolling, bool yScrolling);
     void GetScrollPixelsPerUnit(int* OUTPUT, int* OUTPUT);
@@ -347,7 +364,27 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/12/15 20:41:25  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.6  1998/10/02 06:40:43  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.5  1998/08/17 18:29:40  RD

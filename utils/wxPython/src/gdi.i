@@ -49,7 +49,7 @@ public:
     void SetHeight(int height);
     void SetMask(wxMask* mask);
 #ifdef __WXMSW__
-    void SetPalette(wxPalette* palette);
+    void SetPalette(wxPalette& palette);
 #endif
     void SetWidth(int width);
 };
@@ -220,7 +220,7 @@ public:
     void SetColour(wxColour& colour);
 #ifdef __WXMSW__
     void SetDashes(int LCOUNT, wxDash* LIST);
-    void SetStipple(wxBitmap * stipple);
+    void SetStipple(wxBitmap& stipple);
 #endif
     void SetJoin(int join_style);
     void SetStyle(int style);
@@ -246,7 +246,7 @@ public:
     bool Ok();
 #ifdef __WXMSW__
     void SetColour(wxColour &colour);
-    void SetStipple(wxBitmap *bitmap);
+    void SetStipple(wxBitmap& bitmap);
     void SetStyle(int style);
 #endif
 };
@@ -292,17 +292,17 @@ public:
 #ifdef __WXGTK__
     void FloodFill(long x, long y, wxColour* colour, int style=wxFLOOD_SURFACE);
 #endif
-    wxBrush * GetBackground();
-    wxBrush * GetBrush();
+    wxBrush&  GetBackground();
+    wxBrush&  GetBrush();
     long GetCharHeight();
     long GetCharWidth();
     void GetClippingBox(long *OUTPUT, long *OUTPUT,
                         long *OUTPUT, long *OUTPUT);
-    wxFont * GetFont();
+    wxFont& GetFont();
     int GetLogicalFunction();
     int GetMapMode();
     bool GetOptimization();
-    wxPen * GetPen();
+    wxPen& GetPen();
     %addmethods {
         %new wxColour* GetPixel(long x, long y) {
             wxColour* wc = new wxColour();
@@ -344,12 +344,12 @@ public:
 
     %addmethods {
             // This one is my own creation...
-        void DrawBitmap(wxBitmap* bitmap, long x, long y, bool swapPalette=TRUE) {
+        void DrawBitmap(wxBitmap& bitmap, long x, long y, bool swapPalette=TRUE) {
             wxMemoryDC* memDC = new wxMemoryDC;
             memDC->SelectObject(bitmap);
             if (swapPalette)
-                self->SetPalette(bitmap->GetPalette());
-            self->Blit(x, y, bitmap->GetWidth(), bitmap->GetHeight(), memDC,
+                self->SetPalette(*bitmap.GetPalette());
+            self->Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), memDC,
                     0, 0, self->GetLogicalFunction());
             memDC->SelectObject(wxNullBitmap);
             delete memDC;
@@ -511,7 +511,27 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/12/15 20:41:18  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.6  1998/11/25 08:45:24  RD
+//
 // Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
 // Added events for wxGrid
 // Other various fixes and additions

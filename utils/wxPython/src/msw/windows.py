@@ -4,7 +4,14 @@ import windowsc
 from misc import *
 
 from gdi import *
-import wxp
+import wx
+
+def wxDLG_PNT(win, point):
+    return win.ConvertDialogPointToPixels(point)
+
+def wxDLG_SZE(win, size):
+    return win.ConvertDialogPointToPixels(size)
+
 class wxEvtHandlerPtr :
     def __init__(self,this):
         self.this = this
@@ -74,8 +81,13 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetCharWidth(self):
         val = windowsc.wxWindow_GetCharWidth(self.this)
         return val
+    def GetClientSizeTuple(self):
+        val = windowsc.wxWindow_GetClientSizeTuple(self.this)
+        return val
     def GetClientSize(self):
         val = windowsc.wxWindow_GetClientSize(self.this)
+        val = wxSizePtr(val)
+        val.thisown = 1
         return val
     def GetConstraints(self):
         val = windowsc.wxWindow_GetConstraints(self.this)
@@ -101,9 +113,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetId(self):
         val = windowsc.wxWindow_GetId(self.this)
         return val
-    def GetPosition(self):
-        val = windowsc.wxWindow_GetPosition(self.this)
-        return val
     def GetLabel(self):
         val = windowsc.wxWindow_GetLabel(self.this)
         return val
@@ -113,6 +122,19 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetParent(self):
         val = windowsc.wxWindow_GetParent(self.this)
         val = wxWindowPtr(val)
+        return val
+    def GetPositionTuple(self):
+        val = windowsc.wxWindow_GetPositionTuple(self.this)
+        return val
+    def GetPosition(self):
+        val = windowsc.wxWindow_GetPosition(self.this)
+        val = wxPointPtr(val)
+        val.thisown = 1
+        return val
+    def GetRect(self):
+        val = windowsc.wxWindow_GetRect(self.this)
+        val = wxRectPtr(val)
+        val.thisown = 1
         return val
     def GetReturnCode(self):
         val = windowsc.wxWindow_GetReturnCode(self.this)
@@ -126,8 +148,13 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetScrollRange(self,arg0):
         val = windowsc.wxWindow_GetScrollRange(self.this,arg0)
         return val
+    def GetSizeTuple(self):
+        val = windowsc.wxWindow_GetSizeTuple(self.this)
+        return val
     def GetSize(self):
         val = windowsc.wxWindow_GetSize(self.this)
+        val = wxSizePtr(val)
+        val.thisown = 1
         return val
     def GetTextExtent(self,arg0):
         val = windowsc.wxWindow_GetTextExtent(self.this,arg0)
@@ -190,6 +217,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         except: pass
         args = tuple(argl)
         val = apply(windowsc.wxWindow_ScrollWindow,(self.this,arg0,arg1,)+args)
+        return val
+    def SetAcceleratorTable(self,arg0):
+        val = windowsc.wxWindow_SetAcceleratorTable(self.this,arg0.this)
         return val
     def SetAutoLayout(self,arg0):
         val = windowsc.wxWindow_SetAutoLayout(self.this,arg0)
@@ -263,6 +293,26 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def WarpPointer(self,arg0,arg1):
         val = windowsc.wxWindow_WarpPointer(self.this,arg0,arg1)
         return val
+    def ConvertDialogPointToPixels(self,arg0):
+        val = windowsc.wxWindow_ConvertDialogPointToPixels(self.this,arg0.this)
+        val = wxPointPtr(val)
+        val.thisown = 1
+        return val
+    def ConvertDialogSizeToPixels(self,arg0):
+        val = windowsc.wxWindow_ConvertDialogSizeToPixels(self.this,arg0.this)
+        val = wxSizePtr(val)
+        val.thisown = 1
+        return val
+    def ConvertPixelPointToDialog(self,arg0):
+        val = windowsc.wxWindow_ConvertPixelPointToDialog(self.this,arg0.this)
+        val = wxPointPtr(val)
+        val.thisown = 1
+        return val
+    def ConvertPixelSizeToDialog(self,arg0):
+        val = windowsc.wxWindow_ConvertPixelSizeToDialog(self.this,arg0.this)
+        val = wxSizePtr(val)
+        val.thisown = 1
+        return val
     def __repr__(self):
         return "<C wxWindow instance>"
 class wxWindow(wxWindowPtr):
@@ -275,7 +325,7 @@ class wxWindow(wxWindowPtr):
         args = tuple(argl)
         self.this = apply(windowsc.new_wxWindow,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -299,7 +349,7 @@ class wxPanel(wxPanelPtr):
         args = tuple(argl)
         self.this = apply(windowsc.new_wxPanel,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -350,7 +400,7 @@ class wxDialog(wxDialogPtr):
         args = tuple(argl)
         self.this = apply(windowsc.new_wxDialog,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
-        wxp._StdDialogCallbacks(self)
+        wx._StdDialogCallbacks(self)
 
 
 
@@ -395,8 +445,8 @@ class wxScrolledWindow(wxScrolledWindowPtr):
         args = tuple(argl)
         self.this = apply(windowsc.new_wxScrolledWindow,(arg0.this,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
-        wxp._StdOnScrollCallbacks(self)
+        wx._StdWindowCallbacks(self)
+        wx._StdOnScrollCallbacks(self)
 
 
 

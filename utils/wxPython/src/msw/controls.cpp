@@ -3743,23 +3743,23 @@ static PyObject *_wrap_wxScrollBar_GetPageSize(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxScrollBar_GetPosition(_swigobj)  (_swigobj->GetPosition())
-static PyObject *_wrap_wxScrollBar_GetPosition(PyObject *self, PyObject *args) {
+#define wxScrollBar_GetThumbPosition(_swigobj)  (_swigobj->GetThumbPosition())
+static PyObject *_wrap_wxScrollBar_GetThumbPosition(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     int  _result;
     wxScrollBar * _arg0;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxScrollBar_GetPosition",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:wxScrollBar_GetThumbPosition",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxScrollBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrollBar_GetPosition. Expected _wxScrollBar_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrollBar_GetThumbPosition. Expected _wxScrollBar_p.");
         return NULL;
         }
     }
-    _result = (int )wxScrollBar_GetPosition(_arg0);
+    _result = (int )wxScrollBar_GetThumbPosition(_arg0);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3785,23 +3785,23 @@ static PyObject *_wrap_wxScrollBar_GetThumbSize(PyObject *self, PyObject *args) 
     return _resultobj;
 }
 
-#define wxScrollBar_SetPosition(_swigobj,_swigarg0)  (_swigobj->SetPosition(_swigarg0))
-static PyObject *_wrap_wxScrollBar_SetPosition(PyObject *self, PyObject *args) {
+#define wxScrollBar_SetThumbPosition(_swigobj,_swigarg0)  (_swigobj->SetThumbPosition(_swigarg0))
+static PyObject *_wrap_wxScrollBar_SetThumbPosition(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxScrollBar * _arg0;
     int  _arg1;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"si:wxScrollBar_SetPosition",&_argc0,&_arg1)) 
+    if(!PyArg_ParseTuple(args,"si:wxScrollBar_SetThumbPosition",&_argc0,&_arg1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxScrollBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrollBar_SetPosition. Expected _wxScrollBar_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrollBar_SetThumbPosition. Expected _wxScrollBar_p.");
         return NULL;
         }
     }
-    wxScrollBar_SetPosition(_arg0,_arg1);
+    wxScrollBar_SetThumbPosition(_arg0,_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -5314,9 +5314,9 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxSpinButton_GetMax", _wrap_wxSpinButton_GetMax, 1 },
 	 { "new_wxSpinButton", _wrap_new_wxSpinButton, 1 },
 	 { "wxScrollBar_SetScrollbar", _wrap_wxScrollBar_SetScrollbar, 1 },
-	 { "wxScrollBar_SetPosition", _wrap_wxScrollBar_SetPosition, 1 },
+	 { "wxScrollBar_SetThumbPosition", _wrap_wxScrollBar_SetThumbPosition, 1 },
 	 { "wxScrollBar_GetThumbSize", _wrap_wxScrollBar_GetThumbSize, 1 },
-	 { "wxScrollBar_GetPosition", _wrap_wxScrollBar_GetPosition, 1 },
+	 { "wxScrollBar_GetThumbPosition", _wrap_wxScrollBar_GetThumbPosition, 1 },
 	 { "wxScrollBar_GetPageSize", _wrap_wxScrollBar_GetPageSize, 1 },
 	 { "wxScrollBar_GetRange", _wrap_wxScrollBar_GetRange, 1 },
 	 { "new_wxScrollBar", _wrap_new_wxScrollBar, 1 },
@@ -5451,6 +5451,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_wxMenuEvent","_class_wxMenuEvent",0);
+	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxSlider",SwigwxSliderTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxSlider",SwigwxSliderTowxEvtHandler);
@@ -5551,6 +5552,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
+	 SWIG_RegisterMapping("_class_wxRegion","_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxDropFilesEvent","_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxStaticText","_class_wxStaticText",0);
 	 SWIG_RegisterMapping("_wxFont","_class_wxFont",0);
@@ -5715,6 +5717,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxButton","_wxBitmapButton",SwigwxBitmapButtonTowxButton);
 	 SWIG_RegisterMapping("_wxButton","_class_wxButton",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
+	 SWIG_RegisterMapping("_wxRegionIterator","_class_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxPrinterDC","_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxPaintDC","_wxPaintDC",0);
 	 SWIG_RegisterMapping("_class_wxSysColourChangedEvent","_wxSysColourChangedEvent",0);
@@ -5766,6 +5769,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxIdleEvent","_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_wxEraseEvent","_class_wxEraseEvent",0);
 	 SWIG_RegisterMapping("_class_wxJoystickEvent","_wxJoystickEvent",0);
+	 SWIG_RegisterMapping("_wxRegion","_class_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);

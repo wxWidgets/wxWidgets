@@ -1125,6 +1125,25 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.1  1998/12/15 20:42:01  RD
+# Changed the import semantics from "from wxPython import *" to "from
+# wxPython.wx import *"  This is for people who are worried about
+# namespace pollution, they can use "from wxPython import wx" and then
+# prefix all the wxPython identifiers with "wx."
+#
+# Added wxTaskbarIcon for wxMSW.
+#
+# Made the events work for wxGrid.
+#
+# Added wxConfig.
+#
+# Added wxMiniFrame for wxGTK, (untested.)
+#
+# Changed many of the args and return values that were pointers to gdi
+# objects to references to reflect changes in the wxWindows API.
+#
+# Other assorted fixes and additions.
+#
 # Revision 1.9  1998/11/16 00:01:43  RD
 # Generic treectrl for wxPython/GTK compiles...
 #

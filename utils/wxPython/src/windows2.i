@@ -35,7 +35,7 @@
 %import controls.i
 %import events.i
 
-%pragma(python) code = "import wxp"
+%pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
 
@@ -53,17 +53,17 @@ public:
 
     wxString& GetTextValue();
     void      SetTextValue(const wxString& str);
-    wxFont*   GetFont();
-    void      SetFont(wxFont *f);
+    wxFont&   GetFont();
+    void      SetFont(wxFont& f);
     wxColour& GetTextColour();
     void      SetTextColour(const wxColour& colour);
     wxColour& GetBackgroundColour();
     void      SetBackgroundColour(const wxColour& colour);
-    wxBrush*  GetBackgroundBrush();
+    wxBrush&  GetBackgroundBrush();
     int       GetAlignment();
     void      SetAlignment(int align);
     wxBitmap* GetCellBitmap();
-    void      SetCellBitmap(wxBitmap *bitmap);
+    void      SetCellBitmap(wxBitmap* bitmap);
 };
 
 
@@ -77,16 +77,16 @@ public:
            long style=0,
            char* name="grid");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnCreateCell',           wxEVT_GRID_CREATE_CELL)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnChangeLabels',         wxEVT_GRID_CHANGE_LABELS)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnChangeSelectionLabel', wxEVT_GRID_CHANGE_SEL_LABEL)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnCellChange',           wxEVT_GRID_CELL_CHANGE)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnCellLeftClick',        wxEVT_GRID_CELL_LCLICK)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnCellRightClick',       wxEVT_GRID_CELL_RCLICK)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLabelLeftClick',       wxEVT_GRID_LABEL_LCLICK)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLabelRightClick',      wxEVT_GRID_LABEL_RCLICK)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnCreateCell',           wxEVT_GRID_CREATE_CELL)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnChangeLabels',         wxEVT_GRID_CHANGE_LABELS)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnChangeSelectionLabel', wxEVT_GRID_CHANGE_SEL_LABEL)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnCellChange',           wxEVT_GRID_CELL_CHANGE)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnCellLeftClick',        wxEVT_GRID_CELL_LCLICK)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnCellRightClick',       wxEVT_GRID_CELL_RCLICK)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLabelLeftClick',       wxEVT_GRID_LABEL_LCLICK)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLabelRightClick',      wxEVT_GRID_LABEL_RCLICK)"
 
 
     void AdjustScrollbars();
@@ -124,8 +124,8 @@ public:
     //wxGridCell *** GetCells();
     wxColour& GetCellTextColour(int row, int col);
     %name(GetDefCellTextColour)wxColour& GetCellTextColour();
-    wxFont* GetCellTextFont(int row, int col);
-    %name(GetDefCellTextFont)wxFont* GetCellTextFont();
+    wxFont& GetCellTextFont(int row, int col);
+    %name(GetDefCellTextFont)wxFont& GetCellTextFont();
     wxString& GetCellValue(int row, int col);
     int GetCols();
     int GetColumnWidth(int col);
@@ -138,7 +138,7 @@ public:
     wxColour& GetLabelBackgroundColour();
     int GetLabelSize(int orientation);
     wxColour& GetLabelTextColour();
-    wxFont* GetLabelTextFont();
+    wxFont& GetLabelTextFont();
     wxString& GetLabelValue(int orientation, int pos);
     int GetRowHeight(int row);
     int GetRows();
@@ -159,18 +159,18 @@ public:
         void SetCellBackgroundColour(const wxColour& colour);
     void SetCellTextColour(const wxColour& colour, int row, int col);
     %name(SetDefCellTextColour)void SetCellTextColour(const wxColour& colour);
-    void SetCellTextFont(wxFont *font, int row, int col);
-    %name(SetDefCellTextFont)void SetCellTextFont(wxFont *font);
+    void SetCellTextFont(wxFont& font, int row, int col);
+    %name(SetDefCellTextFont)void SetCellTextFont(wxFont& font);
     void SetCellValue(const wxString& val, int row, int col);
     void SetColumnWidth(int col, int width);
-    void SetDividerPen(wxPen *pen);
+    void SetDividerPen(wxPen& pen);
     void SetEditable(bool editable);
     void SetGridCursor(int row, int col);
     void SetLabelAlignment(int orientation, int alignment);
     void SetLabelBackgroundColour(const wxColour& value);
     void SetLabelSize(int orientation, int size);
     void SetLabelTextColour(const wxColour& value);
-    void SetLabelTextFont(wxFont *font);
+    void SetLabelTextFont(wxFont& font);
     void SetLabelValue(int orientation, const wxString& value, int pos);
     void SetRowHeight(int row, int height);
 
@@ -222,7 +222,7 @@ public:
                long style = 0,
                char* name = "notebook");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     int GetPageCount();
     int SetSelection(int nPage);
@@ -265,7 +265,7 @@ public:
                      long style=wxSP_3D|wxCLIP_CHILDREN,
                      char* name = "splitterWindow");
 
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     int GetBorderSize();
     int GetMinimumPaneSize();
@@ -314,13 +314,13 @@ public:
     wxTaskBarIcon();
     ~wxTaskBarIcon();
 
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnMouseMove',    wxEVT_TASKBAR_MOVE)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLButtonDown',  wxEVT_TASKBAR_LEFT_DOWN)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLButtonUp',    wxEVT_TASKBAR_LEFT_UP)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnRButtonDown',  wxEVT_TASKBAR_RIGHT_DOWN)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnRButtonUp',    wxEVT_TASKBAR_RIGHT_UP)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLButtonDClick',wxEVT_TASKBAR_LEFT_DCLICK)"
-    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnRButtonDClick',wxEVT_TASKBAR_RIGHT_DCLICK)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnMouseMove',    wxEVT_TASKBAR_MOVE)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLButtonDown',  wxEVT_TASKBAR_LEFT_DOWN)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLButtonUp',    wxEVT_TASKBAR_LEFT_UP)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnRButtonDown',  wxEVT_TASKBAR_RIGHT_DOWN)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnRButtonUp',    wxEVT_TASKBAR_RIGHT_UP)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLButtonDClick',wxEVT_TASKBAR_LEFT_DCLICK)"
+    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnRButtonDClick',wxEVT_TASKBAR_RIGHT_DCLICK)"
 
     bool SetIcon(const wxIcon& icon, const char* tooltip = "");
     bool RemoveIcon(void);
@@ -331,7 +331,27 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/12/15 20:41:25  RD
+// Changed the import semantics from "from wxPython import *" to "from
+// wxPython.wx import *"  This is for people who are worried about
+// namespace pollution, they can use "from wxPython import wx" and then
+// prefix all the wxPython identifiers with "wx."
+//
+// Added wxTaskbarIcon for wxMSW.
+//
+// Made the events work for wxGrid.
+//
+// Added wxConfig.
+//
+// Added wxMiniFrame for wxGTK, (untested.)
+//
+// Changed many of the args and return values that were pointers to gdi
+// objects to references to reflect changes in the wxWindows API.
+//
+// Other assorted fixes and additions.
+//
 // Revision 1.6  1998/11/25 08:45:28  RD
+//
 // Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
 // Added events for wxGrid
 // Other various fixes and additions

@@ -334,6 +334,7 @@ PYMODULES = $(GENCODEDIR)/wxp.py       $(GENCODEDIR)/events.py    \
 	    $(GENCODEDIR)/controls.py  $(GENCODEDIR)/controls2.py \
             $(GENCODEDIR)/windows2.py  $(GENCODEDIR)/cmndlgs.py   \
             $(GENCODEDIR)/frames.py    $(GENCODEDIR)/stattool.py   \
+	    $(GENCODEDIR)/utils.py    \
 	    __init__.py
 
 
@@ -346,8 +347,8 @@ $(GENCODEDIR)/%.py : %.i
 
 
 # This one must leave out the -c flag so we define the whole rule
-$(GENCODEDIR)/wxp.cpp $(GENCODEDIR)/wxp.py : wxp.i my_typemaps.i _defs.i _extras.py
-	swig $(SWIGFLAGS) -o $(GENCODEDIR)/wxp.cpp wxp.i
+$(GENCODEDIR)/wx.cpp $(GENCODEDIR)/wx.py : wx.i my_typemaps.i _defs.i _extras.py
+	swig $(SWIGFLAGS) -o $(GENCODEDIR)/wx.cpp wx.i
 
 
 # define some dependencies
@@ -362,6 +363,7 @@ $(GENCODEDIR)/controls2.cpp $(GENCODEDIR)/controls2.py : controls2.i  my_typemap
 $(GENCODEDIR)/cmndlgs.cpp   $(GENCODEDIR)/cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
 $(GENCODEDIR)/frames.cpp    $(GENCODEDIR)/frames.py    : frames.i     my_typemaps.i _defs.i
 $(GENCODEDIR)/stattool.cpp  $(GENCODEDIR)/stattool.py  : stattool.i   my_typemaps.i _defs.i
+$(GENCODEDIR)/utils.cpp     $(GENCODEDIR)/utils.py     : utils.i      my_typemaps.i _defs.i
 
 $(GENCODEDIR)/helpers.cpp:
 	ln -s `pwd`/helpers.cpp $@

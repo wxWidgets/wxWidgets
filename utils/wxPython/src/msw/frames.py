@@ -12,7 +12,7 @@ from stattool import *
 from controls import *
 
 from events import *
-import wxp
+import wx
 class wxFramePtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
@@ -91,7 +91,7 @@ class wxFrame(wxFramePtr):
         args = tuple(argl)
         self.this = apply(framesc.new_wxFrame,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
-        wxp._StdFrameCallbacks(self)
+        wx._StdFrameCallbacks(self)
 
 
 
@@ -112,7 +112,7 @@ class wxMiniFrame(wxMiniFramePtr):
         args = tuple(argl)
         self.this = apply(framesc.new_wxMiniFrame,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
-        wxp._StdFrameCallbacks(self)
+        wx._StdFrameCallbacks(self)
 
 
 

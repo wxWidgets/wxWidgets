@@ -12,7 +12,7 @@
 #----------------------------------------------------------------------------
 
 
-from wxPython import *
+from wxPython.wx import *
 
 import time
 
@@ -43,7 +43,7 @@ class TestSimpleControlsDlg(wxDialog):
         rb = wxRadioBox(self, 30, "wxRadioBox", wxPoint(80, y_pos), wxPyDefaultSize,
                         sampleList, 3, wxRA_HORIZONTAL| wxNO_BORDER)
         EVT_RADIOBOX(self, 30, self.EvtRadioBox)
-        width, height = rb.GetSize()
+        width, height = rb.GetSizeTuple()
         y_pos = y_pos + height + 5
 
         wxStaticText(self, -1, "wxChoice", wxPoint(5, y_pos), wxSize(75, 20))
@@ -64,7 +64,7 @@ class TestSimpleControlsDlg(wxDialog):
         EVT_LISTBOX(self, 60, self.EvtListBox)
         EVT_LISTBOX_DCLICK(self, 60, self.EvtListBoxDClick)
         lb.SetSelection(0)
-        width, height = lb.GetSize()
+        width, height = lb.GetSizeTuple()
         y_pos = y_pos + height + 5
 
 
@@ -374,7 +374,7 @@ class TestCustomStatusBar(wxFrame):
     def __init__(self, parent):
         wxFrame.__init__(self, parent, -1, 'Test Custom StatusBar',
                          wxPyDefaultPosition, wxSize(500, 300))
-        wxWindow(self, -1)
+        wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
 
         self.sb = CustomStatusBar(self)
         self.SetStatusBar(self.sb)
@@ -392,9 +392,9 @@ class TestToolBar(wxFrame):
                          wxPyDefaultPosition, wxSize(500, 300))
         self.log = log
 
-        wxWindow(self, -1)
+        wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
 
-        tb = self.CreateToolBar()
+        tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER)
         #tb = wxToolBar(self, -1, wxPyDefaultPosition, wxPyDefaultSize,
         #               wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
         #self.SetToolBar(tb)
@@ -469,7 +469,7 @@ class TestTreeCtrlPanel(wxPanel):
 
 
     def OnSize(self, event):
-        w,h = self.GetClientSize()
+        w,h = self.GetClientSizeTuple()
         self.tree.SetDimensions(0, 0, w, h)
 
 
@@ -616,7 +616,7 @@ class AppFrame(wxFrame):
     def WriteText(self, str):
         self.log.WriteText(str)
         if wxPlatform == '__WXMSW__':
-            w, h = self.log.GetClientSize()
+            w, h = self.log.GetClientSizeTuple()
             numLines = h/self.charHeight
             x, y = self.log.PositionToXY(self.log.GetLastPosition())
             self.log.ShowPosition(self.log.XYToPosition(x, y-numLines+1))
@@ -803,7 +803,27 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.9  1998/12/15 20:44:35  RD
+# Changed the import semantics from "from wxPython import *" to "from
+# wxPython.wx import *"  This is for people who are worried about
+# namespace pollution, they can use "from wxPython import wx" and then
+# prefix all the wxPython identifiers with "wx."
+#
+# Added wxTaskbarIcon for wxMSW.
+#
+# Made the events work for wxGrid.
+#
+# Added wxConfig.
+#
+# Added wxMiniFrame for wxGTK, (untested.)
+#
+# Changed many of the args and return values that were pointers to gdi
+# objects to references to reflect changes in the wxWindows API.
+#
+# Other assorted fixes and additions.
+#
 # Revision 1.8  1998/11/25 08:47:11  RD
+#
 # Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
 # Added events for wxGrid
 # Other various fixes and additions
