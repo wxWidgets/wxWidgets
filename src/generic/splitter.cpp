@@ -342,7 +342,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             m_needUpdating = TRUE;
         }
     }
-    else if ( event.LeftDClick() )
+    else if ( event.LeftDClick() && m_windowTwo )
     {
         OnDoubleClickSash(x, y);
     }
