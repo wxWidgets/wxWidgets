@@ -39,6 +39,8 @@
     #include <gdk/gdkrgb.h>
 #endif // GTK+ 2.0/1.2
 
+#include <math.h>
+
 extern void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
                           GdkGC               *gc,
                           GdkDrawable  *src,
@@ -342,6 +344,165 @@ bool wxBitmap::CreateFromXpm( const char **bits )
     M_BMPDATA->m_bpp = visual->depth;  // Can we get a different depth from create_from_xpm_d() ?
 
     return TRUE;
+}
+
+wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight, int newx, int newy )
+{
+    wxCHECK_MSG( Ok(), wxNullBitmap, wxT("invalid bitmap") );
+
+    if (newy==M_BMPDATA->m_width && newy==M_BMPDATA->m_height)
+        return *this;
+        
+    GdkImage *img = (GdkImage*) NULL;
+    if (GetPixmap())
+        img = gdk_image_get( GetPixmap(), 0, 0, GetWidth(), GetHeight() );
+    else if (GetBitmap())
+        img = gdk_image_get( GetBitmap(), 0, 0, GetWidth(), GetHeight() );
+    else
+        wxFAIL_MSG( wxT("Ill-formed bitmap") );
+
+    wxCHECK_MSG( img, wxNullBitmap, wxT("couldn't create image") );
+
+    wxBitmap bmp;
+    int bpp = -1;
+
+    int width = wxMax(newx, 1);
+    int height = wxMax(newy, 1);
+    width = wxMin(width, clipwidth);
+    height = wxMin(height, clipheight);
+    
+    GdkGC *gc = NULL;
+    GdkPixmap *dstpix = NULL;
+    if (GetPixmap())
+    {
+        GdkVisual *visual = gdk_window_get_visual( GetPixmap() );
+        if (visual == NULL)
+            visual = wxTheApp->GetGdkVisual();
+
+        bpp = visual->depth;
+        bmp = wxBitmap(width,height,bpp);
+        dstpix = bmp.GetPixmap();
+        gc = gdk_gc_new( dstpix );
+    }
+
+    char *dst = NULL;
+    long dstbyteperline = 0;
+    
+    if (GetBitmap())
+    {
+        bpp = 1;
+        dstbyteperline = width/8*M_BMPDATA->m_bpp;
+        if (width*M_BMPDATA->m_bpp % 8 != 0)
+            dstbyteperline++;
+        dst = (char*) malloc(dstbyteperline*height);
+    }
+             
+    // be careful to use the right scaling factor
+    float scx = (float)M_BMPDATA->m_width/(float)newx;
+    float scy = (float)M_BMPDATA->m_height/(float)newy;
+    // prepare accel-tables
+    int *tablex = (int *)calloc(width,sizeof(int));
+    int *tabley = (int *)calloc(height,sizeof(int));
+
+    // accel table filled with clipped values
+    for (int x = 0; x < width; x++)
+        tablex[x] = (int) (scx * (x+clipx));
+    for (int y = 0; y < height; y++)
+        tabley[y] = (int) (scy * (y+clipy));
+
+    // Main rescaling routine starts here
+    for (int h = 0; h < height; h++)
+    {
+        char outbyte = 0;
+
+        for (int w=0; w<width; w++)
+        {
+            guint32 pixval = gdk_image_get_pixel( img, tablex[w], tabley[h] );
+            if (bpp==1)
+            {
+                if (!pixval)
+                {
+                    char bit=1;
+                    char shift = bit << w % 8;
+                    outbyte |= shift;
+                }
+                
+                if ((w+1)%8==0)
+                {
+                    dst[h*dstbyteperline+w/8]=~outbyte;
+                    outbyte = 0;
+                }
+            }
+            else
+            {
+                GdkColor col;
+                col.pixel = pixval;
+                gdk_gc_set_foreground( gc, &col );
+                gdk_draw_point( dstpix, gc, w, h);
+            }
+        }
+    
+        // do not forget the last byte
+        if (bpp == 1)
+            dst[h*dstbyteperline+width/8] = ~outbyte;
+    }
+    
+    gdk_image_destroy( img );
+    if (gc) gdk_gc_unref( gc );
+
+    if (bpp == 1)
+    {
+        bmp = wxBitmap( (const char *)dst, width, height, 1 );
+        free( dst );
+    }
+    
+    if (GetMask())
+    {
+        bpp = 1;
+        dstbyteperline = width/8*bpp;
+        if (width*bpp % 8 != 0)
+            dstbyteperline++;
+        dst = (char*) malloc(dstbyteperline*height);
+        img = gdk_image_get( GetMask()->GetBitmap(), 0, 0, GetWidth(), GetHeight() );
+
+        for (int h = 0; h < height; h++)
+        {
+            char outbyte = 0;
+    
+            for (int w=0; w<width; w++)
+            {
+                guint32 pixval = gdk_image_get_pixel( img, tablex[w], tabley[h] );
+                if (pixval)
+                {
+                    char bit=1;
+                    char shift = bit << w % 8;
+                    outbyte |= shift;
+                }
+                
+                if ((w+1)%8==0)
+                {
+                    dst[h*dstbyteperline+w/8]=~outbyte;
+                    outbyte = 0;
+                }
+            }
+        
+            // do not forget the last byte
+            if (bpp == 1)
+                dst[h*dstbyteperline+width/8] = ~outbyte;
+        }
+        
+        wxBitmap mask_bmp( (const char *)dst, width, height, 1 );
+        wxMask* mask = new wxMask(mask_bmp);
+        bmp.SetMask(mask);
+        
+        free( dst );
+        gdk_image_destroy( img );
+    }
+
+    free( tablex );
+    free( tabley );
+    
+    return bmp; 
 }
 
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
