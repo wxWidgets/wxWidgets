@@ -770,6 +770,8 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
                 m_bound_all.height = lh;
                 node = node->Next();
             }
+            m_bound_label.width = m_bound_all.width;
+            m_bound_label.height = m_bound_all.height;
             break;
         }
     }
