@@ -85,7 +85,11 @@
     $1 = *sptr;
     delete sptr;
 }
-    
+
+%typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxString& {
+    $1 = PyString_Check($input) || PyUnicode_Check($input);
+}
+
    
 
 //---------------------------------------------------------------------------
