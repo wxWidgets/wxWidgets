@@ -19,7 +19,11 @@ class MyApp: public wxApp
   public:
     MyApp(void) ;
     bool OnInit(void);
+
+    wxFont* m_testFont;
 };
+
+DECLARE_APP(MyApp)
 
 class MyCanvas;
 

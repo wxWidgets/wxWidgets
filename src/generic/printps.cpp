@@ -57,8 +57,8 @@ wxPostScriptPrinter::~wxPostScriptPrinter(void)
 
 bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
-  abortIt = FALSE;
-  abortWindow = (wxWindow *) NULL;
+  sm_abortIt = FALSE;
+  sm_abortWindow = (wxWindow *) NULL;
 
   if (!printout)
     return FALSE;
@@ -74,37 +74,37 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
   if (maxPage == 0)
     return FALSE;
 
-  printData.SetMinPage(minPage);
-  printData.SetMaxPage(maxPage);
+  m_printData.SetMinPage(minPage);
+  m_printData.SetMaxPage(maxPage);
   if (fromPage != 0)
-    printData.SetFromPage(fromPage);
+    m_printData.SetFromPage(fromPage);
   if (toPage != 0)
-    printData.SetToPage(toPage);
+    m_printData.SetToPage(toPage);
 
   if (minPage != 0)
   {
-    printData.EnablePageNumbers(TRUE);
-    if (printData.GetFromPage() < printData.GetMinPage())
-      printData.SetFromPage(printData.GetMinPage());
-    else if (printData.GetFromPage() > printData.GetMaxPage())
-      printData.SetFromPage(printData.GetMaxPage());
-    if (printData.GetToPage() > printData.GetMaxPage())
-      printData.SetToPage(printData.GetMaxPage());
-    else if (printData.GetToPage() < printData.GetMinPage())
-      printData.SetToPage(printData.GetMinPage());
+    m_printData.EnablePageNumbers(TRUE);
+    if (m_printData.GetFromPage() < m_printData.GetMinPage())
+      m_printData.SetFromPage(m_printData.GetMinPage());
+    else if (m_printData.GetFromPage() > m_printData.GetMaxPage())
+      m_printData.SetFromPage(m_printData.GetMaxPage());
+    if (m_printData.GetToPage() > m_printData.GetMaxPage())
+      m_printData.SetToPage(m_printData.GetMaxPage());
+    else if (m_printData.GetToPage() < m_printData.GetMinPage())
+      m_printData.SetToPage(m_printData.GetMinPage());
   }
   else
-    printData.EnablePageNumbers(FALSE);
-  
+    m_printData.EnablePageNumbers(FALSE);
+
   // Create a suitable device context  
   wxDC *dc = (wxDC *) NULL;
   if (prompt)
   {
-     wxGenericPrintDialog dialog(parent, & printData);
+     wxGenericPrintDialog dialog(parent, & m_printData);
      if (dialog.ShowModal() == wxID_OK)
      {
        dc = dialog.GetPrintDC();
-       printData = dialog.GetPrintData();
+       m_printData = dialog.GetPrintData();
      }
   }
   else
@@ -151,22 +151,22 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
   bool keepGoing = TRUE;
 
   int copyCount;
-  for (copyCount = 1; copyCount <= printData.GetNoCopies(); copyCount ++)
+  for (copyCount = 1; copyCount <= m_printData.GetNoCopies(); copyCount ++)
   {
-    if (!printout->OnBeginDocument(printData.GetFromPage(), printData.GetToPage()))
+    if (!printout->OnBeginDocument(m_printData.GetFromPage(), m_printData.GetToPage()))
     {
       wxEndBusyCursor();
       wxMessageBox(_("Could not start printing."), _("Print Error"), wxOK, parent);
       break;
     }
-    if (abortIt)
+    if (sm_abortIt)
       break;
 
     int pn;
-    for (pn = printData.GetFromPage(); keepGoing && (pn <= printData.GetToPage()) && printout->HasPage(pn);
+    for (pn = m_printData.GetFromPage(); keepGoing && (pn <= m_printData.GetToPage()) && printout->HasPage(pn);
          pn++)
     {
-      if (abortIt)
+      if (sm_abortIt)
       {
         keepGoing = FALSE;
         break;
@@ -192,13 +192,13 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
 bool wxPostScriptPrinter::PrintDialog(wxWindow *parent)
 {
-    wxGenericPrintDialog dialog(parent, & printData);
+    wxGenericPrintDialog dialog(parent, & m_printData);
     return (dialog.ShowModal() == wxID_OK);
 }
 
 bool wxPostScriptPrinter::Setup(wxWindow *parent)
 {
-    wxGenericPrintDialog dialog(parent, & printData);
+    wxGenericPrintDialog dialog(parent, & m_printData);
     dialog.GetPrintData().SetSetupDialog(TRUE);
     return (dialog.ShowModal() == wxID_OK);
 }
@@ -220,10 +220,10 @@ wxPostScriptPrintPreview::~wxPostScriptPrintPreview(void)
 
 bool wxPostScriptPrintPreview::Print(bool interactive)
 {
-  if (!printPrintout)
+  if (!m_printPrintout)
     return FALSE;
-  wxPostScriptPrinter printer(&printData);
-  return printer.Print(previewFrame, printPrintout, interactive);
+  wxPostScriptPrinter printer(&m_printData);
+  return printer.Print(m_previewFrame, m_printPrintout, interactive);
 }
 
 void wxPostScriptPrintPreview::DetermineScaling(void)
@@ -237,29 +237,29 @@ void wxPostScriptPrintPreview::DetermineScaling(void)
       paper = wxThePrintPaperDatabase->FindPaperType(_("A4 210 x 297 mm"));
     if (paper)
     {
-      previewPrintout->SetPPIScreen(100, 100);
-      previewPrintout->SetPPIPrinter(100, 100);
+      m_previewPrintout->SetPPIScreen(100, 100);
+      m_previewPrintout->SetPPIPrinter(100, 100);
 
       // If in landscape mode, we need to swap the width and height.
-      if ( printData.GetOrientation() == wxLANDSCAPE )
+      if ( m_printData.GetOrientation() == wxLANDSCAPE )
       {
-        pageWidth = paper->heightPixels;
-        pageHeight = paper->widthPixels;
-        previewPrintout->SetPageSizeMM(paper->heightMM, paper->widthMM);
-        previewPrintout->SetPageSizePixels(paper->heightPixels, paper->widthPixels);
+        m_pageWidth = paper->heightPixels;
+        m_pageHeight = paper->widthPixels;
+        m_previewPrintout->SetPageSizeMM(paper->heightMM, paper->widthMM);
+        m_previewPrintout->SetPageSizePixels(paper->heightPixels, paper->widthPixels);
       }
       else
       {
-        pageWidth = paper->widthPixels;
-        pageHeight = paper->heightPixels;
-        previewPrintout->SetPageSizeMM(paper->widthMM, paper->heightMM);
-        previewPrintout->SetPageSizePixels(paper->widthPixels, paper->heightPixels);
+        m_pageWidth = paper->widthPixels;
+        m_pageHeight = paper->heightPixels;
+        m_previewPrintout->SetPageSizeMM(paper->widthMM, paper->heightMM);
+        m_previewPrintout->SetPageSizePixels(paper->widthPixels, paper->heightPixels);
       }
 
       // At 100%, the page should look about page-size on the screen.
-      previewScale = (float)0.8;
-//      previewScale = (float)((float)screenWidth/(float)printerWidth);
-//      previewScale = previewScale * (float)((float)screenXRes/(float)printerYRes);
+      m_previewScale = (float)0.8;
+//      m_previewScale = (float)((float)screenWidth/(float)printerWidth);
+//      m_previewScale = previewScale * (float)((float)screenXRes/(float)printerYRes);
     }
 }
 

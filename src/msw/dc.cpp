@@ -648,6 +648,10 @@ void wxDC::SetFont(const wxFont& the_font)
     wxDebugMsg("wxDC::SetFont: Selecting HFONT %X\n", m_font.GetResourceHandle());
 #endif
     HFONT f = (HFONT) ::SelectObject((HDC) m_hDC, (HFONT) m_font.GetResourceHandle());
+    if (f == NULL)
+    {
+        wxDebugMsg("::SelectObject failed in wxDC::SetFont.");
+    }
     if (!m_oldFont)
       m_oldFont = (WXHFONT) f;
   }
@@ -716,6 +720,8 @@ void wxDC::SetBrush(const wxBrush& brush)
 
 void wxDC::DrawText(const wxString& text, long x, long y, bool use16bit)
 {
+    // Should be unnecessary: SetFont should have done this already.
+#if 0
   if (m_font.Ok() && m_font.GetResourceHandle())
   {
 #if WXDEBUG > 1
@@ -725,6 +731,7 @@ void wxDC::DrawText(const wxString& text, long x, long y, bool use16bit)
     if (!m_oldFont)
       m_oldFont = (WXHFONT) f;
   }
+#endif
 
   if (m_textForegroundColour.Ok())
     SetTextColor((HDC) m_hDC, m_textForegroundColour.GetPixel() ) ;
@@ -838,31 +845,40 @@ bool wxDC::StartDoc(const wxString& message)
   if (!this->IsKindOf(CLASSINFO(wxPrinterDC)))
     return TRUE;
     
-  bool flag = FALSE;
-
   DOCINFO docinfo;
   docinfo.cbSize = sizeof(DOCINFO);
   docinfo.lpszDocName = (const char *)message;
-  docinfo.lpszOutput = (const char *)m_filename;
+
+  if (m_filename.IsEmpty())
+    docinfo.lpszOutput = NULL;
+  else
+    docinfo.lpszOutput = (const char *)m_filename;
+
 #if defined(__WIN95__)
   docinfo.lpszDatatype = NULL;
   docinfo.fwType = 0;
 #endif
 
-  if (m_hDC) flag = (SP_ERROR !=
+  if (!m_hDC)
+    return FALSE;
+
+  int ret =
 #ifndef __WIN32__
-     ::StartDoc((HDC) m_hDC, &docinfo));
+     ::StartDoc((HDC) m_hDC, &docinfo);
 #else
 #ifdef UNICODE
-     ::StartDocW((HDC) m_hDC, &docinfo));
+     ::StartDocW((HDC) m_hDC, &docinfo);
 #else
-     ::StartDocA((HDC) m_hDC, &docinfo));
+     ::StartDocA((HDC) m_hDC, &docinfo);
 #endif
 #endif
 
-  else flag = FALSE;
-
-  return flag;
+  if (ret <= 0)
+  {
+    DWORD lastError = GetLastError();
+    wxDebugMsg("wxDC::StartDoc failed with error: %d\n", lastError);
+  }
+  return (ret > 0);
 }
 
 void wxDC::EndDoc(void)

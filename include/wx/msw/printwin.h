@@ -26,8 +26,6 @@ class WXDLLEXPORT wxWindowsPrinter: public wxPrinterBase
 {
   DECLARE_DYNAMIC_CLASS(wxWindowsPrinter)
 
- private:
-  WXFARPROC lpAbortProc;
  public:
   wxWindowsPrinter(wxPrintData *data = NULL);
   ~wxWindowsPrinter(void);
@@ -35,6 +33,9 @@ class WXDLLEXPORT wxWindowsPrinter: public wxPrinterBase
   virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = TRUE);
   virtual bool PrintDialog(wxWindow *parent);
   virtual bool Setup(wxWindow *parent);
+
+ private:
+  WXFARPROC     m_lpAbortProc;
 };
 
 /*

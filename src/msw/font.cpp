@@ -158,13 +158,9 @@ bool wxFont::RealizeResource(void)
     else if (M_FONTDATA->m_weight == wxBOLD)
       ff_weight = FW_BOLD;
 
-#if defined(__X__) || (defined(__WXMSW__) && USE_PORTABLE_FONTS_IN_MSW)
-    ff_face = wxTheFontNameDirectory.GetScreenName(M_FONTDATA->m_family, M_FONTDATA->m_weight, M_FONTDATA->m_style);
-#else
-    ff_face = M_FONTDATA->m_faceName;
-	if ( ff_face.IsNull() )
-		ff_face = "";
-#endif
+    const char* pzFace = (const char*) ff_face;
+    if (!M_FONTDATA->m_faceName.IsNull())
+        pzFace = (const char*) M_FONTDATA->m_faceName ;
 
 /* Always calculate fonts using the screen DC (is this the best strategy?)
  * There may be confusion if a font is selected into a printer
@@ -208,7 +204,7 @@ bool wxFont::RealizeResource(void)
 
     M_FONTDATA->m_hFont = (WXHFONT) CreateFont(nHeight, 0, 0, 0,ff_weight,ff_italic,(BYTE)ff_underline,
                 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                PROOF_QUALITY, DEFAULT_PITCH | ff_family, (ff_face == "" ? NULL : (const char *)ff_face));
+                PROOF_QUALITY, DEFAULT_PITCH | ff_family, pzFace);
 #ifdef WXDEBUG_CREATE
     if (m_hFont==NULL) wxError("Cannot create font","Internal Error") ;
 #endif

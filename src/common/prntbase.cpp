@@ -60,22 +60,6 @@
 #include <print.h>
 #endif
 
-#if !defined(APIENTRY)	// NT defines APIENTRY, 3.x not
-#define APIENTRY FAR PASCAL
-#endif
- 
-#ifdef __WIN32__
-#define _EXPORT /**/
-#else
-#define _EXPORT _export
-typedef signed short int SHORT ;
-#endif
- 
-#if !defined(__WIN32__)	// 3.x uses FARPROC for dialogs
-#define DLGPROC FARPROC
-#endif
-
-LONG APIENTRY _EXPORT wxAbortProc(HDC hPr, int Code);
 #endif
  // End __WXMSW__
 
@@ -103,31 +87,31 @@ END_EVENT_TABLE()
  
 wxPrinterBase::wxPrinterBase(wxPrintData *data)
 {
-  currentPrintout = (wxPrintout *) NULL;
-  abortWindow = (wxWindow *) NULL;
-  abortIt = FALSE;
+  m_currentPrintout = (wxPrintout *) NULL;
+  sm_abortWindow = (wxWindow *) NULL;
+  sm_abortIt = FALSE;
   if (data)
-    printData = (*data);
+    m_printData = (*data);
 }
 
-wxWindow *wxPrinterBase::abortWindow = (wxWindow *) NULL;
-bool wxPrinterBase::abortIt = FALSE;
+wxWindow *wxPrinterBase::sm_abortWindow = (wxWindow *) NULL;
+bool wxPrinterBase::sm_abortIt = FALSE;
 
-wxPrinterBase::~wxPrinterBase(void)
+wxPrinterBase::~wxPrinterBase()
 {
 }
 
 void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-  wxPrinterBase::abortIt = TRUE;
-  wxPrinterBase::abortWindow->Show(FALSE);
-  wxPrinterBase::abortWindow->Close(TRUE);
-  wxPrinterBase::abortWindow = (wxWindow *) NULL;
+  wxPrinterBase::sm_abortIt = TRUE;
+  wxPrinterBase::sm_abortWindow->Show(FALSE);
+  wxPrinterBase::sm_abortWindow->Close(TRUE);
+  wxPrinterBase::sm_abortWindow = (wxWindow *) NULL;
 }
 
 wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout *WXUNUSED(printout))
 {
-  wxPrintAbortDialog *dialog = new wxPrintAbortDialog(parent, _("Printing"), wxPoint(0, 0), wxSize(400, 400));
+  wxPrintAbortDialog *dialog = new wxPrintAbortDialog(parent, _("Printing"), wxPoint(0, 0), wxSize(400, 400), wxDEFAULT_DIALOG_STYLE);
   (void) new wxStaticText(dialog, -1, _("Please wait..."), wxPoint(5, 5));
 
   wxButton *button = new wxButton(dialog, wxID_CANCEL, _("Cancel"), wxPoint(5, 30));
@@ -148,25 +132,23 @@ void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout)
  * Printout class
  */
  
-wxPrintout::wxPrintout(const char *title)
+wxPrintout::wxPrintout(const wxString& title)
 {
-  printoutTitle = title ? copystring(title) : (char *) NULL;
-  printoutDC = (wxDC *) NULL;
-  pageWidthMM = 0;
-  pageHeightMM = 0;
-  pageWidthPixels = 0;
-  pageHeightPixels = 0;
-  PPIScreenX = 0;
-  PPIScreenY = 0;
-  PPIPrinterX = 0;
-  PPIPrinterY = 0;
-  isPreview = FALSE;
+  m_printoutTitle = title ;
+  m_printoutDC = (wxDC *) NULL;
+  m_pageWidthMM = 0;
+  m_pageHeightMM = 0;
+  m_pageWidthPixels = 0;
+  m_pageHeightPixels = 0;
+  m_PPIScreenX = 0;
+  m_PPIScreenY = 0;
+  m_PPIPrinterX = 0;
+  m_PPIPrinterY = 0;
+  m_isPreview = FALSE;
 }
 
-wxPrintout::~wxPrintout(void)
+wxPrintout::~wxPrintout()
 {
-  if (printoutTitle)
-    delete[] printoutTitle;
 }
 
 bool wxPrintout::OnBeginDocument(int WXUNUSED(startPage), int WXUNUSED(endPage))
@@ -174,16 +156,16 @@ bool wxPrintout::OnBeginDocument(int WXUNUSED(startPage), int WXUNUSED(endPage))
   return GetDC()->StartDoc(_("Printing"));
 }
 
-void wxPrintout::OnEndDocument(void)
+void wxPrintout::OnEndDocument()
 {
   GetDC()->EndDoc();
 }
 
-void wxPrintout::OnBeginPrinting(void)
+void wxPrintout::OnBeginPrinting()
 {
 }
 
-void wxPrintout::OnEndPrinting(void)
+void wxPrintout::OnEndPrinting()
 {
 }
 
@@ -208,13 +190,13 @@ wxPreviewCanvas::wxPreviewCanvas(wxPrintPreviewBase *preview, wxWindow *parent,
 		const wxPoint& pos, const wxSize& size, long style, const wxString& name):
  wxScrolledWindow(parent, -1, pos, size, style, name)
 {
-  printPreview = preview;
+  m_printPreview = preview;
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
 
   SetScrollbars(40, 40, 100, 100);
 }
 
-wxPreviewCanvas::~wxPreviewCanvas(void)
+wxPreviewCanvas::~wxPreviewCanvas()
 {
 }
 
@@ -222,9 +204,9 @@ void wxPreviewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
   wxPaintDC dc(this);
 
-  if (printPreview)
+  if (m_printPreview)
   {
-    printPreview->PaintPage(this, dc);
+    m_printPreview->PaintPage(this, dc);
   }
 }
 
@@ -256,18 +238,16 @@ wxPreviewControlBar::wxPreviewControlBar(wxPrintPreviewBase *preview, long butto
     long style, const wxString& name):
   wxPanel(parent, -1, pos, size, style, name)
 {
-  printPreview = preview;
-  closeButton = (wxButton *) NULL;
-  nextPageButton = (wxButton *) NULL;
-  previousPageButton = (wxButton *) NULL;
-  printButton = (wxButton *) NULL;
-  zoomControl = (wxChoice *) NULL;
-  buttonFlags = buttons;
+  m_printPreview = preview;
+  m_closeButton = (wxButton *) NULL;
+  m_nextPageButton = (wxButton *) NULL;
+  m_previousPageButton = (wxButton *) NULL;
+  m_printButton = (wxButton *) NULL;
+  m_zoomControl = (wxChoice *) NULL;
+  m_buttonFlags = buttons;
 }
 
-wxFont *wxPreviewControlBar::buttonFont = (wxFont *) NULL;
-
-wxPreviewControlBar::~wxPreviewControlBar(void)
+wxPreviewControlBar::~wxPreviewControlBar()
 {
 }
 
@@ -331,7 +311,7 @@ void wxPreviewControlBar::OnZoom(wxCommandEvent& WXUNUSED(event))
     GetPrintPreview()->SetZoom(zoom);
 }
 
-void wxPreviewControlBar::CreateButtons(void)
+void wxPreviewControlBar::CreateButtons()
 {
 #ifdef __GOOD_COMPILER__ // Robert Roebling
 
@@ -343,9 +323,8 @@ void wxPreviewControlBar::CreateButtons(void)
   int fontSize = 10;
 #endif
 
-  if (!buttonFont)
-    buttonFont = wxTheFontList->FindOrCreateFont(fontSize, wxSWISS, wxNORMAL, wxBOLD);
-  SetButtonFont(*buttonFont);
+  wxFont buttonFont(fontSize, wxSWISS, wxNORMAL, wxBOLD);
+  SetButtonFont(buttonFont);
 
   int buttonWidth = 65;
   int buttonHeight = 24;
@@ -354,28 +333,28 @@ void wxPreviewControlBar::CreateButtons(void)
   int y = 5;
   int gap = 5;
 
-  closeButton = new wxButton(this, wxID_PREVIEW_CLOSE, _("Close"),
+  m_closeButton = new wxButton(this, wxID_PREVIEW_CLOSE, _("Close"),
   	wxPoint(x, y), wxSize(buttonWidth, buttonHeight));
 
   x += gap + buttonWidth;
   
-  if (buttonFlags & wxPREVIEW_PRINT)
+  if (m_buttonFlags & wxPREVIEW_PRINT)
   {
-    printButton =  new wxButton(this, wxID_PREVIEW_PRINT, _("Print..."), wxPoint(x, y),
+    m_printButton =  new wxButton(this, wxID_PREVIEW_PRINT, _("Print..."), wxPoint(x, y),
 		wxSize(buttonWidth, buttonHeight));
 	x += gap + buttonWidth;
   }
 
-  if (buttonFlags & wxPREVIEW_PREVIOUS)
+  if (m_buttonFlags & wxPREVIEW_PREVIOUS)
   {
-    previousPageButton = new wxButton(this, wxID_PREVIEW_PREVIOUS, "<<", wxPoint(x, y),
+    m_previousPageButton = new wxButton(this, wxID_PREVIEW_PREVIOUS, "<<", wxPoint(x, y),
 		wxSize(buttonWidth, buttonHeight));
 	x += gap + buttonWidth;
   }
 
-  if (buttonFlags & wxPREVIEW_NEXT)
+  if (m_buttonFlags & wxPREVIEW_NEXT)
   {
-    nextPageButton = new wxButton(this, wxID_PREVIEW_NEXT, ">>",
+    m_nextPageButton = new wxButton(this, wxID_PREVIEW_NEXT, ">>",
 	 	wxPoint(x, y), wxSize(buttonWidth, buttonHeight));
 	x += gap + buttonWidth;
   }
@@ -383,14 +362,14 @@ void wxPreviewControlBar::CreateButtons(void)
   static wxString choices[] = { "10%", "20%", "25%", "30%", "35%", "40%", "45%", "50%", "55%", "60%",
     "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%", "110%", "120%", "150%", "200%" };
   int n = 22;
-  if (buttonFlags & wxPREVIEW_ZOOM)
+  if (m_buttonFlags & wxPREVIEW_ZOOM)
   {
-    zoomControl = new wxChoice(this, wxID_PREVIEW_ZOOM, wxPoint(x, y),
+    m_zoomControl = new wxChoice(this, wxID_PREVIEW_ZOOM, wxPoint(x, y),
 		wxSize(100, -1), n, (wxString *)choices);
-    SetZoomControl(printPreview->GetZoom());
+    SetZoomControl(m_printPreview->GetZoom());
   }
 
-  closeButton->SetDefault();
+  m_closeButton->SetDefault();
   
 #endif
 }
@@ -400,18 +379,18 @@ void wxPreviewControlBar::SetZoomControl(int zoom)
 #ifdef __GOOD_COMPILER__ // Robert Roebling
   char buf[20];
   sprintf(buf, "%d%%", zoom);
-  if (zoomControl)
-    zoomControl->SetStringSelection(buf);
+  if (m_zoomControl)
+    m_zoomControl->SetStringSelection(buf);
 #endif
 }
 
-int wxPreviewControlBar::GetZoomControl(void)
+int wxPreviewControlBar::GetZoomControl()
 {
 #ifdef __GOOD_COMPILER__ // Robert Roebling
   char buf[20];
-  if (zoomControl && zoomControl->GetStringSelection())
+  if (m_zoomControl && m_zoomControl->GetStringSelection())
   {
-    strcpy(buf, zoomControl->GetStringSelection());
+    strcpy(buf, m_zoomControl->GetStringSelection());
     buf[strlen(buf) - 1] = 0;
     return (int)atoi(buf);
   }
@@ -431,40 +410,39 @@ wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase *preview, wxFrame *parent, con
  wxFrame(parent, -1, title, pos, size, style, name)
 {
 #ifdef __GOOD_COMPILER__ // Robert Roebling
-
-  printPreview = preview;
-  controlBar = NULL;
-  previewCanvas = NULL;
+  m_printPreview = preview;
+  m_controlBar = NULL;
+  m_previewCanvas = NULL;
 #endif
 }
 
-wxPreviewFrame::~wxPreviewFrame(void)
+wxPreviewFrame::~wxPreviewFrame()
 {
 }
 
-bool wxPreviewFrame::OnClose(void)
+bool wxPreviewFrame::OnClose()
 {
 #ifdef __GOOD_COMPILER__ // Robert Roebling
 
   MakeModal(FALSE);
   
   // Need to delete the printout and the print preview
-  wxPrintout *printout = printPreview->GetPrintout();
+  wxPrintout *printout = m_printPreview->GetPrintout();
   if (printout)
   {
     delete printout;
-    printPreview->SetPrintout(NULL);
-    printPreview->SetCanvas(NULL);
-    printPreview->SetFrame(NULL);
+    m_printPreview->SetPrintout(NULL);
+    m_printPreview->SetCanvas(NULL);
+    m_printPreview->SetFrame(NULL);
   }
-  delete printPreview;
+  delete m_printPreview;
   return TRUE;
 #else
   return FALSE;
 #endif
 }
 
-void wxPreviewFrame::Initialize(void)
+void wxPreviewFrame::Initialize()
 {
 
 #ifdef __GOOD_COMPILER__ // Robert Roebling
@@ -474,15 +452,15 @@ void wxPreviewFrame::Initialize(void)
   CreateCanvas();
   CreateControlBar();
 
-  printPreview->SetCanvas(previewCanvas);
-  printPreview->SetFrame(this);
+  m_printPreview->SetCanvas(m_previewCanvas);
+  m_printPreview->SetFrame(this);
 
   // Set layout constraints here
 
   // Control bar constraints
   wxLayoutConstraints *c1 = new wxLayoutConstraints;
 //  int w, h;
-//  controlBar->GetSize(&w, &h);
+//  m_controlBar->GetSize(&w, &h);
   int h;
 #ifdef __WXMSW__
   h = 40;
@@ -495,17 +473,17 @@ void wxPreviewFrame::Initialize(void)
   c1->right.SameAs      (this, wxRight);
   c1->height.Absolute   (h);
 
-  controlBar->SetConstraints(c1);
+  m_controlBar->SetConstraints(c1);
 
   // Canvas constraints
   wxLayoutConstraints *c2 = new wxLayoutConstraints;
 
   c2->left.SameAs       (this, wxLeft);
-  c2->top.Below         (controlBar);
+  c2->top.Below         (m_controlBar);
   c2->right.SameAs      (this, wxRight);
   c2->bottom.SameAs     (this, wxBottom);
 
-  previewCanvas->SetConstraints(c2);
+  m_previewCanvas->SetConstraints(c2);
 
   SetAutoLayout(TRUE);
 
@@ -516,25 +494,25 @@ void wxPreviewFrame::Initialize(void)
 #endif  
 }
 
-void wxPreviewFrame::CreateCanvas(void)
+void wxPreviewFrame::CreateCanvas()
 {
 #ifdef __GOOD_COMPILER__ // Robert Roebling
 
-  previewCanvas = new wxPreviewCanvas(printPreview, this);
+  m_previewCanvas = new wxPreviewCanvas(m_printPreview, this);
   
 #endif
 }
 
-void wxPreviewFrame::CreateControlBar(void)
+void wxPreviewFrame::CreateControlBar()
 {
 #ifdef __GOOD_COMPILER__ // Robert Roebling
 
   long buttons = wxPREVIEW_DEFAULT;
-  if (printPreview->GetPrintoutForPrinting())
+  if (m_printPreview->GetPrintoutForPrinting())
     buttons |= wxPREVIEW_PRINT;
     
-  controlBar = new wxPreviewControlBar(printPreview, buttons, this, wxPoint(0, 0), wxSize(400, 40));
-  controlBar->CreateButtons();
+  m_controlBar = new wxPreviewControlBar(m_printPreview, buttons, this, wxPoint(0, 0), wxSize(400, 40));
+  m_controlBar->CreateButtons();
 #endif
 }
  
@@ -547,44 +525,44 @@ wxPrintPreviewBase::wxPrintPreviewBase(wxPrintout *printout, wxPrintout *printou
 
 #ifdef __GOOD_COMPILER__ // Robert Roebling
 
-  isOk = TRUE;
-  previewPrintout = printout;
-  if (previewPrintout)
-    previewPrintout->SetIsPreview(TRUE);
+  m_isOk = TRUE;
+  m_previewPrintout = printout;
+  if (m_previewPrintout)
+    m_previewPrintout->SetIsPreview(TRUE);
     
-  printPrintout = printoutForPrinting;
+  m_printPrintout = printoutForPrinting;
   if (data)
-    printData = (*data);
+    m_printData = (*data);
 
-  previewCanvas = NULL;
-  previewFrame = NULL;
-  previewBitmap = NULL;
-  currentPage = 1;
-  currentZoom = 30;
-  topMargin = 40;
-  leftMargin = 40;
-  pageWidth = 0;
-  pageHeight = 0;
+  m_previewCanvas = NULL;
+  m_previewFrame = NULL;
+  m_previewBitmap = NULL;
+  m_currentPage = 1;
+  m_currentZoom = 30;
+  m_topMargin = 40;
+  m_leftMargin = 40;
+  m_pageWidth = 0;
+  m_pageHeight = 0;
 
   printout->OnPreparePrinting();
 
   // Get some parameters from the printout, if defined
   int selFrom, selTo;
-  printout->GetPageInfo(&minPage, &maxPage, &selFrom, &selTo);
+  printout->GetPageInfo(&m_minPage, &m_maxPage, &selFrom, &selTo);
   
 #endif  
 }
 
-wxPrintPreviewBase::~wxPrintPreviewBase(void)
+wxPrintPreviewBase::~wxPrintPreviewBase()
 {
 #ifdef __GOOD_COMPILER__ // Robert Roebling
 
-  if (previewPrintout)
-    delete previewPrintout;
-  if (previewBitmap)
-    delete previewBitmap;
-  if (printPrintout)
-    delete printPrintout;
+  if (m_previewPrintout)
+    delete m_previewPrintout;
+  if (m_previewBitmap)
+    delete m_previewBitmap;
+  if (m_printPrintout)
+    delete m_printPrintout;
     
 #endif
 }
@@ -592,20 +570,20 @@ wxPrintPreviewBase::~wxPrintPreviewBase(void)
 bool wxPrintPreviewBase::SetCurrentPage(int pageNum)
 {
 #ifdef __GOOD_COMPILER__ // Robert Roebling
-  if (currentPage == pageNum)
+  if (m_currentPage == pageNum)
     return TRUE;
 
-  currentPage = pageNum;
-  if (previewBitmap)
+  m_currentPage = pageNum;
+  if (m_previewBitmap)
   {
-    delete previewBitmap;
-    previewBitmap = NULL;
+    delete m_previewBitmap;
+    m_previewBitmap = NULL;
   }
 
-  if (previewCanvas)
+  if (m_previewCanvas)
   {
     RenderPage(pageNum);
-    previewCanvas->Refresh();
+    m_previewCanvas->Refresh();
   }
   
 #endif
@@ -619,10 +597,10 @@ bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
 
   DrawBlankPage(canvas, dc);
 
-  if (!previewBitmap)
-    RenderPage(currentPage);
+  if (!m_previewBitmap)
+    RenderPage(m_currentPage);
     
-  if (!previewBitmap)
+  if (!m_previewBitmap)
     return FALSE;
 
   if (!canvas)
@@ -631,19 +609,19 @@ bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
   int canvasWidth, canvasHeight;
   canvas->GetSize(&canvasWidth, &canvasHeight);
   
-  float zoomScale = (float)((float)currentZoom/(float)100);
-  float actualWidth = (float)(zoomScale*pageWidth*previewScale);
-//  float actualHeight = (float)(zoomScale*pageHeight*previewScale);
+  double zoomScale = ((float)m_currentZoom/(float)100);
+  double actualWidth = (zoomScale*m_pageWidth*m_previewScale);
+//  float actualHeight = (float)(zoomScale*m_pageHeight*m_previewScale);
 
-  float x = (float)((canvasWidth - actualWidth)/2.0);
-  if (x < leftMargin)
-    x = (float)leftMargin;
-  float y = (float)topMargin;
+  int x = ((canvasWidth - actualWidth)/2.0);
+  if (x < m_leftMargin)
+    x = m_leftMargin;
+  int y = m_topMargin;
 
   wxMemoryDC temp_dc;
-  temp_dc.SelectObject(*previewBitmap);
+  temp_dc.SelectObject(*m_previewBitmap);
 
-  dc.Blit((float)x, (float)y, (float)previewBitmap->GetWidth(), (float)previewBitmap->GetHeight(), &temp_dc, (float)0, (float)0);
+  dc.Blit(x, y, m_previewBitmap->GetWidth(), m_previewBitmap->GetHeight(), &temp_dc, 0, 0);
 
   temp_dc.SelectObject(wxNullBitmap);
 
@@ -658,74 +636,74 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
   
 #ifdef __GOOD_COMPILER__  // Robert Roebling
 
-  if (!previewCanvas)
+  if (!m_previewCanvas)
   {
     wxMessageBox(_("wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to let me know about the canvas!"),
       _("Print Preview Failure"), wxOK);
     return FALSE;
   }
-  previewCanvas->GetSize(&canvasWidth, &canvasHeight);
+  m_previewCanvas->GetSize(&canvasWidth, &canvasHeight);
   
-  float zoomScale = (float)((float)currentZoom/(float)100);
-  float actualWidth = (float)(zoomScale*pageWidth*previewScale);
-  float actualHeight = (float)(zoomScale*pageHeight*previewScale);
+  double zoomScale = (m_currentZoom/100.0);
+  int actualWidth = (int)(zoomScale*m_pageWidth*m_previewScale);
+  int actualHeight = (int)(zoomScale*m_pageHeight*m_previewScale);
 
-  float x = (float)((canvasWidth - actualWidth)/2.0);
-  if (x < leftMargin)
-    x = (float)leftMargin;
-//  float y = topMargin;
+  int x = (int)((canvasWidth - actualWidth)/2.0);
+  if (x < m_leftMargin)
+    x = m_leftMargin;
+//  int y = m_topMargin;
 
 
-  if (!previewBitmap)
+  if (!m_previewBitmap)
   {
-    previewBitmap = new wxBitmap((int)actualWidth, (int)actualHeight);
-    if (!previewBitmap || !previewBitmap->Ok())
+    m_previewBitmap = new wxBitmap((int)actualWidth, (int)actualHeight);
+    if (!m_previewBitmap || !m_previewBitmap->Ok())
     {
-      if (previewBitmap)
-        delete previewBitmap;
+      if (m_previewBitmap)
+        delete m_previewBitmap;
       wxMessageBox(_("Sorry, not enough memory to create a preview."), _("Print Preview Failure"), wxOK);
       return FALSE;
     }
   }
   
   wxMemoryDC memoryDC;
-  memoryDC.SelectObject(*previewBitmap);
+  memoryDC.SelectObject(*m_previewBitmap);
 
   memoryDC.Clear();
 
-  previewPrintout->SetDC(&memoryDC);
-  previewPrintout->SetPageSizePixels(pageWidth, pageHeight);
+  m_previewPrintout->SetDC(&memoryDC);
+  m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
 
-  previewPrintout->OnBeginPrinting();
+  m_previewPrintout->OnBeginPrinting();
   
 
-  if (!previewPrintout->OnBeginDocument(printData.GetFromPage(), printData.GetToPage()))
+  if (!m_previewPrintout->OnBeginDocument(m_printData.GetFromPage(), m_printData.GetToPage()))
   {
     wxMessageBox(_("Could not start document preview."), _("Print Preview Failure"), wxOK);
     
     memoryDC.SelectObject(wxNullBitmap);
 
-    delete previewBitmap;
+    delete m_previewBitmap;
     return FALSE;
   }
   
-  previewPrintout->OnPrintPage(pageNum);
-  previewPrintout->OnEndDocument();
-  previewPrintout->OnEndPrinting();
+  m_previewPrintout->OnPrintPage(pageNum);
+  m_previewPrintout->OnEndDocument();
+  m_previewPrintout->OnEndPrinting();
 
-  previewPrintout->SetDC(NULL);
+  m_previewPrintout->SetDC(NULL);
   
   memoryDC.SelectObject(wxNullBitmap);
 #endif
 
   char buf[200];
-  if (maxPage != 0)
-    sprintf(buf, _("Page %d of %d"), pageNum, maxPage);
+  if (m_maxPage != 0)
+    sprintf(buf, _("Page %d of %d"), pageNum, m_maxPage);
   else
     sprintf(buf, _("Page %d"), pageNum);
 
-  if (previewFrame)
-    previewFrame->SetStatusText(buf);
+  if (m_previewFrame)
+    m_previewFrame->SetStatusText(buf);
 
   return TRUE;
 }
@@ -739,14 +717,14 @@ bool wxPrintPreviewBase::DrawBlankPage(wxWindow *canvas, wxDC& dc)
   int canvasWidth, canvasHeight;
   canvas->GetSize(&canvasWidth, &canvasHeight);
   
-  float zoomScale = (float)((float)currentZoom/(float)100);
-  float actualWidth = zoomScale*pageWidth*previewScale;
-  float actualHeight = zoomScale*pageHeight*previewScale;
+  float zoomScale = (float)((float)m_currentZoom/(float)100);
+  float actualWidth = zoomScale*m_pageWidth*m_previewScale;
+  float actualHeight = zoomScale*m_pageHeight*m_previewScale;
 
   float x = (float)((canvasWidth - actualWidth)/2.0);
-  if (x < leftMargin)
-    x = (float)leftMargin;
-  float y = (float)topMargin;
+  if (x < m_leftMargin)
+    x = (float)m_leftMargin;
+  float y = (float)m_topMargin;
 
   // Draw shadow, allowing for 1-pixel border AROUND the actual page
   int shadowOffset = 4;
@@ -769,21 +747,21 @@ bool wxPrintPreviewBase::DrawBlankPage(wxWindow *canvas, wxDC& dc)
 void wxPrintPreviewBase::SetZoom(int percent)
 {
 #ifdef __GOOD_COMPILER__ // Robert Roebling
-  if (currentZoom == percent)
+  if (m_currentZoom == percent)
     return;
     
-  currentZoom = percent;
-  if (previewBitmap)
+  m_currentZoom = percent;
+  if (m_previewBitmap)
   {
-    delete previewBitmap;
-    previewBitmap = NULL;
+    delete m_previewBitmap;
+    m_previewBitmap = NULL;
   }
-  RenderPage(currentPage);
+  RenderPage(m_currentPage);
   
-  if (previewCanvas)
+  if (m_previewCanvas)
   {
-    previewCanvas->Clear();
-    previewCanvas->Refresh();
+    m_previewCanvas->Clear();
+    m_previewCanvas->Refresh();
   }
 #endif  
   

@@ -45,13 +45,6 @@ int orientation = wxPORTRAIT;
 // Main proc
 IMPLEMENT_APP(MyApp)
 
-// Must initialise these in OnInit, not statically
-wxPen     *red_pen;
-wxFont    *labelFont;
-wxFont    *itemFont;
-
-float     zoom_factor = 1.0;
-
 #ifdef __WXGTK__
 #include "folder.xpm"
 #endif
@@ -67,12 +60,7 @@ MyApp::MyApp()
 // main frame
 bool MyApp::OnInit(void)
 {
-  // Create a red pen
-  red_pen = new wxPen("RED", 3, wxSOLID);
-
-  // Create a small font
-  itemFont = new wxFont(11, wxROMAN, wxNORMAL, wxNORMAL);
-  labelFont = new wxFont(12, wxROMAN, wxITALIC, wxBOLD);
+  m_testFont = new wxFont(10, wxSWISS, wxNORMAL, wxNORMAL);
 
   // Create the main frame window
   frame = new MyFrame((wxFrame *) NULL, (char *) "wxWindows Printing Demo", wxPoint(0, 0), wxSize(400, 400));
@@ -121,11 +109,6 @@ bool MyApp::OnInit(void)
 
   // Give it scrollbars: the virtual canvas is 20 * 50 = 1000 pixels in each direction
   canvas->SetScrollbars(20, 20, 50, 50);
-
-  // This ensures that the fonts get created as _screen_
-  // fonts, not printer fonts.
-  canvas->SetFont(itemFont);
-  canvas->SetFont(labelFont);
 
   frame->canvas = canvas;
 
@@ -303,20 +286,21 @@ void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::Draw(wxDC& dc)
 {
-  dc.SetFont(itemFont);
+  dc.SetFont(* wxGetApp().m_testFont);
+
   dc.SetBackgroundMode(wxTRANSPARENT);
 
-  dc.SetBrush(wxCYAN_BRUSH);
-  dc.SetPen(wxRED_PEN);
+  dc.SetBrush(* wxCYAN_BRUSH);
+  dc.SetPen(* wxRED_PEN);
 
   dc.DrawRectangle(0, 30, 200, 100);
   dc.DrawText("Rectangle 200 by 100", 40, 40);
 
   dc.DrawEllipse(50, 140, 100, 50);
 
-  dc.DrawText("Test message: this is in 11 point text", 10, 180);
+  dc.DrawText("Test message: this is in 10 point text", 10, 180);
 
-  dc.SetPen(wxBLACK_PEN);
+  dc.SetPen(* wxBLACK_PEN);
   dc.DrawLine(0, 0, 200, 200);
   dc.DrawLine(200, 0, 0, 200);
   
@@ -360,11 +344,10 @@ void MyCanvas::OnEvent(wxMouseEvent& WXUNUSED(event))
 {
 }
 
-// Define the behaviour for the frame closing
-// - must delete all frames except for the main one.
 bool MyFrame::OnClose(void)
 {
   Show(FALSE);
+  delete wxGetApp().m_testFont;
 
   return TRUE;
 }
@@ -495,11 +478,11 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
   // Draw 50 mm by 50 mm L shape
   float logUnitsFactor = (float)(ppiPrinterX/(scale*25.1));
   float logUnits = (float)(50*logUnitsFactor);
-  dc->SetPen(wxBLACK_PEN);
+  dc->SetPen(* wxBLACK_PEN);
   dc->DrawLine(50, 50, (long)(50.0 + logUnits), 50);
   dc->DrawLine(50, 50, 50, (long)(50.0 + logUnits));
 
-  dc->SetFont(itemFont);
+  dc->SetFont(* wxGetApp().m_testFont);
   dc->SetBackgroundMode(wxTRANSPARENT);
 
   dc->DrawText("Some test text", 200, 200 );
@@ -555,7 +538,7 @@ bool WritePageHeader(wxPrintout *printout, wxDC *dc, char *text, float mmToLogic
   float xPos = (float)(((((pageWidthMM - leftMargin - rightMargin)/2.0)+leftMargin)*mmToLogical) - (xExtent/2.0));
   dc->DrawText(text, (long)xPos, (long)topMarginLogical);
 
-  dc->SetPen(wxBLACK_PEN);
+  dc->SetPen(* wxBLACK_PEN);
   dc->DrawLine( (long)leftMarginLogical, (long)(topMarginLogical+yExtent), 
                 (long)rightMarginLogical, (long)topMarginLogical+yExtent );
 
