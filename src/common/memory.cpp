@@ -68,7 +68,7 @@
 
 #include "wx/memory.h"
 
-#if wxUSE_THREADS && defined(__WXDEBUG__) && !defined(__WXMAC__)
+#if wxUSE_THREADS && defined(__WXDEBUG__)
 #define USE_THREADSAFE_MEMORY_ALLOCATION 1
 #else
 #define USE_THREADSAFE_MEMORY_ALLOCATION 0
