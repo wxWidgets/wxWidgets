@@ -405,8 +405,7 @@ class FSTreeModel(BasicTreeModel):
     """
     def __init__(self, path):
         BasicTreeModel.__init__(self)
-        import string
-        fw = FileWrapper(path, string.split(path, os.sep)[-1])
+        fw = FileWrapper(path, path.split(os.sep)[-1])
         self._Build(path, fw)
         self.SetRoot(fw)
         self._editable = true
@@ -431,8 +430,7 @@ class LateFSTreeModel(FSTreeModel):
     """
     def __init__(self, path):
         BasicTreeModel.__init__(self)
-        import string
-        name = string.split(path, os.sep)[-1]
+        name = path.split(os.sep)[-1]
         pathpart = path[:-len(name)]
         fw = FileWrapper(pathpart, name)
         self._Build(path, fw)

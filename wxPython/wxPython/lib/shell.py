@@ -29,7 +29,7 @@ History:
 __version__ ="$Revision$"
 # $RCSfile$
 
-import sys, string, code, traceback
+import sys, code, traceback
 from wxPython.wx import *
 from wxPython.html import *
 
@@ -90,7 +90,7 @@ class PyShellInput(wxPanel):
             return
         text =self.entry.GetValue()
         # weird CRLF thingy
-        text =string.replace(text, "\r\n", "\n")
+        text = text.replace("\r\n", "\n")
         # see if we've finished
         if (not (self.first_line or text[-1] =="\n")  # in continuation mode
             or (text[-1] =="\\")  # escaped newline
@@ -193,9 +193,9 @@ class PyShellOutput(wxPanel):
         if 0 and __debug__: sys.__stdout__.write(text)
         # handle entities
         for (symbol, eref) in self.erefs:
-            text =string.replace(text, symbol, eref)
+            text = text.replace(symbol, eref)
         # replace newlines
-        text =string.replace(text, "\n", style[2])
+        text = text.replace("\n", style[2])
         # add to contents
         self.text =self.text +style[0] +text +style[1]
         if not self.in_batch: self.UpdWindow()
@@ -302,14 +302,14 @@ class PyShell(wxPanel):
         (etype, value, tb) =sys.exc_info()
         # remove myself from traceback
         tblist =traceback.extract_tb(tb)[1:]
-        msg =string.join(traceback.format_exception_only(etype, value)
+        msg = ' '.join(traceback.format_exception_only(etype, value)
                         +traceback.format_list(tblist))
         self.output.write_exc(msg)
 
     def ShowSyntaxError(self):
         """display message about syntax error (no traceback here)"""
         (etype, value, tb) =sys.exc_info()
-        msg =string.join(traceback.format_exception_only(etype, value))
+        msg = ' '.join(traceback.format_exception_only(etype, value))
         self.output.write_exc(msg)
 
     def OnSize(self, event):

@@ -15,7 +15,7 @@
 # add index to data list after parsing total pages for paging
 #----------------------------------------------------------------------------
 
-import os, sys, string, copy
+import os, sys, copy
 
 from wxPython.wx import *
 import copy
@@ -46,7 +46,7 @@ class PrintBase:
         return wxColour(fcolour[0], fcolour[1], fcolour[2])
 
     def OutTextRegion(self, textout, txtdraw = TRUE):
-        textlines = string.splitfields(textout, '\n')
+        textlines = textout.split('\n')
         y = copy.copy(self.y) + self.pt_space_before
         for text in textlines:
             remain = 'X'
@@ -88,7 +88,7 @@ class PrintBase:
     def SetFlow(self, ln_text, width):
         width = width - self.pcell_right_margin
         text = ""
-        split = string.split(ln_text)
+        split = ln_text.split()
         if len(split) == 1:
             return ln_text, ""
 
@@ -109,12 +109,12 @@ class PrintBase:
                 text = text + bword
                 cnt = cnt + 1
             else:
-                remain = string.joinfields(split[cnt:],' ')
-                text = string.strip(text)
+                remain = ' '.join(split[cnt:])
+                text = text.strip()
                 return text, remain
 
-        remain = string.joinfields(split[cnt:],' ')
-        vout = string.strip(text)
+        remain = ' '.join(split[cnt:])
+        vout = text.strip()
         return vout, remain
 
     def SetChar(self, ln_text, width):  # truncate string to fit into width
@@ -129,7 +129,7 @@ class PrintBase:
         return text
 
     def OutTextPageWidth(self, textout, y_out, align, indent, txtdraw = TRUE):
-        textlines = string.splitfields(textout, '\n')
+        textlines = textout.split('\n')
         y = copy.copy(y_out)
 
         pagew = self.parent.page_width * self.pwidth        # full page width
@@ -169,7 +169,7 @@ class PrintBase:
 
     def GetNow(self):
         full = str(wxDateTime_Now())        # get the current date and time in print format
-        flds = string.splitfields(full)
+        flds = full.split()
         date = flds[0]
         time = flds[1]
         return date, time

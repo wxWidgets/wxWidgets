@@ -738,7 +738,7 @@ class wxTimeCtrl(wxTextCtrl):
 
         # Process AM/PM cell
         elif pos == dict_start['am_pm']:
-            char = string.upper(char)
+            char = char.upper()
             if char not in ('A','P'): return                    # disallow all but A or P as 1st char of column
             newtext = text[:pos] + char + text[pos+1:]
         else: return    # not a valid position

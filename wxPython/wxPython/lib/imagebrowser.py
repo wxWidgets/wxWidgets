@@ -17,7 +17,7 @@
 
 #---------------------------------------------------------------------------
 
-import os, sys, string
+import os, sys
 from wxPython.wx import *
 dir_path = os.getcwd()
 
@@ -29,7 +29,7 @@ def ConvertBMP(file_nm):
 
     fl_fld = os.path.splitext(file_nm)
     ext = fl_fld[1]
-    ext = string.lower(ext[1:])
+    ext = ext[1:].lower()
     if ext == 'bmp':
         image = wxImage(file_nm, wxBITMAP_TYPE_BMP)
     elif ext == 'gif':
@@ -278,14 +278,14 @@ class FindFiles:
         dirlist = [".."]
         self.dir = dir
         self.file = ""
-        mask = string.upper(mask)
+        mask = mask.upper()
         pattern = self.MakeRegex(mask)
         for i in os.listdir(dir):
             if i == "." or i == "..":
                 continue
             path = os.path.join(dir, i)
-            path = string.upper(path)
-            value = string.upper(i)
+            path = path.upper()
+            value = i.upper()
 
             if pattern.match(value) != None:
                 filelist.append(i)

@@ -5,7 +5,7 @@
 
 from wxPython.wx import *
 from wxPython.grid import *
-from string import *
+import string
 
 #---------------------------------------------------------------------------
 class CTextCellEditor(wxTextCtrl):
@@ -124,7 +124,7 @@ class CCellEditor(wxPyGridCellEditor):
         elif key < 256 and key >= 0 and chr(key) in string.printable:
             ch = chr(key)
             if not evt.ShiftDown():
-                ch = string.lower(ch)
+                ch = ch.lower()
         
         if ch is not None:                  # If are at this point with a key,
             self._tc.SetValue(ch)           # replace the contents of the text control.
@@ -265,10 +265,10 @@ class CSheet(wxGrid):
             crlf = chr(13) + chr(10)            # CrLf characters
             tab = chr(9)                        # Tab character
             
-            rows = split(s, crlf)               # split into rows
+            rows = s.split(crlf)               # split into rows
             rows = rows[0:-1]                   # leave out last element, which is always empty
             for i in range(0, len(rows)):       # split rows into elements
-                rows[i] = split(rows[i], tab)
+                rows[i] = rows[i].split(tab)
             
             # Get the starting and ending cell range to paste into
             if self._selected == None:          # If no cells selected...
