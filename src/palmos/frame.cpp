@@ -302,8 +302,17 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
 // get the origin of the client area in the client coordinates
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
-    Coord x, y;
-    WinWindowToDisplayPt(&x,&y);
-    wxPoint pt(x,y);
-    return pt;
+    // there is no API to get client area but we know
+    // it starts after titlebar and 1 pixel of form border
+    Coord maxY = wxSystemSettings::GetMetric(wxSYS_SCREEN_Y),
+          X = 1,
+          Y = 0;
+    while ( Y < maxY )
+    {
+        if(!FrmPointInTitle(GetForm(),X,Y))
+            return wxPoint(X,Y+1);
+        Y++;
+    }
+
+    return wxPoint(X,0);
 }

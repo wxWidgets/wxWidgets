@@ -147,10 +147,6 @@ public:
     void OnPaint(wxPaintEvent& event);
 
 public:
-    // For implementation purposes - sometimes decorations make the client area
-    // smaller
-    virtual wxPoint GetClientAreaOrigin() const;
-
     // Windows subclassing
     void SubclassWin(WXHWND hWnd);
     void UnsubclassWin();

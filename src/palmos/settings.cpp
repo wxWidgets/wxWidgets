@@ -2,10 +2,10 @@
 // Name:        src/palmos/settings.cpp
 // Purpose:     wxSystemSettingsNative implementation for Palm OS
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -125,7 +125,23 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
 {
-    return -1;
+    int metric = -1;
+    uint32_t attrP;
+
+    switch( index )
+    {
+        case wxSYS_SCREEN_X:
+            WinScreenGetAttribute(winScreenWidth, &attrP);
+            metric = attrP;
+            break;
+
+        case wxSYS_SCREEN_Y:
+            WinScreenGetAttribute(winScreenHeight, &attrP);
+            metric = attrP;
+            break;
+    }
+
+    return metric;
 }
 
 bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
