@@ -9,9 +9,7 @@
 import  wx
 
 havePopupWindow = 1
-try:
-    wx.PopupWindow
-except NameError:
+if wx.Platform == '__WXMAC__':
     havePopupWindow = 0
     wx.PopupWindow = wx.PopupTransientWindow = wx.Window
 
@@ -199,7 +197,6 @@ def runTest(frame, nb, log):
                 frame, 'wx.PopupWindow is not available on this platform.',
                 'Sorry', wx.OK | wx.ICON_INFORMATION
                 )
-
         dlg.ShowModal()
         dlg.Destroy()
 

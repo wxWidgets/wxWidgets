@@ -2,10 +2,7 @@
 import  wx
 
 haveToggleBtn = 1
-
-try:
-    wx.ToggleButton
-except NameError:
+if wx.Platform == "__WXX11__":
     haveToggleBtn = 0
 
 #----------------------------------------------------------------------

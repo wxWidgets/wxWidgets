@@ -5,7 +5,7 @@
 # Author:      Jeff Grimmett (grimmtoo@softhome.net), adapted from original
 #              .wdr-derived demo
 #
-# Created:     01/02/04
+# Created:     02-Jan-2004
 # RCS-ID:      $Id$
 # Copyright:
 # Licence:     wxWindows license
@@ -14,6 +14,10 @@
 
 import  math
 import  wx
+
+haveJoystick = True
+if wx.Platform == "__WXMAC__":
+    haveJoystick = False
 
 #----------------------------------------------------------------------------
 
@@ -963,8 +967,17 @@ class JoystickDemoPanel(wx.Panel):
 #----------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = JoystickDemoPanel(nb, log)
-    return win
+    if haveJoystick:
+        win = JoystickDemoPanel(nb, log)
+        return win
+    else:
+        dlg = wx.MessageDialog(
+                frame, 'wx.Joystick is not available on this platform.',
+                'Sorry', wx.OK | wx.ICON_INFORMATION
+                )
+        dlg.ShowModal()
+        dlg.Destroy()
+    
 
 #----------------------------------------------------------------------------
 
