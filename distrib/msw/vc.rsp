@@ -118,6 +118,9 @@ samples/validate/ValidateVC.dsw
 samples/wxsocket/SocketVC.dsp
 samples/wxsocket/SocketVC.dsw
 
+samples/wxpoem/PoemVC.dsp
+samples/wxpoem/PoemVC.dsw
+
 utils/wxprop/src/PropVC.dsp
 utils/wxprop/src/PropVC.dsw
 utils/wxprop/src/PropSampleVC.dsp
@@ -129,7 +132,9 @@ utils/dialoged/src/DialogEdVC.dsw
 utils/glcanvas/win/GlcanvasVC.dsp
 utils/glcanvas/win/GlcanvasVC.dsw
 utils/glcanvas/samples/cube/CubeVC.dsp
+utils/glcanvas/samples/cube/CubeVC.dsw
 utils/glcanvas/samples/isosurf/IsosurfVC.dsp
+utils/glcanvas/samples/isosurf/IsosurfVC.dsw
 
 utils/ogl/src/OglVC.dsp
 utils/ogl/src/OglVC.dsw
