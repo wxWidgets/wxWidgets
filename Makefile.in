@@ -174,6 +174,8 @@ ALL_BASE_HEADERS =  \
 	wx/wx.h \
 	wx/wxchar.h \
 	wx/wxprec.h \
+	wx/xti.h \
+	wx/xtistrm.h \
 	wx/zipstrm.h \
 	wx/zstream.h \
 	$(BASE_PLATFORM_HDR) \
@@ -242,6 +244,8 @@ ALL_BASE_SOURCES =  \
 	src/common/variant.cpp \
 	src/common/wfstream.cpp \
 	src/common/wxchar.cpp \
+	src/common/xti.cpp \
+	src/common/xtistrm.cpp \
 	src/common/zipstrm.cpp \
 	src/common/zstream.cpp \
 	src/unix/baseunix.cpp \
@@ -360,6 +364,8 @@ BASEDLL_OBJECTS =  \
 	basedll_variant.o \
 	basedll_wfstream.o \
 	basedll_wxchar.o \
+	basedll_xti.o \
+	basedll_xtistrm.o \
 	basedll_zipstrm.o \
 	basedll_zstream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_2) \
@@ -426,6 +432,8 @@ BASELIB_OBJECTS =  \
 	baselib_variant.o \
 	baselib_wfstream.o \
 	baselib_wxchar.o \
+	baselib_xti.o \
+	baselib_xtistrm.o \
 	baselib_zipstrm.o \
 	baselib_zstream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_3) \
@@ -611,6 +619,8 @@ MONODLL_OBJECTS =  \
 	monodll_variant.o \
 	monodll_wfstream.o \
 	monodll_wxchar.o \
+	monodll_xti.o \
+	monodll_xtistrm.o \
 	monodll_zipstrm.o \
 	monodll_zstream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS) \
@@ -690,6 +700,8 @@ MONOLIB_OBJECTS =  \
 	monolib_variant.o \
 	monolib_wfstream.o \
 	monolib_wxchar.o \
+	monolib_xti.o \
+	monolib_xtistrm.o \
 	monolib_zipstrm.o \
 	monolib_zstream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_1) \
@@ -6495,6 +6507,12 @@ basedll_wfstream.o: $(srcdir)/src/common/wfstream.cpp
 basedll_wxchar.o: $(srcdir)/src/common/wxchar.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+basedll_xti.o: $(srcdir)/src/common/xti.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+basedll_xtistrm.o: $(srcdir)/src/common/xtistrm.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -6777,6 +6795,12 @@ baselib_wfstream.o: $(srcdir)/src/common/wfstream.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_wxchar.o: $(srcdir)/src/common/wxchar.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+baselib_xti.o: $(srcdir)/src/common/xti.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+baselib_xtistrm.o: $(srcdir)/src/common/xtistrm.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
@@ -13899,6 +13923,12 @@ monodll_xml.o: $(srcdir)/src/xml/xml.cpp
 @COND_USE_GUI_1@monodll_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp
 @COND_USE_GUI_1@	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+monodll_xti.o: $(srcdir)/src/common/xti.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xtistrm.o: $(srcdir)/src/common/xtistrm.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -16429,6 +16459,12 @@ monolib_xml.o: $(srcdir)/src/xml/xml.cpp
 
 @COND_USE_GUI_1@monolib_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp
 @COND_USE_GUI_1@	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xti.o: $(srcdir)/src/common/xti.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xtistrm.o: $(srcdir)/src/common/xtistrm.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<

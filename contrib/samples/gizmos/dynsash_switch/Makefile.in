@@ -13,7 +13,6 @@ INSTALL = @INSTALL@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
-EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
@@ -44,8 +43,6 @@ WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
-@COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -76,7 +73,7 @@ WX_VERSION = 2.5.0
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
 	$(__DLLFLAG_p_1) -i $(srcdir)/../../../../samples -i \
-	$(srcdir)/../../../include -o dynsash_switch$(EXEEXT) Carbon.r \
+	$(srcdir)/../../../include -o dynsash_switch Carbon.r \
 	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
@@ -93,7 +90,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__dynsash_switch___mac_rezcmd = \
 @COND_PLATFORM_MAC_1@	$(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__dynsash_switch___mac_setfilecmd \
-@COND_PLATFORM_MAC_1@	= $(SETFILE) -a C dynsash_switch$(EXEEXT)
+@COND_PLATFORM_MAC_1@	= $(SETFILE) -a C dynsash_switch
 @COND_PLATFORM_WIN32_1@__dynsash_switch___win32rc = \
 @COND_PLATFORM_WIN32_1@	dynsash_switch_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__dynsash_switch_bundle___depname \
@@ -101,24 +98,24 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 
 ### Targets: ###
 
-all: dynsash_switch$(EXEEXT) $(__dynsash_switch_bundle___depname)
+all: dynsash_switch $(__dynsash_switch_bundle___depname)
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	rm -f dynsash_switch$(EXEEXT)
+	rm -f dynsash_switch
 	rm -rf dynsash_switch.app
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
-dynsash_switch$(EXEEXT): $(DYNSASH_SWITCH_OBJECTS) $(__dynsash_switch___win32rc)
+dynsash_switch: $(DYNSASH_SWITCH_OBJECTS) $(__dynsash_switch___win32rc)
 	$(CXX) -o $@ $(DYNSASH_SWITCH_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(HOST_SUFFIX) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__dynsash_switch___mac_rezcmd)
 	$(__dynsash_switch___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-dynsash_switch.app/Contents: dynsash_switch$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+dynsash_switch.app/Contents: dynsash_switch $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p dynsash_switch.app/Contents
 	mkdir -p dynsash_switch.app/Contents/MacOS
 	mkdir -p dynsash_switch.app/Contents/Resources
@@ -133,7 +130,7 @@ dynsash_switch.app/Contents: dynsash_switch$(EXEEXT) $(top_srcdir)/src/mac/Info.
 	echo -n "APPL????" >dynsash_switch.app/Contents/PkgInfo
 	
 	
-	ln -f dynsash_switch$(EXEEXT) dynsash_switch.app/Contents/MacOS/dynsash_switch
+	ln -f dynsash_switch dynsash_switch.app/Contents/MacOS/dynsash_switch
 	
 	
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc dynsash_switch.app/Contents/Resources/dynsash_switch.rsrc
@@ -142,7 +139,7 @@ dynsash_switch.app/Contents: dynsash_switch$(EXEEXT) $(top_srcdir)/src/mac/Info.
 @COND_PLATFORM_MACOSX_1@dynsash_switch_bundle: dynsash_switch.app/Contents
 
 dynsash_switch_dynsash_switch.o: $(srcdir)/dynsash_switch.cpp
-	$(CXXC) -c -o $@ $(DYNSASH_SWITCH_CXXFLAGS) $<
+	$(CXX) -c -o $@ $(DYNSASH_SWITCH_CXXFLAGS) $<
 
 dynsash_switch_sample_rc.o: $(srcdir)/../../../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples

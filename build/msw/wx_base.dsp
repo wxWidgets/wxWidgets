@@ -662,6 +662,14 @@ SOURCE=..\..\src\common\wxchar.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\xti.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\xtistrm.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\zipstrm.cpp
 # End Source File
 # Begin Source File
@@ -1296,6 +1304,14 @@ SOURCE=..\..\include\wx\wxchar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\wxprec.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xti.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xtistrm.h
 # End Source File
 # Begin Source File
 

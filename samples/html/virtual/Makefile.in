@@ -13,7 +13,6 @@ INSTALL = @INSTALL@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
-EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
@@ -44,8 +43,6 @@ WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
-@COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -75,7 +72,7 @@ WX_VERSION = 2.5.0
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
-	$(__DLLFLAG_p_1) -i $(srcdir)/../../../samples -o virtual$(EXEEXT) Carbon.r \
+	$(__DLLFLAG_p_1) -i $(srcdir)/../../../samples -o virtual Carbon.r \
 	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
@@ -93,19 +90,18 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 @COND_PLATFORM_MAC_1@__virtual___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
-@COND_PLATFORM_MAC_1@__virtual___mac_setfilecmd = \
-@COND_PLATFORM_MAC_1@	$(SETFILE) -a C virtual$(EXEEXT)
+@COND_PLATFORM_MAC_1@__virtual___mac_setfilecmd = $(SETFILE) -a C virtual
 @COND_PLATFORM_WIN32_1@__virtual___win32rc = virtual_virtual_rc.o
 @COND_PLATFORM_MACOSX_1@__virtual_bundle___depname = virtual_bundle
 
 ### Targets: ###
 
-all: virtual$(EXEEXT) $(__virtual_bundle___depname) data
+all: virtual $(__virtual_bundle___depname) data
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	rm -f virtual$(EXEEXT)
+	rm -f virtual
 	rm -rf virtual.app
 
 data: 
@@ -125,13 +121,13 @@ install-strip: install
 
 uninstall: 
 
-virtual$(EXEEXT): $(VIRTUAL_OBJECTS) $(__virtual___win32rc)
+virtual: $(VIRTUAL_OBJECTS) $(__virtual___win32rc)
 	$(CXX) -o $@ $(VIRTUAL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__virtual___mac_rezcmd)
 	$(__virtual___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-virtual.app/Contents: virtual$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+virtual.app/Contents: virtual $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p virtual.app/Contents
 	mkdir -p virtual.app/Contents/MacOS
 	mkdir -p virtual.app/Contents/Resources
@@ -146,7 +142,7 @@ virtual.app/Contents: virtual$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	echo -n "APPL????" >virtual.app/Contents/PkgInfo
 	
 	
-	ln -f virtual$(EXEEXT) virtual.app/Contents/MacOS/virtual
+	ln -f virtual virtual.app/Contents/MacOS/virtual
 	
 	
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc virtual.app/Contents/Resources/virtual.rsrc
@@ -155,7 +151,7 @@ virtual.app/Contents: virtual$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 @COND_PLATFORM_MACOSX_1@virtual_bundle: virtual.app/Contents
 
 virtual_virtual.o: $(srcdir)/virtual.cpp
-	$(CXXC) -c -o $@ $(VIRTUAL_CXXFLAGS) $<
+	$(CXX) -c -o $@ $(VIRTUAL_CXXFLAGS) $<
 
 virtual_virtual_rc.o: $(srcdir)/virtual.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples

@@ -13,7 +13,6 @@ INSTALL = @INSTALL@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
-EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
@@ -44,8 +43,6 @@ WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
-@COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -75,7 +72,7 @@ WX_VERSION = 2.5.0
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
-	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o validate$(EXEEXT) Carbon.r \
+	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o validate Carbon.r \
 	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
@@ -90,19 +87,18 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 @COND_PLATFORM_MAC_1@__validate___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
-@COND_PLATFORM_MAC_1@__validate___mac_setfilecmd = \
-@COND_PLATFORM_MAC_1@	$(SETFILE) -a C validate$(EXEEXT)
+@COND_PLATFORM_MAC_1@__validate___mac_setfilecmd = $(SETFILE) -a C validate
 @COND_PLATFORM_WIN32_1@__validate___win32rc = validate_validate_rc.o
 @COND_PLATFORM_MACOSX_1@__validate_bundle___depname = validate_bundle
 
 ### Targets: ###
 
-all: validate$(EXEEXT) $(__validate_bundle___depname)
+all: validate $(__validate_bundle___depname)
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	rm -f validate$(EXEEXT)
+	rm -f validate
 	rm -rf validate.app
 
 distclean: clean
@@ -114,13 +110,13 @@ install-strip: install
 
 uninstall: 
 
-validate$(EXEEXT): $(VALIDATE_OBJECTS) $(__validate___win32rc)
+validate: $(VALIDATE_OBJECTS) $(__validate___win32rc)
 	$(CXX) -o $@ $(VALIDATE_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__validate___mac_rezcmd)
 	$(__validate___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-validate.app/Contents: validate$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+validate.app/Contents: validate $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p validate.app/Contents
 	mkdir -p validate.app/Contents/MacOS
 	mkdir -p validate.app/Contents/Resources
@@ -135,7 +131,7 @@ validate.app/Contents: validate$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	echo -n "APPL????" >validate.app/Contents/PkgInfo
 	
 	
-	ln -f validate$(EXEEXT) validate.app/Contents/MacOS/validate
+	ln -f validate validate.app/Contents/MacOS/validate
 	
 	
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc validate.app/Contents/Resources/validate.rsrc
@@ -144,7 +140,7 @@ validate.app/Contents: validate$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 @COND_PLATFORM_MACOSX_1@validate_bundle: validate.app/Contents
 
 validate_validate.o: $(srcdir)/validate.cpp
-	$(CXXC) -c -o $@ $(VALIDATE_CXXFLAGS) $<
+	$(CXX) -c -o $@ $(VALIDATE_CXXFLAGS) $<
 
 validate_validate_rc.o: $(srcdir)/validate.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
