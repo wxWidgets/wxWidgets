@@ -57,8 +57,8 @@ public:
         long style = 0,
         const wxString& name = wxStaticPictureNameStr );
 
-    virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-    virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+    virtual void Command(wxCommandEvent& WXUNUSED(event)) {}
+    virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event)) {return true;}
     void OnPaint(wxPaintEvent& event);
 
     void SetBitmap( const wxBitmap& bmp );
