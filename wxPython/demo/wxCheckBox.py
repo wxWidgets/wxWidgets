@@ -11,7 +11,7 @@ class TestCheckBox(wxPanel):
         wxStaticText(self, -1, "This example uses the wxCheckBox control.",
                                wxPoint(10, 10))
 
-        cID = NewId()
+        cID = wxNewId()
         cb1 = wxCheckBox(self, cID,   "  Apples", wxPoint(65, 40), wxSize(150, 20), wxNO_BORDER)
         cb2 = wxCheckBox(self, cID+1, "  Oranges", wxPoint(65, 60), wxSize(150, 20), wxNO_BORDER)
         cb2.SetValue(True)

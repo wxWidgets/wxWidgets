@@ -716,12 +716,12 @@ class CalenDlg(wxDialog):
         monthlist = GetMonthList()
 
     # select the month
-        mID = NewId()
+        mID = wxNewId()
         self.date = wxComboBox(self, mID, Month[start_month], wxPoint(20, 20), wxSize(90, -1), monthlist, wxCB_DROPDOWN)
         EVT_COMBOBOX(self, mID, self.EvtComboBox)
 
     # alternate spin button to control the month
-        mID = NewId()
+        mID = wxNewId()
         h = self.date.GetSize().height
         self.m_spin = wxSpinButton(self, mID, wxPoint(130, 20), wxSize(h*2, h), wxSP_VERTICAL)
         self.m_spin.SetRange(1, 12)
@@ -730,7 +730,7 @@ class CalenDlg(wxDialog):
         EVT_SPIN(self, mID, self.OnMonthSpin)
 
     # spin button to control the year
-        mID = NewId()
+        mID = wxNewId()
         self.dtext = wxTextCtrl(self, -1, str(start_year), wxPoint(160, 20), wxSize(60, -1))
         h = self.dtext.GetSize().height
 
@@ -746,11 +746,11 @@ class CalenDlg(wxDialog):
         y_pos = 280
         but_size = wxSize(60, 25)
 
-        mID = NewId()
+        mID = wxNewId()
         wxButton(self, mID, ' Ok ', wxPoint(x_pos, y_pos), but_size)
         EVT_BUTTON(self, mID, self.OnOk)
 
-        mID = NewId()
+        mID = wxNewId()
         wxButton(self, mID, ' Close ', wxPoint(x_pos + 120, y_pos), but_size)
         EVT_BUTTON(self, mID, self.OnCancel)
 

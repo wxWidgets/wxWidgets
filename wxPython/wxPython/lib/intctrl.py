@@ -338,17 +338,18 @@ class wxIntCtrl(wxTextCtrl):
     wxIntCtrl(
          parent, id = -1,
          value = 0,
+         pos = wxDefaultPosition,
+         size = wxDefaultSize,
+         style = 0,
+         validator = wxDefaultValidator,
+         name = "integer",
          min = None,
          max = None,
          limited = False,
          allow_none = False,
          allow_long = False,
          default_color = wxBLACK,
-         oob_color = wxRED,
-         pos = wxDefaultPosition,
-         size = wxDefaultSize,
-         style = 0,
-         name = "integer")
+         oob_color = wxRED )
 
     value
         If no initial value is set, the default will be zero, or
@@ -390,14 +391,22 @@ class wxIntCtrl(wxTextCtrl):
     oob_color
         Color value used for out-of-bounds values of the control
         when the bounds are set but the control is not limited.
+
+    validator
+        Normally None, wxIntCtrl uses its own validator to do value
+        validation and input control.  However, a validator derived
+        from wxIntValidator can be supplied to override the data
+        transfer methods for the wxIntValidator class.
     """
+
     def __init__ (
                 self, parent, id=-1,
+                pos = wxDefaultPosition, size = wxDefaultSize,
+                style = 0, validator = wxDefaultValidator,
+                name = "integer",
                 value = 0, min=None, max=None,
                 limited = 0, allow_none = 0, allow_long = 0,
                 default_color = wxBLACK, oob_color = wxRED,
-                pos = wxDefaultPosition, size = wxDefaultSize,
-                style = 0, name = "integer",
         ):
 
         # Establish attrs required for any operation on value:
@@ -408,10 +417,14 @@ class wxIntCtrl(wxTextCtrl):
         self.__oob_color = wxRED
         self.__allow_none = 0
         self.__allow_long = 0
+        self.__oldvalue = None
+
+        if validator == wxDefaultValidator:
+            validator = wxIntValidator()
 
         wxTextCtrl.__init__(
                 self, parent, id, self._toGUI(0),
-                pos, size, style, wxIntValidator(), name )
+                pos, size, style, validator, name )
 
         # The following lets us set out our "integer update" events:
         EVT_TEXT( self, self.GetId(), self.OnText )
@@ -424,20 +437,28 @@ class wxIntCtrl(wxTextCtrl):
         self.SetNoneAllowed(allow_none)
         self.SetLongAllowed(allow_long)
         self.SetValue(value)
+        self.__oldvalue = 0
 
 
     def OnText( self, event ):
         """
         Handles an event indicating that the text control's value
         has changed, and issue EVT_INT event.
+        NOTE: using wxTextCtrl.SetValue() to change the control's
+        contents from within a EVT_CHAR handler can cause double
+        text events.  So we check for actual changes to the text
+        before passing the events on.
         """
-        try:
-            self.GetEventHandler().ProcessEvent(
-                wxIntUpdatedEvent( self.GetId(), self.GetValue(), self ) )
-        except ValueError:
-            return
-        # let normal processing of the text continue
-        event.Skip()
+        value = self.GetValue()
+        if value != self.__oldvalue:
+            try:
+                self.GetEventHandler().ProcessEvent(
+                    wxIntUpdatedEvent( self.GetId(), self.GetValue(), self ) )
+            except ValueError:
+                return
+            # let normal processing of the text continue
+            event.Skip()
+        self.__oldvalue = value # record for next event
 
 
     def GetValue(self):
@@ -719,6 +740,13 @@ class wxIntCtrl(wxTextCtrl):
         """
         Conversion function used in getting the value of the control.
         """
+
+        # One or more of the underlying text control implementations
+        # issue an intermediate EVT_TEXT when replacing the control's
+        # value, where the intermediate value is an empty string.
+        # So, to ensure consistency and to prevent spurious ValueErrors,
+        # we make the following test, and react accordingly:
+        #
         if value == '':
             if not self.IsNoneAllowed():
                 return 0
@@ -811,7 +839,7 @@ if __name__ == '__main__':
             style = wxDEFAULT_DIALOG_STYLE ):
             wxDialog.__init__(self, parent, id, title, pos, size, style)
 
-            self.int_ctrl = wxIntCtrl(self, NewId(), size=(55,20))
+            self.int_ctrl = wxIntCtrl(self, wxNewId(), size=(55,20))
             self.OK = wxButton( self, wxID_OK, "OK")
             self.Cancel = wxButton( self, wxID_CANCEL, "Cancel")
 

@@ -61,7 +61,7 @@ class TestPanel(wxPanel):
 
         monthlist = GetMonthList()
 
-        mID = NewId()
+        mID = wxNewId()
         self.date = wxComboBox(self, mID, "",
                                wxPoint(100, 20), wxSize(90, -1),
                                monthlist, wxCB_DROPDOWN)
@@ -89,7 +89,7 @@ class TestPanel(wxPanel):
 
 # scroll bar for month selection
 
-        mID = NewId()
+        mID = wxNewId()
         self.scroll = wxScrollBar(self, mID, wxPoint(100, 240), wxSize(200, 20), wxSB_HORIZONTAL)
         self.scroll.SetScrollbar(start_month-1, 1, 12, 1, True)
         EVT_COMMAND_SCROLL(self, mID, self.Scroll)
@@ -99,7 +99,7 @@ class TestPanel(wxPanel):
         self.dtext = wxTextCtrl(self, -1, str(start_year), wxPoint(200, 20), wxSize(60, -1))
         h = self.dtext.GetSize().height
 
-        mID = NewId()
+        mID = wxNewId()
         self.spin = wxSpinButton(self, mID, wxPoint(270, 20), wxSize(h*2, h))
         self.spin.SetRange(1980, 2010)
         self.spin.SetValue(start_year)
@@ -109,7 +109,7 @@ class TestPanel(wxPanel):
 
         wxStaticText(self, -1, "Test Calendar Dialog", wxPoint(350, 50), wxSize(150, -1))
 
-        mID = NewId()
+        mID = wxNewId()
         bmp = images.getCalendarBitmap()
         self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 80))#, wxSize(30, 30))
         EVT_BUTTON(self, mID, self.TestDlg)
@@ -118,13 +118,13 @@ class TestPanel(wxPanel):
 
         wxStaticText(self, -1, "Test Calendar Window", wxPoint(350, 150), wxSize(150, -1))
 
-        mID = NewId()
+        mID = wxNewId()
         self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 180))#, wxSize(30, 30))
         EVT_BUTTON(self, mID, self.TestFrame)
 
         wxStaticText(self, -1, "Test Calendar Print", wxPoint(350, 250), wxSize(150, -1))
 
-        mID = NewId()
+        mID = wxNewId()
         self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 280))#, wxSize(30, 30))
         EVT_BUTTON(self, mID, self.OnPreview)
 
@@ -299,17 +299,17 @@ class CalendFrame(wxFrame):
     def MakeFileMenu(self):
         menu = wxMenu()
 
-        mID = NewId()
+        mID = wxNewId()
         menu.Append(mID, 'Decrement', 'Next')
         EVT_MENU(self, mID, self.OnDecMonth)
 
-        mID = NewId()
+        mID = wxNewId()
         menu.Append(mID, 'Increment', 'Dec')
         EVT_MENU(self, mID, self.OnIncMonth)
 
         menu.AppendSeparator()
 
-        mID = NewId()
+        mID = wxNewId()
         menu.Append(mID, 'E&xit', 'Exit')
         EVT_MENU(self, mID, self.OnCloseWindow)
 
@@ -318,23 +318,23 @@ class CalendFrame(wxFrame):
     def MakeToolMenu(self):
         tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getDbDecBitmap(), 'Dec Year')
         EVT_TOOL(self, mID, self.OnDecYear)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getDecBitmap(), 'Dec Month')
         EVT_TOOL(self, mID, self.OnDecMonth)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getPtBitmap(), 'Current Month')
         EVT_TOOL(self, mID, self.OnCurrent)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getIncBitmap(), 'Inc Month')
         EVT_TOOL(self, mID, self.OnIncMonth)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getDbIncBitmap(), 'Inc Year')
         EVT_TOOL(self, mID, self.OnIncYear)
 
