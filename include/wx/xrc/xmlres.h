@@ -212,9 +212,6 @@ private:
 };
 
 
-// This is here only for backward compatibility. Do NOT use!!
-#define wxTheXmlResource  wxXmlResource::Get()
-
 // This macro translates string identifier (as used in XML resource,
 // e.g. <menuitem id="my_menu">...</menuitem>) to integer id that is needed by
 // wxWindows event tables.
@@ -235,7 +232,7 @@ private:
 // controls.
 // Example:
 //    wxDialog dlg;
-//    wxTheXmlResource->LoadDialog(&dlg, mainFrame, "my_dialog");
+//    wxXmlResource::Get()->LoadDialog(&dlg, mainFrame, "my_dialog");
 //    XMLCTRL(dlg, "my_textctrl", wxTextCtrl)->SetValue(wxT("default value"));
 
 #ifdef __WXDEBUG__
@@ -274,7 +271,6 @@ public:
 
 
 protected:
-
     wxXmlResource *m_resource;
     wxArrayString m_styleNames;
     wxArrayInt m_styleValues;
@@ -371,7 +367,6 @@ protected:
 // Programmer-friendly macros for writing XRC handlers:
 
 #define XRC_ADD_STYLE(style) AddStyle(wxT(#style), style)
-#define ADD_STYLE XRC_ADD_STYLE /* deprecated, don't use!! */
 
 #define XRC_MAKE_INSTANCE(variable, classname) \
    classname *variable = NULL; \
@@ -383,5 +378,15 @@ protected:
 
 // FIXME -- remove this $%^#$%#$@# as soon as Ron checks his changes in!!
 void wxXmlInitResourceModule();
+
+
+/* ------------------------------------------------------------------------- 
+   Backward compatibility macros. Do *NOT* use, they may disappear in future
+   versions of the XRC library!
+   ------------------------------------------------------------------------- */
+#define ADD_STYLE         XRC_ADD_STYLE
+#define wxTheXmlResource  wxXmlResource::Get()
+
+
 
 #endif // _WX_XMLRES_H_
