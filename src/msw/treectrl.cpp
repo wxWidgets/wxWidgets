@@ -423,6 +423,9 @@ public:
 
         // and set ourselves as the new one
         tree->SetIndirectItemData(item, this);
+
+        // we must have the invalid value for the item
+        m_pItem = 0l;
     }
 
     // dtor deletes the associated data as well
