@@ -1,5 +1,5 @@
 
-/* This define (__WX_SETUP_H__) is used both to insure setup.h is included 
+/* This define (__WX_SETUP_H__) is used both to insure setup.h is included
  * only once and to indicate that we are building using configure. */
 #ifndef __WX_SETUP_H__
 #define __WX_SETUP_H__
@@ -8,9 +8,11 @@
     #pragma interface
 #endif
 
-
+/* never undefine inline keyword for C++ compilation */
+#ifndef __cplusplus
 /* Define to empty if the keyword does not work.  */
 #undef const
+#endif
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef gid_t
