@@ -838,6 +838,7 @@ if BUILD_STC:
                      '%s/scintilla/src/Document.cxx' % STCLOC,
                      '%s/scintilla/src/DocumentAccessor.cxx' % STCLOC,
                      '%s/scintilla/src/Editor.cxx' % STCLOC,
+                     '%s/scintilla/src/ExternalLexer.cxx' % STCLOC,
                      '%s/scintilla/src/Indicator.cxx' % STCLOC,
                      '%s/scintilla/src/KeyMap.cxx' % STCLOC,
                      '%s/scintilla/src/KeyWords.cxx' % STCLOC,
