@@ -155,10 +155,14 @@ HTMLOBJS = #$ ExpandList("WXHTMLOBJS");
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 # Normal, static library
-all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
+all:    setuph dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
+
+setuph:
+    cd $(WXDIR)\include\wx\msw
+    if not exist setup.h copy setup0.h setup.h
+    cd $(WXDIR)\src\msw
 
 dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D
-
 
 $D:
     mkdir $D
@@ -329,16 +333,6 @@ $(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\treectrl.obj /c /Tp $(MSWDIR)\treectrl.cpp
 	cl @<<
 $(CPPFLAGS2) /Od /Fo$(HTMLDIR)\$D\helpfrm.obj /c /Tp $(HTMLDIR)\helpfrm.cpp
 <<
-
-# If taking wxWindows from CVS, setup.h doesn't exist yet.
-# Actually the 'if not exist setup.h' test doesn't work
-# (copies the file anyway)
-# we'll have to comment this rule out.
-
-# $(WXDIR)\include\wx\msw\setup.h: $(WXDIR)\include\wx\msw\setup0.h
-#    cd "$(WXDIR)"\include\wx\msw
-#    if not exist setup.h copy setup0.h setup.h
-#    cd "$(WXDIR)"\src\msw
 
 ..\common\$D\y_tab.obj:     ..\common\y_tab.c ..\common\lex_yy.c
         cl @<<
