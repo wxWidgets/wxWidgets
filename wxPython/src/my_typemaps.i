@@ -159,12 +159,13 @@
 //---------------------------------------------------------------------------
 // Typemap for wxArrayString from Python sequence objects
 
-%typemap(in) wxArrayString& {
+%typemap(in) wxArrayString& (bool temp=False) {
     if (! PySequence_Check($input)) {
         PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
         SWIG_fail;
     }
     $1 = new wxArrayString;
+    temp = True;
     int i, len=PySequence_Length($input);
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem($input, i);
@@ -180,18 +181,19 @@
 }
 
 %typemap(freearg) wxArrayString& {
-    if ($1) delete $1;
+    if (temp$argnum) delete $1;
 }
 
 //---------------------------------------------------------------------------
 // Typemap for wxArrayInt from Python sequence objects
 
-%typemap(in) wxArrayInt& {
+%typemap(in) wxArrayInt& (bool temp=False) {
     if (! PySequence_Check($input)) {
         PyErr_SetString(PyExc_TypeError, "Sequence of integers expected.");
         SWIG_fail;
     }
     $1 = new wxArrayInt;
+    temp = True;
     int i, len=PySequence_Length($input);
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem($input, i);
@@ -203,7 +205,7 @@
 }
 
 %typemap(freearg) wxArrayInt& {
-    if ($1) delete $1;
+    if (temp$argnum) delete $1;
 }
 
 
