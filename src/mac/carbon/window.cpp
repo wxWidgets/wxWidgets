@@ -1847,8 +1847,11 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
         		// eventually test for transparent windows
 		        if ( child->GetMacRootWindow() == window && child->IsShown() )
 		        {
-        		    SetRectRgn( childarea , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
-        		    DiffRgn( ownUpdateRgn , childarea , ownUpdateRgn ) ;
+		            if ( !child->IsKindOf( CLASSINFO( wxNotebook ) ) && !child->IsKindOf( CLASSINFO( wxTabCtrl ) ) )
+		            {
+        		        SetRectRgn( childarea , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
+        		        DiffRgn( ownUpdateRgn , childarea , ownUpdateRgn ) ;
+        		    }
         		}
          	}		
          	DisposeRgn( childarea ) ;

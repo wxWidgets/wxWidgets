@@ -664,8 +664,9 @@ void wxControl::OnPaint(wxPaintEvent& event)
 				wxMacDrawingHelper help( win ) ;
 				// the mac control manager always assumes to have the origin at 0,0
 				SetOrigin( 0 , 0 ) ;
+
 				
-				bool			hasTabBehind = false ;
+				bool hasTabBehind = false ;
 				wxWindow* parent = GetParent() ;
 				while ( parent )
 				{
@@ -684,7 +685,7 @@ void wxControl::OnPaint(wxPaintEvent& event)
 					
 					parent = parent->GetParent() ;
 				} 
-				
+
 				UMADrawControl( m_macControl ) ;
 				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
 			}
