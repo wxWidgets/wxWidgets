@@ -32,6 +32,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/dynarray.h"
+    #include "wx/settings.h"
 #endif
 
 #if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && defined(__WIN95__)
@@ -397,6 +398,8 @@ bool wxToolBar95::CreateTools()
 
     delete [] buttons;
 
+    // TBBUTTONINFO struct declaration is missing from mingw32 headers
+#ifndef __GNUWIN32__
     // adjust the controls size to fit nicely in the toolbar
     size_t nControls = controlIds.GetCount();
     for ( size_t nCtrl = 0; nCtrl < nControls; nCtrl++ )
@@ -439,6 +442,7 @@ bool wxToolBar95::CreateTools()
 
         control->Move(r.left, r.top + diff / 2);
     }
+#endif // __GNUWIN32__
 
     (void)::SendMessage(GetHwnd(), TB_AUTOSIZE, (WPARAM)0, (LPARAM) 0);
 
