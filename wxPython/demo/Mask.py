@@ -95,7 +95,7 @@ class TestMaskWindow(wx.ScrolledWindow):
             i = i + 1
 
 
-# On wxGTK there needs to be a panel under wxScrolledWindows if they are
+# On wxGTK there needs to be a panel under wx.ScrolledWindows if they are
 # going to be in a wxNotebook...
 class TestPanel(wx.Panel):
     def __init__(self, parent, ID):

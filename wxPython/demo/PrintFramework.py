@@ -6,7 +6,7 @@
 #
 
 import  wx
-import  wxScrolledWindow
+import  ScrolledWindow
 
 #----------------------------------------------------------------------
 
@@ -108,7 +108,7 @@ class TestPrintPanel(wx.Panel):
         self.printData.SetPaperId(wx.PAPER_LETTER)
 
         self.box = wx.BoxSizer(wx.VERTICAL)
-        self.canvas = wxScrolledWindow.MyCanvas(self)
+        self.canvas = ScrolledWindow.MyCanvas(self)
         self.box.Add(self.canvas, 1, wx.GROW)
 
         subbox = wx.BoxSizer(wx.HORIZONTAL)

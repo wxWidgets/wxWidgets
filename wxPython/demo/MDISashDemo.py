@@ -7,7 +7,7 @@
 
 import wx
 
-import wxScrolledWindow
+import ScrolledWindow
 
 #----------------------------------------------------------------------
 # There are better ways to do IDs, but this demo requires that the window
@@ -135,7 +135,7 @@ class MyParentFrame(wx.MDIParentFrame):
     def OnNewWindow(self, evt):
         self.winCount = self.winCount + 1
         win = wx.MDIChildFrame(self, -1, "Child Window: %d" % self.winCount)
-        canvas = wxScrolledWindow.MyCanvas(win)
+        canvas = ScrolledWindow.MyCanvas(win)
         win.Show(True)
 
 

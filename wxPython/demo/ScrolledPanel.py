@@ -30,7 +30,7 @@ class TestPanel(scrolled.ScrolledPanel):
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         desc = wx.StaticText(self, -1,
-                            "ScrolledPanel extends wxScrolledWindow, adding all "
+                            "ScrolledPanel extends wx.ScrolledWindow, adding all "
                             "the necessary bits to set up scroll handling for you.\n\n"
                             "Here are three fixed size examples of its use. The "
                             "demo panel for this sample is also using it -- the \nwxStaticLine"
@@ -118,9 +118,9 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-ScrolledPanel fills a "hole" in the implementation of wxScrolledWindow,
+ScrolledPanel fills a "hole" in the implementation of wx.ScrolledWindow,
 providing automatic scrollbar and scrolling behavior and the tab traversal
-mangement that wxScrolledWindow lacks.
+mangement that wx.ScrolledWindow lacks.
 </body></html>
 """
 

@@ -199,7 +199,7 @@ class MyCanvas(wx.ScrolledWindow):
 
 
 ## This is an example of what to do for the EVT_MOUSEWHEEL event,
-## but since wxScrolledWindow does this already it's not
+## but since wx.ScrolledWindow does this already it's not
 ## necessary to do it ourselves. You would need to add an event table 
 ## entry to __init__() to direct wheelmouse events to this handler.
 

@@ -8,9 +8,9 @@
 
 import  wx
 
-# Importing wxScrolledWindow demo to make use of the MyCanvas 
+# Importing ScrolledWindow demo to make use of the MyCanvas 
 # class defined within.
-import  wxScrolledWindow 
+import  ScrolledWindow 
 import  images
 
 SHOW_BACKGROUND = 1
@@ -53,7 +53,7 @@ class MyParentFrame(wx.MDIParentFrame):
     def OnNewWindow(self, evt):
         self.winCount = self.winCount + 1
         win = wx.MDIChildFrame(self, -1, "Child Window: %d" % self.winCount)
-        canvas = wxScrolledWindow.MyCanvas(win)
+        canvas = ScrolledWindow.MyCanvas(win)
         win.Show(True)
 
 

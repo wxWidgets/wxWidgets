@@ -9,8 +9,8 @@ import  wx
 
 import  ColorPanel
 import  GridSimple
-import  wxListCtrl
-import  wxScrolledWindow
+import  ListCtrl
+import  ScrolledWindow
 import  images
 
 #----------------------------------------------------------------------------
@@ -49,7 +49,7 @@ class TestNB(wx.Notebook):
         win = self.makeColorPanel(wx.RED)
         self.AddPage(win, "Red")
 
-        win = wxScrolledWindow.MyCanvas(self)
+        win = ScrolledWindow.MyCanvas(self)
         self.AddPage(win, 'ScrolledWindow')
 
         win = self.makeColorPanel(wx.GREEN)
@@ -58,7 +58,7 @@ class TestNB(wx.Notebook):
         win = GridSimple.SimpleGrid(self, log)
         self.AddPage(win, "Grid")
 
-        win = wxListCtrl.TestListCtrlPanel(self, log)
+        win = ListCtrl.TestListCtrlPanel(self, log)
         self.AddPage(win, 'List')
 
         win = self.makeColorPanel(wx.CYAN)

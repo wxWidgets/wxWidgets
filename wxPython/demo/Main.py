@@ -29,154 +29,154 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions', [
-        'wxVListBox',
-        'wxListbook',
-        'wxMaskedNumCtrl',
+        'VListBox',
+        'Listbook',
+        'MaskedNumCtrl',
         'FloatCanvas',
-        'wxXmlResourceSubclass',
-        'wxGridBagSizer',
+        'XmlResourceSubclass',
+        'GridBagSizer',
         'Cursor',
         'PyPlot',
         ]),
 
     # managed windows == things with a (optional) caption you can close
     ('Base Frames and Dialogs', [
-        'wxDialog',
-        'wxFrame',
-        'wxMDIWindows',
-        'wxMiniFrame',
-        'wxWizard',
+        'Dialog',
+        'Frame',
+        'MDIWindows',
+        'MiniFrame',
+        'Wizard',
         ]),
 
     # the common dialogs
     ('Common Dialogs', [
-        'wxColourDialog',
-        'wxDirDialog',
-        'wxFileDialog',
-        'wxFileDialog_Save',
-        'wxFindReplaceDialog',
-        'wxFontDialog',
-        'wxMessageDialog',
-        'wxPageSetupDialog',
-        'wxPrintDialog',
-        'wxProgressDialog',
-        'wxSingleChoiceDialog',
-        'wxTextEntryDialog',
+        'ColourDialog',
+        'DirDialog',
+        'FileDialog',
+        'FileDialog_Save',
+        'FindReplaceDialog',
+        'FontDialog',
+        'MessageDialog',
+        'PageSetupDialog',
+        'PrintDialog',
+        'ProgressDialog',
+        'SingleChoiceDialog',
+        'TextEntryDialog',
         ]),
 
     # dialogs from libraries
     ('More Dialogs', [
         'ErrorDialogs',
         'ImageBrowser',
-        'wxMultipleChoiceDialog',
-        'wxScrolledMessageDialog',
+        'MultipleChoiceDialog',
+        'ScrolledMessageDialog',
         ]),
 
     # core controls
     ('Core Windows/Controls', [
+        'Button',
+        'CheckBox',
+        'CheckListBox',
+        'Choice',
+        'ComboBox',
+        'Gauge',
+        'Grid',
+        'Grid_MegaExample',
+        'ListBox',
+        'ListCtrl',
+        'ListCtrl_virtual',
+        'Listbook',
+        'Menu',
+        'Notebook',
         'PopupMenu',
-        'wxButton',
-        'wxCheckBox',
-        'wxCheckListBox',
-        'wxChoice',
-        'wxComboBox',
-        'wxGauge',
-        'wxGrid',
-        'wxGrid_MegaExample',
-        'wxListbook',
-        'wxListBox',
-        'wxListCtrl',
-        'wxListCtrl_virtual',
-        'wxMenu',
-        'wxNotebook',
-        'wxPopupWindow',
-        'wxRadioBox',
-        'wxRadioButton',
-        'wxSashWindow',
-        'wxScrolledWindow',
-        'wxSlider',
-        'wxSpinButton',
-        'wxSpinCtrl',
-        'wxSplitterWindow',
-        'wxStaticBitmap',
-        'wxStaticText',
-        'wxStatusBar',
-        'wxTextCtrl',
-        'wxToggleButton',
-        'wxToolBar',
-        'wxTreeCtrl',
-        'wxValidator',
+        'PopupWindow',
+        'RadioBox',
+        'RadioButton',
+        'SashWindow',
+        'ScrolledWindow',
+        'Slider',
+        'SpinButton',
+        'SpinCtrl',
+        'SplitterWindow',
+        'StaticBitmap',
+        'StaticText',
+        'StatusBar',
+        'TextCtrl',
+        'ToggleButton',
+        'ToolBar',
+        'TreeCtrl',
+        'Validator',
         ]),
 
     ('Custom Controls', [
         'AnalogClockWindow',
         'ColourSelect',
+        'Editor',
         'GenericButtons',
-        'wxEditor',
-        'wxGenericDirCtrl',
-        'wxLEDNumberCtrl',
-        'wxMultiSash',
-        'wxPopupControl',
-        'wxPyColourChooser',
-        'wxTreeListCtrl',
+        'GenericDirCtrl',
+        'LEDNumberCtrl',
+        'MultiSash',
+        'PopupControl',
+        'PyColourChooser',
+        'TreeListCtrl',
     ]),
     
     # controls coming from other libraries
     ('More Windows/Controls', [
-        #'wxFloatBar',          deprecated
-        #'wxMVCTree',           deprecated
-        #'wxRightTextCtrl',     deprecated as we have wxTE_RIGHT now.
+        #'RightTextCtrl',     deprecated as we have wxTE_RIGHT now.
+        'Calendar',
+        'CalendarCtrl',
         'ContextHelp',
+        'DynamicSashWindow',
+        'EditableListBox',
         'FancyText',
-        'FloatCanvas',
         'FileBrowseButton',
+        'FloatBar',  
+        'FloatCanvas',
+        'HtmlWindow',
+        'IEHtmlWin',
+        'IntCtrl',
+        'MVCTree',   
         'MaskedEditControls',
-        'PyShell',
+        'MaskedNumCtrl',
+        'MimeTypesManager',
         'PyCrust',
         'PyPlot',
+        'PyShell',
+        'ScrolledPanel',
         'SplitTree',
+        'StyledTextCtrl_1',
+        'StyledTextCtrl_2',
         'TablePrint',
         'Throbber',
-        'wxCalendar',
-        'wxCalendarCtrl',
-        'wxDynamicSashWindow',
-        'wxEditableListBox',
-        'wxHtmlWindow',
-        'wxIEHtmlWin',
-        'wxIntCtrl',
-        'wxMimeTypesManager',
-        'wxMaskedNumCtrl',
-        'wxScrolledPanel',
-        'wxStyledTextCtrl_1',
-        'wxStyledTextCtrl_2',
-        'wxTimeCtrl',
-        'wxVListBox',
+        'TimeCtrl',
+        'VListBox',
         ]),
 
     # How to lay out the controls in a frame/dialog
     ('Window Layout', [
+        'GridBagSizer',
         'LayoutAnchors',
+        'LayoutConstraints',
         'Layoutf',
         'RowColSizer',
+        'ScrolledPanel',
         'Sizers',
-        'wxGridBagSizer',
-        'wxLayoutConstraints',
-        'wxScrolledPanel',
-        'wxXmlResource',
-        'wxXmlResourceHandler',
-        'wxXmlResourceSubclass',
+        'XmlResource',
+        'XmlResourceHandler',
+        'XmlResourceSubclass',
         ]),
 
     # ditto
     ('Process and Events', [
         'EventManager',
-        'infoframe',
+        'KeyEvents',
         'OOR',
+        'Process',
         'PythonEvents',
         'Threads',
-        'wxKeyEvents',
-        'wxProcess',
-        'wxTimer',
+        'Timer',
+        'infoframe',
         ]),
 
     # Clipboard and DnD
@@ -188,13 +188,13 @@ _treeList = [
 
     # Images
     ('Using Images', [
+        'ArtProvider',
         'Cursor',
+        'DragImage',
+        'Image',
+        'ImageFromStream',
+        'Mask',
         'Throbber',
-        'wxArtProvider',
-        'wxDragImage',
-        'wxImage',
-        'wxImageFromStream',
-        'wxMask',
         ]),
 
     # Other stuff
@@ -202,24 +202,24 @@ _treeList = [
         'ColourDB',
         'DialogUnits',
         'DrawXXXList',
+        'FileHistory',
         'FontEnumerator',
+        'Joystick',
         'NewNamespace',
+        'OGL',
         'PrintFramework',
         'ShapedWindow',
         'Throbber',
         'Unicode',
-        'wxFileHistory',
-        'wxJoystick',
-        'wxOGL',
-        'wxWave',
+        'Wave',
         ]),
 
     # need libs not coming with the demo
     ('Objects using an external library', [
         'ActiveXWrapper_Acrobat',
         'ActiveXWrapper_IE',
-        'wxGLCanvas',
-        #'wxPlotCanvas', # deprecated, use PyPlot
+        'GLCanvas',
+        #'PlotCanvas', # deprecated, use PyPlot
         ]),
 
 
@@ -253,14 +253,14 @@ class MyTP(wx.PyTipProvider):
 
 #---------------------------------------------------------------------------
 # A class to be used to display source code in the demo.  Try using the
-# wxSTC in the wxStyledTextCtrl_2 sample first, fall back to wxTextCtrl
+# wxSTC in the StyledTextCtrl_2 sample first, fall back to wxTextCtrl
 # if there is an error, such as the stc module not being present.
 #
 
 try:
     ##raise ImportError
     from wx import stc
-    from wxStyledTextCtrl_2 import PythonSTC
+    from StyledTextCtrl_2 import PythonSTC
     class DemoCodeViewer(PythonSTC):
         def __init__(self, parent, ID):
             PythonSTC.__init__(self, parent, ID)

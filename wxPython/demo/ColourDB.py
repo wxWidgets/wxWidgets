@@ -141,8 +141,8 @@ class TestWindow(wx.ScrolledWindow):
         dc.EndDrawing()
 
 
-# On wxGTK there needs to be a panel under wxScrolledWindows if they are
-# going to be in a wxNotebook. And, in the demo, we are.
+# On wxGTK there needs to be a panel under wx.ScrolledWindows if they are
+# going to be in a wxNotebook. And, in this demo, we are.
 class TestPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, -1)

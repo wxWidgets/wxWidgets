@@ -15,7 +15,7 @@ resourceText = r'''<?xml version="1.0"?>
      subclass is specified as "moduleName.ClassName"  Try changing
      the classname to one that does not exist and see what happens -->
 
-<object class="wxPanel" subclass="wxXmlResourceSubclass.MyBluePanel" name="MyPanel">
+<object class="wxPanel" subclass="XmlResourceSubclass.MyBluePanel" name="MyPanel">
     <size>200,100</size>
     <object class="wxStaticText" name="label1">
         <label>This blue panel is a class derived from wxPanel
@@ -31,8 +31,8 @@ and is loaded by a using a subclass attribute of the object tag.</label>
 class MyBluePanel(wx.Panel):
     def __init__(self):
         p = wx.PrePanel()
+        # the Create step is done by XRC.
         self.PostCreate(p)
-
         self.Bind(wx.EVT_WINDOW_CREATE, self.OnCreate)
         
     def OnCreate(self, evt):
