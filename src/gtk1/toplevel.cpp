@@ -228,7 +228,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
                         (char *)"base",
                         0, 0, -1, -1);
 
-    return TRUE;
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------

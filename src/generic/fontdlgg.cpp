@@ -348,6 +348,7 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
     {
       m_fontData.fontColour = *col;
       m_previewer->SetForegroundColour(*col);
+      delete col; 
     }
   }
   m_previewer->Refresh();

@@ -364,6 +364,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     {
         int newid = FI_UNKNOWN;
         m_HashTable.Put(extension, new wxFileIconEntry(newid));
+        if (ft) delete ft;
         return newid;
     }
 #ifdef __WIN32__
