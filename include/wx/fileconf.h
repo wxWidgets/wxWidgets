@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        fileconf.h
-// Purpose:     wxFileConfig derivation of wxConfig
+// Purpose:     wxFileConfig derivation of wxConfigBase
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     07.04.98 (adapted from appconf.cpp)
@@ -95,7 +95,7 @@
    IsExpandingEnvVars function).
 */
 
-class wxFileConfig : public wxConfig
+class wxFileConfig : public wxConfigBase
 {
 public:
   // construct the "standard" full name for global (system-wide) and
@@ -130,10 +130,10 @@ public:
   virtual void SetPath(const wxString& strPath);
   virtual const wxString& GetPath() const { return m_strPath; }
 
-  virtual bool GetFirstGroup(wxString& str, long& lIndex);
-  virtual bool GetNextGroup (wxString& str, long& lIndex);
-  virtual bool GetFirstEntry(wxString& str, long& lIndex);
-  virtual bool GetNextEntry (wxString& str, long& lIndex);
+  virtual bool GetFirstGroup(wxString& str, long& lIndex) const;
+  virtual bool GetNextGroup (wxString& str, long& lIndex) const;
+  virtual bool GetFirstEntry(wxString& str, long& lIndex) const;
+  virtual bool GetNextEntry (wxString& str, long& lIndex) const;
 
   virtual uint GetNumberOfEntries(bool bRecursive = FALSE) const;
   virtual uint GetNumberOfGroups(bool bRecursive = FALSE) const;
@@ -147,7 +147,7 @@ public:
                            const char *szDefault = 0) const;
   virtual bool Read(long *pl, const char *szKey, long lDefault) const;
   virtual long Read(const char *szKey, long lDefault) const
-    { return wxConfig::Read(szKey, lDefault); }
+    { return wxConfigBase::Read(szKey, lDefault); }
   virtual bool Write(const char *szKey, const char *szValue);
   virtual bool Write(const char *szKey, long lValue);
   virtual bool Flush(bool bCurrentOnly = FALSE);
@@ -262,15 +262,18 @@ public:
   class ConfigGroup
   {
   private:
-    wxFileConfig *m_pConfig;      // config object we belong to
-    ConfigGroup  *m_pParent;      // parent group (NULL for root group)
-    ArrayEntries  m_aEntries;     // entries in this group
-    ArrayGroups   m_aSubgroups;   // subgroups
-    wxString      m_strName;      // group's name
-    bool          m_bDirty;       // if FALSE => all subgroups are not dirty
-    LineList     *m_pLine;        // pointer to our line in the linked list
-    ConfigEntry  *m_pLastEntry;   // last entry of this group in the local file
-    ConfigGroup  *m_pLastGroup;   // last subgroup
+    wxFileConfig *m_pConfig;        // config object we belong to
+    ConfigGroup  *m_pParent;        // parent group (NULL for root group)
+    ArrayEntries  m_aEntries;       // entries in this group
+    ArrayGroups   m_aSubgroups;     // subgroups
+    wxString      m_strName;        // group's name
+    bool          m_bDirty;         // if FALSE => all subgroups are not dirty
+    LineList     *m_pLine;          // pointer to our line in the linked list
+    ConfigEntry  *m_pLastEntry;     // last entry/subgroup of this group in the
+    ConfigGroup  *m_pLastGroup;     // local file (we insert new ones after it)
+
+    // DeleteSubgroupByName helper
+    bool DeleteSubgroup(ConfigGroup *pGroup);
 
   public:
     // ctor
@@ -294,7 +297,7 @@ public:
     ConfigEntry *FindEntry   (const char *szName) const;
 
     // delete entry/subgroup, return FALSE if doesn't exist
-    bool DeleteSubgroup(const char *szName);
+    bool DeleteSubgroupByName(const char *szName);
     bool DeleteEntry(const char *szName);
 
     // create new entry/subgroup returning pointer to newly created element
@@ -305,17 +308,17 @@ public:
     void SetDirty();
     void SetLine(LineList *pLine);
 
-    // the new entries in this subgroup will be inserted after the last subgroup
-    // or, if there is none, after the last entry
-    void SetLastEntry(ConfigEntry *pLastEntry) { m_pLastEntry = pLastEntry; }
-    void SetLastGroup(ConfigGroup *pLastGroup) { m_pLastGroup = pLastGroup; }
-
+    //
     wxString GetFullName() const;
 
     // get the last line belonging to an entry/subgroup of this group
-    LineList *GetGroupLine();
-    LineList *GetLastEntryLine();
-    LineList *GetLastGroupLine();
+    LineList *GetGroupLine();     // line which contains [group]
+    LineList *GetLastEntryLine(); // after which our subgroups start
+    LineList *GetLastGroupLine(); // after which the next group starts
+
+    // called by entries/subgroups when they're created/deleted
+    void SetLastEntry(ConfigEntry *pEntry) { m_pLastEntry = pEntry; }
+    void SetLastGroup(ConfigGroup *pGroup) { m_pLastGroup = pGroup; }
   };
 };
 

@@ -48,8 +48,9 @@
 #endif
 
 /// should we use registry instead of configuration files under Win32?
-// (i.e. whether wxConfig::Create() will create a wxFileConfig (if it's FALSE) or
-// wxRegConfig (if it's true and we're under Win32) or wxIniConfig (Win16))
+// (i.e. whether wxConfigBase::Create() will create a wxFileConfig (if it's
+//  FALSE) or wxRegConfig (if it's true and we're under Win32) or wxIniConfig
+//  (under Win16))
 #ifndef   wxCONFIG_WIN32_NATIVE
   #define wxCONFIG_WIN32_NATIVE          TRUE
 #endif
@@ -71,7 +72,8 @@ extern wxString wxExpandEnvVars(const wxString &sz);
 extern void wxSplitPath(wxArrayString& aParts, const char *sz);
 
 // ----------------------------------------------------------------------------
-// abstract base class wxConfig which defines the interface for derived classes
+// abstract base class wxConfigBase which defines the interface for derived 
+// classes
 //
 // wxConfig organizes the items in a tree-like structure (modeled after the
 // Unix/Dos filesystem). There are groups (directories) and keys (files).
@@ -80,25 +82,25 @@ extern void wxSplitPath(wxArrayString& aParts, const char *sz);
 // Keys are pairs "key_name = value" where value may be of string or integer
 // (long) type (@@@ doubles and other types such as wxDate coming soon).
 // ----------------------------------------------------------------------------
-class wxConfig
+class wxConfigBase
 {
 public:
   // static functions
     // sets the config object, returns the previous pointer
-  static wxConfig *Set(wxConfig *pConfig);
+  static wxConfigBase *Set(wxConfigBase *pConfig);
     // get the config object, creates it on demand
-  static wxConfig *Get() { if ( !ms_pConfig ) Create(); return ms_pConfig; }
+  static wxConfigBase *Get() { if ( !ms_pConfig ) Create(); return ms_pConfig; }
     // create a new config object: this function will create the "best"
     // implementation of wxConfig available for the current platform, see
     // comments near definition wxCONFIG_WIN32_NATIVE for details. It returns
     // the created object and also sets it as ms_pConfig.
-  static wxConfig *Create();
+  static wxConfigBase *Create();
 
   // ctor & virtual dtor
     // environment variable expansion is on by default
-  wxConfig() { m_bExpandEnvVars = TRUE; }
+  wxConfigBase() { m_bExpandEnvVars = TRUE; }
     // empty but ensures that dtor of all derived classes is virtual
-  virtual ~wxConfig() { }
+  virtual ~wxConfigBase() { }
 
   // path management
     // set current path: if the first character is '/', it's the absolute path,
@@ -111,11 +113,11 @@ public:
   // enumeration: all functions here return false when there are no more items.
   // you must pass the same lIndex to GetNext and GetFirst (don't modify it)
     // enumerate subgroups
-  virtual bool GetFirstGroup(wxString& str, long& lIndex) = 0;
-  virtual bool GetNextGroup (wxString& str, long& lIndex) = 0;
+  virtual bool GetFirstGroup(wxString& str, long& lIndex) const = 0;
+  virtual bool GetNextGroup (wxString& str, long& lIndex) const = 0;
     // enumerate entries
-  virtual bool GetFirstEntry(wxString& str, long& lIndex) = 0;
-  virtual bool GetNextEntry (wxString& str, long& lIndex) = 0;
+  virtual bool GetFirstEntry(wxString& str, long& lIndex) const = 0;
+  virtual bool GetNextEntry (wxString& str, long& lIndex) const = 0;
     // get number of entries/subgroups in the current group, with or without
     // it's subgroups
   virtual uint GetNumberOfEntries(bool bRecursive = FALSE) const = 0;
@@ -190,17 +192,17 @@ protected:
   {
   public:
     // ctor/dtor do path changing/restorin
-    PathChanger(const wxConfig *pContainer, const wxString& strEntry);
+    PathChanger(const wxConfigBase *pContainer, const wxString& strEntry);
    ~PathChanger();
 
     // get the key name
     const wxString& Name() const { return m_strName; }
 
   private:
-    wxConfig *m_pContainer;   // object we live in
-    wxString  m_strName,      // name of entry (i.e. name only)
-              m_strOldPath;   // saved path
-    bool      m_bChanged;     // was the path changed?
+    wxConfigBase *m_pContainer;   // object we live in
+    wxString      m_strName,      // name of entry (i.e. name only)
+                  m_strOldPath;   // saved path
+    bool          m_bChanged;     // was the path changed?
   };
 
 private:
@@ -208,8 +210,22 @@ private:
   bool m_bExpandEnvVars;
 
   // static variables
-  static wxConfig *ms_pConfig;
+  static wxConfigBase *ms_pConfig;
 };
 
-#endif  //_wxCONFIG_H
+// ----------------------------------------------------------------------------
+// the native wxConfigBase implementation
+// ----------------------------------------------------------------------------
 
+// under Windows we prefer to use the native implementation
+#if defined(__WXMSW__) && wxCONFIG_WIN32_NATIVE
+  #ifdef __WIN32__
+    #define wxConfig  wxRegConfig
+  #else  //WIN16
+    #define wxConfig  wxIniConfig
+  #endif
+#else // either we're under Unix or wish to use files even under Windows
+  #define wxConfig  wxFileConfig
+#endif
+
+#endif  //_wxCONFIG_H
