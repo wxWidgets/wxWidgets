@@ -22,7 +22,7 @@
 //
 
 class wxSoundAiff: public wxSoundFileStream {
- public:
+public:
     wxSoundAiff(wxInputStream& stream, wxSoundStream& io_sound);
     wxSoundAiff(wxOutputStream& stream, wxSoundStream& io_sound);
     ~wxSoundAiff();
@@ -30,13 +30,16 @@ class wxSoundAiff: public wxSoundFileStream {
     bool CanRead();
     wxString GetCodecName() const;
     
- protected:
+protected:
     bool PrepareToPlay(); 
-    bool PrepareToRecord(unsigned long time);
+    bool PrepareToRecord(wxUint32 time);
     bool FinishRecording();
+    bool RepositionStream(wxUint32 position);
     
     wxUint32 GetData(void *buffer, wxUint32 len);
     wxUint32 PutData(const void *buffer, wxUint32 len);
+protected:
+    off_t m_base_offset;
 };
 
 #endif

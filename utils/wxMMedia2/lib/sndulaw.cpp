@@ -10,6 +10,10 @@
 #endif
 
 #include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+#endif
+
 #include "sndbase.h"
 #include "sndfile.h"
 #include "sndpcm.h"
@@ -84,7 +88,8 @@ wxSoundStreamUlaw::~wxSoundStreamUlaw()
 
 wxSoundStream& wxSoundStreamUlaw::Read(void *buffer, wxUint32 len)
 {
-  return *this;
+    // TODO
+    return *this;
 }
 
 wxSoundStream& wxSoundStreamUlaw::Write(const void *buffer, wxUint32 len)

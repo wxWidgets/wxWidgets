@@ -27,13 +27,13 @@
 wxSoundRouterStream::wxSoundRouterStream(wxSoundStream& sndio)
   : wxSoundStreamCodec(sndio)
 {
-  m_router = NULL;
+    m_router = NULL;
 }
 
 wxSoundRouterStream::~wxSoundRouterStream()
 {
-  if (m_router)
-    delete m_router;
+    if (m_router)
+        delete m_router;
 }
 
 // --------------------------------------------------------------------------
@@ -42,16 +42,16 @@ wxSoundRouterStream::~wxSoundRouterStream()
 // --------------------------------------------------------------------------
 wxSoundStream& wxSoundRouterStream::Read(void *buffer, wxUint32 len)
 {
-  if (m_router) {
-    m_router->Read(buffer, len);
-    m_snderror  = m_router->GetError();
-    m_lastcount = m_router->GetLastAccess();
-  } else {
-    m_sndio->Read(buffer, len);
-    m_snderror  = m_sndio->GetError();
-    m_lastcount = m_sndio->GetLastAccess();
-  }
-  return *this;
+    if (m_router) {
+        m_router->Read(buffer, len);
+        m_snderror  = m_router->GetError();
+        m_lastcount = m_router->GetLastAccess();
+    } else {
+        m_sndio->Read(buffer, len);
+        m_snderror  = m_sndio->GetError();
+        m_lastcount = m_sndio->GetLastAccess();
+    }
+    return *this;
 }
 
 // --------------------------------------------------------------------------
@@ -59,14 +59,14 @@ wxSoundStream& wxSoundRouterStream::Read(void *buffer, wxUint32 len)
 // --------------------------------------------------------------------------
 wxSoundStream& wxSoundRouterStream::Write(const void *buffer, wxUint32 len)
 {
-  if (m_router) {
-    m_router->Write(buffer, len);
-    m_snderror  = m_router->GetError();
-    m_lastcount = m_router->GetLastAccess();
-  } else {
-    m_sndio->Write(buffer, len);
-    m_snderror  = m_sndio->GetError();
-    m_lastcount = m_sndio->GetLastAccess();
+    if (m_router) {
+        m_router->Write(buffer, len);
+        m_snderror  = m_router->GetError();
+        m_lastcount = m_router->GetLastAccess();
+    } else {
+        m_sndio->Write(buffer, len);
+        m_snderror  = m_sndio->GetError();
+        m_lastcount = m_sndio->GetLastAccess();
   }
   return *this;
 }
@@ -80,32 +80,34 @@ wxSoundStream& wxSoundRouterStream::Write(const void *buffer, wxUint32 len)
 // --------------------------------------------------------------------------
 bool wxSoundRouterStream::SetSoundFormat(const wxSoundFormatBase& format)
 {
-  if (m_router)
-    delete m_router;
-
-  if (m_sndio->SetSoundFormat(format)) {
-    wxSoundStream::SetSoundFormat(m_sndio->GetSoundFormat());
+    if (m_router)
+        delete m_router;
+    
+    // First, we try to setup the sound device
+    if (m_sndio->SetSoundFormat(format)) {
+        // We are lucky, it is working.
+        wxSoundStream::SetSoundFormat(m_sndio->GetSoundFormat());
+        return TRUE;
+    }
+    
+    switch(format.GetType()) {
+        case wxSOUND_NOFORMAT:
+            return FALSE;
+        case wxSOUND_PCM:
+            m_router = new wxSoundStreamPcm(*m_sndio);
+            m_router->SetSoundFormat(format);
+            break;
+        case wxSOUND_ULAW:
+            m_router = new wxSoundStreamUlaw(*m_sndio);
+            m_router->SetSoundFormat(format);
+            break;
+        case wxSOUND_G72X:
+            m_router = new wxSoundStreamG72X(*m_sndio);
+            m_router->SetSoundFormat(format);
+            break;
+    }
+    wxSoundStream::SetSoundFormat(m_router->GetSoundFormat());
     return TRUE;
-  }
-
-  switch(format.GetType()) {
-  case wxSOUND_NOFORMAT:
-    return FALSE;
-  case wxSOUND_PCM:
-    m_router = new wxSoundStreamPcm(*m_sndio);
-    m_router->SetSoundFormat(format);
-    break;
-  case wxSOUND_ULAW:
-    m_router = new wxSoundStreamUlaw(*m_sndio);
-    m_router->SetSoundFormat(format);
-    break;
-  case wxSOUND_G72X:
-    m_router = new wxSoundStreamG72X(*m_sndio);
-    m_router->SetSoundFormat(format);
-    break;
-  }
-  wxSoundStream::SetSoundFormat(m_router->GetSoundFormat());
-  return TRUE;
 }
 
 // --------------------------------------------------------------------------
@@ -126,21 +128,21 @@ wxUint32 wxSoundRouterStream::GetBestSize() const
 // --------------------------------------------------------------------------
 bool wxSoundRouterStream::StartProduction(int evt)
 {
-  if (!m_router) {
-    if (m_sndio->StartProduction(evt))
-      return TRUE;
-
-    m_snderror = m_sndio->GetError();
-    m_lastcount = m_sndio->GetLastAccess();
+    if (!m_router) {
+        if (m_sndio->StartProduction(evt))
+            return TRUE;
+        
+        m_snderror = m_sndio->GetError();
+        m_lastcount = m_sndio->GetLastAccess();
+        return FALSE;
+    }
+    
+    if (m_router->StartProduction(evt))
+        return TRUE;
+    
+    m_snderror = m_router->GetError();
+    m_lastcount = m_router->GetLastAccess();
     return FALSE;
-  }
-
-  if (m_router->StartProduction(evt))
-    return TRUE;
-
-  m_snderror = m_router->GetError();
-  m_lastcount = m_router->GetLastAccess();
-  return FALSE;
 } 
 
 // --------------------------------------------------------------------------
@@ -148,23 +150,22 @@ bool wxSoundRouterStream::StartProduction(int evt)
 // --------------------------------------------------------------------------
 bool wxSoundRouterStream::StopProduction()
 {
-  if (!m_router) {
-    if (m_sndio->StopProduction())
-      return TRUE;
-
-    m_snderror = m_sndio->GetError();
-    m_lastcount = m_sndio->GetLastAccess();
+    if (!m_router) {
+        if (m_sndio->StopProduction())
+            return TRUE;
+        
+        m_snderror = m_sndio->GetError();
+        m_lastcount = m_sndio->GetLastAccess();
+        return FALSE;
+    }
+    
+    if (m_router->StopProduction())
+        return TRUE;
+    
+    m_snderror = m_router->GetError();
+    m_lastcount = m_router->GetLastAccess();
     return FALSE;
-  }
-
-  if (m_router->StopProduction())
-    return TRUE;
-
-  m_snderror = m_router->GetError();
-  m_lastcount = m_router->GetLastAccess();
-  return FALSE;
 }
- 
 
 // --------------------------------------------------------------------------
 // wxSoundFileStream: generic reader
@@ -172,12 +173,12 @@ bool wxSoundRouterStream::StopProduction()
 
 wxSoundFileStream::wxSoundFileStream(wxInputStream& stream,
                                      wxSoundStream& io_sound)
-  : m_codec(io_sound), m_sndio(&io_sound),
-    m_input(&stream), m_output(NULL), m_state(wxSOUND_FILE_STOPPED)
+        : m_codec(io_sound), m_sndio(&io_sound),
+          m_input(&stream), m_output(NULL), m_state(wxSOUND_FILE_STOPPED)
 {
-  m_length = 0;
-  m_bytes_left = 0;
-  m_prepared = FALSE;
+    m_length = 0;
+    m_bytes_left = 0;
+    m_prepared = FALSE;
 }
 
 wxSoundFileStream::wxSoundFileStream(wxOutputStream& stream,
@@ -213,7 +214,7 @@ bool wxSoundFileStream::Play()
   return TRUE;
 }
 
-bool wxSoundFileStream::Record(unsigned long time)
+bool wxSoundFileStream::Record(wxUint32 time)
 {
   if (m_state != wxSOUND_FILE_STOPPED)
     return FALSE;
@@ -346,6 +347,9 @@ wxUint32 wxSoundFileStream::SetPosition(wxUint32 new_position)
   if (!m_prepared)
     return 0;
 
+  if (!RepositionStream(new_position))
+      return m_length-m_bytes_left;
+  
   if (new_position >= m_length) {
     m_bytes_left = 0;
     return m_length;

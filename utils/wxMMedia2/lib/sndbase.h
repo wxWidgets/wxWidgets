@@ -37,7 +37,8 @@ typedef enum {
   wxSOUND_NOFORMAT,
   wxSOUND_PCM,
   wxSOUND_ULAW,
-  wxSOUND_G72X
+  wxSOUND_G72X,
+  wxSOUND_MSADPCM
 } wxSoundFormatType;
 
 // ---------------------

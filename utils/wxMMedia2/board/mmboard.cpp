@@ -71,43 +71,44 @@
 class MMBoardFrame : public wxFrame
 {
 public:
-  // ctor(s)
-  MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
-  // dtor
-  ~MMBoardFrame();
-
-  // event handlers
-  void OnQuit(wxCommandEvent& event);
-  void OnAbout(wxCommandEvent& event);
-  void OnOpen(wxCommandEvent& event);
-  void OnPlay(wxCommandEvent& event);
-  void OnStop(wxCommandEvent& event);
-  void OnPause(wxCommandEvent& event);
-  void OnRefreshInfo(wxEvent& event);
-
-  void OpenVideoWindow();
-  void CloseVideoWindow();
+    // ctor(s)
+    MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    // dtor
+    ~MMBoardFrame();
+    
+    // event handlers
+    void OnQuit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+    void OnOpen(wxCommandEvent& event);
+    void OnPlay(wxCommandEvent& event);
+    void OnStop(wxCommandEvent& event);
+    void OnPause(wxCommandEvent& event);
+    void OnEject(wxCommandEvent& event);
+    void OnRefreshInfo(wxEvent& event);
+    void OnSetPosition(wxCommandEvent& event);
+    
+    void OpenVideoWindow();
+    void CloseVideoWindow();
+    
+private:
+    // any class wishing to process wxWindows events must use this macro
+    DECLARE_EVENT_TABLE()
 
 private:
-  // any class wishing to process wxWindows events must use this macro
-  DECLARE_EVENT_TABLE()
-  
-private:
-  void UpdateMMedInfo(); 
-  void UpdateInfoText();
-
-  MMBoardFile *m_opened_file;
-
-  wxSlider *m_positionSlider;
-  wxBitmapButton *m_playButton, *m_pauseButton, *m_stopButton, *m_ejectButton;
-  wxStaticText *m_fileType, *m_infoText;
-  wxWindow *m_video_window;
-
-  wxPanel *m_panel;
-  wxSizer *m_sizer;
-
-  wxTimer *m_refreshTimer;
-
+    void UpdateMMedInfo(); 
+    void UpdateInfoText();
+    
+    MMBoardFile *m_opened_file;
+    
+    wxSlider *m_positionSlider;
+    wxBitmapButton *m_playButton, *m_pauseButton, *m_stopButton, *m_ejectButton;
+    wxStaticText *m_fileType, *m_infoText;
+    wxWindow *m_video_window;
+    
+    wxPanel *m_panel;
+    wxSizer *m_sizer;
+    
+    wxTimer *m_refreshTimer;
 };
 
 // ----------------------------------------------------------------------------
@@ -141,6 +142,8 @@ BEGIN_EVENT_TABLE(MMBoardFrame, wxFrame)
   EVT_BUTTON(MMBoard_PlayButton, MMBoardFrame::OnPlay)
   EVT_BUTTON(MMBoard_StopButton, MMBoardFrame::OnStop)
   EVT_BUTTON(MMBoard_PauseButton, MMBoardFrame::OnPause)
+  EVT_BUTTON(MMBoard_EjectButton, MMBoardFrame::OnEject)  
+  EVT_SLIDER(MMBoard_PositionSlider, MMBoardFrame::OnSetPosition)
   EVT_CUSTOM(wxEVT_TIMER, MMBoard_RefreshInfo, MMBoardFrame::OnRefreshInfo)
 END_EVENT_TABLE()
 
@@ -190,39 +193,39 @@ bool MMBoardApp::OnInit()
 
 wxUint8 MMBoardApp::TestMultimediaCaps()
 {
-  wxSoundStream *dev;
-  wxUint8 caps;
-
-  caps = 0;
-
+    wxSoundStream *dev;
+    wxUint8 caps;
+    
+    caps = 0;
+    
 #ifdef __UNIX__
-  // We now test the ESD support
-
-  dev = new wxSoundStreamESD();
-  if (dev->GetError() == wxSOUND_NOERR) 
-    caps |= MM_SOUND_ESD;
-  delete dev;
-
-  // We test the OSS (Open Sound System) support.
-
+    // We now test the ESD support
+    
+    dev = new wxSoundStreamESD();
+    if (dev->GetError() == wxSOUND_NOERR) 
+        caps |= MM_SOUND_ESD;
+    delete dev;
+    
+    // We test the OSS (Open Sound System) support.
+    
 #if 0
-  dev = new wxSoundStreamOSS();
-  if (dev->GetError() == wxSOUND_NOERR)
-    caps |= MM_SOUND_OSS;
-  delete dev;
+    dev = new wxSoundStreamOSS();
+    if (dev->GetError() == wxSOUND_NOERR)
+        caps |= MM_SOUND_OSS;
+    delete dev;
 #endif
 #endif
-
+    
 #ifdef __WIN32__
-  // We test the Windows sound support.
+    // We test the Windows sound support.
 
-  dev = new wxSoundStreamWin();
-  if (dev->GetError() == wxSOUND_NOERR)
-    caps |= MM_SOUND_WIN;
-  delete dev;
+    dev = new wxSoundStreamWin();
+    if (dev->GetError() == wxSOUND_NOERR)
+        caps |= MM_SOUND_WIN;
+    delete dev;
 #endif
-
-  return caps;
+    
+    return caps;
 }
 
 // ----------------------------------------------------------------------------
@@ -243,20 +246,20 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
     SetIcon(wxICON(mondrian));
 
     // create a menu bar
-    wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(wxT(""), wxMENU_TEAROFF);
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(MMBoard_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
+    helpMenu->Append(MMBoard_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
 
-    menuFile->Append(MMBoard_Open, _T("&Open\tAlt-O"), _T("Open file"));
+    menuFile->Append(MMBoard_Open, wxT("&Open\tAlt-O"), wxT("Open file"));
     menuFile->AppendSeparator();
-    menuFile->Append(MMBoard_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    menuFile->Append(MMBoard_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, _T("&File"));
-    menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(helpMenu, wxT("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -264,7 +267,7 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(3);
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(wxT("Welcome to wxWindows!"));
 #endif // wxUSE_STATUSBAR
 
     // Misc variables
@@ -277,7 +280,8 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
 				     wxDefaultPosition, wxSize(300, -1),
 				     wxSL_HORIZONTAL | wxSL_AUTOTICKS);
     m_positionSlider->SetPageSize(60);  // 60 secs
-
+    m_positionSlider->Enable(FALSE);
+    
     // Initialize info panel
     wxPanel *infoPanel = new wxPanel( m_panel, -1);
     infoPanel->SetBackgroundColour(*wxBLACK);
@@ -285,7 +289,7 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
 
     wxBoxSizer *infoSizer = new wxBoxSizer(wxVERTICAL);
 
-    m_fileType = new wxStaticText(infoPanel, -1, _T(""));
+    m_fileType = new wxStaticText(infoPanel, -1, wxT(""));
     wxStaticLine *line = new wxStaticLine(infoPanel, -1);
     m_infoText = new wxStaticText(infoPanel, -1, "");
 
@@ -346,10 +350,10 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
 
 MMBoardFrame::~MMBoardFrame()
 {
-  if (m_opened_file)
-    delete m_opened_file;
-
-  delete m_refreshTimer;
+    if (m_opened_file)
+        delete m_opened_file;
+    
+    delete m_refreshTimer;
 }
 
 void MMBoardFrame::OpenVideoWindow()
@@ -366,14 +370,14 @@ void MMBoardFrame::OpenVideoWindow()
 
 void MMBoardFrame::CloseVideoWindow()
 {
-  if (!m_video_window)
-    return;
-
-  m_sizer->Remove(m_video_window);
-  delete m_video_window;
-  m_video_window = NULL;
-
-  m_sizer->Fit(this);
+    if (!m_video_window)
+        return;
+    
+    m_sizer->Remove(m_video_window);
+    delete m_video_window;
+    m_video_window = NULL;
+    
+    m_sizer->Fit(this);
 }
 
 // event handlers
@@ -387,93 +391,97 @@ void MMBoardFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MMBoardFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("wxWindows Multimedia board v1.0a, wxMMedia v2.0a:\n")
-                _T("an example of the capabilities of the wxWindows multimedia classes.\n")
-		_T("Copyright 1999, 2000, Guilhem Lavaux.\n"));
+    msg.Printf( wxT("wxWindows Multimedia board v1.0a, wxMMedia v2.0a:\n")
+                wxT("an example of the capabilities of the wxWindows multimedia classes.\n")
+		wxT("Copyright 1999, 2000, Guilhem Lavaux.\n"));
  
     wxMessageBox(msg, "About MMBoard", wxOK | wxICON_INFORMATION, this);
 }
 
 void MMBoardFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
-  wxString selected_file;
-
-  if (m_opened_file) {
-    if (!m_opened_file->IsStopped()) {
-      wxCommandEvent event2;
-      OnStop(event2);
+    wxString selected_file;
+    
+    if (m_opened_file) {
+        if (!m_opened_file->IsStopped()) {
+            wxCommandEvent event2;
+            OnStop(event2);
+        }
+        delete m_opened_file;
     }
-    delete m_opened_file;
-  }
-
-  // select a file to be opened
-  selected_file = wxLoadFileSelector("multimedia", "*", NULL, this);
-  if (selected_file.IsNull())
-    return;
-
-  m_opened_file = MMBoardManager::Open(selected_file);
-
-  // Change the range values of the slider.
-  MMBoardTime length;
-
-  length = m_opened_file->GetLength();
-  m_positionSlider->SetRange(0, length.hours * 3600 + length.minutes * 60 + length.seconds);
-
-  // Update misc info
-  UpdateMMedInfo();
- 
-  SetStatusText(selected_file, 2);
-
-  // Update info text
-  UpdateInfoText();
-
-  // Enable a few buttons
-  m_playButton->Enable(TRUE);
-  m_ejectButton->Enable(TRUE);
-
-  if (m_opened_file->NeedWindow()) {
-    OpenVideoWindow();
-    m_opened_file->SetWindow(m_video_window);
-  } else
-    CloseVideoWindow();
+    
+    // select a file to be opened
+    selected_file = wxLoadFileSelector("multimedia", "*", NULL, this);
+    if (selected_file.IsNull())
+        return;
+    
+    m_opened_file = MMBoardManager::Open(selected_file);
+    
+    // Change the range values of the slider.
+    MMBoardTime length;
+    
+    length = m_opened_file->GetLength();
+    m_positionSlider->SetRange(0, length.hours * 3600 + length.minutes * 60 + length.seconds);
+    
+    // Update misc info
+    UpdateMMedInfo();
+    
+    SetStatusText(selected_file, 2);
+  
+    // Update info text
+    UpdateInfoText();
+    
+    // Enable a few buttons
+    m_playButton->Enable(TRUE);
+    m_ejectButton->Enable(TRUE);
+    m_positionSlider->Enable(TRUE);
+    
+    if (m_opened_file->NeedWindow()) {
+        OpenVideoWindow();
+        m_opened_file->SetWindow(m_video_window);
+    } else
+        CloseVideoWindow();
 }
 
 void MMBoardFrame::UpdateInfoText()
 {
-  wxString infotext1, infotext2;
-
-  if (m_opened_file) {
-    infotext1 = _T("File type:\n\t");
-    infotext1 += m_opened_file->GetStringType() + _T("\n");
-
-    infotext2 = _T("File informations:\n\n");
-    infotext2 += m_opened_file->GetStringInformation();
-  } else {
-    infotext1 = _T("File type: \n\tNo file opened");
-    infotext2 = _T("File informations:\nNo information\n\n\n\n\n");
-  }
-
-  m_fileType->SetLabel(infotext1);
-  m_infoText->SetLabel(infotext2);
+    wxString infotext1, infotext2;
+    
+    if (m_opened_file) {
+        infotext1 = wxT("File type:\n\t");
+        infotext1 += m_opened_file->GetStringType() + wxT("\n");
+        
+        infotext2 = wxT("File informations:\n\n");
+        infotext2 += m_opened_file->GetStringInformation();
+    } else {
+        infotext1 = wxT("File type: \n\tNo file opened");
+        infotext2 = wxT("File informations:\nNo information\n\n\n\n\n");
+    }
+    
+    m_fileType->SetLabel(infotext1);
+    m_infoText->SetLabel(infotext2);
 }
 
 void MMBoardFrame::UpdateMMedInfo()
 {
-  wxString temp_string;
-  MMBoardTime current, length;
+    wxString temp_string;
+    MMBoardTime current, length;
+    
+    if (m_opened_file) {
+        current = m_opened_file->GetPosition();
+        length  = m_opened_file->GetLength();
+    } else {
+        current.hours = current.minutes = current.seconds = 0;
+        length = current;
+    }
 
-  if (m_opened_file) {
-    current = m_opened_file->GetPosition();
-    length  = m_opened_file->GetLength();
-  }
-
-  // We refresh the status bar
-  temp_string.Printf("%02d:%02d / %02d:%02d", current.hours * 60 + current.minutes,
-		     current.seconds, length.hours * 60 + length.minutes, length.seconds);
-  SetStatusText(temp_string, 1);
-
-  // We set the slider position
-  m_positionSlider->SetValue(current.hours * 3600 + current.minutes * 60 + current.seconds);
+    // We refresh the status bar
+    temp_string.Printf(wxT("%02d:%02d / %02d:%02d"), current.hours * 60 + current.minutes,
+                       current.seconds, length.hours * 60 + length.minutes, length.seconds);
+    SetStatusText(temp_string, 1);
+    
+    // We set the slider position
+    m_positionSlider->SetValue(current.hours * 3600 + current.minutes * 60 + current.seconds);
 }
 
 // ----------------------------------------------------------------------------
@@ -481,51 +489,83 @@ void MMBoardFrame::UpdateMMedInfo()
 
 void MMBoardFrame::OnRefreshInfo(wxEvent& WXUNUSED(event))
 {
-  UpdateMMedInfo();
-
-  if (m_opened_file->IsStopped()) {
-    m_refreshTimer->Stop();
-    m_playButton->Enable(TRUE);
-    m_stopButton->Enable(FALSE);
-    m_pauseButton->Enable(FALSE);
-  }
+    UpdateMMedInfo();
+    
+    if (m_opened_file->IsStopped()) {
+        m_refreshTimer->Stop();
+        m_playButton->Enable(TRUE);
+        m_stopButton->Enable(FALSE);
+        m_pauseButton->Enable(FALSE);
+    }
 }
 
 void MMBoardFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 {
-  m_stopButton->Enable(TRUE);
-  m_pauseButton->Enable(TRUE);
-  m_playButton->Enable(FALSE);
-
-  if (m_opened_file->IsPaused()) {
-    m_opened_file->Resume();
-    return;
-  }
-
-  m_refreshTimer->Start(1000, FALSE);
-
-  m_opened_file->Play();
-
-  m_stopButton->Enable(TRUE);
-  m_pauseButton->Enable(TRUE);
-  m_playButton->Enable(FALSE);
+    m_stopButton->Enable(TRUE);
+    m_pauseButton->Enable(TRUE);
+    m_playButton->Enable(FALSE);
+    
+    if (m_opened_file->IsPaused()) {
+        m_opened_file->Resume();
+        return;
+    }
+    
+    m_refreshTimer->Start(1000, FALSE);
+    
+    m_opened_file->Play();
+    
+    m_stopButton->Enable(TRUE);
+    m_pauseButton->Enable(TRUE);
+    m_playButton->Enable(FALSE);
 }
 
 void MMBoardFrame::OnStop(wxCommandEvent& WXUNUSED(event))
 {
-  m_opened_file->Stop();
-  m_refreshTimer->Stop();
+    m_opened_file->Stop();
+    m_refreshTimer->Stop();
 
-  m_stopButton->Enable(FALSE);
-  m_playButton->Enable(TRUE);
-
-  UpdateMMedInfo();
+    m_stopButton->Enable(FALSE);
+    m_playButton->Enable(TRUE);
+    
+    UpdateMMedInfo();
 }
 
 void MMBoardFrame::OnPause(wxCommandEvent& WXUNUSED(event))
 {
-  m_opened_file->Pause();
-
-  m_playButton->Enable(TRUE);
-  m_pauseButton->Enable(FALSE);
+    m_opened_file->Pause();
+    
+    m_playButton->Enable(TRUE);
+    m_pauseButton->Enable(FALSE);
 }
+
+void MMBoardFrame::OnEject(wxCommandEvent& WXUNUSED(event))
+{
+    m_opened_file->Stop();
+
+    delete m_opened_file;
+    m_opened_file = NULL;
+    
+    m_playButton->Enable(FALSE);
+    m_pauseButton->Enable(FALSE);
+    m_stopButton->Enable(FALSE);
+    m_ejectButton->Enable(FALSE);
+    m_positionSlider->Enable(FALSE);
+
+    UpdateInfoText();
+    UpdateMMedInfo();
+}
+
+void MMBoardFrame::OnSetPosition(wxCommandEvent& WXUNUSED(event))
+{
+    wxUint32 itime;
+    MMBoardTime btime;
+    
+    itime = m_positionSlider->GetValue();
+    btime.seconds = itime % 60;
+    btime.minutes = (itime / 60) % 60;
+    btime.hours = itime / 3600;
+    m_opened_file->SetPosition(btime);
+
+    UpdateMMedInfo();
+}
+

@@ -45,3 +45,4 @@ You need to move the three files included in this directory:
   - utilsunx.cpp => src/unix
   - process.cpp => src/common
   - process.h => include/wx
+  - utilsexc.cpp => src/msw

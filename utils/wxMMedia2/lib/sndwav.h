@@ -24,7 +24,7 @@
 //
 
 class wxSoundWave: public wxSoundFileStream {
- public:
+public:
     wxSoundWave(wxInputStream& stream, wxSoundStream& io_sound);
     wxSoundWave(wxOutputStream& stream, wxSoundStream& io_sound);
     ~wxSoundWave();
@@ -32,10 +32,11 @@ class wxSoundWave: public wxSoundFileStream {
     bool CanRead();
     wxString GetCodecName() const;
     
- protected:
+protected:
     bool PrepareToPlay(); 
-    bool PrepareToRecord(unsigned long time);
+    bool PrepareToRecord(wxUint32 time);
     bool FinishRecording();
+    bool RepositionStream(wxUint32 position);
     
     wxUint32 GetData(void *buffer, wxUint32 len);
     wxUint32 PutData(const void *buffer, wxUint32 len);
@@ -48,6 +49,9 @@ class wxSoundWave: public wxSoundFileStream {
                           wxUint16 byte_p_spl, wxUint16 bits_p_spl);
     wxSoundFormatBase *HandleInputPCM(wxDataOutputStream& data);
     wxSoundFormatBase *HandleInputG72X(wxDataOutputStream& data);
+
+protected:
+    off_t m_base_offset;
 };
 
 #endif

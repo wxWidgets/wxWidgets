@@ -12,7 +12,6 @@
 #pragma interface "sndulaw.h"
 #endif
 
-#include <stddef.h>
 #include "sndcodec.h"
 #include "sndbase.h"
 
@@ -26,6 +25,9 @@ class WXDLLEXPORT wxSoundFormatUlaw: public wxSoundFormatBase {
 
   void SetSampleRate(wxUint32 srate);
   wxUint32 GetSampleRate() const;
+
+  void SetChannels(wxUint8 channels);
+  wxUint8 GetChannels() const;
 
   wxSoundFormatType GetType() const { return wxSOUND_ULAW; }
   wxSoundFormatBase *Clone() const;

@@ -286,8 +286,6 @@ class wxProcessFileInputStream: public wxInputStream {
 
  protected: 
     size_t OnSysRead(void *buffer, size_t bufsize);
-    off_t OnSysSeek(off_t seek, wxSeekMode mode);
-    off_t OnSysTell() const;
 
  protected:
     int m_fd;
@@ -300,8 +298,6 @@ class wxProcessFileOutputStream: public wxOutputStream {
 
  protected:
     size_t OnSysWrite(const void *buffer, size_t bufsize);
-    off_t OnSysSeek(off_t seek, wxSeekMode mode);
-    off_t OnSysTell() const;
 
  protected:
     int m_fd;
@@ -332,18 +328,6 @@ size_t wxProcessFileInputStream::OnSysRead(void *buffer, size_t bufsize)
     return ret;
 }
 
-off_t wxProcessFileInputStream::OnSysSeek(off_t WXUNUSED(seek),
-                                          wxSeekMode WXUNUSED(mode))
-{
-   return wxInvalidOffset;
-}
-
-off_t wxProcessFileInputStream::OnSysTell() const
-{
-   return wxInvalidOffset;
-}
-
-
 wxProcessFileOutputStream::wxProcessFileOutputStream(int fd)
 {
     m_fd = fd;
@@ -365,17 +349,6 @@ size_t wxProcessFileOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
       ret = 0;
     }
     return ret;
-}
-
-off_t wxProcessFileOutputStream::OnSysSeek(off_t WXUNUSED(seek),
-                                          wxSeekMode WXUNUSED(mode))
-{
-   return wxInvalidOffset;
-}
-
-off_t wxProcessFileOutputStream::OnSysTell() const
-{
-   return wxInvalidOffset;
 }
 
 #endif

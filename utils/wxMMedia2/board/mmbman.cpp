@@ -69,64 +69,66 @@
 
 class MMBoardSoundFile: public MMBoardFile {
 public:
-  MMBoardSoundFile(const wxString& filename);
-  ~MMBoardSoundFile();
-
-  bool NeedWindow();
-
-  void SetWindow(wxWindow *window);
-  
-  void Play();
-  void Pause();
-  void Resume();
-  void Stop();
-
-  MMBoardTime GetPosition();
-  MMBoardTime GetLength();
-
-  bool IsStopped();
-  bool IsPaused();
-
-  wxString GetStringType();
-  wxString GetStringInformation();
-
+    MMBoardSoundFile(const wxString& filename);
+    ~MMBoardSoundFile();
+    
+    bool NeedWindow();
+    
+    void SetWindow(wxWindow *window);
+    
+    void Play();
+    void Pause();
+    void Resume();
+    void Stop();
+    
+    MMBoardTime GetPosition();
+    MMBoardTime GetLength();
+    void SetPosition(MMBoardTime btime);
+    
+    bool IsStopped();
+    bool IsPaused();
+    
+    wxString GetStringType();
+    wxString GetStringInformation();
+    
 protected:
-  wxSoundFileStream *GetDecoder();
+    wxSoundFileStream *GetDecoder();
+    
+    wxSoundStream *m_output_stream;
+    wxInputStream *m_input_stream;
+    wxSoundFileStream *m_file_stream;
 
-  wxSoundStream *m_output_stream;
-  wxInputStream *m_input_stream;
-  wxSoundFileStream *m_file_stream;
-
-  MMBoardTime m_length;
-  wxUint8 m_file_type;
+    MMBoardTime m_length;
+    wxUint8 m_file_type;
 };
 
 class MMBoardVideoFile: public MMBoardFile {
 public:
-  MMBoardVideoFile(const wxString& filename);
-  ~MMBoardVideoFile();
-
-  bool NeedWindow();
-
-  void SetWindow(wxWindow *window);
-  
-  void Play();
-  void Pause();
-  void Resume();
-  void Stop();
-
-  MMBoardTime GetPosition();
-  MMBoardTime GetLength();
-
-  bool IsStopped();
-  bool IsPaused();
-
-  wxString GetStringType();
-  wxString GetStringInformation();
-
+    MMBoardVideoFile(const wxString& filename);
+    ~MMBoardVideoFile();
+    
+    bool NeedWindow();
+    
+    void SetWindow(wxWindow *window);
+    
+    void Play();
+    void Pause();
+    void Resume();
+    void Stop();
+    
+    MMBoardTime GetPosition();
+    MMBoardTime GetLength();
+    void SetPosition(MMBoardTime btime);
+    
+    bool IsStopped();
+    bool IsPaused();
+    
+    wxString GetStringType();
+    wxString GetStringInformation();
+    
 protected:
-  wxWindow *m_output_window;
-  wxVideoBaseDriver *m_video_driver;
+    wxWindow *m_output_window;
+    wxVideoBaseDriver *m_video_driver;
 };
 
 // ----------------------------------------------------------------------------
@@ -143,95 +145,106 @@ protected:
 MMBoardSoundFile::MMBoardSoundFile(const wxString& filename)
   : MMBoardFile()
 {
-  m_input_stream = new wxFileInputStream(filename);
-  m_output_stream = MMBoardManager::OpenSoundStream();
-
-  m_file_stream = GetDecoder();
-  
-  if (!m_file_stream) {
-    SetError(MMBoard_UnknownFile);
-    return;
-  }
+    m_input_stream = new wxFileInputStream(filename);
+    m_output_stream = MMBoardManager::OpenSoundStream();
     
-  // Compute length
-  wxUint32 length, seconds;
+    m_file_stream = GetDecoder();
+    
+    if (!m_file_stream) {
+        SetError(MMBoard_UnknownFile);
+        return;
+    }
+    
+    // Compute length
+    wxUint32 length, seconds;
 
-  length = m_file_stream->GetLength();
-  seconds = m_file_stream->GetSoundFormat().GetTimeFromBytes(length);
-  m_length.seconds = seconds % 60;
-  m_length.minutes = (seconds / 60) % 60;
-  m_length.hours   = seconds / 3600;
+    length = m_file_stream->GetLength();
+    seconds = m_file_stream->GetSoundFormat().GetTimeFromBytes(length);
+    m_length.seconds = seconds % 60;
+    m_length.minutes = (seconds / 60) % 60;
+    m_length.hours   = seconds / 3600;
 }
 
 MMBoardSoundFile::~MMBoardSoundFile()
 {
-  if (m_file_stream)
-    delete m_file_stream;
-  MMBoardManager::UnrefSoundStream(m_output_stream);
-  delete m_input_stream;
+    if (m_file_stream)
+        delete m_file_stream;
+    MMBoardManager::UnrefSoundStream(m_output_stream);
+    delete m_input_stream;
 }
 
 wxSoundFileStream *MMBoardSoundFile::GetDecoder()
 {
-  wxSoundFileStream *f_stream;
-
-  // First, we try a Wave decoder
-  f_stream = new wxSoundWave(*m_input_stream, *m_output_stream);
-  m_file_type = MMBoard_WAVE;
-  if (f_stream->CanRead())
-    return f_stream;
-  delete f_stream;
-
-  // Then, a AIFF decoder
-  f_stream = new wxSoundAiff(*m_input_stream, *m_output_stream);
-  m_file_type = MMBoard_AIFF;
-  if (f_stream->CanRead())
-    return f_stream;
-  delete f_stream;
-
-  m_file_type = MMBoard_UNKNOWNTYPE;
-
-  // TODO: automate
-
-  return NULL;
+    wxSoundFileStream *f_stream;
+    
+    // First, we try a Wave decoder
+    f_stream = new wxSoundWave(*m_input_stream, *m_output_stream);
+    m_file_type = MMBoard_WAVE;
+    if (f_stream->CanRead())
+        return f_stream;
+    delete f_stream;
+    
+    // Then, a AIFF decoder
+    f_stream = new wxSoundAiff(*m_input_stream, *m_output_stream);
+    m_file_type = MMBoard_AIFF;
+    if (f_stream->CanRead())
+        return f_stream;
+    delete f_stream;
+    
+    m_file_type = MMBoard_UNKNOWNTYPE;
+    
+    // TODO: automate
+    
+    return NULL;
 }
 
 MMBoardTime MMBoardSoundFile::GetLength()
 {
-  return m_length;
+    return m_length;
 }
 
 bool MMBoardSoundFile::IsStopped()
 {
-  return m_file_stream->IsStopped();
+    return m_file_stream->IsStopped();
 }
 
 bool MMBoardSoundFile::IsPaused()
 {
-  return m_file_stream->IsPaused();
+    return m_file_stream->IsPaused();
 }
 
 MMBoardTime MMBoardSoundFile::GetPosition()
 {
-  wxUint32 length, seconds;
-  MMBoardTime file_time;
-
-  file_time.seconds = file_time.minutes = file_time.hours = 0;
-  if (m_file_stream->IsStopped())
+    wxUint32 length, seconds;
+    MMBoardTime file_time;
+    
+    file_time.seconds = file_time.minutes = file_time.hours = 0;
+    if (m_file_stream->IsStopped())
+        return file_time;
+    
+    length = m_file_stream->GetPosition();
+    seconds = m_file_stream->GetSoundFormat().GetTimeFromBytes(length);
+    file_time.seconds = seconds % 60;
+    file_time.minutes = (seconds / 60) % 60;
+    file_time.hours   = seconds / 3600;
+    
     return file_time;
+}
 
-  length = m_file_stream->GetPosition();
-  seconds = m_file_stream->GetSoundFormat().GetTimeFromBytes(length);
-  file_time.seconds = seconds % 60;
-  file_time.minutes = (seconds / 60) % 60;
-  file_time.hours   = seconds / 3600;
+void MMBoardSoundFile::SetPosition(MMBoardTime btime)
+{
+    wxUint32 itime;
 
-  return file_time;
+    itime = btime.seconds + btime.minutes * 60 + btime.hours;
+
+    m_file_stream->SetPosition(
+        m_file_stream->GetSoundFormat().GetBytesFromTime(itime)
+        );
 }
 
 bool MMBoardSoundFile::NeedWindow()
 {
-  return FALSE;
+    return FALSE;
 }
 
 void MMBoardSoundFile::SetWindow(wxWindow *window)
@@ -240,37 +253,37 @@ void MMBoardSoundFile::SetWindow(wxWindow *window)
 
 void MMBoardSoundFile::Play()
 {
-  m_file_stream->Play();
+    m_file_stream->Play();
 }
 
 void MMBoardSoundFile::Pause()
 {
-  m_file_stream->Pause();
+    m_file_stream->Pause();
 }
 
 void MMBoardSoundFile::Resume()
 {
-  m_file_stream->Resume();
+    m_file_stream->Resume();
 }
 
 void MMBoardSoundFile::Stop()
 {
-  m_file_stream->Stop();
+    m_file_stream->Stop();
 }
 
 wxString MMBoardSoundFile::GetStringType()
 {
-  switch (m_file_type) {
-  case MMBoard_WAVE:
-    return wxString(wxT("WAVE file"));
-    break;
-  case MMBoard_AIFF:
-    return wxString(wxT("AIFF file"));
-    break;
-  default:
-    return wxString(wxT("Unknown file"));
-    break;
-  }
+    switch (m_file_type) {
+        case MMBoard_WAVE:
+            return wxString(wxT("WAVE file"));
+            break;
+        case MMBoard_AIFF:
+            return wxString(wxT("AIFF file"));
+            break;
+        default:
+            return wxString(wxT("Unknown file"));
+            break;
+    }
 }
 
 wxString MMBoardSoundFile::GetStringInformation()
@@ -390,6 +403,10 @@ MMBoardTime MMBoardVideoFile::GetLength()
     btime.minutes = (frameTime / 60) % 60;
     btime.hours   = frameTime / 3600;
     return btime;
+}
+
+void MMBoardVideoFile::SetPosition(MMBoardTime btime)
+{
 }
 
 bool MMBoardVideoFile::IsStopped()
