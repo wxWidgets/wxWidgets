@@ -60,14 +60,8 @@ public:
     virtual ~wxFontMapperBase();
 
     // return instance of the wxFontMapper singleton
-#if wxUSE_GUI
-    // GUI code needs to know it's a wxFontMapper because there
-    // are additional methods in the subclass.
-    static wxFontMapper *Get();
-#else
     // wxBase code only cares that it's a wxFontMapperBase
     static wxFontMapperBase *Get();
-#endif
 
     // set the singleton to 'mapper' instance and return previous one
     static wxFontMapper *Set(wxFontMapper *mapper);
@@ -235,6 +229,9 @@ public:
     // the title for the dialogs (note that default is quite reasonable)
     void SetDialogTitle(const wxString& title) { m_titleDialog = title; }
 
+    // GUI code needs to know it's a wxFontMapper because there
+    // are additional methods in the subclass.
+    static wxFontMapper *Get();
 
 protected:
     // GetAltForEncoding() helper: tests for the existence of the given

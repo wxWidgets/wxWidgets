@@ -163,6 +163,16 @@ wxFontMapper::~wxFontMapper()
 {
 }
 
+/* static */
+// Declared as returning wxFontMapper when wxUSE_GUI=1.  Unfortunately, it's
+// only implemented in wxBase library.  Note that if the last resort
+// is taken and GUI code tries to treat it as a real wxFontMapper
+// then you'd be in trouble.
+wxFontMapper *wxFontMapper::Get()
+{
+    return (wxFontMapper*)wxFontMapperBase::Get();
+}
+
 wxFontEncoding
 wxFontMapper::CharsetToEncoding(const wxString& charset, bool interactive)
 {
