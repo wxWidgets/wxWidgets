@@ -179,6 +179,12 @@ wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
             // portable, so try several methods
 #ifdef HAVE_PTHREAD_MUTEXATTR_T
             {
+                // on some systems pthread_mutexattr_settype() is not in the
+                // headers (but it is in the library, otherwise we wouldn't
+                // compile this code at all)
+                extern "C"
+                int pthread_mutexattr_settype(pthread_mutexattr_t *, int);
+
                 pthread_mutexattr_t attr;
                 pthread_mutexattr_init(&attr);
                 pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
