@@ -468,25 +468,6 @@ bool wxNotebook::InsertPage(int nPage,
     // finally do insert it
     if ( TabCtrl_InsertItem(m_hwnd, nPage, &tcItem) == -1 )
     {
-// Hit test
-int wxNotebook::HitTest(const wxPoint& pt, long& flags)
-{
-    TC_HITTESTINFO hitTestInfo;
-    hitTestInfo.pt.x = pt.x;
-    hitTestInfo.pt.y = pt.y;
-    int item = TabCtrl_HitTest( (HWND) GetHWND(), & hitTestInfo ) ;
-    flags = 0;
-
-    if ((hitTestInfo.flags & TCHT_NOWHERE) == TCHT_NOWHERE)
-        flags |= wxNB_HITTEST_NOWHERE;
-    if ((hitTestInfo.flags & TCHT_ONITEMICON) == TCHT_ONITEMICON)
-        flags |= wxNB_HITTEST_ONICON;
-    if ((hitTestInfo.flags & TCHT_ONITEMLABEL) == TCHT_ONITEMLABEL)
-        flags |= wxNB_HITTEST_ONLABEL;
-
-    return item;
-}
-
         wxLogError(wxT("Can't create the notebook page '%s'."), strText.c_str());
 
         return FALSE;
@@ -536,6 +517,25 @@ int wxNotebook::HitTest(const wxPoint& pt, long& flags)
         SetSelection(selNew);
 
     return TRUE;
+}
+
+// Hit test
+int wxNotebook::HitTest(const wxPoint& pt, long& flags)
+{
+    TC_HITTESTINFO hitTestInfo;
+    hitTestInfo.pt.x = pt.x;
+    hitTestInfo.pt.y = pt.y;
+    int item = TabCtrl_HitTest( (HWND) GetHWND(), & hitTestInfo ) ;
+    flags = 0;
+
+    if ((hitTestInfo.flags & TCHT_NOWHERE) == TCHT_NOWHERE)
+        flags |= wxNB_HITTEST_NOWHERE;
+    if ((hitTestInfo.flags & TCHT_ONITEMICON) == TCHT_ONITEMICON)
+        flags |= wxNB_HITTEST_ONICON;
+    if ((hitTestInfo.flags & TCHT_ONITEMLABEL) == TCHT_ONITEMLABEL)
+        flags |= wxNB_HITTEST_ONLABEL;
+
+    return item;
 }
 
 // ----------------------------------------------------------------------------

@@ -1185,6 +1185,17 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
     }
 }
 
+typedef struct _WXADllVersionInfo
+{
+        DWORD cbSize;
+        DWORD dwMajorVersion;                   // Major version
+        DWORD dwMinorVersion;                   // Minor version
+        DWORD dwBuildNumber;                    // Build number
+        DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
+} WXADLLVERSIONINFO;
+
+typedef HRESULT (CALLBACK* WXADLLGETVERSIONPROC)(WXADLLVERSIONINFO *);
+
 /* static */
 int wxApp::GetComCtl32Version()
 {
@@ -1204,17 +1215,25 @@ int wxApp::GetComCtl32Version()
 
         // do we have it?
         HMODULE hModuleComCtl32 = ::GetModuleHandle(wxT("COMCTL32"));
+        BOOL bFreeComCtl32 = FALSE ;
+        if(!hModuleComCtl32)
+        {
+            hModuleComCtl32 = ::LoadLibrary(wxT("COMCTL32.DLL")) ;
+            if(hModuleComCtl32)
+            {
+                bFreeComCtl32 = TRUE ;
+            }
+        }
 
         // if so, then we can check for the version
         if ( hModuleComCtl32 )
         {
             // try to use DllGetVersion() if available in _headers_
-            #ifdef DLLVER_PLATFORM_WINDOWS // defined in shlwapi.h
-                DLLGETVERSIONPROC pfnDllGetVersion = (DLLGETVERSIONPROC)
+                WXADLLGETVERSIONPROC pfnDllGetVersion = (WXADLLGETVERSIONPROC)
                     ::GetProcAddress(hModuleComCtl32, "DllGetVersion");
                 if ( pfnDllGetVersion )
                 {
-                    DLLVERSIONINFO dvi;
+                    WXADLLVERSIONINFO dvi;
                     dvi.cbSize = sizeof(dvi);
 
                     HRESULT hr = (*pfnDllGetVersion)(&dvi);
@@ -1231,7 +1250,6 @@ int wxApp::GetComCtl32Version()
                                             dvi.dwMinorVersion;
                     }
                 }
-            #endif
                 // DllGetVersion() unavailable either during compile or
                 // run-time, try to guess the version otherwise
                 if ( !s_verComCtl32 )
@@ -1269,6 +1287,11 @@ int wxApp::GetComCtl32Version()
                         }
                     }
                 }
+        }
+
+        if(bFreeComCtl32)
+        {
+            ::FreeLibrary(hModuleComCtl32) ;
         }
     }
 
