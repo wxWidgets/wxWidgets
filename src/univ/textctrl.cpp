@@ -19,6 +19,8 @@
         the same location)?
    3. split file into chunks
 +? 4. rewrite Replace() refresh logic to deal with wrapping lines
+   5. cache info found by GetPartOfWrappedLine() - performance must be horrible
+      with lots of text
  */
 
 /*
@@ -360,6 +362,12 @@ bool wxTextCtrl::Create(wxWindow *parent,
             style |= wxALWAYS_SHOW_SB;
         }
 
+        if ( style & wxTE_WORDWRAP )
+        {
+            // wrapping words means wrapping, hence no horz scrollbar
+            style &= ~wxHSCROLL;
+        }
+
         // TODO: support wxTE_NO_VSCROLL (?)
     }
     else
@@ -420,6 +428,8 @@ void wxTextCtrl::SetValue(const wxString& value)
     }
 
     Replace(0, GetLastPosition(), value);
+
+    // TODO: should we generate the event or not, finally?
 }
 
 wxString wxTextCtrl::GetValue() const
@@ -643,6 +653,9 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
 
         // (5) now refresh the changed area
 
+        // update the (cached) last position first as refresh functions use it
+        m_posLast += text.length() - to + from;
+
         // we may optimize refresh if the number of rows didn't change - but if
         // it did we have to refresh everything below the part we chanegd as
         // well as it might have moved
@@ -669,7 +682,9 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
             }
             //else: refresh all lines we changed (OPT?)
 
-            RefreshLineRange(lineStart, m_lines.GetCount() - 1);
+            wxTextCoord lineEnd = m_lines.GetCount() - 1;
+            if ( lineStart <= lineEnd )
+                RefreshLineRange(lineStart, lineEnd);
 
             // refresh text rect left below
             if ( rowsNew < rowsOld )
@@ -686,9 +701,6 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
             // the vert scrollbar might [dis]appear
             m_updateScrollbarY = TRUE;
         }
-
-        // update the (cached) last position
-        m_posLast += text.length() - to + from;
     }
 
 #ifdef WXDEBUG_TEXT_REPLACE
@@ -1903,8 +1915,9 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
         case wxTE_HT_ON_TEXT:
             if ( col > 0 )
             {
-                // the last entirely seen character is the last one unless the
-                // width of the string is exactly the max width
+                // the last entirely seen character is the previous one because
+                // this one is only partly visible - unless the width of the
+                // string is exactly the max width
                 wReal = GetTextWidth(s.Truncate(col));
                 if ( wReal > m_rectText.width )
                 {
@@ -1913,6 +1926,29 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
                     col--;
                 }
                 //else: we can just see it
+
+                // wrap at any character or only at words boundaries?
+                if ( !(GetWindowStyle() & wxTE_LINEWRAP) )
+                {
+                    // find the (last) not word char before this word
+                    wxTextCoord colWordStart;
+                    for ( colWordStart = col;
+                          colWordStart && IsWordChar(s[(size_t)colWordStart]);
+                          colWordStart-- )
+                        ;
+
+                    if ( colWordStart > 0 )
+                    {
+                        if ( colWordStart != col )
+                        {
+                            // will have to recalc the real width
+                            wReal = -1;
+
+                            col = colWordStart;
+                        }
+                    }
+                    //else: only a single word, have to wrap it here
+                }
             }
             break;
 
@@ -1939,7 +1975,7 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
     }
 
     // VZ: old, horribly inefficient code which can still be used for checking
-    //     the result - to be removed later
+    //     the result (in line, not word, wrap mode only) - to be removed later
 #if 0
     wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
     wxClientDC dc(self);
@@ -2761,22 +2797,22 @@ void wxTextCtrl::RefreshPixelRange(wxTextCoord line,
     // special case: width == 0 means to refresh till the end of line
     if ( width == 0 )
     {
-        // FIXME we refresh till the end of the current line here, but we can't
-        //       tell if the line didn't have fewer or more rows before - it is
-        //       the callers responsability to not call us in this way if it is
-        //       the case
+        // refresh till the end of visible line
+        width = GetTotalWidth();
+
         if ( WrapLines() )
         {
-            width = wxMax(GetTextWidth(text), GetTotalWidth());
-        }
-        else
-        {
-            // refresh till the end of visible line
-            width = GetTotalWidth();
+            // refresh till the end of text
+            wxCoord widthAll = GetTextWidth(text);
+
+            // extend width to the end of ROW
+            width = widthAll - widthAll % width + width;
         }
 
+        // no need to refresh beyond the end of line
         width -= start;
     }
+    //else: just refresh the specified part
 
     wxCoord h = GetCharHeight();
     wxRect rect;
@@ -2804,6 +2840,7 @@ void wxTextCtrl::RefreshPixelRange(wxTextCoord line,
         {
             rect.width = GetTotalWidth() - rect.x;
             RefreshTextRect(rect);
+
             width -= wLine - rect.x;
             rect.x = 0;
             rect.y += h;
@@ -3049,23 +3086,33 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         wxString text = textLine.Mid(colStart, colEnd - colStart + 1);
 
         // now deal with the selection: only do something if at least part of
-        // the line is selected and if this part is (at least partly) in the
-        // current row
+        // the line is selected
         wxTextPos selStart, selEnd;
-        if ( GetSelectedPartOfLine(line, &selStart, &selEnd) &&
-             (selStart <= colEnd) && (selEnd >= colRowStart) )
+        if ( GetSelectedPartOfLine(line, &selStart, &selEnd) )
         {
-            // these values are relative to the start of the line while the
-            // string passed to DrawTextLine() is only part of it, so adjust
-            // the selection range accordingly
-            selStart -= colStart;
-            selEnd -= colStart;
+            // and if this part is (at least partly) in the current row
+            if ( (selStart <= colEnd) &&
+                    (selEnd >= wxMax(colStart, colRowStart)) )
+            {
+                // these values are relative to the start of the line while the
+                // string passed to DrawTextLine() is only part of it, so
+                // adjust the selection range accordingly
+                selStart -= colStart;
+                selEnd -= colStart;
 
-            if ( selStart < 0 )
-                selStart = 0;
+                if ( selStart < 0 )
+                    selStart = 0;
 
-            if ( (size_t)selEnd >= text.length() )
-                selEnd = text.length();
+                if ( (size_t)selEnd >= text.length() )
+                    selEnd = text.length();
+            }
+            else
+            {
+                // reset selStart and selEnd to avoid passing them to
+                // DrawTextLine() below
+                selStart =
+                selEnd = -1;
+            }
         }
 
         // calculate the text coords on screen

@@ -141,6 +141,9 @@ static void TranslateKbdEventToMouse(wxWindowMSW *win,
 // get the text metrics for the current font
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win);
 
+// check if the mouse is in the window or its child
+static bool IsMouseInWindow(HWND hwnd);
+
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
@@ -991,14 +994,27 @@ void wxWindowMSW::SetupColours()
         SetBackgroundColour(GetParent()->GetBackgroundColour());
 }
 
+bool wxWindowMSW::IsMouseInWindow() const
+{
+    // get the mouse position
+    POINT pt;
+    ::GetCursorPos(&pt);
+
+    // find the window which currently has the cursor and go up the window
+    // chain until we find this window - or exhaust it
+    HWND hwnd = ::WindowFromPoint(pt);
+    while ( hwnd && (hwnd != GetHwnd()) )
+        hwnd = ::GetParent(hwnd);
+
+    return hwnd != NULL;
+}
+
 void wxWindowMSW::OnIdle(wxIdleEvent& event)
 {
     // Check if we need to send a LEAVE event
     if ( m_mouseInWindow )
     {
-        POINT pt;
-        ::GetCursorPos(&pt);
-        if ( ::WindowFromPoint(pt) != GetHwnd() )
+        if ( !IsMouseInWindow() )
         {
             // Generate a LEAVE event
             m_mouseInWindow = FALSE;
@@ -1018,6 +1034,8 @@ void wxWindowMSW::OnIdle(wxIdleEvent& event)
             if ( GetKeyState( VK_RBUTTON ) )
                 state |= MK_RBUTTON;
 
+            POINT pt;
+            ::GetCursorPos(&pt);
             wxMouseEvent event(wxEVT_LEAVE_WINDOW);
             InitMouseEvent(event, pt.x, pt.y, state);
 
@@ -3294,13 +3312,11 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
 {
     if ( !m_mouseInWindow )
     {
-        // it would be wrogn to assume that just because we get a mouse move
-        // event the mouse is inside the window: although this is usually true,
-        // it is not if we had captured the mouse, so we need to check the
-        // mouse coordinates here
-        POINT pt;
-        ::GetCursorPos(&pt);
-        if ( ::WindowFromPoint(pt) == GetHwnd() )
+        // it would be wrong to assume that just because we get a mouse move
+        // event that the mouse is inside the window: although this is usually
+        // true, it is not if we had captured the mouse, so we need to check
+        // the mouse coordinates here
+        if ( !m_winCaptured || IsMouseInWindow() )
         {
             // Generate an ENTER event
             m_mouseInWindow = TRUE;
@@ -4420,3 +4436,4 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 
     return tm;
 }
+

@@ -48,6 +48,28 @@
 
 static const int BORDER_THICKNESS = 2;
 
+enum IndicatorType
+{
+    IndicatorType_Check,
+    IndicatorType_Radio,
+    IndicatorType_Max
+};
+
+enum IndicatorState
+{
+    IndicatorState_Normal,
+    IndicatorState_Pressed,
+    IndicatorState_Disabled,
+    IndicatorState_Max
+};
+
+enum IndicatorStatus
+{
+    IndicatorStatus_Checked,
+    IndicatorStatus_Unchecked,
+    IndicatorStatus_Max
+};
+
 // ----------------------------------------------------------------------------
 // wxWin32Renderer: draw the GUI elements in Win32 style
 // ----------------------------------------------------------------------------
@@ -240,8 +262,11 @@ protected:
                                 int indexAccel);
 
     // get the standard check/radio button bitmap
-    wxBitmap GetCheckBitmap(int flags);
-    wxBitmap GetRadioBitmap(int flags);
+    wxBitmap GetIndicator(IndicatorType indType, int flags);
+    wxBitmap GetCheckBitmap(int flags)
+        { return GetIndicator(IndicatorType_Check, flags); }
+    wxBitmap GetRadioBitmap(int flags)
+        { return GetIndicator(IndicatorType_Radio, flags); }
 
 private:
     const wxColourScheme *m_scheme;
@@ -373,7 +398,7 @@ private:
 // standard bitmaps
 // ----------------------------------------------------------------------------
 
-static char *checked_xpm[] = {
+static const char *checked_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 5 1",
 "w c white",
@@ -398,7 +423,7 @@ static char *checked_xpm[] = {
 "hhhhhhhhhhhhh"
 };
 
-static char *pressed_checked_xpm[] = {
+static const char *pressed_checked_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 4 1",
 "b c black",
@@ -422,7 +447,31 @@ static char *pressed_checked_xpm[] = {
 "hhhhhhhhhhhhh"
 };
 
-static char *checked_item_xpm[] = {
+static const char *pressed_disabled_checked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 4 1",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"ddddddddddddh",
+"dbbbbbbbbbbgh",
+"dbggggggggggh",
+"dbgggggggdggh",
+"dbggggggddggh",
+"dbgdgggdddggh",
+"dbgddgdddgggh",
+"dbgdddddggggh",
+"dbggdddgggggh",
+"dbgggdggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dgggggggggggh",
+"hhhhhhhhhhhhh"
+};
+
+static const char *checked_item_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 3 1",
 "w c white",
@@ -445,7 +494,7 @@ static char *checked_item_xpm[] = {
 "wwwwwwwwwwwww"
 };
 
-static char *unchecked_xpm[] = {
+static const char *unchecked_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 5 1",
 "w c white",
@@ -469,7 +518,7 @@ static char *unchecked_xpm[] = {
 "hhhhhhhhhhhhh"
 };
 
-static char *pressed_unchecked_xpm[] = {
+static const char *pressed_unchecked_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 4 1",
 "b c black",
@@ -492,7 +541,7 @@ static char *pressed_unchecked_xpm[] = {
 "hhhhhhhhhhhhh"
 };
 
-static char *unchecked_item_xpm[] = {
+static const char *unchecked_item_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 2 1",
 "w c white",
@@ -514,7 +563,7 @@ static char *unchecked_item_xpm[] = {
 "wwwwwwwwwwwww"
 };
 
-static char *checked_radio_xpm[] = {
+static const char *checked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 6 1",
 "  c None",
@@ -539,7 +588,7 @@ static char *checked_radio_xpm[] = {
 "             "
 };
 
-static char *pressed_checked_radio_xpm[] = {
+static const char *pressed_checked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 6 1",
 "  c None",
@@ -564,7 +613,32 @@ static char *pressed_checked_radio_xpm[] = {
 "             "
 };
 
-static char *unchecked_radio_xpm[] = {
+static const char *pressed_disabled_checked_radio_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 6 1",
+"  c None",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"     dddd    ",
+"   ddbbbbdd  ",
+"  dbbggggbbh ",
+"  dbgggggggh ",
+" dbgggddggggh",
+" dbggddddgggh",
+" dbggddddgggh",
+" dbgggddggggh",
+"  dbgggggggh ",
+"  dggggggggh ",
+"   hhgggghh  ",
+"     hhhh    ",
+"             "
+};
+
+static const char *unchecked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 6 1",
 "  c None",
@@ -589,7 +663,7 @@ static char *unchecked_radio_xpm[] = {
 "             "
 };
 
-static char *pressed_unchecked_radio_xpm[] = {
+static const char *pressed_unchecked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "13 13 6 1",
 "  c None",
@@ -612,6 +686,34 @@ static char *pressed_unchecked_radio_xpm[] = {
 "   hhgggghh  ",
 "     hhhh    ",
 "             "
+};
+
+static const char **
+    bmpIndicators[IndicatorType_Max][IndicatorState_Max][IndicatorStatus_Max] =
+{
+    // checkboxes first
+    {
+        // normal state
+        { checked_xpm, unchecked_xpm },
+
+        // pressed state
+        { pressed_checked_xpm, pressed_unchecked_xpm },
+
+        // disabled state
+        { pressed_disabled_checked_xpm, pressed_unchecked_xpm },
+    },
+
+    // radio
+    {
+        // normal state
+        { checked_radio_xpm, unchecked_radio_xpm },
+
+        // pressed state
+        { pressed_checked_radio_xpm, pressed_unchecked_radio_xpm },
+
+        // disabled state
+        { pressed_disabled_checked_radio_xpm, pressed_unchecked_radio_xpm },
+    },
 };
 
 // ============================================================================
@@ -1497,50 +1599,20 @@ void wxWin32Renderer::DrawCheckItem(wxDC& dc,
 // check/radio buttons
 // ----------------------------------------------------------------------------
 
-wxBitmap wxWin32Renderer::GetCheckBitmap(int flags)
+wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
 {
+    IndicatorState indState;
     if ( flags & wxCONTROL_DISABLED )
-    {
-        // the disabled indicators look the same as pressed ones in Windows
-        flags |= wxCONTROL_PRESSED;
-    }
+        indState = IndicatorState_Disabled;
+    else if ( flags & wxCONTROL_PRESSED )
+        indState = IndicatorState_Pressed;
+    else
+        indState = IndicatorState_Normal;
 
-    char **xpm;
-    if ( flags & wxCONTROL_CHECKED )
-    {
-        xpm = flags & wxCONTROL_PRESSED ? pressed_checked_xpm
-                                        : checked_xpm;
-    }
-    else // unchecked
-    {
-        xpm = flags & wxCONTROL_PRESSED ? pressed_unchecked_xpm
-                                        : unchecked_xpm;
-    }
-
-    return wxBitmap(xpm);
-}
-
-wxBitmap wxWin32Renderer::GetRadioBitmap(int flags)
-{
-    if ( flags & wxCONTROL_DISABLED )
-    {
-        // the disabled indicators look the same as pressed ones in Windows
-        flags |= wxCONTROL_PRESSED;
-    }
-
-    char **xpm;
-    if ( flags & wxCONTROL_CHECKED )
-    {
-        xpm = flags & wxCONTROL_PRESSED ? pressed_checked_radio_xpm
-                                        : checked_radio_xpm;
-    }
-    else // unchecked
-    {
-        xpm = flags & wxCONTROL_PRESSED ? pressed_unchecked_radio_xpm
-                                        : unchecked_radio_xpm;
-    }
-
-    return wxBitmap(xpm);
+    IndicatorStatus indStatus = flags & wxCONTROL_CHECKED
+                                    ? IndicatorStatus_Checked
+                                    : IndicatorStatus_Unchecked;
+    return wxBitmap(bmpIndicators[indType][indState][indStatus]);
 }
 
 void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,

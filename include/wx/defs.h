@@ -1036,10 +1036,18 @@ enum wxBorder
 #define wxTE_RICH           0x0080
 #define wxTE_NO_VSCROLL     0x0100
 #define wxTE_AUTO_SCROLL    0x0200
-#define wxPROCESS_ENTER     0x0400
-#define wxPASSWORD          0x0800
-#define wxTE_PROCESS_ENTER  wxPROCESS_ENTER
-#define wxTE_PASSWORD       wxPASSWORD
+#define wxTE_PROCESS_ENTER  0x0400
+#define wxTE_PASSWORD       0x0800
+
+// use wxHSCROLL to not wrap text at all, wxTE_LINEWRAP to wrap it at any
+// position and wxTE_WORDWRAP to wrap at words boundary
+#define wxTE_DONTWRAP       wxHSCROLL
+#define wxTE_LINEWRAP       0x0800
+#define wxTE_WORDWRAP       0x0000  // it's just == !wxHSCROLL
+
+// deprecated synonyms
+#define wxPROCESS_ENTER     wxTE_PROCESS_ENTER
+#define wxPASSWORD          wxTE_PASSWORD
 
 /*
  * wxComboBox style flags

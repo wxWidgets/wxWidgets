@@ -364,6 +364,9 @@ public:
     // initialize various fields of wxMouseEvent (common part of MSWOnMouseXXX)
     void InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags);
 
+    // check if mouse is in the window
+    bool IsMouseInWindow() const;
+
 protected:
     // the window handle
     WXHWND                m_hWnd;
