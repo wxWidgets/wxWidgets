@@ -209,11 +209,11 @@ private:
 
 // in order to avoid any overhead under platforms where critical sections are
 // just mutexes make all wxCriticalSection class functions inline
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#if !defined(__WXMSW__)
     #define wxCRITSECT_IS_MUTEX 1
 
     #define wxCRITSECT_INLINE inline
-#else // MSW || OS2
+#else // MSW
     #define wxCRITSECT_IS_MUTEX 0
 
     #define wxCRITSECT_INLINE
@@ -257,9 +257,7 @@ private:
 
         wxCritSectBuffer m_buffer;
     };
-#else
-    // nothing for OS/2
-#endif // Unix/Win32/OS2
+#endif // Unix&OS2/Win32
 
     DECLARE_NO_COPY_CLASS(wxCriticalSection)
 };
