@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        uma.cpp
+// Purpose:     UMA support
+// Author:      Stefan Csomor
+// Modified by:
+// Created:     04/01/98
+// RCS-ID:      $Id$
+// Copyright:   (c) Stefan Csomor
+// Licence:     The wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #include "wx/defs.h"
 #include "wx/dc.h"
 #include <MacTextEditor.h>

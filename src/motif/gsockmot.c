@@ -3,6 +3,7 @@
  * Name:    gsockmot.c
  * Purpose: GSocket: Motif part
  * CVSID:   $Id$
+ * Licence: The wxWindows licence
  * ------------------------------------------------------------------------- */
 
 #include "wx/setup.h"

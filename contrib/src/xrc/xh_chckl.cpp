@@ -108,3 +108,4 @@ bool wxCheckListXmlHandler::CanHandle(wxXmlNode *node)
 }
 
 #endif
+

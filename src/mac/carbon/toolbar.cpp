@@ -5,7 +5,8 @@
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Stefan Csomory
+// Copyright:   (c) Stefan Csomor
+// Licence:     The wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
