@@ -86,7 +86,7 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyAppFrame, wxFrame)
@@ -108,7 +108,7 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-    MyAppFrame *frame = new MyAppFrame(_T("FoldPanelBarTest wxWindows Test Application"),
+    MyAppFrame *frame = new MyAppFrame(_T("FoldPanelBarTest wxWidgets Test Application"),
                                  wxPoint(50, 50), wxSize(200, 500));
 
     SetTopWindow(frame);
@@ -129,7 +129,7 @@ MyAppFrame::MyAppFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     SetMenuBar(CreateMenuBar());
 
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(_T("Welcome to wxWidgets!"));
 
     _pnl = new wxFoldPanelBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFPB_DEFAULT_STYLE, wxFPB_COLLAPSE_TO_BOTTOM);
 
