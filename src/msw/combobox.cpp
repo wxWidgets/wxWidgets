@@ -650,12 +650,11 @@ void wxComboBox::SetInsertionPointEnd()
 
 long wxComboBox::GetInsertionPoint() const
 {
-#ifdef __WIN32__
-    DWORD Pos=(DWORD)SendMessage(GetHwnd(), CB_GETEDITSEL, 0, 0L);
-    return Pos&0xFFFF;
-#else
-    return 0;
-#endif
+    // CB_GETEDITSEL returns the index of the last character after selection in
+    // its high-order word
+    DWORD pos= (DWORD)::SendMessage(GetHwnd(), CB_GETEDITSEL, 0, 0L);
+
+    return HIWORD(pos);
 }
 
 wxTextPos wxComboBox::GetLastPosition() const
@@ -691,19 +690,15 @@ void wxComboBox::Remove(long from, long to)
 
 void wxComboBox::SetSelection(long from, long to)
 {
-    HWND hWnd = GetHwnd();
-    long fromChar = from;
-    long toChar = to;
-    // if from and to are both -1, it means
-    // (in wxWidgets) that all text should be selected.
-    // This translates into Windows convention
-    if ((from == -1) && (to == -1))
+    // if from and to are both -1, it means (in wxWidgets) that all text should
+    // be selected, translate this into Windows convention
+    if ( (from == -1) && (to == -1) )
     {
-      fromChar = 0;
-      toChar = -1;
+        from = 0;
     }
 
-    if ( SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)0, (LPARAM)MAKELONG(fromChar, toChar)) == CB_ERR )
+    if ( SendMessage(GetHwnd(), CB_SETEDITSEL,
+                     0, (LPARAM)MAKELONG(from, to)) == CB_ERR )
     {
         wxLogDebug(_T("CB_SETEDITSEL failed"));
     }
@@ -712,10 +707,17 @@ void wxComboBox::SetSelection(long from, long to)
 void wxComboBox::GetSelection(long* from, long* to) const
 {
     DWORD dwStart, dwEnd;
-    ::SendMessage(GetHwnd(), CB_GETEDITSEL, (WPARAM)&dwStart, (LPARAM)&dwEnd);
-
-    *from = dwStart;
-    *to = dwEnd;
+    if ( ::SendMessage(GetHwnd(), CB_GETEDITSEL,
+                       (WPARAM)&dwStart, (LPARAM)&dwEnd) == CB_ERR )
+    {
+        *from =
+        *to = 0;
+    }
+    else
+    {
+        *from = dwStart;
+        *to = dwEnd;
+    }
 }
 
 int wxComboBox::GetSelection() const
