@@ -124,7 +124,7 @@ wxString wxFileConfig::GetLocalDir()
         strDir << szHome;
     #else   // Win16
       // Win16 has no idea about home, so use the current directory instead
-      strDir = ".\\";
+      strDir = ".\\"; 
     #endif  // WIN16/32
   #endif  // UNIX/Win
 
