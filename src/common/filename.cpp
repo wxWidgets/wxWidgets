@@ -1351,7 +1351,7 @@ wxString wxFileName::GetLongPath() const
     bool success = FALSE;
 
 #if wxUSE_DYNAMIC_LOADER
-    typedef DWORD (*GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
+    typedef DWORD (WINAPI *GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
 
     static bool s_triedToLoad = FALSE;
 
