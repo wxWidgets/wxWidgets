@@ -21,19 +21,17 @@
         <template id="wx_contrib_sample" template="wx_sample">
             <include>$(CONTRIB_HDR_DIR)</include>
         </template>
+        <template id="wx_contrib_util" template="wx_util">
+            <include>$(CONTRIB_HDR_DIR)</include>
+        </template>
     </if>
     
     <template id="wx_contrib_dll"
               template="wx_dll_b" template_append="wx_append">
         <include>$(CONTRIB_HDR_DIR)</include>
     </template>
-
     
     <template id="wx_contrib_headers">
         <srcdir>$(CONTRIB_HDR_DIR)</srcdir>
-    </template>    
-
-    <template id="wx_contrib_util" template="wx_util">
-        <include>$(CONTRIB_HDR_DIR)</include>
     </template>
 </makefile>
