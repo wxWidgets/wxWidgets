@@ -514,7 +514,7 @@ static long map_to_unmodified_wx_keysym( GdkEventKey *event )
 {
     // VZ: it seems that GDK_KEY_RELEASE event doesn't set event->string
     //     but only event->keyval which is quite useless to us, so remember
-    //     the last character from GDK_KEY_PRESS and resue it as last resort
+    //     the last character from GDK_KEY_PRESS and reuse it as last resort
     //
     // NB: should be MT-neutral as always called from main thread only
     static struct
@@ -961,8 +961,46 @@ static void gtk_window_draw_callback( GtkWidget *widget,
 // "key_press_event" from any window
 //-----------------------------------------------------------------------------
 
-// turn on to see the key event codes on the console
-#undef DEBUG_KEY_EVENTS
+// set WXTRACE to this to see the key event codes on the console
+#define TRACE_KEYS  _T("keyevent")
+
+static bool
+wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
+                           wxWindowGTK *win,
+                           GdkEventKey *gdk_event)
+{
+    long key_code = map_to_unmodified_wx_keysym( gdk_event );
+
+    wxLogTrace(TRACE_KEYS, _T("Key %s event: %d => %ld"),
+               event.GetEventType() == wxEVT_KEY_UP ? _T("release")
+                                                    : _T("press"),
+               gdk_event->keyval, key_code);
+
+    // sending unknown key events doesn't really make sense
+    if (key_code == 0)
+        return FALSE;
+
+    int x = 0;
+    int y = 0;
+    GdkModifierType state;
+    if (gdk_event->window)
+        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+
+    event.SetTimestamp( gdk_event->time );
+    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
+    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
+    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
+    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK) != 0;
+    event.m_keyCode = key_code;
+    event.m_scanCode = gdk_event->keyval;
+    event.m_rawCode = (wxUint32) gdk_event->keyval;
+    event.m_rawFlags = 0;
+    event.m_x = x;
+    event.m_y = y;
+    event.SetEventObject( win );
+
+    return TRUE;
+}
 
 static gint gtk_window_key_press_callback( GtkWidget *widget,
                                            GdkEventKey *gdk_event,
@@ -976,39 +1014,14 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
-
-    int x = 0;
-    int y = 0;
-    GdkModifierType state;
-    if (gdk_event->window)
-        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
-
-    bool ret = FALSE;
-
-    long key_code = map_to_unmodified_wx_keysym( gdk_event );
-
-#ifdef DEBUG_KEY_EVENTS
-    wxPrintf(_T("Key press event: %d => %ld\n"), gdk_event->keyval, key_code);
-#endif // DEBUG_KEY_EVENTS
-
-    /* sending unknown key events doesn't really make sense */
-    if (key_code == 0)
-        return FALSE;
-
     wxKeyEvent event( wxEVT_KEY_DOWN );
-    event.SetTimestamp( gdk_event->time );
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
-    event.m_keyCode = key_code;
-    event.m_scanCode = gdk_event->keyval;
-    event.m_rawCode = (wxUint32) gdk_event->keyval;
-    event.m_rawFlags = 0;
-    event.m_x = x;
-    event.m_y = y;
-    event.SetEventObject( win );
-    ret = win->GetEventHandler()->ProcessEvent( event );
+    if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
+    {
+        // unknown key pressed, ignore (the event would be useless anyhow
+        return FALSE;
+    }
+
+    bool ret = win->GetEventHandler()->ProcessEvent( event );
 
 #if wxUSE_ACCEL
     if (!ret)
@@ -1034,15 +1047,13 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
        will only be sent if it is not in an accelerator table. */
     if ( !ret )
     {
-        key_code = map_to_wx_keysym( gdk_event );
+        long key_code = map_to_wx_keysym( gdk_event );
 
         if ( key_code )
         {
-#ifdef DEBUG_KEY_EVENTS
-            wxPrintf(_T("Char event: %ld\n"), key_code);
-#endif // DEBUG_KEY_EVENTS
+            wxLogTrace(TRACE_KEYS, _T("Char event: %ld"), key_code);
 
-            // reuse the ame event object, just change its type and use the
+            // reuse the same event object, just change its type and use the
             // translated keycode instead of the raw one
             event.SetEventType(wxEVT_CHAR);
             event.m_keyCode = key_code;
@@ -1124,52 +1135,33 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 // "key_release_event" from any window
 //-----------------------------------------------------------------------------
 
-static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindowGTK *win )
+static gint gtk_window_key_release_callback( GtkWidget *widget,
+                                             GdkEventKey *gdk_event,
+                                             wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) return FALSE;
-    if (g_blockEventsOnDrag) return FALSE;
+    if (!win->m_hasVMT)
+        return FALSE;
 
-    long key_code = map_to_unmodified_wx_keysym( gdk_event );
-
-#ifdef DEBUG_KEY_EVENTS
-    wxPrintf(_T("Key release event: %d => %ld\n"), gdk_event->keyval, key_code);
-#endif // DEBUG_KEY_EVENTS
-
-    /* sending unknown key events doesn't really make sense */
-    if (key_code == 0) return FALSE;
-
-    int x = 0;
-    int y = 0;
-    GdkModifierType state;
-    if (gdk_event->window)
-        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+    if (g_blockEventsOnDrag)
+        return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_UP );
-    event.SetTimestamp( gdk_event->time );
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
-    event.m_keyCode = key_code;
-    event.m_scanCode = gdk_event->keyval;
-    event.m_rawCode = (wxUint32) gdk_event->keyval;
-    event.m_rawFlags = 0;
-    event.m_x = x;
-    event.m_y = y;
-    event.SetEventObject( win );
-
-    if (win->GetEventHandler()->ProcessEvent( event ))
+    if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_release_event" );
-        return TRUE;
+        // unknown key pressed, ignore (the event would be useless anyhow
+        return FALSE;
     }
 
-    return FALSE;
+    if ( !win->GetEventHandler()->ProcessEvent( event ) )
+        return FALSE;
+
+    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_release_event" );
+    return TRUE;
 }
 
 // ============================================================================
@@ -1872,13 +1864,13 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     gdk_window_get_pointer( widget->window, &x, &y, &state );
 
-    event.m_shiftDown = (state & GDK_SHIFT_MASK);
-    event.m_controlDown = (state & GDK_CONTROL_MASK);
-    event.m_altDown = (state & GDK_MOD1_MASK);
-    event.m_metaDown = (state & GDK_MOD2_MASK);
-    event.m_leftDown = (state & GDK_BUTTON1_MASK);
-    event.m_middleDown = (state & GDK_BUTTON2_MASK);
-    event.m_rightDown = (state & GDK_BUTTON3_MASK);
+    event.m_shiftDown = (state & GDK_SHIFT_MASK) != 0;
+    event.m_controlDown = (state & GDK_CONTROL_MASK) != 0;
+    event.m_altDown = (state & GDK_MOD1_MASK) != 0;
+    event.m_metaDown = (state & GDK_MOD2_MASK) != 0;
+    event.m_leftDown = (state & GDK_BUTTON1_MASK) != 0;
+    event.m_middleDown = (state & GDK_BUTTON2_MASK) != 0;
+    event.m_rightDown = (state & GDK_BUTTON3_MASK) != 0;
 
     wxPoint pt = win->GetClientAreaOrigin();
     event.m_x = x + pt.x;
