@@ -1498,6 +1498,7 @@
     src/cocoa/region.cpp
     src/cocoa/settings.cpp
     src/cocoa/slider.mm
+    src/cocoa/spinbutt.mm
     src/cocoa/statbmp.mm
     src/cocoa/statbox.mm
     src/cocoa/statline2.mm
@@ -1564,6 +1565,7 @@
     wx/cocoa/radiobox.h
     wx/cocoa/radiobut.h
     wx/cocoa/region.h
+    wx/cocoa/spinbutt.h
     wx/cocoa/statbmp.h
     wx/cocoa/statbox.h
     wx/cocoa/statline.h
