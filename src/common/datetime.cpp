@@ -92,7 +92,7 @@
 #endif // broken strptime()
 
 #ifndef WX_TIMEZONE
-    #ifdef __MINGW32__
+    #if defined(__MINGW32__) || defined(__VISAGECPP__)
         #define WX_TIMEZONE _timezone
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
@@ -926,7 +926,7 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
 
     if ( IsWestEuropeanCountry(country) || (country == Russia) )
     {
-        // DST ends at 1 a.m. GMT on the last Sunday of October 
+        // DST ends at 1 a.m. GMT on the last Sunday of October
         if ( !dt.SetToLastWeekDay(Sun, Oct, year) )
         {
             // weirder and weirder...
@@ -957,7 +957,7 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
                     break;
 
                 default:
-                    // DST ends at 2 a.m. on the last Sunday of October 
+                    // DST ends at 2 a.m. on the last Sunday of October
                     if ( !dt.SetToLastWeekDay(Sun, Oct, year) )
                     {
                         // weirder and weirder...
@@ -2416,7 +2416,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 haveDay = TRUE;
                 mday = (wxDateTime_t)num;
                 break;
-                
+
             case _T('H'):       // hour in 24h format (00-23)
                 if ( !GetNumericToken(input, &num) || (num > 23) )
                 {
@@ -2772,7 +2772,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
     // set the time
     if ( haveHour )
     {
-        tm.hour = hour; 
+        tm.hour = hour;
     }
 
     if ( haveMin )
