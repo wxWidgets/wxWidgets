@@ -928,7 +928,7 @@ typedef enum
 
 #define wxICON_STOP         wxICON_HAND
 #define wxICON_ASTERISK     wxICON_INFORMATION
-#define wxICON_MASK         (0x0020|0x0040|0x0080|0x0100)
+#define wxICON_MASK         (0x0040|0x0080|0x0100|0x0200)
 
 #define wxCENTRE            0x0200
 #define wxCENTER wxCENTRE

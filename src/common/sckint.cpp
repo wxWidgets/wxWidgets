@@ -22,11 +22,13 @@
 #if wxUSE_SOCKETS
 
 #define WXSOCK_INTERNAL
-#include <wx/object.h>
-#include <wx/list.h>
-#include <wx/socket.h>
-#include <wx/thread.h>
-#include <wx/sckint.h>
+#include "wx/object.h"
+#include "wx/list.h"
+#include "wx/socket.h"
+#include "wx/thread.h"
+#include "wx/sckint.h"
+#include "wx/sckint.h"
+#include "wx/utils.h"
 
 // IRIX requires bstring.h be included to use select()
 #ifdef sgi

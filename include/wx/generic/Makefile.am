@@ -11,14 +11,12 @@ wx_generic_include_HEADERS = \
  colrdlgg.h \
  dcpsg.h \
  dirdlgg.h \
- error.xpm \
  fontdlgg.h \
  gridg.h \
  helpext.h \
  helphtml.h \
  helpxlp.h \
  imaglist.h \
- info.xpm \
  laywin.h \
  listctrl.h \
  msgdlgg.h \
@@ -27,12 +25,16 @@ wx_generic_include_HEADERS = \
  printps.h \
  prntdlgg.h \
  progdlgg.h \
- question.xpm \
  sashwin.h \
  scrolwin.h \
  splitter.h \
  statusbr.h \
  tabg.h \
  textdlgg.h \
- treectrl.h \
- warning.xpm
+ treectrl.h
+ 
+# why do these get installed ? 
+# info.xpm \
+# question.xpm \
+# error.xpm \
+# warning.xpm

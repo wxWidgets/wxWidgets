@@ -41,10 +41,12 @@
 // wxSocket headers (generic)
 // ---------------------------------------------------------------------------
 #ifdef WXPREC
-#include <wx/wxprec.h>
+  #include "wx/wxprec.h"
 #else
-#include <wx/wx.h>
+  #include "wx/event.h"
+  #include "wx/string.h"
 #endif
+
 #include "wx/sckaddr.h"
 
 class WXDLLEXPORT wxSocketEvent;

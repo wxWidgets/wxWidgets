@@ -15,6 +15,7 @@ wx_gtk_include_HEADERS = \
  checkbox.h \
  checklst.h \
  choice.h \
+ choicdlg.h \
  clipbrd.h \
  colour.h \
  combobox.h \
@@ -39,6 +40,7 @@ wx_gtk_include_HEADERS = \
  mdi.h \
  menu.h \
  menuitem.h \
+ mesdlg.h \
  minifram.h \
  notebook.h \
  palette.h \
@@ -56,6 +58,7 @@ wx_gtk_include_HEADERS = \
  stattext.h \
  tbargtk.h \
  textctrl.h \
+ textdlg.h \
  timer.h \
  tooltip.h \
  treectrl.h \
@@ -63,3 +66,8 @@ wx_gtk_include_HEADERS = \
  win_gtk.h \
  window.h
 
+# why do these get installed ? 
+# info.xpm \
+# question.xpm \
+# error.xpm \
+# warning.xpm
