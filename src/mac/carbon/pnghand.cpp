@@ -21,6 +21,8 @@
 #  pragma hdrstop
 #endif
 
+#if wxUSE_LIBPNG
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -902,3 +904,4 @@ bool wxPNGFileHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, in
     return FALSE;
 }
 
+#endif //wxUSE_LIBPNG

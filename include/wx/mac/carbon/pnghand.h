@@ -9,12 +9,16 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_PNGHAND_H_
+#define _WX_PNGHAND_H_
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "pnghand.h"
 #endif
 
-#ifndef _WX_PNGHAND_H_
-#define _WX_PNGHAND_H_
+#include "wx/defs.h"
+
+#if wxUSE_PNGLIB
 
 class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
 {
@@ -31,6 +35,8 @@ public:
       int desiredWidth, int desiredHeight);
   virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
 };
+
+#endif //wxUSE_LIBPNG
 
 #endif
   // _WX_PNGHAND_H_
