@@ -270,9 +270,10 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     // mark the origin
     dc.DrawCircle(0, 0, 10);
-#ifndef __WXGTK__   // not implemented in wxGTK :-(
+#if !(defined __WXGTK__) && !(defined __WXMOTIF__)
+    // not implemented in wxGTK or wxMOTIF :-(
     dc.FloodFill(0, 0, wxColour(255, 0, 0));
-#endif // __WXGTK__
+#endif //
 
     dc.DrawText( "This is text", 110, 10 );
 
