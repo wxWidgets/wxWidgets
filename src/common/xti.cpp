@@ -166,158 +166,17 @@ template<> const wxTypeInfo* wxGetTypeInfo( wxString * )
 
 // this are compiler induced specialization which are never used anywhere
 
-// char const *
-
-template<> const wxTypeInfo* wxGetTypeInfo( char const ** )
-{
-	assert(0) ;
-	static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-	return &s_typeInfo ;
-}
-
-template<> void wxStringReadValue(const wxString & , const char* & )
-{
-	assert(0) ;
-}
-
-template<> void wxStringWriteValue(wxString & , char const * const & )
-{
-	assert(0) ;
-}
-
-// char *
-
-template<> const wxTypeInfo* wxGetTypeInfo( char ** )
-{
-        assert(0) ;
-        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-        return &s_typeInfo ;
-}
-
-template<> void wxStringReadValue(const wxString & , char* & )
-{
-        assert(0) ;
-}
-
-template<> void wxStringWriteValue(wxString & , char * const & )
-{
-        assert(0) ;
-}
-
-// unsigned char *
-
-template<> const wxTypeInfo* wxGetTypeInfo( unsigned char ** )
-{
-        assert(0) ;
-        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-        return &s_typeInfo ;
-}
-
-template<> void wxStringReadValue(const wxString & , unsigned char* & )
-{
-        assert(0) ;
-}
-
-template<> void wxStringWriteValue(wxString & , unsigned char * const & )
-{
-        assert(0) ;
-}
-
-// int *
-
-template<> const wxTypeInfo* wxGetTypeInfo( int ** )
-{
-        assert(0) ;
-        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-        return &s_typeInfo ;
-}
-
-template<> void wxStringReadValue(const wxString & , int* & )
-{
-        assert(0) ;
-}
-
-template<> void wxStringWriteValue(wxString & , int * const & )
-{
-        assert(0) ;
-}
-
-// bool *
-
-template<> const wxTypeInfo* wxGetTypeInfo( bool ** )
-{
-        assert(0) ;
-        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-        return &s_typeInfo ;
-}
-
-template<> void wxStringReadValue(const wxString & , bool* & )
-{
-        assert(0) ;
-}
-
-template<> void wxStringWriteValue(wxString & , bool * const & )
-{
-        assert(0) ;
-}
-
-// long *
-
-template<> const wxTypeInfo* wxGetTypeInfo( long ** )
-{
-        assert(0) ;
-        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-        return &s_typeInfo ;
-}
-
-template<> void wxStringReadValue(const wxString & , long* & )
-{
-        assert(0) ;
-}
-
-template<> void wxStringWriteValue(wxString & , long * const & )
-{
-        assert(0) ;
-}
-
-// wxString *
-
-template<> const wxTypeInfo* wxGetTypeInfo( wxString ** )
-{
-        assert(0) ;
-        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-        return &s_typeInfo ;
-}
-
-template<> void wxStringReadValue(const wxString & , wxString* & )
-{
-        assert(0) ;
-}
-
-template<> void wxStringWriteValue(wxString & , wxString * const & )
-{
-        assert(0) ;
-}
-
+WX_ILLEGAL_TYPE_SPECIALIZATION( char const * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( char * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( unsigned char * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( int * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( bool * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( long * )
+WX_ILLEGAL_TYPE_SPECIALIZATION( wxString * )
 
 // ----------------------------------------------------------------------------
 // value streaming
 // ----------------------------------------------------------------------------
-
-// convenience function (avoids including xml headers in users code)
-
-void wxXmlAddContentToNode( wxXmlNode* node , const wxString& data )
-{
-	node->AddChild(new wxXmlNode(wxXML_TEXT_NODE, "value", data ) );
-}
-
-wxString wxXmlGetContentFromNode( wxXmlNode *node )
-{
-	if ( node->GetChildren() )
-		return node->GetChildren()->GetContent() ;
-	else
-		return wxEmptyString ;
-}
 
 // streamer specializations
 // for all built-in types
