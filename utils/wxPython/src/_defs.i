@@ -236,6 +236,8 @@ enum {
     wxCB_READONLY,
     wxRA_HORIZONTAL,
     wxRA_VERTICAL,
+    wxRA_SPECIFY_ROWS,
+    wxRA_SPECIFY_COLS,
     wxRB_GROUP,
     wxGA_PROGRESSBAR,
     wxGA_HORIZONTAL,
@@ -754,6 +756,9 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.12  1999/02/27 04:21:58  RD
+// Added missing wxRA_SPECIFY_ROWS, wxRA_SPECIFY_COLS
+//
 // Revision 1.11  1999/02/20 09:02:54  RD
 // Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 // window handle.  If you can get the window handle into the python code,
