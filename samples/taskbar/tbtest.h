@@ -14,7 +14,11 @@ class MyTaskBarIcon: public wxTaskBarIcon
 public:
     MyTaskBarIcon() {};
 
+#if WXWIN_COMPATIBILITY_2_4
+    void OnLButtonDClick(wxEvent&);
+#else
     void OnLButtonDClick(wxTaskBarIconEvent&);
+#endif
     void OnMenuRestore(wxCommandEvent&);
     void OnMenuExit(wxCommandEvent&);
     void OnMenuSetNewIcon(wxCommandEvent&);
