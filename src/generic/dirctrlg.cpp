@@ -1534,7 +1534,9 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
 
 static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
 {
-    wxImage smallimg (16, 16);
+    const unsigned int size = 16;
+    
+    wxImage smallimg (size, size);
     unsigned char *p1, *p2, *ps;
     unsigned char mr = img.GetMaskRed(),
                   mg = img.GetMaskGreen(),
@@ -1543,12 +1545,12 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
     unsigned x, y;
     unsigned sr, sg, sb, smask;
 
-    p1 = img.GetData(), p2 = img.GetData() + 3 * 32, ps = smallimg.GetData();
+    p1 = img.GetData(), p2 = img.GetData() + 3 * size*2, ps = smallimg.GetData();
     smallimg.SetMaskColour(mr, mr, mr);
 
-    for (y = 0; y < 16; y++)
+    for (y = 0; y < size; y++)
     {
-        for (x = 0; x < 16; x++)
+        for (x = 0; x < size; x++)
         {
             sr = sg = sb = smask = 0;
             if (p1[0] != mr || p1[1] != mg || p1[2] != mb)
@@ -1574,9 +1576,9 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
                 ps[0] = sr >> 2, ps[1] = sg >> 2, ps[2] = sb >> 2;
             ps += 3;
         }
-        p1 += 32 * 3, p2 += 32 * 3;
+        p1 += size*2 * 3, p2 += size*2 * 3;
     }
-
+    
     return wxBitmap(smallimg);
 }
 
@@ -1648,10 +1650,10 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         wxLogNull logNull;
         if ( ft && ft->GetIcon(&iconLoc) )
         {
-            ic = wxIcon(iconLoc);
+            ic = wxIcon( iconLoc.GetFileName() );
         }
     }
-
+    
     delete ft;
 
     if ( !ic.Ok() )
@@ -1671,18 +1673,24 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         return newid;
     }
 
+    const unsigned int size = 16;
+    
     int id = m_smallImageList->GetImageCount();
-    if ((bmp.GetWidth() == 16) && (bmp.GetHeight() == 16))
+    if ((bmp.GetWidth() == size) && (bmp.GetHeight() == size))
+    {
         m_smallImageList->Add(bmp);
+    }
     else
     {
         wxImage img = bmp.ConvertToImage();
 
-        if ((img.GetWidth() != 32) || (img.GetHeight() != 32))
-            m_smallImageList->Add(CreateAntialiasedBitmap(CutEmptyBorders(img).Rescale(32, 32)));
+        if ((img.GetWidth() != size*2) || (img.GetHeight() != size*2))
+//            m_smallImageList->Add(CreateAntialiasedBitmap(CutEmptyBorders(img).Rescale(size*2, size*2)));
+            m_smallImageList->Add(CreateAntialiasedBitmap(img.Rescale(size*2, size*2)));
         else
             m_smallImageList->Add(CreateAntialiasedBitmap(img));
     }
+    
     m_HashTable->Put(extension, new wxFileIconEntry(id));
     return id;
 

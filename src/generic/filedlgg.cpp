@@ -208,10 +208,13 @@ void wxFileData::ReadData()
     // try to get a better icon
     if (m_image == wxFileIconsTable::file)
     {
-        if (IsExe())
+        if (m_fileName.Find(wxT('.'), TRUE) != wxNOT_FOUND)
+	{
+            m_image = wxTheFileIconsTable->GetIconID( m_fileName.AfterLast(wxT('.')));
+	} else if (IsExe())
+	{
             m_image = wxFileIconsTable::executable;
-        else if (m_fileName.Find(wxT('.'), TRUE) != wxNOT_FOUND)
-            m_image = wxTheFileIconsTable->GetIconID(m_fileName.AfterLast(wxT('.')));
+	}
     }
 
     m_size = buff.st_size;
