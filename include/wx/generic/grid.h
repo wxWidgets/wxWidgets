@@ -134,6 +134,7 @@ public:
     // it until the matching DecRef() is called
     void IncRef() { m_nRef++; }
     void DecRef() { if ( !--m_nRef ) delete this; }
+    void SafeIncRef() { if ( this ) IncRef(); }
     void SafeDecRef() { if ( this ) DecRef(); }
 
     // setters
@@ -1026,6 +1027,27 @@ protected:
     // doesn't have any yet or the existing one if it does
     //
     // DecRef() must be called on the returned pointer, as usual
+    wxGridCellAttr *GetOrCreateCellAttr(int row, int col) const;
+
+    // cell attribute cache (currently we only cache 1, may be will do
+    // more/better later)
+    struct CachedAttr
+    {
+        int             row, col;
+        wxGridCellAttr *attr;
+    } m_attrCache;
+
+    // invalidates the attribute cache
+    void ClearAttrCache();
+
+    // adds an attribute to cache
+    void CacheAttr(int row, int col, wxGridCellAttr *attr) const;
+
+    // looks for an attr in cache, returns TRUE if found
+    bool LookupAttr(int row, int col, wxGridCellAttr **attr) const;
+
+    // looks for the attr in cache, if not found asks the table and caches the
+    // result
     wxGridCellAttr *GetCellAttr(int row, int col) const;
 
     wxGridCellCoordsArray  m_cellsExposed;

@@ -180,7 +180,15 @@ private:
 #define WXGRID_DRAW_LINES 1
 #endif
 
-//////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+//#define DEBUG_ATTR_CACHE
+#ifdef DEBUG_ATTR_CACHE
+    static size_t gs_nAttrCacheHits = 0;
+    static size_t gs_nAttrCacheMisses = 0;
+#endif // DEBUG_ATTR_CACHE
 
 wxGridCellCoords wxGridNoCellCoords( -1, -1 );
 wxRect           wxGridNoCellRect( -1, -1, -1, -1 );
@@ -1249,6 +1257,16 @@ wxGrid::wxGrid( wxWindow *parent,
 
 wxGrid::~wxGrid()
 {
+    ClearAttrCache();
+
+#ifdef DEBUG_ATTR_CACHE
+    size_t total = gs_nAttrCacheHits + gs_nAttrCacheMisses;
+    wxPrintf(_T("wxGrid attribute cache statistics: "
+                "total: %u, hits: %u (%u%%)\n"),
+             total, gs_nAttrCacheHits,
+             total ? (gs_nAttrCacheHits*100) / total : 0);
+#endif
+
     delete m_defaultRenderer;
     delete m_table;
 }
@@ -1344,6 +1362,9 @@ void wxGrid::Init()
     }
 
     m_labelTextColour = wxColour( _T("BLACK") );
+
+    // init attr cache
+    m_attrCache.row = -1;
 
     // TODO: something better than this ?
     //
@@ -4665,11 +4686,9 @@ wxGridCellRenderer *wxGrid::GetCellRenderer(int row, int col)
 // access to cell attributes
 // ----------------------------------------------------------------------------
 
-// TODO VZ: we must cache the attr to allow only retrieveing it once!
-
 wxColour wxGrid::GetCellBackgroundColour(int row, int col)
 {
-    wxGridCellAttr *attr = m_table ? m_table->GetAttr(row, col) : NULL;
+    wxGridCellAttr *attr = GetCellAttr(row, col);
 
     wxColour colour;
     if ( attr && attr->HasBackgroundColour() )
@@ -4684,7 +4703,7 @@ wxColour wxGrid::GetCellBackgroundColour(int row, int col)
 
 wxColour wxGrid::GetCellTextColour( int row, int col )
 {
-    wxGridCellAttr *attr = m_table ? m_table->GetAttr(row, col) : NULL;
+    wxGridCellAttr *attr = GetCellAttr(row, col);
 
     wxColour colour;
     if ( attr && attr->HasTextColour() )
@@ -4699,7 +4718,7 @@ wxColour wxGrid::GetCellTextColour( int row, int col )
 
 wxFont wxGrid::GetCellFont( int row, int col )
 {
-    wxGridCellAttr *attr = m_table ? m_table->GetAttr(row, col) : NULL;
+    wxGridCellAttr *attr = GetCellAttr(row, col);
 
     wxFont font;
     if ( attr && attr->HasFont() )
@@ -4714,7 +4733,7 @@ wxFont wxGrid::GetCellFont( int row, int col )
 
 void wxGrid::GetCellAlignment( int row, int col, int *horiz, int *vert )
 {
-    wxGridCellAttr *attr = m_table ? m_table->GetAttr(row, col) : NULL;
+    wxGridCellAttr *attr = GetCellAttr(row, col);
 
     if ( attr && attr->HasAlignment() )
         attr->GetAlignment(horiz, vert);
@@ -4746,17 +4765,81 @@ bool wxGrid::CanHaveAttributes()
     return TRUE;
 }
 
+void wxGrid::ClearAttrCache()
+{
+    if ( m_attrCache.row != -1 )
+    {
+        m_attrCache.attr->SafeDecRef();
+        m_attrCache.row = -1;
+    }
+}
+
+void wxGrid::CacheAttr(int row, int col, wxGridCellAttr *attr) const
+{
+    wxGrid *self = (wxGrid *)this;  // const_cast
+
+    self->ClearAttrCache();
+    self->m_attrCache.row = row;
+    self->m_attrCache.col = col;
+    self->m_attrCache.attr = attr;
+    attr->SafeIncRef();
+}
+
+bool wxGrid::LookupAttr(int row, int col, wxGridCellAttr **attr) const
+{
+    if ( row == m_attrCache.row && col == m_attrCache.col )
+    {
+        *attr = m_attrCache.attr;
+        (*attr)->SafeIncRef();
+
+#ifdef DEBUG_ATTR_CACHE
+        gs_nAttrCacheHits++;
+#endif
+
+        return TRUE;
+    }
+    else
+    {
+#ifdef DEBUG_ATTR_CACHE
+        gs_nAttrCacheMisses++;
+#endif
+        return FALSE;
+    }
+}
+
 wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
 {
-    wxGridCellAttr *attr = m_table->GetAttr(row, col);
-    if ( !attr )
+    wxGridCellAttr *attr;
+    if ( !LookupAttr(row, col, &attr) )
     {
-        attr = new wxGridCellAttr;
+        attr = m_table ? m_table->GetAttr(row, col) : (wxGridCellAttr *)NULL;
+        CacheAttr(row, col, attr);
+    }
 
-        // artificially inc the ref count to match DecRef() in caller
-        attr->IncRef();
+    return attr;
+}
 
-        m_table->SetAttr(attr, row, col);
+wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
+{
+    wxGridCellAttr *attr;
+    if ( !LookupAttr(row, col, &attr) || !attr )
+    {
+        wxASSERT_MSG( m_table,
+                      _T("we may only be called if CanHaveAttributes() "
+                         "returned TRUE and then m_table should be !NULL") );
+
+        attr = m_table->GetAttr(row, col);
+        if ( !attr )
+        {
+            attr = new wxGridCellAttr;
+
+            // artificially inc the ref count to match DecRef() in caller
+            attr->IncRef();
+
+            m_table->SetAttr(attr, row, col);
+        }
+
+        CacheAttr(row, col, attr);
     }
 
     return attr;
@@ -4766,7 +4849,7 @@ void wxGrid::SetCellBackgroundColour( int row, int col, const wxColour& colour )
 {
     if ( CanHaveAttributes() )
     {
-        wxGridCellAttr *attr = GetCellAttr(row, col);
+        wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
         attr->SetBackgroundColour(colour);
         attr->DecRef();
     }
@@ -4776,7 +4859,7 @@ void wxGrid::SetCellTextColour( int row, int col, const wxColour& colour )
 {
     if ( CanHaveAttributes() )
     {
-        wxGridCellAttr *attr = GetCellAttr(row, col);
+        wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
         attr->SetTextColour(colour);
         attr->DecRef();
     }
@@ -4786,7 +4869,7 @@ void wxGrid::SetCellFont( int row, int col, const wxFont& font )
 {
     if ( CanHaveAttributes() )
     {
-        wxGridCellAttr *attr = GetCellAttr(row, col);
+        wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
         attr->SetFont(font);
         attr->DecRef();
     }
@@ -4796,7 +4879,7 @@ void wxGrid::SetCellAlignment( int row, int col, int horiz, int vert )
 {
     if ( CanHaveAttributes() )
     {
-        wxGridCellAttr *attr = GetCellAttr(row, col);
+        wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
         attr->SetAlignment(horiz, vert);
         attr->DecRef();
     }
@@ -4806,7 +4889,7 @@ void wxGrid::SetCellRenderer(int row, int col, wxGridCellRenderer *renderer)
 {
     if ( CanHaveAttributes() )
     {
-        wxGridCellAttr *attr = GetCellAttr(row, col);
+        wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
         attr->SetRenderer(renderer);
         attr->DecRef();
     }
