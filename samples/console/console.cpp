@@ -81,6 +81,7 @@
     #define TEST_SOCKETS
     #define TEST_STREAMS
     #define TEST_STRINGS
+    #define TEST_TEXTSTREAM
     #define TEST_THREADS
     #define TEST_TIMER
     #define TEST_UNICODE
@@ -93,7 +94,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_DATETIME
+    #define TEST_TEXTSTREAM
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -5157,6 +5158,45 @@ static void TestTimeCompatibility()
 #endif // TEST_DATETIME
 
 // ----------------------------------------------------------------------------
+// wxTextInput/OutputStream
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_TEXTSTREAM
+
+#include "wx/txtstrm.h"
+#include "wx/wfstream.h"
+
+static void TestTextInputStream()
+{
+    wxPuts(_T("\n*** wxTextInputStream test ***"));
+
+    wxFileInputStream fsIn(_T("testdata.fc"));
+    if ( !fsIn.Ok() )
+    {
+        wxPuts(_T("ERROR: couldn't open file."));
+    }
+    else
+    {
+        wxTextInputStream tis(fsIn);
+
+        size_t line = 1;
+        for ( ;; )
+        {
+            const wxString s = tis.ReadLine();
+
+            // line could be non empty if the last line of the file isn't
+            // terminated with EOL
+            if ( fsIn.Eof() && s.empty() )
+                break;
+
+            wxPrintf(_T("Line %d: %s\n"), line++, s.c_str());
+        }
+    }
+}
+
+#endif // TEST_TEXTSTREAM
+
+// ----------------------------------------------------------------------------
 // threads
 // ----------------------------------------------------------------------------
 
@@ -6524,6 +6564,10 @@ int main(int argc, char **argv)
     }
         TestMemoryStream();
 #endif // TEST_STREAMS
+
+#ifdef TEST_TEXTSTREAM
+    TestTextInputStream();
+#endif // TEST_TEXTSTREAM
 
 #ifdef TEST_THREADS
     int nCPUs = wxThread::GetCPUCount();
