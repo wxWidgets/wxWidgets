@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
+    #pragma implementation "appbase.h"
     #pragma implementation "app.h"
 #endif
 

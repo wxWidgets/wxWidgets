@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_IMAGE_H_
@@ -18,9 +18,10 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/gdicmn.h"
+#include "wx/bitmap.h"
 
 #if wxUSE_STREAMS
-#include "wx/stream.h"
+    #include "wx/stream.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -37,8 +38,6 @@ class WXDLLEXPORT wxJPEGHandler;
 class WXDLLEXPORT wxBMPHandler;
 class WXDLLEXPORT wxImage;
 
-class WXDLLEXPORT wxBitmap;
-
 //-----------------------------------------------------------------------------
 // wxImageHandler
 //-----------------------------------------------------------------------------
@@ -46,7 +45,7 @@ class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxImageHandler: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxImageHandler)
-  
+
 public:
   wxImageHandler() { m_name = ""; m_extension = ""; m_type = 0; }
 
@@ -69,7 +68,7 @@ protected:
   wxString  m_extension;
   wxString  m_mime;
   long      m_type;
-  
+
 };
 
 //-----------------------------------------------------------------------------
@@ -80,7 +79,7 @@ protected:
 class WXDLLEXPORT wxPNGHandler: public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxPNGHandler)
-  
+
 public:
 
   inline wxPNGHandler()
@@ -131,7 +130,7 @@ public:
 class WXDLLEXPORT wxBMPHandler: public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxBMPHandler)
-  
+
 public:
 
   inline wxBMPHandler()
@@ -192,27 +191,27 @@ public:
 
   wxImage( const wxImage& image );
   wxImage( const wxImage* image );
-  
-  // these functions get implemented in /src/(platform)/bitmap.cpp 
+
+  // these functions get implemented in /src/(platform)/bitmap.cpp
   wxImage( const wxBitmap &bitmap );
   operator wxBitmap() const { return ConvertToBitmap(); }
   wxBitmap ConvertToBitmap() const;
 
   void Create( int width, int height );
   void Destroy();
-  
+
   // return the new image with size width*height
   wxImage Scale( int width, int height ) const;
 
   // rescales the image in place
-  wxImage Rescale( int width, int height ) { *this = Scale(width, height); }
+  void Rescale( int width, int height ) { *this = Scale(width, height); }
 
-  // these routines are slow but safe  
+  // these routines are slow but safe
   void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
   unsigned char GetRed( int x, int y );
   unsigned char GetGreen( int x, int y );
   unsigned char GetBlue( int x, int y );
-  
+
   virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_PNG );
   virtual bool LoadFile( const wxString& name, const wxString& mimetype );
 
@@ -235,7 +234,7 @@ public:
 
   char unsigned *GetData() const;
   void SetData( char unsigned *data );
-  
+
   void SetMaskColour( unsigned char r, unsigned char g, unsigned char b );
   unsigned char GetMaskRed() const;
   unsigned char GetMaskGreen() const;
@@ -252,7 +251,7 @@ public:
 
   bool operator == (const wxImage& image)
     { return m_refData == image.m_refData; }
-  bool operator != (const wxImage& image) 
+  bool operator != (const wxImage& image)
     { return m_refData != image.m_refData; }
 
   static wxList& GetHandlers() { return sm_handlers; }
@@ -270,7 +269,7 @@ public:
 protected:
 
   static wxList sm_handlers;
-  
+
 };
 
 #endif
