@@ -118,6 +118,7 @@ ctrlsub.cpp	C
 datetime.cpp	C	B
 datstrm.cpp	C	B
 db.cpp	C	32,B
+dbgrid.cpp	C	32,B
 dbtable.cpp	C	32,B
 dcbase.cpp	C
 dircmn.cpp	C	B
@@ -583,8 +584,9 @@ date.h	W	B
 datetime.h	W	B
 datetime.inl	W	B
 datstrm.h	W	B
-db.h	W	32,B
-dbtable.h	W	32,B
+db.h	W	B
+dbgrid.h	W	B
+dbtable.h	W	B
 dc.h	W
 dcclient.h	W
 dcmemory.h	W
@@ -631,6 +633,7 @@ gdiobj.h	W
 geometry.h	W
 gifdecod.h	W
 xpmdecod.h	W
+dbkeyg.h	W	B
 glcanvas.h	W
 grid.h	W
 gridctrl.h	W
