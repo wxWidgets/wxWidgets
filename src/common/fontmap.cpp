@@ -810,7 +810,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);
     size_t count = equiv.GetCount();
     bool foundEquivEncoding = FALSE;
-    wxFontEncoding equivEncoding;
+    wxFontEncoding equivEncoding = wxFONTENCODING_SYSTEM;
     if ( count )
     {
         for ( size_t i = 0; i < count && !foundEquivEncoding; i++ )
