@@ -74,7 +74,7 @@ extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
 static const EventTypeSpec eventList[] =
 {
     // TODO remove control related event like key and mouse (except for WindowLeave events)
-#if !TARGET_API_MAC_OSX    
+#if 1
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
 
     { kEventClassKeyboard, kEventRawKeyDown } ,
@@ -827,6 +827,16 @@ void  wxTopLevelWindowMac::MacSetBackgroundBrush( const wxBrush &brush )
     }
 }
 
+void wxTopLevelWindowMac::MacInstallTopLevelWindowEventHandler() 
+{
+    if ( m_macEventHandler != NULL )
+    {
+        verify_noerr( ::RemoveEventHandler( (EventHandlerRef) m_macEventHandler ) ) ;
+    }
+    InstallWindowEventHandler(MAC_WXHWND(m_macWindow), GetwxMacTopLevelEventHandlerUPP(),
+        GetEventTypeCount(eventList), eventList, this, (EventHandlerRef *)&m_macEventHandler);
+}
+
 void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
            const wxPoint& pos,
            const wxSize& size,
@@ -950,13 +960,12 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     else
     {
         ::CreateRootControl( (WindowRef)m_macWindow , (ControlRef*)&m_macControl ) ;
-        MacInstallEventHandler() ;
     }
+    MacInstallEventHandler() ;
 
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
-    InstallWindowEventHandler(MAC_WXHWND(m_macWindow), GetwxMacTopLevelEventHandlerUPP(),
-        GetEventTypeCount(eventList), eventList, this, (EventHandlerRef *)&m_macEventHandler);
-
+    MacInstallTopLevelWindowEventHandler() ;
+    
     m_macFocus = NULL ;
 
     if ( HasFlag(wxFRAME_SHAPED) )
