@@ -280,6 +280,7 @@ ALL_BASE_HEADERS =  \
 	wx/regex.h \
 	wx/scopeguard.h \
 	wx/snglinst.h \
+	wx/sstream.h \
 	wx/stack.h \
 	wx/stockitem.h \
 	wx/stopwatch.h \
@@ -365,6 +366,7 @@ ALL_BASE_SOURCES =  \
 	src/common/object.cpp \
 	src/common/process.cpp \
 	src/common/regex.cpp \
+	src/common/sstream.cpp \
 	src/common/stopwatch.cpp \
 	src/common/strconv.cpp \
 	src/common/stream.cpp \
@@ -489,6 +491,7 @@ MONODLL_OBJECTS =  \
 	monodll_object.o \
 	monodll_process.o \
 	monodll_regex.o \
+	monodll_sstream.o \
 	monodll_stopwatch.o \
 	monodll_strconv.o \
 	monodll_stream.o \
@@ -573,6 +576,7 @@ MONOLIB_OBJECTS =  \
 	monolib_object.o \
 	monolib_process.o \
 	monolib_regex.o \
+	monolib_sstream.o \
 	monolib_stopwatch.o \
 	monolib_strconv.o \
 	monolib_stream.o \
@@ -658,6 +662,7 @@ BASEDLL_OBJECTS =  \
 	basedll_object.o \
 	basedll_process.o \
 	basedll_regex.o \
+	basedll_sstream.o \
 	basedll_stopwatch.o \
 	basedll_strconv.o \
 	basedll_stream.o \
@@ -727,6 +732,7 @@ BASELIB_OBJECTS =  \
 	baselib_object.o \
 	baselib_process.o \
 	baselib_regex.o \
+	baselib_sstream.o \
 	baselib_stopwatch.o \
 	baselib_strconv.o \
 	baselib_stream.o \
@@ -966,6 +972,95 @@ XMLLIB_OBJECTS =  \
 	xmllib_xml.o \
 	xmllib_xtixml.o
 XMLLIB_ODEP =  $(___pch_wxprec_xmllib_wx_wxprec_h_gch___depname)
+XRCDLL_CXXFLAGS = $(__xrcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
+	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL \
+	-DWXMAKINGDLL_XRC $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
+XRCDLL_OBJECTS =  \
+	xrcdll_xh_bmpbt.o \
+	xrcdll_xh_bmp.o \
+	xrcdll_xh_bttn.o \
+	xrcdll_xh_cald.o \
+	xrcdll_xh_chckb.o \
+	xrcdll_xh_chckl.o \
+	xrcdll_xh_choic.o \
+	xrcdll_xh_combo.o \
+	xrcdll_xh_dlg.o \
+	xrcdll_xh_frame.o \
+	xrcdll_xh_gauge.o \
+	xrcdll_xh_gdctl.o \
+	xrcdll_xh_html.o \
+	xrcdll_xh_listb.o \
+	xrcdll_xh_listc.o \
+	xrcdll_xh_menu.o \
+	xrcdll_xh_notbk.o \
+	xrcdll_xh_panel.o \
+	xrcdll_xh_radbt.o \
+	xrcdll_xh_radbx.o \
+	xrcdll_xh_scrol.o \
+	xrcdll_xh_scwin.o \
+	xrcdll_xh_sizer.o \
+	xrcdll_xh_slidr.o \
+	xrcdll_xh_spin.o \
+	xrcdll_xh_split.o \
+	xrcdll_xh_statbar.o \
+	xrcdll_xh_stbmp.o \
+	xrcdll_xh_stbox.o \
+	xrcdll_xh_stlin.o \
+	xrcdll_xh_sttxt.o \
+	xrcdll_xh_text.o \
+	xrcdll_xh_tglbtn.o \
+	xrcdll_xh_toolb.o \
+	xrcdll_xh_tree.o \
+	xrcdll_xh_unkwn.o \
+	xrcdll_xh_wizrd.o \
+	xrcdll_xmlres.o \
+	xrcdll_xmlrsall.o
+XRCDLL_ODEP =  $(___pch_wxprec_xrcdll_wx_wxprec_h_gch___depname)
+XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
+	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) $(CPPFLAGS) $(CXXFLAGS)
+XRCLIB_OBJECTS =  \
+	xrclib_xh_bmpbt.o \
+	xrclib_xh_bmp.o \
+	xrclib_xh_bttn.o \
+	xrclib_xh_cald.o \
+	xrclib_xh_chckb.o \
+	xrclib_xh_chckl.o \
+	xrclib_xh_choic.o \
+	xrclib_xh_combo.o \
+	xrclib_xh_dlg.o \
+	xrclib_xh_frame.o \
+	xrclib_xh_gauge.o \
+	xrclib_xh_gdctl.o \
+	xrclib_xh_html.o \
+	xrclib_xh_listb.o \
+	xrclib_xh_listc.o \
+	xrclib_xh_menu.o \
+	xrclib_xh_notbk.o \
+	xrclib_xh_panel.o \
+	xrclib_xh_radbt.o \
+	xrclib_xh_radbx.o \
+	xrclib_xh_scrol.o \
+	xrclib_xh_scwin.o \
+	xrclib_xh_sizer.o \
+	xrclib_xh_slidr.o \
+	xrclib_xh_spin.o \
+	xrclib_xh_split.o \
+	xrclib_xh_statbar.o \
+	xrclib_xh_stbmp.o \
+	xrclib_xh_stbox.o \
+	xrclib_xh_stlin.o \
+	xrclib_xh_sttxt.o \
+	xrclib_xh_text.o \
+	xrclib_xh_tglbtn.o \
+	xrclib_xh_toolb.o \
+	xrclib_xh_tree.o \
+	xrclib_xh_unkwn.o \
+	xrclib_xh_wizrd.o \
+	xrclib_xmlres.o \
+	xrclib_xmlrsall.o
+XRCLIB_ODEP =  $(___pch_wxprec_xrclib_wx_wxprec_h_gch___depname)
 GLDLL_CXXFLAGS = $(__gldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
 	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL \
@@ -2167,7 +2262,46 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/wxhtml.h \
 	wx/htmllbox.h \
 	$(OPENGL_HDR) \
-	wx/dbgrid.h
+	wx/dbgrid.h \
+	wx/xrc/xh_all.h \
+	wx/xrc/xh_bmpbt.h \
+	wx/xrc/xh_bmp.h \
+	wx/xrc/xh_bttn.h \
+	wx/xrc/xh_cald.h \
+	wx/xrc/xh_chckb.h \
+	wx/xrc/xh_chckl.h \
+	wx/xrc/xh_choic.h \
+	wx/xrc/xh_combo.h \
+	wx/xrc/xh_dlg.h \
+	wx/xrc/xh_frame.h \
+	wx/xrc/xh_gauge.h \
+	wx/xrc/xh_gdctl.h \
+	wx/xrc/xh_html.h \
+	wx/xrc/xh_listb.h \
+	wx/xrc/xh_listc.h \
+	wx/xrc/xh_menu.h \
+	wx/xrc/xh_notbk.h \
+	wx/xrc/xh_panel.h \
+	wx/xrc/xh_radbt.h \
+	wx/xrc/xh_radbx.h \
+	wx/xrc/xh_scrol.h \
+	wx/xrc/xh_scwin.h \
+	wx/xrc/xh_sizer.h \
+	wx/xrc/xh_slidr.h \
+	wx/xrc/xh_spin.h \
+	wx/xrc/xh_split.h \
+	wx/xrc/xh_statbar.h \
+	wx/xrc/xh_stbmp.h \
+	wx/xrc/xh_stbox.h \
+	wx/xrc/xh_stlin.h \
+	wx/xrc/xh_sttxt.h \
+	wx/xrc/xh_text.h \
+	wx/xrc/xh_tglbtn.h \
+	wx/xrc/xh_toolb.h \
+	wx/xrc/xh_tree.h \
+	wx/xrc/xh_unkwn.h \
+	wx/xrc/xh_wizrd.h \
+	wx/xrc/xmlres.h
 @COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)
 COND_MONOLITHIC_1_SHARED_1___monodll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -2331,7 +2465,46 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_htmllbox.o \
 	monodll_db.o \
 	monodll_dbtable.o \
-	monodll_dbgrid.o
+	monodll_dbgrid.o \
+	monodll_xh_bmpbt.o \
+	monodll_xh_bmp.o \
+	monodll_xh_bttn.o \
+	monodll_xh_cald.o \
+	monodll_xh_chckb.o \
+	monodll_xh_chckl.o \
+	monodll_xh_choic.o \
+	monodll_xh_combo.o \
+	monodll_xh_dlg.o \
+	monodll_xh_frame.o \
+	monodll_xh_gauge.o \
+	monodll_xh_gdctl.o \
+	monodll_xh_html.o \
+	monodll_xh_listb.o \
+	monodll_xh_listc.o \
+	monodll_xh_menu.o \
+	monodll_xh_notbk.o \
+	monodll_xh_panel.o \
+	monodll_xh_radbt.o \
+	monodll_xh_radbx.o \
+	monodll_xh_scrol.o \
+	monodll_xh_scwin.o \
+	monodll_xh_sizer.o \
+	monodll_xh_slidr.o \
+	monodll_xh_spin.o \
+	monodll_xh_split.o \
+	monodll_xh_statbar.o \
+	monodll_xh_stbmp.o \
+	monodll_xh_stbox.o \
+	monodll_xh_stlin.o \
+	monodll_xh_sttxt.o \
+	monodll_xh_text.o \
+	monodll_xh_tglbtn.o \
+	monodll_xh_toolb.o \
+	monodll_xh_tree.o \
+	monodll_xh_unkwn.o \
+	monodll_xh_wizrd.o \
+	monodll_xmlres.o \
+	monodll_xmlrsall.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS) \
@@ -3212,7 +3385,46 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_htmllbox.o \
 	monolib_db.o \
 	monolib_dbtable.o \
-	monolib_dbgrid.o
+	monolib_dbgrid.o \
+	monolib_xh_bmpbt.o \
+	monolib_xh_bmp.o \
+	monolib_xh_bttn.o \
+	monolib_xh_cald.o \
+	monolib_xh_chckb.o \
+	monolib_xh_chckl.o \
+	monolib_xh_choic.o \
+	monolib_xh_combo.o \
+	monolib_xh_dlg.o \
+	monolib_xh_frame.o \
+	monolib_xh_gauge.o \
+	monolib_xh_gdctl.o \
+	monolib_xh_html.o \
+	monolib_xh_listb.o \
+	monolib_xh_listc.o \
+	monolib_xh_menu.o \
+	monolib_xh_notbk.o \
+	monolib_xh_panel.o \
+	monolib_xh_radbt.o \
+	monolib_xh_radbx.o \
+	monolib_xh_scrol.o \
+	monolib_xh_scwin.o \
+	monolib_xh_sizer.o \
+	monolib_xh_slidr.o \
+	monolib_xh_spin.o \
+	monolib_xh_split.o \
+	monolib_xh_statbar.o \
+	monolib_xh_stbmp.o \
+	monolib_xh_stbox.o \
+	monolib_xh_stlin.o \
+	monolib_xh_sttxt.o \
+	monolib_xh_text.o \
+	monolib_xh_tglbtn.o \
+	monolib_xh_toolb.o \
+	monolib_xh_tree.o \
+	monolib_xh_unkwn.o \
+	monolib_xh_wizrd.o \
+	monolib_xmlres.o \
+	monolib_xmlrsall.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS_1 = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_0) \
@@ -6042,6 +6254,57 @@ COND_MONOLITHIC_0_SHARED_0___xmllib___depname = \
 @COND_GCC_PCH_1@__xmllib_PCH_INC = -I.pch/wxprec_xmllib
 @COND_GCC_PCH_1@___pch_wxprec_xmllib_wx_wxprec_h_gch___depname \
 @COND_GCC_PCH_1@	= .pch/wxprec_xmllib/wx/wxprec.h.gch
+COND_MONOLITHIC_0_SHARED_1_USE_XRC_1___xrcdll___depname = \
+	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@__xrcdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_XRC_1___xrcdll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@__install_xrcdll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	= install_xrcdll
+COND_PLATFORM_MACOSX_1___xrcdll___macinstnamecmd = -install_name \
+	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+@COND_PLATFORM_MACOSX_1@__xrcdll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___xrcdll___macinstnamecmd)
+COND_PLATFORM_OS2_1___xrcdll___importlib = -import \
+	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_PLATFORM_OS2_1@__xrcdll___importlib = $(COND_PLATFORM_OS2_1___xrcdll___importlib)
+COND_PLATFORM_WIN32_1___xrcdll___importlib = \
+	-Wl,--out-implib,$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_PLATFORM_WIN32_1@__xrcdll___importlib = $(COND_PLATFORM_WIN32_1___xrcdll___importlib)
+@COND_GCC_PCH_1@__xrcdll_PCH_INC = -I.pch/wxprec_xrcdll
+@COND_GCC_PCH_1@___pch_wxprec_xrcdll_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_xrcdll/wx/wxprec.h.gch
+COND_USE_SOVERLINUX_1___xrcdll___soname_flags = \
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+@COND_USE_SOVERLINUX_1@__xrcdll___soname_flags = $(COND_USE_SOVERLINUX_1___xrcdll___soname_flags)
+COND_USE_SOVERSOLARIS_1___xrcdll___soname_flags = \
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_USE_SOVERSOLARIS_1@__xrcdll___soname_flags = $(COND_USE_SOVERSOLARIS_1___xrcdll___soname_flags)
+COND_USE_SOSYMLINKS_1___xrcdll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; rm -f \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX))
+@COND_USE_SOSYMLINKS_1@__xrcdll___so_symlinks_cmd = $(COND_USE_SOSYMLINKS_1___xrcdll___so_symlinks_cmd)
+COND_USE_SOSYMLINKS_1___xrcdll___so_symlinks_inst_cmd = rm -f \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_USE_SOSYMLINKS_1@__xrcdll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___xrcdll___so_symlinks_inst_cmd)
+COND_MONOLITHIC_0_SHARED_0_USE_XRC_1___xrclib___depname = \
+	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX)$(LIBEXT)
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@__xrclib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_XRC_1___xrclib___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@__install_xrclib___depname \
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@	= install_xrclib
+@COND_GCC_PCH_1@__xrclib_PCH_INC = -I.pch/wxprec_xrclib
+@COND_GCC_PCH_1@___pch_wxprec_xrclib_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_xrclib/wx/wxprec.h.gch
 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1___gldll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@__gldll___depname = $(COND_SHARED_1_USE_GUI_1_USE_OPENGL_1___gldll___depname)
@@ -7046,9 +7309,9 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 
 ### Targets: ###
 
-all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) $(__sound_sdl___depname) $(__macos_res___depname) $(__cocoa_res___depname)
+all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__gldll___depname) $(__gllib___depname) $(__sound_sdl___depname) $(__macos_res___depname) $(__cocoa_res___depname)
 
-install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_dbgriddll___depname) $(__install_dbgridlib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_sound_sdl___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig locale_install $(__macos_res_install___depname) $(__cocoa_res_install___depname)
+install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_dbgriddll___depname) $(__install_dbgridlib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_xrcdll___depname) $(__install_xrclib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_sound_sdl___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig locale_install $(__macos_res_install___depname) $(__cocoa_res_install___depname)
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/aclocal
 	(cd $(srcdir) ; $(INSTALL_DATA)  wxwin.m4 $(DESTDIR)$(datadir)/aclocal)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx
@@ -7088,6 +7351,7 @@ install-strip: install
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(PLUGINS_INST_DIR)/$(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 
@@ -7137,6 +7401,10 @@ clean:
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX)$(LIBEXT)
+	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX)$(LIBEXT)
 	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
@@ -7445,6 +7713,32 @@ distclean: clean
 
 @COND_GCC_PCH_1@.pch/wxprec_xmllib/wx/wxprec.h.gch: 
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_xmllib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(XMLLIB_CXXFLAGS)
+
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(XRCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__htmldll___depname) $(__advdll___depname) $(__coredll___depname) $(__xmldll___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(SHARED_LD_CXX) $@ $(XRCDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__xrcdll___macinstnamecmd) $(__xrcdll___importlib) $(__xrcdll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(__xrcdll___so_symlinks_cmd)
+
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@install_xrcdll: 
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	(cd $(DESTDIR)$(libdir) ; $(__xrcdll___so_symlinks_inst_cmd))
+
+@COND_GCC_PCH_1@.pch/wxprec_xrcdll/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_xrcdll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(XRCDLL_CXXFLAGS)
+
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX)$(LIBEXT): $(XRCLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@	rm -f $@
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@	$(AR) rcu $@ $(XRCLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@	$(RANLIB) $@
+
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@install_xrclib: 
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
+
+@COND_GCC_PCH_1@.pch/wxprec_xrclib/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_xrclib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(XRCLIB_CXXFLAGS)
 
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(GLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__basedll___depname) $(__coredll___depname)
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(SHARED_LD_CXX) $@ $(GLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__gldll___macinstnamecmd) $(__gldll___importlib) $(__gldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p) $(EXTRALIBS_OPENGL)
@@ -8029,6 +8323,9 @@ monodll_process.o: $(srcdir)/src/common/process.cpp $(MONODLL_ODEP)
 monodll_regex.o: $(srcdir)/src/common/regex.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+monodll_sstream.o: $(srcdir)/src/common/sstream.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -8429,6 +8726,123 @@ monodll_dbtable.o: $(srcdir)/src/common/dbtable.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_bttn.o: $(srcdir)/src/xrc/xh_bttn.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_cald.o: $(srcdir)/src/xrc/xh_cald.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_chckb.o: $(srcdir)/src/xrc/xh_chckb.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_chckl.o: $(srcdir)/src/xrc/xh_chckl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_choic.o: $(srcdir)/src/xrc/xh_choic.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_gdctl.o: $(srcdir)/src/xrc/xh_gdctl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_listc.o: $(srcdir)/src/xrc/xh_listc.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_notbk.o: $(srcdir)/src/xrc/xh_notbk.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_panel.o: $(srcdir)/src/xrc/xh_panel.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_radbt.o: $(srcdir)/src/xrc/xh_radbt.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_radbx.o: $(srcdir)/src/xrc/xh_radbx.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_scrol.o: $(srcdir)/src/xrc/xh_scrol.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_slidr.o: $(srcdir)/src/xrc/xh_slidr.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_spin.o: $(srcdir)/src/xrc/xh_spin.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_split.o: $(srcdir)/src/xrc/xh_split.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_statbar.o: $(srcdir)/src/xrc/xh_statbar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_stbmp.o: $(srcdir)/src/xrc/xh_stbmp.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_stbox.o: $(srcdir)/src/xrc/xh_stbox.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_stlin.o: $(srcdir)/src/xrc/xh_stlin.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_sttxt.o: $(srcdir)/src/xrc/xh_sttxt.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_text.o: $(srcdir)/src/xrc/xh_text.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_tglbtn.o: $(srcdir)/src/xrc/xh_tglbtn.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_toolb.o: $(srcdir)/src/xrc/xh_toolb.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_tree.o: $(srcdir)/src/xrc/xh_tree.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xh_wizrd.o: $(srcdir)/src/xrc/xh_wizrd.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_xml.o: $(srcdir)/src/xml/xml.cpp $(MONODLL_ODEP)
@@ -11026,6 +11440,9 @@ monolib_process.o: $(srcdir)/src/common/process.cpp $(MONOLIB_ODEP)
 monolib_regex.o: $(srcdir)/src/common/regex.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+monolib_sstream.o: $(srcdir)/src/common/sstream.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 monolib_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -11426,6 +11843,123 @@ monolib_dbtable.o: $(srcdir)/src/common/dbtable.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_bttn.o: $(srcdir)/src/xrc/xh_bttn.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_cald.o: $(srcdir)/src/xrc/xh_cald.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_chckb.o: $(srcdir)/src/xrc/xh_chckb.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_chckl.o: $(srcdir)/src/xrc/xh_chckl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_choic.o: $(srcdir)/src/xrc/xh_choic.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_gdctl.o: $(srcdir)/src/xrc/xh_gdctl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_listc.o: $(srcdir)/src/xrc/xh_listc.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_notbk.o: $(srcdir)/src/xrc/xh_notbk.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_panel.o: $(srcdir)/src/xrc/xh_panel.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_radbt.o: $(srcdir)/src/xrc/xh_radbt.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_radbx.o: $(srcdir)/src/xrc/xh_radbx.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_scrol.o: $(srcdir)/src/xrc/xh_scrol.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_slidr.o: $(srcdir)/src/xrc/xh_slidr.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_spin.o: $(srcdir)/src/xrc/xh_spin.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_split.o: $(srcdir)/src/xrc/xh_split.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_statbar.o: $(srcdir)/src/xrc/xh_statbar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_stbmp.o: $(srcdir)/src/xrc/xh_stbmp.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_stbox.o: $(srcdir)/src/xrc/xh_stbox.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_stlin.o: $(srcdir)/src/xrc/xh_stlin.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_sttxt.o: $(srcdir)/src/xrc/xh_sttxt.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_text.o: $(srcdir)/src/xrc/xh_text.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_tglbtn.o: $(srcdir)/src/xrc/xh_tglbtn.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_toolb.o: $(srcdir)/src/xrc/xh_toolb.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_tree.o: $(srcdir)/src/xrc/xh_tree.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xh_wizrd.o: $(srcdir)/src/xrc/xh_wizrd.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_xml.o: $(srcdir)/src/xml/xml.cpp $(MONOLIB_ODEP)
@@ -14023,6 +14557,9 @@ basedll_process.o: $(srcdir)/src/common/process.cpp $(BASEDLL_ODEP)
 basedll_regex.o: $(srcdir)/src/common/regex.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+basedll_sstream.o: $(srcdir)/src/common/sstream.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -14357,6 +14894,9 @@ baselib_process.o: $(srcdir)/src/common/process.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_regex.o: $(srcdir)/src/common/regex.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+baselib_sstream.o: $(srcdir)/src/common/sstream.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp $(BASELIB_ODEP)
@@ -19978,6 +20518,240 @@ xmllib_xml.o: $(srcdir)/src/xml/xml.cpp $(XMLLIB_ODEP)
 xmllib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(XMLLIB_ODEP)
 	$(CXXC) -c -o $@ $(XMLLIB_CXXFLAGS) $<
 
+xrcdll_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_bttn.o: $(srcdir)/src/xrc/xh_bttn.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_cald.o: $(srcdir)/src/xrc/xh_cald.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_chckb.o: $(srcdir)/src/xrc/xh_chckb.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_chckl.o: $(srcdir)/src/xrc/xh_chckl.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_choic.o: $(srcdir)/src/xrc/xh_choic.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_gdctl.o: $(srcdir)/src/xrc/xh_gdctl.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_listc.o: $(srcdir)/src/xrc/xh_listc.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_notbk.o: $(srcdir)/src/xrc/xh_notbk.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_panel.o: $(srcdir)/src/xrc/xh_panel.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_radbt.o: $(srcdir)/src/xrc/xh_radbt.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_radbx.o: $(srcdir)/src/xrc/xh_radbx.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_scrol.o: $(srcdir)/src/xrc/xh_scrol.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_slidr.o: $(srcdir)/src/xrc/xh_slidr.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_spin.o: $(srcdir)/src/xrc/xh_spin.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_split.o: $(srcdir)/src/xrc/xh_split.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_statbar.o: $(srcdir)/src/xrc/xh_statbar.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_stbmp.o: $(srcdir)/src/xrc/xh_stbmp.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_stbox.o: $(srcdir)/src/xrc/xh_stbox.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_stlin.o: $(srcdir)/src/xrc/xh_stlin.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_sttxt.o: $(srcdir)/src/xrc/xh_sttxt.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_text.o: $(srcdir)/src/xrc/xh_text.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_tglbtn.o: $(srcdir)/src/xrc/xh_tglbtn.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_toolb.o: $(srcdir)/src/xrc/xh_toolb.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_tree.o: $(srcdir)/src/xrc/xh_tree.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xh_wizrd.o: $(srcdir)/src/xrc/xh_wizrd.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrcdll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+xrclib_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_bttn.o: $(srcdir)/src/xrc/xh_bttn.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_cald.o: $(srcdir)/src/xrc/xh_cald.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_chckb.o: $(srcdir)/src/xrc/xh_chckb.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_chckl.o: $(srcdir)/src/xrc/xh_chckl.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_choic.o: $(srcdir)/src/xrc/xh_choic.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_gdctl.o: $(srcdir)/src/xrc/xh_gdctl.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_listc.o: $(srcdir)/src/xrc/xh_listc.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_notbk.o: $(srcdir)/src/xrc/xh_notbk.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_panel.o: $(srcdir)/src/xrc/xh_panel.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_radbt.o: $(srcdir)/src/xrc/xh_radbt.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_radbx.o: $(srcdir)/src/xrc/xh_radbx.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_scrol.o: $(srcdir)/src/xrc/xh_scrol.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_slidr.o: $(srcdir)/src/xrc/xh_slidr.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_spin.o: $(srcdir)/src/xrc/xh_spin.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_split.o: $(srcdir)/src/xrc/xh_split.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_statbar.o: $(srcdir)/src/xrc/xh_statbar.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_stbmp.o: $(srcdir)/src/xrc/xh_stbmp.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_stbox.o: $(srcdir)/src/xrc/xh_stbox.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_stlin.o: $(srcdir)/src/xrc/xh_stlin.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_sttxt.o: $(srcdir)/src/xrc/xh_sttxt.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_text.o: $(srcdir)/src/xrc/xh_text.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_tglbtn.o: $(srcdir)/src/xrc/xh_tglbtn.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_toolb.o: $(srcdir)/src/xrc/xh_toolb.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_tree.o: $(srcdir)/src/xrc/xh_tree.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xh_wizrd.o: $(srcdir)/src/xrc/xh_wizrd.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+xrclib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_MAC@gldll_glcanvas.o: $(srcdir)/src/mac/carbon/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
@@ -21170,4 +21944,4 @@ rpm: bzip-dist
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean install_wxregex install_wxzlib install_wxpng install_wxjpeg install_wxtiff install_wxodbc install_wxexpat install_monodll install_monolib install_basedll install_baselib install_netdll install_netlib install_coredll install_corelib install_advdll install_advlib install_odbcdll install_odbclib install_dbgriddll install_dbgridlib install_htmldll install_htmllib install_xmldll install_xmllib install_gldll install_gllib install_sound_sdl samples
+.PHONY: all install uninstall clean distclean install_wxregex install_wxzlib install_wxpng install_wxjpeg install_wxtiff install_wxodbc install_wxexpat install_monodll install_monolib install_basedll install_baselib install_netdll install_netlib install_coredll install_corelib install_advdll install_advlib install_odbcdll install_odbclib install_dbgriddll install_dbgridlib install_htmldll install_htmllib install_xmldll install_xmllib install_xrcdll install_xrclib install_gldll install_gllib install_sound_sdl samples

@@ -477,6 +477,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MENUS=no
   DEFAULT_wxUSE_MINIFRAME=no
   DEFAULT_wxUSE_HTML=no
+  DEFAULT_wxUSE_XRC=no
   DEFAULT_wxUSE_WEBKIT=no
   DEFAULT_wxUSE_FILESYSTEM=no
   DEFAULT_wxUSE_FS_INET=no
@@ -662,6 +663,7 @@ else
   DEFAULT_wxUSE_MENUS=yes
   DEFAULT_wxUSE_MINIFRAME=yes
   DEFAULT_wxUSE_HTML=yes
+  DEFAULT_wxUSE_XRC=yes
   DEFAULT_wxUSE_WEBKIT=yes
   DEFAULT_wxUSE_FILESYSTEM=yes
   DEFAULT_wxUSE_FS_INET=yes
@@ -916,6 +918,7 @@ WX_ARG_ENABLE(help,        [  --enable-help           use help subsystem], wxUSE
 WX_ARG_ENABLE(mshtmlhelp,  [  --enable-mshtmlhelp     use MS HTML Help (win32)], wxUSE_MS_HTML_HELP)
 WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], wxUSE_HTML)
 WX_ARG_ENABLE(htmlhelp,    [  --enable-htmlhelp       use wxHTML-based help], wxUSE_WXHTML_HELP)
+WX_ARG_ENABLE(xrc,         [  --enable-xrc            use XRC resources sub-library], wxUSE_XRC)
 WX_ARG_ENABLE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
 WX_ARG_ENABLE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_ENABLE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI)
@@ -5654,6 +5657,12 @@ if test "$wxUSE_WEBKIT" = "yes"; then
     fi
 fi
 
+USE_XRC=0
+if test "$wxUSE_XRC" = "yes"; then
+    AC_DEFINE(wxUSE_XRC)
+    USE_XRC=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS xrc"
+fi
 
 if test "$wxUSE_MENUS" = "yes"; then
     AC_DEFINE(wxUSE_MENUS)
@@ -5845,6 +5854,9 @@ if test "$wxUSE_ODBC" != "no" ; then
 fi
 if test "$wxUSE_HTML" = "yes" ; then
     CORE_GUI_LIBS="html $CORE_GUI_LIBS"
+fi
+if test "$wxUSE_XRC" = "yes" ; then
+    CORE_GUI_LIBS="xrc $CORE_GUI_LIBS"
 fi
 
 if test "$wxUSE_GUI" != "yes"; then

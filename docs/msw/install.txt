@@ -609,6 +609,10 @@ USE_HTML=0
   Do not build wxHTML library. If MONOLITHIC=1, then you must also
   #define wxUSE_HTML 1 in setup.h.
 
+USE_XRC=0
+  Do not build XRC resources library. If MONOLITHIC=1, then you must also
+  #define wxUSE_HTML 1 in setup.h.
+
 RUNTIME_LIBS=static
   Links static version of C and C++ runtime libraries into the executable, so
   that the program does not depend on DLLs provided with the compiler (e.g.

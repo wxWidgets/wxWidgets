@@ -929,6 +929,11 @@
 #define wxUSE_HTML 1
 
 /*
+ * wxXRC
+ */
+#define wxUSE_XRC 1
+
+/*
  * wxWebKitCtrl
  */
 #define wxUSE_WEBKIT 1
