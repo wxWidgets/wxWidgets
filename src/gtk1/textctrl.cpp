@@ -146,9 +146,13 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     bool multi_line = (style & wxTE_MULTILINE) != 0;
     if (multi_line)
     {
+#if (GTK_MINOR_VERSION > 2)
         /* a multi-line edit control: create a vertical scrollbar by default and
            horizontal if requested */
         bool bHasHScrollbar = (style & wxHSCROLL) != 0;
+#else
+        bool bHasHScrollbar = FALSE;
+#endif
 
         /* create our control ... */
         m_text = gtk_text_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
@@ -164,6 +168,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
         /* always wrap words */
         gtk_text_set_word_wrap( GTK_TEXT(m_text), TRUE );
 
+#if (GTK_MINOR_VERSION > 2)
         /* put the horizontal scrollbar in the lower left hand corner */
         if (bHasHScrollbar)
         {
@@ -175,11 +180,10 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
                        0, 0);
             gtk_widget_show(hscrollbar);
 
-#if (GTK_MINOR_VERSION > 0)
             /* don't wrap lines, otherwise we wouldn't need the scrollbar */
             gtk_text_set_line_wrap( GTK_TEXT(m_text), FALSE );
-#endif
         }
+#endif
 
         /* finally, put the vertical scrollbar in the upper right corner */
         m_vScrollbar = gtk_vscrollbar_new( GTK_TEXT(m_text)->vadj );

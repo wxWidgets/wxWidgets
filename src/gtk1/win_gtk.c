@@ -10,7 +10,6 @@
 #include "wx/gtk/win_gtk.h"
 #include "gtk/gtksignal.h"
 #include "gtk/gtknotebook.h"
-#include "gtk/gtktable.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -328,9 +327,9 @@ gtk_myfixed_set_size (GtkMyFixed    *myfixed,
 
             if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (myfixed))
 	    {
-                if ( ((child->width > 1) && (child->height > 1) && (GTK_WIDGET_REALIZED(widget))) ||
-		     /* I don't know why GtkTable is different */
-		     GTK_IS_TABLE(widget))
+                if ( (child->width > 1) && 
+		     (child->height > 1) && 
+		    !(GTK_WIDGET_REALIZED(widget) && GTK_IS_NOTEBOOK(widget)) )
 	        {
                     child_allocation.x = child->x;
                     child_allocation.y = child->y;

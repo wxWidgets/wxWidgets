@@ -166,13 +166,15 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
 wxComboBox::~wxComboBox()
 {
-    wxNode *node = m_clientDataList.First();
+    wxNode *node = m_clientObjectList.First();
     while (node)
     {
         wxClientData *cd = (wxClientData*)node->Data();
         if (cd) delete cd;
         node = node->Next();
     }
+    m_clientObjectList.Clear();
+
     m_clientDataList.Clear();
 }
 
