@@ -3021,7 +3021,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
 // ---------------------------------------------------------------------------
 
 #ifdef __WIN95__
-// FIXME: VZ: I'm not sure at all that the order of processing is correct
+
 bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
 #ifndef __WXMICROWIN__
@@ -3029,12 +3029,19 @@ bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     HWND hWnd = hdr->hwndFrom;
     wxWindow *win = wxFindWinFromHandle((WXHWND)hWnd);
 
-    // is this one of our windows?
+    // if the control is one of our windows, let it handle the message itself
     if ( win )
     {
         return win->MSWOnNotify(idCtrl, lParam, result);
     }
 
+    // VZ: why did we do it? normally this is unnecessary and, besides, it
+    //     breaks the message processing for the toolbars because the tooltip
+    //     notifications were being forwarded to the toolbar child controls
+    //     (if it had any) before being passed to the toolbar itself, so in my
+    //     example the tooltip for the combobox was always shown instead of the
+    //     correct button tooltips
+#if 0
     // try all our children
     wxWindowList::Node *node = GetChildren().GetFirst();
     while ( node )
@@ -3047,8 +3054,9 @@ bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         node = node->GetNext();
     }
+#endif // 0
 
-    // finally try this window too (catches toolbar case)
+    // by default, handle it ourselves
     return MSWOnNotify(idCtrl, lParam, result);
 #else // __WXMICROWIN__
     return FALSE;
@@ -3131,6 +3139,7 @@ bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
 
     return FALSE;
 }
+
 #endif // __WIN95__
 
 // ---------------------------------------------------------------------------
