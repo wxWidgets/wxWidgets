@@ -621,7 +621,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
         wxapp_install_idle_handler();
         
 /*
-    if (win->GetName() == wxT("htmlWindow"))
+    if (win->GetName() == wxT("status_line"))
     {
         wxPrintf( wxT("OnExpose from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -721,7 +721,7 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
         wxapp_install_idle_handler();
         
 /*
-    if (win->GetName() == wxT("htmlWindow"))
+    if (win->GetName() == wxT("status_line"))
     {
         wxPrintf( wxT("OnDraw from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -3030,6 +3030,8 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
             gtk_pizza_set_clear( pizza, old_clear );
 */
             GdkEventExpose gdk_event;
+            gdk_event.type = GDK_EXPOSE;
+            gdk_event.window = GTK_PIZZA(m_wxwindow)->bin_window;
             gdk_event.count = 0;
             gdk_event.area.x = 0;
             gdk_event.area.y = 0;
@@ -3064,6 +3066,8 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
             gtk_pizza_set_clear( pizza, old_clear );
 */
             GdkEventExpose gdk_event;
+            gdk_event.type = GDK_EXPOSE;
+            gdk_event.window = GTK_PIZZA(m_wxwindow)->bin_window;
             gdk_event.count = 0;
             gdk_event.area.x = rect->x;
             gdk_event.area.y = rect->y;
