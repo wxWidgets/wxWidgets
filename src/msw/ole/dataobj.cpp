@@ -474,7 +474,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
     || ( defined(__MWERKS__) && defined(__WXMSW__) )
                         size = std::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
 #else
-                        size = ::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
+                        size = wxWcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
 #endif
                         break;
 #endif
