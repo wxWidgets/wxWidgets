@@ -107,7 +107,7 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_SET_FOCUS               (wxStyledTextCtrl::OnGainFocus)
     EVT_SYS_COLOUR_CHANGED      (wxStyledTextCtrl::OnSysColourChanged)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
-    EVT_MENU_RANGE              (-1, -1, wxStyledTextCtrl::OnMenu)
+    EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
     EVT_LISTBOX_DCLICK          (-1, wxStyledTextCtrl::OnListBox)
 END_EVENT_TABLE()
 
