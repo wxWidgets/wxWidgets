@@ -494,7 +494,7 @@ void wxGridCellTextEditor::Create(wxWindow* parent,
     m_control = new wxTextCtrl(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize
 #if defined(__WXMSW__)
-                               , wxTE_MULTILINE | wxTE_NO_VSCROLL // necessary ???
+                               , wxTE_MULTILINE | wxTE_NO_VSCROLL | wxTE_AUTO_SCROLL
 #endif
                               );
 
@@ -5286,7 +5286,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                        event.ControlDown()) &&
                      ((isalnum((int)event.KeyCode()) &&
                        (event.KeyCode() < 256 && event.KeyCode() >= 0)) ||
-                      event.KeyCode() == WXK_F2) &&
+                      event.KeyCode() == WXK_F2 || event.KeyCode() == WXK_SPACE) &&
                      !IsCellEditControlEnabled() &&
                      CanEnableCellControl() )
                 {
