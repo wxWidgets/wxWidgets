@@ -201,6 +201,7 @@ public:
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
+    virtual void SetSize(const wxRect& rect);
 
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
 
@@ -1004,10 +1005,12 @@ public:
     void RegisterDataType(const wxString& typeName,
                           wxGridCellRenderer* renderer,
                           wxGridCellEditor* editor);
-    wxGridCellEditor* GetDefaultEditorForCell(int row, int col);
-    wxGridCellRenderer* GetDefaultRendererForCell(int row, int col);
-    wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName);
-    wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName);
+    wxGridCellEditor* GetDefaultEditorForCell(int row, int col) const;
+    wxGridCellEditor* GetDefaultEditorForCell(const wxGridCellCoords& c) const
+        { return GetDefaultEditorForCell(c.GetRow(), c.GetCol()); }
+    wxGridCellRenderer* GetDefaultRendererForCell(int row, int col) const;
+    wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName) const;
+    wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName) const;
 
 
 
@@ -1170,9 +1173,6 @@ public:
            wxGRID_CHECKBOX,
            wxGRID_CHOICE,
            wxGRID_COMBOBOX };
-
-    // for wxGridCellBoolEditor
-    wxWindow *GetGridWindow() const;
 
 protected:
     bool m_created;

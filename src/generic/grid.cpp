@@ -468,6 +468,32 @@ void wxGridCellTextEditor::PaintBackground(const wxRect& WXUNUSED(rectCell),
     // flicker
 }
 
+void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
+{
+    wxRect rect(rectOrig);
+
+    // Make the edit control large enough to allow for internal
+    // margins
+    //
+    // TODO: remove this if the text ctrl sizing is improved esp. for
+    // unix
+    //
+#if defined(__WXGTK__)
+    rect.Inflate(rect.x ? 1 : 0, rect.y ? 1 : 0);
+#else // !GTK
+    int extra = row && col ? 2 : 1;
+#if defined(__WXMOTIF__)
+    extra *= 2;
+#endif
+    rect.SetLeft( wxMax(0, rect.x - extra) );
+    rect.SetTop( wxMax(0, rect.y - extra) );
+    rect.SetRight( rect.GetRight() + 2*extra );
+    rect.SetBottom( rect.GetBottom() + 2*extra );
+#endif // GTK/!GTK
+
+    wxGridCellEditor::SetSize(rect);
+}
+
 void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     wxASSERT_MSG(m_control,
@@ -582,10 +608,10 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
 
 void wxGridCellBoolEditor::Show(bool show, wxGridCellAttr *attr)
 {
-    wxGridCellEditor::Show(show, attr);
+    m_control->Show(show);
+
     if ( show )
     {
-        // VZ: normally base class already does it, but it doesn't work (FIXME)
         wxColour colBg = attr ? attr->GetBackgroundColour() : *wxLIGHT_GREY;
         CBox()->SetBackgroundColour(colBg);
     }
@@ -4470,6 +4496,12 @@ void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
 
 void wxGrid::DrawHighlight(wxDC& dc)
 {
+    if ( IsCellEditControlEnabled() )
+    {
+        // don't show highlight when the edit control is shown
+        return;
+    }
+
     // if the active cell was repainted, repaint its highlight too because it
     // might have been damaged by the grid lines
     size_t count = m_cellsExposed.GetCount();
@@ -4856,11 +4888,6 @@ bool wxGrid::IsCellEditControlEnabled() const
     return m_cellEditCtrlEnabled ? !IsCurrentCellReadOnly() : FALSE;
 }
 
-wxWindow *wxGrid::GetGridWindow() const
-{
-    return m_gridWin;
-}
-
 void wxGrid::ShowCellEditControl()
 {
     if ( IsCellEditControlEnabled() )
@@ -4877,58 +4904,22 @@ void wxGrid::ShowCellEditControl()
 
             // convert to scrolled coords
             //
-            int left, top, right, bottom;
-            CalcScrolledPosition( rect.GetLeft(), rect.GetTop(), &left, &top );
-            CalcScrolledPosition( rect.GetRight(), rect.GetBottom(), &right, &bottom );
+            CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+
+            // done in PaintBackground()
+#if 0
+            // erase the highlight and the cell contents because the editor
+            // might not cover the entire cell
+            wxClientDC dc( m_gridWin );
+            PrepareDC( dc );
+            dc.SetBrush(*wxLIGHT_GREY_BRUSH); //wxBrush(attr->GetBackgroundColour(), wxSOLID));
+            dc.SetPen(*wxTRANSPARENT_PEN);
+            dc.DrawRectangle(rect);
+#endif // 0
 
             // cell is shifted by one pixel
-            left--;
-            top--;
-            right--;
-            bottom--;
-
-            // Make the edit control large enough to allow for internal
-            // margins
-            //
-            // TODO: remove this if the text ctrl sizing is improved esp. for
-            // unix
-            //
-            int extra;
-#if defined(__WXMOTIF__)
-            if ( row == 0  || col == 0 )
-            {
-                extra = 2;
-            }
-            else
-            {
-                extra = 4;
-            }
-#else
-            if ( row == 0  || col == 0 )
-            {
-                extra = 1;
-            }
-            else
-            {
-                extra = 2;
-            }
-#endif
-
-#if defined(__WXGTK__)
-            int top_diff = 0;
-            int left_diff = 0;
-            if (left != 0) left_diff++;
-            if (top != 0) top_diff++;
-            rect.SetLeft( left + left_diff );
-            rect.SetTop( top + top_diff );
-            rect.SetRight( rect.GetRight() - left_diff );
-            rect.SetBottom( rect.GetBottom() - top_diff );
-#else
-            rect.SetLeft( wxMax(0, left - extra) );
-            rect.SetTop( wxMax(0, top - extra) );
-            rect.SetRight( rect.GetRight() + 2*extra );
-            rect.SetBottom( rect.GetBottom() + 2*extra );
-#endif
+            rect.x--;
+            rect.y--;
 
             wxGridCellAttr* attr = GetCellAttr(row, col);
             wxGridCellEditor* editor = attr->GetEditor(GetDefaultEditorForCell(row, col));
@@ -4939,6 +4930,7 @@ void wxGrid::ShowCellEditControl()
             }
 
             editor->SetSize( rect );
+
             editor->Show( TRUE, attr );
             editor->BeginEdit(row, col, this);
             attr->DecRef();
@@ -6190,19 +6182,20 @@ void wxGrid::RegisterDataType(const wxString& typeName,
 }
 
 
-wxGridCellEditor* wxGrid::GetDefaultEditorForCell(int row, int col)
+wxGridCellEditor* wxGrid::GetDefaultEditorForCell(int row, int col) const
 {
     wxString typeName = m_table->GetTypeName(row, col);
     return GetDefaultEditorForType(typeName);
 }
 
-wxGridCellRenderer* wxGrid::GetDefaultRendererForCell(int row, int col)
+wxGridCellRenderer* wxGrid::GetDefaultRendererForCell(int row, int col) const
 {
     wxString typeName = m_table->GetTypeName(row, col);
     return GetDefaultRendererForType(typeName);
 }
 
-wxGridCellEditor* wxGrid::GetDefaultEditorForType(const wxString& typeName)
+wxGridCellEditor*
+wxGrid::GetDefaultEditorForType(const wxString& typeName) const
 {
     int index = m_typeRegistry->FindDataType(typeName);
     if (index == -1) {
@@ -6213,7 +6206,8 @@ wxGridCellEditor* wxGrid::GetDefaultEditorForType(const wxString& typeName)
     return m_typeRegistry->GetEditor(index);
 }
 
-wxGridCellRenderer* wxGrid::GetDefaultRendererForType(const wxString& typeName)
+wxGridCellRenderer*
+wxGrid::GetDefaultRendererForType(const wxString& typeName) const
 {
     int index = m_typeRegistry->FindDataType(typeName);
     if (index == -1) {
