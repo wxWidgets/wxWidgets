@@ -655,8 +655,8 @@ be called to reenable window redrawing. Calls to these two functions may be
 nested.
 
 This method is useful for visual appearance optimization (for example, it
-is a good idea to use it before inserting large amount of text into a
-wxTextCtrl under wxGTK) but is not implemented on all platforms nor for all
+is a good idea to use it before doing many large text insertions in a row into
+a wxTextCtrl under wxGTK) but is not implemented on all platforms nor for all
 controls so it is mostly just a hint to wxWidgets and not a mandatory
 directive.
 
