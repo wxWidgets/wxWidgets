@@ -68,6 +68,7 @@ UNICODE!
     codecs first and then pass the unicode string to the wxPython
     method.
 
+Added wxListCtrlAutoWidthMixin from Erik Westra.
 
 
 

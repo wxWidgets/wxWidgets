@@ -11,7 +11,7 @@
 #----------------------------------------------------------------------------
 
 from wxPython.wx import *
-from wxPython.lib.mixins.listctrl import wxColumnSorterMixin
+from wxPython.lib.mixins.listctrl import wxColumnSorterMixin, wxListCtrlAutoWidthMixin
 
 #---------------------------------------------------------------------------
 
@@ -74,6 +74,15 @@ musicdata = {
 
 import images
 
+
+class TestListCtrl(wxListCtrl, wxListCtrlAutoWidthMixin):
+    def __init__(self, parent, ID, pos=wxDefaultPosition,
+                 size=wxDefaultSize, style=0):
+        wxListCtrl.__init__(self, parent, ID, pos, size, style)
+        wxListCtrlAutoWidthMixin.__init__(self)
+
+
+
 class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1, style=wxWANTS_CHARS)
@@ -91,7 +100,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         #self.sm_up = self.il.AddIcon(wxIconFromXPMData(images.getSmallUpArrowData()))
         #self.sm_dn = self.il.AddIcon(wxIconFromXPMData(images.getSmallDnArrowData()))
 
-        self.list = wxListCtrl(self, tID,
+        self.list = TestListCtrl(self, tID,
                                style=wxLC_REPORT|wxSUNKEN_BORDER)#|wxLC_VRULES|wxLC_HRULES)
         self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
 
@@ -99,7 +108,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
 
         if 0:
-            # for normal simple columns, you can add them like this:
+            # for normal, simple columns, you can add them like this:
             self.list.InsertColumn(0, "Artist")
             self.list.InsertColumn(1, "Title", wxLIST_FORMAT_RIGHT)
             self.list.InsertColumn(2, "Genre")
