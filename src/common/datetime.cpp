@@ -1901,6 +1901,10 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                 fmt = _T("%03d");
                 break;
 
+            case _T('w'):               // week day as number has only one
+                fmt = _T("%d");
+                break;
+
             default:
                 // it's either another valid format specifier in which case
                 // the format is "%02d" (for all the rest) or we have the
