@@ -1253,18 +1253,23 @@ wxString wxLocale::GetSystemEncodingName()
     char *alang = nl_langinfo(CODESET);
     setlocale(LC_CTYPE, oldLocale);
     free(oldLocale);
-    if (alang)
+
+    if ( alang )
     {
-#ifdef __SOLARIS__
+        // 7 bit ASCII encoding has several alternative names which we should
+        // recognize to avoid warnings about unrecognized encoding on each
+        // program startup
+
         // nl_langinfo() under Solaris returns 646 by default which stands for
-        // ISO-646, i.e. 7 bit ASCII and we should recognize it to avoid
-        // warnings about unrecognized encoding on each program startup
-        if ( strcmp(alang, "646") == 0 )
+        // ISO-646, i.e. 7 bit ASCII
+        //
+        // and recent glibc call it ANSI_X3.4-1968...
+        if ( strcmp(alang, "646") == 0 ||
+               strcmp(alang, "ANSI_X3.4-1968") == 0 )
         {
             encname = _T("US-ASCII");
         }
         else
-#endif // __SOLARIS__
         {
             encname = wxConvLibc.cMB2WX(alang);
         }
