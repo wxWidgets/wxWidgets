@@ -14,27 +14,29 @@ fi
 
 
 # **** Make a directory to build up a distribution tree
-mkdir _distrib_bld
-mkdir _distrib_bld/wxPythonDocs-$1
+
+DEST=wxPython-$1/docs
+
+mkdir -p _distrib_bld/$DEST
 cd _distrib_bld
-mkdir wxPythonDocs-$1/wx
-mkdir wxPythonDocs-$1/ogl
+mkdir $DEST/wx
+mkdir $DEST/ogl
 
 WXDIR=../..
 
 # **** Build the docs using tex2rtf
-cp $WXDIR/docs/latex/wx/*.gif wxPythonDocs-$1/wx
-$WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/docs/latex/wx/manual.tex wxPythonDocs-$1/wx/wx.htm -twice -html
-cp wxPythonDocs-$1/wx/wx.htm wxPythonDocs-$1/wx/index.htm
+cp $WXDIR/docs/latex/wx/*.gif $DEST/wx
+$WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/docs/latex/wx/manual.tex $DEST/wx/wx.htm -twice -html
+cp $DEST/wx/wx.htm $DEST/wx/index.htm
 
-cp $WXDIR/contrib/docs/latex/ogl/*.gif wxPythonDocs-$1/ogl
-cp $WXDIR/contrib/docs/latex/ogl/*.bmp wxPythonDocs-$1/ogl
-$WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/contrib/docs/latex/ogl/ogl.tex wxPythonDocs-$1/ogl/ogl.htm -twice -html
-cp wxPythonDocs-$1/ogl/ogl.htm wxPythonDocs-$1/ogl/index.htm
+cp $WXDIR/contrib/docs/latex/ogl/*.gif $DEST/ogl
+cp $WXDIR/contrib/docs/latex/ogl/*.bmp $DEST/ogl
+$WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/contrib/docs/latex/ogl/ogl.tex $DEST/ogl/ogl.htm -twice -html
+cp $DEST/ogl/ogl.htm $DEST/ogl/index.htm
 
 
 # **** zip the docs into "books"
-cd wxPythonDocs-$1
+cd $DEST
 cd wx
 zip ../wx.zip *
 cd ..
@@ -46,11 +48,11 @@ cd ..
 rm -r ogl
 
 cd ..
-cp ../distrib/viewdocs.py wxPythonDocs-$1
-cp ../distrib/README.viewdocs.txt wxPythonDocs-$1/README.txt
+cp ../distrib/viewdocs.py $DEST
+cp ../distrib/README.viewdocs.txt $DEST/README.txt
 
 rm -f ../dist/wxPythonDocs-$1.tar.gz
-tar cvf ../dist/wxPythonDocs-$1.tar wxPythonDocs-$1
+tar cvf ../dist/wxPythonDocs-$1.tar $DEST
 gzip -9 ../dist/wxPythonDocs-$1.tar
 
 
