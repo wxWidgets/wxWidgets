@@ -53,7 +53,7 @@
 #include <windows.h>
 #endif
 
-#ifndef __WXGTK__
+#ifdef __WXMSW__
 #include "wx/help.h"
 #endif
 
@@ -113,7 +113,7 @@ wxResourceManager::wxResourceManager():
   m_propertyWindowSize.width = 300;
   m_propertyWindowSize.height = 300;
 
-#ifndef __WXGTK__
+#ifdef __WXMSW__
   m_helpController = NULL;
 #endif
 
@@ -126,7 +126,7 @@ wxResourceManager::~wxResourceManager()
   sm_currentResourceManager = NULL;
   SaveOptions();
 
-#ifndef __WXGTK__
+#ifdef __WXMSW__
   if (m_helpController)
   {
     m_helpController->Quit();
@@ -159,7 +159,7 @@ bool wxResourceManager::Initialize()
 
   LoadOptions();
 
-#ifndef __WXGTK__
+#ifdef __WXMSW__
   m_helpController = new wxHelpController;
   m_helpController->Initialize("dialoged");
 #endif
@@ -2047,7 +2047,7 @@ void wxResourceEditorFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 
 void wxResourceEditorFrame::OnContents(wxCommandEvent& WXUNUSED(event))
 {
-#ifndef __WXGTK__
+#ifdef __WXMSW__
       wxBeginBusyCursor();
       manager->GetHelpController()->LoadFile();
       manager->GetHelpController()->DisplayContents();
@@ -2220,7 +2220,7 @@ bool EditorToolBar::OnLeftClick(int toolIndex, bool toggled)
     }
     case TOOLBAR_HELP:
     {
-#ifndef __WXGTK__
+#ifdef __WXMSW__
       wxBeginBusyCursor();
       manager->GetHelpController()->LoadFile();
       manager->GetHelpController()->DisplayContents();
@@ -2334,19 +2334,4 @@ void EditorToolBar::OnMouseEnter(int toolIndex)
   }
   else frame->SetStatusText("");
 }
-
-void EditorToolBar::OnPaint(wxPaintEvent& event)
-{
-#ifndef __WXGTK__
-  wxToolBar::OnPaint(event);
-
-  wxPaintDC dc(this);
-  int w, h;
-  GetSize(&w, &h);
-  dc.SetPen(wxBLACK_PEN);
-  dc.SetBrush(wxTRANSPARENT_BRUSH);
-  dc.DrawLine(0, h-1, w, h-1);
-#endif
-}
-
 

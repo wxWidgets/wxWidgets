@@ -286,7 +286,9 @@ public:
    inline wxResourceEditorControlList *GetEditorControlList() const { return m_editorControlList; }
    inline wxList& GetSelections() { return m_selections; }
    inline wxMenu *GetPopupMenu() const { return m_popupMenu; }
-//   inline wxHelpController *GetHelpController() const { return m_helpController; }
+#ifdef __WXMSW__
+   inline wxHelpController *GetHelpController() const { return m_helpController; }
+#endif
 
    inline void Modify(bool mod = TRUE) { m_modified = mod; }
    inline bool Modified() const { return m_modified; }
@@ -310,7 +312,9 @@ public:
 
 // Member variables
  protected:
-//   wxHelpController*                m_helpController;
+#ifdef __WXMSW__
+   wxHelpController*                m_helpController;
+#endif
    wxResourceTableWithSaving        m_resourceTable;
    wxFrame*                         m_editorFrame;
    wxResourceEditorScrolledWindow*  m_editorPanel;
@@ -410,7 +414,6 @@ public:
             long style = wxTB_HORIZONTAL);
   bool OnLeftClick(int toolIndex, bool toggled);
   void OnMouseEnter(int toolIndex);
-  void OnPaint(wxPaintEvent& event);
 
 DECLARE_EVENT_TABLE()
 };
