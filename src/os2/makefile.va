@@ -25,6 +25,7 @@ LIBTARGET=$(WXLIB)
 COMTEMPTGT1=$(WXDIR)\lib\wxcom1.lib
 COMTEMPTGT2=$(WXDIR)\lib\wxcom2.lib
 COMTEMPTGT3=$(WXDIR)\lib\wxcom3.lib
+COMTEMPTGT4=$(WXDIR)\lib\wxcom4.lib
 GENTEMPTGT=$(WXDIR)\lib\wxgen.lib
 NONESTEMPTGT=$(WXDIR)\lib\wxnones.lib
 OS2TEMPTGT1=$(WXDIR)\lib\wxos21.lib
@@ -295,6 +296,7 @@ COMMONOBJS = \
   ..\common\$D\sckfile.obj \
   ..\common\$D\sckipc.obj \
   ..\common\$D\sckstrm.obj \
+  ..\common\$D\settcmn.obj \
   ..\common\$D\sizer.obj \
   ..\common\$D\socket.obj \
   ..\common\$D\statbar.obj \
@@ -430,6 +432,7 @@ COMLIBOBJS3 = \
   sckfile.obj \
   sckipc.obj \
   sckstrm.obj \
+  settcmn.obj \
   sizer.obj \
   socket.obj \
   statbar.obj \
@@ -458,7 +461,9 @@ COMLIBOBJS3 = \
   wxchar.obj \
   wxexpr.obj \
   xpmdecod.obj \
-  y_tab.obj \
+  y_tab.obj
+
+COMLIBOBJS4 = \
   zipstrm.obj \
   zstream.obj
 
@@ -800,6 +805,7 @@ $(COMLIBOBJS3):
   copy ..\common\$D\sckfile.obj
   copy ..\common\$D\sckipc.obj
   copy ..\common\$D\sckstrm.obj
+  copy ..\common\$D\settcmn.obj
   copy ..\common\$D\sizer.obj
   copy ..\common\$D\socket.obj
   copy ..\common\$D\statbar.obj
@@ -829,6 +835,8 @@ $(COMLIBOBJS3):
   copy ..\common\$D\wxexpr.obj
   copy ..\common\$D\xpmdecod.obj
   copy ..\common\$D\y_tab.obj
+
+$(COMLIBOBJS4):
   copy ..\common\$D\zipstrm.obj
   copy ..\common\$D\zstream.obj
 
@@ -1038,6 +1046,13 @@ $(WXDIR)\lib\wxcom3.lib: $(COMLIBOBJS3)
     $**;
 <<
 
+$(WXDIR)\lib\wxcom4.lib: $(COMLIBOBJS4)
+ -touch $(WXDIR)\lib\wxcom4.lib
+ -del $(WXDIR)\lib\wxcom4.lib
+ ilib $(LIBFLAGS) $@ @<<
+    $**;
+<<
+
 $(WXDIR)\lib\wxgen.lib: $(GENLIBOBJS)
  -touch $(WXDIR)\lib\wxgen.lib
  -del $(WXDIR)\lib\wxgen.lib
@@ -1079,6 +1094,7 @@ $(WXDIR)\lib\wx.lib: \
   $(COMTEMPTGT1) \
   $(COMTEMPTGT2) \
   $(COMTEMPTGT3) \
+  $(COMTEMPTGT4) \
   $(GENTEMPTGT) \
   $(HTMLTEMPTGT) \
   $(NONESTEMPTGT) \
@@ -1093,6 +1109,7 @@ $(WXDIR)\lib\wx.lib: \
  del $(COMTEMPTGT1)
  del $(COMTEMPTGT2)
  del $(COMTEMPTGT3)
+ del $(COMTEMPTGT4)
  del $(GENTEMPTGT)
  del $(HTMLTEMPTGT)
  del $(NONESTEMPTGT)

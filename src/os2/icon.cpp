@@ -101,6 +101,8 @@ void wxIcon::CopyFromBitmap(
 )
 {
     wxMask*                         pMask = rBmp.GetMask();
+    HBITMAP                         hBmp = NULLHANDLE;
+    HBITMAP                         hBmpMask = NULLHANDLE;
     HBITMAP                         hOldBitmap = NULLHANDLE;
     ERRORID                         vError;
     wxString                        sError;
@@ -117,13 +119,7 @@ void wxIcon::CopyFromBitmap(
                           );
     }
 
-    POINTERINFO                        vIconInfo;
-
-    memset(&vIconInfo, '\0', sizeof(POINTERINFO));
-    vIconInfo.fPointer = FALSE;  // we want an icon, not a pointer
-    vIconInfo.hbmPointer = (HBITMAP) pMask->GetMaskBitmap();
-    vIconInfo.hbmColor = GetHbitmapOf(rBmp);
-
+    BITMAPINFOHEADER2               vHeader;
     SIZEL                           vSize = {0, 0};
     DEVOPENSTRUC                    vDop = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
     HDC                             hDCSrc = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
@@ -133,22 +129,85 @@ void wxIcon::CopyFromBitmap(
     POINTL                          vPoint[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight(),
                                                   0, 0, rBmp.GetWidth(), rBmp.GetHeight()
                                                 };
-    if ((hOldBitmap = ::GpiSetBitmap(hPSSrc, (HBITMAP) pMask->GetMaskBitmap())) == HBM_ERROR)
+    POINTL                          vPointMask[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight(),
+                                                      0, 0, rBmp.GetWidth(), rBmp.GetHeight()
+                                                    };
+
+    POINTERINFO                     vIconInfo;
+
+    memset(&vIconInfo, '\0', sizeof(POINTERINFO));
+    vIconInfo.fPointer = FALSE;  // we want an icon, not a pointer
+
+    memset(&vHeader, '\0', 16);
+    vHeader.cbFix           = 16;
+    vHeader.cx              = (ULONG)rBmp.GetWidth();
+    vHeader.cy              = (ULONG)rBmp.GetHeight();
+    vHeader.cPlanes         = 1L;
+    vHeader.cBitCount       = 24;
+
+    hBmp = ::GpiCreateBitmap( hPSDst
+                             ,&vHeader
+                             ,0L
+                             ,NULL
+                             ,NULL
+                            );
+
+    if ((hOldBitmap = ::GpiSetBitmap(hPSDst, hBmp)) == HBM_ERROR)
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
     }
-    if ((hOldBitmap = ::GpiSetBitmap(hPSDst, (HBITMAP) vIconInfo.hbmColor)) == HBM_ERROR)
+    if ((hOldBitmap = ::GpiSetBitmap(hPSSrc, (HBITMAP)rBmp.GetHBITMAP())) == HBM_ERROR)
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
     }
-    ::GpiSetBitmapId(hPSDst, (HBITMAP) vIconInfo.hbmColor, 1L);
     if ((lHits = ::GpiBitBlt( hPSDst
                              ,hPSSrc
                              ,4L
                              ,vPoint
-                             ,ROP_SRCAND
+                             ,ROP_SRCCOPY
+                             ,BBO_IGNORE
+                            )) == GPI_ERROR)
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+    }
+    if ((hOldBitmap = ::GpiSetBitmap(hPSDst, NULLHANDLE)) == HBM_ERROR)
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+    }
+    if ((hOldBitmap = ::GpiSetBitmap(hPSSrc, NULLHANDLE)) == HBM_ERROR)
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+    }
+    vIconInfo.hbmColor = hBmp;
+
+    vHeader.cy              = (ULONG)rBmp.GetHeight();
+    hBmpMask = ::GpiCreateBitmap( hPSDst
+                                 ,&vHeader
+                                 ,0L
+                                 ,NULL
+                                 ,NULL
+                                );
+
+    if ((hOldBitmap = ::GpiSetBitmap(hPSDst, hBmpMask)) == HBM_ERROR)
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+    }
+    if ((hOldBitmap = ::GpiSetBitmap(hPSSrc, (HBITMAP)pMask->GetMaskBitmap())) == HBM_ERROR)
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+    }
+    if ((lHits = ::GpiBitBlt( hPSDst
+                             ,hPSSrc
+                             ,4L
+                             ,vPointMask
+                             ,ROP_SRCCOPY
                              ,BBO_IGNORE
                             )) == GPI_ERROR)
     {
@@ -166,12 +225,7 @@ void wxIcon::CopyFromBitmap(
         sError = wxPMErrorToStr(vError);
     }
 
-    ::GpiSetBitmap(hPSSrc, NULL);
-    ::GpiSetBitmap(hPSDst, NULL);
-    ::GpiDestroyPS(hPSSrc);
-    ::GpiDestroyPS(hPSDst);
-    ::DevCloseDC(hDCSrc);
-    ::DevCloseDC(hDCDst);
+    vIconInfo.hbmPointer = hBmpMask;
 
     HICON                           hIcon = ::WinCreatePointerIndirect( HWND_DESKTOP
                                                                        ,&vIconInfo
@@ -198,6 +252,12 @@ void wxIcon::CopyFromBitmap(
         //
         delete pMask;
     }
+    ::GpiSetBitmap(hPSSrc, NULL);
+    ::GpiSetBitmap(hPSDst, NULL);
+    ::GpiDestroyPS(hPSSrc);
+    ::GpiDestroyPS(hPSDst);
+    ::DevCloseDC(hDCSrc);
+    ::DevCloseDC(hDCDst);
 } // end of wxIcon::CopyFromBitmap
 
 bool wxIcon::LoadFile(

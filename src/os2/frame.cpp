@@ -1146,6 +1146,11 @@ bool wxFrame::HandleMenuSelect(
             vEvent.SetEventObject(this);
             GetEventHandler()->ProcessEvent(vEvent); // return value would be ignored by PM
         }
+        else
+        {
+            DoGiveHelp(wxEmptyString, FALSE);
+            return FALSE;
+        }
     }
     return TRUE;
 } // end of wxFrame::HandleMenuSelect

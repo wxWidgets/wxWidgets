@@ -2452,6 +2452,8 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxFrameBase::OnIdle(wxIdleEvent&)
       OnIdle__11wxFrameBaseFR11wxIdleEvent
+      ;wxFrameBase::PushStatusText(const wxString&,int)
+      PushStatusText__11wxFrameBaseFRC8wxStringi
       ;wxFrameBase::DeleteAllBars()
       DeleteAllBars__11wxFrameBaseFv
       ;wxFrameBase::SetMenuBar(wxMenuBar*)
@@ -2478,6 +2480,8 @@ EXPORTS
       ProcessCommand__11wxFrameBaseFi
       ;wxFrameBase::SetStatusWidths(int,const int*)
       SetStatusWidths__11wxFrameBaseFiPCi
+      ;wxFrameBase::PopStatusText(int)
+      PopStatusText__11wxFrameBaseFi
       ;wxFrameBase::wxFrameBase()
       __ct__11wxFrameBaseFv
       ;wxFrameBase::CreateToolBar(long,int,const wxString&)
@@ -2492,6 +2496,8 @@ EXPORTS
       __dt__11wxFrameBaseFv
       ;wxFrameBase::AttachMenuBar(wxMenuBar*)
       AttachMenuBar__11wxFrameBaseFP9wxMenuBar
+      ;wxFrameBase::DoGiveHelp(const wxString&,unsigned long)
+      DoGiveHelp__11wxFrameBaseFRC8wxStringUl
       __vft11wxFrameBase8wxObject
       ;wxFrameBase::SetStatusText(const wxString&,int)
       SetStatusText__11wxFrameBaseFRC8wxStringi
@@ -4962,6 +4968,14 @@ EXPORTS
       __vft14wxSocketStream13wxInputStream12wxStreamBase
       ;wxSocketOutputStream::~wxSocketOutputStream()
       __dt__20wxSocketOutputStreamFv
+  ;From object file:  ..\common\settcmn.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxSystemSettings::ms_screen
+      ms_screen__16wxSystemSettings
+      ;wxSystemSettings::SetScreen(wxSystemScreen)
+      SetScreen__16wxSystemSettingsF14wxSystemScreen
+      ;wxSystemSettings::GetScreen()
+      GetScreen__16wxSystemSettingsFv
   ;From object file:  ..\common\sizer.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSizerItem::wxSizerItem(int,int,int,int,int,wxObject*)
@@ -5244,25 +5258,40 @@ EXPORTS
       GetLocal__12wxSocketBaseCFR13wxSockAddress
   ;From object file:  ..\common\statbar.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxStatusBarBase::PopStatusText(int)
+      PopStatusText__15wxStatusBarBaseFi
       ;wxStatusBarBase::FreeWidths()
       FreeWidths__15wxStatusBarBaseFv
       __vft15wxStatusBarBase8wxObject
+      ;wxStatusBarBase::GetStatusStack(int) const
+      GetStatusStack__15wxStatusBarBaseCFi
       ;wxStatusBarBase::InitWidths()
       InitWidths__15wxStatusBarBaseFv
       ;wxStatusBar::sm_classwxStatusBar
       sm_classwxStatusBar__11wxStatusBar
       ;wxStatusBarBase::~wxStatusBarBase()
       __dt__15wxStatusBarBaseFv
+      ;wxStatusBarBase::InitStacks()
+      InitStacks__15wxStatusBarBaseFv
+      ;wxwxListStringNode::DeleteData()
+      DeleteData__18wxwxListStringNodeFv
       ;wxStatusBarBase::SetStatusWidths(int,const int*)
       SetStatusWidths__15wxStatusBarBaseFiPCi
+      ;wxStatusBarBase::GetOrCreateStatusStack(int)
+      GetOrCreateStatusStack__15wxStatusBarBaseFi
       ;wxStatusBarBase::CalculateAbsWidths(int) const
       CalculateAbsWidths__15wxStatusBarBaseCFi
       ;wxStatusBarBase::wxStatusBarBase()
       __ct__15wxStatusBarBaseFv
       ;wxStatusBarBase::SetFieldsCount(int,const int*)
       SetFieldsCount__15wxStatusBarBaseFiPCi
+      ;wxStatusBarBase::PushStatusText(const wxString&,int)
+      PushStatusText__15wxStatusBarBaseFRC8wxStringi
+      ;wxStatusBarBase::FreeStacks()
+      FreeStacks__15wxStatusBarBaseFv
       ;wxConstructorForwxStatusBar()
       wxConstructorForwxStatusBar__Fv
+      __vft18wxwxListStringNode10wxNodeBase
   ;From object file:  ..\common\strconv.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxStrConvModule::sm_classwxStrConvModule
@@ -7180,6 +7209,24 @@ EXPORTS
       __vft16wxZipInputStream12wxStreamBase
       ;wxZipInputStream::Eof() const
       Eof__16wxZipInputStreamCFv
+  ;From object file:  ..\common\zstream.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxZlibInputStream::wxZlibInputStream(wxInputStream&)
+      __ct__17wxZlibInputStreamFR13wxInputStream
+      ;wxZlibOutputStream::wxZlibOutputStream(wxOutputStream&,int)
+      __ct__18wxZlibOutputStreamFR14wxOutputStreami
+      ;wxZlibInputStream::OnSysRead(void*,unsigned int)
+      OnSysRead__17wxZlibInputStreamFPvUi
+      ;wxZlibOutputStream::Sync()
+      Sync__18wxZlibOutputStreamFv
+      ;wxZlibOutputStream::OnSysWrite(const void*,unsigned int)
+      OnSysWrite__18wxZlibOutputStreamFPCvUi
+      __vft18wxZlibOutputStream12wxStreamBase
+      ;wxZlibInputStream::~wxZlibInputStream()
+      __dt__17wxZlibInputStreamFv
+      ;wxZlibOutputStream::~wxZlibOutputStream()
+      __dt__18wxZlibOutputStreamFv
+      __vft17wxZlibInputStream12wxStreamBase
   ;From object file:  ..\generic\busyinfo.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxBusyInfo::~wxBusyInfo()
@@ -14712,6 +14759,8 @@ EXPORTS
       wxGetMousePosition__FPiT1
       ;wxDrawBorder(unsigned long,_RECTL&,unsigned long)
       wxDrawBorder__FUlR6_RECTLT1
+      ;wxShutdown(wxShutdownFlags)
+      wxShutdown__F15wxShutdownFlags
       ;wxPathExists(const wxString&)
       wxPathExists__FRC8wxString
       ;wxGetWindowText(unsigned long)

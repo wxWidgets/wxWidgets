@@ -1189,15 +1189,21 @@ void wxDC::DoDrawIcon(
 , wxCoord                           vY
 )
 {
-    vY = OS2Y(vY,rIcon.GetHeight());
-    wxCHECK_RET( rIcon.Ok(), wxT("invalid icon in DrawIcon") );
+    //
+    // Need to copy back into a bitmap.  ::WinDrawPointer uses device coords
+    // and I don't feel like figuring those out for scrollable windows so
+    // just convert to a bitmap then let the DoDrawBitmap routing display it
+    //
+    if (rIcon.IsXpm())
+    {
+        DoDrawBitmap(rIcon.GetXpmSrc(), vX, vY, TRUE);
+    }
+    else
+    {
+        wxBitmap                        vBitmap(rIcon);
 
-    ::WinDrawPointer( GetHPS()
-                     ,vX
-                     ,vY
-                     ,(HPOINTER)GetHiconOf(rIcon)
-                     ,DP_NORMAL
-                    );
+        DoDrawBitmap(vBitmap, vX, vY, FALSE);
+    }
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX + rIcon.GetWidth(), vY + rIcon.GetHeight());
 } // end of wxDC::DoDrawIcon
@@ -1366,28 +1372,28 @@ void wxDC::DoDrawBitmap(
                     for (j = 0; j < rBmp.GetWidth(); j++)
                     {
                         // Byte 1
-                        if (*pucDataMask == 0x00) // leave bitmap byte alone
+                        if (*pucDataMask == 0xFF) // leave bitmap byte alone
                             pucData++;
                         else
                         {
-                            *pucData = (unsigned char)lColor;
+                            *pucData = ((unsigned char)(lColor >> 16));
                             pucData++;
                         }
                         // Byte 2
-                        if (*(pucDataMask + 1) == 0x00) // leave bitmap byte alone
+                        if (*(pucDataMask + 1) == 0xFF) // leave bitmap byte alone
                             pucData++;
                         else
                         {
-                            *pucData = (unsigned char)lColor >> 8;
+                            *pucData = ((unsigned char)(lColor >> 8));
                             pucData++;
                         }
 
                         // Byte 3
-                        if (*(pucDataMask + 2) == 0x00) // leave bitmap byte alone
+                        if (*(pucDataMask + 2) == 0xFF) // leave bitmap byte alone
                             pucData++;
                         else
                         {
-                            *pucData = (unsigned char)lColor >> 16;
+                            *pucData = ((unsigned char)lColor);
                             pucData++;
                         }
                         pucDataMask += 3;
@@ -1398,7 +1404,6 @@ void wxDC::DoDrawBitmap(
                         pucDataMask++;
                     }
                 }
-
                 //
                 // Create a new bitmap
                 //
@@ -1440,8 +1445,8 @@ void wxDC::DoDrawBitmap(
         }
         else
         {
-            LONG                        lOldTextground = ::GpiQueryColor((HPS)GetHPS());
-            LONG                        lOldBackground = ::GpiQueryBackColor((HPS)GetHPS());
+            LONG                        lOldForeGround = ::GpiQueryColor((HPS)GetHPS());
+            LONG                        lOldBackGround = ::GpiQueryBackColor((HPS)GetHPS());
 
             if (m_textForegroundColour.Ok())
             {
@@ -1455,6 +1460,123 @@ void wxDC::DoDrawBitmap(
                                   ,m_textBackgroundColour.GetPixel()
                                  );
             }
+            //
+            // Need to alter bits in a mono bitmap to match the new
+            // background-foreground if it is different.
+            //
+            if (rBmp.IsMono() &&
+               ((m_textForegroundColour.GetPixel() != lOldForeGround) ||
+                (m_textBackgroundColour.GetPixel() != lOldBackGround)))
+            {
+                DEVOPENSTRUC        vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+                SIZEL               vSize = {0, 0};
+                HDC                 hDC   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+                HPS                 hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
+
+                int                 nBytesPerLine = rBmp.GetWidth() * 3;
+                int                 i, j;
+                LONG                lForeGround = m_textForegroundColour.GetPixel();
+                LONG                lBackGround = m_textBackgroundColour.GetPixel();
+                LONG                lScans;
+                HBITMAP             hOldBitmap = NULLHANDLE;
+                BITMAPINFO2         vInfo;
+                ERRORID             vError;
+                wxString            sError;
+
+
+                memset(&vInfo, '\0', 16);
+                vInfo.cbFix           = 16;
+                vInfo.cx              = (ULONG)rBmp.GetWidth();
+                vInfo.cy              = (ULONG)rBmp.GetHeight();
+                vInfo.cPlanes         = 1;
+                vInfo.cBitCount       = 24;
+
+                unsigned char*          pucBits;     // buffer that will contain the bitmap data
+                unsigned char*          pucData;     // pointer to use to traverse bitmap data
+
+                pucBits = new unsigned char[nBytesPerLine * rBmp.GetHeight()];
+                memset(pucBits, '\0', (nBytesPerLine * rBmp.GetHeight()));
+
+                if ((hOldBitmap = ::GpiSetBitmap(hPS, hBitmap)) == HBM_ERROR)
+                {
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                    return;
+                }
+                if ((lScans = ::GpiQueryBitmapBits( hPS
+                                                   ,0L
+                                                   ,(LONG)rBmp.GetHeight()
+                                                   ,(PBYTE)pucBits
+                                                   ,&vInfo
+                                                  )) == GPI_ALTERROR)
+                {
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                    return;
+                }
+                unsigned char           cOldRedFore   = (unsigned char)(lOldForeGround >> 16);
+                unsigned char           cOldGreenFore = (unsigned char)(lOldForeGround >> 8);
+                unsigned char           cOldBlueFore  = (unsigned char)lOldForeGround;
+
+                unsigned char           cOldRedBack   = (unsigned char)(lOldBackGround >> 16);
+                unsigned char           cOldGreenBack = (unsigned char)(lOldBackGround >> 8);
+                unsigned char           cOldBlueBack  = (unsigned char)lOldBackGround;
+
+                unsigned char           cRedFore   = (unsigned char)(lForeGround >> 16);
+                unsigned char           cGreenFore = (unsigned char)(lForeGround >> 8);
+                unsigned char           cBlueFore  = (unsigned char)lForeGround;
+
+                unsigned char           cRedBack   = (unsigned char)(lBackGround >> 16);
+                unsigned char           cGreenBack = (unsigned char)(lBackGround >> 8);
+                unsigned char           cBlueBack  = (unsigned char)lBackGround;
+
+                pucData = pucBits;
+                for (i = 0; i < rBmp.GetHeight(); i++)
+                {
+                    for (j = 0; j < rBmp.GetWidth(); j++)
+                    {
+                        unsigned char    cBmpRed   = *pucData;
+                        unsigned char    cBmpGreen = *(pucData + 1);
+                        unsigned char    cBmpBlue  = *(pucData + 2);
+
+                        if ((cBmpRed == cOldRedFore) &&
+                            (cBmpGreen == cOldGreenFore) &&
+                            (cBmpBlue == cOldBlueFore))
+                        {
+                            *pucData = cRedFore;
+                            pucData++;
+                            *pucData = cGreenFore;
+                            pucData++;
+                            *pucData = cBlueFore;
+                            pucData++;
+                        }
+                        else
+                        {
+                            *pucData = cRedBack;
+                            pucData++;
+                            *pucData = cGreenBack;
+                            pucData++;
+                            *pucData = cBlueBack;
+                            pucData++;
+                        }
+                    }
+                }
+                if ((lScans = ::GpiSetBitmapBits( hPS
+                                                 ,0L
+                                                 ,(LONG)rBmp.GetHeight()
+                                                 ,(PBYTE)pucBits
+                                                 ,&vInfo
+                                                )) == GPI_ALTERROR)
+                {
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                    return;
+                }
+                delete [] pucBits;
+                ::GpiSetBitmap(hPS, NULLHANDLE);
+                ::GpiDestroyPS(hPS);
+                ::DevCloseDC(hDC);
+            }
             ::GpiWCBitBlt( (HPS)GetHPS()
                           ,hBitmap
                           ,4
@@ -1463,8 +1585,8 @@ void wxDC::DoDrawBitmap(
                           ,BBO_IGNORE
                          );
             ::GpiSetBitmap((HPS)GetHPS(), hBitmapOld);
-            ::GpiSetColor((HPS)GetHPS(), lOldTextground);
-            ::GpiSetBackColor((HPS)GetHPS(), lOldBackground);
+            ::GpiSetColor((HPS)GetHPS(), lOldForeGround);
+            ::GpiSetBackColor((HPS)GetHPS(), lOldBackGround);
         }
     }
 } // end of wxDC::DoDrawBitmap

@@ -86,6 +86,7 @@ void wxBitmapRefData::Free()
 // this function should be called from all wxBitmap ctors
 void wxBitmap::Init()
 {
+    m_bIsMono = FALSE;
 } // end of wxBitmap::Init
 
 bool wxBitmap::CopyFromIconOrCursor(
@@ -113,9 +114,11 @@ bool wxBitmap::CopyFromIconOrCursor(
 
     pRefData->m_hBitmap = (WXHBITMAP)SIconInfo.hbmColor;
 
-    //
-    // No mask in the Info struct in OS/2
-    //
+    wxMask*                         pMask = new wxMask(SIconInfo.hbmPointer);
+
+    pMask->SetMaskBitmap(GetHBITMAP());
+    SetMask(pMask);
+
     return(TRUE);
 } // end of wxBitmap::CopyFromIconOrCursor
 
@@ -315,6 +318,12 @@ bool wxBitmap::Create(
     GetBitmapData()->m_nHeight = nH;
     GetBitmapData()->m_nDepth = nD;
 
+    //
+    // Xpms and bitmaps from other images can also be mono's, but only
+    // mono's need help changing their colors with MemDC changes
+    //
+    if (nD == 1)
+        m_bIsMono = TRUE;
     if (nD > 0)
     {
         DEVOPENSTRUC                vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
@@ -327,7 +336,7 @@ bool wxBitmap::Create(
         vHeader.cx        = nW;
         vHeader.cy        = nH;
         vHeader.cPlanes   = 1;
-        vHeader.cBitCount = nD;
+        vHeader.cBitCount = 24; //nD;
 
         hBmp = ::GpiCreateBitmap( hPS
                                  ,&vHeader
@@ -618,7 +627,6 @@ bool wxBitmap::CreateFromImage (
                              ,NULL
                              ,NULL
                             );
-    hBmpOld = ::GpiSetBitmap(hPS, hBmp);
 #if wxUSE_PALETTE
     HPAL                            hOldPalette = NULLHANDLE;
     if (rImage.GetPalette().Ok())
@@ -638,6 +646,14 @@ bool wxBitmap::CreateFromImage (
     unsigned char*                  ptdata = pData;
     unsigned char*                  ptbits;
 
+    if ((hBmpOld = ::GpiSetBitmap(hPS, hBmp)) == HBM_ERROR)
+    {
+        ERRORID                 vError;
+        wxString                sError;
+
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+    }
     for (n = 0; n < nNumDIB; n++)
     {
         if (nNumDIB > 1 && n == nNumDIB - 1 && nHRemain > 0)
@@ -760,7 +776,11 @@ bool wxBitmap::CreateFromImage (
             {
                 for (i = 0; i < nWidth; i++)
                 {
-                    if ((*(ptdata++) != cRed) || (*(ptdata++) != cGreen) || (*(ptdata++) != cBlue))
+                    unsigned char cRedImage   = (*(ptdata++)) ;
+                    unsigned char cGreenImage = (*(ptdata++)) ;
+                    unsigned char cBlueImage  = (*(ptdata++)) ;
+
+                    if ((cRedImage != cRed) || (cGreenImage != cGreen) || (cBlueImage != cBlue))
                     {
                         *(ptbits++) = cOne;
                         *(ptbits++) = cOne;
