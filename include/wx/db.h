@@ -477,7 +477,7 @@ enum wxDBMS
 // will overwrite the errors of the previously destroyed wxDb object in
 // this variable.
 
-WXDLLIMPEXP_DATA_BASE(extern wxChar)
+WXDLLIMPEXP_DATA_ODBC(extern wxChar)
     DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
 
