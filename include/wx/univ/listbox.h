@@ -13,7 +13,7 @@
 #define _WX_UNIV_LISTBOX_H_
 
 #ifdef __GNUG__
-    #pragma implementation "univlistbox.h"
+    #pragma interface "univlistbox.h"
 #endif
 
 #include "wx/scrolwin.h"    // for wxScrollHelper
