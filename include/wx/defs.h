@@ -1785,7 +1785,7 @@ enum wxPrintMode
 // ----------------------------------------------------------------------------
 
 // define this macro if font handling is done using the X font names
-#if defined(__WXGTK__) || defined(__X__)
+#if (defined(__WXGTK__) && !defined(__WXGTK20__)) || defined(__X__)
     #define _WX_X_FONTLIKE
 #endif
 

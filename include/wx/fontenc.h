@@ -113,6 +113,9 @@ struct WXDLLEXPORT wxNativeEncodingInfo
 #elif defined(_WX_X_FONTLIKE)
     wxString xregistry,
              xencoding;
+#elif defined(__WXGTK20__)
+    // No way to specify this in Pango as this
+    // seems to be handled internally.
 #elif defined(__WXMGL__)
     int      mglEncoding;
 #else

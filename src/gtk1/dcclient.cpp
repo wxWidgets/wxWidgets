@@ -20,6 +20,7 @@
 #include "wx/image.h"
 #include "wx/module.h"
 #include "wx/log.h"
+#include "wx/fontutil.h"
 
 #include "wx/gtk/win_gtk.h"
 
@@ -1656,7 +1657,7 @@ void wxWindowDC::SetFont( const wxFont &font )
 
     m_font = font;
 #ifdef __WXGTK20__
-    // fix fontdesc?
+    m_fontdesc = m_font.GetNativeFontInfo()->description;
 #endif
 }
 

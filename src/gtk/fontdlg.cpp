@@ -74,6 +74,8 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
     }
 
     gchar *fontname = gtk_font_selection_dialog_get_font_name(fontdlg);
+    
+    // printf( "font %s\n", fontname );
 
     dialog->SetChosenFont(fontname);
 
@@ -145,6 +147,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_fontdialog_delete_callback), (gpointer)this );
 
+#ifndef __WXGTK20__
     wxFont font = m_fontData.GetInitialFont();
     if( font.Ok() )
     {
@@ -167,6 +170,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
             wxFAIL_MSG(_T("font is ok but no native font info?"));
         }
     }
+#endif
 
     return TRUE;
 }

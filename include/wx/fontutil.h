@@ -113,6 +113,8 @@ public:
     FATTRS       fa;
     FONTMETRICS  fm;
     FACENAMEDESC fn;
+#elif defined(__WXGTK20__)
+    PangoFontDescription *description;
 #else // other platforms
     //
     //  This is a generic implementation that should work on all ports

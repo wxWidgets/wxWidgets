@@ -31,6 +31,63 @@
 #include "wx/fontenum.h"
 #include "wx/fontutil.h"
 
+// ----------------------------------------------------------------------------
+// GTK 2.0
+// ----------------------------------------------------------------------------
+
+#ifdef __WXGTK20__
+
+#include "wx/gtk/private.h"
+
+extern GtkWidget *wxGetRootWindow();
+
+static int
+cmp_families (const void *a, const void *b)
+{
+  const char *a_name = pango_font_family_get_name (*(PangoFontFamily **)a);
+  const char *b_name = pango_font_family_get_name (*(PangoFontFamily **)b);
+  
+  return g_utf8_collate (a_name, b_name);
+}
+
+// I admit I don't yet understand encodings with Pango
+bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
+                                          bool fixedWidthOnly)
+{
+    if ( fixedWidthOnly )
+    {
+        OnFacename( wxT("monospaced") );
+    }
+    else
+    {
+        PangoFontFamily **families = NULL;
+        gint n_families = 0;
+        pango_context_list_families ( 
+            gtk_widget_get_pango_context( wxGetRootWindow() ),
+            &families, &n_families );
+        qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
+
+        for (int i=0; i<n_families; i++)
+        {
+            const gchar *name = pango_font_family_get_name( families[i] );
+            
+            wxString tmp( name, wxConvUTF8 );
+            OnFacename( tmp );
+        }
+    }
+    
+    return TRUE;
+}
+
+bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
+{
+    return FALSE;
+}
+
+
+#else
+  // GTK 2.0
+
 #ifdef __VMS__ // Xlib.h for VMS is not (yet) compatible with C++
                // The resulting warnings are switched off here
 #pragma message disable nosimpint
@@ -107,12 +164,7 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
     {
         char *font = fonts[n];
 #if wxUSE_REGEX
-#if wxUSE_UNICODE
-        wxString sfont( wxConvLocal.cMB2WC( font ) );
-        if ( !re.Matches(sfont) )
-#else
         if ( !re.Matches(font) )
-#endif        
 #else // !wxUSE_REGEX
         if ( !wxString(font).Matches(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-*-*")) )
 #endif // wxUSE_REGEX/!wxUSE_REGEX
@@ -125,11 +177,7 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
         char *family = dash + 1;
         dash = strchr(family, '-');
         *dash = '\0'; // !NULL because Matches() above succeeded
-#if wxUSE_UNICODE
-       wxString fam( wxConvLocal.cMB2WC( family ) );
-#else        
         wxString fam(family);
-#endif
 
         if ( families.Index(fam) == wxNOT_FOUND )
         {
@@ -279,3 +327,6 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 #endif
     // wxUSE_NANOX
 }
+
+#endif
+   // __WXGTK20__
