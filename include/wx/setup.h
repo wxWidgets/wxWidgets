@@ -11,15 +11,21 @@
 
 /* compatibility code, to be removed asap: */
 
-#if !defined(__WXBASE__) && !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXMOTIF__) && !defined(__WXQT__) && !defined(__WXSTUBS__) && !defined(__WXMAC__) && !defined(__WXPM__)
-#error No __WXxxx__ define set! Please define one of __WXBASE__,__WXGTK__,__WXMSW__,__WXMOTIF__,__WXMAC__,__WXQT__,__WXPM__,__WXSTUBS__
+#if !defined(__WXBASEMSW__) && !defined(__WXBASEUNIX__) && !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXMOTIF__) && !defined(__WXQT__) && !defined(__WXSTUBS__) && !defined(__WXMAC__) && !defined(__WXPM__)
+#error No __WXxxx__ define set! Please define one of __WXBASEMSW__,__WXBASEUNIX__,__WXGTK__,__WXMSW__,__WXMOTIF__,__WXMAC__,__WXQT__,__WXPM__,__WXSTUBS__
 #endif
 
-#ifdef __WXBASE__
+#if defined(__WXBASEUNIX__)
 #if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
 #include "wx/based/setup.h"
 #else
 #include "wx/base/setup.h"
+#endif
+#elif defined(__WXBASEMSW__)
+#if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
+#include "wx/based_w32/setup.h"
+#else
+#include "wx/base_w32/setup.h"
 #endif
 
 #elif defined(__VMS)

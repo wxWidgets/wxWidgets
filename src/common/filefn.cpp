@@ -1073,12 +1073,11 @@ bool wxMkdir(const wxString& dir, int perm)
 #else // !Mac
     const wxChar *dirname = dir.c_str();
 
-    // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
-    // for the GNU compiler
-#if (!(defined(__WXMSW__) || defined(__WXPM__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
-    if ( mkdir(wxFNCONV(dirname), perm) != 0 )
-#elif defined(__WXPM__)
+    // assume mkdir() has 2 args on non Windows-OS/2 platforms
+#if defined(__WXPM__)
     if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
+#elif !defined(__WXMSW__) || defined(__WXWINE__)
+    if ( mkdir(wxFNCONV(dirname), perm) != 0 )
 #else  // !MSW and !OS/2 VAC++
     if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW

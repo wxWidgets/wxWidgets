@@ -158,10 +158,14 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 //#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
 #define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (cy+8)
 
+#if wxUSE_GUI
+
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
 extern LONG APIENTRY _EXPORT
   wxSubclassedGenericControlProc(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
+#endif // wxUSE_GUI
 
 // ---------------------------------------------------------------------------
 // constants which might miss from some compilers' headers

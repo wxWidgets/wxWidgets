@@ -1330,7 +1330,7 @@ done
 dnl from "if wxUSE_GUI"
 else
     PATH_IFS=':'
-    AC_MSG_RESULT(base only)
+    AC_MSG_RESULT(base ($host hosted) only)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1545,23 +1545,13 @@ dnl ----------------------------------------------------------------
 
 AFMINSTALL=
 
-if test "$wxUSE_GUI" = "yes"; then
-
-USE_GUI=1
-
 TOOLKIT=
 TOOLKIT_INCLUDE=
 
-GUI_TK_LIBRARY=
-GUI_TK_LINK=
+dnl are we building for a win32 target environment?
+dnl If so, setup common stuff needed for both GUI and Base libs.
 
-WXGTK12=
-WXGTK127=
-WXGTK13=
-
-WXWINE=
-
-if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
+if test "$USE_WIN32" = 1 ; then
     if test "$cross_compiling" = "yes" ; then
         dnl mingw32 will find them even if they're not in one of standard paths
         AC_MSG_WARN(skipping windows.h check for cross-compilation)
@@ -1592,9 +1582,6 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
         LDFLAGS="$LDFLAGS -mwindows"
     fi
 
-    TOOLKIT=MSW
-    GUIDIST=MSW_DIST
-
     dnl we should calculate these
     RCINCSWITCH="--include-dir"
     RCDEFSWITCH="--define"
@@ -1605,6 +1592,25 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
 
     dnl set optinal RES_PROGRAM_OPT to RES_PROGRAM
     RESPROGRAM="\$(RES_PROGRAM)"
+fi
+
+if test "$wxUSE_GUI" = "yes"; then
+
+USE_GUI=1
+
+GUI_TK_LIBRARY=
+GUI_TK_LINK=
+
+WXGTK12=
+WXGTK127=
+WXGTK13=
+
+WXWINE=
+
+if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
+
+    TOOLKIT=MSW
+    GUIDIST=MSW_DIST
 
 fi
 
@@ -1929,18 +1935,34 @@ else
     dnl this may be (almost) unneccesary for wxBase now we use TOOLKIT_NAME
     TOOLKIT_DIR="base"
 
+    dnl the sources, their dependenices and the headers
+    if test "$USE_WIN32" = 1 ; then
+        TOOLKIT_DEF="-D__WXBASEMSW__ -D__WXMSW__"
+        ALL_OBJECTS="\${BASE_OBJS} \${BASE_MSW_OBJS}"
+        ALL_DEPFILES="\${BASE_DEPS} \${BASE_MSW_DEPS}"
+        TOOLKIT_SRC="msw"
+
+        dnl so we can have native and cross wxBase packages installed together
+        TOOLKIT_DIR="${TOOLKIT_DIR}_w32"
+
+        dnl this is a hack to have the correct configure checks done for
+        dnl wxBase.  It is fragile though and probably should be replaced
+        dnl (along with the tests later in the file) with something more
+        dnl specific to wxBase.
+        TOOLKIT="MSW"
+    else
+        TOOLKIT_DEF="-D__WXBASEUNIX__"
+        ALL_OBJECTS="\${BASE_OBJS} \${BASE_UNIX_OBJS}"
+        ALL_DEPFILES="\${BASE_DEPS} \${BASE_UNIX_DEPS}"
+        TOOLKIT_SRC="unix"
+    fi
+
     dnl the base name of the library and wxXXX-config files
     if test "$wxUSE_DEBUG_FLAG" = "yes"; then
         TOOLKIT_NAME="${TOOLKIT_DIR}d"
     else
         TOOLKIT_NAME="${TOOLKIT_DIR}"
     fi
-
-    TOOLKIT_DEF="-D__WXBASE__"
-
-    dnl the sources, their dependenices and the headers
-    ALL_OBJECTS="\$(BASE_OBJS) \${BASE_UNIX_OBJS}"
-    ALL_DEPFILES="\${BASE_DEPS} \${BASE_UNIX_DEPS}"
 
     if test "$wxUSE_ZLIB" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
@@ -1956,6 +1978,10 @@ else
     dnl distribute only wxBase sources/headers
     GUIDIST="BASE_DIST"
     DISTDIR="wxBase"
+fi
+
+if test -z "$TOOLKIT_SRC" ; then
+    TOOLKIT_SRC="$TOOLKIT_DIR"
 fi
 
 dnl the name of the (libtool) library
@@ -3846,6 +3872,7 @@ AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLKIT_NAME)
 AC_SUBST(TOOLKIT_INCLUDE)
+AC_SUBST(TOOLKIT_SRC)
 AC_SUBST(WXCONFIG_INCLUDE)
 
 dnl what to compile

@@ -32,7 +32,7 @@ include ./src/make.env
 srcdir = @srcdir@
 
 VP1 = @top_srcdir@/src/common
-VP2 = @top_srcdir@/src/@TOOLKIT_DIR@
+VP2 = @top_srcdir@/src/@TOOLKIT_SRC@
 VP3 = @top_srcdir@/src/motif/xmcombo
 VP4 = @top_srcdir@/src/generic
 VP5 = @top_srcdir@/src/unix

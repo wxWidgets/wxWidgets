@@ -31,9 +31,11 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/cursor.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+#if wxUSE_GUI
+    #include "wx/cursor.h"
+#endif
 #endif  //WX_PRECOMP
 
 // In some mingws there is a missing extern "C" int the winsock header,
