@@ -405,6 +405,8 @@ for file in $inputFiles ; do
     *!)
         ;;
     *)
+        # we do not want to export weak symbols in general, so we filter
+        # those out using grep.
         doCommand "emxexp -u $file | grep -v weak$ >> $tmpdefFile || true"
         ;;
     esac
@@ -466,7 +468,17 @@ if [ $flag_USE_LXLITE -ne 0 ]; then
     fi
     doCommand "lxlite -cs -t: -mrn -mln $add_flags $dllFile"
 fi
-doCommand "emxomf -s -l $arcFile"
+
+#New version of emxomf do no longer want the "-l" flag
+case `emxomf` in
+emxomf\ 0.6*)
+    omflibflag=""
+    ;;
+*)
+    omflibflag=" -l"
+    ;;
+esac
+doCommand "emxomf -s$omflibflag $arcFile"
 
 # Successful exit.
 CleanUp 1
