@@ -592,11 +592,11 @@ wxBitmap wxImage::ConvertToBitmap() const
     // calc the number of bytes per scanline and padding
     int bytePerLine = width*3;
     int sizeDWORD = sizeof( DWORD );
-    div_t lineBoundary = div( bytePerLine, sizeDWORD );
+    int lineBoundary = bytePerLine % sizeDWORD;
     int padding = 0;
-    if( lineBoundary.rem > 0 )
+    if( lineBoundary > 0 )
     {
-        padding = sizeDWORD - lineBoundary.rem;
+        padding = sizeDWORD - lineBoundary;
         bytePerLine += padding;
     }
     // calc the number of DIBs and heights of DIBs
@@ -607,9 +607,8 @@ wxBitmap wxImage::ConvertToBitmap() const
         height = bmpHeight;
     else
     {
-        div_t result = div( bmpHeight, height );
-        numDIB = result.quot;
-        hRemain = result.rem;
+        numDIB =  bmpHeight / height;
+        hRemain = bmpHeight % height;
         if( hRemain >0 )  numDIB++;
     }
 
@@ -805,11 +804,11 @@ wxImage::wxImage( const wxBitmap &bitmap )
     // calc the number of bytes per scanline and padding in the DIB
     int bytePerLine = width*3;
     int sizeDWORD = sizeof( DWORD );
-    div_t lineBoundary = div( bytePerLine, sizeDWORD );
+    int lineBoundary =  bytePerLine % sizeDWORD;
     int padding = 0;
-    if( lineBoundary.rem > 0 )
+    if( lineBoundary > 0 )
     {
-        padding = sizeDWORD - lineBoundary.rem;
+        padding = sizeDWORD - lineBoundary;
         bytePerLine += padding;
     }
 
