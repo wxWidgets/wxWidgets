@@ -2,6 +2,7 @@ wxwindows2.4 (2.4.0) unstable; urgency=low
 
   * The fingers crossed release.
   * de.po typo fix.  Closes: #174084
+  * tr.po stable tree patch.  Closes: #174667
 
  -- Ron Lee <ron@debian.org>  Thu, 19 Dec 2002 00:50:48 -0800
 
