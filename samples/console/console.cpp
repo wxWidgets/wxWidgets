@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_FILENAME
+    #define TEST_THREADS
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -1740,6 +1740,7 @@ static void TestMimeFilename()
         _T("readme.txt"),
         _T("document.pdf"),
         _T("image.gif"),
+        _T("picture.jpeg"),
     };
 
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
@@ -5084,18 +5085,18 @@ public:
 
     virtual ExitCode Entry()
     {
-        wxPrintf(_T("%s: Thread %d starting to wait for semaphore...\n"),
-                 wxDateTime::Now().FormatTime().c_str(), m_i);
+        wxPrintf(_T("%s: Thread #%d (%ld) starting to wait for semaphore...\n"),
+                 wxDateTime::Now().FormatTime().c_str(), m_i, (long)GetId());
 
         m_sem->Wait();
 
-        wxPrintf(_T("%s: Thread %d acquired the semaphore.\n"),
-                 wxDateTime::Now().FormatTime().c_str(), m_i);
+        wxPrintf(_T("%s: Thread #%d (%ld) acquired the semaphore.\n"),
+                 wxDateTime::Now().FormatTime().c_str(), m_i, (long)GetId());
 
         Sleep(1000);
 
-        wxPrintf(_T("%s: Thread %d releasing the semaphore.\n"),
-                 wxDateTime::Now().FormatTime().c_str(), m_i);
+        wxPrintf(_T("%s: Thread #%d (%ld) releasing the semaphore.\n"),
+                 wxDateTime::Now().FormatTime().c_str(), m_i, (long)GetId());
 
         m_sem->Post();
 
@@ -5982,10 +5983,9 @@ int main(int argc, char **argv)
     {
         TestMimeEnum();
         TestMimeOverride();
-        TestMimeFilename();
+        TestMimeAssociate();
     }
-
-    TestMimeAssociate();
+    TestMimeFilename();
 #endif // TEST_MIME
 
 #ifdef TEST_INFO_FUNCTIONS
