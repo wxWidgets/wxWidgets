@@ -62,9 +62,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( FileSystemTestCase );
         CPPUNIT_TEST( UrlParsing );
+        CPPUNIT_TEST( FileNameToUrlConversion );
     CPPUNIT_TEST_SUITE_END();
 
     void UrlParsing();
+    void FileNameToUrlConversion();
 
     DECLARE_NO_COPY_CLASS(FileSystemTestCase)
 };
@@ -109,6 +111,16 @@ void FileSystemTestCase::UrlParsing()
         CPPUNIT_ASSERT( tst.RightLocation(d.url) == d.right );
         CPPUNIT_ASSERT( tst.Anchor(d.url) == d.anchor );
     }
+}
+    
+void FileSystemTestCase::FileNameToUrlConversion()
+{
+#ifdef __WINDOWS__
+    wxFileName fn1(_T("\\\\server\\share\\path\\to\\file"));
+    wxString url1 = wxFileSystem::FileNameToURL(fn1);
+   
+    CPPUNIT_ASSERT( fn1.SameAs(wxFileSystem::URLToFileName(url1)) );
+#endif
 }
 
 #endif // wxUSE_FILESYSTEM
