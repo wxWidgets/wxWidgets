@@ -129,6 +129,8 @@ const char *wxFileSelectorPromptStr = "Select a file";
 const char *wxFileSelectorDefaultWildcardStr = "*.*";
 const char *wxInternalErrorStr = "wxWindows Internal Error";
 const char *wxFatalErrorStr = "wxWindows Fatal Error";
+const char *wxDirDialogNameStr = "wxDirCtrl";
+const char *wxDirDialogDefaultFolderStr = "/";
 
 // See wx/utils.h
 const char *wxFloatToStringStr = "%.2f";

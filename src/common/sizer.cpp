@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sizer.cpp
-// Purpose:     provide new wxSizer class for layounting
+// Purpose:     provide new wxSizer class for layout
 // Author:      Robert Roebling and Robin Dunn
 // Modified by:
 // Created:     

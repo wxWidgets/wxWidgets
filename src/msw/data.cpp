@@ -153,6 +153,8 @@ const wxChar *wxFileSelectorDefaultWildcardStr = _T("*.*");
 const wxChar *wxInternalErrorStr = _T("wxWindows Internal Error");
 const wxChar *wxFatalErrorStr = _T("wxWindows Fatal Error");
 const wxChar *wxTreeCtrlNameStr = _T("treeCtrl");
+const wxChar *wxDirDialogNameStr = _T("wxDirCtrl");
+const wxChar *wxDirDialogDefaultFolderStr = _T("/");
 
 // See wx/utils.h
 const wxChar *wxFloatToStringStr = _T("%.2f");

@@ -105,11 +105,11 @@ public:
   
     wxDirCtrl();
     wxDirCtrl(wxWindow *parent, const wxWindowID id = -1, 
-	      const wxString &dir = "/",
+	      const wxString &dir = wxDirDialogDefaultFolderStr,
 	      const wxPoint& pos = wxDefaultPosition,
 	      const wxSize& size = wxDefaultSize,
 	      const long style = wxTR_HAS_BUTTONS,
-	      const wxString& name = "wxTreeCtrl" );
+	      const wxString& name = wxTreeCtrlNameStr );
     void ShowHidden( const bool yesno );
     void OnExpandItem(wxTreeEvent &event );
     void OnCollapseItem(wxTreeEvent &event );

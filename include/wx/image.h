@@ -36,9 +36,15 @@ class WXDLLEXPORT wxPNGHandler;
 class WXDLLEXPORT wxJPEGHandler;
 #endif
 class WXDLLEXPORT wxBMPHandler;
+#if wxUSE_GIF
 class WXDLLEXPORT wxGIFHandler;
+#endif
+#if wxUSE_PNM
 class WXDLLEXPORT wxPNMHandler;
+#endif
+#if wxUSE_PCX
 class WXDLLEXPORT wxPCXHandler;
+#endif
 class WXDLLEXPORT wxImage;
 
 //-----------------------------------------------------------------------------
@@ -181,13 +187,13 @@ public:
   virtual bool CanRead( wxInputStream& stream );
 #endif
 };
-
 #endif
 
 //-----------------------------------------------------------------------------
 // wxPNMHandler
 //-----------------------------------------------------------------------------
 
+#if wxUSE_PNM
 class WXDLLEXPORT wxPNMHandler : public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxPNMHandler)
@@ -208,11 +214,13 @@ public:
   virtual bool CanRead( wxInputStream& stream );
 #endif
 };
+#endif
 
 //-----------------------------------------------------------------------------
 // wxPCXHandler
 //-----------------------------------------------------------------------------
 
+#if wxUSE_PCX
 class WXDLLEXPORT wxPCXHandler : public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxPCXHandler)
@@ -233,6 +241,7 @@ public:
   virtual bool CanRead( wxInputStream& stream );
 #endif
 };
+#endif
 
 //-----------------------------------------------------------------------------
 // wxImage

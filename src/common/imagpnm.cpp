@@ -23,6 +23,8 @@
 #include "wx/log.h"
 #include "wx/txtstrm.h"
 
+#if wxUSE_PNM
+
 #ifdef __WXMSW__
 #include <windows.h>
 #endif
@@ -158,4 +160,5 @@ bool wxPNMHandler::CanRead( wxInputStream& stream )
 
 #endif // wxUSE_STREAMS
 
+#endif // wxUSE_PNM
 

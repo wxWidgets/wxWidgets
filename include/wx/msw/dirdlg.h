@@ -25,7 +25,7 @@ class WXDLLEXPORT wxDirDialog: public wxDialog
 DECLARE_DYNAMIC_CLASS(wxDirDialog)
 public:
     wxDirDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
-        const wxString& defaultPath = "",
+        const wxString& defaultPath = wxEmptyString,
         long style = 0, const wxPoint& pos = wxDefaultPosition);
 
     inline void SetMessage(const wxString& message) { m_message = message; }

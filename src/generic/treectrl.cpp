@@ -1296,7 +1296,7 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList)
    // May be toggle off. Then wxTreeCtrl will spread when
    // necessary (which might look ugly).
 #if 1
-   wxPaintDC dc(this);
+   wxClientDC dc(this);
    m_lineHeight = (int)(dc.GetCharHeight() + 4);
    int
       width = 0,
@@ -1527,7 +1527,7 @@ void wxTreeCtrl::DrawBorder(wxTreeItemId &item)
 
     wxGenericTreeItem *i=item.m_pItem;
 
-    wxPaintDC dc(this);
+    wxClientDC dc(this);
     PrepareDC( dc );
     dc.SetLogicalFunction(wxINVERT);
 
@@ -1546,7 +1546,7 @@ void wxTreeCtrl::DrawLine(wxTreeItemId &item, bool below)
 
     wxGenericTreeItem *i=item.m_pItem;
 
-    wxPaintDC dc(this);
+    wxClientDC dc(this);
     PrepareDC( dc );
     dc.SetLogicalFunction(wxINVERT);
 

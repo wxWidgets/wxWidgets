@@ -344,6 +344,7 @@ protected:
     int               m_maxPage;
 
     bool              m_isOk;
+    bool              m_printingPrepared; // Called OnPreparePrinting?
 
 private:
     void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);

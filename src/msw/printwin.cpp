@@ -99,7 +99,11 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         return FALSE;
 
     printout->SetIsPreview(FALSE);
-    printout->OnPreparePrinting();
+
+    // 4/9/99, JACS: this is a silly place to allow preparation, considering
+    // the DC and no parameters have been set in the printout object.
+    // Moved further down.
+    // printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined
     int fromPage, toPage;
@@ -185,6 +189,8 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     // Create an abort window
     wxBeginBusyCursor();
+
+    printout->OnPreparePrinting();
 
     wxWindow *win = CreateAbortWindow(parent, printout);
     wxYield();

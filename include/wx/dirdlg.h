@@ -1,6 +1,14 @@
 #ifndef _WX_DIRDLG_H_BASE_
 #define _WX_DIRDLG_H_BASE_
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogDefaultFolderStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
+
 #if defined(__WXMSW__)
 #if defined(__WIN16__) || defined(__GNUWIN32__) || defined(__SALFORDC__)
 #include "wx/generic/dirdlgg.h"

@@ -9,6 +9,16 @@
 #include "wx/event.h"
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+#ifdef __WXMSW__
+WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
+#else
+#define wxTreeCtrlNameStr "wxTreeCtrl"
+#endif
+
+// ----------------------------------------------------------------------------
 // include the platform-dependent wxTreeCtrl class
 // ----------------------------------------------------------------------------
 

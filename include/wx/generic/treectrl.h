@@ -179,10 +179,10 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
     wxTreeTextCtrl(void) {};
     wxTreeTextCtrl( wxWindow *parent, const wxWindowID id,
                     bool *accept, wxString *res, wxTreeCtrl *owner,
-                    const wxString &value = "",
+                    const wxString &value = wxEmptyString,
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
                     int style = 0, const wxValidator& validator = wxDefaultValidator,
-                    const wxString &name = "wxTreeTextCtrlText" );
+                    const wxString &name = wxTextCtrlNameStr );
     void OnChar( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
 

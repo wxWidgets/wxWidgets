@@ -28,7 +28,10 @@
 #endif
 
 #include "wx/log.h"
+
+#ifdef __WIN32__
 #include "wx/process.h"
+#endif
 
 #include "wx/msw/private.h"
 
@@ -113,7 +116,6 @@ static DWORD wxExecuteThread(wxExecuteData *data)
 
     return 0;
 }
-#endif
 
 // window procedure of a hidden window which is created just to receive
 // the notification message when a process exits
@@ -146,6 +148,7 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
 
     return 0;
 }
+#endif
 
 extern wxChar wxPanelClassName[];
 

@@ -196,6 +196,17 @@ $(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
 $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
     copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
+$(COMMDIR)/extended.obj:     $*.c
+        cl @<<
+$(CPPFLAGS2) /Fo$@ /c /Tc $*.c
+<<
+
+$(COMMDIR)/unzip.obj:     $*.c
+        cl @<<
+$(CPPFLAGS2) /Fo$@ /c /Tc $*.c
+<<
+
+
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 
 # Peripheral components

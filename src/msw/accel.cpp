@@ -135,7 +135,9 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 #else // Win16
 wxAcceleratorTable::wxAcceleratorTable(int WXUNUSED(n), const wxAcceleratorEntry WXUNUSED(entries)[])
 {
-    wxFAIL_MSG("not implemented");
+    // No, we simply gracefully degrade; we don't expect the
+    // developer to pepper their code with #ifdefs just for this.
+    // wxFAIL_MSG("not implemented");
 }
 #endif // Win32/16
 

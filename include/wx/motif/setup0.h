@@ -62,9 +62,17 @@
  */
 #define wxUSE_LIBJPEG 0
 /*
- * Use gif
+ * Use GIF
  */
-#define wxUSE_LIBGIF 0
+#define wxUSE_LIBGIF 1
+/*
+ * Use PCX
+ */
+#define wxUSE_PCX 1
+/*
+ * Use PNM
+ */
+#define wxUSE_PNM 1
 /*
  * Use iODBC
  */

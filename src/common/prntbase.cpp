@@ -563,8 +563,10 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
     m_leftMargin = 40;
     m_pageWidth = 0;
     m_pageHeight = 0;
+    m_printingPrepared = FALSE;
 
-    printout->OnPreparePrinting();
+    // Too soon! Moved to RenderPage.
+    // printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined
     int selFrom, selTo;
@@ -677,6 +679,13 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
     m_previewPrintout->SetDC(&memoryDC);
     m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
+
+    // Need to delay OnPreparePrinting until here, so we have enough information.
+    if (!m_printingPrepared)
+    {
+        m_previewPrintout->OnPreparePrinting();
+        m_printingPrepared = TRUE;
+    }
 
     m_previewPrintout->OnBeginPrinting();
 

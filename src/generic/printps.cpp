@@ -85,7 +85,12 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
         return FALSE;
 
     printout->SetIsPreview(FALSE);
-    printout->OnPreparePrinting();
+
+    // 4/9/99, JACS: this is a silly place to allow preparation, considering
+    // the DC and no parameters have been set in the printout object.
+    // Moved further down.
+
+    // printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined
     int fromPage, toPage;
@@ -169,6 +174,8 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
     // Create an abort window
     wxBeginBusyCursor();
+
+    printout->OnPreparePrinting();
 
     int
        pagesPerCopy = m_printDialogData.GetToPage()-m_printDialogData.GetFromPage()+1,

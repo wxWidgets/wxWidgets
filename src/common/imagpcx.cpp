@@ -25,6 +25,8 @@
 #include "wx/module.h"
 #include "wx/log.h"
 
+#if wxUSE_PCX
+
 //-----------------------------------------------------------------------------
 // PCX decoding
 //-----------------------------------------------------------------------------
@@ -272,7 +274,7 @@ bool wxPCXHandler::CanRead( wxInputStream& stream )
     return (c == 10);
 }
 
-
 #endif // wxUSE_STREAMS
 
+#endif // wxUSE_PCX
 

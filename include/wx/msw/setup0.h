@@ -190,8 +190,12 @@
                                   // Use PNG bitmap code
 #define wxUSE_LIBJPEG       0
                                   // Use JPEG bitmap code
-#define wxUSE_LIBGIF        0
-				  // Use GIF bitmap code
+#define wxUSE_LIBGIF        1
+                                  // Use GIF bitmap code
+#define wxUSE_PNM           1
+                                  // Use PNM bitmap code
+#define wxUSE_PCX           1
+                                  // Use PCX bitmap code
 #define wxUSE_SERIAL        0
                                   // Use serialization (requires utils/serialize)
 #define wxUSE_DYNLIB_CLASS  0
@@ -382,6 +386,21 @@
 
 #undef wxUSE_TOOLTIPS
 #define wxUSE_TOOLTIPS 0
+
+#undef wxUSE_LIBPNG
+#define wxUSE_LIBPNG 0
+
+#undef wxUSE_LIBJPEG
+#define wxUSE_LIBJPEG 0
+
+#undef wxUSE_LIBGIF
+#define wxUSE_LIBGIF 0
+
+#undef wxUSE_PNM
+#define wxUSE_PNM 0
+
+#undef wxUSE_PCX
+#define wxUSE_PCX 0
 
 #endif
 

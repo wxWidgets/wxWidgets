@@ -120,10 +120,10 @@ http.cpp	C	S
 imagbmp.cpp	C
 image.cpp	C
 imaggif.cpp	C
-imagjpeg.cpp	C
-imagpcx.cpp	C
-imagpng.cpp	C
-imagpnm.cpp	C
+imagjpeg.cpp	C	32
+imagpcx.cpp	C	32
+imagpng.cpp	C	32
+imagpnm.cpp	C	32
 intl.cpp	C
 ipcbase.cpp	C
 layout.cpp	C
@@ -233,7 +233,7 @@ ownerdrw.cpp	M
 palette.cpp	M
 pen.cpp	M
 penwin.cpp	M
-pnghand.cpp	M
+pnghand.cpp	M	32
 printdlg.cpp	M
 printwin.cpp	M
 radiobox.cpp	M

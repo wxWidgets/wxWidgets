@@ -95,4 +95,4 @@ bool wxGIFHandler::CanRead( wxInputStream& stream )
   // wxUSE_STREAMS
 
 #endif
-  // wxUSE_GIF
+  // wxUSE_LIBGIF
