@@ -5,6 +5,10 @@
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
  */
+#include "wx/setup.h"
+
+#if wxUSE_SOCKETS
+
 #include <stdlib.h>
 #include <gdk/gdk.h>
 #include <glib.h>
@@ -105,3 +109,5 @@ unsigned long GSocket_GetEventID(GSocket *socket)
 void GSocket_DoEvent(unsigned long evt_id)
 {
 }
+
+#endif /* wxUSE_SOCKETS */
