@@ -70,7 +70,7 @@ extern int wxEntryReal(int& argc, wxChar **argv);
 
 #if wxUSE_BASE
 
-#if defined(__VISUALC__) && !defined(__WXWINCE__)
+#if wxUSE_ON_FATAL_EXCEPTION && defined(__VISUALC__) && !defined(__WXWINCE__)
     // VC++ (at least from 4.0 up to version 7.1) is incredibly broken in that
     // a "catch ( ... )" will *always* catch SEH exceptions in it even though
     // it should have never been the case... to prevent such catches from
