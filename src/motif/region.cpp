@@ -105,7 +105,7 @@ wxRegion::~wxRegion()
 }
 
 // Get the internal region handle
-WXRegion wxRegion::GetXRegion()
+WXRegion wxRegion::GetXRegion() const
 {
     wxASSERT( m_refData !=NULL );
 

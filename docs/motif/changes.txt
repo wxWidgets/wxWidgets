@@ -53,3 +53,11 @@ More recently:
 - Added a parent-existance check to popup menu code to make it not crash.
 - Added some optimization in wxWindow::SetSize to produce less flicker.
   It remains to be seen whether this produces any resize bugs.
+
+3/12/98
+-------
+
+- Debugged DrawEllipticArc (a ! in the wrong place).
+- Added SetClippingRegion( const wxRegion& region ).
+- Added wxPoint, wxSize, wxRect versions of SetSize etc.
+- Diagnosed but not yet cured a wxTreeCtrl bug (see todo.txt).

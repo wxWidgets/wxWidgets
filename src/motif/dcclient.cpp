@@ -354,7 +354,7 @@ void wxWindowDC::DrawEllipticArc( long x, long y, long width, long height, doubl
           XLOG2DEV_2 (x), YLOG2DEV_2 (y),wd,hd,start,end);
     }
 
-  if (!m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
+  if (m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
     {
       if (m_autoSetting)
     SetPen (m_pen);

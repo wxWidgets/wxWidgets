@@ -103,7 +103,7 @@ public:
 	bool Combine(const wxRect& rect, wxRegionOp op);
 
     // Get the internal Region handle
-    WXRegion GetXRegion() ;
+    WXRegion GetXRegion() const;
 };
 
 class WXDLLEXPORT wxRegionIterator : public wxObject {

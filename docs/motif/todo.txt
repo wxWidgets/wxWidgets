@@ -42,6 +42,9 @@ High Priority
 - Tidy dialogs such as the colour and font selectors.
 
 - Use generic wxTreeCtrl, wxListCtrl: debug and enhance these.
+  wxTreeCtrl: crashes in wxImageList::Draw because it assumes
+  that wxBitmap == wxIcon, which is only true in wxGTK.
+  So add wxDC::DrawBitmap and use this instead.
 
 - Find out why modal dialogs give a grab warning.
 
