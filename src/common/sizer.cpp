@@ -148,14 +148,11 @@ wxSize wxSizerItem::CalcMin()
     {
         if ( IsWindow() && (m_flag & wxADJUST_MINSIZE) )
         {
-            // check if the best (minimal, in fact) window size hadn't changed
-            // by chance: this may happen for, e.g. static text if its label
-            // changed
-            wxSize size = m_window->GetBestSize();
-            if ( size.x > m_minSize.x )
-                m_minSize.x = size.x;
-            if ( size.y > m_minSize.y )
-                m_minSize.y = size.y;
+            // By user request, keep the minimal size for this item
+            // in sync with the largest of BestSize and any user supplied
+            // minimum size hint.  Useful in cases where the item is
+            // changeable -- static text labels, etc.
+            m_minSize = m_window->GetAdjustedBestSize();
         }
 
         ret = m_minSize;

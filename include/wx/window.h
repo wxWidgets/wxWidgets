@@ -271,7 +271,18 @@ public:
             *h = s.y;
     }
 
-        // the generic centre function - centers the window on parent by
+        // There are times (and windows) where 'Best' size and 'Min' size
+        // are vastly out of sync.  This should be remedied somehow, but in
+        // the meantime, this method will return the larger of BestSize
+        // (the window's smallest legible size), and any user specified
+        // MinSize hint.
+    wxSize GetAdjustedBestSize() const
+    {
+        wxSize  s( DoGetBestSize() );
+        return wxSize( wxMax( s.x, GetMinWidth() ), wxMax( s.y, GetMinHeight() ) );
+    }
+
+        // the generic centre function - centers the window on parent by`
         // default or on screen if it doesn't have parent or
         // wxCENTER_ON_SCREEN flag is given
     void Centre( int direction = wxBOTH );
