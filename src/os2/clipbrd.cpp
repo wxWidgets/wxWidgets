@@ -533,12 +533,12 @@ bool wxClipboard::IsSupported( wxDataFormat format )
     return wxIsClipboardFormatAvailable(format);
 }
 
-bool wxClipboard::GetData( wxDataObject *data )
+bool wxClipboard::GetData( wxDataObject& data )
 {
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
 #if wxUSE_DRAG_AND_DROP
-//    wxDataFormat format = data->GetFormat();
+//    wxDataFormat format = data.GetFormat();
     // TODO:
 /*
     switch ( format )
@@ -546,11 +546,11 @@ bool wxClipboard::GetData( wxDataObject *data )
         case wxDF_TEXT:
         case wxDF_OEMTEXT:
         {
-            wxTextDataObject* textDataObject = (wxTextDataObject*) data;
+            wxTextDataObject& textDataObject = (wxTextDataObject&) data;
             char* s = (char*) wxGetClipboardData(format);
             if ( s )
             {
-                textDataObject->SetText(s);
+                textDataObject.SetText(s);
                 delete[] s;
                 return TRUE;
             }
@@ -561,11 +561,11 @@ bool wxClipboard::GetData( wxDataObject *data )
         case wxDF_BITMAP:
         case wxDF_DIB:
         {
-            wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject *)data;
+            wxBitmapDataObject& bitmapDataObject = (wxBitmapDataObject &)data;
             wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(data->GetFormat());
             if (bitmap)
             {
-                bitmapDataObject->SetBitmap(* bitmap);
+                bitmapDataObject.SetBitmap(* bitmap);
                 delete bitmap;
                 return TRUE;
             }
@@ -575,11 +575,11 @@ bool wxClipboard::GetData( wxDataObject *data )
 #if wxUSE_METAFILE
         case wxDF_METAFILE:
         {
-            wxMetafileDataObject* metaFileDataObject = (wxMetafileDataObject *)data;
+            wxMetafileDataObject& metaFileDataObject = (wxMetafileDataObject &)data;
             wxMetafile* metaFile = (wxMetafile *)wxGetClipboardData(wxDF_METAFILE);
             if (metaFile)
             {
-                metaFileDataObject->SetMetafile(*metaFile);
+                metaFileDataObject.SetMetafile(*metaFile);
                 delete metaFile;
                 return TRUE;
             }
@@ -594,7 +594,7 @@ bool wxClipboard::GetData( wxDataObject *data )
                 if ( buf )
                 {
                     // FIXME this is for testing only!!
-                    ((wxPrivateDataObject *)data)->SetData(buf, len);
+                    ((wxPrivateDataObject &)data).SetData(buf, len);
                     free(buf);
 
                     return TRUE;
