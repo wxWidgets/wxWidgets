@@ -7,7 +7,7 @@ INCLUDE=$(INCDIR)
 include $(WXDIR)\src\makesc.env
 
 $(TARGET).exe: $(TARGET).obj $(TARGET).res
-	link $(LDFLAGS) /DELEXECUTABLE /RC $*, $@, $*, $(LIBS)
+	link $(LDFLAGS) /DELEXECUTABLE /RC  $*, $@, $*, $(LIBDIR)\ $(LIBS)
     
 
 sc32.def:

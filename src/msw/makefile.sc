@@ -320,7 +320,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\window.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) $(WINSOCKLIB)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) 
 
 all: MAKEARCHDIR MAKEWINSOCKLIB $(LIBTARGET) zlib png jpeg tiff regex
 
@@ -331,16 +331,17 @@ MAKEARCHDIR:
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
 
 MAKEWINSOCKLIB:
-      @if not exist $(WINSOCKLIB) implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
-##    implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
-##    implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
+      implib  /s $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
+###      implib /system /v /suffix /Ic:\wx\dm\include\win32\ $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
 ##@if not exist $(WINSOCKLIB)  
 
 $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
 	*lib /PAGESIZE:512 $(LIBTARGET) y $(OBJECTS), nul;
 
-clean: clean_zlib clean_png clean_jpeg clean_tiff clean_regex
+clean: clean_msw clean_zlib clean_png clean_jpeg clean_tiff clean_regex
+
+clean_msw:
 	-del $(COMMDIR)\*.obj
 	-del $(MSWDIR)\*.obj
 	-del $(GENDIR)\*.obj
