@@ -766,15 +766,18 @@ bool wxImage::LoadFile( const wxString& filename, long type )
     // We want to use wxFileSystem for virtual FS compatibility
     wxFileSystem fsys;
     wxFSFile *file = fsys.OpenFile(filename);
-    if (!file) {
-        wxLogError(_("Can't open file '%s'"), filename);
+    if (!file)
+    {
+        wxLogError(_("Can't open file '%s'"), filename.c_str());
         return FALSE;
-        }
+    }
     wxInputStream *stream = file->GetStream();
-    if (!stream) {
-        wxLogError(_("Can't open stream for file '%s'"), filename);
+    if (!stream)
+    {
+        wxLogError(_("Can't open stream for file '%s'"), filename.c_str());
         return FALSE;
-        }
+    }
+
     return LoadFile(*stream, type);
 #else // !wxUSE_STREAMS
     return FALSE;
@@ -787,15 +790,17 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
     // We want to use wxFileSystem for virtual FS compatibility
     wxFileSystem fsys;
     wxFSFile *file = fsys.OpenFile(filename);
-    if (!file) {
-        wxLogError(_("Can't open file '%s'"), filename);
+    if (!file)
+    {
+        wxLogError(_("Can't open file '%s'"), filename.c_str());
         return FALSE;
-        }
+    }
     wxInputStream *stream = file->GetStream();
-    if (!stream) {
-        wxLogError(_("Can't open stream for file '%s'"), filename);
+    if (!stream)
+    {
+        wxLogError(_("Can't open stream for file '%s'"), filename.c_str());
         return FALSE;
-        }
+    }
     return LoadFile(*stream, mimetype);
 #else // !wxUSE_STREAMS
     return FALSE;
