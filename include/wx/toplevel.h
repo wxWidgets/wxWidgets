@@ -47,9 +47,9 @@ enum
     wxFULLSCREEN_NOSTATUSBAR = 0x0004,
     wxFULLSCREEN_NOBORDER    = 0x0008,
     wxFULLSCREEN_NOCAPTION   = 0x0010,
-    
-    wxFULLSCREEN_ALL         = wxFULLSCREEN_NOMENUBAR | wxFULLSCREEN_NOTOOLBAR | 
-                               wxFULLSCREEN_NOSTATUSBAR | wxFULLSCREEN_NOBORDER | 
+
+    wxFULLSCREEN_ALL         = wxFULLSCREEN_NOMENUBAR | wxFULLSCREEN_NOTOOLBAR |
+                               wxFULLSCREEN_NOSTATUSBAR | wxFULLSCREEN_NOBORDER |
                                wxFULLSCREEN_NOCAPTION
 };
 
@@ -105,7 +105,7 @@ public:
 
     // maximize the window to cover entire screen
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) = 0;
-    
+
     // return TRUE if the frame is in fullscreen mode
     virtual bool IsFullScreen() const = 0;
 
@@ -122,7 +122,7 @@ public:
     bool Iconized() const { return IsIconized(); }
 #endif // WXWIN_COMPATIBILITY_2
 
-    
+
 #ifdef __WXUNIVERSAL__
     // move/resize the frame interactively, i.e. let the user do it
     virtual void InteractiveMove(int flags = wxINTERACTIVE_MOVE);

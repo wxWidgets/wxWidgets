@@ -148,12 +148,13 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
     wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
 
 #if wxUSE_TOOLBAR
-    if ( GetToolBar() && GetToolBar()->IsShown() )
+    wxToolBar *toolbar = GetToolBar();
+    if ( toolbar && toolbar->IsShown() )
     {
         int w, h;
-        GetToolBar()->GetSize(& w, & h);
+        toolbar->GetSize(&w, &h);
 
-        if ( GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
         {
             pt.x += w;
         }
@@ -186,7 +187,7 @@ bool wxFrameBase::ProcessCommand(int id)
     {
         if (!item->IsEnabled())
             return TRUE;
-            
+
         if (item->IsCheckable())
         {
             item->Toggle();

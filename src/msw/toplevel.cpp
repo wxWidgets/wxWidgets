@@ -387,39 +387,30 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 }
 
 // ----------------------------------------------------------------------------
-// wxTopLevelWindowMSW geometry
+// wxTopLevelWindowMSW client size
 // ----------------------------------------------------------------------------
 
 void wxTopLevelWindowMSW::DoSetClientSize(int width, int height)
 {
-    HWND hWnd = GetHwnd();
-
-    RECT rectClient;
-    ::GetClientRect(hWnd, &rectClient);
-
-    RECT rectTotal;
-    ::GetWindowRect(hWnd, &rectTotal);
-
-    // Find the difference between the entire window (title bar and all)
-    // and the client area; add this to the new client size to move the
-    // window
-    width += rectTotal.right - rectTotal.left - rectClient.right;
-    height += rectTotal.bottom - rectTotal.top - rectClient.bottom;
-
-    // note that calling GetClientAreaOrigin() takes the toolbar into account
+    // call GetClientAreaOrigin() to take the toolbar into account
     wxPoint pt = GetClientAreaOrigin();
     width += pt.x;
     height += pt.y;
 
-    if ( !::MoveWindow(hWnd, rectTotal.left, rectTotal.top,
-                       width, height, TRUE /* redraw */) )
-    {
-        wxLogLastError(_T("MoveWindow"));
-    }
+    wxWindow::DoSetClientSize(width, height);
+}
 
-    wxSizeEvent event(wxSize(width, height), m_windowId);
-    event.SetEventObject(this);
-    (void)GetEventHandler()->ProcessEvent(event);
+void wxTopLevelWindowMSW::DoGetClientSize(int *x, int *y) const
+{
+    wxWindow::DoGetClientSize(x, y);
+
+    wxPoint pt = GetClientAreaOrigin();
+
+    if ( x )
+        *x -= pt.x;
+
+    if ( y )
+        *y -= pt.y;
 }
 
 // ----------------------------------------------------------------------------

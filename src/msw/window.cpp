@@ -1493,40 +1493,65 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxWindowMSW::DoSetClientSize(int width, int height)
 {
-    wxWindow *parent = GetParent();
-    HWND hWnd = GetHwnd();
-    HWND hParentWnd = (HWND) 0;
-    if ( parent )
-        hParentWnd = (HWND) parent->GetHWND();
-
-    RECT rect;
-    ::GetClientRect(hWnd, &rect);
-
-    RECT rect2;
-    GetWindowRect(hWnd, &rect2);
-
-    // Find the difference between the entire window (title bar and all)
-    // and the client area; add this to the new client size to move the
-    // window
-    int actual_width = rect2.right - rect2.left - rect.right + width;
-    int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
-
-    // If there's a parent, must subtract the parent's top left corner
-    // since MoveWindow moves relative to the parent
-
-    POINT point;
-    point.x = rect2.left;
-    point.y = rect2.top;
-    if ( parent )
+    // setting the client size is less obvious than it it could have been
+    // because in the result of changing the total size the window scrollbar
+    // may [dis]appear and/or its menubar may [un]wrap and so the client size
+    // will not be correct as the difference between the total and client size
+    // changes - so we keep changing it until we get it right
+    //
+    // normally this loop shouldn't take more than 2 iterations (usually 1 but
+    // if scrollbars [dis]appear as the result of the first call, then 2) but
+    // just to be on the safe side we check for it instead of making it an
+    // "infinite" loop (i.e. leaving break inside as the only way to get out)
+    for ( int i = 0; i < 3; i++ )
     {
-        ::ScreenToClient(hParentWnd, &point);
+        RECT rectClient;
+        ::GetClientRect(GetHwnd(), &rectClient);
+
+        // if the size is already ok, stop here (rectClient.left = top = 0)
+        if ( rectClient.right == width && rectClient.bottom == height )
+        {
+            break;
+        }
+
+        if ( i == 2 )
+        {
+            // how did it happen? maybe OnSize() handler does something really
+            // strange in this class?
+            wxFAIL_MSG( _T("logic error in DoSetClientSize") );
+
+            break;
+        }
+
+        int widthClient = width,
+            heightClient = height;
+
+        // Find the difference between the entire window (title bar and all)
+        // and the client area; add this to the new client size to move the
+        // window
+        RECT rectWin;
+        ::GetWindowRect(GetHwnd(), &rectWin);
+
+        widthClient += rectWin.right - rectWin.left - rectClient.right;
+        heightClient += rectWin.bottom - rectWin.top - rectClient.bottom;
+
+        POINT point;
+        point.x = rectWin.left;
+        point.y = rectWin.top;
+
+        // MoveWindow positions the child windows relative to the parent, so
+        // adjust if necessary
+        if ( !IsTopLevel() )
+        {
+            wxWindow *parent = GetParent();
+            if ( parent )
+            {
+                ::ScreenToClient(GetHwndOf(parent), &point);
+            }
+        }
+
+        DoMoveWindow(point.x, point.y, widthClient, heightClient);
     }
-
-    DoMoveWindow(point.x, point.y, actual_width, actual_height);
-
-    wxSizeEvent event(wxSize(width, height), m_windowId);
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
 }
 
 // For implementation purposes - sometimes decorations make the client area

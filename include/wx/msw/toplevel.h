@@ -90,6 +90,7 @@ protected:
 
     // implement the geometry-related methods for a top level window
     virtual void DoSetClientSize(int width, int height);
+    virtual void DoGetClientSize(int *width, int *height) const;
 
     // get the MSW window flags corresponding to wxWindows ones
     //
