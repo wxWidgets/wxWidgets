@@ -1045,7 +1045,7 @@ bool wxMDIChildFrame::HandleGetMinMaxInfo(void *mmInfo)
     // let the default window proc calculate the size of MDI children
     // frames because it is based on the size of the MDI client window,
     // not on the values specified in wxWindow m_max variables
-    bool processed = MSWDefWindowProc(WM_GETMINMAXINFO, 0, (LPARAM)mmInfo);
+    bool processed = MSWDefWindowProc(WM_GETMINMAXINFO, 0, (LPARAM)mmInfo) != 0;
 
     // but allow GetSizeHints() to set the min size
     if ( m_minWidth != -1 )
