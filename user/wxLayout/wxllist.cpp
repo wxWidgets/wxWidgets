@@ -46,7 +46,7 @@ static const char *g_aTypeStrings[] =
 };
    
 #  define   wxLayoutDebug        wxLogDebug
-#  define   WXL_VAR(x)           wxLogDebug(#x " = ", x)
+#  define   WXL_VAR(x)           cerr << #x " = " << x ;
 #  define   WXL_DBG_POINT(p)     wxLogDebug(#p ": (%d, %d)", p.x, p.y)
 #  define   WXL_TRACE(f)         wxLogDebug(#f ": ")
 #  define   TypeString(t)        g_aTypeStrings[t]
@@ -236,6 +236,7 @@ wxLayoutList::SetFont(int family, int size, int style, int weight,
 void
 wxLayoutList::SetFont(int family, int size, int style, int weight,
                       int underline, char const *fg, char const *bg)
+
 {
    wxColour const
       * cfg = NULL,
@@ -255,14 +256,15 @@ void
 wxLayoutList::GetSize(CoordType *max_x, CoordType *max_y,
                       CoordType *lineHeight)
 {
-   wxASSERT(max_x); wxASSERT(max_y); wxASSERT(lineHeight);
-   *max_x = m_MaxX;
-   *max_y = m_MaxY;
-   *lineHeight = m_LineHeight;
+   
+   if(max_x) *max_x = m_MaxX;
+   if(max_y) *max_y = m_MaxY;
+   if(lineHeight) *lineHeight = m_LineHeight;
 }
 
 wxLayoutObjectBase *
-wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
+wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const
+                   &findCoords, int pageNo, bool reallyDraw)
 {
    wxLayoutObjectList::iterator i;
 
@@ -310,19 +312,16 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
       int top, bottom, left, right;
    } margins;
 
-   if(
-#ifdef __WXMSW__
-      dc.IsKindOf(CLASSINFO(wxPrinterDC)) ||
-#endif
-      dc.IsKindOf(CLASSINFO(wxPostScriptDC)))
+   int currentPage = 1;
+   
+   if(pageNo > 0)
    {
       dc.GetSize(&pageWidth, &pageHeight);
-      dc.StartDoc(_("Printing..."));
-      dc.StartPage();
-      margins.top = (1*pageHeight)/10;    // 10%
-      margins.bottom = (9*pageHeight)/10; // 90%
-      margins.left = (1*pageWidth)/10;
-      margins.right = (9*pageWidth)/10;
+      WXL_VAR(pageHeight);
+      margins.top = 0;   //(1*pageHeight)/10;    // 10%
+      margins.bottom = pageHeight;// (9*pageHeight)/10; // 90%
+      margins.left = 0;  //(1*pageWidth)/10;
+      margins.right = pageWidth; //(9*pageWidth)/10;
    }
    else
    {
@@ -330,7 +329,7 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
       margins.right = -1;
       margins.bottom = -1;
    }
-   position.y = margins.right;
+   position.y = margins.top;
    position.x = margins.left;
    
    // if the cursorobject is a cmd, we need to find the first
@@ -365,8 +364,14 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
       type = (*i)->GetType();
 
       // to initialise sizes of objects, we need to call Draw
-      (*i)->Draw(dc, position, baseLine, draw);
-
+      if(draw && (pageNo == -1 || pageNo == currentPage))
+      {
+         (*i)->Draw(dc, position, baseLine, draw);
+#ifdef   WXLAYOUT_DEBUG
+         if(i == begin())
+            wxLogDebug("first position = (%d,%d)",(int) position.x, (int)position.y);
+#endif
+      }
       // update coordinates for next object:
       size = (*i)->GetSize(&objBaseLine);
       if(findObject && draw)  // we need to look for an object
@@ -448,17 +453,19 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
          {
             // if the this line needs to go onto a new page, we need
             // to change pages before drawing it:
-            if(margins.bottom != -1 && position.y > margins.bottom)
+            if(pageNo > 0 && position.y > margins.bottom)
             {
-               dc.EndPage();
+               currentPage++;
                position_HeadOfLine.y = margins.top;
-               dc.StartPage();
             }
-            // do this line again, this time drawing it
-            position = position_HeadOfLine;
-            draw = true;
-            i = headOfLine;
-            continue;
+            if(reallyDraw && (pageNo == -1 || pageNo == currentPage))
+            {
+               // do this line again, this time drawing it
+               position = position_HeadOfLine;
+               draw = true;
+               i = headOfLine;
+               continue;
+            }
          }
          else // we have drawn a line, so continue calculating next one
             draw = false;
@@ -478,7 +485,6 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
       }
       i++;
    }
-   dc.EndDoc();
    // draw the cursor
    if(m_Editable)
    {
@@ -996,4 +1002,75 @@ wxLayoutList::Clear(int family, int size, int style, int weight,
       wxLayoutObjectCmd(m_FontPtSize,m_FontFamily,m_FontStyle,
                         m_FontWeight,m_FontUnderline,
                         m_ColourFG, m_ColourBG);
+}
+
+
+
+/******************** printing stuff ********************/
+
+bool wxLayoutPrintout::OnPrintPage(int page)
+{
+  wxDC *dc = GetDC();
+  if (dc)
+  {
+     m_llist->Draw(*dc,false,wxPoint(0,0),page);
+     return TRUE;
+  }
+  else
+    return FALSE;
+}
+
+bool wxLayoutPrintout::OnBeginDocument(int startPage, int endPage)
+{
+  if (!wxPrintout::OnBeginDocument(startPage, endPage))
+    return FALSE;
+
+  return TRUE;
+}
+
+void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
+{
+
+   // This code doesn't work, because we don't have a DC yet.
+   // How on earth are we supposed to calculate the number of pages then?
+
+   *minPage = 1;
+   *maxPage = 32000;
+
+   *selPageFrom = 1;
+   *selPageTo = 1;
+
+#if 0
+   CoordType height;
+   int pageWidth, pageHeight;
+
+   wxDC *dc = GetDC();
+   wxASSERT(dc);
+
+   dc->GetSize(&pageWidth, &pageHeight);
+// don't draw but just recalculate sizes:
+   m_llist->Draw(*dc,false,wxPoint(0,0),-1,false);
+   m_llist->GetSize(NULL,&height,NULL);
+   
+   *minPage = 1;
+   *maxPage = height/pageHeight+1;
+
+   *selPageFrom = 1;
+   *selPageTo = *maxPage;
+   m_maxPage = *maxPage;
+#endif
+   
+}
+
+bool wxLayoutPrintout::HasPage(int pageNum)
+{
+   return true;
+//   return m_maxPage >= pageNum;
+}
+
+
+wxLayoutPrintout *
+wxLayoutList::MakePrintout(wxString const &name)
+{
+   return new wxLayoutPrintout(*this,name);
 }

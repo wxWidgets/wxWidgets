@@ -30,18 +30,41 @@ IMPLEMENT_APP(MyApp)
 // MyFrame
 //-----------------------------------------------------------------------------
 
-   enum ids{ ID_EDIT = 1, ID_ADD_SAMPLE, ID_CLEAR, ID_PRINT, ID_DPRINT,
+   enum ids{ ID_EDIT = 1, ID_ADD_SAMPLE, ID_CLEAR, ID_PRINT,
+             ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
+             ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
+             ID_DPRINT,
              ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT, ID_TEST };
 
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
    BEGIN_EVENT_TABLE(MyFrame,wxFrame)
-   EVT_MENU    (-1,       MyFrame::OnCommand)
-   EVT_COMMAND (-1,-1,    MyFrame::OnCommand)
-   EVT_CHAR    (  wxLayoutWindow::OnChar  )
+    EVT_MENU(ID_PRINT, MyFrame::OnPrint)
+    EVT_MENU(ID_PREVIEW, MyFrame::OnPrintPreview)
+    EVT_MENU(ID_PRINT_SETUP, MyFrame::OnPrintSetup)
+    EVT_MENU(ID_PAGE_SETUP, MyFrame::OnPageSetup)
+    EVT_MENU(ID_PRINT_PS, MyFrame::OnPrintPS)
+    EVT_MENU(ID_PREVIEW_PS, MyFrame::OnPrintPreviewPS)
+    EVT_MENU(ID_PRINT_SETUP_PS, MyFrame::OnPrintSetupPS)
+    EVT_MENU(ID_PAGE_SETUP_PS, MyFrame::OnPageSetupPS)
+    EVT_MENU    (-1,       MyFrame::OnCommand)
+    EVT_COMMAND (-1,-1,    MyFrame::OnCommand)
+    EVT_CHAR    (  wxLayoutWindow::OnChar  )
    END_EVENT_TABLE()
 
+
+
+
+
+
+int orientation = wxPORTRAIT;
+
+
+
+
+
+   
    MyFrame::MyFrame(void) :
       wxFrame( NULL, -1, "wxLayout", wxPoint(20,20), wxSize(600,360) )
 {
@@ -54,7 +77,20 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
    file_menu->Append( ID_ADD_SAMPLE, "Example");
    file_menu->Append( ID_EDIT, "Edit");
    file_menu->Append( ID_WXLAYOUT_DEBUG, "Debug");
-   file_menu->Append( ID_PRINT, "Print");
+
+  file_menu->Append(ID_PRINT, "&Print...", "Print");
+  file_menu->Append(ID_PRINT_SETUP, "Print &Setup...","Setup printer properties");
+  file_menu->Append(ID_PAGE_SETUP, "Page Set&up...", "Page setup");
+  file_menu->Append(ID_PREVIEW, "Print Pre&view", "Preview");
+#ifdef __WXMSW__
+  file_menu->AppendSeparator();
+  file_menu->Append(ID_PRINT_PS, "Print PostScript...", "Print (PostScript)");
+  file_menu->Append(ID_PRINT_SETUP_PS, "Print Setup PostScript...", "Setup printer properties (PostScript)");
+  file_menu->Append(ID_PAGE_SETUP_PS, "Page Setup PostScript...", "Page setup (PostScript)");
+  file_menu->Append(ID_PREVIEW_PS, "Print Preview PostScript", "Preview (PostScript)");
+#endif
+  file_menu->AppendSeparator();
+
    file_menu->Append( ID_DPRINT, "Direct Print");
    file_menu->Append( ID_TEXT, "Export Text");
    file_menu->Append( ID_HTML, "Export HTML");
@@ -261,6 +297,137 @@ void MyFrame::OnCommand( wxCommandEvent &event )
    break;
    }
 };
+
+void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
+{
+#ifdef __WXMSW__
+      wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
+#else
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+#endif
+      wxPrinter printer;
+      wxLayoutPrintout printout( m_lwin->GetLayoutList(),"My printout");
+      if (!printer.Print(this, &printout, TRUE))
+        wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK);
+}
+
+void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
+{
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+
+      wxPostScriptPrinter printer;
+      wxLayoutPrintout printout( m_lwin->GetLayoutList(),"My printout");
+      printer.Print(this, &printout, TRUE);
+}
+
+void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
+{
+#ifdef __WXMSW__
+      wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
+#else
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+#endif
+      wxPrintData printData;
+      printData.SetOrientation(orientation);
+
+      // Pass two printout objects: for preview, and possible printing.
+      wxPrintPreview *preview = new wxPrintPreview(new wxLayoutPrintout( m_lwin->GetLayoutList()), new wxLayoutPrintout( m_lwin->GetLayoutList()), & printData);
+      if (!preview->Ok())
+      {
+        delete preview;
+        wxMessageBox("There was a problem previewing.\nPerhaps your current printer is not set correctly?", "Previewing", wxOK);
+        return;
+      }
+      
+      wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
+      frame->Centre(wxBOTH);
+      frame->Initialize();
+      frame->Show(TRUE);
+}
+
+void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
+{
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+
+      wxPrintData printData;
+      printData.SetOrientation(orientation);
+
+      // Pass two printout objects: for preview, and possible printing.
+      wxPrintPreview *preview = new wxPrintPreview(new wxLayoutPrintout( m_lwin->GetLayoutList()), new wxLayoutPrintout( m_lwin->GetLayoutList()), & printData);
+      wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
+      frame->Centre(wxBOTH);
+      frame->Initialize();
+      frame->Show(TRUE);
+}
+
+void MyFrame::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
+{
+#ifdef __WXMSW__
+      wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
+#else
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+#endif
+      wxPrintData data;
+      data.SetOrientation(orientation);
+
+#ifdef __WXMSW__
+      wxPrintDialog printerDialog(this, & data);
+#else
+      wxGenericPrintDialog printerDialog(this, & data);
+#endif
+      printerDialog.GetPrintData().SetSetupDialog(TRUE);
+      printerDialog.ShowModal();
+
+      orientation = printerDialog.GetPrintData().GetOrientation();
+}
+
+void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
+{
+#ifdef __WXMSW__
+      wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
+#else
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+#endif
+      wxPageSetupData data;
+      data.SetOrientation(orientation);
+
+#ifdef __WXMSW__
+      wxPageSetupDialog pageSetupDialog(this, & data);
+#else
+      wxGenericPageSetupDialog pageSetupDialog(this, & data);
+#endif
+      pageSetupDialog.ShowModal();
+
+      data = pageSetupDialog.GetPageSetupData();
+      orientation = data.GetOrientation();
+}
+
+void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
+{
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+
+      wxPrintData data;
+      data.SetOrientation(orientation);
+
+      wxGenericPrintDialog printerDialog(this, & data);
+      printerDialog.GetPrintData().SetSetupDialog(TRUE);
+      printerDialog.ShowModal();
+
+      orientation = printerDialog.GetPrintData().GetOrientation();
+}
+
+void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
+{
+      wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
+
+      wxPageSetupData data;
+      data.SetOrientation(orientation);
+
+      wxGenericPageSetupDialog pageSetupDialog(this, & data);
+      pageSetupDialog.ShowModal();
+
+      orientation = pageSetupDialog.GetPageSetupData().GetOrientation();
+}
 
 
 //-----------------------------------------------------------------------------

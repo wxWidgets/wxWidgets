@@ -15,6 +15,10 @@
 #include   "kbList.h"
 
 #include   "wx/wx.h"
+#include "wx/print.h"
+#include "wx/printdlg.h"
+#include "wx/generic/printps.h"
+#include "wx/generic/prntdlgg.h"
 
 // skip the following defines if embedded in M application
 #ifdef   M_BASEDIR
@@ -189,6 +193,8 @@ public:
 };
 
 
+class wxLayoutPrintout;
+
 /**
    This class provides a high level abstraction to the wxFText
    classes.
@@ -229,10 +235,14 @@ public:
        @param findObject if true, return the object occupying the
        position specified by coords
        @param coords position where to find the object
+       @pageNo if > 0, print only that page of a document (for
+       printing)
+       @reallyDraw set this to false if you don't want to draw but just calculate the coordinates
        @return if findObject == true, the object or NULL
    */
    wxLayoutObjectBase *Draw(wxDC &dc, bool findObject = false,
-                       wxPoint const &coords = wxPoint(0,0));
+                            wxPoint const &coords = wxPoint(0,0),
+                            int pageNo = -1, bool reallyDraw = true);
 
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
@@ -244,6 +254,7 @@ public:
    void GetSize(CoordType *max_x, CoordType *max_y,
                 CoordType *lineHeight);
 
+   
    /**@name Functionality for editing */
    //@{
    /// set list editable or read only
@@ -269,6 +280,8 @@ public:
    // only used to decide whether we are before or after linebreak
    CoordType GetLineLength(wxLayoutObjectList::iterator i,
                            CoordType offs = 0);
+   wxLayoutPrintout *MakePrintout(wxString const &name);
+
 //@}
 protected:
    /// font parameters:
@@ -305,6 +318,21 @@ protected:
    /// in there
    wxLayoutObjectList::iterator FindObjectCursor(wxPoint *cpos, CoordType *offset = NULL);
    
+};
+
+class wxLayoutPrintout: public wxPrintout
+{
+ public:
+   wxLayoutPrintout(wxLayoutList &llist, wxString const & title = "My printout"):wxPrintout(title)
+      { m_llist = &llist; m_maxPage = 0; }
+  bool OnPrintPage(int page);
+  bool HasPage(int page);
+  bool OnBeginDocument(int startPage, int endPage);
+   void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int
+                    *selPageTo);
+private:
+   wxLayoutList *m_llist;
+   int           m_maxPage;
 };
 
 #endif // WXLLIST_H

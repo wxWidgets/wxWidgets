@@ -35,6 +35,16 @@ class MyFrame: public wxFrame
    void AddSampleText(wxLayoutList &llist);
    void Clear(void);
    void OnCommand( wxCommandEvent &event );
+
+    void OnPrint(wxCommandEvent& event);
+    void OnPrintPreview(wxCommandEvent& event);
+    void OnPrintSetup(wxCommandEvent& event);
+    void OnPageSetup(wxCommandEvent& event);
+    void OnPrintPS(wxCommandEvent& event);
+    void OnPrintPreviewPS(wxCommandEvent& event);
+    void OnPrintSetupPS(wxCommandEvent& event);
+    void OnPageSetupPS(wxCommandEvent& event);
+
    DECLARE_EVENT_TABLE()
 
 private:
