@@ -445,7 +445,7 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
     if ( no_bits == 1 )
     {
         M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
-        MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) = wxMacCreateGWorld( the_width , the_height , no_bits ) ;
+        M_BITMAPDATA->m_hBitmap = wxMacCreateGWorld( the_width , the_height , no_bits ) ;
         M_BITMAPDATA->m_ok = (MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) != NULL ) ;
 
         CGrafPtr    origPort ;
