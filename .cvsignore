@@ -37,6 +37,7 @@ base
 gtk
 motif
 win32
+univ
 base-release
 gtk-release
 motif-release
