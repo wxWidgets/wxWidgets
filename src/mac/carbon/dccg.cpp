@@ -252,7 +252,6 @@ void wxMacCGContext::FillPath( const wxGraphicPath *p , const wxColor &fillColor
     
 wxGraphicPath* wxMacCGContext::CreatePath() 
 { 
-    CGContextRef cg = GetNativeContext() ;
     // make sure that we now have a real cgref, before doing
     // anything with paths
     return new wxMacCGPath() ; 
@@ -1006,11 +1005,9 @@ void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
         -atan2(double(yy2-yyc), double(xx2-xxc)) * RAD2DEG;
     }
     wxCoord alpha2 = wxCoord(radius2 - radius1);
-    wxCoord alpha1 = wxCoord(wxConvertWXangleToMACangle(radius1));
     if( (xx1 > xx2) || (yy1 > yy2) ) {
         alpha2 *= -1;
     }
-    Rect r = { yyc - rad, xxc - rad, yyc + rad, xxc + rad };
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
     AddEllipticArcToPath( ctx , CGPointMake( xxc , yyc ) , rad , rad , 0 , 180 ) ;
@@ -1149,7 +1146,6 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
         hh = -hh;
         yy = yy - hh;
     }
-    Rect rect = { yy , xx , yy + hh , xx + ww } ;
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
     AddRoundedRectToPath( ctx  , CGRectMake( xx , yy , ww , hh ) , 16 ,16  ) ;
@@ -1355,14 +1351,14 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
             drawX , 
             drawY ) ;
         path->AddLineToPoint( 
-            drawX + sin(angle/RAD2DEG) * FixedToInt(ascent + descent) , 
-            drawY + cos(angle/RAD2DEG) * FixedToInt(ascent + descent) ) ;
+            (int) (drawX + sin(angle/RAD2DEG) * FixedToInt(ascent + descent)) , 
+            (int) (drawY + cos(angle/RAD2DEG) * FixedToInt(ascent + descent)) ) ;
         path->AddLineToPoint( 
-            drawX + sin(angle/RAD2DEG) * FixedToInt(ascent + descent ) + cos(angle/RAD2DEG) * FixedToInt(textAfter) ,
-            drawY + cos(angle/RAD2DEG) * FixedToInt(ascent + descent) - sin(angle/RAD2DEG) * FixedToInt(textAfter) ) ;
+            (int) (drawX + sin(angle/RAD2DEG) * FixedToInt(ascent + descent ) + cos(angle/RAD2DEG) * FixedToInt(textAfter)) ,
+            (int) (drawY + cos(angle/RAD2DEG) * FixedToInt(ascent + descent) - sin(angle/RAD2DEG) * FixedToInt(textAfter)) ) ;
         path->AddLineToPoint( 
-            drawX + cos(angle/RAD2DEG) * FixedToInt(textAfter) , 
-            drawY - sin(angle/RAD2DEG) * FixedToInt(textAfter) ) ;
+            (int) (drawX + cos(angle/RAD2DEG) * FixedToInt(textAfter)) , 
+            (int) (drawY - sin(angle/RAD2DEG) * FixedToInt(textAfter)) ) ;
             
         m_graphicContext->FillPath( path , m_textBackgroundColour ) ;
         delete path ;
