@@ -14,10 +14,10 @@ PROGRAM=studio
 OBJECTS=$(PROGRAM).o doc.o shapes.o symbols.o view.o cspalette.o\
   mainfrm.o project.o dialogs.o csprint.o
 
-EXTRACPPFLAGS=-I$(WXDIR)/utils/ogl/src
+EXTRACPPFLAGS=-I$(WXDIR)/utils/ogl/src -I./bitmaps
 EXTRALDLIBS=-logl$(GUISUFFIX)
 
-WXDIR=/home/jacs/wx2
+#WXDIR=/home/jacs/wx2
 
 include $(WXDIR)/src/makeprog.env
 
