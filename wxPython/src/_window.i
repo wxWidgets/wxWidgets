@@ -1572,6 +1572,20 @@ toplevel parent of the window.", "");
         }
     }
 
+    DocStr(
+        AssociateHandle,
+        "Associate the window with a new native handle", "");
+    %extend {
+        void  AssociateHandle(long handle) {
+            self->AssociateHandle((WXWidget)handle);
+        }
+    }
+        
+           
+    DocDeclStr(
+        virtual void , DissociateHandle(),
+        "Dissociate the current native handle from the window", "");
+    
 
     
 #ifdef __WXMSW__
