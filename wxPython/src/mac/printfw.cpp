@@ -62,6 +62,12 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "printfw.h"
 
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxChar* wxPrintoutTitleStr = wxT("Printout");
+    DECLARE_DEF_STRING(PrintoutTitleStr);
+
+    DECLARE_DEF_STRING(FrameNameStr);
+
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -3689,16 +3695,23 @@ static void *SwigwxPyPrintoutTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxPrintout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _result;
-    char * _arg0 = (char *) "Printout";
+    wxString * _arg0 = (wxString *) &wxPyPrintoutTitleStr;
+    PyObject * _obj0 = 0;
     char *_kwnames[] = { "title", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|s:new_wxPrintout",_kwnames,&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxPrintout",_kwnames,&_obj0)) 
         return NULL;
+    if (_obj0)
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPyPrintout *)new_wxPrintout(_arg0);
+    _result = (wxPyPrintout *)new_wxPrintout(*_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3709,6 +3722,10 @@ static PyObject *_wrap_new_wxPrintout(PyObject *self, PyObject *args, PyObject *
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj0)
+        delete _arg0;
+}
     return _resultobj;
 }
 
@@ -4508,14 +4525,15 @@ static PyObject *_wrap_wxPrinter_ReportError(PyObject *self, PyObject *args, PyO
     wxPrinter * _arg0;
     wxWindow * _arg1;
     wxPyPrintout * _arg2;
-    char * _arg3;
+    wxString * _arg3;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "self","parent","printout","message", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOs:wxPrinter_ReportError",_kwnames,&_argo0,&_argo1,&_argo2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:wxPrinter_ReportError",_kwnames,&_argo0,&_argo1,&_argo2,&_obj3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4539,13 +4557,22 @@ static PyObject *_wrap_wxPrinter_ReportError(PyObject *self, PyObject *args, PyO
         }
     }
 {
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrinter_ReportError(_arg0,_arg1,_arg2,_arg3);
+    wxPrinter_ReportError(_arg0,_arg1,_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj3)
+        delete _arg3;
+}
     return _resultobj;
 }
 
@@ -5185,7 +5212,7 @@ static PyObject *_wrap_new_wxPreviewFrame(PyObject *self, PyObject *args, PyObje
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxDEFAULT_FRAME_STYLE;
-    char * _arg6 = (char *) "frame";
+    wxString * _arg6 = (wxString *) &wxPyFrameNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
@@ -5193,11 +5220,12 @@ static PyObject *_wrap_new_wxPreviewFrame(PyObject *self, PyObject *args, PyObje
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "preview","parent","title","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|OOls:new_wxPreviewFrame",_kwnames,&_argo0,&_argo1,&_obj2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|OOlO:new_wxPreviewFrame",_kwnames,&_argo0,&_argo1,&_obj2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5230,9 +5258,15 @@ static PyObject *_wrap_new_wxPreviewFrame(PyObject *self, PyObject *args, PyObje
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPreviewFrame *)new_wxPreviewFrame(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (wxPreviewFrame *)new_wxPreviewFrame(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5246,6 +5280,10 @@ static PyObject *_wrap_new_wxPreviewFrame(PyObject *self, PyObject *args, PyObje
 {
     if (_obj2)
         delete _arg2;
+}
+{
+    if (_obj6)
+        delete _arg6;
 }
     return _resultobj;
 }

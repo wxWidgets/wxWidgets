@@ -91,35 +91,22 @@ class wxHtmlContentsItemPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __setattr__(self,name,value):
-        if name == "m_Level" :
-            htmlhelpc.wxHtmlContentsItem_m_Level_set(self,value)
-            return
-        if name == "m_ID" :
-            htmlhelpc.wxHtmlContentsItem_m_ID_set(self,value)
-            return
-        if name == "m_Name" :
-            htmlhelpc.wxHtmlContentsItem_m_Name_set(self,value)
-            return
-        if name == "m_Page" :
-            htmlhelpc.wxHtmlContentsItem_m_Page_set(self,value)
-            return
-        if name == "m_Book" :
-            htmlhelpc.wxHtmlContentsItem_m_Book_set(self,value.this)
-            return
-        self.__dict__[name] = value
-    def __getattr__(self,name):
-        if name == "m_Level" : 
-            return htmlhelpc.wxHtmlContentsItem_m_Level_get(self)
-        if name == "m_ID" : 
-            return htmlhelpc.wxHtmlContentsItem_m_ID_get(self)
-        if name == "m_Name" : 
-            return htmlhelpc.wxHtmlContentsItem_m_Name_get(self)
-        if name == "m_Page" : 
-            return htmlhelpc.wxHtmlContentsItem_m_Page_get(self)
-        if name == "m_Book" : 
-            return wxHtmlBookRecordPtr(htmlhelpc.wxHtmlContentsItem_m_Book_get(self))
-        raise AttributeError,name
+    def GetLevel(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlContentsItem_GetLevel,(self,) + _args, _kwargs)
+        return val
+    def GetID(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlContentsItem_GetID,(self,) + _args, _kwargs)
+        return val
+    def GetName(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlContentsItem_GetName,(self,) + _args, _kwargs)
+        return val
+    def GetPage(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlContentsItem_GetPage,(self,) + _args, _kwargs)
+        return val
+    def GetBook(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlContentsItem_GetBook,(self,) + _args, _kwargs)
+        if val: val = wxHtmlBookRecordPtr(val) 
+        return val
     def __repr__(self):
         return "<C wxHtmlContentsItem instance at %s>" % (self.this,)
 class wxHtmlContentsItem(wxHtmlContentsItemPtr):

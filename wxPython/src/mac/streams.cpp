@@ -214,7 +214,7 @@ static PyObject *_wrap_wxInputStream_eof(PyObject *self, PyObject *args, PyObjec
 #define wxInputStream_read(_swigobj,_swigarg0)  (_swigobj->read(_swigarg0))
 static PyObject *_wrap_wxInputStream_read(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxString * _result;
+    PyObject * _result;
     wxPyInputStream * _arg0;
     int  _arg1 = (int ) -1;
     PyObject * _argo0 = 0;
@@ -232,16 +232,12 @@ static PyObject *_wrap_wxInputStream_read(PyObject *self, PyObject *args, PyObje
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxString *)wxInputStream_read(_arg0,_arg1);
+    _result = (PyObject *)wxInputStream_read(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
+  _resultobj = _result;
 }
     return _resultobj;
 }
@@ -249,7 +245,7 @@ static PyObject *_wrap_wxInputStream_read(PyObject *self, PyObject *args, PyObje
 #define wxInputStream_readline(_swigobj,_swigarg0)  (_swigobj->readline(_swigarg0))
 static PyObject *_wrap_wxInputStream_readline(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxString * _result;
+    PyObject * _result;
     wxPyInputStream * _arg0;
     int  _arg1 = (int ) -1;
     PyObject * _argo0 = 0;
@@ -267,16 +263,12 @@ static PyObject *_wrap_wxInputStream_readline(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxString *)wxInputStream_readline(_arg0,_arg1);
+    _result = (PyObject *)wxInputStream_readline(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
+  _resultobj = _result;
 }
     return _resultobj;
 }
@@ -284,7 +276,7 @@ static PyObject *_wrap_wxInputStream_readline(PyObject *self, PyObject *args, Py
 #define wxInputStream_readlines(_swigobj,_swigarg0)  (_swigobj->readlines(_swigarg0))
 static PyObject *_wrap_wxInputStream_readlines(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxStringPtrList * _result;
+    PyObject * _result;
     wxPyInputStream * _arg0;
     int  _arg1 = (int ) -1;
     PyObject * _argo0 = 0;
@@ -302,28 +294,12 @@ static PyObject *_wrap_wxInputStream_readlines(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxStringPtrList *)wxInputStream_readlines(_arg0,_arg1);
+    _result = (PyObject *)wxInputStream_readlines(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
-    if (_result) {
-        _resultobj = PyList_New(_result->GetCount());
-        wxStringPtrList::Node *node = _result->GetFirst();
-        for (int i=0; node; i++) {
-            wxString *s = node->GetData();
-#if wxUSE_UNICODE
-            PyList_SetItem(_resultobj, i, PyUnicode_FromUnicode(s->c_str(), s->Len()));
-#else
-            PyList_SetItem(_resultobj, i, PyString_FromStringAndSize(s->c_str(), s->Len()));
-#endif
-            node = node->GetNext();
-            delete s;
-        }
-        delete _result;
-    }
-    else
-        _resultobj=0;
+  _resultobj = _result;
 }
     return _resultobj;
 }
@@ -386,16 +362,24 @@ static PyObject *_wrap_wxInputStream_tell(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-static void  wxOutputStream_write(wxOutputStream *self,const wxString & str) {
-            self->Write(str.c_str(), str.Length());
+static void  wxOutputStream_write(wxOutputStream *self,PyObject * obj) {
+            // We use only strings for the streams, not unicode
+            PyObject* str = PyObject_Str(obj);
+            if (! str) {
+                PyErr_SetString(PyExc_TypeError, "Unable to convert to string");
+                return;
+            }
+            self->Write(PyString_AS_STRING(str),
+                        PyString_GET_SIZE(str));
+            Py_DECREF(str);
         }
 static PyObject *_wrap_wxOutputStream_write(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxOutputStream * _arg0;
-    wxString * _arg1;
+    PyObject * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","str", NULL };
+    char *_kwnames[] = { "self","obj", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxOutputStream_write",_kwnames,&_argo0,&_obj1)) 
@@ -408,22 +392,16 @@ static PyObject *_wrap_wxOutputStream_write(PyObject *self, PyObject *args, PyOb
         }
     }
 {
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
+  _arg1 = _obj1;
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxOutputStream_write(_arg0,*_arg1);
+    wxOutputStream_write(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
-{
-    if (_obj1)
-        delete _arg1;
-}
     return _resultobj;
 }
 

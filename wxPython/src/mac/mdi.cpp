@@ -83,6 +83,9 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
+
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(FrameNameStr);
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -136,18 +139,19 @@ static PyObject *_wrap_new_wxMDIParentFrame(PyObject *self, PyObject *args, PyOb
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL;
-    char * _arg6 = (char *) "frame";
+    wxString * _arg6 = (wxString *) &wxPyFrameNameStr;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "parent","id","title","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxMDIParentFrame",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlO:new_wxMDIParentFrame",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -173,9 +177,15 @@ static PyObject *_wrap_new_wxMDIParentFrame(PyObject *self, PyObject *args, PyOb
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxMDIParentFrame *)new_wxMDIParentFrame(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (wxMDIParentFrame *)new_wxMDIParentFrame(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -189,6 +199,10 @@ static PyObject *_wrap_new_wxMDIParentFrame(PyObject *self, PyObject *args, PyOb
 {
     if (_obj2)
         delete _arg2;
+}
+{
+    if (_obj6)
+        delete _arg6;
 }
     return _resultobj;
 }
@@ -230,7 +244,7 @@ static PyObject *_wrap_wxMDIParentFrame_Create(PyObject *self, PyObject *args, P
     wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg5 = (wxSize *) &wxDefaultSize;
     long  _arg6 = (long ) wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL;
-    char * _arg7 = (char *) "frame";
+    wxString * _arg7 = (wxString *) &wxPyFrameNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj3 = 0;
@@ -238,10 +252,11 @@ static PyObject *_wrap_wxMDIParentFrame_Create(PyObject *self, PyObject *args, P
     PyObject * _obj4 = 0;
     wxSize  temp0;
     PyObject * _obj5 = 0;
+    PyObject * _obj7 = 0;
     char *_kwnames[] = { "self","parent","id","title","pos","size","style","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOiO|OOls:wxMDIParentFrame_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_obj5,&_arg6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOiO|OOlO:wxMDIParentFrame_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_obj5,&_arg6,&_obj7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -274,9 +289,15 @@ static PyObject *_wrap_wxMDIParentFrame_Create(PyObject *self, PyObject *args, P
     if (! wxSize_helper(_obj5, &_arg5))
         return NULL;
 }
+    if (_obj7)
+{
+    _arg7 = wxString_in_helper(_obj7);
+    if (_arg7 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxMDIParentFrame_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,*_arg5,_arg6,_arg7);
+    _result = (bool )wxMDIParentFrame_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,*_arg5,_arg6,*_arg7);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -284,6 +305,10 @@ static PyObject *_wrap_wxMDIParentFrame_Create(PyObject *self, PyObject *args, P
 {
     if (_obj3)
         delete _arg3;
+}
+{
+    if (_obj7)
+        delete _arg7;
 }
     return _resultobj;
 }
@@ -562,18 +587,19 @@ static PyObject *_wrap_new_wxMDIChildFrame(PyObject *self, PyObject *args, PyObj
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxDEFAULT_FRAME_STYLE;
-    char * _arg6 = (char *) "frame";
+    wxString * _arg6 = (wxString *) &wxPyFrameNameStr;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "parent","id","title","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxMDIChildFrame",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlO:new_wxMDIChildFrame",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -599,9 +625,15 @@ static PyObject *_wrap_new_wxMDIChildFrame(PyObject *self, PyObject *args, PyObj
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxMDIChildFrame *)new_wxMDIChildFrame(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (wxMDIChildFrame *)new_wxMDIChildFrame(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -615,6 +647,10 @@ static PyObject *_wrap_new_wxMDIChildFrame(PyObject *self, PyObject *args, PyObj
 {
     if (_obj2)
         delete _arg2;
+}
+{
+    if (_obj6)
+        delete _arg6;
 }
     return _resultobj;
 }
@@ -656,7 +692,7 @@ static PyObject *_wrap_wxMDIChildFrame_Create(PyObject *self, PyObject *args, Py
     wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg5 = (wxSize *) &wxDefaultSize;
     long  _arg6 = (long ) wxDEFAULT_FRAME_STYLE;
-    char * _arg7 = (char *) "frame";
+    wxString * _arg7 = (wxString *) &wxPyFrameNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj3 = 0;
@@ -664,10 +700,11 @@ static PyObject *_wrap_wxMDIChildFrame_Create(PyObject *self, PyObject *args, Py
     PyObject * _obj4 = 0;
     wxSize  temp0;
     PyObject * _obj5 = 0;
+    PyObject * _obj7 = 0;
     char *_kwnames[] = { "self","parent","id","title","pos","size","style","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOiO|OOls:wxMDIChildFrame_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_obj5,&_arg6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOiO|OOlO:wxMDIChildFrame_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_obj5,&_arg6,&_obj7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -700,9 +737,15 @@ static PyObject *_wrap_wxMDIChildFrame_Create(PyObject *self, PyObject *args, Py
     if (! wxSize_helper(_obj5, &_arg5))
         return NULL;
 }
+    if (_obj7)
+{
+    _arg7 = wxString_in_helper(_obj7);
+    if (_arg7 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxMDIChildFrame_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,*_arg5,_arg6,_arg7);
+    _result = (bool )wxMDIChildFrame_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,*_arg5,_arg6,*_arg7);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -710,6 +753,10 @@ static PyObject *_wrap_wxMDIChildFrame_Create(PyObject *self, PyObject *args, Py
 {
     if (_obj3)
         delete _arg3;
+}
+{
+    if (_obj7)
+        delete _arg7;
 }
     return _resultobj;
 }
@@ -1073,6 +1120,14 @@ SWIGEXPORT(void) initmdic() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("mdic", mdicMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"IDM_WINDOWTILE", PyInt_FromLong((long) 4001));
+	 PyDict_SetItemString(d,"IDM_WINDOWTILEHOR", PyInt_FromLong((long) 4001));
+	 PyDict_SetItemString(d,"IDM_WINDOWCASCADE", PyInt_FromLong((long) 4002));
+	 PyDict_SetItemString(d,"IDM_WINDOWICONS", PyInt_FromLong((long) 4003));
+	 PyDict_SetItemString(d,"IDM_WINDOWNEXT", PyInt_FromLong((long) 4004));
+	 PyDict_SetItemString(d,"IDM_WINDOWTILEVERT", PyInt_FromLong((long) 4005));
+	 PyDict_SetItemString(d,"wxFIRST_MDI_CHILD", PyInt_FromLong((long) 4100));
+	 PyDict_SetItemString(d,"wxLAST_MDI_CHILD", PyInt_FromLong((long) 4600));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
