@@ -303,9 +303,7 @@ public:
 class wxCursor : public wxGDIObject
 {
 public:
-#ifdef __WXMSW__
     wxCursor(const wxString& cursorName, long flags, int hotSpotX=0, int hotSpotY=0);
-#endif
     ~wxCursor();
 
     // wxGDIImage methods
