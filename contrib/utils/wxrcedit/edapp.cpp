@@ -30,7 +30,8 @@
 #include "wx/wx.h"
 
 #include "editor.h"
-
+#include "preview.h"
+#include "propframe.h"
 
 
 // -- Application
@@ -51,6 +52,8 @@ bool MyApp::OnInit()
     wxFrame *frame = new EditorFrame(NULL, arg);
     SetTopWindow(frame);
     frame->Show(TRUE);
+    PreviewFrame::Get()->Show(TRUE);
+    PropertiesFrame::Get()->Show(TRUE);
     return TRUE;
 }
 

@@ -28,210 +28,81 @@
 #include "editor.h"
 #include "treedt.h"
 #include "xmlhelpr.h"
-
-
-WX_DEFINE_OBJARRAY(NodeInfoArray);
+#include "nodesdb.h"
 
 
 
-void NodeInfo::Read(const wxString& filename)
+wxList NodeHandler::ms_Handlers;
+bool NodeHandler::ms_HandlersLoaded = FALSE;
+
+
+NodeHandler *NodeHandler::Find(wxXmlNode *node)
 {
-    HandlerType tp = HANDLER_NONE;
-    wxString nd, cht;
-    bool ab = FALSE;
-    long icn = -1;
-
-    Node.Empty();
-
-    wxPathList list;
-    // if modifying, don't forget to modify it in all places --
-    // search for wxINSTALL_PREFIX in editor.cpp
-    list.Add(".");
-    list.Add("./df");
-#ifdef __UNIX__ 
-    list.Add(wxGetHomeDir() + "/.wxrcedit");
-    #ifdef wxINSTALL_PREFIX
-    list.Add(wxINSTALL_PREFIX "/share/wx/wxrcedit");
-    #endif
-#endif
-    
-    wxString path = list.FindValidPath(filename);
-    if (path.IsEmpty()) return;
-    
-    wxTextFile tf;
-    tf.Open(path);
-    
-    if (!tf.IsOpened()) return;
-
-    for (size_t i = 0; i < tf.GetLineCount(); i++)
+    if (!ms_HandlersLoaded)
     {
-        if (tf[i].IsEmpty() || tf[i][0] == '#') continue;
-        wxStringTokenizer tkn(tf[i], ' ');
-        wxString s = tkn.GetNextToken();
-        if (s == "node")
-            nd = tkn.GetNextToken();
-        else if (s == "childtype")
-            cht = tkn.GetNextToken();
-        else if (s == "icon")
-            tkn.GetNextToken().ToLong(&icn);
-        else if (s == "derived")
+        ms_HandlersLoaded = TRUE;
+        ms_Handlers.DeleteContents(TRUE);
+        
+        NodeInfoArray& arr = NodesDb::Get()->GetNodesInfo();
+        NodeHandler *hnd;
+        for (size_t i = 0; i < arr.GetCount(); i++)
         {
-            if (tkn.GetNextToken() == "from")
-            {
-                s = tkn.GetNextToken();
-                DerivedFrom.Add(s);
-                Read(s + ".df");
-            }
+            if (arr[i].NodeClass.IsEmpty() || arr[i].Abstract) continue;
+
+                 if (arr[i].Type == _T("panel"))
+                hnd = new NodeHandlerPanel(&(arr[i]));
+            else if (arr[i].Type == _T("sizer"))
+                hnd = new NodeHandlerSizer(&(arr[i]));
+            else if (arr[i].Type == _T("sizeritem"))
+                hnd = new NodeHandlerSizerItem(&(arr[i]));
+            else if (arr[i].Type == _T("notebook"))
+                hnd = new NodeHandlerNotebook(&(arr[i]));
+            else if (arr[i].Type == _T("notebookpage"))
+                hnd = new NodeHandlerNotebookPage(&(arr[i]));
+            else
+                hnd = new NodeHandler(&(arr[i]));
+            if (hnd) ms_Handlers.Append(hnd);
         }
-        else if (s == "abstract")
-            ab = true;
-        else if (s == "type")
-        {
-            s = tkn.GetNextToken();
-            if (s == "sizer") tp = HANDLER_SIZER;
-            else if (s == "sizeritem") tp = HANDLER_SIZERITEM;
-            else if (s == "panel") tp = HANDLER_PANEL;
-            else if (s == "notebook") tp = HANDLER_NOTEBOOK;
-            else if (s == "notebookpage") tp = HANDLER_NOTEBOOKPAGE;
-            else /*if (s == "normal")*/ tp = HANDLER_NORMAL;
-        }
-        else if (s == "var")
-        {
-            PropertyInfo pi;
-            pi.Name = tkn.GetNextToken();
-            tkn.GetNextToken();
-            wxString typ = tkn.GetNextToken();
-            if (tkn.HasMoreTokens()) pi.MoreInfo = tkn.GetNextToken();
-            /* ADD NEW PROPERTY TYPES HERE 
-               (search for other occurences of this comment in _all_ files) */
-            if (typ == "color") pi.Type = PROP_COLOR;
-            else if (typ == "flags") pi.Type = PROP_FLAGS;
-            else if (typ == "bool") pi.Type = PROP_BOOL;
-            else if (typ == "integer") pi.Type = PROP_INTEGER;
-            else if (typ == "coord") pi.Type = PROP_COORD;
-            else if (typ == "dimension") pi.Type = PROP_DIMENSION;
-            else if (typ == "not_implemented") pi.Type = PROP_NOT_IMPLEMENTED;
-            else /*if (typ == "text")*/ pi.Type = PROP_TEXT;
-            
-            bool fnd = FALSE;
-            for (size_t j = 0; j < Props.GetCount(); j++)
-            {
-                if (Props[j].Name == pi.Name)
-                {
-                    if (Props[j].Type == pi.Type && pi.Type == PROP_FLAGS)
-                        Props[j].MoreInfo << ',' << pi.MoreInfo;
-                    else
-                        Props[j] = pi;
-                    fnd = TRUE;
-                }
-            }
-            
-            if (!fnd) Props.Add(pi);
-        }
+        ms_Handlers.Append(new NodeHandlerUnknown);        
     }
-    
-    if (!nd.IsEmpty()) Node = nd;
-    if (!cht.IsEmpty()) ChildType = cht;
-    if (tp != HANDLER_NONE) Type = tp;
-    if (icn != -1) Icon = icn;
-    Abstract = ab;
-}
 
-
-
-NodeHandler *NodeHandler::CreateFromFile(const wxString& filename, EditorFrame *frame)
-{
-    NodeHandler *hnd = NULL;
-
-    if (s_AllNodes == NULL) s_AllNodes = new NodeInfoArray;
-       
-    NodeInfo *ni = new NodeInfo; 
-    ni->Type = HANDLER_NONE;
-    ni->Icon = 0;
-    ni->Read(filename);
-    
-    // maybe we already parsed it?
-    for (size_t i = 0; i < s_AllNodes->GetCount(); i++)
-        if ((*s_AllNodes)[i].Node == ni->Node) return NULL;
-    
-    s_AllNodes->Add(*ni); // add a copy
-    
-    if (ni->Type == HANDLER_NONE || ni->Node.IsEmpty() || ni->Abstract) 
-        return NULL;
-    
-    switch (ni->Type)
+    wxNode *n = ms_Handlers.GetFirst();
+    while (n)
     {
-        case HANDLER_PANEL:
-            hnd = new NodeHandlerPanel(frame, ni);
-            break;
-        case HANDLER_SIZER:
-            hnd = new NodeHandlerSizer(frame, ni);
-            break;
-        case HANDLER_SIZERITEM:
-            hnd = new NodeHandlerSizerItem(frame, ni);
-            break;
-        case HANDLER_NOTEBOOK:
-            hnd = new NodeHandlerNotebook(frame, ni);
-            break;
-        case HANDLER_NOTEBOOKPAGE:
-            hnd = new NodeHandlerNotebookPage(frame, ni);
-            break;
-        default:
-            hnd = new NodeHandler(frame, ni);
-            break;
+        NodeHandler *h = (NodeHandler*) n->GetData();
+        if (h->CanHandle(node))
+            return h;
+        n = n->GetNext();
     }
-    
-    return hnd;
+    return NULL;
 }
 
 
 
 
-
-
-PropertyHandler* NodeHandler::s_PropHandlers[PROP_TYPES_CNT] = {NULL};
-int NodeHandler::s_RefCnt = 0;
-NodeInfoArray* NodeHandler::s_AllNodes = NULL;
-
-
-NodeHandler::NodeHandler(EditorFrame *frame, NodeInfo *ni) : 
+NodeHandler::NodeHandler(NodeInfo *ni) : 
         m_NodeInfo(ni)
 {
-    if (s_RefCnt++ == 0) CreatePropHandlers();
-}
-
-
-void NodeHandler::CreatePropHandlers()
-{
-    /* ADD NEW PROPERTY TYPES HERE 
-       (search for other occurences of this comment in _all_ files) */
-    s_PropHandlers[PROP_TEXT] = new TextPropertyHandler;
-    s_PropHandlers[PROP_FLAGS] = new FlagsPropertyHandler;
-    s_PropHandlers[PROP_COLOR] = new TextPropertyHandler;
-    s_PropHandlers[PROP_BOOL] = new BoolPropertyHandler;
-    s_PropHandlers[PROP_INTEGER] = new TextPropertyHandler;
-    s_PropHandlers[PROP_COORD] = new CoordPropertyHandler;
-    s_PropHandlers[PROP_DIMENSION] = new DimensionPropertyHandler;
-    s_PropHandlers[PROP_NOT_IMPLEMENTED] = new NotImplPropertyHandler;
 }
 
 
 NodeHandler::~NodeHandler()
 {
-    if (--s_RefCnt == 0)
-    {
-        for (int i = 0; i < PROP_TYPES_CNT; i++)
-            delete s_PropHandlers[i];
-        delete s_AllNodes; s_AllNodes = NULL;
-    }
-    delete m_NodeInfo;
 }
 
 
 
 bool NodeHandler::CanHandle(wxXmlNode *node)
 {
-    return (m_NodeInfo->Node == XmlGetClass(node));
+    return (m_NodeInfo->NodeClass == XmlGetClass(node));
+}
+
+
+
+
+PropertyInfoArray& NodeHandler::GetPropsList(wxXmlNode *node)
+{
+    return m_NodeInfo->Props;
 }
 
 
@@ -262,46 +133,23 @@ wxString NodeHandler::GetTreeString(wxXmlNode *node)
 
 
 
-void NodeHandler::CreatePropsList(wxListCtrl *listctrl, wxXmlNode *node)
-{
-    int index;
-    
-    for (size_t i = 0; i < m_NodeInfo->Props.GetCount(); i++)
-    {
-        PropertyInfo *p = &(m_NodeInfo->Props[i]);
-        index = s_PropHandlers[p->Type]->CreateListItem(listctrl, node, p);
-        listctrl->SetItemData(index, (long)new PropsListInfo(
-                                     index, s_PropHandlers[p->Type], node, 
-                                     p, listctrl));
-    }
-}
-
-
-
-wxPanel *NodeHandler::CreatePropEditPanel(wxWindow *parent, wxListCtrl *listctrl, int index)
-{
-    PropsListInfo *pli = (PropsListInfo*)listctrl->GetItemData(index);
-    
-    return pli->m_Handler->CreateEditPanel(parent, pli);
-}
-
-
 
 wxArrayString& NodeHandler::GetChildTypes()
 {
     if (m_ChildTypes.IsEmpty())
     {
         wxString basetype = m_NodeInfo->ChildType;
+        NodeInfoArray& arr = NodesDb::Get()->GetNodesInfo();
         
-        for (size_t i = 0; i < s_AllNodes->GetCount(); i++)
+        for (size_t i = 0; i < arr.GetCount(); i++)
         {
-            NodeInfo &ni = (*s_AllNodes)[i];
+            NodeInfo &ni = arr[i];
             
-            if (ni.Node == basetype && !ni.Abstract) 
-                m_ChildTypes.Add(ni.Node);
+            if (ni.NodeClass == basetype && !ni.Abstract) 
+                m_ChildTypes.Add(ni.NodeClass);
             
             if (ni.DerivedFrom.Index(basetype) != wxNOT_FOUND && !ni.Abstract)
-                m_ChildTypes.Add(ni.Node);
+                m_ChildTypes.Add(ni.NodeClass);
         }
         m_ChildTypes.Sort();
     }
@@ -336,10 +184,10 @@ wxTreeItemId NodeHandlerPanel::CreateTreeNode(wxTreeCtrl *treectrl,
     {
         if (n->GetType() == wxXML_ELEMENT_NODE &&
             n->GetName() == _T("object"))
-            EditorFrame::Get()->CreateTreeNode(treectrl, root, n);
+            Find(n)->CreateTreeNode(treectrl, root, n);
         n = n->GetNext();
     }
-    treectrl->Expand(root);
+    //treectrl->Expand(root);
     return root;
 }
 
@@ -402,22 +250,27 @@ wxTreeItemId NodeHandlerSizerItem::CreateTreeNode(wxTreeCtrl *treectrl,
 {
     wxTreeItemId root;
 
-    root = EditorFrame::Get()->CreateTreeNode(treectrl, parent, GetRealNode(node));
+    root = Find(GetRealNode(node))->CreateTreeNode(treectrl, parent, GetRealNode(node));
     ((XmlTreeData*)treectrl->GetItemData(root))->Node = node;
 
-    treectrl->Expand(root);
+    //treectrl->Expand(root);
     return root;
 }
 
 
 
-void NodeHandlerSizerItem::CreatePropsList(wxListCtrl *listctrl, wxXmlNode *node)
+PropertyInfoArray& NodeHandlerSizerItem::GetPropsList(wxXmlNode *node)
 {
-    NodeHandler::CreatePropsList(listctrl, node);
-    int item = listctrl->GetItemCount();
-    listctrl->InsertItem(item, "------");
-    listctrl->SetItemImage(item, 0, 0);
-    EditorFrame::Get()->CreatePropsList(listctrl, GetRealNode(node));
+    m_dummy = NodeHandler::GetPropsList(node);
+    wxXmlNode *nd = GetRealNode(node);
+    m_dummy.Add(PropertyInfo(wxEmptyString, wxEmptyString, wxEmptyString));
+    size_t pos = m_dummy.GetCount();
+    WX_APPEND_ARRAY(m_dummy, 
+                    Find(nd)->GetPropsList(nd));
+    for (size_t i = pos; i < m_dummy.GetCount(); i++)
+        m_dummy[i].Name = _T("object/") + m_dummy[i].Name;
+    
+    return m_dummy;
 }
 
 
@@ -425,7 +278,7 @@ void NodeHandlerSizerItem::CreatePropsList(wxListCtrl *listctrl, wxXmlNode *node
 wxString NodeHandlerSizerItem::GetTreeString(wxXmlNode *node)
 {
     wxXmlNode *n = GetRealNode(node);
-    return EditorFrame::Get()->FindHandler(n)->GetTreeString(n);
+    return Find(n)->GetTreeString(n);
 }
 
 
@@ -433,7 +286,7 @@ wxString NodeHandlerSizerItem::GetTreeString(wxXmlNode *node)
 int NodeHandlerSizerItem::GetTreeIcon(wxXmlNode *node)
 {
     wxXmlNode *n = GetRealNode(node);
-    return EditorFrame::Get()->FindHandler(n)->GetTreeIcon(n);
+    return Find(n)->GetTreeIcon(n);
 }
 
 

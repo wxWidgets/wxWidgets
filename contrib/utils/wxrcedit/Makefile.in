@@ -6,7 +6,8 @@ program_dir = contrib/utils/wxrcedit
 
 PROGRAM=wxrcedit
 
-OBJECTS=edapp.o editor.o nodehnd.o prophnd.o xmlhelpr.o preview.o
+OBJECTS=edapp.o editor.o nodehnd.o xmlhelpr.o preview.o nodesdb.o \
+        pe_basic.o pe_adv.o propedit.o propframe.o splittree.o
 
 DATADIRS = df
 DATAFILES = df/break.df df/control.df df/menu_item.df df/notebookpage.df \

@@ -61,18 +61,11 @@ class EditorFrame : public wxFrame
         wxString GetFileName() { return m_FileName; }
         
         void RefreshTree();
-        void RefreshProps(wxXmlNode *node);
-        void RefreshPropsEdit();
         bool SelectNode(wxXmlNode *node, wxTreeItemId *root = NULL);
         
         wxTreeItemId CreateTreeNode(wxTreeCtrl *treectrl, wxTreeItemId parent, wxXmlNode *node);
-        void CreatePropsList(wxListCtrl *listctrl, wxXmlNode *node);
   
         void NotifyChanged(int change_type);
-        
-        void RegisterHandlers(const wxString& dir);
-        
-        NodeHandler *FindHandler(wxXmlNode *node);
         
         static EditorFrame *Get() { return ms_Instance; }
         
@@ -80,16 +73,7 @@ class EditorFrame : public wxFrame
         static EditorFrame *ms_Instance;
     
         wxTreeCtrl *m_TreeCtrl;
-        wxTextCtrl *m_XMLIDCtrl;
-        wxImageList *m_ImgList, *m_ImgListProp;
-        wxPanel *m_PropsPanel;
-        wxScrolledWindow *m_PropsEditPanel;
-        wxSplitterWindow *m_Splitter, *m_Splitter2;
-        wxListCtrl *m_PropsList;
-        int m_SelectedProp;
         
-        wxList m_Handlers;
-
         wxXmlNode *m_SelectedNode;
         
         wxXmlNode *m_Clipboard;
@@ -101,11 +85,6 @@ class EditorFrame : public wxFrame
         void OnTreeSel(wxTreeEvent& event);
         void OnToolbar(wxCommandEvent& event);
         void OnNew(wxCommandEvent& event);
-        void OnXMLIDEdit(wxCommandEvent& event);
-        void OnXMLIDPick(wxCommandEvent& event);
-        void OnEditCode(wxCommandEvent& event);
-        void OnClearProp(wxCommandEvent& event);
-        void OnPropSel(wxListEvent& event);
         void OnNewNode(wxCommandEvent& event);
         void OnRightClickTree(wxPoint pos);
         void OnClipboardAction(wxCommandEvent& event);

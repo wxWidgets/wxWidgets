@@ -23,37 +23,7 @@ class EditorFrame;
 
 #include "wx/treectrl.h"
 #include "wx/xml/xml.h"
-#include "prophnd.h"
-
-
-
-enum HandlerType
-{
-    HANDLER_NONE = 0,
-    HANDLER_PANEL = 1,
-    HANDLER_NORMAL,
-    HANDLER_SIZER,
-    HANDLER_SIZERITEM,
-    HANDLER_NOTEBOOK,
-    HANDLER_NOTEBOOKPAGE
-};
-
-
-class NodeInfo
-{
-    public:
-        wxString Node;
-        HandlerType Type;   
-        PropertyInfoArray Props;
-        wxArrayString DerivedFrom;
-        bool Abstract;
-        wxString ChildType;
-        int Icon;
-    
-        void Read(const wxString& filename);
-};
-
-WX_DECLARE_OBJARRAY(NodeInfo, NodeInfoArray);
+#include "nodesdb.h"
 
 
 
@@ -61,38 +31,35 @@ WX_DECLARE_OBJARRAY(NodeInfo, NodeInfoArray);
 class NodeHandler : public wxObject
 {
     public:
-        static NodeHandler *CreateFromFile(const wxString& filename, EditorFrame *frame);
+        static NodeHandler *Find(wxXmlNode *node);
     
-        NodeHandler(EditorFrame *frame, NodeInfo *ni);
+        NodeHandler(NodeInfo *ni);
         virtual ~NodeHandler();
         
         virtual bool CanHandle(wxXmlNode *node);
         virtual wxTreeItemId CreateTreeNode(wxTreeCtrl *treectrl, wxTreeItemId parent,
                                     wxXmlNode *node);
-        virtual void CreatePropsList(wxListCtrl *listctrl, wxXmlNode *node);
+        virtual PropertyInfoArray& GetPropsList(wxXmlNode *node);
         virtual int GetTreeIcon(wxXmlNode * WXUNUSED(node)) {return m_NodeInfo->Icon;}
         virtual wxString GetTreeString(wxXmlNode *node);
-        wxPanel *CreatePropEditPanel(wxWindow *parent, wxListCtrl *listctrl, int index);
         wxArrayString& GetChildTypes();
         virtual void InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before = NULL);
         virtual wxXmlNode *GetRealNode(wxXmlNode *node) { return node; }
         
     protected:
+
         NodeInfo *m_NodeInfo;
         wxArrayString m_ChildTypes;
-
-        static PropertyHandler* s_PropHandlers[PROP_TYPES_CNT];
-        static int s_RefCnt;       
-        static NodeInfoArray* s_AllNodes;
         
-        void CreatePropHandlers();
+        static wxList ms_Handlers;
+        static bool ms_HandlersLoaded;
 };
 
 // wxPanel handler
 class NodeHandlerPanel : public NodeHandler
 {
     public:
-        NodeHandlerPanel(EditorFrame *frame, NodeInfo *ni) : NodeHandler(frame, ni) {}
+        NodeHandlerPanel(NodeInfo *ni) : NodeHandler(ni) {}
         
         virtual wxTreeItemId CreateTreeNode(wxTreeCtrl *treectrl, wxTreeItemId parent,
                                     wxXmlNode *node);
@@ -104,7 +71,7 @@ class NodeHandlerPanel : public NodeHandler
 class NodeHandlerSizer : public NodeHandlerPanel
 {
     public:
-        NodeHandlerSizer(EditorFrame *frame, NodeInfo *ni) : NodeHandlerPanel(frame, ni) {}
+        NodeHandlerSizer(NodeInfo *ni) : NodeHandlerPanel(ni) {}
         
         virtual void InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before = NULL);
         virtual int GetTreeIcon(wxXmlNode *node);
@@ -115,14 +82,17 @@ class NodeHandlerSizer : public NodeHandlerPanel
 class NodeHandlerSizerItem : public NodeHandler
 {
     public:
-        NodeHandlerSizerItem(EditorFrame *frame, NodeInfo *ni) : NodeHandler(frame, ni) {}
+        NodeHandlerSizerItem(NodeInfo *ni) : NodeHandler(ni) {}
 
         virtual wxTreeItemId CreateTreeNode(wxTreeCtrl *treectrl, wxTreeItemId parent,
                                     wxXmlNode *node);
-        virtual void CreatePropsList(wxListCtrl *listctrl, wxXmlNode *node);
+        virtual PropertyInfoArray& GetPropsList(wxXmlNode *node);
         virtual wxString GetTreeString(wxXmlNode *node);
         virtual int GetTreeIcon(wxXmlNode *node);
         virtual wxXmlNode *GetRealNode(wxXmlNode *node);
+
+    private:
+        PropertyInfoArray m_dummy;
 };
 
 
@@ -131,7 +101,7 @@ class NodeHandlerSizerItem : public NodeHandler
 class NodeHandlerNotebook : public NodeHandlerPanel
 {
     public:
-        NodeHandlerNotebook(EditorFrame *frame, NodeInfo *ni) : NodeHandlerPanel(frame, ni) {}
+        NodeHandlerNotebook(NodeInfo *ni) : NodeHandlerPanel(ni) {}
         
         virtual void InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before = NULL);
 };
@@ -141,8 +111,8 @@ class NodeHandlerNotebook : public NodeHandlerPanel
 class NodeHandlerNotebookPage : public NodeHandlerSizerItem
 {
     public:
-        NodeHandlerNotebookPage(EditorFrame *frame, NodeInfo *ni) : 
-                                        NodeHandlerSizerItem(frame, ni) {}
+        NodeHandlerNotebookPage(NodeInfo *ni) : 
+                                        NodeHandlerSizerItem(ni) {}
 };
 
 
@@ -151,7 +121,7 @@ class NodeHandlerNotebookPage : public NodeHandlerSizerItem
 class NodeHandlerUnknown : public NodeHandler
 {
     public:
-        NodeHandlerUnknown(EditorFrame *frame) : NodeHandler(frame, new NodeInfo) {}
+        NodeHandlerUnknown() : NodeHandler(new NodeInfo) {}
         
         virtual bool CanHandle(wxXmlNode *node) { return TRUE; }
 };

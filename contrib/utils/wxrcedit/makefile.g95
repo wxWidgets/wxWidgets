@@ -11,6 +11,7 @@ WXDIR = ../../..
 
 TARGET=wxrcedit
 EXTRALIBS=-lwxxml
-OBJECTS = edapp.o editor.o nodehnd.o prophnd.o xmlhelpr.o
+OBJECTS=edapp.o editor.o nodehnd.o xmlhelpr.o preview.o nodesdb.o \
+        pe_basic.o pe_adv.o propedit.o propframe.o splittree.o
 include $(WXDIR)/src/makeprog.g95
 

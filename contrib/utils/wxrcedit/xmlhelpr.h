@@ -18,7 +18,13 @@
 
 void XmlWriteValue(wxXmlNode *parent, const wxString& name, const wxString& value);
 wxString XmlReadValue(wxXmlNode *parent, const wxString& name);
+
+// Finds a subnode of parent named <name>
+// (may be recursive, e.g. "name1/name2" means
+// <parent><name1><name2>value</name2></name1></parent>
 wxXmlNode *XmlFindNode(wxXmlNode *parent, const wxString& name);
+wxXmlNode *XmlFindNodeSimple(wxXmlNode *parent, const wxString& path);
+
 wxString XmlGetClass(wxXmlNode *parent);
 void XmlSetClass(wxXmlNode *parent, const wxString& classname);
 

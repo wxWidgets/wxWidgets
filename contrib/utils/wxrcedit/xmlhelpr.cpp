@@ -19,12 +19,15 @@
 
 #include "wx/xml/xml.h"
 #include "wx/wx.h"
+#include "wx/tokenzr.h"
 #include "xmlhelpr.h"
 
 
 
-wxXmlNode *XmlFindNode(wxXmlNode *parent, const wxString& param)
+wxXmlNode *XmlFindNodeSimple(wxXmlNode *parent, const wxString& param)
 {
+    if (param.IsEmpty()) return parent;
+
     wxXmlNode *n = parent->GetChildren();
     
     while (n)
@@ -37,14 +40,33 @@ wxXmlNode *XmlFindNode(wxXmlNode *parent, const wxString& param)
 }
 
 
+
+wxXmlNode *XmlFindNode(wxXmlNode *parent, const wxString& path)
+{
+    wxXmlNode *n = parent;
+    wxStringTokenizer tkn(path, _T("/"));
+    while (tkn.HasMoreTokens())
+    {
+        n = XmlFindNodeSimple(n, tkn.GetNextToken());
+        if (n == NULL) break;
+    }
+    return n;
+}
+
+
+
 void XmlWriteValue(wxXmlNode *parent, const wxString& name, const wxString& value)
 {
     wxXmlNode *n = XmlFindNode(parent, name);
     if (n == NULL) 
     {
-        n = new wxXmlNode(wxXML_ELEMENT_NODE, name);
-        parent->AddChild(n);
-        n->AddChild(new wxXmlNode(wxXML_TEXT_NODE, ""));
+        wxString pname = name.BeforeLast(_T('/'));
+        if (pname.IsEmpty()) pname = name;
+        wxXmlNode *p = XmlFindNode(parent, pname);
+        if (p == NULL) p = parent;
+        n = new wxXmlNode(wxXML_ELEMENT_NODE, name.AfterLast(_T('/')));
+        p->AddChild(n);
+        n->AddChild(new wxXmlNode(wxXML_TEXT_NODE, wxEmptyString));
     }
     
     n = n->GetChildren();
