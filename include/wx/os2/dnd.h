@@ -19,7 +19,9 @@
 
 #define INCL_WINSTDDRAG
 #include <os2.h>
+#ifndef __EMX__
 #include <pmstddlg.h>
+#endif
 
 //-------------------------------------------------------------------------
 // wxDropSource
