@@ -137,7 +137,7 @@ class wxMDIChildFrame: public wxFrame
     // no toolbar bars
   virtual wxToolBar* CreateToolBar( long WXUNUSED(style), wxWindowID WXUNUSED(id), 
     const wxString& WXUNUSED(name) ) { return (wxToolBar*)NULL; }
-  virtual wxToolBar *GetToolBar() { return (wxToolBar*)NULL; }
+  virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
   
     // no icon
   void SetIcon( const wxIcon &icon ) { m_icon = icon; }
