@@ -18,13 +18,18 @@
 
 #include "wx/stream.h"
 #include "wx/longlong.h"
+#include "wx/strconv.h"
 
 #if wxUSE_STREAMS
 
 class WXDLLEXPORT wxDataInputStream
 {
 public:
+#if wxUSE_UNICODE
+    wxDataInputStream(wxInputStream& s, wxMBConv& conv = wxConvUTF8);
+#else
     wxDataInputStream(wxInputStream& s);
+#endif
     ~wxDataInputStream();
     
     bool IsOk() { return m_input->IsOk(); }
@@ -52,12 +57,19 @@ public:
 protected:
     wxInputStream *m_input;
     bool m_be_order;
+#if wxUSE_UNICODE
+    wxMBConv& m_conv;
+#endif
 };
 
 class WXDLLEXPORT wxDataOutputStream
 {
 public:
+#if wxUSE_UNICODE
+    wxDataOutputStream(wxOutputStream& s, wxMBConv& conv = wxConvUTF8);
+#else
     wxDataOutputStream(wxOutputStream& s);
+#endif
     ~wxDataOutputStream();
 
     bool IsOk() { return m_output->IsOk(); }
@@ -86,6 +98,9 @@ public:
 protected:
     wxOutputStream *m_output;
     bool m_be_order;
+#if wxUSE_UNICODE
+    wxMBConv& m_conv;
+#endif
 };
 
 #endif

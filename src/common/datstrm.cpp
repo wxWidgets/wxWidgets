@@ -28,8 +28,13 @@
 // wxDataInputStream
 // ---------------------------------------------------------------------------
 
+#if wxUSE_UNICODE
+wxDataInputStream::wxDataInputStream(wxInputStream& s, wxMBConv& conv)
+  : m_input(&s), m_be_order(FALSE), m_conv(conv)
+#else
 wxDataInputStream::wxDataInputStream(wxInputStream& s)
   : m_input(&s), m_be_order(FALSE)
+#endif
 {
 }
 
@@ -108,7 +113,7 @@ wxString wxDataInputStream::ReadString()
     char *tmp = new char[len + 1];
     m_input->Read(tmp, len);
     tmp[len] = 0;
-    wxString s(tmp);
+    wxString s(tmp, m_conv);
     delete[] tmp;
 #else
     wxString s;
@@ -185,8 +190,13 @@ wxDataInputStream& wxDataInputStream::operator>>(float& f)
 // wxDataOutputStream
 // ---------------------------------------------------------------------------
 
+#if wxUSE_UNICODE
+wxDataOutputStream::wxDataOutputStream(wxOutputStream& s, wxMBConv& conv)
+  : m_output(&s), m_be_order(FALSE), m_conv(conv)
+#else
 wxDataOutputStream::wxDataOutputStream(wxOutputStream& s)
   : m_output(&s), m_be_order(FALSE)
+#endif
 {
 }
 
@@ -235,10 +245,15 @@ void wxDataOutputStream::Write8(wxUint8 i)
 
 void wxDataOutputStream::WriteString(const wxString& string)
 {
+#if wxUSE_UNICODE
+  const wxWX2MBbuf buf = string.mb_str(m_conv);
+#else
   const wxWX2MBbuf buf = string.mb_str();
-  Write32(string.Len());
-  if (string.Len() > 0)
-      m_output->Write(buf, string.Len());
+#endif
+  size_t len = strlen(buf);
+  Write32(len);
+  if (len > 0)
+      m_output->Write(buf, len);
 }
 
 // Must be at global scope for VC++ 5
