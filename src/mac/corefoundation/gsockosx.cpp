@@ -168,7 +168,7 @@ void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
     if (!data) return;
 
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopDefaultMode);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopCommonModes);
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
