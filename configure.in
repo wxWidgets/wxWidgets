@@ -1689,6 +1689,7 @@ WX_CPP_EXPLICIT
 
 dnl check whether C++ compiler supports C++ casts
 AC_CXX_CONST_CAST
+AC_CXX_STATIC_CAST
 
 dnl check various STL features
 if test "$wxUSE_STL" = "yes"; then

@@ -170,6 +170,11 @@
 #define HAVE_CONST_CAST 1
 
 /*
+ * Define if your compiler supports const_cast<>()
+ */
+#define HAVE_STATIC_CAST 1
+
+/*
  * Define if your compiler has std::wstring
  */
 /* #unfine HAVE_STD_WSTRING */

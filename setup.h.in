@@ -161,6 +161,11 @@
 #undef HAVE_CONST_CAST
 
 /*
+ * Define if your compiler supports static_cast<>()
+ */
+#undef HAVE_STATIC_CAST
+
+/*
  * Define if your compiler has std::wstring
  */
 #undef HAVE_STD_WSTRING
