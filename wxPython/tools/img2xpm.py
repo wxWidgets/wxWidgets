@@ -27,10 +27,6 @@ from wxPython.wx import *
 
 wxInitAllImageHandlers()
 
-if wxPlatform == "__WXGTK__":
-    app = wxPySimpleApp()     # Blech!  the GUI needs initialized before
-                              # bitmaps can be created...
-
 
 def convert(file, maskClr, outputDir, outputName):
     if string.lower(os.path.splitext(file)[1]) == ".ico":
