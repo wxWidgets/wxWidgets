@@ -377,7 +377,11 @@ void wxWindow::Clear()
 // Raise the window to the top of the Z order
 void wxWindow::Raise()
 {
-    // TODO
+    NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
+    NSView *superview = [nsview superview];
+    [nsview retain];
+    [nsview removeFromSuperview];
+    [superview addSubview:nsview];
 }
 
 // Lower the window to the bottom of the Z order
