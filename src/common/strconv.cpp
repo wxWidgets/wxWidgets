@@ -177,9 +177,11 @@ const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
         {
             // now do the actual conversion
             wxWCharBuffer buf(nLen);
-            MB2WC(buf.data(), psz, nLen + 1); // with the trailing NUL
-
-            return buf;
+            nLen = MB2WC(buf.data(), psz, nLen + 1); // with the trailing NULL
+            if ( nLen != (size_t)-1 )
+            {
+                return buf;
+            }
         }
     }
 
@@ -196,9 +198,11 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
         if ( nLen != (size_t)-1 )
         {
             wxCharBuffer buf(nLen+3);       // space for a wxUint32 trailing zero
-            WC2MB(buf.data(), pwz, nLen + 4);
-
-            return buf;
+            nLen = WC2MB(buf.data(), pwz, nLen + 4);
+            if ( nLen != (size_t)-1 )
+            {
+                return buf;
+            }
         }
     }
 
