@@ -729,6 +729,10 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
         pm = pm->GetParent();
     }
 
+    // FIXME: why do we have to call wxFrame::GetEventHandler() directly here?
+    //        normally wxMenu::SendEvent() should be enough, if it doesn't work
+    //        in wxGTK then we have a bug in wxMenu::GetInvokingWindow() which
+    //        should be fixed instead of working around it here...
     if (frame)
     {
         // If it is attached then let the frame send the event.
@@ -738,6 +742,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
         commandEvent.SetEventObject(frame);
         if (item->IsCheckable())
             commandEvent.SetInt(item->IsChecked());
+        commandEvent.SetEventObject(menu);
 
         frame->GetEventHandler()->ProcessEvent(commandEvent);
     }
