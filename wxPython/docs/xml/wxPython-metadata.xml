@@ -1886,10 +1886,6 @@ EVT_COMMAND_SCROLL_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK, 1)
 EVT_COMMAND_SCROLL_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLL_THUMBRELEASE, 1)
 EVT_COMMAND_SCROLL_ENDSCROLL = wx.PyEventBinder( wxEVT_SCROLL_ENDSCROLL, 1)
 
-EVT_SPIN_UP   = wx.PyEventBinder( wxEVT_SCROLL_LINEUP, 1)
-EVT_SPIN_DOWN = wx.PyEventBinder( wxEVT_SCROLL_LINEDOWN, 1)
-EVT_SPIN      = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK, 1)
-
 EVT_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_BUTTON_CLICKED, 1)
 EVT_CHECKBOX = wx.PyEventBinder( wxEVT_COMMAND_CHECKBOX_CLICKED, 1)
 EVT_CHOICE = wx.PyEventBinder( wxEVT_COMMAND_CHOICE_SELECTED, 1)
@@ -3358,6 +3354,7 @@ class PyOnDemandOutputWindow:
                               style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
         self.text  = wx.TextCtrl(self.frame, -1, "",
                                  style = wx.TE_MULTILINE | wx.TE_READONLY)
+        self.text.AppendText(st)
         self.frame.SetSize((450, 300))
         self.frame.Show(True)
         EVT_CLOSE(self.frame, self.OnCloseWindow)
@@ -7197,10 +7194,10 @@ background.</docstring>
     <class name="Icon" oldname="wxIcon" module="gdi">
       <baseclass name="GDIObject"/>
       <constructor name="Icon" overloaded="no">
-        <autodoc>__init__(String name, long flags, int desiredWidth=-1, int desiredHeight=-1) -&gt; Icon</autodoc>
+        <autodoc>__init__(String name, int type, int desiredWidth=-1, int desiredHeight=-1) -&gt; Icon</autodoc>
         <paramlist>
           <param name="name" type="String" default=""/>
-          <param name="flags" type="long" default=""/>
+          <param name="type" type="wxBitmapType" default=""/>
           <param name="desiredWidth" type="int" default="-1"/>
           <param name="desiredHeight" type="int" default="-1"/>
         </paramlist>
@@ -7230,10 +7227,10 @@ background.</docstring>
         <autodoc>__del__()</autodoc>
       </destructor>
       <method name="LoadFile" type="bool" overloaded="no">
-        <autodoc>LoadFile(String name, long flags) -&gt; bool</autodoc>
+        <autodoc>LoadFile(String name, int type) -&gt; bool</autodoc>
         <paramlist>
           <param name="name" type="String" default=""/>
-          <param name="flags" type="long" default=""/>
+          <param name="type" type="wxBitmapType" default=""/>
         </paramlist>
       </method>
       <method name="Ok" type="bool" overloaded="no">
@@ -9248,6 +9245,258 @@ Works for single as well as multi-line strings.</docstring>
       </constructor>
     </class>
     <pythoncode>
+    class DC_old(DC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = DC.FloodFillXY
+        GetPixel = DC.GetPixelXY
+        DrawLine = DC.DrawLineXY
+        CrossHair = DC.CrossHairXY
+        DrawArc = DC.DrawArcXY
+        DrawCheckMark = DC.DrawCheckMarkXY
+        DrawEllipticArc = DC.DrawEllipticArcXY
+        DrawPoint = DC.DrawPointXY
+        DrawRectangle = DC.DrawRectangleXY
+        DrawRoundedRectangle = DC.DrawRoundedRectangleXY
+        DrawCircle = DC.DrawCircleXY
+        DrawEllipse = DC.DrawEllipseXY
+        DrawIcon = DC.DrawIconXY
+        DrawBitmap = DC.DrawBitmapXY
+        DrawText = DC.DrawTextXY
+        DrawRotatedText = DC.DrawRotatedTextXY
+        Blit = DC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class MemoryDC_old(MemoryDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = MemoryDC.FloodFillXY
+        GetPixel = MemoryDC.GetPixelXY
+        DrawLine = MemoryDC.DrawLineXY
+        CrossHair = MemoryDC.CrossHairXY
+        DrawArc = MemoryDC.DrawArcXY
+        DrawCheckMark = MemoryDC.DrawCheckMarkXY
+        DrawEllipticArc = MemoryDC.DrawEllipticArcXY
+        DrawPoint = MemoryDC.DrawPointXY
+        DrawRectangle = MemoryDC.DrawRectangleXY
+        DrawRoundedRectangle = MemoryDC.DrawRoundedRectangleXY
+        DrawCircle = MemoryDC.DrawCircleXY
+        DrawEllipse = MemoryDC.DrawEllipseXY
+        DrawIcon = MemoryDC.DrawIconXY
+        DrawBitmap = MemoryDC.DrawBitmapXY
+        DrawText = MemoryDC.DrawTextXY
+        DrawRotatedText = MemoryDC.DrawRotatedTextXY
+        Blit = MemoryDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class BufferedDC_old(BufferedDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = BufferedDC.FloodFillXY
+        GetPixel = BufferedDC.GetPixelXY
+        DrawLine = BufferedDC.DrawLineXY
+        CrossHair = BufferedDC.CrossHairXY
+        DrawArc = BufferedDC.DrawArcXY
+        DrawCheckMark = BufferedDC.DrawCheckMarkXY
+        DrawEllipticArc = BufferedDC.DrawEllipticArcXY
+        DrawPoint = BufferedDC.DrawPointXY
+        DrawRectangle = BufferedDC.DrawRectangleXY
+        DrawRoundedRectangle = BufferedDC.DrawRoundedRectangleXY
+        DrawCircle = BufferedDC.DrawCircleXY
+        DrawEllipse = BufferedDC.DrawEllipseXY
+        DrawIcon = BufferedDC.DrawIconXY
+        DrawBitmap = BufferedDC.DrawBitmapXY
+        DrawText = BufferedDC.DrawTextXY
+        DrawRotatedText = BufferedDC.DrawRotatedTextXY
+        Blit = BufferedDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class BufferedPaintDC_old(BufferedPaintDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = BufferedPaintDC.FloodFillXY
+        GetPixel = BufferedPaintDC.GetPixelXY
+        DrawLine = BufferedPaintDC.DrawLineXY
+        CrossHair = BufferedPaintDC.CrossHairXY
+        DrawArc = BufferedPaintDC.DrawArcXY
+        DrawCheckMark = BufferedPaintDC.DrawCheckMarkXY
+        DrawEllipticArc = BufferedPaintDC.DrawEllipticArcXY
+        DrawPoint = BufferedPaintDC.DrawPointXY
+        DrawRectangle = BufferedPaintDC.DrawRectangleXY
+        DrawRoundedRectangle = BufferedPaintDC.DrawRoundedRectangleXY
+        DrawCircle = BufferedPaintDC.DrawCircleXY
+        DrawEllipse = BufferedPaintDC.DrawEllipseXY
+        DrawIcon = BufferedPaintDC.DrawIconXY
+        DrawBitmap = BufferedPaintDC.DrawBitmapXY
+        DrawText = BufferedPaintDC.DrawTextXY
+        DrawRotatedText = BufferedPaintDC.DrawRotatedTextXY
+        Blit = BufferedPaintDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class ScreenDC_old(ScreenDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = ScreenDC.FloodFillXY
+        GetPixel = ScreenDC.GetPixelXY
+        DrawLine = ScreenDC.DrawLineXY
+        CrossHair = ScreenDC.CrossHairXY
+        DrawArc = ScreenDC.DrawArcXY
+        DrawCheckMark = ScreenDC.DrawCheckMarkXY
+        DrawEllipticArc = ScreenDC.DrawEllipticArcXY
+        DrawPoint = ScreenDC.DrawPointXY
+        DrawRectangle = ScreenDC.DrawRectangleXY
+        DrawRoundedRectangle = ScreenDC.DrawRoundedRectangleXY
+        DrawCircle = ScreenDC.DrawCircleXY
+        DrawEllipse = ScreenDC.DrawEllipseXY
+        DrawIcon = ScreenDC.DrawIconXY
+        DrawBitmap = ScreenDC.DrawBitmapXY
+        DrawText = ScreenDC.DrawTextXY
+        DrawRotatedText = ScreenDC.DrawRotatedTextXY
+        Blit = ScreenDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class ClientDC_old(ClientDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = ClientDC.FloodFillXY
+        GetPixel = ClientDC.GetPixelXY
+        DrawLine = ClientDC.DrawLineXY
+        CrossHair = ClientDC.CrossHairXY
+        DrawArc = ClientDC.DrawArcXY
+        DrawCheckMark = ClientDC.DrawCheckMarkXY
+        DrawEllipticArc = ClientDC.DrawEllipticArcXY
+        DrawPoint = ClientDC.DrawPointXY
+        DrawRectangle = ClientDC.DrawRectangleXY
+        DrawRoundedRectangle = ClientDC.DrawRoundedRectangleXY
+        DrawCircle = ClientDC.DrawCircleXY
+        DrawEllipse = ClientDC.DrawEllipseXY
+        DrawIcon = ClientDC.DrawIconXY
+        DrawBitmap = ClientDC.DrawBitmapXY
+        DrawText = ClientDC.DrawTextXY
+        DrawRotatedText = ClientDC.DrawRotatedTextXY
+        Blit = ClientDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class PaintDC_old(PaintDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = PaintDC.FloodFillXY
+        GetPixel = PaintDC.GetPixelXY
+        DrawLine = PaintDC.DrawLineXY
+        CrossHair = PaintDC.CrossHairXY
+        DrawArc = PaintDC.DrawArcXY
+        DrawCheckMark = PaintDC.DrawCheckMarkXY
+        DrawEllipticArc = PaintDC.DrawEllipticArcXY
+        DrawPoint = PaintDC.DrawPointXY
+        DrawRectangle = PaintDC.DrawRectangleXY
+        DrawRoundedRectangle = PaintDC.DrawRoundedRectangleXY
+        DrawCircle = PaintDC.DrawCircleXY
+        DrawEllipse = PaintDC.DrawEllipseXY
+        DrawIcon = PaintDC.DrawIconXY
+        DrawBitmap = PaintDC.DrawBitmapXY
+        DrawText = PaintDC.DrawTextXY
+        DrawRotatedText = PaintDC.DrawRotatedTextXY
+        Blit = PaintDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class WindowDC_old(WindowDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = WindowDC.FloodFillXY
+        GetPixel = WindowDC.GetPixelXY
+        DrawLine = WindowDC.DrawLineXY
+        CrossHair = WindowDC.CrossHairXY
+        DrawArc = WindowDC.DrawArcXY
+        DrawCheckMark = WindowDC.DrawCheckMarkXY
+        DrawEllipticArc = WindowDC.DrawEllipticArcXY
+        DrawPoint = WindowDC.DrawPointXY
+        DrawRectangle = WindowDC.DrawRectangleXY
+        DrawRoundedRectangle = WindowDC.DrawRoundedRectangleXY
+        DrawCircle = WindowDC.DrawCircleXY
+        DrawEllipse = WindowDC.DrawEllipseXY
+        DrawIcon = WindowDC.DrawIconXY
+        DrawBitmap = WindowDC.DrawBitmapXY
+        DrawText = WindowDC.DrawTextXY
+        DrawRotatedText = WindowDC.DrawRotatedTextXY
+        Blit = WindowDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class MirrorDC_old(MirrorDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = MirrorDC.FloodFillXY
+        GetPixel = MirrorDC.GetPixelXY
+        DrawLine = MirrorDC.DrawLineXY
+        CrossHair = MirrorDC.CrossHairXY
+        DrawArc = MirrorDC.DrawArcXY
+        DrawCheckMark = MirrorDC.DrawCheckMarkXY
+        DrawEllipticArc = MirrorDC.DrawEllipticArcXY
+        DrawPoint = MirrorDC.DrawPointXY
+        DrawRectangle = MirrorDC.DrawRectangleXY
+        DrawRoundedRectangle = MirrorDC.DrawRoundedRectangleXY
+        DrawCircle = MirrorDC.DrawCircleXY
+        DrawEllipse = MirrorDC.DrawEllipseXY
+        DrawIcon = MirrorDC.DrawIconXY
+        DrawBitmap = MirrorDC.DrawBitmapXY
+        DrawText = MirrorDC.DrawTextXY
+        DrawRotatedText = MirrorDC.DrawRotatedTextXY
+        Blit = MirrorDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class PostScriptDC_old(PostScriptDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = PostScriptDC.FloodFillXY
+        GetPixel = PostScriptDC.GetPixelXY
+        DrawLine = PostScriptDC.DrawLineXY
+        CrossHair = PostScriptDC.CrossHairXY
+        DrawArc = PostScriptDC.DrawArcXY
+        DrawCheckMark = PostScriptDC.DrawCheckMarkXY
+        DrawEllipticArc = PostScriptDC.DrawEllipticArcXY
+        DrawPoint = PostScriptDC.DrawPointXY
+        DrawRectangle = PostScriptDC.DrawRectangleXY
+        DrawRoundedRectangle = PostScriptDC.DrawRoundedRectangleXY
+        DrawCircle = PostScriptDC.DrawCircleXY
+        DrawEllipse = PostScriptDC.DrawEllipseXY
+        DrawIcon = PostScriptDC.DrawIconXY
+        DrawBitmap = PostScriptDC.DrawBitmapXY
+        DrawText = PostScriptDC.DrawTextXY
+        DrawRotatedText = PostScriptDC.DrawRotatedTextXY
+        Blit = PostScriptDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class MetaFileDC_old(MetaFileDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = MetaFileDC.FloodFillXY
+        GetPixel = MetaFileDC.GetPixelXY
+        DrawLine = MetaFileDC.DrawLineXY
+        CrossHair = MetaFileDC.CrossHairXY
+        DrawArc = MetaFileDC.DrawArcXY
+        DrawCheckMark = MetaFileDC.DrawCheckMarkXY
+        DrawEllipticArc = MetaFileDC.DrawEllipticArcXY
+        DrawPoint = MetaFileDC.DrawPointXY
+        DrawRectangle = MetaFileDC.DrawRectangleXY
+        DrawRoundedRectangle = MetaFileDC.DrawRoundedRectangleXY
+        DrawCircle = MetaFileDC.DrawCircleXY
+        DrawEllipse = MetaFileDC.DrawEllipseXY
+        DrawIcon = MetaFileDC.DrawIconXY
+        DrawBitmap = MetaFileDC.DrawBitmapXY
+        DrawText = MetaFileDC.DrawTextXY
+        DrawRotatedText = MetaFileDC.DrawRotatedTextXY
+        Blit = MetaFileDC.BlitXY
+    </pythoncode>
+    <pythoncode>
+    class PrinterDC_old(PrinterDC):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = PrinterDC.FloodFillXY
+        GetPixel = PrinterDC.GetPixelXY
+        DrawLine = PrinterDC.DrawLineXY
+        CrossHair = PrinterDC.CrossHairXY
+        DrawArc = PrinterDC.DrawArcXY
+        DrawCheckMark = PrinterDC.DrawCheckMarkXY
+        DrawEllipticArc = PrinterDC.DrawEllipticArcXY
+        DrawPoint = PrinterDC.DrawPointXY
+        DrawRectangle = PrinterDC.DrawRectangleXY
+        DrawRoundedRectangle = PrinterDC.DrawRoundedRectangleXY
+        DrawCircle = PrinterDC.DrawCircleXY
+        DrawEllipse = PrinterDC.DrawEllipseXY
+        DrawIcon = PrinterDC.DrawIconXY
+        DrawBitmap = PrinterDC.DrawBitmapXY
+        DrawText = PrinterDC.DrawTextXY
+        DrawRotatedText = PrinterDC.DrawRotatedTextXY
+        Blit = PrinterDC.BlitXY
+    </pythoncode>
+    <pythoncode>
 #---------------------------------------------------------------------------
 </pythoncode>
     <class name="ImageList" oldname="wxImageList" module="gdi">
@@ -10001,12 +10250,6 @@ CalcUnscrolledPosition(int x, int y) -&gt; (ux, uy)</autodoc>
         <autodoc>CreateButtonSizer(long flags) -&gt; Sizer</autodoc>
         <paramlist>
           <param name="flags" type="long" default=""/>
-        </paramlist>
-      </method>
-      <method name="SetModal" type="" overloaded="no">
-        <autodoc>SetModal(bool flag)</autodoc>
-        <paramlist>
-          <param name="flag" type="bool" default=""/>
         </paramlist>
       </method>
       <method name="IsModal" type="bool" overloaded="no">
@@ -14614,8 +14857,30 @@ EVT_TEXT_MAXLEN = wx.PyEventBinder( wxEVT_COMMAND_TEXT_MAXLEN, 1)
         </paramlist>
       </method>
     </class>
+    <class name="SpinEvent" oldname="wxSpinEvent" module="controls">
+      <baseclass name="NotifyEvent"/>
+      <constructor name="SpinEvent" overloaded="no">
+        <autodoc>__init__(wxEventType commandType=wxEVT_NULL, int winid=0) -&gt; SpinEvent</autodoc>
+        <paramlist>
+          <param name="commandType" type="wxEventType" default="wxEVT_NULL"/>
+          <param name="winid" type="int" default="0"/>
+        </paramlist>
+      </constructor>
+      <method name="GetPosition" type="int" overloaded="no">
+        <autodoc>GetPosition() -&gt; int</autodoc>
+      </method>
+      <method name="SetPosition" type="" overloaded="no">
+        <autodoc>SetPosition(int pos)</autodoc>
+        <paramlist>
+          <param name="pos" type="int" default=""/>
+        </paramlist>
+      </method>
+    </class>
     <pythoncode>
-EVT_SPINCTRL = wx.PyEventBinder( wxEVT_COMMAND_SPINCTRL_UPDATED, 1)
+EVT_SPIN_UP   = wx.PyEventBinder( wx.wxEVT_SCROLL_LINEUP, 1)
+EVT_SPIN_DOWN = wx.PyEventBinder( wx.wxEVT_SCROLL_LINEDOWN, 1)
+EVT_SPIN      = wx.PyEventBinder( wx.wxEVT_SCROLL_THUMBTRACK, 1)
+EVT_SPINCTRL  = wx.PyEventBinder( wxEVT_COMMAND_SPINCTRL_UPDATED, 1)
 </pythoncode>
     <pythoncode>
 #---------------------------------------------------------------------------
@@ -21218,10 +21483,10 @@ __ne__(DataFormat format) -&gt; bool</autodoc>
     </method>
     <class name="DropSource" oldname="wxPyDropSource" module="misc">
       <constructor name="wxPyDropSource" overloaded="no">
-        <autodoc>__init__(Window win=None, Icon copy=wxNullIcon, Icon move=wxNullIcon, 
+        <autodoc>__init__(Window win, Icon copy=wxNullIcon, Icon move=wxNullIcon, 
     Icon none=wxNullIcon) -&gt; DropSource</autodoc>
         <paramlist>
-          <param name="win" type="Window" default="NULL"/>
+          <param name="win" type="Window" default=""/>
           <param name="copy" type="Icon" default="wxNullIcon"/>
           <param name="move" type="Icon" default="wxNullIcon"/>
           <param name="none" type="Icon" default="wxNullIcon"/>
@@ -26222,6 +26487,20 @@ EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
         <autodoc>ClearText()</autodoc>
       </method>
     </class>
+    <class name="AttachmentPoint" oldname="wxAttachmentPoint" module="ogl">
+      <baseclass name="Object"/>
+      <constructor name="AttachmentPoint" overloaded="no">
+        <autodoc>__init__(int id=0, double x=0.0, double y=0.0) -&gt; AttachmentPoint</autodoc>
+        <paramlist>
+          <param name="id" type="int" default="0"/>
+          <param name="x" type="double" default="0.0"/>
+          <param name="y" type="double" default="0.0"/>
+        </paramlist>
+      </constructor>
+      <property name="m_id" type="int" readonly="no"/>
+      <property name="m_x" type="double" readonly="no"/>
+      <property name="m_y" type="double" readonly="no"/>
+    </class>
     <class name="PyShapeEvtHandler" oldname="wxPyShapeEvtHandler" module="ogl">
       <baseclass name="Object"/>
       <constructor name="PyShapeEvtHandler" overloaded="no">
@@ -27045,6 +27324,9 @@ EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
           <param name="attachment" type="int" default=""/>
         </paramlist>
       </method>
+      <method name="GetAttachments" type="PyObject" overloaded="no">
+        <autodoc>GetAttachments() -&gt; PyObject</autodoc>
+      </method>
       <method name="GetAttachmentPositionEdge" type="bool" overloaded="no">
         <autodoc>GetAttachmentPositionEdge(int attachment, double OUTPUT, double OUTPUT, int nth=0, 
     int no_arcs=1, PyLineShape line=None) -&gt; bool</autodoc>
@@ -27225,6 +27507,12 @@ EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
       </method>
       <method name="GetRotation" type="double" overloaded="no">
         <autodoc>GetRotation() -&gt; double</autodoc>
+      </method>
+      <method name="SetRotation" type="" overloaded="no">
+        <autodoc>SetRotation(double rotation)</autodoc>
+        <paramlist>
+          <param name="rotation" type="double" default=""/>
+        </paramlist>
       </method>
       <method name="ClearAttachments" type="" overloaded="no">
         <autodoc>ClearAttachments()</autodoc>
@@ -27754,6 +28042,9 @@ EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
         <paramlist>
           <param name="radius" type="double" default=""/>
         </paramlist>
+      </method>
+      <method name="GetCornerRadius" type="double" overloaded="no">
+        <autodoc>GetCornerRadius() -&gt; double</autodoc>
       </method>
       <method name="base_OnDelete" type="" overloaded="no">
         <autodoc>base_OnDelete()</autodoc>
@@ -30782,6 +31073,38 @@ EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
       <method name="Unlink" type="" overloaded="no">
         <autodoc>Unlink()</autodoc>
       </method>
+      <method name="SetAlignmentOrientation" type="" overloaded="no">
+        <autodoc>SetAlignmentOrientation(bool isEnd, bool isHoriz)</autodoc>
+        <paramlist>
+          <param name="isEnd" type="bool" default=""/>
+          <param name="isHoriz" type="bool" default=""/>
+        </paramlist>
+      </method>
+      <method name="SetAlignmentType" type="" overloaded="no">
+        <autodoc>SetAlignmentType(bool isEnd, int alignType)</autodoc>
+        <paramlist>
+          <param name="isEnd" type="bool" default=""/>
+          <param name="alignType" type="int" default=""/>
+        </paramlist>
+      </method>
+      <method name="GetAlignmentOrientation" type="bool" overloaded="no">
+        <autodoc>GetAlignmentOrientation(bool isEnd) -&gt; bool</autodoc>
+        <paramlist>
+          <param name="isEnd" type="bool" default=""/>
+        </paramlist>
+      </method>
+      <method name="GetAlignmentType" type="int" overloaded="no">
+        <autodoc>GetAlignmentType(bool isEnd) -&gt; int</autodoc>
+        <paramlist>
+          <param name="isEnd" type="bool" default=""/>
+        </paramlist>
+      </method>
+      <method name="GetAlignmentStart" type="int" overloaded="no">
+        <autodoc>GetAlignmentStart() -&gt; int</autodoc>
+      </method>
+      <method name="GetAlignmentEnd" type="int" overloaded="no">
+        <autodoc>GetAlignmentEnd() -&gt; int</autodoc>
+      </method>
       <method name="base_OnDraw" type="" overloaded="no">
         <autodoc>base_OnDraw(DC dc)</autodoc>
         <paramlist>
@@ -31052,6 +31375,27 @@ EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
       </method>
       <method name="GetPoints" type="PyObject" overloaded="no">
         <autodoc>GetPoints() -&gt; PyObject</autodoc>
+      </method>
+      <method name="GetOriginalPoints" type="PyObject" overloaded="no">
+        <autodoc>GetOriginalPoints() -&gt; PyObject</autodoc>
+      </method>
+      <method name="GetOriginalWidth" type="double" overloaded="no">
+        <autodoc>GetOriginalWidth() -&gt; double</autodoc>
+      </method>
+      <method name="GetOriginalHeight" type="double" overloaded="no">
+        <autodoc>GetOriginalHeight() -&gt; double</autodoc>
+      </method>
+      <method name="SetOriginalWidth" type="" overloaded="no">
+        <autodoc>SetOriginalWidth(double w)</autodoc>
+        <paramlist>
+          <param name="w" type="double" default=""/>
+        </paramlist>
+      </method>
+      <method name="SetOriginalHeight" type="" overloaded="no">
+        <autodoc>SetOriginalHeight(double h)</autodoc>
+        <paramlist>
+          <param name="h" type="double" default=""/>
+        </paramlist>
       </method>
       <method name="UpdateOriginalPoints" type="" overloaded="no">
         <autodoc>UpdateOriginalPoints()</autodoc>
