@@ -946,9 +946,28 @@ wxColour wxNotebook::GetThemeBackgroundColour()
                                         hTheme,
                                         10 /* TABP_BODY */,
                                         1 /* NORMAL */,
-                                        3802 /* color of bg fill */,
+                                        3821 /* FILLCOLORHINT */,
                                         &themeColor);
-            
+
+            /*
+            [DS] Workaround for WindowBlinds:
+            Some themes return a near black theme color using FILLCOLORHINT,
+            this makes notebook pages have an ugly black background and makes
+            text (usually black) unreadable. Retry again with FILLCOLOR.
+
+            This workaround potentially breaks appearance of some themes,
+            but in practice it already fixes some themes.
+            */
+            if (themeColor == 1)
+            {
+                wxUxThemeEngine::Get()->GetThemeColor(
+                                            hTheme,
+                                            10 /* TABP_BODY */,
+                                            1 /* NORMAL */,
+                                            3802 /* FILLCOLOR */,
+                                            &themeColor);
+            }
+
             wxColour colour(GetRValue(themeColor), GetGValue(themeColor), GetBValue(themeColor));
             return colour;
         }
