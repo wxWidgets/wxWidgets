@@ -611,6 +611,8 @@ bool wxLocale::Init(const wxChar *szName,
   {
     // the argument to setlocale()
     szLocale = szShort;
+
+    wxCHECK_MSG( szLocale, FALSE, _T("no locale to set in wxLocale::Init()") );
   }
   m_pszOldLocale = wxSetlocale(LC_ALL, szLocale);
   if ( m_pszOldLocale == NULL )
