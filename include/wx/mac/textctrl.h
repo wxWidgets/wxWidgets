@@ -28,16 +28,18 @@ class WXDLLEXPORT wxTextCtrl: public wxTextCtrlBase
 public:
   // creation
   // --------
-  wxTextCtrl();
+  wxTextCtrl() { Init(); }
   ~wxTextCtrl();
-  inline wxTextCtrl(wxWindow *parent, wxWindowID id,
-                    const wxString& value = wxEmptyString,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize, long style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxTextCtrlNameStr)
+  wxTextCtrl(wxWindow *parent, wxWindowID id,
+             const wxString& value = wxEmptyString,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize, long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxTextCtrlNameStr)
   {
-    Create(parent, id, value, pos, size, style, validator, name);
+      Init();
+
+      Create(parent, id, value, pos, size, style, validator, name);
   }
   
   bool Create(wxWindow *parent, wxWindowID id,
@@ -157,9 +159,16 @@ public:
     virtual bool     Show(bool show = TRUE) ;
 
 protected:
+    // common part of all ctors
+    void Init();
+
   virtual wxSize DoGetBestSize() const;
 
   bool  m_editable ;
+
+  // flag is set to true when the user edits the controls contents
+  bool m_dirty;
+
   // one of the following objects is used for representation, the other one is NULL
   void*  m_macTE ;
   void*  m_macTXN ;

@@ -637,13 +637,16 @@ END_EVENT_TABLE()
 #endif
 
 // Text item
-wxTextCtrl::wxTextCtrl()
+void wxTextCtrl::Init()
 {
   m_macTE = NULL ;
   m_macTXN = NULL ;
   m_macTXNvars = NULL ;
   m_macUsesTXN = false ;
+
   m_editable = true ;
+  m_dirty = false;
+
   m_maxLength = TE_UNLIMITED_LENGTH ;
 }
 
@@ -1302,7 +1305,7 @@ void wxTextCtrl::Clear()
 
 bool wxTextCtrl::IsModified() const
 {
-    return TRUE;
+    return m_dirty;
 }
 
 bool wxTextCtrl::IsEditable() const
@@ -1404,7 +1407,7 @@ bool wxTextCtrl::CanRedo() const
 // Makes 'unmodified'
 void wxTextCtrl::DiscardEdits()
 {
-    // TODO
+    m_dirty = false;
 }
 
 int wxTextCtrl::GetNumberOfLines() const
@@ -1531,6 +1534,10 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         // eat it
         return ;
     }
+
+    // assume that any key not processed yet is going to modify the control
+    m_dirty = true;
+
     if ( key == 'v' && event.MetaDown() )
     {
         if ( CanPaste() )
