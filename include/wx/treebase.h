@@ -52,8 +52,15 @@ public:
         // is this a valid tree item?
     bool IsOk() const { return m_pItem != 0; }
 
-    // deprecated: only for compatibility
-    operator wxTreeItemIdValue() const { return m_pItem; }
+    // operations
+        // invalidate the item
+    void Unset() { m_pItem = 0; }
+
+#if WXWIN_COMPATIBILITY_2_4
+    // deprecated: only for compatibility, don't work on 64 bit archs
+    wxTreeItemId(long item) { m_pItem = (wxTreeItemIdValue)item; }
+    operator long() const { return (long)m_pItem; }
+#endif // WXWIN_COMPATIBILITY_2_4
 
     wxTreeItemIdValue m_pItem;
 };
@@ -92,7 +99,14 @@ protected:
     wxTreeItemId m_pItem;
 };
 
-WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxTreeItemId, wxArrayTreeItemIds);
+WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxTreeItemIdValue, wxArrayTreeItemIdsBase);
+
+class WXDLLEXPORT wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
+{
+public:
+    void Add(const wxTreeItemId& id)
+        { wxArrayTreeItemIdsBase::Add(id.m_pItem); }
+};
 
 // ----------------------------------------------------------------------------
 // constants

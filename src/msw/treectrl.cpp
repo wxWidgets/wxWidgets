@@ -75,8 +75,14 @@
     #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
 #endif
 
-// a macro to hide the cast ugliness
-#define HITEM(item)     (HTREEITEM)((item).m_pItem)
+// macros to hide the cast ugliness
+// --------------------------------
+
+// ptr is the real item id, i.e. wxTreeItemId::m_pItem
+#define HITEM_PTR(ptr)     (HTREEITEM)(ptr)
+
+// item here is a wxTreeItemId
+#define HITEM(item)     HITEM_PTR((item).m_pItem)
 
 // the native control doesn't support multiple selections under MSW and we
 // have 2 ways to emulate them: either using TVS_CHECKBOXES style and let
@@ -569,7 +575,6 @@ void wxTreeCtrl::Init()
     m_textCtrl = NULL;
     m_hasAnyAttr = false;
     m_dragImage = NULL;
-    m_htSelStart = 0;
     m_pVirtualRoot = NULL;
 
     // initialize the global array of events now as it can't be done statically
@@ -1189,21 +1194,21 @@ void wxTreeCtrl::RefreshItem(const wxTreeItemId& item)
 
 wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
 {
-    wxMapTreeAttr::const_iterator it = m_attrs.find(item);
+    wxMapTreeAttr::const_iterator it = m_attrs.find(item.m_pItem);
 
     return it == m_attrs.end() ? wxNullColour : it->second->GetTextColour();
 }
 
 wxColour wxTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
 {
-    wxMapTreeAttr::const_iterator it = m_attrs.find(item);
+    wxMapTreeAttr::const_iterator it = m_attrs.find(item.m_pItem);
 
     return it == m_attrs.end() ? wxNullColour : it->second->GetBackgroundColour();
 }
 
 wxFont wxTreeCtrl::GetItemFont(const wxTreeItemId& item) const
 {
-    wxMapTreeAttr::const_iterator it = m_attrs.find(item);
+    wxMapTreeAttr::const_iterator it = m_attrs.find(item.m_pItem);
 
     return it == m_attrs.end() ? wxNullFont : it->second->GetFont();
 }
@@ -1212,12 +1217,12 @@ void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
                                    const wxColour& col)
 {
     wxTreeItemAttr *attr;
-    wxMapTreeAttr::iterator it = m_attrs.find(item);
+    wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
     if ( it == m_attrs.end() )
     {
         m_hasAnyAttr = true;
 
-        m_attrs[item] =
+        m_attrs[item.m_pItem] =
         attr = new wxTreeItemAttr;
     }
     else
@@ -1234,12 +1239,12 @@ void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
                                          const wxColour& col)
 {
     wxTreeItemAttr *attr;
-    wxMapTreeAttr::iterator it = m_attrs.find(item);
+    wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
     if ( it == m_attrs.end() )
     {
         m_hasAnyAttr = true;
 
-        m_attrs[item] =
+        m_attrs[item.m_pItem] =
         attr = new wxTreeItemAttr;
     }
     else // already in the hash
@@ -1255,12 +1260,12 @@ void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
 void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 {
     wxTreeItemAttr *attr;
-    wxMapTreeAttr::iterator it = m_attrs.find(item);
+    wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
     if ( it == m_attrs.end() )
     {
         m_hasAnyAttr = true;
 
-        m_attrs[item] =
+        m_attrs[item.m_pItem] =
         attr = new wxTreeItemAttr;
     }
     else // already in the hash
@@ -1346,7 +1351,7 @@ wxTreeItemId wxTreeCtrl::GetRootItem() const
 
 wxTreeItemId wxTreeCtrl::GetSelection() const
 {
-    wxCHECK_MSG( !(m_windowStyle & wxTR_MULTIPLE), NULL,
+    wxCHECK_MSG( !(m_windowStyle & wxTR_MULTIPLE), wxTreeItemId(),
                  wxT("this only works with single selection controls") );
 
     return wxTreeItemId(TreeView_GetSelection(GetHwnd()));
@@ -1602,7 +1607,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
         return TVI_ROOT;
     }
 
-    return DoInsertItem(wxTreeItemId(), 0,
+    return DoInsertItem(wxTreeItemId(), wxTreeItemId(),
                         text, image, selectedImage, data);
 }
 
@@ -1682,7 +1687,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
     size_t nCount = children.Count();
     for ( size_t n = 0; n < nCount; n++ )
     {
-        if ( !TreeView_DeleteItem(GetHwnd(), HITEM(children[n])) )
+        if ( !TreeView_DeleteItem(GetHwnd(), HITEM_PTR(children[n])) )
         {
             wxLogLastError(wxT("TreeView_DeleteItem"));
         }
@@ -1790,9 +1795,9 @@ void wxTreeCtrl::UnselectAll()
         for ( size_t n = 0; n < count; n++ )
         {
 #if wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-            SetItemCheck(selections[n], false);
+            SetItemCheck(HITEM_PTR(selections[n]), false);
 #else // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-            ::UnselectItem(GetHwnd(), HITEM(selections[n]));
+            ::UnselectItem(GetHwnd(), HITEM_PTR(selections[n]));
 #endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE/!wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
         }
     }
@@ -2106,7 +2111,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         ::SetFocus(GetHwnd(), htItem);
 
                         // reset on any click without Shift
-                        m_htSelStart = 0;
+                        m_htSelStart.Unset();
 
                         processed = true;
                     }
@@ -2137,7 +2142,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         size_t count = GetSelections(selections);
                         if ( count == 0 ||
                              count > 1 ||
-                             HITEM(selections[0]) != htItem )
+                             HITEM_PTR(selections[0]) != htItem )
                         {
                             // clear the previously selected items, if the
                             // user clicked outside of the present selection.
@@ -2163,7 +2168,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         }
 
                         // reset on any click without Shift
-                        m_htSelStart = 0;
+                        m_htSelStart.Unset();
                     }
                 }
                 break;
@@ -2239,7 +2244,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         {
             // TreeView_GetItemRect() will return false if item is not visible,
             // which may happen perfectly well
-            if ( TreeView_GetItemRect(GetHwnd(), HITEM(selections[n]),
+            if ( TreeView_GetItemRect(GetHwnd(), HITEM_PTR(selections[n]),
                                       &rect, true) )
             {
                 ::InvalidateRect(GetHwnd(), &rect, false);
