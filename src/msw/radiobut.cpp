@@ -188,4 +188,19 @@ wxSize wxRadioButton::DoGetBestSize() const
     return wxSize(wRadio, hRadio);
 }
 
+long wxRadioButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    if (nMsg == WM_SETFOCUS)
+    {
+        m_focusJustSet = TRUE;
+
+        long ret = wxControl::MSWWindowProc(nMsg, wParam, lParam);
+
+        m_focusJustSet = FALSE;
+
+        return ret;
+    }
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);    
+}
+
 #endif // wxUSE_RADIOBTN
