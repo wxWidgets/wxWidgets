@@ -77,6 +77,9 @@ cd $2
 mkdir wxWindows-${WXVER}
 cd wxWindows-${WXVER}
 $TAR xf ../wxMac-${WXVER}.tar
+
+# Remove mmedia
+rm -f -r contrib/src/mmedia contrib/samples/mmedia
 cd ..
 rm -f wxMac-${WXVER}.tar
 
