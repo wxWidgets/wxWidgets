@@ -463,11 +463,15 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
   return TRUE;
 };
 
-void wxPaintDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(use16) )
+void wxPaintDC::DrawText( const wxString &text, long x, long y, bool
+WXUNUSED(use16) )
 {
   if (!Ok()) return;
-  
+
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
+
+  x = XLOG2DEV(x);
+  y = YLOG2DEV(y);
 
   // CMB 21/5/98: draw text background if mode is wxSOLID
   if (m_backgroundMode == wxSOLID)
@@ -478,10 +482,21 @@ void wxPaintDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(us
     gdk_draw_rectangle( m_window, m_textGC, TRUE, x, y, width, height );
     gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
   }
-  gdk_draw_string( m_window, font, m_textGC, 
-    XLOG2DEV(x), 
-    YLOG2DEV(y) + font->ascent, text );
+  gdk_draw_string( m_window, font, m_textGC, x, y + font->ascent, text );
+
+  // CMB 17/7/98: simple underline: ignores scaling and underlying
+  // X font's XA_UNDERLINE_POSITION and XA_UNDERLINE_THICKNESS
+  // properties (see wxXt implementation)
+  if (m_font.GetUnderlined())
+  {
+    long width = gdk_string_width( font, text );
+    long ul_y = y + font->ascent;
+    if (font->descent > 0) ul_y++;
+    gdk_draw_line( m_window, m_textGC, x, ul_y, x + width, ul_y);
+  }
 };
+
+
 
 bool wxPaintDC::CanGetTextExtent(void) const
 {
