@@ -1,0 +1,101 @@
+\section{\class{wxPropertyFormView}}\label{wxpropertyformview}
+
+\overview{wxPropertyFormView overview}{wxpropertyformviewoverview}
+
+The {\bf wxPropertyFormView} class shows a wxPropertySheet as a view onto a panel or dialog
+box which has already been created.
+
+\membersection{wxPropertyFormView::wxPropertyFormView}
+
+\func{void}{wxPropertyFormView}{\param{long}{ flags = 0}}
+
+Constructor.
+
+\membersection{wxPropertyFormView::\destruct{wxPropertyFormView}}
+
+\func{void}{\destruct{wxPropertyFormView}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyFormView::AssociateNames}\label{wxpropertyformviewassociatenames}
+
+\func{void}{AssociateNames}{\void}
+
+Associates the properties with the controls on the panel. For each panel item, if the
+panel item name is the same as a property name, the two objects will be associated.
+This function should be called manually since the programmer may wish to do the
+association manually.
+
+\membersection{wxPropertyFormView::Check}\label{wxpropertyformviewcheck}
+
+\func{Bool}{Check}{\void}
+
+Checks all properties by calling the appropriate validators; returns FALSE if a validation failed.
+
+\membersection{wxPropertyFormView::GetPanel}\label{wxpropertyformviewgetpanel}
+
+\func{wxPanel *}{GetPanel}{\void}
+
+Returns the panel associated with the view.
+
+\membersection{wxPropertyFormView::GetManagedWindow}\label{wxpropertyformviewgetmanagedwindow}
+
+\func{wxWindow *}{GetManagedWindow}{\void}
+
+Returns the managed window (a frame or dialog) associated with the view.
+
+\membersection{wxPropertyFormView::OnOk}\label{wxpropertyformviewonok}
+
+\func{void}{OnOk}{\void}
+
+Virtual function that will be called when the OK button on the physical window is pressed.
+By default, checks and updates the form values, closes and deletes the frame or dialog, then deletes the view.
+
+\membersection{wxPropertyFormView::OnCancel}\label{wxpropertyformviewoncancel}
+
+\func{void}{OnCancel}{\void}
+
+Virtual function that will be called when the Cancel button on the physical window is pressed.
+By default, closes and deletes the frame or dialog, then deletes the view.
+
+\membersection{wxPropertyFormView::OnHelp}\label{wxpropertyformviewonhelp}
+
+\func{void}{OnHelp}{\void}
+
+Virtual function that will be called when the Help button on the physical window is pressed.
+This needs to be overridden by the application for anything interesting to happen.
+
+\membersection{wxPropertyFormView::OnRevert}\label{wxpropertyformviewonrevert}
+
+\func{void}{OnRevert}{\void}
+
+Virtual function that will be called when the Revert button on the physical window is pressed.
+By default transfers the wxProperty values to the panel items (in effect
+undoing any unsaved changes in the items).
+
+\membersection{wxPropertyFormView::OnUpdate}\label{wxpropertyformviewonupdate}
+
+\func{void}{OnUpdate}{\void}
+
+Virtual function that will be called when the Update button on the physical window is pressed.
+By defaults transfers the displayed values to the wxProperty objects.
+
+\membersection{wxPropertyFormView::SetManagedWindow}\label{wxpropertyformviewsetmanagedwindow}
+
+\func{void}{SetManagedWindow}{\param{wxWindow *}{win}}
+
+Sets the managed window (a frame or dialog) associated with the view.
+
+\membersection{wxPropertyFormView::TransferToDialog}\label{wxpropertyformviewtransfertodialog}
+
+\func{Bool}{TransferToDialog}{\void}
+
+Transfers property values to the controls in the dialog.
+
+\membersection{wxPropertyFormView::TransferToPropertySheet}\label{wxpropertyformviewtransfertopropertysheet}
+
+\func{Bool}{TransferToPropertySheet}{\void}
+
+Transfers property values from the controls in the dialog to the property sheet.
+
+

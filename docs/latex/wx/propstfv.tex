@@ -1,0 +1,17 @@
+\section{\class{wxStringFormValidator}}\label{wxstringformvalidator}
+
+\overview{Validator classes}{proplistvalidatorclasses}
+
+This class validates a string value for a form view, with an optional choice of possible values.
+The associated panel item must be a wxText, wxListBox or wxChoice. For wxListBox and wxChoice items,
+if the item is empty, the validator attempts to initialize the item from the strings in
+the validator. Note that this does not happen for XView wxChoice items since XView cannot reinitialize a wxChoice.
+ 
+\membersection{wxStringFormValidator::wxStringFormValidator}
+
+\func{void}{wxStringFormValidator}{\param{wxStringList *}{list=NULL}, \param{long}{ flags=0}}
+
+Constructor. Supply a list of strings to indicate a choice, or no strings to allow the
+user to freely edit the string. The string list will be deleted when the validator is deleted.
+
+

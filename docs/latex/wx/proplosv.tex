@@ -1,0 +1,27 @@
+\section{\class{wxListOfStringsListValidator}}\label{wxlistofstringslistvalidator}
+
+\overview{Validator classes}{proplistvalidatorclasses}
+
+This class validates a list of strings for a list view. When editing the property,
+a dialog box is presented for adding, deleting or editing entries in the list.
+At present no constraints may be supplied.
+
+You can construct a string list property value by constructing a wxStringList object.
+
+For example:
+
+\begin{verbatim}
+  myListValidatorRegistry.RegisterValidator((wxString)"stringlist",
+      new wxListOfStringsListValidator);
+
+  wxStringList *strings = new wxStringList("earth", "fire", "wind", "water", NULL);
+
+  sheet->AddProperty(new wxProperty("fred", strings, "stringlist"));
+\end{verbatim}
+
+\membersection{wxListOfStringsListValidator::wxListofStringsListValidator}
+
+\func{void}{wxListOfStringsListValidator}{\param{long}{ flags=0}}
+
+Constructor.
+
