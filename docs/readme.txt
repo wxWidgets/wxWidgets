@@ -200,5 +200,5 @@ web site.
 
 Have fun!
 
-The wxWindows Team, November 2002
+The wxWindows Team, December 2002
 
