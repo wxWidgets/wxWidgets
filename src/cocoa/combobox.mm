@@ -67,7 +67,6 @@
     return (candidate ? candidate : inputString);
 }
 */
-#if wxUSE_COMBOBOX
 
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cocoa/NSComboBox.mm
@@ -89,6 +88,8 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/wxprec.h"
+#if wxUSE_COMBOBOX
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
 #endif // WX_PRECOMP
