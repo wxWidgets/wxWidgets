@@ -545,7 +545,7 @@ bool wxWindow::Show(bool show)
 
 void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    wxLogTrace(wxTRACE_COCOA_Window_Size,"wxWindow=%p::DoSetSizeWindow(%d,%d,%d,%d,Auto: %s%s)",this,x,y,width,height,(sizeFlags&wxSIZE_AUTO_WIDTH)?"W":".",sizeFlags&wxSIZE_AUTO_HEIGHT?"H":".");
+    wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxWindow=%p::DoSetSizeWindow(%d,%d,%d,%d,Auto: %s%s)"),this,x,y,width,height,(sizeFlags&wxSIZE_AUTO_WIDTH)?"W":".",sizeFlags&wxSIZE_AUTO_HEIGHT?"H":".");
     int currentX, currentY;
     int currentW, currentH;
     DoGetPosition(&currentX, &currentY);
@@ -586,7 +586,7 @@ void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags
 void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {
     wxAutoNSAutoreleasePool pool;
-    wxLogTrace(wxTRACE_COCOA_Window_Size,"wxWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
+    wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxWindow=%p::DoMoveWindow(%d,%d,%d,%d)"),this,x,y,width,height);
 
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
@@ -631,7 +631,7 @@ void wxWindow::DoGetSize(int *w, int *h) const
         *w=(int)cocoaRect.size.width;
     if(h)
         *h=(int)cocoaRect.size.height;
-    wxLogTrace(wxTRACE_COCOA_Window_Size,"wxWindow=%p::DoGetSize = (%d,%d)",this,(int)cocoaRect.size.width,(int)cocoaRect.size.height);
+    wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxWindow=%p::DoGetSize = (%d,%d)"),this,(int)cocoaRect.size.width,(int)cocoaRect.size.height);
 }
 
 void wxWindow::DoGetPosition(int *x, int *y) const
@@ -646,7 +646,7 @@ void wxWindow::DoGetPosition(int *x, int *y) const
         *x=(int)cocoaRect.origin.x;
     if(y)
         *y=(int)(parentRect.size.height-(cocoaRect.origin.y+cocoaRect.size.height));
-    wxLogTrace(wxTRACE_COCOA_Window_Size,"wxWindow=%p::DoGetPosition = (%d,%d)",this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
+    wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxWindow=%p::DoGetPosition = (%d,%d)"),this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
 }
 
 WXWidget wxWindow::GetHandle() const
