@@ -158,7 +158,7 @@ private:
     {
         if ( !m_win32Theme )
             m_win32Theme = wxTheme::Create("win32");
-        return m_win32Theme;
+        return m_win32Theme != NULL;
     }
 private:
     wxTheme *m_win32Theme;
