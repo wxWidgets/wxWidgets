@@ -803,7 +803,10 @@ void wxListBox::DoSetFirstItem( int n )
     GtkWidget *item = GTK_WIDGET(target->data);
     wxCHECK_RET( item, wxT("invalid listbox code") );
 
-	gtk_adjustment_set_value( adjustment, item->allocation.y );
+    float y = item->allocation.y;
+    if (y > adjustment->upper - adjustment->page_size)
+        y = adjustment->upper - adjustment->page_size;
+	gtk_adjustment_set_value( adjustment, y );
 }
 
 // ----------------------------------------------------------------------------
