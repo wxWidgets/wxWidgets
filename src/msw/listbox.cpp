@@ -563,8 +563,12 @@ void wxListBox::SetString(int N, const wxString& s)
 
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW )
+    {
         // update item's text
         m_aItems[N]->SetName(s);
+        // reassign the item's data
+        ListBox_SetItemData(GetHwnd(), N, m_aItems[N]);
+    }
 #endif  //USE_OWNER_DRAWN
 }
 
