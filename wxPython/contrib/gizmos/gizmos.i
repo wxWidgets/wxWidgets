@@ -19,6 +19,7 @@
 #include <wx/gizmos/editlbox.h>
 #include <wx/gizmos/splittree.h>
 #include <wx/gizmos/ledctrl.h>
+#include <wx/listctrl.h>
 %}
 
 //---------------------------------------------------------------------------

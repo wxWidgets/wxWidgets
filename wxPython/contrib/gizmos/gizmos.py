@@ -121,27 +121,21 @@ class wxEditableListBoxPtr(wxPanelPtr):
         return val
     def GetListCtrl(self, *_args, **_kwargs):
         val = apply(gizmosc.wxEditableListBox_GetListCtrl,(self,) + _args, _kwargs)
-        if val: val = wxListCtrlPtr(val) 
         return val
     def GetDelButton(self, *_args, **_kwargs):
         val = apply(gizmosc.wxEditableListBox_GetDelButton,(self,) + _args, _kwargs)
-        if val: val = wxBitmapButtonPtr(val) 
         return val
     def GetNewButton(self, *_args, **_kwargs):
         val = apply(gizmosc.wxEditableListBox_GetNewButton,(self,) + _args, _kwargs)
-        if val: val = wxBitmapButtonPtr(val) 
         return val
     def GetUpButton(self, *_args, **_kwargs):
         val = apply(gizmosc.wxEditableListBox_GetUpButton,(self,) + _args, _kwargs)
-        if val: val = wxBitmapButtonPtr(val) 
         return val
     def GetDownButton(self, *_args, **_kwargs):
         val = apply(gizmosc.wxEditableListBox_GetDownButton,(self,) + _args, _kwargs)
-        if val: val = wxBitmapButtonPtr(val) 
         return val
     def GetEditButton(self, *_args, **_kwargs):
         val = apply(gizmosc.wxEditableListBox_GetEditButton,(self,) + _args, _kwargs)
-        if val: val = wxBitmapButtonPtr(val) 
         return val
     def __repr__(self):
         return "<C wxEditableListBox instance at %s>" % (self.this,)

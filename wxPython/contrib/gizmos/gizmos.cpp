@@ -60,6 +60,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/gizmos/editlbox.h>
 #include <wx/gizmos/splittree.h>
 #include <wx/gizmos/ledctrl.h>
+#include <wx/listctrl.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -723,7 +724,6 @@ static PyObject *_wrap_wxEditableListBox_GetListCtrl(PyObject *self, PyObject *a
     wxEditableListBox * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetListCtrl",_kwnames,&_argo0)) 
@@ -741,13 +741,7 @@ static PyObject *_wrap_wxEditableListBox_GetListCtrl(PyObject *self, PyObject *a
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxListCtrl_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -758,7 +752,6 @@ static PyObject *_wrap_wxEditableListBox_GetDelButton(PyObject *self, PyObject *
     wxEditableListBox * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetDelButton",_kwnames,&_argo0)) 
@@ -776,13 +769,7 @@ static PyObject *_wrap_wxEditableListBox_GetDelButton(PyObject *self, PyObject *
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -793,7 +780,6 @@ static PyObject *_wrap_wxEditableListBox_GetNewButton(PyObject *self, PyObject *
     wxEditableListBox * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetNewButton",_kwnames,&_argo0)) 
@@ -811,13 +797,7 @@ static PyObject *_wrap_wxEditableListBox_GetNewButton(PyObject *self, PyObject *
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -828,7 +808,6 @@ static PyObject *_wrap_wxEditableListBox_GetUpButton(PyObject *self, PyObject *a
     wxEditableListBox * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetUpButton",_kwnames,&_argo0)) 
@@ -846,13 +825,7 @@ static PyObject *_wrap_wxEditableListBox_GetUpButton(PyObject *self, PyObject *a
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -863,7 +836,6 @@ static PyObject *_wrap_wxEditableListBox_GetDownButton(PyObject *self, PyObject 
     wxEditableListBox * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetDownButton",_kwnames,&_argo0)) 
@@ -881,13 +853,7 @@ static PyObject *_wrap_wxEditableListBox_GetDownButton(PyObject *self, PyObject 
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -898,7 +864,6 @@ static PyObject *_wrap_wxEditableListBox_GetEditButton(PyObject *self, PyObject 
     wxEditableListBox * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetEditButton",_kwnames,&_argo0)) 
@@ -916,13 +881,7 @@ static PyObject *_wrap_wxEditableListBox_GetEditButton(PyObject *self, PyObject 
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 

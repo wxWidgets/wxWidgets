@@ -383,10 +383,12 @@ $function
 %typemap(python, out) wxToolTip*                { $target = wxPyMake_wxObject($source); }
 
 
+%typemap(python, out) wxBitmapButton*           { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxButton*                 { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxControl*                { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxFrame*                  { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxGrid*                   { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxListCtrl*               { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxMDIChildFrame*          { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxMDIClientWindow*        { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxMenuBar*                { $target = wxPyMake_wxObject($source); }
