@@ -117,17 +117,27 @@ class Buffer:
             return False
         syspath = sys.path
         sys.path = self.syspath
-        code = self.editor.getText()
-        module = imp.new_module(str(self.modulename))
-        namespace = module.__dict__.copy()
+        text = self.editor.getText()
+        text = text.replace('\r\n', '\n')
+        text = text.replace('\r', '\n')
+        name = self.modulename or self.name
+        module = imp.new_module(name)
+        newspace = module.__dict__.copy()
         try:
             try:
-                exec code in namespace
+                code = compile(text, name, 'exec')
             except:
-                return False
+                raise
+#                return False
+            try:
+                exec code in newspace
+            except:
+                raise
+#                return False
             else:
+                # No problems, so update the namespace.
                 self.interp.locals.clear()
-                self.interp.locals.update(namespace)
+                self.interp.locals.update(newspace)
                 return True
         finally:
             sys.path = syspath
