@@ -722,13 +722,26 @@ void wxMacWakeUp()
     if ( isSame )
     {
 #if TARGET_CARBON
-        EventRef dummyEvent ;
+        // we keep the reference only as a weak ref, to avoid double posting
+        // wakeups, so no problem if it is stale
+        
+        static EventRef s_wakeupEvent = 0 ;
+        if ( s_wakeupEvent )
+        {
+            // is our last wakeup still in the queue
+            if ( IsEventInQueue( GetMainEventQueue() , s_wakeupEvent ) )
+                return ;
+            // has been used already
+            s_wakeupEvent = 0 ;
+        }
+        
         OSStatus err = MacCreateEvent(nil, 'WXMC', 'WXMC', GetCurrentEventTime(),
-                        kEventAttributeNone, &dummyEvent);
+                        kEventAttributeNone, &s_wakeupEvent);
         if (err == noErr) 
         {
-            err = PostEventToQueue(GetMainEventQueue(), dummyEvent,
+            err = PostEventToQueue(GetMainEventQueue(), s_wakeupEvent,
                                   kEventPriorityHigh);
+            ReleaseEvent( s_wakeupEvent ) ;
         } 
 #else
         PostEvent( nullEvent , 0 ) ;
