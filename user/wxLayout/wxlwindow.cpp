@@ -33,8 +33,13 @@ wxLayoutWindow::OnMouse(wxMouseEvent& event)
    if(m_EventId == 0) // nothing to do
       return;
    
-   m_FindPos.x = event.GetX();
-   m_FindPos.y = event.GetY();
+   // this is unintuitive
+   wxClientDC dc(this);
+   PrepareDC( dc );
+
+   m_FindPos.x = dc.DeviceToLogicalX( event.GetX() );
+   m_FindPos.y = dc.DeviceToLogicalY( event.GetY() );
+
    m_FoundObject = NULL;
 
 #ifdef   WXLAYOUT_DEBUG
