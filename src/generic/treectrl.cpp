@@ -1,193 +1,221 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        treectrl.cpp
-// Purpose:
+// Purpose:     generic tree control implementation
 // Author:      Robert Roebling
 // Created:     01/02/97
+// Modified:    22/10/98 - almost total rewrite, simpler interface (VZ)
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// =============================================================================
+// declarations
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// headers
+// -----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "treectrl.h"
+  #pragma implementation "treectrl.h"
 #endif
 
 #include "wx/treectrl.h"
 #include "wx/settings.h"
 #include "wx/log.h"
-#include <wx/intl.h>
+#include "wx/intl.h"
+#include "wx/dynarray.h"
+#include "wx/dcclient.h"
 
-//-----------------------------------------------------------------------------
-// wxTreeItem
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// array types
+// -----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeItem, wxObject)
+WX_DEFINE_ARRAY(wxGenericTreeItem *, wxArrayTreeItems);
 
-wxTreeItem::wxTreeItem()
+// -----------------------------------------------------------------------------
+// private classes
+// -----------------------------------------------------------------------------
+
+// a tree item
+class WXDLLEXPORT wxGenericTreeItem
 {
-  m_mask = 0;
-  m_itemId = 0;
-  m_state = 0;
-  m_stateMask = 0;
-  m_image = -1;
-  m_selectedImage = -1;
-  m_children = 0;
-  m_data = 0;
-}
+public:
+  // ctors & dtor
+  wxGenericTreeItem() { m_data = NULL; }
+  wxGenericTreeItem( wxGenericTreeItem *parent,
+                     const wxString& text,
+                     wxDC& dc,
+                     int image, int selImage,
+                     wxTreeItemData *data );
 
-//-----------------------------------------------------------------------------
+  inline ~wxGenericTreeItem();
+
+  // trivial accessors
+  wxArrayTreeItems& GetChildren() { return m_children; }
+
+  const wxString& GetText() const { return m_text; }
+  int GetImage() const { return m_image; }
+  int GetSelectedImage() const { return m_selImage; }
+  wxTreeItemData *GetData() const { return m_data; }
+
+  void SetText( const wxString &text, wxDC& dc );
+  void SetImage(int image) { m_image = image; }
+  void SetSelectedImage(int image) { m_selImage = image; }
+  void SetData(wxTreeItemData *data) { m_data = data; }
+
+  void SetHasPlus(bool has = TRUE) { m_hasPlus = has; }
+
+  int GetX() const { return m_x; }
+  int GetY() const { return m_y; }
+
+  void SetHeight(int h) { m_height = h; }
+
+  void SetX(int x) { m_x = x; }
+  void SetY(int y) { m_y = y; }
+
+  wxGenericTreeItem *GetParent() const { return m_parent; }
+
+  // operations
+  void Reset();
+
+  // get count of all children (and grand children and ...) of this item
+  size_t GetTotalNumberOfChildren() const;
+
+  void Insert(wxGenericTreeItem *child, size_t index)
+    { m_children.Insert(child, index); }
+
+  void SetCross( int x, int y );
+  void GetSize( int &x, int &y );
+
+  // return the item at given position (or NULL if no item), onButton is TRUE
+  // if the point belongs to the item's button, otherwise it lies on the
+  // button's label
+  wxGenericTreeItem *HitTest( const wxPoint& point, bool &onButton );
+
+  void Expand() { m_isCollapsed = FALSE; }
+  void Collapse() { m_isCollapsed = TRUE; }
+
+  void SetHilight( bool set = TRUE ) { m_hasHilight = set; }
+
+  // status inquiries
+  bool HasChildren() const { return !m_children.IsEmpty(); }
+  bool HasHilight()  const { return m_hasHilight; }
+  bool IsExpanded()  const { return !m_isCollapsed; }
+  bool HasPlus()     const { return m_hasPlus || HasChildren(); }
+
+private:
+  wxString            m_text;
+
+  int                 m_image,
+                      m_selImage;
+
+  wxTreeItemData     *m_data;
+  
+  // @@ probably should use bitfields to save size
+  bool                m_isCollapsed,
+                      m_hasHilight,   // same as focused
+                      m_hasPlus;      // used for item which doesn't have
+                                      // children but still has a [+] button
+
+  int                 m_x, m_y;
+  long                m_height, m_width;
+  int                 m_xCross, m_yCross;
+  int                 m_level;
+  wxArrayTreeItems    m_children;
+  wxGenericTreeItem  *m_parent;
+};
+
+// =============================================================================
+// implementation
+// =============================================================================
+
+// -----------------------------------------------------------------------------
 // wxTreeEvent
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent,wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxCommandEvent)
 
-wxTreeEvent::wxTreeEvent( wxEventType commandType, int id ) :
-  wxCommandEvent( commandType, id )
+wxTreeEvent::wxTreeEvent( wxEventType commandType, int id )
+           : wxCommandEvent( commandType, id )
 {
   m_code = 0;
-  m_oldItem = 0;
+  m_itemOld = (wxGenericTreeItem *)NULL;
 }
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // wxGenericTreeItem
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericTreeItem,wxObject)
-
-wxGenericTreeItem::wxGenericTreeItem( wxGenericTreeItem *parent )
+wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
+                                     const wxString& text,
+                                     wxDC& dc,
+                                     int image, int selImage,
+                                     wxTreeItemData *data)
+                 : m_text(text)
 {
-  Reset();
-  m_parent = parent;
+  m_image = image;
+  m_selImage = selImage;
+  m_data = data;
+  m_x = m_y = 0;
+  m_xCross = m_yCross = 0;
+
+  m_level = 0;
+
+  m_isCollapsed = TRUE;
   m_hasHilight = FALSE;
-}
 
-wxGenericTreeItem::wxGenericTreeItem( wxGenericTreeItem *parent, const wxTreeItem& item, wxDC *dc )
-{
-  Reset();
-  SetItem( item, dc );
   m_parent = parent;
-  m_hasHilight = FALSE;
+
+  dc.GetTextExtent( m_text, &m_width, &m_height );
 }
 
-void wxGenericTreeItem::SetItem( const wxTreeItem &item, wxDC *dc )
+wxGenericTreeItem::~wxGenericTreeItem()
 {
-  if ((item.m_mask & wxTREE_MASK_HANDLE) == wxTREE_MASK_HANDLE)
-    m_itemId = item.m_itemId;
-  if ((item.m_mask & wxTREE_MASK_STATE) == wxTREE_MASK_STATE)
-    m_state = item.m_state;
-  if ((item.m_mask & wxTREE_MASK_TEXT) == wxTREE_MASK_TEXT)
-    m_text = item.m_text;
-  if ((item.m_mask & wxTREE_MASK_IMAGE) == wxTREE_MASK_IMAGE)
-    m_image = item.m_image;
-  if ((item.m_mask & wxTREE_MASK_SELECTED_IMAGE) == wxTREE_MASK_SELECTED_IMAGE)
-    m_selectedImage = item.m_selectedImage;
-  if ((item.m_mask & wxTREE_MASK_CHILDREN) == wxTREE_MASK_CHILDREN)
-    m_hasChildren = (item.m_children > 0);
-  if ((item.m_mask & wxTREE_MASK_DATA) == wxTREE_MASK_DATA)
-    m_data = item.m_data;
-  long lw = 0;
-  long lh = 0;
-  dc->GetTextExtent( m_text, &lw, &lh );
-  m_width = lw;
-  m_height = lh;
+  delete m_data;
+  
+  size_t count = m_children.Count();
+  for ( size_t n = 0; n < count; n++ )
+    delete m_children[n];
 }
 
-void wxGenericTreeItem::SetText( const wxString &text, wxDC *dc )
+void wxGenericTreeItem::SetText( const wxString &text, wxDC& dc )
 {
   m_text = text;
-  long lw = 0;
-  long lh = 0;
-  dc->GetTextExtent( m_text, &lw, &lh );
-  m_width = lw;
-  m_height = lh;
+
+  dc.GetTextExtent( m_text, &m_width, &m_height );
 }
 
 void wxGenericTreeItem::Reset()
 {
-  m_itemId = -1;
-  m_state = 0;
-  m_text = "";
-  m_image = -1;
-  m_selectedImage = -1;
-//  m_children = 0;
-  m_hasChildren = FALSE;
-  m_data = 0;
-  m_x = 0;
-  m_y = 0;
-  m_height = 0;
-  m_width = 0;
-  m_xCross = 0;
+  m_text.Empty();
+  m_image =
+  m_selImage = -1;
+  m_data = NULL;
+  m_x = m_y =
+  m_height = m_width = 0;
+  m_xCross =
   m_yCross = 0;
+
   m_level = 0;
-  m_children.DeleteContents( TRUE );
+
+  m_children.Empty();
   m_isCollapsed = TRUE;
-  m_parent = (wxGenericTreeItem *) NULL;
+
+  m_parent = (wxGenericTreeItem *)NULL;
 }
 
-void wxGenericTreeItem::GetItem( wxTreeItem &item ) const
+size_t wxGenericTreeItem::GetTotalNumberOfChildren() const
 {
-  if ((item.m_mask & wxTREE_MASK_STATE) == wxTREE_MASK_STATE)
-    item.m_state = m_state;
-  if ((item.m_mask & wxTREE_MASK_TEXT) == wxTREE_MASK_TEXT)
-    item.m_text = m_text;
-  if ((item.m_mask & wxTREE_MASK_IMAGE) == wxTREE_MASK_IMAGE)
-    item.m_image = m_image;
-  if ((item.m_mask & wxTREE_MASK_SELECTED_IMAGE) == wxTREE_MASK_SELECTED_IMAGE)
-    item.m_selectedImage = m_selectedImage;
-  if ((item.m_mask & wxTREE_MASK_CHILDREN) == wxTREE_MASK_CHILDREN)
-    item.m_children = (int)m_hasChildren;
-  if ((item.m_mask & wxTREE_MASK_DATA) == wxTREE_MASK_DATA)
-    item.m_data = m_data;
-}
-
-bool wxGenericTreeItem::HasChildren()
-{
-  return m_hasChildren;
-}
-
-bool wxGenericTreeItem::HasPlus()
-{
-  if ( !HasChildren() )
-    return FALSE;
-
-  return !IsExpanded();
-}
-
-int wxGenericTreeItem::NumberOfVisibleDescendents()
-{
-  int ret = m_children.Number();
-  wxNode *node = m_children.First();
-  while (node)
+  size_t count = m_children.Count();
+  size_t total = count;
+  for ( size_t n = 0; n < count; n++ )
   {
-    wxGenericTreeItem *item = (wxGenericTreeItem*)node->Data();
-    ret += item->NumberOfVisibleDescendents();
-    node = node->Next();
+    total += m_children[n]->GetTotalNumberOfChildren();
   }
-  return ret;
-}
 
-int wxGenericTreeItem::NumberOfVisibleChildren()
-{
-  return m_isCollapsed ? 0 : m_children.Number();
-}
-
-wxGenericTreeItem *wxGenericTreeItem::FindItem( long itemId ) const
-{
-  if (m_itemId == itemId) return (wxGenericTreeItem*)(this);
-  wxNode *node = m_children.First();
-  while (node)
-  {
-    wxGenericTreeItem *item = (wxGenericTreeItem*)node->Data();
-    wxGenericTreeItem *res = item->FindItem( itemId );
-    if (res) return (wxGenericTreeItem*)(res);
-    node = node->Next();
-  }
-  return (wxGenericTreeItem *) NULL;
-}
-
-void wxGenericTreeItem::AddChild( wxGenericTreeItem *child )
-{
-  m_children.Append( child );
+  return total;
 }
 
 void wxGenericTreeItem::SetCross( int x, int y )
@@ -198,143 +226,60 @@ void wxGenericTreeItem::SetCross( int x, int y )
 
 void wxGenericTreeItem::GetSize( int &x, int &y )
 {
-  if (y < m_y + 10) y = m_y +10;
+  // FIXME what does this all mean??
+  if ( y < m_y + 10 ) y = m_y +10;
   int width = m_x +  m_width;
   if (width > x) x = width;
-  wxNode *node = m_children.First();
-  while (node)
+
+  size_t count = m_children.Count();
+  for ( size_t n = 0; n < count; n++ )
   {
-    wxGenericTreeItem *item = (wxGenericTreeItem*)node->Data();
-    item->GetSize( x, y );
-    node = node->Next();
+    m_children[n]->GetSize( x, y );
   }
 }
 
-long wxGenericTreeItem::HitTest( const wxPoint& point, int &flags )
+wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
+                                               bool &onButton )
 {
-  if ((point.y > m_y) && (point.y < m_y+m_height))
+  if ((point.y > m_y) && (point.y < m_y + m_height))
   {
-    if ((point.x > m_xCross-5) &&
-        (point.x < m_xCross+5) &&
-        (point.y > m_yCross-5) &&
-        (point.y < m_yCross+5) &&
-        (m_hasChildren))
+    // FIXME why +5?
+    if ((point.x > m_xCross-5) && (point.x < m_xCross+5) &&
+        (point.y > m_yCross-5) && (point.y < m_yCross+5) &&
+        HasChildren())
     {
-      flags = wxTREE_HITTEST_ONITEMBUTTON;
-      return m_itemId;
+      onButton = TRUE;
+      return this;
     }
+
     if ((point.x > m_x) && (point.x < m_x+m_width))
     {
-      flags = wxTREE_HITTEST_ONITEMLABEL;
-      return m_itemId;
+      onButton = FALSE;
+      return this;
     }
-    if (point.x > m_x)
-    {
-      flags = wxTREE_HITTEST_ONITEMRIGHT;
-      return m_itemId;
-    }
-    flags = wxTREE_HITTEST_ONITEMINDENT;
-    return m_itemId;
   }
   else
   {
     if (!m_isCollapsed)
     {
-      wxNode *node = m_children.First();
-      while (node)
+      size_t count = m_children.Count();
+      for ( size_t n = 0; n < count; n++ )
       {
-        wxGenericTreeItem *child = (wxGenericTreeItem*)node->Data();
-        long res = child->HitTest( point, flags );
-        if (res != -1) return res;
-        node = node->Next();
+        wxGenericTreeItem *res = m_children[n]->HitTest( point, onButton );
+        if ( res != NULL )
+          return res;
       }
     }
   }
-  return -1;
+
+  return NULL;
 }
 
-void wxGenericTreeItem::PrepareEvent( wxTreeEvent &event )
-{
-  event.m_item.m_itemId = m_itemId;
-  event.m_item.m_state = m_state;
-  event.m_item.m_text = m_text;
-  event.m_item.m_image = m_image;
-  event.m_item.m_selectedImage = m_selectedImage;
-  event.m_item.m_children = (int)m_hasChildren;
-  event.m_item.m_data = m_data;
-  event.m_oldItem = 0;
-  event.m_code = 0;
-  event.m_pointDrag.x = 0;
-  event.m_pointDrag.y = 0;
-}
+// -----------------------------------------------------------------------------
+// wxTreeCtrl implementation
+// -----------------------------------------------------------------------------
 
-void wxGenericTreeItem::SendKeyDown( wxWindow *target )
-{
-  wxTreeEvent event( wxEVT_COMMAND_TREE_KEY_DOWN, target->GetId() );
-  PrepareEvent( event );
-  event.SetEventObject( target );
-  target->ProcessEvent( event );
-}
-
-void wxGenericTreeItem::SendSelected( wxWindow *target )
-{
-  wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGED, target->GetId() );
-  PrepareEvent( event );
-  event.SetEventObject( target );
-  target->ProcessEvent( event );
-}
-
-void wxGenericTreeItem::SendDelete( wxWindow *target )
-{
-  wxTreeEvent event( wxEVT_COMMAND_TREE_DELETE_ITEM, target->GetId() );
-  PrepareEvent( event );
-  event.SetEventObject( target );
-  target->ProcessEvent( event );
-}
-
-void wxGenericTreeItem::SendExpand( wxWindow *target )
-{
-  m_isCollapsed = FALSE;
-
-  wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_EXPANDING, target->GetId() );
-  event.SetEventObject( target );
-  PrepareEvent( event );
-  target->ProcessEvent( event );
-
-  event.SetEventType(wxEVT_COMMAND_TREE_ITEM_EXPANDED);
-  PrepareEvent( event );
-  target->ProcessEvent( event );
-}
-
-void wxGenericTreeItem::SendCollapse( wxWindow *target )
-{
-  m_isCollapsed = TRUE;
-
-  wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_COLLAPSING, target->GetId() );
-  event.SetEventObject( target );
-  PrepareEvent( event );
-  target->ProcessEvent( event );
-
-  event.SetEventType(wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
-  PrepareEvent( event );
-  target->ProcessEvent( event );
-}
-
-void wxGenericTreeItem::SetHilight( bool set )
-{
-  m_hasHilight = set;
-}
-
-bool wxGenericTreeItem::HasHilight()
-{
-  return m_hasHilight;
-}
-
-//-----------------------------------------------------------------------------
-// wxTreeCtrl
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl,wxScrolledWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxTreeCtrl,wxScrolledWindow)
   EVT_PAINT          (wxTreeCtrl::OnPaint)
@@ -344,578 +289,547 @@ BEGIN_EVENT_TABLE(wxTreeCtrl,wxScrolledWindow)
   EVT_KILL_FOCUS     (wxTreeCtrl::OnKillFocus)
 END_EVENT_TABLE()
 
-wxTreeCtrl::wxTreeCtrl()
+// -----------------------------------------------------------------------------
+// construction/destruction
+// -----------------------------------------------------------------------------
+void wxTreeCtrl::Init()
 {
-  m_current = (wxGenericTreeItem *) NULL;
+  m_current =
   m_anchor = (wxGenericTreeItem *) NULL;
   m_hasFocus = FALSE;
+
   m_xScroll = 0;
   m_yScroll = 0;
-  m_lastId = 0;
   m_lineHeight = 10;
   m_indent = 15;
-  m_isCreated = FALSE;
-  m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
-  m_imageList = (wxImageList *) NULL;
-  m_smallImageList = (wxImageList *) NULL;
+
+  m_hilightBrush = new wxBrush
+    (
+      wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT),
+      wxSOLID
+    );
+
+  m_imageListNormal =
+  m_imageListState = (wxImageList *) NULL;
 }
 
-wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
-            const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name )
+bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
+                        const wxPoint& pos, const wxSize& size,
+                        long style, const wxString& name )
 {
-  m_current = (wxGenericTreeItem *) NULL;
-  m_anchor = (wxGenericTreeItem *) NULL;
-  m_hasFocus = FALSE;
-  m_xScroll = 0;
-  m_yScroll = 0;
-  m_lastId = 0;
-  m_lineHeight = 10;
-  m_indent = 15;
-  m_isCreated = FALSE;
-  m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
-  m_imageList = (wxImageList *) NULL;
-  m_smallImageList = (wxImageList *) NULL;
-  Create( parent, id, pos, size, style, name );
+  Init();
+
+  wxScrolledWindow::Create( parent, id, pos, size, style, name );
+
+  SetBackgroundColour( *wxWHITE );
+  m_dottedPen = wxPen( *wxBLACK, 0, 0 );
+
+  return TRUE;
 }
 
 wxTreeCtrl::~wxTreeCtrl()
 {
-  if (m_hilightBrush) delete m_hilightBrush;
-  if (m_anchor) delete m_anchor;
+  wxDELETE( m_hilightBrush );
+  wxDELETE( m_anchor );
 }
 
-bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
-            const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name )
+// -----------------------------------------------------------------------------
+// accessors
+// -----------------------------------------------------------------------------
+
+size_t wxTreeCtrl::GetCount() const
 {
-  wxScrolledWindow::Create( parent, id, pos, size, style, name );
-  SetBackgroundColour( *wxWHITE );
-  m_dottedPen = wxPen( *wxBLACK, 0, 0 );
-  return TRUE;
+  return m_anchor == NULL ? 0u : m_anchor->GetTotalNumberOfChildren();
 }
 
-int wxTreeCtrl::GetCount() const
-{
-  if (!m_anchor) return 0;
-  return m_anchor->NumberOfVisibleDescendents();
-}
-
-long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
-      int selImage, long WXUNUSED(insertAfter) )
-{
-  wxGenericTreeItem *p = (wxGenericTreeItem *) NULL;
-  if (parent == 0)
-  {
-    if (m_anchor) return -1;
-  }
-  else
-  {
-    p = FindItem( parent );
-    if (!p) return -1;
-  }
-  wxTreeItem item;
-  m_lastId++;
-  item.m_mask = wxTREE_MASK_HANDLE;
-  item.m_itemId = m_lastId;
-  if (!label.IsNull() || (label == ""))
-  {
-    item.m_text = label;
-    item.m_mask |= wxTREE_MASK_TEXT;
-  }
-  if (image >= 0)
-  {
-    item.m_image = image;
-    item.m_mask |= wxTREE_MASK_IMAGE;
-  }
-  if (selImage >= 0)
-  {
-    item.m_selectedImage = selImage;
-    item.m_mask |= wxTREE_MASK_SELECTED_IMAGE;
-  }
-
-  wxClientDC dc(this);
-  wxGenericTreeItem *new_child = new wxGenericTreeItem( p, item, &dc );
-  if (p)
-    p->AddChild( new_child );
-  else
-    m_anchor = new_child;
-
-  if (p)
-  {
-    CalculatePositions();
-
-    if (!p->HasChildren()) p->m_hasChildren = TRUE;
-
-    int cw = 0, ch = 0;
-    GetClientSize( &cw, &ch );
-
-    PrepareDC( dc );
-    
-    wxRectangle rect;
-    rect.x = dc.LogicalToDeviceX( 0 ); 
-    rect.y = 0;
-    rect.width = 10000; 
-    rect.height = ch;
-
-    if (p->m_children.Number() == 1)
-    {
-      rect.y = dc.LogicalToDeviceY( p->m_y );
-    }
-    else
-    {
-      wxNode *node = p->m_children.Member( new_child )->Previous();
-      wxGenericTreeItem* last_child = (wxGenericTreeItem*)node->Data();
-      rect.y = dc.LogicalToDeviceY( last_child->m_y );
-    }
-
-    AdjustMyScrollbars();
-
-    if (rect.height > 0) Refresh( FALSE, &rect);
-  }
-  else
-  {
-    AdjustMyScrollbars();
-
-    Refresh();
-  }
-
-  return m_lastId;
-}
-
-long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insertAfter) )
-{
-  int oldMask = info.m_mask;
-  wxGenericTreeItem *p = (wxGenericTreeItem *) NULL;
-  if (parent == 0)
-  {
-    if (m_anchor) return -1;
-  }
-  else
-  {
-    p = FindItem( parent );
-    if (!p)
-    {
-      printf( "TreeItem not found.\n" );
-      return -1;
-    }
-  }
-  long ret = 0;
-  if ((info.m_mask & wxTREE_MASK_HANDLE) == 0)
-  {
-    m_lastId++;
-    info.m_itemId = m_lastId;
-    info.m_mask |= wxTREE_MASK_HANDLE;
-    ret = m_lastId;
-  }
-  else
-  {
-    ret = info.m_itemId;
-  }
-
-  wxClientDC dc(this);
-  wxGenericTreeItem *new_child = new wxGenericTreeItem( p, info, &dc );
-  if (p)
-    p->AddChild( new_child );
-  else
-    m_anchor = new_child;
-
-  if (p)
-  {
-    CalculatePositions();
-
-    if (!p->HasChildren()) p->m_hasChildren = TRUE;
-
-    int ch = 0;
-    GetClientSize( (int *) NULL, &ch );
-
-    PrepareDC( dc );
-    
-    wxRectangle rect;
-    rect.x = dc.LogicalToDeviceX( 0 ); 
-    rect.y = 0;
-    rect.width = 10000; 
-    rect.height = ch;
-
-    if (p->m_children.Number() == 1)
-    {
-      rect.y = dc.LogicalToDeviceY( p->m_y );
-    }
-    else
-    {
-      wxNode *node = p->m_children.Member( new_child )->Previous();
-      wxGenericTreeItem* last_child = (wxGenericTreeItem*)node->Data();
-      rect.y = dc.LogicalToDeviceY( last_child->m_y );
-    }
-
-    AdjustMyScrollbars();
-
-    if (rect.height > 0) Refresh( FALSE, &rect);
-  }
-  else
-  {
-    AdjustMyScrollbars();
-
-    Refresh();
-  }
-
-  info.m_mask = oldMask;
-  return ret;
-}
-
-bool wxTreeCtrl::ExpandItem( long item, int action )
-{
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i)
-    return FALSE;
-
-  switch (action)
-  {
-    case wxTREE_EXPAND_EXPAND:
-    {
-      i->SendExpand( this );
-      break;
-    }
-
-    case wxTREE_EXPAND_COLLAPSE_RESET:
-    case wxTREE_EXPAND_COLLAPSE:
-    {
-      wxNode *node = i->m_children.First();
-      while (node)
-      {
-        wxGenericTreeItem *child = (wxGenericTreeItem*)node->Data();
-        if ( child->IsExpanded() )
-          ExpandItem( child->m_itemId, wxTREE_EXPAND_COLLAPSE );
-        node = node->Next();
-      }
-
-      CalculatePositions();
-
-      i->SendCollapse( this );
-      break;
-    }
-
-    case wxTREE_EXPAND_TOGGLE:
-    {
-      if ( i->IsExpanded() )
-        ExpandItem( item, wxTREE_EXPAND_COLLAPSE );
-      else
-        ExpandItem( item, wxTREE_EXPAND_EXPAND );
-      return TRUE;
-    }
-  }
-
-  wxClientDC dc(this);
-  PrepareDC(dc);
-  
-  int cw = 0;
-  int ch = 0;
-  GetClientSize( &cw, &ch );
-  
-  wxRect rect;
-  rect.x = dc.LogicalToDeviceX( 0 );
-  rect.width = cw;
-  rect.y = dc.LogicalToDeviceY( i->m_y );
-  rect.height = ch;
-  Refresh( TRUE, &rect );
-
-  AdjustMyScrollbars();
-
-  return TRUE;
-}
-
-void wxTreeCtrl::DeleteItem( long item )
-{
-  wxGenericTreeItem *pItem = FindItem( item );
-  wxCHECK_RET( pItem != NULL, _("wxTreeCtrl::DeleteItem: no such pItem.") );
-
-  pItem->m_parent->m_children.DeleteObject(pItem);
-
-  Refresh();
-}
-
-void wxTreeCtrl::DeleteChildren( long item )
-{
-  wxGenericTreeItem *pItem = FindItem( item );
-  wxCHECK_RET( pItem != NULL, _("wxTreeCtrl::DeleteChildren: no such pItem.") );
-
-  pItem->m_children.Clear();
-
-  Refresh();
-}
-
-bool wxTreeCtrl::DeleteAllItems()
-{
-  delete m_anchor;
-  m_anchor = (wxGenericTreeItem *) NULL;
-  Refresh();
-  return TRUE;
-}
-
-bool wxTreeCtrl::GetItem( wxTreeItem &info ) const
-{
-  wxGenericTreeItem *i = FindItem( info.m_itemId );
-  if (!i) return FALSE;
-  i->GetItem( info );
-  return TRUE;
-}
-
-long wxTreeCtrl::GetItemData( long item ) const
-{
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i) return 0;
-  return i->m_data;
-}
-
-wxString wxTreeCtrl::GetItemText( long item ) const
-{
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i) return "";
-  return i->m_text;
-}
-
-int wxTreeCtrl::GetItemImage(long item) const
-{
-  wxGenericTreeItem *i = FindItem( item );
-  return i == 0 ? -1 : i->GetImage();
-}
-
-long wxTreeCtrl::GetParent( long item ) const
-{
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i) return -1;
-  i = i->m_parent;
-  if (!i) return -1;
-  return i->m_parent->m_itemId;
-}
-
-long wxTreeCtrl::GetRootItem() const
-{
-  if (m_anchor) return m_anchor->m_itemId;
-  return -1;
-}
-
-long wxTreeCtrl::GetChild( long item ) const
-{
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i) return -1;
-  if (!i->HasChildren()) return -1;
-  wxNode *node = i->m_children.First();
-  i = (wxGenericTreeItem *)node->Data();
-  return i->m_itemId;
-}
-
-long wxTreeCtrl::GetNextItem( long item, int code ) const
-{
-  switch (code)
-  {
-    case wxTREE_NEXT_CARET:  return GetSelection();
-    case wxTREE_NEXT_CHILD:  return GetChild( item );
-    case wxTREE_NEXT_ROOT:   return GetRootItem();
-    case wxTREE_NEXT_PARENT: return GetParent( item );
-    case wxTREE_NEXT_NEXT:
-    {
-      wxGenericTreeItem *i = FindItem( item );
-      if (!i) return -1;
-      if (i->m_parent)
-      {
-        wxNode *node = i->m_parent->m_children.Member( i );
-	if (!node) return -1;
-	node = node->Next();
-	if (!node) return -1;
-        i = (wxGenericTreeItem *)node->Data();
-        return i->m_itemId;
-      }
-      break;
-    }
-    case wxTREE_NEXT_PREVIOUS:
-    {
-      wxGenericTreeItem *i = FindItem( item );
-      if (!i) return -1;
-      if (i->m_parent)
-      {
-        wxNode *node = i->m_parent->m_children.Member( i );
-	if (!node) return -1;
-	node = node->Previous();
-	if (!node) return -1;
-        i = (wxGenericTreeItem *)node->Data();
-        return i->m_itemId;
-      }
-      break;
-    }
-  }
-  return -1;
-}
-
-long wxTreeCtrl::GetSelection() const
-{
-  return m_current ? m_current->GetItemId() : -1;
-}
-
-bool wxTreeCtrl::SelectItem( long itemId )
-{
-  wxGenericTreeItem *pItem = FindItem(itemId);
-  if ( !pItem ) {
-    wxLogDebug(_("Can't select an item %d which doesn't exist."), itemId);
-
-    return FALSE;
-  }
-
-  SelectItem(pItem);
-
-  return TRUE;
-}
-
-void wxTreeCtrl::SelectItem(wxGenericTreeItem *item)
-{
-  if (m_current != item)
-  {
-    if (m_current)
-    {
-      m_current->SetHilight( FALSE );
-      RefreshLine( m_current );
-    }
-    m_current = item;
-    m_current->SetHilight( TRUE );
-    RefreshLine( m_current );
-
-    m_current->SendSelected( this );
-  }
-}
-
-bool wxTreeCtrl::ItemHasChildren( long item ) const
-{
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i) return FALSE;
-  return i->m_hasChildren;
-}
-
-void wxTreeCtrl::SetIndent( int indent )
+void wxTreeCtrl::SetIndent(unsigned int indent)
 {
   m_indent = indent;
   Refresh();
 }
 
-int wxTreeCtrl::GetIndent() const
+// -----------------------------------------------------------------------------
+// functions to work with tree items
+// -----------------------------------------------------------------------------
+
+wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
 {
-  return m_indent;
+  return item.m_pItem->GetText();
 }
 
-bool wxTreeCtrl::SetItem( wxTreeItem &info )
+int wxTreeCtrl::GetItemImage(const wxTreeItemId& item) const
 {
-  wxGenericTreeItem *i = FindItem( info.m_itemId );
-  if (!i) return FALSE;
+  return item.m_pItem->GetImage();
+}
+
+int wxTreeCtrl::GetItemSelectedImage(const wxTreeItemId& item) const
+{
+  return item.m_pItem->GetSelectedImage();
+}
+
+wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
+{
+  return item.m_pItem->GetData();
+}
+
+void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
+{
   wxClientDC dc(this);
-  i->SetItem( info, &dc );
+  return item.m_pItem->SetText(text, dc);
+}
+
+void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image)
+{
+  return item.m_pItem->SetImage(image);
+}
+
+void wxTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image)
+{
+  return item.m_pItem->SetSelectedImage(image);
+}
+
+void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
+{
+  return item.m_pItem->SetData(data);
+}
+
+void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
+{
+  item.m_pItem->SetHasPlus(has);
+}
+
+// -----------------------------------------------------------------------------
+// item status inquiries
+// -----------------------------------------------------------------------------
+
+bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
+{
+  wxFAIL_MSG("not implemented");
+
+  return TRUE;
+}
+
+bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
+{
+  return !item.m_pItem->GetChildren().IsEmpty();
+}
+
+bool wxTreeCtrl::IsExpanded(const wxTreeItemId& item) const
+{
+  return item.m_pItem->IsExpanded();
+}
+
+bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
+{
+  return item.m_pItem->HasHilight();
+}
+
+// -----------------------------------------------------------------------------
+// navigation
+// -----------------------------------------------------------------------------
+
+wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
+{
+  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+
+  return item.m_pItem->GetParent();
+}
+
+wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item, long& cookie) const
+{
+  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+
+  cookie = 0;
+  return GetNextChild(item, cookie);
+}
+
+wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& item, long& cookie) const
+{
+  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+
+  return item.m_pItem->GetChildren().Item(cookie++);
+}
+
+wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
+{
+  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+
+  wxGenericTreeItem *i = item.m_pItem;
+  wxGenericTreeItem *parent = i->GetParent();
+  if ( parent == NULL )
+  {
+    // root item doesn't have any siblings
+    return NULL;
+  }
+  
+  wxArrayTreeItems& siblings = parent->GetChildren();
+  int index = siblings.Index(i);
+  wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
+
+  size_t n = (size_t)(index + 1);
+  return n == siblings.Count() ? NULL : siblings[n];
+}
+
+wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
+{
+  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+
+  wxGenericTreeItem *i = item.m_pItem;
+  wxGenericTreeItem *parent = i->GetParent();
+  if ( parent == NULL )
+  {
+    // root item doesn't have any siblings
+    return NULL;
+  }
+  
+  wxArrayTreeItems& siblings = parent->GetChildren();
+  int index = siblings.Index(i);
+  wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
+
+  return index == 0 ? NULL : siblings[(size_t)(index - 1)];
+}
+
+wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
+{
+  wxFAIL_MSG("not implemented");
+
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
+{
+  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+
+  wxFAIL_MSG("not implemented");
+
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
+{
+  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+
+  wxFAIL_MSG("not implemented");
+
+  return NULL;
+}
+
+// -----------------------------------------------------------------------------
+// operations
+// -----------------------------------------------------------------------------
+
+wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parentId,
+                                      size_t previous,
+                                      const wxString& text,
+                                      int image, int selImage,
+                                      wxTreeItemData *data)
+{
+  wxGenericTreeItem *parent = parentId.m_pItem;
+  if ( !parent )
+  {
+    // should we give a warning here?
+    return AddRoot(text, image, selImage, data);
+  }
+  
+  wxClientDC dc(this);
+  wxGenericTreeItem *item = new wxGenericTreeItem(parent,
+                                                  text, dc,
+                                                  image, selImage,
+                                                  data);
+
+  if ( data != NULL )
+  {
+    data->m_pItem = item;
+  }
+
+  parent->Insert( item, previous );
+
+  CalculatePositions();
+
+  int cw, ch;
+  GetClientSize( &cw, &ch );
+
+  PrepareDC( dc );
+
+  wxRectangle rect;
+  rect.x = dc.LogicalToDeviceX( 0 ); 
+  rect.y = 0;
+  rect.width = 10000; // @@@ not very elegant...
+  rect.height = ch;
+
+  if ( previous != 0 )
+  {
+    rect.y = dc.LogicalToDeviceY( parent->GetChildren().Item(previous)->GetY() );
+  }
+  else // it's the 1st child
+  {
+    rect.y = dc.LogicalToDeviceY( parent->GetY() );
+  }
+
+  AdjustMyScrollbars();
+
+  if ( rect.height > 0 )
+    Refresh( FALSE, &rect );
+
+  return item;
+}
+
+wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
+                                 int image, int selImage,
+                                 wxTreeItemData *data)
+{
+  wxCHECK_MSG( !m_anchor, NULL, "tree can have only one root" );
+
+  wxClientDC dc(this);
+  m_anchor = new wxGenericTreeItem((wxGenericTreeItem *)NULL, text, dc,
+                                   image, selImage, data);
+  if ( data != NULL )
+  {
+    data->m_pItem = m_anchor;
+  }
+
+  AdjustMyScrollbars();
   Refresh();
-  return TRUE;
+
+  return m_anchor;
 }
 
-bool wxTreeCtrl::SetItemData( long item, long data )
+wxTreeItemId wxTreeCtrl::PrependItem(const wxTreeItemId& parent,
+                                     const wxString& text,
+                                     int image, int selImage,
+                                     wxTreeItemData *data)
 {
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i) return FALSE;
-  i->m_data = data;
-  return TRUE;
+  return DoInsertItem(parent, 0u, text, image, selImage, data);
 }
 
-bool wxTreeCtrl::SetItemText( long item, const wxString &text )
+wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parentId,
+                                    const wxTreeItemId& idPrevious,
+                                    const wxString& text,
+                                    int image, int selImage,
+                                    wxTreeItemData *data)
 {
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i) return FALSE;
-  wxClientDC dc(this);
-  i->SetText( text, &dc );
-  return TRUE;
-}
-
-void wxTreeCtrl::SetItemImage(long item, int image, int imageSel) const
-{
-  wxGenericTreeItem *i = FindItem( item );
-  if ( i != 0 ) 
+  wxGenericTreeItem *parent = parentId.m_pItem;
+  if ( !parent )
   {
-    i->SetImage(image);
-    i->SetSelectedImage(imageSel);
+    // should we give a warning here?
+    return AddRoot(text, image, selImage, data);
+  }
+
+  int index = parent->GetChildren().Index(idPrevious.m_pItem);
+  wxASSERT_MSG( index != NOT_FOUND,
+                "previous item in wxTreeCtrl::InsertItem() is not a sibling" );
+  return DoInsertItem(parentId, (size_t)index, text, image, selImage, data);
+}
+
+wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parentId,
+                                    const wxString& text,
+                                    int image, int selImage,
+                                    wxTreeItemData *data)
+{
+  wxGenericTreeItem *parent = parentId.m_pItem;
+  if ( !parent )
+  {
+    // should we give a warning here?
+    return AddRoot(text, image, selImage, data);
+  }
+
+  return DoInsertItem(parent, parent->GetChildren().Count(), text,
+                      image, selImage, data);
+}
+
+void wxTreeCtrl::Delete(const wxTreeItemId& itemId)
+{
+  wxGenericTreeItem *item = itemId.m_pItem;
+
+  delete item;
+
+  Refresh();
+}
+
+void wxTreeCtrl::DeleteAllItems()
+{
+  if ( m_anchor )
+  {
+    delete m_anchor;
+    m_anchor = NULL;
+
+    Refresh();
   }
 }
 
-int wxTreeCtrl::GetItemState( long item, long stateMask ) const
+void wxTreeCtrl::Expand(const wxTreeItemId& itemId)
 {
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i) return 0;
-  int ret = 0;
+  wxGenericTreeItem *item = itemId.m_pItem;
+
+  if ( item->IsExpanded() )
+    return;
+
+  wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_EXPANDING, GetId() );
+  event.m_item = item;
+  event.SetEventObject( this );
+  if ( ProcessEvent( event ) && event.m_code )
+  {
+    // cancelled by program
+    return;
+  }
   
-  // Currently, an item is always selected _and_ focussed in wxGTK
-  
-  if (stateMask & wxTREE_STATE_FOCUSED)
-    if (m_current == i) 
-      ret += wxTREE_STATE_FOCUSED;
-    
-  if (stateMask & wxTREE_STATE_SELECTED)
-    if (m_current == i) 
-      ret += wxTREE_STATE_SELECTED;
-      
-  if (stateMask & wxTREE_STATE_EXPANDED)
-    if (i->IsExpanded()) 
-      ret += wxTREE_STATE_EXPANDED;
-      
-  return ret;
+  item->Expand();
+
+  RefreshSubtree(item);
+
+  event.SetEventType(wxEVT_COMMAND_TREE_ITEM_EXPANDED);
+  ProcessEvent( event );
 }
 
-bool wxTreeCtrl::SetItemState( long item, long state, long stateMask )
+void wxTreeCtrl::Collapse(const wxTreeItemId& itemId)
 {
-  wxGenericTreeItem *i = FindItem( item );
-  if (!i) return FALSE;
-  
-  if (stateMask & wxTREE_STATE_FOCUSED)
+  wxGenericTreeItem *item = itemId.m_pItem;
+
+  if ( !item->IsExpanded() )
+    return;
+
+  wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_COLLAPSING, GetId() );
+  event.m_item = item;
+  event.SetEventObject( this );
+  if ( ProcessEvent( event ) && event.m_code )
   {
-    if (state & wxTREE_STATE_FOCUSED)
-      SelectItem( i );
-  }
-    
-  if (stateMask & wxTREE_STATE_SELECTED)
-  {
-    if (state & wxTREE_STATE_SELECTED)
-      SelectItem( i );
-  }
-      
-  if (stateMask & wxTREE_STATE_EXPANDED)
-  {
-    if (state & wxTREE_STATE_EXPANDED)
-      ExpandItem( i->m_itemId, wxTREE_EXPAND_EXPAND );
-    else
-      ExpandItem( i->m_itemId, wxTREE_EXPAND_COLLAPSE );
+    // cancelled by program
+    return;
   }
   
-  return TRUE;
-}
+  item->Collapse();
 
-long wxTreeCtrl::HitTest( const wxPoint& point, int &flags )
-{
-  flags = 0;
-  if (!m_anchor) return -1;
-  return m_anchor->HitTest( point, flags );
-}
-
-wxImageList *wxTreeCtrl::GetImageList( int which ) const
-{
-  if (which == wxIMAGE_LIST_NORMAL) return m_imageList;
-  return m_smallImageList;
-}
-
-void wxTreeCtrl::SetImageList( wxImageList *imageList, int which )
-{
-  if (which == wxIMAGE_LIST_NORMAL)
+  wxArrayTreeItems& children = item->GetChildren();
+  size_t count = children.Count();
+  for ( size_t n = 0; n < count; n++ )
   {
-    if (m_imageList) delete m_imageList;
-    m_imageList = imageList;
+    Collapse(children[n]);
   }
+
+  CalculatePositions();
+
+  RefreshSubtree(item);
+
+  event.SetEventType(wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
+  ProcessEvent( event );
+}
+
+void wxTreeCtrl::CollapseAndReset(const wxTreeItemId& item)
+{
+  Collapse(item);
+  Delete(item);
+}
+
+void wxTreeCtrl::Toggle(const wxTreeItemId& itemId)
+{
+  wxGenericTreeItem *item = itemId.m_pItem;
+
+  if ( item->IsExpanded() )
+    Collapse(itemId);
   else
+    Expand(itemId);
+}
+
+void wxTreeCtrl::Unselect()
+{
+  if ( m_current )
   {
-    if (m_smallImageList) delete m_smallImageList;
-    m_smallImageList = imageList;
+    m_current->SetHilight( FALSE );
+    RefreshLine( m_current );
   }
 }
 
+void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId)
+{
+  wxGenericTreeItem *item = itemId.m_pItem;
+
+  if ( m_current != item )
+  {
+    wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, GetId() );
+    event.m_item = item;
+    event.m_itemOld = m_current;
+    event.SetEventObject( this );
+    if ( ProcessEvent( event ) && event.WasVetoed() )
+      return;
+
+    if ( m_current )
+    {
+      m_current->SetHilight( FALSE );
+      RefreshLine( m_current );
+    }
+
+    m_current = item;
+    m_current->SetHilight( TRUE );
+    RefreshLine( m_current );
+
+    event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
+    ProcessEvent( event );
+  }
+}
+
+void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
+{
+  wxFAIL_MSG("not implemented");
+}
+
+void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
+{
+  wxFAIL_MSG("not implemented");
+}
+
+wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item,
+                      wxClassInfo* textCtrlClass)
+{
+  wxFAIL_MSG("not implemented");
+
+  return NULL;
+}
+
+wxTextCtrl *wxTreeCtrl::GetEditControl() const
+{
+  wxFAIL_MSG("not implemented");
+
+  return NULL;
+}
+
+void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges)
+{
+  wxFAIL_MSG("not implemented");
+}
+
+void wxTreeCtrl::SortChildren(const wxTreeItemId& item,
+                              wxTreeItemCmpFunc *cmpFunction)
+{
+  wxFAIL_MSG("not implemented");
+}
+
+// -----------------------------------------------------------------------------
+// images are not currently supported, but we still provide stubs for these
+// functions
+// -----------------------------------------------------------------------------
+wxImageList *wxTreeCtrl::GetImageList() const
+{
+    return m_imageListNormal;
+}
+
+wxImageList *wxTreeCtrl::GetStateImageList() const
+{
+    return m_imageListState;
+}
+
+void wxTreeCtrl::SetImageList(wxImageList *imageList)
+{
+    m_imageListNormal = imageList;
+}
+
+void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
+{
+    m_imageListState = imageList;
+}
+
+// -----------------------------------------------------------------------------
+// helpers
+// -----------------------------------------------------------------------------
 void wxTreeCtrl::AdjustMyScrollbars()
 {
   if (m_anchor)
@@ -938,16 +852,16 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
 {
   int horizX = level*m_indent;
 
-  item->m_x = horizX+33;
-  item->m_y = y-m_lineHeight/3;
-  item->m_height = m_lineHeight;
+  item->SetX( horizX+33 );
+  item->SetY( y-m_lineHeight/3 );
+  item->SetHeight( m_lineHeight );
 
   item->SetCross( horizX+15, y );
 
   int oldY = y;
 
   int exposed_x = dc.LogicalToDeviceX( 0 );
-  int exposed_y = dc.LogicalToDeviceY( item->m_y-2 );
+  int exposed_y = dc.LogicalToDeviceY( item->GetY()-2 );
   
   if (IsExposed( exposed_x, exposed_y, 1000, m_lineHeight+4 ))
   {
@@ -958,74 +872,78 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     
     dc.DrawLine( startX, y, endX, y );
 
-      if (item->HasChildren())
-      {
-        dc.DrawLine( horizX+20, y, horizX+30, y );
-        dc.SetPen( *wxGREY_PEN );
-        dc.DrawRectangle( horizX+10, y-4, 11, 9 );
-        dc.SetPen( *wxBLACK_PEN );
-        dc.DrawLine( horizX+13, y, horizX+18, y );
-        if (item->HasPlus())
-          dc.DrawLine( horizX+15, y-2, horizX+15, y+3 );
-      }
+    if (item->HasPlus())
+    {
+      dc.DrawLine( horizX+20, y, horizX+30, y );
+      dc.SetPen( *wxGREY_PEN );
+      dc.DrawRectangle( horizX+10, y-4, 11, 9 );
+      dc.SetPen( *wxBLACK_PEN );
+      dc.DrawLine( horizX+13, y, horizX+18, y );
 
-      if (item->HasHilight())
-      {
-        dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-        dc.SetBrush( *m_hilightBrush );
-        long tw, th;
-        dc.GetTextExtent( item->m_text, &tw, &th );
-        if (m_hasFocus)
-        {
-          dc.SetPen( *wxBLACK_PEN );
-          dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
-        }
-        else
-        {
-          dc.SetPen( *wxTRANSPARENT_PEN );
-          dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
-        }
-        dc.DrawText( item->m_text, item->m_x, item->m_y );
+      if (!item->IsExpanded())
+        dc.DrawLine( horizX+15, y-2, horizX+15, y+3 );
+    }
 
+    if (item->HasHilight())
+    {
+      dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+      dc.SetBrush( *m_hilightBrush );
+      long tw, th;
+      dc.GetTextExtent( item->GetText(), &tw, &th );
+      if (m_hasFocus)
+      {
         dc.SetPen( *wxBLACK_PEN );
-        dc.SetTextForeground( *wxBLACK );
-        dc.SetBrush( *wxWHITE_BRUSH );
+        dc.DrawRectangle( item->GetX()-2, item->GetY()-2, tw+4, th+4 );
       }
       else
       {
-        dc.SetBrush( *wxWHITE_BRUSH );
         dc.SetPen( *wxTRANSPARENT_PEN );
-        long tw, th;
-        dc.GetTextExtent( item->m_text, &tw, &th );
-        dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
-        dc.DrawText( item->m_text, item->m_x, item->m_y );
-        dc.SetPen( *wxBLACK_PEN );
+        dc.DrawRectangle( item->GetX()-2, item->GetY()-2, tw+4, th+4 );
       }
+      dc.DrawText( item->GetText(), item->GetX(), item->GetY() );
+
+      dc.SetPen( *wxBLACK_PEN );
+      dc.SetTextForeground( *wxBLACK );
+      dc.SetBrush( *wxWHITE_BRUSH );
+    }
+    else
+    {
+      dc.SetBrush( *wxWHITE_BRUSH );
+      dc.SetPen( *wxTRANSPARENT_PEN );
+      long tw, th;
+      dc.GetTextExtent( item->GetText(), &tw, &th );
+      dc.DrawRectangle( item->GetX()-2, item->GetY()-2, tw+4, th+4 );
+      dc.DrawText( item->GetText(), item->GetX(), item->GetY() );
+      dc.SetPen( *wxBLACK_PEN );
+    }
   }
 
-  if (item->NumberOfVisibleChildren() == 0) return;
+  if ( !item->IsExpanded() )
+    return;
 
   int semiOldY = y;
 
-  wxNode *node = item->m_children.First();
-  while (node)
+  wxArrayTreeItems& children = item->GetChildren();
+  size_t count = children.Count();
+  for ( size_t n = 0; n < count; n++ )
   {
-    wxGenericTreeItem *child = (wxGenericTreeItem *)node->Data();
-
     y += m_lineHeight;
     semiOldY = y;
 
-    PaintLevel( child, dc, level+1, y );
-
-    node = node->Next();
+    PaintLevel( children[n], dc, level+1, y );
   }
 
   dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
 }
 
+// -----------------------------------------------------------------------------
+// wxWindows callbacks
+// -----------------------------------------------------------------------------
+
 void wxTreeCtrl::OnPaint( const wxPaintEvent &WXUNUSED(event) )
 {
-  if (!m_anchor) return;
+  if ( !m_anchor )
+    return;
 
   wxPaintDC dc(this);
   PrepareDC( dc );
@@ -1042,77 +960,86 @@ void wxTreeCtrl::OnPaint( const wxPaintEvent &WXUNUSED(event) )
 void wxTreeCtrl::OnSetFocus( const wxFocusEvent &WXUNUSED(event) )
 {
   m_hasFocus = TRUE;
-  if (m_current) RefreshLine( m_current );
+  if ( m_current )
+    RefreshLine( m_current );
 }
 
 void wxTreeCtrl::OnKillFocus( const wxFocusEvent &WXUNUSED(event) )
 {
   m_hasFocus = FALSE;
-  if (m_current) RefreshLine( m_current );
+  if ( m_current )
+    RefreshLine( m_current );
 }
 
 void wxTreeCtrl::OnChar( wxKeyEvent &event )
 {
+  // TODO process '+', '-' (expand/collapse branch) and cursor keys
   event.Skip();
 }
 
 void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
 {
-  if (!event.LeftDown() &&
-      !event.LeftDClick()) return;
+  if ( !(event.LeftDown() || event.LeftDClick()) )
+    return;
+
+  if ( !m_anchor )
+    return;
 
   wxClientDC dc(this);
   PrepareDC(dc);
   long x = dc.DeviceToLogicalX( (long)event.GetX() );
   long y = dc.DeviceToLogicalY( (long)event.GetY() );
 
-  int flag = 0;
-  long id = HitTest( wxPoint(x,y), flag );
-  if (id == -1)
+  bool onButton = FALSE;
+  wxGenericTreeItem *item = m_anchor->HitTest( wxPoint(x,y), onButton );
+  if ( item == NULL )
     return;
-  wxGenericTreeItem *item = FindItem( id );
-
-  if (!item) return;
-  if ((flag != wxTREE_HITTEST_ONITEMBUTTON) &&
-      (flag != wxTREE_HITTEST_ONITEMLABEL)) return;
 
   SelectItem(item);
 
-  if (event.LeftDClick())
-    m_current->SendKeyDown( this );
-
-  if (flag == wxTREE_HITTEST_ONITEMBUTTON)
+  if ( event.LeftDClick() )
   {
-    ExpandItem( item->m_itemId, wxTREE_EXPAND_TOGGLE );
-    return;
+    wxTreeEvent event( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
+    event.m_item = item;
+    event.m_code = 0;
+    event.SetEventObject( this );
+    ProcessEvent( event );
+  }
+
+  if ( onButton )
+  {
+    Toggle( item );
   }
 }
 
-void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y )
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item,
+                                 wxDC &dc,
+                                 int level,
+                                 int &y )
 {
   int horizX = level*m_indent;
 
-  item->m_x = horizX+33;
-  item->m_y = y-m_lineHeight/3-2;
-  item->m_height = m_lineHeight;
+  item->SetX( horizX+33 );
+  item->SetY( y-m_lineHeight/3-2 );
+  item->SetHeight( m_lineHeight );
 
-  if (item->NumberOfVisibleChildren() == 0) return;
+  if ( item->IsExpanded() )
+    return;
 
-  wxNode *node = item->m_children.First();
-  while (node)
+  wxArrayTreeItems& children = item->GetChildren();
+  size_t count = children.Count();
+  for ( size_t n = 0; n < count; n++ )
   {
-    wxGenericTreeItem *child = (wxGenericTreeItem *)node->Data();
-
     y += m_lineHeight;
-    CalculateLevel( child, dc, level+1, y );
-
-    node = node->Next();
+    CalculateLevel( children[n], dc, level+1, y );
   }
 }
 
 void wxTreeCtrl::CalculatePositions()
 {
-  if (!m_anchor)
+  if ( !m_anchor )
     return;
 
   wxClientDC dc(this);
@@ -1127,24 +1054,37 @@ void wxTreeCtrl::CalculatePositions()
   CalculateLevel( m_anchor, dc, 0, y );
 }
 
-wxGenericTreeItem *wxTreeCtrl::FindItem( long itemId ) const
+void wxTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 {
-  if (!m_anchor) return (wxGenericTreeItem *) NULL;
-  return m_anchor->FindItem( itemId );
+  wxClientDC dc(this);
+  PrepareDC(dc);
+  
+  int cw = 0;
+  int ch = 0;
+  GetClientSize( &cw, &ch );
+  
+  wxRect rect;
+  rect.x = dc.LogicalToDeviceX( 0 );
+  rect.width = cw;
+  rect.y = dc.LogicalToDeviceY( item->GetY() );
+  rect.height = ch;
+
+  Refresh( TRUE, &rect );
+
+  AdjustMyScrollbars();
 }
 
 void wxTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 {
-  if (!item) return;
   wxClientDC dc(this);
   PrepareDC( dc );
+
   wxRect rect;
-  rect.x = dc.LogicalToDeviceX( item->m_x-2 );
-  rect.y = dc.LogicalToDeviceY( item->m_y-2 );
+  rect.x = dc.LogicalToDeviceX( item->GetX() - 2 );
+  rect.y = dc.LogicalToDeviceY( item->GetY() - 2 );
   rect.width = 1000;
-  rect.height = dc.GetCharHeight()+6;
+  rect.height = dc.GetCharHeight() + 6;
+
   Refresh( TRUE, &rect );
 }
-
-
 

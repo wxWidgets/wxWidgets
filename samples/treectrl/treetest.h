@@ -69,7 +69,12 @@ class MyFrame: public wxFrame
 class MyTreeItemData : public wxTreeItemData
 {
 public:
+  MyTreeItemData(const wxString& desc) : m_desc(desc) { }
+
 	void ShowInfo(wxTreeCtrl *tree);
+
+private:
+  wxString m_desc;
 };
 
 // ID for the menu quit command
@@ -78,4 +83,8 @@ public:
 
 #define TREE_CTRL   1000
 
-
+enum
+{
+  TreeCtrlIcon_File,
+  TreeCtrlIcon_Folder
+};

@@ -182,7 +182,7 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
     for ( size_t n = 0; n < numChildren; n++ )
     {
       // at depth 1 elements won't have any more children
-      str.Printf("%s child %d", depth == 1 ? "File" : "Folder", n);
+      str.Printf("%s child %d", depth == 1 ? "File" : "Folder", n + 1);
       int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
       wxTreeItemId id = AppendItem(idParent, str, image, image,
                                    new MyTreeItemData(str));
@@ -226,11 +226,13 @@ TREE_EVENT_HANDLER(OnSelChanging)
 
 void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
 {
+  wxLogMessage("OnItemCollapsing");
+
   // for testing, prevent the user from collapsing the root item
   wxTreeItemId itemId = event.GetItem();
   if ( !GetParent(itemId).IsOk() )
   {
-    wxMessageBox("Root item shouldn't collapse");
+    wxMessageBox("You can't collapse the root item.");
 
     event.Veto();
   }
@@ -259,6 +261,6 @@ void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
 {
   wxLogMessage("Item '%s': %sselected, %sexpanded.",
                m_desc.c_str(),
-               Bool2String(tree->IsExpanded(m_itemId)),
-               Bool2String(tree->IsSelected(m_itemId)));
+               Bool2String(tree->IsSelected(GetId())),
+               Bool2String(tree->IsExpanded(GetId())));
 }
