@@ -84,7 +84,7 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
 {
     (void)wxTimerBase::Start(milliseconds, oneShot);
 
-    wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeour") );
+    wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeour") );
 
     TIMERPROC wxTimerProcInst = (TIMERPROC)
         MakeProcInstance((FARPROC)wxTimerProc, wxGetInstance());
@@ -96,13 +96,13 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
     {
         wxTimerList.Append(m_id, this);
 
-        return TRUE;
+        return true;
     }
     else
     {
         wxLogSysError(_("Couldn't create a timer"));
 
-        return FALSE;
+        return false;
     }
 }
 
@@ -140,7 +140,7 @@ UINT WINAPI _EXPORT wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 
     wxCHECK_MSG( node, 0, wxT("bogus timer id in wxTimerProc") );
 
-    wxProcessTimer(*(wxTimer *)node->Data());
+    wxProcessTimer(*(wxTimer *)node->GetData());
 
     return 0;
 }
