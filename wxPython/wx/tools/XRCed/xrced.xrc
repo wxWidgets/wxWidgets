@@ -143,7 +143,7 @@
         <object class="wxBoxSizer">
           <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
-            <object class="wxCheckList" name="CHECK_LIST">
+            <object class="wxCheckListBox" name="CHECK_LIST">
               <content/>
             </object>
             <option>1</option>
@@ -224,7 +224,7 @@
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
-        <object class="wxCheckList" name="CHECK_LIST">
+        <object class="wxCheckListBox" name="CHECK_LIST">
           <content/>
           <size>250,250</size>
           <style></style>

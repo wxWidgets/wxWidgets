@@ -41,22 +41,14 @@ class Panel(wxNotebook):
         sizer.Add(wxBoxSizer())         # dummy sizer
         self.page2.SetAutoLayout(True)
         self.page2.SetSizer(sizer)
-        # Cache for already used panels
-        self.pageCache = {}             # cached property panels
-        self.stylePageCache = {}        # cached style panels
-        # Dummy parent window for cache pages
-        self.cacheParent = wxFrame(None, -1, 'i am invisible')
+
     # Delete child windows and recreate page sizer
     def ResetPage(self, page):
         topSizer = page.GetSizer()
         sizer = topSizer.GetChildren()[0].GetSizer()
         for w in page.GetChildren():
-            sizer.Remove(w)
-            if isinstance(w, ParamPage):
-                # With SetParent, we wouldn't need this
-                w.Reparent(self.cacheParent)
-            else:
-                w.Destroy()
+            w.Destroy()
+            
         topSizer.Remove(sizer)
         # Create new windows
         sizer = wxBoxSizer(wxVERTICAL)
@@ -66,10 +58,10 @@ class Panel(wxNotebook):
         else:
             topSizer.Add(sizer, 0, wxALL, 5)
         return sizer
+
     def SetData(self, xxx):
         self.pages = []
         # First page
-        # Set cached or new page
         # Remove current objects and sizer
         sizer = self.ResetPage(self.page1)
         if not xxx or (not xxx.allParams and not xxx.hasName):
@@ -89,27 +81,13 @@ class Panel(wxNotebook):
             g.currentXXX = xxx.treeObject()
             # Normal or SizerItem page
             isGBSizerItem = isinstance(xxx.parent, xxxGridBagSizer)
-            cacheID = (xxx.__class__, isGBSizerItem)            
-            try:
-                page = self.pageCache[cacheID]
-                page.box.SetLabel(xxx.panelName())
-                page.Reparent(self.page1)
-            except KeyError:
-                page = PropPage(self.page1, xxx.panelName(), xxx)
-                self.pageCache[cacheID] = page
+            page = PropPage(self.page1, xxx.panelName(), xxx)
             page.SetValues(xxx)
             self.pages.append(page)
             sizer.Add(page, 1, wxEXPAND)
             if xxx.hasChild:
                 # Special label for child objects - they may have different GUI
-                cacheID = (xxx.child.__class__, xxx.__class__)
-                try:
-                    page = self.pageCache[cacheID]
-                    page.box.SetLabel(xxx.child.panelName())
-                    page.Reparent(self.page1)
-                except KeyError:
-                    page = PropPage(self.page1, xxx.child.panelName(), xxx.child)
-                    self.pageCache[cacheID] = page
+                page = PropPage(self.page1, xxx.child.panelName(), xxx.child)
                 page.SetValues(xxx.child)
                 self.pages.append(page)
                 sizer.Add(page, 0, wxEXPAND | wxTOP, 5)
@@ -123,12 +101,7 @@ class Panel(wxNotebook):
             xxx = xxx.treeObject()
             # Simplest case: set data if class is the same
             sizer = self.ResetPage(self.page2)
-            try:
-                page = self.stylePageCache[xxx.__class__]
-                page.Reparent(self.page2)
-            except KeyError:
-                page = StylePage(self.page2, xxx.className + ' style', xxx)
-                self.stylePageCache[xxx.__class__] = page
+            page = StylePage(self.page2, xxx.className + ' style', xxx)
             page.SetValues(xxx)
             self.pages.append(page)
             sizer.Add(page, 0, wxEXPAND)
@@ -256,6 +229,8 @@ class ParamPage(wxPanel):
 
 ################################################################################
 
+LABEL_WIDTH = 125
+
 # Panel for displaying properties
 class PropPage(ParamPage):
     def __init__(self, parent, label, xxx):
@@ -266,7 +241,7 @@ class PropPage(ParamPage):
         sizer = wxFlexGridSizer(len(xxx.allParams), 2, 1, 1)
         sizer.AddGrowableCol(1)
         if xxx.hasName:
-            label = wxStaticText(self, -1, 'XML ID:', size=(100,-1))
+            label = wxStaticText(self, -1, 'XML ID:', size=(LABEL_WIDTH,-1))
             control = ParamText(self, 'XML_name', 200)
             sizer.AddMany([ (label, 0, wxALIGN_CENTER_VERTICAL),
                             (control, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxGROW, 5) ])
@@ -275,13 +250,13 @@ class PropPage(ParamPage):
             present = xxx.params.has_key(param)
             if param in xxx.required:
                 label = wxStaticText(self, paramIDs[param], param + ':',
-                                     size = (100,-1), name = param)
+                                     size = (LABEL_WIDTH,-1), name = param)
             else:
                 # Notebook has one very loooooong parameter
                 if param == 'usenotebooksizer': sParam = 'usesizer:'
                 else: sParam = param + ':'
                 label = wxCheckBox(self, paramIDs[param], sParam,
-                                   size = (100,-1), name = param)
+                                   size = (LABEL_WIDTH,-1), name = param)
                 self.checks[param] = label
             try:
                 typeClass = xxx.paramDict[param]
@@ -341,7 +316,7 @@ class StylePage(ParamPage):
         for param in xxx.styles:
             present = xxx.params.has_key(param)
             check = wxCheckBox(self, paramIDs[param],
-                               param + ':', size = (100,-1), name = param)
+                               param + ':', size = (LABEL_WIDTH,-1), name = param)
             check.SetValue(present)
             control = paramDict[param](self, name = param)
             control.Enable(present)

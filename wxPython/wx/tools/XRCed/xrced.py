@@ -794,8 +794,6 @@ Homepage: http://xrced.sourceforge.net\
     def OnCloseWindow(self, evt):
         if not self.AskSave(): return
         if g.testWin: g.testWin.Destroy()
-        # Destroy cached windows
-        panel.cacheParent.Destroy()
         if not panel.GetPageCount() == 2:
             panel.page2.Destroy()
         if not self.IsIconized():
