@@ -170,6 +170,13 @@ wxThread and related classes:
 OTHER CHANGES
 =============
 
+2.4.0.2
+-------
+
+All:
+
+- Added missing wx/quantize.h to install.
+
 2.4.0
 -----
 

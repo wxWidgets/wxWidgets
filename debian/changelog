@@ -1,5 +1,6 @@
-wxwindows2.4 (2.4.1) unstable; urgency=low
+wxwindows2.4 (2.4.0.2) unstable; urgency=low
 
+  * Added missing quantize.h to install.  Closes: #178135
   * Removed unnecessary -dev deps.
   * move wxwin.m4 &c out of the runtime package and conflict with earlier
     versions that didn't.  Also nuke some empty dir cruft that slipped by.
