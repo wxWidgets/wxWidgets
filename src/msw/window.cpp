@@ -79,7 +79,7 @@
 #undef GetClassInfo
 #endif
 
-#define WINDOW_MARGIN 3	// This defines sensitivity of Leave events
+#define WINDOW_MARGIN 3 // This defines sensitivity of Leave events
 
 wxMenu *wxCurrentPopupMenu = NULL;
 extern wxList wxPendingDelete;
@@ -1293,42 +1293,34 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
           return MSWOnMeasureItem((int)wParam, (WXMEASUREITEMSTRUCT *)lParam);
           break;
         }
+
         case WM_KEYDOWN:
         {
-//            return Default();
-
-            if (wParam == VK_SHIFT)
-            	return Default();
-
-            else if (wParam == VK_CONTROL)
-            	return Default();
+            // these keys are not interesting to the application (@@ or are they?)
+            if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
+              return Default();
 
             // Avoid duplicate messages to OnChar
-            else if ((wParam != VK_ESCAPE) && (wParam != VK_SPACE) && (wParam != VK_RETURN) && (wParam != VK_BACK) && (wParam != VK_TAB))
-	    	{
-              MSWOnChar((WORD)wParam, lParam);
-              if (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE)
-			    return Default();
-	    	}
-			else
-				return Default();
+            if ((wParam == VK_ESCAPE) || (wParam == VK_SPACE)  || 
+                (wParam == VK_RETURN) || (wParam == VK_BACK)   || 
+                (wParam == VK_TAB))
+              return Default();
+
+            MSWOnChar((WORD)wParam, lParam);
+            //VZ: commented - what is it for?
+            //if (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE)
+            //  return Default();
             break;
         }
-        case WM_KEYUP:
-        {
-/*
-            if (wParam == VK_SHIFT)
-              wxShiftDown = FALSE;
-            else if (wParam == VK_CONTROL)
-              wxControlDown = FALSE;
-*/
-            break;
-        }
+
+        // VZ: WM_KEYUP not processed
+
         case WM_CHAR: // Always an ASCII character
         {
           MSWOnChar((WORD)wParam, lParam, TRUE);
           break;
         }
+
         case WM_HSCROLL:
         {
 #ifdef __WIN32__
@@ -1544,7 +1536,7 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
 {
   // adding NULL hWnd is (first) surely a result of an error and
   // (secondly) breaks menu command processing
-  wxCHECK( hWnd != NULL );
+  wxCHECK_RET( hWnd != NULL, "attempt to add a NULL hWnd to window list" );
 
   if ( !wxWinHandleList->Find((long)hWnd) )
     wxWinHandleList->Append((long)hWnd, win);
@@ -1858,7 +1850,7 @@ bool wxWindow::MSWOnDrawItem(const int id, WXDRAWITEMSTRUCT *itemStruct)
     if ( id == 0 ) {    // is it a menu item?
       DRAWITEMSTRUCT *pDrawStruct = (DRAWITEMSTRUCT *)itemStruct;
       wxMenuItem *pMenuItem = (wxMenuItem *)(pDrawStruct->itemData);
-      wxCHECK_RET( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
+      wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
 
       // prepare to call OnDrawItem()
       wxDC dc;
@@ -1891,7 +1883,7 @@ bool wxWindow::MSWOnMeasureItem(const int id, WXMEASUREITEMSTRUCT *itemStruct)
     if ( id == 0 ) {    // is it a menu item?
       MEASUREITEMSTRUCT *pMeasureStruct = (MEASUREITEMSTRUCT *)itemStruct;
       wxMenuItem *pMenuItem = (wxMenuItem *)(pMeasureStruct->itemData);
-      wxCHECK_RET( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
+      wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
 
       return pMenuItem->OnMeasureItem(&pMeasureStruct->itemWidth, 
                                       &pMeasureStruct->itemHeight);
@@ -2450,7 +2442,7 @@ void wxWindow::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
   if (m_windowCursor.Ok() && !wxIsBusy())
     ::SetCursor((HCURSOR) m_windowCursor.GetHCURSOR());
 
-  if (!m_mouseInWindow)
+ if (!m_mouseInWindow)
   {
     // Generate an ENTER event
     m_mouseInWindow = TRUE;
@@ -2556,11 +2548,13 @@ void wxWindow::MSWOnChar(const WXWORD wParam, const WXLPARAM lParam, const bool 
       }
     }
   }
-  else
-    if ((id = wxCharCodeMSWToWX(wParam)) == 0)
+  else if ((id = wxCharCodeMSWToWX(wParam)) == 0) {
+      // it's ASCII and will be processed here only when called from
+      // WM_CHAR (i.e. when isASCII = TRUE)
       id = -1;
+  }
 
-  if (id > -1)
+  if (id != -1)
   {
     wxKeyEvent event(wxEVT_CHAR);
     event.m_shiftDown = (::GetKeyState(VK_SHIFT)&0x100?TRUE:FALSE);
