@@ -15,7 +15,7 @@
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 RENDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_16) /DWIN32 \
-	$(__DEBUGINFO) \
+	$(__DEBUGINFO_2) \
 	/Fd$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)251_vc.pdb \
 	$(____DEBUGRUNTIME_15_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
@@ -24,7 +24,7 @@ RENDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_16) /DWIN32 \
 RENDDLL_OBJECTS =  \
 	$(OBJS)\renddll_renddll.obj
 RENDER_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(OBJS)\render.pdb $(____DEBUGRUNTIME_2_p) \
+	$(__DEBUGINFO_2) /Fd$(OBJS)\render.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
 	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples $(__EXCEPTIONSFLAG_0) \
@@ -65,7 +65,7 @@ WXUNICODEFLAG = u
 WXUNIVNAME = univ
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO = /Zi
+__DEBUGINFO = d
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO = 
@@ -74,7 +74,7 @@ __DEBUGINFO =
 __DEBUGINFO = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO = /Zi
+__DEBUGINFO = d
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_1 = /DEBUG
@@ -89,7 +89,7 @@ __DEBUGINFO_1 =
 __DEBUGINFO_1 = /DEBUG
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_2 = d
+__DEBUGINFO_2 = /Zi
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_2 = 
@@ -98,7 +98,7 @@ __DEBUGINFO_2 =
 __DEBUGINFO_2 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_2 = d
+__DEBUGINFO_2 = /Zi
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 __DEBUGRUNTIME_16 = 
@@ -107,7 +107,7 @@ __DEBUGRUNTIME_16 =
 __DEBUGRUNTIME_16 = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_16 = $(__DEBUGINFO_2)
+__DEBUGRUNTIME_16 = $(__DEBUGINFO)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 __DEBUGRUNTIME_3 = 
@@ -116,7 +116,7 @@ __DEBUGRUNTIME_3 =
 __DEBUGRUNTIME_3 = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_3 = $(__DEBUGINFO_2)
+__DEBUGRUNTIME_3 = $(__DEBUGINFO)
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
 __DEBUG_DEFINE_p = /D__WXDEBUG__

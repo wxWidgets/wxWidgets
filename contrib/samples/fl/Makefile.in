@@ -119,7 +119,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_6 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_7 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(srcdir) $(__DLLFLAG_p_1) -i \
 	$(srcdir)/../../../samples -i $(srcdir)/../../include -d BMP_DIR="bitmaps/" \
-	-o fl_demo1$(EXEEXT) Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r \
+	-o fl_sample3$(EXEEXT) Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r \
 	sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_7 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_7)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_8 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
@@ -131,7 +131,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_8 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_9 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(srcdir) $(__DLLFLAG_p_1) -i \
 	$(srcdir)/../../../samples -i $(srcdir)/../../include -d BMP_DIR="bitmaps/" \
-	-o fl_sample3$(EXEEXT) Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r \
+	-o fl_demo1$(EXEEXT) Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r \
 	sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_9 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_9)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
@@ -144,9 +144,9 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_20 = --define __WXUNIVERSAL__
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_22 = --define __WXUNIVERSAL__
 @COND_PLATFORM_OS2_1@__fl = $(top_srcdir)/include/wx/os2/wx.res
-@COND_PLATFORM_MAC_1@__fl_demo1___mac_rezcmd = $(__MACOSX_RESOURCES_p_7)
+@COND_PLATFORM_MAC_1@__fl_demo1___mac_rezcmd = $(__MACOSX_RESOURCES_p_9)
 @COND_PLATFORM_MAC_1@__fl_demo1___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C fl_demo1$(EXEEXT)
 COND_PLATFORM_OS2_1___fl_demo1___os2_emxbindcmd = $(NM) fl_demo1$(EXEEXT) | if \
@@ -178,7 +178,7 @@ COND_PLATFORM_OS2_1___fl_sample2___os2_emxbindcmd = $(NM) fl_sample2$(EXEEXT) \
 @COND_PLATFORM_OS2_1@__fl_sample2___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___fl_sample2___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__fl_sample2___win32rc = fl_sample2_fl_sample2_rc.o
 @COND_PLATFORM_MACOSX_1@__fl_sample2_bundle___depname = fl_sample2_bundle
-@COND_PLATFORM_MAC_1@__fl_sample3___mac_rezcmd = $(__MACOSX_RESOURCES_p_9)
+@COND_PLATFORM_MAC_1@__fl_sample3___mac_rezcmd = $(__MACOSX_RESOURCES_p_7)
 @COND_PLATFORM_MAC_1@__fl_sample3___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C fl_sample3$(EXEEXT)
 COND_PLATFORM_OS2_1___fl_sample3___os2_emxbindcmd = $(NM) fl_sample3$(EXEEXT) \
@@ -250,7 +250,7 @@ fl_demo1_fl_demo1.o: $(srcdir)/fl_demo1.cpp
 	$(CXXC) -c -o $@ $(FL_DEMO1_CXXFLAGS) $<
 
 fl_demo1_fl_demo1_rc.o: $(srcdir)/fl_demo1.rc
-	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_20)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_22)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 fl_demo2$(EXEEXT): $(FL_DEMO2_OBJECTS) $(__fl_demo2___win32rc)
 	$(CXX) -o $@ $(FL_DEMO2_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
@@ -286,7 +286,7 @@ fl_demo2_fl_demo2.o: $(srcdir)/fl_demo2.cpp
 	$(CXXC) -c -o $@ $(FL_DEMO2_CXXFLAGS) $<
 
 fl_demo2_fl_demo2_rc.o: $(srcdir)/fl_demo2.rc
-	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_20)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_22)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 fl_sample1$(EXEEXT): $(FL_SAMPLE1_OBJECTS) $(__fl_sample1___win32rc)
 	$(CXX) -o $@ $(FL_SAMPLE1_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
@@ -322,7 +322,7 @@ fl_sample1_fl_sample1.o: $(srcdir)/fl_sample1.cpp
 	$(CXXC) -c -o $@ $(FL_SAMPLE1_CXXFLAGS) $<
 
 fl_sample1_fl_sample1_rc.o: $(srcdir)/fl_sample1.rc
-	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_20)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_22)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 fl_sample2$(EXEEXT): $(FL_SAMPLE2_OBJECTS) $(__fl_sample2___win32rc)
 	$(CXX) -o $@ $(FL_SAMPLE2_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
@@ -358,7 +358,7 @@ fl_sample2_fl_sample2.o: $(srcdir)/fl_sample2.cpp
 	$(CXXC) -c -o $@ $(FL_SAMPLE2_CXXFLAGS) $<
 
 fl_sample2_fl_sample2_rc.o: $(srcdir)/fl_sample2.rc
-	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_20)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_22)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 fl_sample3$(EXEEXT): $(FL_SAMPLE3_OBJECTS) $(__fl_sample3___win32rc)
 	$(CXX) -o $@ $(FL_SAMPLE3_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
@@ -394,7 +394,7 @@ fl_sample3_fl_sample3.o: $(srcdir)/fl_sample3.cpp
 	$(CXXC) -c -o $@ $(FL_SAMPLE3_CXXFLAGS) $<
 
 fl_sample3_fl_sample3_rc.o: $(srcdir)/fl_sample3.rc
-	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_20)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_22)   --include-dir $(srcdir) $(__DLLFLAG_p_17) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 install: all
 
