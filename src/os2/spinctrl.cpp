@@ -54,6 +54,7 @@ static const int MARGIN_BETWEEN = 5;
 
 bool wxSpinCtrl::Create(wxWindow *parent,
                         wxWindowID id,
+                        const wxString& value,
                         const wxPoint& pos,
                         const wxSize& size,
                         long style,
