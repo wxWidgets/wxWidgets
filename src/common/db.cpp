@@ -4244,7 +4244,7 @@ const wxChar WXDLLIMPEXP_ODBC *wxDbLogExtendedErrorMsg(const wxChar *userText,
         if (pDb->errorList[i])
         {
             msg.Append(pDb->errorList[i]);
-            if (wxStrcmp(pDb->errorList[i], wxEmptyString)) != 0)
+            if (wxStrcmp(pDb->errorList[i], wxEmptyString) != 0)
                 msg.Append(wxT("\n"));
             // Clear the errmsg buffer so the next error will not
             // end up showing the previous error that have occurred
