@@ -296,6 +296,15 @@ bool wxNotebook::Create(wxWindow *parent,
     if ( !MSWCreateControl(className, wxEmptyString, pos, size) )
         return false;
 
+    if (HasFlag(wxNB_NOPAGETHEME) || (wxSystemOptions::HasOption(wxT("msw.notebook.themed-background")) &&
+                                      wxSystemOptions::GetOptionInt(wxT("msw.notebook.themed-background")) == 0))
+    {
+        wxColour col = GetThemeBackgroundColour();
+        if (col.Ok())
+        {
+            SetBackgroundColour(col);
+        }
+    }
     return true;
 }
 
@@ -683,16 +692,6 @@ bool wxNotebook::InsertPage(size_t nPage,
 
     InvalidateBestSize();
 
-    if (HasFlag(wxNB_NOPAGETHEME) || (wxSystemOptions::HasOption(wxT("msw.notebook.themed-background")) &&
-                                      wxSystemOptions::GetOptionInt(wxT("msw.notebook.themed-background")) == 0))
-    {
-        wxColour col = GetThemeBackgroundColour();
-        if (col.Ok())
-        {
-            pPage->SetBackgroundColour(col);
-        }
-    }
-    
     return true;
 }
 
