@@ -67,7 +67,7 @@ public:
     void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString);
     
     //we need to resize the webview when the control size changes
-    //void OnSize(wxSizeEvent &event);
+    void OnSize(wxSizeEvent &event);
 protected:
     DECLARE_EVENT_TABLE()
 

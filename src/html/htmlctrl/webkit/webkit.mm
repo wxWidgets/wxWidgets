@@ -42,7 +42,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxWebKitCtrl, wxControl)
 #endif
 
 BEGIN_EVENT_TABLE(wxWebKitCtrl, wxControl)
-    //EVT_SIZE(wxWebKitCtrl::OnSize)
+    EVT_SIZE(wxWebKitCtrl::OnSize)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -252,6 +252,10 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 
 }
 
+void wxWebKitCtrl::OnSize(wxSizeEvent &event){
+    [m_webView display];
+    event.Skip();
+}
 
 //------------------------------------------------------------
 // Listener interfaces
