@@ -2144,7 +2144,7 @@ AC_CHECK_HEADERS(wcstr.h)
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
 
-if test "$wxUSE_GUI" = "yes" -a test "$wxUSE_UNIX" = "yes"; then
+if test "$wxUSE_GUI" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     dnl defines HAVE_X11_XKBLIB_H
     AC_CHECK_HEADERS(X11/XKBlib.h)
 fi
