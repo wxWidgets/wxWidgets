@@ -80,13 +80,26 @@ public:
             return tup;
         }
 
-        bool __eq__(const wxSize& o) { return *self == o; }
-        bool __ne__(const wxSize& o) { return *self != o; }
+        bool __eq__(PyObject* obj) {
+            wxSize  tmp;
+            wxSize* ptr = &tmp;
+            if (obj == Py_None)               return FALSE;
+            if (! wxSize_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxSize  tmp;
+            wxSize* ptr = &tmp;
+            if (obj == Py_None)               return TRUE;
+            if (! wxSize_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
+        }
+
     }
 
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxSize'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
@@ -129,13 +142,25 @@ public:
             return *self - p;
         }
 
-        bool __eq__(const wxRealPoint& o) { return *self == o; }
-        bool __ne__(const wxRealPoint& o) { return *self != o; }
+        bool __eq__(PyObject* obj) {
+            wxRealPoint  tmp;
+            wxRealPoint* ptr = &tmp;
+            if (obj == Py_None)                    return FALSE;
+            if (! wxRealPoint_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxRealPoint  tmp;
+            wxRealPoint* ptr = &tmp;
+            if (obj == Py_None)                    return TRUE;
+            if (! wxRealPoint_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
+        }
     }
 
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxRealPoint'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
@@ -176,13 +201,25 @@ public:
             return *self - p;
         }
 
-        bool __eq__(const wxPoint& o) { return *self == o; }
-        bool __ne__(const wxPoint& o) { return *self != o; }
+        bool __eq__(PyObject* obj) {
+            wxPoint  tmp;
+            wxPoint* ptr = &tmp;
+            if (obj == Py_None)                return FALSE;
+            if (! wxPoint_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxPoint  tmp;
+            wxPoint* ptr = &tmp;
+            if (obj == Py_None)                return TRUE;
+            if (! wxPoint_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
+        }
     }
 
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxPoint'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
@@ -247,13 +284,25 @@ public:
             return *self + rect;
         }
 
-        bool __eq__(const wxRect& o) { return *self == o; }
-        bool __ne__(const wxRect& o) { return *self != o; }
+        bool __eq__(PyObject* obj) {
+            wxRect  tmp;
+            wxRect* ptr = &tmp;
+            if (obj == Py_None)                 return FALSE;
+            if (! wxRect_helper(obj, &ptr))     return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxRect  tmp;
+            wxRect* ptr = &tmp;
+            if (obj == Py_None)                 return TRUE;
+            if (! wxRect_helper(obj, &ptr))     return TRUE;
+            return *self != *ptr;
+        }
     }
 
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxRect'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
@@ -386,8 +435,20 @@ public:
         //wxPoint2DDouble& operator/=(double n);
         //wxPoint2DDouble& operator/=(int n);
 
-        bool __eq__(const wxPoint2DDouble& pt) {  return (*self) == pt; }
-        bool __ne__(const wxPoint2DDouble& pt) {  return (*self) != pt; }
+        bool __eq__(PyObject* obj) {
+            wxPoint2DDouble  tmp;
+            wxPoint2DDouble* ptr = &tmp;
+            if (obj == Py_None)                        return FALSE;
+            if (! wxPoint2DDouble_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxPoint2DDouble  tmp;
+            wxPoint2DDouble* ptr = &tmp;
+            if (obj == Py_None)                        return TRUE;
+            if (! wxPoint2DDouble_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
+        }
 
         PyObject* asTuple() {
             wxPyBeginBlockThreads();
@@ -401,7 +462,7 @@ public:
 
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxPoint2DDouble'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):

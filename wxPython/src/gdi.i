@@ -365,12 +365,25 @@ public:
             PyTuple_SetItem(rv, 2, PyInt_FromLong(blue));
             return rv;
         }
-        bool __eq__(const wxColour& o) { return *self == o; }
-        bool __ne__(const wxColour& o) { return *self != o; }
+        bool __eq__(PyObject* obj) {
+            wxColour  tmp;
+            wxColour* ptr = &tmp;
+            if (obj == Py_None)                 return FALSE;
+            if (! wxColour_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxColour  tmp;
+            wxColour* ptr = &tmp;
+            if (obj == Py_None)                 return TRUE;
+            if (! wxColour_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
+        }
+
     }
     %pragma(python) addtoclass = "asTuple = Get
     def __str__(self):      return str(self.asTuple())
-    def __repr__(self):     return str(self.asTuple())
+    def __repr__(self):     return 'wxColour: ' + str(self.asTuple())
     def __nonzero__(self):  return self.Ok()
 "
 
