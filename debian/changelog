@@ -1,3 +1,12 @@
+wxwidgets2.5 (2.5.3.1) unstable; urgency=low
+
+  * Functioning concurrent installs for both the C++ libs
+    and wxPython along with legacy support for existing 2.4
+    users mean we can now safely introduce this release to
+    unstable without an adverse effect on existing users.
+
+ -- Ron Lee <ron@debian.org>  Sun, 31 Oct 2004 15:54:46 +1030
+
 wxwidgets2.5 (2.5.3.0) experimental; urgency=low
 
   * Experimental prerelease.
