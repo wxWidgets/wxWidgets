@@ -1540,6 +1540,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/tooltip.cpp
     src/mac/toplevel.cpp
     src/mac/uma.cpp
+    src/mac/utils.cpp
+    src/mac/utilsexc.cpp
     src/mac/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
