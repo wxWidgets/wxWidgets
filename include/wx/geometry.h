@@ -31,9 +31,7 @@
 #ifdef __WXMSW__
     #define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )
 #elif defined( __WXMAC__ )
-    #ifndef __DARWIN__
-        #include "Math64.h"
-    #endif
+    #include "Math64.h"
     #define wxMulDivInt32( a , b , c ) S32Set( S64Div( S64Multiply( S64Set(a) , S64Set(b) ) , S64Set(c) ) )
 #else
     #define wxMulDivInt32( a , b , c ) ((wxInt32)((a)*(((wxDouble)b)/((wxDouble)c))))

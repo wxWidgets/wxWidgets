@@ -76,6 +76,11 @@ wxAppBase::wxAppBase()
 #endif // wxUSE_GUI
 }
 
+wxAppBase::~wxAppBase()
+{
+    // this destructor is required for Darwin
+}
+
 #if wxUSE_GUI
 bool wxAppBase::OnInitGui()
 {

@@ -78,6 +78,11 @@ wxFrameBase::wxFrameBase()
 #endif // wxUSE_STATUSBAR
 }
 
+wxFrameBase::~wxFrameBase()
+{
+    // this destructor is required for Darwin
+}
+
 wxFrame *wxFrameBase::New(wxWindow *parent,
                           wxWindowID id,
                           const wxString& title,

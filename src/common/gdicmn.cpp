@@ -623,7 +623,7 @@ wxBrushList::~wxBrushList ()
     {
       wxBrush *brush = (wxBrush *) node->Data ();
       wxNode *next = node->Next ();
-      if (brush->GetVisible())
+      if (brush && brush->GetVisible())
         delete brush;
       node = next;
     }

@@ -110,6 +110,11 @@
 
 #if wxUSE_GUI && wxUSE_TIMER
 
+wxTimerBase::~wxTimerBase()
+{
+    // this destructor is required for Darwin
+}
+
 void wxTimerBase::Notify()
 {
     // the base class version generates an event if it has owner - which it

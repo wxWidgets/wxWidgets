@@ -49,6 +49,11 @@
 
 wxFontEncoding wxFontBase::ms_encodingDefault = wxFONTENCODING_SYSTEM;
 
+wxFontBase::~wxFontBase()
+{
+    // this destructor is required for Darwin
+}
+
 /* static */
 wxFont *wxFontBase::New(int size,
                         int family,

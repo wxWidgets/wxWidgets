@@ -78,9 +78,7 @@ class WXDLLEXPORT wxFontBase : public wxGDIObject
 {
 public:
     // creator function
-#ifdef __DARWIN__
-    virtual ~wxFontBase() { }
-#endif
+    virtual ~wxFontBase();
 
     // from the font components
     static wxFont *New(

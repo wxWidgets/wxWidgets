@@ -30,9 +30,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBitmapNameStr;
 class WXDLLEXPORT wxStaticBitmapBase : public wxControl
 {
  public:
-#ifdef __DARWIN__
-    ~wxStaticBitmapBase() { }
-#endif
+    virtual ~wxStaticBitmapBase();
     
     // our interface
     virtual void SetIcon(const wxIcon& icon) = 0;

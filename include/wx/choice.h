@@ -38,9 +38,7 @@ class WXDLLEXPORT wxChoiceBase : public wxControlWithItems
 {
 public:
     // all generic methods are in wxControlWithItems
-#ifdef __DARWIN__
-    virtual ~wxChoiceBase() {}
-#endif
+    virtual ~wxChoiceBase();
 
     // single selection logic
     virtual void SetSelection(int n) = 0;
@@ -56,7 +54,6 @@ public:
 
     // emulate selecting the item event.GetInt()
     void Command(wxCommandEvent& event);
-
 };
 
 // ----------------------------------------------------------------------------

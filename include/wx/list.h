@@ -493,9 +493,8 @@ class WXDLLEXPORT wxList : public wxObjectList
 {
 public:
     wxList(int key_type = wxKEY_NONE) : wxObjectList((wxKeyType)key_type) { }
-#ifdef __DARWIN__
+    // this destructor is required for Darwin
    ~wxList() { }
-#endif
 
     wxList& operator=(const wxList& list)
         { return (wxList&)wxListBase::operator=(list); }

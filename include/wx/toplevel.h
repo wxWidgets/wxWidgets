@@ -74,10 +74,7 @@ class WXDLLEXPORT wxTopLevelWindowBase : public wxWindow
 public:
     // construction
     wxTopLevelWindowBase();
-
-#ifdef __DARWIN__
-    virtual ~wxTopLevelWindowBase() {}
-#endif
+    virtual ~wxTopLevelWindowBase();
 
     // top level wnd state
     // --------------------

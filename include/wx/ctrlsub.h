@@ -32,6 +32,7 @@ class WXDLLEXPORT wxItemContainer
 {
 public:
     wxItemContainer() { m_clientDataItemsType = wxClientData_None; }
+    virtual ~wxItemContainer();
 
     // adding items
     // ------------
@@ -85,10 +86,6 @@ public:
     // instead
     int Number() const { return GetCount(); }
 #endif // WXWIN_COMPATIBILITY_2_2
-
-#ifdef __DARWIN__
-    virtual ~wxItemContainer() { }
-#endif
 
 protected:
     virtual int DoAppend(const wxString& item) = 0;

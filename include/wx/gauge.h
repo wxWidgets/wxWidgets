@@ -31,9 +31,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
 class WXDLLEXPORT wxGaugeBase : public wxControl
 {
 public:
-#ifdef __DARWIN__
-    virtual ~wxGaugeBase() { }
-#endif
+    virtual ~wxGaugeBase();
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 int range,

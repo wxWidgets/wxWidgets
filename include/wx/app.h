@@ -88,6 +88,7 @@ class WXDLLEXPORT wxAppBase : public wxEvtHandler
 {
 public:
     wxAppBase();
+    virtual ~wxAppBase();
 
     // the virtual functions which may/must be overridden in the derived class
     // -----------------------------------------------------------------------
@@ -325,11 +326,6 @@ public:
         { m_appInitFn = fn; }
     static wxAppInitializerFunction GetInitializerFunction()
         { return m_appInitFn; }
-
-    // needed to avoid link errors
-#ifdef __DARWIN__
-    virtual ~wxAppBase() { }
-#endif
 
     // process all events in the wxPendingEvents list
     virtual void ProcessPendingEvents();

@@ -109,8 +109,6 @@ void wxBitmapBase::CleanUpHandlers()
     }
 }
 
-
-
 class wxBitmapBaseModule: public wxModule
 {
 DECLARE_DYNAMIC_CLASS(wxBitmapBaseModule)

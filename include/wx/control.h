@@ -33,6 +33,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
 class WXDLLEXPORT wxControlBase : public wxWindow
 {
 public:
+    virtual ~wxControlBase();
+
     // Create() function adds the validator parameter
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -47,10 +49,6 @@ public:
 
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
-
-#ifdef __DARWIN__
-    virtual ~wxControlBase() { }
-#endif
 
 protected:
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it

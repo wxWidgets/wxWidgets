@@ -54,9 +54,7 @@ class WXDLLEXPORT wxFrameBase : public wxTopLevelWindow
 public:
     // construction
     wxFrameBase();
-#ifdef __DARWIN__
-    virtual ~wxFrameBase() { }
-#endif
+    virtual ~wxFrameBase();
 
     wxFrame *New(wxWindow *parent,
                  wxWindowID id,

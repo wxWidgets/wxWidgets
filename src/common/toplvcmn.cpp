@@ -60,6 +60,11 @@ wxTopLevelWindowBase::wxTopLevelWindowBase()
 {
 }
 
+wxTopLevelWindowBase::~wxTopLevelWindowBase()
+{
+    // this destructor is required for Darwin
+}
+
 bool wxTopLevelWindowBase::Destroy()
 {
     // delayed destruction: the frame will be deleted during the next idle

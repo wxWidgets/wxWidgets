@@ -108,6 +108,11 @@ END_EVENT_TABLE()
 // wxPopupWindowBase
 // ----------------------------------------------------------------------------
 
+wxPopupWindowBase::~wxPopupWindowBase()
+{
+    // this destructor is required for Darwin
+}
+
 bool wxPopupWindowBase::Create(wxWindow* WXUNUSED(parent), int WXUNUSED(flags))
 {
     return TRUE;

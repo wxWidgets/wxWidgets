@@ -45,6 +45,11 @@
 // implementation
 // ============================================================================
 
+wxControlBase::~wxControlBase()
+{
+    // this destructor is required for Darwin
+}
+
 bool wxControlBase::Create(wxWindow *parent,
                            wxWindowID id,
                            const wxPoint &pos,
@@ -124,6 +129,11 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
 // ----------------------------------------------------------------------------
 
 #if wxUSE_STATBMP
+
+wxStaticBitmapBase::~wxStaticBitmapBase()
+{
+    // this destructor is required for Darwin
+}
 
 wxSize wxStaticBitmapBase::DoGetBestClientSize() const
 {

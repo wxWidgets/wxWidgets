@@ -28,9 +28,7 @@ class WXDLLEXPORT wxPopupWindowBase : public wxWindow
 {
 public:
     wxPopupWindowBase() { }
-#ifdef __DARWIN__
-    virtual ~wxPopupWindowBase() { }
-#endif
+    virtual ~wxPopupWindowBase();
 
     // create the popup window
     //
