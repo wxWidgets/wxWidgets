@@ -2245,8 +2245,11 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     if ( nMsg == WM_CONTEXTMENU )
     {
         wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
-        event.m_item = GetSelection();
+
+        // can't use GetSelection() here as it would assert in multiselect mode
+        event.m_item = wxTreeItemId(TreeView_GetSelection(GetHwnd()));
         event.SetEventObject( this );
+
         if ( GetEventHandler()->ProcessEvent(event) )
             processed = true;
         //else: continue with generating wxEVT_CONTEXT_MENU in base class code
