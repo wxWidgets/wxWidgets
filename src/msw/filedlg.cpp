@@ -370,7 +370,7 @@ int wxFileDialog::ShowModal()
              {
              wxString messageText;
              messageText.Printf(_("File '%s' already exists.\nDo you want to replace it?"), fileNameBuffer);
-             if ( wxMessageBox(messageText, wxT("Save File As"), wxYES_NO | wxICON_EXCLAMATION	 ) != wxYES )
+             if ( wxMessageBox(messageText, _("Save File As"), wxYES_NO | wxICON_EXCLAMATION	 ) != wxYES )
              {
                  success = FALSE;
              }            

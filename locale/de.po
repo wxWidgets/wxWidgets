@@ -1571,6 +1571,11 @@ msgid "File '%s' already exists.\n"
 msgstr "Datei '%s' existiert bereits.\n"
 "Möchten Sie sie wirklich überschreiben?"
 
+#: ../src/msw/filedlg.cpp:373
+#, c-format
+msgid "Save File As"
+msgstr "Datei speichern unter"
+
 #: ../src/common/textcmn.cpp:158
 msgid "File couldn't be loaded."
 msgstr "Datei konnte nicht geladen werden."
