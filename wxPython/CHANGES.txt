@@ -63,6 +63,12 @@ Added wxPy versions of wxPrintPreview, wxPreviewFrame, and
 wxPreviewControlBar so they can be derived from in Python and be able
 to override the C++ virtual methods.
 
+Simplified how the wxSizer methods are wrapped, changed the name of
+the "option" parameter to "proportion" ("option" is still accepted for
+compatibility, but this will go away in a future release,)
+SetItemMinSize can now take a wxSize (or 2-tuple) parameter, and
+Spacers can be specified with a wxSize (or 2-tuple) parameter
+
 
 
 

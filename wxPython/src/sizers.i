@@ -105,138 +105,192 @@ public:
     %addmethods {
         void Destroy() { delete self; }
 
-        void AddWindow(wxWindow *window, int option=0, int flag=0, int border=0,
-                       PyObject* userData=NULL) {
+
+        void _Add(PyObject* item, int proportion=0, int flag=0, int border=0,
+                  PyObject* userData=NULL, int option=-1) {
+            // The option parameter is only for backwards compatibility
+            // with keyword args, all new code should use "proportion"
+            // instead.  This can be removed eventually.
+            if (option != -1) proportion = option;
+
+            wxWindow* window;
+            wxSizer*  sizer;
+            wxSize    size;
+            wxSize*   sizePtr = &size;
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Add(window, option, flag, border, data);
-        }
-        void AddSizer(wxSizer *sizer, int option=0, int flag=0, int border=0,
-                      PyObject* userData=NULL) {
-            wxPyUserData* data = NULL;
-            if (userData) data = new wxPyUserData(userData);
-            self->Add(sizer, option, flag, border, data);
-        }
-        void AddSpacer(int width, int height, int option=0, int flag=0,
-                       int border=0, PyObject* userData=NULL) {
-            wxPyUserData* data = NULL;
-            if (userData) data = new wxPyUserData(userData);
-            self->Add(width, height, option, flag, border, data);
+
+            // Find out what type the item is and call the real Add method
+            if (! SWIG_GetPtrObj(item, (void**)&window, "_wxWindow_p"))
+                self->Add(window, proportion, flag, border, data);
+
+            else if (!SWIG_GetPtrObj(item, (void**)&sizer, "_wxSizer_p"))
+                self->Add(sizer, proportion, flag, border, data);
+
+            else if (wxSize_helper(item, &sizePtr))
+                self->Add(sizePtr->GetWidth(), sizePtr->GetHeight(),
+                          proportion, flag, border, data);
+            else {
+                if (data) delete data;
+                PyErr_SetString(PyExc_TypeError,
+                                "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
+            }
         }
 
 
-        void InsertWindow(int before, wxWindow *window, int option=0, int flag=0,
-                          int border=0, PyObject* userData=NULL) {
+        void _Insert(int before, PyObject* item, int proportion=0, int flag=0,
+                     int border=0, PyObject* userData=NULL, int option=-1) {
+            // The option parameter is only for backwards compatibility
+            // with keyword args, all new code should use "proportion"
+            // instead.  This can be removed eventually.
+            if (option != -1) proportion = option;
+
+            wxWindow* window;
+            wxSizer*  sizer;
+            wxSize    size;
+            wxSize*   sizePtr = &size;
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Insert(before, window, option, flag, border, data);
-        }
-        void InsertSizer(int before, wxSizer *sizer, int option=0, int flag=0,
-                         int border=0, PyObject* userData=NULL) {
-            wxPyUserData* data = NULL;
-            if (userData) data = new wxPyUserData(userData);
-            self->Insert(before, sizer, option, flag, border, data);
-        }
-        void InsertSpacer(int before, int width, int height, int option=0, int flag=0,
-                          int border=0, PyObject* userData=NULL) {
-            wxPyUserData* data = NULL;
-            if (userData) data = new wxPyUserData(userData);
-            self->Insert(before, width, height, option, flag, border, data);
+
+            // Find out what type the item is and call the real Insert method
+            if (! SWIG_GetPtrObj(item, (void**)&window, "_wxWindow_p"))
+                self->Insert(before, window, proportion, flag, border, data);
+
+            else if (!SWIG_GetPtrObj(item, (void**)&sizer, "_wxSizer_p"))
+                self->Insert(before, sizer, proportion, flag, border, data);
+
+            else if (wxSize_helper(item, &sizePtr))
+                self->Insert(before, sizePtr->GetWidth(), sizePtr->GetHeight(),
+                          proportion, flag, border, data);
+            else {
+                if (data) delete data;
+                PyErr_SetString(PyExc_TypeError,
+                                "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
+            }
         }
 
 
-        void PrependWindow(wxWindow *window, int option=0, int flag=0, int border=0,
-                           PyObject* userData=NULL) {
+
+        void _Prepend(PyObject* item, int proportion=0, int flag=0, int border=0,
+                           PyObject* userData=NULL, int option=-1) {
+            // The option parameter is only for backwards compatibility
+            // with keyword args, all new code should use "proportion"
+            // instead.  This can be removed eventually.
+            if (option != -1) proportion = option;
+
+            wxWindow* window;
+            wxSizer*  sizer;
+            wxSize    size;
+            wxSize*   sizePtr = &size;
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Prepend(window, option, flag, border, data);
+
+            // Find out what type the item is and call the real Prepend method
+            if (! SWIG_GetPtrObj(item, (void**)&window, "_wxWindow_p"))
+                self->Prepend(window, proportion, flag, border, data);
+
+            else if (!SWIG_GetPtrObj(item, (void**)&sizer, "_wxSizer_p"))
+                self->Prepend(sizer, proportion, flag, border, data);
+
+            else if (wxSize_helper(item, &sizePtr))
+                self->Prepend(sizePtr->GetWidth(), sizePtr->GetHeight(),
+                              proportion, flag, border, data);
+            else {
+                if (data) delete data;
+                PyErr_SetString(PyExc_TypeError,
+                                "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
+            }
         }
-        void PrependSizer(wxSizer *sizer, int option=0, int flag=0, int border=0,
-                          PyObject* userData=NULL) {
-            wxPyUserData* data = NULL;
-            if (userData) data = new wxPyUserData(userData);
-            self->Prepend(sizer, option, flag, border, data);
+
+        bool Remove(PyObject* item) {
+            wxWindow* window;
+            wxSizer*  sizer;
+
+            // Find out what type the item is and call the real Remove method
+            if (! SWIG_GetPtrObj(item, (void**)&window, "_wxWindow_p"))
+                return self->Remove(window);
+
+            else if (!SWIG_GetPtrObj(item, (void**)&sizer, "_wxSizer_p"))
+                return self->Remove(sizer);
+
+            else if (PyInt_Check(item)) {
+                int pos = PyInt_AsLong(item);
+                return self->Remove(pos);
+            }
+            else {
+                PyErr_SetString(PyExc_TypeError,
+                                "wxWindow, wxSizer or int (position) expected.");
+                return FALSE;
+            }
         }
-        void PrependSpacer(int width, int height, int option=0, int flag=0,
-                           int border=0, PyObject* userData=NULL) {
-            wxPyUserData* data = NULL;
-            if (userData) data = new wxPyUserData(userData);
-            self->Prepend(width, height, option, flag, border, data);
+
+        void _SetItemMinSize(PyObject* item, wxSize size) {
+            wxWindow* window;
+            wxSizer*  sizer;
+
+            // Find out what type the item is and call the real Remove method
+            if (! SWIG_GetPtrObj(item, (void**)&window, "_wxWindow_p"))
+                self->SetItemMinSize(window, size);
+
+            else if (!SWIG_GetPtrObj(item, (void**)&sizer, "_wxSizer_p"))
+                self->SetItemMinSize(sizer, size);
+
+            else if (PyInt_Check(item)) {
+                int pos = PyInt_AsLong(item);
+                self->SetItemMinSize(pos, size);
+            }
+            else
+                PyErr_SetString(PyExc_TypeError,
+                                "wxWindow, wxSizer or int (position) expected.");
         }
+
     }
-
-    %name(RemoveWindow)bool Remove( wxWindow *window );
-    %name(RemoveSizer)bool Remove( wxSizer *sizer );
-    %name(RemovePos)bool Remove( int pos );
 
 
     %pragma(python) addtoclass = "
-    def Add(self, *args, **kw):
-        if type(args[0]) == type(1):
-            self.AddSpacer(*args, **kw)
-        elif isinstance(args[0], wxSizerPtr):
-            self.AddSizer(*args, **kw)
-        elif isinstance(args[0], wxWindowPtr):
-            self.AddWindow(*args, **kw)
-        else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
-
-    def Insert(self, *args, **kw):
-        if type(args[1]) == type(1):
-            self.InsertSpacer(*args, **kw)
-        elif isinstance(args[1], wxSizerPtr):
-            self.InsertSizer(*args, **kw)
-        elif isinstance(args[1], wxWindowPtr):
-            self.InsertWindow(*args, **kw)
-        else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
-
-    def Prepend(self, *args, **kw):
-        if type(args[0]) == type(1):
-            self.PrependSpacer(*args, **kw)
-        elif isinstance(args[0], wxSizerPtr):
-            self.PrependSizer(*args, **kw)
-        elif isinstance(args[0], wxWindowPtr):
-            self.PrependWindow(*args, **kw)
-        else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
-
-    def Remove(self, *args, **kw):
-        if type(args[0]) == type(1):
-            return self.RemovePos(*args, **kw)
-        elif isinstance(args[0], wxSizerPtr):
-            return self.RemoveSizer(*args, **kw)
-        elif isinstance(args[0], wxWindowPtr):
-            return self.RemoveWindow(*args, **kw)
-        else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
+    def Add(self, item, *args, **kw):
+        if type(item) == type(1):
+            item = (item, args[0])  # backwards compatibility, args are width, height
+            args = args[1:]
+        self._Add(item, *args, **kw)
 
     def AddMany(self, widgets):
         for childinfo in widgets:
             if type(childinfo) != type(()):
                 childinfo = (childinfo, )
             self.Add(*childinfo)
+
+    def Prepend(self, item, *args, **kw):
+        if type(item) == type(1):
+            item = (item, args[0])  # backwards compatibility, args are width, height
+            args = args[1:]
+        self._Prepend(item, *args, **kw)
+
+    def Insert(self, before, item, *args, **kw):
+        if type(item) == type(1):
+            item = (item, args[0])  # backwards compatibility, args are width, height
+            args = args[1:]
+        self._Insert(before, item, *args, **kw)
+
+
+    # for backwards compatibility only
+    AddWindow = AddSizer = AddSpacer = Add
+    PrependWindow = PrependSizer = PrependSpacer = Prepend
+    InsertWindow = InsertSizer = InsertSpacer = Insert
+    RemoveWindow = RemoveSizer = RemovePos = Remove
+
+
+    def SetItemMinSize(self, item, *args):
+        if len(args) == 2:
+            return self._SetItemMinSize(item, args)
+        else:
+            return self._SetItemMinSize(item, args[0])
+
 "
 
 
     void SetDimension( int x, int y, int width, int height );
     void SetMinSize(wxSize size);
-
-    %name(SetItemMinSizeWindow) void SetItemMinSize(wxWindow* window, int width, int height);
-    %name(SetItemMinSizeSizer) void SetItemMinSize(wxSizer* sizer, int width, int height);
-    %name(SetItemMinSizePos) void SetItemMinSize(int pos, int width, int height);
-
-    %pragma(python) addtoclass = "
-    def SetItemMinSize(self, *args):
-        if type(args[0]) == type(1):
-            self.SetItemMinSizePos(*args)
-        elif isinstance(args[0], wxSizerPtr):
-            self.SetItemMinSizeSizer(*args)
-        elif isinstance(args[0], wxWindowPtr):
-            self.SetItemMinSizeWindow(*args)
-        else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
-     "
 
     wxSize GetSize();
     wxPoint GetPosition();
@@ -277,38 +331,47 @@ public:
 
     // Manage whether individual windows or sub-sizers are considered
     // in the layout calculations or not.
-    %name(ShowWindow)void Show( wxWindow *window, bool show = TRUE );
-    %name(HideWindow)void Hide( wxWindow *window );
-    %name(ShowSizer)void Show( wxSizer *sizer, bool show = TRUE );
-    %name(HideSizer)void Hide( wxSizer *sizer );
-    %name(IsShownWindow)bool IsShown( wxWindow *window );
-    %name(IsShownSizer)bool IsShown( wxSizer *sizer );
 
-    %pragma(python) addtoclass = "
-    def Show(self, *args):
-        if isinstance(args[0], wxSizerPtr):
-            self.ShowSizer(*args)
-        elif isinstance(args[0], wxWindowPtr):
-            self.ShowWindow(*args)
-        else:
-            raise TypeError, 'Expected wxSizer or wxWindow parameter'
+    %addmethods {
+        void Show(PyObject* item, bool show = TRUE) {
+            wxWindow* window;
+            wxSizer*  sizer;
+            // Find out what type the item is and call the real method
+            if (! SWIG_GetPtrObj(item, (void**)&window, "_wxWindow_p"))
+                self->Show(window, show);
+            else if (!SWIG_GetPtrObj(item, (void**)&sizer, "_wxSizer_p"))
+                self->Show(sizer, show);
+            else
+                PyErr_SetString(PyExc_TypeError, "wxWindow or wxSizer expected.");
+        }
 
-    def Hide(self, *args):
-        if isinstance(args[0], wxSizerPtr):
-            self.HideSizer(*args)
-        elif isinstance(args[0], wxWindowPtr):
-            self.HideWindow(*args)
-        else:
-            raise TypeError, 'Expected wxSizer or wxWindow parameter'
+        void Hide(PyObject* item) {
+            wxWindow* window;
+            wxSizer*  sizer;
+            // Find out what type the item is and call the real method
+            if (! SWIG_GetPtrObj(item, (void**)&window, "_wxWindow_p"))
+                self->Hide(window);
+            else if (!SWIG_GetPtrObj(item, (void**)&sizer, "_wxSizer_p"))
+                self->Hide(sizer);
+            else
+                PyErr_SetString(PyExc_TypeError, "wxWindow or wxSizer expected.");
+        }
 
-    def IsShown(self, *args):
-        if isinstance(args[0], wxSizerPtr):
-            return self.IsShownSizer(*args)
-        elif isinstance(args[0], wxWindowPtr):
-            return self.IsShownWindow(*args)
-        else:
-            raise TypeError, 'Expected wxSizer or wxWindow parameter'
-"
+        bool IsShown(PyObject* item) {
+            wxWindow* window;
+            wxSizer*  sizer;
+            // Find out what type the item is and call the real method
+            if (! SWIG_GetPtrObj(item, (void**)&window, "_wxWindow_p"))
+                return self->IsShown(window);
+            else if (!SWIG_GetPtrObj(item, (void**)&sizer, "_wxSizer_p"))
+                return self->IsShown(sizer);
+            else {
+                PyErr_SetString(PyExc_TypeError, "wxWindow or wxSizer expected.");
+                return FALSE;
+            }
+        }
+    }
+
 
     // Recursively call wxWindow::Show() on all sizer items.
     void ShowItems(bool show);
