@@ -344,11 +344,18 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     // here not just the size.  It makes SetScrollbars 'sticky'
     // emulating the old non-autoscroll behaviour.
 
-    m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+    wxSize sz = m_targetWindow->GetSize();
+    int x = noUnitsX * pixelsPerUnitX;
+    int y = noUnitsY * pixelsPerUnitY;
+    if (x == 0)
+        x = sz.x;
+    if (y == 0)
+        y = sz.y;
+    m_targetWindow->SetVirtualSizeHints( x, y );
 
     // The above should arguably be deprecated, this however we still need.
 
-    m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+    m_targetWindow->SetVirtualSize( x, y );
 
     if (do_refresh && !noRefresh)
         m_targetWindow->Refresh(TRUE, GetRect());
