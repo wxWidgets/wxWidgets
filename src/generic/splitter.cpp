@@ -730,6 +730,11 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
     wxCHECK_MSG( window1->GetParent() == this && window2->GetParent() == this, false,
                   _T("windows in the splitter should have it as parent!") );
 
+    if (! window1->IsShown())
+        window1->Show();
+    if (! window2->IsShown())
+        window2->Show();
+    
     m_splitMode = mode;
     m_windowOne = window1;
     m_windowTwo = window2;
