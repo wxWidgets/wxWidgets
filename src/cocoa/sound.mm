@@ -61,39 +61,39 @@ bool isLastSoundInScope = false;
 
 @end // wxNSSoundDelegate
 
+const wxObjcAutoRefFromAlloc<struct objc_object*> wxSound::sm_cocoaDelegate = [[wxNSSoundDelegate alloc] init];
+
 // ------------------------------------------------------------------
 //          wxSound
 // ------------------------------------------------------------------
 
 wxSound::wxSound()
-:   m_hSnd(NULL)
+:   m_cocoaNSSound(nil)
 ,   m_waveLength(0)
 {
 }
 
 wxSound::wxSound(const wxString& sFileName, bool isResource)
-:   m_hSnd(NULL)
+:   m_cocoaNSSound(nil)
 ,   m_waveLength(0)
 {
     Create(sFileName, isResource);
 }
 
 wxSound::wxSound(int size, const wxByte* data)
-:   m_hSnd(NULL)
+:   m_cocoaNSSound(nil)
 ,   m_waveLength(size)
 {
     NSData* theData = [[NSData alloc] dataWithBytesNoCopy:(void*)data length:size];
-    m_hSnd = [[NSSound alloc] initWithData:theData];
+    m_cocoaNSSound = [[NSSound alloc] initWithData:theData];
 
-    m_cocoaSoundDelegate = [[wxNSSoundDelegate alloc] init];
 }
 
 wxSound::~wxSound()
 {
-    if (m_hSnd != lastSound)
+    if (m_cocoaNSSound != lastSound)
     {
-        [m_hSnd release];
-        [m_cocoaSoundDelegate release];
+        [m_cocoaNSSound release];
     }
     else
         isLastSoundInScope = false;
@@ -108,19 +108,17 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
     if (isResource)
     {
         //oftype could be @"snd" @"wav" or @"aiff"; nil or @"" autodetects (?)
-        m_hSnd = [[NSSound alloc]
+        m_cocoaNSSound = [[NSSound alloc]
             initWithContentsOfFile:[[NSBundle mainBundle]
                     pathForResource:wxNSStringWithWxString(fileName)
                     ofType:nil]
             byReference:YES];
     }
     else
-            m_hSnd = [[NSSound alloc] initWithContentsOfFile:wxNSStringWithWxString(fileName) byReference:YES];
-
-    m_cocoaSoundDelegate = [[wxNSSoundDelegate alloc] init];
+            m_cocoaNSSound = [[NSSound alloc] initWithContentsOfFile:wxNSStringWithWxString(fileName) byReference:YES];
 
     m_sndname = fileName;
-    return m_hSnd != nil;
+    return m_cocoaNSSound;
 }
 
 bool wxSound::DoPlay(unsigned flags) const
@@ -132,20 +130,20 @@ bool wxSound::DoPlay(unsigned flags) const
 
     if (flags & wxSOUND_ASYNC)
     {
-        lastSound = m_hSnd;
+        lastSound = m_cocoaNSSound;
         isLastSoundLooping = (flags & wxSOUND_LOOP) == wxSOUND_LOOP;
         isLastSoundInScope = true;
-        [m_hSnd setDelegate:m_cocoaSoundDelegate];
-        return [m_hSnd play];
+        [m_cocoaNSSound setDelegate:sm_cocoaDelegate];
+        return [m_cocoaNSSound play];
     }
     else
     {
-        [m_hSnd setDelegate:nil];
+        [m_cocoaNSSound setDelegate:nil];
 
         //play until done
-        bool bOK = [m_hSnd play];
+        bool bOK = [m_cocoaNSSound play];
 
-        while ([m_hSnd isPlaying])
+        while ([m_cocoaNSSound isPlaying])
         {
             wxTheApp->Yield(false);
         }

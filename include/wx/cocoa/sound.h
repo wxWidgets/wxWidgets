@@ -20,6 +20,7 @@
 #if wxUSE_SOUND
 
 #include "wx/object.h"
+#include "wx/cocoa/ObjcRef.h"
 
 class WXDLLEXPORT wxSound : public wxSoundBase
 {
@@ -31,20 +32,21 @@ public:
 
 public:
     bool Create(const wxString& fileName, bool isResource = false);
-    bool IsOk() const { return m_hSnd != NULL; }
+    bool IsOk() const
+    {   return m_cocoaNSSound; }
     static void Stop();
     static bool IsPlaying();
 
     inline WX_NSSound GetNSSound()
-    {   return m_hSnd; }
+    {   return m_cocoaNSSound; }
 protected:  
     bool DoPlay(unsigned flags) const;
 
 private:
-    WX_NSSound m_hSnd; //NSSound handle
+    WX_NSSound m_cocoaNSSound; //NSSound handle
     wxString m_sndname; //file path
     int m_waveLength; //size of file in memory mode    
-    struct objc_object * m_cocoaSoundDelegate;
+    static const wxObjcAutoRefFromAlloc<struct objc_object *> sm_cocoaDelegate;
 };
 
 #endif
