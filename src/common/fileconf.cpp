@@ -257,7 +257,7 @@ wxString wxFileConfig::GetGlobalDir()
   #ifdef __VMS__ // Note if __VMS is defined __UNIX is also defined
     strDir = wxT("sys$manager:");
   #elif defined(__WXMAC__)
-	strDir = wxMacFindFolder(  (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder ) ;
+    strDir = wxMacFindFolder(  (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder ) ;
   #elif defined( __UNIX__ )
     strDir = wxT("/etc/");
   #elif defined(__WXPM__)
@@ -368,20 +368,20 @@ wxString wxFileConfig::GetLocalDir()
 {
   wxString strDir;
 
-#ifndef __WXMAC__
+#if defined(__WXMAC__)
+  // no local dir concept on Mac OS 9
+  return GetGlobalDir() ;
+#else
   wxGetHomeDir(&strDir);
 
-#ifdef  __UNIX__
-#ifdef __VMS
-   if (strDir.Last() != wxT(']'))
-#endif
-   if (strDir.Last() != wxT('/')) strDir << wxT('/');
-#else
+#  ifdef  __UNIX__
+#  ifdef __VMS
+  if (strDir.Last() != wxT(']'))
+#  endif
+      if (strDir.Last() != wxT('/')) strDir << wxT('/');
+#  else
   if (strDir.Last() != wxT('\\')) strDir << wxT('\\');
-#endif
-#else
-	// no local dir concept on mac
-	return GetGlobalDir() ;
+#  endif
 #endif
 
   return strDir;
@@ -393,10 +393,10 @@ wxString wxFileConfig::GetGlobalFileName(const wxChar *szFile)
   str << szFile;
 
   if ( wxStrchr(szFile, wxT('.')) == NULL )
-  #ifdef  __UNIX__
-    str << wxT(".conf");
-  #elif defined( __WXMAC__ )
+  #if defined( __WXMAC__ )
      str << " Preferences";
+  #elif defined( __UNIX__ )
+    str << wxT(".conf");
   #else   // Windows
     str << wxT(".ini");
   #endif  // UNIX/Win
@@ -414,7 +414,7 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
    wxString str = GetLocalDir();
 #endif
    
-  #if defined( __UNIX__ ) && !defined( __VMS )
+  #if defined( __UNIX__ ) && !defined( __VMS ) && !defined( __WXMAC__ )
     str << wxT('.');
   #endif
 
@@ -424,7 +424,6 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
     if ( wxStrchr(szFile, wxT('.')) == NULL )
       str << wxT(".ini");
   #endif
-
 
   #ifdef __WXMAC__
      str << " Preferences";
@@ -950,7 +949,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 
   bool ret = file.Commit();
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
+#if defined(__WXMAC__)
   if ( ret )
   {
   	FSSpec spec ;
@@ -964,7 +963,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   		FSpSetFInfo( &spec , &finfo ) ;
   	}
   }
-#endif // __WXMAC__ && !__UNIX__
+#endif // __WXMAC__
 
 #ifdef __UNIX__
   // restore the old umask if we changed it

@@ -1011,7 +1011,6 @@ long wxGetFreeMemory()
     return -1;
 }
 
-#ifndef __WXMAC__
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
@@ -1041,7 +1040,6 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 
     return FALSE;
 }
-#endif
 
 // ----------------------------------------------------------------------------
 // env vars

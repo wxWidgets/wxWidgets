@@ -11,7 +11,6 @@
 
 #ifdef __GNUG__
 // Note: this is done in utilscmn.cpp now.
-// #pragma implementation
 // #pragma implementation "utils.h"
 #endif
 
@@ -130,11 +129,11 @@ long wxGetFreeMemory()
 
 void wxUsleep(unsigned long milliseconds)
 {
-		clock_t start = clock() ;
-		do 
-		{
-			YieldToAnyThread() ;
-		} while( clock() - start < milliseconds / CLOCKS_PER_SEC ) ;
+    clock_t start = clock() ;
+    do 
+    {
+	YieldToAnyThread() ;
+    } while( clock() - start < milliseconds / CLOCKS_PER_SEC ) ;
 }
 
 void wxSleep(int nSecs)
@@ -318,9 +317,9 @@ bool wxIsBusy()
   return (wxBusyCursorCount > 0);
 }
 
-wxString wxMacFindFolder( short 					vol,
-								 OSType 				folderType,
-								 Boolean 				createFolder)
+wxString wxMacFindFolder( short        vol,
+			  OSType       folderType,
+			  Boolean      createFolder)
 {
 	short 		vRefNum  ;
 	long 		dirID ;
@@ -331,7 +330,7 @@ wxString wxMacFindFolder( short 					vol,
 		FSSpec file ;
 		if ( FSMakeFSSpec( vRefNum , dirID , "\p" , &file ) == noErr )
 		{
-			strDir = wxMacFSSpec2MacFilename( &file ) + ":" ;
+			strDir = wxMacFSSpec2MacFilename( &file ) + wxFILE_SEP_PATH ;
 		}
 	}
 	return strDir ;
@@ -343,7 +342,6 @@ char *wxGetUserHome (const wxString& user)
     // TODO
     return NULL;
 }
-#endif
 
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
@@ -378,6 +376,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 
     return err == noErr ;
 }
+#endif
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
