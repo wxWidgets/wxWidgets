@@ -28,6 +28,7 @@
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/module.h"
+#include "wx/combobox.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -474,6 +475,34 @@ void wxgtk_window_size_request_callback(GtkWidget *widget,
 
     requisition->height = h;
     requisition->width = w;
+}
+
+
+extern "C"
+void wxgtk_combo_size_request_callback(GtkWidget *widget,
+                                       GtkRequisition *requisition,
+                                       wxComboBox *win)
+{
+    // This callback is actually hooked into the text entry
+    // of the combo box, not the GtkHBox.
+    
+    int w, h;
+    win->GetSize( &w, &h );
+    if (w < 2)
+        w = 2;
+    if (h < 2)
+        h = 2;
+
+    GtkCombo *gcombo = GTK_COMBO(win->m_widget);
+    
+    GtkRequisition entry_req;
+    entry_req.width = 2;
+    entry_req.height = 2;
+    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(gcombo->button) )->size_request )
+        (gcombo->button, &entry_req );
+    
+    requisition->width = w - entry_req.width;
+    requisition->height = entry_req.height+4;  // TODO: why +4?
 }
 
 //-----------------------------------------------------------------------------
@@ -2929,13 +2958,20 @@ void wxWindowGTK::PostCreation()
                             GTK_SIGNAL_FUNC(gtk_wxwindow_size_callback), (gpointer)this );
     }
 
-    if ( !GTK_IS_COMBO(m_widget))
+    if (GTK_IS_COMBO(m_widget))
+    {
+        GtkCombo *gcombo = GTK_COMBO(m_widget);
+    
+        gtk_signal_connect( GTK_OBJECT(gcombo->entry), "size_request",
+                            GTK_SIGNAL_FUNC(wxgtk_combo_size_request_callback),
+                            (gpointer) this );
+    }
+    else
     {
         // This is needed if we want to add our windows into native
-        // GTK control, such as the toolbar. With this callback, the
+        // GTK controls, such as the toolbar. With this callback, the
         // toolbar gets to know the correct size (the one set by the
-        // programmer). Sadly, it misbehaves for wxComboBox. FIXME
-        // when moving to GTK 2.0.
+        // programmer). Sadly, it misbehaves for wxComboBox.
         gtk_signal_connect( GTK_OBJECT(m_widget), "size_request",
                             GTK_SIGNAL_FUNC(wxgtk_window_size_request_callback),
                             (gpointer) this );

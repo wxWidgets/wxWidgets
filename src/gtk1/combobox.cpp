@@ -273,8 +273,8 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     SetBestSize(size); // need this too because this is a wxControlWithItems
 
     // This is required for tool bar support
-    wxSize setsize = GetSize();
-    gtk_widget_set_usize( m_widget, setsize.x, setsize.y );
+//    wxSize setsize = GetSize();
+//    gtk_widget_set_usize( m_widget, setsize.x, setsize.y );
 
     return true;
 }
