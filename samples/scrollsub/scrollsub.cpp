@@ -40,7 +40,7 @@ public:
     MyScrolledWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size );
     ~MyScrolledWindow(){};
     void OnPaint( wxPaintEvent &event );
-
+    void OnSize( wxSizeEvent &event );
 private:
     MyCanvas    *m_canvas;
 
@@ -141,7 +141,8 @@ IMPLEMENT_APP(MyApp)
 IMPLEMENT_DYNAMIC_CLASS(MyScrolledWindow, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(MyScrolledWindow, wxScrolledWindow)
-  EVT_PAINT(        MyScrolledWindow::OnPaint)
+  EVT_PAINT(      MyScrolledWindow::OnPaint)
+  EVT_SIZE(       MyScrolledWindow::OnSize)
 END_EVENT_TABLE()
 
 MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
@@ -175,6 +176,20 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
 
     SetAutoLayout( true );
     SetSizer( mainsizer );
+}
+
+void MyScrolledWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
+{
+    // We need to override OnSize so that our scrolled
+    // window a) does call Layout() to use sizers for
+    // positioning the controls but b) does not query
+    // the sizer for their size and use that for setting
+    // the scrollable area as set that ourselves by
+    // calling SetScrollbar() further down.
+
+    Layout();
+
+    AdjustScrollbars();
 }
 
 void MyScrolledWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )

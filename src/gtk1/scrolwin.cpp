@@ -852,19 +852,12 @@ bool wxScrolledWindow::Layout()
 // Default OnSize resets scrollbars, if any
 void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    if( GetAutoLayout() || m_targetWindow->GetAutoLayout() )
+    if ( m_targetWindow->GetAutoLayout() )
     {
-        if( m_targetWindow != this )
-            m_targetWindow->FitInside();
-
-        FitInside();
-
-        // FIXME:  Something is really weird here...  This should be
-        // called by FitInside above (and apparently is), yet the
-        // scrollsub sample will get the scrollbar wrong if resized
-        // quickly.  This masks the bug, but is surely not the right
-        // answer at all.
-        AdjustScrollbars();
+        wxSize size = m_targetWindow->GetBestVirtualSize();
+        
+        // This will call ::Layout() and ::AdjustScrollbars()
+        SetVirtualSize( size );
     }
     else
     {
