@@ -497,7 +497,7 @@ void wxMenuItem::SetName( const wxString& str )
            m_text << *pc;
     }
     
-    /* only GTK 1.2 know about hot keys */
+    /* only GTK 1.2 knows about hot keys */
     m_hotKey = _T("");
 #if (GTK_MINOR_VERSION > 0)
     if(*pc == _T('\t'))
@@ -622,6 +622,44 @@ void wxMenu::AppendSeparator()
     m_items.Append( mitem );
 }
 
+static char* GetHotKey( const wxString &hotkey, char *hotbuf )
+{
+    if (hotkey.IsEmpty()) return (char*) NULL;
+    
+    switch (hotkey[0])
+    {
+        case _T('a'):   /* Alt */
+	case _T('A'):
+	case _T('m'):   /* Meta */
+	case _T('M'):
+	{
+	    strcpy( hotbuf, "<alt>" );
+	    wxString last = hotkey.Right(1);
+	    strcat( hotbuf, last.mb_str() );
+            return hotbuf;
+	}
+	case _T('c'):    /* Ctrl */
+	case _T('C'):
+	case _T('s'):    /* Strg, yeah man, I'm German */
+	case _T('S'):
+	{
+	    strcpy( hotbuf, "<control>" );
+	    wxString last = hotkey.Right(1);
+	    strcat( hotbuf, last.mb_str() );
+            return hotbuf;
+        }
+	case _T('F'):   /* function keys */
+	{
+	    strcpy( hotbuf, hotkey.mb_str() );
+            return hotbuf;
+	}
+	default:
+	{
+	}
+    }
+    return (char*) NULL;
+}
+
 void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool checkable )
 {
     wxMenuItem *mitem = new wxMenuItem();
@@ -648,46 +686,8 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     else
         entry.item_type = "<Item>";
     
-    entry.accelerator = (gchar*) NULL;
     char hotbuf[50];
-    wxString hotkey( mitem->GetHotKey() );
-    if (!hotkey.IsEmpty())
-    {
-	switch (hotkey[0])
-	{
-	    case _T('a'):   /* Alt */
-	    case _T('A'):
-	    case _T('m'):   /* Meta */
-	    case _T('M'):
-	    {
-	       strcpy( hotbuf, "<alt>" );
-	       wxString last = hotkey.Right(1);
-	       strcat( hotbuf, last.mb_str() );
-               entry.accelerator = hotbuf;
-	       break;
-	    }
-	    case _T('c'):    /* Ctrl */
-	    case _T('C'):
-	    case _T('s'):    /* Strg, yeah man, I'm German */
-	    case _T('S'):
-	    {
-	       strcpy( hotbuf, "<control>" );
-	       wxString last = hotkey.Right(1);
-	       strcat( hotbuf, last.mb_str() );
-               entry.accelerator = hotbuf;
-	       break;
-	    }
-	    case _T('F'):   /* function keys */
-	    {
-	       strcpy( hotbuf, hotkey.mb_str() );
-               entry.accelerator = hotbuf;
-	       break;
-	    }
-	    default:
-	    {
-	    }
-	}
-    }
+    entry.accelerator = GetHotKey( mitem->GetHotKey(), hotbuf );
     
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     
@@ -728,16 +728,48 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     m_items.Append( mitem );
 }
 
-void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxString &helpStr )
+void wxMenu::Append( int id, const wxString &item, wxMenu *subMenu, const wxString &helpStr )
 {
     wxMenuItem *mitem = new wxMenuItem();
     mitem->SetId(id);
-    mitem->SetText(text);
+    mitem->SetText(item);
     mitem->SetHelp(helpStr);
 
+#if (GTK_MINOR_VERSION > 0)
+    /* text has "_" instead of "&" after mitem->SetText() */ 
+    wxString text( mitem->GetText() );
+    
+    /* local buffer in multibyte form */
+    char buf[200];
+    strcpy( buf, "/" );
+    strcat( buf, text.mb_str() );
+    
+    GtkItemFactoryEntry entry;
+    entry.path = buf;
+    entry.callback = (GtkItemFactoryCallback) 0;
+    entry.callback_action = 0;
+    entry.item_type = "<Branch>";
+    
+    gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
+    
+    /* in order to get the pointer to the item we need the item text _without_ underscores */
+    wxString s = _T("<main>/");
+    for ( const wxChar *pc = text; *pc != _T('\0'); pc++ )
+    {
+        if (*pc == _T('_')) pc++; /* skip it */
+        s << *pc;
+    }
+    
+    GtkWidget *menuItem = gtk_item_factory_get_item( m_factory, s.mb_str() );
+    
+#else
+
     GtkWidget *menuItem = gtk_menu_item_new_with_label(mitem->GetText().mbc_str());
-    mitem->SetMenuItem(menuItem);
-    mitem->SetSubMenu(subMenu);
+    
+    gtk_menu_append( GTK_MENU(m_menu), menuItem );
+    gtk_widget_show( menuItem );
+    
+#endif    
 
     gtk_signal_connect( GTK_OBJECT(menuItem), "select",
                         GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
@@ -748,8 +780,10 @@ void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxStri
                         (gpointer*)this );
 
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), subMenu->m_menu );
-    gtk_menu_append( GTK_MENU(m_menu), menuItem );
-    gtk_widget_show( menuItem );
+    
+    mitem->SetMenuItem(menuItem);
+    mitem->SetSubMenu(subMenu);
+
     m_items.Append( mitem );
 }
 
