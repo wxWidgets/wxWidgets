@@ -1126,8 +1126,6 @@ wxString wxImage::GetOption(const wxString& name) const
 
 int wxImage::GetOptionInt(const wxString& name) const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
-
     return wxAtoi(GetOption(name));
 }
 
