@@ -1,11 +1,11 @@
-option ProjectOptions = gen(arch, "pentium2"), opt(tune, "pentium2"), 
+option ProjectOptions = gen(arch, "pentium2"), opt(tune, "pentium2"),
                         define("__WXPM__", ), define("__VISAGECPP__", ), define("OS232", ), define("JPEGLOCAL", ),
-                        incl(searchpath, "..\\src"), incl(searchpath, "..\\Include"), report(level, "E"), 
-                        file(genobject, "..\\src\\jpeg\\debugos2\\")
+                        incl(searchpath, "..\\src"), incl(searchpath, "..\\Include"), report(level, "E"),
+                        file(genobject, "..\\src\\jpeg\\dbgos240\\")
 {
    perform
    {
-       run before '-mkdir ' '..\\src\\jpeg\\debugos2'
+       run before '-mkdir ' '..\\src\\jpeg\\dbgos240'
    }
    target "..\\lib\\os2jpeg.lib"
    {
