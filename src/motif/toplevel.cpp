@@ -64,7 +64,7 @@ static void wxTLWEventHandler( Widget wid,
 // wxTopLevelWindowMotif implementation
 // ===========================================================================
 
-wxTopLevelWindowMotif::~wxTopLevelWindowMotif()
+void wxTopLevelWindowMotif::PreDestroy()
 {
     wxTopLevelWindows.DeleteObject(this);
 
@@ -85,9 +85,10 @@ wxTopLevelWindowMotif::~wxTopLevelWindowMotif()
                               wxTLWEventHandler,
                               (XtPointer)this );
     }
+}
 
-    DoDestroy();
-
+wxTopLevelWindowMotif::~wxTopLevelWindowMotif()
+{
     SetMainWidget( (WXWidget)0 );
 
     // If this is the last top-level window, exit.

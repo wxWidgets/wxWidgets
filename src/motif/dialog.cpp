@@ -208,6 +208,7 @@ void wxDialog::SetModal(bool flag)
 wxDialog::~wxDialog()
 {
     m_isBeingDeleted = TRUE;
+
     delete m_eventLoop;
 
     if (m_mainWidget)
@@ -221,6 +222,9 @@ wxDialog::~wxDialog()
     {
         XtUnmapWidget((Widget) m_mainWidget);
     }
+
+    PreDestroy();
+    DoDestroy();
 }
 
 void wxDialog::DoDestroy()

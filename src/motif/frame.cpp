@@ -310,15 +310,19 @@ wxFrame::~wxFrame()
         delete m_frameStatusBar;
         m_frameStatusBar = NULL;
     }
+
+    PreDestroy();
+    DoDestroy();
 }
 
 void wxFrame::DoDestroy()
 {
     Widget frameShell = (Widget)GetShellWidget();
 
-    XtRemoveEventHandler( frameShell, StructureNotifyMask,
-                          False, (XtEventHandler)wxFrameMapProc,
-                          (XtPointer)this );
+    if( frameShell )
+        XtRemoveEventHandler( frameShell, StructureNotifyMask,
+                              False, (XtEventHandler)wxFrameMapProc,
+                              (XtPointer)this );
 
     if( m_clientArea )
     {

@@ -60,6 +60,8 @@ public:
 protected:
     // common part of all constructors
     void Init();
+    // common part of wxDialog/wxFrame destructors
+    void PreDestroy();
 
 private:
     // both these functions should be pure virtual
