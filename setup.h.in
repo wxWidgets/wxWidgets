@@ -151,6 +151,11 @@
 #undef HAVE_EXPLICIT
 
 /*
+ * Define if your compiler supports const_cast<>()
+ */
+#undef HAVE_CONST_CAST
+
+/*
  * Use regex support
  */
 #define wxUSE_REGEX 0

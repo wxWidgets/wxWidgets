@@ -305,7 +305,11 @@ name##PluginSentinel  m_pluginsentinel;
 #define wxDynamicCastThis(className) \
  (IsKindOf(&className::sm_class##className) ? (className *)(this) : (className *)0)
 
+#ifdef HAVE_CONST_CAST
+#define wxConstCast(obj, className) const_cast<className *>(obj)
+#else
 #define wxConstCast(obj, className) ((className *)(obj))
+#endif
 
 
 #ifdef __WXDEBUG__

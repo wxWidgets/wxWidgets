@@ -222,8 +222,12 @@ typedef int wxWindowID;
 
 // check for explicit keyword support
 #ifndef HAVE_EXPLICIT
-    #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-        // VC++ 6.0 has explicit (what about the earlier versions?)
+    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
+        // VC++ 6.0 and 5.0 have explicit (what about the earlier versions?)
+        #define HAVE_EXPLICIT
+    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
+          && wxCHECK_GCC_VERSION(2, 95)
+        // GCC 2.95 has explicit, what about earlier versions?
         #define HAVE_EXPLICIT
     #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0520)
         // BC++ 4.52 doesn't support explicit, CBuilder 1 does
@@ -239,6 +243,24 @@ typedef int wxWindowID;
 #else // !HAVE_EXPLICIT
     #define wxEXPLICIT
 #endif // HAVE_EXPLICIT/!HAVE_EXPLICIT
+
+// check for static/const/reinterpret_cast<>()
+#ifndef HAVE_STATIC_CAST
+    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
+        // VC++ 6.0 and 5.0 have C++ casts (what about the earlier versions?)
+        #define HAVE_CXX_CASTS
+    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
+          && wxCHECK_GCC_VERSION(2, 95)
+        // GCC 2.95 has C++ casts, what about earlier versions?
+        #define HAVE_CXX_CASTS
+    #endif
+#endif // HAVE_STATIC_CAST
+
+#ifdef HAVE_CXX_CASTS
+    #ifndef HAVE_CONST_CAST
+        #define HAVE_CONST_CAST
+    #endif
+#endif // HAVE_CXX_CASTS
 
 // ----------------------------------------------------------------------------
 // portable calling conventions macros
