@@ -791,7 +791,11 @@ pascal	OSErr	IndexedSearch(CSParamPtr pb,
 	if ( pb->ioSearchTime != 0 )
 	{
 		/* Start timer */
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+		timerTask.theTask.tmAddr = NewTimerUPP(TimeOutTask);
+#else
 		timerTask.theTask.tmAddr = NewTimerProc(TimeOutTask);
+#endif
 		InsTime((QElemPtr)&(timerTask.theTask));
 		PrimeTime((QElemPtr)&(timerTask.theTask), pb->ioSearchTime);
 	}
