@@ -81,10 +81,10 @@ public:
     void SetSpacing(unsigned int spacing);
 
         // image list: these functions allow to associate an image list with
-        // the control and retrieve it. Note that when assigned with 
+        // the control and retrieve it. Note that when assigned with
         // SetImageList, the control does _not_ delete
         // the associated image list when it's deleted in order to allow image
-        // lists to be shared between different controls. If you use 
+        // lists to be shared between different controls. If you use
         // AssignImageList, the control _does_ delete the image list.
         //
         // The normal image list is for the icons which correspond to the
@@ -357,10 +357,11 @@ protected:
     unsigned short       m_spacing;
     int                  m_lineHeight;
     wxPen                m_dottedPen;
-    wxBrush             *m_hilightBrush;
+    wxBrush             *m_hilightBrush,
+                        *m_hilightUnfocusedBrush;
     bool                 m_hasFocus;
     bool                 m_dirty;
-    bool                 m_ownsImageListNormal, 
+    bool                 m_ownsImageListNormal,
                          m_ownsImageListState,
                          m_ownsImageListButtons;
     bool                 m_isDragging; // true between BEGIN/END drag events
@@ -404,6 +405,12 @@ protected:
 
     void RefreshSubtree( wxGenericTreeItem *item );
     void RefreshLine( wxGenericTreeItem *item );
+
+    // redraw all selected items
+    void RefreshSelected();
+
+    // RefreshSelected() recursive helper
+    void RefreshSelectedUnder(wxGenericTreeItem *item);
 
     void OnRenameTimer();
     void OnRenameAccept();

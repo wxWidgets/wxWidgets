@@ -614,9 +614,23 @@ void wxGenericTreeCtrl::Init()
     m_indent = 15;
     m_spacing = 18;
 
-    m_hilightBrush = new wxBrush(
-               wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT),
-               wxSOLID);
+    m_hilightBrush = new wxBrush
+                         (
+                            wxSystemSettings::GetSystemColour
+                            (
+                                wxSYS_COLOUR_HIGHLIGHT
+                            ),
+                            wxSOLID
+                         );
+
+    m_hilightUnfocusedBrush = new wxBrush
+                              (
+                                 wxSystemSettings::GetSystemColour
+                                 (
+                                     wxSYS_COLOUR_BTNSHADOW
+                                 ),
+                                 wxSOLID
+                              );
 
     m_imageListNormal = m_imageListButtons =
     m_imageListState = (wxImageList *) NULL;
@@ -672,7 +686,8 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
 
 wxGenericTreeCtrl::~wxGenericTreeCtrl()
 {
-    wxDELETE( m_hilightBrush );
+    delete m_hilightBrush;
+    delete m_hilightUnfocusedBrush;
 
     DeleteAllItems();
 
@@ -1838,10 +1853,9 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int total_h = GetLineHeight(item);
 
-    bool paintBg = item->IsSelected() && m_hasFocus;
-    if ( paintBg )
+    if ( item->IsSelected() )
     {
-        dc.SetBrush(*m_hilightBrush);
+        dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
     }
     else
     {
@@ -1855,7 +1869,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
 
-    if ( item->IsSelected() && image != NO_IMAGE)
+    if ( item->IsSelected() && image != NO_IMAGE )
     {
         // If it's selected, and there's an image, then we should
         // take care to leave the area under the image painted in the
@@ -1999,7 +2013,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 #ifndef __WXMAC__
             // don't draw rect outline if we already have the
             // background color under Mac
-            (item->IsSelected()) ? wxBLACK_PEN :
+            (item->IsSelected() && m_hasFocus) ? wxBLACK_PEN :
 #endif // !__WXMAC__
             wxTRANSPARENT_PEN;
 
@@ -2146,20 +2160,22 @@ void wxGenericTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
     PaintLevel( m_anchor, dc, 0, y );
 }
 
-void wxGenericTreeCtrl::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
+void wxGenericTreeCtrl::OnSetFocus( wxFocusEvent &event )
 {
     m_hasFocus = TRUE;
 
-    if (m_current)
-        RefreshLine( m_current );
+    RefreshSelected();
+
+    event.Skip();
 }
 
-void wxGenericTreeCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
+void wxGenericTreeCtrl::OnKillFocus( wxFocusEvent &event )
 {
     m_hasFocus = FALSE;
 
-    if (m_current)
-        RefreshLine( m_current );
+    RefreshSelected();
+
+    event.Skip();
 }
 
 void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
@@ -2883,6 +2899,27 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
     rect.height = GetLineHeight(item); //dc.GetCharHeight() + 6;
 
     Refresh( TRUE, &rect );
+}
+
+void wxGenericTreeCtrl::RefreshSelected()
+{
+    // TODO: this is awfully inefficient, we should keep the list of all
+    //       selected items internally, should be much faster
+    if ( m_anchor )
+        RefreshSelectedUnder(m_anchor);
+}
+
+void wxGenericTreeCtrl::RefreshSelectedUnder(wxGenericTreeItem *item)
+{
+    if ( item->IsSelected() )
+        RefreshLine(item);
+
+    const wxArrayGenericTreeItems& children = item->GetChildren();
+    size_t count = children.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        RefreshSelectedUnder(children[n]);
+    }
 }
 
 #endif // wxUSE_TREECTRL
