@@ -124,7 +124,7 @@ class WXDLLEXPORT wxExprDatabase;
 
 
 
-class wxShapeEvtHandler: public wxObject
+class wxShapeEvtHandler: public wxObject, public wxClientDataContainer
 {
  DECLARE_DYNAMIC_CLASS(wxShapeEvtHandler)
 
