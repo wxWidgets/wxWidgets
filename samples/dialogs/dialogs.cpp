@@ -209,7 +209,10 @@ MyFrame::MyFrame(wxWindow *parent,
 
 void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
 {
+    wxColour col = myCanvas->GetBackgroundColour();
+
     wxColourData data;
+    data.SetColour(col);
     data.SetChooseFull(TRUE);
     for (int i = 0; i < 16; i++)
     {
@@ -217,17 +220,16 @@ void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
         data.SetCustomColour(i, colour);
     }
 
-    wxColourDialog *dialog = new wxColourDialog(this, &data);
-    dialog->SetTitle("Choose the background colour");
-    if (dialog->ShowModal() == wxID_OK)
+    wxColourDialog dialog(this, &data);
+    dialog.SetTitle("Choose the background colour");
+    if (dialog.ShowModal() == wxID_OK)
     {
-        wxColourData retData = dialog->GetColourData();
-        wxColour col = retData.GetColour();
+        wxColourData retData = dialog.GetColourData();
+        col = retData.GetColour();
         myCanvas->SetBackgroundColour(col);
         myCanvas->Clear();
         myCanvas->Refresh();
     }
-    dialog->Destroy();
 }
 
 void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
