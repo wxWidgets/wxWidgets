@@ -878,32 +878,54 @@ END_EVENT_TABLE()
 long wxGenericFileDialog::ms_lastViewStyle = wxLC_LIST;
 bool wxGenericFileDialog::ms_lastShowHidden = false;
 
+void wxGenericFileDialog::Init()
+{
+    m_bypassGenericImpl = false;
+
+    m_choice = NULL;
+    m_text   = NULL;
+    m_list   = NULL;
+    m_check  = NULL;
+    m_static = NULL;
+    m_upDirButton  = NULL;
+    m_newDirButton = NULL;
+}
+
 wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
                            const wxString& message,
                            const wxString& defaultDir,
                            const wxString& defaultFile,
                            const wxString& wildCard,
-                           long style,
+                           long  style,
                            const wxPoint& pos,
-                           bool bypassGenericImpl )
-                    :wxFileDialogBase(parent, message, defaultDir, defaultFile, wildCard, style, pos)
+                           bool  bypassGenericImpl ) : wxFileDialogBase()
 {
-    m_bypassGenericImpl = bypassGenericImpl;
-
-    if (!m_bypassGenericImpl)
-        Create( parent, message, defaultDir, defaultFile, wildCard, style, pos );
+    Init();
+    Create( parent, message, defaultDir, defaultFile, wildCard, style, pos, bypassGenericImpl );
 }
 
 bool wxGenericFileDialog::Create( wxWindow *parent,
                                   const wxString& message,
-                                  const wxString& WXUNUSED(defaultDir),
+                                  const wxString& defaultDir,
                                   const wxString& defaultFile,
                                   const wxString& wildCard,
-                                  long WXUNUSED(style),
-                                  const wxPoint& pos )
+                                  long  style,
+                                  const wxPoint& pos,
+                                  bool  bypassGenericImpl )
 {
+    m_bypassGenericImpl = bypassGenericImpl;
+
+    if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFile, 
+                                  wildCard, style, pos))
+    {
+        return false;
+    }
+
+    if (m_bypassGenericImpl)
+        return true;
+
     if (!wxDialog::Create( parent, wxID_ANY, message, pos, wxDefaultSize,
-                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ))
+                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ))
     {
         return false;
     }
@@ -1129,8 +1151,13 @@ void wxGenericFileDialog::SetWildcard(const wxString& wildCard)
                                                     wildFilters);
     wxCHECK_RET( count, wxT("wxFileDialog: bad wildcard string") );
 
-    m_choice->Clear();
-    for ( size_t n = 0; n < count; n++ )
+    size_t n, old_count = m_choice->GetCount();
+    for ( n = 0; n < count; n++ )
+    {
+        delete (wxString *)m_choice->GetClientData(n);
+    }
+    
+    for ( n = 0; n < count; n++ )
     {
         m_choice->Append( wildDescriptions[n], new wxString( wildFilters[n] ) );
     }

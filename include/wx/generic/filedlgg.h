@@ -45,23 +45,26 @@ class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxGenericFileDialog: public wxFileDialogBase
 {
 public:
-    wxGenericFileDialog() { }
+    wxGenericFileDialog() : wxFileDialogBase() { Init(); }
 
     wxGenericFileDialog(wxWindow *parent,
-                 const wxString& message = wxFileSelectorPromptStr,
+                        const wxString& message = wxFileSelectorPromptStr,
                         const wxString& defaultDir = wxEmptyString,
                         const wxString& defaultFile = wxEmptyString,
+                        const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                        long style = 0,
+                        const wxPoint& pos = wxDefaultPosition,
+                        bool bypassGenericImpl = false );
+
+    bool Create( wxWindow *parent,
+                 const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& defaultDir = wxEmptyString,
+                 const wxString& defaultFile = wxEmptyString,
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition,
                  bool bypassGenericImpl = false );
-    bool Create( wxWindow *parent,
-                 const wxString& message = wxFileSelectorPromptStr,
-                        const wxString& defaultDir = wxEmptyString,
-                        const wxString& defaultFile = wxEmptyString,
-                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
-                 long style = 0,
-                 const wxPoint& pos = wxDefaultPosition );
+
     virtual ~wxGenericFileDialog();
 
     virtual void SetMessage(const wxString& message) { SetTitle(message); }
@@ -114,6 +117,7 @@ protected:
     wxBitmapButton *m_newDirButton;
 
 private:
+    void Init();
     DECLARE_DYNAMIC_CLASS(wxGenericFileDialog)
     DECLARE_EVENT_TABLE()
 

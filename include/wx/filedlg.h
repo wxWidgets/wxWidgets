@@ -48,15 +48,27 @@ extern WXDLLEXPORT_DATA(const wxChar*) wxFileSelectorDefaultWildcardStr;
 class WXDLLEXPORT wxFileDialogBase: public wxDialog
 {
 public:
-    wxFileDialogBase () {}
+    wxFileDialogBase () { Init(); }
 
     wxFileDialogBase(wxWindow *parent,
-                 const wxString& message = wxFileSelectorPromptStr,
-                 const wxString& defaultDir = wxEmptyString,
-                 const wxString& defaultFile = wxEmptyString,
-                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
-                 long style = 0,
-                 const wxPoint& pos = wxDefaultPosition);
+                     const wxString& message = wxFileSelectorPromptStr,
+                     const wxString& defaultDir = wxEmptyString,
+                     const wxString& defaultFile = wxEmptyString,
+                     const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                     long style = 0,
+                     const wxPoint& pos = wxDefaultPosition) : wxDialog()
+    {
+        Init();
+        Create(parent, message, defaultDir, defaultFile, wildCard, style, pos);
+    }
+
+    bool Create(wxWindow *parent,
+                const wxString& message = wxFileSelectorPromptStr,
+                const wxString& defaultDir = wxEmptyString,
+                const wxString& defaultFile = wxEmptyString,
+                const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                long style = 0,
+                const wxPoint& pos = wxDefaultPosition);
 
     virtual void SetMessage(const wxString& message) { m_message = message; }
     virtual void SetPath(const wxString& path) { m_path = path; }
@@ -107,6 +119,7 @@ protected:
     int           m_filterIndex;
 
 private:
+    void Init();
     DECLARE_DYNAMIC_CLASS(wxFileDialogBase)
     DECLARE_NO_COPY_CLASS(wxFileDialogBase)
 };
