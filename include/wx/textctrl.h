@@ -60,6 +60,31 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // ----------------------------------------------------------------------------
+// wxTextCtrl style flags
+// ----------------------------------------------------------------------------
+
+// the flag bits 0x0001, 2, 4 and 8 are free but should be used only for the
+// things which don't make sense for a text control used by wxTextEntryDialog
+// because they would otherwise conflict with wxOK, wxCANCEL, wxCENTRE
+#define wxTE_READONLY       0x0010
+#define wxTE_MULTILINE      0x0020
+#define wxTE_PROCESS_TAB    0x0040
+
+// this style means to use RICHEDIT control and does something only under wxMSW
+// and Win32 and is silently ignored under all other platforms
+#define wxTE_RICH           0x0080
+#define wxTE_NO_VSCROLL     0x0100
+#define wxTE_AUTO_SCROLL    0x0200
+#define wxTE_PROCESS_ENTER  0x0400
+#define wxTE_PASSWORD       0x0800
+
+// automatically detect the URLs and generate the events when mouse is
+// moved/clicked over an URL
+//
+// this is for Win32 richedit controls only so far
+#define wxTE_AUTO_URL       0x1000
+
+// ----------------------------------------------------------------------------
 // wxTextAttr: a structure containing the visual attributes of a text
 // ----------------------------------------------------------------------------
 
@@ -253,6 +278,56 @@ private:
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/textctrl.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// wxTextCtrl events
+// ----------------------------------------------------------------------------
+
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED, 7)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER, 8)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_URL, 13)
+END_DECLARE_EVENT_TYPES()
+
+class WXDLLEXPORT wxTextUrlEvent : public wxCommandEvent
+{
+public:
+    wxTextUrlEvent(int id, const wxMouseEvent& evtMouse,
+                   long start, long end)
+        : wxCommandEvent(wxEVT_COMMAND_TEXT_URL, id),
+          m_evtMouse(evtMouse)
+        { m_start = start; m_end = end; }
+
+    // get the mouse event which happend over the URL
+    const wxMouseEvent& GetMouseEvent() const { return m_evtMouse; }
+
+    // get the start of the URL
+    long GetURLStart() const { return m_start; }
+
+    // get the end of the URL
+    long GetURLEnd() const { return m_end; }
+
+protected:
+    // the corresponding mouse event
+    wxMouseEvent m_evtMouse;
+
+    // the start and end indices of the URL in the text control
+    long m_start,
+         m_end;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxTextUrlEvent)
+
+public:
+    // for wxWin RTTI only, don't use
+    wxTextUrlEvent() { }
+};
+
+typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
+
+#define EVT_TEXT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TEXT_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TEXT_URL(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_URL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxTextUrlEventFunction) & fn, (wxObject *) NULL ),
 
 #endif // wxUSE_TEXTCTRL
 

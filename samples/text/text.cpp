@@ -67,6 +67,7 @@ public:
     void OnKeyUp(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnText(wxCommandEvent& event);
+    void OnTextURL(wxTextUrlEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
 
     bool m_hasCapture;
@@ -275,6 +276,7 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_KEY_UP(MyTextCtrl::OnKeyUp)
     EVT_CHAR(MyTextCtrl::OnChar)
     EVT_TEXT(-1, MyTextCtrl::OnText)
+    EVT_TEXT_URL(-1, MyTextCtrl::OnTextURL)
     EVT_MOUSE_EVENTS(MyTextCtrl::OnMouseEvent)
 END_EVENT_TABLE()
 
@@ -406,6 +408,40 @@ void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
                   GetChar( event.MetaDown(), _T('M') ) );
 }
 
+static wxString GetMouseEventDesc(const wxMouseEvent& ev)
+{
+    // click event
+    wxString button;
+    bool dbl, up;
+    if ( ev.LeftDown() || ev.LeftUp() || ev.LeftDClick() )
+    {
+        button = _T("Left");
+        dbl = ev.LeftDClick();
+        up = ev.LeftUp();
+    }
+    else if ( ev.MiddleDown() || ev.MiddleUp() || ev.MiddleDClick() )
+    {
+        button = _T("Middle");
+        dbl = ev.MiddleDClick();
+        up = ev.MiddleUp();
+    }
+    else if ( ev.RightDown() || ev.RightUp() || ev.RightDClick() )
+    {
+        button = _T("Right");
+        dbl = ev.RightDClick();
+        up = ev.RightUp();
+    }
+    else
+    {
+        return _T("Unknown mouse event");
+    }
+
+    return wxString::Format(_T("%s mouse button %s"),
+                            button.c_str(),
+                            dbl ? _T("double clicked")
+                                : up ? _T("released") : _T("clicked"));
+}
+
 void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
 {
     if ( !ev.Moving() )
@@ -421,37 +457,7 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
         }
         else
         {
-            // click event
-            wxString button;
-            bool dbl, up;
-            if ( ev.LeftDown() || ev.LeftUp() || ev.LeftDClick() )
-            {
-                button = _T("Left");
-                dbl = ev.LeftDClick();
-                up = ev.LeftUp();
-            }
-            else if ( ev.MiddleDown() || ev.MiddleUp() || ev.MiddleDClick() )
-            {
-                button = _T("Middle");
-                dbl = ev.MiddleDClick();
-                up = ev.MiddleUp();
-            }
-            else if ( ev.RightDown() || ev.RightUp() || ev.RightDClick() )
-            {
-                button = _T("Right");
-                dbl = ev.RightDClick();
-                up = ev.RightUp();
-            }
-            else
-            {
-                wxLogStatus(_T("Unknown mouse event"));
-                return;
-            }
-
-            msg.Printf(_T("%s mouse button %s"),
-                        button.c_str(),
-                        dbl ? _T("double clicked")
-                            : up ? _T("released") : _T("clicked"));
+            msg = GetMouseEventDesc(ev);
         }
 
         msg << _T(" at (") << ev.GetX() << _T(", ") << ev.GetY() << _T(") ")
@@ -483,6 +489,22 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
     {
         wxLogMessage(_T("Text changed in some control"));
     }
+}
+
+void MyTextCtrl::OnTextURL(wxTextUrlEvent& event)
+{
+    const wxMouseEvent& ev = event.GetMouseEvent();
+
+    // filter out mouse moves, too many of them
+    if ( ev.Moving() )
+        return;
+
+    long start = event.GetURLStart(),
+         end = event.GetURLEnd();
+
+    wxLogMessage(_T("Mouse event over URL '%s': %s"),
+                 GetValue().Mid(start, end - start).c_str(),
+                 GetMouseEventDesc(ev).c_str());
 }
 
 void MyTextCtrl::OnChar(wxKeyEvent& event)
@@ -668,7 +690,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 "very very very long line to test"
                                 "wxHSCROLL style",
                                 wxPoint(450, 10), wxSize(230, 230),
-                                wxTE_RICH | wxTE_MULTILINE | wxHSCROLL);
+                                wxTE_RICH |
+                                wxTE_MULTILINE |
+                                wxTE_AUTO_URL |
+                                wxHSCROLL);
 
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);

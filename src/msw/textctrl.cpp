@@ -298,11 +298,19 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 #if wxUSE_RICHEDIT
     if (m_isRich)
     {
-        // Have to enable events
-        ::SendMessage(GetHwnd(), EM_SETEVENTMASK, 0,
-                      ENM_CHANGE | ENM_DROPFILES | ENM_SELCHANGE | ENM_UPDATE);
+        // have to enable events manually
+        LPARAM mask = ENM_CHANGE | ENM_DROPFILES | ENM_SELCHANGE | ENM_UPDATE;
+
+        if ( m_windowStyle & wxTE_AUTO_URL )
+        {
+            mask |= ENM_LINK;
+
+            ::SendMessage(GetHwnd(), EM_AUTOURLDETECT, TRUE, 0);
+        }
+
+        ::SendMessage(GetHwnd(), EM_SETEVENTMASK, 0, mask);
     }
-#endif
+#endif // wxUSE_RICHEDIT
 
     SubclassWin(GetHWND());
 
@@ -1169,6 +1177,72 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 // the rest of the file only deals with the rich edit controls
 #if wxUSE_RICHEDIT
+
+// ----------------------------------------------------------------------------
+// EN_LINK processing
+// ----------------------------------------------------------------------------
+
+bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
+{
+    NMHDR *hdr = (NMHDR* )lParam;
+    if ( hdr->code == EN_LINK )
+    {
+        ENLINK *enlink = (ENLINK *)hdr;
+
+        switch ( enlink->msg )
+        {
+            case WM_SETCURSOR:
+                // ok, so it is hardcoded - do we really nee to customize it?
+                ::SetCursor(GetHcursorOf(wxCursor(wxCURSOR_HAND)));
+                *result = TRUE;
+                break;
+
+            case WM_MOUSEMOVE:
+            case WM_LBUTTONDOWN:
+            case WM_LBUTTONUP:
+            case WM_LBUTTONDBLCLK:
+            case WM_RBUTTONDOWN:
+            case WM_RBUTTONUP:
+            case WM_RBUTTONDBLCLK:
+                // send a mouse event
+                {
+                    static const wxEventType eventsMouse[] =
+                    {
+                        wxEVT_MOTION,
+                        wxEVT_LEFT_DOWN,
+                        wxEVT_LEFT_UP,
+                        wxEVT_LEFT_DCLICK,
+                        wxEVT_RIGHT_DOWN,
+                        wxEVT_RIGHT_UP,
+                        wxEVT_RIGHT_DCLICK,
+                    };
+
+                    // the event ids are consecutive
+                    wxMouseEvent
+                        evtMouse(eventsMouse[enlink->msg - WM_MOUSEMOVE]);
+
+                    InitMouseEvent(evtMouse,
+                                   GET_X_LPARAM(enlink->lParam),
+                                   GET_Y_LPARAM(enlink->lParam),
+                                   enlink->wParam);
+
+                    wxTextUrlEvent event(m_windowId, evtMouse,
+                                         enlink->chrg.cpMin,
+                                         enlink->chrg.cpMax);
+
+                    InitCommandEvent(event);
+
+                    *result = ProcessCommand(event);
+                }
+                break;
+        }
+
+        return TRUE;
+    }
+
+    // not processed
+    return FALSE;
+}
 
 // ----------------------------------------------------------------------------
 // colour setting for the rich edit controls

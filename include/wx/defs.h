@@ -1092,22 +1092,6 @@ enum wxBorder
 #define wxLB_HSCROLL        wxHSCROLL
 // always show an entire number of rows
 #define wxLB_INT_HEIGHT     0x0800
-/*
- * wxTextCtrl style flags
- */
-// the flag bits 0x0001, 2, 4 and 8 are free but should be used only for the
-// things which don't make sense for a text control used by wxTextEntryDialog
-// because they would otherwise conflict with wxOK, wxCANCEL, wxCENTRE
-#define wxTE_READONLY       0x0010
-#define wxTE_MULTILINE      0x0020
-#define wxTE_PROCESS_TAB    0x0040
-// this style means to use RICHEDIT control and does something only under wxMSW
-// and Win32 and is silently ignored under all other platforms
-#define wxTE_RICH           0x0080
-#define wxTE_NO_VSCROLL     0x0100
-#define wxTE_AUTO_SCROLL    0x0200
-#define wxTE_PROCESS_ENTER  0x0400
-#define wxTE_PASSWORD       0x0800
 
 // use wxHSCROLL to not wrap text at all, wxTE_LINEWRAP to wrap it at any
 // position and wxTE_WORDWRAP to wrap at words boundary

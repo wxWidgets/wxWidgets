@@ -131,6 +131,8 @@ public:
 #endif
 
 #if wxUSE_RICHEDIT
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+
     bool IsRich() const { return m_isRich; }
     void SetRichEdit(bool isRich) { m_isRich = isRich; }
 

@@ -30,6 +30,12 @@ you can still use Ctrl-Enter to pass to the next control from the keyboard.}
 \twocolitem{\windowstyle{wxTE\_MULTILINE}}{The text control allows multiple lines.}
 \twocolitem{\windowstyle{wxTE\_PASSWORD}}{The text will be echoed as asterisks.}
 \twocolitem{\windowstyle{wxTE\_READONLY}}{The text will not be user-editable.}
+\twocolitem{\windowstyle{wxTE\_RICH}}{Use rich text control under Win32, this
+allows to have more than 64Kb of text in the control even under Win9x. This
+style is ignored under other platforms.}
+\twocolitem{\windowstyle{wxTE\_AUTO\_URL}}{Highlight the URLs and generate the
+wxTextUrlEvents when mouse events occur over them. This style is supported
+under Win32 only and requires wxTE\_RICH.}
 \twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created. No effect under GTK+.}
 \end{twocollist}
 
@@ -55,8 +61,10 @@ the following:
 If your compiler does not support derivation from {\bf streambuf} and gives a compile error, define the symbol 
 {\bf NO\_TEXT\_WINDOW\_STREAM} in the wxTextCtrl header file.
 
-Note that any use of C++ iostreams (including this one) deprecated and might get completely removed
-in the future.
+% VZ: it is wrong to say that C++ iostreams are deprecated, we need a better
+%     wording here - disabling this for now
+%Note that any use of C++ iostreams (including this one) is deprecated and might
+%get completely removed in the future.
 
 \wxheading{Event handling}
 
@@ -122,9 +130,10 @@ controls don't have a horizontal scrollbar, the text is automatically scrolled
 so that the \helpref{insertion point}{wxtextctrlgetinsertionpoint} is always
 visible.
 
-Under Windows, if the {\bf wxTE\_MULTILINE} style is used, the window is implemented
-as a Windows rich text control with unlimited capacity. Otherwise, normal edit control limits
-apply.
+% VZ: this is no longer true
+%Under Windows, if the {\bf wxTE\_MULTILINE} style is used, the window is implemented
+%as a Windows rich text control with unlimited capacity. Otherwise, normal edit control limits
+%apply.
 
 \wxheading{See also}
 
