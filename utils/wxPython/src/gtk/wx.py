@@ -30,6 +30,8 @@ from windows3 import *
 from image import *
 
 from printfw import *
+
+from sizers import *
 class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
@@ -210,6 +212,8 @@ wxALIGN_LEFT = wxc.wxALIGN_LEFT
 wxALIGN_CENTER = wxc.wxALIGN_CENTER
 wxALIGN_CENTRE = wxc.wxALIGN_CENTRE
 wxALIGN_RIGHT = wxc.wxALIGN_RIGHT
+wxALIGN_BOTTOM = wxc.wxALIGN_BOTTOM
+wxALIGN_TOP = wxc.wxALIGN_TOP
 wxLB_NEEDED_SB = wxc.wxLB_NEEDED_SB
 wxLB_ALWAYS_SB = wxc.wxLB_ALWAYS_SB
 wxLB_SORT = wxc.wxLB_SORT
@@ -784,6 +788,8 @@ wxEVT_COMMAND_LIST_KEY_DOWN = wxc.wxEVT_COMMAND_LIST_KEY_DOWN
 wxEVT_COMMAND_LIST_INSERT_ITEM = wxc.wxEVT_COMMAND_LIST_INSERT_ITEM
 wxEVT_COMMAND_LIST_COL_CLICK = wxc.wxEVT_COMMAND_LIST_COL_CLICK
 wxEVT_COMMAND_LIST_ITEM_ACTIVATED = wxc.wxEVT_COMMAND_LIST_ITEM_ACTIVATED
+wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK = wxc.wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK
+wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK = wxc.wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
 wxEVT_COMMAND_TAB_SEL_CHANGED = wxc.wxEVT_COMMAND_TAB_SEL_CHANGED
 wxEVT_COMMAND_TAB_SEL_CHANGING = wxc.wxEVT_COMMAND_TAB_SEL_CHANGING
 wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED = wxc.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
@@ -792,6 +798,7 @@ wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING = wxc.wxEVT_COMMAND_SPLITTER_SASH_POS_C
 wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxc.wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
 wxEVT_COMMAND_SPLITTER_UNSPLIT = wxc.wxEVT_COMMAND_SPLITTER_UNSPLIT
 wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxc.wxEVT_COMMAND_SPLITTER_DOUBLECLICKED
+wxEVT_NAVIGATION_KEY = wxc.wxEVT_NAVIGATION_KEY
 __version__ = wxc.__version__
 cvar = wxc.cvar
 wxPyDefaultPosition = wxPointPtr(wxc.cvar.wxPyDefaultPosition)
@@ -1403,6 +1410,14 @@ def EVT_LIST_INSERT_ITEM(win, id, func):
 def EVT_LIST_COL_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_CLICK, func)
 
+def EVT_LIST_ITEM_RIGHT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, func)
+
+def EVT_LIST_ITEM_MIDDLE_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, func)
+
+
+
 #wxSplitterWindow
 def EVT_SPLITTER_SASH_POS_CHANGING(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, func)
@@ -1445,17 +1460,9 @@ wxPyDefaultPosition.Set(-1,-1)
 wxPyDefaultSize.Set(-1,-1)
 
 # aliases so that C++ documentation applies:
-wxDefaultPosition = wxPyDefaultPosition
-wxDefaultSize     = wxPyDefaultSize
+wxDefaultPosition  = wxPyDefaultPosition
+wxDefaultSize      = wxPyDefaultSize
 
-
-# This is to cover up a bug in SWIG.  We are redefining
-# the shadow class that is generated for wxAcceleratorTable
-# because SWIG incorrectly uses "arg0.this"
-class wxAcceleratorTable(wxAcceleratorTablePtr):
-    def __init__(self,arg0) :
-        self.this = miscc.new_wxAcceleratorTable(arg0)
-        self.thisown = 1
 
 #----------------------------------------------------------------------
 # This helper function will take a wxPython object and convert it to
@@ -1491,31 +1498,36 @@ def wxPyTypeCast(obj, typeStr):
 
 #----------------------------------------------------------------------
 
-##  class wxPyStdOutWindow:
-##       def __init__(self, title = "wxPython: stdout/stderr"):
-##          self.frame = None
-##          self.title = title
+class wxPyOnDemandOutputWindow:
+    def __init__(self, title = "wxPython: stdout/stderr"):
+        self.frame  = None
+        self.title  = title
 
-##      def write(self, str):
-##          if not self.frame:
-##              self.frame = wxFrame(NULL, -1, self.title)
-##              self.text  = wxTextCtrl(self.frame, -1, "", wxPoint(0,0), wxDefaultSize,
-##                                      wxTE_MULTILINE|wxTE_READONLY)
-##              self.frame.SetSize(wxSize(450, 300))
-##              self.frame.Show(true)
-##              EVT_CLOSE(self.frame, self.OnCloseWindow)
-##          self.text.AppendText(str)
+    def SetParent(self, parent):
+        self.parent = parent
 
-##      def OnCloseWindow(self, event):
-##          wxBell()
-##          self.frame.Destroy()
-##          self.frame = None
-##          self.text  = None
+    def OnCloseWindow(self, event):
+        if self.frame != None:
+            self.frame.Destroy()
+        self.frame = None
+        self.text  = None
+
+    # this provides the file-like behaviour
+    def write(self, str):
+        if not self.frame:
+            self.frame = wxFrame(self.parent, -1, self.title)
+            self.text  = wxTextCtrl(self.frame, -1, "",
+                                    style = wxTE_MULTILINE|wxTE_READONLY)
+            self.frame.SetSize(wxSize(450, 300))
+            self.frame.Show(true)
+            EVT_CLOSE(self.frame, self.OnCloseWindow)
+        self.text.AppendText(str)
+
+    def close(self):
+        self.frame = None
+        self.text  = None
 
 
-##      def close(self):
-##          if self.frame:
-##              self.frame.Close(true)
 
 _defRedirect = (wxPlatform == '__WXMSW__')
 
@@ -1525,6 +1537,7 @@ _defRedirect = (wxPlatform == '__WXMSW__')
 
 class wxApp(wxPyApp):
     error = 'wxApp.error'
+    outputWindowClass = wxPyOnDemandOutputWindow
 
     def __init__(self, redirect=_defRedirect, filename=None):
         wxPyApp.__init__(self)
@@ -1532,7 +1545,6 @@ class wxApp(wxPyApp):
         self.saveStdio = (sys.stdout, sys.stderr)
         if redirect:
             self.RedirectStdio(filename)
-
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)
 
@@ -1543,17 +1555,28 @@ class wxApp(wxPyApp):
         except:
             pass
 
+
+    def SetTopWindow(self, frame):
+        if self.stdioWin:
+            self.stdioWin.SetParent(frame)
+            sys.stdout = self.stdioWin #sys.stderr =
+        wxPyApp.SetTopWindow(self, frame)
+
+    def MainLoop(self):
+        wxPyApp.MainLoop(self)
+        self.RestoreStdio()
+
     def RedirectStdio(self, filename):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            raise self.error, 'wxPyStdOutWindow not yet implemented.'
-            #self.stdioWin = sys.stdout = sys.stderr = wxPyStdOutWindow()
+            self.stdioWin = self.outputWindowClass() # wxPyOnDemandOutputWindow
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio
         if self.stdioWin != None:
             self.stdioWin.close()
+
 
 
 #----------------------------------------------------------------------------

@@ -349,6 +349,9 @@ class wxListBoxPtr(wxControlPtr):
     def GetSelections(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_GetSelections,(self,) + _args, _kwargs)
         return val
+    def InsertItems(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_InsertItems,(self,) + _args, _kwargs)
+        return val
     def GetString(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_GetString,(self,) + _args, _kwargs)
         return val
@@ -770,3 +773,5 @@ class wxSlider(wxSliderPtr):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+cvar = controlsc.cvar
+wxDefaultValidator = wxValidatorPtr(controlsc.cvar.wxDefaultValidator)

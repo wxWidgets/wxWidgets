@@ -106,17 +106,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-
-HELPEREXPORT byte* byte_LIST_helper(PyObject* source);
-HELPEREXPORT int* int_LIST_helper(PyObject* source);
-HELPEREXPORT long* long_LIST_helper(PyObject* source);
-HELPEREXPORT char** string_LIST_helper(PyObject* source);
-HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source);
-HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source);
-HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source);
-HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-
-
 static char* wxStringErrorMsg = "string type is required for parameter";
 #ifdef __cplusplus
 extern "C" {
@@ -545,12 +534,13 @@ static PyObject *_wrap_new_wxDirDialog(PyObject *self, PyObject *args, PyObject 
     long  _arg3 = (long ) 0;
     wxPoint * _arg4 = (wxPoint *) &wxPyDefaultPosition;
     PyObject * _argo0 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj4 = 0;
     char *_kwnames[] = { "parent","message","defaultPath","style","pos", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|sslO:new_wxDirDialog",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_argo4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|sslO:new_wxDirDialog",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_obj4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -559,13 +549,12 @@ static PyObject *_wrap_new_wxDirDialog(PyObject *self, PyObject *args, PyObject 
         return NULL;
         }
     }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxDirDialog. Expected _wxPoint_p.");
+    if (_obj4)
+{
+    _arg4 = &temp;
+    if (! wxPoint_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxDirDialog *)new_wxDirDialog(_arg0,_arg1,_arg2,_arg3,*_arg4);
@@ -823,12 +812,13 @@ static PyObject *_wrap_new_wxFileDialog(PyObject *self, PyObject *args, PyObject
     long  _arg5 = (long ) 0;
     wxPoint * _arg6 = (wxPoint *) &wxPyDefaultPosition;
     PyObject * _argo0 = 0;
-    PyObject * _argo6 = 0;
+    wxPoint  temp;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "parent","message","defaultDir","defaultFile","wildcard","style","pos", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|sssslO:new_wxFileDialog",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|sssslO:new_wxFileDialog",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -837,13 +827,12 @@ static PyObject *_wrap_new_wxFileDialog(PyObject *self, PyObject *args, PyObject
         return NULL;
         }
     }
-    if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxFileDialog. Expected _wxPoint_p.");
+    if (_obj6)
+{
+    _arg6 = &temp;
+    if (! wxPoint_helper(_obj6, &_arg6))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxFileDialog *)new_wxFileDialog(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,*_arg6);
@@ -1407,12 +1396,13 @@ static PyObject *_wrap_new_wxSingleChoiceDialog(PyObject *self, PyObject *args, 
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
     PyObject * _obj4 = 0;
-    PyObject * _argo6 = 0;
+    wxPoint  temp;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "parent","message","caption","LIST","style","pos", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO|lO:new_wxSingleChoiceDialog",_kwnames,&_argo0,&_obj1,&_obj2,&_obj4,&_arg5,&_argo6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO|lO:new_wxSingleChoiceDialog",_kwnames,&_argo0,&_obj1,&_obj2,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1442,13 +1432,12 @@ static PyObject *_wrap_new_wxSingleChoiceDialog(PyObject *self, PyObject *args, 
         return NULL;
     }
 }
-    if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxSingleChoiceDialog. Expected _wxPoint_p.");
+    if (_obj6)
+{
+    _arg6 = &temp;
+    if (! wxPoint_helper(_obj6, &_arg6))
         return NULL;
-        }
-    }
+}
 {
     if (_obj4) {
         _arg3 = PyList_Size(_obj4);
@@ -1640,12 +1629,13 @@ static PyObject *_wrap_new_wxTextEntryDialog(PyObject *self, PyObject *args, PyO
     long  _arg4 = (long ) wxOK|wxCANCEL|wxCENTRE;
     wxPoint * _arg5 = (wxPoint *) &wxPyDefaultPosition;
     PyObject * _argo0 = 0;
-    PyObject * _argo5 = 0;
+    wxPoint  temp;
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","message","caption","defaultValue","style","pos", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os|sslO:new_wxTextEntryDialog",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os|sslO:new_wxTextEntryDialog",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1654,13 +1644,12 @@ static PyObject *_wrap_new_wxTextEntryDialog(PyObject *self, PyObject *args, PyO
         return NULL;
         }
     }
-    if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxTextEntryDialog. Expected _wxPoint_p.");
+    if (_obj5)
+{
+    _arg5 = &temp;
+    if (! wxPoint_helper(_obj5, &_arg5))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxTextEntryDialog *)new_wxTextEntryDialog(_arg0,_arg1,_arg2,_arg3,_arg4,*_arg5);
@@ -2407,12 +2396,13 @@ static PyObject *_wrap_new_wxMessageDialog(PyObject *self, PyObject *args, PyObj
     long  _arg3 = (long ) wxOK|wxCANCEL|wxCENTRE;
     wxPoint * _arg4 = (wxPoint *) &wxPyDefaultPosition;
     PyObject * _argo0 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj4 = 0;
     char *_kwnames[] = { "parent","message","caption","style","pos", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os|slO:new_wxMessageDialog",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_argo4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os|slO:new_wxMessageDialog",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_obj4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2421,13 +2411,12 @@ static PyObject *_wrap_new_wxMessageDialog(PyObject *self, PyObject *args, PyObj
         return NULL;
         }
     }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxMessageDialog. Expected _wxPoint_p.");
+    if (_obj4)
+{
+    _arg4 = &temp;
+    if (! wxPoint_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxMessageDialog *)new_wxMessageDialog(_arg0,_arg1,_arg2,_arg3,*_arg4);
@@ -2693,6 +2682,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxActivateEvent","_wxActivateEvent",0},
     { "_signed_long","_long",0},
     { "_wxMenuEvent","_class_wxMenuEvent",0},
+    { "_class_wxPyCommandEvent","_wxPyCommandEvent",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
     { "_wxPrintQuality","_unsigned_int",0},
@@ -2804,6 +2794,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
+    { "_wxPyValidator","_class_wxPyValidator",0},
     { "_class_wxEvent","_wxEvent",0},
     { "_wxCheckListBox","_class_wxCheckListBox",0},
     { "_wxRect","_class_wxRect",0},
@@ -2823,6 +2814,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_class_wxNotifyEvent","_wxNotifyEvent",0},
     { "_wxMessageDialog","_class_wxMessageDialog",0},
+    { "_class_wxValidator","_wxValidator",0},
     { "_class_wxPyEvent","_wxPyEvent",0},
     { "_wxTextEntryDialog","_class_wxTextEntryDialog",0},
     { "_class_wxIconizeEvent","_wxIconizeEvent",0},
@@ -2906,6 +2898,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxWindow","_wxWindow",0},
     { "_class_wxStaticText","_wxStaticText",0},
     { "_class_wxFont","_wxFont",0},
+    { "_class_wxPyValidator","_wxPyValidator",0},
     { "_class_wxCloseEvent","_wxCloseEvent",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxClientDC","_class_wxClientDC",0},
@@ -2983,6 +2976,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_int","_unsigned_int",0},
     { "_int","_signed_int",0},
     { "_class_wxMouseEvent","_wxMouseEvent",0},
+    { "_wxPyCommandEvent","_class_wxPyCommandEvent",0},
     { "_class_wxSpinEvent","_wxSpinEvent",0},
     { "_wxButton","_class_wxButton",0},
     { "_wxSize","_class_wxSize",0},
@@ -2992,6 +2986,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxInitDialogEvent","_wxInitDialogEvent",0},
     { "_class_wxComboBox","_wxComboBox",0},
     { "_class_wxRadioButton","_wxRadioButton",0},
+    { "_wxValidator","_class_wxValidator",0},
     { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
     { "_wxIconizeEvent","_class_wxIconizeEvent",0},
     { "_class_wxControl","_wxControl",0},

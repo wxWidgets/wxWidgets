@@ -107,17 +107,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-
-HELPEREXPORT byte* byte_LIST_helper(PyObject* source);
-HELPEREXPORT int* int_LIST_helper(PyObject* source);
-HELPEREXPORT long* long_LIST_helper(PyObject* source);
-HELPEREXPORT char** string_LIST_helper(PyObject* source);
-HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source);
-HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source);
-HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source);
-HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-
-
 static char* wxStringErrorMsg = "string type is required for parameter";
                               // Alternate 'constructor'
     wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1) {
@@ -5661,11 +5650,12 @@ static PyObject *_wrap_wxScreenDC_StartDrawingOnTopRect(PyObject *self, PyObject
     wxScreenDC * _arg0;
     wxRect * _arg1 = (wxRect *) NULL;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxRect  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","rect", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxScreenDC_StartDrawingOnTopRect",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxScreenDC_StartDrawingOnTopRect",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5674,13 +5664,12 @@ static PyObject *_wrap_wxScreenDC_StartDrawingOnTopRect(PyObject *self, PyObject
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRect_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxScreenDC_StartDrawingOnTopRect. Expected _wxRect_p.");
+    if (_obj1)
+{
+    _arg1 = &temp;
+    if (! wxRect_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (bool )wxScreenDC_StartDrawingOnTopRect(_arg0,_arg1);

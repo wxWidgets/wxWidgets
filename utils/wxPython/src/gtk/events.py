@@ -618,29 +618,6 @@ class wxSysColourChangedEvent(wxSysColourChangedEventPtr):
 
 
 
-class wxPyEventPtr(wxCommandEventPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self,eventsc=eventsc):
-        if self.thisown == 1 :
-            eventsc.delete_wxPyEvent(self)
-    def SetUserData(self, *_args, **_kwargs):
-        val = apply(eventsc.wxPyEvent_SetUserData,(self,) + _args, _kwargs)
-        return val
-    def GetUserData(self, *_args, **_kwargs):
-        val = apply(eventsc.wxPyEvent_GetUserData,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C wxPyEvent instance at %s>" % (self.this,)
-class wxPyEvent(wxPyEventPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(eventsc.new_wxPyEvent,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 class wxNotifyEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
@@ -656,6 +633,52 @@ class wxNotifyEventPtr(wxCommandEventPtr):
 class wxNotifyEvent(wxNotifyEventPtr):
     def __init__(self,this):
         self.this = this
+
+
+
+
+class wxPyEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,eventsc=eventsc):
+        if self.thisown == 1 :
+            eventsc.delete_wxPyEvent(self)
+    def SetPyData(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyEvent_SetPyData,(self,) + _args, _kwargs)
+        return val
+    def GetPyData(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyEvent_GetPyData,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPyEvent instance at %s>" % (self.this,)
+class wxPyEvent(wxPyEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxPyEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxPyCommandEventPtr(wxCommandEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,eventsc=eventsc):
+        if self.thisown == 1 :
+            eventsc.delete_wxPyCommandEvent(self)
+    def SetPyData(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyCommandEvent_SetPyData,(self,) + _args, _kwargs)
+        return val
+    def GetPyData(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyCommandEvent_GetPyData,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPyCommandEvent instance at %s>" % (self.this,)
+class wxPyCommandEvent(wxPyCommandEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxPyCommandEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
