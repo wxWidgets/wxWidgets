@@ -38,18 +38,3 @@ samples/ with demos/ where needed).
 
 Author:  VZ
 Version: $Id$
-
-$Log$
-Revision 1.2  2000/03/06 16:50:13  GRG
-Added a mention about demos/ instead of samples/
-Added a mention of the 'samples overview' section in the wxWindows manual
-Added EOF marker to easily distinguish the text from the CVS log.
-
-Revision 1.1  2000/03/02 04:18:53  GRG
-Renamed tech notes to tnxxxx.txt
-
-Revision 1.2  2000/03/01 19:24:07  VZ
-added a note about where to find makegen
-
-Revision 1.1  2000/03/01 19:22:41  VZ
-created 'how to add a sample' technote
