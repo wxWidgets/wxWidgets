@@ -398,7 +398,7 @@ bool MyApp::OnInit()
     switch (convertMode)
     {
       case TEX_RTF:
-        wxStrcat(buf, (winHelp) ? _T("WinHelp RTF"), _T("linear RTF"));
+        wxStrcat(buf, (winHelp) ? _T("WinHelp RTF") : _T("linear RTF"));
         break;
       case TEX_HTML:
         wxStrcat(buf, _T("HTML"));
