@@ -39,7 +39,6 @@
 // DLL options compatibility check:
 #include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxHTML")
-//static wxBuildOptionsChecker gs_optionsChecker;
 
 //-----------------------------------------------------------------------------
 // wxHtmlParser helpers
