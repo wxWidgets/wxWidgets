@@ -3399,7 +3399,7 @@ void wxWindowGTK::GtkSendPaintEvents()
             wxRegionIterator upd( m_clearRegion );
             while (upd)
             {
-                gdk_draw_rectangle( GTK_PIZZA(m_wxwindow)->bin_window, g_eraseGC, 0,
+                gdk_draw_rectangle( GTK_PIZZA(m_wxwindow)->bin_window, g_eraseGC, 1,
                                        upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
                 upd ++;
             }
