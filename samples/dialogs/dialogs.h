@@ -54,6 +54,8 @@ public:
     wxColour     m_canvasTextColour;
 };
 
+#if USE_MODAL_PRESENTATION
+
 // A custom modeless dialog
 class MyModelessDialog : public wxDialog
 {
@@ -82,6 +84,8 @@ private:
 
     DECLARE_EVENT_TABLE()
 };
+
+#endif // USE_MODAL_PRESENTATION
 
 // Define a new frame type
 class MyFrame: public wxFrame

@@ -480,6 +480,7 @@ void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
 }
 #endif // USE_FONTDLG_GENERIC
 
+#if wxUSE_LOG_DIALOG
 void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 {
     // calling wxYield() (as ~wxBusyCursor does) shouldn't result in messages
@@ -501,6 +502,7 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 
     wxLogMessage(wxT("And this is the same dialog but with only one message."));
 }
+#endif // wxUSE_LOG_DIALOG
 
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
@@ -576,8 +578,7 @@ void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxMessageDialog dialog2(this, dialog.GetValue(), _T("Got string"));
-        dialog2.ShowModal();
+        wxMessageBox(dialog.GetValue(), _T("Got string"), wxOK | wxICON_INFORMATION, this);
     }
 }
 #endif // wxUSE_TEXTDLG
@@ -1137,6 +1138,8 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
     dc.DrawText(_T("wxWidgets common dialogs test application"), 10, 10);
 }
 
+#if USE_MODAL_PRESENTATION
+
 // ----------------------------------------------------------------------------
 // MyModelessDialog
 // ----------------------------------------------------------------------------
@@ -1233,3 +1236,6 @@ void MyModalDialog::OnButton(wxCommandEvent& event)
         event.Skip();
     }
 }
+
+#endif // USE_MODAL_PRESENTATION
+
