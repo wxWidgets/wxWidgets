@@ -792,7 +792,7 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millis)
  *  operations do not clear this back to GSOCK_NOERROR, so use it only
  *  after an error.
  */
-GSocketError GSocket_GetError(GSocket *socket)
+GSocketError WXDLLEXPORT GSocket_GetError(GSocket *socket)
 {
   assert(socket != NULL);
 
