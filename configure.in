@@ -2933,120 +2933,23 @@ else
     AC_MSG_WARN([Wide character support is unavailable])
 fi
 
-dnl check for vprintf/vsprintf() which are GNU extensions
-AC_FUNC_VPRINTF
+dnl *printf() functions sometimes are available in the library but not
+dnl prototyped -- if this is the case, we can't use them from C++ code, but to
+dnl detect this we have to use C++ compiler for testing
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
 
-dnl check for vsscanf() and vsnprintf() - on some platforms (Linux, glibc
-dnl 2.1.1 for the first one, HP-UX for the second) it's available in the
-dnl library but the prototype is missing, so we can't use AC_CHECK_FUNCS() here,
-dnl do it manually. We can't use AC_TRY_COMPILE(), either, because it doesn't
-dnl check if the symbol is available at linking time
-
-dnl we use AC_TRY_LINK() here instead of AC_TRY_RUN() to make the checks
-dnl work for cross-compilation, but AC_TRY_LINK() normally only compiles
-dnl one function while we need at least 2 - hence the ugly hack below. To
-dnl understand why it works, remember that AC_TRY_LINK() just prepends
-dnl "int main() {" in the beginning of the code and "; return 0; }" at the
-dnl end...
-
-dnl if we fail to find vsnprintf, also try for _vsnprintf as that is what
-dnl we'll find under MSW if it exists.
-
-dnl final note: AC_TRY_LINK will only be executed if there is nothing in
-dnl the cache so we have to do AC_DEFINE(HAVE_VSNPRINTF) below and not inside
-dnl it or the symbol wouldn't be defined for the 2nd and subsequent configure
-dnl runs
-
-dnl check for vsnprintf() - a safe version of vsprintf()
-AC_CACHE_CHECK([for vsnprintf], wx_cv_func_vsnprintf,
-[
-  AC_TRY_LINK([
-                    #include <stdio.h>
-                    #include <stdarg.h>
-                 ], [
-                    int wx_test_vsnprintf(const char *, ...);
-
-                    wx_test_vsnprintf("%s");
-                    return 0;
-                 }
-
-                 int wx_test_vsnprintf(const char *fmt, ...)
-                 {
-                    char *s;
-
-                    va_list argp;
-                    va_start(argp, fmt);
-                    vsnprintf(s, 42, fmt, argp);
-                    va_end(argp);
-                 ], [
-                    wx_cv_func_vsnprintf=yes
-                 ], [
-                    AC_TRY_LINK([
-                                      #include <stdio.h>
-                                      #include <stdarg.h>
-                                   ], [
-                                      int wx_test_vsnprintf(const char *, ...);
-
-                                      wx_test_vsnprintf("%s");
-                                      return 0;
-                                   }
-
-                                   int wx_test_vsnprintf(const char *fmt, ...)
-                                   {
-                                      char *s;
-
-                                      va_list argp;
-                                      va_start(argp, fmt);
-                                      _vsnprintf(s, 42, fmt, argp);
-                                      va_end(argp);
-                                   ], [
-                                      wx_cv_func_vsnprintf=yes
-                                   ], [
-                                      wx_cv_func_vsnprintf=no
-                                   ])
-                 ])
-])
-
-if test "$wx_cv_func_vsnprintf" = yes; then
-    AC_DEFINE(HAVE_VSNPRINTF)
-else
-    AC_MSG_WARN(unsafe function vsprintf will be used instead of vsnprintf)
-fi
-
-dnl check for vsscanf()
-AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
-[
-  AC_TRY_COMPILE([
-                    #include <stdio.h>
-                    #include <stdarg.h>
-                ], [
-                    int wx_test_vsscanf(const char *, ...);
-
-                    wx_test_vsscanf("%d");
-                    return 0;
-                }
-
-                int wx_test_vsscanf(const char *fmt, ...)
-                {
-                    va_list argp;
-                    va_start(argp, fmt);
-                    vsscanf("42", fmt, argp);
-                    va_end(argp);
-                ], [
-                    wx_cv_func_vsscanf=yes
-                ], [
-                    wx_cv_func_vsscanf=no
-                ])
-])
-
-if test "$wx_cv_func_vsscanf" = yes; then
-    AC_DEFINE(HAVE_VSSCANF)
-fi
+dnl check for vsnprintf() -- a safe version of vsprintf())
+AC_CHECK_FUNCS(vsnprintf)
 
 if test "$wxUSE_UNICODE" = yes; then
-    dnl look if we have wide char IO functions
+    dnl also look if we have wide char IO functions
     AC_CHECK_FUNCS(fputwc wprintf vswprintf)
 fi
+
+AC_LANG_RESTORE
+
+
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
