@@ -6795,6 +6795,94 @@ static PyObject *_wrap_wxDateSpan_GetTotalDays(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxDateSpan_Add(_swigobj,_swigarg0)  (_swigobj->Add(_swigarg0))
+static PyObject *_wrap_wxDateSpan_Add(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDateSpan * _result;
+    wxDateSpan * _arg0;
+    wxDateSpan * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","other", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDateSpan_Add",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDateSpan_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDateSpan_Add. Expected _wxDateSpan_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateSpan_Add. Expected _wxDateSpan_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDateSpan & _result_ref = wxDateSpan_Add(_arg0,*_arg1);
+    _result = (wxDateSpan *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDateSpan_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxDateSpan_Subtract(_swigobj,_swigarg0)  (_swigobj->Subtract(_swigarg0))
+static PyObject *_wrap_wxDateSpan_Subtract(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDateSpan * _result;
+    wxDateSpan * _arg0;
+    wxDateSpan * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","other", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDateSpan_Subtract",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDateSpan_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDateSpan_Subtract. Expected _wxDateSpan_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateSpan_Subtract. Expected _wxDateSpan_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDateSpan & _result_ref = wxDateSpan_Subtract(_arg0,*_arg1);
+    _result = (wxDateSpan *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDateSpan_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 #define wxDateSpan_Neg(_swigobj)  (_swigobj->Neg())
 static PyObject *_wrap_wxDateSpan_Neg(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7039,6 +7127,8 @@ static PyMethodDef utilscMethods[] = {
 	 { "wxDateSpan___add__", (PyCFunction) _wrap_wxDateSpan___add__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateSpan_Multiply", (PyCFunction) _wrap_wxDateSpan_Multiply, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateSpan_Neg", (PyCFunction) _wrap_wxDateSpan_Neg, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDateSpan_Subtract", (PyCFunction) _wrap_wxDateSpan_Subtract, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDateSpan_Add", (PyCFunction) _wrap_wxDateSpan_Add, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateSpan_GetTotalDays", (PyCFunction) _wrap_wxDateSpan_GetTotalDays, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateSpan_GetDays", (PyCFunction) _wrap_wxDateSpan_GetDays, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateSpan_GetWeeks", (PyCFunction) _wrap_wxDateSpan_GetWeeks, METH_VARARGS | METH_KEYWORDS },

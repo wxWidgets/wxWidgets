@@ -485,7 +485,7 @@ class wxListCtrl(wxListCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxListCtrl,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 
@@ -814,7 +814,7 @@ class wxTreeCtrl(wxTreeCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxTreeCtrl,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
         self._setSelf(self, wxTreeCtrl)
 
 

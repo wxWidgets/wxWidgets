@@ -124,6 +124,8 @@ class HangmanWnd(wxWindow):
         else:
             self.font = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
         self.SetFocus()
+        EVT_PAINT(self, self.OnPaint)
+
 
     def StartGame(self, word):
         self.word = word
@@ -252,6 +254,7 @@ class HangmanDemoFrame(wxFrame):
     def __init__(self, wf, parent, id, pos, size):
         wxFrame.__init__(self, parent, id, "Hangman demo", pos, size)
         self.demo = HangmanDemo(wf, self, -1, wxDefaultPosition, wxDefaultSize)
+        EVT_CLOSE(self, self.OnCloseWindow)
 
     def OnCloseWindow(self, event):
         self.demo.timer.Stop()

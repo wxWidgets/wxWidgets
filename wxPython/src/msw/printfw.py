@@ -215,7 +215,7 @@ class wxPageSetupDialog(wxPageSetupDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(printfwc.new_wxPageSetupDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 
@@ -325,7 +325,7 @@ class wxPrintDialog(wxPrintDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(printfwc.new_wxPrintDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 
@@ -508,7 +508,7 @@ class wxPreviewFrame(wxPreviewFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(printfwc.new_wxPreviewFrame,_args,_kwargs)
         self.thisown = 1
-        wx._StdFrameCallbacks(self)
+        #wx._StdFrameCallbacks(self)
 
 
 

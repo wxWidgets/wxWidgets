@@ -77,6 +77,9 @@ class GraphWindow(wxWindow):
         self.colors = [ wxRED, wxGREEN, wxBLUE, wxCYAN,
                         wxNamedColour("Yellow"), wxNamedColor("Navy") ]
 
+        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
+        EVT_PAINT(self, self.OnPaint)
+
 
     def SetValue(self, index, value):
         assert index < len(self.values)
@@ -185,6 +188,7 @@ class TestFrame(wxFrame):
         for t in self.threads:
             t.Start()
 
+        EVT_CLOSE(self, self.OnCloseWindow)
 
 
     def OnUpdate(self, evt):

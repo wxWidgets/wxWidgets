@@ -54,7 +54,7 @@ class wxColourDialog : public wxDialog {
 public:
     wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxColourData& GetColourData();
     int ShowModal();
@@ -71,7 +71,7 @@ public:
                 long style = 0,
                 const wxPoint& pos = wxPyDefaultPosition);
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxString GetPath();
     wxString GetMessage();
@@ -93,7 +93,7 @@ public:
                  long style = 0,
                  const wxPoint& pos = wxPyDefaultPosition);
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxString GetDirectory();
     wxString GetFilename();
@@ -162,7 +162,7 @@ public:
         }
     }
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     int GetSelection();
     wxString GetStringSelection();
@@ -182,7 +182,7 @@ public:
                       long style = wxOK | wxCANCEL | wxCENTRE,
                       const wxPoint& pos = wxPyDefaultPosition);
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxString GetValue();
     void SetValue(const wxString& value);
@@ -216,7 +216,7 @@ class wxFontDialog : public wxDialog {
 public:
     wxFontDialog(wxWindow* parent, wxFontData* data);
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxFontData& GetFontData();
     int ShowModal();
@@ -233,7 +233,7 @@ public:
                     long style = wxOK | wxCANCEL | wxCENTRE,
                     const wxPoint& pos = wxPyDefaultPosition);
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     int ShowModal();
 };

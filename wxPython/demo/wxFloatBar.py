@@ -49,6 +49,7 @@ class TestFloatBar(wxFrame):
         tb.Realize()
 
         self.tb = tb
+        EVT_CLOSE(self, self.OnCloseWindow)
 
 
     def OnCloseWindow(self, event):

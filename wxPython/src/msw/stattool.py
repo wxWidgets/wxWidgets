@@ -51,7 +51,7 @@ class wxStatusBar(wxStatusBarPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(stattoolc.new_wxStatusBar,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 
@@ -308,7 +308,7 @@ class wxToolBar(wxToolBarPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(stattoolc.new_wxToolBar,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 
@@ -327,7 +327,7 @@ class wxToolBarSimple(wxToolBarSimplePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(stattoolc.new_wxToolBarSimple,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 

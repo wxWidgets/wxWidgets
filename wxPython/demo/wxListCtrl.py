@@ -93,6 +93,7 @@ class TestListCtrlPanel(wxPanel):
         self.list.SetItemState(5, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
 
         self.currentItem = 0
+        EVT_SIZE(self, self.OnSize)
         EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)
         EVT_LIST_DELETE_ITEM(self, tID, self.OnItemDelete)
         EVT_LIST_COL_CLICK(self, tID, self.OnColClick)

@@ -682,6 +682,12 @@ class wxDCPtr :
     def SetAxisOrientation(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_SetAxisOrientation,(self,) + _args, _kwargs)
         return val
+    def CalcBoundingBox(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_CalcBoundingBox,(self,) + _args, _kwargs)
+        return val
+    def ResetBoundingBox(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_ResetBoundingBox,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxDC instance at %s>" % (self.this,)
 class wxDC(wxDCPtr):

@@ -176,6 +176,7 @@ class PlotCanvas(wx.wxWindow):
 	self.SetBackgroundColour(wx.wxNamedColour("white"))
 
 	wx.EVT_SIZE(self,self.reconfigure)
+        wx.EVT_PAINT(self, self.OnPaint)
 	self._setsize()
 	self.last_draw = None
 #	self.font = self._testFont(font)
@@ -446,8 +447,6 @@ Are you sure you want to do this?""", "Danger!", wx.wxYES_NO)
 	    about = wx.wxMessageDialog(self, __doc__, "About...", wx.wxOK)
 	    about.ShowModal()
 
-	def OnCloseWindow(self, event):
-	    self.Destroy()
 
 
     class MyApp(wx.wxApp):

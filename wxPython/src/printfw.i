@@ -142,7 +142,7 @@ class wxPageSetupDialog : public wxDialog {
 public:
     wxPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data = NULL);
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxPageSetupDialogData& GetPageSetupData();
     int ShowModal();
@@ -189,7 +189,7 @@ class wxPrintDialog : public wxDialog {
 public:
     wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxPrintDialogData& GetPrintDialogData();
     %new wxDC* GetPrintDC();
@@ -339,7 +339,7 @@ public:
                    long style = wxDEFAULT_FRAME_STYLE,
                    char* name = "frame");
 
-    %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
 
     void Initialize();
 

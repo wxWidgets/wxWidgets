@@ -19,6 +19,7 @@ class DoodlePad(wxWindow):
         EVT_LEFT_UP(self, self.OnLeftUp)
         EVT_RIGHT_UP(self, self.OnRightUp)
         EVT_MOTION(self, self.OnMotion)
+        EVT_PAINT(self, self.OnPaint)
 
 
     def OnPaint(self, event):
@@ -153,6 +154,7 @@ class DoodleViewer(wxWindow):
         self.x = self.y = 0
         dt = DoodleDropTarget(self, log)
         self.SetDropTarget(dt)
+        EVT_PAINT(self, self.OnPaint)
 
     def SetLines(self, lines):
         self.lines = lines

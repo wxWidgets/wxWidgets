@@ -59,6 +59,8 @@ else:
         def __init__(self, parent):
             wxGLCanvas.__init__(self, parent, -1)
             EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
+            EVT_SIZE(self, self.OnSize)
+            EVT_PAINT(self, self.OnPaint)
             self.init = false
 
         def OnEraseBackground(self, event):
@@ -148,6 +150,8 @@ else:
         def __init__(self, parent):
             wxGLCanvas.__init__(self, parent, -1)
             EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
+            EVT_SIZE(self, self.OnSize)
+            EVT_PAINT(self, self.OnPaint)
             self.init = false
 
         def OnEraseBackground(self, event):

@@ -53,6 +53,7 @@ class TestMaskWindow(wxScrolledWindow):
 
         self.SetScrollbars(20, 20, 700/20, 460/20)
 
+        EVT_PAINT(self, self.OnPaint)
 
 
     def OnPaint (self, e):

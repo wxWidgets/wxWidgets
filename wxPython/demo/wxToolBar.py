@@ -55,6 +55,7 @@ class TestToolBar(wxFrame):
                                  size=(150,-1), style=wxCB_DROPDOWN))
 
         tb.Realize()
+        EVT_CLOSE(self, self.OnCloseWindow)
 
 
     def OnCloseWindow(self, event):

@@ -505,7 +505,7 @@ class wxWindow(wxWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxWindow,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 
@@ -537,7 +537,7 @@ class wxPanel(wxPanelPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxPanel,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 
@@ -588,7 +588,7 @@ class wxDialog(wxDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 
@@ -649,8 +649,8 @@ class wxScrolledWindow(wxScrolledWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxScrolledWindow,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
-        wx._StdOnScrollCallbacks(self)
+        #wx._StdWindowCallbacks(self)
+        #wx._StdOnScrollCallbacks(self)
 
 
 

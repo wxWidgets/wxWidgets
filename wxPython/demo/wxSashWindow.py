@@ -17,6 +17,7 @@ class TestSashWindow(wxPanel):
 
         EVT_SASH_DRAGGED_RANGE(self, self.ID_WINDOW_TOP,
                                self.ID_WINDOW_BOTTOM, self.OnSashDrag)
+        EVT_SIZE(self, self.OnSize)
 
 
         # Create some layout windows

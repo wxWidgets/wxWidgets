@@ -175,8 +175,6 @@ class TestPanel(wxPanel):
         text = '%s CLICK   %02d/%02d/%d' % (evt.click, evt.day, evt.month, evt.year)  # format date
         self.log.WriteText('Date Selected: ' + text + '\n')
 
-    def OnCloseWindow(self, event):
-        self.Destroy()
 
 # set the highlighted days for the calendar
 
@@ -317,6 +315,7 @@ class CalenDlg(wxDialog):
 class CalendFrame(wxFrame):
     def __init__(self, parent, id, title, log):
         wxFrame.__init__(self, parent, id, title, wxPyDefaultPosition, wxSize(400, 400))
+        EVT_CLOSE(self, self.OnCloseWindow)
 
         self.log = log
         self.CreateStatusBar()
@@ -573,9 +572,6 @@ class PrintCalend:
             year = year + 1
 
         return year, month
-
-    def OnCloseWindow(self, event):
-        self.Destroy()
 
     def GetTotalPages(self):
         self.pg_cnt = 1

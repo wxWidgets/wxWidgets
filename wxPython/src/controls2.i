@@ -220,7 +220,7 @@ public:
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "listCtrl");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
     bool DeleteItem(long item);
@@ -491,7 +491,7 @@ public:
                char* name = "wxTreeCtrl");
 
     void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
     %pragma(python) addtomethod = "__init__:self._setSelf(self, wxTreeCtrl)"
 
     size_t GetCount();
@@ -710,7 +710,7 @@ public:
               long style = 0,
               char* name = "tabCtrl");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     bool DeleteAllItems();
     bool DeleteItem(int item);

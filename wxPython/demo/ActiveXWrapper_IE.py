@@ -1,15 +1,20 @@
 """
 <html><body>
-This demo shows how to embed an ActiveX control in a wxPython application, (Win32 only.)
+This demo shows how to embed an ActiveX control in a wxPython
+application, (Win32 only.)
+
 <p>
-The MakeActiveXClass function dynamically builds a new Class on the fly, that has the
-same signature and semantics as wxWindow.  This means that when you call the function
-you get back a new class that you can use just like wxWindow, (set the size and position,
-use in a sizer, etc.) except its contents will be the COM control.
+The MakeActiveXClass function dynamically builds a new Class on the
+fly, that has the same signature and semantics as wxWindow.  This
+means that when you call the function you get back a new class that
+you can use just like wxWindow, (set the size and position, use in a
+sizer, etc.) except its contents will be the COM control.
+
 <p>
-This demo embeds the Internet Exploer WebBrowser control, and shows how to receive events
-from the COM control.  (The title bar and status bar are updated as pages change, in addition
-to the log messages being shown.)
+This demo embeds the Internet Exploer WebBrowser control, and shows
+how to receive events from the COM control.  (The title bar and status
+bar are updated as pages change, in addition to the log messages being
+shown.)
 </body></html>
 """
 
@@ -30,6 +35,7 @@ if wxPlatform == '__WXMSW__':
 class TestPanel(wxWindow):
     def __init__(self, parent, log, frame=None):
         wxWindow.__init__(self, parent, -1)#, style=wxCLIP_CHILDREN)
+        self.ie = None
         self.log = log
         self.current = "http://alldunn.com/"
         self.frame = frame
@@ -83,14 +89,16 @@ class TestPanel(wxWindow):
 
         self.SetSizer(sizer)
         self.SetAutoLayout(true)
+        EVT_SIZE(self, self.OnSize)
 
 
     def OnSize(self, evt):
         self.Layout()
 
     def __del__(self):
-        self.ie.Cleanup()
-        self.ie = None
+        if self.ie:
+            self.ie.Cleanup()
+            self.ie = None
 
     def OnLocationSelect(self, evt):
         url = self.location.GetStringSelection()
@@ -181,6 +189,7 @@ if __name__ == '__main__':
                              style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
             self.CreateStatusBar()
             self.tp = TestPanel(self, sys.stdout, self)
+            EVT_CLOSE(self, self.OnCloseWindow)
 
         def OnCloseWindow(self, event):
             self.tp.ie.Cleanup()

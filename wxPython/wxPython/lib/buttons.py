@@ -77,13 +77,15 @@ class wxGenButton(wxControl):
         self.SetBestSize(size)
         self.InitColours()
 
-        EVT_LEFT_DOWN(self,  self.OnLeftDown)
-        EVT_LEFT_UP(self,    self.OnLeftUp)
-        EVT_MOTION(self,     self.OnMotion)
-        EVT_SET_FOCUS(self,  self.OnGainFocus)
-        EVT_KILL_FOCUS(self, self.OnLoseFocus)
-        EVT_KEY_DOWN(self,   self.OnKeyDown)
-        EVT_KEY_UP(self,     self.OnKeyUp)
+        EVT_LEFT_DOWN(self,        self.OnLeftDown)
+        EVT_LEFT_UP(self,          self.OnLeftUp)
+        EVT_MOTION(self,           self.OnMotion)
+        EVT_SET_FOCUS(self,        self.OnGainFocus)
+        EVT_KILL_FOCUS(self,       self.OnLoseFocus)
+        EVT_KEY_DOWN(self,         self.OnKeyDown)
+        EVT_KEY_UP(self,           self.OnKeyUp)
+        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
+        EVT_PAINT(self,            self.OnPaint)
 
 
     def SetBestSize(self, size=None):

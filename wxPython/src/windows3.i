@@ -76,7 +76,7 @@ public:
                  long style = wxCLIP_CHILDREN | wxSW_3D,
                  const char* name = "sashWindow");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     bool GetSashVisible(wxSashEdgePosition edge);
     int GetDefaultBorderSize();
@@ -155,9 +155,9 @@ public:
                        long style = wxCLIP_CHILDREN | wxSW_3D,
                        const char* name = "layoutWindow");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnCalculateLayout',    wxEVT_CALCULATE_LAYOUT)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnQueryLayoutInfo',    wxEVT_QUERY_LAYOUT_INFO)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCalculateLayout',    wxEVT_CALCULATE_LAYOUT)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnQueryLayoutInfo',    wxEVT_QUERY_LAYOUT_INFO)"
 
 
     wxLayoutAlignment GetAlignment();

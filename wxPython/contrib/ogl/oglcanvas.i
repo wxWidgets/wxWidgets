@@ -119,8 +119,8 @@ public:
     void _setSelf(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyShapeCanvas)"
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:wx._StdOnScrollCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
 
     void AddShape(wxPyShape *shape, wxPyShape *addAfter = NULL);
 

@@ -114,7 +114,7 @@ class wxSashWindow(wxSashWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windows3c.new_wxSashWindow,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 
@@ -214,9 +214,9 @@ class wxSashLayoutWindow(wxSashLayoutWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windows3c.new_wxSashLayoutWindow,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
-        wx._checkForCallback(self, 'OnCalculateLayout',    wxEVT_CALCULATE_LAYOUT)
-        wx._checkForCallback(self, 'OnQueryLayoutInfo',    wxEVT_QUERY_LAYOUT_INFO)
+        #wx._StdWindowCallbacks(self)
+        #wx._checkForCallback(self, 'OnCalculateLayout',    wxEVT_CALCULATE_LAYOUT)
+        #wx._checkForCallback(self, 'OnQueryLayoutInfo',    wxEVT_QUERY_LAYOUT_INFO)
 
 
 

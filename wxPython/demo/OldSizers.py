@@ -292,6 +292,8 @@ class TestFrame(wxFrame):
         self.CreateStatusBar()
         self.SetStatusText("Resize this frame to see how the sizers respond...")
         self.sizer.FitWindow(self)
+        EVT_CLOSE(self, self.OnCloseWindow)
+        EVT_SIZE(self, self.OnSize)
 
 
     def OnSize(self, event):
@@ -378,6 +380,7 @@ if __name__ == '__main__':
             EVT_MENU(self, 200, self.OnExit)
             self.panel = TestSelectionPanel(self, self)
             self.SetSize(wxSize(400, 380))
+            EVT_CLOSE(self, self.OnCloseWindow)
 
         def OnCloseWindow(self, event):
             self.Destroy()

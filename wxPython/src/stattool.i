@@ -42,7 +42,7 @@ public:
                 long style = wxST_SIZEGRIP,
                 char* name = "statusBar");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     %addmethods {
         %new wxRect* GetFieldRect(long item) {
@@ -278,7 +278,7 @@ public:
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
               const char* name = wxToolBarNameStr);
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
 };
@@ -295,7 +295,7 @@ public:
                     long style = wxNO_BORDER | wxTB_HORIZONTAL,
                     const char* name = wxToolBarNameStr);
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
 };
@@ -347,7 +347,7 @@ public:
               long style = wxTB_HORIZONTAL | wxNO_BORDER,
               char* name = "toolBar");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
 
     bool AddControl(wxControl * control);

@@ -394,6 +394,9 @@ class wxCalendar(wxWindow):
         self.size = None
         self.set_day = None
 
+        EVT_PAINT(self, self.OnPaint)
+
+
 # control some of the main calendar attributes
 
     def HideTitle(self):
@@ -523,7 +526,7 @@ class wxCalendar(wxWindow):
         for key in self.rg.keys():
             val = self.rg[key]
             ms_rect = wxRect(mx, my, 1, 1)
-            if wxIntersectRect(ms_rect, val) != None:
+            if wxIntersectRect(ms_rect, val) is not None:
                 result = self.TestDay(key)
                 return result
         return None

@@ -111,6 +111,8 @@ class wxEditor(wxScrolledWindow):
         EVT_LEFT_DOWN(self, self.OnMouseClick)
         EVT_RIGHT_DOWN(self, self.OnMouseClick)
         EVT_SCROLLWIN(self, self.OnScroll)
+        EVT_CHAR(self, self.OnChar)
+        EVT_PAINT(self, self.OnPaint)
 
         self.o_cx = self.cx
         self.o_cy = self.cy

@@ -570,8 +570,8 @@ class wxHtmlWindow(wxHtmlWindowPtr):
         self.this = apply(htmlc.new_wxHtmlWindow,_args,_kwargs)
         self.thisown = 1
         self._setSelf(self, wxHtmlWindow)
-        wx._StdWindowCallbacks(self)
-        wx._StdOnScrollCallbacks(self)
+        #wx._StdWindowCallbacks(self)
+        #wx._StdOnScrollCallbacks(self)
 
 
 

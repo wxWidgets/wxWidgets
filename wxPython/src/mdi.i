@@ -42,7 +42,7 @@ public:
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const char* name = "frame");
 
-    %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
 
     void ActivateNext();
     void ActivatePrevious();
@@ -73,7 +73,7 @@ public:
                     long style = wxDEFAULT_FRAME_STYLE,
                     const char* name = "frame");
 
-    %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
 
     void Activate();
     void Maximize(bool maximize);
@@ -87,8 +87,8 @@ public:
 class wxMDIClientWindow : public wxWindow {
 public:
     wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:wx._StdOnScrollCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
 };
 
 //---------------------------------------------------------------------------

@@ -6991,6 +6991,62 @@ static PyObject *_wrap_wxDC_SetAxisOrientation(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxDC_CalcBoundingBox(_swigobj,_swigarg0,_swigarg1)  (_swigobj->CalcBoundingBox(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxDC_CalcBoundingBox(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxDC_CalcBoundingBox",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_CalcBoundingBox. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDC_CalcBoundingBox(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxDC_ResetBoundingBox(_swigobj)  (_swigobj->ResetBoundingBox())
+static PyObject *_wrap_wxDC_ResetBoundingBox(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_ResetBoundingBox",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_ResetBoundingBox. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDC_ResetBoundingBox(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxMemoryDCTowxDC(void *ptr) {
     wxMemoryDC *src;
     wxDC *dest;
@@ -8100,6 +8156,8 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxScreenDC", (PyCFunction) _wrap_new_wxScreenDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDC_SelectObject", (PyCFunction) _wrap_wxMemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMemoryDC", (PyCFunction) _wrap_new_wxMemoryDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_ResetBoundingBox", (PyCFunction) _wrap_wxDC_ResetBoundingBox, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_CalcBoundingBox", (PyCFunction) _wrap_wxDC_CalcBoundingBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetAxisOrientation", (PyCFunction) _wrap_wxDC_SetAxisOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_GetDeviceOrigin", (PyCFunction) _wrap_wxDC_GetDeviceOrigin, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetLogicalOrigin", (PyCFunction) _wrap_wxDC_SetLogicalOrigin, METH_VARARGS | METH_KEYWORDS },

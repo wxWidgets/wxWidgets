@@ -737,6 +737,14 @@ class wxDateSpanPtr :
     def GetTotalDays(self, *_args, **_kwargs):
         val = apply(utilsc.wxDateSpan_GetTotalDays,(self,) + _args, _kwargs)
         return val
+    def Add(self, *_args, **_kwargs):
+        val = apply(utilsc.wxDateSpan_Add,(self,) + _args, _kwargs)
+        if val: val = wxDateSpanPtr(val) 
+        return val
+    def Subtract(self, *_args, **_kwargs):
+        val = apply(utilsc.wxDateSpan_Subtract,(self,) + _args, _kwargs)
+        if val: val = wxDateSpanPtr(val) 
+        return val
     def Neg(self, *_args, **_kwargs):
         val = apply(utilsc.wxDateSpan_Neg,(self,) + _args, _kwargs)
         if val: val = wxDateSpanPtr(val) 

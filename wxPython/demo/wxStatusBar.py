@@ -10,6 +10,7 @@ class CustomStatusBar(wxStatusBar):
         wxStatusBar.__init__(self, parent, -1)
         self.SetFieldsCount(3)
         self.log = log
+        EVT_SIZE(self, self.OnSize)
 
         self.SetStatusText("A Custom StatusBar...", 0)
 
@@ -62,6 +63,7 @@ class TestCustomStatusBar(wxFrame):
 
         self.sb = CustomStatusBar(self, log)
         self.SetStatusBar(self.sb)
+        EVT_CLOSE(self, self.OnCloseWindow)
 
     def OnCloseWindow(self, event):
         self.sb.timer.Stop()

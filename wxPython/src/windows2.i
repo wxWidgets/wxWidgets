@@ -80,16 +80,16 @@ public:
            long style=0,
            char* name="grid");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnCreateCell',           wxEVT_GRID_CREATE_CELL)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnChangeLabels',         wxEVT_GRID_CHANGE_LABELS)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnChangeSelectionLabel', wxEVT_GRID_CHANGE_SEL_LABEL)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnCellChange',           wxEVT_GRID_CELL_CHANGE)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnCellLeftClick',        wxEVT_GRID_CELL_LCLICK)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnCellRightClick',       wxEVT_GRID_CELL_RCLICK)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLabelLeftClick',       wxEVT_GRID_LABEL_LCLICK)"
-    %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLabelRightClick',      wxEVT_GRID_LABEL_RCLICK)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCreateCell',           wxEVT_GRID_CREATE_CELL)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnChangeLabels',         wxEVT_GRID_CHANGE_LABELS)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnChangeSelectionLabel', wxEVT_GRID_CHANGE_SEL_LABEL)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCellChange',           wxEVT_GRID_CELL_CHANGE)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCellLeftClick',        wxEVT_GRID_CELL_LCLICK)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCellRightClick',       wxEVT_GRID_CELL_RCLICK)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnLabelLeftClick',       wxEVT_GRID_LABEL_LCLICK)"
+    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnLabelRightClick',      wxEVT_GRID_LABEL_RCLICK)"
 
 
     void AdjustScrollbars();
@@ -261,7 +261,7 @@ public:
                long style = 0,
                char* name = "notebook");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     int GetPageCount();
     int SetSelection(int nPage);
@@ -325,7 +325,7 @@ public:
                      long style=wxSP_3D|wxCLIP_CHILDREN,
                      char* name = "splitterWindow");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     int GetBorderSize();
     int GetMinimumPaneSize();

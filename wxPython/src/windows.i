@@ -165,7 +165,7 @@ public:
              long style = 0,
              char* name = "panel");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     void CaptureMouse();
     void Center(int direction = wxBOTH);
@@ -399,7 +399,7 @@ public:
             long style = wxTAB_TRAVERSAL,
             const char* name = "panel");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     void InitDialog();
     wxButton* GetDefaultItem();
@@ -427,7 +427,7 @@ public:
              long style = wxDEFAULT_DIALOG_STYLE,
              const char* name = "dialogBox");
 
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     void Centre(int direction = wxBOTH);
     void EndModal(int retCode);
@@ -455,8 +455,8 @@ public:
                      long style = wxHSCROLL | wxVSCROLL,
                      char* name = "scrolledWindow");
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:wx._StdOnScrollCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
 
     void EnableScrolling(bool xScrolling, bool yScrolling);
     int GetScrollPageSize(int orient);

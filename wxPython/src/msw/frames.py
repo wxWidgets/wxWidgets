@@ -107,7 +107,7 @@ class wxFrame(wxFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxFrame,_args,_kwargs)
         self.thisown = 1
-        wx._StdFrameCallbacks(self)
+        #wx._StdFrameCallbacks(self)
 
 
 
@@ -122,7 +122,7 @@ class wxMiniFrame(wxMiniFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxMiniFrame,_args,_kwargs)
         self.thisown = 1
-        wx._StdFrameCallbacks(self)
+        #wx._StdFrameCallbacks(self)
 
 
 

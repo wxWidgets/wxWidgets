@@ -32,6 +32,7 @@ class TestPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
         self.log = log
+        self.pdf = None
 
         sizer = wxBoxSizer(wxVERTICAL)
         btnSizer = wxBoxSizer(wxHORIZONTAL)
@@ -65,8 +66,10 @@ class TestPanel(wxPanel):
         self.SetAutoLayout(true)
 
     def __del__(self):
-        self.pdf.Cleanup()
-        self.pdf = None
+        if self.pdf:
+            self.pdf.Cleanup()
+            self.pdf = None
+
 
 
     def OnOpenButton(self, event):
@@ -112,6 +115,7 @@ if __name__ == '__main__':
             wxFrame.__init__(self, None, -1, "ActiveX test -- Acrobat", size=(640, 480),
                              style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
             self.tp = TestPanel(self, sys.stdout)
+            EVT_CLOSE(self, self.OnCloseWindow)
 
         def OnCloseWindow(self, event):
             self.tp.pdf.Cleanup()

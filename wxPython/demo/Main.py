@@ -78,6 +78,7 @@ class wxPythonDemo(wxFrame):
 
         self.otherWin = None
         EVT_IDLE(self, self.OnIdle)
+        EVT_CLOSE(self, self.OnCloseWindow)
 
         self.Centre(wxBOTH)
         self.CreateStatusBar(1, wxST_SIZEGRIP)

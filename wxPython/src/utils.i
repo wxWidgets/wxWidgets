@@ -993,13 +993,13 @@ public:
 
 
     // ------------------------------------------------------------------------
-#ifdef MISSING
+
         // add another wxDateSpan to us
     inline wxDateSpan& Add(const wxDateSpan& other);
 
         // subtract another wxDateSpan from us
     inline wxDateSpan& Subtract(const wxDateSpan& other);
-#endif
+
         // inverse the sign of this timespan
     inline wxDateSpan& Neg();
 

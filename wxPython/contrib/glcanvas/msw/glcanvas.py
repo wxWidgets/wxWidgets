@@ -88,7 +88,7 @@ class wxGLCanvas(wxGLCanvasPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(glcanvasc.new_wxGLCanvas,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 

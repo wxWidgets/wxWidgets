@@ -55,6 +55,9 @@ class wxVTKRenderWindow(wxScrolledWindow):
         EVT_RIGHT_UP   (self, self.Release)
         EVT_MOTION     (self, self.MouseMotion)
 
+        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
+        EVT_PAINT(self, self.OnPaint)
+
 
     def GetRenderer(self):
         self.renderWindow.GetRenderers().InitTraversal()

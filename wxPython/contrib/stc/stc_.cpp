@@ -140,7 +140,7 @@ static PyObject *_wrap_new_wxStyledTextCtrl(PyObject *self, PyObject *args, PyOb
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) 0;
-    char * _arg5;
+    char * _arg5 = (char *) "styledtext";
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
@@ -150,7 +150,7 @@ static PyObject *_wrap_new_wxStyledTextCtrl(PyObject *self, PyObject *args, PyOb
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|Ols:new_wxStyledTextCtrl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxStyledTextCtrl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -159,6 +159,7 @@ static PyObject *_wrap_new_wxStyledTextCtrl(PyObject *self, PyObject *args, PyOb
         return NULL;
         }
     }
+    if (_obj2)
 {
     _arg2 = &temp;
     if (! wxPoint_helper(_obj2, &_arg2))

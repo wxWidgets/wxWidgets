@@ -481,6 +481,7 @@ class TestFrame(wxFrame):
 
         self.SetAutoLayout(true)
         self.SetSizer(self.sizer)
+        EVT_CLOSE(self, self.OnCloseWindow)
 
     def OnCloseWindow(self, event):
         self.MakeModal(false)
@@ -563,6 +564,7 @@ if __name__ == '__main__':
             EVT_MENU(self, 200, self.OnExit)
             self.panel = TestSelectionPanel(self, self)
             self.SetSize(wxSize(400, 380))
+            EVT_CLOSE(self, self.OnCloseWindow)
 
         def OnCloseWindow(self, event):
             self.Destroy()

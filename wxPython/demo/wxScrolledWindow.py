@@ -12,9 +12,12 @@ class MyCanvas(wxScrolledWindow):
         self.maxHeight = 1000
 
         self.SetBackgroundColour(wxNamedColor("WHITE"))
-        self.Connect(-1, -1, wxEVT_LEFT_DOWN, self.OnLeftButtonEvent)
-        self.Connect(-1, -1, wxEVT_LEFT_UP,   self.OnLeftButtonEvent)
-        self.Connect(-1, -1, wxEVT_MOTION,    self.OnLeftButtonEvent)
+        EVT_LEFT_DOWN(self, self.OnLeftButtonEvent)
+        EVT_LEFT_UP(self,   self.OnLeftButtonEvent)
+        EVT_MOTION(self,    self.OnLeftButtonEvent)
+
+        EVT_PAINT(self, self.OnPaint)
+
 
         self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
         bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
@@ -109,7 +112,6 @@ class MyCanvas(wxScrolledWindow):
             self.CaptureMouse()
 
         elif event.Dragging():
-            print event.GetPosition()
             dc = wxClientDC(self)
             self.PrepareDC(dc)
             dc.BeginDrawing()

@@ -42,7 +42,7 @@ public:
             long style = wxDEFAULT_FRAME_STYLE,
             char* name = "frame");
 
-    %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
 
     void Centre(int direction = wxBOTH);
     wxStatusBar* CreateStatusBar(int number = 1,
@@ -87,7 +87,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 char* name = "frame");
 
-    %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
 };
 
 

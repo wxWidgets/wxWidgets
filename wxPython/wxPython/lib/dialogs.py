@@ -48,6 +48,7 @@ class wxMultipleChoiceDialog(wxDialog):
         self.SetAutoLayout(TRUE)
         self.lst = lst
         self.Layout()
+        EVT_SIZE(self, self.OnSize)
 
     def OnSize(self, event):
         self.Layout()

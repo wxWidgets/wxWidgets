@@ -523,6 +523,8 @@ public:
     void GetDeviceOrigin(int *OUTPUT, int *OUTPUT);
     void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
+    void CalcBoundingBox(int x, int y);
+    void ResetBoundingBox();
 };
 
 

@@ -29,6 +29,7 @@ class MyFrame(wxFrame):
         # Associate some events with methods of this class
         EVT_SIZE(self, self.OnSize)
         EVT_MOVE(self, self.OnMove)
+        EVT_CLOSE(self, self.OnCloseWindow)
 
         # Add a panel and some controls to display the size and position
         panel = wxPanel(self, -1)

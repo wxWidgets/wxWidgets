@@ -200,6 +200,7 @@ if __name__=='__main__':
         def __init__(self, parent):
             wxFrame.__init__(self, parent, -1, 'Test Layout Constraints',
                              wxPyDefaultPosition, wxSize(500, 300))
+            EVT_CLOSE(self, self.OnCloseWindow)
 
             self.SetAutoLayout(true)
             EVT_BUTTON(self, 100, self.OnButton)

@@ -43,6 +43,7 @@ class HTMLTextView(wxFrame):
         wxFrame.__init__(self, parent, id, title, wxPyDefaultPosition,
                          wxSize(600,400))
 
+        EVT_CLOSE(self, self.OnCloseWindow)
         self.mainmenu = wxMenuBar()
 
         menu = wxMenu()
@@ -155,6 +156,7 @@ class AppStatusBar(wxStatusBar):
         self.SetStatusWidths([-1, 100])
         self.but = wxButton(self, 1001, "Refresh")
         EVT_BUTTON(self, 1001, parent.OnViewRefresh)
+        EVT_SIZE(self, self.OnSize)
         self.OnSize(None)
 
     def logprint(self,x):

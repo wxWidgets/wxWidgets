@@ -85,7 +85,7 @@ public:
                int *attribList = 0,
                const wxPalette& palette = wxNullPalette);
 
-    %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     void SetCurrent();
     void SetColour(const char *colour);

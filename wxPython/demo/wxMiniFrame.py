@@ -10,6 +10,7 @@ class MyMiniFrame(wxMiniFrame):
         button = wxButton(panel, 1003, "Close Me")
         button.SetPosition(wxPoint(15, 15))
         EVT_BUTTON(self, 1003, self.OnCloseMe)
+        EVT_CLOSE(self, self.OnCloseWindow)
 
     def OnCloseMe(self, event):
         self.Close(true)

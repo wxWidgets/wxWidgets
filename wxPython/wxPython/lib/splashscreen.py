@@ -74,6 +74,8 @@ class SplashScreen(wxFrame):
         self.timer = SplashTimer(callback)
         self.timer.Start(duration, 1) # one-shot only
         EVT_LEFT_DOWN(self, self.OnMouseClick)
+        EVT_CLOSE(self, self.OnCloseWindow)
+        EVT_PAINT(self, self.OnPaint)
 
     def OnPaint(self, event):
         dc = wxPaintDC(self)

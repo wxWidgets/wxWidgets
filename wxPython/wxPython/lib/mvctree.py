@@ -769,6 +769,9 @@ class wxMVCTree(wxScrolledWindow):
         EVT_MOUSE_EVENTS(self, self.OnMouse)
         EVT_KEY_DOWN(self, self.OnKeyDown)
         self.doubleBuffered = true
+        EVT_SIZE(self, self.OnSize)
+        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
+        EVT_PAINT(self, self.OnPaint)
 
 
     def Refresh(self):

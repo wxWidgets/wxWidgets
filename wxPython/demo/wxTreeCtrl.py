@@ -22,6 +22,7 @@ class MyTreeCtrl(wxTreeCtrl):
 class TestTreeCtrlPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
+        EVT_SIZE(self, self.OnSize)
 
         self.log = log
         tID = NewId()

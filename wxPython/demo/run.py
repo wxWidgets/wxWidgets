@@ -37,7 +37,8 @@ class RunDemoApp(wxApp):
 
     def OnInit(self):
         wxInitAllImageHandlers()
-        frame = wxFrame(None, -1, "RunDemo: " + self.name, size=(0,0))
+        frame = wxFrame(None, -1, "RunDemo: " + self.name, size=(0,0),
+                        style=wxNO_FULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
         frame.CreateStatusBar()
         frame.Show(true)
         win = self.demoModule.runTest(frame, frame, Log())
@@ -80,7 +81,6 @@ def main(argv):
     name = argv[1]
     if name[-3:] == '.py':
         name = name[:-3]
-        print name
     module = __import__(name)
 
 

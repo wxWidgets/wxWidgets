@@ -155,7 +155,8 @@ class PyShellOutput(wxPanel):
         # refreshes are annoying
         self.in_batch =0
         self.dirty =0
-
+        EVT_SIZE(self, self.OnSize)
+        EVT_IDLE(self, self.OnIdle)
 
     def OnSize(self, event):
         self.client.SetSize(self.GetClientSize())
@@ -248,6 +249,7 @@ class PyShell(wxPanel):
         splitter.SetMinimumPaneSize(20)
         self.splitter =splitter
         EVT_SET_FOCUS(self, self.OnSetFocus)
+        EVT_SIZE(self, self.OnSize)
 
     def OnSetFocus(self, event):
         self.input.SetFocus()

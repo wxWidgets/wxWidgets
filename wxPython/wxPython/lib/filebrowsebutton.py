@@ -319,6 +319,7 @@ if __name__ == "__main__":
     class DemoFrame( wxFrame ):
         def __init__(self, parent):
             wxFrame.__init__(self, parent, 2400, "File entry with browse", size=(500,260) )
+            EVT_CLOSE(self, self.OnCloseWindow)
             panel = wxPanel (self,-1)
             innerbox = wxBoxSizer(wxVERTICAL)
             control = FileBrowseButton(
