@@ -16,7 +16,11 @@ OTHER CHANGES
 2.2.6
 -----
 
-All:
+wxBase:
+
+- crash when reading certain malformed mailcap entries under Unix fixed
+
+All (GUI):
 
 - bug in wxDocMDIParentFrame::OnMRUFile() fixed
 
