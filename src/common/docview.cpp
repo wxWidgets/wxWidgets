@@ -248,7 +248,7 @@ bool wxDocument::SaveAs()
 
     wxString tmp = wxFileSelector(_("Save as"),
             docTemplate->GetDirectory(),
-            GetFilename(),
+            wxFileNameFromPath(GetFilename()),
             docTemplate->GetDefaultExtension(),
             docTemplate->GetFileFilter(),
             wxSAVE | wxOVERWRITE_PROMPT,
