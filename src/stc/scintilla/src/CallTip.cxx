@@ -117,19 +117,21 @@ void CallTip::PaintCT(Surface *surfaceWindow) {
 }
 
 PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
-                                 const char *faceName, int size, bool unicodeMode_) {
+                                 const char *faceName, int size,
+                                 int codePage_) {
 	if (val)
 		delete []val;
 	val = new char[strlen(defn) + 1];
 	if (!val)
 		return PRectangle();
 	strcpy(val, defn);
-	unicodeMode = unicodeMode_;
+	codePage = codePage_;
 	Surface *surfaceMeasure = Surface::Allocate();
 	if (!surfaceMeasure)
 		return PRectangle();
 	surfaceMeasure->Init();
-	surfaceMeasure->SetUnicodeMode(unicodeMode);
+	surfaceMeasure->SetUnicodeMode(SC_CP_UTF8 == codePage);
+	surfaceMeasure->SetDBCSMode(codePage);
 	startHighlight = 0;
 	endHighlight = 0;
 	inCallTipMode = true;

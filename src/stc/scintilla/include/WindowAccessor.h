@@ -26,8 +26,8 @@ protected:
 	bool InternalIsLeadByte(char ch);
 	void Fill(int position);
 public:
-	WindowAccessor(WindowID id_, PropSet &props_) : 
-		Accessor(), id(id_), props(props_), 
+	WindowAccessor(WindowID id_, PropSet &props_) :
+		Accessor(), id(id_), props(props_),
 		lenDoc(-1), validLen(0), chFlags(0), chWhile(0) {
 	}
 	~WindowAccessor();
@@ -40,8 +40,8 @@ public:
 	void Flush();
 	int GetLineState(int line);
 	int SetLineState(int line, int state);
-	int GetPropertyInt(const char *key, int defaultValue=0) { 
-		return props.GetInt(key, defaultValue); 
+	int GetPropertyInt(const char *key, int defaultValue=0) {
+		return props.GetInt(key, defaultValue);
 	}
 	char *GetProperties() {
 		return props.ToString();
