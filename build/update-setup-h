@@ -52,7 +52,7 @@ update_single_setup_h()
         return 0
     fi
 
-    echo -n "Updating $1..."
+    echo -n "Updating $1 ..."
 
     tmp=$i.$$.tmp
     sed -e '/^\/\* --- start common options --- \*\/$/q' $1 > $tmp &&
