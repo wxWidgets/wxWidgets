@@ -1298,10 +1298,10 @@ bool wxImageHandler::CanRead( const wxString& name )
 
 
 //-----------------------------------------------------------------------------
-// wxBitmap convertion routines
+// Deprecated wxBitmap convertion routines
 //-----------------------------------------------------------------------------
 
-#if wxUSE_GUI
+#if WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI
 
 #ifdef __WXGTK__
 wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue ) const
@@ -1323,24 +1323,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     *this = bitmap.ConvertToImage();
 }
 
-#endif
-
-
-
-// A module to allow wxImage initialization/cleanup
-// without calling these functions from app.cpp or from
-// the user's application.
-
-class wxImageModule: public wxModule
-{
-DECLARE_DYNAMIC_CLASS(wxImageModule)
-public:
-    wxImageModule() {}
-    bool OnInit() { wxImage::InitStandardHandlers(); return TRUE; };
-    void OnExit() { wxImage::CleanUpHandlers(); };
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxImageModule, wxModule)
+#endif // WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI
 
 
 //-----------------------------------------------------------------------------
@@ -1666,5 +1649,25 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 
     return rotated;
 }
+
+
+
+
+
+// A module to allow wxImage initialization/cleanup
+// without calling these functions from app.cpp or from
+// the user's application.
+
+class wxImageModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxImageModule)
+public:
+    wxImageModule() {}
+    bool OnInit() { wxImage::InitStandardHandlers(); return TRUE; };
+    void OnExit() { wxImage::CleanUpHandlers(); };
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxImageModule, wxModule)
+
 
 #endif // wxUSE_IMAGE

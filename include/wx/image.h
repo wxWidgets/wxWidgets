@@ -115,7 +115,7 @@ public:
     wxImage( const wxImage& image );
     wxImage( const wxImage* image );
 
-#if wxUSE_GUI
+#if WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI
     // convertion to/from wxBitmap (deprecated, use wxBitmap's methods instead):
     wxImage( const wxBitmap &bitmap );
     wxBitmap ConvertToBitmap() const;
