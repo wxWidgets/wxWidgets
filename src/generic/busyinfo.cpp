@@ -108,9 +108,8 @@ wxBusyInfo::wxBusyInfo(const wxString& message, wxWindow *parent)
 #ifdef __WXMAC__
     m_InfoFrame->Update() ;
 #else
-    wxYield();
     m_InfoFrame->Refresh();
-    wxYield();
+    m_InfoFrame->Update();
 #endif
 }
 
@@ -118,7 +117,6 @@ wxBusyInfo::~wxBusyInfo()
 {
     m_InfoFrame->Show(false);
     m_InfoFrame->Close();
-    wxYield();
 }
 
 #endif
