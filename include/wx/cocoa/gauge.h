@@ -14,6 +14,8 @@
 
 // #include "wx/cocoa/NSProgressIndicator.h"
 
+DECLARE_WXCOCOA_OBJC_CLASS(NSProgressIndicator);
+
 // ========================================================================
 // wxGauge
 // ========================================================================
@@ -48,6 +50,8 @@ public:
 // ------------------------------------------------------------------------
 // Cocoa callbacks
 // ------------------------------------------------------------------------
+public:
+    inline WX_NSProgressIndicator GetNSProgressIndicator() const { return (WX_NSProgressIndicator)m_cocoaNSView; }
 protected:
     // NSProgressIndicator cannot be enabled/disabled
     virtual void CocoaSetEnabled(bool enable) { }
@@ -62,6 +66,8 @@ public:
     // retrieve/change the range
     virtual void SetRange(int maxValue);
     int GetRange(void) const;
+protected:
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif // __WX_COCOA_GAUGE_H__
