@@ -96,10 +96,10 @@ static NSRect MakeNSButtonDefaultRect()
     // create at (10.0,10.0) with size 20.0x20.0 (just bogus values)
     wxObjcAutoRefFromAlloc<NSButton*> defaultButton = [[NSButton alloc]
             initWithFrame:NSMakeRect(10.0,10.0,20.0,20.0)];
-    [defaultButton setBezelStyle:NSRoundedBezelStyle];
-    [defaultButton setTitle:@""];
-    [defaultButton sizeToFit];
-    return [defaultButton frame];
+    [static_cast<NSButton*>(defaultButton) setBezelStyle:NSRoundedBezelStyle];
+    [static_cast<NSButton*>(defaultButton) setTitle:@""];
+    [static_cast<NSButton*>(defaultButton) sizeToFit];
+    return [static_cast<NSButton*>(defaultButton) frame];
 }
 
 wxSize wxButtonBase::GetDefaultSize()
