@@ -129,7 +129,6 @@ bool wxHTTP::ParseHeaders()
     if (line.Length() == 0)
       break;
 
-    printf("Header: %s\n", WXSTRINGCAST line);
     tokenzr.SetString(line, " :\t\n\r");
     if (!tokenzr.HasMoreToken())
       return FALSE;
@@ -198,7 +197,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   SetFlags(NONE);
   Notify(FALSE);
 
-  sprintf(buf, "%s %s HTTP/1.0\n\r", tmp_buf, (const char*)pathbuf);
+  sprintf(buf, "%s %s\n\r", tmp_buf, pathbuf);
   Write(buf, strlen(buf));
   SendHeaders();
   sprintf(buf, "\n\r");

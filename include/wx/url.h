@@ -68,6 +68,8 @@ public:
 
   static void SetDefaultProxy(const wxString& url_proxy);
   void SetProxy(const wxString& url_proxy);
+
+  static wxString ConvertToValidURI(const wxString& uri);
 };
 
 #endif

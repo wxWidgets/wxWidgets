@@ -316,5 +316,10 @@ void wxURL::SetProxy(const wxString& url_proxy)
   m_path = url_proxy;
 }
 
+wxString wxURL::ConvertToValidURI(const wxString& uri)
+{
+  return wxString(uri);
+}
+
 #endif
   // wxUSE_SOCKETS
