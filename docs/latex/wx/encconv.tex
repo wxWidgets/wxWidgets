@@ -68,16 +68,35 @@ or output encoding is not supported.)
 
 \membersection{wxEncodingConverter::Convert}\label{wxencodingconverterconvert}
 
+\func{void}{Convert}{\param{const char* }{input}, \param{char* }{output}}
+
+\func{void}{Convert}{\param{const wchar\_t* }{input}, \param{wchar\_t* }{output}}
+
+\func{void}{Convert}{\param{const char* }{input}, \param{wchar\_t* }{output}}
+
+\func{void}{Convert}{\param{const wchar\_t* }{input}, \param{char* }{output}}
+
+Convert input string according to settings passed to
+\helpref{Init}{wxencodingconverterinit} and writes the result to {\it output}.
+
+\func{void}{Convert}{\param{char* }{str}}
+
+\func{void}{Convert}{\param{wchar\_t* }{str}}
+
+Convert input string according to settings passed to
+\helpref{Init}{wxencodingconverterinit} in-place, i.e. write the result to the
+same memory area.
+
 \func{wxString}{Convert}{\param{const wxString\& }{input}}
 
-\func{void}{Convert}{\param{const wxChar* }{input}, \param{wxChar* }{output}}
+Convert wxString and return new wxString object.
 
-\func{void}{Convert}{\param{wxChar* }{str}}
+\wxheading{Notes}
 
-\func{void}{Convert}{\param{const char* }{input}, \param{wxChar* }{output}}
+You must call \helpref{Init}{wxencodingconverterinit} before using this method!
 
-Convert input string according to settings passed to \helpref{Init}{wxencodingconverterinit}.
-Note that you must call Init before using Convert!
+{\tt wchar\_t} versions of the method are not available if wxWindows was compiled
+with {\tt wxUSE\_WCHAR\_T} set to 0.
 
 \membersection{wxEncodingConverter::GetPlatformEquivalents}\label{wxencodingconvertergetplatformequivalents}
 
