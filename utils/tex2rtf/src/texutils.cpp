@@ -239,9 +239,9 @@ int ParseUnitArgument(char *unitArg)
       if (strcmp(units, "in") == 0)
         conversionFactor = 72.0;
       else if (strcmp(units, "cm") == 0)
-        conversionFactor = 72.0/2.51;
+        conversionFactor = (float)72.0/(float)2.51;
       else if (strcmp(units, "mm") == 0)
-        conversionFactor = 72.0/25.1;
+        conversionFactor = (float)72.0/(float)25.1;
       else if (strcmp(units, "pt") == 0)
         conversionFactor = 1;
     }
