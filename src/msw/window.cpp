@@ -58,6 +58,10 @@
     #include "wx/dnd.h"
 #endif
 
+#if wxUSE_POPUPWIN
+#include "wx/popupwin.h"
+#endif
+
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
@@ -570,7 +574,11 @@ bool wxWindowMSW::Show(bool show)
     int cshow = show ? SW_SHOW : SW_HIDE;
     ::ShowWindow(hWnd, cshow);
 
-    if ( show && IsTopLevel() )
+    if ( show && (IsTopLevel()
+#if wxUSE_POPUPWIN
+                  || IsKindOf(CLASSINFO(wxPopupWindow)))
+#endif
+        )
     {
         wxBringWindowToTop(hWnd);
     }
