@@ -139,13 +139,26 @@ struct WXDLLEXPORT wxRasThreadData
     wxRasThreadData()
     {
         hWnd = 0;
-        hEventRas = hEventQuit = INVALID_HANDLE_VALUE;
+        hEventRas =
+        hEventQuit = 0;
         dialUpManager = NULL;
     }
 
+    ~wxRasThreadData()
+    {
+        if ( hWnd )
+            DestroyWindow(hWnd);
+
+        if ( hEventQuit )
+            CloseHandle(hEventQuit);
+
+        if ( hEventRas )
+            CloseHandle(hEventRas);
+    }
+
     HWND    hWnd;       // window to send notifications to
-    HANDLE  hEventRas,  // event which RAS signals when status changes
-            hEventQuit; // event which we signal when we terminate
+    HANDLE  hEventRas,  // automatic event which RAS signals when status changes
+            hEventQuit; // manual event which we signal when we terminate
 
     class WXDLLEXPORT wxDialUpManagerMSW *dialUpManager;  // the owner
 };
@@ -228,7 +241,7 @@ private:
 
     // data used by this thread and our hidden window to send messages between
     // each other
-    wxRasThreadData m_data;
+    wxRasThreadData *m_data;
 
     // the handle of rasapi32.dll when it's loaded
     wxDynamicLibrary m_dllRas;
@@ -345,6 +358,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
     // initialize our data
     m_autoCheckLevel = 0;
     m_hThread = 0;
+    m_data = new wxRasThreadData;
 
     if ( !m_dllRas.IsLoaded() )
     {
@@ -537,9 +551,15 @@ void wxDialUpManagerMSW::CleanUpThreadData()
 {
     if ( m_hThread )
     {
-        if ( !SetEvent(m_data.hEventQuit) )
+        if ( !SetEvent(m_data->hEventQuit) )
         {
             wxLogLastError(_T("SetEvent(RasThreadQuit)"));
+        }
+        else // sent quit request to the background thread
+        {
+            // the thread still needs m_data so we can't free it here, rather
+            // let the thread do it itself
+            m_data = NULL;
         }
 
         CloseHandle(m_hThread);
@@ -547,25 +567,10 @@ void wxDialUpManagerMSW::CleanUpThreadData()
         m_hThread = 0;
     }
 
-    if ( m_data.hWnd )
+    if ( m_data )
     {
-        DestroyWindow(m_data.hWnd);
-
-        m_data.hWnd = 0;
-    }
-
-    if ( m_data.hEventQuit )
-    {
-        CloseHandle(m_data.hEventQuit);
-
-        m_data.hEventQuit = 0;
-    }
-
-    if ( m_data.hEventRas )
-    {
-        CloseHandle(m_data.hEventRas);
-
-        m_data.hEventRas = 0;
+        delete m_data;
+        m_data = NULL;
     }
 }
 
@@ -1027,14 +1032,14 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
     if ( ok )
     {
         // first create an event to wait on
-        m_data.hEventRas = CreateEvent
-                           (
+        m_data->hEventRas = CreateEvent
+                            (
                              NULL,      // security attribute (default)
-                             FALSE,     // manual reset (not)
+                             FALSE,     // manual reset (no, it is automatic)
                              FALSE,     // initial state (not signaled)
                              NULL       // name (no)
-                           );
-        if ( !m_data.hEventRas )
+                            );
+        if ( !m_data->hEventRas )
         {
             wxLogLastError(wxT("CreateEvent(RasStatus)"));
 
@@ -1044,9 +1049,18 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
 
     if ( ok )
     {
-        // create the event we use to quit the thread
-        m_data.hEventQuit = CreateEvent(NULL, FALSE, FALSE, NULL);
-        if ( !m_data.hEventQuit )
+        // create the event we use to quit the thread: using a manual event
+        // here avoids problems with missing the event if wxDialUpManagerMSW
+        // is created and destroyed immediately, before wxRasStatusWindowProc
+        // starts waiting on the event
+        m_data->hEventQuit = CreateEvent
+                             (
+                                NULL,   // default security
+                                TRUE,   // manual event
+                                FALSE,  // initially non signalled
+                                NULL    // nameless
+                             );
+        if ( !m_data->hEventQuit )
         {
             wxLogLastError(wxT("CreateEvent(RasThreadQuit)"));
 
@@ -1078,12 +1092,12 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
         wxSetWindowProc(ms_hwndRas, wxRasStatusWindowProc);
     }
 
-    m_data.hWnd = ms_hwndRas;
+    m_data->hWnd = ms_hwndRas;
 
     if ( ok )
     {
         // start the secondary thread
-        m_data.dialUpManager = this;
+        m_data->dialUpManager = this;
 
         DWORD tid;
         m_hThread = CreateThread
@@ -1091,7 +1105,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
                      NULL,
                      0,
                      (LPTHREAD_START_ROUTINE)wxRasMonitorThread,
-                     (void *)&m_data,
+                     (void *)m_data,
                      0,
                      &tid
                     );
@@ -1110,7 +1124,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
         DWORD dwRet = ms_pfnRasConnectionNotification
                       (
                         (HRASCONN)INVALID_HANDLE_VALUE,
-                        m_data.hEventRas,
+                        m_data->hEventRas,
                         3 /* RASCN_Connection | RASCN_Disconnection */
                       );
 
@@ -1212,11 +1226,32 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
                 cont = FALSE;
                 break;
 
+            default:
+                wxFAIL_MSG( _T("unexpected return of WaitForMultipleObjects()") );
+                // fall through
+
             case WAIT_FAILED:
-                wxLogLastError(wxT("WaitForMultipleObjects(RasMonitor)"));
-                break;
+#ifdef __WXDEBUG__
+                // using wxLogLastError() from here is dangerous: we risk to
+                // deadlock the main thread if wxLog sends output to GUI
+                DWORD err = GetLastError();
+                wxMessageOutputDebug().Printf
+                (
+                    wxT("WaitForMultipleObjects(RasMonitor) failed: 0x%08lx (%s)"),
+                    err,
+                    wxSysErrorMsg(err)
+                );
+#endif // __WXDEBUG__
+
+                // no sense in continuing, who knows if the handles we're
+                // waiting for even exist yet...
+                return (DWORD)-1;
         }
     }
+
+    // we don't need it any more now and if this thread ran, it is our
+    // responsability to free the data
+    delete data;
 
     return 0;
 }
