@@ -491,6 +491,13 @@ mimetype to the named file}
 \end{twocollist}}
 }
 
+\membersection{wxImage::Mirror}\label{wximagemirror}
+
+\constfunc{wxImage}{Mirror}{\param{bool}{ horizontally = TRUE}}
+
+Returns a mirrored copy of the image. The parameter {\it horizontally}
+indicates the orientation.
+
 \membersection{wxImage::Replace}\label{wximagereplace}
 
 \func{void}{Replace}{\param{unsigned char}{ r1}, \param{unsigned char}{ g1}, \param{unsigned char}{ b1},
@@ -522,6 +529,13 @@ image has a mask, then the mask colour is used for the uncovered pixels in the
 rotated image background. Else, black (rgb 0, 0, 0) will be used.
 
 Returns the rotated image, leaving this image intact.
+
+\membersection{wxImage::Rotate90}\label{wximagerotate90}
+
+\constfunc{wxImage}{Rotate90}{\param{bool}{ clockwise = TRUE}}
+
+Returns a copy of the image rotated 90 degrees in the direction
+indicated by {\it clockwise}.
 
 \membersection{wxImage::Scale}\label{wximagescale}
 

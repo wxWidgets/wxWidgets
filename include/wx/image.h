@@ -122,7 +122,10 @@ public:
     // Rotates the image about the given point, 'angle' radians.
     // Returns the rotated image, leaving this image intact.
     wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
-                   bool interpolating = TRUE, wxPoint * offset_after_rotation = (wxPoint*) NULL) const ;
+                   bool interpolating = TRUE, wxPoint * offset_after_rotation = (wxPoint*) NULL) const;
+
+    wxImage Rotate90( bool clockwise = TRUE ) const;
+    wxImage Mirror( bool horizontally = TRUE ) const;
 
     // replace one colour with another
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
@@ -130,9 +133,9 @@ public:
 
     // these routines are slow but safe
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
-    unsigned char GetRed( int x, int y );
-    unsigned char GetGreen( int x, int y );
-    unsigned char GetBlue( int x, int y );
+    unsigned char GetRed( int x, int y ) const;
+    unsigned char GetGreen( int x, int y ) const;
+    unsigned char GetBlue( int x, int y ) const;
 
     static bool CanRead( const wxString& name );
     virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY );

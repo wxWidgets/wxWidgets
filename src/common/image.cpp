@@ -217,6 +217,91 @@ wxImage wxImage::Scale( int width, int height ) const
     return image;
 }
 
+wxImage wxImage::Rotate90( bool clockwise ) const
+{
+    wxImage image;
+
+    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+
+    image.Create( M_IMGDATA->m_height, M_IMGDATA->m_width );
+
+    char unsigned *data = image.GetData();
+
+    wxCHECK_MSG( data, image, wxT("unable to create image") );
+
+    if (M_IMGDATA->m_hasMask)
+        image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
+
+    long height = M_IMGDATA->m_height;
+    long width  = M_IMGDATA->m_width;
+
+    char unsigned *source_data = M_IMGDATA->m_data;
+    char unsigned *target_data;
+
+    for (long j = 0; j < height; j++)
+    {
+        for (long i = 0; i < width; i++)
+        {
+            if (clockwise)
+                target_data = data + (((i+1)*height) - j - 1)*3;
+            else
+                target_data = data + ((height*(width-1)) + j - (i*height))*3;
+            memcpy( target_data, source_data, 3 );
+            source_data += 3;
+        }
+    }
+
+    return image;
+}
+
+wxImage wxImage::Mirror( bool horizontally ) const
+{
+    wxImage image;
+
+    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+
+    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height );
+
+    char unsigned *data = image.GetData();
+
+    wxCHECK_MSG( data, image, wxT("unable to create image") );
+
+    if (M_IMGDATA->m_hasMask)
+        image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
+
+    long height = M_IMGDATA->m_height;
+    long width  = M_IMGDATA->m_width;
+
+    char unsigned *source_data = M_IMGDATA->m_data;
+    char unsigned *target_data;
+
+    if (horizontally)
+    {
+        for (long j = 0; j < height; j++)
+        {
+            data += width*3;
+            target_data = data-3;
+            for (long i = 0; i < width; i++)
+            {
+                memcpy( target_data, source_data, 3 );
+                source_data += 3;
+                target_data -= 3;
+            }
+        }
+    }
+    else
+    {
+        for (long i = 0; i < height; i++)
+        {
+            target_data = data + 3*width*(height-1-i);
+            memcpy( target_data, source_data, 3*width );
+            source_data += 3*width;
+        }
+    }
+
+    return image;
+}
+
 wxImage wxImage::GetSubImage( const wxRect &rect ) const
 {
     wxImage image;
@@ -293,7 +378,7 @@ void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned c
     M_IMGDATA->m_data[ pos+2 ] = b;
 }
 
-unsigned char wxImage::GetRed( int x, int y )
+unsigned char wxImage::GetRed( int x, int y ) const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
@@ -307,7 +392,7 @@ unsigned char wxImage::GetRed( int x, int y )
     return M_IMGDATA->m_data[pos];
 }
 
-unsigned char wxImage::GetGreen( int x, int y )
+unsigned char wxImage::GetGreen( int x, int y ) const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
@@ -321,7 +406,7 @@ unsigned char wxImage::GetGreen( int x, int y )
     return M_IMGDATA->m_data[pos+1];
 }
 
-unsigned char wxImage::GetBlue( int x, int y )
+unsigned char wxImage::GetBlue( int x, int y ) const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
 
