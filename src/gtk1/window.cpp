@@ -3744,7 +3744,7 @@ static gint gs_pop_y = 0;
 
 static void wxPopupMenuPositionCallback( GtkMenu *menu,
                                          gint *x, gint *y,
-                                         gpointer * WXUNUSED(user_data) )
+                                         gpointer WXUNUSED(user_data) )
 {
     // ensure that the menu appears entirely on screen
     GtkRequisition req;
