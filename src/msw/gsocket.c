@@ -11,16 +11,24 @@
  * PLEASE don't put C++ comments here - this is a C source file.
  */
 
-/* including rasasync.h (included from windows.h itself included from
- * wx/setup.h and/or winsock.h results in this warning for
- * RPCNOTIFICATION_ROUTINE
- */
 #ifdef _MSC_VER
-#  pragma warning(disable:4115) /* named type definition in parentheses */
-#endif
+   /* RPCNOTIFICATION_ROUTINE in rasasync.h (included from winsock.h),
+    * warning: conditional expression is constant.
+    */
+#  pragma warning(disable:4115)
+   /* FD_SET,
+    * warning: named type definition in parentheses.
+    */
+#  pragma warning(disable:4127)
+   /* GAddress_UNIX_GetPath,
+    * warning: unreferenced formal parameter.
+    */
+#  pragma warning(disable:4100)
+#endif /* _MSC_VER */
+
 
 #ifndef __GSOCKET_STANDALONE__
-#include "wx/setup.h"
+#  include "wx/setup.h"
 #endif
 
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
@@ -33,9 +41,9 @@
 #  include "gsocket.h"
 #endif /* __GSOCKET_STANDALONE__ */
 
-/* redefine some GUI-only functions to do nothing in console mode */
+/* Redefine some GUI-only functions to do nothing in console mode */
 #if defined(wxUSE_GUI) && !wxUSE_GUI
-#  define _GSocket_GUI_Init(socket) 1
+#  define _GSocket_GUI_Init(socket) (1)
 #  define _GSocket_GUI_Destroy(socket)
 #  define _GSocket_Enable_Events(socket)
 #  define _GSocket_Disable_Events(socket)
@@ -51,18 +59,10 @@
 
 #include <winsock.h>
 
-#ifdef _MSC_VER
-#  pragma warning(default:4115) /* named type definition in parentheses */
-#endif
 
 /* if we use configure for MSW SOCKLEN_T will be already defined */
 #ifndef SOCKLEN_T
 #  define SOCKLEN_T int
-#endif
-
-/* using FD_SET results in this warning */
-#ifdef _MSC_VER
-#  pragma warning(disable:4127) /* conditional expression is constant */
 #endif
 
 
@@ -1074,7 +1074,9 @@ void GAddress_destroy(GAddress *address)
 {
   assert(address != NULL);
 
-  free(address->m_addr);
+  if (address->m_addr)
+    free(address->m_addr);
+
   free(address);
 }
 
@@ -1331,10 +1333,6 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
  * Unix address family
  * -------------------------------------------------------------------------
  */
-
-#ifdef _MSC_VER
-    #pragma warning(disable:4100) /* unreferenced formal parameter */
-#endif /* Visual C++ */
 
 GSocketError _GAddress_Init_UNIX(GAddress *address)
 {

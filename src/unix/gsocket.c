@@ -1282,6 +1282,9 @@ void GAddress_destroy(GAddress *address)
 {
   assert(address != NULL);
 
+  if (address->m_addr)
+    free(address->m_addr);
+
   free(address);
 }
 
