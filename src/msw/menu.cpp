@@ -562,7 +562,16 @@ bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
 wxMenuBar::wxMenuBar()
 {
   m_eventHandler = this;
+  m_menuCount = 0;
+  m_menus = NULL;
+  m_titles = NULL;
+  m_menuBarFrame = NULL;
+  m_hMenu = 0;
+}
 
+wxMenuBar::wxMenuBar( long WXUNUSED(style) )
+{
+  m_eventHandler = this;
   m_menuCount = 0;
   m_menus = NULL;
   m_titles = NULL;

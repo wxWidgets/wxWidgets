@@ -144,7 +144,7 @@ public:
   wxBitmap(char **data, wxControl* control = NULL);
 
   // Load a file or resource
-  wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_XBM);
+  wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_XPM);
 
   // Constructor for generalised creation from data
   wxBitmap(void *data, long type, int width, int height, int depth = 1);
@@ -155,7 +155,7 @@ public:
 
   virtual bool Create(int width, int height, int depth = -1);
   virtual bool Create(void *data, long type, int width, int height, int depth = 1);
-  virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_XBM);
+  virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_XPM);
   virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
 
   inline bool Ok() const { return (M_BITMAPDATA && M_BITMAPDATA->m_ok); }

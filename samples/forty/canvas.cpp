@@ -51,7 +51,6 @@ FortyCanvas::FortyCanvas(wxWindow* parent, int x, int y, int w, int h) :
 	m_font = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
 #endif
 	SetBackgroundColour(FortyApp::BackgroundColour());
-	AllowDoubleClick(TRUE);
 
 	m_handCursor = new wxCursor(wxCURSOR_HAND);
 	m_arrowCursor = new wxCursor(wxCURSOR_ARROW);
@@ -98,7 +97,7 @@ void FortyCanvas::OnDraw(wxDC& dc)
 	// then ask the player for their name
 	if (m_player.Length() == 0 && !m_playerDialog)
 	{
-		m_playerDialog = new PlayerSelectionDialog(this, m_scoreFile);
+ 		m_playerDialog = new PlayerSelectionDialog(this, m_scoreFile);
 		m_playerDialog->ShowModal();
 		m_player = m_playerDialog->GetPlayersName();
 		if (m_player.Length() > 0)
@@ -108,7 +107,7 @@ void FortyCanvas::OnDraw(wxDC& dc)
 			m_scoreFile->ReadPlayersScore(m_player, wins, games, score);
 			m_game->NewPlayer(wins, games, score);
 			m_game->DisplayScore(dc);
-			delete m_playerDialog;
+			m_playerDialog->Destroy();
 			m_playerDialog = 0;
 			Refresh();
 		}

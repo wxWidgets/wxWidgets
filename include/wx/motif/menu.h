@@ -169,6 +169,7 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxMenuBar)
 
+  wxMenuBar( long style );
   wxMenuBar();
   wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
   ~wxMenuBar();

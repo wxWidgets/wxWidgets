@@ -92,6 +92,7 @@ COMMONOBJS = \
   $(COMMDIR)\filefn.obj \
   $(COMMDIR)\fileconf.obj \
   $(COMMDIR)\framecmn.obj \
+  $(COMMDIR)\ftp.obj \
   $(COMMDIR)\gdicmn.obj \
   $(COMMDIR)\image.obj \
   $(COMMDIR)\intl.obj \
@@ -829,6 +830,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(COMMDIR)/framecmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/ftp.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

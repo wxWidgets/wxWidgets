@@ -143,6 +143,7 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
 
 public:
   wxMenuBar();
+  wxMenuBar( long style );
   wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
   ~wxMenuBar();
 

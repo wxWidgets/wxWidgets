@@ -508,6 +508,19 @@ wxMenuBar::wxMenuBar()
     m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
+wxMenuBar::wxMenuBar(long WXUNUSED(style))
+{
+    m_eventHandler = this;
+    m_menuCount = 0;
+    m_menus = NULL;
+    m_titles = NULL;
+    m_menuBarFrame = NULL;
+    m_mainWidget = (WXWidget) NULL;
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
+    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+}
+
 wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxString titles[])
 {
     m_eventHandler = this;

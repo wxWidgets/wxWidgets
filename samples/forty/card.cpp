@@ -41,7 +41,7 @@
 #include "forty.h"
 #include "card.h"
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "pictures.xpm"
 #include "symbols.xbm"
 #endif

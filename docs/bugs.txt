@@ -4,8 +4,12 @@ wxWindows Buglist
 wxGTK:
 ------
 
+- TODO
+
 wxMSW:
 ------
+
+- TODO
 
 wxMotif:
 --------
@@ -28,6 +32,20 @@ wxMotif:
 - Can't set the colours for the buttons in the file selector, for
   some reason.
 
+- On SGI IRIX 6.4, XtDestroyWidget in ~wxWindow causes a crash in
+  some cicumstances. This is being looked into. Meanwhile, a
+  possible workaround is to remove the final XtDestroyWidget line in ~wxWindow
+  (window.cpp). This will mean that child windows will only get
+  destroyed when frames and dialogs are destroyed, so dynamic subwindow
+  deletion may not work properly.
+
+- There are reports that scrolling can cause crashes under Lesstif.
+  This is probably a Lesstif bug.
+
 General:
 --------
+
+- Dialog Editor could be more user-friendly. Controls are hard to
+  size and position accurately. No way of changing tab order
+  except by editing .wxr file.
 

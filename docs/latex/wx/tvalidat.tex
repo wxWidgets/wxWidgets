@@ -1,6 +1,7 @@
 \section{Validator overview}\label{validatoroverview}
 
-Classes: \helpref{wxValidator}{wxvalidator}, \helpref{wxTextValidator}{wxtextvalidator}
+Classes: \helpref{wxValidator}{wxvalidator}, \helpref{wxTextValidator}{wxtextvalidator}, 
+\helpref{wxGenericValidator}{wxgenericvalidator}
 
 The aim of the validator concept is to make dialogs very much easier to write.
 A validator is an object that can be plugged into a control (such as a wxTextCtrl), and
@@ -8,8 +9,10 @@ mediates between C++ data and the control, transferring the data in either direc
 and validating it. It also is able to intercept events generated
 by the control, providing filtering behaviour without the need to derive a new control class.
 
-You can use a stock validator, such as \helpref{wxTextValidator}{wxtextvalidator}; or
-you can write your own.
+You can use a stock validator, such as \helpref{wxTextValidator}{wxtextvalidator} (which does text
+control data transfer, validation and filtering) and 
+\helpref{wxGenericValidator}{wxgenericvalidator} (which does data transfer for a range of controls);
+or you can write your own.
 
 \wxheading{Example}
 
@@ -113,4 +116,7 @@ void wxDialog::OnOK(wxCommandEvent& event)
 
 So if using validators and a normal OK button, you may not even need to write any
 code for handling dialog dismissal.
+
+If you load your dialog from a resource file, you'll need to iterate through the controls
+setting validators, since validators can't be specified in a dialog resource.
 

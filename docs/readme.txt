@@ -96,7 +96,7 @@ The wxWindows Web site is located at:
 
   http://www.wxwindows.org
 
-The wxGTK Web site (with further wxGTK-specific fiels and
+The wxGTK Web site (with further wxGTK-specific files and
 information) is located at:
 
   http://www.freiburg.linux.de/~wxxt
@@ -115,5 +115,5 @@ or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, January 1999
+The wxWindows Team, February 1999
 

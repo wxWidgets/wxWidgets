@@ -172,17 +172,17 @@ void PlayerSelectionDialog::ButtonCallback(wxCommandEvent& event)
 			else
 			{
 				m_player = name;
-				Show(FALSE);
+				EndModal(wxID_OK);
 			}
 		}
 		else
 		{
-			wxMessageBox("Please enter your name", "Forty Thieves");
+ 			wxMessageBox("Please enter your name", "Forty Thieves");
 		}
 	}
 	else
 	{
 		m_player = "";
-		Show(FALSE);
+		EndModal(wxID_CANCEL);
 	}
 }

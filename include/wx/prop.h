@@ -42,27 +42,27 @@ class WXDLLEXPORT wxPropertySheet: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxPropertySheet)
  public:
-  wxPropertySheet(wxString name = "");
+  wxPropertySheet(const wxString& name = "");
   ~wxPropertySheet(void);
 
   // Set the name of the sheet
-  inline virtual void SetName(wxString name) { m_name=name; }
-  inline virtual wxString GetName() { return m_name; }
+  inline virtual void SetName(const wxString& name) { m_name=name; }
+  inline virtual wxString GetName() const { return m_name; }
   // Does this sheet contain a property with this name
-  virtual bool HasProperty(wxString name);
+  virtual bool HasProperty(const wxString& name) const;
 
   // Set property name to value
-  virtual bool SetProperty(const wxString name, wxPropertyValue value);
+  virtual bool SetProperty(const wxString& name, const wxPropertyValue& value);
 
   // Remove property from sheet by name, deleting it
-  virtual void RemoveProperty(wxString name);
+  virtual void RemoveProperty(const wxString& name);
 
   // Get the name of the sheet
   // Add a property
   virtual void AddProperty(wxProperty *property);
 
   // Get property by name
-  virtual wxProperty *GetProperty(wxString name);
+  virtual wxProperty *GetProperty(const wxString& name) const;
 
   // Clear all properties
   virtual void Clear(void);

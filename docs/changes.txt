@@ -12,7 +12,7 @@ wxMSW:
 
 - Makefiles for more compilers and samples; Cygwin makefiles
   rationalised.
-- Added VC++ project file for compiling as DLL.
+- Added VC++ project file for compiling wxWindows as DLL.
 
 wxMotif:
 

@@ -42,7 +42,7 @@ wxControl::~wxControl()
     if (parent)
     {
         if (parent->GetDefaultItem() == (wxButton*) this)
-            parent->SetDefaultItem(NULL);
+            parent->SetDefaultItem((wxButton*) NULL);
     }
 }
 

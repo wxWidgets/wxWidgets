@@ -91,7 +91,7 @@ bool FortyApp::OnInit()
 			-1, -1, 668, 510
 			);
 
-	// Show the frame
+ 	// Show the frame
 	frame->Show(TRUE);
 
 	return TRUE;
@@ -192,7 +192,7 @@ FortyFrame::~FortyFrame()
 
 void FortyFrame::OnCloseWindow(wxCloseEvent& event)
 {
-	if (m_canvas->OnCloseCanvas())
+    if (m_canvas->OnCloseCanvas() )
     {
         this->Destroy();
     }

@@ -60,7 +60,10 @@ Using project files:
 
 1. Unarchive wx200vc.zip, the VC++ 5 project makefiles.
 2. Open src/wxvc.dsp, set Debug or Release configuration, and
-   compile. This will produce lib/wxvc.lib or lib/wxvc_debug.lib.
+   compile. This will produce src/Debug/wxvc.lib or
+   src/Release/wxvc.lib.  The project file src/wxvc_dll.dsp
+   will make a DLL version of wxWindow, which will go in
+   src/DebugDLL/wxvc.[lib,dll] and src/ReleaseDLL/wxvc.[lib,dll].
 3. Open a sample project file, choose a configuration, and compile.
    The project files don't use precompiled headers, to save
    space, but you can switch PCH compiling on for greater speed.
@@ -154,8 +157,8 @@ supplied.
 Watcom C++ 10.6 compilation
 ---------------------------
 
-1. Make sure your WXWIN variable is set, and uses the FAT (short
-   name) form.
+1. Make sure your WXWIN variable is set, and uses the DOS short
+   name form.
 2. Change directory to wx\src\msw. Type 'wmake -f makefile.wat' to
    make the wxWindows core library.
 3. Change directory to wx\samples\minimal and type 'wmake -f makefile.wat'
@@ -173,9 +176,9 @@ Metrowerks CodeWarrior compilation
 NOTES:
 
 (a) Unfortunately CodeWarrior support is broken in this
-release. Stefan Csomor (csomor@advancedconcepts.ch) will rectify this shortly.
+    release. Stefan Csomor (csomor@advancedconcepts.ch) will rectify this shortly.
 (b) You need CodeWarrior Pro 4 plus the patches to 4.1 from the
-Metrowerks Web site.
+    Metrowerks Web site.
 
 Symantec C++ compilation
 ------------------------
@@ -267,6 +270,8 @@ Here are the steps required:
   > make -f makefile.g95
   > cd c:\wx\samples\minimal
   > make -f makefile.g95
+
+  Ignore the warning about the default entry point.
 
 - Use the 'strip' command to reduce executable size.
 

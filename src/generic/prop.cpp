@@ -941,7 +941,7 @@ wxPropertyValidator *wxPropertyView::FindPropertyValidator(wxProperty *property)
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertySheet, wxObject)
 
-wxPropertySheet::wxPropertySheet(wxString name)
+wxPropertySheet::wxPropertySheet(const wxString& name)
 :m_properties(wxKEY_STRING),m_name(name)
 {
 }
@@ -972,7 +972,7 @@ void wxPropertySheet::AddProperty(wxProperty *property)
 }
 
 // Get property by name
-wxProperty *wxPropertySheet::GetProperty(wxString name)
+wxProperty *wxPropertySheet::GetProperty(const wxString& name) const
 {
   wxNode *node = m_properties.Find((const char*) name);
   if (!node)
@@ -980,7 +980,8 @@ wxProperty *wxPropertySheet::GetProperty(wxString name)
   else
     return (wxProperty *)node->Data();
 }
-bool wxPropertySheet::SetProperty(const wxString name, wxPropertyValue value)
+
+bool wxPropertySheet::SetProperty(const wxString& name, const wxPropertyValue& value)
 {
   wxProperty* prop = GetProperty(name);
   if(prop){
@@ -990,7 +991,8 @@ bool wxPropertySheet::SetProperty(const wxString name, wxPropertyValue value)
     return FALSE;
   }
 }
-void wxPropertySheet::RemoveProperty(wxString name)
+
+void wxPropertySheet::RemoveProperty(const wxString& name)
 {
   wxNode *node = m_properties.Find(name);
   if(node)
@@ -1000,10 +1002,12 @@ void wxPropertySheet::RemoveProperty(wxString name)
     m_properties.DeleteNode(node);
   }
 }	
-bool wxPropertySheet::HasProperty(wxString name)
+
+bool wxPropertySheet::HasProperty(const wxString& name) const
 { 
 	return (GetProperty(name)?TRUE:FALSE); 
 }
+
 // Clear all properties
 void wxPropertySheet::Clear(void)
 {

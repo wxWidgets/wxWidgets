@@ -285,26 +285,16 @@ wxDialog::~wxDialog()
     // but I think this should work, if we destroy the children first.
     // Note that this might need to be done for wxFrame also.
     DestroyChildren();
-    
-    // This causes a crash in e.g. the resource sample when closing
-    // the example dialog. TODO: Probably not necessary (?)
-#if 0
-    // Now process all events, because otherwise
-    // this might remain on the screen.
-    Display* display;
-    if (m_mainWidget)
-        display = XtDisplay((Widget) m_mainWidget);
-    else
-        display = (Display*) wxGetDisplay();
-    
-    XSync(display, FALSE);
-    XEvent event;
-    while (XtAppPending((XtAppContext) wxTheApp->GetAppContext())) {
-        XFlush(display);
-        XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
-        XtDispatchEvent(&event);
+
+    // The idea about doing it here is that if you have to remove the
+    // XtDestroyWidget from ~wxWindow, at least top-level windows
+    // will still be deleted (and destroy children implicitly).
+    if (GetMainWidget())
+    {
+      DetachWidget(GetMainWidget()); // Removes event handlers
+      XtDestroyWidget((Widget) GetMainWidget());
+      SetMainWidget((WXWidget) NULL);
     }
-#endif
 }
 
 // By default, pressing escape cancels the dialog

@@ -235,7 +235,11 @@ wxWindow::~wxWindow()
     // Destroy the window
     if (GetMainWidget())
     {
-        wxDeleteWindowFromTable((Widget) GetMainWidget());
+        // If this line (XtDestroyWidget) causes a crash, you may comment it out.
+        // Child widgets will get destroyed automatically when a frame
+        // or dialog is destroyed, but before that you may get some memory
+        // leaks and potential layout problems if you delete and then add
+        // child windows.
         XtDestroyWidget((Widget) GetMainWidget());
         SetMainWidget((WXWidget) NULL);
     }
