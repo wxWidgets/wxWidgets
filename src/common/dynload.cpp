@@ -192,7 +192,7 @@ wxDllType wxDllLoader::LoadLibrary(const wxString &name)
     {
         wxString msg(_("Failed to load shared library '%s'"));
 #ifdef HAVE_DLERROR
-        wxChar  *err = dlerror();
+        const wxChar  *err = dlerror();
         if( err )
             wxLogError( msg, err );
 #else
@@ -237,7 +237,7 @@ void *wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name, bool *su
     {
         wxString msg(_("wxDllLoader failed to GetSymbol '%s'"));
 #ifdef HAVE_DLERROR
-        wxChar  *err = dlerror();
+        const wxChar *err = dlerror();
         if( err )
         {
             failed = TRUE;
