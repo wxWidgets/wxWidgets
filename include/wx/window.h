@@ -663,6 +663,15 @@ public:
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = (wxRect *) NULL ) = 0;
 
+        // scrolls window by line/page: note that not all controls support this
+    virtual void ScrollLines(int WXUNUSED(lines)) { }
+    virtual void ScrollPages(int WXUNUSED(pages)) { }
+
+    void LineUp() { ScrollLines(-1); }
+    void LineDown() { ScrollLines(1); }
+    void PageUp() { ScrollPages(-1); }
+    void PageDown() { ScrollPages(1); }
+
     // context-sensitive help
     // ----------------------
 

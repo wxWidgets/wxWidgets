@@ -940,6 +940,24 @@ void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
     ::ScrollWindow(GetHwnd(), dx, dy, prect ? &rect : NULL, NULL);
 }
 
+static void ScrollVertically(int kind, int count)
+{
+}
+
+void wxWindowMSW::ScrollLines(int lines)
+{
+    bool down = lines > 0;
+
+    ScrollVertically(down ? SB_LINEDOWN : SB_LINEUP, down ? lines : -lines);
+}
+
+void wxWindowMSW::ScrollPages(int pages)
+{
+    bool down = pages > 0;
+
+    ScrollVertically(down ? SB_PAGEDOWN : SB_PAGEUP, down ? pages : -pages);
+}
+
 // ---------------------------------------------------------------------------
 // subclassing
 // ---------------------------------------------------------------------------
