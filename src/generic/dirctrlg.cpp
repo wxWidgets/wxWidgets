@@ -317,7 +317,12 @@ int setdrive(int drive)
 	newdrive[0] = (char)('A' + (char)drive - (char)1);
 	newdrive[1] = ':';
 	newdrive[2] = '\0';
+#if defined(__WXMSW__)
 	if (SetCurrentDirectory((LPSTR)newdrive))
+#else
+    // VA doesn't know what LPSTR is and has its own set
+	if (DosSetCurrentDir((PSZ)newdrive))
+#endif
 		return 0;
 	else
 		return -1;
