@@ -226,9 +226,6 @@ private:
     void OutputGlobals(HANDLE hModuleCrash);
 
 
-    // the handle of the report file
-    HANDLE m_hFile;
-
     // the current stack frame (may be NULL)
     STACKFRAME *m_sfCurrent;
 
@@ -247,6 +244,9 @@ private:
     DECLARE_SYM_FUNCTION(SymEnumSymbols);
     DECLARE_SYM_FUNCTION(SymGetTypeInfo);
 #endif // wxUSE_DBGHELP
+
+    // the handle of the report file
+    HANDLE m_hFile;
 };
 
 // ----------------------------------------------------------------------------
