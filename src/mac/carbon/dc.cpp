@@ -277,7 +277,7 @@ void wxDC::DrawSpline( int n, wxPoint points[] )
   DrawSpline( &list );
 };
 
-void wxDC::SetClippingRegion( long x, long y, long width, long height )
+void wxDC::SetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
   MacVerifySetup() ;
 	if( m_clipping )
@@ -308,12 +308,30 @@ void wxDC::SetClippingRegion( long x, long y, long width, long height )
 
 };
 
+void wxDC::SetClippingRegion(const wxRect& rect)
+{ 
+	SetClippingRegion(rect.x, rect.y, rect.width, rect.height); 
+}
+
 void wxDC::DestroyClippingRegion(void)
 {
   MacVerifySetup() ;
   m_clipping = FALSE;
 //	Rect clip = { -32000 , -32000 , 32000 , 32000 } ;
 	::ClipRect(&m_macClipRect);
+};
+
+void wxDC::GetClippingBox( wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height ) const
+{
+  if (m_clipping)
+  {
+    if (x) *x = m_clipX1;
+    if (y) *y = m_clipY1;
+    if (width) *width = (m_clipX2 - m_clipX1);
+    if (height) *height = (m_clipY2 - m_clipY1);
+  }
+  else
+   *x = *y = *width = *height = 0;
 };
 
 void wxDC::GetClippingBox( long *x, long *y, long *width, long *height ) const
@@ -329,6 +347,14 @@ void wxDC::GetClippingBox( long *x, long *y, long *width, long *height ) const
    *x = *y = *width = *height = 0;
 };
 
+void wxDC::GetClippingBox(wxRect& rect) const
+{
+  // Necessary to use intermediate variables for 16-bit compilation
+  wxCoord x, y, w, h;
+  GetClippingBox(&x, &y, &w, &h);
+  rect.x = x; rect.y = y; rect.width = w; rect.height = h;
+}
+    
 void wxDC::GetSize( int* width, int* height ) const
 {
   *width = m_maxX-m_minX;
@@ -1245,7 +1271,7 @@ void  wxDC::GetTextExtent( const wxString &string, long *width, long *height,
 	}
 }
 
-long   wxDC::GetCharWidth(void)
+wxCoord   wxDC::GetCharWidth(void) const
 {
   if (!Ok()) 
   	return 1;
@@ -1260,7 +1286,7 @@ long   wxDC::GetCharWidth(void)
 	return (fi.descent + fi.ascent) / 2 ;
 }
 
-long   wxDC::GetCharHeight(void)
+wxCoord   wxDC::GetCharHeight(void) const
 {
   if (!Ok()) 
   	return 1;
