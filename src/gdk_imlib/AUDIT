@@ -1,0 +1,26 @@
+Audit status of gdk_imlib so far:
+
+cache.c appears clean
+globals.c appears clean
+
+load.c:
+	JPEG, PNG, GIF and TIFF loaders seem safe but the underlying
+		yet libraries have not been checked
+	Helper stuff should now be safe.
+
+misc.c
+	The obvious screwups have been remedied with the usual 
+	length checking sscanfs and snprintfs.
+	Rewrote a little of the parsing code to avoid future problems.
+
+rend.c
+	Appears ok
+
+save.c 
+	Some stuff has been fixed. The helpers should be safe but
+	are incomplete
+
+utils.c
+	Ok this seems clean now. There's a few  FIXME's but they are
+	either new features (helper needs %Q) or bogus but non fatal
+	stuff
