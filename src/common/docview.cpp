@@ -1435,9 +1435,9 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 }
 
 wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
-                                                int noTemplates)
+                                                int noTemplates, bool sort)
 {
-    wxArrayString strings;
+    wxArrayString strings(sort);
     wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
@@ -1483,9 +1483,9 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
 }
 
 wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
-                                            int noTemplates)
+                                            int noTemplates, bool sort)
 {
-    wxArrayString strings;
+    wxArrayString strings(sort);
     wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;

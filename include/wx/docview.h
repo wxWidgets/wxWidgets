@@ -348,9 +348,9 @@ public:
     virtual wxDocTemplate *SelectDocumentPath(wxDocTemplate **templates,
             int noTemplates, wxString& path, long flags, bool save = FALSE);
     virtual wxDocTemplate *SelectDocumentType(wxDocTemplate **templates,
-            int noTemplates);
+            int noTemplates, bool sort = FALSE);
     virtual wxDocTemplate *SelectViewType(wxDocTemplate **templates,
-            int noTemplates);
+            int noTemplates, bool sort = FALSE);
     virtual wxDocTemplate *FindTemplateForPath(const wxString& path);
 
     void AssociateTemplate(wxDocTemplate *temp);

@@ -348,20 +348,38 @@ This function is used in wxDocManager::CreateDocument.
 \membersection{wxDocManager::SelectDocumentType}
 
 \func{wxDocTemplate *}{SelectDocumentType}{\param{wxDocTemplate **}{templates},
- \param{int}{ noTemplates}}
+ \param{int}{ noTemplates}, \param{bool}{ sort=FALSE}}
 
 Returns a document template by asking the user (if there is more than one template).
 This function is used in wxDocManager::CreateDocument.
 
+\wxheading{Parameters}
+
+\docparam{templates}{Pointer to an array of templates from which to choose a desired template.}
+\docparam{noTemplates}{Number of templates being pointed to by the {\it templates} pointer.}
+\docparam{sort}{If more than one template is passed in in {\it templates}, 
+then this parameter indicates whether the list of templates that the user 
+will have to choose from is sorted or not when shown the choice box dialog.  
+Default is FALSE.}
+
 \membersection{wxDocManager::SelectViewType}
 
 \func{wxDocTemplate *}{SelectViewType}{\param{wxDocTemplate **}{templates},
- \param{int}{ noTemplates}}
+ \param{int}{ noTemplates}, \param{bool}{ sort=FALSE}}
 
 Returns a document template by asking the user (if there is more than one template),
 displaying a list of valid views. This function is used in wxDocManager::CreateView.
-The dialog normally won't appear because the array of templates only contains
+The dialog normally will not appear because the array of templates only contains
 those relevant to the document in question, and often there will only be one such.
+
+\wxheading{Parameters}
+
+\docparam{templates}{Pointer to an array of templates from which to choose a desired template.}
+\docparam{noTemplates}{Number of templates being pointed to by the {\it templates} pointer.}
+\docparam{sort}{If more than one template is passed in in {\it templates}, 
+then this parameter indicates whether the list of templates that the user 
+will have to choose from is sorted or not when shown the choice box dialog.  
+Default is FALSE.}
 
 \membersection{wxDocManager::SetLastDirectory}\label{wxdocmanagersetlastdirectory}
 
