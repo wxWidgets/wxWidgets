@@ -63,6 +63,9 @@
 #define wxUSE_CLIPBOARD   1
                                 // 0 for no clipboard functions
 
+#define wxUSE_PLOT        1
+                                // 0 for no generic plot functions
+
 #define wxUSE_SPLINES     1
                                     // 0 for no splines
 
@@ -159,7 +162,7 @@
                                   // Set this to 0 if your compiler can't cope
                                   // with omission of prototype parameters.
 
-#define wxUSE_ODBC                0
+#define wxUSE_ODBC                1
                                   // Define 1 to use ODBC classes
 
 #define wxODBC_FWD_ONLY_CURSORS   1
