@@ -81,6 +81,15 @@ wxMenuItemBase::~wxMenuItemBase()
 
 #if wxUSE_ACCEL
 
+static inline bool CompareAccelString(const wxString& str, const wxChar *accel)
+{
+#if wxUSE_INTL
+    return str == accel || str == wxGetTranslation(accel);
+#else
+    return str == accel;
+#endif
+}
+
 // return wxAcceleratorEntry for the given menu string or NULL if none
 // specified
 wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
@@ -94,11 +103,11 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
         wxString current;
         for ( size_t n = (size_t)posTab + 1; n < label.Len(); n++ ) {
             if ( (label[n] == '+') || (label[n] == '-') ) {
-                if ( current == _("ctrl") || current == _T("ctrl") )
+                if ( CompareAccelString(current, wxTRANSLATE("ctrl")) )
                     accelFlags |= wxACCEL_CTRL;
-                else if ( current == _("alt") || current == _T("alt") )
+                else if ( CompareAccelString(current, wxTRANSLATE("alt")) )
                     accelFlags |= wxACCEL_ALT;
-                else if ( current == _("shift") || current == _T("shift") )
+                else if ( CompareAccelString(current, wxTRANSLATE("shift")) )
                     accelFlags |= wxACCEL_SHIFT;
                 else {
                     // we may have "Ctrl-+", for example, but we still want to
