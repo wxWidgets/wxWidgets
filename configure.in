@@ -510,7 +510,7 @@ AC_ARG_ENABLE(prologio,        [  --enable-prologio       use Prolog IO library]
 AC_ARG_ENABLE(resources,    [  --enable-resources      use wxWindows resources],
             wxUSE_RESOURCES="${enableval}",wxUSE_RESOURCES=$DEFAULT_wxUSE_RESOURCES)
 
-AC_ARG_ENABLE(xresources, [  --enable-xresources       use X resources for save (default for gtk+)],
+AC_ARG_ENABLE(xresources, [  --enable-xresources     use X resources for save (default for gtk+)],
             wxUSE_X_RESOURCES="${enableval}",wxUSE_X_RESOURCES=$DEFAULT_wxUSE_X_RESOURCES)
 dnl ---------------------------------------------------------------------------
 dnl IPC &c
@@ -622,7 +622,7 @@ AC_ARG_ENABLE(radiobox, [  --enable-radiobox       use wxRadioBox class],
             wxUSE_RADIOBOX="${enableval}",wxUSE_RADIOBOX=$DEFAULT_wxUSE_RADIOBOX)
 AC_ARG_ENABLE(radiobtn, [  --enable-radiobtn       use wxRadioButton class],
             wxUSE_RADIOBTN="${enableval}",wxUSE_RADIOBTN=$DEFAULT_wxUSE_RADIOBTN)
-AC_ARG_ENABLE(sash, [  --enable-sash       use wxSashWindow class],
+AC_ARG_ENABLE(sash, [  --enable-sash           use wxSashWindow class],
             wxUSE_SASH="${enableval}",wxUSE_SASH=$DEFAULT_wxUSE_SASH)
 AC_ARG_ENABLE(scrollbar, [  --enable-scrollbar      use wxScrollBar class and scrollable windows],
             wxUSE_SCROLLBAR="${enableval}",wxUSE_SCROLLBAR=$DEFAULT_wxUSE_SCROLLBAR)
@@ -632,7 +632,7 @@ AC_ARG_ENABLE(spinbtn, [  --enable-spinbtn        use wxSpinButton class],
             wxUSE_SPINBTN="${enableval}",wxUSE_SPINBTN=$DEFAULT_wxUSE_SPINBTN)
 AC_ARG_ENABLE(splitter, [  --enable-splitter       use wxSplitterWindow class],
             wxUSE_SPLITTER="${enableval}",wxUSE_SPLITTER=$DEFAULT_wxUSE_SPLITTER)
-AC_ARG_ENABLE(statbmp, [  --enable-statbmp        use wxStaticBitmap class],
+AC_ARG_ENABLE(statbmp, [  --enable-statbmp         use wxStaticBitmap class],
             wxUSE_STATBMP="${enableval}",wxUSE_STATBMP=$DEFAULT_wxUSE_STATBMP)
 AC_ARG_ENABLE(statbox, [  --enable-statbox       use wxStaticBox class],
             wxUSE_STATBOX="${enableval}",wxUSE_STATBOX=$DEFAULT_wxUSE_STATBOX)
@@ -642,7 +642,7 @@ AC_ARG_ENABLE(statusbar, [  --enable-statusbar      use wxStatusBar class],
             wxUSE_STATUSBAR="${enableval}",wxUSE_STATUSBAR=$DEFAULT_wxUSE_STATUSBAR)
 AC_ARG_ENABLE(tabdialog, [  --enable-tabdialog        use wxTabControl class],
             wxUSE_TABDIALOG="${enableval}",wxUSE_TABDIALOG=$DEFAULT_wxUSE_TABDIALOG)
-AC_ARG_ENABLE(toolbar, [  --enable-toolbar        use wxToolBar class],
+AC_ARG_ENABLE(toolbar, [  --enable-toolbar      use wxToolBar class],
             wxUSE_TOOLBAR="${enableval}",wxUSE_TOOLBAR=$DEFAULT_wxUSE_TOOLBAR)
 AC_ARG_ENABLE(treectrl, [  --enable-treectrl       use wxTreeCtrl class],
             wxUSE_TREECTRL="${enableval}",wxUSE_TREECTRL=$DEFAULT_wxUSE_TREECTRL)
@@ -659,7 +659,7 @@ AC_ARG_ENABLE(tooltips, [  --enable-tooltips       use wxToolTip class],
             wxUSE_TOOLTIPS="${enableval}",wxUSE_TOOLTIPS=$DEFAULT_wxUSE_TOOLTIPS)
 AC_ARG_ENABLE(splines, [  --enable-splines        use spline drawing code],
             wxUSE_SPLINES="${enableval}",wxUSE_SPLINES=$DEFAULT_wxUSE_SPLINES)
-AC_ARG_ENABLE(validators, [  --enable-validators      use wxValidator and derived classes],
+AC_ARG_ENABLE(validators, [  --enable-validators     use wxValidator and derived classes],
             wxUSE_VALIDATORS="${enableval}",wxUSE_VALIDATORS=$DEFAULT_wxUSE_VALIDATORS)
 
 dnl check that no more than one toolkit is given and that if none are given that
