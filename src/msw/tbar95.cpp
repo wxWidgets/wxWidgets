@@ -1102,38 +1102,6 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 // private functions
 // ----------------------------------------------------------------------------
 
-// VZ: we use a separate function to do the actual colour mapping because
-//     otherwise VC++ optimizer seems to mangle the code in MapBitmap(): with
-//     optimization on, the code produces incorrect result (but it's ok in
-//     debug mode, i.e. globally without optimizations or if you insert a
-//     #pragma optimize("", off) just before the function!)
-//
-//     This will also make it simpler to replace MapColours() later with
-//     something more efficient...
-static void MapColours(HDC hdc, int width, int height,
-                       size_t numColours, COLORMAP *cmap)
-{
-    for ( int i = 0; i < width; i++ )
-    {
-        for ( int j = 0; j < height; j++ )
-        {
-            COLORREF pixel = ::GetPixel(hdc, i, j);
-
-            for ( size_t k = 0; k < numColours; k++ )
-            {
-                COLORREF col = cmap[k].from;
-                if ( abs(GetRValue(pixel) - GetRValue(col)) < 10 &&
-                     abs(GetGValue(pixel) - GetGValue(col)) < 10 &&
-                     abs(GetBValue(pixel) - GetBValue(col)) < 10 )
-                {
-                    ::SetPixel(hdc, i, j, cmap[k].to);
-                    break;
-                }
-            }
-        }
-    }
-}
-
 WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
 {
     // number of the colours we map: if you change this, update
@@ -1142,7 +1110,7 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
     static const size_t NUM_OF_MAPPED_COLOURS = 4;
 
     static bool s_coloursInit = FALSE;
-    long s_stdColours[NUM_OF_MAPPED_COLOURS];
+    static long s_stdColours[NUM_OF_MAPPED_COLOURS];
 
     if (!s_coloursInit)
     {
@@ -1222,7 +1190,25 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
         return bitmap;
     }
 
-    MapColours(hdcMem, width, height, WXSIZEOF(ColorMap), ColorMap);
+    for ( int i = 0; i < width; i++ )
+    {
+        for ( int j = 0; j < height; j++ )
+        {
+            COLORREF pixel = ::GetPixel(hdcMem, i, j);
+
+            for ( size_t k = 0; k < numColours; k++ )
+            {
+                COLORREF col = ColorMap[k].from;
+                if ( abs(GetRValue(pixel) - GetRValue(col)) < 10 &&
+                     abs(GetGValue(pixel) - GetGValue(col)) < 10 &&
+                     abs(GetBValue(pixel) - GetBValue(col)) < 10 )
+                {
+                    ::SetPixel(hdcMem, i, j, ColorMap[k].to);
+                    break;
+                }
+            }
+        }
+    }
 
     return bitmap;
 
