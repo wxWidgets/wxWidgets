@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  G:\DEV\WX22\WXWINDOWS\lib\wx.lib
+;From library:  G:\DEV\WX22\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -319,6 +319,12 @@ EXPORTS
       __dt__15wxDateTimeArrayFv
       ;wxDateTime::operator+=(const wxDateSpan&)
       __apl__10wxDateTimeFRC10wxDateSpan
+      ;wxTimeSpan::Subtract(const wxTimeSpan&)
+      Subtract__10wxTimeSpanFRC10wxTimeSpan
+      ;wxDateTime::Subtract(const wxDateSpan&)
+      Subtract__10wxDateTimeFRC10wxDateSpan
+      ;wxDateTime::Subtract(const wxDateSpan&) const
+      Subtract__10wxDateTimeCFRC10wxDateSpan
       ;wxDateTime::ResetTime()
       ResetTime__10wxDateTimeFv
       ;wxDateTime::Now()
@@ -345,8 +351,6 @@ EXPORTS
       __ct__10wxTimeSpanFlN31
       ;wxDateTime::Tm::Tm(const tm&,const wxDateTime::TimeZone&)
       __ct__Q2_10wxDateTime2TmFRC2tmRCQ2_10wxDateTime8TimeZone
-      ;wxDateTime::Substract(const wxDateTime&) const
-      Substract__10wxDateTimeCFRC10wxDateTime
       ;wxDateTime::SetYear(int)
       SetYear__10wxDateTimeFi
       ;wxDateTime::SetToLastMonthDay(wxDateTime::Month,int)
@@ -363,12 +367,12 @@ EXPORTS
       GetDayOfYear__10wxDateTimeCFRCQ2_10wxDateTime8TimeZone
       ;wxDateTime::GetCentury(int)
       GetCentury__10wxDateTimeFi
-      ;wxTimeSpan::Substract(const wxTimeSpan&)
-      Substract__10wxTimeSpanFRC10wxTimeSpan
-      ;wxDateTime::Tm::Tm()
-      __ct__Q2_10wxDateTime2TmFv
       ;wxDateTime::SetToWeekDay(wxDateTime::WeekDay,int,wxDateTime::Month,int)
       SetToWeekDay__10wxDateTimeFQ2_10wxDateTime7WeekDayiQ2_10wxDateTime5MonthT2
+      ;wxDateTime::Tm::Tm()
+      __ct__Q2_10wxDateTime2TmFv
+      ;wxDateTime::Subtract(const wxTimeSpan&)
+      Subtract__10wxDateTimeFRC10wxTimeSpan
       ;wxDateTime::GetNumberOfDays(wxDateTime::Month,int,wxDateTime::Calendar)
       GetNumberOfDays__10wxDateTimeFQ2_10wxDateTime5MonthiQ2_10wxDateTime8Calendar
       ;wxTimeSpan::GetHours() const
@@ -429,10 +433,6 @@ EXPORTS
       AddMonths__Q2_10wxDateTime2TmFi
       ;wxDateTime::TimeZone::TimeZone(wxDateTime::TZ)
       __ct__Q2_10wxDateTime8TimeZoneFQ2_10wxDateTime2TZ
-      ;wxDateTime::Substract(const wxTimeSpan&) const
-      Substract__10wxDateTimeCFRC10wxTimeSpan
-      ;wxDateTime::Substract(const wxDateSpan&) const
-      Substract__10wxDateTimeCFRC10wxDateSpan
       ;wxDateSpan::Neg()
       Neg__10wxDateSpanFv
       ;wxDateTime::IsLeapYear(int,wxDateTime::Calendar)
@@ -458,6 +458,8 @@ EXPORTS
       __vft18wxDateTimeWorkDays26wxDateTimeHolidayAuthority
       ;wxDateTime::TIME_T_FACTOR
       TIME_T_FACTOR__10wxDateTime
+      ;wxDateTime::Subtract(const wxDateTime&) const
+      Subtract__10wxDateTimeCFRC10wxDateTime
       ;wxDateTime::SetToWeekDayInSameWeek(wxDateTime::WeekDay)
       SetToWeekDayInSameWeek__10wxDateTimeFQ2_10wxDateTime7WeekDay
       ;wxDateTime::SetToTheWeek(unsigned short,wxDateTime::WeekDay)
@@ -484,8 +486,8 @@ EXPORTS
       __apl__10wxDateTimeFRC10wxTimeSpan
       ;wxDateTime::operator-=(const wxDateSpan&)
       __ami__10wxDateTimeFRC10wxDateSpan
-      ;wxDateTime::Substract(const wxDateSpan&)
-      Substract__10wxDateTimeFRC10wxDateSpan
+      ;wxTimeSpan::Subtract(const wxTimeSpan&) const
+      Subtract__10wxTimeSpanCFRC10wxTimeSpan
       ;wxDateTime::SetToCurrent()
       SetToCurrent__10wxDateTimeFv
       ;wxDateSpan::Negate() const
@@ -547,10 +549,8 @@ EXPORTS
       __ami__10wxDateTimeFRC10wxTimeSpan
       ;wxDateTime::Today()
       Today__10wxDateTimeFv
-      ;wxTimeSpan::Substract(const wxTimeSpan&) const
-      Substract__10wxTimeSpanCFRC10wxTimeSpan
-      ;wxDateTime::Substract(const wxTimeSpan&)
-      Substract__10wxDateTimeFRC10wxTimeSpan
+      ;wxDateTime::Subtract(const wxTimeSpan&) const
+      Subtract__10wxDateTimeCFRC10wxTimeSpan
       ;wxDateTime::IsEqualUpTo(const wxDateTime&,const wxTimeSpan&) const
       IsEqualUpTo__10wxDateTimeCFRC10wxDateTimeRC10wxTimeSpan
       ;wxDateTime::GetWeekDay(wxDateTime::WeekDay,int,wxDateTime::Month,int) const
@@ -1162,6 +1162,8 @@ EXPORTS
       ;wxLibrary::PrepareClasses(wxClassInfo*)
       PrepareClasses__9wxLibraryFP11wxClassInfo
       __vft9wxLibrary8wxObject
+      ;wxDllLoader::GetDllExt()
+      GetDllExt__11wxDllLoaderFv
       ;wxLibraries::LoadLibrary(const wxString&)
       LoadLibrary__11wxLibrariesFRC8wxString
       wxTheLibraries
@@ -1632,10 +1634,6 @@ EXPORTS
       wxRenameFile__FRC8wxStringT1
       ;wxFindFirstFile(const char*,int)
       wxFindFirstFile__FPCci
-      ;rmdir(const wxString&,int)
-      rmdir__FRC8wxStringi
-      ;mkdir(const wxString&,int)
-      mkdir__FRC8wxStringi
       ;wxFindNextFile()
       wxFindNextFile__Fv
       ;wxFindFileInPath(wxString*,const char*,const char*)
@@ -1674,6 +1672,10 @@ EXPORTS
       sm_classwxPathList__10wxPathList
       ;wxContractPath(const wxString&,const wxString&,const wxString&)
       wxContractPath__FRC8wxStringN21
+      ;wxRmdir(const wxString&,int)
+      wxRmdir__FRC8wxStringi
+      ;wxMkdir(const wxString&,int)
+      wxMkdir__FRC8wxStringi
       ;wxGetCwd()
       wxGetCwd__Fv
       ;wxGetOSDirectory()
@@ -1824,6 +1826,8 @@ EXPORTS
       CreateToolBar__11wxFrameBaseFliRC8wxString
       ;wxFrameBase::OnMenuHighlight(wxMenuEvent&)
       OnMenuHighlight__11wxFrameBaseFR11wxMenuEvent
+      ;wxFrameBase::ShowMenuHelp(wxStatusBar*,int)
+      ShowMenuHelp__11wxFrameBaseFP11wxStatusBari
       ;wxFrameBase::GetEventTable() const
       GetEventTable__11wxFrameBaseCFv
       __vft11wxFrameBase8wxObject
@@ -2233,6 +2237,8 @@ EXPORTS
       __vft12wxBMPHandler8wxObject
   ;From object file:  ..\common\image.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxImage::wxImage(int,int,unsigned char*,unsigned long)
+      __ct__7wxImageFiT1PUcUl
       ;wxImage::GetSubImage(const wxRect&) const
       GetSubImage__7wxImageCFRC6wxRect
       ;wxImage::FindHandler(long)
@@ -2245,6 +2251,10 @@ EXPORTS
       __ct__7wxImageFiT1
       ;wxImageModule::sm_classwxImageModule
       sm_classwxImageModule__13wxImageModule
+      ;wxImage::GetRed(int,int) const
+      GetRed__7wxImageCFiT1
+      ;wxImage::GetGreen(int,int) const
+      GetGreen__7wxImageCFiT1
       ;wxConstructorForwxImage()
       wxConstructorForwxImage__Fv
       ;wxImage::Ok() const
@@ -2259,11 +2269,15 @@ EXPORTS
       GetData__7wxImageCFv
       ;wxImage::Destroy()
       Destroy__7wxImageFv
+      ;wxImage::Copy() const
+      Copy__7wxImageCFv
       ;wxImage::FindHandlerMime(const wxString&)
       FindHandlerMime__7wxImageFRC8wxString
+      ;wxImage::Mirror(unsigned long) const
+      Mirror__7wxImageCFUl
+      __vft14wxImageHandler8wxObject
       ;wxImage::LoadFile(const wxString&,long)
       LoadFile__7wxImageFRC8wxStringl
-      __vft14wxImageHandler8wxObject
       ;wxImage::Scale(int,int) const
       Scale__7wxImageCFiT1
       ;wxImage::sm_handlers
@@ -2303,6 +2317,8 @@ EXPORTS
       wxConstructorForwxImageModule__Fv
       ;wxImage::wxImage()
       __ct__7wxImageFv
+      ;wxImage::Paste(const wxImage&,int,int)
+      Paste__7wxImageFRC7wxImageiT2
       ;wxImage::HasMask() const
       HasMask__7wxImageCFv
       ;wxImage::GetMaskRed() const
@@ -2313,10 +2329,14 @@ EXPORTS
       RemoveHandler__7wxImageFRC8wxString
       ;wxImage::FindHandler(const wxString&)
       FindHandler__7wxImageFRC8wxString
+      ;wxImage::Create(int,int,unsigned char*,unsigned long)
+      Create__7wxImageFiT1PUcUl
       ;wxImage::wxImage(wxInputStream&,long)
       __ct__7wxImageFR13wxInputStreaml
       ;wxImage::SetMask(unsigned long)
       SetMask__7wxImageFUl
+      ;wxImage::Rotate90(unsigned long) const
+      Rotate90__7wxImageCFUl
       ;wxImage::Create(int,int)
       Create__7wxImageFiT1
       __vft14wxImageRefData15wxObjectRefData
@@ -2326,10 +2346,10 @@ EXPORTS
       SetMaskColour__7wxImageFUcN21
       ;wxImageHandler::GetImageCount(wxInputStream&)
       GetImageCount__14wxImageHandlerFR13wxInputStream
-      ;wxImage::GetGreen(int,int)
-      GetGreen__7wxImageFiT1
       ;wxImage::ConvertToBitmap() const
       ConvertToBitmap__7wxImageCFv
+      ;wxImage::SetData(unsigned char*,int,int)
+      SetData__7wxImageFPUciT2
       ;wxImage::GetMaskBlue() const
       GetMaskBlue__7wxImageCFv
       ;wxImage::GetHeight() const
@@ -2346,14 +2366,12 @@ EXPORTS
       SaveFile__14wxImageHandlerFP7wxImageR14wxOutputStreamUl
       ;wxImage::LoadFile(wxInputStream&,long)
       LoadFile__7wxImageFR13wxInputStreaml
-      ;wxImage::GetRed(int,int)
-      GetRed__7wxImageFiT1
+      ;wxImage::GetBlue(int,int) const
+      GetBlue__7wxImageCFiT1
       ;wxImage::sm_classwxImage
       sm_classwxImage__7wxImage
       ;wxImage::SaveFile(const wxString&,const wxString&)
       SaveFile__7wxImageFRC8wxStringT1
-      ;wxImage::GetBlue(int,int)
-      GetBlue__7wxImageFiT1
       ;wxImage::ComputeHistogram(wxHashTable&)
       ComputeHistogram__7wxImageFR11wxHashTable
       ;wxImage::CanRead(wxInputStream&)
@@ -2460,8 +2478,6 @@ EXPORTS
       AddCatalog__8wxLocaleFPCc
       ;wxMsgCatalog::Load(const char*,const char*,unsigned long)
       Load__12wxMsgCatalogFPCcT1Ul
-      ;wxSuppressTransErrors()
-      wxSuppressTransErrors__Fv
       ;wxLocale::wxLocale()
       __ct__8wxLocaleFv
       ;wxLocale::Init(const char*,const char*,const char*,unsigned long,unsigned long)
@@ -2470,14 +2486,12 @@ EXPORTS
       GetString__8wxLocaleCFPCcT1
       ;wxGetLocale()
       wxGetLocale__Fv
+      ;NoTransErr::ms_suppressCount
+      ms_suppressCount__10NoTransErr
       ;wxMsgCatalog::GetString(const char*) const
       GetString__12wxMsgCatalogCFPCc
       ;wxLocale::FindCatalog(const char*) const
       FindCatalog__8wxLocaleCFPCc
-      ;wxRestoreTransErrors()
-      wxRestoreTransErrors__Fv
-      ;wxIsLoggingTransErrors()
-      wxIsLoggingTransErrors__Fv
       ;wxLocale::AddCatalogLookupPathPrefix(const wxString&)
       AddCatalogLookupPathPrefix__8wxLocaleFRC8wxString
       ;wxLocale::IsLoaded(const char*) const
@@ -2831,8 +2845,6 @@ EXPORTS
       debugOn__14wxDebugContext
       ;wxDebugContext::checkPoint
       checkPoint__14wxDebugContext
-      ;operator new(unsigned int,char*,int)
-      __nw__FUiPci
       ;wxDebugContext::PaddedSize(const unsigned int)
       PaddedSize__14wxDebugContextFCUi
       ;wxMemStruct::AssertIt()
@@ -2855,8 +2867,6 @@ EXPORTS
       m_balign__14wxDebugContext
       ;wxDebugContext::EndMarkerPos(const char*,const unsigned int)
       EndMarkerPos__14wxDebugContextFPCcCUi
-      ;operator new(unsigned int)
-      __nw__FUi
       ;wxMemStruct::AssertList()
       AssertList__11wxMemStructFv
       ;wxMemStruct::ErrorMsg(const char*)
@@ -2883,10 +2893,6 @@ EXPORTS
       GetPadding__14wxDebugContextFCUi
       ;wxTrace(const char*,...)
       wxTrace__FPCce
-      ;operator new[](unsigned int,char*,int)
-      __vn__FUiPci
-      ;operator new[](unsigned int)
-      __vn__FUi
       ;wxDebugContext::TotSize(const unsigned int)
       TotSize__14wxDebugContextFCUi
       ;wxMemStruct::PrintNode()
@@ -2905,8 +2911,6 @@ EXPORTS
       m_head__14wxDebugContext
       ;wxMemStruct::Append()
       Append__11wxMemStructFv
-      ;operator delete[](void*)
-      __vd__FPv
       ;wxDebugContext::Dump()
       Dump__14wxDebugContextFv
   ;From object file:  ..\common\menucmn.cpp
@@ -2927,12 +2931,12 @@ EXPORTS
       FindMenu__13wxMenuBarBaseCFRC8wxString
       ;wxMenuBarBase::SetHelpString(int,const wxString&)
       SetHelpString__13wxMenuBarBaseFiRC8wxString
+      ;wxMenuBase::Insert(unsigned int,wxMenuItem*)
+      Insert__10wxMenuBaseFUiP10wxMenuItem
       ;wxMenuBase::Remove(wxMenuItem*)
       Remove__10wxMenuBaseFP10wxMenuItem
       ;wxMenuBase::IsChecked(int) const
       IsChecked__10wxMenuBaseCFi
-      ;wxMenuBase::Insert(unsigned int,wxMenuItem*)
-      Insert__10wxMenuBaseFUiP10wxMenuItem
       ;wxMenuBarBase::GetLabel(int) const
       GetLabel__13wxMenuBarBaseCFi
       ;wxMenuBase::GetLabel(int) const
@@ -3137,8 +3141,6 @@ EXPORTS
       StoreObject__8wxObjectFR20wxObjectOutputStream
       ;wxObjectRefData::~wxObjectRefData()
       __dt__15wxObjectRefDataFv
-      ;wxObject::operator delete[](void*)
-      __vd__8wxObjectFPv
       ;wxObject::Clone() const
       Clone__8wxObjectCFv
       ;wxClassInfo::sm_first
@@ -3162,8 +3164,6 @@ EXPORTS
       sm_classwxObject__8wxObject
       ;wxObject::operator new(unsigned int,char*,int)
       __nw__8wxObjectFUiPci
-      ;wxObject::operator new[](unsigned int,char*,int)
-      __vn__8wxObjectFUiPci
       ;wxObject::wxObject()
       __ct__8wxObjectFv
       ;wxObject::~wxObject()
@@ -3740,26 +3740,42 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxSizerItem::wxSizerItem(int,int,int,int,int,wxObject*)
       __ct__11wxSizerItemFiN41P8wxObject
+      __vft11wxGridSizer8wxObject
       ;wxSizerItem::wxSizerItem(wxSizer*,int,int,int,wxObject*)
       __ct__11wxSizerItemFP7wxSizeriN22P8wxObject
       ;wxSizer::Insert(int,wxSizer*,int,int,int,wxObject*)
       Insert__7wxSizerFiP7wxSizerN31P8wxObject
       ;wxSizer::Add(wxWindow*,int,int,int,wxObject*)
       Add__7wxSizerFP8wxWindowiN22P8wxObject
+      ;wxSizer::DoSetItemMinSize(int,int,int)
+      DoSetItemMinSize__7wxSizerFiN21
       ;wxStaticBoxSizer::wxStaticBoxSizer(wxStaticBox*,int)
       __ct__16wxStaticBoxSizerFP11wxStaticBoxi
-      ;wxBoxSizer::CalcMin()
-      CalcMin__10wxBoxSizerFv
+      ;wxGridSizer::wxGridSizer(int,int,int)
+      __ct__11wxGridSizerFiN21
+      ;wxSizer::DoSetItemMinSize(wxWindow*,int,int)
+      DoSetItemMinSize__7wxSizerFP8wxWindowiT2
       ;wxStaticBoxSizer::sm_classwxStaticBoxSizer
       sm_classwxStaticBoxSizer__16wxStaticBoxSizer
+      ;wxGridSizer::sm_classwxGridSizer
+      sm_classwxGridSizer__11wxGridSizer
+      ;wxFlexGridSizer::RecalcSizes()
+      RecalcSizes__15wxFlexGridSizerFv
+      ;wxGridSizer::RecalcSizes()
+      RecalcSizes__11wxGridSizerFv
       ;wxStaticBoxSizer::CalcMin()
       CalcMin__16wxStaticBoxSizerFv
+      ;wxFlexGridSizer::CalcMin()
+      CalcMin__15wxFlexGridSizerFv
+      ;wxBoxSizer::CalcMin()
+      CalcMin__10wxBoxSizerFv
       ;wxSizer::Fit(wxWindow*)
       Fit__7wxSizerFP8wxWindow
       ;wxSizer::GetMinWindowSize(wxWindow*)
       GetMinWindowSize__7wxSizerFP8wxWindow
       ;wxSizer::Prepend(wxWindow*,int,int,int,wxObject*)
       Prepend__7wxSizerFP8wxWindowiN22P8wxObject
+      __vft15wxFlexGridSizer8wxObject
       __vft11wxSizerItem8wxObject
       ;wxSizer::Insert(int,wxWindow*,int,int,int,wxObject*)
       Insert__7wxSizerFiP8wxWindowN31P8wxObject
@@ -3769,6 +3785,12 @@ EXPORTS
       SetDimension__11wxSizerItemF7wxPoint6wxSize
       ;wxSizerItem::sm_classwxSizerItem
       sm_classwxSizerItem__11wxSizerItem
+      ;wxFlexGridSizer::wxFlexGridSizer(int,int,int)
+      __ct__15wxFlexGridSizerFiN21
+      ;wxGridSizer::wxGridSizer(int,int,int,int)
+      __ct__11wxGridSizerFiN31
+      ;wxFlexGridSizer::RemoveGrowableRow(unsigned int)
+      RemoveGrowableRow__15wxFlexGridSizerFUi
       ;wxSizer::~wxSizer()
       __dt__7wxSizerFv
       ;wxSizer::sm_classwxSizer
@@ -3788,26 +3810,38 @@ EXPORTS
       __vft7wxSizer8wxObject
       ;wxSizer::Remove(int)
       Remove__7wxSizerFi
-      ;wxSizerItem::IsSpacer()
-      IsSpacer__11wxSizerItemFv
+      ;wxSizer::GetMinSize()
+      GetMinSize__7wxSizerFv
+      ;wxFlexGridSizer::~wxFlexGridSizer()
+      __dt__15wxFlexGridSizerFv
       ;wxSizer::wxSizer()
       __ct__7wxSizerFv
       ;wxBoxSizer::RecalcSizes()
       RecalcSizes__10wxBoxSizerFv
+      ;wxSizerItem::IsSpacer()
+      IsSpacer__11wxSizerItemFv
+      ;wxFlexGridSizer::CreateArrays()
+      CreateArrays__15wxFlexGridSizerFv
       ;wxSizer::SetSizeHints(wxWindow*)
       SetSizeHints__7wxSizerFP8wxWindow
       ;wxSizer::Add(wxSizer*,int,int,int,wxObject*)
       Add__7wxSizerFP7wxSizeriN22P8wxObject
       ;wxSizer::Prepend(int,int,int,int,int,wxObject*)
       Prepend__7wxSizerFiN41P8wxObject
+      ;wxFlexGridSizer::AddGrowableCol(unsigned int)
+      AddGrowableCol__15wxFlexGridSizerFUi
       ;wxBoxSizer::wxBoxSizer(int)
       __ct__10wxBoxSizerFi
       ;wxSizerItem::IsSizer()
       IsSizer__11wxSizerItemFv
+      ;wxFlexGridSizer::sm_classwxFlexGridSizer
+      sm_classwxFlexGridSizer__15wxFlexGridSizer
       ;wxBoxSizer::sm_classwxBoxSizer
       sm_classwxBoxSizer__10wxBoxSizer
       ;wxSizer::Remove(wxSizer*)
       Remove__7wxSizerFP7wxSizer
+      ;wxSizer::DoSetItemMinSize(wxSizer*,int,int)
+      DoSetItemMinSize__7wxSizerFP7wxSizeriT2
       ;wxSizerItem::wxSizerItem(wxWindow*,int,int,int,wxObject*)
       __ct__11wxSizerItemFP8wxWindowiN22P8wxObject
       __vft16wxStaticBoxSizer8wxObject
@@ -3818,8 +3852,20 @@ EXPORTS
       Add__7wxSizerFiN41P8wxObject
       ;wxSizer::SetDimension(int,int,int,int)
       SetDimension__7wxSizerFiN31
+      ;wxFlexGridSizer::wxFlexGridSizer(int,int,int,int)
+      __ct__15wxFlexGridSizerFiN31
+      ;wxFlexGridSizer::RemoveGrowableCol(unsigned int)
+      RemoveGrowableCol__15wxFlexGridSizerFUi
+      ;wxSizer::DoSetMinSize(int,int)
+      DoSetMinSize__7wxSizerFiT1
+      ;wxFlexGridSizer::AddGrowableRow(unsigned int)
+      AddGrowableRow__15wxFlexGridSizerFUi
       ;wxSizer::Layout()
       Layout__7wxSizerFv
+      ;wxGridSizer::SetItemBounds(wxSizerItem*,int,int,int,int)
+      SetItemBounds__11wxGridSizerFP11wxSizerItemiN32
+      ;wxGridSizer::CalcMin()
+      CalcMin__11wxGridSizerFv
   ;From object file:  ..\common\socket.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSocketBase::SetTimeout(long)
@@ -4274,6 +4320,8 @@ EXPORTS
       __pl__FRC8wxStringPCc
       ;wxString::operator=(const wchar_t*)
       __as__8wxStringFPCw
+      ;wxString::StartsWith(const char*,wxString*) const
+      StartsWith__8wxStringCFPCcP8wxString
       ;wxArrayString::Remove(const char*)
       Remove__13wxArrayStringFPCc
       ;wxString::ConcatSelf(int,const char*)
@@ -4627,8 +4675,8 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxURL::PrepProto(wxString&)
       PrepProto__5wxURLFR8wxString
-      ;wxURL::ConvertToValidURI(const wxString&)
-      ConvertToValidURI__5wxURLFRC8wxString
+      ;wxURL::ConvertToValidURI(const wxString&,const char*)
+      ConvertToValidURI__5wxURLFRC8wxStringPCc
       ;wxURL::ConvertFromURI(const wxString&)
       ConvertFromURI__5wxURLFRC8wxString
       ;wxURL::ms_protocols
@@ -6344,6 +6392,8 @@ EXPORTS
       SetViewer__19wxExtHelpControllerFRC8wxStringl
   ;From object file:  ..\generic\helphtml.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxHTMLHelpControllerBase::DisplaySection(const wxString&)
+      DisplaySection__24wxHTMLHelpControllerBaseFRC8wxString
       ;wxHTMLHelpControllerBase::DisplaySection(int)
       DisplaySection__24wxHTMLHelpControllerBaseFi
       ;wxHTMLHelpControllerBase::Initialize(const wxString&)
@@ -6481,12 +6531,14 @@ EXPORTS
       LayoutMDIFrame__17wxLayoutAlgorithmFP16wxMDIParentFrameP6wxRect
       ;wxLayoutAlgorithm::LayoutWindow(wxWindow*,wxWindow*)
       LayoutWindow__17wxLayoutAlgorithmFP8wxWindowT1
+      ;wxSashLayoutWindow::Init()
+      Init__18wxSashLayoutWindowFv
       ;wxConstructorForwxCalculateLayoutEvent()
       wxConstructorForwxCalculateLayoutEvent__Fv
+      ;wxSashLayoutWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
+      Create__18wxSashLayoutWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxSashLayoutWindow::GetEventTable() const
       GetEventTable__18wxSashLayoutWindowCFv
-      ;wxSashLayoutWindow::wxSashLayoutWindow(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__18wxSashLayoutWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxSashLayoutWindow::sm_classwxSashLayoutWindow
       sm_classwxSashLayoutWindow__18wxSashLayoutWindow
       ;wxCalculateLayoutEvent::sm_classwxCalculateLayoutEvent
@@ -7004,6 +7056,8 @@ EXPORTS
       __dt__10wxLogFrameFv
       ;wxLogGui::Flush()
       Flush__8wxLogGuiFv
+      ;wxLogFrame::DoClose()
+      DoClose__10wxLogFrameFv
       ;wxLogGui::DoLog(unsigned long,const char*,long)
       DoLog__8wxLogGuiFUlPCcl
       ;wxLogDialog::OnListSelect(wxListEvent&)
@@ -7037,10 +7091,12 @@ EXPORTS
       __vft10wxLogFrame8wxObject
       ;wxLogDialog::OnOk(wxCommandEvent&)
       OnOk__11wxLogDialogFR14wxCommandEvent
-      ;wxLogWindow::OnFrameDelete(wxFrame*)
-      OnFrameDelete__11wxLogWindowFP7wxFrame
+      ;wxLogWindow::OnFrameClose(wxFrame*)
+      OnFrameClose__11wxLogWindowFP7wxFrame
       ;wxLogFrame::sm_eventTable
       sm_eventTable__10wxLogFrame
+      ;wxLogWindow::OnFrameDelete(wxFrame*)
+      OnFrameDelete__11wxLogWindowFP7wxFrame
       ;wxLogDialog::~wxLogDialog()
       __dt__11wxLogDialogFv
       ;wxLogWindow::Flush()
@@ -7643,6 +7699,8 @@ EXPORTS
       OnUpdateView__18wxPropertyFormViewFv
       ;wxConstructorForwxStringFormValidator()
       wxConstructorForwxStringFormValidator__Fv
+      ;wxConstructorForwxPropertyFormDialog()
+      wxConstructorForwxPropertyFormDialog__Fv
       ;wxPropertyFormView::OnClose()
       OnClose__18wxPropertyFormViewFv
       ;wxRealFormValidator::OnCheckValue(wxProperty*,wxPropertyFormView*,wxWindow*)
@@ -7668,6 +7726,8 @@ EXPORTS
       sm_eventTable__19wxPropertyFormFrame
       ;wxPropertyFormView::Check()
       Check__18wxPropertyFormViewFv
+      ;wxConstructorForwxPropertyFormPanel()
+      wxConstructorForwxPropertyFormPanel__Fv
       ;wxBoolFormValidator::sm_classwxBoolFormValidator
       sm_classwxBoolFormValidator__19wxBoolFormValidator
       ;wxPropertyFormView::TransferToPropertySheet()
@@ -7722,6 +7782,8 @@ EXPORTS
       sm_classwxPropertyFormFrame__19wxPropertyFormFrame
       ;wxPropertyFormView::GetEventTable() const
       GetEventTable__18wxPropertyFormViewCFv
+      ;wxConstructorForwxPropertyFormFrame()
+      wxConstructorForwxPropertyFormFrame__Fv
       ;wxPropertyFormView::TransferToDialog()
       TransferToDialog__18wxPropertyFormViewFv
       ;wxPropertyFormView::ShowView(wxPropertySheet*,wxWindow*)
@@ -7839,10 +7901,12 @@ EXPORTS
       sm_classwxPropertyListFrame__19wxPropertyListFrame
       ;wxPropertyListView::EditProperty(wxProperty*)
       EditProperty__18wxPropertyListViewFP10wxProperty
-      ;wxPropertyTextEdit::OnSetFocus()
-      OnSetFocus__18wxPropertyTextEditFv
+      ;wxConstructorForwxPropertyTextEdit()
+      wxConstructorForwxPropertyTextEdit__Fv
       ;wxConstructorForwxPropertyListView()
       wxConstructorForwxPropertyListView__Fv
+      ;wxConstructorForwxPropertyListDialog()
+      wxConstructorForwxPropertyListDialog__Fv
       ;wxConstructorForwxIntegerListValidator()
       wxConstructorForwxIntegerListValidator__Fv
       ;wxRealListValidator::sm_classwxRealListValidator
@@ -7851,6 +7915,8 @@ EXPORTS
       sm_classwxIntegerListValidator__22wxIntegerListValidator
       ;wxPropertyStringListEditorDialog::ShowCurrentSelection()
       ShowCurrentSelection__32wxPropertyStringListEditorDialogFv
+      ;wxPropertyTextEdit::OnSetFocus()
+      OnSetFocus__18wxPropertyTextEditFv
       ;wxPropertyListView::OnClose()
       OnClose__18wxPropertyListViewFv
       ;wxPropertyListValidator::OnSelect(unsigned long,wxProperty*,wxPropertyListView*,wxWindow*)
@@ -7960,6 +8026,8 @@ EXPORTS
       OnKillFocus__18wxPropertyTextEditFv
       ;wxConstructorForwxStringListValidator()
       wxConstructorForwxStringListValidator__Fv
+      ;wxConstructorForwxPropertyListFrame()
+      wxConstructorForwxPropertyListFrame__Fv
       ;wxConstructorForwxListOfStringsListValidator()
       wxConstructorForwxListOfStringsListValidator__Fv
       ;wxFilenameListValidator::~wxFilenameListValidator()
@@ -8019,6 +8087,8 @@ EXPORTS
       GetEventTable__18wxPropertyListViewCFv
       ;wxConstructorForwxRealListValidator()
       wxConstructorForwxRealListValidator__Fv
+      ;wxConstructorForwxPropertyListPanel()
+      wxConstructorForwxPropertyListPanel__Fv
       ;wxConstructorForwxColourListValidator()
       wxConstructorForwxColourListValidator__Fv
       ;wxStringListValidator::sm_classwxStringListValidator
@@ -8064,30 +8134,30 @@ EXPORTS
       OnPaint__12wxSashWindowFR12wxPaintEvent
       ;wxSashWindow::SashHitTest(int,int,int)
       SashHitTest__12wxSashWindowFiN21
-      ;wxSashWindow::DrawBorders(wxDC&)
-      DrawBorders__12wxSashWindowFR4wxDC
+      ;wxSashWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
+      Create__12wxSashWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxSashWindow::DrawSash(wxSashEdgePosition,wxDC&)
       DrawSash__12wxSashWindowF18wxSashEdgePositionR4wxDC
-      ;wxSashWindow::~wxSashWindow()
-      __dt__12wxSashWindowFv
+      ;wxSashWindow::DrawBorders(wxDC&)
+      DrawBorders__12wxSashWindowFR4wxDC
+      ;wxSashWindow::Init()
+      Init__12wxSashWindowFv
       ;wxConstructorForwxSashWindow()
       wxConstructorForwxSashWindow__Fv
       ;wxConstructorForwxSashEvent()
       wxConstructorForwxSashEvent__Fv
+      ;wxSashWindow::~wxSashWindow()
+      __dt__12wxSashWindowFv
       ;wxSashWindow::InitColours()
       InitColours__12wxSashWindowFv
       ;wxSashWindow::GetEventTable() const
       GetEventTable__12wxSashWindowCFv
       ;wxSashWindow::DrawSashes(wxDC&)
       DrawSashes__12wxSashWindowFR4wxDC
-      ;wxSashWindow::wxSashWindow()
-      __ct__12wxSashWindowFv
-      ;wxSashWindow::wxSashWindow(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__12wxSashWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
-      ;wxSashWindow::sm_eventTableEntries
-      sm_eventTableEntries__12wxSashWindow
       ;wxSashWindow::sm_classwxSashWindow
       sm_classwxSashWindow__12wxSashWindow
+      ;wxSashWindow::sm_eventTableEntries
+      sm_eventTableEntries__12wxSashWindow
   ;From object file:  ..\generic\scrolwin.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxScrolledWindow::GetScrollPageSize(int) const
@@ -8153,12 +8223,8 @@ EXPORTS
       OnUnsplitEvent__16wxSplitterWindowFR15wxSplitterEvent
       ;wxSplitterWindow::ReplaceWindow(wxWindow*,wxWindow*)
       ReplaceWindow__16wxSplitterWindowFP8wxWindowT1
-      ;wxSplitterWindow::wxSplitterWindow()
-      __ct__16wxSplitterWindowFv
       ;wxSplitterWindow::InitColours()
       InitColours__16wxSplitterWindowFv
-      ;wxSplitterWindow::wxSplitterWindow(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__16wxSplitterWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxSplitterWindow::OnSetCursor(wxSetCursorEvent&)
       OnSetCursor__16wxSplitterWindowFR16wxSetCursorEvent
       __vft16wxSplitterWindow8wxObject
@@ -8186,16 +8252,20 @@ EXPORTS
       OnIdle__16wxSplitterWindowFR11wxIdleEvent
       ;wxSplitterWindow::OnDoubleClick(wxSplitterEvent&)
       OnDoubleClick__16wxSplitterWindowFR15wxSplitterEvent
+      ;wxSplitterWindow::Init()
+      Init__16wxSplitterWindowFv
       ;wxSplitterWindow::GetEventTable() const
       GetEventTable__16wxSplitterWindowCFv
-      ;wxSplitterWindow::DrawBorders(wxDC&)
-      DrawBorders__16wxSplitterWindowFR4wxDC
+      ;wxSplitterWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
+      Create__16wxSplitterWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxSplitterWindow::sm_eventTable
       sm_eventTable__16wxSplitterWindow
       ;wxSplitterWindow::sm_classwxSplitterWindow
       sm_classwxSplitterWindow__16wxSplitterWindow
       ;wxSplitterWindow::Initialize(wxWindow*)
       Initialize__16wxSplitterWindowFP8wxWindow
+      ;wxSplitterWindow::DrawBorders(wxDC&)
+      DrawBorders__16wxSplitterWindowFR4wxDC
       ;wxSplitterWindow::OnMouseEvent(wxMouseEvent&)
       OnMouseEvent__16wxSplitterWindowFR12wxMouseEvent
       ;wxSplitterWindow::SetSashPosition(int,unsigned long)
@@ -8666,11 +8736,13 @@ EXPORTS
   ;From object file:  ..\generic\treelay.cpp
   ;From object file:  ..\generic\wizard.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxWizard::wxWizard(wxWindow*,int,const wxString&,const wxBitmap&,const wxPoint&)
+      __ct__8wxWizardFP8wxWindowiRC8wxStringRC8wxBitmapRC7wxPoint
+      __vft8wxWizard8wxObject
       ;wxWizard::OnCancel(wxCommandEvent&)
       OnCancel__8wxWizardFR14wxCommandEvent
-      __vft8wxWizard8wxObject
-      ;wxWizard::wxWizard(wxWindow*,int,const wxString&,const wxBitmap&,const wxPoint&,const wxSize&)
-      __ct__8wxWizardFP8wxWindowiRC8wxStringRC8wxBitmapRC7wxPointRC6wxSize
+      ;wxWizard::SetPageSize(const wxSize&)
+      SetPageSize__8wxWizardFRC6wxSize
       ;wxWizard::RunWizard(wxWizardPage*)
       RunWizard__8wxWizardFP12wxWizardPage
       ;wxWizard::GetEventTable() const
@@ -8699,6 +8771,8 @@ EXPORTS
       sm_eventTable__8wxWizard
       ;wxWizard::sm_eventTableEntries
       sm_eventTableEntries__8wxWizard
+      ;wxWizard::DoCreateControls()
+      DoCreateControls__8wxWizardFv
       ;wxWizard::GetCurrentPage() const
       GetCurrentPage__8wxWizardCFv
       ;wxWizardPage::wxWizardPage(wxWizard*,const wxBitmap&)
@@ -9378,6 +9452,8 @@ EXPORTS
       InitParser__15wxHtmlWinParserFRC8wxString
       ;wxHtmlWinParser::SetContainer(wxHtmlContainerCell*)
       SetContainer__15wxHtmlWinParserFP19wxHtmlContainerCell
+      ;wxHtmlWinParser::RemoveModule(wxHtmlTagsModule*)
+      RemoveModule__15wxHtmlWinParserFP16wxHtmlTagsModule
       ;wxHtmlWinParser::~wxHtmlWinParser()
       __dt__15wxHtmlWinParserFv
       ;wxHtmlWinParser::OpenContainer()
@@ -9439,11 +9515,11 @@ EXPORTS
       __ct__18wxAcceleratorTableFv
       ;wxAcceleratorRefData::wxAcceleratorRefData()
       __ct__20wxAcceleratorRefDataFv
-      ;wxAcceleratorTable::Translate(wxWindow*,void**) const
-      Translate__18wxAcceleratorTableCFP8wxWindowPPv
       __vft18wxAcceleratorTable8wxObject
       ;wxAcceleratorRefData::~wxAcceleratorRefData()
       __dt__20wxAcceleratorRefDataFv
+      ;wxAcceleratorTable::Translate(unsigned long,void**) const
+      Translate__18wxAcceleratorTableCFUlPPv
       ;wxAcceleratorTable::wxAcceleratorTable(const wxString&)
       __ct__18wxAcceleratorTableFRC8wxString
   ;From object file:  ..\os2\app.cpp
@@ -10034,13 +10110,12 @@ EXPORTS
       wxLIGHT_GREY
       wxDefaultSize
       wxBLUE
-      wxOsVersion
+      wxPageNumber
       wxTextCtrlNameStr
       wxStaticTextNameStr
       wxStaticBoxNameStr
       wxSliderNameStr
       wxRED_PEN
-      wxPageNumber
       wxMultiTextNameStr
       wxMEDIUM_GREY_PEN
       wxGaugeNameStr
@@ -10172,6 +10247,8 @@ EXPORTS
       DoDrawEllipse__4wxDCFiN31
       ;wxDCBase::DeviceToLogicalYRel(int) const
       DeviceToLogicalYRel__8wxDCBaseCFi
+      ;wxDC::DrawAnyText(const wxString&,int,int)
+      DrawAnyText__4wxDCFRC8wxStringiT2
       ;wxDC::sm_classwxDC
       sm_classwxDC__4wxDC
       ;wxDC::DoDrawRoundedRectangle(int,int,int,int,double)
@@ -10201,6 +10278,8 @@ EXPORTS
       DoDrawPolygon__4wxDCFiP7wxPointN31
       ;wxDC::DoDrawLines(int,wxPoint*,int,int)
       DoDrawLines__4wxDCFiP7wxPointN21
+      ;wxDC::DoDrawCheckMark(int,int,int,int)
+      DoDrawCheckMark__4wxDCFiN31
       ;wxDCBase::DeviceToLogicalX(int) const
       DeviceToLogicalX__8wxDCBaseCFi
       ;wxDC::~wxDC()
@@ -10271,14 +10350,12 @@ EXPORTS
       StartPage__4wxDCFv
       ;wxDC::GetCharWidth() const
       GetCharWidth__4wxDCCFv
-      ;wxDC::DoClipping(unsigned long)
-      DoClipping__4wxDCFUl
+      ;wxDC::DoDrawRotatedText(const wxString&,int,int,double)
+      DoDrawRotatedText__4wxDCFRC8wxStringiT2d
       ;wxDC::SetRop(unsigned long)
       SetRop__4wxDCFUl
       ;wxDC::SetBackground(const wxBrush&)
       SetBackground__4wxDCFRC7wxBrush
-      ;wxDC::DoDrawRotatedText(const wxString&,int,int,double)
-      DoDrawRotatedText__4wxDCFRC8wxStringiT2d
       ;wxDC::DoDrawPoint(int,int)
       DoDrawPoint__4wxDCFiT1
       ;wx_spline_push(double,double,double,double,double,double,double,double)
@@ -11268,6 +11345,8 @@ EXPORTS
       __vft9wxMenuBar8wxObject
       ;wxMenuBar::Attach(wxFrame*)
       Attach__9wxMenuBarFP7wxFrame
+      ;wxMenu::m_nextMenuId
+      m_nextMenuId__6wxMenu
       ;wxMenu::Init()
       Init__6wxMenuFv
       ;wxConstructorForwxMenu()
