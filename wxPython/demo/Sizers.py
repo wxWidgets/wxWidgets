@@ -86,26 +86,26 @@ def makeSimpleBox6(win):
 #----------------------------------------------------------------------
 
 def makeSimpleBox7(win):
-    box = wxBoxSizer(wxHORIZONTAL)
-    box.Add(wxButton(win, 1010, "one"), 0, wxEXPAND)
-    box.Add(wxButton(win, 1010, "two"), 0, wxEXPAND)
-    box.Add(wxButton(win, 1010, "three"), 0, wxEXPAND)
-    box.Add((60, 20), 0, wxEXPAND)
-    box.Add(wxButton(win, 1010, "five"), 1, wxEXPAND)
+    box = wx.BoxSizer(wx.HORIZONTAL)
+    box.Add(wx.Button(win, 1010, "one"), 0, wx.EXPAND)
+    box.Add(wx.Button(win, 1010, "two"), 0, wx.EXPAND)
+    box.Add(wx.Button(win, 1010, "three"), 0, wx.EXPAND)
+    box.Add((60, 20), 0, wx.EXPAND)
+    box.Add(wx.Button(win, 1010, "five"), 1, wx.EXPAND)
 
     return box
 
 #----------------------------------------------------------------------
 
 def makeSimpleBox8(win):
-    box = wxBoxSizer(wxVERTICAL)
-    box.Add(wxButton(win, 1010, "one"), 0, wxEXPAND)
+    box = wxBoxSizer(wx.VERTICAL)
+    box.Add(wxButton(win, 1010, "one"), 0, wx.EXPAND)
     box.Add((0,0), 1)
-    box.Add(wxButton(win, 1010, "two"), 0, wxALIGN_CENTER)
+    box.Add(wx.Button(win, 1010, "two"), 0, wx.ALIGN_CENTER)
     box.Add((0,0), 1)
-    box.Add(wxButton(win, 1010, "three"), 0, wxEXPAND)
-    box.Add(wxButton(win, 1010, "four"), 0, wxEXPAND)
-#    box.Add(wxButton(win, 1010, "five"), 1, wxEXPAND)
+    box.Add(wx.Button(win, 1010, "three"), 0, wx.EXPAND)
+    box.Add(wx.Button(win, 1010, "four"), 0, wx.EXPAND)
+#    box.Add(wx.Button(win, 1010, "five"), 1, wx.EXPAND)
 
     return box
 
