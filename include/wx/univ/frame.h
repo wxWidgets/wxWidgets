@@ -69,6 +69,7 @@ public:
 
 protected:
     void OnSize(wxSizeEvent& event);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int height);
