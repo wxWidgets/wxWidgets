@@ -349,10 +349,12 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
     m_hAdjust->value = m_xScrollPosition = xPos;
     m_vAdjust->value = m_yScrollPosition = yPos;
 
-    // The first line should arguably be deprecated, the second we still need.
+    // Setting hints here should arguably be deprecated, but without it
+    // a sizer might override this manual scrollbar setting in old code.
+    m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+
     m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
-    m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
-    
+
     if (!noRefresh)
     {
         int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
