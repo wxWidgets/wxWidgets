@@ -419,7 +419,7 @@ binary-common:
 	dh_installchangelogs
 	dh_installexamples
 	dh_link
-	dh_strip
+	dh_strip -N$(package_gtk_dbg) -N$(package_wxbase_dbg)
 	dh_compress
 	dh_fixperms
 	dh_makeshlibs
