@@ -47,6 +47,7 @@ wxGTK:
 - implemented wxTextCtrl::Freeze() and Thaw(). The GtkTextBuffer
   is not a valid one during frozen state. Get a pointer to it right
   after wxTextCtrl creation if you really need to. (Mart Raudsepp)
+- 
 
 wxMac:
 

@@ -61,7 +61,7 @@ All makefiles and project are located in build\msw directory.
 Where compiled files are stored
 -------------------------------
 
-After succesful compilation you'll find the libraries in a subdirectory
+After successful compilation you'll find the libraries in a subdirectory
 of lib directory named after the compiler and DLL/static settings.
 A couple of examples:
 

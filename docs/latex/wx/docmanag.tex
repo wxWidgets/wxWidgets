@@ -289,37 +289,43 @@ from \helpref{Initialize}{wxdocmanagerinitialize}.
 
 \membersection{wxDocManager::OnFileClose}\label{wxdocmanageronfileclose}
 
-\func{void}{OnFileClose}{\void}
+\func{void}{OnFileClose}{\param{wxCommandEvent\& }{event}}
 
 Closes and deletes the currently active document.
 
 \membersection{wxDocManager::OnFileCloseAll}\label{wxdocmanageronfilecloseall}
 
-\func{void}{OnFileCloseAll}{\void}
+\func{void}{OnFileCloseAll}{\param{wxCommandEvent\& }{event}}
 
 Closes and deletes all the currently opened documents.
 
 \membersection{wxDocManager::OnFileNew}\label{wxdocmanageronfilenew}
 
-\func{void}{OnFileNew}{\void}
+\func{void}{OnFileNew}{\param{wxCommandEvent\& }{event}}
 
 Creates a document from a list of templates (if more than one template).
 
 \membersection{wxDocManager::OnFileOpen}\label{wxdocmanageronfileopen}
 
-\func{void}{OnFileOpen}{\void}
+\func{void}{OnFileOpen}{\param{wxCommandEvent\& }{event}}
 
 Creates a new document and reads in the selected file.
 
+\membersection{wxDocManager::OnFileRevert}\label{wxdocmanageronfilerevert}
+
+\func{void}{OnFileRevert}{\param{wxCommandEvent\& }{event}}
+
+Reverts the current document by calling wxDocument::Revert for the current document.
+
 \membersection{wxDocManager::OnFileSave}\label{wxdocmanageronfilesave}
 
-\func{void}{OnFileSave}{\void}
+\func{void}{OnFileSave}{\param{wxCommandEvent\& }{event}}
 
 Saves the current document by calling wxDocument::Save for the current document.
 
 \membersection{wxDocManager::OnFileSaveAs}\label{wxdocmanageronfilesaveas}
 
-\func{void}{OnFileSaveAs}{\void}
+\func{void}{OnFileSaveAs}{\param{wxCommandEvent\& }{event}}
 
 Calls wxDocument::SaveAs for the current document.
 

@@ -6,7 +6,7 @@ wxWidgets 2.5.3
 *** use the official 2.4.x stable series. You are still encouraged
 *** to try the releases from 2.5.x branch, of course, and unstable
 *** doesn't mean that they crash all the time -- just that the API
-*** may change in backwards incompatible way. If this doesn't frighten
+*** may change in a backwards incompatible way. If this doesn't frighten
 *** you, do try this release and please let us know what you think!
 
 Welcome to wxWidgets, a sophisticated cross-platform C++

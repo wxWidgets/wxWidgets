@@ -103,7 +103,7 @@ the corresponding topic.
 \helpref{wxGetDiskSpace}{wxgetdiskspace}\\
 \helpref{wxGetDisplayName}{wxgetdisplayname}\\
 \helpref{wxGetDisplaySize}{wxdisplaysize}\\
-\helpref{wxGetDisplaySizeMM}{wxdisplaysizemm}\\ 
+\helpref{wxGetDisplaySizeMM}{wxdisplaysizemm}\\
 \helpref{wxGetElapsedTime}{wxgetelapsedtime}\\
 \helpref{wxGetEmailAddress}{wxgetemailaddress}\\
 \helpref{wxGetEnv}{wxgetenv}\\
@@ -3710,7 +3710,7 @@ this might lead to function signature confusion in some cases:
 if you intend to call the format string only version of wxLogTrace,
 then add a \%s format string parameter and then supply a second string parameter for that \%s, the string mask version of wxLogTrace will erroneously get called instead, since you are supplying two string parameters to the function.
 In this case you'll unfortunately have to avoid having two leading
-string parameters, e.g. by adding a bogus integer (with its \%d format string). 
+string parameters, e.g. by adding a bogus integer (with its \%d format string).
 
 The third version of the function only logs the message if all the bits
 corresponding to the {\it mask} are set in the wxLog trace mask which can be

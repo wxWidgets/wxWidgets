@@ -58,11 +58,11 @@ and use than MFC and other frameworks.
 
 As well as comprehensive support for the usual widgets, advanced
 features include: HTML viewing/printing, wxImage class providing
-handlers for eading and writing many image types, resizeable panels
+handlers for reading and writing many image types, resizeable panels
 and dialogs on all platforms, document/view, OpenGL support,
 HTML-based and context-sensitive help, wizards, drag and drop,
 a grid class, ODBC support, threads, sockets, container classes,
-a styled text control, and much more. An 1800-page reference manual
+a styled text control, and much more. A 1800-page reference manual
 is provided in HTML, MS HTML Help, WinHelp, wxWidgets Help and PDF
 formats, and there are over 80 samples and demos.
 

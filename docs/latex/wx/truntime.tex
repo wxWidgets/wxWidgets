@@ -1,4 +1,4 @@
-\section{Run time class information overview}\label{runtimeclassoverview}
+\section{Runtime class information (aka RTTI) overview}\label{runtimeclassoverview}
 
 Classes: \helpref{wxObject}{wxobject}, \helpref{wxClassInfo}{wxclassinfo}.
 
@@ -10,7 +10,7 @@ storage hard to implement.
 
 Most C++ GUI frameworks overcome these limitations by means of a set of
 macros and functions and wxWidgets is no exception. As it originated before the
-addition of RTTI to standard C++ and as support for it is still missing from
+addition of RTTI to the C++ standard and as support for it is still missing from
 some (albeit old) compilers, wxWidgets doesn't (yet) use it, but provides its
 own macro-based RTTI system.
 
@@ -54,7 +54,7 @@ can simply call \helpref{wxClassInfo::CreateObject}{wxclassinfocreateobject}.
 
 \subsection{wxClassInfo}\label{wxclassinfooverview}
 
-\overview{Run time class information overview}{runtimeclassoverview}
+\overview{Runtime class information (aka RTTI) overview}{runtimeclassoverview}
 
 Class: \helpref{wxClassInfo}{wxclassinfo}
 

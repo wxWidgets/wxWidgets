@@ -334,7 +334,7 @@ context it returns a 2-element list {\tt ( item, submenu )}}
 
 \docparam{id}{Menu item identifier.}
 
-\docparam{menu}{If the pointer is not NULL, it will be filled with the items
+\docparam{menu}{If the pointer is not NULL, it will be filled with the item's
 parent menu (if the item was found)}
 
 \wxheading{Return value}
@@ -432,7 +432,7 @@ menubar.
 \param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
 Inserts the given {\it item} before the position {\it pos}. Inserting the item
-at the position \helpref{GetMenuItemCount}{wxmenugetmenuitemcount} is the same
+at position \helpref{GetMenuItemCount}{wxmenugetmenuitemcount} is the same
 as appending it.
 
 \wxheading{See also}
@@ -519,20 +519,20 @@ true if the menu item is enabled, false otherwise.
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
 \param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
-Inserts the given {\it item} at the position $0$, i.e. before all the other
+Inserts the given {\it item} at position $0$, i.e. before all the other
 existing items.
 
 \wxheading{See also}
 
 \helpref{wxMenu::Append}{wxmenuappend},\rtfsp
-\helpref{wxMenu::Inserts}{wxmenuinsert}
+\helpref{wxMenu::Insert}{wxmenuinsert}
 
 \membersection{wxMenu::PrependCheckItem}\label{wxmenuprependcheckitem}
 
 \func{wxMenuItem*}{PrependCheckItem}{\param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
 
-Inserts a checkable item at the position $0$.
+Inserts a checkable item at position $0$.
 
 \wxheading{See also}
 
@@ -544,7 +544,7 @@ Inserts a checkable item at the position $0$.
 \func{wxMenuItem*}{PrependRadioItem}{\param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
 
-Inserts a radio item at the position $0$.
+Inserts a radio item at position $0$.
 
 \wxheading{See also}
 
@@ -555,7 +555,7 @@ Inserts a radio item at the position $0$.
 
 \func{wxMenuItem*}{PrependSeparator}{\param{size\_t }{pos}}
 
-Inserts a separator at the position $0$.
+Inserts a separator at position $0$.
 
 \wxheading{See also}
 
@@ -989,7 +989,7 @@ Replaces the menu at the given position with another one.
 
 \wxheading{Return value}
 
-The menu which was previously at the position {\it pos}. The caller is
+The menu which was previously at position {\it pos}. The caller is
 responsible for deleting it.
 
 \wxheading{See also}

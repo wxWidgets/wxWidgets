@@ -387,7 +387,7 @@ to make these functions reentrant (i.e. allow more than one
 enumeration on one and the same object simultaneously). The cookie passed to
 GetFirstChild and GetNextChild should be the same variable.
 
-Returns an invalid tree item if there are no further children.
+Returns an invalid tree item (i.e. IsOk() returns {\tt false}) if there are no further children.
 
 \wxheading{See also}
 

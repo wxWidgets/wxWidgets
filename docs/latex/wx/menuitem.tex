@@ -27,7 +27,7 @@ wxOwnerDrawn (Windows only)\\
 
 \func{}{wxMenuItem}{\param{wxMenu*}{ parentMenu = NULL}, \param{int}{ id = wxID\_SEPARATOR},
  \param{const wxString\& }{text = ""},  \param{const wxString\& }{helpString = ""},
- \param{wxItemKind }{kind = wxITEM\_NORMAL}, \param{wxMenu*}{ subMenu = NULL}, }
+ \param{wxItemKind }{kind = wxITEM\_NORMAL}, \param{wxMenu*}{ subMenu = NULL}}
 
 Constructs a wxMenuItem object.
 
@@ -58,7 +58,7 @@ Destructor.
 
 \membersection{wxMenuItem::Check}\label{wxmenuitemcheck}
 
-\func{void}{Check}{\param{bool}{ check}}
+\func{void}{Check}{\param{bool}{ check = true}}
 
 Checks or unchecks the menu item.
 
@@ -67,7 +67,7 @@ Note that this only works when the item is already appended to a menu.
 
 \membersection{wxMenuItem::Enable}\label{wxmenuitemenable}
 
-\func{void}{Enable}{\param{bool}{ enable}}
+\func{void}{Enable}{\param{bool}{ enable = true}}
 
 Enables or disables the menu item.
 

@@ -8,7 +8,7 @@ Classes: \helpref{wxXmlResource}{wxxmlresource}, \helpref{wxXmlResourceHandler}{
 The XML-based resource system, known as XRC, allows user interface elements such as
 dialogs, menu bars and toolbars, to be stored in text files and loaded into
 the application at run-time. XRC files can also be compiled into binary XRS files or C++
-code (the former makes it possible to store all resources in since file and the latter
+code (the former makes it possible to store all resources in a single file and the latter
 is useful when you want to embed the resources into the executable).
 
 There are several advantages to using XRC resources.
@@ -16,7 +16,7 @@ There are several advantages to using XRC resources.
 \begin{itemize}\itemsep=0pt
 \item Recompiling and linking an application is not necessary if the
 resources change.
-\item If you use a dialog designers that generates C++ code, it can be hard
+\item If you use a dialog designer that generates C++ code, it can be hard
 to reintegrate this into existing C++ code. Separation of resources and code
 is a more elegant solution.
 \item You can choose between different alternative resource files at run time, if necessary.
@@ -40,7 +40,7 @@ wxFileSystem ZIP handler first with {\tt wxFileSystem::AddHandler(new wxZipFSHan
 \item call {\tt wxXmlResource::Get()->InitAllHandlers()} from your wxApp::OnInit function,
 and then call {\tt wxXmlResource::Get()->Load("myfile.xrc")} to load the resource file;
 \item to create a dialog from a resource, create it using the default constructor, and then
-load using for example {\tt wxXmlResource::Get()->LoadDialog(\&dlg, this, "dlg1");}
+load it using for example {\tt wxXmlResource::Get()->LoadDialog(\&dlg, this, "dlg1");}
 \item set up event tables as usual but use the {\tt XRCID(str)} macro to translate from XRC string names
 to a suitable integer identifier, for example {\tt EVT\_MENU(XRCID("quit"), MyFrame::OnQuit)}.
 \end{itemize}
@@ -97,7 +97,7 @@ For example:
 
 XRS file is essentially a renamed ZIP archive which means that you can manipulate
 it with standard ZIP tools. Note that if you are using XRS files, you have
-to initialize \helpref{wxFileSystem}{wxfilesystem} ZIP handler first! It is a simple
+to initialize the \helpref{wxFileSystem}{wxfilesystem} ZIP handler first! It is a simple
 thing to do:
 
 \begin{verbatim}
@@ -110,7 +110,7 @@ thing to do:
 \subsection{Using embedded resources}\label{embeddedresource}
 
 It is sometimes useful to embed resources in the executable itself instead
-of loading external file (e.g. when your app is small and consists only of one
+of loading an external file (e.g. when your app is small and consists only of one
 exe file). XRC provides means to convert resources into regular C++ file that
 can be compiled and included in the executable. 
 
@@ -480,7 +480,7 @@ TestWnd::TestWnd(){
 The generated window class can be used as basis for the full window class. The
 class members which represent widgets may be accessed by name instead of using
 {\tt XRCCTRL} every time you wish to reference them (note that they are {\tt protected} class members), 
-though you must still use {\tt XRCID} to refer to widget ids in the event
+though you must still use {\tt XRCID} to refer to widget IDs in the event
 table. 
 
 Example:

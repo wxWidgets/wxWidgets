@@ -32,7 +32,8 @@ enum wxDragResult
     wxDragError,    // error prevented the d&d operation from completing
     wxDragNone,     // drag target didn't accept the data
     wxDragCopy,     // the data was successfully copied
-    wxDragMove,     // the data was successfully moved
+    wxDragMove,     // the data was successfully moved (MSW only)
+    wxDragLink,     // operation is a drag-link
     wxDragCancel    // the operation was cancelled by user (not an error)
 };
 \end{verbatim}

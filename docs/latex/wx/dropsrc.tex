@@ -23,7 +23,8 @@ enum wxDragResult
     wxDragError,    // error prevented the d&d operation from completing
     wxDragNone,     // drag target didn't accept the data
     wxDragCopy,     // the data was successfully copied
-    wxDragMove,     // the data was successfully moved
+    wxDragMove,     // the data was successfully moved (MSW only)
+    wxDragLink,     // operation is a drag-link
     wxDragCancel    // the operation was cancelled by user (not an error)
 };
 \end{verbatim}
@@ -92,7 +93,13 @@ operation}.
 \wxheading{Return value}
 
 Returns the operation requested by the user, may be {\tt wxDragCopy}, {\tt
-wxDragMove}, {\tt wxDragCancel} or {\tt wxDragNone} if an error occured.
+wxDragMove}, {\tt wxDragLink}, {\tt wxDragCancel} or {\tt wxDragNone} if an error occured.
+
+\membersection{wxDropSource::GetDataObject}\label{wxdropsourcegetdataobject}
+
+\func{wxDataObject *}{GetDataObject}{\void}
+
+Returns the wxDataObject object that has been assigned previously.
 
 \membersection{wxDropSource::GiveFeedback}\label{wxdropsourcegivefeedback}
 
@@ -104,7 +111,7 @@ slow.
 
 \wxheading{Parameters}
 
-\docparam{effect}{The effect to implement. One of wxDragCopy, wxDragMove and wxDragNone. }
+\docparam{effect}{The effect to implement. One of {\tt wxDragCopy}, {\tt wxDragMove}, {\tt wxDragLink} and {\tt wxDragNone}. }
 
 \docparam{scrolling}{true if the window is scrolling. MSW only. }
 
@@ -112,4 +119,16 @@ slow.
 
 Return false if you want default feedback, or true if you implement your own
 feedback. The return values is ignored under GTK.
+
+\membersection{wxDropSource::SetCursor}\label{wxdropsourcesetcursor}
+
+\func{void}{SetCursor}{\param{wxDragResult }{res}, \param{const wxCursor\& }{cursor}}
+
+Set the icon to use for a certain drag result.
+
+\wxheading{Parameters}
+
+\docparam{res}{The drag result to set the icon for. }
+
+\docparam{cursor}{The ion to show when this drag result occurs. }
 

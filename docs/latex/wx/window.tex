@@ -1119,17 +1119,6 @@ method:\par
 Returns the size and position of the window as a \helpref{wxRect}{wxrect} object.
 
 
-\membersection{wxWindow::GetScrollThumb}\label{wxwindowgetscrollthumb}
-
-\func{virtual int}{GetScrollThumb}{\param{int }{orientation}}
-
-Returns the built-in scrollbar thumb size.
-
-\wxheading{See also}
-
-\helpref{wxWindow::SetScrollbar}{wxwindowsetscrollbar}
-
-
 \membersection{wxWindow::GetScrollPos}\label{wxwindowgetscrollpos}
 
 \func{virtual int}{GetScrollPos}{\param{int }{orientation}}
@@ -1146,6 +1135,17 @@ See \helpref{wxWindow::SetScrollbar}{wxwindowsetscrollbar}
 \func{virtual int}{GetScrollRange}{\param{int }{orientation}}
 
 Returns the built-in scrollbar range.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetScrollbar}{wxwindowsetscrollbar}
+
+
+\membersection{wxWindow::GetScrollThumb}\label{wxwindowgetscrollthumb}
+
+\func{virtual int}{GetScrollThumb}{\param{int }{orientation}}
+
+Returns the built-in scrollbar thumb size.
 
 \wxheading{See also}
 
@@ -1313,13 +1313,25 @@ Returns the value previous passed to
 
 \constfunc{virtual bool}{HasCapture}{\void}
 
-Returns true if this window has the current mouse capture.
+Returns {\tt true} if this window has the current mouse capture.
 
 \wxheading{See also}
 
 \helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse}, 
 \helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse}, 
 \helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
+
+
+\membersection{wxWindow::HasScrollbar}\label{wxwindowhasscrollbar}
+
+\constfunc{virtual bool}{HasScrollbar}{\param{int }{orient}}
+
+
+Returns {\tt true} if this window has a scroll bar for this orientation.
+
+\wxheading{Parameters}
+
+\docparam{orient}{Orientation to check, either {\tt wxHORIZONTAL} or {\tt wxVERTICAL}.}
 
 
 \membersection{wxWindow::Hide}\label{wxwindowhide}
@@ -2864,6 +2876,21 @@ on creation and should not be modified subsequently.
 
 
 
+\membersection{wxWindow::SetLabel}\label{wxwindowsetlabel}
+
+\func{virtual void}{SetLabel}{\param{const wxString\& }{label}}
+
+Sets the window's label.
+
+\wxheading{Parameters}
+
+\docparam{label}{The window label.}
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetLabel}{wxwindowgetlabel}
+
+
 \membersection{wxWindow::SetName}\label{wxwindowsetname}
 
 \func{virtual void}{SetName}{\param{const wxString\& }{name}}
@@ -3503,7 +3530,7 @@ Returns {\tt false} if any of the validations failed.
 \wxheading{See also}
 
 \helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow},\rtfsp
-\helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow},\rtfsp
+\helpref{wxWindow::TransferDataToWindow}{wxwindowtransferdatatowindow},\rtfsp
 \helpref{wxValidator}{wxvalidator}
 
 

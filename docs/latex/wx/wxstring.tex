@@ -659,7 +659,7 @@ This static function returns the string containing the result of calling
 
 \membersection{wxString::FormatV}\label{wxstringformatv}
 
-\func{static wxString}{Format}{\param{const wxChar }{*format}, \param{va\_list }{argptr}}
+\func{static wxString}{FormatV}{\param{const wxChar }{*format}, \param{va\_list }{argptr}}
 
 This static function returns the string containing the result of calling 
 \helpref{PrintfV}{wxstringprintfv} with the passed parameters on it.
@@ -1033,7 +1033,7 @@ familiar with C) results.
 
 \constfunc{bool}{ToULong}{\param{unsigned long}{ *val}, \param{int }{base = $10$}}
 
-Attempts to convert the string to a unsigned integer in base {\it base}.
+Attempts to convert the string to an unsigned integer in base {\it base}.
 Returns {\tt true} on success in which case the number is stored in the
 location pointed to by {\it val} or {\tt false} if the string does not
 represent a valid number in the given base.

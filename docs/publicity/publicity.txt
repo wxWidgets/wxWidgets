@@ -31,7 +31,7 @@ comp.windows.x
 comp.windows.x.announce
 comp.windows.x.motif
 
-Note: submissions to comp.windows.linux.announce must be
+Note: submissions to comp.os.linux.announce must be
 sent to cola@stump.algebra.com, with short descr
 of software and location. See http://stump.algebra.com/~cola/
 NO CROSSPOSTING when sending to this address.

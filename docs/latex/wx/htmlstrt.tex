@@ -1,6 +1,6 @@
 \subsection{wxHTML quick start}\label{wxhtmlquickstart}
 
-\wxheading{Displaying HMTL}
+\wxheading{Displaying HTML}
 
 First of all, you must include <wx/wxhtml.h>.
 
@@ -28,9 +28,9 @@ See \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}.
 \wxheading{Setting up wxHtmlWindow}
 
 Because wxHtmlWindow is derived from wxScrolledWindow and not from
-wxFrame, it doesn't have visible frame. But the user usually want to see
-the title of HTML page displayed somewhere and frame's titlebar is 
-ideal place for it.
+wxFrame, it doesn't have visible frame. But the user usually wants to see
+the title of HTML page displayed somewhere and the frame's titlebar is 
+the ideal place for it.
 
 wxHtmlWindow provides 2 methods in order to handle this: 
 \helpref{SetRelatedFrame}{wxhtmlwindowsetrelatedframe} and 
@@ -43,8 +43,8 @@ See the example:
     html -> SetRelatedStatusBar(0);
 \end{verbatim}
 
-The first command associates html object with it is parent frame
-(this points to wxFrame object there) and sets format of title.
+The first command associates the HTML object with its parent frame
+(this points to wxFrame object there) and sets the format of the title.
 Page title "Hello, world!" will be displayed as "HTML : Hello, world!"
 in this example.
 
