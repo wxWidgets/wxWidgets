@@ -265,6 +265,8 @@ void MyFrame::OnRecreate(wxCommandEvent& event)
 }
 
 // MyTreeCtrl implementation
+IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
+
 MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        const wxPoint& pos, const wxSize& size,
                        long style)

@@ -36,6 +36,7 @@ public:
     TreeCtrlIcon_Folder
   };
 
+  MyTreeCtrl() { }
   MyTreeCtrl(wxWindow *parent, const wxWindowID id,
              const wxPoint& pos, const wxSize& size,
              long style);
@@ -78,6 +79,11 @@ private:
   wxImageList *m_imageListNormal;
   bool         m_reverseSort;           // flag for OnCompareItems
 
+  // NB: due to an ugly wxMSW hack you _must_ use DECLARE_DYNAMIC_CLASS()
+  //     if you want your overloaded OnCompareItems() to be called.
+  //     OTOH, if you don't want it you may omit the next line - this will
+  //     make default (alphabetical) sorting much faster under wxMSW.
+  DECLARE_DYNAMIC_CLASS(MyTreeCtrl)
   DECLARE_EVENT_TABLE()
 };
 
@@ -131,10 +137,4 @@ enum
   TreeTest_DeleteAll,
   TreeTest_Recreate,
   TreeTest_Ctrl = 100
-};
-
-enum
-{
-  TreeCtrlIcon_File,
-  TreeCtrlIcon_Folder
 };

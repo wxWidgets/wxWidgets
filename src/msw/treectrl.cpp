@@ -254,6 +254,31 @@ void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
     SetAnyImageList(m_imageListState = imageList, TVSIL_STATE);
 }
 
+size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
+{
+    long cookie;
+
+    size_t result = 0;
+
+    wxArrayLong children;
+    wxTreeItemId child = GetFirstChild(item, cookie);
+    while ( child.IsOk() )
+    {
+        if ( recursively )
+        {
+            // recursive call
+            result += GetChildrenCount(child, TRUE);
+        }
+
+        // add the child to the result in any case
+        result++;
+
+        child = GetNextChild(item, cookie);
+    }
+
+    return result;
+}
+
 // ----------------------------------------------------------------------------
 // Item access
 // ----------------------------------------------------------------------------
@@ -421,9 +446,10 @@ wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
 wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
                                       long& _cookie) const
 {
-    wxTreeItemId l=wxTreeItemId((WXHTREEITEM) TreeView_GetNextSibling(wxhWnd,
-                (HTREEITEM) (WXHTREEITEM)_cookie));
-    _cookie=(long)l;
+    wxTreeItemId l = wxTreeItemId((WXHTREEITEM)TreeView_GetNextSibling(wxhWnd,
+                                   (HTREEITEM)(WXHTREEITEM)_cookie));
+    _cookie = (long)l;
+
     return l;
 }
 
@@ -569,6 +595,30 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
     if ( !TreeView_DeleteItem(wxhWnd, (HTREEITEM)(WXHTREEITEM)item) )
     {
         wxLogLastError("TreeView_DeleteItem");
+    }
+}
+
+// delete all children (but don't delete the item itself)
+void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
+{
+    long cookie;
+
+    wxArrayLong children;
+    wxTreeItemId child = GetFirstChild(item, cookie);
+    while ( child.IsOk() )
+    {
+        children.Add((long)(WXHTREEITEM)child);
+
+        child = GetNextChild(item, cookie);
+    }
+
+    size_t nCount = children.Count();
+    for ( size_t n = 0; n < nCount; n++ )
+    {
+        if ( !TreeView_DeleteItem(wxhWnd, (HTREEITEM)children[n]) )
+        {
+            wxLogLastError("TreeView_DeleteItem");
+        }
     }
 }
 
@@ -736,6 +786,16 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
     return wxTreeItemId((WXHTREEITEM) hitTestInfo.hItem);
 }
 
+// ----------------------------------------------------------------------------
+// sorting stuff
+// ----------------------------------------------------------------------------
+static int CALLBACK TreeView_CompareCallback(wxTreeItemData *pItem1,
+                                             wxTreeItemData *pItem2,
+                                             wxTreeCtrl *tree)
+{
+    return tree->OnCompareItems(pItem1->GetId(), pItem2->GetId());
+}
+
 int wxTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
                                const wxTreeItemId& item2)
 {
@@ -745,32 +805,20 @@ int wxTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
 void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
 {
     // rely on the fact that TreeView_SortChildren does the same thing as our
-    // default behaviour, i.e. sorts items alphabetically
-    if ( wxIS_KIND_OF(this, wxTreeCtrl) )
+    // default behaviour, i.e. sorts items alphabetically and so call it
+    // directly if we're not in derived class (much more efficient!)
+    if ( GetClassInfo() == CLASSINFO(wxTreeCtrl) )
     {
-        TreeView_SortChildren(wxhWnd, (HTREEITEM) (WXHTREEITEM) item, 0);
+        TreeView_SortChildren(wxhWnd, (HTREEITEM)(WXHTREEITEM)item, 0);
     }
     else
     {
-        // TODO: use TreeView_SortChildrenCB
-        wxFAIL_MSG("wxTreeCtrl::SortChildren not implemented");
+        TVSORTCB tvSort;
+        tvSort.hParent = (HTREEITEM)(WXHTREEITEM)item;
+        tvSort.lpfnCompare = (PFNTVCOMPARE)TreeView_CompareCallback;
+        tvSort.lParam = (LPARAM)this;
+        TreeView_SortChildrenCB(wxhWnd, &tvSort, 0 /* reserved */);
     }
-}
-
-size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
-{
-    // TODO
-    wxFAIL_MSG("wxTreeCtrl::GetChildrenCount not implemented");
-
-    return 0;
-}
-
-// delete all children (but don't delete the item itself)
-// NB: this won't send wxEVT_COMMAND_TREE_ITEM_DELETED events
-void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
-{
-    // TODO
-    wxFAIL_MSG("wxTreeCtrl::DeleteChildren not implemented");
 }
 
 // ----------------------------------------------------------------------------
@@ -907,6 +955,16 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
                 TV_KEYDOWN *info = (TV_KEYDOWN *)lParam;
 
                 event.m_code = wxCharCodeMSWToWX(info->wVKey);
+
+                // a separate event for this case
+                if ( info->wVKey == VK_SPACE || info->wVKey == VK_RETURN )
+                {
+                    wxTreeEvent event2(wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
+                                       m_windowId);
+                    event2.SetEventObject(this);
+
+                    GetEventHandler()->ProcessEvent(event2);
+                }
                 break;
             }
 
