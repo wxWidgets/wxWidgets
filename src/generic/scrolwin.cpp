@@ -110,8 +110,14 @@ bool wxScrolledWindow::Create(wxWindow *parent,
 
     m_targetWindow = this;
 
-    // we need wxWANTS_CHARS to process arrows ourselves
-    return wxPanel::Create(parent, id, pos, size, style | wxWANTS_CHARS, name);
+    bool ok = wxPanel::Create(parent, id, pos, size, style, name);
+
+#ifdef __WXMSW__
+    // we need to process arrows ourselves for scrolling
+    m_lDlgCode |= DLGC_WANTARROWS;
+#endif // __WXMSW__
+
+    return ok;
 }
 
 wxScrolledWindow::~wxScrolledWindow()
@@ -640,12 +646,12 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
     if( m_xScrollPixelsPerLine )
     {
         clix /= m_xScrollPixelsPerLine;
-	szx /= m_xScrollPixelsPerLine;
+        szx /= m_xScrollPixelsPerLine;
     }
     else
     {
         clix = 0;
-	szx = -1;
+        szx = -1;
     }
     if( m_yScrollPixelsPerLine )
     {
@@ -655,7 +661,7 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
     else
     {
         cliy = 0;
-	szy = -1;
+        szy = -1;
     }
 
     int dsty;

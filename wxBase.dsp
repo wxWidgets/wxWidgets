@@ -32,16 +32,16 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "Release"
-# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Output_Dir "BaseRelease"
+# PROP BASE Intermediate_Dir "BaseRelease"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
+# PROP Output_Dir "BaseRelease"
+# PROP Intermediate_Dir "BaseRelease"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /W3 /Zi /O2 /I "$(wx)\include" /I "$(wx)\src\zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D WIN95=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN32__" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
+# ADD CPP /nologo /W3 /Zi /O2 /I "$(wx)\include" /I "$(wx)\src\zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D WIN95=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN32__" /D "_MT" /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -55,16 +55,16 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "Debug"
-# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Output_Dir "BaseDebug"
+# PROP BASE Intermediate_Dir "BaseDebug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "BaseDebug"
 # PROP Intermediate_Dir "BaseDebug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W4 /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /D DEBUG=1 /D "_DEBUG" /D WXDEBUG=1 /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /D "_MT" /Fr /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
+# ADD CPP /nologo /MTd /W4 /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /D "_DEBUG" /D DEBUG=1 /D WXDEBUG=1 /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /D "_MT" /Fr /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -86,11 +86,23 @@ SOURCE=.\src\common\appcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\common\cmdline.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\common\config.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\common\datetime.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\datstrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\dde.cpp
 # End Source File
 # Begin Source File
 
@@ -140,6 +152,18 @@ SOURCE=.\src\common\filesys.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\common\fs_inet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\fs_mem.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\fs_zip.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\common\hash.cpp
 # End Source File
 # Begin Source File
@@ -149,6 +173,10 @@ SOURCE=.\src\common\init.cpp
 # Begin Source File
 
 SOURCE=.\src\common\intl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\ipcbase.cpp
 # End Source File
 # Begin Source File
 
@@ -168,7 +196,11 @@ SOURCE=.\src\msw\main.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\common\mimetype.cpp
+SOURCE=.\src\common\mimecmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\mimetype.cpp
 # End Source File
 # Begin Source File
 
@@ -176,7 +208,15 @@ SOURCE=.\src\common\module.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\common\mstream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\common\object.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\objstrm.cpp
 # End Source File
 # Begin Source File
 
@@ -189,6 +229,10 @@ SOURCE=.\src\msw\regconf.cpp
 # Begin Source File
 
 SOURCE=.\src\msw\registry.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\serbase.cpp
 # End Source File
 # Begin Source File
 
@@ -224,6 +268,11 @@ SOURCE=.\src\common\txtstrm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\common\unzip.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\msw\utils.cpp
 # End Source File
 # Begin Source File
@@ -237,6 +286,10 @@ SOURCE=.\src\msw\utilsexc.cpp
 # Begin Source File
 
 SOURCE=.\src\common\variant.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\wfstream.cpp
 # End Source File
 # Begin Source File
 
@@ -257,6 +310,14 @@ SOURCE=.\src\common\y_tab.c
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\zipstrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\zstream.cpp
 # End Source File
 # End Target
 # End Project

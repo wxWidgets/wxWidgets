@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        longlong.tex
+%% Purpose:     wxLongLong documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     07.03.00
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% Licence:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxLongLong}}\label{wxlonglong}
 
 This class represents a signed 64 bit long number. It is implemented using the
@@ -13,5 +24,134 @@ also has operators for implicit construction from and conversion to the native
 {\it long long} type if it exists and {\it long}.
 
 You would usually use this type in exactly the same manner as any other
-(built-in) arithmetic type.
+(built-in) arithmetic type. Note that wxLongLong is a signed type.
 
+If a native (i.e. supported directly by the compiler) 64 bit integer type was
+found a typedef {\it wxLongLong\_t} will be defined to correspond it.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/longlong.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLongLong::wxLongLong}\label{wxlonglongwxlonglongdef}
+
+\func{}{wxLongLong}{\void}
+
+Default constructor initializes the object to 0.
+
+\membersection{wxLongLong::wxLongLong}\label{wxlonglongwxlonglongll}
+
+\func{}{wxLongLong}{\param{wxLongLong\_t }{ll}}
+
+Constructor from native long long (only for compilers supporting it).
+
+\membersection{wxLongLong::wxLongLong}\label{wxlonglongwxlonglong}
+
+\func{}{wxLongLong}{\param{long }{hi}, \param{unsigned long }{lo}}
+
+Constructor from 2 longs: the high and low part are combined into one
+wxLongLong.
+
+\membersection{wxLongLong::operator=}\label{wxlonglongoperatorassign}
+
+\func{wxLongLong\& operator}{operator=}{\param{wxLongLong\_t }{ll}}
+
+Assignment operator from native long long (only for compilers supporting it).
+
+\membersection{wxLongLong::Abs}\label{wxlonglongabs}
+
+\constfunc{wxLongLong}{Abs}{\void}
+
+\func{wxLongLong\&}{Abs}{\void}
+
+Returns an absolute value of wxLongLong - either making a copy (const version)
+or modifying it in place (the second one).
+
+\membersection{wxLongLong::Assign}\label{wxlonglongassign}
+
+\func{wxLongLong\&}{Assign}{\param{double }{d}}
+
+This allows to convert a double value to wxLongLong type. Such conversion is
+not always possible in which case the result will be silently truncated in a
+platform-dependent way.
+
+\membersection{wxLongLong::GetHi}\label{wxlonglonggethi}
+
+\constfunc{long}{GetHi}{\void}
+
+Returnes the high 32 bits of 64 bit integer.
+
+\membersection{wxLongLong::GetLo}\label{wxlonglonggetlo}
+
+\constfunc{unsigned long}{GetLo}{\void}
+
+Returnes the low 32 bits of 64 bit integer.
+
+\membersection{wxLongLong::GetValue}\label{wxlonglonggetvalue}
+
+\constfunc{wxLongLong\_t}{GetValue}{\void}
+
+Convert to native long long (only for compilers supporting it)
+
+\membersection{wxLongLong::ToLong}\label{wxlonglongtolong}
+
+\constfunc{long}{ToLong}{\void}
+
+Truncate wxLongLong to long. If the conversion loses data (i.e. the wxLongLong
+value is outside the range of built-in long type), an assert will be triggered
+in debug mode.
+
+\membersection{wxLongLong::operator$+$}\label{wxlonglongoperatorplus}
+
+\constfunc{wxLongLong}{operator$+$}{\param{const wxLongLong\& }{ll}}
+
+Adds 2 wxLongLongs together and returns the result.
+
+\membersection{wxLongLong::operator$+=$}\label{wxlonglongoperatorplusassign}
+
+\func{wxLongLong\&}{operator+}{\param{const wxLongLong\& }{ll}}
+
+Add another wxLongLong to this one.
+
+\membersection{wxLongLong::operator$++$}\label{wxlonglongoperatorinc}
+
+\func{wxLongLong\&}{operator$++$}{\void}
+
+\func{wxLongLong\&}{operator$++$}{\param{int}{}}
+
+Pre/post increment operator.
+
+\membersection{wxLongLong::operator$-$}\label{wxlonglongoperatorunaryminus}
+
+\constfunc{wxLongLong}{operator$-$}{\void}
+
+Returns the value of this wxLongLong with opposite sign.
+
+\membersection{wxLongLong::operator$-$}\label{wxlonglongoperatorminus}
+
+\constfunc{wxLongLong}{operator$-$}{\param{const wxLongLong\& }{ll}}
+
+Substracts 2 wxLongLongs and returns the result.
+
+\membersection{wxLongLong::operator$-=$}\label{wxlonglongoperatorminusassign}
+
+\func{wxLongLong\&}{operator-}{\param{const wxLongLong\& }{ll}}
+
+Substracts another wxLongLong from this one.
+
+\membersection{wxLongLong::operator$--$}\label{wxlonglongoperatordec}
+
+\func{wxLongLong\&}{operator$--$}{\void}
+
+\func{wxLongLong\&}{operator$--$}{\param{int}{}}
+
+Pre/post decrement operator.
+
+% TODO document all other arithmetics operations: shitfs, multiplication,
+% division, bitwise, comparison

@@ -17,14 +17,15 @@ Frames may contain windows, and dialog boxes may directly contain controls.
 \twocolitem{\helpref{wxMDIParentFrame}{wxmdiparentframe}}{MDI parent frame}
 \twocolitem{\helpref{wxMDIChildFrame}{wxmdichildframe}}{MDI child frame}
 \twocolitem{\helpref{wxMiniFrame}{wxminiframe}}{A frame with a small title bar}
-\twocolitem{\helpref{wxTabbedDialog}{wxtabbeddialog}}{Tabbed dialog}
+\twocolitem{\helpref{wxTabbedDialog}{wxtabbeddialog}}{Tabbed dialog
+(deprecated, use wxNotebook instead)}
 \end{twocollist}
 
 See also {\bf Common dialogs}.
 
 {\large {\bf Miscellaneous windows}}
 
-The following are a variety of windows that are derived from wxWindow.
+The following are a variety of classes that are derived from wxWindow.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxPanel}{wxpanel}}{A window whose colour changes according to current user settings}
@@ -227,9 +228,12 @@ These are the data structure classes supported by wxWindows.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxExpr}{wxexpr}}{A class for flexible I/O}
 \twocolitem{\helpref{wxExprDatabase}{wxexprdatabase}}{A class for flexible I/O}
-\twocolitem{\helpref{wxDate}{wxdate}}{A class for date manipulation}
+\twocolitem{\helpref{wxDate}{wxdate}}{A class for date manipulation (deprecated in favour of wxDateTime)}
+\twocolitem{\helpref{wxDateTime}{wxdatetime}}{A class for date/time manipulations}
 \twocolitem{\helpref{wxHashTable}{wxhashtable}}{A simple hash table implementation}
+% \twocolitem{\helpref{wxHashTableLong}{wxhashtablelong}}{A wxHashTable version for storing long data}
 \twocolitem{\helpref{wxList}{wxlist}}{A simple linked list implementation}
+\twocolitem{\helpref{wxLongLong}{wxlonglong}}{A portable 64 bit integer type}
 \twocolitem{\helpref{wxNode}{wxnode}}{Represents a node in the wxList implementation}
 \twocolitem{\helpref{wxObject}{wxobject}}{The root class for most wxWindows classes}
 \twocolitem{\helpref{wxPathList}{wxpathlist}}{A class to help search multiple paths}
@@ -241,9 +245,8 @@ These are the data structure classes supported by wxWindows.
 \twocolitem{\helpref{wxStringTokenizer}{wxstringtokenizer}}{A class for interpreting a string as a list of tokens or words}
 \twocolitem{\helpref{wxRealPoint}{wxrealpoint}}{Representation of a point using floating point numbers}
 \twocolitem{\helpref{wxSize}{wxsize}}{Representation of a size}
-\twocolitem{\helpref{wxTime}{wxtime}}{A class for time manipulation}
-\twocolitem{\helpref{wxVariant}{wxvariant}}{A class for storing arbitrary types
-that may change at run-time}
+\twocolitem{\helpref{wxTime}{wxtime}}{A class for time manipulation (deprecated in favour of wxDateTime)}
+\twocolitem{\helpref{wxVariant}{wxvariant}}{A class for storing arbitrary types that may change at run-time}
 \end{twocollist}
 
 {\large {\bf Run-time class information system}}
