@@ -2887,7 +2887,12 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     if (event.Dragging())
     {
         if (m_dragCount == 0)
-            m_dragStart = wxPoint(x,y);
+        {
+            // we have to report the raw, physical coords as we want to be
+            // able to call HitTest(event.m_pointDrag) from the user code to
+            // get the item being dragged
+            m_dragStart = event.GetPosition();
+        }
 
         m_dragCount++;
 
