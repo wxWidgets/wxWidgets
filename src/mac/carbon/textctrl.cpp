@@ -408,8 +408,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( !wxTextCtrlBase::Create(parent, id, pos, size, style & ~(wxHSCROLL|wxVSCROLL), validator, name) )
         return false;
 
-    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-
     if ( m_windowStyle & wxTE_MULTILINE )
     {
         wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),
@@ -2375,7 +2373,7 @@ wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxTextCtrl *wxPeer,
     short featurSet;
 
     featurSet = kControlSupportsEmbedding | kControlSupportsFocus  | kControlWantsIdle
-            | kControlWantsActivate  | kControlHandlesTracking | kControlHasSpecialBackground
+            | kControlWantsActivate  | kControlHandlesTracking // | kControlHasSpecialBackground
             | kControlGetsFocusOnClick | kControlSupportsLiveFeedback;
 
     verify_noerr( ::CreateUserPaneControl( MAC_WXHWND(wxPeer->GetParent()->MacGetTopLevelWindowRef()), &bounds, featurSet, &m_controlRef ) );
