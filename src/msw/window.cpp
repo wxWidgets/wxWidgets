@@ -4397,7 +4397,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
         {
             // Generate an ENTER event
             m_mouseInWindow = TRUE;
-
+#if _WIN32_WINNT >= 0x0400
 #ifndef __WXWINCE__
             TRACKMOUSEEVENT trackinfo;
 
@@ -4409,7 +4409,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             // else we need _WIN32_WINNT >= 0x0400 
             _TrackMouseEvent(&trackinfo);
 #endif
-            
+#endif
             wxMouseEvent event(wxEVT_ENTER_WINDOW);
             InitMouseEvent(event, x, y, flags);
 
