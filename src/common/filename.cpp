@@ -215,6 +215,7 @@ bool wxFileName::Mkdir( const wxString &dir, int perm, bool full )
     {
         wxFileName filename(dir);
         wxArrayString dirs = filename.GetDirs();
+        dirs.Add(filename.GetName());
 
         size_t count = dirs.GetCount();
         size_t i;
@@ -620,7 +621,10 @@ wxString wxFileName::GetLongPath() const
         HANDLE hFind;
         pathOut = wxEmptyString;
 
-        size_t count = m_dirs.GetCount();
+        wxArrayString dirs = GetDirs();
+        dirs.Add(GetName());
+
+        size_t count = dirs.GetCount();
         size_t i;
         wxString tmpPath;
 
@@ -628,7 +632,7 @@ wxString wxFileName::GetLongPath() const
         {
             // We're using pathOut to collect the long-name path,
             // but using a temporary for appending the last path component which may be short-name
-            tmpPath = pathOut + m_dirs[i];
+            tmpPath = pathOut + dirs[i];
 
             if (tmpPath.Last() == wxT(':'))
             {
