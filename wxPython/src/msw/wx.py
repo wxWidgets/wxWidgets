@@ -206,7 +206,6 @@ wxFRAME_TOOL_WINDOW = wxc.wxFRAME_TOOL_WINDOW
 wxFRAME_FLOAT_ON_PARENT = wxc.wxFRAME_FLOAT_ON_PARENT
 wxFRAME_NO_WINDOW_MENU = wxc.wxFRAME_NO_WINDOW_MENU
 wxFRAME_NO_TASKBAR = wxc.wxFRAME_NO_TASKBAR
-wxFRAME_EX_CONTEXTHELP = wxc.wxFRAME_EX_CONTEXTHELP
 wxED_CLIENT_MARGIN = wxc.wxED_CLIENT_MARGIN
 wxED_BUTTONS_BOTTOM = wxc.wxED_BUTTONS_BOTTOM
 wxED_BUTTONS_RIGHT = wxc.wxED_BUTTONS_RIGHT
@@ -790,7 +789,6 @@ wxEVT_MENU_CHAR = wxc.wxEVT_MENU_CHAR
 wxEVT_MENU_INIT = wxc.wxEVT_MENU_INIT
 wxEVT_MENU_HIGHLIGHT = wxc.wxEVT_MENU_HIGHLIGHT
 wxEVT_POPUP_MENU_INIT = wxc.wxEVT_POPUP_MENU_INIT
-wxEVT_CONTEXT_MENU = wxc.wxEVT_CONTEXT_MENU
 wxEVT_SYS_COLOUR_CHANGED = wxc.wxEVT_SYS_COLOUR_CHANGED
 wxEVT_SETTING_CHANGED = wxc.wxEVT_SETTING_CHANGED
 wxEVT_QUERY_NEW_PALETTE = wxc.wxEVT_QUERY_NEW_PALETTE
@@ -804,8 +802,6 @@ wxEVT_DRAW_ITEM = wxc.wxEVT_DRAW_ITEM
 wxEVT_MEASURE_ITEM = wxc.wxEVT_MEASURE_ITEM
 wxEVT_COMPARE_ITEM = wxc.wxEVT_COMPARE_ITEM
 wxEVT_INIT_DIALOG = wxc.wxEVT_INIT_DIALOG
-wxEVT_HELP = wxc.wxEVT_HELP
-wxEVT_DETAILED_HELP = wxc.wxEVT_DETAILED_HELP
 wxEVT_IDLE = wxc.wxEVT_IDLE
 wxEVT_UPDATE_UI = wxc.wxEVT_UPDATE_UI
 wxEVT_COMMAND_LEFT_CLICK = wxc.wxEVT_COMMAND_LEFT_CLICK
@@ -1468,6 +1464,24 @@ def EVT_JOYSTICK_EVENTS(win, func):
 
 def EVT_TOGGLEBUTTON(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, func)
+
+
+
+# Help events
+def EVT_HELP(win, id, func):
+    win.Connect(id, -1, wxEVT_HELP, func)
+
+def EVT_HELP_RANGE(win, id, id2, func):
+    win.Connect(id, id2, wxEVT_HELP, func)
+
+def EVT_DETAILED_HELP(win, id, func):
+    win.Connect(id, -1, wxEVT_DETAILED_HELP, func)
+
+def EVT_DETAILED_HELP_RANGE(win, id, id2, func):
+    win.Connect(id, id2, wxEVT_DETAILED_HELP, func)
+
+def EVT_CONTEXT_MENU(win, func):
+    win.Connect(-1, -1, wxEVT_CONTEXT_MENU, func)
 
 
 #----------------------------------------------------------------------

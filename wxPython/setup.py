@@ -377,6 +377,20 @@ if not GL_ONLY:
     wxpExtensions.append(ext)
 
 
+    # Extension for the help module
+    swig_sources = run_swig(['help.i'], 'src', GENDIR, PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps)
+    ext = Extension('helpc', swig_sources,
+                    include_dirs =  includes,
+                    define_macros = defines,
+                    library_dirs = libdirs,
+                    libraries = libs,
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+    wxpExtensions.append(ext)
+
+
 #----------------------------------------------------------------------
 # Define the GLCanvas extension module
 #----------------------------------------------------------------------

@@ -22,7 +22,7 @@ import images
 
 
 _treeList = [
-    ('New since last release', ['wxTextCtrl', 'XML_Resource'
+    ('New since last release', ['ContextHelp',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -45,7 +45,7 @@ _treeList = [
                   'wxCalendarCtrl', 'wxToggleButton',
                   ]),
 
-    ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', ]),
+    ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', 'XML_Resource']),
 
     ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'FontEnumerator',
                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',

@@ -514,6 +514,12 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Thaw(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Thaw,(self,) + _args, _kwargs)
         return val
+    def GetHelpText(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetHelpText,(self,) + _args, _kwargs)
+        return val
+    def SetHelpText(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetHelpText,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
     # replaces broken shadow method

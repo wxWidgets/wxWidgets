@@ -386,6 +386,9 @@ public:
     void Freeze();
     void Thaw();
 
+    wxString GetHelpText();
+    void SetHelpText(const wxString& helpText);
+
 
 //      // Properties list
 //      %pragma(python) addtoclass = "

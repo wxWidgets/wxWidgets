@@ -16,6 +16,7 @@
 %{
 #include "helpers.h"
 #include <wx/minifram.h>
+#include <wx/tipwin.h>
 %}
 
 //----------------------------------------------------------------------
@@ -100,6 +101,17 @@ public:
                 char* name = "frame");
 
     %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
+};
+
+
+//---------------------------------------------------------------------------
+
+class wxTipWindow : public wxFrame
+{
+public:
+    wxTipWindow(wxWindow *parent,
+                const wxString& text,
+                wxCoord maxLength = 100);
 };
 
 

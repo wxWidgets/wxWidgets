@@ -1938,7 +1938,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxFRAME_FLOAT_ON_PARENT", PyInt_FromLong((long) wxFRAME_FLOAT_ON_PARENT));
 	 PyDict_SetItemString(d,"wxFRAME_NO_WINDOW_MENU", PyInt_FromLong((long) wxFRAME_NO_WINDOW_MENU));
 	 PyDict_SetItemString(d,"wxFRAME_NO_TASKBAR", PyInt_FromLong((long) wxFRAME_NO_TASKBAR));
-	 PyDict_SetItemString(d,"wxFRAME_EX_CONTEXTHELP", PyInt_FromLong((long) wxFRAME_EX_CONTEXTHELP));
 	 PyDict_SetItemString(d,"wxED_CLIENT_MARGIN", PyInt_FromLong((long) wxED_CLIENT_MARGIN));
 	 PyDict_SetItemString(d,"wxED_BUTTONS_BOTTOM", PyInt_FromLong((long) wxED_BUTTONS_BOTTOM));
 	 PyDict_SetItemString(d,"wxED_BUTTONS_RIGHT", PyInt_FromLong((long) wxED_BUTTONS_RIGHT));
@@ -2522,7 +2521,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_MENU_INIT", PyInt_FromLong((long) wxEVT_MENU_INIT));
 	 PyDict_SetItemString(d,"wxEVT_MENU_HIGHLIGHT", PyInt_FromLong((long) wxEVT_MENU_HIGHLIGHT));
 	 PyDict_SetItemString(d,"wxEVT_POPUP_MENU_INIT", PyInt_FromLong((long) wxEVT_POPUP_MENU_INIT));
-	 PyDict_SetItemString(d,"wxEVT_CONTEXT_MENU", PyInt_FromLong((long) wxEVT_CONTEXT_MENU));
 	 PyDict_SetItemString(d,"wxEVT_SYS_COLOUR_CHANGED", PyInt_FromLong((long) wxEVT_SYS_COLOUR_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_SETTING_CHANGED", PyInt_FromLong((long) wxEVT_SETTING_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_QUERY_NEW_PALETTE", PyInt_FromLong((long) wxEVT_QUERY_NEW_PALETTE));
@@ -2536,8 +2534,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_MEASURE_ITEM", PyInt_FromLong((long) wxEVT_MEASURE_ITEM));
 	 PyDict_SetItemString(d,"wxEVT_COMPARE_ITEM", PyInt_FromLong((long) wxEVT_COMPARE_ITEM));
 	 PyDict_SetItemString(d,"wxEVT_INIT_DIALOG", PyInt_FromLong((long) wxEVT_INIT_DIALOG));
-	 PyDict_SetItemString(d,"wxEVT_HELP", PyInt_FromLong((long) wxEVT_HELP));
-	 PyDict_SetItemString(d,"wxEVT_DETAILED_HELP", PyInt_FromLong((long) wxEVT_DETAILED_HELP));
 	 PyDict_SetItemString(d,"wxEVT_IDLE", PyInt_FromLong((long) wxEVT_IDLE));
 	 PyDict_SetItemString(d,"wxEVT_UPDATE_UI", PyInt_FromLong((long) wxEVT_UPDATE_UI));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LEFT_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_LEFT_CLICK));
