@@ -83,9 +83,9 @@ wxFrame *wxVideoCreateFrame(wxVideoBaseDriver *vid_drv)
   vid_out->DynamicSize(TRUE);
   frame->Layout();
   frame->Show(TRUE);
-  wxYield();
 
   vid_drv->AttachOutput(*vid_out);
+  vid_drv->Play();
 
   return frame;
 }

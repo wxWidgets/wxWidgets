@@ -67,32 +67,39 @@ protected:
 public:
   friend class wxVideoOutput;
  
-  ///
+  //
   wxVideoBaseDriver();
-  ///
+  //
   wxVideoBaseDriver(wxInputStream& str);
-  ///
+  //
   virtual ~wxVideoBaseDriver();
 
-  ///
+
+  //
+  virtual bool Play() = 0;
+  //
+  virtual bool Stop() = 0;
+  //
   virtual bool Pause() = 0;
-  ///
+  //
   virtual bool Resume() = 0;
 
-  ///
+  //
   virtual bool SetVolume(wxUint8 vol) = 0;
-  ///
+  //
   virtual bool Resize(wxUint16 w, wxUint16 h) = 0;
+  //
+  virtual bool GetSize(wxSize& size) const = 0;
 
-  ///
+  //
   virtual bool IsCapable(wxVideoType WXUNUSED(v_type)) { return FALSE; }
 
-  ///
+  //
   virtual void OnFinished() {}
 
-  ///
+  //
   virtual bool AttachOutput(wxVideoOutput& output);
-  ///
+  //
   virtual void DetachOutput();
 };
 

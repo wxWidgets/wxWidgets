@@ -233,8 +233,10 @@ FAIL_WITH(m_output->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
     pcm->Signed(TRUE);
     pcm->SetOrder(wxLITTLE_ENDIAN);
     
-    if (!SetSoundFormat(*pcm))
+    if (!SetSoundFormat(*pcm)) {
+      delete pcm;
       return FALSE;
+    }
 
     delete pcm;
   }

@@ -45,13 +45,14 @@ public:
   wxVideoXANIM(wxInputStream& str);
   ~wxVideoXANIM();
 
-  bool StartPlay();
+  bool Play();
   bool Pause();
   bool Resume();
-  void StopPlay();
+  bool Stop();
 
   bool SetVolume(wxUint8 vol);
   bool Resize(wxUint16 w, wxUint16 h);
+  bool GetSize(wxSize& size) const;
 
   bool IsCapable(wxVideoType v_type);
 

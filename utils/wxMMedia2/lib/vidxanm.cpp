@@ -60,13 +60,13 @@ wxVideoXANIM::wxVideoXANIM(wxInputStream& str)
 wxVideoXANIM::~wxVideoXANIM()
 {
   if (m_xanim_started)
-    StopPlay();
+    Stop();
   delete m_internal;
 
   wxRemoveFile(m_filename);
 }
 
-bool wxVideoXANIM::StartPlay()
+bool wxVideoXANIM::Play()
 {
   if (!m_paused && m_xanim_started)
     return TRUE; 
@@ -75,7 +75,8 @@ bool wxVideoXANIM::StartPlay()
     return TRUE;
   }
 
-  if (SendCommand(" ")) {
+  // The movie starts with xanim
+  if (RestartXANIM()) {
     m_paused = FALSE;
     return TRUE;
   }
@@ -100,15 +101,17 @@ bool wxVideoXANIM::Resume()
   return FALSE;
 }
 
-void wxVideoXANIM::StopPlay()
+bool wxVideoXANIM::Stop()
 {
   if (!m_xanim_started)
-    return;
+    return FALSE;
 
   SendCommand("q");
 
   m_xanim_started = FALSE;
   m_paused = FALSE;
+
+  return TRUE;
 }
 
 bool wxVideoXANIM::SetVolume(wxUint8 vol)
@@ -127,6 +130,12 @@ bool wxVideoXANIM::Resize(wxUint16 WXUNUSED(w), wxUint16 WXUNUSED(h))
   return FALSE;
 }
 
+bool wxVideoXANIM::GetSize(wxSize& size) const
+{
+  // Not implemented
+  return FALSE;
+}
+
 bool wxVideoXANIM::IsCapable(wxVideoType v_type)
 {
   if (v_type == wxVIDEO_MSAVI || v_type == wxVIDEO_MPEG ||
@@ -142,7 +151,7 @@ bool wxVideoXANIM::AttachOutput(wxVideoOutput& out)
   if (!wxVideoBaseDriver::AttachOutput(out))
     return FALSE;
 
-  return RestartXANIM();
+  return TRUE;
 }
 
 void wxVideoXANIM::DetachOutput()
@@ -229,7 +238,7 @@ bool wxVideoXANIM::RestartXANIM()
 //    wxYield();
   }
 
-//  m_paused = TRUE;
+  m_paused = FALSE;
   m_xanim_started = TRUE;
 
   return TRUE;
