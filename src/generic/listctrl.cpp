@@ -3328,6 +3328,14 @@ void wxListMainWindow::SetFocus()
 
 void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
+    if ( GetParent() )
+    {
+        wxFocusEvent event( wxEVT_SET_FOCUS, GetParent()->GetId() );
+        event.SetEventObject( GetParent() );
+        if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
+            return;
+    }
+
     // wxGTK sends us EVT_SET_FOCUS events even if we had never got
     // EVT_KILL_FOCUS before which means that we finish by redrawing the items
     // which are already drawn correctly resulting in horrible flicker - avoid
@@ -3338,19 +3346,18 @@ void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 
         RefreshSelected();
     }
-
-    if ( !GetParent() )
-        return;
-
-    wxFocusEvent event( wxEVT_SET_FOCUS, GetParent()->GetId() );
-    event.SetEventObject( GetParent() );
-    GetParent()->GetEventHandler()->ProcessEvent( event );
 }
 
 void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
+    if ( GetParent() )
+    {
+        wxFocusEvent event( wxEVT_KILL_FOCUS, GetParent()->GetId() );
+        event.SetEventObject( GetParent() );
+        if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
+            return;
+    }
     m_hasFocus = FALSE;
-
     RefreshSelected();
 }
 
