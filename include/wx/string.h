@@ -1040,7 +1040,7 @@ public:
         : m_str(str), m_buf(lenWanted), m_len(lenWanted)
         { }
 
-    ~wxStringBuffer() { m_str.assign(m_buf.data(), m_len); }
+    ~wxStringBuffer() { m_str.assign(m_buf.data(), wxStrlen(m_buf.data())); }
 
     operator wxChar*() { return m_buf.data(); }
 
