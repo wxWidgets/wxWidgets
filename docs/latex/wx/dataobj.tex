@@ -13,10 +13,10 @@
 
 A wxDataObject represents data that can be copied to or from the clipboard, or
 dragged and dropped. The important thing about wxDataObject is that this is a
-'smart' piece of data unlike usual 'dumb' data containers such as memory
+'smart' piece of data unlike 'dumb' data containers such as memory
 buffers or files. Being 'smart' here means that the data object itself should
 know what data formats it supports and how to render itself in each of
-supported formats.
+its supported formats.
 
 A supported format, incidentally, is exactly the format in which the data can
 be requested from a data object or from which the data object may be set. In
@@ -33,7 +33,7 @@ enum Direction
 };
 \end{verbatim}
 
-which allows to distinguish between them. See 
+which distinguishes between them. See 
 \helpref{wxDataFormat}{wxdataformat} documentation for more about formats.
 
 Not surprisingly, being 'smart' comes at a price of added complexity. This is
@@ -47,8 +47,8 @@ which derive from wxDataObject: \helpref{wxDataObjectSimple}{wxdataobjectsimple}
 \helpref{wxDataObjectSimple}{wxdataobjectsimple} is
 the simplest wxDataObject possible and only holds data in a single format (such
 as HTML or text) and \helpref{wxDataObjectComposite}{wxdataobjectcomposite} is
-the simplest way to implement wxDataObject which does support multiple formats
-because it achievs this by simply holding several wxDataObjectSimple objects.
+the simplest way to implement a wxDataObject which that does support multiple formats
+because it achieves this by simply holding several wxDataObjectSimple objects.
 
 So, you have several solutions when you need a wxDataObject class (and you need
 one as soon as you want to transfer data via the clipboard or drag and drop):
@@ -65,7 +65,7 @@ in your program (or between different copies of it).}
 solution which allows you to support any number of formats (either
 standard or custom if you combine it with the previous solution).}
 \twocolitem{{\bf 4. Use wxDataObject directly}}{This is the solution for
-maximal flexibility and efficiency, but it is also is the most difficult to
+maximal flexibility and efficiency, but it is also the most difficult to
 implement.}
 \end{twocollist}
 
@@ -78,8 +78,8 @@ the clipboard and even today's computers are in trouble. For this case, you
 will have to derive from wxDataObject directly and make it enumerate its
 formats and provide the data in the requested format on demand.
 
-Note that neither the GTK data transfer mechanisms for the clipboard and
-drag and drop, nor the OLE data transfer copy any data until another application
+Note that neither the GTK+ data transfer mechanisms for clipboard and
+drag and drop, nor OLE data transfer, copy any data until another application
 actually requests the data. This is in contrast to the 'feel' offered to the
 user of a program who would normally think that the data resides in the
 clipboard after having pressed 'Copy' - in reality it is only declared to be
@@ -93,9 +93,9 @@ change.
 
 You may also derive your own data object classes from 
 \helpref{wxCustomDataObject}{wxcustomdataobject} for user-defined types. The
-format of user-defined data is given as mime-type string literal, such as
+format of user-defined data is given as a mime-type string literal, such as
 "application/word" or "image/png". These strings are used as they are under
-Unix (so far only GTK) to identify a format and are translated into their
+Unix (so far only GTK+) to identify a format and are translated into their
 Windows equivalent under Win32 (using the OLE IDataObject for data exchange to
 and from the clipboard and for drag and drop). Note that the format string
 translation under Windows is not yet finished.

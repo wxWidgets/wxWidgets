@@ -1025,6 +1025,19 @@ the button text. This function can be useful for meta-programs (such as testing
 tools or special-needs access programs) which need to identify windows
 by name.
 
+\membersection{wxWindow::GetMaxSize}\label{wxwindowgetmaxsize}
+
+\constfunc{wxSize}{GetMaxSize}{\void}
+
+Returns the maximum size of the window, an indication to the sizer layout mechanism
+that this is the maximum possible size.
+
+\membersection{wxWindow::GetMinSize}\label{wxwindowgetminsize}
+
+\constfunc{wxSize}{GetMinSize}{\void}
+
+Returns the minimum size of the window, an indication to the sizer layout mechanism
+that this is the minimum required size.
 
 \membersection{wxWindow::GetName}\label{wxwindowgetname}
 
@@ -2572,6 +2585,21 @@ the constraints automatically in OnSize; otherwise, you must override OnSize and
 explicitly. When setting both a wxLayoutConstraints and a \helpref{wxSizer}{wxsizer}, only the
 sizer will have effect.
 
+\membersection{wxWindow::SetMaxSize}\label{wxwindowsetmaxsize}
+
+\func{void}{SetMaxSize}{\param{const wxSize\& }{size}}
+
+Sets the maximum size of the window, to indicate to the sizer layout mechanism
+that this is the maximum possible size.
+
+\membersection{wxWindow::SetMinSize}\label{wxwindowsetminsize}
+
+\func{void}{SetMinSize}{\param{const wxSize\& }{size}}
+
+Sets the minimum size of the window, to indicate to the sizer layout mechanism
+that this is the minimum required size. You may need to call this
+if you change the window size after construction and before adding
+to its parent sizer.
 
 \membersection{wxWindow::SetOwnBackgroundColour}\label{wxwindowsetownbackgroundcolour}
 

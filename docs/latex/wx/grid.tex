@@ -550,12 +550,6 @@ Get the minimal width of the given column/row.
 
 Returns the width of the specified column.
 
-\membersection{wxGrid::GetColWidth}\label{wxgridgetcolwidth}
-
-\constfunc{int}{GetColWidth}{\param{int }{col}}
-
-Get the col/row coords
-
 \membersection{wxGrid::GetDefaultCellAlignment}\label{wxgridgetdefaultcellalignment}
 
 \func{void}{GetDefaultCellAlignment}{\param{int* }{horiz}, \param{int* }{vert}}
@@ -706,21 +700,6 @@ Returns the total number of grid rows (actually the number of rows in the underl
 \membersection{wxGrid::GetOrCreateCellAttr}\label{wxgridgetorcreatecellattr}
 
 \constfunc{wxGridCellAttr*}{GetOrCreateCellAttr}{\param{int }{row}, \param{int }{col}}
-
-\membersection{wxGrid::GetRowHeight}\label{wxgridgetrowheight}
-
-\constfunc{int}{GetRowHeight}{\param{int }{row}}
-
-This function must be public for compatibility.
-
-\membersection{wxGrid::GetRowTop}\label{wxgridgetrowtop}
-
-\constfunc{int}{GetRowTop}{\param{int }{row}}
-
-
-\membersection{wxGrid::GetRowBottom}\label{wxgridgetrowbottom}
-
-\constfunc{int}{GetRowBottom}{\param{int }{row}}
 
 \membersection{wxGrid::GetRowMinimalAcceptableHeight}\label{wxgridgetrowminimalacceptableheight}
 
@@ -1305,6 +1284,12 @@ Sets the default background colour for grid cells.
 
 Sets the default font to be used for grid cell text.
 
+\membersection{wxGrid::SetDefaultCellTextColour}\label{wxgridsetdefaultcelltextcolour}
+
+\func{void}{SetDefaultCellTextColour}{\param{const wxColour\&}{ colour}}
+
+Sets the current default colour for grid cell text.
+
 \membersection{wxGrid::SetDefaultEditor}\label{wxgridsetdefaulteditor}
 
 \func{void}{SetDefaultEditor}{\param{wxGridCellEditor* }{editor}}
@@ -1499,7 +1484,7 @@ Set the selection behaviour of the grid.
 
 \docparam{wxGrid::wxGridSelectRows}{Selections will consist of whole rows.}
 
-\docparam{wxGrid::wxGridSelectionColumns}{Selections will consist of whole columns.}
+\docparam{wxGrid::wxGridSelectColumns}{Selections will consist of whole columns.}
 
 \membersection{wxGrid::SetTable}\label{wxgridsettable}
 
