@@ -217,17 +217,8 @@
  */
 #define wxMAKE_UNIQUE_ASSERT_NAME2(text) wxCONCAT(wxAssert_, text)
 
-#ifdef __WATCOMC__
-    /* avoid "unused symbol" warning */
-    #define wxCOMPILE_TIME_ASSERT2(expr, msg, text) \
-        class wxMAKE_UNIQUE_ASSERT_NAME2(text) { \
-          unsigned int msg: expr; \
-          wxMAKE_UNIQUE_ASSERT_NAME2(text) { wxUnusedVar(msg); } \
-        }
-#else
-    #define wxCOMPILE_TIME_ASSERT2(expr, msg, text) \
-        struct wxMAKE_UNIQUE_ASSERT_NAME2(text) { unsigned int msg: expr; }
-#endif
+#define wxCOMPILE_TIME_ASSERT2(expr, msg, text) \
+    struct wxMAKE_UNIQUE_ASSERT_NAME2(text) { unsigned int msg: expr; }
 
 /*  helpers for wxCOMPILE_TIME_ASSERT below, for private use only */
 #define wxMAKE_BITSIZE_MSG(type, size) type ## SmallerThan ## size ## Bits
