@@ -262,7 +262,8 @@ GAddress *GSocket_GetLocal(GSocket *socket)
 {
   GAddress *address;
   struct sockaddr addr;
-  SOCKLEN_T size;
+  SOCKLEN_T size = sizeof(addr);
+  GSocketError err;
 
   assert(socket != NULL);
 
@@ -289,10 +290,11 @@ GAddress *GSocket_GetLocal(GSocket *socket)
      socket->m_error = GSOCK_MEMERR;
      return NULL;
   }
-  if (_GAddress_translate_from(address, &addr, size) != GSOCK_NOERROR)
+  err = _GAddress_translate_from(address, &addr, size);
+  if (err != GSOCK_NOERROR)
   {
-     socket->m_error = GSOCK_MEMERR;
      GAddress_destroy(address);
+     socket->m_error = err;
      return NULL;
   }
 
@@ -380,6 +382,9 @@ GSocketError GSocket_SetServer(GSocket *sck)
 GSocket *GSocket_WaitConnection(GSocket *sck)
 {
   GSocket *connection;
+  struct sockaddr from;
+  SOCKLEN_T fromlen = sizeof(from);
+  GSocketError err;
   u_long arg = 1;
 
   assert(sck != NULL);
@@ -409,7 +414,7 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
     return NULL;
   }
 
-  connection->m_fd = accept(sck->m_fd, NULL, NULL);
+  connection->m_fd = accept(sck->m_fd, &from, &fromlen);
 
   if (connection->m_fd == INVALID_SOCKET)
   {
@@ -426,6 +431,23 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
   connection->m_server   = FALSE;
   connection->m_stream   = TRUE;
   connection->m_oriented = TRUE;
+
+  /* Setup the peer address field */
+  connection->m_peer = GAddress_new();
+  if (!connection->m_peer)
+  {
+    GSocket_destroy(connection);
+    sck->m_error = GSOCK_MEMERR;
+    return NULL;
+  }
+  err = _GAddress_translate_from(connection->m_peer, &from, fromlen);
+  if (err != GSOCK_NOERROR)
+  {
+    GAddress_destroy(connection->m_peer);
+    GSocket_destroy(connection);
+    sck->m_error = err;
+    return NULL;
+  }
 
   ioctlsocket(connection->m_fd, FIONBIO, (u_long FAR *) &arg);
   _GSocket_Enable_Events(connection);
@@ -956,6 +978,7 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
   struct sockaddr from;
   SOCKLEN_T fromlen = sizeof(from);
   int ret;
+  GSocketError err;
 
   ret = recvfrom(socket->m_fd, buffer, size, 0, &from, &fromlen);
 
@@ -972,10 +995,12 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
       return -1;
     }
   }
-  if (_GAddress_translate_from(socket->m_peer, &from, fromlen) != GSOCK_NOERROR)
+  err = _GAddress_translate_from(socket->m_peer, &from, fromlen);
+  if (err != GSOCK_NOERROR)
   {
-    socket->m_error = GSOCK_MEMERR;
     GAddress_destroy(socket->m_peer);
+    socket->m_peer  = NULL;
+    socket->m_error = err;
     return -1;
   }
 
@@ -991,6 +1016,7 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
 {
   struct sockaddr *addr;
   int len, ret;
+  GSocketError err;
 
   if (!socket->m_peer)
   {
@@ -998,9 +1024,10 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
-  if (!_GAddress_translate_to(socket->m_peer, &addr, &len))
+  err = _GAddress_translate_to(socket->m_peer, &addr, &len);
+  if (err != GSOCK_NOERROR)
   {
-    socket->m_error = GSOCK_MEMERR;
+    socket->m_error = err;
     return -1;
   }
 

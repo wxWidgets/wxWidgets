@@ -15,7 +15,6 @@
 #include <netdb.h>
 #include <sys/ioctl.h>
 #ifdef __VMS__
-#define SOCK_LEN_TYP (unsigned int*)
 #include <socket.h>
 struct	sockaddr_un {
 	u_char	sun_len;		/* sockaddr len including null */
@@ -25,7 +24,6 @@ struct	sockaddr_un {
 #else
 #include <sys/socket.h>
 #include <sys/un.h>
-#define SOCK_LEN_TYP (int*)
 #endif
 #include <sys/time.h>
 #include <netinet/in.h>
@@ -54,15 +52,19 @@ struct	sockaddr_un {
 
 #ifndef SOCKLEN_T
 
-#ifdef __GLIBC__
-#      if __GLIBC__ == 2
-#         define SOCKLEN_T socklen_t
-#      endif
+#ifdef VMS
+#  define SOCKLEN_T unsigned int
 #else
-#      define SOCKLEN_T int
+#  ifdef __GLIBC__
+#    if __GLIBC__ == 2
+#       define SOCKLEN_T socklen_t
+#    endif
+#  else
+#    define SOCKLEN_T int
+#  endif
 #endif
 
-#endif
+#endif // SOCKLEN_T
 
 #define MASK_SIGNAL()                       \
 {                                           \
@@ -210,7 +212,7 @@ GAddress *GSocket_GetLocal(GSocket *socket)
 {
   GAddress *address;
   struct sockaddr addr;
-  SOCKLEN_T size;
+  SOCKLEN_T size = sizeof(addr);
   GSocketError err;
 
   assert(socket != NULL);
@@ -225,7 +227,7 @@ GAddress *GSocket_GetLocal(GSocket *socket)
 
   size = sizeof(addr);
 
-  if (getsockname(socket->m_fd, &addr, SOCK_LEN_TYP &size) < 0) {
+  if (getsockname(socket->m_fd, &addr, (SOCKLEN_T *) &size) < 0) {
     socket->m_error = GSOCK_IOERR;
     return NULL;
   }
@@ -235,9 +237,10 @@ GAddress *GSocket_GetLocal(GSocket *socket)
     socket->m_error = GSOCK_MEMERR;
     return NULL;
   }
-  socket->m_error = _GAddress_translate_from(address, &addr, size);
-  if (socket->m_error != GSOCK_NOERROR) {
+  err = _GAddress_translate_from(address, &addr, size); /*xxx*/
+  if (err != GSOCK_NOERROR) {
     GAddress_destroy(address);
+    socket->m_error = err;
     return NULL;
   }
 
@@ -319,6 +322,8 @@ GSocketError GSocket_SetServer(GSocket *sck)
  */
 GSocket *GSocket_WaitConnection(GSocket *socket)
 {
+  struct sockaddr from;
+  SOCKLEN_T fromlen = sizeof(from);
   GSocket *connection;
   int arg = 1;
 
@@ -338,7 +343,7 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   connection = GSocket_new();
   if (!connection)
   {
-    connection->m_error = GSOCK_MEMERR;
+    socket->m_error = GSOCK_MEMERR;
     return NULL;
   }
 
@@ -350,7 +355,7 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
     return NULL;
   }
 
-  connection->m_fd = accept(socket->m_fd, NULL, NULL);
+  connection->m_fd = accept(socket->m_fd, &from, (SOCKLEN_T *) &fromlen);
 
   if (connection->m_fd == -1)
   {
@@ -367,6 +372,23 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   connection->m_server   = FALSE;
   connection->m_stream   = TRUE;
   connection->m_oriented = TRUE;
+
+  /* Setup the peer address field */ /*xxx*/
+  connection->m_peer = GAddress_new();
+  if (!connection->m_peer)
+  {
+    GSocket_destroy(connection);
+    socket->m_error = GSOCK_MEMERR;
+    return NULL;
+  }
+  err = _GAddress_translate_from(connection->m_peer, &from, fromlen);
+  if (err != GSOCK_NOERROR)
+  {
+    GAddress_destroy(connection->m_peer);
+    GSocket_destroy(connection);
+    socket->m_error = err;
+    return NULL;
+  }
 
   ioctl(connection->m_fd, FIONBIO, &arg);
   _GSocket_Enable_Events(connection);
@@ -799,15 +821,14 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
 {
   struct sockaddr from;
-  SOCKLEN_T fromlen;
+  SOCKLEN_T fromlen = sizeof(from);
   int ret;
   GSocketError err;
 
   fromlen = sizeof(from);
 
   MASK_SIGNAL();
-  ret = recvfrom(socket->m_fd, buffer, size, 0, &from,
-		 SOCK_LEN_TYP &fromlen);
+  ret = recvfrom(socket->m_fd, buffer, size, 0, &from, (SOCKLEN_T *) &fromlen);
   UNMASK_SIGNAL();
 
   if (ret == -1)
@@ -838,7 +859,6 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
 int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
 {
   int ret;
-  GSocketError err;
 
   MASK_SIGNAL();
   ret = send(socket->m_fd, buffer, size, 0);
@@ -910,7 +930,7 @@ void _GSocket_Detected_Write(GSocket *socket)
 
     len = sizeof(error);
     getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*) &error,
-	       SOCK_LEN_TYP &len);
+           (SOCKLEN_T *) &len);
 
     if (error)
     {
@@ -1302,3 +1322,4 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 
 #endif
   /* wxUSE_SOCKETS */
+
