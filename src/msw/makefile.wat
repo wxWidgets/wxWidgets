@@ -47,8 +47,7 @@ NONESSENTIALOBJS= printps.obj &
   msgdlgg.obj &
   helpxlp.obj &
   colrdlgg.obj &
-  fontdlgg.obj &
-  postscrp.obj
+  fontdlgg.obj
 
 COMMONOBJS = cmndata.obj &
   config.obj &

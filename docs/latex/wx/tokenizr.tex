@@ -1,0 +1,49 @@
+\section{\class{wxStringTokenizer}}\label{wxstringtokenizer}
+
+wxStringTokenizer helps you to break a string up into a number of tokens.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStringTokenizer::wxStringTokenizer}\label{wxstringtokenizerwxstringtokenizer}
+
+\func{}{wxStringTokenizer}{\param{const wxString\& }{to\_tokenize}, \param{const wxString\& }{delims = " \t\r\n"}, \param{bool }{ret\_delim = FALSE}}
+
+Constructor. Pass the string to tokenze, a string containing delimiters,
+a flag specifying whether delimiters are retained.
+
+\membersection{wxStringTokenizer::\destruct{wxStringTokenizer}}\label{wxstringtokenizerdtor}
+
+\func{}{\destruct{wxStringTokenizer}}{\void}
+
+Destructor.
+
+\membersection{wxStringTokenizer::CountTokens}\label{wxstringtokenizercounttokens}
+
+\constfunc{virtual int}{CountTokens}{\void}
+
+Returns the number of tokens in the input string.
+
+\membersection{wxStringTokenizer::HasMoreToken}\label{wxstringtokenizerhasmoretoken}
+
+\constfunc{virtual bool}{HasMoreToken}{\void}
+
+Returns TRUE if the tokenizer has further tokens.
+
+\membersection{wxStringTokenizer::NextToken}\label{wxstringtokenizernexttoken}
+
+\constfunc{virtual wxString}{NextToken}{\void}
+
+Returns the next token.
+
+\membersection{wxStringTokenizer::GetString}\label{wxstringtokenizergetstring}
+
+\constfunc{virtual wxString}{GetString}{\void}
+
+Returns the input string.
+
+
+

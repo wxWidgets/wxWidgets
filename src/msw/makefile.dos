@@ -131,9 +131,6 @@ COMMONOBJS = \
 # Fails when including png.h, on jmp_buf.
 #  $(COMMDIR)\image.obj \
 
-# Don't need this
-# $(COMMDIR)\postscrp.obj \
- 
 MSWOBJS = \
   $(MSWDIR)\accel.obj \
   $(MSWDIR)\app.obj \
@@ -781,11 +778,6 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/odbc.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
-$(COMMDIR)/postscrp.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

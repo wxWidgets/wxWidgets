@@ -49,8 +49,7 @@ NONESSENTIALOBJS= \
   $(GENDIR)\msgdlgg.obj \
   $(GENDIR)\helpxlp.obj \
   $(GENDIR)\colrdlgg.obj \
-  $(GENDIR)\fontdlgg.obj \
-  $(COMMDIR)\postscrp.obj
+  $(GENDIR)\fontdlgg.obj
 
 COMMONOBJS = \
   $(COMMDIR)\cmndata.obj \

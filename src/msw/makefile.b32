@@ -119,7 +119,6 @@ COMMONOBJS = \
   $(MSWDIR)\mimetype.obj \
   $(MSWDIR)\module.obj \
   $(MSWDIR)\object.obj \
-  $(MSWDIR)\postscrp.obj \
   $(MSWDIR)\prntbase.obj \
   $(MSWDIR)\resource.obj \
   $(MSWDIR)\tbarbase.obj \
@@ -520,8 +519,6 @@ $(MSWDIR)\module.obj:     $(COMMDIR)\module.$(SRCSUFF)
 $(MSWDIR)\object.obj:     $(COMMDIR)\object.$(SRCSUFF)
 
 $(MSWDIR)\odbc.obj:     $(COMMDIR)\odbc.$(SRCSUFF)
-
-$(MSWDIR)\postscrp.obj:     $(COMMDIR)\postscrp.$(SRCSUFF)
 
 $(MSWDIR)\prntbase.obj:     $(COMMDIR)\prntbase.$(SRCSUFF)
 
