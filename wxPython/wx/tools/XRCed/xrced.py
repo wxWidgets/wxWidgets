@@ -875,7 +875,7 @@ Homepage: http://xrced.sourceforge.net\
             dom = minidom.parse(f)
             f.close()
             # Set encoding global variable
-            g.currentEncoding = dom.encoding
+            if dom.encoding: g.currentEncoding = dom.encoding
             # Change dir
             dir = os.path.dirname(path)
             if dir: os.chdir(dir)
@@ -1010,7 +1010,11 @@ class App(wxApp):
         frame.Show(True)
         # Load resources from XRC file (!!! should be transformed to .py later?)
         frame.res = wxXmlResource('')
-        frame.res.Load(os.path.join(basePath, 'xrced.xrc'))
+        # !!! Temporary blocking of assert failure occuring in unicode build
+        try:
+            frame.res.Load(os.path.join(basePath, 'xrced.xrc'))
+        except wx._core.PyAssertionError:
+            pass
 
         # Load file after showing
         if args:
