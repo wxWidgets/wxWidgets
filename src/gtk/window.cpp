@@ -2450,8 +2450,10 @@ void wxWindowGTK::Init()
 
     m_hAdjust = (GtkAdjustment*) NULL;
     m_vAdjust = (GtkAdjustment*) NULL;
-    m_oldHorizontalPos = 0.0;
+    m_oldHorizontalPos =
     m_oldVerticalPos = 0.0;
+    m_oldClientWidth =
+    m_oldClientHeight = 0;
 
     m_resizing = FALSE;
     m_widgetStyle = (GtkStyle*) NULL;
