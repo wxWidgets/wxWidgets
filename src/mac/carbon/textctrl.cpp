@@ -752,7 +752,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     if ( !m_macUsesTXN )
     {
-	    m_macControl = ::NewControl( (GrafPtr) parent->MacGetRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
+	    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , "\p" , true , 0 , 0 , 1, 
 	  	    (style & wxTE_PASSWORD) ? kControlEditTextPasswordProc : kControlEditTextProc , (long) this ) ;
 	  	long size ;
         ::GetControlData((ControlHandle)  m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &((TEHandle) m_macTE) , &size ) ;
@@ -766,7 +766,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                 | kControlWantsActivate | kControlHandlesTracking | kControlHasSpecialBackground
                 | kControlGetsFocusOnClick | kControlSupportsLiveFeedback;
             /* create the control */
-        m_macControl = NewControl((GrafPtr) parent->MacGetRootWindow(), &bounds, "\p", true, featurSet, 0, featurSet, kControlUserPaneProc, 0);
+        m_macControl = NewControl(MAC_WXHWND(parent->MacGetRootWindow()), &bounds, "\p", true, featurSet, 0, featurSet, kControlUserPaneProc, 0);
             /* set up the mUP specific features and data */
     	mUPOpenControl((ControlHandle) m_macControl, m_windowStyle & wxTE_MULTILINE );
 	}
@@ -1129,7 +1129,7 @@ void wxTextCtrl::WriteText(const wxString& text)
 	}
 	else
 	{
-    	TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (const char*)value, value.Length(),
+    	TXNSetData( ((TXNObject) m_macTXN), kTXNTextData, (void*) (const char*)value, value.Length(),
     	  kTXNUseCurrentSelection, kTXNUseCurrentSelection);
 	}
 	MacRedrawControl() ;
