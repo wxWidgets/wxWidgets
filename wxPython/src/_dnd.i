@@ -144,6 +144,15 @@ public:
     // with the data from the drop source if it returns True
     bool GetData();
 
+    // sets the default action for drag and drop:
+    // use wxDragMove or wxDragCopy to set deafult action to move or copy
+    // and use wxDragNone (default) to set default action specified by
+    // initialization of draging (see wxDropSourceBase::DoDragDrop())
+    void SetDefaultAction(wxDragResult action);
+
+    // returns default action for drag and drop or
+    // wxDragNone if this not specified
+    wxDragResult GetDefaultAction();
 };
 
 
