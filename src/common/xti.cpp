@@ -69,7 +69,7 @@ int wxEnumData::GetEnumMemberValue(const wxChar *name)
 			return m_members[i].m_value;
 		}
 	}
-	return 0 ;
+    return 0 ;
 }
 
 const wxChar *wxEnumData::GetEnumMemberName(int value)
@@ -98,93 +98,126 @@ const char * wxEnumData::GetEnumMemberNameByIndex( int idx )
 // Type Information
 // ----------------------------------------------------------------------------
 
-const wxTypeInfo* wxGetTypeInfo( void * )
+template<> const wxTypeInfo* wxGetTypeInfo( void * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( bool * )
+template<> const wxTypeInfo* wxGetTypeInfo( bool * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_BOOL ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( char * )
+template<> const wxTypeInfo* wxGetTypeInfo( char * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( unsigned char * )
+template<> const wxTypeInfo* wxGetTypeInfo( unsigned char * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( int * )
+template<> const wxTypeInfo* wxGetTypeInfo( int * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( unsigned int * )
+template<> const wxTypeInfo* wxGetTypeInfo( unsigned int * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( long * )
+template<> const wxTypeInfo* wxGetTypeInfo( long * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( unsigned long * )
+template<> const wxTypeInfo* wxGetTypeInfo( unsigned long * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( float * )
+template<> const wxTypeInfo* wxGetTypeInfo( float * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_FLOAT ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( double * )
+template<> const wxTypeInfo* wxGetTypeInfo( double * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_DOUBLE ) ;
 	return &s_typeInfo ;
 }
 
-const wxTypeInfo* wxGetTypeInfo( wxString * )
+template<> const wxTypeInfo* wxGetTypeInfo( wxString * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_STRING ) ;
 	return &s_typeInfo ;
 }
 
-// this is a compiler induced specialization which is never used anywhere
-// const char * should never be active
+// this are compiler induced specialization which are never used anywhere
 
-const wxTypeInfo* wxGetTypeInfo( char const ** )
+// char const *
+
+template<> const wxTypeInfo* wxGetTypeInfo( char const ** )
 {
 	assert(0) ;
 	static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
 	return &s_typeInfo ;
 }
 
-void wxStringReadValue(const wxString & , const char* & )
+template<> void wxStringReadValue(const wxString & , const char* & )
 {
 	assert(0) ;
 }
 
-void wxStringWriteValue(wxString & , char const * const & )
+template<> void wxStringWriteValue(wxString & , char const * const & )
 {
 	assert(0) ;
 }
 
+// char *
 
+template<> const wxTypeInfo* wxGetTypeInfo( char ** )
+{
+        assert(0) ;
+        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
+        return &s_typeInfo ;
+}
+
+template<> void wxStringReadValue(const wxString & , char* & )
+{
+        assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , char * const & )
+{
+        assert(0) ;
+}
+
+// const wxPoint
+/*
+template<> const wxTypeInfo* wxGetTypeInfo( const wxPoint * )
+{
+        assert(0) ;
+        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
+        return &s_typeInfo ;
+}
+
+template<> void wxStringReadValue(const wxString & , const wxPoint & )
+{
+        assert(0) ;
+}
+*/
 // ----------------------------------------------------------------------------
 // value streaming
 // ----------------------------------------------------------------------------
