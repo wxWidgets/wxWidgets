@@ -3,6 +3,14 @@
 #include <wx/wfstream.h>
 #include <wx/string.h>
 
+#ifdef WXMAKINGDLL_SVG
+    #define WXDLLIMPEXP_SVG WXEXPORT
+#elif defined(WXUSINGDLL)
+    #define WXDLLIMPEXP_SVG WXIMPORT
+#else // not making nor using DLL
+    #define WXDLLIMPEXP_SVG
+#endif
+
 #define wxSVGVersion wxT("v0100")
 #ifdef __BORLANDC__
 #pragma warn -rch
@@ -20,7 +28,7 @@
 #define mm2pt            2.83464566929
 #define pt2mm            0.352777777778
 
-class wxSVGFileDC : public wxDC
+class WXDLLIMPEXP_SVG wxSVGFileDC : public wxDC
 {
 
     private:

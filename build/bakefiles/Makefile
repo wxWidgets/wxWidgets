@@ -11,12 +11,14 @@ AUTOCONF_ALL = \
 	../../Makefile.in \
 	../../configure \
 	../../contrib/samples/animate/Makefile.in \
+	../../contrib/samples/svg/Makefile.in \
 	../../contrib/samples/xrc/Makefile.in \
 	../../contrib/src/animate/Makefile.in \
 	../../contrib/src/fl/Makefile.in \
 	../../contrib/src/gizmos/Makefile.in \
 	../../contrib/src/ogl/Makefile.in \
 	../../contrib/src/stc/Makefile.in \
+	../../contrib/src/svg/Makefile.in \
 	../../contrib/src/xrc/Makefile.in \
 	../../contrib/utils/wxrc/Makefile.in \
 	../../samples/Makefile.in \
@@ -108,8 +110,10 @@ BORLAND_ALL = \
 	../../contrib/build/gizmos/makefile.bcc \
 	../../contrib/build/ogl/makefile.bcc \
 	../../contrib/build/stc/makefile.bcc \
+	../../contrib/build/svg/makefile.bcc \
 	../../contrib/build/xrc/makefile.bcc \
 	../../contrib/samples/animate/makefile.bcc \
+	../../contrib/samples/svg/makefile.bcc \
 	../../contrib/samples/xrc/makefile.bcc \
 	../../contrib/utils/wxrc/makefile.bcc \
 	../../samples/access/makefile.bcc \
@@ -202,8 +206,10 @@ MINGW_ALL = \
 	../../contrib/build/gizmos/makefile.gcc \
 	../../contrib/build/ogl/makefile.gcc \
 	../../contrib/build/stc/makefile.gcc \
+	../../contrib/build/svg/makefile.gcc \
 	../../contrib/build/xrc/makefile.gcc \
 	../../contrib/samples/animate/makefile.gcc \
+	../../contrib/samples/svg/makefile.gcc \
 	../../contrib/samples/xrc/makefile.gcc \
 	../../contrib/utils/wxrc/makefile.gcc \
 	../../samples/access/makefile.gcc \
@@ -296,8 +302,10 @@ MSVC_ALL = \
 	../../contrib/build/gizmos/makefile.vc \
 	../../contrib/build/ogl/makefile.vc \
 	../../contrib/build/stc/makefile.vc \
+	../../contrib/build/svg/makefile.vc \
 	../../contrib/build/xrc/makefile.vc \
 	../../contrib/samples/animate/makefile.vc \
+	../../contrib/samples/svg/makefile.vc \
 	../../contrib/samples/xrc/makefile.vc \
 	../../contrib/utils/wxrc/makefile.vc \
 	../../samples/access/makefile.vc \
@@ -390,8 +398,10 @@ WATCOM_ALL = \
 	../../contrib/build/gizmos/makefile.wat \
 	../../contrib/build/ogl/makefile.wat \
 	../../contrib/build/stc/makefile.wat \
+	../../contrib/build/svg/makefile.wat \
 	../../contrib/build/xrc/makefile.wat \
 	../../contrib/samples/animate/makefile.wat \
+	../../contrib/samples/svg/makefile.wat \
 	../../contrib/samples/xrc/makefile.wat \
 	../../contrib/utils/wxrc/makefile.wat \
 	../../samples/access/makefile.wat \
@@ -491,12 +501,14 @@ clean:
 	rm -f ../../Makefile.in
 	rm -f ../../configure
 	rm -f ../../contrib/samples/animate/Makefile.in
+	rm -f ../../contrib/samples/svg/Makefile.in
 	rm -f ../../contrib/samples/xrc/Makefile.in
 	rm -f ../../contrib/src/animate/Makefile.in
 	rm -f ../../contrib/src/fl/Makefile.in
 	rm -f ../../contrib/src/gizmos/Makefile.in
 	rm -f ../../contrib/src/ogl/Makefile.in
 	rm -f ../../contrib/src/stc/Makefile.in
+	rm -f ../../contrib/src/svg/Makefile.in
 	rm -f ../../contrib/src/xrc/Makefile.in
 	rm -f ../../contrib/utils/wxrc/Makefile.in
 	rm -f ../../samples/Makefile.in
@@ -587,8 +599,10 @@ clean:
 	rm -f ../../contrib/build/gizmos/makefile.bcc
 	rm -f ../../contrib/build/ogl/makefile.bcc
 	rm -f ../../contrib/build/stc/makefile.bcc
+	rm -f ../../contrib/build/svg/makefile.bcc
 	rm -f ../../contrib/build/xrc/makefile.bcc
 	rm -f ../../contrib/samples/animate/makefile.bcc
+	rm -f ../../contrib/samples/svg/makefile.bcc
 	rm -f ../../contrib/samples/xrc/makefile.bcc
 	rm -f ../../contrib/utils/wxrc/makefile.bcc
 	rm -f ../../samples/access/makefile.bcc
@@ -680,8 +694,10 @@ clean:
 	rm -f ../../contrib/build/gizmos/makefile.gcc
 	rm -f ../../contrib/build/ogl/makefile.gcc
 	rm -f ../../contrib/build/stc/makefile.gcc
+	rm -f ../../contrib/build/svg/makefile.gcc
 	rm -f ../../contrib/build/xrc/makefile.gcc
 	rm -f ../../contrib/samples/animate/makefile.gcc
+	rm -f ../../contrib/samples/svg/makefile.gcc
 	rm -f ../../contrib/samples/xrc/makefile.gcc
 	rm -f ../../contrib/utils/wxrc/makefile.gcc
 	rm -f ../../samples/access/makefile.gcc
@@ -773,8 +789,10 @@ clean:
 	rm -f ../../contrib/build/gizmos/makefile.vc
 	rm -f ../../contrib/build/ogl/makefile.vc
 	rm -f ../../contrib/build/stc/makefile.vc
+	rm -f ../../contrib/build/svg/makefile.vc
 	rm -f ../../contrib/build/xrc/makefile.vc
 	rm -f ../../contrib/samples/animate/makefile.vc
+	rm -f ../../contrib/samples/svg/makefile.vc
 	rm -f ../../contrib/samples/xrc/makefile.vc
 	rm -f ../../contrib/utils/wxrc/makefile.vc
 	rm -f ../../samples/access/makefile.vc
@@ -866,8 +884,10 @@ clean:
 	rm -f ../../contrib/build/gizmos/makefile.wat
 	rm -f ../../contrib/build/ogl/makefile.wat
 	rm -f ../../contrib/build/stc/makefile.wat
+	rm -f ../../contrib/build/svg/makefile.wat
 	rm -f ../../contrib/build/xrc/makefile.wat
 	rm -f ../../contrib/samples/animate/makefile.wat
+	rm -f ../../contrib/samples/svg/makefile.wat
 	rm -f ../../contrib/samples/xrc/makefile.wat
 	rm -f ../../contrib/utils/wxrc/makefile.wat
 	rm -f ../../samples/access/makefile.wat
@@ -1057,6 +1077,23 @@ Makefile: regenMakefile.py
 	touch $@
 
 
+../../contrib/src/svg/Makefile.in: $(CDEPS) ../../contrib/build/svg/svg.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/svg/svg.bkl
+	touch $@
+../../contrib/build/svg/makefile.bcc: $(CDEPS) ../../contrib/build/svg/svg.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/svg -DWXTOPDIR=../../../ ../../contrib/build/svg/svg.bkl
+	touch $@
+../../contrib/build/svg/makefile.vc: $(CDEPS) ../../contrib/build/svg/svg.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/svg -DWXTOPDIR=../../../ ../../contrib/build/svg/svg.bkl
+	touch $@
+../../contrib/build/svg/makefile.gcc: $(CDEPS) ../../contrib/build/svg/svg.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/svg -DWXTOPDIR=../../../ ../../contrib/build/svg/svg.bkl
+	touch $@
+../../contrib/build/svg/makefile.wat: $(CDEPS) ../../contrib/build/svg/svg.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/svg -DWXTOPDIR=../../../ ../../contrib/build/svg/svg.bkl
+	touch $@
+
+
 ../../contrib/src/xrc/Makefile.in: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
 	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/xrc/xrc.bkl
 	touch $@
@@ -1088,6 +1125,23 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/samples/animate/makefile.wat: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+	touch $@
+
+
+../../contrib/samples/svg/Makefile.in: $(SDEPS) ../../contrib/samples/svg/svgtest.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/svg/svgtest.bkl
+	touch $@
+../../contrib/samples/svg/makefile.bcc: $(SDEPS) ../../contrib/samples/svg/svgtest.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/svg/svgtest.bkl
+	touch $@
+../../contrib/samples/svg/makefile.vc: $(SDEPS) ../../contrib/samples/svg/svgtest.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/svg/svgtest.bkl
+	touch $@
+../../contrib/samples/svg/makefile.gcc: $(SDEPS) ../../contrib/samples/svg/svgtest.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/svg/svgtest.bkl
+	touch $@
+../../contrib/samples/svg/makefile.wat: $(SDEPS) ../../contrib/samples/svg/svgtest.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/svg/svgtest.bkl
 	touch $@
 
 
