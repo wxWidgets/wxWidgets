@@ -156,48 +156,59 @@ inline void wxClassInfo::CleanUpClasses() {}
 // Dynamic class macros
 // ----------------------------------------------------------------------------
 
-#define DECLARE_DYNAMIC_CLASS(name)           \
- public:                                      \
-  static wxClassInfo ms_classInfo;            \
-  static wxObject* wxCreateObject();          \
-  virtual wxClassInfo *GetClassInfo() const   \
-   { return &name::ms_classInfo; }
+#define DECLARE_ABSTRACT_CLASS(name)                                          \
+    public:                                                                   \
+        static wxClassInfo ms_classInfo;                                      \
+        virtual wxClassInfo *GetClassInfo() const;
 
-#define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   \
-    DECLARE_NO_ASSIGN_CLASS(name)               \
+#define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)                                 \
+    DECLARE_NO_ASSIGN_CLASS(name)                                             \
     DECLARE_DYNAMIC_CLASS(name)
 
-#define DECLARE_DYNAMIC_CLASS_NO_COPY(name)   \
-    DECLARE_NO_COPY_CLASS(name)               \
+#define DECLARE_DYNAMIC_CLASS_NO_COPY(name)                                   \
+    DECLARE_NO_COPY_CLASS(name)                                               \
     DECLARE_DYNAMIC_CLASS(name)
 
-#define DECLARE_ABSTRACT_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
+#define DECLARE_DYNAMIC_CLASS(name)                                           \
+    DECLARE_ABSTRACT_CLASS(name)                                              \
+    static wxObject* wxCreateObject();
+
 #define DECLARE_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
+
+
+// common part of the macros below
+#define wxIMPLEMENT_CLASS_COMMON(name, basename, baseclsinfo2, func)          \
+    wxClassInfo name::ms_classInfo(wxT(#name),                                \
+            &basename::ms_classInfo,                                          \
+            baseclsinfo2,                                                     \
+            (int) sizeof(name),                                               \
+            (wxObjectConstructorFn) func);                                    \
+                                                                              \
+    wxClassInfo *name::GetClassInfo() const                                   \
+        { return &name::ms_classInfo; }
+
+#define wxIMPLEMENT_CLASS_COMMON1(name, basename, func)                       \
+    wxIMPLEMENT_CLASS_COMMON(name, basename, NULL, func)
+
+#define wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, func)           \
+    wxIMPLEMENT_CLASS_COMMON(name, basename1, &basename2::ms_classInfo)
 
 // -----------------------------------
 // for concrete classes
 // -----------------------------------
 
     // Single inheritance with one base class
-
-#define IMPLEMENT_DYNAMIC_CLASS(name, basename)                 \
- wxObject* name::wxCreateObject()                               \
-  { return new name; }                                          \
- wxClassInfo name::ms_classInfo(wxT(#name),                     \
-            &basename::ms_classInfo, NULL,                      \
-            (int) sizeof(name),                                 \
-            (wxObjectConstructorFn) name::wxCreateObject);
+#define IMPLEMENT_DYNAMIC_CLASS(name, basename)                               \
+    wxIMPLEMENT_CLASS_COMMON1(name, basename, name::wxCreateObject)           \
+    wxObject* name::wxCreateObject()                                          \
+        { return new name; }
 
     // Multiple inheritance with two base classes
-
-#define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)    \
- wxObject* name::wxCreateObject()                               \
-  { return new name; }                                          \
- wxClassInfo name::ms_classInfo(wxT(#name),                     \
-            &basename1::ms_classInfo,                           \
-            &basename2::ms_classInfo,                           \
-            (int) sizeof(name),                                 \
-            (wxObjectConstructorFn) name::wxCreateObject);
+#define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)                  \
+    wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2,                     \
+                              name::wxCreateObject)                           \
+    wxObject* name::wxCreateObject()                                          \
+        { return new name; }
 
 // -----------------------------------
 // for abstract classes
@@ -205,19 +216,13 @@ inline void wxClassInfo::CleanUpClasses() {}
 
     // Single inheritance with one base class
 
-#define IMPLEMENT_ABSTRACT_CLASS(name, basename)                \
- wxClassInfo name::ms_classInfo(wxT(#name),                     \
-            &basename::ms_classInfo, NULL,                      \
-            (int) sizeof(name), (wxObjectConstructorFn) 0);
+#define IMPLEMENT_ABSTRACT_CLASS(name, basename)                              \
+    wxIMPLEMENT_CLASS_COMMON1(name, basename, NULL)
 
     // Multiple inheritance with two base classes
 
-#define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)   \
- wxClassInfo name::ms_classInfo(wxT(#name),                     \
-            &basename1::ms_classInfo,                           \
-            &basename2::ms_classInfo,                           \
-            (int) sizeof(name),                                 \
-            (wxObjectConstructorFn) 0);
+#define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)                 \
+    wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, NULL)
 
 #define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
 #define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2

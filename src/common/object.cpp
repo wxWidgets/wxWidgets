@@ -81,6 +81,11 @@ wxClassInfo wxObject::ms_classInfo( wxT("wxObject"), 0, 0,
 wxClassInfo* wxClassInfo::sm_first = NULL;
 wxHashTable* wxClassInfo::sm_classTable = NULL;
 
+wxClassInfo *wxObject::GetClassInfo() const
+{
+    return &wxObject::ms_classInfo;
+}
+
 // These are here so we can avoid 'always true/false' warnings
 // by referring to these instead of true/false
 const bool wxTrue = true;
