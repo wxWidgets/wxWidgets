@@ -410,8 +410,7 @@ wxArrayString wxFSVolume::GetVolumes(int flagsSet, int flagsUnset)
         wxArrayString nn;
         if (BuildRemoteList(nn, 0, flagsSet, flagsUnset))
         {
-            int idx;
-            for (idx = 0; idx < nn.GetCount(); idx++)
+            for (size_t idx = 0; idx < nn.GetCount(); idx++)
                 list.Add(nn[idx]);
         }
     }
@@ -537,14 +536,9 @@ int wxFSVolume::GetFlags() const
 //=============================================================================
 wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
 {
-    wxASSERT(type < m_icons.GetCount());
-
-    if (type >= m_icons.GetCount())
-    {
-        wxLogError(_("Invalid request for icon type!"));
-        wxIcon null;
-        return null;
-    }
+    wxCHECK_MSG( type >= 0 && (size_t)type < m_icons.GetCount(),
+                 wxIcon(),                 
+                 _T("invalid icon index") );
 
     // Load on demand.
     if (m_icons[type].IsNull())
