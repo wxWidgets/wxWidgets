@@ -9,7 +9,7 @@
 #
 # Makefile for Tex2RTF (Unix)
 
-EXTRADEFS=-DNO_GUI
+APPEXTRADEFS=-DNO_GUI
 # comment out if you want GUI version of tex2rtf...
 
 top_srcdir = @top_srcdir@/..

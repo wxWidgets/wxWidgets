@@ -3387,7 +3387,7 @@ if test "$wxUSE_GUI" = "yes"; then
                      font fractal image minimal richedit"
 
     dnl this is needed to be able to find AFM files
-    CPPFLAGS="$CPPFLAGS \$(EXTRADEFS)"
+    CPPFLAGS="$CPPFLAGS \$(EXTRADEFS) \$(APPEXTRADEFS)"
 else
     SAMPLES_SUBDIRS=""
 fi
