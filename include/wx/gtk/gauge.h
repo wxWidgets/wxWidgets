@@ -98,6 +98,8 @@ protected:
     // set the gauge value to the value of m_gaugePos
     void DoSetGauge();
 
+    virtual wxSize DoGetBestSize() const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxGauge)
 };

@@ -56,7 +56,8 @@ bool wxGauge::Create( wxWindow *parent,
     m_parent->DoAddChild( this );
 
     PostCreation();
-
+    SetBestSize(size);
+    
     Show( TRUE );
 
     return TRUE;
@@ -69,6 +70,11 @@ void wxGauge::DoSetGauge()
 
     gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget),
                              m_rangeMax ? ((float)m_gaugePos)/m_rangeMax : 0.);
+}
+
+wxSize wxGauge::DoGetBestSize() const
+{
+    return wxSize(100, 28);
 }
 
 void wxGauge::SetRange( int range )
