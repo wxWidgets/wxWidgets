@@ -111,7 +111,7 @@ HANDLE ReadIcon( wxChar *szFileName, int *W, int *H)
     return (HANDLE) NULL;
 
   // inserted by P.S.
-  while( ((unsigned)nDirEntries < iconFileHead.wResourceCount) &&
+  while( (nDirEntries < iconFileHead.wResourceCount) &&
          ((iconFileRes.bWidth != nWidth) || (iconFileRes.bHeight != nHeight)))
   {
     cbRes = _lread( hFile, (LPSTR )&iconFileRes, sizeof( ICONFILERES));
@@ -359,7 +359,7 @@ HANDLE ReadCur( wxChar *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
     return (HANDLE) NULL;
 
   // following added by P.S.
-  while( ((unsigned)nDirEntries < curFileHead.wResourceCount) &&
+  while( (nDirEntries < curFileHead.wResourceCount) &&
          ((curFileRes.bWidth != nWidth) || (curFileRes.bHeight != nHeight)))
   {
     cbRes = _lread( hFile, (LPSTR )&curFileRes, sizeof( CURFILERES));

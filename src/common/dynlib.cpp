@@ -363,7 +363,8 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     if (node != NULL)
         return ((wxLibrary *)node->Data());
 #else // !OS/2
-    if ( (node = m_loaded.Find(name.GetData())) )
+	node = m_loaded.Find(name.GetData());
+    if ( node )
         return ((wxLibrary *)node->Data());
 #endif
     // If DLL shares data, this is necessary.

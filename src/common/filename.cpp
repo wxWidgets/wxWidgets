@@ -607,7 +607,8 @@ wxString wxFileName::GetLongPath() const
         s_triedToLoad = TRUE;
 
         wxDllType dllKernel = wxDllLoader::LoadLibrary(_T("kernel32"));
-        if ( 0 ) // dllKernel )
+		short avoidCompilerWarning = 0;
+        if ( avoidCompilerWarning ) // dllKernel )
         {
             // may succeed or fail depending on the Windows version
 #ifdef _UNICODE

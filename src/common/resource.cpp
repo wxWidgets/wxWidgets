@@ -1055,7 +1055,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
     {
         wxExpr *valueList = (wxExpr *) NULL;
         
-        if ((valueList = expr->Nth(count)) && (valueList->Type() == PrologList))
+		valueList = expr->Nth(count);
+        if (valueList && (valueList->Type() == PrologList))
         {
             wxStringList stringList;
             wxExpr *stringExpr = valueList->GetFirst();
@@ -1072,7 +1073,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
             /*
             controlItem->SetValue1(wxLB_SINGLE);
             */
-            if ((mult = expr->Nth(count)) && ((mult->Type() == PrologString)||(mult->Type() == PrologWord)))
+			mult = expr->Nth(count);
+            if (mult && ((mult->Type() == PrologString)||(mult->Type() == PrologWord)))
             {
             /*
             wxString m(mult->StringValue());
@@ -1097,7 +1099,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
     {
         wxExpr *valueList = (wxExpr *) NULL;
         // Check for default value list
-        if ((valueList = expr->Nth(count)) && (valueList->Type() == PrologList))
+		valueList = expr->Nth(count);
+        if (valueList && (valueList->Type() == PrologList))
         {
             wxStringList stringList;
             wxExpr *stringExpr = valueList->GetFirst();
@@ -1132,7 +1135,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
             
             wxExpr *valueList = (wxExpr *) NULL;
             // Check for default value list
-            if ((valueList = expr->Nth(count)) && (valueList->Type() == PrologList))
+			valueList = expr->Nth(count);
+            if (valueList && (valueList->Type() == PrologList))
             {
                 wxStringList stringList;
                 wxExpr *stringExpr = valueList->GetFirst();
@@ -1161,7 +1165,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
     {
         wxExpr *valueList = (wxExpr *) NULL;
         // Check for default value list
-        if ((valueList = expr->Nth(count)) && (valueList->Type() == PrologList))
+		valueList = expr->Nth(count);
+        if (valueList && (valueList->Type() == PrologList))
         {
             wxStringList stringList;
             wxExpr *stringExpr = valueList->GetFirst();
@@ -2646,10 +2651,10 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
             {
 #ifdef __WXGTK__
                 wxLogWarning(_("Icon resource specification %s not found."), (const wxChar*) resource);
+                break;
 #else
                 return wxIcon(name, bitmapType);
 #endif
-                break;
             }
         }
         return wxNullIcon;

@@ -45,13 +45,11 @@ wxColour wxSystemSettings::GetSystemColour(int index)
     {
         case wxSYS_COLOUR_LISTBOX:
             return *wxWHITE;
-            break;
     
         default:
             COLORREF ref = ::GetSysColor(index);
             wxColour col(GetRValue(ref), GetGValue(ref), GetBValue(ref));
             return col;
-			break;
     }
 }
 

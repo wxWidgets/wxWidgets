@@ -3119,7 +3119,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                     : 31;
 
                 // can it be day?
-                if ( (val == 0) || (val > maxDays) )
+                if ( (val == 0) || (val > (unsigned long)maxDays) )  // cast to shut up compiler warning in BCC
                 {
                     isYear = TRUE;
                 }

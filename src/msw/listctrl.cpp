@@ -1667,7 +1667,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         return TRUE;
                 }
             }
-            break;
+//            break; // can never be reached
 #endif // _WIN32_IE >= 0x300
 
         default:
