@@ -130,8 +130,6 @@ protected:
 
     DECLARE_EVENT_TABLE()
 };
-
-int WXDLLEXPORT wxEntry( int argc, char *argv[] );
 #endif
     // _WX_APP_H_
 
