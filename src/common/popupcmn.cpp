@@ -198,16 +198,13 @@ wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent, int style)
 wxPopupTransientWindow::~wxPopupTransientWindow()
 {
     PopHandlers();
-    
-    delete m_handlerFocus;
-    delete m_handlerPopup;
 }
 
 void wxPopupTransientWindow::PopHandlers()
 {
     if ( m_child )
     {
-        if ( !m_child->RemoveEventHandler(m_handlerPopup) )
+        if ( m_handlerPopup && !m_child->RemoveEventHandler(m_handlerPopup) )
         {
             // something is very wrong and someone else probably deleted our
             // handler - so don't risk deleting it second time
@@ -221,19 +218,26 @@ void wxPopupTransientWindow::PopHandlers()
 #ifdef __WXMSW__
     if ( m_focus )
     {
-        if ( !m_focus->RemoveEventHandler(m_handlerFocus) )
+        if ( m_handlerFocus && !m_focus->RemoveEventHandler(m_handlerFocus) )
         {
             // see above
             m_handlerFocus = NULL;
         }
     }
 #else
-    if ( !RemoveEventHandler(m_handlerFocus) )
+    if ( m_handlerFocus && !RemoveEventHandler(m_handlerFocus) )
     {
         // see above
         m_handlerFocus = NULL;
     }
 #endif
+
+    // delete the handlers, they'll be created as necessary in Popup()
+    delete m_handlerPopup;
+    m_handlerPopup = NULL;
+    delete m_handlerFocus;
+    m_handlerFocus = NULL;
+
     m_focus = NULL;
 }
 
