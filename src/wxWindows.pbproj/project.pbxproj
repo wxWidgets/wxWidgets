@@ -379,7 +379,7 @@
 			);
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
-				DYLIB_CURRENT_VERSION = 2.5.0;
+				DYLIB_CURRENT_VERSION = 2.5.3;
 				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/carbon/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/3.1;
 				LIBRARY_STYLE = DYNAMIC;
@@ -3172,7 +3172,7 @@
 			buildSettings = {
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
-				DYLIB_CURRENT_VERSION = 2.5.0;
+				DYLIB_CURRENT_VERSION = 2.5.3;
 				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/carbon/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = DYNAMIC;
 				OPTIMIZATION_CFLAGS = "-O3";
@@ -13798,6 +13798,13 @@
 			path = common/statbar.cpp;
 			refType = 2;
 		};
+		F5A8604C01FA022C0175ACA7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = stockitem.cpp;
+			path = common/stockitem.cpp;
+			refType = 2;
+		};
 		F5A8604D01FA022C0175ACA7 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -15021,6 +15028,12 @@
 			path = gdiobj.cpp;
 			refType = 4;
 		};
+		F5A861C101FA022C0175ACA7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = hid.cpp;
+			refType = 4;
+		};
 		F5A861C301FA022C0175ACA7 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -15275,6 +15288,12 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = tabctrl.cpp;
+			refType = 4;
+		};
+		F5A861FD01FA022C0175ACA7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = taskbar.cpp;
 			refType = 4;
 		};
 		F5A861FF01FA022C0175ACA7 = {
@@ -15792,7 +15811,7 @@
 			);
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
-				DYLIB_CURRENT_VERSION = 2.5.0;
+				DYLIB_CURRENT_VERSION = 2.5.3;
 				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/carbon/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O0";
@@ -16841,7 +16860,7 @@
 			buildSettings = {
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
-				DYLIB_CURRENT_VERSION = 2.5.0;
+				DYLIB_CURRENT_VERSION = 2.5.3;
 				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/carbon/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O3";
