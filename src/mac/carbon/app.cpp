@@ -304,11 +304,38 @@ void wxApp::MacNewFile()
 
 void wxApp::MacReopenApp()
 {
-    // eventually check for open docs, if none, call MacNewFile
-    wxTopLevelWindowMac* topLevelWindow = wxDynamicCast(GetTopWindow(), wxTopLevelWindowMac);
-
-    if (topLevelWindow && topLevelWindow->IsIconized())
-        topLevelWindow->Iconize(false);
+    // HIG says :
+    // if there is no open window -> create a new one
+    // if all windows are hidden -> show the first
+    // if some windows are not hidden -> do nothing
+    
+    wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
+    if ( node == NULL )
+    {  
+        MacNewFile() ;
+    }
+    else
+    {
+        wxTopLevelWindow* win = NULL ;
+        wxTopLevelWindow* firstIconized = NULL ;
+        while (node)
+        {
+            wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
+            if ( win->IsIconized() == false )
+            {
+                firstIconized = NULL ;
+                break ;
+            }
+            else
+            {
+                if ( firstIconized == NULL )
+                    firstIconized = win ;
+            }
+            node = node->GetNext();
+        }
+        if ( firstIconized )
+            firstIconized->Iconize( false ) ;
+    }
 }
 
 //----------------------------------------------------------------------
