@@ -57,60 +57,72 @@ available at dates convenient to the developers.<P>
 </CENTER>
 <P>
 
-<H4>Release 2.1.11</H4>
+<H4>Release 2.1.14</H4>
 
-Release date: November 7th, 1999<P>
+Release date: February 13 or 20, 2000<P>
+
+This will be the final beta release before the final 2.2 release. It will be
+synchronized for as many platforms as possible (at least Windows and GTK,
+probably Motif and hopefully Mac).
+
+Changes since the last synchronized release (2.1.11):
 
 <ul>
-<li>Split wxWindows into base and GUI libraries. Most, but not all makefiles
-are expected to support this: for the rest, the makefiles will build a valid
-combined base/GUI library for GUI applications only.
-<li>wxWizard (beta).
-<li>wxDialUpManager and wxPhoneDialer.
-<li>wxFontEnumerator.
-<li>Preliminary support for different font encodings
-<li>wxPostEvent function
-<li>New wxGrid.
-<li>wxSocket working.
-<li>Full support for fonts in different encodings.
-<li>Tested multithreading support (wxThread).
-<li>wxHTML printing.
-<li>Better i18n support (i.e. more translations).
+<li>first beta release of wxBase
+<li>new or significantly improved base classes: wxDateTime, wxLongLong,
+wxCmdLineParser, wxDir, wxStopWatch
+<li>much better i18n support, encoding conversion on the fly, wxFontMapper
+<li>new wxGrid class
+<li>new wxCalendarCtrl class
+<li>dynamic toolbar/menubar management
+<li>better image formats support: TIFF (new), PCX (improved)
+<li>attributes (custom colours/font) support in wxTreeCtrl, wxListCtrl
+<li>impressive number of fixed bugs in wxMSW and wxGTK including various
+incompatibilities between the two
 </ul>
 
 <P>
 
 <H4>Release 2.2 (stable)</H4>
 
-Release date: December 19th, 1999.<P>
+Release date: March 5, 2000.<P>
+
+This is the next stable version of wxWindows. No new features since
+2.1.14 beta.
 
 <ul>
-<li>Miscellaneous fixes and small enhancements.
+<li>bugs found during 2.1.14 will be fixed.
+<li>translations of text strings used in wxWindows
+<li>documentation updated to include all new classes
 </ul>
 
 <P>
 
 <H4>Release 2.3</H4>
 
-Release date: March 5th, 2000
+Release date: ?
 
 <ul>
-<li>Miscellaneous fixes and small enhancements.
-<li>wxDateTime class in beta.
 <li>Context sensitive help.
 <li>More i18n issues: dates, times, ...
-<li>Regular expressions support.
+<li>POSIX-like regular expressions support for all platforms.
+<li>Encryption support (interface to OpenSSL).
+<li>UDP support in wxSocket
+<li>wxPlot
+<li>XML for resource files.
 </ul>
 
 <P>
 
 <H4>Release 2.4 (stable)</H4>
 
-Release date: May 7th, 2000.
+Release date: ?
+
+Stable version of 2.3.
 
 <ul>
-<li>Unicode compilation starting to work in wxGTK and wxMSW.
-<li>wxDateTime class.
+<li>wxMac release.
+<li>wxBeOS port.
 </ul>
 
 <P>
