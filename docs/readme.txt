@@ -1,4 +1,4 @@
-wxWindows 2.3.3
+wxWindows 2.3.4
 ---------------
 
 *** Please note that this is an UNSTABLE DEVELOPMENT SNAPSHOT.
