@@ -17,7 +17,7 @@
 #endif
 
 #ifndef wxUSE_DEPRECATED
-#define wxUSE_DEPRECATED 1
+#define wxUSE_DEPRECATED 0
 #endif
 
 #if wxUSE_DEPRECATED
