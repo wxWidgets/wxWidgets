@@ -460,7 +460,7 @@ WX_MINOR_VERSION_NUMBER=3
 WX_RELEASE_NUMBER=0
 
 WX_INTERFACE_AGE=0
-WX_BINARY_AGE=1
+WX_BINARY_AGE=0
 
 WX_VERSION=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER.$WX_RELEASE_NUMBER
 
@@ -727,6 +727,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_JOYSTICK=no
   DEFAULT_wxUSE_DYNLIB_CLASS=no
   DEFAULT_wxUSE_LONGLONG=no
+  DEFAULT_wxUSE_GEOMETRY=no
 
   DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=no
   DEFAULT_wxUSE_NORMALIZED_PS_FONTS=no
@@ -849,6 +850,7 @@ else
   DEFAULT_wxUSE_JOYSTICK=yes
   DEFAULT_wxUSE_DYNLIB_CLASS=yes
   DEFAULT_wxUSE_LONGLONG=yes
+  DEFAULT_wxUSE_GEOMETRY=yes
 
   DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=yes
   DEFAULT_wxUSE_NORMALIZED_PS_FONTS=yes
@@ -1033,6 +1035,7 @@ WX_ARG_ENABLE(wave,          [  --enable-wave           use wxWave class], wxUSE
 WX_ARG_ENABLE(fraction,      [  --enable-fraction       use wxFraction class], wxUSE_FRACTION)
 WX_ARG_ENABLE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
 WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
+WX_ARG_ENABLE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
 WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxUSE_LOG)
 WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
 WX_ARG_ENABLE(file,          [  --enable-file           use wxFile classes], wxUSE_FILE)
@@ -2993,6 +2996,10 @@ fi
 
 if test "$wxUSE_LONGLONG" = "yes"; then
   AC_DEFINE(wxUSE_LONGLONG)
+fi
+
+if test "$wxUSE_GEOMETRY" = "yes"; then
+  AC_DEFINE(wxUSE_GEOMETRY)
 fi
 
 if test "$wxUSE_PLOT" = "yes"; then
