@@ -1384,7 +1384,7 @@ wxString wxLocale::GetSystemEncodingName()
     // to Unix98)
     char *oldLocale = strdup(setlocale(LC_CTYPE, NULL));
     setlocale(LC_CTYPE, "");
-    char *alang = nl_langinfo(CODESET);
+    const char *alang = nl_langinfo(CODESET);
     setlocale(LC_CTYPE, oldLocale);
     free(oldLocale);
 
