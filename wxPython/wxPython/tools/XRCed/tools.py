@@ -31,7 +31,7 @@ class Tools(wxPanel):
         # Data to create buttons
         pullDownMenu = g.pullDownMenu
         self.groups = []
-        self.ctrl = self.shift = false
+        self.ctrl = self.shift = False
         # Current state (what to enable/disable)
         self.state = None
         groups = [
@@ -120,18 +120,18 @@ class Tools(wxPanel):
         self.groups.append((box,{}))
 
     # Enable/disable group
-    def EnableGroup(self, gnum, enable = true):
+    def EnableGroup(self, gnum, enable = True):
         grp = self.groups[gnum]
         grp[0].Enable(enable)
         for b in grp[1].values(): b.Enable(enable)
 
     # Enable/disable group item
-    def EnableGroupItem(self, gnum, id, enable = true):
+    def EnableGroupItem(self, gnum, id, enable = True):
         grp = self.groups[gnum]
         grp[1][id].Enable(enable)
 
     # Enable/disable group items
-    def EnableGroupItems(self, gnum, ids, enable = true):
+    def EnableGroupItems(self, gnum, ids, enable = True):
         grp = self.groups[gnum]
         for id in ids:
             grp[1][id].Enable(enable)
@@ -139,17 +139,17 @@ class Tools(wxPanel):
     # Process key events
     def OnKeyDown(self, evt):
         if evt.GetKeyCode() == WXK_CONTROL:
-            g.tree.ctrl = true
+            g.tree.ctrl = True
         elif evt.GetKeyCode() == WXK_SHIFT:
-            g.tree.shift = true
+            g.tree.shift = True
         self.UpdateIfNeeded()
         evt.Skip()
 
     def OnKeyUp(self, evt):
         if evt.GetKeyCode() == WXK_CONTROL:
-            g.tree.ctrl = false
+            g.tree.ctrl = False
         elif evt.GetKeyCode() == WXK_SHIFT:
-            g.tree.shift = false
+            g.tree.shift = False
         self.UpdateIfNeeded()
         evt.Skip()
 
@@ -186,10 +186,10 @@ class Tools(wxPanel):
         if not item:
             # Disable everything
             for grp in range(GROUPNUM):
-                self.EnableGroup(grp, false)
+                self.EnableGroup(grp, False)
             self.state = None
             return
-        if tree.ctrl: needInsert = true
+        if tree.ctrl: needInsert = True
         else: needInsert = tree.NeedInsert(item)
         # Enable depending on selection
         if item == tree.root or needInsert and tree.GetItemParent(item) == tree.root:
@@ -212,24 +212,24 @@ class Tools(wxPanel):
         if state != self.state:
             # Disable everything
             for grp in range(GROUPNUM):
-                self.EnableGroup(grp, false)
+                self.EnableGroup(grp, False)
             # Enable some
             if state == STATE_ROOT:
-                self.EnableGroup(GROUP_WINDOWS, true)
-                self.EnableGroup(GROUP_MENUS, true)
+                self.EnableGroup(GROUP_WINDOWS, True)
+                self.EnableGroup(GROUP_MENUS, True)
                 # But disable items
                 self.EnableGroupItems(GROUP_MENUS,
                                       [ ID_NEW.TOOL,
                                         ID_NEW.MENU_ITEM,
                                         ID_NEW.SEPARATOR ],
-                                      false)
+                                      False)
             elif state == STATE_MENUBAR:
                 self.EnableGroup(GROUP_MENUS)
                 self.EnableGroupItems(GROUP_MENUS,
                                       [ ID_NEW.TOOL_BAR,
                                         ID_NEW.MENU_BAR,
                                         ID_NEW.TOOL ],
-                                      false)
+                                      False)
             elif state == STATE_TOOLBAR:
                 self.EnableGroup(GROUP_MENUS)
                 self.EnableGroupItems(GROUP_MENUS,
@@ -237,25 +237,25 @@ class Tools(wxPanel):
                                         ID_NEW.MENU,
                                         ID_NEW.MENU_BAR,
                                         ID_NEW.MENU_ITEM ],
-                                      false)
+                                      False)
                 self.EnableGroup(GROUP_CONTROLS)
                 self.EnableGroupItems(GROUP_CONTROLS,
                                       [ ID_NEW.TREE_CTRL,
                                         ID_NEW.NOTEBOOK ],
-                                      false)
+                                      False)
             elif state == STATE_MENU:
                 self.EnableGroup(GROUP_MENUS)
                 self.EnableGroupItems(GROUP_MENUS,
                                       [ ID_NEW.TOOL_BAR,
                                         ID_NEW.MENU_BAR,
                                         ID_NEW.TOOL ],
-                                      false)
+                                      False)
             else:
                 self.EnableGroup(GROUP_WINDOWS)
                 self.EnableGroupItems(GROUP_WINDOWS,
                                       [ ID_NEW.FRAME,
                                         ID_NEW.DIALOG ],
-                                      false)
+                                      False)
                 self.EnableGroup(GROUP_MENUS)
                 self.EnableGroupItems(GROUP_MENUS,
                                       [ ID_NEW.MENU_BAR,
@@ -264,16 +264,16 @@ class Tools(wxPanel):
                                         ID_NEW.MENU_ITEM,
                                         ID_NEW.TOOL,
                                         ID_NEW.SEPARATOR ],
-                                      false)
+                                      False)
                 self.EnableGroup(GROUP_SIZERS)
                 self.EnableGroup(GROUP_CONTROLS)
         # Special case for notebook (always executed)
         if state == STATE_ELSE:
             if xxx.__class__ == xxxNotebook:
-                self.EnableGroup(GROUP_SIZERS, false)
+                self.EnableGroup(GROUP_SIZERS, False)
             else:
                 self.EnableGroup(GROUP_SIZERS)
                 if not (xxx.isSizer or xxx.parent and xxx.parent.isSizer):
-                    self.EnableGroupItem(GROUP_SIZERS, ID_NEW.SPACER, false)
+                    self.EnableGroupItem(GROUP_SIZERS, ID_NEW.SPACER, False)
         # Save state
         self.state = state
