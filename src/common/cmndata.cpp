@@ -490,7 +490,7 @@ void wxPrintData::ConvertToNative()
                 case wxPRINTBIN_MANUAL:         devMode->dmDefaultSource = DMBIN_MANUAL;        break;
                 case wxPRINTBIN_ENVELOPE:       devMode->dmDefaultSource = DMBIN_ENVELOPE;      break;
                 case wxPRINTBIN_ENVMANUAL:      devMode->dmDefaultSource = DMBIN_ENVMANUAL;     break;
-                case wxPRINTBIN_AUTO:           devMode->dmDefaultSource = DMBIN_AUTO,;         break;
+                case wxPRINTBIN_AUTO:           devMode->dmDefaultSource = DMBIN_AUTO;          break;
                 case wxPRINTBIN_TRACTOR:        devMode->dmDefaultSource = DMBIN_TRACTOR;       break;
                 case wxPRINTBIN_SMALLFMT:       devMode->dmDefaultSource = DMBIN_SMALLFMT;      break;
                 case wxPRINTBIN_LARGEFMT:       devMode->dmDefaultSource = DMBIN_LARGEFMT;      break;
@@ -554,7 +554,7 @@ void wxPrintData::ConvertFromNative()
 
         if (devMode->dmFields & DM_DEFAULTSOURCE)
         {
-            m_bin = devMode->dmDefaultSource;
+            m_bin = (wxPrintBin)devMode->dmDefaultSource;
         }
 
         //// Printer name
