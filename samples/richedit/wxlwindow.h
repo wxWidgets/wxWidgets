@@ -39,6 +39,7 @@ enum
    WXLOWIN_MENU_DBLCLICK,
    WXLOWIN_MENU_MDOWN,
    WXLOWIN_MENU_LDOWN,
+   WXLOWIN_MENU_LCLICK = WXLOWIN_MENU_LDOWN,
    WXLOWIN_MENU_LUP,
    WXLOWIN_MENU_MOUSEMOVE,
    WXLOWIN_MENU_LAST = WXLOWIN_MENU_MOUSEMOVE
@@ -82,7 +83,8 @@ public:
          m_BGbitmap = bitmap;
       }
    /// Enable or disable editing, i.e. processing of keystrokes.
-   void SetEditable(bool toggle) { m_Editable = toggle; }
+   void SetEditable(bool toggle)
+      { m_Editable = toggle; SetCursorVisibility(toggle); }
    /// Query whether list can be edited by user.
    bool IsEditable(void) const { return m_Editable; }
    /** Sets cursor visibility, visible=1, invisible=0,

@@ -153,11 +153,6 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    m_bitmap = new wxBitmap(4,4);
    m_bitmapSize = wxPoint(4,4);
    m_llist = new wxLayoutList();
-#ifdef __WXMSW__
-   SetAutoDeleteSelection(true);
-#else
-   SetAutoDeleteSelection(false);
-#endif
    m_BGbitmap = NULL;
    m_ScrollToCursor = false;
    SetWrapMargin(0);
@@ -173,13 +168,20 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    wxCaret *caret = new wxCaret(this, 2, 20);
    SetCaret(caret);
    m_llist->SetCaret(caret);
-   caret->Show();
 #endif // WXLAYOUT_USE_CARET
 
+   m_HaveFocus = FALSE;
    m_HandCursor = FALSE;
    m_CursorVisibility = -1;
    SetCursor(wxCURSOR_IBEAM);
    SetDirty();
+
+   // at least under Windows, this should be the default behaviour
+#ifdef __WXMSW__
+   m_AutoDeleteSelection = TRUE;
+#else // !Windows
+   m_AutoDeleteSelection = FALSE;
+#endif // Win/!Win
 }
 
 wxLayoutWindow::~wxLayoutWindow()
@@ -206,7 +208,12 @@ wxLayoutWindow::Clear(int family,
    ResizeScrollbars(true);
    SetDirty();
    SetModified(false);
-   wxScrolledWindow::Clear();
+
+#ifdef WXLAYOUT_USE_CARET
+   if ( m_CursorVisibility == 1 )
+      GetCaret()->Show();
+#endif // WXLAYOUT_USE_CARET
+
    DoPaint((wxRect *)NULL);
 }
 
@@ -331,7 +338,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 
              if(m_CursorVisibility != 0)
              {
-                // draw a thick cursor for    editable windows with focus
+                // draw a thick cursor for editable windows with focus
                 m_llist->DrawCursor(dc, m_HaveFocus && IsEditable(), offset);
              }
 
@@ -720,12 +727,13 @@ void
 wxLayoutWindow::DoPaint(const wxRect *updateRect)
 {
 #ifdef __WXGTK__
+   // Calling Refresh() causes bad flicker under wxGTK!!!
    InternalPaint(updateRect);
-#else // Causes bad flicker under wxGTK!!!
+#else
+   // shouldn't specify the update rectangle if it doesn't include all the
+   // changed locations - otherwise, they won't be repainted at all because
+   // the system clips the display to the update rect
    Refresh(FALSE); //, updateRect);
-
-   if ( !::UpdateWindow(GetHwnd()) )
-      wxLogLastError("UpdateWindow");
 #endif
 }
 
@@ -764,6 +772,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       m_llist->Layout(dc);
       ResizeScrollbars();
    }
+
    /* Check whether the window has grown, if so, we need to reallocate
       the bitmap to be larger. */
    if(x1 > m_bitmapSize.x || y1 > m_bitmapSize.y)
@@ -779,7 +788,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    }
 
    m_memDC->SetDeviceOrigin(0,0);
-   m_memDC->SetBrush(wxBrush(m_llist->GetDefaultStyleInfo().GetBGColour(),wxSOLID));
+   m_memDC->SetBackground(wxBrush(m_llist->GetDefaultStyleInfo().GetBGColour(),wxSOLID));
    m_memDC->SetPen(wxPen(m_llist->GetDefaultStyleInfo().GetBGColour(),
                          0,wxTRANSPARENT));
    m_memDC->SetLogicalFunction(wxCOPY);
@@ -855,7 +864,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 
 #ifdef WXLAYOUT_USE_CARET
    // show the caret back after everything is redrawn
-   m_caret->Show();
+   GetCaret()->Show();
 #endif // WXLAYOUT_USE_CARET
 
    ResetDirty();

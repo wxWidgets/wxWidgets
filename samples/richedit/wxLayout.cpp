@@ -125,6 +125,7 @@ MyFrame::MyFrame(void) :
    m_lwin->SetFocus();
    Clear();
 
+#if 0
    // create and set the background bitmap (this will result in a lattice)
    static const int sizeBmp = 10;
    wxBitmap *bitmap = new wxBitmap(sizeBmp, sizeBmp);
@@ -140,6 +141,7 @@ MyFrame::MyFrame(void) :
    dcMem.SelectObject( wxNullBitmap );
 
    m_lwin->SetBackgroundBitmap(bitmap);
+#endif // 0
 };
 
 void
@@ -236,7 +238,9 @@ MyFrame::AddSampleText(wxLayoutList *llist)
 void
 MyFrame::Clear(void)
 {
-   m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false);
+   wxColour colBg(0, 255, 255);
+
+   m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false, wxGREEN, &colBg);
 }
 
 
