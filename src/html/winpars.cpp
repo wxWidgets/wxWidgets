@@ -185,14 +185,24 @@ wxObject* wxHtmlWinParser::GetProduct()
 }
 
 
+static char *gs_htmlBuf = NULL;
+static int gs_htmlBufLen = 0;
 
 void wxHtmlWinParser::AddText(const char* txt)
 {
     wxHtmlCell *c;
     int i = 0, x, lng = strlen(txt);
-    char temp[wxHTML_BUFLEN];
+    char *temp;
     register char d;
     int templen = 0;
+    
+    if (lng+1 > gs_htmlBufLen)
+    {
+        gs_htmlBufLen = wxMax(lng+1, wxHTML_BUFLEN);
+        delete gs_htmlBuf;
+        gs_htmlBuf = new char[gs_htmlBufLen];
+    }
+    temp = gs_htmlBuf;
 
     if (m_tmpLastWasSpace) {
         while ((i < lng) && ((txt[i] == '\n') || (txt[i] == '\r') || (txt[i] == ' ') || (txt[i] == '\t'))) i++;
@@ -400,6 +410,7 @@ bool wxHtmlTagsModule::OnInit()
 void wxHtmlTagsModule::OnExit()
 {
     wxHtmlWinParser::RemoveModule(this);
+    delete gs_htmlBuf;
 }
 #endif
 
