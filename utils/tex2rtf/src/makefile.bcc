@@ -1,0 +1,19 @@
+#
+# File:		makefile.bcc
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+#
+# Builds a BC++ 16-bit sample
+
+!if "$(WXWIN)" == ""
+!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
+!endif
+
+WXDIR = $(WXWIN)
+
+TARGET=tex2rtf
+OBJECTS = tex2rtf.obj tex2any.obj texutils.obj rtfutils.obj xlputils.obj htmlutil.obj readshg.obj table.obj
+
+!include $(WXDIR)\src\makeprog.bcc
+

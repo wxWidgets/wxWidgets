@@ -909,7 +909,7 @@ int wxDebugContext::CountObjectsLeft(bool sinceCheckpoint)
   wxMemStruct *from = NULL;
   if (sinceCheckpoint && checkPoint)
     from = checkPoint->m_next;
-  if (from == (wxMemStruct*) NULL)
+  else
     from = wxDebugContext::GetHead () ;
 
   for (wxMemStruct * st = from; st != 0; st = st->m_next)

@@ -98,25 +98,6 @@ utils/wxhelp/src/*.ico
 utils/wxhelp/src/*.def
 utils/wxhelp/src/*.rc
 
-utils/tex2rtf/src/wxwin/*.*
-utils/tex2rtf/src/*.cpp
-utils/tex2rtf/src/*.h
-utils/tex2rtf/src/make*.*
-utils/tex2rtf/src/*.xbm
-utils/tex2rtf/src/*.xpm
-utils/tex2rtf/src/*.sty
-utils/tex2rtf/src/*.ini
-utils/tex2rtf/src/*.inf
-utils/tex2rtf/lib/dummy
-utils/tex2rtf/src/*.bmp
-utils/tex2rtf/src/*.ico
-utils/tex2rtf/src/*.def
-utils/tex2rtf/src/*.rc
-utils/tex2rtf/tools/lacheck/*.*
-utils/tex2rtf/tools/tcheck/*.awk
-utils/tex2rtf/tools/tcheck/*.pl
-utils/tex2rtf/tools/tcheck/*.bat
-
 utils/wxtree/src/*.cpp
 utils/wxtree/src/*.h
 utils/wxtree/src/makefile*

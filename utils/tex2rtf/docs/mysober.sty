@@ -1,0 +1,154 @@
+% SOBER.STY van Nico Poppelier
+% Adapted by Julian Smart for his own
+% nefarious purposes
+% --------------------------------------
+% Koppen van secties, subsecties, ...
+% --------------------------------------
+%
+% --------------------------------------
+% fontgrootte en regelafstand
+% (met de notatie X/Y wordt bedoeld
+%  'letter X op regelafstand Y')
+% --------------------------------------
+%
+%                10pt     11pt     12pt
+% \scriptsize    7/ 8     8/ 9.5   8/ 9.5
+% \tiny          5/ 6     6/ 7     6/ 7
+% \small         9/11    10/12    11/13.6
+% \footnotesize  8/ 9.5   9/11    10/12
+% \@normalsize  10/12    11/13.6  12/15
+% \large        12/14    12/14    14/18
+% \Large        14/18    14/18    17/22
+% \LARGE        17/22    17/22    20/25
+% \huge         20/25    20/25    25/30
+% \Huge         25/30    25/30    25/30
+%
+% de syntax van \@startsection is:
+%   \@startsection
+%     {Name}{Level}{Indent}{Before_skip}{After_Skip}{Type_face}
+%     Indent     : inspring van kop vanaf linkermarge
+%     Before_skip: wit boven kopje
+%                  (< 0 geeft aan dat eerste alinea niet inspringt)
+%     After_skip : wit onder kopje indien >= 0
+%                  horizontaal wit na kopje,
+%                  met kopje op de regel indien < 0
+%
+% notatie voor <glue>: <dimen>(<stretch>)(<shrink>)
+%
+% in LaTeX's standaard-stijlen (onafhankelijk van \@ptsize):
+%
+%               Indent     Before_skip           After_skip     Type_face
+% section       0          -3.5ex (-1ex)(-0.2ex)  2.3ex(0.2ex) \Large\bf
+% subsection    0          -3.25ex(-1ex)(-0.2ex)  1.5ex(0.2ex) \large\bf
+% subsubsection 0          -3.25ex(-1ex)(-0.2ex)  1.5ex(0.2ex) \normalsize\bf
+% paragraph     0           3.25ex( 1ex)( 0.2ex) -1em()()      \normalsize\bf
+% subparagraph  \parindent  3.25ex( 1ex)( 0.2ex) -1em()()      \normalsize\bf
+%
+%
+% in een soberder uitvoering (onafhankelijk van \@ptsize):
+%
+\def\section{\@startsection{section}{1}
+%{\z@}{-2.5ex plus -0.5ex minus -0.1ex}{0.5ex plus 0.1ex}{\large\bf}}
+{\z@}{-2.5ex plus -0.5ex minus -0.1ex}{0.5ex plus 0.1ex}{\large\bf}}
+\def\subsection{\@startsection{subsection}{2}
+{\z@}{-2.25ex plus -0.3ex minus -0.2ex}{0.05ex plus 0.05ex}{\normalsize\bf}}
+\def\subsubsection{\@startsection{subsubsection}{3}
+{\z@}{-2.25ex plus -0.3ex minus -0.2ex}{0.05ex plus 0.05ex}{\normalsize\sc}}
+\def\paragraph{\@startsection{paragraph}{4}
+{\z@}{2ex plus 0.5ex minus 0.1ex}{-0.7em}{\normalsize\it}}
+\def\subparagraph{\@startsection{subparagraph}{4}
+{\parindent}{2ex plus 0.5ex minus 0.1ex}{-0.7em}{\normalsize\it}}
+%
+% --------------------------------------
+% Hoofdstuk-koppen
+% --------------------------------------
+%
+% LaTeX's book style (standaard documentstijl) definieert
+% de hoofdstuk-koppen onafhankelijk van \@ptsize
+%
+
+\def\@makechapterhead#1{\vspace*{20pt}%
+% Next line repaired by Piet van Oostrum - June 14, 1991.
+%{\parindent 0pt\Large\bf \ifnum\c@secnumdepth>\m@ne\thechapter \fi
+{\parindent 0pt\LARGE\bf \ifnum\c@secnumdepth>\m@ne\thechapter. \hskip 1em \fi%
+{\raggedright\LARGE\bf #1}\\\rule[10pt]{\textwidth}{0.3mm}\par\nobreak \vskip25pt} }
+
+\def\@makeschapterhead#1{
+ \vspace*{20pt} { \parindent 0pt \raggedright
+ \LARGE\bf#1\par\nobreak\vskip25pt } }
+%
+% --------------------------------------
+% List-omgevingen (itemize en enumerate)
+% --------------------------------------
+%
+% De volgende parameters zijn relevant in een list-omgeving:
+%
+%   \labelsep     : afstand tussen label en item
+%   \labelwidth   : breedte van label
+%   \leftmargin   : afstand tussen linkermarge en item
+%   \rightmargin  : afstand tussen item en rechtermarge
+%   \listparindent: indentatie voor vervolg-alinea's in item
+%   \parsep       : verticaal wit tussen vervolg-alinea's in item
+%   \itemsep      : verticaal wit tussen opeenvolgende item's
+%   \topsep,
+%   \partopsep    : wit boven item 1 = \topsep + \parskip
+%                    (geen alinea-overgang boven lijst)
+%                   wit boven item 1 = \topsep + \parskip + \partopsep
+%                    (alinea-overgang boven lijst)
+%
+% zie verder LaTeX-boek 5.7.1 en C.5.3
+% --------------------------------------
+%
+% De parameters voor niveau 1 worden gedefinieerd op top-niveau en
+% \@listi definieert uitsluitend \leftmargin
+%
+% size = small (9pt, 10pt, 11pt)
+\def\@listi{\topsep 0.4ex \parsep 0pt \itemsep \parsep}
+% \topsep 4pt(2pt)(2pt)  6pt(2pt)(2pt)  9pt(3pt)(5pt)
+% \parsep 2pt(1pt)(1pt)  3pt(2pt)(1pt) 4.5pt(2pt)(1pt)
+%
+% size = footnotesize (8pt, 9pt, 10pt)
+\def\@listi{\topsep 0.4ex \parsep 0pt \itemsep \parsep}
+% \topsep 3pt(1pt)(1pt) 4pt(2pt)(2pt) 6pt(2pt)(2pt)
+% \parsep 2pt(1pt)(1pt) 2pt(1pt)(1pt) 3pt(2pt)(1pt)
+%
+% size = normalsize (and bigger)
+% \parskip    0pt(1pt) 0pt(1pt) 0pt(1pt)
+% \parindent  15pt 17pt 1.5em
+% \topsep      8pt(2pt)(4pt) 9pt(3pt)(5pt) 10pt(4pt)(6pt)
+% \partopsep   2pt(1pt)(1pt) 3pt(1pt)(2pt) 3pt(2pt)(2pt)
+% \itemsep     4pt(2pt)(1pt) 4.5pt(2pt)(1pt)  5pt(2.5pt)(1pt
+% \parsep  4pt(2pt)(1pt) 4.5pt(2pt)(1pt) 5pt(2.5pt)(1pt)
+\topsep 0.4ex \partopsep 0pt \itemsep 0pt \parsep 0pt
+%
+% \leftmargini  2.5em \leftmarginii 2.2em \leftmarginiii 1.87em
+% \leftmarginiv 1.7em \leftmarginv  1.0em \leftmarginvi  1.0em
+%
+% \leftmargin\leftmargini
+% \labelwidth\leftmargini\advance\labelwidth-\labelsep
+% \labelsep 0.5em
+%
+% \def\@listi{\leftmargin\leftmargini}
+%
+\def\@listii{\leftmargin\leftmarginii
+ \labelwidth\leftmarginii\advance\labelwidth-\labelsep
+% \topsep 4pt(2pt)(1pt) 4.5pt(2pt)(1pt) 5pt(2.5pt)(1pt)
+% \parsep 2pt(1pt)(1pt) 2pt(1pt)(1pt)   2.5pt(1pt)(1pt)
+ \topsep 0pt \parsep 0pt \itemsep \parsep}
+%
+\def\@listiii{\leftmargin\leftmarginiii
+ \labelwidth\leftmarginiii\advance\labelwidth-\labelsep
+% \topsep    2pt(1pt)(1pt) 2pt(1pt)(1pt) 2.5pt(1pt)(1pt)
+% \partopsep 1pt(0pt)(1pt) 1pt(0pt)(1pt) 1pt(0pt)(1pt)
+ \parsep \z@ \topsep 0pt \partopsep 0pt \itemsep \topsep}
+%
+% \def\@listiv{\leftmargin\leftmarginiv
+%  \labelwidth\leftmarginiv\advance\labelwidth-\labelsep}
+%
+% \def\@listv{ \leftmargin\leftmarginv
+%  \labelwidth\leftmarginv\advance\labelwidth-\labelsep}
+%
+% \def\@listvi{\leftmargin\leftmarginvi
+%  \labelwidth\leftmarginvi\advance\labelwidth-\labelsep}
+ 
+

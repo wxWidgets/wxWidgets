@@ -1,0 +1,61 @@
+#
+# File:		makefile.g95
+# Author:	Julian Smart
+# Created:	1996
+# Updated:	
+#
+# "%W% %G%"
+#
+# Makefile for Tex2RTF (GNU-WIN32)
+
+WXDIR = ../../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/tex2rtf.$(OBJSUFF) $(OBJDIR)/texutils.$(OBJSUFF) $(OBJDIR)/tex2any.$(OBJSUFF)\
+ $(OBJDIR)/htmlutil.$(OBJSUFF) $(OBJDIR)/rtfutils.$(OBJSUFF) $(OBJDIR)/xlputils.$(OBJSUFF)\
+ $(OBJDIR)/table.$(OBJSUFF) $(OBJDIR)/readshg.$(OBJSUFF)\
+ $(OBJDIR)/tex2rtf_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) tex2rtf$(GUISUFFIX)$(EXESUFF)
+
+INC = $(COMPPATHS) -I$(WXDIR)/include/msw -I$(WXDIR)/include/base -I../../wxhelp/src
+CPPFLAGS = $(XINCLUDE) $(INC) $(OPTIONS) $(GUI) -DDEBUG='$(DEBUG)' $(DEBUGFLAGS) $(WARN) $(OPT)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+tex2rtf$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o tex2rtf$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/tex2rtf.$(OBJSUFF):	tex2rtf.$(SRCSUFF) tex2rtf.h tex2any.h
+	$(CC) -c $(CPPFLAGS) -o $@ tex2rtf.$(SRCSUFF)
+
+$(OBJDIR)/texutils.$(OBJSUFF):	texutils.$(SRCSUFF) tex2rtf.h tex2any.h
+	$(CC) -c $(CPPFLAGS) -o $@ texutils.$(SRCSUFF)
+
+$(OBJDIR)/tex2any.$(OBJSUFF):	tex2any.$(SRCSUFF) tex2any.h
+	$(CC) -c $(CPPFLAGS) -o $@ tex2any.$(SRCSUFF)
+
+$(OBJDIR)/htmlutil.$(OBJSUFF):	htmlutil.$(SRCSUFF) tex2any.h
+	$(CC) -c $(CPPFLAGS) -o $@ htmlutil.$(SRCSUFF)
+
+$(OBJDIR)/rtfutils.$(OBJSUFF):	rtfutils.$(SRCSUFF) tex2any.h
+	$(CC) -c $(CPPFLAGS) -o $@ rtfutils.$(SRCSUFF)
+
+$(OBJDIR)/xlputils.$(OBJSUFF):	xlputils.$(SRCSUFF) tex2any.h
+	$(CC) -c $(CPPFLAGS) -o $@ xlputils.$(SRCSUFF)
+
+$(OBJDIR)/table.$(OBJSUFF):	table.$(SRCSUFF) tex2any.h
+	$(CC) -c $(CPPFLAGS) -o $@ table.$(SRCSUFF)
+
+$(OBJDIR)/readshg.$(OBJSUFF):	readshg.$(SRCSUFF) readshg.h
+	$(CC) -c $(CPPFLAGS) -o $@ readshg.$(SRCSUFF)
+
+$(OBJDIR)/tex2rtf_resources.o:  tex2rtf.rc
+	$(RESCOMP) -i tex2rtf.rc -o $(OBJDIR)/tex2rtf_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) tex2rtf$(GUISUFFIX).exe core *.rsc *.res

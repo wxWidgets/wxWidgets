@@ -35,6 +35,9 @@ zip32 -@ %dest\wx200cw.zip < %src\distrib\msw\cw.rsp
 
 zip32 -@ %dest\ogl3.zip < %src\utils\ogl\distrib\ogl.rsp
 
+rem Tex2RTF
+zip32 -@ %dest\tex2rtf.zip < %src\distrib\msw\tex2rtf.rsp
+
 cd %dest
 
 echo wxWindows archived.

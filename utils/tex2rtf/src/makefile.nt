@@ -1,0 +1,141 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1993
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds Tex2RTF on Windows Windows 95/NT
+#
+!include <..\..\..\src\ntwxwin.mak>
+
+TEX2RTFDIR = $(WXDIR)\utils\tex2rtf
+TEX2RTFINC = $(TEX2RTFDIR)\src
+PROGRAM=tex2rtf
+DOCDIR=$(WXDIR)\docs
+LOCALDOCDIR=$(WXDIR)\utils\tex2rtf\docs
+THISDIR=$(TEX2RTFDIR)\src
+
+OBJECTS = tex2rtf.obj tex2any.obj texutils.obj rtfutils.obj xlputils.obj htmlutil.obj readshg.obj table.obj
+
+all:    tex2rtf.exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt
+        cd $(TEX2RTFDIR)\src
+
+$(PROGRAM).exe:      $(WXLIB) $(OBJECTS) $(PROGRAM).res
+	$(link) @<<
+-out:$(PROGRAM).exe
+$(LINKFLAGS)
+$(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res
+$(LIBS)
+<<
+
+$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
+    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
+
+tex2any.obj: tex2any.$(SRCSUFF) tex2any.h
+	cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+texutils.obj: texutils.$(SRCSUFF) tex2any.h
+	cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+tex2rtf.obj: tex2rtf.$(SRCSUFF) bmputils.h tex2rtf.h tex2any.h
+	cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+rtfutils.obj: rtfutils.$(SRCSUFF) tex2rtf.h bmputils.h tex2any.h readshg.h table.h
+	cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+table.obj: table.$(SRCSUFF) table.h
+	cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+readshg.obj: readshg.$(SRCSUFF) readshg.h
+	cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+xlputils.obj: xlputils.$(SRCSUFF) tex2rtf.h rtfutils.h tex2any.h
+	cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+htmlutil.obj: htmlutil.$(SRCSUFF) tex2rtf.h tex2any.h table.h
+	cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+clean:
+        -erase *.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+
+cleanall:
+        erase *.exe *.obj *.pch *.res
+
+DOCSOURCES=$(LOCALDOCDIR)\tex2rtf.tex
+
+html: $(DOCDIR)\html\tex2rtf\t2rtf.htm
+hlp: $(DOCDIR)\winhelp\tex2rtf.hlp
+pdfrtf: $(DOCDIR)\pdf\tex2rtf.rtf
+ps: $(WXDIR)\docs\ps\tex2rtf.ps
+
+$(DOCDIR)\winhelp\tex2rtf.hlp:         $(LOCALDOCDIR)\tex2rtf.rtf $(LOCALDOCDIR)\tex2rtf.hpj
+        cd $(LOCALDOCDIR)
+        -erase tex2rtf.ph
+        hc tex2rtf
+        copy tex2rtf.hlp $(DOCDIR)\winhelp\tex2rtf.hlp
+        copy tex2rtf.cnt $(DOCDIR)\winhelp\tex2rtf.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\tex2rtf.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start /w tex2rtf $(LOCALDOCDIR)\tex2rtf.tex $(LOCALDOCDIR)\tex2rtf.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\tex2rtf.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -start /w tex2rtf $(LOCALDOCDIR)\tex2rtf.tex $(DOCDIR)\pdf\tex2rtf.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\tex2rtf\t2rtf.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\tex2rtf
+        -start /w tex2rtf $(LOCALDOCDIR)\tex2rtf.tex $(DOCDIR)\html\tex2rtf\t2rtf.htm -twice -html
+        -erase $(DOCDIR)\html\tex2rtf\*.con
+        -erase $(DOCDIR)\html\tex2rtf\*.ref
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\tex2rtf.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex tex2rtf
+        -latex tex2rtf
+        -makeindx tex2rtf
+        -bibtex tex2rtf
+        -latex tex2rtf
+        -latex tex2rtf
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\tex2rtf.ps:	$(LOCALDOCDIR)\tex2rtf.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o tex2rtf.ps tex2rtf
+        copy tex2rtf.ps $(WXDIR)\docs\ps\tex2rtf.ps
+        cd $(THISDIR)
+
+

@@ -1,0 +1,17 @@
+[OPTIONS]
+BMROOT=.
+TITLE=Tex2RTF Manual
+CONTENTS=Contents
+COMPRESS=HIGH
+
+[FILES]
+tex2rtf.rtf
+
+[CONFIG]
+CreateButton("Up", "&Up", "JumpId(`tex2rtf.hlp', `Contents')")
+BrowseButtons()
+
+[MAP]
+
+[BITMAPS]
+
