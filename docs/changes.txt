@@ -185,6 +185,7 @@ All:
 
 - Spanish translations updated (Javier San Jose)
 - fixed DLL build of db.cpp with some OpenWatcom (ABX)
+- fixed wxZlibOutputStream to properly close zlib stream
 
 All (GUI):
 
@@ -204,6 +205,7 @@ Unix:
 - typo in configure which broke AIX build fixed (Swengtoo)
 - fixed priorities of mailcap entries (David Hart)
 
+>>>>>>> 1.212.2.99
 wxMSW:
 
 - strip ampersands from strings returned by wxMenuBar::GetLabelTop()
