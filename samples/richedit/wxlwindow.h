@@ -29,12 +29,9 @@ enum
 {
    WXLOWIN_MENU_LARGER = WXLOWIN_MENU_FIRST,
    WXLOWIN_MENU_SMALLER,
-   WXLOWIN_MENU_UNDERLINE_ON,
-   WXLOWIN_MENU_UNDERLINE_OFF,
-   WXLOWIN_MENU_BOLD_ON,
-   WXLOWIN_MENU_BOLD_OFF,
-   WXLOWIN_MENU_ITALICS_ON,
-   WXLOWIN_MENU_ITALICS_OFF,
+   WXLOWIN_MENU_UNDERLINE,
+   WXLOWIN_MENU_BOLD,
+   WXLOWIN_MENU_ITALICS,
    WXLOWIN_MENU_ROMAN,
    WXLOWIN_MENU_TYPEWRITER,
    WXLOWIN_MENU_SANSSERIF,
@@ -132,6 +129,9 @@ public:
    void OnPaint(wxPaintEvent &event);
    void OnChar(wxKeyEvent& event);
    void OnKeyUp(wxKeyEvent& event);
+   void OnUpdateMenuUnderline(wxUpdateUIEvent& event);
+   void OnUpdateMenuBold(wxUpdateUIEvent& event);
+   void OnUpdateMenuItalic(wxUpdateUIEvent& event);
    void OnMenu(wxCommandEvent& event);
    void OnLeftMouseClick(wxMouseEvent& event)  { OnMouse(WXLOWIN_MENU_LCLICK, event); }
    void OnRightMouseClick(wxMouseEvent& event) { OnMouse(WXLOWIN_MENU_RCLICK, event); }

@@ -904,7 +904,6 @@ public:
    inline void SetFontColour(wxColour *fg, wxColour *bg = NULL)
       { SetFont(-1,-1,-1,-1,-1,fg,bg); }
 
-
    /**
       Returns a pointer to the default settings.
       This is only valid temporarily and should not be stored
@@ -913,6 +912,27 @@ public:
    */
    wxLayoutStyleInfo &GetDefaultStyleInfo(void) { return m_DefaultStyleInfo ; }
    wxLayoutStyleInfo &GetStyleInfo(void) { return m_CurrentStyleInfo ; }
+   const wxLayoutStyleInfo &GetStyleInfo(void) const { return m_CurrentStyleInfo ; }
+
+   /// is the current font underlined?
+   bool IsFontUnderlined() const { return GetStyleInfo().underline != 0; }
+   /// is the current font bold?
+   bool IsFontBold() const { return GetStyleInfo().weight == wxBOLD; }
+   /// is the current font italic?
+   bool IsFontItalic() const { return GetStyleInfo().style == wxITALIC; }
+
+   /// set underline if it was off, turn it off if it was on
+   void ToggleFontUnderline()
+      { SetFontUnderline(!IsFontUnderlined()); }
+
+   /// make font bold if it was normal or make it normal if it was bold
+   void ToggleFontWeight()
+      { SetFontWeight(IsFontBold() ? wxNORMAL : wxBOLD); }
+
+   /// make font italic if it was normal or make it normal if it was italic
+   void ToggleFontItalics()
+      { SetFontStyle(IsFontItalic() ? wxNORMAL : wxITALIC); }
+
    //@}
 
    /**@name Drawing */

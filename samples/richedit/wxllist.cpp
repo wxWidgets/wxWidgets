@@ -463,23 +463,16 @@ wxLayoutStyleInfo::wxLayoutStyleInfo(int ifamily,
                                      wxColour *fg,
                                      wxColour *bg)
 {
-   family = ifamily; size = isize;
-   style = istyle; weight = iweight;
+   family = ifamily;
+   size = isize;
+   style = istyle;
+   weight = iweight;
    underline = iul != 0;
-   if(fg)
-   {
-      m_fg = *fg;
-      m_fg_valid = TRUE;
-   }
-   else
-      m_fg = *wxBLACK;
-   if(bg)
-   {
-      m_bg = *bg;
-      m_bg_valid = TRUE;
-   }
-   else
-      m_bg = *wxWHITE;
+
+   m_fg_valid = fg != 0;
+   m_bg_valid = bg != 0;
+   m_fg = m_fg_valid ? *fg : *wxBLACK;
+   m_bg = m_fg_valid ? *bg : *wxWHITE;
 }
 
 #define COPY_SI_(what) if(right.what != -1) what = right.what;
@@ -632,6 +625,7 @@ wxLayoutLine::wxLayoutLine(wxLayoutLine *prev, wxLayoutList *llist)
    m_LineNumber = 0;
    m_Width = m_Height = 0;
    m_Length = 0;
+   m_updateLeft = -1;
    MarkDirty(0);
    m_Previous = prev;
    m_Next = NULL;

@@ -85,13 +85,20 @@ static const int Y_SCROLL_PAGE = 20;
 
 BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_PAINT    (wxLayoutWindow::OnPaint)
+
    EVT_CHAR     (wxLayoutWindow::OnChar)
    EVT_KEY_UP   (wxLayoutWindow::OnKeyUp)
+
    EVT_LEFT_DOWN(wxLayoutWindow::OnLeftMouseClick)
    EVT_RIGHT_DOWN(wxLayoutWindow::OnRightMouseClick)
    EVT_LEFT_DCLICK(wxLayoutWindow::OnMouseDblClick)
    EVT_MOTION    (wxLayoutWindow::OnMouseMove)
+
+   EVT_UPDATE_UI(WXLOWIN_MENU_UNDERLINE, wxLayoutWindow::OnUpdateMenuUnderline)
+   EVT_UPDATE_UI(WXLOWIN_MENU_BOLD, wxLayoutWindow::OnUpdateMenuBold)
+   EVT_UPDATE_UI(WXLOWIN_MENU_ITALICS, wxLayoutWindow::OnUpdateMenuItalic)
    EVT_MENU_RANGE(WXLOWIN_MENU_FIRST, WXLOWIN_MENU_LAST, wxLayoutWindow::OnMenu)
+
    EVT_SET_FOCUS(wxLayoutWindow::OnSetFocus)
    EVT_KILL_FOCUS(wxLayoutWindow::OnKillFocus)
 END_EVENT_TABLE()
@@ -154,7 +161,8 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    caret->Show();
 #endif // WXLAYOUT_USE_CARET
 
-   SetCursorVisibility(-1);
+   m_HandCursor = FALSE;
+   m_CursorVisibility = -1;
    SetCursor(wxCURSOR_IBEAM);
    SetDirty();
 }
@@ -951,17 +959,30 @@ wxLayoutWindow::MakeFormatMenu()
    m->Append(WXLOWIN_MENU_LARGER   ,_("&Larger"),_("Switch to larger font."), false);
    m->Append(WXLOWIN_MENU_SMALLER  ,_("&Smaller"),_("Switch to smaller font."), false);
    m->AppendSeparator();
-   m->Append(WXLOWIN_MENU_UNDERLINE_ON, _("&Underline on"),_("Activate underline mode."), false);
-   m->Append(WXLOWIN_MENU_UNDERLINE_OFF,_("&Underline off"),_("Deactivate underline mode."), false);
-   m->Append(WXLOWIN_MENU_BOLD_ON      ,_("&Bold on"),_("Activate bold mode."), false);
-   m->Append(WXLOWIN_MENU_BOLD_OFF     ,_("&Bold off"),_("Deactivate bold mode."), false);
-   m->Append(WXLOWIN_MENU_ITALICS_ON   ,_("&Italics on"),_("Activate italics mode."), false);
-   m->Append(WXLOWIN_MENU_ITALICS_OFF  ,_("&Italics off"),_("Deactivate italics mode."), false);
+   m->Append(WXLOWIN_MENU_UNDERLINE, _("&Underline"),_("Underline mode."), true);
+   m->Append(WXLOWIN_MENU_BOLD, _("&Bold"),_("Bold mode."), true);
+   m->Append(WXLOWIN_MENU_ITALICS, _("&Italics"),_("Italics mode."), true);
    m->AppendSeparator();
    m->Append(WXLOWIN_MENU_ROMAN     ,_("&Roman"),_("Switch to roman font."), false);
    m->Append(WXLOWIN_MENU_TYPEWRITER,_("&Typewriter"),_("Switch to typewriter font."), false);
    m->Append(WXLOWIN_MENU_SANSSERIF ,_("&Sans Serif"),_("Switch to sans serif font."), false);
+
    return m;
+}
+
+void wxLayoutWindow::OnUpdateMenuUnderline(wxUpdateUIEvent& event)
+{
+   event.Check(m_llist->IsFontUnderlined());
+}
+
+void wxLayoutWindow::OnUpdateMenuBold(wxUpdateUIEvent& event)
+{
+   event.Check(m_llist->IsFontBold());
+}
+
+void wxLayoutWindow::OnUpdateMenuItalic(wxUpdateUIEvent& event)
+{
+   event.Check(m_llist->IsFontItalic());
 }
 
 void wxLayoutWindow::OnMenu(wxCommandEvent& event)
@@ -969,21 +990,22 @@ void wxLayoutWindow::OnMenu(wxCommandEvent& event)
    switch (event.GetId())
    {
    case WXLOWIN_MENU_LARGER:
-      m_llist->SetFontLarger(); break;
+      m_llist->SetFontLarger();
+      break;
    case WXLOWIN_MENU_SMALLER:
-      m_llist->SetFontSmaller(); break;
-   case WXLOWIN_MENU_UNDERLINE_ON:
-      m_llist->SetFontUnderline(true); break;
-   case WXLOWIN_MENU_UNDERLINE_OFF:
-      m_llist->SetFontUnderline(false); break;
-   case WXLOWIN_MENU_BOLD_ON:
-      m_llist->SetFontWeight(wxBOLD); break;
-   case WXLOWIN_MENU_BOLD_OFF:
-      m_llist->SetFontWeight(wxNORMAL); break;
-   case WXLOWIN_MENU_ITALICS_ON:
-      m_llist->SetFontStyle(wxITALIC); break;
-   case WXLOWIN_MENU_ITALICS_OFF:
-      m_llist->SetFontStyle(wxNORMAL); break;
+      m_llist->SetFontSmaller();
+      break;
+
+   case WXLOWIN_MENU_UNDERLINE:
+      m_llist->ToggleFontUnderline();
+      break;
+   case WXLOWIN_MENU_BOLD:
+      m_llist->ToggleFontWeight();
+      break;
+   case WXLOWIN_MENU_ITALICS:
+      m_llist->ToggleFontItalics();
+      break;
+
    case WXLOWIN_MENU_ROMAN:
       m_llist->SetFontFamily(wxROMAN); break;
    case WXLOWIN_MENU_TYPEWRITER:
