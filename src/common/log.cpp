@@ -66,6 +66,14 @@
   static void wxLogWrap(FILE *f, const char *pszPrefix, const char *psz);
 #endif
 
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+// we use a global variable to store the frame pointer for wxLogStatus - bad,
+// but it's he easiest way
+static wxFrame *gs_pFrame;
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -116,6 +124,24 @@ IMPLEMENT_LOG_FUNCTION(Warning)
 IMPLEMENT_LOG_FUNCTION(Message)
 IMPLEMENT_LOG_FUNCTION(Info)
 IMPLEMENT_LOG_FUNCTION(Status)
+
+// accepts an additional argument which tells to which frame the output should
+// be directed
+void wxLogStatus(wxFrame *pFrame, const char *szFormat, ...)
+{
+  wxLog *pLog = wxLog::GetActiveTarget();
+  if ( pLog != NULL ) {
+    va_list argptr;
+    va_start(argptr, szFormat);
+    vsprintf(s_szBuf, szFormat, argptr);
+    va_end(argptr);
+
+    wxASSERT( gs_pFrame == NULL ); // should be reset!
+    gs_pFrame = pFrame;
+    wxLog::OnLog(wxLOG_Status, s_szBuf);
+    gs_pFrame = NULL;
+  }
+}
 
 // same as info, but only if 'verbose' mode is on
 void wxLogVerbose(const char *szFormat, ...)
@@ -444,11 +470,16 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
     case wxLOG_Status:
       {
         // find the top window and set it's status text if it has any
-        wxWindow *pWin = wxTheApp->GetTopWindow();
-        if ( pWin != NULL && pWin->IsKindOf(CLASSINFO(wxFrame)) ) {
-          wxFrame *pFrame = (wxFrame *)pWin;
-          pFrame->SetStatusText(szString);
+        wxFrame *pFrame = gs_pFrame;
+        if ( pFrame == NULL ) {
+          wxWindow *pWin = wxTheApp->GetTopWindow();
+          if ( pWin != NULL && pWin->IsKindOf(CLASSINFO(wxFrame)) ) {
+            pFrame = (wxFrame *)pWin;
+          }
         }
+
+        if ( pFrame != NULL )
+          pFrame->SetStatusText(szString);
       }
       break;
 
@@ -506,7 +537,7 @@ class wxLogFrame : public wxFrame
 {
 public:
   // ctor & dtor
-  wxLogFrame(wxLogWindow *log, const char *szTitle);
+  wxLogFrame(wxFrame *pParent, wxLogWindow *log, const char *szTitle);
   virtual ~wxLogFrame();
 
   // menu callbacks
@@ -544,12 +575,10 @@ BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
   EVT_MENU(Menu_Clear, wxLogFrame::OnClear)
 
   EVT_CLOSE(wxLogFrame::OnCloseWindow)
-
-  EVT_IDLE(wxLogFrame::OnIdle)
 END_EVENT_TABLE()
 
-wxLogFrame::wxLogFrame(wxLogWindow *log, const char *szTitle)
-          : wxFrame(NULL, -1, szTitle)
+wxLogFrame::wxLogFrame(wxFrame *pParent, wxLogWindow *log, const char *szTitle)
+          : wxFrame(pParent, -1, szTitle)
 {
   m_log = log;
 
@@ -557,14 +586,10 @@ wxLogFrame::wxLogFrame(wxLogWindow *log, const char *szTitle)
   //    a rich edit control instead of a normal one we want in wxMSW
   m_pTextCtrl = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition,
                                wxDefaultSize,
-                               wxSIMPLE_BORDER |
+                             //wxSIMPLE_BORDER |
                                wxTE_MULTILINE  |
                                wxHSCROLL       |
                                wxTE_READONLY);
-  /*
-  m_pTextCtrl->SetEditable(FALSE);
-  m_pTextCtrl->SetRichEdit(FALSE);
-  */
 
   // create menu
   wxMenuBar *pMenuBar = new wxMenuBar;
@@ -590,14 +615,6 @@ void wxLogFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 void wxLogFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   DoClose();
-}
-
-void wxLogFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
-{
-  // if we're the last frame to stay, delete log frame letting the 
-  // application to close
-  if ( wxTopLevelWindows.Number() == 1 )
-    Destroy();
 }
 
 void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
@@ -679,11 +696,14 @@ wxLogFrame::~wxLogFrame()
 
 // wxLogWindow
 // -----------
-wxLogWindow::wxLogWindow(const char *szTitle, bool bShow, bool bDoPass)
+wxLogWindow::wxLogWindow(wxFrame *pParent,
+                         const char *szTitle,
+                         bool bShow,
+                         bool bDoPass)
 {
   m_bPassMessages = bDoPass;
 
-  m_pLogFrame = new wxLogFrame(this, szTitle);
+  m_pLogFrame = new wxLogFrame(pParent, this, szTitle);
   m_pOldLog = wxLog::SetActiveTarget(this);
 
   if ( bShow )

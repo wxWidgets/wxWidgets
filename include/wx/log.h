@@ -50,6 +50,14 @@ typedef unsigned long wxTraceMask;
 typedef unsigned long wxLogLevel;
 
 // ----------------------------------------------------------------------------
+// forward declarations
+// ----------------------------------------------------------------------------
+class wxTextCtrl;
+class wxLogFrame;
+class wxFrame;
+class ostream;
+
+// ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages
 // normally, only a single instance of this class exists but it's not enforced
 // ----------------------------------------------------------------------------
@@ -166,7 +174,6 @@ protected:
 };
 
 // log everything to a text window (GUI only of course)
-class wxTextCtrl;
 class WXDLLEXPORT wxLogTextCtrl : public wxLogStream
 {
 public:
@@ -200,12 +207,11 @@ protected:
 // to the log window. This window has it's own menu which allows the user to
 // close it, clear the log contents or save it to the file.
 // ----------------------------------------------------------------------------
-class wxLogFrame;
-class wxFrame;
 class WXDLLEXPORT wxLogWindow : public wxLog
 {
 public:
-  wxLogWindow(const char *szTitle,      // the title of the frame
+  wxLogWindow(wxFrame *pParent,         // the parent frame (can be NULL)
+              const char *szTitle,      // the title of the frame
               bool bShow = TRUE,        // show window immediately?
               bool bPassToOld = TRUE);  // pass log messages to the old target?
   ~wxLogWindow();
@@ -302,8 +308,15 @@ DECLARE_LOG_FUNCTION(Error);
 DECLARE_LOG_FUNCTION(Warning);
 DECLARE_LOG_FUNCTION(Message);
 DECLARE_LOG_FUNCTION(Info);
-DECLARE_LOG_FUNCTION(Status);
 DECLARE_LOG_FUNCTION(Verbose);
+
+// this function sends the log message to the status line of the top level
+// application frame, if any
+DECLARE_LOG_FUNCTION(Status);
+
+// this one is the same as previous except that it allows to explicitly 
+// specify the frame to which the output should go
+DECLARE_LOG_FUNCTION2(Status, wxFrame *pFrame);
 
 // additional one: as wxLogError, but also logs last system call error code
 // and the corresponding error message if available
