@@ -349,7 +349,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MEM_TRACING=no
   DEFAULT_wxUSE_DEBUG_CONTEXT=no
   DEFAULT_wxUSE_DMALLOC=no
-  DEFAULT_wxUSE_PRECOMP=no
   DEFAULT_wxUSE_APPLE_IEEE=no
 
   DEFAULT_wxUSE_LOG=yes
@@ -524,7 +523,6 @@ else
   DEFAULT_wxUSE_MEM_TRACING=no
   DEFAULT_wxUSE_DEBUG_CONTEXT=no
   DEFAULT_wxUSE_DMALLOC=no
-  DEFAULT_wxUSE_PRECOMP=no
   DEFAULT_wxUSE_APPLE_IEEE=yes
 
   DEFAULT_wxUSE_LOG=yes
@@ -747,9 +745,6 @@ WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
-
-dnl allow the precompiled header option to be disabled under Mac OS X/Darwin
-WX_ARG_ENABLE(precomp,     [  --enable-precomp        enable use of precompiled headers (Mac OS X/Darwin)], wxUSE_PRECOMP)
 
 if test "$wxUSE_DEBUG" = "yes"; then
   DEFAULT_wxUSE_DEBUG_FLAG=yes
@@ -2124,16 +2119,6 @@ if test "$USE_WIN32" = 1 ; then
 
     dnl install Win32-specific files in "make install"
     WIN32INSTALL=win32install
-fi
-
-if test "$USE_DARWIN" = 1; then
-    dnl Mac OS X/Darwin GCC uses precompiled headers by default
-    dnl this can cause problems both when compiling wxMac and wxBase
-    if test "$wxUSE_PRECOMP" = "yes"; then
-        CPPFLAGS="$CPPFLAGS -cpp-precomp"
-    else
-        CPPFLAGS="$CPPFLAGS -no-cpp-precomp"
-    fi
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
