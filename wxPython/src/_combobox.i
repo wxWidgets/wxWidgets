@@ -58,6 +58,8 @@ public:
     %pythonAppend wxComboBox         "self._setOORInfo(self)"
     %pythonAppend wxComboBox()       ""
 
+    RefDoc(wxComboBox, ""); // turn it off for the ctors
+    
     DocCtorAStr(
         wxComboBox(wxWindow* parent, wxWindowID id,
                    const wxString& value = wxPyEmptyString,

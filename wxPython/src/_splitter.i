@@ -111,6 +111,8 @@ public:
     %pythonAppend  wxSplitterWindow         "self._setOORInfo(self)"
     %pythonAppend  wxSplitterWindow()       ""
 
+    RefDoc(wxSplitterWindow, ""); // turn it off for the ctors
+    
     DocCtorStr(
         wxSplitterWindow(wxWindow* parent, wxWindowID id,
                          const wxPoint& pos = wxDefaultPosition,

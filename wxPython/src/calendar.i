@@ -200,6 +200,8 @@ public:
     %pythonAppend wxCalendarCtrl()    ""
 
     DocStr(wxCalendarCtrl, "Create and show a calendar control.");
+    RefDoc(wxCalendarCtrl, ""); // turn it off for the ctors
+    
     wxCalendarCtrl(wxWindow *parent,
                    wxWindowID id,
                    const wxDateTime& date = wxDefaultDateTime,
