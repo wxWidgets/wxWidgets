@@ -133,6 +133,9 @@ wxMSW:
 wxMotif:
 
 - removed wxMenuItem::DeleteSubMenu()
+- wxButtons use Motif default size, which is smaller than it used to be
+  and closer to wxMSW/wxGTK look. This can be disabled by setting
+  motif.largebuttons system option to 1 (see wxSystemOptions).
 
 wxUniv/X11:
 
