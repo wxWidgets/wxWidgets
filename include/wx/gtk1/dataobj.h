@@ -32,7 +32,7 @@ class wxPrivateDataObject;
 class wxFileDataObject;
 
 //-------------------------------------------------------------------------
-// wxDataFormat
+// wxDataType (internal)
 //-------------------------------------------------------------------------
 
 enum wxDataType
@@ -56,6 +56,10 @@ enum wxDataType
   wxDF_LOCALE =           16,
   wxDF_PRIVATE =          20
 };
+
+//-------------------------------------------------------------------------
+// wxDataFormat (internal)
+//-------------------------------------------------------------------------
 
 class wxDataFormat : public wxObject
 {
@@ -86,7 +90,7 @@ private:
 };
 
 //-------------------------------------------------------------------------
-// wxDataBroker handles data and ormat negotiation for clipboard and DnD
+// wxDataBroker (internal)
 //-------------------------------------------------------------------------
 
 class wxDataBroker : public wxObject

@@ -32,12 +32,14 @@ wxCAPTION.}
 for Windows, it is implicit in {\bf wxTHICK\_FRAME}).}
 \end{twocollist}
 
-See also \helpref{window styles overview}{windowstyles}.
+See also \helpref{window styles overview}{windowstyles}. Note that all the window styles
+above are ignored under GTK and the mini frame cannot be resized by the user.
 
 \wxheading{Remarks}
 
-This class has miniframe functionality under Windows and GTK+. On other platforms,
-it behaves like a normal frame.
+This class has miniframe functionality under Windows and GTK, i.e. the presence
+of mini frame will not be noted in the task bar and focus behaviour is different.
+On other platforms, it behaves like a normal frame.
 
 \wxheading{See also}
 
