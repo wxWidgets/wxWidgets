@@ -5947,6 +5947,72 @@ static PyObject *_wrap_wxCheckListBox_GetItemHeight(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+#define wxCheckListBox_HitTest(_swigobj,_swigarg0)  (_swigobj->HitTest(_swigarg0))
+static PyObject *_wrap_wxCheckListBox_HitTest(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxCheckListBox * _arg0;
+    wxPoint * _arg1;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxCheckListBox_HitTest",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCheckListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckListBox_HitTest. Expected _wxCheckListBox_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxCheckListBox_HitTest(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCheckListBox_HitTestXY(_swigobj,_swigarg0,_swigarg1)  (_swigobj->HitTest(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxCheckListBox_HitTestXY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxCheckListBox * _arg0;
+    wxCoord  _arg1;
+    wxCoord  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxCheckListBox_HitTestXY",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCheckListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckListBox_HitTestXY. Expected _wxCheckListBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxCheckListBox_HitTestXY(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define new_wxTextAttr(_swigarg0,_swigarg1,_swigarg2) (new wxTextAttr(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_new_wxTextAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11859,6 +11925,8 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextAttr_SetTextColour", (PyCFunction) _wrap_wxTextAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxTextAttr", (PyCFunction) _wrap_delete_wxTextAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTextAttr", (PyCFunction) _wrap_new_wxTextAttr, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCheckListBox_HitTestXY", (PyCFunction) _wrap_wxCheckListBox_HitTestXY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCheckListBox_HitTest", (PyCFunction) _wrap_wxCheckListBox_HitTest, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckListBox_GetItemHeight", (PyCFunction) _wrap_wxCheckListBox_GetItemHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckListBox_InsertItems", (PyCFunction) _wrap_wxCheckListBox_InsertItems, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckListBox_Check", (PyCFunction) _wrap_wxCheckListBox_Check, METH_VARARGS | METH_KEYWORDS },

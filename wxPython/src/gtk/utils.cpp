@@ -7867,6 +7867,7 @@ SWIGEXPORT(void) initutilsc() {
 	 PyDict_SetItemString(d,"wxCONFIG_USE_LOCAL_FILE", PyInt_FromLong((long) wxCONFIG_USE_LOCAL_FILE));
 	 PyDict_SetItemString(d,"wxCONFIG_USE_GLOBAL_FILE", PyInt_FromLong((long) wxCONFIG_USE_GLOBAL_FILE));
 	 PyDict_SetItemString(d,"wxCONFIG_USE_RELATIVE_PATH", PyInt_FromLong((long) wxCONFIG_USE_RELATIVE_PATH));
+	 PyDict_SetItemString(d,"wxCONFIG_USE_NO_ESCAPE_CHARACTERS", PyInt_FromLong((long) wxCONFIG_USE_NO_ESCAPE_CHARACTERS));
 
     // These are no longer needed since utils is back in the core
 //      wxClassInfo::CleanUpClasses();
