@@ -67,7 +67,7 @@ public:
     virtual void OnExit()
     {
 #if wxUSE_WCHAR_T
-        wxConvLocal.Clear();
+         wxConvLocal.Clear();
 #endif
     }
 
@@ -195,7 +195,6 @@ size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
     {
         for (size_t i = 0; i < strlen( psz )+1; i++)
             buf[i] = (wchar_t) psz[i];
-        // printf( "libc %s\n", buf );
         return strlen( psz );
     }
     else
@@ -214,7 +213,6 @@ size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     {
         for (size_t i = 0; i < wxStrlen( psz )+1; i++)
             buf[i] = (char) psz[i];
-        // printf( "libc %s\n", buf );
         return wxStrlen( psz );
     }
     else
@@ -250,7 +248,6 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *psz) const
             return wxCharBuffer((char *) NULL);
         wxCharBuffer buf(nLen);                      // this allocates nLen+1
         WC2MB((char *)(const char *) buf, psz, nLen+1);
-        // printf( "str %s\n", (const char*) buf );
         return buf;
     }
     else
@@ -911,15 +908,6 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
         cset = NULL;
     }
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
-    cset = new CP_CharSet(name);
-    if ( cset->usable() )
-        return cset;
-
-    delete cset;
-    cset = NULL;
-#endif // __WIN32__
-
 #if wxUSE_FONTMAP
     cset = new EC_CharSet(name);
     if ( cset->usable() )
@@ -928,6 +916,15 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
     delete cset;
     cset = NULL;
 #endif // wxUSE_FONTMAP
+
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+    cset = new CP_CharSet(name);
+    if ( cset->usable() )
+        return cset;
+
+    delete cset;
+    cset = NULL;
+#endif // __WIN32__
 
     wxLogError(_("Cannot convert from encoding '%s'!"), name);
 

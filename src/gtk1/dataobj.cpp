@@ -72,8 +72,12 @@ wxDataFormat::wxDataFormat( NativeFormat format )
 void wxDataFormat::SetType( wxDataFormatId type )
 {
     PrepareFormats();
-    m_type = type;
+    
+    if (type == wxDF_UNICODETEXT)
+       type = wxDF_TEXT;
 
+    m_type = type;
+    
     if (m_type == wxDF_TEXT)
         m_format = g_textAtom;
     else
@@ -135,7 +139,7 @@ void wxDataFormat::PrepareFormats()
     //     here (with whom?)
     if (!g_textAtom)
 #if wxUSE_UNICODE
-        g_textAtom = gdk_atom_intern( "text/utf8", FALSE );
+        g_textAtom = gdk_atom_intern( "UTF8_STRING", FALSE );
 #else
         g_textAtom = gdk_atom_intern( "STRING" /* "text/plain" */, FALSE );
 #endif

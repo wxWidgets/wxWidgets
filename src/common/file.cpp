@@ -502,9 +502,9 @@ bool wxTempFile::Open(const wxString& strName)
 #ifdef __UNIX__
     // the temp file should have the same permissions as the original one
     mode_t mode;
-
+    
     wxStructStat st;
-    if ( stat(m_strName.fn_str(), &st) == 0 )
+    if ( stat( (const char*) m_strName.fn_str(), &st) == 0 )
     {
         mode = st.st_mode;
     }
@@ -517,7 +517,7 @@ bool wxTempFile::Open(const wxString& strName)
         umask(mask);
     }
 
-    if ( chmod(m_strTemp.mb_str(), mode) == -1 )
+    if ( chmod( (const char*) m_strTemp.fn_str(), mode) == -1 )
     {
         wxLogSysError(_("Failed to set temporary file permissions"));
     }

@@ -639,10 +639,10 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     path += _T("XXXXXX");
 
     // we need to copy the path to the buffer in which mkstemp() can modify it
-    wxCharBuffer buf(path.fn_str());
+    wxCharBuffer buf = wxConvFile.cWX2MB( path );
 
     // cast is safe because the string length doesn't change
-    int fdTemp = mkstemp( (char *)buf.data() );
+    int fdTemp = mkstemp( (char*)(const char*) buf );
     if ( fdTemp == -1 )
     {
         // this might be not necessary as mkstemp() on most systems should have
@@ -651,8 +651,8 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     }
     else // mkstemp() succeeded
     {
-        path = wxConvFile.cMB2WX(buf);
-
+        path = wxConvFile.cMB2WX( (const char*) buf );
+        
         // avoid leaking the fd
         if ( fileTemp )
         {
@@ -669,14 +669,14 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     // same as above
     path += _T("XXXXXX");
 
-    wxCharBuffer buf(path.fn_str());
-    if ( !mktemp( buf ) )
+    wxCharBuffer buf = wxConvFile.cWX2MB( path );
+    if ( !mktemp( (const char*) buf ) )
     {
         path.clear();
     }
     else
     {
-        path = wxConvFile.cMB2WX(buf);
+        path = wxConvFile.cMB2WX( (const char*) buf );
     }
 #else // !HAVE_MKTEMP (includes __DOS__)
     // generate the unique file name ourselves

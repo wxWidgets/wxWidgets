@@ -901,14 +901,24 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 
   wxTempFile file(m_strLocalFile);
 
-  if ( !file.IsOpened() ) {
+  if ( !file.IsOpened() )
+  {
     wxLogError(_("can't open user configuration file."));
     return FALSE;
   }
 
   // write all strings to file
-  for ( wxFileConfigLineList *p = m_linesHead; p != NULL; p = p->Next() ) {
-    if ( !file.Write(p->Text() + wxTextFile::GetEOL()) ) {
+  for ( wxFileConfigLineList *p = m_linesHead; p != NULL; p = p->Next() )
+  {
+    wxString line = p->Text();
+    line += wxTextFile::GetEOL();
+#if wxUSE_UNICODE
+    wxCharBuffer buf = wxConvLocal.cWX2MB( line );
+    if ( !file.Write( (const char*)buf, strlen( (const char*) buf ) ) )
+#else
+    if ( !file.Write( line.c_str(), line.Len() ) )
+#endif
+    {
       wxLogError(_("can't write user configuration file."));
       return FALSE;
     }
