@@ -2163,7 +2163,7 @@ typedef void (wxEvtHandler::*wxIdleEventFunction)(wxIdleEvent&);
 typedef void (wxEvtHandler::*wxCloseEventFunction)(wxCloseEvent&);
 typedef void (wxEvtHandler::*wxShowEventFunction)(wxShowEvent&);
 typedef void (wxEvtHandler::*wxIconizeEventFunction)(wxIconizeEvent&);
-typedef void (wxEvtHandler::*wxMaximizeEventFunction)(wxMazimizeEvent&);
+typedef void (wxEvtHandler::*wxMaximizeEventFunction)(wxMaximizeEvent&);
 typedef void (wxEvtHandler::*wxNavigationKeyEventFunction)(wxNavigationKeyEvent&);
 typedef void (wxEvtHandler::*wxPaletteChangedEventFunction)(wxPaletteChangedEvent&);
 typedef void (wxEvtHandler::*wxQueryNewPaletteEventFunction)(wxQueryNewPaletteEvent&);
