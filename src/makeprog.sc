@@ -20,4 +20,13 @@ clean:
 	-del *.res
 	-del *.map
 	-del *.rws
+    -del *.sym
     -del sc16.def
+
+cleanexe:
+    -del *.exe
+
+relink: cleanexe $(TARGET).exe
+
+
+
