@@ -55,7 +55,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxHashTable, wxObject)
 
 wxHashTableBase::wxHashTableBase()
 {
-    m_deleteContents = FALSE;
+    m_deleteContents = false;
     m_hashTable = (wxListBase **)NULL;
     m_hashSize = 0;
     m_count = 0;
@@ -301,7 +301,7 @@ wxString wxStringHashTable::Get(long key, bool *wasFound) const
             if ( keys->Item(n) == key )
             {
                 if ( wasFound )
-                    *wasFound = TRUE;
+                    *wasFound = true;
 
                 return m_values[slot]->Item(n);
             }
@@ -309,14 +309,14 @@ wxString wxStringHashTable::Get(long key, bool *wasFound) const
     }
 
     if ( wasFound )
-        *wasFound = FALSE;
+        *wasFound = false;
 
     return _T("");
 }
 
 bool wxStringHashTable::Delete(long key) const
 {
-    wxCHECK_MSG( m_hashSize, FALSE, _T("must call Create() first") );
+    wxCHECK_MSG( m_hashSize, false, _T("must call Create() first") );
 
     size_t slot = (size_t)abs((int)(key % (long)m_hashSize));
 
@@ -330,12 +330,12 @@ bool wxStringHashTable::Delete(long key) const
             {
                 keys->RemoveAt(n);
                 m_values[slot]->RemoveAt(n);
-                return TRUE;
+                return true;
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 #endif // WXWIN_COMPATIBILITY_2_4
@@ -350,7 +350,7 @@ wxHashTable::wxHashTable (int the_key_type, int size)
   hash_table = (wxList**) NULL;
   Create(the_key_type, size);
   m_count = 0;
-  m_deleteContents = FALSE;
+  m_deleteContents = false;
 /*
   n = size;
   current_position = -1;
@@ -393,7 +393,7 @@ bool wxHashTable::Create(int the_key_type, int size)
   int i;
   for (i = 0; i < size; i++)
     hash_table[i] = (wxList *) NULL;
-  return TRUE;
+  return true;
 }
 
 
@@ -427,7 +427,7 @@ void wxHashTable::Put (long key, long value, wxObject * object)
   if (!hash_table[position])
   {
     hash_table[position] = new wxList (wxKEY_INTEGER);
-    if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
+    if (m_deleteContents) hash_table[position]->DeleteContents(true);
   }
 
   hash_table[position]->Append (value, object);
@@ -445,7 +445,7 @@ void wxHashTable::Put (long key, const wxChar *value, wxObject * object)
   if (!hash_table[position])
   {
     hash_table[position] = new wxList (wxKEY_STRING);
-    if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
+    if (m_deleteContents) hash_table[position]->DeleteContents(true);
   }
 
   hash_table[position]->Append (value, object);
@@ -463,7 +463,7 @@ void wxHashTable::Put (long key, wxObject * object)
   if (!hash_table[position])
   {
     hash_table[position] = new wxList (wxKEY_INTEGER);
-    if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
+    if (m_deleteContents) hash_table[position]->DeleteContents(true);
   }
 
   hash_table[position]->Append (k, object);
@@ -478,7 +478,7 @@ void wxHashTable::Put (const wxChar *key, wxObject * object)
   if (!hash_table[position])
   {
     hash_table[position] = new wxList (wxKEY_STRING);
-    if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
+    if (m_deleteContents) hash_table[position]->DeleteContents(true);
   }
 
   hash_table[position]->Append (key, object);
@@ -669,7 +669,7 @@ void wxHashTable::BeginFind ()
 wxHashTable::Node* wxHashTable::Next ()
 {
   wxNode *found = (wxNode *) NULL;
-  bool end = FALSE;
+  bool end = false;
   while (!end && !found)
     {
       if (!current_node)
@@ -679,7 +679,7 @@ wxHashTable::Node* wxHashTable::Next ()
             {
               current_position = -1;
               current_node = (wxNode *) NULL;
-              end = TRUE;
+              end = true;
             }
           else
             {
@@ -808,7 +808,7 @@ void wxHashTableBase::DoRemoveNode( wxHashTableBase_Node* node )
         Node* prev = start;
 
         for( curr = prev->GetNext(); curr != node;
-             prev = curr, curr = curr->GetNext() );
+             prev = curr, curr = curr->GetNext() ) ;
 
         DoUnlinkNode( bucket, node, prev );
     }
