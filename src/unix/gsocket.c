@@ -485,12 +485,10 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
         close(sck->m_fd);
         sck->m_fd = -1;
         /* sck->m_error is set in _GSocket_Output_Timeout */
-        fprintf(stderr, "Blocking connect timeouts\n");
         return GSOCK_TIMEDOUT;
       }
       else
       {
-        fprintf(stderr, "Blocking connect OK\n");
         return GSOCK_NOERROR;
       }
     }
@@ -505,7 +503,6 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     {
       sck->m_error = GSOCK_WOULDBLOCK;
       sck->m_establishing = TRUE;
-      fprintf(stderr, "Nonblocking connect in progress\n");
 
       return GSOCK_WOULDBLOCK;
     }
@@ -517,11 +514,9 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     sck->m_fd = -1;
     sck->m_error = GSOCK_IOERR;
 
-    fprintf(stderr, "Connect failed (generic err)\n");
     return GSOCK_IOERR;
   }
 
-  fprintf(stderr, "Connect OK\n");
   return GSOCK_NOERROR;
 }
 
