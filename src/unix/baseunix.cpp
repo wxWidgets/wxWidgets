@@ -94,7 +94,7 @@ int wxConsoleAppTraits::GetOSVersion(int *verMaj, int *verMin)
     int major, minor;
     char name[256];
 
-    if ( sscanf(WXWIN_OS_DESCRIPTION, "%.255s %d.%d", name, &major, &minor) != 3 )
+    if ( sscanf(WXWIN_OS_DESCRIPTION, "%255s %d.%d", name, &major, &minor) != 3 )
     {
         // unreckognized uname string format
         major =
