@@ -109,13 +109,31 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menu_bar);
 
   // Make a panel
-  frame->panel = new wxWindow(frame, -1, wxPoint(0, 0), wxSize(400, 400), 0, "MyMainFrame");
+  frame->panel = new MyPanel(frame, -1, wxPoint(0, 0), wxSize(400, 400), 0, "MyMainFrame");
   frame->Show(TRUE);
 
   SetTopWindow(frame);
 
   return TRUE;
 }
+
+BEGIN_EVENT_TABLE(MyPanel, wxPanel)
+	EVT_LEFT_DOWN( MyPanel::OnClick)
+END_EVENT_TABLE()
+
+MyPanel::MyPanel( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, 
+  int style, const wxString &name ) : 
+  wxPanel( parent, id, pos, size, style, name )
+{
+}
+
+void MyPanel::OnClick( wxMouseEvent &WXUNUSED(event) )
+{
+  MyFrame *frame = (MyFrame*)(wxTheApp->GetTopWindow());
+  wxCommandEvent event;
+  frame->OnTest1( event );
+}
+
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 	EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
@@ -129,12 +147,12 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   panel = NULL;
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
 	Close(TRUE);
 }
 
-void MyFrame::OnTest1(wxCommandEvent& event)
+void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event) )
 {
       MyDialog *dialog = new MyDialog;
       if (dialog->LoadFromResource(this, "dialog1"))
@@ -161,12 +179,12 @@ BEGIN_EVENT_TABLE(MyDialog, wxDialog)
 END_EVENT_TABLE()
 
 
-void MyDialog::OnOk(wxCommandEvent& event)
+void MyDialog::OnOk(wxCommandEvent& WXUNUSED(event) )
 {
   EndModal(RESOURCE_OK);
 }
 
-void MyDialog::OnCancel(wxCommandEvent& event)
+void MyDialog::OnCancel(wxCommandEvent& WXUNUSED(event) )
 {
   EndModal(RESOURCE_CANCEL);
 }

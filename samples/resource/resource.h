@@ -21,6 +21,16 @@ class MyApp: public wxApp
     bool OnInit(void);
 };
 
+class MyPanel: public wxPanel
+{
+  public:
+    MyPanel( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+             int style, const wxString &name );
+    void OnClick(wxMouseEvent &event);
+
+ DECLARE_EVENT_TABLE()
+};
+
 class MyFrame: public wxFrame
 {
   public:

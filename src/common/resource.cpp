@@ -901,7 +901,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
     }
   }
 #endif
-  else if (controlType == "wxText" || controlType == "wxTextCtrl")
+  else if (controlType == "wxText" || controlType == "wxTextCtrl" || controlType == "wxMultiText")
   {
     // Check for default value
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))

@@ -21,6 +21,7 @@
 #include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/settings.h"
+#include "wx/resource.h"
 
 #include "unistd.h"
 
@@ -257,6 +258,8 @@ void wxApp::CommonInit(void)
   wxInitializeStockLists();
   wxInitializeStockObjects();
 
+  wxInitializeResourceSystem();
+  
   // For PostScript printing
 #if USE_POSTSCRIPT
   wxInitializePrintSetupData();
@@ -270,8 +273,6 @@ void wxApp::CommonInit(void)
 
   g_globalCursor = new wxCursor;
 */
-
-//  wxInitializeStockObjects();
 };
 
 void wxApp::CommonCleanUp(void)
@@ -288,6 +289,8 @@ void wxApp::CommonCleanUp(void)
 
   wxDeleteStockLists();
 
+  wxCleanUpResourceSystem();
+  
   wxSystemSettings::Done();
 };
     

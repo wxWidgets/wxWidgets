@@ -10,7 +10,7 @@ static char *dialog1 = "dialog(name = 'dialog1',\
   control = [wxRadioBox, 'Radiobox', 'wxHSCROLL | wxVERTICAL | wxVERTICAL_LABEL', 'radiobox2', 24, 23, 111, 63, ['One', 'Two', 'Three', 'Four'], 2,\
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [wxMultiText, 'Multitext', 'wxVERTICAL_LABEL', 'multitext3', 156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',\
+  control = [wxMultiText, 'Multitext', 'wxTE_MULTILINE', 'multitext3', 156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',\
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
   control = [wxListBox, 'Listbox', 'wxVERTICAL_LABEL', 'listbox4', 156, 26, 200, 80, ['Apples', 'Pears', 'Bananas'], 'wxSINGLE',\
