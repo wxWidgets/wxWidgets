@@ -746,11 +746,17 @@ IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEnc
 
 PyObject *wxPyFontEnumerator_GetEncodings(wxPyFontEnumerator *self){
             wxArrayString* arr = self->GetEncodings();
-            return wxArrayString2PyList_helper(*arr);
+            if (arr)
+                return wxArrayString2PyList_helper(*arr);
+            else
+                return PyList_New(0);
         }
 PyObject *wxPyFontEnumerator_GetFacenames(wxPyFontEnumerator *self){
             wxArrayString* arr = self->GetFacenames();
-            return wxArrayString2PyList_helper(*arr);
+            if (arr)
+                return wxArrayString2PyList_helper(*arr);
+            else
+                return PyList_New(0);
         }
 
 
@@ -8666,7 +8672,7 @@ static PyObject *_wrap_Font_GetNoAntiAliasing(PyObject *self, PyObject *args, Py
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->GetNoAntiAliasing();
+        result = (bool)((wxFont const *)arg1)->GetNoAntiAliasing();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

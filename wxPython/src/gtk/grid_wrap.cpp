@@ -17269,6 +17269,16 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"GRID_VALUE_DATETIME", SWIG_FromCharPtr("datetime"));
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellCoords",_wrap_GridNoCellCoords_get, _wrap_GridNoCellCoords_set);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellRect",_wrap_GridNoCellRect_get, _wrap_GridNoCellRect_set);
+    PyDict_SetItemString(d,"GRID_DEFAULT_NUMBER_ROWS", SWIG_FromInt((int)WXGRID_DEFAULT_NUMBER_ROWS));
+    PyDict_SetItemString(d,"GRID_DEFAULT_NUMBER_COLS", SWIG_FromInt((int)WXGRID_DEFAULT_NUMBER_COLS));
+    PyDict_SetItemString(d,"GRID_DEFAULT_ROW_HEIGHT", SWIG_FromInt((int)WXGRID_DEFAULT_ROW_HEIGHT));
+    PyDict_SetItemString(d,"GRID_DEFAULT_COL_WIDTH", SWIG_FromInt((int)WXGRID_DEFAULT_COL_WIDTH));
+    PyDict_SetItemString(d,"GRID_DEFAULT_COL_LABEL_HEIGHT", SWIG_FromInt((int)WXGRID_DEFAULT_COL_LABEL_HEIGHT));
+    PyDict_SetItemString(d,"GRID_DEFAULT_ROW_LABEL_WIDTH", SWIG_FromInt((int)WXGRID_DEFAULT_ROW_LABEL_WIDTH));
+    PyDict_SetItemString(d,"GRID_LABEL_EDGE_ZONE", SWIG_FromInt((int)WXGRID_LABEL_EDGE_ZONE));
+    PyDict_SetItemString(d,"GRID_MIN_ROW_HEIGHT", SWIG_FromInt((int)WXGRID_MIN_ROW_HEIGHT));
+    PyDict_SetItemString(d,"GRID_MIN_COL_WIDTH", SWIG_FromInt((int)WXGRID_MIN_COL_WIDTH));
+    PyDict_SetItemString(d,"GRID_DEFAULT_SCROLLBAR_WIDTH", SWIG_FromInt((int)WXGRID_DEFAULT_SCROLLBAR_WIDTH));
     PyDict_SetItemString(d,"GridCellAttr_Any", SWIG_FromInt((int)wxGridCellAttr::Any));
     PyDict_SetItemString(d,"GridCellAttr_Default", SWIG_FromInt((int)wxGridCellAttr::Default));
     PyDict_SetItemString(d,"GridCellAttr_Cell", SWIG_FromInt((int)wxGridCellAttr::Cell));
