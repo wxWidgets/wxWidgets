@@ -34,6 +34,7 @@
 #include "wx/settings.h"
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
+#include "wx/fontutil.h"
 
 #if wxUSE_OWNER_DRAWN
 
@@ -48,21 +49,50 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
                            bool bCheckable, bool WXUNUSED(bMenuItem))
             : m_strName(str)
 {
-  m_bCheckable   = bCheckable;
-  m_bOwnerDrawn  = FALSE;
-  m_nHeight      = 0;
-  m_nMarginWidth = ms_nLastMarginWidth;
-  if (wxNORMAL_FONT)
-    m_font = * wxNORMAL_FONT;
-}
-
 #if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
-  size_t wxOwnerDrawn::ms_nDefaultMarginWidth = GetSystemMetrics(SM_CXMENUCHECK);
-#else   // # what is the reasonable default?
-  size_t wxOwnerDrawn::ms_nDefaultMarginWidth = 15;
+    // get the default menu height and font from the system
+    NONCLIENTMETRICS nm;
+    nm.cbSize = sizeof (NONCLIENTMETRICS);
+    SystemParametersInfo (SPI_GETNONCLIENTMETRICS,0,&nm,0); 
+    m_nMinHeight = nm.iMenuHeight;
+    
+    // nm.iMenuWidth is the system default for the width of
+    // menu icons and checkmarks
+    if (ms_nDefaultMarginWidth == 0)
+    {
+       ms_nDefaultMarginWidth = nm.iMenuWidth;
+       ms_nLastMarginWidth = nm.iMenuWidth;
+    }
+
+    wxNativeFontInfo info;
+    memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
+    m_font.Create(info);
+#else
+    // windows clean install default
+    m_nMinHeight = 18;
+    
+    if (ms_nDefaultMarginWidth == 0)
+    {
+        ms_nDefaultMarginWidth = 18;
+        ms_nLastMarginWidth = 18;
+    }
+    if (wxNORMAL_FONT)
+       m_font = *wxNORMAL_FONT;
 #endif
 
-size_t wxOwnerDrawn::ms_nLastMarginWidth = ms_nDefaultMarginWidth;
+    m_bCheckable   = bCheckable;
+    m_bOwnerDrawn  = FALSE;
+    m_nHeight      = 0;
+    m_nMarginWidth = ms_nLastMarginWidth;
+}
+
+
+// these items will be set during the first invocation of the c'tor,
+// because the values will be determined by checking the system settings,
+// which is a chunk of code  
+size_t wxOwnerDrawn::ms_nDefaultMarginWidth = 0;
+size_t wxOwnerDrawn::ms_nLastMarginWidth = 0;
+
 
 // drawing
 // -------
@@ -82,8 +112,8 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
   dc.GetTextExtent(str, (long *)pwidth, (long *)pheight);
 
-  // JACS: items still look too tightly packed, so adding 2 pixels.
-  (*pheight) = (*pheight) + 2;
+  // JACS: items still look too tightly packed, so adding 5 pixels.
+  (*pheight) = (*pheight) + 5;
 
   // Ray Gilbert's changes - Corrects the problem of a BMP
   // being placed next to text in a menu item, and the BMP does
@@ -108,6 +138,11 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
       if ((size_t)GetMarginWidth() < adjustedWidth)
           SetMarginWidth(adjustedWidth);
   }
+
+  // make sure that this item is at least as
+  // tall as the user's system settings specify
+  if (*pheight < m_nMinHeight)
+    *pheight = m_nMinHeight;
 
   m_nHeight = *pheight;                // remember height for use in OnDrawItem
 
@@ -165,8 +200,11 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   // select the font and draw the text
   // ---------------------------------
 
+
   // determine where to draw and leave space for a check-mark.
-  int x = rc.x + GetMarginWidth();
+  // Add 3 pixel padding so text appears well within highlight rectangle
+  int x = rc.x + GetMarginWidth() + 3;
+
 
   // using native API because it reckognizes '&'
   #ifdef  O_DRAW_NATIVE_API
@@ -174,8 +212,15 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     HBRUSH hbr = CreateSolidBrush(colBack),
            hPrevBrush = (HBRUSH)SelectObject(hdc, hbr);
 
-    RECT rectAll = { rc.GetLeft(), rc.GetTop(), rc.GetRight(), rc.GetBottom() };
-    FillRect(hdc, &rectAll, hbr);
+    RECT rectFill = { rc.GetLeft(), rc.GetTop(), rc.GetRight()+1, rc.GetBottom() };
+
+    if ( st & wxODSelected && m_bmpChecked.Ok()) {
+        // only draw the highlight under the text, not under
+        // the bitmap or checkmark; leave a 1-pixel gap.
+        rectFill.left = GetMarginWidth() + 1;
+    }
+
+    FillRect(hdc, &rectFill, hbr);
 
     DeleteObject(hbr);
 
@@ -191,21 +236,23 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
     HFONT hPrevFont = (HFONT) ::SelectObject(hdc, hfont);
 
+    wxString strStrippedName = wxStripMenuCodes(m_strName);
+
     ::DrawState(hdc, NULL, NULL,
-                (LPARAM)m_strName.c_str(), m_strName.length(),
-                x, rc.y, rc.GetWidth(), rc.GetHeight(),
+                (LPARAM)strStrippedName.c_str(), strStrippedName.length(),
+                x, rc.y + 1, rc.GetWidth(), rc.GetHeight(),
                 DST_PREFIXTEXT | (st & wxODDisabled ? DSS_DISABLED : 0));
 
     if ( !m_strAccel.empty() )
     {
         RECT r;
-        r.top = rc.GetTop();
+        r.top = rc.GetTop() + 1;
         r.left = rc.GetLeft();
-        r.right = rc.GetRight() - GetMarginWidth();
+        r.right = rc.GetRight() - 16;
         r.bottom = rc.GetBottom();
 
         DrawText(hdc, m_strAccel, m_strAccel.length(), &r,
-                 DT_SINGLELINE | DT_RIGHT | DT_VCENTER);
+                 DT_SINGLELINE | DT_RIGHT);
     }
 
     (void)SelectObject(hdc, hPrevBrush);
@@ -213,7 +260,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     (void)SetBkMode(hdc, nPrevMode);
   #else
     dc.SetFont(GetFont());
-    dc.DrawText(m_strName, x, rc.y);
+    dc.DrawText(wxStripMenuCodes(m_strName), x, rc.y);
   #endif  //O_DRAW_NATIVE_API
 
   // draw the bitmap
@@ -270,20 +317,19 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
               &dcMem, 0, 0, wxCOPY, TRUE /* use mask */);
 
       if ( st & wxODSelected ) {
-        #ifdef  O_DRAW_NATIVE_API
-          RECT rectBmp =
-          {
-              rc.GetLeft(),
-              rc.GetTop(),
-              rc.GetLeft() + GetMarginWidth() - 1,
-              rc.GetTop() + m_nHeight - 1
-          };
 
-          SetBkColor(hdc, colBack);
-          DrawEdge(hdc, &rectBmp, EDGE_RAISED, BF_SOFT | BF_RECT);
-        #else
-          // ## to write portable DrawEdge
-        #endif  //O_DRAW_NATIVE_API
+          int x1, y1, x2, y2;
+          x1 = rc.x;
+          y1 = rc.y;
+          x2 = x1 + GetMarginWidth() - 1;
+          y2 = y1 + m_nHeight - 1;
+
+          dc.SetPen(*wxWHITE_PEN);
+          dc.DrawLine(x1, y1, x2, y1);
+          dc.DrawLine(x1, y1, x1, y2);
+          dc.SetPen(*wxGREY_PEN);
+          dc.DrawLine(x1, y2-1, x2, y2-1);
+          dc.DrawLine(x2, y1, x2, y2);
       }
     }
   }
