@@ -322,11 +322,14 @@ enum wxSeekMode
     #undef wxHAS_HUGE_FILES
 #else // Unix platforms using configure
     typedef off_t wxFileOffset;
-    typedef unsigned off_t wxFileSize_t;
     #ifdef _LARGE_FILES
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
+        wxCOMPILE_TIME_ASSERT( sizeof(off_t) == sizeof(wxLongLong_t),
+                                BadFileSizeType );
+        typedef unsigned wxLongLong_t wxFileSize_t;
     #else
         #define wxFileOffsetFmtSpec _T("")
+        typedef unsigned long wxFileSize_t;
     #endif
     // functions
     #define   wxClose      close
