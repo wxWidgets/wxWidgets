@@ -1449,6 +1449,16 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
 }
 
 /* static */
+wxString wxLocale::GetLanguageName(int lang)
+{
+    const wxLanguageInfo *info = GetLanguageInfo(lang);
+    if ( !info )
+        return wxEmptyString;
+    else
+        return info->Description;
+}
+
+/* static */
 const wxLanguageInfo *wxLocale::FindLanguageInfo(const wxString& locale)
 {
     CreateLanguagesDB();
