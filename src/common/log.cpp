@@ -210,7 +210,7 @@ wxLog::wxLog()
   m_bHasMessages = FALSE;
   m_bVerbose     = FALSE;
   m_szTimeFormat = "[%d/%b/%y %H:%M:%S] ";
-  m_ulTraceMask  = (wxTraceMask)-1;        // set all bits
+  m_ulTraceMask  = (wxTraceMask)0;        // -1 to set all bits
 }
 
 wxLog *wxLog::GetActiveTarget() 
