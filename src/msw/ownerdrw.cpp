@@ -33,6 +33,8 @@
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 
+#if wxUSE_OWNER_DRAWN
+
 
 // ============================================================================
 // implementation of wxOwnerDrawn class
@@ -250,4 +252,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
 
   return TRUE;
 }
+
+
+#endif // wxUSE_OWNER_DRAWN
 
