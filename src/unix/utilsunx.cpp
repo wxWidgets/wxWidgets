@@ -566,8 +566,14 @@ long wxExecute(wxChar **argv,
     //
     // NB: do *not* use vfork() here, it completely breaks this code for some
     //     reason under Solaris (and maybe others, although not under Linux)
-    pid_t pid = fork();
-    if ( pid == -1 )     // error?
+    //     But on OpenVMS we do not have fork so we have to use vfork and
+    //     cross our fingers that it works.
+#ifdef __VMS
+   pid_t pid = vfork();
+#else
+   pid_t pid = fork();
+#endif
+   if ( pid == -1 )     // error?
     {
         wxLogSysError( _("Fork failed") );
 
