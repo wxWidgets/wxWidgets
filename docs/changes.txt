@@ -229,6 +229,7 @@ All:
   SQL_C_WXCHAR should be used rather than SQL_C_CHAR to ensure transparent 
   behavior between Unicode and non-unicode builds
 - BLOB example added to samples\db (thanks to Casey ODonnell)
+- use wxStream::GetLength() instead of deprecated GetSize()
 
 All (GUI):
 

@@ -21,7 +21,7 @@ class WXDLLIMPEXP_BASE wxMemoryInputStream : public wxInputStream
 public:
     wxMemoryInputStream(const void *data, size_t length);
     virtual ~wxMemoryInputStream();
-    virtual size_t GetSize() const { return m_length; }
+    virtual wxFileOffset GetLength() const { return m_length; }
     virtual bool Eof() const;
 
     char Peek();
@@ -50,7 +50,7 @@ public:
     // if data is !NULL it must be allocated with malloc()
     wxMemoryOutputStream(void *data = NULL, size_t length = 0);
     virtual ~wxMemoryOutputStream();
-    virtual size_t GetSize() const { return m_o_streambuf->GetLastAccess(); }
+    virtual wxFileOffset GetLength() const { return m_o_streambuf->GetLastAccess(); }
 
     size_t CopyTo(void *buffer, size_t len) const;
 

@@ -34,7 +34,7 @@ public:
             // Remember that archive must be local file accesible via fopen, fread functions!
     ~wxZipInputStream();
 
-    virtual size_t GetSize() const {return m_Size;}
+    virtual wxFileOffset GetLength() const {return m_Size;}
     virtual bool Eof() const;
 
 protected:
@@ -43,7 +43,7 @@ protected:
     virtual wxFileOffset OnSysTell() const {return m_Pos;}
 
 private:
-    size_t m_Size;
+    wxFileOffset m_Size;
     wxFileOffset m_Pos;
 
     // this void* is handle of archive . I'm sorry it is void and not proper

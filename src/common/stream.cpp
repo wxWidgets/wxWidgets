@@ -657,6 +657,12 @@ wxStreamBase::~wxStreamBase()
 {
 }
 
+size_t wxStreamBase::GetSize() const
+{
+    wxFileOffset length = GetLength();
+    return length == wxInvalidOffset ? 0 : (size_t)length;
+}
+
 wxFileOffset wxStreamBase::OnSysSeek(wxFileOffset WXUNUSED(seek), wxSeekMode WXUNUSED(mode))
 {
     return wxInvalidOffset;
@@ -957,7 +963,7 @@ wxCountingOutputStream::wxCountingOutputStream ()
      m_currentPos = 0;
 }
 
-size_t wxCountingOutputStream::GetSize() const
+wxFileOffset wxCountingOutputStream::GetLength() const
 {
     return m_lastcount;
 }
@@ -1218,9 +1224,9 @@ wxFileOffset wxBufferedOutputStream::OnSysTell() const
     return m_parent_o_stream->TellO();
 }
 
-size_t wxBufferedOutputStream::GetSize() const
+wxFileOffset wxBufferedOutputStream::GetLength() const
 {
-   return m_parent_o_stream->GetSize() + m_o_streambuf->GetIntPosition();
+   return m_parent_o_stream->GetLength() + m_o_streambuf->GetIntPosition();
 }
 
 void wxBufferedOutputStream::SetOutputStreamBuffer(wxStreamBuffer *buffer)

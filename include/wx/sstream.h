@@ -31,7 +31,7 @@ public:
         m_pos = 0;
     }
 
-    virtual size_t GetSize() const { return m_str.length(); }
+    virtual wxFileOffset GetLength() const { return m_str.length(); }
 
 protected:
     virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode);

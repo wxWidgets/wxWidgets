@@ -1385,7 +1385,7 @@ PyObject* wxPyCBInputStream::getMethod(PyObject* py, char* name) {
 }
 
 
-size_t wxPyCBInputStream::GetSize() const {
+wxFileOffset wxPyCBInputStream::GetLength() const {
     wxPyCBInputStream* self = (wxPyCBInputStream*)this; // cast off const
     if (m_seek && m_tell) {
         wxFileOffset temp = self->OnSysTell();
@@ -1394,7 +1394,7 @@ size_t wxPyCBInputStream::GetSize() const {
         return ret;
     }
     else
-        return 0;
+        return wxInvalidOffset;
 }
 
 

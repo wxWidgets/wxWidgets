@@ -62,7 +62,7 @@ wxFileInputStream::~wxFileInputStream()
         delete m_file;
 }
 
-size_t wxFileInputStream::GetSize() const
+wxFileOffset wxFileInputStream::GetLength() const
 {
     return m_file->Length();
 }
@@ -176,7 +176,7 @@ void wxFileOutputStream::Sync()
     m_file->Flush();
 }
 
-size_t wxFileOutputStream::GetSize() const
+wxFileOffset wxFileOutputStream::GetLength() const
 {
     return m_file->Length();
 }
@@ -227,7 +227,7 @@ wxFFileInputStream::~wxFFileInputStream()
         delete m_file;
 }
 
-size_t wxFFileInputStream::GetSize() const
+wxFileOffset wxFFileInputStream::GetLength() const
 {
     return m_file->Length();
 }
@@ -343,7 +343,7 @@ void wxFFileOutputStream::Sync()
     m_file->Flush();
 }
 
-size_t wxFFileOutputStream::GetSize() const
+wxFileOffset wxFFileOutputStream::GetLength() const
 {
     return m_file->Length();
 }

@@ -82,7 +82,8 @@ public:
     void Reset() { m_lasterror = wxSTREAM_NO_ERROR; }
 
     // this doesn't make sense for all streams, always test its return value
-    virtual size_t GetSize() const { return 0; }
+    virtual size_t GetSize() const;
+    virtual wxFileOffset GetLength() const { return wxInvalidOffset; }
 
 #if WXWIN_COMPATIBILITY_2_2
     // deprecated, for compatibility only
@@ -283,7 +284,7 @@ class WXDLLIMPEXP_BASE wxCountingOutputStream : public wxOutputStream
 public:
     wxCountingOutputStream();
 
-    size_t GetSize() const;
+    wxFileOffset GetLength() const;
     bool Ok() const { return true; }
 
 protected:
@@ -309,7 +310,7 @@ public:
 
     char Peek() { return m_parent_i_stream->Peek(); }
 
-    size_t GetSize() const { return m_parent_i_stream->GetSize(); }
+    wxFileOffset GetLength() const { return m_parent_i_stream->GetLength(); }
 
     wxInputStream *GetFilterInputStream() const { return m_parent_i_stream; }
 
@@ -326,7 +327,7 @@ public:
     wxFilterOutputStream(wxOutputStream& stream);
     virtual ~wxFilterOutputStream();
 
-    size_t GetSize() const { return m_parent_o_stream->GetSize(); }
+    wxFileOffset GetLength() const { return m_parent_o_stream->GetLength(); }
 
     wxOutputStream *GetFilterOutputStream() const { return m_parent_o_stream; }
 
@@ -515,7 +516,7 @@ public:
 
     void Sync();
 
-    size_t GetSize() const;
+    wxFileOffset GetLength() const;
 
     // the buffer given to the stream will be deleted by it
     void SetOutputStreamBuffer(wxStreamBuffer *buffer);

@@ -37,7 +37,7 @@ class WXDLLIMPEXP_BASE wxFileInputStream: public wxInputStream {
   wxFileInputStream(int fd);
   ~wxFileInputStream();
 
-  size_t GetSize() const;
+  wxFileOffset GetLength() const;
 
   bool Ok() const { return m_file->IsOpened(); }
 
@@ -67,7 +67,7 @@ class WXDLLIMPEXP_BASE wxFileOutputStream: public wxOutputStream {
 //     { return wxOutputStream::Write(buffer, size); }
 
   void Sync();
-  size_t GetSize() const;
+  wxFileOffset GetLength() const;
 
   bool Ok() const { return m_file->IsOpened(); }
 
@@ -106,7 +106,7 @@ class WXDLLIMPEXP_BASE wxFFileInputStream: public wxInputStream {
   wxFFileInputStream(FILE *file);
   ~wxFFileInputStream();
 
-  size_t GetSize() const;
+  wxFileOffset GetLength() const;
 
   bool Ok() const { return m_file->IsOpened(); }
 
@@ -136,7 +136,7 @@ class WXDLLIMPEXP_BASE wxFFileOutputStream: public wxOutputStream {
 //     { return wxOutputStream::Write(buffer, size); }
 
   void Sync();
-  size_t GetSize() const;
+  wxFileOffset GetLength() const;
 
   bool Ok() const { return m_file->IsOpened(); }
 

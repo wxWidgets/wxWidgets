@@ -27,11 +27,13 @@ None
 % ctor & dtor
 % -----------
 
+
 \membersection{wxStreamBase::wxStreamBase}\label{wxstreambasector}
 
 \func{}{wxStreamBase}{\void}
 
 Creates a dummy stream object. It doesn't do anything.
+
 
 \membersection{wxStreamBase::\destruct{wxStreamBase}}\label{wxstreambasedtor}
 
@@ -39,15 +41,17 @@ Creates a dummy stream object. It doesn't do anything.
 
 Destructor.
 
-\membersection{wxStreamBase::IsOk}\label{wxstreambaseisok}
 
-\constfunc{wxStreamError}{IsOk}{\void}
+\membersection{wxStreamBase::GetLength}\label{wxstreambasegetlength}
 
-Returns true if no error occurred on the stream.
+\constfunc{wxFileOffset}{GetLength}{\void}
 
-\wxheading{See also}
+Returns the length of the stream in bytes. If the length cannot be determined
+(this is always the case for socket streams for example), returns
+\texttt{wxInvalidOffset}.
 
-\helpref{GetLastError}{wxstreambasegetlasterror}
+\newsince{2.5.4}
+
 
 \membersection{wxStreamBase::GetLastError}\label{wxstreambasegetlasterror}
 
@@ -63,12 +67,40 @@ This function returns the last error.
 \twocolitem{{\bf wxSTREAM\_READ\_ERROR}}{A generic error occurred on the last read call.}
 \end{twocollist}
 
+
+\membersection{wxStreamBase::GetSize}\label{wxstreambasegetsize}
+
+\constfunc{size\_t}{GetSize}{\void}
+
+\deprecated{\helpref{GetLength}{wxstreambasegetlength}}
+
+This function returns the size of the stream. For example, for a file it is the
+size of the file.
+
+\wxheading{Warning}
+
+There are streams which do not have size by definition, such as socket streams.
+In that cases, GetSize returns $0$ so you should always test its return value.
+
+
+\membersection{wxStreamBase::IsOk}\label{wxstreambaseisok}
+
+\constfunc{wxStreamError}{IsOk}{\void}
+
+Returns true if no error occurred on the stream.
+
+\wxheading{See also}
+
+\helpref{GetLastError}{wxstreambasegetlasterror}
+
+
 \membersection{wxStreamBase::OnSysRead}\label{wxstreambaseonsysread}
 
 \func{size\_t}{OnSysRead}{\param{void*}{ buffer}, \param{size\_t}{ bufsize}}
 
 Internal function. It is called when the stream wants to read data of the
 specified size. It should return the size that was actually read.
+
 
 \membersection{wxStreamBase::OnSysSeek}\label{wxstreambaseonsysseek}
 
@@ -77,6 +109,7 @@ specified size. It should return the size that was actually read.
 Internal function. It is called when the stream needs to change the
 current position.
 
+
 \membersection{wxStreamBase::OnSysTell}\label{wxstreambaseonsystell}
 
 \constfunc{off\_t}{OnSysTell}{\void}
@@ -84,21 +117,11 @@ current position.
 Internal function. Is is called when the stream needs to know the
 real position.
 
+
 \membersection{wxStreamBase::OnSysWrite}\label{wxstreambaseonsyswrite}
 
 \func{size\_t}{OnSysWrite}{\param{void *}{buffer}, \param{size\_t}{ bufsize}}
 
 See \helpref{OnSysRead}{wxstreambaseonsysread}.
 
-\membersection{wxStreamBase::GetSize}\label{wxstreambasegetsize}
-
-\constfunc{size\_t}{GetSize}{\void}
-
-This function returns the size of the stream. For example, for a file it is the size of
-the file.
-
-\wxheading{Warning}
-
-There are streams which do not have size by definition, such as socket streams.
-In that cases, GetSize returns $0$ so you should always test its return value.
 
