@@ -156,6 +156,12 @@ bool wxLocalFSHandler::CanOpen(const wxString& location)
 wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
     wxString right = GetRightLocation(location);
+ #ifdef __WXMAC__
+    if ( right[0] != '.' && right[0] != '/' && right.Find( '/' ) != wxNOT_FOUND ) {
+      right = "./" + right ;
+    }
+    right = wxUnix2MacFilename( right ) ;
+ #endif
     if (!wxFileExists(right))
         return (wxFSFile*) NULL;
 
@@ -170,6 +176,12 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)
 {
     wxString right = GetRightLocation(spec);
+ #ifdef __WXMAC__
+    if ( right[0] != '.' && right[0] != '/' && right.Find( '/' ) != wxNOT_FOUND ) {
+      right = "./" + right ;
+    }
+    right = wxUnix2MacFilename( right ) ;
+ #endif
     return wxFindFirstFile(right, flags);
 }
 
