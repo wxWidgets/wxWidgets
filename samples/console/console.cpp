@@ -1034,6 +1034,24 @@ static void TestFileNameMakeRelative()
     }
 }
 
+static void TestFileNameMakeAbsolute()
+{
+    wxPuts(_T("*** testing wxFileName::MakeAbsolute() ***"));
+
+    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
+    {
+        const FileNameInfo& fni = filenames[n];
+        wxFileName fn(fni.fullname, fni.format);
+        
+        wxPrintf(_T("'%s' absolutized: "),
+               fn.GetFullPath(fni.format).c_str());
+        fn.MakeAbsolute();
+        wxPrintf(_T("'%s'\n"), fn.GetFullPath(fni.format).c_str());
+    }
+
+    wxPuts(_T(""));
+}
+
 static void TestFileNameComparison()
 {
     // TODO!
@@ -6429,6 +6447,7 @@ int main(int argc, char **argv)
     {
         TestFileNameConstruction();
         TestFileNameMakeRelative();
+        TestFileNameMakeAbsolute();
         TestFileNameSplit();
         TestFileNameTemp();
         TestFileNameCwd();
