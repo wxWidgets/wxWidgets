@@ -312,8 +312,6 @@ Set the version of your Mingw installation here.
         <set var="DEBUG_INFO">default</set>
         <set var="DEBUG_FLAG">default</set>
         <set var="MSLU">0</set>
-        <set var="CPPUNIT_CFLAGS"/>
-        <set var="CPPUNIT_LIBS"/>
     </if>
 
 
