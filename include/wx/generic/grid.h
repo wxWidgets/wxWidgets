@@ -48,7 +48,7 @@
 #define WXGRID_DEFAULT_COL_WIDTH              80
 #define WXGRID_DEFAULT_COL_LABEL_HEIGHT       32
 #define WXGRID_DEFAULT_ROW_LABEL_WIDTH        82
-#define WXGRID_LABEL_EDGE_ZONE                 5
+#define WXGRID_LABEL_EDGE_ZONE                 2
 #define WXGRID_MIN_ROW_HEIGHT                 15
 #define WXGRID_MIN_COL_WIDTH                  15
 #define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
@@ -969,6 +969,7 @@ public:
                      wxGrid::wxGridSelectionModes selmode =
                      wxGrid::wxGridSelectCells );
 
+    void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
 
     // ------ grid dimensions
     //

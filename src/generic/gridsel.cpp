@@ -30,7 +30,18 @@
     #pragma hdrstop
 #endif
 
+#if defined(wxUSE_NEW_GRID) && (wxUSE_NEW_GRID)
+
 #include "wx/generic/gridsel.h"
+
+// Some explanation for the members of the class:
+// m_cellSelection stores individual selected cells
+//   -- this is only used if m_selectionMode == wxGridSelectCells
+// m_blockSelectionTopLeft and m_blockSelectionBottomRight
+//   store the upper left and lower right corner of selected Blocks
+// m_rowSelection and m_colSelection store individual selected
+//   rows and columns; maybe those are superfluous and should be
+//   treated as blocks?
 
 wxGridSelection::wxGridSelection( wxGrid * grid,
                                   wxGrid::wxGridSelectionModes sel )
@@ -47,9 +58,11 @@ bool wxGridSelection::IsSelection()
 
 bool wxGridSelection::IsInSelection ( int row, int col )
 {
-  size_t count;
-    if ( m_selectionMode != wxGrid::wxGridSelectRows &&
-         m_selectionMode != wxGrid::wxGridSelectColumns )
+    size_t count;
+
+    // First check whether the given cell is individually selected
+    // (if m_selectionMode is wxGridSelectCells).
+    if ( m_selectionMode == wxGrid::wxGridSelectCells )
     {
         count = m_cellSelection.GetCount();
         for ( size_t n = 0; n < count; n++ )
@@ -59,6 +72,9 @@ bool wxGridSelection::IsInSelection ( int row, int col )
                 return true;
         }
     }
+
+    // Now check whether the given cell is
+    // contained in one of the selected blocks.
     count = m_blockSelectionTopLeft.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
@@ -69,6 +85,10 @@ bool wxGridSelection::IsInSelection ( int row, int col )
                                row, col ) )
             return true;
     }
+
+    // Now check whether the given cell is
+    // contained in one of the selected rows
+    // (unless we are in column selection mode).
     if ( m_selectionMode != wxGrid::wxGridSelectColumns )
     {
         size_t count = m_rowSelection.GetCount();
@@ -78,6 +98,10 @@ bool wxGridSelection::IsInSelection ( int row, int col )
               return true;
         }
     }
+
+    // Now check whether the given cell is
+    // contained in one of the selected columns
+    // (unless we are in row selection mode).
     if ( m_selectionMode != wxGrid::wxGridSelectRows )
     {
         size_t count = m_colSelection.GetCount();
@@ -90,18 +114,83 @@ bool wxGridSelection::IsInSelection ( int row, int col )
     return false;
 }
 
+// Change the selection mode
+void wxGridSelection::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
+{
+    // if selection mode is unchanged return immediately
+    if (selmode == m_selectionMode)
+        return;
+
+    if ( m_selectionMode != wxGrid::wxGridSelectCells )
+    {
+        // if changing form row to column selection
+        // or vice versa, clear the selection.
+        if ( selmode != wxGrid::wxGridSelectCells )
+            ClearSelection();
+
+        m_selectionMode = selmode;
+    }
+    else
+    {
+        // if changing from cell selection to something else,
+        // promote selected cells/blocks to whole rows/columns.
+        size_t n;
+        while ( ( n = m_cellSelection.GetCount() ) > 0 )
+        {
+            n--;
+            wxGridCellCoords& coords = m_cellSelection[n];
+            int row = coords.GetRow();
+            int col = coords.GetCol();
+            m_cellSelection.RemoveAt(n);
+            if (selmode == wxGrid::wxGridSelectRows)
+                SelectRow( row );
+            else // selmode == wxGridSelectColumns)
+                SelectCol( col );
+        }
+        while( ( n = m_blockSelectionTopLeft.GetCount() ) > 0)
+        {
+            n--;
+            wxGridCellCoords& coords = m_blockSelectionTopLeft[n];
+            int topRow = coords.GetRow();
+            int leftCol = coords.GetCol();
+            coords = m_blockSelectionBottomRight[n];
+            int bottomRow = coords.GetRow();
+            int rightCol = coords.GetCol();
+            if (selmode == wxGrid::wxGridSelectRows)
+            {
+                if (leftCol != 0 || rightCol != m_grid->GetNumberCols() - 1 )
+                {
+                    m_blockSelectionTopLeft.RemoveAt(n);
+                    m_blockSelectionBottomRight.RemoveAt(n);
+                    SelectBlock( topRow, 0,
+                                 bottomRow, m_grid->GetNumberCols() - 1 );
+                }
+            }
+            else // selmode == wxGridSelectColumns)
+            {
+                if (topRow != 0 || bottomRow != m_grid->GetNumberRows() - 1 )
+                {
+                    m_blockSelectionTopLeft.RemoveAt(n);
+                    m_blockSelectionBottomRight.RemoveAt(n);
+                    SelectBlock( 0, leftCol,
+                                 m_grid->GetNumberRows() - 1, rightCol );
+                }
+            }
+        }
+    }
+}
+
 void wxGridSelection::SelectRow( int row, bool addToSelected )
 {
     if ( m_selectionMode == wxGrid::wxGridSelectColumns )
         return;
-    size_t count;
+    size_t count, n;
 
     // Remove single cells contained in newly selected block.
-    if ( m_selectionMode != wxGrid::wxGridSelectRows &&
-         m_selectionMode != wxGrid::wxGridSelectColumns )
+    if ( m_selectionMode == wxGrid::wxGridSelectCells )
     {
         count = m_cellSelection.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        for ( n = 0; n < count; n++ )
         {
             wxGridCellCoords& coords = m_cellSelection[n];
             if ( BlockContainsCell( row, 0, row, m_grid->GetNumberCols() - 1,
@@ -113,67 +202,77 @@ void wxGridSelection::SelectRow( int row, bool addToSelected )
         }
     }
 
-    // If possible, merge row with existing selected block
+    // Simplify list of selected blocks (if possible)
     count = m_blockSelectionTopLeft.GetCount();
-    size_t n;
+    bool done = false;
     for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
         wxGridCellCoords& coords2 = m_blockSelectionBottomRight[n];
+
+        // Remove block if it is a subset of the row
         if ( coords1.GetRow() == row && row == coords2.GetRow() )
         {
             m_blockSelectionTopLeft.RemoveAt(n);
             m_blockSelectionBottomRight.RemoveAt(n);
             n--; count--;
-        }
+        }       
         else if ( coords1.GetCol() == 0  &&
                   coords2.GetCol() == m_grid->GetNumberCols() - 1 )
         {
+            // silently return, if row is contained in block
             if ( coords1.GetRow() <= row && row <= coords2.GetRow() )
                 return;
+            // expand block, if it touched row
             else if ( coords1.GetRow() == row + 1)
             {
                 coords1.SetRow(row);
-                return;
+                done = true;
             }
             else if ( coords2.GetRow() == row - 1)
             {
                 coords2.SetRow(row);
-                return;
+                done = true;
             }           
         }
     }
 
-    // Check whether row is already selected.
-    count = m_rowSelection.GetCount();
-    for ( n = 0; n < count; n++ )
+    // Unless we successfully handled the row,
+    // check whether row is already selected.
+    if ( !done )
     {
-        if ( row == m_rowSelection[n] )
-            return;
-    }
+        count = m_rowSelection.GetCount();
+        for ( n = 0; n < count; n++ )
+        {
+            if ( row == m_rowSelection[n] )
+                return;
+        }
 
-    // Add row to selection
-    m_rowSelection.Add(row);
+        // Add row to selection
+        m_rowSelection.Add(row);
+    }
 
     // Update View:
     wxRect r = m_grid->BlockToDeviceRect( wxGridCellCoords( row, 0 ),
                                           wxGridCellCoords( row, m_grid->GetNumberCols() - 1 ) );
     if ( !m_grid->GetBatchCount() )
         ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
+
+    // Possibly send event here? This would imply that no event is sent,
+    // if the row already was part of the selection.
 }
 
 void wxGridSelection::SelectCol( int col, bool addToSelected )
 {
     if ( m_selectionMode == wxGrid::wxGridSelectRows )
         return;
-    size_t count;
+    size_t count, n;
 
     // Remove single cells contained in newly selected block.
-    if ( m_selectionMode != wxGrid::wxGridSelectRows &&
-         m_selectionMode != wxGrid::wxGridSelectColumns )
+    if ( m_selectionMode == wxGrid::wxGridSelectCells )
     {
         count = m_cellSelection.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        for ( n = 0; n < count; n++ )
         {
             wxGridCellCoords& coords = m_cellSelection[n];
             if ( BlockContainsCell( 0, col, m_grid->GetNumberRows() - 1, col,
@@ -185,13 +284,15 @@ void wxGridSelection::SelectCol( int col, bool addToSelected )
         }
     }
 
-    // If possible, merge col with existing selected block
+    // Simplify list of selected blocks (if possible)
     count = m_blockSelectionTopLeft.GetCount();
-    size_t n;
+    bool done = false;
     for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
         wxGridCellCoords& coords2 = m_blockSelectionBottomRight[n];
+
+        // Remove block if it is a subset of the column
         if ( coords1.GetCol() == col && col == coords2.GetCol() )
         {
             m_blockSelectionTopLeft.RemoveAt(n);
@@ -201,37 +302,46 @@ void wxGridSelection::SelectCol( int col, bool addToSelected )
         else if ( coords1.GetRow() == 0  &&
                   coords2.GetRow() == m_grid->GetNumberRows() - 1 )
         {
+            // silently return, if row is contained in block
             if ( coords1.GetCol() <= col && col <= coords2.GetCol() )
                 return;
+            // expand block, if it touched col
             else if ( coords1.GetCol() == col + 1)
             {
                 coords1.SetCol(col);
-                return;
+                done = true;
             }
             else if ( coords2.GetCol() == col - 1)
             {
                 coords2.SetCol(col);
-                return;
+                done = true;
             }           
         }
     }
 
+    // Unless we successfully handled the column,
     // Check whether col is already selected.
-    count = m_colSelection.GetCount();
-    for ( n = 0; n < count; n++ )
+    if ( !done )
     {
-        if ( col == m_colSelection[n] )
-            return;
-    }
+        count = m_colSelection.GetCount();
+        for ( n = 0; n < count; n++ )
+        {
+            if ( col == m_colSelection[n] )
+                return;
+        }
 
-    // Add col to selection
-    m_colSelection.Add(col);
+        // Add col to selection
+        m_colSelection.Add(col);
+    }
 
     // Update View:
     wxRect r = m_grid->BlockToDeviceRect( wxGridCellCoords( 0, col ),
                                           wxGridCellCoords( m_grid->GetNumberRows() - 1, col ) );
     if ( !m_grid->GetBatchCount() )
         ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
+
+    // Possibly send event here? This would imply that no event is sent,
+    // if the row already was part of the selection.
 }
 
 void wxGridSelection::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
@@ -252,13 +362,12 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol, int bottomRow, int r
     if ( topRow == bottomRow && leftCol == rightCol )
         SelectCell( topRow, leftCol );
 
-    size_t count;
+    size_t count, n;
     // Remove single cells contained in newly selected block.
-    if ( m_selectionMode != wxGrid::wxGridSelectRows &&
-         m_selectionMode != wxGrid::wxGridSelectColumns )
+    if ( m_selectionMode == wxGrid::wxGridSelectCells )
     {
         count = m_cellSelection.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        for ( n = 0; n < count; n++ )
         {
             wxGridCellCoords& coords = m_cellSelection[n];
             if ( BlockContainsCell( topRow, leftCol, bottomRow, rightCol,
@@ -274,7 +383,7 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol, int bottomRow, int r
     // if a block contained in the selection is found, remove it.
 
     count = m_blockSelectionTopLeft.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
         wxGridCellCoords& coords2 = m_blockSelectionBottomRight[n];
@@ -297,8 +406,8 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol, int bottomRow, int r
     // if a row contained in newly selected block is found, remove it.
     if ( m_selectionMode != wxGrid::wxGridSelectColumns )
     {
-        size_t count = m_rowSelection.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        count = m_rowSelection.GetCount();
+        for ( n = 0; n < count; n++ )
         {
             switch ( BlockContain( m_rowSelection[n], 0,
                                    m_rowSelection[n], m_grid->GetNumberCols()-1,
@@ -316,8 +425,8 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol, int bottomRow, int r
     }
     if ( m_selectionMode != wxGrid::wxGridSelectRows )
     {
-        size_t count = m_colSelection.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        count = m_colSelection.GetCount();
+        for ( n = 0; n < count; n++ )
         {
             switch ( BlockContain( 0, m_colSelection[n],
                                    m_grid->GetNumberRows()-1, m_colSelection[n], 
@@ -341,6 +450,8 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol, int bottomRow, int r
                                           wxGridCellCoords( bottomRow, rightCol ) );
     if ( !m_grid->GetBatchCount() )
         ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
+
+    // Possibly send event?
 }
 
 void wxGridSelection::SelectCell( int row, int col)
@@ -353,30 +464,37 @@ void wxGridSelection::SelectCell( int row, int col)
         return;
     m_cellSelection.Add( wxGridCellCoords( row, col ) );
 
+    // Update View:
     wxRect r = m_grid->BlockToDeviceRect( wxGridCellCoords( row, col ),
                                           wxGridCellCoords( row, col ) );
     if ( !m_grid->GetBatchCount() )
         ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
+
+    // Possibly send event?
 }
 
 void wxGridSelection::ToggleCellSelection( int row, int col)
 {
+    // if the cell is not selected, select it
     if ( !IsInSelection ( row, col ) )
     {
         SelectCell( row, col );
         return;
     }
-    size_t count;
 
-    // Maybe we want to toggle a member of m_cellSelection.
-    // Then it can't be contained in rows/cols/block, and we
-    // just have to remove it from m_cellSelection.
+    // otherwise deselect it. This can be simple or more or
+    // less difficult, depending on how the cell is selected.
+    size_t count, n;
 
-    if ( m_selectionMode != wxGrid::wxGridSelectRows &&
-         m_selectionMode != wxGrid::wxGridSelectColumns )
+    // The simplest case: The cell is contained in m_cellSelection
+    // Then it can't be contained in rows/cols/block (since those
+    // would remove the cell from m_cellSelection on creation), so
+    // we just have to remove it from m_cellSelection.
+
+    if ( m_selectionMode == wxGrid::wxGridSelectCells )
     {
         count = m_cellSelection.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        for ( n = 0; n < count; n++ )
         {
             wxGridCellCoords& coords = m_cellSelection[n];
             if ( row == coords.GetRow() && col == coords.GetCol() )
@@ -393,9 +511,27 @@ void wxGridSelection::ToggleCellSelection( int row, int col)
         }
     }
 
-    // remove a cell from the middle of a block (the really ugly case)
+    // The most difficult case: The cell is member of one or even several
+    // blocks. Split each such block in up to 4 new parts, that don't
+    // contain the cell to be selected, like this:
+    // |---------------------------|
+    // |                           |
+    // |           part 1          |
+    // |                           |
+    // |---------------------------|
+    // |   part 3   |x|   part 4   |
+    // |---------------------------|
+    // |                           |
+    // |           part 2          |
+    // |                           |
+    // |---------------------------|
+    //   (The x marks the newly deselected cell).
+    // Note: in row selection mode, we only need part1 and part2;
+    //       in column selection mode, we only need part 3 and part4,
+    //          which are expanded to whole columns automatically!
+
     count = m_blockSelectionTopLeft.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( n = 0; n < count; n++ )
       {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
         wxGridCellCoords& coords2 = m_blockSelectionBottomRight[n];
@@ -431,8 +567,8 @@ void wxGridSelection::ToggleCellSelection( int row, int col)
     // remove a cell from a row, adding up to two new blocks
     if ( m_selectionMode != wxGrid::wxGridSelectColumns )
     {
-        size_t count = m_rowSelection.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        count = m_rowSelection.GetCount();
+        for ( n = 0; n < count; n++ )
         {
             if ( m_rowSelection[n] == row )
             {
@@ -452,8 +588,8 @@ void wxGridSelection::ToggleCellSelection( int row, int col)
     // remove a cell from a column, adding up to two new blocks
     if ( m_selectionMode != wxGrid::wxGridSelectRows )
     {
-        size_t count = m_colSelection.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        count = m_colSelection.GetCount();
+        for ( n = 0; n < count; n++ )
         {
             if ( m_colSelection[n] == col )
             {
@@ -469,6 +605,9 @@ void wxGridSelection::ToggleCellSelection( int row, int col)
             }
         }
     }
+
+    // Refresh the screen; according to m_selectionMode, we
+    // need to either update only the cell, or the whole row/column.
     wxRect r;
     switch (m_selectionMode)
     {
@@ -491,9 +630,11 @@ void wxGridSelection::ToggleCellSelection( int row, int col)
 
 void wxGridSelection::ClearSelection()
 {
+    // Should this send deselection events?
     size_t n;
-    if ( m_selectionMode != wxGrid::wxGridSelectRows &&
-         m_selectionMode != wxGrid::wxGridSelectColumns )
+
+    // deselect all invidiual cells and update the screen
+    if ( m_selectionMode == wxGrid::wxGridSelectCells )
     {
       
         while( ( n = m_cellSelection.GetCount() ) > 0)
@@ -507,6 +648,8 @@ void wxGridSelection::ClearSelection()
                 ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
         }
     }
+
+    // deselect all blocks and update the screen
     while( ( n = m_blockSelectionTopLeft.GetCount() ) > 0)
     {
         wxRect r;
@@ -518,6 +661,8 @@ void wxGridSelection::ClearSelection()
         if ( !m_grid->GetBatchCount() )
             ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );   
     }
+
+    // deselect all rows and update the screen
     if ( m_selectionMode != wxGrid::wxGridSelectColumns )
     {
         while( ( n = m_rowSelection.GetCount() ) > 0)
@@ -532,6 +677,8 @@ void wxGridSelection::ClearSelection()
                 ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );   
         }
     }
+
+    // deselect all columns and update the screen
     if ( m_selectionMode != wxGrid::wxGridSelectRows )
     {
         while( ( n = m_colSelection.GetCount() ) > 0)
@@ -769,3 +916,5 @@ int wxGridSelection::BlockContain( int topRow1, int leftCol1,
         return -1;
     return 0;
 }
+
+#endif

@@ -28,6 +28,7 @@ public:
                      wxGrid::wxGridSelectCells );
     bool IsSelection();
     bool IsInSelection ( int row, int col );
+    void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
     void SelectRow( int row, bool addToSelected = FALSE );
     void SelectCol( int col, bool addToSelected = FALSE );
     void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol );

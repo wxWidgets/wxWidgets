@@ -3171,6 +3171,16 @@ bool wxGrid::CreateGrid( int numRows, int numCols,
     return m_created;
 }
 
+void wxGrid::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
+{
+    if ( !m_created )
+    {
+        wxFAIL_MSG( wxT("Called wxGrid::SetSelectionMode() before calling CreateGrid()") );
+    }
+    else
+        m_selection->SetSelectionMode( selmode );
+}
+
 bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership )
 {
     if ( m_created )
@@ -4381,10 +4391,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             if ( m_selectingTopLeft != wxGridNoCellCoords &&
                  m_selectingBottomRight != wxGridNoCellCoords )
             {
-                m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
-                                          m_selectingTopLeft.GetCol(),
-                                          m_selectingBottomRight.GetRow(),
-                                          m_selectingBottomRight.GetCol() );
+                 m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
+                                           m_selectingTopLeft.GetCol(),
+                                           m_selectingBottomRight.GetRow(),
+                                           m_selectingBottomRight.GetCol() );
                 if (m_winCapture)
                 {
                     m_winCapture->ReleaseMouse();
