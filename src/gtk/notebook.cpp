@@ -262,10 +262,6 @@ wxNotebook::wxNotebook( wxWindow *parent, wxWindowID id,
 
 wxNotebook::~wxNotebook()
 {
-    /* don't generate change page events any more */
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
-      GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer) this );
-
     DeleteAllPages();
 }
 
@@ -541,16 +537,10 @@ bool wxNotebook::DeleteAllPages()
 
 bool wxNotebook::DeletePage( size_t page )
 {
-    // GTK sets GtkNotebook.cur_page to NULL before sending the switch page
-    // event so we have to store the selection internally
-    if ( m_selection == -1 )
+    if ( m_selection == (int)m_pagesData.GetCount() - 1 )
     {
-        m_selection = GetSelection();
-        if ( m_selection == (int)m_pagesData.GetCount() - 1 )
-        {
-            // the index will become invalid after the page is deleted
-            m_selection = -1;
-        }
+        // the index will become invalid after the page is deleted
+        m_selection = -1;
     }
 
     // it will call our DoRemovePage() to do the real work
@@ -567,7 +557,16 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
     gtk_widget_unrealize( client->m_widget );
     gtk_widget_unparent( client->m_widget );
 
+    // gtk_notebook_remove_page() sends "switch_page" signal with some strange
+    // new page index (when deleting selected page 0, new page is 1 although,
+    // clearly, the selection should stay 0), so suppress this
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
+      GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer) this );
+
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
+
+    gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page",
+      GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer)this );
 
     wxGtkNotebookPage* p = GetNotebookPage(page);
     m_pagesData.DeleteObject(p);
