@@ -386,6 +386,7 @@ void __wxPreStart(PyObject* moduleDict)
     wxPyTMutex = new wxMutex;
 #endif
 
+    // Ensure that the build options in the DLL (or whatever) match this build
     wxApp::CheckBuildOptions(wxBuildOptions());
 
     wxPyAssertionError = PyErr_NewException("wxPython.wxc.wxPyAssertionError",
