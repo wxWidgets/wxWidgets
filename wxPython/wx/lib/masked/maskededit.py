@@ -4956,6 +4956,8 @@ class MaskedEditMixin:
         we need to pull the following trick:
         """
 ##        dbg('MaskedEditMixin::_OnFocus')
+        if self.IsBeingDeleted() or self.GetParent().IsBeingDeleted():
+            return 
         wx.CallAfter(self._fixSelection)
         event.Skip()
         self.Refresh()
