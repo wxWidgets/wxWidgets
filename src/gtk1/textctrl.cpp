@@ -1077,10 +1077,10 @@ void wxTextCtrl::ChangeFontGlobally()
     wxString value = GetValue();
     if ( !value.IsEmpty() )
     {
+        m_updateFont = FALSE;
+
         Clear();
         AppendText(value);
-
-        m_updateFont = FALSE;
     }
 }
 
