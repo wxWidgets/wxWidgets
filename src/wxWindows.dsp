@@ -1908,10 +1908,6 @@ SOURCE=..\include\wx\helpbase.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\helphtml.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\helpwin.h
 # End Source File
 # Begin Source File
@@ -2887,10 +2883,6 @@ SOURCE=..\include\wx\generic\gridg.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\helpext.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\helphtml.h
 # End Source File
 # Begin Source File
 

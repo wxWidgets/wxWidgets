@@ -63,7 +63,6 @@ NONESSENTIALOBJS= $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\filedlgg.obj &
 	$(OUTPUTDIR)\fontdlgg.obj &
 	$(OUTPUTDIR)\helpext.obj &
-	$(OUTPUTDIR)\helphtml.obj &
 	$(OUTPUTDIR)\imaglist.obj &
 	$(OUTPUTDIR)\listctrl.obj &
 	$(OUTPUTDIR)\mdig.obj &

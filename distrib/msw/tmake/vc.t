@@ -152,7 +152,6 @@ GENERICOBJS= #$ ExpandList("WXGENERICOBJS");
 NONESSENTIALOBJS= #$ ExpandList("WXNONESSENTIALOBJS");
 
 COMMONOBJS = \
-		$(COMMDIR)\$D\y_tab.obj \
 		#$ ExpandList("WXCOMMONOBJS");
 
 MSWOBJS = #$ ExpandList("WXMSWOBJS");
@@ -324,9 +323,6 @@ $(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\fileconf.obj /c /Tp $(COMMDIR)\fileconf.cpp
 $(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\hash.obj /c /Tp $(COMMDIR)\hash.cpp
 <<
 	cl @<<
-$(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\resource.obj /c /Tp $(COMMDIR)\resource.cpp
-<<
-	cl @<<
 $(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\textfile.obj /c /Tp $(COMMDIR)\textfile.cpp
 <<
 	cl @<<
@@ -340,9 +336,6 @@ $(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\gridsel.obj /c /Tp $(GENDIR)\gridsel.cpp
 <<
 	cl @<<
 $(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\logg.obj /c /Tp $(GENDIR)\logg.cpp
-<<
-	cl @<<
-$(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\proplist.obj /c /Tp $(GENDIR)\proplist.cpp
 <<
 	cl @<<
 $(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\clipbrd.obj /c /Tp $(MSWDIR)\clipbrd.cpp

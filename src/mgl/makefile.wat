@@ -58,7 +58,6 @@ GENERICOBJS= accel.obj &
 	gridctrl.obj &
 	gridsel.obj &
 	helpext.obj &
-	helphtml.obj &
 	imaglist.obj &
 	laywin.obj &
 	listctrl.obj &
@@ -1000,9 +999,6 @@ gridsel.obj:     $(GENDIR)\gridsel.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 helpext.obj:     $(GENDIR)\helpext.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-helphtml.obj:     $(GENDIR)\helphtml.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 imaglist.obj:     $(GENDIR)\imaglist.cpp

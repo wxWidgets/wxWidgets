@@ -227,7 +227,6 @@ GENERICUNIVOBJS= $(MSWDIR)\accel.obj \
 		$(MSWDIR)\gridctrl.obj \
 		$(MSWDIR)\gridsel.obj \
 		$(MSWDIR)\helpext.obj \
-		$(MSWDIR)\helphtml.obj \
 		$(MSWDIR)\imaglist.obj \
 		$(MSWDIR)\laywin.obj \
 		$(MSWDIR)\listctrl.obj \
@@ -1317,8 +1316,6 @@ $(MSWDIR)\gridctrl.obj: $(GENDIR)\gridctrl.$(SRCSUFF)
 $(MSWDIR)\gridsel.obj: $(GENDIR)\gridsel.$(SRCSUFF)
 
 $(MSWDIR)\helpext.obj: $(GENDIR)\helpext.$(SRCSUFF)
-
-$(MSWDIR)\helphtml.obj: $(GENDIR)\helphtml.$(SRCSUFF)
 
 $(MSWDIR)\imaglist.obj: $(GENDIR)\imaglist.$(SRCSUFF)
 

@@ -689,10 +689,6 @@ SOURCE=.\generic\helpext.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\helphtml.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\imaglist.cpp
 # End Source File
 # Begin Source File
@@ -1715,10 +1711,6 @@ SOURCE=..\include\wx\helpbase.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\helphtml.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\helpwin.h
 # End Source File
 # Begin Source File
@@ -2329,10 +2321,6 @@ SOURCE=..\include\wx\generic\gridg.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\helpext.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\helphtml.h
 # End Source File
 # Begin Source File
 
