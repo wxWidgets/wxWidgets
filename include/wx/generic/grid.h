@@ -22,6 +22,7 @@
 #include "wx/panel.h"
 #include "wx/scrolwin.h"
 #include "wx/string.h"
+#include "wx/arrstr.h"
 #include "wx/scrolbar.h"
 #include "wx/event.h"
 #include "wx/combobox.h"

@@ -19,6 +19,7 @@
 #include "wx/pen.h"
 #include "wx/font.h"
 #include "wx/statusbr.h"
+#include "wx/arrstr.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 

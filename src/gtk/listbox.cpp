@@ -12,11 +12,13 @@
 #pragma implementation "listbox.h"
 #endif
 
-#include "wx/listbox.h"
+#include "wx/defs.h"
 
 #if wxUSE_LISTBOX
 
+#include "wx/listbox.h"
 #include "wx/dynarray.h"
+#include "wx/arrstr.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/checklst.h"

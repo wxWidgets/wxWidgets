@@ -38,6 +38,8 @@ class WXDLLIMPEXP_BASE wxArrayString : public wxArrayStringBase
 public:
     wxArrayString() { }
     wxArrayString(const wxArrayString& a) : wxArrayStringBase(a) { }
+
+    int Index(const wxChar* sz, bool bCase = true, bool bFromEnd = false) const;
 };
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase
@@ -56,6 +58,8 @@ public:
         for ( size_t n = 0; n < src.size(); n++ )
             Add(src[n]);
     }
+
+    int Index(const wxChar* sz, bool bCase = true, bool bFromEnd = false) const;
 };
 
 #else // if !wxUSE_STL

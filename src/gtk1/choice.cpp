@@ -17,6 +17,7 @@
 #if wxUSE_CHOICE
 
 #include "wx/choice.h"
+#include "wx/arrstr.h"
 
 #include "wx/gtk/private.h"
 

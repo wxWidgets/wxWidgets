@@ -426,6 +426,52 @@ _WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
 #if wxUSE_STL
 #include "wx/arrstr.h"
 
-_WX_DEFINE_BASEARRAY(wxString, wxBaseArrayStringBase)
+#include "wx/beforestd.h"
+#include <functional>
+#include "wx/afterstd.h"
+
+_WX_DEFINE_BASEARRAY(wxString, wxBaseArrayStringBase);
+
+int wxArrayString::Index(const wxChar* sz, bool bCase, bool bFromEnd) const
+{
+    wxArrayString::const_iterator it;
+
+    if (bCase)
+        it = std::find_if(begin(), end(),
+                          std::not1(std::bind2nd(std::ptr_fun(wxStrcmp), sz)));
+    else
+        it = std::find_if(begin(), end(),
+                          std::not1(std::bind2nd(std::ptr_fun(wxStricmp), sz)));
+
+    return it == end() ? wxNOT_FOUND : it - begin();
+}
+
+class wxStringCompareLess
+{
+public:
+    typedef int (wxCMPFUNC_CONV * fnc)(const wxChar*, const wxChar*);
+public:
+    wxStringCompareLess(fnc f) : m_f(f) { }
+    bool operator()(const wxChar* s1, const wxChar* s2)
+        { return m_f(s1, s2) < 0; }
+private:
+    fnc m_f;
+};
+
+int wxSortedArrayString::Index(const wxChar* sz, bool bCase, bool bFromEnd) const
+{
+    wxSortedArrayString::const_iterator it;
+
+    if (bCase)
+        it = std::lower_bound(begin(), end(), sz,
+                              wxStringCompareLess(wxStrcmp));
+    else
+        it = std::lower_bound(begin(), end(), sz,
+                              wxStringCompareLess(wxStricmp));
+
+    if (it == end() || (bCase ? wxStrcmp : wxStricmp)(it->c_str(), sz) != 0)
+        return wxNOT_FOUND;
+    return it - begin();
+}
 
 #endif

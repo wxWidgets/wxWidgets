@@ -39,6 +39,7 @@
     #include "wx/stattext.h"
     #include "wx/intl.h"
     #include "wx/sizer.h"
+    #include "wx/arrstr.h"
 #endif
 
 #if wxUSE_STATLINE

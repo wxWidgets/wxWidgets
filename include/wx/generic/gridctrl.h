@@ -20,6 +20,7 @@
 
 #include "wx/grid.h"
 #include "wx/string.h"
+#include "wx/arrstr.h"
 #include "wx/datetime.h"
 
 #define wxGRID_VALUE_CHOICEINT    _T("choiceint")

@@ -17,9 +17,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include  "wx/string.h"
-    #include "wx/arrstr.h"
+    #include "wx/string.h"
 #endif
+
+class WXDLLIMPEXP_BASE wxArrayString;
 
 // ----------------------------------------------------------------------------
 // constants
