@@ -126,7 +126,8 @@
 // Default is 1
 //
 // Recommended setting: 1 if your compiler supports it.
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || \
+    (defined(__BORLANDC__) && __BORLANDC__ >= 0x0550)
     #define wxUSE_ON_FATAL_EXCEPTION 1
 #else
     #define wxUSE_ON_FATAL_EXCEPTION 0
