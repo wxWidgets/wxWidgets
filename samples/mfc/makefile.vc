@@ -13,6 +13,7 @@ WXDIR = $(WXWIN)
 
 PROGRAM=mfctest
 OBJECTS = $(PROGRAM).obj
+EXTRAFLAGS=/D_AFXDLL
 
 !include $(WXDIR)\src\makeprog.vc
 
