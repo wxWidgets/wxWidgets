@@ -62,6 +62,12 @@ def EVT_KEY_DOWN(win, func):
 def EVT_KEY_UP(win, func):
     win.Connect(-1, -1, wxEVT_KEY_UP, func)
 
+def EVT_MENU_OPEN(win, func):
+    win.Connect(-1, -1, wxEVT_MENU_OPEN, func)
+
+def EVT_MENU_CLOSE(win, func):
+    win.Connect(-1, -1, wxEVT_MENU_CLOSE, func)
+
 def EVT_MENU_HIGHLIGHT(win, id, func):
     win.Connect(id, -1, wxEVT_MENU_HIGHLIGHT, func)
 

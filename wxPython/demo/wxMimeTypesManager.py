@@ -165,9 +165,10 @@ overview = """\
 
 
 import mimetypes_wdr
+import images
 
 def MyBitmapsFunc( index ):
-    return wxImage( opj("bitmaps/noicon.png"), wxBITMAP_TYPE_PNG ).ConvertToBitmap()
+    return images.getNoIconBitmap()
 
 mimetypes_wdr.MyBitmapsFunc = MyBitmapsFunc
 

@@ -4734,6 +4734,34 @@ static PyObject *_wrap_wxMenuEvent_GetMenuId(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxMenuEvent_IsPopup(_swigobj)  (_swigobj->IsPopup())
+static PyObject *_wrap_wxMenuEvent_IsPopup(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxMenuEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMenuEvent_IsPopup",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuEvent_IsPopup. Expected _wxMenuEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxMenuEvent_IsPopup(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxShowEventTowxEvent(void *ptr) {
     wxShowEvent *src;
     wxEvent *dest;
@@ -7184,6 +7212,7 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxShowEvent_GetShow", (PyCFunction) _wrap_wxShowEvent_GetShow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxShowEvent_SetShow", (PyCFunction) _wrap_wxShowEvent_SetShow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxShowEvent", (PyCFunction) _wrap_new_wxShowEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuEvent_IsPopup", (PyCFunction) _wrap_wxMenuEvent_IsPopup, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuEvent_GetMenuId", (PyCFunction) _wrap_wxMenuEvent_GetMenuId, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMenuEvent", (PyCFunction) _wrap_new_wxMenuEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxInitDialogEvent", (PyCFunction) _wrap_new_wxInitDialogEvent, METH_VARARGS | METH_KEYWORDS },

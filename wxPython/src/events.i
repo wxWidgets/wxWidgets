@@ -302,6 +302,7 @@ class wxMenuEvent: public wxEvent {
 public:
     wxMenuEvent(WXTYPE id = 0, int id = 0);
     int GetMenuId();
+    bool IsPopup();
 };
 
 //---------------------------------------------------------------------------

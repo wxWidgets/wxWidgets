@@ -18,6 +18,9 @@ Finished wrapping and providing typemaps for wxInputStream and also
 added the stream ctor and other methods for wxImage so images can now
 be loaded from any Python "file-like" object.
 
+Changed the img2py tool to use PNG instead of XPM for embedding image
+data in Python source code, and the generated code now uses streams to
+convert the image data to wxImage, wxBitmap, or wxIcon.
 
 
 

@@ -113,14 +113,7 @@ class wxPythonDemo(wxFrame):
         self.cwd = os.getcwd()
         self.curOverview = ""
 
-        if 1:
-            icon = wxIconFromXPMData(images.getMondrianData())
-        else:
-            # another way to do it
-            bmp = images.getMondrianBitmap()
-            icon = wxEmptyIcon()
-            icon.CopyFromBitmap(bmp)
-
+        icon = images.getMondrianIcon()
         self.SetIcon(icon)
 
         if wxPlatform == '__WXMSW__':
@@ -192,8 +185,8 @@ class wxPythonDemo(wxFrame):
         self.tree = wxTreeCtrl(splitter, tID,
                                style=wxTR_HAS_BUTTONS |
                                wxTR_EDIT_LABELS |
-                               wxTR_HAS_VARIABLE_ROW_HEIGHT |
-                               wxSUNKEN_BORDER)
+                               wxTR_HAS_VARIABLE_ROW_HEIGHT)
+
         #self.tree.SetBackgroundColour(wxNamedColour("Pink"))
         root = self.tree.AddRoot("Overview")
         firstChild = None
@@ -256,12 +249,13 @@ class wxPythonDemo(wxFrame):
 
         # add the windows to the splitter and split it.
         splitter2.SplitHorizontally(self.nb, self.log)
+        splitter.SplitVertically(self.tree, splitter2)
+
+        splitter.SetSashPosition(180, true)
+        splitter.SetMinimumPaneSize(20)
         splitter2.SetSashPosition(450, true)
         splitter2.SetMinimumPaneSize(20)
 
-        splitter.SplitVertically(self.tree, splitter2)
-        splitter.SetSashPosition(180, true)
-        splitter.SetMinimumPaneSize(20)
 
 
         # select initial items

@@ -21,11 +21,7 @@ class TestPanel(wxPanel):
         wxStaticBitmap(self, -1, bmp, wxPoint(80, 50),
                        wxSize(bmp.GetWidth(), bmp.GetHeight()))
 
-        # This one doesn't convert to the embedded format very well,
-        # (lots of colors so it explodes in size and takes a noticable
-        # amount of time to convert back to a bitmap.)  So we'll just
-        # do it the old way
-        bmp = wxBitmap(opj('bitmaps/robin.jpg'), wxBITMAP_TYPE_JPEG)
+        bmp = images.getRobinBitmap()
         wxStaticBitmap(self, -1, bmp, (80, 150))
 
         wxStaticText(self, -1, "Hey, if Ousterhout can do it, so can I.",
