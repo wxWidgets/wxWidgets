@@ -579,7 +579,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dash1[0] = 2;
     ud.SetDashes( 1, dash1 );
     dc.DrawLine( x+20, y+160, 100, y+160 );
-    dash1[0] = 0xFF;
+    dash1[0] = 0x7F;
     ud.SetDashes( 1, dash1 );
     dc.DrawLine( x+20, y+170, 100, y+170 );
 }
