@@ -71,6 +71,8 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/wave.h>
 #endif
 
+#include <wx/mimetype.h>
+
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -288,6 +290,11 @@ public:
     wxWave* wxWaveData(const wxString& data) {
         return new wxWave(data.Len(), (wxByte*)data.c_str());
     }
+
+#if 0
+extern wxMimeTypesManager * wxTheMimeTypesManager; 
+
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2207,6 +2214,21 @@ static PyObject *_wrap_wxWaveData(PyObject *self, PyObject *args, PyObject *kwar
     return _resultobj;
 }
 
+static int _wrap_wxTheMimeTypesManager_set(PyObject *val) {
+
+    PyErr_SetString(PyExc_TypeError,"Variable wxTheMimeTypesManager is read-only.");
+    return 1;
+}
+
+static PyObject *_wrap_wxTheMimeTypesManager_get() {
+    PyObject * pyobj;
+    char ptemp[128];
+
+    SWIG_MakePtr(ptemp, (char *) wxTheMimeTypesManager,"_wxMimeTypesManager_p");
+    pyobj = PyString_FromString(ptemp);
+    return pyobj;
+}
+
 static void *SwigwxToolTipTowxObject(void *ptr) {
     wxToolTip *src;
     wxObject *dest;
@@ -3047,10 +3069,7 @@ static PyObject *_wrap_wxFontEnumerator_EnumerateEncodings(PyObject *self, PyObj
 
 static PyObject * wxPyFontEnumerator_GetEncodings(wxPyFontEnumerator *self) {
             wxArrayString* arr = self->GetEncodings();
-            PyObject* list = PyList_New(0);
-            for (size_t x=0; x<arr->GetCount(); x++)
-                PyList_Append(list, PyString_FromString((*arr)[x]));
-            return list;
+            return wxArrayString2PyList_helper(arr);
         }
 static PyObject *_wrap_wxFontEnumerator_GetEncodings(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3082,10 +3101,7 @@ static PyObject *_wrap_wxFontEnumerator_GetEncodings(PyObject *self, PyObject *a
 
 static PyObject * wxPyFontEnumerator_GetFacenames(wxPyFontEnumerator *self) {
             wxArrayString* arr = self->GetFacenames();
-            PyObject* list = PyList_New(0);
-            for (size_t x=0; x<arr->GetCount(); x++)
-                PyList_Append(list, PyString_FromString((*arr)[x]));
-            return list;
+            return wxArrayString2PyList_helper(arr);
         }
 static PyObject *_wrap_wxFontEnumerator_GetFacenames(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4249,6 +4265,140 @@ static PyObject *_wrap_wxPyTimer_Stop(PyObject *self, PyObject *args, PyObject *
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define new_wxStopWatch() (new wxStopWatch())
+static PyObject *_wrap_new_wxStopWatch(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStopWatch * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxStopWatch",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxStopWatch *)new_wxStopWatch();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxStopWatch_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxStopWatch_Start(_swigobj,_swigarg0)  (_swigobj->Start(_swigarg0))
+static PyObject *_wrap_wxStopWatch_Start(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStopWatch * _arg0;
+    long  _arg1 = (long ) 0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","t", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|l:wxStopWatch_Start",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStopWatch_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStopWatch_Start. Expected _wxStopWatch_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStopWatch_Start(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStopWatch_Pause(_swigobj)  (_swigobj->Pause())
+static PyObject *_wrap_wxStopWatch_Pause(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStopWatch * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStopWatch_Pause",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStopWatch_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStopWatch_Pause. Expected _wxStopWatch_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStopWatch_Pause(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStopWatch_Resume(_swigobj)  (_swigobj->Resume())
+static PyObject *_wrap_wxStopWatch_Resume(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStopWatch * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStopWatch_Resume",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStopWatch_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStopWatch_Resume. Expected _wxStopWatch_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStopWatch_Resume(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStopWatch_Time(_swigobj)  (_swigobj->Time())
+static PyObject *_wrap_wxStopWatch_Time(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxStopWatch * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStopWatch_Time",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStopWatch_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStopWatch_Time. Expected _wxStopWatch_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxStopWatch_Time(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -7356,7 +7506,1871 @@ static PyObject *_wrap_wxWave_Play(PyObject *self, PyObject *args, PyObject *kwa
     return _resultobj;
 }
 
+#define new_wxFileTypeInfo(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxFileTypeInfo(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_new_wxFileTypeInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileTypeInfo * _result;
+    char * _arg0;
+    char * _arg1;
+    char * _arg2;
+    char * _arg3;
+    char *_kwnames[] = { "mimeType","openCmd","printCmd","desc", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ssss:new_wxFileTypeInfo",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFileTypeInfo *)new_wxFileTypeInfo(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileTypeInfo_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxFileTypeInfoSequence(_swigarg0) (new wxFileTypeInfo(_swigarg0))
+static PyObject *_wrap_new_wxFileTypeInfoSequence(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileTypeInfo * _result;
+    wxArrayString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "sArray", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxFileTypeInfoSequence",_kwnames,&_obj0)) 
+        return NULL;
+{
+    if (! PySequence_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
+        return NULL;
+    }
+    _arg0 = new wxArrayString;
+    int i, len=PySequence_Length(_obj0);
+    for (i=0; i<len; i++) {
+        PyObject* item = PySequence_GetItem(_obj0, i);
+        PyObject* str  = PyObject_Str(item);
+        _arg0->Add(PyString_AsString(item));
+        Py_DECREF(item);
+        Py_DECREF(str);
+    }
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFileTypeInfo *)new_wxFileTypeInfoSequence(*_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileTypeInfo_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
+#define new_wxNullFileTypeInfo() (new wxFileTypeInfo())
+static PyObject *_wrap_new_wxNullFileTypeInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileTypeInfo * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxNullFileTypeInfo",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFileTypeInfo *)new_wxNullFileTypeInfo();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileTypeInfo_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_IsValid(_swigobj)  (_swigobj->IsValid())
+static PyObject *_wrap_wxFileTypeInfo_IsValid(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_IsValid",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_IsValid. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxFileTypeInfo_IsValid(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_SetIcon(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetIcon(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxFileTypeInfo_SetIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileTypeInfo * _arg0;
+    wxString * _arg1;
+    int  _arg2 = (int ) 0;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","iconFile","iconIndex", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxFileTypeInfo_SetIcon",_kwnames,&_argo0,&_obj1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_SetIcon. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileTypeInfo_SetIcon(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_SetShortDesc(_swigobj,_swigarg0)  (_swigobj->SetShortDesc(_swigarg0))
+static PyObject *_wrap_wxFileTypeInfo_SetShortDesc(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileTypeInfo * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","shortDesc", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileTypeInfo_SetShortDesc",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_SetShortDesc. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileTypeInfo_SetShortDesc(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_GetMimeType(_swigobj)  (_swigobj->GetMimeType())
+static PyObject *_wrap_wxFileTypeInfo_GetMimeType(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_GetMimeType",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_GetMimeType. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxFileTypeInfo_GetMimeType(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_GetOpenCommand(_swigobj)  (_swigobj->GetOpenCommand())
+static PyObject *_wrap_wxFileTypeInfo_GetOpenCommand(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_GetOpenCommand",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_GetOpenCommand. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxFileTypeInfo_GetOpenCommand(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_GetPrintCommand(_swigobj)  (_swigobj->GetPrintCommand())
+static PyObject *_wrap_wxFileTypeInfo_GetPrintCommand(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_GetPrintCommand",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_GetPrintCommand. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxFileTypeInfo_GetPrintCommand(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_GetShortDesc(_swigobj)  (_swigobj->GetShortDesc())
+static PyObject *_wrap_wxFileTypeInfo_GetShortDesc(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_GetShortDesc",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_GetShortDesc. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxFileTypeInfo_GetShortDesc(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_GetDescription(_swigobj)  (_swigobj->GetDescription())
+static PyObject *_wrap_wxFileTypeInfo_GetDescription(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_GetDescription",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_GetDescription. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxFileTypeInfo_GetDescription(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+static PyObject * wxFileTypeInfo_GetExtensions(wxFileTypeInfo *self) {
+            wxArrayString& arr = (wxArrayString&)self->GetExtensions();
+            return wxArrayString2PyList_helper(arr);
+        }
+static PyObject *_wrap_wxFileTypeInfo_GetExtensions(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_GetExtensions",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_GetExtensions. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileTypeInfo_GetExtensions(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_GetExtensionsCount(_swigobj)  (_swigobj->GetExtensionsCount())
+static PyObject *_wrap_wxFileTypeInfo_GetExtensionsCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_GetExtensionsCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_GetExtensionsCount. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxFileTypeInfo_GetExtensionsCount(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_GetIconFile(_swigobj)  (_swigobj->GetIconFile())
+static PyObject *_wrap_wxFileTypeInfo_GetIconFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_GetIconFile",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_GetIconFile. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxFileTypeInfo_GetIconFile(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxFileTypeInfo_GetIconIndex(_swigobj)  (_swigobj->GetIconIndex())
+static PyObject *_wrap_wxFileTypeInfo_GetIconIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileTypeInfo_GetIconIndex",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileTypeInfo_GetIconIndex. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxFileTypeInfo_GetIconIndex(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define new_wxFileType(_swigarg0) (new wxFileType(_swigarg0))
+static PyObject *_wrap_new_wxFileType(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileType * _result;
+    wxFileTypeInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "ftInfo", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxFileType",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxFileType. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFileType *)new_wxFileType(*_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileType_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject * wxFileType_GetMimeType(wxFileType *self) {
+            wxString str;
+            if (self->GetMimeType(&str))
+                return PyString_FromString(str.c_str());
+            else
+                RETURN_NONE();
+        }
+static PyObject *_wrap_wxFileType_GetMimeType(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileType * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileType_GetMimeType",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_GetMimeType. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileType_GetMimeType(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject * wxFileType_GetMimeTypes(wxFileType *self) {
+            wxArrayString arr;
+            if (self->GetMimeTypes(arr))
+                return wxArrayString2PyList_helper(arr);
+            else
+                RETURN_NONE();
+        }
+static PyObject *_wrap_wxFileType_GetMimeTypes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileType * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileType_GetMimeTypes",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_GetMimeTypes. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileType_GetMimeTypes(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject * wxFileType_GetExtensions(wxFileType *self) {
+            wxArrayString arr;
+            if (self->GetExtensions(arr))
+                return wxArrayString2PyList_helper(arr);
+            else
+                RETURN_NONE();
+        }
+static PyObject *_wrap_wxFileType_GetExtensions(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileType * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileType_GetExtensions",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_GetExtensions. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileType_GetExtensions(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static wxIcon * wxFileType_GetIcon(wxFileType *self) {
+            wxIcon icon;
+            if (self->GetIcon(&icon))
+                return new wxIcon(icon);
+            else
+                return NULL;
+        }
+static PyObject *_wrap_wxFileType_GetIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _result;
+    wxFileType * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileType_GetIcon",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_GetIcon. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxIcon *)wxFileType_GetIcon(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxIcon_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject * wxFileType_GetIconInfo(wxFileType *self) {
+            wxIcon icon;
+            wxString iconFile;
+            int iconIndex;
+            if (self->GetIcon(&icon, &iconFile, &iconIndex)) {
+                wxPyTState* state = wxPyBeginBlockThreads();
+                PyObject* tuple = PyTuple_New(3);
+                PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(icon),
+                                                              "wxIcon", TRUE));
+                PyTuple_SetItem(tuple, 1, PyString_FromString(iconFile.c_str()));
+                PyTuple_SetItem(tuple, 2, PyInt_FromLong(iconIndex));
+                wxPyEndBlockThreads(state);
+                return tuple;
+            }
+            else
+                RETURN_NONE();
+        }
+static PyObject *_wrap_wxFileType_GetIconInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileType * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileType_GetIconInfo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_GetIconInfo. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileType_GetIconInfo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject * wxFileType_GetDescription(wxFileType *self) {
+            wxString str;
+            if (self->GetDescription(&str))
+                return PyString_FromString(str.c_str());
+            else
+                RETURN_NONE();
+        }
+static PyObject *_wrap_wxFileType_GetDescription(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileType * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileType_GetDescription",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_GetDescription. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileType_GetDescription(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject * wxFileType_GetOpenCommand(wxFileType *self,const wxString & filename,const wxString & mimetype) {
+            wxString str;
+            if (self->GetOpenCommand(&str, wxFileType::MessageParameters(filename, mimetype)))
+                return PyString_FromString(str.c_str());
+            else
+                RETURN_NONE();
+        }
+static PyObject *_wrap_wxFileType_GetOpenCommand(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileType * _arg0;
+    wxString * _arg1;
+    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","filename","mimetype", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxFileType_GetOpenCommand",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_GetOpenCommand. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    if (_obj2)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileType_GetOpenCommand(_arg0,*_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+static PyObject * wxFileType_GetPrintCommand(wxFileType *self,const wxString & filename,const wxString & mimetype) {
+            wxString str;
+            if (self->GetPrintCommand(&str, wxFileType::MessageParameters(filename, mimetype)))
+                return PyString_FromString(str.c_str());
+            else
+                RETURN_NONE();
+        }
+static PyObject *_wrap_wxFileType_GetPrintCommand(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileType * _arg0;
+    wxString * _arg1;
+    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","filename","mimetype", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxFileType_GetPrintCommand",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_GetPrintCommand. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    if (_obj2)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileType_GetPrintCommand(_arg0,*_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+static PyObject * wxFileType_GetAllCommands(wxFileType *self,const wxString & filename,const wxString & mimetype) {
+            wxArrayString verbs;
+            wxArrayString commands;
+            if (self->GetAllCommands(&verbs, &commands,
+                                     wxFileType::MessageParameters(filename, mimetype))) {
+                wxPyTState* state = wxPyBeginBlockThreads();
+                PyObject* tuple = PyTuple_New(2);
+                PyTuple_SetItem(tuple, 0, wxArrayString2PyList_helper(verbs));
+                PyTuple_SetItem(tuple, 1, wxArrayString2PyList_helper(commands));
+                wxPyEndBlockThreads(state);
+                return tuple;
+            }
+            else
+                RETURN_NONE();
+        }
+static PyObject *_wrap_wxFileType_GetAllCommands(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileType * _arg0;
+    wxString * _arg1;
+    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","filename","mimetype", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxFileType_GetAllCommands",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_GetAllCommands. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    if (_obj2)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileType_GetAllCommands(_arg0,*_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxFileType_SetCommand(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetCommand(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxFileType_SetCommand(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFileType * _arg0;
+    wxString * _arg1;
+    wxString * _arg2;
+    bool  _arg3 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    int tempbool3 = (int) TRUE;
+    char *_kwnames[] = { "self","cmd","verb","overwriteprompt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|i:wxFileType_SetCommand",_kwnames,&_argo0,&_obj1,&_obj2,&tempbool3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_SetCommand. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+    _arg3 = (bool ) tempbool3;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxFileType_SetCommand(_arg0,*_arg1,*_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxFileType_SetDefaultIcon(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetDefaultIcon(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxFileType_SetDefaultIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFileType * _arg0;
+    wxString * _arg1 = (wxString *) &wxEmptyString;
+    int  _arg2 = (int ) 0;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","cmd","index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|Oi:wxFileType_SetDefaultIcon",_kwnames,&_argo0,&_obj1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_SetDefaultIcon. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+    if (_obj1)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxFileType_SetDefaultIcon(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFileType_Unassociate(_swigobj)  (_swigobj->Unassociate())
+static PyObject *_wrap_wxFileType_Unassociate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFileType * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileType_Unassociate",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileType_Unassociate. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxFileType_Unassociate(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxFileType_ExpandCommand(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    wxFileType::MessageParameters * _arg1;
+    PyObject * _obj0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "command","params", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileType_ExpandCommand",_kwnames,&_obj0,&_argo1)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileType::MessageParameters_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileType_ExpandCommand. Expected _wxFileType::MessageParameters_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxFileType::ExpandCommand(*_arg0,*_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define delete_wxFileType(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxFileType(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileType * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxFileType",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxFileType. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxFileType(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxMimeTypesManager_IsOfType(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxString * _arg0;
+    wxString * _arg1;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "mimeType","wildcard", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMimeTypesManager_IsOfType",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxMimeTypesManager::IsOfType(*_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define new_wxMimeTypesManager() (new wxMimeTypesManager())
+static PyObject *_wrap_new_wxMimeTypesManager(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMimeTypesManager * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxMimeTypesManager",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxMimeTypesManager *)new_wxMimeTypesManager();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMimeTypesManager_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxMimeTypesManager_Initialize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Initialize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxMimeTypesManager_Initialize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMimeTypesManager * _arg0;
+    int  _arg1 = (int ) (wxMAILCAP_STANDARD);
+    wxString * _arg2 = (wxString *) &wxEmptyString;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","mailcapStyle","extraDir", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iO:wxMimeTypesManager_Initialize",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_Initialize. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMimeTypesManager_Initialize(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxMimeTypesManager_ClearData(_swigobj)  (_swigobj->ClearData())
+static PyObject *_wrap_wxMimeTypesManager_ClearData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMimeTypesManager * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMimeTypesManager_ClearData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_ClearData. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMimeTypesManager_ClearData(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxMimeTypesManager_GetFileTypeFromExtension(_swigobj,_swigarg0)  (_swigobj->GetFileTypeFromExtension(_swigarg0))
+static PyObject *_wrap_wxMimeTypesManager_GetFileTypeFromExtension(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileType * _result;
+    wxMimeTypesManager * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","ext", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMimeTypesManager_GetFileTypeFromExtension",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_GetFileTypeFromExtension. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFileType *)wxMimeTypesManager_GetFileTypeFromExtension(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileType_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxMimeTypesManager_GetFileTypeFromMimeType(_swigobj,_swigarg0)  (_swigobj->GetFileTypeFromMimeType(_swigarg0))
+static PyObject *_wrap_wxMimeTypesManager_GetFileTypeFromMimeType(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileType * _result;
+    wxMimeTypesManager * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","mimeType", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMimeTypesManager_GetFileTypeFromMimeType",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_GetFileTypeFromMimeType. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFileType *)wxMimeTypesManager_GetFileTypeFromMimeType(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileType_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxMimeTypesManager_ReadMailcap(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ReadMailcap(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxMimeTypesManager_ReadMailcap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxMimeTypesManager * _arg0;
+    wxString * _arg1;
+    bool  _arg2 = (bool ) FALSE;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    int tempbool2 = (int) FALSE;
+    char *_kwnames[] = { "self","filename","fallback", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxMimeTypesManager_ReadMailcap",_kwnames,&_argo0,&_obj1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_ReadMailcap. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxMimeTypesManager_ReadMailcap(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxMimeTypesManager_ReadMimeTypes(_swigobj,_swigarg0)  (_swigobj->ReadMimeTypes(_swigarg0))
+static PyObject *_wrap_wxMimeTypesManager_ReadMimeTypes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxMimeTypesManager * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","filename", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMimeTypesManager_ReadMimeTypes",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_ReadMimeTypes. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxMimeTypesManager_ReadMimeTypes(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static PyObject * wxMimeTypesManager_EnumAllFileTypes(wxMimeTypesManager *self) {
+            wxArrayString arr;
+            self->EnumAllFileTypes(arr);
+            return wxArrayString2PyList_helper(arr);
+        }
+static PyObject *_wrap_wxMimeTypesManager_EnumAllFileTypes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxMimeTypesManager * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMimeTypesManager_EnumAllFileTypes",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_EnumAllFileTypes. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxMimeTypesManager_EnumAllFileTypes(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+#define wxMimeTypesManager_AddFallback(_swigobj,_swigarg0)  (_swigobj->AddFallback(_swigarg0))
+static PyObject *_wrap_wxMimeTypesManager_AddFallback(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMimeTypesManager * _arg0;
+    wxFileTypeInfo * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","ft", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMimeTypesManager_AddFallback",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_AddFallback. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMimeTypesManager_AddFallback. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMimeTypesManager_AddFallback(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxMimeTypesManager_Associate(_swigobj,_swigarg0)  (_swigobj->Associate(_swigarg0))
+static PyObject *_wrap_wxMimeTypesManager_Associate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileType * _result;
+    wxMimeTypesManager * _arg0;
+    wxFileTypeInfo * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","ftInfo", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMimeTypesManager_Associate",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_Associate. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMimeTypesManager_Associate. Expected _wxFileTypeInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFileType *)wxMimeTypesManager_Associate(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileType_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxMimeTypesManager_Unassociate(_swigobj,_swigarg0)  (_swigobj->Unassociate(_swigarg0))
+static PyObject *_wrap_wxMimeTypesManager_Unassociate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxMimeTypesManager * _arg0;
+    wxFileType * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","ft", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMimeTypesManager_Unassociate",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMimeTypesManager_Unassociate. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileType_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMimeTypesManager_Unassociate. Expected _wxFileType_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxMimeTypesManager_Unassociate(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define delete_wxMimeTypesManager(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxMimeTypesManager(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMimeTypesManager * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxMimeTypesManager",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMimeTypesManager_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxMimeTypesManager. Expected _wxMimeTypesManager_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxMimeTypesManager(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef misc2cMethods[] = {
+	 { "delete_wxMimeTypesManager", (PyCFunction) _wrap_delete_wxMimeTypesManager, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_Unassociate", (PyCFunction) _wrap_wxMimeTypesManager_Unassociate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_Associate", (PyCFunction) _wrap_wxMimeTypesManager_Associate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_AddFallback", (PyCFunction) _wrap_wxMimeTypesManager_AddFallback, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_EnumAllFileTypes", (PyCFunction) _wrap_wxMimeTypesManager_EnumAllFileTypes, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_ReadMimeTypes", (PyCFunction) _wrap_wxMimeTypesManager_ReadMimeTypes, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_ReadMailcap", (PyCFunction) _wrap_wxMimeTypesManager_ReadMailcap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_GetFileTypeFromMimeType", (PyCFunction) _wrap_wxMimeTypesManager_GetFileTypeFromMimeType, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_GetFileTypeFromExtension", (PyCFunction) _wrap_wxMimeTypesManager_GetFileTypeFromExtension, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_ClearData", (PyCFunction) _wrap_wxMimeTypesManager_ClearData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_Initialize", (PyCFunction) _wrap_wxMimeTypesManager_Initialize, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxMimeTypesManager", (PyCFunction) _wrap_new_wxMimeTypesManager, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMimeTypesManager_IsOfType", (PyCFunction) _wrap_wxMimeTypesManager_IsOfType, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxFileType", (PyCFunction) _wrap_delete_wxFileType, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_ExpandCommand", (PyCFunction) _wrap_wxFileType_ExpandCommand, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_Unassociate", (PyCFunction) _wrap_wxFileType_Unassociate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_SetDefaultIcon", (PyCFunction) _wrap_wxFileType_SetDefaultIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_SetCommand", (PyCFunction) _wrap_wxFileType_SetCommand, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_GetAllCommands", (PyCFunction) _wrap_wxFileType_GetAllCommands, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_GetPrintCommand", (PyCFunction) _wrap_wxFileType_GetPrintCommand, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_GetOpenCommand", (PyCFunction) _wrap_wxFileType_GetOpenCommand, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_GetDescription", (PyCFunction) _wrap_wxFileType_GetDescription, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_GetIconInfo", (PyCFunction) _wrap_wxFileType_GetIconInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_GetIcon", (PyCFunction) _wrap_wxFileType_GetIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_GetExtensions", (PyCFunction) _wrap_wxFileType_GetExtensions, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_GetMimeTypes", (PyCFunction) _wrap_wxFileType_GetMimeTypes, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileType_GetMimeType", (PyCFunction) _wrap_wxFileType_GetMimeType, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxFileType", (PyCFunction) _wrap_new_wxFileType, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_GetIconIndex", (PyCFunction) _wrap_wxFileTypeInfo_GetIconIndex, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_GetIconFile", (PyCFunction) _wrap_wxFileTypeInfo_GetIconFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_GetExtensionsCount", (PyCFunction) _wrap_wxFileTypeInfo_GetExtensionsCount, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_GetExtensions", (PyCFunction) _wrap_wxFileTypeInfo_GetExtensions, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_GetDescription", (PyCFunction) _wrap_wxFileTypeInfo_GetDescription, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_GetShortDesc", (PyCFunction) _wrap_wxFileTypeInfo_GetShortDesc, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_GetPrintCommand", (PyCFunction) _wrap_wxFileTypeInfo_GetPrintCommand, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_GetOpenCommand", (PyCFunction) _wrap_wxFileTypeInfo_GetOpenCommand, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_GetMimeType", (PyCFunction) _wrap_wxFileTypeInfo_GetMimeType, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_SetShortDesc", (PyCFunction) _wrap_wxFileTypeInfo_SetShortDesc, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_SetIcon", (PyCFunction) _wrap_wxFileTypeInfo_SetIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileTypeInfo_IsValid", (PyCFunction) _wrap_wxFileTypeInfo_IsValid, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxNullFileTypeInfo", (PyCFunction) _wrap_new_wxNullFileTypeInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxFileTypeInfoSequence", (PyCFunction) _wrap_new_wxFileTypeInfoSequence, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxFileTypeInfo", (PyCFunction) _wrap_new_wxFileTypeInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWave_Play", (PyCFunction) _wrap_wxWave_Play, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWave_IsOk", (PyCFunction) _wrap_wxWave_IsOk, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxWave", (PyCFunction) _wrap_delete_wxWave, METH_VARARGS | METH_KEYWORDS },
@@ -7465,6 +9479,11 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxLog_EnableLogging", (PyCFunction) _wrap_wxLog_EnableLogging, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_IsEnabled", (PyCFunction) _wrap_wxLog_IsEnabled, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLog", (PyCFunction) _wrap_new_wxLog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStopWatch_Time", (PyCFunction) _wrap_wxStopWatch_Time, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStopWatch_Resume", (PyCFunction) _wrap_wxStopWatch_Resume, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStopWatch_Pause", (PyCFunction) _wrap_wxStopWatch_Pause, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStopWatch_Start", (PyCFunction) _wrap_wxStopWatch_Start, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxStopWatch", (PyCFunction) _wrap_new_wxStopWatch, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyTimer_Stop", (PyCFunction) _wrap_wxPyTimer_Stop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyTimer_Start", (PyCFunction) _wrap_wxPyTimer_Start, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyTimer_SetOwner", (PyCFunction) _wrap_wxPyTimer_SetOwner, METH_VARARGS | METH_KEYWORDS },
@@ -7811,6 +9830,13 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxLOG_Progress", PyInt_FromLong((long) wxLOG_Progress));
 	 PyDict_SetItemString(d,"wxLOG_User", PyInt_FromLong((long) wxLOG_User));
 	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
+	 PyDict_SetItemString(d,"wxMAILCAP_STANDARD", PyInt_FromLong((long) wxMAILCAP_STANDARD));
+	 PyDict_SetItemString(d,"wxMAILCAP_NETSCAPE", PyInt_FromLong((long) wxMAILCAP_NETSCAPE));
+	 PyDict_SetItemString(d,"wxMAILCAP_KDE", PyInt_FromLong((long) wxMAILCAP_KDE));
+	 PyDict_SetItemString(d,"wxMAILCAP_GNOME", PyInt_FromLong((long) wxMAILCAP_GNOME));
+	 PyDict_SetItemString(d,"wxMAILCAP_ALL", PyInt_FromLong((long) wxMAILCAP_ALL));
+	 PyDict_SetItemString(d,"cvar", SWIG_globals);
+	 SWIG_addvarlink(SWIG_globals,"wxTheMimeTypesManager",_wrap_wxTheMimeTypesManager_get, _wrap_wxTheMimeTypesManager_set);
 
     wxPyPtrTypeMap_Add("wxFontEnumerator", "wxPyFontEnumerator");
     wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");

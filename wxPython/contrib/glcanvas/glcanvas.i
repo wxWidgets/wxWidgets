@@ -54,8 +54,10 @@ class wxGLCanvas;
 
 class wxGLContext : public wxObject {
 public:
+#ifndef __WXMAC__  //  fix this?
     wxGLContext(bool isRGB, wxGLCanvas *win,
                 const wxPalette& palette = wxNullPalette);
+#endif
     ~wxGLContext();
 
     void SetCurrent();

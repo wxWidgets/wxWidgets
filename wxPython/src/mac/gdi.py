@@ -964,20 +964,6 @@ class wxWindowDC(wxWindowDCPtr):
 
 
 
-class wxPostScriptDCPtr(wxDCPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __repr__(self):
-        return "<C wxPostScriptDC instance at %s>" % (self.this,)
-class wxPostScriptDC(wxPostScriptDCPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(gdic.new_wxPostScriptDC,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 class wxPalettePtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this

@@ -58,6 +58,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/print.h>
 #include <wx/printdlg.h>
+#include <wx/dcps.h>
 
 #include "printfw.h"
 
@@ -1541,6 +1542,229 @@ static PyObject *_wrap_wxPrintData_SetPrintMode(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxPostScriptDCTowxDC(void *ptr) {
+    wxPostScriptDC *src;
+    wxDC *dest;
+    src = (wxPostScriptDC *) ptr;
+    dest = (wxDC *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPostScriptDCTowxObject(void *ptr) {
+    wxPostScriptDC *src;
+    wxObject *dest;
+    src = (wxPostScriptDC *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxPostScriptDC(_swigarg0) (new wxPostScriptDC(_swigarg0))
+static PyObject *_wrap_new_wxPostScriptDC(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPostScriptDC * _result;
+    wxPrintData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "printData", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxPostScriptDC",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPostScriptDC. Expected _wxPrintData_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPostScriptDC *)new_wxPostScriptDC(*_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPostScriptDC_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxPostScriptDC2(_swigarg0,_swigarg1,_swigarg2) (new wxPostScriptDC(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_new_wxPostScriptDC2(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPostScriptDC * _result;
+    wxString * _arg0;
+    bool  _arg1 = (bool ) TRUE;
+    wxWindow * _arg2 = (wxWindow *) NULL;
+    PyObject * _obj0 = 0;
+    int tempbool1 = (int) TRUE;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "output","interactive","parent", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iO:new_wxPostScriptDC2",_kwnames,&_obj0,&tempbool1,&_argo2)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+    _arg1 = (bool ) tempbool1;
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxPostScriptDC2. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPostScriptDC *)new_wxPostScriptDC2(*_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPostScriptDC_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
+#define wxPostScriptDC_GetPrintData(_swigobj)  (_swigobj->GetPrintData())
+static PyObject *_wrap_wxPostScriptDC_GetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintData * _result;
+    wxPostScriptDC * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPostScriptDC_GetPrintData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPostScriptDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPostScriptDC_GetPrintData. Expected _wxPostScriptDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPrintData & _result_ref = wxPostScriptDC_GetPrintData(_arg0);
+    _result = (wxPrintData *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintData_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxPostScriptDC_SetPrintData(_swigobj,_swigarg0)  (_swigobj->SetPrintData(_swigarg0))
+static PyObject *_wrap_wxPostScriptDC_SetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPostScriptDC * _arg0;
+    wxPrintData * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","data", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPostScriptDC_SetPrintData",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPostScriptDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPostScriptDC_SetPrintData. Expected _wxPostScriptDC_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPostScriptDC_SetPrintData. Expected _wxPrintData_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPostScriptDC_SetPrintData(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPostScriptDC_SetResolution(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _arg0;
+    char *_kwnames[] = { "ppi", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxPostScriptDC_SetResolution",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPostScriptDC::SetResolution(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPostScriptDC_GetResolution(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPostScriptDC_GetResolution",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxPostScriptDC::GetResolution();
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5245,6 +5469,12 @@ static PyMethodDef printfwcMethods[] = {
 	 { "wxPageSetupDialogData_EnableHelp", (PyCFunction) _wrap_wxPageSetupDialogData_EnableHelp, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPageSetupDialogData", (PyCFunction) _wrap_delete_wxPageSetupDialogData, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPageSetupDialogData", (PyCFunction) _wrap_new_wxPageSetupDialogData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPostScriptDC_GetResolution", (PyCFunction) _wrap_wxPostScriptDC_GetResolution, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPostScriptDC_SetResolution", (PyCFunction) _wrap_wxPostScriptDC_SetResolution, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPostScriptDC_SetPrintData", (PyCFunction) _wrap_wxPostScriptDC_SetPrintData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPostScriptDC_GetPrintData", (PyCFunction) _wrap_wxPostScriptDC_GetPrintData, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPostScriptDC2", (PyCFunction) _wrap_new_wxPostScriptDC2, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPostScriptDC", (PyCFunction) _wrap_new_wxPostScriptDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintData_SetPrintMode", (PyCFunction) _wrap_wxPrintData_SetPrintMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintData_SetPrinterTranslation", (PyCFunction) _wrap_wxPrintData_SetPrinterTranslation, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintData_SetPrinterTranslateY", (PyCFunction) _wrap_wxPrintData_SetPrinterTranslateY, METH_VARARGS | METH_KEYWORDS },
@@ -5309,6 +5539,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
+    { "_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -5354,6 +5585,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxPrintDialogData",SwigwxPrintDialogDataTowxObject},
     { "_wxObject","_wxPageSetupDialog",SwigwxPageSetupDialogTowxObject},
     { "_wxObject","_wxPageSetupDialogData",SwigwxPageSetupDialogDataTowxObject},
+    { "_wxObject","_wxPostScriptDC",SwigwxPostScriptDCTowxObject},
     { "_wxObject","_wxPrintData",SwigwxPrintDataTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},

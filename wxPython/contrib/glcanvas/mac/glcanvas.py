@@ -63,14 +63,13 @@ class wxGLContextPtr(wxObjectPtr):
     def __repr__(self):
         return "<C wxGLContext instance at %s>" % (self.this,)
 class wxGLContext(wxGLContextPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(glcanvasc.new_wxGLContext,_args,_kwargs)
-        self.thisown = 1
+    def __init__(self,this):
+        self.this = this
 
 
 
 
-class wxGLCanvasPtr(wxScrolledWindowPtr):
+class wxGLCanvasPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0

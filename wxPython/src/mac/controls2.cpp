@@ -2297,63 +2297,6 @@ static PyObject *_wrap_wxListEvent_m_itemIndex_get(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxListEvent_m_oldItemIndex_set(_swigobj,_swigval) (_swigobj->m_oldItemIndex = _swigval,_swigval)
-static PyObject *_wrap_wxListEvent_m_oldItemIndex_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxListEvent * _arg0;
-    long  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_oldItemIndex", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxListEvent_m_oldItemIndex_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_m_oldItemIndex_set. Expected _wxListEvent_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxListEvent_m_oldItemIndex_set(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxListEvent_m_oldItemIndex_get(_swigobj) ((long ) _swigobj->m_oldItemIndex)
-static PyObject *_wrap_wxListEvent_m_oldItemIndex_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxListEvent * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxListEvent_m_oldItemIndex_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_m_oldItemIndex_get. Expected _wxListEvent_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxListEvent_m_oldItemIndex_get(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
 #define wxListEvent_m_col_set(_swigobj,_swigval) (_swigobj->m_col = _swigval,_swigval)
 static PyObject *_wrap_wxListEvent_m_col_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2662,62 +2605,6 @@ static PyObject *_wrap_wxListEvent_GetIndex(PyObject *self, PyObject *args, PyOb
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (long )wxListEvent_GetIndex(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxListEvent_GetOldIndex(_swigobj)  (_swigobj->GetOldIndex())
-static PyObject *_wrap_wxListEvent_GetOldIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxListEvent * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxListEvent_GetOldIndex",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_GetOldIndex. Expected _wxListEvent_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxListEvent_GetOldIndex(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxListEvent_GetOldItem(_swigobj)  (_swigobj->GetOldItem())
-static PyObject *_wrap_wxListEvent_GetOldItem(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxListEvent * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxListEvent_GetOldItem",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_GetOldItem. Expected _wxListEvent_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxListEvent_GetOldItem(_arg0);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -9615,8 +9502,6 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListEvent_GetPoint", (PyCFunction) _wrap_wxListEvent_GetPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_Cancelled", (PyCFunction) _wrap_wxListEvent_Cancelled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_GetColumn", (PyCFunction) _wrap_wxListEvent_GetColumn, METH_VARARGS | METH_KEYWORDS },
-	 { "wxListEvent_GetOldItem", (PyCFunction) _wrap_wxListEvent_GetOldItem, METH_VARARGS | METH_KEYWORDS },
-	 { "wxListEvent_GetOldIndex", (PyCFunction) _wrap_wxListEvent_GetOldIndex, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_GetIndex", (PyCFunction) _wrap_wxListEvent_GetIndex, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_GetCode", (PyCFunction) _wrap_wxListEvent_GetCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_m_item_get", (PyCFunction) _wrap_wxListEvent_m_item_get, METH_VARARGS | METH_KEYWORDS },
@@ -9627,8 +9512,6 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListEvent_m_cancelled_set", (PyCFunction) _wrap_wxListEvent_m_cancelled_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_m_col_get", (PyCFunction) _wrap_wxListEvent_m_col_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_m_col_set", (PyCFunction) _wrap_wxListEvent_m_col_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxListEvent_m_oldItemIndex_get", (PyCFunction) _wrap_wxListEvent_m_oldItemIndex_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxListEvent_m_oldItemIndex_set", (PyCFunction) _wrap_wxListEvent_m_oldItemIndex_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_m_itemIndex_get", (PyCFunction) _wrap_wxListEvent_m_itemIndex_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_m_itemIndex_set", (PyCFunction) _wrap_wxListEvent_m_itemIndex_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_m_code_get", (PyCFunction) _wrap_wxListEvent_m_code_get, METH_VARARGS | METH_KEYWORDS },

@@ -157,6 +157,32 @@ class wxPrintData(wxPrintDataPtr):
 
 
 
+class wxPostScriptDCPtr(wxDCPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetPrintData(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPostScriptDC_GetPrintData,(self,) + _args, _kwargs)
+        if val: val = wxPrintDataPtr(val) 
+        return val
+    def SetPrintData(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPostScriptDC_SetPrintData,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPostScriptDC instance at %s>" % (self.this,)
+class wxPostScriptDC(wxPostScriptDCPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(printfwc.new_wxPostScriptDC,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxPostScriptDC2(*_args,**_kwargs):
+    val = wxPostScriptDCPtr(apply(printfwc.new_wxPostScriptDC2,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+
 class wxPageSetupDialogDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -575,6 +601,10 @@ class wxPreviewFrame(wxPreviewFramePtr):
 
 
 #-------------- FUNCTION WRAPPERS ------------------
+
+wxPostScriptDC_SetResolution = printfwc.wxPostScriptDC_SetResolution
+
+wxPostScriptDC_GetResolution = printfwc.wxPostScriptDC_GetResolution
 
 
 

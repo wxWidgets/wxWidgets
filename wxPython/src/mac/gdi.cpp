@@ -57,9 +57,6 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/imaglist.h>
-#ifndef __WXMSW__
-#include <wx/dcps.h>
-#endif
 #include <wx/fontmap.h>
 #include <wx/fontenc.h>
 #include <wx/fontmap.h>
@@ -9309,84 +9306,6 @@ static PyObject *_wrap_new_wxWindowDC(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-static void *SwigwxPostScriptDCTowxDC(void *ptr) {
-    wxPostScriptDC *src;
-    wxDC *dest;
-    src = (wxPostScriptDC *) ptr;
-    dest = (wxDC *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxPostScriptDCTowxObject(void *ptr) {
-    wxPostScriptDC *src;
-    wxObject *dest;
-    src = (wxPostScriptDC *) ptr;
-    dest = (wxObject *) src;
-    return (void *) dest;
-}
-
-#define new_wxPostScriptDC(_swigarg0,_swigarg1,_swigarg2) (new wxPostScriptDC(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_new_wxPostScriptDC(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPostScriptDC * _result;
-    wxString * _arg0;
-    bool  _arg1 = (bool ) TRUE;
-    wxWindow * _arg2 = (wxWindow *) NULL;
-    PyObject * _obj0 = 0;
-    int tempbool1 = (int) TRUE;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "output","interactive","win", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iO:new_wxPostScriptDC",_kwnames,&_obj0,&tempbool1,&_argo2)) 
-        return NULL;
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg0 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
-#endif
-}
-    _arg1 = (bool ) tempbool1;
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxPostScriptDC. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPostScriptDC *)new_wxPostScriptDC(*_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPostScriptDC_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
 static void *SwigwxPaletteTowxGDIObject(void *ptr) {
     wxPalette *src;
     wxGDIObject *dest;
@@ -11144,7 +11063,6 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxPalette_GetPixel", (PyCFunction) _wrap_wxPalette_GetPixel, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPalette", (PyCFunction) _wrap_delete_wxPalette, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPalette", (PyCFunction) _wrap_new_wxPalette, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxPostScriptDC", (PyCFunction) _wrap_new_wxPostScriptDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxWindowDC", (PyCFunction) _wrap_new_wxWindowDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPaintDC", (PyCFunction) _wrap_new_wxPaintDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxClientDC", (PyCFunction) _wrap_new_wxClientDC, METH_VARARGS | METH_KEYWORDS },
@@ -11407,7 +11325,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGDIObject","_wxCursor",SwigwxCursorTowxGDIObject},
     { "_wxGDIObject","_wxIcon",SwigwxIconTowxGDIObject},
     { "_wxGDIObject","_wxBitmap",SwigwxBitmapTowxGDIObject},
-    { "_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC},
     { "_wxDC","_wxWindowDC",SwigwxWindowDCTowxDC},
     { "_wxDC","_wxPaintDC",SwigwxPaintDCTowxDC},
     { "_wxDC","_wxClientDC",SwigwxClientDCTowxDC},
@@ -11451,7 +11368,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxRegion",SwigwxRegionTowxObject},
     { "_wxObject","_wxImageList",SwigwxImageListTowxObject},
     { "_wxObject","_wxPalette",SwigwxPaletteTowxObject},
-    { "_wxObject","_wxPostScriptDC",SwigwxPostScriptDCTowxObject},
     { "_wxObject","_wxWindowDC",SwigwxWindowDCTowxObject},
     { "_wxObject","_wxPaintDC",SwigwxPaintDCTowxObject},
     { "_wxObject","_wxClientDC",SwigwxClientDCTowxObject},

@@ -958,9 +958,6 @@ class wxGridPtr(wxScrolledWindowPtr):
     def DrawTextRectangle(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_DrawTextRectangle,(self,) + _args, _kwargs)
         return val
-    def StringToLines(self, *_args, **_kwargs):
-        val = apply(gridc.wxGrid_StringToLines,(self,) + _args, _kwargs)
-        return val
     def GetTextBoxSize(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetTextBoxSize,(self,) + _args, _kwargs)
         return val

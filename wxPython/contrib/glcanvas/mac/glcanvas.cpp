@@ -106,52 +106,6 @@ static void *SwigwxGLContextTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxGLContext(_swigarg0,_swigarg1,_swigarg2) (new wxGLContext(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_new_wxGLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGLContext * _result;
-    bool  _arg0;
-    wxGLCanvas * _arg1;
-    wxPalette * _arg2 = (wxPalette *) &wxNullPalette;
-    int tempbool0;
-    PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "isRGB","win","palette", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO|O:new_wxGLContext",_kwnames,&tempbool0,&_argo1,&_argo2)) 
-        return NULL;
-    _arg0 = (bool ) tempbool0;
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGLCanvas_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxGLContext. Expected _wxGLCanvas_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPalette_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxGLContext. Expected _wxPalette_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGLContext *)new_wxGLContext(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGLContext_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
 #define delete_wxGLContext(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxGLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -286,22 +240,6 @@ static PyObject *_wrap_wxGLContext_GetWindow(PyObject *self, PyObject *args, PyO
     wxPy_END_ALLOW_THREADS;
 }{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
-}
-
-static void *SwigwxGLCanvasTowxScrolledWindow(void *ptr) {
-    wxGLCanvas *src;
-    wxScrolledWindow *dest;
-    src = (wxGLCanvas *) ptr;
-    dest = (wxScrolledWindow *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxGLCanvasTowxPanel(void *ptr) {
-    wxGLCanvas *src;
-    wxPanel *dest;
-    src = (wxGLCanvas *) ptr;
-    dest = (wxPanel *) src;
-    return (void *) dest;
 }
 
 static void *SwigwxGLCanvasTowxWindow(void *ptr) {
@@ -631,7 +569,6 @@ static PyMethodDef glcanvascMethods[] = {
 	 { "wxGLContext_SetColour", (PyCFunction) _wrap_wxGLContext_SetColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGLContext_SetCurrent", (PyCFunction) _wrap_wxGLContext_SetCurrent, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxGLContext", (PyCFunction) _wrap_delete_wxGLContext, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxGLContext", (PyCFunction) _wrap_new_wxGLContext, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus
@@ -661,7 +598,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxPanel","_wxGLCanvas",SwigwxGLCanvasTowxPanel},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -695,7 +631,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxGLContext",SwigwxGLContextTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_wxScrolledWindow","_wxGLCanvas",SwigwxGLCanvasTowxScrolledWindow},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
