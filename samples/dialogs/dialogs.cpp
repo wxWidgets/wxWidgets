@@ -224,30 +224,26 @@ MyFrame::MyFrame(wxWindow *parent,
     m_dlgFind =
     m_dlgReplace = NULL;
 #endif
+    
+    m_clrData.SetChooseFull(true);
+    for (int i = 0; i < 16; i++)
+    {
+        m_clrData.SetCustomColour(i, wxColour(i*16, i*16, i*16));
+    }
    
     CreateStatusBar();
 }
 
 void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
 {
-    wxColour col = myCanvas->GetBackgroundColour();
+    m_clrData.SetColour(myCanvas->GetBackgroundColour());
 
-    wxColourData data;
-    data.SetColour(col);
-    data.SetChooseFull(TRUE);
-    for (int i = 0; i < 16; i++)
-    {
-        wxColour colour(i*16, i*16, i*16);
-        data.SetCustomColour(i, colour);
-    }
-
-    wxColourDialog dialog(this, &data);
+    wxColourDialog dialog(this, &m_clrData);
     dialog.SetTitle(_T("Choose the background colour"));
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxColourData retData = dialog.GetColourData();
-        col = retData.GetColour();
-        myCanvas->SetBackgroundColour(col);
+        m_clrData = dialog.GetColourData();
+        myCanvas->SetBackgroundColour(m_clrData.GetColour());
         myCanvas->ClearBackground();
         myCanvas->Refresh();
     }

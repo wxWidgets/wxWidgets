@@ -109,6 +109,8 @@ private:
                         *m_dlgReplace;
 #endif // wxUSE_FINDREPLDLG
 
+    wxColourData m_clrData;
+
     DECLARE_EVENT_TABLE()
 };
 
