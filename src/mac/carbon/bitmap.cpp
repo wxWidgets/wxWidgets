@@ -51,6 +51,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject )
 // we don't dare premultiplied alpha yet
 #define wxMAC_USE_PREMULTIPLIED_ALPHA 0
 
+#if wxUSE_BMPBUTTON
+
 void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType )
 {
     memset( info , 0 , sizeof(ControlButtonContentInfo) ) ;
@@ -121,6 +123,8 @@ void wxMacReleaseBitmapButton( ControlButtonContentInfo*info )
         wxFAIL_MSG(wxT("Unexpected bitmap type") ) ;
     }
 }
+
+#endif //wxUSE_BMPBUTTON
 
 #define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
 
@@ -369,7 +373,10 @@ IconRef wxBitmapRefData::GetIconRef()
         // transform into IconRef
     
         static int iconCounter = 2 ;        
-        OSStatus err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) iconCounter, iconFamily, &m_iconRef ) ;
+#ifdef __WXDEBUG__
+        OSStatus err = 
+#endif
+            RegisterIconRefFromIconFamily( 'WXNG' , (OSType) iconCounter, iconFamily, &m_iconRef ) ;
         wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
         // we have to retain a reference, as Unregister will decrement it 
         AcquireIconRef( m_iconRef ) ;
@@ -809,12 +816,16 @@ void wxBitmap::EndRawAccess()
 
 bool wxBitmap::CreateFromXpm(const char **bits)
 {
+#if wxUSE_IMAGE
     wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
     wxXPMDecoder decoder;
     wxImage img = decoder.ReadData(bits);
     wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
     *this = wxBitmap(img);
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 #ifdef __WXMAC_OSX__
@@ -907,11 +918,13 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
     }
     else
     {
+#if wxUSE_IMAGE
         wxImage loadimage(filename, type);
         if (loadimage.Ok()) {
             *this = loadimage;
             return true;
         }
+#endif
     }
     wxLogWarning(wxT("no bitmap handler for type %d defined."), type);
     return false;
@@ -933,6 +946,8 @@ bool wxBitmap::Create(void *data, wxBitmapType type, int width, int height, int 
 
     return handler->Create(this, data, type, width, height, depth);
 }
+
+#if wxUSE_IMAGE
 
 wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
@@ -1085,6 +1100,7 @@ wxImage wxBitmap::ConvertToImage() const
     return image;
 }
 
+#endif //wxUSE_IMAGE
 
 bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type,
                         const wxPalette *palette) const
@@ -1097,9 +1113,10 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type,
     }
     else
     {
+#if wxUSE_IMAGE
         wxImage image = ConvertToImage();
-
         return image.SaveFile(filename, type);
+#endif
     }
 
     wxLogWarning(wxT("no bitmap handler for type %d defined."), type);
