@@ -155,7 +155,7 @@ HTMLOBJS = #$ ExpandList("WXHTMLOBJS");
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 # Normal, static library
-all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg $(LIBTARGET)
+all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
 
 dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D
 
@@ -241,7 +241,7 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
     $(link) @<<
     $(LINKFLAGS)
     -out:$(WXDIR)\lib\$(WXLIBNAME).dll
-    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\zlib.lib $(WXDIR)\lib\xpm.lib $(WXDIR)\lib\jpeg.lib
+    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\zlib.lib $(WXDIR)\lib\xpm.lib $(WXDIR)\lib\jpeg.lib $(WXDIR)\lib\tiff.lib
 <<
 
 !endif
@@ -318,6 +318,16 @@ clean_jpeg:
     nmake -f makefile.vc clean
     cd $(WXDIR)\src\msw
 
+tiff:
+    cd $(WXDIR)\src\tiff
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)  CRTFLAG=$(CRTFLAG) all
+    cd $(WXDIR)\src\msw
+
+clean_tiff:
+    cd $(WXDIR)\src\tiff
+    nmake -f makefile.vc clean
+    cd $(WXDIR)\src\msw
+
 xpm:
     cd $(WXDIR)\src\xpm
     nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG)
@@ -333,7 +343,7 @@ rcparser:
     nmake -f makefile.vc FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
-clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_xpm clean_jpeg 
+clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_xpm clean_jpeg clean_tiff
         -erase $(LIBTARGET)
         -erase $(WXDIR)\lib\$(WXLIBNAME).pdb
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll

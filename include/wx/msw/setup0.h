@@ -214,7 +214,7 @@
                                 // if alignment is an issue.
 #define wxUSE_DEBUG_CONTEXT       1
                                 // If 1, enables wxDebugContext, for
-                                // writing error messages to file, etc. 
+                                // writing error messages to file, etc.
                                 // If __WXDEBUG__ is not defined, will still use
                                 // normal memory operators.
                                 // It's recommended to set this to 1,
@@ -243,7 +243,7 @@
                                 // Some databases/ODBC drivers only allow forward scrolling cursors.
                                 // Unless you specifically want to use backward scrolling
                                 // cursors, and you know that all of the databases/ODBC drivers
-                                // that you will use these odbc classes with allow backward 
+                                // that you will use these odbc classes with allow backward
                                 // scrolling cursors, this setting should remain set to 1
                                 // for maximum database/driver compatibilty
 
@@ -277,6 +277,8 @@
                                 // Use PNG bitmap/image code
 #define wxUSE_LIBJPEG       1
                                 // Use JPEG bitmap/image code
+#define wxUSE_LIBTIFF       0
+                                // Use TIFF bitmap/image code
 #define wxUSE_GIF           1
                                 // Use GIF bitmap/image code
 #define wxUSE_PNM           1
