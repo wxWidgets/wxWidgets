@@ -30,7 +30,6 @@
 #include <Xm/ToggleB.h>
 #include <Xm/ToggleBG.h>
 #include <Xm/RowColumn.h>
-#include <Xm/Form.h>
 #include <Xm/Frame.h>
 #ifdef __VMS__
 #pragma message enable nosimpint
@@ -92,7 +91,6 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     m_mainWidget = XtVaCreateWidget ("radioboxframe",
                                         xmFrameWidgetClass, parentWidget,
-                                        XmNshadowType, XmSHADOW_IN,
                                         XmNresizeHeight, True,
                                         XmNresizeWidth, True,
                                         NULL);

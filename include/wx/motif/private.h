@@ -21,6 +21,18 @@
 // this header is included after Xm/Xm.h
 
 // ----------------------------------------------------------------------------
+// convenience macros
+// ----------------------------------------------------------------------------
+
+#define wxCHECK_MOTIF_VERSION( major, minor ) \
+  ( XmVersion >= (major) * 1000 + (minor) )
+
+#define wxCHECK_LESSTIF_VERSION( major, minor ) \
+  ( LesstifVersion >= (major) * 1000 + (minor) )
+
+#define wxCHECK_LESSTIF() ( defined(LesstifVersion) && LesstifVersion > 0 )
+
+// ----------------------------------------------------------------------------
 // common callbacks
 // ----------------------------------------------------------------------------
 
