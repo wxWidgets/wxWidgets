@@ -92,8 +92,8 @@ public:
     // wxScrollBar actions
     void ScrollToStart();
     void ScrollToEnd();
-    void ScrollLines(int nLines);
-    void ScrollPages(int nPages);
+    bool ScrollLines(int nLines);
+    bool ScrollPages(int nPages);
 
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0,
