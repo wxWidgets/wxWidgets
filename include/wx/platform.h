@@ -415,12 +415,6 @@
 #    define __UNIX__
 #endif /* Unix */
 
-#if defined(__HPUX__) && !defined(__WXGTK__)
-#    ifndef __WXMOTIF__
-#        define __WXMOTIF__
-#    endif /* __WXMOTIF__ */
-#endif
-
 #if defined(__WXMOTIF__) || defined(__WXX11__)
 #    define __X__
 #endif
