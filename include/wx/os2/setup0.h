@@ -362,5 +362,7 @@
 
 #define wxUSE_FINDREPLDLG         1 // Find replace dialog
 
+#define wxUSE_PALETTE             1
+
 #endif
     // _WX_SETUP_H_
