@@ -2035,6 +2035,8 @@ enum wxUpdateUI
 
 #ifdef __WXMAC__
 
+#define WX_OPAQUE_TYPE( name ) struct wxOpaque##name
+
 typedef unsigned char WXCOLORREF[6];
 typedef void*       WXHBITMAP;
 typedef void*       WXHMETAFILE;
@@ -2054,8 +2056,11 @@ typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 
-typedef void*       WXWidget;
-typedef void*       WXWindow;
+
+//typedef void*       WXWidget;
+//typedef void*       WXWindow;
+typedef WX_OPAQUE_TYPE(ControlRef ) * WXWidget ;
+typedef WX_OPAQUE_TYPE(WindowRef) * WXWindow ;
 typedef void*       WXDisplay;
 
 /* typedef WindowPtr       WXHWND; */
