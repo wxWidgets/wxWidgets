@@ -17,6 +17,7 @@ mswu
 mswud
 mswdllu
 mswdllud
+vc_lib
 univ
 univd
 univdll
@@ -32,6 +33,7 @@ wxmsw*.dll
 wxmsw*.exp
 wxmsw*.ilk
 wxmsw*.lib
+expat*.lib
 jpeg*.lib
 png*.lib
 regex*.lib
