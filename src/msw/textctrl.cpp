@@ -844,6 +844,12 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 
 bool wxTextCtrl::IsEditable() const
 {
+    // strangely enough, we may be called before the control is created: our
+    // own Create() calls MSWGetStyle() which calls AcceptsFocus() which calls
+    // us
+    if ( !m_hWnd )
+        return TRUE;
+
     long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
     return (style & ES_READONLY) == 0;
