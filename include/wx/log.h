@@ -107,7 +107,7 @@ public:
 
     // static sink function - see DoLog() for function to overload in the
     // derived classes
-    static void OnLog(wxLogLevel level, const char *szString, time_t t)
+    static void OnLog(wxLogLevel level, const wxChar *szString, time_t t)
     {
         if ( IsEnabled() ) {
             wxLog *pLogger = GetActiveTarget();
@@ -154,7 +154,7 @@ public:
         // get trace mask
     static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
         // is this trace mask in the list?
-    static bool IsAllowedTraceMask(const char *mask)
+    static bool IsAllowedTraceMask(const wxChar *mask)
         { return ms_aTraceMasks.Index(mask) != wxNOT_FOUND; }
 
     // make dtor virtual for all derived classes
@@ -167,10 +167,10 @@ protected:
     // the logging functions that can be overriden
         // default DoLog() prepends the time stamp and a prefix corresponding
         // to the message to szString and then passes it to DoLogString()
-    virtual void DoLog(wxLogLevel level, const char *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
         // default DoLogString does nothing but is not pure virtual because if
         // you override DoLog() you might not need it at all
-    virtual void DoLogString(const char *szString, time_t t);
+    virtual void DoLogString(const wxChar *szString, time_t t);
 
 private:
     // static variables
@@ -197,7 +197,7 @@ public:
 
 private:
     // implement sink function
-    virtual void DoLogString(const char *szString, time_t t);
+    virtual void DoLogString(const wxChar *szString, time_t t);
 
     FILE *m_fp;
 };
@@ -212,7 +212,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogString(const char *szString, time_t t);
+    virtual void DoLogString(const wxChar *szString, time_t t);
 
     // using ptr here to avoid including <iostream.h> from this file
     ostream *m_ostr;
@@ -245,7 +245,7 @@ public:
     virtual void Flush();
 
 protected:
-    virtual void DoLog(wxLogLevel level, const char *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
 
     // empty everything
     void Clear();
@@ -266,7 +266,7 @@ class WXDLLEXPORT wxLogWindow : public wxLog
 {
 public:
     wxLogWindow(wxFrame *pParent,         // the parent frame (can be NULL)
-            const char *szTitle,      // the title of the frame
+            const wxChar *szTitle,      // the title of the frame
             bool bShow = TRUE,        // show window immediately?
             bool bPassToOld = TRUE);  // pass log messages to the old target?
     ~wxLogWindow();
@@ -300,8 +300,8 @@ public:
     virtual void OnFrameDelete(wxFrame *frame);
 
 protected:
-    virtual void DoLog(wxLogLevel level, const char *szString, time_t t);
-    virtual void DoLogString(const char *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
+    virtual void DoLogString(const wxChar *szString, time_t t);
 
 private:
     bool        m_bPassMessages;  // pass messages to m_pOldLog?
@@ -351,9 +351,9 @@ private:
 // -------------------
 
 #define DECLARE_LOG_FUNCTION(level)                                 \
-extern void WXDLLEXPORT wxLog##level(const char *szFormat, ...)
+extern void WXDLLEXPORT wxLog##level(const wxChar *szFormat, ...)
 #define DECLARE_LOG_FUNCTION2(level, arg1)                          \
-extern void WXDLLEXPORT wxLog##level(arg1, const char *szFormat, ...)
+extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...)
 
     // a generic function for all levels (level is passes as parameter)
     DECLARE_LOG_FUNCTION2(Generic, wxLogLevel level);
@@ -399,10 +399,10 @@ extern void WXDLLEXPORT wxLog##level(arg1, const char *szFormat, ...)
     DECLARE_LOG_FUNCTION2(Trace, wxTraceMask mask);
 #else   //!debug
     // these functions do nothing in release builds
-    inline void wxLogDebug(const char *, ...) { }
-    inline void wxLogTrace(const char *, ...) { }
-    inline void wxLogTrace(wxTraceMask, const char *, ...) { }
-    inline void wxLogTrace(const char *, const char *, ...) { }
+    inline void wxLogDebug(const wxChar *, ...) { }
+    inline void wxLogTrace(const wxChar *, ...) { }
+    inline void wxLogTrace(wxTraceMask, const wxChar *, ...) { }
+    inline void wxLogTrace(const wxChar *, const wxChar *, ...) { }
 #endif
 
 
@@ -419,21 +419,26 @@ extern void WXDLLEXPORT wxLog##level(arg1, const char *szFormat, ...)
     // return the last system error code
     WXDLLEXPORT unsigned long wxSysErrorCode();
     // return the error message for given (or last if 0) error code
-    WXDLLEXPORT const char* wxSysErrorMsg(unsigned long nErrCode = 0);
+    WXDLLEXPORT const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
     // ----------------------------------------------------------------------------
     // debug only logging functions: use them with API name and error code
     // ----------------------------------------------------------------------------
 
+#ifndef __TFILE__
+#define __XFILE__(x) _T(x)
+#define __TFILE__ __XFILE__(__FILE__)
+#endif
+
 #ifdef  __WXDEBUG__
 #define wxLogApiError(api, rc)                                              \
-    wxLogDebug("At %s(%d) '%s' failed with error %lx (%s).",  \
-            __FILE__, __LINE__, api,                       \
+    wxLogDebug(_T("At %s(%d) '%s' failed with error %lx (%s)."),  \
+            __TFILE__, __LINE__, api,                       \
             rc, wxSysErrorMsg(rc))
 #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
 #else   //!debug
-    inline void wxLogApiError(const char *, long) { }
-    inline void wxLogLastError(const char *) { }
+    inline void wxLogApiError(const wxChar *, long) { }
+    inline void wxLogLastError(const wxChar *) { }
 #endif  //debug/!debug
 
 #endif  // _WX_LOG_H_
