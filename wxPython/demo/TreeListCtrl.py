@@ -82,17 +82,10 @@ class TestPanel(wx.Panel):
 
 
     def OnRightUp(self, evt):
-        # Convert the position from being relative to the subwindow to
-        # being relative to the outer treelist window so HitTest will
-        # have the point it is expecting.
         pos = evt.GetPosition()
-        pos = self.tree.GetMainWindow().ClientToScreen(pos)
-        pos = self.tree.ScreenToClient(pos)
         item, flags, col = self.tree.HitTest(pos)
-
         if item:
             print flags, col, self.tree.GetItemText(item, col)
-
 
     def OnSize(self, evt):
         self.tree.SetSize(self.GetSize())
