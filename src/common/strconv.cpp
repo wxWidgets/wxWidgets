@@ -231,28 +231,41 @@ size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
 const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
 {
-    if (psz)
+    if ( psz )
     {
-        size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);  // return value excludes /0
-        if (nLen == (size_t)-1)
-            return wxWCharBuffer((wchar_t *) NULL);
-        wxWCharBuffer buf(nLen);                        // this allocates nLen1+
-        MB2WC((wchar_t *)(const wchar_t *) buf, psz, nLen+1);
-        return buf;
+        // calculate the length of the buffer needed first
+        size_t nLen = MB2WC(NULL, psz, 0);
+        if ( nLen != (size_t)-1 )
+        {
+            // now do the actual conversion
+            wxWCharBuffer buf(nLen);
+            MB2WC(buf.data(), psz, nLen + 1); // with the trailing NUL
+
+            return buf;
+        }
     }
-    else
-        return wxWCharBuffer((wchar_t *) NULL);
+
+    wxWCharBuffer buf((wchar_t *)NULL);
+
+    return buf;
 }
 
 const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
 {
-    // return value excludes NUL
-    size_t nLen = pwz ? WC2MB((char *) NULL, pwz, 0) : (size_t)-1;
-    if (nLen == (size_t)-1)
-        return wxCharBuffer((const char *)NULL);
+    if ( pwz )
+    {
+        size_t nLen = WC2MB(NULL, pwz, 0);
+        if ( nLen != (size_t)-1 )
+        {
+            wxCharBuffer buf(nLen);
+            WC2MB(buf.data(), pwz, nLen + 1);
 
-    wxCharBuffer buf(nLen);                      // this allocates nLen+1
-    WC2MB((char *)(const char *) buf, pwz, nLen+1);
+            return buf;
+        }
+    }
+
+    wxCharBuffer buf((char *)NULL);
+
     return buf;
 }
 
