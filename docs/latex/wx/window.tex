@@ -778,7 +778,12 @@ method:\par
 \end{twocollist}
 }}
 
-\membersection{wxWindow::GetTextExtent}
+\membersection{wxWindow::GetSizer}\label{wxwindowgetsizer}
+
+\constfunc{const wxSizer *}{GetSizer}{\void}
+
+Return the sizer associated with the window by a previous call to 
+\helpref{SetSizer()}{wxwindowsetsizer} or {\tt NULL}.
 
 \constfunc{virtual void}{GetTextExtent}{\param{const wxString\& }{string}, \param{int* }{x}, \param{int* }{y},
  \param{int* }{descent = NULL}, \param{int* }{externalLeading = NULL},
@@ -1812,9 +1817,10 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 \func{void}{SetAutoLayout}{\param{bool}{ autoLayout}}
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
-be called automatically when the window is resized. Use in connection with
-\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and
-\helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for laying out subwindows.
+be called automatically when the window is resized. Use in connection with 
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and 
+\helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for laying out
+subwindows.
 
 \wxheading{Parameters}
 
