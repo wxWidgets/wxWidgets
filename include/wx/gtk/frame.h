@@ -60,7 +60,7 @@ public:
     bool Destroy();
 
     virtual bool Show( bool show );
-    virtual void Centre( int direction = wxHORIZONTAL );
+    virtual void Centre( int direction = wxBOTH );
 
 #if wxUSE_STATUSBAR
     virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,

@@ -313,39 +313,6 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 
 #endif // GTK_MINOR_VERSION > 0
 
-
-//-----------------------------------------------------------------------------
-// "size_allocate"
-//-----------------------------------------------------------------------------
-
-static void gtk_window_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    if (!win->m_hasVMT) 
-        return;
-
-    if (win->m_sizeSet)
-        return;
-	
-    win->m_sizeSet = TRUE;
-    
-/*
-    wxPrintf( "OnSize from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        wxPrintf( win->GetClassInfo()->GetClassName() );
-    wxPrintf( " %d %d %d %d\n", (int)alloc->x,
-                                (int)alloc->y,
-                                (int)alloc->width,
-                                (int)alloc->height );
-*/
-
-    wxSizeEvent event( win->GetSize(), win->GetId() );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
-}
-
 //-----------------------------------------------------------------------------
 // key event conversion routines
 //-----------------------------------------------------------------------------
@@ -2069,13 +2036,6 @@ void wxWindow::PostCreation()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
 
-    if (!m_isFrame)
-    {
-        /* frames have their own callback */
-        gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
-            GTK_SIGNAL_FUNC(gtk_window_size_callback), (gpointer)this );
-    }
-
     if (m_wxwindow)
     {
         if (!m_noExpose)
@@ -2164,14 +2124,9 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         m_y = y;
         m_width = width;
         m_height = height;
-
-        m_sizeSet = FALSE;
     }
     else
     {
-        int old_width = m_width;
-	int old_height = m_height;
-	
         GtkMyFixed *myfixed = GTK_MYFIXED(m_parent->m_wxwindow);
 	
         if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
@@ -2220,19 +2175,19 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
                               m_y-border,
                               m_width+2*border,
                               m_height+border+bottom_border );
-
-        if ((old_width != m_width) ||
-	    (old_height != m_height))
-	{
-	    m_sizeSet = FALSE;
-	}
     }
-
+    
 /*
+    wxPrintf( "OnSize sent from " );
+    if (GetClassInfo() && GetClassInfo()->GetClassName())
+        wxPrintf( GetClassInfo()->GetClassName() );
+    wxPrintf( " %d %d %d %d\n", (int)m_x, (int)m_y, (int)m_width, (int)m_height );
+*/
+
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
-*/
+
     m_resizing = FALSE;
 }
 

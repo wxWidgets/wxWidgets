@@ -113,7 +113,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 {
     if (g_isIdle) 
         wxapp_install_idle_handler();
-    
+
     if ((win->m_x == alloc->x) &&
         (win->m_y == alloc->y) &&
         (win->m_width == alloc->width) &&
@@ -124,7 +124,28 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
     
     win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
 
-    if (win->GetAutoLayout()) win->Layout();
+    if (win->GetAutoLayout())
+    {
+        win->Layout();
+    }
+}
+
+//-----------------------------------------------------------------------------
+// "realize" from m_widget
+//-----------------------------------------------------------------------------
+
+/* GTK 1.2 up to version 1.2.5 is broken so that we have to call a queue_resize 
+   here in order to take repositioning before showing to take effect. */
+
+static gint
+gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    gtk_widget_queue_resize( win->m_widget );
+
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -213,6 +234,9 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
+    gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
+                            GTK_SIGNAL_FUNC(gtk_notebook_realized_callback), (gpointer) this );
+			    
     Show( TRUE );
 
     return TRUE;

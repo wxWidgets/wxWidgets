@@ -112,6 +112,7 @@ void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
                                          wxDefaultPosition, wxDefaultSize,
                                          5, animals,
                                          2, wxRA_SPECIFY_ROWS);
+
   c = new wxLayoutConstraints;
   c->left.SameAs(radiobox, wxLeft);
   c->height.AsIs();

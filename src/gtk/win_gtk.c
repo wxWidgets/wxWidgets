@@ -393,7 +393,7 @@ gtk_myfixed_set_size (GtkMyFixed    *myfixed,
             if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (myfixed))
 	        gtk_widget_queue_resize (widget);
 		    
-            break;
+            return;
         }
     }
 }
@@ -602,16 +602,6 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
 
     myfixed = GTK_MYFIXED (widget);
   
-    children = myfixed->children;
-    while (children)
-    {
-        child = children->data;
-        children = children->next;
- 
-        gtk_myfixed_position_child (myfixed, child);
-        gtk_myfixed_allocate_child (myfixed, child);
-    }
-    
     widget->allocation = *allocation;
     
     if (myfixed->shadow_type == GTK_MYSHADOW_NONE)
@@ -631,6 +621,16 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
     {
         gdk_window_move_resize( widget->window, x, y, w, h );
         gdk_window_move_resize( myfixed->bin_window, 0, 0, w, h );
+    }
+    
+    children = myfixed->children;
+    while (children)
+    {
+        child = children->data;
+        children = children->next;
+ 
+        gtk_myfixed_position_child (myfixed, child);
+        gtk_myfixed_allocate_child (myfixed, child);
     }
 }
 
@@ -665,56 +665,6 @@ gtk_myfixed_draw (GtkWidget    *widget,
 	    gtk_widget_draw (child->widget, &child_area);
     }
 }
-
-/*
-static void
-gtk_myfixed_draw_border (GtkMyFixed *myfixed)
-{
-    GtkWidget *widget;
-    
-    widget = GTK_WIDGET(myfixed);
-
-    if (myfixed->shadow_type == GTK_MYSHADOW_NONE)
-        return;
-	
-    if (myfixed->shadow_type == GTK_MYSHADOW_OUT)
-    {
-        gtk_draw_shadow( widget->style,
-                         widget->window,
-                         GTK_STATE_NORMAL,
-                         GTK_SHADOW_OUT,
-                         0, 0,
-			 widget->allocation.width,
-			 widget->allocation.height );
-        return;
-    }
-
-    if (myfixed->shadow_type == GTK_MYSHADOW_IN)
-    {
-        gtk_draw_shadow( widget->style,
-                         widget->window,
-                         GTK_STATE_NORMAL,
-                         GTK_SHADOW_IN,
-                         0, 0,
-			 widget->allocation.width,
-			 widget->allocation.height );
-        return;
-    }
-    
-    if (myfixed->shadow_type == GTK_MYSHADOW_THIN)
-    {
-        GdkGC *gc;
-	gc = gdk_gc_new( widget->window );
-        gdk_gc_set_foreground( gc, &widget->style->black );
-        gdk_draw_rectangle( widget->window, gc, FALSE, 
-                            0, 0, 
-			    widget->allocation.width-1,
-			    widget->allocation.height-1 );
-        gdk_gc_unref( gc );
-        return;
-    }
-}
-*/
 
 static gint
 gtk_myfixed_expose (GtkWidget      *widget,
@@ -820,23 +770,23 @@ gtk_myfixed_forall (GtkContainer *container,
 		   GtkCallback   callback,
 		   gpointer      callback_data)
 {
-  GtkMyFixed *myfixed;
-  GtkMyFixedChild *child;
-  GList *children;
+    GtkMyFixed *myfixed;
+    GtkMyFixedChild *child;
+    GList *children;
 
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (container));
-  g_return_if_fail (callback != NULL);
+    g_return_if_fail (container != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (container));
+    g_return_if_fail (callback != NULL);
 
-  myfixed = GTK_MYFIXED (container);
+    myfixed = GTK_MYFIXED (container);
 
-  children = myfixed->children;
-  while (children)
+    children = myfixed->children;
+    while (children)
     {
-      child = children->data;
-      children = children->next;
+        child = children->data;
+        children = children->next;
 
-      (* callback) (child->widget, callback_data);
+        (* callback) (child->widget, callback_data);
     }
 }
 
@@ -848,31 +798,31 @@ static void
 gtk_myfixed_position_child (GtkMyFixed      *myfixed,
 			   GtkMyFixedChild *child)
 {
-  gint x;
-  gint y;
+    gint x;
+    gint y;
 
-  x = child->x - myfixed->xoffset;
-  y = child->y - myfixed->yoffset;
+    x = child->x - myfixed->xoffset;
+    y = child->y - myfixed->yoffset;
 
-  if (IS_ONSCREEN (x,y))
+    if (IS_ONSCREEN (x,y))
     {
-      if (GTK_WIDGET_MAPPED (myfixed) &&
+        if (GTK_WIDGET_MAPPED (myfixed) &&
 	  GTK_WIDGET_VISIBLE (child->widget))
 	{
-	  if (!GTK_WIDGET_MAPPED (child->widget))
-	    gtk_widget_map (child->widget);
+	    if (!GTK_WIDGET_MAPPED (child->widget))
+	        gtk_widget_map (child->widget);
 	}
 
-      if (GTK_WIDGET_IS_OFFSCREEN (child->widget))
-	GTK_PRIVATE_UNSET_FLAG (child->widget, GTK_IS_OFFSCREEN);
+        if (GTK_WIDGET_IS_OFFSCREEN (child->widget))
+	    GTK_PRIVATE_UNSET_FLAG (child->widget, GTK_IS_OFFSCREEN);
     }
-  else
+    else
     {
-      if (!GTK_WIDGET_IS_OFFSCREEN (child->widget))
-	GTK_PRIVATE_SET_FLAG (child->widget, GTK_IS_OFFSCREEN);
+        if (!GTK_WIDGET_IS_OFFSCREEN (child->widget))
+	    GTK_PRIVATE_SET_FLAG (child->widget, GTK_IS_OFFSCREEN);
 
-      if (GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_unmap (child->widget);
+        if (GTK_WIDGET_MAPPED (child->widget))
+	    gtk_widget_unmap (child->widget);
     }
 }
 
@@ -880,30 +830,30 @@ static void
 gtk_myfixed_allocate_child (GtkMyFixed      *myfixed,
 			   GtkMyFixedChild *child)
 {
-  GtkAllocation allocation;
-  GtkRequisition requisition;
+    GtkAllocation allocation;
+    GtkRequisition requisition;
 
-  allocation.x = child->x - myfixed->xoffset;
-  allocation.y = child->y - myfixed->yoffset;
-  gtk_widget_get_child_requisition (child->widget, &requisition);
-  allocation.width = requisition.width;
-  allocation.height = requisition.height;
+    allocation.x = child->x - myfixed->xoffset;
+    allocation.y = child->y - myfixed->yoffset;
+    gtk_widget_get_child_requisition (child->widget, &requisition);
+    allocation.width = requisition.width;
+    allocation.height = requisition.height;
   
-  gtk_widget_size_allocate (child->widget, &allocation);
+    gtk_widget_size_allocate (child->widget, &allocation);
 }
 
 static void
 gtk_myfixed_position_children (GtkMyFixed *myfixed)
 {
-  GList *tmp_list;
+    GList *tmp_list;
 
-  tmp_list = myfixed->children;
-  while (tmp_list)
+    tmp_list = myfixed->children;
+    while (tmp_list)
     {
-      GtkMyFixedChild *child = tmp_list->data;
-      tmp_list = tmp_list->next;
+        GtkMyFixedChild *child = tmp_list->data;
+        tmp_list = tmp_list->next;
       
-      gtk_myfixed_position_child (myfixed, child);
+        gtk_myfixed_position_child (myfixed, child);
     }
 }
 
@@ -911,16 +861,17 @@ static void
 gtk_myfixed_adjust_allocations_recurse (GtkWidget *widget,
 				       gpointer   cb_data)
 {
-  GtkMyFixedAdjData *data = cb_data;
+    GtkMyFixedAdjData *data = cb_data;
 
-  widget->allocation.x += data->dx;
-  widget->allocation.y += data->dy;
+    widget->allocation.x += data->dx;
+    widget->allocation.y += data->dy;
 
-  if (GTK_WIDGET_NO_WINDOW (widget) &&
-      GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), 
+    if (GTK_WIDGET_NO_WINDOW (widget) && GTK_IS_CONTAINER (widget))
+    {
+        gtk_container_forall (GTK_CONTAINER (widget), 
 			  gtk_myfixed_adjust_allocations_recurse,
 			  cb_data);
+    }
 }
 
 static void
