@@ -58,11 +58,10 @@ public:
     bool SendIdleEvents();
     bool SendIdleEvents( wxWindow* win );
 
-    static bool Initialize();
-    static bool InitialzeVisual();
-    static void CleanUp();
+    virtual bool Initialize(int argc, wxChar **argv);
+    virtual void CleanUp();
 
-    void DeletePendingObjects();
+    static bool InitialzeVisual();
 
 #ifdef __WXDEBUG__
     virtual void OnAssert(const wxChar *file, int line, const wxChar *cond, const wxChar *msg);

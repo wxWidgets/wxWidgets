@@ -54,10 +54,8 @@ public:
     bool SendIdleEvents();
     bool SendIdleEvents(wxWindow* win);
 
-    static bool Initialize();
-    static void CleanUp();
-
-    void DeletePendingObjects();
+    virtual bool Initialize(int argc, wxChar **argv);
+    virtual void CleanUp();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
 

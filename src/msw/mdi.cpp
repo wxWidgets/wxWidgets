@@ -342,8 +342,8 @@ void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 WXHICON wxMDIParentFrame::GetDefaultIcon() const
 {
-    return (WXHICON)(wxSTD_MDIPARENTFRAME_ICON ? wxSTD_MDIPARENTFRAME_ICON
-                                               : wxDEFAULT_MDIPARENTFRAME_ICON);
+    // we don't have any standard icons (any more)
+    return (WXHICON)0;
 }
 
 // ---------------------------------------------------------------------------
@@ -811,8 +811,8 @@ void wxMDIChildFrame::InternalSetMenuBar()
 
 WXHICON wxMDIChildFrame::GetDefaultIcon() const
 {
-    return (WXHICON)(wxSTD_MDICHILDFRAME_ICON ? wxSTD_MDICHILDFRAME_ICON
-                                              : wxDEFAULT_MDICHILDFRAME_ICON);
+    // we don't have any standard icons (any more)
+    return (WXHICON)0;
 }
 
 // ---------------------------------------------------------------------------

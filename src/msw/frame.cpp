@@ -506,8 +506,8 @@ void wxFrame::IconizeChildFrames(bool bIconize)
 
 WXHICON wxFrame::GetDefaultIcon() const
 {
-    return (WXHICON)(wxSTD_FRAME_ICON ? wxSTD_FRAME_ICON
-                                      : wxDEFAULT_FRAME_ICON);
+    // we don't have any standard icons (any more)
+    return (WXHICON)0;
 }
 
 // ===========================================================================

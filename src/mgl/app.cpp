@@ -383,118 +383,40 @@ void wxApp::Dispatch()
     wxEventLoop::GetActive()->Dispatch();
 }
 
-void wxApp::DeletePendingObjects()
+bool wxApp::Initialize(int argc, wxChar **argv)
 {
-    wxNode *node = wxPendingDelete.First();
-    while (node)
-    {
-        wxObject *obj = (wxObject *)node->Data();
+    // must do it before calling wxAppBase::Initialize(), because fonts are
+    // needed by stock lists which are created there
+    wxTheFontsManager = new wxFontsManager;
 
-        delete obj;
+    if ( !wxAppBase::Initialize(argc, argv) )
+        return false;
 
-        if ( wxPendingDelete.Find(obj) )
-            delete node;
-
-        node = wxPendingDelete.First();
-    }
-}
-
-bool wxApp::Initialize()
-{
     if ( MGL_init(".", NULL) == 0 )
     {
         wxLogError(_("Cannot initialize SciTech MGL!"));
-        return FALSE;
-    }
 
-    wxClassInfo::InitializeClasses();
+        wxAppBase::CleanUp();
+
+        return false;
+    }
 
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
-    // GL: I'm annoyed ... I don't know where to put this and I don't want to
-    // create a module for that as it's part of the core.
-#if wxUSE_THREADS
-    wxPendingEvents = new wxList;
-    wxPendingEventsLocker = new wxCriticalSection;
-#endif
-
-    wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
-    wxTheColourDatabase->Initialize();
-
-    // Can't do this in wxModule, because fonts are needed by stock lists
-    wxTheFontsManager = new wxFontsManager;
-
-    wxInitializeStockLists();
-    wxInitializeStockObjects();
-
-    wxModule::RegisterModules();
-    if (!wxModule::InitializeModules()) return FALSE;
-
-    return TRUE;
+    return true;
 }
 
 void wxApp::CleanUp()
 {
-#if wxUSE_LOG
-    // continuing to use user defined log target is unsafe from now on because
-    // some resources may be already unavailable, so replace it by something
-    // more safe
-    wxLog *oldlog = wxLog::SetActiveTarget(new wxLogStderr);
-    if ( oldlog )
-        delete oldlog;
-#endif // wxUSE_LOG
-
     delete gs_rootWindow;
 
-    wxModule::CleanUpModules();
+    wxAppBase::CleanUp();
 
-    if (wxTheColourDatabase)
-        delete wxTheColourDatabase;
-
-    wxTheColourDatabase = (wxColourDatabase*) NULL;
-
-    wxDeleteStockObjects();
-    wxDeleteStockLists();
-
-    delete wxTheApp;
-    wxTheApp = (wxApp*) NULL;
-
-
-    // GL: I'm annoyed ... I don't know where to put this and I don't want to
-    // create a module for that as it's part of the core.
-#if wxUSE_THREADS
-    delete wxPendingEvents;
-    delete wxPendingEventsLocker;
-#endif
-
-    wxClassInfo::CleanUpClasses();
-
-    // Can't do this in wxModule, because fonts are needed by stock lists
-    // (do it after deleting wxTheApp and cleaning modules up, since somebody
-    // may be deleting fonts that lately)
+    // must do this after calling base class CleanUp()
     delete wxTheFontsManager;
     wxTheFontsManager = (wxFontsManager*) NULL;
-
-    // check for memory leaks
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
-    {
-        wxLogDebug(wxT("There were memory leaks.\n"));
-        wxDebugContext::Dump();
-        wxDebugContext::PrintStatistics();
-    }
-#endif // Debug
-
-#if wxUSE_LOG
-    // do this as the very last thing because everything else can log messages
-    wxLog::DontCreateOnDemand();
-
-    wxLog *oldLog = wxLog::SetActiveTarget( (wxLog*) NULL );
-    if (oldLog)
-        delete oldLog;
-#endif // wxUSE_LOG
 
     wxDestroyMGL_WM();
     MGL_exit();

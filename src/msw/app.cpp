@@ -49,7 +49,6 @@
 #endif
 
 #include "wx/apptrait.h"
-#include "wx/cmdline.h"
 #include "wx/filename.h"
 #include "wx/module.h"
 
@@ -87,10 +86,6 @@
 
 #if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__WXMICROWIN__)) && !defined(__CYGWIN10__))
     #include <commctrl.h>
-#endif
-
-#ifndef __WXMICROWIN__
-#include "wx/msw/msvcrt.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -141,31 +136,13 @@ const wxChar *wxMDIFrameClassNameNoRedraw = wxT("wxMDIFrameClassNR");
 const wxChar *wxMDIChildFrameClassName = wxT("wxMDIChildFrameClass");
 const wxChar *wxMDIChildFrameClassNameNoRedraw = wxT("wxMDIChildFrameClassNR");
 
-HICON wxSTD_FRAME_ICON = (HICON) NULL;
-HICON wxSTD_MDICHILDFRAME_ICON = (HICON) NULL;
-HICON wxSTD_MDIPARENTFRAME_ICON = (HICON) NULL;
-
-HICON wxDEFAULT_FRAME_ICON = (HICON) NULL;
-HICON wxDEFAULT_MDICHILDFRAME_ICON = (HICON) NULL;
-HICON wxDEFAULT_MDIPARENTFRAME_ICON = (HICON) NULL;
-
 HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
 LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
-
-// FIXME wxUSE_ON_FATAL_EXCEPTION is only supported for VC++ now because it
-//       needs compiler support for Win32 SEH. Others (especially Borland)
-//       probably have it too, but I'm not sure about how it works
-// JACS: get 'Cannot use __try in functions that require unwinding
-// in Unicode mode, so disabling.
-#if !defined(__VISUALC__) || defined(__WIN16__) || defined(UNICODE)
-    #undef wxUSE_ON_FATAL_EXCEPTION
-    #define wxUSE_ON_FATAL_EXCEPTION 0
-#endif // VC++
-
-#if wxUSE_ON_FATAL_EXCEPTION
-    static bool gs_handleExceptions = FALSE;
-#endif
 
 // ===========================================================================
 // wxGUIAppTraits implementation
@@ -252,6 +229,8 @@ bool wxGUIAppTraits::DoMessageFromThreadWait()
 // wxApp implementation
 // ===========================================================================
 
+int wxApp::m_nCmdShow = SW_SHOWNORMAL;
+
 // ---------------------------------------------------------------------------
 // wxWin macros
 // ---------------------------------------------------------------------------
@@ -264,9 +243,29 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
 END_EVENT_TABLE()
 
-//// Initialize
-bool wxApp::Initialize()
+// class to ensure that wxAppBase::CleanUp() is called if our Initialize()
+// fails
+class wxCallBaseCleanup
 {
+public:
+    wxCallBaseCleanup(wxApp *app) : m_app(app) { }
+    ~wxCallBaseCleanup() { if ( m_app ) m_app->wxAppBase::CleanUp(); }
+
+    void Dismiss() { m_app = NULL; }
+
+private:
+    wxApp *m_app;
+};
+
+//// Initialize
+bool wxApp::Initialize(int argc, wxChar **argv)
+{
+    if ( !wxAppBase::Initialize(argc, argv) )
+        return false;
+
+    // ensure that base cleanup is done if we return too early
+    wxCallBaseCleanup callBaseCleanup(this);
+
     // the first thing to do is to check if we're trying to run an Unicode
     // program under Win9x w/o MSLU emulation layer - if so, abort right now
     // as it has no chance to work
@@ -289,20 +288,6 @@ bool wxApp::Initialize()
 #endif // wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
 
     wxBuffer = new wxChar[1500]; // FIXME
-
-    wxClassInfo::InitializeClasses();
-
-#if wxUSE_THREADS
-    wxPendingEventsLocker = new wxCriticalSection;
-#endif
-
-    wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
-    wxTheColourDatabase->Initialize();
-
-    wxInitializeStockLists();
-    wxInitializeStockObjects();
-
-    wxBitmap::InitStandardHandlers();
 
 #if defined(__WIN95__) && !defined(__WXMICROWIN__)
     InitCommonControls();
@@ -331,17 +316,6 @@ bool wxApp::Initialize()
 
     Ctl3dAutoSubclass(wxhInstance);
 #endif // wxUSE_CTL3D
-
-    // VZ: these icons are not in wx.rc anyhow (but should they?)!
-#if 0
-    wxSTD_FRAME_ICON = LoadIcon(wxhInstance, wxT("wxSTD_FRAME"));
-    wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, wxT("wxSTD_MDIPARENTFRAME"));
-    wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, wxT("wxSTD_MDICHILDFRAME"));
-
-    wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, wxT("wxDEFAULT_FRAME"));
-    wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, wxT("wxDEFAULT_MDIPARENTFRAME"));
-    wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, wxT("wxDEFAULT_MDICHILDFRAME"));
-#endif // 0
 
     RegisterWindowClasses();
 
@@ -377,10 +351,9 @@ bool wxApp::Initialize()
     wxSetKeyboardHook(TRUE);
 #endif
 
-    wxModule::RegisterModules();
-    if (!wxModule::InitializeModules())
-        return FALSE;
-    return TRUE;
+    callBaseCleanup.Dismiss();
+
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -525,79 +498,10 @@ bool wxApp::UnregisterWindowClasses()
     return retval;
 }
 
-// ---------------------------------------------------------------------------
-// Convert Windows to argc, argv style
-// ---------------------------------------------------------------------------
-
-void wxApp::ConvertToStandardCommandArgs(const char* lpCmdLine)
-{
-    // break the command line in words
-    wxArrayString args =
-        wxCmdLineParser::ConvertStringToArgs(wxConvertMB2WX(lpCmdLine));
-
-    // +1 here for the program name
-    argc = args.GetCount() + 1;
-
-    // and +1 here for the terminating NULL
-    argv = new wxChar *[argc + 1];
-
-    argv[0] = new wxChar[260]; // 260 is MAX_PATH value from windef.h
-    ::GetModuleFileName(wxhInstance, argv[0], 260);
-
-    // also set the app name from argv[0]
-    wxString name;
-    wxFileName::SplitPath(argv[0], NULL, &name, NULL);
-
-    // but don't override the name already set by the user code, if any
-    if ( GetAppName().empty() )
-        SetAppName(name);
-
-    // copy all the other arguments to wxApp::argv[]
-    for ( int i = 1; i < argc; i++ )
-    {
-        argv[i] = copystring(args[i - 1]);
-    }
-
-    // argv[] must be NULL-terminated
-    argv[argc] = NULL;
-}
-
-//// Cleans up any wxWindows internal structures left lying around
-
 void wxApp::CleanUp()
 {
-    //// COMMON CLEANUP
-
-#if wxUSE_LOG
-    // flush the logged messages if any and install a 'safer' log target: the
-    // default one (wxLogGui) can't be used after the resources are freed just
-    // below and the user suppliedo ne might be even more unsafe (using any
-    // wxWindows GUI function is unsafe starting from now)
-    wxLog::DontCreateOnDemand();
-
-    // this will flush the old messages if any
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-#endif // wxUSE_LOG
-
-    // One last chance for pending objects to be cleaned up
-    wxTheApp->DeletePendingObjects();
-
-    wxModule::CleanUpModules();
-
-    wxDeleteStockObjects();
-
-    // Destroy all GDI lists, etc.
-    wxDeleteStockLists();
-
-    delete wxTheColourDatabase;
-    wxTheColourDatabase = NULL;
-
-    wxBitmap::CleanUpHandlers();
-
     delete[] wxBuffer;
     wxBuffer = NULL;
-
-    //// WINDOWS-SPECIFIC CLEANUP
 
 #ifndef __WXMICROWIN__
     wxSetKeyboardHook(FALSE);
@@ -607,20 +511,6 @@ void wxApp::CleanUp()
     wxCleanUpPenWin();
 #endif
 
-    if (wxSTD_FRAME_ICON)
-        DestroyIcon(wxSTD_FRAME_ICON);
-    if (wxSTD_MDICHILDFRAME_ICON)
-        DestroyIcon(wxSTD_MDICHILDFRAME_ICON);
-    if (wxSTD_MDIPARENTFRAME_ICON)
-        DestroyIcon(wxSTD_MDIPARENTFRAME_ICON);
-
-    if (wxDEFAULT_FRAME_ICON)
-        DestroyIcon(wxDEFAULT_FRAME_ICON);
-    if (wxDEFAULT_MDICHILDFRAME_ICON)
-        DestroyIcon(wxDEFAULT_MDICHILDFRAME_ICON);
-    if (wxDEFAULT_MDIPARENTFRAME_ICON)
-        DestroyIcon(wxDEFAULT_MDIPARENTFRAME_ICON);
-
     if ( wxDisableButtonBrush )
         ::DeleteObject( wxDisableButtonBrush );
 
@@ -628,275 +518,44 @@ void wxApp::CleanUp()
     ::OleUninitialize();
 #endif
 
-#ifdef WXMAKINGDLL
     // for an EXE the classes are unregistered when it terminates but DLL may
     // be loaded several times (load/unload/load) into the same process in
     // which case the registration will fail after the first time if we don't
     // unregister the classes now
     UnregisterWindowClasses();
-#endif // WXMAKINGDLL
 
 #if wxUSE_CTL3D
     Ctl3dUnregister(wxhInstance);
 #endif
 
     delete wxWinHandleHash;
-    wxWinHandleHash = NULL; // Set to null in case anything later tries to ref it.
+    wxWinHandleHash = NULL;
 
-    delete wxPendingEvents;
-    wxPendingEvents = NULL; // Set to null because wxAppBase::wxEvtHandler is destroyed later.
-
-#if wxUSE_THREADS
-    delete wxPendingEventsLocker;
-    wxPendingEventsLocker = NULL; // Set to null because wxAppBase::wxEvtHandler is destroyed later.
-    // If we don't do the following, we get an apparent memory leak
-#if wxUSE_VALIDATORS
-    ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
-#endif // wxUSE_VALIDATORS
-#endif // wxUSE_THREADS
-
-    wxClassInfo::CleanUpClasses();
-
-    delete wxTheApp;
-    wxTheApp = NULL;
-
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // At this point we want to check if there are any memory
-    // blocks that aren't part of the wxDebugContext itself,
-    // as a special case. Then when dumping we need to ignore
-    // wxDebugContext, too.
-    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
-    {
-        wxLogMessage(wxT("There were memory leaks."));
-        wxDebugContext::Dump();
-        wxDebugContext::PrintStatistics();
-    }
-    //  wxDebugContext::SetStream(NULL, NULL);
-#endif
-
-#if wxUSE_LOG
-    // do it as the very last thing because everything else can log messages
-    delete wxLog::SetActiveTarget(NULL);
-#endif // wxUSE_LOG
+    wxAppBase::CleanUp();
 }
 
-//----------------------------------------------------------------------
-// Entry point helpers, used by wxPython
-//----------------------------------------------------------------------
-
-int WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char** WXUNUSED(argv) )
-{
-    return wxApp::Initialize();
-}
-
-int WXDLLEXPORT wxEntryInitGui()
-{
-    return wxTheApp->OnInitGui();
-}
-
-void WXDLLEXPORT wxEntryCleanup()
-{
-    wxApp::CleanUp();
-}
-
-
-#if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
-
-// temporarily disable this warning which would be generated in release builds
-// because of __try
-#ifdef __VISUALC__
-    #pragma warning(disable: 4715) // not all control paths return a value
-#endif // Visual C++
-
-//----------------------------------------------------------------------
-// Main wxWindows entry point
-//----------------------------------------------------------------------
-int wxEntry(WXHINSTANCE hInstance,
-            WXHINSTANCE WXUNUSED(hPrevInstance),
-            char *lpCmdLine,
-            int nCmdShow,
-            bool enterLoop)
-{
-    // do check for memory leaks on program exit
-    // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
-    //  deallocated memory which may be used to simulate low-memory condition)
-#ifndef __WXMICROWIN__
-    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
-#endif
-
-#ifdef __MWERKS__
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // This seems to be necessary since there are 'rogue'
-    // objects present at this point (perhaps global objects?)
-    // Setting a checkpoint will ignore them as far as the
-    // memory checking facility is concerned.
-    // Of course you may argue that memory allocated in globals should be
-    // checked, but this is a reasonable compromise.
-    wxDebugContext::SetCheckpoint();
-#endif
-#endif
-
-    // take everything into a try-except block to be able to call
-    // OnFatalException() if necessary
-#if wxUSE_ON_FATAL_EXCEPTION
-    __try {
-#endif
-        wxhInstance = (HINSTANCE) hInstance;
-
-        if (!wxEntryStart(0,0))
-            return 0;
-
-        // create the application object or ensure that one already exists
-        if (!wxTheApp)
-        {
-            // The app may have declared a global application object, but we recommend
-            // the IMPLEMENT_APP macro is used instead, which sets an initializer
-            // function for delayed, dynamic app object construction.
-            wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
-                         wxT("No initializer - use IMPLEMENT_APP macro.") );
-
-            wxTheApp = (wxApp*) (*wxApp::GetInitializerFunction()) ();
-        }
-
-        wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );
-
-        // save the WinMain() parameters
-        if (lpCmdLine) // MicroWindows passes NULL
-            wxTheApp->ConvertToStandardCommandArgs(lpCmdLine);
-        wxTheApp->m_nCmdShow = nCmdShow;
-
-        // We really don't want timestamps by default, because it means
-        // we can't simply double-click on the error message and get to that
-        // line in the source. So VC++ at least, let's have a sensible default.
-#ifdef __VISUALC__
-#if wxUSE_LOG
-        wxLog::SetTimestamp(NULL);
-#endif // wxUSE_LOG
-#endif // __VISUALC__
-
-        // init the app
-        int retValue = wxEntryInitGui() && wxTheApp->OnInit() ? 0 : -1;
-
-        if ( retValue == 0 )
-        {
-            if ( enterLoop )
-            {
-                // run the main loop
-                wxTheApp->OnRun();
-            }
-            else
-            {
-                // we want to initialize, but not run or exit immediately.
-                return 1;
-            }
-        }
-        //else: app initialization failed, so we skipped OnRun()
-
-        wxWindow *topWindow = wxTheApp->GetTopWindow();
-        if ( topWindow )
-        {
-            // Forcibly delete the window.
-            if ( topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
-                    topWindow->IsKindOf(CLASSINFO(wxDialog)) )
-            {
-                topWindow->Close(TRUE);
-                wxTheApp->DeletePendingObjects();
-            }
-            else
-            {
-                delete topWindow;
-                wxTheApp->SetTopWindow(NULL);
-            }
-        }
-
-        retValue = wxTheApp->OnExit();
-
-        wxEntryCleanup();
-
-        return retValue;
-
-#if wxUSE_ON_FATAL_EXCEPTION
-    }
-    __except ( gs_handleExceptions ? EXCEPTION_EXECUTE_HANDLER
-                                   : EXCEPTION_CONTINUE_SEARCH ) {
-        if ( wxTheApp )
-        {
-           // give the user a chance to do something special about this
-           wxTheApp->OnFatalException();
-        }
-
-        ::ExitProcess(3); // the same exit code as abort()
-
-        // NOTREACHED
-    }
-#endif // wxUSE_ON_FATAL_EXCEPTION
-}
-
-// restore warning state
-#ifdef __VISUALC__
-    #pragma warning(default: 4715) // not all control paths return a value
-#endif // Visual C++
-
-#else /*  _WINDLL  */
-
-//----------------------------------------------------------------------
-// Entry point for wxWindows + the App in a DLL
-//----------------------------------------------------------------------
-
-int wxEntry(WXHINSTANCE hInstance)
-{
-    wxhInstance = (HINSTANCE) hInstance;
-    wxEntryStart(0, 0);
-
-    // The app may have declared a global application object, but we recommend
-    // the IMPLEMENT_APP macro is used instead, which sets an initializer function
-    // for delayed, dynamic app object construction.
-    if (!wxTheApp)
-    {
-        wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
-                     "No initializer - use IMPLEMENT_APP macro." );
-
-        wxTheApp = (* wxApp::GetInitializerFunction()) ();
-    }
-
-    wxCHECK_MSG( wxTheApp, 0, "You have to define an instance of wxApp!" );
-
-    wxTheApp->argc = 0;
-    wxTheApp->argv = NULL;
-
-    wxEntryInitGui();
-
-    wxTheApp->OnInit();
-
-    wxWindow *topWindow = wxTheApp->GetTopWindow();
-    if ( topWindow && topWindow->GetHWND())
-    {
-        topWindow->Show(TRUE);
-    }
-
-    return 1;
-}
-#endif // _WINDLL
-
-//// Static member initialization
+// ----------------------------------------------------------------------------
+// wxApp ctor/dtor
+// ----------------------------------------------------------------------------
 
 wxApp::wxApp()
 {
-    argc = 0;
-    argv = NULL;
     m_printMode = wxPRINT_WINDOWS;
-    m_auto3D = TRUE;
 }
 
 wxApp::~wxApp()
 {
-    // Delete command-line args
-    int i;
-    for (i = 0; i < argc; i++)
+    // our cmd line arguments are allocated inside wxEntry(HINSTANCE), they
+    // don't come from main(), so we have to free them
+
+    while ( argc )
     {
-        delete[] argv[i];
+        // m_argv elements were allocated by wxStrdup()
+        free(argv[--argc]);
     }
-    delete[] argv;
+
+    // but m_argv itself -- using new[]
+    delete [] argv;
 }
 
 bool wxApp::Initialized()
@@ -1242,24 +901,6 @@ void wxApp::WakeUpIdle()
     }
 }
 
-void wxApp::DeletePendingObjects()
-{
-    wxNode *node = wxPendingDelete.GetFirst();
-    while (node)
-    {
-        wxObject *obj = node->GetData();
-
-        delete obj;
-
-        if (wxPendingDelete.Member(obj))
-            delete node;
-
-        // Deleting one object may have deleted other pending
-        // objects, so start from beginning of list again.
-        node = wxPendingDelete.GetFirst();
-    }
-}
-
 void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 {
     if (GetTopWindow())
@@ -1443,25 +1084,3 @@ bool wxApp::Yield(bool onlyIfNeeded)
     return TRUE;
 }
 
-bool wxHandleFatalExceptions(bool doit)
-{
-#if wxUSE_ON_FATAL_EXCEPTION
-    // assume this can only be called from the main thread
-    gs_handleExceptions = doit;
-
-    return TRUE;
-#else
-    wxFAIL_MSG(_T("set wxUSE_ON_FATAL_EXCEPTION to 1 to use this function"));
-
-    (void)doit;
-    return FALSE;
-#endif
-}
-
-//-----------------------------------------------------------------------------
-
-// For some reason, with MSVC++ 1.5, WinMain isn't linked in properly
-// if in a separate file. So include it here to ensure it's linked.
-#if (defined(__VISUALC__) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !defined(__WINE__) && !defined(WXMAKINGDLL))
-#include "main.cpp"
-#endif

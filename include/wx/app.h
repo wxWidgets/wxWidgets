@@ -24,6 +24,7 @@
 #endif // wxUSE_GUI
 
 #include "wx/build.h"
+#include "wx/init.h"
 
 class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxAppTraits;
@@ -89,11 +90,21 @@ public:
     // the virtual functions which may/must be overridden in the derived class
     // -----------------------------------------------------------------------
 
+    // This is the very first function called for a newly created wxApp object,
+    // it is used by the library to do the global initialization. If, for some
+    // reason, you must override it (instead of just overriding OnInit(), as
+    // usual, for app-specific initializations), do not forget to call the base
+    // class version!
+    virtual bool Initialize(int argc, wxChar **argv);
+
     // Called before OnRun(), this is a good place to do initialization -- if
     // anything fails, return false from here to prevent the program from
     // continuing. The command line is normally parsed here, call the base
     // class OnInit() to do it.
     virtual bool OnInit();
+
+    // this is here only temproary hopefully (FIXME)
+    virtual bool OnInitGui() { return true; }
 
     // This is the replacement for the normal main(): all program work should
     // be done here. When OnRun() returns, the programs starts shutting down.
@@ -102,6 +113,11 @@ public:
     // This is only called if OnInit() returned true so it's a good place to do
     // any cleanup matching the initializations done there.
     virtual int OnExit();
+
+    // This is the very last function called on wxApp object before it is
+    // destroyed. If you override it (instead of overriding OnExit() as usual)
+    // do not forget to call the base class version!
+    virtual void CleanUp();
 
     // Called when a fatal exception occurs, this function should take care not
     // to do anything which might provoke a nested exception! It may be
@@ -295,6 +311,11 @@ public:
     // the virtual functions which may/must be overridden in the derived class
     // -----------------------------------------------------------------------
 
+        // very first initialization function
+        //
+        // Override: very rarely
+    virtual bool Initialize(int argc, wxChar **argv);
+
         // a platform-dependent version of OnInit(): the code here is likely to
         // depend on the toolkit. default version does nothing.
         //
@@ -310,8 +331,10 @@ public:
         // Override: rarely in GUI applications, always in console ones.
     virtual int OnRun();
 
-        // exit the main loop thus terminating the application
-    virtual void Exit();
+        // very last clean up function
+        //
+        // Override: very rarely
+    virtual void CleanUp();
 
 
     // the worker functions - usually not used directly by the user code
@@ -319,6 +342,9 @@ public:
 
         // execute the main GUI loop, the function returns when the loop ends
     virtual int MainLoop() = 0;
+
+        // exit the main loop thus terminating the application
+    virtual void Exit();
 
         // exit the main GUI loop during the next iteration (i.e. it does not
         // stop the program immediately!)
@@ -419,6 +445,9 @@ public:
 
 
 protected:
+    // delete all objects in wxPendingDelete list
+    void DeletePendingObjects();
+
     // override base class method to use GUI traits
     virtual wxAppTraits *CreateTraits();
 
@@ -505,44 +534,6 @@ extern bool WXDLLEXPORT wxYield();
 // Yield to other apps/messages
 extern void WXDLLEXPORT wxWakeUpIdle();
 
-
-// console applications may avoid using DECLARE_APP and IMPLEMENT_APP macros
-// and call these functions instead at the program startup and termination
-// -------------------------------------------------------------------------
-
-#if !wxUSE_GUI
-
-// initialize the library (may be called as many times as needed, but each
-// call to wxInitialize() must be matched by wxUninitialize())
-extern bool WXDLLEXPORT wxInitialize();
-
-// clean up - the library can't be used any more after the last call to
-// wxUninitialize()
-extern void WXDLLEXPORT wxUninitialize();
-
-// create an object of this class on stack to initialize/cleanup thel ibrary
-// automatically
-class WXDLLEXPORT wxInitializer
-{
-public:
-    // initialize the library
-    wxInitializer() { m_ok = wxInitialize(); }
-
-    // has the initialization been successful? (explicit test)
-    bool IsOk() const { return m_ok; }
-
-    // has the initialization been successful? (implicit test)
-    operator bool() const { return m_ok; }
-
-    // dtor only does clean up if we initialized the library properly
-    ~wxInitializer() { if ( m_ok ) wxUninitialize(); }
-
-private:
-    bool m_ok;
-};
-
-#endif // !wxUSE_GUI
-
 // ----------------------------------------------------------------------------
 // macros for dynamic creation of the application object
 // ----------------------------------------------------------------------------
@@ -572,22 +563,17 @@ public:
         extern int wxEntry( int argc, char **argv, bool enterLoop = TRUE ); \
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
 #elif defined(__WXMSW__) && defined(WXUSINGDLL)
-    // NT defines APIENTRY, 3.x not
-    #if !defined(WXAPIENTRY)
-        #define WXAPIENTRY WXFAR wxSTDCALL
-    #endif
-
-    #include <windows.h>
-    #include "wx/msw/winundef.h"
-
     #define IMPLEMENT_WXWIN_MAIN \
-        extern "C" int WXAPIENTRY WinMain(HINSTANCE hInstance,\
-                                          HINSTANCE hPrevInstance,\
-                                          LPSTR m_lpCmdLine, int nCmdShow)\
-        {\
-            return wxEntry((WXHINSTANCE) hInstance,\
-                           (WXHINSTANCE) hPrevInstance,\
-                           m_lpCmdLine, nCmdShow);\
+        extern int wxEntry(WXHINSTANCE hInstance,                             \
+                           WXHINSTANCE hPrevInstance,                         \
+                           char *pCmdLine,                                    \
+                           int nCmdShow);                                     \
+        extern "C" int wxSTDCALL WinMain(WXHINSTANCE hInstance,               \
+                                         WXHINSTANCE hPrevInstance,           \
+                                         char *lpCmdLine,                     \
+                                         int nCmdShow)                        \
+        {                                                                     \
+            return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);    \
         }
 #else
     #define IMPLEMENT_WXWIN_MAIN
@@ -605,13 +591,14 @@ public:
 
 // Use this macro if you want to define your own main() or WinMain() function
 // and call wxEntry() from there.
-#define IMPLEMENT_APP_NO_MAIN(appname)                   \
-    wxApp *wxCreateApp()                                 \
-    {                                                    \
-        wxApp::CheckBuildOptions(wxBuildOptions());      \
-        return new appname;                              \
-    }                                                    \
-    wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp); \
+#define IMPLEMENT_APP_NO_MAIN(appname)                                      \
+    wxApp *wxCreateApp()                                                    \
+    {                                                                       \
+        wxApp::CheckBuildOptions(wxBuildOptions());                         \
+        return new appname;                                                 \
+    }                                                                       \
+    wxAppInitializer                                                        \
+        wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp);        \
     appname& wxGetApp() { return *(appname *)wxTheApp; }
 
 // Same as IMPLEMENT_APP() normally but doesn't include themes support in
@@ -630,5 +617,5 @@ public:
 // function
 #define DECLARE_APP(appname) extern appname& wxGetApp();
 
-#endif
-    // _WX_APP_H_BASE_
+#endif // _WX_APP_H_BASE_
+

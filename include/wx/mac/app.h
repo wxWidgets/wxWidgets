@@ -91,10 +91,9 @@ protected:
 public:
 
     // Implementation
-    static bool Initialize();
-    static void CleanUp();
+    virtual bool Initialize(int argc, wxChar **argv);
+    virtual void CleanUp();
     
-    void DeletePendingObjects();
     bool IsExiting() { return !m_keepGoing ; }
 #if TARGET_CARBON
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }

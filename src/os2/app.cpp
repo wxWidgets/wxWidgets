@@ -226,10 +226,11 @@ void wxApp::HandleSockets()
 //
 // Initialize
 //
-bool wxApp::Initialize(
-  HAB                               vHab
-)
+bool wxApp::Initialize(int argc, wxChar **argv)
 {
+    if ( !wxAppBase::Initialize(argc, argv) )
+        return false;
+
 #if defined(wxUSE_CONSOLEDEBUG)
   #if wxUSE_CONSOLEDEBUG
 /***********************************************/
@@ -252,31 +253,20 @@ bool wxApp::Initialize(
   #endif //wxUSE_CONSOLEDEBUG
 #endif
 
-    wxBuffer = new wxChar[1500]; // FIXME; why?
-
-    wxClassInfo::InitializeClasses();
-
-#if wxUSE_THREADS
-    wxPendingEventsLocker = new wxCriticalSection;
-#endif
-
-    wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
-    wxTheColourDatabase->Initialize();
-
-    wxInitializeStockLists();
-    wxInitializeStockObjects();
-
-    wxBitmap::InitStandardHandlers();
-
     //
     // OS2 has to have an anchorblock
     //
-    vHab = WinInitialize(0);
+    vHabmain = WinInitialize(0);
 
-    if (!vHab)
+    if (!vHabmain)
+    {
+        // TODO: at least give some error message here...
+        wxAppBase::CleanUp();
+
         return FALSE;
-    else
-        vHabmain = vHab;
+    }
+
+    wxBuffer = new wxChar[1500]; // FIXME; why?
 
     // Some people may wish to use this, but
     // probably it shouldn't be here by default.
@@ -295,10 +285,8 @@ bool wxApp::Initialize(
 
     // wxSetKeyboardHook(TRUE);
 
-    wxModule::RegisterModules();
-    if (!wxModule::InitializeModules())
-        return FALSE;
     RegisterWindowClasses(vHab);
+
     return TRUE;
 } // end of wxApp::Initialize
 
@@ -437,45 +425,6 @@ bool wxApp::RegisterWindowClasses(
 //
 void wxApp::CleanUp()
 {
-    //
-    // COMMON CLEANUP
-    //
-
-#if wxUSE_LOG
-
-    //
-    // Flush the logged messages if any and install a 'safer' log target: the
-    // default one (wxLogGui) can't be used after the resources are freed just
-    // below and the user suppliedo ne might be even more unsafe (using any
-    // wxWindows GUI function is unsafe starting from now)
-    //
-    wxLog::DontCreateOnDemand();
-
-    //
-    // This will flush the old messages if any
-    //
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-#endif // wxUSE_LOG
-
-    //
-    // One last chance for pending objects to be cleaned up
-    //
-    wxTheApp->DeletePendingObjects();
-
-    wxModule::CleanUpModules();
-
-    wxDeleteStockObjects();
-
-    //
-    // Destroy all GDI lists, etc.
-    //
-    wxDeleteStockLists();
-
-    delete wxTheColourDatabase;
-    wxTheColourDatabase = NULL;
-
-    wxBitmap::CleanUpHandlers();
-
     delete[] wxBuffer;
     wxBuffer = NULL;
 
@@ -514,33 +463,11 @@ void wxApp::CleanUp()
     ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
 #endif
 
-    wxClassInfo::CleanUpClasses();
-
     // Delete Message queue
     if (wxTheApp->m_hMq)
         ::WinDestroyMsgQueue(wxTheApp->m_hMq);
 
-    delete wxTheApp;
-    wxTheApp = NULL;
-
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // At this point we want to check if there are any memory
-    // blocks that aren't part of the wxDebugContext itself,
-    // as a special case. Then when dumping we need to ignore
-    // wxDebugContext, too.
-    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
-    {
-        wxLogDebug(wxT("There were memory leaks."));
-        wxDebugContext::Dump();
-        wxDebugContext::PrintStatistics();
-    }
-    //  wxDebugContext::SetStream(NULL, NULL);
-#endif
-
-#if wxUSE_LOG
-    // do it as the very last thing because everything else can log messages
-    delete wxLog::SetActiveTarget(NULL);
-#endif // wxUSE_LOG
+    wxAppBase::CleanUp();
 } // end of wxApp::CleanUp
 
 //----------------------------------------------------------------------
@@ -1050,27 +977,6 @@ bool wxApp::SendIdleEvents(
     }
     return bNeedMore;
 } // end of wxApp::SendIdleEvents
-
-void wxApp::DeletePendingObjects()
-{
-    wxNode*                         pNode = wxPendingDelete.First();
-
-    while (pNode)
-    {
-        wxObject*                   pObj = (wxObject *)pNode->Data();
-
-        delete pObj;
-
-        if (wxPendingDelete.Member(pObj))
-            delete pNode;
-
-        //
-        // Deleting one object may have deleted other pending
-        // objects, so start from beginning of list again.
-        //
-        pNode = wxPendingDelete.First();
-    }
-} // end of wxApp::DeletePendingObjects
 
 void wxApp::OnEndSession(
   wxCloseEvent&                     WXUNUSED(rEvent))

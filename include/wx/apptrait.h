@@ -116,7 +116,7 @@ public:
 // wxConsoleAppTraitsBase: wxAppTraits implementation for the console apps
 // ----------------------------------------------------------------------------
 
-class wxConsoleAppTraitsBase : public wxAppTraits
+class WXDLLEXPORT wxConsoleAppTraitsBase : public wxAppTraits
 {
 public:
 #if wxUSE_LOG
@@ -142,7 +142,7 @@ public:
 
 #if wxUSE_GUI
 
-class wxGUIAppTraitsBase : public wxAppTraits
+class WXDLLEXPORT wxGUIAppTraitsBase : public wxAppTraits
 {
 public:
 #if wxUSE_LOG

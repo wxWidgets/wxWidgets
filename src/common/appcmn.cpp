@@ -49,7 +49,7 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// initialization and termination
+// initialization
 // ----------------------------------------------------------------------------
 
 wxAppBase::wxAppBase()
@@ -73,10 +73,74 @@ wxAppBase::wxAppBase()
     m_exitOnFrameDelete = Later;
 }
 
+bool wxAppBase::Initialize(int argc, wxChar **argv)
+{
+    if ( !wxAppConsole::Initialize(argc, argv) )
+        return false;
+
+    // for compatibility call the old initialization function too
+    if ( !OnInitGui() )
+    {
+        wxAppConsole::CleanUp();
+
+        return false;
+    }
+
+#if wxUSE_THREADS
+    wxPendingEventsLocker = new wxCriticalSection;
+#endif
+
+    wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
+    wxTheColourDatabase->Initialize();
+
+    wxInitializeStockLists();
+    wxInitializeStockObjects();
+
+    wxBitmap::InitStandardHandlers();
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// cleanup
+// ----------------------------------------------------------------------------
+
 wxAppBase::~wxAppBase()
 {
     // this destructor is required for Darwin
 }
+
+void wxAppBase::CleanUp()
+{
+    // one last chance for pending objects to be cleaned up
+    DeletePendingObjects();
+
+    wxBitmap::CleanUpHandlers();
+
+    wxDeleteStockObjects();
+
+    wxDeleteStockLists();
+
+    delete wxTheColourDatabase;
+    wxTheColourDatabase = NULL;
+
+#if wxUSE_THREADS
+    delete wxPendingEvents;
+    wxPendingEvents = NULL;
+
+    delete wxPendingEventsLocker;
+    wxPendingEventsLocker = NULL;
+
+#if wxUSE_VALIDATORS
+    // If we don't do the following, we get an apparent memory leak.
+    ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
+#endif // wxUSE_VALIDATORS
+#endif // wxUSE_THREADS
+}
+
+// ----------------------------------------------------------------------------
+// OnXXX() hooks
+// ----------------------------------------------------------------------------
 
 bool wxAppBase::OnInitGui()
 {
@@ -126,6 +190,24 @@ void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
     event.SetEventObject(this);
 
     (void)ProcessEvent(event);
+}
+
+void wxAppBase::DeletePendingObjects()
+{
+    wxNode *node = wxPendingDelete.GetFirst();
+    while (node)
+    {
+        wxObject *obj = node->GetData();
+
+        delete obj;
+
+        if (wxPendingDelete.Member(obj))
+            delete node;
+
+        // Deleting one object may have deleted other pending
+        // objects, so start from beginning of list again.
+        node = wxPendingDelete.GetFirst();
+    }
 }
 
 // ----------------------------------------------------------------------------

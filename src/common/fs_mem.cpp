@@ -19,10 +19,12 @@
 
 #if wxUSE_FILESYSTEM && wxUSE_STREAMS
 
-#include "wx/image.h"
-#include "wx/bitmap.h"
 #include "wx/fs_mem.h"
 
+#if wxUSE_GUI
+    #include "wx/image.h"
+    #include "wx/bitmap.h"
+#endif // wxUSE_GUI
 
 #ifndef WXPRECOMP
     #include "wx/intl.h"

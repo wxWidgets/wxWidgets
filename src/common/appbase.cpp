@@ -36,6 +36,9 @@
 #include "wx/apptrait.h"
 #include "wx/cmdline.h"
 #include "wx/confbase.h"
+#if wxUSE_FILENAME
+    #include "wx/filename.h"
+#endif // wxUSE_FILENAME
 #if wxUSE_FONTMAP
     #include "wx/fontmap.h"
 #endif // wxUSE_FONTMAP
@@ -112,6 +115,33 @@ wxAppConsole::wxAppConsole()
 wxAppConsole::~wxAppConsole()
 {
     delete m_traits;
+}
+
+// ----------------------------------------------------------------------------
+// initilization/cleanup
+// ----------------------------------------------------------------------------
+
+bool wxAppConsole::Initialize(int argc, wxChar **argv)
+{
+    // remember the command line arguments
+    this->argc = argc;
+    this->argv = argv;
+
+    if ( m_appName.empty() )
+    {
+        // the application name is, by default, the name of its executable file
+#if wxUSE_FILENAME
+        wxFileName::SplitPath(argv[0], NULL, &m_appName, NULL);
+#else // !wxUSE_FILENAME
+        m_appName = argv[0];
+#endif // wxUSE_FILENAME/!wxUSE_FILENAME
+    }
+
+    return true;
+}
+
+void wxAppConsole::CleanUp()
+{
 }
 
 // ----------------------------------------------------------------------------

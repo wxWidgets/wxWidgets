@@ -82,10 +82,8 @@ protected:
     
 public:
     // Implementation
-    static bool Initialize();
-    static void CleanUp();
-    
-    void DeletePendingObjects();
+    virtual bool Initialize(int argc, wxChar **argv);
+    virtual void CleanUp();
     
     // Motif-specific
     WXAppContext   GetAppContext() const { return m_appContext; }

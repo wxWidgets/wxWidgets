@@ -36,6 +36,9 @@ public:
     virtual ~wxApp();
 
     // override base class (pure) virtuals
+    virtual bool Initialize(int argc, wxChar **argv);
+    virtual void CleanUp();
+
     virtual int MainLoop();
     virtual void ExitMainLoop();
     virtual bool Initialized();
@@ -62,27 +65,16 @@ public:
     // Returns TRUE if more idle time is requested.
     bool SendIdleEvents(wxWindow* win);
 
-    void SetAuto3D(bool flag) { m_auto3D = flag; }
-    bool GetAuto3D() const { return m_auto3D; }
-
 protected:
-    bool   m_showOnInit;
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
-    bool   m_auto3D ;   // Always use 3D controls, except where overriden
 
     /* Windows-specific wxApp definitions */
 
 public:
 
     // Implementation
-    static bool Initialize();
-    static void CleanUp();
-
     static bool RegisterWindowClasses();
     static bool UnregisterWindowClasses();
-
-    // Convert Windows to argc, argv style
-    void ConvertToStandardCommandArgs(const char* p);
 
     // message processing
     // ------------------
@@ -99,8 +91,6 @@ public:
     // idle processing
     // ---------------
 
-    void DeletePendingObjects();
-
 #if wxUSE_RICHEDIT
     // initialize the richedit DLL of (at least) given version, return TRUE if
     // ok (Win95 has version 1, Win98/NT4 has 1 and 2, W2K has 3)
@@ -112,21 +102,19 @@ public:
     static int GetComCtl32Version();
 
 public:
-    int               m_nCmdShow;
+    // the SW_XXX value to be used for the frames opened by the application
+    // (currently seems unused which is a bug -- TODO)
+    static int m_nCmdShow;
 
 protected:
-    bool              m_keepGoing;
+    // we exit the main event loop when this flag becomes false
+    bool m_keepGoing;
 
     DECLARE_EVENT_TABLE()
 };
 
-#if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
 int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance, WXHINSTANCE hPrevInstance,
-                        char *lpszCmdLine, int nCmdShow, bool enterLoop = TRUE);
-#else
-int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance);
-#endif
+                        char *lpszCmdLine, int nCmdShow);
 
-#endif
-    // _WX_APP_H_
+#endif // _WX_APP_H_
 

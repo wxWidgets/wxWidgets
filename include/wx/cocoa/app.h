@@ -66,12 +66,11 @@ public:
     // Returns TRUE if more idle time is requested.
     bool SendIdleEvents(wxWindowCocoa* win);
     
-    static bool Initialize();
-    static void CleanUp();
+    virtual bool Initialize(int argc, wxChar **argv);
+    virtual void CleanUp();
     
     virtual bool OnInit();
     virtual bool OnInitGui();
-    void DeletePendingObjects();
 };
 
 #endif // _WX_COCOA_APP_H_

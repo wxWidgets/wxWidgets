@@ -1035,7 +1035,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // is a more neutral term, we don't necessarily get a sunken effect in
     // Windows XP. Instead we get the appropriate style for the theme.
 
-    if (border == wxBORDER_DEFAULT && wxTheApp->GetAuto3D() &&
+    if (border == wxBORDER_DEFAULT &&
         IsKindOf(CLASSINFO(wxControl)) &&
         GetParent() &&
         ((GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))

@@ -93,33 +93,19 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
 END_EVENT_TABLE()
 
-bool wxApp::Initialize()
+bool wxApp::Initialize(int argc, wxChar **argv)
 {
-    wxClassInfo::InitializeClasses();
+    if ( !wxAppBase::Initialize(argc, argv) )
+        return false;
 
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
-    // GL: I'm annoyed ... I don't know where to put this and I don't want to
-    // create a module for that as it's part of the core.
-#if wxUSE_THREADS
-    wxPendingEventsLocker = new wxCriticalSection();
-#endif
-
-    wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
-    wxTheColourDatabase->Initialize();
-
-    wxInitializeStockLists();
-    wxInitializeStockObjects();
-
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
     wxClientWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
 
-    wxModule::RegisterModules();
-    if (!wxModule::InitializeModules()) return FALSE;
-
-    return TRUE;
+    return true;
 }
 
 void wxApp::CleanUp()
@@ -129,42 +115,7 @@ void wxApp::CleanUp()
     delete wxClientWidgetHashTable;
     wxClientWidgetHashTable = NULL;
 
-    wxModule::CleanUpModules();
-
-    delete wxTheColourDatabase;
-    wxTheColourDatabase = NULL;
-
-    wxDeleteStockObjects();
-
-    wxDeleteStockLists();
-
-    delete wxTheApp;
-    wxTheApp = NULL;
-
-    wxClassInfo::CleanUpClasses();
-
-#if wxUSE_THREADS
-    delete wxPendingEvents;
-    delete wxPendingEventsLocker;
-#endif
-
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // At this point we want to check if there are any memory
-    // blocks that aren't part of the wxDebugContext itself,
-    // as a special case. Then when dumping we need to ignore
-    // wxDebugContext, too.
-    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
-    {
-        wxLogDebug("There were memory leaks.");
-        wxDebugContext::Dump();
-        wxDebugContext::PrintStatistics();
-    }
-#endif
-
-    // do it as the very last thing because everything else can log messages
-    wxLog::DontCreateOnDemand();
-    // do it as the very last thing because everything else can log messages
-    delete wxLog::SetActiveTarget(NULL);
+    wxAppBase::CleanUp();
 }
 
 // NB: argc and argv may be changed here, pass by reference!
@@ -933,24 +884,6 @@ bool wxApp::SendIdleEvents(wxWindow* win)
     win->OnInternalIdle();
 
     return needMore;
-}
-
-void wxApp::DeletePendingObjects()
-{
-    wxNode *node = wxPendingDelete.GetFirst();
-    while (node)
-    {
-        wxObject *obj = (wxObject *)node->GetData();
-
-        delete obj;
-
-        if (wxPendingDelete.Member(obj))
-            delete node;
-
-        // Deleting one object may have deleted other pending
-        // objects, so start from beginning of list again.
-        node = wxPendingDelete.GetFirst();
-    }
 }
 
 // Create display, and other initialization

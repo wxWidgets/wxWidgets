@@ -30,6 +30,7 @@
 
 #include "wx/event.h"
 #include "wx/app.h"
+#include "wx/cmdline.h"
 
 #include "wx/msw/private.h"
 
@@ -48,6 +49,8 @@
     #define HINSTANCE HANDLE
 #endif
 
+#if wxUSE_GUI
+
 // ----------------------------------------------------------------------------
 // function prototypes
 // ----------------------------------------------------------------------------
@@ -55,13 +58,35 @@
 // from src/msw/app.cpp
 extern void WXDLLEXPORT wxEntryCleanup();
 
+static wxChar **ConvertToStandardCommandArgs(const wxChar *p, int& argc);
+
 // ============================================================================
 // implementation: various entry points
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// Windows-specific wxEntry
+// ----------------------------------------------------------------------------
+
+int wxEntry(WXHINSTANCE hInstance,
+            WXHINSTANCE WXUNUSED(hPrevInstance),
+            char *pCmdLine,
+            int nCmdShow)
+{
+    // remember the parameters Windows gave us
+    wxSetInstance((HINSTANCE)hInstance);
+    wxApp::m_nCmdShow = nCmdShow;
+
+    // parse the command line
+    int argc;
+    wxChar **argv = ConvertToStandardCommandArgs(wxConvertMB2WX(pCmdLine), argc);
+
+    return wxEntry(argc, argv);
+}
+
 // May wish not to have a DllMain or WinMain, e.g. if we're programming
 // a Netscape plugin or if we're writing a console application
-#if wxUSE_GUI && !defined(NOMAIN)
+#if !defined(NOMAIN)
 
 extern "C"
 {
@@ -104,10 +129,8 @@ DllMain(HANDLE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
             return wxEntry((WXHINSTANCE) hModule);
 
         case DLL_PROCESS_DETACH:
-           if ( wxTheApp )
-              wxTheApp->OnExit();
-           wxEntryCleanup();
-           break;
+            wxEntryCleanup();
+            break;
     }
 #else
 	(void)hModule;
@@ -122,6 +145,42 @@ DllMain(HANDLE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
 } // extern "C"
 
 #endif // !NOMAIN
+
+// ---------------------------------------------------------------------------
+// Convert Windows to argc, argv style
+// ---------------------------------------------------------------------------
+
+wxChar **ConvertToStandardCommandArgs(const wxChar *p, int& argc)
+{
+    // break the command line in words
+    wxArrayString args;
+    if ( p )
+    {
+        args = wxCmdLineParser::ConvertStringToArgs(p);
+    }
+
+    // +1 here for the program name
+    argc = args.GetCount() + 1;
+
+    // and +1 here for the terminating NULL
+    wxChar **argv = new wxChar *[argc + 1];
+
+    argv[0] = new wxChar[MAX_PATH];
+    ::GetModuleFileName(wxhInstance, argv[0], MAX_PATH);
+
+    // copy all the other arguments to wxApp::argv[]
+    for ( int i = 1; i < argc; i++ )
+    {
+        argv[i] = wxStrdup(args[i - 1]);
+    }
+
+    // argv[] must be NULL-terminated
+    argv[argc] = NULL;
+
+    return argv;
+}
+
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // global HINSTANCE

@@ -231,84 +231,23 @@ END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 // wxApp static functions
 // ----------------------------------------------------------------------------
-/*static*/ bool wxApp::Initialize()
+
+bool wxApp::Initialize(int argc, wxChar **argv)
 {
+    // VZ: apparently this needs to be done a.s.a.p., right? it is done after
+    //     wxClassInfo::InitializeClasses() now but usd to be done before, I
+    //     hope it's not a problem -- if it is, please let me know, David (if
+    //     it isn't, just remove this comment :-)
     wxPoseAsInitializer::InitializePosers();
-    wxClassInfo::InitializeClasses();
 
-#if wxUSE_THREADS
-    wxPendingEventsLocker = new wxCriticalSection;
-#endif
-
-    wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
-    wxTheColourDatabase->Initialize();
-
-    wxInitializeStockLists();
-    wxInitializeStockObjects();
-
-#if wxUSE_WX_RESOURCES
-    wxInitializeResourceSystem();
-#endif
-
-    wxBitmap::InitStandardHandlers();
-
-    wxModule::RegisterModules();
-    if (!wxModule::InitializeModules()) {
-        return FALSE;
-    }
-    return TRUE;
+    return wxAppBase::Initialize(argc, argv);
 }
 
-/*static*/ void wxApp::CleanUp()
+void wxApp::CleanUp()
 {
-    wxModule::CleanUpModules();
-
-#if wxUSE_WX_RESOURCES
-    wxCleanUpResourceSystem();
-#endif
-
-    wxDeleteStockObjects() ;
-
-    // Destroy all GDI lists, etc.
-    wxDeleteStockLists();
-
-    delete wxTheColourDatabase;
-    wxTheColourDatabase = NULL;
-
-    wxBitmap::CleanUpHandlers();
-
-    delete wxPendingEvents;
-
-#if wxUSE_THREADS
-    delete wxPendingEventsLocker;
-    // If we don't do the following, we get an apparent memory leak.
-    ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
-#endif
-
-    wxClassInfo::CleanUpClasses();
-
-    delete wxTheApp;
-    wxTheApp = NULL;
-
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // At this point we want to check if there are any memory
-    // blocks that aren't part of the wxDebugContext itself,
-    // as a special case. Then when dumping we need to ignore
-    // wxDebugContext, too.
-    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
-    {
-        wxLogDebug(wxT("There were memory leaks."));
-        wxDebugContext::Dump();
-        wxDebugContext::PrintStatistics();
-    }
-    //  wxDebugContext::SetStream(NULL, NULL);
-#endif
-
     wxDC::CocoaShutdownTextSystem();
-#if wxUSE_LOG
-    // do it as the very last thing because everything else can log messages
-    delete wxLog::SetActiveTarget(NULL);
-#endif // wxUSE_LOG
+
+    wxAppBase::CleanUp();
 }
 
 // ----------------------------------------------------------------------------
@@ -520,22 +459,4 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     return true;
 }
-
-void wxApp::DeletePendingObjects()
-{
-    wxNode *node = wxPendingDelete.GetFirst();
-    while (node)
-    {
-        wxObject *obj = (wxObject *)node->GetData();
-
-        delete obj;
-
-        if (wxPendingDelete.Find(obj))
-            delete node;
-
-        node = wxPendingDelete.GetFirst();
-    }
-}
-
-// platform specifics
 

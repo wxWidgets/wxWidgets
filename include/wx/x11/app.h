@@ -89,8 +89,8 @@ protected:
     
 public:
     // Implementation
-    static bool Initialize();
-    static void CleanUp();
+    virtual bool Initialize();
+    virtual void CleanUp();
     
     void DeletePendingObjects();
     

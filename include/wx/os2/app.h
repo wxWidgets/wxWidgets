@@ -126,14 +126,13 @@ private:
 public:
 
     // Implementation
-    static bool  Initialize(HAB vHab);
-    static void  CleanUp(void);
+    virtual bool  Initialize(int argc, wxChar **argv);
+    virtual void  CleanUp(void);
 
     static bool  RegisterWindowClasses(HAB vHab);
     virtual void DoMessage(WXMSG *pMsg);
     virtual bool DoMessage(void);
     virtual bool ProcessMessage(WXMSG* pMsg);
-    void         DeletePendingObjects(void);
 
 public:
     int                             m_nCmdShow;

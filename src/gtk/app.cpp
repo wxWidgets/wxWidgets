@@ -671,91 +671,21 @@ void wxApp::Dispatch()
     gtk_main_iteration();
 }
 
-void wxApp::DeletePendingObjects()
+bool wxApp::Initialize(int argc, wxChar **argv)
 {
-    wxNode *node = wxPendingDelete.GetFirst();
-    while (node)
-    {
-        wxObject *obj = (wxObject *)node->GetData();
-
-        delete obj;
-
-        if (wxPendingDelete.Find(obj))
-            delete node;
-
-        node = wxPendingDelete.GetFirst();
-    }
-}
-
-bool wxApp::Initialize()
-{
-    wxClassInfo::InitializeClasses();
-
-    // GL: I'm annoyed ... I don't know where to put this and I don't want to
-    // create a module for that as it's part of the core.
-#if wxUSE_THREADS
-    wxPendingEvents = new wxList();
-    wxPendingEventsLocker = new wxCriticalSection();
-#endif
-
-    wxTheColourDatabase = new wxColourDatabase( wxKEY_STRING );
-    wxTheColourDatabase->Initialize();
-
-    wxInitializeStockLists();
-    wxInitializeStockObjects();
-
-    wxModule::RegisterModules();
-    if (!wxModule::InitializeModules())
-        return FALSE;
+    if ( !wxAppBase::Initialize(argc, argv) )
+        return false;
 
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
-    return TRUE;
+    return true;
 }
 
 void wxApp::CleanUp()
 {
-    wxModule::CleanUpModules();
-
-    delete wxTheColourDatabase;
-    wxTheColourDatabase = (wxColourDatabase*) NULL;
-
-    wxDeleteStockObjects();
-
-    wxDeleteStockLists();
-
-    delete wxTheApp;
-    wxTheApp = (wxApp*) NULL;
-
-    wxClassInfo::CleanUpClasses();
-
-#if wxUSE_THREADS
-    delete wxPendingEvents;
-    wxPendingEvents = NULL;
-    delete wxPendingEventsLocker;
-    wxPendingEventsLocker = NULL;
-#endif
-
-    // check for memory leaks
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
-    {
-        wxLogDebug(wxT("There were memory leaks.\n"));
-        wxDebugContext::Dump();
-        wxDebugContext::PrintStatistics();
-    }
-#endif // Debug
-
-#if wxUSE_LOG
-    // do this as the very last thing because everything else can log messages
-    wxLog::DontCreateOnDemand();
-
-    wxLog *oldLog = wxLog::SetActiveTarget( (wxLog*) NULL );
-    if (oldLog)
-        delete oldLog;
-#endif // wxUSE_LOG
+    wxAppBase::CleanUp();
 }
 
 //-----------------------------------------------------------------------------
