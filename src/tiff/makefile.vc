@@ -1,6 +1,8 @@
 
 !if "$(FINAL)" == "1"
 LIBTARGET=$(WXDIR)\lib\tiff.lib
+!else if "$(FINAL)" == "hybrid"
+LIBTARGET=$(WXDIR)\lib\tiffh.lib
 !else
 LIBTARGET=$(WXDIR)\lib\tiffd.lib
 !endif
