@@ -12455,7 +12455,7 @@ fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
   
-      OPENGL_LINK="-lGL"
+      OPENGL_LINK="-lGL -lGLU"
     
 else
   echo "$ac_t""no" 1>&6
@@ -12496,7 +12496,7 @@ fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
   
-        OPENGL_LINK="-lMesaGL"
+        OPENGL_LINK="-lMesaGL -lMesaGLU"
       
 else
   echo "$ac_t""no" 1>&6
@@ -14331,7 +14331,8 @@ EOF
 
 
 
-GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $TOOLKIT_LINK"
+GUILIBS="$GUI_TK_LIBRARY $TOOLKIT_LINK"
+OPENGL_LIBS="$OPENGL_LINK"
 
 EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
 if test "$wxUSE_GUI" = "yes"; then
@@ -14456,8 +14457,9 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 
+
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:14461: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:14463: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -14745,6 +14747,7 @@ s%@DOCS_SUBDIRS@%$DOCS_SUBDIRS%g
 s%@SAMPLES_SUBDIRS@%$SAMPLES_SUBDIRS%g
 s%@USER_SUBDIRS@%$USER_SUBDIRS%g
 s%@EXTRA_LIBS@%$EXTRA_LIBS%g
+s%@OPENGL_LIBS@%$OPENGL_LIBS%g
 s%@EXTRADEFS@%$EXTRADEFS%g
 s%@LD_LIBS@%$LD_LIBS%g
 s%@RCINPUTSWITCH@%$RCINPUTSWITCH%g

@@ -2841,10 +2841,10 @@ if test "$wxUSE_OPENGL" = "yes"; then
     AC_DEFINE(wxUSE_OPENGL)
     AC_DEFINE(wxUSE_GLCANVAS)
     AC_CHECK_LIB(GL, glFlush, [
-      OPENGL_LINK="-lGL"
+      OPENGL_LINK="-lGL -lGLU"
     ],[
         AC_CHECK_LIB(MesaGL, glFlush, [
-        OPENGL_LINK="-lMesaGL"
+        OPENGL_LINK="-lMesaGL -lMesaGLU"
       ],)
      ],)
     ],wxUSE_OPENGL=0)
@@ -3704,7 +3704,8 @@ dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
 
-GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $TOOLKIT_LINK"
+GUILIBS="$GUI_TK_LIBRARY $TOOLKIT_LINK"
+OPENGL_LIBS="$OPENGL_LINK"
 
 dnl all additional libraries (except wxWindows itself) we link with
 dnl
@@ -3846,6 +3847,7 @@ AC_SUBST(USER_SUBDIRS)
 dnl additional libraries and linker settings
 AC_SUBST(LDFLAGS)
 AC_SUBST(EXTRA_LIBS)
+AC_SUBST(OPENGL_LIBS)
 AC_SUBST(EXTRADEFS)
 AC_SUBST(LIBS)
 AC_SUBST(LD_LIBS)

@@ -68,7 +68,7 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 #include "gdk/gdkprivate.h"
 
-void gdk_draw_bitmap     (GdkDrawable  *drawable,
+void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
                           GdkGC               *gc,
                           GdkDrawable  *src,
                           gint                xsrc,
@@ -912,7 +912,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
        drawing a mono-bitmap (XBitmap) we use the current text GC */
     if (is_mono)
-        gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );
+        gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );
     else
         gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
 
@@ -1098,7 +1098,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
            drawing a mono-bitmap (XBitmap) we use the current text GC */
 
         if (is_mono)
-            gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
+            gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
         else
             gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, xx, yy, ww, hh );
 
