@@ -2,6 +2,7 @@
  * helphtml.h - base class for html based help controllers          *
  *                                                                  *
  * (C) 1999 by Karsten Ballüder (Ballueder@usa.net)                 *
+ * License: wxWindows licence                                       *
  *                                                                  *
  * $Id$
  *******************************************************************/
