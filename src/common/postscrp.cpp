@@ -690,8 +690,8 @@ void wxPostScriptDC::SetFont (const wxFont& the_font)
 	return;
 
   char buf[100];
-  char *name;
-  char *style = "";
+  const char *name;
+  const char *style = "";
   int Style = m_font.GetStyle ();
   int Weight = m_font.GetWeight ();
 
@@ -790,12 +790,12 @@ void wxPostScriptDC::SetPen (const wxPen& pen)
      will be first black line *2* units long, then space 4 units, then the
      pattern of *3* units black, 4 units space will be repeated.
    */
-  static char *dotted = "[2 5] 2";
-  static char *short_dashed = "[4 4] 2";
-  static char *long_dashed = "[4 8] 2";
-  static char *dotted_dashed = "[6 6 2 6] 4";
+  static const char *dotted = "[2 5] 2";
+  static const char *short_dashed = "[4 4] 2";
+  static const char *long_dashed = "[4 8] 2";
+  static const char *dotted_dashed = "[6 6 2 6] 4";
 
-  char *psdash = NULL;
+  const char *psdash = NULL;
   switch (m_pen.GetStyle ())
     {
     case wxDOT:
@@ -1640,7 +1640,7 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
 
     // 1. construct filename ******************************************
     /* MATTHEW: [2] Use wxTheFontNameDirectory */
-    char *name;
+    const char *name;
 
 	// Julian - we'll need to do this a different way now we've removed the
 	// font directory system. Must find Stefan's original code.
@@ -1983,7 +1983,7 @@ long wxPostScriptDC::LogicalToDeviceYRel (long y) const
 
 void wxPostScriptDC::GetSize(int* width, int* height) const
 {
-  char *paperType = wxThePrintSetupData->GetPaperName();
+  const char *paperType = wxThePrintSetupData->GetPaperName();
   if (!paperType)
     paperType = "A4 210 x 297 mm";
 
@@ -2004,7 +2004,7 @@ void wxPostScriptDC::GetSize(int* width, int* height) const
 
 void wxPostScriptDC::GetSizeMM(long *width, long *height) const
 {
-  char *paperType = wxThePrintSetupData->GetPaperName();
+  const char *paperType = wxThePrintSetupData->GetPaperName();
   if (!paperType)
     paperType = "A4 210 x 297 mm";
 
@@ -2565,7 +2565,7 @@ void wxPrintPaperDatabase::AddPaperType(char *name, int wmm, int hmm, int wp, in
   Append(name, new wxPrintPaperType(name, wmm, hmm, wp, hp));
 }
 
-wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(char *name)
+wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const char *name)
 {
   wxNode *node = Find(name);
   if (node)

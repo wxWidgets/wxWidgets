@@ -148,9 +148,9 @@ void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout)
  * Printout class
  */
  
-wxPrintout::wxPrintout(char *title)
+wxPrintout::wxPrintout(const char *title)
 {
-  printoutTitle = title ? copystring(title) : (char*)NULL;
+  printoutTitle = title ? copystring(title) : NULL;
   printoutDC = NULL;
   pageWidthMM = 0;
   pageHeightMM = 0;

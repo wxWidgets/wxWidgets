@@ -284,7 +284,7 @@ class WXDLLEXPORT wxPrintPaperDatabase: public wxList
   void ClearDatabase(void);
 
   void AddPaperType(char *name, int wmm, int hmm, int wp, int hp);
-  wxPrintPaperType *FindPaperType(char *name);
+  wxPrintPaperType *FindPaperType(const char *name);
 };
 
 WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;

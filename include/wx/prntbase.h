@@ -94,7 +94,7 @@ class WXDLLEXPORT wxPrintout: public wxObject
 
    bool isPreview;
  public:
-  wxPrintout(char *title = "Printout");
+  wxPrintout(const char *title = "Printout");
   ~wxPrintout(void);
 
   virtual bool OnBeginDocument(int startPage, int endPage);
