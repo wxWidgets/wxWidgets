@@ -29,10 +29,6 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/defs.h"
-#endif
-
 #include "wx/utils.h"
 #include "wx/intl.h"
 
@@ -66,9 +62,9 @@
     #include <dirent.h>
 #endif
 
-#ifdef __OS2__
-    #include <direct.h>
+#ifdef __WXPM__
     #include <process.h>
+    #include "wx/os2/private.h"
 #endif
 #ifdef __WINDOWS__
 #if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
@@ -277,14 +273,10 @@ wxFileExists (const wxString& filename)
     return FALSE ;
 #else
 
-#ifdef __SALFORDC__
-  struct _stat stbuf;
-#else
-  struct stat stbuf;
-#endif
-
-  if ((filename != wxT("")) && stat (wxFNSTRINGCAST filename.fn_str(), &stbuf) == 0)
+  wxStructStat stbuf;
+  if ((filename != wxT("")) && wxStat (wxFNSTRINGCAST filename.fn_str(), &stbuf) == 0)
     return TRUE;
+
   return FALSE;
 #endif
 }
@@ -570,7 +562,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
         /* prefix ~ */
         if (nm[1] == SEP || nm[1] == 0)
         {        /* ~/filename */
-	    // FIXME: wxGetUserHome could return temporary storage in Unicode mode
+        // FIXME: wxGetUserHome could return temporary storage in Unicode mode
             if ((s = WXSTRINGCAST wxGetUserHome(wxT(""))) != NULL) {
                 if (*++nm)
                     nm++;
@@ -584,7 +576,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             was_sep = (*s == SEP);
             nnm = *s ? s + 1 : s;
             *s = 0;
-	    // FIXME: wxGetUserHome could return temporary storage in Unicode mode
+        // FIXME: wxGetUserHome could return temporary storage in Unicode mode
             if ((home = WXSTRINGCAST wxGetUserHome(wxString(nm + 1))) == NULL) {
                if (was_sep) /* replace only if it was there: */
                    *s = SEP;
@@ -836,8 +828,8 @@ static char sMacFileNameConversion[ 1000 ] ;
 
 wxString wxMac2UnixFilename (const char *str)
 {
-	char *s = sMacFileNameConversion ;
-	strcpy( s , str ) ;
+    char *s = sMacFileNameConversion ;
+    strcpy( s , str ) ;
   if (s)
   {
     memmove( s+1 , s ,strlen( s ) + 1) ;
@@ -860,8 +852,8 @@ wxString wxMac2UnixFilename (const char *str)
 
 wxString wxUnix2MacFilename (const char *str)
 {
-	char *s = sMacFileNameConversion ;
-	strcpy( s , str ) ;
+    char *s = sMacFileNameConversion ;
+    strcpy( s , str ) ;
   if (s)
   {
     if ( *s == '.' )
@@ -882,13 +874,13 @@ wxString wxUnix2MacFilename (const char *str)
     {
       if (*s == '/' || *s == '\\')
       {
-      	// convert any back-directory situations
-      	if ( *(s+1) == '.' && *(s+2) == '.' && ( (*(s+3) == '/' || *(s+3) == '\\') ) )
-      	{
+          // convert any back-directory situations
+          if ( *(s+1) == '.' && *(s+2) == '.' && ( (*(s+3) == '/' || *(s+3) == '\\') ) )
+          {
           *s = ':';
-    			memmove( s+1 , s+3 ,strlen( s+3 ) + 1 ) ;
-      	}
-      	else
+                memmove( s+1 , s+3 ,strlen( s+3 ) + 1 ) ;
+          }
+          else
           *s = ':';
       }
 
@@ -900,36 +892,36 @@ wxString wxUnix2MacFilename (const char *str)
 
 wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 {
-	Handle	myPath ;
-	short 	length ;
-	
-	FSpGetFullPath( spec , &length , &myPath ) ;
-	::SetHandleSize( myPath , length + 1 ) ;
-	::HLock( myPath ) ;
-	(*myPath)[length] = 0 ;
-	if ( length > 0 && (*myPath)[length-1] ==':' )
-		(*myPath)[length-1] = 0 ;
-	
-	wxString result( 	(char*) *myPath ) ;
-	::HUnlock( myPath ) ;
-	::DisposeHandle( myPath ) ;
-	return result ;
+    Handle    myPath ;
+    short     length ;
+
+    FSpGetFullPath( spec , &length , &myPath ) ;
+    ::SetHandleSize( myPath , length + 1 ) ;
+    ::HLock( myPath ) ;
+    (*myPath)[length] = 0 ;
+    if ( length > 0 && (*myPath)[length-1] ==':' )
+        (*myPath)[length-1] = 0 ;
+
+    wxString result(     (char*) *myPath ) ;
+    ::HUnlock( myPath ) ;
+    ::DisposeHandle( myPath ) ;
+    return result ;
 }
 
 wxString wxMacFSSpec2UnixFilename( const FSSpec *spec )
 {
-	return wxMac2UnixFilename( wxMacFSSpec2MacFilename( spec) ) ;
+    return wxMac2UnixFilename( wxMacFSSpec2MacFilename( spec) ) ;
 }
 
 void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
 {
-	FSpLocationFromFullPath( strlen(path ) , path , spec ) ;
+    FSpLocationFromFullPath( strlen(path ) , path , spec ) ;
 }
 
 void wxUnixFilename2FSSpec( const char *path , FSSpec *spec )
 {
-	wxString var = wxUnix2MacFilename( path ) ;
-	wxMacFilename2FSSpec( var , spec ) ;
+    wxString var = wxUnix2MacFilename( path ) ;
+    wxMacFilename2FSSpec( var , spec ) ;
 }
 
 #endif
@@ -1050,7 +1042,7 @@ wxRenameFile (const wxString& file1, const wxString& file2)
     return TRUE;
 #else
   // Normal system call
-  if (0 == rename (wxFNSTRINGCAST file1.fn_str(), wxFNSTRINGCAST file2.fn_str()))
+  if (0 == wxRename (wxCSTRINGCAST file1, wxCSTRINGCAST file2))
     return TRUE;
 #endif
   // Try to copy
@@ -1065,7 +1057,7 @@ wxRenameFile (const wxString& file1, const wxString& file2)
 bool wxRemoveFile(const wxString& file)
 {
 #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
-  int flag = remove(wxFNSTRINGCAST file.fn_str());
+  int flag = wxRemove(wxFNSTRINGCAST file.fn_str());
 #elif defined( __WXMAC__ )
   int flag = unlink(wxUnix2MacFilename( file ));
 #else
@@ -1083,10 +1075,12 @@ bool wxMkdir(const wxString& dir, int perm)
 
     // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
-#if (!(defined(__WXMSW__) || defined(__OS2__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
+#if (!(defined(__WXMSW__) || defined(__WXPM__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
+#elif defined(__WXPM__)
+    if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
 #else  // !MSW and !OS/2 VAC++
-    if ( mkdir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
+    if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dirname);
@@ -1104,12 +1098,14 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
   return FALSE; //to be changed since rmdir exists in VMS7.x
 #elif defined( __WXMAC__ )
   return (rmdir(wxUnix2MacFilename( dir )) == 0);
+#elif defined(__WXPM__)
+  return (::DosDeleteDir((PSZ)dir.c_str()) == 0);
 #else
 
 #ifdef __SALFORDC__
   return FALSE; // What to do?
 #else
-  return (rmdir(wxFNSTRINGCAST dir.fn_str()) == 0);
+  return (wxRmDir(wxFNSTRINGCAST dir.fn_str()) == 0);
 #endif
 
 #endif
@@ -1164,19 +1160,25 @@ bool wxDirExists(const wxString& dir)
 // does the path exists? (may have or not '/' or '\\' at the end)
 bool wxPathExists(const wxChar *pszPathName)
 {
-  /* Windows API returns -1 from stat for "c:\dir\" if "c:\dir" exists
-   * OTOH, we should change "d:" to "d:\" and leave "\" as is. */
-  wxString strPath(pszPathName);
-  if ( wxEndsWithPathSeparator(pszPathName) && pszPathName[1] != wxT('\0') )
-    strPath.Last() = wxT('\0');
+    wxString strPath(pszPathName);
+#ifdef __WINDOWS__
+    // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
+    // so remove all trailing backslashes from the path - but don't do this for
+    // the pathes "d:\" (which are different from "d:") nor for just "\"
+    while ( wxEndsWithPathSeparator(strPath) )
+    {
+        size_t len = strPath.length();
+        if ( len == 1 || strPath[len - 1] == _T(':') )
+            break;
 
-#ifdef __SALFORDC__
-  struct _stat st;
-#else
-  struct stat st;
-#endif
+        strPath.Truncate(len - 1);
+    }
+#endif // __WINDOWS__
 
-  return stat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 && (st.st_mode & S_IFDIR);
+    wxStructStat st;
+
+    return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 &&
+        ((st.st_mode & S_IFMT) == S_IFDIR);
 }
 
 // Get a temporary filename, opening and closing the file.
@@ -1311,8 +1313,8 @@ wxString wxFindNextFile()
           nextDir = readdir(gs_dirStream) )
     {
         if (wxMatchWild(name, nextDir->d_name, FALSE) &&   // RR: added FALSE to find hidden files
-	    strcmp(nextDir->d_name, ".") &&
-	    strcmp(nextDir->d_name, "..") )
+        strcmp(nextDir->d_name, ".") &&
+        strcmp(nextDir->d_name, "..") )
         {
             result.Empty();
             if ( !path.IsEmpty() )
@@ -1360,10 +1362,10 @@ wxString wxFindNextFile()
 
 struct MacDirectoryIterator
 {
-	CInfoPBRec			m_CPB ;
-	wxInt16				m_index ;
-	long				m_dirId ;
-	Str255				m_name ;
+    CInfoPBRec            m_CPB ;
+    wxInt16                m_index ;
+    long                m_dirId ;
+    Str255                m_name ;
 } ;
 
 static int g_iter_flags ;
@@ -1381,57 +1383,57 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     if ( !path.IsEmpty() )
         result << path << wxT('\\');
 
-	FSSpec fsspec ;
+    FSSpec fsspec ;
 
-	wxUnixFilename2FSSpec( result , &fsspec ) ;
-	g_iter.m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
-	g_iter.m_CPB.hFileInfo.ioNamePtr = g_iter.m_name ;
-	g_iter.m_index = 0 ;
-	
-	Boolean isDir ;
-	FSpGetDirectoryID( &fsspec , &g_iter.m_dirId , &isDir ) ;
-	if ( !isDir )
-		return wxEmptyString ;
-		
-	return wxFindNextFile( ) ;
+    wxUnixFilename2FSSpec( result , &fsspec ) ;
+    g_iter.m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
+    g_iter.m_CPB.hFileInfo.ioNamePtr = g_iter.m_name ;
+    g_iter.m_index = 0 ;
+
+    Boolean isDir ;
+    FSpGetDirectoryID( &fsspec , &g_iter.m_dirId , &isDir ) ;
+    if ( !isDir )
+        return wxEmptyString ;
+
+    return wxFindNextFile( ) ;
 }
 
 wxString wxFindNextFile()
 {
     wxString result;
 
-	short err = noErr ;
-	
-	while ( err == noErr )
-	{
-		g_iter.m_index++ ;
-		g_iter.m_CPB.dirInfo.ioFDirIndex = g_iter.m_index;
-		g_iter.m_CPB.dirInfo.ioDrDirID = g_iter.m_dirId;	/* we need to do this every time */
-		err = PBGetCatInfoSync((CInfoPBPtr)&g_iter.m_CPB);
-		if ( err != noErr )
-			break ;
-			
-		if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (g_iter_flags & wxDIR) ) //  we have a directory
-			break ;
-			
-		if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(g_iter_flags & wxFILE ) )
-			continue ;
-			
-		// hit !
-		break ;
-	}
-	if ( err != noErr )
-	{
-		return wxEmptyString ;
-	}
-	FSSpec spec ;
-	
-	FSMakeFSSpecCompat(g_iter.m_CPB.hFileInfo.ioVRefNum,
-								   g_iter.m_dirId,
-								   g_iter.m_name,
-								   &spec) ;
-								
-	return wxMacFSSpec2UnixFilename( &spec ) ;
+    short err = noErr ;
+
+    while ( err == noErr )
+    {
+        g_iter.m_index++ ;
+        g_iter.m_CPB.dirInfo.ioFDirIndex = g_iter.m_index;
+        g_iter.m_CPB.dirInfo.ioDrDirID = g_iter.m_dirId;    /* we need to do this every time */
+        err = PBGetCatInfoSync((CInfoPBPtr)&g_iter.m_CPB);
+        if ( err != noErr )
+            break ;
+
+        if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (g_iter_flags & wxDIR) ) //  we have a directory
+            break ;
+
+        if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(g_iter_flags & wxFILE ) )
+            continue ;
+
+        // hit !
+        break ;
+    }
+    if ( err != noErr )
+    {
+        return wxEmptyString ;
+    }
+    FSSpec spec ;
+
+    FSMakeFSSpecCompat(g_iter.m_CPB.hFileInfo.ioVRefNum,
+                                   g_iter.m_dirId,
+                                   g_iter.m_name,
+                                   &spec) ;
+
+    return wxMacFSSpec2UnixFilename( &spec ) ;
 }
 
 #elif defined(__WXMSW__)
@@ -1485,9 +1487,9 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     result += gs_findDataStruct.cFileName;
 
     return result;
-#else
+#else // !Win32
     int flag = _A_NORMAL;
-    if (flags & wxDIR) /* MATTHEW: [5] Use & */
+    if (flags & wxDIR)
         flag = _A_SUBDIR;
 
 #ifdef __BORLANDC__
@@ -1496,7 +1498,6 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
         if (_dos_findfirst(WXSTRINGCAST spec, flag, &gs_findDataStruct) == 0)
 #endif
         {
-            /* MATTHEW: [5] Check directory flag */
             char attrib;
 
 #ifdef __BORLANDC__
@@ -1519,9 +1520,9 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
 #endif
                     ;
         }
-#endif // __WIN32__
 
     return result;
+#endif // __WIN32__
 }
 
 
@@ -1591,9 +1592,9 @@ try_again:
 #endif
                       ;
         }
-#endif // Win32/16
 
     return result;
+#endif // Win32/16
 }
 
 #elif defined(__WXPM__)
@@ -1654,16 +1655,16 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #ifdef _MSC_VER
   if (_getcwd(cbuf, sz) == NULL) {
 #elif defined( __WXMAC__)
-	enum
-	{
-		SFSaveDisk = 0x214, CurDirStore = 0x398
-	};
-	FSSpec cwdSpec ;
-	
-	FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
-	wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
-	strcpy( buf , res ) ;
-	if (0) {
+    enum
+    {
+        SFSaveDisk = 0x214, CurDirStore = 0x398
+    };
+    FSSpec cwdSpec ;
+
+    FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
+    wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
+    strcpy( buf , res ) ;
+    if (0) {
 #else
   if (getcwd(cbuf, sz) == NULL) {
 #endif
@@ -1672,16 +1673,23 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #ifdef _MSC_VER
   if (_getcwd(buf, sz) == NULL) {
 #elif defined( __WXMAC__)
-	enum
-	{
-		SFSaveDisk = 0x214, CurDirStore = 0x398
-	};
-	FSSpec cwdSpec ;
-	
-	FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
-	wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
-	strcpy( buf , res ) ;
-	if (0) {
+    enum
+    {
+        SFSaveDisk = 0x214, CurDirStore = 0x398
+    };
+    FSSpec cwdSpec ;
+
+    FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
+    wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
+    strcpy( buf , res ) ;
+    if (0) {
+#elif(__VISAGECPP__)
+    APIRET rc;
+    rc = ::DosQueryCurrentDir( 0 // current drive
+                              ,buf
+                              ,(PULONG)&sz
+                             );
+    if (rc != 0) {
 #else
   if (getcwd(buf, sz) == NULL) {
 #endif
@@ -1711,8 +1719,10 @@ wxString wxGetCwd()
 
 bool wxSetWorkingDirectory(const wxString& d)
 {
-#if defined( __UNIX__ ) || defined( __WXMAC__ ) || defined(__WXPM__)
+#if defined( __UNIX__ ) || defined( __WXMAC__ )
   return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
+#elif defined(__WXPM__)
+  return (::DosSetCurrentDir((PSZ)d.c_str()) == 0);
 #elif defined(__WINDOWS__)
 
 #ifdef __WIN32__
@@ -1771,7 +1781,7 @@ bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, const wxChar *pszFi
 {
     // we assume that it's not empty
     wxCHECK_MSG( !wxIsEmpty(pszFile), FALSE,
-            _("empty file name in wxFindFileInPath"));
+                 _T("empty file name in wxFindFileInPath"));
 
     // skip path separator in the beginning of the file name if present
     if ( wxIsPathSeparator(*pszFile) )
@@ -1868,13 +1878,11 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
     }
 }
 
-
-
 time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 {
-    struct stat buf;
+    wxStructStat buf;
 
-    stat(filename.fn_str(), &buf);
+    wxStat(filename.fn_str(), &buf);
     return buf.st_mtime;
 }
 

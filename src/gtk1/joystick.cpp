@@ -12,6 +12,7 @@
 #ifdef __GNUG__
 #pragma implementation "joystick.h"
 #endif
+#if wxUSE_JOYSTICK
 
 #include <linux/joystick.h>
 #include <sys/types.h>
@@ -354,4 +355,5 @@ bool wxJoystick::ReleaseCapture(void)
   m_polling = 0;
   return TRUE;
 }
+#endif  // wxUSE_JOYSTICK
 

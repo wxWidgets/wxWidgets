@@ -142,8 +142,8 @@ public:
     wxMask *GetMask() const { return (GetBitmapData() ? GetBitmapData()->m_bitmapMask : (wxMask*) NULL); }
     void SetMask(wxMask *mask) ;
 
-    bool operator==(const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
-    bool operator!=(const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
+    bool operator==(const wxBitmap& bitmap) const { return m_refData == bitmap.m_refData; }
+    bool operator!=(const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
 
 #if WXWIN_COMPATIBILITY_2
     void SetOk(bool isOk);

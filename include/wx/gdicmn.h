@@ -226,8 +226,8 @@ public:
     wxRealPoint() { x = y = 0.0; };
     wxRealPoint(double xx, double yy) { x = xx; y = yy; };
 
-    wxRealPoint operator+(const wxRealPoint& pt) { return wxRealPoint(x + pt.x, y + pt.y); }
-    wxRealPoint operator-(const wxRealPoint& pt) { return wxRealPoint(x - pt.x, y - pt.y); }
+    wxRealPoint operator+(const wxRealPoint& pt) const { return wxRealPoint(x + pt.x, y + pt.y); }
+    wxRealPoint operator-(const wxRealPoint& pt) const { return wxRealPoint(x - pt.x, y - pt.y); }
 
     bool operator==(const wxRealPoint& pt) const { return x == pt.x && y == pt.y; }
 };
@@ -247,8 +247,8 @@ public:
     bool operator!=(const wxPoint& p) const { return !(*this == p); }
 
     // arithmetic operations (component wise)
-    wxPoint operator+(const wxPoint& p) { return wxPoint(x + p.x, y + p.y); }
-    wxPoint operator-(const wxPoint& p) { return wxPoint(x - p.x, y - p.y); }
+    wxPoint operator+(const wxPoint& p) const { return wxPoint(x + p.x, y + p.y); }
+    wxPoint operator-(const wxPoint& p) const { return wxPoint(x - p.x, y - p.y); }
 
     wxPoint& operator+=(const wxPoint& p) { x += p.x; y += p.y; return *this; }
     wxPoint& operator-=(const wxPoint& p) { x -= p.x; y -= p.y; return *this; }

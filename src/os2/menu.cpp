@@ -49,6 +49,15 @@ extern wxMenu*                      wxCurrentPopupMenu;
 //
 static const int                    idMenuTitle = -2;
 
+//
+// The unique ID for Menus
+//
+#ifdef __VISAGECPP__
+USHORT                              wxMenu::m_nextMenuId = 0;
+#else
+static USHORT                       wxMenu::m_nextMenuId = 0;
+#endif
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -73,7 +82,7 @@ static wxString TextToLabel(const wxString& rTitle)
                 pc++;
                 Title << wxT('&');
             }
-            else 
+            else
                 Title << wxT('~');
         }
 //         else if (*pc == wxT('/'))
@@ -113,7 +122,7 @@ void wxMenu::Init()
     // Create the menu (to be used as a submenu or a popup)
     //
     if ((m_hMenu =  ::WinCreateWindow( HWND_DESKTOP
-                                      ,(const wxChar*)WC_MENU
+                                      ,WC_MENU
                                       ,"Menu"
                                       ,0L
                                       ,0L
@@ -132,7 +141,7 @@ void wxMenu::Init()
     m_vMenuData.iPosition   = 0;
     m_vMenuData.afStyle     = MIS_SUBMENU | MIS_TEXT;
     m_vMenuData.afAttribute = (USHORT)0;
-    m_vMenuData.id          = (USHORT)0;
+    m_vMenuData.id          = m_nextMenuId++;
     m_vMenuData.hwndSubMenu = m_hMenu;
     m_vMenuData.hItem       = NULLHANDLE;
 
@@ -169,7 +178,9 @@ wxMenu::~wxMenu()
     //
     // Delete accels
     //
+#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
     WX_CLEAR_ARRAY(m_vAccels);
+#endif
 #endif // wxUSE_ACCEL
 } // end of wxMenu::~wxMenu
 
@@ -254,13 +265,24 @@ bool wxMenu::DoInsertOrAppend(
 {
     ERRORID                         vError;
     wxString                        sError;
-    MENUITEM                        vItem;
-
 #if wxUSE_ACCEL
     UpdateAccel(pItem);
 #endif // wxUSE_ACCEL
 
-    memset(&vItem, '\0', sizeof(vItem));
+    //
+    // rItem is the member MENUITEM for the  menu items and the submenu's
+    // MENUITEM for submenus as required by ::MM_INSERTITEM message API
+    //
+
+    wxMenu*                         pSubmenu = pItem->GetSubMenu();
+    MENUITEM	&rItem = (pSubmenu != NULL)?pSubmenu->m_vMenuData:
+                                            pItem->m_vMenuData;
+    if(pSubmenu != NULL)
+    {
+        wxASSERT_MSG(pSubmenu->GetHMenu(), wxT("invalid submenu"));
+        pSubmenu->SetParent(this);
+        rItem.afStyle |= MIS_SUBMENU | MIS_TEXT;
+    }
 
     //
     // If "Break" has just been called, insert a menu break before this item
@@ -268,40 +290,13 @@ bool wxMenu::DoInsertOrAppend(
     //
     if (m_bDoBreak)
     {
-        vItem.afStyle |= MIS_BREAK;
+        rItem.afStyle |= MIS_BREAK;
         m_bDoBreak = FALSE;
     }
 
-    //
-    // Menu items that are being inserted into a submenu MUST have a
-    // MENUITEM structure separate from the parent menu so we must use
-    // a local vItem not the object's m_vMenuItem as that is the MENUITEM
-    // associated with the parent submenu.
-    //
     if (pItem->IsSeparator())
     {
-        vItem.afStyle |= MIS_SEPARATOR;
-    }
-
-    //
-    // Id is the numeric id for normal menu items and HMENU for submenus as
-    // required by ::MM_INSERTITEM message API
-    //
-
-    wxMenu*                         pSubmenu = pItem->GetSubMenu();
-
-    if (pSubmenu != NULL)
-    {
-        wxASSERT_MSG(pSubmenu->GetHMenu(), wxT("invalid submenu"));
-        pSubmenu->SetParent(this);
-
-        vItem.iPosition = 0; // submenus have a 0 position
-        vItem.id = (USHORT)pSubmenu->GetHMenu();
-        vItem.afStyle |= MIS_SUBMENU | MIS_TEXT;
-    }
-    else
-    {
-        vItem.id = pItem->GetId();
+        rItem.afStyle |= MIS_SEPARATOR;
     }
 
     BYTE*                           pData;
@@ -314,7 +309,7 @@ bool wxMenu::DoInsertOrAppend(
         // item draws itself, pass pointer to it in data parameter
         // Will eventually need to set the image handle somewhere into vItem.hItem
         //
-        vItem.afStyle |= MIS_OWNERDRAW;
+        rItem.afStyle |= MIS_OWNERDRAW;
         pData = (BYTE*)pItem;
         // vItem.hItem = ????
     }
@@ -324,29 +319,26 @@ bool wxMenu::DoInsertOrAppend(
         //
         // Menu is just a normal string (passed in data parameter)
         //
-        wxSetShortCutKey((wxChar*)pItem->GetText().c_str());
-        vItem.afStyle |= MIS_TEXT;
+        rItem.afStyle |= MIS_TEXT;
         pData = (char*)pItem->GetText().c_str();
+    }
+
+    if (nPos == (size_t)-1)
+    {
+        rItem.iPosition = MIT_END;
+    }
+    else
+    {
+        rItem.iPosition = nPos;
     }
 
     APIRET                          rc;
 
-    if (pSubmenu == NULL)
-    {
-        //
-        // -1 means append at end
-        //
-        if (nPos == (size_t)-1)
-        {
-            vItem.iPosition = MIT_END;
-        }
-        else
-        {
-            vItem.iPosition = nPos;
-        }
-    }
-
-    rc = (APIRET)::WinSendMsg(GetHmenu(), MM_INSERTITEM, (MPARAM)&vItem, (MPARAM)pData);
+    rc = (APIRET)::WinSendMsg( GetHmenu()
+                              ,MM_INSERTITEM
+                              ,(MPARAM)&rItem
+                              ,(MPARAM)pData
+                             );
     if (rc == MIT_MEMERROR || rc == MIT_ERROR)
     {
         vError = ::WinGetLastError(vHabmain);
@@ -666,7 +658,6 @@ WXHMENU wxMenuBar::Create()
 {
     MENUITEM                        vItem;
     HWND                            hFrame;
-    HWND                            hMenuBar = NULLHANDLE;
 
     if (m_hMenu != 0 )
         return m_hMenu;
@@ -683,39 +674,39 @@ WXHMENU wxMenuBar::Create()
     //
     // Create an empty menu and then fill it with insertions
     //
-    if (!wxWindow::OS2Create( hFrame
-                             ,WC_MENU
-                             ,"Menu"
-                             ,MS_ACTIONBAR | WS_SYNCPAINT | WS_VISIBLE
-                             ,0L
-                             ,0L
-                             ,0L
-                             ,0L
-                             ,hFrame
-                             ,HWND_TOP
-                             ,FID_MENU
-                             ,(PVOID)NULL
-                             ,(PVOID)NULL
-                            ))
+    if ((m_hMenu =  ::WinCreateWindow( hFrame
+                                      ,WC_MENU
+                                      ,(PSZ)NULL
+                                      ,MS_ACTIONBAR | WS_SYNCPAINT | WS_VISIBLE
+                                      ,0L
+                                      ,0L
+                                      ,0L
+                                      ,0L
+                                      ,hFrame
+                                      ,HWND_TOP
+                                      ,FID_MENU
+                                      ,NULL
+                                      ,NULL
+                                     )) == 0)
     {
-        wxLogLastError("CreateMenu");
+        wxLogLastError("WinLoadMenu");
     }
     else
     {
         size_t                      nCount = GetMenuCount();
 
-        hMenuBar = GetHwnd();
         for (size_t i = 0; i < nCount; i++)
         {
             APIRET                  rc;
             ERRORID                 vError;
             wxString                sError;
-            MENUITEM                vItem;
+            HWND                    hSubMenu;
 
             //
             // Set the parent and owner of the submenues to be the menubar, not the desktop
             //
-            if (!::WinSetParent(m_menus[i]->m_vMenuData.hwndSubMenu, hMenuBar, FALSE))
+            hSubMenu = m_menus[i]->m_vMenuData.hwndSubMenu;
+            if (!::WinSetParent(m_menus[i]->m_vMenuData.hwndSubMenu, m_hMenu, FALSE))
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
@@ -723,7 +714,7 @@ WXHMENU wxMenuBar::Create()
                 return NULLHANDLE;
             }
 
-            if (!::WinSetOwner(m_menus[i]->m_vMenuData.hwndSubMenu, hMenuBar))
+            if (!::WinSetOwner(m_menus[i]->m_vMenuData.hwndSubMenu, m_hMenu))
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
@@ -733,7 +724,7 @@ WXHMENU wxMenuBar::Create()
 
             m_menus[i]->m_vMenuData.iPosition = i;
 
-            rc = (APIRET)::WinSendMsg(hMenuBar, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
+            rc = (APIRET)::WinSendMsg(m_hMenu, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
             if (rc == MIT_MEMERROR || rc == MIT_ERROR)
             {
                 vError = ::WinGetLastError(vHabmain);
@@ -743,7 +734,7 @@ WXHMENU wxMenuBar::Create()
             }
         }
     }
-    return hMenuBar;
+    return m_hMenu;
 } // end of wxMenuBar::Create
 
 // ---------------------------------------------------------------------------
@@ -772,7 +763,7 @@ void wxMenuBar::EnableTop(
         wxLogLastError("LogLastError");
         return;
     }
-    ::WinSendMsg((HWND)m_hMenu, MM_SETITEMATTR, MPFROM2SHORT(nId, TRUE), MPFROM2SHORT(uFlag, uFlag));
+    ::WinSendMsg((HWND)m_hMenu, MM_SETITEMATTR, MPFROM2SHORT(nId, TRUE), MPFROM2SHORT(MIA_DISABLED, uFlag));
     Refresh();
 } // end of wxMenuBar::EnableTop
 
@@ -853,7 +844,7 @@ wxMenu* wxMenuBar::Replace(
     m_titles[nPos] = Title;
     if (IsAttached())
     {
-        ::WinSendMsg((HWND)m_hMenu, MM_DELETEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
+        ::WinSendMsg((HWND)m_hMenu, MM_REMOVEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
         ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)Title.c_str());
 
 #if wxUSE_ACCEL
@@ -913,8 +904,6 @@ bool wxMenuBar::Append(
 
     wxCHECK_MSG(hSubmenu, FALSE, wxT("can't append invalid menu to menubar"));
 
-    wxSetShortCutKey((wxChar*)rTitle.c_str());
-
     wxString Title = TextToLabel(rTitle);
     if (!wxMenuBarBase::Append(pMenu, Title))
         return FALSE;
@@ -958,7 +947,7 @@ wxMenu* wxMenuBar::Remove(
     }
     if (IsAttached())
     {
-        ::WinSendMsg((HWND)GetHmenu(), MM_DELETEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
+        ::WinSendMsg((HWND)GetHmenu(), MM_REMOVEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
         pMenu->Detach();
 
 #if wxUSE_ACCEL
@@ -1019,6 +1008,14 @@ void wxMenuBar::Attach(
 
 #if wxUSE_ACCEL
     RebuildAccelTable();
+    //
+    // Ensure the accelerator table is set to the frame (not the client!)
+    //
+    if (!::WinSetAccelTable( vHabmain
+                            ,(HWND)pFrame->GetFrame()
+                            ,m_vAccelTable.GetHACCEL()
+                           ))
+        wxLogLastError("WinSetAccelTable");
 #endif // wxUSE_ACCEL
 } // end of wxMenuBar::Attach
 
@@ -1074,23 +1071,4 @@ wxMenuItem* wxMenuBar::FindItem(
     return pItem;
 } // end of wxMenuBar::FindItem
 
-//
-// wxWindows' default shortcut identifier is WIN32's "&" but
-// OS2's is "~" so we have to change this and must watch for the
-// sequence, "&&" converting only the first one
-//
-void wxSetShortCutKey(
-  wxChar*                           zText
-)
-{
-    for (int i = 0; zText[i] != '\0'; i++)
-    {
-        if (zText[i] == '&')
-        {
-            zText[i] = '~';
-            if (zText[i+1] == '&')
-                i++;
-        }
-    }
-}
 

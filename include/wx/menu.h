@@ -32,8 +32,8 @@ class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxMenuItem;
 
 // pseudo template list classes
-WX_DECLARE_LIST(wxMenu, wxMenuList);
-WX_DECLARE_LIST(wxMenuItem, wxMenuItemList);
+WX_DECLARE_EXPORTED_LIST(wxMenu, wxMenuList);
+WX_DECLARE_EXPORTED_LIST(wxMenuItem, wxMenuItemList);
 
 // ----------------------------------------------------------------------------
 // conditional compilation
@@ -102,6 +102,59 @@ public:
 
     // insert an item before given position
     bool Insert(size_t pos, wxMenuItem *item);
+    void Insert(size_t pos,
+                int id,
+                const wxString& text,
+                const wxString& help = wxEmptyString,
+                bool isCheckable = FALSE)
+    {
+        Insert(pos, wxMenuItem::New((wxMenu *)this, id, text, help, isCheckable));
+    }
+
+    // insert a separator
+    void InsertSeparator(size_t pos)
+    {
+        Insert(pos, wxMenuItem::New((wxMenu *)this));
+    }
+
+    // insert a submenu
+    void Insert(size_t pos,
+                int id,
+                const wxString& text,
+                wxMenu *submenu,
+                const wxString& help = wxEmptyString)
+    {
+        Insert(pos, wxMenuItem::New((wxMenu *)this, id, text, help, FALSE, submenu));
+    }
+
+    // prepend an item to the menu
+    void Prepend(wxMenuItem *item)
+    {
+        Insert(0u, item);
+    }
+
+    void Prepend(int id,
+                 const wxString& text,
+                 const wxString& help = wxEmptyString,
+                 bool isCheckable = FALSE)
+    {
+        Insert(0u, id, text, help, isCheckable);
+    }
+
+    // insert a separator
+    void PrependSeparator()
+    {
+        InsertSeparator(0u);
+    }
+
+    // insert a submenu
+    void Prepend(int id,
+                 const wxString& text,
+                 wxMenu *submenu,
+                 const wxString& help = wxEmptyString)
+    {
+        Insert(0u, id, text, submenu, help);
+    }
 
     // detach an item from the menu, but don't delete it so that it can be
     // added back later (but if it's not, the caller is responsible for

@@ -61,20 +61,21 @@ enum ScreenToShow
     Show_Polygons,
     Show_Mask,
     Show_Ops,
-    Show_Regions
+    Show_Regions,
+    Show_Circles
 };
 
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
 
-static wxBitmap gs_bmpNoMask,
-                gs_bmpWithColMask,
-                gs_bmpMask,
-                gs_bmpWithMask,
-                gs_bmp4,
-                gs_bmp4_mono,
-                gs_bmp36;
+static wxBitmap *gs_bmpNoMask = NULL,
+                *gs_bmpWithColMask = NULL,
+                *gs_bmpMask = NULL,
+                *gs_bmpWithMask = NULL,
+                *gs_bmp4 = NULL,
+                *gs_bmp4_mono = NULL,
+                *gs_bmp36 = NULL;
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -92,7 +93,11 @@ public:
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
 
+    virtual int OnExit() { DeleteBitmaps(); return 0; }
+
 protected:
+    void DeleteBitmaps();
+
     bool LoadImages();
 };
 
@@ -151,6 +156,7 @@ protected:
     void DrawImages(wxDC& dc);
     void DrawWithLogicalOps(wxDC& dc);
     void DrawRegions(wxDC& dc);
+    void DrawCircles(wxDC& dc);
     void DrawDefault(wxDC& dc);
 
 private:
@@ -182,7 +188,8 @@ enum
     File_ShowMask,
     File_ShowOps,
     File_ShowRegions,
-    MenuShow_Last = File_ShowRegions,
+    File_ShowCircles,
+    MenuShow_Last = File_ShowCircles,
 
     MenuOption_First,
 
@@ -237,6 +244,14 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::LoadImages()
 {
+    gs_bmpNoMask = new wxBitmap;
+    gs_bmpWithColMask = new wxBitmap;
+    gs_bmpMask = new wxBitmap;
+    gs_bmpWithMask = new wxBitmap;
+    gs_bmp4 = new wxBitmap;
+    gs_bmp4_mono = new wxBitmap;
+    gs_bmp36 = new wxBitmap;
+
     wxPathList pathList;
     pathList.Add(".");
     pathList.Add("..");
@@ -244,41 +259,38 @@ bool MyApp::LoadImages()
     wxString path = pathList.FindValidPath("pat4.bmp");
     if ( !path )
         return FALSE;
+
     /* 4 colour bitmap */
-    gs_bmp4.LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmp4->LoadFile(path, wxBITMAP_TYPE_BMP);
     /* turn into mono-bitmap */
-    gs_bmp4_mono.LoadFile(path, wxBITMAP_TYPE_BMP);
-    wxMask* mask4 = new wxMask(gs_bmp4_mono, *wxBLACK);
-    gs_bmp4_mono.SetMask(mask4);
+    gs_bmp4_mono->LoadFile(path, wxBITMAP_TYPE_BMP);
+    wxMask* mask4 = new wxMask(*gs_bmp4_mono, *wxBLACK);
+    gs_bmp4_mono->SetMask(mask4);
 
     path = pathList.FindValidPath("pat36.bmp");
     if ( !path )
         return FALSE;
-    gs_bmp36.LoadFile(path, wxBITMAP_TYPE_BMP);
-    wxMask* mask36 = new wxMask(gs_bmp36, *wxBLACK);
-    gs_bmp36.SetMask(mask36);
+    gs_bmp36->LoadFile(path, wxBITMAP_TYPE_BMP);
+    wxMask* mask36 = new wxMask(*gs_bmp36, *wxBLACK);
+    gs_bmp36->SetMask(mask36);
 
     path = pathList.FindValidPath("image.bmp");
     if ( !path )
         return FALSE;
-    gs_bmpNoMask.LoadFile(path, wxBITMAP_TYPE_BMP);
-    gs_bmpWithMask.LoadFile(path, wxBITMAP_TYPE_BMP);
-    gs_bmpWithColMask.LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpNoMask->LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpWithMask->LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpWithColMask->LoadFile(path, wxBITMAP_TYPE_BMP);
 
     path = pathList.FindValidPath("mask.bmp");
     if ( !path )
         return FALSE;
-    gs_bmpMask.LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpMask->LoadFile(path, wxBITMAP_TYPE_BMP);
 
-//    This is so wrong, it hurts.
-//    gs_bmpMask.SetDepth(1);
-//    wxMask *mask = new wxMask(gs_bmpMask);
+    wxMask *mask = new wxMask(*gs_bmpMask, *wxBLACK);
+    gs_bmpWithMask->SetMask(mask);
 
-    wxMask *mask = new wxMask(gs_bmpMask, *wxBLACK);
-    gs_bmpWithMask.SetMask(mask);
-
-    mask = new wxMask(gs_bmpWithColMask, *wxWHITE);
-    gs_bmpWithColMask.SetMask(mask);
+    mask = new wxMask(*gs_bmpWithColMask, *wxWHITE);
+    gs_bmpWithColMask->SetMask(mask);
 
     return TRUE;
 }
@@ -301,11 +313,24 @@ bool MyApp::OnInit()
                    "there.");
 
         // stop here
+        DeleteBitmaps();
+
         return FALSE;
     }
 
     // ok, continue
     return TRUE;
+}
+
+void MyApp::DeleteBitmaps()
+{
+    delete gs_bmpNoMask;
+    delete gs_bmpWithColMask;
+    delete gs_bmpMask;
+    delete gs_bmpWithMask;
+    delete gs_bmp4;
+    delete gs_bmp4_mono;
+    delete gs_bmp36;
 }
 
 // ----------------------------------------------------------------------------
@@ -342,9 +367,9 @@ MyCanvas::MyCanvas( MyFrame *parent ) : wxScrolledWindow( parent )
 
 void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
 {
-    wxBrush* brush4 = new wxBrush(gs_bmp4);
-    wxBrush* brush4_mono = new wxBrush(gs_bmp4_mono);
-    wxBrush* brush36 = new wxBrush(gs_bmp36);
+    wxBrush* brush4 = new wxBrush(*gs_bmp4);
+    wxBrush* brush4_mono = new wxBrush(*gs_bmp4_mono);
+    wxBrush* brush36 = new wxBrush(*gs_bmp36);
 
     wxPoint todraw[5];
     todraw[0].x=(long)x+100;
@@ -542,8 +567,10 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.SetBrush( *wxRED_BRUSH );
+    dc.DrawText(wxString::Format("Testing lines of width %d", width), x + 10, y - 10);
     dc.DrawRectangle( x+10, y+10, 100, 190 );
 
+    dc.DrawText("Solid/dot/short dash/long dash/dot dash", x + 150, y + 10);
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.DrawLine( x+20, y+20, 100, y+20 );
     dc.SetPen( wxPen( "black", width, wxDOT) );
@@ -555,6 +582,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen( wxPen( "black", width, wxDOT_DASH) );
     dc.DrawLine( x+20, y+60, 100, y+60 );
 
+    dc.DrawText("Misc hatches", x + 150, y + 70);
     dc.SetPen( wxPen( "black", width, wxBDIAGONAL_HATCH) );
     dc.DrawLine( x+20, y+70, 100, y+70 );
     dc.SetPen( wxPen( "black", width, wxCROSSDIAG_HATCH) );
@@ -568,6 +596,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen( wxPen( "black", width, wxVERTICAL_HATCH) );
     dc.DrawLine( x+20, y+120, 100, y+120 );
 
+    dc.DrawText("User dash", x + 150, y + 140);
     wxPen ud( "black", width, wxUSER_DASH );
     wxDash dash1[1];
     dash1[0] = 0;
@@ -579,7 +608,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dash1[0] = 2;
     ud.SetDashes( 1, dash1 );
     dc.DrawLine( x+20, y+160, 100, y+160 );
-    dash1[0] = 0xFF;
+    dash1[0] = 0x7F;
     ud.SetDashes( 1, dash1 );
     dc.DrawLine( x+20, y+170, 100, y+170 );
 }
@@ -793,7 +822,7 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.SetFont( *wxNORMAL_FONT );
 
     wxString text;
-    dc. SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxTRANSPARENT);
 
     for ( int n = -180; n < 180; n += 30 )
     {
@@ -816,6 +845,24 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.DrawText( text, 110, 120 );
 
     dc.DrawRectangle( 100, 40, 4, height );
+
+    // test the logical function effect
+    wxCoord y = 150;
+    dc.SetLogicalFunction(wxINVERT);
+    dc.DrawText( "There should be no text below", 110, 150 );
+    dc.DrawRectangle( 110, y, 100, height );
+
+    // twice drawn inverted should result in invisible
+    y += height;
+    dc.DrawText( "Invisible text", 110, y );
+    dc.DrawRectangle( 110, y, 100, height );
+    dc.DrawText( "Invisible text", 110, y );
+    dc.DrawRectangle( 110, y, 100, height );
+    dc.SetLogicalFunction(wxCOPY);
+
+    y += height;
+    dc.DrawRectangle( 110, y, 100, height );
+    dc.DrawText( "Visible text", 110, y );
 }
 
 static const struct
@@ -844,16 +891,16 @@ static const struct
 void MyCanvas::DrawImages(wxDC& dc)
 {
     dc.DrawText("original image", 0, 0);
-    dc.DrawBitmap(gs_bmpNoMask, 0, 20, 0);
+    dc.DrawBitmap(*gs_bmpNoMask, 0, 20, 0);
     dc.DrawText("with colour mask", 0, 100);
-    dc.DrawBitmap(gs_bmpWithColMask, 0, 120, TRUE);
+    dc.DrawBitmap(*gs_bmpWithColMask, 0, 120, TRUE);
     dc.DrawText("the mask image", 0, 200);
-    dc.DrawBitmap(gs_bmpMask, 0, 220, 0);
+    dc.DrawBitmap(*gs_bmpMask, 0, 220, 0);
     dc.DrawText("masked image", 0, 300);
-    dc.DrawBitmap(gs_bmpWithMask, 0, 320, TRUE);
+    dc.DrawBitmap(*gs_bmpWithMask, 0, 320, TRUE);
 
-    int cx = gs_bmpWithColMask.GetWidth(),
-        cy = gs_bmpWithColMask.GetHeight();
+    int cx = gs_bmpWithColMask->GetWidth(),
+        cy = gs_bmpWithColMask->GetHeight();
 
     wxMemoryDC memDC;
     for ( size_t n = 0; n < WXSIZEOF(rasterOperations); n++ )
@@ -862,7 +909,7 @@ void MyCanvas::DrawImages(wxDC& dc)
                 y =  20 + 100*(n/4);
 
         dc.DrawText(rasterOperations[n].name, x, y - 20);
-        memDC.SelectObject(gs_bmpWithColMask);
+        memDC.SelectObject(*gs_bmpWithColMask);
         dc.Blit(x, y, cx, cy, &memDC, 0, 0, rasterOperations[n].rop, TRUE);
     }
 }
@@ -901,6 +948,36 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
         dc.SetLogicalFunction(rasterOperations[n].rop);
         dc.DrawRectangle(x, y, w, h);
     }
+}
+
+void MyCanvas::DrawCircles(wxDC& dc)
+{
+    int x = 100,
+        y = 100,
+        r = 20;
+
+    dc.DrawText("Some circles", 0, y);
+    dc.DrawCircle(x, y, r);
+    dc.DrawCircle(x + 2*r, y, r);
+    dc.DrawCircle(x + 4*r, y, r);
+
+    y += 2*r;
+    dc.DrawText("And ellipses", 0, y);
+    dc.DrawEllipse(x - r, y, 2*r, r);
+    dc.DrawEllipse(x + r, y, 2*r, r);
+    dc.DrawEllipse(x + 3*r, y, 2*r, r);
+
+    y += 2*r;
+    dc.DrawText("And arcs", 0, y);
+    dc.DrawArc(x - r, y, x + r, y, x, y);
+    dc.DrawArc(x + 4*r, y, x + 2*r, y, x + 3*r, y);
+    dc.DrawArc(x + 5*r, y, x + 5*r, y, x + 6*r, y);
+
+    y += 2*r;
+    dc.DrawEllipticArc(x - r, y, 2*r, r, 0, 90);
+    dc.DrawEllipticArc(x + r, y, 2*r, r, 90, 180);
+    dc.DrawEllipticArc(x + 3*r, y, 2*r, r, 180, 270);
+    dc.DrawEllipticArc(x + 5*r, y, 2*r, r, 270, 360);
 }
 
 void MyCanvas::DrawRegions(wxDC& dc)
@@ -969,6 +1046,10 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
             DrawDefault(dc);
             break;
 
+        case Show_Circles:
+            DrawCircles(dc);
+            break;
+
         case Show_Regions:
             DrawRegions(dc);
             break;
@@ -979,9 +1060,9 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
         case Show_Lines:
             DrawTestLines( 0, 100, 0, dc );
-            DrawTestLines( 0, 300, 1, dc );
-            DrawTestLines( 0, 500, 2, dc );
-            DrawTestLines( 0, 700, 6, dc );
+            DrawTestLines( 0, 320, 1, dc );
+            DrawTestLines( 0, 540, 2, dc );
+            DrawTestLines( 0, 760, 6, dc );
             break;
 
         case Show_Polygons:
@@ -1046,7 +1127,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowPolygons, "&Polygons screen\tF4");
     menuFile->Append(File_ShowMask, "wx&Mask screen\tF5");
     menuFile->Append(File_ShowOps, "&ROP screen\tF6");
-    menuFile->Append(File_ShowRegions, "Re&gions screen\tF6");
+    menuFile->Append(File_ShowRegions, "Re&gions screen\tF7");
+    menuFile->Append(File_ShowCircles, "&Circles screen\tF8");
     menuFile->AppendSeparator();
     menuFile->Append(File_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();

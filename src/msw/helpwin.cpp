@@ -24,9 +24,11 @@
 #include "wx/defs.h"
 #endif
 
+#if wxUSE_HELP
+
+#include "wx/filefn.h"
 #include "wx/msw/helpwin.h"
 
-#if wxUSE_HELP
 #include <time.h>
 
 #ifdef __WXMSW__
@@ -35,124 +37,91 @@
 
 #include <string.h>
 
-// MAX path length
-#define _MAXPATHLEN 500
-
-// MAX length of Help descriptor
-#define _MAX_HELP_LEN 500
+static HWND GetSuitableHWND()
+{
+    if (wxTheApp->GetTopWindow())
+        return (HWND) wxTheApp->GetTopWindow()->GetHWND();
+    else
+        return GetDesktopWindow();
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxWinHelpController, wxHelpControllerBase)
 
-wxWinHelpController::wxWinHelpController(void)
-{
-  m_helpFile = "";
-}
-
-wxWinHelpController::~wxWinHelpController(void)
-{
-}
-
 bool wxWinHelpController::Initialize(const wxString& filename)
 {
-  m_helpFile = filename;
-  return TRUE;
+    m_helpFile = filename;
+    return TRUE;
 }
 
 bool wxWinHelpController::LoadFile(const wxString& file)
 {
-  m_helpFile = file;
-  return TRUE;
+    if (!file.IsEmpty())
+        m_helpFile = file;
+    return TRUE;
 }
 
 bool wxWinHelpController::DisplayContents(void)
 {
-    if (m_helpFile == wxT("")) return FALSE;
-
-    wxString str = m_helpFile;
-    size_t len = str.Length();
-    if (!(str[(size_t)(len-1)] == wxT('p') && str[(size_t)(len-2)] == wxT('l') && str[(size_t)(len-3)] == wxT('h') && str[(size_t)(len-4)] == wxT('.')))
-      str += wxT(".hlp");
-
-    if (wxTheApp->GetTopWindow())
-    {
+    if (m_helpFile.IsEmpty()) return FALSE;
+    
+    wxString str = GetValidFilename(m_helpFile);
+    
 #if defined(__WIN95__)
-      WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_FINDER, 0L);
+    WinHelp(GetSuitableHWND(), (const wxChar*) str, HELP_FINDER, 0L);
 #else
-      WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTENTS, 0L);
+    WinHelp(GetSuitableHWND(), (const wxChar*) str, HELP_CONTENTS, 0L);
 #endif
-     return TRUE;
-    }
-	return FALSE;
+    return TRUE;
 }
 
 bool wxWinHelpController::DisplaySection(int section)
 {
     // Use context number
-    if (m_helpFile == wxT("")) return FALSE;
+    if (m_helpFile.IsEmpty()) return FALSE;
+    
+    wxString str = GetValidFilename(m_helpFile);
 
-    wxString str = m_helpFile;
-    size_t len = str.Length();
-    if (!(str[(size_t)(len-1)] == wxT('p') && str[(size_t)(len-2)] == wxT('l') && str[(size_t)(len-3)] == wxT('h') && str[(size_t)(len-4)] == wxT('.')))
-      str += wxT(".hlp");
-
-    if (wxTheApp->GetTopWindow())
-	{
-      WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXT, (DWORD)section);
-      return TRUE;
-	}
-    return FALSE;
+    WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXT, (DWORD)section);
+    return TRUE;
 }
 
 bool wxWinHelpController::DisplayBlock(long block)
 {
-    // Use context number -- a very rough equivalent to block id!
-    if (m_helpFile == wxT("")) return FALSE;
-
-    wxString str = m_helpFile;
-    size_t len = str.Length();
-    if (!(str[(size_t)(len-1)] == 'p' && str[(size_t)(len-2)] == 'l' && str[(size_t)(len-3)] == 'h' && str[(size_t)(len-4)] == '.'))
-      str += wxT(".hlp");
-
-    if (wxTheApp->GetTopWindow())
-	{
-      WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXT, (DWORD)block);
-      return TRUE;
-	}
-    return FALSE;
+    DisplaySection(block);
+    return TRUE;
 }
 
 bool wxWinHelpController::KeywordSearch(const wxString& k)
 {
-    if (m_helpFile == wxT("")) return FALSE;
-
-    wxString str = m_helpFile;
-    size_t len = str.Length();
-    if (!(str[(size_t)(len-1)] == wxT('p') && str[(size_t)(len-2)] == wxT('l') && str[(size_t)(len-3)] == wxT('h') && str[(size_t)(len-4)] == wxT('.')))
-      str += wxT(".hlp");
-
-    if (wxTheApp->GetTopWindow())
-    {
-      WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_PARTIALKEY, (DWORD)(const wxChar*) k);
-      return TRUE;
-    }
-    return FALSE;
+    if (m_helpFile.IsEmpty()) return FALSE;
+    
+    wxString str = GetValidFilename(m_helpFile);
+    
+    WinHelp(GetSuitableHWND(), (const wxChar*) str, HELP_PARTIALKEY, (DWORD)(const wxChar*) k);
+    return TRUE;
 }
 
 // Can't close the help window explicitly in WinHelp
 bool wxWinHelpController::Quit(void)
 {
-  if (wxTheApp->GetTopWindow())
-  {
-    WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), 0, HELP_QUIT, 0L);
+    WinHelp(GetSuitableHWND(), 0, HELP_QUIT, 0L);
     return TRUE;
-  }
-  else
-    return FALSE;
 }
 
-// Don't get notified of WinHelp quitting
-void wxWinHelpController::OnQuit(void)
+// Append extension if necessary.
+wxString wxWinHelpController::GetValidFilename(const wxString& file) const
 {
+    wxString path, name, ext;
+    wxSplitPath(file, & path, & name, & ext);
+
+    wxString fullName;
+    if (path.IsEmpty())
+        fullName = name + wxT(".hlp");
+    else if (path.Last() == wxT('\\'))
+        fullName = path + name + wxT(".hlp");
+    else
+        fullName = path + wxT("\\") + name + wxT(".hlp");
+    return fullName;
 }
 
 #endif // wxUSE_HELP

@@ -33,7 +33,7 @@ class wxColourRefData: public wxObjectRefData
     GdkColormap *m_colormap;
     bool         m_hasPixel;
 
-    friend wxColour;
+    friend class wxColour;
 };
 
 wxColourRefData::wxColourRefData()
@@ -133,7 +133,7 @@ bool wxColour::operator == ( const wxColour& col ) const
 
 bool wxColour::operator != ( const wxColour& col) const
 {
-    return m_refData != col.m_refData;
+    return !(*this == col);
 }
 
 void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )

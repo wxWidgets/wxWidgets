@@ -46,7 +46,9 @@
 #ifdef __WIN16__
     #define CALL_CARET_API(api, args)   api args
 #else // Win32
-    #define CALL_CARET_API(api, args)   if ( !api args ) wxLogLastError(#api)
+    #define CALL_CARET_API(api, args)   \
+        if ( !api args )                \
+            wxLogLastError(_T(#api))
 #endif // Win16/32
 
 // ===========================================================================
@@ -63,7 +65,7 @@ int wxCaretBase::GetBlinkTime()
     int blinkTime = ::GetCaretBlinkTime();
     if ( !blinkTime )
     {
-        wxLogLastError("GetCaretBlinkTime");
+        wxLogLastError(wxT("GetCaretBlinkTime"));
     }
 
     return blinkTime;

@@ -22,25 +22,34 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxMessageBoxCaptionStr;
 
-class WXDLLEXPORT wxMessageDialog: public wxDialog
+class WXDLLEXPORT wxMessageDialog : public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxMessageDialog)
-protected:
-    wxString    m_caption;
-    wxString    m_message;
-    long        m_dialogStyle;
-    wxWindow *  m_parent;
 public:
-    wxMessageDialog(wxWindow *parent, const wxString& message, const wxString& caption = wxMessageBoxCaptionStr,
-        long style = wxOK|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
+    wxMessageDialog( wxWindow*       pParent
+                    ,const wxString& rsMessage
+                    ,const wxString& rsCaption = wxMessageBoxCaptionStr
+                    ,long            lStyle = wxOK|wxCENTRE
+                    ,const wxPoint&  rPos = wxDefaultPosition
+                   );
 
-    int ShowModal();
-};
+    int ShowModal(void);
+
+protected:
+    wxString                        m_sCaption;
+    wxString                        m_sMessage;
+    long                            m_lDialogStyle;
+    wxWindow*                       m_pParent;
+}; // end of CLASS wxMessageDialog
 
 
-int WXDLLEXPORT wxMessageBox(const wxString& message, const wxString& caption = wxMessageBoxCaptionStr,
-  long style = wxOK|wxCENTRE,
-  wxWindow *parent = NULL, int x = -1, int y = -1);
+int WXDLLEXPORT wxMessageBox( const wxString& rsMessage
+                             ,const wxString& rsCaption = wxMessageBoxCaptionStr
+                             ,long            lStyle = wxOK|wxCENTRE
+                             ,wxWindow*       pParent = NULL
+                             ,int             nX = -1
+                             ,int             nY = -1
+                            );
 
 #endif
     // _WX_MSGBOXDLG_H_

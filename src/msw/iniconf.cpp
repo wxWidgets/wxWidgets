@@ -28,6 +28,10 @@
   #include  "wx/utils.h"
 #endif  //WX_PRECOMP
 
+// Doesn't yet compile in Unicode mode
+
+#if wxUSE_CONFIG && !wxUSE_UNICODE
+
 #include  "wx/dynarray.h"
 #include  "wx/log.h"
 #include  "wx/config.h"
@@ -79,19 +83,19 @@ wxIniConfig::wxIniConfig(const wxString& strAppName,
     m_strLocalFilename = localFilename;
     if (m_strLocalFilename.IsEmpty())
     {
-        m_strLocalFilename = GetAppName() + ".ini";
+        m_strLocalFilename = GetAppName() + wxT(".ini");
     }
 
     // append the extension if none given and it's not an absolute file name
     // (otherwise we assume that they know what they're doing)
     if ( !wxIsPathSeparator(m_strLocalFilename[0u]) &&
-        m_strLocalFilename.Find('.') == wxNOT_FOUND )
+        m_strLocalFilename.Find(wxT('.')) == wxNOT_FOUND )
     {
-        m_strLocalFilename << ".ini";
+        m_strLocalFilename << wxT(".ini");
     }
 
     // set root path
-    SetPath("");
+    SetPath(wxT(""));
 }
 
 wxIniConfig::~wxIniConfig()
@@ -380,7 +384,7 @@ bool wxIniConfig::Write(const wxString& szKey, const wxString& szValue)
                                        szValue, m_strLocalFilename) != 0;
 
   if ( !bOk )
-    wxLogLastError("WritePrivateProfileString");
+    wxLogLastError(wxT("WritePrivateProfileString"));
 
   return bOk;
 }
@@ -424,7 +428,7 @@ bool wxIniConfig::DeleteEntry(const wxString& szKey, bool bGroupIfEmptyAlso)
                                        NULL, m_strLocalFilename) != 0;
 
   if ( !bOk )
-    wxLogLastError("WritePrivateProfileString");
+    wxLogLastError(wxT("WritePrivateProfileString"));
 
   return bOk;
 }
@@ -439,7 +443,7 @@ bool wxIniConfig::DeleteGroup(const wxString& szKey)
                                        NULL, m_strLocalFilename) != 0;
 
   if ( !bOk )
-    wxLogLastError("WritePrivateProfileString");
+    wxLogLastError(wxT("WritePrivateProfileString"));
 
   return bOk;
 }
@@ -458,11 +462,11 @@ bool wxIniConfig::DeleteAll()
   size_t nRc = GetWindowsDirectory(szBuf, WXSIZEOF(szBuf));
   if ( nRc == 0 )
   {
-    wxLogLastError("GetWindowsDirectory");
+    wxLogLastError(wxT("GetWindowsDirectory"));
   }
   else if ( nRc > WXSIZEOF(szBuf) )
   {
-    wxFAIL_MSG("buffer is too small for Windows directory.");
+    wxFAIL_MSG(wxT("buffer is too small for Windows directory."));
   }
 
   wxString strFile = szBuf;
@@ -487,3 +491,6 @@ bool wxIniConfig::RenameGroup(const wxString& oldName, const wxString& newName)
     // Not implemented
     return FALSE;
 }
+
+#endif
+    // wxUSE_CONFIG && wxUSE_UNICODE

@@ -15,9 +15,8 @@ docs/wine/COPYING.LIB
 distrib/msw/*.rsp
 distrib/msw/*.bat
 
-tools/gettext/xgettext.exe
-tools/gettext/msgfmt.exe
-tools/gettext/msgunfmt.exe
+tools/gettext/*.exe
+tools/gettext/*.sed
 
 src/makeb32.env
 src/makeprog.b32

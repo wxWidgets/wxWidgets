@@ -22,7 +22,7 @@
 
 
 #include <wx/wx.h>
-
+#include "SciLexer.h"
 
 //----------------------------------------------------------------------
 // constants and stuff
@@ -53,7 +53,7 @@ const int wxSTC_STYLE_LINENUMBER  = 33;
 const int wxSTC_STYLE_BRACELIGHT  = 34;
 const int wxSTC_STYLE_BRACEBAD    = 35;
 const int wxSTC_STYLE_CONTROLCHAR = 36;
-const int wxSTC_STYLE_MAX         = 63;
+const int wxSTC_STYLE_MAX         = 127;
 const int wxSTC_STYLE_MASK        = 31;
 
 const int wxSTC_MARKER_MAX        = 31;
@@ -63,14 +63,30 @@ const int wxSTC_MARK_ARROW        = 2;
 const int wxSTC_MARK_SMALLRECT    = 3;
 const int wxSTC_MARK_SHORTARROW   = 4;
 const int wxSTC_MARK_EMPTY        = 5;
+const int wxSTC_MARK_ARROWDOWN    = 6;
+const int wxSTC_MARK_MINUS        = 7;
+const int wxSTC_MARK_PLUS         = 8;
 
+const int wxSTC_MARKNUM_FOLDER    = 30;
+const int wxSTC_MARKNUM_FOLDEROPEN= 31;
+const int wxSTC_MASK_FOLDERS      = ((1 << wxSTC_MARKNUM_FOLDER) | (1 << wxSTC_MARKNUM_FOLDEROPEN));
+
+const int wxSTC_INDIC_MAX         = 7;
 const int wxSTC_INDIC_PLAIN       = 0;
 const int wxSTC_INDIC_SQUIGGLE    = 1;
 const int wxSTC_INDIC_TT          = 2;
+const int wxSTC_INDIC_DIAGONAL    = 3;
+const int wxSTC_INDIC_STRIKE      = 4;
 const int wxSTC_INDIC0_MASK       = 32;
 const int wxSTC_INDIC1_MASK       = 64;
 const int wxSTC_INDIC2_MASK       = 128;
 const int wxSTC_INDICS_MASK       = (wxSTC_INDIC0_MASK | wxSTC_INDIC1_MASK | wxSTC_INDIC2_MASK);
+
+
+const int wxSTC_FOLDLEVELBASE       = 0x0400;
+const int wxSTC_FOLDLEVELWHITEFLAG  = 0x1000;
+const int wxSTC_FOLDLEVELHEADERFLAG = 0x2000;
+const int wxSTC_FOLDLEVELNUMBERMASK = 0x0FFF;
 
 
 // key commands
@@ -111,7 +127,14 @@ enum {
     wxSTC_CMD_ZOOMIN,
     wxSTC_CMD_ZOOMOUT,
     wxSTC_CMD_DELWORDLEFT,
-    wxSTC_CMD_DELWORDRIGHT
+    wxSTC_CMD_DELWORDRIGHT,
+    wxSTC_CMD_LINECUT,
+    wxSTC_CMD_LINEDELETE,
+    wxSTC_CMD_LINETRANSPOSE,
+    wxSTC_CMD_LOWERCASE,
+    wxSTC_CMD_UPPERCASE,
+    wxSTC_CMD_LINESCROLLDOWN,
+    wxSTC_CMD_LINESCROLLUP
 };
 
 
@@ -129,6 +152,8 @@ enum wxSTC_LEX {
     wxSTC_LEX_ERRORLIST,
     wxSTC_LEX_MAKEFILE,
     wxSTC_LEX_BATCH,
+    wxSTC_LEX_XCODE,
+    wxSTC_LEX_LATEX
 };
 
 
@@ -153,12 +178,22 @@ extern const wxChar* wxSTCNameStr;
 class wxStyledTextCtrl : public wxControl {
 public:
 
+#ifdef SWIG
+    wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize, long style = 0,
+                     const char* name = "styledtext");
+#else
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxSTCNameStr);
-    ~wxStyledTextCtrl();
+#endif
 
+
+#ifndef SWIG
+    ~wxStyledTextCtrl();
+#endif
 
 
     // Text retrieval and modification
@@ -170,8 +205,10 @@ public:
     bool     GetReadOnly();
     wxString GetTextRange(int startPos, int endPos);
     wxString GetStyledTextRange(int startPos, int endPos);
+#ifndef SWIG
     void     GetTextRange(int startPos, int endPos, char* buff);
     void     GetStyledTextRange(int startPos, int endPos, char* buff);
+#endif
     void     AddText(const wxString& text);
     void     AddStyledText(const wxString& text);
     void     InsertText(int pos, const wxString& text);
@@ -203,7 +240,11 @@ public:
 
 
     // Selection and information
+#ifdef SWIG
+    void     GetSelection(int* OUTPUT, int* OUTPUT);
+#else
     void     GetSelection(int* startPos, int* endPos);
+#endif
     void     SetSelection(int  startPos, int  endPos);
     wxString GetSelectedText();
     void     HideSelection(bool hide);
@@ -218,7 +259,11 @@ public:
     int      GetLineStartPos(int line);
     int      GetLineLengthAtPos(int pos);
     int      GetLineLength(int line);
-    wxString GetCurrentLineText(int* linePos=NULL);
+#ifdef SWIG
+    wxString GetCurrentLineText(int* OUTPUT);
+#else
+    wxString GetCurrentLineText(int* linePos);
+#endif
     int      GetCurrentLine();
     int      PositionFromPoint(wxPoint pt);
     int      LineFromPoint(wxPoint pt);
@@ -239,7 +284,10 @@ public:
     void     EnsureCaretVisible();
     void     SetCaretPolicy(int policy, int slop=0);
     int      GetSelectionType();
-
+    int      GetLinesOnScreen();
+    bool     IsSelectionRectangle();
+    void     SetUseHorizontalScrollBar(bool use);
+    bool     GetUseHorizontalScrollBar();
 
 
     // Searching
@@ -268,6 +316,8 @@ public:
     void     StartStyling(int pos, int mask);
     void     SetStyleFor(int length, int style);
     void     SetStyleBytes(int length, char* styleBytes);
+    void     SetLineState(int line, int value);
+    int      GetLineState(int line);
 
 
     // Style Definition
@@ -277,12 +327,13 @@ public:
     void     StyleSetForeground(int styleNum, const wxColour& colour);
     void     StyleSetBackground(int styleNum, const wxColour& colour);
     void     StyleSetFont(int styleNum, wxFont& font);
-    void     StyleSetFontAttr(int styleNum, int size, const wxString& faceName, bool bold, bool italic);
+    void     StyleSetFontAttr(int styleNum, int size, const wxString& faceName, bool bold=FALSE, bool italic=FALSE, bool underline=FALSE);
     void     StyleSetBold(int styleNum, bool bold);
     void     StyleSetItalic(int styleNum, bool italic);
     void     StyleSetFaceName(int styleNum, const wxString& faceName);
     void     StyleSetSize(int styleNum, int pointSize);
     void     StyleSetEOLFilled(int styleNum, bool fillEOL);
+    void     StyleSetUnderline(int styleNum, bool underline);
 
 
     // Margins in the edit area
@@ -313,7 +364,14 @@ public:
     // Other settings
     void     SetBufferedDraw(bool isBuffered);
     void     SetTabWidth(int numChars);
+    void     SetIndent(int numChars);
+    void     SetUseTabs(bool usetabs);
+    void     SetLineIndentation(int line, int indentation);
+    int      GetLineIndentation(int line);
+    int      GetLineIndentationPos(int line);
     void     SetWordChars(const wxString& wordChars);
+
+    void     SetUsePop(bool usepopup);
 
 
     // Brace highlighting
@@ -352,7 +410,9 @@ public:
     int      AutoCompPosAtStart();
     void     AutoCompComplete();
     void     AutoCompStopChars(const wxString& stopChars);
-
+    void     AutoCompSetSeparator(char separator);
+    char     AutoCompGetSeparator();
+    void     AutoCompSelect(const wxString& stringtoselect);
 
     // Call tips
     void     CallTipShow(int pos, const wxString& text);
@@ -391,15 +451,23 @@ public:
     int      DocLineFromVisible(int displayLine);
     int      SetFoldLevel(int line, int level);
     int      GetFoldLevel(int line);
-    int      GetLastChild(int line);
+    int      GetLastChild(int line, int level);
     int      GetFoldParent(int line);
     void     ShowLines(int lineStart, int lineEnd);
     void     HideLines(int lineStart, int lineEnd);
     bool     GetLineVisible(int line);
-    void     SetFoldExpanded(int line);
+    void     SetFoldExpanded(int line, bool expanded);
     bool     GetFoldExpanded(int line);
     void     ToggleFold(int line);
     void     EnsureVisible(int line);
+    void     SetFoldFlags(int flags);
+
+
+    // Zooming
+    void     ZoomIn();
+    void     ZoomOut();
+    void     SetZoom(int zoom);
+    int      GetZoom();
 
 
     // Long Lines
@@ -419,7 +487,11 @@ public:
     void     SetKeywords(int keywordSet, const wxString& keywordList);
 
 
+    // Event mask for Modified Event
+    void     SetModEventMask(int mask);
+    //int      GetModEventMask();
 
+#ifndef SWIG
 private:
     // Event handlers
     void OnPaint(wxPaintEvent& evt);
@@ -430,11 +502,13 @@ private:
     void OnMouseLeftUp(wxMouseEvent& evt);
     void OnMouseRightUp(wxMouseEvent& evt);
     void OnChar(wxKeyEvent& evt);
+    void OnKeyDown(wxKeyEvent& evt);
     void OnLoseFocus(wxFocusEvent& evt);
     void OnGainFocus(wxFocusEvent& evt);
     void OnSysColourChanged(wxSysColourChangedEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnMenu(wxCommandEvent& evt);
+    void OnListBox(wxCommandEvent& evt);
 
 
     // Turn notifications from Scintilla into events
@@ -445,6 +519,7 @@ private:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxStyledTextCtrl)
 
     ScintillaWX*        m_swx;
     wxStopWatch         m_stopWatch;
@@ -454,13 +529,14 @@ private:
 
     friend class ScintillaWX;
     friend class Platform;
+#endif
 };
 
 //----------------------------------------------------------------------
 
 class wxStyledTextEvent : public wxCommandEvent {
 public:
-    wxStyledTextEvent(wxEventType commandType, int id);
+    wxStyledTextEvent(wxEventType commandType=0, int id=0);
     ~wxStyledTextEvent() {}
 
     void SetPosition(int pos)        { m_position = pos; }
@@ -499,7 +575,10 @@ public:
 
     void CopyObject(wxObject& obj) const;
 
+#ifndef SWIG
 private:
+    DECLARE_DYNAMIC_CLASS(wxStyledTextEvent)
+
     int  m_position;
     int  m_key;
     int  m_modifiers;
@@ -517,11 +596,11 @@ private:
     int  m_message;             // wxEVT_STC_MACRORECORD
     int  m_wParam;
     int  m_lParam;
-
+#endif
 };
 
 
-
+// Event types
 enum {
     wxEVT_STC_CHANGE = 1650,
     wxEVT_STC_STYLENEEDED,
@@ -538,6 +617,21 @@ enum {
     wxEVT_STC_NEEDSHOWN
 };
 
+// Modification and action types
+const int wxSTC_MOD_INSERTTEXT = 0x1;
+const int wxSTC_MOD_DELETETEXT = 0x2;
+const int wxSTC_MOD_CHANGESTYLE = 0x4;
+const int wxSTC_MOD_CHANGEFOLD = 0x8;
+const int wxSTC_PERFORMED_USER = 0x10;
+const int wxSTC_PERFORMED_UNDO = 0x20;
+const int wxSTC_PERFORMED_REDO = 0x40;
+const int wxSTC_LASTSTEPINUNDOREDO = 0x100;
+const int wxSTC_MOD_CHANGEMARKER = 0x200;
+const int wxSTC_MOD_BEFOREINSERT = 0x400;
+const int wxSTC_MOD_BEFOREDELETE = 0x800;
+
+
+#ifndef SWIG
 typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 
 #define EVT_STC_CHANGE(id, fn) { wxEVT_STC_CHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
@@ -549,9 +643,12 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_ROMODIFYATTEMPT(id, fn) { wxEVT_STC_ROMODIFYATTEMPT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 #define EVT_STC_DOUBLECLICK(id, fn) { wxEVT_STC_DOUBLECLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 #define EVT_STC_MODIFIED(id, fn) { wxEVT_STC_MODIFIED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_CMDKEY(id, fn) { wxEVT_STC_CMDKEY, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
-#define EVT_STC_UNKNOWNCMDKEY(id, fn) { wxEVT_STC_UNKNOWNCMDKEY, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
+#define EVT_STC_KEY(id, fn) { wxEVT_STC_KEY, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
+#define EVT_STC_MACRORECORD(id, fn) { wxEVT_STC_MACRORECORD, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
+#define EVT_STC_MARGINCLICK(id, fn) { wxEVT_STC_MARGINCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
+#define EVT_STC_NEEDSHOWN(id, fn) { wxEVT_STC_NEEDSHOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 
+#endif
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

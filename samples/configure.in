@@ -30,6 +30,7 @@ AC_OUTPUT([
             dnd/Makefile
             dragimag/Makefile
             drawing/Makefile
+            dynamic/Makefile
             exec/Makefile
             font/Makefile
             grid/Makefile

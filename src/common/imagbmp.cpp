@@ -47,7 +47,122 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 
+
 #if wxUSE_STREAMS
+
+
+bool wxBMPHandler::SaveFile(wxImage *image,
+                            wxOutputStream& stream,
+                            bool verbose)
+{
+    wxCHECK_MSG( image, FALSE, _T("invalid pointer in wxBMPHandler::SaveFile") );
+
+    if (!image->Ok())
+    {
+        if (verbose) wxLogError(_("BMP: Couldn't save invalid image."));
+        return FALSE;
+    }
+
+    unsigned width = image->GetWidth();
+    unsigned row_width = width * 3 + 
+                         (((width % 4) == 0) ? 0 : (4 - (width * 3) % 4));
+                         // each row must be aligned to dwords  
+    struct
+    {
+        // BitmapHeader:
+        wxUint16  magic;          // format magic, always 'BM'
+        wxUint32  filesize;       // total file size, inc. headers
+        wxUint32  reserved;       // for future use
+        wxUint32  data_offset;    // image data offset in the file
+        
+        // BitmapInfoHeader:
+        wxUint32  bih_size;       // 2nd part's size
+        wxUint32  width, height;  // bitmap's dimensions
+        wxUint16  planes;         // num of planes
+        wxUint16  bpp;            // bits per pixel
+        wxUint32  compression;    // compression method
+        wxUint32  size_of_bmp;    // size of the bitmap
+        wxUint32  h_res, v_res;   // image resolution in dpi
+        wxUint32  num_clrs;       // number of colors used
+        wxUint32  num_signif_clrs;// number of significant colors
+    } hdr;
+    wxUint32 hdr_size = 14/*BitmapHeader*/ + 40/*BitmapInfoHeader*/;
+
+    hdr.magic = wxUINT16_SWAP_ON_BE(0x4D42/*'BM'*/);
+    hdr.filesize = wxUINT32_SWAP_ON_BE(
+                   hdr_size + 
+                   row_width * image->GetHeight()
+                   );
+    hdr.reserved = 0;
+    hdr.data_offset = wxUINT32_SWAP_ON_BE(hdr_size);
+    
+    hdr.bih_size = wxUINT32_SWAP_ON_BE(hdr_size - 14);
+    hdr.width = wxUINT32_SWAP_ON_BE(image->GetWidth());
+    hdr.height = wxUINT32_SWAP_ON_BE(image->GetHeight());
+    hdr.planes = wxUINT16_SWAP_ON_BE(1); // always 1 plane
+    hdr.bpp = wxUINT16_SWAP_ON_BE(24); // always TrueColor
+    hdr.compression = 0; // RGB uncompressed
+    hdr.size_of_bmp = wxUINT32_SWAP_ON_BE(row_width * image->GetHeight()); 
+    hdr.h_res = hdr.v_res = wxUINT32_SWAP_ON_BE(72); // 72dpi is standard
+    hdr.num_clrs = 0; // maximal possible = 2^24
+    hdr.num_signif_clrs = 0; // all colors are significant
+
+    if (// VS: looks ugly but compilers tend to do ugly things with structs,
+        //     like aligning hdr.filesize's ofset to dword :(
+        // VZ: we should add padding then...
+        !stream.Write(&hdr.magic, 2) ||
+        !stream.Write(&hdr.filesize, 4) ||
+        !stream.Write(&hdr.reserved, 4) ||
+        !stream.Write(&hdr.data_offset, 4) ||
+        !stream.Write(&hdr.bih_size, 4) ||
+        !stream.Write(&hdr.width, 4) ||
+        !stream.Write(&hdr.height, 4) ||
+        !stream.Write(&hdr.planes, 2) ||
+        !stream.Write(&hdr.bpp, 2) ||
+        !stream.Write(&hdr.compression, 4) ||
+        !stream.Write(&hdr.size_of_bmp, 4) ||
+        !stream.Write(&hdr.h_res, 4) ||
+        !stream.Write(&hdr.v_res, 4) ||
+        !stream.Write(&hdr.num_clrs, 4) ||
+        !stream.Write(&hdr.num_signif_clrs, 4)
+       ) 
+    {
+        if (verbose)
+            wxLogError(_("BMP: Couldn't write the file header."));
+        return FALSE;
+    }
+
+    wxUint8 *data = (wxUint8*) image->GetData();
+    wxUint8 *buffer = new wxUint8[row_width];
+    wxUint8 tmpvar;
+    memset(buffer, 0, row_width);
+    int y; unsigned x;
+
+    for (y = image->GetHeight() -1 ; y >= 0; y--)
+    {
+        memcpy(buffer, data + y * 3 * width, 3 * width);
+        for (x = 0; x < width; x++)
+        {
+            tmpvar = buffer[3 * x + 0];
+            buffer[3 * x + 0] = buffer[3 * x + 2];
+            buffer[3 * x + 2] = tmpvar;
+        }
+        
+        if (!stream.Write(buffer, row_width))
+        {
+            if (verbose)
+                wxLogError(_("BMP: Couldn't write data."));
+            delete[] buffer;
+            return FALSE;
+        }
+    }
+    delete[] buffer;
+
+    return TRUE;
+}
+
+
+
 
 #ifndef BI_RGB
 #define BI_RGB       0
@@ -74,6 +189,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     } *cmap = NULL;
 
     off_t start_offset = stream.TellI();
+    if (start_offset == wxInvalidOffset) start_offset = 0;
 
     image->Destroy();
 

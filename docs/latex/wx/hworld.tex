@@ -1,11 +1,11 @@
 \section{wxWindows "Hello World"}\label{helloworld}
 
 As many people have requested a mini-sample to be published here
-so that some quick judgements concerning syntax
+so that some quick judgments concerning syntax
 and basic principles can be made, you can now look at wxWindows'
 "Hello World":
 
-You have to include wxWindows's header files, of course. This can
+You have to include wxWindows' header files, of course. This can
 be done on a file by file basis (such as \#include "wx/window.h")
 or using one global include (\#include "wx/wx.h"). This is
 also useful on platforms which support precompiled headers such
@@ -75,7 +75,7 @@ enum
 };
 \end{verbatim}
 
-We then procede to actually implement an event table in which the events
+We then proceed to actually implement an event table in which the events
 are routed to their respective handler functions in the class MyFrame.
 There are predefined macros for routing all common events, ranging from
 the selection of a list box entry to a resize event when a user resizes
@@ -101,11 +101,11 @@ using this macro, which creates an application instance and starts the program.
 IMPLEMENT_APP(MyApp)
 \end{verbatim}
 
-As mentionend above, wxApp::OnInit() is called upon startup and should be
+As mentioned above, wxApp::OnInit() is called upon startup and should be
 used to initialize the program, maybe showing a "splash screen" and creating
 the main window (or several). The frame should get a title bar text ("Hello World")
 and a position and start-up size. One frame can also be declared to be the
-top window. Returning TRUE indicates a successful intialization.
+top window. Returning TRUE indicates a successful initialization.
 
 \begin{verbatim}
 bool MyApp::OnInit()
@@ -142,9 +142,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 \end{verbatim}
 
 Here are the actual event handlers. MyFrame::OnQuit() closes the main window
-by calling Close(). The paramter TRUE indicates that other windows have no veto
+by calling Close(). The parameter TRUE indicates that other windows have no veto
 power such as after asking "Do you really want to close?". If there is no other 
-main window left, the applicatin will quit.
+main window left, the application will quit.
 
 \begin{verbatim}
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -159,7 +159,7 @@ case a typical "About" window with information about the program.
 \begin{verbatim}
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox( "This is a wxWindows's Hello world sample",
+    wxMessageBox( "This is a wxWindows' Hello world sample",
                   "About Hello World", wxOK | wxICON_INFORMATION );
 }
 \end{verbatim}

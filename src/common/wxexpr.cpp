@@ -719,17 +719,17 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
     case wxExprString:
     {
       fprintf( stream, "\"" );
-      int i;
+      size_t i;
       const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.string);
-      int len = strlen(val);
+      size_t len = strlen(val);
       for (i = 0; i < len; i++)
       {
         char ch = val[i];
         if (ch == '"' || ch == '\\')
-	  fprintf( stream, "\\" );
-	char tmp[2];
-	tmp[0] = ch;
-	tmp[1] = 0;
+        fprintf( stream, "\\" );
+        char tmp[2];
+        tmp[0] = ch;
+        tmp[1] = 0;
         fprintf( stream, tmp );
       }
       fprintf( stream, "\"" );
@@ -739,12 +739,12 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
     {
       bool quote_it = FALSE;
       const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.word);
-      int len = strlen(val);
-      if ((len == 0) || (len > 0 && (val[0] > 64 && val[0] < 91)))
+      size_t len = strlen(val);
+      if ((len == 0) || (len > 0 && (val[(size_t) 0] > 64 && val[(size_t) 0] < 91)))
         quote_it = TRUE;
       else
       {
-        int i;
+        size_t i;
         for (i = 0; i < len; i++)
           if ((!isalpha(val[i])) && (!isdigit(val[i])) &&
               (val[i] != '_'))
@@ -754,7 +754,7 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
       if (quote_it)
         fprintf( stream ,"'" );
 
-      fprintf( stream, (const char*) val );
+      fprintf( stream, val );
 
       if (quote_it)
         fprintf( stream, "'" );
@@ -785,7 +785,7 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
             expr->WriteExpr(stream);
             expr = expr->next;
             if (expr) 
-	      fprintf( stream, ", " );
+	        fprintf( stream, ", " );
           }
           fprintf( stream, "]" );
         }
@@ -992,7 +992,7 @@ bool wxExprDatabase::Read(const wxString& filename)
 {
   noErrors = 0;
 
-  FILE *f = fopen(filename.fn_str(), "r");
+  FILE *f = wxFopen(filename, _T("r"));
   if (f)
   {
     thewxExprDatabase = this;
@@ -1024,7 +1024,7 @@ bool wxExprDatabase::ReadFromString(const wxString& buffer)
 
 bool wxExprDatabase::Write(const wxString& fileName)
 {
-  FILE *stream = fopen( fileName.fn_str(), "w+" );
+  FILE *stream = wxFopen( fileName, _T("w+"));
   
   if (!stream)
     return FALSE;
@@ -1130,7 +1130,7 @@ char *wxmake_word(char *str)
 char *wxmake_string(char *str)
 {
   wxChar *s, *t;
-  int len, i;
+  size_t len, i;
   const wxMB2WXbuf sbuf = wxConvLibc.cMB2WX(str);
 
 //  str++;			/* skip leading quote */

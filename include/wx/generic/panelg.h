@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        panelg.h
-// Purpose:     wxPanel: similar to wxWindows but is coloured as for a dialog
+// Name:        wx/generic/panelg.h
+// Purpose:     wxPanel: a container for child controls
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -13,13 +13,22 @@
 #define _WX_GENERIC_PANEL_H_
 
 #ifdef __GNUG__
-#pragma interface "panelg.h"
+    #pragma interface "panelg.h"
 #endif
 
+// ----------------------------------------------------------------------------
+// headers and forward declarations
+// ----------------------------------------------------------------------------
+
 #include "wx/window.h"
-#include "wx/button.h"
+
+class WXDLLEXPORT wxButton;
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
+
+// ----------------------------------------------------------------------------
+// wxPanel contains other controls and implements TAB traversal between them
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPanel : public wxWindow
 {
@@ -105,6 +114,9 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPanel)
     DECLARE_EVENT_TABLE()
 };
+
+// this function is for wxWindows use only
+extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
 
 #endif
     // _WX_GENERIC_PANEL_H_

@@ -209,8 +209,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 
     if ( !m_hWnd )
     {
-        wxLogError(_("Can't create list control window, check "
-                     "that comctl32.dll is installed."));
+        wxLogError(_("Can't create list control window, check that comctl32.dll is installed."));
 
         return FALSE;
     }
@@ -952,7 +951,7 @@ bool wxListCtrl::DeleteAllColumns()
     {
         if ( ListView_DeleteColumn(GetHwnd(), 0) == 0 )
         {
-            wxLogLastError("ListView_DeleteColumn");
+            wxLogLastError(wxT("ListView_DeleteColumn"));
 
             return FALSE;
         }
@@ -1436,7 +1435,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     event.m_code = wxCharCodeMSWToWX(wVKey);
                 }
 
-                event.m_item.m_data = GetItemData(lItem);
+                if ( lItem != -1 )
+                {
+                    // fill the other fields too
+                    event.m_item.m_text = GetItemText(lItem);
+                    event.m_item.m_data = GetItemData(lItem);
+                }
             }
             break;
 
@@ -1458,6 +1462,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
             event.m_itemIndex = nmLV->iItem;
+            event.m_item.m_text = GetItemText(nmLV->iItem);
             event.m_item.m_data = GetItemData(nmLV->iItem);
             break;
 

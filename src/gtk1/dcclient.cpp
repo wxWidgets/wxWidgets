@@ -68,7 +68,7 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 #include "gdk/gdkprivate.h"
 
-void gdk_draw_bitmap     (GdkDrawable  *drawable,
+void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
                           GdkGC               *gc,
                           GdkDrawable  *src,
                           gint                xsrc,
@@ -122,7 +122,11 @@ enum wxPoolGCType
    wxTEXT_COLOUR,
    wxBG_COLOUR,
    wxPEN_COLOUR,
-   wxBRUSH_COLOUR
+   wxBRUSH_COLOUR,
+   wxTEXT_SCREEN,
+   wxBG_SCREEN,
+   wxPEN_SCREEN,
+   wxBRUSH_SCREEN
 };
 
 struct wxGC
@@ -267,6 +271,14 @@ void wxWindowDC::SetUpDC()
 
     wxASSERT_MSG( !m_penGC, wxT("GCs already created") );
 
+    if (m_isScreenDC)
+    {
+        m_penGC = wxGetPoolGC( m_window, wxPEN_SCREEN );
+        m_brushGC = wxGetPoolGC( m_window, wxBRUSH_SCREEN );
+        m_textGC = wxGetPoolGC( m_window, wxTEXT_SCREEN );
+        m_bgGC = wxGetPoolGC( m_window, wxBG_SCREEN );
+    }
+    else
     if (m_isMemDC && (((wxMemoryDC*)this)->m_selected.GetDepth() == 1))
     {
         m_penGC = wxGetPoolGC( m_window, wxPEN_MONO );
@@ -912,7 +924,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
        drawing a mono-bitmap (XBitmap) we use the current text GC */
     if (is_mono)
-        gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );
+        gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );
     else
         gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
 
@@ -1098,7 +1110,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
            drawing a mono-bitmap (XBitmap) we use the current text GC */
 
         if (is_mono)
-            gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
+            gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
         else
             gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, xx, yy, ww, hh );
 
@@ -1284,8 +1296,8 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
         for ( wxCoord srcY = 0; srcY < h; srcY++ )
         {
             // transform source coords to dest coords
-            double r = sqrt(srcX*srcX + srcY*srcY);
-            double angleOrig = atan2(srcY, srcX) - rad;
+            double r = sqrt((double)srcX*srcX + srcY*srcY);
+            double angleOrig = atan2((double)srcY, (double)srcX) - rad;
             wxCoord dstX = (wxCoord)(r*cos(angleOrig) + 0.5),
                     dstY = (wxCoord)(r*sin(angleOrig) + 0.5);
 

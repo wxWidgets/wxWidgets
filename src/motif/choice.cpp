@@ -189,32 +189,37 @@ void wxChoice::Append(const wxString& item)
         for (i = 0; i < m_noStrings; i++)
             new_widgetList[i] = m_widgetList[i];
 
-        new_widgetList[m_noStrings] = (WXWidget) w;
+    new_widgetList[m_noStrings] = (WXWidget) w;
 
-        if (m_widgetList)
-            delete[] m_widgetList;
-        m_widgetList = new_widgetList;
+    if (m_widgetList)
+        delete[] m_widgetList;
+    m_widgetList = new_widgetList;
 
-        char mnem = wxFindMnemonic ((char*) (const char*) item);
-        if (mnem != 0)
-            XtVaSetValues (w, XmNmnemonic, mnem, NULL);
+    char mnem = wxFindMnemonic ((char*) (const char*) item);
+    if (mnem != 0)
+        XtVaSetValues (w, XmNmnemonic, mnem, NULL);
 
-        XtAddCallback (w, XmNactivateCallback, (XtCallbackProc) wxChoiceCallback, (XtPointer) this);
+    XtAddCallback (w, XmNactivateCallback, (XtCallbackProc) wxChoiceCallback, (XtPointer) this);
 
-        if (m_noStrings == 0 && m_buttonWidget)
-        {
-            XtVaSetValues ((Widget) m_buttonWidget, XmNmenuHistory, w, NULL);
-            Widget label = XmOptionButtonGadget ((Widget) m_buttonWidget);
-            XmString text = XmStringCreateSimple ((char*) (const char*) item);
-            XtVaSetValues (label,
-                XmNlabelString, text,
-                NULL);
-            XmStringFree (text);
-        }
-        wxNode *node = m_stringList.Add (item);
-        XtVaSetValues (w, XmNuserData, node->Data (), NULL);
+    if (m_noStrings == 0 && m_buttonWidget)
+    {
+        XtVaSetValues ((Widget) m_buttonWidget, XmNmenuHistory, w, NULL);
+        Widget label = XmOptionButtonGadget ((Widget) m_buttonWidget);
+        XmString text = XmStringCreateSimple ((char*) (const char*) item);
+        XtVaSetValues (label,
+            XmNlabelString, text,
+            NULL);
+        XmStringFree (text);
+    }
+    wxNode *node = m_stringList.Add (item);
+    XtVaSetValues (w, XmNuserData, node->Data (), NULL);
 
-        m_noStrings ++;
+    if (m_noStrings == 0)
+        m_clientList.Append((wxObject*) NULL);
+    else
+        m_clientList.Insert( m_clientList.Item(m_noStrings-1),
+                                 (wxObject*) NULL );
+    m_noStrings ++;
 }
 
 void wxChoice::Delete(int WXUNUSED(n))
@@ -243,6 +248,21 @@ void wxChoice::Clear()
     m_widgetList = (WXWidget*) NULL;
     if (m_buttonWidget)
         XtVaSetValues ((Widget) m_buttonWidget, XmNmenuHistory, (Widget) NULL, NULL);
+
+    if ( HasClientObjectData() )
+    {
+        // destroy the data (due to Robert's idea of using wxList<wxObject>
+        // and not wxList<wxClientData> we can't just say
+        // m_clientList.DeleteContents(TRUE) - this would crash!
+        wxNode *node = m_clientList.First();
+        while ( node )
+        {
+            delete (wxClientData *)node->Data();
+            node = node->Next();
+        }
+    }
+    m_clientList.Clear();
+
     m_noStrings = 0;
 }
 
@@ -524,26 +544,40 @@ void wxChoice::DoSetFirstItem(int WXUNUSED(n))
     wxFAIL_MSG( wxT("wxChoice::DoSetFirstItem not implemented") );
 }
 
-void wxChoice::DoSetItemClientData(int WXUNUSED(n), void* WXUNUSED(clientData))
+void wxChoice::DoSetItemClientData(int n, void* clientData)
 {
-    wxFAIL_MSG( wxT("wxChoice::DoSetItemClientData not implemented") );
+    wxNode *node = m_clientList.Nth( n );
+    wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetItemClientData") );
+
+    node->SetData( (wxObject*) clientData );
 }
 
-void* wxChoice::DoGetItemClientData(int WXUNUSED(n)) const
+void* wxChoice::DoGetItemClientData(int n) const
 {
-    wxFAIL_MSG( wxT("wxChoice::DoGetItemClientData not implemented") );
-    return (void*) NULL;
+    wxNode *node = m_clientList.Nth( n );
+    wxCHECK_MSG( node, NULL, wxT("invalid index in wxChoice::DoGetItemClientData") );
+
+    return node->Data();
 }
 
-void wxChoice::DoSetItemClientObject(int WXUNUSED(n), wxClientData* WXUNUSED(clientData))
+void wxChoice::DoSetItemClientObject(int n, wxClientData* clientData)
 {
-    wxFAIL_MSG( wxT("wxChoice::DoSetItemClientObject not implemented") );
+    wxNode *node = m_clientList.Nth( n );
+    wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetItemClientObject") );
+
+    wxClientData *cd = (wxClientData*) node->Data();
+    delete cd;
+
+    node->SetData( (wxObject*) clientData );
 }
 
-wxClientData* wxChoice::DoGetItemClientObject(int WXUNUSED(n)) const
+wxClientData* wxChoice::DoGetItemClientObject(int n) const
 {
-    wxFAIL_MSG( wxT("wxChoice::DoGetItemClientObject not implemented") );
-    return (wxClientData*) NULL;
+    wxNode *node = m_clientList.Nth( n );
+    wxCHECK_MSG( node, (wxClientData *)NULL,
+                 wxT("invalid index in wxChoice::DoGetItemClientObject") );
+
+    return (wxClientData*) node->Data();
 }
 
 void wxChoice::Select(int n)

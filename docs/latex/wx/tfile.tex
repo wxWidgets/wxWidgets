@@ -10,11 +10,11 @@ As usual, the accent is put on cross-platform features which explains, for
 example, the \helpref{wxTextFile}{wxtextfile} class which may be used to convert
 between different types of text files (DOS/Unix/Mac).
 
-wxFile may be used for low-level IO. It contains all usual functions to work
-with files (opening/closing, reading/writing, seeking...) but, compared to
-using standard C functions, brings error checking (in case of an error a message
+wxFile may be used for low-level IO. It contains all the usual functions to work
+with files (opening/closing, reading/writing, seeking, and so on) but compared with
+using standard C functions, has error checking (in case of an error a message
 is logged using \helpref{wxLog}{wxlog} facilities) and closes the file
-automatically in destructor which may be quite convenient.
+automatically in the destructor which may be quite convenient.
 
 wxTempFile is a very small file designed to make replacing the files contents
 safer - see its \helpref{documentation}{wxtempfile} for more details.

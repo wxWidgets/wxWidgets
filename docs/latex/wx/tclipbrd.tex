@@ -35,7 +35,7 @@ should do.
 
 The data provider is responsible for creating a 
 \helpref{wxDataObject}{wxdataobject} containing the data to be
-transfered. Then it should either pass it to the clipboard using 
+transferred. Then it should either pass it to the clipboard using 
 \helpref{SetData}{wxclipboardsetdata} function or to 
 \helpref{wxDropSource}{wxdropsource} and call 
 \helpref{DoDragDrop}{wxdropsourcedodragdrop} function.
@@ -62,7 +62,7 @@ create a \helpref{wxDataObject}{wxdataobject} derived class which supports the
 data formats you need and pass it as argument to 
 \helpref{wxClipboard::GetData}{wxclipboardgetdata}. If it returns {\tt FALSE},
 no data in (any of) the supported format(s) is available. If it returns {\tt
-TRUE}, the data has been successfully transfered to wxDataObject.
+TRUE}, the data has been successfully transferred to wxDataObject.
 
 For drag and drop case, the \helpref{wxDropTarget::OnData}{wxdroptargetondata} 
 virtual function will be called when a data object is dropped, from which the

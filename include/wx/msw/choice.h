@@ -66,6 +66,8 @@ public:
     // MSW only
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
     virtual void DoSetItemClientData( int n, void* clientData );

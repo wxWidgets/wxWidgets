@@ -18,6 +18,7 @@
 #define INCL_PM
 #define INCL_GPI
 #define INCL_WINSYS
+#define INCL_SHLERRORS
 #include <os2.h>
 
 class WXDLLEXPORT wxFont;

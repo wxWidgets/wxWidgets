@@ -41,15 +41,24 @@ Constructor.
 
 \membersection{wxHtmlEasyPrinting::PreviewFile}\label{wxhtmleasyprintingpreviewfile}
 
-\func{void}{PreviewFile}{\param{const wxString\& }{htmlfile}}
+\func{bool}{PreviewFile}{\param{const wxString\& }{htmlfile}}
 
-Previews HTML file. 
+Preview HTML file. 
+
+Returns FALSE in case of error -- call
+\helpref{wxPrinter::GetLastError}{wxprintergetlasterror} to get detailed
+information about the kind of the error.
+
 
 \membersection{wxHtmlEasyPrinting::PreviewText}\label{wxhtmleasyprintingpreviewtext}
 
-\func{void}{PreviewText}{\param{const wxString\& }{htmltext}, \param{const wxString\& }{basepath = wxEmptyString}}
+\func{bool}{PreviewText}{\param{const wxString\& }{htmltext}, \param{const wxString\& }{basepath = wxEmptyString}}
 
-Previews HTML text (not file!). 
+Preview HTML text (not file!). 
+
+Returns FALSE in case of error -- call
+\helpref{wxPrinter::GetLastError}{wxprintergetlasterror} to get detailed
+information about the kind of the error.
 
 \wxheading{Parameters}
 
@@ -60,15 +69,23 @@ file). It is used to determine path for loading images, for example.}
 
 \membersection{wxHtmlEasyPrinting::PrintFile}\label{wxhtmleasyprintingprintfile}
 
-\func{void}{PrintFile}{\param{const wxString\& }{htmlfile}}
+\func{bool}{PrintFile}{\param{const wxString\& }{htmlfile}}
 
-Prints HTML file.
+Print HTML file.
+
+Returns FALSE in case of error -- call
+\helpref{wxPrinter::GetLastError}{wxprintergetlasterror} to get detailed
+information about the kind of the error.
 
 \membersection{wxHtmlEasyPrinting::PrintText}\label{wxhtmleasyprintingprinttext}
 
-\func{void}{PrintText}{\param{const wxString\& }{htmltext}, \param{const wxString\& }{basepath = wxEmptyString}}
+\func{bool}{PrintText}{\param{const wxString\& }{htmltext}, \param{const wxString\& }{basepath = wxEmptyString}}
 
-Prints HTML text (not file!). 
+Print HTML text (not file!). 
+
+Returns FALSE in case of error -- call
+\helpref{wxPrinter::GetLastError}{wxprintergetlasterror} to get detailed
+information about the kind of the error.
 
 \wxheading{Parameters}
 
@@ -81,19 +98,19 @@ file). It is used to determine path for loading images, for example.}
 
 \func{void}{PrinterSetup}{\void}
 
-Displays printer setup dialog and allows the user to modify settings. 
+Display printer setup dialog and allows the user to modify settings. 
 
 \membersection{wxHtmlEasyPrinting::PageSetup}\label{wxhtmleasyprintingpagesetup}
 
 \func{void}{PageSetup}{\void}
 
-Displays page setup dialog and allows the user to modify settings. 
+Display page setup dialog and allows the user to modify settings. 
 
 \membersection{wxHtmlEasyPrinting::SetHeader}\label{wxhtmleasyprintingsetheader}
 
 \func{void}{SetHeader}{\param{const wxString\& }{header}, \param{int }{pg = wxPAGE\_ALL}}
 
-Sets page header.
+Set page header.
 
 \wxheading{Parameters}
 
@@ -111,7 +128,7 @@ Sets page header.
 
 \func{void}{SetFooter}{\param{const wxString\& }{footer}, \param{int }{pg = wxPAGE\_ALL}}
 
-Sets page footer.
+Set page footer.
 
 \wxheading{Parameters}
 

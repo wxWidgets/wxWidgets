@@ -500,11 +500,11 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
     wxDataFormat format( selection_data->target );
 
     wxLogDebug( wxT("Drop source: format requested: %s"), format.GetId().c_str() );
-    
+
     drop_source->m_retValue = wxDragCancel;
 
     wxDataObject *data = drop_source->GetDataObject();
-    
+
     if (!data)
     {
         wxLogDebug( wxT("Drop source: no data object") );
@@ -562,7 +562,7 @@ static void source_drag_data_delete( GtkWidget          *WXUNUSED(widget),
                                      GdkDragContext     *WXUNUSED(context),
                                      wxDropSource       *WXUNUSED(drop_source) )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     // printf( "Drag source: drag_data_delete\n" );
@@ -576,7 +576,7 @@ static void source_drag_begin( GtkWidget          *WXUNUSED(widget),
                                GdkDragContext     *WXUNUSED(context),
                                wxDropSource       *WXUNUSED(drop_source) )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     // printf( "Drag source: drag_begin.\n" );
@@ -620,7 +620,10 @@ gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigur
 // wxDropSource
 //---------------------------------------------------------------------------
 
-wxDropSource::wxDropSource( wxWindow *win, const wxIcon &icon )
+wxDropSource::wxDropSource(wxWindow *win,
+                           const wxIcon &iconCopy,
+                           const wxIcon &iconMove,
+                           const wxIcon &iconNone)
 {
     m_waiting = TRUE;
 
@@ -632,11 +635,14 @@ wxDropSource::wxDropSource( wxWindow *win, const wxIcon &icon )
 
     m_retValue = wxDragCancel;
 
-    m_icon = icon;
-    if (wxNullIcon == icon) m_icon = wxIcon( page_xpm );
+    SetIcons(iconCopy, iconMove, iconNone);
 }
 
-wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win, const wxIcon &icon )
+wxDropSource::wxDropSource(wxDataObject& data,
+                           wxWindow *win,
+                           const wxIcon &iconCopy,
+                           const wxIcon &iconMove,
+                           const wxIcon &iconNone)
 {
     m_waiting = TRUE;
 
@@ -650,19 +656,47 @@ wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win, const wxIcon &ico
 
     m_retValue = wxDragCancel;
 
-    m_icon = icon;
-    if (wxNullIcon == icon) m_icon = wxIcon( page_xpm );
+    SetIcons(iconCopy, iconMove, iconNone);
+}
+
+void wxDropSource::SetIcons(const wxIcon &iconCopy,
+                            const wxIcon &iconMove,
+                            const wxIcon &iconNone)
+{
+    m_iconCopy = iconCopy;
+    m_iconMove = iconMove;
+    m_iconNone = iconNone;
+
+    if ( !m_iconCopy.Ok() )
+        m_iconCopy = wxIcon(page_xpm);
+    if ( !m_iconMove.Ok() )
+        m_iconMove = m_iconCopy;
+    if ( !m_iconNone.Ok() )
+        m_iconNone = m_iconCopy;
 }
 
 wxDropSource::~wxDropSource()
 {
 }
 
-void wxDropSource::PrepareIcon( int hot_x, int hot_y, GdkDragContext *context )
+void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
 {
-    GdkBitmap *mask = (GdkBitmap *) NULL;
-    if (m_icon.GetMask()) mask = m_icon.GetMask()->GetBitmap();
-    GdkPixmap *pixmap = m_icon.GetPixmap();
+    // get the right icon to display
+    wxIcon *icon = NULL;
+    if ( action & GDK_ACTION_MOVE )
+        icon = &m_iconMove;
+    else if ( action & GDK_ACTION_COPY )
+        icon = &m_iconCopy;
+    else
+        icon = &m_iconNone;
+
+    GdkBitmap *mask;
+    if ( icon->GetMask() )
+        mask = icon->GetMask()->GetBitmap();
+    else
+        mask = (GdkBitmap *)NULL;
+
+    GdkPixmap *pixmap = icon->GetPixmap();
 
     gint width,height;
     gdk_window_get_size (pixmap, &width, &height);
@@ -689,7 +723,7 @@ void wxDropSource::PrepareIcon( int hot_x, int hot_y, GdkDragContext *context )
     if (mask)
         gtk_widget_shape_combine_mask (m_iconWindow, mask, 0, 0);
 
-    gtk_drag_set_icon_widget( context, m_iconWindow, hot_x, hot_y );
+    gtk_drag_set_icon_widget( context, m_iconWindow, 0, 0 );
 }
 
 wxDragResult wxDropSource::DoDragDrop( bool allowMove )
@@ -702,7 +736,8 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     if (m_data->GetFormatCount() == 0)
         return (wxDragResult) wxDragNone;
 
-    g_blockEventsOnDrag = TRUE;
+    // disabled for now
+    g_blockEventsOnDrag = FALSE;
 
     RegisterWindow();
 
@@ -746,22 +781,22 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     if (button_number)
     {
         GdkDragAction action = GDK_ACTION_COPY;
-	if (allowMove) action = (GdkDragAction)(GDK_ACTION_MOVE|GDK_ACTION_COPY);
+        if (allowMove) action = (GdkDragAction)(GDK_ACTION_MOVE|GDK_ACTION_COPY);
         GdkDragContext *context = gtk_drag_begin( m_widget,
-                                              target_list,
-					      action,
-                                              button_number,  /* number of mouse button which started drag */
-                                              (GdkEvent*) &event );
+                target_list,
+                action,
+                button_number,  /* number of mouse button which started drag */
+                (GdkEvent*) &event );
 
         m_dragContext = context;
 
-        PrepareIcon( 0, 0, context );
+        PrepareIcon( action, context );
 
         while (m_waiting) gtk_main_iteration();
-	
-	if (context->action == GDK_ACTION_COPY)
+
+        if (context->action == GDK_ACTION_COPY)
             m_retValue = wxDragCopy;
-	if (context->action == GDK_ACTION_MOVE)
+        if (context->action == GDK_ACTION_MOVE)
             m_retValue = wxDragMove;
     }
 
@@ -780,7 +815,7 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
 void wxDropSource::RegisterWindow()
 {
     if (!m_widget) return;
-    
+
     gtk_signal_connect( GTK_OBJECT(m_widget), "drag_data_get",
                       GTK_SIGNAL_FUNC (source_drag_data_get), (gpointer) this);
     gtk_signal_connect (GTK_OBJECT(m_widget), "drag_data_delete",
