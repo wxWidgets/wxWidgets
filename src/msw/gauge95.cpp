@@ -140,7 +140,6 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
 #endif // wxUSE_VALIDATORS
 
   if (parent) parent->AddChild(this);
-  m_rangeMax = range;
   m_gaugePos = 0;
 
   m_windowStyle = style;
@@ -177,7 +176,7 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   // Subclass again for purposes of dialog editing mode
   SubclassWin((WXHWND) wx_button);
 
-  SendMessage((HWND) GetHWND(), PBM_SETRANGE, 0, MAKELPARAM(0, range));
+  SetRange(range);
 
   SetFont(parent->GetFont());
 
@@ -187,7 +186,7 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
     height = 28;
   SetSize(x, y, width, height);
 
-  ShowWindow((HWND) GetHWND(), SW_SHOW);
+  ShowWindow(GetHwnd(), SW_SHOW);
 
   return TRUE;
 }
@@ -204,14 +203,19 @@ void wxGauge95::SetRange(int r)
 {
   m_rangeMax = r;
 
-  SendMessage((HWND) GetHWND(), PBM_SETRANGE, 0, MAKELPARAM(0, r));
+#ifdef PBM_SETRANGE32
+  SendMessage(GetHwnd(), PBM_SETRANGE32, 0, r);
+#else // !PBM_SETRANGE32
+  // fall back to PBM_SETRANGE (limited to 16 bits)
+  SendMessage(GetHwnd(), PBM_SETRANGE, 0, MAKELPARAM(0, r));
+#endif // PBM_SETRANGE32/!PBM_SETRANGE32
 }
 
 void wxGauge95::SetValue(int pos)
 {
   m_gaugePos = pos;
 
-  SendMessage((HWND) GetHWND(), PBM_SETPOS, pos, 0);
+  SendMessage(GetHwnd(), PBM_SETPOS, pos, 0);
 }
 
 int wxGauge95::GetShadowWidth() const

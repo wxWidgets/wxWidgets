@@ -61,6 +61,7 @@ wxMSW:
 - changed wxCrashReport to generate minidumps instead of text files
 - wxRadioButtons are now checked when they get focus (standard behaviour)
 - several fixes to owner drawn menu items (Christian Sturmlechner)
+- wxGauge now supports full 32 bit range (Miroslav Rajcic)
 
 wxGTK:
 
