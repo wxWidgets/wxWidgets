@@ -1679,7 +1679,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
-            if ( !(m_windowStyle & wxTE_MULTILINE) )
+            if ( !HasFlag(wxTE_MULTILINE) )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 InitCommandEvent(event);
@@ -1692,10 +1692,26 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             break;
 
         case WXK_TAB:
-            // always produce navigation event - even if we process TAB
+            // always produce navigation event -- even if we process TAB
             // ourselves the fact that we got here means that the user code
-            // decided to skip processing of this TAB - probably to let it
+            // decided to skip processing of this TAB -- probably to let it
             // do its default job.
+
+            // ok, so this is getting absolutely ridiculous but I don't see
+            // any other way to fix this bug: when a multiline text control is
+            // inside a wxFrame, we need to generate the navigation event as
+            // otherwise nothing happens at all, but when the same control is
+            // created inside a dialog, IsDialogMessage() *does* switch focus
+            // all by itself and so if we do it here as well, it is advanced
+            // twice and goes to the next control... to prevent this from
+            // happening we're doing this ugly check, the logic being that if
+            // we don't have focus then it had been already changed to the next
+            // control
+            //
+            // the right thing to do would, of course, be to understand what
+            // the hell is IsDialogMessage() doing but this is beyond my feeble
+            // forces at the moment unfortunately
+            if ( FindFocus() == this )
             {
                 wxNavigationKeyEvent eventNav;
                 eventNav.SetDirection(!event.ShiftDown());
