@@ -572,6 +572,18 @@ bool wxNotebook::DeletePage( int page )
 
     m_pages.DeleteObject( nb_page );
 
+    /* adjust the notebook page numbers so that
+       m_id reflects the current position, Daniel Paull */ 
+    int count = 0;
+    wxNode *node = m_pages.First();
+    wxNotebookPage *pagePtr = (wxNotebookPage *) NULL;
+    while (node)
+    {
+        pagePtr = (wxNotebookPage*)node->Data();
+        pagePtr->m_id = count++;
+        node = node->Next();
+    }
+    
     return TRUE;
 }
 
