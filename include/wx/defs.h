@@ -855,6 +855,10 @@ typedef wxUint32 wxDword;
       #define wxLongLong_t __int64
       #define wxLongLongSuffix i64
       #define wxLongLongFmtSpec _T("Ld")
+#elif defined(__DIGITALMARS__) 
+      #define wxLongLong_t __int64
+      #define wxLongLongSuffix LL
+      #define wxLongLongFmtSpec _T("ll")
 #elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
         defined(__MINGW32__) || \
         defined(__GNUC__) || \
