@@ -192,11 +192,11 @@ Compiling using the makefiles (updated 24 Sept 02):
 
 1. Change directory to build\msw. Type 'make -f makefile.bcc' to
    make the wxWindows core library. Ignore the compiler warnings.
-   This produces a couple of libraries in the lib\bcc_mswdll directory.
+   This produces a couple of libraries in the lib\bcc_lib directory.
 
 2. Change directory to a sample or demo such as samples\minimal, and type
   'make -f makefile.bcc'. This produces a windows exe file - by default 
-   in the bcc_mswdll subdirectory.
+   in the bcc_mswd subdirectory.
 
 Note (1): the wxWindows makefiles assume dword structure alignment. Please
 make sure that your own project or makefile settings use the
