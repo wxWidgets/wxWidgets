@@ -227,9 +227,7 @@ int wxFileDialog::ShowModal()
     //  static char fileBuf[512];
     Widget parentWidget = (Widget) 0;
     if (m_parent)
-    {
         parentWidget = (Widget) m_parent->GetTopWidget();
-    }
     else
         parentWidget = (Widget) wxTheApp->GetTopLevelWidget();
     // prepare the arg list
@@ -349,28 +347,25 @@ int wxFileDialog::ShowModal()
     wxEndBusyCursor();
 
     XtAddGrab(XtParent(fileSel), TRUE, FALSE);
+    XtAppContext context = (XtAppContext) wxTheApp->GetAppContext();
     XEvent event;
     while (!m_fileSelectorReturned)
     {
-        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
+        XtAppNextEvent(context, &event);
+        XtDispatchEvent(&event);
     }
     XtRemoveGrab(XtParent(fileSel));
 
-    XmUpdateDisplay((Widget) wxTheApp->GetTopLevelWidget()); // Experimental
+    // XmUpdateDisplay((Widget) wxTheApp->GetTopLevelWidget()); // Experimental
 
-    //  XtDestroyWidget(fileSel);
+    Display* display = XtDisplay(fileSel);
+
     XtUnmapWidget(XtParent(fileSel));
     XtDestroyWidget(XtParent(fileSel));
 
     // Now process all events, because otherwise
     // this might remain on the screen
-    XSync(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()), FALSE);
-    while (XtAppPending((XtAppContext) wxTheApp->GetAppContext()))
-    {
-        XFlush(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()));
-        XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
-        XtDispatchEvent(&event);
-    }
+    wxFlushEvents(display);
 
     m_path = m_fileSelectorAnswer;
     m_fileName = wxFileNameFromPath(m_fileSelectorAnswer);

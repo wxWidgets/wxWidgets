@@ -33,7 +33,7 @@ class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxEventLoop;
 class WXDLLEXPORT wxXVisualInfo;
-class wxXVisualInfoMap;
+class wxPerDisplayDataMap;
 
 // ----------------------------------------------------------------------------
 // the wxApp class for Motif - see wxAppBase for more details
@@ -85,29 +85,25 @@ public:
     
     // Motif-specific
     WXAppContext   GetAppContext() const { return m_appContext; }
-    WXWidget       GetTopLevelWidget() const { return m_topLevelWidget; }
+    WXWidget       GetTopLevelWidget();
     WXColormap     GetMainColormap(WXDisplay* display);
     WXDisplay*     GetInitialDisplay() const { return m_initialDisplay; }
-    long           GetMaxRequestSize() const { return m_maxRequestSize; }
-    
+
+    void           SetTopLevelWidget(WXDisplay* display, WXWidget widget);
+
     // This handler is called when a property change event occurs
     virtual void   HandlePropertyChange(WXEvent *event);
 
     wxXVisualInfo* GetVisualInfo(WXDisplay* display);
 
 private:
-    static long    sm_lastMessageTime;
-    int            m_nCmdShow;
-
     wxEventLoop*    m_eventLoop;
     
     // Motif-specific
     WXAppContext          m_appContext;
-    WXWidget              m_topLevelWidget;
     WXColormap            m_mainColormap;
     WXDisplay*            m_initialDisplay;
-    long                  m_maxRequestSize;
-    wxXVisualInfoMap*     m_visualInfoMap;
+    wxPerDisplayDataMap*  m_perDisplayData;
 
     DECLARE_EVENT_TABLE()
 };

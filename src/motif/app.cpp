@@ -48,7 +48,20 @@
 
 #include <string.h>
 
-WX_DECLARE_VOIDPTR_HASH_MAP( wxXVisualInfo*, wxXVisualInfoMap );
+struct wxPerDisplayData
+{
+    wxPerDisplayData()
+        { m_visualInfo = NULL; m_topLevelWidget = NULL; }
+
+    wxXVisualInfo* m_visualInfo;
+    Widget         m_topLevelWidget;
+};
+
+WX_DECLARE_VOIDPTR_HASH_MAP( wxPerDisplayData, wxPerDisplayDataMap );
+
+static void wxTLWidgetDestroyCallback(Widget w, XtPointer clientData,
+                                      XtPointer ptr);
+static WXWidget wxCreateTopLevelWidget( WXDisplay* display );
 
 extern wxList wxPendingDelete;
 extern bool wxAddIdleCallback();
@@ -74,8 +87,6 @@ END_EVENT_TABLE()
         return gs_pfnXErrorHandler(dpy, xevent);
     }
 #endif // __WXDEBUG__
-
-long wxApp::sm_lastMessageTime = 0;
 
 bool wxApp::Initialize()
 {
@@ -265,24 +276,25 @@ wxApp::wxApp()
     m_eventLoop = new wxEventLoop;
     m_mainColormap = (WXColormap) NULL;
     m_appContext = (WXAppContext) NULL;
-    m_topLevelWidget = (WXWidget) NULL;
-    m_maxRequestSize = 0;
     m_initialDisplay = (WXDisplay*) 0;
-    m_visualInfoMap = new wxXVisualInfoMap;
+    m_perDisplayData = new wxPerDisplayDataMap;
 }
 
 wxApp::~wxApp()
 {
     delete m_eventLoop;
 
-    for( wxXVisualInfoMap::iterator it  = m_visualInfoMap->begin(),
-                                    end = m_visualInfoMap->end();
+    for( wxPerDisplayDataMap::iterator it  = m_perDisplayData->begin(),
+                                       end = m_perDisplayData->end();
          it != end; ++it )
     {
-        delete it->second;
+        delete it->second.m_visualInfo;
+        XtDestroyWidget( it->second.m_topLevelWidget );
     }
 
-    delete m_visualInfoMap;
+    delete m_perDisplayData;
+
+    wxTheApp = NULL;
 }
 
 bool wxApp::Initialized()
@@ -493,12 +505,6 @@ bool wxApp::OnInitGui()
     gs_pfnXErrorHandler = XSetErrorHandler(wxXErrorHandler);
 #endif // __WXDEBUG__
 
-    wxTheApp->m_topLevelWidget =
-        (WXWidget) XtAppCreateShell((String)NULL,
-                                    wxTheApp->GetClassName().c_str(),
-                                    applicationShellWidgetClass,dpy,
-                                    NULL,0) ;
-
     // Add general resize proc
     XtActionsRec rec;
     rec.string = "resize";
@@ -506,7 +512,6 @@ bool wxApp::OnInitGui()
     XtAppAddActions((XtAppContext) wxTheApp->m_appContext, &rec, 1);
 
     GetMainColormap(dpy);
-    m_maxRequestSize = XMaxRequestSize((Display*) dpy);
 
     wxAddIdleCallback();
 
@@ -531,16 +536,59 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
 
 wxXVisualInfo* wxApp::GetVisualInfo( WXDisplay* display )
 {
-    wxXVisualInfoMap::iterator it = m_visualInfoMap->find( display );
+    wxPerDisplayDataMap::iterator it = m_perDisplayData->find( display );
 
-    if( it != m_visualInfoMap->end() ) return it->second;
+    if( it != m_perDisplayData->end() && it->second.m_visualInfo )
+        return it->second.m_visualInfo;
 
     wxXVisualInfo* vi = new wxXVisualInfo;
     wxFillXVisualInfo( vi, (Display*)display );
 
-    (*m_visualInfoMap)[display] = vi;
+    (*m_perDisplayData)[display].m_visualInfo = vi;
 
     return vi;
+}
+
+static void wxTLWidgetDestroyCallback(Widget w, XtPointer clientData,
+                                      XtPointer ptr)
+{
+    if( wxTheApp )
+        wxTheApp->SetTopLevelWidget( (WXDisplay*)XtDisplay(w),
+                                     (WXWidget)NULL );
+}
+
+WXWidget wxCreateTopLevelWidget( WXDisplay* display )
+{
+    Widget tlw = XtAppCreateShell( (String)NULL,
+                                   wxTheApp->GetClassName().c_str(),
+                                   applicationShellWidgetClass,
+                                   (Display*)display,
+                                   NULL, 0 );
+
+    XtAddCallback( tlw, XmNdestroyCallback,
+                   (XtCallbackProc)wxTLWidgetDestroyCallback,
+                   (XtPointer)NULL );
+
+    return (WXWidget)tlw;
+}
+
+WXWidget wxApp::GetTopLevelWidget()
+{
+    WXDisplay* display = wxGetDisplay();
+    wxPerDisplayDataMap::iterator it = m_perDisplayData->find( display );
+
+    if( it != m_perDisplayData->end() && it->second.m_topLevelWidget )
+        return (WXWidget)it->second.m_topLevelWidget;
+
+    WXWidget tlw = wxCreateTopLevelWidget( display );
+    SetTopLevelWidget( display, tlw );
+
+    return tlw;
+}
+
+void wxApp::SetTopLevelWidget(WXDisplay* display, WXWidget widget)
+{
+    (*m_perDisplayData)[display].m_topLevelWidget = (Widget)widget;
 }
 
 void wxExit()

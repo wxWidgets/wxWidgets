@@ -154,13 +154,17 @@ wxSize wxDoGetSingleTextCtrlBestSize( Widget textWidget,
                                       const wxWindow* window );
 
 // ----------------------------------------------------------------------------
-// executes one main loop iteration (implemented in src/motif/evtloop.cpp)
+// event-related functions
 // ----------------------------------------------------------------------------
 
 class wxEventLoop;
 
+// executes one main loop iteration (implemented in src/motif/evtloop.cpp)
 // returns true if the loop should be exited
 bool wxDoEventLoopIteration( wxEventLoop& evtLoop );
+
+// Consume all events until no more left
+void wxFlushEvents(WXDisplay* display);
 
 // ----------------------------------------------------------------------------
 // macros to avoid casting WXFOO to Foo all the time

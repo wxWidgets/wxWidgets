@@ -2337,7 +2337,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
 
                 // check for a double click
                 //
-                long dclickTime = XtGetMultiClickTime(wxGlobalDisplay());
+                long dclickTime = XtGetMultiClickTime(xevent->xany.display);
                 long ts = wxevent.GetTimestamp();
 
                 int buttonLast = win->GetLastClickedButton();
@@ -2624,7 +2624,7 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 // Get the current mouse position.
 wxPoint wxGetMousePosition()
 {
-    Display *display = (Display*) wxGetDisplay();
+    Display *display = wxGlobalDisplay();
     Window rootWindow = RootWindowOfScreen (DefaultScreenOfDisplay(display));
     Window rootReturn, childReturn;
     int rootX, rootY, winX, winY;

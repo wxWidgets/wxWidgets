@@ -88,10 +88,6 @@ static void wxFrameMapProc(Widget frameShell, XtPointer clientData,
 extern wxList wxModelessWindows;
 extern wxList wxPendingDelete;
 
-// TODO: this should be tidied so that any frame can be the
-// top frame
-// static bool wxTopLevelUsed = FALSE;
-
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -120,7 +116,6 @@ void wxFrame::Init()
     m_mainWidget = (WXWidget) NULL;;
     m_workArea = (WXWidget) NULL;;
     m_clientArea = (WXWidget) NULL;;
-    // m_visibleStatus = TRUE;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -206,25 +201,13 @@ bool wxFrame::DoCreate( wxWindow* parent, wxWindowID id,
                         long style,
                         const wxString& name )
 {
-    static bool wxTopLevelUsed = FALSE; /* this is global */
-    WXWidget frameShell;
+    Widget frameShell;
 
-    if (wxTopLevelUsed)
-    {
-        // Change suggested by Matthew Flatt
-        frameShell = (WXWidget)XtAppCreateShell( name,
-                                                 wxTheApp->GetClassName(),
-                                                 topLevelShellWidgetClass,
-                                                 (Display*) wxGetDisplay(),
-                                                 NULL, 0 );
-    }
-    else
-    {
-        frameShell = wxTheApp->GetTopLevelWidget();
-        wxTopLevelUsed = TRUE;
-    }
+    frameShell = XtCreatePopupShell( name, topLevelShellWidgetClass,
+                                     (Widget)wxTheApp->GetTopLevelWidget(),
+                                     NULL, 0 );
 
-    XtVaSetValues((Widget) frameShell,
+    XtVaSetValues(frameShell,
         // Allows menu to resize
         XmNallowShellResize, True,
         XmNdeleteResponse, XmDO_NOTHING,
@@ -232,10 +215,10 @@ bool wxFrame::DoCreate( wxWindow* parent, wxWindowID id,
         XmNiconic, (style & wxICONIZE) ? TRUE : FALSE,
         NULL);
 
-    m_frameShell = frameShell;
+    m_frameShell = (WXWidget)frameShell;
 
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget("main_window",
-        xmMainWindowWidgetClass, (Widget) frameShell,
+        xmMainWindowWidgetClass, frameShell,
         XmNresizePolicy, XmRESIZE_NONE,
         NULL);
 
@@ -266,11 +249,11 @@ bool wxFrame::DoCreate( wxWindow* parent, wxWindowID id,
     XtFree( (char *)ptr );
 
     /* Part of show-&-hide fix */
-    XtAddEventHandler( (Widget)frameShell, StructureNotifyMask,
+    XtAddEventHandler( frameShell, StructureNotifyMask,
                        False, (XtEventHandler)wxFrameMapProc,
                        (XtPointer)this );
 
-    XtRealizeWidget((Widget) frameShell);
+    XtRealizeWidget(frameShell);
 
     wxAddWindowToTable( (Widget)m_workArea, this);
     wxAddWindowToTable( (Widget)m_clientArea, this);

@@ -23,22 +23,11 @@
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"
-#include "wx/msgdlg.h"
-#include "wx/cursor.h"
 #include "wx/dcmemory.h"
 #include "wx/bitmap.h"
+#include "wx/evtloop.h"
 
-#include <ctype.h>
-#include <stdarg.h>
-#include <dirent.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <pwd.h>
-#include <errno.h>
-#include <signal.h>
 
 #if (defined(__SUNCC__) || defined(__CLCC__))
     #include <sysent.h>
@@ -88,56 +77,19 @@ static char *GetIniFile (char *dest, const char *filename);
 // ----------------------------------------------------------------------------
 
 // Consume all events until no more left
-void wxFlushEvents()
+void wxFlushEvents(WXDisplay* wxdisplay)
 {
-    Display *display = (Display*) wxGetDisplay();
+    Display *display = (Display*)wxdisplay;
+    wxEventLoop evtLoop;
 
     XSync (display, FALSE);
 
-    // XtAppPending returns availability of events AND timers/inputs, which
-    // are processed via callbacks, so XtAppNextEvent will not return if
-    // there are no events. So added '& XtIMXEvent' - Sergey.
-    while (XtAppPending ((XtAppContext) wxTheApp->GetAppContext()) & XtIMXEvent)
+    while (evtLoop.Pending())
     {
-        XFlush (XtDisplay ((Widget) wxTheApp->GetTopLevelWidget()));
-        // Jan Lessner: works better when events are non-X events
-        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMXEvent);
+        XFlush (display);
+        evtLoop.Dispatch();
     }
 }
-
-#if 0
-// Check whether this window wants to process messages, e.g. Stop button
-// in long calculations.
-bool wxCheckForInterrupt(wxWindow *wnd)
-{
-    wxCHECK_MSG( wnd, FALSE, "NULL window in wxCheckForInterrupt" );
-
-    Display *dpy=(Display*) wnd->GetXDisplay();
-    Window win=(Window) wnd->GetXWindow();
-    XEvent event;
-    XFlush(dpy);
-    if (wnd->GetMainWidget())
-    {
-        XmUpdateDisplay((Widget)(wnd->GetMainWidget()));
-    }
-
-    bool hadEvents = FALSE;
-    while( XCheckMaskEvent(dpy,
-                           ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|
-                           PointerMotionMask|KeyPressMask|KeyReleaseMask,
-                           &event) )
-    {
-        if ( event.xany.window == win )
-        {
-            hadEvents = TRUE;
-
-            XtDispatchEvent(&event);
-        }
-    }
-
-    return hadEvents;
-}
-#endif
 
 // ----------------------------------------------------------------------------
 // wxExecute stuff
@@ -175,7 +127,7 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 void wxBell()
 {
     // Use current setting for the bell
-    XBell ((Display*) wxGetDisplay(), 0);
+    XBell (wxGlobalDisplay(), 0);
 }
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
@@ -184,7 +136,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
     // This code is WRONG!! Does NOT return the
     // Motif version of the libs but the X protocol
     // version!
-    Display *display = XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
+    Display *display = wxGlobalDisplay();
     if (majorVsn)
         *majorVsn = ProtocolVersion (display);
     if (minorVsn)
@@ -337,7 +289,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
 {
     if (!wxResourceDatabase)
     {
-        Display *display = (Display*) wxGetDisplay();
+        Display *display = wxGlobalDisplay();
         wxXMergeDatabases (wxTheApp, display);
     }
 
@@ -549,8 +501,8 @@ void wxGetMousePosition( int* x, int* y )
 #else
     XMotionEvent xev;
     Window root, child;
-    XQueryPointer((Display*) wxGetDisplay(),
-                  DefaultRootWindow((Display*) wxGetDisplay()),
+    XQueryPointer(wxGlobalDisplay(),
+                  DefaultRootWindow(wxGlobalDisplay()),
                   &root, &child,
                   &(xev.x_root), &(xev.y_root),
                   &(xev.x),      &(xev.y),
@@ -569,7 +521,7 @@ bool wxColourDisplay()
 // Returns depth of screen
 int wxDisplayDepth()
 {
-    Display *dpy = (Display*) wxGetDisplay();
+    Display *dpy = wxGlobalDisplay();
 
     return DefaultDepth (dpy, DefaultScreen (dpy));
 }
@@ -577,7 +529,7 @@ int wxDisplayDepth()
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-    Display *dpy = (Display*) wxGetDisplay();
+    Display *dpy = wxGlobalDisplay();
 
     if ( width )
         *width = DisplayWidth (dpy, DefaultScreen (dpy));
@@ -587,7 +539,7 @@ void wxDisplaySize(int *width, int *height)
 
 void wxDisplaySizeMM(int *width, int *height)
 {
-    Display *dpy = (Display*) wxGetDisplay();
+    Display *dpy = wxGlobalDisplay();
 
     if ( width )
         *width = DisplayWidthMM(dpy, DefaultScreen (dpy));
@@ -615,8 +567,6 @@ WXDisplay *wxGetDisplay()
 {
     if (gs_currentDisplay)
         return gs_currentDisplay;
-    if (wxTheApp && wxTheApp->GetTopLevelWidget())
-        return XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
     else if (wxTheApp)
         return wxTheApp->GetInitialDisplay();
     return NULL;
@@ -1064,6 +1014,7 @@ char wxFindMnemonic (const char *s)
     char mnem = 0;
     int len = strlen (s);
     int i;
+
     for (i = 0; i < len; i++)
     {
         if (s[i] == '&')
@@ -1081,19 +1032,18 @@ char wxFindMnemonic (const char *s)
     return mnem;
 }
 
-char * wxFindAccelerator (const char *s)
+char* wxFindAccelerator( const char *s )
 {
+#if 1
     // VZ: this function returns incorrect keysym which completely breaks kbd
     //     handling
     return NULL;
+#else
+    // The accelerator text is after the \t char.
+    s = strchr( s, '\t' );
 
-#if 0
-   // The accelerator text is after the \t char.
-    while (*s && *s != '\t')
-        s++;
-    if (*s == '\0')
-        return (NULL);
-    s++;
+    if( !s ) return NULL;
+
     /*
     Now we need to format it as X standard:
 
@@ -1104,62 +1054,68 @@ char * wxFindAccelerator (const char *s)
         Alt+k        --> Meta<Key>k
         Ctrl+Shift+A --> Ctrl Shift<Key>A
 
+        and handle Ctrl-N & similia
     */
 
     static char buf[256];
-    buf[0] = '\0';
-    char *tmp = copystring (s);
-    s = tmp;
-    char *p = tmp;
 
-    while (1)
+    buf[0] = '\0';
+    wxString tmp = s + 1; // skip TAB
+    size_t index = 0;
+
+    while( index < tmp.length() )
     {
-        while (*p && *p != '+')
-            p++;
-        if (*p)
+        size_t plus  = tmp.find( '+', index );
+        size_t minus = tmp.find( '-', index );
+
+        // neither '+' nor '-', add <Key>
+        if( plus == wxString::npos && minus == wxString::npos )
         {
-            *p = '\0';
-            if (buf[0])
-                strcat (buf, " ");
-            if (strcmp (s, "Alt"))
-                strcat (buf, s);
-            else
-                strcat (buf, "Meta");
-            s = p++;
+            strcat( buf, "<Key>" );
+            strcat( buf, tmp.c_str() + index );
+
+            return buf;
         }
-        else
-        {
-            strcat (buf, "<Key>");
-            strcat (buf, s);
-            break;
-        }
+
+        // OK: npos is big and positive
+        size_t sep = wxMin( plus, minus );
+        wxString mod = tmp.substr( index, sep - index );
+
+        // Ctrl  -> Ctrl
+        // Shift -> Shift
+        // Alt   -> Meta
+        if( mod == "Alt" )
+            mod = "Meta";
+
+        if( buf[0] )
+            strcat( buf, " " );
+
+        strcat( buf, mod.c_str() );
+
+        index = sep + 1;
     }
-    delete[]tmp;
-    return buf;
+
+    return NULL;
 #endif
 }
 
 XmString wxFindAcceleratorText (const char *s)
 {
+#if 1
     // VZ: this function returns incorrect keysym which completely breaks kbd
     //     handling
     return NULL;
+#else
+    // The accelerator text is after the \t char.
+    s = strchr( s, '\t' );
 
-#if 0
-   // The accelerator text is after the \t char.
-    while (*s && *s != '\t')
-        s++;
-    if (*s == '\0')
-        return (NULL);
-    s++;
-    XmString text = XmStringCreateSimple ((char *)s);
-    return text;
+    if( !s ) return NULL;
+
+    return wxStringToXmString( s + 1 ); // skip TAB!
 #endif
 }
 
-
 // Change a widget's foreground and background colours.
-
 void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
 {
     // When should we specify the foreground, if it's calculated
@@ -1204,14 +1160,6 @@ extern void wxDoChangeFont(WXWidget widget, wxFont& font)
                    NULL );
 #endif
 
-}
-
-bool wxWindowIsVisible(Window win)
-{
-    XWindowAttributes wa;
-    XGetWindowAttributes(wxGlobalDisplay(), win, &wa);
-
-    return (wa.map_state == IsViewable);
 }
 
 wxString wxXmStringToString( const XmString& xmString )

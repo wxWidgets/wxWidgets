@@ -305,8 +305,8 @@ bool wxDialog::Show( bool show )
         else
             XtUnmanageChild((Widget)m_mainWidget) ;
 
-        XFlush(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()));
-        XSync(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()), FALSE);
+        XFlush(XtDisplay((Widget)m_mainWidget));
+        XSync(XtDisplay((Widget)m_mainWidget), FALSE);
     }
 
     return TRUE;
@@ -319,6 +319,9 @@ int wxDialog::ShowModal()
 
     Show(TRUE);
 
+    // after the event loop ran, the widget might already have been destroyed
+    WXDisplay* display = (WXDisplay*)XtDisplay( (Widget)m_mainWidget );
+
     if (m_modalShowing)
         return 0;
     m_eventLoop = new wxEventLoop;
@@ -329,12 +332,7 @@ int wxDialog::ShowModal()
     m_eventLoop->Run();
 
     // Now process all events in case they get sent to a destroyed dialog
-    XSync(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()), FALSE);
-    while (m_eventLoop->Pending())
-    {
-        XFlush(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()));
-        m_eventLoop->Dispatch();
-    }
+    wxFlushEvents( display );
 
     delete m_eventLoop;
     m_eventLoop = NULL;

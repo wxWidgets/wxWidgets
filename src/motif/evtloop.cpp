@@ -234,7 +234,7 @@ void ProcessXEvent(XEvent* event)
          * window is recieved. Prevents flicker as windows are resized.
          */
 
-        Display *disp = XtDisplay((Widget) wxTheApp->GetTopLevelWidget());
+        Display *disp = event->xany.display;
         Window win = event->xany.window;
         XEvent report;
 
@@ -260,7 +260,7 @@ bool CheckForAccelerator(XEvent* event)
     {
         // Find a wxWindow for this window
         // TODO: should get display for the window, not the current display
-        Widget widget = XtWindowToWidget((Display*) wxGetDisplay(),
+        Widget widget = XtWindowToWidget(event->xany.display,
                                          event->xany.window);
         wxWindow* win = NULL;
 
@@ -294,8 +294,8 @@ bool CheckForKeyDown(XEvent* event)
 {
     if (event->xany.type == KeyPress)
     {
-        Widget widget = XtWindowToWidget((Display*) wxGetDisplay(),
-                     event->xany.window);
+        Widget widget = XtWindowToWidget(event->xany.display,
+                                         event->xany.window);
         wxWindow* win = NULL;
 
         // Find the first wxWindow that corresponds to this event window
@@ -320,8 +320,8 @@ bool CheckForKeyUp(XEvent* event)
 {
     if (event->xany.type == KeyRelease)
     {
-        Widget widget = XtWindowToWidget((Display*) wxGetDisplay(),
-                         event->xany.window);
+        Widget widget = XtWindowToWidget(event->xany.display,
+                                         event->xany.window);
         wxWindow* win = NULL;
 
         // Find the first wxWindow that corresponds to this event window
