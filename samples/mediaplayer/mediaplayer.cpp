@@ -66,13 +66,6 @@
 // media from a URL, etc.
 #define wxUSE_UNOFFICIALSTUFF 0
 
-//Libraries for MSVC with optional backends
-#ifdef _MSC_VER
-    #if wxUSE_QUICKTIME
-        #pragma comment(lib,"qtmlClient.lib")
-    #endif
-#endif
-
 // ----------------------------------------------------------------------------
 // Bail out if the user doesn't want one of the
 // things we need
