@@ -85,12 +85,12 @@ unsigned char g_palette[64*3] =
   0x75, 0x93, 0x4f,
   0x91, 0xae, 0x64,
   0xad, 0xc8, 0x7a,
-  0xf0, 0xa8, 0xef, 
+  0xf0, 0xa8, 0xef,
   0xd0, 0x88, 0xd0,
   0xaf, 0x66, 0xaf,
   0x8e, 0x44, 0x8e,
   0x6d, 0x22, 0x6d,
-  0x4b, 0x0,  0x4b, 
+  0x4b, 0x0,  0x4b,
   0xff, 0xc0, 0xbc,
   0xff, 0x93, 0x91,
   0xff, 0x66, 0x67,
@@ -209,7 +209,7 @@ void wxApp::OnIdle( wxIdleEvent &event )
 bool wxApp::SendIdleEvents(void)
 {
     bool needMore = FALSE;
-    
+
     wxNode* node = wxTopLevelWindows.First();
     while (node)
     {
@@ -326,7 +326,7 @@ void wxApp::CommonInit(void)
   wxInitializeResourceSystem();
 
   wxImage::InitStandardHandlers();
-  
+
 //  g_globalCursor = new wxCursor;
 }
 
@@ -343,7 +343,7 @@ void wxApp::CommonCleanUp(void)
     wxDeleteStockLists();
 
     wxCleanUpResourceSystem();
-  
+
     wxImage::CleanUpHandlers();
 
     wxSystemSettings::Done();
@@ -402,9 +402,9 @@ int wxEntry( int argc, char *argv[] )
     strcpy( name, wxFileNameFromPath(name) );
     wxStripExtension( name );
     wxTheApp->SetAppName( name );
-  
+
     gtk_set_locale();
-  
+
     gtk_init( &argc, &argv );
 
     GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
@@ -416,19 +416,19 @@ int wxEntry( int argc, char *argv[] )
         col.green  = g_palette[i*3 + 1] << 8;
         col.blue   = g_palette[i*3 + 2] << 8;
         col.pixel  = 0;
-    
+
         gdk_color_alloc( cmap, &col );
     }
-  
+
     gtk_widget_push_colormap( cmap );
-  
+
     gtk_widget_set_default_colormap( cmap );
 
     wxApp::CommonInit();
 
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules()) return FALSE;
-    
+
     wxTheApp->OnInitGui();
 
     // Here frames insert themselves automatically
@@ -448,18 +448,18 @@ int wxEntry( int argc, char *argv[] )
     wxTheApp->OnExit();
 
     wxModule::CleanUpModules();
-  
+
     wxApp::CommonCleanUp();
 
     delete wxTheApp;
     wxTheApp = (wxApp*) NULL;
 
     wxClassInfo::CleanUpClasses();
-  
+
     delete[] wxBuffer;
-  
+
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-  
+
     if (wxDebugContext::CountObjectsLeft() > 0)
     {
         wxLogDebug("There were memory leaks.\n");
@@ -467,7 +467,7 @@ int wxEntry( int argc, char *argv[] )
         wxDebugContext::PrintStatistics();
     }
 //  wxDebugContext::SetStream(NULL, NULL);
-  
+
 #endif
 
     wxLog *oldLog = wxLog::SetActiveTarget( NULL );
@@ -477,17 +477,7 @@ int wxEntry( int argc, char *argv[] )
 }
 
 //-----------------------------------------------------------------------------
-// main()
-//-----------------------------------------------------------------------------
 
-#if defined(AIX) || defined(AIX4) || defined(____HPUX__) || defined(NOMAIN)
 
- // main in IMPLEMENT_WX_MAIN in IMPLEMENT_APP in app.h
-
-#else
-
-  int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
-
-#endif
 
 

@@ -96,6 +96,7 @@ LIB_CPP_SRC=\
  gtk/gdiobj.cpp \
  gtk/icon.cpp \
  gtk/listbox.cpp \
+ gtk/main.cpp \
  gtk/mdi.cpp \
  gtk/menu.cpp \
  gtk/minifram.cpp \
