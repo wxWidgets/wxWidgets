@@ -80,11 +80,11 @@ Source: "distrib\msw\MSVCP60.dll";       DestDir: "{code:GetPythonDir}"; CopyMod
 
 Source: "%(WXDIR)s\lib\vc_dll\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\wx"; Components: core
 %(MSLU)s
-Source: "wx\_core.pyd";                        DestDir: "{app}\wx"; Components: core
-Source: "wx\_gdi.pyd";                         DestDir: "{app}\wx"; Components: core
-Source: "wx\_windows.pyd";                     DestDir: "{app}\wx"; Components: core
-Source: "wx\_controls.pyd";                    DestDir: "{app}\wx"; Components: core
-Source: "wx\_misc.pyd";                        DestDir: "{app}\wx"; Components: core
+Source: "wx\_core_.pyd";                       DestDir: "{app}\wx"; Components: core
+Source: "wx\_gdi_.pyd";                        DestDir: "{app}\wx"; Components: core
+Source: "wx\_windows_.pyd";                    DestDir: "{app}\wx"; Components: core
+Source: "wx\_controls_.pyd";                   DestDir: "{app}\wx"; Components: core
+Source: "wx\_misc_.pyd";                       DestDir: "{app}\wx"; Components: core
 Source: "wx\_calendar.pyd";                    DestDir: "{app}\wx"; Components: core
 Source: "wx\_grid.pyd";                        DestDir: "{app}\wx"; Components: core
 Source: "wx\_html.pyd";                        DestDir: "{app}\wx"; Components: core
@@ -101,7 +101,7 @@ Source: "wx\_xrc.pyd";                         DestDir: "{app}\wx"; Components: 
 Source: "wx\*.py";                             DestDir: "{app}\wx"; Components: core
 Source: "wx\build\*.py";                       DestDir: "{app}\wx\build"; Components: core
 Source: "wx\lib\*.py";                         DestDir: "{app}\wx\lib"; Components: core
-Source: "wx\lib\*.wdr";                        DestDir: "{app}\wx\lib"; Components: core
+;;Source: "wx\lib\*.wdr";                        DestDir: "{app}\wx\lib"; Components: core
 Source: "wx\lib\colourchooser\*.py";           DestDir: "{app}\wx\lib\colourchooser"; Components: core
 Source: "wx\lib\editor\*.py";                  DestDir: "{app}\wx\lib\editor"; Components: core
 Source: "wx\lib\editor\*.txt";                 DestDir: "{app}\wx\lib\editor"; Components: core
@@ -434,7 +434,7 @@ def find_DLLs():
 
     WXDLLVER = PYTHONVER = None
 
-    proc = os.popen(r"dumpbin /imports wx\_core.pyd", "r")
+    proc = os.popen(r"dumpbin /imports wx\_core_.pyd", "r")
     lines = proc.readlines()
     proc.close()
     for line in lines:
@@ -530,7 +530,10 @@ def main():
     f.write(IFS_Template % vars())
     f.close()
 
-    os.system(ISCC % (os.environ['TOOLS'], ISSFILE))
+    TOOLS = os.environ['TOOLS']
+    if TOOLS.startswith('/cygdrive'):
+        TOOLS = r"c:\TOOLS"  # temporary hack until I convert everything over to bash
+    os.system(ISCC % (TOOLS, ISSFILE))
 
     if not KEEP_TEMPS:
         time.sleep(1)
