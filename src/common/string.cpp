@@ -899,8 +899,13 @@ wxString& wxString::Pad(size_t nCount, char chPad, bool bFromRight)
 // truncate the string
 wxString& wxString::Truncate(size_t uiLen)
 {
-  *(m_pchData + uiLen) = '\0';
-  GetStringData()->nDataLength = uiLen;
+  if ( uiLen < Len() ) {
+    CopyBeforeWrite();
+
+    *(m_pchData + uiLen) = '\0';
+    GetStringData()->nDataLength = uiLen;
+  }
+  //else: nothing to do, string is already short enough
 
   return *this;
 }
