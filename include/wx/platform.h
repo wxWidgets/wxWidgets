@@ -167,6 +167,13 @@
         #define LINKAGEMODE _Optlink
     #endif
     #define wxSIZE_T_IS_UINT
+
+#elif defined(__DOS__)
+    /* size_t is the same as unsigned int for Watcom 11 compiler, */
+    /* so define it if it hadn't been done by configure yet */
+    #if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
+        #define wxSIZE_T_IS_UINT
+    #endif
 #else   /* Windows */
     #ifndef __WINDOWS__
         #define __WINDOWS__
