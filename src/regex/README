@@ -1,3 +1,35 @@
+wxWindows regex
+----------------
+This is a version of Henry Spencer's regex,
+which was taken from postresql, which was
+taken from the source of TCL (Toolkit Command Language).
+
+This is version of Henry Spencer's library is
+modified by the wxWindows team.  The modifications
+made by the wxWindows team are as follows:
+regcustom.h (all code)
+regex.h (function wrappers, other)
+regc_locale.c (A function or two).
+All the rest (Using standard c library routines instead of
+              postresql routines, various cleanup/optimizations)
+
+The code that is wxWindows-specific is as follows:
+regcustom.h (all code, see comments on how to replace)
+regex.h (where noted with comments, compiler workarounds)
+regcomp.c (a few of the functions prefixed with wx_,
+	   these may be replaced by c library routines)
+
+This newer library was chosen over the old one because
+Henry Spencer's old library did not support unicode and
+had some other bugs that were fixed by this one, and
+the license was incompatible with the wxWindows license
+and the gpl.
+
+Modifications made by the wxWindows team are not licensed.
+
+
+The original readme (from the TCL distribution) follows:
+
 alpha3.8 release.
 Tue Aug 10 15:51:48 EDT 1999
 henry@spsystems.net  (formerly henry@zoo.toronto.edu)
