@@ -480,15 +480,19 @@ int dlclose(void *handle)
     return 0;
 }
 
-void *dlsym(void *WXUNUSED(handle), const char *symbol)
+void *dlsym(void *handle, const char *symbol)
 {
     void *addr;
+    
+    NSSymbol nsSymbol = NSLookupSymbolInModule( handle , symbol ) ;
 
-    if (NSIsSymbolNameDefined(symbol)) {
-	addr = NSAddressOfSymbol(NSLookupAndBindSymbol(symbol));
+    if ( nsSymbol) 
+    {
+	    addr = NSAddressOfSymbol(nsSymbol);
     }
-    else {
-	addr = NULL;
+    else 
+    {
+	    addr = NULL;
     }
     return addr;
 }
