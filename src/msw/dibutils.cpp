@@ -72,60 +72,6 @@
                 (GlobalUnlockPtr(lp), (BOOL)GlobalFree(GlobalPtrHandle(lp)))
 #endif
 
-
-/*
- *  Clear the System Palette so that we can ensure an identity palette
- *  mapping for fast performance.
- */
-
-void wxClearSystemPalette(void)
-{
-  //*** A dummy palette setup
-  struct
-  {
-    WORD Version;
-    WORD NumberOfEntries;
-    PALETTEENTRY aEntries[256];
-  } Palette =
-  {
-    0x300,
-    256
-  };
-
-  HPALETTE ScreenPalette = 0;
-  HDC ScreenDC;
-  int Counter;
-  UINT nMapped = 0;
-  BOOL bOK = FALSE;
-  int  nOK = 0;
-
-  // *** Reset everything in the system palette to black
-  for(Counter = 0; Counter < 256; Counter++)
-  {
-    Palette.aEntries[Counter].peRed = 0;
-   Palette.aEntries[Counter].peGreen = 0;
-    Palette.aEntries[Counter].peBlue = 0;
-    Palette.aEntries[Counter].peFlags = PC_NOCOLLAPSE;
-  }
-
-  // *** Create, select, realize, deselect, and delete the palette
-  ScreenDC = GetDC(NULL);
-  ScreenPalette = CreatePalette((LOGPALETTE *)&Palette);
-
-  if (ScreenPalette)
-  {
-   ScreenPalette = SelectPalette(ScreenDC,ScreenPalette,FALSE);
-   nMapped = RealizePalette(ScreenDC);
-    ScreenPalette = SelectPalette(ScreenDC,ScreenPalette,FALSE);
-    bOK = DeleteObject(ScreenPalette);
-  }
-
-  nOK = ReleaseDC(NULL, ScreenDC);
-
-  return;
-}
-
-
 /*
  *   Open a DIB file and return a MEMORY DIB, a memory handle containing..
  *
@@ -142,8 +88,7 @@ int wxDibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
    fh = OpenFile(wxConvFile.cWX2MB(szFile), &of, OF_WRITE | OF_CREATE);
 
   if (!fh) {
-//   printf("la regamos0");
-   return 0;
+    return 0;
   }
 
   long size = wxDibSize(lpbi);

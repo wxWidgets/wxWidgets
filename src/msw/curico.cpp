@@ -36,50 +36,6 @@
 #include "wx/string.h"
 
 //*****************************************************************************
-//* Function : ReadIconFile()                                                 *
-//* Purpose  : Reads an icon resource file and creates an icon based on that  *
-//*            information.                                                   *
-//* Parameters : char *szFileName - The icon resource file.                   *
-//* Returns :  A handle to an icon. The handle will be NULL if an icon cannot *
-//*            be created for any reason.                                     *
-//*****************************************************************************
-
-HICON ReadIconFile( wxChar *szFileName, HINSTANCE hInst, int *W, int *H)
-{ HICON   hIcon;
-  HANDLE  hDIB;
-
-  if( (hDIB = ReadIcon(szFileName, W, H)) == (HANDLE) NULL)
-                                          // read the icon DIB from file
-    return (HICON) NULL;
-  hIcon = MakeIcon( hDIB, hInst);         // create an icon from DIB
-  GlobalFree( hDIB);
-  return hIcon;
-}
-
-//*****************************************************************************
-//* Function : CursorToIcon()                                                 *
-//* Purpose  : Reads a cursor resource file and creates an icon based on that *
-//*            information.                                                   *
-//* Parameters : char *szFileName - The cursor resource file.                 *
-//* Returns :  A handle to an icon. The handle will be NULL if an icon cannot *
-//*            be created for any reason.                                     *
-//* Comments : A cursor is monochrome. So, the resulting icon will also be    *
-//*            monochrome.                                                    *
-//*****************************************************************************
-
-HICON CursorToIcon( wxChar *szFileName, HINSTANCE hInst, int *W, int *H)
-{ HANDLE  hDIB;     // Handle to DIB memory
-  HICON   hIcon;    // Handle to Icon
-
-  if( (hDIB = ReadCur( szFileName, NULL, W, H)) == (HANDLE) NULL)
-                                                    // Read cursor DIB
-    return (HICON) NULL;
-  hIcon = MakeIcon( hDIB, hInst);      // make icon from cursor DIB
-  GlobalFree( hDIB);
-  return hIcon;
-}
-
-//*****************************************************************************
 //* Function : ReadIcon()                                                     *
 //* Purpose  : Reads an icon resource file and extracts the DIB information.  *
 //* Parameters : char *szFileName - The icon resource file.                   *
@@ -268,35 +224,6 @@ HICON MakeIcon( HANDLE hDIB, HINSTANCE hInst)
   return hIcon;
 }
 
-// **************************************************************************
-
-//*****************************************************************************
-//* Function : ReadCursorFile()                                               *
-//* Purpose  : Reads a cursor resource file and creates a cursor based on that*
-//*            information.                                                   *
-//* Parameters : char *szFileName - The cursor resource file.                 *
-//* Returns :  A handle to a cursor. The handle will be NULL if a cursor can't*
-//*            be created for any reason.                                     *
-//*****************************************************************************
-
-HCURSOR ReadCursorFile( wxChar *szFileName, HINSTANCE hInst, int *W, int *H,
-                        int *XHot, int *YHot)
-{ HANDLE    hDIB;    // Handle to DIB memory
-  HCURSOR   hCursor;
-  POINT     ptHotSpot;
-
-  // read cur DIB from file
-  if( (hDIB = ReadCur( szFileName, (LPPOINT )&ptHotSpot, W, H)) == (HANDLE) NULL)
-    return (HCURSOR) NULL;
-  hCursor = MakeCursor( hDIB, (LPPOINT )&ptHotSpot, hInst);//create cur from DIB
-  if(XHot != 0)
-    *XHot = ptHotSpot.x;
-  if(YHot != 0)
-    *YHot = ptHotSpot.y;
-  GlobalFree( hDIB);
-  return ( hCursor);
-}
-
 //*****************************************************************************
 //* Function : IconToCursor()                                                 *
 //* Purpose  : Reads an icon resource file and creates a cursor based on that *
@@ -408,112 +335,6 @@ HANDLE ReadCur( wxChar *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
   }
   GlobalUnlock( hDIB);
   return( hDIB);
-}
-
-//*****************************************************************************
-//* Function : ColorDDBToMonoDDB()                                            *
-//* Purpose  : Converts a color bitmap to a monochrome bitmap.                *
-//* Parameters : HBITMAP hbm - The color bitmap.                              *
-//* Returns :  A handle to a monochrome bitmap.                               *
-//*****************************************************************************
-HBITMAP ColorDDBToMonoDDB ( HBITMAP hbm)
-{ BITMAP              bm;
-  BITMAPINFOHEADER    bi;
-  LPBITMAPINFOHEADER  lpbi;
-  DWORD               dwLen;
-  HANDLE              hdib;
-  HANDLE              h;
-  HDC                 hdc;
-  HBITMAP             hbmMono;
-
-  GetObject( hbm, sizeof( bm), (LPSTR )&bm);
-
-  bi.biSize           = sizeof( BITMAPINFOHEADER);    // size of this structure
-  bi.biWidth          = bm.bmWidth;                   // bitmap width in pixels
-  bi.biHeight         = bm.bmHeight;                  // bitmap height in pixels
-  bi.biPlanes         = 1;                            // # of planes always 1 for DIBs
-  bi.biBitCount       = bm.bmPlanes * bm.bmBitsPixel; // color bits per pixel
-  bi.biCompression    = BI_RGB;                       // no compression
-  bi.biSizeImage      = 0;                            // 0 means default size
-  bi.biXPelsPerMeter  = 0;                            // not used
-  bi.biYPelsPerMeter  = 0;                            // not used
-  bi.biClrUsed        = 0;                            // 0 means default colors
-  bi.biClrImportant   = 0;                            // 0 means defaults
-
-  dwLen = bi.biSize + PaletteSize((LPSTR)&bi);
-
-  hdc = GetDC( (HWND) NULL);
-
-  hdib = GlobalAlloc( GHND, dwLen);
-  if (hdib == (HANDLE) NULL)
-  {
-    ReleaseDC( (HWND) NULL, hdc);
-    return (HBITMAP) NULL;
-  }
-
-#ifdef __WINDOWS_386__
-  lpbi = (LPBITMAPINFOHEADER )MK_FP32(GlobalLock( hdib));
-#else
-  lpbi = (LPBITMAPINFOHEADER )GlobalLock( hdib);
-#endif
-
-  *lpbi = bi;
-
-  // Call GetDIBits with a NULL lpBits parameter; it will calculate
-  // the biSizeImage field.
-  GetDIBits( hdc, hbm, 0, (WORD)bi.biHeight,
-             NULL, (LPBITMAPINFO)lpbi, DIB_RGB_COLORS);
-
-  bi = *lpbi;
-  GlobalUnlock( hdib);
-
-  // If the driver did not fill in the biSizeImage field, make one up.
-  if(bi.biSizeImage == 0)
-    bi.biSizeImage = WIDTHBYTES( (DWORD )bm.bmWidth * bi.biBitCount) * bm.bmHeight;
-
-  // Reallocate the buffer big enough to hold all the bits.
-  dwLen = bi.biSize + PaletteSize((LPSTR)&bi) + bi.biSizeImage;
-  if( (h = GlobalReAlloc( hdib, dwLen, 0)) != 0)
-    hdib = h;
-  else
-  {
-    GlobalFree( hdib);
-    ReleaseDC( (HWND) NULL, hdc);
-    return (HBITMAP) NULL;
-  }
-
-  // Call GetDIBits with a NON-NULL lpBits parameter, to actually
-  // get the bits this time.
-
-#ifdef __WINDOWS_386__
-  lpbi = (LPBITMAPINFOHEADER )MK_FP32(GlobalLock( hdib));
-#else
-  lpbi = (LPBITMAPINFOHEADER )GlobalLock( hdib);
-#endif
-
-  if( GetDIBits( hdc, hbm, 0, (WORD)bi.biHeight,
-                 (LPSTR)lpbi + (WORD)lpbi->biSize + PaletteSize((LPSTR)lpbi),
-                 (LPBITMAPINFO)lpbi, DIB_RGB_COLORS) == 0)
-  {
-    GlobalUnlock( hdib);
-    hdib = (HANDLE) NULL;
-    ReleaseDC( (HWND) NULL, hdc);
-    return (HBITMAP) NULL;
-  }
-
-  // Finally, create a monochrome DDB, and put the DIB into
-  // it. SetDIBits does smart color conversion.
-  hbmMono = CreateBitmap((WORD)lpbi->biWidth, (WORD)lpbi->biHeight, 1, 1, NULL);
-  SetDIBits( hdc, hbmMono, (WORD)0, (WORD)lpbi->biHeight,
-             (LPSTR)lpbi + (int )lpbi->biSize + PaletteSize((LPSTR)lpbi),
-             (LPBITMAPINFO)lpbi, DIB_RGB_COLORS);
-
-  bi = *lpbi;
-  GlobalUnlock( hdib);
-  GlobalFree( hdib);
-
-  ReleaseDC((HWND) NULL, hdc);
-  return hbmMono;
 }
 
 //*****************************************************************************
@@ -629,29 +450,6 @@ HCURSOR MakeCursor( HANDLE hDIB, LPPOINT lpptHotSpot, HINSTANCE hInst)
 }
 
 //*****************************************************************************
-//* Function : PaletteSize()                                                  *
-//* Purpose  : Calculates the palette size in bytes. If the info. block is of *
-//*            the BITMAPCOREHEADER type, the number of colors is multiplied  *
-//*            by sizeof(RGBTRIPLE) to give the palette size, otherwise the   *
-//*            number of colors is multiplied by sizeof(RGBQUAD).             *
-//* Parameters : LPSTR pv - pointer to the BITMAPINFOHEADER                   *
-//* Returns :  The size of the palette.                                       *
-//*****************************************************************************
-
-WORD PaletteSize( LPSTR pv)
-{ LPBITMAPINFOHEADER  lpbi;
-  WORD                NumColors;
-
-  lpbi      = (LPBITMAPINFOHEADER )pv;
-  NumColors = DIBNumColors((LPSTR )lpbi);
-
-  if(lpbi->biSize == sizeof( BITMAPCOREHEADER))  // OS/2 style DIBs
-    return (WORD)(NumColors * sizeof( RGBTRIPLE));
-  else
-    return (WORD)(NumColors * sizeof( RGBQUAD));
-}
-
-//*****************************************************************************
 //* Function : DIBNumColors()                                                 *
 //* Purpose  : This function calculates the number of colors in the DIB's     *
 //*            color table by finding the bits per pixel for the DIB (whether *
@@ -698,70 +496,7 @@ WORD DIBNumColors ( LPSTR pv)
   }
 }
 
-#if 0
-// ******************************************************************
-BOOL fGetXPixmap( BOOL fIsIcon, wxChar *szFileName, HINSTANCE hInst,
-                  char cData[], int &width, int &height)
-{ HDC       hdc,
-            hdcMemory;
-  HBITMAP   hbmp,
-            holdbmp;
-  int       i,
-            j,
-            w,
-            h;
-  BYTE     *s,
-            cByte,
-            cMask;
-  COLORREF  rgb;
-  HCURSOR   hIconOrCursor = fIsIcon ?
-                      IconToCursor( szFileName, hInst, 0, 0, &w, &h)
-                    : ReadCursorFile( szFileName, hInst, &w, &h, 0, 0);
-  int       sum;
-
-  if(hIconOrCursor == 0)
-    return FALSE;
-
-  hdc       = GetDC( GetDesktopWindow());
-  hdcMemory = CreateCompatibleDC( hdc);
-  hbmp      = CreateCompatibleBitmap( hdc, w, h);
-  holdbmp   = SelectObject( hdcMemory, hbmp);
-  PatBlt( hdcMemory, 0, 0, w, h, BLACKNESS); // or use WHITENESS??
-  DrawIcon( hdcMemory, 0, 0, hIconOrCursor); //using HCURSOR with DrawIcon is OK
-
-  // the data retrieval follows:
-  width  = w;
-  height = h;
-  for( j = 0, s = (BYTE *)cData ; j < h ; ++j)
-    for( i = 0 ; i < w ; ++i, cMask >>= 1)
-    {
-      if( (i % 8) == 0)
-      {
-        cByte = 0;
-        cMask = 0x80;
-      }
-      rgb  = GetPixel( hdcMemory, i, j);
-      sum  = (int )(rgb & 0xFFL);
-      sum += (int )((rgb & 0xFF00L) >> 8);
-      sum += (int )((rgb & 0xFF0000L) >> 16);
-      if(sum > 381)
-        cByte = cByte | cMask;
-      if( (i % 8) == 7)
-      {
-        *s = cByte;
-        ++s;
-      }
-    }
-  SelectObject( hdcMemory, holdbmp);
-  DeleteDC( hdcMemory);
-  ReleaseDC( GetDesktopWindow(), hdc);
-  DestroyCursor( hIconOrCursor);
-  DeleteObject( hbmp);
-  return TRUE;
-}
-#endif
-
-// Added from scavenged internet code, JACS 23/6/95
+// Added JACS 23/6/95
 HCURSOR MakeCursorFromBitmap(HINSTANCE hInst, HBITMAP hBitmap, POINT *pPoint)
 {
   HDC hDCColor, hDCMono;
@@ -840,83 +575,5 @@ HCURSOR MakeCursorFromBitmap(HINSTANCE hInst, HBITMAP hBitmap, POINT *pPoint)
   LocalFree(LocalHandle((LPCVOID) xorBits));
 #endif
   return hNewCursor;
-}
-
-/*
- * This doesn't work: just gives us a grey square. Ideas, anyone?
- */
-
-HICON MakeIconFromBitmap(HINSTANCE hInst, HBITMAP hBitmap)
-{
-  HDC hDCColor, hDCMono;
-  HDC hDC;
-  HBITMAP   hBmpOld;
-  HBITMAP   hAndBmp;
-  HBITMAP   hXorBmp;
-  HICON     hNewIcon;
-  BITMAP    bm;
-  DWORD     dwBytes;
-  NPSTR     andBits;
-  NPSTR     xorBits;
-
-  hDC = GetDC((HWND) NULL);
-  hDCColor = CreateCompatibleDC(hDC);
-  hDCMono = CreateCompatibleDC(hDC);
-  hAndBmp = CreateCompatibleBitmap(hDCMono, 32, 32);
-  hXorBmp = CreateCompatibleBitmap(hDCMono, 32, 32);
-
-  hBmpOld = (HBITMAP) SelectObject(hDCColor, hBitmap);
-  SelectObject(hDCMono, hAndBmp);
-  SetBkColor(hDCColor, RGB(191, 191, 191));
-
-  BitBlt(hDCMono, 0, 0, 32, 32, hDCColor, 0, 0, SRCCOPY);
-
-  // Now we have the AND Mask
-
-  GetObject(hAndBmp, sizeof(BITMAP), (LPSTR) &bm);
-  dwBytes = (bm.bmWidthBytes * bm.bmHeight);
-  andBits = (NPSTR) LocalAlloc(LPTR, dwBytes);
-  GetBitmapBits(hAndBmp, dwBytes, andBits);
-
-  SelectObject(hDCMono, hXorBmp);
-  SetBkColor(hDCColor, RGB(0, 0, 0));
-
-  BitBlt(hDCMono, 0, 0, 32, 32, hDCColor, 0, 0, SRCCOPY);
-
-  // Now we have the XOR Mask
-
-  GetObject(hXorBmp, sizeof(BITMAP), (LPSTR) &bm);
-  dwBytes = (bm.bmWidthBytes * bm.bmHeight);
-  xorBits = (NPSTR) LocalAlloc(LPTR, dwBytes);
-  GetBitmapBits(hXorBmp, dwBytes, xorBits);
-
-  hNewIcon = CreateIcon(hInst, 1, 4, 32, 32, (unsigned char *)andBits, (unsigned char *)xorBits);
-
-  SelectObject(hDCColor, hBmpOld);
-  SelectObject(hDCMono, hBmpOld);
-  DeleteDC(hDCColor);
-  DeleteDC(hDCMono);
-  DeleteObject(hAndBmp);
-  DeleteObject(hXorBmp);
-  ReleaseDC((HWND) NULL, hDC);
-#ifndef __WIN32__
-#ifdef STRICT
-  LocalUnlock(LocalHandle((void NEAR*) andBits));
-  LocalUnlock(LocalHandle((void NEAR*) xorBits));
-  LocalFree(LocalHandle((void NEAR*) andBits));
-  LocalFree(LocalHandle((void NEAR*) xorBits));
-#else
-  LocalUnlock(LocalHandle((WORD) andBits));
-  LocalUnlock(LocalHandle((WORD) xorBits));
-  LocalFree(LocalHandle((WORD) andBits));
-  LocalFree(LocalHandle((WORD) xorBits));
-#endif
-#else
-  LocalUnlock(LocalHandle((LPCVOID) andBits));
-  LocalUnlock(LocalHandle((LPCVOID) xorBits));
-  LocalFree(LocalHandle((LPCVOID) andBits));
-  LocalFree(LocalHandle((LPCVOID) xorBits));
-#endif
-  return hNewIcon;
 }
 

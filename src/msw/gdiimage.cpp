@@ -494,6 +494,16 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     HICON hicon = ReadIconFile((wxChar *)name.c_str(),
                                wxGetInstance(),
                                &size.x, &size.y);
+    HICON   hIcon = 0;
+    HANDLE  hDIB = 0;
+
+    // Read the icon DIB from file
+    if( (hDIB = ReadIcon((wxChar *)name.c_str(), &size.x, &size.y)) == (HANDLE) NULL)
+        return false;
+
+    // Create an icon from DIB
+    hicon = MakeIcon( hDIB, wxGetInstance());
+    GlobalFree( hDIB);
 #endif // Win32/Win16
 
     if ( (desiredWidth != -1 && desiredWidth != size.x) ||

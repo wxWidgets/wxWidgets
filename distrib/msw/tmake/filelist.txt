@@ -289,7 +289,6 @@ dde.cpp	MSW	LowLevel,Base
 dialog.cpp	MSW
 dialup.cpp	MSW	LowLevel
 dib.cpp	MSW	LowLevel
-dibutils.cpp	MSW
 dir.cpp	MSW	Base
 dirdlg.cpp	MSW	Win32Only,LowLevel
 display.cpp	MSW	Win32Only,LowLevel
@@ -1292,7 +1291,6 @@ dcscreen.h	MSWH
 dde.h	MSWH	Base
 dialog.h	MSWH
 dib.h	MSWH
-dibutils.h	MSWH
 dirdlg.h	MSWH
 dragimag.h	MSWH
 enhmeta.h	MSWH	Win32Only

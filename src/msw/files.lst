@@ -191,7 +191,6 @@ ALL_SOURCES = \
 		msw/dialog.cpp \
 		msw/dialup.cpp \
 		msw/dib.cpp \
-		msw/dibutils.cpp \
 		msw/dir.cpp \
 		msw/dirdlg.cpp \
 		msw/dragimag.cpp \
@@ -562,7 +561,6 @@ ALL_HEADERS = \
 		msw/dde.h \
 		msw/dialog.h \
 		msw/dib.h \
-		msw/dibutils.h \
 		msw/dirdlg.h \
 		msw/dragimag.h \
 		msw/enhmeta.h \
@@ -895,7 +893,6 @@ GUIOBJS = \
 		dialog.o \
 		dialup.o \
 		dib.o \
-		dibutils.o \
 		dir.o \
 		dirdlg.o \
 		dragimag.o \

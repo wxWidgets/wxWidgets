@@ -133,7 +133,6 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\dialog.obj \
 		$(MSWDIR)\dialup.obj \
 		$(MSWDIR)\dib.obj \
-		$(MSWDIR)\dibutils.obj \
 		$(MSWDIR)\dir.obj \
 		$(MSWDIR)\dirdlg.obj \
 		$(MSWDIR)\dragimag.obj \
@@ -773,8 +772,6 @@ $(MSWDIR)\dialog.obj: $(MSWDIR)\dialog.$(SRCSUFF)
 $(MSWDIR)\dialup.obj: $(MSWDIR)\dialup.$(SRCSUFF)
 
 $(MSWDIR)\dib.obj: $(MSWDIR)\dib.$(SRCSUFF)
-
-$(MSWDIR)\dibutils.obj: $(MSWDIR)\dibutils.$(SRCSUFF)
 
 $(MSWDIR)\dir.obj: $(MSWDIR)\dir.$(SRCSUFF)
 

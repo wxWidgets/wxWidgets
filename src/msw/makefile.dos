@@ -234,7 +234,6 @@ MSWOBJS1 = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\dialog.obj \
 		$(MSWDIR)\dialup.obj \
 		$(MSWDIR)\dib.obj \
-		$(MSWDIR)\dibutils.obj \
 		$(MSWDIR)\dir.obj \
 		$(MSWDIR)\dragimag.obj \
 		$(MSWDIR)\evtloop.obj \

@@ -327,37 +327,37 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame( (wxFrame *)NULL, -1, _T("wxDragImage sample"),
-                  wxPoint(20,20), wxSize(470,360) )
+: wxFrame( (wxFrame *)NULL, -1, _T("wxDragImage sample"),
+          wxPoint(20,20), wxSize(470,360) )
 {
-  wxMenu *file_menu = new wxMenu();
-  file_menu->Append( wxID_ABOUT, _T("&About..."));
-  file_menu->Append( TEST_USE_SCREEN, _T("&Use whole screen for dragging"), _T("Use whole screen"), TRUE);
-  file_menu->Append( wxID_EXIT, _T("E&xit"));
-
-  wxMenuBar *menu_bar = new wxMenuBar();
-  menu_bar->Append(file_menu, _T("&File"));
-
-  SetMenuBar( menu_bar );
-
-  CreateStatusBar(2);
-  int widths[] = { -1, 100 };
-  SetStatusWidths( 2, widths );
-
-  m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
+    wxMenu *file_menu = new wxMenu();
+    file_menu->Append( wxID_ABOUT, _T("&About..."));
+    file_menu->Append( TEST_USE_SCREEN, _T("&Use whole screen for dragging"), _T("Use whole screen"), TRUE);
+    file_menu->Append( wxID_EXIT, _T("E&xit"));
+    
+    wxMenuBar *menu_bar = new wxMenuBar();
+    menu_bar->Append(file_menu, _T("&File"));
+    
+    SetMenuBar( menu_bar );
+    
+    CreateStatusBar(2);
+    int widths[] = { -1, 100 };
+    SetStatusWidths( 2, widths );
+    
+    m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 {
-  Close( TRUE );
+    Close( TRUE );
 }
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
     (void)wxMessageBox( _T("wxDragImage demo\n")
-                        _T("Julian Smart (c) 2000"),
-                        _T("About wxDragImage Demo"), 
-                        wxICON_INFORMATION | wxOK );
+        _T("Julian Smart (c) 2000"),
+        _T("About wxDragImage Demo"), 
+        wxICON_INFORMATION | wxOK );
 }
 
 //-----------------------------------------------------------------------------

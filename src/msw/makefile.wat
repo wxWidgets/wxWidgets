@@ -242,7 +242,6 @@ MSWOBJS = $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\dialog.obj &
 	$(OUTPUTDIR)\dialup.obj &
 	$(OUTPUTDIR)\dib.obj &
-	$(OUTPUTDIR)\dibutils.obj &
 	$(OUTPUTDIR)\dir.obj &
 	$(OUTPUTDIR)\dirdlg.obj &
 	$(OUTPUTDIR)\dragimag.obj &
@@ -463,9 +462,6 @@ $(OUTPUTDIR)\dialup.obj:     $(MSWDIR)\dialup.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\dib.obj:     $(MSWDIR)\dib.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
-$(OUTPUTDIR)\dibutils.obj:     $(MSWDIR)\dibutils.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\dir.obj:     $(MSWDIR)\dir.cpp

@@ -167,6 +167,12 @@ wxMiscellaneous
 - wxLocale Extension (eg Currency)
 - wxStreams review
 - wxURL?
+- a way to tell wxWindows to check for any non-portable usage,
+  for a given set of platforms. Sometimes you want to be able
+  to get away with non-portable usage, and sometimes not.
+  This is probably way too time-consuming to implement.
+- In headers, don't silently omit contents if the features for this
+  header is switched off. Instead, emit an error message.
 
 
 Version:      $Id$

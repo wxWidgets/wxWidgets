@@ -9,25 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-/***************************************************************************
-
-    (C) Copyright 1994 Microsoft Corp.  All rights reserved.
-
-    You have a royalty-free right to use, modify, reproduce and 
-    distribute the Sample Files (and/or any modified version) in 
-    any way you find useful, provided that you agree that 
-	 Microsoft has no warranty obligations or liability for any
-    Sample Application Files which are modified. 
-
- **************************************************************************/
-
-/***************************************************************************
-    Functions for handling Device Independent Bitmaps and clearing the 
-	 System Palette.
- **************************************************************************/
-
-#ifndef SAMPLES_UTILS_H  
-#define SAMPLES_UTILS_H
+#ifndef _DIBUTILS_H
+#define _DIBUTILS_H
 
 #ifdef __GNUG__
 #pragma interface "dibutils.h"
@@ -40,13 +23,12 @@ typedef     HANDLE             HDIB;
    External function declarations
  **************************************************************************/
 
-void        wxClearSystemPalette(void);
-PDIB        wxDibOpenFile(LPTSTR szFile);  
-int 			wxDibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi);
+PDIB        wxDibOpenFile(LPTSTR szFile);
+int         wxDibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi);
 BOOL        wxDibSetUsage(PDIB pdib, HPALETTE hpal,UINT wUsage);
 PDIB        wxDibCreate(int bits, int dx, int dy);
 BOOL        wxDibMapToPalette(PDIB pdib, HPALETTE hpal);
-HPALETTE wxMakePalette(const BITMAPINFO FAR* Info, UINT flags);
+HPALETTE    wxMakePalette(const BITMAPINFO FAR* Info, UINT flags);
 
 /****************************************************************************
    Internal function declarations
@@ -130,3 +112,4 @@ PDIB        wxDibReadBitmapInfo(HFILE fh);
 #endif
 
 #endif
+    // _DIBUTILS_H

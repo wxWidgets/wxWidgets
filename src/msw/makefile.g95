@@ -311,7 +311,6 @@ MSWOBJS     = \
 		$(MSWDIR)/dialog.$(OBJSUFF) \
 		$(MSWDIR)/dialup.$(OBJSUFF) \
 		$(MSWDIR)/dib.$(OBJSUFF) \
-		$(MSWDIR)/dibutils.$(OBJSUFF) \
 		$(MSWDIR)/dragimag.$(OBJSUFF) \
 		$(MSWDIR)/enhmeta.$(OBJSUFF) \
 		$(MSWDIR)/evtloop.$(OBJSUFF) \

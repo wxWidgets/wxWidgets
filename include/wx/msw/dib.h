@@ -170,16 +170,16 @@ extern WXDLLEXPORT wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbi);
 // the rest is defined in dib.cpp
 
 // Save (device dependent) wxBitmap as a DIB
-bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *colourmap = NULL);
+bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *palette = NULL);
 
 // Load device independent bitmap into device dependent bitmap
-wxBitmap *wxLoadBitmap(wxChar *filename, wxPalette **colourmap = NULL);
+wxBitmap *wxLoadBitmap(wxChar *filename, wxPalette **palette = NULL);
 
 // Load into existing bitmap;
 bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal = NULL);
 
 HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal);
-BOOL   wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
+bool   wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
 HANDLE wxReadDIB2(LPTSTR lpFileName);
 LPSTR wxFindDIBBits (LPSTR lpbi);
 HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo);

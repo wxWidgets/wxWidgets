@@ -300,7 +300,6 @@ MSWOBJS = $(MSWDIR)\$D\accel.obj \
 		$(MSWDIR)\$D\dialog.obj \
 		$(MSWDIR)\$D\dialup.obj \
 		$(MSWDIR)\$D\dib.obj \
-		$(MSWDIR)\$D\dibutils.obj \
 		$(MSWDIR)\$D\dir.obj \
 		$(MSWDIR)\$D\dirdlg.obj \
 		$(MSWDIR)\$D\display.obj \
