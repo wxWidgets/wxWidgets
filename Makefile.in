@@ -485,11 +485,12 @@ uninstall:
 	@$(RM) $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h
 	@$(RM) $(bindir)/wx-config
 	@$(RM) $(bindir)/wx@TOOLCHAIN_NAME@-config
-	@$(RM) $(datadir)/wx/afm/*
-	@$(RM) $(datadir)/wx/gs_afm/*
+	@$(RM) $(datadir)/wx/$(VER_MAJMIN)/afm/*
+	@$(RM) $(datadir)/wx/$(VER_MAJMIN)/gs_afm/*
 # FIXME: wxBase doesnt install these next 3 dirs.
-	@-rmdir $(datadir)/wx/gs_afm
-	@-rmdir $(datadir)/wx/afm
+	@-rmdir $(datadir)/wx/$(VER_MAJMIN)/gs_afm
+	@-rmdir $(datadir)/wx/$(VER_MAJMIN)/afm
+	@-rmdir $(datadir)/wx/$(VER_MAJMIN)
 	@-rmdir $(datadir)/wx
 	@echo " Removing headers..."
 	@list='$(HEADERS)'; for p in $$list; do \
