@@ -224,12 +224,15 @@ public:
     wxString GetName() const                    { return m_name; }
     bool HasName() const                        { return !m_name.IsEmpty(); }
 
+    // full name is the file name + extension (but without the path)
+    void SetFullName(const wxString& fullname);
     wxString GetFullName() const;
 
     const wxArrayString &GetDirs() const        { return m_dirs; }
 
     // Construct path only - possibly with the trailing separator
-    wxString GetPath( bool add_separator = FALSE, wxPathFormat format = wxPATH_NATIVE ) const;
+    wxString GetPath( bool add_separator = FALSE,
+                      wxPathFormat format = wxPATH_NATIVE ) const;
 
     // more readable synonym
     wxString GetPathWithSep(wxPathFormat format = wxPATH_NATIVE ) const
