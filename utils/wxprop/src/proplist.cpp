@@ -182,8 +182,11 @@ bool wxPropertyListView::UpdatePropertyDisplayInList(wxProperty *property)
 //  UpdatePropertyList(FALSE);
 //#endif
 
+  // TODO: why is this necessary?
+#ifdef __WXMSW__
   if (currentlySelected > -1)
     propertyScrollingList->SetSelection(currentlySelected);
+#endif
 
   return TRUE;
 }
@@ -952,7 +955,7 @@ bool wxPropertyListValidator::OnDisplayValue(wxProperty *property, wxPropertyLis
 //  view->GetValueText()->Show(TRUE);
   wxString str(property->GetValue().GetStringRepresentation());
 
-  view->GetValueText()->SetValue(str.GetData());
+  view->GetValueText()->SetValue(str);
   return TRUE;
 }
 
@@ -1159,8 +1162,12 @@ bool wxBoolListValidator::OnDisplayValue(wxProperty *property, wxPropertyListVie
     return FALSE;
   wxString str(property->GetValue().GetStringRepresentation());
 
-  view->GetValueText()->SetValue(str.GetData());
-  view->GetValueList()->SetStringSelection(str.GetData());
+  view->GetValueText()->SetValue(str);
+
+  if (view->GetValueList()->IsShown())
+  {
+    view->GetValueList()->SetStringSelection(str);
+  }
   return TRUE;
 }
 
@@ -1274,10 +1281,10 @@ bool wxStringListValidator::OnDisplayValue(wxProperty *property, wxPropertyListV
   if (!view->GetValueText())
     return FALSE;
   wxString str(property->GetValue().GetStringRepresentation());
-  view->GetValueText()->SetValue(str.GetData());
-  if (strings && view->GetValueList() && view->GetValueList()->Number() > 0)
+  view->GetValueText()->SetValue(str);
+  if (strings && view->GetValueList() && view->GetValueList()->IsShown() && view->GetValueList()->Number() > 0)
   {
-    view->GetValueList()->SetStringSelection(str.GetData());
+    view->GetValueList()->SetStringSelection(str);
   }
   return TRUE;
 }
@@ -1611,7 +1618,7 @@ bool wxListOfStringsListValidator::OnDisplayValue(wxProperty *property, wxProper
   if (!view->GetValueText())
     return FALSE;
   wxString str(property->GetValue().GetStringRepresentation());
-  view->GetValueText()->SetValue(str.GetData());
+  view->GetValueText()->SetValue(str);
   return TRUE;
 }
 

@@ -1,5 +1,9 @@
  %{
 #include <string.h>
+#ifdef _MSC_VER
+#include <io.h>
+#endif
+
 #include "wx/expr.h"
 
 #ifndef __EXTERN_C__

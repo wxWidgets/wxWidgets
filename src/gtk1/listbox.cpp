@@ -234,7 +234,9 @@ int wxListBox::GetSelection(void) const
       child = child->next;
     }
   }
-  wxFAIL_MSG("wrong listbox index");
+  // No, I think it's reasonable to return -1 to indicate
+  // there is no selection. -- JACS
+//  wxFAIL_MSG("wrong listbox index");
   return -1;
 }
 

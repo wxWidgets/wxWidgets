@@ -4,6 +4,9 @@ static char yysccsid[] = "@(#)yaccpar     1.7 (Berkeley) 09/09/90";
 #define YYBYACC 1
 #line 2 "parser.y"
 #include "string.h"
+#ifdef _MSC_VER
+#include <io.h>
+#endif
 #include "wx/expr.h"
 
 #ifndef __EXTERN_C__

@@ -33,9 +33,10 @@ Update manual.
     wxTaskBarIcon       DONE
     wxMsgCatalog etc.
     wxLog
-    wxConfig, wxRegKey
+    wxConfig            DONE
+    wxRegKey
     wxTabCtrl           DONE
-    wxNotebook
+    wxNotebook          DONE (some more explanation required)
     wxWave              DONE
     wxJoystick          DONE
     wxStatusBar95 and wxFrame status bar functions
@@ -44,8 +45,8 @@ Update manual.
     wxHelpController classes DONE (except for Unix ones)
     wxString            PARTLY DONE
     Drag and drop (change API if required, e.g. const).
-    wxCheckListBox
-    wxAcceleratorTable
+    wxCheckListBox      DONE
+    wxAcceleratorTable  DONE
     wxBaseArray, other arrays
     (wxOwnerDrawn)
     Document the include file for each class
@@ -63,8 +64,6 @@ objects.
 
 More wxSystemSettings (see comment in settings.cpp).
 
-wxSocket integration.
-
 Convert remaining utilities e.g. (GLCanvas; wxGraphLayout) and samples
 
 Check TODO entries.
@@ -79,7 +78,7 @@ for all controls, at least in WXWIN_COMPATIBLE mode, but
 retain (Set)Callback for all compilations. This is following a
 panicky response to losing callbacks.
 
-Merge dib.cpp, dibutils.cpp.
+Merge dib.cpp, dibutils.cpp (see also some DIB code in bitmap.cpp).
 
 Add a wxTabCtrl sample.
 
@@ -151,7 +150,9 @@ substituting static text for obsolete labels).
 
 Improve and expand wxSizer classes.
 
-Write more validators.
+Write more validators. Also, how do they work if loading the
+dialog from a .wxr? Could call SetValidator from within
+InitDialog for all controls, then call TransferDataToWindow.
 
 Classes for file/OS utility functions.
 

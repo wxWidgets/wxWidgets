@@ -56,7 +56,7 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
 
   SetValidator( validator );
 
-  SetLabel( label );
+  wxControl::SetLabel( label );
 
   m_widget = gtk_check_button_new_with_label( m_label );
  

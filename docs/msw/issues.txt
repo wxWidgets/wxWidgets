@@ -32,40 +32,6 @@ wxDebugStreamBuf it might help, but I don't know how to do that -
 I've redefined 'new' throughout as WXDEBUG_NEW (which is itself
 defined as the 3-argument operator).
 
-Config/registry classes
------------------------
-
-Problems with Karsten's/Vadim's existing AppConfig classes:
-
-- use char* a lot instead of wxString
-- rather hard to understand
-- will need fairly substantial rewrite
-- no native .ini functions (?) for guaranteed Windows
-  compatibility
-- new wxWin docs required
-
-Good things:
-
-- exists!
-- FileConfig independent of OS
-- specifying a base class that will meet nearly all needs for
-  derived classes
-- enumerator
-
-Other features we should probably have:
-
-- ability to specify vendor name/app name in constructor
-- under Windows, ability to read/write all areas of registry
-  as an option
-
-Options:
-
-- rewrite AppConfig
-- start from own CRegistry class
-- take elements from both
-- do the Windows stuff, let someone else write/adapt the
-  non-Windows classes
-
 Owner-draw menus
 ----------------
 
