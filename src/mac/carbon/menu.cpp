@@ -791,6 +791,8 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 
         Refresh();
     }
+    if (m_invokingWindow)
+        wxMenubarSetInvokingWindow( menu, m_invokingWindow );
 
     return menuOld;
 }
@@ -820,6 +822,8 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         }
         Refresh();
     }
+    if (m_invokingWindow)
+        wxMenubarSetInvokingWindow( menu, m_invokingWindow );
 
     return TRUE;
 }
@@ -867,7 +871,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
         Refresh();
     }
 
-   // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
+    // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
     // adding menu later on.
     if (m_invokingWindow)
         wxMenubarSetInvokingWindow( menu, m_invokingWindow );
