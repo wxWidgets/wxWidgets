@@ -225,10 +225,6 @@ void wxTopLevelWindowCocoa::CocoaDelegate_windowWillClose(void)
 {
     m_closed = true;
     Destroy();
-    /* Be SURE that idle events get ran.  If the window was not active when
-    it was closed, then there will be no more events to trigger this and
-    therefore it must be done here */
-    wxTheApp->CocoaInstallRequestedIdleHandler();
 }
 
 bool wxTopLevelWindowCocoa::CocoaDelegate_windowShouldClose()

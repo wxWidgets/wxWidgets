@@ -36,11 +36,14 @@
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSThread.h>
 #import <AppKit/NSEvent.h>
+#import <Foundation/NSString.h>
 
 // ========================================================================
 // wxPoseAsInitializer
 // ========================================================================
 wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
+
+static bool sg_needIdle = true;
 
 // ========================================================================
 // wxPoserNSApplication
@@ -49,6 +52,7 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 {
 }
 
+- (NSEvent *)nextEventMatchingMask:(unsigned int)mask untilDate:(NSDate *)expiration inMode:(NSString *)mode dequeue:(BOOL)flag;
 - (void)sendEvent: (NSEvent*)anEvent;
 @end // wxPoserNSApplication
 
@@ -56,10 +60,53 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 
 @implementation wxPoserNSApplication : NSApplication
 
+/* NOTE: The old method of idle event handling added the handler using the
+    [NSRunLoop -performSelector:target:argument:order:modes] which caused
+    the invocation to occur at the begining of [NSApplication
+    -nextEventMatchingMask:untilDate:expiration:inMode:dequeue:].  However,
+    the code would be scheduled for invocation with every iteration of
+    the event loop.  This new method simply overrides the method.  The
+    same caveats apply.  In particular, by the time the event loop has
+    called this method, it usually expects to receive an event.  If you
+    plan on stopping the event loop, it is wise to send an event through
+    the queue to ensure this method will return.
+    See wxEventLoop::Exit() for more information.
+*/
+   
+- (NSEvent *)nextEventMatchingMask:(unsigned int)mask untilDate:(NSDate *)expiration inMode:(NSString *)mode dequeue:(BOOL)flag
+{
+    // Get the same events except don't block
+    NSEvent *event = [super nextEventMatchingMask:mask untilDate:nil/* equivalent to [NSDate distantPast] */ inMode:mode dequeue:flag];
+    // If we got one, simply return it
+    if(event)
+        return event;
+    // No events, try doing some idle stuff
+    if(sg_needIdle && !wxTheApp->IsInAssert() && ([NSDefaultRunLoopMode isEqualToString:mode] || [NSModalPanelRunLoopMode isEqualToString:mode]))
+    {
+        sg_needIdle = false;
+        wxLogDebug("Processing idle events");
+        while(wxTheApp->ProcessIdle())
+        {
+            // Get the same events except don't block
+            NSEvent *event = [super nextEventMatchingMask:mask untilDate:nil/* equivalent to [NSDate distantPast] */ inMode:mode dequeue:flag];
+            // If we got one, simply return it
+            if(event)
+                return event;
+            // we didn't get one, do some idle work
+            wxLogDebug("Looping idle events");
+        }
+        // No more idle work requested, block
+        wxLogDebug("Finished idle processing");
+    }
+    else
+        wxLogDebug("Avoiding idle processing sg_needIdle=%d",sg_needIdle);
+    return [super nextEventMatchingMask:mask untilDate:expiration inMode:mode dequeue:flag];
+}
+
 - (void)sendEvent: (NSEvent*)anEvent
 {
     wxLogDebug("SendEvent");
-    wxTheApp->CocoaInstallRequestedIdleHandler();
+    sg_needIdle = true;
     [super sendEvent: anEvent];
 }
 
@@ -72,7 +119,6 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 {
 }
 
-- (void)doIdle: (id)data;
 // Delegate methods
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
 - (void)applicationWillBecomeActive:(NSNotification *)notification;
@@ -82,38 +128,6 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 @end // interface wxNSApplicationDelegate : NSObject
 
 @implementation wxNSApplicationDelegate : NSObject
-
-- (void)doIdle: (id)data
-{
-    wxASSERT(wxTheApp);
-    wxASSERT(wxMenuBarManager::GetInstance());
-    wxLogDebug("doIdle called");
-#ifdef __WXDEBUG__
-    if(wxTheApp->IsInAssert())
-    {
-        wxLogDebug("Idle events ignored durring assertion dialog");
-    }
-    else
-#endif
-    {
-        NSRunLoop *rl = [NSRunLoop currentRunLoop];
-        // runMode: beforeDate returns YES if something was done
-        while(wxTheApp->ProcessIdle()) // FIXME: AND NO EVENTS ARE PENDING
-        {
-            wxLogDebug("Looping for idle events");
-            #if 1
-            if( [rl runMode:[rl currentMode] beforeDate:[NSDate distantPast]])
-            {
-                wxLogDebug("Found actual work to do");
-                break;
-            }
-            #endif
-        }
-    }
-    wxLogDebug("Idle processing complete, requesting next idle event");
-    // Add ourself back into the run loop (on next event) if necessary
-    wxTheApp->CocoaRequestIdle();
-}
 
 // NOTE: Terminate means that the event loop does NOT return and thus
 // cleanup code doesn't properly execute.  Furthermore, wxWindows has its
@@ -209,7 +223,6 @@ wxApp::wxApp()
 {
     m_topWindow = NULL;
 
-    m_isIdle = true;
 #if WXWIN_COMPATIBILITY_2_2
     m_wantDebugOutput = TRUE;
 #endif
@@ -221,34 +234,6 @@ wxApp::wxApp()
     argv = NULL;
     m_cocoaApp = NULL;
     m_cocoaAppDelegate = NULL;
-}
-
-void wxApp::CocoaInstallIdleHandler()
-{
-    // If we're not the main thread, don't install the idle handler
-    if(m_cocoaMainThread != [NSThread currentThread])
-    {
-        wxLogDebug("Attempt to install idle handler from secondary thread");
-        return;
-    }
-    // If we're supposed to be stopping, don't add more idle events
-    if(![m_cocoaApp isRunning])
-        return;
-    wxLogDebug("wxApp::CocoaInstallIdleHandler");
-    m_isIdle = false;
-    // Call doIdle for EVERYTHING dammit
-// We'd need Foundation/NSConnection.h for this next constant, do we need it?
-    [[ NSRunLoop currentRunLoop ] performSelector:@selector(doIdle:) target:m_cocoaAppDelegate argument:NULL order:0 modes:[NSArray arrayWithObjects:NSDefaultRunLoopMode, /* NSConnectionReplyRunLoopMode,*/ NSModalPanelRunLoopMode, /**/NSEventTrackingRunLoopMode,/**/ nil] ];
-    /* Notes:
-    In the Mac OS X implementation of Cocoa, the above method schedules
-    doIdle: to be called from *within* [NSApplication
-    -nextEventMatchingMask:untilDate:inMode:dequeue:].  That is, no
-    NSEvent object is generated and control does not return from that
-    method.  In fact, control will only return from that method for the
-    usual reasons (e.g. a real event is received or the untilDate is reached).
-    This has implications when trying to stop the event loop and return to
-    its caller.  See wxEventLoop::Exit
-    */
 }
 
 void wxApp::CocoaDelegate_applicationWillBecomeActive()
@@ -283,11 +268,6 @@ bool wxApp::OnInitGui()
 
     wxDC::CocoaInitializeTextSystem();
 //    [ m_cocoaApp setDelegate:m_cocoaApp ];
-    #if 0
-    wxLogDebug("Just for kicks");
-    [ m_cocoaAppDelegate performSelector:@selector(doIdle:) withObject:NULL ];
-    wxLogDebug("okay.. done now");
-    #endif
     return TRUE;
 }
 
@@ -354,6 +334,14 @@ bool wxApp::Yield(bool onlyIfNeeded)
     s_inYield = false;
 
     return true;
+}
+
+void wxApp::WakeUpIdle()
+{
+    [m_cocoaApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined
+            location:NSZeroPoint modifierFlags:NSAnyEventMask
+            timestamp:0 windowNumber:0 context:nil
+            subtype:0 data1:0 data2:0] atStart:NO];
 }
 
 #ifdef __WXDEBUG__
