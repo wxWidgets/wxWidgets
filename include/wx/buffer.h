@@ -17,14 +17,6 @@
 #include "wx/wxchar.h"
 #include <string.h> // strdup
 
-#ifdef HAVE_WCSTR_H
-#include <wcstr.h>
-#elif defined( HAVE_WCHAR_H )
-#include <wchar.h>  // wchar_t
-#else
-#pragma error "Don't know what to do!"
-#endif
-
 // ----------------------------------------------------------------------------
 // Special classes for (wide) character strings: they use malloc/free instead
 // of new/delete
@@ -67,6 +59,7 @@ private:
    char *m_str;
 };
 
+#if wxUSE_WCHAR_T
 class wxWCharBuffer
 {
 public:
@@ -109,6 +102,7 @@ public:
 private:
    wchar_t *m_wcs;
 };
+#endif
 
 #if wxUSE_UNICODE
 #define wxMB2WXbuf wxWCharBuffer
