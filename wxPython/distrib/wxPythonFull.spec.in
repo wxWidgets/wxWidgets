@@ -7,10 +7,17 @@
 %define tarname @TARNAME@
 %define version @VERSION@
 %define ver2    @VER2@
-%define release 1
 %define wxprefbase %{pref}/lib/wxPython
 %define wxpref  %{wxprefbase}-%{version}
 %define name    wxPython%{port}-py%{pyver}
+
+
+# Allow the release tag to be specified on the rpmbuild command 
+# line with --define 'release SOMETHING'  If no such definition is 
+# used then the release number is 1.
+%if %{release:0}%{!?release:1}
+%define release 1
+%endif
 
 
 # Should the builtin image and etc. libs be used, or system libs?
@@ -107,6 +114,8 @@ cd bld
 %if %{unicode}
 	--enable-gtk2 \
 	--enable-unicode \
+%else
+	--disable-gtk2 \
 %endif
 	--enable-geometry \
 	--enable-optimise \
