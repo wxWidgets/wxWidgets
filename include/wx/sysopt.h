@@ -14,8 +14,6 @@
 
 #include "wx/object.h"
 
-#if wxUSE_SYSTEM_OPTIONS
-
 // ----------------------------------------------------------------------------
 // Enables an application to influence the wxWidgets implementation
 // ----------------------------------------------------------------------------
@@ -29,15 +27,39 @@ public:
     // These could also be used to influence GetSystem... calls, indeed
     // to implement SetSystemColour/Font/Metric
 
+#if wxUSE_SYSTEM_OPTIONS
     static void SetOption(const wxString& name, const wxString& value);
     static void SetOption(const wxString& name, int value);
-    static wxString GetOption(const wxString& name) ;
-    static int GetOptionInt(const wxString& name) ;
-    static bool HasOption(const wxString& name) ;
+#endif // wxUSE_SYSTEM_OPTIONS
+    static wxString GetOption(const wxString& name);
+    static int GetOptionInt(const wxString& name);
+    static bool HasOption(const wxString& name);
 };
 
-#endif
+#if !wxUSE_SYSTEM_OPTIONS
 
+// define inline stubs for accessors to make it possible to use wxSystemOptions
+// in the library itself without checking for wxUSE_SYSTEM_OPTIONS all the time
+
+/* static */ inline
+wxString wxSystemOptions::GetOption(const wxString& WXUNUSED(name))
+{
+    return wxEmptyString;
+}
+
+/* static */ inline
+int wxSystemOptions::GetOptionInt(const wxString& WXUNUSED(name))
+{
+    return 0;
+}
+
+/* static */ inline
+bool wxSystemOptions::HasOption(const wxString& WXUNUSED(name))
+{
+    return false;
+}
+
+#endif // !wxUSE_SYSTEM_OPTIONS
 
 #endif
     // _WX_SYSOPT_H_
