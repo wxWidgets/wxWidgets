@@ -41,14 +41,15 @@ wxListItemData::wxListItemData()
     m_ypos = 0;
     m_width = 0;
     m_height = 0;
-    m_colour = wxBLACK;
+    m_attr = NULL;
 }
 
 wxListItemData::wxListItemData( const wxListItem &info )
 {
     m_image = -1;
     m_data = 0;
-    m_colour = (wxColour *)&info.GetTextColour();
+    m_attr = NULL;
+
     SetItem( info );
 }
 
@@ -57,7 +58,15 @@ void wxListItemData::SetItem( const wxListItem &info )
     if (info.m_mask & wxLIST_MASK_TEXT) m_text = info.m_text;
     if (info.m_mask & wxLIST_MASK_IMAGE) m_image = info.m_image;
     if (info.m_mask & wxLIST_MASK_DATA) m_data = info.m_data;
-    m_colour = (wxColour *)&info.GetTextColour();
+
+    if ( info.HasAttributes() )
+    {
+        if ( m_attr )
+            *m_attr = *info.GetAttributes();
+        else
+            m_attr = new wxListItemAttr(*info.GetAttributes());
+    }
+
     m_xpos = 0;
     m_ypos = 0;
     m_width = info.m_width;
@@ -89,11 +98,6 @@ void wxListItemData::SetSize( int width, int height )
 {
     if (width != -1) m_width = width;
     if (height != -1) m_height = height;
-}
-
-void wxListItemData::SetColour( wxColour *col )
-{
-    m_colour = col;
 }
 
 bool wxListItemData::HasImage() const
@@ -141,17 +145,21 @@ int wxListItemData::GetImage() const
     return m_image;
 }
 
-void wxListItemData::GetItem( wxListItem &info )
+void wxListItemData::GetItem( wxListItem &info ) const
 {
     info.m_text = m_text;
     info.m_image = m_image;
     info.m_data = m_data;
-    info.SetTextColour(*m_colour);
-}
 
-wxColour *wxListItemData::GetColour()
-{
-    return m_colour;
+    if ( m_attr )
+    {
+        if ( m_attr->HasTextColour() )
+            info.SetTextColour(m_attr->GetTextColour());
+        if ( m_attr->HasBackgroundColour() )
+            info.SetBackgroundColour(m_attr->GetBackgroundColour());
+        if ( m_attr->HasFont() )
+            info.SetFont(m_attr->GetFont());
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -286,8 +294,7 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             if (node)
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
-                wxString s;
-                item->GetText( s );
+                wxString s = item->GetText();
                 long lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
                 if (lw > m_spacing) m_bound_all.width = lw;
@@ -300,8 +307,7 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             if (node)
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
-                wxString s;
-                item->GetText( s );
+                wxString s = item->GetText();
                 long lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
                 m_bound_all.width = lw;
@@ -577,6 +583,30 @@ int wxListLineData::GetImage( int index )
     return -1;
 }
 
+void wxListLineData::SetAttributes(wxDC *dc,
+                                   const wxListItemAttr *attr,
+                                   const wxColour& colText,
+                                   const wxFont& font)
+{
+    if ( attr && attr->HasTextColour() )
+    {
+        dc->SetTextForeground(attr->GetTextColour());
+    }
+    else
+    {
+        dc->SetTextForeground(colText);
+    }
+
+    if ( attr && attr->HasFont() )
+    {
+        dc->SetFont(attr->GetFont());
+    }
+    else
+    {
+        dc->SetFont(font);
+    }
+}
+
 void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
 {
     long dev_x = dc->LogicalToDeviceX( m_bound_all.x-2 );
@@ -589,27 +619,51 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
         return;
     }
 
-    if (paintBG)
+    wxWindow *listctrl = m_owner->GetParent();
+
+    // default foreground colour
+    wxColour colText;
+    if ( hilight )
+    {
+        colText = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
+    }
+    else
+    {
+        colText = listctrl->GetForegroundColour();
+    }
+
+    // default font
+    wxFont font = listctrl->GetFont();
+
+    // VZ: currently we set the colours/fonts only once, but like this (i.e.
+    //     using SetAttributes() inside the loop), it will be trivial to
+    //     customize the subitems (in report mode) too.
+    wxListItemData *item = (wxListItemData*)m_items.First()->Data();
+    wxListItemAttr *attr = item->GetAttributes();
+    SetAttributes(dc, attr, colText, font);
+
+    bool hasBgCol = attr && attr->HasBackgroundColour();
+    if ( paintBG || hasBgCol )
     {
         if (hilight)
         {
             dc->SetBrush( * m_hilightBrush );
-            dc->SetPen( * wxTRANSPARENT_PEN );
         }
         else
         {
-            dc->SetBrush( * wxWHITE_BRUSH );
-            dc->SetPen( * wxTRANSPARENT_PEN );
+            if ( hasBgCol )
+                dc->SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
+            else
+                dc->SetBrush( * wxWHITE_BRUSH );
         }
+
+        dc->SetPen( * wxTRANSPARENT_PEN );
         dc->DrawRectangle( m_bound_hilight.x, m_bound_hilight.y,
                            m_bound_hilight.width, m_bound_hilight.height );
     }
 
-    dc->SetBackgroundMode(wxTRANSPARENT);
     if (m_mode == wxLC_REPORT)
     {
-        wxString s;
-	wxColour *colour = (wxColour*) NULL;
         wxNode *node = m_items.First();
         while (node)
         {
@@ -623,16 +677,9 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
                 m_owner->GetImageSize( item->GetImage(), x, y );
                 x += item->GetX() + 5;
             }
-	    if (!colour)
-	        colour = item->GetColour();
             if (item->HasText())
             {
-                item->GetText( s );
-                if (hilight)
-                    dc->SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-                else
-                    dc->SetTextForeground( *colour );
-                dc->DrawText( s, x, item->GetY() );
+                dc->DrawText( item->GetText(), x, item->GetY() );
             }
             dc->DestroyClippingRegion();
             node = node->Next();
@@ -650,13 +697,7 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
             }
             if (item->HasText())
             {
-                wxString s;
-                item->GetText( s );
-                if (hilight)
-                    dc->SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-                else
-                    dc->SetTextForeground( * item->GetColour() );
-                dc->DrawText( s, m_bound_label.x, m_bound_label.y );
+                dc->DrawText( item->GetText(), m_bound_label.x, m_bound_label.y );
             }
         }
     }
@@ -2881,15 +2922,15 @@ int wxListCtrl::GetSelectedItemCount() const
     return m_mainWin->GetSelectedItemCount();
 }
 
-/*
 wxColour wxListCtrl::GetTextColour() const
 {
+    return GetForegroundColour();
 }
 
-void wxListCtrl::SetTextColour(const wxColour& WXUNUSED(col))
+void wxListCtrl::SetTextColour(const wxColour& col)
 {
+    SetForegroundColour(col);
 }
-*/
 
 long wxListCtrl::GetTopItem() const
 {

@@ -18,6 +18,7 @@ all (GUI):
 - wxMenu(Bar)::Insert() and Remove() functions for dynamic menu menagament
 - wxToolBar supports arbitrary controls (not only buttons) and can be
   dynamically changed (Delete/Insert functions)
+- wxListCtrl allows setting colour/fonts for individual items
 - wxDC::DrawRotatedText() (contributed by Hans-Joachim Baader, limited to
   +/-90 degrees for now - contributions to improve it are welcome!)
 

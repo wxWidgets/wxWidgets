@@ -291,7 +291,7 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
     // we leave all mask fields to 0 and only change the colour
     wxListItem item;
     item.m_itemId = 0;
-    item.SetTextColour(*wxBLUE);
+    item.SetTextColour(*wxRED);
     m_listCtrl->SetItem( item );
 
     item.m_itemId = 2;

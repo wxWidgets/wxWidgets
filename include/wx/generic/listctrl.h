@@ -63,10 +63,13 @@ public:
     long       m_data;
     int        m_xpos,m_ypos;
     int        m_width,m_height;
-    wxColour   *m_colour;
+
+    wxListItemAttr *m_attr;
 
 public:
     wxListItemData();
+    ~wxListItemData() { delete m_attr; }
+
     wxListItemData( const wxListItem &info );
     void SetItem( const wxListItem &info );
     void SetText( const wxString &s );
@@ -74,18 +77,19 @@ public:
     void SetData( long data );
     void SetPosition( int x, int y );
     void SetSize( int width, int height );
-    void SetColour( wxColour *col );
     bool HasImage() const;
     bool HasText() const;
     bool IsHit( int x, int y ) const;
     void GetText( wxString &s );
+    const wxString& GetText() { return m_text; }
     int GetX( void ) const;
     int GetY( void ) const;
     int GetWidth() const;
     int GetHeight() const;
     int GetImage() const;
-    void GetItem( wxListItem &info );
-    wxColour *GetColour();
+    void GetItem( wxListItem &info ) const;
+
+    wxListItemAttr *GetAttributes() const { return m_attr; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxListItemData);
@@ -174,6 +178,10 @@ public:
     void AssignRect( wxRect &dest, const wxRect &source );
     
 private:
+    void SetAttributes(wxDC *dc,
+                       const wxListItemAttr *attr,
+                       const wxColour& colText, const wxFont& font);
+
     DECLARE_DYNAMIC_CLASS(wxListLineData);
 };
 
@@ -241,8 +249,9 @@ public:
                     bool *accept, wxString *res, wxListMainWindow *owner,
                     const wxString &value = "",
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+                    int style = 0,
 #if wxUSE_VALIDATORS
-                    int style = 0, const wxValidator& validator = wxDefaultValidator,
+                    const wxValidator& validator = wxDefaultValidator,
 #endif
                     const wxString &name = "wxListTextCtrlText" );
     void OnChar( wxKeyEvent &event );
@@ -313,8 +322,8 @@ public:
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
     void OnSize( wxSizeEvent &event );
-	void OnScroll(wxScrollWinEvent& event) ;
-	
+    void OnScroll(wxScrollWinEvent& event) ;
+    
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height );
     int GetIndexOfLine( const wxListLineData *line );
@@ -411,8 +420,8 @@ public:
     void SetItemSpacing( int spacing, bool isSmall = FALSE );
     int GetItemSpacing( bool isSmall ) const;
     int GetSelectedItemCount() const;
-//  wxColour GetTextColour() const; // wxGLC has colours for every Item (see wxListItem)
-//  void SetTextColour(const wxColour& col);
+    wxColour GetTextColour() const;
+    void SetTextColour(const wxColour& col);
     long GetTopItem() const;
 
     void SetSingleStyle( long style, bool add = TRUE ) ;

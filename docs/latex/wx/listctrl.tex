@@ -402,7 +402,7 @@ For list view mode (only), inserts a column. For more details, see \helpref{wxLi
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{\bf{InsertColumn(col, heading, format=wxLIST_FORMAT_LEFT,
+\twocolitem{\bf{InsertColumn(col, heading, format=wxLIST\_FORMAT\_LEFT,
 width=-1)}}{Creates a column using a header string only.}
 \twocolitem{\bf{InsertColumnInfo(col, item)}}{Creates a column using a
 wxListInfo.}
@@ -528,6 +528,12 @@ The {\bf m\_mask} member contains a bitlist specifying which of the other fields
 \end{twocollist}
 
 The {\bf m\_stateMask} and {\bf m\_state} members take flags from the following:
+
+The wxListItem object can also contain item-specific colour and font
+information: for this you need to call one of SetTextColour(),
+SetBackgroundColour() or SetFont() functions on it passing it the colour/font
+to use. If the colour/font is not specified, the default list control
+colour/font is used.
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
