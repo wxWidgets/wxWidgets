@@ -176,7 +176,7 @@ bool MyApp::OnInit()
 {
     // Create the main application window
     MyFrame *frame = new MyFrame("Calendar wxWindows sample",
-                                 wxPoint(50, 50), wxSize(450, 340));
+                                 wxPoint(50, 50), wxSize(450, 375));
 
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
@@ -240,8 +240,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
-    CreateStatusBar(1);
-    SetStatusText("Welcome to wxWindows! Try changing the size of the Window !");
+    CreateStatusBar(2);
+    SetStatusText("Welcome to wxWindows!");
+    SetStatusText("Try changing the size of the Window !",1);
 #endif // wxUSE_STATUSBAR
 }
 
