@@ -62,7 +62,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     // All dialogs should really have this style
     style |= wxTAB_TRAVERSAL;
 
-    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
+    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style & ~(wxYES|wxOK|wxNO|wxCANCEL) , name) )
         return FALSE;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
@@ -167,7 +167,7 @@ void wxDialog::DoShowModal()
     wxModalDialogs.Append(this);
 
 #if TARGET_CARBON
-    BeginAppModalStateForWindow(  (WindowRef) MacGetWindowRef()) ;
+//    BeginAppModalStateForWindow(  (WindowRef) MacGetWindowRef()) ;
 #else
     // TODO : test whether parent gets disabled
     bool formerModal = s_macIsInModalLoop ;
@@ -180,7 +180,7 @@ void wxDialog::DoShowModal()
     }
 
 #if TARGET_CARBON
-    EndAppModalStateForWindow( (WindowRef) MacGetWindowRef() ) ;
+//    EndAppModalStateForWindow( (WindowRef) MacGetWindowRef() ) ;
 #else
     // TODO probably reenable the parent window if any
     s_macIsInModalLoop = formerModal ;
