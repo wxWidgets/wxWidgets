@@ -305,7 +305,7 @@ public:
             return;
         }
 
-//        data.UseAlpha();
+        data.UseAlpha();
 
         Data::Iterator p(data);
 
