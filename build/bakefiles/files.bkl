@@ -1732,6 +1732,7 @@
     src/cocoa/dcscreen.cpp
     src/cocoa/dialog.mm
     src/cocoa/font.cpp
+    src/cocoa/fontenum.mm
     src/cocoa/fontutil.cpp
     src/cocoa/frame.mm
     src/cocoa/gauge.mm
