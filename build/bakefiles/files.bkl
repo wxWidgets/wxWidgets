@@ -1430,8 +1430,12 @@
 <!-- ====================================================================== -->
 
 <set var="COCOA_LOWLEVEL_SRC">
+    <!-- Unix files used by wxCocoa: -->
+    $(BASE_UNIX_SRC)
+    src/unix/utilsunx.cpp
 </set>
 <set var="COCOA_LOWLEVEL_HDR">
+    $(BASE_UNIX_HDR)
 </set>
 <set var="COCOA_SRC">
     src/cocoa/NSBox.mm
@@ -1498,17 +1502,6 @@
     src/generic/accel.cpp
     src/generic/paletteg.cpp
     src/generic/timer.cpp
-    <!-- Unix files used by wxCocoa: -->
-    <!-- FIXME(DE): All UNIX files are needed for wxCocoa, this is a hack
-         because I don't know Bakefile well enough yet to make it use the
-         files from the base UNIX section. -->
-    src/unix/baseunix.cpp
-    src/unix/dir.cpp
-    src/unix/gsocket.c
-    src/unix/mimetype.cpp
-    src/unix/snglinst.cpp
-    src/unix/threadpsx.cpp
-    src/unix/utilsunx.cpp
 </set>
 <set var="COCOA_HDR">
     wx/cocoa/NSBox.h
