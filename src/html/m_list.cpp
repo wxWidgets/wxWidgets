@@ -59,7 +59,6 @@ void wxHtmlListmarkCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
     dc.SetBrush(m_Brush);
     dc.DrawEllipse(x + m_PosX + m_Width / 4, y + m_PosY + m_Height / 4, m_Width / 2, m_Width / 2);
-    wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
 
