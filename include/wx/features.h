@@ -46,5 +46,17 @@
     #undef wxHAS_CRASH_REPORT
 #endif
 
+// Hopefully we can emulate these dialogs in due
+// course
+#if wxUSE_SMARTPHONE
+
+#  ifdef wxUSE_COLOURDLG
+#  undef wxUSE_COLOURDLG
+#  define wxUSE_COLOURDLG 0
+#  endif
+
+#endif
+
+
 #endif // _WX_FEATURES_H_
 

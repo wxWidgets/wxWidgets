@@ -51,7 +51,7 @@
     #include <windowsx.h>
     #include "wx/msw/private.h"
 
-    #ifdef __WXWINCE__
+    #if defined(__WXWINCE__) && !wxUSE_SMARTPHONE
         #include <commdlg.h>
     #endif
 

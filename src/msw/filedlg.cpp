@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_FILEDLG
+#if wxUSE_FILEDLG && !wxUSE_SMARTPHONE
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"

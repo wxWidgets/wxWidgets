@@ -122,7 +122,7 @@ bool MyApp::OnInit()
     // create the main application window
     MyFrame *frame = new MyFrame(_T("Minimal wxWindows App"),
 #ifdef __WXWINCE__
-        wxPoint(0, 0), wxDefaultSize, wxNO_BORDER);
+        wxPoint(0, 0), wxDefaultSize, wxNO_BORDER|wxSYSTEM_MENU);
 #else
         wxPoint(50, 50), wxSize(450, 340));
 #endif

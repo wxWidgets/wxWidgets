@@ -1043,6 +1043,9 @@
 // (notably, wxNotebook pages)
 #define wxUSE_UXTHEME_AUTO      1
 
+// Set to 1 to if you're developing for MS SmartPhone
+#define wxUSE_SMARTPHONE        0
+
 // ----------------------------------------------------------------------------
 // obsolete settings
 // ----------------------------------------------------------------------------
