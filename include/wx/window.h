@@ -271,11 +271,19 @@ public:
             *h = s.y;
     }
 
-        // centre with respect to the the parent window
+        // the generic centre function - centers the window on parent by
+        // default or on screen if it doesn't have parent or
+        // wxCENTER_ON_SCREEN flag is given
     void Centre( int direction = wxBOTH );
     void Center( int direction = wxBOTH ) { Centre(direction); }
-    void CentreOnParent( int dir = wxBOTH ) { Centre(dir | wxCENTER_FRAME); }
-    void CenterOnParent( int dir = wxBOTH ) { Centre(dir | wxCENTER_FRAME); }
+
+        // centre on screen (only works for top level windows)
+    void CentreOnScreen(int dir = wxBOTH) { Centre(dir | wxCENTER_ON_SCREEN); }
+    void CenterOnScreen(int dir = wxBOTH) { CentreOnScreen(dir); }
+
+        // centre with respect to the the parent window
+    void CentreOnParent(int dir = wxBOTH) { Centre(dir | wxCENTER_FRAME); }
+    void CenterOnParent(int dir = wxBOTH) { CentreOnParent(dir); }
 
         // set window size to wrap around its children
     virtual void Fit();

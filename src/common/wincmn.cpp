@@ -354,10 +354,11 @@ void wxWindowBase::Centre(int direction)
 
     // controls are always centered on their parent because it doesn't make
     // sense to centre them on the screen
-    if ( !(direction & wxCENTRE_ON_SCREEN) || wxDynamicCast(this, wxControl) )
+    if ( !(direction & wxCENTRE_ON_SCREEN) || !IsTopLevel() )
     {
-        // theo nly chance to get this is to have a wxControl without parent
-        wxCHECK_RET( parent, wxT("a control must have a parent") );
+        // the only chance to get this is to have a not top level window
+        // without parent which shouldn't happen
+        wxCHECK_RET( parent, wxT("this window must have a parent") );
 
         // adjust to the parents client area origin
         wxPoint posParent = parent->ClientToScreen(wxPoint(0, 0));

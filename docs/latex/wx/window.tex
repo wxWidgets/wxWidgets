@@ -143,9 +143,15 @@ A synonym for \helpref{Centre}{wxwindowcentre}.
 
 A synonym for \helpref{CentreOnParent}{wxwindowcentreonparent}.
 
+\membersection{wxWindow::CenterOnScreen}\label{wxwindowcenteronscreen}
+
+\func{void}{CenterOnScreen}{\param{int}{ direction}}
+
+A synonym for \helpref{CentreOnScreen}{wxwindowcentreonscreen}.
+
 \membersection{wxWindow::Centre}\label{wxwindowcentre}
 
-\func{void}{Centre}{\param{int}{ direction = wxHORIZONTAL}}
+\func{void}{Centre}{\param{int}{ direction = wxBOTH}}
 
 Centres the window.
 
@@ -156,7 +162,8 @@ or {\tt wxBOTH}. It may also include {\tt wxCENTRE\_ON\_SCREEN} flag
 if you want to center the window on the entire screen and not on its
 parent window.}
 
-The flag {\tt wxCENTRE\_FRAME} is obsolete and should not be used any longer.
+The flag {\tt wxCENTRE\_FRAME} is obsolete and should not be used any longer
+(it has no effect).
 
 \wxheading{Remarks}
 
@@ -169,9 +176,10 @@ centered relative to the screen anyhow.
 
 \membersection{wxWindow::CentreOnParent}\label{wxwindowcentreonparent}
 
-\func{void}{CentreOnParent}{\param{int}{ direction = wxHORIZONTAL}}
+\func{void}{CentreOnParent}{\param{int}{ direction = wxBOTH}}
 
-Centres the window.
+Centres the window on its parent. This is a more readable synonym for 
+\helpref{Centre}{wxwindowcentre}.
 
 \wxheading{Parameters}
 
@@ -187,7 +195,23 @@ window is not a top level window, then behaviour is the same as
 
 \wxheading{See also}
 
-\helpref{wxWindow::CenterOnParent}{wxwindowcenteronparent}
+\helpref{wxWindow::CentreOnScreen}{wxwindowcenteronscreen}
+
+\membersection{wxWindow::CentreOnScreen}\label{wxwindowcentreonscreen}
+
+\func{void}{CentreOnScreen}{\param{int}{ direction = wxBOTH}}
+
+Centres the window on screen. This only works for top level windows -
+otherwise, the window will still be centered on its parent.
+
+\wxheading{Parameters}
+
+\docparam{direction}{Specifies the direction for the centering. May be {\tt wxHORIZONTAL}, {\tt wxVERTICAL}\rtfsp
+or {\tt wxBOTH}.}
+
+\wxheading{See also}
+
+\helpref{wxWindow::CentreOnParent}{wxwindowcenteronparent}
 
 \membersection{wxWindow::Clear}\label{wxwindowclear}
 
