@@ -2,6 +2,16 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+2.4.0
+------
+No major new features since 2.3.4.2, mostly bug fixes and minor
+enhancements.
+
+Added function wrappers for the common dialogs from Kevin Altis.  See
+wxPython/lib/dialogs.py for more details.
+
+
+
 2.3.4.2
 -------
 Various bug fixes.

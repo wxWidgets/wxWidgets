@@ -40,8 +40,9 @@ function useage {
     echo "   skiprpm        Don't build the RPM (but why?)"
     echo "   skipclean      Don't do the cleanup at the end"
     echo "   gtk2           Build using wxGTK2 and Unicode"
+    echo "   x11            Build using wxX11"
     echo "   speconly       Do nothing but write the RPM spec file"
-    echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
+#    echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
 }
 
 if [ $# -lt 3 ]; then
@@ -88,6 +89,7 @@ for flag in $*; do
 	skiptar)   skiptar=1                           ;;
 	skiprpm)   skiprpm=1                           ;;
 	gtk2)      unicode=1; port=GTK2; lcport=gtk2   ;;
+	x11)       port=X11; lcport=x11                ;;
 	smp)       export SMP=2                        ;;
 	speconly)  makespec; exit 0                    ;;
 

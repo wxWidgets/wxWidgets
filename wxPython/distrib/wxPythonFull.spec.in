@@ -21,10 +21,14 @@
 # that are turned into Python exceptions starting with 2.3.4.
 %define debug_flag 1
 
+
+%if %{unicode}
+    %define uniflag u
+%endif
 %if %{debug_flag}
-    %define wxconfigname %{wxpref}/bin/wx%{lcport}d-%{ver2}-config
+    %define wxconfigname %{wxpref}/bin/wx%{lcport}%{uniflag}d-%{ver2}-config
 %else
-    %define wxconfigname %{wxpref}/bin/wx%{lcport}-%{ver2}-config
+    %define wxconfigname %{wxpref}/bin/wx%{lcport}%{uniflag}-%{ver2}-config
 %endif
 
 
@@ -122,6 +126,7 @@ cd $WXDIR/wxPython
 %{python} setup.py \
 	IN_CVS_TREE=1 \
 	NO_SCRIPTS=1 \
+	WXPORT=%{lcport} \
 	WX_CONFIG="$WXDIR/build/wx-config --inplace --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	build
 
@@ -140,6 +145,7 @@ cd $WXDIR/wxPython
 %{python} setup.py \
 	IN_CVS_TREE=1 \
 	NO_SCRIPTS=1 \
+	WXPORT=%{lcport} \
 	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	install \
 	--root=$RPM_BUILD_ROOT

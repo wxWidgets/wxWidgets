@@ -28,6 +28,8 @@ on.
 """
 
 
+# Config values below this point can be reset on the setup.py command line.
+
 BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
