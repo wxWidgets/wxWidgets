@@ -441,28 +441,12 @@ PyObject* wxPyConstructObject(void* ptr,
 
 //---------------------------------------------------------------------------
 
-// TODO:  This should really be wxThread::GetCurrentId(), and I will do so
-//        after I make a quick 2.3.2.1 release.
+
 #ifdef WXP_WITH_THREAD
-#ifdef __WXGTK__  // does wxGTK always use pthreads?
-#include <unistd.h>
-#include <pthread.h>
-#endif
 inline
 unsigned long wxPyGetCurrentThreadId() {
-#ifdef __WXMSW__
-    return (unsigned long)::GetCurrentThreadId();
-#endif
-#ifdef __WXGTK__  // does wxGTK always use pthreads?
-    return (unsigned long)pthread_self();
-#endif
-#ifdef __WXMAC__
-    ThreadID current ;
-    MacGetCurrentThread( &current ) ;
-    return (unsigned long)current;
-#endif
+    return wxThread::GetCurrentId();
 }
-
 
 
 static

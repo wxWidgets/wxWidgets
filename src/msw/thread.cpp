@@ -647,6 +647,11 @@ int wxThread::GetCPUCount()
     return si.dwNumberOfProcessors;
 }
 
+unsigned long wxThread::GetCurrentId()
+{
+    return (unsigned long)::GetCurrentThreadId();
+}
+
 bool wxThread::SetConcurrency(size_t level)
 {
     wxASSERT_MSG( IsMain(), _T("should only be called from the main thread") );

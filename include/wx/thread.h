@@ -286,6 +286,11 @@ public:
         // Returns -1 if unknown, number of CPUs otherwise
     static int GetCPUCount();
 
+        // Get the platform specific thread ID and return as a long.  This
+        // can be used to uniquely identify threads, even if they are not
+        // wxThreads.  This is used by wxPython.
+    static unsigned long GetCurrentId();
+
         // sets the concurrency level: this is, roughly, the number of threads
         // the system tries to schedule to run in parallel. 0 means the
         // default value (usually acceptable, but may not yield the best
@@ -376,7 +381,7 @@ public:
 #else
    unsigned long GetId() const;
 #endif
-   
+
     // called when the thread exits - in the context of this thread
     //
     // NB: this function will not be called if the thread is Kill()ed
