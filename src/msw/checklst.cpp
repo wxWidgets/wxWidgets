@@ -9,6 +9,14 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
 #pragma implementation "checklst.h"
 #endif
@@ -34,6 +42,14 @@
 #include "wx/msw/checklst.h"
 
 #include <windows.h>
+#include <windowsx.h>
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+// get item (converted to right type)
+#define GetItem(n)    ((wxCheckListBoxItem *)(GetItem(n)))
 
 // ============================================================================
 // implementation
@@ -49,6 +65,7 @@
 
 class wxCheckListBoxItem : public wxOwnerDrawn
 {
+friend class wxCheckListBox;
 public:
   // ctor
   wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex);
@@ -58,8 +75,8 @@ public:
 
   // simple accessors
   bool IsChecked() const  { return m_bChecked;        }
-  void Check(bool bCheck) { m_bChecked = bCheck;      }
-  void Toggle();
+  void Check(bool bCheck);
+  void Toggle() { Check(!IsChecked()); }
 
 private:
   bool            m_bChecked;
@@ -190,19 +207,30 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 }
 
 // change the state of the item and redraw it
-void wxCheckListBoxItem::Toggle()
+void wxCheckListBoxItem::Check(bool check)
 {
-  m_bChecked = !m_bChecked;
+    m_bChecked = check;
 
-  size_t nHeight = m_pParent->GetItemHeight();
-  size_t y = m_nIndex * nHeight;
-  RECT rcUpdate = { 0, y, GetDefaultMarginWidth(), y + nHeight};
-  InvalidateRect((HWND)m_pParent->GetHWND(), &rcUpdate, FALSE);
+    // index may be chanegd because new items were added/deleted
+    if ( m_pParent->GetItemIndex(this) != (int)m_nIndex )
+    {
+        // update it
+        int index = m_pParent->GetItemIndex(this);
 
-  wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, m_pParent->GetId());
-  event.SetInt(m_nIndex);
-  event.SetEventObject(m_pParent);
-  m_pParent->ProcessCommand(event);
+        wxASSERT_MSG( index != wxNOT_FOUND, "what does this item do here?" );
+
+        m_nIndex = (size_t)index;
+    }
+
+    size_t nHeight = m_pParent->GetItemHeight();
+    size_t y = m_nIndex * nHeight;
+    RECT rcUpdate = { 0, y, GetDefaultMarginWidth(), y + nHeight};
+    InvalidateRect((HWND)m_pParent->GetHWND(), &rcUpdate, FALSE);
+    
+    wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, m_pParent->GetId());
+    event.SetInt(m_nIndex);
+    event.SetEventObject(m_pParent);
+    m_pParent->ProcessCommand(event);
 }
 
 // ----------------------------------------------------------------------------
@@ -229,13 +257,40 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                                const wxPoint& pos, const wxSize& size,
                                int nStrings, const wxString choices[],
                                long style, const wxValidator& val,
-                               const wxString& name) // , const wxFont& font)
-                // don't use ctor with arguments! we must call Create()
-                // ourselves from here.
+                               const wxString& name)
               : wxListBox()
-//                , m_font(font)
 {
-  Create(parent, id, pos, size, nStrings, choices, style|wxLB_OWNERDRAW, val, name);
+    Create(parent, id, pos, size, nStrings, choices,
+           style | wxLB_OWNERDRAW, val, name);
+}
+
+void wxCheckListBox::Delete(int N)
+{
+    wxCHECK_RET( N >= 0 && N < m_noItems,
+                 "invalid index in wxListBox::Delete" );
+
+    wxListBox::Delete(N);
+
+    // free memory
+    delete m_aItems[N];
+
+    m_aItems.Remove(N);
+}
+
+void wxCheckListBox::InsertItems(int nItems, const wxString items[], int pos)
+{
+    wxCHECK_RET( pos >= 0 && pos <= m_noItems,
+                 "invalid index in wxCheckListBox::InsertItems" );
+
+    wxListBox::InsertItems(nItems, items, pos);
+
+    int i;
+    for ( i = 0; i < nItems; i++ ) {
+        wxOwnerDrawn *pNewItem = CreateItem((size_t)(pos + i));
+        pNewItem->SetName(items[i]);
+        m_aItems.Insert(pNewItem, (size_t)(pos + i));
+        ListBox_SetItemData((HWND)GetHWND(), i + pos, pNewItem);
+    }
 }
 
 // create/retrieve item
@@ -250,9 +305,6 @@ wxOwnerDrawn *wxCheckListBox::CreateItem(size_t nIndex)
 
   return pItem;
 }
-
-// get item (converted to right type)
-#define GetItem(n)    ((wxCheckListBoxItem *)(GetItem(n)))
 
 // return item size
 // ----------------
@@ -301,7 +353,7 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
 {
   // clicking on the item selects it, clicking on the checkmark toggles
   if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
-    // # better use LB_ITEMFROMPOINT perhaps?
+    // FIXME better use LB_ITEMFROMPOINT perhaps?
     size_t nItem = ((size_t)event.GetY()) / m_nItemHeight;
     if ( nItem < (size_t)m_noItems )
       GetItem(nItem)->Toggle();

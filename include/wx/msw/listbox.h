@@ -78,6 +78,9 @@ public:
 
     // allows to get the item and use SetXXX functions to set it's appearance
     wxOwnerDrawn *GetItem(size_t n) const { return m_aItems[n]; }
+
+    // get the index of the given item
+    int GetItemIndex(wxOwnerDrawn *item) const { return m_aItems.Index(item); }
 #endif // wxUSE_OWNER_DRAWN
 
     virtual void Append(const wxString& item);

@@ -40,14 +40,17 @@ public:
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxListBoxNameStr);
-//                 const wxFont& font = wxNullFont);
+
+  // override base class virtuals
+  virtual void Delete(int n);
+  virtual void InsertItems(int nItems, const wxString items[], int pos);
 
   // items may be checked
-  bool  IsChecked(size_t uiIndex) const;
-  void  Check(size_t uiIndex, bool bCheck = TRUE);
+  bool IsChecked(size_t uiIndex) const;
+  void Check(size_t uiIndex, bool bCheck = TRUE);
 
   // accessors
-  size_t  GetItemHeight() const { return m_nItemHeight; }
+  size_t GetItemHeight() const { return m_nItemHeight; }
 
 protected:
   // we create our items ourselves and they have non-standard size,
