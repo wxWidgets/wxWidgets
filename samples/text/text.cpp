@@ -79,6 +79,7 @@ public:
     static bool ms_logKey;
     static bool ms_logChar;
     static bool ms_logMouse;
+    static bool ms_logText;
 
 private:
     static inline wxChar GetChar(bool on, wxChar c) { return on ? c : _T('-'); }
@@ -197,6 +198,11 @@ public:
         MyTextCtrl::ms_logMouse = event.IsChecked();
     }
 
+    void OnLogText(wxCommandEvent& event)
+    {
+        MyTextCtrl::ms_logText = event.IsChecked();
+    }
+
     void OnIdle( wxIdleEvent& event );
 
 private:
@@ -262,6 +268,7 @@ enum
     TEXT_LOG_KEY,
     TEXT_LOG_CHAR,
     TEXT_LOG_MOUSE,
+    TEXT_LOG_TEXT,
 
     TEXT_END
 };
@@ -325,11 +332,13 @@ bool MyApp::OnInit()
     menuLog->Append(TEXT_LOG_KEY, "Log &key events", "", TRUE);
     menuLog->Append(TEXT_LOG_CHAR, "Log &char events", "", TRUE);
     menuLog->Append(TEXT_LOG_MOUSE, "Log &mouse events", "", TRUE);
+    menuLog->Append(TEXT_LOG_TEXT, "Log &text events", "", TRUE);
     menuLog->AppendSeparator();
     menuLog->Append(TEXT_CLEAR, "&Clear the log\tCtrl-C",
                     "Clear the log window contents");
     menuLog->Check(TEXT_LOG_KEY, TRUE);
     menuLog->Check(TEXT_LOG_CHAR, TRUE);
+    menuLog->Check(TEXT_LOG_TEXT, TRUE);
     menu_bar->Append(menuLog, "&Log");
 
     frame->SetMenuBar(menu_bar);
@@ -361,6 +370,7 @@ END_EVENT_TABLE()
 bool MyTextCtrl::ms_logKey = TRUE;
 bool MyTextCtrl::ms_logChar = TRUE;
 bool MyTextCtrl::ms_logMouse = FALSE;
+bool MyTextCtrl::ms_logText = TRUE;
 
 void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
 {
@@ -474,9 +484,11 @@ void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
             default:
             {
                if ( wxIsprint((int)keycode) )
-                   key.Printf( _T("'%c'") , (char)keycode);
+                   key.Printf(_T("'%c'"), (char)keycode);
+               else if ( keycode > 0 && keycode < 27 )
+                   key.Printf(_("Ctrl-%c"), _T('A') + keycode - 1);
                else
-                   key.Printf( _T("unknown (%ld)"), keycode);
+                   key.Printf(_T("unknown (%ld)"), keycode);
             }
         }
     }
@@ -528,7 +540,7 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
 {
     ev.Skip();
 
-    if ( !MyTextCtrl::ms_logMouse )
+    if ( !ms_logMouse )
         return;
 
     if ( !ev.Moving() )
@@ -564,6 +576,9 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
 
 void MyTextCtrl::OnText(wxCommandEvent& event)
 {
+    if ( !ms_logText )
+        return;
+
     MyTextCtrl *win = (MyTextCtrl *)event.GetEventObject();
     const wxChar *data = (const wxChar *)(win->GetClientData());
     if ( data )
@@ -599,7 +614,7 @@ void MyTextCtrl::OnTextURL(wxTextUrlEvent& event)
 
 void MyTextCtrl::OnChar(wxKeyEvent& event)
 {
-    if ( MyTextCtrl::ms_logChar )
+    if ( ms_logChar )
         LogEvent( _T("Char"), event);
 
     event.Skip();
@@ -607,7 +622,7 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
 
 void MyTextCtrl::OnKeyUp(wxKeyEvent& event)
 {
-    if ( MyTextCtrl::ms_logKey )
+    if ( ms_logKey )
         LogEvent( _T("Key up"), event);
 
     event.Skip();
@@ -672,7 +687,7 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             break;
     }
 
-    if ( MyTextCtrl::ms_logKey )
+    if ( ms_logKey )
         LogEvent( wxT("Key down"), event);
 
     event.Skip();
@@ -923,8 +938,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
 
     EVT_MENU(TEXT_LOG_KEY,  MyFrame::OnLogKey)
-    EVT_MENU(TEXT_LOG_CHAR,  MyFrame::OnLogChar)
-    EVT_MENU(TEXT_LOG_MOUSE,  MyFrame::OnLogMouse)
+    EVT_MENU(TEXT_LOG_CHAR, MyFrame::OnLogChar)
+    EVT_MENU(TEXT_LOG_MOUSE,MyFrame::OnLogMouse)
+    EVT_MENU(TEXT_LOG_TEXT, MyFrame::OnLogText)
     EVT_MENU(TEXT_CLEAR,  MyFrame::OnLogClear)
 
 #if wxUSE_TOOLTIPS
