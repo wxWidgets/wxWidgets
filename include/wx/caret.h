@@ -96,12 +96,12 @@ public:
         {
             if ( show )
             {
-                if ( ++m_countVisible > 0 )
+                if ( m_countVisible++ == 0 )
                     DoShow();
             }
             else
             {
-                if ( --m_countVisible < 1 )
+                if ( --m_countVisible == 0 )
                     DoHide();
             }
         }

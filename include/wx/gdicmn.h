@@ -174,6 +174,7 @@ public:
 // ---------------------------------------------------------------------------
 // Point classes: with real or integer coordinates
 // ---------------------------------------------------------------------------
+
 class WXDLLEXPORT wxRealPoint
 {
 public:
@@ -205,10 +206,16 @@ public:
 
     // no copy ctor or assignment operator - the defaults are ok
 
-    bool operator==(const wxPoint& pt) const { return x == pt.x && y == pt.y; }
+    // comparison
+    bool operator==(const wxPoint& p) const { return x == p.x && y == p.y; }
+    bool operator!=(const wxPoint& p) const { return !(*this == p); }
 
-    wxPoint operator + (const wxPoint& pt) { return wxPoint(x + pt.x, y + pt.y); }
-    wxPoint operator - (const wxPoint& pt) { return wxPoint(x - pt.x, y - pt.y); }
+    // arithmetic operations (component wise)
+    wxPoint operator+(const wxPoint& p) { return wxPoint(x + p.x, y + p.y); }
+    wxPoint operator-(const wxPoint& p) { return wxPoint(x - p.x, y - p.y); }
+
+    wxPoint& operator+=(const wxPoint& p) { x += p.x; y += p.y; return *this; }
+    wxPoint& operator-=(const wxPoint& p) { x -= p.x; y -= p.y; return *this; }
 };
 
 #if WXWIN_COMPATIBILITY
@@ -251,8 +258,8 @@ public:
     long GetBottom() const { return y + height; }
     long GetRight()  const { return x + width; }
 
-    bool operator == (const wxRect& rect) const;
-    bool operator != (const wxRect& rect) const { return !(*this == rect); }
+    bool operator==(const wxRect& rect) const;
+    bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
 public:
     long x, y, width, height;

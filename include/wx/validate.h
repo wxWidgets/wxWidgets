@@ -18,6 +18,7 @@
 
 #include "wx/event.h"
 
+class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxWindowBase;
 
 /*
@@ -49,7 +50,7 @@ public:
 
     // Called when the value in the window must be validated.
     // This function can pop up an error message.
-    virtual bool Validate(wxWindowBase *WXUNUSED(parent)) { return FALSE; };
+    virtual bool Validate(wxWindow *WXUNUSED(parent)) { return FALSE; };
 
     // Called to transfer data to the window
     virtual bool TransferToWindow() { return FALSE; }
@@ -58,7 +59,7 @@ public:
     virtual bool TransferFromWindow() { return FALSE; };
 
     // accessors
-    wxWindowBase *GetWindow() const { return m_validatorWindow; }
+    wxWindow *GetWindow() const { return (wxWindow *)m_validatorWindow; }
     void SetWindow(wxWindowBase *win) { m_validatorWindow = win; }
 
     // validators beep by default if invalid key is pressed, these functions
