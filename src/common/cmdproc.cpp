@@ -106,6 +106,8 @@ bool wxCommandProcessor::Submit(wxCommand *command, bool storeIt)
 
     if ( storeIt )
         Store(command);
+    else
+        delete command;
 
     return true;
 }
