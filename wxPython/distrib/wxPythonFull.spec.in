@@ -65,13 +65,13 @@ This package is implemented using the %{port} port of wxWindows, and
 includes the wx%{port} shared libs and etc.
 
 
-%package devel
+%package -n wxPython%{port}-devel
 Summary: wxPython%{port} development files
 Group: Development/Libraries
 Requires: wxPython%{port} = %{version}
 
 
-%description devel
+%description -n wxPython%{port}-devel
 This packages contains the headers and etc. for building apps or
 Python extension modules that use the same wx%{port} shared libraries
 that wxPython uses.
@@ -89,11 +89,12 @@ else
     MAKE="make"
 fi
 
+WXDIR=`pwd`
 mkdir build
 cd build
 
-# Configure, trying to reduce dependencies
-../configure --with-%{lcport} \
+# Configure, trying to reduce external dependencies
+$WXDIR/configure --with-%{lcport} \
 	--prefix=%{wxpref} \
 	--disable-soname \
 	--enable-rpath=%{wxpref}/lib \
@@ -111,39 +112,33 @@ cd build
 	--with-libtiff=builtin \
 	--with-zlib=builtin \
 
-##	--enable-debug_flag \
-##	--with-odbc \
 
 
 # Build wxWindows
 $MAKE
-
-cd ../locale
+cd $WXDIR/locale
 make allmo
 
-
-# ** Unfortunately we have to do a bit of installation here so wxPython
-# can be built.  Perhaps wx-config should be changed to be able to be
-# used from the build dir, maybe with an --inplace flag...  Move these
-# three lines to %install if/when that happens.
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-cd ../build
-make prefix=$RPM_BUILD_ROOT%{wxpref} install
-
-
 # Now build wxPython
-cd ../wxPython
+cd $WXDIR/wxPython
 %{python} setup.py \
 	IN_CVS_TREE=1 \
 	NO_SCRIPTS=1 \
-	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
+	WX_CONFIG="$WXDIR/build/wx-config --inplace --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	build
 
 
 #----------------------------------------------------------------
 %install
-%find_lang wxstd
-cd wxPython
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+
+# install wxWindows
+WXDIR=`pwd`
+cd build
+make prefix=$RPM_BUILD_ROOT%{wxpref} install
+
+# install wxPython
+cd $WXDIR/wxPython
 %{python} setup.py \
 	IN_CVS_TREE=1 \
 	NO_SCRIPTS=1 \
@@ -152,11 +147,11 @@ cd wxPython
 	--root=$RPM_BUILD_ROOT
 
 # Since I want this RPM to be as generic as possible I won't let
-# distutils copy the scripts, since it will mangle the #! line
-# to use the real python pathname.  Since some distros install
-# python 2.2 as python2 and others as python, then I can't let
-# it do that otherwise the dependencies will be fouled up.  Copy
-# them manually instead:
+# distutils copy the scripts since it will mangle the #! line to use
+# the real python pathname.  Since some distros install python 2.2 as
+# python2 and others as python, then I can't let distutils do that
+# otherwise the dependencies will be fouled up.  Copy them manually
+# instead, leaving the #!/bin/env line intact:
 
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 for s in \
@@ -170,6 +165,30 @@ for s in \
 done
 
 
+# Generate the filelists.  For some reason the %defattr below is still
+# resulting in many (but not all) files not owned by root when just
+# specifying directories and wildcards to be included in each package.
+# So instead we'll build some explicit filelists here and use %attr on
+# each entry.
+cd $WXDIR
+mkdir -p $RPM_BUILD_ROOT%{pref}/share/doc
+GFL="%{python} wxPython/distrib/genfilelist.py"
+$GFL    $RPM_BUILD_ROOT %{pref}                     > FILELIST
+$GFL -r $RPM_BUILD_ROOT %{pref}/bin                >> FILELIST
+$GFL    $RPM_BUILD_ROOT %{pref}/lib                >> FILELIST
+$GFL -r $RPM_BUILD_ROOT %{pref}/lib/python%{pyver} >> FILELIST
+$GFL -r $RPM_BUILD_ROOT %{pref}/share              >> FILELIST
+$GFL    $RPM_BUILD_ROOT %{wxpref}                  >> FILELIST
+$GFL    $RPM_BUILD_ROOT %{wxpref}/lib              >> FILELIST
+$GFL    $RPM_BUILD_ROOT "%{wxpref}/lib/libwx*"     >> FILELIST
+$GFL -r $RPM_BUILD_ROOT %{wxpref}/share            >> FILELIST
+$GFL -r $RPM_BUILD_ROOT %{pref}/share              >> FILELIST
+
+$GFL    $RPM_BUILD_ROOT %{wxpref}/include           > DEVELLIST
+$GFL -r $RPM_BUILD_ROOT %{wxpref}/include/wx       >> DEVELLIST
+$GFL -r $RPM_BUILD_ROOT %{wxpref}/lib/wx           >> DEVELLIST
+$GFL    $RPM_BUILD_ROOT %{wxconfigname}            >> DEVELLIST
+$GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
 
 
 #----------------------------------------------------------------
@@ -178,37 +197,15 @@ done
 
 
 #----------------------------------------------------------------
-%post
-/sbin/ldconfig
 
-
-#----------------------------------------------------------------
-%postun
-/sbin/ldconfig
-
-
-
-#----------------------------------------------------------------
-%files
-%doc docs/preamble.txt
-%doc docs/licence.txt
-%doc docs/readme.txt
-%doc docs/changes.txt
-%doc wxPython/README.txt
-%doc wxPython/CHANGES.txt
+%files -f FILELIST
 %defattr(-,root,root)
-%{wxpref}/lib/libwx*
-%{pref}/lib/python*
-%{wxpref}/share/
-%{pref}/bin/*
+%doc docs/preamble.txt docs/licence.txt docs/readme.txt docs/changes.txt
+%doc wxPython/README.txt wxPython/CHANGES.txt
 
 
-%files devel
+%files -n wxPython%{port}-devel -f DEVELLIST
 %defattr(-,root,root)
-%{wxpref}/include/wx
-%{wxpref}/lib/wx
-%{wxconfigname}
-%{wxpref}/bin/wx-config
 
 
 #----------------------------------------------------------------
