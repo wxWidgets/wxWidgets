@@ -64,10 +64,11 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
      * Read the PNM header
      */
 
-    wxTextInputStream text_stream(stream);
+    wxBufferedInputStream buf_stream(stream);
+    wxTextInputStream text_stream(buf_stream);
 
-    Skip_Comment(stream);
-    if (stream.GetC()==_T('P')) c=stream.GetC();
+    Skip_Comment(buf_stream);
+    if (buf_stream.GetC()==_T('P')) c=buf_stream.GetC();
 
     switch (c)
       {
@@ -84,9 +85,9 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
       }
 
     text_stream >> line; // for the \n
-    Skip_Comment(stream);
+    Skip_Comment(buf_stream);
     text_stream >> width >> height ;
-    Skip_Comment(stream); 
+    Skip_Comment(buf_stream); 
     text_stream >> maxval;
 
     //cout << line << " " << width << " " << height << " " << maxval << endl;
@@ -97,8 +98,6 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
         wxLogError( _T("Cannot allocate RAM for RGB data in PNM file.") );
 	return FALSE;
     }
-
-    wxBufferedInputStream buf_stream(stream);
 
    if (c=='3') // Ascii RBG
       { 

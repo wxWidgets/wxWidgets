@@ -195,6 +195,23 @@ void wxStreamBuffer::PutChar(char c)
   m_stream->m_lastcount = 1;
 }
 
+char wxStreamBuffer::Peek()
+{
+  char c;
+
+  wxASSERT(m_stream != NULL && m_buffer_size != 0);
+
+  if (!GetDataLeft()) {
+    CHECK_ERROR(wxStream_READ_ERR);
+    return 0;
+  }
+
+  GetFromBuffer(&c, 1);
+  m_buffer_pos--;
+
+  return c;
+}
+
 char wxStreamBuffer::GetChar()
 {
   char c;
@@ -248,7 +265,7 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
       buffer = (char *)buffer + buf_left; // ANSI C++ violation.
 
       if (!FillBuffer()) {
-        CHECK_ERROR(wxStream_READ_ERR);
+        CHECK_ERROR(wxStream_EOF);
         return (m_stream->m_lastcount = orig_size-size);
       }
     } else {
@@ -741,6 +758,11 @@ wxBufferedInputStream::wxBufferedInputStream(wxInputStream& s)
 wxBufferedInputStream::~wxBufferedInputStream()
 {
   delete m_i_streambuf;
+}
+
+char wxBufferedInputStream::Peek()
+{
+  return m_i_streambuf->Peek();
 }
 
 wxInputStream& wxBufferedInputStream::Read(void *buffer, size_t size)

@@ -170,7 +170,6 @@ class WXDLLEXPORT wxFilterInputStream: public wxInputStream {
 
   char Peek() { return m_parent_i_stream->Peek(); }
 
-  wxStreamError LastError() const { return m_parent_i_stream->LastError(); }
   size_t GetSize() const { return m_parent_i_stream->GetSize(); }
 
  protected:
@@ -183,7 +182,6 @@ class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream {
   wxFilterOutputStream(wxOutputStream& stream);
   ~wxFilterOutputStream();
 
-  wxStreamError LastError() const { return m_parent_o_stream->LastError(); }
   size_t GetSize() const { return m_parent_o_stream->GetSize(); }
 
  protected:
@@ -216,6 +214,7 @@ class WXDLLEXPORT wxStreamBuffer {
   size_t Write(const void *buffer, size_t size);
   size_t Write(wxStreamBuffer *buf);
 
+  char Peek();
   char GetChar();
   void PutChar(char c);
   off_t Tell() const;
@@ -273,6 +272,7 @@ class wxBufferedInputStream: public wxFilterInputStream {
   wxBufferedInputStream(wxInputStream& stream);
   ~wxBufferedInputStream();
 
+  char Peek();
   wxInputStream& Read(void *buffer, size_t size);
   
   // Position functions

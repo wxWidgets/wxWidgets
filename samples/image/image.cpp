@@ -43,6 +43,7 @@ public:
     wxBitmap  *my_horse_gif;
     wxBitmap  *my_horse_bmp;
     wxBitmap  *my_horse_pcx;
+    wxBitmap  *my_horse_pnm;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
 
@@ -147,6 +148,11 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
       wxLogError("Can't load BMP image");
   else
     my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
+
+  if ( !image.LoadFile( dir + wxString("horse.pnm"), wxBITMAP_TYPE_PNM ) )
+      wxLogError("Can't load PNM image");
+  else
+    my_horse_pnm = new wxBitmap( image.ConvertToBitmap() );
   
   image.LoadFile( dir + wxString("test.png") );
   my_square = new wxBitmap( image.ConvertToBitmap() );
@@ -156,6 +162,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
 MyCanvas::~MyCanvas()
 {
+  delete my_horse_pnm;
   delete my_horse_png;
   delete my_horse_jpeg;
   delete my_horse_gif;
@@ -194,6 +201,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
   dc.DrawText( "BMP handler", 30, 1055 );
   if (my_horse_bmp && my_horse_bmp->Ok()) dc.DrawBitmap( *my_horse_bmp, 30, 1070 );
+
+  dc.DrawText( "PNM handler", 30, 1285 );
+  if (my_horse_pnm && my_horse_pnm->Ok()) dc.DrawBitmap( *my_horse_pnm, 30, 1300 );
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -277,7 +287,7 @@ MyFrame::MyFrame()
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
   // 500 width * 1300 height
-  m_canvas->SetScrollbars( 10, 10, 50, 130 );
+  m_canvas->SetScrollbars( 10, 10, 50, 152 );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
@@ -309,6 +319,7 @@ bool MyApp::OnInit()
 
   wxImage::AddHandler( new wxGIFHandler );
   wxImage::AddHandler( new wxPCXHandler );
+  wxImage::AddHandler( new wxPNMHandler );
 
   wxFrame *frame = new MyFrame();
   frame->Show( TRUE );
