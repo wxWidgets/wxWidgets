@@ -389,9 +389,10 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
 
     wxSize sizeBtn = GetMaxButtonSize();
     wxPoint ptOrigin = GetBoxAreaOrigin();
+    wxPoint clientOrigin = GetParent() ? GetParent()->GetClientAreaOrigin() : wxPoint(0,0);
 
-    x0 += ptOrigin.x + BOX_BORDER_X;
-    y0 += ptOrigin.y + BOX_BORDER_Y;
+    x0 += ptOrigin.x + BOX_BORDER_X - clientOrigin.x;
+    y0 += ptOrigin.y + BOX_BORDER_Y - clientOrigin.y;
 
     int x = x0,
         y = y0;
