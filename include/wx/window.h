@@ -411,6 +411,9 @@ public:
     void SetVirtualSize( const wxSize &size ) { DoSetVirtualSize( size.x, size.y ); }
     void SetVirtualSize( int x, int y ) { DoSetVirtualSize( x, y ); }
 
+        // this is necessary to forget about previously set virtual size
+    void UnsetVirtualSize() { m_virtualSize = wxDefaultSize; }
+
     wxSize GetVirtualSize() const { return DoGetVirtualSize(); }
     void GetVirtualSize( int *x, int *y ) const
     {
