@@ -133,13 +133,21 @@ void wxStreamBuffer::SetBufferIO(void *buffer_start,
                                  void *buffer_end,
                                  bool takeOwnership)
 {
+    SetBufferIO(buffer_start, (char *)buffer_end - (char *)buffer_start,
+                takeOwnership);
+}
+
+void wxStreamBuffer::SetBufferIO(void *start,
+                                 size_t len,
+                                 bool takeOwnership)
+{
     // start by freeing the old buffer
     FreeBuffer();
 
-    m_buffer_start = (char *)buffer_start;
-    m_buffer_end   = (char *)buffer_end;
+    m_buffer_start = (char *)start;
+    m_buffer_end   = m_buffer_start + len;
 
-    m_buffer_size = m_buffer_end - m_buffer_start;
+    m_buffer_size = len;
 
     // if we own it, we free it
     m_destroybuf = !takeOwnership;
@@ -154,8 +162,7 @@ void wxStreamBuffer::SetBufferIO(size_t bufsize)
 
     if ( bufsize )
     {
-        char *buf = (char *)malloc(bufsize);
-        SetBufferIO(buf, buf + bufsize, TRUE /* take ownership */);
+        SetBufferIO(malloc(bufsize), bufsize, TRUE /* take ownership */);
     }
     else // no buffer size => no buffer
     {

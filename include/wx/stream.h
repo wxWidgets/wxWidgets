@@ -242,10 +242,12 @@ public:
     // NB: the buffer must always be allocated with malloc() if takeOwn is
     //     TRUE as it will be deallocated by free()
     void SetBufferIO(void *start, void *end, bool takeOwnership = FALSE);
+    void SetBufferIO(void *start, size_t len, bool takeOwnership = FALSE);
     void SetBufferIO(size_t bufsize);
     void *GetBufferStart() const { return m_buffer_start; }
     void *GetBufferEnd() const { return m_buffer_end; }
     void *GetBufferPos() const { return m_buffer_pos; }
+    size_t GetBufferSize() const { return m_buffer_size; }
     size_t GetIntPosition() const { return m_buffer_pos - m_buffer_start; }
     void SetIntPosition(size_t pos) { m_buffer_pos = m_buffer_start + pos; }
     size_t GetLastAccess() const { return m_buffer_end - m_buffer_start; }

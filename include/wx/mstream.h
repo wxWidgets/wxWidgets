@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mstream.h
+// Name:        wx/mstream.h
 // Purpose:     Memory stream classes
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -19,13 +19,16 @@
 class WXDLLEXPORT wxMemoryInputStream : public wxInputStream
 {
 public:
-    wxMemoryInputStream(const char *data, size_t length);
+    wxMemoryInputStream(const void *data, size_t length);
     virtual ~wxMemoryInputStream();
     virtual size_t GetSize() const { return m_length; }
     virtual bool Eof() const;
 
     char Peek();
 
+    wxStreamBuffer *GetInputStreamBuffer() const { return m_i_streambuf; }
+
+    // deprecated, compatibility only
     wxStreamBuffer *InputStreamBuffer() const { return m_i_streambuf; }
 
 protected:
@@ -42,13 +45,17 @@ private:
 class WXDLLEXPORT wxMemoryOutputStream : public wxOutputStream
 {
 public:
-    wxMemoryOutputStream(char *data = NULL, size_t length = 0);
+    // if data is !NULL it must be allocated with malloc()
+    wxMemoryOutputStream(void *data = NULL, size_t length = 0);
     virtual ~wxMemoryOutputStream();
     virtual size_t GetSize() const { return m_o_streambuf->GetLastAccess(); }
 
-    wxStreamBuffer *OutputStreamBuffer() const { return m_o_streambuf; }
+    size_t CopyTo(void *buffer, size_t len) const;
 
-    size_t CopyTo(char *buffer, size_t len) const;
+    wxStreamBuffer *GetOutputStreamBuffer() const { return m_o_streambuf; }
+
+    // deprecated, compatibility only
+    wxStreamBuffer *OutputStreamBuffer() const { return m_o_streambuf; }
 
 protected:
     wxStreamBuffer *m_o_streambuf;
