@@ -7,7 +7,9 @@ as wxSpinButton is not implemented for all platforms (Win32 and GTK only
 currently).
 
 {\bf NB:} the range supported by this control (and wxSpinCtrl) depends on the
-platform but is at least {\tt SHRT\_MIN} to {\tt SHRT\_MAX}.
+platform but is at least {\tt -0x8000} to {\tt 0x7fff}. Under GTK and
+Win32 with sufficiently new version of {\tt comctrl32.dll} (at least 4.71 is
+required, 5.80 is recommended) the full 32 bit range is supported.
 
 \wxheading{Derived from}
 
@@ -36,18 +38,7 @@ platform but is at least {\tt SHRT\_MIN} to {\tt SHRT\_MAX}.
 
 See also \helpref{window styles overview}{windowstyles}.
 
-\wxheading{Event handling}
-
-To process input from a spin button, use one of these event handler macros to
-direct input to member functions that take a 
-\helpref{wxSpinEvent}{wxspinevent} argument:
-
-\twocolwidtha{7cm}
-\begin{twocollist}
-\twocolitem{{\bf EVT\_SPIN(id, func)}}{Generated whenever an arrow is pressed.}
-\twocolitem{{\bf EVT\_SPIN\_UP(id, func)}}{Generated when left/up arrow is pressed.}
-\twocolitem{{\bf EVT\_SPIN\_DOWN(id, func)}}{Generated when right/down arrow is pressed.}
-\end{twocollist}%
+\input spinevt.inc
 
 \wxheading{See also}
 
@@ -92,7 +83,7 @@ Constructor, creating and showing a spin button.
 
 \func{void}{\destruct{wxSpinButton}}{\void}
 
-Destructor, destroying the spin button.
+Destructor, destroys the spin button control.
 
 \membersection{wxSpinButton::Create}\label{wxspinbuttoncreate}
 

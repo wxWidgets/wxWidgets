@@ -34,8 +34,14 @@ functions that take a \helpref{wxSpinEvent}{wxspinevent} argument:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_SPINCTRL(id, func)}}{Generated whenever spinctrl is updated}
+\twocolitem{{\bf EVT\_SPINCTRL(id, func)}}{Generated whenever the numeric value
+of the spinctrl is updated}
 \end{twocollist}%
+
+You may also use the \helpref{wxSpinButton}{wxspinbutton} event macros, however
+the corresponding events will not be generated under all platforms. Finally, if
+the user modifies the text in the edit part of the spin control directly, the
+{\tt EVT\_TEXT} is generated, like for the \helpref{wxTextCtrl}{wxtextctrl}.
 
 \wxheading{See also}
 
