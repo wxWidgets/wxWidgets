@@ -34,9 +34,9 @@
     class WXDLLIMPEXP_FL l;          \
     WX_DEFINE_ARRAY(c,l)
 
-#define WXFL_DEFINE_ARRAY_NO_PTR(c,l)\
+#define WXFL_DEFINE_ARRAY_PTR(c,l)\
     class WXDLLIMPEXP_FL l;          \
-    WX_DEFINE_ARRAY_NO_PTR(c,l)
+    WX_DEFINE_ARRAY_PTR(c,l)
 
 #define WXFL_DEFINE_ARRAY_LONG(t,l) \
     class WXDLLIMPEXP_FL l;          \
