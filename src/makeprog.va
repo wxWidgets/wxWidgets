@@ -10,13 +10,6 @@
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
-# Set and environment variable to point to WXDIR for your system
-WXDIR = $(WXWIN)
-
-WXUSINGDLL=0
-
-!include $(WXDIR)\src\makeva.env
-
 all:    $(PROGRAM).exe
 
 wx:

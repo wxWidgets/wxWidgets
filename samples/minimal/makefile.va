@@ -11,8 +11,15 @@
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 
-PROGRAM=minimal
+WXUSINGDLL=0
+
+!include $(WXDIR)\src\makeva.env
+
+PROGRAM=$D\minimal
 OBJECTS = $(PROGRAM).obj
+
+!if [md $D]
+!endif
 
 !include $(WXDIR)\src\makeprog.va
 
