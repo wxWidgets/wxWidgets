@@ -103,7 +103,8 @@ wxListbook::Create(wxWindow *parent,
                     wxID_LISTBOOKLISTVIEW,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    wxLC_ICON | wxLC_SINGLE_SEL
+                    wxBORDER_NONE | wxLC_ICON | wxLC_SINGLE_SEL |
+                        (IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP)
                  );
 
     m_line = new wxStaticLine
@@ -124,53 +125,19 @@ wxListbook::Create(wxWindow *parent,
 
 wxSize wxListbook::GetListSize() const
 {
-    const wxSize sizeClient = GetClientSize();
-
-    // we need to find the longest/tallest label
-    wxCoord widthMax = 0,
-            heightMax = 0;
-    const int count = m_list->GetItemCount();
-    if ( count )
-    {
-        for ( int i = 0; i < count; i++ )
-        {
-            wxRect r;
-            m_list->GetItemRect(i, r);
-
-            wxCoord w = r.width,
-                    h = r.height;
-
-            if ( w > widthMax )
-                widthMax = w;
-            if ( h > heightMax )
-                heightMax = h;
-        }
-    }
+    const wxSize sizeClient = GetClientSize(),
+                 sizeList = m_list->GetViewRect().GetSize();
 
     wxSize size;
     if ( IsVertical() )
     {
         size.x = sizeClient.x;
-        size.y = heightMax;
-
-        if ( widthMax >= sizeClient.x )
-        {
-            // account for the scrollbar
-            size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
-        }
+        size.y = sizeList.y;
     }
     else // left/right aligned
     {
-        // +20 is due to an apparent bug in wxListCtrl::GetItemRect() but I
-        // can't fix it there right now so just add a fudge here...
-        size.x = widthMax + 20;
+        size.x = sizeList.x;
         size.y = sizeClient.y;
-
-        if ( heightMax >= sizeClient.y )
-        {
-            // account for the scrollbar
-            size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
-        }
     }
 
     return size;
