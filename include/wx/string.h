@@ -184,8 +184,8 @@ struct WXDLLEXPORT wxStringData
 
 friend class wxArrayString;
 
-  // NB: this data must be here (before all other functions) to be sure that all
-  // inline functions are really inlined by all compilers
+  // NB: special care was taken in arrangin the member functions in such order
+  //     that all inline functions can be effectively inlined
 private:
   // points to data preceded by wxStringData structure with ref count info
   char *m_pchData;
@@ -193,23 +193,62 @@ private:
   // accessor to string data
   wxStringData* GetStringData() const { return (wxStringData*)m_pchData - 1; }
 
+  // string (re)initialization functions
+    // initializes the string to the empty value (must be called only from
+    // ctors, use Reinit() otherwise)
+  void Init() { m_pchData = (char *)g_szNul; }
+    // initializaes the string with (a part of) C-string
+  void InitWith(const char *psz, size_t nPos = 0, size_t nLen = STRING_MAXLEN);
+    // as Init, but also frees old data
+  void Reinit() { GetStringData()->Unlock(); Init(); }
+
+  // memory allocation
+    // allocates memory for string of lenght nLen
+  void AllocBuffer(size_t nLen);
+    // copies data to another string
+  void AllocCopy(wxString&, int, int) const;
+    // effectively copies data to string
+  void AssignCopy(size_t, const char *);
+
+  // append a (sub)string
+  void ConcatSelf(int nLen, const char *src);
+
+  // functions called before writing to the string: they copy it if there
+  // are other references to our data (should be the only owner when writing)
+  void CopyBeforeWrite();
+  void AllocBeforeWrite(size_t);
+
 public:
   /** @name constructors & dtor */
   //@{
     /// ctor for an empty string
-  wxString();
+  wxString() { Init(); }
     /// copy ctor
-  wxString(const wxString& stringSrc);
+  wxString(const wxString& stringSrc)
+  {
+    wxASSERT( stringSrc.GetStringData()->IsValid() );
+
+    if ( stringSrc.IsEmpty() ) {
+      // nothing to do for an empty string
+      Init();
+    }
+    else {
+      m_pchData = stringSrc.m_pchData;            // share same data
+      GetStringData()->Lock();                    // => one more copy
+    }
+  }
     /// string containing nRepeat copies of ch
   wxString(char ch, size_t nRepeat = 1);
     /// ctor takes first nLength characters from C string
-  wxString(const char *psz, size_t nLength = STRING_MAXLEN);
+    // (default value of STRING_MAXLEN means take all the string)
+  wxString(const char *psz, size_t nLength = STRING_MAXLEN)
+    { InitWith(psz, 0, nLength); }
     /// from C string (for compilers using unsigned char)
   wxString(const unsigned char* psz, size_t nLength = STRING_MAXLEN);
     /// from wide (UNICODE) string
   wxString(const wchar_t *pwz);
     /// dtor is not virtual, this class must not be inherited from!
- ~wxString();
+ ~wxString() { GetStringData()->Unlock(); }
   //@}
 
   /** @name generic attributes & operations */
@@ -290,14 +329,6 @@ public:
   /** @name string concatenation */
   //@{
     /** @name in place concatenation */
-    //@{
-      /// string += string
-  void operator+=(const wxString& s) { (void)operator<<(s); }
-      /// string += C string
-  void operator+=(const char *psz) { (void)operator<<(psz); }
-      /// string += char
-  void operator+=(char ch) { (void)operator<<(ch); }
-    //@}
     /** @name concatenate and return the result
         left to right associativity of << allows to write
         things like "str << str1 << str2 << ..."          */
@@ -315,6 +346,15 @@ public:
     { ConcatSelf(Strlen(psz), psz); return *this; }
       /// as +=
   wxString& operator<<(char ch) { ConcatSelf(1, &ch); return *this; }
+    //@}
+
+    //@{
+      /// string += string
+  void operator+=(const wxString& s) { (void)operator<<(s); }
+      /// string += C string
+  void operator+=(const char *psz) { (void)operator<<(psz); }
+      /// string += char
+  void operator+=(char ch) { (void)operator<<(ch); }
     //@}
 
     /** @name return resulting string */
@@ -463,17 +503,20 @@ public:
 
     /// same as Cmp
   inline int CompareTo(const char* psz, caseCompare cmp = exact) const
-  { return cmp == exact ? Cmp(psz) : CmpNoCase(psz); }
+    { return cmp == exact ? Cmp(psz) : CmpNoCase(psz); }
 
     /// same as Mid (substring extraction)
-  inline wxString  operator()(size_t start, size_t len) const { return Mid(start, len); }
+  inline wxString  operator()(size_t start, size_t len) const
+    { return Mid(start, len); }
 
     /// same as += or <<
   inline wxString& Append(const char* psz) { return *this << psz; }
-  inline wxString& Append(char ch, int count = 1) { wxString str(ch, count); (*this) += str; return *this; }
+  inline wxString& Append(char ch, int count = 1)
+    { wxString str(ch, count); (*this) += str; return *this; }
 
     ///
-  wxString& Prepend(const wxString& str) { *this = str + *this; return *this; }
+  wxString& Prepend(const wxString& str)
+    { *this = str + *this; return *this; }
     /// same as Len
   size_t Length() const { return Len(); }
     /// same as MakeLower
@@ -491,8 +534,8 @@ public:
   wxString& RemoveLast() { return Truncate(Len() - 1); }
 
   // Robert Roebling
-
-  wxString& Remove(size_t nStart, size_t nLen) { return erase( nStart, nLen ); }
+  wxString& Remove(size_t nStart, size_t nLen)
+    { return erase( nStart, nLen ); }
 
   size_t First( const char ch ) const { return find(ch); }
   size_t First( const char* psz ) const { return find(psz); }
@@ -516,7 +559,11 @@ public:
     /** @name constructors */
     //@{
       /// take nLen chars starting at nPos
-      wxString(const wxString& s, size_t nPos, size_t nLen = npos);
+      wxString(const wxString& str, size_t nPos, size_t nLen = npos)
+      { 
+        wxASSERT( str.GetStringData()->IsValid() );
+        InitWith(str.c_str(), nPos, nLen == npos ? 0 : nLen);
+      }
       /// take all characters from pStart to pEnd
       wxString(const void *pStart, const void *pEnd);
     //@}
@@ -725,35 +772,6 @@ public:
     wxString substr(size_t nStart = 0, size_t nLen = npos) const;
   //@}
 #endif
-
-private:
-
-
-  // string (re)initialization functions
-    // initializes the string to the empty value (must be called only from
-    // ctors, use Reinit() otherwise)
-  void Init() { m_pchData = (char *)g_szNul; }
-    // initializaes the string with (a part of) C-string
-  void InitWith(const char *psz, size_t nPos = 0, size_t nLen = STRING_MAXLEN);
-    // as Init, but also frees old data
-  void Reinit() { GetStringData()->Unlock(); Init(); }
-
-  // memory allocation
-    // allocates memory for string of lenght nLen
-  void AllocBuffer(size_t nLen);
-    // copies data to another string
-  void AllocCopy(wxString&, int, int) const;
-    // effectively copies data to string
-  void AssignCopy(size_t, const char *);
-
-  // append a (sub)string
-  void ConcatCopy(int nLen1, const char *src1, int nLen2, const char *src2);
-  void ConcatSelf(int nLen, const char *src);
-
-  // functions called before writing to the string: they copy it if there
-  // other references (should be the only owner when writing)
-  void CopyBeforeWrite();
-  void AllocBeforeWrite(size_t);
 };
 
 // ----------------------------------------------------------------------------
@@ -852,12 +870,6 @@ private:
 
   char  **m_pItems;   // pointer to data
 };
-
-// ---------------------------------------------------------------------------
-// implementation of inline functions
-// ---------------------------------------------------------------------------
-
-// Put back into class, since BC++ can't create precompiled header otherwise
 
 // ---------------------------------------------------------------------------
 /** @name wxString comparaison functions
