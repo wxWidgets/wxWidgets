@@ -511,7 +511,7 @@ bool wxSetWMDecorations(Window w, long style)
         hints.decorations |= MWM_DECOR_TITLE;
     }
 
-    if ((style & wxTHICK_FRAME) || (style & wxSIMPLE_BORDER) || (style & wxCAPTION))
+    if ((style & wxTHICK_FRAME) || (style & wxCAPTION))
     {
         // wxLogDebug("MWM_DECOR_BORDER");
         hints.flags |= MWM_HINTS_DECORATIONS;

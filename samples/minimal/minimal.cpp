@@ -61,7 +61,8 @@ class MyFrame : public wxFrame
 {
 public:
     // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
+            long style = wxDEFAULT_FRAME_STYLE);
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
@@ -137,8 +138,8 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 // frame constructor
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame(NULL, -1, title, pos, size)
+MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
+       : wxFrame(NULL, -1, title, pos, size, style)
 {
     // set the frame icon
     SetIcon(wxICON(mondrian));

@@ -304,8 +304,6 @@ bool wxFrame::Create(wxWindow *parent,
             decor |= MWM_DECOR_TITLE;
         if (style & wxTHICK_FRAME)
             decor |= MWM_DECOR_BORDER;
-        if (style & wxTHICK_FRAME)
-            decor |= MWM_DECOR_BORDER;
         if (style & wxMINIMIZE_BOX)
             decor |= MWM_DECOR_MINIMIZE;
         if (style & wxMAXIMIZE_BOX)
