@@ -1009,6 +1009,12 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     } s_lastKeyPress = { 0, 0 };
 
     KeySym keysym = gdk_event->keyval;
+
+    wxLogTrace(TRACE_KEYS, _T("Key %s event: keysym = %d"),
+               event.GetEventType() == wxEVT_KEY_UP ? _T("release")
+                                                    : _T("press"),
+               keysym);
+
     long key_code = wxTranslateKeySymToWXKey(keysym, FALSE /* !isChar */);
 
     if ( !key_code )
@@ -1034,6 +1040,9 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             // and then back but always using the lower register
             Display *dpy = (Display *)wxGetDisplay();
             KeyCode keycode = XKeysymToKeycode(dpy, keysym);
+
+            wxLogTrace(TRACE_KEYS, _T("\t-> keycode %d"), keycode);
+
             KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
 
             // use the normalized, i.e. lower register, keysym if we've
@@ -1071,10 +1080,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         }
     }
 
-    wxLogTrace(TRACE_KEYS, _T("Key %s event: keysym = %d => keycode = %ld"),
-               event.GetEventType() == wxEVT_KEY_UP ? _T("release")
-                                                    : _T("press"),
-               gdk_event->keyval, key_code);
+    wxLogTrace(TRACE_KEYS, _T("\t-> wxKeyCode %d"), key_code);
 
     // sending unknown key events doesn't really make sense
     if ( !key_code )
