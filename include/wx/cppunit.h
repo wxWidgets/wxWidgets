@@ -23,12 +23,20 @@
     #pragma warning(disable:4786)
 #endif // __VISUALC__
 
+#ifdef __BORLANDC__
+    #pragma warn -8022
+#endif
+
 #include "wx/beforestd.h"
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "wx/afterstd.h"
+
+#ifdef __BORLANDC__
+    #pragma warn .8022
+#endif
 
 #ifdef _MSC_VER
   #pragma warning(default:4702)

@@ -11,7 +11,16 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/wx.h"
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif // WX_PRECOMP
+
 #include "wx/filesys.h"
 
 #include "wx/cppunit.h"
@@ -57,7 +66,7 @@ private:
 
     void UrlParsing();
 
-    DECLARE_NO_COPY_CLASS(FileSystemTestCase);
+    DECLARE_NO_COPY_CLASS(FileSystemTestCase)
 };
 
 // register in the unnamed registry so that these tests are run by default
@@ -70,8 +79,8 @@ void FileSystemTestCase::UrlParsing()
 {
     static const struct Data
     {
-        const wchar_t *url;
-        const wchar_t *protocol, *left, *right, *anchor;
+        const wxChar *url;
+        const wxChar *protocol, *left, *right, *anchor;
     } data[] =
     {
         // simple case:
