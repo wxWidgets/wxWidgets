@@ -36,6 +36,7 @@
     #include "wx/listbox.h"
     #include "wx/checklst.h"
     #include "wx/scrolbar.h"
+    #include "wx/slider.h"
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 

@@ -27,7 +27,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_STATLINE
+#if wxUSE_BMPBUTTON
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
@@ -154,5 +154,5 @@ void wxBitmapButton::Release()
     wxButton::Release();
 }
 
-#endif // wxUSE_STATLINE
+#endif // wxUSE_BMPBUTTON
 

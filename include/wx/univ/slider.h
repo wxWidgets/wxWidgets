@@ -122,6 +122,11 @@ public:
     wxScrollThumb& GetThumb() { return m_thumb; }
 
 protected:
+    enum
+    {
+        INVALID_THUMB_VALUE = -0xffff
+    };
+
     // overridden base class virtuals
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
@@ -168,7 +173,8 @@ protected:
     // NULL, we calculate it here too)
     void CalcThumbRect(const wxRect *rectShaft,
                        wxRect *rectThumbOut,
-                       wxRect *rectLabelOut) const;
+                       wxRect *rectLabelOut,
+                       int value = INVALID_THUMB_VALUE) const;
 
     // return the slider rect calculating it if needed
     const wxRect& GetSliderRect() const;
@@ -206,6 +212,9 @@ private:
 
     // the state of the thumb (wxCONTROL_XXX constants sum)
     int m_thumbFlags;
+
+    // the previous slider value
+    int m_oldValue;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxSlider)

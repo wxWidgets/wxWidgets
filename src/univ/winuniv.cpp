@@ -271,6 +271,13 @@ bool wxWindow::DoDrawBackground(wxDC& dc)
     return TRUE;
 }
 
+void wxWindow::EraseBackground(wxDC& dc, const wxRect& rect)
+{
+    // TODO: handle bg bitmaps here!
+
+    m_renderer->DrawBackground(dc, wxTHEME_BG_COLOUR(this), rect, GetStateFlags());
+}
+
 void wxWindow::DoDrawBorder(wxDC& dc, const wxRect& rect)
 {
     // draw outline unless the update region is enitrely inside it in which

@@ -165,6 +165,9 @@ public:
     // this function
     void RefreshScrollbars();
 
+    // erase part of the control
+    virtual void EraseBackground(wxDC& dc, const wxRect& rect);
+
     // overridden base class methods
     // -----------------------------
 
