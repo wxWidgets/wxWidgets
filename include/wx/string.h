@@ -254,13 +254,13 @@ public:
   /** @name generic attributes & operations */
   //@{
     /// as standard strlen()
-  size_t Len() const { return GetStringData()->nDataLength; }
+  size_t Len() const { return GetStringData() ? GetStringData()->nDataLength : 0; }
     /// string contains any characters?
   bool IsEmpty() const { return Len() == 0; }
     /// reinitialize string (and free data!)
   void Empty()
   {
-    if ( GetStringData()->nDataLength != 0 )
+    if ( GetStringData() && GetStringData()->nDataLength != 0 )
       Reinit();
 
     wxASSERT( GetStringData()->nDataLength == 0 );
