@@ -1615,8 +1615,8 @@ void wxDC::SetMapMode(int mode)
             return;
         }
 
-        double mm2pixelsX = pixel_width / mm_width,
-               mm2pixelsY = pixel_height / mm_height;
+        double mm2pixelsX = (double)pixel_width / mm_width,
+               mm2pixelsY = (double)pixel_height / mm_height;
 
         switch (mode)
         {
