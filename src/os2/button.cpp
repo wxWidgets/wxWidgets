@@ -51,6 +51,9 @@ bool wxButton::Create(
 , const wxString&                   rsName
 )
 {
+
+    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+
     SetName(rsName);
 #if wxUSE_VALIDATORS
     SetValidator(rValidator);
@@ -73,7 +76,7 @@ bool wxButton::Create(
 
     m_hWnd = (WXHWND)::WinCreateWindow( GetHwndOf(pParent)   // Parent handle
                                        ,WC_BUTTON            // A Button class window
-                                       ,(PSZ)rsLabel.c_str() // Button text
+                                       ,(PSZ)sLabel.c_str()  // Button text
                                        ,lStyle               // Button style
                                        ,0, 0, 0, 0           // Location and size
                                        ,GetHwndOf(pParent)   // Owner handle

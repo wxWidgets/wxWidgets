@@ -50,6 +50,8 @@ public:
                 ,const wxString&    rsName = wxControlNameStr
                );
 
+    virtual void SetLabel(const wxString& rsLabel);
+
     //
     // Simulates an event
     //

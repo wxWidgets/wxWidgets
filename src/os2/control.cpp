@@ -240,6 +240,15 @@ WXDWORD wxControl::OS2GetStyle(
     return dwStyle;
 } // end of wxControl::OS2GetStyle
 
+void wxControl::SetLabel(
+  const wxString&                   rsLabel
+)
+{
+    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+
+    ::WinSetWindowText(GetHwnd(), sLabel.c_str());
+} // end of wxControl::SetLabel
+
 // ---------------------------------------------------------------------------
 // global functions
 // ---------------------------------------------------------------------------
