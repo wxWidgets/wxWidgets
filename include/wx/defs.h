@@ -2146,7 +2146,7 @@ typedef unsigned short  WXWORD;
 
 typedef unsigned long   WXCOLORREF;
 typedef void *          WXRGNDATA;
-typedef void *          WXMSG;
+typedef struct tagMSG   WXMSG;
 typedef void *          WXHCONV;
 typedef void *          WXHKEY;
 typedef void *          WXHTREEITEM;
