@@ -62,7 +62,7 @@ public:
     // just as with the ctor above, wxVSCROLL style is always used, there is no
     // need to specify it
     bool Create(wxWindow *parent,
-                wxWindowID id,
+                wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -96,7 +96,8 @@ public:
     // redraw all lines in the specified range (inclusive)
     void RefreshLines(size_t from, size_t to);
 
-    // return the item at the specified (in physical coordinates) position or
+    // return the item at the specified (in physical coordinates) position or.
+
     // wxNOT_FOUND if none, i.e. if it is below the last item
     int HitTest(wxCoord x, wxCoord y) const;
     int HitTest(const wxPoint& pt) const { return HitTest(pt.x, pt.y); }
