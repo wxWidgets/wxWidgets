@@ -1,0 +1,82 @@
+\section{\class{wxProtocol}}\label{wxprotocol}
+
+\wxheading{Derived from}
+
+\helpref{wxSocketClient}{wxsocketclient}
+
+\wxheading{See also}
+
+\helpref{wxSocketBase}{wxsocketbase}, \helpref{wxURL}{wxurl}
+
+% ----------------------------------------------------------------------------
+% Members
+% ----------------------------------------------------------------------------
+
+\latexignore{\rtfignore{\membersection{Members}}}
+
+\membersection{wxProtocol::Reconnect}\label{wxprotoreconnect}
+
+\func{bool}{Reconnect}{\void}
+
+Tries to reestablish a previous opened connection (close and renegotiate connection).
+
+\wxheading{Return value}
+
+TRUE, if the connection is established, else FALSE.
+
+% ----------------------------------------------------------------------------
+
+\membersection{wxProtocol::GetInputStream}\label{wxprotogetinput}
+
+\func{wxInputStream *}{GetInputStream}{\param{const wxString\&}{ path}}
+
+Creates a new input stream on the the specified path. You can use all but seek
+functionnality of wxStream. Seek isn't available on all stream. For example,
+http or ftp streams doesn't deal with it.
+
+\wxheading{Return value}
+
+Returns the initialized stream. You will have to delete it yourself.
+
+% ----------------------------------------------------------------------------
+
+\membersection{wxProtocol::Abort}\label{wxprotoabort}
+
+\func{bool }{Abort}{\void}
+
+Abort the current stream.
+\it{WARNING: It is advised to destroy the input stream instead of aborting the stream this way.}
+
+\wxheading{Return value}
+
+Returns TRUE, if successful, else FALSE.
+
+% ----------------------------------------------------------------------------
+
+\membersection{wxProtocol::GetError}
+
+\func{wxProtocolError }{GetError}{\void}
+
+Returns the last occured error.
+
+% ----------------------------------------------------------------------------
+
+\membersection{wxProtocol::GetContentType}
+
+\func{wxString }{GetContentType}{\void}
+
+Returns the type of the content of the last opened stream. It is a mime-type.
+
+% ----------------------------------------------------------------------------
+
+\membersection{wxProtocol::SetUser}
+
+\func{void }{SetUser}{\param{const wxString\&}{ user}}
+
+Sets the authentication user. It is mainly useful when FTP is used.
+
+\membersection{wxProtocol::SetPassword}
+
+\func{void }{SetPassword}{\param{const wxString\&}{ user}}
+
+Sets the authentication password. It is mainly useful when FTP is used.

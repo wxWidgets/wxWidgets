@@ -76,11 +76,13 @@ It can be one of these errors:
 
 \func{wxInputStream *}{GetInputStream}{\void}
 
-Initializes the protocol and opens the input stream.
+Creates a new input stream on the the specified URL. You can use all but seek
+functionnality of wxStream. Seek isn't available on all stream. For example,
+http or ftp streams doesn't deal with it.
 
 \wxheading{Return value}
 
-It returns a read-only wxStream.
+Returns the initialized stream. You will have to delete it yourself.
 
 \wxheading{See also}
 
