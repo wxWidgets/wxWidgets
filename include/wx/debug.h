@@ -17,6 +17,32 @@
 #include  "wx/wxchar.h"
 
 // ----------------------------------------------------------------------------
+// Defines controlling the debugging macros
+// ----------------------------------------------------------------------------
+
+// if _DEBUG is defined (MS VC++ and others use it in debug builds), define
+// __WXDEBUG__ too
+#ifdef _DEBUG
+    #ifndef __WXDEBUG__
+        #define __WXDEBUG__
+    #endif // !__WXDEBUG__
+#endif // _DEBUG
+
+// if NDEBUG is defined (<assert.h> uses it), undef __WXDEBUG__ and WXDEBUG
+#ifdef NDEBUG
+    #undef __WXDEBUG__
+    #undef WXDEBUG
+#endif // NDEBUG
+
+// if __WXDEBUG__ is defined, make sure that WXDEBUG is defined and >= 1
+#ifdef __WXDEBUG__
+    #if !defined(WXDEBUG) || !WXDEBUG
+        #undef WXDEBUG
+        #define WXDEBUG 1
+    #endif // !WXDEBUG
+#endif // __WXDEBUG__
+
+// ----------------------------------------------------------------------------
 // Debugging macros
 //
 // All debugging macros rely on ASSERT() which in turn calls user-defined
@@ -35,10 +61,6 @@
 // even in release builds, but in general are not much of a burden, while
 // a judicious use of them might increase your program's stability.
 // ----------------------------------------------------------------------------
-
-// Use of these suppresses compiler warnings about testing constant expression
-WXDLLEXPORT_DATA(extern const bool) wxTrue;
-WXDLLEXPORT_DATA(extern const bool) wxFalse;
 
 // Macros which are completely disabled in 'release' mode
 //
@@ -94,6 +116,10 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
   #define wxASSERT(cond)
   #define wxASSERT_MSG(x, m)
 #endif  //__WXDEBUG__
+
+// Use of wxFalse instead of FALSE suppresses compiler warnings about testing
+// constant expression
+WXDLLEXPORT_DATA(extern const bool) wxFalse;
 
 // special form of assert: always triggers it (in debug mode)
 #define wxFAIL                 wxASSERT(wxFalse)
