@@ -211,11 +211,14 @@ void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
 
 wxString wxStatusBar95::GetStatusText(int nField) const
 {
-  wxASSERT( (nField > 0) && (nField < m_nFields) );
+  wxASSERT( (nField > -1) && (nField < m_nFields) );
 
-  wxString str;
-  StatusBar_GetText(hwnd, nField, 
-                    str.GetWriteBuf(StatusBar_GetTextLen(hwnd, nField)));
+  wxString str("");
+  int len = StatusBar_GetTextLen(hwnd, nField);
+  if (len > 0)
+  {
+        StatusBar_GetText(hwnd, nField, str.GetWriteBuf(len));
+  }
   return str;
 }
 

@@ -70,7 +70,7 @@ wxDC::wxDC(void)
 {
   m_minX = 0; m_minY = 0; m_maxX = 0; m_maxY = 0;
   m_clipping = FALSE;
-  m_autoSetting = TRUE ;
+  m_autoSetting = FALSE ;
 
   m_filename = "";
   m_canvas = NULL;

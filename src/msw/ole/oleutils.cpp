@@ -41,7 +41,7 @@
 #include  <wx/msw/ole/uuid.h>
 #include  <wx/msw/ole/oleutils.h>
 
-#ifndef __BORLANDC__
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #include  <docobj.h>
 #endif
 

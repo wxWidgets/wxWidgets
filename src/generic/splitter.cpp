@@ -429,8 +429,8 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             dc.DrawLine(m_sashPosition+m_sashSize-2, 1, m_sashPosition+m_sashSize-2, h-1);
 
             dc.SetPen(*m_darkShadowPen);
-            dc.DrawLine(m_sashPosition+m_sashSize-1, 2, m_sashPosition+m_sashSize-1, h-2);
-        }
+			dc.DrawLine(m_sashPosition+m_sashSize-1, 2, m_sashPosition+m_sashSize-1, h-2);
+		}
         else
         {
             dc.SetPen(*m_facePen);

@@ -120,6 +120,8 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
 	SetIcon(wxIcon("aiai.xbm"));
 #endif
 
+	CreateStatusBar(1);
+
 	// Make a menubar
 	fileMenu = new wxMenu;
 	fileMenu->Append(SPLIT_VERTICAL, "Split &Vertically", "Split vertically");
@@ -150,7 +152,6 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
 
     // Set this to prevent unsplitting
 //    splitter->SetMinimumPaneSize(20);
-    CreateStatusBar();
 }
 
 MyFrame::~MyFrame()
@@ -223,8 +224,13 @@ MyCanvas::~MyCanvas()
 
 void MyCanvas::OnDraw(wxDC& dc)
 {
+	dc.SetPen(*wxBLACK_PEN);
 	dc.DrawLine(0, 0, 100, 100);
 
     dc.SetBackgroundMode(wxTRANSPARENT);
 	dc.DrawText("Testing", 50, 50);
+
+    dc.SetPen(*wxRED_PEN);
+    dc.SetBrush(*wxGREEN_BRUSH);
+    dc.DrawRectangle(120, 120, 100, 80);
 }
