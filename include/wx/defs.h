@@ -949,6 +949,9 @@ enum wxStretch
  * wxNotebook flags
  */
 #define wxNB_FIXEDWIDTH       0x0008
+#define wxNB_LEFT             0x0020
+#define wxNB_RIGHT            0x0040
+#define wxNB_BOTTOM           0x0080
 
 /*
  * wxStatusBar95 flags
