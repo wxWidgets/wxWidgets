@@ -132,34 +132,34 @@ static const char *wxPostScriptHeaderSpline = "\
 ";
 
 static const char *wxPostScriptHeaderColourImage = "\
-% define 'colorimage' if it isn't defined\n\
-%   ('colortogray' and 'mergeprocs' come from xwd2ps\n\
-%     via xgrab)\n\
-/colorimage where   % do we know about 'colorimage'?\n\
-  { pop }           % yes: pop off the 'dict' returned\n\
-  {                 % no:  define one\n\
-    /colortogray {  % define an RGB->I function\n\
-      /rgbdata exch store    % call input 'rgbdata'\n\
+%% define 'colorimage' if it isn't defined\n\
+%%   ('colortogray' and 'mergeprocs' come from xwd2ps\n\
+%%     via xgrab)\n\
+/colorimage where   %% do we know about 'colorimage'?\n\
+  { pop }           %% yes: pop off the 'dict' returned\n\
+  {                 %% no:  define one\n\
+    /colortogray {  %% define an RGB->I function\n\
+      /rgbdata exch store    %% call input 'rgbdata'\n\
       rgbdata length 3 idiv\n\
       /npixls exch store\n\
       /rgbindx 0 store\n\
       0 1 npixls 1 sub {\n\
         grays exch\n\
-        rgbdata rgbindx       get 20 mul    % Red\n\
-        rgbdata rgbindx 1 add get 32 mul    % Green\n\
-        rgbdata rgbindx 2 add get 12 mul    % Blue\n\
-        add add 64 idiv      % I = .5G + .31R + .18B\n\
+        rgbdata rgbindx       get 20 mul    %% Red\n\
+        rgbdata rgbindx 1 add get 32 mul    %% Green\n\
+        rgbdata rgbindx 2 add get 12 mul    %% Blue\n\
+        add add 64 idiv      %% I = .5G + .31R + .18B\n\
         put\n\
         /rgbindx rgbindx 3 add store\n\
       } for\n\
       grays 0 npixls getinterval\n\
     } bind def\n\
 \n\
-    % Utility procedure for colorimage operator.\n\
-    % This procedure takes two procedures off the\n\
-    % stack and merges them into a single procedure.\n\
+    %% Utility procedure for colorimage operator.\n\
+    %% This procedure takes two procedures off the\n\
+    %% stack and merges them into a single procedure.\n\
 \n\
-    /mergeprocs { % def\n\
+    /mergeprocs { %% def\n\
       dup length\n\
       3 -1 roll\n\
       dup\n\
@@ -178,12 +178,12 @@ static const char *wxPostScriptHeaderColourImage = "\
       putinterval\n\
     } bind def\n\
 \n\
-    /colorimage { % def\n\
-      pop pop     % remove 'false 3' operands\n\
+    /colorimage { %% def\n\
+      pop pop     %% remove 'false 3' operands\n\
       {colortogray} mergeprocs\n\
       image\n\
     } bind def\n\
-  } ifelse          % end of 'false' case\n\
+  } ifelse          %% end of 'false' case\n\
 ";
 
 static char wxPostScriptHeaderReencodeISO1[] =
@@ -233,7 +233,7 @@ static char wxPostScriptHeaderReencodeISO2[] =
 
 wxPostScriptDC::wxPostScriptDC ()
 {
-    m_pstream = (ofstream*) NULL;
+    m_pstream = (FILE*) NULL;
 
     m_currentRed = 0;
     m_currentGreen = 0;
@@ -255,7 +255,7 @@ wxPostScriptDC::wxPostScriptDC ()
 
 wxPostScriptDC::wxPostScriptDC (const wxString& file, bool interactive, wxWindow *parent)
 {
-    m_pstream = (ofstream*) NULL;
+    m_pstream = (FILE*) NULL;
 
     m_currentRed = 0;
     m_currentGreen = 0;
@@ -300,7 +300,7 @@ bool wxPostScriptDC::Create(const wxString& file, bool interactive, wxWindow *pa
 
 wxPostScriptDC::wxPostScriptDC (const wxPrintData& printData)
 {
-    m_pstream = (ofstream*) NULL;
+    m_pstream = (FILE*) NULL;
 
     m_currentRed = 0;
     m_currentGreen = 0;
@@ -323,7 +323,11 @@ wxPostScriptDC::wxPostScriptDC (const wxPrintData& printData)
 
 wxPostScriptDC::~wxPostScriptDC ()
 {
-    if (m_pstream) delete m_pstream;
+    if (m_pstream)
+    {
+        fclose( m_pstream );
+	m_pstream = (FILE*) NULL;
+    }
 }
 
 bool wxPostScriptDC::Ok() const
@@ -388,17 +392,22 @@ void wxPostScriptDC::SetClippingRegion (long x, long y, long w, long h)
     wxDC::SetClippingRegion( x, y, w, h );
 
     m_clipping = TRUE;
-    *m_pstream << "gsave\n"
-               << "newpath\n"
-           << XLOG2DEV(x)   << " " << YLOG2DEV(y)   << " moveto\n"
-           << XLOG2DEV(x+w) << " " << YLOG2DEV(y)   << " lineto\n"
-           << XLOG2DEV(x+w) << " " << YLOG2DEV(y+h) << " lineto\n"
-           << XLOG2DEV(x)   << " " << YLOG2DEV(y+h) << " lineto\n"
-               << "closepath clip newpath\n";
+    fprintf( m_pstream, 
+            "gsave\n newpath\n"
+	    "%ld %ld moveto\n"
+	    "%ld %ld lineto\n"
+	    "%ld %ld lineto\n"
+	    "%ld %ld lineto\n"
+	    "closepath clip newpath\n",
+	    XLOG2DEV(x),   YLOG2DEV(y), 
+	    XLOG2DEV(x+w), YLOG2DEV(y), 
+	    XLOG2DEV(x+w), YLOG2DEV(y+h),
+	    XLOG2DEV(x),   YLOG2DEV(y+h) );
 }
 
 void wxPostScriptDC::SetClippingRegion( const wxRegion &WXUNUSED(region) )
 {
+    wxFAIL_MSG( _T("wxPostScriptDC::SetClippingRegion not implemented.") );
 }
 
 void wxPostScriptDC::DestroyClippingRegion()
@@ -410,7 +419,7 @@ void wxPostScriptDC::DestroyClippingRegion()
     if (m_clipping)
     {
         m_clipping = FALSE;
-        *m_pstream << "grestore\n";
+	fprintf( m_pstream, "grestore\n" );
     }
 }
 
@@ -443,10 +452,13 @@ void wxPostScriptDC::DoDrawLine (long x1, long y1, long x2, long y2)
 
     SetPen( m_pen );
 
-    *m_pstream << "newpath\n"
-           <<  XLOG2DEV(x1) << " " <<  YLOG2DEV (y1) << " moveto\n"
-           <<  XLOG2DEV(x2) << " " <<  YLOG2DEV (y2) << " lineto\n"
-           << "stroke\n";
+    fprintf( m_pstream,
+            "newpath\n"
+	    "%ld %ld moveto\n"
+	    "%ld %ld lineto\n"
+	    "stroke\n",
+	    XLOG2DEV(x1), YLOG2DEV(y1),
+	    XLOG2DEV(x2), YLOG2DEV (y2) );
 
     CalcBoundingBox( x1, y1 );
     CalcBoundingBox( x2, y2 );
@@ -465,19 +477,21 @@ void wxPostScriptDC::DoDrawArc (long x1, long y1, long x2, long y2, long xc, lon
 
     if (x1 == x2 && y1 == y2)
     {
-    alpha1 = 0.0;
-    alpha2 = 360.0;
-    } else if (radius == 0.0)
+        alpha1 = 0.0;
+        alpha2 = 360.0;
+    } 
+    else if (radius == 0.0)
     {
-    alpha1 = alpha2 = 0.0;
-    } else
+        alpha1 = alpha2 = 0.0;
+    } 
+    else
     {
-    alpha1 = (x1 - xc == 0) ?
-        (y1 - yc < 0) ? 90.0 : -90.0 :
-        -atan2(double(y1-yc), double(x1-xc)) * RAD2DEG;
-    alpha2 = (x2 - xc == 0) ?
-        (y2 - yc < 0) ? 90.0 : -90.0 :
-        -atan2(double(y2-yc), double(x2-xc)) * RAD2DEG;
+        alpha1 = (x1 - xc == 0) ?
+            (y1 - yc < 0) ? 90.0 : -90.0 :
+                -atan2(double(y1-yc), double(x1-xc)) * RAD2DEG;
+        alpha2 = (x2 - xc == 0) ?
+            (y2 - yc < 0) ? 90.0 : -90.0 :
+                -atan2(double(y2-yc), double(x2-xc)) * RAD2DEG;
     }
     while (alpha1 <= 0)   alpha1 += 360;
     while (alpha2 <= 0)   alpha2 += 360; // adjust angles to be between
@@ -486,35 +500,37 @@ void wxPostScriptDC::DoDrawArc (long x1, long y1, long x2, long y2, long xc, lon
 
     if (m_brush.GetStyle() != wxTRANSPARENT)
     {
-    SetBrush( m_brush );
-    *m_pstream << "newpath\n"
-             << XLOG2DEV(xc)        << " "
-         << YLOG2DEV(yc)        << " "
-             << XLOG2DEVREL(radius) << " "
-         << YLOG2DEVREL(radius) << " "
-         << alpha1               << " "
-         << alpha2               << " ellipse\n"
-             << XLOG2DEV(xc)        << " "
-         << YLOG2DEV(yc)        << " lineto\n"
-         << "closepath\n"
-             << "fill\n";
+        SetBrush( m_brush );
+	
+	fprintf( m_pstream,
+	        "newpath\n"
+		"%ld %ld %ld %ld %ld %ld ellipse\n"
+		"%ld %ld lineto\n"
+		"closepath\n"
+		"fill\n",
+		XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL(radius), YLOG2DEVREL(radius), (long)alpha1, (long) alpha2,
+		XLOG2DEV(xc), YLOG2DEV(yc) );
+
+        CalcBoundingBox( xc-radius, yc-radius );
+        CalcBoundingBox( xc+radius, yc+radius );
     }
 
     if (m_pen.GetStyle() != wxTRANSPARENT)
     {
-    SetPen( m_pen );
-    *m_pstream << "newpath\n"
-             << XLOG2DEV(xc)        << " "
-         << YLOG2DEV(yc)        << " "
-             << XLOG2DEVREL(radius) << " "
-         << YLOG2DEVREL(radius) << " "
-         << alpha1               << " "
-         << alpha2               << " ellipse\n"
-             << "stroke\n";
-    }
+        SetPen( m_pen );
+	
+	fprintf( m_pstream,
+	        "newpath\n"
+		"%ld %ld %ld %ld %ld %ld ellipse\n"
+		"%ld %ld lineto\n"
+		"stroke\n"
+		"fill\n",
+		XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL(radius), YLOG2DEVREL(radius), (long)alpha1, (long) alpha2,
+		XLOG2DEV(xc), YLOG2DEV(yc) );
 
-    CalcBoundingBox( xc-radius, yc-radius );
-    CalcBoundingBox( xc+radius, yc+radius );
+        CalcBoundingBox( xc-radius, yc-radius );
+        CalcBoundingBox( xc+radius, yc+radius );
+    }
 }
 
 void wxPostScriptDC::DoDrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
@@ -535,26 +551,26 @@ void wxPostScriptDC::DoDrawEllipticArc(long x,long y,long w,long h,double sa,dou
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
         SetBrush( m_brush );
-
-        *m_pstream << "newpath\n"
-               << XLOG2DEV(x+w/2) << " " << YLOG2DEV(y+h/2) << " "
-           << XLOG2DEVREL(w/2) << " " << YLOG2DEVREL(h/2) << " "
-           << int(sa) <<" "<< int(ea) << " true ellipticarc\n";
-
+	
+	fprintf( m_pstream,
+	        "newpath\n"
+		"%ld %ld %ld %ld %ld %ld true ellipticarc\n",
+		XLOG2DEV(x+w/2), YLOG2DEV(y+h/2), XLOG2DEVREL(w/2), YLOG2DEVREL(h/2), (long)sa, (long)ea );
+    
         CalcBoundingBox( x ,y );
         CalcBoundingBox( x+w, y+h );
-    }
-
+    }	
+    
     if (m_pen.GetStyle () != wxTRANSPARENT)
     {
         SetPen( m_pen );
 
-        *m_pstream << "newpath\n"
-               << XLOG2DEV(x+w/2) << " " << YLOG2DEV(y+h/2) << " "
-           << XLOG2DEVREL(w/2) << " " << XLOG2DEVREL(h/2) << " "
-           << int(sa) <<" "<< int(ea) << " false ellipticarc\n";
-
-        CalcBoundingBox( x, y );
+	fprintf( m_pstream,
+	        "newpath\n"
+		"%ld %ld %ld %ld %ld %ld false ellipticarc\n",
+		XLOG2DEV(x+w/2), YLOG2DEV(y+h/2), XLOG2DEVREL(w/2), YLOG2DEVREL(h/2), (long)sa, (long)ea );
+    
+        CalcBoundingBox( x ,y );
         CalcBoundingBox( x+w, y+h );
     }
 }
@@ -567,10 +583,13 @@ void wxPostScriptDC::DoDrawPoint (long x, long y)
 
     SetPen (m_pen);
 
-    *m_pstream << "newpath\n"
-         << XLOG2DEV(x)   << " " << YLOG2DEV (y) << " moveto\n"
-         << XLOG2DEV(x+1) << " " << YLOG2DEV (y) << " lineto\n"
-         << "stroke\n";
+    fprintf( m_pstream,
+            "newpath\n"
+	    "%ld %ld moveto\n"
+	    "%ld %ld lineto\n"
+	    "stroke\n",
+	    XLOG2DEV(x),   YLOG2DEV(y),
+	    XLOG2DEV(x+1), YLOG2DEV(y) );
 
     CalcBoundingBox( x, y );
 }
@@ -583,45 +602,54 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], long xoffset, long 
 
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
-    SetBrush( m_brush );
+        SetBrush( m_brush );
 
-    *m_pstream << "newpath\n";
+        fprintf( m_pstream, "newpath\n" );
 
-    long xx = XLOG2DEV(points[0].x + xoffset);
-    long yy = YLOG2DEV(points[0].y + yoffset);
-    *m_pstream << xx << " " << yy << " moveto\n";
-    CalcBoundingBox( points[0].x + xoffset, points[0].y + yoffset );
+        long xx = XLOG2DEV(points[0].x + xoffset);
+        long yy = YLOG2DEV(points[0].y + yoffset);
+	
+	fprintf( m_pstream, "%ld %ld moveto\n", xx, yy );
+		
+        CalcBoundingBox( points[0].x + xoffset, points[0].y + yoffset );
 
-    for (int i = 1; i < n; i++)
-    {
-        xx = XLOG2DEV(points[i].x + xoffset);
-        yy = YLOG2DEV(points[i].y + yoffset);
-        *m_pstream << xx << " " << yy << " lineto\n";
-        CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset);
-    }
-    *m_pstream << "fill\n";
+        for (int i = 1; i < n; i++)
+        {
+            xx = XLOG2DEV(points[i].x + xoffset);
+            yy = YLOG2DEV(points[i].y + yoffset);
+	    
+	    fprintf( m_pstream, "%ld %ld lineto\n", xx, yy );
+
+            CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset);
+        }
+	
+	fprintf( m_pstream, "fill\n" );
     }
 
     if (m_pen.GetStyle () != wxTRANSPARENT)
     {
-    SetPen( m_pen );
+        SetPen( m_pen );
+	
+        fprintf( m_pstream, "newpath\n" );
 
-    *m_pstream << "newpath\n";
+        long xx = XLOG2DEV(points[0].x + xoffset);
+        long yy = YLOG2DEV(points[0].y + yoffset);
+	
+	fprintf( m_pstream, "%ld %ld moveto\n", xx, yy );
+	
+        CalcBoundingBox( points[0].x + xoffset, points[0].y + yoffset );
 
-    long xx = XLOG2DEV(points[0].x + xoffset);
-    long yy = YLOG2DEV(points[0].y + yoffset);
-    *m_pstream << xx << " " << yy << " moveto\n";
-    CalcBoundingBox( points[0].x + xoffset, points[0].y + yoffset );
+        for (int i = 1; i < n; i++)
+        {
+            xx = XLOG2DEV(points[i].x + xoffset);
+            yy = YLOG2DEV(points[i].y + yoffset);
+	    
+	    fprintf( m_pstream, "%ld %ld lineto\n", xx, yy );
+	    
+            CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset);
+        }
 
-    for (int i = 1; i < n; i++)
-    {
-        xx = XLOG2DEV(points[i].x + xoffset);
-        yy = YLOG2DEV(points[i].y + yoffset);
-        *m_pstream << xx << " " << yy << " lineto\n";
-        CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset);
-    }
-
-    *m_pstream << "stroke\n";
+	fprintf( m_pstream, "fill\n" );
     }
 }
 
@@ -629,10 +657,9 @@ void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], long xoffset, long yo
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
-    if (m_pen.GetStyle() == wxTRANSPARENT)
-        return;
-    if (n <= 0)
-        return;
+    if (m_pen.GetStyle() == wxTRANSPARENT) return;
+	
+    if (n <= 0) return;
 
     SetPen (m_pen);
 
@@ -642,17 +669,19 @@ void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], long xoffset, long yo
         CalcBoundingBox( XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset));
     }
 
-    *m_pstream << "newpath\n"
-               << XLOG2DEV(points[0].x+xoffset) << " "
-               << YLOG2DEV(points[0].y+yoffset) << " moveto\n";
+    fprintf( m_pstream,
+            "newpath\n"
+	    "%ld %ld moveto\n",
+	    XLOG2DEV(points[0].x+xoffset), YLOG2DEV(points[0].y+yoffset) );
 
     for (i = 1; i < n; i++)
     {
-        *m_pstream << XLOG2DEV(points[i].x+xoffset) << " "
-                   << YLOG2DEV(points[i].y+yoffset) << " lineto\n";
+        fprintf( m_pstream,
+	        "%ld %ld lineto\n",
+	        XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset) );
     }
 
-    *m_pstream << "stroke\n";
+    fprintf( m_pstream, "stroke\n" );
 }
 
 void wxPostScriptDC::DoDrawRectangle (long x, long y, long width, long height)
@@ -662,14 +691,19 @@ void wxPostScriptDC::DoDrawRectangle (long x, long y, long width, long height)
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
         SetBrush( m_brush );
-
-        *m_pstream << "newpath\n"
-                   << XLOG2DEV(x) << " " << YLOG2DEV(y) << " moveto\n"
-                   << XLOG2DEV(x + width) << " " << YLOG2DEV(y) << " lineto\n"
-                   << XLOG2DEV(x + width) << " " << YLOG2DEV(y + height) << " lineto\n"
-                   << XLOG2DEV(x) << " " << YLOG2DEV(y + height) << " lineto\n"
-                   << "closepath\n"
-                   << "fill\n";
+	
+	fprintf( m_pstream,
+	        "newpath\n"
+		"%ld %ld moveto\n"
+		"%ld %ld lineto\n"
+		"%ld %ld lineto\n"
+		"%ld %ld lineto\n"
+                "closepath\n"
+                "fill\n",
+		XLOG2DEV(x),         YLOG2DEV(y),
+		XLOG2DEV(x + width), YLOG2DEV(y),
+		XLOG2DEV(x + width), YLOG2DEV(y + height),
+		XLOG2DEV(x),         YLOG2DEV(y + height) );
 
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -679,14 +713,19 @@ void wxPostScriptDC::DoDrawRectangle (long x, long y, long width, long height)
     {
         SetPen (m_pen);
 
-        *m_pstream << "newpath\n"
-                   << XLOG2DEV(x) << " " << YLOG2DEV(y) << " moveto\n"
-                   << XLOG2DEV(x + width) << " " << YLOG2DEV(y) << " lineto\n"
-                   << XLOG2DEV(x + width) << " " << YLOG2DEV(y + height) << " lineto\n"
-                   << XLOG2DEV(x) << " " << YLOG2DEV(y + height) << " lineto\n"
-                   << "closepath\n"
-                   << "stroke\n";
-
+	fprintf( m_pstream,
+	        "newpath\n"
+		"%ld %ld moveto\n"
+		"%ld %ld lineto\n"
+		"%ld %ld lineto\n"
+		"%ld %ld lineto\n"
+                "closepath\n"
+                "stroke\n",
+		XLOG2DEV(x),         YLOG2DEV(y),
+		XLOG2DEV(x + width), YLOG2DEV(y),
+		XLOG2DEV(x + width), YLOG2DEV(y + height),
+		XLOG2DEV(x),         YLOG2DEV(y + height) );
+		
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
     }
@@ -714,18 +753,27 @@ void wxPostScriptDC::DoDrawRoundedRectangle (long x, long y, long width, long he
     {
         SetBrush( m_brush );
 
-        // Draw rectangle anticlockwise
-        *m_pstream << "newpath\n"
-                   << XLOG2DEV(x + rad) << " " << YLOG2DEV(y + rad) << " " << XLOG2DEVREL(rad) << " 90 180 arc\n"
-                   << XLOG2DEV(x) << " " << YLOG2DEV(y + rad) << " moveto\n"
-                   << XLOG2DEV(x + rad) << " " << YLOG2DEV(y + height - rad) << " " << XLOG2DEVREL(rad) << " 180 270 arc\n"
-                   << XLOG2DEV(x + width - rad) << " " << YLOG2DEV(y + height) << " lineto\n"
-                   << XLOG2DEV(x + width - rad) << " " << YLOG2DEV(y + height - rad) << " " << XLOG2DEVREL(rad) << " 270 0 arc\n"
-                   << XLOG2DEV(x + width) << " " << YLOG2DEV(y + rad) << " lineto\n"
-                   << XLOG2DEV(x + width - rad) << " " << YLOG2DEV(y + rad) << " " << XLOG2DEVREL(rad) << " 0 90 arc\n"
-                   << XLOG2DEV(x + rad) << " " << YLOG2DEV(y) << " lineto\n"
-                   << "closepath\n"
-                   << "fill\n";
+        /* Draw rectangle anticlockwise */
+	fprintf( m_pstream,
+	        "newpath\n"
+		"%ld %ld %ld 90 180 arc\n"
+		"%ld %ld moveto\n"
+		"%ld %ld %ld 180 270 arc\n"
+		"%ld %ld lineto\n"
+		"%ld %ld %ld 270 0 arc\n"
+		"%ld %ld lineto\n"
+		"%ld %ld %ld 0 90 arc\n"
+		"%ld %ld lineto\n"
+                "closepath\n"
+                "fill\n",
+		XLOG2DEV(x + rad), YLOG2DEV(y + rad), XLOG2DEVREL(rad),
+		XLOG2DEV(x), YLOG2DEV(y + rad),
+                XLOG2DEV(x + rad), YLOG2DEV(y + height - rad), XLOG2DEVREL(rad),
+                XLOG2DEV(x + width - rad), YLOG2DEV(y + height),
+		XLOG2DEV(x + width - rad), YLOG2DEV(y + height - rad), XLOG2DEVREL(rad),
+		XLOG2DEV(x + width), YLOG2DEV(y + rad),
+		XLOG2DEV(x + width - rad), YLOG2DEV(y + rad), XLOG2DEVREL(rad),
+		XLOG2DEV(x + rad), YLOG2DEV(y) );
 
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -735,18 +783,27 @@ void wxPostScriptDC::DoDrawRoundedRectangle (long x, long y, long width, long he
     {
         SetPen (m_pen);
 
-        // Draw rectangle anticlockwise
-        *m_pstream << "newpath\n"
-                   << XLOG2DEV(x + rad) << " " << YLOG2DEV(y + rad) << " " << XLOG2DEVREL(rad) << " 90 180 arc\n"
-                   << XLOG2DEV(x) << " " << YLOG2DEV(y + rad) << " moveto\n"
-                   << XLOG2DEV(x + rad) << " " << YLOG2DEV(y + height - rad) << " " << XLOG2DEVREL(rad) << " 180 270 arc\n"
-                   << XLOG2DEV(x + width - rad) << " " << YLOG2DEV(y + height) << " lineto\n"
-                   << XLOG2DEV(x + width - rad) << " " << YLOG2DEV(y + height - rad) << " " << XLOG2DEVREL(rad) << " 270 0 arc\n"
-                   << XLOG2DEV(x + width) << " " << YLOG2DEV(y + rad) << " lineto\n"
-                   << XLOG2DEV(x + width - rad) << " " << YLOG2DEV(y + rad) << " " << XLOG2DEVREL(rad) << " 0 90 arc\n"
-                   << XLOG2DEV(x + rad) << " " << YLOG2DEV(y) << " lineto\n"
-                   << "closepath\n"
-                   << "stroke\n";
+        /* Draw rectangle anticlockwise */
+	fprintf( m_pstream,
+	        "newpath\n"
+		"%ld %ld %ld 90 180 arc\n"
+		"%ld %ld moveto\n"
+		"%ld %ld %ld 180 270 arc\n"
+		"%ld %ld lineto\n"
+		"%ld %ld %ld 270 0 arc\n"
+		"%ld %ld lineto\n"
+		"%ld %ld %ld 0 90 arc\n"
+		"%ld %ld lineto\n"
+                "closepath\n"
+                "stroke\n",
+		XLOG2DEV(x + rad), YLOG2DEV(y + rad), XLOG2DEVREL(rad),
+		XLOG2DEV(x), YLOG2DEV(y + rad),
+                XLOG2DEV(x + rad), YLOG2DEV(y + height - rad), XLOG2DEVREL(rad),
+                XLOG2DEV(x + width - rad), YLOG2DEV(y + height),
+		XLOG2DEV(x + width - rad), YLOG2DEV(y + height - rad), XLOG2DEVREL(rad),
+		XLOG2DEV(x + width), YLOG2DEV(y + rad),
+		XLOG2DEV(x + width - rad), YLOG2DEV(y + rad), XLOG2DEVREL(rad),
+		XLOG2DEV(x + rad), YLOG2DEV(y) );
 
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -761,23 +818,27 @@ void wxPostScriptDC::DoDrawEllipse (long x, long y, long width, long height)
     {
         SetBrush (m_brush);
 
-        *m_pstream << "newpath\n"
-                   << XLOG2DEV(x + width / 2) << " " << YLOG2DEV(y + height / 2) << " "
-                   << XLOG2DEV(width / 2) << " " << YLOG2DEVREL(height / 2) << " 0 360 ellipse\n"
-                   << "fill\n";
+        fprintf( m_pstream, 
+	        "newpath\n"
+		"%ld %ld %ld %ld 0 360 ellipse\n"
+		"fill\n",
+		XLOG2DEV(x + width / 2), YLOG2DEV(y + height / 2), 
+		XLOG2DEV(width / 2), YLOG2DEVREL(height / 2) );
 
         CalcBoundingBox( x - width, y - height );
         CalcBoundingBox( x + width, y + height );
     }
 
-    if (m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.GetStyle () != wxTRANSPARENT)
     {
         SetPen (m_pen);
 
-        *m_pstream << "newpath\n"
-                   << XLOG2DEV(x + width / 2) << " " << YLOG2DEV(y + height / 2) << " "
-                   << XLOG2DEV(width / 2) << " " << YLOG2DEVREL(height / 2) << " 0 360 ellipse\n"
-                   << "stroke\n";
+        fprintf( m_pstream, 
+	        "newpath\n"
+		"%ld %ld %ld %ld 0 360 ellipse\n"
+		"stroke\n",
+		XLOG2DEV(x + width / 2), YLOG2DEV(y + height / 2), 
+		XLOG2DEV(width / 2), YLOG2DEVREL(height / 2) );
 
         CalcBoundingBox( x - width, y - height );
         CalcBoundingBox( x + width, y + height );
@@ -787,6 +848,17 @@ void wxPostScriptDC::DoDrawEllipse (long x, long y, long width, long height)
 void wxPostScriptDC::DoDrawIcon( const wxIcon& icon, long x, long y )
 {
     DrawBitmap( icon, x, y, TRUE );
+}
+
+/* this has to be char, not wxChar */
+static char hexArray[] = "0123456789ABCDEF";
+static void LocalDecToHex( int dec, char *buf )
+{
+    int firstDigit = (int)(dec/16.0);
+    int secondDigit = (int)(dec - (firstDigit*16.0));
+    buf[0] = hexArray[firstDigit];
+    buf[1] = hexArray[secondDigit];
+    buf[2] = 0;
 }
 
 void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, long x, long y, bool WXUNUSED(useMask) )
@@ -799,48 +871,48 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, long x, long y, bool 
 
     if (!image.Ok()) return;
 
-    int ww = XLOG2DEVREL(image.GetWidth());
-    int hh = YLOG2DEVREL(image.GetHeight());
+    long ww = XLOG2DEVREL(image.GetWidth());
+    long hh = YLOG2DEVREL(image.GetHeight());
 
     image = image.Scale( ww, hh );
 
     if (!image.Ok()) return;
 
-    int xx = XLOG2DEV(x);
-    int yy = YLOG2DEV(y + bitmap.GetHeight());
+    long xx = XLOG2DEV(x);
+    long yy = YLOG2DEV(y + bitmap.GetHeight());
 
-    *m_pstream << "/origstate save def\n"
-               << "20 dict begin\n"
-               << "/pix " << ww << " string def\n"
-               << "/grays " << ww << " string def\n"
-               << "/npixels 0 def\n"
-               << "/rgbindx 0 def\n"
-               << xx << " " << yy << " translate\n"
-               << ww << " " << hh << " scale\n"
-               << ww << " " << hh << " 8\n"
-               << "[" << ww << " 0 0 " << (-hh) << " 0 " << hh << "]\n"
-               << "{currentfile pix readhexstring pop}\n"
-               << "false 3 colorimage\n";
+    fprintf( m_pstream,
+            "/origstate save def\n"
+	    "20 dict begin\n"
+	    "/pix %ld string def\n"
+	    "/grays %ld string def\n"
+            "/npixels 0 def\n"
+            "/rgbindx 0 def\n"
+	    "%ld %ld translate\n"
+	    "%ld %ld scale\n"
+	    "%ld %ld 8\n"
+	    "[%ld 0 0 %ld 0 %ld]\n"
+	    "{currentfile pix readhexstring pop}\n"
+	    "false 3 colorimage\n",
+	    ww, ww, xx, yy, ww, hh, ww, hh, ww, -hh, hh );
 
     for (int j = 0; j < hh; j++)
     {
         for (int i = 0; i < ww; i++)
         {
-        wxChar buffer[5];
-        buffer[2] = 0;
-        wxDecToHex( image.GetRed(i,j), buffer );
-            *m_pstream << buffer;
-        wxDecToHex( image.GetGreen(i,j), buffer );
-            *m_pstream << buffer;
-        wxDecToHex( image.GetBlue(i,j), buffer );
-            *m_pstream << buffer;
-    }
-    *m_pstream << "\n";
+            char buffer[5];
+            LocalDecToHex( image.GetRed(i,j), buffer );
+	    fprintf( m_pstream, buffer );
+            LocalDecToHex( image.GetGreen(i,j), buffer );
+	    fprintf( m_pstream, buffer );
+	    LocalDecToHex( image.GetBlue(i,j), buffer );
+	    fprintf( m_pstream, buffer );
+        }
+        fprintf( m_pstream, "\n" );
     }
 
-    *m_pstream << "end\n";
-    *m_pstream << "origstate restore\n";
-
+    fprintf( m_pstream, "end\n" );
+    fprintf( m_pstream, "origstate restore\n" );
 }
 
 void wxPostScriptDC::SetFont( const wxFont& font )
@@ -856,7 +928,7 @@ void wxPostScriptDC::SetFont( const wxFont& font )
     int Style = m_font.GetStyle();
     int Weight = m_font.GetWeight();
 
-    switch (m_font.GetFamily ())
+    switch (m_font.GetFamily())
     {
         case wxTELETYPE:
         case wxMODERN:
@@ -881,55 +953,57 @@ void wxPostScriptDC::SetFont( const wxFont& font )
 
     if (Style == wxNORMAL && (Weight == wxNORMAL || Weight == wxLIGHT))
     {
-      if (m_font.GetFamily () == wxROMAN)
-    style = "-Roman";
-      else
-    style = "";
+        if (m_font.GetFamily () == wxROMAN)
+            style = "-Roman";
+        else
+            style = "";
     }
     else if (Style == wxNORMAL && Weight == wxBOLD)
     {
-      style = "-Bold";
+        style = "-Bold";
     }
     else if (Style == wxITALIC && (Weight == wxNORMAL || Weight == wxLIGHT))
     {
-      if (m_font.GetFamily () == wxROMAN)
-    style = "-Italic";
-      else
-    style = "-Oblique";
+        if (m_font.GetFamily () == wxROMAN)
+            style = "-Italic";
+        else
+            style = "-Oblique";
     }
     else if (Style == wxITALIC && Weight == wxBOLD)
     {
-      if (m_font.GetFamily () == wxROMAN)
-    style = "-BoldItalic";
-      else
-    style = "-BoldOblique";
+        if (m_font.GetFamily () == wxROMAN)
+            style = "-BoldItalic";
+        else
+            style = "-BoldOblique";
     }
     else if (Style == wxSLANT && (Weight == wxNORMAL || Weight == wxLIGHT))
     {
-      if (m_font.GetFamily () == wxROMAN)
-    style = "-Italic";
-      else
-    style = "-Oblique";
+        if (m_font.GetFamily () == wxROMAN)
+            style = "-Italic";
+        else
+            style = "-Oblique";
     }
     else if (Style == wxSLANT && Weight == wxBOLD)
     {
-      if (m_font.GetFamily () == wxROMAN)
-    style = "-BoldItalic";
-      else
-    style = "-BoldOblique";
+        if (m_font.GetFamily () == wxROMAN)
+            style = "-BoldItalic";
+        else
+            style = "-BoldOblique";
     }
     else
     {
-      style = "";
+        style = "";
     }
 
-    char buf[100];
-    strcpy (buf, name);
-    strcat (buf, style);
+    char buffer[100];
+    strcpy( buffer, name );
+    strcat( buffer, style );
 
-    *m_pstream << buf << " reencodeISO def\n";
-    *m_pstream << buf << " findfont\n";
-    *m_pstream << YLOG2DEVREL(m_font.GetPointSize()) << " scalefont setfont\n";
+    fprintf( m_pstream, buffer );
+    fprintf( m_pstream, " reencodeISO def\n" );
+    fprintf( m_pstream, buffer );
+    fprintf( m_pstream, " findfont\n" );
+    fprintf( m_pstream, "%ld scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize()) );
 }
 
 void wxPostScriptDC::SetPen( const wxPen& pen )
@@ -942,7 +1016,7 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
 
     m_pen = pen;
 
-    *m_pstream << XLOG2DEVREL(m_pen.GetWidth()) << " setlinewidth\n";
+    fprintf( m_pstream, "%ld setlinewidth\n", XLOG2DEVREL(m_pen.GetWidth()) );
 
 /*
      Line style - WRONG: 2nd arg is OFFSET
@@ -962,7 +1036,7 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
     static const char *dotted_dashed = "[6 6 2 6] 4";
 
     const char *psdash = (char *) NULL;
-    switch (m_pen.GetStyle ())
+    switch (m_pen.GetStyle())
     {
         case wxDOT:           psdash = dotted;         break;
         case wxSHORT_DASH:    psdash = short_dashed;   break;
@@ -975,7 +1049,8 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
 
     if (oldStyle != m_pen.GetStyle())
     {
-        *m_pstream << psdash << " setdash\n";
+        fprintf( m_pstream, psdash );
+	fprintf( m_pstream," setdash\n" );
     }
 
     // Line colour
@@ -986,27 +1061,30 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
     if (!m_colour)
     {
         // Anything not white is black
-        if (!(red == (unsigned char) 255 && blue == (unsigned char) 255
-        && green == (unsigned char) 255))
-    {
-        red = (unsigned char) 0;
-        green = (unsigned char) 0;
-        blue = (unsigned char) 0;
-    }
-
-    // setgray here ?
+        if (! (red == (unsigned char) 255 && 
+	       blue == (unsigned char) 255 &&
+               green == (unsigned char) 255) )
+        {
+            red = (unsigned char) 0;
+            green = (unsigned char) 0;
+            blue = (unsigned char) 0;
+        } 
+        // setgray here ?
     }
 
     if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
     {
-       float redPS = (float)(red) / 255.0;
-       float bluePS = (float)(blue) / 255.0;
-       float greenPS = (float)(green) / 255.0;
-       *m_pstream << redPS << " " << greenPS << " " << bluePS << " setrgbcolor\n";
-
-       m_currentRed = red;
-       m_currentBlue = blue;
-       m_currentGreen = green;
+        double redPS = (double)(red) / 255.0;
+        double bluePS = (double)(blue) / 255.0;
+        double greenPS = (double)(green) / 255.0;
+	
+	fprintf( m_pstream, 
+	        "%.8f %.8f %.8f setrgbcolor\n",
+		redPS, greenPS, bluePS );
+		
+        m_currentRed = red;
+        m_currentBlue = blue;
+        m_currentGreen = green;
     }
 }
 
@@ -1025,27 +1103,31 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 
     if (!m_colour)
     {
-        // Anything not black is white
-        if (!(red == (unsigned char) 0 && blue == (unsigned char) 0
-        && green == (unsigned char) 0))
-    {
-        red = (unsigned char) 255;
-        green = (unsigned char) 255;
-        blue = (unsigned char) 255;
+        // Anything not white is black
+        if (! (red == (unsigned char) 255 && 
+	       blue == (unsigned char) 255 &&
+               green == (unsigned char) 255) )
+        {
+            red = (unsigned char) 0;
+            green = (unsigned char) 0;
+            blue = (unsigned char) 0;
+        } 
+        // setgray here ?
     }
-
-    // setgray here ?
-    }
-
+    
     if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
     {
-       float redPS = (float)(red) / 255.0;
-       float bluePS = (float)(blue) / 255.0;
-       float greenPS = (float)(green) / 255.0;
-       *m_pstream << redPS << " " << greenPS << " " << bluePS << " setrgbcolor\n";
-       m_currentRed = red;
-       m_currentBlue = blue;
-       m_currentGreen = green;
+        double redPS = (double)(red) / 255.0;
+        double bluePS = (double)(blue) / 255.0;
+        double greenPS = (double)(green) / 255.0;
+	
+	fprintf( m_pstream, 
+	        "%.8f %.8f %.8f setrgbcolor\n",
+		redPS, greenPS, bluePS );
+		
+        m_currentRed = red;
+        m_currentBlue = blue;
+        m_currentGreen = green;
     }
 }
 
@@ -1055,33 +1137,36 @@ void wxPostScriptDC::DoDrawText( const wxString& text, long x, long y )
 
     SetFont( m_font );
 
-    if (m_textForegroundColour.Ok ())
+    if (m_textForegroundColour.Ok())
     {
-        unsigned char red = m_textForegroundColour.Red ();
-        unsigned char blue = m_textForegroundColour.Blue ();
-        unsigned char green = m_textForegroundColour.Green ();
+        unsigned char red = m_textForegroundColour.Red();
+        unsigned char blue = m_textForegroundColour.Blue();
+        unsigned char green = m_textForegroundColour.Green();
 
         if (!m_colour)
-    {
-      // Anything not white is black
-      if (!(red == (unsigned char) 255 && blue == (unsigned char) 255
-        && green == (unsigned char) 255))
         {
-          red = (unsigned char) 0;
-          green = (unsigned char) 0;
-          blue = (unsigned char) 0;
+            // Anything not white is black
+            if (! (red == (unsigned char) 255 && 
+	           blue == (unsigned char) 255 &&
+		   green == (unsigned char) 255))
+            {
+                red = (unsigned char) 0;
+                green = (unsigned char) 0;
+                blue = (unsigned char) 0;
+            }
         }
-    }
 
-    // maybe setgray here ?
-
+        // maybe setgray here ?
         if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
         {
-            float redPS = (float)(red) / 255.0;
-            float bluePS = (float)(blue) / 255.0;
-            float greenPS = (float)(green) / 255.0;
-            *m_pstream << redPS << " " << greenPS << " " << bluePS << " setrgbcolor\n";
-
+            double redPS = (double)(red) / 255.0;
+            double bluePS = (double)(blue) / 255.0;
+            double greenPS = (double)(green) / 255.0;
+	
+	    fprintf( m_pstream, 
+	            "%.8f %.8f %.8f setrgbcolor\n",
+		    redPS, greenPS, bluePS );
+		
             m_currentRed = red;
             m_currentBlue = blue;
             m_currentGreen = green;
@@ -1090,32 +1175,40 @@ void wxPostScriptDC::DoDrawText( const wxString& text, long x, long y )
 
     int size = m_font.GetPointSize();
 
-    long by = y + (long)floor( float(size) * 2.0 / 3.0 ); // approximate baseline
-    *m_pstream << XLOG2DEV(x) << " " << YLOG2DEV(by) << " moveto\n";
+    long by = y + (long)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
+    fprintf( m_pstream, "%ld %ld moveto\n", XLOG2DEV(x), YLOG2DEV(by) );
 
-    *m_pstream << "(";
+    /* I don't know how to write char to a stream, so I use a mini string */
+    char tmpbuf[2];
+    tmpbuf[1] = 0;
+    
+    fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
-    int len = strlen (textbuf);
+    int len = strlen(textbuf);
     int i;
     for (i = 0; i < len; i++)
     {
         int c = (unsigned char) textbuf[i];
-        if ( c == ')' || c == '(' || c == '\\')
+        if (c == ')' || c == '(' || c == '\\')
         {
-            *m_pstream << "\\" << (char) c;
+            /* Cope with special characters */
+	    fprintf( m_pstream, "\\" );
+	    tmpbuf[0] = (char) c;
+	    fprintf( m_pstream, tmpbuf );
         }
         else if ( c >= 128 )
         {
-            // Cope with character codes > 127
-            char tmp[5];
-            sprintf(tmp, "\\%o", c);
-            *m_pstream << tmp;
+            /* Cope with character codes > 127 */
+	    fprintf(m_pstream, "\\%o", c);
         }
         else
-            *m_pstream << (char) c;
+	{
+	    tmpbuf[0] = (char) c;
+	    fprintf( m_pstream, tmpbuf );
+	}
     }
-
-    *m_pstream << ")" << " show\n";
+    
+    fprintf( m_pstream, ") show\n" );
 
     if (m_font.GetUnderlined())
     {
@@ -1123,11 +1216,16 @@ void wxPostScriptDC::DoDrawText( const wxString& text, long x, long y )
         long w, h;
         GetTextExtent(text, &w, &h);
 
-        *m_pstream << "gsave " << XLOG2DEV(x) << " " << YLOG2DEV(uy)
-                   << " moveto\n"
-                   << (long)m_underlineThickness << " setlinewidth "
-                   << XLOG2DEV(x + w) << " " << YLOG2DEV(uy)
-                   << " lineto stroke grestore\n";
+        fprintf( m_pstream, 
+	        "gsave\n"
+		"%ld %ld moveto\n"		
+		"%ld setlinewidth\n"
+		"%ld %ld lineto\n"
+		"stroke\n"
+		"grestore\n", 
+                XLOG2DEV(x), YLOG2DEV(uy),
+		(long)m_underlineThickness,
+		XLOG2DEV(x + w), YLOG2DEV(uy) );
     }
 
     CalcBoundingBox( x, y );
@@ -1166,9 +1264,12 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     x3 = a = (double)(x1 + c) / 2;
     y3 = b = (double)(y1 + d) / 2;
 
-    *m_pstream  << "newpath "
-                << XLOG2DEV((long)x1) << " " << YLOG2DEV((long)y1) << " moveto "
-        << XLOG2DEV((long)x3) << " " << YLOG2DEV((long)y3) << " lineto\n";
+    fprintf( m_pstream, 
+            "newpath\n"
+	    "%ld %ld moveto\n"
+	    "%ld %ld lineto\n",
+            XLOG2DEV((long)x1), YLOG2DEV((long)y1),
+            XLOG2DEV((long)x3), YLOG2DEV((long)y3) );
 
     CalcBoundingBox( (long)x1, (long)y1 );
     CalcBoundingBox( (long)x3, (long)y3 );
@@ -1177,17 +1278,20 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     {
         q = (wxPoint *)node->Data();
 
-    x1 = x3;
-    y1 = y3;
-    x2 = c;
-    y2 = d;
-    c = q->x;
-    d = q->y;
+        x1 = x3;
+        y1 = y3;
+        x2 = c;
+        y2 = d;
+        c = q->x;
+        d = q->y;
         x3 = (double)(x2 + c) / 2;
         y3 = (double)(y2 + d) / 2;
-        *m_pstream << XLOG2DEV((long)x1) << " " << YLOG2DEV((long)y1) << " "
-               << XLOG2DEV((long)x2) << " " << YLOG2DEV((long)y2) << " "
-                   << XLOG2DEV((long)x3) << " " << YLOG2DEV((long)y3) << " DrawSplineSection\n";
+	
+	fprintf( m_pstream,
+	        "%ld %ld %ld %ld %ld %ld DrawSplineSection\n",
+		XLOG2DEV((long)x1), YLOG2DEV((long)y1),
+		XLOG2DEV((long)x2), YLOG2DEV((long)y2),
+		XLOG2DEV((long)x3), YLOG2DEV((long)y3) );
 
         CalcBoundingBox( (long)x1, (long)y1 );
         CalcBoundingBox( (long)x3, (long)y3 );
@@ -1198,7 +1302,10 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
      next-to-last and last point respectively, in the point list
 */
 
-    *m_pstream << XLOG2DEV((long)c) << " " << YLOG2DEV((long)d) << " lineto stroke\n";
+    fprintf( m_pstream,
+            "%ld %ld lineto\n"
+	    "stroke\n",
+	    XLOG2DEV((long)c), YLOG2DEV((long)d) );
 }
 
 long wxPostScriptDC::GetCharWidth() const
@@ -1279,7 +1386,7 @@ wxSize wxPostScriptDC::GetPPI(void) const
 }
 
 
-bool wxPostScriptDC::StartDoc (const wxString& message)
+bool wxPostScriptDC::StartDoc( const wxString& message )
 {
     wxCHECK_MSG( m_ok, FALSE, _T("invalid postscript dc") );
 
@@ -1287,20 +1394,28 @@ bool wxPostScriptDC::StartDoc (const wxString& message)
     {
         wxString filename = wxGetTempFileName("ps");
         m_printData.SetFilename(filename);
-
-        m_ok = TRUE;
     }
+    
+    m_pstream = fopen( m_printData.GetFilename().fn_str(), "w+" );
 
-    m_pstream = new ofstream (m_printData.GetFilename().fn_str());
-
-    if (!m_pstream || !m_pstream->good())
+    if (!m_pstream)
     {
-        wxMessageBox (_("Cannot open file!"), _("Error"), wxOK);
+        wxMessageBox( _("Cannot open file for PostScript printing!"), _("Error"), wxOK );
         m_ok = FALSE;
         return FALSE;
     }
 
     m_ok = TRUE;
+
+    fprintf( m_pstream, "%%%%BeginProlog\n" );
+    fprintf( m_pstream, wxPostScriptHeaderEllipse );
+    fprintf( m_pstream, wxPostScriptHeaderEllipticArc );
+    fprintf( m_pstream, wxPostScriptHeaderColourImage );
+    fprintf( m_pstream, wxPostScriptHeaderReencodeISO1 );
+    fprintf( m_pstream, wxPostScriptHeaderReencodeISO2 );
+    if (wxPostScriptHeaderSpline)
+        fprintf( m_pstream, wxPostScriptHeaderSpline );
+    fprintf( m_pstream, "%%%%EndProlog\n" );
 
     SetBrush( *wxBLACK_BRUSH );
     SetPen( *wxBLACK_PEN );
@@ -1323,36 +1438,33 @@ void wxPostScriptDC::EndDoc ()
     if (m_clipping)
     {
         m_clipping = FALSE;
-        *m_pstream << "grestore\n";
+	fprintf( m_pstream, "grestore\n" );
     }
 
-    if (m_pstream)
-    {
-        delete m_pstream;
-        m_pstream = (ofstream *) NULL;
-    }
+    fclose( m_pstream );
+    m_pstream = (FILE *) NULL;
 
     wxChar *header_file = wxGetTempFileName("ps");
 
-    m_pstream = new ofstream( wxConvCurrent->cWX2MB(header_file) );
+    m_pstream = fopen( wxConvFile.cWX2MB(header_file) , "w+" );
 
-    *m_pstream << "%!PS-Adobe-2.0\n";   /* PostScript magic strings */
-    *m_pstream << "%%Title: " << m_title.mb_str() << "\n";
-    *m_pstream << "%%Creator: " << wxTheApp->argv[0] << "\n";
-    *m_pstream << "%%CreationDate: " << wxNow().mb_str() << "\n";
+    fprintf( m_pstream, "%%!PS-Adobe-2.0\n" );                     // PostScript magic strings
+    fprintf( m_pstream, "%%%%Title: %s\n", m_title.mb_str() );
+    fprintf( m_pstream, "%%%%Creator: %s\n", wxTheApp->argv[0] );
+    fprintf( m_pstream, "%%%%CreationDate: %s\n", wxNow().mb_str() );
 
     wxChar userID[256];
     if ( wxGetEmailAddress(userID, sizeof(userID)) )
     {
-        *m_pstream << "%%For: " << MBSTRINGCAST wxConvCurrent->cWX2MB(userID);
+        fprintf( m_pstream, "%%%%For: %s ", MBSTRINGCAST wxConvCurrent->cWX2MB(userID) );
         wxChar userName[245];
         if (wxGetUserName(userName, sizeof(userName)))
-            *m_pstream << " (" << MBSTRINGCAST wxConvCurrent->cWX2MB(userName) << ")";
-        *m_pstream << "\n";
+            fprintf( m_pstream, " (%s)", MBSTRINGCAST wxConvCurrent->cWX2MB(userName) );
+	fprintf( m_pstream, "\n" );
     }
     else if ( wxGetUserName(userID, sizeof(userID)) )
     {
-        *m_pstream << "%%For: " << MBSTRINGCAST wxConvCurrent->cWX2MB(userID) << "\n";
+        fprintf( m_pstream, "%%%%For: %s\n", MBSTRINGCAST wxConvCurrent->cWX2MB(userID) );;
     }
 
     // THE FOLLOWING HAS BEEN CONTRIBUTED BY Andy Fyfe <andy@hyperparallel.com>
@@ -1367,13 +1479,9 @@ void wxPostScriptDC::EndDoc ()
     wx_printer_scale_y = m_printData.GetPrinterScaleY();
 
     if (m_printData.GetOrientation() == wxLANDSCAPE)
-    {
-        *m_pstream << "%%Orientation: Landscape\n";
-    }
+        fprintf( m_pstream, "%%%%Orientation: Landscape\n" );
     else
-    {
-        *m_pstream << "%%Orientation: Portrait\n";
-    }
+        fprintf( m_pstream, "%%%%Orientation: Portrait\n" );
 
     // Compute the bounding box.  Note that it is in the default user
     // coordinate system, thus we have to convert the values.
@@ -1397,11 +1505,12 @@ void wxPostScriptDC::EndDoc ()
 
     // The Adobe specifications call for integers; we round as to make
     // the bounding larger.
-    *m_pstream << "%%BoundingBox: "
-               << floor((double)llx) << " " << floor((double)lly) << " "
-               << ceil((double)urx)  << " " << ceil((double)ury)  << "\n";
-    *m_pstream << "%%Pages: " << (wxPageNumber - 1) << "\n";
-    *m_pstream << "%%EndComments\n\n";
+    fprintf( m_pstream, 
+            "%%%%BoundingBox: %ld %ld %ld %ld\n",
+	    (long)floor((double)llx), (long)floor((double)lly),
+	    (long)ceil((double)urx), (long)ceil((double)ury) );
+    fprintf( m_pstream, "%%%%Pages: %d\n", (wxPageNumber - 1) );
+    fprintf( m_pstream, "%%%%EndComments\n\n" );
 
     // To check the correctness of the bounding box, postscript commands
     // to draw a box corresponding to the bounding box are generated below.
@@ -1409,87 +1518,74 @@ void wxPostScriptDC::EndDoc ()
     // commands are generated within comments.  These lines appear before any
     // adjustment of scale, rotation, or translation, and hence are in the
     // default user coordinates.
-    *m_pstream << "% newpath\n";
-    *m_pstream << "% " << llx << " " << lly << " moveto\n";
-    *m_pstream << "% " << urx << " " << lly << " lineto\n";
-    *m_pstream << "% " << urx << " " << ury << " lineto\n";
-    *m_pstream << "% " << llx << " " << ury << " lineto closepath stroke\n";
+    fprintf( m_pstream, "%% newpath\n" );
+    fprintf( m_pstream, "%% %ld %ld moveto\n", llx, lly );
+    fprintf( m_pstream, "%% %ld %ld lineto\n", urx, lly );
+    fprintf( m_pstream, "%% %ld %ld lineto\n", urx, ury );
+    fprintf( m_pstream, "%% %ld %ld lineto closepath stroke\n", llx, ury );
 
-    *m_pstream << "%%BeginProlog\n";
-    *m_pstream << wxPostScriptHeaderEllipse;
-    *m_pstream << wxPostScriptHeaderEllipticArc;
-    *m_pstream << wxPostScriptHeaderColourImage;
-    *m_pstream << wxPostScriptHeaderReencodeISO1;
-    *m_pstream << wxPostScriptHeaderReencodeISO2;
-
-    if (wxPostScriptHeaderSpline)
-        *m_pstream << wxPostScriptHeaderSpline;
-    *m_pstream << "%%EndProlog\n";
-
-    delete m_pstream;
-    m_pstream = (ofstream *) NULL;
+    fclose( m_pstream );
+    m_pstream = (FILE*) NULL;
 
     wxChar *tmp_file = wxGetTempFileName("ps");
 
     // Paste header Before wx_printer_file
-    wxConcatFiles (header_file, m_printData.GetFilename(), tmp_file);
-    wxRemoveFile (header_file);
-    wxRemoveFile (m_printData.GetFilename());
-    wxRenameFile(tmp_file, m_printData.GetFilename());
+    wxConcatFiles (header_file, m_printData.GetFilename(), tmp_file );
+    wxRemoveFile( header_file );
+    wxRemoveFile( m_printData.GetFilename() );
+    wxRenameFile( tmp_file, m_printData.GetFilename() );
 
 #if defined(__X__) || defined(__WXGTK__)
-  if (m_ok)
+    if (m_ok)
     {
-      wxString previewCommand(m_printData.GetPreviewCommand());
-      wxString printerCommand(m_printData.GetPrinterCommand());
-      wxString printerOptions(m_printData.GetPrinterOptions());
-      wxString filename(m_printData.GetFilename());
+        wxString previewCommand(m_printData.GetPreviewCommand());
+        wxString printerCommand(m_printData.GetPrinterCommand());
+        wxString printerOptions(m_printData.GetPrinterOptions());
+        wxString filename(m_printData.GetFilename());
 
-      switch (m_printData.GetPrintMode()) {
+        switch (m_printData.GetPrintMode()) 
+	{
+            case wxPRINT_MODE_PREVIEW:
+            {
+                wxChar *argv[3];
+                argv[0] = WXSTRINGCAST previewCommand;
+                argv[1] = WXSTRINGCAST filename;
+                argv[2] = (wxChar*) NULL;
+                wxExecute( argv, TRUE );
+                wxRemoveFile( m_printData.GetFilename() );
+            }
+            break;
+            case wxPRINT_MODE_PRINTER:
+            {
+                wxChar *argv[4];
+                int argc = 0;
+                argv[argc++] = WXSTRINGCAST printerCommand;
 
-    case wxPRINT_MODE_PREVIEW:
-    {
-          wxChar *argv[3];
-          argv[0] = WXSTRINGCAST previewCommand;
-          argv[1] = WXSTRINGCAST filename;
-          argv[2] = (wxChar*) NULL;
-          wxExecute (argv, TRUE);
-          wxRemoveFile(m_printData.GetFilename());
-    }
-    break;
+                // !SM! If we simply assign to argv[1] here, if printer options
+                // are blank, we get an annoying and confusing message from lpr.
+                wxChar *opts = WXSTRINGCAST printerOptions;
+                if (opts && *opts)
+                    argv[argc++] = opts;
 
-    case wxPRINT_MODE_PRINTER:
-    {
-          wxChar *argv[4];
-          int argc = 0;
-          argv[argc++] = WXSTRINGCAST printerCommand;
-
-          // !SM! If we simply assign to argv[1] here, if printer options
-          // are blank, we get an annoying and confusing message from lpr.
-          wxChar * opts = WXSTRINGCAST printerOptions;
-          if (opts && *opts)
-              argv[argc++] = opts;
-
-          argv[argc++] = WXSTRINGCAST filename;
-          argv[argc++] = (wxChar *) NULL;
-          wxExecute (argv, TRUE);
-          wxRemoveFile(filename);
-    }
-    break;
-
-    case wxPRINT_MODE_FILE:
-    case wxPRINT_MODE_NONE:
-      break;
-    }
+                argv[argc++] = WXSTRINGCAST filename;
+                argv[argc++] = (wxChar *) NULL;
+                wxExecute( argv, TRUE );
+                wxRemoveFile( filename );
+            }
+            break;
+            case wxPRINT_MODE_FILE:
+            case wxPRINT_MODE_NONE:
+            break;
+        }
     }
 #endif
 }
 
-void wxPostScriptDC::StartPage ()
+void wxPostScriptDC::StartPage()
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
-    *m_pstream << "%%Page: " << (wxPageNumber++) << "\n";
+    fprintf( m_pstream, "%%%%Page: %d\n", wxPageNumber++ );
 
 //  *m_pstream << "matrix currentmatrix\n";
 
@@ -1516,19 +1612,23 @@ void wxPostScriptDC::StartPage ()
 
     if (m_printData.GetOrientation() == wxLANDSCAPE)
     {
-        translate_y -= m_maxY;
-        *m_pstream << "90 rotate\n";
+//        translate_y -= m_maxY;
+//        fprintf( m_pstream, "90 rotate\n" );
+
+        printf( "Hi.\n" );
+	
+	fprintf( m_pstream, "90 rotate llx neg ury nef translate\n" );
     }
 
-    *m_pstream << scale_x << " " << scale_y << " scale\n";
-    *m_pstream << translate_x << " " << translate_y << " translate\n";
+//    fprintf( m_pstream, "%.8f %.8f scale\n", scale_x, scale_y );
+//    fprintf( m_pstream, "%ld %ld translate\n", translate_x, translate_y );
 }
 
 void wxPostScriptDC::EndPage ()
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
-    *m_pstream << "showpage\n";
+    fprintf( m_pstream, "showpage\n" );
 }
 
 bool wxPostScriptDC::DoBlit( long xdest, long ydest,
@@ -1542,7 +1642,6 @@ bool wxPostScriptDC::DoBlit( long xdest, long ydest,
     wxCHECK_MSG( source, FALSE, _T("invalid source dc") );
 
     /* blit into a bitmap */
-
     wxBitmap bitmap( (int)fwidth, (int)fheight );
     wxMemoryDC memDC;
     memDC.SelectObject(bitmap);
@@ -1550,7 +1649,6 @@ bool wxPostScriptDC::DoBlit( long xdest, long ydest,
     memDC.SelectObject(wxNullBitmap);
 
     /* draw bitmap. scaling and positioning is done there */
-
     DrawBitmap( bitmap, xdest, ydest );
 
     return TRUE;
@@ -1690,7 +1788,7 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
 	
 	if (!m_printData.GetFontMetricPath().IsEmpty())
 	{
-	    strcpy( afmName, m_printData.GetFontMetricPath().mb_str() )
+	    strcpy( afmName, m_printData.GetFontMetricPath().fn_str() )
 	}
 
         /* 2. open and process the file

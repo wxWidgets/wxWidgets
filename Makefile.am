@@ -1,6 +1,5 @@
 
-AUTOMAKE_OPTIONS = 1.3 
-# no-dependencies
+AUTOMAKE_OPTIONS = 1.3 no-dependencies
 
 SUBDIRS = include src samples misc # utils user docs
 

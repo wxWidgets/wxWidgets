@@ -25,8 +25,6 @@
 #include "wx/module.h"
 #include "wx/cmndata.h"
 
-#include <fstream.h>
-
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -127,8 +125,6 @@ public:
   inline void SetBackgroundMode(int WXUNUSED(mode)) {}
   inline void SetPalette(const wxPalette& WXUNUSED(palette)) {}
 
-  ofstream *GetStream(void) const { return m_pstream; }
-
   wxPrintData& GetPrintData() { return m_printData; }
   void SetPrintData(const wxPrintData& data) { m_printData = data; }
 
@@ -136,7 +132,7 @@ public:
 
 protected:
 
-  ofstream *        m_pstream;    // PostScript output stream
+  FILE*             m_pstream;    // PostScript output stream
   wxString          m_title;
   unsigned char     m_currentRed;
   unsigned char     m_currentGreen;
