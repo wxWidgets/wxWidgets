@@ -818,7 +818,15 @@ wxThreadInternal::WaitForTerminate(bool shouldCancel,
                     break;
 
                 case WAIT_OBJECT_0 + 1:
-                    // new message arrived, process it
+                    // new message arrived, process it -- but only if we're the
+                    // main thread as we don't support processing messages in
+                    // the other ones
+                    //
+                    // NB: we still must include QS_ALLINPUT even when waiting
+                    //     in a secondary thread because if it had created some
+                    //     window somehow (possible not even using wxWindows)
+                    //     the system might dead lock then
+                    if ( IsMain() )
                     {
                         // it looks that sometimes WAIT_OBJECT_0 + 1 is
                         // returned but there are no messages in the thread
