@@ -2216,6 +2216,7 @@ dnl (the original file name may be overriden by appending another name after a
 dnl colon)
 AC_OUTPUT([
             wx-config
+	    makefile.unx
             Makefile
             src/Makefile
 

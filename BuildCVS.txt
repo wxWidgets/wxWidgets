@@ -30,17 +30,17 @@ and its make.exe).
 -> Edit c:\wxWin\include\wx\msw\setup.h so that
    most features are enabled (i.e. defined to 1) with
    #define wxUSE_SOCKETS       0
-   #define wxUSE_HTML          0
+   #define wxUSE_HTML          1
    #define wxUSE_THREADS       1
    #define wxUSE_FS_INET       0
-   #define wxUSE_FS_ZIP        0
+   #define wxUSE_FS_ZIP        1
    #define wxUSE_BUSYINFO      1
    #define wxUSE_DYNLIB_CLASS  1
    #define wxUSE_ZIPSTREAM     1
    #define wxUSE_JPEGLIB       1
    #define wxUSE_PNGLIB        1
 
-   and disable iostreams with
+   and iostreams ares disabled with
    #define wxUSE_STD_IOSTREAM   0
 -> type: cd c:\wxWin\src\msw
 -> type: make -f makefile.g95
