@@ -181,7 +181,6 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/common/zipstrm.cpp \
 ../../src/common/zstream.cpp \
 ../../src/generic/renderg.cpp \
-../../src/generic/statusbr.cpp \
 ../../src/palmos/accel.cpp \
 ../../src/palmos/app.cpp \
 ../../src/palmos/base.cpp \
@@ -266,7 +265,7 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/palmos/spinctrl.cpp \
 ../../src/palmos/statbmp.cpp \
 ../../src/palmos/statbox.cpp \
-../../src/palmos/statusbar.cpp \
+../../src/palmos/statbrpalm.cpp \
 ../../src/palmos/statline.cpp \
 ../../src/palmos/stattext.cpp \
 ../../src/palmos/taskbar.cpp \
@@ -368,8 +367,8 @@ ADDITIONAL_SIM_LINK_LIBRARIES =
 # Additionally, you must explicly specify the "-I" prior to each
 # path included in this variable.  Spaces are used to separate
 # each path from each other.
-LOCAL_INCLUDE_PATHS = -Irsc -I../../include
-LOCAL_SIM_INCLUDE_PATHS = -Irsc -I../../include
+LOCAL_INCLUDE_PATHS = -Irsc -I../../lib/gcc_lib/palmos -I../../include
+LOCAL_SIM_INCLUDE_PATHS = $(LOCAL_INCLUDE_PATHS)
 
 # Additional paths to look for #include <header>
 # (Palm OS SDK directories are automatically included)

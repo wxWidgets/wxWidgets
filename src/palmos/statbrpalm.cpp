@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        palmos/statusbr.cpp
+// Name:        palmos/statbrpalm.cpp
 // Purpose:     Implementation of wxStatusBar for PalmOS
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@
   #include "wx/dcclient.h"
 #endif
 
-#if wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR
+#if wxUSE_STATUSBAR
 
 #include "wx/intl.h"
 #include "wx/log.h"
@@ -126,17 +126,17 @@ void wxStatusBarPalm::DrawStatusBar()
     int leftPos=0;
     wxArrayInt widthsAbs;
     wxString text;
-    
+
     RectangleType EraseRect;
     EraseRect.topLeft.x=0;
-    EraseRect.topLeft.y=160-FntCharHeight()-1;    
+    EraseRect.topLeft.y=160-FntCharHeight()-1;
     EraseRect.extent.x=159;
-    EraseRect.extent.y=159;    
+    EraseRect.extent.y=159;
     WinEraseRectangle(&EraseRect,0);
 
     if(m_nFields>0)
         widthsAbs=CalculateAbsWidths(160 - 2*(m_nFields - 1));
-    
+
     for(i=0;i<m_nFields;i++)
     {
         text=GetStatusBufferText(i);
@@ -186,7 +186,7 @@ wxListString *wxStatusBarPalm::GetOrCreateStatusBuffer(int i)
         delete top->GetData();
         st->Erase(top);
         delete st;
-          
+
         StatusTextBuffer[i] = new wxListString();
     }
 
@@ -202,14 +202,12 @@ wxListString *wxStatusBarPalm::GetStatusBufferStack(int i) const
 
 void wxStatusBarPalm::DeleteStatusBuffer()
 {
-    int i=0;
-    
     if(!StatusTextBuffer)
     {
         return;
     }
 
-    for(i=0;i<m_nFields;i++)
+    for(int i=0;i<m_nFields;i++)
     {
         if(StatusTextBuffer[i])
         {
@@ -246,5 +244,5 @@ void wxStatusBarPalm::DoMoveWindow(int x, int y, int width, int height)
 {
 }
 
-#endif // wxUSE_NATIVE_STATUSBAR
+#endif // wxUSE_STATUSBAR
 
