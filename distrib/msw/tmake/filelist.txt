@@ -12,6 +12,7 @@
 #  Common	/src/common
 #  MSW	/src/msw
 #  Mac	/src/mac for Mac OS X with Apple Developer Tools
+#  Cocoa        /src/cocoa
 #  Motif	/src/motif
 #  Univ	/src/univ or src/univ/themes
 #  Unix	/src/unix
@@ -55,6 +56,7 @@
 #  Socket	Socket file (currently doesn't compile under Win16)
 #  NotMSW	Not required for the MSW port
 #  NotMac	Not required for the MAC port under Mac OS X
+#  NotCocoa	Not required for the Cocoa port under Mac OS X
 #  NotMGL	Not required for the MGL port
 #  NotMicro	Not required for the MicroWindows port
 #  NotGTK	Not required for the GTK port
@@ -109,7 +111,7 @@ scrlwing.cpp	Generic
 spinctlg.cpp	Generic
 splash.cpp	Generic
 splitter.cpp	Generic
-statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotMicro
+statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotCocoa,NotMicro
 statusbr.cpp	Generic	NotMGL,NotX11,NotMicro
 tabg.cpp	Generic	NotWin32,NotOS2
 tbarsmpl.cpp	Generic
@@ -376,8 +378,8 @@ window.cpp	MSW	LowLevel
 
 dialup.cpp	Unix	NotMac
 dir.cpp	Unix	Base,NotMac
-fontenum.cpp	Unix	NotMac,NotMGL,NotMicro
-fontutil.cpp	Unix	NotMac,NotMGL,NotMicro
+fontenum.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
+fontutil.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
 gsocket.c	Unix	Base,NotMac
 mimetype.cpp	Unix	Base,NotMac,NotMicro
 snglinst.cpp	Unix	Base
@@ -566,6 +568,57 @@ utils.cpp	Mac
 utilsexc.cpp	Mac
 wave.cpp	Mac
 window.cpp	Mac
+
+# NS wrapper classes
+NSBox.mm	Cocoa
+NSButton.mm	Cocoa
+NSControl.mm	Cocoa
+NSMenu.mm	Cocoa
+NSPanel.mm	Cocoa
+NSTextField.mm	Cocoa
+NSView.mm	Cocoa
+NSWindow.mm	Cocoa
+# wx implementations
+app.mm	Cocoa
+bmpbuttn.mm	Cocoa
+bitmap.mm	Cocoa
+brush.cpp	Cocoa
+button.mm	Cocoa
+checkbox.mm	Cocoa
+checklst.mm	Cocoa
+choice.mm	Cocoa
+colour.cpp	Cocoa
+control.mm	Cocoa
+cursor.mm	Cocoa
+data.cpp	Cocoa
+dc.cpp	Cocoa
+dcclient.cpp	Cocoa
+dcmemory.cpp	Cocoa
+dcscreen.cpp	Cocoa
+dialog.mm	Cocoa
+font.cpp	Cocoa
+fontutil.cpp	Cocoa
+frame.mm	Cocoa
+gdiobj.cpp	Cocoa
+icon.cpp	Cocoa
+listbox.mm	Cocoa
+main.cpp	Cocoa
+menu.mm	Cocoa
+menuitem.mm	Cocoa
+pen.cpp	Cocoa
+radiobox.mm	Cocoa
+radiobut.mm	Cocoa
+region.cpp	Cocoa
+settings.cpp	Cocoa
+statbmp.mm	Cocoa
+statbox.mm	Cocoa
+statline2.mm	Cocoa
+stattext.mm	Cocoa
+textctrl.mm	Cocoa
+toplevel.mm	Cocoa
+utils.cpp	Cocoa
+utilsexc.cpp	Cocoa
+window.mm	Cocoa
 
 gsockmot.c	Motif	Socket
 accel.cpp	Motif
@@ -1151,6 +1204,52 @@ uma.h	MacH
 wave.h	MacH
 window.h	MacH
 
+# NS wrapper classes
+NSBox.h	CocoaH
+NSButton.h	CocoaH
+NSControl.h	CocoaH
+NSMenu.h	CocoaH
+NSPanel.h	CocoaH
+NSTextField.h	CocoaH
+NSView.h	CocoaH
+NSWindow.h	CocoaH
+ObjcPose.h	CocoaH
+# wx implementations
+app.h	CocoaH
+bitmap.h	CocoaH
+bmpbuttn.h	CocoaH
+brush.h	CocoaH
+button.h	CocoaH
+checkbox.h	CocoaH
+checklst.h	CocoaH
+choice.h	CocoaH
+colour.h	CocoaH
+control.h	CocoaH
+cursor.h	CocoaH
+dc.h	CocoaH
+dcclient.h	CocoaH
+dcmemory.h	CocoaH
+dcscreen.h	CocoaH
+dialog.h	CocoaH
+font.h	CocoaH
+frame.h	CocoaH
+gdiobj.h	CocoaH
+icon.h	CocoaH
+listbox.h	CocoaH
+menu.h	CocoaH
+menuitem.h	CocoaH
+pen.h	CocoaH
+radiobox.h	CocoaH
+radiobut.h	CocoaH
+region.h	CocoaH
+statbmp.h	CocoaH
+statbox.h	CocoaH
+statline.h	CocoaH
+stattext.h	CocoaH
+textctrl.h	CocoaH
+toplevel.h	CocoaH
+window.h	CocoaH
+
 accel.h	MotifH
 app.h	MotifH
 bitmap.h	MotifH
@@ -1526,7 +1625,7 @@ scrolwin.h	GenericH
 spinctlg.h	GenericH
 splash.h	GenericH
 splitter.h	GenericH
-statline.h	GenericH	NotMSW,NotMac,NotMGL,NotMicro,NotGTK,NotX11,NotOS2,NotUniv
+statline.h	GenericH	NotMSW,NotMac,NotCocoa,NotMGL,NotMicro,NotGTK,NotX11,NotOS2,NotUniv
 statusbr.h	GenericH
 tabg.h	GenericH	NotWin32
 textdlgg.h	GenericH
