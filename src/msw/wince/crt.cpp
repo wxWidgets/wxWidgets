@@ -57,7 +57,8 @@ void abort()
 
     MessageBox(NULL, L"Abnormal program termination", name, MB_ICONHAND | MB_OK);
 
-    ::ExitProcess(3);
+    _exit(3);
+//    ::ExitProcess(3);
 }
 
 extern "C"
