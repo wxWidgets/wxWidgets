@@ -691,13 +691,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
 
     panel = new wxPanel(m_notebook);
-    (void)new wxStaticBox( panel, -1, "&wxGauge and wxSlider", wxPoint(10,10), wxSize(200,130) );
+    (void)new wxStaticBox( panel, -1, "&wxGauge and wxSlider", wxPoint(10,10), wxSize(220,130) );
     m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
     m_gauge->SetBackgroundColour(*wxGREEN);
     m_gauge->SetForegroundColour(*wxRED);
     m_gaugeVert = new wxGauge( panel, -1, 100,
-                               wxPoint(180,50), wxSize(-1, 70),
-                               wxGA_VERTICAL | wxNO_BORDER );
+                               wxPoint(180,35), wxSize(30, 90),
+                               wxGA_VERTICAL | wxGA_SMOOTH | wxNO_BORDER );
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1), wxSL_LABELS );
     (void)new wxStaticBox( panel, -1, "&Explanation", wxPoint(220,10), wxSize(270,130) );
 #ifdef __WXMOTIF__
