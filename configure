@@ -3628,6 +3628,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 if test "$USE_OS2" = "1"; then
+    DEFAULT_wxUSE_OMF=no
 
 	  enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-omf" >&5
@@ -13357,8 +13358,8 @@ fi
       else
                     RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
-                                    echo "$as_me:$LINENO: checking for gcc version" >&5
-echo $ECHO_N "checking for gcc version... $ECHO_C" >&6
+                                    echo "$as_me:$LINENO: checking for gcc/libc version" >&5
+echo $ECHO_N "checking for gcc/libc version... $ECHO_C" >&6
 if test "${wx_cv_gccversion+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -13437,9 +13438,6 @@ echo "${ECHO_T}$wx_cv_gccversion" >&6
 echo "$as_me: WARNING: Building DLLs requires OMF mode, enabled" >&2;}
         wxUSE_OMF=yes
 	enable_omf=yes
-      fi
-      if test "$wxUSE_OMF" = "yes"; then
-        LDFLAGS="$LDFLAGS -Zomf -Zlinker /EXEPACK -Zlinker /PMTYPE:PM"
       fi
         ;;
   *)
@@ -28981,6 +28979,9 @@ for ac_dir in $SEARCH_LIB /usr/lib;
   done
 
                 if test "$ac_find_libraries" != "" ; then
+                    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
 
   echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
   result=$?
@@ -28994,6 +28995,8 @@ for ac_dir in $SEARCH_LIB /usr/lib;
                         LDFLAGS_GL="$ac_path_to_link"
                     fi
 
+                                                                                echo "$as_me:$LINENO: checking for -lGLU" >&5
+echo $ECHO_N "checking for -lGLU... $ECHO_C" >&6
 
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
@@ -29025,12 +29028,16 @@ for ac_dir in $SEARCH_LIB /usr/lib;
                         OPENGL_LIBS="-lGL -lGLU"
                         echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+                    else
+                        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
                     fi
+                else
+                    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
                 fi
 
                 if test "$found_gl" != 1; then
-                    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
                     echo "$as_me:$LINENO: checking for -lMesaGL" >&5
 echo $ECHO_N "checking for -lMesaGL... $ECHO_C" >&6
 
@@ -43112,6 +43119,15 @@ else
 
         EXE_LINKER="$CXX -o"
 
+fi
+if test "$wxUSE_OMF" = "yes"; then
+    case "${host}" in
+      *-pc-os2_emx | *-pc-os2-emx )
+        LDFLAGS="$LDFLAGS -Zlinker /EXEPACK"
+        LDFLAGS_GUI="-Zlinker /PMTYPE:PM"
+        WXCONFIG_LDFLAGS_GUI="-Zlinker /PMTYPE:PM"
+      ;;
+    esac
 fi
 
 GCC_PRAGMA_FLAGS=""

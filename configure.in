@@ -3296,6 +3296,8 @@ if test "$wxUSE_OPENGL" = "yes"; then
                 AC_MSG_CHECKING([for -lGL])
                 WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],GL)
                 if test "$ac_find_libraries" != "" ; then
+                    AC_MSG_RESULT([yes])
+
                     WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                     if test "$ac_path_to_link" != " -L/usr/lib" ; then
                         LDFLAGS_GL="$ac_path_to_link"
@@ -3304,6 +3306,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
                     dnl don't suppose that libGL and libGLU are always in the
                     dnl same directory -- this is not true for some common
                     dnl distributions
+                    AC_MSG_CHECKING([for -lGLU])
                     WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],GLU)
                     if test "$ac_find_libraries" != "" ; then
                         WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
@@ -3315,11 +3318,14 @@ if test "$wxUSE_OPENGL" = "yes"; then
                         found_gl=1
                         OPENGL_LIBS="-lGL -lGLU"
                         AC_MSG_RESULT([yes])
+                    else
+                        AC_MSG_RESULT([no])
                     fi
+                else
+                    AC_MSG_RESULT([no])
                 fi
 
                 if test "$found_gl" != 1; then
-                    AC_MSG_RESULT([no])
                     AC_MSG_CHECKING([for -lMesaGL])
                     WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],MesaGL)
                     if test "$ac_find_libraries" != "" ; then
