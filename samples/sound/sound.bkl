@@ -13,7 +13,10 @@
     </exe>
     
     <wx-data id="data">
-        <files>doggrowl.wav</files>
+        <files>
+	    9000g.wav  911ch.wav  chord.wav  cuckoo.wav  
+	    ding.wav  doggrowl.wav  notify.wav
+	</files>
     </wx-data>
 
 </makefile>
