@@ -8,6 +8,7 @@ Makefile.in
 make.env
 makeprog.env
 makelib.env
+ReleaseDebug
 wxwindowsM*Data
 wxwindowsM5.mcp
 build
