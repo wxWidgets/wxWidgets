@@ -754,6 +754,7 @@ void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 void  wxDC::DoCrossHair( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), wxT("wxDC::DoCrossHair  Invalid window dc") );
+    wxMacPortSetter helper(this) ;
 
     if (m_pen.GetStyle() != wxTRANSPARENT)
     {
@@ -815,6 +816,7 @@ void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
                            wxCoord xc, wxCoord yc )
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawArc  Invalid DC"));
+    wxMacPortSetter helper(this) ;
 
     wxCoord xx1 = XLOG2DEVMAC(x1);
     wxCoord yy1 = YLOG2DEVMAC(y1);
@@ -868,6 +870,7 @@ void  wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea )
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawEllepticArc  Invalid DC"));
+    wxMacPortSetter helper(this) ;
 
     Rect r;
     double angle = sa - ea;  // Order important Mac in opposite direction to wx
