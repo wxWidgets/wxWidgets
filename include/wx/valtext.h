@@ -64,25 +64,41 @@ public:
     inline long GetStyle() const { return m_validatorStyle; }
     inline void SetStyle(long style) { m_validatorStyle = style; }
 
-    void SetIncludeList(const wxStringList& list);
-    inline wxStringList& GetIncludeList() { return m_includeList; }
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED( void SetIncludeList(const wxStringList& list) );
+    wxDEPRECATED( inline wxStringList& GetIncludeList() );
 
-    void SetExcludeList(const wxStringList& list);
-    inline wxStringList& GetExcludeList() { return m_excludeList; }
+    wxDEPRECATED( void SetExcludeList(const wxStringList& list) );
+    wxDEPRECATED( inline wxStringList& GetExcludeList() );
+
+    wxDEPRECATED( bool IsInCharIncludeList(const wxString& val) );
+    wxDEPRECATED( bool IsNotInCharExcludeList(const wxString& val) );
+#endif
+
+    void SetIncludes(const wxArrayString& includes) { m_includes = includes; }
+    inline wxArrayString& GetIncludes() { return m_includes; }
+
+    void SetExcludes(const wxArrayString& excludes) { m_excludes = excludes; }
+    inline wxArrayString& GetExcludes() { return m_excludes; }
+
+    bool IsInCharIncludes(const wxString& val);
+    bool IsNotInCharExcludes(const wxString& val);
 
     // Filter keystrokes
     void OnChar(wxKeyEvent& event);
 
-    bool IsInCharIncludeList(const wxString& val);
-    bool IsNotInCharExcludeList(const wxString& val);
 
 DECLARE_EVENT_TABLE()
 
 protected:
     long            m_validatorStyle;
     wxString *      m_stringValue;
+#if WXWIN_COMPATIBILITY_2_4
     wxStringList    m_includeList;
     wxStringList    m_excludeList;
+#endif
+    wxArrayString   m_includes;
+    wxArrayString   m_excludes;
 
     bool CheckValidator() const
     {

@@ -44,16 +44,16 @@ Constructor, taking a style and optional pointer to a wxString variable.
 \twocolitem{{\bf wxFILTER\_NUMERIC}}{Non-numeric characters are filtered out.}
 \twocolitem{{\bf wxFILTER\_INCLUDE\_LIST}}{Use an include list. The validator
 checks if the user input is on the list, complaining if not. See 
-\helpref{wxTextValidator::SetIncludeList}{wxtextvalidatorsetincludelist}.}
+\helpref{wxTextValidator::SetIncludes}{wxtextvalidatorsetincludes}.}
 \twocolitem{{\bf wxFILTER\_EXCLUDE\_LIST}}{Use an exclude list. The validator
 checks if the user input is on the list, complaining if it is. See 
-\helpref{wxTextValidator::SetExcludeList}{wxtextvalidatorsetexcludelist}.}
+\helpref{wxTextValidator::SetExcludes}{wxtextvalidatorsetexcludes}.}
 \twocolitem{{\bf wxFILTER\_INCLUDE\_CHAR\_LIST}}{Use an include list. The validator
 checks if each input character is in the list (one character per list element), complaining if not.
-See \helpref{wxTextValidator::SetIncludeList}{wxtextvalidatorsetincludelist}.}
+See \helpref{wxTextValidator::SetIncludes}{wxtextvalidatorsetincludes}.}
 \twocolitem{{\bf wxFILTER\_EXCLUDE\_CHAR\_LIST}}{Use an include list. The validator
 checks if each input character is in the list (one character per list element), complaining if it is.
-See \helpref{wxTextValidator::SetExcludeList}{wxtextvalidatorsetexcludelist}.}
+See \helpref{wxTextValidator::SetExcludes}{wxtextvalidatorsetexcludes}.}
 \end{twocollist}
 }
 
@@ -62,27 +62,21 @@ should have a lifetime equal to or longer than the validator lifetime (which is 
 determined by the lifetime of the window). % If NULL, the validator uses its own internal storage for the value. NOT true
 }
 
-\membersection{wxTextValidator::\destruct{wxTextValidator}}\label{wxtextvalidatordtor}
-
-\func{}{\destruct{wxTextValidator}}{\void}
-
-Destructor.
-
 \membersection{wxTextValidator::Clone}\label{wxtextvalidatorclone}
 
 \constfunc{virtual wxValidator*}{Clone}{\void}
 
 Clones the text validator using the copy constructor.
 
-\membersection{wxTextValidator::GetExcludeList}\label{wxtextvalidatorgetexcludelist}
+\membersection{wxTextValidator::GetExcludes}\label{wxtextvalidatorgetexcludes}
 
-\constfunc{wxStringList\&}{GetExcludeList}{\void}
+\constfunc{wxArrayString\&}{GetExcludes}{\void}
 
 Returns a reference to the exclude list (the list of invalid values).
 
-\membersection{wxTextValidator::GetIncludeList}\label{wxtextvalidatorgetincludelist}
+\membersection{wxTextValidator::GetIncludes}\label{wxtextvalidatorgetincludes}
 
-\constfunc{wxStringList\&}{GetIncludeList}{\void}
+\constfunc{wxArrayString\&}{GetIncludes}{\void}
 
 Returns a reference to the include list (the list of valid values).
 
@@ -99,15 +93,15 @@ Returns the validator style.
 Receives character input from the window and filters it according to the
 current validator style.
 
-\membersection{wxTextValidator::SetExcludeList}\label{wxtextvalidatorsetexcludelist}
+\membersection{wxTextValidator::SetExcludes}\label{wxtextvalidatorsetexcludes}
 
-\func{void}{SetExcludeList}{\param{const wxStringList\&}{ stringList}}
+\func{void}{SetExcludes}{\param{const wxArrayString\&}{ stringList}}
 
 Sets the exclude list (invalid values for the user input).
 
-\membersection{wxTextValidator::SetIncludeList}\label{wxtextvalidatorsetincludelist}
+\membersection{wxTextValidator::SetIncludes}\label{wxtextvalidatorsetincludes}
 
-\func{void}{SetIncludeList}{\param{const wxStringList\&}{ stringList}}
+\func{void}{SetIncludes}{\param{const wxArrayString\&}{ stringList}}
 
 Sets the include list (valid values for the user input).
 
