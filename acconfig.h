@@ -5,6 +5,8 @@
 #ifndef __GTKSETUPH__
 #define __GTKSETUPH__
 
+#define USING_CONFIGURE
+
 #ifdef __GNUG__
     #pragma interface
 #endif
@@ -31,7 +33,7 @@
 /*
  * Define to 1 for Unix[-like] system
  */
-#define wxUSE_UNIX 1
+#define wxUSE_UNIX 0
 
 #undef __UNIX__
 #undef __LINUX__
@@ -56,6 +58,7 @@
 #undef __WIN95__
 #undef __WIN32__
 #undef __GNUWIN32__
+#undef WINVER
 
 /* ------------------------------------------------------------------------ */
 /* compiler options                                                         */
@@ -271,7 +274,7 @@
  */
 #define wxUSE_TOOLBAR 0
 
-#ifdef __WXWINE__
+#if defined(__WXWINE__) || defined(__GNUWIN32__)
   #if wxUSE_TOOLBAR
     #define wxUSE_BUTTONBAR 1
   #endif

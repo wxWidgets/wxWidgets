@@ -80,7 +80,7 @@ USE_FREEBSD=
 USE_VMS=
 USE_ULTRIX=
 USE_CYGWIN=
-USE_MINGW32=
+USE_MINGW=
 USE_DATA_GENERAL=
 
 dnl the list of all available toolkits
@@ -186,6 +186,16 @@ case "${host}" in
     AC_DEFINE(__WIN95__)
     AC_DEFINE(__WINDOWS__)
     AC_DEFINE(__GNUWIN32__)
+    AC_DEFINE(WINVER, 0x0400)
+    DEFAULT_DEFAULT_wxUSE_MSW=1
+  ;;
+  *-*-mingw32* )
+    USE_UNIX=0
+    AC_DEFINE(__WIN32__)
+    AC_DEFINE(__WIN95__)
+    AC_DEFINE(__WINDOWS__)
+    AC_DEFINE(__GNUWIN32__)
+    AC_DEFINE(WINVER, 0x0400)
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
@@ -969,7 +979,7 @@ WXGTK12=
 
 WXWINE=
 
-if test "$wxUSE_CYGWIN" = 1; then
+if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
   AC_MSG_CHECKING(for Windows headers)
   WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
 
@@ -978,7 +988,9 @@ if test "$wxUSE_CYGWIN" = 1; then
     TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
   else
     AC_MSG_RESULT(no)
-    AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
+    if test "$cross_compiling" != "yes" ; then
+      AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
+    fi  
   fi
 
   TOOLKIT=MSW
