@@ -549,7 +549,7 @@ bool Ccontact::CreateIndexes(void)
  */
 bool Ccontact::FetchByName(const wxString &name)
 {
-    whereStr.Printf(wxT("NAME = '%s'"),name);
+    whereStr.Printf(wxT("NAME = '%s'"),name.c_str());
     SetWhereClause(whereStr.c_str());
     SetOrderByClause(wxT(""));
 
@@ -1027,7 +1027,7 @@ bool CeditorDlg::Initialize()
     
     if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
     {
-        Contact->whereStr.Printf(wxT("NAME = (SELECT MIN(NAME) FROM %s)"),Contact->GetTableName());
+        Contact->whereStr.Printf(wxT("NAME = (SELECT MIN(NAME) FROM %s)"),Contact->GetTableName().c_str());
         // NOTE: (const wxChar*) returns a pointer which may not be valid later, so this is short term use only
         Contact->SetWhereClause(Contact->whereStr);
     }
