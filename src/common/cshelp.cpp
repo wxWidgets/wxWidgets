@@ -170,7 +170,7 @@ bool wxContextHelp::EndContextHelp()
 bool wxContextHelp::EventLoop()
 {
     m_inHelp = TRUE;
-    
+
     while ( m_inHelp )
     {
         if (wxTheApp->Pending())
@@ -182,7 +182,7 @@ bool wxContextHelp::EventLoop()
             wxTheApp->ProcessIdle();
         }
     }
-    
+
     return TRUE;
 }
 
@@ -225,9 +225,9 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
     {
         wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), pt) ;
         helpEvent.SetEventObject(this);
-        
+
         eventProcessed = win->GetEventHandler()->ProcessEvent(helpEvent);
-        
+
         // Go up the window hierarchy until the event is handled (or not).
         // I.e. keep submitting ancestor windows until one is recognised
         // by the app code that processes the ids and displays help.
@@ -275,8 +275,15 @@ wxContextHelpButton::wxContextHelpButton(wxWindow* parent,
                                          const wxPoint& pos,
                                          const wxSize& size,
                                          long style)
+#if defined(__WXPM__)
+                   : wxBitmapButton(parent, id, wxBitmap(wxCSQUERY_BITMAP
+                                                         ,wxBITMAP_TYPE_RESOURCE
+                                                        ),
+                                    pos, size, style)
+#else
                    : wxBitmapButton(parent, id, wxBITMAP(csquery),
                                     pos, size, style)
+#endif
 {
 }
 

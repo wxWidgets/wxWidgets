@@ -335,7 +335,14 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
                 ((wxItemResource*) childResource)->SetBitmap(bitmap);
             }
             if (!bitmap.Ok())
+#if defined(__WXPM__)
+                //
+                // OS/2 uses integer id's to access resources, not file name strings
+                //
+                bitmap.LoadFile(wxCROSS_BITMAP, wxBITMAP_TYPE_BMP_RESOURCE);
+#else
                 bitmap.LoadFile("cross_bmp", wxBITMAP_TYPE_BMP_RESOURCE);
+#endif
             control = new wxBitmapButton(parent, id, bitmap, pos, size,
                 childResource->GetStyle() | wxBU_AUTODRAW, wxDefaultValidator, childResource->GetName());
         }
@@ -2477,7 +2484,11 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
             }
         default:
             {
+#if defined(__WXPM__)
+                return wxNullBitmap;
+#else
                 return wxBitmap(name, (wxBitmapType)bitmapType);
+#endif
             }
         }
 #ifndef __WXGTK__
