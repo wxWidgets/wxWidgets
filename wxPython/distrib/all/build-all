@@ -60,7 +60,7 @@ config.LINUX_BUILD = "/tmp/BUILD"
 # Upload server locations
 config.UPLOAD_HOST = "starship.python.net"
 config.UPLOAD_DAILY_ROOT = "/home/crew/robind/public_html/wxPython/daily"
-config.UPLOAD_PREVIEW_ROOT = "/home/crew/robind/public_html/wxPython/preview"
+config.UPLOAD_PREVIEW_ROOT = "/home/crew/robind/public_html/wxPython/rc"
 
 # defaults for build options
 config.KIND = "dryrun"
