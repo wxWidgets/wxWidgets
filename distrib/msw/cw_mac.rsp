@@ -151,8 +151,6 @@ samples/widgets/*M?.xml
 samples/widgets/*.mcp
 samples/wizard/*M?.xml
 samples/wizard/*.mcp
-samples/wxtest/*M?.xml
-samples/wxtest/*.mcp
 
 utils/helpview/src/*M?.xml
 utils/helpview/src/*.mcp

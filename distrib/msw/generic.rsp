@@ -1282,20 +1282,6 @@ samples/wizard/*.txt
 samples/wizard/*.pro
 samples/wizard/*.bkl
 
-samples/wxtest/*.cpp
-samples/wxtest/*.h
-samples/wxtest/makefile*
-samples/wxtest/*.rc
-samples/wxtest/*.def
-samples/wxtest/*.bmp
-samples/wxtest/*.xpm
-samples/wxtest/*.xbm
-samples/wxtest/*.png
-samples/wxtest/*.ico
-samples/wxtest/*.txt
-samples/wxtest/*.pro
-samples/wxtest/*.bkl
-
 demos/demos.bkl
 demos/makefile*
 

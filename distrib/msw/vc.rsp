@@ -257,9 +257,6 @@ samples/vscroll/vscroll.dsw
 samples/wizard/wizard.dsp
 samples/wizard/wizard.dsw
 
-samples/wxtest/wxtest.dsp
-samples/wxtest/wxtest.dsw
-
 samples/widgets/widgets.dsp
 samples/widgets/widgets.dsw
 

@@ -233,9 +233,6 @@ samples/vscroll/vscroll.vcw
 samples/wizard/wizard.vcp
 samples/wizard/wizard.vcw
 
-samples/wxtest/wxtest.vcp
-samples/wxtest/wxtest.vcw
-
 samples/widgets/widgets.vcp
 samples/widgets/widgets.vcw
 

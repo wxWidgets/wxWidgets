@@ -129,7 +129,6 @@ samples/validate/makefile.dmc
 samples/vscroll/makefile.dmc
 samples/widgets/makefile.dmc
 samples/wizard/makefile.dmc
-samples/wxtest/makefile.dmc
 tests/makefile.dmc
 utils/configtool/src/makefile.dmc
 utils/emulator/src/makefile.dmc

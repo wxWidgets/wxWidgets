@@ -102,7 +102,6 @@ bakefile_gen -b ../../samples/validate/validate.bkl -f msevc4prj
 bakefile_gen -b ../../samples/vscroll/vscroll.bkl -f msevc4prj
 bakefile_gen -b ../../samples/widgets/widgets.bkl -f msevc4prj
 bakefile_gen -b ../../samples/wizard/wizard.bkl -f msevc4prj
-bakefile_gen -b ../../samples/wxtest/wxtest.bkl -f msevc4prj
 
 bakefile_gen -b ../../contrib/build/animate/animate.bkl -f msevc4prj
 bakefile_gen -b ../../contrib/build/deprecated/deprecated.bkl -f msevc4prj

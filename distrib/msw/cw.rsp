@@ -82,7 +82,6 @@ samples/typetest/*W7.xml
 samples/validate/*W7.xml
 samples/widgets/*W7.xml
 samples/wizard/*W7.xml
-samples/wxtest/*W7.xml
 
 utils/helpview/src/*W7.xml
 utils/tex2rtf/src/*W7.xml
