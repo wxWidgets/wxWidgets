@@ -168,6 +168,8 @@ os.path.walk(os.path.join('..','..','samples'),
              onSubmakefile, SAMPLES_DIR)
 os.path.walk(os.path.join('..','..','demos'),
              onSubmakefile, SAMPLES_DIR)
+os.path.walk(os.path.join('..','..','utils'),
+             onSubmakefile, SAMPLES_DIR)
 os.path.walk(os.path.join('..','..','contrib','build'),
              onSubmakefile, CONTRIB_DIR)
 os.path.walk(os.path.join('..','..','contrib','samples'),

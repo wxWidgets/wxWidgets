@@ -138,7 +138,8 @@ AUTOCONF_ALL = \
 	../../samples/vscroll/Makefile.in \
 	../../samples/widgets/Makefile.in \
 	../../samples/wizard/Makefile.in \
-	../../samples/wxtest/Makefile.in
+	../../samples/wxtest/Makefile.in \
+	../../utils/HelpGen/Makefile.in
 BORLAND_ALL = \
 	../../contrib/build/animate/makefile.bcc \
 	../../contrib/build/deprecated/makefile.bcc \
@@ -264,6 +265,7 @@ BORLAND_ALL = \
 	../../samples/widgets/makefile.bcc \
 	../../samples/wizard/makefile.bcc \
 	../../samples/wxtest/makefile.bcc \
+	../../utils/HelpGen/makefile.bcc \
 	../msw/makefile.bcc
 MINGW_ALL = \
 	../../contrib/build/animate/makefile.gcc \
@@ -390,6 +392,7 @@ MINGW_ALL = \
 	../../samples/widgets/makefile.gcc \
 	../../samples/wizard/makefile.gcc \
 	../../samples/wxtest/makefile.gcc \
+	../../utils/HelpGen/makefile.gcc \
 	../msw/makefile.gcc
 MSVC_ALL = \
 	../../contrib/build/animate/makefile.vc \
@@ -516,6 +519,7 @@ MSVC_ALL = \
 	../../samples/widgets/makefile.vc \
 	../../samples/wizard/makefile.vc \
 	../../samples/wxtest/makefile.vc \
+	../../utils/HelpGen/makefile.vc \
 	../msw/makefile.vc
 MSVC6PRJ_ALL = \
 	../../contrib/build/animate/animate.dsw \
@@ -637,6 +641,7 @@ MSVC6PRJ_ALL = \
 	../../samples/widgets/widgets.dsw \
 	../../samples/wizard/wizard.dsw \
 	../../samples/wxtest/wxtest.dsw \
+	../../utils/HelpGen/helpgen.dsw \
 	../msw/wx.dsw
 WATCOM_ALL = \
 	../../contrib/build/animate/makefile.wat \
@@ -763,6 +768,7 @@ WATCOM_ALL = \
 	../../samples/widgets/makefile.wat \
 	../../samples/wizard/makefile.wat \
 	../../samples/wxtest/makefile.wat \
+	../../utils/HelpGen/makefile.wat \
 	../msw/makefile.wat
 
 all: $(COMPAT_TARGETS) autoconf borland mingw msvc msvc6prj watcom
@@ -901,6 +907,7 @@ clean:
 	rm -f ../../samples/widgets/Makefile.in
 	rm -f ../../samples/wizard/Makefile.in
 	rm -f ../../samples/wxtest/Makefile.in
+	rm -f ../../utils/HelpGen/Makefile.in
 	rm -f ../../contrib/build/animate/makefile.bcc
 	rm -f ../../contrib/build/deprecated/makefile.bcc
 	rm -f ../../contrib/build/fl/makefile.bcc
@@ -1025,6 +1032,7 @@ clean:
 	rm -f ../../samples/widgets/makefile.bcc
 	rm -f ../../samples/wizard/makefile.bcc
 	rm -f ../../samples/wxtest/makefile.bcc
+	rm -f ../../utils/HelpGen/makefile.bcc
 	rm -f ../msw/makefile.bcc
 	rm -f ../../contrib/build/animate/makefile.gcc
 	rm -f ../../contrib/build/deprecated/makefile.gcc
@@ -1150,6 +1158,7 @@ clean:
 	rm -f ../../samples/widgets/makefile.gcc
 	rm -f ../../samples/wizard/makefile.gcc
 	rm -f ../../samples/wxtest/makefile.gcc
+	rm -f ../../utils/HelpGen/makefile.gcc
 	rm -f ../msw/makefile.gcc
 	rm -f ../../contrib/build/animate/makefile.vc
 	rm -f ../../contrib/build/deprecated/makefile.vc
@@ -1275,6 +1284,7 @@ clean:
 	rm -f ../../samples/widgets/makefile.vc
 	rm -f ../../samples/wizard/makefile.vc
 	rm -f ../../samples/wxtest/makefile.vc
+	rm -f ../../utils/HelpGen/makefile.vc
 	rm -f ../msw/makefile.vc
 	rm -f ../../contrib/build/animate/animate.dsw
 	rm -f ../../contrib/build/deprecated/deprecated.dsw
@@ -1395,6 +1405,7 @@ clean:
 	rm -f ../../samples/widgets/widgets.dsw
 	rm -f ../../samples/wizard/wizard.dsw
 	rm -f ../../samples/wxtest/wxtest.dsw
+	rm -f ../../utils/HelpGen/helpgen.dsw
 	rm -f ../msw/wx.dsw
 	rm -f ../../contrib/build/animate/makefile.wat
 	rm -f ../../contrib/build/deprecated/makefile.wat
@@ -1520,6 +1531,7 @@ clean:
 	rm -f ../../samples/widgets/makefile.wat
 	rm -f ../../samples/wizard/makefile.wat
 	rm -f ../../samples/wxtest/makefile.wat
+	rm -f ../../utils/HelpGen/makefile.wat
 	rm -f ../msw/makefile.wat
 
 
@@ -4006,6 +4018,26 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/wxtest/wxtest.dsw: $(SDEPS) ../../samples/wxtest/wxtest.bkl
 	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../ $(DSWFLAGS)  ../../samples/wxtest/wxtest.bkl
+	touch $@
+
+
+../../utils/HelpGen/Makefile.in: $(SDEPS) ../../utils/HelpGen/helpgen.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../utils/HelpGen/helpgen.bkl
+	touch $@
+../../utils/HelpGen/makefile.bcc: $(SDEPS) ../../utils/HelpGen/helpgen.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0  ../../utils/HelpGen/helpgen.bkl
+	touch $@
+../../utils/HelpGen/makefile.vc: $(SDEPS) ../../utils/HelpGen/helpgen.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.vc -DWRITE_OPTIONS_FILE=0  ../../utils/HelpGen/helpgen.bkl
+	touch $@
+../../utils/HelpGen/makefile.gcc: $(SDEPS) ../../utils/HelpGen/helpgen.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0  ../../utils/HelpGen/helpgen.bkl
+	touch $@
+../../utils/HelpGen/makefile.wat: $(SDEPS) ../../utils/HelpGen/helpgen.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.wat -DWRITE_OPTIONS_FILE=0  ../../utils/HelpGen/helpgen.bkl
+	touch $@
+../../utils/HelpGen/helpgen.dsw: $(SDEPS) ../../utils/HelpGen/helpgen.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../ $(DSWFLAGS)  ../../utils/HelpGen/helpgen.bkl
 	touch $@
 
 
