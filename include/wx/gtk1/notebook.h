@@ -118,7 +118,7 @@ public:
     // associate image list with a control
   void SetImageList(wxImageList* imageList);
     // get pointer (may be NULL) to the associated image list
-  wxImageList* GetImageList() const { return m_imageList; }
+  wxImageList *GetImageList() const { return m_imageList; }
 
     // sets/returns item's image index in the current image list
   int  GetPageImage(int nPage) const;
@@ -133,8 +133,7 @@ public:
   void SetPageSize(const wxSize& size);
     // set the padding between tabs (in pixels)
   void SetPadding(const wxSize& padding);
-
-    // Sets the size of the tabs (assumes all tabs are the same size)
+    // sets the size of the tabs (assumes all tabs are the same size)
   void SetTabSize(const wxSize& sz);
 
   // operations
@@ -151,15 +150,15 @@ public:
                const wxString& strText,
                bool select = FALSE,
                int imageId = -1);
-    // @@@@ VZ: I don't know how to implement InsertPage()
+    // TODO VZ: I don't know how to implement InsertPage()
 
     // get the panel which represents the given page
   wxWindow *GetPage(int nPage) const;
 
   void OnNavigationKey(wxNavigationKeyEvent& event);
-  
+
   // implementation
-  
+
   void SetConstraintSizes(bool recurse);
   bool DoPhase(int phase);
   void ApplyWidgetStyle();
