@@ -1314,6 +1314,7 @@ palette.h	X11H
 pen.h	X11H	Motif
 print.h	X11H
 private.h	X11H
+privx.h	X11H	Motif
 region.h	X11H
 reparent.h	X11H
 textctrl.h	X11H
