@@ -206,7 +206,7 @@ public:
 
 // Get the internal data structure
 static wxListItemInternalData *wxGetInternalData(HWND hwnd, long itemId);
-static wxListItemInternalData *wxGetInternalData(wxListCtrl *ctl, long itemId);
+static wxListItemInternalData *wxGetInternalData(const wxListCtrl *ctl, long itemId);
 static wxListItemAttr *wxGetInternalDataAttr(wxListCtrl *ctl, long itemId);
 static void wxDeleteInternalData(wxListCtrl* ctl, long itemId);
 
@@ -329,7 +329,6 @@ void wxListCtrl::Init()
     m_imageListSmall = NULL;
     m_imageListState = NULL;
     m_ownsImageListNormal = m_ownsImageListSmall = m_ownsImageListState = FALSE;
-    m_baseStyle = 0;
     m_colCount = 0;
     m_count = 0;
     m_ignoreChangeMessages = FALSE;
@@ -343,77 +342,14 @@ bool wxListCtrl::Create(wxWindow *parent,
                         const wxPoint& pos,
                         const wxSize& size,
                         long style,
-                        const wxValidator& wxVALIDATOR_PARAM(validator),
+                        const wxValidator& validator,
                         const wxString& name)
 {
-#if wxUSE_VALIDATORS
-    SetValidator(validator);
-#endif // wxUSE_VALIDATORS
-
-    SetName(name);
-
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-
-    m_windowStyle = style;
-
-    SetParent(parent);
-
-    if (width <= 0)
-        width = 100;
-    if (height <= 0)
-        height = 30;
-    if (x < 0)
-        x = 0;
-    if (y < 0)
-        y = 0;
-
-    m_windowId = (id == -1) ? NewControlId() : id;
-
-    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
-                   LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
-
-    m_baseStyle = wstyle;
-
-    if ( !DoCreateControl(x, y, width, height) )
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    if (parent)
-        parent->AddChild(this);
-
-    return TRUE;
-}
-
-bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
-{
-    DWORD wstyle = m_baseStyle;
-
-    WXDWORD exStyle = 0;
-    WXDWORD standardStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
-
-    long oldStyle = 0; // Dummy
-    wstyle |= ConvertToMSWStyle(oldStyle, m_windowStyle);
-    wstyle |= standardStyle;
-
-    // Create the ListView control.
-    m_hWnd = (WXHWND)CreateWindowEx(exStyle,
-                                    WC_LISTVIEW,
-                                    wxEmptyString,
-                                    wstyle,
-                                    x, y, w, h,
-                                    GetWinHwnd(GetParent()),
-                                    (HMENU)m_windowId,
-                                    wxGetInstance(),
-                                    NULL);
-
-    if ( !m_hWnd )
-    {
-        wxLogError(_("Can't create list control window, check that comctl32.dll is installed."));
-
+    if ( !MSWCreateControl(WC_LISTVIEW, _T(""), pos, size) )
         return FALSE;
-    }
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
     // versions of _some_ messages (notably LVN_GETDISPINFOA) in MSLU build
@@ -423,28 +359,100 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 
     // for comctl32.dll v 4.70+ we want to have this attribute because it's
     // prettier (and also because wxGTK does it like this)
-    if ( (wstyle & LVS_REPORT) && wxTheApp->GetComCtl32Version() >= 470 )
+    if ( HasFlag(wxLC_REPORT) && wxTheApp->GetComCtl32Version() >= 470 )
     {
         ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE,
                       0, LVS_EX_FULLROWSELECT);
     }
 
+    // inherit foreground colour but our background should be the same as for
+    // listboxes and other such "container" windows and not inherited
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(GetParent()->GetForegroundColour());
-
-    SubclassWin(m_hWnd);
 
     return TRUE;
 }
 
+WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    WXDWORD wstyle = wxControl::MSWGetStyle(style, exstyle);
+
+    wstyle |= LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
+
+#ifdef __WXDEBUG__
+    size_t nModes = 0;
+
+    #define MAP_MODE_STYLE(wx, ms)                                            \
+        if ( style & (wx) ) { wstyle |= (ms); nModes++; }
+#else // !__WXDEBUG__
+    #define MAP_MODE_STYLE(wx, ms)                                            \
+        if ( style & (wx) ) wstyle |= (ms);
+#endif // __WXDEBUG__
+
+    MAP_MODE_STYLE(wxLC_ICON, LVS_ICON)
+    MAP_MODE_STYLE(wxLC_SMALL_ICON, LVS_SMALLICON)
+    MAP_MODE_STYLE(wxLC_LIST, LVS_LIST)
+    MAP_MODE_STYLE(wxLC_REPORT, LVS_REPORT)
+
+    wxASSERT_MSG( nModes == 1,
+                  _T("wxListCtrl style should have exactly one mode bit set") );
+
+#undef MAP_MODE_STYLE
+
+    if ( style & wxLC_ALIGN_LEFT )
+        wstyle |= LVS_ALIGNLEFT;
+
+    if ( style & wxLC_ALIGN_TOP )
+        wstyle |= LVS_ALIGNTOP;
+
+    if ( style & wxLC_AUTOARRANGE )
+        wstyle |= LVS_AUTOARRANGE;
+
+    if ( style & wxLC_NO_SORT_HEADER )
+        wstyle |= LVS_NOSORTHEADER;
+
+    if ( style & wxLC_NO_HEADER )
+        wstyle |= LVS_NOCOLUMNHEADER;
+
+    if ( style & wxLC_EDIT_LABELS )
+        wstyle |= LVS_EDITLABELS;
+
+    if ( style & wxLC_SINGLE_SEL )
+        wstyle |= LVS_SINGLESEL;
+
+    if ( style & wxLC_SORT_ASCENDING )
+    {
+        wstyle |= LVS_SORTASCENDING;
+
+        wxASSERT_MSG( !(style & wxLC_SORT_DESCENDING),
+                      _T("can't sort in ascending and descending orders at once") );
+    }
+    else if ( style & wxLC_SORT_DESCENDING )
+        wstyle |= LVS_SORTDESCENDING;
+
+#if !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
+    if ( style & wxLC_VIRTUAL )
+    {
+        int ver = wxTheApp->GetComCtl32Version();
+        if ( ver < 470 )
+        {
+            wxLogWarning(_("Please install a newer version of comctl32.dll\n(at least version 4.70 is required but you have %d.%02d)\nor this program won't operate correctly."),
+                        ver / 100, ver % 100);
+        }
+
+        wstyle |= LVS_OWNERDATA;
+    }
+#endif // ancient cygwin
+
+    return wstyle;
+}
+
 void wxListCtrl::UpdateStyle()
 {
-    if ( GetHWND() )
+    if ( GetHwnd() )
     {
         // The new window view style
-        long dummy;
-        DWORD dwStyleNew = ConvertToMSWStyle(dummy, m_windowStyle);
-        dwStyleNew |= m_baseStyle;
+        DWORD dwStyleNew = MSWGetStyle(m_windowStyle, NULL);
 
         // Get the current window style.
         DWORD dwStyleOld = ::GetWindowLong(GetHwnd(), GWL_STYLE);
@@ -534,115 +542,6 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
     m_windowStyle = flag;
 
     UpdateStyle();
-}
-
-// Can be just a single style, or a bitlist
-long wxListCtrl::ConvertToMSWStyle(long& oldStyle, long style) const
-{
-    long wstyle = 0;
-    if ( style & wxLC_ICON )
-    {
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_SMALLICON )
-            oldStyle -= LVS_SMALLICON;
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_REPORT )
-            oldStyle -= LVS_REPORT;
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_LIST )
-            oldStyle -= LVS_LIST;
-        wstyle |= LVS_ICON;
-    }
-
-    if ( style & wxLC_SMALL_ICON )
-    {
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_ICON )
-            oldStyle -= LVS_ICON;
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_REPORT )
-            oldStyle -= LVS_REPORT;
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_LIST )
-            oldStyle -= LVS_LIST;
-        wstyle |= LVS_SMALLICON;
-    }
-
-    if ( style & wxLC_LIST )
-    {
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_ICON )
-            oldStyle -= LVS_ICON;
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_REPORT )
-            oldStyle -= LVS_REPORT;
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_SMALLICON )
-            oldStyle -= LVS_SMALLICON;
-        wstyle |= LVS_LIST;
-    }
-
-    if ( style & wxLC_REPORT )
-    {
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_ICON )
-            oldStyle -= LVS_ICON;
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_LIST )
-            oldStyle -= LVS_LIST;
-        if ( (oldStyle & LVS_TYPEMASK) == LVS_SMALLICON )
-            oldStyle -= LVS_SMALLICON;
-
-        wstyle |= LVS_REPORT;
-    }
-
-    if ( style & wxLC_ALIGN_LEFT )
-    {
-        if ( oldStyle & LVS_ALIGNTOP )
-            oldStyle -= LVS_ALIGNTOP;
-        wstyle |= LVS_ALIGNLEFT;
-    }
-
-    if ( style & wxLC_ALIGN_TOP )
-    {
-        if ( oldStyle & LVS_ALIGNLEFT )
-            oldStyle -= LVS_ALIGNLEFT;
-        wstyle |= LVS_ALIGNTOP;
-    }
-
-    if ( style & wxLC_AUTOARRANGE )
-        wstyle |= LVS_AUTOARRANGE;
-
-    if ( style & wxLC_NO_SORT_HEADER )
-        wstyle |= LVS_NOSORTHEADER;
-
-    if ( style & wxLC_NO_HEADER )
-        wstyle |= LVS_NOCOLUMNHEADER;
-
-    if ( style & wxLC_EDIT_LABELS )
-        wstyle |= LVS_EDITLABELS;
-
-    if ( style & wxLC_SINGLE_SEL )
-        wstyle |= LVS_SINGLESEL;
-
-    if ( style & wxLC_SORT_ASCENDING )
-    {
-        if ( oldStyle & LVS_SORTDESCENDING )
-            oldStyle -= LVS_SORTDESCENDING;
-        wstyle |= LVS_SORTASCENDING;
-    }
-
-    if ( style & wxLC_SORT_DESCENDING )
-    {
-        if ( oldStyle & LVS_SORTASCENDING )
-            oldStyle -= LVS_SORTASCENDING;
-        wstyle |= LVS_SORTDESCENDING;
-    }
-
-#if !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
-    if ( style & wxLC_VIRTUAL )
-    {
-        int ver = wxTheApp->GetComCtl32Version();
-        if ( ver < 470 )
-        {
-            wxLogWarning(_("Please install a newer version of comctl32.dll\n(at least version 4.70 is required but you have %d.%02d)\nor this program won't operate correctly."),
-                        ver / 100, ver % 100);
-        }
-
-        wstyle |= LVS_OWNERDATA;
-    }
-#endif
-
-    return wstyle;
 }
 
 // ----------------------------------------------------------------------------
@@ -1150,10 +1049,12 @@ void wxListCtrl::SetItemTextColour( long item, const wxColour &col )
 
 wxColour wxListCtrl::GetItemTextColour( long item ) const
 {
-    wxListItem info;
-    info.m_itemId = item;
-    GetItem( info );
-    return info.GetTextColour();
+    wxColour col;
+    wxListItemInternalData *data = wxGetInternalData(this, item);
+    if ( data && data->attr )
+        col = data->attr->GetTextColour();
+
+    return col;
 }
 
 void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col )
@@ -1166,10 +1067,12 @@ void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col )
 
 wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
 {
-    wxListItem info;
-    info.m_itemId = item;
-    GetItem( info );
-    return info.GetBackgroundColour();
+    wxColour col;
+    wxListItemInternalData *data = wxGetInternalData(this, item);
+    if ( data && data->attr )
+        col = data->attr->GetBackgroundColour();
+
+    return col;
 }
 
 // Gets the number of selected items in the list control
@@ -2525,31 +2428,33 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
     RefreshRect(rect);
 }
 
+// ----------------------------------------------------------------------------
+// internal data stuff
+// ----------------------------------------------------------------------------
+
 static wxListItemInternalData *wxGetInternalData(HWND hwnd, long itemId)
 {
     LV_ITEM it;
     it.mask = LVIF_PARAM;
     it.iItem = itemId;
 
-    bool success = ListView_GetItem(hwnd, &it) != 0;
-    if (success)
-        return (wxListItemInternalData *) it.lParam;
-    else
+    if ( !ListView_GetItem(hwnd, &it) )
         return NULL;
+
+    return (wxListItemInternalData *) it.lParam;
 };
 
-static wxListItemInternalData *wxGetInternalData(wxListCtrl *ctl, long itemId)
+static
+wxListItemInternalData *wxGetInternalData(const wxListCtrl *ctl, long itemId)
 {
-    return wxGetInternalData((HWND) ctl->GetHWND(), itemId);
+    return wxGetInternalData(GetHwndOf(ctl), itemId);
 };
 
 static wxListItemAttr *wxGetInternalDataAttr(wxListCtrl *ctl, long itemId)
 {
     wxListItemInternalData *data = wxGetInternalData(ctl, itemId);
-    if (data)
-        return data->attr;
-    else
-        return NULL;
+
+    return data ? data->attr : NULL;
 };
 
 static void wxDeleteInternalData(wxListCtrl* ctl, long itemId)
@@ -2566,6 +2471,10 @@ static void wxDeleteInternalData(wxListCtrl* ctl, long itemId)
         delete data;
     }
 }
+
+// ----------------------------------------------------------------------------
+// wxWin <-> MSW items conversions
+// ----------------------------------------------------------------------------
 
 static void wxConvertFromMSWListItem(HWND hwndListCtrl,
                                      wxListItem& info,

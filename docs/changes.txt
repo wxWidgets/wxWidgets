@@ -155,6 +155,7 @@ wxMSW:
 - fixed several bugs in wxNotebook with wxNB_MULTILINE style
 - accelerators are now initially hidden if appropriate (Peter Nielsen)
 - background colour of a wxComboBox may now be set
+- fixed wxListCtrl::GetItemText/BackgroundColour()
 
 wxGTK:
 

@@ -103,6 +103,7 @@ functions that take a \helpref{wxListEvent}{wxlistevent} argument.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxListCtrl::wxListCtrl}\label{wxlistctrlconstr}
 
 \func{}{wxListCtrl}{\void}
@@ -136,11 +137,13 @@ appropriately.}
 
 \helpref{wxListCtrl::Create}{wxlistctrlcreate}, \helpref{wxValidator}{wxvalidator}
 
+
 \membersection{wxListCtrl::\destruct{wxListCtrl}}
 
 \func{void}{\destruct{wxListCtrl}}{\void}
 
 Destructor, destroying the list control.
+
 
 \membersection{wxListCtrl::Arrange}\label{wxlistctrlarrange}
 
@@ -156,6 +159,7 @@ Arranges the items in icon or small icon view. This only has effect on Win32. {\
 \twocolitem{wxLIST\_ALIGN\_SNAP\_TO\_GRID}{Snap to grid.}
 \end{twocollist}
 
+
 \membersection{wxListCtrl::AssignImageList}\label{wxlistctrlassignimagelist}
 
 \func{void}{AssignImageList}{\param{wxImageList*}{ imageList}, \param{int }{which}}
@@ -169,11 +173,13 @@ wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL, wxIMAGE\_LIST\_STATE (the last is u
 
 \helpref{wxListCtrl::SetImageList}{wxlistctrlsetimagelist}
 
+
 \membersection{wxListCtrl::ClearAll}\label{wxlistctrlclearall}
 
 \func{void}{ClearAll}{}
 
 Deletes all items and all columns.
+
 
 \membersection{wxListCtrl::Create}\label{wxlistctrlcreate}
 
@@ -182,6 +188,7 @@ Deletes all items and all columns.
 \param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
 
 Creates the list control. See \helpref{wxListCtrl::wxListCtrl}{wxlistctrlconstr} for further details.
+
 
 \membersection{wxListCtrl::DeleteAllItems}\label{wxlistctrldeleteallitems}
 
@@ -193,11 +200,13 @@ Deletes all the items in the list control.
 {\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event because deleting many items
 from the control would be too slow then (unlike \helpref{DeleteItem}{wxlistctrldeleteitem}).
 
+
 \membersection{wxListCtrl::DeleteColumn}\label{wxlistctrldeletecolumn}
 
 \func{bool}{DeleteColumn}{\param{int }{col}}
 
 Deletes a column.
+
 
 \membersection{wxListCtrl::DeleteItem}\label{wxlistctrldeleteitem}
 
@@ -207,6 +216,7 @@ Deletes the specified item. This function sends the
 {\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event for the item being deleted.
 
 See also: \helpref{DeleteAllItems}{wxlistctrldeleteallitems}
+
 
 \membersection{wxListCtrl::EditLabel}\label{wxlistctrledit}
 
@@ -220,11 +230,13 @@ If the user changed the label (i.e. s/he does not press ESC or leave
 the text control without changes, a EVT\_LIST\_END\_LABEL\_EDIT event
 will be sent which can be vetoed as well.
 
+
 \membersection{wxListCtrl::EnsureVisible}\label{wxlistctrlensurevisible}
 
 \func{bool}{EnsureVisible}{\param{long }{item}}
 
 Ensures this item is visible.
+
 
 \membersection{wxListCtrl::FindItem}\label{wxlistctrlfinditem}
 
@@ -261,6 +273,7 @@ method:\par
 \end{twocollist}
 }}
 
+
 \membersection{wxListCtrl::GetColumn}\label{wxlistctrlgetcolumn}
 
 \constfunc{bool}{GetColumn}{\param{int }{col}, \param{wxListItem\& }{item}}
@@ -271,17 +284,20 @@ information.
 \perlnote{In wxPerl this method takes only the {\bf col} parameter and
   returns a Wx::ListItem ( or undef ).}
 
+
 \membersection{wxListCtrl::GetColumnCount}\label{wxlistctrlgetcolumncount}
 
 \constfunc{int}{GetColumnCount}{\void}
 
 Returns the number of columns.
 
+
 \membersection{wxListCtrl::GetColumnWidth}\label{wxlistctrlgetcolumnwidth}
 
 \constfunc{int}{GetColumnWidth}{\param{int }{col}}
 
 Gets the column width (report view only).
+
 
 \membersection{wxListCtrl::GetCountPerPage}\label{wxlistctrlgetcountperpage}
 
@@ -292,6 +308,7 @@ visible area of the list control (list or report view)
 or the total number of items in the list control (icon
 or small icon view).
 
+
 \membersection{wxListCtrl::GetEditControl}\label{wxlistctrlgeteditcontrol}
 
 \constfunc{wxTextCtrl *}{GetEditControl}{\void}
@@ -300,6 +317,7 @@ Returns the edit control being currently used to edit a label. Returns {\tt NULL
 if no label is being edited.
 
 {\bf NB:} It is currently only implemented for wxMSW.
+
 
 \membersection{wxListCtrl::GetImageList}\label{wxlistctrlgetimagelist}
 
@@ -313,6 +331,7 @@ Returns the specified image list. {\it which} may be one of:
 \twocolitem{\windowstyle{wxIMAGE\_LIST\_SMALL}}{The small icon image list.}
 \twocolitem{\windowstyle{wxIMAGE\_LIST\_STATE}}{The user-defined state image list (unimplemented).}
 \end{twocollist}
+
 
 \membersection{wxListCtrl::GetItem}\label{wxlistctrlgetitem}
 
@@ -331,17 +350,33 @@ returns the wxListItem object.}
 \perlnote{In wxPerl this method takes as parameter the {\bf ID} of the item
 and ( optionally ) the column, and returns a Wx::ListItem object.}
 
+
+\membersection{wxListCtrl::GetItemBackgroundColour}\label{wxlistctrlgetitembackgroundcolour}
+
+\constfunc{wxColour}{GetItemBackgroundColour}{\param{long }{item}}
+
+Returns the colour for this item. If the item has no specific colour, returns
+an invalid colour (and not the default background control of the control
+itself).
+
+\wxheading{See also}
+
+\helpref{GetItemTextColour}{wxlistctrlgetitemtextcolour}
+
+
 \membersection{wxListCtrl::GetItemCount}\label{wxlistctrlgetitemcount}
 
 \constfunc{int}{GetItemCount}{\void}
 
 Returns the number of items in the list control.
 
+
 \membersection{wxListCtrl::GetItemData}\label{wxlistctrlgetitemdata}
 
 \constfunc{long}{GetItemData}{\param{long }{item}}
 
 Gets the application-defined data associated with this item.
+
 
 \membersection{wxListCtrl::GetItemPosition}\label{wxlistctrlgetitemposition}
 
@@ -354,6 +389,7 @@ ID and returns the wxPoint.}
 
 \perlnote{In wxPerl this method takes only the {\bf item} parameter and
 returns a Wx::Point ( or undef ).}
+
 
 \membersection{wxListCtrl::GetItemRect}\label{wxlistctrlgetitemrect}
 
@@ -370,6 +406,7 @@ ID and code and returns the wxRect.}
 returns a Wx::Rect ( or undef ).}
 
 
+
 \membersection{wxListCtrl::GetItemSpacing}\label{wxlistctrlgetitemspacing}
 
 \constfunc{wxSize}{GetItemSpacing}{\void}
@@ -377,6 +414,7 @@ returns a Wx::Rect ( or undef ).}
 Retrieves the spacing between icons in pixels: horizontal spacing is returned
 as \texttt{x} component of the \helpref{wxSize}{wxsize} object and the vertical
 spacing as its \texttt{y} component.
+
 
 
 \membersection{wxListCtrl::GetItemState}\label{wxlistctrlgetitemstate}
@@ -387,11 +425,24 @@ Gets the item state. For a list of state flags, see \helpref{wxListCtrl::SetItem
 
 The {\bf stateMask} indicates which state flags are of interest.
 
+
 \membersection{wxListCtrl::GetItemText}\label{wxlistctrlgetitemtext}
 
 \constfunc{wxString}{GetItemText}{\param{long }{item}}
 
 Gets the item text for this item.
+
+
+\membersection{wxListCtrl::GetItemTextColour}\label{wxlistctrlgetitemtextcolour}
+
+\constfunc{wxColour}{GetItemTextColour}{\param{long }{item}}
+
+Returns the colour for this item. If the item has no specific colour, returns
+an invalid colour (and not the default foreground control of the control itself
+as this wouldn't allow distinguishing between items having the same colour as
+the current control foreground and items with default colour which, hence, have
+always the same colour as the control).
+
 
 \membersection{wxListCtrl::GetNextItem}\label{wxlistctrlgetnextitem}
 
@@ -446,11 +497,13 @@ other platforms.
 \twocolitem{wxLIST\_STATE\_CUT}{The item is selected as part of a cut and paste operation.}
 \end{twocollist}
 
+
 \membersection{wxListCtrl::GetSelectedItemCount}\label{wxlistctrlgetselecteditemcount}
 
 \constfunc{int}{GetSelectedItemCount}{\void}
 
 Returns the number of selected items in the list control.
+
 
 \membersection{wxListCtrl::GetTextColour}\label{wxlistctrlgettextcolour}
 
@@ -458,12 +511,14 @@ Returns the number of selected items in the list control.
 
 Gets the text colour of the list control.
 
+
 \membersection{wxListCtrl::GetTopItem}\label{wxlistctrlgettopitem}
 
 \constfunc{long}{GetTopItem}{\void}
 
 Gets the index of the topmost visible item when in
 list or report view.
+
 
 
 \membersection{wxRect}{wxListCtrl::GetViewRect}\label{wxlistctrlgetviewrect}
@@ -476,6 +531,7 @@ would be needed and no free space would be left.
 
 Note that this function only works in the icon and small icon views, not in
 list or report views (this is a limitation of the native Win32 control).
+
 
 
 \membersection{wxListCtrl::HitTest}\label{wxlistctrlhittest}
@@ -507,6 +563,7 @@ flags value mentioned above.}
 \perlnote{In wxPerl this method only takes the {\bf point} parameter
   and returns a 2-element list {\tt ( item, flags )}.}
 
+
 \membersection{wxListCtrl::InsertColumn}\label{wxlistctrlinsertcolumn}
 
 \func{long}{InsertColumn}{\param{long }{col}, \param{wxListItem\& }{info}}
@@ -525,6 +582,7 @@ width=-1)}}{Creates a column using a header string only.}
 wxListInfo.}
 \end{twocollist}}
 }
+
 
 \membersection{wxListCtrl::InsertItem}\label{wxlistctrlinsertitem}
 
@@ -576,6 +634,7 @@ method:\par
 \end{twocollist}
 }}
 
+
 \membersection{wxListCtrl::OnGetItemAttr}\label{wxlistctrlongetitemattr}
 
 \func{virtual wxListItemAttr *}{OnGetItemAttr}{\param{long }{item}}
@@ -591,6 +650,7 @@ The base class version always returns {\tt NULL}.
 
 \helpref{OnGetItemImage}{wxlistctrlongetitemimage},\\
 \helpref{OnGetItemText}{wxlistctrlongetitemtext}
+
 
 \membersection{wxListCtrl::OnGetItemImage}\label{wxlistctrlongetitemimage}
 
@@ -609,6 +669,7 @@ The base class version always returns $-1$.
 \helpref{OnGetItemText}{wxlistctrlongetitemtext},\\
 \helpref{OnGetItemAttr}{wxlistctrlongetitemattr}
 
+
 \membersection{wxListCtrl::OnGetItemText}\label{wxlistctrlongetitemtext}
 
 \func{virtual wxString}{OnGetItemText}{\param{long }{item}, \param{long }{column}}
@@ -623,6 +684,7 @@ the given {\it column} for the specified {\tt item}.
 \helpref{OnGetItemImage}{wxlistctrlongetitemimage},\\
 \helpref{OnGetItemAttr}{wxlistctrlongetitemattr}
 
+
 \membersection{wxListCtrl::RefreshItem}\label{wxlistctrlrefreshitem}
 
 \func{void}{RefreshItem}{\param{long }{item}}
@@ -636,6 +698,7 @@ even when the underlying data does change.
 \helpref{RefreshItems}{wxlistctrlrefreshitems}
 
 
+
 \membersection{wxListCtrl::RefreshItems}\label{wxlistctrlrefreshitems}
 
 \func{void}{RefreshItems}{\param{long }{itemFrom}, \param{long }{itemTo}}
@@ -645,6 +708,7 @@ must be less than or equal to the ending one.
 
 Just as \helpref{RefreshItem}{wxlistctrlrefreshitem} this is only useful for
 virtual list controls.
+
 
 
 \membersection{wxListCtrl::ScrollList}\label{wxlistctrlscrolllist}
@@ -658,6 +722,7 @@ the number of pixels to scroll vertically.
 
 {\bf NB:} This method is currently only implemented in the Windows version.
 
+
 \membersection{wxListCtrl::SetBackgroundColour}\label{wxlistctrlsetbackgroundcolour}
 
 \func{void}{SetBackgroundColour}{\param{const wxColour\& }{col}}
@@ -665,12 +730,14 @@ the number of pixels to scroll vertically.
 Sets the background colour (GetBackgroundColour already implicit in
 wxWindow class).
 
+
 \membersection{wxListCtrl::SetColumn}\label{wxlistctrlsetcolumn}
 
 \func{bool}{SetColumn}{\param{int }{col}, \param{wxListItem\& }{item}}
 
 Sets information about this column. See \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem} for more
 information.
+
 
 \membersection{wxListCtrl::SetColumnWidth}\label{wxlistctrlsetcolumnwidth}
 
@@ -683,6 +750,7 @@ wxLIST\_AUTOSIZE will resize the column to the length of its longest item. wxLIS
 will resize the column to the length of the header (Win32) or 80 pixels (other platforms).
 
 In small or normal icon view, {\it col} must be -1, and the column width is set for all columns.
+
 
 \membersection{wxListCtrl::SetImageList}\label{wxlistctrlsetimagelist}
 
@@ -697,6 +765,7 @@ delete it yourself.
 \wxheading{See also}
 
 \helpref{wxListCtrl::AssignImageList}{wxlistctrlassignimagelist}
+
 
 
 \membersection{wxListCtrl::SetItem}\label{wxlistctrlsetitem}
@@ -766,6 +835,17 @@ string or image at a given location.}
 \end{twocollist}}
 }
 
+\membersection{wxListCtrl::SetItemBackgroundColour}\label{wxlistctrlsetitembackgroundcolour}
+
+\func{void}{SetItemBackgroundColour}{\param{long }{item}, \param{const wxColour\& }{col}}
+
+Sets the background colour for this item. This function only works in report view.
+
+The colour can be retrieved using 
+\helpref{GetItemBackgroundColour}{wxlistctrlgetitembackgroundcolour}.
+
+
+
 \membersection{wxListCtrl::SetItemCount}\label{wxlistctrlsetitemcount}
 
 \func{void}{SetItemCount}{\param{long }{count}}
@@ -776,11 +856,13 @@ program should be ready to handle calls to various item callbacks (such as
 \helpref{OnGetItemText}{wxlistctrlongetitemtext}) for all items in the range
 from $0$ to {\it count}.
 
+
 \membersection{wxListCtrl::SetItemData}\label{wxlistctrlsetitemdata}
 
 \func{bool}{SetItemData}{\param{long }{item}, \param{long }{data}}
 
 Associates application-defined data with this item.
+
 
 \membersection{wxListCtrl::SetItemImage}\label{wxlistctrlsetitemimage}
 
@@ -789,11 +871,13 @@ Associates application-defined data with this item.
 Sets the unselected and selected images associated with the item. The images are indices into the
 image list associated with the list control.
 
+
 \membersection{wxListCtrl::SetItemPosition}\label{wxlistctrlsetitemposition}
 
 \func{bool}{SetItemPosition}{\param{long }{item}, \param{const wxPoint\& }{pos}}
 
 Sets the position of the item, in icon or small icon view.
+
 
 \membersection{wxListCtrl::SetItemState}\label{wxlistctrlsetitemstate}
 
@@ -803,11 +887,23 @@ Sets the item state. For a list of state flags, see \helpref{wxListCtrl::SetItem
 
 The {\bf stateMask} indicates which state flags are valid.
 
+
 \membersection{wxListCtrl::SetItemText}\label{wxlistctrlsetitemtext}
 
 \func{void}{SetItemText}{\param{long }{item}, \param{const wxString\& }{text}}
 
 Sets the item text for this item.
+
+
+\membersection{wxListCtrl::SetItemTextColour}\label{wxlistctrlsetitemtextcolour}
+
+\func{void}{SetItemTextColour}{\param{long }{item}, \param{const wxColour\& }{col}}
+
+Sets the colour for this item. This function only works in report view.
+
+The colour can be retrieved using 
+\helpref{GetItemTextColour}{wxlistctrlgetitemtextcolour}.
+
 
 \membersection{wxListCtrl::SetSingleStyle}\label{wxlistctrlsetsinglestyle}
 
@@ -815,17 +911,20 @@ Sets the item text for this item.
 
 Adds or removes a single window style.
 
+
 \membersection{wxListCtrl::SetTextColour}\label{wxlistctrlsettextcolour}
 
 \func{void}{SetTextColour}{\param{const wxColour\& }{col}}
 
 Sets the text colour of the list control.
 
+
 \membersection{wxListCtrl::SetWindowStyleFlag}\label{wxlistctrlsetwindowstyleflag}
 
 \func{void}{SetWindowStyleFlag}{\param{long }{style}}
 
 Sets the whole window style.
+
 
 \membersection{wxListCtrl::SortItems}\label{wxlistctrlsortitems}
 
