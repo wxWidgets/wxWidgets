@@ -341,7 +341,7 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
             wxFocusEventHandler(wxDatePickerCtrlGeneric::OnSetFocus));
 
     wxClientDC dc(yearControl);
-    dc.SetFont(m_font);
+    dc.SetFont(yearControl->GetFont());
     wxCoord width, dummy;
     dc.GetTextExtent(wxT("2000"), &width, &dummy);
     width += ConvertDialogToPixels(wxSize(20, 0)).x;
