@@ -1,0 +1,98 @@
+#! /bin/sh
+
+OS=$OSTYPE
+
+if test "x$OS" = x; then 
+  echo "please set the environment variable OSTYPE "
+  echo "to a value appropriate for your system."
+  echo "to do so type: setenv OSTYPE `uname`   for the csh, tcsh"
+  echo "               export OSTYPE=`uname`   for other shells"
+  exit 1
+fi
+
+TMP_CONT=`ls src`
+SRC_DIR=src
+for each in $TMP_CONT; do
+  if test -d src/$each ; then 
+    SRC_DIR="$SRC_DIR src/$each"
+  fi
+done
+
+TMP_CONT=`ls samples`
+SAMPLES_DIR=
+for each in $TMP_CONT; do
+  if test -d samples/$each ; then 
+    SAMPLES_DIR="$SAMPLES_DIR samples/$each"
+  fi
+done
+
+TMP_CONT=`ls utils`
+UTILS_DIR=
+for each in $TMP_CONT; do
+  if test -d utils/$each ; then 
+    UTILS_DIR="$UTILS_DIR utils/$each"
+  fi
+done
+
+TMP_CONT=`ls user`
+USER_DIR=
+for each in $TMP_CONT; do
+  if test -d user/$each ; then 
+    USER_DIR="$USER_DIR user/$each"
+  fi
+done
+
+ALL_DIR="$SRC_DIR $SAMPLES_DIR $UTILS_DIR $USER_DIR"
+
+echo Creating for: $OS
+
+# create defaults
+if test ! -d install/unix/setup/$OS; then
+    mkdir install/unix/setup/$OS
+fi
+
+SUBSTFILE=install/unix/setup/$OS/substit
+
+# the substit file first
+if test -f install/unix/setup/substit ; then
+  cat install/unix/setup/substit | sed "s/*/@/g" > $SUBSTFILE;
+  rm -f install/unix/setup/substit 
+fi
+# now the template file
+cat install/unix/setup/maketmpl.in | sed -f $SUBSTFILE > install/unix/setup/$OS/maketmpl
+
+# now the config header file
+#if test -f setup/wx_setup.h ; then
+#  cat setup/wx_setup.h > setup/$OS/wx_setup.h;
+#  rm -f setup/wx_setup.h
+#fi
+
+# create lib and bin directory
+if test ! -d lib; then
+  mkdir lib
+fi
+if test ! -d lib/$OS; then
+  mkdir lib/$OS
+fi
+if test ! -d bin; then
+  mkdir bin
+fi
+if test ! -d bin/$OS; then
+  mkdir bin/$OS
+fi
+
+# create makefiles
+for each in $ALL_DIR; do
+    DIR=$each/$OS
+    # create Makefile in directory
+    if test -r $each/Makefile.in ; then
+        # create directory
+        if test ! -d $DIR; then
+            echo "Creating Directory: $DIR..."
+	    mkdir $DIR
+        fi
+	echo "Creating: $DIR/Makefile..."
+	cat $each/Makefile.in | sed -f $SUBSTFILE > $DIR/Makefile
+	(cd $DIR; make subdirs > /dev/null;)
+    fi
+done

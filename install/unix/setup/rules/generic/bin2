@@ -1,0 +1,9 @@
+binary:: binary1 binary2
+
+depend_binary:: depend_binary1 depend_binary2
+
+clean_binary:: clean_binary1 clean_binary2
+
+include $(RULES_GENERIC)/bin1gen
+include $(RULES_GENERIC)/bin2gen
+

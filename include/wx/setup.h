@@ -11,6 +11,8 @@
 #    define __WXGTK__
 #  elif defined(__MOTIF__)
 #    define __WXMOTIF__
+#  elif defined(__QT__)
+#    define __WXQT__
 #  else
 #    error No __WXxxx__ define set! Please define __WXGTK__,__WXMSW__ or __WXMOTIF__.
 #  endif
@@ -18,10 +20,8 @@
 
 #if defined(__WXMSW__)
 #include "wx/msw/setup.h"
-#elif defined(__WXMOTIF__)
-#include "wx/xt/setup.h"
-#elif defined(__WXGTK__)
-#include "wx/gtk/setup.h"
+#else
+#include "wx/../../install/unix/setup/setup.h"
 #endif
 
 #endif

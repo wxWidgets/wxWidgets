@@ -1,0 +1,10 @@
+#! /bin/sh
+
+for each in $@ ; do
+  LINE=`grep " $each " ../$OSTYPE/wx_setup.h | grep "#define" | grep 1`
+  if test "x$LINE" = x ; then
+    echo "$each needed to compile";
+    exit 1;
+  fi
+done
+

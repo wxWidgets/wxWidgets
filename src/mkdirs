@@ -5,6 +5,16 @@ if test ! -d gtk; then
     mkdir gtk
 fi
 
+# create "/qt" if not present
+if test ! -d gtk; then
+    mkdir gtk
+fi
+
+# create "/motif" if not present
+if test ! -d gtk; then
+    mkdir gtk
+fi
+
 # create "/common" if not present
 if test ! -d common; then
     mkdir common

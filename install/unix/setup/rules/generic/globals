@@ -1,0 +1,15 @@
+# creates subdirectories for object-files in case they are needed...
+
+subdirs::
+	@if test "x$(SRC_DIR)" != x ; then \
+	  echo -n "Creating necessary subdirs: "; \
+	  for each in $(SRC_DIR) xxx; do \
+	    if test "x$$each" != xxxx; then \
+	      echo -n "$$each "; \
+	      if test ! -d $$each ; then \
+	        mkdir $$each ; \
+	      fi; \
+	    fi; \
+	  done; \
+	  echo "";\
+	fi
