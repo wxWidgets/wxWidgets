@@ -410,6 +410,7 @@ protected:
 
     wxTimer             *m_renameTimer;
     bool                 m_renameAccept;
+    bool                 m_lastOnSame;  // last click on the same item as prev
     wxString             m_renameRes;
 
     // the common part of all ctors
