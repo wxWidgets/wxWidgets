@@ -1330,7 +1330,7 @@ wxColour wxWin32ColourScheme::GetBackground(wxWindow *win) const
         col = win->GetBackgroundColour();
     }
 
-    if ( win->IsContainerWindow() )
+    if ( !win->ShouldInheritColours() )
     {
         wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
         if ( text )

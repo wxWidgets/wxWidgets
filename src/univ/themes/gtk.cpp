@@ -775,7 +775,7 @@ wxColour wxGTKColourScheme::GetBackground(wxWindow *win) const
         col = win->GetBackgroundColour();
     }
 
-    if ( win->IsContainerWindow() )
+    if ( !win->ShouldInheritColours() )
     {
         // doesn't depend on the state
         if ( !col.Ok() )
