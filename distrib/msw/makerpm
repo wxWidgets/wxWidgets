@@ -70,6 +70,69 @@ dospinwxgtk()
   echo Now try the RPMs with rpm -i.
 }
 
+dospinwxmgl()
+{
+  echo Making wxMGL RPMs...
+  RPM_ROOT=$WXDEST/wxmgl/rpm-root
+  export MGL_ROOT=/usr/lib/mgl5
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmgl
+  mkdir $WXDEST/wxmgl
+  mkdir $WXDEST/wxmgl/release
+  mkdir $RPM_ROOT
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmgl/release
+  echo Configuring...
+  $WXSRC/configure --with-mgl --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  echo Setting up RPM build dir $RPM_ROOT...
+  rm -f -r $RPM_ROOT
+  mkdir $RPM_ROOT
+  mkdir $RPM_ROOT/BUILD
+  mkdir $RPM_ROOT/RPMS
+  mkdir $RPM_ROOT/RPMS/i386
+  mkdir $RPM_ROOT/RPMS/i686
+  mkdir $RPM_ROOT/RPMS/noarch
+  mkdir $RPM_ROOT/SOURCES
+  mkdir $RPM_ROOT/SPECS
+  mkdir $RPM_ROOT/SRPMS
+
+  echo %_topdir $RPM_ROOT > ~/.rpmmacros
+
+  echo Copying wxMGL-$WXVER.tar.bz2 to $RPM_ROOT/SOURCES...
+  cp wxMGL-$WXVER.tar.bz2 $RPM_ROOT/SOURCES
+  echo Copying wxMGL.spec to $RPM_ROOT/SPECS...
+  cp $WXSRC/wxMGL.spec $RPM_ROOT/SPECS
+
+  echo Starting wxMGL RPM build...
+  cd $RPM_ROOT
+  rpmbuild -ba SPECS/wxMGL.spec 2>&1 | tee wxMGL.out
+
+  echo Finished wxMGL RPM build, in $RPM_ROOT.
+  echo "SRPMS:"
+  ls SRPMS
+  echo "RPMS/i386:"
+  ls RPMS/i386
+
+  cp $RPM_ROOT/SRPMS/*.rpm $WXDEST
+  cp $RPM_ROOT/RPMS/*.rpm $WXDEST
+  cp $WXDEST/wxmgl/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxmgl/release/*.tar.bz2 $WXDEST
+
+  rm -f -r $WXDEST/wxmgl
+
+  echo Now try the RPMs with rpm -i.
+}
+
 dospinwxmotif()
 {
   echo Making wxMotif RPMs...
@@ -321,6 +384,7 @@ SPINWXGTK=0
 SPINWXMAC=0
 SPINWXMOTIF=0
 SPINWXBASE=0
+SPINWXMGL=0
 SPINEVERYTHING=0
 UPDATECVS=0
 
@@ -333,6 +397,7 @@ usage()
     echo "    --wxbase       Spin wxBase RPMs"
     echo "    --wxx11        Spin wxX11 RPMs"
     echo "    --wxmotif      Spin wxMotif RPMs"
+    echo "    --wxmgl        Spin wxMGL RPMs"
     echo "    --wxmac        Make wxMac tarball"
     echo "    --all          Spin EVERYTHING"
     echo "    --updatecvs    Update from CVS"
@@ -366,6 +431,7 @@ for i in "$@"; do
 	--wxx11) SPINWXX11=1 ;;
 	--wxgtk) SPINWXGTK=1 ;;
 	--wxmotif) SPINWXMOTIF=1 ;;
+	--wxmgl) SPINWXMGL=1 ;;
 	--wxmac) SPINWXMAC=1 ;;
 	--wxbase) SPINWXBASE=1 ;;
 	--all) SPINEVERYTHING=1 ;;
@@ -402,6 +468,10 @@ fi
 
 if [ "$SPINWXMOTIF" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
   dospinwxmotif
+fi
+
+if [ "$SPINWXMGL" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmgl
 fi
 
 if [ "$SPINWXMAC" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
