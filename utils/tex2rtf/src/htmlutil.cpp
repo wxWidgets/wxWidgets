@@ -2110,6 +2110,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       descriptionItemArg = GetArgChunk();
       return FALSE;
     }
+    return TRUE;
   }
   case ltTWOCOLITEM:
   case ltTWOCOLITEMRULED:
