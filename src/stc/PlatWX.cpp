@@ -751,6 +751,10 @@ public:
         // things to look right...
         lv->SetFocus();
 
+        Hide();
+    }
+
+        
     // On OSX and (possibly others) there can still be pending
     // messages/events for the list control when Scintilla wants to
     // close it, so do a pending delete of it instead of destroying
