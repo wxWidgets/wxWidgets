@@ -86,7 +86,14 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
     Widget toolbar = XtVaCreateManagedWidget("toolbar",
-                xmFormWidgetClass, parentWidget,
+                    xmBulletinBoardWidgetClass, (Widget) parentWidget,
+                    XmNmarginWidth, 0,
+                    XmNmarginHeight, 0,
+                    XmNresizePolicy, XmRESIZE_NONE,
+                    NULL);
+/*
+    Widget toolbar = XtVaCreateManagedWidget("toolbar",
+                xmFormWidgetClass, (Widget) m_clientWidget,
                 XmNtraversalOn, False,
                 XmNhorizontalSpacing, 0,
                 XmNverticalSpacing, 0,
@@ -95,6 +102,7 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
                 XmNmarginWidth, 0,
                 XmNmarginHeight, 0,
                 NULL);
+*/
 
     m_mainWidget = (WXWidget) toolbar;
 
@@ -117,6 +125,200 @@ wxToolBar::~wxToolBar()
     DestroyPixmaps();
 }
 
+bool wxToolBar::CreateTools()
+{
+    if (m_tools.Number() == 0)
+        return FALSE;
+
+    // Separator spacing
+    const int separatorSize = GetToolSeparation(); // 8;
+    wxSize margins = GetToolMargins();
+    int marginX = margins.x;
+    int marginY = margins.y;
+
+    int currentX = marginX;
+    int currentY = marginY;
+
+    int buttonHeight = 0;
+
+    int currentSpacing = 0;
+
+    m_widgets.Clear();
+    Widget prevButton = (Widget) 0;
+    wxNode* node = m_tools.First();
+    while (node)
+    {
+        wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+
+        if (tool->m_toolStyle == wxTOOL_STYLE_SEPARATOR)
+            currentX += separatorSize;
+        else if (tool->m_bitmap1.Ok())
+        {
+            Widget button = (Widget) 0;
+
+            if (tool->m_isToggle)
+            {
+                button = XtVaCreateWidget("toggleButton", 
+                   xmToggleButtonWidgetClass, (Widget) m_mainWidget,
+                   XmNx, currentX, XmNy, currentY,
+						 //                   XmNpushButtonEnabled, True,
+                   XmNmultiClick, XmMULTICLICK_KEEP,
+                   XmNlabelType, XmPIXMAP,
+                   NULL);
+                XtAddCallback ((Widget) button, XmNvalueChangedCallback, (XtCallbackProc) wxToolButtonCallback,
+		 (XtPointer) this);
+            }
+            else
+            {
+                button = XtVaCreateWidget("button", 
+                   xmPushButtonWidgetClass, (Widget) m_mainWidget,
+                   XmNx, currentX, XmNy, currentY,
+                   XmNpushButtonEnabled, True,
+                   XmNmultiClick, XmMULTICLICK_KEEP,
+                   XmNlabelType, XmPIXMAP,
+                   NULL);
+                XtAddCallback (button,
+                   XmNactivateCallback, (XtCallbackProc) wxToolButtonCallback,
+                   (XtPointer) this);
+            }
+
+            // For each button, if there is a mask, we must create
+            // a new wxBitmap that has the correct background colour
+            // for the button. Otherwise the background will just be
+            // e.g. black if a transparent XPM has been loaded.
+            wxBitmap originalBitmap = tool->m_bitmap1;
+
+            if (tool->m_bitmap1.GetMask())
+            {
+                int backgroundPixel;
+                XtVaGetValues(button, XmNbackground, &backgroundPixel,
+			      NULL);
+
+
+                wxColour col;
+                col.SetPixel(backgroundPixel);
+                
+                wxBitmap newBitmap = wxCreateMaskedBitmap(tool->m_bitmap1, col);
+
+                tool->m_bitmap1 = newBitmap;
+            }
+
+            // Create a selected/toggled bitmap. If there isn't a m_bitmap2,
+            // we need to create it (with a darker, selected background)
+            int backgroundPixel;
+            if (tool->m_isToggle)
+                XtVaGetValues(button, XmNselectColor, &backgroundPixel,
+		      NULL);
+            else
+                XtVaGetValues(button, XmNarmColor, &backgroundPixel,
+		      NULL);
+
+            wxColour col;
+            col.SetPixel(backgroundPixel);
+
+            if (tool->m_bitmap2.Ok() && tool->m_bitmap2.GetMask())
+            {
+                // Use what's there
+                wxBitmap newBitmap = wxCreateMaskedBitmap(tool->m_bitmap2, col);
+                tool->m_bitmap2 = newBitmap;
+            }
+            else
+            {
+                // Use unselected bitmap
+                if (originalBitmap.GetMask())
+                {
+                    wxBitmap newBitmap = wxCreateMaskedBitmap(originalBitmap, col);
+                    tool->m_bitmap2 = newBitmap;
+		}
+                else
+                    tool->m_bitmap2 = tool->m_bitmap1;
+            }
+
+            Pixmap pixmap = (Pixmap) tool->m_bitmap1.GetPixmap();
+            Pixmap insensPixmap = (Pixmap) tool->m_bitmap1.GetInsensPixmap();
+
+            if (tool->m_isToggle)
+            {
+                // Toggle button
+                Pixmap pixmap2 = (Pixmap) 0;
+                Pixmap insensPixmap2 = (Pixmap) 0;
+
+                // If there's a bitmap for the toggled state, use it,
+                // otherwise generate one.
+                if (tool->m_bitmap2.Ok())
+                {
+                    pixmap2 = (Pixmap) tool->m_bitmap2.GetPixmap();
+                    insensPixmap2 = (Pixmap) tool->m_bitmap2.GetInsensPixmap();
+                }
+                else
+                {
+                    pixmap2 = (Pixmap) tool->m_bitmap1.GetArmPixmap(button);
+                    insensPixmap2 = XCreateInsensitivePixmap((Display*) wxGetDisplay(), pixmap2);
+                    m_pixmaps.Append((wxObject*) insensPixmap2); // Store for later deletion
+                }
+                XtVaSetValues (button,
+                    XmNindicatorOn, False,
+		    XmNshadowThickness, 2,
+			       //		    XmNborderWidth, 0,
+			       //		    XmNspacing, 0,
+		    XmNmarginWidth, 0,
+		    XmNmarginHeight, 0,
+                    XmNfillOnSelect, True,
+                    XmNlabelPixmap, pixmap,
+                    XmNselectPixmap, pixmap2,
+                    XmNlabelInsensitivePixmap, insensPixmap,
+                    XmNselectInsensitivePixmap, insensPixmap2,
+                    XmNlabelType, XmPIXMAP,
+                    NULL);
+            }
+            else
+            {
+                Pixmap pixmap2 = (Pixmap) 0;
+
+                // If there's a bitmap for the armed state, use it,
+                // otherwise generate one.
+                if (tool->m_bitmap2.Ok())
+                {
+                    pixmap2 = (Pixmap) tool->m_bitmap2.GetPixmap();
+                }
+                else
+                {
+                    pixmap2 = (Pixmap) tool->m_bitmap1.GetArmPixmap(button);
+
+                }
+                // Normal button
+                XtVaSetValues(button,
+                   XmNlabelPixmap, pixmap,
+                   XmNlabelInsensitivePixmap, insensPixmap,
+                   XmNarmPixmap, pixmap2,
+                   NULL);
+            }
+            XtManageChild(button);
+
+            Dimension width, height;
+            XtVaGetValues(button, XmNwidth, & width, XmNheight, & height,
+			      NULL);
+            currentX += width + marginX;
+            buttonHeight = wxMax(buttonHeight, height);
+
+            XtAddEventHandler (button, EnterWindowMask | LeaveWindowMask, 
+                       False, wxToolButtonPopupCallback, (XtPointer) this);
+            m_widgets.Append(tool->m_index, (wxObject*) button);
+
+            prevButton = button;
+            currentSpacing = 0;
+        }
+        node = node->Next();
+    }
+
+    SetSize(-1, -1, currentX, buttonHeight + 2*marginY);
+
+    return TRUE;
+}
+
+// Old version, assuming we use a form. Now we use
+// a bulletin board, so we can create controls on the toolbar.
+#if 0
 bool wxToolBar::CreateTools()
 {
     if (m_tools.Number() == 0)
@@ -296,6 +498,7 @@ bool wxToolBar::CreateTools()
 
     return TRUE;
 }
+#endif
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
@@ -427,6 +630,22 @@ WXWidget wxToolBar::FindWidgetForIndex(int index)
     else
         return (WXWidget) node->Data();
 }
+
+WXWidget wxToolBar::GetTopWidget() const
+{
+    return m_mainWidget;
+}
+
+WXWidget wxToolBar::GetClientWidget() const
+{
+    return m_mainWidget;
+}
+
+WXWidget wxToolBar::GetMainWidget() const
+{
+    return m_mainWidget;
+}
+
 
 void wxToolButtonCallback (Widget w, XtPointer clientData,
 		    XtPointer ptr)

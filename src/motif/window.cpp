@@ -661,6 +661,27 @@ void wxWindow::GetClientSize(int *x, int *y) const
 
 void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
+  // A bit of optimization to help sort out the flickers.
+  int oldX, oldY, oldW, oldH;
+  GetSize(& oldW, & oldH);
+  GetPosition(& oldX, & oldY);
+
+  bool useOldPos = FALSE;
+  bool useOldSize = FALSE;
+
+  if ((x == -1) && (x == -1) && ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0))
+    useOldPos = TRUE;
+  else if (x == oldX && y == oldY)
+    useOldPos = TRUE;
+
+  if ((width == -1) && (height == -1))
+    useOldSize = TRUE;
+  else if (width == oldW && height == oldH)
+    useOldSize = TRUE;
+
+  if (useOldPos && useOldSize)
+    return;
+
   if (m_drawingArea)
   {
     CanvasSetSize(x, y, width, height, sizeFlags);
@@ -677,22 +698,32 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
   int xx = x; int yy = y;
   AdjustForParentClientOrigin(xx, yy, sizeFlags);
 
-  if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    XtVaSetValues(widget, XmNx, xx, NULL);
-  if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    XtVaSetValues(widget, XmNy, yy, NULL);
-  if (width > -1)
-    XtVaSetValues(widget, XmNwidth, width, NULL);
-  if (height > -1)
-    XtVaSetValues(widget, XmNheight, height, NULL);
+  if (!useOldPos)
+  {
+    if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+      XtVaSetValues(widget, XmNx, xx, NULL);
+    if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+      XtVaSetValues(widget, XmNy, yy, NULL);
+  }
+  if (!useOldSize)
+  {
+    if (width > -1)
+      XtVaSetValues(widget, XmNwidth, width, NULL);
+    if (height > -1)
+      XtVaSetValues(widget, XmNheight, height, NULL);
+  }
 
   if (managed)
     XtManageChild(widget);
 
+  // How about this bit. Maybe we don't need to generate size events
+  // all the time -- they'll be generated when the window is sized anyway.
+  /*
   wxSizeEvent sizeEvent(wxSize(width, height), GetId());
   sizeEvent.SetEventObject(this);
   
   GetEventHandler()->ProcessEvent(sizeEvent);
+  */
 }
 
 void wxWindow::SetClientSize(int width, int height)
@@ -2504,6 +2535,27 @@ void wxWindow::DoPaint()
 // SetSize, but as per old wxCanvas (with drawing widget etc.)
 void wxWindow::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
 {
+  // A bit of optimization to help sort out the flickers.
+  int oldX, oldY, oldW, oldH;
+  GetSize(& oldW, & oldH);
+  GetPosition(& oldX, & oldY);
+
+  bool useOldPos = FALSE;
+  bool useOldSize = FALSE;
+
+  if ((x == -1) && (x == -1) && ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0))
+    useOldPos = TRUE;
+  else if (x == oldX && y == oldY)
+    useOldPos = TRUE;
+
+  if ((w == -1) && (h == -1))
+    useOldSize = TRUE;
+  else if (w == oldW && h == oldH)
+    useOldSize = TRUE;
+
+  if (useOldPos && useOldSize)
+    return;
+
   Widget drawingArea = (Widget) m_drawingArea;
   bool managed = XtIsManaged(m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
 
@@ -2514,19 +2566,25 @@ void wxWindow::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
   int xx = x; int yy = y;
   AdjustForParentClientOrigin(xx, yy, sizeFlags);
 
-  if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+  if (!useOldPos)
+  {
+    if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
       XtVaSetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow,
 		     XmNx, xx, NULL);
     }
 
-  if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
       XtVaSetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow,
 		     XmNy, yy, NULL);
     }
+  }
 
-  if (w > -1)
+  if (!useOldSize)
+  {
+
+    if (w > -1)
     {
       if (m_borderWidget)
 	{
@@ -2588,16 +2646,21 @@ void wxWindow::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
 
       XtVaSetValues ((Widget) m_drawingArea, XmNheight, h, NULL);
     }
+  }
+
   if (managed)
     XtManageChild (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
   XtVaSetValues((Widget) m_drawingArea, XmNresizePolicy, XmRESIZE_NONE, NULL);
 
+  /*
   int ww, hh;
   GetClientSize (&ww, &hh);
   wxSizeEvent sizeEvent(wxSize(ww, hh), GetId());
   sizeEvent.SetEventObject(this);
   
   GetEventHandler()->ProcessEvent(sizeEvent);
+  */
+
 }
 
 void wxWindow::CanvasSetClientSize (int w, int h)
@@ -2630,10 +2693,12 @@ void wxWindow::CanvasSetClientSize (int w, int h)
   DoRefresh ();
   */
 
+  /*
   wxSizeEvent sizeEvent(wxSize(w, h), GetId());
   sizeEvent.SetEventObject(this);
   
   GetEventHandler()->ProcessEvent(sizeEvent);
+  */
 }
 
 void wxWindow::CanvasGetClientSize (int *w, int *h) const

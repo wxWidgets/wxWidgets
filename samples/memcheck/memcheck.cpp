@@ -27,12 +27,18 @@
 
 #include "wx/date.h"
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
 #endif
 
 #ifndef __WXDEBUG__
 #error This program must be compiled in debug mode.
+#endif
+
+// Normally, new is automatically defined to be the
+// debugging version. If not, this does it.
+#if !defined(new) && defined(WXDEBUG_NEW)
+#define new WXDEBUG_NEW
 #endif
 
 // Define a new application type
@@ -59,11 +65,7 @@ bool MyApp::OnInit(void)
   MyFrame *frame = new MyFrame((wxFrame *) NULL);
 
   // Give it an icon
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
-#else
-  frame->SetIcon(wxIcon(mondrian_xpm));
-#endif
+  frame->SetIcon(wxICON(mondrian));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -82,7 +84,6 @@ bool MyApp::OnInit(void)
   frame->Show(TRUE);
 
   wxDebugContext::SetCheckpoint();
-//  wxDebugContext::SetFile("debug.log");
 
   wxString *thing = new wxString;
   wxDate* date = new wxDate;

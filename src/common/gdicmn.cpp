@@ -449,8 +449,7 @@ wxBitmapList::wxBitmapList ()
 
 wxBitmapList::~wxBitmapList ()
 {
-#ifdef __WXMSW__
-
+#if defined(__WXMSW__) || defined(__WXMOTIF__)
   wxNode *node = First ();
   while (node)
     {
@@ -466,7 +465,7 @@ wxBitmapList::~wxBitmapList ()
 // Pen and Brush lists
 wxPenList::~wxPenList ()
 {
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMOTIF__)
   wxNode *node = First ();
   while (node)
     {
@@ -514,7 +513,7 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 
 wxBrushList::~wxBrushList ()
 {
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMOTIF__)
   wxNode *node = First ();
   while (node)
     {

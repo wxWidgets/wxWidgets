@@ -105,7 +105,7 @@ wxExtHelpController::Initialize(const wxString& file)
 
   
 bool
-wxExtHelpController::LoadFile(const wxString& ifile = "")
+wxExtHelpController::LoadFile(const wxString& ifile)
 {
    wxString mapFile, file, url, doc;
    int id,i,len;
@@ -118,7 +118,9 @@ wxExtHelpController::LoadFile(const wxString& ifile = "")
       file = ifile;
       if(! wxIsAbsolutePath(file))
       {
-         file = wxGetWorkingDirectory();
+         char* f = wxGetWorkingDirectory();
+         file = f;
+         delete[] f; // wxGetWorkingDirectory returns new memory
          file << WXEXTHELP_SEPARATOR << ifile;
       }
       else

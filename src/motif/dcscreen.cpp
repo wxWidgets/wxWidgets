@@ -73,7 +73,7 @@ bool wxScreenDC::StartDrawingOnTop(wxWindow* window)
   return StartDrawingOnTop(& rect);
 }
 
-bool wxScreenDC::StartDrawingOnTop(wxRect* rect = NULL)
+bool wxScreenDC::StartDrawingOnTop(wxRect* rect)
 {
   if (sm_overlayWindow)
     return FALSE;

@@ -75,6 +75,10 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
   int FindIndexForWidget(WXWidget w);
   WXWidget FindWidgetForIndex(int index);
 
+  WXWidget GetTopWidget() const;
+  WXWidget GetClientWidget() const;
+  WXWidget GetMainWidget() const;
+
 protected:
   // List of widgets in the toolbar, indexed by tool index
   wxList    m_widgets;

@@ -550,7 +550,10 @@ void wxMDIChildFrame::SetIcon(const wxIcon& icon)
 void wxMDIChildFrame::SetTitle(const wxString& title)
 {
     m_title = title;
-    // TODO: set parent frame title
+    wxMDIClientWindow* clientWindow = GetMDIParentFrame()->GetClientWindow();
+    int pageNo = clientWindow->FindPagePosition(this);
+    if (pageNo > -1)
+        clientWindow->SetPageText(pageNo, title);
 }
 
 // MDI operations
@@ -623,7 +626,19 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
   //    m_windowParent = parent;
     //    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
 
-    return wxNotebook::Create(parent, wxID_NOTEBOOK_CLIENT_AREA, wxPoint(0, 0), wxSize(100, 100), 0);
+    bool success = wxNotebook::Create(parent, wxID_NOTEBOOK_CLIENT_AREA, wxPoint(0, 0), wxSize(100, 100), 0);
+    if (success)
+    {
+        wxFont font(10, wxSWISS, wxNORMAL, wxNORMAL);
+        wxFont selFont(10, wxSWISS, wxNORMAL, wxBOLD);
+        GetTabView()->SetTabFont(font);
+        GetTabView()->SetSelectedTabFont(selFont);
+        GetTabView()->SetTabSize(120, 18);
+        GetTabView()->SetTabSelectionHeight(20);
+        return TRUE;
+    }
+    else
+      return FALSE;
 }
 
 void wxMDIClientWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
@@ -670,9 +685,11 @@ void wxMDIClientWindow::OnPageChanged(wxNotebookEvent& event)
             oldChild->GetEventHandler()->ProcessEvent(event);
         }
     }
-    wxMDIChildFrame* activeChild = (wxMDIChildFrame*) GetPage(event.GetSelection());
-    if (activeChild)
+    if (event.GetSelection() != -1)
     {
+      wxMDIChildFrame* activeChild = (wxMDIChildFrame*) GetPage(event.GetSelection());
+      if (activeChild)
+      {
         wxActivateEvent event(wxEVT_ACTIVATE, TRUE, activeChild->GetId());
         event.SetEventObject( activeChild );
         activeChild->GetEventHandler()->ProcessEvent(event);
@@ -682,6 +699,7 @@ void wxMDIClientWindow::OnPageChanged(wxNotebookEvent& event)
             activeChild->GetMDIParentFrame()->SetActiveChild(activeChild);
             activeChild->GetMDIParentFrame()->SetChildMenuBar(activeChild);
         }
+      }
     }
     event.Skip();
 }

@@ -1522,7 +1522,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
     {
       Pixmap myStipple;
 
-      oldStipple = NULL;    // For later reset!!
+      oldStipple = (wxBitmap*) NULL;    // For later reset!!
 
       switch (m_currentFill)
       {

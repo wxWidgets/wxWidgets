@@ -34,3 +34,22 @@ More recently:
   tidied up in wxApp so that events are filtered through ProcessXEvent.
 - wxWindow::GetUpdateRegion should now work.
 
+25/11/98
+--------
+
+- Reimplemented MDI using wxNotebook instead of the MDI widgets, which
+  were too buggy (probably not design for dynamic addition/removal of
+  child frames).
+- Some improvements to the wxNotebook implementation.
+- wxToolBar now uses a bulletin board instead of a form, in an attempt
+  to make it possible to add ordinary wxControls to a toolbar.
+- Cured problem with not being able to use global memory operators,
+  by defining two more global operators, so that the delete will match
+  the debugging implementation.
+- Added wxUSE_DEBUG_NEW_ALWAYS so we can distinguish between using
+  global memory operators (usually OK) and #defining new to be
+  WXDEBUG_NEW (sometimes it might not be OK).
+- Added time.cpp to makefile; set wxUSE_DATETIME to 1.
+- Added a parent-existance check to popup menu code to make it not crash.
+- Added some optimization in wxWindow::SetSize to produce less flicker.
+  It remains to be seen whether this produces any resize bugs.

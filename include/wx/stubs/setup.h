@@ -87,6 +87,11 @@
                                   // In debug mode, cause new and delete to be redefined globally.
                                   // If this causes problems (e.g. link errors), set this to 0.
 
+#define wxUSE_DEBUG_NEW_ALWAYS 1
+                                  // In debug mode, causes new to be defined to
+                                  // be WXDEBUG_NEW (see object.h).
+                                  // If this causes problems (e.g. link errors), set this to 0.
+
 #define REMOVE_UNUSED_ARG 1
                                   // Set this to 0 if your compiler can't cope
                                   // with omission of prototype parameters.

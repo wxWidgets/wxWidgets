@@ -246,11 +246,19 @@ private:
     int m_count;
 };
 
-#if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS
-// JACS: not necessary now that new can be defined globally
-//#ifndef WXDEBUG_NEW
-//#define WXDEBUG_NEW new(__FILE__,__LINE__)
-//#endif
+#ifdef __WXDEBUG__
+#ifndef WXDEBUG_NEW
+#define WXDEBUG_NEW new(__FILE__,__LINE__)
+#endif
+#else
+#define WXDEBUG_NEW new
+#endif
+
+// Redefine new to be the debugging version. This doesn't
+// work with all compilers, in which case you need to
+// use WXDEBUG_NEW explicitly if you wish to use the debugging version.
+
+#if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
 #define new new(__FILE__,__LINE__)
 #endif
 

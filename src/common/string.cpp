@@ -941,7 +941,7 @@ int wxString::Printf(const char *pszFormat, ...)
 
 int wxString::PrintfV(const char* pszFormat, va_list argptr)
 {
-#ifdef __BORLANDC__
+#if defined(__BORLANDC__) || defined(__GNUWIN32__)
   static char s_szScratch[1024];
 
   int iLen = vsprintf(s_szScratch, pszFormat, argptr);

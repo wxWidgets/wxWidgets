@@ -120,6 +120,9 @@ public:
   
   void ClearTabs(bool deleteTabs = TRUE);
 
+  bool SetTabText(int id, const wxString& label);
+  wxString GetTabText(int id) const;
+
   // Layout tabs (optional, e.g. if resizing window)
   void Layout(void);
 

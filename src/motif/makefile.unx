@@ -46,6 +46,7 @@ LIB_CPP_SRC=\
  ../common/textfile.cpp \
  ../common/tbarbase.cpp \
  ../common/tbarsmpl.cpp \
+ ../common/time.cpp \
  ../common/timercmn.cpp \
  ../common/utilscmn.cpp \
  ../common/wincmn.cpp \

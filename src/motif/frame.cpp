@@ -479,10 +479,12 @@ void wxFrame::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (!(height == -1 && width == -1))
   {
     PreResize();
+ /* JACS: not sure if this is necessary
     wxSizeEvent sizeEvent(wxSize(width, height), GetId());
     sizeEvent.SetEventObject(this);
 
     GetEventHandler()->ProcessEvent(sizeEvent);
+  */
   }
 }
 
@@ -553,13 +555,10 @@ void wxFrame::SetIcon(const wxIcon& icon)
   if (!m_frameShell)
     return;
 
-  // TODO
-  /*
   if (!icon.Ok() || !icon.GetPixmap())
     return;
 
-  XtVaSetValues((Widget) m_frameShell, XtNiconPixmap, icon->.GetPixmap(), NULL);
-  */
+  XtVaSetValues((Widget) m_frameShell, XtNiconPixmap, icon.GetPixmap(), NULL);
 }
 
 wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,

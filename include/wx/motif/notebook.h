@@ -201,6 +201,10 @@ public:
   virtual void ChangeForegroundColour();
   virtual wxRect GetAvailableClientSize();
 
+  // Implementation: calculate the layout of the view rect
+  // and resize the children if required
+  bool RefreshLayout(bool force = TRUE);
+
 protected:
   // common part of all ctors
   void Init();

@@ -338,8 +338,11 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
     case wxLOG_Trace:
     case wxLOG_Debug:
       #ifdef __WXDEBUG__
-        DoLogString(str << (level == wxLOG_Trace ? _("Trace") : _("Debug"))
-                        << ": " << szString);
+      //        DoLogString(str << (level == wxLOG_Trace ? _("Trace") : _("Debug"))
+      //                        << ": " << szString);
+      // JACS: we don't really want to prefix with 'Debug'. It's just extra
+      // verbiage.
+              DoLogString(szString);
       #endif
 
       break;
@@ -506,9 +509,13 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
               OutputDebugString(strTime + szString + "\n\r");
           #else  
             // send them to stderr
+    /*
             fprintf(stderr, "%s %s: %s\n",
                     strTime.c_str(),
                     level == wxLOG_Trace ? _("Trace") : _("Debug"),
+                    szString);
+     */
+            fprintf(stderr, "%s\n",
                     szString);
             fflush(stderr);
           #endif

@@ -951,6 +951,25 @@ void * operator new (size_t size, char * fileName, int lineNum)
 #endif
 }
 
+// Added JACS 25/11/98
+void * operator new (size_t size)
+{
+#ifdef NO_DEBUG_ALLOCATION
+  return malloc(size);
+#else
+  return wxDebugAlloc(size, NULL, 0, FALSE);
+#endif
+}
+
+void * operator new[] (size_t size)
+{
+#ifdef NO_DEBUG_ALLOCATION
+  return malloc(size);
+#else
+  return wxDebugAlloc(size, NULL, 0, FALSE, TRUE);
+#endif
+}
+
 #if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
 void * operator new[] (size_t size, char * fileName, int lineNum)
 {

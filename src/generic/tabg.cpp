@@ -207,7 +207,12 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
   dc.GetTextExtent(GetLabel(), &textWidth, &textHeight);
 
   int textX = (int)(tabX + (GetWidth() - textWidth)/2.0);
+  if (textX < (tabX + 2))
+    textX = (tabX + 2);
+
+  dc.SetClippingRegion(tabX, tabY, GetWidth(), GetHeight());
   dc.DrawText(GetLabel(), textX, textY);
+  dc.DestroyClippingRegion();
 
   if (m_isSelected)
   {
@@ -615,6 +620,7 @@ bool wxTabView::RemoveTab(int id)
           m_tabSelection = -1;
         delete tab;
         delete tabNode;
+        m_noTabs --;
 
         // The layout has changed
         Layout();
@@ -625,6 +631,24 @@ bool wxTabView::RemoveTab(int id)
     layerNode = layerNode->Next();
   }
   return FALSE;
+}
+
+bool wxTabView::SetTabText(int id, const wxString& label)
+{
+    wxTabControl* control = FindTabControlForId(id);
+    if (!control)
+      return FALSE;
+    control->SetLabel(label);
+    return TRUE;
+}
+
+wxString wxTabView::GetTabText(int id) const
+{
+    wxTabControl* control = FindTabControlForId(id);
+    if (!control)
+      return wxEmptyString;
+    else
+      return control->GetLabel();
 }
   
 // Returns the total height of the tabs component -- this may be several
@@ -674,6 +698,7 @@ void wxTabView::ClearTabs(bool deleteTabs)
     delete layerNode;
     layerNode = nextLayerNode;
   }
+  m_noTabs = 0;
 }
 
 
@@ -761,6 +786,10 @@ void wxTabView::Layout(void)
 // Draw all tabs
 void wxTabView::Draw(wxDC& dc)
 {
+        // Don't draw anything if there are no tabs.
+        if (GetNumberOfTabs() == 0)
+          return;
+
 	// Draw top margin area (beneath tabs and above view area)
 	if (GetTabStyle() & wxTAB_STYLE_COLOUR_INTERIOR)
 	{

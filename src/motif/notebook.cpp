@@ -141,7 +141,6 @@ int wxNotebook::SetSelection(int nPage)
     wxNotebookPage* pPage = GetPage(nPage);
 
     m_tabView->SetTabSelection((int) (long) pPage);
-    //    ChangePage(m_nSelection, nPage);
 
     // TODO
     return 0;
@@ -161,7 +160,14 @@ bool wxNotebook::SetPageText(int nPage, const wxString& strText)
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
-    // TODO
+    wxNotebookPage* page = GetPage(nPage);
+    if (page)
+    {
+        m_tabView->SetTabText((int) (long) page, strText);
+        Refresh();
+        return TRUE;
+    }
+
     return FALSE;
 }
 
@@ -169,8 +175,11 @@ wxString wxNotebook::GetPageText(int nPage) const
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
-    // TODO
-    return wxString("");
+    wxNotebookPage* page = ((wxNotebook*)this)->GetPage(nPage);
+    if (page)
+        return m_tabView->GetTabText((int) (long) page);
+    else
+        return wxEmptyString;
 }
 
 int wxNotebook::GetPageImage(int nPage) const
@@ -221,12 +230,15 @@ bool wxNotebook::DeletePage(int nPage)
       m_nSelection = -1;
       m_tabView->SetTabSelection(-1, FALSE);
     }
-    else if (m_nSelection > 0)
+    else if (m_nSelection > -1)
     {
       m_nSelection = -1;
       m_tabView->SetTabSelection((int) (long) GetPage(0), FALSE);
-      ChangePage(-1, 0);
+      if (m_nSelection != 0)
+        ChangePage(-1, 0);
     }
+
+    RefreshLayout(FALSE);
 
     return TRUE;
 }
@@ -245,11 +257,8 @@ bool wxNotebook::RemovePage(int nPage)
 {
     wxCHECK( IS_VALID_PAGE(nPage), FALSE );
 
-    if (m_nSelection != -1)
-    {
-        m_aPages[m_nSelection]->Show(FALSE);
-        m_aPages[m_nSelection]->Lower();
-    }
+    m_aPages[nPage]->Show(FALSE);
+    //    m_aPages[nPage]->Lower();
 
     wxNotebookPage* pPage = GetPage(nPage);
     m_tabView->RemoveTab((int) (long) pPage);
@@ -259,14 +268,29 @@ bool wxNotebook::RemovePage(int nPage)
     if (m_aPages.GetCount() == 0)
     {
       m_nSelection = -1;
-      m_tabView->SetTabSelection(-1, FALSE);
+      m_tabView->SetTabSelection(-1, TRUE);
     }
-    else if (m_nSelection > 0)
+    else if (m_nSelection > -1)
     {
-      m_nSelection = -1;
-      m_tabView->SetTabSelection((int) (long) GetPage(0), FALSE);
-      ChangePage(-1, 0);
+      // Only change the selection if the page we
+      // deleted was the selection.
+      if (nPage == m_nSelection)
+      {
+         m_nSelection = -1;
+         // Select the first tab. Generates a ChangePage.
+         m_tabView->SetTabSelection((int) (long) GetPage(0), TRUE);
+      }
+      else
+      {
+	// We must adjust which tab we think is selected.
+        // If greater than the page we deleted, it must be moved down
+        // a notch.
+        if (m_nSelection > nPage)
+          m_nSelection -- ;
+      }
     }
+
+    RefreshLayout(FALSE);
 
     return TRUE;
 }
@@ -343,6 +367,8 @@ bool wxNotebook::InsertPage(int nPage,
     if ( m_nSelection == -1 )
       ChangePage(-1, 0);
 
+    RefreshLayout(FALSE);
+
     return TRUE;
 }
 
@@ -360,8 +386,20 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         s_bFirstTime = FALSE;
     }
 
+    RefreshLayout();
+
+    // Processing continues to next OnSize
+    event.Skip();
+}
+
+// Implementation: calculate the layout of the view rect
+// and resize the children if required
+bool wxNotebook::RefreshLayout(bool force)
+{
     if (m_tabView)
     {
+        wxRect oldRect = m_tabView->GetViewRect();
+
         int cw, ch;
         GetClientSize(& cw, & ch);
 
@@ -388,13 +426,9 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         m_tabView->SetViewRect(rect);
 
         m_tabView->Layout();
-	/*
-        // emulate page change (it's esp. important to do it first time because
-        // otherwise our page would stay invisible)
-        int nSel = m_nSelection;
-        m_nSelection = -1;
-        SetSelection(nSel);
-	*/
+
+        if (!force && (rect == oldRect))
+          return FALSE;
 
         // fit the notebook page to the tab control's display area
 
@@ -411,16 +445,17 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         }
         Refresh();
     }
-
-    // Processing continues to next OnSize
-    event.Skip();
+    return TRUE;
 }
 
 void wxNotebook::OnSelChange(wxNotebookEvent& event)
 {
     // is it our tab control?
     if ( event.GetEventObject() == this )
-        ChangePage(event.GetOldSelection(), event.GetSelection());
+    {
+        if (event.GetSelection() != m_nSelection)
+          ChangePage(event.GetOldSelection(), event.GetSelection());
+    }
 
     // we want to give others a chance to process this message as well
     event.Skip();
@@ -479,6 +514,7 @@ void wxNotebook::Command(wxCommandEvent& event)
 // hide the currently active panel and show the new one
 void wxNotebook::ChangePage(int nOldSel, int nSel)
 {
+  //  cout << "ChangePage: " << nOldSel << ", " << nSel << "\n";
     wxASSERT( nOldSel != nSel ); // impossible
 
     if ( nOldSel != -1 ) {

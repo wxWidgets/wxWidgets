@@ -832,8 +832,11 @@ int PostDeletionOfMenu( XtPointer* clientData )
   wxMenu *menu = (wxMenu *)clientData;
 
   if (menu->GetMainWidget()) {
-    wxList& list = menu->GetParent()->GetItems();
-    list.DeleteObject(menu);
+    if (menu->GetParent())
+    {
+      wxList& list = menu->GetParent()->GetItems();
+      list.DeleteObject(menu);
+    }
     menu->DestroyMenu(TRUE);
   }
   /* Mark as no longer popped up */
