@@ -574,6 +574,9 @@ long wxExecute(wxChar **argv,
     {
         ARGS_CLEANUP;
 
+        // save it for WaitForChild() use
+        execData.pid = pid;
+
         // prepare for IO redirection
 
 #if wxUSE_STREAMS
