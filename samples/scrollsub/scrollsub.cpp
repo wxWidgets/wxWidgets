@@ -207,7 +207,7 @@ MyTopLabels::MyTopLabels( wxScrolledWindow *parent, wxWindowID id, const wxPoint
     m_owner = parent;
 }
 
-void MyTopLabels::OnPaint( wxPaintEvent &WXUNUSED(event) )
+void MyTopLabels::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
@@ -241,7 +241,7 @@ MyRightLabels::MyRightLabels( wxScrolledWindow *parent, wxWindowID id, const wxP
     m_owner = parent;
 }
 
-void MyRightLabels::OnPaint( wxPaintEvent &WXUNUSED(event) )
+void MyRightLabels::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
@@ -396,7 +396,7 @@ MyFrame::MyFrame()
     SetStatusWidths( 2, widths );
 
     m_scrolled = new MyScrolledWindow( this, -1, wxDefaultPosition, wxSize(100,100) );
-    m_scrolled->SetScrollbars( 10, 10, 50, 100 );
+    m_scrolled->SetScrollbars( 10, 10, 50, 50 );
 
     m_log = new wxTextCtrl( this, -1, _T("This is the log window.\n"), wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
