@@ -6,7 +6,7 @@ The compilation was tested with
     -DECC 6.0
     -Compac C++ 6.2
     
-To get every thing compiled you'll need to have installed
+To get everything compiled you'll need to have installed:
     -Bison
     -Flex
     -Sed
@@ -14,13 +14,17 @@ To get every thing compiled you'll need to have installed
   http://www.openvms.digital.com/freeware/
   At the moment you'll have to hack the descrip.mms files to include the right
   locations of the packages, but i intend to make this better in future.
-  
+    -sys$library:libjpeg.olb  (from ftp://ftp.uu.net/graphics/jpeg/ )
+    -sys$library:libpng.olb & sys$library:libz.olb (from
+          http://www.cdrom.com/pub/png/pngcode.html )
+
 Currently only the MOTIF GUI vcan be build by typing
-  MMS/MACRO=(__MOTIF__=1)
+  MMS/MACRO=(__WXMOTIF__=1)
  in the main directory of the distribution.
  
 It automatically makes the library in [.lib] and links the following samples
  [.samples.menu]dialogs.exe
+ [.samples.menu]image.exe
  [.samples.menu]menu.exe
  [.samples.menu]minimal.exe
  
