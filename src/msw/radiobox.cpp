@@ -833,78 +833,12 @@ WXLRESULT wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 {
     switch ( nMsg )
     {
-#ifdef __WIN32__
         case WM_CTLCOLORSTATIC:
-            // set the colour of the radio buttons to be the same as ours
-            {
-                HDC hdc = (HDC)wParam;
-
-                const wxColour& colBack = GetBackgroundColour();
-                ::SetBkColor(hdc, wxColourToRGB(colBack));
-                ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-
-                wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
-
-                return (WXLRESULT)brush->GetResourceHandle();
-            }
-#endif // Win32
-
-        // VZ: this code breaks radiobox redrawing under Windows XP, don't use
-        //     it. If you need to get messages from the static controls,
-        //     create them as a child of another (non static) window
-#if 0
-        // This is required for the radiobox to be sensitive to mouse input,
-        // e.g. for Dialog Editor.
-        case WM_NCHITTEST:
-            {
-                int xPos = LOWORD(lParam);  // horizontal position of cursor
-                int yPos = HIWORD(lParam);  // vertical position of cursor
-
-                ScreenToClient(&xPos, &yPos);
-
-                // Make sure you can drag by the top of the groupbox, but let
-                // other (enclosed) controls get mouse events also
-                if (yPos < 10)
-                    return (long)HTCLIENT;
-            }
-            break;
-#endif // 0
+            return (WXLRESULT)GetStockObject(WHITE_BRUSH);
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
-
-WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-#if wxUSE_CTL3D
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam
-#else
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-#endif
-    )
-{
-#if wxUSE_CTL3D
-    if ( m_useCtl3D )
-    {
-        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-        return (WXHBRUSH) hbrush;
-    }
-#endif // wxUSE_CTL3D
-
-    HDC hdc = (HDC)pDC;
-    wxColour colBack = GetBackgroundColour();
-
-    ::SetBkColor(hdc, wxColourToRGB(colBack));
-    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-
-    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
-
-    return (WXHBRUSH)brush->GetResourceHandle();
-}
-
 
 // ---------------------------------------------------------------------------
 // window proc for radio buttons

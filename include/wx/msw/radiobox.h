@@ -113,9 +113,6 @@ public:
     virtual bool SetFont(const wxFont& font);
 
     WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message,
-                                WXWPARAM wParam, WXLPARAM lParam);
     WXHWND *GetRadioButtons() const { return m_radioButtons; }
     bool ContainsHWND(WXHWND hWnd) const;
     void SendNotificationEvent();
