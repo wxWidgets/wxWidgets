@@ -527,6 +527,8 @@ bool wxThreadInternal::Resume()
 // static functions
 // ----------------
 
+bool WXDLLEXPORT wxGuiOwnedByMainThread();
+
 wxThread *wxThread::This()
 {
     wxThread*                       pThread = m_pThread;
@@ -939,11 +941,13 @@ void wxThreadModule::OnExit()
 // wake up the main thread if it's in ::GetMessage()
 void WXDLLEXPORT wxWakeUpMainThread()
 {
+#if 0
     if ( !::WinPostQueueMsg(wxTheApp->m_hMq, WM_NULL, 0, 0) )
     {
         // should never happen
         wxLogLastError(wxT("WinPostMessage(WM_NULL)"));
     }
+#endif
 }
 
 void WXDLLEXPORT wxMutexGuiEnter()
