@@ -610,7 +610,7 @@ void ScintillaWX::DoAddChar(int key) {
     char ansiChars[3];
     ansiChars[0] = key;
     ansiChars[1] = 0;
-    wxString uniChar(ansiChars);
+    wxString uniChar(ansiChars, wxConvLocal);
     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(uniChar);
     AddCharUTF((char*)buf.data(), strlen(buf));
 #else
