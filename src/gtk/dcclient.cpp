@@ -1736,8 +1736,10 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
         *height = (wxCoord) h;
     if (descent)
     {
-        // Do something about metrics here. TODO.
-        *descent = 0;
+        PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
+        int baseline = pango_layout_iter_get_baseline(iter);
+        pango_layout_iter_free(iter);
+        *descent = h - PANGO_PIXELS(baseline);
     }
     if (externalLeading)
         *externalLeading = 0;  // ??

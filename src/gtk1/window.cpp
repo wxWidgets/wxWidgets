@@ -3484,7 +3484,7 @@ int wxWindowGTK::GetCharHeight() const
 
     g_object_unref( G_OBJECT( layout ) );
 
-    return (int) (rect.height / PANGO_SCALE);
+    return (int) PANGO_PIXELS(rect.height);
 #else
     GdkFont *gfont = font.GetInternalFont( 1.0 );
 
@@ -3518,7 +3518,7 @@ int wxWindowGTK::GetCharWidth() const
 
     g_object_unref( G_OBJECT( layout ) );
 
-    return (int) (rect.width / PANGO_SCALE);
+    return (int) PANGO_PIXELS(rect.width);
 #else
     GdkFont *gfont = font.GetInternalFont( 1.0 );
 
@@ -3569,17 +3569,19 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
         pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
 #endif
     }
-    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+    PangoLayoutLine *line = pango_layout_get_line(layout, 0);
 
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
 
-    if (x) (*x) = (wxCoord) (rect.width / PANGO_SCALE);
-    if (y) (*y) = (wxCoord) (rect.height / PANGO_SCALE);
+    if (x) (*x) = (wxCoord) PANGO_PIXELS(rect.width);
+    if (y) (*y) = (wxCoord) PANGO_PIXELS(rect.height);
     if (descent)
     {
-        // Do something about metrics here
-        (*descent) = 0;
+        PangoLayoutIter *iter = pango_layout_get_iter(layout);
+        int baseline = pango_layout_iter_get_baseline(iter);
+        pango_layout_iter_free(iter);
+        *descent = *y - PANGO_PIXELS(baseline);
     }
     if (externalLeading) (*externalLeading) = 0;  // ??
 
