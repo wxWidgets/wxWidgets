@@ -1499,9 +1499,10 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     if (height < 0)
         height = 0;
 
-    // if our parent had prepared a defer window handle for us, use it
+    // if our parent had prepared a defer window handle for us, use it (unless
+    // we are a top level window)
     wxWindowMSW *parent = GetParent();
-    HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
+    HDWP hdwp = (parent && !IsTopLevel()) ? (HDWP)parent->m_hDWP : NULL;
     if ( hdwp )
     {
         hdwp = ::DeferWindowPos(hdwp, GetHwnd(), NULL,
