@@ -196,12 +196,10 @@ def runTest(frame, nb, log):
         win = TestPanel(nb, log)
         return win
     else:
-        dlg = wx.MessageDialog(
-                frame, 'wx.PopupWindow is not available on this platform.',
-                'Sorry', wx.OK | wx.ICON_INFORMATION
-                )
-        dlg.ShowModal()
-        dlg.Destroy()
+        from Main import MessagePanel
+        win = MessagePanel(nb, 'wx.PopupWindow is not available on this platform.',
+                           'Sorry', wx.ICON_WARNING)
+        return win
 
 #---------------------------------------------------------------------------
 

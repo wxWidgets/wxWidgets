@@ -191,10 +191,10 @@ def runTest(frame, nb, log):
         win = TestPanel(nb, log, frame)
         return win
     else:
-        dlg = wx.MessageDialog(frame, 'This demo only works on Windows.',
-                          'Sorry', wx.OK | wx.ICON_INFORMATION)
-        dlg.ShowModal()
-        dlg.Destroy()
+        from Main import MessagePanel
+        win = MessagePanel(nb, 'This demo only works on Microsoft Windows.',
+                           'Sorry', wx.ICON_WARNING)
+        return win
 
 
 

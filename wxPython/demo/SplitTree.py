@@ -122,8 +122,10 @@ class TestPanel(wx.Panel):
 
 def runTest(frame, nb, log):
     if wx.Platform == "__WXMAC__":
-        wx.MessageBox("This demo currently fails on the Mac. The problem is being looked into...", "Sorry")
-        return
+        from Main import MessagePanel
+        win = MessagePanel(nb, 'This demo currently fails on the Mac. The problem is being looked into...',
+                           'Sorry', wx.ICON_WARNING)
+        return win
 
     win = TestPanel(nb, log)
     return win
