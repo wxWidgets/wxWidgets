@@ -311,6 +311,33 @@ void wxNotebook::SetTabSize(const wxSize& sz)
     ::SendMessage(GetHwnd(), TCM_SETITEMSIZE, 0, MAKELPARAM(sz.x, sz.y));
 }
 
+wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
+{
+    wxSize sizeTotal = sizePage;
+    
+    // We need to make getting tab size part of the wxWindows API.
+    wxSize tabSize(0, 0);
+    if (GetPageCount() > 0)
+    {
+        RECT rect;
+        TabCtrl_GetItemRect((HWND) GetHWND(), 0, & rect);
+        tabSize.x = rect.right - rect.left;
+        tabSize.y = rect.bottom - rect.top;
+    }
+    if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
+    {
+        sizeTotal.x += tabSize.x + 7;
+        sizeTotal.y += 7;
+    }
+    else
+    {
+        sizeTotal.x += 7;
+        sizeTotal.y += tabSize.y + 7;
+    }
+
+    return sizeTotal;
+}
+
 void wxNotebook::AdjustPageSize(wxNotebookPage *page)
 {
     wxCHECK_RET( page, _T("NULL page in wxNotebook::AdjustPageSize") );

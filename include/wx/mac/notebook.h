@@ -85,7 +85,7 @@ public:
   virtual void SetTabSize(const wxSize& sz);
    
     // calculate size for wxNotebookSizer
-  wxSize CalcSizeFromPage(const wxSize& sizePage);
+  wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
 /*
     // get number of pages in the dialog

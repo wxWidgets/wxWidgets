@@ -962,7 +962,7 @@ void wxNotebook::SetPageSize(const wxSize& size)
     SetClientSize(GetSizeForPage(size));
 }
 
-wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage)
+wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     return AdjustSize(GetSizeForPage(sizePage));
 }

@@ -107,7 +107,7 @@ public:
     virtual void SetTabSize(const wxSize& sz) = 0;
 
     // calculate the size of the notebook from the size of its page
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage);
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
     // operations
     // ----------
@@ -155,6 +155,8 @@ public:
 protected:
     // remove the page and return a pointer to it
     virtual wxNotebookPage *DoRemovePage(int page);
+	// return the minimum size large enough to display the largest page entirely
+	virtual wxSize DoGetBestSize() const;
 
     // common part of all ctors
     void Init();

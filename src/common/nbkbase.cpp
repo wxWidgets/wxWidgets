@@ -96,34 +96,17 @@ void wxNotebookBase::AssignImageList(wxImageList* imageList)
 // geometry
 // ----------------------------------------------------------------------------
 
-wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage)
+wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage) const
 {
     // this was just taken from wxNotebookSizer::CalcMin() and is, of
     // course, totally bogus - just like the original code was
     wxSize sizeTotal = sizePage;
     
-    // Slightly less bogus, at least under Windows.
-    // We need to make getting tab size part of the wxWindows API.
-#ifdef __WXMSW__
-    wxSize tabSize(0, 0);
-    if (GetPageCount() > 0)
-    {
-        RECT rect;
-        TabCtrl_GetItemRect((HWND) GetHWND(), 0, & rect);
-        tabSize.x = rect.right - rect.left;
-        tabSize.y = rect.bottom - rect.top;
-    }
-    if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
-    {
-        sizeTotal.x += tabSize.x + 7;
-        sizeTotal.y += 7;
-    }
-    else
-    {
-        sizeTotal.x += 7;
-        sizeTotal.y += tabSize.y + 7;
-    }
-#else
+	// changed hajokirchhoff -- May, 31st, 2003
+	// moved the __WXMSW__ portion to wxNotebook::CalcSizeFromPage in src/msw/notebook.cpp
+	// where it really belongs.
+	// Question: Shouldn't we make wxNotebookBase::CalcSizeFromPage a pure virtual class.
+	//			 I'd like this better than this "totally bogus" code here.
     if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
     {
         sizeTotal.x += 90;
@@ -134,7 +117,6 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage)
         sizeTotal.x += 10;
         sizeTotal.y += 40;
     }
-#endif
 
     return sizeTotal;
 }
@@ -163,6 +145,21 @@ wxNotebookPage *wxNotebookBase::DoRemovePage(int nPage)
     m_pages.RemoveAt(nPage);
 
     return pageRemoved;
+}
+
+wxSize wxNotebookBase::DoGetBestSize() const
+{
+  wxSize bestSize(0,0);
+  size_t nCount = m_pages.Count();
+	// iterate over all pages, get the largest width and height
+  for ( size_t nPage = 0; nPage < nCount; nPage++ ) {
+    wxNotebookPage *pPage = m_pages[nPage];
+    wxSize childBestSize(pPage->GetBestSize());
+	bestSize.SetWidth(max(childBestSize.GetWidth(), bestSize.GetWidth()));
+	bestSize.SetHeight(max(childBestSize.GetHeight(), bestSize.GetHeight()));
+  }
+  // convert display area to window area, adding the size neccessary for the tab control itself
+  return CalcSizeFromPage(bestSize);
 }
 
 int wxNotebookBase::GetNextPage(bool forward) const

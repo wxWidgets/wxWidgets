@@ -103,6 +103,9 @@ public:
     // style.
   void SetTabSize(const wxSize& sz);
 
+  // calculate the size of the notebook from the size of its page
+  virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
+
   // callbacks
   // ---------
   void OnSize(wxSizeEvent& event);

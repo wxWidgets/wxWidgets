@@ -202,7 +202,7 @@ wxNotebook::~wxNotebook()
     m_macControl = NULL ;
 }
 
-wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage)
+wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     wxSize sizeTotal = sizePage;
 
