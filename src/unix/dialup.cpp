@@ -44,6 +44,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <errno.h>
 
 // ----------------------------------------------------------------------------
 // A class which groups functions dealing with connecting to the network from a
@@ -170,6 +171,11 @@ private:
    /// The path to ifconfig
    wxString m_IfconfigPath;
 
+   ///  Can we use ping to find hosts?
+   int m_CanUsePing;
+   /// The path to ping program
+   wxString m_PingPath;
+   
    /// beacon host:
    wxString m_BeaconHost;
    /// beacon host portnumber for connect:
@@ -196,6 +202,14 @@ private:
 
    /// real status check
    void CheckStatusInternal(void);
+
+   /// Check output of ifconfig command for PPP/SLIP/PLIP devices
+   int CheckIfconfig(void);
+   /// Ping a host: 1 on success, -1 if it cannot be used, 0 if unreachable
+   int CheckPing(void);
+   /// Check by connecting to host on given port.
+   int CheckConnect(void);
+   
 };
 
 
@@ -248,16 +262,15 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
    m_DialProcess = NULL;
    m_timer = NULL;
    m_CanUseIfconfig = -1; // unknown
+   m_CanUsePing = -1; // unknown
    m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
    m_BeaconPort = 80;
    SetConnectCommand("pon", "poff"); // default values for Debian/GNU linux
-#if 0
    wxChar * dial = wxGetenv(_T("WXDIALUP_DIALCMD"));
    wxChar * hup = wxGetenv(_T("WXDIALUP_HUPCMD"));
    if(dial || hup)
       SetConnectCommand(dial ? wxString(dial) : m_ConnectCommand,
                         hup ? wxString(hup) : m_HangUpCommand); 
-#endif
 }
 
 wxDialUpManagerImpl::~wxDialUpManagerImpl()
@@ -410,6 +423,54 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
 {
    m_IsOnline = -1;
 
+   int testResult;
+
+   testResult = CheckConnect();
+   if(testResult == -1)
+      testResult = CheckIfconfig();
+   if(testResult == -1)
+      testResult = CheckPing();
+      m_IsOnline = testResult;
+}
+
+int
+wxDialUpManagerImpl::CheckConnect(void)
+{
+   // second method: try to connect to a well known host:
+   // This can be used under Win 9x, too!
+   struct hostent     *hp;
+   struct sockaddr_in  serv_addr;
+
+   if((hp = gethostbyname(m_BeaconHost.mb_str())) == NULL)
+      return 0; // no DNS no net
+   
+   serv_addr.sin_family		= hp->h_addrtype;
+   memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
+   serv_addr.sin_port		= htons(m_BeaconPort);
+
+   int	sockfd;
+   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) 
+   {	
+      return -1;  // no info
+   }
+   
+   if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
+   {
+      close(sockfd);
+      return 1; // we can connect, so we have a network!
+   }
+   //connected!
+   close(sockfd);
+   if(errno == ENETUNREACH)
+      return 0; // network is unreachable
+   // connect failed, but don't know why
+   return -1;
+}
+
+int
+wxDialUpManagerImpl::CheckIfconfig(void)
+{
+   int rc = -1;
    // First time check for ifconfig location. We only use the variant
    // which does not take arguments, a la GNU.
    if(m_CanUseIfconfig == -1) // unknown
@@ -428,7 +489,18 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
 
       wxString tmpfile = wxGetTempFileName("_wxdialuptest");
       wxString cmd = "/bin/sh -c \'";
-      cmd << m_IfconfigPath << " >" << tmpfile <<  '\'';
+      cmd << m_IfconfigPath;
+#if defined(__SOLARIS__) || defined (__SUNOS__)
+      // need to add -a flag
+      cmd << " -a";
+#elif defined(__LINUX__) || defined (__FREEBSD__)
+      // nothing to be added to ifconfig
+#else
+#   pragma warning "No ifconfig information for this OS."
+      m_CanUseIfconfig = 0;
+      return -1;
+#endif
+      cmd << " >" << tmpfile <<  '\'';
       /* I tried to add an option to wxExecute() to not close stdout,
          so we could let ifconfig write directly to the tmpfile, but
          this does not work. That should be faster, as it doesn´t call
@@ -443,72 +515,73 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
             output[file.Length()] = '\0';
             if(file.Read(output,file.Length()) == file.Length())
             {
-               if(strstr(output,"ppp")   // ppp
+               if(
+#if defined(__SOLARIS__) || defined (__SUNOS__)
+                  strstr(output,"ipdptp")   // dialup device
+#elif defined(__LINUX__) || defined (__FREEBSD__)
+                  strstr(output,"ppp")   // ppp
                   || strstr(output,"sl") // slip
                   || strstr(output,"pl") // plip
+#else
+                  wxASSERT(0); // unreachable code
+#endif
                   )
-                  m_IsOnline = 1;
+                  rc = 1;
                else
-                  m_IsOnline = 0;
+                  rc = 0;
             }
             file.Close();
             delete [] output;
          }
-         // else m_IsOnline remains -1 as we don't know for sure
+         // else rc remains -1 as we don't know for sure
       }
       else // could not run ifconfig correctly
          m_CanUseIfconfig = 0; // don´t try again
       (void) wxRemoveFile(tmpfile);
-      if(m_IsOnline != -1) // we are done
-         return;
    }
-
-   // this was supposed to work like ping(8), but doesn´t.
-   // second method: try to connect to a well known host:
-   // This can be used under Win 9x, too!
-   struct hostent     *hp;
-   struct sockaddr_in  serv_addr;
-
-   m_IsOnline = 0; // assume false
-   if((hp = gethostbyname(m_BeaconHost.mb_str())) == NULL)
-      return; // no DNS no net
-   
-   serv_addr.sin_family		= hp->h_addrtype;
-   memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
-   serv_addr.sin_port		= htons(m_BeaconPort);
-
-      // PING method:
-
-   int	sockfd;
-   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) 
-   {	
-      //  sys_error("cannot create socket for gw");
-      return;
-   }
-   
-#if 0
-   // this "ping" method does not work.
-   if(sendto(sockfd, "hello",
-             strlen("hello"), /* flags */ 0,
-             (struct  sockaddr *) &serv_addr,
-             sizeof(serv_addr)) == -1)
-   {
-      close(sockfd);
-      return;
-   }
-#endif
-   
-   if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-   {
-      //sys_error("cannot connect to server");
-      close(sockfd);
-      return;
-   }
-   //connected!
-   close(sockfd);
-   m_IsOnline = TRUE;
+      return rc;
 }
 
+int
+wxDialUpManagerImpl::CheckPing(void)
+{
+   if(! m_CanUsePing)
+      return -1;
+   
+   // First time check for ping location. We only use the variant
+   // which does not take arguments, a la GNU.
+   if(m_CanUsePing == -1) // unknown
+   {
+      if(wxFileExists("/bin/ping"))
+         m_PingPath = "/bin/ping";
+      else if(wxFileExists("/usr/sbin/ping"))
+         m_PingPath = "/usr/sbin/ping";
+      if(! m_PingPath)
+      {
+         m_CanUsePing = 0;
+         return -1;
+      }
+   }
+
+   wxLogNull ln; // suppress all error messages
+   wxASSERT(m_PingPath.length());
+   wxString cmd;
+   cmd << m_PingPath << ' ';
+#if defined(__SOLARIS__) || defined (__SUNOS__)
+   // nothing to add to ping command
+#elif defined(__LINUX__)
+   cmd << "-c 1 "; // only ping once
+#else
+#   pragma warning "No Ping information for this OS."
+   m_CanUsePing = 0;
+   return -1;
+#endif
+   cmd << m_BeaconHost;
+   if(wxExecute(cmd, TRUE /* sync */) == 0)
+      return 1;
+   else
+      return 0;
+}
 
 /* static */
 wxDialUpManager *
