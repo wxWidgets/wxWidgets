@@ -66,6 +66,7 @@ wxMSW:
 wxGTK:
 
 - fixes to wxTextCtrl scrolling under GTK2 (Nerijus Baliunas)
+- fix for crash when using user-dashed lines (Chris Borgolte)
 
 
 2.5.0

@@ -1838,6 +1838,12 @@ void wxWindowDC::SetPen( const wxPen &pen )
                    ( fabs((double) XLOG2DEVREL(width)) +
                      fabs((double) YLOG2DEVREL(width)) ) / 2.0;
         width = (int)w;
+        if ( !width )
+        {
+            // width can't be 0 or an internal GTK error occurs inside
+            // gdk_gc_set_dashes() below
+            width = 1;
+        }
     }
 
     static const wxGTKDash dotted[] = {1, 1};
