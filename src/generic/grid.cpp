@@ -816,9 +816,10 @@ void wxGrid::Init()
     m_cellEditCtrlEnabled = TRUE;
     m_editCtrlType = wxGRID_TEXTCTRL;    
     
-    // Not really needed here, it gets called by OnSize()
+    // This is here in case OnSize does not get called when the grid is
+    // displayed
     //
-    // CalcDimensions();
+    CalcDimensions();
 }
 
 
