@@ -517,6 +517,7 @@ else:
 
 
 ext = Extension('wxc', ['src/helpers.cpp',
+                        'src/drawlist.cpp',
                         'src/libpy.c',
                         ] + rc_file + swig_sources,
 

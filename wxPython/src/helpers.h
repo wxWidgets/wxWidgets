@@ -110,6 +110,21 @@ PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr);
 #define DECLARE_DEF_STRING2(name,val) static const wxString wxPy##name(val)
 
 //----------------------------------------------------------------------
+// functions used by the DrawXXXList enhancements added to wxDC
+
+typedef bool (*wxPyDrawListOp_t)(wxDC& dc, PyObject* coords);
+PyObject* wxPyDrawXXXList(wxDC& dc, wxPyDrawListOp_t doDraw,
+                          PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes);
+bool wxPyDrawXXXPoint(wxDC& dc, PyObject* coords);
+bool wxPyDrawXXXLine(wxDC& dc, PyObject* coords);
+bool wxPyDrawXXXRectangle(wxDC& dc, PyObject* coords);
+bool wxPyDrawXXXEllipse(wxDC& dc, PyObject* coords);
+bool wxPyDrawXXXPolygon(wxDC& dc, PyObject* coords);
+
+PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints,
+                           PyObject* foregroundList, PyObject* backgroundList);
+
+//----------------------------------------------------------------------
 
 #ifndef SWIGCODE
 extern "C" void SWIG_MakePtr(char *, void *, char *);

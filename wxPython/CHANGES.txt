@@ -63,6 +63,10 @@ always call them.  The functions are:
        wxApp_SetMacExitMenuItemId
        wxApp_SetMacHelpMenuTitleName
 
+Refactored, enhanced and added capabilites for the DrawXXXList
+functions, inspired by code from Chris Barker.
+
+
 
 
 2.4.0.2
