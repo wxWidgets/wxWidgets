@@ -1874,7 +1874,10 @@ enum wxKeyCode
     WXK_SPACE   =    32,
     WXK_DELETE  =    127,
 
-    WXK_START   = 300, /* FIXME:  Conflicts with UNICODE */
+    /* There are by design not compatable with unicode characters.
+       If you want to get a unicode character from a key event, use
+       wxKeyEvent::GetUnicodeKey instead.                           */
+    WXK_START   = 300, 
     WXK_LBUTTON,
     WXK_RBUTTON,
     WXK_CANCEL,
