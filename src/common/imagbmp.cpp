@@ -1241,15 +1241,15 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
     static const char *listtxt = "LIST";
     static const char *icotxt  = "icon";
 
-    wxInt32 *riff32 = (wxInt32 *) rifftxt;
-    wxInt32 *list32 = (wxInt32 *) listtxt;
-    wxInt32 *ico32  = (wxInt32 *) icotxt;
+    wxInt32 riff32 = (wxInt32) rifftxt;
+    wxInt32 list32 = (wxInt32) listtxt;
+    wxInt32 ico32  = (wxInt32) icotxt;
 
     int iIcon = 0;
 
     stream.SeekI(0);
     stream.Read(&FCC1, 4);
-    if ( FCC1 != *riff32 )
+    if ( FCC1 != riff32 )
         return FALSE;
 
     // we have a riff file:
@@ -1261,20 +1261,20 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
         //data should be padded to make even number of bytes
         if (datalen % 2 == 1) datalen ++ ;
         //now either data or a FCC
-        if ( (FCC1 == *riff32) || (FCC1 == *list32) )
+        if ( (FCC1 == riff32) || (FCC1 == list32) )
         {
             stream.Read(&FCC2, 4);
         }
         else
         {
-            if (FCC1 == *ico32 && iIcon >= index)
+            if (FCC1 == ico32 && iIcon >= index)
             {
                 return DoLoadFile(image, stream, verbose, -1);
             }
             else
             {
                 stream.SeekI(stream.TellI() + datalen);
-                if ( FCC1 == *ico32 )
+                if ( FCC1 == ico32 )
                     iIcon ++;
             }
         }
@@ -1293,21 +1293,21 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
     static const char *listtxt = "LIST";
     static const char *anihtxt = "anih";
 
-    wxInt32 *riff32 = (wxInt32 *) rifftxt;
-    wxInt32 *list32 = (wxInt32 *) listtxt;
-    wxInt32 *anih32 = (wxInt32 *) anihtxt;
+    wxInt32 riff32 = (wxInt32) rifftxt;
+    wxInt32 list32 = (wxInt32) listtxt;
+    wxInt32 anih32 = (wxInt32) anihtxt;
 
     stream.SeekI(0);
     if ( !stream.Read(&FCC1, 4) )
         return FALSE;
 
-    if ( FCC1 != *riff32 )
+    if ( FCC1 != riff32 )
         return FALSE;
 
     // we have a riff file:
     while ( stream.IsOk() )
     {
-        if ( FCC1 == *anih32 )
+        if ( FCC1 == anih32 )
             return TRUE;
         // we always have a data size:
         stream.Read(&datalen, 4);
@@ -1315,7 +1315,7 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
         //data should be padded to make even number of bytes
         if (datalen % 2 == 1) datalen ++ ;
         // now either data or a FCC:
-        if ( (FCC1 == *riff32) || (FCC1 == *list32) )
+        if ( (FCC1 == riff32) || (FCC1 == list32) )
         {
             stream.Read(&FCC2, 4);
         }
@@ -1343,13 +1343,13 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
     static const char *listtxt = "LIST";
     static const char *anihtxt = "anih";
 
-    wxInt32 *riff32 = (wxInt32 *) rifftxt;
-    wxInt32 *list32 = (wxInt32 *) listtxt;
-    wxInt32 *anih32 = (wxInt32 *) anihtxt;
+    wxInt32 riff32 = (wxInt32) rifftxt;
+    wxInt32 list32 = (wxInt32) listtxt;
+    wxInt32 anih32 = (wxInt32) anihtxt;
 
     stream.SeekI(0);
     stream.Read(&FCC1, 4);
-    if ( FCC1 != *riff32 )
+    if ( FCC1 != riff32 )
         return wxNOT_FOUND;
 
     // we have a riff file:
@@ -1361,13 +1361,13 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
         //data should be padded to make even number of bytes
         if (datalen % 2 == 1) datalen ++ ;
         // now either data or a FCC:
-        if ( (FCC1 == *riff32) || (FCC1 == *list32) )
+        if ( (FCC1 == riff32) || (FCC1 == list32) )
         {
             stream.Read(&FCC2, 4);
         }
         else
         {
-            if ( FCC1 == *anih32 )
+            if ( FCC1 == anih32 )
             {
                 wxUint32 *pData = new wxUint32[datalen/4];
                 stream.Read(pData, datalen);
