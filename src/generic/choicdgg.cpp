@@ -48,7 +48,7 @@ wxString wxGetSingleChoice( const wxString& message, const wxString& caption, in
     if ( dialog.ShowModal() == wxID_OK )
         return dialog.GetStringSelection();
     else
-        return _T("");
+        return T("");
 }
 
 // Overloaded for backward compatibility
@@ -234,7 +234,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent),
 {
     m_selection = 0;
     m_clientData = NULL;
-    m_stringSelection = _T("");
+    m_stringSelection = T("");
 
     m_dialogStyle = style;
 

@@ -72,7 +72,7 @@ wxMetafile::wxMetafile(const wxString& file)
 
     M_METAFILEDATA->m_windowsMappingMode = wxMM_ANISOTROPIC;
     M_METAFILEDATA->m_metafile = 0;
-    if (!file.IsNull() && (file.Cmp(_T("")) == 0))
+    if (!file.IsNull() && (file.Cmp(T("")) == 0))
         M_METAFILEDATA->m_metafile = (WXHANDLE) GetMetaFile(file);
 }
 
@@ -146,7 +146,7 @@ wxMetafileDC::wxMetafileDC(const wxString& file)
   if (!file.IsNull() && wxFileExists(file))
     wxRemoveFile(file);
 
-  if (!file.IsNull() && (file != _T("")))
+  if (!file.IsNull() && (file != T("")))
     m_hDC = (WXHDC) CreateMetaFile(file);
   else
     m_hDC = (WXHDC) CreateMetaFile(NULL);
@@ -167,7 +167,7 @@ wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, i
   m_minY = 10000;
   m_maxX = -10000;
   m_maxY = -10000;
-  if (file != _T("") && wxFileExists(file)) wxRemoveFile(file);
+  if (file != T("") && wxFileExists(file)) wxRemoveFile(file);
   m_hDC = (WXHDC) CreateMetaFile(file);
 
   m_ok = TRUE;
@@ -344,7 +344,7 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
   if (!fd) return FALSE;
   
   wxChar tempFileBuf[256];
-  wxGetTempFileName(_T("mf"), tempFileBuf);
+  wxGetTempFileName(T("mf"), tempFileBuf);
   FILE *fHandle = fopen(wxConvFile.cWX2MB(tempFileBuf), "wb");
   if (!fHandle)
     return FALSE;

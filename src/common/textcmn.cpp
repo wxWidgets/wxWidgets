@@ -88,7 +88,7 @@ bool wxTextCtrlBase::SaveFile(const wxString& filename)
     if ( !filenameToUse )
     {
         // what kind of message to give? is it an error or a program bug?
-        wxLogDebug(_T("Can't save textctrl to file without filename."));
+        wxLogDebug(T("Can't save textctrl to file without filename."));
 
         return FALSE;
     }
@@ -122,7 +122,7 @@ wxTextCtrl& wxTextCtrlBase::operator<<(const wxString& s)
 wxTextCtrl& wxTextCtrlBase::operator<<(float f)
 {
     wxString str;
-    str.Printf(_T("%.2f"), f);
+    str.Printf(T("%.2f"), f);
     AppendText(str);
     return *TEXTCTRL(this);
 }
@@ -130,7 +130,7 @@ wxTextCtrl& wxTextCtrlBase::operator<<(float f)
 wxTextCtrl& wxTextCtrlBase::operator<<(double d)
 {
     wxString str;
-    str.Printf(_T("%.2f"), d);
+    str.Printf(T("%.2f"), d);
     AppendText(str);
     return *TEXTCTRL(this);
 }
@@ -138,7 +138,7 @@ wxTextCtrl& wxTextCtrlBase::operator<<(double d)
 wxTextCtrl& wxTextCtrlBase::operator<<(int i)
 {
     wxString str;
-    str.Printf(_T("%d"), i);
+    str.Printf(T("%d"), i);
     AppendText(str);
     return *TEXTCTRL(this);
 }
@@ -146,7 +146,7 @@ wxTextCtrl& wxTextCtrlBase::operator<<(int i)
 wxTextCtrl& wxTextCtrlBase::operator<<(long i)
 {
     wxString str;
-    str.Printf(_T("%ld"), i);
+    str.Printf(T("%ld"), i);
     AppendText(str);
     return *TEXTCTRL(this);
 }

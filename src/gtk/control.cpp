@@ -39,13 +39,13 @@ wxControl::wxControl( wxWindow *parent,
 void wxControl::SetLabel( const wxString &label )
 {
     m_label.Empty();
-    for ( const wxChar *pc = label; *pc != _T('\0'); pc++ )
+    for ( const wxChar *pc = label; *pc != T('\0'); pc++ )
     {
-        if ( *pc == _T('&') )
+        if ( *pc == T('&') )
         {
             pc++; // skip it
 #if 0 // it would be unused anyhow for now - kbd interface not done yet
-            if ( *pc != _T('&') ) m_chAccel = *pc;
+            if ( *pc != T('&') ) m_chAccel = *pc;
 #endif
         }
         m_label << *pc;

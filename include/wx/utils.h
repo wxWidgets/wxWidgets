@@ -74,7 +74,7 @@ WXDLLEXPORT bool StringMatch(wxChar *one, wxChar *two, bool subString = TRUE, bo
 // ----------------------------------------------------------------------------
 
 // Sound the bell
-WXDLLEXPORT void wxBell(void) ;
+WXDLLEXPORT void wxBell();
 
 // Get OS version
 WXDLLEXPORT int wxGetOsVersion(int *majorVsn= (int *) NULL,int *minorVsn= (int *) NULL) ;
@@ -82,6 +82,7 @@ WXDLLEXPORT int wxGetOsVersion(int *majorVsn= (int *) NULL,int *minorVsn= (int *
 // Return a string with the current date/time
 WXDLLEXPORT wxString wxNow();
 
+#if wxUSE_GUI
 // Don't synthesize KeyUp events holding down a key and producing
 // KeyDown events with autorepeat. On by default and always on
 // in wxMSW.
@@ -105,6 +106,8 @@ WXDLLEXPORT void wxRegisterId(long id);
 
 // Return the current ID
 WXDLLEXPORT long wxGetCurrentId();
+
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // Various conversions
@@ -214,6 +217,8 @@ WXDLLEXPORT const wxMB2WXbuf wxGetUserHome(const wxString& user = wxEmptyString)
 #else
 WXDLLEXPORT wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
 #endif
+
+#if wxUSE_GUI // GUI only things from now on
 
 // ----------------------------------------------------------------------------
 // Strip out any menu codes
@@ -387,6 +392,8 @@ extern wxNativeFont wxLoadQueryNearestFont(int pointSize,
                                            wxFontEncoding encoding);
 
 #endif // X || GTK
+
+#endif // wxUSE_GUI
 
 #endif
     // _WX_UTILSH__

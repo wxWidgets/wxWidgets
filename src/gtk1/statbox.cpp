@@ -44,7 +44,7 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( _T("wxStaticBox creation failed") );
+        wxFAIL_MSG( T("wxStaticBox creation failed") );
 	return FALSE;
     }
 

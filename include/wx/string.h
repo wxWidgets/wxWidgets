@@ -9,12 +9,34 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
+/*
+    Efficient string class [more or less] compatible with MFC CString,
+    wxWindows version 1 wxString and std::string and some handy functions
+    missing from string.h.
+*/
+
 #ifndef _WX_WXSTRINGH__
 #define _WX_WXSTRINGH__
 
 #ifdef __GNUG__
-#pragma interface "string.h"
+    #pragma interface "string.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// conditinal compilation
+// ----------------------------------------------------------------------------
+
+// compile the std::string compatibility functions if defined
+#define   wxSTD_STRING_COMPATIBILITY
+
+// define to derive wxString from wxObject (deprecated!)
+#ifdef WXSTRING_IS_WXOBJECT
+    #undef WXSTRING_IS_WXOBJECT
+#endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #ifdef __WXMAC__
     #include <ctype.h>
@@ -34,57 +56,53 @@
     #include <strings.h>    // for strcasecmp()
 #endif // AIX
 
-#ifndef  WX_PRECOMP
-  #include "wx/defs.h"
+#include "wx/defs.h"        // everybody should include this
+#include "wx/debug.h"       // for wxASSERT()
+#include "wx/wxchar.h"      // for wxChar
+#include "wx/buffer.h"      // for wxCharBuffer
+#include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
 
+#ifndef  WX_PRECOMP
   #ifdef    WXSTRING_IS_WXOBJECT
-    #include "wx/object.h"
+    #include "wx/object.h" // base class
   #endif
 #endif // !PCH
-
-#include "wx/debug.h"
-#include "wx/wxchar.h"
-#include "wx/buffer.h"
-
-/*
-    Efficient string class [more or less] compatible with MFC CString,
-    wxWindows version 1 wxString and std::string and some handy functions
-    missing from string.h.
-*/
 
 // ---------------------------------------------------------------------------
 // macros
 // ---------------------------------------------------------------------------
 
-// compile the std::string compatibility functions if defined
-#define   wxSTD_STRING_COMPATIBILITY
-
-// define to derive wxString from wxObject
-#ifdef    WXSTRING_IS_WXOBJECT
-#undef    WXSTRING_IS_WXOBJECT
-#endif
-
-// maximum possible length for a string means "take all string" everywhere
-//  (as sizeof(StringData) is unknown here we substract 100)
-const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
-
 // 'naughty' cast
 #define   WXSTRINGCAST (wxChar *)(const wxChar *)
-#define   WXCSTRINGCAST (wxChar *)(const wxChar *)
-#define   MBSTRINGCAST (char *)(const char *)
-#define   WCSTRINGCAST (wchar_t *)(const wchar_t *)
+#define   wxCSTRINGCAST (wxChar *)(const wxChar *)
+#define   wxMBSTRINGCAST (char *)(const char *)
+#define   wxWCSTRINGCAST (wchar_t *)(const wchar_t *)
 
 // implementation only
 #define   ASSERT_VALID_INDEX(i) wxASSERT( (unsigned)(i) <= Len() )
 
-// include conversion classes
-#include "wx/strconv.h"
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// maximum possible length for a string means "take all string" everywhere
+//  (as sizeof(StringData) is unknown here, we substract 100)
+const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
+
+// ----------------------------------------------------------------------------
+// global data
+// ----------------------------------------------------------------------------
+
+// global pointer to empty string
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // ---------------------------------------------------------------------------
-// Global functions complementing standard C string library replacements for
+// global functions complementing standard C string library replacements for
 // strlen() and portable strcasecmp()
 //---------------------------------------------------------------------------
-// USE wx* FUNCTIONS IN wx/wxchar.h INSTEAD - THIS IS ONLY FOR BINARY COMPATIBILITY
+
+// Use wxXXX() functions from wxchar.h instead! These functions are for
+// backwards compatibility only.
 
 // checks whether the passed in pointer is NULL and if the string is empty
 inline bool WXDLLEXPORT IsEmpty(const char *p) { return (!p || !*p); }
@@ -138,23 +156,15 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
 #endif  // OS/compiler
 }
 
-// ----------------------------------------------------------------------------
-// global data
-// ----------------------------------------------------------------------------
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
-
-// global pointer to empty string
-WXDLLEXPORT_DATA(extern const wxChar*) g_szNul;
-
 // return an empty wxString
 class WXDLLEXPORT wxString; // not yet defined
-inline const wxString& wxGetEmptyString() { return *(wxString *)&g_szNul; }
+inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; }
 
 // ---------------------------------------------------------------------------
 // string data prepended with some housekeeping info (used by wxString class),
 // is never used directly (but had to be put here to allow inlining)
 // ---------------------------------------------------------------------------
+
 struct WXDLLEXPORT wxStringData
 {
   int     nRefs;        // reference count
@@ -225,7 +235,7 @@ private:
   // string (re)initialization functions
     // initializes the string to the empty value (must be called only from
     // ctors, use Reinit() otherwise)
-  void Init() { m_pchData = (wxChar *)g_szNul; }
+  void Init() { m_pchData = (wxChar *)wxEmptyString; }
     // initializaes the string with (a part of) C-string
   void InitWith(const wxChar *psz, size_t nPos = 0, size_t nLen = wxSTRING_MAXLEN);
     // as Init, but also frees old data
@@ -278,6 +288,7 @@ public:
     // (default value of wxSTRING_MAXLEN means take all the string)
   wxString(const wxChar *psz, size_t nLength = wxSTRING_MAXLEN)
     { InitWith(psz, 0, nLength); }
+
 #if wxUSE_UNICODE
     // from multibyte string
     // (NB: nLength is right now number of Unicode characters, not
@@ -286,21 +297,24 @@ public:
     // from wxWCharBuffer (i.e. return from wxGetString)
   wxString(const wxWCharBuffer& psz)
     { InitWith(psz, 0, wxSTRING_MAXLEN); }
-#else
+#else // ANSI
     // from C string (for compilers using unsigned char)
   wxString(const unsigned char* psz, size_t nLength = wxSTRING_MAXLEN)
     { InitWith((const char*)psz, 0, nLength); }
     // from multibyte string
   wxString(const char *psz, wxMBConv& WXUNUSED(conv), size_t nLength = wxSTRING_MAXLEN)
     { InitWith(psz, 0, nLength); }
+
 #if wxUSE_WCHAR_T
     // from wide (Unicode) string
   wxString(const wchar_t *pwz);
-#endif
+#endif // !wxUSE_WCHAR_T
+
     // from wxCharBuffer
   wxString(const wxCharBuffer& psz)
     { InitWith(psz, 0, wxSTRING_MAXLEN); }
-#endif
+#endif // Unicode/ANSI
+
     // dtor is not virtual, this class must not be inherited from!
  ~wxString() { GetStringData()->Unlock(); }
 
@@ -378,25 +392,36 @@ public:
     const wxChar* c_str()   const { return m_pchData; }
     // (and this with [wx]Printf()!)
     const wxChar* wx_str()  const { return m_pchData; }
-    //
+    // identical to c_str()
     const wxChar* GetData() const { return m_pchData; }
+
+    // conversions with (possible) format convertions: have to return a
+    // buffer with temporary data
 #if wxUSE_UNICODE
     const wxCharBuffer mb_str(wxMBConv& conv = wxConvLibc) const { return conv.cWC2MB(m_pchData); }
+    const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
+
     const wxChar* wc_str(wxMBConv& WXUNUSED(conv) = wxConvLibc) const { return m_pchData; }
+
 #if wxMBFILES
     const wxCharBuffer fn_str() const { return mb_str(wxConvFile); }
-#else
+#else // !wxMBFILES
     const wxChar* fn_str() const { return m_pchData; }
-#endif
-#else
-    const wxChar* mb_str(wxMBConv& WXUNUSED(conv) = wxConvLibc ) const { return m_pchData; }
+#endif // wxMBFILES/!wxMBFILES
+#else // ANSI
+#if wxUSE_MULTIBYTE
+    const wxChar* mb_str(wxMBConv& WXUNUSED(conv) = wxConvLibc) const
+        { return m_pchData; }
+    const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
+#else // !mmultibyte
+    const wxChar* mb_str() const { return m_pchData; }
+    const wxWX2MBbuf mbc_str() const { return mb_str(); }
+#endif // multibyte/!multibyte
 #if wxUSE_WCHAR_T
     const wxWCharBuffer wc_str(wxMBConv& conv) const { return conv.cMB2WC(m_pchData); }
-#endif
+#endif // wxUSE_WCHAR_T
     const wxChar* fn_str() const { return m_pchData; }
-#endif
-    // for convenience
-    const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
+#endif // Unicode/ANSI
 
   // overloaded assignment
     // from another wxString
@@ -408,7 +433,7 @@ public:
 #if wxUSE_UNICODE
     // from wxWCharBuffer
   wxString& operator=(const wxWCharBuffer& psz) { return operator=((const wchar_t *)psz); }
-#else
+#else // ANSI
     // from another kind of C string
   wxString& operator=(const unsigned char* psz);
 #if wxUSE_WCHAR_T
@@ -417,7 +442,7 @@ public:
 #endif
     // from wxCharBuffer
   wxString& operator=(const wxCharBuffer& psz) { return operator=((const char *)psz); }
-#endif
+#endif // Unicode/ANSI
 
   // string concatenation
     // in place concatenation
@@ -548,7 +573,7 @@ public:
       // remove spaces from left or from right (default) side
   wxString& Trim(bool bFromRight = TRUE);
       // add nCount copies chPad in the beginning or at the end (default)
-  wxString& Pad(size_t nCount, wxChar chPad = _T(' '), bool bFromRight = TRUE);
+  wxString& Pad(size_t nCount, wxChar chPad = T(' '), bool bFromRight = TRUE);
       // truncate string to given length
   wxString& Truncate(size_t uiLen);
 
@@ -660,7 +685,7 @@ public:
     // return the maximum size of the string
   size_t max_size() const { return wxSTRING_MAXLEN; }
     // resize the string, filling the space with c if c != 0
-  void resize(size_t nSize, wxChar ch = _T('\0'));
+  void resize(size_t nSize, wxChar ch = T('\0'));
     // delete the contents of the string
   void clear() { Empty(); }
     // returns true if the string is empty
@@ -835,6 +860,7 @@ public:
 // so the original string may be safely deleted. When a string is retrieved
 // from the array (operator[] or Item() method), a reference is returned.
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxArrayString
 {
 public:
@@ -979,19 +1005,22 @@ wxString WXDLLEXPORT operator+(const wxString& string, const wxChar *psz);
 wxString WXDLLEXPORT operator+(const wxChar *psz, const wxString& string);
 #if wxUSE_UNICODE
 inline wxString WXDLLEXPORT operator+(const wxString& string, const wxWCharBuffer& buf)
-{ return string + (const wchar_t *)buf; }
+    { return string + (const wchar_t *)buf; }
 inline wxString WXDLLEXPORT operator+(const wxWCharBuffer& buf, const wxString& string)
-{ return (const wchar_t *)buf + string; }
+    { return (const wchar_t *)buf + string; }
 #else
 inline wxString WXDLLEXPORT operator+(const wxString& string, const wxCharBuffer& buf)
-{ return string + (const char *)buf; }
+    { return string + (const char *)buf; }
 inline wxString WXDLLEXPORT operator+(const wxCharBuffer& buf, const wxString& string)
-{ return (const char *)buf + string; }
+    { return (const char *)buf + string; }
 #endif
 
 // ---------------------------------------------------------------------------
 // Implementation only from here until the end of file
 // ---------------------------------------------------------------------------
+
+// don't pollute the library user's name space
+#undef ASSERT_VALID_INDEX
 
 #if defined(wxSTD_STRING_COMPATIBILITY) && wxUSE_STD_IOSTREAM
 

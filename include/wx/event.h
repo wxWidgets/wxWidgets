@@ -18,16 +18,30 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
-#include "wx/gdicmn.h"
+
+#if wxUSE_GUI
+    #include "wx/gdicmn.h"
+#endif
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
 #endif
 
-/*
- * Event types
- *
- */
+// ----------------------------------------------------------------------------
+// forward declarations
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxList;
+
+#if wxUSE_GUI
+    class WXDLLEXPORT wxClientData;
+    class WXDLLEXPORT wxDC;
+    class WXDLLEXPORT wxMenu;
+#endif // wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// Event types
+// ----------------------------------------------------------------------------
 
 typedef int wxEventType;
 
@@ -336,6 +350,8 @@ public:
     bool              m_isCommandEvent;
 };
 
+#if wxUSE_GUI
+
 // Item or menu event class
 /*
  wxEVT_COMMAND_BUTTON_CLICKED
@@ -353,8 +369,6 @@ public:
  wxEVT_COMMAND_VLBOX_SELECTED
  wxEVT_COMMAND_COMBOBOX_SELECTED
 */
-
-class WXDLLEXPORT wxClientData;
 
 class WXDLLEXPORT wxCommandEvent : public wxEvent
 {
@@ -523,7 +537,6 @@ public:
  wxEVT_NC_RIGHT_DCLICK,
 */
 
-class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxMouseEvent : public wxEvent
 {
     DECLARE_DYNAMIC_CLASS(wxMouseEvent)
@@ -764,7 +777,6 @@ public:
  wxEVT_ERASE_BACKGROUND
  */
 
-class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxEraseEvent : public wxEvent
 {
     DECLARE_DYNAMIC_CLASS(wxEraseEvent)
@@ -884,7 +896,7 @@ public:
     {
         // GetVeto() will return FALSE anyhow...
         wxCHECK_RET( m_canVeto,
-                     _T("call to Veto() ignored (can't veto this event)") );
+                     T("call to Veto() ignored (can't veto this event)") );
 
         m_veto = veto;
     }
@@ -1069,35 +1081,10 @@ public:
     void CopyObject(wxObject& obj) const;
 };
 
-// Idle event
-/*
- wxEVT_IDLE
- */
-
-class WXDLLEXPORT wxIdleEvent : public wxEvent
-{
-    DECLARE_DYNAMIC_CLASS(wxIdleEvent)
-
-public:
-    wxIdleEvent()
-        { m_eventType = wxEVT_IDLE; m_requestMore = FALSE; }
-
-    void RequestMore(bool needMore = TRUE) { m_requestMore = needMore; }
-    bool MoreRequested() const { return m_requestMore; }
-
-    void CopyObject(wxObject& obj) const;
-
-protected:
-    bool m_requestMore;
-};
-
 // Update UI event
 /*
  wxEVT_UPDATE_UI
  */
-
-class WXDLLEXPORT wxMenu;
-class WXDLLEXPORT wxWindow;
 
 class WXDLLEXPORT wxUpdateUIEvent : public wxCommandEvent
 {
@@ -1256,6 +1243,30 @@ public:
     wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
 };
 
+#endif // wxUSE_GUI
+
+// Idle event
+/*
+ wxEVT_IDLE
+ */
+
+class WXDLLEXPORT wxIdleEvent : public wxEvent
+{
+    DECLARE_DYNAMIC_CLASS(wxIdleEvent)
+
+public:
+    wxIdleEvent()
+        { m_eventType = wxEVT_IDLE; m_requestMore = FALSE; }
+
+    void RequestMore(bool needMore = TRUE) { m_requestMore = needMore; }
+    bool MoreRequested() const { return m_requestMore; }
+
+    void CopyObject(wxObject& obj) const;
+
+protected:
+    bool m_requestMore;
+};
+
 /* TODO
  wxEVT_POWER,
  wxEVT_MOUSE_CAPTURE_CHANGED,
@@ -1266,11 +1277,6 @@ public:
  wxEVT_MEASURE_ITEM,
  wxEVT_COMPARE_ITEM
 */
-
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxControl;
-
-// struct WXDLLEXPORT wxEventTableEntry;
 
 typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
@@ -1312,7 +1318,7 @@ public:
     virtual void OnCommand(wxWindow& WXUNUSED(win),
                            wxCommandEvent& WXUNUSED(event))
     {
-        wxFAIL_MSG(_T("shouldn't be called any more"));
+        wxFAIL_MSG(T("shouldn't be called any more"));
     }
 
     // Called if child control has no callback function
@@ -1373,6 +1379,7 @@ protected:
 };
 
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
+#if wxUSE_GUI
 typedef void (wxEvtHandler::*wxCommandEventFunction)(wxCommandEvent&);
 typedef void (wxEvtHandler::*wxScrollEventFunction)(wxScrollEvent&);
 typedef void (wxEvtHandler::*wxScrollWinEventFunction)(wxScrollWinEvent&);
@@ -1398,6 +1405,7 @@ typedef void (wxEvtHandler::*wxMaximizeEventFunction)(wxShowEvent&);
 typedef void (wxEvtHandler::*wxNavigationKeyEventFunction)(wxNavigationKeyEvent&);
 typedef void (wxEvtHandler::*wxPaletteChangedEventFunction)(wxPaletteChangedEvent&);
 typedef void (wxEvtHandler::*wxQueryNewPaletteEventFunction)(wxQueryNewPaletteEvent&);
+#endif // wxUSE_GUI
 
 // N.B. In GNU-WIN32, you *have* to take the address of a member function
 // (use &) or the compiler crashes...
@@ -1603,13 +1611,17 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_UPDATE_UI(id, func) \
  { wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL },\
 
-/*
- * Helper functions
- */
+// ----------------------------------------------------------------------------
+// Helper functions
+// ----------------------------------------------------------------------------
+
+#if wxUSE_GUI
 
 // Find a window with the focus, that is also a descendant of the given window.
 // This is used to determine the window to initially send commands to.
 wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
+
+#endif // wxUSE_GUI
 
 #endif
         // _WX_EVENTH__

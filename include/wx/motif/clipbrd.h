@@ -110,7 +110,7 @@ class WXDLLEXPORT wxClipboardClient : public wxObject
 
  public:
   /* This list should be filled in with strings indicating the formats
-     this client can provide. Almost all clients will provide "TEXT".
+     this client can provide. Almost all clients will provide "TEXT(".
      Format names should be 4 characters long, so things will work
      out on the Macintosh */
   wxStringList formats;
@@ -147,7 +147,7 @@ class WXDLLEXPORT wxClipboard : public wxObject
   /* Set the clipboard string; does not require a client. */
   void SetClipboardString(char *, long time);
 
-  /* Get data from the clipboard in the format "TEXT". */
+  /* Get data from the clipboard in the format "TEXT(". */
   char *GetClipboardString(long time);
 
   /* Get data from the clipboard */

@@ -92,7 +92,7 @@ public:
     
   // the string ID identifies the format of clipboard or DnD data. a word
   // processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
-  // to the clipboard - the latter with the Id "WXWORD_FORMAT".
+  // to the clipboard - the latter with the Id "WXWORD_FORMAT(".
     
   void SetId( const wxString& id )
       { m_id = id; }

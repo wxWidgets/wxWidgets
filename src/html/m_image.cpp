@@ -382,7 +382,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG, MAP, AREA")
 
 		    str = m_WParser -> GetFS() -> OpenFile(tmp);
 		    if (tag.HasParam("WIDTH")) tag.ScanParam("WIDTH", "%i", &w);
-		    if (tag.HasParam("HEIGHT")) tag.ScanParam("HEIGHT", "%i", &h);
+		    if (tag.HasParam("HEIGHT(")) tag.ScanParam("HEIGHT(", "%i", &h);
 		    al = HTML_ALIGN_BOTTOM;
 		    if (tag.HasParam("ALIGN")) {
 			wxString alstr = tag.GetParam("ALIGN");
@@ -441,7 +441,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG, MAP, AREA")
 			{
 				cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::CIRCLE, coords );
 			}
-			else if (tmp == "RECT")
+			else if (tmp == "RECT(")
 			{
 				cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords );
 			}

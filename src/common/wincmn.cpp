@@ -160,7 +160,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     // m_isWindow is set to TRUE in wxWindowBase::Init() as well as many other
     // member variables - check that it has been called (will catch the case
     // when a new ctor is added which doesn't call InitWindow)
-    wxASSERT_MSG( m_isWindow, _T("Init() must have been called before!") );
+    wxASSERT_MSG( m_isWindow, T("Init() must have been called before!") );
 
     // generate a new id if the user doesn't care about it
     m_windowId = id == -1 ? NewControlId() : id;
@@ -191,7 +191,7 @@ wxWindowBase::~wxWindowBase()
     // we weren't a dialog class
     wxTopLevelWindows.DeleteObject(this);
 
-    wxASSERT_MSG( GetChildren().GetCount() == 0, _T("children not destroyed") );
+    wxASSERT_MSG( GetChildren().GetCount() == 0, T("children not destroyed") );
 
     // make sure that there are no dangling pointers left pointing to us
     wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
@@ -280,12 +280,12 @@ bool wxWindowBase::DestroyChildren()
 
         wxWindow *child = node->GetData();
 
-        wxASSERT_MSG( child, _T("children list contains empty nodes") );
+        wxASSERT_MSG( child, T("children list contains empty nodes") );
 
         delete child;
 
         wxASSERT_MSG( !GetChildren().Find(child),
-                      _T("child didn't remove itself using RemoveChild()") );
+                      T("child didn't remove itself using RemoveChild()") );
     }
 
     return TRUE;
@@ -335,7 +335,7 @@ void wxWindowBase::Centre(int direction)
     if ( !(direction & wxCENTRE_ON_SCREEN) || wxDynamicCast(this, wxControl) )
     {
         // theo nly chance to get this is to have a wxControl without parent
-        wxCHECK_RET( parent, _T("a control must have a parent") );
+        wxCHECK_RET( parent, T("a control must have a parent") );
 
         // adjust to the parents client area origin
         wxPoint posParent = parent->ClientToScreen(wxPoint(0, 0));
@@ -436,7 +436,7 @@ bool wxWindowBase::IsTopLevel() const
 
 void wxWindowBase::AddChild(wxWindowBase *child)
 {
-    wxCHECK_RET( child, _T("can't add a NULL child") );
+    wxCHECK_RET( child, T("can't add a NULL child") );
 
     GetChildren().Append(child);
     child->SetParent(this);
@@ -444,7 +444,7 @@ void wxWindowBase::AddChild(wxWindowBase *child)
 
 void wxWindowBase::RemoveChild(wxWindowBase *child)
 {
-    wxCHECK_RET( child, _T("can't remove a NULL child") );
+    wxCHECK_RET( child, T("can't remove a NULL child") );
 
     GetChildren().DeleteObject(child);
     child->SetParent((wxWindow *)NULL);
@@ -579,7 +579,7 @@ void wxWindowBase::SetCaret(wxCaret *caret)
     if ( m_caret )
     {
         wxASSERT_MSG( m_caret->GetWindow() == this,
-                      _T("caret should be created associated to this window") );
+                      T("caret should be created associated to this window") );
     }
 }
 #endif // wxUSE_CARET
@@ -1038,18 +1038,18 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
         wxChar *windowClass = GetClassInfo()->GetClassName();
 
         wxString winName;
-        if ( GetName() == _T("") )
-            winName = _T("unnamed");
+        if ( GetName() == T("") )
+            winName = T("unnamed");
         else
             winName = GetName();
-        wxLogDebug( _T("Constraint(s) not satisfied for window of type %s, name %s:\n"),
+        wxLogDebug( T("Constraint(s) not satisfied for window of type %s, name %s:\n"),
                 (const wxChar *)windowClass,
                 (const wxChar *)winName);
-        if ( !constr->left.GetDone()) wxLogDebug( _T("  unsatisfied 'left' constraint.\n")  );
-        if ( !constr->right.GetDone()) wxLogDebug( _T("  unsatisfied 'right' constraint.\n")  );
-        if ( !constr->width.GetDone()) wxLogDebug( _T("  unsatisfied 'width' constraint.\n")  );
-        if ( !constr->height.GetDone())  wxLogDebug( _T("  unsatisfied 'height' constraint.\n")  );
-        wxLogDebug( _T("Please check constraints: try adding AsIs() constraints.\n") );
+        if ( !constr->left.GetDone()) wxLogDebug( T("  unsatisfied 'left' constraint.\n")  );
+        if ( !constr->right.GetDone()) wxLogDebug( T("  unsatisfied 'right' constraint.\n")  );
+        if ( !constr->width.GetDone()) wxLogDebug( T("  unsatisfied 'width' constraint.\n")  );
+        if ( !constr->height.GetDone())  wxLogDebug( T("  unsatisfied 'height' constraint.\n")  );
+        wxLogDebug( T("Please check constraints: try adding AsIs() constraints.\n") );
     }
 
     if ( recurse )
@@ -1236,7 +1236,7 @@ wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt)
 void wxWindowBase::DoSetClientObject( wxClientData *data )
 {
     wxASSERT_MSG( m_clientDataType != ClientData_Void,
-                  _T("can't have both object and void client data") );
+                  T("can't have both object and void client data") );
 
     if ( m_clientObject )
         delete m_clientObject;
@@ -1248,7 +1248,7 @@ void wxWindowBase::DoSetClientObject( wxClientData *data )
 wxClientData *wxWindowBase::DoGetClientObject() const
 {
     wxASSERT_MSG( m_clientDataType == ClientData_Object,
-                  _T("this window doesn't have object client data") );
+                  T("this window doesn't have object client data") );
 
     return m_clientObject;
 }
@@ -1256,7 +1256,7 @@ wxClientData *wxWindowBase::DoGetClientObject() const
 void wxWindowBase::DoSetClientData( void *data )
 {
     wxASSERT_MSG( m_clientDataType != ClientData_Object,
-                  _T("can't have both object and void client data") );
+                  T("can't have both object and void client data") );
 
     m_clientData = data;
     m_clientDataType = ClientData_Void;
@@ -1265,7 +1265,7 @@ void wxWindowBase::DoSetClientData( void *data )
 void *wxWindowBase::DoGetClientData() const
 {
     wxASSERT_MSG( m_clientDataType == ClientData_Void,
-                  _T("this window doesn't have void client data") );
+                  T("this window doesn't have void client data") );
 
     return m_clientData;
 }

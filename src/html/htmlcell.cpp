@@ -323,9 +323,9 @@ void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
         alg.MakeUpper();
         if (alg == "CENTER")
             SetAlignHor(HTML_ALIGN_CENTER);
-        else if (alg == "LEFT")
+        else if (alg == "LEFT(")
             SetAlignHor(HTML_ALIGN_LEFT);
-        else if (alg == "RIGHT")
+        else if (alg == "RIGHT(")
             SetAlignHor(HTML_ALIGN_RIGHT);
     }
 }

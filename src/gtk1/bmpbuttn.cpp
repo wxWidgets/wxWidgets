@@ -121,7 +121,7 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
-        wxFAIL_MSG( _T("wxBitmapButton creation failed") );
+        wxFAIL_MSG( T("wxBitmapButton creation failed") );
 	return FALSE;
     }
 
@@ -190,14 +190,14 @@ void wxBitmapButton::SetDefault()
 
 void wxBitmapButton::SetLabel( const wxString &label )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid button") );
+    wxCHECK_RET( m_widget != NULL, T("invalid button") );
 
     wxControl::SetLabel( label );
 }
 
 wxString wxBitmapButton::GetLabel() const
 {
-    wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid button") );
+    wxCHECK_MSG( m_widget != NULL, T(""), T("invalid button") );
 
     return wxControl::GetLabel();
 }
@@ -208,7 +208,7 @@ void wxBitmapButton::ApplyWidgetStyle()
 
 void wxBitmapButton::SetBitmap()
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid button") );
+    wxCHECK_RET( m_widget != NULL, T("invalid button") );
 
     wxBitmap the_one;
   
@@ -243,7 +243,7 @@ void wxBitmapButton::SetBitmap()
 
 void wxBitmapButton::SetBitmapDisabled( const wxBitmap& bitmap ) 
 {
-  wxCHECK_RET( m_widget != NULL, _T("invalid button") );
+  wxCHECK_RET( m_widget != NULL, T("invalid button") );
 
   if ( ! m_disabled.Ok() ) return;
   m_disabled = bitmap;
@@ -253,7 +253,7 @@ void wxBitmapButton::SetBitmapDisabled( const wxBitmap& bitmap )
 
 void wxBitmapButton::SetBitmapFocus( const wxBitmap& bitmap ) 
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid button") );
+    wxCHECK_RET( m_widget != NULL, T("invalid button") );
 
     if ( ! m_focus.Ok() ) return;
     m_focus = bitmap;
@@ -263,7 +263,7 @@ void wxBitmapButton::SetBitmapFocus( const wxBitmap& bitmap )
 
 void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid button") );
+    wxCHECK_RET( m_widget != NULL, T("invalid button") );
 
     if (!m_bitmap.Ok()) return;
     m_bitmap = bitmap;
@@ -273,7 +273,7 @@ void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
 
 void wxBitmapButton::SetBitmapSelected( const wxBitmap& bitmap )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid button") );
+    wxCHECK_RET( m_widget != NULL, T("invalid button") );
 
     if ( ! m_selected.Ok() ) return;
     m_selected = bitmap;

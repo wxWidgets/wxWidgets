@@ -469,7 +469,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                     als = m_rAlign;
                     if (tag.HasParam("ALIGN")) als = tag.GetParam("ALIGN");
                     als.MakeUpper();
-                    if (als == "RIGHT") m_WParser -> SetAlign(HTML_ALIGN_RIGHT);
+                    if (als == "RIGHT(") m_WParser -> SetAlign(HTML_ALIGN_RIGHT);
                     else if (als == "CENTER") m_WParser -> SetAlign(HTML_ALIGN_CENTER);
                 }
                 m_WParser -> OpenContainer();

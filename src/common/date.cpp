@@ -43,13 +43,13 @@
 #define ABBR_LENGTH 3
 
 static const wxChar *dayname[] = {
-    _T("Sunday"), _T("Monday"), _T("Tuesday"), _T("Wednesday"),
-    _T("Thursday"), _T("Friday"), _T("Saturday")
+    T("Sunday"), T("Monday"), T("Tuesday"), T("Wednesday"),
+    T("Thursday"), T("Friday"), T("Saturday")
 };
 
 static const wxChar *mname[] = {
-    _T("January"), _T("February"), _T("March"), _T("April"), _T("May"), _T("June"),
-    _T("July"), _T("August"), _T("September"), _T("October"), _T("November"), _T("December")
+    T("January"), T("February"), T("March"), T("April"), T("May"), T("June"),
+    T("July"), T("August"), T("September"), T("October"), T("November"), T("December")
 };
 
 static int GauDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -88,7 +88,7 @@ wxDate::wxDate (const wxString& dat)
 {
     DisplayFormat=wxMDY;
     DisplayOptions='\0';
-    if (wxStrcmp(dat, _T("TODAY")) == 0 || wxStrcmp(dat, _T("today")) == 0)
+    if (wxStrcmp(dat, T("TODAY")) == 0 || wxStrcmp(dat, T("today")) == 0)
     {
         // Sets the current date
         Set();
@@ -96,12 +96,12 @@ wxDate::wxDate (const wxString& dat)
     else
     {
         wxChar buf[100];
-        wxStrcpy(buf, WXSTRINGCAST dat);
+        wxStrcpy(buf, dat);
 
-        wxChar *save_ptr, *token = wxStrtok(buf,_T("/-"),&save_ptr);
+        wxChar *save_ptr, *token = wxStrtok(buf,T("/-"),&save_ptr);
         month = wxAtoi(token);
-        day   = wxAtoi(wxStrtok((wxChar *) NULL,_T("/-"),&save_ptr));
-        year  = wxAtoi(wxStrtok((wxChar *) NULL,_T(" "),&save_ptr));
+        day   = wxAtoi(wxStrtok((wxChar *) NULL,T("/-"),&save_ptr));
+        year  = wxAtoi(wxStrtok((wxChar *) NULL,T(" "),&save_ptr));
     }
 
     mdy_to_julian ();
@@ -131,7 +131,7 @@ void wxDate::operator = (const wxString& dat)
 {
     DisplayFormat=wxMDY;
     DisplayOptions='\0';
-    if (wxStrcmp(dat, _T("TODAY")) == 0 || wxStrcmp(dat, _T("today")) == 0)
+    if (wxStrcmp(dat, T("TODAY")) == 0 || wxStrcmp(dat, T("today")) == 0)
     {
         // Sets the current date
         Set();
@@ -139,12 +139,12 @@ void wxDate::operator = (const wxString& dat)
     else
     {
         wxChar buf[100];
-        wxStrcpy(buf, WXSTRINGCAST dat);
+        wxStrcpy(buf, dat);
 
-        wxChar *save_ptr, *token = wxStrtok(buf,_T("/-"),&save_ptr);
+        wxChar *save_ptr, *token = wxStrtok(buf,T("/-"),&save_ptr);
         month = wxAtoi(token);
-        day   = wxAtoi(wxStrtok((wxChar *) NULL,_T("/-"),&save_ptr));
-        year  = wxAtoi(wxStrtok((wxChar *) NULL,_T(" "),&save_ptr));
+        day   = wxAtoi(wxStrtok((wxChar *) NULL,T("/-"),&save_ptr));
+        year  = wxAtoi(wxStrtok((wxChar *) NULL,T(" "),&save_ptr));
     }
 
     mdy_to_julian ();
@@ -379,11 +379,11 @@ wxString wxDate::FormatDate (int type) const
             }
             wxStrncpy( buf, wxGetTranslation(dayname[day_of_week-1]),
 		       (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
-            wxStrcat( buf, _T(", "));
+            wxStrcat( buf, T(", "));
             wxStrncat( buf, wxGetTranslation(mname[month-1]),
 		       (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
-            wxStrcat( buf, _T(" "));
-            wxSprintf( buf+wxStrlen(buf), _T("%d, %d"), day, abs(year) );
+            wxStrcat( buf, T(" "));
+            wxSprintf( buf+wxStrlen(buf), T("%d, %d"), day, abs(year) );
             if (year < 0)
                 wxStrcat(buf,_(" B.C."));
             return wxString(buf);
@@ -395,10 +395,10 @@ wxString wxDate::FormatDate (int type) const
                 wxStrcpy(buf, _("invalid date"));
                 return wxString(buf);
             }
-            wxSprintf(buf,_T("%d "),  day);
+            wxSprintf(buf,T("%d "),  day);
             wxStrncat(buf, wxGetTranslation(mname[month-1]),
                     (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
-            wxSprintf( buf+wxStrlen(buf), _T(" %d"), abs(year) );
+            wxSprintf( buf+wxStrlen(buf), T(" %d"), abs(year) );
             if (year < 0)
                 wxStrcat(buf, _(" B.C."));
             return wxString(buf);
@@ -408,13 +408,13 @@ wxString wxDate::FormatDate (int type) const
             if (day==0 || month==0 || year==0)
                 wxStrcpy(buf, _("invalid date"));
             else
-                wxSprintf( buf+wxStrlen(buf), _T("%1d/%1d/%02d"), month, day,
+                wxSprintf( buf+wxStrlen(buf), T("%1d/%1d/%02d"), month, day,
 			   (DisplayOptions & wxNO_CENTURY) && (abs(year) > 1899)
 			   ? (abs(year) - (abs(year) / 100 * 100))
 			   : (abs(year))  );
             return wxString(buf);
     }
-    return wxString(_T(""));
+    return wxString(T(""));
 }
 
 void wxDate::SetFormat( int format )

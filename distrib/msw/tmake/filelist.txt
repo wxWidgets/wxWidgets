@@ -28,6 +28,7 @@
 # compiler, &c)
 #
 # Known flags:
+#  B	makes part of the base library too
 #  16	a generic file implementing Win32 control for Win16
 #  32	only can be compiled under Win32
 #  PS	PostScript related file, normally not compiled under Windows
@@ -37,6 +38,7 @@
 #  S	Socket file (currently doesn't compile under Win16 nor with GNU)
 #  R	Not required for the GTK port
 #  X	Not required for the Motif port
+#
 #  WX	Base header
 #  GTK  GTK header
 #  MSW	MSW header
@@ -90,9 +92,9 @@ wizard.cpp	G
 
 choiccmn.cpp	C	R
 cmndata.cpp	C
-config.cpp	C
+config.cpp	C	B
 ctrlcmn.cpp	C	R
-date.cpp	C
+date.cpp	C	B
 datstrm.cpp	C
 db.cpp	C
 dbtable.cpp	C
@@ -100,15 +102,15 @@ dcbase.cpp	C
 dlgcmn.cpp	C
 docmdi.cpp	C
 docview.cpp	C
-dynarray.cpp	C
-dynlib.cpp	C
+dynarray.cpp	C	B
+dynlib.cpp	C	B
 event.cpp	C
-extended.c	C
-ffile.cpp	C
-file.cpp	C
-fileconf.cpp	C
-filefn.cpp	C
-filesys.cpp	C
+extended.c	C	B
+ffile.cpp	C	B
+file.cpp	C	B
+fileconf.cpp	C	B
+filefn.cpp	C	B
+filesys.cpp	C	B
 fontcmn.cpp	C
 framecmn.cpp	C
 fs_inet.cpp	C
@@ -116,7 +118,7 @@ fs_zip.cpp	C
 ftp.cpp	C	S
 gdicmn.cpp	C
 gifdecod.cpp	C
-hash.cpp	C
+hash.cpp	C	B
 helpbase.cpp	C
 http.cpp	C	S
 imagbmp.cpp	C
@@ -127,21 +129,21 @@ imagjpeg.cpp	C	32
 imagpcx.cpp	C	32
 imagpng.cpp	C	32
 imagpnm.cpp	C	32
-intl.cpp	C
+intl.cpp	C	B
 ipcbase.cpp	C
 layout.cpp	C
-list.cpp	C
-log.cpp	C
+list.cpp	C	B
+log.cpp	C	B
 memory.cpp	C
-mimetype.cpp	C	32
-module.cpp	C
+mimetype.cpp	C	32,B
+module.cpp	C	B
 mstream.cpp	C
-object.cpp	C
+object.cpp	C	B
 objstrm.cpp	C
 odbc.cpp	C	R
 paper.cpp	C
 prntbase.cpp	C
-process.cpp	C	32
+process.cpp	C	32,B
 protocol.cpp	C	S
 resource.cpp	C
 sckaddr.cpp	C	S
@@ -152,26 +154,26 @@ serbase.cpp	C
 sizer.cpp	C
 socket.cpp	C	S
 stream.cpp	C
-strconv.cpp	C
-string.cpp	C
+strconv.cpp	C	B
+string.cpp	C	B
 tbarbase.cpp	C
 tbarsmpl.cpp	C
 textcmn.cpp	C
-textfile.cpp	C
-time.cpp	C
-timercmn.cpp	C
-tokenzr.cpp	C
+textfile.cpp	C	B
+time.cpp	C	B
+timercmn.cpp	C	B
+tokenzr.cpp	C	B
 txtstrm.cpp	C
 unzip.c	C
 url.cpp	C	S
-utilscmn.cpp	C
+utilscmn.cpp	C	B
 valgen.cpp	C
 validate.cpp	C
 valtext.cpp	C
-variant.cpp	C
+variant.cpp	C	B
 wfstream.cpp	C
 wincmn.cpp	C
-wxchar.cpp	C
+wxchar.cpp	C	B
 wxexpr.cpp	C
 zipstrm.cpp	C
 zstream.cpp	C
@@ -272,6 +274,7 @@ window.cpp	M
 xpmhand.cpp	M
 gsocket.c	M	S
 
+dialup.cpp	U
 threadpsx.cpp	U
 utilsunx.cpp	U
 gsocket.c	U

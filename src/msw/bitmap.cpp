@@ -80,7 +80,7 @@ wxBitmapRefData::~wxBitmapRefData()
   if (m_selectedInto)
   {
     wxChar buf[200];
-    wxSprintf(buf, _T("Bitmap was deleted without selecting out of wxMemoryDC %lX."), (unsigned long) m_selectedInto);
+    wxSprintf(buf, T("Bitmap was deleted without selecting out of wxMemoryDC %lX."), (unsigned long) m_selectedInto);
     wxFatalError(buf);
   }
   if (m_hBitmap)
@@ -146,7 +146,7 @@ bool wxBitmap::FreeResource(bool WXUNUSED(force))
   if (M_BITMAPDATA->m_selectedInto)
   {
     wxChar buf[200];
-    wxSprintf(buf, _T("Bitmap %lX was deleted without selecting out of wxMemoryDC %lX."), (unsigned long) this, (unsigned long) M_BITMAPDATA->m_selectedInto);
+    wxSprintf(buf, T("Bitmap %lX was deleted without selecting out of wxMemoryDC %lX."), (unsigned long) this, (unsigned long) M_BITMAPDATA->m_selectedInto);
     wxFatalError(buf);
   }
   if (M_BITMAPDATA->m_hBitmap)
@@ -255,7 +255,7 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
   wxBitmapHandler *handler = FindHandler(type);
 
   if ( handler == NULL ) {
-    wxLogWarning(_T("no bitmap handler for type %d defined."), type);
+    wxLogWarning(T("no bitmap handler for type %d defined."), type);
 
     return FALSE;
   }
@@ -272,7 +272,7 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
   wxBitmapHandler *handler = FindHandler(type);
 
   if ( handler == NULL ) {
-    wxLogWarning(_T("no bitmap handler for type %d defined."), type);
+    wxLogWarning(T("no bitmap handler for type %d defined."), type);
 
     return FALSE;
   }
@@ -285,7 +285,7 @@ bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *pal
   wxBitmapHandler *handler = FindHandler(type);
 
   if ( handler == NULL ) {
-    wxLogWarning(_T("no bitmap handler for type %d defined."), type);
+    wxLogWarning(T("no bitmap handler for type %d defined."), type);
 
     return FALSE;
   }
@@ -682,7 +682,7 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long
     }
 
   // it's probably not found
-  wxLogError(_T("Can't load bitmap '%s' from resources! Check .rc file."), name.c_str());
+  wxLogError(T("Can't load bitmap '%s' from resources! Check .rc file."), name.c_str());
 
   return FALSE;
 }

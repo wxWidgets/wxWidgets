@@ -364,12 +364,12 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
                                                M_FONTDATA->m_style,
                                                M_FONTDATA->m_weight,
                                                M_FONTDATA->m_underlined,
-                                               _T(""),
+                                               T(""),
                                                M_FONTDATA->m_encoding);
 
     if ( !font )
     {
-        wxFAIL_MSG( _T("Could not allocate even a default font -- something is wrong.") );
+        wxFAIL_MSG( T("Could not allocate even a default font -- something is wrong.") );
 
         return (wxXFont*) NULL;
     }

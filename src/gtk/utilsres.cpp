@@ -40,9 +40,9 @@
 // Yuck this is really BOTH site and platform dependent
 // so we should use some other strategy!
 #ifdef __SUN__
-    #define DEFAULT_XRESOURCE_DIR _T("/usr/openwin/lib/app-defaults")
+    #define DEFAULT_XRESOURCE_DIR T("/usr/openwin/lib/app-defaults")
 #else
-    #define DEFAULT_XRESOURCE_DIR _T("/usr/lib/X11/app-defaults")
+    #define DEFAULT_XRESOURCE_DIR T("/usr/lib/X11/app-defaults")
 #endif
 
 //-----------------------------------------------------------------------------
@@ -63,13 +63,13 @@ static wxChar *GetResourcePath(wxChar *buf, wxChar *name, bool create)
         wxStrcpy(buf, name);
         return buf; // Exists so ...
     }
-    if (*name == _T('/'))
+    if (*name == T('/'))
         wxStrcpy(buf, name);
     else 
     {
         // Put in standard place for resource files if not absolute
         wxStrcpy(buf, DEFAULT_XRESOURCE_DIR);
-        wxStrcat(buf, _T("/"));
+        wxStrcat(buf, T("/"));
         wxStrcat(buf, FileNameFromPath(name));
     }
     if (create) 
@@ -96,18 +96,18 @@ static wxChar *GetIniFile(wxChar *dest, const wxChar *filename)
       if ((home = wxGetUserHome(wxString())) != NULL)
       {
         wxStrcpy(dest, home);
-        if (dest[wxStrlen(dest) - 1] != _T('/')) wxStrcat(dest, _T("/"));
+        if (dest[wxStrlen(dest) - 1] != T('/')) wxStrcat(dest, T("/"));
         if (filename == NULL)
         {
-          if ((filename = wxGetenv(_T("XENVIRONMENT"))) == NULL) filename = _T(".Xdefaults");
+          if ((filename = wxGetenv(T("XENVIRONMENT("))) == NULL) filename = T(".Xdefaults");
         }
         else
-          if (*filename != _T('.')) wxStrcat(dest, _T("."));
+          if (*filename != T('.')) wxStrcat(dest, T("."));
         wxStrcat(dest, filename);
       }
       else
       {
-        dest[0] = _T('\0');
+        dest[0] = T('\0');
       }
     }
     return dest;
@@ -148,7 +148,7 @@ static void wxXMergeDatabases()
     // Open XENVIRONMENT file, or if not defined, the .Xdefaults,
     // and merge into existing database
 
-    if ((environment = wxGetenv(_T("XENVIRONMENT"))) == NULL) 
+    if ((environment = wxGetenv(T("XENVIRONMENT("))) == NULL) 
     {
         size_t len;
 #if wxUSE_UNICODE
@@ -203,7 +203,7 @@ void wxFlushResources()
 
 void wxDeleteResources(const wxChar *file)
 {
-    wxLogTrace(wxTraceResAlloc, _T("Delete: Number = %d"), wxTheResourceCache->Number());
+    wxLogTrace(wxTraceResAlloc, T("Delete: Number = %d"), wxTheResourceCache->Number());
     wxChar buffer[500];
     (void)GetIniFile(buffer, file);
 
@@ -233,11 +233,11 @@ bool wxWriteResource(const wxString& section, const wxString& entry, const wxStr
         database = (XrmDatabase)node->Data();
     else {
         database = XrmGetFileDatabase(wxConvCurrent->cWX2MB(buffer));
-        wxLogTrace(wxTraceResAlloc, _T("Write: Number = %d"), wxTheResourceCache->Number());
+        wxLogTrace(wxTraceResAlloc, T("Write: Number = %d"), wxTheResourceCache->Number());
         wxTheResourceCache->Append(buffer, (wxObject *)database);
     }
     char resName[300];
-    strcpy(resName, !section.IsNull() ? MBSTRINGCAST section.mb_str() : "wxWindows");
+    strcpy(resName, !section.IsNull() ? wxMBSTRINGCAST section.mb_str() : "wxWindows");
     strcat(resName, ".");
     strcat(resName, entry.mb_str());
     XrmPutStringResource(&database, resName, value.mb_str());
@@ -287,7 +287,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
         else
         {
             database = XrmGetFileDatabase(wxConvCurrent->cWX2MB(buffer));
-            wxLogTrace(wxTraceResAlloc, _T("Get: Number = %d"), wxTheResourceCache->Number());
+            wxLogTrace(wxTraceResAlloc, T("Get: Number = %d"), wxTheResourceCache->Number());
             wxTheResourceCache->Append(buffer, (wxObject *)database);
         }
     } else
@@ -352,7 +352,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
     {
         // Handle True, False here
         // True, Yes, Enables, Set or  Activated
-        if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
+        if (*s == 'T(' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
             *value = TRUE;
         // False, No, Disabled, Reset, Cleared, Deactivated
         else if (*s == 'F' || *s == 'N' || *s == 'D' || *s == 'R' || *s == 'C')

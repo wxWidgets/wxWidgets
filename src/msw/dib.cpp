@@ -69,7 +69,7 @@
 /* Header signatutes for various resources */
 #define BFT_ICON	 0x4349	 /* 'IC' */
 #define BFT_BITMAP 0x4d42	 /* 'BM' */
-#define BFT_CURSOR 0x5450	 /* 'PT' */
+#define BFT_CURSOR 0x5450	 /* 'PT(' */
 
 /* macro to determine if resource is a DIB */
 #define ISDIB(bft) ((bft) == BFT_BITMAP)
@@ -436,8 +436,8 @@ BOOL wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 
     fh = OpenFile (wxFNCONV(lpFileName), &of, OF_READ);
     if (fh == -1) {
-        wsprintf(str,_T("Can't open file '%s'"), lpFileName);
-	MessageBox(NULL, str, _T("Error"), MB_ICONSTOP | MB_OK);
+        wsprintf(str,T("Can't open file '%s'"), lpFileName);
+	MessageBox(NULL, str, T("Error"), MB_ICONSTOP | MB_OK);
 	return (0);
     }
 

@@ -32,7 +32,7 @@
 // gettext() style macro (notice that xgettext should be invoked with "-k_"
 // option to extract the strings inside _() from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-    #define   _(str)  wxGetTranslation(_T(str))
+    #define   _(str)  wxGetTranslation(T(str))
 #endif
 
 // ----------------------------------------------------------------------------

@@ -54,7 +54,7 @@ wxFFile::wxFFile(const wxChar *filename, const char *mode)
 
 bool wxFFile::Open(const wxChar *filename, const char *mode)
 {
-    wxASSERT_MSG( !m_fp, _T("should close or detach the old file first") );
+    wxASSERT_MSG( !m_fp, T("should close or detach the old file first") );
 
 #if wxUSE_UNICODE
     char *tmp_fname;
@@ -107,8 +107,8 @@ bool wxFFile::Close()
 
 bool wxFFile::ReadAll(wxString *str)
 {
-    wxCHECK_MSG( str, FALSE, _T("invalid parameter") );
-    wxCHECK_MSG( IsOpened(), FALSE, _T("can't read from closed file") );
+    wxCHECK_MSG( str, FALSE, T("invalid parameter") );
+    wxCHECK_MSG( IsOpened(), FALSE, T("can't read from closed file") );
 
     clearerr(m_fp);
 
@@ -137,8 +137,8 @@ bool wxFFile::ReadAll(wxString *str)
 
 size_t wxFFile::Read(void *pBuf, size_t nCount)
 {
-    wxCHECK_MSG( pBuf, FALSE, _T("invalid parameter") );
-    wxCHECK_MSG( IsOpened(), FALSE, _T("can't read from closed file") );
+    wxCHECK_MSG( pBuf, FALSE, T("invalid parameter") );
+    wxCHECK_MSG( IsOpened(), FALSE, T("can't read from closed file") );
 
     size_t nRead = fread(pBuf, 1, nCount, m_fp);
     if ( (nRead < nCount) && Error() )
@@ -151,8 +151,8 @@ size_t wxFFile::Read(void *pBuf, size_t nCount)
 
 size_t wxFFile::Write(const void *pBuf, size_t nCount)
 {
-    wxCHECK_MSG( pBuf, FALSE, _T("invalid parameter") );
-    wxCHECK_MSG( IsOpened(), FALSE, _T("can't write to closed file") );
+    wxCHECK_MSG( pBuf, FALSE, T("invalid parameter") );
+    wxCHECK_MSG( IsOpened(), FALSE, T("can't write to closed file") );
 
     size_t nWritten = fwrite(pBuf, 1, nCount, m_fp);
     if ( nWritten < nCount )
@@ -186,13 +186,13 @@ bool wxFFile::Flush()
 
 bool wxFFile::Seek(long ofs, wxSeekMode mode)
 {
-    wxCHECK_MSG( IsOpened(), FALSE, _T("can't seek on closed file") );
+    wxCHECK_MSG( IsOpened(), FALSE, T("can't seek on closed file") );
 
     int origin;
     switch ( mode )
     {
         default:
-            wxFAIL_MSG(_T("unknown seek mode"));
+            wxFAIL_MSG(T("unknown seek mode"));
             // still fall through
 
         case wxFromStart:

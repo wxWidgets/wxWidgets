@@ -100,7 +100,7 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_LIST,
                 const wxValidator &validator = wxDefaultValidator,
-                const wxString &name = _T("filelist") );
+                const wxString &name = T("filelist") );
     void ChangeToListMode();
     void ChangeToReportMode();
     void ChangeToIconMode();

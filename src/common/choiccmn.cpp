@@ -55,7 +55,7 @@ wxString wxChoiceBase::GetStringSelection() const
 {
     int sel = GetSelection();
     wxString str;
-    wxCHECK_MSG( sel != wxNOT_FOUND, str, _T("no selection, hence no string") );
+    wxCHECK_MSG( sel != wxNOT_FOUND, str, T("no selection, hence no string") );
 
     str = GetString(sel);
     return str;
@@ -65,7 +65,7 @@ bool wxChoiceBase::SetStringSelection(const wxString& sel)
 {
     int selIndex = FindString(sel);
     wxCHECK_MSG( selIndex != wxNOT_FOUND, FALSE,
-                 _T("can't set selection to string not in the control") );
+                 T("can't set selection to string not in the control") );
 
     SetSelection(selIndex);
 
@@ -79,7 +79,7 @@ bool wxChoiceBase::SetStringSelection(const wxString& sel)
 void wxChoiceBase::SetClientObject(int n, wxClientData *data)
 {
     wxASSERT_MSG( m_clientDataItemsType != ClientData_Void,
-                  _T("can't have both object and void client data") );
+                  T("can't have both object and void client data") );
 
     wxClientData *clientDataOld = DoGetClientObject(n);
     if ( clientDataOld )
@@ -92,7 +92,7 @@ void wxChoiceBase::SetClientObject(int n, wxClientData *data)
 wxClientData *wxChoiceBase::GetClientObject(int n) const
 {
     wxASSERT_MSG( m_clientDataItemsType == ClientData_Object,
-                  _T("this window doesn't have object client data") );
+                  T("this window doesn't have object client data") );
 
     return DoGetClientObject(n);
 }
@@ -100,7 +100,7 @@ wxClientData *wxChoiceBase::GetClientObject(int n) const
 void wxChoiceBase::SetClientData(int n, void *data)
 {
     wxASSERT_MSG( m_clientDataItemsType != ClientData_Object,
-                  _T("can't have both object and void client data") );
+                  T("can't have both object and void client data") );
 
     DoSetClientData(n, data);
     m_clientDataItemsType = ClientData_Void;
@@ -109,7 +109,7 @@ void wxChoiceBase::SetClientData(int n, void *data)
 void *wxChoiceBase::GetClientData(int n) const
 {
     wxASSERT_MSG( m_clientDataItemsType == ClientData_Void,
-                  _T("this window doesn't have void client data") );
+                  T("this window doesn't have void client data") );
 
     return DoGetClientData(n);
 }

@@ -229,7 +229,7 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     if (!CanRead(stream))
     {
         if (verbose)
-            wxLogError(_T("wxPCXHandler: this is not a PCX file"));
+            wxLogError(T("wxPCXHandler: this is not a PCX file"));
 
         return FALSE;
     }
@@ -242,10 +242,10 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
         {
             switch (error)
             {
-                case E_FORMATO: wxLogError(_T("wxPCXHandler: image format unsupported")); break;
-                case E_MEMORIA: wxLogError(_T("wxPCXHandler: couldn't allocate memory")); break;
-                case E_VERSION: wxLogError(_T("wxPCXHandler: version number too low")); break;
-                default:        wxLogError(_T("wxPCXHandler: unknown error !!!"));
+                case E_FORMATO: wxLogError(T("wxPCXHandler: image format unsupported")); break;
+                case E_MEMORIA: wxLogError(T("wxPCXHandler: couldn't allocate memory")); break;
+                case E_VERSION: wxLogError(T("wxPCXHandler: version number too low")); break;
+                default:        wxLogError(T("wxPCXHandler: unknown error !!!"));
             }
         }
         image->Destroy();
@@ -258,7 +258,7 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 bool wxPCXHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool verbose )
 {
     if (verbose)
-        wxLogError(_T("wxPCXHandler::SaveFile still not implemented"));
+        wxLogError(T("wxPCXHandler::SaveFile still not implemented"));
 
     return FALSE;
 }

@@ -473,7 +473,7 @@ wxSize wxBoxSizer::CalcMin()
 wxStaticBoxSizer::wxStaticBoxSizer( wxStaticBox *box, int orient )
   : wxBoxSizer( orient )
 {
-    wxASSERT_MSG( box, _T("wxStaticBoxSizer needs a static box") );
+    wxASSERT_MSG( box, T("wxStaticBoxSizer needs a static box") );
 
     m_staticBox = box;
 }

@@ -41,9 +41,9 @@ wxMenuBar::wxMenuBar( long style )
     m_invokingWindow = (wxWindow*) NULL;
 
     if (!PreCreation( (wxWindow*) NULL, wxDefaultPosition, wxDefaultSize ) ||
-        !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, _T("menubar") ))
+        !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, T("menubar") ))
     {
-        wxFAIL_MSG( _T("wxMenuBar creation failed") );
+        wxFAIL_MSG( T("wxMenuBar creation failed") );
         return;
     }
 
@@ -80,9 +80,9 @@ wxMenuBar::wxMenuBar()
     m_invokingWindow = (wxWindow*) NULL;
 
     if (!PreCreation( (wxWindow*) NULL, wxDefaultPosition, wxDefaultSize ) ||
-        !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("menubar") ))
+        !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, T("menubar") ))
     {
-        wxFAIL_MSG( _T("wxMenuBar creation failed") );
+        wxFAIL_MSG( T("wxMenuBar creation failed") );
         return;
     }
     
@@ -202,22 +202,22 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
     /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
     wxString str;
-    for ( pc = title; *pc != _T('\0'); pc++ )
+    for ( pc = title; *pc != T('\0'); pc++ )
     {
-        if (*pc == _T('&'))
+        if (*pc == T('&'))
         {
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
-            str << _T('_');
+            str << T('_');
         }
-        else if (*pc == _T('/'))
+        else if (*pc == T('/'))
         {
-            str << _T('\\');
+            str << T('\\');
 #endif
         }
         else
         {
 #if __WXGTK12__
-            if ( *pc == _T('_') )
+            if ( *pc == T('_') )
             {
                 // underscores must be doubled to prevent them from being
                 // interpreted as accelerator character prefix by GTK
@@ -237,7 +237,7 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
     /* local buffer in multibyte form */
     wxString buf;
-    buf << _T('/') << str.c_str();
+    buf << T('/') << str.c_str();
 
     char *cbuf = new char[buf.Length()+1];
     strcpy(cbuf, buf.mbc_str());
@@ -251,13 +251,13 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     /* in order to get the pointer to the item we need the item text _without_ underscores */
-    wxString tmp = _T("<main>/");
-    for ( pc = str; *pc != _T('\0'); pc++ )
+    wxString tmp = T("<main>/");
+    for ( pc = str; *pc != T('\0'); pc++ )
     {
        // contrary to the common sense, we must throw out _all_ underscores,
        // (i.e. "Hello__World" => "HelloWorld" and not "Hello_World" as we
        // might naively think). IMHO it's a bug in GTK+ (VZ) 
-       while (*pc == _T('_'))
+       while (*pc == T('_'))
            pc++;
        tmp << *pc;
     }
@@ -364,7 +364,7 @@ void wxMenuBar::Check( int id, bool check )
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_RET( item, _T("wxMenuBar::Check: no such item") );
+    wxCHECK_RET( item, T("wxMenuBar::Check: no such item") );
 
     item->Check(check);
 }
@@ -373,7 +373,7 @@ bool wxMenuBar::IsChecked( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_MSG( item, FALSE, _T("wxMenuBar::IsChecked: no such item") );
+    wxCHECK_MSG( item, FALSE, T("wxMenuBar::IsChecked: no such item") );
 
     return item->IsChecked();
 }
@@ -382,7 +382,7 @@ void wxMenuBar::Enable( int id, bool enable )
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_RET( item, _T("wxMenuBar::Enable: no such item") );
+    wxCHECK_RET( item, T("wxMenuBar::Enable: no such item") );
 
     item->Enable(enable);
 }
@@ -391,7 +391,7 @@ bool wxMenuBar::IsEnabled( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_MSG( item, FALSE, _T("wxMenuBar::IsEnabled: no such item") );
+    wxCHECK_MSG( item, FALSE, T("wxMenuBar::IsEnabled: no such item") );
 
     return item->IsEnabled();
 }
@@ -400,7 +400,7 @@ wxString wxMenuBar::GetLabel( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_MSG( item, _T(""), _T("wxMenuBar::GetLabel: no such item") );
+    wxCHECK_MSG( item, T(""), T("wxMenuBar::GetLabel: no such item") );
 
     return item->GetText();
 }
@@ -409,7 +409,7 @@ void wxMenuBar::SetLabel( int id, const wxString &label )
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_RET( item, _T("wxMenuBar::SetLabel: no such item") );
+    wxCHECK_RET( item, T("wxMenuBar::SetLabel: no such item") );
 
     item->SetText( label );
 }
@@ -418,7 +418,7 @@ void wxMenuBar::EnableTop( int pos, bool flag )
 {
     wxNode *node = m_menus.Nth( pos );
 
-    wxCHECK_RET( node, _T("menu not found") );
+    wxCHECK_RET( node, T("menu not found") );
 
     wxMenu* menu = (wxMenu*)node->Data();
 
@@ -430,7 +430,7 @@ wxString wxMenuBar::GetLabelTop( int pos ) const
 {
     wxNode *node = m_menus.Nth( pos );
 
-    wxCHECK_MSG( node, _T("invalid"), _T("menu not found") );
+    wxCHECK_MSG( node, T("invalid"), T("menu not found") );
 
     wxMenu* menu = (wxMenu*)node->Data();
 
@@ -441,7 +441,7 @@ void wxMenuBar::SetLabelTop( int pos, const wxString& label )
 {
     wxNode *node = m_menus.Nth( pos );
 
-    wxCHECK_RET( node, _T("menu not found") );
+    wxCHECK_RET( node, T("menu not found") );
 
     wxMenu* menu = (wxMenu*)node->Data();
 
@@ -452,7 +452,7 @@ void wxMenuBar::SetHelpString( int id, const wxString& helpString )
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_RET( item, _T("wxMenuBar::SetHelpString: no such item") );
+    wxCHECK_RET( item, T("wxMenuBar::SetHelpString: no such item") );
 
     item->SetHelp( helpString );
 }
@@ -461,7 +461,7 @@ wxString wxMenuBar::GetHelpString( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_MSG( item, _T(""), _T("wxMenuBar::GetHelpString: no such item") );
+    wxCHECK_MSG( item, T(""), T("wxMenuBar::GetHelpString: no such item") );
 
     return item->GetHelp();
 }
@@ -483,7 +483,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
         return;
 
     wxMenuItem* item = menu->FindItem( id );
-    wxCHECK_RET( item, _T("error in menu item callback") );
+    wxCHECK_RET( item, T("error in menu item callback") );
 
     if (item->IsCheckable())
     {
@@ -588,22 +588,22 @@ wxMenuItem::wxMenuItem()
 void wxMenuItem::SetName( const wxString& str )
 {
     /* '\t' is the deliminator indicating a hot key */
-    m_text = _T("");
+    m_text = T("");
     const wxChar *pc = str;
-    for (; (*pc != _T('\0')) && (*pc != _T('\t')); pc++ )
+    for (; (*pc != T('\0')) && (*pc != T('\t')); pc++ )
     {
-        if (*pc == _T('&'))
+        if (*pc == T('&'))
         {
 #if (GTK_MINOR_VERSION > 0)
-            m_text << _T('_');
+            m_text << T('_');
         }
-        else if ( *pc == _T('_') )    // escape underscores
+        else if ( *pc == T('_') )    // escape underscores
         {
-            m_text << _T("__");
+            m_text << T("__");
         }
-        else if (*pc == _T('/'))      /* we have to filter out slashes ... */
+        else if (*pc == T('/'))      /* we have to filter out slashes ... */
         {
-            m_text << _T('\\');  /* ... and replace them with back slashes */
+            m_text << T('\\');  /* ... and replace them with back slashes */
 #endif
         }
         else
@@ -611,9 +611,9 @@ void wxMenuItem::SetName( const wxString& str )
     }
 
     /* only GTK 1.2 knows about hot keys */
-    m_hotKey = _T("");
+    m_hotKey = T("");
 #if (GTK_MINOR_VERSION > 0)
-    if(*pc == _T('\t'))
+    if(*pc == T('\t'))
     {
        pc++;
        m_hotKey = pc;
@@ -629,9 +629,9 @@ void wxMenuItem::SetName( const wxString& str )
 
 void wxMenuItem::Check( bool check )
 {
-    wxCHECK_RET( m_menuItem, _T("invalid menu item") );
+    wxCHECK_RET( m_menuItem, T("invalid menu item") );
 
-    wxCHECK_RET( IsCheckable(), _T("Can't check uncheckable item!") )
+    wxCHECK_RET( IsCheckable(), T("Can't check uncheckable item!") )
 
     if (check == m_isChecked) return;
 
@@ -641,7 +641,7 @@ void wxMenuItem::Check( bool check )
 
 void wxMenuItem::Enable( bool enable )
 {
-    wxCHECK_RET( m_menuItem, _T("invalid menu item") );
+    wxCHECK_RET( m_menuItem, T("invalid menu item") );
 
     gtk_widget_set_sensitive( m_menuItem, enable );
     m_isEnabled = enable;
@@ -649,7 +649,7 @@ void wxMenuItem::Enable( bool enable )
 
 bool wxMenuItem::IsChecked() const
 {
-    wxCHECK_MSG( m_menuItem, FALSE, _T("invalid menu item") );
+    wxCHECK_MSG( m_menuItem, FALSE, T("invalid menu item") );
 
     wxCHECK( IsCheckable(), FALSE ); // can't get state of uncheckable item!
 
@@ -688,8 +688,8 @@ wxMenu::Init( const wxString& title,
     m_eventHandler = this;
     m_clientData = (void*) NULL;
 
-    if (m_title.IsNull()) m_title = _T("");
-    if (m_title != _T(""))
+    if (m_title.IsNull()) m_title = T("");
+    if (m_title != T(""))
     {
         Append(-2, m_title);
         AppendSeparator();
@@ -767,27 +767,27 @@ static char* GetHotKey( const wxString &hotkey, char *hotbuf )
 
     switch (hotkey[0])
     {
-        case _T('a'):   /* Alt */
-        case _T('A'):
-        case _T('m'):   /* Meta */
-        case _T('M'):
+        case T('a'):   /* Alt */
+        case T('A'):
+        case T('m'):   /* Meta */
+        case T('M'):
         {
             strcpy( hotbuf, "<alt>" );
             wxString last = hotkey.Right(1);
             strcat( hotbuf, last.mb_str() );
             return hotbuf;
         }
-        case _T('c'):    /* Ctrl */
-        case _T('C'):
-        case _T('s'):    /* Strg, yeah man, I'm German */
-        case _T('S'):
+        case T('c'):    /* Ctrl */
+        case T('C'):
+        case T('s'):    /* Strg, yeah man, I'm German */
+        case T('S'):
         {
             strcpy( hotbuf, "<control>" );
             wxString last = hotkey.Right(1);
             strcat( hotbuf, last.mb_str() );
             return hotbuf;
         }
-        case _T('F'):   /* function keys */
+        case T('F'):   /* function keys */
         {
             strcpy( hotbuf, hotkey.mb_str() );
             return hotbuf;
@@ -832,10 +832,10 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
     /* in order to get the pointer to the item we need the item text _without_ underscores */
-    wxString s = _T("<main>/");
-    for ( const wxChar *pc = text; *pc != _T('\0'); pc++ )
+    wxString s = T("<main>/");
+    for ( const wxChar *pc = text; *pc != T('\0'); pc++ )
     {
-        while (*pc == _T('_')) pc++; /* skip it */
+        while (*pc == T('_')) pc++; /* skip it */
         s << *pc;
     }
 
@@ -893,10 +893,10 @@ void wxMenu::Append( int id, const wxString &item, wxMenu *subMenu, const wxStri
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
     /* in order to get the pointer to the item we need the item text _without_ underscores */
-    wxString s = _T("<main>/");
-    for ( const wxChar *pc = text; *pc != _T('\0'); pc++ )
+    wxString s = T("<main>/");
+    for ( const wxChar *pc = text; *pc != T('\0'); pc++ )
     {
-        if (*pc == _T('_')) pc++; /* skip it */
+        if (*pc == T('_')) pc++; /* skip it */
         s << *pc;
     }
 
@@ -966,14 +966,14 @@ void wxMenu::Append( wxMenuItem *item )
 
 int wxMenu::FindItem( const wxString itemString ) const
 {
-    wxString s = _T("");
-    for ( const wxChar *pc = itemString; *pc != _T('\0'); pc++ )
+    wxString s = T("");
+    for ( const wxChar *pc = itemString; *pc != T('\0'); pc++ )
     {
-        if (*pc == _T('&'))
+        if (*pc == T('&'))
         {
             pc++; /* skip it */
 #if (GTK_MINOR_VERSION > 0)
-            s << _T('_');
+            s << T('_');
 #endif
         }
         s << *pc;
@@ -997,7 +997,7 @@ void wxMenu::Enable( int id, bool enable )
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_RET( item, _T("wxMenu::Enable: no such item") );
+    wxCHECK_RET( item, T("wxMenu::Enable: no such item") );
 
     item->Enable(enable);
 }
@@ -1006,7 +1006,7 @@ bool wxMenu::IsEnabled( int id ) const
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_MSG( item, FALSE, _T("wxMenu::IsEnabled: no such item") );
+    wxCHECK_MSG( item, FALSE, T("wxMenu::IsEnabled: no such item") );
 
     return item->IsEnabled();
 }
@@ -1015,7 +1015,7 @@ void wxMenu::Check( int id, bool enable )
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_RET( item, _T("wxMenu::Check: no such item") );
+    wxCHECK_RET( item, T("wxMenu::Check: no such item") );
 
     item->Check(enable);
 }
@@ -1024,7 +1024,7 @@ bool wxMenu::IsChecked( int id ) const
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_MSG( item, FALSE, _T("wxMenu::IsChecked: no such item") );
+    wxCHECK_MSG( item, FALSE, T("wxMenu::IsChecked: no such item") );
 
     return item->IsChecked();
 }
@@ -1033,7 +1033,7 @@ void wxMenu::SetLabel( int id, const wxString &label )
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_RET( item, _T("wxMenu::SetLabel: no such item") );
+    wxCHECK_RET( item, T("wxMenu::SetLabel: no such item") );
 
     item->SetText(label);
 }
@@ -1042,7 +1042,7 @@ wxString wxMenu::GetLabel( int id ) const
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_MSG( item, _T(""), _T("wxMenu::GetLabel: no such item") );
+    wxCHECK_MSG( item, T(""), T("wxMenu::GetLabel: no such item") );
 
     return item->GetText();
 }
@@ -1051,7 +1051,7 @@ void wxMenu::SetHelpString( int id, const wxString& helpString )
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_RET( item, _T("wxMenu::SetHelpString: no such item") );
+    wxCHECK_RET( item, T("wxMenu::SetHelpString: no such item") );
 
     item->SetHelp( helpString );
 }
@@ -1060,7 +1060,7 @@ wxString wxMenu::GetHelpString( int id ) const
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_MSG( item, _T(""), _T("wxMenu::GetHelpString: no such item") );
+    wxCHECK_MSG( item, T(""), T("wxMenu::GetHelpString: no such item") );
 
     return item->GetHelp();
 }

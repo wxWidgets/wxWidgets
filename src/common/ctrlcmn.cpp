@@ -48,7 +48,7 @@ bool wxControlBase::CreateControl(wxWindowBase *parent,
     // even if it's possible to create controls without parents in some port,
     // it should surely be discouraged because it doesn't work at all under
     // Windows
-    wxCHECK_MSG( parent, FALSE, _T("all controls must have parents") );
+    wxCHECK_MSG( parent, FALSE, T("all controls must have parents") );
 
     if ( !CreateBase(parent, id, pos, size, style, validator, name) )
         return FALSE;

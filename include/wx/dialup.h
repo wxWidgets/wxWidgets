@@ -24,7 +24,7 @@
 
 extern const wxChar *wxEmptyString;
 
-#define WXDIALUP_MANAGER_DEFAULT_BEACONHOST  _T("www.yahoo.com")
+#define WXDIALUP_MANAGER_DEFAULT_BEACONHOST  T("www.yahoo.com")
 
 // ----------------------------------------------------------------------------
 // A class which groups functions dealing with connecting to the network from a
@@ -78,7 +78,7 @@ public:
                       bool async = TRUE) = 0;
 
     // returns TRUE if (async) dialing is in progress
-    virtual bool IsDialling() const = 0;
+    virtual bool IsDialing() const = 0;
 
     // cancel dialing the number initiated with Dial(async = TRUE)
     // NB: this won't result in DISCONNECTED event being sent
@@ -129,8 +129,8 @@ public:
     // Sets the commands to start up the network and to hang up again. Used by
     // the Unix implementations only.
     virtual void
-    SetConnectCommand(const wxString& commandDial = _T("/usr/bin/pon"),
-                      const wxString& commandHangup = _T("/usr/bin/poff")) = 0;
+    SetConnectCommand(const wxString& commandDial = T("/usr/bin/pon"),
+                      const wxString& commandHangup = T("/usr/bin/poff")) = 0;
 };
 
 // ----------------------------------------------------------------------------

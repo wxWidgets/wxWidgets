@@ -147,7 +147,7 @@ wxTime::wxTime(const wxDate& date, hourTy h, minuteTy m, secondTy s, bool dst)
 /*
                 if (IsDST()) setError(NIHCL_BADTIME,DEFAULT,
                 date.dayOfMonth(),date.nameOfMonth(),date.year(),
-                h,m,s,(dst?_("DST"):""));
+                h,m,s,(dst?_("DST("):""));
 */
   }
   sec += TIME_ZONE;                               // adjust to GMT
@@ -346,10 +346,10 @@ wxChar *wxTime::FormatTime() const {
 
   switch (Precision) {
   case wxStdMinSec:
-    wxSprintf(timeBuf,_T("%2d:%02d:%02d"),hh,GetMinute(),GetSecond());
+    wxSprintf(timeBuf,T("%2d:%02d:%02d"),hh,GetMinute(),GetSecond());
     break;
   case wxStdMin:
-    wxSprintf(timeBuf,_T("%2d:%02d"),hh,GetMinute());
+    wxSprintf(timeBuf,T("%2d:%02d"),hh,GetMinute());
     break;
   }
 

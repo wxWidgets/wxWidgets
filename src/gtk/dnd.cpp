@@ -367,9 +367,9 @@ bool wxDropTarget::RequestData( wxDataFormat format )
     if (!m_dragWidget) return FALSE;
 
 /*
-    wxPrintf( _T("format: %s.\n"), format.GetId().c_str() );
-    if (format.GetType() == wxDF_PRIVATE) wxPrintf( _T("private data.\n") );
-    if (format.GetType() == wxDF_TEXT) wxPrintf( _T("text data.\n") );
+    wxPrintf( T("format: %s.\n"), format.GetId().c_str() );
+    if (format.GetType() == wxDF_PRIVATE) wxPrintf( T("private data.\n") );
+    if (format.GetType() == wxDF_TEXT) wxPrintf( T("text data.\n") );
 */
 
 #if wxUSE_THREADS
@@ -437,7 +437,7 @@ bool wxDropTarget::GetData( wxDataObject *data_object )
 
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
 {
-    wxCHECK_RET( widget != NULL, _T("unregister widget is NULL") );
+    wxCHECK_RET( widget != NULL, T("unregister widget is NULL") );
 
     gtk_drag_dest_unset( widget );
 
@@ -456,7 +456,7 @@ void wxDropTarget::UnregisterWidget( GtkWidget *widget )
 
 void wxDropTarget::RegisterWidget( GtkWidget *widget )
 {
-    wxCHECK_RET( widget != NULL, _T("register widget is NULL") );
+    wxCHECK_RET( widget != NULL, T("register widget is NULL") );
 
     /* gtk_drag_dest_set() determines what default behaviour we'd like
        GTK to supply. we don't want to specify out targets (=formats)
@@ -817,7 +817,7 @@ wxDropSource::~wxDropSource(void)
 
 wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
-    wxASSERT_MSG( m_data, _T("wxDragSource: no data") );
+    wxASSERT_MSG( m_data, T("wxDragSource: no data") );
 
     if (!m_data) return (wxDragResult) wxDragNone;
 

@@ -70,7 +70,7 @@ wxString wxFileSelector(const wxChar *title,
 
     wxString filter2;
     if ( defaultExtension && !filter )
-        filter2 = wxString(_T("*.")) + defaultExtension;
+        filter2 = wxString(T("*.")) + defaultExtension;
     else if ( filter )
         filter2 = filter;
 
@@ -92,7 +92,7 @@ wxString wxFileSelector(const wxChar *title,
 
         for( unsigned int i = 0; i < filter2.Len(); i++ )
         {
-            if( filter2.GetChar(i) == _T('|') )
+            if( filter2.GetChar(i) == T('|') )
             {
                 // save the start index of the new filter
                 unsigned int is = i++;
@@ -101,7 +101,7 @@ wxString wxFileSelector(const wxChar *title,
                 // find the end of the filter
                 for( ; i < filter2.Len(); i++ )
                 {
-                    if(filter2[i] == _T('|'))
+                    if(filter2[i] == T('|'))
                         break;
                 }
 
@@ -161,8 +161,8 @@ wxString wxFileSelectorEx(const wxChar *title,
                        int       y)
 
 {
-    wxFileDialog fileDialog(parent, title ? title : _T(""), defaultDir ? defaultDir : _T(""),
-        defaultFileName ? defaultFileName : _T(""), filter ? filter : _T(""), flags, wxPoint(x, y));
+    wxFileDialog fileDialog(parent, title ? title : T(""), defaultDir ? defaultDir : T(""),
+        defaultFileName ? defaultFileName : T(""), filter ? filter : T(""), flags, wxPoint(x, y));
 
     if ( fileDialog.ShowModal() == wxID_OK )
     {
@@ -181,7 +181,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     m_message = message;
     m_dialogStyle = style;
     m_parent = parent;
-    m_path = _T("");
+    m_path = T("");
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;
@@ -196,8 +196,8 @@ int wxFileDialog::ShowModal(void)
     static wxChar fileNameBuffer [ MAXPATH ];           // the file-name
     wxChar        titleBuffer    [ MAXFILE+1+MAXEXT ];  // the file-name, without path
 
-    *fileNameBuffer = _T('\0');
-    *titleBuffer    = _T('\0');
+    *fileNameBuffer = T('\0');
+    *titleBuffer    = T('\0');
 
     long msw_flags = 0;
     if ( (m_dialogStyle & wxHIDE_READONLY) || (m_dialogStyle & wxSAVE) )
@@ -228,8 +228,8 @@ int wxFileDialog::ShowModal(void)
     size_t i = 0;
     size_t len = m_dir.Length();
     for (i = 0; i < len; i++)
-        if (m_dir[i] == _T('/'))
-            m_dir[i] = _T('\\');
+        if (m_dir[i] == T('/'))
+            m_dir[i] = T('\\');
 
     of.lpstrInitialDir   = m_dir.c_str();
 
@@ -251,12 +251,12 @@ int wxFileDialog::ShowModal(void)
 
     wxString theFilter;
     if ( wxStrlen(m_wildCard) == 0 )
-        theFilter = wxString(_T("*.*"));
+        theFilter = wxString(T("*.*"));
     else
         theFilter = m_wildCard ;
     wxString filterBuffer;
 
-    if ( !wxStrchr( theFilter, _T('|') ) ) {    // only one filter ==> default text
+    if ( !wxStrchr( theFilter, T('|') ) ) {    // only one filter ==> default text
         filterBuffer.Printf(_("Files (%s)|%s"),
                             theFilter.c_str(), theFilter.c_str());
     }
@@ -265,11 +265,11 @@ int wxFileDialog::ShowModal(void)
 
     }
 
-    filterBuffer += _T("|");
+    filterBuffer += T("|");
     // Replace | with \0
     for (i = 0; i < filterBuffer.Len(); i++ ) {
-        if ( filterBuffer.GetChar(i) == _T('|') ) {
-            filterBuffer[i] = _T('\0');
+        if ( filterBuffer.GetChar(i) == T('|') ) {
+            filterBuffer[i] = T('\0');
         }
     }
 
@@ -279,7 +279,7 @@ int wxFileDialog::ShowModal(void)
     //=== Setting defaultFileName >>=========================================
 
     wxStrncpy( fileNameBuffer, (const wxChar *)m_fileName, MAXPATH-1 );
-    fileNameBuffer[ MAXPATH-1 ] = _T('\0');
+    fileNameBuffer[ MAXPATH-1 ] = T('\0');
 
     of.lpstrFile = fileNameBuffer;  // holds returned filename
     of.nMaxFile  = MAXPATH;
@@ -297,7 +297,7 @@ int wxFileDialog::ShowModal(void)
 
         m_filterIndex = (int)of.nFilterIndex;
 
-        if ( of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != _T('.') )
+        if ( of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != T('.') )
         {                                    // user has typed an filename
             // without an extension:
 
@@ -308,19 +308,19 @@ int wxFileDialog::ShowModal(void)
                 extension = extension + wxStrlen( extension ) +1;
             }
 
-            extension = wxStrrchr( extension, _T('.') );
+            extension = wxStrrchr( extension, T('.') );
             if (  extension                                 // != "blabla"
-                    && !wxStrrchr( extension, _T('*') )       // != "blabla.*"
-                    && !wxStrrchr( extension, _T('?') )       // != "blabla.?"
+                    && !wxStrrchr( extension, T('*') )       // != "blabla.*"
+                    && !wxStrrchr( extension, T('?') )       // != "blabla.?"
                     && extension[1]                           // != "blabla."
-                    && extension[1] != _T(' ') )              // != "blabla. "
+                    && extension[1] != T(' ') )              // != "blabla. "
             {
                 // now concat extension to the fileName:
                 m_fileName = wxString(fileNameBuffer) + extension;
 
                 int len = wxStrlen( fileNameBuffer );
                 wxStrncpy( fileNameBuffer + len, extension, MAXPATH - len );
-                fileNameBuffer[ MAXPATH -1 ] = _T('\0');
+                fileNameBuffer[ MAXPATH -1 ] = T('\0');
             }
         }
 
@@ -352,7 +352,7 @@ int wxFileDialog::ShowModal(void)
         if ( dwErr != 0 )
         {
             // this msg is only for developers
-            wxLogError(_T("Common dialog failed with error code %0lx."),
+            wxLogError(T("Common dialog failed with error code %0lx."),
                        dwErr);
         }
         //else: it was just cancelled
@@ -378,11 +378,11 @@ wxString wxDefaultFileSelector(bool load,
   prompt.Printf(str, what);
 
   const wxChar *ext = extension;
-  if (*ext == _T('.'))
+  if (*ext == T('.'))
       ext++;
 
   wxString wild;
-  wild.Printf(_T("*.%s"), ext);
+  wild.Printf(T("*.%s"), ext);
 
   return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
 }

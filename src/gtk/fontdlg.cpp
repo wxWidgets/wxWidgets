@@ -106,13 +106,13 @@ wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *WXUNUSED(data) )
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE,
-                     wxDefaultValidator, _T("fontdialog") ))
+                     wxDefaultValidator, T("fontdialog") ))
     {
-        wxFAIL_MSG( _T("wxXX creation failed") );
+        wxFAIL_MSG( T("wxXX creation failed") );
         return;
     }
 #ifndef __WXGTK12__
-    wxFAIL_MSG( _T("TODO") );
+    wxFAIL_MSG( T("TODO") );
 #else // GTK+ 1.2
     wxString m_message( _("Choose font") );
     m_widget = gtk_font_selection_dialog_new( m_message.mbc_str() );

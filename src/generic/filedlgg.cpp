@@ -89,8 +89,8 @@ int ListCompare( long data1, long data2, long WXUNUSED(data) )
 {
      wxFileData *fd1 = (wxFileData*)data1 ;
      wxFileData *fd2 = (wxFileData*)data2 ;
-     if (fd1->GetName() == _T("..")) return -1;
-     if (fd2->GetName() == _T("..")) return 1;
+     if (fd1->GetName() == T("..")) return -1;
+     if (fd2->GetName() == T("..")) return 1;
      if (fd1->IsDir() && !fd2->IsDir()) return -1;
      if (fd2->IsDir() && !fd1->IsDir()) return 1;
      return strcmp( fd1->GetName(), fd2->GetName() );
@@ -156,15 +156,15 @@ wxString wxFileData::GetHint() const
         s += _(" bytes ");
     }
     s += IntToString( m_day );
-    s += _T(".");
+    s += T(".");
     s += IntToString( m_month );
-    s += _T(".");
+    s += T(".");
     s += IntToString( m_year );
-    s += _T("  ");
+    s += T("  ");
     s += IntToString( m_hour );
-    s += _T(":");
+    s += T(":");
     s += IntToString( m_minute );
-    s += _T("  ");
+    s += T("  ");
     s += m_permissions;
     return s;
 };
@@ -183,27 +183,27 @@ wxString wxFileData::GetEntry( int num )
             else s = LongToString( m_size );
             break;
         case 2:
-            if (m_day < 10) s = _T("0"); else s = _T("");
+            if (m_day < 10) s = T("0"); else s = T("");
             s += IntToString( m_day );
-            s += _T(".");
-            if (m_month < 10) s += _T("0");
+            s += T(".");
+            if (m_month < 10) s += T("0");
             s += IntToString( m_month );
-            s += _T(".");
-            if (m_year < 10) s += _T("0"); // this should happen real soon...
+            s += T(".");
+            if (m_year < 10) s += T("0"); // this should happen real soon...
             s += IntToString( m_year );
             break;
         case 3:
-            if (m_hour < 10) s = _T("0"); else s = _T("");
+            if (m_hour < 10) s = T("0"); else s = T("");
             s += IntToString( m_hour );
-            s += _T(":");
-            if (m_minute < 10) s += _T("0");
+            s += T(":");
+            if (m_minute < 10) s += T("0");
             s += IntToString( m_minute );
             break;
         case 4:
             s = m_permissions;
             break;
         default:
-            s = _T("No entry");
+            s = T("No entry");
             break;
     }
     return s;
@@ -263,7 +263,7 @@ END_EVENT_TABLE()
 
 wxFileCtrl::wxFileCtrl()
 {
-    m_dirName = _T("/");
+    m_dirName = T("/");
     m_showHidden = FALSE;
 }
 
@@ -342,23 +342,23 @@ void wxFileCtrl::Update()
     item.m_itemId = 0;
     item.m_col = 0;
 
-    if (m_dirName != _T("/"))
+    if (m_dirName != T("/"))
     {
         wxString p( wxPathOnly(m_dirName) );
-        if (p.IsEmpty()) p = _T("/");
-        fd = new wxFileData( _T(".."), p );
+        if (p.IsEmpty()) p = T("/");
+        fd = new wxFileData( T(".."), p );
         Add( fd, item );
         item.m_itemId++;
     }
 
-    wxString res = m_dirName + _T("/*");
+    wxString res = m_dirName + T("/*");
     wxString f( wxFindFirstFile( res.GetData(), wxDIR ) );
     while (!f.IsEmpty())
     {
         res = wxFileNameFromPath( f );
         fd = new wxFileData( res, f );
         wxString s = fd->GetName();
-        if (m_showHidden || (s[0] != _T('.')))
+        if (m_showHidden || (s[0] != T('.')))
         {
             Add( fd, item );
             item.m_itemId++;
@@ -366,14 +366,14 @@ void wxFileCtrl::Update()
         f = wxFindNextFile();
     }
 
-    res = m_dirName + _T("/") + m_wild;
+    res = m_dirName + T("/") + m_wild;
     f = wxFindFirstFile( res.GetData(), wxFILE );
     while (!f.IsEmpty())
     {
         res = wxFileNameFromPath( f );
         fd = new wxFileData( res, f );
         wxString s = fd->GetName();
-        if (m_showHidden || (s[0] != _T('.')))
+        if (m_showHidden || (s[0] != T('.')))
         {
             Add( fd, item );
             item.m_itemId++;
@@ -392,9 +392,9 @@ void wxFileCtrl::SetWild( const wxString &wild )
 
 void wxFileCtrl::MakeDir()
 {
-    wxString new_name( _T("NewName") );
+    wxString new_name( T("NewName") );
     wxString path( m_dirName );
-    path += _T( "/" );
+    path += T("/");
     path += new_name;
     if (wxFileExists(path))
     {
@@ -403,11 +403,11 @@ void wxFileCtrl::MakeDir()
         do {
             new_name = _("NewName");
             wxString num;
-            num.Printf( _T("%d"), i );
+            num.Printf( T("%d"), i );
             new_name += num;
 
             path = m_dirName;
-            path += _T("/");
+            path += T("/");
             path += new_name;
             i++;
         } while (wxFileExists(path));
@@ -438,11 +438,11 @@ void wxFileCtrl::MakeDir()
 
 void wxFileCtrl::GoToParentDir()
 {
-    if (m_dirName != _T("/"))
+    if (m_dirName != T("/"))
     {
         wxString fname( wxFileNameFromPath(m_dirName) );
         m_dirName = wxPathOnly( m_dirName );
-        if (m_dirName.IsEmpty()) m_dirName = _T("/");
+        if (m_dirName.IsEmpty()) m_dirName = T("/");
         Update();
         int id = FindItem( 0, fname );
         if (id != -1)
@@ -489,7 +489,7 @@ void wxFileCtrl::OnListEndLabelEdit( wxListEvent &event )
     if ((event.GetLabel().IsEmpty()) ||
         (event.GetLabel() == _(".")) ||
         (event.GetLabel() == _("..")) ||
-        (event.GetLabel().First( _T("/") ) != wxNOT_FOUND))
+        (event.GetLabel().First( T("/") ) != wxNOT_FOUND))
     {
         wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
         dialog.ShowModal();
@@ -498,7 +498,7 @@ void wxFileCtrl::OnListEndLabelEdit( wxListEvent &event )
     }
 
     wxString new_name( wxPathOnly( fd->GetFullName() ) );
-    new_name += _T("/");
+    new_name += T("/");
     new_name += event.GetLabel();
 
     wxLogNull log;
@@ -573,7 +573,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
         m_dir = getcwd( buf, sizeof(buf) );
     }
     m_path = defaultDir;
-    m_path += _T("/");
+    m_path += T("/");
     m_path += defaultFile;
     m_fileName = defaultFile;
     m_wildCard = wildCard;
@@ -584,7 +584,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     if (m_wildCard.IsEmpty())
         m_wildCard = _("All files (*)|*");
 
-    wxStringTokenizer tokens( m_wildCard, _T("|") );
+    wxStringTokenizer tokens( m_wildCard, T("|") );
     wxString firstWild;
     wxString firstWildText;
     if (tokens.CountTokens() == 1)
@@ -594,7 +594,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     }
     else
     {
-        wxASSERT_MSG( tokens.CountTokens() % 2 == 0, _T("Wrong file type descripition") );
+        wxASSERT_MSG( tokens.CountTokens() % 2 == 0, T("Wrong file type descripition") );
         firstWildText = tokens.GetNextToken();
         firstWild = tokens.GetNextToken();
     }
@@ -717,11 +717,11 @@ void wxFileDialog::OnSelected( wxListEvent &event )
     if (FindFocus() != m_list) return;
     
     wxString filename( event.m_item.m_text );
-    if (filename == _T("..")) return;
+    if (filename == T("..")) return;
     
     wxString dir;
     m_list->GetDir( dir );
-    if (dir != _T("/")) dir += _T("/");
+    if (dir != T("/")) dir += T("/");
     dir += filename;
     if (wxDirExists(dir)) return;
     
@@ -734,9 +734,9 @@ void wxFileDialog::HandleAction( const wxString &fn )
     wxString dir;
     m_list->GetDir( dir );
     if (filename.IsEmpty()) return;
-    if (filename == _T(".")) return;
+    if (filename == T(".")) return;
 
-    if (filename == _T(".."))
+    if (filename == T(".."))
     {
         m_list->GoToParentDir();
         m_list->SetFocus();
@@ -745,7 +745,7 @@ void wxFileDialog::HandleAction( const wxString &fn )
         return;
     }
 
-    if (filename == _T("~"))
+    if (filename == T("~"))
     {
         m_list->GoToHomeDir();
         m_list->SetFocus();
@@ -754,19 +754,19 @@ void wxFileDialog::HandleAction( const wxString &fn )
         return;
     }
 
-    if (filename[0] == _T('~'))
+    if (filename[0] == T('~'))
     {
         filename.Remove( 0, 1 );
         wxString tmp( wxGetUserHome() );
-        tmp += _T('/');
+        tmp += T('/');
         tmp += filename;
         filename = tmp;
     }
 
-    if ((filename.Find(_T('*')) != wxNOT_FOUND) ||
-        (filename.Find(_T('?')) != wxNOT_FOUND))
+    if ((filename.Find(T('*')) != wxNOT_FOUND) ||
+        (filename.Find(T('?')) != wxNOT_FOUND))
     {
-        if (filename.Find(_T('/')) != wxNOT_FOUND)
+        if (filename.Find(T('/')) != wxNOT_FOUND)
         {
             wxMessageBox(_("Illegal file specification."), _("Error"), wxOK | wxICON_ERROR );
             return;
@@ -775,8 +775,8 @@ void wxFileDialog::HandleAction( const wxString &fn )
         return;
     }
 
-    if (dir != _T("/")) dir += _T("/");
-    if (filename[0] != _T('/'))
+    if (dir != T("/")) dir += T("/");
+    if (filename[0] != T('/'))
     {
         dir += filename;
         filename = dir;
@@ -867,7 +867,7 @@ void wxFileDialog::SetPath( const wxString& path )
         wxSplitPath(path, &m_dir, &m_fileName, &ext);
         if (!ext.IsEmpty())
         {
-            m_fileName += _T(".");
+            m_fileName += T(".");
             m_fileName += ext;
         }
     }
@@ -888,7 +888,7 @@ wxFileSelectorEx(const wxChar *message,
                  int x, int y)
 {
     // TODO: implement this somehow
-    return wxFileSelector(message, default_path, default_filename, _T(""),
+    return wxFileSelector(message, default_path, default_filename, T(""),
                           wildcard, flags, parent, x, y);
 }
 
@@ -899,7 +899,7 @@ wxString wxFileSelector( const wxChar *title,
 {
     wxString filter2;
     if ( defaultExtension && !filter )
-        filter2 = wxString(_T("*.")) + wxString(defaultExtension) ;
+        filter2 = wxString(T("*.")) + wxString(defaultExtension) ;
     else if ( filter )
         filter2 = filter;
 
@@ -931,9 +931,9 @@ wxString wxLoadFileSelector( const wxChar *what, const wxChar *extension, const 
     wxString str = _("Load %s file");
     wxSprintf(prompt, str, what);
 
-    if (*ext == _T('.')) ext++;
+    if (*ext == T('.')) ext++;
     wxChar wild[60];
-    wxSprintf(wild, _T("*.%s"), ext);
+    wxSprintf(wild, T("*.%s"), ext);
 
     return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
 }
@@ -947,9 +947,9 @@ wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const w
     wxString str = _("Save %s file");
     wxSprintf(prompt, str, what);
 
-    if (*ext == _T('.')) ext++;
+    if (*ext == T('.')) ext++;
     wxChar wild[60];
-    wxSprintf(wild, _T("*.%s"), ext);
+    wxSprintf(wild, T("*.%s"), ext);
 
     return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
 }

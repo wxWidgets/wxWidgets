@@ -110,7 +110,7 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
             }
         }
 
-        wxASSERT_MSG( selectedButton != -1, _T("click from alien button?") );
+        wxASSERT_MSG( selectedButton != -1, T("click from alien button?") );
 
         if ( selectedButton != m_selectedButton )
         {
@@ -257,7 +257,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     }
 
     // Create a dummy radio control to end the group.
-    (void)CreateWindowEx(0, RADIO_CLASS, _T(""), WS_GROUP | RADIO_FLAGS,
+    (void)CreateWindowEx(0, RADIO_CLASS, T(""), WS_GROUP | RADIO_FLAGS,
                          0, 0, 0, 0, hwndParent,
                          (HMENU)NewControlId(), wxGetInstance(), NULL);
 
@@ -289,14 +289,14 @@ wxRadioBox::~wxRadioBox()
 
 wxString wxRadioBox::GetLabel(int item) const
 {
-    wxCHECK_MSG( item >= 0 && item < m_noItems, _T(""), _T("invalid radiobox index") );
+    wxCHECK_MSG( item >= 0 && item < m_noItems, T(""), T("invalid radiobox index") );
 
     return wxGetWindowText(m_radioButtons[item]);
 }
 
 void wxRadioBox::SetLabel(int item, const wxString& label)
 {
-    wxCHECK_RET( item >= 0 && item < m_noItems, _T("invalid radiobox index") );
+    wxCHECK_RET( item >= 0 && item < m_noItems, T("invalid radiobox index") );
 
     m_radioWidth[item] = m_radioHeight[item] = -1;
     SetWindowText((HWND)m_radioButtons[item], label.c_str());
@@ -308,7 +308,7 @@ void wxRadioBox::SetLabel(int item, wxBitmap *bitmap)
        m_radioWidth[item] = bitmap->GetWidth() + FB_MARGIN;
        m_radioHeight[item] = bitmap->GetHeight() + FB_MARGIN;
      */
-    wxFAIL_MSG(_T("not implemented"));
+    wxFAIL_MSG(T("not implemented"));
 }
 
 int wxRadioBox::FindString(const wxString& s) const
@@ -324,7 +324,7 @@ int wxRadioBox::FindString(const wxString& s) const
 
 void wxRadioBox::SetSelection(int N)
 {
-    wxCHECK_RET( (N >= 0) && (N < m_noItems), _T("invalid radiobox index") );
+    wxCHECK_RET( (N >= 0) && (N < m_noItems), T("invalid radiobox index") );
 
     // Following necessary for Win32s, because Win32s translate BM_SETCHECK
     if (m_selectedButton >= 0 && m_selectedButton < m_noItems)
@@ -591,7 +591,7 @@ bool wxRadioBox::Show(bool show)
 void wxRadioBox::Enable(int item, bool enable)
 {
     wxCHECK_RET( item >= 0 && item < m_noItems,
-                 _T("invalid item in wxRadioBox::Enable()") );
+                 T("invalid item in wxRadioBox::Enable()") );
 
     ::EnableWindow((HWND) m_radioButtons[item], enable);
 }
@@ -612,7 +612,7 @@ bool wxRadioBox::Enable(bool enable)
 void wxRadioBox::Show(int item, bool show)
 {
     wxCHECK_RET( item >= 0 && item < m_noItems,
-                 _T("invalid item in wxRadioBox::Show()") );
+                 T("invalid item in wxRadioBox::Show()") );
 
     ::ShowWindow((HWND)m_radioButtons[item], show ? SW_SHOW : SW_HIDE);
 }
@@ -724,7 +724,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
     {
         wxRadioBox *radiobox = (wxRadioBox *)::GetWindowLong(hwnd, GWL_USERDATA);
 
-        wxCHECK_MSG( radiobox, 0, _T("radio button without radio box?") );
+        wxCHECK_MSG( radiobox, 0, T("radio button without radio box?") );
 
         int sel = radiobox->GetSelection();
 

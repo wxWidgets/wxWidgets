@@ -105,7 +105,7 @@ wxMutex::wxMutex()
 wxMutex::~wxMutex()
 {
     if (m_locked > 0)
-        wxLogDebug(_T("Warning: freeing a locked mutex (%d locks)."), m_locked);
+        wxLogDebug(T("Warning: freeing a locked mutex (%d locks)."), m_locked);
     CloseHandle(p_internal->p_mutex);
 }
 
@@ -129,7 +129,7 @@ wxMutexError wxMutex::Lock()
 
         case WAIT_TIMEOUT:
         default:
-            wxFAIL_MSG(_T("impossible return value in wxMutex::Lock"));
+            wxFAIL_MSG(T("impossible return value in wxMutex::Lock"));
     }
 
     m_locked++;
@@ -375,7 +375,7 @@ bool wxThreadInternal::Create(wxThread *thread)
         win_priority = THREAD_PRIORITY_HIGHEST;
     else
     {
-        wxFAIL_MSG(_T("invalid value of thread priority parameter"));
+        wxFAIL_MSG(T("invalid value of thread priority parameter"));
         win_priority = THREAD_PRIORITY_NORMAL;
     }
 
@@ -575,7 +575,7 @@ wxThread::ExitCode wxThread::Delete()
                     break;
 
                 default:
-                    wxFAIL_MSG(_T("unexpected result of MsgWaitForMultipleObject"));
+                    wxFAIL_MSG(T("unexpected result of MsgWaitForMultipleObject"));
             }
         } while ( result != WAIT_OBJECT_0 );
 
@@ -594,7 +594,7 @@ wxThread::ExitCode wxThread::Delete()
         }
 
         wxASSERT_MSG( (LPVOID)rc != (LPVOID)STILL_ACTIVE,
-                      _T("thread must be already terminated.") );
+                      T("thread must be already terminated.") );
 
         ::CloseHandle(hThread);
     }
@@ -625,7 +625,7 @@ void wxThread::Exit(void *status)
 
     ::ExitThread((DWORD)status);
 
-    wxFAIL_MSG(_T("Couldn't return from ExitThread()!"));
+    wxFAIL_MSG(T("Couldn't return from ExitThread()!"));
 }
 
 void wxThread::SetPriority(unsigned int prio)
@@ -770,7 +770,7 @@ void WXDLLEXPORT wxMutexGuiEnter()
 {
     // this would dead lock everything...
     wxASSERT_MSG( !wxThread::IsMain(),
-                  _T("main thread doesn't want to block in wxMutexGuiEnter()!") );
+                  T("main thread doesn't want to block in wxMutexGuiEnter()!") );
 
     // the order in which we enter the critical sections here is crucial!!
 
@@ -800,7 +800,7 @@ void WXDLLEXPORT wxMutexGuiLeave()
     {
         // decrement the number of waiters now
         wxASSERT_MSG( s_nWaitingForGui > 0,
-                      _T("calling wxMutexGuiLeave() without entering it first?") );
+                      T("calling wxMutexGuiLeave() without entering it first?") );
 
         s_nWaitingForGui--;
 
@@ -813,7 +813,7 @@ void WXDLLEXPORT wxMutexGuiLeave()
 void WXDLLEXPORT wxMutexGuiLeaveOrEnter()
 {
     wxASSERT_MSG( wxThread::IsMain(),
-                  _T("only main thread may call wxMutexGuiLeaveOrEnter()!") );
+                  T("only main thread may call wxMutexGuiLeaveOrEnter()!") );
 
     wxCriticalSectionLocker enter(*s_critsectWaitingForGui);
 

@@ -119,7 +119,7 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         return TRUE;
     }
 
-    else if (tag.GetName() == "OBJECT") {
+    else if (tag.GetName() == "OBJECT(") {
         m_Name = m_Page = wxEmptyString;
         ParseInner(tag);
         if (m_Page != wxEmptyString) {

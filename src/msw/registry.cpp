@@ -67,23 +67,23 @@ static struct
 }
 aStdKeys[] = 
 { 
-  { HKEY_CLASSES_ROOT,      _T("HKEY_CLASSES_ROOT"),      _T("HKCR") },
+  { HKEY_CLASSES_ROOT,      T("HKEY_CLASSES_ROOT("),      T("HKCR") },
 #ifdef  __WIN32__
-  { HKEY_CURRENT_USER,      _T("HKEY_CURRENT_USER"),      _T("HKCU") },
-  { HKEY_LOCAL_MACHINE,     _T("HKEY_LOCAL_MACHINE"),     _T("HKLM") },
-  { HKEY_USERS,             _T("HKEY_USERS"),             _T("HKU")  }, // short name?
-  { HKEY_PERFORMANCE_DATA,  _T("HKEY_PERFORMANCE_DATA"),  _T("HKPD") },
+  { HKEY_CURRENT_USER,      T("HKEY_CURRENT_USER"),      T("HKCU") },
+  { HKEY_LOCAL_MACHINE,     T("HKEY_LOCAL_MACHINE"),     T("HKLM") },
+  { HKEY_USERS,             T("HKEY_USERS"),             T("HKU")  }, // short name?
+  { HKEY_PERFORMANCE_DATA,  T("HKEY_PERFORMANCE_DATA"),  T("HKPD") },
 #if     WINVER >= 0x0400
-  { HKEY_CURRENT_CONFIG,    _T("HKEY_CURRENT_CONFIG"),    _T("HKCC") },
+  { HKEY_CURRENT_CONFIG,    T("HKEY_CURRENT_CONFIG"),    T("HKCC") },
 #ifndef __GNUWIN32__
-  { HKEY_DYN_DATA,          _T("HKEY_DYN_DATA"),          _T("HKDD") }, // short name?
+  { HKEY_DYN_DATA,          T("HKEY_DYN_DATA"),          T("HKDD") }, // short name?
 #endif  //GNUWIN32
 #endif  //WINVER >= 4.0
 #endif  //WIN32
 };
 
 // the registry name separator (perhaps one day MS will change it to '/' ;-)
-#define   REG_SEPARATOR     _T('\\')
+#define   REG_SEPARATOR     T('\\')
 
 // useful for Windows programmers: makes somewhat more clear all these zeroes
 // being passed to Windows APIs
@@ -128,7 +128,7 @@ const size_t wxRegKey::nStdKeys = WXSIZEOF(aStdKeys);
 const wxChar *wxRegKey::GetStdKeyName(size_t key)
 {
   // return empty string if key is invalid
-  wxCHECK_MSG( key < nStdKeys, _T(""), _T("invalid key in wxRegKey::GetStdKeyName") );
+  wxCHECK_MSG( key < nStdKeys, T(""), T("invalid key in wxRegKey::GetStdKeyName") );
 
   return aStdKeys[key].szName;
 }
@@ -136,7 +136,7 @@ const wxChar *wxRegKey::GetStdKeyName(size_t key)
 const wxChar *wxRegKey::GetStdKeyShortName(size_t key)
 {
   // return empty string if key is invalid
-  wxCHECK( key < nStdKeys, _T("") );
+  wxCHECK( key < nStdKeys, T("") );
 
   return aStdKeys[key].szShortName;
 }
@@ -156,7 +156,7 @@ wxRegKey::StdKey wxRegKey::ExtractKeyName(wxString& strKey)
   }
 
   if ( ui == nStdKeys ) {
-    wxFAIL_MSG(_T("invalid key prefix in wxRegKey::ExtractKeyName."));
+    wxFAIL_MSG(T("invalid key prefix in wxRegKey::ExtractKeyName."));
 
     hRootKey = HKEY_CLASSES_ROOT;
   }
@@ -176,7 +176,7 @@ wxRegKey::StdKey wxRegKey::GetStdKeyFromHkey(WXHKEY hkey)
       return (StdKey)ui;
   }
   
-  wxFAIL_MSG(_T("non root hkey passed to wxRegKey::GetStdKeyFromHkey."));
+  wxFAIL_MSG(T("non root hkey passed to wxRegKey::GetStdKeyFromHkey."));
 
   return HKCR;
 }
@@ -624,7 +624,7 @@ bool wxRegKey::QueryValue(const wxChar *szValue, long *plValue) const
     else {
       // check that we read the value of right type
       wxASSERT_MSG( dwType == REG_DWORD, 
-                    _T("Type mismatch in wxRegKey::QueryValue().")  );
+                    T("Type mismatch in wxRegKey::QueryValue().")  );
 
       return TRUE;
     }
@@ -651,7 +651,7 @@ bool wxRegKey::QueryValue(const wxChar *szValue, wxString& strValue) const
         if ( m_dwLastError == ERROR_SUCCESS ) {
           // check that it was the right type
           wxASSERT_MSG( dwType == REG_SZ, 
-                        _T("Type mismatch in wxRegKey::QueryValue().") );
+                        T("Type mismatch in wxRegKey::QueryValue().") );
 
           return TRUE;
         }
@@ -833,7 +833,7 @@ const wxChar *GetFullName(const wxRegKey *pKey, const wxChar *szValue)
   static wxString s_str;
   s_str = pKey->GetName();
   if ( !wxIsEmpty(szValue) )
-    s_str << _T("\\") << szValue;
+    s_str << T("\\") << szValue;
 
   return s_str.c_str();
 }

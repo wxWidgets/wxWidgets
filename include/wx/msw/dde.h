@@ -54,8 +54,8 @@ public:
   ~wxDDEConnection(void);
 
   // Calls that CLIENT can make
-  virtual bool Execute(wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
-  virtual bool Execute(const wxString& str) { return Execute(WXSTRINGCAST str, -1, wxIPC_TEXT); }
+  virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
+  virtual bool Execute(const wxString& str) { return Execute(str, -1, wxIPC_TEXT); }
   virtual char *Request(const wxString& item, int *size = NULL, wxIPCFormat format = wxIPC_TEXT);
   virtual bool Poke(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
   virtual bool StartAdvise(const wxString& item);

@@ -48,7 +48,7 @@
 
 #define BFT_ICON   0x4349   /* 'IC' */
 #define BFT_BITMAP 0x4d42   /* 'BM' */
-#define BFT_CURSOR 0x5450   /* 'PT' */
+#define BFT_CURSOR 0x5450   /* 'PT(' */
 
 #ifndef SEEK_CUR
 /* flags for _lseek */

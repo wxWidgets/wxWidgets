@@ -362,18 +362,18 @@ bool wxPostScriptDC::PrinterDialog(wxWindow *parent)
       wxChar userId[256];
       wxGetUserId (userId, sizeof (userId) / sizeof (char));
       wxChar tmp[256];
-      wxStrcpy (tmp, _T("/tmp/preview_"));
+      wxStrcpy (tmp, T("/tmp/preview_"));
       wxStrcat (tmp, userId);
       m_printData.SetFilename(tmp);
 #endif
       wxChar tmp2[256];
       wxStrcpy(tmp2, m_printData.GetFilename());
-      wxStrcat (tmp2, _T(".ps"));
+      wxStrcat (tmp2, T(".ps"));
       m_printData.SetFilename(tmp2);
     }
-    else if ((m_printData.GetFilename() == _T("")) && (m_printData.GetPrintMode() == wxPRINT_MODE_FILE))
+    else if ((m_printData.GetFilename() == T("")) && (m_printData.GetPrintMode() == wxPRINT_MODE_FILE))
     {
-      wxString file = wxSaveFileSelector (_("PostScript"), _T("ps"));
+      wxString file = wxSaveFileSelector (_("PostScript"), T("ps"));
       if ( file.IsEmpty() )
       {
         m_ok = FALSE;
@@ -389,7 +389,7 @@ bool wxPostScriptDC::PrinterDialog(wxWindow *parent)
 
 void wxPostScriptDC::SetClippingRegion (long x, long y, long w, long h)
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (m_clipping) return;
 
@@ -411,12 +411,12 @@ void wxPostScriptDC::SetClippingRegion (long x, long y, long w, long h)
 
 void wxPostScriptDC::SetClippingRegion( const wxRegion &WXUNUSED(region) )
 {
-    wxFAIL_MSG( _T("wxPostScriptDC::SetClippingRegion not implemented.") );
+    wxFAIL_MSG( T("wxPostScriptDC::SetClippingRegion not implemented.") );
 }
 
 void wxPostScriptDC::DestroyClippingRegion()
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     wxDC::DestroyClippingRegion();
 
@@ -429,28 +429,28 @@ void wxPostScriptDC::DestroyClippingRegion()
 
 void wxPostScriptDC::Clear()
 {
-    wxFAIL_MSG( _T("wxPostScriptDC::Clear not implemented.") );
+    wxFAIL_MSG( T("wxPostScriptDC::Clear not implemented.") );
 }
 
 void wxPostScriptDC::DoFloodFill (long WXUNUSED(x), long WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
 {
-    wxFAIL_MSG( _T("wxPostScriptDC::FloodFill not implemented.") );
+    wxFAIL_MSG( T("wxPostScriptDC::FloodFill not implemented.") );
 }
 
 bool wxPostScriptDC::DoGetPixel (long WXUNUSED(x), long WXUNUSED(y), wxColour * WXUNUSED(col)) const
 {
-    wxFAIL_MSG( _T("wxPostScriptDC::GetPixel not implemented.") );
+    wxFAIL_MSG( T("wxPostScriptDC::GetPixel not implemented.") );
     return FALSE;
 }
 
 void wxPostScriptDC::DoCrossHair (long WXUNUSED(x), long WXUNUSED(y))
 {
-    wxFAIL_MSG( _T("wxPostScriptDC::CrossHair not implemented.") );
+    wxFAIL_MSG( T("wxPostScriptDC::CrossHair not implemented.") );
 }
 
 void wxPostScriptDC::DoDrawLine (long x1, long y1, long x2, long y2)
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if  (m_pen.GetStyle() == wxTRANSPARENT) return;
 
@@ -472,7 +472,7 @@ void wxPostScriptDC::DoDrawLine (long x1, long y1, long x2, long y2)
 
 void wxPostScriptDC::DoDrawArc (long x1, long y1, long x2, long y2, long xc, long yc)
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     long dx = x1 - xc;
     long dy = y1 - yc;
@@ -539,7 +539,7 @@ void wxPostScriptDC::DoDrawArc (long x1, long y1, long x2, long y2, long xc, lon
 
 void wxPostScriptDC::DoDrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (sa>=360 || sa<=-360) sa=sa-int(sa/360)*360;
     if (ea>=360 || ea<=-360) ea=ea-int(ea/360)*360;
@@ -581,7 +581,7 @@ void wxPostScriptDC::DoDrawEllipticArc(long x,long y,long w,long h,double sa,dou
 
 void wxPostScriptDC::DoDrawPoint (long x, long y)
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (m_pen.GetStyle() == wxTRANSPARENT) return;
 
@@ -600,7 +600,7 @@ void wxPostScriptDC::DoDrawPoint (long x, long y)
 
 void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], long xoffset, long yoffset, int WXUNUSED(fillStyle))
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (n <= 0) return;
 
@@ -659,7 +659,7 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], long xoffset, long 
 
 void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], long xoffset, long yoffset)
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (m_pen.GetStyle() == wxTRANSPARENT) return;
 	
@@ -690,7 +690,7 @@ void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], long xoffset, long yo
 
 void wxPostScriptDC::DoDrawRectangle (long x, long y, long width, long height)
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
@@ -737,7 +737,7 @@ void wxPostScriptDC::DoDrawRectangle (long x, long y, long width, long height)
 
 void wxPostScriptDC::DoDrawRoundedRectangle (long x, long y, long width, long height, double radius)
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (radius < 0.0)
     {
@@ -816,7 +816,7 @@ void wxPostScriptDC::DoDrawRoundedRectangle (long x, long y, long width, long he
 
 void wxPostScriptDC::DoDrawEllipse (long x, long y, long width, long height)
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
@@ -867,7 +867,7 @@ static void LocalDecToHex( int dec, char *buf )
 
 void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, long x, long y, bool WXUNUSED(useMask) )
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (!bitmap.Ok()) return;
 
@@ -921,7 +921,7 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, long x, long y, bool 
 
 void wxPostScriptDC::SetFont( const wxFont& font )
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (!font.Ok())  return;
 
@@ -1016,7 +1016,7 @@ void wxPostScriptDC::SetFont( const wxFont& font )
 
 void wxPostScriptDC::SetPen( const wxPen& pen )
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (!pen.Ok()) return;
 
@@ -1101,7 +1101,7 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
 
 void wxPostScriptDC::SetBrush( const wxBrush& brush )
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (!brush.Ok()) return;
 
@@ -1144,7 +1144,7 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 
 void wxPostScriptDC::DoDrawText( const wxString& text, long x, long y )
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     SetFont( m_font );
 
@@ -1251,12 +1251,12 @@ void wxPostScriptDC::SetBackground (const wxBrush& brush)
 
 void wxPostScriptDC::SetLogicalFunction (int WXUNUSED(function))
 {
-    wxFAIL_MSG( _T("wxPostScriptDC::SetLogicalFunction not implemented.") );
+    wxFAIL_MSG( T("wxPostScriptDC::SetLogicalFunction not implemented.") );
 }
 
 void wxPostScriptDC::DoDrawSpline( wxList *points )
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     SetPen( m_pen );
 
@@ -1328,7 +1328,7 @@ long wxPostScriptDC::GetCharWidth() const
 
 void wxPostScriptDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     m_signX = (xLeftRight ? 1 : -1);
     m_signY = (yBottomUp  ? 1 : -1);
@@ -1341,7 +1341,7 @@ void wxPostScriptDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 
 void wxPostScriptDC::SetDeviceOrigin( long x, long y )
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     int h = 0;
     int w = 0;
@@ -1413,7 +1413,7 @@ wxSize wxPostScriptDC::GetPPI(void) const
 
 bool wxPostScriptDC::StartDoc( const wxString& message )
 {
-    wxCHECK_MSG( m_ok, FALSE, _T("invalid postscript dc") );
+    wxCHECK_MSG( m_ok, FALSE, T("invalid postscript dc") );
 
     if (m_printData.GetFilename() == "")
     {
@@ -1458,7 +1458,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 
 void wxPostScriptDC::EndDoc ()
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     if (m_clipping)
     {
@@ -1481,15 +1481,15 @@ void wxPostScriptDC::EndDoc ()
     wxChar userID[256];
     if ( wxGetEmailAddress(userID, sizeof(userID)) )
     {
-        fprintf( m_pstream, "%%%%For: %s ", MBSTRINGCAST wxConvCurrent->cWX2MB(userID) );
+        fprintf( m_pstream, "%%%%For: %s ", wxMBSTRINGCAST wxConvCurrent->cWX2MB(userID) );
         wxChar userName[245];
         if (wxGetUserName(userName, sizeof(userName)))
-            fprintf( m_pstream, " (%s)", MBSTRINGCAST wxConvCurrent->cWX2MB(userName) );
+            fprintf( m_pstream, " (%s)", wxMBSTRINGCAST wxConvCurrent->cWX2MB(userName) );
 	fprintf( m_pstream, "\n" );
     }
     else if ( wxGetUserName(userID, sizeof(userID)) )
     {
-        fprintf( m_pstream, "%%%%For: %s\n", MBSTRINGCAST wxConvCurrent->cWX2MB(userID) );;
+        fprintf( m_pstream, "%%%%For: %s\n", wxMBSTRINGCAST wxConvCurrent->cWX2MB(userID) );;
     }
 
     // THE FOLLOWING HAS BEEN CONTRIBUTED BY Andy Fyfe <andy@hyperparallel.com>
@@ -1608,7 +1608,7 @@ void wxPostScriptDC::EndDoc ()
 
 void wxPostScriptDC::StartPage()
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     fprintf( m_pstream, "%%%%Page: %d\n", wxPageNumber++ );
 
@@ -1648,7 +1648,7 @@ void wxPostScriptDC::StartPage()
 
 void wxPostScriptDC::EndPage ()
 {
-    wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
+    wxCHECK_RET( m_ok && m_pstream, T("invalid postscript dc") );
 
     fprintf( m_pstream, "showpage\n" );
 }
@@ -1659,9 +1659,9 @@ bool wxPostScriptDC::DoBlit( long xdest, long ydest,
                            long xsrc, long ysrc,
                            int rop, bool WXUNUSED(useMask) )
 {
-    wxCHECK_MSG( m_ok && m_pstream, FALSE, _T("invalid postscript dc") );
+    wxCHECK_MSG( m_ok && m_pstream, FALSE, T("invalid postscript dc") );
 
-    wxCHECK_MSG( source, FALSE, _T("invalid source dc") );
+    wxCHECK_MSG( source, FALSE, T("invalid source dc") );
 
     /* blit into a bitmap */
     wxBitmap bitmap( (int)fwidth, (int)fheight );
@@ -1691,9 +1691,9 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
 
     if (!fontToUse) fontToUse = (wxFont*) &m_font;
 
-    wxCHECK_RET( fontToUse, _T("GetTextExtent: no font defined") );
-    wxCHECK_RET( x, _T("GetTextExtent: x == NULL") );
-    wxCHECK_RET( y, _T("GetTextExtent: y == NULL") );
+    wxCHECK_RET( fontToUse, T("GetTextExtent: no font defined") );
+    wxCHECK_RET( x, T("GetTextExtent: x == NULL") );
+    wxCHECK_RET( y, T("GetTextExtent: y == NULL") );
 
     const wxWX2MBbuf strbuf = string.mb_str();
 

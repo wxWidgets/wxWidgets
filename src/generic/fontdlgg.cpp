@@ -57,59 +57,59 @@ END_EVENT_TABLE()
 #endif
 
 #define NUM_COLS 48
-static wxString wxColourDialogNames[NUM_COLS]={_T("ORANGE"),
-                    _T("GOLDENROD"),
-                    _T("WHEAT"),
-                    _T("SPRING GREEN"),
-                    _T("SKY BLUE"),
-                    _T("SLATE BLUE"),
-                    _T("MEDIUM VIOLET RED"),
-                    _T("PURPLE"),
+static wxString wxColourDialogNames[NUM_COLS]={T("ORANGE"),
+                    T("GOLDENROD"),
+                    T("WHEAT("),
+                    T("SPRING GREEN"),
+                    T("SKY BLUE"),
+                    T("SLATE BLUE"),
+                    T("MEDIUM VIOLET RED"),
+                    T("PURPLE"),
 
-                    _T("RED"),
-                    _T("YELLOW"),
-                    _T("MEDIUM SPRING GREEN"),
-                    _T("PALE GREEN"),
-                    _T("CYAN"),
-                    _T("LIGHT STEEL BLUE"),
-                    _T("ORCHID"),
-                    _T("LIGHT MAGENTA"),
+                    T("RED"),
+                    T("YELLOW"),
+                    T("MEDIUM SPRING GREEN"),
+                    T("PALE GREEN"),
+                    T("CYAN"),
+                    T("LIGHT STEEL BLUE"),
+                    T("ORCHID"),
+                    T("LIGHT MAGENTA"),
 
-                    _T("BROWN"),
-                    _T("YELLOW"),
-                    _T("GREEN"),
-                    _T("CADET BLUE"),
-                    _T("MEDIUM BLUE"),
-                    _T("MAGENTA"),
-                    _T("MAROON"),
-                    _T("ORANGE RED"),
+                    T("BROWN"),
+                    T("YELLOW"),
+                    T("GREEN"),
+                    T("CADET BLUE"),
+                    T("MEDIUM BLUE"),
+                    T("MAGENTA"),
+                    T("MAROON"),
+                    T("ORANGE RED"),
 
-                    _T("FIREBRICK"),
-                    _T("CORAL"),
-                    _T("FOREST GREEN"),
-                    _T("AQUARAMINE"),
-                    _T("BLUE"),
-                    _T("NAVY"),
-                    _T("THISTLE"),
-                    _T("MEDIUM VIOLET RED"),
+                    T("FIREBRICK"),
+                    T("CORAL"),
+                    T("FOREST GREEN"),
+                    T("AQUARAMINE"),
+                    T("BLUE"),
+                    T("NAVY"),
+                    T("THISTLE"),
+                    T("MEDIUM VIOLET RED"),
 
-                    _T("INDIAN RED"),
-                    _T("GOLD"),
-                    _T("MEDIUM SEA GREEN"),
-                    _T("MEDIUM BLUE"),
-                    _T("MIDNIGHT BLUE"),
-                    _T("GREY"),
-                    _T("PURPLE"),
-                    _T("KHAKI"),
+                    T("INDIAN RED"),
+                    T("GOLD"),
+                    T("MEDIUM SEA GREEN"),
+                    T("MEDIUM BLUE"),
+                    T("MIDNIGHT BLUE"),
+                    T("GREY"),
+                    T("PURPLE"),
+                    T("KHAKI"),
 
-                    _T("BLACK"),
-                    _T("MEDIUM FOREST GREEN"),
-                    _T("KHAKI"),
-                    _T("DARK GREY"),
-                    _T("SEA GREEN"),
-                    _T("LIGHT GREY"),
-                    _T("MEDIUM SLATE BLUE"),
-                    _T("WHITE")
+                    T("BLACK"),
+                    T("MEDIUM FOREST GREEN"),
+                    T("KHAKI"),
+                    T("DARK GREY"),
+                    T("SEA GREEN"),
+                    T("LIGHT GREY"),
+                    T("MEDIUM SLATE BLUE"),
+                    T("WHITE")
                     };
 
 /*
@@ -345,7 +345,7 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
   int fontUnderline = underLineCheckBox->GetValue();
 
   dialogFont = wxFont(fontSize, fontFamily, fontStyle, fontWeight, (fontUnderline != 0));
-  if (colourChoice->GetStringSelection() != _T(""))
+  if (colourChoice->GetStringSelection() != T(""))
   {
     wxColour *col = (wxColour*) NULL;
     col = wxTheColourDatabase->FindColour(colourChoice->GetStringSelection());
@@ -364,14 +364,14 @@ wxChar *wxFontWeightIntToString(int weight)
   switch (weight)
   {
     case wxLIGHT:
-      return _T("Light");
+      return T("Light");
     case wxBOLD:
-      return _T("Bold");
+      return T("Bold");
     case wxNORMAL:
     default:
-      return _T("Normal");
+      return T("Normal");
   }
-  return _T("Normal");
+  return T("Normal");
 }
 
 wxChar *wxFontStyleIntToString(int style)
@@ -379,14 +379,14 @@ wxChar *wxFontStyleIntToString(int style)
   switch (style)
   {
     case wxITALIC:
-      return _T("Italic");
+      return T("Italic");
     case wxSLANT:
-      return _T("Slant");
+      return T("Slant");
     case wxNORMAL:
     default:
-      return _T("Normal");
+      return T("Normal");
   }
-  return _T("Normal");
+  return T("Normal");
 }
 
 wxChar *wxFontFamilyIntToString(int family)
@@ -394,20 +394,20 @@ wxChar *wxFontFamilyIntToString(int family)
   switch (family)
   {
     case wxROMAN:
-      return _T("Roman");
+      return T("Roman");
     case wxDECORATIVE:
-      return _T("Decorative");
+      return T("Decorative");
     case wxMODERN:
-      return _T("Modern");
+      return T("Modern");
     case wxSCRIPT:
-      return _T("Script");
+      return T("Script");
     case wxTELETYPE:
-      return _T("Teletype");
+      return T("Teletype");
     case wxSWISS:
     default:
-      return _T("Swiss");
+      return T("Swiss");
   }
-  return _T("Swiss");
+  return T("Swiss");
 }
 
 int wxFontFamilyStringToInt(wxChar *family)
@@ -415,15 +415,15 @@ int wxFontFamilyStringToInt(wxChar *family)
   if (!family)
     return wxSWISS;
 
-  if (wxStrcmp(family, _T("Roman")) == 0)
+  if (wxStrcmp(family, T("Roman")) == 0)
     return wxROMAN;
-  else if (wxStrcmp(family, _T("Decorative")) == 0)
+  else if (wxStrcmp(family, T("Decorative")) == 0)
     return wxDECORATIVE;
-  else if (wxStrcmp(family, _T("Modern")) == 0)
+  else if (wxStrcmp(family, T("Modern")) == 0)
     return wxMODERN;
-  else if (wxStrcmp(family, _T("Script")) == 0)
+  else if (wxStrcmp(family, T("Script")) == 0)
     return wxSCRIPT;
-  else if (wxStrcmp(family, _T("Teletype")) == 0)
+  else if (wxStrcmp(family, T("Teletype")) == 0)
     return wxTELETYPE;
   else return wxSWISS;
 }
@@ -432,9 +432,9 @@ int wxFontStyleStringToInt(wxChar *style)
 {
   if (!style)
     return wxNORMAL;
-  if (wxStrcmp(style, _T("Italic")) == 0)
+  if (wxStrcmp(style, T("Italic")) == 0)
     return wxITALIC;
-  else if (wxStrcmp(style, _T("Slant")) == 0)
+  else if (wxStrcmp(style, T("Slant")) == 0)
     return wxSLANT;
   else
     return wxNORMAL;
@@ -444,9 +444,9 @@ int wxFontWeightStringToInt(wxChar *weight)
 {
   if (!weight)
     return wxNORMAL;
-  if (wxStrcmp(weight, _T("Bold")) == 0)
+  if (wxStrcmp(weight, T("Bold")) == 0)
     return wxBOLD;
-  else if (wxStrcmp(weight, _T("Light")) == 0)
+  else if (wxStrcmp(weight, T("Light")) == 0)
     return wxLIGHT;
   else
     return wxNORMAL;

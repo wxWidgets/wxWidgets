@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        debug.h
+// Name:        wx/debug.h
 // Purpose:     Misc debug functions and macros
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef   _WX_DEBUG_H_
@@ -16,24 +16,19 @@
 
 #include  "wx/wxchar.h"
 
-#ifndef __TFILE__
-#define __XFILE__(x) _T(x)
-#define __TFILE__ __XFILE__(__FILE__)
-#endif
-
 // ----------------------------------------------------------------------------
-/** 
-  @name Debugging macros 
+/**
+  @name Debugging macros
 
   All debugging macros rely on ASSERT() which in turn calls user-defined
   OnAssert() function. To keep things simple, it's called even when the
   expression is TRUE (i.e. everything is ok) and by default does nothing: just
   returns the same value back. But if you redefine it to do something more sexy
-  (popping up a message box in your favourite GUI, sending you e-mail or 
+  (popping up a message box in your favourite GUI, sending you e-mail or
   whatever) it will affect all ASSERTs, FAILs and CHECKs in your code.
   <BR>
   <BR>
-  <b>Warning</b>: if you don't like advices on programming style, don't read 
+  <b>Warning</b>: if you don't like advices on programming style, don't read
   further! ;-)
   <BR>
   <BR>
@@ -94,13 +89,13 @@
 
 // NB: these macros work also in release mode!
 
-/** 
+/**
   These macros must be used only in invalid situation: for example, an
   invalid parameter (NULL pointer) is passed to a function. Instead of
   dereferencing it and causing core dump the function might try using
   CHECK( p != NULL ) or CHECK( p != NULL, return LogError("p is NULL!!") )
 
-  @name Macros which remain even in 'release' mode 
+  @name Macros which remain even in 'release' mode
 */
 //@{
   /// check that expression is true, "return" if not (also FAILs in debug mode)

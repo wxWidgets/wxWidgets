@@ -63,9 +63,9 @@ protected:
   friend class wxTCPServer;
   friend class wxTCPClient;
   friend void Client_OnRequest(wxSocketBase&,
-			       wxSocketNotify, char *);
+                               wxSocketNotify, char *);
   friend void Server_OnRequest(wxSocketServer&,
-			       wxSocketNotify, char *);
+                               wxSocketNotify, char *);
 public:
 
   wxTCPConnection(char *buffer, int size);
@@ -73,7 +73,7 @@ public:
   virtual ~wxTCPConnection();
 
   // Calls that CLIENT can make
-  bool Execute(wxChar *data, int size = -1,
+  bool Execute(const wxChar *data, int size = -1,
                wxIPCFormat format = wxIPC_TEXT);
   char *Request(const wxString& item, int *size = NULL,
                 wxIPCFormat format = wxIPC_TEXT);

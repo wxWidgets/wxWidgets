@@ -116,7 +116,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
   // Create the toolbar control.
   HWND hWndTabCtrl = CreateWindowEx(0L,     // No extended styles.
     WC_TABCONTROL,                          // Class name for the tab control
-    _T(""),                                 // No default text.
+    T(""),                                 // No default text.
     WS_CHILD | WS_BORDER | WS_VISIBLE | tabStyle,    // Styles and defaults.
     x, y, width, height,                    // Standard size and position.
     (HWND) parent->GetHWND(),               // Parent window
@@ -244,7 +244,7 @@ int wxTabCtrl::GetRowCount() const
 wxString wxTabCtrl::GetItemText(int item) const
 {
     wxChar buf[256];
-    wxString str(_T(""));
+    wxString str(T(""));
     TC_ITEM tcItem;
     tcItem.mask = TCIF_TEXT;
     tcItem.pszText = buf;
@@ -306,7 +306,7 @@ bool wxTabCtrl::InsertItem(int item, const wxString& text, int imageId, void* da
     TC_ITEM tcItem;
     tcItem.mask = TCIF_PARAM;
     tcItem.lParam = (long) data;
-    if (text != _T(""))
+    if (text != T(""))
     {
         tcItem.mask |= TCIF_TEXT;
         wxStrcpy(buf, (const wxChar*) text);

@@ -2194,7 +2194,7 @@ static void wx_spline_draw_point_array(wxDC *dc)
 
 void wxWindowDC::DoDrawSpline( wxList *points )
 {
-    wxCHECK_RET( Ok(), _T("invalid window dc") );
+    wxCHECK_RET( Ok(), T("invalid window dc") );
   
     wxPoint *p;
     double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;

@@ -218,7 +218,7 @@ HICON MakeIcon( HANDLE hDIB, HINSTANCE hInst)
                             lpDIB->bmiHeader.biBitCount)));
 
   // Get a hDC so we can create a bitmap compatible with it
-  hDC = CreateDC( _T("DISPLAY"), NULL, NULL, NULL);
+  hDC = CreateDC( T("DISPLAY"), NULL, NULL, NULL);
 
   // 5) Create a device dependent bitmap with the XOR bits.
   hbmXor = CreateDIBitmap( hDC, (LPBITMAPINFOHEADER)&(lpDIB->bmiHeader),
@@ -579,7 +579,7 @@ HCURSOR MakeCursor( HANDLE hDIB, LPPOINT lpptHotSpot, HINSTANCE hInst)
                            lpDIB->bmiHeader.biBitCount)));
 
   // Get a hDC so we can create a bitmap compatible with it
-  hDC = CreateDC( _T("DISPLAY"), NULL, NULL, NULL);
+  hDC = CreateDC( T("DISPLAY"), NULL, NULL, NULL);
 
   // 5) Create a device dependent bitmap with the XOR bits.
   hbmXor = CreateBitmap( (int )lpDIB->bmiHeader.biWidth,

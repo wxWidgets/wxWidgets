@@ -136,7 +136,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
                                       POINTL       pt,
                                       DWORD       *pdwEffect)
 {
-  wxLogDebug(_T("IDropTarget::DragEnter"));
+  wxLogDebug(T("IDropTarget::DragEnter"));
 
   wxASSERT( m_pIDataObject == NULL );
 
@@ -187,7 +187,7 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
 // Notes   : good place to do any clean-up
 STDMETHODIMP wxIDropTarget::DragLeave()
 {
-  wxLogDebug(_T("IDropTarget::DragLeave"));
+  wxLogDebug(T("IDropTarget::DragLeave"));
 
   // remove the UI feedback
   m_pTarget->OnLeave();
@@ -212,7 +212,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                                  POINTL       pt,
                                  DWORD       *pdwEffect)
 {
-  wxLogDebug(_T("IDropTarget::Drop"));
+  wxLogDebug(T("IDropTarget::Drop"));
 
   // TODO I don't know why there is this parameter, but so far I assume
   //      that it's the same we've already got in DragEnter
@@ -385,7 +385,7 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *pData)
 
     UINT len2 = ::DragQueryFile(hdrop, n, aszFiles[n], len);
     if ( len2 != len - 1 ) {
-      wxLogDebug(_T("In wxFileDropTarget::OnDrop DragQueryFile returned %d "
+      wxLogDebug(T("In wxFileDropTarget::OnDrop DragQueryFile returned %d "
                     "characters, %d expected."), len2, len - 1);
     }
   }

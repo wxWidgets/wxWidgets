@@ -6,16 +6,26 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WXH__
 #define _WX_WXH__
 
-#include "wx/setup.h"           // Which features to include - user editable
 #include "wx/defs.h"
+#include "wx/object.h"
+#include "wx/dynarray.h"
+#include "wx/list.h"
+#include "wx/hash.h"
 #include "wx/string.h"
+#include "wx/intl.h"
 #include "wx/log.h"
+#include "wx/event.h"
+#include "wx/app.h"
+#include "wx/utils.h"
+
+#if wxUSE_GUI
+
 #include "wx/window.h"
 #include "wx/panel.h"
 #include "wx/frame.h"
@@ -26,8 +36,6 @@
 #include "wx/dcscreen.h"
 #include "wx/button.h"
 #include "wx/menu.h"
-#include "wx/app.h"
-#include "wx/event.h"
 #include "wx/list.h"
 #include "wx/pen.h"
 #include "wx/brush.h"
@@ -36,7 +44,6 @@
 #include "wx/cursor.h"
 #include "wx/dialog.h"
 #include "wx/timer.h"
-#include "wx/utils.h"
 #include "wx/settings.h"
 #include "wx/msgdlg.h"
 #include "wx/cmndata.h"
@@ -67,10 +74,6 @@
 #include "wx/filedlg.h"
 #include "wx/dirdlg.h"
 
-#if wxUSE_INTL
-    #include "wx/intl.h"
-#endif // wxUSE_INTL
-
 #if wxUSE_VALIDATORS
     #include "wx/valtext.h"
 #endif // wxUSE_VALIDATORS
@@ -79,6 +82,8 @@
     #include "wx/objstrm.h"
     #include "wx/serbase.h"
 #endif // wxUSE_SERIAL
+
+#endif // wxUSE_GUI
 
 #endif
     // _WX_WXH__

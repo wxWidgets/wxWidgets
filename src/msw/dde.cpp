@@ -228,7 +228,7 @@ bool wxDDEServer::Create(const wxString& server_name)
 
 wxDDEServer::~wxDDEServer(void)
 {
-  if (m_serviceName != _T(""))
+  if (m_serviceName != T(""))
   {
     HSZ serviceName = DdeCreateStringHandle(DDEIdInst, WXSTRINGCAST m_serviceName, CP_WINANSI);
     if (DdeNameService(DDEIdInst, serviceName, NULL, DNS_UNREGISTER) == 0)
@@ -742,64 +742,64 @@ void DDEPrintError(void)
   switch (DdeGetLastError(DDEIdInst))
   {
     case DMLERR_ADVACKTIMEOUT:
-      err = _T("A request for a synchronous advise transaction has timed out.");
+      err = T("A request for a synchronous advise transaction has timed out.");
       break;
     case DMLERR_BUSY:
-      err = _T("The response to the transaction caused the DDE_FBUSY bit to be set.");
+      err = T("The response to the transaction caused the DDE_FBUSY bit to be set.");
       break;
     case DMLERR_DATAACKTIMEOUT:
-      err = _T("A request for a synchronous data transaction has timed out.");
+      err = T("A request for a synchronous data transaction has timed out.");
       break;
     case DMLERR_DLL_NOT_INITIALIZED:
-      err = _T("A DDEML function was called without first calling the DdeInitialize function,\n\ror an invalid instance identifier\n\rwas passed to a DDEML function.");
+      err = T("A DDEML function was called without first calling the DdeInitialize function,\n\ror an invalid instance identifier\n\rwas passed to a DDEML function.");
       break;
     case DMLERR_DLL_USAGE:
-      err = _T("An application initialized as APPCLASS_MONITOR has\n\rattempted to perform a DDE transaction,\n\ror an application initialized as APPCMD_CLIENTONLY has \n\rattempted to perform server transactions.");
+      err = T("An application initialized as APPCLASS_MONITOR has\n\rattempted to perform a DDE transaction,\n\ror an application initialized as APPCMD_CLIENTONLY has \n\rattempted to perform server transactions.");
       break;
     case DMLERR_EXECACKTIMEOUT:
-      err = _T("A request for a synchronous execute transaction has timed out.");
+      err = T("A request for a synchronous execute transaction has timed out.");
       break;
     case DMLERR_INVALIDPARAMETER:
-      err = _T("A parameter failed to be validated by the DDEML.");
+      err = T("A parameter failed to be validated by the DDEML.");
       break;
     case DMLERR_LOW_MEMORY:
-      err = _T("A DDEML application has created a prolonged race condition.");
+      err = T("A DDEML application has created a prolonged race condition.");
       break;
     case DMLERR_MEMORY_ERROR:
-      err = _T("A memory allocation failed.");
+      err = T("A memory allocation failed.");
       break;
     case DMLERR_NO_CONV_ESTABLISHED:
-      err = _T("A client's attempt to establish a conversation has failed.");
+      err = T("A client's attempt to establish a conversation has failed.");
       break;
     case DMLERR_NOTPROCESSED:
-      err = _T("A transaction failed.");
+      err = T("A transaction failed.");
       break;
     case DMLERR_POKEACKTIMEOUT:
-      err = _T("A request for a synchronous poke transaction has timed out.");
+      err = T("A request for a synchronous poke transaction has timed out.");
       break;
     case DMLERR_POSTMSG_FAILED:
-      err = _T("An internal call to the PostMessage function has failed. ");
+      err = T("An internal call to the PostMessage function has failed. ");
       break;
     case DMLERR_REENTRANCY:
-      err = _T("Reentrancy problem.");
+      err = T("Reentrancy problem.");
       break;
     case DMLERR_SERVER_DIED:
-      err = _T("A server-side transaction was attempted on a conversation\n\rthat was terminated by the client, or the server\n\rterminated before completing a transaction.");
+      err = T("A server-side transaction was attempted on a conversation\n\rthat was terminated by the client, or the server\n\rterminated before completing a transaction.");
       break;
     case DMLERR_SYS_ERROR:
-      err = _T("An internal error has occurred in the DDEML.");
+      err = T("An internal error has occurred in the DDEML.");
       break;
     case DMLERR_UNADVACKTIMEOUT:
-      err = _T("A request to end an advise transaction has timed out.");
+      err = T("A request to end an advise transaction has timed out.");
       break;
     case DMLERR_UNFOUND_QUEUE_ID:
-      err = _T("An invalid transaction identifier was passed to a DDEML function.\n\rOnce the application has returned from an XTYP_XACT_COMPLETE callback,\n\rthe transaction identifier for that callback is no longer valid.");
+      err = T("An invalid transaction identifier was passed to a DDEML function.\n\rOnce the application has returned from an XTYP_XACT_COMPLETE callback,\n\rthe transaction identifier for that callback is no longer valid.");
       break;
     default:
-      err = _T("Unrecognised error type.");
+      err = T("Unrecognised error type.");
       break;
   }
-  MessageBox((HWND) NULL, (LPCTSTR)err, _T("DDE Error"), MB_OK | MB_ICONINFORMATION);
+  MessageBox((HWND) NULL, (LPCTSTR)err, T("DDE Error"), MB_OK | MB_ICONINFORMATION);
 }
 
 #endif

@@ -3,7 +3,7 @@
 // Header signatures for various resources
 #define BFT_ICON   0x4349   /* 'IC' */
 #define BFT_BITMAP 0x4d42   /* 'BM' */
-#define BFT_CURSOR 0x5450   /* 'PT' */
+#define BFT_CURSOR 0x5450   /* 'PT(' */
 
 // This WIDTHBYTES macro determines the number of BYTES per scan line.
 #define WIDTHBYTES( i)   ((i + 31) / 32 * 4)

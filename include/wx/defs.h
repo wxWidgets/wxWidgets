@@ -115,13 +115,11 @@
 #   pragma suppress 571             // Virtual function hiding
 #endif // __SALFORDC__
 
-#ifdef __VISUALC__
-#ifndef WIN32
-// VC1.5 does not have LPTSTR type
-#define LPTSTR LPSTR
-#define LPCTSTR LPCSTR
-#endif
-#endif
+#if defined(__VISUALC__) && !defined(WIN32)
+    // VC1.5 does not have LPTSTR type
+    #define LPTSTR LPSTR
+    #define LPCTSTR LPCSTR
+#endif // VC++ 1.5
 
 // Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
 // so define it ourselves
@@ -190,8 +188,9 @@
 // Make sure the environment is set correctly
 #if defined(__WXMSW__) && defined(__X__)
     #error "Target can't be both X and Windows"
-#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXPM__) && \
-      !defined(__WXMAC__) && !defined(__X__) && !defined(__WXQT__) && !defined(__WXSTUBS__)
+#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
+      !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
+      !defined(__WXQT__) && !defined(__WXSTUBS__) && wxUSE_GUI
     #error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXPM__|__WXSTUBS__]"
 #endif
 
@@ -215,6 +214,17 @@
 
 #include "wx/version.h"
 
+// ----------------------------------------------------------------------------
+// compatibility defines
+// ----------------------------------------------------------------------------
+
+// possibility to build non GUI apps is new, so don't burden ourselves with
+// compatibility code
+#if !wxUSE_GUI
+    #undef WXWIN_COMPATIBILITY_2
+    #define WXWIN_COMPATIBILITY_2 0
+#endif // !GUI
+
 // ============================================================================
 // non portable C++ features
 // ============================================================================
@@ -223,21 +233,14 @@
 // check for native bool type and TRUE/FALSE constants
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__) || defined(__WXPM__) || defined(__WXSTUBS__)
-    // Bool is now obsolete, use bool instead
-    // typedef int Bool;
+// define boolean constants if not done yet
+#ifndef TRUE
+    #define TRUE  1
+#endif
 
-    #ifndef TRUE
-        #define TRUE  1
-        #define FALSE 0
-        #define Bool_DEFINED
-    #endif
-#elif defined(__WXMSW__)
-    #ifndef TRUE
-        #define TRUE  1
-        #define FALSE 0
-    #endif
-#endif // TRUE/FALSE
+#ifndef FALSE
+    #define FALSE 0
+#endif
 
 // Add more tests here for Windows compilers that already define bool
 // (under Unix, configure tests for this)

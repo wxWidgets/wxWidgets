@@ -75,7 +75,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
-        wxFAIL_MSG( _T("wxChoice creation failed") );
+        wxFAIL_MSG( T("wxChoice creation failed") );
 	return FALSE;
     }
 
@@ -125,7 +125,7 @@ wxChoice::~wxChoice()
 
 void wxChoice::AppendCommon( const wxString &item )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid choice") );
+    wxCHECK_RET( m_widget != NULL, T("invalid choice") );
 
     GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
     GtkWidget *menu_item = gtk_menu_item_new_with_label( item.mbc_str() );
@@ -172,7 +172,7 @@ void wxChoice::Append( const wxString &item, wxClientData *clientData )
 
 void wxChoice::SetClientData( int n, void* clientData )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
 
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return;
@@ -182,7 +182,7 @@ void wxChoice::SetClientData( int n, void* clientData )
 
 void* wxChoice::GetClientData( int n )
 {
-    wxCHECK_MSG( m_widget != NULL, NULL, _T("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, NULL, T("invalid combobox") );
 
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return NULL;
@@ -192,7 +192,7 @@ void* wxChoice::GetClientData( int n )
 
 void wxChoice::SetClientObject( int n, wxClientData* clientData )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, T("invalid combobox") );
 
     wxNode *node = m_clientObjectList.Nth( n );
     if (!node) return;
@@ -205,7 +205,7 @@ void wxChoice::SetClientObject( int n, wxClientData* clientData )
 
 wxClientData* wxChoice::GetClientObject( int n )
 {
-    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, _T("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, T("invalid combobox") );
 
     wxNode *node = m_clientObjectList.Nth( n );
     if (!node) return (wxClientData*) NULL;
@@ -215,7 +215,7 @@ wxClientData* wxChoice::GetClientObject( int n )
 
 void wxChoice::Clear()
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid choice") );
+    wxCHECK_RET( m_widget != NULL, T("invalid choice") );
 
     gtk_option_menu_remove_menu( GTK_OPTION_MENU(m_widget) );
     GtkWidget *menu = gtk_menu_new();
@@ -235,12 +235,12 @@ void wxChoice::Clear()
 
 void wxChoice::Delete( int WXUNUSED(n) )
 {
-    wxFAIL_MSG( _T("wxChoice:Delete not implemented") );
+    wxFAIL_MSG( T("wxChoice:Delete not implemented") );
 }
 
 int wxChoice::FindString( const wxString &string ) const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, _T("invalid choice") );
+    wxCHECK_MSG( m_widget != NULL, -1, T("invalid choice") );
 
     // If you read this code once and you think you understand
     // it, then you are very wrong. Robert Roebling.
@@ -255,7 +255,7 @@ int wxChoice::FindString( const wxString &string ) const
         if (bin->child) label = GTK_LABEL(bin->child);
         if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
 
-        wxASSERT_MSG( label != NULL , _T("wxChoice: invalid label") );
+        wxASSERT_MSG( label != NULL , T("wxChoice: invalid label") );
 
        if (string == wxString(label->label,*wxConvCurrent))
            return count;
@@ -274,7 +274,7 @@ int wxChoice::GetColumns() const
 
 int wxChoice::GetSelection()
 {
-    wxCHECK_MSG( m_widget != NULL, -1, _T("invalid choice") );
+    wxCHECK_MSG( m_widget != NULL, -1, T("invalid choice") );
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
     int count = 0;
@@ -292,7 +292,7 @@ int wxChoice::GetSelection()
 
 wxString wxChoice::GetString( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid choice") );
+    wxCHECK_MSG( m_widget != NULL, T(""), T("invalid choice") );
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
     int count = 0;
@@ -306,7 +306,7 @@ wxString wxChoice::GetString( int n ) const
             if (bin->child) label = GTK_LABEL(bin->child);
             if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
 
-            wxASSERT_MSG( label != NULL , _T("wxChoice: invalid label") );
+            wxASSERT_MSG( label != NULL , T("wxChoice: invalid label") );
 
             return wxString(label->label,*wxConvCurrent);
         }
@@ -314,25 +314,25 @@ wxString wxChoice::GetString( int n ) const
         count++;
     }
 
-    wxFAIL_MSG( _T("wxChoice: invalid index in GetString()") );
+    wxFAIL_MSG( T("wxChoice: invalid index in GetString()") );
 
-    return _T("");
+    return T("");
 }
 
 wxString wxChoice::GetStringSelection() const
 {
-    wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid choice") );
+    wxCHECK_MSG( m_widget != NULL, T(""), T("invalid choice") );
 
     GtkLabel *label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
 
-    wxASSERT_MSG( label != NULL , _T("wxChoice: invalid label") );
+    wxASSERT_MSG( label != NULL , T("wxChoice: invalid label") );
 
     return wxString(label->label,*wxConvCurrent);
 }
 
 int wxChoice::Number() const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, _T("invalid choice") );
+    wxCHECK_MSG( m_widget != NULL, 0, T("invalid choice") );
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
     int count = 0;
@@ -351,7 +351,7 @@ void wxChoice::SetColumns( int WXUNUSED(n) )
 
 void wxChoice::SetSelection( int n )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid choice") );
+    wxCHECK_RET( m_widget != NULL, T("invalid choice") );
 
     int tmp = n;
     gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
@@ -359,7 +359,7 @@ void wxChoice::SetSelection( int n )
 
 void wxChoice::SetStringSelection( const wxString &string )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid choice") );
+    wxCHECK_RET( m_widget != NULL, T("invalid choice") );
 
     int n = FindString( string );
     if (n != -1) SetSelection( n );

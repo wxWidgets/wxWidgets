@@ -51,7 +51,7 @@
 LRESULT APIENTRY _EXPORT wxTaskBarIconWindowProc( HWND hWnd, unsigned msg,
 				     UINT wParam, LONG lParam );
 
-wxChar *wxTaskBarWindowClass = _T("wxTaskBarWindowClass");
+wxChar *wxTaskBarWindowClass = T("wxTaskBarWindowClass");
 
 wxList wxTaskBarIcon::sm_taskBarIcons;
 bool   wxTaskBarIcon::sm_registeredClass = FALSE;
@@ -120,7 +120,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 	    notifyData.hIcon = (HICON) icon.GetHICON();
     }
 
-    if (((const wxChar*) tooltip != NULL) && (tooltip != _T("")))
+    if (((const wxChar*) tooltip != NULL) && (tooltip != T("")))
     {
         notifyData.uFlags |= NIF_TIP ;
 		lstrcpyn(notifyData.szTip, WXSTRINGCAST tooltip, sizeof(notifyData.szTip));
@@ -262,7 +262,7 @@ bool wxTaskBarIcon::RegisterWindowClass()
         return TRUE;
 
     // Also register the taskbar message here
-    sm_taskbarMsg = ::RegisterWindowMessage(_T("wxTaskBarIconMessage"));
+    sm_taskbarMsg = ::RegisterWindowMessage(T("wxTaskBarIconMessage"));
 
     WNDCLASS	wc;
     bool	rc;
@@ -294,7 +294,7 @@ WXHWND wxTaskBarIcon::CreateTaskBarWindow()
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
     HWND hWnd = CreateWindowEx (0, wxTaskBarWindowClass,
-            _T("wxTaskBarWindow"),
+            T("wxTaskBarWindow"),
             WS_OVERLAPPED,
             0,
             0,

@@ -193,7 +193,7 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
 	// =====================================================================
 	// Results from a Microsoft Access 7.0 db, using a driver from Microsoft
 	//
-	// SQL_VARCHAR						type name = 'TEXT', Precision = 255
+	// SQL_VARCHAR						type name = 'TEXT(', Precision = 255
 	// SQL_TIMESTAMP					type name = 'DATETIME'
 	// SQL_DECIMAL						SQL_NO_DATA_FOUND
 	// SQL_NUMERIC						type name = 'CURRENCY', Precision = 19
@@ -979,14 +979,14 @@ bool wxDB::Grant(int privileges, char *tableName, char *userList)
 		int c = 0;
 		if (privileges & DB_GRANT_SELECT)
 		{
-			strcat(sqlStmt, "SELECT");
+			strcat(sqlStmt, "SELECT(");
 			c++;
 		}
 		if (privileges & DB_GRANT_INSERT)
 		{
 			if (c++)
 				strcat(sqlStmt, ", ");
-			strcat(sqlStmt, "INSERT");
+			strcat(sqlStmt, "INSERT(");
 		}
 		if (privileges & DB_GRANT_UPDATE)
 		{

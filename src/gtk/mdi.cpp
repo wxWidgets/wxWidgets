@@ -319,7 +319,7 @@ void wxMDIChildFrame::AddChild( wxWindowBase *child )
 
 void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 {
-    wxASSERT_MSG( m_menuBar == NULL, _T("Only one menubar allowed") );
+    wxASSERT_MSG( m_menuBar == NULL, T("Only one menubar allowed") );
 
     m_menuBar = menu_bar;
 
@@ -431,9 +431,9 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInMDI;
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
-        !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, _T("wxMDIClientWindow") ))
+        !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, T("wxMDIClientWindow") ))
     {
-        wxFAIL_MSG( _T("wxMDIClientWindow creation failed") );
+        wxFAIL_MSG( T("wxMDIClientWindow creation failed") );
 	return FALSE;
     }
 

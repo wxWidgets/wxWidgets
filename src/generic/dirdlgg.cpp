@@ -6,7 +6,7 @@
 // Created:     12/12/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -55,12 +55,12 @@ static char * icon1_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 6 1",
 /* colors */
-" 	s None	c None",
-".	c #000000",
-"+	c #c0c0c0",
-"@	c #808080",
-"#	c #ffff00",
-"$	c #ffffff",
+"   s None  c None",
+".  c #000000",
+"+  c #c0c0c0",
+"@  c #808080",
+"#  c #ffff00",
+"$  c #ffffff",
 /* pixels */
 "                ",
 "   @@@@@        ",
@@ -84,12 +84,12 @@ static char * icon2_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 6 1",
 /* colors */
-" 	s None	c None",
-".	c #000000",
-"+	c #c0c0c0",
-"@	c #808080",
-"#	c #ffff00",
-"$	c #ffffff",
+"   s None  c None",
+".  c #000000",
+"+  c #c0c0c0",
+"@  c #808080",
+"#  c #ffff00",
+"$  c #ffffff",
 /* pixels */
 "                ",
 "   @@@@@        ",
@@ -123,8 +123,8 @@ wxDirItemData::wxDirItemData(wxString& path, wxString& name)
 {
     m_path = path;
     m_name = name;
-    /* Insert logic to detect hidden files here 
-     * In UnixLand we just check whether the first char is a dot 
+    /* Insert logic to detect hidden files here
+     * In UnixLand we just check whether the first char is a dot
      * For FileNameFromPath read LastDirNameInThisPath ;-) */
     // m_isHidden = (bool)(wxFileNameFromPath(*m_path)[0] == '.');
     m_isHidden = FALSE;
@@ -179,7 +179,7 @@ wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &WXUN
     m_imageListNormal->Add(wxICON(icon2));
     SetImageList(m_imageListNormal);
  #endif
-  
+
     m_showHidden = FALSE;
     m_rootId = AddRoot( _("Sections") );
     SetItemHasChildren(m_rootId);
@@ -190,7 +190,7 @@ wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &WXUN
 #define ADD_SECTION(a,b) \
   if (wxPathExists((a))) { m_paths.Add( (a) ); m_names.Add( (b) ); };
 
-void wxDirCtrl::SetupSections() 
+void wxDirCtrl::SetupSections()
 {
   wxString home;
 
@@ -198,17 +198,17 @@ void wxDirCtrl::SetupSections()
   m_names.Clear();
 #ifdef __WXMSW__
   // better than nothing
-  ADD_SECTION(_T("c:\\"), _("My Harddisk") )
+  ADD_SECTION(T("c:\\"), _("My Harddisk") )
 #else
-  ADD_SECTION(_T("/"), _("The Computer") )
+  ADD_SECTION(T("/"), _("The Computer") )
   wxGetHomeDir(&home);
   ADD_SECTION(home, _("My Home") )
-  ADD_SECTION(_T("/mnt"), _("Mounted Devices") )
-  ADD_SECTION(_T("/usr"), _("User") )
-  ADD_SECTION(_T("/usr/local"), _("User Local") )
-  ADD_SECTION(_T("/var"), _("Variables") )
-  ADD_SECTION(_T("/etc"), _("Etcetera") )
-  ADD_SECTION(_T("/tmp"), _("Temporary") )
+  ADD_SECTION(T("/mnt"), _("Mounted Devices") )
+  ADD_SECTION(T("/usr"), _("User") )
+  ADD_SECTION(T("/usr/local"), _("User Local") )
+  ADD_SECTION(T("/var"), _("Variables") )
+  ADD_SECTION(T("/etc"), _("Etcetera") )
+  ADD_SECTION(T("/tmp"), _("Temporary") )
 #endif
 }
 #undef ADD_SECTION
@@ -219,14 +219,14 @@ void wxDirCtrl::CreateItems(const wxTreeItemId &parent)
     wxDirItemData *dir_item;
 
 //  wxASSERT(m_paths.Count() == m_names.Count());  ?
-  
-    for (unsigned int i=0; i<m_paths.Count(); i++) 
+
+    for (unsigned int i=0; i<m_paths.Count(); i++)
     {
-	dir_item = new wxDirItemData(m_paths[i],m_names[i]);
+  dir_item = new wxDirItemData(m_paths[i],m_names[i]);
 #ifdef __WXMSW__
-	id = AppendItem( parent, m_names[i], -1, -1, dir_item);
+  id = AppendItem( parent, m_names[i], -1, -1, dir_item);
 #else
-	id = AppendItem( parent, m_names[i], 0, 1, dir_item);
+  id = AppendItem( parent, m_names[i], 0, 1, dir_item);
 #endif
         if (dir_item->m_hasSubDirs) SetItemHasChildren(id);
     }
@@ -240,7 +240,7 @@ void wxDirCtrl::OnBeginEditItem(wxTreeEvent &event)
         event.Veto();
         return;
     }
-    
+
     // don't rename the individual sections
     if (GetParent( event.GetItem() ) == m_rootId)
     {
@@ -254,31 +254,31 @@ void wxDirCtrl::OnEndEditItem(wxTreeEvent &event)
     if ((event.GetLabel().IsEmpty()) ||
         (event.GetLabel() == _(".")) ||
         (event.GetLabel() == _("..")) ||
-	(event.GetLabel().First( _T("/") ) != wxNOT_FOUND))
+  (event.GetLabel().First( T("/") ) != wxNOT_FOUND))
     {
         wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
-	dialog.ShowModal();
+  dialog.ShowModal();
         event.Veto();
-	return;
+  return;
     }
 
     wxTreeItemId id = event.GetItem();
     wxDirItemData *data = (wxDirItemData*)GetItemData( id );
     wxASSERT( data );
-    
+
     wxString new_name( wxPathOnly( data->m_path ) );
-    new_name += _T("/");
+    new_name += T("/");
     new_name += event.GetLabel();
-    
+
     wxLogNull log;
-    
+
     if (wxFileExists(new_name))
     {
         wxMessageDialog dialog(this, _("File name exists already."), _("Error"), wxOK | wxICON_ERROR );
-	dialog.ShowModal();
+  dialog.ShowModal();
         event.Veto();
     }
-    
+
     if (wxRenameFile(data->m_path,new_name))
     {
         data->SetNewDirName( new_name );
@@ -286,7 +286,7 @@ void wxDirCtrl::OnEndEditItem(wxTreeEvent &event)
     else
     {
         wxMessageDialog dialog(this, _("Operation not permitted."), _("Error"), wxOK | wxICON_ERROR );
-	dialog.ShowModal();
+  dialog.ShowModal();
         event.Veto();
     }
 }
@@ -311,23 +311,23 @@ void wxDirCtrl::OnExpandItem(wxTreeEvent &event)
     m_paths.Clear();
     m_names.Clear();
     search = data->m_path + "/*";
-    for (path = wxFindFirstFile( search, wxDIR ); !path.IsNull(); 
-       path=wxFindNextFile() ) 
+    for (path = wxFindFirstFile( search, wxDIR ); !path.IsNull();
+       path=wxFindNextFile() )
     {
         filename = wxFileNameFromPath( path );
         /* Don't add "." and ".." to the tree. I think wxFindNextFile
          * also checks this, but I don't quite understand what happens
          * there. Also wxFindNextFile seems to swallow hidden dirs */
-        if ((filename != ".") && (filename != "..")) 
+        if ((filename != ".") && (filename != ".."))
         {
             m_paths.Add(path);
             m_names.Add(filename);
         }
     }
-    
+
     CreateItems( event.GetItem() );
     SortChildren( event.GetItem() );
-      
+
     wxEndBusyCursor();
 }
 
@@ -338,10 +338,10 @@ void wxDirCtrl::OnCollapseItem(wxTreeEvent &event )
     /* Workaround because DeleteChildren has disapeared (why?) and
      * CollapseAndReset doesn't work as advertised (deletes parent too) */
     child = GetFirstChild(parent, cookie);
-    while (child.IsOk()) 
+    while (child.IsOk())
     {
         Delete(child);
-        /* Not GetNextChild below, because the cookie mechanism can't 
+        /* Not GetNextChild below, because the cookie mechanism can't
          * handle disappearing children! */
         child = GetFirstChild(parent, cookie);
     }
@@ -370,33 +370,33 @@ BEGIN_EVENT_TABLE( wxDirDialog, wxDialog )
 END_EVENT_TABLE()
 
 wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
-			 const wxString& defaultPath, long style, 
-			 const wxPoint& pos) : 
+       const wxString& defaultPath, long style,
+       const wxPoint& pos) :
   wxDialog(parent, -1, message, pos, wxSize(300,300),
-	   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     m_message = message;
     m_dialogStyle = style;
     m_parent = parent;
-  
+
     m_path = defaultPath;
-  
+
     wxBeginBusyCursor();
-    
+
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) dir ctrl
-    m_dir = new wxDirCtrl( this, ID_DIRCTRL, "/", wxDefaultPosition, wxSize(200,200), 
-      wxTR_HAS_BUTTONS | wxSUNKEN_BORDER | wxTR_EDIT_LABELS); 
+    m_dir = new wxDirCtrl( this, ID_DIRCTRL, "/", wxDefaultPosition, wxSize(200,200),
+      wxTR_HAS_BUTTONS | wxSUNKEN_BORDER | wxTR_EDIT_LABELS);
     topsizer->Add( m_dir, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
- 
+
     // 2) text ctrl
-    m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition ); 
+    m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition );
     topsizer->Add( m_input, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
-    
+
     // m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden") );
     // m_check->SetValue(TRUE);
-    
+
 #if wxUSE_STATLINE
     // 3) static line
     topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
@@ -410,15 +410,15 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
     buttonsizer->Add( m_cancel, 0, wxLEFT|wxRIGHT, 10 );
     m_new = new wxButton( this, ID_NEW, _("New...") );
     buttonsizer->Add( m_new, 0, wxLEFT|wxRIGHT, 10 );
-    
+
     topsizer->Add( buttonsizer, 0, wxALL | wxCENTER, 10 );
 
     m_ok->SetDefault();
     m_dir->SetFocus();
-    
+
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
-    
+
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
@@ -436,14 +436,14 @@ int wxDirDialog::ShowModal()
 void wxDirDialog::OnTreeSelected( wxTreeEvent &event )
 {
     wxDirItemData *data = (wxDirItemData*)m_dir->GetItemData(event.GetItem());
-    if (data) 
+    if (data)
        m_input->SetValue( data->m_path );
 };
 
 void wxDirDialog::OnTreeKeyDown( wxTreeEvent &WXUNUSED(event) )
 {
     wxDirItemData *data = (wxDirItemData*)m_dir->GetItemData(m_dir->GetSelection());
-    if (data) 
+    if (data)
         m_input->SetValue( data->m_path );
 };
 
@@ -472,7 +472,7 @@ void wxDirDialog::OnOK( wxCommandEvent& WXUNUSED(event) )
     else {
       // Trouble...
       msg = _("Failed to create directory ")+m_path+
-	_("\n(Do you have the required permissions?)");
+  _("\n(Do you have the required permissions?)");
       wxMessageDialog errmsg(this, msg, _("Error creating directory"), wxOK | wxICON_ERROR);
       errmsg.ShowModal();
       // We still don't have a valid dir. Back to the main dialog.
@@ -492,8 +492,8 @@ void wxDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
     if ((id == m_dir->GetRootItem()) ||
         (m_dir->GetParent(id) == m_dir->GetRootItem()))
     {
-        wxMessageDialog msg(this, _("You cannot add a new directory to this section."), 
-	                          _("Create directory"), wxOK | wxICON_INFORMATION );
+        wxMessageDialog msg(this, _("You cannot add a new directory to this section."),
+                            _("Create directory"), wxOK | wxICON_INFORMATION );
         msg.ShowModal();
         return;
     }
@@ -501,33 +501,33 @@ void wxDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
     wxTreeItemId parent = m_dir->GetParent( id );
     wxDirItemData *data = (wxDirItemData*)m_dir->GetItemData( parent );
     wxASSERT( data );
-    
-    wxString new_name( _T("NewName") );
+
+    wxString new_name( T("NewName") );
     wxString path( data->m_path );
-    path += _T( "/" );
+    path += T("/");
     path += new_name;
     if (wxFileExists(path))
     {
         // try NewName0, NewName1 etc.
         int i = 0;
-	do {
-            new_name = _T("NewName");
-	    wxString num;
-	    num.Printf( "%d", i );
-	    new_name += num;
-	    
+  do {
+            new_name = T("NewName");
+      wxString num;
+      num.Printf( "%d", i );
+      new_name += num;
+
             path = data->m_path;
-            path += _T( "/" );
+            path += T("/");
             path += new_name;
-	    i++;
-	} while (wxFileExists(path));
+      i++;
+  } while (wxFileExists(path));
     }
-	
+
     wxLogNull log;
-    if (!wxMkdir(path)) 
+    if (!wxMkdir(path))
     {
         wxMessageDialog dialog(this, _("Operation not permitted."), _("Error"), wxOK | wxICON_ERROR );
-	dialog.ShowModal();
+  dialog.ShowModal();
         return;
     }
 

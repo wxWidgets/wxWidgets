@@ -103,7 +103,7 @@ static inline wxString FindExtension(const wxChar *path);
 // local constants
 // ----------------------------------------------------------------------------
 
-static const char *s_MRUEntryFormat = _T("&%d %s");
+static const char *s_MRUEntryFormat = T("&%d %s");
 
 // ============================================================================
 // implementation
@@ -224,7 +224,7 @@ bool wxDocument::Save()
     bool ret = FALSE;
 
     if (!IsModified()) return TRUE;
-    if (m_documentFile == _T("") || !m_savedYet)
+    if (m_documentFile == T("") || !m_savedYet)
         ret = SaveAs();
     else
         ret = OnSaveDocument(m_documentFile);
@@ -254,7 +254,7 @@ bool wxDocument::SaveAs()
     wxString path, name, ext;
     wxSplitPath(fileName, & path, & name, & ext);
 
-    if (ext.IsEmpty() || ext == _T(""))
+    if (ext.IsEmpty() || ext == T(""))
     {
         fileName += ".";
         fileName += docTemplate->GetDefaultExtension();
@@ -283,7 +283,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         return FALSE;
 
     wxString msgTitle;
-    if (wxTheApp->GetAppName() != _T(""))
+    if (wxTheApp->GetAppName() != T(""))
         msgTitle = wxTheApp->GetAppName();
     else
         msgTitle = wxString(_("File error"));
@@ -319,7 +319,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         return FALSE;
 
     wxString msgTitle;
-    if (wxTheApp->GetAppName() != _T(""))
+    if (wxTheApp->GetAppName() != T(""))
         msgTitle = wxTheApp->GetAppName();
     else
         msgTitle = wxString(_("File error"));
@@ -378,12 +378,12 @@ bool wxDocument::Revert()
 // Get title, or filename if no title, else unnamed
 bool wxDocument::GetPrintableName(wxString& buf) const
 {
-    if (m_documentTitle != _T(""))
+    if (m_documentTitle != T(""))
     {
         buf = m_documentTitle;
         return TRUE;
     }
-    else if (m_documentFile != _T(""))
+    else if (m_documentFile != T(""))
     {
         buf = wxFileNameFromPath(m_documentFile);
         return TRUE;
@@ -418,7 +418,7 @@ bool wxDocument::OnSaveModified()
         GetPrintableName(title);
 
         wxString msgTitle;
-        if (wxTheApp->GetAppName() != _T(""))
+        if (wxTheApp->GetAppName() != T(""))
             msgTitle = wxTheApp->GetAppName();
         else
             msgTitle = wxString(_("Warning"));
@@ -985,8 +985,8 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
     // Existing document
     wxDocTemplate *temp = (wxDocTemplate *) NULL;
 
-    wxString path2(_T(""));
-    if (path != _T(""))
+    wxString path2(T(""));
+    if (path != T(""))
         path2 = path;
 
     if (flags & wxDOC_SILENT)
@@ -1211,21 +1211,21 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
         {
             // add a '|' to separate this filter from the previous one
             if ( !descrBuf.IsEmpty() )
-                descrBuf << _T('|');
+                descrBuf << T('|');
 
             descrBuf << templates[i]->GetDescription()
-                << _T(" (") << templates[i]->GetFileFilter() << _T(") |")
+                << T(" (") << templates[i]->GetFileFilter() << T(") |")
                 << templates[i]->GetFileFilter();
         }
     }
 #else
-    wxString descrBuf = _T("*.*");
+    wxString descrBuf = T("*.*");
 #endif
 
     int FilterIndex = 0;
     wxString pathTmp = wxFileSelectorEx(_("Select a file"),
-                                        _T(""),
-                                        _T(""),
+                                        T(""),
+                                        T(""),
                                         &FilterIndex,
                                         descrBuf,
                                         0,
@@ -1250,7 +1250,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     }
     else
     {
-        path = _T("");
+        path = T("");
         return (wxDocTemplate *) NULL;
     }
 #if 0
@@ -1261,7 +1261,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     if (!temp)
         return (wxDocTemplate *) NULL;
 
-    wxChar *pathTmp = wxFileSelector(_("Select a file"), _T(""), _T(""),
+    wxChar *pathTmp = wxFileSelector(_("Select a file"), T(""), T(""),
             temp->GetDefaultExtension(),
             temp->GetFileFilter(),
             0, wxTheApp->GetTopWindow());
@@ -1279,7 +1279,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
                                                 int noTemplates)
 {
-    wxChar **strings = new wxChar *[noTemplates];
+    const wxChar **strings = new wxChar *[noTemplates];
     wxChar **data = new wxChar *[noTemplates];
     int i;
     int n = 0;
@@ -1287,7 +1287,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
     {
         if (templates[i]->IsVisible())
         {
-            strings[n] = WXSTRINGCAST templates[i]->m_description;
+            strings[n] = templates[i]->m_description;
             data[n] = (wxChar *)templates[i];
             n ++;
         }
@@ -1316,15 +1316,15 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
 wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
         int noTemplates)
 {
-    wxChar **strings = new wxChar *[noTemplates];
+    const wxChar **strings = new wxChar *[noTemplates];
     wxChar **data = new wxChar *[noTemplates];
     int i;
     int n = 0;
     for (i = 0; i < noTemplates; i++)
     {
-        if (templates[i]->IsVisible() && (templates[i]->GetViewName() != _T("")))
+        if (templates[i]->IsVisible() && (templates[i]->GetViewName() != T("")))
         {
-            strings[n] = WXSTRINGCAST templates[i]->m_viewTypeName;
+            strings[n] = templates[i]->m_viewTypeName;
             data[n] = (wxChar *)templates[i];
             n ++;
         }
@@ -1543,7 +1543,7 @@ void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
 #if wxUSE_PRINTING_ARCHITECTURE
 
 wxDocPrintout::wxDocPrintout(wxView *view, const wxString& title)
-             : wxPrintout(WXSTRINGCAST title)
+             : wxPrintout(title)
 {
     m_printoutView = view;
 }
@@ -1759,7 +1759,7 @@ void wxCommandProcessor::SetMenuStrings()
         {
             wxCommand *command = (wxCommand *)m_currentCommand->Data();
             wxString commandName(command->GetName());
-            if (commandName == _T("")) commandName = _("Unnamed command");
+            if (commandName == T("")) commandName = _("Unnamed command");
             bool canUndo = command->CanUndo();
             if (canUndo)
                 buf = wxString(_("&Undo ")) + commandName;
@@ -1774,7 +1774,7 @@ void wxCommandProcessor::SetMenuStrings()
             {
                 wxCommand *redoCommand = (wxCommand *)m_currentCommand->Next()->Data();
                 wxString redoCommandName(redoCommand->GetName());
-                if (redoCommandName == _T("")) redoCommandName = _("Unnamed command");
+                if (redoCommandName == T("")) redoCommandName = _("Unnamed command");
                 buf = wxString(_("&Redo ")) + redoCommandName;
                 m_commandEditMenu->SetLabel(wxID_REDO, buf);
                 m_commandEditMenu->Enable(wxID_REDO, TRUE);
@@ -1801,7 +1801,7 @@ void wxCommandProcessor::SetMenuStrings()
                 // we've undone to the start of the list, but can redo the first.
                 wxCommand *redoCommand = (wxCommand *)m_commands.First()->Data();
                 wxString redoCommandName(redoCommand->GetName());
-                if (redoCommandName == _T("")) redoCommandName = _("Unnamed command");
+                if (redoCommandName == T("")) redoCommandName = _("Unnamed command");
                 buf = wxString(_("&Redo ")) + redoCommandName;
                 m_commandEditMenu->SetLabel(wxID_REDO, buf);
                 m_commandEditMenu->Enable(wxID_REDO, TRUE);
@@ -1900,7 +1900,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
 void wxFileHistory::RemoveFileFromHistory(int i)
 {
     wxCHECK_RET( i < m_fileHistoryN,
-                 _T("invalid index in wxFileHistory::RemoveFileFromHistory") );
+                 T("invalid index in wxFileHistory::RemoveFileFromHistory") );
 
     wxNode* node = m_fileMenus.First();
     while ( node )
@@ -1932,7 +1932,7 @@ void wxFileHistory::RemoveFileFromHistory(int i)
 
         // to be removed as soon as wxMenu::Delete() is implemented
 #if 1
-        menu->SetLabel(wxID_FILE1 + m_fileHistoryN - 1, _T(""));
+        menu->SetLabel(wxID_FILE1 + m_fileHistoryN - 1, T(""));
 #endif
 
         node = node->Next();
@@ -1964,13 +1964,13 @@ void wxFileHistory::Load(wxConfigBase& config)
 {
     m_fileHistoryN = 0;
     wxString buf;
-    buf.Printf(_T("file%d"), m_fileHistoryN+1);
+    buf.Printf(T("file%d"), m_fileHistoryN+1);
     wxString historyFile;
-    while ((m_fileHistoryN <= m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != _T("")))
+    while ((m_fileHistoryN <= m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != T("")))
     {
         m_fileHistory[m_fileHistoryN] = copystring((const wxChar*) historyFile);
         m_fileHistoryN ++;
-        buf.Printf(_T("file%d"), m_fileHistoryN+1);
+        buf.Printf(T("file%d"), m_fileHistoryN+1);
         historyFile = "";
     }
     AddFilesToMenu();
@@ -1982,7 +1982,7 @@ void wxFileHistory::Save(wxConfigBase& config)
     for (i = 0; i < m_fileHistoryN; i++)
     {
         wxString buf;
-        buf.Printf(_T("file%d"), i+1);
+        buf.Printf(T("file%d"), i+1);
         config.Write(buf, wxString(m_fileHistory[i]));
     }
 }

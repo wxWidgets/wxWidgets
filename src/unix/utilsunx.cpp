@@ -64,7 +64,7 @@
         #ifdef __SUN__
             int usleep(unsigned int usec);
         #else // !Sun
-	#ifdef __EMX
+        #ifdef __EMX
             /* I copied this from the XFree86 diffs. AV. */
             #define INCL_DOSPROCESS
             #include <os2.h>
@@ -72,9 +72,9 @@
             {
                 DosSleep(delay ? (delay/1000l) : 1l);
             }
-	#else
-	    void usleep(unsigned long usec);
-	#endif
+        #else
+            void usleep(unsigned long usec);
+        #endif
         #endif // Sun/EMX/Something else
     };
 #define HAVE_USLEEP 1
@@ -130,31 +130,31 @@ int wxKill(long pid, wxSignal sig)
 
 long wxExecute( const wxString& command, bool sync, wxProcess *process )
 {
-    wxCHECK_MSG( !command.IsEmpty(), 0, _T("can't exec empty command") );
+    wxCHECK_MSG( !command.IsEmpty(), 0, T("can't exec empty command") );
 
     int argc = 0;
     wxChar *argv[WXEXECUTE_NARGS];
     wxString argument;
     const wxChar *cptr = command.c_str();
-    wxChar quotechar = _T('\0'); // is arg quoted?
+    wxChar quotechar = T('\0'); // is arg quoted?
     bool escaped = FALSE;
 
     // split the command line in arguments
     do
     {
-        argument=_T("");
-        quotechar = _T('\0');
+        argument=T("");
+        quotechar = T('\0');
 
         // eat leading whitespace:
         while ( wxIsspace(*cptr) )
             cptr++;
 
-        if ( *cptr == _T('\'') || *cptr == _T('"') )
+        if ( *cptr == T('\'') || *cptr == T('"') )
             quotechar = *cptr++;
 
         do
         {
-            if ( *cptr == _T('\\') && ! escaped )
+            if ( *cptr == T('\\') && ! escaped )
             {
                 escaped = TRUE;
                 cptr++;
@@ -167,11 +167,11 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
 
             // have we reached the end of the argument?
             if ( (*cptr == quotechar && ! escaped)
-                 || (quotechar == _T('\0') && wxIsspace(*cptr))
-                 || *cptr == _T('\0') )
+                 || (quotechar == T('\0') && wxIsspace(*cptr))
+                 || *cptr == T('\0') )
             {
                 wxASSERT_MSG( argc < WXEXECUTE_NARGS,
-                              _T("too many arguments in wxExecute") );
+                              T("too many arguments in wxExecute") );
 
                 argv[argc] = new wxChar[argument.length() + 1];
                 wxStrcpy(argv[argc], argument.c_str());
@@ -202,7 +202,7 @@ bool wxShell(const wxString& command)
 {
     wxString cmd;
     if ( !!command )
-        cmd.Printf(_T("xterm -e %s"), command.c_str());
+        cmd.Printf(T("xterm -e %s"), command.c_str());
     else
         cmd = command;
 
@@ -247,34 +247,43 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
 
 long wxExecute( wxChar **argv, bool sync, wxProcess *process )
 {
-    wxCHECK_MSG( *argv, 0, _T("can't exec empty command") );
+    wxCHECK_MSG( *argv, 0, T("can't exec empty command") );
 
-    int end_proc_detect[2];
 #if wxUSE_UNICODE
     int mb_argc = 0;
     char *mb_argv[WXEXECUTE_NARGS];
 
-    while (argv[mb_argc]) {
-      wxWX2MBbuf mb_arg = wxConvCurrent->cWX2MB(argv[mb_argc]);
+    while (argv[mb_argc])
+    {
+      wxWX2MBbuf mb_arg = wxConvertWX2MB(argv[mb_argc]);
       mb_argv[mb_argc] = strdup(mb_arg);
       mb_argc++;
     }
     mb_argv[mb_argc] = (char *) NULL;
-#else
-    wxChar **mb_argv = argv;
-#endif
 
+    // this macro will free memory we used above
+    #define ARGS_CLEANUP                                 \
+        for ( mb_argc = 0; mb_argb[mb_argc]; mb_argc++ ) \
+            free(mb_argv[mb_argc])
+#else // ANSI
+    // no need for cleanup
+    #define ARGS_CLEANUP
+
+    wxChar **mb_argv = argv;
+#endif // Unicode/ANSI
+
+#if wxUSE_GUI
     // create pipes
+    int end_proc_detect[2];
     if (pipe(end_proc_detect) == -1)
     {
         wxLogSysError( _("Pipe creation failed") );
-#if wxUSE_UNICODE
-	mb_argc = 0;
-	while (mb_argv[mb_argc])
-	  free(mb_argv[mb_argc++]);
-#endif
+
+        ARGS_CLEANUP;
+
         return 0;
     }
+#endif // wxUSE_GUI
 
     // fork the process
 #if HAVE_VFORK
@@ -285,17 +294,17 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
     if (pid == -1)
     {
         wxLogSysError( _("Fork failed") );
-#if wxUSE_UNICODE
-	mb_argc = 0;
-	while (mb_argv[mb_argc])
-	  free(mb_argv[mb_argc++]);
-#endif
+
+        ARGS_CLEANUP;
+
         return 0;
     }
     else if (pid == 0)
     {
+#if wxUSE_GUI
         // we're in child
         close(end_proc_detect[0]); // close reading side
+#endif // wxUSE_GUI
 
         // These three lines close the open file descriptors to to avoid any
         // input/output which might block the process or irritate the user. If
@@ -306,7 +315,12 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
             // leave stderr opened, it won't do any hurm
             for ( int fd = 0; fd < FD_SETSIZE; fd++ )
             {
-                if ( fd != end_proc_detect[1] && fd != STDERR_FILENO )
+#if wxUSE_GUI
+                if ( fd == end_proc_detect[1] )
+                    continue;
+#endif // wxUSE_GUI
+
+                if ( fd != STDERR_FILENO )
                     close(fd);
             }
         }
@@ -330,21 +344,18 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
     }
     else
     {
+#if wxUSE_GUI
         // we're in parent
         close(end_proc_detect[1]); // close writing side
 
         wxEndProcessData *data = new wxEndProcessData;
         data->tag = wxAddProcessCallback(data, end_proc_detect[0]);
 
-#if wxUSE_UNICODE
-	mb_argc = 0;
-	while (mb_argv[mb_argc])
-	  free(mb_argv[mb_argc++]);
-#endif
+        ARGS_CLEANUP;
 
         if ( sync )
         {
-            wxASSERT_MSG( !process, _T("wxProcess param ignored for sync exec") );
+            wxASSERT_MSG( !process, T("wxProcess param ignored for sync exec") );
             data->process = NULL;
 
             // sync execution: indicate it by negating the pid
@@ -370,7 +381,20 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
 
             return pid;
         }
+#else // !wxUSE_GUI
+        wxASSERT_MSG( sync, T("async execution not supported yet") );
+
+        int exitcode = 0;
+        if ( waitpid(pid, &exitcode, 0) == -1 || !WIFEXITED(exitcode) )
+        {
+            wxLogSysError(_("Waiting for subprocess termination failed"));
+        }
+
+        return exitcode;
+#endif // wxUSE_GUI
     }
+
+    #undef ARGS_CLEANUP
 }
 
 // ----------------------------------------------------------------------------
@@ -381,14 +405,14 @@ const wxChar* wxGetHomeDir( wxString *home  )
 {
     *home = wxGetUserHome( wxString() );
     if ( home->IsEmpty() )
-        *home = _T("/");
+        *home = T("/");
 
     return home->c_str();
 }
 
 #if wxUSE_UNICODE
 const wxMB2WXbuf wxGetUserHome( const wxString &user )
-#else // just for binary compatibility
+#else // just for binary compatibility -- there is no 'const' here
 char *wxGetUserHome( const wxString &user )
 #endif
 {
@@ -396,15 +420,15 @@ char *wxGetUserHome( const wxString &user )
 
     if ( !user )
     {
-        register wxChar *ptr;
+        wxChar *ptr;
 
-        if ((ptr = wxGetenv(_T("HOME"))) != NULL)
+        if ((ptr = wxGetenv(T("HOME"))) != NULL)
         {
             return ptr;
         }
-        if ((ptr = wxGetenv(_T("USER"))) != NULL || (ptr = wxGetenv(_T("LOGNAME"))) != NULL)
+        if ((ptr = wxGetenv(T("USER"))) != NULL || (ptr = wxGetenv(T("LOGNAME"))) != NULL)
         {
-            who = getpwnam(wxConvCurrent->cWX2MB(ptr));
+            who = getpwnam(wxConvertWX2MB(ptr));
         }
 
         // We now make sure the the user exists!
@@ -418,11 +442,7 @@ char *wxGetUserHome( const wxString &user )
       who = getpwnam (user.mb_str());
     }
 
-#if wxUSE_UNICODE
-    return who ? wxConvCurrent->cMB2WX(who->pw_dir) : (wxMB2WXbuf)((wxChar*)NULL);
-#else
-    return who ? who->pw_dir : ((char*)NULL);
-#endif
+    return wxConvertMB2WX(who ? who->pw_dir : NULL);
 }
 
 // ----------------------------------------------------------------------------
@@ -434,9 +454,9 @@ char *wxGetUserHome( const wxString &user )
 // private use only)
 static bool wxGetHostNameInternal(wxChar *buf, int sz)
 {
-    wxCHECK_MSG( buf, FALSE, _T("NULL pointer in wxGetHostNameInternal") );
+    wxCHECK_MSG( buf, FALSE, T("NULL pointer in wxGetHostNameInternal") );
 
-    *buf = _T('\0');
+    *buf = T('\0');
 
     // we're using uname() which is POSIX instead of less standard sysinfo()
 #if defined(HAVE_UNAME)
@@ -444,13 +464,13 @@ static bool wxGetHostNameInternal(wxChar *buf, int sz)
     bool ok = uname(&uts) != -1;
     if ( ok )
     {
-        wxStrncpy(buf, wxConvCurrent->cMB2WX(uts.nodename), sz - 1);
-        buf[sz] = _T('\0');
+        wxStrncpy(buf, wxConvertMB2WX(uts.nodename), sz - 1);
+        buf[sz] = T('\0');
     }
 #elif defined(HAVE_GETHOSTNAME)
     bool ok = gethostname(buf, sz) != -1;
 #else // no uname, no gethostname
-    wxFAIL_MSG(_T("don't know host name for this machine"));
+    wxFAIL_MSG(T("don't know host name for this machine"));
 
     bool ok = FALSE;
 #endif // uname/gethostname
@@ -471,11 +491,11 @@ bool wxGetHostName(wxChar *buf, int sz)
     {
         // BSD systems return the FQDN, we only want the hostname, so extract
         // it (we consider that dots are domain separators)
-        wxChar *dot = wxStrchr(buf, _T('.'));
+        wxChar *dot = wxStrchr(buf, T('.'));
         if ( dot )
         {
             // nuke it
-            *dot = _T('\0');
+            *dot = T('\0');
         }
     }
 
@@ -488,9 +508,9 @@ bool wxGetFullHostName(wxChar *buf, int sz)
 
     if ( ok )
     {
-        if ( !wxStrchr(buf, _T('.')) )
+        if ( !wxStrchr(buf, T('.')) )
         {
-            struct hostent *host = gethostbyname(wxConvCurrent->cWX2MB(buf));
+            struct hostent *host = gethostbyname(wxConvertWX2MB(buf));
             if ( !host )
             {
                 wxLogSysError(_("Cannot get the official hostname"));
@@ -500,7 +520,7 @@ bool wxGetFullHostName(wxChar *buf, int sz)
             else
             {
                 // the canonical name
-                wxStrncpy(buf, wxConvCurrent->cMB2WX(host->h_name), sz);
+                wxStrncpy(buf, wxConvertMB2WX(host->h_name), sz);
             }
         }
         //else: it's already a FQDN (BSD behaves this way)
@@ -513,10 +533,10 @@ bool wxGetUserId(wxChar *buf, int sz)
 {
     struct passwd *who;
 
-    *buf = _T('\0');
+    *buf = T('\0');
     if ((who = getpwuid(getuid ())) != NULL)
     {
-        wxStrncpy (buf, wxConvCurrent->cMB2WX(who->pw_name), sz - 1);
+        wxStrncpy (buf, wxConvertMB2WX(who->pw_name), sz - 1);
         return TRUE;
     }
 
@@ -528,17 +548,19 @@ bool wxGetUserName(wxChar *buf, int sz)
     struct passwd *who;
     char *comma;
 
-    *buf = _T('\0');
+    *buf = T('\0');
     if ((who = getpwuid (getuid ())) != NULL) {
        comma = strchr(who->pw_gecos, ',');
        if (comma)
            *comma = '\0'; // cut off non-name comment fields
-       wxStrncpy (buf, wxConvCurrent->cMB2WX(who->pw_gecos), sz - 1);
+       wxStrncpy (buf, wxConvertMB2WX(who->pw_gecos), sz - 1);
        return TRUE;
     }
 
     return FALSE;
 }
+
+#if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // error and debug output routines (deprecated, use wxLog)
@@ -556,17 +578,17 @@ void wxDebugMsg( const char *format, ... )
 void wxError( const wxString &msg, const wxString &title )
 {
   wxFprintf( stderr, _("Error ") );
-  if (!title.IsNull()) wxFprintf( stderr, _T("%s "), WXSTRINGCAST(title) );
-  if (!msg.IsNull()) wxFprintf( stderr, _T(": %s"), WXSTRINGCAST(msg) );
-  wxFprintf( stderr, _T(".\n") );
+  if (!title.IsNull()) wxFprintf( stderr, T("%s "), WXSTRINGCAST(title) );
+  if (!msg.IsNull()) wxFprintf( stderr, T(": %s"), WXSTRINGCAST(msg) );
+  wxFprintf( stderr, T(".\n") );
 }
 
 void wxFatalError( const wxString &msg, const wxString &title )
 {
   wxFprintf( stderr, _("Error ") );
-  if (!title.IsNull()) wxFprintf( stderr, _T("%s "), WXSTRINGCAST(title) );
-  if (!msg.IsNull()) wxFprintf( stderr, _T(": %s"), WXSTRINGCAST(msg) );
-  wxFprintf( stderr, _T(".\n") );
+  if (!title.IsNull()) wxFprintf( stderr, T("%s "), WXSTRINGCAST(title) );
+  if (!msg.IsNull()) wxFprintf( stderr, T(": %s"), WXSTRINGCAST(msg) );
+  wxFprintf( stderr, T(".\n") );
   exit(3); // the same exit code as for abort()
 }
 
@@ -591,7 +613,7 @@ void wxFatalError( const wxString &msg, const wxString &title )
 
     static inline wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
-        return gdk_font_load( wxConvCurrent->cWX2MB(fontSpec) );
+        return gdk_font_load( wxConvertWX2MB(fontSpec) );
     }
 
     static inline void wxFreeFont(wxNativeFont font)
@@ -630,19 +652,19 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     wxString xfamily;
     switch (family)
     {
-        case wxDECORATIVE: xfamily = _T("lucida"); break;
-        case wxROMAN:      xfamily = _T("times");  break;
-        case wxMODERN:     xfamily = _T("courier"); break;
-        case wxSWISS:      xfamily = _T("helvetica"); break;
-        case wxTELETYPE:   xfamily = _T("lucidatypewriter"); break;
-        case wxSCRIPT:     xfamily = _T("utopia"); break;
-        default:           xfamily = _T("*");
+        case wxDECORATIVE: xfamily = T("lucida"); break;
+        case wxROMAN:      xfamily = T("times");  break;
+        case wxMODERN:     xfamily = T("courier"); break;
+        case wxSWISS:      xfamily = T("helvetica"); break;
+        case wxTELETYPE:   xfamily = T("lucidatypewriter"); break;
+        case wxSCRIPT:     xfamily = T("utopia"); break;
+        default:           xfamily = T("*");
     }
 
     wxString fontSpec;
     if (!facename.IsEmpty())
     {
-        fontSpec.Printf(_T("-*-%s-*-*-normal-*-*-*-*-*-*-*-*-*"),
+        fontSpec.Printf(T("-*-%s-*-*-normal-*-*-*-*-*-*-*-*-*"),
                         facename.c_str());
 
         if ( wxTestFontSpec(fontSpec) )
@@ -655,19 +677,19 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     wxString xstyle;
     switch (style)
     {
-        case wxITALIC:     xstyle = _T("i"); break;
-        case wxSLANT:      xstyle = _T("o"); break;
-        case wxNORMAL:     xstyle = _T("r"); break;
-        default:           xstyle = _T("*"); break;
+        case wxITALIC:     xstyle = T("i"); break;
+        case wxSLANT:      xstyle = T("o"); break;
+        case wxNORMAL:     xstyle = T("r"); break;
+        default:           xstyle = T("*"); break;
     }
 
     wxString xweight;
     switch (weight)
     {
-        case wxBOLD:       xweight = _T("bold"); break;
+        case wxBOLD:       xweight = T("bold"); break;
         case wxLIGHT:
-        case wxNORMAL:     xweight = _T("medium"); break;
-        default:           xweight = _T("*"); break;
+        case wxNORMAL:     xweight = T("medium"); break;
+        default:           xweight = T("*"); break;
     }
 
     wxString xregistry, xencoding;
@@ -696,23 +718,23 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
         case wxFONTENCODING_ISO8859_15:
             {
                 int cp = encoding - wxFONTENCODING_ISO8859_1 + 1;
-                xregistry = _T("iso8859");
-                xencoding.Printf(_T("%d"), cp);
+                xregistry = T("iso8859");
+                xencoding.Printf(T("%d"), cp);
             }
             break;
 
         case wxFONTENCODING_KOI8:
-            xregistry = _T("koi8");
-            if ( wxTestFontSpec(_T("-*-*-*-*-*-*-*-*-*-*-*-*-koi8-1")) )
+            xregistry = T("koi8");
+            if ( wxTestFontSpec(T("-*-*-*-*-*-*-*-*-*-*-*-*-koi8-1")) )
             {
-                xencoding = _T("1");
+                xencoding = T("1");
 
                 // test passed, no need to do it once more
                 test = FALSE;
             }
             else
             {
-                xencoding = _T("*");
+                xencoding = T("*");
             }
             break;
 
@@ -721,12 +743,12 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
         case wxFONTENCODING_CP1252:
             {
                 int cp = encoding - wxFONTENCODING_CP1250 + 1250;
-                fontSpec.Printf(_T("-*-*-*-*-*-*-*-*-*-*-*-*-microsoft-cp%d"),
+                fontSpec.Printf(T("-*-*-*-*-*-*-*-*-*-*-*-*-microsoft-cp%d"),
                                 cp);
                 if ( wxTestFontSpec(fontSpec) )
                 {
-                    xregistry = _T("microsoft");
-                    xencoding.Printf(_T("cp%d"), cp);
+                    xregistry = T("microsoft");
+                    xencoding.Printf(T("cp%d"), cp);
 
                     // test passed, no need to do it once more
                     test = FALSE;
@@ -734,8 +756,8 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
                 else
                 {
                     // fall back to LatinX
-                    xregistry = _T("iso8859");
-                    xencoding.Printf(_T("%d"), cp - 1249);
+                    xregistry = T("iso8859");
+                    xencoding.Printf(T("%d"), cp - 1249);
                 }
             }
             break;
@@ -744,23 +766,23 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
         default:
             test = FALSE;
             xregistry =
-            xencoding = _T("*");
+            xencoding = T("*");
     }
 
     if ( test )
     {
-        fontSpec.Printf(_T("-*-*-*-*-*-*-*-*-*-*-*-*-%s-%s"),
+        fontSpec.Printf(T("-*-*-*-*-*-*-*-*-*-*-*-*-%s-%s"),
                         xregistry.c_str(), xencoding.c_str());
         if ( !wxTestFontSpec(fontSpec) )
         {
             // this encoding isn't available - what to do?
             xregistry =
-            xencoding = _T("*");
+            xencoding = T("*");
         }
     }
 
     // construct the X font spec from our data
-    fontSpec.Printf(_T("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-%s-%s"),
+    fontSpec.Printf(T("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-%s-%s"),
                     xfamily.c_str(), xweight.c_str(), xstyle.c_str(),
                     pointSize, xregistry.c_str(), xencoding.c_str());
 
@@ -818,3 +840,4 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
     return font;
 }
 
+#endif // wxUSE_GUI

@@ -53,8 +53,8 @@ class WXDLLEXPORT wxConnectionBase: public wxObject
   inline ~wxConnectionBase(void) {}
 
   // Calls that CLIENT can make
-  virtual bool Execute(wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT ) = 0;
-  virtual bool Execute(const wxString& str) { return Execute(WXSTRINGCAST str, -1, wxIPC_TEXT); }
+  virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT ) = 0;
+  virtual bool Execute(const wxString& str) { return Execute(str, -1, wxIPC_TEXT); }
   virtual char *Request(const wxString& item, int *size = (int *) NULL, wxIPCFormat format = wxIPC_TEXT) = 0;
   virtual bool Poke(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT) = 0;
   virtual bool StartAdvise(const wxString& item) = 0;

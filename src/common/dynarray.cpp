@@ -250,7 +250,7 @@ void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
 // add item at the given position
 void wxBaseArray::Insert(long lItem, size_t nIndex)
 {
-  wxCHECK_RET( nIndex <= m_nCount, _T("bad index in wxArray::Insert") );
+  wxCHECK_RET( nIndex <= m_nCount, T("bad index in wxArray::Insert") );
 
   Grow();
 
@@ -263,7 +263,7 @@ void wxBaseArray::Insert(long lItem, size_t nIndex)
 // removes item from array (by index)
 void wxBaseArray::Remove(size_t nIndex)
 {
-  wxCHECK_RET( nIndex <= m_nCount, _T("bad index in wxArray::Remove") );
+  wxCHECK_RET( nIndex <= m_nCount, T("bad index in wxArray::Remove") );
 
   memmove(&m_pItems[nIndex], &m_pItems[nIndex + 1],
           (m_nCount - nIndex - 1)*sizeof(long));
@@ -276,7 +276,7 @@ void wxBaseArray::Remove(long lItem)
   int iIndex = Index(lItem);
 
   wxCHECK_RET( iIndex != wxNOT_FOUND,
-               _T("removing inexistent item in wxArray::Remove") );
+               T("removing inexistent item in wxArray::Remove") );
 
   Remove((size_t)iIndex);
 }

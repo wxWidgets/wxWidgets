@@ -165,27 +165,27 @@ wxCursor::wxCursor(int cursor_type)
     }
     case wxCURSOR_HAND:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_HAND"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_HAND"));
       break;
     }
     case wxCURSOR_BULLSEYE:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_BULLSEYE"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_BULLSEYE"));
       break;
     }
     case wxCURSOR_PENCIL:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_PENCIL"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_PENCIL"));
       break;
     }
     case wxCURSOR_MAGNIFIER:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_MAGNIFIER"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_MAGNIFIER"));
       break;
     }
     case wxCURSOR_NO_ENTRY:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_NO_ENTRY"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_NO_ENTRY"));
       break;
     }
     case wxCURSOR_LEFT_BUTTON:
@@ -205,42 +205,42 @@ wxCursor::wxCursor(int cursor_type)
     }
     case wxCURSOR_SIZING:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_SIZING"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_SIZING"));
       break;
     }
     case wxCURSOR_WATCH:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_WATCH"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_WATCH"));
       break;
     }
     case wxCURSOR_SPRAYCAN:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_ROLLER"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_ROLLER"));
       break;
     }
     case wxCURSOR_PAINT_BRUSH:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_PBRUSH"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_PBRUSH"));
       break;
     }
     case wxCURSOR_POINT_LEFT:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_PLEFT"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_PLEFT("));
       break;
     }
     case wxCURSOR_POINT_RIGHT:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_PRIGHT"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_PRIGHT("));
       break;
     }
     case wxCURSOR_QUESTION_ARROW:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_QARROW"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_QARROW"));
       break;
     }
     case wxCURSOR_BLANK:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), _T("wxCURSOR_BLANK"));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_BLANK"));
       break;
     }
     default:

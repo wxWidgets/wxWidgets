@@ -68,7 +68,7 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
-        wxFAIL_MSG( _T("wxRadioButton creation failed") );
+        wxFAIL_MSG( T("wxRadioButton creation failed") );
 	return FALSE;
     }
 
@@ -131,7 +131,7 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
 
 void wxRadioButton::SetLabel( const wxString& label )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid radiobutton") );
+    wxCHECK_RET( m_widget != NULL, T("invalid radiobutton") );
   
     wxControl::SetLabel( label );
     GtkButton *bin = GTK_BUTTON( m_widget );
@@ -141,7 +141,7 @@ void wxRadioButton::SetLabel( const wxString& label )
 
 void wxRadioButton::SetValue( bool val )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid radiobutton") );
+    wxCHECK_RET( m_widget != NULL, T("invalid radiobutton") );
   
     if (val == GetValue())
         return;
@@ -164,7 +164,7 @@ void wxRadioButton::SetValue( bool val )
 
 bool wxRadioButton::GetValue() const
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid radiobutton") );
+    wxCHECK_MSG( m_widget != NULL, FALSE, T("invalid radiobutton") );
   
     return GTK_TOGGLE_BUTTON(m_widget)->active;
 }

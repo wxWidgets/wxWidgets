@@ -9,47 +9,62 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "utils.h"
+    #pragma implementation "utils.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
-#include "wx/utils.h"
-#include "wx/window.h"
-#include "wx/menu.h"
-#include "wx/frame.h"
-#include "wx/msgdlg.h"
-#include "wx/textdlg.h"
-#endif
+    #include "wx/defs.h"
+    #include "wx/string.h"
+    #include "wx/utils.h"
+
+    #if wxUSE_GUI
+        #include "wx/window.h"
+        #include "wx/menu.h"
+        #include "wx/frame.h"
+        #include "wx/msgdlg.h"
+        #include "wx/textdlg.h"
+    #endif // wxUSE_GUI
+#endif // WX_PRECOMP
 
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #if !defined(__WATCOMC__)
     #if !(defined(_MSC_VER) && (_MSC_VER > 800))
         #include <errno.h>
     #endif
 #endif
+
 #include <time.h>
+
 #ifndef __MWERKS__
-#include <sys/types.h>
-#include <sys/stat.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
 #endif
 
 #ifdef __SALFORDC__
-#include <clib.h>
+    #include <clib.h>
 #endif
 
-// Pattern matching code.
+// Pattern matching code. (FIXME)
 // Yes, this path is deliberate (for Borland compilation)
 #ifdef wx_mac /* MATTHEW: [5] Mac doesn't like paths with "/" */
 #include "glob.inc"
@@ -58,19 +73,25 @@
 #endif
 
 #ifdef __WXMSW__
-#include "windows.h"
+    #include "windows.h"
 #endif
 
-#define _MAXPATHLEN 500
-
-extern wxChar *wxBuffer;
-
 // ----------------------------------------------------------------------------
-// private functions
+// function protoypes
 // ----------------------------------------------------------------------------
 
-static wxWindow *wxFindWindowByLabel1(const wxString& title, wxWindow * parent);
-static wxWindow *wxFindWindowByName1 (const wxString& title, wxWindow * parent);
+#if wxUSE_GUI
+    static wxWindow *wxFindWindowByLabel1(const wxString& title, wxWindow *parent);
+    static wxWindow *wxFindWindowByName1 (const wxString& title, wxWindow *parent);
+#endif // wxUSE_GUI
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// string functions
+// ----------------------------------------------------------------------------
 
 #ifdef __WXMAC__
 int strcasecmp(const char *str_1, const char *str_2)
@@ -101,7 +122,8 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
   return 0 ;
 
 }
-#endif
+#endif // wxMAC
+
 #ifdef __VMS__
 // we have no strI functions under VMS, therefore I have implemented
 // an inefficient but portable version: convert copies of strings to lowercase
@@ -145,7 +167,7 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 
   return(result);
 }
-#endif
+#endif // __VMS__
 
 #ifdef __WINDOWS__
 
@@ -185,7 +207,7 @@ extern "C"
 wxChar *
 copystring (const wxChar *s)
 {
-  if (s == NULL) s = _T("");
+  if (s == NULL) s = T("");
   size_t len = wxStrlen (s) + 1;
 
   wxChar *news = new wxChar[len];
@@ -265,7 +287,7 @@ IntToString (int number)
 {
   static wxChar buf[20];
 
-  wxSprintf (buf, _T("%d"), number);
+  wxSprintf (buf, T("%d"), number);
   return buf;
 }
 
@@ -274,27 +296,27 @@ LongToString (long number)
 {
   static wxChar buf[20];
 
-  wxSprintf (buf, _T("%ld"), number);
+  wxSprintf (buf, T("%ld"), number);
   return buf;
 }
 
 // Array used in DecToHex conversion routine.
-static wxChar hexArray[] = _T("0123456789ABCDEF");
+static wxChar hexArray[] = T("0123456789ABCDEF");
 
 // Convert 2-digit hex number to decimal
 int wxHexToDec(const wxString& buf)
 {
   int firstDigit, secondDigit;
 
-  if (buf.GetChar(0) >= _T('A'))
-    firstDigit = buf.GetChar(0) - _T('A') + 10;
+  if (buf.GetChar(0) >= T('A'))
+    firstDigit = buf.GetChar(0) - T('A') + 10;
   else
-    firstDigit = buf.GetChar(0) - _T('0');
+    firstDigit = buf.GetChar(0) - T('0');
 
-  if (buf.GetChar(1) >= _T('A'))
-    secondDigit = buf.GetChar(1) - _T('A') + 10;
+  if (buf.GetChar(1) >= T('A'))
+    secondDigit = buf.GetChar(1) - T('A') + 10;
   else
-    secondDigit = buf.GetChar(1) - _T('0');
+    secondDigit = buf.GetChar(1) - T('0');
 
   return firstDigit * 16 + secondDigit;
 }
@@ -357,19 +379,9 @@ StringMatch (char *str1, char *str2, bool subString, bool exact)
   return FALSE;
 }
 
-// Don't synthesize KeyUp events holding down a key and producing
-// KeyDown events with autorepeat. On by default and always on
-// on in wxMSW. wxGTK version in utilsgtk.cpp.
-#ifndef __WXGTK__
-bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
-{
-   return TRUE;          // detectable auto-repeat is the only mode MSW supports
-}
-#endif
-
 // Return the current date/time
 // [volatile]
-wxString wxNow( void )
+wxString wxNow()
 {
   time_t now = time((time_t *) NULL);
   char *date = ctime(&now);
@@ -377,9 +389,11 @@ wxString wxNow( void )
   return wxString(date);
 }
 
-/*
- * Strip out any menu codes
- */
+#if wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// Strip out any menu codes
+// ----------------------------------------------------------------------------
 
 wxChar *wxStripMenuCodes (wxChar *in, wxChar *out)
 {
@@ -393,13 +407,13 @@ wxChar *wxStripMenuCodes (wxChar *in, wxChar *out)
 
   while (*in)
     {
-      if (*in == _T('&'))
+      if (*in == T('&'))
         {
           // Check && -> &, &x -> x
-          if (*++in == _T('&'))
+          if (*++in == T('&'))
             *out++ = *in++;
         }
-      else if (*in == _T('\t'))
+      else if (*in == T('\t'))
         {
           // Remove all stuff after \t in X mode, and let the stuff as is
           // in Windows mode.
@@ -411,7 +425,7 @@ wxChar *wxStripMenuCodes (wxChar *in, wxChar *out)
         *out++ = *in++;
     }                                // while
 
-  *out = _T('\0');
+  *out = T('\0');
 
   return tmpOut;
 }
@@ -425,10 +439,9 @@ wxString wxStripMenuCodes(const wxString& str)
     return str1;
 }
 
-/*
- * Window search functions
- *
- */
+// ----------------------------------------------------------------------------
+// Window search functions
+// ----------------------------------------------------------------------------
 
 /*
  * If parent is non-NULL, look through children for a label or title
@@ -552,6 +565,8 @@ wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& i
     return -1;
   return menuBar->FindMenuItem (menuString, itemString);
 }
+
+#endif // wxUSE_GUI
 
 /*
 On Fri, 21 Jul 1995, Paul Craven wrote:
@@ -745,24 +760,12 @@ whereami(name)
 }
 
 #endif
-void wxEnableTopLevelWindows(bool enable)
-{
-   wxWindowList::Node *node;
-   for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
-      node->GetData()->Enable(enable);
-}
 
-// Yield to other apps/messages and disable user input
-bool wxSafeYield(wxWindow *win)
-{
-   wxEnableTopLevelWindows(FALSE);
-   // always enable ourselves
-   if ( win )
-      win->Enable(TRUE);
-   bool rc = wxYield();
-   wxEnableTopLevelWindows(TRUE);
-   return rc;
-}
+#if wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// GUI helpers
+// ----------------------------------------------------------------------------
 
 /*
  * N.B. these convenience functions must be separate from msgdlgg.cpp, textdlgg.cpp
@@ -817,7 +820,42 @@ int isascii( int c )
 {
         return ( c >= 0 && c < 128 ) ;
 }
-#endif
+#endif // __MWERKS__
+
+// ----------------------------------------------------------------------------
+// misc functions
+// ----------------------------------------------------------------------------
+
+void wxEnableTopLevelWindows(bool enable)
+{
+   wxWindowList::Node *node;
+   for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+      node->GetData()->Enable(enable);
+}
+
+// Yield to other apps/messages and disable user input
+bool wxSafeYield(wxWindow *win)
+{
+   wxEnableTopLevelWindows(FALSE);
+   // always enable ourselves
+   if ( win )
+      win->Enable(TRUE);
+   bool rc = wxYield();
+   wxEnableTopLevelWindows(TRUE);
+   return rc;
+}
+
+// Don't synthesize KeyUp events holding down a key and producing KeyDown
+// events with autorepeat. On by default and always on in wxMSW. wxGTK version
+// in utilsgtk.cpp.
+#ifndef __WXGTK__
+bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
+{
+   return TRUE;          // detectable auto-repeat is the only mode MSW supports
+}
+#endif // !wxGTK
+
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // network and user id functions
@@ -831,7 +869,7 @@ bool wxGetEmailAddress(wxChar *address, int maxSize)
         return FALSE;
 
     wxStrncpy(address, email, maxSize - 1);
-    address[maxSize - 1] = _T('\0');
+    address[maxSize - 1] = T('\0');
 
     return TRUE;
 }
@@ -847,7 +885,7 @@ wxString wxGetEmailAddress()
         if ( !!user )
         {
             wxString email(user);
-            email << _T('@') << host;
+            email << T('@') << host;
         }
     }
 

@@ -174,7 +174,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   int width = size.x;
   int height = size.y;
 
-  m_windowMenu = (WXHMENU) ::LoadMenu(wxGetInstance(), _T("wxWindowMenu"));
+  m_windowMenu = (WXHMENU) ::LoadMenu(wxGetInstance(), T("wxWindowMenu"));
 
   DWORD msflags = WS_OVERLAPPED;
   if (style & wxMINIMIZE_BOX)
@@ -505,7 +505,7 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
     {
         // this shouldn't happen because it means that our messages are being
         // lost (they're not sent to the parent frame nor to the children)
-        wxFAIL_MSG(_T("MDI parent frame is not active, "
+        wxFAIL_MSG(T("MDI parent frame is not active, "
                       "yet there is no active MDI child?"));
     }
 
@@ -926,7 +926,7 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
     else if ( m_hWnd == hwndDeact )
     {
         wxASSERT_MSG( parent->m_currentChild == this,
-                      _T("can't deactivate MDI child which wasn't active!") );
+                      T("can't deactivate MDI child which wasn't active!") );
 
         activated = FALSE;
         parent->m_currentChild = NULL;
@@ -1099,7 +1099,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         exStyle,
-                        _T("MDICLIENT"),
+                        T("MDICLIENT("),
                         NULL,
                         msStyle,
                         0, 0, 0, 0,
@@ -1152,7 +1152,7 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
 
     // update menu bar of the parent window
     wxWindow *parent = win->GetParent();
-    wxCHECK_RET( parent, _T("MDI client without parent frame? weird...") );
+    wxCHECK_RET( parent, T("MDI client without parent frame? weird...") );
 
     ::DrawMenuBar(GetWinHwnd(parent));
 }
@@ -1169,23 +1169,23 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
         int chars = GetMenuString(hmenu, i, buf, WXSIZEOF(buf), MF_BYPOSITION);
         if ( chars == 0 )
         {
-            wxLogLastError(_T("GetMenuString"));
+            wxLogLastError(T("GetMenuString"));
 
             continue;
         }
 
-        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_T("Help")) )
+        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(T("Help")) )
         {
             success = TRUE;
             ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,
-                         (UINT)subMenu, _T("&Window"));
+                         (UINT)subMenu, T("&Window"));
             break;
         }
     }
 
     if ( !success )
     {
-        ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, _T("&Window"));
+        ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, T("&Window"));
     }
 
     MDISetMenu(win, hmenu, subMenu);

@@ -24,159 +24,175 @@
 
 #if wxUSE_WCHAR_T
 
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxMBConv (base class for conversions, using libc conversion itself)
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxMBConv
 {
 public:
+    // the actual conversion takes place here
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 
-  // the actual conversion takes place here
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
-  
-  // No longer inline since BC++ complains.
-  const wxWCharBuffer cMB2WC(const char *psz) const;
-  const wxCharBuffer cWC2MB(const wchar_t *psz) const;
+    // No longer inline since BC++ complains.
+    const wxWCharBuffer cMB2WC(const char *psz) const;
+    const wxCharBuffer cWC2MB(const wchar_t *psz) const;
+
 #if wxUSE_UNICODE
-  const wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }
-  const wxCharBuffer cWX2MB(const wchar_t *psz) const { return cWC2MB(psz); }
-  const wchar_t* cWC2WX(const wchar_t *psz) const { return psz; }
-  const wchar_t* cMB2WC(const wchar_t *psz) const { return psz; }
-#else
-  const char* cMB2WX(const char *psz) const { return psz; }
-  const char* cWX2MB(const char *psz) const { return psz; }
-  const wxCharBuffer cWC2WX(const wchar_t *psz) const { return cWC2MB(psz); }
-  const wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
-#endif
+    const wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }
+    const wxCharBuffer cWX2MB(const wchar_t *psz) const { return cWC2MB(psz); }
+    const wchar_t* cWC2WX(const wchar_t *psz) const { return psz; }
+    const wchar_t* cMB2WC(const wchar_t *psz) const { return psz; }
+#else // ANSI
+    const char* cMB2WX(const char *psz) const { return psz; }
+    const char* cWX2MB(const char *psz) const { return psz; }
+    const wxCharBuffer cWC2WX(const wchar_t *psz) const { return cWC2MB(psz); }
+    const wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
+#endif // Unicode/ANSI
 };
 
 WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc;
 
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxMBConvFile (for conversion to filenames)
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMBConvFile: public wxMBConv 
+class WXDLLEXPORT wxMBConvFile : public wxMBConv
 {
 public:
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
 WXDLLEXPORT_DATA(extern wxMBConvFile) wxConvFile;
 
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxMBConvUTF7 (for conversion using UTF7 encoding)
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMBConvUTF7: public wxMBConv 
+class WXDLLEXPORT wxMBConvUTF7 : public wxMBConv
 {
 public:
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
 WXDLLEXPORT_DATA(extern wxMBConvUTF7) wxConvUTF7;
 
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxMBConvUTF8 (for conversion using UTF8 encoding)
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMBConvUTF8: public wxMBConv 
+class WXDLLEXPORT wxMBConvUTF8 : public wxMBConv
 {
 public:
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
 WXDLLEXPORT_DATA(extern wxMBConvUTF8) wxConvUTF8;
 
 #ifdef __WXGTK12__
-//---------------------------------------------------------------------------
-// wxMBConvUTF8 (for conversion using GDK's internal converions)
-//---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMBConvGdk: public wxMBConv
+// ----------------------------------------------------------------------------
+// wxMBConvUTF8 (for conversion using GDK's internal converions)
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxMBConvGdk : public wxMBConv
 {
 public:
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
 WXDLLEXPORT_DATA(extern wxMBConvGdk) wxConvGdk;
-#endif
 
-//---------------------------------------------------------------------------
-// wxCSConv (for conversion based on laodable char sets)
-//---------------------------------------------------------------------------
+#endif // wxGTK 1.2
 
-class wxCharacterSet;
+// ----------------------------------------------------------------------------
+// wxCSConv (for conversion based on loadable char sets)
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCSConv: public wxMBConv
+class WXDLLEXPORT wxCharacterSet;
+
+class WXDLLEXPORT wxCSConv : public wxMBConv
 {
-private:
-  wxChar *m_name;
-  wxCharacterSet *m_cset;
-  bool m_deferred;
-  void SetName(const wxChar *charset);
-  
 public:
-  wxCSConv(const wxChar *charset);
-  virtual ~wxCSConv();
-  void LoadNow();
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    wxCSConv(const wxChar *charset);
+    virtual ~wxCSConv();
+
+    void LoadNow();
+
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+
+private:
+    void SetName(const wxChar *charset);
+
+    wxChar *m_name;
+    wxCharacterSet *m_cset;
+    bool m_deferred;
 };
 
 WXDLLEXPORT_DATA(extern wxCSConv) wxConvLocal;
-#define wxConv_local wxConvLocal
-
 WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
-#define wxConv_current wxConvCurrent
 
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // filename conversion macros
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 // filenames are multibyte on Unix and probably widechar on Windows?
 #if defined(__UNIX__) || defined(__BORLANDC__)
-#define wxMBFILES 1
+    #define wxMBFILES 1
 #else
-#define wxMBFILES 0
+    #define wxMBFILES 0
 #endif
 
 #if wxMBFILES
-#define wxFNCONV(name) wxConvFile.cWX2MB(name)
-#define FNSTRINGCAST MBSTRINGCAST
+    #define wxFNCONV(name) wxConvFile.cWX2MB(name)
+    #define wxFNSTRINGCAST wxMBSTRINGCAST
 #else
-#define wxFNCONV(name) name
-#define FNSTRINGCAST WXSTRINGCAST
+    #define wxFNCONV(name) name
+    #define wxFNSTRINGCAST WXSTRINGCAST
 #endif
 
 #else
   // !wxUSE_WCHAR_T
 
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // stand-ins in absence of wchar_t
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMBConv 
+class WXDLLEXPORT wxMBConv
 {
 public:
-  const char* cMB2WX(const char *psz) const { return psz; }
-  const char* cWX2MB(const char *psz) const { return psz; }
+    const char* cMB2WX(const char *psz) const { return psz; }
+    const char* cWX2MB(const char *psz) const { return psz; }
 };
+
 WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc, wxConvFile;
 WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 
 #define wxFNCONV(name) name
-#define FNSTRINGCAST WXSTRINGCAST
+#define wxFNSTRINGCAST WXSTRINGCAST
 
 #endif
   // wxUSE_WCHAR_T
 
-#endif  
+// ----------------------------------------------------------------------------
+// macros for the most common conversions
+// ----------------------------------------------------------------------------
+
+#if wxUSE_UNICODE
+    #define wxConvertWX2MB(s)   wxConvCurrent->cWX2MB(s)
+    #define wxConvertMB2WX(s)   wxConvCurrent->cMB2WX(s)
+#else // ANSI
+    // no conversions to do
+    #define wxConvertWX2MB(s)   (s)
+    #define wxConvertMB2WX(s)   (s)
+#endif // Unicode/ANSI
+
+#endif
   // _WX_WXSTRCONVH__
 

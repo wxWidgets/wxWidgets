@@ -105,9 +105,9 @@ bool wxURL::ParseURL()
     CleanData();
 
     // Third, we rebuild the URL.
-    m_url = m_protoname + _T(":");
+    m_url = m_protoname + T(":");
     if (m_protoinfo->m_needhost)
-      m_url = m_url + _T("//") + m_hostname;
+      m_url = m_url + T("//") + m_hostname;
 
     m_url += m_path;
 
@@ -146,7 +146,7 @@ bool wxURL::PrepProto(wxString& url)
   int pos;
 
   // Find end
-  pos = url.Find(_T(':'));
+  pos = url.Find(T(':'));
   if (pos == -1)
     return FALSE;
 
@@ -167,7 +167,7 @@ bool wxURL::PrepHost(wxString& url)
 
   url = url(2, url.Length());
 
-  pos = url.Find(_T('/'));
+  pos = url.Find(T('/'));
   if (pos == -1)
     pos = url.Length();
 
@@ -175,10 +175,10 @@ bool wxURL::PrepHost(wxString& url)
     return FALSE;
 
   temp_url = url(0, pos);
-  url = url(url.Find(_T('/')), url.Length());
+  url = url(url.Find(T('/')), url.Length());
 
   // Retrieve service number
-  pos2 = temp_url.Find(_T(':'), TRUE);
+  pos2 = temp_url.Find(T(':'), TRUE);
   if (pos2 != -1 && pos2 < pos) {
     m_servname = temp_url(pos2+1, pos);
     if (!m_servname.IsNumber())
@@ -187,18 +187,18 @@ bool wxURL::PrepHost(wxString& url)
   }
 
   // Retrieve user and password.
-  pos2 = temp_url.Find(_T('@'));
+  pos2 = temp_url.Find(T('@'));
   // Even if pos2 equals -1, this code is right.
   m_hostname = temp_url(pos2+1, temp_url.Length());
 
-  m_user = _T("");
-  m_password = _T("");
+  m_user = T("");
+  m_password = T("");
 
   if (pos2 == -1)
     return TRUE;
 
   temp_url = temp_url(0, pos2);
-  pos2 = temp_url.Find(_T(':'));
+  pos2 = temp_url.Find(T(':'));
 
   if (pos2 == -1)
     return FALSE;
@@ -214,7 +214,7 @@ bool wxURL::PrepPath(wxString& url)
   if (url.Length() != 0)
     m_path = ConvertToValidURI(url);
   else
-    m_path = _T("/");
+    m_path = T("/");
   return TRUE;
 }
 
@@ -250,7 +250,7 @@ wxInputStream *wxURL::GetInputStream(void)
   }
 
   m_error = wxURL_NOERR;
-  if (m_user != _T("")) {
+  if (m_user != T("")) {
     m_protocol->SetUser(m_user);
     m_protocol->SetPassword(m_password);
   }
@@ -300,7 +300,7 @@ void wxURL::SetDefaultProxy(const wxString& url_proxy)
   }
 
   wxString tmp_str = url_proxy;
-  int pos = tmp_str.Find(_T(':'));
+  int pos = tmp_str.Find(T(':'));
   if (pos == -1)
     return;
 
@@ -338,7 +338,7 @@ void wxURL::SetProxy(const wxString& url_proxy)
   wxIPV4address addr;
 
   tmp_str = url_proxy;
-  pos = tmp_str.Find(_T(':'));
+  pos = tmp_str.Find(T(':'));
   // This is an invalid proxy name.
   if (pos == -1)
     return;
@@ -371,11 +371,11 @@ wxString wxURL::ConvertToValidURI(const wxString& uri)
   for (i=0;i<uri.Len();i++) {
     wxChar c = uri.GetChar(i);
 
-    if (c == _T(' '))
-      out_str += _T('+');
+    if (c == T(' '))
+      out_str += T('+');
     else {
-      if (!isalpha(c) && c != _T('.') && c != _T('+') && c != _T('/')) {
-        hexa_code.Printf(_T("%%%02X"), c);
+      if (!isalpha(c) && c != T('.') && c != T('+') && c != T('/')) {
+        hexa_code.Printf(T("%%%02X"), c);
         out_str += hexa_code;
       } else
         out_str += c;
@@ -392,17 +392,17 @@ wxString wxURL::ConvertFromURI(const wxString& uri)
   size_t i = 0;
   while (i<uri.Len()) {
     int code;
-    if (uri[i] == _T('%')) {
+    if (uri[i] == T('%')) {
       i++;
-      if (uri[i] >= _T('A') && uri[i] <= _T('F'))
-        code = (uri[i] - _T('A') + 10) * 16;
+      if (uri[i] >= T('A') && uri[i] <= T('F'))
+        code = (uri[i] - T('A') + 10) * 16;
       else
-        code = (uri[i] - _T('0')) * 16;
+        code = (uri[i] - T('0')) * 16;
       i++;
-      if (uri[i] >= _T('A') && uri[i] <= _T('F'))
-        code += (uri[i] - _T('A')) + 10;
+      if (uri[i] >= T('A') && uri[i] <= T('F'))
+        code += (uri[i] - T('A')) + 10;
       else
-        code += (uri[i] - _T('0'));
+        code += (uri[i] - T('0'));
       i++;
       new_uri += (wxChar)code;
       continue;

@@ -113,14 +113,14 @@ wxApp *wxTheApp = NULL;
 
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
 //     with NR suffix - wxWindow::MSWCreate() supposes this
-wxChar wxFrameClassName[]         = _T("wxFrameClass");
-wxChar wxFrameClassNameNoRedraw[] = _T("wxFrameClassNR");
-wxChar wxMDIFrameClassName[]      = _T("wxMDIFrameClass");
-wxChar wxMDIFrameClassNameNoRedraw[] = _T("wxMDIFrameClassNR");
-wxChar wxMDIChildFrameClassName[] = _T("wxMDIChildFrameClass");
-wxChar wxMDIChildFrameClassNameNoRedraw[] = _T("wxMDIChildFrameClassNR");
-wxChar wxPanelClassName[]         = _T("wxPanelClass");
-wxChar wxCanvasClassName[]        = _T("wxCanvasClass");
+wxChar wxFrameClassName[]         = T("wxFrameClass");
+wxChar wxFrameClassNameNoRedraw[] = T("wxFrameClassNR");
+wxChar wxMDIFrameClassName[]      = T("wxMDIFrameClass");
+wxChar wxMDIFrameClassNameNoRedraw[] = T("wxMDIFrameClassNR");
+wxChar wxMDIChildFrameClassName[] = T("wxMDIChildFrameClass");
+wxChar wxMDIChildFrameClassNameNoRedraw[] = T("wxMDIChildFrameClassNR");
+wxChar wxPanelClassName[]         = T("wxPanelClass");
+wxChar wxCanvasClassName[]        = T("wxCanvasClass");
 
 HICON wxSTD_FRAME_ICON = (HICON) NULL;
 HICON wxSTD_MDICHILDFRAME_ICON = (HICON) NULL;
@@ -176,7 +176,7 @@ bool wxApp::Initialize()
     wxClassInfo::InitializeClasses();
 
 #if wxUSE_RESOURCES
-    wxGetResource(_T("wxWindows"), _T("OsVersion"), &wxOsVersion);
+    wxGetResource(T("wxWindows"), T("OsVersion"), &wxOsVersion);
 #endif
 
     // I'm annoyed ... I don't know where to put this and I don't want to
@@ -202,7 +202,7 @@ bool wxApp::Initialize()
     InitCommonControls();
 
 #if wxUSE_RICHEDIT
-    gs_hRichEdit = LoadLibrary(_T("RICHED32.DLL"));
+    gs_hRichEdit = LoadLibrary(T("RICHED32.DLL"));
 
     if (gs_hRichEdit == (HINSTANCE) NULL)
     {
@@ -227,20 +227,20 @@ bool wxApp::Initialize()
 
 #if wxUSE_CTL3D
     if (!Ctl3dRegister(wxhInstance))
-        wxLogError(_T("Cannot register CTL3D"));
+        wxLogError(T("Cannot register CTL3D"));
 
     Ctl3dAutoSubclass(wxhInstance);
 #endif
 
     g_globalCursor = new wxCursor;
 
-    wxSTD_FRAME_ICON = LoadIcon(wxhInstance, _T("wxSTD_FRAME"));
-    wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, _T("wxSTD_MDIPARENTFRAME"));
-    wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, _T("wxSTD_MDICHILDFRAME"));
+    wxSTD_FRAME_ICON = LoadIcon(wxhInstance, T("wxSTD_FRAME"));
+    wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, T("wxSTD_MDIPARENTFRAME"));
+    wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, T("wxSTD_MDICHILDFRAME"));
 
-    wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, _T("wxDEFAULT_FRAME"));
-    wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, _T("wxDEFAULT_MDIPARENTFRAME"));
-    wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, _T("wxDEFAULT_MDICHILDFRAME"));
+    wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, T("wxDEFAULT_FRAME"));
+    wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, T("wxDEFAULT_MDIPARENTFRAME"));
+    wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, T("wxDEFAULT_MDICHILDFRAME"));
 
     RegisterWindowClasses();
 
@@ -248,7 +248,7 @@ bool wxApp::Initialize()
 
     LOGBRUSH lb;
     lb.lbStyle = BS_PATTERN;
-    lb.lbHatch = (int)LoadBitmap( wxhInstance, _T("wxDISABLE_BUTTON_BITMAP") );
+    lb.lbHatch = (int)LoadBitmap( wxhInstance, T("wxDISABLE_BUTTON_BITMAP") );
     if ( lb.lbHatch )
     {
         wxDisableButtonBrush = ::CreateBrushIndirect( & lb );
@@ -425,11 +425,11 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
 
         if (i < len)
         {
-            if (cmdLine.GetChar(i) == _T('"')) // We found the start of a string
+            if (cmdLine.GetChar(i) == T('"')) // We found the start of a string
             {
                 i ++;
                 int first = i;
-                while ((i < len) && (cmdLine.GetChar(i) != _T('"')))
+                while ((i < len) && (cmdLine.GetChar(i) != T('"')))
                     i ++;
 
                 wxString arg(cmdLine.Mid(first, (i - first)));
@@ -578,7 +578,7 @@ void wxApp::CleanUp()
     // wxDebugContext, too.
     if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
     {
-        wxLogDebug(_T("There were memory leaks."));
+        wxLogDebug(T("There were memory leaks."));
         wxDebugContext::Dump();
         wxDebugContext::PrintStatistics();
     }
@@ -635,12 +635,12 @@ int wxEntry(WXHINSTANCE hInstance,
             // the IMPLEMENT_APP macro is used instead, which sets an initializer
             // function for delayed, dynamic app object construction.
             wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
-                         _T("No initializer - use IMPLEMENT_APP macro.") );
+                         T("No initializer - use IMPLEMENT_APP macro.") );
 
             wxTheApp = (*wxApp::GetInitializerFunction()) ();
         }
 
-        wxCHECK_MSG( wxTheApp, 0, _T("You have to define an instance of wxApp!") );
+        wxCHECK_MSG( wxTheApp, 0, T("You have to define an instance of wxApp!") );
 
         // save the WinMain() parameters
         wxTheApp->ConvertToStandardCommandArgs(lpCmdLine);
@@ -818,7 +818,7 @@ bool wxApp::DoMessage()
     {
 #if wxUSE_THREADS
         wxASSERT_MSG( wxThread::IsMain(),
-                      _T("only the main thread can process Windows messages") );
+                      T("only the main thread can process Windows messages") );
 
         static bool s_hadGuiLock = TRUE;
         static wxMsgArray s_aSavedMessages;
@@ -1112,7 +1112,7 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
 int wxApp::GetComCtl32Version() const
 {
     // have we loaded COMCTL32 yet?
-    HMODULE theModule = ::GetModuleHandle(_T("COMCTL32"));
+    HMODULE theModule = ::GetModuleHandle(T("COMCTL32"));
     int version = 0;
 
     // if so, then we can check for the version
@@ -1197,7 +1197,7 @@ wxApp::GetStdIcon(int which) const
             return wxIcon("wxICON_WARNING");
 
         default:
-            wxFAIL_MSG(_T("requested non existent standard icon"));
+            wxFAIL_MSG(T("requested non existent standard icon"));
             // still fall through
 
         case wxICON_HAND:

@@ -70,43 +70,43 @@ bool wxFontBase::operator!=(const wxFont& font) const
 
 wxString wxFontBase::GetFamilyString() const
 {
-    wxCHECK_MSG( Ok(), _T("wxDEFAULT"), _T("invalid font") );
+    wxCHECK_MSG( Ok(), T("wxDEFAULT("), T("invalid font") );
 
     switch ( GetFamily() )
     {
-        case wxDECORATIVE:   return _T("wxDECORATIVE");
-        case wxROMAN:        return _T("wxROMAN");
-        case wxSCRIPT:       return _T("wxSCRIPT");
-        case wxSWISS:        return _T("wxSWISS");
-        case wxMODERN:       return _T("wxMODERN");
-        case wxTELETYPE:     return _T("wxTELETYPE");
-        default:             return _T("wxDEFAULT");
+        case wxDECORATIVE:   return T("wxDECORATIVE");
+        case wxROMAN:        return T("wxROMAN");
+        case wxSCRIPT:       return T("wxSCRIPT(");
+        case wxSWISS:        return T("wxSWISS");
+        case wxMODERN:       return T("wxMODERN");
+        case wxTELETYPE:     return T("wxTELETYPE");
+        default:             return T("wxDEFAULT(");
     }
 }
 
 wxString wxFontBase::GetStyleString() const
 {
-    wxCHECK_MSG( Ok(), _T("wxDEFAULT"), _T("invalid font") );
+    wxCHECK_MSG( Ok(), T("wxDEFAULT("), T("invalid font") );
 
     switch ( GetStyle() )
     {
-        case wxNORMAL:   return _T("wxNORMAL");
-        case wxSLANT:    return _T("wxSLANT");
-        case wxITALIC:   return _T("wxITALIC");
-        default:         return _T("wxDEFAULT");
+        case wxNORMAL:   return T("wxNORMAL");
+        case wxSLANT:    return T("wxSLANT(");
+        case wxITALIC:   return T("wxITALIC");
+        default:         return T("wxDEFAULT(");
     }
 }
 
 wxString wxFontBase::GetWeightString() const
 {
-    wxCHECK_MSG( Ok(), _T("wxDEFAULT"), _T("invalid font") );
+    wxCHECK_MSG( Ok(), T("wxDEFAULT("), T("invalid font") );
 
     switch ( GetWeight() )
     {
-        case wxNORMAL:   return _T("wxNORMAL");
-        case wxBOLD:     return _T("wxBOLD");
-        case wxLIGHT:    return _T("wxLIGHT");
-        default:         return _T("wxDEFAULT");
+        case wxNORMAL:   return T("wxNORMAL");
+        case wxBOLD:     return T("wxBOLD");
+        case wxLIGHT:    return T("wxLIGHT(");
+        default:         return T("wxDEFAULT(");
     }
 }
 

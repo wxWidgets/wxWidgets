@@ -17,7 +17,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
+#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB
 
 #include "wx/log.h"
 #include "wx/intl.h"
@@ -39,21 +39,21 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
 
     m_Pos = 0;
     m_Size = 0;
-    m_Archive = (void*) unzOpen(archive.mb_str(wxConvFile));
-    if (m_Archive == NULL) 
+    m_Archive = (void*) unzOpen(archive.fn_str());
+    if (m_Archive == NULL)
     {
         m_lasterror = wxStream_READ_ERR;
         return;
     }
-    if (unzLocateFile((unzFile)m_Archive, file.mb_str(wxConvFile), 0) != UNZ_OK) 
+    if (unzLocateFile((unzFile)m_Archive, file.fn_str(), 0) != UNZ_OK)
     {
         m_lasterror = wxStream_READ_ERR;
         return;
     }
-    
+
     unzGetCurrentFileInfo((unzFile)m_Archive, &zinfo, (char*) NULL, 0, (void*) NULL, 0, (char*) NULL, 0);
 
-    if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK) 
+    if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK)
     {
         m_lasterror = wxStream_READ_ERR;
         return;
@@ -65,7 +65,7 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
 
 wxZipInputStream::~wxZipInputStream()
 {
-    if (m_Archive) 
+    if (m_Archive)
     {
         if (m_Size != 0)
             unzCloseCurrentFile((unzFile)m_Archive);
@@ -90,7 +90,7 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
     off_t nextpos;
     void *buf;
 
-    switch (mode) 
+    switch (mode)
     {
         case wxFromCurrent : nextpos = seek + m_Pos; break;
         case wxFromStart : nextpos = seek; break;
@@ -99,7 +99,7 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
     }
 
     // cheated seeking :
-    if (nextpos > m_Pos) 
+    if (nextpos > m_Pos)
     {
         buf = malloc(nextpos - m_Pos);
         unzReadCurrentFile((unzFile)m_Archive, buf, nextpos -  m_Pos);
@@ -107,8 +107,8 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
     }
     else if (nextpos < m_Pos) {
         unzCloseCurrentFile((unzFile)m_Archive);
-        if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK) 
-	{
+        if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK)
+        {
             m_lasterror = wxStream_READ_ERR;
             return m_Pos;
         }
@@ -122,4 +122,4 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
 }
 
 #endif
-  // wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
+  // wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB

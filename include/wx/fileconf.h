@@ -141,9 +141,9 @@ public:
     // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE or
     // wxCONFIG_USE_GLOBAL_FILE to say which files should be used.
   wxFileConfig(const wxString& appName,
-               const wxString& vendorName = _T(""),
-               const wxString& localFilename = _T(""),
-               const wxString& globalFilename = _T(""),
+               const wxString& vendorName = T(""),
+               const wxString& localFilename = T(""),
+               const wxString& globalFilename = T(""),
                long style = wxCONFIG_USE_LOCAL_FILE);
 
     // dtor will save unsaved data

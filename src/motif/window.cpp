@@ -719,7 +719,7 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
     }
 
     wxASSERT_MSG( m_cursor.Ok(),
-                  _T("cursor must be valid after call to the base version"));
+                  T("cursor must be valid after call to the base version"));
 
     WXDisplay *dpy = GetXDisplay();
     WXCursor x_cursor = m_cursor.GetXCursor(dpy);

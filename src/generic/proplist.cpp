@@ -830,7 +830,7 @@ bool wxPropertyListValidator::OnSelect(bool select, wxProperty *property, wxProp
 bool wxPropertyListValidator::OnValueListSelect(wxProperty *property, wxPropertyListView *view, wxWindow *WXUNUSED(parentWindow))
 {
   wxString s(view->GetValueList()->GetStringSelection());
-  if (s != _T(""))
+  if (s != T(""))
   {
     view->GetValueText()->SetValue(s);
     view->RetrieveProperty(property);
@@ -898,8 +898,8 @@ bool wxRealListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxPropert
   if (!StringToFloat(WXSTRINGCAST value, &val))
   {
     wxChar buf[200];
-    wxSprintf(buf, _T("Value %s is not a valid real number!"), value.GetData());
-    wxMessageBox(buf, _T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxSprintf(buf, T("Value %s is not a valid real number!"), value.GetData());
+    wxMessageBox(buf, T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
 
@@ -961,15 +961,15 @@ bool wxIntegerListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxProp
   if (!StringToLong(WXSTRINGCAST value, &val))
   {
     wxChar buf[200];
-    wxSprintf(buf, _T("Value %s is not a valid integer!"), value.GetData());
-    wxMessageBox(buf, _T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxSprintf(buf, T("Value %s is not a valid integer!"), value.GetData());
+    wxMessageBox(buf, T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
   if (val < m_integerMin || val > m_integerMax)
   {
     wxChar buf[200];
-    wxSprintf(buf, _T("Value must be an integer between %ld and %ld!"), m_integerMin, m_integerMax);
-    wxMessageBox(buf, _T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxSprintf(buf, T("Value must be an integer between %ld and %ld!"), m_integerMin, m_integerMax);
+    wxMessageBox(buf, T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
   return TRUE;
@@ -1015,9 +1015,9 @@ bool wxBoolListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxPropert
   if (!view->GetValueText())
     return FALSE;
   wxString value(view->GetValueText()->GetValue());
-  if (value != _T("True") && value != _T("False"))
+  if (value != T("True") && value != T("False"))
   {
-    wxMessageBox(_T("Value must be True or False!"), _T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxMessageBox(T("Value must be True or False!"), T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
   return TRUE;
@@ -1036,7 +1036,7 @@ bool wxBoolListValidator::OnRetrieveValue(wxProperty *property, wxPropertyListVi
 
   wxString value(view->GetValueText()->GetValue());
   bool boolValue = FALSE;
-  if (value == _T("True"))
+  if (value == T("True"))
     boolValue = TRUE;
   else
     boolValue = FALSE;
@@ -1079,8 +1079,8 @@ bool wxBoolListValidator::OnPrepareDetailControls(wxProperty *WXUNUSED(property)
     view->ShowListBoxControl(TRUE);
     view->GetValueList()->Enable(TRUE);
 
-    view->GetValueList()->Append(_T("True"));
-    view->GetValueList()->Append(_T("False"));
+    view->GetValueList()->Append(T("True"));
+    view->GetValueList()->Append(T("False"));
     wxChar *currentString = copystring(view->GetValueText()->GetValue());
     view->GetValueList()->SetStringSelection(currentString);
     delete[] currentString;
@@ -1353,7 +1353,7 @@ void wxFilenameListValidator::OnEdit(wxProperty *property, wxPropertyListView *v
      m_filenameWildCard.GetData(),
      0,
      parentWindow);
-  if (s != _T(""))
+  if (s != T(""))
   {
     property->GetValue() = s;
     view->DisplayProperty(property);
@@ -1546,7 +1546,7 @@ void wxListOfStringsListValidator::OnEdit(wxProperty *property, wxPropertyListVi
     expr = expr->GetNext();
   }
 
-  wxString title(_T("Editing "));
+  wxString title(T("Editing "));
   title += property->GetName();
 
   if (EditStringList(parentWindow, stringList, title.GetData()))
@@ -1766,7 +1766,7 @@ void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
   SaveCurrentSelection();
 
-  wxChar *initialText = _T("");
+  wxChar *initialText = T("");
   wxNode *node = m_stringList->Add(initialText);
   m_listBox->Append(initialText, (void *)node);
   m_currentSelection = m_stringList->Number() - 1;

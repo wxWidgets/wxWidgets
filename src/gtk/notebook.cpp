@@ -186,7 +186,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( _T("wxNoteBook creation failed") );
+        wxFAIL_MSG( T("wxNoteBook creation failed") );
 	return FALSE;
     }
 
@@ -194,7 +194,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     m_widget = gtk_notebook_new();
 
 #ifdef __WXDEBUG__
-    debug_focus_in( m_widget, _T("wxNotebook::m_widget"), name );
+    debug_focus_in( m_widget, T("wxNotebook::m_widget"), name );
 #endif
 
     gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
@@ -233,7 +233,7 @@ void wxNotebook::SetFocus()
 
 int wxNotebook::GetSelection() const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, _T("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, -1, T("invalid notebook") );
 
     GList *pages = GTK_NOTEBOOK(m_widget)->children;
 
@@ -258,18 +258,18 @@ int wxNotebook::GetRowCount() const
 
 wxString wxNotebook::GetPageText( int page ) const
 {
-    wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, T(""), T("invalid notebook") );
 
     wxNotebookPage* nb_page = GetNotebookPage(page);
     if (nb_page)
         return nb_page->m_text;
     else
-        return _T("");
+        return T("");
 }
 
 int wxNotebook::GetPageImage( int page ) const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, _T("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, -1, T("invalid notebook") );
 
     wxNotebookPage* nb_page = GetNotebookPage(page);
     if (nb_page)
@@ -280,9 +280,9 @@ int wxNotebook::GetPageImage( int page ) const
 
 wxNotebookPage* wxNotebook::GetNotebookPage( int page ) const
 {
-    wxCHECK_MSG( m_widget != NULL, (wxNotebookPage*) NULL, _T("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, (wxNotebookPage*) NULL, T("invalid notebook") );
 
-    wxCHECK_MSG( page < (int)m_pages.GetCount(), (wxNotebookPage*) NULL, _T("invalid notebook index") );
+    wxCHECK_MSG( page < (int)m_pages.GetCount(), (wxNotebookPage*) NULL, T("invalid notebook index") );
     
     wxNode *node = m_pages.Nth( page );
     
@@ -291,9 +291,9 @@ wxNotebookPage* wxNotebook::GetNotebookPage( int page ) const
 
 int wxNotebook::SetSelection( int page )
 {
-    wxCHECK_MSG( m_widget != NULL, -1, _T("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, -1, T("invalid notebook") );
 
-    wxCHECK_MSG( page < (int)m_pages.GetCount(), -1, _T("invalid notebook index") );
+    wxCHECK_MSG( page < (int)m_pages.GetCount(), -1, T("invalid notebook index") );
 
     int selOld = GetSelection();
     
@@ -304,7 +304,7 @@ int wxNotebook::SetSelection( int page )
 
 void wxNotebook::AdvanceSelection( bool forward )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid notebook") );
+    wxCHECK_RET( m_widget != NULL, T("invalid notebook") );
 
     int sel = GetSelection();
     int max = GetPageCount();
@@ -322,11 +322,11 @@ void wxNotebook::SetImageList( wxImageList* imageList )
 
 bool wxNotebook::SetPageText( int page, const wxString &text )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, FALSE, T("invalid notebook") );
 
     wxNotebookPage* nb_page = GetNotebookPage(page);
 
-    wxCHECK_MSG( nb_page, FALSE, _T("SetPageText: invalid page index") );
+    wxCHECK_MSG( nb_page, FALSE, T("SetPageText: invalid page index") );
 
     nb_page->m_text = text;
 
@@ -422,22 +422,22 @@ bool wxNotebook::SetPageImage( int page, int image )
 
 void wxNotebook::SetPageSize( const wxSize &WXUNUSED(size) )
 {
-    wxFAIL_MSG( _T("wxNotebook::SetPageSize not implemented") );
+    wxFAIL_MSG( T("wxNotebook::SetPageSize not implemented") );
 }
 
 void wxNotebook::SetPadding( const wxSize &WXUNUSED(padding) )
 {
-    wxFAIL_MSG( _T("wxNotebook::SetPadding not implemented") );
+    wxFAIL_MSG( T("wxNotebook::SetPadding not implemented") );
 }
 
 void wxNotebook::SetTabSize(const wxSize& WXUNUSED(sz))
 {
-    wxFAIL_MSG( _T("wxNotebook::SetTabSize not implemented") );
+    wxFAIL_MSG( T("wxNotebook::SetTabSize not implemented") );
 }
 
 bool wxNotebook::DeleteAllPages()
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, FALSE, T("invalid notebook") );
 
     while (m_pages.GetCount() > 0)
         DeletePage( m_pages.GetCount()-1 );
@@ -478,10 +478,10 @@ bool wxNotebook::RemovePage( int page )
 bool wxNotebook::InsertPage( int position, wxWindow* win, const wxString& text,
                              bool select, int imageId )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, FALSE, T("invalid notebook") );
 
     wxCHECK_MSG( win->GetParent() == this, FALSE,
-               _T("Can't add a page whose parent is not the notebook!") );
+               T("Can't add a page whose parent is not the notebook!") );
 
     /* don't receive switch page during addition */	       
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget), 
@@ -535,7 +535,7 @@ bool wxNotebook::InsertPage( int position, wxWindow* win, const wxString& text,
 
     /* set the label text */
     page->m_text = text;
-    if (page->m_text.IsEmpty()) page->m_text = _T("");
+    if (page->m_text.IsEmpty()) page->m_text = T("");
     
     page->m_label = GTK_LABEL( gtk_label_new(page->m_text.mbc_str()) );
     gtk_box_pack_end( GTK_BOX(page->m_box), GTK_WIDGET(page->m_label), FALSE, FALSE, 3 );
@@ -573,7 +573,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 
 wxWindow *wxNotebook::GetPage( int page ) const
 {
-    wxCHECK_MSG( m_widget != NULL, (wxWindow*) NULL, _T("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, (wxWindow*) NULL, T("invalid notebook") );
 
     wxNotebookPage* nb_page = GetNotebookPage(page);
     if (!nb_page)

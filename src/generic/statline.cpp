@@ -55,7 +55,7 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     wxSize sizeReal = AdjustSize(size);
 
-    m_statbox = new wxStaticBox(parent, id, _T(""), pos, sizeReal, style, name);
+    m_statbox = new wxStaticBox(parent, id, T(""), pos, sizeReal, style, name);
 
     return TRUE;
 }

@@ -151,6 +151,11 @@ private:
 // template classes
 // ============================================================================
 
+// resolves the name conflict between the T() macor and T typedef: we can't
+// use T() inside WX_DEFINE_ARRAY!
+#define _WX_ERROR_SIZEOF   T("illegal use of DEFINE_ARRAY")
+#define _WX_ERROR_REMOVE   T("removing inexisting element in wxArray::Remove")
+
 // ----------------------------------------------------------------------------
 // This macro generates a new array class. It is intended for storage of simple
 // types of sizeof()<=sizeof(long) or pointers if sizeof(pointer)<=sizeof(long)
@@ -170,7 +175,7 @@ public:                                                             \
     size_t type = sizeof(T);                                        \
     size_t sizelong = sizeof(long);                                 \
     if ( type > sizelong )                                          \
-      { wxFAIL_MSG( _T("illegal use of DEFINE_ARRAY") ); }          \
+      { wxFAIL_MSG( _WX_ERROR_SIZEOF ); }                           \
   }                                                                 \
                                                                     \
   name& operator=(const name& src)                                  \
@@ -197,7 +202,7 @@ public:                                                             \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
       wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                  \
-        _T("removing inexisting element in wxArray::Remove") );     \
+         _WX_ERROR_REMOVE);                                         \
       wxBaseArray::Remove((size_t)iIndex); }                        \
                                                                     \
   void Sort(CMPFUNC##T fCmp) { wxBaseArray::Sort((CMPFUNC)fCmp); }  \
@@ -232,7 +237,7 @@ public:                                                             \
   { size_t type = sizeof(T);                                        \
     size_t sizelong = sizeof(long);                                 \
     if ( type > sizelong )                                          \
-      { wxFAIL_MSG( _T("illegal use of DEFINE_ARRAY") ); }          \
+      { wxFAIL_MSG( _WX_ERROR_SIZEOF ); }                           \
     m_fnCompare = fn;                                               \
   }                                                                 \
                                                                     \
@@ -259,7 +264,7 @@ public:                                                             \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
       wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                  \
-        _T("removing inexisting element in wxArray::Remove") );     \
+        _WX_ERROR_REMOVE );                                         \
       wxBaseArray::Remove((size_t)iIndex); }                        \
                                                                     \
 private:                                                            \

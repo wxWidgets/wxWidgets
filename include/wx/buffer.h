@@ -15,6 +15,7 @@
 #define _WX_BUFFER_H
 
 #include "wx/wxchar.h"
+
 #include <string.h> // strdup
 
 // ----------------------------------------------------------------------------
@@ -27,14 +28,14 @@ class wxCharBuffer
 public:
     wxCharBuffer(const char *str)
     {
-        wxASSERT_MSG( str, _T("NULL string in wxCharBuffer") );
+        wxASSERT_MSG( str, T("NULL string in wxCharBuffer") );
 
         m_str = str ? strdup(str) : (char *)NULL;
     }
     wxCharBuffer(size_t len)
     {
         m_str = (char *)malloc(len+1);
-	m_str[len] = '\0';
+        m_str[len] = '\0';
     }
     // no need to check for NULL, free() does it
    ~wxCharBuffer() { free(m_str); }
@@ -66,7 +67,7 @@ class wxWCharBuffer
 public:
     wxWCharBuffer(const wchar_t *wcs)
     {
-        wxASSERT_MSG( wcs, _T("NULL string in wxWCharBuffer") );
+        wxASSERT_MSG( wcs, T("NULL string in wxWCharBuffer") );
 
         if (wcs) {
           size_t siz = (wcslen(wcs)+1)*sizeof(wchar_t);
@@ -78,7 +79,7 @@ public:
     wxWCharBuffer(size_t len)
     {
         m_wcs = (wchar_t *)malloc((len+1)*sizeof(wchar_t));
-	m_wcs[len] = L'\0';
+        m_wcs[len] = L'\0';
     }
 
     // no need to check for NULL, free() does it
@@ -100,23 +101,23 @@ public:
 
    operator const wchar_t *() const { return m_wcs; }
    wchar_t operator[](size_t n) const { return m_wcs[n]; }
-          
+
 private:
    wchar_t *m_wcs;
 };
 #endif
 
 #if wxUSE_UNICODE
-#define wxMB2WXbuf wxWCharBuffer
-#define wxWX2MBbuf wxCharBuffer
-#define wxWC2WXbuf wxChar*
-#define wxWX2WCbuf wxChar*
-#else
-#define wxMB2WXbuf wxChar*
-#define wxWX2MBbuf wxChar*
-#define wxWC2WXbuf wxCharBuffer
-#define wxWX2WCbuf wxWCharBuffer
-#endif
+    #define wxMB2WXbuf wxWCharBuffer
+    #define wxWX2MBbuf wxCharBuffer
+    #define wxWC2WXbuf wxChar*
+    #define wxWX2WCbuf wxChar*
+#else // ANSI
+    #define wxMB2WXbuf wxChar*
+    #define wxWX2MBbuf wxChar*
+    #define wxWC2WXbuf wxCharBuffer
+    #define wxWX2WCbuf wxWCharBuffer
+#endif // Unicode/ANSI
 
 // ----------------------------------------------------------------------------
 // template class for any kind of data

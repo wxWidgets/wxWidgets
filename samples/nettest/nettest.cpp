@@ -35,7 +35,7 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/net.h"
+#include "wx/dialup.h"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -208,9 +208,6 @@ void MyApp::OnConnected(wxDialUpEvent& event)
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, -1, title, pos, size)
 {
-    // set the frame icon
-    SetIcon(wxICON(mondrian));
-
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 

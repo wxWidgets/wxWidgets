@@ -245,7 +245,7 @@ protected:
 // GUI part (andnot just the base one) of the library, they're implemented in
 // src/generic/logg.cpp *and not src/common/log.cpp unlike all the rest)
 
-#ifndef wxUSE_NOGUI
+#if wxUSE_GUI
 
 // log everything to a text window (GUI only of course)
 class WXDLLEXPORT wxLogTextCtrl : public wxLog
@@ -338,7 +338,7 @@ private:
     wxLogFrame *m_pLogFrame;      // the log frame
 };
 
-#endif // wxUSE_NOGUI
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // /dev/null log target: suppress logging until this object goes out of scope
@@ -464,7 +464,7 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 // ----------------------------------------------------------------------------
 
 #ifndef __TFILE__
-    #define __XFILE__(x) _T(x)
+    #define __XFILE__(x) Tx)
     #define __TFILE__ __XFILE__(__FILE__)
 #endif
 
@@ -473,12 +473,12 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
     // will take us immediately to the place of the failed API
 #ifdef __VISUALC__
     #define wxLogApiError(api, rc)                                              \
-        wxLogDebug(_T("%s(%d): '%s' failed with error 0x%08lx (%s)."),          \
+        wxLogDebug(T("%s(%d): '%s' failed with error 0x%08lx (%s)."),          \
                    __TFILE__, __LINE__, api,                                    \
                    rc, wxSysErrorMsg(rc))
 #else // !VC++
     #define wxLogApiError(api, rc)                                              \
-        wxLogDebug(_T("In file %s at line %d: '%s' failed with "                \
+        wxLogDebug(T("In file %s at line %d: '%s' failed with "                \
                       "error 0x%08lx (%s)."),                                   \
                    __TFILE__, __LINE__, api,                                    \
                    rc, wxSysErrorMsg(rc))

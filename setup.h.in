@@ -131,11 +131,11 @@
 /*
  * Use GUI
  */
-#define wxUSE_GUI 1
+#define wxUSE_GUI 0
 /*
- * Defined if !wxUSE_GUI
+ * Don't use GUI (defined to 1 when compiling/using base only)
  */
-#undef wxUSE_NOGUI
+#define wxUSE_NOGUI 0
 
 /*
  * Use constraints mechanism
@@ -367,9 +367,19 @@
 #define wxUSE_POSTSCRIPT 0
 
 /*
- * Compile wxString with wide character (Unicode) support?
+ * Compile wxString with some Unicode support?
+ */
+#define wxUSE_WCHAR_T 0
+
+/*
+ * Compile wxString in wide character (Unicode) mode?
  */
 #define wxUSE_UNICODE 0
+
+/*
+ * Compile wxString with (limited) multibyte char support?
+ */
+#define wxUSE_MULTIBYTE 0
 
 /*
  * Work around a bug in GNU libc 5.x wcstombs() implementation.
@@ -643,6 +653,9 @@
 
 /* Define if you have the shl_load function.  */
 #undef HAVE_SHL_LOAD
+
+/* Define if you have strtok_r function. */
+#undef HAVE_STRTOK_R
 
 /* Define if you have the uname function.  */
 #undef HAVE_UNAME

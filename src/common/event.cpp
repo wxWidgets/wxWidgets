@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -22,46 +22,56 @@
 
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
-    #include "wx/control.h"
-    #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/dc.h"
+    #include "wx/list.h"
+
+    #if wxUSE_GUI
+        #include "wx/control.h"
+        #include "wx/utils.h"
+        #include "wx/dc.h"
+    #endif // wxUSE_GUI
 #endif
 
 #include "wx/event.h"
-#include "wx/validate.h"
+
+#if wxUSE_GUI
+    #include "wx/validate.h"
+#endif // wxUSE_GUI
 
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
     IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
-    IMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxScrollWinEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMouseEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxKeyEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxSizeEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxPaintEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxEraseEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMoveEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxFocusEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxCloseEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxShowEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMaximizeEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxIconizeEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMenuEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxJoystickEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxDropFilesEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxActivateEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxInitDialogEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxUpdateUIEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxPaletteChangedEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxQueryNewPaletteEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindowCreateEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindowDestroyEvent, wxEvent)
+
+    #if wxUSE_GUI
+        IMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxScrollWinEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxMouseEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxKeyEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxSizeEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxPaintEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxEraseEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxMoveEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxFocusEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxCloseEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxShowEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxMaximizeEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxIconizeEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxMenuEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxJoystickEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxDropFilesEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxActivateEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxInitDialogEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxUpdateUIEvent, wxCommandEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxCommandEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxPaletteChangedEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxQueryNewPaletteEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxWindowCreateEvent, wxEvent)
+        IMPLEMENT_DYNAMIC_CLASS(wxWindowDestroyEvent, wxEvent)
+    #endif // wxUSE_GUI
 
     const wxEventTable *wxEvtHandler::GetEventTable() const
         { return &wxEvtHandler::sm_eventTable; }
@@ -102,7 +112,7 @@ wxEvent::wxEvent(int theId)
 
 void wxEvent::CopyObject(wxObject& object_dest) const
 {
-    wxEvent *obj = (wxEvent *)&object_dest; 
+    wxEvent *obj = (wxEvent *)&object_dest;
     wxObject::CopyObject(object_dest);
 
     obj->m_eventType = m_eventType;
@@ -113,6 +123,8 @@ void wxEvent::CopyObject(wxObject& object_dest) const
     obj->m_callbackUserData = m_callbackUserData;
     obj->m_isCommandEvent = m_isCommandEvent;
 }
+
+#if wxUSE_GUI
 
 /*
  * Command events
@@ -133,7 +145,7 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
 
 void wxCommandEvent::CopyObject(wxObject& obj_d) const
 {
-    wxCommandEvent *obj = (wxCommandEvent *)&obj_d; 
+    wxCommandEvent *obj = (wxCommandEvent *)&obj_d;
 
     wxEvent::CopyObject(obj_d);
 
@@ -172,7 +184,7 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
 
 void wxScrollWinEvent::CopyObject(wxObject& obj_d) const
 {
-    wxScrollWinEvent *obj = (wxScrollWinEvent*)&obj_d; 
+    wxScrollWinEvent *obj = (wxScrollWinEvent*)&obj_d;
 
     wxEvent::CopyObject(obj_d);
 
@@ -231,7 +243,7 @@ bool wxMouseEvent::ButtonDClick(int but) const
         case 3:
             return RightDClick();
         default:
-            wxFAIL_MSG(_T("invalid parameter in wxMouseEvent::ButtonDClick"));
+            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::ButtonDClick"));
     }
 
     return FALSE;
@@ -252,7 +264,7 @@ bool wxMouseEvent::ButtonDown(int but) const
         case 3:
             return RightDown();
         default:
-            wxFAIL_MSG(_T("invalid parameter in wxMouseEvent::ButtonDown"));
+            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::ButtonDown"));
     }
 
     return FALSE;
@@ -272,7 +284,7 @@ bool wxMouseEvent::ButtonUp(int but) const
         case 3:
             return RightUp();
         default:
-            wxFAIL_MSG(_T("invalid parameter in wxMouseEvent::ButtonUp"));
+            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::ButtonUp"));
     }
 
     return FALSE;
@@ -291,7 +303,7 @@ bool wxMouseEvent::Button(int but) const
         case 3:
             return (RightDown() || RightUp() || RightDClick());
         default:
-            wxFAIL_MSG(_T("invalid parameter in wxMouseEvent::Button"));
+            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::Button"));
     }
 
     return FALSE;
@@ -309,7 +321,7 @@ bool wxMouseEvent::ButtonIsDown(int but) const
         case 3:
             return RightIsDown();
         default:
-            wxFAIL_MSG(_T("invalid parameter in wxMouseEvent::ButtonIsDown"));
+            wxFAIL_MSG(T("invalid parameter in wxMouseEvent::ButtonIsDown"));
     }
 
     return FALSE;
@@ -408,7 +420,7 @@ void wxCloseEvent::CopyObject(wxObject& obj_d) const
 #endif
     obj->m_canVeto = m_canVeto;
 }
- 
+
 void wxShowEvent::CopyObject(wxObject& obj_d) const
 {
     wxShowEvent *obj = (wxShowEvent *)&obj_d;
@@ -427,7 +439,7 @@ void wxJoystickEvent::CopyObject(wxObject& obj_d) const
     obj->m_buttonChange = m_buttonChange;
     obj->m_buttonState = m_buttonState;
     obj->m_joyStick = m_joyStick;
-} 
+}
 
 void wxDropFilesEvent::CopyObject(wxObject& obj_d) const
 {
@@ -437,15 +449,7 @@ void wxDropFilesEvent::CopyObject(wxObject& obj_d) const
     obj->m_noFiles = m_noFiles;
     obj->m_pos = m_pos;
     // TODO: Problem with obj->m_files. It should be deallocated by the
-    // destructor of the event. 
-}
-
-void wxIdleEvent::CopyObject(wxObject& obj_d) const
-{
-    wxIdleEvent *obj = (wxIdleEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_requestMore = m_requestMore;
+    // destructor of the event.
 }
 
 void wxUpdateUIEvent::CopyObject(wxObject &obj_d) const
@@ -487,6 +491,16 @@ wxWindowDestroyEvent::wxWindowDestroyEvent(wxWindow *win)
                     : wxEvent(wxEVT_DESTROY)
 {
     SetEventObject(win);
+}
+
+#endif // wxUSE_GUI
+
+void wxIdleEvent::CopyObject(wxObject& obj_d) const
+{
+    wxIdleEvent *obj = (wxIdleEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_requestMore = m_requestMore;
 }
 
 /*
@@ -564,7 +578,7 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
 
     // TODO: Wake up idle handler for the other platforms.
 #ifdef __WXGTK__
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 #endif
 
@@ -592,14 +606,16 @@ void wxEvtHandler::ProcessPendingEvents()
 
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
+#if wxUSE_GUI
     /* check that our flag corresponds to reality */
     wxASSERT( m_isWindow == IsKindOf(CLASSINFO(wxWindow)) );
+#endif // wxUSE_GUI
 
     /* An event handler can be enabled or disabled */
     if ( GetEvtHandlerEnabled() )
     {
 #if wxUSE_THREADS
-	/* Check whether we are in a child thread. */
+        /* Check whether we are in a child thread. */
         if (!wxThread::IsMain())
           return ProcessThreadEvent(event);
 #endif
@@ -612,7 +628,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 
         const wxEventTable *table = GetEventTable();
 
-#if wxUSE_VALIDATORS
+#if wxUSE_GUI && wxUSE_VALIDATORS
         // Try the associated validator first, if this is a window.
         // Problem: if the event handler of the window has been replaced,
         // this wxEvtHandler may no longer be a window.
@@ -654,6 +670,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
             return TRUE;
     }
 
+#if wxUSE_GUI
     // Carry on up the parent-child hierarchy,
     // but only if event is a command event: it wouldn't
     // make sense for a parent to receive a child's size event, for example
@@ -664,6 +681,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         if (parent && !parent->IsBeingDeleted())
             return parent->GetEventHandler()->ProcessEvent(event);
     }
+#endif // wxUSE_GUI
 
     // Last try - application object.
     if ( wxTheApp && (this != wxTheApp) )
@@ -735,7 +753,7 @@ void wxEvtHandler::Connect( int id, int lastId,
 bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 {
     wxCHECK_MSG( m_dynamicEvents, FALSE,
-                 _T("caller should check that we have dynamic events") );
+                 T("caller should check that we have dynamic events") );
 
     int commandId = event.GetId();
 
@@ -779,6 +797,8 @@ bool wxEvtHandler::OnClose()
 }
 #endif // WXWIN_COMPATIBILITY
 
+#if wxUSE_GUI
+
 // Find a window with the focus, that is also a descendant of the given window.
 // This is used to determine the window to initially send commands to.
 wxWindow* wxFindFocusDescendant(wxWindow* ancestor)
@@ -802,3 +822,4 @@ wxWindow* wxFindFocusDescendant(wxWindow* ancestor)
     return focusWin;
 }
 
+#endif // wxUSE_GUI

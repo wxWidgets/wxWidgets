@@ -181,13 +181,13 @@ wxMiniFrame::~wxMiniFrame(void)
 #define HASCAPTION( hwnd )    (TestWinStyle( hwnd, IBS_VERTCAPTION ) ||\
                                TestWinStyle( hwnd, IBS_HORZCAPTION ))
                                
-#define SETCAPTIONSIZE(h,i)   (UINT)SetProp(h,_T("ibSize"),(HANDLE)i)
-#define GETCAPTIONSIZE(h)     (UINT)GetProp(h,_T("ibSize"))
-#define FREECAPTIONSIZE(h)    RemoveProp(h,_T("ibSize"))
+#define SETCAPTIONSIZE(h,i)   (UINT)SetProp(h,T("ibSize"),(HANDLE)i)
+#define GETCAPTIONSIZE(h)     (UINT)GetProp(h,T("ibSize"))
+#define FREECAPTIONSIZE(h)    RemoveProp(h,T("ibSize"))
 
-#define SETMENUWASUPFLAG(h,i) (UINT)SetProp(h,_T("ibFlag"),(HANDLE)i)
-#define GETMENUWASUPFLAG(h)   (UINT)GetProp(h,_T("ibFlag"))
-#define FREEMENUWASUPFLAG(h)  RemoveProp(h,_T("ibFlag"))
+#define SETMENUWASUPFLAG(h,i) (UINT)SetProp(h,T("ibFlag"),(HANDLE)i)
+#define GETMENUWASUPFLAG(h)   (UINT)GetProp(h,T("ibFlag"))
+#define FREEMENUWASUPFLAG(h)  RemoveProp(h,T("ibFlag"))
 
 /////////////////////////////////////////////////////////////////////
 // Little known fact:
@@ -405,7 +405,7 @@ LRESULT WINAPI ibDefWindowProc( HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lPa
                 {
                     // VZ: I don't know what should be here, but the vars must
                     //     be inited!
-                    wxFAIL_MSG(_T("don't know how to initialize cx, cy"));
+                    wxFAIL_MSG(T("don't know how to initialize cx, cy"));
 
                     cx = cy = 0;
                 }
@@ -916,7 +916,7 @@ BOOL PASCAL DrawCaption( HDC hDC, HWND hWnd, LPRECT lprc,
             {
                 // Can only rotate true type fonts (well, ok, we could
                 // try and use "modern").
-                wxStrcpy( lf.lfFaceName, _T("Arial") ) ;
+                wxStrcpy( lf.lfFaceName, T("Arial") ) ;
                 lf.lfPitchAndFamily = FF_SWISS | 0x04;
                 lf.lfEscapement = 900 ;
 

@@ -165,8 +165,8 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         unsigned long tmp;
         wxColour clr;
 
-        if (tag.HasParam("TEXT")) {
-            if (tag.ScanParam("TEXT", "#%lX", &tmp) == 1) {
+        if (tag.HasParam("TEXT(")) {
+            if (tag.ScanParam("TEXT(", "#%lX", &tmp) == 1) {
                 clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
                 m_WParser -> SetActualColor(clr);
                 m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr));

@@ -44,7 +44,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
 
 bool wxCheckListBox::IsChecked( int index ) const
 {
-    wxCHECK_MSG( m_list != NULL, FALSE, _T("invalid checklistbox") );
+    wxCHECK_MSG( m_list != NULL, FALSE, T("invalid checklistbox") );
 
     GList *child = g_list_nth( m_list->children, index );
     if (child)
@@ -54,16 +54,16 @@ bool wxCheckListBox::IsChecked( int index ) const
 
         wxString str = wxString(label->label,*wxConvCurrent);
 
-        return (str[1] == _T('X'));
+        return (str[1] == T('X'));
     }
 
-    wxFAIL_MSG(_T("wrong checklistbox index"));
+    wxFAIL_MSG(T("wrong checklistbox index"));
     return FALSE;
 }
 
 void wxCheckListBox::Check( int index, bool check )
 {
-    wxCHECK_RET( m_list != NULL, _T("invalid checklistbox") );
+    wxCHECK_RET( m_list != NULL, T("invalid checklistbox") );
 
     GList *child = g_list_nth( m_list->children, index );
     if (child)
@@ -73,19 +73,19 @@ void wxCheckListBox::Check( int index, bool check )
 
         wxString str = wxString(label->label,*wxConvCurrent);
 
-        if (check == (str[1] == _T('X'))) return;
+        if (check == (str[1] == T('X'))) return;
 
         if (check)
-            str.SetChar( 1, _T('X') );
+            str.SetChar( 1, T('X') );
         else
-            str.SetChar( 1, _T('-') );
+            str.SetChar( 1, T('-') );
 
         gtk_label_set( label, str.mbc_str() );
 
         return;
     }
 
-    wxFAIL_MSG(_T("wrong checklistbox index"));
+    wxFAIL_MSG(T("wrong checklistbox index"));
 }
 
 int wxCheckListBox::GetItemHeight() const

@@ -352,7 +352,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
                                  DFC_BUTTON,
                                  DFCS_BUTTONCHECK | DFCS_CHECKED) )
         {
-            wxLogLastError(_T("DrawFrameControl(check)"));
+            wxLogLastError(T("DrawFrameControl(check)"));
         }
 
         bmp.SetHBITMAP((WXHBITMAP)hbmpCheck);
@@ -362,7 +362,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
                                  DFC_BUTTON,
                                  DFCS_BUTTONCHECK) )
         {
-            wxLogLastError(_T("DrawFrameControl(uncheck)"));
+            wxLogLastError(T("DrawFrameControl(uncheck)"));
         }
 
         bmp.SetHBITMAP((WXHBITMAP)hbmpCheck);
@@ -480,7 +480,7 @@ wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
     if ( !DoGetItem(&tvItem) )
     {
         // don't return some garbage which was on stack, but an empty string
-        buf[0] = _T('\0');
+        buf[0] = T('\0');
     }
 
     return wxString(buf);
@@ -555,7 +555,7 @@ int wxTreeCtrl::GetItemImage(const wxTreeItemId& item,
     switch ( which )
     {
         default:
-            wxFAIL_MSG( _T("unknown tree item image type") );
+            wxFAIL_MSG( T("unknown tree item image type") );
 
         case wxTreeItemIcon_Normal:
             mask = TVIF_IMAGE;
@@ -583,7 +583,7 @@ void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
     switch ( which )
     {
         default:
-            wxFAIL_MSG( _T("unknown tree item image type") );
+            wxFAIL_MSG( T("unknown tree item image type") );
 
         case wxTreeItemIcon_Normal:
             imageNormal = image;
@@ -659,7 +659,7 @@ void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
         }
         else
         {
-            wxFAIL_MSG( _T("failed to change tree items data") );
+            wxFAIL_MSG( T("failed to change tree items data") );
         }
     }
     else
@@ -676,7 +676,7 @@ void wxTreeCtrl::SetIndirectItemData(const wxTreeItemId& item,
     // to crash too because the code elsewhere supposes that the pointer the
     // wxTreeItemIndirectData has is a real wxItemData and not
     // wxTreeItemIndirectData as well
-    wxASSERT_MSG( !HasIndirectData(item), _T("setting indirect data twice?") );
+    wxASSERT_MSG( !HasIndirectData(item), T("setting indirect data twice?") );
 
     SetItemData(item, (wxTreeItemData *)data);
 
@@ -768,7 +768,7 @@ wxTreeItemId wxTreeCtrl::GetRootItem() const
 wxTreeItemId wxTreeCtrl::GetSelection() const
 {
     wxCHECK_MSG( !(m_windowStyle & wxTR_MULTIPLE), (WXHTREEITEM)0,
-                 _T("this only works with single selection controls") );
+                 T("this only works with single selection controls") );
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetSelection(GetHwnd()));
 }
@@ -830,7 +830,7 @@ wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 {
-    wxASSERT_MSG( IsVisible(item), _T("The item you call GetNextVisible() "
+    wxASSERT_MSG( IsVisible(item), T("The item you call GetNextVisible() "
                                       "for must be visible itself!"));
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetNextVisible(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item));
@@ -838,7 +838,7 @@ wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 {
-    wxASSERT_MSG( IsVisible(item), _T("The item you call GetPrevVisible() "
+    wxASSERT_MSG( IsVisible(item), T("The item you call GetPrevVisible() "
                                       "for must be visible itself!"));
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevVisible(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item));
@@ -1036,7 +1036,7 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
                   flag == (TVE_COLLAPSE | TVE_COLLAPSERESET) ||
                   flag == TVE_EXPAND   ||
                   flag == TVE_TOGGLE,
-                  _T("Unknown flag in wxTreeCtrl::DoExpand") );
+                  T("Unknown flag in wxTreeCtrl::DoExpand") );
 
     // TreeView_Expand doesn't send TVN_ITEMEXPAND(ING) messages, so we must
     // emulate them. This behaviour has changed slightly with comctl32.dll
@@ -1096,7 +1096,7 @@ void wxTreeCtrl::ExpandItem(const wxTreeItemId& item, int action)
 
 void wxTreeCtrl::Unselect()
 {
-    wxASSERT_MSG( !(m_windowStyle & wxTR_MULTIPLE), _T("doesn't make sense") );
+    wxASSERT_MSG( !(m_windowStyle & wxTR_MULTIPLE), T("doesn't make sense") );
 
     // just remove the selection
     SelectItem(wxTreeItemId((WXHTREEITEM) 0));
@@ -1274,7 +1274,7 @@ static int CALLBACK TreeView_CompareCallback(wxTreeItemData *pItem1,
                                              wxTreeCtrl *tree)
 {
     wxCHECK_MSG( pItem1 && pItem2, 0,
-                 _T("sorting tree without data doesn't make sense") );
+                 T("sorting tree without data doesn't make sense") );
 
     return tree->OnCompareItems(pItem1->GetId(), pItem2->GetId());
 }
@@ -1423,7 +1423,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         break;
 
                     default:
-                        wxLogDebug(_T("unexpected code %d in TVN_ITEMEXPAND "
+                        wxLogDebug(T("unexpected code %d in TVN_ITEMEXPAND "
                                       "message"), tv->action);
                 }
 

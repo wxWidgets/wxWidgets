@@ -81,22 +81,22 @@ public:
 
 // Construction & destruction
     wxVariant();
-    wxVariant(double val, const wxString& name = g_szNul);
-    wxVariant(long val, const wxString& name = g_szNul);
+    wxVariant(double val, const wxString& name = wxEmptyString);
+    wxVariant(long val, const wxString& name = wxEmptyString);
 #ifdef HAVE_BOOL
-    wxVariant(bool val, const wxString& name = g_szNul);
+    wxVariant(bool val, const wxString& name = wxEmptyString);
 #endif
-    wxVariant(char val, const wxString& name = g_szNul);
-    wxVariant(const wxString& val, const wxString& name = g_szNul);
-    wxVariant(const wxChar* val, const wxString& name = g_szNul); // Necessary or VC++ assumes bool!
-    wxVariant(const wxStringList& val, const wxString& name = g_szNul);
-    wxVariant(const wxList& val, const wxString& name = g_szNul); // List of variants
+    wxVariant(char val, const wxString& name = wxEmptyString);
+    wxVariant(const wxString& val, const wxString& name = wxEmptyString);
+    wxVariant(const wxChar* val, const wxString& name = wxEmptyString); // Necessary or VC++ assumes bool!
+    wxVariant(const wxStringList& val, const wxString& name = wxEmptyString);
+    wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
 #if wxUSE_TIMEDATE
-    wxVariant(const wxTime& val, const wxString& name = g_szNul); // Time
-    wxVariant(const wxDate& val, const wxString& name = g_szNul); // Date
+    wxVariant(const wxTime& val, const wxString& name = wxEmptyString); // Time
+    wxVariant(const wxDate& val, const wxString& name = wxEmptyString); // Date
 #endif
-    wxVariant(void* ptr, const wxString& name = g_szNul); // void* (general purpose)
-    wxVariant(wxVariantData* data, const wxString& name = g_szNul); // User-defined data
+    wxVariant(void* ptr, const wxString& name = wxEmptyString); // void* (general purpose)
+    wxVariant(wxVariantData* data, const wxString& name = wxEmptyString); // User-defined data
     wxVariant(const wxVariant& variant);
     ~wxVariant();
 

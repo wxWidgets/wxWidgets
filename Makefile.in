@@ -1821,14 +1821,53 @@ JPEGOBJS    = \
 		jquant2.o \
 		jdmerge.o
 
+BASE_OBJS = \
+    dynarray.o \
+    event.o \
+    hash.o \
+    intl.o \
+    init.o \
+    file.o \
+    filefn.o \
+    list.o \
+    log.o \
+    object.o \
+    string.o \
+    utilscmn.o \
+    utilsunx.o
 
-OBJECTS = $(@GUIOBJS@) $(@COMMONOBJS@) $(@GENERICOBJS@) $(@UNIXOBJS@) $(HTMLOBJS) \
-	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS)
+BASE_DEPS = \
+    dynarray.d \
+    event.d \
+    hash.d \
+    intl.d \
+    init.d \
+    file.d \
+    filefn.d \
+    list.d \
+    log.d \
+    object.d \
+    string.d \
+    utilscmn.d \
+    utilsunx.d
 
-DEPFILES = $(@GUIDEPS@) $(@COMMONDEPS@) $(@GENERICDEPS@) $(UNIXDEPS) $(HTMLDEPS)
+BASE_HEADERS =
 
-HEADERS = $(@GUIHEADERS@) $(HTML_HEADERS) $(UNIX_HEADERS) $(PROTOCOL_HEADERS) \
-	  $(GENERIC_HEADERS) $(WX_HEADERS)
+GUIOBJS = @GUIOBJS@
+GUIDEPS = @GUIDEPS@
+GUIHEADERS = @GUIHEADERS@
+COMMONOBJS = @COMMONOBJS@
+COMMONDEPS = @COMMONDEPS@
+GENERICOBJS = @GENERICOBJS@
+GENERICDEPS = @GENERICDEPS@
+UNIXOBJS = @UNIXOBJS@
+UNIXDEPS = @UNIXDEPS@
+
+OBJECTS = @ALL_OBJECTS@
+
+DEPFILES = @ALL_DEPFILES@
+
+HEADERS = @ALL_HEADERS@
 
 all: @WX_CREATE_LINKS@
 

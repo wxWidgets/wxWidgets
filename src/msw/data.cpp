@@ -118,50 +118,49 @@ wxFont   wxNullFont;
 wxColour wxNullColour;
 
 // Default window names
-const wxChar *wxButtonNameStr = _T("button");
-const wxChar *wxCanvasNameStr = _T("canvas");
-const wxChar *wxCheckBoxNameStr = _T("check");
-const wxChar *wxChoiceNameStr = _T("choice");
-const wxChar *wxComboBoxNameStr = _T("comboBox");
-const wxChar *wxDialogNameStr = _T("dialog");
-const wxChar *wxFrameNameStr = _T("frame");
-const wxChar *wxGaugeNameStr = _T("gauge");
-const wxChar *wxStaticBoxNameStr = _T("groupBox");
-const wxChar *wxListBoxNameStr = _T("listBox");
-const wxChar *wxStaticTextNameStr = _T("message");
-const wxChar *wxStaticBitmapNameStr = _T("message");
-const wxChar *wxMultiTextNameStr = _T("multitext");
-const wxChar *wxPanelNameStr = _T("panel");
-const wxChar *wxRadioBoxNameStr = _T("radioBox");
-const wxChar *wxRadioButtonNameStr = _T("radioButton");
-const wxChar *wxBitmapRadioButtonNameStr = _T("radioButton");
-const wxChar *wxScrollBarNameStr = _T("scrollBar");
-const wxChar *wxSliderNameStr = _T("slider");
-const wxChar *wxStaticNameStr = _T("static");
-const wxChar *wxTextCtrlWindowNameStr = _T("textWindow");
-const wxChar *wxTextCtrlNameStr = _T("text");
-const wxChar *wxVirtListBoxNameStr = _T("virtListBox");
-const wxChar *wxButtonBarNameStr = _T("buttonbar");
-const wxChar *wxEnhDialogNameStr = _T("Shell");
-const wxChar *wxToolBarNameStr = _T("toolbar");
-const wxChar *wxStatusLineNameStr = _T("status_line");
-const wxChar *wxEmptyString = _T("");
-const wxChar *wxGetTextFromUserPromptStr = _T("Input Text");
-const wxChar *wxMessageBoxCaptionStr = _T("Message");
-const wxChar *wxFileSelectorPromptStr = _T("Select a file");
-const wxChar *wxFileSelectorDefaultWildcardStr = _T("*.*");
-const wxChar *wxInternalErrorStr = _T("wxWindows Internal Error");
-const wxChar *wxFatalErrorStr = _T("wxWindows Fatal Error");
-const wxChar *wxTreeCtrlNameStr = _T("treeCtrl");
-const wxChar *wxDirDialogNameStr = _T("wxDirCtrl");
-const wxChar *wxDirDialogDefaultFolderStr = _T("/");
+const wxChar *wxButtonNameStr = T("button");
+const wxChar *wxCanvasNameStr = T("canvas");
+const wxChar *wxCheckBoxNameStr = T("check");
+const wxChar *wxChoiceNameStr = T("choice");
+const wxChar *wxComboBoxNameStr = T("comboBox");
+const wxChar *wxDialogNameStr = T("dialog");
+const wxChar *wxFrameNameStr = T("frame");
+const wxChar *wxGaugeNameStr = T("gauge");
+const wxChar *wxStaticBoxNameStr = T("groupBox");
+const wxChar *wxListBoxNameStr = T("listBox");
+const wxChar *wxStaticTextNameStr = T("message");
+const wxChar *wxStaticBitmapNameStr = T("message");
+const wxChar *wxMultiTextNameStr = T("multitext");
+const wxChar *wxPanelNameStr = T("panel");
+const wxChar *wxRadioBoxNameStr = T("radioBox");
+const wxChar *wxRadioButtonNameStr = T("radioButton");
+const wxChar *wxBitmapRadioButtonNameStr = T("radioButton");
+const wxChar *wxScrollBarNameStr = T("scrollBar");
+const wxChar *wxSliderNameStr = T("slider");
+const wxChar *wxStaticNameStr = T("static");
+const wxChar *wxTextCtrlWindowNameStr = T("textWindow");
+const wxChar *wxTextCtrlNameStr = T("text");
+const wxChar *wxVirtListBoxNameStr = T("virtListBox");
+const wxChar *wxButtonBarNameStr = T("buttonbar");
+const wxChar *wxEnhDialogNameStr = T("Shell");
+const wxChar *wxToolBarNameStr = T("toolbar");
+const wxChar *wxStatusLineNameStr = T("status_line");
+const wxChar *wxGetTextFromUserPromptStr = T("Input Text");
+const wxChar *wxMessageBoxCaptionStr = T("Message");
+const wxChar *wxFileSelectorPromptStr = T("Select a file");
+const wxChar *wxFileSelectorDefaultWildcardStr = T("*.*");
+const wxChar *wxInternalErrorStr = T("wxWindows Internal Error");
+const wxChar *wxFatalErrorStr = T("wxWindows Fatal Error");
+const wxChar *wxTreeCtrlNameStr = T("treeCtrl");
+const wxChar *wxDirDialogNameStr = T("wxDirCtrl");
+const wxChar *wxDirDialogDefaultFolderStr = T("/");
 
 // See wx/utils.h
-const wxChar *wxFloatToStringStr = _T("%.2f");
-const wxChar *wxDoubleToStringStr = _T("%.2f");
+const wxChar *wxFloatToStringStr = T("%.2f");
+const wxChar *wxDoubleToStringStr = T("%.2f");
 
 #ifdef __WXMSW__
-const wxChar *wxUserResourceStr = _T("TEXT");
+const wxChar *wxUserResourceStr = T("TEXT(");
 #endif
 
 #if wxUSE_SHARED_LIBRARY

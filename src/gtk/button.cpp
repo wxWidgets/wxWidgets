@@ -78,7 +78,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
-        wxFAIL_MSG( _T("wxButton creation failed") );
+        wxFAIL_MSG( T("wxButton creation failed") );
 	return FALSE;
     }
 
@@ -142,7 +142,7 @@ wxSize wxButton::GetDefaultSize()
 
 void wxButton::SetLabel( const wxString &label )
 {
-    wxCHECK_RET( m_widget != NULL, _T("invalid button") );
+    wxCHECK_RET( m_widget != NULL, T("invalid button") );
   
     wxControl::SetLabel( label );
   

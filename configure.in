@@ -64,8 +64,8 @@ main ()
    if (gtk_minor_version == 1) return FALSE;
 
    return !((gtk_major_version > major) ||
-	    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
-	    ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)));
+    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
+    ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)));
 }
 ],, no_gtk=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
      CFLAGS="$ac_save_CFLAGS"
@@ -744,7 +744,7 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
-  
+
   DEFAULT_wxUSE_GIF=no
   DEFAULT_wxUSE_PCX=no
   DEFAULT_wxUSE_PNM=no
@@ -855,7 +855,7 @@ else
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
-  
+
   DEFAULT_wxUSE_GIF=yes
   DEFAULT_wxUSE_PCX=yes
   DEFAULT_wxUSE_PNM=yes
@@ -879,6 +879,85 @@ for toolkit in `echo $ALL_TOOLKITS`; do
     eval "CACHE_$toolkit=1"
   fi
 done
+
+dnl ---------------------------------------------------------------------------
+dnl --disable-gui will build only non-GUI part of wxWindows: check for this
+dnl first to disable many other switches if it's given
+dnl
+dnl NB: this is still in testing stage, don't use if you don't know what you're
+dnl     doing
+dnl ---------------------------------------------------------------------------
+
+WX_ARG_ENABLE(gui,         [  --enable-gui            use GUI classes], wxUSE_GUI)
+
+dnl disable everything GUI related then
+if test "$wxUSE_GUI" = "no"; then
+  DEFAULT_wxUSE_ZLIB=no
+  DEFAULT_wxUSE_LIBPNG=no
+  DEFAULT_wxUSE_LIBJPEG=no
+  DEFAULT_wxUSE_SOCKETS=no
+  DEFAULT_wxUSE_JOYSTICK=no
+  DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=no
+  DEFAULT_wxUSE_NORMALIZED_PS_FONTS=no
+  DEFAULT_wxUSE_POSTSCRIPT=no
+  DEFAULT_wxUSE_X_RESOURCES=no
+  DEFAULT_wxUSE_CLIPBOARD=no
+  DEFAULT_wxUSE_TOOLTIPS=no
+  DEFAULT_wxUSE_DRAG_AND_DROP=no
+  DEFAULT_wxUSE_SPLINES=no
+  DEFAULT_wxUSE_MDI_ARCHITECTURE=no
+  DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=no
+  DEFAULT_wxUSE_PRINTING_ARCHITECTURE=no
+  DEFAULT_wxUSE_PROLOGIO=no
+  DEFAULT_wxUSE_RESOURCES=no
+  DEFAULT_wxUSE_CONSTRAINTS=no
+  DEFAULT_wxUSE_IPC=no
+  DEFAULT_wxUSE_HELP=no
+  DEFAULT_wxUSE_WXTREE=no
+  DEFAULT_wxUSE_METAFILE=no
+  DEFAULT_wxUSE_COMMONDLGS=no
+  DEFAULT_wxUSE_DIRDLG=no
+  DEFAULT_wxUSE_TEXTDLG=no
+  DEFAULT_wxUSE_STARTUP_TIPS=no
+  DEFAULT_wxUSE_PROGRESSDLG=no
+  DEFAULT_wxUSE_MINIFRAME=no
+  DEFAULT_wxUSE_HTML=no
+  DEFAULT_wxUSE_FS_INET=no
+  DEFAULT_wxUSE_FS_ZIP=no
+  DEFAULT_wxUSE_BUSYINFO=no
+  DEFAULT_wxUSE_ZIPSTREAM=no
+  DEFAULT_wxUSE_VALIDATORS=yes
+  DEFAULT_wxUSE_ACCEL=no
+  DEFAULT_wxUSE_CARET=no
+  DEFAULT_wxUSE_BMPBUTTON=no
+  DEFAULT_wxUSE_CHECKBOX=no
+  DEFAULT_wxUSE_CHECKLST=no
+  DEFAULT_wxUSE_CHOICE=yes
+  DEFAULT_wxUSE_COMBOBOX=no
+  DEFAULT_wxUSE_GAUGE=no
+  DEFAULT_wxUSE_GRID=no
+  DEFAULT_wxUSE_IMAGLIST=no
+  DEFAULT_wxUSE_LISTBOX=no
+  DEFAULT_wxUSE_LISTCTRL=no
+  DEFAULT_wxUSE_NOTEBOOK=no
+  DEFAULT_wxUSE_RADIOBOX=no
+  DEFAULT_wxUSE_RADIOBTN=no
+  DEFAULT_wxUSE_SASH=no
+  DEFAULT_wxUSE_SCROLLBAR=no
+  DEFAULT_wxUSE_SLIDER=no
+  DEFAULT_wxUSE_SPINBTN=no
+  DEFAULT_wxUSE_SPLITTER=no
+  DEFAULT_wxUSE_STATBMP=no
+  DEFAULT_wxUSE_STATBOX=no
+  DEFAULT_wxUSE_STATLINE=no
+  DEFAULT_wxUSE_STATUSBAR=yes
+  DEFAULT_wxUSE_TABDIALOG=no
+  DEFAULT_wxUSE_TOOLBAR=no
+  DEFAULT_wxUSE_TREECTRL=no
+  DEFAULT_wxUSE_GIF=no
+  DEFAULT_wxUSE_PCX=no
+  DEFAULT_wxUSE_PNM=no
+fi
 
 AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
@@ -928,15 +1007,6 @@ WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without exceptions information], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
-
-dnl ---------------------------------------------------------------------------
-dnl --disable-gui will build only non-GUI part of wxWindows
-dnl
-dnl NB: this is still in testing stage, don't use if you don't know what you're
-dnl     doing
-dnl ---------------------------------------------------------------------------
-
-WX_ARG_ENABLE(gui,         [  --enable-gui            use GUI classes], wxUSE_GUI)
 
 dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
@@ -1139,6 +1209,8 @@ dnl we have a default one
 
 AC_MSG_CHECKING(for toolkit)
 
+if test "$wxUSE_GUI" = "yes"; then
+
 if test "$TOOLKIT_GIVEN" = 1; then
   dnl convert "yes" to 1 and "no" to 0
   for toolkit in `echo $ALL_TOOLKITS`; do
@@ -1186,6 +1258,11 @@ for toolkit in `echo $ALL_TOOLKITS`; do
     fi
   fi
 done
+
+dnl from "if wxUSE_GUI"
+else
+    AC_MSG_RESULT(base only)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for programs
@@ -1390,6 +1467,8 @@ dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
 
+if test "$wxUSE_GUI" = "yes"; then
+
 TOOLKIT=
 TOOLKIT_INCLUDE=
 
@@ -1409,14 +1488,14 @@ PROGRAM_EXT=
 
 if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     if test "$cross_compiling" = "yes" ; then
-    	AC_MSG_WARN(Cross compiling --- skipping windows.h check)
+        AC_MSG_WARN(Cross compiling --- skipping windows.h check)
     else
-	AC_MSG_CHECKING(for Windows headers)
-    	WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
-    	if test "$ac_find_includes" != "" ; then
+        AC_MSG_CHECKING(for Windows headers)
+        WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
+        if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found $ac_find_includes)
             TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
-	else
+        else
             AC_MSG_RESULT(no)
             AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
         fi
@@ -1429,10 +1508,10 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
 
     TOOLKIT=MSW
 
-    GUIOBJS=MSW_GUIOBJS
-    GUIHEADERS=MSW_HEADERS
-    COMMONOBJS=MSW_COMMONOBJS
-    GENERICOBJS=MSW_GENERICOBJS
+    GUIOBJS="\$(MSW_GUIOBJS)"
+    GUIHEADERS="\$(MSW_HEADERS)"
+    COMMONOBJS="\$(MSW_COMMONOBJS)"
+    GENERICOBJS="\$(MSW_GENERICOBJS)"
     UNIXOBJS=
     GUIDIST=MSW_DIST
     PROGRAM_EXT=.exe
@@ -1450,14 +1529,14 @@ if test "$wxUSE_GTK" = 1; then
     GUI_TK_LIBRARY="$GTK_LIBS"
     TOOLKIT=GTK
 
-    GUIHEADERS=GTK_HEADERS
-    GUIOBJS=GTK_GUIOBJS
-    COMMONOBJS=GTK_COMMONOBJS
-    GENERICOBJS=GTK_GENERICOBJS
-    GUIDEPS=GTK_GUIDEPS
-    COMMONDEPS=GTK_COMMONDEPS
-    GENERICDEPS=GTK_GENERICDEPS
-    UNIXOBJS=UNIXOBJS
+    GUIOBJS="\$(GTK_GUIOBJS)"
+    GUIHEADERS="\$(GTK_HEADERS)"
+    COMMONOBJS="\$(GTK_COMMONOBJS)"
+    GENERICOBJS="\$(GTK_GENERICOBJS)"
+    GUIDEPS="\$(GTK_GUIDEPS)"
+    COMMONDEPS="\$(GTK_COMMONDEPS)"
+    GENERICDEPS="\$(GTK_GENERICDEPS)"
+    UNIXOBJS="\$(UNIX_OBJS)"
     GUIDIST=GTK_DIST
 fi
 
@@ -1501,14 +1580,14 @@ if test "$wxUSE_WINE" = 1; then
     WXWINE=1
     TOOLKIT=MSW
 
-    GUIHEADERS=MSW_HEADERS
-    GUIOBJS=MSW_GUIOBJS
-    COMMONOBJS=MSW_COMMONOBJS
-    GENERICOBJS=MSW_GENERICOBJS
-    GUIDEPS=MSW_GUIDEPS
-    COMMONDEPS=MSW_COMMONDEPS
-    GENERICDEPS=MSW_GENERICDEPS
-    UNIXOBJS=UNIXOBJS
+    GUIHEADERS="\$(MSW_HEADERS)"
+    GUIOBJS="\$(MSW_GUIOBJS)"
+    COMMONOBJS="\$(MSW_COMMONOBJS)"
+    GENERICOBJS="\$(MSW_GENERICOBJS)"
+    GUIDEPS="\$(MSW_GUIDEPS)"
+    COMMONDEPS="\$(MSW_COMMONDEPS)"
+    GENERICDEPS="\$(MSW_GENERICDEPS)"
+    UNIXOBJS="\$(UNIX_OBJS)"
     GUIDIST=MSW_DIST
 fi
 
@@ -1576,14 +1655,14 @@ if test "$wxUSE_MOTIF" = 1; then
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     TOOLKIT=MOTIF
 
-    GUIHEADERS=MOTIF_HEADERS
-    GUIOBJS=MOTIF_GUIOBJS
-    COMMONOBJS=MOTIF_COMMONOBJS
-    GENERICOBJS=MOTIF_GENERICOBJS
-    GUIDEPS=MOTIF_GUIDEPS
-    COMMONDEPS=MOTIF_COMMONDEPS
-    GENERICDEPS=MOTIF_GENERICDEPS
-    UNIXOBJS=UNIXOBJS
+    GUIHEADERS="\$(MOTIF_HEADERS)"
+    GUIOBJS="\$(MOTIF_GUIOBJS)"
+    COMMONOBJS="\$(MOTIF_COMMONOBJS)"
+    GENERICOBJS="\$(MOTIF_GENERICOBJS)"
+    GUIDEPS="\$(MOTIF_GUIDEPS)"
+    COMMONDEPS="\$(MOTIF_COMMONDEPS)"
+    GENERICDEPS="\$(MOTIF_GENERICDEPS)"
+    UNIXOBJS="\$(UNIX_OBJS)"
     GUIDIST=MOTIF_DIST
 fi
 
@@ -1603,19 +1682,35 @@ TOOLKIT_DEF="-D__WX${TOOLKIT}__"
 dnl the name of the (libtool) library
 WX_LIBRARY="wx_${TOOLKIT_DIR}"
 
+    dnl the sources, their dependenices and the headers
+    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(JPEGOBJS) \$(PNGOBJS) \$(ZLIBOBJS)"
+    ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS)"
+    ALL_HEADERS="\$(GUIHEADERS) \$(HTML_HEADERS) \$(UNIX_HEADERS) \$(PROTOCOL_HEADERS) \$(GENERIC_HEADERS) \$(WX_HEADERS)"
+else
+    dnl leave all TOOLKIT_XXX vars empty
+
+    dnl the sources, their dependenices and the headers
+    ALL_OBJECTS="\$(BASE_OBJS)"
+    ALL_DEPFILES="\${BASE_DEPS}"
+    ALL_HEADERS="\${BASE_HEADERS}"
+
+    dnl building wxBase only
+    WX_LIBRARY="wxbase"
+fi
+
 dnl the name of the (libtool) library
-WX_LIBRARY_NAME="libwx_${TOOLKIT_DIR}.la"
+WX_LIBRARY_NAME="lib${WX_LIBRARY}.la"
 
 dnl the name of the static library
-WX_LIBRARY_NAME_STATIC="libwx_${TOOLKIT_DIR}.a"
+WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
 
 dnl the name of the shared library
-WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
 
 dnl the name of the links to the shared library
-WX_LIBRARY_LINK1="libwx_${TOOLKIT_DIR}-${WX_RELEASE}.so.${WX_CURRENT}"
-WX_LIBRARY_LINK2="libwx_${TOOLKIT_DIR}-${WX_RELEASE}.so"
-WX_LIBRARY_LINK3="libwx_${TOOLKIT_DIR}.so"
+WX_LIBRARY_LINK1="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}"
+WX_LIBRARY_LINK2="lib${WX_LIBRARY}-${WX_RELEASE}.so"
+WX_LIBRARY_LINK3="lib${WX_LIBRARY}.so"
 
 dnl shared library settings
 SHARED_LD=
@@ -1725,8 +1820,11 @@ dnl defines HAVE_WCSTR_H
 AC_CHECK_HEADERS(wcstr.h)
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
-dnl defines HAVE_X11_XKBLIB_H
-AC_CHECK_HEADERS(X11/XKBlib.h)
+
+if test "$wxUSE_GUI" = "yes"; then
+    dnl defines HAVE_X11_XKBLIB_H
+    AC_CHECK_HEADERS(X11/XKBlib.h)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for typedefs
@@ -1862,6 +1960,9 @@ AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP), [
 
 dnl check for uname (POSIX) and gethostname (BSD)
 AC_CHECK_FUNCS(uname gethostname, break)
+
+dnl check for MT-safe version of strtok
+AC_CHECK_FUNCS(strtok_r)
 
 dnl check for inet_addr, inet_aton, ...
 AC_CHECK_FUNCS(inet_addr)
@@ -2051,10 +2152,10 @@ fi
 DEP_INFO_FLAGS=
 if test "$GCC" = yes ; then
     if test "$wxUSE_NO_RTTI" = "yes" ; then
-	WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-rtti"
+        WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-rtti"
     fi
     if test "$wxUSE_NO_EXCEPTIONS" = "yes" ; then
-	WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-exceptions"
+        WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-exceptions"
     fi
     if test "$wxUSE_PERMISSIVE" = "yes" ; then
        CFLAGS="${CFLAGS} -fpermissive"
@@ -2312,9 +2413,9 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
             AC_MSG_WARN("--with-dynlib and --with-odbc will be disabled due to missing shared library support")
             wxUSE_ODBC=no
             wxUSE_DYNLIB_CLASS=no
-	else
-	    AC_MSG_WARN("Cannot check dynlib requirements on non-Unix platforms. dynlib remains enabled.")
-	fi
+        else
+            AC_MSG_WARN("Cannot check dynlib requirements on non-Unix platforms. dynlib remains enabled.")
+        fi
     fi
 fi
 
@@ -2429,13 +2530,13 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
     if test "$wxUSE_GTK" = 1; then
         if test "$WXGTK12" != 1; then
             AC_MSG_WARN([Drag and drop is only supported under GTK+ 1.2])
-	    wxUSE_DRAG_AND_DROP=no
+            wxUSE_DRAG_AND_DROP=no
         fi
     fi
 
     if test "$wxUSE_MOTIF" = 1; then
         AC_MSG_WARN([Drag and drop is not yet supported under Motif])
-	wxUSE_DRAG_AND_DROP=no
+        wxUSE_DRAG_AND_DROP=no
     fi
 
     if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
@@ -2556,7 +2657,7 @@ if test "$wxUSE_STATLINE" = "yes"; then
     if test "$wxUSE_WINE" = 1 ; then
         AC_MSG_WARN([wxStaticLine is not supported under WINE])
     else
-	AC_DEFINE(wxUSE_STATLINE)
+        AC_DEFINE(wxUSE_STATLINE)
     fi
 fi
 
@@ -2672,16 +2773,13 @@ dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
 
-dnl if we add wxUSE_GUI in the future, it might be handy to separate the libs
-dnl into GUI and non-GUI parts
 GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $LIBPNG_LINK $ZLIB_LINK $TOOLKIT_LINK"
 
 dnl all additional libraries (except wxWindows itself) we link with
-EXTRA_LIBS="$LIBS $POSIX4_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $GUILIBS"
-
-dnl all the libraries needed to link wxWindows programs (when the library is not
-dnl yet installed)
-LIBS="\${top_builddir}/src/${TOOLKIT_DIR}/${WX_LIBRARY_NAME} $EXTRA_LIBS"
+EXTRA_LIBS="$LIBS $POSIX4_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK"
+if test "$wxUSE_GUI" = "yes"; then
+    EXTRA_LIBS="$EXTRA_LIBS $GUILIBS"
+fi
 
 dnl all the libraries needed to link wxWindows programs when using the
 dnl makefile system without libtool
@@ -2694,8 +2792,8 @@ dnl C/C++ compiler options used to compile wxWindows
 if test "$GXX" = yes ; then
     dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
     CXXWARNINGS="-Wall"
-    dnl there is one weird warning in docview.h:71 which prevents me from doing
-    dnl this...
+    dnl FIXME: there is one weird warning in docview.h:71 which prevents me from
+    dnl        doing this... (VZ)
     dnl CXXWARNINGS="-Wall -Werror"
 fi
 EXTRA_CFLAGS="$WXDEBUG $PROFILE $OPTIMISE $INCLUDES"
@@ -2712,6 +2810,8 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl      mfc, nativdlg, oleauto, ownerdrw, proplist
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
                      forty fractal image wxpoem"
+else
+    SAMPLES_SUBDIRS=""
 fi
 
 dnl for convenience, sort the samples in alphabetical order
@@ -2760,6 +2860,10 @@ AC_SUBST(GUIDEPS)
 AC_SUBST(COMMONDEPS)
 AC_SUBST(GENERICDEPS)
 AC_SUBST(UNIXOBJS)
+AC_SUBST(UNIXDEPS)
+AC_SUBST(ALL_OBJECTS)
+AC_SUBST(ALL_DEPFILES)
+AC_SUBST(ALL_HEADERS)
 AC_SUBST(GUIDIST)
 
 dnl additional subdirectories where we will build
@@ -2797,9 +2901,9 @@ dnl (the original file name may be overriden by appending another name after a
 dnl colon)
 AC_OUTPUT([
             wx-config
-	    src/make.env
-	    src/makeprog.env
-	    src/makelib.env
+            src/make.env
+            src/makeprog.env
+            src/makelib.env
             Makefile
             samples/Makefile
             samples/bombs/Makefile
@@ -2807,63 +2911,63 @@ AC_OUTPUT([
             samples/checklst/Makefile
             samples/config/Makefile
             samples/controls/Makefile
-	    samples/dialogs/Makefile
-	    samples/docview/Makefile
-	    samples/docvwmdi/Makefile
-	    samples/dnd/Makefile
-	    samples/drawing/Makefile
-	    samples/dynamic/Makefile
-	    samples/image/Makefile
-	    samples/internat/Makefile
-	    samples/layout/Makefile
-	    samples/listctrl/Makefile
-	    samples/mdi/Makefile
-	    samples/minifram/Makefile
-	    samples/minimal/Makefile
-	    samples/notebook/Makefile
+            samples/dialogs/Makefile
+            samples/docview/Makefile
+            samples/docvwmdi/Makefile
+            samples/dnd/Makefile
+            samples/drawing/Makefile
+            samples/dynamic/Makefile
+            samples/image/Makefile
+            samples/internat/Makefile
+            samples/layout/Makefile
+            samples/listctrl/Makefile
+            samples/mdi/Makefile
+            samples/minifram/Makefile
+            samples/minimal/Makefile
+            samples/notebook/Makefile
             samples/printing/Makefile
             samples/proplist/Makefile
-	    samples/sashtest/Makefile
-	    samples/scroll/Makefile
-	    samples/splitter/Makefile
-	    samples/text/Makefile
-	    samples/thread/Makefile
-	    samples/toolbar/Makefile
-	    samples/treectrl/Makefile
-	    samples/typetest/Makefile
-	    samples/validate/Makefile
-	    samples/wxpoem/Makefile
-	    samples/wxsocket/Makefile
-	    samples/wizard/Makefile
-	    samples/html/Makefile
-	    samples/html/about/Makefile
-	    samples/html/help/Makefile
-	    samples/html/printing/Makefile
-	    samples/html/test/Makefile
-	    samples/html/zip/Makefile
-	    samples/html/virtual/Makefile
-	    samples/html/widget/Makefile
-	    utils/Makefile
-	    utils/wxMMedia2/Makefile
-	    utils/wxMMedia2/lib/Makefile
-	    utils/wxMMedia2/sample/Makefile
-	    utils/glcanvas/Makefile
-	    utils/glcanvas/${GL_TOOLKIT_DIR}/Makefile
-	    utils/ogl/Makefile
-	    utils/ogl/src/Makefile
+            samples/sashtest/Makefile
+            samples/scroll/Makefile
+            samples/splitter/Makefile
+            samples/text/Makefile
+            samples/thread/Makefile
+            samples/toolbar/Makefile
+            samples/treectrl/Makefile
+            samples/typetest/Makefile
+            samples/validate/Makefile
+            samples/wxpoem/Makefile
+            samples/wxsocket/Makefile
+            samples/wizard/Makefile
+            samples/html/Makefile
+            samples/html/about/Makefile
+            samples/html/help/Makefile
+            samples/html/printing/Makefile
+            samples/html/test/Makefile
+            samples/html/zip/Makefile
+            samples/html/virtual/Makefile
+            samples/html/widget/Makefile
+            utils/Makefile
+            utils/wxMMedia2/Makefile
+            utils/wxMMedia2/lib/Makefile
+            utils/wxMMedia2/sample/Makefile
+            utils/glcanvas/Makefile
+            utils/glcanvas/${GL_TOOLKIT_DIR}/Makefile
+            utils/ogl/Makefile
+            utils/ogl/src/Makefile
           ],
           [
             chmod +x wx-config
-	    if test ! -d include; then
-	      mkdir include
-	    fi
-	    if test ! -d include/wx; then
-	      mkdir include/wx
-	    fi
-	    if test ! -d include/wx/${TOOLKIT_DIR}; then
-	      mkdir include/wx/${TOOLKIT_DIR}
-	    fi
-	    cp -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
+            if test ! -d include; then
+              mkdir include
+            fi
+            if test ! -d include/wx; then
+              mkdir include/wx
+            fi
+            if test ! -d include/wx/${TOOLKIT_DIR}; then
+              mkdir include/wx/${TOOLKIT_DIR}
+            fi
+            cp -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
           ],
           [
             LN_S="${ac_cv_prog_LN_S}"

@@ -93,7 +93,7 @@ void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
   // a device context
   if (bitmap.GetSelectedInto() && (bitmap.GetSelectedInto() != this))
   {
-    wxFatalError(_T("Error in wxMemoryDC::SelectObject\nBitmap is selected in another wxMemoryDC.\nDelete the first wxMemoryDC or use SelectObject(NULL)"));
+    wxFatalError(T("Error in wxMemoryDC::SelectObject\nBitmap is selected in another wxMemoryDC.\nDelete the first wxMemoryDC or use SelectObject(NULL)"));
     return;
   }
 
@@ -122,7 +122,7 @@ void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
 
   if (bm == ERROR)
   {
-    wxFatalError(_T("Error in wxMemoryDC::SelectObject\nBitmap may not be loaded, or may be selected in another wxMemoryDC.\nDelete the first wxMemoryDC to deselect bitmap."));
+    wxFatalError(T("Error in wxMemoryDC::SelectObject\nBitmap may not be loaded, or may be selected in another wxMemoryDC.\nDelete the first wxMemoryDC to deselect bitmap."));
   }
   else if (!m_oldBitmap)
     m_oldBitmap = (WXHBITMAP) bm;

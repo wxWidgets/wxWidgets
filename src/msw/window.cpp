@@ -297,7 +297,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, _T("can't create wxWindow without parent") );
+    wxCHECK_MSG( parent, FALSE, T("can't create wxWindow without parent") );
 
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
@@ -448,7 +448,7 @@ bool wxWindow::SetFont(const wxFont& font)
     {
         WXHANDLE hFont = m_font.GetResourceHandle();
 
-        wxASSERT_MSG( hFont, _T("should have valid font") );
+        wxASSERT_MSG( hFont, T("should have valid font") );
 
         ::SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
     }
@@ -464,7 +464,7 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
     }
 
     wxASSERT_MSG( m_cursor.Ok(),
-                  _T("cursor must be valid after call to the base version"));
+                  T("cursor must be valid after call to the base version"));
 
     HWND hWnd = GetHwnd();
 
@@ -801,10 +801,10 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
 void wxWindow::SubclassWin(WXHWND hWnd)
 {
-    wxASSERT_MSG( !m_oldWndProc, _T("subclassing window twice?") );
+    wxASSERT_MSG( !m_oldWndProc, T("subclassing window twice?") );
 
     HWND hwnd = (HWND)hWnd;
-    wxCHECK_RET( ::IsWindow(hwnd), _T("invalid HWND in SubclassWin") );
+    wxCHECK_RET( ::IsWindow(hwnd), T("invalid HWND in SubclassWin") );
 
     wxAssociateWinWithHandle(hwnd, this);
 
@@ -822,7 +822,7 @@ void wxWindow::UnsubclassWin()
     {
         m_hWnd = 0;
 
-        wxCHECK_RET( ::IsWindow(hwnd), _T("invalid HWND in UnsubclassWin") );
+        wxCHECK_RET( ::IsWindow(hwnd), T("invalid HWND in UnsubclassWin") );
 
         FARPROC farProc = (FARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
         if ( (m_oldWndProc != 0) && (farProc != (FARPROC) m_oldWndProc) )
@@ -1709,7 +1709,7 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 {
     // trace all messages - useful for the debugging
 #ifdef __WXDEBUG__
-    wxLogTrace(wxTraceMessages, _T("Processing %s(wParam=%8lx, lParam=%8lx)"),
+    wxLogTrace(wxTraceMessages, T("Processing %s(wParam=%8lx, lParam=%8lx)"),
                wxGetMessageName(message), wParam, lParam);
 #endif // __WXDEBUG__
 
@@ -2094,7 +2094,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
     if ( !processed )
     {
 #ifdef __WXDEBUG__
-        wxLogTrace(wxTraceMessages, _T("Forwarding %s to DefWindowProc."),
+        wxLogTrace(wxTraceMessages, T("Forwarding %s to DefWindowProc."),
                    wxGetMessageName(message));
 #endif // __WXDEBUG__
         rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -2139,7 +2139,7 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
     // adding NULL hWnd is (first) surely a result of an error and
     // (secondly) breaks menu command processing
     wxCHECK_RET( hWnd != (HWND)NULL,
-                 _T("attempt to add a NULL hWnd to window list ignored") );
+                 T("attempt to add a NULL hWnd to window list ignored") );
 
 
     wxWindow *oldWin = wxFindWinFromHandle((WXHWND) hWnd);
@@ -2191,12 +2191,12 @@ void wxWindow::MSWDetachWindowMenu()
             int chars = GetMenuString(hMenu, i, buf, 100, MF_BYPOSITION);
             if ( !chars )
             {
-                wxLogLastError(_T("GetMenuString"));
+                wxLogLastError(T("GetMenuString"));
 
                 continue;
             }
 
-            if ( wxStrcmp(buf, _T("&Window")) == 0 )
+            if ( wxStrcmp(buf, T("&Window")) == 0 )
             {
                 RemoveMenu(hMenu, i, MF_BYPOSITION);
 
@@ -2272,14 +2272,14 @@ bool wxWindow::MSWCreate(int id,
             if ( !::SetWindowPos(GetHwnd(), HWND_TOPMOST, 0, 0, 0, 0,
                                  SWP_NOSIZE | SWP_NOMOVE) )
             {
-                wxLogLastError(_T("SetWindowPos"));
+                wxLogLastError(T("SetWindowPos"));
             }
         }
 
         // move the dialog to its initial position without forcing repainting
         if ( !::MoveWindow(GetHwnd(), x1, y1, width1, height1, FALSE) )
         {
-            wxLogLastError(_T("MoveWindow"));
+            wxLogLastError(T("MoveWindow"));
         }
     }
     else
@@ -2291,12 +2291,12 @@ bool wxWindow::MSWCreate(int id,
         wxString className(wclass);
         if ( GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )
         {
-            className += _T("NR");
+            className += T("NR");
         }
 
         m_hWnd = (WXHWND)CreateWindowEx(extendedStyle,
                                         wclass,
-                                        title ? title : _T(""),
+                                        title ? title : T(""),
                                         style,
                                         x1, y1,
                                         width1, height1,
@@ -3271,7 +3271,7 @@ bool wxWindow::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
             break;
 
         default:
-            wxFAIL_MSG(_T("no such joystick event"));
+            wxFAIL_MSG(T("no such joystick event"));
 
             return FALSE;
     }
@@ -3622,13 +3622,13 @@ const char *wxGetMessageName(int message)
         case 0x0008: return "WM_KILLFOCUS";
         case 0x000A: return "WM_ENABLE";
         case 0x000B: return "WM_SETREDRAW";
-        case 0x000C: return "WM_SETTEXT";
-        case 0x000D: return "WM_GETTEXT";
+        case 0x000C: return "WM_SETTEXT(";
+        case 0x000D: return "WM_GETTEXT(";
         case 0x000E: return "WM_GETTEXTLENGTH";
-        case 0x000F: return "WM_PAINT";
+        case 0x000F: return "WM_PAINT(";
         case 0x0010: return "WM_CLOSE";
         case 0x0011: return "WM_QUERYENDSESSION";
-        case 0x0012: return "WM_QUIT";
+        case 0x0012: return "WM_QUIT(";
         case 0x0013: return "WM_QUERYOPEN";
         case 0x0014: return "WM_ERASEBKGND";
         case 0x0015: return "WM_SYSCOLORCHANGE";
@@ -3656,8 +3656,8 @@ const char *wxGetMessageName(int message)
         case 0x002D: return "WM_DELETEITEM";
         case 0x002E: return "WM_VKEYTOITEM";
         case 0x002F: return "WM_CHARTOITEM";
-        case 0x0030: return "WM_SETFONT";
-        case 0x0031: return "WM_GETFONT";
+        case 0x0030: return "WM_SETFONT(";
+        case 0x0031: return "WM_GETFONT(";
         case 0x0037: return "WM_QUERYDRAGICON";
         case 0x0039: return "WM_COMPAREITEM";
         case 0x0041: return "WM_COMPACTING";
@@ -3670,12 +3670,12 @@ const char *wxGetMessageName(int message)
         case 0x004A: return "WM_COPYDATA";
         case 0x004B: return "WM_CANCELJOURNAL";
         case 0x004E: return "WM_NOTIFY";
-        case 0x0050: return "WM_INPUTLANGCHANGEREQUEST";
+        case 0x0050: return "WM_INPUTLANGCHANGEREQUEST(";
         case 0x0051: return "WM_INPUTLANGCHANGE";
         case 0x0052: return "WM_TCARD";
         case 0x0053: return "WM_HELP";
         case 0x0054: return "WM_USERCHANGED";
-        case 0x0055: return "WM_NOTIFYFORMAT";
+        case 0x0055: return "WM_NOTIFYFORMAT(";
         case 0x007B: return "WM_CONTEXTMENU";
         case 0x007C: return "WM_STYLECHANGING";
         case 0x007D: return "WM_STYLECHANGED";
@@ -3687,8 +3687,8 @@ const char *wxGetMessageName(int message)
         case 0x0081: return "WM_NCCREATE";
         case 0x0082: return "WM_NCDESTROY";
         case 0x0083: return "WM_NCCALCSIZE";
-        case 0x0084: return "WM_NCHITTEST";
-        case 0x0085: return "WM_NCPAINT";
+        case 0x0084: return "WM_NCHITTEST(";
+        case 0x0085: return "WM_NCPAINT(";
         case 0x0086: return "WM_NCACTIVATE";
         case 0x0087: return "WM_GETDLGCODE";
         case 0x00A0: return "WM_NCMOUSEMOVE";
@@ -3709,7 +3709,7 @@ const char *wxGetMessageName(int message)
         case 0x0105: return "WM_SYSKEYUP";
         case 0x0106: return "WM_SYSCHAR";
         case 0x0107: return "WM_SYSDEADCHAR";
-        case 0x0108: return "WM_KEYLAST";
+        case 0x0108: return "WM_KEYLAST(";
 
 #ifdef  __WIN32__
         case 0x010D: return "WM_IME_STARTCOMPOSITION";
@@ -3725,7 +3725,7 @@ const char *wxGetMessageName(int message)
         case 0x0115: return "WM_VSCROLL";
         case 0x0116: return "WM_INITMENU";
         case 0x0117: return "WM_INITMENUPOPUP";
-        case 0x011F: return "WM_MENUSELECT";
+        case 0x011F: return "WM_MENUSELECT(";
         case 0x0120: return "WM_MENUCHAR";
         case 0x0121: return "WM_ENTERIDLE";
         case 0x0200: return "WM_MOUSEMOVE";
@@ -3747,7 +3747,7 @@ const char *wxGetMessageName(int message)
         case 0x0214: return "WM_SIZING";
         case 0x0215: return "WM_CAPTURECHANGED";
         case 0x0216: return "WM_MOVING";
-        case 0x0218: return "WM_POWERBROADCAST";
+        case 0x0218: return "WM_POWERBROADCAST(";
         case 0x0219: return "WM_DEVICECHANGE";
 #endif  //WIN32
 
@@ -3755,7 +3755,7 @@ const char *wxGetMessageName(int message)
         case 0x0221: return "WM_MDIDESTROY";
         case 0x0222: return "WM_MDIACTIVATE";
         case 0x0223: return "WM_MDIRESTORE";
-        case 0x0224: return "WM_MDINEXT";
+        case 0x0224: return "WM_MDINEXT(";
         case 0x0225: return "WM_MDIMAXIMIZE";
         case 0x0226: return "WM_MDITILE";
         case 0x0227: return "WM_MDICASCADE";
@@ -3765,22 +3765,22 @@ const char *wxGetMessageName(int message)
         case 0x0233: return "WM_DROPFILES";
 
 #ifdef  __WIN32__
-        case 0x0281: return "WM_IME_SETCONTEXT";
+        case 0x0281: return "WM_IME_SETCONTEXT(";
         case 0x0282: return "WM_IME_NOTIFY";
         case 0x0283: return "WM_IME_CONTROL";
         case 0x0284: return "WM_IME_COMPOSITIONFULL";
-        case 0x0285: return "WM_IME_SELECT";
+        case 0x0285: return "WM_IME_SELECT(";
         case 0x0286: return "WM_IME_CHAR";
         case 0x0290: return "WM_IME_KEYDOWN";
         case 0x0291: return "WM_IME_KEYUP";
 #endif  //WIN32
 
-        case 0x0300: return "WM_CUT";
+        case 0x0300: return "WM_CUT(";
         case 0x0301: return "WM_COPY";
         case 0x0302: return "WM_PASTE";
         case 0x0303: return "WM_CLEAR";
         case 0x0304: return "WM_UNDO";
-        case 0x0305: return "WM_RENDERFORMAT";
+        case 0x0305: return "WM_RENDERFORMAT(";
         case 0x0306: return "WM_RENDERALLFORMATS";
         case 0x0307: return "WM_DESTROYCLIPBOARD";
         case 0x0308: return "WM_DRAWCLIPBOARD";
@@ -3801,9 +3801,9 @@ const char *wxGetMessageName(int message)
         // listview
         case 0x1000 + 0: return "LVM_GETBKCOLOR";
         case 0x1000 + 1: return "LVM_SETBKCOLOR";
-        case 0x1000 + 2: return "LVM_GETIMAGELIST";
-        case 0x1000 + 3: return "LVM_SETIMAGELIST";
-        case 0x1000 + 4: return "LVM_GETITEMCOUNT";
+        case 0x1000 + 2: return "LVM_GETIMAGELIST(";
+        case 0x1000 + 3: return "LVM_SETIMAGELIST(";
+        case 0x1000 + 4: return "LVM_GETITEMCOUNT(";
         case 0x1000 + 5: return "LVM_GETITEMA";
         case 0x1000 + 75: return "LVM_GETITEMW";
         case 0x1000 + 6: return "LVM_SETITEMA";
@@ -3817,12 +3817,12 @@ const char *wxGetMessageName(int message)
         case 0x1000 + 12: return "LVM_GETNEXTITEM";
         case 0x1000 + 13: return "LVM_FINDITEMA";
         case 0x1000 + 83: return "LVM_FINDITEMW";
-        case 0x1000 + 14: return "LVM_GETITEMRECT";
+        case 0x1000 + 14: return "LVM_GETITEMRECT(";
         case 0x1000 + 15: return "LVM_SETITEMPOSITION";
         case 0x1000 + 16: return "LVM_GETITEMPOSITION";
         case 0x1000 + 17: return "LVM_GETSTRINGWIDTHA";
         case 0x1000 + 87: return "LVM_GETSTRINGWIDTHW";
-        case 0x1000 + 18: return "LVM_HITTEST";
+        case 0x1000 + 18: return "LVM_HITTEST(";
         case 0x1000 + 19: return "LVM_ENSUREVISIBLE";
         case 0x1000 + 20: return "LVM_SCROLL";
         case 0x1000 + 21: return "LVM_REDRAWITEMS";
@@ -3841,7 +3841,7 @@ const char *wxGetMessageName(int message)
         case 0x1000 + 30: return "LVM_SETCOLUMNWIDTH";
         case 0x1000 + 31: return "LVM_GETHEADER";
         case 0x1000 + 33: return "LVM_CREATEDRAGIMAGE";
-        case 0x1000 + 34: return "LVM_GETVIEWRECT";
+        case 0x1000 + 34: return "LVM_GETVIEWRECT(";
         case 0x1000 + 35: return "LVM_GETTEXTCOLOR";
         case 0x1000 + 36: return "LVM_SETTEXTCOLOR";
         case 0x1000 + 37: return "LVM_GETTEXTBKCOLOR";
@@ -3856,25 +3856,25 @@ const char *wxGetMessageName(int message)
         case 0x1000 + 115: return "LVM_GETITEMTEXTW";
         case 0x1000 + 46: return "LVM_SETITEMTEXTA";
         case 0x1000 + 116: return "LVM_SETITEMTEXTW";
-        case 0x1000 + 47: return "LVM_SETITEMCOUNT";
+        case 0x1000 + 47: return "LVM_SETITEMCOUNT(";
         case 0x1000 + 48: return "LVM_SORTITEMS";
         case 0x1000 + 49: return "LVM_SETITEMPOSITION32";
-        case 0x1000 + 50: return "LVM_GETSELECTEDCOUNT";
+        case 0x1000 + 50: return "LVM_GETSELECTEDCOUNT(";
         case 0x1000 + 51: return "LVM_GETITEMSPACING";
         case 0x1000 + 52: return "LVM_GETISEARCHSTRINGA";
         case 0x1000 + 117: return "LVM_GETISEARCHSTRINGW";
         case 0x1000 + 53: return "LVM_SETICONSPACING";
         case 0x1000 + 54: return "LVM_SETEXTENDEDLISTVIEWSTYLE";
         case 0x1000 + 55: return "LVM_GETEXTENDEDLISTVIEWSTYLE";
-        case 0x1000 + 56: return "LVM_GETSUBITEMRECT";
-        case 0x1000 + 57: return "LVM_SUBITEMHITTEST";
+        case 0x1000 + 56: return "LVM_GETSUBITEMRECT(";
+        case 0x1000 + 57: return "LVM_SUBITEMHITTEST(";
         case 0x1000 + 58: return "LVM_SETCOLUMNORDERARRAY";
         case 0x1000 + 59: return "LVM_GETCOLUMNORDERARRAY";
         case 0x1000 + 60: return "LVM_SETHOTITEM";
         case 0x1000 + 61: return "LVM_GETHOTITEM";
         case 0x1000 + 62: return "LVM_SETHOTCURSOR";
         case 0x1000 + 63: return "LVM_GETHOTCURSOR";
-        case 0x1000 + 64: return "LVM_APPROXIMATEVIEWRECT";
+        case 0x1000 + 64: return "LVM_APPROXIMATEVIEWRECT(";
         case 0x1000 + 65: return "LVM_SETWORKAREA";
 
         // tree view
@@ -3882,12 +3882,12 @@ const char *wxGetMessageName(int message)
         case 0x1100 + 50: return "TVM_INSERTITEMW";
         case 0x1100 + 1: return "TVM_DELETEITEM";
         case 0x1100 + 2: return "TVM_EXPAND";
-        case 0x1100 + 4: return "TVM_GETITEMRECT";
-        case 0x1100 + 5: return "TVM_GETCOUNT";
-        case 0x1100 + 6: return "TVM_GETINDENT";
-        case 0x1100 + 7: return "TVM_SETINDENT";
-        case 0x1100 + 8: return "TVM_GETIMAGELIST";
-        case 0x1100 + 9: return "TVM_SETIMAGELIST";
+        case 0x1100 + 4: return "TVM_GETITEMRECT(";
+        case 0x1100 + 5: return "TVM_GETCOUNT(";
+        case 0x1100 + 6: return "TVM_GETINDENT(";
+        case 0x1100 + 7: return "TVM_SETINDENT(";
+        case 0x1100 + 8: return "TVM_GETIMAGELIST(";
+        case 0x1100 + 9: return "TVM_SETIMAGELIST(";
         case 0x1100 + 10: return "TVM_GETNEXTITEM";
         case 0x1100 + 11: return "TVM_SELECTITEM";
         case 0x1100 + 12: return "TVM_GETITEMA";
@@ -3897,8 +3897,8 @@ const char *wxGetMessageName(int message)
         case 0x1100 + 14: return "TVM_EDITLABELA";
         case 0x1100 + 65: return "TVM_EDITLABELW";
         case 0x1100 + 15: return "TVM_GETEDITCONTROL";
-        case 0x1100 + 16: return "TVM_GETVISIBLECOUNT";
-        case 0x1100 + 17: return "TVM_HITTEST";
+        case 0x1100 + 16: return "TVM_GETVISIBLECOUNT(";
+        case 0x1100 + 17: return "TVM_HITTEST(";
         case 0x1100 + 18: return "TVM_CREATEDRAGIMAGE";
         case 0x1100 + 19: return "TVM_SORTCHILDREN";
         case 0x1100 + 20: return "TVM_ENSUREVISIBLE";
@@ -3910,7 +3910,7 @@ const char *wxGetMessageName(int message)
         case 0x1100 + 25: return "TVM_GETTOOLTIPS";
 
         // header
-        case 0x1200 + 0: return "HDM_GETITEMCOUNT";
+        case 0x1200 + 0: return "HDM_GETITEMCOUNT(";
         case 0x1200 + 1: return "HDM_INSERTITEMA";
         case 0x1200 + 10: return "HDM_INSERTITEMW";
         case 0x1200 + 2: return "HDM_DELETEITEM";
@@ -3918,11 +3918,11 @@ const char *wxGetMessageName(int message)
         case 0x1200 + 11: return "HDM_GETITEMW";
         case 0x1200 + 4: return "HDM_SETITEMA";
         case 0x1200 + 12: return "HDM_SETITEMW";
-        case 0x1200 + 5: return "HDM_LAYOUT";
-        case 0x1200 + 6: return "HDM_HITTEST";
-        case 0x1200 + 7: return "HDM_GETITEMRECT";
-        case 0x1200 + 8: return "HDM_SETIMAGELIST";
-        case 0x1200 + 9: return "HDM_GETIMAGELIST";
+        case 0x1200 + 5: return "HDM_LAYOUT(";
+        case 0x1200 + 6: return "HDM_HITTEST(";
+        case 0x1200 + 7: return "HDM_GETITEMRECT(";
+        case 0x1200 + 8: return "HDM_SETIMAGELIST(";
+        case 0x1200 + 9: return "HDM_GETIMAGELIST(";
         case 0x1200 + 15: return "HDM_ORDERTOINDEX";
         case 0x1200 + 16: return "HDM_CREATEDRAGIMAGE";
         case 0x1200 + 17: return "HDM_GETORDERARRAY";
@@ -3930,9 +3930,9 @@ const char *wxGetMessageName(int message)
         case 0x1200 + 19: return "HDM_SETHOTDIVIDER";
 
         // tab control
-        case 0x1300 + 2: return "TCM_GETIMAGELIST";
-        case 0x1300 + 3: return "TCM_SETIMAGELIST";
-        case 0x1300 + 4: return "TCM_GETITEMCOUNT";
+        case 0x1300 + 2: return "TCM_GETIMAGELIST(";
+        case 0x1300 + 3: return "TCM_SETIMAGELIST(";
+        case 0x1300 + 4: return "TCM_GETITEMCOUNT(";
         case 0x1300 + 5: return "TCM_GETITEMA";
         case 0x1300 + 60: return "TCM_GETITEMW";
         case 0x1300 + 6: return "TCM_SETITEMA";
@@ -3941,16 +3941,16 @@ const char *wxGetMessageName(int message)
         case 0x1300 + 62: return "TCM_INSERTITEMW";
         case 0x1300 + 8: return "TCM_DELETEITEM";
         case 0x1300 + 9: return "TCM_DELETEALLITEMS";
-        case 0x1300 + 10: return "TCM_GETITEMRECT";
+        case 0x1300 + 10: return "TCM_GETITEMRECT(";
         case 0x1300 + 11: return "TCM_GETCURSEL";
         case 0x1300 + 12: return "TCM_SETCURSEL";
-        case 0x1300 + 13: return "TCM_HITTEST";
+        case 0x1300 + 13: return "TCM_HITTEST(";
         case 0x1300 + 14: return "TCM_SETITEMEXTRA";
-        case 0x1300 + 40: return "TCM_ADJUSTRECT";
+        case 0x1300 + 40: return "TCM_ADJUSTRECT(";
         case 0x1300 + 41: return "TCM_SETITEMSIZE";
         case 0x1300 + 42: return "TCM_REMOVEIMAGE";
         case 0x1300 + 43: return "TCM_SETPADDING";
-        case 0x1300 + 44: return "TCM_GETROWCOUNT";
+        case 0x1300 + 44: return "TCM_GETROWCOUNT(";
         case 0x1300 + 45: return "TCM_GETTOOLTIPS";
         case 0x1300 + 46: return "TCM_SETTOOLTIPS";
         case 0x1300 + 47: return "TCM_GETCURFOCUS";
@@ -3976,21 +3976,21 @@ const char *wxGetMessageName(int message)
         case WM_USER+21: return "TB_INSERTBUTTON";
         case WM_USER+22: return "TB_DELETEBUTTON";
         case WM_USER+23: return "TB_GETBUTTON";
-        case WM_USER+24: return "TB_BUTTONCOUNT";
+        case WM_USER+24: return "TB_BUTTONCOUNT(";
         case WM_USER+25: return "TB_COMMANDTOINDEX";
         case WM_USER+26: return "TB_SAVERESTOREA";
         case WM_USER+76: return "TB_SAVERESTOREW";
         case WM_USER+27: return "TB_CUSTOMIZE";
         case WM_USER+28: return "TB_ADDSTRINGA";
         case WM_USER+77: return "TB_ADDSTRINGW";
-        case WM_USER+29: return "TB_GETITEMRECT";
+        case WM_USER+29: return "TB_GETITEMRECT(";
         case WM_USER+30: return "TB_BUTTONSTRUCTSIZE";
         case WM_USER+31: return "TB_SETBUTTONSIZE";
         case WM_USER+32: return "TB_SETBITMAPSIZE";
         case WM_USER+33: return "TB_AUTOSIZE";
         case WM_USER+35: return "TB_GETTOOLTIPS";
         case WM_USER+36: return "TB_SETTOOLTIPS";
-        case WM_USER+37: return "TB_SETPARENT";
+        case WM_USER+37: return "TB_SETPARENT(";
         case WM_USER+39: return "TB_SETROWS";
         case WM_USER+40: return "TB_GETROWS";
         case WM_USER+42: return "TB_SETCMDID";
@@ -3999,15 +3999,15 @@ const char *wxGetMessageName(int message)
         case WM_USER+45: return "TB_GETBUTTONTEXTA";
         case WM_USER+75: return "TB_GETBUTTONTEXTW";
         case WM_USER+46: return "TB_REPLACEBITMAP";
-        case WM_USER+47: return "TB_SETINDENT";
-        case WM_USER+48: return "TB_SETIMAGELIST";
-        case WM_USER+49: return "TB_GETIMAGELIST";
+        case WM_USER+47: return "TB_SETINDENT(";
+        case WM_USER+48: return "TB_SETIMAGELIST(";
+        case WM_USER+49: return "TB_GETIMAGELIST(";
         case WM_USER+50: return "TB_LOADIMAGES";
-        case WM_USER+51: return "TB_GETRECT";
-        case WM_USER+52: return "TB_SETHOTIMAGELIST";
-        case WM_USER+53: return "TB_GETHOTIMAGELIST";
-        case WM_USER+54: return "TB_SETDISABLEDIMAGELIST";
-        case WM_USER+55: return "TB_GETDISABLEDIMAGELIST";
+        case WM_USER+51: return "TB_GETRECT(";
+        case WM_USER+52: return "TB_SETHOTIMAGELIST(";
+        case WM_USER+53: return "TB_GETHOTIMAGELIST(";
+        case WM_USER+54: return "TB_SETDISABLEDIMAGELIST(";
+        case WM_USER+55: return "TB_GETDISABLEDIMAGELIST(";
         case WM_USER+56: return "TB_SETSTYLE";
         case WM_USER+57: return "TB_GETSTYLE";
         case WM_USER+58: return "TB_GETBUTTONSIZE";

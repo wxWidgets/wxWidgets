@@ -52,7 +52,7 @@ size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
   if (buf) {
     if (!n || !*psz) {
-      if (n) *buf = _T('\0');
+      if (n) *buf = T('\0');
       return 0;
     }
     return mbstowcs(buf, psz, n);
@@ -181,7 +181,7 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
   psz = wxStrpbrk(psz, delim);
   if (!psz) *save_ptr = (wxChar*)NULL;
   else {
-    *psz = _T('\0');
+    *psz = T('\0');
     *save_ptr = psz + 1;
   }
   return ret;
@@ -292,21 +292,21 @@ WXDLLEXPORT double wxStrtod(const wxChar *nptr, wxChar **endptr)
 
   // FIXME: only correct for C locale
   while (wxIsspace(*nptr)) nptr++;
-  if (*nptr == _T('+') || *nptr == _T('-')) nptr++;
+  if (*nptr == T('+') || *nptr == T('-')) nptr++;
   while (wxIsdigit(*nptr)) nptr++;
-  if (*nptr == _T('.')) {
+  if (*nptr == T('.')) {
     nptr++;
     while (wxIsdigit(*nptr)) nptr++;
   }
-  if (*nptr == _T('E') || *nptr == _T('e')) {
+  if (*nptr == T('E') || *nptr == T('e')) {
     nptr++;
-    if (*nptr == _T('+') || *nptr == _T('-')) nptr++;
+    if (*nptr == T('+') || *nptr == T('-')) nptr++;
     while (wxIsdigit(*nptr)) nptr++;
   }
 
   wxString data(nptr, nptr-start);
   wxWX2MBbuf dat = data.mb_str(wxConvLibc);
-  char *rdat = MBSTRINGCAST dat;
+  char *rdat = wxMBSTRINGCAST dat;
   double ret = strtod(dat, &rdat);
 
   if (endptr) *endptr = (wxChar *)(start + (rdat - (const char *)dat));
@@ -320,21 +320,21 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
 
   // FIXME: only correct for C locale
   while (wxIsspace(*nptr)) nptr++;
-  if (*nptr == _T('+') || *nptr == _T('-')) nptr++;
+  if (*nptr == T('+') || *nptr == T('-')) nptr++;
   if (((base == 0) || (base == 16)) &&
-      (nptr[0] == _T('0') && nptr[1] == _T('x'))) {
+      (nptr[0] == T('0') && nptr[1] == T('x'))) {
     nptr += 2;
     base = 16;
   }
-  else if ((base == 0) && (nptr[0] == _T('0'))) base = 8;
+  else if ((base == 0) && (nptr[0] == T('0'))) base = 8;
   else if (base == 0) base = 10;
 
-  while ((wxIsdigit(*nptr) && (*nptr - _T('0') < base)) ||
-         (wxIsalpha(*nptr) && (wxToupper(*nptr) - _T('A') + 10 < base))) nptr++;
+  while ((wxIsdigit(*nptr) && (*nptr - T('0') < base)) ||
+         (wxIsalpha(*nptr) && (wxToupper(*nptr) - T('A') + 10 < base))) nptr++;
 
   wxString data(nptr, nptr-start);
   wxWX2MBbuf dat = data.mb_str(wxConvLibc);
-  char *rdat = MBSTRINGCAST dat;
+  char *rdat = wxMBSTRINGCAST dat;
   long int ret = strtol(dat, &rdat, base);
 
   if (endptr) *endptr = (wxChar *)(start + (rdat - (const char *)dat));

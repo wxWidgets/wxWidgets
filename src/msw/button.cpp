@@ -81,7 +81,7 @@ bool wxButton::Create(wxWindow *parent,
     m_hWnd = (WXHWND)CreateWindowEx
                      (
                       MakeExtendedStyle(m_windowStyle),
-                      _T("BUTTON"),
+                      T("BUTTON"),
                       label,
                       WS_VISIBLE | WS_TABSTOP | WS_CHILD,
                       0, 0, 0, 0,

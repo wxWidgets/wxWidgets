@@ -11,11 +11,11 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_DIALUP_MANAGER
-
 #ifdef __GNUG__
     #pragma implementation "dialup.h"
 #endif
+
+#if wxUSE_DIALUP_MANAGER
 
 #ifndef  WX_PRECOMP
 #   include "wx/defs.h"
@@ -72,7 +72,7 @@ class WXDLLEXPORT wxDialUpManagerImpl : public wxDialUpManager
 public:
    wxDialUpManagerImpl();
    ~wxDialUpManagerImpl();
-   
+
    /** Could the dialup manager be initialized correctly? If this function
        returns FALSE, no other functions will work neither, so it's a good idea
        to call this function and check its result before calling any other
@@ -110,7 +110,7 @@ public:
       }
 
    /// returns TRUE if (async) dialing is in progress
-   inline virtual bool IsDialling() const
+   inline virtual bool IsDialing() const
       { return m_DialProcess != NULL; }
 
    // cancel dialing the number initiated with Dial(async = TRUE)
@@ -180,7 +180,7 @@ private:
    /// pid of dial process
    int m_DialPId;
    friend class wxDialProcess;
-   
+
    /// determine status
    void CheckStatus(bool fromAsync = FALSE) const;
 
@@ -282,7 +282,7 @@ wxDialUpManagerImpl::HangUp(void)
 {
    if(m_IsOnline == 0)
       return FALSE;
-   if(IsDialling())
+   if(IsDialing())
    {
       wxLogError(_("Already dialling ISP."));
       return FALSE;
@@ -300,7 +300,7 @@ wxDialUpManagerImpl::HangUp(void)
 bool
 wxDialUpManagerImpl::CancelDialing()
 {
-   if(! IsDialling())
+   if(! IsDialing())
       return FALSE;
    return kill(m_DialPId, SIGTERM) > 0;
 }
@@ -397,13 +397,13 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    if(m_CanUseIfconfig != 0) // unknown or yes
    {
       wxASSERT(m_IfconfigPath.length());
-      
+
       wxString tmpfile = wxGetTempFileName("_wxdialuptest");
       wxString cmd = "/bin/sh -c \'";
       cmd << m_IfconfigPath << " >" << tmpfile <<  '\'';
       /* I tried to add an option to wxExecute() to not close stdout,
          so we could let ifconfig write directly to the tmpfile, but
-         this does not work. That should be faster, as it doesn´t call 
+         this does not work. That should be faster, as it doesn´t call
          the shell first. I have no idea why. :-(  (KB) */
 #if 0
       // temporarily redirect stdout/stderr:
@@ -463,17 +463,17 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    // This can be used under Win 9x, too!
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
-   int	sockfd;
+   int sockfd;
 
    m_IsOnline = 0; // assume false
    if((hp = gethostbyname(m_BeaconHost)) == NULL)
       return; // no DNS no net
-   
-   serv_addr.sin_family		= hp->h_addrtype;
+
+   serv_addr.sin_family = hp->h_addrtype;
    memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
-   serv_addr.sin_port		= htons(m_BeaconPort);
-   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) 
-   {	
+   serv_addr.sin_port = htons(m_BeaconPort);
+   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
+   {
       //  sys_error("cannot create socket for gw");
       return;
    }
@@ -484,9 +484,9 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
              sizeof(serv_addr)) == -1)
       return;
 #endif
-   
+
    if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-   {	
+   {
       //sys_error("cannot connect to server");
       return;
    }

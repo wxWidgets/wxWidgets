@@ -33,7 +33,7 @@ bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
-        wxFAIL_MSG( _T("wxGauge creation failed") );
+        wxFAIL_MSG( T("wxGauge creation failed") );
 	return FALSE;
     }
 

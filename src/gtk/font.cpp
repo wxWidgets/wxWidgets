@@ -162,18 +162,18 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
     wxString tmp;
 
     wxString fontname( xFontName );
-    wxStringTokenizer tn( fontname, _T("-") );
+    wxStringTokenizer tn( fontname, T("-") );
 
     tn.GetNextToken();                           // foundry
 
     M_FONTDATA->m_faceName = tn.GetNextToken();  // courier
 
     tmp = tn.GetNextToken().MakeUpper();
-    if (tmp == _T("BOLD")) M_FONTDATA->m_weight = wxBOLD;
+    if (tmp == T("BOLD")) M_FONTDATA->m_weight = wxBOLD;
 
     tmp = tn.GetNextToken().MakeUpper();
-    if (tmp == _T("I")) M_FONTDATA->m_style = wxITALIC;
-    if (tmp == _T("O")) M_FONTDATA->m_style = wxITALIC;
+    if (tmp == T("I")) M_FONTDATA->m_style = wxITALIC;
+    if (tmp == T("O")) M_FONTDATA->m_style = wxITALIC;
 
     tn.GetNextToken();                           // set width
     tn.GetNextToken();                           // ?
@@ -187,12 +187,12 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
     tn.GetNextToken();                           // y-res
 
     tmp = tn.GetNextToken().MakeUpper();
-    if (tmp == _T("M")) M_FONTDATA->m_family = wxMODERN;
-    else if (M_FONTDATA->m_faceName == _T("TIMES")) M_FONTDATA->m_family = wxROMAN;
-    else if (M_FONTDATA->m_faceName == _T("HELVETICA")) M_FONTDATA->m_family = wxSWISS;
-    else if (M_FONTDATA->m_faceName == _T("LUCIDATYPEWRITER")) M_FONTDATA->m_family = wxTELETYPE;
-    else if (M_FONTDATA->m_faceName == _T("LUCIDA")) M_FONTDATA->m_family = wxDECORATIVE;
-    else if (M_FONTDATA->m_faceName == _T("UTOPIA")) M_FONTDATA->m_family = wxSCRIPT;
+    if (tmp == T("M")) M_FONTDATA->m_family = wxMODERN;
+    else if (M_FONTDATA->m_faceName == T("TIMES")) M_FONTDATA->m_family = wxROMAN;
+    else if (M_FONTDATA->m_faceName == T("HELVETICA")) M_FONTDATA->m_family = wxSWISS;
+    else if (M_FONTDATA->m_faceName == T("LUCIDATYPEWRITER")) M_FONTDATA->m_family = wxTELETYPE;
+    else if (M_FONTDATA->m_faceName == T("LUCIDA")) M_FONTDATA->m_family = wxDECORATIVE;
+    else if (M_FONTDATA->m_faceName == T("UTOPIA")) M_FONTDATA->m_family = wxSCRIPT;
 }
 
 bool wxFont::Create( int pointSize,
@@ -235,42 +235,42 @@ wxFont::~wxFont()
 
 int wxFont::GetPointSize() const
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid font") );
+    wxCHECK_MSG( Ok(), 0, T("invalid font") );
 
     return M_FONTDATA->m_pointSize;
 }
 
 wxString wxFont::GetFaceName() const
 {
-    wxCHECK_MSG( Ok(), _T(""), _T("invalid font") );
+    wxCHECK_MSG( Ok(), T(""), T("invalid font") );
 
     return M_FONTDATA->m_faceName;
 }
 
 int wxFont::GetFamily() const
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid font") );
+    wxCHECK_MSG( Ok(), 0, T("invalid font") );
 
     return M_FONTDATA->m_family;
 }
 
 int wxFont::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid font") );
+    wxCHECK_MSG( Ok(), 0, T("invalid font") );
 
     return M_FONTDATA->m_style;
 }
 
 int wxFont::GetWeight() const
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid font") );
+    wxCHECK_MSG( Ok(), 0, T("invalid font") );
 
     return M_FONTDATA->m_weight;
 }
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( Ok(), FALSE, _T("invalid font") );
+    wxCHECK_MSG( Ok(), FALSE, T("invalid font") );
 
     return M_FONTDATA->m_underlined;
 }
@@ -278,7 +278,7 @@ bool wxFont::GetUnderlined() const
 
 wxFontEncoding wxFont::GetEncoding() const
 {
-    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, _T("invalid font") );
+    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, T("invalid font") );
 
     return M_FONTDATA->m_encoding;
 }
@@ -344,7 +344,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
 {
     if (!Ok())
     {
-        wxFAIL_MSG( _T("invalid font") );
+        wxFAIL_MSG( T("invalid font") );
 
         return (GdkFont*) NULL;
     }
@@ -387,7 +387,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
 
     if (!font)
     {
-        wxLogError(_T("could not load any font"));
+        wxLogError(T("could not load any font"));
     }
 
     return font;

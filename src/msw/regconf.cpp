@@ -98,7 +98,7 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
 
     if ( appName.IsEmpty() )
     {
-      wxCHECK_RET( wxTheApp, _T("No application name in wxRegConfig ctor!") );
+      wxCHECK_RET( wxTheApp, T("No application name in wxRegConfig ctor!") );
       strRoot << wxTheApp->GetAppName();
     }
     else
@@ -337,7 +337,7 @@ bool wxRegConfig::Read(const wxString& key, wxString *pStr) const
   if ( IsImmutable(path.Name()) ) {
     if ( TryGetValue(m_keyGlobal, path.Name(), *pStr) ) {
       if ( m_keyLocal.HasValue(path.Name()) ) {
-        wxLogWarning(_T("User value for immutable key '%s' ignored."),
+        wxLogWarning(T("User value for immutable key '%s' ignored."),
                    path.Name().c_str());
       }
      *pStr = wxConfigBase::ExpandEnvVars(*pStr);
@@ -373,7 +373,7 @@ bool wxRegConfig::Read(const wxString& key, wxString *pStr,
   if ( IsImmutable(path.Name()) ) {
     if ( TryGetValue(m_keyGlobal, path.Name(), *pStr) ) {
       if ( m_keyLocal.HasValue(path.Name()) ) {
-        wxLogWarning(_T("User value for immutable key '%s' ignored."),
+        wxLogWarning(T("User value for immutable key '%s' ignored."),
                    path.Name().c_str());
       }
 
@@ -416,7 +416,7 @@ bool wxRegConfig::Read(const wxString& key, long *plResult) const
   if ( IsImmutable(path.Name()) ) {
     if ( TryGetValue(m_keyGlobal, path.Name(), plResult) ) {
       if ( m_keyLocal.HasValue(path.Name()) ) {
-        wxLogWarning(_T("User value for immutable key '%s' ignored."),
+        wxLogWarning(T("User value for immutable key '%s' ignored."),
                      path.Name().c_str());
       }
 
@@ -441,7 +441,7 @@ bool wxRegConfig::Write(const wxString& key, const wxString& szValue)
   wxConfigPathChanger path(this, key);
 
   if ( IsImmutable(path.Name()) ) {
-    wxLogError(_T("Can't change immutable entry '%s'."), path.Name().c_str());
+    wxLogError(T("Can't change immutable entry '%s'."), path.Name().c_str());
     return FALSE;
   }
 
@@ -453,7 +453,7 @@ bool wxRegConfig::Write(const wxString& key, long lValue)
   wxConfigPathChanger path(this, key);
 
   if ( IsImmutable(path.Name()) ) {
-    wxLogError(_T("Can't change immutable entry '%s'."), path.Name().c_str());
+    wxLogError(T("Can't change immutable entry '%s'."), path.Name().c_str());
     return FALSE;
   }
 
@@ -516,7 +516,7 @@ bool wxRegConfig::RenameGroup(const wxString& oldName, const wxString& newName)
 
     // TODO there is no way to rename a registry key - we must do a deep copy
     //      ourselves
-    wxFAIL_MSG(_T("Registry key renaming not implemented"));
+    wxFAIL_MSG(T("Registry key renaming not implemented"));
 
     return FALSE;
 }

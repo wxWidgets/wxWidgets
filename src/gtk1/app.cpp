@@ -144,7 +144,7 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) );
 bool wxYield()
 {
     bool has_idle = (wxTheApp->m_idleTag != 0);
-    
+
     if (has_idle)
     {
         /* We need to temporarily remove idle callbacks or the loop will
@@ -160,20 +160,20 @@ bool wxYield()
        might have been changed (it also will update other things set from
        OnUpdateUI() which is a nice (and desired) side effect) */
     while (wxTheApp->ProcessIdle()) { }
-	
+
     if (has_idle)
     {
         /* re-add idle handler */
         wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
     }
-    
+
     return TRUE;
 }
 
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
-    
+
 #if (GTK_MINOR_VERSION > 0)
     /* when getting called from GDK's idle handler we
        are no longer within GDK's grab on the GUI
@@ -206,7 +206,7 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 
 void wxapp_install_idle_handler()
 {
-    wxASSERT_MSG( wxTheApp->m_idleTag == 0, _T("attempt to install idle handler twice") );
+    wxASSERT_MSG( wxTheApp->m_idleTag == 0, T("attempt to install idle handler twice") );
 
     /* this routine gets called by all event handlers
        indicating that the idle is over. */
@@ -224,14 +224,14 @@ static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) );
 void wxapp_install_thread_wakeup()
 {
     if (wxTheApp->m_wakeUpTimerTag) return;
-    
+
     wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 100, wxapp_wakeup_timerout_callback, (gpointer) NULL );
 }
 
 void wxapp_uninstall_thread_wakeup()
 {
     if (!wxTheApp->m_wakeUpTimerTag) return;
-    
+
     gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
     wxTheApp->m_wakeUpTimerTag = 0;
 }
@@ -397,7 +397,7 @@ bool wxApp::OnInitGui()
                     index |= (g >> (5 - vis->green_prec)) << vis->green_shift;
                     index |= (b >> (5 - vis->blue_prec)) << vis->blue_shift;
 #else
-                    wxFAIL_MSG( _T("Unsupported graphics hardware") );
+                    wxFAIL_MSG( T("Unsupported graphics hardware") );
 #endif
                 }
                 m_colorCube[ (r*1024) + (g*32) + b ] = index;
@@ -478,7 +478,7 @@ bool wxApp::SendIdleEvents( wxWindow* win )
     win->ProcessEvent(event);
 
     win->OnInternalIdle();
-    
+
     if (event.MoreRequested())
         needMore = TRUE;
 
@@ -640,7 +640,7 @@ void wxApp::CleanUp()
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     if (wxDebugContext::CountObjectsLeft() > 0)
     {
-        wxLogDebug(_T("There were memory leaks.\n"));
+        wxLogDebug(T("There were memory leaks.\n"));
         wxDebugContext::Dump();
         wxDebugContext::PrintStatistics();
     }
@@ -681,7 +681,7 @@ int wxEntry( int argc, char *argv[] )
     if (!wxTheApp)
     {
         wxCHECK_MSG( wxApp::GetInitializerFunction(), -1,
-                     _T("wxWindows error: No initializer - use IMPLEMENT_APP macro.\n") );
+                     T("wxWindows error: No initializer - use IMPLEMENT_APP macro.\n") );
 
         wxAppInitializerFunction app_ini = wxApp::GetInitializerFunction();
 
@@ -690,7 +690,7 @@ int wxEntry( int argc, char *argv[] )
         wxTheApp = (wxApp*) test_app;
     }
 
-    wxCHECK_MSG( wxTheApp, -1, _T("wxWindows error: no application object") );
+    wxCHECK_MSG( wxTheApp, -1, T("wxWindows error: no application object") );
 
     wxTheApp->argc = argc;
 #if wxUSE_UNICODE
@@ -794,7 +794,7 @@ wxApp::GetStdIcon(int which) const
             return wxIcon(warning_xpm);
 
         default:
-            wxFAIL_MSG(_T("requested non existent standard icon"));
+            wxFAIL_MSG(T("requested non existent standard icon"));
             // still fall through
 
         case wxICON_HAND:

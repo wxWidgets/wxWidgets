@@ -151,7 +151,7 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( _T("wxToolBar creation failed") );
+        wxFAIL_MSG( T("wxToolBar creation failed") );
 	return FALSE;
     }
 
@@ -263,13 +263,13 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
     m_hasToolAlready = TRUE;
     
     wxCHECK_MSG( bitmap.Ok(), (wxToolBarTool *)NULL,
-                 _T("invalid bitmap for wxToolBar icon") );
+                 T("invalid bitmap for wxToolBar icon") );
 
     wxCHECK_MSG( bitmap.GetBitmap() == NULL, (wxToolBarTool *)NULL,
-                 _T("wxToolBar doesn't support GdkBitmap") );
+                 T("wxToolBar doesn't support GdkBitmap") );
 
     wxCHECK_MSG( bitmap.GetPixmap() != NULL, (wxToolBarTool *)NULL,
-                 _T("wxToolBar::Add needs a wxBitmap") );
+                 T("wxToolBar::Add needs a wxBitmap") );
   
     GtkWidget *tool_pixmap = (GtkWidget *)NULL;
   
@@ -326,7 +326,7 @@ void wxToolBar::AddSeparator()
 
 void wxToolBar::ClearTools()
 {
-    wxFAIL_MSG( _T("wxToolBar::ClearTools not implemented") );
+    wxFAIL_MSG( T("wxToolBar::ClearTools not implemented") );
 }
 
 bool wxToolBar::Realize()
@@ -376,7 +376,7 @@ void wxToolBar::EnableTool(int toolIndex, bool enable)
         node = node->Next();
     }
   
-    wxFAIL_MSG( _T("wrong toolbar index") );
+    wxFAIL_MSG( T("wrong toolbar index") );
 }
 
 void wxToolBar::ToggleTool( int toolIndex, bool toggle ) 
@@ -418,7 +418,7 @@ void wxToolBar::ToggleTool( int toolIndex, bool toggle )
         node = node->Next();
     }
   
-    wxFAIL_MSG( _T("wrong toolbar index") );
+    wxFAIL_MSG( T("wrong toolbar index") );
 }
 
 wxObject *wxToolBar::GetToolClientData( int index ) const
@@ -431,7 +431,7 @@ wxObject *wxToolBar::GetToolClientData( int index ) const
         node = node->Next();
     }
   
-    wxFAIL_MSG( _T("wrong toolbar index") );
+    wxFAIL_MSG( T("wrong toolbar index") );
   
     return (wxObject*)NULL;
 }
@@ -446,7 +446,7 @@ bool wxToolBar::GetToolState(int toolIndex) const
         node = node->Next();
     }
   
-    wxFAIL_MSG( _T("wrong toolbar index") );
+    wxFAIL_MSG( T("wrong toolbar index") );
   
     return FALSE;
 }
@@ -461,14 +461,14 @@ bool wxToolBar::GetToolEnabled(int toolIndex) const
         node = node->Next();
     }
   
-    wxFAIL_MSG( _T("wrong toolbar index") );
+    wxFAIL_MSG( T("wrong toolbar index") );
   
     return FALSE;
 }
 
 void wxToolBar::SetMargins( int x, int y )
 {
-    wxCHECK_RET( !m_hasToolAlready, _T("wxToolBar::SetMargins must be called before adding tool.") );
+    wxCHECK_RET( !m_hasToolAlready, T("wxToolBar::SetMargins must be called before adding tool.") );
     
     if (x > 2) gtk_toolbar_append_space( m_toolbar );  // oh well
     
@@ -478,7 +478,7 @@ void wxToolBar::SetMargins( int x, int y )
 
 void wxToolBar::SetToolPacking( int WXUNUSED(packing) )
 {
-    wxFAIL_MSG( _T("wxToolBar::SetToolPacking not implemented") );
+    wxFAIL_MSG( T("wxToolBar::SetToolPacking not implemented") );
 }
 
 void wxToolBar::SetToolSeparation( int separation )
@@ -510,9 +510,9 @@ wxString wxToolBar::GetToolLongHelp(int toolIndex)
         node = node->Next();
     }
   
-    wxFAIL_MSG( _T("wrong toolbar index") );
+    wxFAIL_MSG( T("wrong toolbar index") );
     
-    return _T("");
+    return T("");
 }
 
 wxString wxToolBar::GetToolShortHelp(int toolIndex)
@@ -528,9 +528,9 @@ wxString wxToolBar::GetToolShortHelp(int toolIndex)
         node = node->Next();
     }
   
-    wxFAIL_MSG( _T("wrong toolbar index") );
+    wxFAIL_MSG( T("wrong toolbar index") );
     
-    return _T("");
+    return T("");
 }
 
 void wxToolBar::SetToolLongHelp(int toolIndex, const wxString& helpString)
@@ -547,7 +547,7 @@ void wxToolBar::SetToolLongHelp(int toolIndex, const wxString& helpString)
         node = node->Next();
     }
   
-    wxFAIL_MSG( _T("wrong toolbar index") );
+    wxFAIL_MSG( T("wrong toolbar index") );
     
     return;
 }
@@ -566,7 +566,7 @@ void wxToolBar::SetToolShortHelp(int toolIndex, const wxString& helpString)
         node = node->Next();
     }
   
-    wxFAIL_MSG( _T("wrong toolbar index") );
+    wxFAIL_MSG( T("wrong toolbar index") );
     
     return;
 }

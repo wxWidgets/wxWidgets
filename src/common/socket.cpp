@@ -316,7 +316,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
 
   if (sig != 0xfeeddead)
   {
-    wxLogMessage(_T("Warning: invalid signature returned to ReadMsg"));
+    wxLogMessage(T("Warning: invalid signature returned to ReadMsg"));
     goto exit;
   }
 
@@ -374,7 +374,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
 
   if (sig != 0xdeadfeed)
   {
-    //wxLogMessage(_T("Warning: invalid signature returned to ReadMsg"));
+    //wxLogMessage(T("Warning: invalid signature returned to ReadMsg"));
     goto exit;
   }
 

@@ -89,7 +89,7 @@ wxDataFormat::wxDataFormat( const Atom atom )
         m_type = wxDF_PRIVATE;
 	m_id = XGetAtomName( (Display*) wxGetDisplay(),  m_atom );
 
-	if (m_id == _T("file:ALL"))
+	if (m_id == T("file:ALL"))
 	{
 	    m_type = wxDF_FILENAME;
 	}
@@ -102,21 +102,21 @@ void wxDataFormat::SetType( wxDataFormatId type )
 
     if (m_type == wxDF_TEXT)
     {
-        m_id = _T("STRING");
+        m_id = T("STRING");
     }
     else
     if (m_type == wxDF_BITMAP)
     {
-        m_id = _T("BITMAP");
+        m_id = T("BITMAP");
     }
     else
     if (m_type == wxDF_FILENAME)
     {
-        m_id = _T("file:ALL");
+        m_id = T("file:ALL");
     }
     else
     {
-       wxFAIL_MSG( _T("invalid dataformat") );
+       wxFAIL_MSG( T("invalid dataformat") );
     }
 
     m_hasAtom = FALSE;
@@ -159,7 +159,7 @@ Atom wxDataFormat::GetAtom()
 */
         if (m_type == wxDF_PRIVATE)
         {
-            m_atom = XInternAtom( (Display*) wxGetDisplay(), MBSTRINGCAST m_id.mbc_str(), FALSE );
+            m_atom = XInternAtom( (Display*) wxGetDisplay(), wxMBSTRINGCAST m_id.mbc_str(), FALSE );
         }
 	else
 	if (m_type == wxDF_FILENAME)
@@ -268,7 +268,7 @@ void wxPrivateDataObject::Free()
 
 wxPrivateDataObject::wxPrivateDataObject()
 {
-    wxString id = _T("application/");
+    wxString id = T("application/");
     id += wxTheApp->GetAppName();
 
     m_format.SetId( id );

@@ -81,7 +81,7 @@ static bool gs_wxClipboardIsOpen = FALSE;
 
 bool wxOpenClipboard()
 {
-    wxCHECK_MSG( !gs_wxClipboardIsOpen, TRUE, _T("clipboard already opened.") );
+    wxCHECK_MSG( !gs_wxClipboardIsOpen, TRUE, T("clipboard already opened.") );
 
     wxWindow *win = wxTheApp->GetTopWindow();
     if ( win )
@@ -95,7 +95,7 @@ bool wxOpenClipboard()
     }
     else
     {
-        wxLogDebug(_T("Can not open clipboard without a main window."));
+        wxLogDebug(T("Can not open clipboard without a main window."));
 
         return FALSE;
     }
@@ -103,7 +103,7 @@ bool wxOpenClipboard()
 
 bool wxCloseClipboard()
 {
-    wxCHECK_MSG( gs_wxClipboardIsOpen, FALSE, _T("clipboard is not opened") );
+    wxCHECK_MSG( gs_wxClipboardIsOpen, FALSE, T("clipboard is not opened") );
 
     gs_wxClipboardIsOpen = FALSE;
 
@@ -470,10 +470,10 @@ bool wxClipboard::SetData( wxDataObject *data )
 
 bool wxClipboard::AddData( wxDataObject *data )
 {
-    wxCHECK_MSG( data, FALSE, _T("data is invalid") );
+    wxCHECK_MSG( data, FALSE, T("data is invalid") );
 
 #if wxUSE_DRAG_AND_DROP
-    wxCHECK_MSG( wxIsClipboardOpened(), FALSE, _T("clipboard not open") );
+    wxCHECK_MSG( wxIsClipboardOpened(), FALSE, T("clipboard not open") );
 
     wxDataFormat format = data->GetFormat();
 
@@ -527,7 +527,7 @@ bool wxClipboard::IsSupported( wxDataFormat format )
 
 bool wxClipboard::GetData( wxDataObject *data )
 {
-    wxCHECK_MSG( wxIsClipboardOpened(), FALSE, _T("clipboard not open") );
+    wxCHECK_MSG( wxIsClipboardOpened(), FALSE, T("clipboard not open") );
 
 #if wxUSE_DRAG_AND_DROP
     wxDataFormat format = data->GetFormat();

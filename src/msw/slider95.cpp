@@ -93,14 +93,14 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
       bool want3D;
       WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
 
-      m_staticValue = (WXHWND) CreateWindowEx(exStyle, _T("STATIC"), NULL,
+      m_staticValue = (WXHWND) CreateWindowEx(exStyle, T("STATIC"), NULL,
                                msStyle,
                                0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                                wxGetInstance(), NULL);
 
       // Now create min static control
-      wxSprintf(wxBuffer, _T("%d"), minValue);
-      m_staticMin = (WXHWND) CreateWindowEx(0, _T("STATIC"), wxBuffer,
+      wxSprintf(wxBuffer, T("%d"), minValue);
+      m_staticMin = (WXHWND) CreateWindowEx(0, T("STATIC"), wxBuffer,
                              STATIC_FLAGS,
                              0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                              wxGetInstance(), NULL);
@@ -149,15 +149,15 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
   SubclassWin(GetHWND());
 
-  SetWindowText((HWND) m_hWnd, _T(""));
+  SetWindowText((HWND) m_hWnd, T(""));
 
   SetFont(parent->GetFont());
 
   if ( m_windowStyle & wxSL_LABELS )
   {
       // Finally, create max value static item
-      wxSprintf(wxBuffer, _T("%d"), maxValue);
-      m_staticMax = (WXHWND) CreateWindowEx(0, _T("STATIC"), wxBuffer,
+      wxSprintf(wxBuffer, T("%d"), maxValue);
+      m_staticMax = (WXHWND) CreateWindowEx(0, T("STATIC"), wxBuffer,
                              STATIC_FLAGS,
                              0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                              wxGetInstance(), NULL);
@@ -285,7 +285,7 @@ void wxSlider95::SetValue(int value)
   ::SendMessage(GetHwnd(), TBM_SETPOS, (WPARAM)TRUE, (LPARAM)value);
   if (m_staticValue)
   {
-    wxSprintf(wxBuffer, _T("%d"), value);
+    wxSprintf(wxBuffer, T("%d"), value);
     SetWindowText((HWND) m_staticValue, wxBuffer);
   }
 }
@@ -513,13 +513,13 @@ void wxSlider95::SetRange(int minValue, int maxValue)
   wxChar buf[40];
   if ( m_staticMin )
   {
-      wxSprintf(buf, _T("%d"), m_rangeMin);
+      wxSprintf(buf, T("%d"), m_rangeMin);
       SetWindowText((HWND) m_staticMin, buf);
   }
 
   if ( m_staticMax )
   {
-    wxSprintf(buf, _T("%d"), m_rangeMax);
+    wxSprintf(buf, T("%d"), m_rangeMax);
     SetWindowText((HWND) m_staticMax, buf);
   }
 }

@@ -230,7 +230,7 @@ typedef __WCHAR_TYPE__          wxChar;
 typedef signed __WCHAR_TYPE__   wxSChar;
 typedef unsigned __WCHAR_TYPE__ wxUChar;
 
-#      define _T(x)                   L##x
+#      define T(x)                   L##x
 
        // ctype.h functions (wctype.h)
 #      define  wxIsalnum   iswalnum
@@ -289,50 +289,54 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #    include <ctype.h>
 #    include <string.h>
 
-#    if 0 // temporary - preserve binary compatibilty
-typedef char            wxChar;
-typedef signed char     wxSChar;
-typedef unsigned char   wxUChar;
-#    else
-#      define wxChar char
-#      define wxSChar signed char
-#      define wxUChar unsigned char
-#    endif
+#   if 0 // temporary - preserve binary compatibilty
+        typedef char            wxChar;
+        typedef signed char     wxSChar;
+        typedef unsigned char   wxUChar;
+#   else
+#     define wxChar char
+#     define wxSChar signed char
+#     define wxUChar unsigned char
+#   endif
 
-#    ifdef __FreeBSD__
-#      undef _T
-#    endif
-#    define _T(x)           x
+#   ifdef __FreeBSD__
+#     undef T
+#   endif
+#   define T(x)           x
 
      // ctype.h functions
-#    define  wxIsalnum   isalnum
-#    define  wxIsalpha   isalpha
-#    define  wxIsctrl    isctrl
-#    define  wxIsdigit   isdigit
-#    define  wxIsgraph   isgraph
-#    define  wxIslower   islower
-#    define  wxIsprint   isprint
-#    define  wxIspunct   ispunct
-#    define  wxIsspace   isspace
-#    define  wxIsupper   isupper
-#    define  wxIsxdigit  isxdigit
-#    define  wxTolower   tolower
-#    define  wxToupper   toupper
+#   define  wxIsalnum   isalnum
+#   define  wxIsalpha   isalpha
+#   define  wxIsctrl    isctrl
+#   define  wxIsdigit   isdigit
+#   define  wxIsgraph   isgraph
+#   define  wxIslower   islower
+#   define  wxIsprint   isprint
+#   define  wxIspunct   ispunct
+#   define  wxIsspace   isspace
+#   define  wxIsupper   isupper
+#   define  wxIsxdigit  isxdigit
+#   define  wxTolower   tolower
+#   define  wxToupper   toupper
 
-     // locale.h functons
-#    define  wxSetlocale setlocale
+    // locale.h functons
+#   define  wxSetlocale setlocale
 
-     // string.h functions
-     // #define  wxStricmp   strcasecmp
-     // wxStricmp is defined below!!
+    // string.h functions
+    // #define  wxStricmp   strcasecmp
+    // wxStricmp is defined below!!
 
-     // #define  wxStrtok    strtok_r // this needs a configure check
+    #ifdef HAVE_STRTOK_R
+        #define  wxStrtok(str, sep, last)    strtok_r(str, sep, last)
+    #else
+        #define  wxStrtok(str, sep, last)    strtok(str, sep)
+    #endif
 
      // leave the rest to defaults below
-#    define wxNEED_WX_STRING_H
-#    define wxNEED_WX_STDIO_H
-#    define wxNEED_WX_STDLIB_H
-#    define wxNEED_WX_TIME_H
+#   define wxNEED_WX_STRING_H
+#   define wxNEED_WX_STDIO_H
+#   define wxNEED_WX_STDLIB_H
+#   define wxNEED_WX_TIME_H
 
 #  endif//Unicode
 #endif//TCHAR-aware compilers
@@ -555,6 +559,12 @@ WXDLLEXPORT int      wxSystem(const wxChar *psz);
 
 #ifdef wxNEED_WX_TIME_H
 WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const struct tm *tm);
+#endif
+
+// a Unicode-friendly __FILE__ analog
+#ifndef __TFILE__
+    #define __XFILE__(x) T(x)
+    #define __TFILE__ __XFILE__(__FILE__)
 #endif
 
 #endif

@@ -2,7 +2,7 @@
 // Name:        listimpl.cpp
 // Purpose:     helper file for implementation of dynamic lists
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     16.10.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -19,6 +19,9 @@
  *          3) #include arrimpl.cpp                                          *
  *          4) WX_DEFINE_OBJARRAY                                            *
  *****************************************************************************/
+
+// needed to resolve the conflict between global T and macro parameter T
+#define _WX_ERROR_REMOVE2(x)     T("bad index in " #x "::Remove()")
 
 // macro implements remaining (not inline) methods of template list
 // (it's private to this file)
@@ -58,7 +61,7 @@ void name::Empty()                                                            \
                                                                               \
 void name::Remove(size_t uiIndex)                                             \
 {                                                                             \
-  wxCHECK_RET( uiIndex < Count(), _T("bad index in " #name "::Remove()") );   \
+  wxCHECK_RET( uiIndex < Count(), _WX_ERROR_REMOVE2(name) );                  \
                                                                               \
   delete (T*)wxBaseArray::Item(uiIndex);                                      \
                                                                               \
@@ -99,8 +102,8 @@ int name::Index(const T& Item, bool bFromEnd) const                           \
     }                                                                         \
   }                                                                           \
                                                                               \
-  return wxNOT_FOUND;                                                           \
-}                                                                             
+  return wxNOT_FOUND;                                                         \
+}
 
 // redefine the macro so that now it will generate the class implementation
 // old value would provoke a compile-time error if this file is not included

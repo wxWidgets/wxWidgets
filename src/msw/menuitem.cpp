@@ -87,7 +87,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
 #endif  //owner drawn
                         m_strHelp(strHelp)
 {
-    wxASSERT_MSG( pParentMenu != NULL, _T("a menu item should have a parent") );
+    wxASSERT_MSG( pParentMenu != NULL, T("a menu item should have a parent") );
 
 #if  wxUSE_OWNER_DRAWN
     // set default menu colors
@@ -151,7 +151,7 @@ void wxMenuItem::Enable(bool bDoEnable)
 
 void wxMenuItem::Check(bool bDoCheck)
 {
-    wxCHECK_RET( IsCheckable(), _T("only checkable items may be checked") );
+    wxCHECK_RET( IsCheckable(), T("only checkable items may be checked") );
 
     if ( m_bChecked != bDoCheck ) {
         long rc = CheckMenuItem(GetHMenuOf(m_pParentMenu),
@@ -210,7 +210,7 @@ void wxMenuItem::SetName(const wxString& strName)
                           MF_BYCOMMAND | flagsOld,
                           id, data) == 0xFFFFFFFF )
         {
-            wxLogLastError(_T("ModifyMenu"));
+            wxLogLastError(T("ModifyMenu"));
         }
     }
 }

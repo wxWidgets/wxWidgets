@@ -64,7 +64,7 @@ public:
 
 #if wxUSE_STATUSBAR
     virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
-            const wxString& name = _T("statusBar"));
+            const wxString& name = T("statusBar"));
     virtual wxStatusBar *OnCreateStatusBar( int number, long style, wxWindowID id,
             const wxString& name );
     virtual wxStatusBar *GetStatusBar() const;

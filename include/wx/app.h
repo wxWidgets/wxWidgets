@@ -37,7 +37,9 @@
 
 #include "wx/event.h"       // for the base class
 
-#include "wx/window.h"      // for wxTopLevelWindows
+#if wxUSE_GUI
+    #include "wx/window.h"      // for wxTopLevelWindows
+#endif // wxUSE_GUI
 
 #if wxUSE_LOG
     #include "wx/log.h"
@@ -64,22 +66,33 @@ public:
         // prevents the program from continuing - it's a good place to create
         // the top level program window and return TRUE.
         //
-        // Override: always.
+        // Override: always in GUI application, rarely in console ones.
+#if wxUSE_GUI
     virtual bool OnInit() { return FALSE; };
+#else // !GUI
+    virtual bool OnInit() { return TRUE; };
+#endif // wxUSE_GUI
 
+#if wxUSE_GUI
         // a platform-dependent version of OnInit(): the code here is likely to
         // depend on the toolkit. default version does nothing.
         //
         // Override: rarely.
     virtual bool OnInitGui() { return TRUE; }
+#endif // wxUSE_GUI
 
         // called to start program execution - the default version just enters
         // the main GUI loop in which events are received and processed until
         // the last window is not deleted (if GetExitOnFrameDelete) or
-        // ExitMainLoop() is called.
+        // ExitMainLoop() is called. In console mode programs, the execution
+        // of the program really starts here
         //
-        // Override: rarely.
+        // Override: rarely in GUI applications, always in console ones.
+#if wxUSE_GUI
     virtual int OnRun() { return MainLoop(); };
+#else // !GUI
+    virtual int OnRun() = 0;
+#endif // wxUSE_GUI
 
         // called after the main loop termination. This is a good place for
         // cleaning up (it may be too late in dtor) and is also useful if you
@@ -102,6 +115,7 @@ public:
     // the worker functions - usually not used directly by the user code
     // -----------------------------------------------------------------
 
+#if wxUSE_GUI
         // execute the main GUI loop, the function returns when the loop ends
     virtual int MainLoop() = 0;
 
@@ -118,6 +132,7 @@ public:
         // process the first event in the event queue (blocks until an event
         // apperas if there are none currently)
     virtual void Dispatch() = 0;
+#endif // wxUSE_GUI
 
     // application info: name, description, vendor
     // -------------------------------------------
@@ -144,6 +159,7 @@ public:
     const wxString& GetVendorName() const { return m_vendorName; }
     void SetVendorName(const wxString& name) { m_vendorName = name; }
 
+#if wxUSE_GUI
     // top level window functions
     // --------------------------
 
@@ -171,6 +187,8 @@ public:
     void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
     bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
 
+#endif // wxUSE_GUI
+
     // miscellaneous customization functions
     // -------------------------------------
 
@@ -179,10 +197,15 @@ public:
         // user-defined class (default implementation creates a wxLogGui
         // object) - this log object is used by default by all wxLogXXX()
         // functions.
-    virtual wxLog *CreateLogTarget() { return new wxLogGui; }
+    virtual wxLog *CreateLogTarget()
+#if wxUSE_GUI
+        { return new wxLogGui; }
+#else // !GUI
+        { return new wxLogStderr; }
+#endif // wxUSE_GUI
 #endif // wxUSE_LOG
 
-
+#if wxUSE_GUI
         // get the standard icon used by wxWin dialogs - this allows the user
         // to customize the standard dialogs. The 'which' parameter is one of
         // wxICON_XXX values
@@ -198,6 +221,7 @@ public:
         // printing.
     virtual void SetPrintMode(int WXUNUSED(mode)) { }
     int GetPrintMode() const { return wxPRINT_POSTSCRIPT; }
+#endif // wxUSE_GUI
 
     // implementation only from now on
     // -------------------------------
@@ -228,29 +252,35 @@ protected:
     // TRUE if the application wants to get debug output
     bool m_wantDebugOutput;
 
+#if wxUSE_GUI
     // the main top level window - may be NULL
     wxWindow *m_topWindow;
+#endif // wxUSE_GUI
 };
 
 // ----------------------------------------------------------------------------
 // now include the declaration of the real class
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
-    #include "wx/msw/app.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/app.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/app.h"
-#elif defined(__WXGTK__)
-    #include "wx/gtk/app.h"
-#elif defined(__WXMAC__)
-    #include "wx/mac/app.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/app.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/app.h"
-#endif
+#if wxUSE_GUI
+    #if defined(__WXMSW__)
+        #include "wx/msw/app.h"
+    #elif defined(__WXMOTIF__)
+        #include "wx/motif/app.h"
+    #elif defined(__WXQT__)
+        #include "wx/qt/app.h"
+    #elif defined(__WXGTK__)
+        #include "wx/gtk/app.h"
+    #elif defined(__WXMAC__)
+        #include "wx/mac/app.h"
+    #elif defined(__WXPM__)
+        #include "wx/os2/app.h"
+    #elif defined(__WXSTUBS__)
+        #include "wx/stubs/app.h"
+    #endif
+#else // !GUI
+    typedef wxAppBase wxApp;
+#endif // GUI/!GUI
 
 // ----------------------------------------------------------------------------
 // the global data
@@ -266,11 +296,34 @@ WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 // global functions
 // ----------------------------------------------------------------------------
 
+// event loop related functions only work in GUI programs
+// ------------------------------------------------------
+
+#if wxUSE_GUI
+
 // Force an exit from main loop
-void WXDLLEXPORT wxExit();
+extern void WXDLLEXPORT wxExit();
 
 // Yield to other apps/messages
-bool WXDLLEXPORT wxYield();
+extern bool WXDLLEXPORT wxYield();
+
+#endif // wxUSE_GUI
+
+// console applications may avoid using DECLARE_APP and IMPLEMENT_APP macros
+// and call these functions instead at the program startup and termination
+// -------------------------------------------------------------------------
+
+#if wxUSE_NOGUI
+
+// initialize the library (may be called as many times as needed, but each
+// call to wxInitialize() must be matched by wxUninitialize())
+extern bool WXDLLEXPORT wxInitialize();
+
+// clean up - the library can't be used any more after the last call to
+// wxUninitialize()
+extern void WXDLLEXPORT wxUninitialize();
+
+#endif // wxUSE_NOGUI
 
 // ----------------------------------------------------------------------------
 // macros for dynamic creation of the application object

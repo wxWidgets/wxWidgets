@@ -45,7 +45,7 @@ wxString wxObjectOutputStream::GetObjectName(wxObject *obj)
 {
   wxString name;
 
-  name.Printf(_T("%x"), (unsigned long)obj);
+  name.Printf(T("%x"), (unsigned long)obj);
   return name;
 }
 
@@ -58,16 +58,16 @@ void wxObjectOutputStream::WriteObjectDef(wxObjectStreamInfo& info)
   if (info.duplicate) {
     data_s.WriteString(TAG_DUPLICATE_OBJECT);
     data_s.WriteString(GetObjectName(info.object));
-    wxPrintf(_T("info.object (dup %s)\n"), info.object->GetClassInfo()->GetClassName());
+    wxPrintf(T("info.object (dup %s)\n"), info.object->GetClassInfo()->GetClassName());
     return;
   }
 
   if (info.object) {
     data_s.WriteString(info.object->GetClassInfo()->GetClassName());
-    wxPrintf(_T("info.object (%s)\n"), info.object->GetClassInfo()->GetClassName());
+    wxPrintf(T("info.object (%s)\n"), info.object->GetClassInfo()->GetClassName());
   } else {
     data_s.WriteString(TAG_EMPTY_OBJECT);
-    wxPrintf(_T("info.object (NULL)\n"));
+    wxPrintf(T("info.object (NULL)\n"));
     return;
   }
 

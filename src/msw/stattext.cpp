@@ -72,12 +72,12 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
   if ( wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
-  m_hWnd = (WXHWND)::CreateWindowEx(MakeExtendedStyle(m_windowStyle), _T("STATIC"), (const wxChar *)label,
+  m_hWnd = (WXHWND)::CreateWindowEx(MakeExtendedStyle(m_windowStyle), T("STATIC"), (const wxChar *)label,
                          msStyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);
 
-  wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create static ctrl") );
+  wxCHECK_MSG( m_hWnd, FALSE, T("Failed to create static ctrl") );
 
 #if wxUSE_CTL3D
 /*
@@ -103,13 +103,13 @@ wxSize wxStaticText::DoGetBestSize()
 
     wxString curLine;
     for ( const wxChar *pc = text; ; pc++ ) {
-        if ( *pc == _T('\n') || *pc == _T('\0') ) {
+        if ( *pc == T('\n') || *pc == T('\0') ) {
             GetTextExtent(curLine, &widthLine, &heightLine);
             if ( widthLine > widthTextMax )
                 widthTextMax = widthLine;
             heightTextTotal += heightLine;
 
-            if ( *pc == _T('\n') ) {
+            if ( *pc == T('\n') ) {
                curLine.Empty();
             }
             else {

@@ -124,11 +124,11 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     // otherwise it would look too strange)
     const wxChar *dlg;
     if ( style & wxRESIZE_BORDER )
-        dlg = _T("wxResizeableDialog");
+        dlg = T("wxResizeableDialog");
     else if ( style & wxCAPTION )
-        dlg = _T("wxCaptionDialog");
+        dlg = T("wxCaptionDialog");
     else
-        dlg = _T("wxNoCaptionDialog");
+        dlg = T("wxNoCaptionDialog");
     MSWCreate(m_windowId, parent, NULL, this, NULL,
               x, y, width, height,
               0, // style is not used if we have dlg template

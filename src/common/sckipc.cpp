@@ -215,7 +215,7 @@ bool wxTCPConnection::Disconnect ()
   return TRUE;
 }
 
-bool wxTCPConnection::Execute (wxChar *data, int size, wxIPCFormat format)
+bool wxTCPConnection::Execute (const wxChar *data, int size, wxIPCFormat format)
 {
   if (!m_sock->IsConnected())
     return FALSE;

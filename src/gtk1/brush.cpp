@@ -111,7 +111,7 @@ int wxBrush::GetStyle() const
 {
   if (m_refData == NULL)
   {
-    wxFAIL_MSG( _T("invalid brush") );
+    wxFAIL_MSG( T("invalid brush") );
     return 0;
   }
 
@@ -122,7 +122,7 @@ wxColour &wxBrush::GetColour() const
 {
   if (m_refData == NULL)
   {
-    wxFAIL_MSG( _T("invalid brush") );
+    wxFAIL_MSG( T("invalid brush") );
     return wxNullColour;
   }
 
@@ -133,7 +133,7 @@ wxBitmap *wxBrush::GetStipple() const
 {
   if (m_refData == NULL)
   {
-    wxFAIL_MSG( _T("invalid brush") );
+    wxFAIL_MSG( T("invalid brush") );
     return &wxNullBitmap;
   }
 

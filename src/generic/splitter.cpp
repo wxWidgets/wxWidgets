@@ -373,7 +373,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         if ( dialog )
             iconized = dialog->IsIconized();
         else
-            wxFAIL_MSG(_T("should have a top level frame or dialog parent!"));
+            wxFAIL_MSG(T("should have a top level frame or dialog parent!"));
     }
 
     if ( iconized )
@@ -742,7 +742,7 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
     }
     else
     {
-        wxFAIL_MSG(_T("splitter: attempt to remove a non-existent window"));
+        wxFAIL_MSG(T("splitter: attempt to remove a non-existent window"));
 
         return FALSE;
     }
@@ -757,8 +757,8 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
 // Replace a window with another one
 bool wxSplitterWindow::ReplaceWindow(wxWindow *winOld, wxWindow *winNew)
 {
-    wxCHECK_MSG( winOld, FALSE, _T("use one of Split() functions instead") );
-    wxCHECK_MSG( winNew, FALSE, _T("use Unsplit() functions instead") );
+    wxCHECK_MSG( winOld, FALSE, T("use one of Split() functions instead") );
+    wxCHECK_MSG( winNew, FALSE, T("use Unsplit() functions instead") );
 
     if ( winOld == m_windowTwo )
     {
@@ -770,7 +770,7 @@ bool wxSplitterWindow::ReplaceWindow(wxWindow *winOld, wxWindow *winNew)
     }
     else
     {
-        wxFAIL_MSG(_T("splitter: attempt to replace a non-existent window"));
+        wxFAIL_MSG(T("splitter: attempt to replace a non-existent window"));
 
         return FALSE;
     }

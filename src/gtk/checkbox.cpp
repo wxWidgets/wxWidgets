@@ -75,7 +75,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
-        wxFAIL_MSG( _T("wxCheckBox creation failed") );
+        wxFAIL_MSG( T("wxCheckBox creation failed") );
 	return FALSE;
     }
 
@@ -136,7 +136,7 @@ bool wxCheckBox::Create(wxWindow *parent,
 
 void wxCheckBox::SetValue( bool state )
 {
-    wxCHECK_RET( m_widgetCheckbox != NULL, _T("invalid checkbox") );
+    wxCHECK_RET( m_widgetCheckbox != NULL, T("invalid checkbox") );
 
     if (state == GetValue())
         return;
@@ -155,14 +155,14 @@ void wxCheckBox::SetValue( bool state )
 
 bool wxCheckBox::GetValue() const
 {
-    wxCHECK_MSG( m_widgetCheckbox != NULL, FALSE, _T("invalid checkbox") );
+    wxCHECK_MSG( m_widgetCheckbox != NULL, FALSE, T("invalid checkbox") );
 
     return GTK_TOGGLE_BUTTON(m_widgetCheckbox)->active;
 }
 
 void wxCheckBox::SetLabel( const wxString& label )
 {
-    wxCHECK_RET( m_widgetLabel != NULL, _T("invalid checkbox") );
+    wxCHECK_RET( m_widgetLabel != NULL, T("invalid checkbox") );
 
     wxControl::SetLabel( label );
 
