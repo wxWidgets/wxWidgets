@@ -142,6 +142,7 @@ filesys.cpp	Common	Base
 fontcmn.cpp	Common
 fontmap.cpp	Common	Base
 framecmn.cpp	Common
+toplvcmn.cpp	Common
 fs_inet.cpp	Common	Base
 fs_zip.cpp	Common	Base
 fs_mem.cpp	Common	Base
@@ -403,6 +404,7 @@ evtloop.cpp	GTK	LowLevel
 font.cpp	GTK	LowLevel
 fontdlg.cpp	GTK
 frame.cpp	GTK	LowLevel
+toplevel.cpp	GTK	LowLevel
 gauge.cpp	GTK
 gdiobj.cpp	GTK	LowLevel
 icon.cpp	GTK	LowLevel
@@ -667,6 +669,7 @@ fontenum.h	WXH
 fontmap.h	WXH	Base
 fontutil.h	WXH
 frame.h	WXH
+toplevel.h	WXH
 fs_inet.h	WXH	Base
 fs_zip.h	WXH	Base
 fs_mem.h	WXH	Base
@@ -844,6 +847,7 @@ filedlg.h	GTKH
 font.h	GTKH
 fontdlg.h	GTKH
 frame.h	GTKH
+toplevel.h	GTKH
 gauge.h	GTKH
 gdiobj.h	GTKH
 glcanvas.h	GTKH
@@ -1204,6 +1208,7 @@ colschem.h	UnivH
 combobox.h	UnivH
 control.h	UnivH
 frame.h	UnivH
+toplevel.h	UnivH
 gauge.h	UnivH
 inphand.h	UnivH
 listbox.h	UnivH
@@ -1250,6 +1255,7 @@ dcmemory.cpp	MGL	LowLevel
 dcscreen.cpp	MGL	LowLevel
 dialog.cpp	MGL	LowLevel
 frame.cpp	MGL	LowLevel
+toplevel.cpp	MGL	LowLevel
 icon.cpp	MGL	LowLevel
 settings.cpp	MGL	LowLevel
 timer.cpp	MGL	LowLevel
