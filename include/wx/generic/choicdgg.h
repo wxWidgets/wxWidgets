@@ -271,6 +271,8 @@ WXDLLEXPORT size_t wxGetMultipleChoices(wxArrayInt& selections,
 // deprecated
 // ----------------------------------------------------------------------------
 
+#ifdef WXWIN_COMPATIBILITY_2
+
 WXDLLEXPORT wxString wxGetSingleChoice(const wxString& message,
                                        const wxString& caption,
                                        int n, wxChar *choices[],
@@ -301,6 +303,8 @@ WXDLLEXPORT void* wxGetSingleChoiceData(const wxString& message,
                                         int width = wxCHOICE_WIDTH,
                                         int height = wxCHOICE_HEIGHT);
 
+
+#endif // WXWIN_COMPATIBILITY_2
 
 #endif // __CHOICEDLGH_G__
 
