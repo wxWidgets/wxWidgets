@@ -216,8 +216,6 @@ static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
         return new wxMemoryDC(oldDC);
     }
 
-#include <wx/metafile.h>
-
 #if 0
 extern wxFont * wxNORMAL_FONT; 
 extern wxFont * wxSMALL_FONT; 
@@ -10188,397 +10186,6 @@ static PyObject *_wrap_new_wxWindowDC(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-static void *SwigwxMetaFileTowxObject(void *ptr) {
-    wxMetaFile *src;
-    wxObject *dest;
-    src = (wxMetaFile *) ptr;
-    dest = (wxObject *) src;
-    return (void *) dest;
-}
-
-#define new_wxMetaFile(_swigarg0) (new wxMetaFile(_swigarg0))
-static PyObject *_wrap_new_wxMetaFile(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMetaFile * _result;
-    wxString * _arg0 = (wxString *) &wxEmptyString;
-    PyObject * _obj0 = 0;
-    char *_kwnames[] = { "filename", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxMetaFile",_kwnames,&_obj0)) 
-        return NULL;
-    if (_obj0)
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg0 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
-#endif
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxMetaFile *)new_wxMetaFile(*_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMetaFile_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
-#define delete_wxMetaFile(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxMetaFile(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMetaFile * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxMetaFile",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetaFile_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxMetaFile. Expected _wxMetaFile_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        delete_wxMetaFile(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxMetaFile_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxMetaFile_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxMetaFile * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMetaFile_Ok",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetaFile_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMetaFile_Ok. Expected _wxMetaFile_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxMetaFile_Ok(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxMetaFile_SetClipboard(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetClipboard(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxMetaFile_SetClipboard(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxMetaFile * _arg0;
-    int  _arg1 = (int ) 0;
-    int  _arg2 = (int ) 0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","width","height", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxMetaFile_SetClipboard",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetaFile_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMetaFile_SetClipboard. Expected _wxMetaFile_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxMetaFile_SetClipboard(_arg0,_arg1,_arg2);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxMetaFile_GetSize(_swigobj)  (_swigobj->GetSize())
-static PyObject *_wrap_wxMetaFile_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSize * _result;
-    wxMetaFile * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMetaFile_GetSize",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetaFile_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMetaFile_GetSize. Expected _wxMetaFile_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxSize (wxMetaFile_GetSize(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxMetaFile_GetWidth(_swigobj)  (_swigobj->GetWidth())
-static PyObject *_wrap_wxMetaFile_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxMetaFile * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMetaFile_GetWidth",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetaFile_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMetaFile_GetWidth. Expected _wxMetaFile_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxMetaFile_GetWidth(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxMetaFile_GetHeight(_swigobj)  (_swigobj->GetHeight())
-static PyObject *_wrap_wxMetaFile_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxMetaFile * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMetaFile_GetHeight",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetaFile_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMetaFile_GetHeight. Expected _wxMetaFile_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxMetaFile_GetHeight(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxMetaFile_GetFileName(_swigobj)  (_swigobj->GetFileName())
-static PyObject *_wrap_wxMetaFile_GetFileName(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxMetaFile * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMetaFile_GetFileName",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetaFile_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMetaFile_GetFileName. Expected _wxMetaFile_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        const wxString & _result_ref = wxMetaFile_GetFileName(_arg0);
-    _result = (wxString *) &_result_ref;
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-    return _resultobj;
-}
-
-static void *SwigwxMetaFileDCTowxDC(void *ptr) {
-    wxMetaFileDC *src;
-    wxDC *dest;
-    src = (wxMetaFileDC *) ptr;
-    dest = (wxDC *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxMetaFileDCTowxObject(void *ptr) {
-    wxMetaFileDC *src;
-    wxObject *dest;
-    src = (wxMetaFileDC *) ptr;
-    dest = (wxObject *) src;
-    return (void *) dest;
-}
-
-#define new_wxMetaFileDC(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxMetaFileDC(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_new_wxMetaFileDC(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMetaFileDC * _result;
-    wxString * _arg0 = (wxString *) &wxEmptyString;
-    int  _arg1 = (int ) 0;
-    int  _arg2 = (int ) 0;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
-    PyObject * _obj0 = 0;
-    PyObject * _obj3 = 0;
-    char *_kwnames[] = { "filename","width","height","description", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OiiO:new_wxMetaFileDC",_kwnames,&_obj0,&_arg1,&_arg2,&_obj3)) 
-        return NULL;
-    if (_obj0)
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg0 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
-#endif
-}
-    if (_obj3)
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg3 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
-#endif
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxMetaFileDC *)new_wxMetaFileDC(*_arg0,_arg1,_arg2,*_arg3);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMetaFileDC_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-{
-    if (_obj0)
-        delete _arg0;
-}
-{
-    if (_obj3)
-        delete _arg3;
-}
-    return _resultobj;
-}
-
-#define wxMetaFileDC_Close(_swigobj)  (_swigobj->Close())
-static PyObject *_wrap_wxMetaFileDC_Close(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMetaFile * _result;
-    wxMetaFileDC * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMetaFileDC_Close",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetaFileDC_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMetaFileDC_Close. Expected _wxMetaFileDC_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxMetaFile *)wxMetaFileDC_Close(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMetaFile_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
 static void *SwigwxPaletteTowxGDIObject(void *ptr) {
     wxPalette *src;
     wxGDIObject *dest;
@@ -11319,36 +10926,6 @@ static PyObject *_wrap_wxRegion_Clear(PyObject *self, PyObject *args, PyObject *
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxRegion_Offset(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Offset(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxRegion_Offset(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxRegion * _arg0;
-    wxCoord  _arg1;
-    wxCoord  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","x","y", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRegion_Offset",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRegion_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRegion_Offset. Expected _wxRegion_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxRegion_Offset(_arg0,_arg1,_arg2);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -12350,7 +11927,6 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxRegion_ContainsRect", (PyCFunction) _wrap_wxRegion_ContainsRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_ContainsPoint", (PyCFunction) _wrap_wxRegion_ContainsPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_Contains", (PyCFunction) _wrap_wxRegion_Contains, METH_VARARGS | METH_KEYWORDS },
-	 { "wxRegion_Offset", (PyCFunction) _wrap_wxRegion_Offset, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_Clear", (PyCFunction) _wrap_wxRegion_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxRegion", (PyCFunction) _wrap_delete_wxRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxRegion", (PyCFunction) _wrap_new_wxRegion, METH_VARARGS | METH_KEYWORDS },
@@ -12370,16 +11946,6 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxPalette_GetPixel", (PyCFunction) _wrap_wxPalette_GetPixel, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPalette", (PyCFunction) _wrap_delete_wxPalette, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPalette", (PyCFunction) _wrap_new_wxPalette, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMetaFileDC_Close", (PyCFunction) _wrap_wxMetaFileDC_Close, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxMetaFileDC", (PyCFunction) _wrap_new_wxMetaFileDC, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMetaFile_GetFileName", (PyCFunction) _wrap_wxMetaFile_GetFileName, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMetaFile_GetHeight", (PyCFunction) _wrap_wxMetaFile_GetHeight, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMetaFile_GetWidth", (PyCFunction) _wrap_wxMetaFile_GetWidth, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMetaFile_GetSize", (PyCFunction) _wrap_wxMetaFile_GetSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMetaFile_SetClipboard", (PyCFunction) _wrap_wxMetaFile_SetClipboard, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMetaFile_Ok", (PyCFunction) _wrap_wxMetaFile_Ok, METH_VARARGS | METH_KEYWORDS },
-	 { "delete_wxMetaFile", (PyCFunction) _wrap_delete_wxMetaFile, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxMetaFile", (PyCFunction) _wrap_new_wxMetaFile, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxWindowDC", (PyCFunction) _wrap_new_wxWindowDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPaintDC", (PyCFunction) _wrap_new_wxPaintDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxClientDC", (PyCFunction) _wrap_new_wxClientDC, METH_VARARGS | METH_KEYWORDS },
@@ -12668,7 +12234,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGDIObject","_wxCursor",SwigwxCursorTowxGDIObject},
     { "_wxGDIObject","_wxIcon",SwigwxIconTowxGDIObject},
     { "_wxGDIObject","_wxBitmap",SwigwxBitmapTowxGDIObject},
-    { "_wxDC","_wxMetaFileDC",SwigwxMetaFileDCTowxDC},
     { "_wxDC","_wxWindowDC",SwigwxWindowDCTowxDC},
     { "_wxDC","_wxPaintDC",SwigwxPaintDCTowxDC},
     { "_wxDC","_wxClientDC",SwigwxClientDCTowxDC},
@@ -12712,8 +12277,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxRegion",SwigwxRegionTowxObject},
     { "_wxObject","_wxImageList",SwigwxImageListTowxObject},
     { "_wxObject","_wxPalette",SwigwxPaletteTowxObject},
-    { "_wxObject","_wxMetaFileDC",SwigwxMetaFileDCTowxObject},
-    { "_wxObject","_wxMetaFile",SwigwxMetaFileTowxObject},
     { "_wxObject","_wxWindowDC",SwigwxWindowDCTowxObject},
     { "_wxObject","_wxPaintDC",SwigwxPaintDCTowxObject},
     { "_wxObject","_wxClientDC",SwigwxClientDCTowxObject},

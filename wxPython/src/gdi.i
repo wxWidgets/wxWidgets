@@ -1167,7 +1167,7 @@ public:
 //---------------------------------------------------------------------------
 
 
-#ifndef __WXGTK__
+#ifdef __WXMSW__
 
 %{
 #include <wx/metafile.h>
@@ -1267,7 +1267,9 @@ public:
     ~wxRegion();
 
     void Clear();
+#ifndef __WXMAC__
     bool Offset(wxCoord x, wxCoord y);
+#endif
 
     wxRegionContain Contains(long x, long y);
     %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);
