@@ -686,11 +686,12 @@ exist it is created.
 
 \func{void}{SetRecordDefaults}{\param{bool }{bDoIt = TRUE}}
 
-Sets whether defaults are written back to the config file.
+Sets whether defaults are recorded to the config file whenever an attempt to
+read read the value which is not present in it is done.
 
-If on (default is off) all default values are written back to the config file.
-This allows the user to see what config options may be changed and is probably
-useful only for wxFileConfig.
+If on (default is off) all default values for the settings used by the program
+are written back to the config file. This allows the user to see what config
+options may be changed and is probably useful only for wxFileConfig.
 
 \membersection{wxConfigBase::SetUmask}\label{wxfileconfigsetumask}
 
