@@ -219,8 +219,8 @@ void cbRowLayoutPlugin::AdjustLengthOfInserted( cbRowInfo* WXUNUSED(pRow), cbBar
 void cbRowLayoutPlugin::FitBarsToRange( int from, int till,
                                         cbBarInfo* pTheBar, cbRowInfo* pRow )
 {
-    cbBarInfo* pFromBar = NULL;
-    cbBarInfo* pTillBar = NULL;
+    cbBarInfo* pFromBar;
+    cbBarInfo* pTillBar;
 
     if ( pTheBar->mBounds.x > from )
     {
@@ -400,11 +400,11 @@ void cbRowLayoutPlugin::RecalcLengthRatios( cbRowInfo* pRow )
 
 void cbRowLayoutPlugin::ApplyLengthRatios( cbRowInfo* pRow )
 {
+    size_t i;
     double pcntSum = 0;
 
     // FOR NOW:: all-in-one
 
-    size_t i = 0;
     for ( i = 0; i != pRow->mBars.Count(); ++i )
     {
         if ( !pRow->mBars[i]->IsFixed() )
@@ -1109,8 +1109,6 @@ void cbRowLayoutPlugin::OnResizeRow( cbResizeRowEvent& event )
     // FIXME:: Next line not used.
     //int     newHeight      = pTheRow->mRowHeight;
 
-    int     freeSpc        = 0;
-
     if ( forUpperHandle )
     {
         // calculate available free space from above,
@@ -1120,8 +1118,6 @@ void cbRowLayoutPlugin::OnResizeRow( cbResizeRowEvent& event )
 
         while( pRow ) 
         {
-            freeSpc += pRow->mRowHeight - event.mpPane->GetMinimalRowHeight( pRow );
-
             pRow = pRow->mpPrev;
         }
     }
@@ -1134,8 +1130,6 @@ void cbRowLayoutPlugin::OnResizeRow( cbResizeRowEvent& event )
 
         while( pRow ) 
         {
-            freeSpc += pRow->mRowHeight - mpPane->GetMinimalRowHeight( pRow );
-
             pRow = pRow->mpNext;
         }
     }

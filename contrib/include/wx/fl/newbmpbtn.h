@@ -145,6 +145,11 @@ public:
         // Sets the label and optionally label text.
     virtual void SetLabel(const wxBitmap& labelBitmap, const wxString& labelText = wxT("") );
 
+        // Unhide method from parents.
+
+    virtual void SetLabel(const wxString& label)
+                         { wxPanel::SetLabel(label); };
+
         // Sets the text alignment and margins.
     virtual void SetAlignments( int alignText = NB_ALIGN_TEXT_BOTTOM,
                                 int marginX        = NB_DEFAULT_MARGIN,

@@ -294,7 +294,7 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
                 return;
             }
 
-            wxCursor* pCurs = NULL;
+            wxCursor* pCurs;
 
             if ( testResult == CB_UPPER_ROW_HANDLE_HITTED ||
                  testResult == CB_LOWER_ROW_HANDLE_HITTED)

@@ -199,16 +199,16 @@ wxShape *csDiagramView::FindFirstSelectedShape(void)
 {
   csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
   wxShape *theShape = NULL;
-  wxNode *node = doc->GetDiagram()->GetShapeList()->First();
+  wxNode *node = doc->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
-    wxShape *eachShape = (wxShape *)node->Data();
+    wxShape *eachShape = (wxShape *)node->GetData();
     if ((eachShape->GetParent() == NULL) && !eachShape->IsKindOf(CLASSINFO(wxLabelShape)) && eachShape->Selected())
     {
       theShape = eachShape;
       node = NULL;
     }
-    else node = node->Next();
+    else node = node->GetNext();
   }
   return theShape;
 }
@@ -216,15 +216,15 @@ wxShape *csDiagramView::FindFirstSelectedShape(void)
 void csDiagramView::FindSelectedShapes(wxList& selections, wxClassInfo* toFind)
 {
   csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
-  wxNode *node = doc->GetDiagram()->GetShapeList()->First();
+  wxNode *node = doc->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
-    wxShape *eachShape = (wxShape *)node->Data();
+    wxShape *eachShape = (wxShape *)node->GetData();
     if ((eachShape->GetParent() == NULL) && !eachShape->IsKindOf(CLASSINFO(wxLabelShape)) && eachShape->Selected() && ((toFind == NULL) || (eachShape->IsKindOf(toFind))))
     {
       selections.Append(eachShape);
     }
-    node = node->Next();
+    node = node->GetNext();
   }
 }
 
@@ -296,17 +296,17 @@ void csDiagramView::OnDuplicate(wxCommandEvent& WXUNUSED(event))
 
 void csDiagramView::OnCutUpdate(wxUpdateUIEvent& event)
 {
-    event.Enable( (m_selections.Number() > 0) );
+    event.Enable( (m_selections.GetCount() > 0) );
 }
 
 void csDiagramView::OnClearUpdate(wxUpdateUIEvent& event)
 {
-    event.Enable( (m_selections.Number() > 0) );
+    event.Enable( (m_selections.GetCount() > 0) );
 }
 
 void csDiagramView::OnCopyUpdate(wxUpdateUIEvent& event)
 {
-    event.Enable( (m_selections.Number() > 0) );
+    event.Enable( (m_selections.GetCount() > 0) );
 }
 
 void csDiagramView::OnPasteUpdate(wxUpdateUIEvent& event)
@@ -320,21 +320,21 @@ void csDiagramView::OnPasteUpdate(wxUpdateUIEvent& event)
 
 void csDiagramView::OnDuplicateUpdate(wxUpdateUIEvent& event)
 {
-    event.Enable( (m_selections.Number() > 0) );
+    event.Enable( (m_selections.GetCount() > 0) );
 }
 
 void csDiagramView::DoCut(wxList& shapes)
 {
     csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
 
-    if (shapes.Number() > 0)
+    if (shapes.GetCount() > 0)
     {
         csDiagramCommand* cmd = new csDiagramCommand(_T("Cut"), doc);
 
-        wxNode* node = shapes.First();
+        wxNode* node = shapes.GetFirst();
         while (node)
         {
-            wxShape *theShape = (wxShape*) node->Data();
+            wxShape *theShape = (wxShape*) node->GetData();
             csCommandState* state = new csCommandState(ID_CS_CUT, NULL, theShape);
 
             // Insert lines at the front, so they are cut first.
@@ -345,7 +345,7 @@ void csDiagramView::DoCut(wxList& shapes)
             else
                 cmd->AddState(state);
 
-            node = node->Next();
+            node = node->GetNext();
         }
         cmd->RemoveLines(); // Schedule any connected lines, not already mentioned,
                             // to be removed first
@@ -359,21 +359,21 @@ void csDiagramView::DoCmd(wxList& shapes, wxList& oldShapes, int cmd, const wxSt
 {
     csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
 
-    if (shapes.Number() > 0)
+    if (shapes.GetCount() > 0)
     {
         csDiagramCommand* command = new csDiagramCommand(op, doc);
 
-        wxNode* node = shapes.First();
-        wxNode* node1 = oldShapes.First();
+        wxNode* node = shapes.GetFirst();
+        wxNode* node1 = oldShapes.GetFirst();
         while (node && node1)
         {
-            wxShape *theShape = (wxShape*) node->Data();
-            wxShape *oldShape = (wxShape*) node1->Data();
+            wxShape *theShape = (wxShape*) node->GetData();
+            wxShape *oldShape = (wxShape*) node1->GetData();
             csCommandState* state = new csCommandState(cmd, theShape, oldShape);
             command->AddState(state);
 
-            node = node->Next();
-            node1 = node1->Next();
+            node = node->GetNext();
+            node1 = node1->GetNext();
         }
         doc->GetCommandProcessor()->Submit(command);
     }
@@ -386,13 +386,13 @@ void csDiagramView::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
     wxList selections;
     FindSelectedShapes(selections);
 
-    if (selections.Number() > 0)
+    if (selections.GetCount() > 0)
     {
         wxColourData data;
         data.SetChooseFull(TRUE);
-        if (selections.Number() == 1)
+        if (selections.GetCount() == 1)
         {
-            wxShape* firstShape = (wxShape*) selections.First()->Data();
+            wxShape* firstShape = (wxShape*) selections.GetFirst()->GetData();
             data.SetColour(firstShape->GetBrush()->GetColour());
         }
 
@@ -410,17 +410,17 @@ void csDiagramView::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
 
         csDiagramCommand* cmd = new csDiagramCommand(_T("Change colour"), doc);
 
-        wxNode* node = selections.First();
+        wxNode* node = selections.GetFirst();
         while (node)
         {
-            wxShape *theShape = (wxShape*) node->Data();
+            wxShape *theShape = (wxShape*) node->GetData();
             wxShape* newShape = theShape->CreateNewCopy();
             newShape->SetBrush(theBrush);
 
             csCommandState* state = new csCommandState(ID_CS_CHANGE_BACKGROUND_COLOUR, newShape, theShape);
             cmd->AddState(state);
 
-            node = node->Next();
+            node = node->GetNext();
         }
         doc->GetCommandProcessor()->Submit(cmd);
     }
@@ -437,7 +437,7 @@ void csDiagramView::OnEditPropertiesUpdate(wxUpdateUIEvent& event)
 {
     wxList selections;
     FindSelectedShapes(selections);
-    event.Enable( (selections.Number() > 0) );
+    event.Enable( (selections.GetCount() > 0) );
 }
 
 void csDiagramView::OnPointSizeComboSel(wxCommandEvent& event)
@@ -475,14 +475,14 @@ void csDiagramView::ApplyPointSize(int pointSize)
     wxList selections;
     FindSelectedShapes(selections);
 
-    if (selections.Number() > 0)
+    if (selections.GetCount() > 0)
     {
         csDiagramCommand* cmd = new csDiagramCommand(_T("Point size"), doc);
 
-        wxNode* node = selections.First();
+        wxNode* node = selections.GetFirst();
         while (node)
         {
-            wxShape *theShape = (wxShape*) node->Data();
+            wxShape *theShape = (wxShape*) node->GetData();
             wxShape *newShape = theShape->CreateNewCopy();
 
             wxFont* newFont = wxTheFontList->FindOrCreateFont(pointSize,
@@ -498,7 +498,7 @@ void csDiagramView::ApplyPointSize(int pointSize)
 
             cmd->AddState(state);
 
-            node = node->Next();
+            node = node->GetNext();
         }
         doc->GetCommandProcessor()->Submit(cmd);
     }
@@ -531,23 +531,23 @@ void csDiagramView::SelectAll(bool select)
         wxList selections;
         FindSelectedShapes(selections);
 
-        wxNode* node = selections.First();
+        wxNode* node = selections.GetFirst();
         while (node)
         {
-            wxShape *theShape = (wxShape*) node->Data();
+            wxShape *theShape = (wxShape*) node->GetData();
             theShape->Select(FALSE, &dc);
             SelectShape(theShape, FALSE);
 
-            node = node->Next();
+            node = node->GetNext();
         }
     }
     else
     {
         csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
-        wxNode *node = doc->GetDiagram()->GetShapeList()->First();
+        wxNode *node = doc->GetDiagram()->GetShapeList()->GetFirst();
         while (node)
         {
-            wxShape *eachShape = (wxShape *)node->Data();
+            wxShape *eachShape = (wxShape *)node->GetData();
             if (eachShape->GetParent() == NULL &&
                 !eachShape->IsKindOf(CLASSINFO(wxControlPoint)) &&
                 !eachShape->IsKindOf(CLASSINFO(wxLabelShape)))
@@ -555,7 +555,7 @@ void csDiagramView::SelectAll(bool select)
                 eachShape->Select(TRUE, &dc);
                 SelectShape(eachShape, TRUE);
             }
-            node = node->Next();
+            node = node->GetNext();
         }
     }
 }
@@ -575,20 +575,20 @@ void csDiagramView::OnToggleArrowTool(wxCommandEvent& WXUNUSED(event))
     wxList selections;
     FindSelectedShapes(selections, CLASSINFO(wxLineShape));
 
-    if (selections.Number() > 0)
+    if (selections.GetCount() > 0)
     {
         csDiagramCommand* cmd = new csDiagramCommand(stateName, doc);
 
-        wxNode* node = selections.First();
+        wxNode* node = selections.GetFirst();
         while (node)
         {
-            wxLineShape *theShape = (wxLineShape*) node->Data();
+            wxLineShape *theShape = (wxLineShape*) node->GetData();
             wxLineShape *newShape = NULL;
 
             if (state)
             {
                 // Add arrow
-                if (theShape->GetArrows().Number() == 0)
+                if (theShape->GetArrows().GetCount() == 0)
                 {
                     newShape = (wxLineShape*) theShape->CreateNewCopy();
                     newShape->AddArrow(ARROW_ARROW, ARROW_POSITION_MIDDLE, 10.0, 0.0, _T("Normal arrowhead"));
@@ -596,7 +596,7 @@ void csDiagramView::OnToggleArrowTool(wxCommandEvent& WXUNUSED(event))
             }
             else
             {
-                if (theShape->GetArrows().Number() > 0)
+                if (theShape->GetArrows().GetCount() > 0)
                 {
                     newShape = (wxLineShape*) theShape->CreateNewCopy();
                     newShape->ClearArrowsAtPosition();
@@ -610,7 +610,7 @@ void csDiagramView::OnToggleArrowTool(wxCommandEvent& WXUNUSED(event))
                 cmd->AddState(state);
             }
 
-            node = node->Next();
+            node = node->GetNext();
         }
         doc->GetCommandProcessor()->Submit(cmd);
     }
@@ -620,7 +620,7 @@ void csDiagramView::OnToggleArrowToolUpdate(wxUpdateUIEvent& event)
 {
     wxList selections;
     FindSelectedShapes(selections, CLASSINFO(wxLineShape));
-    event.Enable( (selections.Number() > 0) );
+    event.Enable( (selections.GetCount() > 0) );
 }
 
 // Make the point size combobox reflect this
@@ -634,13 +634,13 @@ void csDiagramView::ReflectPointSize(int pointSize)
 void csDiagramView::ReflectArrowState(wxLineShape* lineShape)
 {
     bool haveArrow = FALSE;
-    wxNode *node = lineShape->GetArrows().First();
+    wxNode *node = lineShape->GetArrows().GetFirst();
     while (node)
     {
-      wxArrowHead *arrow = (wxArrowHead *)node->Data();
+      wxArrowHead *arrow = (wxArrowHead *)node->GetData();
       if (ARROW_POSITION_MIDDLE == arrow->GetArrowEnd())
         haveArrow = TRUE;
-      node = node->Next();
+      node = node->GetNext();
     }
 
     wxGetApp().GetDiagramToolBar()->ToggleTool(DIAGRAM_TOOLBAR_LINE_ARROW, haveArrow);
@@ -651,35 +651,35 @@ void csDiagramView::OnAlign(wxCommandEvent& event)
     // Make a copy of the selections, keeping only those shapes
     // that are top-level non-line shapes.
     wxList selections;
-    wxNode* node = GetSelectionList().First();
+    wxNode* node = GetSelectionList().GetFirst();
     while (node)
     {
-        wxShape* shape = (wxShape*) node->Data();
+        wxShape* shape = (wxShape*) node->GetData();
         if ((shape->GetParent() == NULL) && (!shape->IsKindOf(CLASSINFO(wxLineShape))))
         {
             selections.Append(shape);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    if (selections.Number() == 0)
+    if (selections.GetCount() == 0)
         return;
 
     csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
     csDiagramCommand* cmd = new csDiagramCommand(_T("Align"), doc);
 
-    node = selections.First();
-    wxShape* firstShape = (wxShape*) node->Data();
+    node = selections.GetFirst();
+    wxShape* firstShape = (wxShape*) node->GetData();
 
     double x = firstShape->GetX();
     double y = firstShape->GetY();
     double width, height;
     firstShape->GetBoundingBoxMax(&width, &height);
 
-    node = selections.First();
+    node = selections.GetFirst();
     while (node)
     {
-        wxShape* shape = (wxShape*) node->Data();
+        wxShape* shape = (wxShape*) node->GetData();
         if (shape != firstShape)
         {
             /* double x1 = */ shape->GetX();
@@ -734,7 +734,7 @@ void csDiagramView::OnAlign(wxCommandEvent& event)
             csCommandState* state = new csCommandState(ID_CS_ALIGN, newShape, shape);
             cmd->AddState(state);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     doc->GetCommandProcessor()->Submit(cmd);
 }
@@ -743,7 +743,7 @@ void csDiagramView::OnAlignUpdate(wxUpdateUIEvent& event)
 {
     // This is an approximation, since there may be lines
     // amongst the selections.
-    event.Enable( (m_selections.Number() > 1) ) ;
+    event.Enable( (m_selections.GetCount() > 1) ) ;
 }
 
 void csDiagramView::OnNewLinePoint(wxCommandEvent& WXUNUSED(event))
@@ -751,10 +751,10 @@ void csDiagramView::OnNewLinePoint(wxCommandEvent& WXUNUSED(event))
     csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
     csDiagramCommand* cmd = new csDiagramCommand(_T("New line point"), doc);
 
-    wxNode* node = m_selections.First();
+    wxNode* node = m_selections.GetFirst();
     while (node)
     {
-        wxShape* shape = (wxShape*) node->Data();
+        wxShape* shape = (wxShape*) node->GetData();
         if (shape->IsKindOf(CLASSINFO(wxLineShape)))
         {
             wxShape* newShape = shape->CreateNewCopy();
@@ -762,7 +762,7 @@ void csDiagramView::OnNewLinePoint(wxCommandEvent& WXUNUSED(event))
             csCommandState* state = new csCommandState(ID_CS_NEW_POINT, newShape, shape);
             cmd->AddState(state);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     doc->GetCommandProcessor()->Submit(cmd);
 }
@@ -772,10 +772,10 @@ void csDiagramView::OnCutLinePoint(wxCommandEvent& WXUNUSED(event))
     csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
     csDiagramCommand* cmd = new csDiagramCommand(_T("Cut line point"), doc);
 
-    wxNode* node = m_selections.First();
+    wxNode* node = m_selections.GetFirst();
     while (node)
     {
-        wxShape* shape = (wxShape*) node->Data();
+        wxShape* shape = (wxShape*) node->GetData();
         if (shape->IsKindOf(CLASSINFO(wxLineShape)))
         {
             wxShape* newShape = shape->CreateNewCopy();
@@ -783,7 +783,7 @@ void csDiagramView::OnCutLinePoint(wxCommandEvent& WXUNUSED(event))
             csCommandState* state = new csCommandState(ID_CS_CUT_POINT, newShape, shape);
             cmd->AddState(state);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     doc->GetCommandProcessor()->Submit(cmd);
 }
@@ -793,10 +793,10 @@ void csDiagramView::OnStraightenLines(wxCommandEvent& WXUNUSED(event))
     csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
     csDiagramCommand* cmd = new csDiagramCommand(_T("Straighten lines"), doc);
 
-    wxNode* node = m_selections.First();
+    wxNode* node = m_selections.GetFirst();
     while (node)
     {
-        wxShape* shape = (wxShape*) node->Data();
+        wxShape* shape = (wxShape*) node->GetData();
         if (shape->IsKindOf(CLASSINFO(wxLineShape)))
         {
             wxShape* newShape = shape->CreateNewCopy();
@@ -804,7 +804,7 @@ void csDiagramView::OnStraightenLines(wxCommandEvent& WXUNUSED(event))
             csCommandState* state = new csCommandState(ID_CS_STRAIGHTEN, newShape, shape);
             cmd->AddState(state);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     doc->GetCommandProcessor()->Submit(cmd);
 }
@@ -813,21 +813,21 @@ void csDiagramView::OnNewLinePointUpdate(wxUpdateUIEvent& event)
 {
     wxList selections;
     FindSelectedShapes(selections, CLASSINFO(wxLineShape));
-    event.Enable( (selections.Number() > 0) );
+    event.Enable( (selections.GetCount() > 0) );
 }
 
 void csDiagramView::OnCutLinePointUpdate(wxUpdateUIEvent& event)
 {
     wxList selections;
     FindSelectedShapes(selections, CLASSINFO(wxLineShape));
-    event.Enable( (selections.Number() > 0) );
+    event.Enable( (selections.GetCount() > 0) );
 }
 
 void csDiagramView::OnStraightenLinesUpdate(wxUpdateUIEvent& event)
 {
     wxList selections;
     FindSelectedShapes(selections, CLASSINFO(wxLineShape));
-    event.Enable( (selections.Number() > 0) );
+    event.Enable( (selections.GetCount() > 0) );
 }
 
 /*
@@ -999,10 +999,10 @@ void csCanvas::OnEndDragLeft(double x, double y, int WXUNUSED(keys))
     min_y = wxMin(y, sg_initialY);
     max_y = wxMax(y, sg_initialY);
 
-    wxNode *node = GetDiagram()->GetShapeList()->First();
+    wxNode *node = GetDiagram()->GetShapeList()->GetFirst();
     while (node)
     {
-        wxShape *shape = (wxShape *)node->Data();
+        wxShape *shape = (wxShape *)node->GetData();
         if (shape->GetParent() == NULL && !shape->IsKindOf(CLASSINFO(wxControlPoint)))
         {
             float image_x = shape->GetX();
@@ -1014,7 +1014,7 @@ void csCanvas::OnEndDragLeft(double x, double y, int WXUNUSED(keys))
                 GetView()->SelectShape(shape, TRUE);
             }
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 

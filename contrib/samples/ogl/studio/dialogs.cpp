@@ -100,13 +100,19 @@ csSettingsDialog::csSettingsDialog(wxWindow* parent):
 
     m_generalSettings = new wxPanel;
 
-    bool success = wxLoadFromResource(m_generalSettings, m_notebook, _T("general_settings_dialog"));
+    #ifdef  __WXDEBUG__
+    bool success = 
+    #endif
+                   wxLoadFromResource(m_generalSettings, m_notebook, _T("general_settings_dialog"));
     wxASSERT_MSG( (success), _T("Could not load general settings panel."));
     m_notebook->AddPage(m_generalSettings, _T("General"), TRUE);
 
     m_diagramSettings = new wxPanel;
 
-    success = wxLoadFromResource(m_diagramSettings, m_notebook, _T("diagram_settings_dialog"));
+    #ifdef  __WXDEBUG__
+    success = 
+    #endif
+              wxLoadFromResource(m_diagramSettings, m_notebook, _T("diagram_settings_dialog"));
     wxASSERT_MSG( (success), _T("Could not load diagram settings panel."));
     m_notebook->AddPage(m_diagramSettings, _T("Diagram"));
 
@@ -199,10 +205,10 @@ bool csSettingsDialog::TransferDataFromWindow()
     }
 
     // Apply settings to all open diagram documents
-    wxNode* node = wxGetApp().GetDocManager()->GetDocuments().First();
+    wxNode* node = wxGetApp().GetDocManager()->GetDocuments().GetFirst();
     while (node)
     {
-        wxDocument* doc = (wxDocument*) node->Data();
+        wxDocument* doc = (wxDocument*) node->GetData();
         if (doc->IsKindOf(CLASSINFO(csDiagramDocument)))
         {
             csDiagramDocument* diagramDoc = (csDiagramDocument*) doc;
@@ -228,7 +234,7 @@ bool csSettingsDialog::TransferDataFromWindow()
                 }
             }
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
     return TRUE;
@@ -262,12 +268,14 @@ csShapePropertiesDialog::csShapePropertiesDialog(wxWindow* parent, const wxStrin
          wxPoint(2, 2), wxSize(SHAPE_PROPERTY_DIALOG_WIDTH - 4, SHAPE_PROPERTY_DIALOG_HEIGHT - 4));
 
     m_generalPropertiesDialog = new csGeneralShapePropertiesDialog;
-    bool success = wxLoadFromResource(m_generalPropertiesDialog, m_notebook, _T("general_shape_properties_dialog"));
+    #ifdef  __WXDEBUG__
+    bool success = 
+    #endif
+                   wxLoadFromResource(m_generalPropertiesDialog, m_notebook, _T("general_shape_properties_dialog"));
     wxASSERT_MSG( (success), _T("Could not load general properties panel."));
     m_notebook->AddPage(m_generalPropertiesDialog, _T("General"));
 
-    success = wxLoadFromResource(m_attributeDialog, m_notebook, attributeDialogName);
-    if (!success)
+    if (!wxLoadFromResource(m_attributeDialog, m_notebook, attributeDialogName))
     {
         wxMessageBox(_T("Could not load the attribute dialog for this shape."), _T("Studio"), wxICON_EXCLAMATION);
         delete m_attributeDialog;
@@ -282,8 +290,7 @@ csShapePropertiesDialog::csShapePropertiesDialog(wxWindow* parent, const wxStrin
     wxString str(attributeDialogName);
     str += _T("1");
     m_alternativeAttributeDialog = new wxPanel;
-    success = wxLoadFromResource(m_alternativeAttributeDialog, m_notebook, str);
-    if (success)
+    if (wxLoadFromResource(m_alternativeAttributeDialog, m_notebook, str))
     {
         m_notebook->AddPage(m_alternativeAttributeDialog, _T("Attributes (alternative)"));
     }
@@ -358,31 +365,31 @@ void csShapePropertiesDialog::SetDefaults()
     if (!m_attributeDialog)
         return;
 
-    wxNode* node = m_attributeDialog->GetChildren().First();
+    wxWindowListNode* node = m_attributeDialog->GetChildren().GetFirst();
     while (node)
     {
-        wxWindow* child = (wxWindow*) node->Data();
+        wxWindow* child = (wxWindow*) node->GetData();
         if (child->IsKindOf(CLASSINFO(wxChoice)))
         {
             wxChoice* choice = (wxChoice*) child;
             choice->SetSelection(0);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
     if (!m_alternativeAttributeDialog)
         return;
 
-    node = m_alternativeAttributeDialog->GetChildren().First();
+    node = m_alternativeAttributeDialog->GetChildren().GetFirst();
     while (node)
     {
-        wxWindow* child = (wxWindow*) node->Data();
+        wxWindow* child = (wxWindow*) node->GetData();
         if (child->IsKindOf(CLASSINFO(wxChoice)))
         {
             wxChoice* choice = (wxChoice*) child;
             choice->SetSelection(0);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 

@@ -222,7 +222,7 @@ bool DiagramCommand::Do(void)
     }
     case OGLEDIT_ADD_SHAPE:
     {
-      wxShape *theShape = NULL;
+      wxShape *theShape;
       if (shape)
         theShape = shape; // Saved from undoing the shape
       else
@@ -253,7 +253,7 @@ bool DiagramCommand::Do(void)
     }
     case OGLEDIT_ADD_LINE:
     {
-      wxShape *theShape = NULL;
+      wxShape *theShape;
       if (shape)
         theShape = shape; // Saved from undoing the line
       else
@@ -424,13 +424,13 @@ bool DiagramCommand::Undo(void)
 // Remove each individual line connected to a shape by sending a command.
 void DiagramCommand::RemoveLines(wxShape *shape)
 {
-  wxNode *node = shape->GetLines().First();
+  wxNode *node = shape->GetLines().GetFirst();
   while (node)
   {
-    wxLineShape *line = (wxLineShape *)node->Data();
+    wxLineShape *line = (wxLineShape *)node->GetData();
     doc->GetCommandProcessor()->Submit(new DiagramCommand(_T("Cut"), OGLEDIT_CUT, doc, NULL, 0.0, 0.0, line->Selected(), line));
     
-    node = shape->GetLines().First();
+    node = shape->GetLines().GetFirst();
   }
 }
 
@@ -455,10 +455,10 @@ void MyEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys,
     {
       // Ensure no other shape is selected, to simplify Undo/Redo code
       bool redraw = FALSE;
-      wxNode *node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->First();
+      wxNode *node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
       while (node)
       {
-        wxShape *eachShape = (wxShape *)node->Data();
+        wxShape *eachShape = (wxShape *)node->GetData();
         if (eachShape->GetParent() == NULL)
         {
           if (eachShape->Selected())
@@ -467,7 +467,7 @@ void MyEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys,
             redraw = TRUE;
           }
         }
-        node = node->Next();
+        node = node->GetNext();
       }
       GetShape()->Select(TRUE, &dc);
       if (redraw)

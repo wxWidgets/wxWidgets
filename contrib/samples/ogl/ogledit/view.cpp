@@ -127,16 +127,16 @@ void DiagramView::OnDraw(wxDC *dc)
   if (diagram_p->GetShapeList())
   {
     /* wxCursor *old_cursor = NULL; */
-    wxNode *current = diagram_p->GetShapeList()->First();
+    wxNode *current = diagram_p->GetShapeList()->GetFirst();
 
     while (current) // Loop through the entire list of shapes
     {
-        wxShape *object = (wxShape *)current->Data();
+        wxShape *object = (wxShape *)current->GetData();
         if (!object->GetParent())
         {
             object->Draw(* dc); // Draw the shape onto our printing dc
         }
-        current = current->Next();  // Procede to the next shape in the list
+        current = current->GetNext();  // Procede to the next shape in the list
     }
   }
   dc->EndDrawing(); // Allows optimization of drawing code under MS Windows.
@@ -177,16 +177,16 @@ wxShape *DiagramView::FindSelectedShape(void)
 {
   DiagramDocument *doc = (DiagramDocument *)GetDocument();
   wxShape *theShape = NULL;
-  wxNode *node = doc->GetDiagram()->GetShapeList()->First();
+  wxNode *node = doc->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
-    wxShape *eachShape = (wxShape *)node->Data();
+    wxShape *eachShape = (wxShape *)node->GetData();
     if ((eachShape->GetParent() == NULL) && eachShape->Selected())
     {
       theShape = eachShape;
       node = NULL;
     }
-    else node = node->Next();
+    else node = node->GetNext();
   }
   return theShape;
 }

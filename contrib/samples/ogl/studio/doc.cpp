@@ -120,12 +120,12 @@ csDiagramCommand::csDiagramCommand(const wxString& name, csDiagramDocument *doc,
 
 csDiagramCommand::~csDiagramCommand()
 {
-    wxNode* node = m_states.First();
+    wxNode* node = m_states.GetFirst();
     while (node)
     {
-        csCommandState* state = (csCommandState*) node->Data();
+        csCommandState* state = (csCommandState*) node->GetData();
         delete state;
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -147,51 +147,51 @@ void csDiagramCommand::InsertState(csCommandState* state)
 // Schedule all lines connected to the states to be cut.
 void csDiagramCommand::RemoveLines()
 {
-    wxNode* node = m_states.First();
+    wxNode* node = m_states.GetFirst();
     while (node)
     {
-        csCommandState* state = (csCommandState*) node->Data();
+        csCommandState* state = (csCommandState*) node->GetData();
         wxShape* shape = state->GetShapeOnCanvas();
         wxASSERT( (shape != NULL) );
 
-        wxNode *node1 = shape->GetLines().First();
+        wxNode *node1 = shape->GetLines().GetFirst();
         while (node1)
         {
-            wxLineShape *line = (wxLineShape *)node1->Data();
+            wxLineShape *line = (wxLineShape *)node1->GetData();
             if (!FindStateByShape(line))
             {
                 csCommandState* newState = new csCommandState(ID_CS_CUT, NULL, line);
                 InsertState(newState);
             }
 
-            node1 = node1->Next();
+            node1 = node1->GetNext();
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
 csCommandState* csDiagramCommand::FindStateByShape(wxShape* shape)
 {
-    wxNode* node = m_states.First();
+    wxNode* node = m_states.GetFirst();
     while (node)
     {
-        csCommandState* state = (csCommandState*) node->Data();
+        csCommandState* state = (csCommandState*) node->GetData();
         if (shape == state->GetShapeOnCanvas() || shape == state->GetSavedState())
             return state;
-        node = node->Next();
+        node = node->GetNext();
     }
     return NULL;
 }
 
 bool csDiagramCommand::Do()
 {
-    wxNode* node = m_states.First();
+    wxNode* node = m_states.GetFirst();
     while (node)
     {
-        csCommandState* state = (csCommandState*) node->Data();
+        csCommandState* state = (csCommandState*) node->GetData();
         if (!state->Do())
             return FALSE;
-        node = node->Next();
+        node = node->GetNext();
     }
     return TRUE;
 }
@@ -200,13 +200,13 @@ bool csDiagramCommand::Undo()
 {
     // Undo in reverse order, so e.g. shapes get added
     // back before the lines do.
-    wxNode* node = m_states.Last();
+    wxNode* node = m_states.GetLast();
     while (node)
     {
-        csCommandState* state = (csCommandState*) node->Data();
+        csCommandState* state = (csCommandState*) node->GetData();
         if (!state->Undo())
             return FALSE;
-        node = node->Previous();
+        node = node->GetPrevious();
     }
     return TRUE;
 }
@@ -457,7 +457,7 @@ bool csCommandState::Do()
             m_shapeOnCanvas->Show(TRUE);
 
             // Recursively redraw links if we have a composite.
-            if (m_shapeOnCanvas->GetChildren().Number() > 0)
+            if (m_shapeOnCanvas->GetChildren().GetCount() > 0)
                 m_shapeOnCanvas->DrawLinks(dc, -1, TRUE);
 
             m_shapeOnCanvas->GetEventHandler()->OnEndSize(width, height);

@@ -97,7 +97,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, cons
 
 // Define the behaviour for the frame closing
 // - must delete all frames except for the main one.
-void MyFrame::OnCloseWindow(wxCloseEvent& event)
+void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     if (wxGetApp().m_childWindow)
     {
@@ -107,32 +107,32 @@ void MyFrame::OnCloseWindow(wxCloseEvent& event)
     Destroy();
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void MyFrame::OnDialogList(wxCommandEvent& event)
+void MyFrame::OnDialogList(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().PropertyListTest(TRUE);
 }
 
-void MyFrame::OnFrameList(wxCommandEvent& event)
+void MyFrame::OnFrameList(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().PropertyListTest(FALSE);
 }
 
-void MyFrame::OnDialogForm(wxCommandEvent& event)
+void MyFrame::OnDialogForm(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().PropertyFormTest(TRUE);
 }
 
-void MyFrame::OnFrameForm(wxCommandEvent& event)
+void MyFrame::OnFrameForm(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().PropertyFormTest(FALSE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     (void)wxMessageBox(_T("Property Classes Demo\nAuthor: Julian Smart"), _T("About Property Classes Test"));
 }

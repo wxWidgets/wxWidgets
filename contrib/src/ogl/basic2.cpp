@@ -203,15 +203,12 @@ bool PolylineHitTest(double n, double xvec[], double yvec[],
   double line_ratio;
   double other_ratio;
 
-//  char buf[300];
   for (i = 1; i < n; i++)
   {
     oglCheckLineIntersection(x1, y1, x2, y2, lastx, lasty, xvec[i], yvec[i],
                             &line_ratio, &other_ratio);
     if (line_ratio != 1.0)
       isAHit = TRUE;
-//    sprintf(buf, "Line ratio = %.2f, other ratio = %.2f\n", line_ratio, other_ratio);
-//    ClipsErrorFunction(buf);
     lastx = xvec[i];
     lasty = yvec[i];
 
@@ -226,13 +223,8 @@ bool PolylineHitTest(double n, double xvec[], double yvec[],
                             &line_ratio, &other_ratio);
     if (line_ratio != 1.0)
       isAHit = TRUE;
-//    sprintf(buf, "Line ratio = %.2f, other ratio = %.2f\n", line_ratio, other_ratio);
-//    ClipsErrorFunction(buf);
 
-    if (line_ratio < min_ratio)
-      min_ratio = line_ratio;
   }
-//  ClipsErrorFunction("\n");
   return isAHit;
 }
 

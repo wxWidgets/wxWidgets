@@ -33,18 +33,6 @@
 
 static char _buf[1024]; // a temp buffer to use inplace of wxBuffer, which is deprecated.
 
-static char hexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
-  'C', 'D', 'E', 'F' };
-
-static void DecToHex(int dec, char *buf)
-{
-  int firstDigit = (int)(dec/16.0);
-  int secondDigit = (int)(dec - (firstDigit*16.0));
-  buf[0] = hexArray[firstDigit];
-  buf[1] = hexArray[secondDigit];
-  buf[2] = 0;
-}
-
 // 16-bit unsigned integer
 static unsigned int getshort(FILE *fp)
 {
@@ -64,7 +52,7 @@ static int getsignedshort(FILE *fp)
   int testRes = ((unsigned int) c) + (((unsigned int) c1) << 8);
 #endif
   unsigned long res1 = ((unsigned int) c) + (((unsigned int) c1) << 8);
-  int res = 0;
+  int res;
   if (res1 > 32767)
     res = (int)(res1 - 65536);
   else

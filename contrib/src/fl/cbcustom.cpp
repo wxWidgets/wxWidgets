@@ -167,7 +167,7 @@ void cbSimpleCustomizationPlugin::OnMenuItemSelected( wxCommandEvent& event )
 
 		// "inverse" bar-visibility of the selected bar
 
-		int newState = 0;
+		int newState;
 
 		if ( pBar->mState == wxCBAR_HIDDEN )
 		{

@@ -1020,7 +1020,7 @@ void wxExprDatabase::Append(wxExpr *clause)
     if (expr)
     {
       long functor_key = hash_table->MakeKey(WXSTRINGCAST functor);
-      long value_key = 0;
+      long value_key;
       if (expr && expr->Type() == wxExprString)
       {
         value_key = hash_table->MakeKey(WXSTRINGCAST expr->StringValue());

@@ -360,7 +360,6 @@ void oglGetCentredTextExtent(wxDC& dc, wxList *text_list,
   long current_width = 0;
 
   wxNode *current = text_list->GetFirst();
-  int i = 0;
   while (current)
   {
     wxShapeTextLine *line = (wxShapeTextLine *)current->GetData();
@@ -369,7 +368,6 @@ void oglGetCentredTextExtent(wxDC& dc, wxList *text_list,
     if (current_width > max_width)
       max_width = current_width;
     current = current->GetNext();
-    i ++;
   }
 
   *actual_height = n*char_height;

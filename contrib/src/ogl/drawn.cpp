@@ -89,8 +89,7 @@ void wxDrawnShape::SetSize(double w, double h, bool WXUNUSED(recursive))
     scaleY = 1.0;
   else scaleY = h/GetHeight();
 
-  int i = 0;
-  for (i = 0; i < 4; i++)
+  for (int i = 0; i < 4; i++)
   {
     if (m_metafiles[i].IsValid())
         m_metafiles[i].Scale(scaleX, scaleY);
@@ -242,8 +241,7 @@ void wxDrawnShape::WriteAttributes(wxExpr *clause)
   clause->AddAttributeValue(_T("save_metafile"), (long)m_saveToFile);
   if (m_saveToFile)
   {
-    int i = 0;
-    for (i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
         if (m_metafiles[i].IsValid())
             m_metafiles[i].WriteAttributes(clause, i);
@@ -262,8 +260,7 @@ void wxDrawnShape::ReadAttributes(wxExpr *clause)
 
   if (m_saveToFile)
   {
-    int i = 0;
-    for (i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
       m_metafiles[i].ReadAttributes(clause, i);
     }
@@ -280,8 +277,7 @@ void wxDrawnShape::Copy(wxShape& copy)
 
   wxDrawnShape& drawnCopy = (wxDrawnShape&) copy;
 
-  int i = 0;
-  for (i = 0; i < 4; i++)
+  for (int i = 0; i < 4; i++)
   {
     m_metafiles[i].Copy(drawnCopy.m_metafiles[i]);
   }
@@ -1261,8 +1257,7 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
   double *xpoints = new double[n];
   double *ypoints = new double[n];
 
-  int i = 0;
-  for (i = 0; i < n; i++)
+  for (int i = 0; i < n; i++)
   {
     wxRealPoint *point = & (m_points[i]);
     xpoints[i] = point->x + xOffset;

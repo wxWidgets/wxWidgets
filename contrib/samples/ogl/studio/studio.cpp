@@ -244,9 +244,7 @@ wxMDIChildFrame *csApp::CreateChildFrame(wxDocument *doc, wxView *view, wxMenu**
   fileMenu->AppendSeparator();
   fileMenu->Append(wxID_EXIT, _T("E&xit"));
 
-  wxMenu *editMenu = NULL;
-
-  editMenu = new wxMenu;
+  wxMenu* editMenu = new wxMenu;
   editMenu->Append(wxID_UNDO, _T("&Undo\tCtrl+Z"));
   editMenu->Append(wxID_REDO, _T("&Redo\tCtrl+Y"));
   editMenu->AppendSeparator();

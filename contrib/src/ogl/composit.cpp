@@ -693,11 +693,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
       haveConstraints = FALSE;
       break;
     }
-    int cType = 0;
-    double cXSpacing = 0.0;
-    double cYSpacing = 0.0;
     wxString cName = wxEmptyString;
-    long cId = 0;
     wxShape *m_constrainingObject = NULL;
     wxList m_constrainedObjects;
 
@@ -712,11 +708,11 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
     wxExpr *constrainingExpr = constraintExpr->Nth(5);
     wxExpr *constrainedExpr = constraintExpr->Nth(6);
 
-    cType = (int)typeExpr->IntegerValue();
-    cXSpacing = xExpr->RealValue();
-    cYSpacing = yExpr->RealValue();
+    int cType = (int)typeExpr->IntegerValue();
+    double cXSpacing = xExpr->RealValue();
+    double cYSpacing = yExpr->RealValue();
     cName = nameExpr->StringValue();
-    cId = idExpr->IntegerValue();
+    long cId = idExpr->IntegerValue();
 
     wxExpr *objExpr1 = database->HashFind(_T("node_image"), constrainingExpr->IntegerValue());
     if (objExpr1 && objExpr1->GetClientData())
@@ -1180,8 +1176,8 @@ void wxDivisionShape::MakeMandatoryControlPoints()
   double maxX, maxY;
 
   GetBoundingBoxMax(&maxX, &maxY);
-  double x, y;
-  int direction;
+  double x = 0.0 , y = 0.0;
+  int direction = 0;
 /*
   if (m_leftSide)
   {
@@ -1585,8 +1581,7 @@ public:
 };
 
 BEGIN_EVENT_TABLE(OGLPopupDivisionMenu, wxMenu)
-    EVT_CUSTOM_RANGE(wxEVT_COMMAND_MENU_SELECTED,
-                     DIVISION_MENU_SPLIT_HORIZONTALLY,
+    EVT_MENU_RANGE(DIVISION_MENU_SPLIT_HORIZONTALLY,
                      DIVISION_MENU_EDIT_BOTTOM_EDGE,
                      OGLPopupDivisionMenu::OnMenu)
 END_EVENT_TABLE()

@@ -74,41 +74,41 @@ void csSymbolDatabase::AddSymbol(csSymbol* symbol)
 
 void csSymbolDatabase::ClearSymbols()
 {
-    wxNode* node = m_symbols.First();
+    wxNode* node = m_symbols.GetFirst();
     while (node)
     {
-        csSymbol* symbol = (csSymbol*) node->Data();
+        csSymbol* symbol = (csSymbol*) node->GetData();
         delete symbol;
 
-        node = node->Next();
+        node = node->GetNext();
     }
     m_symbols.Clear();
 }
 
 csSymbol* csSymbolDatabase::FindSymbol(const wxString& name) const
 {
-    wxNode* node = m_symbols.First();
+    wxNode* node = m_symbols.GetFirst();
     while (node)
     {
-        csSymbol* symbol = (csSymbol*) node->Data();
+        csSymbol* symbol = (csSymbol*) node->GetData();
         if (symbol->GetName() == name)
             return symbol;
 
-        node = node->Next();
+        node = node->GetNext();
     }
     return NULL;
 }
 
 csSymbol* csSymbolDatabase::FindSymbol(int toolId) const
 {
-    wxNode* node = m_symbols.First();
+    wxNode* node = m_symbols.GetFirst();
     while (node)
     {
-        csSymbol* symbol = (csSymbol*) node->Data();
+        csSymbol* symbol = (csSymbol*) node->GetData();
         if (symbol->GetToolId() == toolId)
             return symbol;
 
-        node = node->Next();
+        node = node->GetNext();
     }
     return NULL;
 }

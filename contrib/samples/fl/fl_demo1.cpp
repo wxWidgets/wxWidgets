@@ -96,17 +96,17 @@ BEGIN_EVENT_TABLE( MyFrame, wxFrame )
     EVT_MENU( NEW_TEST_EXIT, MyFrame::OnExit )
 END_EVENT_TABLE()
 
-void MyFrame::OnLoad( wxCommandEvent& event )
+void MyFrame::OnLoad( wxCommandEvent& WXUNUSED(event) )
 {						
     wxMessageBox(_T("Hey - you found a BIG question-mark !!"));
 }
 
-void MyFrame::OnSave( wxCommandEvent& event )
+void MyFrame::OnSave( wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageBox(_("Hey - you found another BIG question-mark !!"));
 }
 
-void MyFrame::OnExit( wxCommandEvent& event )
+void MyFrame::OnExit( wxCommandEvent& WXUNUSED(event) )
 {
     Destroy();
 }

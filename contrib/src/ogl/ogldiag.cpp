@@ -231,7 +231,7 @@ bool wxDiagram::SaveFile(const wxString& filename)
 
     if (!shape->IsKindOf(CLASSINFO(wxControlPoint)))
     {
-      wxExpr *expr = NULL;
+      wxExpr *expr;
       if (shape->IsKindOf(CLASSINFO(wxLineShape)))
         expr = new wxExpr(_T("line"));
        else
@@ -239,7 +239,7 @@ bool wxDiagram::SaveFile(const wxString& filename)
 
       OnShapeSave(*database, *shape, *expr);
     }
-    node = node->Next();
+    node = node->GetNext();
   }
   OnDatabaseSave(*database);
 
@@ -308,14 +308,14 @@ bool wxDiagram::LoadFile(const wxString& filename)
     OnHeaderLoad(database, *header);
 
   // Scan through all clauses and register the ids
-  wxNode *node = database.First();
+  wxNode *node = database.GetFirst();
   while (node)
   {
     wxExpr *clause = (wxExpr *)node->GetData();
     long id = -1;
     clause->GetAttributeValue(_T("id"), id);
     wxRegisterId(id);
-    node = node->Next();
+    node = node->GetNext();
   }
 
   ReadNodes(database);
@@ -534,13 +534,13 @@ bool wxDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 
   if (shape.IsKindOf(CLASSINFO(wxCompositeShape)))
   {
-    wxNode *node = shape.GetChildren().First();
+    wxNode *node = shape.GetChildren().GetFirst();
     while (node)
     {
       wxShape *childShape = (wxShape *)node->GetData();
       wxExpr *childExpr = new wxExpr(_T("shape"));
       OnShapeSave(db, *childShape, *childExpr);
-      node = node->Next();
+      node = node->GetNext();
     }
   }
 

@@ -115,8 +115,7 @@ void wxLineShape::MakeLineControlPoints(int n)
   }
   m_lineControlPoints = new wxList;
 
-  int i = 0;
-  for (i = 0; i < n; i++)
+  for (int i = 0; i < n; i++)
   {
     wxRealPoint *point = new wxRealPoint(-999, -999);
     m_lineControlPoints->Append((wxObject*) point);
@@ -598,7 +597,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
   double positionOnLineX, positionOnLineY;
 
   // Position of start point of line, at the end of which we draw the arrow.
-  double startPositionX, startPositionY;
+  double startPositionX = 0.0 , startPositionY = 0.0;
 
   switch (arrow->GetPosition())
   {
@@ -691,7 +690,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
      double y3 = positionOnLineY;
      double d = -arrow->GetYOffset(); // Negate so +offset is above line
 
-     double theta = 0.0;
+     double theta;
      if (x3 == x1)
        theta = (double)(myPi/2.0);
      else
@@ -2036,9 +2035,9 @@ bool wxLineShape::AddArrowOrdered(wxArrowHead *arrow, wxList& referenceList, int
     return TRUE;
   }
 
+  wxArrowHead *currArrow = (wxArrowHead *)currNode->GetData();
   while (refNode && currNode)
   {
-    wxArrowHead *currArrow = (wxArrowHead *)currNode->GetData();
     refArrow = (wxArrowHead *)refNode->GetData();
 
     // Matching: advance current arrow pointer
@@ -2318,7 +2317,7 @@ int wxLineShape::GetAlignmentType(bool isEnd)
 wxRealPoint *wxLineShape::GetNextControlPoint(wxShape *nodeObject)
 {
   int n = m_lineControlPoints->GetCount();
-  int nn = 0;
+  int nn;
   if (m_to == nodeObject)
   {
     // Must be END of line, so we want (n - 1)th control point.

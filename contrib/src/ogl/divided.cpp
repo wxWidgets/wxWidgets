@@ -243,18 +243,8 @@ bool wxDividedShape::GetAttachmentPosition(int attachment, double *x, double *y,
   // Left or right.
   else
   {
-    int i = 0;
-    bool isLeft = FALSE;
-    if (attachment < (n+1))
-    {
-      i = attachment-1;
-      isLeft = FALSE;
-    }
-    else
-    {
-      i = (totalNumberAttachments - attachment - 1);
-      isLeft = TRUE;
-    }
+    bool isLeft = !(attachment < (n+1));
+    int i = (isLeft) ? (totalNumberAttachments - attachment - 1) : (attachment-1);
     wxNode *node = GetRegions().Item(i);
     if (node)
     {

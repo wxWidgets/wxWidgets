@@ -2064,7 +2064,7 @@ void wxShape::ReadRegions(wxExpr *clause)
   wxChar regionNameBuf[20];
   wxChar textNameBuf[20];
 
-  wxExpr *regionExpr = NULL;
+  wxExpr *regionExpr;
   wxExpr *textExpr = NULL;
   wxSprintf(regionNameBuf, _T("region%d"), regionNo);
   wxSprintf(textNameBuf, _T("text%d"), regionNo);
@@ -2896,8 +2896,7 @@ wxRealPoint wxShape::CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPo
 // Return the zero-based position in m_lines of line.
 int wxShape::GetLinePosition(wxLineShape* line)
 {
-    size_t i = 0;
-    for (i = 0; i < m_lines.GetCount(); i++)
+    for (size_t i = 0; i < m_lines.GetCount(); i++)
         if ((wxLineShape*) (m_lines.Item(i)->GetData()) == line)
             return i;
 

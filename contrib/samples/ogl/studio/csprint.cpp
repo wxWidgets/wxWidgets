@@ -70,10 +70,10 @@ bool wxDiagramClipboard::DoCopy(wxDiagram* diagramFrom, wxDiagram* diagramTo, bo
 
     // First copy all node shapes.
     wxList* shapeList = diagramFrom->GetShapeList();
-    wxNode* node = shapeList->First();
+    wxNode* node = shapeList->GetFirst();
     while (node)
     {
-        wxShape* shape = (wxShape*) node->Data();
+        wxShape* shape = (wxShape*) node->GetData();
         if (((diagramFrom == this) || shape->Selected()) && !shape->IsKindOf(CLASSINFO(wxLineShape)))
         {
             wxShape* newShape = shape->CreateNewCopy();
@@ -90,13 +90,13 @@ bool wxDiagramClipboard::DoCopy(wxDiagram* diagramFrom, wxDiagram* diagramTo, bo
             OnAddShape(diagramTo, newShape, dc);
 
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    node = shapeList->First();
+    node = shapeList->GetFirst();
     while (node)
     {
-        wxShape* shape = (wxShape*) node->Data();
+        wxShape* shape = (wxShape*) node->GetData();
         if (((diagramFrom == this) || shape->Selected()) && shape->IsKindOf(CLASSINFO(wxLineShape)))
         {
             wxLineShape* lineShape = (wxLineShape*) shape;
@@ -122,14 +122,14 @@ bool wxDiagramClipboard::DoCopy(wxDiagram* diagramFrom, wxDiagram* diagramTo, bo
 
             }
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
     // Now make sure line ordering is correct
-    node = shapeList->First();
+    node = shapeList->GetFirst();
     while (node)
     {
-        wxShape* shape = (wxShape*) node->Data();
+        wxShape* shape = (wxShape*) node->GetData();
         if (((diagramFrom == this) || shape->Selected()) && !shape->IsKindOf(CLASSINFO(wxLineShape)))
         {
             wxShape* newShape = (wxShape*) mapping.Get((long) shape);
@@ -137,10 +137,10 @@ bool wxDiagramClipboard::DoCopy(wxDiagram* diagramFrom, wxDiagram* diagramTo, bo
             // Make a list of all the new lines, in the same order as the old lines.
             // Then apply the list of new lines to the shape.
             wxList newLines;
-            wxNode* lineNode = shape->GetLines().First();
+            wxNode* lineNode = shape->GetLines().GetFirst();
             while (lineNode)
             {
-                wxLineShape* lineShape = (wxLineShape*) lineNode->Data();
+                wxLineShape* lineShape = (wxLineShape*) lineNode->GetData();
                 if ((diagramFrom == this) || (lineShape->GetTo()->Selected() && lineShape->GetFrom()->Selected()))
                 {
                     wxLineShape* newLineShape = (wxLineShape*) mapping.Get((long) lineShape);
@@ -150,13 +150,13 @@ bool wxDiagramClipboard::DoCopy(wxDiagram* diagramFrom, wxDiagram* diagramTo, bo
                     newLines.Append(newLineShape);
                 }
 
-                lineNode = lineNode->Next();
+                lineNode = lineNode->GetNext();
             }
 
-            if (newLines.Number() > 0)
+            if (newLines.GetCount() > 0)
                 newShape->ApplyAttachmentOrdering(newLines);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
     OnEndCopy(diagramTo);
@@ -284,7 +284,7 @@ bool csDiagramClipboard::OnEndCopy(wxDiagram* diagramTo)
 
     if (m_currentCmd)
     {
-        if (m_currentCmd->GetStates().Number() == 0)
+        if (m_currentCmd->GetStates().GetCount() == 0)
         {
             delete m_currentCmd;
         }

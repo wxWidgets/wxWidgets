@@ -166,6 +166,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h
 
     mImageList( 16,16, FALSE, 2 )
 {
+    int i;
+
     mpInternalFrm = (wxPanel*)this;
     
     mAboutBox.Create( this, -1,  _T("About box in wxWindows style..."),
@@ -173,7 +175,6 @@ MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h
                       wxSize( 385,220),
                       wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE | wxTAB_TRAVERSAL );
     
-    int i = 0;
     for( i = 0; i != MAX_LAYOUTS; ++i ) 
         mLayouts[i] = NULL;
     
@@ -240,17 +241,17 @@ bool MyFrame::OnClose(void)
     return TRUE;
 }
 
-void MyFrame::OnLoad( wxCommandEvent& event )
+void MyFrame::OnLoad( wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageBox(_("Hey - you found a BIG question-mark !!"));
 }
 
-void MyFrame::OnStore( wxCommandEvent& event )
+void MyFrame::OnStore( wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageBox(_("Hey - you found another BIG question-mark !!"));
 }
 
-void MyFrame::OnAutoSave( wxCommandEvent& event )
+void MyFrame::OnAutoSave( wxCommandEvent& WXUNUSED(event) )
 {
     mAutoSave = !mAutoSave;
     
@@ -260,14 +261,14 @@ void MyFrame::OnAutoSave( wxCommandEvent& event )
     SyncMenuBarItems();
 }
 
-void MyFrame::OnRemove( wxCommandEvent& event )
+void MyFrame::OnRemove( wxCommandEvent& WXUNUSED(event) )
 {
     RemoveLayout( mActiveLayoutNo );
     
     Refresh();
 }
 
-void MyFrame::OnRemoveAll( wxCommandEvent& event )
+void MyFrame::OnRemoveAll( wxCommandEvent& WXUNUSED(event) )
 {
     for( int i = 0; i != MAX_LAYOUTS; ++i )
     {    
@@ -287,22 +288,22 @@ void MyFrame::OnRecreate( wxCommandEvent& event )
     mLayouts[mActiveLayoutNo]->Activate();
 }
 
-void MyFrame::OnFirst( wxCommandEvent& event )
+void MyFrame::OnFirst( wxCommandEvent& WXUNUSED(event) )
 {
     ActivateLayout( FIRST_LAYOUT );
 }
 
-void MyFrame::OnSecond( wxCommandEvent& event )
+void MyFrame::OnSecond( wxCommandEvent& WXUNUSED(event) )
 {
     ActivateLayout( SECOND_LAYOUT );
 }
 
-void MyFrame::OnThird( wxCommandEvent& event )
+void MyFrame::OnThird( wxCommandEvent& WXUNUSED(event) )
 {
     ActivateLayout( THIRD_LAYOUT );
 }
 
-void MyFrame::OnQuit( wxCommandEvent& event )
+void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
     //  USEFUL TRICK:: avoids flickering of application's frame 
     //                 when closing NN windows on exit:
@@ -321,7 +322,7 @@ void MyFrame::OnQuit( wxCommandEvent& event )
     Destroy();
 }
 
-void MyFrame::OnAbout( wxCommandEvent& event )
+void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
     wxFont font;
 #ifdef __WXMSW__
@@ -397,22 +398,22 @@ void MyFrame::OnChar( wxKeyEvent& event )
     }
 }
 
-void MyFrame::OnSayItsOk( wxCommandEvent& event )
+void MyFrame::OnSayItsOk( wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageBox(_("It's OK  :-)\n\n now click on the border around the button\n and try dragging it!") );
 }
 
-void MyFrame::OnBtnYes( wxCommandEvent& event )
+void MyFrame::OnBtnYes( wxCommandEvent& WXUNUSED(event) )
 {
     mAboutBox.Show(FALSE);
 }
 
-void MyFrame::OnBtnNo( wxCommandEvent& event )
+void MyFrame::OnBtnNo( wxCommandEvent& WXUNUSED(event) )
 {
     mAboutBox.Show(FALSE);
 }
 
-void MyFrame::OnBtnEsc( wxCommandEvent& event )
+void MyFrame::OnBtnEsc( wxCommandEvent& WXUNUSED(event) )
 {
     mAboutBox.Show(FALSE);
 }
@@ -524,7 +525,7 @@ wxChoice* MyFrame::CreateChoice( const wxString& txt )
 
 // helper
 
-void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
+void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* WXUNUSED(pParent) )
 {
     cbDimInfo sizes2( 275,38,   // when docked horizontally      
                       45,275,   // when docked vertically        
@@ -927,14 +928,14 @@ BEGIN_EVENT_TABLE( StartButton95, wxPanel )
     EVT_PAINT    ( StartButton95::OnPaint     )
 END_EVENT_TABLE()
 
-void StartButton95::OnMouseDown( wxMouseEvent& event )
+void StartButton95::OnMouseDown( wxMouseEvent& WXUNUSED(event) )
 {
     m_bPressed = TRUE;
     Refresh();
     CaptureMouse();
 }
 
-void StartButton95::OnMouseUp( wxMouseEvent& event )
+void StartButton95::OnMouseUp( wxMouseEvent& WXUNUSED(event) )
 {
     // "this is not a bug"
     
@@ -943,8 +944,7 @@ void StartButton95::OnMouseUp( wxMouseEvent& event )
     ::wxSetCursor( wxCURSOR_WAIT );    
     wxSleep(1);
     
-    int i = 0;
-    for( i = 1; i != 6; ++i ) 
+    for( int i = 1; i != 6; ++i ) 
     { 
         m_bPressed = (i % 2) != 0;
         Refresh();
@@ -954,9 +954,9 @@ void StartButton95::OnMouseUp( wxMouseEvent& event )
     //*((char*)(i)-3) = 'X'; // Aleks what's the meaning of this???
 }
 
-void StartButton95::OnPaint( wxPaintEvent& event )
+void StartButton95::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
-    wxBitmap* pBmp = 0;
+    wxBitmap* pBmp;
     
     if ( m_bPressed )
     {

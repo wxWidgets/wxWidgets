@@ -226,21 +226,11 @@ void cbRowDragPlugin::OnMouseMove( cbMotionEvent& event )
 
         if ( mpPane->IsHorizontal() )
         {
-            // DBG::
-            wxPoint p = event.mPos;
-            wxPoint d = mDragOrigin;
-//            int dif = event.mPos.x - mDragOrigin.x;
-
             // row is dragged up or down;
             ShowDraggedRow( pos.y - mDragOrigin.y );
         }
         else
         {
-            // DBG::
-            wxPoint p = event.mPos;
-            wxPoint d = mDragOrigin;
-//            int dif = event.mPos.x - mDragOrigin.x;
-
             // row is dragged left or right
             ShowDraggedRow( pos.x - mDragOrigin.x );
         }

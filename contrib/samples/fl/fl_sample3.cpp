@@ -108,7 +108,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
-    : wxFrame( parent, -1, _("NewTest-II"), wxDefaultPosition,
+    : wxFrame( parent, -1, title, wxDefaultPosition,
           wxSize( 700, 500 ),
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
           wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION,
@@ -202,24 +202,24 @@ wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
     return pCtrl;
 }
 
-void MyFrame::OnLoad( wxCommandEvent& event )
+void MyFrame::OnLoad( wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageBox(_("Hey - you found a BIG question-mark !!"));
 }
 
-void MyFrame::OnStore( wxCommandEvent& event )
+void MyFrame::OnStore( wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageBox(_("Hey - you found another BIG question-mark !!"));
 }
 
-void MyFrame::OnQuit( wxCommandEvent& event )
+void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
     Show( FALSE ); // TRICK:: hide it, to avoid flickered destruction
     
     Close(TRUE);
 }
 
-void MyFrame::OnButt( wxCommandEvent& event )
+void MyFrame::OnButt( wxCommandEvent& WXUNUSED(event) )
 {
     static int i =0;
     
@@ -266,7 +266,7 @@ void MyFrame::OnButt( wxCommandEvent& event )
     i++;
 }
 
-void MyFrame::OnButt2( wxCommandEvent& event )
+void MyFrame::OnButt2( wxCommandEvent& WXUNUSED(event) )
 {
     static int i =0;
     

@@ -449,7 +449,6 @@ wxShape *wxShapeCanvas::FindShape(double x, double y, int *attachment, wxClassIn
         // Check for division in case line straddles divisions (i.e. is not wholly contained).
         if (!nearest_object || !(object->IsKindOf(CLASSINFO(wxDivisionShape)) || WhollyContains(object, nearest_object)))
         {
-          nearest = dist;
           nearest_object = object;
           nearest_attachment = temp_attachment;
           current = NULL;

@@ -199,7 +199,7 @@ void csEvtHandler::OnBeginDragRight(double x, double y, int WXUNUSED(keys), int 
   dc.SetPen(dottedPen);
   double xp, yp;
   GetShape()->GetAttachmentPositionEdge(attachment, &xp, &yp);
-  dc.DrawLine(xp, yp, x, y);
+  dc.DrawLine((wxCoord)xp, (wxCoord)yp, (wxCoord)x, (wxCoord)y);
   GetShape()->GetCanvas()->CaptureMouse();
 }
 
@@ -213,7 +213,7 @@ void csEvtHandler::OnDragRight(bool WXUNUSED(draw), double x, double y, int WXUN
   dc.SetPen(dottedPen);
   double xp, yp;
   GetShape()->GetAttachmentPositionEdge(attachment, &xp, &yp);
-  dc.DrawLine(xp, yp, x, y);
+  dc.DrawLine((wxCoord)xp, (wxCoord)yp, (wxCoord)x, (wxCoord)y);
 }
 
 void csEvtHandler::OnEndDragRight(double x, double y, int WXUNUSED(keys), int attachment)
@@ -299,16 +299,16 @@ void csEvtHandler::OnDragLeft(bool draw, double x, double y, int keys, int attac
   GetShape()->GetEventHandler()->OnDrawOutline(dc, xx, yy, w, h);
 
   // Draw bounding box for other selected shapes
-  wxNode* node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->First();
+  wxNode* node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
-     wxShape* shape = (wxShape*) node->Data();
+     wxShape* shape = (wxShape*) node->GetData();
      if (shape->Selected() && !shape->IsKindOf(CLASSINFO(wxLineShape)) && (shape != GetShape()))
      {
         shape->GetBoundingBoxMax(&w, &h);
         shape->OnDrawOutline(dc, shape->GetX() + offsetX, shape->GetY() + offsetY, w, h);
      }
-     node = node->Next();
+     node = node->GetNext();
   }
 }
 
@@ -358,16 +358,16 @@ void csEvtHandler::OnBeginDragLeft(double x, double y, int keys, int attachment)
   GetShape()->GetEventHandler()->OnDrawOutline(dc, xx, yy, w, h);
 
   // Draw bounding box for other selected shapes
-  wxNode* node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->First();
+  wxNode* node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
-     wxShape* shape = (wxShape*) node->Data();
+     wxShape* shape = (wxShape*) node->GetData();
      if (shape->Selected() && !shape->IsKindOf(CLASSINFO(wxLineShape)) && (shape != GetShape()))
      {
         shape->GetBoundingBoxMax(&w, &h);
         shape->OnDrawOutline(dc, shape->GetX() + offsetX, shape->GetY() + offsetY, w, h);
      }
-     node = node->Next();
+     node = node->GetNext();
   }
 
   GetShape()->GetCanvas()->CaptureMouse();
@@ -413,40 +413,40 @@ void csEvtHandler::OnEndDragLeft(double x, double y, int keys, int attachment)
                 new csCommandState(ID_CS_MOVE, newShape, GetShape()));
 
   // Move line points
-  wxNode* node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->First();
+  wxNode* node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
-     wxShape* shape = (wxShape*) node->Data();
+     wxShape* shape = (wxShape*) node->GetData();
      // Only move the line point(s) if both ends move too
      if (shape->IsKindOf(CLASSINFO(wxLineShape)) &&
            ((wxLineShape*)shape)->GetTo()->Selected() && ((wxLineShape*)shape)->GetFrom()->Selected())
      {
         wxLineShape* lineShape = (wxLineShape*) shape;
 
-        if (lineShape->GetLineControlPoints()->Number() > 2)
+        if (lineShape->GetLineControlPoints()->GetCount() > 2)
         {
             wxLineShape* newLineShape = (wxLineShape*) lineShape->CreateNewCopy();
 
-            wxNode *node1 = newLineShape->GetLineControlPoints()->First();
+            wxNode *node1 = newLineShape->GetLineControlPoints()->GetFirst();
             while (node1)
             {
-                wxRealPoint *point = (wxRealPoint *)node1->Data();
+                wxRealPoint *point = (wxRealPoint *)node1->GetData();
                 point->x += offsetX;
                 point->y += offsetY;
-                node1 = node1->Next();
+                node1 = node1->GetNext();
             }
             cmd->AddState(new csCommandState(ID_CS_MOVE_LINE_POINT, newLineShape, lineShape));
             lineShape->Erase(dc);
         }
      }
-     node = node->Next();
+     node = node->GetNext();
   }
 
   // Add other selected node shapes, if any
-  node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->First();
+  node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
-     wxShape* shape = (wxShape*) node->Data();
+     wxShape* shape = (wxShape*) node->GetData();
      if (shape->Selected() && !shape->IsKindOf(CLASSINFO(wxLineShape)) && (shape != GetShape()))
      {
         wxShape* newShape2 = shape->CreateNewCopy();
@@ -454,7 +454,7 @@ void csEvtHandler::OnEndDragLeft(double x, double y, int keys, int attachment)
         newShape2->SetY(shape->GetY() + offsetY);
         cmd->AddState(new csCommandState(ID_CS_MOVE, newShape2, shape));
      }
-     node = node->Next();
+     node = node->GetNext();
   }
 
   canvas->GetView()->GetDocument()->GetCommandProcessor()->Submit(cmd);
@@ -736,7 +736,7 @@ csThinRectangleShape::csThinRectangleShape()
     double w = csSTANDARD_SHAPE_WIDTH/2;
     double h = csSTANDARD_SHAPE_WIDTH;
 
-    DrawRectangle(wxRect(- w/2, - h/2, w, h));
+    DrawRectangle(wxRect((int)(- w/2), (int)(- h/2), (int)(w), (int)(h)));
     CalculateSize();
 
     SetAttachmentMode(ATTACHMENT_MODE_BRANCHING);
@@ -755,7 +755,7 @@ csWideRectangleShape::csWideRectangleShape()
     double w = csSTANDARD_SHAPE_WIDTH;
     double h = w/2.0;
 
-    DrawRoundedRectangle(wxRect(- w/2, - h/2, w, h), -0.3);
+    DrawRoundedRectangle(wxRect((int)(- w/2), (int)(- h/2), (int)(w), (int)(h)), -0.3);
     CalculateSize();
 
     SetAttachmentMode(ATTACHMENT_MODE_BRANCHING);
@@ -778,9 +778,9 @@ csTriangleShape::csTriangleShape()
     wxPoint* points = new wxPoint[3];
 
 
-    points[0] = wxPoint( 0 ,  - h / 2 );
-    points[1] = wxPoint( w / 2 ,  h / 2 );
-    points[2] = wxPoint( -w / 2,  h / 2 );
+    points[0] = wxPoint( 0 ,  (int)(- h / 2) );
+    points[1] = wxPoint( (int)(w / 2) ,  (int)(h / 2) );
+    points[2] = wxPoint( (int)(-w / 2),  (int)(h / 2) );
 
     DrawPolygon(3, points, oglMETAFLAGS_OUTLINE);
 
@@ -834,14 +834,14 @@ csSemiCircleShape::csSemiCircleShape()
     // bounding box, since we can't calculate the bounding box for
     // an arbitrary arc (not implemented)
 
-    DrawRectangle(wxRect(-w/2.0, -h/2.0, w, h));
+    DrawRectangle(wxRect((int)(-w/2.0), (int)(-h/2.0), (int)(w), (int)(h)));
 
     SetDrawnPen(wxBLACK_PEN);
     wxBrush* brush = wxTheBrushList->FindOrCreateBrush(wxColour(220, 220, 220), wxSOLID);
     SetDrawnBrush(brush);
 
-    DrawEllipticArc(wxRect(-w/2, -h/2, w, 2*h), 0.0, 180.0);
-    DrawLine(wxPoint(-w/2, h/2), wxPoint(w/2, h/2));
+    DrawEllipticArc(wxRect((int)(-w/2), (int)(-h/2), (int)(w), (int)(2*h)), 0.0, 180.0);
+    DrawLine(wxPoint((int)(-w/2), (int)(h/2)), wxPoint((int)(w/2), (int)(h/2)));
 
     CalculateSize();
 
@@ -855,13 +855,13 @@ csSemiCircleShape::csSemiCircleShape()
     SetDrawnPen(wxTRANSPARENT_PEN);
     SetDrawnBrush(wxTRANSPARENT_BRUSH);
 
-    DrawRectangle(wxRect(-w/2, -h/2, w, h));
+    DrawRectangle(wxRect((int)(-w/2), (int)(-h/2), (int)(w), (int)(h)));
 
     SetDrawnPen(wxBLACK_PEN);
     SetDrawnBrush(brush);
 
-    DrawEllipticArc(wxRect(-w/2 - w, -h/2, 2*w, h), 270.0, 90.0);
-    DrawLine(wxPoint(-w/2, -h/2), wxPoint(-w/2, h/2));
+    DrawEllipticArc(wxRect((int)(-w/2 - w), (int)(-h/2), (int)(2*w), (int)(h)), 270.0, 90.0);
+    DrawLine(wxPoint((int)(-w/2), (int)(-h/2)), wxPoint((int)(-w/2), (int)(h/2)));
 
     CalculateSize();
 
@@ -875,13 +875,13 @@ csSemiCircleShape::csSemiCircleShape()
     SetDrawnPen(wxTRANSPARENT_PEN);
     SetDrawnBrush(wxTRANSPARENT_BRUSH);
 
-    DrawRectangle(wxRect(-w/2, -h/2, w, h));
+    DrawRectangle(wxRect((int)(-w/2), (int)(-h/2), (int)(w), (int)(h)));
 
     SetDrawnPen(wxBLACK_PEN);
     SetDrawnBrush(brush);
 
-    DrawEllipticArc(wxRect(-w/2, -h/2 - h, w, 2*h), 180.0, 0.0);
-    DrawLine(wxPoint(-w/2, -h/2), wxPoint(w/2, -h/2));
+    DrawEllipticArc(wxRect((int)(-w/2), (int)(-h/2 - h), (int)(w), (int)(2*h)), 180.0, 0.0);
+    DrawLine(wxPoint((int)(-w/2), (int)(-h/2)), wxPoint((int)(w/2), (int)(-h/2)));
 
     CalculateSize();
 
@@ -895,13 +895,13 @@ csSemiCircleShape::csSemiCircleShape()
     SetDrawnPen(wxTRANSPARENT_PEN);
     SetDrawnBrush(wxTRANSPARENT_BRUSH);
 
-    DrawRectangle(wxRect(-w/2, -h/2, w, h));
+    DrawRectangle(wxRect((int)(-w/2), (int)(-h/2), (int)(w), (int)(h)));
 
     SetDrawnPen(wxBLACK_PEN);
     SetDrawnBrush(brush);
 
-    DrawEllipticArc(wxRect(-w/2, -h/2, 2*w, h), 90.0, 270.0);
-    DrawLine(wxPoint(w/2, -h/2), wxPoint(w/2, h/2));
+    DrawEllipticArc(wxRect((int)(-w/2), (int)(-h/2), (int)(2*w), (int)(h)), 90.0, 270.0);
+    DrawLine(wxPoint((int)(w/2),(int)(-h/2)), wxPoint((int)(w/2), (int)(h/2)));
 
     CalculateSize();
 

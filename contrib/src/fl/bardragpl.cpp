@@ -465,7 +465,10 @@ void cbBarDragPlugin::ShowHint( bool prevWasInClient )
 
 		if ( mpSrcPane->mProps.mExactDockPredictionOn && mpCurPane )
 		{
-			bool success = mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, FALSE );
+      #ifdef  __WXDEBUG__
+      bool success = 
+      #endif
+                     mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, FALSE );
 
 			wxASSERT( success ); // DBG::
 
@@ -519,7 +522,10 @@ void cbBarDragPlugin::ShowHint( bool prevWasInClient )
 
 				mpDraggedBar->mUMgrData.SetDirty( TRUE );
 
-			bool success = mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, FALSE );
+      #ifdef  __WXDEBUG__
+      bool success = 
+      #endif
+                     mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, FALSE );
 
 			wxASSERT( success ); // DBG ::
 

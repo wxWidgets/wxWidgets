@@ -87,6 +87,9 @@
 
 // some ascii-art, still can't get these *nice* cursors working on wx... :-(
 
+/*
+// FIXME:: see places where _gHorizCursorImg is used
+
 static const char* _gHorizCursorImg[] = 
 {
     "............XX....XX............",
@@ -126,6 +129,7 @@ static const char* _gVertCursorImg[] =
     "...............XXX..............",
     "................X..............."
 };
+*/
 
 // helper inline functions
 
@@ -446,6 +450,8 @@ void wxFrameLayout::ShowFloatedWindows( bool show )
 
 wxFrameLayout::~wxFrameLayout()
 {
+    size_t i;
+
     UnhookFromFrame();
 
     if ( mpUpdatesMgr )
@@ -474,7 +480,6 @@ wxFrameLayout::~wxFrameLayout()
 
     // destroy contents of arrays and lists
 
-    size_t i = 0;
     for ( i = 0; i != MAX_PANES; ++i )
     {
         if ( mPanes[i] ) 
@@ -691,7 +696,10 @@ void wxFrameLayout::SetBarState( cbBarInfo* pBar, int newState, bool updateNow )
         cbDockPane* pPane;
         cbRowInfo*  pRow;
 
-        bool success = LocateBar( pBar, &pRow, &pPane );
+        #ifdef  __WXDEBUG__
+        bool success = 
+        #endif
+                       LocateBar( pBar, &pRow, &pPane );
 
         wxASSERT( success ); // DBG::
 
@@ -773,7 +781,7 @@ void wxFrameLayout::InverseVisibility( cbBarInfo* pBar )
 
     // "inverse" bar-visibility of the selected bar
 
-    int newState = 0;
+    int newState;
 
     if ( pBar->mState == wxCBAR_HIDDEN )
     {
@@ -1012,7 +1020,6 @@ void wxFrameLayout::RecalcLayout( bool repositionBarsNow )
 
     int frmWidth, frmHeight;
     mpFrame->GetClientSize( &frmWidth, &frmHeight );
-    int paneHeight = 0;
 
     int curY = 0;
     int curX = 0;
@@ -1028,7 +1035,7 @@ void wxFrameLayout::RecalcLayout( bool repositionBarsNow )
     pPane->SetPaneWidth( frmWidth );
     pPane->RecalcLayout();
 
-    paneHeight = pPane->GetPaneHeight();
+    int paneHeight = pPane->GetPaneHeight();
 
     rect.x      = curX;
     rect.y      = curY;
@@ -1361,11 +1368,6 @@ void wxFrameLayout::ForwardMouseEvent( wxMouseEvent& event,
     {
         cbMotionEvent evt( pos, pToPane );
         FirePluginEvent( evt );
-    }
-    else 
-    {
-        int avoidCompilerWarning = 0;
-        wxASSERT(avoidCompilerWarning); // DBG::
     }
 }  // wxFrameLayout::ForwardMouseEvent()
 
@@ -2235,7 +2237,7 @@ void cbDockPane::PaintRowBackground ( cbRowInfo* pRow, wxDC& dc )
 
 void cbDockPane::PaintRowDecorations( cbRowInfo* pRow, wxDC& dc )
 {
-    size_t i = 0;
+    size_t i;
 
     // decorations first
     for ( i = 0; i != pRow->mBars.Count(); ++i )
@@ -2271,9 +2273,9 @@ void cbDockPane::PaintPaneDecorations( wxDC& dc )
 
 void cbDockPane::PaintPane( wxDC& dc )
 {
-    PaintPaneBackground( dc );
+    size_t i;
 
-    size_t i = 0;
+    PaintPaneBackground( dc );
 
     // first decorations
     for ( i = 0; i != mRows.Count(); ++i )
@@ -2625,9 +2627,9 @@ bool cbDockPane::HasNotFixedBarsRight( cbBarInfo* pBar )
 
 void cbDockPane::CalcLengthRatios( cbRowInfo* pInRow )
 {
-    int totalWidth = 0;
+    size_t i;
 
-    size_t i = 0;
+    int totalWidth = 0;
 
     // calc current-maximal-total-length of all maximized bars
 
@@ -2781,7 +2783,7 @@ void cbDockPane::InitLinksForRows()
 
 void cbDockPane::DoInsertBar( cbBarInfo* pBar, int rowNo )
 {
-    cbRowInfo* pRow = NULL;
+    cbRowInfo* pRow;
 
     if ( rowNo == -1 || rowNo >= (int)mRows.Count() )
     {

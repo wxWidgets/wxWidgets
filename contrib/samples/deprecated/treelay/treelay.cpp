@@ -152,12 +152,12 @@ MyFrame::MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos, co
 {
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void MyFrame::OnLeftRight(wxCommandEvent& event)
+void MyFrame::OnLeftRight(wxCommandEvent& WXUNUSED(event))
 {
       if (myTree)
       {
@@ -170,7 +170,7 @@ void MyFrame::OnLeftRight(wxCommandEvent& event)
       }
 }
 
-void MyFrame::OnTopBottom(wxCommandEvent& event)
+void MyFrame::OnTopBottom(wxCommandEvent& WXUNUSED(event))
 {
       if (myTree)
       {
@@ -183,12 +183,12 @@ void MyFrame::OnTopBottom(wxCommandEvent& event)
       }
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
       (void)wxMessageBox(_T("wxWindows tree library demo Vsn 2.0\nAuthor: Julian Smart (c) 1998"), _T("About tree test"));
 }
 
-void MyFrame::OnCloseWindow(wxCloseEvent& event)
+void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   Destroy();
 }
@@ -205,7 +205,7 @@ MyCanvas::MyCanvas(wxWindow *parent):
 }
 
 // Define the repainting behaviour
-void MyCanvas::OnPaint(wxPaintEvent& event)
+void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
     PrepareDC(dc);

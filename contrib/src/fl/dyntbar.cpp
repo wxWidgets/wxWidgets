@@ -374,7 +374,7 @@ void wxDynamicToolBar::SizeToolWindows()
                 bStateCheckDone = TRUE;
                 
                 size_t j;
-                wxDynToolInfo *pInfo = NULL;
+                wxDynToolInfo *pInfo;
                 wxDynToolInfo *pPrevInfo = NULL;
                 int nVertSeparators = 0;
 

@@ -156,6 +156,11 @@ public:
                               const wxString& labelText = wxT(""), bool alignTextRight = FALSE,
                               bool isFlat = TRUE );
 
+        // Unhide method from parent.
+
+    virtual wxToolBarToolBase *AddTool (wxToolBarToolBase *tool)
+                              { return wxToolBarBase::AddTool(tool); };
+
     // Method from wxToolBarBase (for compatibility), only
     // the first two arguments are valid.
     // See the documentation for wxToolBar for details.
@@ -166,7 +171,12 @@ public:
 
         // Adds a separator. See the documentation for wxToolBar for details.
 
-    virtual void AddSeparator( wxWindow* pSepartorWnd = NULL );
+    virtual void AddSeparator( wxWindow* pSepartorWnd );
+FIXXXXXME
+        // Unhide method from parent.
+
+    virtual wxToolBarToolBase *AddSeparator()
+                              { return wxToolBarBase::AddSeparator(); };
 
         // Returns tool information for the given tool index.
 

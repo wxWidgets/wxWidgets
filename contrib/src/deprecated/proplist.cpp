@@ -1031,11 +1031,7 @@ bool wxBoolListValidator::OnRetrieveValue(wxProperty *property, wxPropertyListVi
     return FALSE;
 
   wxString value(view->GetValueText()->GetValue());
-  bool boolValue = FALSE;
-  if (value == wxT("True"))
-    boolValue = TRUE;
-  else
-    boolValue = FALSE;
+  bool boolValue = (value == wxT("True"));
   property->GetValue() = (bool)boolValue;
   return TRUE;
 }
@@ -1258,7 +1254,7 @@ bool wxStringListValidator::OnDoubleClick( wxProperty *property,
     wxChar *s = node->GetData();
     if (wxStrcmp(s, currentString) == 0)
     {
-      wxChar *nextString = NULL;
+      wxChar *nextString;
       if (node->GetNext())
         nextString = node->GetNext()->GetData();
       else

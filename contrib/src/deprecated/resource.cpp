@@ -164,13 +164,13 @@ wxItemResource::wxItemResource()
 
 wxItemResource::~wxItemResource()
 {
-    wxNode *node = m_children.First();
+    wxNode *node = m_children.GetFirst();
     while (node)
     {
-        wxItemResource *item = (wxItemResource *)node->Data();
+        wxItemResource *item = (wxItemResource *)node->GetData();
         delete item;
         delete node;
-        node = m_children.First();
+        node = m_children.GetFirst();
     }
 }
 
@@ -215,11 +215,10 @@ bool wxResourceTable::DeleteResource(const wxString& name)
         // See if any resource has this as its child; if so, delete from
         // parent's child list.
         BeginFind();
-        wxNode *node = (wxNode *) NULL;
-        node = Next();
+        wxNode *node = Next();
         while (node != NULL)
         {
-            wxItemResource *parent = (wxItemResource *)node->Data();
+            wxItemResource *parent = (wxItemResource *)node->GetData();
             if (parent->GetChildren().Member(item))
             {
                 parent->GetChildren().DeleteObject(item);
@@ -314,7 +313,7 @@ void wxResourceTable::ClearTable()
     while (node)
     {
         wxNode *next = Next();
-        wxItemResource *item = (wxItemResource *)node->Data();
+        wxItemResource *item = (wxItemResource *)node->GetData();
         delete item;
         delete node;
         node = next;
@@ -464,17 +463,17 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
         wxStringList& stringList = childResource->GetStringValues();
         wxString *strings = (wxString *) NULL;
         int noStrings = 0;
-        if (stringList.Number() > 0)
+        if (stringList.GetCount() > 0)
         {
-            noStrings = stringList.Number();
+            noStrings = stringList.GetCount();
             strings = new wxString[noStrings];
-            wxNode *node = stringList.First();
+            wxStringListNode *node = stringList.GetFirst();
             int i = 0;
             while (node)
             {
-                strings[i] = (wxChar *)node->Data();
+                strings[i] = (wxChar *)node->GetData();
                 i ++;
-                node = node->Next();
+                node = node->GetNext();
             }
         }
         control = new wxListBox(parent, id, pos, size,
@@ -488,17 +487,17 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
         wxStringList& stringList = childResource->GetStringValues();
         wxString *strings = (wxString *) NULL;
         int noStrings = 0;
-        if (stringList.Number() > 0)
+        if (stringList.GetCount() > 0)
         {
-            noStrings = stringList.Number();
+            noStrings = stringList.GetCount();
             strings = new wxString[noStrings];
-            wxNode *node = stringList.First();
+            wxStringListNode *node = stringList.GetFirst();
             int i = 0;
             while (node)
             {
-                strings[i] = (wxChar *)node->Data();
+                strings[i] = (wxChar *)node->GetData();
                 i ++;
-                node = node->Next();
+                node = node->GetNext();
             }
         }
         control = new wxChoice(parent, id, pos, size,
@@ -513,17 +512,17 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
         wxStringList& stringList = childResource->GetStringValues();
         wxString *strings = (wxString *) NULL;
         int noStrings = 0;
-        if (stringList.Number() > 0)
+        if (stringList.GetCount() > 0)
         {
-            noStrings = stringList.Number();
+            noStrings = stringList.GetCount();
             strings = new wxString[noStrings];
-            wxNode *node = stringList.First();
+            wxStringListNode *node = stringList.GetFirst();
             int i = 0;
             while (node)
             {
-                strings[i] = (wxChar *)node->Data();
+                strings[i] = (wxChar *)node->GetData();
                 i ++;
-                node = node->Next();
+                node = node->GetNext();
             }
         }
         control = new wxComboBox(parent, id, childResource->GetValue4(), pos, size,
@@ -538,17 +537,17 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
         wxStringList& stringList = childResource->GetStringValues();
         wxString *strings = (wxString *) NULL;
         int noStrings = 0;
-        if (stringList.Number() > 0)
+        if (stringList.GetCount() > 0)
         {
-            noStrings = stringList.Number();
+            noStrings = stringList.GetCount();
             strings = new wxString[noStrings];
-            wxNode *node = stringList.First();
+            wxStringListNode *node = stringList.GetFirst();
             int i = 0;
             while (node)
             {
-                strings[i] = (wxChar *)node->Data();
+                strings[i] = (wxChar *)node->GetData();
                 i ++;
-                node = node->Next();
+                node = node->GetNext();
             }
         }
         control = new wxRadioBox(parent, (wxWindowID) id, wxString(childResource->GetTitle()), pos, size,
@@ -587,10 +586,10 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
 
 bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db)
 {
-    wxNode *node = db.First();
+    wxNode *node = db.GetFirst();
     while (node)
     {
-        wxExpr *clause = (wxExpr *)node->Data();
+        wxExpr *clause = (wxExpr *)node->GetData();
         wxString functor(clause->Functor());
 
         wxItemResource *item = (wxItemResource *) NULL;
@@ -616,7 +615,7 @@ bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db)
                 table.DeleteResource(item->GetName());
             table.AddResource(item);
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     return TRUE;
 }
@@ -1543,7 +1542,7 @@ bool wxReallocateResourceBuffer()
 
 static bool wxEatWhiteSpace(FILE *fd)
 {
-    int ch = 0;
+    int ch;
 
     while ((ch = getc(fd)) != EOF)
     {
@@ -2391,10 +2390,10 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
         wxItemResource *optResource = (wxItemResource *) NULL;
 
         // Try to find optimum bitmap for this platform/colour depth
-        wxNode *node = item->GetChildren().First();
+        wxNode *node = item->GetChildren().GetFirst();
         while (node)
         {
-            wxItemResource *child = (wxItemResource *)node->Data();
+            wxItemResource *child = (wxItemResource *)node->GetData();
             int platform = (int)child->GetValue2();
             int noColours = (int)child->GetValue3();
             /*
@@ -2465,7 +2464,7 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
             default:
                 break;
             }
-            node = node->Next();
+            node = node->GetNext();
         }
         // If no matching resource, fail.
         if (!optResource)
@@ -2545,10 +2544,10 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
         wxItemResource *optResource = (wxItemResource *) NULL;
 
         // Try to find optimum icon for this platform/colour depth
-        wxNode *node = item->GetChildren().First();
+        wxNode *node = item->GetChildren().GetFirst();
         while (node)
         {
-            wxItemResource *child = (wxItemResource *)node->Data();
+            wxItemResource *child = (wxItemResource *)node->GetData();
             int platform = (int)child->GetValue2();
             int noColours = (int)child->GetValue3();
             /*
@@ -2619,7 +2618,7 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
             default:
                 break;
             }
-            node = node->Next();
+            node = node->GetNext();
         }
         // If no matching resource, fail.
         if (!optResource)
@@ -2686,13 +2685,13 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
 wxMenu *wxResourceCreateMenu(wxItemResource *item)
 {
     wxMenu *menu = new wxMenu;
-    wxNode *node = item->GetChildren().First();
+    wxNode *node = item->GetChildren().GetFirst();
     while (node)
     {
-        wxItemResource *child = (wxItemResource *)node->Data();
+        wxItemResource *child = (wxItemResource *)node->GetData();
         if ((child->GetType() != wxT("")) && (child->GetType() == wxT("wxMenuSeparator")))
             menu->AppendSeparator();
-        else if (child->GetChildren().Number() > 0)
+        else if (child->GetChildren().GetCount() > 0)
         {
             wxMenu *subMenu = wxResourceCreateMenu(child);
             if (subMenu)
@@ -2702,7 +2701,7 @@ wxMenu *wxResourceCreateMenu(wxItemResource *item)
         {
             menu->Append((int)child->GetValue1(), child->GetTitle(), child->GetValue4(), (child->GetValue2() != 0));
         }
-        node = node->Next();
+        node = node->GetNext();
     }
     return menu;
 }
@@ -2717,14 +2716,14 @@ wxMenuBar *wxResourceCreateMenuBar(const wxString& resource, wxResourceTable *ta
     {
         if (!menuBar)
             menuBar = new wxMenuBar;
-        wxNode *node = menuResource->GetChildren().First();
+        wxNode *node = menuResource->GetChildren().GetFirst();
         while (node)
         {
-            wxItemResource *child = (wxItemResource *)node->Data();
+            wxItemResource *child = (wxItemResource *)node->GetData();
             wxMenu *menu = wxResourceCreateMenu(child);
             if (menu)
                 menuBar->Append(menu, child->GetTitle());
-            node = node->Next();
+            node = node->GetNext();
         }
         return menuBar;
     }
@@ -2876,7 +2875,7 @@ static int ungetc_string()
 
 bool wxEatWhiteSpaceString(char *s)
 {
-    int ch = 0;
+    int ch;
 
     while ((ch = getc_string(s)) != EOF)
     {
@@ -2889,7 +2888,6 @@ bool wxEatWhiteSpaceString(char *s)
             break;
         case '/':
             {
-                int prev_ch = ch;
                 ch = getc_string(s);
                 if (ch == EOF)
                 {
@@ -2900,7 +2898,7 @@ bool wxEatWhiteSpaceString(char *s)
                 if (ch == '*')
                 {
                     // Eat C comment
-                    prev_ch = 0;
+                    int prev_ch = 0;
                     while ((ch = getc_string(s)) != EOF)
                     {
                         if (ch == '/' && prev_ch == '*')
@@ -3251,14 +3249,14 @@ bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& 
     }
 
     // Now create children
-    wxNode *node = resource->GetChildren().First();
+    wxNode *node = resource->GetChildren().GetFirst();
     while (node)
     {
-        wxItemResource *childResource = (wxItemResource *)node->Data();
+        wxItemResource *childResource = (wxItemResource *)node->GetData();
 
         (void) wxCreateItem(thisWindow, childResource, resource, table);
 
-        node = node->Next();
+        node = node->GetNext();
     }
     return TRUE;
 }

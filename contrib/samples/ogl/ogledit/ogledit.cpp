@@ -72,7 +72,6 @@ bool MyApp::OnInit(void)
 
   //// Make a menubar
   wxMenu *file_menu = new wxMenu;
-  wxMenu *edit_menu = NULL;
 
   file_menu->Append(wxID_NEW, _T("&New..."));
   file_menu->Append(wxID_OPEN, _T("&Open..."));
@@ -85,7 +84,7 @@ bool MyApp::OnInit(void)
   file_menu->Append(wxID_PRINT_SETUP, _T("Print &Setup..."));
   file_menu->Append(wxID_PREVIEW, _T("Print Pre&view"));
 
-  edit_menu = new wxMenu;
+  wxMenu *edit_menu = new wxMenu;
   edit_menu->Append(wxID_UNDO, _T("&Undo"));
   edit_menu->Append(wxID_REDO, _T("&Redo"));
   edit_menu->AppendSeparator();

@@ -69,10 +69,7 @@ wxNode* GarbageCollector::FindItemNode( void* pForObj )
         pNode = pNode->GetNext();
     }
 
-    int avoidCompilerWarning = 0;
-    wxASSERT(avoidCompilerWarning); // DBG:: item should be present
-
-    return 0;
+    return NULL;
 }
 
 wxNode* GarbageCollector::FindReferenceFreeItemNode()

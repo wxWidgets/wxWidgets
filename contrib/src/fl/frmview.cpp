@@ -41,9 +41,6 @@ void wxFrameView::OnIdle( wxIdleEvent& event)
 
     if ( mDoToolUpdates )
     {
-        int o = 0;  //glt
-        ++o;
-
         // TBD::
     }
 }

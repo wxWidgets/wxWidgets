@@ -31,7 +31,7 @@ BEGIN_EVENT_TABLE(csProjectTreeCtrl, wxTreeCtrl)
 END_EVENT_TABLE()
 
 // Define my frame constructor
-csProjectTreeCtrl::csProjectTreeCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+csProjectTreeCtrl::csProjectTreeCtrl(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
 	long style):
 
   wxTreeCtrl(parent, id, pos, size, style),
