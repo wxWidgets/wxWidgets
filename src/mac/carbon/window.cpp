@@ -1447,10 +1447,12 @@ void wxWindowMac::Update()
     if ( win )
     {
       win->MacUpdate( 0 ) ;
+#if TARGET_API_MAC_CARBON
         if ( QDIsPortBuffered( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) ) )
         {
                 QDFlushPortBuffer( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) , NULL ) ;
         }
+#endif
       }
 }
 
