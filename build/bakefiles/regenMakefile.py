@@ -44,7 +44,7 @@ def addMakefile(bake, makedirs, deps=[], args={}):
             makedir = makedirs['all']
         tfile = '%s/%s' % (makedir, make)
         lines.append('%s: %s' % (tfile, dep))
-        lines.append('\t$(BAKEFILE) -f%s -o$@ %s' % (format, bake))
+        lines.append('\t$(BAKEFILE) -f%s -o$@ %s %s' % (format, a, bake))
         lines.append('\ttouch $@')
         if format not in all: all[format] = []
         all[format].append(tfile)
