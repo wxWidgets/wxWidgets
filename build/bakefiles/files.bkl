@@ -2354,6 +2354,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MAC'">$(BASE_MAC_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(BASE_DARWIN_SRC)</if>
         <if cond="TOOLKIT=='GTK'">$(BASE_DARWIN_SRC)</if>
+        <if cond="TOOLKIT=='X11'">$(BASE_DARWIN_SRC)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(BASE_DARWIN_SRC)</if>
         <!-- FIXME: TOOLKIT!='MAC' is what we really want -->
     </set>
     <set var="BASE_PLATFORM_SRC" hints="files">
