@@ -71,8 +71,8 @@
 #endif
 
 #include "wx/validate.h"
-
 #include "wx/log.h"
+#include "wx/module.h"
 
 #include <ctype.h>
 #include <math.h>
@@ -111,7 +111,8 @@ int wxResourceStringPtr = 0;
 
 void wxInitializeResourceSystem()
 {
-    wxDefaultResourceTable = new wxResourceTable;
+    if (!wxDefaultResourceTable)
+        wxDefaultResourceTable = new wxResourceTable;
 }
 
 void wxCleanUpResourceSystem()
@@ -121,12 +122,21 @@ void wxCleanUpResourceSystem()
         delete[] wxResourceBuffer;
 }
 
-#if 0
-void wxLogWarning(char *msg)
+// Module to ensure the resource system data gets initialized
+// and cleaned up.
+
+class wxResourceModule: public wxModule
 {
-    wxMessageBox(msg, _("Warning"), wxOK);
-}
-#endif
+public:
+    wxResourceModule() : wxModule() {}
+    virtual bool OnInit() { wxInitializeResourceSystem(); return TRUE; }
+    virtual void OnExit() { wxCleanUpResourceSystem();  }
+
+    DECLARE_DYNAMIC_CLASS(wxResourceModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxResourceModule, wxModule)
+
 
 IMPLEMENT_DYNAMIC_CLASS(wxItemResource, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxResourceTable, wxHashTable)
@@ -1499,9 +1509,6 @@ wxFont wxResourceInterpretFontSpec(wxExpr *expr)
                                             (underline != 0), faceName);
 }
 
-// Separate file for the remainder of this, for BC++/Win16
-
-#if !((defined(__BORLANDC__) || defined(__SC__)) && defined(__WIN16__))
 /*
 * (Re)allocate buffer for reading in from resource file
 */
@@ -3158,7 +3165,7 @@ bool wxResourceParseString(char *s, wxResourceTable *table)
 * resource loading facility
 */
 
-bool wxWindowBase::LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table)
+bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& resourceName, const wxResourceTable *table)
 {
     if (!table)
         table = wxDefaultResourceTable;
@@ -3179,11 +3186,11 @@ bool wxWindowBase::LoadFromResource(wxWindow *parent, const wxString& resourceNa
     wxString name = resource->GetName();
 
     // this is used for loading wxWizard pages from WXR
-    if ( parent != this )
+    if ( parent != thisWindow )
     {
-        if (IsKindOf(CLASSINFO(wxDialog)))
+        if (thisWindow->IsKindOf(CLASSINFO(wxDialog)))
         {
-            wxDialog *dialogBox = (wxDialog *)this;
+            wxDialog *dialogBox = (wxDialog *)thisWindow;
             long modalStyle = isModal ? wxDIALOG_MODAL : 0;
             if (!dialogBox->Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), theWindowStyle|modalStyle, name))
                 return FALSE;
@@ -3192,15 +3199,15 @@ bool wxWindowBase::LoadFromResource(wxWindow *parent, const wxString& resourceNa
             if ((resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) == 0)
                 dialogBox->SetClientSize(width, height);
         }
-        else if (IsKindOf(CLASSINFO(wxPanel)))
+        else if (thisWindow->IsKindOf(CLASSINFO(wxPanel)))
         {
-            wxPanel* panel = (wxPanel *)this;
+            wxPanel* panel = (wxPanel *)thisWindow;
             if (!panel->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle | wxTAB_TRAVERSAL, name))
                 return FALSE;
         }
         else
         {
-            if (!((wxWindow *)this)->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
+            if (!((wxWindow *)thisWindow)->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
                 return FALSE;
         }
     }
@@ -3213,26 +3220,26 @@ bool wxWindowBase::LoadFromResource(wxWindow *parent, const wxString& resourceNa
     else
     {
         if (resource->GetFont().Ok())
-            SetFont(resource->GetFont());
+            thisWindow->SetFont(resource->GetFont());
         if (resource->GetBackgroundColour().Ok())
-            SetBackgroundColour(resource->GetBackgroundColour());
+            thisWindow->SetBackgroundColour(resource->GetBackgroundColour());
     }
 
     // Should have some kind of font at this point
-    if (!GetFont().Ok())
-        SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    if (!GetBackgroundColour().Ok())
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    if (!thisWindow->GetFont().Ok())
+        thisWindow->SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+    if (!thisWindow->GetBackgroundColour().Ok())
+        thisWindow->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
     // Only when we've created the window and set the font can we set the correct size,
     // if based on dialog units.
     if ((resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) != 0)
     {
-        wxSize sz = ConvertDialogToPixels(wxSize(width, height));
-        SetClientSize(sz.x, sz.y);
+        wxSize sz = thisWindow->ConvertDialogToPixels(wxSize(width, height));
+        thisWindow->SetClientSize(sz.x, sz.y);
 
-        wxPoint pt = ConvertDialogToPixels(wxPoint(x, y));
-        Move(pt.x, pt.y);
+        wxPoint pt = thisWindow->ConvertDialogToPixels(wxPoint(x, y));
+        thisWindow->Move(pt.x, pt.y);
     }
 
     // Now create children
@@ -3241,25 +3248,23 @@ bool wxWindowBase::LoadFromResource(wxWindow *parent, const wxString& resourceNa
     {
         wxItemResource *childResource = (wxItemResource *)node->Data();
 
-        (void) CreateItem(childResource, resource, table);
+        (void) wxCreateItem(thisWindow, childResource, resource, table);
 
         node = node->Next();
     }
     return TRUE;
 }
 
-wxControl *wxWindowBase::CreateItem(const wxItemResource *resource, const wxItemResource* parentResource, const wxResourceTable *table)
+wxControl *wxCreateItem(wxWindow* thisWindow, const wxItemResource *resource, const wxItemResource* parentResource, const wxResourceTable *table)
 {
     if (!table)
         table = wxDefaultResourceTable;
-    return table->CreateItem((wxWindow *)this, resource, parentResource);
+    return table->CreateItem(thisWindow, resource, parentResource);
 }
 
 #ifdef __VISUALC__
 #pragma warning(default:4706)   // assignment within conditional expression
 #endif // VC++
 
-#endif
-// BC++/Win16
-
 #endif // wxUSE_WX_RESOURCES
+

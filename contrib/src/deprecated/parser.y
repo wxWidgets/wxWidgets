@@ -128,9 +128,9 @@ arg1	:	WORD
 #elif defined(__WXMAC__) && defined(__APPLE__)
 #include "lexer.c"
 #elif defined(__MWERKS__)
-#include "../common/cwlex_yy.c"
+#include "cwlex_yy.c"
 #else
-#include "../common/lex_yy.c"
+#include "lex_yy.c"
 #endif
 
 /*

@@ -201,6 +201,12 @@ WXDLLEXPORT extern bool wxResourceRegisterBitmapData(const wxString& name, char 
 WXDLLEXPORT extern bool wxResourceAddIdentifier(const wxString& name, int value, wxResourceTable *table = (wxResourceTable *) NULL);
 WXDLLEXPORT extern int wxResourceGetIdentifier(const wxString& name, wxResourceTable *table = (wxResourceTable *) NULL);
 
+// Used to be wxWindowBase::LoadFromResource
+bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& resourceName, const wxResourceTable *table);
+
+// Used to be wxWindowBase::CreateItem
+wxControl *wxCreateItem(wxWindow* thisWindow, const wxItemResource *resource, const wxItemResource* parentResource, const wxResourceTable *table);
+
 #if defined(__WXPM__)
 #include "wx/os2/wxrsc.h"
 #endif

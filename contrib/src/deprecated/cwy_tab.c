@@ -1,23 +1,13 @@
-/* include platform.h first to get __WIN32__ definition */
-#include "wx/platform.h"
-#if defined(__WIN32__) || defined(__GNUWIN32__)
-/* all Win32 compilers can handle C++ comments, and C++ comments
-   is the only C++ in setup.h */
-#include "wx/setup.h"
-#include "wx/deprecated/setup.h"
-#endif
-
-#if !defined(wxUSE_PROLOGIO) || wxUSE_PROLOGIO
-
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar     1.7 (Berkeley) 09/09/90";
 #endif
 #define YYBYACC 1
 #line 2 "parser.y"
 #include "string.h"
-#if defined(_MSC_VER) || defined(__VISAGECPP__)
+#ifdef _MSC_VER
 #include <io.h>
 #endif
+#include "wx/expr.h"
 #include "wx/deprecated/expr.h"
 
 #ifndef __EXTERN_C__
@@ -29,13 +19,31 @@ static char yysccsid[] = "@(#)yaccpar     1.7 (Berkeley) 09/09/90";
 extern "C" {
 #endif
 #endif
+int yyparse(void);
+int PROIO_yyparse(void) {
+	return yyparse() ;
+}
 int yylex(void);
 int yylook(void);
 int yywrap(void);
 int yyback(int *, int);
+#if __MSL__ < 0x6000
+int read( int , char * , int ) ;
+#else
+int _read( int , void * , size_t ) ;
+#define read _read
+#endif
+#ifdef __WXMSW__
+//int fileno( FILE* ) ; This is defined in watcom
+#else
+#if __MSL__ < 0x6000
+int fileno( void* ) ;
+#endif
+#endif
 
 /* You may need to put /DLEX_SCANNER in your makefile
  * if you're using LEX!
+	Last change:  JS   13 Jul 97    6:12 pm
  */
 #ifdef LEX_SCANNER
 /* int yyoutput(int); */
@@ -222,7 +230,11 @@ YYSTYPE yyvs[YYSTACKSIZE];
 #ifdef IDE_INVOKED
 #include "doslex.c"
 #else
+#if (defined(__MWERKS__))
+#include "cwlex_yy.c"
+#else
 #include "lex_yy.c"
+#endif
 #endif
 
 /*
@@ -258,10 +270,7 @@ void yyerror(char *s)
 #define yywrap() 1
 #endif
 #else
-#  if !(defined(__VISAGECPP__) && __IBMC__ >= 400)
-/* VA 4.0 thinks this is multiply defined (in lex_yy.c) */
-   int yywrap() { return 1; }
-#  endif
+int yywrap() { return 1; }
 #endif
 #endif
 #line 247 "y_tab.c"
@@ -269,15 +278,14 @@ void yyerror(char *s)
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
 int
-PROIO_yyparse()
+yyparse()
 {
     register int yym, yyn, yystate;
 #if YYDEBUG
     register char *yys;
     extern char *getenv();
 
-    yys = getenv("YYDEBUG");
-    if (yys)
+    if (yys = getenv("YYDEBUG"))
     {
         yyn = *yys;
         if (yyn >= '0' && yyn <= '9')
@@ -294,8 +302,7 @@ PROIO_yyparse()
     *yyssp = yystate = 0;
 
 yyloop:
-    yyn = yydefred[yystate];
-    if (yyn != 0) goto yyreduce;
+    if (yyn = yydefred[yystate]) goto yyreduce;
     if (yychar < 0)
     {
         if ((yychar = yylex()) < 0) yychar = 0;
@@ -537,5 +544,3 @@ yyabort:
 yyaccept:
     return (0);
 }
-
-#endif /* wxUSE_PROLOGIO */

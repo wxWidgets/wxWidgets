@@ -84,15 +84,31 @@ LIB32=link.exe -lib
 # Name "deprecated - Win32 Debug"
 # Begin Source File
 
-SOURCE=.\animate.cpp
+SOURCE=.\dosyacc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\animate\animate.h
+SOURCE=.\prop.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\readme.txt
+SOURCE=.\propform.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\proplist.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\resource.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\treelay.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\wxexpr.cpp
 # End Source File
 # End Target
 # End Project
