@@ -36,7 +36,7 @@ class WXDLLEXPORT wxDateSpan;
 // rebuilt)
 
 // For Mingw32, causes a link error. (VZ: why?)
-#if defined( __WXDEBUG__) && !defined(__MINGW32__)
+#if defined( __WXDEBUG__) && !defined(__MINGW32__) && !defined(_MSC_VER)
     #define wxDATETIME_DONT_INLINE
 
     #undef inline
