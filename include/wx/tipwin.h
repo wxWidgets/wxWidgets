@@ -28,6 +28,7 @@
 
     #define wxTipWindowBase wxFrame
 #endif
+#include "wx/arrstr.h"
 
 class WXDLLEXPORT wxTipWindowView;
 
