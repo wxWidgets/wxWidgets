@@ -119,6 +119,14 @@ bool wxStatusBar95::Create(wxWindow *parent,
     InheritAttributes();
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
+    
+    // we must refresh the frame size when the statusbar is created, because
+    // its client area might change
+    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
+    if ( frame )
+    {
+        frame->SendSizeEvent();
+    }
 
     return true;
 }
