@@ -316,7 +316,10 @@ def TestText(dc,log):
 
 class TestNB(wxNotebook):
     def __init__(self, parent, id, log):
-        wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
+        style = wxNB_BOTTOM
+        if wxPlatform == "__WXMAC__":
+            style = 0
+        wxNotebook.__init__(self, parent, id, style=style)
         self.log = log
 
         win = DrawPanel(self, TestEllipses, log)
@@ -361,7 +364,7 @@ def runTest(frame, nb, log):
     h = nb.GetClientSize().height
     if w < 600: w = 600
     if h < 400: h = 400
-    Init(w, h, 500)
+    Init(w, h, 200)
     win = TestNB(nb, -1, log)
     return win
 
