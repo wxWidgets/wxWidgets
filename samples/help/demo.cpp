@@ -120,6 +120,7 @@ public:
 
     void OnContextHelp(wxHelpEvent& event);
     void OnShowContextHelp(wxCommandEvent& event);
+    void OnShowDialogContextHelp(wxCommandEvent& event);
 
     void ShowHelp(int commandId, wxHelpControllerBase& helpController);
 
@@ -141,6 +142,19 @@ private:
    DECLARE_EVENT_TABLE()
 };
 
+// A custom modal dialog
+class MyModalDialog : public wxDialog
+{
+public:
+    MyModalDialog(wxWindow *parent);
+
+    void OnContextHelp(wxHelpEvent& event);
+
+private:
+
+    DECLARE_EVENT_TABLE()
+};
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -156,6 +170,7 @@ enum
     HelpDemo_Help_Help,
     HelpDemo_Help_Search,
     HelpDemo_Help_ContextHelp,
+    HelpDemo_Help_DialogContextHelp,
 
     HelpDemo_Html_Help_Index,
     HelpDemo_Html_Help_Classes,
@@ -197,6 +212,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HelpDemo_Help_Help, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_Search, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_ContextHelp, MyFrame::OnShowContextHelp)
+    EVT_MENU(HelpDemo_Help_DialogContextHelp, MyFrame::OnShowDialogContextHelp)
 
     EVT_HELP(-1, MyFrame::OnContextHelp)
 
@@ -323,6 +339,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Help_Classes, "&Help on Classes...");
     menuFile->Append(HelpDemo_Help_Functions, "&Help on Functions...");
     menuFile->Append(HelpDemo_Help_ContextHelp, "&Context Help...");
+    menuFile->Append(HelpDemo_Help_DialogContextHelp, "&Dialog Context Help...");
     menuFile->Append(HelpDemo_Help_Help, "&About Help Demo...");
     menuFile->Append(HelpDemo_Help_Search, "&Search help...");
 #if USE_HTML_HELP
@@ -404,14 +421,18 @@ void MyFrame::OnShowContextHelp(wxCommandEvent& event)
     wxContextHelp contextHelp(this);
 }
 
+void MyFrame::OnShowDialogContextHelp(wxCommandEvent& event)
+{
+    MyModalDialog dialog(this);
+    dialog.ShowModal();
+}
+
 void MyFrame::OnContextHelp(wxHelpEvent& event)
 {
     // In a real app, if we didn't recognise this ID, we should call event.Skip()
     wxString msg;
     msg.Printf(wxT("We should now display help for window %d"), event.GetId());
     wxMessageBox(msg);
-    //wxToolTip::Enable(TRUE);
-    //SetToolTip(msg);
 }
 
 void MyFrame::OnHtmlHelp(wxCommandEvent& event)
@@ -561,9 +582,82 @@ void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
    case HelpDemo_Help_Netscape:
       helpController.SetViewer("netscape", wxHELP_NETSCAPE);
       break;
-
    default:
       break;
    }
+}
+
+// ----------------------------------------------------------------------------
+// MyModalDialog
+// Demonstrates context-sensitive help
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(MyModalDialog, wxDialog)
+    EVT_HELP(-1, MyModalDialog::OnContextHelp)
+END_EVENT_TABLE()
+
+MyModalDialog::MyModalDialog(wxWindow *parent)
+             : wxDialog()
+{
+    // Add the context-sensitive help button on the caption, MSW only
+    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
+
+    wxDialog::Create(parent, -1, wxString("Modal dialog"));
+
+    wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
+
+    wxButton* btnOK = new wxButton(this, wxID_OK, "&OK");
+    wxButton* btnCancel = new wxButton(this, wxID_CANCEL, "&Cancel");
+    sizerRow->Add(btnOK, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerRow->Add(btnCancel, 0, wxALIGN_CENTER | wxALL, 5);
+
+    // Add the explicit context-sensitive help button, non-MSW
+#ifndef __WXMSW__
+    sizerRow->Add(new wxContextHelpButton(this), 0, wxALIGN_CENTER | wxALL, 5);
+#endif
+
+    sizerTop->Add(new wxTextCtrl(this, wxID_APPLY, wxT("A demo text control"), wxDefaultPosition, wxSize(300, 100), wxTE_MULTILINE),
+            0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    sizerTop->Add(sizerRow, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    SetAutoLayout(TRUE);
+    SetSizer(sizerTop);
+
+    sizerTop->SetSizeHints(this);
+    sizerTop->Fit(this);
+
+    btnOK->SetFocus();
+    btnOK->SetDefault();
+}
+
+void MyModalDialog::OnContextHelp(wxHelpEvent& event)
+{
+    wxString msg;
+    switch (event.GetId())
+    {
+    case wxID_OK:
+        {
+            msg = _("The OK button confirms the dialog choices.");
+            break;
+        }
+    case wxID_CANCEL:
+        {
+            msg = _("The Cancel button cancels the dialog.");
+            break;
+        }
+    case wxID_APPLY:
+        {
+            msg = _("This is a text control that does nothing in particular.");
+            break;
+        }
+    case wxID_CONTEXT_HELP:
+        {
+            msg = _("If you didn't know what this button is for, why did you press it? :-)");
+            break;
+        }
+    }
+    if (!msg.IsEmpty())
+        wxMessageBox(msg, _("Help"), wxICON_INFORMATION, this);
 }
 
