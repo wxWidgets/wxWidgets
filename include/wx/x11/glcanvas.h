@@ -100,21 +100,21 @@ public:
     wxGLCanvas( wxWindow *parent, wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, 
-        long style = 0, const wxString& name = "GLCanvas", 
+        long style = 0, const wxString& name = wxT("GLCanvas"), 
         int *attribList = (int*) NULL, 
         const wxPalette& palette = wxNullPalette );
     wxGLCanvas( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
         wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, 
-        long style = 0, const wxString& name = "GLCanvas", 
+        long style = 0, const wxString& name = wxT("GLCanvas"), 
         int *attribList = (int*) NULL, 
         const wxPalette& palette = wxNullPalette );
     wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL,
         wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, 
-        long style = 0, const wxString& name = "GLCanvas", 
+        long style = 0, const wxString& name = wxT("GLCanvas"), 
         int *attribList = (int*) NULL, 
         const wxPalette& palette = wxNullPalette );
     
@@ -124,7 +124,7 @@ public:
         wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, 
-        long style = 0, const wxString& name = "GLCanvas", 
+        long style = 0, const wxString& name = wxT("GLCanvas"), 
         int *attribList = (int*) NULL,
         const wxPalette& palette = wxNullPalette );
     
