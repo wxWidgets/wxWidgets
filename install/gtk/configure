@@ -18,7 +18,7 @@ ac_help="$ac_help
 ac_help="$ac_help
 **--with-shared           create shared libraries"
 ac_help="$ac_help
-**--without-optimise      create unoptimised code"
+**--with-optimise      create optimised code"
 ac_help="$ac_help
 **--with-debug_flag       create code with DEBUG define set to 1"
 ac_help="$ac_help

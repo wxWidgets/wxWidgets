@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/wx.h"
+#include "wx/module.h"
 #include "wx/thread.h"
 
 wxMutex::wxMutex()
@@ -26,13 +27,13 @@ wxMutex::~wxMutex()
     wxDebugMsg("wxMutex warning: destroying a locked mutex (%d locks)\n", m_locked);
 }
 
-MutexError wxMutex::Lock()
+wxMutexError wxMutex::Lock()
 {
   m_locked++;
   return MUTEX_NO_ERROR;
 }
 
-MutexError wxMutex::TryLock()
+wxMutexError wxMutex::TryLock()
 {
   if (m_locked > 0)
     return MUTEX_BUSY;
@@ -40,7 +41,7 @@ MutexError wxMutex::TryLock()
   return MUTEX_NO_ERROR;
 }
 
-MutexError wxMutex::Unlock()
+wxMutexError wxMutex::Unlock()
 {
   if (m_locked == 0)
     return MUTEX_UNLOCKED;
@@ -74,24 +75,24 @@ void wxCondition::Broadcast()
 {
 }
 
-struct wxThreadPrivate {
+struct wxThreadInternal {
 	int thread_id;
 	void* exit_status;
 };
 
-ThreadError wxThread::Create()
+wxThreadError wxThread::Create()
 {
   p_internal->exit_status = Entry();
   OnExit();
   return THREAD_NO_ERROR;
 }
 
-ThreadError wxThread::Destroy()
+wxThreadError wxThread::Destroy()
 {
   return THREAD_RUNNING;
 }
 
-void wxThread::DeferDestroy()
+void wxThread::DeferDestroy( bool WXUNUSED(on) )
 {
 }
 
@@ -120,18 +121,18 @@ bool wxThread::IsAlive() const
 }
 
 void wxThread::SetPriority(int WXUNUSED(prio)) { }
-int wxThread::GetPriority() const { }
+int wxThread::GetPriority() const { return 0; }
 
 wxMutex wxMainMutex; // controls access to all GUI functions
 
 wxThread::wxThread()
 {
-  p_internal = new wxThreadPrivate();
+  p_internal = new wxThreadInternal();
 }
 
 wxThread::~wxThread()
 {
-  Cancel();
+  Destroy();
   Join();
   delete p_internal;
 }
@@ -156,7 +157,7 @@ bool wxThreadModule::OnInit() {
   return TRUE;
 }
 
-void wxThreadModule::wxThreadExit()
+void wxThreadModule::OnExit()
 {
   wxMainMutex.Unlock();
 }

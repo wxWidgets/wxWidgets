@@ -741,7 +741,7 @@ AC_OVERRIDES(shared,shared,
 USE_SHARED)
 
 AC_OVERRIDES(optimise,optimise,
-**--without-optimise      create unoptimised code,
+**--with-optimise      create optimised code,
 USE_OPTIMISE)
 
 AC_OVERRIDES(debug_flag,debug_flag,

@@ -137,9 +137,9 @@ void wxDC::DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 )
 {
   wxList list;
   list.DeleteContents(TRUE);
-  list.Append( new wxPoint(x1, y1) );
-  list.Append( new wxPoint(x2, y2) );
-  list.Append( new wxPoint(x3, y3) );
+  list.Append( (wxObject*)new wxPoint(x1, y1) );
+  list.Append( (wxObject*)new wxPoint(x2, y2) );
+  list.Append( (wxObject*)new wxPoint(x3, y3) );
   DrawSpline(&list);
 };
 

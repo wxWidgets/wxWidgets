@@ -51,6 +51,12 @@ int wxKill(long pid, int sig)
   return kill(pid, sig);
 };
 
+void wxDisplaySize( int *width, int *height )
+{
+  if (width) *width = gdk_screen_width();
+  if (height) *height = gdk_screen_height();
+}
+
 //------------------------------------------------------------------------
 // user and home routines
 //------------------------------------------------------------------------
@@ -440,4 +446,5 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
 	/* loop */ ;
     return wxExecute(argv, sync, process);
 };
+
 

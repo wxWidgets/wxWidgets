@@ -65,6 +65,7 @@ LIB_CPP_SRC=\
  gtk/choice.cpp \
  gtk/colour.cpp \
  gtk/control.cpp \
+ gtk/combobox.cpp \
  gtk/cursor.cpp \
  gtk/data.cpp \
  gtk/dc.cpp \
