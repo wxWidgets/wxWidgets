@@ -228,7 +228,7 @@ gtk_myfixed_put (GtkMyFixed   *myfixed,
   if (GTK_WIDGET_REALIZED (myfixed) && !GTK_WIDGET_REALIZED (widget))
     gtk_widget_realize (widget);
 
-  if (GTK_WIDGET_MAPPED (myfixed) && !GTK_WIDGET_MAPPED (widget))
+  if (GTK_WIDGET_MAPPED (myfixed) && !GTK_WIDGET_MAPPED (widget) && GTK_WIDGET_VISIBLE (widget))
     gtk_widget_map (widget);
 
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (myfixed))

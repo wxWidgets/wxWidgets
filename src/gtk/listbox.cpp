@@ -64,6 +64,53 @@ extern bool g_isIdle;
 extern bool   g_blockEventsOnDrag;
 extern bool   g_blockEventsOnScroll;
 
+static bool   g_hasDoubleClicked = FALSE;
+
+//-----------------------------------------------------------------------------
+// "button_release_event"
+//-----------------------------------------------------------------------------
+
+/* we would normally emit a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event once
+   a GDK_2BUTTON_PRESS occurs, but this has the particular problem of the
+   listbox keeping the focus until it receives a GDK_BUTTON_RELEASE event.
+   this can lead to race conditions so that we emit the dclick event
+   after the GDK_BUTTON_RELEASE event after the GDK_2BUTTON_PRESS event */
+
+static gint
+gtk_listbox_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxListBox *listbox )
+{
+    if (g_isIdle) wxapp_install_idle_handler();
+
+    if (g_blockEventsOnDrag) return FALSE;
+    if (g_blockEventsOnScroll) return FALSE;
+
+    if (!listbox->m_hasVMT) return FALSE;
+
+    if (!g_hasDoubleClicked) return FALSE;
+
+        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
+        event.SetEventObject( listbox );
+
+        wxArrayInt aSelections;
+        int count = listbox->GetSelections(aSelections);
+        if ( count > 0 )
+        {
+            event.m_commandInt = aSelections[0] ;
+            event.m_clientData = listbox->GetClientData( event.m_commandInt );
+            wxString str(listbox->GetString(event.m_commandInt));
+            if (!str.IsEmpty()) event.m_commandString = str;
+        }
+        else
+        {
+            event.m_commandInt = -1 ;
+            event.m_commandString.Empty();
+        }
+
+        listbox->GetEventHandler()->ProcessEvent( event );
+
+    return FALSE;
+}
+
 //-----------------------------------------------------------------------------
 // "button_press_event"
 //-----------------------------------------------------------------------------
@@ -91,30 +138,9 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
         event.SetInt( sel );
         listbox->GetEventHandler()->ProcessEvent( event );
     }
-
-    if (gdk_event->type == GDK_2BUTTON_PRESS)
-    {
-        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
-        event.SetEventObject( listbox );
-
-        wxArrayInt aSelections;
-        int count = listbox->GetSelections(aSelections);
-        if ( count > 0 )
-        {
-            event.m_commandInt = aSelections[0] ;
-            event.m_clientData = listbox->GetClientData( event.m_commandInt );
-            wxString str(listbox->GetString(event.m_commandInt));
-            if (!str.IsEmpty()) event.m_commandString = str;
-        }
-        else
-        {
-            event.m_commandInt = -1 ;
-            event.m_commandString.Empty();
-        }
-
-        listbox->GetEventHandler()->ProcessEvent( event );
-
-    }
+    
+    /* emit wxEVT_COMMAND_LISTBOX_DOUBLECLICKED later */
+    g_hasDoubleClicked = (gdk_event->type == GDK_2BUTTON_PRESS);
 
     return FALSE;
 }
@@ -267,6 +293,11 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         gtk_signal_connect( GTK_OBJECT(list_item),
                             "button_press_event",
                             (GtkSignalFunc)gtk_listbox_button_press_callback,
+                            (gpointer) this );
+
+        gtk_signal_connect_after( GTK_OBJECT(list_item),
+                            "button_release_event",
+                            (GtkSignalFunc)gtk_listbox_button_release_callback,
                             (gpointer) this );
 
         if (m_hasCheckBoxes)
