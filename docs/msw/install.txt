@@ -312,7 +312,7 @@ issues concerning the compiler installation:
 
 2. Make sure that you downloaded and installed the service pack 1 
    for Borland C++ 5.5.  This SP1 can be downloaded from:
-   http://www.borland.com/devsupport/bcppbuilder/file_supplements.html
+   http://www.borland.com/devsupport/bcppbuilder/patches/#freecompiler55
 
    IMPORTANT:
    When installing SP1, make sure that you extract (UnZip) the files 
