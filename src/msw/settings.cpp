@@ -273,8 +273,10 @@ bool wxSystemSettings::GetCapability(int index)
     {
         case wxSYS_CAN_ICONIZE_FRAME: 
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
-            return TRUE; break;
+            return TRUE;
         default:
             return FALSE;
     }
+
+    return FALSE;
 }
