@@ -38,10 +38,12 @@
 
 #include "wx/dynlib.h"
 
-#include "wx/net.h"
+#include "wx/dialup.h"
 
 #include <ras.h>
 #include <raserror.h>
+
+#include <wininet.h>
 
 #include "wx/msw/private.h"
 
@@ -51,6 +53,7 @@
 
 // this message is sent by the secondary thread when RAS status changes
 #define wxWM_RAS_STATUS_CHANGED (WM_USER + 10010)
+#define wxWM_RAS_DIALING_PROGRESS (WM_USER + 10011)
 
 // ----------------------------------------------------------------------------
 // types
@@ -62,47 +65,47 @@
 // startup because of the missing DLL...
 
 #ifndef UNICODE
-    typedef DWORD (* RASDIAL)( LPRASDIALEXTENSIONS, LPCSTR, LPRASDIALPARAMSA, DWORD, LPVOID, LPHRASCONN );
-    typedef DWORD (* RASENUMCONNECTIONS)( LPRASCONNA, LPDWORD, LPDWORD );
-    typedef DWORD (* RASENUMENTRIES)( LPCSTR, LPCSTR, LPRASENTRYNAMEA, LPDWORD, LPDWORD );
-    typedef DWORD (* RASGETCONNECTSTATUS)( HRASCONN, LPRASCONNSTATUSA );
-    typedef DWORD (* RASGETERRORSTRING)( UINT, LPSTR, DWORD );
-    typedef DWORD (* RASHANGUP)( HRASCONN );
-    typedef DWORD (* RASGETPROJECTIONINFO)( HRASCONN, RASPROJECTION, LPVOID, LPDWORD );
-    typedef DWORD (* RASCREATEPHONEBOOKENTRY)( HWND, LPCSTR );
-    typedef DWORD (* RASEDITPHONEBOOKENTRY)( HWND, LPCSTR, LPCSTR );
-    typedef DWORD (* RASSETENTRYDIALPARAMS)( LPCSTR, LPRASDIALPARAMSA, BOOL );
-    typedef DWORD (* RASGETENTRYDIALPARAMS)( LPCSTR, LPRASDIALPARAMSA, LPBOOL );
-    typedef DWORD (* RASENUMDEVICES)( LPRASDEVINFOA, LPDWORD, LPDWORD );
-    typedef DWORD (* RASGETCOUNTRYINFO)( LPRASCTRYINFOA, LPDWORD );
-    typedef DWORD (* RASGETENTRYPROPERTIES)( LPCSTR, LPCSTR, LPRASENTRYA, LPDWORD, LPBYTE, LPDWORD );
-    typedef DWORD (* RASSETENTRYPROPERTIES)( LPCSTR, LPCSTR, LPRASENTRYA, DWORD, LPBYTE, DWORD );
-    typedef DWORD (* RASRENAMEENTRY)( LPCSTR, LPCSTR, LPCSTR );
-    typedef DWORD (* RASDELETEENTRY)( LPCSTR, LPCSTR );
-    typedef DWORD (* RASVALIDATEENTRYNAME)( LPCSTR, LPCSTR );
-    typedef DWORD (* RASCONNECTIONNOTIFICATION)( HRASCONN, HANDLE, DWORD );
+    typedef DWORD (APIENTRY * RASDIAL)( LPRASDIALEXTENSIONS, LPCSTR, LPRASDIALPARAMSA, DWORD, LPVOID, LPHRASCONN );
+    typedef DWORD (APIENTRY * RASENUMCONNECTIONS)( LPRASCONNA, LPDWORD, LPDWORD );
+    typedef DWORD (APIENTRY * RASENUMENTRIES)( LPCSTR, LPCSTR, LPRASENTRYNAMEA, LPDWORD, LPDWORD );
+    typedef DWORD (APIENTRY * RASGETCONNECTSTATUS)( HRASCONN, LPRASCONNSTATUSA );
+    typedef DWORD (APIENTRY * RASGETERRORSTRING)( UINT, LPSTR, DWORD );
+    typedef DWORD (APIENTRY * RASHANGUP)( HRASCONN );
+    typedef DWORD (APIENTRY * RASGETPROJECTIONINFO)( HRASCONN, RASPROJECTION, LPVOID, LPDWORD );
+    typedef DWORD (APIENTRY * RASCREATEPHONEBOOKENTRY)( HWND, LPCSTR );
+    typedef DWORD (APIENTRY * RASEDITPHONEBOOKENTRY)( HWND, LPCSTR, LPCSTR );
+    typedef DWORD (APIENTRY * RASSETENTRYDIALPARAMS)( LPCSTR, LPRASDIALPARAMSA, BOOL );
+    typedef DWORD (APIENTRY * RASGETENTRYDIALPARAMS)( LPCSTR, LPRASDIALPARAMSA, LPBOOL );
+    typedef DWORD (APIENTRY * RASENUMDEVICES)( LPRASDEVINFOA, LPDWORD, LPDWORD );
+    typedef DWORD (APIENTRY * RASGETCOUNTRYINFO)( LPRASCTRYINFOA, LPDWORD );
+    typedef DWORD (APIENTRY * RASGETENTRYPROPERTIES)( LPCSTR, LPCSTR, LPRASENTRYA, LPDWORD, LPBYTE, LPDWORD );
+    typedef DWORD (APIENTRY * RASSETENTRYPROPERTIES)( LPCSTR, LPCSTR, LPRASENTRYA, DWORD, LPBYTE, DWORD );
+    typedef DWORD (APIENTRY * RASRENAMEENTRY)( LPCSTR, LPCSTR, LPCSTR );
+    typedef DWORD (APIENTRY * RASDELETEENTRY)( LPCSTR, LPCSTR );
+    typedef DWORD (APIENTRY * RASVALIDATEENTRYNAME)( LPCSTR, LPCSTR );
+    typedef DWORD (APIENTRY * RASCONNECTIONNOTIFICATION)( HRASCONN, HANDLE, DWORD );
 
     static const char gs_funcSuffix = 'A';
 #else // Unicode
-    typedef DWORD (* RASDIAL)( LPRASDIALEXTENSIONS, LPCWSTR, LPRASDIALPARAMSW, DWORD, LPVOID, LPHRASCONN );
-    typedef DWORD (* RASENUMCONNECTIONS)( LPRASCONNW, LPDWORD, LPDWORD );
-    typedef DWORD (* RASENUMENTRIES)( LPCWSTR, LPCWSTR, LPRASENTRYNAMEW, LPDWORD, LPDWORD );
-    typedef DWORD (* RASGETCONNECTSTATUS)( HRASCONN, LPRASCONNSTATUSW );
-    typedef DWORD (* RASGETERRORSTRING)( UINT, LPWSTR, DWORD );
-    typedef DWORD (* RASHANGUP)( HRASCONN );
-    typedef DWORD (* RASGETPROJECTIONINFO)( HRASCONN, RASPROJECTION, LPVOID, LPDWORD );
-    typedef DWORD (* RASCREATEPHONEBOOKENTRY)( HWND, LPCWSTR );
-    typedef DWORD (* RASEDITPHONEBOOKENTRY)( HWND, LPCWSTR, LPCWSTR );
-    typedef DWORD (* RASSETENTRYDIALPARAMS)( LPCWSTR, LPRASDIALPARAMSW, BOOL );
-    typedef DWORD (* RASGETENTRYDIALPARAMS)( LPCWSTR, LPRASDIALPARAMSW, LPBOOL );
-    typedef DWORD (* RASENUMDEVICES)( LPRASDEVINFOW, LPDWORD, LPDWORD );
-    typedef DWORD (* RASGETCOUNTRYINFO)( LPRASCTRYINFOW, LPDWORD );
-    typedef DWORD (* RASGETENTRYPROPERTIES)( LPCWSTR, LPCWSTR, LPRASENTRYW, LPDWORD, LPBYTE, LPDWORD );
-    typedef DWORD (* RASSETENTRYPROPERTIES)( LPCWSTR, LPCWSTR, LPRASENTRYW, DWORD, LPBYTE, DWORD );
-    typedef DWORD (* RASRENAMEENTRY)( LPCWSTR, LPCWSTR, LPCWSTR );
-    typedef DWORD (* RASDELETEENTRY)( LPCWSTR, LPCWSTR );
-    typedef DWORD (* RASVALIDATEENTRYNAME)( LPCWSTR, LPCWSTR );
-    typedef DWORD (* RASCONNECTIONNOTIFICATION)( HRASCONN, HANDLE, DWORD );
+    typedef DWORD (APIENTRY * RASDIAL)( LPRASDIALEXTENSIONS, LPCWSTR, LPRASDIALPARAMSW, DWORD, LPVOID, LPHRASCONN );
+    typedef DWORD (APIENTRY * RASENUMCONNECTIONS)( LPRASCONNW, LPDWORD, LPDWORD );
+    typedef DWORD (APIENTRY * RASENUMENTRIES)( LPCWSTR, LPCWSTR, LPRASENTRYNAMEW, LPDWORD, LPDWORD );
+    typedef DWORD (APIENTRY * RASGETCONNECTSTATUS)( HRASCONN, LPRASCONNSTATUSW );
+    typedef DWORD (APIENTRY * RASGETERRORSTRING)( UINT, LPWSTR, DWORD );
+    typedef DWORD (APIENTRY * RASHANGUP)( HRASCONN );
+    typedef DWORD (APIENTRY * RASGETPROJECTIONINFO)( HRASCONN, RASPROJECTION, LPVOID, LPDWORD );
+    typedef DWORD (APIENTRY * RASCREATEPHONEBOOKENTRY)( HWND, LPCWSTR );
+    typedef DWORD (APIENTRY * RASEDITPHONEBOOKENTRY)( HWND, LPCWSTR, LPCWSTR );
+    typedef DWORD (APIENTRY * RASSETENTRYDIALPARAMS)( LPCWSTR, LPRASDIALPARAMSW, BOOL );
+    typedef DWORD (APIENTRY * RASGETENTRYDIALPARAMS)( LPCWSTR, LPRASDIALPARAMSW, LPBOOL );
+    typedef DWORD (APIENTRY * RASENUMDEVICES)( LPRASDEVINFOW, LPDWORD, LPDWORD );
+    typedef DWORD (APIENTRY * RASGETCOUNTRYINFO)( LPRASCTRYINFOW, LPDWORD );
+    typedef DWORD (APIENTRY * RASGETENTRYPROPERTIES)( LPCWSTR, LPCWSTR, LPRASENTRYW, LPDWORD, LPBYTE, LPDWORD );
+    typedef DWORD (APIENTRY * RASSETENTRYPROPERTIES)( LPCWSTR, LPCWSTR, LPRASENTRYW, DWORD, LPBYTE, DWORD );
+    typedef DWORD (APIENTRY * RASRENAMEENTRY)( LPCWSTR, LPCWSTR, LPCWSTR );
+    typedef DWORD (APIENTRY * RASDELETEENTRY)( LPCWSTR, LPCWSTR );
+    typedef DWORD (APIENTRY * RASVALIDATEENTRYNAME)( LPCWSTR, LPCWSTR );
+    typedef DWORD (APIENTRY * RASCONNECTIONNOTIFICATION)( HRASCONN, HANDLE, DWORD );
 
     static const char gs_funcSuffix = 'W';
 #endif // ASCII/Unicode
@@ -137,6 +140,7 @@ public:
 
     // implement base class pure virtuals
     virtual bool IsOk() const;
+    virtual size_t GetISPNames(wxArrayString& names) const;
     virtual bool Dial(const wxString& nameOfISP,
                       const wxString& username,
                       const wxString& password,
@@ -144,6 +148,7 @@ public:
     virtual bool IsDialing() const;
     virtual bool CancelDialing();
     virtual bool HangUp();
+    virtual bool IsAlwaysOnline() const;
     virtual bool IsOnline() const;
     virtual void SetOnlineStatus(bool isOnline = TRUE);
     virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds);
@@ -157,9 +162,10 @@ public:
 
     // for wxRasStatusWindowProc
     void OnConnectStatusChange();
+    void OnDialProgress(RASCONNSTATE rasconnstate, DWORD dwError);
 
     // for wxRasDialFunc
-    void OnDialProgress(RASCONNSTATE rasconnstate, DWORD dwError);
+    static HWND GetRasWindow() { return ms_hwndRas; }
     static wxDialUpManagerMSW *GetDialer() { return ms_dialer; }
 
 private:
@@ -194,6 +200,9 @@ private:
     // data used by this thread and our hidden window to send messages between
     // each other
     wxRasThreadData m_data;
+
+    // the hidden window we use for passing messages between threads
+    static HWND ms_hwndRas;
 
     // the handle of the connection we initiated or 0 if none
     static HRASCONN ms_hRasConnection;
@@ -233,6 +242,10 @@ private:
     // this flag tells us if we're online
     static int ms_isConnected;
 
+    // this flag is the result of the call to IsAlwaysOnline() (-1 if not
+    // called yet)
+    static int ms_isAlwaysOnline;
+
     // this flag tells us whether a call to RasDial() is in progress
     static wxDialUpManagerMSW *ms_dialer;
 };
@@ -260,6 +273,8 @@ static void WINAPI wxRasDialFunc(UINT unMsg,
 
 HRASCONN wxDialUpManagerMSW::ms_hRasConnection = 0;
 
+HWND wxDialUpManagerMSW::ms_hwndRas = 0;
+
 int wxDialUpManagerMSW::ms_nDllCount = 0;
 wxDllType wxDialUpManagerMSW::ms_dllRas = 0;
 
@@ -285,6 +300,7 @@ RASCONNECTIONNOTIFICATION wxDialUpManagerMSW::ms_pfnRasConnectionNotification = 
 
 int wxDialUpManagerMSW::ms_userSpecifiedOnlineStatus = -1;
 int wxDialUpManagerMSW::ms_isConnected = -1;
+int wxDialUpManagerMSW::ms_isAlwaysOnline = -1;
 wxDialUpManagerMSW *wxDialUpManagerMSW::ms_dialer = NULL;
 
 // ----------------------------------------------------------------------------
@@ -329,7 +345,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
             // get the function from rasapi32.dll and abort if it's not found
             #define RESOLVE_RAS_FUNCTION(type, name)                    \
                 ms_pfn##name = (type)wxDllLoader::GetSymbol(ms_dllRas,  \
-                               wxString(#name) + gs_funcSuffix);        \
+                               wxString(_T(#name)) + gs_funcSuffix);    \
                 if ( !ms_pfn##name )                                    \
                 {                                                       \
                     funcName = #name;                                   \
@@ -340,7 +356,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
             // not found in the DLL
             #define RESOLVE_OPTIONAL_RAS_FUNCTION(type, name)           \
                 ms_pfn##name = (type)wxDllLoader::GetSymbol(ms_dllRas,  \
-                               wxString(#name) + gs_funcSuffix);
+                               wxString(_T(#name)) + gs_funcSuffix);
 
             RESOLVE_RAS_FUNCTION(RASDIAL, RasDial);
             RESOLVE_RAS_FUNCTION(RASENUMCONNECTIONS, RasEnumConnections);
@@ -348,6 +364,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
             RESOLVE_RAS_FUNCTION(RASGETCONNECTSTATUS, RasGetConnectStatus);
             RESOLVE_RAS_FUNCTION(RASGETERRORSTRING, RasGetErrorString);
             RESOLVE_RAS_FUNCTION(RASHANGUP, RasHangUp);
+            RESOLVE_RAS_FUNCTION(RASGETENTRYDIALPARAMS, RasGetEntryDialParams);
 
             // suppress wxDllLoader messages about missing (non essential)
             // functions
@@ -358,7 +375,6 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
                 RESOLVE_OPTIONAL_RAS_FUNCTION(RASCREATEPHONEBOOKENTRY, RasCreatePhonebookEntry);
                 RESOLVE_OPTIONAL_RAS_FUNCTION(RASEDITPHONEBOOKENTRY, RasEditPhonebookEntry);
                 RESOLVE_OPTIONAL_RAS_FUNCTION(RASSETENTRYDIALPARAMS, RasSetEntryDialParams);
-                RESOLVE_OPTIONAL_RAS_FUNCTION(RASGETENTRYDIALPARAMS, RasGetEntryDialParams);
                 RESOLVE_OPTIONAL_RAS_FUNCTION(RASGETENTRYPROPERTIES, RasGetEntryProperties);
                 RESOLVE_OPTIONAL_RAS_FUNCTION(RASSETENTRYPROPERTIES, RasSetEntryProperties);
                 RESOLVE_OPTIONAL_RAS_FUNCTION(RASRENAMEENTRY, RasRenameEntry);
@@ -632,11 +648,62 @@ bool wxDialUpManagerMSW::IsOk() const
     return ms_dllRas != 0;
 }
 
+size_t wxDialUpManagerMSW::GetISPNames(wxArrayString& names) const
+{
+    // fetch the entries
+    DWORD size = sizeof(RASENTRYNAME);
+    RASENTRYNAME *rasEntries = (RASENTRYNAME *)malloc(size);
+    rasEntries->dwSize = sizeof(RASENTRYNAME);
+
+    DWORD nEntries;
+    DWORD dwRet;
+    do
+    {
+        dwRet = ms_pfnRasEnumEntries
+                  (
+                   NULL,                // reserved
+                   NULL,                // default phone book (or all)
+                   rasEntries,          // [out] buffer for the entries
+                   &size,               // [in/out] size of the buffer
+                   &nEntries            // [out] number of entries fetched
+                  );
+
+        if ( dwRet == ERROR_BUFFER_TOO_SMALL )
+        {
+            // reallocate the buffer
+            rasEntries = (RASENTRYNAME *)realloc(rasEntries, size);
+        }
+        else if ( dwRet != 0 )
+        {
+            // some other error - abort
+            wxLogError(_("Failed to get ISP names: %s"), GetErrorString(dwRet));
+
+            free(rasEntries);
+
+            return 0u;
+        }
+    }
+    while ( dwRet != 0 );
+
+    // process them
+    names.Empty();
+    for ( size_t n = 0; n < (size_t)nEntries; n++ )
+    {
+        names.Add(rasEntries[n].szEntryName);
+    }
+
+    free(rasEntries);
+
+    // return the number of entries
+    return names.GetCount();
+}
+
 bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
                               const wxString& username,
                               const wxString& password,
                               bool async)
 {
+    // check preconditions
     wxCHECK_MSG( IsOk(), FALSE, T("using uninitialized wxDialUpManager") );
 
     if ( ms_hRasConnection )
@@ -646,15 +713,86 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
         return TRUE;
     }
 
+    // get the default ISP if none given
+    wxString entryName(nameOfISP);
+    if ( !entryName )
+    {
+        wxArrayString names;
+        size_t count = GetISPNames(names);
+        switch ( count )
+        {
+            case 0:
+                // no known ISPs, abort
+                wxLogError(_("Failed to connect: no ISP to dial."));
+
+                return FALSE;
+
+            case 1:
+                // only one ISP, choose it
+                entryName = names[0u];
+                break;
+
+            default:
+                // several ISPs, let the user choose
+                {
+                    wxString *strings = new wxString[count];
+                    for ( size_t i = 0; i < count; i++ )
+                    {
+                        strings[i] = names[i];
+                    }
+
+                    entryName = wxGetSingleChoice
+                                (
+                                 _("Choose ISP to dial"),
+                                 _("Please choose which ISP do you want to "
+                                   "connect to"),
+                                 count,
+                                 strings
+                                );
+
+                    delete [] strings;
+
+                    if ( !entryName )
+                    {
+                        // cancelled by user
+                        return FALSE;
+                    }
+                }
+        }
+    }
+
     RASDIALPARAMS rasDialParams;
     rasDialParams.dwSize = sizeof(rasDialParams);
-    strncpy(rasDialParams.szEntryName, nameOfISP, RAS_MaxEntryName);
+    strncpy(rasDialParams.szEntryName, entryName, RAS_MaxEntryName);
+
+    // do we have the username and password?
+    if ( !username || !password )
+    {
+        BOOL gotPassword;
+        DWORD dwRet = ms_pfnRasGetEntryDialParams
+                      (
+                       NULL,            // default phonebook
+                       &rasDialParams,  // [in/out] the params of this entry
+                       &gotPassword     // [out] did we get password?
+                      );
+
+        if ( dwRet != 0 )
+        {
+            wxLogError(_("Failed to connect: missing username/password."));
+
+            return FALSE;
+        }
+    }
+	else
+	{
+		strncpy(rasDialParams.szUserName, username, UNLEN);
+		strncpy(rasDialParams.szPassword, password, PWLEN);
+	}
+
+	// default values for other fields
     rasDialParams.szPhoneNumber[0] = '\0';
     rasDialParams.szCallbackNumber[0] = '\0';
     rasDialParams.szCallbackNumber[0] = '\0';
-
-    strncpy(rasDialParams.szUserName, username, UNLEN);
-    strncpy(rasDialParams.szPassword, password, PWLEN);
 
     rasDialParams.szDomain[0] = '*';
     rasDialParams.szDomain[1] = '\0';
@@ -781,6 +919,74 @@ bool wxDialUpManagerMSW::HangUp()
     return TRUE;
 }
 
+bool wxDialUpManagerMSW::IsAlwaysOnline() const
+{
+    // we cache the result (presumably this won't change while the program is
+    // running!)
+    if ( ms_isAlwaysOnline != -1 )
+    {
+        return ms_isAlwaysOnline != 0;
+    }
+
+    // try to use WinInet function first
+    bool ok;
+    wxDllType hDll = wxDllLoader::LoadLibrary(_T("WININET"), &ok);
+    if ( ok )
+    {
+        typedef BOOL (*INTERNETGETCONNECTEDSTATE)(LPDWORD, DWORD);
+        INTERNETGETCONNECTEDSTATE pfnInternetGetConnectedState;
+
+        #define RESOLVE_FUNCTION(type, name) \
+            pfn##name = (type)wxDllLoader::GetSymbol(hDll, _T(#name))
+
+        RESOLVE_FUNCTION(INTERNETGETCONNECTEDSTATE, InternetGetConnectedState);
+
+        if ( pfnInternetGetConnectedState )
+        {
+            DWORD flags = 0;
+            if ( pfnInternetGetConnectedState(&flags, 0 /* reserved */) )
+            {
+                // there is some connection to the net, see of which type
+                ms_isAlwaysOnline = (flags & INTERNET_CONNECTION_LAN != 0) ||
+                                    (flags & INTERNET_CONNECTION_PROXY != 0);
+
+                wxLogMessage("InternetGetConnectedState() returned TRUE, "
+                             "flags = %08x", flags);
+            }
+            else
+            {
+                // no Internet connection at all
+                ms_isAlwaysOnline = FALSE;
+            }
+        }
+
+        wxDllLoader::UnloadLibrary(hDll);
+    }
+
+    // did we succeed with WinInet? if not, try something else
+    if ( ms_isAlwaysOnline == -1 )
+    {
+        if ( !IsOnline() )
+        {
+            // definitely no permanent connection because we are not connected
+            // now
+            ms_isAlwaysOnline = FALSE;
+        }
+        else
+        {
+            // of course, having a modem doesn't prevent us from having a
+            // permanent connection as well, but we have to guess somehow and
+            // it's probably more common that a system connected via a modem
+            // doesn't have any other net access, so:
+            ms_isAlwaysOnline = FALSE;
+        }
+    }
+
+    wxASSERT_MSG( ms_isAlwaysOnline != -1, T("logic error") );
+
+    return ms_isAlwaysOnline != 0;
+}
+
 bool wxDialUpManagerMSW::IsOnline() const
 {
     wxCHECK_MSG( IsOk(), FALSE, T("using uninitialized wxDialUpManager") );
@@ -872,16 +1078,16 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
         }
     }
 
-    if ( ok )
+    if ( ok && !ms_hwndRas )
     {
         // create a hidden window to receive notification about connections
         // status change
         extern wxChar wxPanelClassName[];
-        m_data.hWnd = ::CreateWindow(wxPanelClassName, NULL,
-                                     0, 0, 0, 0,
-                                     0, NULL,
-                                     (HMENU)NULL, wxGetInstance(), 0);
-        if ( !m_data.hWnd )
+        ms_hwndRas = ::CreateWindow(wxPanelClassName, NULL,
+                                    0, 0, 0, 0,
+                                    0, NULL,
+                                    (HMENU)NULL, wxGetInstance(), 0);
+        if ( !ms_hwndRas )
         {
             wxLogLastError("CreateWindow(RasHiddenWindow)");
 
@@ -897,8 +1103,10 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
                               wxGetInstance()
                              );
 
-        ::SetWindowLong(m_data.hWnd, GWL_WNDPROC, (LONG) windowProc);
+        ::SetWindowLong(ms_hwndRas, GWL_WNDPROC, (LONG) windowProc);
     }
+
+    m_data.hWnd = ms_hwndRas;
 
     if ( ok )
     {
@@ -1043,6 +1251,12 @@ static LRESULT APIENTRY wxRasStatusWindowProc(HWND hWnd, UINT message,
         wxRasThreadData *data = (wxRasThreadData *)lParam;
         data->dialUpManager->OnConnectStatusChange();
     }
+    else if ( message == wxWM_RAS_DIALING_PROGRESS )
+    {
+        wxDialUpManagerMSW *dialUpManager = wxDialUpManagerMSW::GetDialer();
+
+        dialUpManager->OnDialProgress((RASCONNSTATE)wParam, lParam);
+    }
 
     return 0;
 }
@@ -1055,7 +1269,8 @@ static void WINAPI wxRasDialFunc(UINT unMsg,
 
     wxCHECK_RET( dialUpManager, T("who started to dial then?") );
 
-    dialUpManager->OnDialProgress(rasconnstate, dwError);
+    SendMessage(dialUpManager->GetRasWindow(), wxWM_RAS_DIALING_PROGRESS,
+                rasconnstate, dwError);
 }
 
 #endif // wxUSE_DIALUP_MANAGER

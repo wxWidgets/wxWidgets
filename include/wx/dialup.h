@@ -19,8 +19,10 @@
 #if wxUSE_DIALUP_MANAGER
 
 // ----------------------------------------------------------------------------
-// constants
+// misc
 // ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxArrayString;
 
 extern const wxChar *wxEmptyString;
 
@@ -65,7 +67,16 @@ public:
     // operations
     // ----------
 
+    // fills the array with the names of all possible values for the first
+    // parameter to Dial() on this machine and returns their number (may be 0)
+    virtual size_t GetISPNames(wxArrayString& names) const = 0;
+
     // dial the given ISP, use username and password to authentificate
+    //
+    // if no nameOfISP is given, the function will select the default one
+    //
+    // if no username/password are given, the function will try to do without
+    // them, but will ask the user if really needed
     //
     // if async parameter is FALSE, the function waits until the end of dialing
     // and returns TRUE upon successful completion.
@@ -89,6 +100,14 @@ public:
 
     // online status
     // -------------
+
+    // returns TRUE if the computer has a permanent network connection (i.e. is
+    // on a LAN) and so there is no need to use Dial() function to go online
+    //
+    // NB: this functions tries to guess the result and it is not always
+    //     guaranteed to be correct, so it's better to ask user for
+    //     confirmation or give him a possibility to override it
+    virtual bool IsAlwaysOnline() const = 0;
 
     // returns TRUE if the computer is connected to the network: under Windows,
     // this just means that a RAS connection exists, under Unix we check that

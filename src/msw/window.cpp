@@ -2240,11 +2240,7 @@ bool wxWindow::MSWCreate(int id,
     if ( width > -1 ) width1 = width;
     if ( height > -1 ) height1 = height;
 
-#ifdef __WXWINE__
     HWND hParent = (HWND)NULL;
-#else
-    HWND hParent = NULL;
-#endif
     if ( parent )
         hParent = (HWND) parent->GetHWND();
 
