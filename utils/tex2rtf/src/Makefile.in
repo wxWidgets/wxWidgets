@@ -1,0 +1,42 @@
+# WXXT base directory
+WXBASEDIR=@WXBASEDIR@
+
+# set the OS type for compilation
+OS=@OS@
+# compile a library only
+RULE=bin
+
+# define library name
+BIN_TARGET=tex2rtf
+# define library sources
+BIN_SRC=\
+htmlutil.cpp \
+maths.cpp \
+readshg.cpp \
+rtfutils.cpp \
+table.cpp \
+tex2any.cpp \
+tex2rtf.cpp \
+texutils.cpp \
+xlputils.cpp 
+
+#define library objects
+BIN_OBJ=\
+htmlutil.o \
+maths.o \
+readshg.o \
+rtfutils.o \
+table.o \
+tex2any.o \
+tex2rtf.o \
+texutils.o \
+xlputils.o 
+
+# additional things needed to link
+BIN_LINK=
+
+# additional things needed to compile
+ADD_COMPILE=
+
+# include the definitions now
+include ../../../../template.mak
