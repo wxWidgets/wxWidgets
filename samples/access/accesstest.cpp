@@ -93,6 +93,8 @@ public:
     // Recursively give information about an object
     void LogObject(int indent, IAccessible* obj);
 
+    // Get info for a child (id > 0) or object (id == 0)
+    void GetInfo(IAccessible* accessible, int id, wxString& name, wxString& role);
 private:
     wxTextCtrl* m_textCtrl;
 
@@ -212,7 +214,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 {
     m_textCtrl = NULL;
 
-    SetAccessible(new FrameAccessible(this));
+//    SetAccessible(new FrameAccessible(this));
 
     // set the frame icon
     SetIcon(wxICON(mondrian));
@@ -238,12 +240,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
-#if 1 // wxUSE_STATUSBAR
+#if 0 // wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWindows!"));
 #endif // wxUSE_STATUSBAR
 
+#if 1
     wxSplitterWindow* splitter = new wxSplitterWindow(this, -1);
     splitter->CreateAccessible();
 
@@ -255,6 +258,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     m_textCtrl->CreateAccessible();
 
     splitter->SplitHorizontally(listBox, m_textCtrl, 150);
+#endif
 
 #if 0
 #if 1
@@ -297,8 +301,67 @@ void MyFrame::OnQuery(wxCommandEvent& WXUNUSED(event))
     }
     if (accessibleFrame)
     {
-        Log(wxT("Got an IAccessible for the frame."));
+        //Log(wxT("Got an IAccessible for the frame."));
         LogObject(0, accessibleFrame);
+        Log(wxT("Checking children using AccessibleChildren()..."));
+
+        // Now check the AccessibleChildren function works OK
+        long childCount = 0;
+        if (S_OK != accessibleFrame->get_accChildCount(& childCount))
+        {
+            Log(wxT("Could not get number of children."));
+            accessibleFrame->Release();
+            return;
+        }
+        else if (childCount == 0)
+        {
+            Log(wxT("No children."));
+            accessibleFrame->Release();
+            return;
+        }
+        
+
+        long obtained = 0;
+        VARIANT *var = new VARIANT[childCount];
+        int i;
+        for (i = 0; i < childCount; i++)
+        {
+            VariantInit(& (var[i]));
+            var[i].vt = VT_DISPATCH;
+        }
+        
+        if (S_OK == AccessibleChildren(accessibleFrame, 0, childCount, var, &obtained))
+        {
+            for (i = 0; i < childCount; i++)
+            {
+                IAccessible* childAccessible = NULL;
+                if (var[i].pdispVal)
+                {
+                    if (var[i].pdispVal->QueryInterface(IID_IAccessible, (LPVOID*) & childAccessible) == S_OK)
+                    {
+                        var[i].pdispVal->Release();
+                        
+                        wxString name, role;
+                        GetInfo(childAccessible, 0, name, role);
+                        wxString str;
+                        str.Printf(wxT("Found child %s/%s"), name.c_str(), role.c_str());
+                        Log(str);
+                        childAccessible->Release();
+                    }
+                    else
+                    {
+                        var[i].pdispVal->Release();
+                    }
+                }
+            }
+        }
+        else
+        {
+            Log(wxT("AccessibleChildren failed."));
+        }
+        delete[] var;
+
+
         accessibleFrame->Release();
     }
 }
@@ -319,56 +382,16 @@ void MyFrame::Log(const wxString& text)
 // Recursively give information about an object
 void MyFrame::LogObject(int indent, IAccessible* obj)
 {
-    VARIANT var;
-    VariantInit(& var);
-    var.vt = VT_I4;
-    var.lVal = 0;
-    
-    BSTR bStrName = 0;
-    HRESULT hResult = obj->get_accName(var, & bStrName);
-    
-    if (hResult == S_OK)
+    wxString name, role;
+    if (indent == 0)
     {
-        wxString strName(wxConvertStringFromOle(bStrName));
-        SysFreeString(bStrName);
-        
+        GetInfo(obj, 0, name, role);
+
         wxString str;
-        str.Printf(wxT("Name: %s"), strName.c_str());
+        str.Printf(wxT("Name = %s; Role = %s"), name.c_str(), role.c_str());
         str.Pad(indent, wxT(' '), FALSE);
         Log(str);
     }
-    else
-    {
-        wxString str;
-        str.Printf(wxT("NO NAME"));
-        str.Pad(indent, wxT(' '), FALSE);
-        Log(str);
-    }
-    
-    VARIANT varRole;
-    VariantInit(& varRole);
-    
-    hResult = obj->get_accRole(var, & varRole);
-    
-    if (hResult == S_OK && varRole.vt == VT_I4)
-    {
-        wxChar buf[256];
-        GetRoleText(varRole.lVal, buf, 256);
-        
-        wxString strRole(buf);
-        
-        wxString str;
-        str.Printf(wxT("Role: %s"), strRole.c_str());
-        str.Pad(indent, wxT(' '), FALSE);
-        Log(str);
-    }
-    else
-    {
-        wxString str;
-        str.Printf(wxT("NO ROLE"));
-        str.Pad(indent, wxT(' '), FALSE);
-        Log(str);
-    }    
 
     long childCount = 0;
     if (S_OK == obj->get_accChildCount(& childCount))
@@ -377,63 +400,25 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
         str.Printf(wxT("There are %d children."), (int) childCount);
         str.Pad(indent, wxT(' '), FALSE);
         Log(str);
+        Log(wxT(""));
     }
 
     int i;
     for (i = 1; i <= childCount; i++)
     {
+        GetInfo(obj, i, name, role);
+
+        wxString str;
+        str.Printf(wxT("%d) Name = %s; Role = %s"), i, name.c_str(), role.c_str());
+        str.Pad(indent, wxT(' '), FALSE);
+        Log(str);
+
         VARIANT var;
         VariantInit(& var);
         var.vt = VT_I4;
         var.lVal = i;
         IDispatch* pDisp = NULL;
         IAccessible* childObject = NULL;
-
-        BSTR bStrName = 0;
-        HRESULT hResult = obj->get_accName(var, & bStrName);
-
-        if (hResult == S_OK)
-        {
-            wxString strName(wxConvertStringFromOle(bStrName));
-            SysFreeString(bStrName);
-
-            wxString str;
-            str.Printf(wxT("Name: %s"), strName.c_str());
-            str.Pad(indent+4, wxT(' '), FALSE);
-            Log(str);
-        }
-        else
-        {
-            wxString str;
-            str.Printf(wxT("NO NAME"));
-            str.Pad(indent+4, wxT(' '), FALSE);
-            Log(str);
-        }
-
-        VARIANT varRole;
-        VariantInit(& varRole);
-
-        hResult = obj->get_accRole(var, & varRole);
-
-        if (hResult == S_OK && varRole.vt == VT_I4)
-        {
-            wxChar buf[256];
-            GetRoleText(varRole.lVal, buf, 256);
-
-            wxString strRole(buf);
-
-            wxString str;
-            str.Printf(wxT("Role: %s"), strRole.c_str());
-            str.Pad(indent+4, wxT(' '), FALSE);
-            Log(str);
-        }
-        else
-        {
-            wxString str;
-            str.Printf(wxT("NO ROLE"));
-            str.Pad(indent+4, wxT(' '), FALSE);
-            Log(str);
-        }
 
         if (S_OK == obj->get_accChild(var, & pDisp) && pDisp)
         {
@@ -456,8 +441,46 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
             str.Pad(indent+4, wxT(' '), FALSE);
             Log(str);
         }
-        Log(wxT(""));
+        // Log(wxT(""));
     }
 
 }
 
+// Get info for a child (id > 0) or object (id == 0)
+void MyFrame::GetInfo(IAccessible* accessible, int id, wxString& name, wxString& role)
+{
+    VARIANT var;
+    VariantInit(& var);
+    var.vt = VT_I4;
+    var.lVal = id;
+    
+    BSTR bStrName = 0;
+    HRESULT hResult = accessible->get_accName(var, & bStrName);
+    
+    if (hResult == S_OK)
+    {
+        name = wxConvertStringFromOle(bStrName);
+        SysFreeString(bStrName);
+    }
+    else
+    {
+        name = wxT("NO NAME");
+    }
+    
+    VARIANT varRole;
+    VariantInit(& varRole);
+    
+    hResult = accessible->get_accRole(var, & varRole);
+    
+    if (hResult == S_OK && varRole.vt == VT_I4)
+    {
+        wxChar buf[256];
+        GetRoleText(varRole.lVal, buf, 256);
+        
+        role = buf;
+    }
+    else
+    {
+        role = wxT("NO ROLE");
+    }    
+}

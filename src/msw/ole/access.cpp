@@ -332,6 +332,10 @@ public:
     // Call Release if this is non-NULL.
     IAccessible* GetChildStdAccessible(int id);
 
+    // Gets the IAccessible interface for the given child or object.
+    // Call Release if this is non-NULL.
+    IAccessible* GetChildAccessible(int id);
+
 private:
     wxAccessible *m_pAccessible;      // pointer to C++ class we belong to
 
@@ -384,7 +388,7 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
         // Use standard interface instead.
         IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
-            return E_FAIL;
+            return E_NOTIMPL;
         else
             return stdInterface->accHitTest(xLeft, yLeft, pVarID);
     }
@@ -401,13 +405,12 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
         {
             wxIAccessible* childIA = childObject->GetIAccessible();
             if (!childIA)
-                return E_FAIL;
+                return E_NOTIMPL;
 
 	        if (childIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarID->pdispVal) != S_OK)
 	            return E_FAIL;
             
             pVarID->vt = VT_DISPATCH;
-//            pVarID->pdispVal->AddRef();
             return S_OK;
         }
     }
@@ -423,7 +426,7 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
         return S_FALSE;
     }
     
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the specified object's current screen location. All visual objects must
@@ -444,12 +447,22 @@ STDMETHODIMP wxIAccessible::accLocation ( long* pxLeft, long* pyTop, long* pcxWi
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varID);
+        // Try to use child object directly.
+        if (varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varID);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varID);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varID);
     }
     else
     {
@@ -460,7 +473,7 @@ STDMETHODIMP wxIAccessible::accLocation ( long* pxLeft, long* pyTop, long* pcxWi
         return S_OK;
     }
 
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Traverses to another user interface element within a container and retrieves the object.
@@ -554,12 +567,22 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
     {
         wxLogDebug("Navigate not implemented");
 
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->accNavigate ( navDir, varStart, pVarEnd);
+        // Try to use child object directly.
+        if (varStart.vt == VT_I4 && varStart.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varStart.lVal);
+            if (childAccessible)
+            {
+                varStart.lVal = 0;
+                HRESULT hResult = childAccessible->accNavigate(navDir, varStart, pVarEnd);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accNavigate(navDir, varStart, pVarEnd);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accNavigate(navDir, varStart, pVarEnd);
     }
     else
     {
@@ -582,7 +605,6 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
             
             wxLogDebug("Called QueryInterface for Navigate");
             pVarEnd->vt = VT_DISPATCH;
-//            pVarEnd->pdispVal->AddRef();
             return S_OK;
         }
         else if (elementId > 0)
@@ -601,7 +623,7 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
     }
 
     wxLogDebug("Failing Navigate");
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the address of an IDispatch interface for the specified child.
@@ -641,7 +663,7 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
         // Use standard interface instead.
         IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
-            return E_FAIL;
+            return E_NOTIMPL;
         else
         {
             wxLogDebug("Using standard interface for get_accChild");
@@ -654,7 +676,7 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
         {
             wxIAccessible* objectIA = child->GetIAccessible();
             if (!objectIA)
-                return E_FAIL;
+                return E_NOTIMPL;
 
 	        if (objectIA->QueryInterface(IID_IDispatch, (LPVOID*) ppDispChild) != S_OK)
             {
@@ -662,7 +684,6 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
 	            return E_FAIL;
             }
             
-//            (*ppDispChild)->AddRef();
             return S_OK;
         }
         else
@@ -672,7 +693,7 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
         }
     }
 
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the number of children that belong to this object.
@@ -695,7 +716,7 @@ STDMETHODIMP wxIAccessible::get_accChildCount ( long* pCountChildren)
         // Use standard interface instead.
         IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
-            return E_FAIL;
+            return E_NOTIMPL;
         else
         {
             wxLogDebug("Using standard interface for get_accChildCount");
@@ -712,7 +733,7 @@ STDMETHODIMP wxIAccessible::get_accChildCount ( long* pCountChildren)
         return S_OK;
     }
 
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the IDispatch interface of the object's parent.
@@ -740,7 +761,7 @@ STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
         // Use standard interface instead.
         IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
-            return E_FAIL;
+            return E_NOTIMPL;
         else
             return stdInterface->get_accParent (ppDispParent);
     }
@@ -759,17 +780,8 @@ STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
 	            return E_FAIL;
             }
             
-//            (*ppDispParent)->AddRef();
             wxLogDebug("Returning S_OK for get_accParent");
             return S_OK;
-/*
-            wxIAccessible* objectIA = parent->GetIAccessible();
-            if (!objectIA)
-                return E_FAIL;
-            objectIA->AddRef();
-            *ppDispParent = objectIA;
-            return S_OK;
-*/
         }
         else
         {
@@ -781,7 +793,7 @@ STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
         }
     }
 
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Performs the object's default action. Not all objects have a default
@@ -809,12 +821,22 @@ STDMETHODIMP wxIAccessible::accDoDefaultAction(VARIANT varID)
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->accDoDefaultAction(varID);
+        // Try to use child object directly.
+        if (varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->accDoDefaultAction(varID);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accDoDefaultAction(varID);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accDoDefaultAction(varID);
     }
     return E_FAIL;
 }
@@ -845,12 +867,22 @@ STDMETHODIMP wxIAccessible::get_accDefaultAction ( VARIANT varID, BSTR* pszDefau
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->get_accDefaultAction (varID, pszDefaultAction);
+        // Try to use child object directly.
+        if (varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->get_accDefaultAction(varID, pszDefaultAction);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accDefaultAction(varID, pszDefaultAction);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accDefaultAction(varID, pszDefaultAction);
     }
     else
     {
@@ -892,12 +924,22 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->get_accDescription (varID, pszDescription);
+        // Try to use child object directly.
+        if (varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->get_accDescription(varID, pszDescription);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accDescription(varID, pszDescription);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accDescription(varID, pszDescription);
     }
     else
     {
@@ -913,7 +955,7 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
             return S_OK;
         }        
     }
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves an object's Help property string.
@@ -939,12 +981,22 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->get_accHelp (varID, pszHelp);
+        // Try to use child object directly.
+        if (varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->get_accHelp(varID, pszHelp);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accHelp(varID, pszHelp);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accHelp (varID, pszHelp);
     }
     else
     {
@@ -960,7 +1012,7 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
             return S_OK;
         }        
     }
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the full path of the WinHelp file associated with the specified
@@ -988,14 +1040,24 @@ STDMETHODIMP wxIAccessible::get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChi
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->get_accHelpTopic (pszHelpFile, varChild, pidTopic);
+        // Try to use child object directly.
+        if (varChild.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varChild.lVal);
+            if (childAccessible)
+            {
+                varChild.lVal = 0;
+                HRESULT hResult = childAccessible->get_accHelpTopic(pszHelpFile, varChild, pidTopic);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accHelpTopic(pszHelpFile, varChild, pidTopic);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accHelpTopic (pszHelpFile, varChild, pidTopic);
     }
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the specified object's shortcut key or access key, also known as
@@ -1024,12 +1086,22 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->get_accKeyboardShortcut(varID, pszKeyboardShortcut);
+        // Try to use child object directly.
+        if (varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->get_accKeyboardShortcut(varID, pszKeyboardShortcut);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accKeyboardShortcut(varID, pszKeyboardShortcut);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accKeyboardShortcut (varID, pszKeyboardShortcut);
     }
     else
     {
@@ -1045,7 +1117,7 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
             return S_OK;
         }        
     }
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the name of the specified object.
@@ -1075,25 +1147,22 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-#if 0
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->get_accName (varID, pszName);
-#endif
-        // Turn child reference into object reference.
-        IAccessible* stdInterface = GetChildStdAccessible(varID.lVal);
-        if (stdInterface)
+        // Try to use child object directly.
+        if (varID.lVal > 0)
         {
-            varID.lVal = 0;
-            HRESULT hResult = stdInterface->get_accName(varID, pszName);
-            stdInterface->Release();
-            return hResult;
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->get_accName(varID, pszName);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accName(varID, pszName);
         }
-        else
-            return E_FAIL;
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accName (varID, pszName);
     }
     else
     {
@@ -1101,7 +1170,7 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
         *pszName = basicString.Get();
         return S_OK;
     }
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves information that describes the role of the specified object.
@@ -1131,12 +1200,22 @@ STDMETHODIMP wxIAccessible::get_accRole ( VARIANT varID, VARIANT* pVarRole)
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->get_accRole (varID, pVarRole);
+        // Try to use child object directly.
+        if (varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->get_accRole(varID, pVarRole);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accRole(varID, pVarRole);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accRole (varID, pVarRole);
     }
     else
     {
@@ -1151,7 +1230,7 @@ STDMETHODIMP wxIAccessible::get_accRole ( VARIANT varID, VARIANT* pVarRole)
 
         return S_OK;
     }
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the current state of the specified object.
@@ -1164,7 +1243,7 @@ STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
     if (!m_pAccessible)
         return E_FAIL;
     
-    if (varID.vt != VT_I4)
+    if (varID.vt != VT_I4 && varID.vt != VT_EMPTY)
     {
         wxLogDebug("Invalid arg for get_accState");
         return E_INVALIDARG;
@@ -1178,12 +1257,22 @@ STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->get_accState (varID, pVarState);
+        // Try to use child object directly.
+        if (varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->get_accState(varID, pVarState);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accState(varID, pVarState);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accState (varID, pVarState);
     }
     else
     {
@@ -1192,7 +1281,7 @@ STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
         pVarState->vt = VT_I4;
         return S_OK;
     }
-    return E_FAIL;
+    return E_NOTIMPL;
 }
     
 // Retrieves the value of the specified object.
@@ -1220,12 +1309,22 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->get_accValue (varID, pszValue);
+        // Try to use child object directly.
+        if (varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->get_accValue(varID, pszValue);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accValue(varID, pszValue);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accValue (varID, pszValue);
     }
     else
     {
@@ -1233,7 +1332,7 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
         * pszValue = basicString.Get();
         return S_OK;
     }
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Modifies the selection or moves the keyboard focus of the
@@ -1261,17 +1360,27 @@ STDMETHODIMP wxIAccessible::accSelect ( long flagsSelect, VARIANT varID )
     
     if (status == wxACC_NOT_IMPLEMENTED)
     {
-        // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
-        if (!stdInterface)
-            return E_FAIL;
-        else
-            return stdInterface->accSelect ( flagsSelect, varID );
+        // Try to use child object directly.
+        if (varID.lVal > 0 && varID.lVal > 0)
+        {
+            IAccessible* childAccessible = GetChildAccessible(varID.lVal);
+            if (childAccessible)
+            {
+                varID.lVal = 0;
+                HRESULT hResult = childAccessible->accSelect(flagsSelect, varID);
+                childAccessible->Release();
+                return hResult;
+            }
+            else if (m_pAccessible->GetIAccessibleStd())
+                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accSelect(flagsSelect, varID);
+        }
+        else if (m_pAccessible->GetIAccessibleStd())
+            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accSelect(flagsSelect, varID);
     }
     else
         return S_OK;
 
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the object that has the keyboard focus. All objects
@@ -1297,7 +1406,7 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
         // Use standard interface instead.
         IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
-            return E_FAIL;
+            return E_NOTIMPL;
         else
             return stdInterface->get_accFocus (pVarID);
     }
@@ -1312,13 +1421,12 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
         {
             wxIAccessible* childIA = childObject->GetIAccessible();
             if (!childIA)
-                return E_FAIL;
+                return E_NOTIMPL;
 
 	        if (childIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarID->pdispVal) != S_OK)
 	            return E_FAIL;
             
             pVarID->vt = VT_DISPATCH;
-//            pVarID->pdispVal->AddRef();
             return S_OK;
         }
     }
@@ -1334,7 +1442,7 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
         return S_FALSE;
     }
     
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Retrieves the selected children of this object. All objects
@@ -1359,7 +1467,7 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
         // Use standard interface instead.
         IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
-            return E_FAIL;
+            return E_NOTIMPL;
         else
             return stdInterface->get_accSelection (pVarChildren);
     }
@@ -1377,13 +1485,12 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
             wxAccessible* childObject = (wxAccessible*) selections.GetVoidPtr();
             wxIAccessible* childIA = childObject->GetIAccessible();
             if (!childIA)
-                return E_FAIL;
+                return E_NOTIMPL;
 
 	        if (childIA->QueryInterface(IID_IDispatch, (LPVOID*) & pVarChildren->pdispVal) != S_OK)
 	            return E_FAIL;
             
             pVarChildren->vt = VT_DISPATCH;
-//            pVarChildren->pdispVal->AddRef();
 
             return S_OK;
         }
@@ -1401,7 +1508,7 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
         }
     }
 
-    return E_FAIL;
+    return E_NOTIMPL;
 }
 
 // Get type info
@@ -1438,7 +1545,7 @@ STDMETHODIMP wxIAccessible::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
     return E_NOTIMPL;
 }
 
-// Gets the IAccessible interface for the given child or object.
+// Gets the standard IAccessible interface for the given child or object.
 // Call Release if this is non-NULL.
 IAccessible* wxIAccessible::GetChildStdAccessible(int id)
 {
@@ -1516,6 +1623,40 @@ IAccessible* wxIAccessible::GetChildStdAccessible(int id)
     return NULL;
 }
 
+// Gets the IAccessible interface for the given child or object.
+// Call Release if this is non-NULL.
+IAccessible* wxIAccessible::GetChildAccessible(int id)
+{
+    if (id == 0)
+    {
+        IAccessible* obj = this;
+
+        obj->AddRef();
+        return obj;
+    }
+    else
+    {
+        VARIANT var;
+        VariantInit(& var);
+        var.vt = VT_I4;
+        var.lVal = id;
+        IDispatch* pDispatch = NULL;
+        if (S_OK == get_accChild ( var, & pDispatch))
+        {
+            IAccessible* childAccessible = NULL;
+            if (pDispatch->QueryInterface(IID_IAccessible, (LPVOID*) & childAccessible) == S_OK)
+            {
+                pDispatch->Release();
+                return childAccessible;
+            }
+            else
+            {
+                pDispatch->Release();
+            }                                    
+        }
+    }
+    return NULL;
+}
 
 // ----------------------------------------------------------------------------
 // wxAccessible implementation
@@ -1552,13 +1693,8 @@ void* wxAccessible::GetIAccessibleStd()
 
     if (GetWindow())
     {
-#if 0
-        HRESULT retCode = ::CreateStdAccessibleProxy((HWND) GetWindow()->GetHWND(),
-                wxT("wxWindowClass"), OBJID_CLIENT, IID_IAccessible, (void**) & m_pIAccessibleStd);
-#else
         HRESULT retCode = ::CreateStdAccessibleObject((HWND) GetWindow()->GetHWND(),
                 OBJID_CLIENT, IID_IAccessible, (void**) & m_pIAccessibleStd);
-#endif
         if (retCode == S_OK)
             return m_pIAccessibleStd;
         else

@@ -1959,7 +1959,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 #if wxUSE_ACCESSIBILITY
 void wxWindowBase::SetAccessible(wxAccessible* accessible)
 {
-    if (m_accessible)
+    if (m_accessible && (accessible != m_accessible))
         delete m_accessible;
     m_accessible = accessible;
     if (m_accessible)
@@ -2251,7 +2251,21 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
     if (!GetWindow())
         return wxACC_FAIL;
 
-    wxString title(GetWindow()->GetTitle());
+    wxString title;
+
+    // If a child, leave wxWindows to call the function on the actual
+    // child object.
+    if (childId > 0)
+        return wxACC_NOT_IMPLEMENTED;
+
+    // This will eventually be replaced by specialised
+    // accessible classes, one for each kind of wxWindows
+    // control or window.
+    if (GetWindow()->IsKindOf(CLASSINFO(wxButton)))
+        title = ((wxButton*) GetWindow())->GetLabel();
+    else
+        title = GetWindow()->GetName();
+    
     if (!title.IsEmpty())
     {
         *name = title;
@@ -2357,6 +2371,12 @@ wxAccStatus wxWindowAccessible::GetDescription(int childId, wxString* descriptio
     if (!GetWindow())
         return wxACC_FAIL;
 
+    wxString ht(GetWindow()->GetHelpText());
+    if (!ht.IsEmpty())
+    {
+        *description = ht;
+        return wxACC_OK;
+    }
     return wxACC_NOT_IMPLEMENTED;
 }
 
@@ -2394,6 +2414,26 @@ wxAccStatus wxWindowAccessible::GetRole(int childId, wxAccRole* role)
     if (!GetWindow())
         return wxACC_FAIL;
 
+    // If a child, leave wxWindows to call the function on the actual
+    // child object.
+    if (childId > 0)
+        return wxACC_NOT_IMPLEMENTED;
+
+    if (GetWindow()->IsKindOf(CLASSINFO(wxControl)))
+        return wxACC_NOT_IMPLEMENTED;
+#if wxUSE_STATUSBAR
+    if (GetWindow()->IsKindOf(CLASSINFO(wxStatusBar)))
+        return wxACC_NOT_IMPLEMENTED;
+#endif
+#if wxUSE_TOOLBAR
+    if (GetWindow()->IsKindOf(CLASSINFO(wxToolBar)))
+        return wxACC_NOT_IMPLEMENTED;
+#endif
+
+    //*role = wxROLE_SYSTEM_CLIENT;
+    *role = wxROLE_SYSTEM_CLIENT;
+    return wxACC_OK;
+
     return wxACC_NOT_IMPLEMENTED;
 }
 
@@ -2403,6 +2443,26 @@ wxAccStatus wxWindowAccessible::GetState(int childId, long* state)
     wxASSERT( GetWindow() != NULL );
     if (!GetWindow())
         return wxACC_FAIL;
+
+    // If a child, leave wxWindows to call the function on the actual
+    // child object.
+    if (childId > 0)
+        return wxACC_NOT_IMPLEMENTED;
+
+    if (GetWindow()->IsKindOf(CLASSINFO(wxControl)))
+        return wxACC_NOT_IMPLEMENTED;
+
+#if wxUSE_STATUSBAR
+    if (GetWindow()->IsKindOf(CLASSINFO(wxStatusBar)))
+        return wxACC_NOT_IMPLEMENTED;
+#endif
+#if wxUSE_TOOLBAR
+    if (GetWindow()->IsKindOf(CLASSINFO(wxToolBar)))
+        return wxACC_NOT_IMPLEMENTED;
+#endif
+
+    *state = 0;
+    return wxACC_OK;
 
     return wxACC_NOT_IMPLEMENTED;
 }
