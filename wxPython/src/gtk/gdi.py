@@ -665,6 +665,13 @@ class wxDCPtr(wxObjectPtr):
     def DrawIcon(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_DrawIcon,(self,) + _args, _kwargs)
         return val
+    def DrawLabel(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_DrawLabel,(self,) + _args, _kwargs)
+        return val
+    def DrawImageLabel(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_DrawImageLabel,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
+        return val
     def DrawLine(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_DrawLine,(self,) + _args, _kwargs)
         return val
@@ -1086,6 +1093,9 @@ class wxRegionPtr(wxGDIObjectPtr):
             gdic.delete_wxRegion(self)
     def Clear(self, *_args, **_kwargs):
         val = apply(gdic.wxRegion_Clear,(self,) + _args, _kwargs)
+        return val
+    def Offset(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_Offset,(self,) + _args, _kwargs)
         return val
     def Contains(self, *_args, **_kwargs):
         val = apply(gdic.wxRegion_Contains,(self,) + _args, _kwargs)
