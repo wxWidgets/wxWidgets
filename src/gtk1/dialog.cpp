@@ -74,7 +74,6 @@ wxDialog::wxDialog()
 {
     m_title = "";
     m_modalShowing = FALSE;
-    wxTopLevelWindows.Insert( this );
 }
 
 wxDialog::wxDialog( wxWindow *parent, 
@@ -83,7 +82,6 @@ wxDialog::wxDialog( wxWindow *parent,
                     long style, const wxString &name )
 {
     m_modalShowing = FALSE;
-    wxTopLevelWindows.Insert( this );
     Create( parent, id, title, pos, size, style, name );
 }
 
@@ -92,6 +90,8 @@ bool wxDialog::Create( wxWindow *parent,
                        const wxPoint &pos, const wxSize &size, 
                        long style, const wxString &name )
 {
+    wxTopLevelWindows.Append( this );
+    
     m_needParent = FALSE;
   
     PreCreation( parent, id, pos, size, style, name );

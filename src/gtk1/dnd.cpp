@@ -366,8 +366,99 @@ void wxDropSource::UnregisterWindow(void)
 
 #else  // NEW_CODE
 
+GtkWidget *shape_create_icon (char     **data,
+			      gint      x,
+			      gint      y,
+			      gint      px,
+			      gint      py,
+			      gint      window_type);
 
-
+/* XPM */
+static char * gv_xpm[] = {
+"40 34 3 1",
+" 	s None c None",
+".	c black",
+"X	c white",
+"                                        ",
+"                                        ",
+"                  ......                ",
+"                ..XXXXXX..              ",
+"               .XXXXXXXXXX.             ",
+"              .XXXXXXXXXXXX.            ",
+"              .XXXXXXXXXXXX.            ",
+"             .XXXXXXXXXXXXXX.           ",
+"             .XXX..XXXX..XXX.           ",
+"          ....XX....XX....XX.           ",
+"         .XXX.XXX..XXXX..XXX....        ",
+"        .XXXXXXXXXXXXXXXXXXX.XXX.       ",
+"        .XXXXXXXXXXXXXXXXXXXXXXXX.      ",
+"        .XXXXXXXXXXXXXXXXXXXXXXXX.      ",
+"         ..XXXXXXXXXXXXXXXXXXXXXX.      ",
+"           .XXXXXXXXXXXXXXXXXX...       ",
+"           ..XXXXXXXXXXXXXXXX.          ",
+"            .XXXXXXXXXXXXXXXX.          ",
+"            .XXXXXXXXXXXXXXXX.          ",
+"            .XXXXXXXXXXXXXXXXX.         ",
+"            .XXXXXXXXXXXXXXXXX.         ",
+"            .XXXXXXXXXXXXXXXXXX.        ",
+"            .XXXXXXXXXXXXXXXXXXX.       ",
+"           .XXXXXXXXXXXXXXXXXXXXX.      ",
+"           .XXXXXXXXXXXXXX.XXXXXXX.     ",
+"          .XXXXXXX.XXXXXXX.XXXXXXX.     ",
+"         .XXXXXXXX.XXXXXXX.XXXXXXX.     ",
+"         .XXXXXXX...XXXXX...XXXXX.      ",
+"         .XXXXXXX.  .....   .....       ",
+"         ..XXXX..                       ",
+"           ....                         ",
+"                                        ",
+"                                        ",
+"                                        "};
+			      
+/* XPM */
+static char * page_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"32 32 5 1",
+/* colors */
+" 	s None	c None",
+".	c black",
+"X	c wheat",
+"o	c tan",
+"O	c #6699FF",
+/* pixels */
+"    ...................         ",
+"    .XXXXXXXXXXXXXXXXX..        ",
+"    .XXXXXXXXXXXXXXXXX.o.       ",
+"    .XXXXXXXXXXXXXXXXX.oo.      ",
+"    .XXXXXXXXXXXXXXXXX.ooo.     ",
+"    .XXXXXXXXXXXXXXXXX.oooo.    ",
+"    .XXXXXXXXXXXXXXXXX.......   ",
+"    .XXXXXOOOOOOOOOOXXXooooo.   ",
+"    .XXXXXXXXXXXXXXXXXXooooo.   ",
+"    .XXXXXOOOOOOOOOOXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXOOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXOOOOOOOOOOXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXOOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXOOOOOOOOOOXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXOOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXOOOOOOOXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .........................   "};
+			      
+			      
 //-----------------------------------------------------------------------------
 // "drop_data_available_event"
 //-----------------------------------------------------------------------------
@@ -382,7 +473,7 @@ static void gtk_target_callback( GtkWidget *widget,
         int y = 0;
         gdk_window_get_pointer( widget->window, &x, &y, (GdkModifierType *) NULL );
 
-        printf( "Drop data is of type %s.\n", event->data_type );
+//        printf( "Drop data is of type %s.\n", event->data_type );
   
         target->OnDrop( x, y, (const void*)event->data, (size_t)event->data_numbytes );
     }
@@ -536,8 +627,6 @@ wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
 
 void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source )
 {
-  printf( "Data requested for dropping.\n" );
-  
   wxDataObject *data = source->m_data;
   
   size_t size = data->GetDataSize();
@@ -602,6 +691,43 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   
   if (!m_data) return (wxDragResult) wxDragNone;
   if (m_data->GetDataSize() == 0) return (wxDragResult) wxDragNone;
+  
+  static GtkWidget *drag_icon = NULL;
+  static GtkWidget *drop_icon = NULL;
+
+  GdkPoint hotspot_1 = {0,-5 };
+      
+     if (!drag_icon)
+	{
+	  drag_icon = shape_create_icon ( gv_xpm,
+					 440, 140, 0,0, GTK_WINDOW_POPUP);
+	  
+	  gtk_signal_connect (GTK_OBJECT (drag_icon), "destroy",
+			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			      &drag_icon);
+
+	  gtk_widget_hide (drag_icon);
+	}
+      
+  GdkPoint hotspot_2 = {-5,-5};
+	
+      if (!drop_icon)
+	{
+	  drop_icon = shape_create_icon ( page_xpm,
+					 440, 140, 0,0, GTK_WINDOW_POPUP);
+	  
+	  gtk_signal_connect (GTK_OBJECT (drop_icon), "destroy",
+			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			      &drop_icon);
+
+	  gtk_widget_hide (drop_icon);
+	}
+
+      gdk_dnd_set_drag_shape(drag_icon->window,
+			     &hotspot_1,
+			     drop_icon->window,
+			     &hotspot_2);
+  
   
   GdkWindowPrivate *wp = (GdkWindowPrivate*) m_widget->window;
   
@@ -694,6 +820,129 @@ void wxDropSource::UnregisterWindow(void)
   
   gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)this );
 }
+
+
+/*
+ * Shaped Windows
+ */
+static GdkWindow *root_win = NULL;
+
+typedef struct _cursoroffset {gint x,y;} CursorOffset;
+
+static void
+shape_pressed (GtkWidget *widget, GdkEventButton *event)
+{
+  CursorOffset *p;
+
+  /* ignore double and triple click */
+  if (event->type != GDK_BUTTON_PRESS)
+    return;
+
+  p = gtk_object_get_user_data (GTK_OBJECT(widget));
+  p->x = (int) event->x;
+  p->y = (int) event->y;
+
+  gtk_grab_add (widget);
+  gdk_pointer_grab (widget->window, TRUE,
+		    GDK_BUTTON_RELEASE_MASK |
+		    GDK_BUTTON_MOTION_MASK |
+		    GDK_POINTER_MOTION_HINT_MASK,
+		    NULL, NULL, 0);
+}
+
+
+static void
+shape_released (GtkWidget *widget)
+{
+  gtk_grab_remove (widget);
+  gdk_pointer_ungrab (0);
+}
+
+static void
+shape_motion (GtkWidget      *widget, 
+	      GdkEventMotion *event)
+{
+  gint xp, yp;
+  CursorOffset * p;
+  GdkModifierType mask;
+
+  p = gtk_object_get_user_data (GTK_OBJECT (widget));
+
+  /*
+   * Can't use event->x / event->y here 
+   * because I need absolute coordinates.
+   */
+  gdk_window_get_pointer (root_win, &xp, &yp, &mask);
+  gtk_widget_set_uposition (widget, xp  - p->x, yp  - p->y);
+}
+
+GtkWidget *
+shape_create_icon (char     **data,
+		   gint      x,
+		   gint      y,
+		   gint      px,
+		   gint      py,
+		   gint      window_type)
+{
+  GtkWidget *window;
+  GtkWidget *pixmap;
+  GtkWidget *fixed;
+  CursorOffset* icon_pos;
+  GdkGC* gc;
+  GdkBitmap *gdk_pixmap_mask;
+  GdkPixmap *gdk_pixmap;
+  GtkStyle *style;
+
+  style = gtk_widget_get_default_style ();
+  gc = style->black_gc;	
+
+  /*
+   * GDK_WINDOW_TOPLEVEL works also, giving you a title border
+   */
+  window = gtk_window_new (window_type);
+  
+  fixed = gtk_fixed_new ();
+  gtk_widget_set_usize (fixed, 100,100);
+  gtk_container_add (GTK_CONTAINER (window), fixed);
+  gtk_widget_show (fixed);
+  
+  gtk_widget_set_events (window, 
+			 gtk_widget_get_events (window) |
+			 GDK_BUTTON_MOTION_MASK |
+			 GDK_POINTER_MOTION_HINT_MASK |
+			 GDK_BUTTON_PRESS_MASK);
+
+  gtk_widget_realize (window);
+  
+  gdk_pixmap = gdk_pixmap_create_from_xpm_d (window->window, &gdk_pixmap_mask, 
+					   &style->bg[GTK_STATE_NORMAL],
+					   (gchar**) data );
+
+  pixmap = gtk_pixmap_new (gdk_pixmap, gdk_pixmap_mask);
+  gtk_fixed_put (GTK_FIXED (fixed), pixmap, px,py);
+  gtk_widget_show (pixmap);
+  
+  gtk_widget_shape_combine_mask (window, gdk_pixmap_mask, px,py);
+
+
+  gtk_signal_connect (GTK_OBJECT (window), "button_press_event",
+		      GTK_SIGNAL_FUNC (shape_pressed),NULL);
+  gtk_signal_connect (GTK_OBJECT (window), "button_release_event",
+		      GTK_SIGNAL_FUNC (shape_released),NULL);
+  gtk_signal_connect (GTK_OBJECT (window), "motion_notify_event",
+		      GTK_SIGNAL_FUNC (shape_motion),NULL);
+
+  icon_pos = g_new (CursorOffset, 1);
+  gtk_object_set_user_data(GTK_OBJECT(window), icon_pos);
+
+  gtk_widget_set_uposition (window, x, y);
+  gtk_widget_show (window);
+  
+  return window;
+}
+
+
+
 
 #endif 
        // NEW_GTK_DND_CODE

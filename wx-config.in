@@ -36,7 +36,7 @@ while test $# -gt 0; do
       echo $exec_prefix
       ;;
     --version)
-      echo 1.94
+      echo 1.97
       ;;
     --cflags)
       if test @includedir@ != /usr/include ; then

@@ -1,8 +1,8 @@
 * The most simple case
 -----------------------
 
-If you compile wxWindows on Unix for the first time and don't like
-to read install instructions just do (in the base dir):
+If you compile wxWindows on Unix for the first time and don't 
+like to read install instructions just do (in the base dir):
 
 ./configure --without-threads
 make
@@ -11,33 +11,42 @@ and drink 10 coffees. Then you may log in as root and type
 
 make install
 
-You can leave out the --without-threads option if you have a NEW
-Linux distribution based on glibc (e.g. RedHat 5.1 or Debian 2.0) 
-or any other Unix that comes with Posix threads or SGI threads.
+You can leave out the --without-threads option if you have 
+a NEW Linux distribution based on glibc (e.g. RedHat 5.1 or 
+Debian 2.0) or any other Unix that comes with Posix threads 
+or SGI threads.
 
-Now create your super-application myfoo.app and compile anywhere with
+Now create your super-application myfoo.app and compile anywhere 
+with
 
 g++ myfoo.cpp `wx-config --libs` `wx-config --cflags` -o myfoo
 
 * General
 -----------------------
 
-The Unix variants of wxWindows use GNU configure. If you have problems 
-with your make use GNU make instead.
+The Unix variants of wxWindows use GNU configure. If you have 
+problems with your make use GNU make instead.
 
-Read my homepage at 
+If you have general problems with installation, read my 
+homepage at 
 
   http://wesley.informatik.uni-freiburg.de/~wxxt
   
-for newest information.
+for newest information. If you still don't have any success,
+please send a bug report to one of our mailing lists (see
+my homepage) INCLUDING A DESCRIPTION OF YOUR SYSTEM AND 
+YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT
+DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know 
+this has no effect, but I tried...
 
 * GUI libraries
 -----------------------
 
 wxWindows/GTK requires the GTK+ library to be installed on your system.
 It has to be a stable version, preferebly version 1.0.6. When using
-a version previous to 1.0.6 you'll get crashes here and there. This
-is certain to happen with colors in native widgets.
+a version previous to 1.0.6 you'll get crashes here and there. Although
+wxWindows/GTK now compiles with GTK+ 1.1.3, it does not set work
+properly. Wait for a stable version GTK 1.2. 
 
 You can get the newest version of the GTK+ from the GTK homepage
 at

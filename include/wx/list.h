@@ -222,13 +222,13 @@ protected:
 
         // get the list item's data
     void *operator[](size_t index) const
-        { wxNodeBase *node = Item(index); return node ? node->GetData() : NULL; }
+        { wxNodeBase *node = Item(index); return node ? node->GetData() : (wxNodeBase*)NULL; }
 
     // operations
         // append to end of list
     wxNodeBase *Append(void *object);
         // insert a new item at the beginning of the list
-    wxNodeBase *Insert(void *object) { return Insert(NULL, object); }
+    wxNodeBase *Insert(void *object) { return Insert( (wxNodeBase*)NULL, object); }
         // insert before given node or at front of list if prev == NULL
     wxNodeBase *Insert(wxNodeBase *prev, void *object);
 
@@ -350,7 +350,7 @@ private:
         nodetype *Append(T *object)                                         \
             { return (nodetype *)wxListBase::Append(object); }              \
         nodetype *Insert(T *object)                                         \
-            { return (nodetype *)Insert(NULL, object); }                    \
+            { return (nodetype *)Insert((nodetype*)NULL, object); }         \
         nodetype *Insert(nodetype *prev, T *object)                         \
             { return (nodetype *)wxListBase::Insert(prev, object); }        \
                                                                             \

@@ -829,6 +829,7 @@ void wxPaintDC::SetBackground( const wxBrush &brush )
   
     m_backgroundBrush.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_background( m_brushGC, m_backgroundBrush.GetColour().GetColor() );
+    gdk_gc_set_background( m_penGC, m_backgroundBrush.GetColour().GetColor() );
     gdk_gc_set_background( m_bgGC, m_backgroundBrush.GetColour().GetColor() );
     gdk_gc_set_foreground( m_bgGC, m_backgroundBrush.GetColour().GetColor() );
   
@@ -949,8 +950,13 @@ void wxPaintDC::SetUpDC(void)
     m_brushGC = gdk_gc_new( m_window );
     m_textGC = gdk_gc_new( m_window );
     m_bgGC = gdk_gc_new( m_window );
-    SetTextForeground( m_textForegroundColour );
-    SetTextBackground( m_textBackgroundColour );
+    
+    wxColour tmp_col( m_textForegroundColour );
+    m_textForegroundColour = wxNullColour;
+    SetTextForeground( tmp_col );
+    tmp_col = m_textBackgroundColour;
+    m_textBackgroundColour = wxNullColour;
+    SetTextBackground( tmp_col );
     
     wxPen tmp_pen( m_pen );
     m_pen = wxNullPen;
@@ -967,8 +973,6 @@ void wxPaintDC::SetUpDC(void)
     tmp_brush = m_backgroundBrush;
     m_backgroundBrush = wxNullBrush;
     SetBackground( tmp_brush );
-  
-    gdk_gc_set_background( m_penGC, wxWHITE->GetColor() );
   
     if (!hatch_bitmap) 
     {

@@ -108,7 +108,6 @@ wxFrame::wxFrame()
     m_frameStatusBar = (wxStatusBar *) NULL;
     m_frameToolBar = (wxToolBar *) NULL;
     m_sizeSet = FALSE;
-    wxTopLevelWindows.Insert( this );
 }
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -120,13 +119,14 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     m_frameToolBar = (wxToolBar *) NULL;
     m_sizeSet = FALSE;
     Create( parent, id, title, pos, size, style, name );
-    wxTopLevelWindows.Insert( this );
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
+    wxTopLevelWindows.Append( this );
+    
     m_needParent = FALSE;
 
     PreCreation( parent, id, pos, size, style, name );

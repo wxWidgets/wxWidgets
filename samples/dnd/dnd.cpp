@@ -182,7 +182,6 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile, wxLB_HSCROLL);
   m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText, wxLB_HSCROLL);
 
-/*
   m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size, 
                                wxTE_MULTILINE | wxTE_READONLY | 
                                wxSUNKEN_BORDER| wxHSCROLL);
@@ -190,10 +189,6 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   // redirect log messages to the text window (don't forget to delete it!)
   m_pLog = new wxLogTextCtrl(m_ctrlLog);
   m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
-*/
-
-  wxStaticText *m_testLabel = new wxStaticText( this, -1, "Hallo", pos, size );
-  m_testLabel->SetDropTarget( new wxTextDropTarget() );
 
   // associate drop targets with 2 text controls
   m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
@@ -217,7 +212,6 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   c->height.PercentOf(this, wxHeight, 40);
   m_ctrlText->SetConstraints(c);
 
-/*
   // Lower text control
   c = new wxLayoutConstraints;
   c->left.SameAs    (this, wxLeft);
@@ -225,17 +219,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   c->height.PercentOf(this, wxHeight, 40);
   c->top.SameAs(m_ctrlText, wxBottom);
   m_ctrlLog->SetConstraints(c);
-*/
 
-  // Lower label control
-  c = new wxLayoutConstraints;
-  c->left.SameAs    (this, wxLeft);
-  c->right.SameAs   (this, wxRight);
-  c->height.PercentOf(this, wxHeight, 40);
-  c->top.SameAs(m_ctrlText, wxBottom);
-  m_testLabel->SetConstraints(c);
-  
-  
   SetAutoLayout(TRUE);
 }
 
