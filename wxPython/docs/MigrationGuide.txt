@@ -786,6 +786,7 @@ The help module no longer exists and the classes therein are now part
 of the core module imported with wxPython.wx or the wx package.
 
 
+
 wx.TaskBarIcon
 --------------
 
@@ -821,9 +822,76 @@ and the MainLoop will not exit.
 
 
 
+Version Number Change
+---------------------
 
-Other Stuff
------------
+**[Changed in 2.5.3.x]** 
+
+Starting with 2.5.3.0 the Unicode versions of wxPython will no longer
+have a 'u' appended to the fourth component of the version number.
+Please check for the presence of "unicode" in the `wx.PlatformInfo`
+tuple instead.  (This tuple of strings has been available since the
+first 2.5 version.) For example::
+
+     if "unicode" in wx.PlatformInfo:
+         # do whatever
+	 ...
+
+
+
+
+Multi-Version Installs
+----------------------
+
+**[Changed in 2.5.3.x]** 
+
+Starting with 2.5.3.0 the wx and wxPython pacakge directories will be
+installed in a subdirectory of the site-packages directory, instead of
+directly in site-pacakges.  This is done to help facilitate having
+multiple versions of wxPython installed side-by-side.  Why would you
+want to do this?  One possible scenario is you have an app that
+requires wxPython 2.4 but you want to use the newest 2.5 to do your
+development with.  Or perhaps you want to be able to test your app
+with several different versions of wxPython to ensure compatibility.
+Before everyone panics, rest asured that if you only install one
+version of wxPython then you should notice no difference in how
+things work.
+
+In addition to installing wxPython into a "versioned" subdirectory of
+site-packages, a file named `wx.pth` is optionally installed that will
+contain the name of the versioned subdirectory.  This will cause that
+subdirectory to be automatically added to the sys.path and so doing an
+"import wx" will find the package in the subdirectory like like it
+would have if it was still located directly in site-packages.  I say
+"optionally" above because that is how you can control which install
+of wxPython is the default one.  Which ever version installs the
+wx.pth file will be the one that is imported with a plain "import wx"
+statement.  Of course you can always manipulate that by editing the
+wx.pth file, or by setting PYTHONPATH in the environment, or by the
+method described in the next paragraph.
+
+Finally, a new module named wxversion.py is installed to the
+site-pacakges directory.  It can be used to manipulate the sys.path at
+runtime so your applications can select which version of wxPython they
+would like to to have imported.  You use it like this::
+
+      import wxversion
+      wxversion.require("2.4")
+      import wx
+
+Then eventhough a 2.5 version of wxPython may be the default the
+application that does the above the first time that wx is imported
+will actually get a 2.4 version.  **NOTE:** There isn't actually a 2.4
+version of wxPython that supports this, but there will be.
+
+Please see this wiki page for more details, HowTo's and FAQ's:
+http://wiki.wxpython.org/index.cgi/MultiVersionInstalls
+
+
+
+
+Miscellaneous Stuff
+-------------------
 
 wxPyDefaultPosition and wxPyDefaultSize are gone.  Use the
 wxDefaultPosition and wxDefaultSize objects instead.
