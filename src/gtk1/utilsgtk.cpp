@@ -35,6 +35,11 @@
   #include <sys/systeminfo.h>
 #endif
 
+#ifdef __SOLARIS__
+// somehow missing from sys/wait.h but in the system's docs
+pid_t wait4(pid_t pid, int *statusp, int options, struct rusage *rusage);   
+#endif
+
 //------------------------------------------------------------------------
 // misc.
 //------------------------------------------------------------------------
