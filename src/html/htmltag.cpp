@@ -57,6 +57,12 @@ IMPLEMENT_CLASS(wxHtmlTagsCache,wxObject)
 
 #define CACHE_INCREMENT  64
 
+bool wxIsCDATAElement(const wxChar *tag)
+{
+    return (wxStrcmp(tag, _T("SCRIPT")) == 0) ||
+           (wxStrcmp(tag, _T("STYLE")) == 0);
+}
+
 wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 {
     const wxChar *src = source.c_str();
@@ -108,6 +114,47 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             else
             {
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -1;
+
+                if (wxIsCDATAElement(tagBuffer))
+                {
+                    // find next matching tag
+                    int tag_len = wxStrlen(tagBuffer);
+                    while (pos < lng)
+                    {
+                        // find the ending tag
+                        while (pos + 1 < lng &&
+                               (src[pos] != '<' || src[pos+1] != '/'))
+                            ++pos;
+                        if (src[pos] == '<')
+                            ++pos;
+                        
+                        // see if it matches
+                        int match_pos = 0;
+                        while (pos < lng && match_pos < tag_len && src[pos] != '>' && src[pos] != '<') {
+                            if (wxToupper(src[pos]) == tagBuffer[match_pos]) {
+                                ++match_pos;
+                            }  
+                            else if (src[pos] == wxT(' ') || src[pos] == wxT('\n') ||
+                                src[pos] == wxT('\r') || src[pos] == wxT('\t')) {
+                                // need to skip over these
+                            }
+                            else {
+                                match_pos = 0;
+                            }
+                            ++pos;
+                        }
+
+                        // found a match
+                        if (match_pos == tag_len) {
+                            pos = pos - tag_len - 3;
+                            stpos = pos;
+                            break;
+                        }
+                        else {
+                            ++pos;
+                        }
+                    }
+                }
             }
         }
 
