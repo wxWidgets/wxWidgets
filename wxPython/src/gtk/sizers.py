@@ -14,7 +14,7 @@ from controls import *
 from events import *
 import wx
 import string
-class wxSizerItemPtr :
+class wxSizerItemPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -52,14 +52,12 @@ class wxSizerItemPtr :
         return val
     def GetWindow(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_GetWindow,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def SetWindow(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_SetWindow,(self,) + _args, _kwargs)
         return val
     def GetSizer(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_GetSizer,(self,) + _args, _kwargs)
-        if val: val = wxSizerPtr(val) 
         return val
     def SetSizer(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_SetSizer,(self,) + _args, _kwargs)
@@ -97,7 +95,7 @@ class wxSizerItem(wxSizerItemPtr):
 
 
 
-class wxSizerPtr :
+class wxSizerPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -284,7 +282,6 @@ class wxStaticBoxSizerPtr(wxBoxSizerPtr):
         self.thisown = 0
     def GetStaticBox(self, *_args, **_kwargs):
         val = apply(sizersc.wxStaticBoxSizer_GetStaticBox,(self,) + _args, _kwargs)
-        if val: val = wxStaticBoxPtr(val) 
         return val
     def RecalcSizes(self, *_args, **_kwargs):
         val = apply(sizersc.wxStaticBoxSizer_RecalcSizes,(self,) + _args, _kwargs)
@@ -316,7 +313,6 @@ class wxNotebookSizerPtr(wxSizerPtr):
         return val
     def GetNotebook(self, *_args, **_kwargs):
         val = apply(sizersc.wxNotebookSizer_GetNotebook,(self,) + _args, _kwargs)
-        if val: val = wxNotebookPtr(val) 
         return val
     def __repr__(self):
         return "<C wxNotebookSizer instance at %s>" % (self.this,)

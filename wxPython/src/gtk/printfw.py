@@ -19,7 +19,7 @@ from controls import *
 
 from events import *
 import wx
-class wxPrintDataPtr :
+class wxPrintDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -157,7 +157,7 @@ class wxPrintData(wxPrintDataPtr):
 
 
 
-class wxPageSetupDialogDataPtr :
+class wxPageSetupDialogDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -286,7 +286,7 @@ class wxPageSetupDialog(wxPageSetupDialogPtr):
 
 
 
-class wxPrintDialogDataPtr :
+class wxPrintDialogDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -380,7 +380,6 @@ class wxPrintDialogPtr(wxDialogPtr):
         return val
     def GetPrintDC(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintDialog_GetPrintDC,(self,) + _args, _kwargs)
-        if val: val = wxDCPtr(val) ; val.thisown = 1
         return val
     def ShowModal(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintDialog_ShowModal,(self,) + _args, _kwargs)
@@ -396,7 +395,7 @@ class wxPrintDialog(wxPrintDialogPtr):
 
 
 
-class wxPrintoutPtr :
+class wxPrintoutPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -408,7 +407,6 @@ class wxPrintoutPtr :
         return val
     def GetDC(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintout_GetDC,(self,) + _args, _kwargs)
-        if val: val = wxDCPtr(val) 
         return val
     def GetPageSizeMM(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintout_GetPageSizeMM,(self,) + _args, _kwargs)
@@ -457,7 +455,7 @@ class wxPrintout(wxPrintoutPtr):
 
 
 
-class wxPrinterPtr :
+class wxPrinterPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -476,7 +474,6 @@ class wxPrinterPtr :
         return val
     def PrintDialog(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrinter_PrintDialog,(self,) + _args, _kwargs)
-        if val: val = wxDCPtr(val) 
         return val
     def ReportError(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrinter_ReportError,(self,) + _args, _kwargs)
@@ -494,20 +491,18 @@ class wxPrinter(wxPrinterPtr):
 
 
 
-class wxPrintPreviewPtr :
+class wxPrintPreviewPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def GetCanvas(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintPreview_GetCanvas,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def GetCurrentPage(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintPreview_GetCurrentPage,(self,) + _args, _kwargs)
         return val
     def GetFrame(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintPreview_GetFrame,(self,) + _args, _kwargs)
-        if val: val = wxFramePtr(val) 
         return val
     def GetMaxPage(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintPreview_GetMaxPage,(self,) + _args, _kwargs)
@@ -521,11 +516,9 @@ class wxPrintPreviewPtr :
         return val
     def GetPrintout(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintPreview_GetPrintout,(self,) + _args, _kwargs)
-        if val: val = wxPrintoutPtr(val) 
         return val
     def GetPrintoutForPrinting(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintPreview_GetPrintoutForPrinting,(self,) + _args, _kwargs)
-        if val: val = wxPrintoutPtr(val) 
         return val
     def GetZoom(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintPreview_GetZoom,(self,) + _args, _kwargs)

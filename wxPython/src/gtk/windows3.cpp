@@ -129,6 +129,14 @@ static void *SwigwxSashEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxSashEventTowxObject(void *ptr) {
+    wxSashEvent *src;
+    wxObject *dest;
+    src = (wxSashEvent *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define wxSashEvent_SetEdge(_swigobj,_swigarg0)  (_swigobj->SetEdge(_swigarg0))
 static PyObject *_wrap_wxSashEvent_SetEdge(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -316,6 +324,14 @@ static void *SwigwxSashWindowTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxSashWindow *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSashWindowTowxObject(void *ptr) {
+    wxSashWindow *src;
+    wxObject *dest;
+    src = (wxSashWindow *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -858,6 +874,14 @@ static void *SwigwxQueryLayoutInfoEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxQueryLayoutInfoEventTowxObject(void *ptr) {
+    wxQueryLayoutInfoEvent *src;
+    wxObject *dest;
+    src = (wxQueryLayoutInfoEvent *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define wxQueryLayoutInfoEvent_SetRequestedLength(_swigobj,_swigarg0)  (_swigobj->SetRequestedLength(_swigarg0))
 static PyObject *_wrap_wxQueryLayoutInfoEvent_SetRequestedLength(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1150,6 +1174,14 @@ static void *SwigwxCalculateLayoutEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxCalculateLayoutEventTowxObject(void *ptr) {
+    wxCalculateLayoutEvent *src;
+    wxObject *dest;
+    src = (wxCalculateLayoutEvent *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define wxCalculateLayoutEvent_SetFlags(_swigobj,_swigarg0)  (_swigobj->SetFlags(_swigarg0))
 static PyObject *_wrap_wxCalculateLayoutEvent_SetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1290,6 +1322,14 @@ static void *SwigwxSashLayoutWindowTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxSashLayoutWindow *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSashLayoutWindowTowxObject(void *ptr) {
+    wxSashLayoutWindow *src;
+    wxObject *dest;
+    src = (wxSashLayoutWindow *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -1491,6 +1531,14 @@ static PyObject *_wrap_wxSashLayoutWindow_SetOrientation(PyObject *self, PyObjec
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
+}
+
+static void *SwigwxLayoutAlgorithmTowxObject(void *ptr) {
+    wxLayoutAlgorithm *src;
+    wxObject *dest;
+    src = (wxLayoutAlgorithm *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 #define new_wxLayoutAlgorithm() (new wxLayoutAlgorithm())
@@ -1802,8 +1850,22 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
     { "_class_wxSashEvent","_wxSashEvent",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
+    { "_class_wxObject","_class_wxLayoutAlgorithm",SwigwxLayoutAlgorithmTowxObject},
+    { "_class_wxObject","_wxLayoutAlgorithm",SwigwxLayoutAlgorithmTowxObject},
+    { "_class_wxObject","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxObject},
+    { "_class_wxObject","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxObject},
+    { "_class_wxObject","_class_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxObject},
+    { "_class_wxObject","_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxObject},
+    { "_class_wxObject","_class_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxObject},
+    { "_class_wxObject","_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxObject},
+    { "_class_wxObject","_class_wxSashWindow",SwigwxSashWindowTowxObject},
+    { "_class_wxObject","_wxSashWindow",SwigwxSashWindowTowxObject},
+    { "_class_wxObject","_class_wxSashEvent",SwigwxSashEventTowxObject},
+    { "_class_wxObject","_wxSashEvent",SwigwxSashEventTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_wxSashLayoutWindow","_class_wxSashLayoutWindow",0},
     { "_size_t","_wxCoord",0},
@@ -1972,6 +2034,19 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
+    { "_wxObject","_class_wxLayoutAlgorithm",SwigwxLayoutAlgorithmTowxObject},
+    { "_wxObject","_wxLayoutAlgorithm",SwigwxLayoutAlgorithmTowxObject},
+    { "_wxObject","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxObject},
+    { "_wxObject","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxObject},
+    { "_wxObject","_class_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxObject},
+    { "_wxObject","_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxObject},
+    { "_wxObject","_class_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxObject},
+    { "_wxObject","_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxObject},
+    { "_wxObject","_class_wxSashWindow",SwigwxSashWindowTowxObject},
+    { "_wxObject","_wxSashWindow",SwigwxSashWindowTowxObject},
+    { "_wxObject","_class_wxSashEvent",SwigwxSashEventTowxObject},
+    { "_wxObject","_wxSashEvent",SwigwxSashEventTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
@@ -2030,6 +2105,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},

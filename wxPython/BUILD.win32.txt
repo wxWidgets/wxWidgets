@@ -19,8 +19,10 @@ few bits of background information on tools.
 I use a tool called SWIG (http://www.swig.org) to help generate the
 C++ sources used in the wxPython extension module.  However you don't
 need to have SWIG unless you want to modify the *.i files.  If you do
-you'll want to have version 1.1-883 of SWIG and you'll need to change
-a flag in the setup.py script as described below.
+you'll want to have version 1.1-883 of SWIG and you'll need to apply
+the patches and updates in wxPython/SWIG and rebuild it.  Then you'll
+need to change a flag in the setup.py script as described below so the
+wxPython build process will use SWIG if needed.
 
 I use the new Python Distutils tool to build wxPython.  It is included
 with Python 2.0, but if you want to use Python 1.5.2 or 1.6 then

@@ -9,6 +9,9 @@ elif [ "$1" = "20" ]; then
 elif [ "$1" = "21" ]; then
     PYVER=2.1
     shift
+else
+    echo You must specify Python version as first parameter.
+    exit
 fi
 
 

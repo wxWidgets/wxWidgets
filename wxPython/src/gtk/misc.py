@@ -1,5 +1,24 @@
 # This file was created automatically by SWIG.
 import miscc
+class wxObjectPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetClassName(self, *_args, **_kwargs):
+        val = apply(miscc.wxObject_GetClassName,(self,) + _args, _kwargs)
+        return val
+    def Destroy(self, *_args, **_kwargs):
+        val = apply(miscc.wxObject_Destroy,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxObject instance at %s>" % (self.this,)
+class wxObject(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
 class wxSizePtr :
     def __init__(self,this):
         self.this = this
@@ -30,6 +49,9 @@ class wxSizePtr :
         return val
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxSize_asTuple,(self,) + _args, _kwargs)
+        return val
+    def __cmp__(self, *_args, **_kwargs):
+        val = apply(miscc.wxSize___cmp__,(self,) + _args, _kwargs)
         return val
     def __setattr__(self,name,value):
         if name == "x" :
@@ -353,7 +375,7 @@ class wxRect(wxRectPtr):
 
 
 
-class wxIndividualLayoutConstraintPtr :
+class wxIndividualLayoutConstraintPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -396,7 +418,7 @@ class wxIndividualLayoutConstraint(wxIndividualLayoutConstraintPtr):
 
 
 
-class wxLayoutConstraintsPtr :
+class wxLayoutConstraintsPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -454,129 +476,6 @@ class wxLayoutConstraints(wxLayoutConstraintsPtr):
 
 
 
-class wxRegionPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxRegion(self)
-    def Clear(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_Clear,(self,) + _args, _kwargs)
-        return val
-    def Contains(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_Contains,(self,) + _args, _kwargs)
-        return val
-    def ContainsPoint(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_ContainsPoint,(self,) + _args, _kwargs)
-        return val
-    def ContainsRect(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_ContainsRect,(self,) + _args, _kwargs)
-        return val
-    def ContainsRectDim(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_ContainsRectDim,(self,) + _args, _kwargs)
-        return val
-    def GetBox(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_GetBox,(self,) + _args, _kwargs)
-        if val: val = wxRectPtr(val) ; val.thisown = 1
-        return val
-    def Intersect(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_Intersect,(self,) + _args, _kwargs)
-        return val
-    def IntersectRect(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_IntersectRect,(self,) + _args, _kwargs)
-        return val
-    def IntersectRegion(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_IntersectRegion,(self,) + _args, _kwargs)
-        return val
-    def IsEmpty(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_IsEmpty,(self,) + _args, _kwargs)
-        return val
-    def Union(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_Union,(self,) + _args, _kwargs)
-        return val
-    def UnionRect(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_UnionRect,(self,) + _args, _kwargs)
-        return val
-    def UnionRegion(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_UnionRegion,(self,) + _args, _kwargs)
-        return val
-    def Subtract(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_Subtract,(self,) + _args, _kwargs)
-        return val
-    def SubtractRect(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_SubtractRect,(self,) + _args, _kwargs)
-        return val
-    def SubtractRegion(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_SubtractRegion,(self,) + _args, _kwargs)
-        return val
-    def Xor(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_Xor,(self,) + _args, _kwargs)
-        return val
-    def XorRect(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_XorRect,(self,) + _args, _kwargs)
-        return val
-    def XorRegion(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_XorRegion,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C wxRegion instance at %s>" % (self.this,)
-class wxRegion(wxRegionPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(miscc.new_wxRegion,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
-class wxRegionIteratorPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxRegionIterator(self)
-    def GetX(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_GetX,(self,) + _args, _kwargs)
-        return val
-    def GetY(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_GetY,(self,) + _args, _kwargs)
-        return val
-    def GetW(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_GetW,(self,) + _args, _kwargs)
-        return val
-    def GetWidth(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_GetWidth,(self,) + _args, _kwargs)
-        return val
-    def GetH(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_GetH,(self,) + _args, _kwargs)
-        return val
-    def GetHeight(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_GetHeight,(self,) + _args, _kwargs)
-        return val
-    def GetRect(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_GetRect,(self,) + _args, _kwargs)
-        if val: val = wxRectPtr(val) ; val.thisown = 1
-        return val
-    def HaveRects(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_HaveRects,(self,) + _args, _kwargs)
-        return val
-    def Reset(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_Reset,(self,) + _args, _kwargs)
-        return val
-    def Next(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegionIterator_Next,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C wxRegionIterator instance at %s>" % (self.this,)
-class wxRegionIterator(wxRegionIteratorPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(miscc.new_wxRegionIterator,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 class wxAcceleratorEntryPtr :
     def __init__(self,this):
         self.this = this
@@ -606,7 +505,7 @@ class wxAcceleratorEntry(wxAcceleratorEntryPtr):
 
 
 
-class wxAcceleratorTablePtr :
+class wxAcceleratorTablePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -623,7 +522,7 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
 
 
 
-class wxBusyInfoPtr :
+class wxBusyInfoPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -730,8 +629,5 @@ wxLeftOf = miscc.wxLeftOf
 wxRightOf = miscc.wxRightOf
 wxSameAs = miscc.wxSameAs
 wxAbsolute = miscc.wxAbsolute
-wxOutRegion = miscc.wxOutRegion
-wxPartRegion = miscc.wxPartRegion
-wxInRegion = miscc.wxInRegion
 cvar = miscc.cvar
 wxNullAcceleratorTable = wxAcceleratorTablePtr(miscc.cvar.wxNullAcceleratorTable)

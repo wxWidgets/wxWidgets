@@ -24,11 +24,9 @@ class wxFramePtr(wxWindowPtr):
         return val
     def CreateStatusBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_CreateStatusBar,(self,) + _args, _kwargs)
-        if val: val = wxStatusBarPtr(val) 
         return val
     def CreateToolBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_CreateToolBar,(self,) + _args, _kwargs)
-        if val: val = wxToolBarPtr(val) 
         return val
     def GetIcon(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_GetIcon,(self,) + _args, _kwargs)
@@ -36,18 +34,15 @@ class wxFramePtr(wxWindowPtr):
         return val
     def GetMenuBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_GetMenuBar,(self,) + _args, _kwargs)
-        if val: val = wxMenuBarPtr(val) 
         return val
     def GetStatusBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_GetStatusBar,(self,) + _args, _kwargs)
-        if val: val = wxStatusBarPtr(val) 
         return val
     def GetTitle(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_GetTitle,(self,) + _args, _kwargs)
         return val
     def GetToolBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_GetToolBar,(self,) + _args, _kwargs)
-        if val: val = wxToolBarPtr(val) 
         return val
     def Iconize(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_Iconize,(self,) + _args, _kwargs)
@@ -100,6 +95,9 @@ class wxFramePtr(wxWindowPtr):
         return val
     def ProcessCommand(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_ProcessCommand,(self,) + _args, _kwargs)
+        return val
+    def ShowFullScreen(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_ShowFullScreen,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxFrame instance at %s>" % (self.this,)

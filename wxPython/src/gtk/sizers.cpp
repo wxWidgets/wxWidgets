@@ -57,6 +57,8 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 
+#include <wx/notebook.h>
+
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     if (!target) {
@@ -127,6 +129,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxPySizer, wxSizer);
 #ifdef __cplusplus
 extern "C" {
 #endif
+static void *SwigwxSizerItemTowxObject(void *ptr) {
+    wxSizerItem *src;
+    wxObject *dest;
+    src = (wxSizerItem *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define wxSizerItem_GetSize(_swigobj)  (_swigobj->GetSize())
 static PyObject *_wrap_wxSizerItem_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -435,7 +445,6 @@ static PyObject *_wrap_wxSizerItem_GetWindow(PyObject *self, PyObject *args, PyO
     wxSizerItem * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetWindow",_kwnames,&_argo0)) 
@@ -452,13 +461,7 @@ static PyObject *_wrap_wxSizerItem_GetWindow(PyObject *self, PyObject *args, PyO
         _result = (wxWindow *)wxSizerItem_GetWindow(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -505,7 +508,6 @@ static PyObject *_wrap_wxSizerItem_GetSizer(PyObject *self, PyObject *args, PyOb
     wxSizerItem * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetSizer",_kwnames,&_argo0)) 
@@ -522,13 +524,7 @@ static PyObject *_wrap_wxSizerItem_GetSizer(PyObject *self, PyObject *args, PyOb
         _result = (wxSizer *)wxSizerItem_GetSizer(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSizer_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -798,6 +794,14 @@ static PyObject *_wrap_wxSizerItem_GetUserData(PyObject *self, PyObject *args, P
   _resultobj = _result;
 }
     return _resultobj;
+}
+
+static void *SwigwxSizerTowxObject(void *ptr) {
+    wxSizer *src;
+    wxObject *dest;
+    src = (wxSizer *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 static void  wxSizer_Destroy(wxSizer *self) { delete self; }
@@ -1748,6 +1752,14 @@ static void *SwigwxPySizerTowxSizer(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxPySizerTowxObject(void *ptr) {
+    wxPySizer *src;
+    wxObject *dest;
+    src = (wxPySizer *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxPySizer() (new wxPySizer())
 static PyObject *_wrap_new_wxPySizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1815,6 +1827,14 @@ static void *SwigwxBoxSizerTowxSizer(void *ptr) {
     wxSizer *dest;
     src = (wxBoxSizer *) ptr;
     dest = (wxSizer *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxBoxSizerTowxObject(void *ptr) {
+    wxBoxSizer *src;
+    wxObject *dest;
+    src = (wxBoxSizer *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -1943,6 +1963,14 @@ static void *SwigwxStaticBoxSizerTowxSizer(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxStaticBoxSizerTowxObject(void *ptr) {
+    wxStaticBoxSizer *src;
+    wxObject *dest;
+    src = (wxStaticBoxSizer *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxStaticBoxSizer(_swigarg0,_swigarg1) (new wxStaticBoxSizer(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxStaticBoxSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1985,7 +2013,6 @@ static PyObject *_wrap_wxStaticBoxSizer_GetStaticBox(PyObject *self, PyObject *a
     wxStaticBoxSizer * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStaticBoxSizer_GetStaticBox",_kwnames,&_argo0)) 
@@ -2002,13 +2029,7 @@ static PyObject *_wrap_wxStaticBoxSizer_GetStaticBox(PyObject *self, PyObject *a
         _result = (wxStaticBox *)wxStaticBoxSizer_GetStaticBox(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxStaticBox_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -2073,6 +2094,14 @@ static void *SwigwxNotebookSizerTowxSizer(void *ptr) {
     wxSizer *dest;
     src = (wxNotebookSizer *) ptr;
     dest = (wxSizer *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxNotebookSizerTowxObject(void *ptr) {
+    wxNotebookSizer *src;
+    wxObject *dest;
+    src = (wxNotebookSizer *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -2173,7 +2202,6 @@ static PyObject *_wrap_wxNotebookSizer_GetNotebook(PyObject *self, PyObject *arg
     wxNotebookSizer * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxNotebookSizer_GetNotebook",_kwnames,&_argo0)) 
@@ -2190,13 +2218,7 @@ static PyObject *_wrap_wxNotebookSizer_GetNotebook(PyObject *self, PyObject *arg
         _result = (wxNotebook *)wxNotebookSizer_GetNotebook(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxNotebook_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -2205,6 +2227,14 @@ static void *SwigwxGridSizerTowxSizer(void *ptr) {
     wxSizer *dest;
     src = (wxGridSizer *) ptr;
     dest = (wxSizer *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGridSizerTowxObject(void *ptr) {
+    wxGridSizer *src;
+    wxObject *dest;
+    src = (wxGridSizer *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -2526,6 +2556,14 @@ static void *SwigwxFlexGridSizerTowxSizer(void *ptr) {
     wxSizer *dest;
     src = (wxFlexGridSizer *) ptr;
     dest = (wxSizer *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxFlexGridSizerTowxObject(void *ptr) {
+    wxFlexGridSizer *src;
+    wxObject *dest;
+    src = (wxFlexGridSizer *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -2882,10 +2920,28 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_wxSizerItem","_class_wxSizerItem",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
     { "_class_wxFlexGridSizer","_wxFlexGridSizer",0},
+    { "_class_wxObject","_class_wxFlexGridSizer",SwigwxFlexGridSizerTowxObject},
+    { "_class_wxObject","_wxFlexGridSizer",SwigwxFlexGridSizerTowxObject},
+    { "_class_wxObject","_class_wxGridSizer",SwigwxGridSizerTowxObject},
+    { "_class_wxObject","_wxGridSizer",SwigwxGridSizerTowxObject},
+    { "_class_wxObject","_class_wxNotebookSizer",SwigwxNotebookSizerTowxObject},
+    { "_class_wxObject","_wxNotebookSizer",SwigwxNotebookSizerTowxObject},
+    { "_class_wxObject","_class_wxStaticBoxSizer",SwigwxStaticBoxSizerTowxObject},
+    { "_class_wxObject","_wxStaticBoxSizer",SwigwxStaticBoxSizerTowxObject},
+    { "_class_wxObject","_class_wxBoxSizer",SwigwxBoxSizerTowxObject},
+    { "_class_wxObject","_wxBoxSizer",SwigwxBoxSizerTowxObject},
+    { "_class_wxObject","_class_wxPySizer",SwigwxPySizerTowxObject},
+    { "_class_wxObject","_wxPySizer",SwigwxPySizerTowxObject},
+    { "_class_wxObject","_class_wxSizer",SwigwxSizerTowxObject},
+    { "_class_wxObject","_wxSizer",SwigwxSizerTowxObject},
+    { "_class_wxObject","_class_wxSizerItem",SwigwxSizerItemTowxObject},
+    { "_class_wxObject","_wxSizerItem",SwigwxSizerItemTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
@@ -3022,6 +3078,23 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
+    { "_wxObject","_class_wxFlexGridSizer",SwigwxFlexGridSizerTowxObject},
+    { "_wxObject","_wxFlexGridSizer",SwigwxFlexGridSizerTowxObject},
+    { "_wxObject","_class_wxGridSizer",SwigwxGridSizerTowxObject},
+    { "_wxObject","_wxGridSizer",SwigwxGridSizerTowxObject},
+    { "_wxObject","_class_wxNotebookSizer",SwigwxNotebookSizerTowxObject},
+    { "_wxObject","_wxNotebookSizer",SwigwxNotebookSizerTowxObject},
+    { "_wxObject","_class_wxStaticBoxSizer",SwigwxStaticBoxSizerTowxObject},
+    { "_wxObject","_wxStaticBoxSizer",SwigwxStaticBoxSizerTowxObject},
+    { "_wxObject","_class_wxBoxSizer",SwigwxBoxSizerTowxObject},
+    { "_wxObject","_wxBoxSizer",SwigwxBoxSizerTowxObject},
+    { "_wxObject","_class_wxPySizer",SwigwxPySizerTowxObject},
+    { "_wxObject","_wxPySizer",SwigwxPySizerTowxObject},
+    { "_wxObject","_class_wxSizer",SwigwxSizerTowxObject},
+    { "_wxObject","_wxSizer",SwigwxSizerTowxObject},
+    { "_wxObject","_class_wxSizerItem",SwigwxSizerItemTowxObject},
+    { "_wxObject","_wxSizerItem",SwigwxSizerItemTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
@@ -3080,6 +3153,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_class_wxSizerItem","_wxSizerItem",0},
     { "_int","_wxCoord",0},

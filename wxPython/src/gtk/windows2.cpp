@@ -61,6 +61,7 @@ extern PyObject *SWIG_newvarlink(void);
 #endif
 #include <wx/notebook.h>
 #include <wx/splitter.h>
+#include <wx/imaglist.h>
 #ifdef __WXMSW__
 #include <wx/msw/taskbar.h>
 #endif
@@ -140,6 +141,14 @@ static void *SwigwxNotebookEventTowxEvent(void *ptr) {
     wxEvent *dest;
     src = (wxNotebookEvent *) ptr;
     dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxNotebookEventTowxObject(void *ptr) {
+    wxNotebookEvent *src;
+    wxObject *dest;
+    src = (wxNotebookEvent *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -274,6 +283,14 @@ static void *SwigwxNotebookTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxNotebook *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxNotebookTowxObject(void *ptr) {
+    wxNotebook *src;
+    wxObject *dest;
+    src = (wxNotebook *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -572,7 +589,6 @@ static PyObject *_wrap_wxNotebook_GetImageList(PyObject *self, PyObject *args, P
     wxNotebook * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxNotebook_GetImageList",_kwnames,&_argo0)) 
@@ -589,13 +605,7 @@ static PyObject *_wrap_wxNotebook_GetImageList(PyObject *self, PyObject *args, P
         _result = (wxImageList *)wxNotebook_GetImageList(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxImageList_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -971,7 +981,6 @@ static PyObject *_wrap_wxNotebook_GetPage(PyObject *self, PyObject *args, PyObje
     int  _arg1;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self","nPage", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxNotebook_GetPage",_kwnames,&_argo0,&_arg1)) 
@@ -988,13 +997,7 @@ static PyObject *_wrap_wxNotebook_GetPage(PyObject *self, PyObject *args, PyObje
         _result = (wxWindow *)wxNotebook_GetPage(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -1041,6 +1044,14 @@ static void *SwigwxSplitterEventTowxEvent(void *ptr) {
     wxEvent *dest;
     src = (wxSplitterEvent *) ptr;
     dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplitterEventTowxObject(void *ptr) {
+    wxSplitterEvent *src;
+    wxObject *dest;
+    src = (wxSplitterEvent *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -1132,7 +1143,6 @@ static PyObject *_wrap_wxSplitterEvent_GetWindowBeingRemoved(PyObject *self, PyO
     wxSplitterEvent * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSplitterEvent_GetWindowBeingRemoved",_kwnames,&_argo0)) 
@@ -1149,13 +1159,7 @@ static PyObject *_wrap_wxSplitterEvent_GetWindowBeingRemoved(PyObject *self, PyO
         _result = (wxWindow *)wxSplitterEvent_GetWindowBeingRemoved(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -1200,6 +1204,14 @@ static void *SwigwxSplitterWindowTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxSplitterWindow *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplitterWindowTowxObject(void *ptr) {
+    wxSplitterWindow *src;
+    wxObject *dest;
+    src = (wxSplitterWindow *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -1400,7 +1412,6 @@ static PyObject *_wrap_wxSplitterWindow_GetWindow1(PyObject *self, PyObject *arg
     wxSplitterWindow * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSplitterWindow_GetWindow1",_kwnames,&_argo0)) 
@@ -1417,13 +1428,7 @@ static PyObject *_wrap_wxSplitterWindow_GetWindow1(PyObject *self, PyObject *arg
         _result = (wxWindow *)wxSplitterWindow_GetWindow1(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -1434,7 +1439,6 @@ static PyObject *_wrap_wxSplitterWindow_GetWindow2(PyObject *self, PyObject *arg
     wxSplitterWindow * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSplitterWindow_GetWindow2",_kwnames,&_argo0)) 
@@ -1451,13 +1455,7 @@ static PyObject *_wrap_wxSplitterWindow_GetWindow2(PyObject *self, PyObject *arg
         _result = (wxWindow *)wxSplitterWindow_GetWindow2(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -1955,8 +1953,18 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
+    { "_class_wxObject","_class_wxSplitterWindow",SwigwxSplitterWindowTowxObject},
+    { "_class_wxObject","_wxSplitterWindow",SwigwxSplitterWindowTowxObject},
+    { "_class_wxObject","_class_wxSplitterEvent",SwigwxSplitterEventTowxObject},
+    { "_class_wxObject","_wxSplitterEvent",SwigwxSplitterEventTowxObject},
+    { "_class_wxObject","_class_wxNotebook",SwigwxNotebookTowxObject},
+    { "_class_wxObject","_wxNotebook",SwigwxNotebookTowxObject},
+    { "_class_wxObject","_class_wxNotebookEvent",SwigwxNotebookEventTowxObject},
+    { "_class_wxObject","_wxNotebookEvent",SwigwxNotebookEventTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
@@ -2108,6 +2116,15 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
+    { "_wxObject","_class_wxSplitterWindow",SwigwxSplitterWindowTowxObject},
+    { "_wxObject","_wxSplitterWindow",SwigwxSplitterWindowTowxObject},
+    { "_wxObject","_class_wxSplitterEvent",SwigwxSplitterEventTowxObject},
+    { "_wxObject","_wxSplitterEvent",SwigwxSplitterEventTowxObject},
+    { "_wxObject","_class_wxNotebook",SwigwxNotebookTowxObject},
+    { "_wxObject","_wxNotebook",SwigwxNotebookTowxObject},
+    { "_wxObject","_class_wxNotebookEvent",SwigwxNotebookEventTowxObject},
+    { "_wxObject","_wxNotebookEvent",SwigwxNotebookEventTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
@@ -2163,6 +2180,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},

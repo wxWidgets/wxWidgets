@@ -328,6 +328,14 @@ static PyObject *_wrap___wxMemoryFSHandler_AddFile_Data(PyObject *self, PyObject
     return _resultobj;
 }
 
+static void *SwigwxFSFileTowxObject(void *ptr) {
+    wxFSFile *src;
+    wxObject *dest;
+    src = (wxFSFile *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxFSFile(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxFSFile(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
 static PyObject *_wrap_new_wxFSFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -478,28 +486,7 @@ static PyObject *_wrap_wxFSFile_GetStream(PyObject *self, PyObject *args, PyObje
     if (_result) {
         _ptr = new wxPyInputStream(_result);
     }
-    if (_ptr) {
-        char    swigptr[64];
-        SWIG_MakePtr(swigptr, _ptr, "_wxPyInputStream_p");
-
-        PyObject* classobj = PyDict_GetItemString(wxPython_dict, "wxInputStreamPtr");
-        if (! classobj) {
-            Py_INCREF(Py_None);
-            _resultobj = Py_None;
-        } else {
-            PyObject* arg = Py_BuildValue("(s)", swigptr);
-            _resultobj = PyInstance_New(classobj, arg, NULL);
-            Py_DECREF(arg);
-
-            // set ThisOwn
-            PyObject* one = PyInt_FromLong(1);
-            PyObject_SetAttrString(_resultobj, "thisown", one);
-            Py_DECREF(one);
-        }
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+    _resultobj = wxPyConstructObject(_ptr, "wxInputStream", TRUE);
 }
     return _resultobj;
 }
@@ -623,11 +610,27 @@ static PyObject *_wrap_wxFSFile_GetModificationTime(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+static void *SwigwxFileSystemHandlerTowxObject(void *ptr) {
+    wxFileSystemHandler *src;
+    wxObject *dest;
+    src = (wxFileSystemHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxPyFileSystemHandlerTowxFileSystemHandler(void *ptr) {
     wxPyFileSystemHandler *src;
     wxFileSystemHandler *dest;
     src = (wxPyFileSystemHandler *) ptr;
     dest = (wxFileSystemHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyFileSystemHandlerTowxObject(void *ptr) {
+    wxPyFileSystemHandler *src;
+    wxObject *dest;
+    src = (wxPyFileSystemHandler *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -755,7 +758,6 @@ static PyObject *_wrap_wxFileSystemHandler_OpenFile(PyObject *self, PyObject *ar
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","fs","location", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxFileSystemHandler_OpenFile",_kwnames,&_argo0,&_argo1,&_obj2)) 
@@ -797,13 +799,7 @@ static PyObject *_wrap_wxFileSystemHandler_OpenFile(PyObject *self, PyObject *ar
         _result = (wxFSFile *)wxFileSystemHandler_OpenFile(_arg0,*_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFSFile_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
 {
     if (_obj2)
         delete _arg2;
@@ -1180,6 +1176,14 @@ static PyObject *_wrap_wxFileSystemHandler_GetMimeTypeFromExt(PyObject *self, Py
     return _resultobj;
 }
 
+static void *SwigwxFileSystemTowxObject(void *ptr) {
+    wxFileSystem *src;
+    wxObject *dest;
+    src = (wxFileSystem *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxFileSystem() (new wxFileSystem())
 static PyObject *_wrap_new_wxFileSystem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1300,7 +1304,6 @@ static PyObject *_wrap_wxFileSystem_OpenFile(PyObject *self, PyObject *args, PyO
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","location", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileSystem_OpenFile",_kwnames,&_argo0,&_obj1)) 
@@ -1335,13 +1338,7 @@ static PyObject *_wrap_wxFileSystem_OpenFile(PyObject *self, PyObject *args, PyO
         _result = (wxFSFile *)wxFileSystem_OpenFile(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFSFile_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
 {
     if (_obj1)
         delete _arg1;
@@ -1489,6 +1486,14 @@ static void *SwigwxInternetFSHandlerTowxFileSystemHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxInternetFSHandlerTowxObject(void *ptr) {
+    wxInternetFSHandler *src;
+    wxObject *dest;
+    src = (wxInternetFSHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxInternetFSHandler() (new wxInternetFSHandler())
 static PyObject *_wrap_new_wxInternetFSHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1576,7 +1581,6 @@ static PyObject *_wrap_wxInternetFSHandler_OpenFile(PyObject *self, PyObject *ar
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","fs","location", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxInternetFSHandler_OpenFile",_kwnames,&_argo0,&_argo1,&_obj2)) 
@@ -1618,13 +1622,7 @@ static PyObject *_wrap_wxInternetFSHandler_OpenFile(PyObject *self, PyObject *ar
         _result = (wxFSFile *)wxInternetFSHandler_OpenFile(_arg0,*_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFSFile_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
 {
     if (_obj2)
         delete _arg2;
@@ -1637,6 +1635,14 @@ static void *SwigwxZipFSHandlerTowxFileSystemHandler(void *ptr) {
     wxFileSystemHandler *dest;
     src = (wxZipFSHandler *) ptr;
     dest = (wxFileSystemHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxZipFSHandlerTowxObject(void *ptr) {
+    wxZipFSHandler *src;
+    wxObject *dest;
+    src = (wxZipFSHandler *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -1727,7 +1733,6 @@ static PyObject *_wrap_wxZipFSHandler_OpenFile(PyObject *self, PyObject *args, P
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","fs","location", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxZipFSHandler_OpenFile",_kwnames,&_argo0,&_argo1,&_obj2)) 
@@ -1769,13 +1774,7 @@ static PyObject *_wrap_wxZipFSHandler_OpenFile(PyObject *self, PyObject *args, P
         _result = (wxFSFile *)wxZipFSHandler_OpenFile(_arg0,*_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFSFile_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
 {
     if (_obj2)
         delete _arg2;
@@ -1877,6 +1876,14 @@ static void *SwigwxMemoryFSHandlerTowxFileSystemHandler(void *ptr) {
     wxFileSystemHandler *dest;
     src = (wxMemoryFSHandler *) ptr;
     dest = (wxFileSystemHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxMemoryFSHandlerTowxObject(void *ptr) {
+    wxMemoryFSHandler *src;
+    wxObject *dest;
+    src = (wxMemoryFSHandler *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -2008,7 +2015,6 @@ static PyObject *_wrap_wxMemoryFSHandler_OpenFile(PyObject *self, PyObject *args
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","fs","location", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxMemoryFSHandler_OpenFile",_kwnames,&_argo0,&_argo1,&_obj2)) 
@@ -2050,13 +2056,7 @@ static PyObject *_wrap_wxMemoryFSHandler_OpenFile(PyObject *self, PyObject *args
         _result = (wxFSFile *)wxMemoryFSHandler_OpenFile(_arg0,*_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFSFile_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
 {
     if (_obj2)
         delete _arg2;
@@ -2237,8 +2237,24 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxImageList","_class_wxImageList",0},
     { "_class_wxTIFFHandler","_wxTIFFHandler",0},
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBMPHandler","_wxBMPHandler",0},
+    { "_class_wxObject","_class_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxObject},
+    { "_class_wxObject","_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxObject},
+    { "_class_wxObject","_class_wxZipFSHandler",SwigwxZipFSHandlerTowxObject},
+    { "_class_wxObject","_wxZipFSHandler",SwigwxZipFSHandlerTowxObject},
+    { "_class_wxObject","_class_wxInternetFSHandler",SwigwxInternetFSHandlerTowxObject},
+    { "_class_wxObject","_wxInternetFSHandler",SwigwxInternetFSHandlerTowxObject},
+    { "_class_wxObject","_class_wxFileSystem",SwigwxFileSystemTowxObject},
+    { "_class_wxObject","_wxFileSystem",SwigwxFileSystemTowxObject},
+    { "_class_wxObject","_class_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxObject},
+    { "_class_wxObject","_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxObject},
+    { "_class_wxObject","_class_wxFileSystemHandler",SwigwxFileSystemHandlerTowxObject},
+    { "_class_wxObject","_wxFileSystemHandler",SwigwxFileSystemHandlerTowxObject},
+    { "_class_wxObject","_class_wxFSFile",SwigwxFSFileTowxObject},
+    { "_class_wxObject","_wxFSFile",SwigwxFSFileTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -2315,6 +2331,21 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_wxFontList","_class_wxFontList",0},
     { "_wxClientDC","_class_wxClientDC",0},
+    { "_wxObject","_class_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxObject},
+    { "_wxObject","_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxObject},
+    { "_wxObject","_class_wxZipFSHandler",SwigwxZipFSHandlerTowxObject},
+    { "_wxObject","_wxZipFSHandler",SwigwxZipFSHandlerTowxObject},
+    { "_wxObject","_class_wxInternetFSHandler",SwigwxInternetFSHandlerTowxObject},
+    { "_wxObject","_wxInternetFSHandler",SwigwxInternetFSHandlerTowxObject},
+    { "_wxObject","_class_wxFileSystem",SwigwxFileSystemTowxObject},
+    { "_wxObject","_wxFileSystem",SwigwxFileSystemTowxObject},
+    { "_wxObject","_class_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxObject},
+    { "_wxObject","_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxObject},
+    { "_wxObject","_class_wxFileSystemHandler",SwigwxFileSystemHandlerTowxObject},
+    { "_wxObject","_wxFileSystemHandler",SwigwxFileSystemHandlerTowxObject},
+    { "_wxObject","_class_wxFSFile",SwigwxFSFileTowxObject},
+    { "_wxObject","_wxFSFile",SwigwxFSFileTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_class_wxPyInputStream","_wxPyInputStream",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
@@ -2364,6 +2395,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_time_t",0},
@@ -2442,6 +2474,8 @@ SWIGEXPORT(void) initfilesysc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("filesysc", filesyscMethods);
 	 d = PyModule_GetDict(m);
+
+    wxPyPtrTypeMap_Add("wxFileSystemHandler", "wxPyFileSystemHandler");
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -20,7 +20,7 @@ def wxDLG_SZE(win, size_width, height=None):
     else:
         return win.ConvertDialogSizeToPixels(wxSize(size_width, height))
 
-class wxEvtHandlerPtr :
+class wxEvtHandlerPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -38,11 +38,9 @@ class wxEvtHandlerPtr :
         return val
     def GetNextHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_GetNextHandler,(self,) + _args, _kwargs)
-        if val: val = wxEvtHandlerPtr(val) 
         return val
     def GetPreviousHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_GetPreviousHandler,(self,) + _args, _kwargs)
-        if val: val = wxEvtHandlerPtr(val) 
         return val
     def SetNextHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_SetNextHandler,(self,) + _args, _kwargs)
@@ -55,9 +53,6 @@ class wxEvtHandlerPtr :
         return val
     def Disconnect(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_Disconnect,(self,) + _args, _kwargs)
-        return val
-    def GetClassName(self, *_args, **_kwargs):
-        val = apply(windowsc.wxEvtHandler_GetClassName,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxEvtHandler instance at %s>" % (self.this,)
@@ -75,11 +70,9 @@ class wxValidatorPtr(wxEvtHandlerPtr):
         self.thisown = 0
     def Clone(self, *_args, **_kwargs):
         val = apply(windowsc.wxValidator_Clone,(self,) + _args, _kwargs)
-        if val: val = wxValidatorPtr(val) 
         return val
     def GetWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxValidator_GetWindow,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def SetWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxValidator_SetWindow,(self,) + _args, _kwargs)
@@ -98,9 +91,6 @@ class wxPyValidatorPtr(wxValidatorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Destroy(self, *_args, **_kwargs):
-        val = apply(windowsc.wxPyValidator_Destroy,(self,) + _args, _kwargs)
-        return val
     def _setSelf(self, *_args, **_kwargs):
         val = apply(windowsc.wxPyValidator__setSelf,(self,) + _args, _kwargs)
         return val
@@ -110,7 +100,7 @@ class wxPyValidator(wxPyValidatorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxPyValidator,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPyValidator, 0)
+        self._setSelf(self, wxPyValidator, 1)
 
 
 
@@ -161,11 +151,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def FindWindowById(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_FindWindowById,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def FindWindowByName(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_FindWindowByName,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def Fit(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Fit,(self,) + _args, _kwargs)
@@ -196,7 +184,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def GetEventHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetEventHandler,(self,) + _args, _kwargs)
-        if val: val = wxEvtHandlerPtr(val) 
         return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetFont,(self,) + _args, _kwargs)
@@ -208,7 +195,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def GetGrandParent(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetGrandParent,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def GetHandle(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetHandle,(self,) + _args, _kwargs)
@@ -227,7 +213,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def GetParent(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetParent,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def GetPositionTuple(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetPositionTuple,(self,) + _args, _kwargs)
@@ -325,7 +310,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def PopEventHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_PopEventHandler,(self,) + _args, _kwargs)
-        if val: val = wxEvtHandlerPtr(val) 
         return val
     def PushEventHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_PushEventHandler,(self,) + _args, _kwargs)
@@ -483,18 +467,15 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def GetToolTip(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetToolTip,(self,) + _args, _kwargs)
-        if val: val = wxToolTipPtr(val) 
         return val
     def SetSizer(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetSizer,(self,) + _args, _kwargs)
         return val
     def GetSizer(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetSizer,(self,) + _args, _kwargs)
-        if val: val = wxSizerPtr(val) 
         return val
     def GetValidator(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetValidator,(self,) + _args, _kwargs)
-        if val: val = wxValidatorPtr(val) 
         return val
     def SetValidator(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetValidator,(self,) + _args, _kwargs)
@@ -520,23 +501,11 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
-    # replaces broken shadow methods
+    # replaces broken shadow method
     def GetCaret(self, *_args, **_kwargs):
         from misc2 import wxCaretPtr
         val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
         if val: val = wxCaretPtr(val)
-        return val
-
-    def GetSizer(self, *_args, **_kwargs):
-        from sizers import wxSizerPtr
-        val = apply(windowsc.wxWindow_GetSizer,(self,) + _args, _kwargs)
-        if val: val = wxSizerPtr(val)
-        return val
-
-    def GetToolTip(self, *_args, **_kwargs):
-        from misc2 import wxToolTipPtr
-        val = apply(windowsc.wxWindow_GetToolTip,(self,) + _args, _kwargs)
-        if val: val = wxToolTipPtr(val)
         return val
     
 class wxWindow(wxWindowPtr):
@@ -557,20 +526,12 @@ class wxPanelPtr(wxWindowPtr):
         return val
     def GetDefaultItem(self, *_args, **_kwargs):
         val = apply(windowsc.wxPanel_GetDefaultItem,(self,) + _args, _kwargs)
-        if val: val = wxButtonPtr(val) 
         return val
     def SetDefaultItem(self, *_args, **_kwargs):
         val = apply(windowsc.wxPanel_SetDefaultItem,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxPanel instance at %s>" % (self.this,)
-    
-    def GetDefaultItem(self):
-        import controls
-        val = windowsc.wxPanel_GetDefaultItem(self.this)
-        val = controls.wxButtonPtr(val)
-        return val
-
 class wxPanel(wxPanelPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxPanel,_args,_kwargs)
@@ -622,27 +583,12 @@ class wxDialogPtr(wxPanelPtr):
         return val
     def CreateTextSizer(self, *_args, **_kwargs):
         val = apply(windowsc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
-        if val: val = wxSizerPtr(val) 
         return val
     def CreateButtonSizer(self, *_args, **_kwargs):
         val = apply(windowsc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
-        if val: val = wxSizerPtr(val) 
         return val
     def __repr__(self):
         return "<C wxDialog instance at %s>" % (self.this,)
-    
-    # replace swig generated shadow methods to resolve import issues
-    def CreateTextSizer(self, *_args, **_kwargs):
-        import sizers
-        val = apply(windowsc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
-        if val: val = sizers.wxSizerPtr(val)
-        return val
-    def CreateButtonSizer(self, *_args, **_kwargs):
-        import sizers
-        val = apply(windowsc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
-        if val: val = sizers.wxSizerPtr(val)
-        return val
-
 class wxDialog(wxDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxDialog,_args,_kwargs)
@@ -667,7 +613,6 @@ class wxScrolledWindowPtr(wxPanelPtr):
         return val
     def GetTargetWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_GetTargetWindow,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def GetVirtualSize(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_GetVirtualSize,(self,) + _args, _kwargs)
@@ -762,7 +707,6 @@ class wxMenuPtr(wxEvtHandlerPtr):
         return val
     def FindItemById(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_FindItemById,(self,) + _args, _kwargs)
-        if val: val = wxMenuItemPtr(val) 
         return val
     def GetTitle(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_GetTitle,(self,) + _args, _kwargs)
@@ -796,11 +740,9 @@ class wxMenuPtr(wxEvtHandlerPtr):
         return val
     def Remove(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_Remove,(self,) + _args, _kwargs)
-        if val: val = wxMenuItemPtr(val) 
         return val
     def RemoveItem(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_RemoveItem,(self,) + _args, _kwargs)
-        if val: val = wxMenuItemPtr(val) 
         return val
     def Destroy(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_Destroy,(self,) + _args, _kwargs)
@@ -822,14 +764,12 @@ class wxMenuPtr(wxEvtHandlerPtr):
         return val
     def GetEventHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_GetEventHandler,(self,) + _args, _kwargs)
-        if val: val = wxEvtHandlerPtr(val) 
         return val
     def SetInvokingWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_SetInvokingWindow,(self,) + _args, _kwargs)
         return val
     def GetInvokingWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_GetInvokingWindow,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def GetStyle(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_GetStyle,(self,) + _args, _kwargs)
@@ -842,7 +782,6 @@ class wxMenuPtr(wxEvtHandlerPtr):
         return val
     def GetParent(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_GetParent,(self,) + _args, _kwargs)
-        if val: val = wxMenuPtr(val) 
         return val
     def __repr__(self):
         return "<C wxMenu instance at %s>" % (self.this,)
@@ -869,15 +808,12 @@ class wxMenuBarPtr(wxWindowPtr):
         return val
     def GetMenu(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_GetMenu,(self,) + _args, _kwargs)
-        if val: val = wxMenuPtr(val) 
         return val
     def Replace(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_Replace,(self,) + _args, _kwargs)
-        if val: val = wxMenuPtr(val) 
         return val
     def Remove(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_Remove,(self,) + _args, _kwargs)
-        if val: val = wxMenuPtr(val) 
         return val
     def EnableTop(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_EnableTop,(self,) + _args, _kwargs)
@@ -893,7 +829,6 @@ class wxMenuBarPtr(wxWindowPtr):
         return val
     def FindItemById(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_FindItemById,(self,) + _args, _kwargs)
-        if val: val = wxMenuItemPtr(val) 
         return val
     def Enable(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_Enable,(self,) + _args, _kwargs)
@@ -929,13 +864,12 @@ class wxMenuBar(wxMenuBarPtr):
 
 
 
-class wxMenuItemPtr :
+class wxMenuItemPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def GetMenu(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetMenu,(self,) + _args, _kwargs)
-        if val: val = wxMenuPtr(val) 
         return val
     def SetId(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetId,(self,) + _args, _kwargs)
@@ -969,7 +903,6 @@ class wxMenuItemPtr :
         return val
     def GetSubMenu(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetSubMenu,(self,) + _args, _kwargs)
-        if val: val = wxMenuPtr(val) 
         return val
     def Enable(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_Enable,(self,) + _args, _kwargs)
@@ -1013,13 +946,8 @@ class wxMenuItem(wxMenuItemPtr):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
-wxValidator_IsSilent = windowsc.wxValidator_IsSilent
-
-wxValidator_SetBellOnError = windowsc.wxValidator_SetBellOnError
-
 def wxWindow_FindFocus(*_args, **_kwargs):
     val = apply(windowsc.wxWindow_FindFocus,_args,_kwargs)
-    if val: val = wxWindowPtr(val)
     return val
 
 wxWindow_NewControlId = windowsc.wxWindow_NewControlId
@@ -1027,6 +955,10 @@ wxWindow_NewControlId = windowsc.wxWindow_NewControlId
 wxWindow_NextControlId = windowsc.wxWindow_NextControlId
 
 wxWindow_PrevControlId = windowsc.wxWindow_PrevControlId
+
+wxValidator_IsSilent = windowsc.wxValidator_IsSilent
+
+wxValidator_SetBellOnError = windowsc.wxValidator_SetBellOnError
 
 wxMenuItem_GetLabelFromText = windowsc.wxMenuItem_GetLabelFromText
 

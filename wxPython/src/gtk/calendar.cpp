@@ -752,6 +752,14 @@ static void *SwigwxCalendarEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxCalendarEventTowxObject(void *ptr) {
+    wxCalendarEvent *src;
+    wxObject *dest;
+    src = (wxCalendarEvent *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxCalendarEvent(_swigarg0,_swigarg1) (new wxCalendarEvent(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxCalendarEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -870,6 +878,14 @@ static void *SwigwxCalendarCtrlTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxCalendarCtrl *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxCalendarCtrlTowxObject(void *ptr) {
+    wxCalendarCtrl *src;
+    wxObject *dest;
+    src = (wxCalendarCtrl *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -1722,8 +1738,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
+    { "_class_wxObject","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
+    { "_class_wxObject","_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
+    { "_class_wxObject","_class_wxCalendarEvent",SwigwxCalendarEventTowxObject},
+    { "_class_wxObject","_wxCalendarEvent",SwigwxCalendarEventTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
@@ -1872,6 +1894,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
+    { "_wxObject","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
+    { "_wxObject","_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
+    { "_wxObject","_class_wxCalendarEvent",SwigwxCalendarEventTowxObject},
+    { "_wxObject","_wxCalendarEvent",SwigwxCalendarEventTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
@@ -1929,6 +1956,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},

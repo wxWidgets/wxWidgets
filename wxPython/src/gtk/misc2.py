@@ -12,7 +12,7 @@ from clip_dnd import *
 from events import *
 
 from streams import *
-class wxToolTipPtr :
+class wxToolTipPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -24,7 +24,6 @@ class wxToolTipPtr :
         return val
     def GetWindow(self, *_args, **_kwargs):
         val = apply(misc2c.wxToolTip_GetWindow,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def __repr__(self):
         return "<C wxToolTip instance at %s>" % (self.this,)
@@ -65,7 +64,6 @@ class wxCaretPtr :
         return val
     def GetWindow(self, *_args, **_kwargs):
         val = apply(misc2c.wxCaret_GetWindow,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def MoveXY(self, *_args, **_kwargs):
         val = apply(misc2c.wxCaret_MoveXY,(self,) + _args, _kwargs)
@@ -215,7 +213,7 @@ class wxPyTipProvider(wxPyTipProviderPtr):
 
 
 
-class wxDragImagePtr :
+class wxDragImagePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -257,7 +255,7 @@ class wxDragImage(wxDragImagePtr):
 
 
 
-class wxPyTimerPtr :
+class wxPyTimerPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -369,7 +367,6 @@ class wxLogWindowPtr(wxLogPtr):
         return val
     def GetFrame(self, *_args, **_kwargs):
         val = apply(misc2c.wxLogWindow_GetFrame,(self,) + _args, _kwargs)
-        if val: val = wxFramePtr(val) 
         return val
     def GetOldLog(self, *_args, **_kwargs):
         val = apply(misc2c.wxLogWindow_GetOldLog,(self,) + _args, _kwargs)
@@ -537,19 +534,16 @@ wxSetCursor = misc2c.wxSetCursor
 
 def wxFindWindowByLabel(*_args, **_kwargs):
     val = apply(misc2c.wxFindWindowByLabel,_args,_kwargs)
-    if val: val = wxWindowPtr(val)
     return val
 
 def wxFindWindowByName(*_args, **_kwargs):
     val = apply(misc2c.wxFindWindowByName,_args,_kwargs)
-    if val: val = wxWindowPtr(val)
     return val
 
 wxBeginBusyCursor = misc2c.wxBeginBusyCursor
 
 def wxGetActiveWindow(*_args, **_kwargs):
     val = apply(misc2c.wxGetActiveWindow,_args,_kwargs)
-    if val: val = wxWindowPtr(val)
     return val
 
 wxResourceAddIdentifier = misc2c.wxResourceAddIdentifier
@@ -568,7 +562,6 @@ def wxResourceCreateIcon(*_args, **_kwargs):
 
 def wxResourceCreateMenuBar(*_args, **_kwargs):
     val = apply(misc2c.wxResourceCreateMenuBar,_args,_kwargs)
-    if val: val = wxMenuBarPtr(val)
     return val
 
 wxResourceGetIdentifier = misc2c.wxResourceGetIdentifier

@@ -182,6 +182,14 @@ static void *SwigwxControlTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxControlTowxObject(void *ptr) {
+    wxControl *src;
+    wxObject *dest;
+    src = (wxControl *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxControl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxControl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -386,6 +394,14 @@ static void *SwigwxButtonTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxButton *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxButtonTowxObject(void *ptr) {
+    wxButton *src;
+    wxObject *dest;
+    src = (wxButton *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -603,6 +619,14 @@ static void *SwigwxBitmapButtonTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxBitmapButton *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxBitmapButtonTowxObject(void *ptr) {
+    wxBitmapButton *src;
+    wxObject *dest;
+    src = (wxBitmapButton *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -1070,6 +1094,14 @@ static void *SwigwxCheckBoxTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxCheckBoxTowxObject(void *ptr) {
+    wxCheckBox *src;
+    wxObject *dest;
+    src = (wxCheckBox *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxCheckBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7) (new wxCheckBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7))
 static PyObject *_wrap_new_wxCheckBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1236,6 +1268,14 @@ static void *SwigwxChoiceTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxChoice *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxChoiceTowxObject(void *ptr) {
+    wxChoice *src;
+    wxObject *dest;
+    src = (wxChoice *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -1735,6 +1775,14 @@ static void *SwigwxComboBoxTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxComboBox *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxComboBoxTowxObject(void *ptr) {
+    wxComboBox *src;
+    wxObject *dest;
+    src = (wxComboBox *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -2536,6 +2584,14 @@ static void *SwigwxGaugeTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxGaugeTowxObject(void *ptr) {
+    wxGauge *src;
+    wxObject *dest;
+    src = (wxGauge *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxGauge(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7) (new wxGauge(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7))
 static PyObject *_wrap_new_wxGauge(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2845,6 +2901,14 @@ static void *SwigwxStaticBoxTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxStaticBoxTowxObject(void *ptr) {
+    wxStaticBox *src;
+    wxObject *dest;
+    src = (wxStaticBox *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxStaticBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxStaticBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxStaticBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2948,6 +3012,14 @@ static void *SwigwxStaticLineTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxStaticLineTowxObject(void *ptr) {
+    wxStaticLine *src;
+    wxObject *dest;
+    src = (wxStaticLine *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxStaticLine(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxStaticLine(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_new_wxStaticLine(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3024,6 +3096,14 @@ static void *SwigwxStaticTextTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxStaticText *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxStaticTextTowxObject(void *ptr) {
+    wxStaticText *src;
+    wxObject *dest;
+    src = (wxStaticText *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -3210,6 +3290,14 @@ static void *SwigwxListBoxTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxListBox *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxListBoxTowxObject(void *ptr) {
+    wxListBox *src;
+    wxObject *dest;
+    src = (wxListBox *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -4011,6 +4099,14 @@ static void *SwigwxCheckListBoxTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxCheckListBoxTowxObject(void *ptr) {
+    wxCheckListBox *src;
+    wxObject *dest;
+    src = (wxCheckListBox *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxCheckListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8) (new wxCheckListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8))
 static PyObject *_wrap_new_wxCheckListBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4249,6 +4345,14 @@ static void *SwigwxTextCtrlTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxTextCtrl *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxTextCtrlTowxObject(void *ptr) {
+    wxTextCtrl *src;
+    wxObject *dest;
+    src = (wxTextCtrl *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -5549,6 +5653,14 @@ static void *SwigwxScrollBarTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxScrollBarTowxObject(void *ptr) {
+    wxScrollBar *src;
+    wxObject *dest;
+    src = (wxScrollBar *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxScrollBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxScrollBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5807,6 +5919,14 @@ static void *SwigwxSpinButtonTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxSpinButtonTowxObject(void *ptr) {
+    wxSpinButton *src;
+    wxObject *dest;
+    src = (wxSpinButton *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxSpinButton(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxSpinButton(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_new_wxSpinButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6024,6 +6144,14 @@ static void *SwigwxStaticBitmapTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxStaticBitmapTowxObject(void *ptr) {
+    wxStaticBitmap *src;
+    wxObject *dest;
+    src = (wxStaticBitmap *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxStaticBitmap(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxStaticBitmap(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxStaticBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6216,6 +6344,14 @@ static void *SwigwxRadioBoxTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxRadioBox *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxRadioBoxTowxObject(void *ptr) {
+    wxRadioBox *src;
+    wxObject *dest;
+    src = (wxRadioBox *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -6809,6 +6945,14 @@ static void *SwigwxRadioButtonTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxRadioButtonTowxObject(void *ptr) {
+    wxRadioButton *src;
+    wxObject *dest;
+    src = (wxRadioButton *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxRadioButton(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7) (new wxRadioButton(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7))
 static PyObject *_wrap_new_wxRadioButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6975,6 +7119,14 @@ static void *SwigwxSliderTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxSlider *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSliderTowxObject(void *ptr) {
+    wxSlider *src;
+    wxObject *dest;
+    src = (wxSlider *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -7601,6 +7753,14 @@ static void *SwigwxSpinCtrlTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxSpinCtrlTowxObject(void *ptr) {
+    wxSpinCtrl *src;
+    wxObject *dest;
+    src = (wxSpinCtrl *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxSpinCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8,_swigarg9) (new wxSpinCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8,_swigarg9))
 static PyObject *_wrap_new_wxSpinCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7819,6 +7979,14 @@ static void *SwigwxToggleButtonTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxToggleButton *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxToggleButtonTowxObject(void *ptr) {
+    wxToggleButton *src;
+    wxObject *dest;
+    src = (wxToggleButton *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -8317,8 +8485,52 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
+    { "_class_wxObject","_class_wxToggleButton",SwigwxToggleButtonTowxObject},
+    { "_class_wxObject","_wxToggleButton",SwigwxToggleButtonTowxObject},
+    { "_class_wxObject","_class_wxSpinCtrl",SwigwxSpinCtrlTowxObject},
+    { "_class_wxObject","_wxSpinCtrl",SwigwxSpinCtrlTowxObject},
+    { "_class_wxObject","_class_wxSlider",SwigwxSliderTowxObject},
+    { "_class_wxObject","_wxSlider",SwigwxSliderTowxObject},
+    { "_class_wxObject","_class_wxRadioButton",SwigwxRadioButtonTowxObject},
+    { "_class_wxObject","_wxRadioButton",SwigwxRadioButtonTowxObject},
+    { "_class_wxObject","_class_wxRadioBox",SwigwxRadioBoxTowxObject},
+    { "_class_wxObject","_wxRadioBox",SwigwxRadioBoxTowxObject},
+    { "_class_wxObject","_class_wxStaticBitmap",SwigwxStaticBitmapTowxObject},
+    { "_class_wxObject","_wxStaticBitmap",SwigwxStaticBitmapTowxObject},
+    { "_class_wxObject","_class_wxSpinButton",SwigwxSpinButtonTowxObject},
+    { "_class_wxObject","_wxSpinButton",SwigwxSpinButtonTowxObject},
+    { "_class_wxObject","_class_wxScrollBar",SwigwxScrollBarTowxObject},
+    { "_class_wxObject","_wxScrollBar",SwigwxScrollBarTowxObject},
+    { "_class_wxObject","_class_wxTextCtrl",SwigwxTextCtrlTowxObject},
+    { "_class_wxObject","_wxTextCtrl",SwigwxTextCtrlTowxObject},
+    { "_class_wxObject","_class_wxCheckListBox",SwigwxCheckListBoxTowxObject},
+    { "_class_wxObject","_wxCheckListBox",SwigwxCheckListBoxTowxObject},
+    { "_class_wxObject","_class_wxListBox",SwigwxListBoxTowxObject},
+    { "_class_wxObject","_wxListBox",SwigwxListBoxTowxObject},
+    { "_class_wxObject","_class_wxStaticText",SwigwxStaticTextTowxObject},
+    { "_class_wxObject","_wxStaticText",SwigwxStaticTextTowxObject},
+    { "_class_wxObject","_class_wxStaticLine",SwigwxStaticLineTowxObject},
+    { "_class_wxObject","_wxStaticLine",SwigwxStaticLineTowxObject},
+    { "_class_wxObject","_class_wxStaticBox",SwigwxStaticBoxTowxObject},
+    { "_class_wxObject","_wxStaticBox",SwigwxStaticBoxTowxObject},
+    { "_class_wxObject","_class_wxGauge",SwigwxGaugeTowxObject},
+    { "_class_wxObject","_wxGauge",SwigwxGaugeTowxObject},
+    { "_class_wxObject","_class_wxComboBox",SwigwxComboBoxTowxObject},
+    { "_class_wxObject","_wxComboBox",SwigwxComboBoxTowxObject},
+    { "_class_wxObject","_class_wxChoice",SwigwxChoiceTowxObject},
+    { "_class_wxObject","_wxChoice",SwigwxChoiceTowxObject},
+    { "_class_wxObject","_class_wxCheckBox",SwigwxCheckBoxTowxObject},
+    { "_class_wxObject","_wxCheckBox",SwigwxCheckBoxTowxObject},
+    { "_class_wxObject","_class_wxBitmapButton",SwigwxBitmapButtonTowxObject},
+    { "_class_wxObject","_wxBitmapButton",SwigwxBitmapButtonTowxObject},
+    { "_class_wxObject","_class_wxButton",SwigwxButtonTowxObject},
+    { "_class_wxObject","_wxButton",SwigwxButtonTowxObject},
+    { "_class_wxObject","_class_wxControl",SwigwxControlTowxObject},
+    { "_class_wxObject","_wxControl",SwigwxControlTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
@@ -8501,6 +8713,49 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
+    { "_wxObject","_class_wxToggleButton",SwigwxToggleButtonTowxObject},
+    { "_wxObject","_wxToggleButton",SwigwxToggleButtonTowxObject},
+    { "_wxObject","_class_wxSpinCtrl",SwigwxSpinCtrlTowxObject},
+    { "_wxObject","_wxSpinCtrl",SwigwxSpinCtrlTowxObject},
+    { "_wxObject","_class_wxSlider",SwigwxSliderTowxObject},
+    { "_wxObject","_wxSlider",SwigwxSliderTowxObject},
+    { "_wxObject","_class_wxRadioButton",SwigwxRadioButtonTowxObject},
+    { "_wxObject","_wxRadioButton",SwigwxRadioButtonTowxObject},
+    { "_wxObject","_class_wxRadioBox",SwigwxRadioBoxTowxObject},
+    { "_wxObject","_wxRadioBox",SwigwxRadioBoxTowxObject},
+    { "_wxObject","_class_wxStaticBitmap",SwigwxStaticBitmapTowxObject},
+    { "_wxObject","_wxStaticBitmap",SwigwxStaticBitmapTowxObject},
+    { "_wxObject","_class_wxSpinButton",SwigwxSpinButtonTowxObject},
+    { "_wxObject","_wxSpinButton",SwigwxSpinButtonTowxObject},
+    { "_wxObject","_class_wxScrollBar",SwigwxScrollBarTowxObject},
+    { "_wxObject","_wxScrollBar",SwigwxScrollBarTowxObject},
+    { "_wxObject","_class_wxTextCtrl",SwigwxTextCtrlTowxObject},
+    { "_wxObject","_wxTextCtrl",SwigwxTextCtrlTowxObject},
+    { "_wxObject","_class_wxCheckListBox",SwigwxCheckListBoxTowxObject},
+    { "_wxObject","_wxCheckListBox",SwigwxCheckListBoxTowxObject},
+    { "_wxObject","_class_wxListBox",SwigwxListBoxTowxObject},
+    { "_wxObject","_wxListBox",SwigwxListBoxTowxObject},
+    { "_wxObject","_class_wxStaticText",SwigwxStaticTextTowxObject},
+    { "_wxObject","_wxStaticText",SwigwxStaticTextTowxObject},
+    { "_wxObject","_class_wxStaticLine",SwigwxStaticLineTowxObject},
+    { "_wxObject","_wxStaticLine",SwigwxStaticLineTowxObject},
+    { "_wxObject","_class_wxStaticBox",SwigwxStaticBoxTowxObject},
+    { "_wxObject","_wxStaticBox",SwigwxStaticBoxTowxObject},
+    { "_wxObject","_class_wxGauge",SwigwxGaugeTowxObject},
+    { "_wxObject","_wxGauge",SwigwxGaugeTowxObject},
+    { "_wxObject","_class_wxComboBox",SwigwxComboBoxTowxObject},
+    { "_wxObject","_wxComboBox",SwigwxComboBoxTowxObject},
+    { "_wxObject","_class_wxChoice",SwigwxChoiceTowxObject},
+    { "_wxObject","_wxChoice",SwigwxChoiceTowxObject},
+    { "_wxObject","_class_wxCheckBox",SwigwxCheckBoxTowxObject},
+    { "_wxObject","_wxCheckBox",SwigwxCheckBoxTowxObject},
+    { "_wxObject","_class_wxBitmapButton",SwigwxBitmapButtonTowxObject},
+    { "_wxObject","_wxBitmapButton",SwigwxBitmapButtonTowxObject},
+    { "_wxObject","_class_wxButton",SwigwxButtonTowxObject},
+    { "_wxObject","_wxButton",SwigwxButtonTowxObject},
+    { "_wxObject","_class_wxControl",SwigwxControlTowxObject},
+    { "_wxObject","_wxControl",SwigwxControlTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
@@ -8597,6 +8852,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},

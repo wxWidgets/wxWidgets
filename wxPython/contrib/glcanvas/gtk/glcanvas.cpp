@@ -117,6 +117,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
+static void *SwigwxGLContextTowxObject(void *ptr) {
+    wxGLContext *src;
+    wxObject *dest;
+    src = (wxGLContext *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxGLContext(_swigarg0,_swigarg1,_swigarg2) (new wxGLContext(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_new_wxGLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -405,7 +413,6 @@ static PyObject *_wrap_wxGLContext_GetWindow(PyObject *self, PyObject *args, PyO
     wxGLContext * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLContext_GetWindow",_kwnames,&_argo0)) 
@@ -422,13 +429,7 @@ static PyObject *_wrap_wxGLContext_GetWindow(PyObject *self, PyObject *args, PyO
         _result = (wxWindow *)wxGLContext_GetWindow(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -461,6 +462,14 @@ static void *SwigwxGLCanvasTowxEvtHandler(void *ptr) {
     wxEvtHandler *dest;
     src = (wxGLCanvas *) ptr;
     dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGLCanvasTowxObject(void *ptr) {
+    wxGLCanvas *src;
+    wxObject *dest;
+    src = (wxGLCanvas *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -773,6 +782,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
     { "_class_wxSashEvent","_wxSashEvent",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_wxSizerItem","_class_wxSizerItem",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
@@ -782,6 +792,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxBMPHandler","_wxBMPHandler",0},
     { "_wxPrintPreview","_class_wxPrintPreview",0},
     { "_class_wxFlexGridSizer","_wxFlexGridSizer",0},
+    { "_class_wxObject","_class_wxGLCanvas",SwigwxGLCanvasTowxObject},
+    { "_class_wxObject","_wxGLCanvas",SwigwxGLCanvasTowxObject},
+    { "_class_wxObject","_class_wxGLContext",SwigwxGLContextTowxObject},
+    { "_class_wxObject","_wxGLContext",SwigwxGLContextTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_wxSashLayoutWindow","_class_wxSashLayoutWindow",0},
     { "_size_t","_wxCoord",0},
@@ -1002,6 +1017,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxListCtrl","_class_wxListCtrl",0},
     { "_wxSingleChoiceDialog","_class_wxSingleChoiceDialog",0},
     { "_wxGLCanvas","_class_wxGLCanvas",0},
+    { "_wxObject","_class_wxGLCanvas",SwigwxGLCanvasTowxObject},
+    { "_wxObject","_wxGLCanvas",SwigwxGLCanvasTowxObject},
+    { "_wxObject","_class_wxGLContext",SwigwxGLContextTowxObject},
+    { "_wxObject","_wxGLContext",SwigwxGLContextTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_class_wxPyInputStream","_wxPyInputStream",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
@@ -1080,6 +1100,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_class_wxSizerItem","_wxSizerItem",0},
     { "_int","_wxCoord",0},

@@ -334,6 +334,14 @@ static PyObject *_wrap_wxBitmapFromImage(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+static void *SwigwxImageHandlerTowxObject(void *ptr) {
+    wxImageHandler *src;
+    wxObject *dest;
+    src = (wxImageHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define wxImageHandler_GetName(_swigobj)  (_swigobj->GetName())
 static PyObject *_wrap_wxImageHandler_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -646,6 +654,14 @@ static void *SwigwxPNGHandlerTowxImageHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxPNGHandlerTowxObject(void *ptr) {
+    wxPNGHandler *src;
+    wxObject *dest;
+    src = (wxPNGHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxPNGHandler() (new wxPNGHandler())
 static PyObject *_wrap_new_wxPNGHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -676,6 +692,14 @@ static void *SwigwxJPEGHandlerTowxImageHandler(void *ptr) {
     wxImageHandler *dest;
     src = (wxJPEGHandler *) ptr;
     dest = (wxImageHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxJPEGHandlerTowxObject(void *ptr) {
+    wxJPEGHandler *src;
+    wxObject *dest;
+    src = (wxJPEGHandler *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -712,6 +736,14 @@ static void *SwigwxBMPHandlerTowxImageHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxBMPHandlerTowxObject(void *ptr) {
+    wxBMPHandler *src;
+    wxObject *dest;
+    src = (wxBMPHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxBMPHandler() (new wxBMPHandler())
 static PyObject *_wrap_new_wxBMPHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -742,6 +774,14 @@ static void *SwigwxGIFHandlerTowxImageHandler(void *ptr) {
     wxImageHandler *dest;
     src = (wxGIFHandler *) ptr;
     dest = (wxImageHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGIFHandlerTowxObject(void *ptr) {
+    wxGIFHandler *src;
+    wxObject *dest;
+    src = (wxGIFHandler *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -778,6 +818,14 @@ static void *SwigwxPNMHandlerTowxImageHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxPNMHandlerTowxObject(void *ptr) {
+    wxPNMHandler *src;
+    wxObject *dest;
+    src = (wxPNMHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxPNMHandler() (new wxPNMHandler())
 static PyObject *_wrap_new_wxPNMHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -808,6 +856,14 @@ static void *SwigwxPCXHandlerTowxImageHandler(void *ptr) {
     wxImageHandler *dest;
     src = (wxPCXHandler *) ptr;
     dest = (wxImageHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPCXHandlerTowxObject(void *ptr) {
+    wxPCXHandler *src;
+    wxObject *dest;
+    src = (wxPCXHandler *) ptr;
+    dest = (wxObject *) src;
     return (void *) dest;
 }
 
@@ -844,6 +900,14 @@ static void *SwigwxTIFFHandlerTowxImageHandler(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxTIFFHandlerTowxObject(void *ptr) {
+    wxTIFFHandler *src;
+    wxObject *dest;
+    src = (wxTIFFHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
 #define new_wxTIFFHandler() (new wxTIFFHandler())
 static PyObject *_wrap_new_wxTIFFHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -867,6 +931,14 @@ static PyObject *_wrap_new_wxTIFFHandler(PyObject *self, PyObject *args, PyObjec
         _resultobj = Py_None;
     }
     return _resultobj;
+}
+
+static void *SwigwxImageTowxObject(void *ptr) {
+    wxImage *src;
+    wxObject *dest;
+    src = (wxImage *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 #define new_wxImage(_swigarg0,_swigarg1) (new wxImage(_swigarg0,_swigarg1))
@@ -2355,8 +2427,28 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxImageList","_class_wxImageList",0},
     { "_class_wxTIFFHandler","_wxTIFFHandler",0},
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
+    { "_wxGDIObject","_class_wxGDIObject",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBMPHandler","_wxBMPHandler",0},
+    { "_class_wxObject","_class_wxImage",SwigwxImageTowxObject},
+    { "_class_wxObject","_wxImage",SwigwxImageTowxObject},
+    { "_class_wxObject","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxObject},
+    { "_class_wxObject","_wxTIFFHandler",SwigwxTIFFHandlerTowxObject},
+    { "_class_wxObject","_class_wxPCXHandler",SwigwxPCXHandlerTowxObject},
+    { "_class_wxObject","_wxPCXHandler",SwigwxPCXHandlerTowxObject},
+    { "_class_wxObject","_class_wxPNMHandler",SwigwxPNMHandlerTowxObject},
+    { "_class_wxObject","_wxPNMHandler",SwigwxPNMHandlerTowxObject},
+    { "_class_wxObject","_class_wxGIFHandler",SwigwxGIFHandlerTowxObject},
+    { "_class_wxObject","_wxGIFHandler",SwigwxGIFHandlerTowxObject},
+    { "_class_wxObject","_class_wxBMPHandler",SwigwxBMPHandlerTowxObject},
+    { "_class_wxObject","_wxBMPHandler",SwigwxBMPHandlerTowxObject},
+    { "_class_wxObject","_class_wxJPEGHandler",SwigwxJPEGHandlerTowxObject},
+    { "_class_wxObject","_wxJPEGHandler",SwigwxJPEGHandlerTowxObject},
+    { "_class_wxObject","_class_wxPNGHandler",SwigwxPNGHandlerTowxObject},
+    { "_class_wxObject","_wxPNGHandler",SwigwxPNGHandlerTowxObject},
+    { "_class_wxObject","_class_wxImageHandler",SwigwxImageHandlerTowxObject},
+    { "_class_wxObject","_wxImageHandler",SwigwxImageHandlerTowxObject},
+    { "_class_wxObject","_wxObject",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -2420,6 +2512,25 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_wxFontList","_class_wxFontList",0},
     { "_wxClientDC","_class_wxClientDC",0},
+    { "_wxObject","_class_wxImage",SwigwxImageTowxObject},
+    { "_wxObject","_wxImage",SwigwxImageTowxObject},
+    { "_wxObject","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxObject},
+    { "_wxObject","_wxTIFFHandler",SwigwxTIFFHandlerTowxObject},
+    { "_wxObject","_class_wxPCXHandler",SwigwxPCXHandlerTowxObject},
+    { "_wxObject","_wxPCXHandler",SwigwxPCXHandlerTowxObject},
+    { "_wxObject","_class_wxPNMHandler",SwigwxPNMHandlerTowxObject},
+    { "_wxObject","_wxPNMHandler",SwigwxPNMHandlerTowxObject},
+    { "_wxObject","_class_wxGIFHandler",SwigwxGIFHandlerTowxObject},
+    { "_wxObject","_wxGIFHandler",SwigwxGIFHandlerTowxObject},
+    { "_wxObject","_class_wxBMPHandler",SwigwxBMPHandlerTowxObject},
+    { "_wxObject","_wxBMPHandler",SwigwxBMPHandlerTowxObject},
+    { "_wxObject","_class_wxJPEGHandler",SwigwxJPEGHandlerTowxObject},
+    { "_wxObject","_wxJPEGHandler",SwigwxJPEGHandlerTowxObject},
+    { "_wxObject","_class_wxPNGHandler",SwigwxPNGHandlerTowxObject},
+    { "_wxObject","_wxPNGHandler",SwigwxPNGHandlerTowxObject},
+    { "_wxObject","_class_wxImageHandler",SwigwxImageHandlerTowxObject},
+    { "_wxObject","_wxImageHandler",SwigwxImageHandlerTowxObject},
+    { "_wxObject","_class_wxObject",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_signed_short","_WXTYPE",0},
@@ -2470,6 +2581,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_time_t",0},

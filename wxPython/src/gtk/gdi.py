@@ -2,7 +2,33 @@
 import gdic
 
 from misc import *
-class wxBitmapPtr :
+class wxGDIObjectPtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxGDIObject(self)
+    def GetVisible(self, *_args, **_kwargs):
+        val = apply(gdic.wxGDIObject_GetVisible,(self,) + _args, _kwargs)
+        return val
+    def SetVisible(self, *_args, **_kwargs):
+        val = apply(gdic.wxGDIObject_SetVisible,(self,) + _args, _kwargs)
+        return val
+    def IsNull(self, *_args, **_kwargs):
+        val = apply(gdic.wxGDIObject_IsNull,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxGDIObject instance at %s>" % (self.this,)
+class wxGDIObject(wxGDIObjectPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxGDIObject,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxBitmapPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -69,7 +95,7 @@ class wxBitmap(wxBitmapPtr):
 
 
 
-class wxMaskPtr :
+class wxMaskPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -86,7 +112,7 @@ class wxMask(wxMaskPtr):
 
 
 
-class wxIconPtr :
+class wxIconPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -138,7 +164,7 @@ class wxIcon(wxIconPtr):
 
 
 
-class wxCursorPtr :
+class wxCursorPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -157,7 +183,7 @@ class wxCursor(wxCursorPtr):
 
 
 
-class wxFontPtr :
+class wxFontPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -228,7 +254,7 @@ class wxFont(wxFontPtr):
 
 
 
-class wxFontListPtr :
+class wxFontListPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -251,7 +277,7 @@ class wxFontList(wxFontListPtr):
 
 
 
-class wxColourPtr :
+class wxColourPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -289,7 +315,7 @@ class wxColour(wxColourPtr):
 
 
 
-class wxColourDatabasePtr :
+class wxColourDatabasePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -312,7 +338,7 @@ class wxColourDatabase(wxColourDatabasePtr):
 
 
 
-class wxPenPtr :
+class wxPenPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -369,7 +395,7 @@ class wxPen(wxPenPtr):
 
 
 
-class wxPenListPtr :
+class wxPenListPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -392,7 +418,7 @@ class wxPenList(wxPenListPtr):
 
 
 
-class wxBrushPtr :
+class wxBrushPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -455,7 +481,7 @@ class wxBrushList(wxBrushListPtr):
 
 
 
-class wxDCPtr :
+class wxDCPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -829,7 +855,7 @@ class wxPostScriptDC(wxPostScriptDCPtr):
 
 
 
-class wxPalettePtr :
+class wxPalettePtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -855,7 +881,7 @@ class wxPalette(wxPalettePtr):
 
 
 
-class wxImageListPtr :
+class wxImageListPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -894,6 +920,129 @@ class wxImageListPtr :
 class wxImageList(wxImageListPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxImageList,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxRegionPtr(wxGDIObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxRegion(self)
+    def Clear(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_Clear,(self,) + _args, _kwargs)
+        return val
+    def Contains(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_Contains,(self,) + _args, _kwargs)
+        return val
+    def ContainsPoint(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_ContainsPoint,(self,) + _args, _kwargs)
+        return val
+    def ContainsRect(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_ContainsRect,(self,) + _args, _kwargs)
+        return val
+    def ContainsRectDim(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_ContainsRectDim,(self,) + _args, _kwargs)
+        return val
+    def GetBox(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_GetBox,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
+        return val
+    def Intersect(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_Intersect,(self,) + _args, _kwargs)
+        return val
+    def IntersectRect(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_IntersectRect,(self,) + _args, _kwargs)
+        return val
+    def IntersectRegion(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_IntersectRegion,(self,) + _args, _kwargs)
+        return val
+    def IsEmpty(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_IsEmpty,(self,) + _args, _kwargs)
+        return val
+    def Union(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_Union,(self,) + _args, _kwargs)
+        return val
+    def UnionRect(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_UnionRect,(self,) + _args, _kwargs)
+        return val
+    def UnionRegion(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_UnionRegion,(self,) + _args, _kwargs)
+        return val
+    def Subtract(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_Subtract,(self,) + _args, _kwargs)
+        return val
+    def SubtractRect(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_SubtractRect,(self,) + _args, _kwargs)
+        return val
+    def SubtractRegion(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_SubtractRegion,(self,) + _args, _kwargs)
+        return val
+    def Xor(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_Xor,(self,) + _args, _kwargs)
+        return val
+    def XorRect(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_XorRect,(self,) + _args, _kwargs)
+        return val
+    def XorRegion(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegion_XorRegion,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxRegion instance at %s>" % (self.this,)
+class wxRegion(wxRegionPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxRegion,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxRegionIteratorPtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxRegionIterator(self)
+    def GetX(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_GetX,(self,) + _args, _kwargs)
+        return val
+    def GetY(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_GetY,(self,) + _args, _kwargs)
+        return val
+    def GetW(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_GetW,(self,) + _args, _kwargs)
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetH(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_GetH,(self,) + _args, _kwargs)
+        return val
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetRect(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_GetRect,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
+        return val
+    def HaveRects(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_HaveRects,(self,) + _args, _kwargs)
+        return val
+    def Reset(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_Reset,(self,) + _args, _kwargs)
+        return val
+    def Next(self, *_args, **_kwargs):
+        val = apply(gdic.wxRegionIterator_Next,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxRegionIterator instance at %s>" % (self.this,)
+class wxRegionIterator(wxRegionIteratorPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxRegionIterator,_args,_kwargs)
         self.thisown = 1
 
 
@@ -1038,3 +1187,6 @@ wxIMAGELIST_DRAW_FOCUSED = gdic.wxIMAGELIST_DRAW_FOCUSED
 wxIMAGE_LIST_NORMAL = gdic.wxIMAGE_LIST_NORMAL
 wxIMAGE_LIST_SMALL = gdic.wxIMAGE_LIST_SMALL
 wxIMAGE_LIST_STATE = gdic.wxIMAGE_LIST_STATE
+wxOutRegion = gdic.wxOutRegion
+wxPartRegion = gdic.wxPartRegion
+wxInRegion = gdic.wxInRegion

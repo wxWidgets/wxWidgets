@@ -61,7 +61,6 @@ class wxPyAppPtr(wxEvtHandlerPtr):
         return val
     def GetTopWindow(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_GetTopWindow,(self,) + _args, _kwargs)
-        if val: val = wxWindowPtr(val) 
         return val
     def GetVendorName(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_GetVendorName,(self,) + _args, _kwargs)
@@ -813,6 +812,8 @@ wxEVT_DRAW_ITEM = wxc.wxEVT_DRAW_ITEM
 wxEVT_MEASURE_ITEM = wxc.wxEVT_MEASURE_ITEM
 wxEVT_COMPARE_ITEM = wxc.wxEVT_COMPARE_ITEM
 wxEVT_INIT_DIALOG = wxc.wxEVT_INIT_DIALOG
+wxEVT_HELP = wxc.wxEVT_HELP
+wxEVT_DETAILED_HELP = wxc.wxEVT_DETAILED_HELP
 wxEVT_IDLE = wxc.wxEVT_IDLE
 wxEVT_UPDATE_UI = wxc.wxEVT_UPDATE_UI
 wxEVT_COMMAND_LEFT_CLICK = wxc.wxEVT_COMMAND_LEFT_CLICK
@@ -1538,11 +1539,14 @@ wxPyDefaultSize     = wxDefaultSize
 def wxPyTypeCast(obj, typeStr):
     if obj is None:
         return None
+    theClass = globals()[typeStr+"Ptr"]
+    typeStr = __wxPyPtrTypeMap.get(typeStr, typeStr)
     if hasattr(obj, "this"):
+        if obj.__class__ is theClass:   # if already the right type then just return it
+            return obj
         newPtr = ptrcast(obj.this, typeStr+"_p")
     else:
         newPtr = ptrcast(obj, typeStr+"_p")
-    theClass = globals()[typeStr+"Ptr"]
     theObj = theClass(newPtr)
     if hasattr(obj, "this"):
         theObj.thisown = obj.thisown
@@ -1677,4 +1681,6 @@ class __wxPyCleanup:
         self.cleanup()
 
 __cleanMeUp = __wxPyCleanup()
+
+#----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
