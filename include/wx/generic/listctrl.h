@@ -185,14 +185,16 @@ protected:
     // return the icon for the given item
     virtual int OnGetItemImage(long item) const;
 
+    // return the attribute for the item (may return NULL if none)
+    virtual wxListItemAttr *OnGetItemAttr(long item) const;
+
     // it calls our OnGetXXX() functions
 
     friend class WXDLLEXPORT wxListMainWindow;
 
 private:
     // Virtual function hiding supression
-    void Update(void)
-    { wxWindowBase::Update(); }
+    virtual void Update() { wxWindowBase::Update(); }
 
     // create the header window
     void CreateHeaderWindow();

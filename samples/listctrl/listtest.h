@@ -19,9 +19,13 @@ public:
 class MyListCtrl: public wxListCtrl
 {
 public:
-    MyListCtrl(wxWindow *parent, const wxWindowID id, const wxPoint& pos,
-            const wxSize& size, long style):
-        wxListCtrl(parent, id, pos, size, style)
+    MyListCtrl(wxWindow *parent,
+               const wxWindowID id,
+               const wxPoint& pos,
+               const wxSize& size,
+               long style)
+        : wxListCtrl(parent, id, pos, size, style),
+          m_attr(*wxCYAN, *wxLIGHT_GREY, wxNullFont)
         {
         }
 
@@ -49,6 +53,9 @@ private:
 
     virtual wxString OnGetItemText(long item, long column) const;
     virtual int OnGetItemImage(long item) const;
+    virtual wxListItemAttr *OnGetItemAttr(long item) const;
+
+    wxListItemAttr m_attr;
 
     DECLARE_EVENT_TABLE()
 };

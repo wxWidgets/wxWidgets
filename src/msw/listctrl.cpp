@@ -1825,6 +1825,15 @@ int wxListCtrl::OnGetItemImage(long item) const
     return -1;
 }
 
+wxListItemAttr *wxListCtrl::OnGetItemAttr(long item) const
+{
+    wxASSERT_MSG( item >= 0 && (size_t)item < GetItemCount(),
+                  _T("invalid item index in OnGetItemAttr()") );
+
+    // no attributes by default
+    return NULL;
+}
+
 void wxListCtrl::SetItemCount(long count)
 {
     wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );

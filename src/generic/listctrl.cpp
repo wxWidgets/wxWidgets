@@ -247,7 +247,8 @@ public:
 
     void GetItem( wxListItem &info ) const;
 
-    wxListItemAttr *GetAttributes() const { return m_attr; }
+    void SetAttr(wxListItemAttr *attr) { m_attr = attr; }
+    wxListItemAttr *GetAttr() const { return m_attr; }
 
 public:
     // the item image or -1
@@ -383,6 +384,9 @@ public:
 
     wxString GetText(int index) const;
     void SetText( int index, const wxString s );
+
+    wxListItemAttr *GetAttr() const;
+    void SetAttr(wxListItemAttr *attr);
 
     // return true if the highlighting really changed
     bool Highlight( bool on );
@@ -1475,6 +1479,24 @@ int wxListLineData::GetImage( int index ) const
     return item->GetImage();
 }
 
+wxListItemAttr *wxListLineData::GetAttr() const
+{
+    wxListItemDataList::Node *node = m_items.GetFirst();
+    wxCHECK_MSG( node, NULL, _T("invalid column index in GetAttr()") );
+
+    wxListItemData *item = node->GetData();
+    return item->GetAttr();
+}
+
+void wxListLineData::SetAttr(wxListItemAttr *attr)
+{
+    wxListItemDataList::Node *node = m_items.GetFirst();
+    wxCHECK_RET( node, _T("invalid column index in SetAttr()") );
+
+    wxListItemData *item = node->GetData();
+    item->SetAttr(attr);
+}
+
 void wxListLineData::SetAttributes(wxDC *dc,
                                    const wxListItemAttr *attr,
                                    const wxColour& colText,
@@ -1547,11 +1569,10 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     // default font
     wxFont font = listctrl->GetFont();
 
-    // VZ: currently we set the colours/fonts only once, but like this (i.e.
-    //     using SetAttributes() inside the loop), it will be trivial to
-    //     customize the subitems (in report mode) too.
-    wxListItemData *item = m_items.GetFirst()->GetData();
-    wxListItemAttr *attr = item->GetAttributes();
+    // TODO: later we should support setting different attributes for
+    //       different columns - to do it, just add "col" argument to
+    //       GetAttr() and move this code into the loop below
+    wxListItemAttr *attr = GetAttr();
     SetAttributes(dc, attr, colText, font, highlighted);
 
     bool hasBgCol = attr && attr->HasBackgroundColour();
@@ -2145,6 +2166,7 @@ void wxListMainWindow::CacheLineData(size_t line)
     }
 
     ld->SetImage(listctrl->OnGetItemImage(line));
+    ld->SetAttr(listctrl->OnGetItemAttr(line));
 }
 
 wxListLineData *wxListMainWindow::GetDummyLine() const
@@ -2457,6 +2479,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 // don't redraw unaffected lines to avoid flicker
                 continue;
             }
+
+            printf("Redrawing line %u\n", line);
 
             GetLine(line)->DrawInReportMode( &dc,
                                              rectLine,
@@ -3365,19 +3389,21 @@ void wxListMainWindow::SetItem( wxListItem &item )
     wxCHECK_RET( id >= 0 && (size_t)id < GetItemCount(),
                  _T("invalid item index in SetItem") );
 
-    if ( IsVirtual() )
+    if ( !IsVirtual() )
+    {
+        wxListLineData *line = GetLine((size_t)id);
+        line->SetItem( item.m_col, item );
+    }
+
+    if ( InReportView() )
     {
         // just refresh the line to show the new value of the text/image
         RefreshLine((size_t)id);
     }
-    else // !virtual
+    else // !report
     {
+        // refresh everything (resulting in horrible flicker - FIXME!)
         m_dirty = TRUE;
-
-        wxListLineData *line = GetLine((size_t)id);
-        if ( HasFlag(wxLC_REPORT) )
-            item.m_width = GetColumnWidth( item.m_col );
-        line->SetItem( item.m_col, item );
     }
 }
 
@@ -4878,6 +4904,15 @@ int wxListCtrl::OnGetItemImage(long item) const
     wxFAIL_MSG( _T("not supposed to be called") );
 
     return -1;
+}
+
+wxListItemAttr *wxListCtrl::OnGetItemAttr(long item) const
+{
+    wxASSERT_MSG( item >= 0 && item < GetItemCount(),
+                  _T("invalid item index in OnGetItemAttr()") );
+
+    // no attributes by default
+    return NULL;
 }
 
 void wxListCtrl::SetItemCount(long count)

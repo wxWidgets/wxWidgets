@@ -373,6 +373,9 @@ protected:
     // return the icon for the given item
     virtual int OnGetItemImage(long item) const;
 
+    // return the attribute for the item (may return NULL if none)
+    virtual wxListItemAttr *OnGetItemAttr(long item) const;
+
 private:
     bool DoCreateControl(int x, int y, int w, int h);
 

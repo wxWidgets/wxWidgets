@@ -657,6 +657,22 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
     switch ( event.GetCode() )
     {
+        case 'c':
+            {
+                wxListItem info;
+                info.m_itemId = event.GetIndex();
+                GetItem(info);
+
+                wxListItemAttr *attr = info.GetAttributes();
+                if ( !attr || !attr->HasTextColour() )
+                {
+                    info.SetTextColour(*wxCYAN);
+
+                    SetItem(info);
+                }
+            }
+            break;
+
         case WXK_DELETE:
             DeleteItem(event.GetIndex());
 
@@ -706,6 +722,11 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
 int MyListCtrl::OnGetItemImage(long item) const
 {
     return 0;
+}
+
+wxListItemAttr *MyListCtrl::OnGetItemAttr(long item) const
+{
+    return item % 2 ? NULL : (wxListItemAttr *)&m_attr;
 }
 
 void MyListCtrl::InsertItemInReportView(int i)
