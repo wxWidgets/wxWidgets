@@ -9,7 +9,7 @@
 #ifndef __GSOCK_MSW_H
 #define __GSOCK_MSW_H
 
-#ifdef __WXMSW__
+#ifndef __GSOCKET_STANDALONE__
 #include "wx/gsocket.h"
 #else
 #include "gsocket.h"
@@ -17,6 +17,10 @@
 
 #include <winsock.h>
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Definition of GSocket */
 struct _GSocket
@@ -50,10 +54,6 @@ struct _GAddress
   GSocketError m_error;
 };
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /* Input / output */
 
