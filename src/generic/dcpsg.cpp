@@ -1759,8 +1759,8 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
     static int lastDescender = INT_MIN;
     static int lastWidths[256]; /* widths of the characters */
     
-    static float UnderlinePosition = 0.0;
-    static float UnderlineThickness = 0.0;
+    double UnderlinePosition = 0.0;
+    double UnderlineThickness = 0.0;
 
     /* get actual parameters */
     const int Family = fontToUse->GetFamily();
@@ -1794,8 +1794,7 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
                     if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "TimesBoO";
                     else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "TimesBo";
                     else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "TimesO";
-//                    else if name = "TimesRo";  /* no typo */
-                    else name = "TimesRo";  /* VS maybe no typo, but it did not compile */
+                    else name = "TimesRo"; 
                 }
                 break;
             default:
@@ -1838,21 +1837,21 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
         FILE *afmFile = fopen(afmName,"r");
 	
 #ifdef __UNIX__
-	if (afmFile==NULL)
-	{
-	    strcpy( afmName, "/usr/local/share/wx/gs_afm/" );
-            strcat(afmName,name);
-            strcat(afmName,".afm");
-            FILE *afmFile = fopen(afmName,"r");
-	}
-	
-	if (afmFile==NULL)
-	{
-	    strcpy( afmName, "/usr/share/wx/gs_afm/" );
-            strcat(afmName,name);
-            strcat(afmName,".afm");
-            FILE *afmFile = fopen(afmName,"r");
-	}
+	     if (afmFile==NULL)
+	     {
+	         strcpy( afmName, "/usr/local/share/wx/gs_afm/" );
+             strcat(afmName,name);
+             strcat(afmName,".afm");
+             afmFile = fopen(afmName,"r");
+	     }
+
+	     if (afmFile==NULL)
+	     {
+	         strcpy( afmName, "/usr/share/wx/gs_afm/" );
+             strcat(afmName,name);
+             strcat(afmName,".afm");
+             afmFile = fopen(afmName,"r");
+	     }
 #endif
 	
         if (afmFile==NULL)
@@ -1955,15 +1954,20 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
     }
 
     /* JC: calculate UnderlineThickness/UnderlinePosition */
-//    m_underlinePosition = m_underlinePosition * fontToUse->GetPointSize() / 1000.0f;
-//    m_underlineThickness = m_underlineThickness * fontToUse->GetPointSize() / 1000.0f * m_scaleFactor;
-//   VS: can't do this - we're in const method. m_underline* seems to be never used!
+    {
+        // VS: dirty, but is there any better solution?
+        double *pt;
+        pt = (double*) &m_underlinePosition;
+        *pt = UnderlinePosition * fontToUse->GetPointSize() / 1000.0f;
+        pt = (double*) &m_underlineThickness;
+        *pt = UnderlineThickness * fontToUse->GetPointSize() / 1000.0f * m_scaleFactor;
+    }
 
     /* 3. now the font metrics are read in, calc size this
        /  is done by adding the widths of the characters in the
        /  string. they are given in 1/1000 of the size! */
 
-    long widthSum=0;
+    double widthSum=0;
     long height=Size; /* by default */
     unsigned char *p;
     for(p=(unsigned char *)strbuf; *p; p++)
@@ -1971,22 +1975,22 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
         if(lastWidths[*p]== INT_MIN)
         {
             wxLogDebug("GetTextExtent: undefined width for character '%c' (%d)\n", *p,*p);
-            widthSum += (long)(lastWidths[' ']/1000.0F * Size); /* assume space */
+            widthSum += /*(long)*/(lastWidths[' ']/1000.0F * Size); /* assume space */
         }
         else
         {
-            widthSum += (long)((lastWidths[*p]/1000.0F)*Size);
+            widthSum += /*(long)*/((lastWidths[*p]/1000.0F)*Size);
         }
     }
 
     /* add descender to height (it is usually a negative value) */
-    if (lastDescender!=INT_MIN)
+    if (lastDescender != INT_MIN)
     {
         height += (long)(((-lastDescender)/1000.0F) * Size); /* MATTHEW: forgot scale */
     }
 
     /* return size values */
-    *x = widthSum;
+    *x = (long)widthSum;
     *y = height;
 
     /* return other parameters */
