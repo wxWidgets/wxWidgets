@@ -34,7 +34,7 @@
 #endif // PCH
 
 #include "wx/dir.h"
-#include "wx/filefn.h"          // for wxPathExists()
+#include "wx/filefn.h"          // for wxDirExists()
 
 #ifndef __DARWIN__
   #include <windows.h>
@@ -69,12 +69,12 @@ class wxDirData
 public:
     wxDirData(const wxString& dirname);
     ~wxDirData();
-    
+
     void Close() ;
     void SetFileSpec(const wxString& filespec) { m_filespec = filespec; }
     void SetFlags(int flags) { m_flags = flags; }
 
-    bool Read(wxString *filename); // reads the next 
+    bool Read(wxString *filename); // reads the next
     void Rewind() ;
 
     const wxString& GetName() const { return m_dirname; }
@@ -116,7 +116,7 @@ wxDirData::~wxDirData()
 }
 
 void wxDirData::Close()
-{ 
+{
     if ( m_iterator )
     {
         FSCloseIterator( m_iterator ) ;
@@ -124,13 +124,13 @@ void wxDirData::Close()
     }
 }
 
-void wxDirData::Rewind() 
+void wxDirData::Rewind()
 {
     Close() ;
 }
 
 bool wxDirData::Read(wxString *filename)
-{        
+{
     wxString result;
     OSStatus err = noErr ;
     if ( NULL == m_iterator )
@@ -139,17 +139,17 @@ bool wxDirData::Read(wxString *filename)
         err = wxMacPathToFSRef( m_dirname , &dirRef ) ;
         if ( err == noErr )
         {
-    	    err = FSOpenIterator(&dirRef, kFSIterateFlat, &m_iterator);
-    	}
-    	if ( err )
-    	{
-    	    Close() ;
-    	    return FALSE ;
-    	}
+            err = FSOpenIterator(&dirRef, kFSIterateFlat, &m_iterator);
+        }
+        if ( err )
+        {
+            Close() ;
+            return false ;
+        }
     }
-    
+
     wxString name ;
-    
+
     while( noErr == err )
     {
         HFSUniStr255 uniname ;
@@ -160,12 +160,12 @@ bool wxDirData::Read(wxString *filename)
         err = FSGetCatalogInfoBulk( m_iterator, 1, &fetched, NULL, kFSCatInfoNodeFlags | kFSCatInfoFinderInfo , &catalogInfo , &fileRef, NULL, &uniname );
         if ( errFSNoMoreItems == err )
             return false ;
-            
+
         wxASSERT( noErr == err ) ;
-        
+
         if ( noErr != err )
             break ;
-                
+
         name = wxMacHFSUniStrToString( &uniname ) ;
 
         if ( ( name == wxT(".") || name == wxT("..") ) && !(m_flags & wxDIR_DOTDOT) )
@@ -176,7 +176,7 @@ bool wxDirData::Read(wxString *filename)
 
         if ( (((FileInfo*)&catalogInfo.finderInfo)->finderFlags & kIsInvisible ) && !(m_flags & wxDIR_HIDDEN ) )
             continue ;
-        
+
         // its a dir and we don't want it
         if ( (catalogInfo.nodeFlags & kFSNodeIsDirectoryMask)  && !(m_flags & wxDIR_DIRS) )
             continue ;
@@ -184,24 +184,24 @@ bool wxDirData::Read(wxString *filename)
         // its a file but we don't want it
         if ( (catalogInfo.nodeFlags & kFSNodeIsDirectoryMask) == 0  && !(m_flags & wxDIR_FILES ) )
             continue ;
-                    
-        if ( m_filespec.IsEmpty() || m_filespec == wxT("*.*") || m_filespec == wxT("*") )
+
+        if ( m_filespec.empty() || m_filespec == wxT("*.*") || m_filespec == wxT("*") )
         {
         }
-        else if ( !wxMatchWild(m_filespec, name , FALSE) )
+        else if ( !wxMatchWild(m_filespec, name , false) )
         {
             continue ;
         }
-        
+
         break ;
     }
     if ( err != noErr )
     {
-        return FALSE ;
+        return false ;
     }
-    
+
     *filename = name ;
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -211,7 +211,7 @@ bool wxDirData::Read(wxString *filename)
 /* static */
 bool wxDir::Exists(const wxString& dir)
 {
-    return wxPathExists(dir);
+    return wxDirExists(dir);
 }
 
 // ----------------------------------------------------------------------------
@@ -230,7 +230,7 @@ bool wxDir::Open(const wxString& dirname)
     delete M_DIR;
     m_data = new wxDirData(dirname);
 
-    return TRUE;
+    return true;
 }
 
 bool wxDir::IsOpened() const
@@ -270,7 +270,7 @@ bool wxDir::GetFirst(wxString *filename,
                      const wxString& filespec,
                      int flags) const
 {
-    wxCHECK_MSG( IsOpened(), FALSE, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
 
     M_DIR->Rewind();
 
@@ -282,9 +282,9 @@ bool wxDir::GetFirst(wxString *filename,
 
 bool wxDir::GetNext(wxString *filename) const
 {
-    wxCHECK_MSG( IsOpened(), FALSE, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
 
-    wxCHECK_MSG( filename, FALSE, _T("bad pointer in wxDir::GetNext()") );
+    wxCHECK_MSG( filename, false, _T("bad pointer in wxDir::GetNext()") );
 
     return M_DIR->Read(filename);
 }

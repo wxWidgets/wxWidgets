@@ -34,7 +34,7 @@
 #endif // PCH
 
 #include "wx/dir.h"
-#include "wx/filefn.h"          // for wxPathExists()
+#include "wx/filefn.h"          // for wxDirExists()
 
 // ----------------------------------------------------------------------------
 // define the types and functions used for file searching

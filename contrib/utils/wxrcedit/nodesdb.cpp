@@ -49,7 +49,7 @@ void NodeInfo::Read(const wxString& filename, wxPathList& list)
 
     for (size_t i = 0; i < tf.GetLineCount(); i++)
     {
-        if (tf[i].IsEmpty() || tf[i][0u] == _T('#')) continue;
+        if (tf[i].empty() || tf[i][0u] == _T('#')) continue;
         wxStringTokenizer tkn(tf[i], _T(' '));
         wxString s = tkn.GetNextToken();
         if (s == _T("node"))
@@ -153,7 +153,7 @@ void NodesDb::Load()
 
 void NodesDb::LoadDir(const wxString& path)
 {
-    if (!wxPathExists(path)) return;
+    if (!wxDirExists(path)) return;
 
     wxDir dir(path);
     wxString filename;

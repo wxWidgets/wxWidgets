@@ -2299,8 +2299,8 @@ EXPORTS
       wxStripExtension__FPc
       ;wxPathOnly(const wxString&)
       wxPathOnly__FRC8wxString
-      ;wxPathExists(const char*)
-      wxPathExists__FPCc
+      ;wxDirExists(const char*)
+      wxDirExists__FPCc
       ;wxPathList::FindValidPath(const wxString&)
       FindValidPath__10wxPathListFRC8wxString
       ;wxPathList::FindAbsoluteValidPath(const wxString&)
@@ -13919,8 +13919,8 @@ EXPORTS
       wxDrawBorder__FUlR6_RECTLT1
       ;wxShutdown(wxShutdownFlags)
       wxShutdown__F15wxShutdownFlags
-      ;wxPathExists(const wxString&)
-      wxPathExists__FRC8wxString
+      ;wxDirExists(const wxString&)
+      wxDirExists__FRC8wxString
       ;wxGetWindowText(unsigned long)
       wxGetWindowText__FUl
       ;wxGetWindowId(unsigned long)

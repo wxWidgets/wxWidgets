@@ -367,7 +367,7 @@ const int wxInvalidOffset = -1;
 WXDLLIMPEXP_BASE bool wxFileExists(const wxString& filename);
 
 // does the path exist? (may have or not '/' or '\\' at the end)
-WXDLLIMPEXP_BASE bool wxPathExists(const wxChar *pszPathName);
+WXDLLIMPEXP_BASE bool wxDirExists(const wxChar *pszPathName);
 
 WXDLLIMPEXP_BASE bool wxIsAbsolutePath(const wxString& filename);
 
@@ -462,7 +462,14 @@ WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(int fd);
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(FILE *fp);
 
 // compatibility defines, don't use in new code
-#define wxDirExists wxPathExists
+// consider removal droping 2.4 compatibility
+// #if WXWIN_COMPATIBILITY_2_4
+wxDEPRECATED( inline bool wxPathExists(const wxChar *pszPathName) );
+inline bool wxPathExists(const wxChar *pszPathName)
+{
+    return wxDirExists(pszPathName);
+}
+// #endif //WXWIN_COMPATIBILITY_2_4
 
 // ----------------------------------------------------------------------------
 // separators in file names

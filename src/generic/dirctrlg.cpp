@@ -259,7 +259,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
         //     like it when MS-DOS app accesses empty floppy drive
         return (dirNameLower[0u] == wxT('a') ||
                 dirNameLower[0u] == wxT('b') ||
-                wxPathExists(dirNameLower));
+                wxDirExists(dirNameLower));
     }
     else
 #endif
@@ -318,7 +318,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
     {
         wxString dirNameLower(dirName.Lower());
 #if defined(__GNUWIN32__) && !(defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
-        success = wxPathExists(dirNameLower);
+        success = wxDirExists(dirNameLower);
 #else
         #if defined(__OS2__)
         // Avoid changing to drive since no media may be inserted.

@@ -216,7 +216,7 @@ void wxGenericDirDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
     m_path = m_input->GetValue();
     // Does the path exist? (User may have typed anything in m_input)
-    if (wxPathExists(m_path)) {
+    if (wxDirExists(m_path)) {
         // OK, path exists, we're done.
         EndModal(wxID_OK);
         return;
@@ -320,7 +320,7 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
     if (!wxEndsWithPathSeparator(path))
         path += wxFILE_SEP_PATH;
     path += new_name;
-    if (wxPathExists(path))
+    if (wxDirExists(path))
     {
         // try NewName0, NewName1 etc.
         int i = 0;
@@ -335,7 +335,7 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
                 path += wxFILE_SEP_PATH;
             path += new_name;
             i++;
-        } while (wxPathExists(path));
+        } while (wxDirExists(path));
     }
 
     wxLogNull log;

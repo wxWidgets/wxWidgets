@@ -120,26 +120,26 @@ wxDirData::~wxDirData()
 bool wxDirData::Read(wxString *filename)
 {
     dirent *de = (dirent *)NULL;    // just to silence compiler warnings
-    bool matches = FALSE;
+    bool matches = false;
 
     // speed up string concatenation in the loop a bit
     wxString path = m_dirname;
     path += _T('/');
     path.reserve(path.length() + 255);
-    
+
     wxString de_d_name;
 
     while ( !matches )
     {
         de = readdir(m_dir);
         if ( !de )
-            return FALSE;
-            
+            return false;
+
 #if wxUSE_UNICODE
         de_d_name = wxConvFileName->cMB2WC( de->d_name );
 #else
         de_d_name = de->d_name;
-#endif            
+#endif
 
         // don't return "." and ".." unless asked for
         if ( de->d_name[0] == '.' &&
@@ -168,7 +168,7 @@ bool wxDirData::Read(wxString *filename)
         // finally, check the name
         if ( m_filespec.empty() )
         {
-            matches = m_flags & wxDIR_HIDDEN ? TRUE : de->d_name[0] != '.';
+            matches = m_flags & wxDIR_HIDDEN ? true : de->d_name[0] != '.';
         }
         else
         {
@@ -180,7 +180,7 @@ bool wxDirData::Read(wxString *filename)
 
     *filename = de_d_name;
 
-    return TRUE;
+    return true;
 }
 
 #else // old VMS (TODO)
@@ -196,7 +196,7 @@ wxDirData::~wxDirData()
 
 bool wxDirData::Read(wxString * WXUNUSED(filename))
 {
-    return FALSE;
+    return false;
 }
 
 #endif // not or new VMS/old VMS
@@ -208,7 +208,7 @@ bool wxDirData::Read(wxString * WXUNUSED(filename))
 /* static */
 bool wxDir::Exists(const wxString& dir)
 {
-    return wxPathExists(dir);
+    return wxDirExists(dir);
 }
 
 // ----------------------------------------------------------------------------
@@ -235,10 +235,10 @@ bool wxDir::Open(const wxString& dirname)
         delete M_DIR;
         m_data = NULL;
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxDir::IsOpened() const
@@ -275,7 +275,7 @@ bool wxDir::GetFirst(wxString *filename,
                      const wxString& filespec,
                      int flags) const
 {
-    wxCHECK_MSG( IsOpened(), FALSE, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
 
     M_DIR->Rewind();
 
@@ -287,16 +287,16 @@ bool wxDir::GetFirst(wxString *filename,
 
 bool wxDir::GetNext(wxString *filename) const
 {
-    wxCHECK_MSG( IsOpened(), FALSE, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
 
-    wxCHECK_MSG( filename, FALSE, _T("bad pointer in wxDir::GetNext()") );
+    wxCHECK_MSG( filename, false, _T("bad pointer in wxDir::GetNext()") );
 
     return M_DIR->Read(filename);
 }
 
 bool wxDir::HasSubDirs(const wxString& spec)
 {
-    wxCHECK_MSG( IsOpened(), FALSE, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
 
     if ( spec.empty() )
     {
@@ -317,7 +317,7 @@ bool wxDir::HasSubDirs(const wxString& spec)
             {
                 case 2:
                     // just "." and ".."
-                    return FALSE;
+                    return false;
 
                 case 0:
                 case 1:
@@ -329,7 +329,7 @@ bool wxDir::HasSubDirs(const wxString& spec)
                     // assume we have subdirs - may turn out to be wrong if we
                     // have other hard links to this directory but it's not
                     // that bad as explained above
-                    return TRUE;
+                    return true;
             }
         }
     }
