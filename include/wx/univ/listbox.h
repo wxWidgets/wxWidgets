@@ -194,8 +194,8 @@ protected:
     void RefreshFromItemToEnd(int n);
     void RefreshAll();
 
-    // send an event of the given type (using m_current item)
-    bool SendEvent(wxEventType type);
+    // send an event of the given type (using m_current by default)
+    bool SendEvent(wxEventType type, int item = -1);
 
     // calculate the number of items per page using our current size
     void CalcItemsPerPage();

@@ -803,7 +803,7 @@ wxSize wxListBox::DoGetBestClientSize() const
 // listbox actions
 // ----------------------------------------------------------------------------
 
-bool wxListBox::SendEvent(wxEventType type)
+bool wxListBox::SendEvent(wxEventType type, int item)
 {
     // don't generate select events while the mouse is captured, we will only
     // send them once it is released
@@ -813,17 +813,24 @@ bool wxListBox::SendEvent(wxEventType type)
     wxCommandEvent event(type, m_windowId);
     event.SetEventObject(this);
 
-    if ( m_current != -1 )
+    // use the current item by default
+    if ( item == -1 )
     {
-        if ( HasClientObjectData() )
-            event.SetClientObject(GetClientObject(m_current));
-        else if ( HasClientUntypedData() )
-            event.SetClientData(GetClientData(m_current));
-
-        event.SetString(GetString(m_current));
+        item = m_current;
     }
 
-    event.m_commandInt = m_current;
+    // client data and string parameters only make sense if we have an item
+    if ( item != -1 )
+    {
+        if ( HasClientObjectData() )
+            event.SetClientObject(GetClientObject(item));
+        else if ( HasClientUntypedData() )
+            event.SetClientData(GetClientData(item));
+
+        event.SetString(GetString(item));
+    }
+
+    event.m_commandInt = item;
 
     return GetEventHandler()->ProcessEvent(event);
 }
