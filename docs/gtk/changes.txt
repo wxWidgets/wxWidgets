@@ -1,3 +1,13 @@
+1st May '2000: wxWindows 2.1.16 release
+
+It was time for another beta.
+
+Various enhancements to wxSizer.
+
+Added wxGridSizer and wxFlexGridSizer.
+
+Reworked wxURL.
+
 22th March '2000: wxWindows 2.1.15 released
 
 Build fix. RPMs no loner require GTK's include files.

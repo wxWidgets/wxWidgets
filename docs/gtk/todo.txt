@@ -3,6 +3,18 @@
 
 Improve, update translations. Install *.mo files somewehere.
 
+wxFrame::SetMenuBar() bug
+
+Add wxNoteBook::GetPageIndex()
+
+Correct insert point in wxTextCtrl::SetValue()
+
+wxBitmapButton doesn't refresh when parent gets refreshed
+
+reverse log.h menu.h in menu.cpp
+
+wxMDIXXXX:SetTitle() has no effect
+
 -------------------- Medium priority ---------------------
 
 Show accelerator control labels and actually implement them

@@ -1,5 +1,5 @@
 
-   Welcome to wxWindows/Gtk 2.1.15
+   Welcome to wxWindows/Gtk 2.1.16
 
 you have downloaded a beta version of the GTK+ 1.2 port of 
 the wxWindows GUI library. Although this is not yet the
@@ -44,7 +44,7 @@ VERSION OF GTK, WXGTK, WHAT DISTRIBUTION YOU USE AND WHAT ERROR
 WAS REPORTED. I know this has no effect, but I tried...
 
 The library produced by the install process will be called 
-libwx_gtk.a (static) and libwx_gtk-2.1.so.15.0.0 (shared) so 
+libwx_gtk.a (static) and libwx_gtk-2.1.so.16.0.0 (shared) so 
 that once a binary incompatible version of wxWindows/Gtk comes 
 out we'll augment the library version number to avoid linking 
 problems.
