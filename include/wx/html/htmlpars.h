@@ -89,15 +89,6 @@ class WXDLLEXPORT wxHtmlParser : public wxObject
 
         wxString* GetSource() {return &m_Source;}
 
-        virtual wxList* GetTempData() {return NULL;}
-                // this method returns list of wxObjects that represents
-                // all data allocated by the parser. These can't be freeded
-                // by destructor because they must be valid as long as
-                // GetProduct's return value is valid - the caller must
-                // explicitly call delete MyParser -> GetTempData() to free
-                // the memory
-                // (this method always sets the list to delete its contents)
-
     protected:
 
         virtual void AddText(const char* txt) = 0;

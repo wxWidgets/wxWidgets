@@ -69,9 +69,6 @@ wxHtmlWindow::~wxHtmlWindow()
 
     if (m_Cell) delete m_Cell;
 
-    wxList *parser_data = m_Parser -> GetTempData();
-    if (parser_data) delete parser_data;
-
     delete m_Parser;
     delete m_FS;
 }
