@@ -44,7 +44,9 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     image.LoadFile( "marble.jpg", wxBITMAP_TYPE_JPEG );
     
     wxBitmap bitmap( image );
+#ifdef __WXUNIVERSAL__
     SetBackground( bitmap, 0, wxTILE );
+#endif
     
     new wxStaticText( this, -1, "This is text", wxPoint( 20,50 ) );
     
