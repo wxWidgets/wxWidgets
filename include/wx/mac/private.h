@@ -92,6 +92,8 @@ private:
     bool      m_ok ;
 } ;
 
+// app.h
+bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec) ;
 
 // filefn.h
 WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
