@@ -401,6 +401,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBXPM=no
   DEFAULT_wxUSE_LIBMSPACK=no
   DEFAULT_wxUSE_LIBSDL=no
+  DEFAULT_wxUSE_LIBGNOMEPRINT=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -588,6 +589,7 @@ else
   DEFAULT_wxUSE_LIBXPM=yes
   DEFAULT_wxUSE_LIBMSPACK=yes
   DEFAULT_wxUSE_LIBSDL=no
+  DEFAULT_wxUSE_LIBGNOMEPRINT=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -793,6 +795,7 @@ WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file for
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
+WX_ARG_WITH(gnomeprint,    [  --with-gnomeprint       use GNOME print for audio printing under Unix], wxUSE_LIBGNOMEPRINT)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -2514,24 +2517,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         esac
 
         if test "$WXGTK20" = 1; then
-            if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
-                PKG_CHECK_MODULES(PANGOFT2, pangoft2,
-                    [
-                        CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
-                        # FIXME: GTK_LIBS already has a lot of what this is
-                        #        about to add, but we go ahead and just add
-                        #        it all again anyway.
-                        # This is not a good way to manage things.  And simply
-                        # uniq'ing the list later is hardly better.
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
-                    ],
-                    [
-                        AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
-                        wxUSE_PRINTING_ARCHITECTURE="no"
-                    ]
-                )
-            fi
-                
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$CFLAGS $GTK_CFLAGS"
@@ -4595,6 +4580,25 @@ if test "$wxUSE_SOUND" = "yes"; then
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sound"
 fi
 
+if test "$WXGTK20" = 1; then
+    if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
+        if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
+        
+                PKG_CHECK_MODULES(LIBGNOMEPRINTUI, libgnomeprintui-2.2,
+                    [
+                        CXXFLAGS="$CXXFLAGS $LIBGNOMEPRINTUI_CFLAGS"
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBGNOMEPRINTUI_LIBS"
+                    ],
+                    [
+                        AC_MSG_WARN([libgnomeprintui not found, library will use standard PostScript printing])
+                        wxUSE_LIBGNOMEPRINT="no"
+                    ]
+                )
+        fi
+    fi
+fi
+
+
 if test "$wxUSE_CMDLINE_PARSER" = "yes"; then
   AC_DEFINE(wxUSE_CMDLINE_PARSER)
 fi
@@ -6018,6 +6022,7 @@ AC_SUBST(EXTRALIBS_GUI)
 AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(WITH_PLUGIN_SDL)
+AC_SUBST(EXTRALIBS_GNOMEPRINT)
 AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
@@ -6304,6 +6309,7 @@ echo "                                       odbc               ${wxUSE_ODBC}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
+echo "                                       gnomeprint         ${wxUSE_LIBGNOMEPRINT}"
 
 echo ""
 

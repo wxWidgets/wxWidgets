@@ -18,7 +18,10 @@
     #pragma hdrstop
 #endif
 
-#include "gprint.h"
+#include "wx/gtk/gnome/gprint.h"
+
+#if wxUSE_LIBGNOMEPRINT
+
 #include "wx/fontutil.h"
 #include "wx/printdlg.h"
 #include "wx/gtk/private.h"
@@ -659,3 +662,6 @@ int wxGnomePrintDC::GetResolution()
 {
     return 72;
 }
+
+#endif
+    // wxUSE_LIBGNOMEPRINT

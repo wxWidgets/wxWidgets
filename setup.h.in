@@ -247,6 +247,10 @@
  */
 #define wxUSE_LIBSDL 0
 /*
+ * Use GNOME print for printing under GTK+ 2.0
+ */
+#define wxUSE_LIBGNOMEPRINT 0
+/*
  * Use iODBC
  */
 #define wxUSE_ODBC 0

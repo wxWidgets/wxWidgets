@@ -4,6 +4,7 @@
 // Purpose:     GNOME printing support
 // Created:     09/20/04
 // Copyright:   Robert Roebling
+// Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __gprint_H__
@@ -18,6 +19,8 @@
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
 #endif
+
+#if wxUSE_LIBGNOMEPRINT
 
 #include "wx/print.h"
 #include "wx/prntbase.h"
@@ -301,5 +304,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrintDC)
     DECLARE_NO_COPY_CLASS(wxGnomePrintDC)
 };
+
+#endif
+    // wxUSE_LIBGNOMEPRINT
 
 #endif
