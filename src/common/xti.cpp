@@ -57,7 +57,7 @@ bool wxEnumData::HasEnumMemberValue(const wxChar *name, int *value)
     int i;
     for (i = 0; m_members[i].m_name ; i++ )
     {
-        if (!strcmp(name, m_members[i].m_name))
+        if (!wxStrcmp(name, m_members[i].m_name))
         {
             if ( value )
                 *value = m_members[i].m_value;
@@ -72,7 +72,7 @@ int wxEnumData::GetEnumMemberValue(const wxChar *name)
     int i;
     for (i = 0; m_members[i].m_name ; i++ )
     {
-        if (!strcmp(name, m_members[i].m_name))
+        if (!wxStrcmp(name, m_members[i].m_name))
         {
             return m_members[i].m_value;
         }
@@ -96,7 +96,7 @@ int wxEnumData::GetEnumMemberValueByIndex( int idx )
     return m_members[idx].m_value ;
 }
 
-const char * wxEnumData::GetEnumMemberNameByIndex( int idx )
+const wxChar * wxEnumData::GetEnumMemberNameByIndex( int idx )
 {
     // we should cache the count in order to avoid out-of-bounds errors
     return m_members[idx].m_name ;
@@ -123,7 +123,7 @@ template<> void wxStringReadValue(const wxString &s , bool &data )
 
 template<> void wxStringWriteValue(wxString &s , const bool &data )
 {
-    s = wxString::Format("%d", data ) ;
+    s = wxString::Format(_T("%d"), data ) ;
 }
 
 // char
@@ -137,7 +137,7 @@ template<> void wxStringReadValue(const wxString &s , char &data )
 
 template<> void wxStringWriteValue(wxString &s , const char &data )
 {
-    s = wxString::Format("%d", data ) ;
+    s = wxString::Format(_T("%d"), data ) ;
 }
 
 // unsigned char
@@ -151,7 +151,7 @@ template<> void wxStringReadValue(const wxString &s , unsigned char &data )
 
 template<> void wxStringWriteValue(wxString &s , const unsigned char &data )
 {
-    s = wxString::Format("%d", data ) ;
+    s = wxString::Format(_T("%d"), data ) ;
 }
 
 // int
@@ -163,7 +163,7 @@ template<> void wxStringReadValue(const wxString &s , int &data )
 
 template<> void wxStringWriteValue(wxString &s , const int &data )
 {
-    s = wxString::Format("%d", data ) ;
+    s = wxString::Format(_T("%d"), data ) ;
 }
 
 // unsigned int
@@ -175,7 +175,7 @@ template<> void wxStringReadValue(const wxString &s , unsigned int &data )
 
 template<> void wxStringWriteValue(wxString &s , const unsigned int &data )
 {
-    s = wxString::Format("%d", data ) ;
+    s = wxString::Format(_T("%d"), data ) ;
 }
 
 // long
@@ -187,7 +187,7 @@ template<> void wxStringReadValue(const wxString &s , long &data )
 
 template<> void wxStringWriteValue(wxString &s , const long &data )
 {
-    s = wxString::Format("%ld", data ) ;
+    s = wxString::Format(_T("%ld"), data ) ;
 }
 
 // unsigned long
@@ -199,7 +199,7 @@ template<> void wxStringReadValue(const wxString &s , unsigned long &data )
 
 template<> void wxStringWriteValue(wxString &s , const unsigned long &data )
 {
-    s = wxString::Format("%ld", data ) ;
+    s = wxString::Format(_T("%ld"), data ) ;
 }
 
 // float
@@ -211,7 +211,7 @@ template<> void wxStringReadValue(const wxString &s , float &data )
 
 template<> void wxStringWriteValue(wxString &s , const float &data )
 {
-    s = wxString::Format("%f", data ) ;
+    s = wxString::Format(_T("%f"), data ) ;
 }
 
 // double
@@ -223,7 +223,7 @@ template<> void wxStringReadValue(const wxString &s , double &data )
 
 template<> void wxStringWriteValue(wxString &s , const double &data )
 {
-    s = wxString::Format("%lf", data ) ;
+    s = wxString::Format(_T("%lf"), data ) ;
 }
 
 // wxString
@@ -363,7 +363,7 @@ wxHandlerInfo::~wxHandlerInfo()
     }
 }
 
-const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName) const
+const wxPropertyAccessor *wxClassInfo::FindAccessor(const wxChar *PropertyName) const
 {
     const wxPropertyInfo* info = FindPropertyInfo( PropertyName ) ;
 
@@ -373,13 +373,13 @@ const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName) co
     return NULL ;
 }
 
-wxPropertyInfo *wxClassInfo::FindPropertyInfoInThisClass (const char *PropertyName) const
+wxPropertyInfo *wxClassInfo::FindPropertyInfoInThisClass (const wxChar *PropertyName) const
 {
     wxPropertyInfo* info = m_firstProperty ;
 
     while( info )
     {
-        if ( strcmp( info->GetName() , PropertyName ) == 0 )
+        if ( wxStrcmp( info->GetName() , PropertyName ) == 0 )
             return info ;
         info = info->GetNext() ;
     }
@@ -387,7 +387,7 @@ wxPropertyInfo *wxClassInfo::FindPropertyInfoInThisClass (const char *PropertyNa
     return 0;
 }
 
-const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const char *PropertyName) const
+const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const wxChar *PropertyName) const
 {
     const wxPropertyInfo* info = FindPropertyInfoInThisClass( PropertyName ) ;
     if ( info )
@@ -403,13 +403,13 @@ const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const char *PropertyName) c
     return 0;
 }
 
-wxHandlerInfo *wxClassInfo::FindHandlerInfoInThisClass (const char *PropertyName) const
+wxHandlerInfo *wxClassInfo::FindHandlerInfoInThisClass (const wxChar *PropertyName) const
 {
     wxHandlerInfo* info = m_firstHandler ;
 
     while( info )
     {
-        if ( strcmp( info->GetName() , PropertyName ) == 0 )
+        if ( wxStrcmp( info->GetName() , PropertyName ) == 0 )
             return info ;
         info = info->GetNext() ;
     }
@@ -417,7 +417,7 @@ wxHandlerInfo *wxClassInfo::FindHandlerInfoInThisClass (const char *PropertyName
     return 0;
 }
 
-const wxHandlerInfo *wxClassInfo::FindHandlerInfo (const char *PropertyName) const
+const wxHandlerInfo *wxClassInfo::FindHandlerInfo (const wxChar *PropertyName) const
 {
     const wxHandlerInfo* info = FindHandlerInfoInThisClass( PropertyName ) ;
 
@@ -457,7 +457,7 @@ bool wxClassInfo::BeforeWriteObject( const wxObject *obj, wxWriter *streamer , w
     return true ;
 }
 
-void wxClassInfo::SetProperty(wxObject *object, const char *propertyName, const wxxVariant &value) const
+void wxClassInfo::SetProperty(wxObject *object, const wxChar *propertyName, const wxxVariant &value) const
 {
     const wxPropertyAccessor *accessor;
 
@@ -466,7 +466,7 @@ void wxClassInfo::SetProperty(wxObject *object, const char *propertyName, const 
     accessor->SetProperty( object , value ) ;
 }
 
-wxxVariant wxClassInfo::GetProperty(wxObject *object, const char *propertyName) const
+wxxVariant wxClassInfo::GetProperty(wxObject *object, const wxChar *propertyName) const
 {
     const wxPropertyAccessor *accessor;
 
@@ -608,7 +608,7 @@ const wxChar* wxDynamicClassInfo::GetCreateParamName(int i) const
     return GetParents()[0]->GetCreateParamName( i ) ;
 }
 
-void wxDynamicClassInfo::SetProperty(wxObject *object, const char *propertyName, const wxxVariant &value) const
+void wxDynamicClassInfo::SetProperty(wxObject *object, const wxChar *propertyName, const wxxVariant &value) const
 {
     wxDynamicObject* dynobj = dynamic_cast< wxDynamicObject * >( object ) ;
     wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
@@ -618,7 +618,7 @@ void wxDynamicClassInfo::SetProperty(wxObject *object, const char *propertyName,
         GetParents()[0]->SetProperty( dynobj->GetSuperClassInstance() , propertyName , value ) ;
 }
 
-wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const char *propertyName) const
+wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const wxChar *propertyName) const
 {
     wxDynamicObject* dynobj = dynamic_cast< wxDynamicObject * >( object ) ;
     wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
