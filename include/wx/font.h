@@ -143,10 +143,8 @@ public:
 
     // the default encoding is used for creating all fonts with default
     // encoding parameter
-    static wxFontEncoding GetDefaultEncoding()
-        { return ms_encodingDefault; }
-    static void SetDefaultEncoding(wxFontEncoding encoding)
-        { ms_encodingDefault = encoding; }
+    static wxFontEncoding GetDefaultEncoding() { return ms_encodingDefault; }
+    static void SetDefaultEncoding(wxFontEncoding encoding);
 
 protected:
     // get the internal data

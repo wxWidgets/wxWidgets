@@ -49,6 +49,17 @@
 
 wxFontEncoding wxFontBase::ms_encodingDefault = wxFONTENCODING_SYSTEM;
 
+/* static */
+void wxFontBase::SetDefaultEncoding(wxFontEncoding encoding)
+{
+    // GetDefaultEncoding() should return something != wxFONTENCODING_DEFAULT
+    // and, besides, using this value here doesn't make any sense
+    wxCHECK_RET( encoding != wxFONTENCODING_DEFAULT,
+                 _T("can't set default encoding to wxFONTENCODING_DEFAULT") );
+
+    ms_encodingDefault = encoding;
+}
+
 wxFontBase::~wxFontBase()
 {
     // this destructor is required for Darwin

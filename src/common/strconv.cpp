@@ -858,8 +858,9 @@ public:
     {
         if (name)
             enc = wxTheFontMapper->CharsetToEncoding(name, FALSE);
-        m2w.Init(enc, wxFONTENCODING_UNICODE);
-        w2m.Init(wxFONTENCODING_UNICODE, enc);
+
+        m_ok = m2w.Init(enc, wxFONTENCODING_UNICODE) &&
+               w2m.Init(wxFONTENCODING_UNICODE, enc);
     }
 
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
@@ -884,12 +885,14 @@ public:
         return inbuf;
     }
 
-    bool usable() const
-        { return (enc!=wxFONTENCODING_SYSTEM) && (enc!=wxFONTENCODING_DEFAULT); }
+    bool usable() const { return m_ok; }
 
 public:
     wxFontEncoding enc;
     wxEncodingConverter m2w, w2m;
+
+    // were we initialized successfully?
+    bool m_ok;
 };
 
 #endif // wxUSE_FONTMAP
@@ -901,46 +904,61 @@ public:
 
 static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
 {
-    wxCharacterSet *cset = NULL;
-    if (name)
+    // check for the special case of ASCII charset
+#if wxUSE_FONTMAP
+    if ( wxTheFontMapper->CharsetToEncoding(name) == wxFONTENCODING_DEFAULT )
+#else // wxUSE_FONTMAP
+    if ( !name )
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
     {
-        if (wxStricmp(name, wxT("UTF8")) == 0 || wxStricmp(name, wxT("UTF-8")) == 0)
-        {
-            cset = new ID_CharSet(name, &wxConvUTF8);
-        }
-        else
-        {
+        // don't convert at all
+        return NULL;
+    }
+
+    // the test above must have taken care of this case
+    wxCHECK_MSG( name, NULL, _T("NULL name must be wxFONTENCODING_DEFAULT") );
+
+    wxCharacterSet *cset;
+
+    if ( wxStricmp(name, wxT("UTF8")) == 0 || wxStricmp(name, wxT("UTF-8")) == 0)
+    {
+        cset = new ID_CharSet(name, &wxConvUTF8);
+    }
+    else
+    {
 #ifdef HAVE_ICONV
-            cset = new IC_CharSet(name); // may not take NULL
-#endif
-        }
-    }
-
-    if (cset && cset->usable())
-        return cset;
-
-    if (cset)
-    {
-        delete cset;
+        cset = new IC_CharSet(name);
+#else // !HAVE_ICONV
         cset = NULL;
+#endif // HAVE_ICONV/!HAVE_ICONV
     }
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
-    cset = new CP_CharSet(name); // may take NULL
-    if (cset->usable())
+    if ( cset->usable() )
         return cset;
 
     delete cset;
+    cset = NULL;
+
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+    cset = new CP_CharSet(name);
+    if ( cset->usable() )
+        return cset;
+
+    delete cset;
+    cset = NULL;
 #endif // __WIN32__
 
 #if wxUSE_FONTMAP
     cset = new EC_CharSet(name);
-    if (cset->usable())
+    if ( cset->usable() )
         return cset;
-#endif // wxUSE_FONTMAP
 
     delete cset;
-    wxLogError(_("Unknown encoding '%s'!"), name);
+    cset = NULL;
+#endif // wxUSE_FONTMAP
+
+    wxLogError(_("Cannot convert from encoding '%s'!"), name);
+
     return NULL;
 }
 
