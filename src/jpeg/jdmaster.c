@@ -15,6 +15,10 @@
 #include "jinclude.h"
 #include "jpeglib.h"
 
+#if defined(__VISAGECPP__)
+/* Visual Age fixups for multiple declarations */
+#  define start_input_pass   start_input_pass2 /* already in jcmaint.c */
+#endif
 
 /* Private state */
 
@@ -217,7 +221,7 @@ jpeg_calc_output_dimensions (j_decompress_ptr cinfo)
  * For most steps we can mathematically guarantee that the initial value
  * of x is within MAXJSAMPLE+1 of the legal range, so a table running from
  * -(MAXJSAMPLE+1) to 2*MAXJSAMPLE+1 is sufficient.  But for the initial
- * limiting step (just after the IDCT), a wildly out-of-range value is 
+ * limiting step (just after the IDCT), a wildly out-of-range value is
  * possible if the input data is corrupt.  To avoid any chance of indexing
  * off the end of memory and getting a bad-pointer trap, we perform the
  * post-IDCT limiting thus:
@@ -555,3 +559,10 @@ jinit_master_decompress (j_decompress_ptr cinfo)
 
   master_selection(cinfo);
 }
+
+#if defined(__VISAGECPP__)
+#  ifdef start_input_pass2
+#   undef start_input_pass2
+#  endif
+#endif
+
