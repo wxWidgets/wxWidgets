@@ -72,9 +72,6 @@ public:
 
     void OnEraseBackground(wxEraseEvent& event);
 
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-
 protected:
     // regardless how deeply we are in wxWidgets hierarchy always get correct form
     FormType* GetParentForm() const;
@@ -101,6 +98,7 @@ protected:
     // getting and setting sizes
     virtual void DoGetPosition( int *x, int *y ) const;
     virtual void DoGetSize( int *width, int *height ) const;
+    virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // create the control of the given ControlStyleType: this is typically called
     // from Create() method of the derived class passing its label, pos and
@@ -143,6 +141,7 @@ private:
     void Init();
 
     virtual void DoGetBounds( RectangleType &rect ) const;
+    virtual void DoSetBounds( RectangleType &rect );
 
     // m_label stores label in case of wxButton, wxCheckBox, wxToggleButton etc.
     // We must ensure that it persists for as long as it is being displayed

@@ -80,11 +80,6 @@ WXDWORD wxTopLevelWindowPalm::PalmGetStyle(long style, WXDWORD *exflags) const
     return 0;
 }
 
-WXHWND wxTopLevelWindowPalm::PalmGetParent() const
-{
-    return NULL;
-}
-
 bool wxTopLevelWindowPalm::Create(wxWindow *parent,
                                   wxWindowID id,
                                   const wxString& title,
@@ -145,6 +140,18 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
 
 wxTopLevelWindowPalm::~wxTopLevelWindowPalm()
 {
+}
+
+// ---------------------------------------------------------------------------
+// implementation
+// ---------------------------------------------------------------------------
+
+WXWINHANDLE wxTopLevelWindowPalm::GetWinHandle() const
+{
+    FormType *form = GetForm();
+    if(form)
+        return FrmGetWindowHandle(form);
+    return 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -233,14 +240,10 @@ FormType *wxTopLevelWindowPalm::GetForm() const
     return FrmGetActiveForm();
 }
 
-#ifndef __WXWINCE__
-
 bool wxTopLevelWindowPalm::SetShape(const wxRegion& region)
 {
     return false;
 }
-
-#endif // !__WXWINCE__
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow native event handling

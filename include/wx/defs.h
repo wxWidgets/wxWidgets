@@ -2346,7 +2346,37 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSView);
 typedef WX_NSView WXWidget; /*  wxWidgets BASE definition */
 #endif /*  __WXCOCOA__ */
 
-#if defined(__WXMSW__) || defined(__WXPALMOS__)
+#if defined(__WXPALMOS__)
+
+typedef void *          WXHANDLE;
+typedef void *          WXHICON;
+typedef void *          WXHFONT;
+typedef void *          WXHMENU;
+typedef void *          WXHPEN;
+typedef void *          WXHBRUSH;
+typedef void *          WXHPALETTE;
+typedef void *          WXHCURSOR;
+typedef void *          WXHRGN;
+typedef void *          WXHACCEL;
+typedef void *          WXHINSTANCE;
+typedef void *          WXHBITMAP;
+typedef void *          WXHIMAGELIST;
+typedef void *          WXHGLOBAL;
+typedef void *          WXHDC;
+typedef unsigned int    WXUINT;
+typedef unsigned long   WXDWORD;
+typedef unsigned short  WXWORD;
+
+typedef unsigned long   WXCOLORREF;
+typedef struct tagMSG   WXMSG;
+
+typedef WinHandle       WXWINHANDLE;
+typedef WXWINHANDLE     WXWidget;
+
+#endif /* __WXPALMOS__ */
+
+
+#if defined(__WXMSW__)
 
 /*  the keywords needed for WinMain() declaration */
 #ifndef WXFAR

@@ -120,7 +120,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
                              const wxValidator& validator,
                              const wxString& name)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxChoice::Create(wxWindow *parent,
@@ -270,15 +270,6 @@ WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
     return false;
-}
-
-WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-     )
-{
-    return (WXHBRUSH) 0;
 }
 
 #endif // wxUSE_CHOICE

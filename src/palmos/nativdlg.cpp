@@ -72,13 +72,13 @@ wxWindow* wxWindow::GetWindowChild(wxWindowID id)
 // create wxWin window from a native HWND
 // ---------------------------------------------------------------------------
 
-wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
+wxWindow* wxWindow::CreateWindowFromWinHandle(wxWindow* parent, WXWINHANDLE handle)
 {
     return NULL;
 }
 
-// Make sure the window style (etc.) reflects the HWND style (roughly)
-void wxWindow::AdoptAttributesFromHWND(void)
+// Make sure the window style (etc.) reflects the WinHandle style (roughly)
+void wxWindow::AdoptAttributesFromWinHandle(void)
 {
 }
 

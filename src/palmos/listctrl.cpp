@@ -191,11 +191,6 @@ void wxListCtrl::SetSingleStyle(long style, bool add)
 {
 }
 
-// Set the whole window style
-void wxListCtrl::SetWindowStyleFlag(long flag)
-{
-}
-
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------

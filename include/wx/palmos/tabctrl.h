@@ -117,9 +117,6 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
 
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
-    // Responds to colour changes
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
 protected:
     wxImageList*    m_imageList;
 

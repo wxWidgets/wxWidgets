@@ -60,10 +60,7 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    virtual void SetWindowStyleFlag(long style);
-
     void OnMouseEvent(wxMouseEvent& event);
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     void SetFocus() {}
 

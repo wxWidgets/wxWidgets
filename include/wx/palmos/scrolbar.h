@@ -46,7 +46,7 @@ public:
 
     virtual void SetThumbPosition(int viewStart);
     virtual void SetScrollbar(int position, int thumbSize, int range, int pageSize,
-            bool refresh = TRUE);
+            bool refresh = true);
 
     // needed for RTTI
     void SetThumbSize( int s ) { SetScrollbar( GetThumbPosition() , s , GetRange() , GetPageSize() , true ) ; }
@@ -54,8 +54,6 @@ public:
     void SetRange( int s ) { SetScrollbar( GetThumbPosition() , GetThumbSize() , s , GetPageSize() , true ) ; }
 
     void Command(wxCommandEvent& event);
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control);
 

@@ -89,6 +89,8 @@ public:
     bool HandleControlRepeat(EventType* event);
     bool HandleSize(EventType* event);
 
+    virtual WXWINHANDLE GetWinHandle() const;
+
 protected:
     // common part of all ctors
     void Init();
@@ -101,9 +103,6 @@ protected:
 
     // translate wxWidgets flags to Windows ones
     virtual WXDWORD PalmGetStyle(long flags, WXDWORD *exstyle) const;
-
-    // choose the right parent to use with CreateWindow()
-    virtual WXHWND PalmGetParent() const;
 
     // is the window currently iconized?
     bool m_iconized;

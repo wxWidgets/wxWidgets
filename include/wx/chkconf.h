@@ -1262,6 +1262,17 @@
 #   endif
 #endif /* wxUSE_CALENDARCTRL */
 
+#if wxUSE_DATEPICKCTRL
+#   if !wxUSE_DATETIME
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error wxDatePickerCtrl requires wxUSE_DATETIME"
+#       else
+#           undef wxUSE_DATETIME
+#           define wxUSE_DATETIME 1
+#       endif
+#   endif
+#endif /* wxUSE_DATEPICKCTRL */
+
 #if wxUSE_CHECKLISTBOX
 #   if !wxUSE_LISTBOX
 #        ifdef wxABORT_ON_CONFIG_ERROR

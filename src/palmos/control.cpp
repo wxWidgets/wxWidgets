@@ -286,6 +286,17 @@ void wxControl::DoGetBounds( RectangleType &rect ) const
     FrmGetObjectBounds(form,index,&rect);
 }
 
+void wxControl::DoSetBounds( RectangleType &rect )
+{
+    FormType* form = GetParentForm();
+    if(form==NULL)
+        return;
+    uint16_t index = FrmGetObjectIndex(form,GetId());
+    if(index==frmInvalidObjectId)
+        return;
+    FrmSetObjectBounds(form,index,&rect);
+}
+
 void wxControl::DoGetPosition( int *x, int *y ) const
 {
     RectangleType rect;
@@ -304,6 +315,18 @@ void wxControl::DoGetSize( int *width, int *height ) const
         *width = rect.extent.x;
     if(height)
         *height = rect.extent.y;
+}
+
+void wxControl::DoMoveWindow(int x, int y, int width, int height)
+{
+    wxRect area = GetRect();
+    RectangleType rect;
+    rect.topLeft.x = x;
+    rect.topLeft.y = y;
+    rect.extent.x = width;
+    rect.extent.y = height;
+    DoSetBounds(rect);
+    GetParent()->Refresh(true, &area);
 }
 
 bool wxControl::Enable(bool enable)
@@ -467,18 +490,5 @@ bool wxControl::ProcessCommand(wxCommandEvent& event)
 void wxControl::OnEraseBackground(wxEraseEvent& event)
 {
 }
-
-WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-    )
-{
-    return (WXHBRUSH)0;
-}
-
-// ---------------------------------------------------------------------------
-// global functions
-// ---------------------------------------------------------------------------
 
 #endif // wxUSE_CONTROLS

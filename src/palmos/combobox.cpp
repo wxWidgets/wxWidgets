@@ -128,27 +128,6 @@ static WNDPROC gs_wndprocEdit = (WNDPROC)NULL;
 // implementation
 // ============================================================================
 
-WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC,
-                                WXHWND WXUNUSED(pWnd),
-                                WXUINT WXUNUSED(nCtlColor),
-                                WXUINT WXUNUSED(message),
-                                WXWPARAM WXUNUSED(wParam),
-                                WXLPARAM WXUNUSED(lParam))
-{
-    HDC hdc = (HDC)pDC;
-    wxColour colBack = GetBackgroundColour();
-
-    if (!IsEnabled())
-        colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-
-    ::SetBkColor(hdc, wxColourToRGB(colBack));
-    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-
-    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
-
-    return (WXHBRUSH)brush->GetResourceHandle();
-}
-
 // ----------------------------------------------------------------------------
 // wxComboBox callbacks
 // ----------------------------------------------------------------------------

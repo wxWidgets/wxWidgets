@@ -213,9 +213,6 @@ public:
     // Add or remove a single window style
     void SetSingleStyle(long style, bool add = true) ;
 
-    // Set the whole window style
-    void SetWindowStyleFlag(long style) ;
-
     // Searches for an item, starting from 'item'.
     // item can be -1 to find the first item that matches the
     // specified flags.
@@ -347,10 +344,6 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-
-
-    // obsolete stuff, for compatibility only -- don't use
-    wxDEPRECATED( int GetItemSpacing(bool isSmall) const);
 
 protected:
     // common part of all ctors

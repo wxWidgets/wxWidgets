@@ -136,12 +136,8 @@ public:
     // Implementation from now on
     // --------------------------
 
-    virtual void SetWindowStyleFlag(long style);
-
     virtual void Command(wxCommandEvent& event);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 #if wxUSE_RICHEDIT
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
@@ -154,8 +150,6 @@ public:
     virtual bool SetBackgroundColour(const wxColour& colour);
     virtual bool SetForegroundColour(const wxColour& colour);
 #endif // wxUSE_RICHEDIT
-
-    virtual void AdoptAttributesFromHWND();
 
     virtual bool AcceptsFocus() const;
 

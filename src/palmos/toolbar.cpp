@@ -93,7 +93,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
-    EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -249,14 +248,6 @@ void wxToolBar::UpdateSize()
 }
 
 // ----------------------------------------------------------------------------
-// toolbar styles
-// ---------------------------------------------------------------------------
-
-void wxToolBar::SetWindowStyleFlag(long style)
-{
-}
-
-// ----------------------------------------------------------------------------
 // tool state
 // ----------------------------------------------------------------------------
 
@@ -275,11 +266,6 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
-
-// Responds to colour changes, and passes event on to children.
-void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
-{
-}
 
 void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 {

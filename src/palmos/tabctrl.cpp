@@ -37,7 +37,6 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGING)
 
 BEGIN_EVENT_TABLE(wxTabCtrl, wxControl)
-    EVT_SYS_COLOUR_CHANGED(wxTabCtrl::OnSysColourChanged)
 END_EVENT_TABLE()
 
 wxTabCtrl::wxTabCtrl()
@@ -57,11 +56,6 @@ wxTabCtrl::~wxTabCtrl()
 bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     return false;
-}
-
-// Responds to colour changes, and passes event on to children.
-void wxTabCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
-{
 }
 
 // Delete all items

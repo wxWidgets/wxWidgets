@@ -74,12 +74,11 @@ public:
     virtual void WarpPointer(int x, int y);
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL );
+                          const wxRect *rect = NULL );
     virtual void Update();
     virtual void Freeze();
     virtual void Thaw();
 
-    virtual void SetWindowStyleFlag( long style );
     virtual bool SetCursor( const wxCursor &cursor );
     virtual bool SetFont( const wxFont &font );
 
@@ -136,9 +135,8 @@ public:
     // simple accessors
     // ----------------
 
-    WXHWND GetHWND() const { return m_hWnd; }
-    void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
-    virtual WXWidget GetHandle() const { return GetHWND(); }
+    virtual WXWINHANDLE GetWinHandle() const { return m_handle; }
+    virtual WXWidget GetHandle() const { return GetWinHandle(); }
 
     // event handlers
     // --------------
@@ -147,23 +145,11 @@ public:
     void OnPaint(wxPaintEvent& event);
 
 public:
-    // Windows subclassing
-    void SubclassWin(WXHWND hWnd);
-    void UnsubclassWin();
-
-    WXFARPROC PalmGetOldWndProc() const { return m_oldWndProc; }
-    void PalmSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
-
-    // return true if the window is of a standard (i.e. not wxWidgets') class
-    //
-    // to understand why does it work, look at SubclassWin() code and comments
-    bool IsOfStandardClass() const { return m_oldWndProc != NULL; }
-
     wxWindow *FindItem(long id) const;
-    wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
+    wxWindow *FindItemByWinHandle(WXWINHANDLE handle, bool controlOnly = false) const;
 
     // Palm only: true if this control is part of the main control
-    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; };
+    virtual bool ContainsWinHandle(WXWINHANDLE WXUNUSED(handle)) const { return false; };
 
     // translate wxWidgets style flags for this control into the Windows style
     // and optional extended style for the corresponding native control
@@ -188,9 +174,6 @@ public:
                                   int& x, int& y,
                                   int& w, int& h) const;
 
-    // get the HWND to be used as parent of this window with CreateWindow()
-    virtual WXHWND PalmGetParent() const;
-
     // creates the window of specified Windows class with given style, extended
     // style, title and geometry (default values
     //
@@ -202,150 +185,25 @@ public:
                    WXDWORD style = 0,
                    WXDWORD exendedStyle = 0);
 
-    virtual bool PalmCommand(WXUINT param, WXWORD id);
-
 #ifndef __WXUNIVERSAL__
-    // Create an appropriate wxWindow from a HWND
-    virtual wxWindow* CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd);
+    // Create an appropriate wxWindow from a WinHandle
+    virtual wxWindow* CreateWindowFromWinHandle(wxWindow* parent, WXWINHANDLE handle);
 
-    // Make sure the window style reflects the HWND style (roughly)
-    virtual void AdoptAttributesFromHWND();
+    // Make sure the window style reflects the WinHandle style (roughly)
+    virtual void AdoptAttributesFromWinHandle();
 #endif // __WXUNIVERSAL__
 
     // Setup background and foreground colours correctly
     virtual void SetupColours();
 
     // ------------------------------------------------------------------------
-    // helpers for message handlers: these perform the same function as the
-    // message crackers from <windowsx.h> - they unpack WPARAM and LPARAM into
-    // the correct parameters
-    // ------------------------------------------------------------------------
-
-    void UnpackCommand(WXWPARAM wParam, WXLPARAM lParam,
-                       WXWORD *id, WXHWND *hwnd, WXWORD *cmd);
-    void UnpackActivate(WXWPARAM wParam, WXLPARAM lParam,
-                        WXWORD *state, WXWORD *minimized, WXHWND *hwnd);
-    void UnpackScroll(WXWPARAM wParam, WXLPARAM lParam,
-                      WXWORD *code, WXWORD *pos, WXHWND *hwnd);
-    void UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
-                        WXWORD *nCtlColor, WXHDC *hdc, WXHWND *hwnd);
-    void UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
-                          WXWORD *item, WXWORD *flags, WXHMENU *hmenu);
-
-    // ------------------------------------------------------------------------
     // internal handlers for Palm messages: all handlers return a boolean value:
     // true means that the handler processed the event and false that it didn't
     // ------------------------------------------------------------------------
 
-    // there are several cases where we have virtual functions for Windows
-    // message processing: this is because these messages often require to be
-    // processed in a different manner in the derived classes. For all other
-    // messages, however, we do *not* have corresponding PalmOnXXX() function
-    // and if the derived class wants to process them, it should override
-    // PalmWindowProc() directly.
-
     // scroll event (both horizontal and vertical)
     virtual bool PalmOnScroll(int orientation, WXWORD nSBCode,
-                             WXWORD pos, WXHWND control);
-
-    // owner-drawn controls need to process these messages
-    virtual bool PalmOnDrawItem(int id, WXDRAWITEMSTRUCT *item);
-    virtual bool PalmOnMeasureItem(int id, WXMEASUREITEMSTRUCT *item);
-
-    // the rest are not virtual
-    bool HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate);
-    bool HandleInitDialog(WXHWND hWndFocus);
-    bool HandleDestroy();
-
-    bool HandlePaint();
-    bool HandleEraseBkgnd(WXHDC pDC);
-
-    bool HandleMinimize();
-    bool HandleMaximize();
-    bool HandleSize(int x, int y, WXUINT flag);
-    bool HandleSizing(wxRect& rect);
-    bool HandleGetMinMaxInfo(void *mmInfo);
-
-    bool HandleShow(bool show, int status);
-    bool HandleActivate(int flag, bool minimized, WXHWND activate);
-
-    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
-
-    bool HandleCtlColor(WXHBRUSH *hBrush,
-                        WXHDC hdc,
-                        WXHWND hWnd,
-                        WXUINT nCtlColor,
-                        WXUINT message,
-                        WXWPARAM wParam,
-                        WXLPARAM lParam);
-
-    bool HandlePaletteChanged(WXHWND hWndPalChange);
-    bool HandleQueryNewPalette();
-    bool HandleSysColorChange();
-    bool HandleDisplayChange();
-    bool HandleCaptureChanged(WXHWND gainedCapture);
-
-    bool HandleQueryEndSession(long logOff, bool *mayEnd);
-    bool HandleEndSession(bool endSession, long logOff);
-
-    bool HandleSetFocus(WXHWND wnd);
-    bool HandleKillFocus(WXHWND wnd);
-
-    bool HandleDropFiles(WXWPARAM wParam);
-
-    bool HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags);
-    bool HandleMouseMove(int x, int y, WXUINT flags);
-    bool HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam);
-
-    bool HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII = false);
-    bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
-    bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
-#if wxUSE_ACCEL
-    bool HandleHotKey(WXWPARAM wParam, WXLPARAM lParam);
-#endif
-
-    bool HandleQueryDragIcon(WXHICON *hIcon);
-
-    bool HandleSetCursor(WXHWND hWnd, short nHitTest, int mouseMsg);
-
-    // Window procedure
-    virtual WXLRESULT PalmWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
-    // Calls an appropriate default window procedure
-    virtual WXLRESULT PalmDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
-    // message processing helpers
-
-    // return false if the message shouldn't be translated/preprocessed but
-    // dispatched normally
-    virtual bool PalmShouldPreProcessMessage(WXMSG* pMsg);
-
-    // return true if the message was preprocessed and shouldn't be dispatched
-    virtual bool PalmProcessMessage(WXMSG* pMsg);
-
-    // return true if the message was translated and shouldn't be dispatched
-    virtual bool PalmTranslateMessage(WXMSG* pMsg);
-
-    // called when the window is about to be destroyed
-    virtual void PalmDestroyWindow();
-
-    // this function should return the brush to paint the window background
-    // with or 0 for the default brush
-    virtual WXHBRUSH OnCtlColor(WXHDC hDC,
-                                WXHWND hWnd,
-                                WXUINT nCtlColor,
-                                WXUINT message,
-                                WXWPARAM wParam,
-                                WXLPARAM lParam);
-
-    // Responds to colour changes: passes event on to children.
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    // initialize various fields of wxMouseEvent (common part of PalmOnMouseXXX)
-    void InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags);
-
-    // check if mouse is in the window
-    bool IsMouseInWindow() const;
+                              WXWORD pos, WXWINHANDLE control);
 
     // virtual function for implementing internal idle
     // behaviour
@@ -353,14 +211,11 @@ public:
 
 protected:
     // the window handle
-    WXHWND                m_hWnd;
+    WinHandle m_handle;
     FormType *FrameForm;
 
     FormType *GetFormPtr();
     void SetFormPtr(FormType *FormPtr);
-
-    // the old window proc (we subclass all windows)
-    WXFARPROC             m_oldWndProc;
 
     // additional (Palm specific) flags
     bool                  m_mouseInWindow:1;
@@ -409,10 +264,6 @@ protected:
                              const wxString& ttip);
 #endif // wxUSE_TOOLTIPS
 
-    // the helper functions used by HandleChar/KeyXXX methods
-    wxKeyEvent CreateKeyEvent(wxEventType evType, int id,
-                              WXLPARAM lParam = 0, WXWPARAM wParam = 0) const;
-
 private:
     // common part of all ctors
     void Init();
@@ -433,24 +284,6 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-// ---------------------------------------------------------------------------
-// global functions
-// ---------------------------------------------------------------------------
-
-// kbd code translation
-WXDLLEXPORT int wxCharCodePalmToWX(int keySym, WXLPARAM lParam = 0);
-WXDLLEXPORT int wxCharCodeWXToPalm(int id, bool *IsVirtual);
-
-// window creation helper class: before creating a new HWND, instantiate an
-// object of this class on stack - this allows to process the messages sent to
-// the window even before CreateWindow() returns
-class wxWindowCreationHook
-{
-public:
-    wxWindowCreationHook(wxWindowPalm *winBeingCreated);
-    ~wxWindowCreationHook();
-};
-
 // ----------------------------------------------------------------------------
 // global objects
 // ----------------------------------------------------------------------------
@@ -459,7 +292,7 @@ public:
 // needs to "see" its dtor and not just forward declaration
 #include "wx/hash.h"
 
-// pseudo-template HWND <-> wxWindow hash table
+// pseudo-template WinHandle <-> wxWindow hash table
 WX_DECLARE_HASH(wxWindowPalm, wxWindowList, wxWinHashTable);
 
 extern wxWinHashTable *wxWinHandleHash;

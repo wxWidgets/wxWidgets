@@ -137,7 +137,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_SIZE(wxMDIParentFrame::OnSize)
-    EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMDIChildFrame, wxFrame)
@@ -201,12 +200,6 @@ wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
     return new wxMDIClientWindow;
 }
 
-// Responds to colour changes, and passes event on to children.
-void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
-{
-    event.Skip();
-}
-
 WXHICON wxMDIParentFrame::GetDefaultIcon() const
 {
     // we don't have any standard icons (any more)
@@ -246,16 +239,6 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
                                      WXLPARAM lParam)
 {
     return 0;
-}
-
-bool wxMDIParentFrame::HandleActivate(int state, bool minimized, WXHWND activate)
-{
-    return false;
-}
-
-bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
-{
-    return false;
 }
 
 WXLRESULT wxMDIParentFrame::MSWDefWindowProc(WXUINT message,
@@ -340,11 +323,6 @@ WXLRESULT wxMDIChildFrame::MSWWindowProc(WXUINT message,
     return 0;
 }
 
-bool wxMDIChildFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
-{
-    return false;
-}
-
 bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
                                         WXHWND hwndAct,
                                         WXHWND hwndDeact)
@@ -353,11 +331,6 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
 }
 
 bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
-{
-    return false;
-}
-
-bool wxMDIChildFrame::HandleGetMinMaxInfo(void *mmInfo)
 {
     return false;
 }

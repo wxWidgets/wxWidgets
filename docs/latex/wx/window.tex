@@ -9,9 +9,9 @@ the destructor before the window itself is deleted which means that you don't
 have to worry about deleting them manually. Please see the \helpref{window
 deletion overview}{windowdeletionoverview} for more information.
 
-Also note that in this, and many others, wxWidgets classes some 
-\texttt{GetXXX()} methods may be overloaded (as, for example, 
-\helpref{GetSize}{wxwindowgetsize} or 
+Also note that in this, and many others, wxWidgets classes some
+\texttt{GetXXX()} methods may be overloaded (as, for example,
+\helpref{GetSize}{wxwindowgetsize} or
 \helpref{GetClientSize}{wxwindowgetclientsize}). In this case, the overloads
 are non-virtual because having multiple virtual functions with the same name
 results in a virtual function name hiding at the derived class level (in
@@ -353,7 +353,7 @@ implementation of wxDialog::OnCloseWindow does not necessarily delete the
 dialog, since it will simply simulate an wxID\_CANCEL event which is handled by
 the appropriate button event handler and may do anything at all.
 
-To guarantee that the window will be destroyed, call 
+To guarantee that the window will be destroyed, call
 \helpref{wxWindow::Destroy}{wxwindowdestroy} instead
 
 \wxheading{See also}
@@ -491,7 +491,7 @@ same size as it would have after a call to \helpref{Fit()}{wxwindowfit}.
 \func{virtual void}{DoUpdateWindowUI}{\param{wxUpdateUIEvent\&}{ event}}
 
 Does the window-specific updating after processing the update event.
-This function is called by \helpref{wxWindow::UpdateWindowUI}{wxwindowupdatewindowui} 
+This function is called by \helpref{wxWindow::UpdateWindowUI}{wxwindowupdatewindowui}
 in order to check return values in the \helpref{wxUpdateUIEvent}{wxupdateuievent} and
 act appropriately. For example, to allow frame and dialog title updating, wxWidgets
 implements this function as follows:
@@ -502,7 +502,7 @@ void wxTopLevelWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 {
     if ( event.GetSetEnabled() )
         Enable(event.GetEnabled());
-    
+
     if ( event.GetSetText() )
     {
         if ( event.GetText() != GetTitle() )
@@ -611,7 +611,7 @@ If {\it parent} is NULL, the search will start from all top-level
 frames and dialog boxes; if non-NULL, the search will be limited to the given window hierarchy.
 The search is recursive in both cases.
 
-If no window with such name is found, 
+If no window with such name is found,
 \helpref{FindWindowByLabel}{wxwindowfindwindowbylabel} is called.
 
 \wxheading{See also}
@@ -774,9 +774,9 @@ Returns the currently captured window.
 
 \wxheading{See also}
 
-\helpref{wxWindow::HasCapture}{wxwindowhascapture}, 
-\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse}, 
-\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse}, 
+\helpref{wxWindow::HasCapture}{wxwindowhascapture},
+\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse},
+\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse},
 \helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
 
 
@@ -813,7 +813,7 @@ system, especially if it uses themes.
 
 The \arg{variant} parameter is only relevant under Mac currently and is
 ignore under other platforms. Under Mac, it will change the size of the
-returned font. See \helpref{wxWindow::SetWindowVariant}{wxwindowsetwindowvariant} 
+returned font. See \helpref{wxWindow::SetWindowVariant}{wxwindowsetwindowvariant}
 for more about this.
 
 This static method is ``overridden'' in many derived classes and so calling,
@@ -821,7 +821,7 @@ for example, \helpref{wxButton}{wxbutton}::GetClassDefaultAttributes() will typi
 return the values appropriate for a button which will be normally different
 from those returned by, say, \helpref{wxListCtrl}{wxlistctrl}::GetClassDefaultAttributes().
 
-The \texttt{wxVisualAttributes} structure has at least the fields 
+The \texttt{wxVisualAttributes} structure has at least the fields
 \texttt{font}, \texttt{colFg} and \texttt{colBg}. All of them may be invalid
 if it was not possible to determine the default control appearance or,
 especially for the background colour, if the field doesn't make sense as is
@@ -896,7 +896,7 @@ Return the cursor associated with this window.
 
 \constfunc{virtual wxVisualAttributes}{GetDefaultAttributes}{\void}
 
-Currently this is the same as calling 
+Currently this is the same as calling
 \helpref{GetClassDefaultAttributes}{wxwindowgetclassdefaultattributes}(\helpref{GetWindowVariant}{wxwindowgetwindowvariant}()).
 
 One advantage of using this function compared to the static version is that
@@ -988,7 +988,7 @@ Returns the grandparent of a window, or NULL if there isn't one.
 \constfunc{void*}{GetHandle}{\void}
 
 Returns the platform-specific handle of the physical window. Cast it to an appropriate
-handle, such as {\bf HWND} for Windows, {\bf Widget} for Motif or {\bf GtkWidget} for GTK.
+handle, such as {\bf HWND} for Windows, {\bf Widget} for Motif, {\bf GtkWidget} for GTK or {\bf WinHandle} for PalmOS.
 
 \pythonnote{This method will return an integer in wxPython.}
 
@@ -1308,7 +1308,7 @@ method. {\bf GetWindowStyle()} is another name for the same function.
 
 \constfunc{wxWindowVariant}{GetWindowVariant}{\void}
 
-Returns the value previous passed to 
+Returns the value previous passed to
 \helpref{wxWindow::SetWindowVariant}{wxwindowsetwindowvariant}.
 
 
@@ -1320,8 +1320,8 @@ Returns {\tt true} if this window has the current mouse capture.
 
 \wxheading{See also}
 
-\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse}, 
-\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse}, 
+\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse},
+\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse},
 \helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
 
 
@@ -1365,12 +1365,12 @@ the font and the foreground and background colours.
 
 By ``intelligently'' the following is meant: by default, all windows use their
 own \helpref{default}{wxwindowgetclassdefaultattributes} attributes. However
-if some of the parents attributes are explicitly (that is, using 
-\helpref{SetFont}{wxwindowsetfont} and not 
+if some of the parents attributes are explicitly (that is, using
+\helpref{SetFont}{wxwindowsetfont} and not
 \helpref{SetOwnFont}{wxwindowsetownfont}) changed \emph{and} if the
 corresponding attribute hadn't been explicitly set for this window itself,
 then this window takes the same value as used by the parent. In addition, if
-the window overrides \helpref{ShouldInheritColours}{wxwindowshouldinheritcolours} 
+the window overrides \helpref{ShouldInheritColours}{wxwindowshouldinheritcolours}
 to return \false, the colours will not be changed no matter what and only the
 font might.
 
@@ -1549,7 +1549,7 @@ Moves this window in the tab navigation order after the specified \arg{win}.
 This means that when the user presses \texttt{TAB} key on that other window,
 the focus switches to this window.
 
-Default tab order is the same as creation order, this function and 
+Default tab order is the same as creation order, this function and
 \helpref{MoveBeforeInTabOrder()}{wxwindowmovebeforeintaborder} allow to change
 it after creating all the windows.
 
@@ -2089,7 +2089,7 @@ that should not be disabled by an application defining an OnIdle
 handler in a derived class.
 
 This function may be used to do delayed painting, for example,
-and most implementations call \helpref{wxWindow::UpdateWindowUI}{wxwindowupdatewindowui} 
+and most implementations call \helpref{wxWindow::UpdateWindowUI}{wxwindowupdatewindowui}
 in order to send update events to the window in idle time.
 
 
@@ -2237,7 +2237,7 @@ Redraws the contents of the given rectangle: only the area inside it will be
 repainted.
 
 This is the same as \helpref{Refresh}{wxwindowrefresh} but has a nicer syntax
-as it can be called with a temporary wxRect object as argument like this 
+as it can be called with a temporary wxRect object as argument like this
 \texttt{RefreshRect(wxRect(x, y, w, h))}.
 
 
@@ -2283,9 +2283,9 @@ Releases mouse input captured with \helpref{wxWindow::CaptureMouse}{wxwindowcapt
 
 \wxheading{See also}
 
-\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse}, 
-\helpref{wxWindow::HasCapture}{wxwindowhascapture}, 
-\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse}, 
+\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse},
+\helpref{wxWindow::HasCapture}{wxwindowhascapture},
+\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse},
 \helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
 
 
@@ -2456,8 +2456,8 @@ See also \helpref{wxAccessible}{wxaccessible}.
 \func{void}{SetAutoLayout}{\param{bool}{ autoLayout}}
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
-be called automatically when the window is resized. It is called implicitly by 
-\helpref{wxWindow::SetSizer}{wxwindowsetsizer} but if you use 
+be called automatically when the window is resized. It is called implicitly by
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer} but if you use
 \helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} you should call it
 manually or otherwise the window layout won't be correctly updated when its
 size changes.
@@ -2479,7 +2479,7 @@ from within wxWindow::OnSize functions.}
 Sets the background colour of the window.
 
 Please see \helpref{InheritAttributes}{wxwindowinheritattributes} for
-explanation of the difference between this method and 
+explanation of the difference between this method and
 \helpref{SetOwnBackgroundColour}{wxwindowsetownbackgroundcolour}.
 
 \wxheading{Parameters}
@@ -2832,7 +2832,7 @@ explanations.
 Sets the foreground colour of the window.
 
 Please see \helpref{InheritAttributes}{wxwindowinheritattributes} for
-explanation of the difference between this method and 
+explanation of the difference between this method and
 \helpref{SetOwnForegroundColour}{wxwindowsetownforegroundcolour}.
 
 \wxheading{Parameters}
@@ -3201,7 +3201,7 @@ will then own the object, and will take care of its deletion.
 If an existing layout constraints object is already owned by the
 window, it will be deleted if the deleteOld parameter is true.
 
-Note that this function will also call 
+Note that this function will also call
 \helpref{SetAutoLayout}{wxwindowsetautolayout} implicitly with {\tt true}
 parameter if the {\it sizer}\/ is non-NULL and {\tt false} otherwise.
 
@@ -3295,7 +3295,7 @@ Sets the virtual size of the window in pixels.
 
 \func{virtual void}{SetVirtualSizeHints}{\param{int}{ minW},\param{int}{ minH}, \param{int}{ maxW=-1}, \param{int}{ maxH=-1}}
 
-\func{void}{SetVirtualSizeHints}{\param{const wxSize\&}{ minSize=wxDefaultSize}, 
+\func{void}{SetVirtualSizeHints}{\param{const wxSize\&}{ minSize=wxDefaultSize},
 \param{const wxSize\&}{ maxSize=wxDefaultSize}}
 
 
@@ -3371,11 +3371,11 @@ be used to change this.
 
 \func{virtual bool}{ShouldInheritColours}{\void}
 
-Return \true from here to allow the colours of this window to be changed by 
+Return \true from here to allow the colours of this window to be changed by
 \helpref{InheritAttributes}{wxwindowinheritattributes}, returning \false
 forbids inheriting them from the parent window.
 
-The base class version returns \false, but this method is overridden in 
+The base class version returns \false, but this method is overridden in
 \helpref{wxControl}{wxcontrol} where it returns \true.
 
 
@@ -3406,7 +3406,7 @@ done because it already was in the requested state.
 
 \func{virtual void}{Thaw}{\void}
 
-Reenables window updating after a previous call to 
+Reenables window updating after a previous call to
 \helpref{Freeze}{wxwindowfreeze}. To really thaw the control, it must be called
 exactly the same number of times as \helpref{Freeze}{wxwindowfreeze}.
 
@@ -3476,7 +3476,7 @@ This function is currently only implemented under MSW.
 Calling this method immediately repaints the invalidated area of the window
 while this would usually only happen when the flow of control returns to the
 event loop. Notice that this function doesn't refresh the window and does
-nothing if the window hadn't been already repainted. Use 
+nothing if the window hadn't been already repainted. Use
 \helpref{Refresh}{wxwindowrefresh} first if you want to immediately redraw the
 window unconditionally.
 
@@ -3491,8 +3491,8 @@ example a wxToolBar will send an update UI event for each toolbar button,
 and a wxFrame will send an update UI event for each menubar menu item.
 You can call this function from your application to ensure that your
 UI is up-to-date at this point (as far as your wxUpdateUIEvent handlers
-are concerned). This may be necessary if you have called 
-\helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode} or 
+are concerned). This may be necessary if you have called
+\helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode} or
 \helpref{wxUpdateUIEvent::SetUpdateInterval}{wxupdateuieventsetupdateinterval} to
 limit the overhead that wxWidgets incurs by sending update UI events in idle time.
 
@@ -3525,8 +3525,8 @@ void MyWindow::OnInternalIdle()
 
 \wxheading{See also}
 
-\helpref{wxUpdateUIEvent}{wxupdateuievent}, 
-\helpref{wxWindow::DoUpdateWindowUI}{wxwindowdoupdatewindowui}, 
+\helpref{wxUpdateUIEvent}{wxupdateuievent},
+\helpref{wxWindow::DoUpdateWindowUI}{wxwindowdoupdatewindowui},
 \helpref{wxWindow::OnInternalIdle}{wxwindowoninternalidle}
 
 

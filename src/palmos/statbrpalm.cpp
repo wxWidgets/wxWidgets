@@ -48,8 +48,6 @@
 wxStatusBarPalm::wxStatusBarPalm()
 {
     SetParent(NULL);
-    m_hWnd = 0;
-    m_windowId = 0;
 }
 
 bool wxStatusBarPalm::Create(wxWindow *parent,
@@ -68,7 +66,6 @@ bool wxStatusBarPalm::Create(wxWindow *parent,
     parent->AddChild(this);
 
     SetFieldsCount(1);
-    SubclassWin(m_hWnd);
 
     return true;
 }

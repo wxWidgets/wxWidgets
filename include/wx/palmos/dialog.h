@@ -63,7 +63,7 @@ public:
     // -------------------------------
 
     // override some base class virtuals
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
     virtual void Raise();
 
@@ -75,28 +75,6 @@ public:
     void OnOK(wxCommandEvent& event);
     void OnApply(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
-
-    // Responds to colour changes
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    // Windows callbacks
-    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-
-    // obsolete methods
-    // ----------------
-
-    // use the other ctor
-    wxDEPRECATED( wxDialog(wxWindow *parent,
-             const wxString& title, bool modal,
-             int x = -1, int y= -1, int width = 500, int height = 500,
-             long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = wxDialogNameStr) );
-
-    // just call Show() or ShowModal()
-    wxDEPRECATED( void SetModal(bool flag) );
-
-    // use IsModal()
-    wxDEPRECATED( bool IsModalShowing() const );
 
 protected:
     // find the window to use as parent for this dialog if none has been

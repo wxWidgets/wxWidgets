@@ -70,7 +70,6 @@
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
-    EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
     EVT_PAINT(wxFrame::OnPaint)
 END_EVENT_TABLE()
 
@@ -232,11 +231,6 @@ bool wxFrame::HandleMenuSelect(EventType* event)
 
 #endif // wxUSE_MENUS_NATIVE
 
-// Responds to colour changes, and passes event on to children.
-void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
-{
-}
-
 void wxFrame::OnPaint(wxPaintEvent& event)
 {
 #if wxUSE_STATUSBAR
@@ -277,24 +271,6 @@ void wxFrame::PositionToolBar()
 // on the desktop, but are iconized/restored with it
 void wxFrame::IconizeChildFrames(bool bIconize)
 {
-}
-
-// ===========================================================================
-// message processing
-// ===========================================================================
-
-// ---------------------------------------------------------------------------
-// our private (non virtual) message handlers
-// ---------------------------------------------------------------------------
-
-bool wxFrame::HandlePaint()
-{
-    return false;
-}
-
-bool wxFrame::HandleSize(int x, int y, WXUINT id)
-{
-    return false;
 }
 
 // ----------------------------------------------------------------------------

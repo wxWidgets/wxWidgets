@@ -52,7 +52,6 @@ public:
     // -------------------------------
 
     // event handlers
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnPaint(wxPaintEvent& event);
 
     // Toolbar
@@ -65,8 +64,6 @@ public:
 #endif // wxUSE_TOOLBAR
 
     // event handlers
-    bool HandlePaint();
-    bool HandleSize(int x, int y, WXUINT flag);
     bool HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup);
 
     virtual wxPoint GetClientAreaOrigin() const;

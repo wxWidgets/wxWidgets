@@ -105,8 +105,6 @@ BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
     EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
     EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
 
-    EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
-
     EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
@@ -160,23 +158,6 @@ bool wxDialog::Create(wxWindow *parent,
     return false;
 }
 
-// deprecated ctor
-wxDialog::wxDialog(wxWindow *parent,
-                   const wxString& title,
-                   bool WXUNUSED(modal),
-                   int x,
-                   int y,
-                   int w,
-                   int h,
-                   long style,
-                   const wxString& name)
-{
-}
-
-void wxDialog::SetModal(bool WXUNUSED(flag))
-{
-}
-
 wxDialog::~wxDialog()
 {
 }
@@ -184,11 +165,6 @@ wxDialog::~wxDialog()
 // ----------------------------------------------------------------------------
 // showing the dialogs
 // ----------------------------------------------------------------------------
-
-bool wxDialog::IsModalShowing() const
-{
-    return false;
-}
 
 wxWindow *wxDialog::FindSuitableParent() const
 {
@@ -233,17 +209,4 @@ void wxDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 
 void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
-}
-
-void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
-{
-}
-
-// ---------------------------------------------------------------------------
-// dialog window proc
-// ---------------------------------------------------------------------------
-
-WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return false;
 }

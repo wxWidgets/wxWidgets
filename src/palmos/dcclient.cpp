@@ -42,14 +42,14 @@ struct WXDLLEXPORT wxPaintDCInfo
 {
     wxPaintDCInfo(wxWindow *win, wxDC *dc)
     {
-        hwnd = win->GetHWND();
-        hdc = dc->GetHDC();
-        count = 1;
+        handle = win->GetWinHandle();
+        hdc    = dc->GetHDC();
+        count  = 1;
     }
 
-    WXHWND    hwnd;       // window for this DC
-    WXHDC     hdc;        // the DC handle
-    size_t    count;      // usage count
+    WXWINHANDLE handle;       // window for this DC
+    WXHDC       hdc;        // the DC handle
+    size_t     count;      // usage count
 };
 
 #include "wx/arrimpl.cpp"

@@ -74,7 +74,11 @@ public:
     virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const = 0;
 };
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXPALMOS__)
+    #include "wx/palmos/datectrl.h"
+
+    #define wxHAS_NATIVE_DATEPICKCTRL
+#elif defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/datectrl.h"
 
     #define wxHAS_NATIVE_DATEPICKCTRL

@@ -217,18 +217,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     return false;
 }
 
-// Make sure the window style (etc.) reflects the HWND style (roughly)
-void wxTextCtrl::AdoptAttributesFromHWND()
-{
-}
-
 WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     return 0;
-}
-
-void wxTextCtrl::SetWindowStyleFlag(long style)
-{
 }
 
 // ----------------------------------------------------------------------------
@@ -565,15 +556,6 @@ bool wxTextCtrl::SendUpdateEvent()
 bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
     return false;
-}
-
-WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-    )
-{
-    return (WXHBRUSH) 0;
 }
 
 bool wxTextCtrl::AdjustSpaceLimit()

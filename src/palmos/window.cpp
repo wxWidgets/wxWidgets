@@ -93,10 +93,6 @@
 wxMenu *wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS_NATIVE
 
-// true if we had already created the std colour map, used by
-// wxGetStdColourMap() and wxWindow::OnSysColourChanged()           (FIXME-MT)
-static bool gs_hasStdCmap = false;
-
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
@@ -218,7 +214,6 @@ wxCONSTRUCTOR_DUMMY(wxWindow)
 
 BEGIN_EVENT_TABLE(wxWindowPalm, wxWindowBase)
     EVT_ERASE_BACKGROUND(wxWindowPalm::OnEraseBackground)
-    EVT_SYS_COLOUR_CHANGED(wxWindowPalm::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowPalm::OnInitDialog)
 END_EVENT_TABLE()
 
@@ -237,15 +232,10 @@ wxWindow *wxWindowPalm::FindItem(long id) const
 }
 
 // Find an item given the MS Windows handle
-wxWindow *wxWindowPalm::FindItemByHWND(WXHWND hWnd, bool controlOnly) const
+wxWindow *wxWindowPalm::FindItemByWinHandle(WXWINHANDLE handle, bool controlOnly) const
 {
+    // TODO
     return NULL;
-}
-
-// Default command handler
-bool wxWindowPalm::PalmCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
-{
-    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -254,6 +244,7 @@ bool wxWindowPalm::PalmCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 
 void wxWindowPalm::Init()
 {
+    m_handle = 0;
 }
 
 // Destructor
@@ -263,11 +254,11 @@ wxWindowPalm::~wxWindowPalm()
 
 // real construction (Init() must have been called before!)
 bool wxWindowPalm::Create(wxWindow *parent,
-                         wxWindowID id,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         long style,
-                         const wxString& name)
+                          wxWindowID id,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style,
+                          const wxString& name)
 {
     wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
 
@@ -417,30 +408,9 @@ bool wxWindowPalm::ScrollPages(int pages)
     return false;
 }
 
-// ---------------------------------------------------------------------------
-// subclassing
-// ---------------------------------------------------------------------------
-
-void wxWindowPalm::SubclassWin(WXHWND hWnd)
-{
-}
-
-void wxWindowPalm::UnsubclassWin()
-{
-}
-
-bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
-{
-    return false;
-}
-
 // ----------------------------------------------------------------------------
 // Style handling
 // ----------------------------------------------------------------------------
-
-void wxWindowPalm::SetWindowStyleFlag(long flags)
-{
-}
 
 WXDWORD wxWindowPalm::PalmGetStyle(long flags, WXDWORD *exstyle) const
 {
@@ -450,11 +420,6 @@ WXDWORD wxWindowPalm::PalmGetStyle(long flags, WXDWORD *exstyle) const
 // Setup background and foreground colours correctly
 void wxWindowPalm::SetupColours()
 {
-}
-
-bool wxWindowPalm::IsMouseInWindow() const
-{
-    return false;
 }
 
 void wxWindowPalm::OnInternalIdle()
@@ -477,6 +442,23 @@ void wxWindowPalm::Thaw()
 
 void wxWindowPalm::Refresh(bool eraseBack, const wxRect *rect)
 {
+    WinHandle handle = GetWinHandle();
+    if(handle)
+    {
+        if(rect)
+        {
+            RectangleType dirtyRect;
+            dirtyRect.topLeft.x = rect->GetX();
+            dirtyRect.topLeft.y = rect->GetY();
+            dirtyRect.extent.x = rect->GetWidth();
+            dirtyRect.extent.y = rect->GetHeight();
+            WinInvalidateRect(handle, &dirtyRect);
+        }
+        else
+        {
+            WinInvalidateWindow(handle);
+        }
+    }
 }
 
 void wxWindowPalm::Update()
@@ -552,6 +534,61 @@ void wxWindowPalm::DoMoveWindow(int x, int y, int width, int height)
 // width/height
 void wxWindowPalm::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
+    // get the current size and position...
+    int currentX, currentY;
+    GetPosition(&currentX, &currentY);
+    int currentW,currentH;
+    GetSize(&currentW, &currentH);
+
+    // ... and don't do anything (avoiding flicker) if it's already ok
+    if ( x == currentX && y == currentY &&
+         width == currentW && height == currentH )
+    {
+        return;
+    }
+
+    if ( x == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+        x = currentX;
+    if ( y == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+        y = currentY;
+
+    AdjustForParentClientOrigin(x, y, sizeFlags);
+
+    wxSize size = wxDefaultSize;
+    if ( width == wxDefaultCoord )
+    {
+        if ( sizeFlags & wxSIZE_AUTO_WIDTH )
+        {
+            size = DoGetBestSize();
+            width = size.x;
+        }
+        else
+        {
+            // just take the current one
+            width = currentW;
+        }
+    }
+
+    if ( height == wxDefaultCoord )
+    {
+        if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
+        {
+            if ( size.x == wxDefaultCoord )
+            {
+                size = DoGetBestSize();
+            }
+            //else: already called DoGetBestSize() above
+
+            height = size.y;
+        }
+        else
+        {
+            // just take the current one
+            height = currentH;
+        }
+    }
+
+    DoMoveWindow(x, y, width, height);
 }
 
 void wxWindowPalm::DoSetClientSize(int width, int height)
@@ -601,60 +638,15 @@ bool wxWindowPalm::DoPopupMenu(wxMenu *menu, int x, int y)
 
 #endif // wxUSE_MENUS_NATIVE
 
-// ===========================================================================
-// pre/post message processing
-// ===========================================================================
-
-WXLRESULT wxWindowPalm::PalmDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return false;
-}
-
-bool wxWindowPalm::PalmProcessMessage(WXMSG* pMsg)
-{
-    return false;
-}
-
-bool wxWindowPalm::PalmTranslateMessage(WXMSG* pMsg)
-{
-    return false;
-}
-
-bool wxWindowPalm::PalmShouldPreProcessMessage(WXMSG* WXUNUSED(pMsg))
-{
-    return false;
-}
-
-// ---------------------------------------------------------------------------
-// Main wxWidgets window proc and the window proc for wxWindow
-// ---------------------------------------------------------------------------
-
-// Hook for new window just as it's being created, when the window isn't yet
-// associated with the handle
-
-// implementation of wxWindowCreationHook class: it just sets gs_winBeingCreated to the
-// window being created and insures that it's always unset back later
-wxWindowCreationHook::wxWindowCreationHook(wxWindowPalm *winBeingCreated)
-{
-}
-
-wxWindowCreationHook::~wxWindowCreationHook()
-{
-}
-
-WXLRESULT wxWindowPalm::PalmWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return false;
-}
-
 // ----------------------------------------------------------------------------
 // wxWindow <-> HWND map
 // ----------------------------------------------------------------------------
 
 wxWinHashTable *wxWinHandleHash = NULL;
 
-wxWindow *wxFindWinFromHandle(WXHWND hWnd)
+wxWindow *wxFindWinFromWinHandle(WXWINHANDLE handle)
 {
+    // TODO
     return NULL;
 }
 
@@ -663,34 +655,23 @@ void wxRemoveHandleAssociation(wxWindowPalm *win)
 }
 
 // ----------------------------------------------------------------------------
-// various Palm speciic class dependent functions
+// various Palm specific class dependent functions
 // ----------------------------------------------------------------------------
 
-// Default destroyer - override if you destroy it in some other way
-// (e.g. with MDI child windows)
-void wxWindowPalm::PalmDestroyWindow()
-{
-}
-
 bool wxWindowPalm::PalmGetCreateWindowCoords(const wxPoint& pos,
-                                           const wxSize& size,
-                                           int& x, int& y,
-                                           int& w, int& h) const
+                                             const wxSize& size,
+                                             int& x, int& y,
+                                             int& w, int& h) const
 {
     return false;
 }
 
-WXHWND wxWindowPalm::PalmGetParent() const
-{
-    return NULL;
-}
-
 bool wxWindowPalm::PalmCreate(const wxChar *wclass,
-                            const wxChar *title,
-                            const wxPoint& pos,
-                            const wxSize& size,
-                            WXDWORD style,
-                            WXDWORD extendedStyle)
+                              const wxChar *title,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              WXDWORD style,
+                              WXDWORD extendedStyle)
 {
     return false;
 }
@@ -700,180 +681,12 @@ bool wxWindowPalm::PalmCreate(const wxChar *wclass,
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
-// end session messages
-// ---------------------------------------------------------------------------
-
-bool wxWindowPalm::HandleQueryEndSession(long logOff, bool *mayEnd)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleEndSession(bool endSession, long logOff)
-{
-    return false;
-}
-
-// ---------------------------------------------------------------------------
-// window creation/destruction
-// ---------------------------------------------------------------------------
-
-bool wxWindowPalm::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleDestroy()
-{
-    return false;
-}
-
-// ---------------------------------------------------------------------------
-// activation/focus
-// ---------------------------------------------------------------------------
-
-bool wxWindowPalm::HandleActivate(int state,
-                              bool WXUNUSED(minimized),
-                              WXHWND WXUNUSED(activate))
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleSetFocus(WXHWND hwnd)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleKillFocus(WXHWND hwnd)
-{
-    return false;
-}
-
-// ---------------------------------------------------------------------------
-// miscellaneous
-// ---------------------------------------------------------------------------
-
-bool wxWindowPalm::HandleShow(bool show, int WXUNUSED(status))
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleDropFiles(WXWPARAM wParam)
-{
-    return false;
-}
-
-
-bool wxWindowPalm::HandleSetCursor(WXHWND WXUNUSED(hWnd),
-                                  short nHitTest,
-                                  int WXUNUSED(mouseMsg))
-{
-    return false;
-}
-
-// ---------------------------------------------------------------------------
-// owner drawn stuff
-// ---------------------------------------------------------------------------
-
-#if (wxUSE_OWNER_DRAWN && wxUSE_MENUS_NATIVE) || \
-        (wxUSE_CONTROLS && !defined(__WXUNIVERSAL__))
-    #define WXUNUSED_UNLESS_ODRAWN(param) param
-#else
-    #define WXUNUSED_UNLESS_ODRAWN(param)
-#endif
-
-bool
-wxWindowPalm::PalmOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
-                           WXDRAWITEMSTRUCT * WXUNUSED_UNLESS_ODRAWN(itemStruct))
-{
-    return false;
-}
-
-bool
-wxWindowPalm::PalmOnMeasureItem(int WXUNUSED_UNLESS_ODRAWN(id),
-                              WXMEASUREITEMSTRUCT *
-                                  WXUNUSED_UNLESS_ODRAWN(itemStruct))
-{
-    return false;
-}
-
-// ---------------------------------------------------------------------------
-// colours and palettes
-// ---------------------------------------------------------------------------
-
-bool wxWindowPalm::HandleSysColorChange()
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleDisplayChange()
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleCtlColor(WXHBRUSH *brush,
-                              WXHDC pDC,
-                              WXHWND pWnd,
-                              WXUINT nCtlColor,
-                              WXUINT message,
-                              WXWPARAM wParam,
-                              WXLPARAM lParam)
-{
-    return false;
-}
-
-// Define for each class of dialog and control
-WXHBRUSH wxWindowPalm::OnCtlColor(WXHDC WXUNUSED(hDC),
-                                 WXHWND WXUNUSED(hWnd),
-                                 WXUINT WXUNUSED(nCtlColor),
-                                 WXUINT WXUNUSED(message),
-                                 WXWPARAM WXUNUSED(wParam),
-                                 WXLPARAM WXUNUSED(lParam))
-{
-    return (WXHBRUSH)0;
-}
-
-bool wxWindowPalm::HandlePaletteChanged(WXHWND hWndPalChange)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleCaptureChanged(WXHWND hWndGainedCapture)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleQueryNewPalette()
-{
-    return false;
-}
-
-// Responds to colour changes: passes event on to children.
-void wxWindowPalm::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
-{
-}
-
-// ---------------------------------------------------------------------------
 // painting
 // ---------------------------------------------------------------------------
-
-bool wxWindowPalm::HandlePaint()
-{
-    return false;
-}
 
 // Can be called from an application's OnPaint handler
 void wxWindowPalm::OnPaint(wxPaintEvent& event)
 {
-}
-
-bool wxWindowPalm::HandleEraseBkgnd(WXHDC hdc)
-{
-    return false;
 }
 
 void wxWindowPalm::OnEraseBackground(wxEraseEvent& event)
@@ -884,122 +697,12 @@ void wxWindowPalm::OnEraseBackground(wxEraseEvent& event)
 // moving and resizing
 // ---------------------------------------------------------------------------
 
-bool wxWindowPalm::HandleMinimize()
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleMaximize()
-{
-    return false;
-}
-
 bool wxWindowPalm::HandleMove(int x, int y)
 {
     return false;
 }
 
 bool wxWindowPalm::HandleMoving(wxRect& rect)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleSize(int WXUNUSED(w), int WXUNUSED(h),
-                             WXUINT WXUNUSED(flag))
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleSizing(wxRect& rect)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleGetMinMaxInfo(void *mmInfo)
-{
-    return false;
-}
-
-// ---------------------------------------------------------------------------
-// command messages
-// ---------------------------------------------------------------------------
-
-bool wxWindowPalm::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
-{
-    return false;
-}
-
-// ---------------------------------------------------------------------------
-// mouse events
-// ---------------------------------------------------------------------------
-
-void wxWindowPalm::InitMouseEvent(wxMouseEvent& event,
-                                 int x, int y,
-                                 WXUINT flags)
-{
-}
-
-// Windows doesn't send the mouse events to the static controls (which are
-// transparent in the sense that their WM_NCHITTEST handler returns
-// HTTRANSPARENT) at all but we want all controls to receive the mouse events
-// and so we manually check if we don't have a child window under mouse and if
-// we do, send the event to it instead of the window Windows had sent WM_XXX
-// to.
-//
-// Notice that this is not done for the mouse move events because this could
-// (would?) be too slow, but only for clicks which means that the static texts
-// still don't get move, enter nor leave events.
-static wxWindowPalm *FindWindowForMouseEvent(wxWindowPalm *win, int *x, int *y) //TW:REQ:Univ
-{
-    return NULL;
-}
-
-bool wxWindowPalm::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleMouseMove(int x, int y, WXUINT flags)
-{
-    return false;
-}
-
-
-bool wxWindowPalm::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
-{
-    return false;
-}
-
-
-// ---------------------------------------------------------------------------
-// keyboard handling
-// ---------------------------------------------------------------------------
-
-// create the key event of the given type for the given key - used by
-// HandleChar and HandleKeyDown/Up
-wxKeyEvent wxWindowPalm::CreateKeyEvent(wxEventType evType,
-                                       int id,
-                                       WXLPARAM lParam,
-                                       WXWPARAM wParam) const
-{
-    wxKeyEvent event(evType);
-
-    return event;
-}
-
-// isASCII is true only when we're called from WM_CHAR handler and not from
-// WM_KEYDOWN one
-bool wxWindowPalm::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam)
-{
-    return false;
-}
-
-bool wxWindowPalm::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
 {
     return false;
 }
@@ -1018,8 +721,9 @@ bool wxWindowPalm::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
 // ---------------------------------------------------------------------------
 
 bool wxWindowPalm::PalmOnScroll(int orientation, WXWORD wParam,
-                              WXWORD pos, WXHWND control)
+                                WXWORD pos, WXWINHANDLE control)
 {
+    // TODO
     return false;
 }
 
@@ -1027,53 +731,9 @@ bool wxWindowPalm::PalmOnScroll(int orientation, WXWORD wParam,
 // global functions
 // ===========================================================================
 
-void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont *the_font)
+void wxGetCharSize(WXWINHANDLE wnd, int *x, int *y, const wxFont *the_font)
 {
-}
-
-// Returns 0 if was a normal ASCII value, not a special key. This indicates that
-// the key should be ignored by WM_KEYDOWN and processed by WM_CHAR instead.
-int wxCharCodePalmToWX(int keySym, WXLPARAM lParam)
-{
-    return 0;
-}
-
-int wxCharCodeWXToPalm(int id, bool *isVirtual)
-{
-    return 0;
-}
-
-bool wxGetKeyState(wxKeyCode key)
-{
-    return false;
-}
-
-wxWindow *wxGetActiveWindow()
-{
-    return NULL;
-}
-
-extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
-{
-    return NULL;
-}
-
-// Find the wxWindow at the current mouse position, returning the mouse
-// position.
-wxWindow* wxFindWindowAtPointer(wxPoint& pt)
-{
-    return NULL;
-}
-
-wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
-{
-    return NULL;
-}
-
-// Get the current mouse position.
-wxPoint wxGetMousePosition()
-{
-    return wxPoint(0, 0);
+    // TODO
 }
 
 #if wxUSE_HOTKEY
@@ -1087,15 +747,6 @@ bool wxWindowPalm::UnregisterHotKey(int hotkeyId)
 {
     return false;
 }
-
-#if wxUSE_ACCEL
-
-bool wxWindowPalm::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
-{
-    return false;
-}
-
-#endif // wxUSE_ACCEL
 
 #endif // wxUSE_HOTKEY
 

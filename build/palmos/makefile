@@ -200,6 +200,7 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/palmos/control.cpp \
 ../../src/palmos/cursor.cpp \
 ../../src/palmos/data.cpp \
+../../src/palmos/datectrl.cpp \
 ../../src/palmos/dc.cpp \
 ../../src/palmos/dcclient.cpp \
 ../../src/palmos/dcmemory.cpp \

@@ -152,28 +152,3 @@ void wxDisplaySizeMM(int *width, int *height)
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
 }
-
-// ---------------------------------------------------------------------------
-// window information functions
-// ---------------------------------------------------------------------------
-
-wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd)
-{
-    wxString str;
-
-    return str;
-}
-
-wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
-{
-    wxString str;
-
-    return str;
-}
-
-WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
-{
-    return 0;
-}
-
-

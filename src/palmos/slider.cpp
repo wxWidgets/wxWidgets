@@ -117,7 +117,6 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     // wxSL_RIGHT is ignored - always off
     // wxSL_TOP is ignored - always off
     // wxSL_SELRANGE is ignored - always off
-    // wxSL_INVERSE is ignored - always off
     // wxSL_VERTICAL is impossible in native form
     wxCHECK_MSG(!(style & wxSL_VERTICAL), false, _T("non vertical slider on PalmOS"));
 
@@ -196,6 +195,14 @@ int wxSlider::GetPageSize() const
     return ret;
 }
 
+int wxSlider::PalmInvertOrNot(int value) const
+{
+    if (m_windowStyle & wxSL_INVERSE)
+        return (GetMax() + GetMin()) - value;
+    else
+        return value;
+}
+
 int wxSlider::GetValue() const
 {
     ControlType *control = (ControlType *)GetObjectPtr();
@@ -203,12 +210,12 @@ int wxSlider::GetValue() const
         return 0;
     uint16_t ret;
     CtlGetSliderValues(control, NULL, NULL, NULL, &ret);
-    return ret;
+    return PalmInvertOrNot(ret);
 }
 
 void wxSlider::SetValue(int value)
 {
-    SetIntValue(value);
+    SetIntValue(PalmInvertOrNot(value));
     m_oldValue = m_oldPos = value;
 }
 
@@ -328,7 +335,7 @@ bool wxSlider::SendUpdatedEvent()
 bool wxSlider::SendScrollEvent(EventType* event)
 {
     wxEventType scrollEvent;
-    int newPos = event->data.ctlRepeat.value;
+    int newPos = PalmInvertOrNot(event->data.ctlRepeat.value);
     if ( newPos == m_oldPos )
     {
         // nothing changed since last event

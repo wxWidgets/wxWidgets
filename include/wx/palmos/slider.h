@@ -85,6 +85,9 @@ protected:
 private:
 
     void Init();
+
+    int PalmInvertOrNot(int value) const;
+
     int m_oldPos;    // needed for tracing thumb position during scrolling
     int m_oldValue;  // needed for comparing thumb position before and after scrolling
     int m_lineSize;  // imitate line size

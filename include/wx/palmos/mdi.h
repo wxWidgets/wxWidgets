@@ -81,13 +81,7 @@ public:
     // handlers
     // --------
 
-    // Responds to colour changes
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
     void OnSize(wxSizeEvent& event);
-
-    bool HandleActivate(int state, bool minimized, WXHWND activate);
-    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
 
     // override window proc for MDI-specific message processing
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
@@ -106,7 +100,7 @@ protected:
     wxMDIChildFrame *               m_currentChild;
     wxMenu*                         m_windowMenu;
 
-    // TRUE if MDI Frame is intercepting commands, not child
+    // true if MDI Frame is intercepting commands, not child
     bool m_parentFrameActive;
 
 private:
@@ -148,10 +142,10 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual bool IsTopLevel() const { return FALSE; }
+    virtual bool IsTopLevel() const { return false; }
 
     // MDI operations
-    virtual void Maximize(bool maximize = TRUE);
+    virtual void Maximize(bool maximize = true);
     virtual void Restore();
     virtual void Activate();
 
@@ -161,8 +155,6 @@ public:
     // Handlers
     bool HandleMDIActivate(long bActivate, WXHWND, WXHWND);
     bool HandleWindowPosChanging(void *lpPos);
-    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
-    bool HandleGetMinMaxInfo(void *mmInfo);
 
     virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     virtual WXLRESULT MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
@@ -178,7 +170,7 @@ protected:
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoSetClientSize(int width, int height);
     virtual void InternalSetMenuBar();
-    virtual bool IsMDIChild() const { return TRUE; }
+    virtual bool IsMDIChild() const { return true; }
 
     virtual WXHICON GetDefaultIcon() const;
 
