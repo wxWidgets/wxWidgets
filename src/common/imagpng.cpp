@@ -75,7 +75,8 @@ enum Transparency
 // have transparent pixels, i.e. either Transparency_Alpha or Transparency_Mask
 static Transparency
 CheckTransparency(const unsigned char *ptr,
-                  png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h);
+                  png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h,
+                  size_t numColBytes);
 
 // init the alpha channel for the image and fill it with 1s up to (x, y)
 static unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y);
