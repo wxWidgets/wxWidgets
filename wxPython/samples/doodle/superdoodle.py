@@ -57,8 +57,7 @@ class DoodleFrame(wx.Frame):
         box.Add(self.doodle, 1, wx.EXPAND)
 
         # Tell the frame that it should layout itself in response to
-        # size events.
-        self.SetAutoLayout(True)
+        # size events using this sizer.
         self.SetSizer(box)
 
 
