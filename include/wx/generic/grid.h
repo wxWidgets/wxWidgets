@@ -997,7 +997,9 @@ public:
     void DoEndDragResizeCol();
 
     wxGridTableBase * GetTable() const { return m_table; }
-    bool SetTable( wxGridTableBase *table, bool takeOwnership=FALSE );
+    bool SetTable( wxGridTableBase *table, bool takeOwnership=FALSE,
+		   wxGrid::wxGridSelectionModes selmode =
+		   wxGrid::wxGridSelectCells );
 
     void ClearGrid();
     bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels=TRUE );

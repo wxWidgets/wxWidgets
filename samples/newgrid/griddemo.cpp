@@ -83,6 +83,9 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
     EVT_MENU( ID_DELETECOL, GridFrame::DeleteSelectedCols )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
+    EVT_MENU( ID_SELCELLS,  GridFrame::SelectCells )
+    EVT_MENU( ID_SELROWS,  GridFrame::SelectRows )
+    EVT_MENU( ID_SELCOLS,  GridFrame::SelectCols )
 
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
@@ -158,6 +161,16 @@ GridFrame::GridFrame()
     editMenu->Append( ID_DELETEROW, "Delete selected ro&ws" );
     editMenu->Append( ID_DELETECOL, "Delete selected co&ls" );
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
+
+    wxMenu *selectionMenu = new wxMenu;
+
+    editMenu->Append( ID_CHANGESEL, "Change &selection mode",
+		      selectionMenu,
+		      "Change selection mode" );
+
+    selectionMenu->Append( ID_SELCELLS, "Select &Cells" );
+    selectionMenu->Append( ID_SELROWS, "Select &Rows" );
+    selectionMenu->Append( ID_SELCOLS, "Select C&ols" );
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append( ID_ABOUT, "&About wxGrid demo" );
@@ -482,33 +495,44 @@ void GridFrame::InsertCol( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
 {
-#if 0
     if ( grid->IsSelection() )
     {
-        int topRow, bottomRow, leftCol, rightCol;
-        grid->GetSelection( &topRow, &leftCol, &bottomRow, &rightCol );
-        grid->DeleteRows( topRow, bottomRow - topRow + 1 );
+        for ( int n = 0; n < grid->GetNumberRows(); n++ )
+	    if ( grid->IsInSelection( n , 0 ) )
+	        grid->DeleteRows( n, 1 );
     }
-#endif
 }
 
 
 void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 {
-#if 0
     if ( grid->IsSelection() )
     {
-        int topRow, bottomRow, leftCol, rightCol;
-        grid->GetSelection( &topRow, &leftCol, &bottomRow, &rightCol );
-        grid->DeleteCols( leftCol, rightCol - leftCol + 1 );
+        for ( int n = 0; n < grid->GetNumberCols(); n++ )
+	    if ( grid->IsInSelection( 0 , n ) )
+	        grid->DeleteCols( n, 1 );
     }
-#endif
 }
 
 
 void GridFrame::ClearGrid( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->ClearGrid();
+}
+
+void GridFrame::SelectCells( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->SetSelectionMode( wxGrid::wxGridSelectCells );
+}
+
+void GridFrame::SelectRows( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->SetSelectionMode( wxGrid::wxGridSelectRows );
+}
+
+void GridFrame::SelectCols( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->SetSelectionMode( wxGrid::wxGridSelectColumns );
 }
 
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )

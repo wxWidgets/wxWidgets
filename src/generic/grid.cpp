@@ -3165,9 +3165,9 @@ bool wxGrid::CreateGrid( int numRows, int numCols,
         m_table->SetView( this );
         m_ownTable = TRUE;
         Init();
+        m_selection = new wxGridSelection( this, selmode );
         m_created = TRUE;
     }
-    m_selection = new wxGridSelection( this, selmode );
     return m_created;
 }
 
@@ -3181,7 +3181,8 @@ void wxGrid::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
         m_selection->SetSelectionMode( selmode );
 }
 
-bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership )
+bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
+                       wxGrid::wxGridSelectionModes selmode )
 {
     if ( m_created )
     {
@@ -3190,6 +3191,7 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership )
         // View at runtime.  Is there anything in the implmentation that would
         // prevent this?
 
+        // At least, you now have to copy with m_selection
         wxFAIL_MSG( wxT("wxGrid::CreateGrid or wxGrid::SetTable called more than once") );
         return FALSE;
     }
@@ -3203,6 +3205,7 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership )
         if (takeOwnership)
             m_ownTable = TRUE;
         Init();
+        m_selection = new wxGridSelection( this, selmode );
         m_created = TRUE;
     }
 
@@ -4391,10 +4394,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             if ( m_selectingTopLeft != wxGridNoCellCoords &&
                  m_selectingBottomRight != wxGridNoCellCoords )
             {
-                 m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
-                                           m_selectingTopLeft.GetCol(),
-                                           m_selectingBottomRight.GetRow(),
-                                           m_selectingBottomRight.GetCol() );
+                m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
+                                          m_selectingTopLeft.GetCol(),
+                                          m_selectingBottomRight.GetRow(),
+                                          m_selectingBottomRight.GetCol() );
                 if (m_winCapture)
                 {
                     m_winCapture->ReleaseMouse();

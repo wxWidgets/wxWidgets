@@ -147,9 +147,10 @@ void wxGridSelection::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
             else // selmode == wxGridSelectColumns)
                 SelectCol( col );
         }
-        while( ( n = m_blockSelectionTopLeft.GetCount() ) > 0)
+
+        for (n = 0; n < m_blockSelectionTopLeft.GetCount(); n++)
+        // Note that m_blockSelectionTopLeft's size may be changing!
         {
-            n--;
             wxGridCellCoords& coords = m_blockSelectionTopLeft[n];
             int topRow = coords.GetRow();
             int leftCol = coords.GetCol();
@@ -177,6 +178,7 @@ void wxGridSelection::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
                 }
             }
         }
+        m_selectionMode = selmode;
     }
 }
 
@@ -457,9 +459,15 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol, int bottomRow, int r
 void wxGridSelection::SelectCell( int row, int col)
 {
     if ( m_selectionMode == wxGrid::wxGridSelectRows )
+    {
         SelectBlock(row, 0, row, m_grid->GetNumberCols() - 1 );
+        return;
+    }
     else if ( m_selectionMode == wxGrid::wxGridSelectColumns )
+    {
         SelectBlock(0, col, m_grid->GetNumberRows() - 1, col );
+        return;
+    }
     else if ( IsInSelection ( row, col ) )
         return;
     m_cellSelection.Add( wxGridCellCoords( row, col ) );
