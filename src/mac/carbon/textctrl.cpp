@@ -233,6 +233,8 @@ protected :
 
 // implementation available under OSX
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+
 class wxMacMLTEHIViewControl : public wxMacMLTEControl 
 {
 public :
@@ -247,6 +249,8 @@ protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
 } ;
+
+#endif
 
 class wxMacUnicodeTextControl : public wxMacTextControl
 {
@@ -300,18 +304,6 @@ public :
 
 
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
-#if TARGET_API_MAC_OSX
-    #define wxMAC_USE_MLTE 1
-    #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-        #define wxMAC_USE_MLTE_HIVIEW 1
-    #else
-        #define wxMAC_USE_MLTE_HIVIEW 0
-    #endif
-#else
- // there is no unicodetextctrl on classic, and hopefully MLTE works better there
-    #define wxMAC_USE_MLTE 1
-    #define wxMAC_USE_MLTE_HIVIEW 0
-#endif
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
@@ -357,19 +349,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     m_macIsUserPane = FALSE ;
     m_editable = true ;
 
-    // base initialization
-    
     if ( !HasFlag(wxNO_BORDER) )
-    {
-#if wxMAC_USE_MLTE
-#if wxMAC_USE_MLTE_HIVIEW
         style |= wxSUNKEN_BORDER ;
-#endif
-#endif
-    }
-    else
-    {
-    }
     
     if ( !wxTextCtrlBase::Create(parent, id, pos, size, style & ~(wxHSCROLL|wxVSCROLL), validator, name) )
         return FALSE;
@@ -386,15 +367,21 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_windowStyle |= wxTE_PROCESS_ENTER;
         style |= wxTE_PROCESS_ENTER ;
     }
-#if wxMAC_USE_MLTE
-#if wxMAC_USE_MLTE_HIVIEW
-    m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
+#if TARGET_API_MAC_OSX
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+    if ( UMAGetSystemVersion() >= 0x1030 )
+    {
+        m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
+    }
+    else
+#endif
+    {     
+        m_peer = new wxMacUnicodeTextControl( this , str , pos , size , style ) ;
+    }
 #else
     m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
-#endif        
-#else // wxMAC_USE_MLTE
-    m_peer = new wxMacUnicodeTextControl( this , str , pos , size , style ) ;
 #endif
+
     MacPostControlCreate(pos,size) ;
 
     if ( m_windowStyle & wxTE_READONLY)
@@ -647,12 +634,8 @@ wxSize wxTextCtrl::DoGetBestSize() const
             break ; 
     }
 
-#if !wxMAC_USE_MLTE
-    // unicode text control is using client size, ie 3 pixels on every side
-    // TODO make this fit into normal window size concept, probably having 
-    // to reintroduce the margin vars
-    hText -= 6 ;
-#endif
+    if ( HasFlag(wxNO_BORDER) )
+        hText -= 6 ;
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {

@@ -2387,12 +2387,16 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
 
     if ( MacGetTopLevelWindow() && m_peer->NeedsFocusRect() )
     {
-        wxWindowDC dc(this) ;
-        wxMacPortSetter helper(&dc) ;
+        wxMacWindowStateSaver sv( this ) ;
+//        wxWindowDC dc(this) ;
+//        wxMacPortSetter helper(&dc) ;
 
         int w , h ;
+        int x , y ;
+        x = y = 0 ;
+        MacWindowToRootWindow( &x , &y ) ;
         GetSize( &w , &h ) ;
-        Rect rect = { dc.m_macLocalOrigin.y , dc.m_macLocalOrigin.x , h + dc.m_macLocalOrigin.y , w + dc.m_macLocalOrigin.x } ;
+        Rect rect = {y , x , h + y , w + x } ;
 
         if ( event.GetEventType() == wxEVT_SET_FOCUS )
             DrawThemeFocusRect( &rect , true ) ;

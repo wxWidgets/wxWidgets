@@ -44,9 +44,12 @@ MenuHandle NewUniqueMenu()
 // around text control.
 static const wxCoord MARGIN = 6;
 static const int    POPUPWIDTH = 24;
+// this is the border a focus rect on OSX is needing
+static const int    TEXTFOCUSBORDER = 3 ;
 #else
 static const wxCoord MARGIN = 2;
 static const int    POPUPWIDTH = 18;
+static const int    TEXTFOCUSBORDER = 0 ;
 #endif
 static const int    POPUPHEIGHT = 23;
 
@@ -209,22 +212,15 @@ wxSize wxComboBox::DoGetBestSize() const
         if (sizeText.y > size.y)
             size.y = sizeText.y;
         size.x = POPUPWIDTH + sizeText.x + MARGIN;
+        size.x += TEXTFOCUSBORDER ;
+        size.y += 2 * TEXTFOCUSBORDER ;
     }
-
     return size;
 }
 
 void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
-    height = POPUPHEIGHT;
-    int origin = 0;
-#if TARGET_API_MAC_OSX
-    // give the controls some padding so that the text ctrl's borders
-    // and blue highlight can appear
-    origin = 4;
-#endif
-
-    wxControl::DoMoveWindow(x, y, width + origin, height + origin);
-
+    wxControl::DoMoveWindow(x, y, width , height );
+    
     if ( m_text == NULL )
     {
         // we might not be fully constructed yet, therefore watch out...
@@ -234,14 +230,8 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
     else
     {
         wxCoord wText = width - POPUPWIDTH - MARGIN;
-#if TARGET_API_MAC_OSX
-        // also, we need to shrink the size of the wxTextCtrl a bit
-        // to make it appear properly on OS X.
-        height -= 8;
-        wText -= 8;
-#endif
-        m_text->SetSize(origin, origin, wText, height);
-        m_choice->SetSize(origin + wText + MARGIN, 0, POPUPWIDTH, -1);
+        m_text->SetSize(TEXTFOCUSBORDER, TEXTFOCUSBORDER, wText, -1 );
+        m_choice->SetSize(TEXTFOCUSBORDER + wText + MARGIN, TEXTFOCUSBORDER, POPUPWIDTH, -1);
     }    
 }
 
@@ -327,8 +317,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     else
     {
         m_text = new wxComboBoxText(this);
-        if ( size.y == -1 ) {
-          csize.y = m_text->GetSize().y ;
+        if ( size.y == -1 ) 
+        {
+            csize.y = m_text->GetSize().y ;
+            csize.y += 2 * TEXTFOCUSBORDER ;
         }
     }
     
