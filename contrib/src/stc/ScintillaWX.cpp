@@ -181,6 +181,11 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     stc   = win;
     wheelRotation = 0;
     Initialise();
+#ifdef __WXMSW__
+    sysCaretBitmap = 0;
+    sysCaretWidth = 0;
+    sysCaretHeight = 0;
+#endif
 }
 
 
