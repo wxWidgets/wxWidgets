@@ -62,7 +62,7 @@ struct WXDLLEXPORT wxNativeEncodingInfo
     wxString xregistry,
              xencoding;
 #elif defined(__WXMGL__)
-    // FIXME_MGL -- do we need something more?
+    // we don't need additional information
 #else
     #error "Unsupported toolkit"
 #endif
@@ -94,5 +94,13 @@ extern bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
 #ifdef _WX_X_FONTLIKE
     #include "wx/unix/fontutil.h"
 #endif // X || GDK
+
+// ----------------------------------------------------------------------------
+// font-related functions (MGL)
+// ----------------------------------------------------------------------------
+
+#ifdef __WXMGL__
+    #include "wx/mgl/fontutil.h"
+#endif // __WXMGL__
 
 #endif // _WX_FONTUTIL_H_
