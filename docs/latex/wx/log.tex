@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        log.tex
+%% Purpose:     wxLog and related classes documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     some time ago
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 1997-2001 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxLog}}\label{wxlog}
 
 wxLog class defines the interface for the {\it log targets} used by wxWindows
@@ -28,14 +39,13 @@ No base class
 \membersection{Static functions}
 
 The functions in this section work with and manipulate the active log target.
-The {\it OnLog()} is called by the {\it wxLogXXX()} functions and invokes the 
-{\it DoLog()} of the active log target if any. Get/Set methods are used to
-install/query the current active target and, finally, 
-\helpref{DontCreateOnDemand()}{wxlogdontcreateondemand} 
-disables the automatic creation of a standard log target
-if none actually exists. It is only useful when the application is terminating
-and shouldn't be used in other situations because it may easily lead to a loss
-of messages.
+The \helpref{OnLog()}{wxlogonlog} is called by the {\it wxLogXXX()} functions
+and invokes the \helpref{DoLog()}{wxlogdolog} of the active log target if any.
+Get/Set methods are used to install/query the current active target and,
+finally, \helpref{DontCreateOnDemand()}{wxlogdontcreateondemand} disables the
+automatic creation of a standard log target if none actually exists. It is
+only useful when the application is terminating and shouldn't be used in other
+situations because it may easily lead to a loss of messages.
 
 \helpref{OnLog}{wxlogonlog}\\
 \helpref{GetActiveTarget}{wxloggetactivetarget}\\
@@ -44,19 +54,33 @@ of messages.
 \helpref{Suspend}{wxlogsuspend}\\
 \helpref{Resume}{wxlogresume}
 
-\membersection{Message buffering}
+\membersection{Logging functions}
 
-Some of wxLog implementations, most notably the standard
-wxLogGui class, buffer the messages (for example, to avoid
-showing the user a zillion of modal message boxes one after another - which
-would be really annoying). {\it Flush()} shows them all and clears the buffer
-contents. Although this function doesn't do anything if the buffer is already
-empty, {\it HasPendingMessages()} is also provided which allows to explicitly
-verify it.
+There are two functions which must be implemented by any derived class to
+actually process the log messages: \helpref{DoLog}{wxlogdolog} and 
+\helpref{DoLogString}{wxlogdologstring}. The second function receives a string
+which just has to be output in some way and the easiest way to write a new log
+target is to override just this function in the derived class. If more control
+over the output format is needed, then the first function must be overridden
+which allows to construct custom messages depending on the log level or even
+do completely different things depending on the message severity (for example,
+throw away all messages except warnings and errors, show warnings on the
+screen and forward the error messages to the user's (or programmer's) cell
+phone - maybe depending on whether the timestamp tells us if it is day or
+night in the current time zone).
+
+There also functions to support message buffering. Why are they needed?
+Some of wxLog implementations, most notably the standard wxLogGui class,
+buffer the messages (for example, to avoid showing the user a zillion of modal
+message boxes one after another - which would be really annoying). 
+\helpref{Flush()}{wxlogflush} shows them all and clears the buffer contents.
+Although this function doesn't do anything if the buffer is already empty,
+\helpref{HasPendingMessages()}{wxloghaspendingmessages} is also provided which
+allows to explicitly verify it.
 
 \helpref{Flush}{wxlogflush}\\
 \helpref{FlushActive}{wxlogflushactive}\\
-\helpref{HasPendingMessages}{haspendingmessages}
+\helpref{HasPendingMessages}{wxloghaspendingmessages}
 
 \membersection{Customization}\label{wxlogcustomization}
 
@@ -207,6 +231,28 @@ Resumes logging previously suspended by a call to
 \helpref{Suspend}{wxlogsuspend}. All messages logged in the meanwhile will be
 flushed soon.
 
+\membersection{wxLog::DoLog}\label{wxlogdolog}
+
+\func{virtual void}{DoLog}{\param{wxLogLevel }{level}, \param{const wxChar }{*msg}, \param{time\_t }{timestamp}}
+
+Called to process the message of the specified severity. {\it msg} is the text
+of the message as specified in the call of {\it wxLogXXX()} function which
+generated it and {\it timestamp} is the moment when the message was generated.
+
+The base class version prepends the timestamp to the message, adds a prefix
+corresponding to the log level and then calls 
+\helpref{DoLogString}{wxlogdologstring} with the resulting string.
+
+\membersection{wxLog::DoLogString}\label{wxlogdologstring}
+
+\func{virtual void}{DoLogString}{\param{const wxChar }{*msg}, \param{time\_t }{timestamp}}
+
+Called to log the specified string. The timestamp is already included into the
+string but still passed to this function.
+
+A simple implementation may just send the string to {\tt stdout} or, better, 
+{\tt stderr}.
+
 \membersection{wxLog::DontCreateOnDemand}\label{wxlogdontcreateondemand}
 
 \func{static void}{DontCreateOnDemand}{\void}
@@ -235,7 +281,7 @@ See also:
 
 \helpref{Flush}{wxlogflush}
 
-\membersection{wxLog::HasPendingMessages}\label{haspendingmessages}
+\membersection{wxLog::HasPendingMessages}\label{wxloghaspendingmessages}
 
 \constfunc{bool}{HasPendingMessages}{\void}
 
@@ -244,14 +290,14 @@ user). (Almost) for internal use only.
 
 \membersection{wxLog::SetVerbose}\label{wxlogsetverbose}
 
-\func{void}{SetVerbose}{\param{bool }{ verbose = TRUE}}
+\func{static void}{SetVerbose}{\param{bool }{ verbose = TRUE}}
 
 Activates or desactivates verbose mode in which the verbose messages are
 logged as the normal ones instead of being silently dropped.
 
 \membersection{wxLog::GetVerbose}\label{wxloggetverbose}
 
-\constfunc{bool}{GetVerbose}{\void}
+\func{static bool}{GetVerbose}{\void}
 
 Returns whether the verbose mode is currently active.
 
@@ -300,4 +346,115 @@ Remove the {\it mask} from the list of allowed masks for
 \helpref{wxLogTrace}{wxlogtrace}.
 
 See also: \helpref{AddTraceMask}{wxlogaddtracemask}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogChain %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogChain}}\label{wxlogchain}
+
+This simple class allows to chain log sinks, that is to install a new sink but
+keep passing log messages to the old one instead of replacing it completely as 
+\helpref{SetActiveTarget}{wxlogsetactivetarget} does.
+
+It is especially useful when you want to divert the logs somewhere (for
+example to a file or a log window) but also keep showing the error messages
+using the standard dialogs as \helpref{wxLogGui}{wxloggui} does by default.
+
+Example of usage:
+
+\begin{verbatim}
+wxLogChain *logChain = new wxLogChain(new wxLogStderr);
+
+// all the log messages are sent to stderr and also processed as usually
+...
+
+delete logChain;
+
+\end{verbatim}
+
+\wxheading{Derived from}
+
+\helpref{wxLog}{wxlog}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogChain::wxLogChain}\label{wxlogchainwxlogchain}
+
+\func{}{wxLogChain}{\param{wxLog *}{logger}}
+
+Sets the specified {\tt logger} (which may be {\tt NULL}) as the default log
+target but the log messages are also passed to the previous log target if any.
+
+\membersection{wxLogChain::\destruct{wxLogChain}}
+
+\func{}{\destruct{wxLogChain}}{\void}
+
+Destroys the previous log target.
+
+\membersection{wxLogChain::GetOldLog}\label{wxlogchaingetoldlog}
+
+\constfunc{wxLog *}{GetOldLog}{\void}
+
+Returns the pointer to the previously active log target (which may be {\tt
+NULL}).
+
+\membersection{wxLogChain::IsPassingMessages}\label{wxlogchainispassingmessages}
+
+\constfunc{bool}{IsPassingMessages}{\void}
+
+Returns {\tt TRUE} if the messages are passed to the previously active log
+target (default) or {\tt FALSE} if \helpref{PassMessages}{wxlogchainpassmessages} 
+had been called.
+
+\membersection{wxLogChain::PassMessages}\label{wxlogchainpassmessages}
+
+\func{void}{PassMessages}{\param{bool }{passMessages}}
+
+By default, the log messages are passed to the previously active log target.
+Calling this function with {\tt FALSE} parameter disables this behaviour
+(presumably temporarily, as you shouldn't use wxLogChain at all otherwise) and
+it can be reenabled by calling it again with {\it passMessages} set to {\tt
+TRUE}.
+
+\membersection{wxLogChain::SetLog}\label{wxlogchainsetlog}
+
+\func{void}{SetLog}{\param{wxLog *}{logger}}
+
+Sets another log target to use (may be {\tt NULL}). The log target specified
+in the \helpref{constructor}{wxlogchainwxlogchain} or in a previous call to
+this function is deleted.
+
+This doesn't change the old log target value (the one the messages are
+forwarded to) which still remains the same as was active when wxLogChain
+object was created.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogChain %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogPassThrough}}\label{wxlogpassthrough}
+
+A special version of \helpref{wxLogChain}{wxlogchain} which uses itself as the
+new log target. Maybe more clearly, it means that this is a log target which
+forwards the log messages to the previously installed one in addition to
+processing them itself.
+
+Unlike \helpref{wxLogChain}{wxlogchain} which is usually used directly as is,
+this class must be derived from to implement \helpref{DoLog}{wxlogdolog} 
+and/or \helpref{DoLogString}{wxlogdologstring} methods.
+
+\wxheading{Derived from}
+
+\helpref{wxLogChain}{wxlogchain}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogPassThrough::wxLogPassThrough}\label{wxlogpassthroughctor}
+
+Default ctor installs this object as the current active log target.
 
