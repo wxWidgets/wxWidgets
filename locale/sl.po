@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows 2.5.1\n"
-"POT-Creation-Date: 2002-12-12 11:59+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-02-04 18:56+0100\n"
 "PO-Revision-Date: 2001-06-28 12:48+0100\n"
 "Last-Translator: Roman Plevel <roman.plevel@iskratr.si>\n"
 "Language-Team: transmission <roman.plevel@iskratr.si>\n"
@@ -14,130 +15,92 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 # common/log.cpp:242
-#: ../src/common/log.cpp:304
+#: ../src/common/log.cpp:319
 #, c-format
 msgid " (error %ld: %s)"
 msgstr "(napaka %ld: %s)"
 
 # common/docview.cpp:1206
-#: ../src/common/docview.cpp:1242
+#: ../src/common/docview.cpp:1325
 msgid " - "
 msgstr " - "
 
 # html/htmprint.cpp:490
-#: ../src/html/htmprint.cpp:497
+#: ../src/html/htmprint.cpp:537
 msgid " Preview"
 msgstr " Predogled"
 
-#: ../src/common/paper.cpp:124
+#: ../src/common/paper.cpp:136
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
 msgstr ""
 
-#: ../src/common/paper.cpp:125
+#: ../src/common/paper.cpp:137
 msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
 msgstr ""
 
-#: ../src/common/paper.cpp:126
+#: ../src/common/paper.cpp:138
 msgid "#12 Envelope, 4 3/4 x 11 in"
 msgstr ""
 
-#: ../src/common/paper.cpp:127
+#: ../src/common/paper.cpp:139
 msgid "#14 Envelope, 5 x 11 1/2 in"
 msgstr ""
 
-#: ../src/common/paper.cpp:123
+#: ../src/common/paper.cpp:135
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
-msgstr ""
-
-# common/resourc2.cpp:265
-# common/resourc2.cpp:1334
-# common/resource.cpp:1778
-# common/resource.cpp:1908
-# common/resource.cpp:2988
-#: ../src/common/resourc2.cpp:265 ../src/common/resourc2.cpp:1326
-#: ../src/common/resource.cpp:1784 ../src/common/resource.cpp:1914
-#: ../src/common/resource.cpp:2994
-#, c-format
-msgid "#define %s must be an integer."
-msgstr ""
-
-#: ../src/common/prntbase.cpp:375
-#, c-format
-msgid "%d"
-msgstr ""
-
-#: ../src/common/prntbase.cpp:373
-#, c-format
-msgid "%d...%d"
 msgstr ""
 
 # html/helpfrm.cpp:718
 # html/helpfrm.cpp:719
 # html/helpfrm.cpp:1277
 # html/helpfrm.cpp:1304
-#: ../src/html/helpfrm.cpp:777 ../src/html/helpfrm.cpp:778
-#: ../src/html/helpfrm.cpp:1404 ../src/html/helpfrm.cpp:1434
+#: ../src/html/helpfrm.cpp:867 ../src/html/helpfrm.cpp:868
+#: ../src/html/helpfrm.cpp:1505 ../src/html/helpfrm.cpp:1535
 #, c-format
 msgid "%i of %i"
 msgstr "%i od %i"
 
+# generic/filedlgg.cpp:328
+#: ../src/generic/filedlgg.cpp:277
+#, fuzzy, c-format
+msgid "%ld bytes"
+msgstr "byte-ov "
+
 # common/cmdline.cpp:735
-#: ../src/common/cmdline.cpp:814
+#: ../src/common/cmdline.cpp:825
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (ali%s)"
 
 # generic/logg.cpp:243
-#: ../src/generic/logg.cpp:246
+#: ../src/generic/logg.cpp:258
 #, c-format
 msgid "%s Error"
 msgstr "%s Napaka"
 
 # generic/logg.cpp:251
-#: ../src/generic/logg.cpp:254
+#: ../src/generic/logg.cpp:266
 #, c-format
 msgid "%s Information"
 msgstr "%s Informacija"
 
 # generic/logg.cpp:247
-#: ../src/generic/logg.cpp:250
+#: ../src/generic/logg.cpp:262
 #, c-format
 msgid "%s Warning"
 msgstr "%s Opozorilo"
 
-#: ../src/common/msgout.cpp:108
+#: ../src/common/msgout.cpp:188
 #, c-format
 msgid "%s message"
 msgstr ""
 
-# common/resourc2.cpp:709
-# common/resource.cpp:2359
-#: ../src/common/resourc2.cpp:709 ../src/common/resource.cpp:2366
-#, c-format
-msgid "%s not a bitmap resource specification."
-msgstr ""
-
-# common/resourc2.cpp:864
-# common/resource.cpp:2514
-#: ../src/common/resourc2.cpp:860 ../src/common/resource.cpp:2520
-#, c-format
-msgid "%s not an icon resource specification."
-msgstr ""
-
-# common/resourc2.cpp:357
-# common/resourc2.cpp:1430
-# common/resource.cpp:1871
-# common/resource.cpp:2000
-# common/resource.cpp:3085
-#: ../src/common/resourc2.cpp:357 ../src/common/resourc2.cpp:1422
-#: ../src/common/resource.cpp:1877 ../src/common/resource.cpp:2006
-#: ../src/common/resource.cpp:3091
-#, c-format
-msgid "%s: ill-formed resource file syntax."
+#: ../src/html/helpfrm.cpp:274
+msgid "&About..."
 msgstr ""
 
 # msw/mdi.cpp:187
-#: ../src/msw/mdi.cpp:192
+#: ../src/msw/mdi.cpp:191
 msgid "&Arrange Icons"
 msgstr "&Uredi ikone"
 
@@ -152,173 +115,191 @@ msgstr "&Uredi ikone"
 # generic/proplist.cpp:523
 # generic/wizard.cpp:192
 # html/helpfrm.cpp:910
-#: ../src/generic/wizard.cpp:271 ../src/generic/fdrepdlg.cpp:170
+#: ../src/generic/fdrepdlg.cpp:164 ../src/generic/wizard.cpp:401
 #, fuzzy
 msgid "&Cancel"
 msgstr "Preklièi"
 
 # msw/mdi.cpp:183
-#: ../src/msw/mdi.cpp:188
+#: ../src/msw/mdi.cpp:187
 msgid "&Cascade"
 msgstr "&Kaskadno"
 
 # generic/logg.cpp:477
 # generic/tipdlg.cpp:170
-#: ../src/generic/tipdlg.cpp:210 ../src/generic/logg.cpp:491
+#: ../src/common/prntbase.cpp:439 ../src/generic/logg.cpp:502
+#: ../src/generic/tipdlg.cpp:213 ../src/html/helpfrm.cpp:271
 msgid "&Close"
 msgstr "&Zapri"
 
-#: ../src/msw/textctrl.cpp:1681
+#: ../src/msw/textctrl.cpp:2051
 msgid "&Copy"
 msgstr ""
 
-#: ../src/msw/textctrl.cpp:1683
+#: ../src/msw/textctrl.cpp:2053
 msgid "&Delete"
 msgstr ""
 
-#: ../src/generic/logg.cpp:695
+#: ../src/generic/logg.cpp:704
 msgid "&Details"
 msgstr ""
 
 # html/helpfrm.cpp:340
-#: ../src/generic/fdrepdlg.cpp:168
+#: ../src/generic/fdrepdlg.cpp:162
 #, fuzzy
 msgid "&Find"
 msgstr "Poi¹èi"
 
 # generic/wizard.cpp:284
-#: ../src/generic/wizard.cpp:412
+#: ../src/generic/wizard.cpp:580
 msgid "&Finish"
 msgstr "&Dokonèaj"
+
+#: ../src/common/prntbase.cpp:474
+msgid "&Goto..."
+msgstr ""
 
 # common/dlgcmn.cpp:144
 # generic/proplist.cpp:528
 # html/helpfrm.cpp:208
 # msw/mdi.cpp:1283
-#: ../src/generic/wizard.cpp:258
+#: ../src/generic/wizard.cpp:404
 #, fuzzy
 msgid "&Help"
 msgstr "Pomoè"
 
 # generic/logg.cpp:478
-#: ../src/generic/logg.cpp:492
+#: ../src/generic/logg.cpp:503
 msgid "&Log"
 msgstr "&Dnevnik"
 
-#: ../src/univ/themes/win32.cpp:4541
+#: ../src/univ/themes/win32.cpp:4672
 msgid "&Move"
 msgstr ""
 
 # msw/mdi.cpp:188
-#: ../src/msw/mdi.cpp:193 ../src/generic/mdig.cpp:115
+#: ../src/generic/mdig.cpp:117 ../src/msw/mdi.cpp:192
 msgid "&Next"
 msgstr "&Naslednji"
 
 # generic/wizard.cpp:189
 # generic/wizard.cpp:286
-#: ../src/generic/wizard.cpp:268 ../src/generic/wizard.cpp:414
+#: ../src/generic/wizard.cpp:400 ../src/generic/wizard.cpp:582
 msgid "&Next >"
 msgstr "&Naslednji"
 
 # generic/tipdlg.cpp:175
-#: ../src/generic/tipdlg.cpp:215
+#: ../src/generic/tipdlg.cpp:218
 msgid "&Next Tip"
 msgstr "N&aslednji namig"
 
+# generic/logg.cpp:473
+# generic/logg.cpp:774
+#: ../src/html/helpfrm.cpp:269
+#, fuzzy
+msgid "&Open..."
+msgstr "&Shrani..."
+
 # common/cmdline.cpp:912
-#: ../src/msw/textctrl.cpp:1682
+#: ../src/msw/textctrl.cpp:2052
 #, fuzzy
 msgid "&Paste"
 msgstr "datum"
 
 # html/helpfrm.cpp:512
-#: ../src/msw/mdi.cpp:194 ../src/generic/mdig.cpp:116
+#: ../src/generic/mdig.cpp:118 ../src/msw/mdi.cpp:193
 #, fuzzy
 msgid "&Previous"
 msgstr "Prej¹nja stran"
 
+# common/prntbase.cpp:366
+#: ../src/common/prntbase.cpp:444
+#, fuzzy
+msgid "&Print..."
+msgstr "Tiskaj..."
+
 # common/docview.cpp:1945
 # common/docview.cpp:1956
-#: ../src/msw/textctrl.cpp:1678 ../src/common/cmdproc.cpp:261
-#: ../src/common/cmdproc.cpp:272
+#: ../src/common/cmdproc.cpp:285 ../src/common/cmdproc.cpp:292
+#: ../src/msw/textctrl.cpp:2048
 msgid "&Redo"
 msgstr "&Ponovi"
 
 # common/docview.cpp:1939
 # common/docview.cpp:1966
-#: ../src/common/cmdproc.cpp:255 ../src/common/cmdproc.cpp:282
+#: ../src/common/cmdproc.cpp:281 ../src/common/cmdproc.cpp:301
 msgid "&Redo "
 msgstr "&Ponovi "
 
-#: ../src/generic/fdrepdlg.cpp:174
+#: ../src/generic/fdrepdlg.cpp:168
 msgid "&Replace"
 msgstr ""
 
 # common/docview.cpp:1945
 # common/docview.cpp:1956
-#: ../src/univ/themes/win32.cpp:4540
+#: ../src/univ/themes/win32.cpp:4671
 #, fuzzy
 msgid "&Restore"
 msgstr "&Ponovi"
 
 # generic/logg.cpp:473
 # generic/logg.cpp:774
-#: ../src/generic/logg.cpp:487 ../src/generic/logg.cpp:818
+#: ../src/generic/logg.cpp:498 ../src/generic/logg.cpp:827
 msgid "&Save..."
 msgstr "&Shrani..."
 
 # generic/tipdlg.cpp:172
-#: ../src/generic/tipdlg.cpp:212
+#: ../src/generic/tipdlg.cpp:215
 msgid "&Show tips at startup"
 msgstr "&Poka¾i namige ob zagonu"
 
 # generic/filedlgg.cpp:534
-#: ../src/univ/themes/win32.cpp:4543
+#: ../src/univ/themes/win32.cpp:4674
 #, fuzzy
 msgid "&Size"
 msgstr "Velikost"
 
 # common/docview.cpp:1951
-#: ../src/msw/textctrl.cpp:1677 ../src/common/cmdproc.cpp:267
+#: ../src/common/cmdproc.cpp:263 ../src/msw/textctrl.cpp:2047
 msgid "&Undo"
 msgstr "&Preklièi"
 
 # common/docview.cpp:1926
-#: ../src/common/cmdproc.cpp:241
+#: ../src/common/cmdproc.cpp:257
 msgid "&Undo "
 msgstr "&Preklièi "
 
 # msw/mdi.cpp:1287
 # msw/mdi.cpp:1294
 # msw/window.cpp:2286
-#: ../src/msw/mdi.cpp:1328 ../src/msw/mdi.cpp:1335 ../src/msw/mdi.cpp:1365
-#: ../src/generic/mdig.cpp:295 ../src/generic/mdig.cpp:311
-#: ../src/generic/mdig.cpp:315
+#: ../src/generic/mdig.cpp:297 ../src/generic/mdig.cpp:313
+#: ../src/generic/mdig.cpp:317 ../src/msw/mdi.cpp:1333 ../src/msw/mdi.cpp:1340
+#: ../src/msw/mdi.cpp:1370
 msgid "&Window"
 msgstr "&Okno"
 
 # common/config.cpp:396
 # msw/regconf.cpp:264
-#: ../src/msw/regconf.cpp:264 ../src/common/config.cpp:410
+#: ../src/common/config.cpp:414 ../src/msw/regconf.cpp:265
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' ima dodaten '..', ignoriran"
 
 # common/valtext.cpp:140
-#: ../src/common/valtext.cpp:147 ../src/common/valtext.cpp:177
-#: ../src/common/valtext.cpp:183
+#: ../src/common/valtext.cpp:136 ../src/common/valtext.cpp:166
+#: ../src/common/valtext.cpp:172
 #, c-format
 msgid "'%s' is invalid"
 msgstr "'%s' je napaèen"
 
 # common/cmdline.cpp:657
-#: ../src/common/cmdline.cpp:734
+#: ../src/common/cmdline.cpp:743
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' ni pravilna numerièna vrednost"
 
 # common/intl.cpp:412
-#: ../src/common/intl.cpp:402
+#: ../src/common/intl.cpp:1140
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' ni veljaven katalog sporoèil."
@@ -329,156 +310,157 @@ msgid "'%s' is probably a binary buffer."
 msgstr ""
 
 # common/valtext.cpp:178
-#: ../src/common/valtext.cpp:172
+#: ../src/common/valtext.cpp:161
 #, c-format
 msgid "'%s' should be numeric."
 msgstr "'%s' sme biti le ¹tevilo."
 
 # common/valtext.cpp:160
-#: ../src/common/valtext.cpp:154
+#: ../src/common/valtext.cpp:143
 #, c-format
 msgid "'%s' should only contain ASCII characters."
 msgstr "'%s' sme vsebovati samo ASCII znake."
 
 # common/valtext.cpp:166
-#: ../src/common/valtext.cpp:160
+#: ../src/common/valtext.cpp:149
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
 msgstr "'%s' sme vsebovati samo èrkovne znake."
 
 # common/valtext.cpp:172
-#: ../src/common/valtext.cpp:166
+#: ../src/common/valtext.cpp:155
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "'%s' sme vsebovati samo èrkovne ali ¹tevilène znake."
 
 # html/helpfrm.cpp:679
-#: ../src/html/helpfrm.cpp:714
+#: ../src/html/helpfrm.cpp:803
 msgid "(Help)"
 msgstr "(Pomoè)"
 
 # html/helpfrm.cpp:276
 # html/helpfrm.cpp:783
 # html/helpfrm.cpp:1330
-#: ../src/html/helpfrm.cpp:315 ../src/html/helpfrm.cpp:845
-#: ../src/html/helpfrm.cpp:1461
+#: ../src/html/helpfrm.cpp:345 ../src/html/helpfrm.cpp:935
+#: ../src/html/helpfrm.cpp:1563
 msgid "(bookmarks)"
 msgstr "(zaznamki)"
 
-# common/resourc2.cpp:297
-# common/resourc2.cpp:1370
-# common/resource.cpp:1810
-# common/resource.cpp:1940
-# common/resource.cpp:3024
-#: ../src/common/resourc2.cpp:297 ../src/common/resourc2.cpp:1362
-#: ../src/common/resource.cpp:1816 ../src/common/resource.cpp:1946
-#: ../src/common/resource.cpp:3030
-msgid ""
-", expected static, #include or #define\n"
-"whilst parsing resource."
-msgstr ""
-
 # generic/dirdlgg.cpp:264
 # generic/filedlgg.cpp:713
-#: ../src/generic/dirctrlg.cpp:700 ../src/generic/filedlgg.cpp:938
+#: ../src/generic/dirctrlg.cpp:677 ../src/generic/filedlgg.cpp:707
 msgid "."
 msgstr ""
 
 # generic/dirdlgg.cpp:265
 # generic/filedlgg.cpp:714
-#: ../src/generic/dirctrlg.cpp:701 ../src/generic/filedlgg.cpp:939
+#: ../src/generic/dirctrlg.cpp:678 ../src/generic/filedlgg.cpp:708
 msgid ".."
 msgstr ""
 
-#: ../src/common/paper.cpp:120
+#: ../src/html/chm.cpp:561
+msgid "/#SYSTEM"
+msgstr ""
+
+#: ../src/common/paper.cpp:132
 msgid "10 x 14 in"
 msgstr ""
 
-#: ../src/common/paper.cpp:121
+#: ../src/common/paper.cpp:133
 msgid "11 x 17 in"
 msgstr ""
 
-#: ../src/common/paper.cpp:139
+#: ../src/common/paper.cpp:151
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
 msgstr ""
 
 # html/htmprint.cpp:272
-#: ../src/html/htmprint.cpp:279
+#: ../src/html/htmprint.cpp:291
 msgid ": file does not exist!"
 msgstr ": datoteka ne obstaja"
 
 # common/fontmap.cpp:507
-#: ../src/common/fontmap.cpp:670
+#: ../src/common/fontmap.cpp:184
 msgid ": unknown charset"
 msgstr ": nepoznan nabor znakov"
 
 # common/fontmap.cpp:712
-#: ../src/common/fontmap.cpp:898
+#: ../src/common/fontmap.cpp:393
 msgid ": unknown encoding"
 msgstr ": nepoznano kodiranje"
 
 # generic/wizard.cpp:186
-#: ../src/generic/wizard.cpp:263
+#: ../src/generic/wizard.cpp:405
 msgid "< &Back"
 msgstr "< &Nazaj"
 
+#: ../src/common/prntbase.cpp:456
+msgid "<<"
+msgstr ""
+
 # generic/filedlgg.cpp:356
-#: ../src/generic/filedlgg.cpp:534
+#: ../src/generic/filedlgg.cpp:248 ../src/generic/filedlgg.cpp:271
 msgid "<DIR>"
 msgstr "<IMENIK>"
 
+# generic/filedlgg.cpp:356
+#: ../src/generic/filedlgg.cpp:252 ../src/generic/filedlgg.cpp:275
+#, fuzzy
+msgid "<DRIVE>"
+msgstr "<IMENIK>"
+
 # generic/filedlgg.cpp:357
-#: ../src/generic/filedlgg.cpp:536
+#: ../src/generic/filedlgg.cpp:250 ../src/generic/filedlgg.cpp:273
 msgid "<LINK>"
 msgstr "<POVEZAVA>"
 
-# html/helpfrm.cpp:928
-#: ../src/html/helpfrm.cpp:994
-#, fuzzy
-msgid ""
-"<html><body><table><tr><td>Normal face<br>(and <u>underlined</u>. <i>Italic "
-"face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-"
-"2>font size -2</font><br><font size=-1>font size -1</font><br><font size="
-"+0>font size +0</font><br><font size=+1>font size +1</font><br><font size="
-"+2>font size +2</font><br><font size=+3>font size +3</font><br><font size="
-"+4>font size +4</font><br><td><p><tt>Fixed size face.<br> <b>bold</b> "
-"<i>italic</i> <b><i>bold italic <u>underlined</u></i></b><br><font size=-"
-"2>font size -2</font><br><font size=-1>font size -1</font><br><font size="
-"+0>font size +0</font><br><font size=+1>font size +1</font><br><font size="
-"+2>font size +2</font><br><font size=+3>font size +3</font><br><font size="
-"+4>font size +4</font></tt></table></body></html>"
+#: ../src/html/helpfrm.cpp:1098
+msgid "<b><i>Bold italic face.</i></b><br>"
 msgstr ""
-"<html><body>Normalno<br>(and <u>podèrtano</u>. <i>Kurzivno.</i> <b>Krepko.</"
-"b> <b><i>Krepko kurzivno.</i></b><br><font size=-2>velikost èrk -2</"
-"font><br><font size=-1>velikost èrk -1</font><br><font size=+0>velikost èrk "
-"+0</font><br><font size=+1>velikost èrk +1</font><br><font size=+2>velikost "
-"èrk +2</font><br><font size=+3>velikost èrk +3</font><br><font size="
-"+4>velikost èrk +4</font><br><p><tt>Enaka velikost.<br> <b>krepko</b> "
-"<i>kurzivno</i> <b><i>krepko kurzivno <u>podèrtano</u></i></b><br><font "
-"size=-2>velikost èrk -2</font><br><font size=-1>velikost èrk -1</"
-"font><br><font size=+0>velikost èrk +0</font><br><font size=+1>velikost èrk "
-"+1</font><br><font size=+2>velikost èrk +2</font><br><font size=+3>velikost "
-"èrk +3</font><br><font size=+4>velikost èrk +4</font></tt></body></html>"
+
+#: ../src/html/helpfrm.cpp:1102
+msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:1097
+msgid "<b>Bold face.</b> "
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:1096
+msgid "<i>Italic face.</i> "
+msgstr ""
+
+#: ../src/common/prntbase.cpp:462
+msgid ">>"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:468
+msgid ">>|"
+msgstr ""
+
+#: ../src/common/xtixml.cpp:409
+msgid "A non empty collection must consist of 'element' nodes"
+msgstr ""
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:113
+#: ../src/common/paper.cpp:125
 #, fuzzy
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "List A4 210 x 297 mm"
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:104
+#: ../src/common/paper.cpp:116
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "List A4 210 x 297 mm"
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:114
+#: ../src/common/paper.cpp:126
 #, fuzzy
 msgid "A4 small sheet, 210 x 297 mm"
 msgstr "List A4 210 x 297 mm"
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:115
+#: ../src/common/paper.cpp:127
 #, fuzzy
 msgid "A5 sheet, 148 x 210 mm"
 msgstr "List A4 210 x 297 mm"
@@ -493,7 +475,7 @@ msgid "ASCII"
 msgstr ""
 
 # html/helpfrm.cpp:270
-#: ../src/html/helpfrm.cpp:328
+#: ../src/html/helpfrm.cpp:358
 msgid "Add current page to bookmarks"
 msgstr "Dodaj trenutno stran med zaznamke"
 
@@ -502,117 +484,138 @@ msgstr "Dodaj trenutno stran med zaznamke"
 msgid "Add to custom colours"
 msgstr "Dodaj k predelanim barvam"
 
+#: ../include/wx/xti.h:858
+msgid "AddToPropertyCollection called on a generic accessor"
+msgstr ""
+
+#: ../include/wx/xti.h:806
+msgid "AddToPropertyCollection called w/o valid adder"
+msgstr ""
+
 # html/helpctrl.cpp:83
-#: ../src/html/helpctrl.cpp:100
+#: ../src/html/helpctrl.cpp:106
 #, c-format
 msgid "Adding book %s"
 msgstr "Dodajanj knjige %s"
 
 # generic/prntdlgg.cpp:163
-#: ../src/generic/prntdlgg.cpp:160
+#: ../src/generic/prntdlgg.cpp:157
 msgid "All"
 msgstr "Vse"
 
 # generic/filedlgg.cpp:825
-#: ../src/generic/filedlgg.cpp:1062
+#: ../include/wx/defs.h:1986
 msgid "All files (*)|*"
 msgstr "Vse datoteke (*)|*"
+
+# generic/filedlgg.cpp:825
+#: ../src/html/helpfrm.cpp:1403
+#, fuzzy
+msgid "All files (*.*)|*"
+msgstr "Vse datoteke (*)|*"
+
+# generic/filedlgg.cpp:825
+#: ../include/wx/defs.h:1983
+#, fuzzy
+msgid "All files (*.*)|*.*"
+msgstr "Vse datoteke (*)|*"
+
+#: ../src/common/xtistrm.cpp:383
+msgid "Already Registered Object passed to SetObjectClassInfo"
+msgstr ""
 
 #: ../src/unix/dialup.cpp:362
 msgid "Already dialling ISP."
 msgstr ""
 
 # generic/logg.cpp:1021
-#: ../src/generic/logg.cpp:1109
+#: ../src/generic/logg.cpp:1118
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Dodajanje dnevnika v datoteko '%s' (Izberite [Ne] jo preps)"
 
-#: ../src/common/fontmap.cpp:118
+#: ../src/common/fmapbase.cpp:107
 msgid "Arabic (ISO-8859-6)"
 msgstr ""
 
-#: ../src/common/paper.cpp:134
+#: ../src/generic/filedlgg.cpp:428
+msgid "Attributes"
+msgstr ""
+
+#: ../src/common/paper.cpp:146
 msgid "B4 Envelope, 250 x 353 mm"
 msgstr ""
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:116
+#: ../src/common/paper.cpp:128
 #, fuzzy
 msgid "B4 sheet, 250 x 354 mm"
 msgstr "List A4 210 x 297 mm"
 
-#: ../src/common/paper.cpp:135
+#: ../src/common/paper.cpp:147
 msgid "B5 Envelope, 176 x 250 mm"
 msgstr ""
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:117
+#: ../src/common/paper.cpp:129
 #, fuzzy
 msgid "B5 sheet, 182 x 257 millimeter"
 msgstr "List A4 210 x 297 mm"
 
-#: ../src/common/paper.cpp:136
+#: ../src/common/paper.cpp:148
 msgid "B6 Envelope, 176 x 125 mm"
 msgstr ""
 
 # common/imagbmp.cpp:266
 # common/imagbmp.cpp:278
-#: ../src/common/imagbmp.cpp:468 ../src/common/imagbmp.cpp:484
+#: ../src/common/imagbmp.cpp:470 ../src/common/imagbmp.cpp:486
 #, fuzzy
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: Ne morem alocirati pomnilnika."
 
 # common/imagbmp.cpp:62
-#: ../src/common/imagbmp.cpp:86
+#: ../src/common/imagbmp.cpp:88
 msgid "BMP: Couldn't save invalid image."
 msgstr "BMP: Ne morem shraniti nepravilne slike."
 
 # common/imagbmp.cpp:154
-#: ../src/common/imagbmp.cpp:290
+#: ../src/common/imagbmp.cpp:292
 #, fuzzy
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: Ne morem zapisati podatkov"
 
 # common/imagbmp.cpp:154
-#: ../src/common/imagbmp.cpp:422
+#: ../src/common/imagbmp.cpp:424
 msgid "BMP: Couldn't write data."
 msgstr "BMP: Ne morem zapisati podatkov"
 
 # common/imagbmp.cpp:131
-#: ../src/common/imagbmp.cpp:195
+#: ../src/common/imagbmp.cpp:197
 #, fuzzy
 msgid "BMP: Couldn't write the file (Bitmap) header."
 msgstr "BMP: Ne morem zapisati datoteène glave"
 
 # common/imagbmp.cpp:131
-#: ../src/common/imagbmp.cpp:216
+#: ../src/common/imagbmp.cpp:218
 #, fuzzy
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: Ne morem zapisati datoteène glave"
 
-#: ../src/common/imagbmp.cpp:120
+#: ../src/common/imagbmp.cpp:122
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr ""
 
 # common/dlgcmn.cpp:135
-#: ../src/common/dlgcmn.cpp:233
+#: ../src/common/dlgcmn.cpp:227
 msgid "Backward"
 msgstr "Nazaj"
 
-#: ../src/common/fontmap.cpp:125
+#: ../src/common/fmapbase.cpp:114
 msgid "Baltic (ISO-8859-13)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:116
+#: ../src/common/fmapbase.cpp:105
 msgid "Baltic (old) (ISO-8859-4)"
-msgstr ""
-
-# common/resourc2.cpp:844
-# common/resource.cpp:2494
-#: ../src/common/resourc2.cpp:840 ../src/common/resource.cpp:2500
-#, c-format
-msgid "Bitmap resource specification %s not found."
 msgstr ""
 
 # generic/fontdlgg.cpp:217
@@ -621,84 +624,113 @@ msgid "Bold"
 msgstr "Krepko"
 
 # generic/prntdlgg.cpp:662
-#: ../src/generic/prntdlgg.cpp:645
+#: ../src/generic/prntdlgg.cpp:663
 msgid "Bottom margin (mm):"
 msgstr "Spodnji rob"
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:105
+#: ../src/common/paper.cpp:117
 #, fuzzy
 msgid "C sheet, 17 x 22 in"
 msgstr "List A4 210 x 297 mm"
 
 # generic/logg.cpp:475
-#: ../src/generic/logg.cpp:489
+#: ../src/generic/logg.cpp:500
 msgid "C&lear"
 msgstr "&Izprazni"
 
-#: ../src/common/paper.cpp:130
+#: ../src/common/paper.cpp:142
 msgid "C3 Envelope, 324 x 458 mm"
 msgstr ""
 
-#: ../src/common/paper.cpp:131
+#: ../src/common/paper.cpp:143
 msgid "C4 Envelope, 229 x 324 mm"
 msgstr ""
 
-#: ../src/common/paper.cpp:129
+#: ../src/common/paper.cpp:141
 msgid "C5 Envelope, 162 x 229 mm"
 msgstr ""
 
-#: ../src/common/paper.cpp:132
+#: ../src/common/paper.cpp:144
 msgid "C6 Envelope, 114 x 162 mm"
 msgstr ""
 
-#: ../src/common/paper.cpp:133
+#: ../src/common/paper.cpp:145
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr ""
 
+#: ../src/html/chm.cpp:783 ../src/html/chm.cpp:842
+msgid "CHM handler currently supports only local files!"
+msgstr ""
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# msw/thread.cpp:519
+#: ../src/os2/thread.cpp:121
+#, fuzzy
+msgid "Can not create mutex."
+msgstr "ne morem ustvariti niti"
+
 # common/filefn.cpp:1287
 # msw/dir.cpp:294
-#: ../src/common/filefn.cpp:1383
+#: ../src/common/filefn.cpp:1462
 #, fuzzy, c-format
 msgid "Can not enumerate files '%s'"
 msgstr "Ne morem o¹tevilèiti datotek v imeniku '%s'"
 
 # common/filefn.cpp:1287
 # msw/dir.cpp:294
-#: ../src/msw/dir.cpp:296 ../src/unix/dir.cpp:232
+#: ../src/msw/dir.cpp:300 ../src/unix/dir.cpp:232
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Ne morem o¹tevilèiti datotek v imeniku '%s'"
 
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# msw/thread.cpp:519
+#: ../src/os2/thread.cpp:523
+#, fuzzy, c-format
+msgid "Can not resume thread %lu"
+msgstr "ne morem ustvariti niti"
+
 # msw/thread.cpp:552
-#: ../src/mac/thread.cpp:472 ../src/msw/thread.cpp:685
+#: ../src/mac/thread.cpp:477 ../src/msw/thread.cpp:821
 #, c-format
 msgid "Can not resume thread %x"
 msgstr ""
 
 # msw/thread.cpp:433
-#: ../src/msw/thread.cpp:559
+#: ../src/msw/thread.cpp:498
 msgid "Can not start thread: error writing TLS."
 msgstr ""
 
+#: ../src/os2/thread.cpp:510
+#, c-format
+msgid "Can not suspend thread %lu"
+msgstr ""
+
 # msw/thread.cpp:537
-#: ../src/mac/thread.cpp:448 ../src/msw/thread.cpp:670
+#: ../src/mac/thread.cpp:453 ../src/msw/thread.cpp:806
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr ""
 
 # msw/thread.cpp:871
-#: ../src/msw/thread.cpp:1016
+#: ../src/msw/thread.cpp:728
 msgid "Can not wait for thread termination"
 msgstr ""
 
 # common/docview.cpp:1928
-#: ../src/common/cmdproc.cpp:243
+#: ../src/common/cmdproc.cpp:259
 msgid "Can't &Undo "
 msgstr "Ne morem &preklicati"
 
 # common/image.cpp:953
-#: ../src/common/image.cpp:1315
+#: ../src/common/image.cpp:1441
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
 msgstr "Ne morem preveriti formata slike v datoteki '%s': datoteka ne obstaja."
@@ -708,39 +740,19 @@ msgstr "Ne morem preveriti formata slike v datoteki '%s': datoteka ne obstaja."
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/registry.cpp:418
-#: ../src/msw/registry.cpp:421
+#: ../src/msw/registry.cpp:447
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "ne morem zapreti 'registry' kljuèa '%s'"
 
 # msw/registry.cpp:490
-#: ../src/msw/registry.cpp:493
+#: ../src/msw/registry.cpp:519
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr ""
 
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
-# common/file.cpp:200
-#: ../src/msw/toplevel.cpp:315
-#, fuzzy
-msgid "Can't create dialog using memory template"
-msgstr "ne morem ustvariti datoteke '%s'"
-
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
-# common/file.cpp:200
-#: ../src/os2/toplevel.cpp:369
-#, fuzzy, c-format
-msgid "Can't create dialog using template '%ul'"
-msgstr "ne morem ustvariti datoteke '%s'"
-
 # msw/listctrl.cpp:212
-#: ../src/msw/listctrl.cpp:334
+#: ../src/msw/listctrl.cpp:413
 msgid "Can't create list control window, check that comctl32.dll is installed."
 msgstr ""
 
@@ -749,7 +761,7 @@ msgstr ""
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/registry.cpp:399
-#: ../src/msw/registry.cpp:402
+#: ../src/msw/registry.cpp:428
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
@@ -759,7 +771,8 @@ msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/thread.cpp:519
-#: ../src/mac/thread.cpp:427 ../src/msw/thread.cpp:652
+#: ../src/mac/thread.cpp:430 ../src/msw/thread.cpp:593
+#: ../src/os2/thread.cpp:491
 msgid "Can't create thread"
 msgstr "ne morem ustvariti niti"
 
@@ -768,7 +781,7 @@ msgstr "ne morem ustvariti niti"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # common/file.cpp:200
-#: ../src/msw/window.cpp:3062
+#: ../src/msw/window.cpp:3080
 #, fuzzy, c-format
 msgid "Can't create window of class %s"
 msgstr "ne morem ustvariti datoteke '%s'"
@@ -778,7 +791,7 @@ msgstr "ne morem ustvariti datoteke '%s'"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/registry.cpp:658
-#: ../src/msw/registry.cpp:661
+#: ../src/msw/registry.cpp:689
 #, c-format
 msgid "Can't delete key '%s'"
 msgstr "ne morem izbrisati kljuèa '%s'"
@@ -788,13 +801,13 @@ msgstr "ne morem izbrisati kljuèa '%s'"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/iniconf.cpp:476
-#: ../src/msw/iniconf.cpp:445
+#: ../src/msw/iniconf.cpp:444 ../src/os2/iniconf.cpp:448
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "ne morem zbrisati datoteke INI'%s'"
 
 # msw/registry.cpp:683
-#: ../src/msw/registry.cpp:686
+#: ../src/msw/registry.cpp:717
 #, c-format
 msgid "Can't delete value '%s' from key '%s'"
 msgstr ""
@@ -804,13 +817,13 @@ msgstr ""
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/registry.cpp:694
-#: ../src/msw/registry.cpp:697
+#: ../src/msw/registry.cpp:728
 #, c-format
 msgid "Can't delete value of key '%s'"
 msgstr "ne morem izbrisati vrednosti kljuèa '%s'"
 
 # msw/registry.cpp:1020
-#: ../src/msw/registry.cpp:1025
+#: ../src/msw/registry.cpp:1058
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr ""
@@ -820,7 +833,7 @@ msgstr ""
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/registry.cpp:975
-#: ../src/msw/registry.cpp:980
+#: ../src/msw/registry.cpp:1006
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "ne morem o¹tevilèiti vrednosti kljuèa '%s'"
@@ -830,42 +843,58 @@ msgstr "ne morem o¹tevilèiti vrednosti kljuèa '%s'"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # common/ffile.cpp:234
-#: ../src/common/ffile.cpp:226
+#: ../src/common/ffile.cpp:212
 #, c-format
 msgid "Can't find current position in file '%s'"
 msgstr "ne morem najti trenutne pozicije v datoteki '%s'"
 
 # msw/registry.cpp:348
-#: ../src/msw/registry.cpp:351
+#: ../src/msw/registry.cpp:359
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr ""
 
+# html/helpfrm.cpp:1174
+#: ../src/common/zstream.cpp:197
+#, fuzzy
+msgid "Can't initialize zlib deflate stream."
+msgstr "Ne morem natisniti prazne strani."
+
+# html/helpfrm.cpp:1174
+#: ../src/common/zstream.cpp:88
+#, fuzzy
+msgid "Can't initialize zlib inflate stream."
+msgstr "Ne morem natisniti prazne strani."
+
 # common/image.cpp:653
 # common/image.cpp:673
-#: ../src/common/image.cpp:913 ../src/common/image.cpp:933
+#: ../src/common/image.cpp:1028 ../src/common/image.cpp:1048
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Ne morem nalo¾iti slike iz datoteke '%s': datoteka ne obstaja"
 
-# msw/dib.cpp:434
-#: ../src/msw/dib.cpp:434
-#, c-format
-msgid "Can't open file '%s'"
-msgstr "Ne morem odpreti datoteke '%s'"
-
 # msw/registry.cpp:374
-#: ../src/msw/registry.cpp:377
+#: ../src/msw/registry.cpp:394
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "ne morem odpreti 'registry' kljuèa '%s'"
+
+# common/file.cpp:285
+#: ../src/common/zstream.cpp:142
+#, fuzzy, c-format
+msgid "Can't read from inflate stream: %s\n"
+msgstr "ne morem brati iz deskriptorja %d"
+
+#: ../src/common/zstream.cpp:121
+msgid "Can't read inflate stream: unexpected EOF in underlying stream."
+msgstr ""
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/registry.cpp:899
-#: ../src/msw/registry.cpp:904
+#: ../src/msw/registry.cpp:930
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "ne morem prebrati vrednosti '%s'"
@@ -876,26 +905,26 @@ msgstr "ne morem prebrati vrednosti '%s'"
 # 
 # msw/registry.cpp:774
 # msw/registry.cpp:813
-#: ../src/msw/registry.cpp:777 ../src/msw/registry.cpp:816
+#: ../src/msw/registry.cpp:808 ../src/msw/registry.cpp:842
 #, c-format
 msgid "Can't read value of key '%s'"
 msgstr "ne morem prebrati vrednosti kljuèa '%s'"
 
 # common/image.cpp:653
 # common/image.cpp:673
-#: ../src/common/image.cpp:955
+#: ../src/common/image.cpp:1070
 #, fuzzy, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Ne morem nalo¾iti slike iz datoteke '%s': datoteka ne obstaja"
 
 # generic/logg.cpp:535
 # generic/logg.cpp:932
-#: ../src/generic/logg.cpp:551 ../src/generic/logg.cpp:985
+#: ../src/generic/logg.cpp:562 ../src/generic/logg.cpp:994
 msgid "Can't save log contents to file."
 msgstr "Ne morem shraniti vsebine dnevnika"
 
 # msw/thread.cpp:485
-#: ../src/msw/thread.cpp:611
+#: ../src/msw/thread.cpp:549 ../src/os2/thread.cpp:473
 msgid "Can't set thread priority"
 msgstr ""
 
@@ -905,10 +934,16 @@ msgstr ""
 # 
 # msw/registry.cpp:799
 # msw/registry.cpp:923
-#: ../src/msw/registry.cpp:802 ../src/msw/registry.cpp:928
+#: ../src/msw/registry.cpp:829 ../src/msw/registry.cpp:954
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "ne morem nastaviti vrednosti kljuèa '%s'"
+
+# common/file.cpp:304
+#: ../src/common/zstream.cpp:276
+#, fuzzy, c-format
+msgid "Can't write to deflate stream: %s\n"
+msgstr "ne morem pisati na deskriptor %d"
 
 # common/dlgcmn.cpp:148
 # common/prntbase.cpp:109
@@ -921,91 +956,91 @@ msgstr "ne morem nastaviti vrednosti kljuèa '%s'"
 # generic/proplist.cpp:523
 # generic/wizard.cpp:192
 # html/helpfrm.cpp:910
-#: ../src/gtk/fontdlg.cpp:144 ../src/gtk/filedlg.cpp:173
-#: ../src/html/helpfrm.cpp:976 ../src/motif/msgdlg.cpp:182
-#: ../src/common/dlgcmn.cpp:246 ../src/generic/fontdlgg.cpp:255
-#: ../src/generic/proplist.cpp:511 ../src/generic/dirdlgg.cpp:153
-#: ../src/generic/progdlgg.cpp:211 ../src/generic/filedlgg.cpp:1181
-#: ../src/generic/filedlgg.cpp:1200 ../src/generic/prntdlgg.cpp:453
+#: ../src/common/dlgcmn.cpp:240 ../src/generic/dirdlgg.cpp:155
+#: ../src/generic/filedlgg.cpp:977 ../src/generic/filedlgg.cpp:996
+#: ../src/generic/fontdlgg.cpp:255 ../src/generic/prntdlgg.cpp:455
+#: ../src/generic/progdlgg.cpp:211 ../src/gtk/filedlg.cpp:168
+#: ../src/gtk/fontdlg.cpp:147 ../src/html/helpfrm.cpp:1066
+#: ../src/motif/msgdlg.cpp:182
 msgid "Cancel"
 msgstr "Preklièi"
 
-#: ../contrib/src/xrc/xmlres.cpp:969 ../contrib/src/xrc/xmlres.cpp:1010
+#: ../contrib/src/xrc/xmlres.cpp:987 ../contrib/src/xrc/xmlres.cpp:1028
 msgid "Cannot convert dialog units: dialog unknown."
 msgstr ""
 
 # common/fontmap.cpp:332
-#: ../src/common/strconv.cpp:963
+#: ../src/common/strconv.cpp:1567
 #, fuzzy, c-format
-msgid "Cannot convert from encoding '%s'!"
+msgid "Cannot convert from the charset '%s'!"
 msgstr "nepoznano kodiranje (%s)"
 
 # msw/dialup.cpp:518
-#: ../src/msw/dialup.cpp:499
+#: ../src/msw/dialup.cpp:497
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr ""
 
-#: ../contrib/src/xrc/xmlres.cpp:243
+#: ../contrib/src/xrc/xmlres.cpp:262
 #, c-format
 msgid "Cannot find container for unknown control '%s'."
 msgstr ""
 
 # generic/helpext.cpp:96
-#: ../contrib/src/xrc/xmlres.cpp:1024
+#: ../contrib/src/xrc/xmlres.cpp:1042
 #, fuzzy, c-format
 msgid "Cannot find font node '%s'."
 msgstr "ne morem odpreti URL '%s'"
 
 # msw/dialup.cpp:832
-#: ../src/msw/dialup.cpp:813
+#: ../src/msw/dialup.cpp:811
 msgid "Cannot find the location of address book file"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1096
+#: ../src/unix/threadpsx.cpp:1100
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:865
+#: ../src/unix/utilsunx.cpp:724
 msgid "Cannot get the hostname"
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:901
+#: ../src/unix/utilsunx.cpp:760
 msgid "Cannot get the official hostname"
 msgstr ""
 
 # msw/dialup.cpp:925
-#: ../src/msw/dialup.cpp:907
+#: ../src/msw/dialup.cpp:905
 msgid "Cannot hang up - no active dialup connection."
 msgstr ""
 
 # msw/app.cpp:252
-#: ../src/msw/app.cpp:250
+#: ../src/msw/app.cpp:290 ../src/msw/app.cpp:293
 msgid "Cannot initialize OLE"
 msgstr ""
 
 # html/helpfrm.cpp:1174
-#: ../src/mgl/app.cpp:414
+#: ../src/mgl/app.cpp:292
 #, fuzzy
 msgid "Cannot initialize SciTech MGL!"
 msgstr "Ne morem natisniti prazne strani."
 
 # html/helpfrm.cpp:1174
-#: ../src/mgl/window.cpp:547
+#: ../src/mgl/window.cpp:546
 #, fuzzy
 msgid "Cannot initialize display."
 msgstr "Ne morem natisniti prazne strani."
 
 # common/filefn.cpp:1287
 # msw/dir.cpp:294
-#: ../src/msw/volume.cpp:634
+#: ../src/msw/volume.cpp:601
 #, fuzzy, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Ne morem o¹tevilèiti datotek v imeniku '%s'"
 
 # common/ffile.cpp:101
-#: ../contrib/src/xrc/xmlres.cpp:356
+#: ../contrib/src/xrc/xmlres.cpp:382
 #, fuzzy, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "ne morem zadpreti datoteke '%s'"
@@ -1017,240 +1052,259 @@ msgid "Cannot open HTML document: %s"
 msgstr "Ne morem odpreti dokumenta HTML :%s"
 
 # html/helpdata.cpp:657
-#: ../src/html/helpdata.cpp:584
+#: ../src/html/helpdata.cpp:613
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Ne morem odpreti knjige s HTML pomoèjo: %s"
 
 # generic/helpext.cpp:96
-#: ../src/generic/helpext.cpp:100
+#: ../src/generic/helpext.cpp:122
 #, c-format
 msgid "Cannot open URL '%s'"
 msgstr "ne morem odpreti URL '%s'"
 
 # html/helpdata.cpp:353
-#: ../src/html/helpdata.cpp:277
+#: ../src/html/helpdata.cpp:284
 #, c-format
 msgid "Cannot open contents file: %s"
 msgstr "ne morem datoteke: '%s' z vsebino"
 
 # msw/dib.cpp:434
-#: ../contrib/src/xrc/xmlres.cpp:330
+#: ../contrib/src/xrc/xmlres.cpp:353
 #, fuzzy, c-format
 msgid "Cannot open file '%s'."
 msgstr "Ne morem odpreti datoteke '%s'"
 
 # generic/dcpsg.cpp:1584
-#: ../src/generic/dcpsg.cpp:1719
+#: ../src/generic/dcpsg.cpp:1795
 msgid "Cannot open file for PostScript printing!"
 msgstr "Ne morem odpreti datoteke za tiskanje PostScript"
 
 # html/helpdata.cpp:368
-#: ../src/html/helpdata.cpp:292
+#: ../src/html/helpdata.cpp:299
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "ne morem odpreti indeksne datoteke '%s'"
 
 # html/helpdata.cpp:353
-#: ../contrib/src/xrc/xmlres.cpp:957
+#: ../src/common/intl.cpp:1196
+#, fuzzy, c-format
+msgid "Cannot parse Plural-Forms:'%s'"
+msgstr "ne morem datoteke: '%s' z vsebino"
+
+# html/helpdata.cpp:353
+#: ../contrib/src/xrc/xmlres.cpp:975
 #, fuzzy, c-format
 msgid "Cannot parse coordinates from '%s'."
 msgstr "ne morem datoteke: '%s' z vsebino"
 
 # common/filefn.cpp:1287
 # msw/dir.cpp:294
-#: ../contrib/src/xrc/xmlres.cpp:998
+#: ../contrib/src/xrc/xmlres.cpp:1016
 #, fuzzy, c-format
 msgid "Cannot parse dimension from '%s'."
 msgstr "Ne morem o¹tevilèiti datotek v imeniku '%s'"
 
 # html/helpfrm.cpp:1174
-#: ../src/html/helpfrm.cpp:1293
+#: ../src/html/helpfrm.cpp:1387
 msgid "Cannot print empty page."
 msgstr "Ne morem natisniti prazne strani."
 
 # html/helpdata.cpp:353
-#: ../src/msw/volume.cpp:195 ../src/msw/volume.cpp:526
+#: ../src/msw/volume.cpp:160 ../src/msw/volume.cpp:491
 #, fuzzy, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "ne morem datoteke: '%s' z vsebino"
 
-#: ../src/unix/threadpsx.cpp:1077
+#: ../src/unix/threadpsx.cpp:1081
 msgid "Cannot retrieve thread scheduling policy."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:710
+#: ../src/unix/threadpsx.cpp:728
 msgid "Cannot start thread: error writing TLS"
 msgstr ""
 
 # html/helpfrm.cpp:398
-#: ../src/html/helpfrm.cpp:411
+#: ../src/html/helpfrm.cpp:441
 msgid "Case sensitive"
 msgstr "Velikost èrk je pomenbna"
 
-#: ../src/common/fontmap.cpp:126
+#: ../src/common/fmapbase.cpp:115
 msgid "Celtic (ISO-8859-14)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:114
+#: ../src/common/fmapbase.cpp:103
 msgid "Central European (ISO-8859-2)"
 msgstr ""
 
 # msw/dialup.cpp:767
-#: ../src/msw/dialup.cpp:748
+#: ../src/msw/dialup.cpp:746
 msgid "Choose ISP to dial"
 msgstr ""
 
-#: ../src/gtk/fontdlg.cpp:122
+#: ../src/gtk/fontdlg.cpp:125
 msgid "Choose font"
 msgstr ""
 
 # common/prntbase.cpp:359
 # generic/progdlgg.cpp:307
 # generic/proplist.cpp:518
-#: ../src/generic/mdig.cpp:112
+#: ../src/generic/mdig.cpp:114
 #, fuzzy
 msgid "Cl&ose"
 msgstr "Zapri "
 
 # generic/logg.cpp:475
-#: ../src/generic/logg.cpp:489
+#: ../src/generic/logg.cpp:500
 msgid "Clear the log contents"
 msgstr "Izprazni vsebino dnevnika"
 
 # common/prntbase.cpp:359
 # generic/progdlgg.cpp:307
 # generic/proplist.cpp:518
-#: ../src/common/prntbase.cpp:428 ../src/generic/proplist.cpp:506
 #: ../src/generic/progdlgg.cpp:358
 msgid "Close"
 msgstr "Zapri "
 
-#: ../src/univ/themes/win32.cpp:4549
+#: ../src/univ/themes/win32.cpp:4680
 msgid "Close\tAlt-F4"
 msgstr ""
 
 # common/prntbase.cpp:359
 # generic/progdlgg.cpp:307
 # generic/proplist.cpp:518
-#: ../src/generic/mdig.cpp:113
+#: ../src/generic/mdig.cpp:115
 #, fuzzy
 msgid "Close All"
 msgstr "Zapri "
 
 # generic/logg.cpp:477
-#: ../src/generic/logg.cpp:491
+#: ../src/generic/logg.cpp:502
 msgid "Close this window"
 msgstr "Zapri to okno"
 
+#: ../src/html/helpfrm.cpp:1401
+msgid "Compressed HTML Help file (*.chm)|*.chm|"
+msgstr ""
+
 # generic/dirdlgg.cpp:210
-#: ../src/generic/dirctrlg.cpp:549
+#: ../src/generic/dirctrlg.cpp:592
 #, fuzzy
 msgid "Computer"
 msgstr "Raèunalnik"
 
 # common/fileconf.cpp:760
-#: ../src/common/fileconf.cpp:902
+#: ../src/common/fileconf.cpp:934
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Vstopno konfiguracijsko ime se ne more zaèeti s '%c'"
 
 # generic/filedlgg.cpp:1077
-#: ../src/gtk/filedlg.cpp:72 ../src/generic/filedlgg.cpp:1411
+#: ../src/generic/filedlgg.cpp:1214 ../src/gtk/filedlg.cpp:74
 msgid "Confirm"
 msgstr "Potrdi"
 
-#: ../src/msw/mimetype.cpp:689
+#: ../src/msw/mimetype.cpp:679
 msgid "Confirm registry update"
 msgstr ""
 
 # html/htmlwin.cpp:166
-#: ../src/html/htmlwin.cpp:262
+#: ../src/html/htmlwin.cpp:361
 msgid "Connecting..."
 msgstr "Povezovanje..."
 
 # generic/helpwxht.cpp:159
 # html/helpfrm.cpp:303
 # html/helpfrm.cpp:312
-#: ../src/html/helpfrm.cpp:351
+#: ../src/html/helpfrm.cpp:381
 msgid "Contents"
 msgstr "Vsebina"
 
-#: ../src/common/strconv.cpp:616
+#: ../src/common/strconv.cpp:942
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr ""
 
+# generic/dirdlgg.cpp:550
+#: ../src/html/htmlwin.cpp:781
+#, fuzzy, c-format
+msgid "Copied to clipboard:\"%s\""
+msgstr "Ne morem ustvariti imenika"
+
 # generic/prntdlgg.cpp:196
-#: ../src/generic/prntdlgg.cpp:193
+#: ../src/generic/prntdlgg.cpp:190
 msgid "Copies:"
 msgstr "©t. kopij"
 
-# common/resourc2.cpp:287
-# common/resource.cpp:1800
-# common/resource.cpp:1930
-#: ../src/common/resourc2.cpp:287 ../src/common/resource.cpp:1806
-#: ../src/common/resource.cpp:1936
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# common/file.cpp:580
+# common/file.cpp:583
+#: ../src/html/chm.cpp:689
+#, fuzzy, c-format
+msgid "Could not create temporary file '%s'"
+msgstr "ne odstraniti zaèasne datoteke '%s'"
+
+#: ../src/html/chm.cpp:274
 #, c-format
-msgid "Could not find resource include file %s."
+msgid "Could not extract %s into %s: %s"
 msgstr ""
 
 # generic/tabg.cpp:1042
-#: ../src/generic/tabg.cpp:1044
+#: ../src/generic/tabg.cpp:1049
 msgid "Could not find tab for id"
 msgstr "Ne morem najti tab za id"
 
 # msw/textctrl.cpp:1249
-#: ../src/msw/textctrl.cpp:2050
+#: ../src/msw/textctrl.cpp:2632
 #, c-format
 msgid "Could not load Rich Edit DLL '%s'"
 msgstr ""
 
-# common/resource.cpp:796
-#: ../src/common/resource.cpp:802
-#, c-format
-msgid ""
-"Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
-" or provide #define (see manual for caveats)"
-msgstr ""
-
-# common/resource.cpp:1245
-#: ../src/common/resource.cpp:1251
-#, c-format
-msgid ""
-"Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
-"or provide #define (see manual for caveats)"
-msgstr ""
+# msw/dib.cpp:434
+#: ../src/html/chm.cpp:445
+#, fuzzy, c-format
+msgid "Could not locate file '%s'."
+msgstr "Ne morem odpreti datoteke '%s'"
 
 # common/prntbase.cpp:711
-#: ../src/common/prntbase.cpp:805
+#: ../src/common/prntbase.cpp:810
 msgid "Could not start document preview."
 msgstr "Ne morem zaèeti predogleda dokumenta"
 
 # generic/printps.cpp:209
 # msw/printwin.cpp:252
-#: ../src/msw/printwin.cpp:252 ../src/generic/printps.cpp:198
+#: ../src/generic/printps.cpp:221 ../src/msw/printwin.cpp:245
 msgid "Could not start printing."
 msgstr "Ne morem zaèeti s tiskanjem."
 
 # common/wincmn.cpp:784
-#: ../src/common/wincmn.cpp:1167
+#: ../src/common/wincmn.cpp:1202
 msgid "Could not transfer data to window"
 msgstr "Ne morem prenesti podatkov v okno"
+
+# common/imagbmp.cpp:266
+# common/imagbmp.cpp:278
+#: ../src/os2/thread.cpp:154
+#, fuzzy
+msgid "Couldn't acquire a mutex lock"
+msgstr "BMP: Ne morem alocirati pomnilnika."
 
 # msw/dragimag.cpp:142
 # msw/dragimag.cpp:179
 # msw/imaglist.cpp:152
 # msw/imaglist.cpp:174
 # msw/imaglist.cpp:187
-#: ../src/msw/dragimag.cpp:158 ../src/msw/dragimag.cpp:194
-#: ../src/msw/imaglist.cpp:152 ../src/msw/imaglist.cpp:174
-#: ../src/msw/imaglist.cpp:187
+#: ../src/msw/dragimag.cpp:166 ../src/msw/dragimag.cpp:206
+#: ../src/msw/imaglist.cpp:156 ../src/msw/imaglist.cpp:174
+#: ../src/msw/imaglist.cpp:186
 msgid "Couldn't add an image to the image list."
 msgstr ""
 
 # msw/timer.cpp:96
-#: ../src/msw/timer.cpp:103
+#: ../src/msw/timer.cpp:101 ../src/os2/timer.cpp:118
 msgid "Couldn't create a timer"
 msgstr ""
 
@@ -1262,20 +1316,33 @@ msgid "Couldn't create cursor."
 msgstr "BMP: Ne morem alocirati pomnilnika."
 
 # common/dynlib.cpp:309
-#: ../src/common/dynlib.cpp:347 ../src/common/dynload.cpp:299
+#: ../src/common/dynlib.cpp:388
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Ne najdem simbola '%s' v dinamièni knji¾nici"
 
 # msw/thread.cpp:578
-#: ../src/mac/thread.cpp:502 ../src/msw/thread.cpp:711
+#: ../src/mac/thread.cpp:507 ../src/msw/thread.cpp:847
 msgid "Couldn't get the current thread pointer"
 msgstr ""
 
 # common/imagpng.cpp:251
-#: ../src/common/imagpng.cpp:302
+#: ../src/common/imagpng.cpp:607
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
 msgstr ""
+
+# common/filefn.cpp:1287
+# msw/dir.cpp:294
+#: ../src/unix/sound.cpp:412
+#, fuzzy, c-format
+msgid "Couldn't load sound data from '%s'."
+msgstr "Ne morem o¹tevilèiti datotek v imeniku '%s'"
+
+# msw/dib.cpp:434
+#: ../src/unix/sound_sdl.cpp:231
+#, fuzzy, c-format
+msgid "Couldn't open audio: %s"
+msgstr "Ne morem odpreti datoteke '%s'"
 
 # msw/ole/dataobj.cpp:151
 #: ../src/msw/ole/dataobj.cpp:147
@@ -1283,104 +1350,114 @@ msgstr ""
 msgid "Couldn't register clipboard format '%s'."
 msgstr ""
 
+# common/imagbmp.cpp:266
+# common/imagbmp.cpp:278
+#: ../src/os2/thread.cpp:171
+#, fuzzy
+msgid "Couldn't release a mutex"
+msgstr "BMP: Ne morem alocirati pomnilnika."
+
 # msw/listctrl.cpp:616
-#: ../src/msw/listctrl.cpp:737
+#: ../src/msw/listctrl.cpp:828
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr ""
 
 # common/imagbmp.cpp:62
-#: ../src/common/imagpng.cpp:338 ../src/common/imagpng.cpp:349
-#: ../src/common/imagpng.cpp:357
+#: ../src/common/imagpng.cpp:647 ../src/common/imagpng.cpp:658
+#: ../src/common/imagpng.cpp:666
 #, fuzzy
 msgid "Couldn't save PNG image."
 msgstr "BMP: Ne morem shraniti nepravilne slike."
 
 # msw/thread.cpp:958
-#: ../src/mac/thread.cpp:749 ../src/msw/thread.cpp:1091
+#: ../src/mac/thread.cpp:756 ../src/msw/thread.cpp:610
 msgid "Couldn't terminate thread"
 msgstr ""
 
+#: ../src/common/xtistrm.cpp:161
+msgid "Create Parameter not found in declared RTTI Parameters"
+msgstr ""
+
 # generic/dirdlgg.cpp:572
-#: ../src/generic/dirdlgg.cpp:263
+#: ../src/generic/dirdlgg.cpp:265
 msgid "Create directory"
 msgstr "Ustvari imenik"
 
 # generic/filedlgg.cpp:883
-#: ../src/generic/dirdlgg.cpp:103 ../src/generic/filedlgg.cpp:1132
+#: ../src/generic/dirdlgg.cpp:105 ../src/generic/filedlgg.cpp:931
 msgid "Create new directory"
 msgstr "Istvari nov imenik"
 
-#: ../src/msw/textctrl.cpp:1680
+#: ../src/msw/textctrl.cpp:2050
 msgid "Cu&t"
 msgstr ""
 
 # generic/filedlgg.cpp:890
-#: ../src/generic/filedlgg.cpp:1143
+#: ../src/generic/filedlgg.cpp:942
 msgid "Current directory:"
 msgstr "Trenutni imenik"
 
-#: ../src/common/fontmap.cpp:117
+#: ../src/common/fmapbase.cpp:106
 msgid "Cyrillic (ISO-8859-5)"
 msgstr ""
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:106
+#: ../src/common/paper.cpp:118
 #, fuzzy
 msgid "D sheet, 22 x 34 in"
 msgstr "List A4 210 x 297 mm"
 
 # msw/dde.cpp:597
-#: ../src/msw/dde.cpp:594
+#: ../src/msw/dde.cpp:649
 msgid "DDE poke request failed"
 msgstr ""
 
 # common/imagbmp.cpp:257
-#: ../src/common/imagbmp.cpp:917
+#: ../src/common/imagbmp.cpp:914
 #, fuzzy
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "BMP: Kodiranej se ne ujema z bitno globino."
 
 # common/imagbmp.cpp:220
-#: ../src/common/imagbmp.cpp:879
+#: ../src/common/imagbmp.cpp:876
 #, fuzzy
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "BMP: vi¹ina slike > 32767 pikslov za datoteko."
 
 # common/imagbmp.cpp:214
-#: ../src/common/imagbmp.cpp:873
+#: ../src/common/imagbmp.cpp:870
 #, fuzzy
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "BMP: ¹irina slike > 32767 pikslov za datoteko."
 
 # common/imagbmp.cpp:234
-#: ../src/common/imagbmp.cpp:893
+#: ../src/common/imagbmp.cpp:890
 #, fuzzy
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "BMP: Nepoznana bitna globina v datoteki."
 
 # common/imagbmp.cpp:243
-#: ../src/common/imagbmp.cpp:903
+#: ../src/common/imagbmp.cpp:900
 #, fuzzy
 msgid "DIB Header: Unknown encoding in file."
 msgstr "Nepoznano kodiranje v datoteki."
 
-#: ../src/common/paper.cpp:128
+#: ../src/common/paper.cpp:140
 msgid "DL Envelope, 110 x 220 mm"
 msgstr ""
-
-# generic/filedlgg.cpp:535
-#: ../src/generic/filedlgg.cpp:705
-msgid "Date"
-msgstr "Datum"
 
 # generic/fontdlgg.cpp:207
 #: ../src/generic/fontdlgg.cpp:222
 msgid "Decorative"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:392
+#: ../src/common/fmapbase.cpp:660
 msgid "Default encoding"
+msgstr ""
+
+#: ../contrib/src/gizmos/editlbox.cpp:163
+msgid "Delete item"
 msgstr ""
 
 # SOME DESCRIPTIVE TITLE.
@@ -1394,23 +1471,19 @@ msgid "Deleted stale lock file '%s'."
 msgstr "ne morem zbrisati datoteke INI'%s'"
 
 # msw/dialup.cpp:354
-#: ../src/msw/dialup.cpp:348
+#: ../src/msw/dialup.cpp:346
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
 msgstr ""
 
-#: ../src/os2/toplevel.cpp:367
-msgid "Did you forget to include wx/os2/wx.rc in your resources?"
-msgstr ""
-
 # generic/tipdlg.cpp:177
-#: ../src/generic/tipdlg.cpp:217
+#: ../src/generic/tipdlg.cpp:220
 msgid "Did you know..."
 msgstr "Ali ste vedeli..."
 
 # common/filefn.cpp:1086
-#: ../src/common/filefn.cpp:1279
+#: ../src/common/filefn.cpp:1352
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Ne morem ustvariti imenika '%s'"
@@ -1422,12 +1495,18 @@ msgid "Directory '%s' doesn't exist!"
 msgstr "Imenik ne obstaja"
 
 # generic/dirdlgg.cpp:539
-#: ../src/generic/dirdlgg.cpp:188
+#: ../src/generic/dirdlgg.cpp:190
 msgid "Directory does not exist"
 msgstr "Imenik ne obstaja"
 
+# generic/dirdlgg.cpp:539
+#: ../src/generic/filedlgg.cpp:1191
+#, fuzzy
+msgid "Directory doesn't exist."
+msgstr "Imenik ne obstaja"
+
 # html/helpfrm.cpp:366
-#: ../src/html/helpfrm.cpp:379
+#: ../src/html/helpfrm.cpp:409
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
@@ -1436,11 +1515,11 @@ msgstr ""
 "obèutljivo na velikost èrk"
 
 # html/helpfrm.cpp:535
-#: ../src/html/helpfrm.cpp:545
+#: ../src/html/helpfrm.cpp:583
 msgid "Display options dialog"
 msgstr "Poka¾i pogovorno okno z mo¾nostmi"
 
-#: ../src/msw/mimetype.cpp:682
+#: ../src/msw/mimetype.cpp:672
 msgid ""
 "Do you want to overwrite the command used to %s files with extension \"%s"
 "\" ?\n"
@@ -1451,13 +1530,13 @@ msgid ""
 msgstr ""
 
 # common/docview.cpp:440
-#: ../src/common/docview.cpp:441
+#: ../src/common/docview.cpp:466
 #, c-format
 msgid "Do you want to save changes to document %s?"
 msgstr "Ali ¾elite shraniti sprmembe dokumenta %s"
 
 # html/htmlwin.cpp:216
-#: ../src/html/htmlwin.cpp:314
+#: ../src/html/htmlwin.cpp:421
 msgid "Done"
 msgstr "Konèano"
 
@@ -1466,14 +1545,23 @@ msgstr "Konèano"
 msgid "Done."
 msgstr "Konèano."
 
+#: ../src/common/xtixml.cpp:271
+#, c-format
+msgid "Doubly used id : %d"
+msgstr ""
+
 # html/htmlwin.cpp:216
-#: ../src/generic/fdrepdlg.cpp:157
+#: ../src/generic/fdrepdlg.cpp:151
 #, fuzzy
 msgid "Down"
 msgstr "Konèano"
 
-#: ../src/common/paper.cpp:107
+#: ../src/common/paper.cpp:119
 msgid "E sheet, 34 x 44 in"
+msgstr ""
+
+#: ../contrib/src/gizmos/editlbox.cpp:161
+msgid "Edit item"
 msgstr ""
 
 # generic/progdlgg.cpp:153
@@ -1481,13 +1569,18 @@ msgstr ""
 msgid "Elapsed time : "
 msgstr "Porabljen èas"
 
+#: ../src/common/prntbase.cpp:408
+#, c-format
+msgid "Enter a page number between %d and %d:"
+msgstr ""
+
 # generic/helphtml.cpp:320
-#: ../src/generic/helphtml.cpp:335
+#: ../src/generic/helpext.cpp:442
 msgid "Entries found"
 msgstr "Najdeni naslovi"
 
 # common/config.cpp:349
-#: ../src/common/config.cpp:362
+#: ../src/common/config.cpp:366
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %d in '%s'."
@@ -1505,36 +1598,43 @@ msgstr ""
 # generic/filedlgg.cpp:1043
 # generic/filedlgg.cpp:1092
 # generic/helpxlp.cpp:241
-#: ../src/gtk/fontdlg.cpp:71 ../src/gtk/filedlg.cpp:80
-#: ../src/generic/dirdlgg.cpp:298 ../src/generic/dirctrlg.cpp:704
-#: ../src/generic/dirctrlg.cpp:722 ../src/generic/dirctrlg.cpp:733
-#: ../src/generic/filedlgg.cpp:841 ../src/generic/filedlgg.cpp:942
-#: ../src/generic/filedlgg.cpp:956 ../src/generic/filedlgg.cpp:969
-#: ../src/generic/filedlgg.cpp:1365 ../src/generic/filedlgg.cpp:1418
+#: ../src/generic/dirctrlg.cpp:683 ../src/generic/dirctrlg.cpp:701
+#: ../src/generic/dirctrlg.cpp:712 ../src/generic/dirdlgg.cpp:300
+#: ../src/generic/filedlgg.cpp:611 ../src/generic/filedlgg.cpp:711
+#: ../src/generic/filedlgg.cpp:725 ../src/generic/filedlgg.cpp:739
+#: ../src/generic/filedlgg.cpp:1166 ../src/generic/filedlgg.cpp:1191
+#: ../src/generic/filedlgg.cpp:1221 ../src/gtk/filedlg.cpp:82
+#: ../src/gtk/fontdlg.cpp:76
 msgid "Error"
 msgstr "Napaka"
 
 # common/log.cpp:362
-#: ../src/unix/utilsunx.cpp:1193 ../src/unix/utilsunx.cpp:1201
+#: ../src/unix/utilsunx.cpp:1030 ../src/unix/utilsunx.cpp:1038
 #, fuzzy
 msgid "Error "
 msgstr "Napaka:"
 
 # generic/dirdlgg.cpp:552
-#: ../src/generic/dirdlgg.cpp:203
+#: ../src/generic/dirdlgg.cpp:205
 msgid "Error creating directory"
 msgstr "Napaka pri ustvarjanju imenika"
 
-#: ../src/common/imagbmp.cpp:926
+#: ../src/common/imagbmp.cpp:923
 msgid "Error in reading image DIB ."
 msgstr ""
 
+# generic/dirdlgg.cpp:552
+#: ../src/common/fileconf.cpp:505
+#, fuzzy
+msgid "Error reading config options."
+msgstr "Napaka pri ustvarjanju imenika"
+
 # common/log.cpp:362
-#: ../src/common/log.cpp:460
+#: ../src/common/log.cpp:478
 msgid "Error: "
 msgstr "Napaka:"
 
-#: ../src/common/fontmap.cpp:115
+#: ../src/common/fmapbase.cpp:104
 msgid "Esperanto (ISO-8859-3)"
 msgstr ""
 
@@ -1544,54 +1644,31 @@ msgid "Estimated time : "
 msgstr "Prièakovan èas"
 
 # msw/utilsexc.cpp:585
-#: ../src/msw/utilsexc.cpp:702
+#: ../src/msw/utilsexc.cpp:735
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr ""
 
-#: ../src/common/paper.cpp:112
+#: ../src/os2/utilsexc.cpp:171
+#, c-format
+msgid "Execution of command '%s' failed with error: %ul"
+msgstr ""
+
+#: ../src/common/paper.cpp:124
 msgid "Executive, 7 1/4 x 10 1/2 in"
 msgstr ""
 
-# common/resourc2.cpp:326
-# common/resourc2.cpp:1399
-# common/resource.cpp:1839
-# common/resource.cpp:1969
-# common/resource.cpp:3053
-#: ../src/common/resourc2.cpp:326 ../src/common/resourc2.cpp:1391
-#: ../src/common/resource.cpp:1845 ../src/common/resource.cpp:1975
-#: ../src/common/resource.cpp:3059
-msgid "Expected '*' whilst parsing resource."
-msgstr ""
-
-# common/resourc2.cpp:342
-# common/resourc2.cpp:1415
-# common/resource.cpp:1856
-# common/resource.cpp:1985
-# common/resource.cpp:3070
-#: ../src/common/resourc2.cpp:342 ../src/common/resourc2.cpp:1407
-#: ../src/common/resource.cpp:1862 ../src/common/resource.cpp:1991
-#: ../src/common/resource.cpp:3076
-msgid "Expected '=' whilst parsing resource."
-msgstr ""
-
-# common/resourc2.cpp:312
-# common/resourc2.cpp:1385
-# common/resource.cpp:1825
-# common/resource.cpp:1955
-# common/resource.cpp:3039
-#: ../src/common/resourc2.cpp:312 ../src/common/resourc2.cpp:1377
-#: ../src/common/resource.cpp:1831 ../src/common/resource.cpp:1961
-#: ../src/common/resource.cpp:3045
-msgid "Expected 'char' whilst parsing resource."
-msgstr ""
-
-#: ../src/common/fontmap.cpp:144
+#: ../src/common/fmapbase.cpp:139
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
 msgstr ""
 
+#: ../src/html/chm.cpp:696
+#, c-format
+msgid "Extraction of '%s' into '%s' failed."
+msgstr ""
+
 # msw/dialup.cpp:860
-#: ../src/msw/dialup.cpp:842
+#: ../src/msw/dialup.cpp:840
 #, c-format
 msgid "Failed to %s dialup connection: %s"
 msgstr ""
@@ -1600,8 +1677,19 @@ msgstr ""
 msgid "Failed to access lock file."
 msgstr ""
 
+#: ../src/msw/dib.cpp:460
+#, c-format
+msgid "Failed to allocated %luKb of memory for bitmap data."
+msgstr ""
+
 # common/ffile.cpp:182
-#: ../src/common/filename.cpp:176
+#: ../src/unix/displayx11.cpp:262
+#, fuzzy
+msgid "Failed to change video mode"
+msgstr "ne morem izprazniti datoteje '%s'"
+
+# common/ffile.cpp:182
+#: ../src/common/filename.cpp:187
 #, fuzzy
 msgid "Failed to close file handle"
 msgstr "ne morem izprazniti datoteje '%s'"
@@ -1613,83 +1701,84 @@ msgid "Failed to close lock file '%s'"
 msgstr "ne morem izprazniti datoteje '%s'"
 
 # msw/clipbrd.cpp:122
-#: ../src/msw/clipbrd.cpp:127
+#: ../src/msw/clipbrd.cpp:122
 msgid "Failed to close the clipboard."
 msgstr ""
 
 # msw/dialup.cpp:801
-#: ../src/msw/dialup.cpp:782
+#: ../src/msw/dialup.cpp:780
 msgid "Failed to connect: missing username/password."
 msgstr ""
 
 # msw/dialup.cpp:747
-#: ../src/msw/dialup.cpp:728
+#: ../src/msw/dialup.cpp:726
 msgid "Failed to connect: no ISP to dial."
 msgstr ""
 
 # msw/registry.cpp:594
-#: ../src/msw/registry.cpp:597
+#: ../src/msw/registry.cpp:623
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr ""
 
 # msw/registry.cpp:603
-#: ../src/msw/registry.cpp:606
+#: ../src/msw/registry.cpp:632
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr ""
 
 # common/ffile.cpp:182
-#: ../src/common/filefn.cpp:1131
+#: ../src/common/filefn.cpp:1192
 #, fuzzy, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "ne morem izprazniti datoteje '%s'"
 
 # msw/dde.cpp:934
-#: ../src/msw/dde.cpp:948
+#: ../src/msw/dde.cpp:1004
 msgid "Failed to create DDE string"
 msgstr ""
 
 # msw/mdi.cpp:428
-#: ../src/msw/mdi.cpp:425
+#: ../src/msw/mdi.cpp:426
 msgid "Failed to create MDI parent frame."
 msgstr ""
 
 # msw/statbr95.cpp:149
-#: ../src/msw/statbr95.cpp:110
+#: ../src/msw/statbr95.cpp:112
 msgid "Failed to create a status bar."
 msgstr ""
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filename.cpp:721
+#: ../src/common/filename.cpp:733
 #, fuzzy
 msgid "Failed to create a temporary file name"
 msgstr "Ne morem ustvariti imenika"
 
 # generic/dirdlgg.cpp:550
-#: ../src/msw/utilsexc.cpp:197
+#: ../src/msw/utilsexc.cpp:228
 #, fuzzy
 msgid "Failed to create an anonymous pipe"
 msgstr "Ne morem ustvariti imenika"
 
 # msw/dde.cpp:401
-#: ../src/msw/dde.cpp:412
+#: ../src/msw/dde.cpp:468
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
 msgstr ""
 
-# generic/dirdlgg.cpp:550
-#: ../src/msw/toplevel.cpp:313
+# common/imagbmp.cpp:266
+# common/imagbmp.cpp:278
+#: ../src/msw/cursor.cpp:197
 #, fuzzy
-msgid "Failed to create dialog. Incorrect DLGTEMPLATE?"
-msgstr "Ne morem ustvariti imenika"
+msgid "Failed to create cursor."
+msgstr "BMP: Ne morem alocirati pomnilnika."
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/registry.cpp:399
-#: ../src/unix/mimetype.cpp:372
+#: ../src/unix/mimetype.cpp:369
 #, fuzzy, c-format
 msgid "Failed to create directory %s/.gnome."
 msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
@@ -1699,13 +1788,13 @@ msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/registry.cpp:399
-#: ../src/unix/mimetype.cpp:381
+#: ../src/unix/mimetype.cpp:378
 #, fuzzy, c-format
 msgid "Failed to create directory %s/mime-info."
 msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
 
 # generic/dirdlgg.cpp:551
-#: ../src/generic/dirdlgg.cpp:201
+#: ../src/generic/dirdlgg.cpp:203
 #, fuzzy, c-format
 msgid ""
 "Failed to create directory '%s'\n"
@@ -1719,100 +1808,83 @@ msgstr ""
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/registry.cpp:399
-#: ../src/msw/mimetype.cpp:168
+#: ../src/msw/mimetype.cpp:196
 #, fuzzy, c-format
 msgid "Failed to create registry entry for '%s' files."
 msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
 
-#: ../src/msw/fdrepdlg.cpp:442
+#: ../src/msw/fdrepdlg.cpp:480
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr ""
 
 # html/winpars.cpp:364
-#: ../src/html/winpars.cpp:468
+#: ../src/html/winpars.cpp:495
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Ne morem prikazati dokumenta HTML, kodiranega v %s"
 
 # msw/clipbrd.cpp:134
-#: ../src/mac/clipbrd.cpp:168 ../src/msw/clipbrd.cpp:139
+#: ../src/mac/clipbrd.cpp:185 ../src/msw/clipbrd.cpp:134
 msgid "Failed to empty the clipboard."
 msgstr ""
 
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# msw/registry.cpp:399
+#: ../src/unix/displayx11.cpp:201
+#, fuzzy
+msgid "Failed to enumerate video modes"
+msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
+
 # msw/dde.cpp:616
-#: ../src/msw/dde.cpp:613
+#: ../src/msw/dde.cpp:668
 msgid "Failed to establish an advise loop with DDE server"
 msgstr ""
 
 # msw/dialup.cpp:639
-#: ../src/msw/dialup.cpp:620
+#: ../src/msw/dialup.cpp:618
 #, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr ""
 
 # common/ffile.cpp:182
-#: ../src/unix/utilsunx.cpp:540 ../src/unix/utilsunx.cpp:557
+#: ../src/unix/utilsunx.cpp:459 ../src/unix/utilsunx.cpp:475
 #, fuzzy, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "ne morem izprazniti datoteje '%s'"
 
-# common/resourc2.cpp:808
-# common/resource.cpp:2458
-#: ../src/common/resourc2.cpp:808 ../src/common/resource.cpp:2465
-#, c-format
-msgid ""
-"Failed to find XBM resource %s.\n"
-"Forgot to use wxResourceLoadBitmapData?"
-msgstr ""
-
-# common/resourc2.cpp:963
-# common/resource.cpp:2613
-#: ../src/common/resourc2.cpp:959 ../src/common/resource.cpp:2619
-#, c-format
-msgid ""
-"Failed to find XBM resource %s.\n"
-"Forgot to use wxResourceLoadIconData?"
-msgstr ""
-
-# common/resourc2.cpp:824
-# common/resource.cpp:2474
-#: ../src/common/resourc2.cpp:823 ../src/common/resource.cpp:2480
-#, c-format
-msgid ""
-"Failed to find XPM resource %s.\n"
-"Forgot to use wxResourceLoadBitmapData?"
-msgstr ""
-
 # msw/dialup.cpp:699
-#: ../src/msw/dialup.cpp:680
+#: ../src/msw/dialup.cpp:678
 #, c-format
 msgid "Failed to get ISP names: %s"
 msgstr ""
 
 # generic/dirdlgg.cpp:550
-#: ../src/mac/clipbrd.cpp:119
+#: ../src/mac/clipbrd.cpp:134
 #, fuzzy
 msgid "Failed to get clipboard data."
 msgstr "Ne morem ustvariti imenika"
 
 # msw/clipbrd.cpp:623
-#: ../src/msw/clipbrd.cpp:712
+#: ../src/msw/clipbrd.cpp:713
 msgid "Failed to get data from the clipboard"
 msgstr ""
 
 # common/timercmn.cpp:244
-#: ../src/common/timercmn.cpp:294
+#: ../src/common/stopwatch.cpp:238
 msgid "Failed to get the UTC system time."
 msgstr ""
 
 # common/timercmn.cpp:196
-#: ../src/common/timercmn.cpp:245
+#: ../src/common/stopwatch.cpp:189
 msgid "Failed to get the local system time"
 msgstr ""
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filefn.cpp:1512
+#: ../src/common/filefn.cpp:1602
 #, fuzzy
 msgid "Failed to get the working directory"
 msgstr "Ne morem ustvariti imenika"
@@ -1825,11 +1897,11 @@ msgstr ""
 msgid "Failed to initialize MS HTML Help."
 msgstr ""
 
-#: ../src/msw/glcanvas.cpp:729
+#: ../src/msw/glcanvas.cpp:741
 msgid "Failed to initialize OpenGL"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:887
+#: ../src/unix/threadpsx.cpp:896
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -1841,25 +1913,25 @@ msgid "Failed to kill process %d"
 msgstr ""
 
 # common/ffile.cpp:182
-#: ../src/common/iconbndl.cpp:66
+#: ../src/common/iconbndl.cpp:68
 #, fuzzy, c-format
 msgid "Failed to load image %d from file '%s'."
 msgstr "ne morem izprazniti datoteje '%s'"
 
 # generic/dirdlgg.cpp:550
-#: ../src/msw/volume.cpp:347
+#: ../src/msw/volume.cpp:312
 #, fuzzy
 msgid "Failed to load mpr.dll."
 msgstr "Ne morem ustvariti imenika"
 
 # common/dynlib.cpp:239
-#: ../src/common/dynlib.cpp:274 ../src/common/dynload.cpp:198
+#: ../src/common/dynlib.cpp:287
 #, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "Ne morem odpreti deljene knji¾nice"
 
 # common/dynlib.cpp:239
-#: ../src/common/dynlib.cpp:256 ../src/common/dynload.cpp:127
+#: ../src/common/dynlib.cpp:216
 #, fuzzy, c-format
 msgid "Failed to load shared library '%s' Error '%s'"
 msgstr "Ne morem odpreti deljene knji¾nice"
@@ -1870,21 +1942,27 @@ msgstr "Ne morem odpreti deljene knji¾nice"
 msgid "Failed to lock the lock file '%s'"
 msgstr "ne morem izprazniti datoteje '%s'"
 
-#: ../src/common/regex.cpp:251
+#: ../src/common/regex.cpp:263
 #, c-format
 msgid "Failed to match '%s' in regular expression: %s"
 msgstr ""
 
 # common/ffile.cpp:182
-#: ../src/common/filename.cpp:1667
+#: ../src/common/filename.cpp:1848
 #, fuzzy, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "ne morem izprazniti datoteje '%s'"
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filename.cpp:164
+#: ../src/common/filename.cpp:175
 #, fuzzy, c-format
 msgid "Failed to open '%s' for %s"
+msgstr "Ne morem ustvariti imenika"
+
+# generic/dirdlgg.cpp:550
+#: ../src/html/chm.cpp:142
+#, fuzzy, c-format
+msgid "Failed to open CHM archive '%s'."
 msgstr "Ne morem ustvariti imenika"
 
 # SOME DESCRIPTIVE TITLE.
@@ -1893,13 +1971,13 @@ msgstr "Ne morem ustvariti imenika"
 # 
 # common/file.cpp:580
 # common/file.cpp:583
-#: ../src/common/filename.cpp:743
+#: ../src/common/filename.cpp:755
 #, fuzzy
 msgid "Failed to open temporary file."
 msgstr "ne odstraniti zaèasne datoteke '%s'"
 
 # msw/clipbrd.cpp:102
-#: ../src/msw/clipbrd.cpp:107
+#: ../src/msw/clipbrd.cpp:102
 msgid "Failed to open the clipboard."
 msgstr ""
 
@@ -1912,24 +1990,24 @@ msgstr ""
 msgid "Failed to read PID from lock file."
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:635
+#: ../src/unix/utilsunx.cpp:547
 msgid "Failed to redirect child process input/output"
 msgstr ""
 
 # generic/dirdlgg.cpp:550
-#: ../src/msw/utilsexc.cpp:605
+#: ../src/msw/utilsexc.cpp:635
 #, fuzzy
 msgid "Failed to redirect the child process IO"
 msgstr "Ne morem ustvariti imenika"
 
 # msw/dde.cpp:285
-#: ../src/msw/dde.cpp:295
+#: ../src/msw/dde.cpp:318
 #, c-format
 msgid "Failed to register DDE server '%s'"
 msgstr ""
 
 # common/fontmap.cpp:552
-#: ../src/common/fontmap.cpp:715
+#: ../src/common/fontmap.cpp:230
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Ne morem zi zapomniti kodiranje za izbor znakov '%s'."
@@ -1957,40 +2035,46 @@ msgid "Failed to remove stale lock file '%s'."
 msgstr "ne odstraniti zaèasne datoteke '%s'"
 
 # msw/registry.cpp:440
-#: ../src/msw/registry.cpp:443
+#: ../src/msw/registry.cpp:469
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr ""
 
 # msw/registry.cpp:540
-#: ../src/msw/registry.cpp:543
+#: ../src/msw/registry.cpp:569
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr ""
 
 # msw/clipbrd.cpp:428
-#: ../src/msw/clipbrd.cpp:505
+#: ../src/msw/clipbrd.cpp:503
 msgid "Failed to retrieve data from the clipboard."
 msgstr ""
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filename.cpp:1757
+#: ../src/common/filename.cpp:1938
 #, fuzzy, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Ne morem ustvariti imenika"
 
 # msw/dialup.cpp:463
-#: ../src/msw/dialup.cpp:444
+#: ../src/msw/dialup.cpp:442
 msgid "Failed to retrieve text of RAS error message"
 msgstr ""
 
 # msw/clipbrd.cpp:652
-#: ../src/msw/clipbrd.cpp:742
+#: ../src/msw/clipbrd.cpp:750
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr ""
 
+# common/ffile.cpp:182
+#: ../src/msw/dib.cpp:264
+#, fuzzy, c-format
+msgid "Failed to save the bitmap image to file \"%s\"."
+msgstr "ne morem izprazniti datoteje '%s'"
+
 # msw/dde.cpp:661
-#: ../src/msw/dde.cpp:658
+#: ../src/msw/dde.cpp:713
 msgid "Failed to send DDE advise notification"
 msgstr ""
 
@@ -2006,42 +2090,42 @@ msgid "Failed to set clipboard data."
 msgstr ""
 
 # common/ffile.cpp:182
-#: ../src/common/file.cpp:526
+#: ../src/common/file.cpp:701
 #, fuzzy
 msgid "Failed to set temporary file permissions"
 msgstr "ne morem izprazniti datoteje '%s'"
 
 # generic/dirdlgg.cpp:550
-#: ../src/unix/threadpsx.cpp:1241 ../src/unix/threadpsx.cpp:1252
+#: ../src/unix/threadpsx.cpp:1245 ../src/unix/threadpsx.cpp:1256
 #, fuzzy, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Ne morem ustvariti imenika"
 
 # common/fs_mem.cpp:167
-#: ../src/common/fs_mem.cpp:167
+#: ../src/common/fs_mem.cpp:229
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "Ne morem shraniti slike '%s' v spominski VFS!"
 
 # generic/dirdlgg.cpp:550
-#: ../src/unix/threadpsx.cpp:1425
+#: ../src/unix/threadpsx.cpp:1429
 #, fuzzy
 msgid "Failed to terminate a thread."
 msgstr "Ne morem ustvariti imenika"
 
 # msw/dde.cpp:635
-#: ../src/msw/dde.cpp:632
+#: ../src/msw/dde.cpp:687
 msgid "Failed to terminate the advise loop with DDE server"
 msgstr ""
 
 # msw/dialup.cpp:933
-#: ../src/msw/dialup.cpp:915
+#: ../src/msw/dialup.cpp:913
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
 msgstr ""
 
 # common/ffile.cpp:182
-#: ../src/common/filename.cpp:1682
+#: ../src/common/filename.cpp:1863
 #, fuzzy, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "ne morem izprazniti datoteje '%s'"
@@ -2053,7 +2137,7 @@ msgid "Failed to unlock lock file '%s'"
 msgstr "ne morem izprazniti datoteje '%s'"
 
 # msw/dde.cpp:301
-#: ../src/msw/dde.cpp:311
+#: ../src/msw/dde.cpp:339
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
 msgstr ""
@@ -2065,19 +2149,18 @@ msgid "Failed to write to lock file '%s'"
 msgstr "ne morem izprazniti datoteje '%s'"
 
 # generic/logg.cpp:371
-#: ../src/generic/logg.cpp:379
+#: ../src/generic/logg.cpp:391
 msgid "Fatal error"
 msgstr "Fatalna napaka"
 
 # common/log.cpp:355
-#: ../src/common/log.cpp:453
+#: ../src/common/log.cpp:467
 msgid "Fatal error: "
 msgstr "Fatalna napaka:"
 
-# msw/app.cpp:1263
-#: ../src/mac/app.cpp:1284 ../src/msw/app.cpp:1290
-msgid "Fatal error: exiting"
-msgstr "Fatalna napaka: izstop"
+#: ../src/html/helpfrm.cpp:276
+msgid "File"
+msgstr ""
 
 # html/htmprint.cpp:272
 #: ../src/mgl/bitmap.cpp:544
@@ -2086,13 +2169,13 @@ msgid "File %s does not exist."
 msgstr ": datoteka ne obstaja"
 
 # generic/filedlgg.cpp:1074
-#: ../src/gtk/filedlg.cpp:69 ../src/generic/filedlgg.cpp:1408
+#: ../src/generic/filedlgg.cpp:1212 ../src/gtk/filedlg.cpp:71
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Datoteka %s ¾e obstaja. Ali jo res ¾elite prepisati?"
 
 # generic/filedlgg.cpp:1074
-#: ../src/msw/filedlg.cpp:518
+#: ../src/os2/filedlg.cpp:302
 #, fuzzy, c-format
 msgid ""
 "File '%s' already exists.\n"
@@ -2100,78 +2183,75 @@ msgid ""
 msgstr "Datoteka %s ¾e obstaja. Ali jo res ¾elite prepisati?"
 
 # common/textcmn.cpp:94
-#: ../src/common/textcmn.cpp:158
+#: ../src/common/textcmn.cpp:224
 msgid "File couldn't be loaded."
 msgstr ""
 
 # common/docview.cpp:296
 # common/docview.cpp:332
 # common/docview.cpp:1388
-#: ../src/common/docview.cpp:295 ../src/common/docview.cpp:332
-#: ../src/common/docview.cpp:1424
+#: ../src/common/docview.cpp:316 ../src/common/docview.cpp:357
+#: ../src/common/docview.cpp:1502
 msgid "File error"
 msgstr "Datoteèna napaka:"
 
 # generic/dirdlgg.cpp:286
 # generic/filedlgg.cpp:731
-#: ../src/generic/dirctrlg.cpp:722 ../src/generic/filedlgg.cpp:956
+#: ../src/generic/dirctrlg.cpp:701 ../src/generic/filedlgg.cpp:725
 msgid "File name exists already."
 msgstr "Datoteka ¾e obstaja"
 
 # msw/filedlg.cpp:303
-#: ../src/msw/filedlg.cpp:366
+#: ../src/common/fldlgcmn.cpp:62 ../src/msw/filedlg.cpp:250
 #, c-format
 msgid "Files (%s)|%s"
 msgstr ""
 
 # html/helpfrm.cpp:340
-#: ../src/html/helpfrm.cpp:367
+#: ../src/html/helpfrm.cpp:397
 msgid "Find"
 msgstr "Poi¹èi"
 
 # html/helpfrm.cpp:889
-#: ../src/html/helpfrm.cpp:950
+#: ../src/html/helpfrm.cpp:1040
 msgid "Fixed font:"
 msgstr "enakomerna pisava"
 
-#: ../src/common/paper.cpp:118
+#: ../src/html/helpfrm.cpp:1101
+msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
+msgstr ""
+
+#: ../src/common/paper.cpp:130
 msgid "Folio, 8 1/2 x 13 in"
 msgstr ""
 
 # html/helpfrm.cpp:899
-#: ../src/html/helpfrm.cpp:951
+#: ../src/html/helpfrm.cpp:1041
 msgid "Font size:"
 msgstr "Velikost pisave"
 
-#: ../src/unix/utilsunx.cpp:578
+#: ../src/unix/utilsunx.cpp:496
 msgid "Fork failed"
 msgstr ""
 
 # common/dlgcmn.cpp:132
 # generic/helpwxht.cpp:158
-#: ../src/common/dlgcmn.cpp:230
+#: ../src/common/dlgcmn.cpp:224
 msgid "Forward"
 msgstr "Naprej"
 
-# common/resourc2.cpp:295
-# common/resourc2.cpp:1368
-# common/resource.cpp:1808
-# common/resource.cpp:1938
-# common/resource.cpp:3022
-#: ../src/common/resourc2.cpp:295 ../src/common/resourc2.cpp:1360
-#: ../src/common/resource.cpp:1814 ../src/common/resource.cpp:1944
-#: ../src/common/resource.cpp:3028
-msgid "Found "
+#: ../src/common/xtixml.cpp:235
+msgid "Forward hrefs are not supported"
 msgstr ""
 
 # html/helpfrm.cpp:637
-#: ../src/html/helpfrm.cpp:666
+#: ../src/html/helpfrm.cpp:722
 #, c-format
 msgid "Found %i matches"
 msgstr "Najdenij %i ujemanj"
 
 # generic/prntdlgg.cpp:187
-#: ../src/generic/prntdlgg.cpp:184
+#: ../src/generic/prntdlgg.cpp:181
 msgid "From:"
 msgstr "Od:"
 
@@ -2199,72 +2279,82 @@ msgstr ""
 msgid "GIF: unknown error!!!"
 msgstr ""
 
-#: ../src/univ/themes/gtk.cpp:623
+#: ../src/univ/themes/gtk.cpp:631
 msgid "GTK+ theme"
 msgstr ""
 
-#: ../src/common/paper.cpp:142
+#: ../src/common/paper.cpp:154
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr ""
 
-#: ../src/common/paper.cpp:141
+#: ../src/common/paper.cpp:153
 msgid "German Std Fanfold, 8 1/2 x 12 in"
 msgstr ""
 
-#: ../src/common/image.cpp:762
+#: ../include/wx/xti.h:802
+msgid "GetProperty called w/o valid getter"
+msgstr ""
+
+#: ../include/wx/xti.h:862
+msgid "GetPropertyCollection called on a generic accessor"
+msgstr ""
+
+#: ../include/wx/xti.h:810
+msgid "GetPropertyCollection called w/o valid collection getter"
+msgstr ""
+
+#: ../src/common/image.cpp:1499
 msgid "GetUnusedColour:: No Unused Color in image "
 msgstr ""
 
 # html/helpfrm.cpp:501
-#: ../src/html/helpfrm.cpp:511
+#: ../src/html/helpfrm.cpp:549
 msgid "Go back"
 msgstr "Nazaj"
 
 # html/helpfrm.cpp:504
-#: ../src/html/helpfrm.cpp:514
+#: ../src/html/helpfrm.cpp:552
 msgid "Go forward"
 msgstr "Naprej"
 
 # html/helpfrm.cpp:509
-#: ../src/html/helpfrm.cpp:519
+#: ../src/html/helpfrm.cpp:557
 msgid "Go one level up in document hierarchy"
 msgstr "En nivo vi¹je v hierarhiji dokumenta"
 
 # generic/filedlgg.cpp:875
-#: ../src/generic/dirdlgg.cpp:108 ../src/generic/filedlgg.cpp:1121
+#: ../src/generic/dirdlgg.cpp:110 ../src/generic/filedlgg.cpp:921
 msgid "Go to home directory"
 msgstr "Pojdi na domaèi imenik"
 
 # generic/filedlgg.cpp:869
-#: ../src/generic/filedlgg.cpp:1113
+#: ../src/generic/filedlgg.cpp:913
 msgid "Go to parent directory"
 msgstr "Pojdi menik gor"
 
-#: ../src/common/prntbase.cpp:378
+#: ../src/common/prntbase.cpp:413
 msgid "Goto Page"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:119
+#: ../src/common/fmapbase.cpp:108
 msgid "Greek (ISO-8859-7)"
 msgstr ""
 
+#: ../src/html/helpfrm.cpp:1399
+msgid "HTML Help Project (*.hhp)|*.hhp|"
+msgstr ""
+
 # html/htmlwin.cpp:251
-#: ../src/html/htmlwin.cpp:354
+#: ../src/html/htmlwin.cpp:467
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "HTML sidro %s ne obstaja"
 
-# html/helpfrm.cpp:1188
-#: ../src/html/helpfrm.cpp:1307
-msgid ""
-"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*.htb|"
-"Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*.*)|*"
+#: ../src/html/helpfrm.cpp:1397
+msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr ""
-"HTML datoteke (*.htm)|*.htm|HTML datoteke (*.html)|*.html|Knjige s pomoèjo "
-"(*.htb)|*.htb|Knjige s pomoèjo (*.zip)|*.zip|HTML Projekt pomoèi (*.hhp)|*."
-"hhp|Vse datoteke (*.*)|*"
 
-#: ../src/common/fontmap.cpp:120
+#: ../src/common/fmapbase.cpp:109
 msgid "Hebrew (ISO-8859-8)"
 msgstr ""
 
@@ -2272,165 +2362,170 @@ msgstr ""
 # generic/proplist.cpp:528
 # html/helpfrm.cpp:208
 # msw/mdi.cpp:1283
-#: ../src/msw/mdi.cpp:1324 ../src/html/helpfrm.cpp:245
-#: ../src/common/dlgcmn.cpp:242 ../src/generic/proplist.cpp:516
-#: ../src/generic/mdig.cpp:308
+#: ../src/common/dlgcmn.cpp:236 ../src/generic/mdig.cpp:310
+#: ../src/html/helpfrm.cpp:254 ../src/html/helpfrm.cpp:277
+#: ../src/msw/mdi.cpp:1329
 msgid "Help"
 msgstr "Pomoè"
 
 # html/helpfrm.cpp:872
-#: ../src/html/helpfrm.cpp:944
+#: ../src/html/helpfrm.cpp:1034
 msgid "Help Browser Options"
 msgstr "Mo¾nosti Brkljalnika Pomoèi"
 
 # generic/helphtml.cpp:319
 # generic/helphtml.cpp:320
-#: ../src/generic/helphtml.cpp:334 ../src/generic/helphtml.cpp:335
+#: ../src/generic/helpext.cpp:441 ../src/generic/helpext.cpp:442
 msgid "Help Index"
 msgstr "Indeks pomoèi"
 
 # html/helpfrm.cpp:1172
-#: ../src/html/helpfrm.cpp:1291
+#: ../src/html/helpfrm.cpp:1385
 msgid "Help Printing"
 msgstr "Pomoè pri tiskanju"
 
+#: ../src/html/helpfrm.cpp:1398
+msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
+msgstr ""
+
 # generic/helpwxht.cpp:251
 # html/helpctrl.cpp:38
-#: ../src/html/helpctrl.cpp:49
+#: ../src/html/helpctrl.cpp:55
 #, c-format
 msgid "Help: %s"
 msgstr "Pomoè %s"
 
-#: ../src/common/imagbmp.cpp:939
+#: ../src/common/imagbmp.cpp:936
 msgid "ICO: Error in reading mask DIB."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1041 ../src/common/imagbmp.cpp:1100
-#: ../src/common/imagbmp.cpp:1109 ../src/common/imagbmp.cpp:1120
-#: ../src/common/imagbmp.cpp:1164 ../src/common/imagbmp.cpp:1174
-#: ../src/common/imagbmp.cpp:1183
+#: ../src/common/imagbmp.cpp:1042 ../src/common/imagbmp.cpp:1101
+#: ../src/common/imagbmp.cpp:1110 ../src/common/imagbmp.cpp:1121
+#: ../src/common/imagbmp.cpp:1165 ../src/common/imagbmp.cpp:1175
+#: ../src/common/imagbmp.cpp:1184
 msgid "ICO: Error writing the image file!"
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1009
+#: ../src/common/imagbmp.cpp:1010
 msgid "ICO: Image too tall for an icon."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1015
+#: ../src/common/imagbmp.cpp:1016
 msgid "ICO: Image too wide for an icon."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1248
+#: ../src/common/imagbmp.cpp:1249
 msgid "ICO: Invalid icon index."
 msgstr ""
 
-#: ../src/common/imagiff.cpp:767
+#: ../src/common/imagiff.cpp:771
 msgid "IFF: data stream seems to be truncated."
 msgstr ""
 
-#: ../src/common/imagiff.cpp:751
+#: ../src/common/imagiff.cpp:755
 msgid "IFF: error in IFF image format."
 msgstr ""
 
-#: ../src/common/imagiff.cpp:754
+#: ../src/common/imagiff.cpp:758
 msgid "IFF: not enough memory."
 msgstr ""
 
 # generic/progdlgg.cpp:241
-#: ../src/common/imagiff.cpp:757
+#: ../src/common/imagiff.cpp:761
 #, fuzzy
 msgid "IFF: unknown error!!!"
 msgstr "nepoznan"
 
-# common/resourc2.cpp:997
-# common/resourc2.cpp:1008
-# common/resource.cpp:2647
-# common/resource.cpp:2658
-#: ../src/common/resourc2.cpp:989 ../src/common/resourc2.cpp:1000
-#: ../src/common/resource.cpp:2649 ../src/common/resource.cpp:2660
-#, c-format
-msgid "Icon resource specification %s not found."
+#: ../src/common/xtistrm.cpp:258
+msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr ""
 
-# common/resource.cpp:251
-#: ../src/common/resource.cpp:250
-msgid "Ill-formed resource file syntax."
+#: ../include/wx/xti.h:1606
+msgid "Illegal Parameter Count for ConstructObject Method"
+msgstr ""
+
+#: ../include/wx/xti.h:1679
+msgid "Illegal Parameter Count for Create Method"
 msgstr ""
 
 # generic/dirdlgg.cpp:268
 # generic/filedlgg.cpp:717
-#: ../src/generic/dirctrlg.cpp:704 ../src/generic/filedlgg.cpp:942
+#: ../src/generic/dirctrlg.cpp:683 ../src/generic/filedlgg.cpp:711
 msgid "Illegal directory name."
 msgstr "Napaèno ime imenika"
 
 # generic/filedlgg.cpp:1043
-#: ../src/generic/filedlgg.cpp:1365
+#: ../src/generic/filedlgg.cpp:1166
 msgid "Illegal file specification."
 msgstr "Napaèna specifikacija datoteke"
 
-#: ../src/common/image.cpp:785
+#: ../src/common/image.cpp:900
 msgid "Image and Mask have different sizes"
 msgstr ""
 
-#: ../src/common/image.cpp:1067
+#: ../src/common/image.cpp:1180
 #, c-format
 msgid "Image file is not of type %d."
 msgstr ""
 
 # msw/textctrl.cpp:219
-#: ../src/msw/textctrl.cpp:270
+#: ../src/msw/textctrl.cpp:303
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:390
+#: ../src/unix/utilsunx.cpp:379
 msgid "Impossible to get child process input"
 msgstr ""
 
-#: ../src/common/filefn.cpp:1147
+#: ../src/common/filefn.cpp:1208
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr ""
 
 # common/ffile.cpp:182
-#: ../src/common/filefn.cpp:1161
+#: ../src/common/filefn.cpp:1222
 #, fuzzy, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "ne morem izprazniti datoteje '%s'"
 
-#: ../src/common/filefn.cpp:1212
+#: ../src/common/filefn.cpp:1273
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr ""
 
 # html/helpfrm.cpp:372
-#: ../src/html/helpfrm.cpp:392
+#: ../src/html/helpfrm.cpp:422
 msgid "Index"
 msgstr "Indeks"
 
-#: ../src/common/fontmap.cpp:124
+#: ../src/common/fmapbase.cpp:113
 msgid "Indian (ISO-8859-12)"
 msgstr ""
 
+#: ../src/common/xtistrm.cpp:702
+msgid "Internal error, illegal wxCustomTypeInfo"
+msgstr ""
+
 # common/imagtiff.cpp:171
-#: ../src/common/imagtiff.cpp:183
+#: ../src/common/imagtiff.cpp:211
 msgid "Invalid TIFF image index."
 msgstr ""
 
-#: ../contrib/src/xrc/xmlres.cpp:362
+#: ../contrib/src/xrc/xmlres.cpp:389
 #, c-format
 msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
 msgstr ""
 
 # generic/filedlgg.cpp:1043
-#: ../src/common/appcmn.cpp:398
+#: ../src/common/appcmn.cpp:239
 #, fuzzy, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Napaèna specifikacija datoteke"
 
 # generic/filedlgg.cpp:1043
-#: ../src/x11/app.cpp:218
+#: ../src/x11/app.cpp:128
 #, fuzzy, c-format
 msgid "Invalid geometry specification '%s'"
 msgstr "Napaèna specifikacija datoteke"
@@ -2441,7 +2536,15 @@ msgstr "Napaèna specifikacija datoteke"
 msgid "Invalid lock file '%s'."
 msgstr "ne morem zadpreti datoteke '%s'"
 
-#: ../src/common/regex.cpp:173
+#: ../src/common/xtistrm.cpp:363 ../src/common/xtistrm.cpp:378
+msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:393
+msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
+msgstr ""
+
+#: ../src/common/regex.cpp:182
 #, c-format
 msgid "Invalid regular expression '%s': %s"
 msgstr ""
@@ -2451,49 +2554,49 @@ msgstr ""
 msgid "Italic"
 msgstr "Kurzivno"
 
-#: ../src/common/paper.cpp:137
+#: ../src/common/paper.cpp:149
 msgid "Italy Envelope, 110 x 230 mm"
 msgstr ""
 
 # common/imagjpeg.cpp:202
-#: ../src/common/imagjpeg.cpp:222
+#: ../src/common/imagjpeg.cpp:225
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr ""
 
 # common/imagjpeg.cpp:315
-#: ../src/common/imagjpeg.cpp:336
+#: ../src/common/imagjpeg.cpp:339
 msgid "JPEG: Couldn't save image."
 msgstr ""
 
-#: ../src/common/fontmap.cpp:128
+#: ../src/common/fmapbase.cpp:117
 msgid "KOI8-R"
 msgstr ""
 
 # generic/dcpsg.cpp:2262
 # generic/prntdlgg.cpp:441
 # generic/prntdlgg.cpp:637
-#: ../src/generic/prntdlgg.cpp:426 ../src/generic/prntdlgg.cpp:620
+#: ../src/generic/prntdlgg.cpp:428 ../src/generic/prntdlgg.cpp:638
 msgid "Landscape"
 msgstr "Pokrajina"
 
-#: ../src/common/paper.cpp:110
+#: ../src/common/paper.cpp:122
 msgid "Ledger, 17 x 11 in"
 msgstr ""
 
 # generic/prntdlgg.cpp:649
-#: ../src/generic/prntdlgg.cpp:632
+#: ../src/generic/prntdlgg.cpp:650
 msgid "Left margin (mm):"
 msgstr "Levi rob"
 
-#: ../src/common/paper.cpp:103
+#: ../src/common/paper.cpp:115
 msgid "Legal, 8 1/2 x 14 in"
 msgstr ""
 
-#: ../src/common/paper.cpp:108
+#: ../src/common/paper.cpp:120
 msgid "Letter Small, 8 1/2 x 11 in"
 msgstr ""
 
-#: ../src/common/paper.cpp:102
+#: ../src/common/paper.cpp:114
 msgid "Letter, 8 1/2 x 11 in"
 msgstr ""
 
@@ -2502,20 +2605,19 @@ msgstr ""
 msgid "Light"
 msgstr "Svetlo"
 
+#: ../src/html/chm.cpp:806
+msgid "Link contained '//', converted to absolute link."
+msgstr ""
+
 # generic/filedlgg.cpp:1270
 # msw/filedlg.cpp:483
-#: ../src/gtk/filedlg.cpp:249 ../src/msw/filedlg.cpp:555
-#: ../src/motif/filedlg.cpp:357 ../src/generic/filedlgg.cpp:1623
+#: ../src/common/fldlgcmn.cpp:274
 #, c-format
 msgid "Load %s file"
 msgstr ""
 
-#: ../src/generic/filedlgg.cpp:1625
-msgid "Load file"
-msgstr ""
-
 # html/htmlwin.cpp:187
-#: ../src/html/htmlwin.cpp:282
+#: ../src/html/htmlwin.cpp:389
 msgid "Loading : "
 msgstr "Nalaganje : "
 
@@ -2534,12 +2636,16 @@ msgstr ""
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # generic/logg.cpp:538
-#: ../src/generic/logg.cpp:554
+#: ../src/generic/logg.cpp:565
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Dnevnik je bil shranjen v datoteko '%s'"
 
-#: ../src/gtk/mdi.cpp:433
+#: ../include/wx/xti.h:469 ../include/wx/xti.h:473
+msgid "Long Conversions not supported"
+msgstr ""
+
+#: ../src/gtk/mdi.cpp:442
 msgid "MDI child"
 msgstr ""
 
@@ -2549,22 +2655,22 @@ msgid ""
 "not installed on this machine. Please install it."
 msgstr ""
 
-#: ../src/univ/themes/win32.cpp:4547
+#: ../src/univ/themes/win32.cpp:4678
 msgid "Ma&ximize"
 msgstr ""
 
 # common/fileconf.cpp:526
-#: ../src/unix/mimetype.cpp:2497
+#: ../src/unix/mimetype.cpp:2518
 #, fuzzy, c-format
 msgid "Mailcap file %s, line %d: incomplete entry ignored."
 msgstr "datoteka '%s', vrstica %d: vrednost immutable kluèa '%s' ignorirana."
 
-#: ../src/generic/fdrepdlg.cpp:152
+#: ../src/generic/fdrepdlg.cpp:146
 msgid "Match case"
 msgstr ""
 
 # common/fs_mem.cpp:144
-#: ../src/common/fs_mem.cpp:144
+#: ../src/common/fs_mem.cpp:176
 #, c-format
 msgid "Memory VFS already contains file '%s'!"
 msgstr "Spominski VFS ¾e vsebuje datoteko '%s'"
@@ -2573,16 +2679,16 @@ msgstr "Spominski VFS ¾e vsebuje datoteko '%s'"
 msgid "Metal theme"
 msgstr ""
 
-#: ../src/univ/themes/win32.cpp:4545
+#: ../src/univ/themes/win32.cpp:4676
 msgid "Mi&nimize"
 msgstr ""
 
-#: ../src/unix/mimetype.cpp:2118
+#: ../src/unix/mimetype.cpp:2134
 #, c-format
 msgid "Mime.types file %s, line %d: unterminated quoted string."
 msgstr ""
 
-#: ../src/mgl/app.cpp:173
+#: ../src/mgl/app.cpp:165
 #, c-format
 msgid "Mode %ix%i-%i not available."
 msgstr ""
@@ -2592,64 +2698,65 @@ msgstr ""
 msgid "Modern"
 msgstr ""
 
-#: ../src/common/paper.cpp:138
+#: ../src/generic/filedlgg.cpp:422
+msgid "Modified"
+msgstr ""
+
+#: ../src/common/paper.cpp:150
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
 msgstr ""
 
 # common/dlgcmn.cpp:141
-#: ../src/common/dlgcmn.cpp:239
+#: ../src/common/dlgcmn.cpp:233
 msgid "More..."
 msgstr "Veè..."
 
+#: ../contrib/src/gizmos/editlbox.cpp:165
+msgid "Move down"
+msgstr ""
+
+#: ../contrib/src/gizmos/editlbox.cpp:164
+msgid "Move up"
+msgstr ""
+
 # generic/filedlgg.cpp:533
-#: ../src/generic/filedlgg.cpp:703
+#: ../src/generic/filedlgg.cpp:419
 msgid "Name"
 msgstr "Ime"
 
+#: ../contrib/src/gizmos/editlbox.cpp:162
+msgid "New item"
+msgstr ""
+
 # generic/filedlgg.cpp:610
-#: ../src/generic/dirdlgg.cpp:272 ../src/generic/dirdlgg.cpp:282
-#: ../src/generic/filedlgg.cpp:817 ../src/generic/filedlgg.cpp:826
+#: ../src/generic/dirdlgg.cpp:274 ../src/generic/dirdlgg.cpp:284
+#: ../src/generic/filedlgg.cpp:587 ../src/generic/filedlgg.cpp:596
 msgid "NewName"
 msgstr "NovoIme"
 
 # html/helpfrm.cpp:515
-#: ../src/html/helpfrm.cpp:525
+#: ../src/html/helpfrm.cpp:563
 msgid "Next page"
 msgstr "Naslednja stran"
 
 # common/dlgcmn.cpp:111
 # common/dlgcmn.cpp:121
-#: ../src/mac/msgdlg.cpp:78 ../src/motif/msgdlg.cpp:182
-#: ../src/common/dlgcmn.cpp:219
+#: ../src/common/dlgcmn.cpp:213 ../src/mac/msgdlg.cpp:56
+#: ../src/mac/msgdlg.cpp:140 ../src/motif/msgdlg.cpp:182
 msgid "No"
 msgstr "Ne"
 
-#: ../src/common/image.cpp:793
+#: ../src/common/image.cpp:908
 msgid "No Unused Color in image being masked"
 msgstr ""
 
-# common/resourc2.cpp:814
-# common/resourc2.cpp:969
-# common/resource.cpp:2464
-# common/resource.cpp:2619
-#: ../src/common/resourc2.cpp:814 ../src/common/resourc2.cpp:965
-#: ../src/common/resource.cpp:2471 ../src/common/resource.cpp:2625
-msgid "No XBM facility available!"
-msgstr ""
-
-# common/resourc2.cpp:991
-# common/resource.cpp:2641
-#: ../src/common/resourc2.cpp:983 ../src/common/resource.cpp:2643
-msgid "No XPM icon facility available!"
-msgstr ""
-
 # generic/helphtml.cpp:314
-#: ../src/generic/helphtml.cpp:329
+#: ../src/generic/helpext.cpp:436
 msgid "No entries found."
 msgstr "Ne najdem naslovov"
 
 # common/fontmap.cpp:716
-#: ../src/common/fontmap.cpp:906
+#: ../src/common/fontmap.cpp:401
 #, fuzzy, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found,\n"
@@ -2662,7 +2769,7 @@ msgstr ""
 "(secer besedilo ne bo prikazano pravilno)?"
 
 # common/fontmap.cpp:716
-#: ../src/common/fontmap.cpp:911
+#: ../src/common/fontmap.cpp:406
 #, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found.\n"
@@ -2673,37 +2780,43 @@ msgstr ""
 "®elite izbrati drugo pisavo za prikaz tega kodiranja\n"
 "(secer besedilo ne bo prikazano pravilno)?"
 
-#: ../contrib/src/xrc/xmlres.cpp:557
+#: ../contrib/src/xrc/xmlres.cpp:602
 #, c-format
 msgid "No handler found for XML node '%s', class '%s'!"
 msgstr ""
 
 # common/image.cpp:758
-#: ../src/common/image.cpp:1049 ../src/common/image.cpp:1092
+#: ../src/common/image.cpp:1162 ../src/common/image.cpp:1205
 msgid "No handler found for image type."
 msgstr "Ne najdem handlerja za tip slike."
 
 # common/image.cpp:766
 # common/image.cpp:800
-#: ../src/common/image.cpp:1057 ../src/common/image.cpp:1100
-#: ../src/common/image.cpp:1134
+#: ../src/common/image.cpp:1170 ../src/common/image.cpp:1213
+#: ../src/common/image.cpp:1247
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr ""
 
 # common/image.cpp:784
 # common/image.cpp:816
-#: ../src/common/image.cpp:1118 ../src/common/image.cpp:1150
+#: ../src/common/image.cpp:1231 ../src/common/image.cpp:1263
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr ""
 
 # html/helpfrm.cpp:628
-#: ../src/html/helpfrm.cpp:655
+#: ../src/html/helpfrm.cpp:710
 msgid "No matching page found yet"
 msgstr "Ne najdem ustrezne strani"
 
-#: ../src/common/fontmap.cpp:122
+# generic/helphtml.cpp:314
+#: ../src/unix/sound.cpp:89
+#, fuzzy
+msgid "No sound"
+msgstr "Ne najdem naslovov"
+
+#: ../src/common/fmapbase.cpp:111
 msgid "Nordic (ISO-8859-10)"
 msgstr ""
 
@@ -2713,12 +2826,16 @@ msgstr ""
 msgid "Normal"
 msgstr "Normalno"
 
+#: ../src/html/helpfrm.cpp:1095
+msgid "Normal face<br>and <u>underlined</u>. "
+msgstr ""
+
 # html/helpfrm.cpp:881
-#: ../src/html/helpfrm.cpp:949
+#: ../src/html/helpfrm.cpp:1039
 msgid "Normal font:"
 msgstr "Normalna pisava:"
 
-#: ../src/common/paper.cpp:122
+#: ../src/common/paper.cpp:134
 msgid "Note, 8 1/2 x 11 in"
 msgstr ""
 
@@ -2731,18 +2848,25 @@ msgstr ""
 # generic/prntdlgg.cpp:467
 # generic/proplist.cpp:511
 # html/helpfrm.cpp:909
-#: ../src/gtk/fontdlg.cpp:136 ../src/gtk/filedlg.cpp:167
-#: ../src/html/helpfrm.cpp:974 ../src/common/dlgcmn.cpp:225
-#: ../src/generic/fontdlgg.cpp:254 ../src/generic/proplist.cpp:499
-#: ../src/generic/dirdlgg.cpp:151 ../src/generic/filedlgg.cpp:1180
-#: ../src/generic/filedlgg.cpp:1191 ../src/generic/logg.cpp:739
-#: ../src/generic/prntdlgg.cpp:452
+#: ../src/common/dlgcmn.cpp:219 ../src/generic/dirdlgg.cpp:153
+#: ../src/generic/filedlgg.cpp:976 ../src/generic/filedlgg.cpp:987
+#: ../src/generic/fontdlgg.cpp:254 ../src/generic/logg.cpp:748
+#: ../src/generic/prntdlgg.cpp:454 ../src/gtk/filedlg.cpp:162
+#: ../src/gtk/fontdlg.cpp:139 ../src/html/helpfrm.cpp:1064
 msgid "OK"
 msgstr "V redu"
 
+#: ../src/common/xtixml.cpp:263
+msgid "Objects must have an id attribute"
+msgstr ""
+
+#: ../src/common/docview.cpp:1197 ../src/common/docview.cpp:1525
+msgid "Open File"
+msgstr ""
+
 # html/helpfrm.cpp:523
 # html/helpfrm.cpp:1183
-#: ../src/html/helpfrm.cpp:533 ../src/html/helpfrm.cpp:1302
+#: ../src/html/helpfrm.cpp:571 ../src/html/helpfrm.cpp:1404
 msgid "Open HTML document"
 msgstr "Odpri HTML dokument"
 
@@ -2750,69 +2874,69 @@ msgstr "Odpri HTML dokument"
 # generic/dirdlgg.cpp:605
 # generic/filedlgg.cpp:625
 # generic/filedlgg.cpp:744
-#: ../src/generic/dirdlgg.cpp:298 ../src/generic/dirctrlg.cpp:733
-#: ../src/generic/filedlgg.cpp:841 ../src/generic/filedlgg.cpp:969
+#: ../src/generic/dirctrlg.cpp:712 ../src/generic/dirdlgg.cpp:300
+#: ../src/generic/filedlgg.cpp:611 ../src/generic/filedlgg.cpp:739
 msgid "Operation not permitted."
 msgstr "Operacija ni dovoljena"
 
 # common/cmdline.cpp:590
-#: ../src/common/cmdline.cpp:667
+#: ../src/common/cmdline.cpp:676
 #, c-format
 msgid "Option '%s' requires a value, '=' expected."
 msgstr "Opcija '%s' zahteva vrednost, prièakujem '='."
 
 # common/cmdline.cpp:610
-#: ../src/common/cmdline.cpp:687
+#: ../src/common/cmdline.cpp:696
 #, c-format
 msgid "Option '%s' requires a value."
 msgstr "Opcija '%s' zahteva vrednost."
 
 # common/cmdline.cpp:671
-#: ../src/common/cmdline.cpp:748
+#: ../src/common/cmdline.cpp:758
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Opcije '%s':'%s' ne morem pretvoriti v datum"
 
 # generic/prntdlgg.cpp:447
-#: ../src/generic/prntdlgg.cpp:432
+#: ../src/generic/prntdlgg.cpp:434
 msgid "Options"
 msgstr "Mo¾nosti"
 
 # generic/prntdlgg.cpp:443
 # generic/prntdlgg.cpp:638
-#: ../src/generic/prntdlgg.cpp:428 ../src/generic/prntdlgg.cpp:621
+#: ../src/generic/prntdlgg.cpp:430 ../src/generic/prntdlgg.cpp:639
 msgid "Orientation"
 msgstr "Orientacija"
 
 # common/imagpcx.cpp:448
 # common/imagpcx.cpp:471
-#: ../src/common/imagpcx.cpp:455 ../src/common/imagpcx.cpp:478
+#: ../src/common/imagpcx.cpp:462 ../src/common/imagpcx.cpp:485
 msgid "PCX: couldn't allocate memory"
 msgstr ""
 
 # common/imagpcx.cpp:447
-#: ../src/common/imagpcx.cpp:454
+#: ../src/common/imagpcx.cpp:461
 msgid "PCX: image format unsupported"
 msgstr ""
 
 # common/imagpcx.cpp:470
-#: ../src/common/imagpcx.cpp:477
+#: ../src/common/imagpcx.cpp:484
 msgid "PCX: invalid image"
 msgstr ""
 
 # common/imagpcx.cpp:434
-#: ../src/common/imagpcx.cpp:441
+#: ../src/common/imagpcx.cpp:448
 msgid "PCX: this is not a PCX file."
 msgstr ""
 
 # common/imagpcx.cpp:450
 # common/imagpcx.cpp:472
-#: ../src/common/imagpcx.cpp:457 ../src/common/imagpcx.cpp:479
+#: ../src/common/imagpcx.cpp:464 ../src/common/imagpcx.cpp:486
 msgid "PCX: unknown error !!!"
 msgstr ""
 
 # common/imagpcx.cpp:449
-#: ../src/common/imagpcx.cpp:456
+#: ../src/common/imagpcx.cpp:463
 msgid "PCX: version number too low"
 msgstr ""
 
@@ -2832,69 +2956,81 @@ msgid "PNM: File seems truncated."
 msgstr ""
 
 # common/prntbase.cpp:731
-#: ../src/common/prntbase.cpp:826
+#: ../src/common/prntbase.cpp:832
 #, c-format
 msgid "Page %d"
 msgstr "Stran %d"
 
 # common/prntbase.cpp:729
-#: ../src/common/prntbase.cpp:824
+#: ../src/common/prntbase.cpp:830
 #, c-format
 msgid "Page %d of %d"
 msgstr "Stran %d v %d"
 
 # generic/prntdlgg.cpp:604
-#: ../src/generic/prntdlgg.cpp:587
+#: ../src/generic/prntdlgg.cpp:598
 msgid "Page Setup"
 msgstr "Nastavitev strani"
 
 # generic/prntdlgg.cpp:164
-#: ../src/generic/prntdlgg.cpp:161
+#: ../src/generic/prntdlgg.cpp:158
 msgid "Pages"
 msgstr "Strani"
 
 # generic/prntdlgg.cpp:555
 # generic/prntdlgg.cpp:626
 # generic/prntdlgg.cpp:808
-#: ../src/generic/prntdlgg.cpp:538 ../src/generic/prntdlgg.cpp:609
-#: ../src/generic/prntdlgg.cpp:794
+#: ../src/generic/prntdlgg.cpp:545 ../src/generic/prntdlgg.cpp:625
+#: ../src/generic/prntdlgg.cpp:818
 msgid "Paper Size"
 msgstr "Velikost parirja"
 
 # generic/prntdlgg.cpp:433
 # generic/prntdlgg.cpp:615
 # generic/prntdlgg.cpp:804
-#: ../src/generic/prntdlgg.cpp:418 ../src/generic/prntdlgg.cpp:598
-#: ../src/generic/prntdlgg.cpp:790
+#: ../src/generic/prntdlgg.cpp:420 ../src/generic/prntdlgg.cpp:612
+#: ../src/generic/prntdlgg.cpp:813
 msgid "Paper size"
 msgstr "Velikost papirja"
 
+#: ../src/common/xtistrm.cpp:423
+msgid "Passing a already registered object to SetObject"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:641
+msgid "Passing a already registered object to SetObjectName"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:434 ../src/common/xtistrm.cpp:654
+msgid "Passing an unkown object to GetObject"
+msgstr ""
+
 # generic/filedlgg.cpp:537
-#: ../src/generic/filedlgg.cpp:708
+#: ../src/generic/filedlgg.cpp:425
 msgid "Permissions"
 msgstr "Dovoljenja"
 
-#: ../src/unix/utilsunx.cpp:441
+#: ../include/wx/unix/pipe.h:47
 msgid "Pipe creation failed"
 msgstr ""
 
 # generic/filedlgg.cpp:1092
-#: ../src/gtk/fontdlg.cpp:71
+#: ../src/gtk/fontdlg.cpp:76
 #, fuzzy
 msgid "Please choose a valid font."
 msgstr "Izberi obstojeèo datoteko"
 
 # generic/filedlgg.cpp:1092
-#: ../src/gtk/filedlg.cpp:80 ../src/generic/filedlgg.cpp:1418
+#: ../src/generic/filedlgg.cpp:1221 ../src/gtk/filedlg.cpp:82
 msgid "Please choose an existing file."
 msgstr "Izberi obstojeèo datoteko"
 
 # msw/dialup.cpp:768
-#: ../src/msw/dialup.cpp:749
+#: ../src/msw/dialup.cpp:747
 msgid "Please choose which ISP do you want to connect to"
 msgstr ""
 
-#: ../src/msw/listctrl.cpp:550
+#: ../src/msw/listctrl.cpp:637
 #, c-format
 msgid ""
 "Please install a newer version of comctl32.dll\n"
@@ -2902,171 +3038,166 @@ msgid ""
 "or this program won't operate correctly."
 msgstr ""
 
-#: ../src/common/prntbase.cpp:111
+#: ../src/common/prntbase.cpp:112
 msgid "Please wait while printing\n"
 msgstr ""
 
 # generic/dcpsg.cpp:2261
 # generic/prntdlgg.cpp:440
 # generic/prntdlgg.cpp:636
-#: ../src/generic/prntdlgg.cpp:425 ../src/generic/prntdlgg.cpp:619
+#: ../src/generic/prntdlgg.cpp:427 ../src/generic/prntdlgg.cpp:637
 msgid "Portrait"
 msgstr "Portet"
 
 # generic/prntdlgg.cpp:272
-#: ../src/generic/prntdlgg.cpp:268
+#: ../src/generic/prntdlgg.cpp:270
 msgid "PostScript file"
 msgstr "PostScript datoteka"
 
 # html/helpfrm.cpp:903
-#: ../src/html/helpfrm.cpp:966
+#: ../src/html/helpfrm.cpp:1056
 msgid "Preview:"
 msgstr "Predogled"
 
 # html/helpfrm.cpp:512
-#: ../src/html/helpfrm.cpp:522
+#: ../src/html/helpfrm.cpp:560
 msgid "Previous page"
 msgstr "Prej¹nja stran"
 
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
-#: ../src/generic/prntdlgg.cpp:110 ../src/generic/prntdlgg.cpp:124
+#: ../src/generic/prntdlgg.cpp:107 ../src/generic/prntdlgg.cpp:121
 msgid "Print"
 msgstr "Tiskanje"
 
 # common/docview.cpp:897
-#: ../src/common/docview.cpp:925
+#: ../src/common/docview.cpp:963
 msgid "Print Preview"
 msgstr "Predogled tiskanja"
 
 # common/prntbase.cpp:687
 # common/prntbase.cpp:711
-#: ../src/common/prntbase.cpp:781 ../src/common/prntbase.cpp:805
+#: ../src/common/prntbase.cpp:784 ../src/common/prntbase.cpp:810
 msgid "Print Preview Failure"
 msgstr "Napaka pri predogledu tiskanja"
 
 # generic/prntdlgg.cpp:172
-#: ../src/generic/prntdlgg.cpp:169
+#: ../src/generic/prntdlgg.cpp:166
 msgid "Print Range"
 msgstr "Podroèje tiskanja"
 
 # generic/prntdlgg.cpp:408
 # generic/prntdlgg.cpp:415
-#: ../src/generic/prntdlgg.cpp:406
+#: ../src/generic/prntdlgg.cpp:408
 msgid "Print Setup"
 msgstr "Nastavitev tiskanja"
 
 # generic/prntdlgg.cpp:455
-#: ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/prntdlgg.cpp:442
 msgid "Print in colour"
 msgstr "Bravno tiskanje"
 
 # generic/prntdlgg.cpp:457
-#: ../src/generic/prntdlgg.cpp:442
+#: ../src/generic/prntdlgg.cpp:444
 msgid "Print spooling"
 msgstr "Spooling tiskanja"
 
 # html/helpfrm.cpp:529
-#: ../src/html/helpfrm.cpp:539
+#: ../src/html/helpfrm.cpp:577
 msgid "Print this page"
 msgstr "Natisni to stran"
 
 # generic/dcpsg.cpp:2265
 # generic/prntdlgg.cpp:150
-#: ../src/generic/prntdlgg.cpp:147
+#: ../src/generic/prntdlgg.cpp:144
 msgid "Print to File"
 msgstr "Po¹li v datoteko"
 
-# common/prntbase.cpp:366
-#: ../src/common/prntbase.cpp:435
-msgid "Print..."
-msgstr "Tiskaj..."
-
 # generic/prntdlgg.cpp:459
-#: ../src/generic/prntdlgg.cpp:444
+#: ../src/generic/prntdlgg.cpp:446
 msgid "Printer command:"
 msgstr "Tiskalni¹ka komanda"
 
 # generic/prntdlgg.cpp:149
-#: ../src/generic/prntdlgg.cpp:146
+#: ../src/generic/prntdlgg.cpp:143
 msgid "Printer options"
 msgstr "Nastavitve tiskalnika"
 
 # generic/prntdlgg.cpp:463
-#: ../src/generic/prntdlgg.cpp:448
+#: ../src/generic/prntdlgg.cpp:450
 msgid "Printer options:"
 msgstr "Mo¾nosti tiskalnika"
 
 # generic/prntdlgg.cpp:682
-#: ../src/generic/prntdlgg.cpp:665
+#: ../src/generic/prntdlgg.cpp:683
 msgid "Printer..."
 msgstr "Tiskalnik..."
 
 # common/prntbase.cpp:106
 # common/prntbase.cpp:148
-#: ../src/common/prntbase.cpp:108 ../src/common/prntbase.cpp:153
+#: ../src/common/prntbase.cpp:109 ../src/common/prntbase.cpp:154
 #, fuzzy
 msgid "Printing "
 msgstr "Tiskam"
 
 # common/prntbase.cpp:120
-#: ../src/common/prntbase.cpp:125
+#: ../src/common/prntbase.cpp:126
 msgid "Printing Error"
 msgstr "Napaka pri tiskanju"
 
 # generic/printps.cpp:232
-#: ../src/generic/printps.cpp:221
+#: ../src/generic/printps.cpp:244
 #, c-format
 msgid "Printing page %d..."
 msgstr "Tsikanje strani %d..."
 
 # generic/printps.cpp:192
-#: ../src/generic/printps.cpp:181
+#: ../src/generic/printps.cpp:204
 msgid "Printing..."
 msgstr "Tiskanje..."
 
 # common/log.cpp:356
-#: ../src/common/log.cpp:454
+#: ../src/common/log.cpp:468
 msgid "Program aborted."
 msgstr "Program ustavljen."
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:119
+#: ../src/common/paper.cpp:131
 #, fuzzy
 msgid "Quarto, 215 x 275 mm"
 msgstr "List A4 210 x 297 mm"
 
 # generic/logg.cpp:1023
-#: ../src/generic/logg.cpp:1111
+#: ../src/generic/logg.cpp:1120
 msgid "Question"
 msgstr "Vpra¹anje"
 
 # common/ffile.cpp:133
 # common/ffile.cpp:154
-#: ../src/common/ffile.cpp:125 ../src/common/ffile.cpp:146
+#: ../src/common/ffile.cpp:111 ../src/common/ffile.cpp:132
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "napaka pri branjui datoteke '%s'"
 
-#: ../contrib/src/xrc/xmlres.cpp:532
+#: ../contrib/src/xrc/xmlres.cpp:568
 #, c-format
 msgid "Referenced object node with ref=\"%s\" not found!"
 msgstr ""
 
 # msw/registry.cpp:532
-#: ../src/msw/registry.cpp:535
+#: ../src/msw/registry.cpp:561
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr ""
 
 # msw/registry.cpp:501
-#: ../src/msw/registry.cpp:504
+#: ../src/msw/registry.cpp:530
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr ""
 
 # msw/registry.cpp:628
-#: ../src/msw/registry.cpp:631
+#: ../src/msw/registry.cpp:657
 #, c-format
 msgid ""
 "Registry key '%s' is needed for normal system operation,\n"
@@ -3075,13 +3206,13 @@ msgid ""
 msgstr ""
 
 # msw/registry.cpp:432
-#: ../src/msw/registry.cpp:435
+#: ../src/msw/registry.cpp:461
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr ""
 
 # generic/helphtml.cpp:319
-#: ../src/generic/helphtml.cpp:334
+#: ../src/generic/helpext.cpp:441
 msgid "Relevant entries:"
 msgstr "Ustrezni naslovi"
 
@@ -3091,30 +3222,35 @@ msgid "Remaining time : "
 msgstr "Preostanek èasa"
 
 # html/helpfrm.cpp:269
-#: ../src/html/helpfrm.cpp:329
+#: ../src/html/helpfrm.cpp:359
 msgid "Remove current page from bookmarks"
 msgstr "Odstrani trenutno stran iz zaznamkov"
+
+#: ../src/common/rendcmn.cpp:193
+#, c-format
+msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
+msgstr ""
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # msw/filedlg.cpp:445
-#: ../src/generic/fdrepdlg.cpp:177
+#: ../src/generic/fdrepdlg.cpp:171
 #, fuzzy
 msgid "Replace &all"
 msgstr "Zamenjam datoteko '%s'?"
 
-#: ../src/generic/fdrepdlg.cpp:129
+#: ../src/generic/fdrepdlg.cpp:123
 msgid "Replace with:"
 msgstr ""
 
-#: ../contrib/src/xrc/xmlres.cpp:379
+#: ../contrib/src/xrc/xmlres.cpp:408
 msgid "Resource files must have same version number!"
 msgstr ""
 
 # generic/prntdlgg.cpp:661
-#: ../src/generic/prntdlgg.cpp:644
+#: ../src/generic/prntdlgg.cpp:662
 msgid "Right margin (mm):"
 msgstr "Desni rob"
 
@@ -3125,26 +3261,18 @@ msgstr ""
 
 # generic/filedlgg.cpp:1286
 # msw/filedlg.cpp:484
-#: ../src/gtk/filedlg.cpp:265 ../src/msw/filedlg.cpp:557
-#: ../src/motif/filedlg.cpp:359 ../src/generic/filedlgg.cpp:1638
+#: ../src/common/fldlgcmn.cpp:276
 #, c-format
 msgid "Save %s file"
 msgstr ""
 
 # common/docview.cpp:249
-#: ../src/common/docview.cpp:248
+#: ../src/common/docview.cpp:256
 msgid "Save as"
 msgstr "Shrani kot"
 
-# common/docview.cpp:1371
-# common/docview.cpp:1422
-#: ../src/generic/filedlgg.cpp:1640
-#, fuzzy
-msgid "Save file"
-msgstr "Izberi datoteko"
-
 # generic/logg.cpp:473
-#: ../src/generic/logg.cpp:487
+#: ../src/generic/logg.cpp:498
 msgid "Save log contents to file"
 msgstr "Shrani vsebino dnevnika v datoteko"
 
@@ -3156,12 +3284,12 @@ msgstr ""
 # generic/helpwxht.cpp:161
 # html/helpfrm.cpp:414
 # html/helpfrm.cpp:434
-#: ../src/html/helpfrm.cpp:413 ../src/html/helpfrm.cpp:428
+#: ../src/html/helpfrm.cpp:443 ../src/html/helpfrm.cpp:458
 msgid "Search"
 msgstr "Iskanje"
 
 # html/helpfrm.cpp:416
-#: ../src/html/helpfrm.cpp:415
+#: ../src/html/helpfrm.cpp:445
 msgid ""
 "Search contents of help book(s) for all occurences of the text you typed "
 "above"
@@ -3169,7 +3297,7 @@ msgstr ""
 "Iskanje v knjigah s pomoèjo za vse pojavitve zgoraj natipkanega besedila"
 
 # generic/dirdlgg.cpp:572
-#: ../src/generic/fdrepdlg.cpp:158
+#: ../src/generic/fdrepdlg.cpp:152
 #, fuzzy
 msgid "Search direction"
 msgstr "Ustvari imenik"
@@ -3177,104 +3305,108 @@ msgstr "Ustvari imenik"
 # generic/helpwxht.cpp:161
 # html/helpfrm.cpp:414
 # html/helpfrm.cpp:434
-#: ../src/generic/fdrepdlg.cpp:117
+#: ../src/generic/fdrepdlg.cpp:111
 #, fuzzy
 msgid "Search for:"
 msgstr "Iskanje"
 
 # html/helpfrm.cpp:735
-#: ../src/html/helpfrm.cpp:794
+#: ../src/html/helpfrm.cpp:884
 msgid "Search in all books"
 msgstr "I¹èi v vseh knjigah"
 
 # html/helpfrm.cpp:628
-#: ../src/html/helpfrm.cpp:655
+#: ../src/html/helpfrm.cpp:709
 msgid "Searching..."
 msgstr "Iskanje..."
 
 # generic/dirdlgg.cpp:191
-#: ../src/generic/dirctrlg.cpp:551
+#: ../src/generic/dirctrlg.cpp:594
 msgid "Sections"
 msgstr "Sekcije"
 
 # common/ffile.cpp:221
-#: ../src/common/ffile.cpp:213
+#: ../src/common/ffile.cpp:199
 #, c-format
 msgid "Seek error on file '%s'"
 msgstr "napaka pri iskanju v datoteki '%s'"
 
 # common/docview.cpp:1371
 # common/docview.cpp:1422
-#: ../src/msw/textctrl.cpp:1685
+#: ../src/msw/textctrl.cpp:2055
 #, fuzzy
 msgid "Select &All"
 msgstr "Izberi datoteko"
 
 # common/docview.cpp:1469
-#: ../src/common/docview.cpp:1540
+#: ../src/common/docview.cpp:1605
 msgid "Select a document template"
 msgstr "Izberi ¹ablono dokumenta"
 
 # common/docview.cpp:1494
-#: ../src/common/docview.cpp:1616
+#: ../src/common/docview.cpp:1682
 msgid "Select a document view"
 msgstr "Izberi naèin ogleda dokumenta"
 
 # common/docview.cpp:1371
 # common/docview.cpp:1422
-#: ../src/common/docview.cpp:1407 ../src/common/docview.cpp:1458
+#: ../src/common/docview.cpp:1485
 msgid "Select a file"
 msgstr "Izberi datoteko"
 
 # common/cmdline.cpp:627
-#: ../src/common/cmdline.cpp:704
+#: ../src/common/cmdline.cpp:713
 #, c-format
 msgid "Separator expected after the option '%s'."
 msgstr "Po opciji '%s' prièakujem loèilo."
 
+#: ../include/wx/xti.h:798
+msgid "SetProperty called w/o valid setter"
+msgstr ""
+
 # common/dlgcmn.cpp:138
-#: ../src/common/dlgcmn.cpp:236
+#: ../src/common/dlgcmn.cpp:230
 msgid "Setup"
 msgstr "Nastavitev"
 
 # generic/prntdlgg.cpp:155
-#: ../src/generic/prntdlgg.cpp:152
+#: ../src/generic/prntdlgg.cpp:149
 msgid "Setup..."
 msgstr "Nastavitve..."
 
 # msw/dialup.cpp:539
-#: ../src/msw/dialup.cpp:520
+#: ../src/msw/dialup.cpp:518
 msgid "Several active dialup connections found, choosing one randomly."
 msgstr ""
 
 # html/helpfrm.cpp:331
-#: ../src/html/helpfrm.cpp:369
+#: ../src/html/helpfrm.cpp:399
 msgid "Show all"
 msgstr "Poka¾i vse"
 
 # html/helpfrm.cpp:365
-#: ../src/html/helpfrm.cpp:380
+#: ../src/html/helpfrm.cpp:410
 msgid "Show all items in index"
 msgstr "Poka¾i vse predmete v indeksu"
 
 # generic/filedlgg.cpp:913
-#: ../src/generic/dirdlgg.cpp:135
+#: ../src/generic/dirdlgg.cpp:137
 #, fuzzy
 msgid "Show hidden directories"
 msgstr "Poka¾i skrite datoteke"
 
 # generic/filedlgg.cpp:913
-#: ../src/generic/filedlgg.cpp:1175 ../src/generic/filedlgg.cpp:1197
+#: ../src/generic/filedlgg.cpp:971 ../src/generic/filedlgg.cpp:993
 msgid "Show hidden files"
 msgstr "Poka¾i skrite datoteke"
 
 # html/helpfrm.cpp:496
-#: ../src/html/helpfrm.cpp:506
+#: ../src/html/helpfrm.cpp:544
 msgid "Show/hide navigation panel"
 msgstr "Poka¾i/Skrij navigacijski pano"
 
 # generic/filedlgg.cpp:534
-#: ../src/generic/filedlgg.cpp:704
+#: ../src/generic/filedlgg.cpp:420
 msgid "Size"
 msgstr "Velikost"
 
@@ -3284,38 +3416,72 @@ msgid "Slant"
 msgstr "Levo kurzivno"
 
 # common/docview.cpp:306
-#: ../src/common/docview.cpp:305
+#: ../src/common/docview.cpp:326
 msgid "Sorry, could not open this file for saving."
 msgstr "Ne morem odpreti te datoteke za shranjevanje."
 
 # common/docview.cpp:342
 # common/docview.cpp:354
 # common/docview.cpp:1390
-#: ../src/common/docview.cpp:342 ../src/common/docview.cpp:355
-#: ../src/common/docview.cpp:1426
+#: ../src/common/docview.cpp:367 ../src/common/docview.cpp:380
+#: ../src/common/docview.cpp:1504
 msgid "Sorry, could not open this file."
 msgstr "Ne morem odpreti te datoteke"
 
 # common/docview.cpp:313
-#: ../src/common/docview.cpp:312
+#: ../src/common/docview.cpp:333
 msgid "Sorry, could not save this file."
 msgstr "Ne morem shraniti te datoteke"
 
 # common/prntbase.cpp:687
-#: ../src/common/prntbase.cpp:781
+#: ../src/common/prntbase.cpp:784
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Ni dovolj spomina za predogled tiskanja"
 
-#: ../src/common/paper.cpp:111
+#: ../src/common/docview.cpp:959
+msgid "Sorry, print preview needs a printer to be installed."
+msgstr ""
+
+# common/docview.cpp:342
+# common/docview.cpp:354
+# common/docview.cpp:1390
+#: ../src/common/docview.cpp:1196 ../src/common/docview.cpp:1524
+#, fuzzy
+msgid "Sorry, the format for this file is unknown."
+msgstr "Ne morem odpreti te datoteke"
+
+#: ../src/unix/sound.cpp:433
+msgid "Sound data are in unsupported format."
+msgstr ""
+
+#: ../src/unix/sound.cpp:418
+#, c-format
+msgid "Sound file '%s' is in unsupported format."
+msgstr ""
+
+#: ../src/common/paper.cpp:123
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr ""
 
 # generic/logg.cpp:598
-#: ../src/generic/logg.cpp:604
+#: ../src/generic/logg.cpp:615
 msgid "Status: "
 msgstr "Stanje:"
 
-#: ../contrib/src/xrc/xmlres.cpp:632
+#: ../src/common/xtistrm.cpp:251
+msgid "Streaming delegates for not already streamed objects not yet supported"
+msgstr ""
+
+#: ../src/msw/colour.cpp:38
+#, c-format
+msgid "String To Colour : Incorrect colour specification : %s"
+msgstr ""
+
+#: ../include/wx/xti.h:396 ../include/wx/xti.h:400
+msgid "String conversions not supported"
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:676
 #, c-format
 msgid "Subclass '%s' not found for resource '%s', not subclassing!"
 msgstr ""
@@ -3328,32 +3494,32 @@ msgstr ""
 # common/imagtiff.cpp:192
 # common/imagtiff.cpp:203
 # common/imagtiff.cpp:314
-#: ../src/common/imagtiff.cpp:204 ../src/common/imagtiff.cpp:215
-#: ../src/common/imagtiff.cpp:326
+#: ../src/common/imagtiff.cpp:232 ../src/common/imagtiff.cpp:243
+#: ../src/common/imagtiff.cpp:354
 msgid "TIFF: Couldn't allocate memory."
 msgstr ""
 
 # common/imagtiff.cpp:163
-#: ../src/common/imagtiff.cpp:175
+#: ../src/common/imagtiff.cpp:203
 msgid "TIFF: Error loading image."
 msgstr ""
 
 # common/imagtiff.cpp:214
-#: ../src/common/imagtiff.cpp:226
+#: ../src/common/imagtiff.cpp:254
 msgid "TIFF: Error reading image."
 msgstr ""
 
 # common/imagtiff.cpp:291
-#: ../src/common/imagtiff.cpp:303
+#: ../src/common/imagtiff.cpp:331
 msgid "TIFF: Error saving image."
 msgstr ""
 
 # common/imagtiff.cpp:338
-#: ../src/common/imagtiff.cpp:350
+#: ../src/common/imagtiff.cpp:378
 msgid "TIFF: Error writing image."
 msgstr ""
 
-#: ../src/common/paper.cpp:109
+#: ../src/common/paper.cpp:121
 msgid "Tabloid, 11 x 17 in"
 msgstr ""
 
@@ -3363,20 +3529,20 @@ msgid "Teletype"
 msgstr ""
 
 # common/docview.cpp:1469
-#: ../src/common/docview.cpp:1541
+#: ../src/common/docview.cpp:1606
 msgid "Templates"
 msgstr "©ablone"
 
-#: ../src/common/fontmap.cpp:123
+#: ../src/common/fmapbase.cpp:112
 msgid "Thai (ISO-8859-11)"
 msgstr ""
 
-#: ../src/common/ftp.cpp:569
+#: ../src/common/ftp.cpp:573
 msgid "The FTP server doesn't support passive mode."
 msgstr ""
 
 # common/fontmap.cpp:511
-#: ../src/common/fontmap.cpp:674
+#: ../src/common/fontmap.cpp:188
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -3388,13 +3554,13 @@ msgstr ""
 "[Preklièil] èe ne more biti zamenjan"
 
 # msw/ole/dataobj.cpp:169
-#: ../src/msw/ole/dataobj.cpp:165
+#: ../src/msw/ole/dataobj.cpp:164
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr ""
 
 # generic/dirdlgg.cpp:538
-#: ../src/generic/dirdlgg.cpp:186
+#: ../src/generic/dirdlgg.cpp:188
 #, fuzzy, c-format
 msgid ""
 "The directory '%s' does not exist\n"
@@ -3405,7 +3571,17 @@ msgstr ""
 "Ga ustvarim?"
 
 # common/docview.cpp:1676
-#: ../src/common/docview.cpp:1804
+#: ../src/common/docview.cpp:1859
+#, fuzzy, c-format
+msgid ""
+"The file '%s' couldn't be opened.\n"
+"It has been removed from the most recently used files list."
+msgstr ""
+"Datoteka '%s' ne obstaja.\n"
+"Prav tako je bila izbisana iz seznama MRU datotek."
+
+# common/docview.cpp:1676
+#: ../src/common/docview.cpp:1869
 #, fuzzy, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -3414,210 +3590,227 @@ msgstr ""
 "Datoteka '%s' ne obstaja.\n"
 "Prav tako je bila izbisana iz seznama MRU datotek."
 
-#: ../src/common/filename.cpp:900
+#: ../src/common/filename.cpp:931
 #, c-format
 msgid "The path '%s' contains too many \"..\"!"
 msgstr ""
 
 # common/cmdline.cpp:761
-#: ../src/common/cmdline.cpp:846
+#: ../src/common/cmdline.cpp:857
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Zahtevani parameter '%s' ni bil podan."
 
 # common/textcmn.cpp:121
-#: ../src/common/textcmn.cpp:187
+#: ../src/common/textcmn.cpp:255
 msgid "The text couldn't be saved."
 msgstr ""
 
 # common/cmdline.cpp:740
-#: ../src/common/cmdline.cpp:825
+#: ../src/common/cmdline.cpp:836
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "Vrednost opcije '%s' mora biti podana."
 
-#: ../src/msw/dialup.cpp:408
+#: ../src/msw/dialup.cpp:406
 #, c-format
 msgid ""
 "The version of remote access service (RAS) installed on this machine is "
 "tooold, please upgrade (the following required function is missing: %s)."
 msgstr ""
 
-#: ../src/html/htmprint.cpp:540
+#: ../src/html/htmprint.cpp:580
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
 
 # msw/thread.cpp:1083
-#: ../src/msw/thread.cpp:1214
+#: ../src/msw/thread.cpp:1197
 msgid ""
 "Thread module initialization failed: can not store value in thread local "
 "storage"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1596
+#: ../src/unix/threadpsx.cpp:1600
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 
 # msw/thread.cpp:1071
-#: ../src/msw/thread.cpp:1202
+#: ../src/msw/thread.cpp:1185
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1104
+#: ../src/unix/threadpsx.cpp:1108
 msgid "Thread priority setting is ignored."
 msgstr ""
 
 # msw/mdi.cpp:184
-#: ../src/msw/mdi.cpp:189
+#: ../src/msw/mdi.cpp:188
 msgid "Tile &Horizontally"
 msgstr "Zlo¾i &Horizontalno"
 
 # msw/mdi.cpp:185
-#: ../src/msw/mdi.cpp:190
+#: ../src/msw/mdi.cpp:189
 msgid "Tile &Vertically"
 msgstr "Zlo¾i &Vertikalno"
 
-# generic/filedlgg.cpp:536
-#: ../src/generic/filedlgg.cpp:706
-msgid "Time"
-msgstr "Èas"
+#: ../src/msw/timer.cpp:111
+msgid "Timer creation failed."
+msgstr ""
 
 # generic/tipdlg.cpp:162
-#: ../src/generic/tipdlg.cpp:202
+#: ../src/generic/tipdlg.cpp:205
 msgid "Tip of the Day"
 msgstr "Namigi dneva"
 
 # generic/tipdlg.cpp:138
-#: ../src/generic/tipdlg.cpp:140
+#: ../src/generic/tipdlg.cpp:143
 msgid "Tips not available, sorry!"
 msgstr "Oprostite, namigi niso na voljo"
 
 # generic/prntdlgg.cpp:191
-#: ../src/generic/prntdlgg.cpp:188
+#: ../src/generic/prntdlgg.cpp:185
 msgid "To:"
 msgstr "Do:"
 
+#: ../src/common/imagpng.cpp:304
+msgid "Too many colours in PNG, the image may be slightly blurred."
+msgstr ""
+
 # generic/prntdlgg.cpp:650
-#: ../src/generic/prntdlgg.cpp:633
+#: ../src/generic/prntdlgg.cpp:651
 msgid "Top margin (mm):"
 msgstr "Zgornji rob"
 
 # common/fs_mem.cpp:202
-#: ../src/common/fs_mem.cpp:202
+#: ../src/common/fs_mem.cpp:205
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr ""
 "Posku¹am odstaniti datoteko '%s' iz spominskega VFS, ampak ni nalo¾ena!"
 
 # common/sckaddr.cpp:107
-#: ../src/common/sckaddr.cpp:126
+#: ../src/common/sckaddr.cpp:146 ../src/common/sckaddr.cpp:250
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:121
+#: ../src/common/fmapbase.cpp:110
 msgid "Turkish (ISO-8859-9)"
 msgstr ""
 
-#: ../src/common/paper.cpp:140
+#: ../src/generic/filedlgg.cpp:421
+msgid "Type"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:279 ../src/common/xtixml.cpp:351
+#: ../src/common/xtixml.cpp:498
+msgid "Type must have enum - long conversion"
+msgstr ""
+
+#: ../src/common/paper.cpp:152
 msgid "US Std Fanfold, 14 7/8 x 11 in"
 msgstr ""
 
 # html/htmlwin.cpp:175
-#: ../src/html/htmlwin.cpp:270
+#: ../src/html/htmlwin.cpp:377
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Ne morem odpreti zahtevanega HTML dokumenta: %s"
+
+#: ../src/unix/sound.cpp:323
+msgid "Unable to play sound asynchronously."
+msgstr ""
 
 # generic/fontdlgg.cpp:242
 #: ../src/generic/fontdlgg.cpp:250
 msgid "Underline"
 msgstr "Podèrtano"
 
-# common/resourc2.cpp:305
-# common/resourc2.cpp:319
-# common/resourc2.cpp:335
-# common/resourc2.cpp:349
-# common/resourc2.cpp:1378
-# common/resourc2.cpp:1392
-# common/resourc2.cpp:1408
-# common/resourc2.cpp:1422
-# common/resource.cpp:1818
-# common/resource.cpp:1832
-# common/resource.cpp:1849
-# common/resource.cpp:1863
-# common/resource.cpp:1948
-# common/resource.cpp:1962
-# common/resource.cpp:1978
-# common/resource.cpp:1992
-# common/resource.cpp:3032
-# common/resource.cpp:3046
-# common/resource.cpp:3063
-# common/resource.cpp:3077
-#: ../src/common/resourc2.cpp:305 ../src/common/resourc2.cpp:319
-#: ../src/common/resourc2.cpp:335 ../src/common/resourc2.cpp:349
-#: ../src/common/resourc2.cpp:1370 ../src/common/resourc2.cpp:1384
-#: ../src/common/resourc2.cpp:1400 ../src/common/resourc2.cpp:1414
-#: ../src/common/resource.cpp:1824 ../src/common/resource.cpp:1838
-#: ../src/common/resource.cpp:1855 ../src/common/resource.cpp:1869
-#: ../src/common/resource.cpp:1954 ../src/common/resource.cpp:1968
-#: ../src/common/resource.cpp:1984 ../src/common/resource.cpp:1998
-#: ../src/common/resource.cpp:3038 ../src/common/resource.cpp:3052
-#: ../src/common/resource.cpp:3069 ../src/common/resource.cpp:3083
-msgid "Unexpected end of file whilst parsing resource."
-msgstr ""
-
 # common/cmdline.cpp:712
-#: ../src/common/cmdline.cpp:789
+#: ../src/common/cmdline.cpp:800
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Neprièakovan parameter '%s'"
 
-#: ../src/common/fontmap.cpp:142
+#: ../src/common/fmapbase.cpp:133
+msgid "Unicode 16 bit (UTF-16)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:134
+msgid "Unicode 16 bit Big Endian (UTF-16BE)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:135
+msgid "Unicode 16 bit Little Endian (UTF-16LE)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:136
+msgid "Unicode 32 bit (UTF-32)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:137
+msgid "Unicode 32 bit Big Endian (UTF-32BE)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:138
+msgid "Unicode 32 bit Little Endian (UTF-32LE)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:131
 msgid "Unicode 7 bit (UTF-7)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:143
+#: ../src/common/fmapbase.cpp:132
 msgid "Unicode 8 bit (UTF-8)"
 msgstr ""
 
 # msw/dde.cpp:1030
-#: ../src/msw/dde.cpp:1044
+#: ../src/msw/dde.cpp:1108
 #, c-format
 msgid "Unknown DDE error %08x"
 msgstr ""
 
+#: ../src/common/xtistrm.cpp:368
+msgid "Unknown Object passed to GetObjectClassInfo"
+msgstr ""
+
 # common/fontmap.cpp:332
-#: ../src/common/fontmap.cpp:406
+#: ../src/common/fmapbase.cpp:674
 #, c-format
 msgid "Unknown encoding (%d)"
 msgstr "nepoznano kodiranje (%s)"
 
-#: ../src/unix/mimetype.cpp:2165
+#: ../src/unix/mimetype.cpp:2187
 #, c-format
 msgid "Unknown field in file %s, line %d: '%s'."
 msgstr ""
 
 # common/cmdline.cpp:496
-#: ../src/common/cmdline.cpp:565
+#: ../src/common/cmdline.cpp:573
 #, c-format
 msgid "Unknown long option '%s'"
 msgstr "Nepoznana dolga opcija '%s'"
 
 # common/cmdline.cpp:518
-#: ../src/common/cmdline.cpp:574 ../src/common/cmdline.cpp:595
+#: ../src/common/cmdline.cpp:582 ../src/common/cmdline.cpp:603
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Nepoznana opcija '%s'"
 
-#: ../contrib/src/xrc/xmlres.cpp:701
+#: ../contrib/src/xrc/xmlres.cpp:746
 msgid "Unknown style flag "
 msgstr ""
 
+# common/cmdline.cpp:518
+#: ../src/common/xtixml.cpp:324
+#, fuzzy, c-format
+msgid "Unkown Property %s"
+msgstr "Nepoznana opcija '%s'"
+
 # common/mimecmn.cpp:161
-#: ../src/common/mimecmn.cpp:167
+#: ../src/common/mimecmn.cpp:161
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr ""
@@ -3625,234 +3818,235 @@ msgstr ""
 # common/docview.cpp:1923
 # common/docview.cpp:1938
 # common/docview.cpp:1965
-#: ../src/common/cmdproc.cpp:238 ../src/common/cmdproc.cpp:254
-#: ../src/common/cmdproc.cpp:281
+#: ../src/common/cmdproc.cpp:254 ../src/common/cmdproc.cpp:280
+#: ../src/common/cmdproc.cpp:300
 msgid "Unnamed command"
 msgstr "Neimenovan ukaz"
 
-# common/resourc2.cpp:687
-# common/resource.cpp:2336
-#: ../src/common/resourc2.cpp:687 ../src/common/resource.cpp:2343
-#, c-format
-msgid "Unrecognized style %s whilst parsing resource."
-msgstr ""
-
 # msw/clipbrd.cpp:268
 # msw/clipbrd.cpp:369
-#: ../src/mac/clipbrd.cpp:59 ../src/msw/clipbrd.cpp:273
-#: ../src/msw/clipbrd.cpp:447
+#: ../src/mac/clipbrd.cpp:64 ../src/msw/clipbrd.cpp:273
+#: ../src/msw/clipbrd.cpp:445
 msgid "Unsupported clipboard format."
 msgstr ""
 
-#: ../src/common/appcmn.cpp:380
+#: ../src/common/gzstream.cpp:139
+msgid "Unsupported flag in Gzip header"
+msgstr ""
+
+#: ../src/common/appcmn.cpp:222
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr ""
 
-#: ../src/generic/fdrepdlg.cpp:157
+#: ../src/generic/fdrepdlg.cpp:151
 msgid "Up"
 msgstr ""
 
 # common/cmdline.cpp:797
-#: ../src/common/cmdline.cpp:916
+#: ../src/common/cmdline.cpp:927
 #, c-format
 msgid "Usage: %s"
 msgstr "Uporaba: %s"
 
 # common/valtext.cpp:188
-#: ../src/common/valtext.cpp:196
+#: ../src/common/valtext.cpp:185
 msgid "Validation conflict"
 msgstr "Konflikt pri preverjanju"
 
+#: ../contrib/src/mmedia/vidbase.cpp:65
+msgid "Video Output"
+msgstr ""
+
 # generic/filedlgg.cpp:861
-#: ../src/generic/filedlgg.cpp:1103
+#: ../src/generic/filedlgg.cpp:904
 msgid "View files as a detailed view"
 msgstr "Poka¾i podrobnosti"
 
 # generic/filedlgg.cpp:855
-#: ../src/generic/filedlgg.cpp:1096
+#: ../src/generic/filedlgg.cpp:897
 msgid "View files as a list view"
 msgstr "Poka¾i kot seznam"
 
 # common/docview.cpp:1494
-#: ../src/common/docview.cpp:1617
+#: ../src/common/docview.cpp:1683
 msgid "Views"
 msgstr "Pogledi"
 
-#: ../src/unix/utilsunx.cpp:758
+#: ../src/unix/baseunix.cpp:78
 msgid "Waiting for subprocess termination failed"
 msgstr ""
 
 # common/docview.cpp:437
 # common/resource.cpp:121
-#: ../src/common/resource.cpp:124 ../src/common/docview.cpp:438
+#: ../src/common/docview.cpp:463
 msgid "Warning"
 msgstr "Opozorilo"
 
 # common/log.cpp:366
-#: ../src/common/log.cpp:464
+#: ../src/common/log.cpp:482
 msgid "Warning: "
 msgstr "Opozorilo"
 
 # html/htmlpars.cpp:177
-#: ../src/html/htmlpars.cpp:362
+#: ../src/html/htmlpars.cpp:390
 msgid "Warning: attempt to remove HTML tag handler from empty stack."
 msgstr "Opozorilo: poskus dodajanja praznega HTML 'tag'-a  s praznega sklada"
 
-#: ../src/common/fontmap.cpp:113
+#: ../src/common/fmapbase.cpp:102
 msgid "Western European (ISO-8859-1)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:127
+#: ../src/common/fmapbase.cpp:116
 msgid "Western European with Euro (ISO-8859-15)"
 msgstr ""
 
 # html/helpfrm.cpp:406
-#: ../src/generic/fdrepdlg.cpp:149
+#: ../src/generic/fdrepdlg.cpp:143
 #, fuzzy
 msgid "Whole word"
 msgstr "Samo cele besede"
 
 # html/helpfrm.cpp:406
-#: ../src/html/helpfrm.cpp:412
+#: ../src/html/helpfrm.cpp:442
 msgid "Whole words only"
 msgstr "Samo cele besede"
 
-#: ../src/univ/themes/win32.cpp:1168
+#: ../src/univ/themes/win32.cpp:1182
 msgid "Win32 theme"
 msgstr ""
 
 # msw/utils.cpp:545
-#: ../src/msw/utils.cpp:983
+#: ../src/msw/utils.cpp:981
 msgid "Win32s on Windows 3.1"
 msgstr ""
 
 # msw/utils.cpp:583
-#: ../src/msw/utils.cpp:1015
+#: ../src/msw/utils.cpp:1013
 msgid "Windows 3.1"
 msgstr ""
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:987
+#: ../src/msw/utils.cpp:985
 #, c-format
 msgid "Windows 9%c"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:139
+#: ../src/common/fmapbase.cpp:128
 msgid "Windows Arabic (CP 1256)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:140
+#: ../src/common/fmapbase.cpp:129
 msgid "Windows Baltic (CP 1257)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:133
+#: ../src/common/fmapbase.cpp:122
 msgid "Windows Central European (CP 1250)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:130
+#: ../src/common/fmapbase.cpp:119
 msgid "Windows Chinese Simplified (CP 936)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:132
+#: ../src/common/fmapbase.cpp:121
 msgid "Windows Chinese Traditional (CP 950)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:134
+#: ../src/common/fmapbase.cpp:123
 msgid "Windows Cyrillic (CP 1251)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:136
+#: ../src/common/fmapbase.cpp:125
 msgid "Windows Greek (CP 1253)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:138
+#: ../src/common/fmapbase.cpp:127
 msgid "Windows Hebrew (CP 1255)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:129
+#: ../src/common/fmapbase.cpp:118
 msgid "Windows Japanese (CP 932)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:131
+#: ../src/common/fmapbase.cpp:120
 msgid "Windows Korean (CP 949)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:137
+#: ../src/common/fmapbase.cpp:126
 msgid "Windows Turkish (CP 1254)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:135
+#: ../src/common/fmapbase.cpp:124
 msgid "Windows Western European (CP 1252)"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:141
+#: ../src/common/fmapbase.cpp:130
 msgid "Windows/DOS OEM (CP 437)"
 msgstr ""
 
 # common/ffile.cpp:168
-#: ../src/common/ffile.cpp:160
+#: ../src/common/ffile.cpp:146
 #, c-format
 msgid "Write error on file '%s'"
 msgstr "napaka pri pisanju datoteke '%s'"
 
-#: ../contrib/src/xrc/xml.cpp:530
+#: ../src/xml/xml.cpp:548
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr ""
 
-#: ../src/common/xpmdecod.cpp:759
+#: ../src/common/xpmdecod.cpp:777
 msgid "XPM: Malformed pixel data!"
 msgstr ""
 
-#: ../src/common/xpmdecod.cpp:709 ../src/common/xpmdecod.cpp:718
+#: ../src/common/xpmdecod.cpp:712 ../src/common/xpmdecod.cpp:722
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr ""
 
-#: ../contrib/src/xrc/xmlres.cpp:470
+#: ../contrib/src/xrc/xmlres.cpp:504
 #, c-format
 msgid "XRC resource '%s' (class '%s') not found!"
 msgstr ""
 
-#: ../contrib/src/xrc/xmlres.cpp:861 ../contrib/src/xrc/xmlres.cpp:872
+#: ../contrib/src/xrc/xmlres.cpp:885 ../contrib/src/xrc/xmlres.cpp:897
 #, c-format
 msgid "XRC resource: Cannot create bitmap from '%s'."
 msgstr ""
 
-#: ../contrib/src/xrc/xmlres.cpp:821
+#: ../contrib/src/xrc/xmlres.cpp:845
 #, c-format
 msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
 msgstr ""
 
 # common/dlgcmn.cpp:109
 # common/dlgcmn.cpp:116
-#: ../src/mac/msgdlg.cpp:77 ../src/motif/msgdlg.cpp:182
-#: ../src/common/dlgcmn.cpp:214
+#: ../src/common/dlgcmn.cpp:208 ../src/mac/msgdlg.cpp:57
+#: ../src/mac/msgdlg.cpp:139 ../src/motif/msgdlg.cpp:182
 msgid "Yes"
 msgstr "Da"
 
 # generic/dirdlgg.cpp:571
-#: ../src/generic/dirdlgg.cpp:262
+#: ../src/generic/dirdlgg.cpp:264
 msgid "You cannot add a new directory to this section."
 msgstr "Ne morete dodati novega imenika v to sekcijo"
 
-#: ../src/common/fs_zip.cpp:86 ../src/common/fs_zip.cpp:125
+#: ../src/common/fs_zip.cpp:88 ../src/common/fs_zip.cpp:138
 msgid "ZIP handler currently supports only local files!"
 msgstr ""
 
 # common/docview.cpp:2034
-#: ../src/common/docview.cpp:1953
+#: ../src/common/docview.cpp:2043
 msgid "[EMPTY]"
 msgstr "[PRAZEN]"
 
 # msw/dde.cpp:997
-#: ../src/msw/dde.cpp:1011
+#: ../src/msw/dde.cpp:1075
 msgid "a DDEML application has created a prolonged race condition."
 msgstr ""
 
 # msw/dde.cpp:985
-#: ../src/msw/dde.cpp:999
+#: ../src/msw/dde.cpp:1063
 msgid ""
 "a DDEML function was called without first calling the DdeInitialize "
 "function,\n"
@@ -3861,47 +4055,47 @@ msgid ""
 msgstr ""
 
 # msw/dde.cpp:1003
-#: ../src/msw/dde.cpp:1017
+#: ../src/msw/dde.cpp:1081
 msgid "a client's attempt to establish a conversation has failed."
 msgstr ""
 
 # msw/dde.cpp:1000
-#: ../src/msw/dde.cpp:1014
+#: ../src/msw/dde.cpp:1078
 msgid "a memory allocation failed."
 msgstr ""
 
 # msw/dde.cpp:994
-#: ../src/msw/dde.cpp:1008
+#: ../src/msw/dde.cpp:1072
 msgid "a parameter failed to be validated by the DDEML."
 msgstr ""
 
 # msw/dde.cpp:976
-#: ../src/msw/dde.cpp:990
+#: ../src/msw/dde.cpp:1054
 msgid "a request for a synchronous advise transaction has timed out."
 msgstr ""
 
 # msw/dde.cpp:982
-#: ../src/msw/dde.cpp:996
+#: ../src/msw/dde.cpp:1060
 msgid "a request for a synchronous data transaction has timed out."
 msgstr ""
 
 # msw/dde.cpp:991
-#: ../src/msw/dde.cpp:1005
+#: ../src/msw/dde.cpp:1069
 msgid "a request for a synchronous execute transaction has timed out."
 msgstr ""
 
 # msw/dde.cpp:1009
-#: ../src/msw/dde.cpp:1023
+#: ../src/msw/dde.cpp:1087
 msgid "a request for a synchronous poke transaction has timed out."
 msgstr ""
 
 # msw/dde.cpp:1024
-#: ../src/msw/dde.cpp:1038
+#: ../src/msw/dde.cpp:1102
 msgid "a request to end an advise transaction has timed out."
 msgstr ""
 
 # msw/dde.cpp:1018
-#: ../src/msw/dde.cpp:1032
+#: ../src/msw/dde.cpp:1096
 msgid ""
 "a server-side transaction was attempted on a conversation\n"
 "that was terminated by the client, or the server\n"
@@ -3909,17 +4103,17 @@ msgid ""
 msgstr ""
 
 # msw/dde.cpp:1006
-#: ../src/msw/dde.cpp:1020
+#: ../src/msw/dde.cpp:1084
 msgid "a transaction failed."
 msgstr ""
 
 # common/utilscmn.cpp:466
-#: ../src/common/menucmn.cpp:99
+#: ../src/common/menucmn.cpp:108
 msgid "alt"
 msgstr ""
 
 # msw/dde.cpp:988
-#: ../src/msw/dde.cpp:1002
+#: ../src/msw/dde.cpp:1066
 msgid ""
 "an application initialized as APPCLASS_MONITOR has\n"
 "attempted to perform a DDE transaction,\n"
@@ -3928,17 +4122,17 @@ msgid ""
 msgstr ""
 
 # msw/dde.cpp:1012
-#: ../src/msw/dde.cpp:1026
+#: ../src/msw/dde.cpp:1090
 msgid "an internal call to the PostMessage function has failed. "
 msgstr ""
 
 # msw/dde.cpp:1021
-#: ../src/msw/dde.cpp:1035
+#: ../src/msw/dde.cpp:1099
 msgid "an internal error has occurred in the DDEML."
 msgstr ""
 
 # msw/dde.cpp:1027
-#: ../src/msw/dde.cpp:1041
+#: ../src/msw/dde.cpp:1105
 msgid ""
 "an invalid transaction identifier was passed to a DDEML function.\n"
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
@@ -3946,35 +4140,43 @@ msgid ""
 msgstr ""
 
 # common/fileconf.cpp:1450
-#: ../src/common/fileconf.cpp:1767
+#: ../src/common/fileconf.cpp:1815
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "poskus spremembe nestremenjivega kljuèa '%s' je bil ignoriran."
+
+#: ../src/html/chm.cpp:330
+msgid "bad arguments to library function"
+msgstr ""
+
+#: ../src/html/chm.cpp:342
+msgid "bad signature"
+msgstr ""
 
 #: ../src/common/ftp.cpp:369
 msgid "binary"
 msgstr ""
 
 # generic/fontdlgg.cpp:217
-#: ../src/common/fontcmn.cpp:548
+#: ../src/common/fontcmn.cpp:533
 #, fuzzy
 msgid "bold"
 msgstr "Krepko"
 
 # generic/fontdlgg.cpp:217
-#: ../src/common/fontcmn.cpp:472
+#: ../src/common/fontcmn.cpp:457
 #, fuzzy
 msgid "bold "
 msgstr "Krepko"
 
 # common/ffile.cpp:101
-#: ../src/common/ffile.cpp:93
+#: ../src/common/ffile.cpp:79
 #, c-format
 msgid "can't close file '%s'"
 msgstr "ne morem zadpreti datoteke '%s'"
 
 # common/file.cpp:257
-#: ../src/common/file.cpp:275
+#: ../src/common/file.cpp:371
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "ne morem zapreti datoteènega deskriptorja %d"
@@ -3985,7 +4187,7 @@ msgstr "ne morem zapreti datoteènega deskriptorja %d"
 # 
 # common/file.cpp:557
 # common/file.cpp:567
-#: ../src/common/file.cpp:553
+#: ../src/common/file.cpp:729
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "ne uveljviti sprememb datoteke '%s'"
@@ -3995,7 +4197,7 @@ msgstr "ne uveljviti sprememb datoteke '%s'"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # common/file.cpp:200
-#: ../src/common/file.cpp:215
+#: ../src/common/file.cpp:252
 #, c-format
 msgid "can't create file '%s'"
 msgstr "ne morem ustvariti datoteke '%s'"
@@ -4005,72 +4207,76 @@ msgstr "ne morem ustvariti datoteke '%s'"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # common/fileconf.cpp:920
-#: ../src/common/fileconf.cpp:1078
+#: ../src/common/fileconf.cpp:1106
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "ne morem zbrisati uporabnikove datoteke '%s'"
 
 # common/file.cpp:438
-#: ../src/common/file.cpp:458
+#: ../src/common/file.cpp:631
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr ""
 "ne morem ugotoviti, ali je bil konec datoteke dose¾en na deskriptorju %d"
 
 # common/file.cpp:404
-#: ../src/common/file.cpp:424
+#: ../src/common/file.cpp:585
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "ne morem najti dol¾ine datoteke na datoteènem deskriptorju %d"
 
 # msw/utils.cpp:376
-#: ../src/msw/utils.cpp:369
+#: ../src/msw/utils.cpp:371
 msgid "can't find user's HOME, using current directory."
 msgstr ""
 
 # common/file.cpp:319
-#: ../src/common/file.cpp:338
+#: ../src/common/file.cpp:450
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "ne morem izprazniti deskriptorja %d"
 
 # common/file.cpp:373
-#: ../src/common/file.cpp:392
+#: ../src/common/file.cpp:535 ../src/common/file.cpp:543
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "ne morem iskalne pozicije v datoteènem deskriptorju %d"
 
 # common/fontmap.cpp:646
-#: ../src/common/fontmap.cpp:807
+#: ../src/common/fontmap.cpp:305
 msgid "can't load any font, aborting"
 msgstr "ne morem nalo¾iti katere koli posave, prekinjam"
 
 # common/ffile.cpp:85
 # common/file.cpp:243
-#: ../src/common/file.cpp:261 ../src/common/ffile.cpp:77
+#: ../src/common/ffile.cpp:63 ../src/common/file.cpp:352
 #, c-format
 msgid "can't open file '%s'"
 msgstr "ne morem odpreti datoteke '%s'"
 
 # common/fileconf.cpp:319
-#: ../src/common/fileconf.cpp:397
+#: ../src/common/fileconf.cpp:407
 #, c-format
 msgid "can't open global configuration file '%s'."
 msgstr "ne morem odpreti globalne konfiguracijske datoteke '%s'"
 
 # common/fileconf.cpp:331
-#: ../src/common/fileconf.cpp:416
+#: ../src/common/fileconf.cpp:422
 #, c-format
 msgid "can't open user configuration file '%s'."
 msgstr "ne morem odpreti uporabnikove konfiguracijske datoteke '%s'"
 
 # common/fileconf.cpp:800
-#: ../src/common/fileconf.cpp:949
+#: ../src/common/fileconf.cpp:981
 msgid "can't open user configuration file."
 msgstr "ne morem odpreti uporabni¹ke konfiguracijske datoteke"
 
+#: ../src/common/dynlib.cpp:445
+msgid "can't query for GUI plugins name in console applications"
+msgstr ""
+
 # common/file.cpp:285
-#: ../src/common/file.cpp:301
+#: ../src/common/file.cpp:404
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "ne morem brati iz deskriptorja %d"
@@ -4081,7 +4287,7 @@ msgstr "ne morem brati iz deskriptorja %d"
 # 
 # common/file.cpp:552
 # common/file.cpp:562
-#: ../src/common/file.cpp:548
+#: ../src/common/file.cpp:724
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "ne morem odstraniti datoteke '%s'"
@@ -4092,13 +4298,13 @@ msgstr "ne morem odstraniti datoteke '%s'"
 # 
 # common/file.cpp:580
 # common/file.cpp:583
-#: ../src/common/file.cpp:564
+#: ../src/common/file.cpp:740
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "ne odstraniti zaèasne datoteke '%s'"
 
 # common/file.cpp:359
-#: ../src/common/file.cpp:378
+#: ../src/common/file.cpp:492 ../src/common/file.cpp:518
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "ne morem iskati na datoteènem deskriptorju"
@@ -4114,321 +4320,402 @@ msgid "can't write buffer '%s' to disk."
 msgstr "ne morem zapisati datoteke '%s' na disk"
 
 # common/file.cpp:304
-#: ../src/common/file.cpp:323
+#: ../src/common/file.cpp:433
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "ne morem pisati na deskriptor %d"
 
 # common/fileconf.cpp:807
-#: ../src/common/fileconf.cpp:965
+#: ../src/common/fileconf.cpp:992
 msgid "can't write user configuration file."
 msgstr "ne morem zapisati uporabni¹ke konfiguracijske datoteke"
 
 # common/intl.cpp:374
-#: ../src/common/intl.cpp:364
+#: ../src/common/intl.cpp:1102
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "ne najdem katalo¾ne datoteke za domeno '%s'."
 
+#: ../src/html/chm.cpp:346
+msgid "checksum error"
+msgstr ""
+
+#: ../src/html/chm.cpp:348
+msgid "compression error"
+msgstr ""
+
 # common/utilscmn.cpp:464
-#: ../src/common/menucmn.cpp:97
+#: ../src/common/menucmn.cpp:106
 msgid "ctrl"
 msgstr ""
 
 # common/cmdline.cpp:912
-#: ../src/common/cmdline.cpp:1056
+#: ../src/common/cmdline.cpp:1067
 msgid "date"
 msgstr "datum"
 
-#: ../src/common/fontmap.cpp:416
+#: ../src/html/chm.cpp:350
+msgid "decompression error"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:684
 msgid "default"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3363
+#: ../src/common/xtistrm.cpp:841
+msgid "delegate has no type info"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3483
 msgid "eighteenth"
 msgstr ""
 
 # generic/fontdlgg.cpp:216
-#: ../src/common/datetime.cpp:3353
+#: ../src/common/datetime.cpp:3473
 #, fuzzy
 msgid "eighth"
 msgstr "Svetlo"
 
-#: ../src/common/datetime.cpp:3356
+#: ../src/common/datetime.cpp:3476
 msgid "eleventh"
 msgstr ""
 
+# common/fontmap.cpp:332
+#: ../src/common/strconv.cpp:1573
+#, fuzzy, c-format
+msgid "encoding %s"
+msgstr "nepoznano kodiranje (%s)"
+
 # common/fileconf.cpp:1437
-#: ../src/common/fileconf.cpp:1753
+#: ../src/common/fileconf.cpp:1801
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "vstop '%s' se pojavi veèkrat v skupini '%s'"
 
+#: ../src/html/chm.cpp:344
+msgid "error in data format"
+msgstr ""
+
+# common/ffile.cpp:133
+# common/ffile.cpp:154
+#: ../src/html/chm.cpp:332
+#, fuzzy
+msgid "error opening file"
+msgstr "napaka pri branjui datoteke '%s'"
+
 # msw/dialup.cpp:861
-#: ../src/msw/dialup.cpp:843
+#: ../src/msw/dialup.cpp:841
 msgid "establish"
 msgstr ""
 
 # common/ffile.cpp:182
-#: ../src/common/ffile.cpp:174
+#: ../src/common/ffile.cpp:160
 #, c-format
 msgid "failed to flush the file '%s'"
 msgstr "ne morem izprazniti datoteje '%s'"
 
-#: ../src/common/datetime.cpp:3360
+#: ../src/common/datetime.cpp:3480
 msgid "fifteenth"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3350
+#: ../src/common/datetime.cpp:3470
 msgid "fifth"
 msgstr ""
 
 # common/fileconf.cpp:481
-#: ../src/common/fileconf.cpp:626
+#: ../src/common/fileconf.cpp:658
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "datoteka '%s', vrstica %d: '%s' je bil ignoriran po skupinski glavi."
 
 # common/fileconf.cpp:510
-#: ../src/common/fileconf.cpp:655
+#: ../src/common/fileconf.cpp:687
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "datoteka '%s', vrstica %d: '=' prièakovan."
 
 # common/fileconf.cpp:536
-#: ../src/common/fileconf.cpp:681
+#: ../src/common/fileconf.cpp:710
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "datoteka '%s', vrstica %d: kljuè '%s' je bil ¾e najden v vrstici %d."
 
 # common/fileconf.cpp:526
-#: ../src/common/fileconf.cpp:671
+#: ../src/common/fileconf.cpp:700
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "datoteka '%s', vrstica %d: vrednost immutable kluèa '%s' ignorirana."
 
 # common/fileconf.cpp:449
-#: ../src/common/fileconf.cpp:594
+#: ../src/common/fileconf.cpp:622
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "datoteka '%s': neprièakovan znak %c v vrstici %d"
 
-#: ../src/common/datetime.cpp:3346
+#: ../src/common/datetime.cpp:3466
 msgid "first"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3359
+# html/helpfrm.cpp:899
+#: ../src/html/helpfrm.cpp:1084
+#, fuzzy
+msgid "font size"
+msgstr "Velikost pisave"
+
+#: ../src/common/datetime.cpp:3479
 msgid "fourteenth"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3349
+#: ../src/common/datetime.cpp:3469
 msgid "fourth"
 msgstr ""
 
-#: ../src/common/appcmn.cpp:319
+#: ../src/common/appbase.cpp:320
 msgid "generate verbose log messages"
 msgstr ""
 
 # common/timercmn.cpp:240
-#: ../src/common/timercmn.cpp:290
+#: ../src/common/stopwatch.cpp:234
 msgid "gmtime() failed"
 msgstr ""
 
-#: ../src/mac/scrolbar.cpp:143
-#, c-format
-msgid "illegal scrollbar selector %d"
+#: ../src/common/xtixml.cpp:479
+msgid "incorrect event handler string, missing dot"
 msgstr ""
 
 # msw/dialup.cpp:861
-#: ../src/msw/dialup.cpp:843
+#: ../src/msw/dialup.cpp:841
 msgid "initiate"
 msgstr ""
 
 # common/file.cpp:442
-#: ../src/common/file.cpp:462
+#: ../src/common/file.cpp:635
 msgid "invalid eof() return value."
 msgstr "eof() vrnil napaèno vrednost"
 
 # generic/logg.cpp:1037
-#: ../src/generic/logg.cpp:1125
+#: ../src/generic/logg.cpp:1134
 msgid "invalid message box return value"
 msgstr "Napaèna vrnjena vrednost sporoèilnega okna"
 
 # generic/fontdlgg.cpp:213
-#: ../src/common/fontcmn.cpp:488 ../src/common/fontcmn.cpp:552
+#: ../src/common/fontcmn.cpp:473 ../src/common/fontcmn.cpp:537
 #, fuzzy
 msgid "italic"
 msgstr "Kurzivno"
 
 # generic/fontdlgg.cpp:216
-#: ../src/common/fontcmn.cpp:544
+#: ../src/common/fontcmn.cpp:529
 #, fuzzy
 msgid "light"
 msgstr "Svetlo"
 
 # generic/fontdlgg.cpp:216
-#: ../src/common/fontcmn.cpp:468
+#: ../src/common/fontcmn.cpp:453
 #, fuzzy
 msgid "light "
 msgstr "Svetlo"
 
 # common/intl.cpp:575
-#: ../src/common/intl.cpp:615
+#: ../src/common/intl.cpp:1427
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "ne morem nastaviti locale '%s'."
 
 # common/intl.cpp:369
-#: ../src/common/intl.cpp:359
+#: ../src/common/intl.cpp:1097
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "iskanje kataloga '%s' v poti '%s'"
 
 # generic/fontdlgg.cpp:216
-#: ../src/common/datetime.cpp:3511
+#: ../src/common/datetime.cpp:3630
 #, fuzzy
 msgid "midnight"
 msgstr "Svetlo"
 
 # common/timercmn.cpp:236
-#: ../src/common/timercmn.cpp:286
+#: ../src/common/stopwatch.cpp:230
 msgid "mktime() failed"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3364
+#: ../src/common/datetime.cpp:3484
 msgid "nineteenth"
 msgstr ""
 
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
-#: ../src/common/datetime.cpp:3354
+#: ../src/common/datetime.cpp:3474
 #, fuzzy
 msgid "ninth"
 msgstr "Tiskanje"
 
 # msw/dde.cpp:972
-#: ../src/msw/dde.cpp:986
+#: ../src/msw/dde.cpp:1050
 msgid "no DDE error."
 msgstr ""
 
+# generic/progdlgg.cpp:241
+#: ../src/html/chm.cpp:328
+#, fuzzy
+msgid "no error"
+msgstr "nepoznan"
+
 # html/helpdata.cpp:644
-#: ../src/html/helpdata.cpp:574
+#: ../src/html/helpdata.cpp:603
 msgid "noname"
 msgstr "neimanovana"
 
 # html/helpdata.cpp:644
-#: ../src/common/datetime.cpp:3510
+#: ../src/common/datetime.cpp:3629
 #, fuzzy
 msgid "noon"
 msgstr "neimanovana"
 
 # common/cmdline.cpp:911
-#: ../src/common/cmdline.cpp:1052
+#: ../src/common/cmdline.cpp:1063
 msgid "num"
 msgstr "¹t"
 
-#: ../src/common/filename.cpp:166
+#: ../src/common/xtixml.cpp:258
+msgid "objects cannot have XML Text Nodes"
+msgstr ""
+
+#: ../src/html/chm.cpp:340
+msgid "out of memory"
+msgstr ""
+
+# common/docview.cpp:296
+# common/docview.cpp:332
+# common/docview.cpp:1388
+#: ../src/html/chm.cpp:334
+#, fuzzy
+msgid "read error"
+msgstr "Datoteèna napaka:"
+
+#: ../src/common/filename.cpp:177
 msgid "reading"
 msgstr ""
 
+#: ../src/common/gzstream.cpp:180
+msgid "reading Gzip stream: bad crc"
+msgstr ""
+
+#: ../src/common/gzstream.cpp:182
+msgid "reading Gzip stream: incorrect length"
+msgstr ""
+
 # msw/dde.cpp:1015
-#: ../src/msw/dde.cpp:1029
+#: ../src/msw/dde.cpp:1093
 msgid "reentrancy problem."
 msgstr ""
 
-#: ../src/common/datetime.cpp:3347
+#: ../src/common/datetime.cpp:3467
 msgid "second"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3362
+# common/docview.cpp:296
+# common/docview.cpp:332
+# common/docview.cpp:1388
+#: ../src/html/chm.cpp:338
+#, fuzzy
+msgid "seek error"
+msgstr "Datoteèna napaka:"
+
+#: ../src/common/datetime.cpp:3482
 msgid "seventeenth"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3352
+#: ../src/common/datetime.cpp:3472
 msgid "seventh"
 msgstr ""
 
 # common/utilscmn.cpp:468
-#: ../src/common/menucmn.cpp:101
+#: ../src/common/menucmn.cpp:110
 msgid "shift"
 msgstr ""
 
-#: ../src/common/appcmn.cpp:309
+#: ../src/common/appbase.cpp:310
 msgid "show this help message"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3361
+#: ../src/common/datetime.cpp:3481
 msgid "sixteenth"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3351
+#: ../src/common/datetime.cpp:3471
 msgid "sixth"
 msgstr ""
 
-#: ../src/common/appcmn.cpp:344
+#: ../src/common/appcmn.cpp:193
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr ""
 
-#: ../src/common/appcmn.cpp:330
+#: ../src/common/appcmn.cpp:179
 msgid "specify the theme to use"
 msgstr ""
 
 # common/cmdline.cpp:910
-#: ../src/common/cmdline.cpp:1048
+#: ../src/common/cmdline.cpp:1059
 msgid "str"
 msgstr "str"
 
 # generic/helpwxht.cpp:159
 # html/helpfrm.cpp:303
 # html/helpfrm.cpp:312
-#: ../src/common/datetime.cpp:3355
+#: ../src/common/datetime.cpp:3475
 #, fuzzy
 msgid "tenth"
 msgstr "Vsebina"
 
 # msw/dde.cpp:979
-#: ../src/msw/dde.cpp:993
+#: ../src/msw/dde.cpp:1057
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr ""
 
-#: ../src/common/datetime.cpp:3348
+#: ../src/common/datetime.cpp:3468
 msgid "third"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3358
+#: ../src/common/datetime.cpp:3478
 msgid "thirteenth"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3190
+#: ../src/common/imagtiff.cpp:143 ../src/common/imagtiff.cpp:151
+#, c-format
+msgid "tiff module: %s"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3301
 msgid "today"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3192
+#: ../src/common/datetime.cpp:3303
 msgid "tomorrow"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3357
+#: ../src/common/datetime.cpp:3477
 msgid "twelfth"
 msgstr ""
 
-#: ../src/common/datetime.cpp:3365
+#: ../src/common/datetime.cpp:3485
 msgid "twentieth"
 msgstr ""
 
 # generic/fontdlgg.cpp:242
-#: ../src/common/fontcmn.cpp:540
+#: ../src/common/fontcmn.cpp:525
 #, fuzzy
 msgid "underlined"
 msgstr "Podèrtano"
 
 # generic/fontdlgg.cpp:242
-#: ../src/common/fontcmn.cpp:455
+#: ../src/common/fontcmn.cpp:440
 #, fuzzy
 msgid "underlined "
 msgstr "Podèrtano"
 
 # common/fileconf.cpp:1557
-#: ../src/common/fileconf.cpp:1887
+#: ../src/common/fileconf.cpp:1935
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "neprièakovan \" na poziciji %d v '%s'."
@@ -4438,14 +4725,20 @@ msgstr "neprièakovan \" na poziciji %d v '%s'."
 msgid "unknown"
 msgstr "nepoznan"
 
+# common/fontmap.cpp:507
+#: ../src/common/xtixml.cpp:252
+#, fuzzy, c-format
+msgid "unknown class %s"
+msgstr ": nepoznan nabor znakov"
+
 # generic/progdlgg.cpp:241
-#: ../src/common/regex.cpp:144
+#: ../src/common/regex.cpp:151 ../src/html/chm.cpp:352
 #, fuzzy
 msgid "unknown error"
 msgstr "nepoznan"
 
 # msw/dialup.cpp:466
-#: ../src/msw/dialup.cpp:447
+#: ../src/msw/dialup.cpp:445
 #, c-format
 msgid "unknown error (error code %08x)."
 msgstr ""
@@ -4457,85 +4750,172 @@ msgid "unknown line terminator"
 msgstr "nepoznana smer iskanja"
 
 # common/file.cpp:342
-#: ../src/common/file.cpp:361
+#: ../src/common/file.cpp:474 ../src/common/file.cpp:501
 msgid "unknown seek origin"
 msgstr "nepoznana smer iskanja"
 
 # common/fontmap.cpp:354
-#: ../src/common/fontmap.cpp:430
+#: ../src/common/fmapbase.cpp:698
 #, c-format
 msgid "unknown-%d"
 msgstr "nepoznan-%d"
 
 # common/docview.cpp:406
-#: ../src/common/docview.cpp:407
+#: ../src/common/docview.cpp:432
 msgid "unnamed"
 msgstr "neimenovana"
 
 # common/docview.cpp:1188
-#: ../src/common/docview.cpp:1224
+#: ../src/common/docview.cpp:1307
 #, c-format
 msgid "unnamed%d"
 msgstr "neimenovana%d"
 
+#: ../src/common/gzstream.cpp:147
+msgid "unsupported compression method in Gzip stream"
+msgstr ""
+
 # common/intl.cpp:379
-#: ../src/common/intl.cpp:369
+#: ../src/common/intl.cpp:1107
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "uporabljam katalog '%s' iz '%s'"
 
+# common/docview.cpp:296
+# common/docview.cpp:332
+# common/docview.cpp:1388
+#: ../src/html/chm.cpp:336
+#, fuzzy
+msgid "write error"
+msgstr "Datoteèna napaka:"
+
 # common/prntbase.cpp:106
 # common/prntbase.cpp:148
-#: ../src/common/filename.cpp:166
+#: ../src/common/filename.cpp:177
 #, fuzzy
 msgid "writing"
 msgstr "Tiskam"
 
-#: ../src/common/dynlib.cpp:336
-#, c-format
-msgid "wxDllLoader failed to GetSymbol '%s'"
-msgstr ""
-
-#: ../src/common/dynload.cpp:282
-#, c-format
-msgid "wxDynamicLibrary failed to GetSymbol '%s'"
-msgstr ""
-
 # common/timercmn.cpp:267
-#: ../src/common/timercmn.cpp:335
+#: ../src/common/stopwatch.cpp:279
 msgid "wxGetTimeOfDay failed."
 msgstr ""
 
 # common/socket.cpp:347
 # common/socket.cpp:401
-#: ../src/common/socket.cpp:394 ../src/common/socket.cpp:448
+#: ../src/common/socket.cpp:395 ../src/common/socket.cpp:449
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr ""
 
 # common/socket.cpp:921
-#: ../src/common/socket.cpp:975
+#: ../src/common/socket.cpp:945
 msgid "wxSocket: unknown event!."
 msgstr ""
 
 # common/docview.cpp:306
-#: ../src/motif/app.cpp:586
+#: ../src/motif/app.cpp:204
 #, fuzzy, c-format
 msgid "wxWindows could not open display for '%s': exiting."
 msgstr "Ne morem odpreti te datoteke za shranjevanje."
 
 # common/docview.cpp:306
-#: ../src/x11/app.cpp:245
+#: ../src/x11/app.cpp:176
 #, fuzzy
 msgid "wxWindows could not open display. Exiting."
 msgstr "Ne morem odpreti te datoteke za shranjevanje."
 
-#: ../src/common/datetime.cpp:3191
+#: ../src/common/datetime.cpp:3302
 msgid "yesterday"
 msgstr ""
 
-# generic/filedlgg.cpp:328
-#~ msgid " bytes "
-#~ msgstr "byte-ov "
+# common/log.cpp:242
+#: ../src/common/zstream.cpp:141 ../src/common/zstream.cpp:275
+#, fuzzy, c-format
+msgid "zlib error %d"
+msgstr "(napaka %ld: %s)"
+
+#: ../src/common/prntbase.cpp:450
+msgid "|<<"
+msgstr ""
+
+# html/helpfrm.cpp:928
+#, fuzzy
+#~ msgid ""
+#~ "<html><body><table><tr><td>Normal face<br>(and <u>underlined</u>. "
+#~ "<i>Italic face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></"
+#~ "b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</"
+#~ "font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</"
+#~ "font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</"
+#~ "font><br><font size=+4>font size +4</font><br><td><p><tt>Fixed size face."
+#~ "<br> <b>bold</b> <i>italic</i> <b><i>bold italic <u>underlined</u></i></"
+#~ "b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</"
+#~ "font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</"
+#~ "font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</"
+#~ "font><br><font size=+4>font size +4</font></tt></table></body></html>"
+#~ msgstr ""
+#~ "<html><body>Normalno<br>(and <u>podèrtano</u>. <i>Kurzivno.</i> <b>Krepko."
+#~ "</b> <b><i>Krepko kurzivno.</i></b><br><font size=-2>velikost èrk -2</"
+#~ "font><br><font size=-1>velikost èrk -1</font><br><font size=+0>velikost "
+#~ "èrk +0</font><br><font size=+1>velikost èrk +1</font><br><font size="
+#~ "+2>velikost èrk +2</font><br><font size=+3>velikost èrk +3</"
+#~ "font><br><font size=+4>velikost èrk +4</font><br><p><tt>Enaka velikost."
+#~ "<br> <b>krepko</b> <i>kurzivno</i> <b><i>krepko kurzivno <u>podèrtano</"
+#~ "u></i></b><br><font size=-2>velikost èrk -2</font><br><font size=-"
+#~ "1>velikost èrk -1</font><br><font size=+0>velikost èrk +0</font><br><font "
+#~ "size=+1>velikost èrk +1</font><br><font size=+2>velikost èrk +2</"
+#~ "font><br><font size=+3>velikost èrk +3</font><br><font size=+4>velikost "
+#~ "èrk +4</font></tt></body></html>"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# common/file.cpp:200
+#, fuzzy
+#~ msgid "Can't create dialog using memory template"
+#~ msgstr "ne morem ustvariti datoteke '%s'"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# common/file.cpp:200
+#, fuzzy
+#~ msgid "Can't create dialog using template '%ul'"
+#~ msgstr "ne morem ustvariti datoteke '%s'"
+
+# generic/filedlgg.cpp:535
+#~ msgid "Date"
+#~ msgstr "Datum"
+
+# generic/dirdlgg.cpp:550
+#, fuzzy
+#~ msgid "Failed to create dialog. Incorrect DLGTEMPLATE?"
+#~ msgstr "Ne morem ustvariti imenika"
+
+# msw/app.cpp:1263
+#~ msgid "Fatal error: exiting"
+#~ msgstr "Fatalna napaka: izstop"
+
+# html/helpfrm.cpp:1188
+#~ msgid ""
+#~ "HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*."
+#~ "htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*."
+#~ "*)|*"
+#~ msgstr ""
+#~ "HTML datoteke (*.htm)|*.htm|HTML datoteke (*.html)|*.html|Knjige s "
+#~ "pomoèjo (*.htb)|*.htb|Knjige s pomoèjo (*.zip)|*.zip|HTML Projekt pomoèi "
+#~ "(*.hhp)|*.hhp|Vse datoteke (*.*)|*"
+
+# common/docview.cpp:1371
+# common/docview.cpp:1422
+#, fuzzy
+#~ msgid "Save file"
+#~ msgstr "Izberi datoteko"
+
+# generic/filedlgg.cpp:536
+#~ msgid "Time"
+#~ msgstr "Èas"
 
 # generic/filedlgg.cpp:323
 #~ msgid "<DIR> "
@@ -4582,11 +4962,6 @@ msgstr ""
 # html/helpfrm.cpp:874
 #~ msgid "very small"
 #~ msgstr "zelo male"
-
-# generic/filedlgg.cpp:825
-#, fuzzy
-#~ msgid "All files (*.*)|*.*"
-#~ msgstr "Vse datoteke (*)|*"
 
 # generic/fontdlgg.cpp:124
 #~ msgid "Font"
@@ -4723,12 +5098,3 @@ msgstr ""
 # common/filefn.cpp:1230
 #~ msgid "wxWindows: error finding temporary file name.\n"
 #~ msgstr "wxWindows: napaki pri iskanju imena zaèasne datoteke.\n"
-
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
-# msw/thread.cpp:519
-#, fuzzy
-#~ msgid "Can not create mutex."
-#~ msgstr "ne morem ustvariti niti"

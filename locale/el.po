@@ -1,7 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows 2.5.1\n"
-"POT-Creation-Date: 2002-12-12 11:59+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-02-04 18:56+0100\n"
 "PO-Revision-Date: 2003-04-14 21:28+0200\n"
 "Last-Translator: Nassos Yiannopoulos <nassosy@compulink.gr>\n"
 "Language-Team: Tsolakos Stavros <tsolako1@otenet.gr>\n"
@@ -9,288 +10,222 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-7\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/common/log.cpp:304
+#: ../src/common/log.cpp:319
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (σφάλμα %ld: %s)"
 
-#: ../src/common/docview.cpp:1242
-#, c-format
+#: ../src/common/docview.cpp:1325
 msgid " - "
 msgstr " - "
 
-#: ../src/html/htmprint.cpp:497
-#, c-format
+#: ../src/html/htmprint.cpp:537
 msgid " Preview"
 msgstr " Προεπισκόπηση"
 
-#: ../src/common/paper.cpp:124
-#, c-format
+#: ../src/common/paper.cpp:136
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
 msgstr "#10 Φάκελος, 4 1/8 x 9 1/2 ίντσες"
 
-#: ../src/common/paper.cpp:125
-#, c-format
+#: ../src/common/paper.cpp:137
 msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
 msgstr "#11 Φάκελος, 4 1/2 x 10 3/8 ίντσες"
 
-#: ../src/common/paper.cpp:126
-#, c-format
+#: ../src/common/paper.cpp:138
 msgid "#12 Envelope, 4 3/4 x 11 in"
 msgstr "#12 Φάκελος, 4 3/4 x 11 ίντσες"
 
-#: ../src/common/paper.cpp:127
-#, c-format
+#: ../src/common/paper.cpp:139
 msgid "#14 Envelope, 5 x 11 1/2 in"
 msgstr "#14 Φάκελος, 5 x 11 1/2 ίντσες"
 
-#: ../src/common/paper.cpp:123
-#, c-format
+#: ../src/common/paper.cpp:135
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 Φάκελος, 3 7/8 x 8 7/8 ίντσες"
 
-#: ../src/common/resourc2.cpp:265
-#: ../src/common/resourc2.cpp:1326
-#: ../src/common/resource.cpp:1784
-#: ../src/common/resource.cpp:1914
-#: ../src/common/resource.cpp:2994
-#, c-format
-msgid "#define %s must be an integer."
-msgstr "#define %s πρέπει να είναι ακέραιος (integer)."
-
-#: ../src/common/prntbase.cpp:375
-#, c-format
-msgid "%d"
-msgstr "%d"
-
-#: ../src/common/prntbase.cpp:373
-#, c-format
-msgid "%d...%d"
-msgstr "%d...%d"
-
-#: ../src/html/helpfrm.cpp:777
-#: ../src/html/helpfrm.cpp:778
-#: ../src/html/helpfrm.cpp:1404
-#: ../src/html/helpfrm.cpp:1434
+#: ../src/html/helpfrm.cpp:867 ../src/html/helpfrm.cpp:868
+#: ../src/html/helpfrm.cpp:1505 ../src/html/helpfrm.cpp:1535
 #, c-format
 msgid "%i of %i"
 msgstr "%i από %i"
 
-#: ../src/common/cmdline.cpp:814
+#: ../src/generic/filedlgg.cpp:277
+#, c-format
+msgid "%ld bytes"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:825
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (ή %s)"
 
-#: ../src/generic/logg.cpp:246
+#: ../src/generic/logg.cpp:258
 #, c-format
 msgid "%s Error"
 msgstr "%s Σφάλμα"
 
-#: ../src/generic/logg.cpp:254
+#: ../src/generic/logg.cpp:266
 #, c-format
 msgid "%s Information"
 msgstr "%s Πληροφορίες"
 
-#: ../src/generic/logg.cpp:250
+#: ../src/generic/logg.cpp:262
 #, c-format
 msgid "%s Warning"
 msgstr "%s Προειδοποίηση"
 
-#: ../src/common/msgout.cpp:108
+#: ../src/common/msgout.cpp:188
 #, c-format
 msgid "%s message"
 msgstr "%s μήνυμα"
 
-#: ../src/common/resourc2.cpp:709
-#: ../src/common/resource.cpp:2366
-#, c-format
-msgid "%s not a bitmap resource specification."
-msgstr "%s δεν είναι καθορισμός πόρου τύπου bitmap ( bitmap resource )"
+#: ../src/html/helpfrm.cpp:274
+msgid "&About..."
+msgstr ""
 
-#: ../src/common/resourc2.cpp:860
-#: ../src/common/resource.cpp:2520
-#, c-format
-msgid "%s not an icon resource specification."
-msgstr "%s δεν είναι καθορισμός πόρου τύπου εικονιδίου ( icon resource )"
-
-#: ../src/common/resourc2.cpp:357
-#: ../src/common/resourc2.cpp:1422
-#: ../src/common/resource.cpp:1877
-#: ../src/common/resource.cpp:2006
-#: ../src/common/resource.cpp:3091
-#, c-format
-msgid "%s: ill-formed resource file syntax."
-msgstr "%s: κακή (ill-formed) σύνταξη αρχείου πόρων. ( resource file )"
-
-#: ../src/msw/mdi.cpp:192
-#, c-format
+#: ../src/msw/mdi.cpp:191
 msgid "&Arrange Icons"
 msgstr "&Τακτοποίηση εικονιδίων"
 
-#: ../src/generic/fdrepdlg.cpp:170
-#: ../src/generic/wizard.cpp:271
-#, c-format
+#: ../src/generic/fdrepdlg.cpp:164 ../src/generic/wizard.cpp:401
 msgid "&Cancel"
 msgstr "&Άκυρο"
 
-#: ../src/msw/mdi.cpp:188
-#, c-format
+#: ../src/msw/mdi.cpp:187
 msgid "&Cascade"
 msgstr "&Επικάλυψη"
 
-#: ../src/generic/logg.cpp:491
-#: ../src/generic/tipdlg.cpp:210
-#, c-format
+#: ../src/common/prntbase.cpp:439 ../src/generic/logg.cpp:502
+#: ../src/generic/tipdlg.cpp:213 ../src/html/helpfrm.cpp:271
 msgid "&Close"
 msgstr "&Κλείσιμο"
 
-#: ../src/msw/textctrl.cpp:1681
-#, c-format
+#: ../src/msw/textctrl.cpp:2051
 msgid "&Copy"
 msgstr "&Αντιγραφή"
 
-#: ../src/msw/textctrl.cpp:1683
-#, c-format
+#: ../src/msw/textctrl.cpp:2053
 msgid "&Delete"
 msgstr "&Διαγραφή"
 
-#: ../src/generic/logg.cpp:695
-#, c-format
+#: ../src/generic/logg.cpp:704
 msgid "&Details"
 msgstr "&Λεπτομέρειες"
 
-#: ../src/generic/fdrepdlg.cpp:168
-#, c-format
+#: ../src/generic/fdrepdlg.cpp:162
 msgid "&Find"
 msgstr "&Εύρεση"
 
-#: ../src/generic/wizard.cpp:412
-#, c-format
+#: ../src/generic/wizard.cpp:580
 msgid "&Finish"
 msgstr "&Τέλος"
 
-#: ../src/generic/wizard.cpp:258
-#, c-format
+#: ../src/common/prntbase.cpp:474
+msgid "&Goto..."
+msgstr ""
+
+#: ../src/generic/wizard.cpp:404
 msgid "&Help"
 msgstr "&Βοήθεια"
 
-#: ../src/generic/logg.cpp:492
-#, c-format
+#: ../src/generic/logg.cpp:503
 msgid "&Log"
 msgstr "&Καταγραφή"
 
-#: ../src/univ/themes/win32.cpp:4541
-#, c-format
+#: ../src/univ/themes/win32.cpp:4672
 msgid "&Move"
 msgstr "&Μετακίνηση"
 
-#: ../src/generic/mdig.cpp:115
-#: ../src/msw/mdi.cpp:193
-#, c-format
+#: ../src/generic/mdig.cpp:117 ../src/msw/mdi.cpp:192
 msgid "&Next"
 msgstr "&Επόμενο"
 
-#: ../src/generic/wizard.cpp:268
-#: ../src/generic/wizard.cpp:414
-#, c-format
+#: ../src/generic/wizard.cpp:400 ../src/generic/wizard.cpp:582
 msgid "&Next >"
 msgstr "&Επόμενο >"
 
-#: ../src/generic/tipdlg.cpp:215
-#, c-format
+#: ../src/generic/tipdlg.cpp:218
 msgid "&Next Tip"
 msgstr "&Επόμενο Tip"
 
-#: ../src/msw/textctrl.cpp:1682
-#, c-format
+#: ../src/html/helpfrm.cpp:269
+#, fuzzy
+msgid "&Open..."
+msgstr "&Αποθήκευση..."
+
+#: ../src/msw/textctrl.cpp:2052
 msgid "&Paste"
 msgstr "&Επικόληση"
 
-#: ../src/generic/mdig.cpp:116
-#: ../src/msw/mdi.cpp:194
-#, c-format
+#: ../src/generic/mdig.cpp:118 ../src/msw/mdi.cpp:193
 msgid "&Previous"
 msgstr "&Προηγούμενο"
 
-#: ../src/common/cmdproc.cpp:261
-#: ../src/common/cmdproc.cpp:272
-#: ../src/msw/textctrl.cpp:1678
-#, c-format
+#: ../src/common/prntbase.cpp:444
+#, fuzzy
+msgid "&Print..."
+msgstr "Εκτύπωση..."
+
+#: ../src/common/cmdproc.cpp:285 ../src/common/cmdproc.cpp:292
+#: ../src/msw/textctrl.cpp:2048
 msgid "&Redo"
 msgstr "&Επανάληψη"
 
-#: ../src/common/cmdproc.cpp:255
-#: ../src/common/cmdproc.cpp:282
-#, c-format
+#: ../src/common/cmdproc.cpp:281 ../src/common/cmdproc.cpp:301
 msgid "&Redo "
 msgstr "&Επανάληψη "
 
-#: ../src/generic/fdrepdlg.cpp:174
-#, c-format
+#: ../src/generic/fdrepdlg.cpp:168
 msgid "&Replace"
 msgstr "&Αντικατάσταση"
 
-#: ../src/univ/themes/win32.cpp:4540
-#, c-format
+#: ../src/univ/themes/win32.cpp:4671
 msgid "&Restore"
 msgstr "&Επαναφορά"
 
-#: ../src/generic/logg.cpp:487
-#: ../src/generic/logg.cpp:818
-#, c-format
+#: ../src/generic/logg.cpp:498 ../src/generic/logg.cpp:827
 msgid "&Save..."
 msgstr "&Αποθήκευση..."
 
-#: ../src/generic/tipdlg.cpp:212
-#, c-format
+#: ../src/generic/tipdlg.cpp:215
 msgid "&Show tips at startup"
 msgstr "&Εμφάνιση tips κατά την εκκίνηση"
 
-#: ../src/univ/themes/win32.cpp:4543
-#, c-format
+#: ../src/univ/themes/win32.cpp:4674
 msgid "&Size"
 msgstr "&Μέγεθος"
 
-#: ../src/common/cmdproc.cpp:267
-#: ../src/msw/textctrl.cpp:1677
-#, c-format
+#: ../src/common/cmdproc.cpp:263 ../src/msw/textctrl.cpp:2047
 msgid "&Undo"
 msgstr "&Αναίρεση"
 
-#: ../src/common/cmdproc.cpp:241
-#, c-format
+#: ../src/common/cmdproc.cpp:257
 msgid "&Undo "
 msgstr "&Αναίρεση "
 
-#: ../src/generic/mdig.cpp:295
-#: ../src/generic/mdig.cpp:311
-#: ../src/generic/mdig.cpp:315
-#: ../src/msw/mdi.cpp:1328
-#: ../src/msw/mdi.cpp:1335
-#: ../src/msw/mdi.cpp:1365
-#, c-format
+#: ../src/generic/mdig.cpp:297 ../src/generic/mdig.cpp:313
+#: ../src/generic/mdig.cpp:317 ../src/msw/mdi.cpp:1333 ../src/msw/mdi.cpp:1340
+#: ../src/msw/mdi.cpp:1370
 msgid "&Window"
 msgstr "&Παράθυρο"
 
-#: ../src/common/config.cpp:410
-#: ../src/msw/regconf.cpp:264
+#: ../src/common/config.cpp:414 ../src/msw/regconf.cpp:265
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' περιέχει επιπλέον '..', αγνοήθηκαν."
 
-#: ../src/common/valtext.cpp:147
-#: ../src/common/valtext.cpp:177
-#: ../src/common/valtext.cpp:183
+#: ../src/common/valtext.cpp:136 ../src/common/valtext.cpp:166
+#: ../src/common/valtext.cpp:172
 #, c-format
 msgid "'%s' is invalid"
 msgstr "'%s' δεν ισχύει"
 
-#: ../src/common/cmdline.cpp:734
+#: ../src/common/cmdline.cpp:743
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' δεν είναι μία σωστή αριθμητική τιμή για την επιλογή '%s'."
 
-#: ../src/common/intl.cpp:402
+#: ../src/common/intl.cpp:1140
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' δεν είναι ένας σωστός κατάλογος μηνυμάτων."
@@ -300,564 +235,584 @@ msgstr "'%s' δεν είναι ένας σωστός κατάλογος μηνυμάτων."
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' είναι πιθανόν ένας δυαδικός ( binary ) buffer"
 
-#: ../src/common/valtext.cpp:172
+#: ../src/common/valtext.cpp:161
 #, c-format
 msgid "'%s' should be numeric."
 msgstr "'%s' πρέπει να είναι αριθμητικό."
 
-#: ../src/common/valtext.cpp:154
+#: ../src/common/valtext.cpp:143
 #, c-format
 msgid "'%s' should only contain ASCII characters."
 msgstr "'%s' πρέπει να περιέχει ASCII χαρακτήρες."
 
-#: ../src/common/valtext.cpp:160
+#: ../src/common/valtext.cpp:149
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
 msgstr "'%s' πρέπει να περιέχει μόνο αλφαβητικούς χαρακτήρες."
 
-#: ../src/common/valtext.cpp:166
+#: ../src/common/valtext.cpp:155
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "'%s' πρέπει να περιέχει μόνο αλφαβητικούς ή αριθμητικούς χαρακτήρες."
 
-#: ../src/html/helpfrm.cpp:714
-#, c-format
+#: ../src/html/helpfrm.cpp:803
 msgid "(Help)"
 msgstr "(Βοήθεια)"
 
-#: ../src/html/helpfrm.cpp:315
-#: ../src/html/helpfrm.cpp:845
-#: ../src/html/helpfrm.cpp:1461
-#, c-format
+#: ../src/html/helpfrm.cpp:345 ../src/html/helpfrm.cpp:935
+#: ../src/html/helpfrm.cpp:1563
 msgid "(bookmarks)"
 msgstr "(σελιδοδείκτες)"
 
-#: ../src/common/resourc2.cpp:297
-#: ../src/common/resourc2.cpp:1362
-#: ../src/common/resource.cpp:1816
-#: ../src/common/resource.cpp:1946
-#: ../src/common/resource.cpp:3030
-#, c-format
-msgid ", expected static, #include or #define\n"
-"whilst parsing resource."
-msgstr ", αναμενόταν static, #include ή #define\n"
-"κατά την ανάγνωση του πόρου."
-
-#: ../src/generic/dirctrlg.cpp:700
-#: ../src/generic/filedlgg.cpp:938
-#, c-format
+#: ../src/generic/dirctrlg.cpp:677 ../src/generic/filedlgg.cpp:707
 msgid "."
 msgstr "."
 
-#: ../src/generic/dirctrlg.cpp:701
-#: ../src/generic/filedlgg.cpp:939
-#, c-format
+#: ../src/generic/dirctrlg.cpp:678 ../src/generic/filedlgg.cpp:708
 msgid ".."
 msgstr ".."
 
-#: ../src/common/paper.cpp:120
-#, c-format
+#: ../src/html/chm.cpp:561
+msgid "/#SYSTEM"
+msgstr ""
+
+#: ../src/common/paper.cpp:132
 msgid "10 x 14 in"
 msgstr "10 x 14 ίντσες"
 
-#: ../src/common/paper.cpp:121
-#, c-format
+#: ../src/common/paper.cpp:133
 msgid "11 x 17 in"
 msgstr "11 x 17 ίντσες"
 
-#: ../src/common/paper.cpp:139
-#, c-format
+#: ../src/common/paper.cpp:151
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
 msgstr "6 3/4 Φάκελος, 3 5/8 x 6 1/2 ίντσες"
 
-#: ../src/html/htmprint.cpp:279
-#, c-format
+#: ../src/html/htmprint.cpp:291
 msgid ": file does not exist!"
 msgstr ": το αρχείο δεν υπάρχει!"
 
-#: ../src/common/fontmap.cpp:670
-#, c-format
+#: ../src/common/fontmap.cpp:184
 msgid ": unknown charset"
 msgstr ": άγνωστο σετ χαρακτήρων"
 
-#: ../src/common/fontmap.cpp:898
-#, c-format
+#: ../src/common/fontmap.cpp:393
 msgid ": unknown encoding"
 msgstr ": άγνωστη κωδικοποίηση"
 
-#: ../src/generic/wizard.cpp:263
-#, c-format
+#: ../src/generic/wizard.cpp:405
 msgid "< &Back"
 msgstr "< &Πίσω"
 
-#: ../src/generic/filedlgg.cpp:534
-#, c-format
+#: ../src/common/prntbase.cpp:456
+msgid "<<"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:248 ../src/generic/filedlgg.cpp:271
 msgid "<DIR>"
 msgstr "<ΚΑΤΑΛΟΓΟΣ>"
 
-#: ../src/generic/filedlgg.cpp:536
-#, c-format
+#: ../src/generic/filedlgg.cpp:252 ../src/generic/filedlgg.cpp:275
+#, fuzzy
+msgid "<DRIVE>"
+msgstr "<ΚΑΤΑΛΟΓΟΣ>"
+
+#: ../src/generic/filedlgg.cpp:250 ../src/generic/filedlgg.cpp:273
 msgid "<LINK>"
 msgstr "<ΣΥΝΔΕΣΗ>"
 
-#: ../src/common/paper.cpp:113
-#, c-format
+#: ../src/html/helpfrm.cpp:1098
+msgid "<b><i>Bold italic face.</i></b><br>"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:1102
+msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:1097
+msgid "<b>Bold face.</b> "
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:1096
+msgid "<i>Italic face.</i> "
+msgstr ""
+
+#: ../src/common/prntbase.cpp:462
+msgid ">>"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:468
+msgid ">>|"
+msgstr ""
+
+#: ../src/common/xtixml.cpp:409
+msgid "A non empty collection must consist of 'element' nodes"
+msgstr ""
+
+#: ../src/common/paper.cpp:125
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "Φύλλο A3, 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104
-#, c-format
+#: ../src/common/paper.cpp:116
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "Φύλλο A4, 210 x 297 mm"
 
-#: ../src/common/paper.cpp:114
-#, c-format
+#: ../src/common/paper.cpp:126
 msgid "A4 small sheet, 210 x 297 mm"
 msgstr "Μικρό φύλλο A4, 210 x 297 mm"
 
-#: ../src/common/paper.cpp:115
-#, c-format
+#: ../src/common/paper.cpp:127
 msgid "A5 sheet, 148 x 210 mm"
 msgstr "Φύλλο A5, 148 x 210 mm"
 
 #: ../src/generic/fontdlgg.cpp:83
-#, c-format
 msgid "ABCDEFGabcdefg12345"
 msgstr "ΑΒΓΔΕΖαβγδεζ12345"
 
 #: ../src/common/ftp.cpp:369
-#, c-format
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/html/helpfrm.cpp:328
-#, c-format
+#: ../src/html/helpfrm.cpp:358
 msgid "Add current page to bookmarks"
 msgstr "Προσθήκη της τρέχουσας σελίδας στους σελιδοδείκτες"
 
 #: ../src/generic/colrdlgg.cpp:287
-#, c-format
 msgid "Add to custom colours"
 msgstr "Προσθήκη στα χρώματα χρήστη"
 
-#: ../src/html/helpctrl.cpp:100
+#: ../include/wx/xti.h:858
+msgid "AddToPropertyCollection called on a generic accessor"
+msgstr ""
+
+#: ../include/wx/xti.h:806
+msgid "AddToPropertyCollection called w/o valid adder"
+msgstr ""
+
+#: ../src/html/helpctrl.cpp:106
 #, c-format
 msgid "Adding book %s"
 msgstr "Προσθήκη βιβλίου %s"
 
-#: ../src/generic/prntdlgg.cpp:160
-#, c-format
+#: ../src/generic/prntdlgg.cpp:157
 msgid "All"
 msgstr "Όλα"
 
-#: ../src/generic/filedlgg.cpp:1062
-#, c-format
+#: ../include/wx/defs.h:1986
 msgid "All files (*)|*"
 msgstr "Όλα τα αρχεία (*)|*"
 
+#: ../src/html/helpfrm.cpp:1403
+#, fuzzy
+msgid "All files (*.*)|*"
+msgstr "Όλα τα αρχεία (*)|*"
+
+#: ../include/wx/defs.h:1983
+#, fuzzy
+msgid "All files (*.*)|*.*"
+msgstr "Όλα τα αρχεία (*)|*"
+
+#: ../src/common/xtistrm.cpp:383
+msgid "Already Registered Object passed to SetObjectClassInfo"
+msgstr ""
+
 #: ../src/unix/dialup.cpp:362
-#, c-format
 msgid "Already dialling ISP."
 msgstr "Γίνεται ήδη κλήση προς τον παροχέα Internet(ISP)."
 
-#: ../src/generic/logg.cpp:1109
+#: ../src/generic/logg.cpp:1118
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
-msgstr "Να γίνει προσάρτηση(append) της καταγραφής(log) στο αρχείο '%s' (Επιλέγοντας [Όχι] θα το επικαλύψει(overwrite));"
+msgstr ""
+"Να γίνει προσάρτηση(append) της καταγραφής(log) στο αρχείο '%s' (Επιλέγοντας "
+"[Όχι] θα το επικαλύψει(overwrite));"
 
-#: ../src/common/fontmap.cpp:118
-#, c-format
+#: ../src/common/fmapbase.cpp:107
 msgid "Arabic (ISO-8859-6)"
 msgstr "Αραβικό (ISO-8859-6)"
 
-#: ../src/common/paper.cpp:134
-#, c-format
+#: ../src/generic/filedlgg.cpp:428
+msgid "Attributes"
+msgstr ""
+
+#: ../src/common/paper.cpp:146
 msgid "B4 Envelope, 250 x 353 mm"
 msgstr "B4 Φάκελος, 250 x 353 mm"
 
-#: ../src/common/paper.cpp:116
-#, c-format
+#: ../src/common/paper.cpp:128
 msgid "B4 sheet, 250 x 354 mm"
 msgstr "Φύλλο B4, 250 x 354 mm"
 
-#: ../src/common/paper.cpp:135
-#, c-format
+#: ../src/common/paper.cpp:147
 msgid "B5 Envelope, 176 x 250 mm"
 msgstr "B5 Φάκελος, 176 x 250 mm"
 
-#: ../src/common/paper.cpp:117
-#, c-format
+#: ../src/common/paper.cpp:129
 msgid "B5 sheet, 182 x 257 millimeter"
 msgstr "Φύλλο B5, 182 x 257 mm"
 
-#: ../src/common/paper.cpp:136
-#, c-format
+#: ../src/common/paper.cpp:148
 msgid "B6 Envelope, 176 x 125 mm"
 msgstr "B6 Φάκελος, 176 x 125 mm"
 
-#: ../src/common/imagbmp.cpp:468
-#: ../src/common/imagbmp.cpp:484
-#, c-format
+#: ../src/common/imagbmp.cpp:470 ../src/common/imagbmp.cpp:486
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: Δεν ήταν δυνατή η δέσμευση(allocation) μνήμης."
 
-#: ../src/common/imagbmp.cpp:86
-#, c-format
+#: ../src/common/imagbmp.cpp:88
 msgid "BMP: Couldn't save invalid image."
 msgstr "BMP: Δεν είναι δυνατή η αποθήκευση μη έγκυρης εικόνας."
 
-#: ../src/common/imagbmp.cpp:290
-#, c-format
+#: ../src/common/imagbmp.cpp:292
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: Δεν ήταν δυνατή η εγγραφή του χάρτη RGB."
 
-#: ../src/common/imagbmp.cpp:422
-#, c-format
+#: ../src/common/imagbmp.cpp:424
 msgid "BMP: Couldn't write data."
 msgstr "BMP: Δεν ήταν δυνατή η εγγραφή δεδομένων."
 
-#: ../src/common/imagbmp.cpp:195
-#, c-format
+#: ../src/common/imagbmp.cpp:197
 msgid "BMP: Couldn't write the file (Bitmap) header."
 msgstr "BMP: Δεν ήταν δυνατή η εγγραφή της κεφαλής του αρχείου Bitmap."
 
-#: ../src/common/imagbmp.cpp:216
-#, c-format
+#: ../src/common/imagbmp.cpp:218
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: Δεν ήταν δυνατή η εγγραφή της κεφαλής του αρχείου BitmapInfo."
 
-#: ../src/common/imagbmp.cpp:120
-#, c-format
+#: ../src/common/imagbmp.cpp:122
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: Το wxImage δεν κατέχει κάποιο wxPalette."
 
-#: ../src/common/dlgcmn.cpp:233
-#, c-format
+#: ../src/common/dlgcmn.cpp:227
 msgid "Backward"
 msgstr "Πίσω"
 
-#: ../src/common/fontmap.cpp:125
-#, c-format
+#: ../src/common/fmapbase.cpp:114
 msgid "Baltic (ISO-8859-13)"
 msgstr "Βαλτικό (ISO-8859-13)"
 
-#: ../src/common/fontmap.cpp:116
-#, c-format
+#: ../src/common/fmapbase.cpp:105
 msgid "Baltic (old) (ISO-8859-4)"
 msgstr "Βαλτικό (παλαιό) (ISO-8859-4)"
 
-#: ../src/common/resourc2.cpp:840
-#: ../src/common/resource.cpp:2500
-#, c-format
-msgid "Bitmap resource specification %s not found."
-msgstr "Δεν βρέθηκε ο καθοριμός πόρου bitmap %s"
-
 #: ../src/generic/fontdlgg.cpp:232
-#, c-format
 msgid "Bold"
 msgstr "Έντονο"
 
-#: ../src/generic/prntdlgg.cpp:645
-#, c-format
+#: ../src/generic/prntdlgg.cpp:663
 msgid "Bottom margin (mm):"
 msgstr "Κάτω περιθώριο (mm)"
 
-#: ../src/common/paper.cpp:105
-#, c-format
+#: ../src/common/paper.cpp:117
 msgid "C sheet, 17 x 22 in"
 msgstr "Φύλλο C, 17 x 22 ίντσες"
 
-#: ../src/generic/logg.cpp:489
-#, c-format
+#: ../src/generic/logg.cpp:500
 msgid "C&lear"
 msgstr "&Καθάρισμα"
 
-#: ../src/common/paper.cpp:130
-#, c-format
+#: ../src/common/paper.cpp:142
 msgid "C3 Envelope, 324 x 458 mm"
 msgstr "C3 Φάκελος, 324 x 458 mm"
 
-#: ../src/common/paper.cpp:131
-#, c-format
+#: ../src/common/paper.cpp:143
 msgid "C4 Envelope, 229 x 324 mm"
 msgstr "C4 Φάκελος, 229 x 324 mm"
 
-#: ../src/common/paper.cpp:129
-#, c-format
+#: ../src/common/paper.cpp:141
 msgid "C5 Envelope, 162 x 229 mm"
 msgstr "C5 Φάκελος, 162 x 229 mm"
 
-#: ../src/common/paper.cpp:132
-#, c-format
+#: ../src/common/paper.cpp:144
 msgid "C6 Envelope, 114 x 162 mm"
 msgstr "C6 Φάκελος, 114 x 162 mm"
 
-#: ../src/common/paper.cpp:133
-#, c-format
+#: ../src/common/paper.cpp:145
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 Φάκελος, 114 x 229 mm"
 
-#: ../src/common/filefn.cpp:1383
+#: ../src/html/chm.cpp:783 ../src/html/chm.cpp:842
+#, fuzzy
+msgid "CHM handler currently supports only local files!"
+msgstr "ο χειριστής ZIP προς το παρόν υποστηρίζει μόνο τοπικά αρχεία!"
+
+#: ../src/os2/thread.cpp:121
+#, fuzzy
+msgid "Can not create mutex."
+msgstr "Δεν είναι δυνατή η δημιουργία του νήματος εκτέλεσης (thread)"
+
+#: ../src/common/filefn.cpp:1462
 #, c-format
 msgid "Can not enumerate files '%s'"
 msgstr "Δεν είναι δυνατή η απαρίθμηση των αρχείων '%s'"
 
-#: ../src/msw/dir.cpp:296
-#: ../src/unix/dir.cpp:232
+#: ../src/msw/dir.cpp:300 ../src/unix/dir.cpp:232
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Δεν είναι δυνατή η απαρίθμηση των αρχείων στον κατάλογο '%s'"
 
-#: ../src/mac/thread.cpp:472
-#: ../src/msw/thread.cpp:685
+#: ../src/os2/thread.cpp:523
+#, fuzzy, c-format
+msgid "Can not resume thread %lu"
+msgstr "Δεν είναι δυνατή η συνέχιση(resume) του νήματος(thread) %x"
+
+#: ../src/mac/thread.cpp:477 ../src/msw/thread.cpp:821
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "Δεν είναι δυνατή η συνέχιση(resume) του νήματος(thread) %x"
 
-#: ../src/msw/thread.cpp:559
-#, c-format
+#: ../src/msw/thread.cpp:498
 msgid "Can not start thread: error writing TLS."
-msgstr "Δεν είναι δυνατή η εκκίνηση του νήματος(thread): Σφάλμα κατά την εγγραφή του TLS"
+msgstr ""
+"Δεν είναι δυνατή η εκκίνηση του νήματος(thread): Σφάλμα κατά την εγγραφή του "
+"TLS"
 
-#: ../src/mac/thread.cpp:448
-#: ../src/msw/thread.cpp:670
+#: ../src/os2/thread.cpp:510
+#, fuzzy, c-format
+msgid "Can not suspend thread %lu"
+msgstr "Δεν είναι δυνατή η αναστολή εκτέλεσης(suspend) του νήματος(thread) %x"
+
+#: ../src/mac/thread.cpp:453 ../src/msw/thread.cpp:806
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "Δεν είναι δυνατή η αναστολή εκτέλεσης(suspend) του νήματος(thread) %x"
 
-#: ../src/msw/thread.cpp:1016
-#, c-format
+#: ../src/msw/thread.cpp:728
 msgid "Can not wait for thread termination"
-msgstr "Δεν είναι δυνατή η αναμονή(wait) για τον τερματισμό του νήματος εκτέλεσης(thread)"
+msgstr ""
+"Δεν είναι δυνατή η αναμονή(wait) για τον τερματισμό του νήματος εκτέλεσης"
+"(thread)"
 
-#: ../src/common/cmdproc.cpp:243
-#, c-format
+#: ../src/common/cmdproc.cpp:259
 msgid "Can't &Undo "
 msgstr "Δεν είναι δυνατή η αναίρεση"
 
-#: ../src/common/image.cpp:1315
+#: ../src/common/image.cpp:1441
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
-msgstr "Δεν είναι δυνατή η εξακρίβωση του τύπου του αρχείου %s: το αρχείο δεν υπάρχει."
+msgstr ""
+"Δεν είναι δυνατή η εξακρίβωση του τύπου του αρχείου %s: το αρχείο δεν "
+"υπάρχει."
 
-#: ../src/msw/registry.cpp:421
+#: ../src/msw/registry.cpp:447
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "Δεν είναι δυνατό το κλείσιμο του κλειδιού μητρώου(registry key) '%s'"
 
-#: ../src/msw/registry.cpp:493
+#: ../src/msw/registry.cpp:519
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "Δεν είναι δυνατή η αντιγραφή τιμών μη υποστηριζομένου τύπου %d."
 
-#: ../src/msw/toplevel.cpp:315
-#, c-format
-msgid "Can't create dialog using memory template"
-msgstr "Δεν είναι δυνατή η δημιουργία του διαλόγου με τη χρήση προτύπου μνήμης. (memory template)"
-
-#: ../src/os2/toplevel.cpp:369
-#, c-format
-msgid "Can't create dialog using template '%ul'"
-msgstr "Δεν είναι δυνατή η δημιουργία του διαλόγου με τη χρήση του προτύπου '%ul'"
-
-#: ../src/msw/listctrl.cpp:334
-#, c-format
+#: ../src/msw/listctrl.cpp:413
 msgid "Can't create list control window, check that comctl32.dll is installed."
-msgstr "Δεν είναι δυνατή η δημιουργία του στοιχείου ελέγχου λίστας (list control). Ελέγξτε ότι το comctl32.dll είναι εγατεστημένο."
+msgstr ""
+"Δεν είναι δυνατή η δημιουργία του στοιχείου ελέγχου λίστας (list control). "
+"Ελέγξτε ότι το comctl32.dll είναι εγατεστημένο."
 
-#: ../src/msw/registry.cpp:402
+#: ../src/msw/registry.cpp:428
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "Δεν είναι δυνατή η δημιουργία του κλειδιού μητρώου(registry key) '%s'"
 
-#: ../src/mac/thread.cpp:427
-#: ../src/msw/thread.cpp:652
-#, c-format
+#: ../src/mac/thread.cpp:430 ../src/msw/thread.cpp:593
+#: ../src/os2/thread.cpp:491
 msgid "Can't create thread"
 msgstr "Δεν είναι δυνατή η δημιουργία του νήματος εκτέλεσης (thread)"
 
-#: ../src/msw/window.cpp:3062
+#: ../src/msw/window.cpp:3080
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Δεν είναι δυνατή η δημιουργία παραθύρου τάξεως %s"
 
-#: ../src/msw/registry.cpp:661
+#: ../src/msw/registry.cpp:689
 #, c-format
 msgid "Can't delete key '%s'"
 msgstr "Δεν είναι δυνατή η διαγραφή του κλειδιού '%s'"
 
-#: ../src/msw/iniconf.cpp:445
+#: ../src/msw/iniconf.cpp:444 ../src/os2/iniconf.cpp:448
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "Δεν είναι δυνατή η διαγραφή του αρχείου INI '%s'"
 
-#: ../src/msw/registry.cpp:686
+#: ../src/msw/registry.cpp:717
 #, c-format
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "Δεν είναι δυνατή η διαγραφή της τιμής '%s' από το κλειδί '%s'"
 
-#: ../src/msw/registry.cpp:697
+#: ../src/msw/registry.cpp:728
 #, c-format
 msgid "Can't delete value of key '%s'"
 msgstr "Δεν είναι δυνατή η διαγρσφή του κλειδιού '%s'"
 
-#: ../src/msw/registry.cpp:1025
+#: ../src/msw/registry.cpp:1058
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Δεν είναι δυνατή η απαρίθμηση των υποκλειδιών του '%s'"
 
-#: ../src/msw/registry.cpp:980
+#: ../src/msw/registry.cpp:1006
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Δεν είναι δυνατή η απαρίθμηση των τιμών του κλειδιού '%s'"
 
-#: ../src/common/ffile.cpp:226
+#: ../src/common/ffile.cpp:212
 #, c-format
 msgid "Can't find current position in file '%s'"
 msgstr "Δεν είναι δυνατή η εύρεση της τρέχουσας θέσης στο αρχείου '%s'"
 
-#: ../src/msw/registry.cpp:351
+#: ../src/msw/registry.cpp:359
 #, c-format
 msgid "Can't get info about registry key '%s'"
-msgstr "Δεν είναι δυνατή η συλλογή πληροφοριών για το κλειδί μητρώου(registry) '%s'"
+msgstr ""
+"Δεν είναι δυνατή η συλλογή πληροφοριών για το κλειδί μητρώου(registry) '%s'"
 
-#: ../src/common/image.cpp:913
-#: ../src/common/image.cpp:933
+#: ../src/common/zstream.cpp:197
+#, fuzzy
+msgid "Can't initialize zlib deflate stream."
+msgstr "Δεν είναι δυνατή η αρχικοποίηση απεικόνησης."
+
+#: ../src/common/zstream.cpp:88
+#, fuzzy
+msgid "Can't initialize zlib inflate stream."
+msgstr "Δεν είναι δυνατή η αρχικοποίηση απεικόνησης."
+
+#: ../src/common/image.cpp:1028 ../src/common/image.cpp:1048
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
-msgstr "Δεν είναι δυνατή η ανάγνωση της εικόνας από το αρχείο '%s': Το αρχείο δεν υπάρχει."
+msgstr ""
+"Δεν είναι δυνατή η ανάγνωση της εικόνας από το αρχείο '%s': Το αρχείο δεν "
+"υπάρχει."
 
-#: ../src/msw/dib.cpp:434
-#, c-format
-msgid "Can't open file '%s'"
-msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου '%s'"
-
-#: ../src/msw/registry.cpp:377
+#: ../src/msw/registry.cpp:394
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "Δεν είναι δυνατό το άνοιγμα του κλειδιού μητρώου(registry) '%s'"
 
-#: ../src/msw/registry.cpp:904
+#: ../src/common/zstream.cpp:142
+#, fuzzy, c-format
+msgid "Can't read from inflate stream: %s\n"
+msgstr "αδύνατη η ανάγνωση από περiγραφέα (descriptor) αρχείου %d"
+
+#: ../src/common/zstream.cpp:121
+msgid "Can't read inflate stream: unexpected EOF in underlying stream."
+msgstr ""
+
+#: ../src/msw/registry.cpp:930
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "Δεν είναι δυνατή η ανάγνωση της τιμής του '%s'"
 
-#: ../src/msw/registry.cpp:777
-#: ../src/msw/registry.cpp:816
+#: ../src/msw/registry.cpp:808 ../src/msw/registry.cpp:842
 #, c-format
 msgid "Can't read value of key '%s'"
 msgstr "Δεν είναι δυνατή η ανάγνωση της τιμής του κλειδιού '%s'"
 
-#: ../src/common/image.cpp:955
+#: ../src/common/image.cpp:1070
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
-msgstr "Δεν είναι δυνατή η αποθήκευση της εικόνας στο αρχείο '%s': άγνωστη επέκταση"
+msgstr ""
+"Δεν είναι δυνατή η αποθήκευση της εικόνας στο αρχείο '%s': άγνωστη επέκταση"
 
-#: ../src/generic/logg.cpp:551
-#: ../src/generic/logg.cpp:985
-#, c-format
+#: ../src/generic/logg.cpp:562 ../src/generic/logg.cpp:994
 msgid "Can't save log contents to file."
-msgstr "Δεν είναι δυνατή η αποθήκευση των περιεχομένων της καταγραφής(log) στο αρχείο."
+msgstr ""
+"Δεν είναι δυνατή η αποθήκευση των περιεχομένων της καταγραφής(log) στο "
+"αρχείο."
 
-#: ../src/msw/thread.cpp:611
-#, c-format
+#: ../src/msw/thread.cpp:549 ../src/os2/thread.cpp:473
 msgid "Can't set thread priority"
 msgstr "Δεν είναι δυνατή η θέση προτεραιότητας του νήματος εκτέλεσης (thread)"
 
-#: ../src/msw/registry.cpp:802
-#: ../src/msw/registry.cpp:928
+#: ../src/msw/registry.cpp:829 ../src/msw/registry.cpp:954
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "Δεν είναι δυνατή η ανάθεση τιμής του '%s'"
 
-#: ../src/common/dlgcmn.cpp:246
-#: ../src/generic/dirdlgg.cpp:153
-#: ../src/generic/filedlgg.cpp:1181
-#: ../src/generic/filedlgg.cpp:1200
-#: ../src/generic/fontdlgg.cpp:255
-#: ../src/generic/prntdlgg.cpp:453
-#: ../src/generic/progdlgg.cpp:211
-#: ../src/generic/proplist.cpp:511
-#: ../src/gtk/filedlg.cpp:173
-#: ../src/gtk/fontdlg.cpp:144
-#: ../src/html/helpfrm.cpp:976
+#: ../src/common/zstream.cpp:276
+#, fuzzy, c-format
+msgid "Can't write to deflate stream: %s\n"
+msgstr "δεν είναι δυνατή η εγγραφή του περιγραφέα αρχείου(file descriptor) %d"
+
+#: ../src/common/dlgcmn.cpp:240 ../src/generic/dirdlgg.cpp:155
+#: ../src/generic/filedlgg.cpp:977 ../src/generic/filedlgg.cpp:996
+#: ../src/generic/fontdlgg.cpp:255 ../src/generic/prntdlgg.cpp:455
+#: ../src/generic/progdlgg.cpp:211 ../src/gtk/filedlg.cpp:168
+#: ../src/gtk/fontdlg.cpp:147 ../src/html/helpfrm.cpp:1066
 #: ../src/motif/msgdlg.cpp:182
-#, c-format
 msgid "Cancel"
 msgstr "Άκυρο"
 
-#: ../contrib/src/xrc/xmlres.cpp:969
-#: ../contrib/src/xrc/xmlres.cpp:1010
-#, c-format
+#: ../contrib/src/xrc/xmlres.cpp:987 ../contrib/src/xrc/xmlres.cpp:1028
 msgid "Cannot convert dialog units: dialog unknown."
-msgstr "Δεν είναι δυνατή η μετατροπή των μονάδων διαλόγου(dialog units): άγνωστο παράθυρο διαλόγου."
+msgstr ""
+"Δεν είναι δυνατή η μετατροπή των μονάδων διαλόγου(dialog units): άγνωστο "
+"παράθυρο διαλόγου."
 
-#: ../src/common/strconv.cpp:963
-#, c-format
-msgid "Cannot convert from encoding '%s'!"
+#: ../src/common/strconv.cpp:1567
+#, fuzzy, c-format
+msgid "Cannot convert from the charset '%s'!"
 msgstr "Δεν είναι δυνατή η μετατροπη από την κωδικοποίηση '%s'!"
 
-#: ../src/msw/dialup.cpp:499
+#: ../src/msw/dialup.cpp:497
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "Δεν είναι δυνατή η εύρεση της ενεργού τηλεφωνικής συνδέσεως: %s"
 
-#: ../contrib/src/xrc/xmlres.cpp:243
+#: ../contrib/src/xrc/xmlres.cpp:262
 #, c-format
 msgid "Cannot find container for unknown control '%s'."
-msgstr "Δεν είναι δυνατή η εύρεση φορέα(container) για άγνωστο στοιχείο ελέγχου(control) '%s'."
+msgstr ""
+"Δεν είναι δυνατή η εύρεση φορέα(container) για άγνωστο στοιχείο ελέγχου"
+"(control) '%s'."
 
-#: ../contrib/src/xrc/xmlres.cpp:1024
+#: ../contrib/src/xrc/xmlres.cpp:1042
 #, c-format
 msgid "Cannot find font node '%s'."
 msgstr "Δεν είναι δυνατή η εύρεση καταστάσεως γραμματοσειράς(font mode) '%s'."
 
-#: ../src/msw/dialup.cpp:813
-#, c-format
+#: ../src/msw/dialup.cpp:811
 msgid "Cannot find the location of address book file"
 msgstr "Δεν είναι δυνατή η εύρεση της θέσης του αρχείου βιβλίου διευθύνσεων"
 
-#: ../src/unix/threadpsx.cpp:1096
+#: ../src/unix/threadpsx.cpp:1100
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Δεν είναι δυνατή η ανάγνωση του εύρους προτεραιοτήτων"
 
-#: ../src/unix/utilsunx.cpp:865
-#, c-format
+#: ../src/unix/utilsunx.cpp:724
 msgid "Cannot get the hostname"
 msgstr "Δεν είναι δυνατή η ανάγνωση του ονόματος διακομιστή(hostname)"
 
-#: ../src/unix/utilsunx.cpp:901
-#, c-format
+#: ../src/unix/utilsunx.cpp:760
 msgid "Cannot get the official hostname"
-msgstr "Δεν είναι δυνατή η ανάγνωση του επισήμου ονόματος διακομιστή(official hostname)"
+msgstr ""
+"Δεν είναι δυνατή η ανάγνωση του επισήμου ονόματος διακομιστή(official "
+"hostname)"
 
-#: ../src/msw/dialup.cpp:907
-#, c-format
+#: ../src/msw/dialup.cpp:905
 msgid "Cannot hang up - no active dialup connection."
-msgstr "Δεν είναι δυνατό το κλείσιμο της γραμμής - δεν υπάρχει ενεργός τηλεφωνική σύνδεση."
+msgstr ""
+"Δεν είναι δυνατό το κλείσιμο της γραμμής - δεν υπάρχει ενεργός τηλεφωνική "
+"σύνδεση."
 
-#: ../src/msw/app.cpp:250
-#, c-format
+#: ../src/msw/app.cpp:290 ../src/msw/app.cpp:293
 msgid "Cannot initialize OLE"
 msgstr "Δεν είναι δυνατή η αρχικοποίηση του OLE"
 
-#: ../src/mgl/app.cpp:414
-#, c-format
+#: ../src/mgl/app.cpp:292
 msgid "Cannot initialize SciTech MGL!"
 msgstr "Δεν είναι δυνατή η αρχικοποίηση του SciTech MGL"
 
-#: ../src/mgl/window.cpp:547
-#, c-format
+#: ../src/mgl/window.cpp:546
 msgid "Cannot initialize display."
 msgstr "Δεν είναι δυνατή η αρχικοποίηση απεικόνησης."
 
-#: ../src/msw/volume.cpp:634
+#: ../src/msw/volume.cpp:601
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Δεν είναι δυνατή η φόρτωση εικονιδίου από το '%s'"
 
-#: ../contrib/src/xrc/xmlres.cpp:356
+#: ../contrib/src/xrc/xmlres.cpp:382
 #, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "Δεν είναι δυνατή η φόρτωση πόρων(resources) από το αρχείο '%s'"
@@ -867,374 +822,356 @@ msgstr "Δεν είναι δυνατή η φόρτωση πόρων(resources) από το αρχείο '%s'"
 msgid "Cannot open HTML document: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα εγγράφου HTML: %s"
 
-#: ../src/html/helpdata.cpp:584
+#: ../src/html/helpdata.cpp:613
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα βιβλίου βοήθειας HTML: %s"
 
-#: ../src/generic/helpext.cpp:100
+#: ../src/generic/helpext.cpp:122
 #, c-format
 msgid "Cannot open URL '%s'"
 msgstr "Δεν είναι δυνατό to άνοιγμα του URL '%s'"
 
-#: ../src/html/helpdata.cpp:277
+#: ../src/html/helpdata.cpp:284
 #, c-format
 msgid "Cannot open contents file: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα των περιεχομένων του αρχείου: %s"
 
-#: ../contrib/src/xrc/xmlres.cpp:330
+#: ../contrib/src/xrc/xmlres.cpp:353
 #, c-format
 msgid "Cannot open file '%s'."
 msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου '%s'."
 
-#: ../src/generic/dcpsg.cpp:1719
-#, c-format
+#: ../src/generic/dcpsg.cpp:1795
 msgid "Cannot open file for PostScript printing!"
 msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου για εκτύπωση PostScript!"
 
-#: ../src/html/helpdata.cpp:292
+#: ../src/html/helpdata.cpp:299
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου ευρετηρίου(index): %s"
 
-#: ../contrib/src/xrc/xmlres.cpp:957
+#: ../src/common/intl.cpp:1196
+#, fuzzy, c-format
+msgid "Cannot parse Plural-Forms:'%s'"
+msgstr "Δεν είναι δυνατή η ανάγνωση συντεταγμένων από '%s'."
+
+#: ../contrib/src/xrc/xmlres.cpp:975
 #, c-format
 msgid "Cannot parse coordinates from '%s'."
 msgstr "Δεν είναι δυνατή η ανάγνωση συντεταγμένων από '%s'."
 
-#: ../contrib/src/xrc/xmlres.cpp:998
+#: ../contrib/src/xrc/xmlres.cpp:1016
 #, c-format
 msgid "Cannot parse dimension from '%s'."
 msgstr "Δεν είναι δυνατή η ανάγνωση διαστάσεων από '%s'."
 
-#: ../src/html/helpfrm.cpp:1293
-#, c-format
+#: ../src/html/helpfrm.cpp:1387
 msgid "Cannot print empty page."
 msgstr "Δεν είναι δυνατή η εκτύπωση άδειας σελίδας."
 
-#: ../src/msw/volume.cpp:195
-#: ../src/msw/volume.cpp:526
+#: ../src/msw/volume.cpp:160 ../src/msw/volume.cpp:491
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "Δεν είναι δυνατή η ανάγνωση ονομάτων τύπων(typenames) από το '%s'"
 
-#: ../src/unix/threadpsx.cpp:1077
-#, c-format
+#: ../src/unix/threadpsx.cpp:1081
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "Δεν είναι δυνατή η ανάκτηση της thread scheduling policy."
 
-#: ../src/unix/threadpsx.cpp:710
-#, c-format
+#: ../src/unix/threadpsx.cpp:728
 msgid "Cannot start thread: error writing TLS"
-msgstr "Δεν είναι δυνατή η εκκίνηση του ΄νηματος εκτέλεσης (thread): σφάλμα κατά την εγγραφή του TLS"
+msgstr ""
+"Δεν είναι δυνατή η εκκίνηση του ΄νηματος εκτέλεσης (thread): σφάλμα κατά την "
+"εγγραφή του TLS"
 
-#: ../src/html/helpfrm.cpp:411
-#, c-format
+#: ../src/html/helpfrm.cpp:441
 msgid "Case sensitive"
 msgstr "Διάκριση κεφαλαίων-πεζών"
 
-#: ../src/common/fontmap.cpp:126
-#, c-format
+#: ../src/common/fmapbase.cpp:115
 msgid "Celtic (ISO-8859-14)"
 msgstr "Κελτικό (ISO-8859-14)"
 
-#: ../src/common/fontmap.cpp:114
-#, c-format
+#: ../src/common/fmapbase.cpp:103
 msgid "Central European (ISO-8859-2)"
 msgstr "Κεντροευρωπαϊκό (ISO-8859-2)"
 
-#: ../src/msw/dialup.cpp:748
-#, c-format
+#: ../src/msw/dialup.cpp:746
 msgid "Choose ISP to dial"
 msgstr "Επιλέξτε παροχέα Internet για κλήση"
 
-#: ../src/gtk/fontdlg.cpp:122
-#, c-format
+#: ../src/gtk/fontdlg.cpp:125
 msgid "Choose font"
 msgstr "Επιλέξτε γραμματοσειρά"
 
-#: ../src/generic/mdig.cpp:112
-#, c-format
+#: ../src/generic/mdig.cpp:114
 msgid "Cl&ose"
 msgstr "&Κλείσιμο"
 
-#: ../src/generic/logg.cpp:489
-#, c-format
+#: ../src/generic/logg.cpp:500
 msgid "Clear the log contents"
 msgstr "Καθαρισμός περιεχομένων καταγραφής(log)"
 
-#: ../src/common/prntbase.cpp:428
 #: ../src/generic/progdlgg.cpp:358
-#: ../src/generic/proplist.cpp:506
-#, c-format
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: ../src/univ/themes/win32.cpp:4549
-#, c-format
+#: ../src/univ/themes/win32.cpp:4680
 msgid "Close\tAlt-F4"
 msgstr "Κλείσιμο\tAlt-F4"
 
-#: ../src/generic/mdig.cpp:113
-#, c-format
+#: ../src/generic/mdig.cpp:115
 msgid "Close All"
 msgstr "Κλείσιμο"
 
-#: ../src/generic/logg.cpp:491
-#, c-format
+#: ../src/generic/logg.cpp:502
 msgid "Close this window"
 msgstr "Κλείσιμο αυτού του παραθύρου."
 
-#: ../src/generic/dirctrlg.cpp:549
-#, c-format
+#: ../src/html/helpfrm.cpp:1401
+msgid "Compressed HTML Help file (*.chm)|*.chm|"
+msgstr ""
+
+#: ../src/generic/dirctrlg.cpp:592
 msgid "Computer"
 msgstr "Υπολογιστής"
 
-#: ../src/common/fileconf.cpp:902
+#: ../src/common/fileconf.cpp:934
 #, c-format
 msgid "Config entry name cannot start with '%c'."
-msgstr "Το όνομα εισόδου διαμόρφωσης (Config entry name) δεν μπορεί να αρχίζει με '%c'"
+msgstr ""
+"Το όνομα εισόδου διαμόρφωσης (Config entry name) δεν μπορεί να αρχίζει με '%"
+"c'"
 
-#: ../src/generic/filedlgg.cpp:1411
-#: ../src/gtk/filedlg.cpp:72
-#, c-format
+#: ../src/generic/filedlgg.cpp:1214 ../src/gtk/filedlg.cpp:74
 msgid "Confirm"
 msgstr "Επιβεβαίωση"
 
-#: ../src/msw/mimetype.cpp:689
-#, c-format
+#: ../src/msw/mimetype.cpp:679
 msgid "Confirm registry update"
 msgstr "Επιβεβαίωση ενημέρωσης μητρώου(registry update)"
 
-#: ../src/html/htmlwin.cpp:262
-#, c-format
+#: ../src/html/htmlwin.cpp:361
 msgid "Connecting..."
 msgstr "Γίνεται σύνδεση..."
 
-#: ../src/html/helpfrm.cpp:351
-#, c-format
+#: ../src/html/helpfrm.cpp:381
 msgid "Contents"
 msgstr "Περιεχόμενα"
 
-#: ../src/common/strconv.cpp:616
+#: ../src/common/strconv.cpp:942
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Η μετατροπή στο σετ χαρακτήρων '%s' δεν λειτουργεί"
 
-#: ../src/generic/prntdlgg.cpp:193
-#, c-format
+#: ../src/html/htmlwin.cpp:781
+#, fuzzy, c-format
+msgid "Copied to clipboard:\"%s\""
+msgstr "Αποτυχία θέσης δεδομένων προχείρου (clipboard)."
+
+#: ../src/generic/prntdlgg.cpp:190
 msgid "Copies:"
 msgstr "Αντίγραφα:"
 
-#: ../src/common/resourc2.cpp:287
-#: ../src/common/resource.cpp:1806
-#: ../src/common/resource.cpp:1936
-#, c-format
-msgid "Could not find resource include file %s."
-msgstr "Δεν βρέθηκε το αρχείο συμπερήληψης πόρων(resource include file) %s."
+#: ../src/html/chm.cpp:689
+#, fuzzy, c-format
+msgid "Could not create temporary file '%s'"
+msgstr "δεν είναι δυνατό το σβήσιμο του προσωρινού αρχείου '%s'"
 
-#: ../src/generic/tabg.cpp:1044
+#: ../src/html/chm.cpp:274
 #, c-format
+msgid "Could not extract %s into %s: %s"
+msgstr ""
+
+#: ../src/generic/tabg.cpp:1049
 msgid "Could not find tab for id"
 msgstr "Δεν ήταν δυνατή η εύρεση tab για το id"
 
-#: ../src/msw/textctrl.cpp:2050
+#: ../src/msw/textctrl.cpp:2632
 #, c-format
 msgid "Could not load Rich Edit DLL '%s'"
 msgstr "Δεν ήταν δυνατή η φόρτωση του Rich DLL '%s'"
 
-#: ../src/common/resource.cpp:802
-#, c-format
-msgid "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
-" or provide #define (see manual for caveats)"
-msgstr "Δεν ήταν δυνατή η αντιστοίχηση της κλάσης ελέγχου ή του id '%s'. Χρησιμοποιήστε (μη-μηδενικό) ακέραιο\n"
-" ή μία οδηγία #define (ανατρέξατε στο εγχειρίδιο για λεπτομέρειες)"
+#: ../src/html/chm.cpp:445
+#, fuzzy, c-format
+msgid "Could not locate file '%s'."
+msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου '%s'."
 
-#: ../src/common/resource.cpp:1251
-#, c-format
-msgid "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
-"or provide #define (see manual for caveats)"
-msgstr "Δεν ήταν δυνατή η αντιστοίχηση του menu id '%s'. Χρησιμοποιήστε (μη-μηδενικό) ακέραιο\n"
-"ή μία οδηγία #define (ανατρέξατε στο εγχειρίδιο για λεπτομέρειες)"
-
-#: ../src/common/prntbase.cpp:805
-#, c-format
+#: ../src/common/prntbase.cpp:810
 msgid "Could not start document preview."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της προεπισκόπησης εγγράφου."
 
-#: ../src/generic/printps.cpp:198
-#: ../src/msw/printwin.cpp:252
-#, c-format
+#: ../src/generic/printps.cpp:221 ../src/msw/printwin.cpp:245
 msgid "Could not start printing."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
 
-#: ../src/common/wincmn.cpp:1167
-#, c-format
+#: ../src/common/wincmn.cpp:1202
 msgid "Could not transfer data to window"
 msgstr "Δεν ήταν δυνατή η μεταφορά δεδομένων στο παράθυρο."
 
-#: ../src/msw/dragimag.cpp:158
-#: ../src/msw/dragimag.cpp:194
-#: ../src/msw/imaglist.cpp:152
-#: ../src/msw/imaglist.cpp:174
-#: ../src/msw/imaglist.cpp:187
-#, c-format
+#: ../src/os2/thread.cpp:154
+#, fuzzy
+msgid "Couldn't acquire a mutex lock"
+msgstr "Δεν ήταν δυνατή η δημιουργία χρονοδιακόπτη (timer)"
+
+#: ../src/msw/dragimag.cpp:166 ../src/msw/dragimag.cpp:206
+#: ../src/msw/imaglist.cpp:156 ../src/msw/imaglist.cpp:174
+#: ../src/msw/imaglist.cpp:186
 msgid "Couldn't add an image to the image list."
 msgstr "Δεν ήταν δυνατή η προσθήκη μιας εικόνας στην λίστα εικόνων."
 
-#: ../src/msw/timer.cpp:103
-#, c-format
+#: ../src/msw/timer.cpp:101 ../src/os2/timer.cpp:118
 msgid "Couldn't create a timer"
 msgstr "Δεν ήταν δυνατή η δημιουργία χρονοδιακόπτη (timer)"
 
-#: ../src/mgl/cursor.cpp:135
-#: ../src/mgl/cursor.cpp:166
-#, c-format
+#: ../src/mgl/cursor.cpp:135 ../src/mgl/cursor.cpp:166
 msgid "Couldn't create cursor."
 msgstr "Δεν ήταν δυνατή η δημιουργία δείκτη ποντικιού."
 
-#: ../src/common/dynlib.cpp:347
-#: ../src/common/dynload.cpp:299
+#: ../src/common/dynlib.cpp:388
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
-msgstr "Δεν ήταν δυνατός ο εντοπισμός του συμβόλου '%s' σε μια δυναμική βιβλιοθήκη."
+msgstr ""
+"Δεν ήταν δυνατός ο εντοπισμός του συμβόλου '%s' σε μια δυναμική βιβλιοθήκη."
 
-#: ../src/mac/thread.cpp:502
-#: ../src/msw/thread.cpp:711
-#, c-format
+#: ../src/mac/thread.cpp:507 ../src/msw/thread.cpp:847
 msgid "Couldn't get the current thread pointer"
-msgstr "Δεν ήταν δυνατή η ανάκτηση toy τρέχοντος δείκτη νήματος εκτέλεσης(thread)"
+msgstr ""
+"Δεν ήταν δυνατή η ανάκτηση toy τρέχοντος δείκτη νήματος εκτέλεσης(thread)"
 
-#: ../src/common/imagpng.cpp:302
-#, c-format
+#: ../src/common/imagpng.cpp:607
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr "Δεν ήταν δυνατή η φόρτωση εικόνας PNG - είτε το αρχείο δεν είναι έγκυρο ή δεν υπάρχει αρκετή μνήμη."
+msgstr ""
+"Δεν ήταν δυνατή η φόρτωση εικόνας PNG - είτε το αρχείο δεν είναι έγκυρο ή "
+"δεν υπάρχει αρκετή μνήμη."
+
+#: ../src/unix/sound.cpp:412
+#, fuzzy, c-format
+msgid "Couldn't load sound data from '%s'."
+msgstr "Δεν είναι δυνατή η φόρτωση εικονιδίου από το '%s'"
+
+#: ../src/unix/sound_sdl.cpp:231
+#, fuzzy, c-format
+msgid "Couldn't open audio: %s"
+msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου '%s'"
 
 #: ../src/msw/ole/dataobj.cpp:147
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
-msgstr "Δεν ήταν δυνατή η καταχώρηση του τύπου προχείρου(clipboard format) '%s'"
+msgstr ""
+"Δεν ήταν δυνατή η καταχώρηση του τύπου προχείρου(clipboard format) '%s'"
 
-#: ../src/msw/listctrl.cpp:737
+#: ../src/os2/thread.cpp:171
+#, fuzzy
+msgid "Couldn't release a mutex"
+msgstr "Δεν ήταν δυνατή η δημιουργία χρονοδιακόπτη (timer)"
+
+#: ../src/msw/listctrl.cpp:828
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
-msgstr "Δεν ήταν δυνατή η ανάκτηση πληροφοριών σχετικά με το στοιχείο λίστας %d."
+msgstr ""
+"Δεν ήταν δυνατή η ανάκτηση πληροφοριών σχετικά με το στοιχείο λίστας %d."
 
-#: ../src/common/imagpng.cpp:338
-#: ../src/common/imagpng.cpp:349
-#: ../src/common/imagpng.cpp:357
-#, c-format
+#: ../src/common/imagpng.cpp:647 ../src/common/imagpng.cpp:658
+#: ../src/common/imagpng.cpp:666
 msgid "Couldn't save PNG image."
 msgstr "Δεν ήταν δυνατή η αποθήκευση εικόνας PNG."
 
-#: ../src/mac/thread.cpp:749
-#: ../src/msw/thread.cpp:1091
-#, c-format
+#: ../src/mac/thread.cpp:756 ../src/msw/thread.cpp:610
 msgid "Couldn't terminate thread"
 msgstr "Δεν ήταν δυνατός ο τερματισμός του thread"
 
-#: ../src/generic/dirdlgg.cpp:263
-#, c-format
+#: ../src/common/xtistrm.cpp:161
+msgid "Create Parameter not found in declared RTTI Parameters"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:265
 msgid "Create directory"
 msgstr "Δημιουργία καταλόγου"
 
-#: ../src/generic/dirdlgg.cpp:103
-#: ../src/generic/filedlgg.cpp:1132
-#, c-format
+#: ../src/generic/dirdlgg.cpp:105 ../src/generic/filedlgg.cpp:931
 msgid "Create new directory"
 msgstr "Δημιουργία νέου καταλόγου"
 
-#: ../src/msw/textctrl.cpp:1680
-#, c-format
+#: ../src/msw/textctrl.cpp:2050
 msgid "Cu&t"
 msgstr "Απο&κοπή"
 
-#: ../src/generic/filedlgg.cpp:1143
-#, c-format
+#: ../src/generic/filedlgg.cpp:942
 msgid "Current directory:"
 msgstr "Τρέχον κατάλογος:"
 
-#: ../src/common/fontmap.cpp:117
-#, c-format
+#: ../src/common/fmapbase.cpp:106
 msgid "Cyrillic (ISO-8859-5)"
 msgstr "Κυριλλικό (ISO-8859-5)"
 
-#: ../src/common/paper.cpp:106
-#, c-format
+#: ../src/common/paper.cpp:118
 msgid "D sheet, 22 x 34 in"
 msgstr "D sheet, 22 x 34 ίντσες"
 
-#: ../src/msw/dde.cpp:594
-#, c-format
+#: ../src/msw/dde.cpp:649
 msgid "DDE poke request failed"
 msgstr "Η DDE poke αίτηση απέτυχε"
 
-#: ../src/common/imagbmp.cpp:917
-#, c-format
+#: ../src/common/imagbmp.cpp:914
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "DIB Header: Η κωδικοποίηση δεν ταιρίζει με το βάθος bit."
 
-#: ../src/common/imagbmp.cpp:879
-#, c-format
+#: ../src/common/imagbmp.cpp:876
 msgid "DIB Header: Image height > 32767 pixels for file."
-msgstr "DIB Header: Το ύψος της εικόνας είναι > 32767 εικονοστοιχεία για το αρχείο."
+msgstr ""
+"DIB Header: Το ύψος της εικόνας είναι > 32767 εικονοστοιχεία για το αρχείο."
 
-#: ../src/common/imagbmp.cpp:873
-#, c-format
+#: ../src/common/imagbmp.cpp:870
 msgid "DIB Header: Image width > 32767 pixels for file."
-msgstr "DIB Header: Το πλάτος της εικόνας είναι > 32767 εικονοστοιχεία για το αρχείο."
+msgstr ""
+"DIB Header: Το πλάτος της εικόνας είναι > 32767 εικονοστοιχεία για το αρχείο."
 
-#: ../src/common/imagbmp.cpp:893
-#, c-format
+#: ../src/common/imagbmp.cpp:890
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "DIB Header: Αγνωστο βάθος bit στο αρχείο."
 
-#: ../src/common/imagbmp.cpp:903
-#, c-format
+#: ../src/common/imagbmp.cpp:900
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB Header: Αγνωστη κωδικοποίηση στο αρχείο."
 
-#: ../src/common/paper.cpp:128
-#, c-format
+#: ../src/common/paper.cpp:140
 msgid "DL Envelope, 110 x 220 mm"
 msgstr "Φάκελος DL, 110 x 220 mm"
 
-#: ../src/generic/filedlgg.cpp:705
-#, c-format
-msgid "Date"
-msgstr "Ημερομηνία"
-
 #: ../src/generic/fontdlgg.cpp:222
-#, c-format
 msgid "Decorative"
 msgstr "Διακοσμητικός"
 
-#: ../src/common/fontmap.cpp:392
-#, c-format
+#: ../src/common/fmapbase.cpp:660
 msgid "Default encoding"
 msgstr "Προκαθορισμένη κωδικοποίηση"
+
+#: ../contrib/src/gizmos/editlbox.cpp:163
+#, fuzzy
+msgid "Delete item"
+msgstr "&Διαγραφή"
 
 #: ../src/unix/snglinst.cpp:269
 #, c-format
 msgid "Deleted stale lock file '%s'."
 msgstr "Διεγράφη το απαρχειομένο(stale) αρχείο κλειδαριά (lock file) '%s'"
 
-#: ../src/msw/dialup.cpp:348
-#, c-format
-msgid "Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."
-msgstr "Συναρτήσεις (functions) τηλεφωνικής σύνδεσης (dialup) δεν είναι διαθέσιμες γιατί η υπηρεσία απομακρυσμένης πρόσβασης (remote access service, RAS) δεν είναι εκατεστημένη σε αυτό το μηχάνημα. Παρακαλώ εγκαταστήστε τη."
+#: ../src/msw/dialup.cpp:346
+msgid ""
+"Dial up functions are unavailable because the remote access service (RAS) is "
+"not installed on this machine. Please install it."
+msgstr ""
+"Συναρτήσεις (functions) τηλεφωνικής σύνδεσης (dialup) δεν είναι διαθέσιμες "
+"γιατί η υπηρεσία απομακρυσμένης πρόσβασης (remote access service, RAS) δεν "
+"είναι εκατεστημένη σε αυτό το μηχάνημα. Παρακαλώ εγκαταστήστε τη."
 
-#: ../src/os2/toplevel.cpp:367
-#, c-format
-msgid "Did you forget to include wx/os2/wx.rc in your resources?"
-msgstr "Ξεχάσατε να συμπεριλάβετε (include) το wx/os2/wx.rc στους πόρους σας (resources) ;"
-
-#: ../src/generic/tipdlg.cpp:217
-#, c-format
+#: ../src/generic/tipdlg.cpp:220
 msgid "Did you know..."
 msgstr "Γνωρίζατε ότι..."
 
-#: ../src/common/filefn.cpp:1279
+#: ../src/common/filefn.cpp:1352
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
@@ -1244,177 +1181,176 @@ msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
 msgid "Directory '%s' doesn't exist!"
 msgstr "Ο κατάλογος '%s' δεν υπάρχει!"
 
-#: ../src/generic/dirdlgg.cpp:188
-#, c-format
+#: ../src/generic/dirdlgg.cpp:190
 msgid "Directory does not exist"
 msgstr "Ο κατάλογος δεν υπάρχει"
 
-#: ../src/html/helpfrm.cpp:379
-#, c-format
-msgid "Display all index items that contain given substring. Search is case insensitive."
-msgstr "Εμφάνιση όλων των στοιχείων του ευρετηρίου δεδομένου substring. Η αναζήτηση διακρίνει μεταξύ κεφαλαίων/πεζών."
+#: ../src/generic/filedlgg.cpp:1191
+#, fuzzy
+msgid "Directory doesn't exist."
+msgstr "Ο κατάλογος δεν υπάρχει"
 
-#: ../src/html/helpfrm.cpp:545
-#, c-format
+#: ../src/html/helpfrm.cpp:409
+msgid ""
+"Display all index items that contain given substring. Search is case "
+"insensitive."
+msgstr ""
+"Εμφάνιση όλων των στοιχείων του ευρετηρίου δεδομένου substring. Η αναζήτηση "
+"διακρίνει μεταξύ κεφαλαίων/πεζών."
+
+#: ../src/html/helpfrm.cpp:583
 msgid "Display options dialog"
 msgstr "Εμφάνιση του διαλόγου επιλογών"
 
-#: ../src/msw/mimetype.cpp:682
-#, c-format
+#: ../src/msw/mimetype.cpp:672
 msgid ""
-"Do you want to overwrite the command used to %s files with extension \"%s\" ?\n"
+"Do you want to overwrite the command used to %s files with extension \"%s"
+"\" ?\n"
 "Current value is \n"
 "%s, \n"
 "New value is \n"
 "%s %1"
 msgstr ""
-"Θέλετε να επικαλύψετε την εντολή που χρησιμοποιήθηκε για να %s τα αρχεία με επέκταση \"%s\" ?\n"
+"Θέλετε να επικαλύψετε την εντολή που χρησιμοποιήθηκε για να %s τα αρχεία με "
+"επέκταση \"%s\" ?\n"
 "Η τρέχουσα τιμή είναι \n"
 "%s, \n"
 "Η νέα τιμή είναι \n"
 "%s %1"
 
-#: ../src/common/docview.cpp:441
+#: ../src/common/docview.cpp:466
 #, c-format
 msgid "Do you want to save changes to document %s?"
 msgstr "Θέλετε να αποθηκεύσετε τις αλλαγές στο έγγραφο %s ;"
 
-#: ../src/html/htmlwin.cpp:314
-#, c-format
+#: ../src/html/htmlwin.cpp:421
 msgid "Done"
 msgstr "Έτοιμο"
 
 #: ../src/generic/progdlgg.cpp:370
-#, c-format
 msgid "Done."
 msgstr "Έτοιμο."
 
-#: ../src/generic/fdrepdlg.cpp:157
+#: ../src/common/xtixml.cpp:271
 #, c-format
+msgid "Doubly used id : %d"
+msgstr ""
+
+#: ../src/generic/fdrepdlg.cpp:151
 msgid "Down"
 msgstr "Κάτω"
 
-#: ../src/common/paper.cpp:107
-#, c-format
+#: ../src/common/paper.cpp:119
 msgid "E sheet, 34 x 44 in"
 msgstr "E sheet, 34 x 44 ίντσες"
 
+#: ../contrib/src/gizmos/editlbox.cpp:161
+msgid "Edit item"
+msgstr ""
+
 #: ../src/generic/progdlgg.cpp:183
-#, c-format
 msgid "Elapsed time : "
 msgstr "Υπολογισθείς χρόνος : "
 
-#: ../src/generic/helphtml.cpp:335
+#: ../src/common/prntbase.cpp:408
 #, c-format
+msgid "Enter a page number between %d and %d:"
+msgstr ""
+
+#: ../src/generic/helpext.cpp:442
 msgid "Entries found"
 msgstr "Εισαγωγές(entries) βρέθηκαν"
 
-#: ../src/common/config.cpp:362
+#: ../src/common/config.cpp:366
 #, c-format
-msgid "Environment variables expansion failed: missing '%c' at position %d in '%s'."
-msgstr "Η επέκταση μεταβλητών περιβάλλοντος απέτυχε: λείπει το '%c' στην θέση %d στο '%s'."
+msgid ""
+"Environment variables expansion failed: missing '%c' at position %d in '%s'."
+msgstr ""
+"Η επέκταση μεταβλητών περιβάλλοντος απέτυχε: λείπει το '%c' στην θέση %d στο "
+"'%s'."
 
-#: ../src/generic/dirctrlg.cpp:704
-#: ../src/generic/dirctrlg.cpp:722
-#: ../src/generic/dirctrlg.cpp:733
-#: ../src/generic/dirdlgg.cpp:298
-#: ../src/generic/filedlgg.cpp:841
-#: ../src/generic/filedlgg.cpp:942
-#: ../src/generic/filedlgg.cpp:956
-#: ../src/generic/filedlgg.cpp:969
-#: ../src/generic/filedlgg.cpp:1365
-#: ../src/generic/filedlgg.cpp:1418
-#: ../src/gtk/filedlg.cpp:80
-#: ../src/gtk/fontdlg.cpp:71
-#, c-format
+#: ../src/generic/dirctrlg.cpp:683 ../src/generic/dirctrlg.cpp:701
+#: ../src/generic/dirctrlg.cpp:712 ../src/generic/dirdlgg.cpp:300
+#: ../src/generic/filedlgg.cpp:611 ../src/generic/filedlgg.cpp:711
+#: ../src/generic/filedlgg.cpp:725 ../src/generic/filedlgg.cpp:739
+#: ../src/generic/filedlgg.cpp:1166 ../src/generic/filedlgg.cpp:1191
+#: ../src/generic/filedlgg.cpp:1221 ../src/gtk/filedlg.cpp:82
+#: ../src/gtk/fontdlg.cpp:76
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: ../src/unix/utilsunx.cpp:1193
-#: ../src/unix/utilsunx.cpp:1201
-#, c-format
+#: ../src/unix/utilsunx.cpp:1030 ../src/unix/utilsunx.cpp:1038
 msgid "Error "
 msgstr "Σφάλμα "
 
-#: ../src/generic/dirdlgg.cpp:203
-#, c-format
+#: ../src/generic/dirdlgg.cpp:205
 msgid "Error creating directory"
 msgstr "Σφάλμα κατα τη δημιουργία καταλόγου"
 
-#: ../src/common/imagbmp.cpp:926
-#, c-format
+#: ../src/common/imagbmp.cpp:923
 msgid "Error in reading image DIB ."
 msgstr "Σφάλμα κατά την ανάγνωση εικόνας DIB."
 
-#: ../src/common/log.cpp:460
-#, c-format
+#: ../src/common/fileconf.cpp:505
+#, fuzzy
+msgid "Error reading config options."
+msgstr "Σφάλμα κατά την ανάγνωση εικόνας DIB."
+
+#: ../src/common/log.cpp:478
 msgid "Error: "
 msgstr "Σφάλμα: "
 
-#: ../src/common/fontmap.cpp:115
-#, c-format
+#: ../src/common/fmapbase.cpp:104
 msgid "Esperanto (ISO-8859-3)"
 msgstr "Εσπεράντο (ISO-8859-3)"
 
 #: ../src/generic/progdlgg.cpp:191
-#, c-format
 msgid "Estimated time : "
 msgstr "Υπολογισθείς χρόνος : "
 
-#: ../src/msw/utilsexc.cpp:702
+#: ../src/msw/utilsexc.cpp:735
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Η εκτέλεση της εντολής '%s' απέτυχε"
 
-#: ../src/common/paper.cpp:112
-#, c-format
+#: ../src/os2/utilsexc.cpp:171
+#, fuzzy, c-format
+msgid "Execution of command '%s' failed with error: %ul"
+msgstr "Η εκτέλεση της εντολής '%s' απέτυχε"
+
+#: ../src/common/paper.cpp:124
 msgid "Executive, 7 1/4 x 10 1/2 in"
 msgstr "Executive, 7 1/4 x 10 1/2 ίντσες"
 
-#: ../src/common/resourc2.cpp:326
-#: ../src/common/resourc2.cpp:1391
-#: ../src/common/resource.cpp:1845
-#: ../src/common/resource.cpp:1975
-#: ../src/common/resource.cpp:3059
-#, c-format
-msgid "Expected '*' whilst parsing resource."
-msgstr "Αναμενόταν '*' κατά την ανάγνωση του πόρου(resource)."
-
-#: ../src/common/resourc2.cpp:342
-#: ../src/common/resourc2.cpp:1407
-#: ../src/common/resource.cpp:1862
-#: ../src/common/resource.cpp:1991
-#: ../src/common/resource.cpp:3076
-#, c-format
-msgid "Expected '=' whilst parsing resource."
-msgstr "Αναμενόταν '=' κατά την ανάγνωση του πόρου(resource)."
-
-#: ../src/common/resourc2.cpp:312
-#: ../src/common/resourc2.cpp:1377
-#: ../src/common/resource.cpp:1831
-#: ../src/common/resource.cpp:1961
-#: ../src/common/resource.cpp:3045
-#, c-format
-msgid "Expected 'char' whilst parsing resource."
-msgstr "Αναμενόταν 'char' κατά την ανάγνωση του πόρου(resource)."
-
-#: ../src/common/fontmap.cpp:144
-#, c-format
+#: ../src/common/fmapbase.cpp:139
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
 msgstr "Εκτεταμένη Κωδικοσελίδα Unix για Ιαπωνικά (EUC-JP)"
 
-#: ../src/msw/dialup.cpp:842
+#: ../src/html/chm.cpp:696
+#, fuzzy, c-format
+msgid "Extraction of '%s' into '%s' failed."
+msgstr "Η εκτέλεση της εντολής '%s' απέτυχε"
+
+#: ../src/msw/dialup.cpp:840
 #, c-format
 msgid "Failed to %s dialup connection: %s"
 msgstr "Αποτυχία %s της σύνδεσης μέσω τηλεφώνου : %s"
 
 #: ../src/unix/snglinst.cpp:243
-#, c-format
 msgid "Failed to access lock file."
 msgstr "Αποτυχία πρόσβασης στο αρχείο 'κλειδωνιά'(lock file)."
 
-#: ../src/common/filename.cpp:176
+#: ../src/msw/dib.cpp:460
 #, c-format
+msgid "Failed to allocated %luKb of memory for bitmap data."
+msgstr ""
+
+#: ../src/unix/displayx11.cpp:262
+#, fuzzy
+msgid "Failed to change video mode"
+msgstr "Αποτυχία κλεισίματος του χειριστηρίου του αρχείου(file handle)"
+
+#: ../src/common/filename.cpp:187
 msgid "Failed to close file handle"
 msgstr "Αποτυχία κλεισίματος του χειριστηρίου του αρχείου(file handle)"
 
@@ -1423,285 +1359,261 @@ msgstr "Αποτυχία κλεισίματος του χειριστηρίου του αρχείου(file handle)"
 msgid "Failed to close lock file '%s'"
 msgstr "Αποτυχία κλεισίματος του αρχείου 'κλειδωνιά'(lock file) '%s'"
 
-#: ../src/msw/clipbrd.cpp:127
-#, c-format
+#: ../src/msw/clipbrd.cpp:122
 msgid "Failed to close the clipboard."
 msgstr "Αποτυχία κλεισίματος του προχείρου(clipboard)"
 
-#: ../src/msw/dialup.cpp:782
-#, c-format
+#: ../src/msw/dialup.cpp:780
 msgid "Failed to connect: missing username/password."
 msgstr "Αποτυχία συνδεσης: λείπει το όνομα χρήστη/συνθηματικό"
 
-#: ../src/msw/dialup.cpp:728
-#, c-format
+#: ../src/msw/dialup.cpp:726
 msgid "Failed to connect: no ISP to dial."
-msgstr "Αποτυχία συνδεσης: κανένας παροχέας υπηρεσιών Internet (ISP) για να καλέσω."
+msgstr ""
+"Αποτυχία συνδεσης: κανένας παροχέας υπηρεσιών Internet (ISP) για να καλέσω."
 
-#: ../src/msw/registry.cpp:597
+#: ../src/msw/registry.cpp:623
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "Αποτυχία αντιγραφής της τιμής μητρώου '%s'"
 
-#: ../src/msw/registry.cpp:606
+#: ../src/msw/registry.cpp:632
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
-msgstr "Αποτυχία αντιγραφής των περιεχομένων του κλειδιού μητρώου '%s' στο '%s'."
+msgstr ""
+"Αποτυχία αντιγραφής των περιεχομένων του κλειδιού μητρώου '%s' στο '%s'."
 
-#: ../src/common/filefn.cpp:1131
+#: ../src/common/filefn.cpp:1192
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "Αποτυχία αντιγραφής του αρχείου '%s' στο '%s'"
 
-#: ../src/msw/dde.cpp:948
-#, c-format
+#: ../src/msw/dde.cpp:1004
 msgid "Failed to create DDE string"
 msgstr "Απέτυχε η δημιουργεία ενός DDE αλφαρηθμιτικού (string)"
 
-#: ../src/msw/mdi.cpp:425
-#, c-format
+#: ../src/msw/mdi.cpp:426
 msgid "Failed to create MDI parent frame."
 msgstr "Αποτυχία δημιουργίας ενός γονεικού περιγράμματος (parent frame) MDI."
 
-#: ../src/msw/statbr95.cpp:110
-#, c-format
+#: ../src/msw/statbr95.cpp:112
 msgid "Failed to create a status bar."
 msgstr "Αποτυχία δημιουργίας μιας μπάρας κατάστασης (status bar)"
 
-#: ../src/common/filename.cpp:721
-#, c-format
+#: ../src/common/filename.cpp:733
 msgid "Failed to create a temporary file name"
 msgstr "Αποτυχία δημιουργίας ονόματος προσωρινού αρχείου"
 
-#: ../src/msw/utilsexc.cpp:197
-#, c-format
+#: ../src/msw/utilsexc.cpp:228
 msgid "Failed to create an anonymous pipe"
 msgstr "Αποτυχία δημιουργίας ενός ανώνυμου pipe"
 
-#: ../src/msw/dde.cpp:412
+#: ../src/msw/dde.cpp:468
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
-msgstr "Αποτυχία κατά την δημιουργία σύνδεσης με τον εξυπηρετητή (server) '%s' στο θέμα '%s'"
+msgstr ""
+"Αποτυχία κατά την δημιουργία σύνδεσης με τον εξυπηρετητή (server) '%s' στο "
+"θέμα '%s'"
 
-#: ../src/msw/toplevel.cpp:313
-#, c-format
-msgid "Failed to create dialog. Incorrect DLGTEMPLATE?"
-msgstr "Απέτυχε η δημιουργία παράθυρου διαλόγου. Λανθασμένο DLGTEMPLATE ;"
+#: ../src/msw/cursor.cpp:197
+#, fuzzy
+msgid "Failed to create cursor."
+msgstr "Αποτυχία δημιουργίας μιας μπάρας κατάστασης (status bar)"
 
-#: ../src/unix/mimetype.cpp:372
+#: ../src/unix/mimetype.cpp:369
 #, c-format
 msgid "Failed to create directory %s/.gnome."
 msgstr "Απέτυχε η δημιουργία καταλόγου '%s'/.gnome."
 
-#: ../src/unix/mimetype.cpp:381
+#: ../src/unix/mimetype.cpp:378
 #, c-format
 msgid "Failed to create directory %s/mime-info."
 msgstr "Απέτυχε η δημιουργία καταλόγου '%s'/mime-info."
 
-#: ../src/generic/dirdlgg.cpp:201
+#: ../src/generic/dirdlgg.cpp:203
 #, c-format
-msgid "Failed to create directory '%s'\n"
+msgid ""
+"Failed to create directory '%s'\n"
 "(Do you have the required permissions?)"
-msgstr "Αποτυχία κατά τη δημιουργία υποκαταλόγου '%s'\n"
+msgstr ""
+"Αποτυχία κατά τη δημιουργία υποκαταλόγου '%s'\n"
 "(Έχετε τα απαιτούμενα δικαιώματα(permissions);)"
 
-#: ../src/msw/mimetype.cpp:168
+#: ../src/msw/mimetype.cpp:196
 #, c-format
 msgid "Failed to create registry entry for '%s' files."
-msgstr "Απέτυχε η δημιουργία εγγραφής μητρώου (registry entry) για '%s' αρχεία."
+msgstr ""
+"Απέτυχε η δημιουργία εγγραφής μητρώου (registry entry) για '%s' αρχεία."
 
-#: ../src/msw/fdrepdlg.cpp:442
+#: ../src/msw/fdrepdlg.cpp:480
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
-msgstr "Απέτυχε η δημιουργία καθιερωμένου παράθυρου διαλόγου εύρεσης/αντικατάστασης (κωδικός σφάλματος %d)"
+msgstr ""
+"Απέτυχε η δημιουργία καθιερωμένου παράθυρου διαλόγου εύρεσης/αντικατάστασης "
+"(κωδικός σφάλματος %d)"
 
-#: ../src/html/winpars.cpp:468
+#: ../src/html/winpars.cpp:495
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Απέτυχε η προβολή του εγγράφου HTML στην κωδικοποίηση %s"
 
-#: ../src/mac/clipbrd.cpp:168
-#: ../src/msw/clipbrd.cpp:139
-#, c-format
+#: ../src/mac/clipbrd.cpp:185 ../src/msw/clipbrd.cpp:134
 msgid "Failed to empty the clipboard."
 msgstr "Αποτυχία αδειάσματος του προχείρου (clipboard)."
 
-#: ../src/msw/dde.cpp:613
-#, c-format
+#: ../src/unix/displayx11.cpp:201
+#, fuzzy
+msgid "Failed to enumerate video modes"
+msgstr "Απέτυχε η δημιουργία καταλόγου '%s'/.gnome."
+
+#: ../src/msw/dde.cpp:668
 msgid "Failed to establish an advise loop with DDE server"
 msgstr "Αποτυχία επίτευξης βρόχου advise με τον διακομιστή DDE"
 
-#: ../src/msw/dialup.cpp:620
+#: ../src/msw/dialup.cpp:618
 #, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr "Αποτυχία %s της σύνδεσης μέσω τηλεφώνου : %s"
 
-#: ../src/unix/utilsunx.cpp:540
-#: ../src/unix/utilsunx.cpp:557
+#: ../src/unix/utilsunx.cpp:459 ../src/unix/utilsunx.cpp:475
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Αποτυχία εκτέλεσης του '%s'\n"
 
-#: ../src/common/resourc2.cpp:808
-#: ../src/common/resource.cpp:2465
-#, c-format
-msgid "Failed to find XBM resource %s.\n"
-"Forgot to use wxResourceLoadBitmapData?"
-msgstr "Απέτυχε η έυρεση XBM πόρου %s.\n"
-"Ξεχάσατε να χρησιμοποιήσετε το wxResourceLoadBitmapData ;"
-
-#: ../src/common/resourc2.cpp:959
-#: ../src/common/resource.cpp:2619
-#, c-format
-msgid "Failed to find XBM resource %s.\n"
-"Forgot to use wxResourceLoadIconData?"
-msgstr "Απέτυχε η έυρεση XBM πόρου %s.\n"
-"Ξεχάσατε να χρησιμοποιήσετε το wxResourceLoadIconData ;"
-
-#: ../src/common/resourc2.cpp:823
-#: ../src/common/resource.cpp:2480
-#, c-format
-msgid "Failed to find XPM resource %s.\n"
-"Forgot to use wxResourceLoadBitmapData?"
-msgstr "Απέτυχε η έυρεση XPM πόρου %s.\n"
-"Ξεχάσατε να χρησιμοποιήσετε το wxResourceLoadBitmapData ;"
-
-#: ../src/msw/dialup.cpp:680
+#: ../src/msw/dialup.cpp:678
 #, c-format
 msgid "Failed to get ISP names: %s"
 msgstr "Αποτυχία κατά την λήψη των ονομάτων των ISP: %s"
 
-#: ../src/mac/clipbrd.cpp:119
-#, c-format
+#: ../src/mac/clipbrd.cpp:134
 msgid "Failed to get clipboard data."
 msgstr "Αποτυχία στη λήψη των δεδομένων του προχείρου (clipboard)."
 
-#: ../src/msw/clipbrd.cpp:712
-#, c-format
+#: ../src/msw/clipbrd.cpp:713
 msgid "Failed to get data from the clipboard"
 msgstr "Αποτυχία λήψης δεδομένων απο το πρόχειρο"
 
-#: ../src/common/timercmn.cpp:294
-#, c-format
+#: ../src/common/stopwatch.cpp:238
 msgid "Failed to get the UTC system time."
 msgstr "Αποτυχία καθορισμού της ώρας του UTC συστήματος"
 
-#: ../src/common/timercmn.cpp:245
-#, c-format
+#: ../src/common/stopwatch.cpp:189
 msgid "Failed to get the local system time"
 msgstr "Αποτυχία καθορισμού της ώρας του τοπικού συστήματος"
 
-#: ../src/common/filefn.cpp:1512
-#, c-format
+#: ../src/common/filefn.cpp:1602
 msgid "Failed to get the working directory"
 msgstr "Αποτυχία λήψης καταλόγου εργασίας (working directory)"
 
 #: ../src/univ/theme.cpp:122
-#, c-format
 msgid "Failed to initialize GUI: no built-in themes found."
 msgstr "Αποτυχία αρχικοποίησης του GUI: δεν βρέθηκαν ενσωματωμένα θέματα."
 
 #: ../src/msw/helpchm.cpp:69
-#, c-format
 msgid "Failed to initialize MS HTML Help."
 msgstr "Αποτυχία στην αρχικοποίηση του MS HTML Help."
 
-#: ../src/msw/glcanvas.cpp:729
-#, c-format
+#: ../src/msw/glcanvas.cpp:741
 msgid "Failed to initialize OpenGL"
 msgstr "Απέτυχε η αρχικοποίηση του OpenGL"
 
-#: ../src/unix/threadpsx.cpp:887
-#, c-format
-msgid "Failed to join a thread, potential memory leak detected - please restart the program"
-msgstr "Απέτυχε η συνένωση(join) ενός νήματος εκτέλεσης (thread), πιθανή διαρροή μνήμης εντοπίστηκε - παρακαλώ επανεκκινήστε το πρόγραμμα"
+#: ../src/unix/threadpsx.cpp:896
+msgid ""
+"Failed to join a thread, potential memory leak detected - please restart the "
+"program"
+msgstr ""
+"Απέτυχε η συνένωση(join) ενός νήματος εκτέλεσης (thread), πιθανή διαρροή "
+"μνήμης εντοπίστηκε - παρακαλώ επανεκκινήστε το πρόγραμμα"
 
 #: ../src/msw/utils.cpp:723
 #, c-format
 msgid "Failed to kill process %d"
 msgstr "Αποτυχία θανάτωσης της διαδικασίας(process) %d"
 
-#: ../src/common/iconbndl.cpp:66
+#: ../src/common/iconbndl.cpp:68
 #, c-format
 msgid "Failed to load image %d from file '%s'."
 msgstr "Αποτυχία φόρτωσης της εικόνας %d από το αρχείο '%s'."
 
-#: ../src/msw/volume.cpp:347
-#, c-format
+#: ../src/msw/volume.cpp:312
 msgid "Failed to load mpr.dll."
 msgstr "Αποτυχία φόρτωσης του mpr.dll."
 
-#: ../src/common/dynlib.cpp:274
-#: ../src/common/dynload.cpp:198
+#: ../src/common/dynlib.cpp:287
 #, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "Αποτυχία φόρτωσης της κοινής βιβλιοθήκης (shared library) '%s'"
 
-#: ../src/common/dynlib.cpp:256
-#: ../src/common/dynload.cpp:127
+#: ../src/common/dynlib.cpp:216
 #, c-format
 msgid "Failed to load shared library '%s' Error '%s'"
-msgstr "Αποτυχία φόρτωσης της κοινής βιβλιοθήκης (shared library) '%s' Σφάλμα '%s'"
+msgstr ""
+"Αποτυχία φόρτωσης της κοινής βιβλιοθήκης (shared library) '%s' Σφάλμα '%s'"
 
 #: ../src/unix/snglinst.cpp:192
 #, c-format
 msgid "Failed to lock the lock file '%s'"
 msgstr "Αποτυχία κλειδώματος του αρχείου 'κλειδωνιά'(lock file) '%s'"
 
-#: ../src/common/regex.cpp:251
+#: ../src/common/regex.cpp:263
 #, c-format
 msgid "Failed to match '%s' in regular expression: %s"
-msgstr "Αποτυχία στο συνταίριασμα του '%s' στην κανονική έκφραση (regular expression): %s"
+msgstr ""
+"Αποτυχία στο συνταίριασμα του '%s' στην κανονική έκφραση (regular "
+"expression): %s"
 
-#: ../src/common/filename.cpp:1667
+#: ../src/common/filename.cpp:1848
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Αποτυχία τροποποίησης ώρας του αρχείου '%s'"
 
-#: ../src/common/filename.cpp:164
+#: ../src/common/filename.cpp:175
 #, c-format
 msgid "Failed to open '%s' for %s"
 msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
 
-#: ../src/common/filename.cpp:743
-#, c-format
+#: ../src/html/chm.cpp:142
+#, fuzzy, c-format
+msgid "Failed to open CHM archive '%s'."
+msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
+
+#: ../src/common/filename.cpp:755
 msgid "Failed to open temporary file."
 msgstr "Αποτυχία ανοίγματος προσωρινού αρχείου"
 
-#: ../src/msw/clipbrd.cpp:107
-#, c-format
+#: ../src/msw/clipbrd.cpp:102
 msgid "Failed to open the clipboard."
 msgstr "Αποτυχία ανοίγματος του προχείρου (clipboard)."
 
 #: ../src/msw/clipbrd.cpp:616
-#, c-format
 msgid "Failed to put data on the clipboard"
 msgstr "Αποτυχία τοποθέτησης δεδομένων στο πρόχειρο (clipboard)"
 
 #: ../src/unix/snglinst.cpp:252
-#, c-format
 msgid "Failed to read PID from lock file."
 msgstr "Απέτυχε η ανάγνωση PID από αρχείο κλειδωνιά(lock file)."
 
-#: ../src/unix/utilsunx.cpp:635
-#, c-format
+#: ../src/unix/utilsunx.cpp:547
 msgid "Failed to redirect child process input/output"
-msgstr "Αποτυχία στην ανακατεύθυνση της εισόδου/εξόδου διεργασίας απογόνου (child process input/output)"
+msgstr ""
+"Αποτυχία στην ανακατεύθυνση της εισόδου/εξόδου διεργασίας απογόνου (child "
+"process input/output)"
 
-#: ../src/msw/utilsexc.cpp:605
-#, c-format
+#: ../src/msw/utilsexc.cpp:635
 msgid "Failed to redirect the child process IO"
-msgstr "Αποτυχία στην ανακατεύθυνση του IO διεργασίας απογόνου (child process IO)"
+msgstr ""
+"Αποτυχία στην ανακατεύθυνση του IO διεργασίας απογόνου (child process IO)"
 
-#: ../src/msw/dde.cpp:295
+#: ../src/msw/dde.cpp:318
 #, c-format
 msgid "Failed to register DDE server '%s'"
 msgstr "Απέτυχε η καταχώρηση του DDE εξυπηρετητή (server) '%s'"
 
-#: ../src/common/fontmap.cpp:715
+#: ../src/common/fontmap.cpp:230
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
-msgstr "Αποτυχία ανάμνησης της κωδικοποίησης για το συνολο χαρακτήρων (charset) '%s'"
+msgstr ""
+"Αποτυχία ανάμνησης της κωδικοποίησης για το συνολο χαρακτήρων (charset) '%s'"
 
 #: ../src/unix/snglinst.cpp:296
 #, c-format
@@ -1711,40 +1623,45 @@ msgstr "Αποτυχία απομάκρυνσης του αρχείου 'κλειδωνιά'(lock file) '%s'"
 #: ../src/unix/snglinst.cpp:262
 #, c-format
 msgid "Failed to remove stale lock file '%s'."
-msgstr "Αποτυχία απομάκρυνσης του απαρχειομένου(stale) αρχείου 'κλειδωνιά'(lock file) '%s'"
+msgstr ""
+"Αποτυχία απομάκρυνσης του απαρχειομένου(stale) αρχείου 'κλειδωνιά'(lock "
+"file) '%s'"
 
-#: ../src/msw/registry.cpp:443
+#: ../src/msw/registry.cpp:469
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Αποτυχία της μετονομασίας της τιμής μητρώου '%s' σε '%s'."
 
-#: ../src/msw/registry.cpp:543
+#: ../src/msw/registry.cpp:569
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Αποτυχία της μετονομασίας του κλειδιού μητρώου '%s' σε '%s'."
 
-#: ../src/msw/clipbrd.cpp:505
-#, c-format
+#: ../src/msw/clipbrd.cpp:503
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Αποτυχία κατά την ανάκτηση δεδομένων από το πρόχειρο (clipboard)."
 
-#: ../src/common/filename.cpp:1757
+#: ../src/common/filename.cpp:1938
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Αποτυχία λήψης της ώρας του αρχείου '%s'"
 
-#: ../src/msw/dialup.cpp:444
-#, c-format
+#: ../src/msw/dialup.cpp:442
 msgid "Failed to retrieve text of RAS error message"
 msgstr "Αποτυχία στη λήψη κειμένου από το μήνυμα σφάλματος RAS"
 
-#: ../src/msw/clipbrd.cpp:742
-#, c-format
+#: ../src/msw/clipbrd.cpp:750
 msgid "Failed to retrieve the supported clipboard formats"
-msgstr "Αποτυχία στην ανάκτηση των υποστηριζομένων μορφών προχείρου (clipboard formats)"
+msgstr ""
+"Αποτυχία στην ανάκτηση των υποστηριζομένων μορφών προχείρου (clipboard "
+"formats)"
 
-#: ../src/msw/dde.cpp:658
-#, c-format
+#: ../src/msw/dib.cpp:264
+#, fuzzy, c-format
+msgid "Failed to save the bitmap image to file \"%s\"."
+msgstr "Αποτυχία φόρτωσης της εικόνας %d από το αρχείο '%s'."
+
+#: ../src/msw/dde.cpp:713
 msgid "Failed to send DDE advise notification"
 msgstr "Αποτυχία κατά την αποστολή DDE advise επισήμανσης"
 
@@ -1754,42 +1671,37 @@ msgid "Failed to set FTP transfer mode to %s."
 msgstr "Αποτυχία θέσης FTP transfer mode σε '%s'"
 
 #: ../src/msw/clipbrd.cpp:379
-#, c-format
 msgid "Failed to set clipboard data."
 msgstr "Αποτυχία θέσης δεδομένων προχείρου (clipboard)."
 
-#: ../src/common/file.cpp:526
-#, c-format
+#: ../src/common/file.cpp:701
 msgid "Failed to set temporary file permissions"
 msgstr "Αποτυχία θέσπισης δικαιωμάτων προσωρινού αρχείου"
 
-#: ../src/unix/threadpsx.cpp:1241
-#: ../src/unix/threadpsx.cpp:1252
+#: ../src/unix/threadpsx.cpp:1245 ../src/unix/threadpsx.cpp:1256
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Δεν είναι δυνατή η θέση προτεραιότητας του thread"
 
-#: ../src/common/fs_mem.cpp:167
+#: ../src/common/fs_mem.cpp:229
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "Αποτυχία αποθήκευσης της εικόνας '%s' στο VFS μνήμης!"
 
-#: ../src/unix/threadpsx.cpp:1425
-#, c-format
+#: ../src/unix/threadpsx.cpp:1429
 msgid "Failed to terminate a thread."
 msgstr "Αποτυχία τερματισμού του thread"
 
-#: ../src/msw/dde.cpp:632
-#, c-format
+#: ../src/msw/dde.cpp:687
 msgid "Failed to terminate the advise loop with DDE server"
 msgstr "Αποτυχία τερματισμού του advise loop με τον DDE εξυπηρετητή (server)"
 
-#: ../src/msw/dialup.cpp:915
+#: ../src/msw/dialup.cpp:913
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Αποτυχία τερματισμού της σύνδεσης μέσω τηλεφώνου : %s"
 
-#: ../src/common/filename.cpp:1682
+#: ../src/common/filename.cpp:1863
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "Αποτυχία αγγίγματος (touch) του αρχείου '%s'"
@@ -1799,384 +1711,353 @@ msgstr "Αποτυχία αγγίγματος (touch) του αρχείου '%s'"
 msgid "Failed to unlock lock file '%s'"
 msgstr "Αποτυχία ξεκλείδωματος του αρχείου 'κλειδωνιά'(lock file) '%s'"
 
-#: ../src/msw/dde.cpp:311
+#: ../src/msw/dde.cpp:339
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
-msgstr "Αποτυχία απο-καταχώρησης (unregister) του DDE εξυπηρετητή (server) '%s'"
+msgstr ""
+"Αποτυχία απο-καταχώρησης (unregister) του DDE εξυπηρετητή (server) '%s'"
 
 #: ../src/unix/snglinst.cpp:173
 #, c-format
 msgid "Failed to write to lock file '%s'"
 msgstr "Αποτυχία εγγραφής του αρχείου 'κλειδωνιά'(lock file) '%s'"
 
-#: ../src/generic/logg.cpp:379
-#, c-format
+#: ../src/generic/logg.cpp:391
 msgid "Fatal error"
 msgstr "Μοιραίο σφάλμα"
 
-#: ../src/common/log.cpp:453
-#, c-format
+#: ../src/common/log.cpp:467
 msgid "Fatal error: "
 msgstr "Μοιραίο σφάλμα: "
 
-#: ../src/mac/app.cpp:1284
-#: ../src/msw/app.cpp:1290
-#, c-format
-msgid "Fatal error: exiting"
-msgstr "Μοιραίο σφάλμα: έξοδος"
+#: ../src/html/helpfrm.cpp:276
+msgid "File"
+msgstr ""
 
 #: ../src/mgl/bitmap.cpp:544
 #, c-format
 msgid "File %s does not exist."
 msgstr "Το αρχείο %s δεν υπάρχει."
 
-#: ../src/generic/filedlgg.cpp:1408
-#: ../src/gtk/filedlg.cpp:69
+#: ../src/generic/filedlgg.cpp:1212 ../src/gtk/filedlg.cpp:71
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Το αρχείο '%s' υπάρχει ήδη, πραγματικά θέλετε να επικαλυφτεί;"
 
-#: ../src/msw/filedlg.cpp:518
+#: ../src/os2/filedlg.cpp:302
 #, c-format
-msgid "File '%s' already exists.\n"
+msgid ""
+"File '%s' already exists.\n"
 "Do you want to replace it?"
-msgstr "Το αρχείο '%s' υπάρχει ήδη.\n"
+msgstr ""
+"Το αρχείο '%s' υπάρχει ήδη.\n"
 "Θέλετε να αντικατασταθεί;"
 
-#: ../src/common/textcmn.cpp:158
-#, c-format
+#: ../src/common/textcmn.cpp:224
 msgid "File couldn't be loaded."
 msgstr "Το αρχείο δεν μπόρεσε να φορτωθεί."
 
-#: ../src/common/docview.cpp:295
-#: ../src/common/docview.cpp:332
-#: ../src/common/docview.cpp:1424
-#, c-format
+#: ../src/common/docview.cpp:316 ../src/common/docview.cpp:357
+#: ../src/common/docview.cpp:1502
 msgid "File error"
 msgstr "Σφάλμα αρχείου"
 
-#: ../src/generic/dirctrlg.cpp:722
-#: ../src/generic/filedlgg.cpp:956
-#, c-format
+#: ../src/generic/dirctrlg.cpp:701 ../src/generic/filedlgg.cpp:725
 msgid "File name exists already."
 msgstr "Το όνομα αρχείου υπάρχει ήδη."
 
-#: ../src/msw/filedlg.cpp:366
+#: ../src/common/fldlgcmn.cpp:62 ../src/msw/filedlg.cpp:250
 #, c-format
 msgid "Files (%s)|%s"
 msgstr "Αρχεία (%s)|%s"
 
-#: ../src/html/helpfrm.cpp:367
-#, c-format
+#: ../src/html/helpfrm.cpp:397
 msgid "Find"
 msgstr "Εύρεση"
 
-#: ../src/html/helpfrm.cpp:950
-#, c-format
+#: ../src/html/helpfrm.cpp:1040
 msgid "Fixed font:"
 msgstr "Γραμματοσειρά σταθερού μεγέθους:"
 
-#: ../src/common/paper.cpp:118
-#, c-format
+#: ../src/html/helpfrm.cpp:1101
+msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
+msgstr ""
+
+#: ../src/common/paper.cpp:130
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 ίντσες"
 
-#: ../src/html/helpfrm.cpp:951
-#, c-format
+#: ../src/html/helpfrm.cpp:1041
 msgid "Font size:"
 msgstr "Μέγεθος γραμματοσειράς:"
 
-#: ../src/unix/utilsunx.cpp:578
-#, c-format
+#: ../src/unix/utilsunx.cpp:496
 msgid "Fork failed"
 msgstr "Fork απέτυχε"
 
-#: ../src/common/dlgcmn.cpp:230
-#, c-format
+#: ../src/common/dlgcmn.cpp:224
 msgid "Forward"
 msgstr "Εμπρός"
 
-#: ../src/common/resourc2.cpp:295
-#: ../src/common/resourc2.cpp:1360
-#: ../src/common/resource.cpp:1814
-#: ../src/common/resource.cpp:1944
-#: ../src/common/resource.cpp:3028
-#, c-format
-msgid "Found "
-msgstr "Βρέθηκαν "
+#: ../src/common/xtixml.cpp:235
+msgid "Forward hrefs are not supported"
+msgstr ""
 
-#: ../src/html/helpfrm.cpp:666
+#: ../src/html/helpfrm.cpp:722
 #, c-format
 msgid "Found %i matches"
 msgstr "Βρέθηκαν %i αντιστοιχίες"
 
-#: ../src/generic/prntdlgg.cpp:184
-#, c-format
+#: ../src/generic/prntdlgg.cpp:181
 msgid "From:"
 msgstr "Από:"
 
 #: ../src/common/imaggif.cpp:100
-#, c-format
 msgid "GIF: Invalid gif index."
 msgstr "GIF: Λάθος gif index."
 
 #: ../src/common/imaggif.cpp:75
-#, c-format
 msgid "GIF: data stream seems to be truncated."
 msgstr "GIF: το stream δεδομένων μοιάζει να είναι αποκομμένο."
 
 #: ../src/common/imaggif.cpp:59
-#, c-format
 msgid "GIF: error in GIF image format."
 msgstr "GIF: σφάλμα στην μορφή εικόνας GIF."
 
 #: ../src/common/imaggif.cpp:62
-#, c-format
 msgid "GIF: not enough memory."
 msgstr "GIF: ανεπαρκής μνήμη."
 
 #: ../src/common/imaggif.cpp:65
-#, c-format
 msgid "GIF: unknown error!!!"
 msgstr "GIF: άγνωστο λάθος!!!"
 
-#: ../src/univ/themes/gtk.cpp:623
-#, c-format
+#: ../src/univ/themes/gtk.cpp:631
 msgid "GTK+ theme"
 msgstr "Θέμα GTK+"
 
-#: ../src/common/paper.cpp:142
-#, c-format
+#: ../src/common/paper.cpp:154
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "German Legal Fanfold, 8 1/2 x 13 ίντσες"
 
-#: ../src/common/paper.cpp:141
-#, c-format
+#: ../src/common/paper.cpp:153
 msgid "German Std Fanfold, 8 1/2 x 12 in"
 msgstr "German Std Fanfold, 8 1/2 x 12 ίντσες"
 
-#: ../src/common/image.cpp:762
-#, c-format
+#: ../include/wx/xti.h:802
+msgid "GetProperty called w/o valid getter"
+msgstr ""
+
+#: ../include/wx/xti.h:862
+msgid "GetPropertyCollection called on a generic accessor"
+msgstr ""
+
+#: ../include/wx/xti.h:810
+msgid "GetPropertyCollection called w/o valid collection getter"
+msgstr ""
+
+#: ../src/common/image.cpp:1499
 msgid "GetUnusedColour:: No Unused Color in image "
 msgstr "GetUnusedColour:: Κανένα Αχρησιμοποίητο Χρώμα στην εικόνα "
 
-#: ../src/html/helpfrm.cpp:511
-#, c-format
+#: ../src/html/helpfrm.cpp:549
 msgid "Go back"
 msgstr "Πήγαινε πίσω"
 
-#: ../src/html/helpfrm.cpp:514
-#, c-format
+#: ../src/html/helpfrm.cpp:552
 msgid "Go forward"
 msgstr "Πήγαινε εμπρός"
 
-#: ../src/html/helpfrm.cpp:519
-#, c-format
+#: ../src/html/helpfrm.cpp:557
 msgid "Go one level up in document hierarchy"
 msgstr "Πήγαινε ένα επίπεδο πάνω στην ιεραρχεία του εγγράφου"
 
-#: ../src/generic/dirdlgg.cpp:108
-#: ../src/generic/filedlgg.cpp:1121
-#, c-format
+#: ../src/generic/dirdlgg.cpp:110 ../src/generic/filedlgg.cpp:921
 msgid "Go to home directory"
 msgstr "Προς κεντρικό κατάλογο"
 
-#: ../src/generic/filedlgg.cpp:1113
-#, c-format
+#: ../src/generic/filedlgg.cpp:913
 msgid "Go to parent directory"
 msgstr "Προς πατρικό κατάλογο"
 
-#: ../src/common/prntbase.cpp:378
-#, c-format
+#: ../src/common/prntbase.cpp:413
 msgid "Goto Page"
 msgstr "Μετάβαση στη Σελίδα"
 
-#: ../src/common/fontmap.cpp:119
-#, c-format
+#: ../src/common/fmapbase.cpp:108
 msgid "Greek (ISO-8859-7)"
 msgstr "Ελληνικό (ISO-8859-7)"
 
-#: ../src/html/htmlwin.cpp:354
+#: ../src/html/helpfrm.cpp:1399
+msgid "HTML Help Project (*.hhp)|*.hhp|"
+msgstr ""
+
+#: ../src/html/htmlwin.cpp:467
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "Η HTML άγκυρα %s δεν υπάρχει."
 
-#: ../src/html/helpfrm.cpp:1307
-#, c-format
-msgid "HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*.*)|*"
-msgstr "Αρχεία HTML (*.htm)|*.htm|Αρχεία HTML (*.html)|*.html|Βιβλία βοηθείας (*.htb)|*.htb|Βιβλία βοηθείας (*.zip)|*.zip|Project HTML βοήθειας (*.hhp)|*.hhp|Ολα τα αρχεία (*.*)|*"
+#: ../src/html/helpfrm.cpp:1397
+msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
+msgstr ""
 
-#: ../src/common/fontmap.cpp:120
-#, c-format
+#: ../src/common/fmapbase.cpp:109
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Εβραϊκό (ISO-8859-8)"
 
-#: ../src/common/dlgcmn.cpp:242
-#: ../src/generic/mdig.cpp:308
-#: ../src/generic/proplist.cpp:516
-#: ../src/html/helpfrm.cpp:245
-#: ../src/msw/mdi.cpp:1324
-#, c-format
+#: ../src/common/dlgcmn.cpp:236 ../src/generic/mdig.cpp:310
+#: ../src/html/helpfrm.cpp:254 ../src/html/helpfrm.cpp:277
+#: ../src/msw/mdi.cpp:1329
 msgid "Help"
 msgstr "Βοήθεια"
 
-#: ../src/html/helpfrm.cpp:944
-#, c-format
+#: ../src/html/helpfrm.cpp:1034
 msgid "Help Browser Options"
 msgstr "Επιλογές Περιηγητή Βοηθείας"
 
-#: ../src/generic/helphtml.cpp:334
-#: ../src/generic/helphtml.cpp:335
-#, c-format
+#: ../src/generic/helpext.cpp:441 ../src/generic/helpext.cpp:442
 msgid "Help Index"
 msgstr "Ευρετήριο Βοηθείας"
 
-#: ../src/html/helpfrm.cpp:1291
-#, c-format
+#: ../src/html/helpfrm.cpp:1385
 msgid "Help Printing"
 msgstr "Βοήθεια Εκτύπωσης"
 
-#: ../src/html/helpctrl.cpp:49
+#: ../src/html/helpfrm.cpp:1398
+msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
+msgstr ""
+
+#: ../src/html/helpctrl.cpp:55
 #, c-format
 msgid "Help: %s"
 msgstr "Βοήθεια: %s"
 
-#: ../src/common/imagbmp.cpp:939
-#, c-format
+#: ../src/common/imagbmp.cpp:936
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Σφάλμα στην ανάγνωση μάσκας DIB."
 
-#: ../src/common/imagbmp.cpp:1041
-#: ../src/common/imagbmp.cpp:1100
-#: ../src/common/imagbmp.cpp:1109
-#: ../src/common/imagbmp.cpp:1120
-#: ../src/common/imagbmp.cpp:1164
-#: ../src/common/imagbmp.cpp:1174
-#: ../src/common/imagbmp.cpp:1183
-#, c-format
+#: ../src/common/imagbmp.cpp:1042 ../src/common/imagbmp.cpp:1101
+#: ../src/common/imagbmp.cpp:1110 ../src/common/imagbmp.cpp:1121
+#: ../src/common/imagbmp.cpp:1165 ../src/common/imagbmp.cpp:1175
+#: ../src/common/imagbmp.cpp:1184
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Σφάλμα κατά την εγγραφή του αρχείου εικόνας!"
 
-#: ../src/common/imagbmp.cpp:1009
-#, c-format
+#: ../src/common/imagbmp.cpp:1010
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Εικόνα πολύ ψηλή για εικονίδιο(icon)."
 
-#: ../src/common/imagbmp.cpp:1015
-#, c-format
+#: ../src/common/imagbmp.cpp:1016
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Εικόνα πολύ πλατιά για εικονίδιο(icon)."
 
-#: ../src/common/imagbmp.cpp:1248
-#, c-format
+#: ../src/common/imagbmp.cpp:1249
 msgid "ICO: Invalid icon index."
 msgstr "ICO: Λανθασμένος δείκτης(index) εικονιδίου(icon)."
 
-#: ../src/common/imagiff.cpp:767
-#, c-format
+#: ../src/common/imagiff.cpp:771
 msgid "IFF: data stream seems to be truncated."
 msgstr "IFF: το stream δεδομένων μοιάζει να είναι αποκομμένο."
 
-#: ../src/common/imagiff.cpp:751
-#, c-format
+#: ../src/common/imagiff.cpp:755
 msgid "IFF: error in IFF image format."
 msgstr "IFF: σφάλμα στη μορφή εικόνας IFF."
 
-#: ../src/common/imagiff.cpp:754
-#, c-format
+#: ../src/common/imagiff.cpp:758
 msgid "IFF: not enough memory."
 msgstr "IFF: ανεπαρκής μνήμη."
 
-#: ../src/common/imagiff.cpp:757
-#, c-format
+#: ../src/common/imagiff.cpp:761
 msgid "IFF: unknown error!!!"
 msgstr "IFF: άγνωστο λάθος!!!"
 
-#: ../src/common/resourc2.cpp:989
-#: ../src/common/resourc2.cpp:1000
-#: ../src/common/resource.cpp:2649
-#: ../src/common/resource.cpp:2660
-#, c-format
-msgid "Icon resource specification %s not found."
-msgstr "Δεν βρέθηκε ο καθοριμός πόρου bitmap %s"
+#: ../src/common/xtistrm.cpp:258
+msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
+msgstr ""
 
-#: ../src/common/resource.cpp:250
-#, c-format
-msgid "Ill-formed resource file syntax."
-msgstr "Λανθασμένη συνταξη αρχείου πόρου."
+#: ../include/wx/xti.h:1606
+msgid "Illegal Parameter Count for ConstructObject Method"
+msgstr ""
 
-#: ../src/generic/dirctrlg.cpp:704
-#: ../src/generic/filedlgg.cpp:942
-#, c-format
+#: ../include/wx/xti.h:1679
+msgid "Illegal Parameter Count for Create Method"
+msgstr ""
+
+#: ../src/generic/dirctrlg.cpp:683 ../src/generic/filedlgg.cpp:711
 msgid "Illegal directory name."
 msgstr "Μη έγκυρο όνομα καταλόγου."
 
-#: ../src/generic/filedlgg.cpp:1365
-#, c-format
+#: ../src/generic/filedlgg.cpp:1166
 msgid "Illegal file specification."
 msgstr "Μη έγκυρος προσδιορισμός αρχείου."
 
-#: ../src/common/image.cpp:785
-#, c-format
+#: ../src/common/image.cpp:900
 msgid "Image and Mask have different sizes"
 msgstr "Εικόνα και Μάσκα έχουν διαφορετικά μεγέθη."
 
-#: ../src/common/image.cpp:1067
+#: ../src/common/image.cpp:1180
 #, c-format
 msgid "Image file is not of type %d."
 msgstr "Αρχείο εικόνας δεν είναι τύπυ %d."
 
-#: ../src/msw/textctrl.cpp:270
-#, c-format
-msgid "Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"
-msgstr "Αδύνατη η δημουργία ενός στοιχείου ελέγχου(control) rich edit, αντι αυτού γίνεται χρήση του simpe text στοιχείου ελέγχου. Παρακαλώ επανεγκαταστήστε το riched32.dll"
+#: ../src/msw/textctrl.cpp:303
+msgid ""
+"Impossible to create a rich edit control, using simple text control instead. "
+"Please reinstall riched32.dll"
+msgstr ""
+"Αδύνατη η δημουργία ενός στοιχείου ελέγχου(control) rich edit, αντι αυτού "
+"γίνεται χρήση του simpe text στοιχείου ελέγχου. Παρακαλώ επανεγκαταστήστε το "
+"riched32.dll"
 
-#: ../src/unix/utilsunx.cpp:390
-#, c-format
+#: ../src/unix/utilsunx.cpp:379
 msgid "Impossible to get child process input"
 msgstr "Αδύνατη η λήψη της εισόδου της διεργασίας (process) απογόνου(child)"
 
-#: ../src/common/filefn.cpp:1147
+#: ../src/common/filefn.cpp:1208
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "Αδύνατη η λήψη των δικαιωμάτων για το αρχείο '%s'"
 
-#: ../src/common/filefn.cpp:1161
+#: ../src/common/filefn.cpp:1222
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "Αδύνατη η επικάλυψη του αρχείου '%s'"
 
-#: ../src/common/filefn.cpp:1212
+#: ../src/common/filefn.cpp:1273
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "Αδύνατος ο ορισμός των δικαιωμάτων για το αρχείο '%s'"
 
-#: ../src/html/helpfrm.cpp:392
-#, c-format
+#: ../src/html/helpfrm.cpp:422
 msgid "Index"
 msgstr "Ευρετήριο"
 
-#: ../src/common/fontmap.cpp:124
-#, c-format
+#: ../src/common/fmapbase.cpp:113
 msgid "Indian (ISO-8859-12)"
 msgstr "Ινδικό (ISO-8859-12)"
 
-#: ../src/common/imagtiff.cpp:183
-#, c-format
+#: ../src/common/xtistrm.cpp:702
+msgid "Internal error, illegal wxCustomTypeInfo"
+msgstr ""
+
+#: ../src/common/imagtiff.cpp:211
 msgid "Invalid TIFF image index."
 msgstr "Λανθασμένος δείκτης εικόνας TIFF."
 
-#: ../contrib/src/xrc/xmlres.cpp:362
+#: ../contrib/src/xrc/xmlres.cpp:389
 #, c-format
 msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
-msgstr "Λανθασμένος XRC πόρος '%s': δεν έχει ριζικό(root) κόμβο(node) 'resource'."
+msgstr ""
+"Λανθασμένος XRC πόρος '%s': δεν έχει ριζικό(root) κόμβο(node) 'resource'."
 
-#: ../src/common/appcmn.cpp:398
+#: ../src/common/appcmn.cpp:239
 #, c-format
 msgid "Invalid display mode specification '%s'."
-msgstr "Λανθασμένος καθορισμός(specification) κατάστασης λειτουργίας(mode) οθόνης(display) '%s'."
+msgstr ""
+"Λανθασμένος καθορισμός(specification) κατάστασης λειτουργίας(mode) οθόνης"
+"(display) '%s'."
 
-#: ../src/x11/app.cpp:218
+#: ../src/x11/app.cpp:128
 #, c-format
 msgid "Invalid geometry specification '%s'"
 msgstr "Λανθασμένος γεωμετρικός καθορισμός(specification) '%s'"
@@ -2186,452 +2067,426 @@ msgstr "Λανθασμένος γεωμετρικός καθορισμός(specification) '%s'"
 msgid "Invalid lock file '%s'."
 msgstr "Λανθασμένο αρχείο κλειδαριά (lock file) '%s'."
 
-#: ../src/common/regex.cpp:173
+#: ../src/common/xtistrm.cpp:363 ../src/common/xtistrm.cpp:378
+msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:393
+msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
+msgstr ""
+
+#: ../src/common/regex.cpp:182
 #, c-format
 msgid "Invalid regular expression '%s': %s"
 msgstr "Λανθασμένη κανονική έκφραση (regular expression) '%s': %s"
 
 #: ../src/generic/fontdlgg.cpp:228
-#, c-format
 msgid "Italic"
 msgstr "Πλάγια"
 
-#: ../src/common/paper.cpp:137
-#, c-format
+#: ../src/common/paper.cpp:149
 msgid "Italy Envelope, 110 x 230 mm"
 msgstr "Italy Envelope, 110 x 230 mm"
 
-#: ../src/common/imagjpeg.cpp:222
-#, c-format
+#: ../src/common/imagjpeg.cpp:225
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr "JPEG: Αδύνατη η φόρτωση - το αρχείο είναι μάλλον φθαρμένο(corrupted)."
 
-#: ../src/common/imagjpeg.cpp:336
-#, c-format
+#: ../src/common/imagjpeg.cpp:339
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: Αδύνατη η αποθήκευση της εικόνας."
 
-#: ../src/common/fontmap.cpp:128
-#, c-format
+#: ../src/common/fmapbase.cpp:117
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/prntdlgg.cpp:426
-#: ../src/generic/prntdlgg.cpp:620
-#, c-format
+#: ../src/generic/prntdlgg.cpp:428 ../src/generic/prntdlgg.cpp:638
 msgid "Landscape"
 msgstr "Τοπίο"
 
-#: ../src/common/paper.cpp:110
-#, c-format
+#: ../src/common/paper.cpp:122
 msgid "Ledger, 17 x 11 in"
 msgstr "Ledger, 17 x 11 ίντσες"
 
-#: ../src/generic/prntdlgg.cpp:632
-#, c-format
+#: ../src/generic/prntdlgg.cpp:650
 msgid "Left margin (mm):"
 msgstr "Αριστερό περιθώριο (mm)"
 
-#: ../src/common/paper.cpp:103
-#, c-format
+#: ../src/common/paper.cpp:115
 msgid "Legal, 8 1/2 x 14 in"
 msgstr "Νομικό, 8 1/2 x 14 ίντσες"
 
-#: ../src/common/paper.cpp:108
-#, c-format
+#: ../src/common/paper.cpp:120
 msgid "Letter Small, 8 1/2 x 11 in"
 msgstr "Γράμμα Μικρό, 8 1/2 x 11 ίντσες"
 
-#: ../src/common/paper.cpp:102
-#, c-format
+#: ../src/common/paper.cpp:114
 msgid "Letter, 8 1/2 x 11 in"
 msgstr "Γράμμα, 8 1/2 x 11 ίντσες"
 
 #: ../src/generic/fontdlgg.cpp:231
-#, c-format
 msgid "Light"
 msgstr "Απαλό(light)"
 
-#: ../src/generic/filedlgg.cpp:1623
-#: ../src/gtk/filedlg.cpp:249
-#: ../src/motif/filedlg.cpp:357
-#: ../src/msw/filedlg.cpp:555
+#: ../src/html/chm.cpp:806
+msgid "Link contained '//', converted to absolute link."
+msgstr ""
+
+#: ../src/common/fldlgcmn.cpp:274
 #, c-format
 msgid "Load %s file"
 msgstr "Φόρτωση %s αρχείου"
 
-#: ../src/generic/filedlgg.cpp:1625
-#, c-format
-msgid "Load file"
-msgstr "Φόρτωση αρχείου"
-
-#: ../src/html/htmlwin.cpp:282
-#, c-format
+#: ../src/html/htmlwin.cpp:389
 msgid "Loading : "
 msgstr "Γίνεται φόρτωση : "
 
 #: ../src/common/imagpnm.cpp:72
-#, c-format
 msgid "Loading Grey Ascii PNM image is not yet implemented."
 msgstr "Η φόρτωση εικόνας Grey Ascii PNM δεν έχει υλοποιηθεί ακόμα."
 
 #: ../src/common/imagpnm.cpp:75
-#, c-format
 msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr "Η φόρτωση εικόνας Grey Raw PNM δεν έχει υλοποιηθεί ακόμα."
 
-#: ../src/generic/logg.cpp:554
+#: ../src/generic/logg.cpp:565
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Η καταγραφή (log) αποθηκεύτηκε στο αρχείο '%s'"
 
-#: ../src/gtk/mdi.cpp:433
-#, c-format
+#: ../include/wx/xti.h:469 ../include/wx/xti.h:473
+msgid "Long Conversions not supported"
+msgstr ""
+
+#: ../src/gtk/mdi.cpp:442
 msgid "MDI child"
 msgstr "MDI παιδί"
 
 #: ../src/msw/helpchm.cpp:60
-#, c-format
-msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
-msgstr "Οι συναρτήσεις (functions) της MS HTML Help δεν είναι διαθέσιμες γιατί η βιβλιοθήκη MS HTML Help δεν είναι εγκατεστημένη. Παρακαλώ εγκαταστήστε την."
+msgid ""
+"MS HTML Help functions are unavailable because the MS HTML Help library is "
+"not installed on this machine. Please install it."
+msgstr ""
+"Οι συναρτήσεις (functions) της MS HTML Help δεν είναι διαθέσιμες γιατί η "
+"βιβλιοθήκη MS HTML Help δεν είναι εγκατεστημένη. Παρακαλώ εγκαταστήστε την."
 
-#: ../src/univ/themes/win32.cpp:4547
-#, c-format
+#: ../src/univ/themes/win32.cpp:4678
 msgid "Ma&ximize"
 msgstr "Με&γιστοποίηση"
 
-#: ../src/unix/mimetype.cpp:2497
+#: ../src/unix/mimetype.cpp:2518
 #, c-format
 msgid "Mailcap file %s, line %d: incomplete entry ignored."
 msgstr "Mailcap αρχείο %s, γραμμή %d: ημιτελής εγγραφή αγνοήθηκε."
 
-#: ../src/generic/fdrepdlg.cpp:152
-#, c-format
+#: ../src/generic/fdrepdlg.cpp:146
 msgid "Match case"
 msgstr "Ταίριασμα πεζών/κεφαλαίων"
 
-#: ../src/common/fs_mem.cpp:144
+#: ../src/common/fs_mem.cpp:176
 #, c-format
 msgid "Memory VFS already contains file '%s'!"
 msgstr "VFS μνήμης ήδη περιέχει το αρχείο '%s'!"
 
 #: ../src/univ/themes/metal.cpp:174
-#, c-format
 msgid "Metal theme"
 msgstr "Μεταλλικό θέμα"
 
-#: ../src/univ/themes/win32.cpp:4545
-#, c-format
+#: ../src/univ/themes/win32.cpp:4676
 msgid "Mi&nimize"
 msgstr "Ελα&χιστοποίηση"
 
-#: ../src/unix/mimetype.cpp:2118
+#: ../src/unix/mimetype.cpp:2134
 #, c-format
 msgid "Mime.types file %s, line %d: unterminated quoted string."
 msgstr "Mime.types αρχείο %s, γραμμή %d: μη τερματιζόμενο quoted string."
 
-#: ../src/mgl/app.cpp:173
+#: ../src/mgl/app.cpp:165
 #, c-format
 msgid "Mode %ix%i-%i not available."
 msgstr "Η κατάσταση λειτουργίας (mode) %ix%i-%i δεν είναι διαθέσιμη."
 
 #: ../src/generic/fontdlgg.cpp:223
-#, c-format
 msgid "Modern"
 msgstr "Μοντέρνο"
 
-#: ../src/common/paper.cpp:138
-#, c-format
+#: ../src/generic/filedlgg.cpp:422
+msgid "Modified"
+msgstr ""
+
+#: ../src/common/paper.cpp:150
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
 msgstr "Φακελος Monarch, 3 7/8 x 7 1/2 ίντσες"
 
-#: ../src/common/dlgcmn.cpp:239
-#, c-format
+#: ../src/common/dlgcmn.cpp:233
 msgid "More..."
 msgstr "Περισσότερα..."
 
-#: ../src/generic/filedlgg.cpp:703
-#, c-format
+#: ../contrib/src/gizmos/editlbox.cpp:165
+msgid "Move down"
+msgstr ""
+
+#: ../contrib/src/gizmos/editlbox.cpp:164
+#, fuzzy
+msgid "Move up"
+msgstr "&Μετακίνηση"
+
+#: ../src/generic/filedlgg.cpp:419
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../src/generic/dirdlgg.cpp:272
-#: ../src/generic/dirdlgg.cpp:282
-#: ../src/generic/filedlgg.cpp:817
-#: ../src/generic/filedlgg.cpp:826
-#, c-format
+#: ../contrib/src/gizmos/editlbox.cpp:162
+msgid "New item"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:274 ../src/generic/dirdlgg.cpp:284
+#: ../src/generic/filedlgg.cpp:587 ../src/generic/filedlgg.cpp:596
 msgid "NewName"
 msgstr "ΝέοΌνομα"
 
-#: ../src/html/helpfrm.cpp:525
-#, c-format
+#: ../src/html/helpfrm.cpp:563
 msgid "Next page"
 msgstr "Επόμενη σελίδα"
 
-#: ../src/common/dlgcmn.cpp:219
-#: ../src/mac/msgdlg.cpp:78
-#: ../src/motif/msgdlg.cpp:182
-#, c-format
+#: ../src/common/dlgcmn.cpp:213 ../src/mac/msgdlg.cpp:56
+#: ../src/mac/msgdlg.cpp:140 ../src/motif/msgdlg.cpp:182
 msgid "No"
 msgstr "Όχι"
 
-#: ../src/common/image.cpp:793
-#, c-format
+#: ../src/common/image.cpp:908
 msgid "No Unused Color in image being masked"
-msgstr "Δεν υπάρχειμη χρησιμοποιούμενο χρώμα στην εικόνα που εφααρμόζεται η μάσκα"
+msgstr ""
+"Δεν υπάρχειμη χρησιμοποιούμενο χρώμα στην εικόνα που εφααρμόζεται η μάσκα"
 
-#: ../src/common/resourc2.cpp:814
-#: ../src/common/resourc2.cpp:965
-#: ../src/common/resource.cpp:2471
-#: ../src/common/resource.cpp:2625
-#, c-format
-msgid "No XBM facility available!"
-msgstr "Δεν υπάρχει μονάδα(facility) XBM διαθέσιμη!"
-
-#: ../src/common/resourc2.cpp:983
-#: ../src/common/resource.cpp:2643
-#, c-format
-msgid "No XPM icon facility available!"
-msgstr "Δεν υπάρχει μονάδα(facility) εικονιδίων XPM διαθέσιμη!"
-
-#: ../src/generic/helphtml.cpp:329
-#, c-format
+#: ../src/generic/helpext.cpp:436
 msgid "No entries found."
 msgstr "Δεν βρέθηκαν εισαγωγές(entries)."
 
-#: ../src/common/fontmap.cpp:906
+#: ../src/common/fontmap.cpp:401
 #, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found,\n"
 "but an alternative encoding '%s' is available.\n"
-"Do you want to use this encoding (otherwise you will have to choose another one)?"
+"Do you want to use this encoding (otherwise you will have to choose another "
+"one)?"
 msgstr ""
-"Δεν βρέθηκε γραμματοσειρά (font) για την εμφάνιση κειμένου στην κωδικοποίηση (encoding) '%s',\n"
+"Δεν βρέθηκε γραμματοσειρά (font) για την εμφάνιση κειμένου στην κωδικοποίηση "
+"(encoding) '%s',\n"
 "αλλά μία εναλλακτική κωδικοποίηση '%s' είναι διαθέισμη.\n"
-"Θέλετε να χρησιμοποιήσετε αυτή την κωδικοποίηση (διαφορετικά θα πρέπει να επιλέξετε μία άλλη) ;"
+"Θέλετε να χρησιμοποιήσετε αυτή την κωδικοποίηση (διαφορετικά θα πρέπει να "
+"επιλέξετε μία άλλη) ;"
 
-#: ../src/common/fontmap.cpp:911
+#: ../src/common/fontmap.cpp:406
 #, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found.\n"
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
-msgstr "Δεν βρέθηκε γραμματοσειρά (font) για την εμφάνιση κειμένου για αυτήν την κωδικοποίηση (encoding) '%s'.\n"
-"Θα θέλατε να επιλέξετε μία γραμματοσειρα για να χρησιμοποιηθεί για αυτή την κωδικοποίηση(διαφορετικά το κείμενο σε αυτή την κωδικοποίηση δεν θα εμφανιστεί κανονικά) ;"
+msgstr ""
+"Δεν βρέθηκε γραμματοσειρά (font) για την εμφάνιση κειμένου για αυτήν την "
+"κωδικοποίηση (encoding) '%s'.\n"
+"Θα θέλατε να επιλέξετε μία γραμματοσειρα για να χρησιμοποιηθεί για αυτή την "
+"κωδικοποίηση(διαφορετικά το κείμενο σε αυτή την κωδικοποίηση δεν θα "
+"εμφανιστεί κανονικά) ;"
 
-#: ../contrib/src/xrc/xmlres.cpp:557
+#: ../contrib/src/xrc/xmlres.cpp:602
 #, c-format
 msgid "No handler found for XML node '%s', class '%s'!"
-msgstr "Δεν βρέθηκε κανένας χειριστής (handler) για τον XML κόμβο(node) '%s', τάξη(class) '%s'!"
+msgstr ""
+"Δεν βρέθηκε κανένας χειριστής (handler) για τον XML κόμβο(node) '%s', τάξη"
+"(class) '%s'!"
 
-#: ../src/common/image.cpp:1049
-#: ../src/common/image.cpp:1092
-#, c-format
+#: ../src/common/image.cpp:1162 ../src/common/image.cpp:1205
 msgid "No handler found for image type."
 msgstr "Δεν βρέθηκε χειριστής για τύπο εικόνας."
 
-#: ../src/common/image.cpp:1057
-#: ../src/common/image.cpp:1100
-#: ../src/common/image.cpp:1134
+#: ../src/common/image.cpp:1170 ../src/common/image.cpp:1213
+#: ../src/common/image.cpp:1247
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "Δεν έχει οριστεί χειριστής εικόνας για τον τύπο %d."
 
-#: ../src/common/image.cpp:1118
-#: ../src/common/image.cpp:1150
+#: ../src/common/image.cpp:1231 ../src/common/image.cpp:1263
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Δεν έχει οριστεί χειριστής εικόνας για τον τύπο %s."
 
-#: ../src/html/helpfrm.cpp:655
-#, c-format
+#: ../src/html/helpfrm.cpp:710
 msgid "No matching page found yet"
 msgstr "Δεν βρέθηκε ακόμα σελίδα που να ταιράζει"
 
-#: ../src/common/fontmap.cpp:122
-#, c-format
+#: ../src/unix/sound.cpp:89
+#, fuzzy
+msgid "No sound"
+msgstr "Δεν βρέθηκαν εισαγωγές(entries)."
+
+#: ../src/common/fmapbase.cpp:111
 msgid "Nordic (ISO-8859-10)"
 msgstr "Νορδικό (ISO-8859-10)"
 
-#: ../src/generic/fontdlgg.cpp:227
-#: ../src/generic/fontdlgg.cpp:230
-#, c-format
+#: ../src/generic/fontdlgg.cpp:227 ../src/generic/fontdlgg.cpp:230
 msgid "Normal"
 msgstr "Κανονικό"
 
-#: ../src/html/helpfrm.cpp:949
-#, c-format
+#: ../src/html/helpfrm.cpp:1095
+msgid "Normal face<br>and <u>underlined</u>. "
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:1039
 msgid "Normal font:"
 msgstr "Κανονική γραμματοσειρά:"
 
-#: ../src/common/paper.cpp:122
-#, c-format
+#: ../src/common/paper.cpp:134
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Σημείωμα, 8 1/2 x 11 ίντσες"
 
-#: ../src/common/dlgcmn.cpp:225
-#: ../src/generic/dirdlgg.cpp:151
-#: ../src/generic/filedlgg.cpp:1180
-#: ../src/generic/filedlgg.cpp:1191
-#: ../src/generic/fontdlgg.cpp:254
-#: ../src/generic/logg.cpp:739
-#: ../src/generic/prntdlgg.cpp:452
-#: ../src/generic/proplist.cpp:499
-#: ../src/gtk/filedlg.cpp:167
-#: ../src/gtk/fontdlg.cpp:136
-#: ../src/html/helpfrm.cpp:974
-#, c-format
+#: ../src/common/dlgcmn.cpp:219 ../src/generic/dirdlgg.cpp:153
+#: ../src/generic/filedlgg.cpp:976 ../src/generic/filedlgg.cpp:987
+#: ../src/generic/fontdlgg.cpp:254 ../src/generic/logg.cpp:748
+#: ../src/generic/prntdlgg.cpp:454 ../src/gtk/filedlg.cpp:162
+#: ../src/gtk/fontdlg.cpp:139 ../src/html/helpfrm.cpp:1064
 msgid "OK"
 msgstr "OK"
 
-#: ../src/html/helpfrm.cpp:533
-#: ../src/html/helpfrm.cpp:1302
-#, c-format
+#: ../src/common/xtixml.cpp:263
+msgid "Objects must have an id attribute"
+msgstr ""
+
+#: ../src/common/docview.cpp:1197 ../src/common/docview.cpp:1525
+msgid "Open File"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:571 ../src/html/helpfrm.cpp:1404
 msgid "Open HTML document"
 msgstr "’νοιγμα εγγράφου HTML"
 
-#: ../src/generic/dirctrlg.cpp:733
-#: ../src/generic/dirdlgg.cpp:298
-#: ../src/generic/filedlgg.cpp:841
-#: ../src/generic/filedlgg.cpp:969
-#, c-format
+#: ../src/generic/dirctrlg.cpp:712 ../src/generic/dirdlgg.cpp:300
+#: ../src/generic/filedlgg.cpp:611 ../src/generic/filedlgg.cpp:739
 msgid "Operation not permitted."
 msgstr "Λειτουργία δεν ειπιτρέπετε."
 
-#: ../src/common/cmdline.cpp:667
+#: ../src/common/cmdline.cpp:676
 #, c-format
 msgid "Option '%s' requires a value, '=' expected."
 msgstr "Η επιλογή '%s' απαιτεί μια τιμή, αναμενόταν '='."
 
-#: ../src/common/cmdline.cpp:687
+#: ../src/common/cmdline.cpp:696
 #, c-format
 msgid "Option '%s' requires a value."
 msgstr "Η επιλογή '%s' απαιτεί μια τιμή."
 
-#: ../src/common/cmdline.cpp:748
+#: ../src/common/cmdline.cpp:758
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Επιλογή '%s': το '%s' δεν μπροει να μετατραπει σε ημερομηνία."
 
-#: ../src/generic/prntdlgg.cpp:432
-#, c-format
+#: ../src/generic/prntdlgg.cpp:434
 msgid "Options"
 msgstr "Επιλογές"
 
-#: ../src/generic/prntdlgg.cpp:428
-#: ../src/generic/prntdlgg.cpp:621
-#, c-format
+#: ../src/generic/prntdlgg.cpp:430 ../src/generic/prntdlgg.cpp:639
 msgid "Orientation"
 msgstr "Προσανατολισμός"
 
-#: ../src/common/imagpcx.cpp:455
-#: ../src/common/imagpcx.cpp:478
-#, c-format
+#: ../src/common/imagpcx.cpp:462 ../src/common/imagpcx.cpp:485
 msgid "PCX: couldn't allocate memory"
 msgstr "PCX: Δεν ήταν δυνατή η δέσμευση μνήμης"
 
-#: ../src/common/imagpcx.cpp:454
-#, c-format
+#: ../src/common/imagpcx.cpp:461
 msgid "PCX: image format unsupported"
 msgstr "PCX: μορφή εικόνας δεν υποστηρίζεται"
 
-#: ../src/common/imagpcx.cpp:477
-#, c-format
+#: ../src/common/imagpcx.cpp:484
 msgid "PCX: invalid image"
 msgstr "PCX: λανθασμένη εικόνα"
 
-#: ../src/common/imagpcx.cpp:441
-#, c-format
+#: ../src/common/imagpcx.cpp:448
 msgid "PCX: this is not a PCX file."
 msgstr "PCX: αυτό δεν είναι αρχείο PCX."
 
-#: ../src/common/imagpcx.cpp:457
-#: ../src/common/imagpcx.cpp:479
-#, c-format
+#: ../src/common/imagpcx.cpp:464 ../src/common/imagpcx.cpp:486
 msgid "PCX: unknown error !!!"
 msgstr "PCX: άγνωστο σφάλμα !!!"
 
-#: ../src/common/imagpcx.cpp:456
-#, c-format
+#: ../src/common/imagpcx.cpp:463
 msgid "PCX: version number too low"
 msgstr "PCX: αριθμός έκδοσης πολύ χαμηλός"
 
 #: ../src/common/imagpnm.cpp:96
-#, c-format
 msgid "PNM: Couldn't allocate memory."
 msgstr "PNM: Δεν ήταν δυνατή η δέσμευση μνήμης."
 
 #: ../src/common/imagpnm.cpp:80
-#, c-format
 msgid "PNM: File format is not recognized."
 msgstr "PNM: Η μορφή αρχείου δεν αναγνωρίζεται."
 
 #: ../src/common/imagpnm.cpp:112
-#, c-format
 msgid "PNM: File seems truncated."
 msgstr "PNM: Το αρχείο μοιάζει να είναι αποκομμένο."
 
-#: ../src/common/prntbase.cpp:826
+#: ../src/common/prntbase.cpp:832
 #, c-format
 msgid "Page %d"
 msgstr "Σελίδα %d"
 
-#: ../src/common/prntbase.cpp:824
+#: ../src/common/prntbase.cpp:830
 #, c-format
 msgid "Page %d of %d"
 msgstr "Σελίδα %d από %d"
 
-#: ../src/generic/prntdlgg.cpp:587
-#, c-format
+#: ../src/generic/prntdlgg.cpp:598
 msgid "Page Setup"
 msgstr "Οργάνωση(setup) Σελίδας"
 
-#: ../src/generic/prntdlgg.cpp:161
-#, c-format
+#: ../src/generic/prntdlgg.cpp:158
 msgid "Pages"
 msgstr "Σελίδες"
 
-#: ../src/generic/prntdlgg.cpp:538
-#: ../src/generic/prntdlgg.cpp:609
-#: ../src/generic/prntdlgg.cpp:794
-#, c-format
+#: ../src/generic/prntdlgg.cpp:545 ../src/generic/prntdlgg.cpp:625
+#: ../src/generic/prntdlgg.cpp:818
 msgid "Paper Size"
 msgstr "Μέγεθος Χαρτιού"
 
-#: ../src/generic/prntdlgg.cpp:418
-#: ../src/generic/prntdlgg.cpp:598
-#: ../src/generic/prntdlgg.cpp:790
-#, c-format
+#: ../src/generic/prntdlgg.cpp:420 ../src/generic/prntdlgg.cpp:612
+#: ../src/generic/prntdlgg.cpp:813
 msgid "Paper size"
 msgstr "Μέγεθος χαρτιού"
 
-#: ../src/generic/filedlgg.cpp:708
-#, c-format
+#: ../src/common/xtistrm.cpp:423
+msgid "Passing a already registered object to SetObject"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:641
+msgid "Passing a already registered object to SetObjectName"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:434 ../src/common/xtistrm.cpp:654
+msgid "Passing an unkown object to GetObject"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:425
 msgid "Permissions"
 msgstr "Δικαιώματα"
 
-#: ../src/unix/utilsunx.cpp:441
-#, c-format
+#: ../include/wx/unix/pipe.h:47
 msgid "Pipe creation failed"
 msgstr "Δημιουργία pipe απέτυχε"
 
-#: ../src/gtk/fontdlg.cpp:71
-#, c-format
+#: ../src/gtk/fontdlg.cpp:76
 msgid "Please choose a valid font."
 msgstr "Παρακαλώ επιλέξτε μία αποδεκτή γραμματοσειρά."
 
-#: ../src/generic/filedlgg.cpp:1418
-#: ../src/gtk/filedlg.cpp:80
-#, c-format
+#: ../src/generic/filedlgg.cpp:1221 ../src/gtk/filedlg.cpp:82
 msgid "Please choose an existing file."
 msgstr "Παρακλώ επιλέξτε ένα υπάρχον αρχείο."
 
-#: ../src/msw/dialup.cpp:749
-#, c-format
+#: ../src/msw/dialup.cpp:747
 msgid "Please choose which ISP do you want to connect to"
-msgstr "Παρακαλώ επιλέξτε τον παροχέα υπηρεσιών Internet (ISP) με τον οποίο θέλετε να συνδεθείτε"
+msgstr ""
+"Παρακαλώ επιλέξτε τον παροχέα υπηρεσιών Internet (ISP) με τον οποίο θέλετε "
+"να συνδεθείτε"
 
-#: ../src/msw/listctrl.cpp:550
+#: ../src/msw/listctrl.cpp:637
 #, c-format
 msgid ""
 "Please install a newer version of comctl32.dll\n"
@@ -2642,458 +2497,412 @@ msgstr ""
 "(η ελάχιστη απαραίτητη έκδοση είναι η 4.70 αλλά εσείς έχετε την %d.%02d)\n"
 "διαφορετικά αυτό το πρόγραμμα δεν θα λειτουργήσει κανονικά."
 
-#: ../src/common/prntbase.cpp:111
-#, c-format
+#: ../src/common/prntbase.cpp:112
 msgid "Please wait while printing\n"
 msgstr "Παρακαλώ περιμένετε όσο διαρκεί η εκτύπωση\n"
 
-#: ../src/generic/prntdlgg.cpp:425
-#: ../src/generic/prntdlgg.cpp:619
-#, c-format
+#: ../src/generic/prntdlgg.cpp:427 ../src/generic/prntdlgg.cpp:637
 msgid "Portrait"
 msgstr "Πορτραίτο"
 
-#: ../src/generic/prntdlgg.cpp:268
-#, c-format
+#: ../src/generic/prntdlgg.cpp:270
 msgid "PostScript file"
 msgstr "Αρχείο PostScript"
 
-#: ../src/html/helpfrm.cpp:966
-#, c-format
+#: ../src/html/helpfrm.cpp:1056
 msgid "Preview:"
 msgstr "Προεπισκόπηση:"
 
-#: ../src/html/helpfrm.cpp:522
-#, c-format
+#: ../src/html/helpfrm.cpp:560
 msgid "Previous page"
 msgstr "Προηγούμενη σελίδα"
 
-#: ../src/generic/prntdlgg.cpp:110
-#: ../src/generic/prntdlgg.cpp:124
-#, c-format
+#: ../src/generic/prntdlgg.cpp:107 ../src/generic/prntdlgg.cpp:121
 msgid "Print"
 msgstr "Εκτύπωση"
 
-#: ../src/common/docview.cpp:925
-#, c-format
+#: ../src/common/docview.cpp:963
 msgid "Print Preview"
 msgstr "Προεπισκόπηση Εκτύπωσης"
 
-#: ../src/common/prntbase.cpp:781
-#: ../src/common/prntbase.cpp:805
-#, c-format
+#: ../src/common/prntbase.cpp:784 ../src/common/prntbase.cpp:810
 msgid "Print Preview Failure"
 msgstr "Αποτυχία Προεπισκόπησης Εκτύπωσης"
 
-#: ../src/generic/prntdlgg.cpp:169
-#, c-format
+#: ../src/generic/prntdlgg.cpp:166
 msgid "Print Range"
 msgstr "Εύρος εκτύπωσης"
 
-#: ../src/generic/prntdlgg.cpp:406
-#, c-format
+#: ../src/generic/prntdlgg.cpp:408
 msgid "Print Setup"
 msgstr "Οργάνωση(setup) Εκτύπωσης"
 
-#: ../src/generic/prntdlgg.cpp:440
-#, c-format
+#: ../src/generic/prntdlgg.cpp:442
 msgid "Print in colour"
 msgstr "Εγχρωμη εκτύπωση"
 
-#: ../src/generic/prntdlgg.cpp:442
-#, c-format
+#: ../src/generic/prntdlgg.cpp:444
 msgid "Print spooling"
 msgstr "Spooling Εκτύπωσης"
 
-#: ../src/html/helpfrm.cpp:539
-#, c-format
+#: ../src/html/helpfrm.cpp:577
 msgid "Print this page"
 msgstr "Εκτύπωση αυτής της σελίδας"
 
-#: ../src/generic/prntdlgg.cpp:147
-#, c-format
+#: ../src/generic/prntdlgg.cpp:144
 msgid "Print to File"
 msgstr "Εκτύπωση σε Αρχείο"
 
-#: ../src/common/prntbase.cpp:435
-#, c-format
-msgid "Print..."
-msgstr "Εκτύπωση..."
-
-#: ../src/generic/prntdlgg.cpp:444
-#, c-format
+#: ../src/generic/prntdlgg.cpp:446
 msgid "Printer command:"
 msgstr "Εντολή εκτυπωτή:"
 
-#: ../src/generic/prntdlgg.cpp:146
-#, c-format
+#: ../src/generic/prntdlgg.cpp:143
 msgid "Printer options"
 msgstr "Επιλογές εκτυπωτή"
 
-#: ../src/generic/prntdlgg.cpp:448
-#, c-format
+#: ../src/generic/prntdlgg.cpp:450
 msgid "Printer options:"
 msgstr "Επιλογές εκτυπωτή:"
 
-#: ../src/generic/prntdlgg.cpp:665
-#, c-format
+#: ../src/generic/prntdlgg.cpp:683
 msgid "Printer..."
 msgstr "Εκτυπωτής..."
 
-#: ../src/common/prntbase.cpp:108
-#: ../src/common/prntbase.cpp:153
-#, c-format
+#: ../src/common/prntbase.cpp:109 ../src/common/prntbase.cpp:154
 msgid "Printing "
 msgstr "Γίνεται εκτύπωση του "
 
-#: ../src/common/prntbase.cpp:125
-#, c-format
+#: ../src/common/prntbase.cpp:126
 msgid "Printing Error"
 msgstr "Σφάλμα Εκτύπωσης"
 
-#: ../src/generic/printps.cpp:221
+#: ../src/generic/printps.cpp:244
 #, c-format
 msgid "Printing page %d..."
 msgstr "Γίνεται εκτύπωση σελίδας %d..."
 
-#: ../src/generic/printps.cpp:181
-#, c-format
+#: ../src/generic/printps.cpp:204
 msgid "Printing..."
 msgstr "Γίνεται εκτύπωση..."
 
-#: ../src/common/log.cpp:454
-#, c-format
+#: ../src/common/log.cpp:468
 msgid "Program aborted."
 msgstr "Το πρόγραμμα ματαιώθηκε."
 
-#: ../src/common/paper.cpp:119
-#, c-format
+#: ../src/common/paper.cpp:131
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1111
-#, c-format
+#: ../src/generic/logg.cpp:1120
 msgid "Question"
 msgstr "Ερώτημα"
 
-#: ../src/common/ffile.cpp:125
-#: ../src/common/ffile.cpp:146
+#: ../src/common/ffile.cpp:111 ../src/common/ffile.cpp:132
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "Λάθος ανάγνωσης στο αρχείο '%s'"
 
-#: ../contrib/src/xrc/xmlres.cpp:532
+#: ../contrib/src/xrc/xmlres.cpp:568
 #, c-format
 msgid "Referenced object node with ref=\"%s\" not found!"
 msgstr "Ο αναφερόμενος κομβος αντικειμένου με ref=\"%s\" δεν βρέθηκε!"
 
-#: ../src/msw/registry.cpp:535
+#: ../src/msw/registry.cpp:561
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "Το κλειδί μητρώου '%s' υπάρχει ήδη."
 
-#: ../src/msw/registry.cpp:504
+#: ../src/msw/registry.cpp:530
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "Το κλειδί μητρώου '%s' δεν υπάρχει, αδύνατη η μετονομασία του."
 
-#: ../src/msw/registry.cpp:631
+#: ../src/msw/registry.cpp:657
 #, c-format
 msgid ""
 "Registry key '%s' is needed for normal system operation,\n"
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
-"Το αρχείο μητρώου '%s' χρειάζεται για την κανονική λειτουργία του συστήματος,\n"
+"Το αρχείο μητρώου '%s' χρειάζεται για την κανονική λειτουργία του "
+"συστήματος,\n"
 "διαγράφοντάς το θα αφήσει το σύστημά σας σε κατάσταση αχρηστίας:\n"
 "η λειτουργία ματαιώθηκε."
 
-#: ../src/msw/registry.cpp:435
+#: ../src/msw/registry.cpp:461
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "Η τιμή μητρώου '%s' υπάρχει ήδη."
 
-#: ../src/generic/helphtml.cpp:334
-#, c-format
+#: ../src/generic/helpext.cpp:441
 msgid "Relevant entries:"
 msgstr "Σχετικές εγγραφές:"
 
 #: ../src/generic/progdlgg.cpp:199
-#, c-format
 msgid "Remaining time : "
 msgstr "Xρόνος που απομένει : "
 
-#: ../src/html/helpfrm.cpp:329
-#, c-format
+#: ../src/html/helpfrm.cpp:359
 msgid "Remove current page from bookmarks"
 msgstr "Αφαίρεση τρέχουσας σελίδας από τους σελιδοδείκτες"
 
-#: ../src/generic/fdrepdlg.cpp:177
+#: ../src/common/rendcmn.cpp:193
 #, c-format
+msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
+msgstr ""
+
+#: ../src/generic/fdrepdlg.cpp:171
 msgid "Replace &all"
 msgstr "Αντικατάσταση &Όλων"
 
-#: ../src/generic/fdrepdlg.cpp:129
-#, c-format
+#: ../src/generic/fdrepdlg.cpp:123
 msgid "Replace with:"
 msgstr "Αντικατάσταση με:"
 
-#: ../contrib/src/xrc/xmlres.cpp:379
-#, c-format
+#: ../contrib/src/xrc/xmlres.cpp:408
 msgid "Resource files must have same version number!"
 msgstr "Τα αρχεία πόρων πρέπει να έχουν τον ίδιο αριθμό έκδοσης!"
 
-#: ../src/generic/prntdlgg.cpp:644
-#, c-format
+#: ../src/generic/prntdlgg.cpp:662
 msgid "Right margin (mm):"
 msgstr "Δεξί περιθώριο (mm):"
 
 #: ../src/generic/fontdlgg.cpp:221
-#, c-format
 msgid "Roman"
 msgstr "Ρωμαϊκό"
 
-#: ../src/generic/filedlgg.cpp:1638
-#: ../src/gtk/filedlg.cpp:265
-#: ../src/motif/filedlg.cpp:359
-#: ../src/msw/filedlg.cpp:557
+#: ../src/common/fldlgcmn.cpp:276
 #, c-format
 msgid "Save %s file"
 msgstr "Αποθήκευση %s αρχείου"
 
-#: ../src/common/docview.cpp:248
-#, c-format
+#: ../src/common/docview.cpp:256
 msgid "Save as"
 msgstr "Αποθήκευση ώς"
 
-#: ../src/generic/filedlgg.cpp:1640
-#, c-format
-msgid "Save file"
-msgstr "Αποθήκευση αρχείου"
-
-#: ../src/generic/logg.cpp:487
-#, c-format
+#: ../src/generic/logg.cpp:498
 msgid "Save log contents to file"
 msgstr "Αποθήκευση περιεχομένων καταγραφής(log) σε αρχείο"
 
 #: ../src/generic/fontdlgg.cpp:224
-#, c-format
 msgid "Script"
 msgstr "Χειρόγραφο(Script)"
 
-#: ../src/html/helpfrm.cpp:413
-#: ../src/html/helpfrm.cpp:428
-#, c-format
+#: ../src/html/helpfrm.cpp:443 ../src/html/helpfrm.cpp:458
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: ../src/html/helpfrm.cpp:415
-#, c-format
-msgid "Search contents of help book(s) for all occurences of the text you typed above"
-msgstr "Αναζήτηση στα περιεχόμενα του/των βιβλίου/βιβλίων βοηθείας για όλες τις εμφανίσεις του κειμένου που γράψατε επάνω"
+#: ../src/html/helpfrm.cpp:445
+msgid ""
+"Search contents of help book(s) for all occurences of the text you typed "
+"above"
+msgstr ""
+"Αναζήτηση στα περιεχόμενα του/των βιβλίου/βιβλίων βοηθείας για όλες τις "
+"εμφανίσεις του κειμένου που γράψατε επάνω"
 
-#: ../src/generic/fdrepdlg.cpp:158
-#, c-format
+#: ../src/generic/fdrepdlg.cpp:152
 msgid "Search direction"
 msgstr "Κατεύθυνση αναζήτησης"
 
-#: ../src/generic/fdrepdlg.cpp:117
-#, c-format
+#: ../src/generic/fdrepdlg.cpp:111
 msgid "Search for:"
 msgstr "Αναζήτηση για:"
 
-#: ../src/html/helpfrm.cpp:794
-#, c-format
+#: ../src/html/helpfrm.cpp:884
 msgid "Search in all books"
 msgstr "Εύρεση σε όλα τα βιβλία"
 
-#: ../src/html/helpfrm.cpp:655
-#, c-format
+#: ../src/html/helpfrm.cpp:709
 msgid "Searching..."
 msgstr "Γίνεται αναζήτηση..."
 
-#: ../src/generic/dirctrlg.cpp:551
-#, c-format
+#: ../src/generic/dirctrlg.cpp:594
 msgid "Sections"
 msgstr "Τμήματα"
 
-#: ../src/common/ffile.cpp:213
+#: ../src/common/ffile.cpp:199
 #, c-format
 msgid "Seek error on file '%s'"
 msgstr "Λάθος ανίχνευσης (seek error) στο αρχείο '%s'."
 
-#: ../src/msw/textctrl.cpp:1685
-#, c-format
+#: ../src/msw/textctrl.cpp:2055
 msgid "Select &All"
 msgstr "Επιλογή &Ολων"
 
-#: ../src/common/docview.cpp:1540
-#, c-format
+#: ../src/common/docview.cpp:1605
 msgid "Select a document template"
 msgstr "Επιλέξτε ένα πρότυπα εγγράφου"
 
-#: ../src/common/docview.cpp:1616
-#, c-format
+#: ../src/common/docview.cpp:1682
 msgid "Select a document view"
 msgstr "Επιλέξτε μια προβολή εγγράφων"
 
-#: ../src/common/docview.cpp:1407
-#: ../src/common/docview.cpp:1458
-#, c-format
+#: ../src/common/docview.cpp:1485
 msgid "Select a file"
 msgstr "Επιλέξτε ένα αρχείο"
 
-#: ../src/common/cmdline.cpp:704
+#: ../src/common/cmdline.cpp:713
 #, c-format
 msgid "Separator expected after the option '%s'."
 msgstr "Αναμενόταν διαχωριστικό μετά την επιλογή '%s'."
 
-#: ../src/common/dlgcmn.cpp:236
-#, c-format
+#: ../include/wx/xti.h:798
+msgid "SetProperty called w/o valid setter"
+msgstr ""
+
+#: ../src/common/dlgcmn.cpp:230
 msgid "Setup"
 msgstr "Οργάνωση(Setup)"
 
-#: ../src/generic/prntdlgg.cpp:152
-#, c-format
+#: ../src/generic/prntdlgg.cpp:149
 msgid "Setup..."
 msgstr "Ρυθμίσεις..."
 
-#: ../src/msw/dialup.cpp:520
-#, c-format
+#: ../src/msw/dialup.cpp:518
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr "Βρέθηκαν πολλαπλές ενεργές τηλεφωνικές συνδέσεις, γίνεται τυχαία επιλογή μίας."
+msgstr ""
+"Βρέθηκαν πολλαπλές ενεργές τηλεφωνικές συνδέσεις, γίνεται τυχαία επιλογή "
+"μίας."
 
-#: ../src/html/helpfrm.cpp:369
-#, c-format
+#: ../src/html/helpfrm.cpp:399
 msgid "Show all"
 msgstr "Εμφάνιση όλων"
 
-#: ../src/html/helpfrm.cpp:380
-#, c-format
+#: ../src/html/helpfrm.cpp:410
 msgid "Show all items in index"
 msgstr "Εμφάνιση όλων των στοιχείων στο ευρετήριο"
 
-#: ../src/generic/dirdlgg.cpp:135
-#, c-format
+#: ../src/generic/dirdlgg.cpp:137
 msgid "Show hidden directories"
 msgstr "Εμφάνιση κρυφών καταλόγων"
 
-#: ../src/generic/filedlgg.cpp:1175
-#: ../src/generic/filedlgg.cpp:1197
-#, c-format
+#: ../src/generic/filedlgg.cpp:971 ../src/generic/filedlgg.cpp:993
 msgid "Show hidden files"
 msgstr "Εμφάνιση κρυφών αρχείων."
 
-#: ../src/html/helpfrm.cpp:506
-#, c-format
+#: ../src/html/helpfrm.cpp:544
 msgid "Show/hide navigation panel"
 msgstr "Εμφλανιση/Κρύψιμο πλαίσιο πλοήγησης (navigation panel)"
 
-#: ../src/generic/filedlgg.cpp:704
-#, c-format
+#: ../src/generic/filedlgg.cpp:420
 msgid "Size"
 msgstr "Μέγεθος"
 
 #: ../src/generic/fontdlgg.cpp:229
-#, c-format
 msgid "Slant"
 msgstr "Κλήση"
 
-#: ../src/common/docview.cpp:305
-#, c-format
+#: ../src/common/docview.cpp:326
 msgid "Sorry, could not open this file for saving."
 msgstr "Συγγώμη, είναι αδύνατο το άνοιγμα αυτού του αρχείου για αποθήκευση."
 
-#: ../src/common/docview.cpp:342
-#: ../src/common/docview.cpp:355
-#: ../src/common/docview.cpp:1426
-#, c-format
+#: ../src/common/docview.cpp:367 ../src/common/docview.cpp:380
+#: ../src/common/docview.cpp:1504
 msgid "Sorry, could not open this file."
 msgstr "Συγγνώμη, δεν μπόρεσε να ανοιχθεί αυτό το αρχείο."
 
-#: ../src/common/docview.cpp:312
-#, c-format
+#: ../src/common/docview.cpp:333
 msgid "Sorry, could not save this file."
 msgstr "Συγγνώμη, δεν μπόρεσε να αποθηκευθεί αυτό το αρχείο."
 
-#: ../src/common/prntbase.cpp:781
-#, c-format
+#: ../src/common/prntbase.cpp:784
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Συγνώμη, δεν υπάρχει αρκετή μνήμη για την δημιουργία προεπισκόπησης."
 
-#: ../src/common/paper.cpp:111
+#: ../src/common/docview.cpp:959
+msgid "Sorry, print preview needs a printer to be installed."
+msgstr ""
+
+#: ../src/common/docview.cpp:1196 ../src/common/docview.cpp:1524
+#, fuzzy
+msgid "Sorry, the format for this file is unknown."
+msgstr "Συγγνώμη, δεν μπόρεσε να ανοιχθεί αυτό το αρχείο."
+
+#: ../src/unix/sound.cpp:433
+msgid "Sound data are in unsupported format."
+msgstr ""
+
+#: ../src/unix/sound.cpp:418
 #, c-format
+msgid "Sound file '%s' is in unsupported format."
+msgstr ""
+
+#: ../src/common/paper.cpp:123
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Δήλωση, 5 1/2 x 8 1/2 ίντσες"
 
-#: ../src/generic/logg.cpp:604
-#, c-format
+#: ../src/generic/logg.cpp:615
 msgid "Status: "
 msgstr "Κατάσταση:"
 
-#: ../contrib/src/xrc/xmlres.cpp:632
+#: ../src/common/xtistrm.cpp:251
+msgid "Streaming delegates for not already streamed objects not yet supported"
+msgstr ""
+
+#: ../src/msw/colour.cpp:38
+#, fuzzy, c-format
+msgid "String To Colour : Incorrect colour specification : %s"
+msgstr ""
+"XRC resource: Λανθασμένος καθορισμός χρώματος '%s' για την ιδιότητα '%s'."
+
+#: ../include/wx/xti.h:396 ../include/wx/xti.h:400
+msgid "String conversions not supported"
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:676
 #, c-format
 msgid "Subclass '%s' not found for resource '%s', not subclassing!"
-msgstr "Η υπο-κλάση '%s' δεν βρέθηκε για τον πόρο '%s', δεν θα γίνει subclassing!"
+msgstr ""
+"Η υπο-κλάση '%s' δεν βρέθηκε για τον πόρο '%s', δεν θα γίνει subclassing!"
 
 #: ../src/generic/fontdlgg.cpp:225
-#, c-format
 msgid "Swiss"
 msgstr "Ελβετικό(Swiss)"
 
-#: ../src/common/imagtiff.cpp:204
-#: ../src/common/imagtiff.cpp:215
-#: ../src/common/imagtiff.cpp:326
-#, c-format
+#: ../src/common/imagtiff.cpp:232 ../src/common/imagtiff.cpp:243
+#: ../src/common/imagtiff.cpp:354
 msgid "TIFF: Couldn't allocate memory."
 msgstr "TIFF: Αδύνατη η δέσμευση μνήμης."
 
-#: ../src/common/imagtiff.cpp:175
-#, c-format
+#: ../src/common/imagtiff.cpp:203
 msgid "TIFF: Error loading image."
 msgstr "TIFF: Λάθος κατά την φόρτωση εικόνας."
 
-#: ../src/common/imagtiff.cpp:226
-#, c-format
+#: ../src/common/imagtiff.cpp:254
 msgid "TIFF: Error reading image."
 msgstr "TIFF: Λάθος κατά την ανάγνωση εικόνας."
 
-#: ../src/common/imagtiff.cpp:303
-#, c-format
+#: ../src/common/imagtiff.cpp:331
 msgid "TIFF: Error saving image."
 msgstr "TIFF: Λάθος κατά την αποθήκευση εικόνας."
 
-#: ../src/common/imagtiff.cpp:350
-#, c-format
+#: ../src/common/imagtiff.cpp:378
 msgid "TIFF: Error writing image."
 msgstr "TIFF: Λάθος κατα την εγγραφή εικόνας."
 
-#: ../src/common/paper.cpp:109
-#, c-format
+#: ../src/common/paper.cpp:121
 msgid "Tabloid, 11 x 17 in"
 msgstr "11 x 17 ίντσες"
 
 #: ../src/generic/fontdlgg.cpp:226
-#, c-format
 msgid "Teletype"
 msgstr "Τηλέτυπος"
 
-#: ../src/common/docview.cpp:1541
-#, c-format
+#: ../src/common/docview.cpp:1606
 msgid "Templates"
 msgstr "Πρότυπα"
 
-#: ../src/common/fontmap.cpp:123
-#, c-format
+#: ../src/common/fmapbase.cpp:112
 msgid "Thai (ISO-8859-11)"
 msgstr "Ταϊλανδέζικο (ISO-8859-11)"
 
-#: ../src/common/ftp.cpp:569
-#, c-format
+#: ../src/common/ftp.cpp:573
 msgid "The FTP server doesn't support passive mode."
-msgstr "Ο FTP εξυπηρετητής δεν υποστηρίζει κατάσταση λειτουργίας(mode) 'passive'."
+msgstr ""
+"Ο FTP εξυπηρετητής δεν υποστηρίζει κατάσταση λειτουργίας(mode) 'passive'."
 
-#: ../src/common/fontmap.cpp:674
+#: ../src/common/fontmap.cpp:188
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -3104,535 +2913,548 @@ msgstr ""
 "ένα άλλο σύνολο χαρακτήρων να το αντικαταστήσει ή διαλέξτε\n"
 "[Ακύρωση] εάν δεν μπορεί να αντικατασταθεί"
 
-#: ../src/msw/ole/dataobj.cpp:165
+#: ../src/msw/ole/dataobj.cpp:164
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "O τύπος προχείρου(clipboard format) '%d' δεν υπάρχει."
 
-#: ../src/generic/dirdlgg.cpp:186
+#: ../src/generic/dirdlgg.cpp:188
 #, c-format
-msgid "The directory '%s' does not exist\n"
+msgid ""
+"The directory '%s' does not exist\n"
 "Create it now?"
-msgstr "Ο κατάλογος '%s' δεν υπάρχει\n"
+msgstr ""
+"Ο κατάλογος '%s' δεν υπάρχει\n"
 "Να δημιουργηθεί τώρα;"
 
-#: ../src/common/docview.cpp:1804
-#, c-format
-msgid "The file '%s' doesn't exist and couldn't be opened.\n"
+#: ../src/common/docview.cpp:1859
+#, fuzzy, c-format
+msgid ""
+"The file '%s' couldn't be opened.\n"
 "It has been removed from the most recently used files list."
-msgstr "Το αρχείο '%s' δεν υπάρχει και δεν μπόρεσε να ανοιχτεί.\n"
+msgstr ""
+"Το αρχείο '%s' δεν υπάρχει και δεν μπόρεσε να ανοιχτεί.\n"
 "Αφαιρέθηκε από την λίστα με τα πρόσφατα χρησιμοποιημένα αρχεία."
 
-#: ../src/common/filename.cpp:900
+#: ../src/common/docview.cpp:1869
+#, c-format
+msgid ""
+"The file '%s' doesn't exist and couldn't be opened.\n"
+"It has been removed from the most recently used files list."
+msgstr ""
+"Το αρχείο '%s' δεν υπάρχει και δεν μπόρεσε να ανοιχτεί.\n"
+"Αφαιρέθηκε από την λίστα με τα πρόσφατα χρησιμοποιημένα αρχεία."
+
+#: ../src/common/filename.cpp:931
 #, c-format
 msgid "The path '%s' contains too many \"..\"!"
 msgstr "Η διαδρομή '%s' περιέχει πάρα πολλά \"..\"!"
 
-#: ../src/common/cmdline.cpp:846
+#: ../src/common/cmdline.cpp:857
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Η απαραίτητη παράμετρος '%s' δεν προσδιορίστηκε."
 
-#: ../src/common/textcmn.cpp:187
-#, c-format
+#: ../src/common/textcmn.cpp:255
 msgid "The text couldn't be saved."
 msgstr "Το κείμενο δεν μπόρεσε να αποθυκευτεί."
 
-#: ../src/common/cmdline.cpp:825
+#: ../src/common/cmdline.cpp:836
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "Η τιμή για την επιλογή '%s' πρέπει να προσδιοριστεί,"
 
-#: ../src/msw/dialup.cpp:408
+#: ../src/msw/dialup.cpp:406
 #, c-format
-msgid "The version of remote access service (RAS) installed on this machine is tooold, please upgrade (the following required function is missing: %s)."
-msgstr "Η εγκατεστημένη σε αυτό το μηχάνημα υπηρεσία απομακρυσμένης πρόσβασης (remote access service, RAS) είναι πολύ παλία, παρακαλώ αναβαθμίστε (η ακόλουθη απαραίτητη συνάρτηση λείπει: %s)."
+msgid ""
+"The version of remote access service (RAS) installed on this machine is "
+"tooold, please upgrade (the following required function is missing: %s)."
+msgstr ""
+"Η εγκατεστημένη σε αυτό το μηχάνημα υπηρεσία απομακρυσμένης πρόσβασης "
+"(remote access service, RAS) είναι πολύ παλία, παρακαλώ αναβαθμίστε (η "
+"ακόλουθη απαραίτητη συνάρτηση λείπει: %s)."
 
-#: ../src/html/htmprint.cpp:540
-#, c-format
-msgid "There was a problem during page setup: you may need to set a default printer."
-msgstr "Υπήρξε πρόβλημα κατά την διάρκεια οργάνωσης δελίδας (page setup): ίσως να χρειαστεί να θέσετε έναν προεπιλεγμένο (default) εκτυπωτή."
+#: ../src/html/htmprint.cpp:580
+msgid ""
+"There was a problem during page setup: you may need to set a default printer."
+msgstr ""
+"Υπήρξε πρόβλημα κατά την διάρκεια οργάνωσης δελίδας (page setup): ίσως να "
+"χρειαστεί να θέσετε έναν προεπιλεγμένο (default) εκτυπωτή."
 
-#: ../src/msw/thread.cpp:1214
-#, c-format
-msgid "Thread module initialization failed: can not store value in thread local storage"
-msgstr "Η αρχικοποίηση μονάδας νήματος εκτέλεσης (thread module) απέτυχε: αδύνατη η αποθήκευση τιμής στην τοπική αποθήκευση νήματος (thread local storage)"
+#: ../src/msw/thread.cpp:1197
+msgid ""
+"Thread module initialization failed: can not store value in thread local "
+"storage"
+msgstr ""
+"Η αρχικοποίηση μονάδας νήματος εκτέλεσης (thread module) απέτυχε: αδύνατη η "
+"αποθήκευση τιμής στην τοπική αποθήκευση νήματος (thread local storage)"
 
-#: ../src/unix/threadpsx.cpp:1596
-#, c-format
+#: ../src/unix/threadpsx.cpp:1600
 msgid "Thread module initialization failed: failed to create thread key"
-msgstr "Η αρχικοποίηση μονάδας νήματος εκτέλεσης (thread module) απέτυχε: αποτυχία δημιουργίας κλειδιού νήματος (thread key)"
+msgstr ""
+"Η αρχικοποίηση μονάδας νήματος εκτέλεσης (thread module) απέτυχε: αποτυχία "
+"δημιουργίας κλειδιού νήματος (thread key)"
 
-#: ../src/msw/thread.cpp:1202
-#, c-format
-msgid "Thread module initialization failed: impossible to allocate index in thread local storage"
-msgstr "Η αρχικοποίηση μονάδας νήματος εκτέλεσης (thread module) απέτυχε: αδύνατο να δεσμευτεί (allocate) δείκτης (index) στην στην τοπική αποθήκευση νήματος (thread local storage)"
+#: ../src/msw/thread.cpp:1185
+msgid ""
+"Thread module initialization failed: impossible to allocate index in thread "
+"local storage"
+msgstr ""
+"Η αρχικοποίηση μονάδας νήματος εκτέλεσης (thread module) απέτυχε: αδύνατο να "
+"δεσμευτεί (allocate) δείκτης (index) στην στην τοπική αποθήκευση νήματος "
+"(thread local storage)"
 
-#: ../src/unix/threadpsx.cpp:1104
-#, c-format
+#: ../src/unix/threadpsx.cpp:1108
 msgid "Thread priority setting is ignored."
 msgstr "Η ρύθμιση προτεραιότητας του νήματος εκτέλεσης (thread) αγνοήθηκε. "
 
-#: ../src/msw/mdi.cpp:189
-#, c-format
+#: ../src/msw/mdi.cpp:188
 msgid "Tile &Horizontally"
 msgstr "Οριζόντια παράθεση"
 
-#: ../src/msw/mdi.cpp:190
-#, c-format
+#: ../src/msw/mdi.cpp:189
 msgid "Tile &Vertically"
 msgstr "Κατακόρυφη παράθεση"
 
-#: ../src/generic/filedlgg.cpp:706
-#, c-format
-msgid "Time"
-msgstr "Ώρα"
+#: ../src/msw/timer.cpp:111
+#, fuzzy
+msgid "Timer creation failed."
+msgstr "Δημιουργία pipe απέτυχε"
 
-#: ../src/generic/tipdlg.cpp:202
-#, c-format
+#: ../src/generic/tipdlg.cpp:205
 msgid "Tip of the Day"
 msgstr "Tip της Ημέρας"
 
-#: ../src/generic/tipdlg.cpp:140
-#, c-format
+#: ../src/generic/tipdlg.cpp:143
 msgid "Tips not available, sorry!"
 msgstr "Το Tip δεν είναι διαθέσιμο, συγνώμη!"
 
-#: ../src/generic/prntdlgg.cpp:188
-#, c-format
+#: ../src/generic/prntdlgg.cpp:185
 msgid "To:"
 msgstr "Πρός:"
 
-#: ../src/generic/prntdlgg.cpp:633
-#, c-format
+#: ../src/common/imagpng.cpp:304
+msgid "Too many colours in PNG, the image may be slightly blurred."
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:651
 msgid "Top margin (mm):"
 msgstr "Πάνω περιθώριο (mm)"
 
-#: ../src/common/fs_mem.cpp:202
+#: ../src/common/fs_mem.cpp:205
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
-msgstr "Προσπάθεια απομάκρυνσης αρχείου '%s' από VFS μνήμης, αλλά δεν είναι φορτωμένο!"
+msgstr ""
+"Προσπάθεια απομάκρυνσης αρχείου '%s' από VFS μνήμης, αλλά δεν είναι "
+"φορτωμένο!"
 
-#: ../src/common/sckaddr.cpp:126
-#, c-format
+#: ../src/common/sckaddr.cpp:146 ../src/common/sckaddr.cpp:250
 msgid "Trying to solve a NULL hostname: giving up"
-msgstr "Προσπάθεια διαλεύκανσης ενός NULL ονόματος διακομιστή(hostname): γίνεται παραίτηση"
+msgstr ""
+"Προσπάθεια διαλεύκανσης ενός NULL ονόματος διακομιστή(hostname): γίνεται "
+"παραίτηση"
 
-#: ../src/common/fontmap.cpp:121
-#, c-format
+#: ../src/common/fmapbase.cpp:110
 msgid "Turkish (ISO-8859-9)"
 msgstr "Τουρκικό (ISO-8859-9)"
 
-#: ../src/common/paper.cpp:140
-#, c-format
+#: ../src/generic/filedlgg.cpp:421
+#, fuzzy
+msgid "Type"
+msgstr "Τηλέτυπος"
+
+#: ../src/common/xtistrm.cpp:279 ../src/common/xtixml.cpp:351
+#: ../src/common/xtixml.cpp:498
+msgid "Type must have enum - long conversion"
+msgstr ""
+
+#: ../src/common/paper.cpp:152
 msgid "US Std Fanfold, 14 7/8 x 11 in"
 msgstr "US Std Fanfold, 14 7/8 x 11 ίντσες"
 
-#: ../src/html/htmlwin.cpp:270
+#: ../src/html/htmlwin.cpp:377
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα εγγράφου HTML: %s"
 
+#: ../src/unix/sound.cpp:323
+msgid "Unable to play sound asynchronously."
+msgstr ""
+
 #: ../src/generic/fontdlgg.cpp:250
-#, c-format
 msgid "Underline"
 msgstr "Υπογράμμιση"
 
-#: ../src/common/resourc2.cpp:305
-#: ../src/common/resourc2.cpp:319
-#: ../src/common/resourc2.cpp:335
-#: ../src/common/resourc2.cpp:349
-#: ../src/common/resourc2.cpp:1370
-#: ../src/common/resourc2.cpp:1384
-#: ../src/common/resourc2.cpp:1400
-#: ../src/common/resourc2.cpp:1414
-#: ../src/common/resource.cpp:1824
-#: ../src/common/resource.cpp:1838
-#: ../src/common/resource.cpp:1855
-#: ../src/common/resource.cpp:1869
-#: ../src/common/resource.cpp:1954
-#: ../src/common/resource.cpp:1968
-#: ../src/common/resource.cpp:1984
-#: ../src/common/resource.cpp:1998
-#: ../src/common/resource.cpp:3038
-#: ../src/common/resource.cpp:3052
-#: ../src/common/resource.cpp:3069
-#: ../src/common/resource.cpp:3083
-#, c-format
-msgid "Unexpected end of file whilst parsing resource."
-msgstr "Απροσδόκητο τέλος αρχείου κατά την ανάγνωση πόρου."
-
-#: ../src/common/cmdline.cpp:789
+#: ../src/common/cmdline.cpp:800
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Απροσδόκητη παράμετρος '%s'"
 
-#: ../src/common/fontmap.cpp:142
-#, c-format
+#: ../src/common/fmapbase.cpp:133
+#, fuzzy
+msgid "Unicode 16 bit (UTF-16)"
+msgstr "Unicode 7 bit (UTF-7)"
+
+#: ../src/common/fmapbase.cpp:134
+#, fuzzy
+msgid "Unicode 16 bit Big Endian (UTF-16BE)"
+msgstr "Unicode 8 bit (UTF-8)"
+
+#: ../src/common/fmapbase.cpp:135
+#, fuzzy
+msgid "Unicode 16 bit Little Endian (UTF-16LE)"
+msgstr "Unicode 8 bit (UTF-8)"
+
+#: ../src/common/fmapbase.cpp:136
+#, fuzzy
+msgid "Unicode 32 bit (UTF-32)"
+msgstr "Unicode 7 bit (UTF-7)"
+
+#: ../src/common/fmapbase.cpp:137
+#, fuzzy
+msgid "Unicode 32 bit Big Endian (UTF-32BE)"
+msgstr "Unicode 8 bit (UTF-8)"
+
+#: ../src/common/fmapbase.cpp:138
+#, fuzzy
+msgid "Unicode 32 bit Little Endian (UTF-32LE)"
+msgstr "Unicode 8 bit (UTF-8)"
+
+#: ../src/common/fmapbase.cpp:131
 msgid "Unicode 7 bit (UTF-7)"
 msgstr "Unicode 7 bit (UTF-7)"
 
-#: ../src/common/fontmap.cpp:143
-#, c-format
+#: ../src/common/fmapbase.cpp:132
 msgid "Unicode 8 bit (UTF-8)"
 msgstr "Unicode 8 bit (UTF-8)"
 
-#: ../src/msw/dde.cpp:1044
+#: ../src/msw/dde.cpp:1108
 #, c-format
 msgid "Unknown DDE error %08x"
 msgstr "’γνωστο σφάλμα DDE %08x"
 
-#: ../src/common/fontmap.cpp:406
+#: ../src/common/xtistrm.cpp:368
+msgid "Unknown Object passed to GetObjectClassInfo"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:674
 #, c-format
 msgid "Unknown encoding (%d)"
 msgstr "’γνωστη κωδικοποίηση (%d)"
 
-#: ../src/unix/mimetype.cpp:2165
+#: ../src/unix/mimetype.cpp:2187
 #, c-format
 msgid "Unknown field in file %s, line %d: '%s'."
 msgstr "’γνωστο πεδίο στο αρχείο %s, γραμμή %d: '%s'."
 
-#: ../src/common/cmdline.cpp:565
+#: ../src/common/cmdline.cpp:573
 #, c-format
 msgid "Unknown long option '%s'"
 msgstr "’γνωστη επιλογή long '%s'"
 
-#: ../src/common/cmdline.cpp:574
-#: ../src/common/cmdline.cpp:595
+#: ../src/common/cmdline.cpp:582 ../src/common/cmdline.cpp:603
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "’γνωστη επιλογή '%s'"
 
-#: ../contrib/src/xrc/xmlres.cpp:701
-#, c-format
+#: ../contrib/src/xrc/xmlres.cpp:746
 msgid "Unknown style flag "
 msgstr "’γνωστη σημαία στύλ (style flag)."
 
-#: ../src/common/mimecmn.cpp:167
+#: ../src/common/xtixml.cpp:324
+#, fuzzy, c-format
+msgid "Unkown Property %s"
+msgstr "’γνωστη επιλογή '%s'"
+
+#: ../src/common/mimecmn.cpp:161
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "Αταίριαστο '{' σε μία είσοδο (entry) για τον τύπο mime %s."
 
-#: ../src/common/cmdproc.cpp:238
-#: ../src/common/cmdproc.cpp:254
-#: ../src/common/cmdproc.cpp:281
-#, c-format
+#: ../src/common/cmdproc.cpp:254 ../src/common/cmdproc.cpp:280
+#: ../src/common/cmdproc.cpp:300
 msgid "Unnamed command"
 msgstr "Ανώνυμη εντολή"
 
-#: ../src/common/resourc2.cpp:687
-#: ../src/common/resource.cpp:2343
-#, c-format
-msgid "Unrecognized style %s whilst parsing resource."
-msgstr "Μη-αναγνωρίσιμο στύλ %s κατα την ανάγνωση πόρου."
-
-#: ../src/mac/clipbrd.cpp:59
-#: ../src/msw/clipbrd.cpp:273
-#: ../src/msw/clipbrd.cpp:447
-#, c-format
+#: ../src/mac/clipbrd.cpp:64 ../src/msw/clipbrd.cpp:273
+#: ../src/msw/clipbrd.cpp:445
 msgid "Unsupported clipboard format."
 msgstr "Δεν υποστηρίζεται ο τύπος προχείρου(clipboard format)."
 
-#: ../src/common/appcmn.cpp:380
+#: ../src/common/gzstream.cpp:139
+#, fuzzy
+msgid "Unsupported flag in Gzip header"
+msgstr "Δεν υποστηρίζεται ο τύπος προχείρου(clipboard format)."
+
+#: ../src/common/appcmn.cpp:222
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Το θέμα '%s' δεν υποστηρίζεται."
 
-#: ../src/generic/fdrepdlg.cpp:157
-#, c-format
+#: ../src/generic/fdrepdlg.cpp:151
 msgid "Up"
 msgstr "Πάνω"
 
-#: ../src/common/cmdline.cpp:916
+#: ../src/common/cmdline.cpp:927
 #, c-format
 msgid "Usage: %s"
 msgstr "Χρήση: %s"
 
-#: ../src/common/valtext.cpp:196
-#, c-format
+#: ../src/common/valtext.cpp:185
 msgid "Validation conflict"
 msgstr "Σύγκρουση επικύρωσης (validation conflict)"
 
-#: ../src/generic/filedlgg.cpp:1103
-#, c-format
+#: ../contrib/src/mmedia/vidbase.cpp:65
+msgid "Video Output"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:904
 msgid "View files as a detailed view"
 msgstr "Εμφάνιση αρχείων σε προβολή με λεπτομέρειες"
 
-#: ../src/generic/filedlgg.cpp:1096
-#, c-format
+#: ../src/generic/filedlgg.cpp:897
 msgid "View files as a list view"
 msgstr "Εμφάνιση αρχείων σε προβολή λίστας"
 
-#: ../src/common/docview.cpp:1617
-#, c-format
+#: ../src/common/docview.cpp:1683
 msgid "Views"
 msgstr "Προβολές"
 
-#: ../src/unix/utilsunx.cpp:758
-#, c-format
+#: ../src/unix/baseunix.cpp:78
 msgid "Waiting for subprocess termination failed"
 msgstr "Η αναμονή για τον τερματισμό υπο-διεργασίας (subprocess) απέτυχε"
 
-#: ../src/common/docview.cpp:438
-#: ../src/common/resource.cpp:124
-#, c-format
+#: ../src/common/docview.cpp:463
 msgid "Warning"
 msgstr "Προειδοποίηση"
 
-#: ../src/common/log.cpp:464
-#, c-format
+#: ../src/common/log.cpp:482
 msgid "Warning: "
 msgstr "Προειδοποίηση: "
 
-#: ../src/html/htmlpars.cpp:362
-#, c-format
+#: ../src/html/htmlpars.cpp:390
 msgid "Warning: attempt to remove HTML tag handler from empty stack."
-msgstr "Προειδοποίηση: προσπάθεια απομάκρυνσης διαχειριστή ετικετών (tag handler) HTML από άδεια στοίβα (stack)."
+msgstr ""
+"Προειδοποίηση: προσπάθεια απομάκρυνσης διαχειριστή ετικετών (tag handler) "
+"HTML από άδεια στοίβα (stack)."
 
-#: ../src/common/fontmap.cpp:113
-#, c-format
+#: ../src/common/fmapbase.cpp:102
 msgid "Western European (ISO-8859-1)"
 msgstr "Δυτικο-Ευρωπαϊκό (ISO-8859-1)"
 
-#: ../src/common/fontmap.cpp:127
-#, c-format
+#: ../src/common/fmapbase.cpp:116
 msgid "Western European with Euro (ISO-8859-15)"
 msgstr "Δυτικο-Ευρωπαϊκό με Euro (ISO-8859-15)"
 
-#: ../src/generic/fdrepdlg.cpp:149
-#, c-format
+#: ../src/generic/fdrepdlg.cpp:143
 msgid "Whole word"
 msgstr "Ολόκληρη λέξη"
 
-#: ../src/html/helpfrm.cpp:412
-#, c-format
+#: ../src/html/helpfrm.cpp:442
 msgid "Whole words only"
 msgstr "Ολόκληρες λέξεις μόνο"
 
-#: ../src/univ/themes/win32.cpp:1168
-#, c-format
+#: ../src/univ/themes/win32.cpp:1182
 msgid "Win32 theme"
 msgstr "Win32 θέμα"
 
-#: ../src/msw/utils.cpp:983
-#, c-format
+#: ../src/msw/utils.cpp:981
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s σε Windows 3.1"
 
-#: ../src/msw/utils.cpp:1015
-#, c-format
+#: ../src/msw/utils.cpp:1013
 msgid "Windows 3.1"
 msgstr "Windows 3.1"
 
-#: ../src/msw/utils.cpp:987
+#: ../src/msw/utils.cpp:985
 #, c-format
 msgid "Windows 9%c"
 msgstr "Windows 9%c"
 
-#: ../src/common/fontmap.cpp:139
-#, c-format
+#: ../src/common/fmapbase.cpp:128
 msgid "Windows Arabic (CP 1256)"
 msgstr "Windows Αραβικό (CP 1256)"
 
-#: ../src/common/fontmap.cpp:140
-#, c-format
+#: ../src/common/fmapbase.cpp:129
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Βαλτικό (CP 1257)"
 
-#: ../src/common/fontmap.cpp:133
-#, c-format
+#: ../src/common/fmapbase.cpp:122
 msgid "Windows Central European (CP 1250)"
 msgstr "Windows Κεντρο-Ευρωπαϊκό (CP 1250)"
 
-#: ../src/common/fontmap.cpp:130
-#, c-format
+#: ../src/common/fmapbase.cpp:119
 msgid "Windows Chinese Simplified (CP 936)"
 msgstr "Windows Απλοποιημένο Κινέζικο (CP 936)"
 
-#: ../src/common/fontmap.cpp:132
-#, c-format
+#: ../src/common/fmapbase.cpp:121
 msgid "Windows Chinese Traditional (CP 950)"
 msgstr "Windows Παραδοσιακό Κινέζικο (CP 950)"
 
-#: ../src/common/fontmap.cpp:134
-#, c-format
+#: ../src/common/fmapbase.cpp:123
 msgid "Windows Cyrillic (CP 1251)"
 msgstr "Windows Κυριλικό (CP 1251)"
 
-#: ../src/common/fontmap.cpp:136
-#, c-format
+#: ../src/common/fmapbase.cpp:125
 msgid "Windows Greek (CP 1253)"
 msgstr "Windows Ελληνικό (CP 1253)"
 
-#: ../src/common/fontmap.cpp:138
-#, c-format
+#: ../src/common/fmapbase.cpp:127
 msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows Εβραϊκό (CP 1255)"
 
-#: ../src/common/fontmap.cpp:129
-#, c-format
+#: ../src/common/fmapbase.cpp:118
 msgid "Windows Japanese (CP 932)"
 msgstr "Windows Ιαπωνικό (CP 932)"
 
-#: ../src/common/fontmap.cpp:131
-#, c-format
+#: ../src/common/fmapbase.cpp:120
 msgid "Windows Korean (CP 949)"
 msgstr "Windows Κορεάτικο (CP 949)"
 
-#: ../src/common/fontmap.cpp:137
-#, c-format
+#: ../src/common/fmapbase.cpp:126
 msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Τουρκικό (CP 1254)"
 
-#: ../src/common/fontmap.cpp:135
-#, c-format
+#: ../src/common/fmapbase.cpp:124
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows Δυτικο-Ευρωπαϊκό (CP 1252)"
 
-#: ../src/common/fontmap.cpp:141
-#, c-format
+#: ../src/common/fmapbase.cpp:130
 msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
-#: ../src/common/ffile.cpp:160
+#: ../src/common/ffile.cpp:146
 #, c-format
 msgid "Write error on file '%s'"
 msgstr "Λάθος εγγραφής (write error) στο αρχείο '%s'"
 
-#: ../contrib/src/xrc/xml.cpp:530
+#: ../src/xml/xml.cpp:548
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr "XML σφάλμα ανάγνωσης (parsing error): '%s' στη γραμμή %d"
 
-#: ../src/common/xpmdecod.cpp:759
-#, c-format
+#: ../src/common/xpmdecod.cpp:777
 msgid "XPM: Malformed pixel data!"
 msgstr "XPM: Κακοσχηματισμένα δεδομένα εικονοστοιχείων (pixel)!"
 
-#: ../src/common/xpmdecod.cpp:709
-#: ../src/common/xpmdecod.cpp:718
+#: ../src/common/xpmdecod.cpp:712 ../src/common/xpmdecod.cpp:722
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr "XPM: κακοσχηματισμένος ορισμός χρώματος '%s'!"
 
-#: ../contrib/src/xrc/xmlres.cpp:470
+#: ../contrib/src/xrc/xmlres.cpp:504
 #, c-format
 msgid "XRC resource '%s' (class '%s') not found!"
 msgstr "XRC resource '%s' (τάξη(class) '%s') δεν βρέθηκε!"
 
-#: ../contrib/src/xrc/xmlres.cpp:861
-#: ../contrib/src/xrc/xmlres.cpp:872
+#: ../contrib/src/xrc/xmlres.cpp:885 ../contrib/src/xrc/xmlres.cpp:897
 #, c-format
 msgid "XRC resource: Cannot create bitmap from '%s'."
 msgstr "XRC resource: Δεν είναι δυνατή η δημιουργία bitmap από '%s'."
 
-#: ../contrib/src/xrc/xmlres.cpp:821
+#: ../contrib/src/xrc/xmlres.cpp:845
 #, c-format
 msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
-msgstr "XRC resource: Λανθασμένος καθορισμός χρώματος '%s' για την ιδιότητα '%s'."
+msgstr ""
+"XRC resource: Λανθασμένος καθορισμός χρώματος '%s' για την ιδιότητα '%s'."
 
-#: ../src/common/dlgcmn.cpp:214
-#: ../src/mac/msgdlg.cpp:77
-#: ../src/motif/msgdlg.cpp:182
-#, c-format
+#: ../src/common/dlgcmn.cpp:208 ../src/mac/msgdlg.cpp:57
+#: ../src/mac/msgdlg.cpp:139 ../src/motif/msgdlg.cpp:182
 msgid "Yes"
 msgstr "Ναι"
 
-#: ../src/generic/dirdlgg.cpp:262
-#, c-format
+#: ../src/generic/dirdlgg.cpp:264
 msgid "You cannot add a new directory to this section."
 msgstr "Δεν μπορείτε να προσθέσετε καινούργιο κατάλογο σε αυτό το τμήμα."
 
-#: ../src/common/fs_zip.cpp:86
-#: ../src/common/fs_zip.cpp:125
-#, c-format
+#: ../src/common/fs_zip.cpp:88 ../src/common/fs_zip.cpp:138
 msgid "ZIP handler currently supports only local files!"
 msgstr "ο χειριστής ZIP προς το παρόν υποστηρίζει μόνο τοπικά αρχεία!"
 
-#: ../src/common/docview.cpp:1953
-#, c-format
+#: ../src/common/docview.cpp:2043
 msgid "[EMPTY]"
 msgstr "[ΚΕΝΟ]"
 
-#: ../src/msw/dde.cpp:1011
-#, c-format
+#: ../src/msw/dde.cpp:1075
 msgid "a DDEML application has created a prolonged race condition."
 msgstr "μια DDEML εφαρμογή έχει δημιουργήσει έναν παρατεταμένο race condition."
 
-#: ../src/msw/dde.cpp:999
-#, c-format
+#: ../src/msw/dde.cpp:1063
 msgid ""
-"a DDEML function was called without first calling the DdeInitialize function,\n"
+"a DDEML function was called without first calling the DdeInitialize "
+"function,\n"
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
-"μια συνάρτηση(function) DDEML κλήθηκε χώρις πρώτα να καλέσει την DdeInitialize συνάρτηση(function),\n"
+"μια συνάρτηση(function) DDEML κλήθηκε χώρις πρώτα να καλέσει την "
+"DdeInitialize συνάρτηση(function),\n"
 "ή ένα λανθασμένο αναγνωριστικό(identifier) instance\n"
 "δόθηκε σε μια DDEML συνάρτηση(function)."
 
-#: ../src/msw/dde.cpp:1017
-#, c-format
+#: ../src/msw/dde.cpp:1081
 msgid "a client's attempt to establish a conversation has failed."
-msgstr "η προσπάθεια ενός πελάτη(client) να εδραιώσει(establish) μία συνδιάλεξη(conversation) απέτυχε. "
+msgstr ""
+"η προσπάθεια ενός πελάτη(client) να εδραιώσει(establish) μία συνδιάλεξη"
+"(conversation) απέτυχε. "
 
-#: ../src/msw/dde.cpp:1014
-#, c-format
+#: ../src/msw/dde.cpp:1078
 msgid "a memory allocation failed."
 msgstr "μία προσπάθεια δέσμευσης (allocation) μνήμης απέτυχε."
 
-#: ../src/msw/dde.cpp:1008
-#, c-format
+#: ../src/msw/dde.cpp:1072
 msgid "a parameter failed to be validated by the DDEML."
 msgstr "απέτυχε η επικύρωση μιας παραμέτρου από το DDEML."
 
-#: ../src/msw/dde.cpp:990
-#, c-format
+#: ../src/msw/dde.cpp:1054
 msgid "a request for a synchronous advise transaction has timed out."
-msgstr "μία αίτηση για σύγχρονη(synchronous) ενημερωτική(advise) συναλλαγή(transaction) ξεπέρασε το χρονικό περιθώριο (timed out)"
+msgstr ""
+"μία αίτηση για σύγχρονη(synchronous) ενημερωτική(advise) συναλλαγή"
+"(transaction) ξεπέρασε το χρονικό περιθώριο (timed out)"
 
-#: ../src/msw/dde.cpp:996
-#, c-format
+#: ../src/msw/dde.cpp:1060
 msgid "a request for a synchronous data transaction has timed out."
-msgstr "μία αίτηση για σύγχρονη(synchronous) συναλλαγή(transaction) δεδομένων(data) ξεπέρασε το χρονικό περιθώριο (timed out)"
+msgstr ""
+"μία αίτηση για σύγχρονη(synchronous) συναλλαγή(transaction) δεδομένων(data) "
+"ξεπέρασε το χρονικό περιθώριο (timed out)"
 
-#: ../src/msw/dde.cpp:1005
-#, c-format
+#: ../src/msw/dde.cpp:1069
 msgid "a request for a synchronous execute transaction has timed out."
-msgstr "μία αίτηση για σύγχρονη(synchronous) συναλλαγή(transaction) εκτέλεσης(execute) ξεπέρασε το χρονικό περιθώριο (timed out)"
+msgstr ""
+"μία αίτηση για σύγχρονη(synchronous) συναλλαγή(transaction) εκτέλεσης"
+"(execute) ξεπέρασε το χρονικό περιθώριο (timed out)"
 
-#: ../src/msw/dde.cpp:1023
-#, c-format
+#: ../src/msw/dde.cpp:1087
 msgid "a request for a synchronous poke transaction has timed out."
-msgstr "μία αίτηση για σύγχρονη(synchronous) poke συναλλαγή(transaction) ξεπέρασε το χρονικό περιθώριο (timed out)"
+msgstr ""
+"μία αίτηση για σύγχρονη(synchronous) poke συναλλαγή(transaction) ξεπέρασε το "
+"χρονικό περιθώριο (timed out)"
 
-#: ../src/msw/dde.cpp:1038
-#, c-format
+#: ../src/msw/dde.cpp:1102
 msgid "a request to end an advise transaction has timed out."
-msgstr "μία αίτηση για τερματισμό μιας ενημερωτικής(advise) συναλλαγής(transaction) ξεπέρασε το χρονικό περιθώριο (timed out)"
+msgstr ""
+"μία αίτηση για τερματισμό μιας ενημερωτικής(advise) συναλλαγής(transaction) "
+"ξεπέρασε το χρονικό περιθώριο (timed out)"
 
-#: ../src/msw/dde.cpp:1032
-#, c-format
+#: ../src/msw/dde.cpp:1096
 msgid ""
 "a server-side transaction was attempted on a conversation\n"
 "that was terminated by the client, or the server\n"
 "terminated before completing a transaction."
 msgstr ""
-"αποπειράθηκε μια συναλλαγη στη μεριά του εξυπηρετητή (server-side) σε μια συνδίαλεξη (conversation)\n"
+"αποπειράθηκε μια συναλλαγη στη μεριά του εξυπηρετητή (server-side) σε μια "
+"συνδίαλεξη (conversation)\n"
 "που είχε τερματιστεί από τον πελάτη(client), ή ο εξυπηρετητής (server)\n"
 "τερμάτισε πριν ολοκληρωθεί μια συναλλαγή( transaction)."
 
-#: ../src/msw/dde.cpp:1020
-#, c-format
+#: ../src/msw/dde.cpp:1084
 msgid "a transaction failed."
 msgstr "μία συναλλαγή (transaction) απέτυχε."
 
-#: ../src/common/menucmn.cpp:99
-#, c-format
+#: ../src/common/menucmn.cpp:108
 msgid "alt"
 msgstr "alt"
 
-#: ../src/msw/dde.cpp:1002
-#, c-format
+#: ../src/msw/dde.cpp:1066
 msgid ""
 "an application initialized as APPCLASS_MONITOR has\n"
 "attempted to perform a DDE transaction,\n"
@@ -3644,139 +3466,150 @@ msgstr ""
 "ή μία εφαρμογή που αρχικοποιήθηκε ως APPCMD_CLIENTONLY\n"
 "προσπάθησε να κάνει συναλλαγές εξυπηρετητή (server transactions)."
 
-#: ../src/msw/dde.cpp:1026
-#, c-format
+#: ../src/msw/dde.cpp:1090
 msgid "an internal call to the PostMessage function has failed. "
 msgstr "μία εσωτερική κλήση στην συνάρτηση (function) PostMessage απέτυχε."
 
-#: ../src/msw/dde.cpp:1035
-#, c-format
+#: ../src/msw/dde.cpp:1099
 msgid "an internal error has occurred in the DDEML."
 msgstr "ένα εσωτερικό λάθος συνέβη στο DDEML."
 
-#: ../src/msw/dde.cpp:1041
-#, c-format
+#: ../src/msw/dde.cpp:1105
 msgid ""
 "an invalid transaction identifier was passed to a DDEML function.\n"
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
 "the transaction identifier for that callback is no longer valid."
 msgstr ""
-"ένα λανθασμένο αναγνωριστικό(identifier) συναλλαγής(transaction) δώθηκε σε μία DDEML συνάρτηση(function).\n"
+"ένα λανθασμένο αναγνωριστικό(identifier) συναλλαγής(transaction) δώθηκε σε "
+"μία DDEML συνάρτηση(function).\n"
 "Όταν η εφαρμογή επιστρέψει από ένα XTYP_XACT_COMPLETE callback,\n"
 "το αναγνωριστικό συναλλαγής για εκείνο το callback δεν θα είναι πλέον έγκυρο."
 
-#: ../src/common/fileconf.cpp:1767
+#: ../src/common/fileconf.cpp:1815
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "η προσπάθεια αλλαγής αμετάβλητου κλειδιού '%s' αγνοήθηκε."
 
+#: ../src/html/chm.cpp:330
+msgid "bad arguments to library function"
+msgstr ""
+
+#: ../src/html/chm.cpp:342
+msgid "bad signature"
+msgstr ""
+
 #: ../src/common/ftp.cpp:369
-#, c-format
 msgid "binary"
 msgstr "δυαδικό"
 
-#: ../src/common/fontcmn.cpp:548
-#, c-format
+#: ../src/common/fontcmn.cpp:533
 msgid "bold"
 msgstr "έντονο"
 
-#: ../src/common/fontcmn.cpp:472
-#, c-format
+#: ../src/common/fontcmn.cpp:457
 msgid "bold "
 msgstr "έντονο "
 
-#: ../src/common/ffile.cpp:93
+#: ../src/common/ffile.cpp:79
 #, c-format
 msgid "can't close file '%s'"
 msgstr "δεν είναι δυνατό το κλείσιμο του αρχείου '%s'"
 
-#: ../src/common/file.cpp:275
+#: ../src/common/file.cpp:371
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "αδύνατο το κλείσιμο περιγραφέα (descriptor) αρχείου %d"
 
-#: ../src/common/file.cpp:553
+#: ../src/common/file.cpp:729
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "αδύνατη η δέσμευση των αλλαγών στο αρχείο '%s'"
 
-#: ../src/common/file.cpp:215
+#: ../src/common/file.cpp:252
 #, c-format
 msgid "can't create file '%s'"
 msgstr "δεν είναι δυνατή η δημιουργία του αρχείου '%s'"
 
-#: ../src/common/fileconf.cpp:1078
+#: ../src/common/fileconf.cpp:1106
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "Δεν είναι δυνατή η διαγραφή του αρχείου ρυθμίσεων '%s' του χρήστη"
 
-#: ../src/common/file.cpp:458
+#: ../src/common/file.cpp:631
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
-msgstr "αδύνατο να καθοριστεί εαν το τέλος αρχείου του έχει φτάσει στο περιγραφέα (descriptor) %d"
+msgstr ""
+"αδύνατο να καθοριστεί εαν το τέλος αρχείου του έχει φτάσει στο περιγραφέα "
+"(descriptor) %d"
 
-#: ../src/common/file.cpp:424
+#: ../src/common/file.cpp:585
 #, c-format
 msgid "can't find length of file on file descriptor %d"
-msgstr "αδύνατη η εύρεση του μεγέθους αρχείου στον περιγραφέα αρχείου (file desciptor) %d"
+msgstr ""
+"αδύνατη η εύρεση του μεγέθους αρχείου στον περιγραφέα αρχείου (file "
+"desciptor) %d"
 
-#: ../src/msw/utils.cpp:369
-#, c-format
+#: ../src/msw/utils.cpp:371
 msgid "can't find user's HOME, using current directory."
-msgstr "αδύνατη η εύρεση του HOME του χρήστη, γίνεται χρήση τρέχοντος καταλόγου."
+msgstr ""
+"αδύνατη η εύρεση του HOME του χρήστη, γίνεται χρήση τρέχοντος καταλόγου."
 
-#: ../src/common/file.cpp:338
+#: ../src/common/file.cpp:450
 #, c-format
 msgid "can't flush file descriptor %d"
-msgstr "δεν μπορεί να πραγματοποιηθεί το άδειασμα (flush) του περιγραφέα αρχείου %d"
+msgstr ""
+"δεν μπορεί να πραγματοποιηθεί το άδειασμα (flush) του περιγραφέα αρχείου %d"
 
-#: ../src/common/file.cpp:392
+#: ../src/common/file.cpp:535 ../src/common/file.cpp:543
 #, c-format
 msgid "can't get seek position on file descriptor %d"
-msgstr "αδύνατη η λήψη θέσης αναζήτησης (seek position) στον περιγραφέα(descriptor) αρχείου %d"
+msgstr ""
+"αδύνατη η λήψη θέσης αναζήτησης (seek position) στον περιγραφέα(descriptor) "
+"αρχείου %d"
 
-#: ../src/common/fontmap.cpp:807
-#, c-format
+#: ../src/common/fontmap.cpp:305
 msgid "can't load any font, aborting"
 msgstr "αδύνατη η φόρτωση οποιασδήποτε γραμματοσειράς, γίνεται ματαίωση"
 
-#: ../src/common/ffile.cpp:77
-#: ../src/common/file.cpp:261
+#: ../src/common/ffile.cpp:63 ../src/common/file.cpp:352
 #, c-format
 msgid "can't open file '%s'"
 msgstr "δεν είναι δυνατό το άνοιγμα του αρχείου '%s'"
 
-#: ../src/common/fileconf.cpp:397
+#: ../src/common/fileconf.cpp:407
 #, c-format
 msgid "can't open global configuration file '%s'."
 msgstr "δεν είναι δυνατό το άνοιγμα του γενικού(global) αρχείου ρυθμίσεων %s"
 
-#: ../src/common/fileconf.cpp:416
+#: ../src/common/fileconf.cpp:422
 #, c-format
 msgid "can't open user configuration file '%s'."
 msgstr "δεν είναι δυνατό το άνοιγμα του αρχείου ρυθμίσεων '%s' του χρήστη"
 
-#: ../src/common/fileconf.cpp:949
-#, c-format
+#: ../src/common/fileconf.cpp:981
 msgid "can't open user configuration file."
 msgstr "αδύνατο το άνοιγμα αρχείου ρυθμίσεων του χρήστη."
 
-#: ../src/common/file.cpp:301
+#: ../src/common/dynlib.cpp:445
+msgid "can't query for GUI plugins name in console applications"
+msgstr ""
+
+#: ../src/common/file.cpp:404
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "αδύνατη η ανάγνωση από περiγραφέα (descriptor) αρχείου %d"
 
-#: ../src/common/file.cpp:548
+#: ../src/common/file.cpp:724
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "δεν είναι δυνατό το σβήσιμο του αρχείου '%s'"
 
-#: ../src/common/file.cpp:564
+#: ../src/common/file.cpp:740
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "δεν είναι δυνατό το σβήσιμο του προσωρινού αρχείου '%s'"
 
-#: ../src/common/file.cpp:378
+#: ../src/common/file.cpp:492 ../src/common/file.cpp:518
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "αδύνατη η αναζήτηση(seek) στον περγραφέα(descriptor) αρχείου %d"
@@ -3786,415 +3619,589 @@ msgstr "αδύνατη η αναζήτηση(seek) στον περγραφέα(descriptor) αρχείου %d"
 msgid "can't write buffer '%s' to disk."
 msgstr "αδύνατη η εγγραφή της προσωρινής μνήμης (buffer) '%s' στο δίσκο."
 
-#: ../src/common/file.cpp:323
+#: ../src/common/file.cpp:433
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "δεν είναι δυνατή η εγγραφή του περιγραφέα αρχείου(file descriptor) %d"
 
-#: ../src/common/fileconf.cpp:965
-#, c-format
+#: ../src/common/fileconf.cpp:992
 msgid "can't write user configuration file."
 msgstr "Αδύνατη η εγγραφή αρχείου ρυθμίσεων χρήστη."
 
-#: ../src/common/intl.cpp:364
+#: ../src/common/intl.cpp:1102
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "αρχείο καταλόγου για την περιοχή (domain) '%s' δεν βρέθηκε."
 
-#: ../src/common/menucmn.cpp:97
-#, c-format
+#: ../src/html/chm.cpp:346
+msgid "checksum error"
+msgstr ""
+
+#: ../src/html/chm.cpp:348
+msgid "compression error"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:106
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:1056
-#, c-format
+#: ../src/common/cmdline.cpp:1067
 msgid "date"
 msgstr "ημερομηνία"
 
-#: ../src/common/fontmap.cpp:416
-#, c-format
+#: ../src/html/chm.cpp:350
+msgid "decompression error"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:684
 msgid "default"
 msgstr "προκαθορισμένο"
 
-#: ../src/common/datetime.cpp:3363
-#, c-format
+#: ../src/common/xtistrm.cpp:841
+msgid "delegate has no type info"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3483
 msgid "eighteenth"
 msgstr "δέκατο-όγδοο"
 
-#: ../src/common/datetime.cpp:3353
-#, c-format
+#: ../src/common/datetime.cpp:3473
 msgid "eighth"
 msgstr "όγδοο"
 
-#: ../src/common/datetime.cpp:3356
-#, c-format
+#: ../src/common/datetime.cpp:3476
 msgid "eleventh"
 msgstr "έβδομο"
 
-#: ../src/common/fileconf.cpp:1753
+#: ../src/common/strconv.cpp:1573
+#, fuzzy, c-format
+msgid "encoding %s"
+msgstr "’γνωστη κωδικοποίηση (%d)"
+
+#: ../src/common/fileconf.cpp:1801
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "η εισαγωγή(entry) '%s' εμφανίζεται πάνω από μία φορά στο γκρούπ '%s'"
 
-#: ../src/msw/dialup.cpp:843
-#, c-format
+#: ../src/html/chm.cpp:344
+#, fuzzy
+msgid "error in data format"
+msgstr "IFF: σφάλμα στη μορφή εικόνας IFF."
+
+#: ../src/html/chm.cpp:332
+#, fuzzy
+msgid "error opening file"
+msgstr "Λάθος ανάγνωσης στο αρχείο '%s'"
+
+#: ../src/msw/dialup.cpp:841
 msgid "establish"
 msgstr "εδραίωσε"
 
-#: ../src/common/ffile.cpp:174
+#: ../src/common/ffile.cpp:160
 #, c-format
 msgid "failed to flush the file '%s'"
 msgstr "Αποτυχία αδειάσματος buffer (flush) του αρχείου '%s'"
 
-#: ../src/common/datetime.cpp:3360
-#, c-format
+#: ../src/common/datetime.cpp:3480
 msgid "fifteenth"
 msgstr "δέκατο-πέμπτο"
 
-#: ../src/common/datetime.cpp:3350
-#, c-format
+#: ../src/common/datetime.cpp:3470
 msgid "fifth"
 msgstr "πέμπτο"
 
-#: ../src/common/fileconf.cpp:626
+#: ../src/common/fileconf.cpp:658
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
-msgstr "αρχείο '%s', γραμμή %d: το '%s' αγνοήθηκε μετά την επικεφαλίδα του γκρούπ."
+msgstr ""
+"αρχείο '%s', γραμμή %d: το '%s' αγνοήθηκε μετά την επικεφαλίδα του γκρούπ."
 
-#: ../src/common/fileconf.cpp:655
+#: ../src/common/fileconf.cpp:687
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "αρχείο '%s', γραμμή %d: αναμενόταν '=' ."
 
-#: ../src/common/fileconf.cpp:681
+#: ../src/common/fileconf.cpp:710
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
-msgstr "αρχείο '%s', γραμμή %d: το κλειδί '%s' βρέθηκε για πρώτη φορά στη γραμμή %d."
+msgstr ""
+"αρχείο '%s', γραμμή %d: το κλειδί '%s' βρέθηκε για πρώτη φορά στη γραμμή %d."
 
-#: ../src/common/fileconf.cpp:671
+#: ../src/common/fileconf.cpp:700
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "αρχείο '%s', γραμμή %d: τιμή για αμετάβλητο κλειδί '%s' αγνοήθηκε."
 
-#: ../src/common/fileconf.cpp:594
+#: ../src/common/fileconf.cpp:622
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "αρχείο '%s': απροσδόκητος χαρακτήρας %c στη γραμμή %d."
 
-#: ../src/common/datetime.cpp:3346
-#, c-format
+#: ../src/common/datetime.cpp:3466
 msgid "first"
 msgstr "πρώτο"
 
-#: ../src/common/datetime.cpp:3359
-#, c-format
+#: ../src/html/helpfrm.cpp:1084
+#, fuzzy
+msgid "font size"
+msgstr "Μέγεθος γραμματοσειράς:"
+
+#: ../src/common/datetime.cpp:3479
 msgid "fourteenth"
 msgstr "δέκατο-τέταρτο"
 
-#: ../src/common/datetime.cpp:3349
-#, c-format
+#: ../src/common/datetime.cpp:3469
 msgid "fourth"
 msgstr "τέταρτο"
 
-#: ../src/common/appcmn.cpp:319
-#, c-format
+#: ../src/common/appbase.cpp:320
 msgid "generate verbose log messages"
 msgstr "δημιουργία αναλυτικών (verbose) μηνυμάτων καταγραφής (log)"
 
-#: ../src/common/timercmn.cpp:290
-#, c-format
+#: ../src/common/stopwatch.cpp:234
 msgid "gmtime() failed"
 msgstr "το gmtime() απέτυχε"
 
-#: ../src/mac/scrolbar.cpp:143
-#, c-format
-msgid "illegal scrollbar selector %d"
-msgstr "παράνομος επιλογέας(selector) γραμμής κύλισης(scrollbar) %d"
+#: ../src/common/xtixml.cpp:479
+msgid "incorrect event handler string, missing dot"
+msgstr ""
 
-#: ../src/msw/dialup.cpp:843
-#, c-format
+#: ../src/msw/dialup.cpp:841
 msgid "initiate"
 msgstr "αρχικοποίησε"
 
-#: ../src/common/file.cpp:462
-#, c-format
+#: ../src/common/file.cpp:635
 msgid "invalid eof() return value."
 msgstr "λανθασμένη τιμή επιστροφής του eof()."
 
-#: ../src/generic/logg.cpp:1125
-#, c-format
+#: ../src/generic/logg.cpp:1134
 msgid "invalid message box return value"
 msgstr "μη-αποδεκτή τιμή επιστροφής παράθυρου μηνύματος"
 
-#: ../src/common/fontcmn.cpp:488
-#: ../src/common/fontcmn.cpp:552
-#, c-format
+#: ../src/common/fontcmn.cpp:473 ../src/common/fontcmn.cpp:537
 msgid "italic"
 msgstr "πλάγιο"
 
-#: ../src/common/fontcmn.cpp:544
-#, c-format
+#: ../src/common/fontcmn.cpp:529
 msgid "light"
 msgstr "απαλό(light)"
 
-#: ../src/common/fontcmn.cpp:468
-#, c-format
+#: ../src/common/fontcmn.cpp:453
 msgid "light "
 msgstr "απαλό(light) "
 
-#: ../src/common/intl.cpp:615
+#: ../src/common/intl.cpp:1427
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "η γλώσσα '%s' δεν μπορει να οριστεί"
 
-#: ../src/common/intl.cpp:359
+#: ../src/common/intl.cpp:1097
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "γίνεται εύρεση του καταλόγου '%s' στο μονοπάτι '%s'."
 
-#: ../src/common/datetime.cpp:3511
-#, c-format
+#: ../src/common/datetime.cpp:3630
 msgid "midnight"
 msgstr "μεσάνυκτα"
 
-#: ../src/common/timercmn.cpp:286
-#, c-format
+#: ../src/common/stopwatch.cpp:230
 msgid "mktime() failed"
 msgstr "το mktime() απέτυχε"
 
-#: ../src/common/datetime.cpp:3364
-#, c-format
+#: ../src/common/datetime.cpp:3484
 msgid "nineteenth"
 msgstr "δέκατο-ένατο"
 
-#: ../src/common/datetime.cpp:3354
-#, c-format
+#: ../src/common/datetime.cpp:3474
 msgid "ninth"
 msgstr "ένατο"
 
-#: ../src/msw/dde.cpp:986
-#, c-format
+#: ../src/msw/dde.cpp:1050
 msgid "no DDE error."
 msgstr "κανένα λάθος DDE"
 
-#: ../src/html/helpdata.cpp:574
-#, c-format
+#: ../src/html/chm.cpp:328
+#, fuzzy
+msgid "no error"
+msgstr "άνωστο λάθος"
+
+#: ../src/html/helpdata.cpp:603
 msgid "noname"
 msgstr "ανώνυμο"
 
-#: ../src/common/datetime.cpp:3510
-#, c-format
+#: ../src/common/datetime.cpp:3629
 msgid "noon"
 msgstr "μεσημέρι"
 
-#: ../src/common/cmdline.cpp:1052
-#, c-format
+#: ../src/common/cmdline.cpp:1063
 msgid "num"
 msgstr "num"
 
-#: ../src/common/filename.cpp:166
-#, c-format
+#: ../src/common/xtixml.cpp:258
+msgid "objects cannot have XML Text Nodes"
+msgstr ""
+
+#: ../src/html/chm.cpp:340
+#, fuzzy
+msgid "out of memory"
+msgstr "GIF: ανεπαρκής μνήμη."
+
+#: ../src/html/chm.cpp:334
+#, fuzzy
+msgid "read error"
+msgstr "Σφάλμα αρχείου"
+
+#: ../src/common/filename.cpp:177
 msgid "reading"
 msgstr "γίνεται ανάγνωση"
 
-#: ../src/msw/dde.cpp:1029
-#, c-format
+#: ../src/common/gzstream.cpp:180
+msgid "reading Gzip stream: bad crc"
+msgstr ""
+
+#: ../src/common/gzstream.cpp:182
+msgid "reading Gzip stream: incorrect length"
+msgstr ""
+
+#: ../src/msw/dde.cpp:1093
 msgid "reentrancy problem."
 msgstr "πρόβλημα επανεισαγωγής (reentrancy problem)."
 
-#: ../src/common/datetime.cpp:3347
-#, c-format
+#: ../src/common/datetime.cpp:3467
 msgid "second"
 msgstr "δεύτερο"
 
-#: ../src/common/datetime.cpp:3362
-#, c-format
+#: ../src/html/chm.cpp:338
+#, fuzzy
+msgid "seek error"
+msgstr "Σφάλμα αρχείου"
+
+#: ../src/common/datetime.cpp:3482
 msgid "seventeenth"
 msgstr "δέκατο-έβδομο"
 
-#: ../src/common/datetime.cpp:3352
-#, c-format
+#: ../src/common/datetime.cpp:3472
 msgid "seventh"
 msgstr "έβδομο"
 
-#: ../src/common/menucmn.cpp:101
-#, c-format
+#: ../src/common/menucmn.cpp:110
 msgid "shift"
 msgstr "shift"
 
-#: ../src/common/appcmn.cpp:309
-#, c-format
+#: ../src/common/appbase.cpp:310
 msgid "show this help message"
 msgstr "εμφάνιση αυτού του μηνύματος βοηθείας"
 
-#: ../src/common/datetime.cpp:3361
-#, c-format
+#: ../src/common/datetime.cpp:3481
 msgid "sixteenth"
 msgstr "δέκατο-έκτο"
 
-#: ../src/common/datetime.cpp:3351
-#, c-format
+#: ../src/common/datetime.cpp:3471
 msgid "sixth"
 msgstr "έκτο"
 
-#: ../src/common/appcmn.cpp:344
-#, c-format
+#: ../src/common/appcmn.cpp:193
 msgid "specify display mode to use (e.g. 640x480-16)"
-msgstr "διευκρινίστε τον τρόπο απεικόνισης που θα χρησιμοποιηθεί (π.χ. 640x480-16)"
+msgstr ""
+"διευκρινίστε τον τρόπο απεικόνισης που θα χρησιμοποιηθεί (π.χ. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:330
-#, c-format
+#: ../src/common/appcmn.cpp:179
 msgid "specify the theme to use"
 msgstr "καθορίστε το θέμα που θα χρησιμοποιηθεί"
 
-#: ../src/common/cmdline.cpp:1048
-#, c-format
+#: ../src/common/cmdline.cpp:1059
 msgid "str"
 msgstr "str"
 
-#: ../src/common/datetime.cpp:3355
-#, c-format
+#: ../src/common/datetime.cpp:3475
 msgid "tenth"
 msgstr "δέκατο"
 
-#: ../src/msw/dde.cpp:993
-#, c-format
+#: ../src/msw/dde.cpp:1057
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "η απάντηση στη συναλλαγή ανάγκασε το DDE_FBUSY bit να τεθεί."
 
-#: ../src/common/datetime.cpp:3348
-#, c-format
+#: ../src/common/datetime.cpp:3468
 msgid "third"
 msgstr "τρίτο"
 
-#: ../src/common/datetime.cpp:3358
-#, c-format
+#: ../src/common/datetime.cpp:3478
 msgid "thirteenth"
 msgstr "δέκατο-τρίτο"
 
-#: ../src/common/datetime.cpp:3190
+#: ../src/common/imagtiff.cpp:143 ../src/common/imagtiff.cpp:151
 #, c-format
+msgid "tiff module: %s"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3301
 msgid "today"
 msgstr "σήμερα"
 
-#: ../src/common/datetime.cpp:3192
-#, c-format
+#: ../src/common/datetime.cpp:3303
 msgid "tomorrow"
 msgstr "αύριο"
 
-#: ../src/common/datetime.cpp:3357
-#, c-format
+#: ../src/common/datetime.cpp:3477
 msgid "twelfth"
 msgstr "δωδέκατο"
 
-#: ../src/common/datetime.cpp:3365
-#, c-format
+#: ../src/common/datetime.cpp:3485
 msgid "twentieth"
 msgstr "εικοστό"
 
-#: ../src/common/fontcmn.cpp:540
-#, c-format
+#: ../src/common/fontcmn.cpp:525
 msgid "underlined"
 msgstr "υπογεγραμμένο"
 
-#: ../src/common/fontcmn.cpp:455
-#, c-format
+#: ../src/common/fontcmn.cpp:440
 msgid "underlined "
 msgstr "υπογεγραμμένο "
 
-#: ../src/common/fileconf.cpp:1887
+#: ../src/common/fileconf.cpp:1935
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "απροσδόκητο \" στη θέση %d στο '%s'."
 
 #: ../src/generic/progdlgg.cpp:282
-#, c-format
 msgid "unknown"
 msgstr "'άγνωστο"
 
-#: ../src/common/regex.cpp:144
-#, c-format
+#: ../src/common/xtixml.cpp:252
+#, fuzzy, c-format
+msgid "unknown class %s"
+msgstr ": άγνωστο σετ χαρακτήρων"
+
+#: ../src/common/regex.cpp:151 ../src/html/chm.cpp:352
 msgid "unknown error"
 msgstr "άνωστο λάθος"
 
-#: ../src/msw/dialup.cpp:447
+#: ../src/msw/dialup.cpp:445
 #, c-format
 msgid "unknown error (error code %08x)."
 msgstr "άνωστο λάθος (κωδικός λάθους %08x)"
 
 #: ../src/common/textbuf.cpp:229
-#, c-format
 msgid "unknown line terminator"
 msgstr "άγνωστο τερματικό γραμμής"
 
-#: ../src/common/file.cpp:361
-#, c-format
+#: ../src/common/file.cpp:474 ../src/common/file.cpp:501
 msgid "unknown seek origin"
 msgstr "άγνωστη αφετηρία(origin) αναζήτησης(seek)"
 
-#: ../src/common/fontmap.cpp:430
+#: ../src/common/fmapbase.cpp:698
 #, c-format
 msgid "unknown-%d"
 msgstr "άγνωστο-%d"
 
-#: ../src/common/docview.cpp:407
-#, c-format
+#: ../src/common/docview.cpp:432
 msgid "unnamed"
 msgstr "απροσδιόριστο"
 
-#: ../src/common/docview.cpp:1224
+#: ../src/common/docview.cpp:1307
 #, c-format
 msgid "unnamed%d"
 msgstr "απροσδιόριστο%d"
 
-#: ../src/common/intl.cpp:369
+#: ../src/common/gzstream.cpp:147
+msgid "unsupported compression method in Gzip stream"
+msgstr ""
+
+#: ../src/common/intl.cpp:1107
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "χρήση καταλόγου '%s' από '%s'"
 
-#: ../src/common/filename.cpp:166
-#, c-format
+#: ../src/html/chm.cpp:336
+#, fuzzy
+msgid "write error"
+msgstr "Σφάλμα αρχείου"
+
+#: ../src/common/filename.cpp:177
 msgid "writing"
 msgstr "γίνεται εγγραφή"
 
-#: ../src/common/dynlib.cpp:336
-#, c-format
-msgid "wxDllLoader failed to GetSymbol '%s'"
-msgstr "Αποτυχία του wxDllLoader να κάνει GetSymbol '%s'"
-
-#: ../src/common/dynload.cpp:282
-#, c-format
-msgid "wxDynamicLibrary failed to GetSymbol '%s'"
-msgstr "Αποτυχία του wxDynamicLibrary να κάνει GetSymbol '%s'"
-
-#: ../src/common/timercmn.cpp:335
-#, c-format
+#: ../src/common/stopwatch.cpp:279
 msgid "wxGetTimeOfDay failed."
 msgstr "το wxGetTimeOfDay απέτυχε."
 
-#: ../src/common/socket.cpp:394
-#: ../src/common/socket.cpp:448
-#, c-format
+#: ../src/common/socket.cpp:395 ../src/common/socket.cpp:449
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr "wxSocket: λανθασμένη υπογραφή (invalid signature) στο ReadMsg."
 
-#: ../src/common/socket.cpp:975
-#, c-format
+#: ../src/common/socket.cpp:945
 msgid "wxSocket: unknown event!."
 msgstr "wxSocket: άγνωστο γεγονός (event)!"
 
-#: ../src/motif/app.cpp:586
+#: ../src/motif/app.cpp:204
 #, c-format
 msgid "wxWindows could not open display for '%s': exiting."
-msgstr "Η βιλιοθήκη wxWindows δεν μπορεί να ανοίξει την απεικόνιση για το '%s': 'Εξοδος..."
+msgstr ""
+"Η βιλιοθήκη wxWindows δεν μπορεί να ανοίξει την απεικόνιση για το '%s': "
+"'Εξοδος..."
 
-#: ../src/x11/app.cpp:245
-#, c-format
+#: ../src/x11/app.cpp:176
 msgid "wxWindows could not open display. Exiting."
 msgstr "Η βιλιοθήκη wxWindows δεν μπορεί να ανοίξει την απεικόνιση. 'Εξοδος..."
 
-#: ../src/common/datetime.cpp:3191
-#, c-format
+#: ../src/common/datetime.cpp:3302
 msgid "yesterday"
 msgstr "χθες"
 
+#: ../src/common/zstream.cpp:141 ../src/common/zstream.cpp:275
+#, fuzzy, c-format
+msgid "zlib error %d"
+msgstr " (σφάλμα %ld: %s)"
+
+#: ../src/common/prntbase.cpp:450
+msgid "|<<"
+msgstr ""
+
+#~ msgid "#define %s must be an integer."
+#~ msgstr "#define %s πρέπει να είναι ακέραιος (integer)."
+
+#~ msgid "%d"
+#~ msgstr "%d"
+
+#~ msgid "%d...%d"
+#~ msgstr "%d...%d"
+
+#~ msgid "%s not a bitmap resource specification."
+#~ msgstr "%s δεν είναι καθορισμός πόρου τύπου bitmap ( bitmap resource )"
+
+#~ msgid "%s not an icon resource specification."
+#~ msgstr "%s δεν είναι καθορισμός πόρου τύπου εικονιδίου ( icon resource )"
+
+#~ msgid "%s: ill-formed resource file syntax."
+#~ msgstr "%s: κακή (ill-formed) σύνταξη αρχείου πόρων. ( resource file )"
+
+#~ msgid ""
+#~ ", expected static, #include or #define\n"
+#~ "whilst parsing resource."
+#~ msgstr ""
+#~ ", αναμενόταν static, #include ή #define\n"
+#~ "κατά την ανάγνωση του πόρου."
+
+#~ msgid "Bitmap resource specification %s not found."
+#~ msgstr "Δεν βρέθηκε ο καθοριμός πόρου bitmap %s"
+
+#~ msgid "Can't create dialog using memory template"
+#~ msgstr ""
+#~ "Δεν είναι δυνατή η δημιουργία του διαλόγου με τη χρήση προτύπου μνήμης. "
+#~ "(memory template)"
+
+#~ msgid "Can't create dialog using template '%ul'"
+#~ msgstr ""
+#~ "Δεν είναι δυνατή η δημιουργία του διαλόγου με τη χρήση του προτύπου '%ul'"
+
+#~ msgid "Could not find resource include file %s."
+#~ msgstr "Δεν βρέθηκε το αρχείο συμπερήληψης πόρων(resource include file) %s."
+
+#~ msgid ""
+#~ "Could not resolve control class or id '%s'. Use (non-zero) integer "
+#~ "instead\n"
+#~ " or provide #define (see manual for caveats)"
+#~ msgstr ""
+#~ "Δεν ήταν δυνατή η αντιστοίχηση της κλάσης ελέγχου ή του id '%s'. "
+#~ "Χρησιμοποιήστε (μη-μηδενικό) ακέραιο\n"
+#~ " ή μία οδηγία #define (ανατρέξατε στο εγχειρίδιο για λεπτομέρειες)"
+
+#~ msgid ""
+#~ "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
+#~ "or provide #define (see manual for caveats)"
+#~ msgstr ""
+#~ "Δεν ήταν δυνατή η αντιστοίχηση του menu id '%s'. Χρησιμοποιήστε (μη-"
+#~ "μηδενικό) ακέραιο\n"
+#~ "ή μία οδηγία #define (ανατρέξατε στο εγχειρίδιο για λεπτομέρειες)"
+
+#~ msgid "Date"
+#~ msgstr "Ημερομηνία"
+
+#~ msgid "Did you forget to include wx/os2/wx.rc in your resources?"
+#~ msgstr ""
+#~ "Ξεχάσατε να συμπεριλάβετε (include) το wx/os2/wx.rc στους πόρους σας "
+#~ "(resources) ;"
+
+#~ msgid "Expected '*' whilst parsing resource."
+#~ msgstr "Αναμενόταν '*' κατά την ανάγνωση του πόρου(resource)."
+
+#~ msgid "Expected '=' whilst parsing resource."
+#~ msgstr "Αναμενόταν '=' κατά την ανάγνωση του πόρου(resource)."
+
+#~ msgid "Expected 'char' whilst parsing resource."
+#~ msgstr "Αναμενόταν 'char' κατά την ανάγνωση του πόρου(resource)."
+
+#~ msgid "Failed to create dialog. Incorrect DLGTEMPLATE?"
+#~ msgstr "Απέτυχε η δημιουργία παράθυρου διαλόγου. Λανθασμένο DLGTEMPLATE ;"
+
+#~ msgid ""
+#~ "Failed to find XBM resource %s.\n"
+#~ "Forgot to use wxResourceLoadBitmapData?"
+#~ msgstr ""
+#~ "Απέτυχε η έυρεση XBM πόρου %s.\n"
+#~ "Ξεχάσατε να χρησιμοποιήσετε το wxResourceLoadBitmapData ;"
+
+#~ msgid ""
+#~ "Failed to find XBM resource %s.\n"
+#~ "Forgot to use wxResourceLoadIconData?"
+#~ msgstr ""
+#~ "Απέτυχε η έυρεση XBM πόρου %s.\n"
+#~ "Ξεχάσατε να χρησιμοποιήσετε το wxResourceLoadIconData ;"
+
+#~ msgid ""
+#~ "Failed to find XPM resource %s.\n"
+#~ "Forgot to use wxResourceLoadBitmapData?"
+#~ msgstr ""
+#~ "Απέτυχε η έυρεση XPM πόρου %s.\n"
+#~ "Ξεχάσατε να χρησιμοποιήσετε το wxResourceLoadBitmapData ;"
+
+#~ msgid "Fatal error: exiting"
+#~ msgstr "Μοιραίο σφάλμα: έξοδος"
+
+#~ msgid "Found "
+#~ msgstr "Βρέθηκαν "
+
+#~ msgid ""
+#~ "HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*."
+#~ "htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*."
+#~ "*)|*"
+#~ msgstr ""
+#~ "Αρχεία HTML (*.htm)|*.htm|Αρχεία HTML (*.html)|*.html|Βιβλία βοηθείας (*."
+#~ "htb)|*.htb|Βιβλία βοηθείας (*.zip)|*.zip|Project HTML βοήθειας (*.hhp)|*."
+#~ "hhp|Ολα τα αρχεία (*.*)|*"
+
+#~ msgid "Icon resource specification %s not found."
+#~ msgstr "Δεν βρέθηκε ο καθοριμός πόρου bitmap %s"
+
+#~ msgid "Ill-formed resource file syntax."
+#~ msgstr "Λανθασμένη συνταξη αρχείου πόρου."
+
+#~ msgid "Load file"
+#~ msgstr "Φόρτωση αρχείου"
+
+#~ msgid "No XBM facility available!"
+#~ msgstr "Δεν υπάρχει μονάδα(facility) XBM διαθέσιμη!"
+
+#~ msgid "No XPM icon facility available!"
+#~ msgstr "Δεν υπάρχει μονάδα(facility) εικονιδίων XPM διαθέσιμη!"
+
+#~ msgid "Save file"
+#~ msgstr "Αποθήκευση αρχείου"
+
+#~ msgid "Time"
+#~ msgstr "Ώρα"
+
+#~ msgid "Unexpected end of file whilst parsing resource."
+#~ msgstr "Απροσδόκητο τέλος αρχείου κατά την ανάγνωση πόρου."
+
+#~ msgid "Unrecognized style %s whilst parsing resource."
+#~ msgstr "Μη-αναγνωρίσιμο στύλ %s κατα την ανάγνωση πόρου."
+
+#~ msgid "illegal scrollbar selector %d"
+#~ msgstr "παράνομος επιλογέας(selector) γραμμής κύλισης(scrollbar) %d"
+
+#~ msgid "wxDllLoader failed to GetSymbol '%s'"
+#~ msgstr "Αποτυχία του wxDllLoader να κάνει GetSymbol '%s'"
+
+#~ msgid "wxDynamicLibrary failed to GetSymbol '%s'"
+#~ msgstr "Αποτυχία του wxDynamicLibrary να κάνει GetSymbol '%s'"
