@@ -1024,3 +1024,15 @@ samples/menu/*.png
 samples/menu/*.ico
 samples/menu/*.txt
 
+samples/font/*.cpp
+samples/font/*.h
+samples/font/makefile*
+samples/font/*.rc
+samples/font/*.def
+samples/font/*.bmp
+samples/font/*.xpm
+samples/font/*.xbm
+samples/font/*.png
+samples/font/*.ico
+samples/font/*.txt
+

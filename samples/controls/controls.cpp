@@ -49,12 +49,13 @@
 
 #ifdef __WIN16__
     // Win16 doesn't have them
-    #ifndef wxUSE_SPINBTN
+    #ifdef wxUSE_SPINBTN
     #undef wxUSE_SPINBTN
+    #endif
     #define wxUSE_SPINBTN 0
 #else
-    #if !defined(wxUSE_SPINBTN)
-        #define wxUSE_SPINBTN 1
+    #ifndef wxUSE_SPINBTN
+    #define wxUSE_SPINBTN 1
     #endif
 #endif // __WIN16__
 

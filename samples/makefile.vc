@@ -60,6 +60,8 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\dynamic
         nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\font
+        nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\forty
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\fractal
@@ -88,6 +90,8 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\mdi
         nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\menu
+        nmake -f makefile.vc FINAL=$(FINAL)
 !if "$(FINAL)" == "0"
         cd $(WXDIR)\samples\memcheck
         nmake -f makefile.vc FINAL=$(FINAL)
@@ -101,6 +105,8 @@ all:
         cd $(WXDIR)\samples\minimal
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\nativdlg
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\nettest
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\notebook
         nmake -f makefile.vc FINAL=$(FINAL)
@@ -125,6 +131,8 @@ all:
         cd $(WXDIR)\samples\sashtest
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\scroll
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\scrollsub
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\splitter
         nmake -f makefile.vc FINAL=$(FINAL)
@@ -178,6 +186,8 @@ clean:
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\dynamic
         nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\font
+        nmake -f makefile.vc clean
         cd $(WXDIR)\samples\forty
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\fractal
@@ -208,11 +218,15 @@ clean:
 !endif
         cd $(WXDIR)\samples\mfc
         nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\menu
+        nmake -f makefile.vc clean
         cd $(WXDIR)\samples\minifram
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\minimal
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\nativdlg
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\nettest
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\notebook
         nmake -f makefile.vc clean
@@ -235,6 +249,8 @@ clean:
         cd $(WXDIR)\samples\sashtest
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\scroll
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\scrollsub
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\splitter
         nmake -f makefile.vc clean

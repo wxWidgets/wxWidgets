@@ -453,11 +453,12 @@
 #endif
 
 // Problem with VC++ 5 and dobjcmn.cpp
-
+/*
 #if defined(_MSC_VER) && (_MSC_VER > 1020) && (_MSC_VER < 1200)
 #undef wxUSE_DRAG_AND_DROP
 #define wxUSE_DRAG_AND_DROP 0
 #endif
+*/
 
 #endif
     // _WX_SETUP_H_

@@ -141,17 +141,14 @@ project files are unlikely to be compatible, so use one method or
 the other.
 
 Note (3): VC++ 5's optimization code seems to be broken and can
-cause problems: this can be seen when deleting an object Dialog
-Editor, in Release mode with optimizations on. If in doubt,
-switch off optimisations, although this will result in much
+cause both compile and run-time problems: this can be seen when
+deleting an object Dialog Editor, in Release mode with optimizations
+on. If in doubt, switch off optimisations, although this will result in much
 larger executables. It seems possible that the library can be created with
 strong optimization, so long as the application is not strongly
 optimized. For example, in wxWindows project, set to 'Minimum
 Size'. In Dialog Editor project, set to 'Customize: Favor Small
 Code' (and no others). This will then work.
-Note also that a bug in the compiler, even without optimization,
-causes dobjcmn.cpp to produce an internal error, so setup.h
-switches off drag and drop for VC++ 5.
 
 Similarly, in VC++ 4, optimization can cause internal compiler
 errors, so edit src\makevc.env and change /O1 to /Od before
@@ -388,7 +385,7 @@ Notes:
 
 - Doesn't compile src/msw/ole files, so no drag and drop.
 
-- There's a bug in the Mingw32 headers for some distributions.
+- There's a bug in Mingw32 headers for some early distributions.
 
   in include/windows32/defines.h, where it says:
 
