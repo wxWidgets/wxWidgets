@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -53,6 +53,8 @@ EXPORTS
       wxConstructorForwxDefaultArtProviderModule__Fv
   ;From object file:  ..\common\appcmn.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxAssert(int,const char*,int,const char*,const char*)
+      wxAssert__FiPCcT1N22
       ;wxAppBase::OnInitGui()
       OnInitGui__9wxAppBaseFv
       ;wxAppBase::OnInitCmdLine(wxCmdLineParser&)
@@ -3478,6 +3480,8 @@ EXPORTS
       sm_classwxLocaleModule__14wxLocaleModule
       ;wxLanguageInfoArray::RemoveAt(unsigned int,unsigned int)
       RemoveAt__19wxLanguageInfoArrayFUiT1
+      ;wxLocale::GetLanguageInfo(int)
+      GetLanguageInfo__8wxLocaleFi
       ;wxLocale::CreateLanguagesDB()
       CreateLanguagesDB__8wxLocaleFv
       ;wxLocale::~wxLocale()
@@ -3548,10 +3552,21 @@ EXPORTS
       IsLoaded__8wxLocaleCFPCc
   ;From object file:  ..\common\ipcbase.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxConnectionBase::wxConnectionBase(char*,int)
+      __ct__16wxConnectionBaseFPci
+      ;wxConnectionBase::wxConnectionBase(wxConnectionBase&)
+      __ct__16wxConnectionBaseFR16wxConnectionBase
       ;wxConnectionBase::sm_classwxConnectionBase
       sm_classwxConnectionBase__16wxConnectionBase
+      ;wxConnectionBase::wxConnectionBase()
+      __ct__16wxConnectionBaseFv
+      ;wxConnectionBase::~wxConnectionBase()
+      __dt__16wxConnectionBaseFv
+      ;wxConnectionBase::GetBufferAtLeast(unsigned int)
+      GetBufferAtLeast__16wxConnectionBaseFUi
       ;wxClientBase::sm_classwxClientBase
       sm_classwxClientBase__12wxClientBase
+      __vft16wxConnectionBase8wxObject
       ;wxServerBase::sm_classwxServerBase
       sm_classwxServerBase__12wxServerBase
   ;From object file:  ..\common\layout.cpp
@@ -6429,6 +6444,8 @@ EXPORTS
       __vft18wxGenericValidator8wxObject
       ;wxGenericValidator::Copy(const wxGenericValidator&)
       Copy__18wxGenericValidatorFRC18wxGenericValidator
+      ;wxGenericValidator::sm_classwxGenericValidator
+      sm_classwxGenericValidator__18wxGenericValidator
       ;wxGenericValidator::TransferFromWindow()
       TransferFromWindow__18wxGenericValidatorFv
   ;From object file:  ..\common\validate.cpp
@@ -7208,7 +7225,6 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxVsnprintf_(char*,unsigned int,const char*,char*)
       wxVsnprintf___FPcUiPCcT1
-      wcslen
       ;wxMB2WC(wchar_t*,const char*,unsigned int)
       wxMB2WC__FPwPCcUi
       ;wxSnprintf_(char*,unsigned int,const char*,...)
@@ -7217,6 +7233,8 @@ EXPORTS
       wxWC2MB__FPcPCwUi
       ;wxOKlibc()
       wxOKlibc__Fv
+      ;wxStrtok(char*,const char*,char**)
+      wxStrtok__FPcPCcPPc
   ;From object file:  ..\common\wxexpr.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxExpr::GetAttributeValue(const wxString&,long&) const
@@ -8040,6 +8058,8 @@ EXPORTS
       InsertRows__17wxGridStringTableFUiT1
       ;wxGridTableBase::GetValueAsBool(int,int)
       GetValueAsBool__15wxGridTableBaseFiT1
+      ;wxGridCellAttr::GetSize(int*,int*) const
+      GetSize__14wxGridCellAttrCFPiT1
       ;wxGrid::GetRowBottom(int) const
       GetRowBottom__6wxGridCFi
       ;wxGridTypeRegistry::GetEditor(int)
@@ -8089,6 +8109,8 @@ EXPORTS
       LookupAttr__6wxGridCFiT1PP14wxGridCellAttr
       ;wxGridCellAttrProvider::InitData()
       InitData__22wxGridCellAttrProviderFv
+      ;wxGrid::GetSelectionMode() const
+      GetSelectionMode__6wxGridCFv
       ;wxGridCellAttr::GetRenderer(wxGrid*,int,int) const
       GetRenderer__14wxGridCellAttrCFP6wxGridiT2
       ;wxGridColLabelWindow::GetEventTable() const
@@ -8201,14 +8223,14 @@ EXPORTS
       SetColFormatFloat__6wxGridFiN21
       ;wxGridTableBase::SetColAttr(wxGridCellAttr*,int)
       SetColAttr__15wxGridTableBaseFP14wxGridCellAttri
+      ;wxGrid::SetCellSize(int,int,int,int)
+      SetCellSize__6wxGridFiN31
       ;wxGridRowOrColAttrData::SetAttr(wxGridCellAttr*,int)
       SetAttr__22wxGridRowOrColAttrDataFP14wxGridCellAttri
       ;wxGridCellWithAttrArray::RemoveAt(unsigned int,unsigned int)
       RemoveAt__23wxGridCellWithAttrArrayFUiT1
       ;wxGrid::MakeCellVisible(int,int)
       MakeCellVisible__6wxGridFiT1
-      ;wxGrid::IsInSelection(int,int)
-      IsInSelection__6wxGridFiT1
       ;wxGridTableBase::InsertRows(unsigned int,unsigned int)
       InsertRows__15wxGridTableBaseFUiT1
       ;wxGridStringTable::GetValue(int,int)
@@ -8298,6 +8320,10 @@ EXPORTS
       GetTextColour__14wxGridCellAttrCFv
       ;wxGridCellNumberRenderer::GetString(wxGrid&,int,int)
       GetString__24wxGridCellNumberRendererFR6wxGridiT2
+      ;wxGrid::GetSelectionBlockTopLeft() const
+      GetSelectionBlockTopLeft__6wxGridCFv
+      ;wxGrid::GetSelectedCells() const
+      GetSelectedCells__6wxGridCFv
       ;wxGrid::GetEventTable() const
       GetEventTable__6wxGridCFv
       ;wxGrid::GetDefaultRowSize()
@@ -8402,8 +8428,8 @@ EXPORTS
       BeginEdit__21wxGridCellFloatEditorFiT1P6wxGrid
       ;wxGrid::AppendRows(int,unsigned long)
       AppendRows__6wxGridFiUl
-      ;wxGrid::SetRowSize(int,int)
-      SetRowSize__6wxGridFiT1
+      ;wxGrid::IsInSelection(int,int) const
+      IsInSelection__6wxGridCFiT1
       ;wxGridStringTable::sm_classwxGridStringTable
       sm_classwxGridStringTable__17wxGridStringTable
       ;wxGridColLabelWindow::wxGridColLabelWindow(wxGrid*,int,const wxPoint&,const wxSize&)
@@ -8420,6 +8446,8 @@ EXPORTS
       YToRow__6wxGridFi
       ;wxGridCellAttrProvider::UpdateAttrCols(unsigned int,int)
       UpdateAttrCols__22wxGridCellAttrProviderFUii
+      ;wxGrid::SetRowSize(int,int)
+      SetRowSize__6wxGridFiT1
       ;wxGrid::SetRowMinimalHeight(int,int)
       SetRowMinimalHeight__6wxGridFiT1
       ;wxGrid::SetRowLabelSize(int)
@@ -8477,6 +8505,8 @@ EXPORTS
       SetDefaultCellTextColour__6wxGridFRC8wxColour
       ;wxGrid::SetCellRenderer(int,int,wxGridCellRenderer*)
       SetCellRenderer__6wxGridFiT1P18wxGridCellRenderer
+      ;wxGrid::SetAttr(int,int,wxGridCellAttr*)
+      SetAttr__6wxGridFiT1P14wxGridCellAttr
       ;wxGridCellAttrProvider::SetAttr(wxGridCellAttr*,int,int)
       SetAttr__22wxGridCellAttrProviderFP14wxGridCellAttriT2
       ;wxGrid::SendEvent(const int,int,int)
@@ -8495,8 +8525,12 @@ EXPORTS
       IsSelection__6wxGridFv
       ;wxGrid::IsCellEditControlEnabled() const
       IsCellEditControlEnabled__6wxGridCFv
+      ;wxGrid::GetSelectionBlockBottomRight() const
+      GetSelectionBlockBottomRight__6wxGridCFv
       ;wxGridCornerLabelWindow::GetEventTable() const
       GetEventTable__23wxGridCornerLabelWindowCFv
+      ;wxGrid::GetDefaultCellOverflow()
+      GetDefaultCellOverflow__6wxGridFv
       ;wxGrid::EndBatch()
       EndBatch__6wxGridFv
       ;wxGrid::DrawCellHighlight(wxDC&,const wxGridCellAttr*)
@@ -8544,6 +8578,8 @@ EXPORTS
       __ct__22wxGridCellChoiceEditorFUiPC8wxStringUl
       ;wxGridCellTextEditor::StartingKey(wxKeyEvent&)
       StartingKey__20wxGridCellTextEditorFR10wxKeyEvent
+      ;wxGrid::SetDefaultCellOverflow(unsigned long)
+      SetDefaultCellOverflow__6wxGridFUl
       ;wxGridWindow::ScrollWindow(int,int,const wxRect*)
       ScrollWindow__12wxGridWindowFiT1PC6wxRect
       ;wxGrid::ProcessRowLabelMouseEvent(wxMouseEvent&)
@@ -8606,6 +8642,8 @@ EXPORTS
       __as__17wxGridStringArrayFRC17wxGridStringArray
       ;wxGridRowOrColAttrData::UpdateAttrRowsOrCols(unsigned int,int)
       UpdateAttrRowsOrCols__22wxGridRowOrColAttrDataFUii
+      ;wxGridCellAttr::SetSize(int,int)
+      SetSize__14wxGridCellAttrFiT1
       ;wxGrid::SetColSize(int,int)
       SetColSize__6wxGridFiT1
       ;wxGrid::SetColLabelAlignment(int,int)
@@ -8636,6 +8674,8 @@ EXPORTS
       GetColLabelAlignment__6wxGridFPiT1
       ;wxGrid::GetCellTextColour(int,int)
       GetCellTextColour__6wxGridFiT1
+      ;wxGrid::GetCellOverflow(int,int)
+      GetCellOverflow__6wxGridFiT1
       ;wxGrid::GetCellFont(int,int)
       GetCellFont__6wxGridFiT1
       ;wxGrid::DeselectRow(int)
@@ -8676,6 +8716,8 @@ EXPORTS
       GetString__23wxGridCellFloatRendererFR6wxGridiT2
       ;wxGridCellFloatEditor::GetString() const
       GetString__21wxGridCellFloatEditorCFv
+      ;wxGrid::GetSelectedRows() const
+      GetSelectedRows__6wxGridCFv
       ;wxGridStringTable::GetNumberCols()
       GetNumberCols__17wxGridStringTableFv
       ;wxGrid::GetModelValues()
@@ -8716,6 +8758,8 @@ EXPORTS
       SetParameters__21wxGridCellFloatEditorFRC8wxString
       ;wxGridStringTable::SetColLabelValue(int,const wxString&)
       SetColLabelValue__17wxGridStringTableFiRC8wxString
+      ;wxGrid::GetCellSize(int,int,int*,int*)
+      GetCellSize__6wxGridFiT1PiT3
       ;wxGrid::GetCellAlignment(int,int,int*,int*)
       GetCellAlignment__6wxGridFiT1PiT3
       ;wxGrid::DrawGridSpace(wxDC&)
@@ -8741,8 +8785,12 @@ EXPORTS
       SetReadOnly__6wxGridFiT1Ul
       ;wxGrid::SetLabelFont(const wxFont&)
       SetLabelFont__6wxGridFRC6wxFont
+      ;wxGrid::SetCellOverflow(int,int,unsigned long)
+      SetCellOverflow__6wxGridFiT1Ul
       ;wxGrid::SelectCol(int,unsigned long)
       SelectCol__6wxGridFiUl
+      ;wxGrid::Refresh(unsigned long,const wxRect*)
+      Refresh__6wxGridFUlPC6wxRect
       ;wxGrid::ProcessGridCellMouseEvent(wxMouseEvent&)
       ProcessGridCellMouseEvent__6wxGridFR12wxMouseEvent
       ;wxGridColLabelWindow::OnMouseWheel(wxMouseEvent&)
@@ -8863,6 +8911,8 @@ EXPORTS
       InitColWidths__6wxGridFv
       ;wxGrid::HideCellEditControl()
       HideCellEditControl__6wxGridFv
+      ;wxGrid::GetSelectedCols() const
+      GetSelectedCols__6wxGridCFv
       ;wxGridStringTable::GetNumberRows()
       GetNumberRows__17wxGridStringTableFv
       ;wxGridCellAttr::GetFont() const
@@ -10175,12 +10225,16 @@ EXPORTS
       DrawField__11wxStatusBarFR4wxDCi
       ;wxStatusBar::DrawFieldText(wxDC&,int)
       DrawFieldText__11wxStatusBarFR4wxDCi
+      ;wxStatusBar::Init()
+      Init__11wxStatusBarFv
       ;wxStatusBar::InitColours()
       InitColours__11wxStatusBarFv
       ;wxStatusBar::Create(wxWindow*,int,long,const wxString&)
       Create__11wxStatusBarFP8wxWindowilRC8wxString
       ;wxStatusBar::OnPaint(wxPaintEvent&)
       OnPaint__11wxStatusBarFR12wxPaintEvent
+      ;wxStatusBar::OnSize(wxSizeEvent&)
+      OnSize__11wxStatusBarFR11wxSizeEvent
       ;wxStatusBar::GetStatusText(int) const
       GetStatusText__11wxStatusBarCFi
       ;wxStatusBar::SetFieldsCount(int,const int*)
@@ -10200,8 +10254,6 @@ EXPORTS
       sm_eventTable__11wxStatusBar
       ;wxStatusBar::sm_eventTableEntries
       sm_eventTableEntries__11wxStatusBar
-      ;wxStatusBar::wxStatusBar()
-      __ct__11wxStatusBarFv
   ;From object file:  ..\generic\tabg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTabControl::OnDraw(wxDC&,unsigned long)
@@ -10476,6 +10528,8 @@ EXPORTS
       DeleteChildren__17wxGenericTreeCtrlFRC12wxTreeItemId
       ;wxGenericTreeCtrl::Collapse(const wxTreeItemId&)
       Collapse__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::OnRenameCancelled(wxGenericTreeItem*)
+      OnRenameCancelled__17wxGenericTreeCtrlFP17wxGenericTreeItem
       ;wxGenericTreeCtrl::SetSpacing(unsigned int)
       SetSpacing__17wxGenericTreeCtrlFUi
       ;wxGenericTreeCtrl::PrependItem(const wxTreeItemId&,const wxString&,int,int,wxTreeItemData*)
@@ -13014,10 +13068,12 @@ EXPORTS
       _GSocket_Recv_Dgram
       _GSocket_Send_Stream
       GSocket_SetCallback
-      GSocket_GetLocal
+      ;GSocket_close(_GSocket*)
+      GSocket_close__FP8_GSocket
       _GSocket_Input_Timeout
       _GAddress_Init_INET
       GSocket_Read
+      GSocket_GetLocal
       GSocket_Connect
       GAddress_INET_GetPort
       GSocket_destroy
