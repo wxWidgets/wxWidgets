@@ -51,6 +51,8 @@
 #include "wx/file.h"
 #include "wx/tokenzr.h"
 #include "wx/module.h"
+#include "wx/fontmap.h"
+#include "wx/encconv.h"
 
 #ifdef __WIN32__
     #include "wx/msw/private.h"
@@ -506,15 +508,8 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
   return NULL;
 }
 
-
-#if wxUSE_GUI
-#include "wx/fontmap.h"
-#include "wx/encconv.h"
-#endif
-
 void wxMsgCatalog::ConvertEncoding()
 {
-#if wxUSE_GUI
     wxFontEncoding enc;
 
     // first, find encoding header:
@@ -537,19 +532,7 @@ void wxMsgCatalog::ConvertEncoding()
     if ( enc == wxFONTENCODING_SYSTEM )
         return; // unknown encoding
 
-    wxFontEncoding targetEnc = wxFONTENCODING_SYSTEM;
-#ifdef __UNIX__
-    wxString langFull;
-    if (wxGetEnv(wxT("LC_ALL"), &langFull) ||
-        wxGetEnv(wxT("LC_CTYPE"), &langFull) ||
-        wxGetEnv(wxT("LANG"), &langFull))
-    {
-        wxString lcharset = langFull.AfterFirst(wxT('.')).BeforeFirst(wxT('@'));
-        if (!lcharset.IsEmpty())
-            targetEnc = wxTheFontMapper->CharsetToEncoding(lcharset, FALSE);
-    }
-#endif
-
+    wxFontEncoding targetEnc = wxLocale::GetSystemEncoding();
     if (targetEnc == wxFONTENCODING_SYSTEM)
     {
         wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
@@ -565,7 +548,6 @@ void wxMsgCatalog::ConvertEncoding()
 
     for (size_t i = 0; i < m_numStrings; i++)
         converter.Convert((char*)StringAtOfs(m_pTransTable, i));
-#endif // wxUSE_GUI
 }
 
 
@@ -962,6 +944,7 @@ wxString wxLocale::GetSystemEncodingName()
     setlocale(LC_CTYPE, "");
     char *alang = nl_langinfo(CODESET);
     setlocale(LC_CTYPE, oldLocale);
+    free(oldLocale);
     if (alang)
     {
         encname = wxConvLibc.cMB2WX(alang);
