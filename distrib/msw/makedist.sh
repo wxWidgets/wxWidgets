@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 # makedist.sh
 #
 # Build wxWindows 2 for Windows distribution.
