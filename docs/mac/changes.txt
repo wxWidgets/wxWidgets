@@ -1,1 +1,0 @@
-These are the changes for wxMac 2.3.2

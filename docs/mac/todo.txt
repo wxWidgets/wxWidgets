@@ -1,8 +1,0 @@
-Bugs/Defects (GD)
------------------
-* Implement toggle buttons missing under Mac OS & Mac OS X
-
-* Correct smart processing errors that provoke the following error:
-
-cpp-precomp: warning: errors during smart preprocessing, retrying in basic mode
-
