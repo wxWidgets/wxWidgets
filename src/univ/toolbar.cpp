@@ -55,16 +55,17 @@ static const wxCoord INVALID_WIDTH = -1;
 class WXDLLEXPORT wxToolBarTool : public wxToolBarToolBase
 {
 public:
-    wxToolBarTool( wxToolBarBase *tbar = (wxToolBarBase *)NULL,
-                   int id = wxID_SEPARATOR,
-                   const wxBitmap& bitmap1 = wxNullBitmap,
-                   const wxBitmap& bitmap2 = wxNullBitmap,
-                   bool toggle = FALSE,
-                   wxObject *clientData = (wxObject *) NULL,
-                   const wxString& shortHelpString = wxEmptyString,
-                   const wxString& longHelpString = wxEmptyString )
-        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle, clientData,
-                            shortHelpString, longHelpString)
+    wxToolBarTool(wxToolBar *tbar,
+                  int id,
+                  const wxString& label,
+                  const wxBitmap& bmpNormal,
+                  const wxBitmap& bmpDisabled,
+                  wxItemKind kind,
+                  wxObject *clientData,
+                  const wxString& shortHelp,
+                  const wxString& longHelp)
+        : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
+                            clientData, shortHelp, longHelp)
     {
         // no position yet
         m_x =
@@ -230,7 +231,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
     // created disabled-state bitmap on demand
     if ( !enable && !tool->GetDisabledBitmap().Ok() )
     {
-        wxImage image( tool->GetNormalBitmap() );
+        wxImage image( tool->GetNormalBitmap().ConvertToImage() );
 
         // TODO: don't hardcode 180
         unsigned char bg_red = 180;
@@ -278,7 +279,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
             }
         }
 
-        tool->SetDisabledBitmap( image.ConvertToBitmap() );
+        tool->SetDisabledBitmap(image);
     }
 
     RefreshTool(tool);
@@ -297,15 +298,16 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *tool, bool WXUNUSED(toggle))
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
-                                         const wxBitmap& bitmap1,
-                                         const wxBitmap& bitmap2,
-                                         bool toggle,
+                                         const wxString& label,
+                                         const wxBitmap& bmpNormal,
+                                         const wxBitmap& bmpDisabled,
+                                         wxItemKind kind,
                                          wxObject *clientData,
-                                         const wxString& shortHelpString,
-                                         const wxString& longHelpString)
+                                         const wxString& shortHelp,
+                                         const wxString& longHelp)
 {
-    return new wxToolBarTool( this, id, bitmap1, bitmap2, toggle,
-                              clientData, shortHelpString, longHelpString);
+    return new wxToolBarTool(this, id, label, bmpNormal, bmpDisabled, kind,
+                             clientData, shortHelp, longHelp);
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
