@@ -22,21 +22,21 @@ MAKE_CONST_WXSTRING(NOTEBOOK_NAME);
 
 // TODO:  Virtualize this class so other book controls can be derived in Python
 
-MustHaveApp(wxBookCtrl);
+MustHaveApp(wxBookCtrlBase);
 
 //  Common base class for wxList/Tree/Notebook
-class wxBookCtrl : public wxControl
+class wxBookCtrlBase : public wxControl
 {
 public:
     // This is an ABC, it can't be constructed...
 
-//     wxBookCtrl(wxWindow *parent,
+//     wxBookCtrlBase(wxWindow *parent,
 //                wxWindowID id,
 //                const wxPoint& pos = wxDefaultPosition,
 //                const wxSize& size = wxDefaultSize,
 //                long style = 0,
 //                const wxString& name = wxPyEmptyString);
-//     %name(PreBookCtrl)wxBookCtrl();
+//     %name(PreBookCtrlBase)wxBookCtrlBase();
 //     bool Create(wxWindow *parent,
 //                 wxWindowID id,
 //                 const wxPoint& pos = wxDefaultPosition,
@@ -127,10 +127,10 @@ public:
 
 
 
-class wxBookCtrlEvent : public wxNotifyEvent
+class wxBookCtrlBaseEvent : public wxNotifyEvent
 {
 public:
-    wxBookCtrlEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
+    wxBookCtrlBaseEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                     int nSel = -1, int nOldSel = -1);
 
         // the currently selected page (-1 if none)
@@ -167,7 +167,7 @@ enum {
 
 MustHaveApp(wxNotebook);
 
-class wxNotebook : public wxBookCtrl {
+class wxNotebook : public wxBookCtrlBase {
 public:
     %pythonAppend wxNotebook         "self._setOORInfo(self)"
     %pythonAppend wxNotebook()       ""
@@ -219,7 +219,7 @@ wx.NB_HITTEST flags.", "");
 
 
 
-class wxNotebookEvent : public wxBookCtrlEvent
+class wxNotebookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
@@ -295,7 +295,7 @@ enum
 MustHaveApp(wxListbook);
 
 //  wxListCtrl and wxNotebook combination
-class wxListbook : public wxBookCtrl
+class wxListbook : public wxBookCtrlBase
 {
 public:
     %pythonAppend wxListbook         "self._setOORInfo(self)"
@@ -324,7 +324,7 @@ public:
 
 
 
-class wxListbookEvent : public wxBookCtrlEvent
+class wxListbookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxListbookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
@@ -359,7 +359,7 @@ enum {
 
 MustHaveApp(wxChoicebook);
 
-class wxChoicebook : public wxBookCtrl
+class wxChoicebook : public wxBookCtrlBase
 {
 public:
     %pythonAppend wxChoicebook         "self._setOORInfo(self)"
@@ -389,7 +389,7 @@ public:
 };
 
 
-class wxChoicebookEvent : public wxBookCtrlEvent
+class wxChoicebookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxChoicebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
@@ -413,11 +413,11 @@ class wxBookCtrlSizer: public wxSizer
 public:
     %pythonAppend wxBookCtrlSizer "self._setOORInfo(self)"
 
-    wxBookCtrlSizer( wxBookCtrl *nb );
+    wxBookCtrlSizer( wxBookCtrlBase *nb );
 
     void RecalcSizes();
     wxSize CalcMin();
-    wxBookCtrl *GetControl();
+    wxBookCtrlBase *GetControl();
 };
 
 
