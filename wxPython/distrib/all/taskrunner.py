@@ -182,6 +182,7 @@ class TaskRunner(object):
         except KeyboardInterrupt:
             print "STOPPING JOBS..."
             self.stopAllJobs()
+            return 1
 
         except:
             print "Unknown exception..."
