@@ -18,7 +18,7 @@
    first define Windows symbols if they're not defined on the command line: we
    can autodetect everything we need if _WIN32 is defined
  */
-#if defined(_WIN32) || defined(WIN32) || defined(__NT__)
+#if defined(_WIN32) || defined(WIN32) || defined(__NT__) || defined(__WXWINCE__)
     #ifndef __WXMSW__
         #define __WXMSW__
     #endif
