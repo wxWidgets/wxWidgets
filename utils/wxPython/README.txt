@@ -32,7 +32,8 @@ Python.  For example, some methods that return mutliple values via
 argument pointers in C++ will return a tuple of values in Python.
 These differences have not been documented yet so if something isn't
 working the same as described in the wxWindows documents the best
-thing to do is to scan through the wxPython sources.
+thing to do is to scan through the wxPython sources, especially the .i
+files, as that is where the interfaces for wxPython are defined.
 
 Currently this extension module is designed such that the entire
 application will be written in Python.  I havn't tried it yet, but I
@@ -41,14 +42,32 @@ application will cause problems.  However there is a plan to support
 this in the future.
 
 
+
+What's new in 0.4.2
+-------------------
+
+wxPython on wxGTK works!!!  Both dynamic and static on Linux and
+static on Solaris have been tested.  Many thanks go to Harm
+<H.v.d.Heijden@phys.tue.nl> for his astute detective work on tracking
+down a nasty DECREF bug.  Okay so I have to confess that it was just a
+DSM (Dumb Stupid Mistake) on my part but it was nasty none the less
+because the behavior was so different on different platforms.
+
+
+The dynamicly loaded module on Solaris is still segfaulting, so it
+must have been a different issue all along...
+
+
+
 What's New in 0.4
 -----------------
+
 1. Worked on wxGTK compatibility.  It is partially working.  On a
 Solaris/Sparc box wxPython is working but only when it is statically
 linked with the Python interpreter.  When built as a dyamically loaded
-extension module, things acting weirdly and it soon seg-faults.  And on
-Linux ???????  (I don't know.  I can't get wxGTK to build right now.
-I'll have to look into that... :-)
+extension module, things start acting weirdly and it soon seg-faults.
+And on Linux both the statically linked and the dynamically linked
+version segfault shortly after starting up.
 
 2. Added Toolbar, StatusBar and SplitterWindow classes.
 
@@ -63,12 +82,19 @@ extension module.  This enabled me to only have to deal with a small
 amount of code and only have to bother with the exceptional issues.
 SWIG takes care of the rest and generates all the repetative code for
 me.  You don't need SWIG to build the extension module as all the
-generated C++ code is included in the src directory.
+generated C++ code is included under the src directory.
+
+I added a few minor features to SWIG to control some of the code
+generation.  If you want to playaround with this the patches are in
+wxPython/SWIG.patches and they should be applied to the 1.1p5 version
+of SWIG.  These new patches are documented at
+http://starship.skyport.net/crew/robind/python/#swig, and they should
+also end up in the 1.2 version of SWIG.
 
 wxPython is organized as a Python package.  This means that the
 directory containing the results of the build process should be a
 subdirectory of a directory on the PYTHONPATH.  (And preferably should
-be named wxPython.)  You can control where the bulid process will dump
+be named wxPython.)  You can control where the build process will dump
 wxPython by setting the TARGETDIR makefile variable.  The default is
 $(WXWIN)/utils/wxPython, where this README.txt is located.  If you
 leave it here then you should add $(WXWIN)/utils to your PYTHONPATH.
@@ -112,15 +138,11 @@ version of Python either from the command line or from a shortcut.
 Unix
 ----
 
-NOTE:  I don't have wxPython working yet with wxGTK, so if you aren't
-using Win32 you can skip the rest of this file and check back in a
-week or so.
-
-
 1. Change into the $(WXWIN)/utils/wxPython/src directory.
 
 2. Edit Setup.in and ensure that the flags, directories, and toolkit
-options are correct.  See the above commentary about TARGETDIR.
+options are correct.  See the above commentary about TARGETDIR.  There
+are a few sample Setup.in.[platform] files provided.
 
 3. Run this command to generate a makefile:
 
@@ -146,3 +168,6 @@ module:
 
 Robin Dunn
 robin@alldunn.com
+
+
+
