@@ -36,6 +36,8 @@ public:
     // ctor loads all info into memory for quicker access later on
     // TODO it would be nice to load them all, but parse on demand only...
     wxMimeTypesManagerImpl();
+    ~wxMimeTypesManagerImpl();
+    
 
     // implement containing class functions
     wxFileType *GetFileTypeFromExtension(const wxString& ext);

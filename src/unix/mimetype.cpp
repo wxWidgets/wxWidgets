@@ -138,6 +138,11 @@ public:
     {
         m_next = NULL;
     }
+    
+    ~MailCapEntry()
+    {
+        if (m_next) delete m_next;
+    }
 
     // accessors
     const wxString& GetOpenCmd()  const { return m_openCmd;  }
@@ -1040,6 +1045,14 @@ wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
     for ( size_t hn = 0; hn < count; hn++ )
         handlers[hn]->GetMimeInfoRecords(this);
 }
+
+
+wxMimeTypesManagerImpl::~wxMimeTypesManagerImpl()
+{
+    size_t cnt = m_aEntries.GetCount();
+    for (size_t i = 0; i < cnt; i++) delete m_aEntries[i];
+}
+
 
 wxFileType *
 wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
