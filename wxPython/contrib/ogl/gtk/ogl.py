@@ -694,7 +694,7 @@ class PyShape(PyShapeEvtHandler):
         return _ogl.PyShape_GetRegionId(*args, **kwargs)
 
     def NameRegions(*args, **kwargs):
-        """NameRegions(wxString parentName="")"""
+        """NameRegions(wxString parentName=wxPyEmptyString)"""
         return _ogl.PyShape_NameRegions(*args, **kwargs)
 
     def GetRegions(*args, **kwargs):

@@ -5305,7 +5305,7 @@ static PyObject *_wrap_PyShape_GetRegionId(PyObject *self, PyObject *args, PyObj
 static PyObject *_wrap_PyShape_NameRegions(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
-    wxString const &arg2_defvalue = "" ;
+    wxString const &arg2_defvalue = wxPyEmptyString ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     bool temp2 = False ;
     PyObject * obj0 = 0 ;

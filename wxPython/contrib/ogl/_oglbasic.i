@@ -264,7 +264,7 @@ public:
     void SetRegionName(const wxString& name, int regionId = 0);
     wxString GetRegionName(int regionId);
     int GetRegionId(const wxString& name);
-    void NameRegions(const wxString& parentName = "");
+    void NameRegions(const wxString& parentName = wxPyEmptyString);
 
     // wxList& GetRegions();
     %extend {
