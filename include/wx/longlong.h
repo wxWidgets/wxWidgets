@@ -51,12 +51,12 @@
 #if defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
     #define wxLongLong_t long
     #define wxLongLongIsLong
-#elif defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8
-    #define wxLongLong_t long long
 #elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ )
     #define wxLongLong_t __int64
 #elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
     #define wxLongLong_t __int64
+#elif defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8
+    #define wxLongLong_t long long
 #elif defined(__MINGW32__)
     #define wxLongLong_t long long
 #elif defined(__MWERKS__)
