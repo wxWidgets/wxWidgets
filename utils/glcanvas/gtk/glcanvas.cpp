@@ -220,7 +220,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
 		       GLX_RED_SIZE, 1, 
 		       GLX_GREEN_SIZE, 1, 
 		       GLX_BLUE_SIZE, 1, 
-		       GLX_ALPHA_SIZE, 1, 
+		       GLX_ALPHA_SIZE, 0, 
 		       None };
 	attribList = (int*) data;
     }
