@@ -29,7 +29,7 @@ class wxColourDataPtr(wxObjectPtr):
         return val
     def GetColour(self, *_args, **_kwargs):
         val = apply(cmndlgsc.wxColourData_GetColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetCustomColour(self, *_args, **_kwargs):
         val = apply(cmndlgsc.wxColourData_GetCustomColour,(self,) + _args, _kwargs)
@@ -241,7 +241,7 @@ class wxFontDataPtr(wxObjectPtr):
         return val
     def GetColour(self, *_args, **_kwargs):
         val = apply(cmndlgsc.wxFontData_GetColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetChosenFont(self, *_args, **_kwargs):
         val = apply(cmndlgsc.wxFontData_GetChosenFont,(self,) + _args, _kwargs)
