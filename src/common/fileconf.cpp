@@ -764,7 +764,7 @@ bool wxFileConfig::Write(const wxString& key, long lValue)
 
 bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 {
-  if ( LineListIsEmpty() || !m_pRootGroup->IsDirty() )
+  if ( LineListIsEmpty() || !m_pRootGroup->IsDirty() || !m_strLocalFile )
     return TRUE;
 
   wxTempFile file(m_strLocalFile);

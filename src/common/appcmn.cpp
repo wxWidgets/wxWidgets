@@ -63,14 +63,14 @@ void wxAppBase::ProcessPendingEvents()
         delete node;
 
         // In ProcessPendingEvents(), new handlers might be add
-	    // and we can safely leave the critical section here.
+        // and we can safely leave the critical section here.
         wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
         handler->ProcessPendingEvents();
         wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 
         node = wxPendingEvents->First();
     }
-    
+
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
 }
 

@@ -36,6 +36,7 @@
 
 #include "wx/fontmap.h"
 #include "wx/config.h"
+#include "wx/memconf.h"
 
 #include "wx/msgdlg.h"
 #include "wx/fontdlg.h"
@@ -223,7 +224,18 @@ wxConfigBase *wxFontMapper::GetConfig()
     if ( !m_config )
     {
         // try the default
-        m_config = wxConfig::Get(FALSE/*don't create on demand*/);
+        m_config = wxConfig::Get(FALSE /*don't create on demand*/ );
+
+        if ( !m_config )
+        {
+            // we still want to have a config object because otherwise we would
+            // keep asking the user the same questions in the interactive mode,
+            // so create a dummy config which won't write to any files/registry
+            // but will allow us to remember the results of the questions at
+            // least during this run
+            m_config = new wxMemoryConfig;
+            wxConfig::Set(m_config);
+        }
     }
 
     return m_config;
@@ -343,8 +355,9 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
             }
             else
             {
-                wxLogDebug(wxT("corrupted config data - invalid encoding %ld "
-                              "for charset '%s'"), value, charset.c_str());
+                wxLogDebug(wxT("corrupted config data: invalid encoding %ld "
+                               "for charset '%s' ignored"),
+                           value, charset.c_str());
             }
         }
 
@@ -435,7 +448,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
                       wxT("inconsitency detected - forgot to update one of "
-                         "the arrays?") );
+                          "the arrays?") );
 
         wxString *encodingNamesTranslated = new wxString[count];
 
@@ -459,9 +472,22 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         if ( n != -1 )
         {
-            // TODO save the result in the config!
-
             encoding = gs_encodings[n];
+
+            // save the result in the config now
+            if ( ChangePath(FONTMAPPER_CHARSET_PATH, &pathOld) )
+            {
+                wxConfigBase *config = GetConfig();
+
+                // remember the alt encoding for this charset
+                if ( !config->Write(charset, (long)encoding) )
+                {
+                    wxLogError(_("Failed to remember the encoding "
+                                 "for the charset '%s'."), charset.c_str());
+                }
+
+                RestorePath(pathOld);
+            }
         }
         //else: cancelled
     }
@@ -521,7 +547,12 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         // wxFatalError doesn't return
     }
 
-    wxString configEntry = facename + _T("_") + GetEncodingName(encoding);
+    wxString configEntry, encName = GetEncodingName(encoding);
+    if ( !!facename )
+    {
+        configEntry = facename + _T("_");
+    }
+    configEntry += encName;
 
     // do we have a font spec for this encoding?
     wxString pathOld;
@@ -532,6 +563,12 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         wxString fontinfo = config->Read(configEntry);
 
         RestorePath(pathOld);
+
+        if ( !!fontinfo && !!facename )
+        {
+            // we tried to find a match with facename - now try without it
+            fontinfo = config->Read(encName);
+        }
 
         if ( !!fontinfo )
         {
@@ -550,6 +587,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                               "a valid font encoding info"), fontinfo.c_str());
             }
         }
+        //else: there is no information in config about this encoding
     }
 
     // ask the user
@@ -606,9 +644,12 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
     // now try the default mappings:
     wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);
-    for ( unsigned i = (equiv[0] == encoding) ? 1 : 0; i < equiv.GetCount(); i++ )
+    size_t count = equiv.GetCount();
+    for ( size_t i = (equiv[0] == encoding) ? 1 : 0; i < count; i++ )
+    {
         if ( TestAltEncoding(configEntry, equiv[i], info) )
             return TRUE;
+    }
 
     return FALSE;
 }
