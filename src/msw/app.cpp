@@ -338,8 +338,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(frame)"));
-
-        return FALSE;
     }
 
     // "no redraw" frame
@@ -349,8 +347,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(no redraw frame)"));
-
-        return FALSE;
     }
 
     // Register the MDI frame window class.
@@ -361,8 +357,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(MDI parent)"));
-
-        return FALSE;
     }
 
     // "no redraw" MDI frame
@@ -372,8 +366,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(no redraw MDI parent frame)"));
-
-        return FALSE;
     }
 
     // Register the MDI child frame window class.
@@ -384,8 +376,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(MDI child)"));
-
-        return FALSE;
     }
 
     // "no redraw" MDI child frame
@@ -395,8 +385,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(no redraw MDI child)"));
-
-        return FALSE;
     }
 
     // Register the panel window class.
@@ -407,8 +395,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(panel)"));
-
-        return FALSE;
     }
 
     // Register the no redraw panel window class.
@@ -418,8 +404,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(no redraw panel)"));
-
-        return FALSE;
     }
 
     // Register the canvas and textsubwindow class name
@@ -429,8 +413,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(canvas)"));
-
-        return FALSE;
     }
 
     wndclass.lpszClassName = wxCanvasClassNameNR;
@@ -438,8 +420,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(no redraw canvas)"));
-
-        return FALSE;
     }
 
     return TRUE;

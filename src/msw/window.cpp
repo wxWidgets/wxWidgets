@@ -337,10 +337,13 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                      DLGC_WANTTAB | DLGC_WANTMESSAGE;
     }
 
-    return MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
+    bool retVal = MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
                      pos.x, pos.y,
                      WidthDefault(size.x), HeightDefault(size.y),
                      msflags, NULL, exStyle);
+    if (retVal)
+        SetWindowLong( (HWND)m_hWnd, GWL_WNDPROC, (LONG)wxWndProc);
+    return retVal;
 }
 
 // ---------------------------------------------------------------------------
