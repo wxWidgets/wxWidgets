@@ -137,8 +137,8 @@ public:
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
 
-    bool HasAlpha() const { return true; }
-    void UseAlpha() { }
+    bool HasAlpha() const;
+    void UseAlpha();
 
 protected:
     bool CreateFromXpm(const char **bits);

@@ -1597,6 +1597,23 @@ void wxBitmap::UngetRawData(wxPixelDataBase& data)
 {
 }
 
+
+bool wxBitmap::HasAlpha() const 
+{
+#ifdef __WXGTK20__
+    return HasPixbuf();
+#else
+    return false;
+#endif
+}
+
+void wxBitmap::UseAlpha()
+{ 
+#ifdef __WXGTK20__
+    GetPixbuf();
+#endif
+}
+
 //-----------------------------------------------------------------------------
 // wxBitmapHandler
 //-----------------------------------------------------------------------------
