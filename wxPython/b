@@ -18,7 +18,7 @@ shift
 
 python$PYVER -c "import sys;print '\n', sys.version, '\n'"
 
-WXPYVER=`python -c "import setup;print setup.VERSION"`
+WXPYVER=`python$PYVER -c "import setup;print setup.VERSION"`
 SETUP="python$PYVER -u setup.py"
 FLAGS="USE_SWIG=1 IN_CVS_TREE=1"
 OTHERFLAGS=""
