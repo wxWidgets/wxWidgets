@@ -98,8 +98,8 @@ def makeSimpleBox7(win):
 #----------------------------------------------------------------------
 
 def makeSimpleBox8(win):
-    box = wxBoxSizer(wx.VERTICAL)
-    box.Add(wxButton(win, 1010, "one"), 0, wx.EXPAND)
+    box = wx.BoxSizer(wx.VERTICAL)
+    box.Add(wx.Button(win, 1010, "one"), 0, wx.EXPAND)
     box.Add((0,0), 1)
     box.Add(wx.Button(win, 1010, "two"), 0, wx.ALIGN_CENTER)
     box.Add((0,0), 1)
@@ -271,7 +271,7 @@ def makeGrid3(win):
                  (wx.Button(win, -1, 'two'),   0, wx.EXPAND),
                  (wx.Button(win, -1, 'three'), 0, wx.EXPAND),
                  (wx.Button(win, -1, 'four'),  0, wx.EXPAND),
-                 #(wxButton(win, 1010, 'five'),  0, wxEXPAND),
+                 #(wx.Button(win, 1010, 'five'),  0, wx.EXPAND),
                  ((175, 50)),
                  (wx.Button(win, -1, 'six'),   0, wx.EXPAND),
                  (wx.Button(win, -1, 'seven'), 0, wx.EXPAND),
@@ -440,14 +440,14 @@ theTests = [
     ("", None, ""),
 
     ("Simple Grid", makeGrid1,
-     "This is an example of the wxGridSizer.  In this case all row heights "
+     "This is an example of the wx.GridSizer.  In this case all row heights "
      "and column widths are kept the same as all the others and all items "
      "fill their available space.  The horizontal and vertical gaps are set to "
      "2 pixels each."
      ),
 
     ("More Grid Features", makeGrid2,
-     "This is another example of the wxGridSizer.  This one has no gaps in the grid, "
+     "This is another example of the wx.GridSizer.  This one has no gaps in the grid, "
      "but various cells are given different alignment options and some of them "
      "hold nested sizers."
      ),
@@ -469,7 +469,7 @@ theTests = [
 
     ("Proportional resize", makeSimpleBoxShaped,
      "Managed items can preserve their original aspect ratio.  The last item has the "
-     "wxSHAPED flag set and will resize proportional to its original size."
+     "wx.SHAPED flag set and will resize proportional to its original size."
      ),
 
     ("Proportional resize with Alignments", makeShapes,
@@ -553,9 +553,6 @@ def runTest(frame, nb, log):
     return win
 
 overview = ""
-#wxSizer.__doc__        + '\n' + '-' * 80 + '\n' + \
-#wxBoxSizer.__doc__     + '\n' + '-' * 80 + '\n' + \
-#wxBorderSizer.__doc__
 
 #----------------------------------------------------------------------
 

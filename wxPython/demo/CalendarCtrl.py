@@ -27,8 +27,9 @@ class TestPanel(wx.Panel):
         self.OnChangeMonth()
 
     def OnButton(self, evt):
-        self.cal.Destroy()
-        self.cal = None
+        if self.cal is not None:
+            self.cal.Destroy()
+            self.cal = None
 
     def OnCalSelected(self, evt):
         self.log.write('OnCalSelected: %s\n' % evt.GetDate())

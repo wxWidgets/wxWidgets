@@ -67,7 +67,7 @@ class TestValueWindow(gizmos.TreeCompanionWindow):
 
             text = text + tree.GetItemText(itemId)
             pen = wx.Pen(
-                wx.SystemSettings_GetSystemColour(wx.SYS_COLOUR_3DLIGHT), 
+                wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DLIGHT), 
                 1, wx.SOLID
                 )
 
@@ -97,11 +97,11 @@ class TestPanel(wx.Panel):
             )
             
         splitter.SetSashSize(2)
-        tree = TestTree(splitter, -1, style = wx.TR_HAS_BUTTONS |
-                                              wx.TR_NO_LINES |
-                                              wx.TR_ROW_LINES |
-                                              #wx.TR_HIDE_ROOT |
-                                              wx.NO_BORDER )
+        tree = TestTree(splitter, style = wx.TR_HAS_BUTTONS |
+                                          wx.TR_NO_LINES |
+                                          wx.TR_ROW_LINES |
+                                          #wx.TR_HIDE_ROOT |
+                                          wx.NO_BORDER )
 
         valueWindow = TestValueWindow(splitter, style=wx.NO_BORDER)
 
