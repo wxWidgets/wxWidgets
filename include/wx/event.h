@@ -52,219 +52,219 @@ class WXDLLEXPORT wxList;
 typedef int wxEventType;
 
 // generate a new unique event type
-int wxNewEventType();
+extern wxEventType wxNewEventType();
 
 // the standard event types
-extern const int wxEVT_NULL;
-extern const int wxEVT_FIRST;
+extern wxEventType wxEVT_NULL;
+extern wxEventType wxEVT_FIRST;
 
-extern const int wxEVT_COMMAND_BUTTON_CLICKED;
-extern const int wxEVT_COMMAND_CHECKBOX_CLICKED;
-extern const int wxEVT_COMMAND_CHOICE_SELECTED;
-extern const int wxEVT_COMMAND_LISTBOX_SELECTED;
-extern const int wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
-extern const int wxEVT_COMMAND_CHECKLISTBOX_TOGGLED;
-extern const int wxEVT_COMMAND_TEXT_UPDATED;
-extern const int wxEVT_COMMAND_TEXT_ENTER;
-extern const int wxEVT_COMMAND_MENU_SELECTED;
-extern const int wxEVT_COMMAND_TOOL_CLICKED;
-extern const int wxEVT_COMMAND_SLIDER_UPDATED;
-extern const int wxEVT_COMMAND_RADIOBOX_SELECTED;
-extern const int wxEVT_COMMAND_RADIOBUTTON_SELECTED;
-extern const int wxEVT_COMMAND_SCROLLBAR_UPDATED;
-extern const int wxEVT_COMMAND_VLBOX_SELECTED;
-extern const int wxEVT_COMMAND_COMBOBOX_SELECTED;
-extern const int wxEVT_COMMAND_TOOL_RCLICKED;
-extern const int wxEVT_COMMAND_TOOL_ENTER;
-extern const int wxEVT_COMMAND_SPINCTRL_UPDATED;
+extern wxEventType wxEVT_COMMAND_BUTTON_CLICKED;
+extern wxEventType wxEVT_COMMAND_CHECKBOX_CLICKED;
+extern wxEventType wxEVT_COMMAND_CHOICE_SELECTED;
+extern wxEventType wxEVT_COMMAND_LISTBOX_SELECTED;
+extern wxEventType wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
+extern wxEventType wxEVT_COMMAND_CHECKLISTBOX_TOGGLED;
+extern wxEventType wxEVT_COMMAND_TEXT_UPDATED;
+extern wxEventType wxEVT_COMMAND_TEXT_ENTER;
+extern wxEventType wxEVT_COMMAND_MENU_SELECTED;
+extern wxEventType wxEVT_COMMAND_TOOL_CLICKED;
+extern wxEventType wxEVT_COMMAND_SLIDER_UPDATED;
+extern wxEventType wxEVT_COMMAND_RADIOBOX_SELECTED;
+extern wxEventType wxEVT_COMMAND_RADIOBUTTON_SELECTED;
+extern wxEventType wxEVT_COMMAND_SCROLLBAR_UPDATED;
+extern wxEventType wxEVT_COMMAND_VLBOX_SELECTED;
+extern wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED;
+extern wxEventType wxEVT_COMMAND_TOOL_RCLICKED;
+extern wxEventType wxEVT_COMMAND_TOOL_ENTER;
+extern wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
 
 // Sockets and timers send events, too
-extern const int wxEVT_SOCKET;
-extern const int wxEVT_TIMER;
+extern wxEventType wxEVT_SOCKET;
+extern wxEventType wxEVT_TIMER;
 
 // Mouse event types
-extern const int wxEVT_LEFT_DOWN;
-extern const int wxEVT_LEFT_UP;
-extern const int wxEVT_MIDDLE_DOWN;
-extern const int wxEVT_MIDDLE_UP;
-extern const int wxEVT_RIGHT_DOWN;
-extern const int wxEVT_RIGHT_UP;
-extern const int wxEVT_MOTION;
-extern const int wxEVT_ENTER_WINDOW;
-extern const int wxEVT_LEAVE_WINDOW;
-extern const int wxEVT_LEFT_DCLICK;
-extern const int wxEVT_MIDDLE_DCLICK;
-extern const int wxEVT_RIGHT_DCLICK;
-extern const int wxEVT_SET_FOCUS;
-extern const int wxEVT_KILL_FOCUS;
+extern wxEventType wxEVT_LEFT_DOWN;
+extern wxEventType wxEVT_LEFT_UP;
+extern wxEventType wxEVT_MIDDLE_DOWN;
+extern wxEventType wxEVT_MIDDLE_UP;
+extern wxEventType wxEVT_RIGHT_DOWN;
+extern wxEventType wxEVT_RIGHT_UP;
+extern wxEventType wxEVT_MOTION;
+extern wxEventType wxEVT_ENTER_WINDOW;
+extern wxEventType wxEVT_LEAVE_WINDOW;
+extern wxEventType wxEVT_LEFT_DCLICK;
+extern wxEventType wxEVT_MIDDLE_DCLICK;
+extern wxEventType wxEVT_RIGHT_DCLICK;
+extern wxEventType wxEVT_SET_FOCUS;
+extern wxEventType wxEVT_KILL_FOCUS;
 
 // Non-client mouse events
-extern const int wxEVT_NC_LEFT_DOWN;
-extern const int wxEVT_NC_LEFT_UP;
-extern const int wxEVT_NC_MIDDLE_DOWN;
-extern const int wxEVT_NC_MIDDLE_UP;
-extern const int wxEVT_NC_RIGHT_DOWN;
-extern const int wxEVT_NC_RIGHT_UP;
-extern const int wxEVT_NC_MOTION;
-extern const int wxEVT_NC_ENTER_WINDOW;
-extern const int wxEVT_NC_LEAVE_WINDOW;
-extern const int wxEVT_NC_LEFT_DCLICK;
-extern const int wxEVT_NC_MIDDLE_DCLICK;
-extern const int wxEVT_NC_RIGHT_DCLICK;
+extern wxEventType wxEVT_NC_LEFT_DOWN;
+extern wxEventType wxEVT_NC_LEFT_UP;
+extern wxEventType wxEVT_NC_MIDDLE_DOWN;
+extern wxEventType wxEVT_NC_MIDDLE_UP;
+extern wxEventType wxEVT_NC_RIGHT_DOWN;
+extern wxEventType wxEVT_NC_RIGHT_UP;
+extern wxEventType wxEVT_NC_MOTION;
+extern wxEventType wxEVT_NC_ENTER_WINDOW;
+extern wxEventType wxEVT_NC_LEAVE_WINDOW;
+extern wxEventType wxEVT_NC_LEFT_DCLICK;
+extern wxEventType wxEVT_NC_MIDDLE_DCLICK;
+extern wxEventType wxEVT_NC_RIGHT_DCLICK;
 
 // Character input event type
-extern const int wxEVT_CHAR;
-extern const int wxEVT_CHAR_HOOK;
-extern const int wxEVT_NAVIGATION_KEY;
-extern const int wxEVT_KEY_DOWN;
-extern const int wxEVT_KEY_UP;
+extern wxEventType wxEVT_CHAR;
+extern wxEventType wxEVT_CHAR_HOOK;
+extern wxEventType wxEVT_NAVIGATION_KEY;
+extern wxEventType wxEVT_KEY_DOWN;
+extern wxEventType wxEVT_KEY_UP;
 
 // Set cursor event
-extern const int wxEVT_SET_CURSOR;
+extern wxEventType wxEVT_SET_CURSOR;
 
 // wxScrollbar and wxSlider event identifiers
-extern const int wxEVT_SCROLL_TOP;
-extern const int wxEVT_SCROLL_BOTTOM;
-extern const int wxEVT_SCROLL_LINEUP;
-extern const int wxEVT_SCROLL_LINEDOWN;
-extern const int wxEVT_SCROLL_PAGEUP;
-extern const int wxEVT_SCROLL_PAGEDOWN;
-extern const int wxEVT_SCROLL_THUMBTRACK;
-extern const int wxEVT_SCROLL_THUMBRELEASE;
+extern wxEventType wxEVT_SCROLL_TOP;
+extern wxEventType wxEVT_SCROLL_BOTTOM;
+extern wxEventType wxEVT_SCROLL_LINEUP;
+extern wxEventType wxEVT_SCROLL_LINEDOWN;
+extern wxEventType wxEVT_SCROLL_PAGEUP;
+extern wxEventType wxEVT_SCROLL_PAGEDOWN;
+extern wxEventType wxEVT_SCROLL_THUMBTRACK;
+extern wxEventType wxEVT_SCROLL_THUMBRELEASE;
 
 // Scroll events from wxWindow
-extern const int wxEVT_SCROLLWIN_TOP;
-extern const int wxEVT_SCROLLWIN_BOTTOM;
-extern const int wxEVT_SCROLLWIN_LINEUP;
-extern const int wxEVT_SCROLLWIN_LINEDOWN;
-extern const int wxEVT_SCROLLWIN_PAGEUP;
-extern const int wxEVT_SCROLLWIN_PAGEDOWN;
-extern const int wxEVT_SCROLLWIN_THUMBTRACK;
-extern const int wxEVT_SCROLLWIN_THUMBRELEASE;
+extern wxEventType wxEVT_SCROLLWIN_TOP;
+extern wxEventType wxEVT_SCROLLWIN_BOTTOM;
+extern wxEventType wxEVT_SCROLLWIN_LINEUP;
+extern wxEventType wxEVT_SCROLLWIN_LINEDOWN;
+extern wxEventType wxEVT_SCROLLWIN_PAGEUP;
+extern wxEventType wxEVT_SCROLLWIN_PAGEDOWN;
+extern wxEventType wxEVT_SCROLLWIN_THUMBTRACK;
+extern wxEventType wxEVT_SCROLLWIN_THUMBRELEASE;
 
 // System events
-extern const int wxEVT_SIZE;
-extern const int wxEVT_MOVE;
-extern const int wxEVT_CLOSE_WINDOW;
-extern const int wxEVT_END_SESSION;
-extern const int wxEVT_QUERY_END_SESSION;
-extern const int wxEVT_ACTIVATE_APP;
-extern const int wxEVT_POWER;
-extern const int wxEVT_ACTIVATE;
-extern const int wxEVT_CREATE;
-extern const int wxEVT_DESTROY;
-extern const int wxEVT_SHOW;
-extern const int wxEVT_ICONIZE;
-extern const int wxEVT_MAXIMIZE;
-extern const int wxEVT_MOUSE_CAPTURE_CHANGED;
-extern const int wxEVT_PAINT;
-extern const int wxEVT_ERASE_BACKGROUND;
-extern const int wxEVT_NC_PAINT;
-extern const int wxEVT_PAINT_ICON;
-extern const int wxEVT_MENU_CHAR;
-extern const int wxEVT_MENU_INIT;
-extern const int wxEVT_MENU_HIGHLIGHT;
-extern const int wxEVT_POPUP_MENU_INIT;
-extern const int wxEVT_CONTEXT_MENU;
-extern const int wxEVT_SYS_COLOUR_CHANGED;
-extern const int wxEVT_SETTING_CHANGED;
-extern const int wxEVT_QUERY_NEW_PALETTE;
-extern const int wxEVT_PALETTE_CHANGED;
-extern const int wxEVT_JOY_BUTTON_DOWN;
-extern const int wxEVT_JOY_BUTTON_UP;
-extern const int wxEVT_JOY_MOVE;
-extern const int wxEVT_JOY_ZMOVE;
-extern const int wxEVT_DROP_FILES;
-extern const int wxEVT_DRAW_ITEM;
-extern const int wxEVT_MEASURE_ITEM;
-extern const int wxEVT_COMPARE_ITEM;
-extern const int wxEVT_INIT_DIALOG;
-extern const int wxEVT_IDLE;
-extern const int wxEVT_UPDATE_UI;
+extern wxEventType wxEVT_SIZE;
+extern wxEventType wxEVT_MOVE;
+extern wxEventType wxEVT_CLOSE_WINDOW;
+extern wxEventType wxEVT_END_SESSION;
+extern wxEventType wxEVT_QUERY_END_SESSION;
+extern wxEventType wxEVT_ACTIVATE_APP;
+extern wxEventType wxEVT_POWER;
+extern wxEventType wxEVT_ACTIVATE;
+extern wxEventType wxEVT_CREATE;
+extern wxEventType wxEVT_DESTROY;
+extern wxEventType wxEVT_SHOW;
+extern wxEventType wxEVT_ICONIZE;
+extern wxEventType wxEVT_MAXIMIZE;
+extern wxEventType wxEVT_MOUSE_CAPTURE_CHANGED;
+extern wxEventType wxEVT_PAINT;
+extern wxEventType wxEVT_ERASE_BACKGROUND;
+extern wxEventType wxEVT_NC_PAINT;
+extern wxEventType wxEVT_PAINT_ICON;
+extern wxEventType wxEVT_MENU_CHAR;
+extern wxEventType wxEVT_MENU_INIT;
+extern wxEventType wxEVT_MENU_HIGHLIGHT;
+extern wxEventType wxEVT_POPUP_MENU_INIT;
+extern wxEventType wxEVT_CONTEXT_MENU;
+extern wxEventType wxEVT_SYS_COLOUR_CHANGED;
+extern wxEventType wxEVT_SETTING_CHANGED;
+extern wxEventType wxEVT_QUERY_NEW_PALETTE;
+extern wxEventType wxEVT_PALETTE_CHANGED;
+extern wxEventType wxEVT_JOY_BUTTON_DOWN;
+extern wxEventType wxEVT_JOY_BUTTON_UP;
+extern wxEventType wxEVT_JOY_MOVE;
+extern wxEventType wxEVT_JOY_ZMOVE;
+extern wxEventType wxEVT_DROP_FILES;
+extern wxEventType wxEVT_DRAW_ITEM;
+extern wxEventType wxEVT_MEASURE_ITEM;
+extern wxEventType wxEVT_COMPARE_ITEM;
+extern wxEventType wxEVT_INIT_DIALOG;
+extern wxEventType wxEVT_IDLE;
+extern wxEventType wxEVT_UPDATE_UI;
 
 // System misc.
-extern const int wxEVT_END_PROCESS;
+extern wxEventType wxEVT_END_PROCESS;
 
 // Dial up events
-extern const int wxEVT_DIALUP_CONNECTED;
-extern const int wxEVT_DIALUP_DISCONNECTED;
+extern wxEventType wxEVT_DIALUP_CONNECTED;
+extern wxEventType wxEVT_DIALUP_DISCONNECTED;
 
 // Generic command events
 // Note: a click is a higher-level event than button down/up
-extern const int wxEVT_COMMAND_LEFT_CLICK;
-extern const int wxEVT_COMMAND_LEFT_DCLICK;
-extern const int wxEVT_COMMAND_RIGHT_CLICK;
-extern const int wxEVT_COMMAND_RIGHT_DCLICK;
-extern const int wxEVT_COMMAND_SET_FOCUS;
-extern const int wxEVT_COMMAND_KILL_FOCUS;
-extern const int wxEVT_COMMAND_ENTER;
+extern wxEventType wxEVT_COMMAND_LEFT_CLICK;
+extern wxEventType wxEVT_COMMAND_LEFT_DCLICK;
+extern wxEventType wxEVT_COMMAND_RIGHT_CLICK;
+extern wxEventType wxEVT_COMMAND_RIGHT_DCLICK;
+extern wxEventType wxEVT_COMMAND_SET_FOCUS;
+extern wxEventType wxEVT_COMMAND_KILL_FOCUS;
+extern wxEventType wxEVT_COMMAND_ENTER;
 
 // Tree control event types
-extern const int wxEVT_COMMAND_TREE_BEGIN_DRAG;
-extern const int wxEVT_COMMAND_TREE_BEGIN_RDRAG;
-extern const int wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT;
-extern const int wxEVT_COMMAND_TREE_END_LABEL_EDIT;
-extern const int wxEVT_COMMAND_TREE_DELETE_ITEM;
-extern const int wxEVT_COMMAND_TREE_GET_INFO;
-extern const int wxEVT_COMMAND_TREE_SET_INFO;
-extern const int wxEVT_COMMAND_TREE_ITEM_EXPANDED;
-extern const int wxEVT_COMMAND_TREE_ITEM_EXPANDING;
-extern const int wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
-extern const int wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
-extern const int wxEVT_COMMAND_TREE_SEL_CHANGED;
-extern const int wxEVT_COMMAND_TREE_SEL_CHANGING;
-extern const int wxEVT_COMMAND_TREE_KEY_DOWN;
-extern const int wxEVT_COMMAND_TREE_ITEM_ACTIVATED;
-extern const int wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
-extern const int wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK;
-extern const int wxEVT_COMMAND_TREE_END_DRAG;
+extern wxEventType wxEVT_COMMAND_TREE_BEGIN_DRAG;
+extern wxEventType wxEVT_COMMAND_TREE_BEGIN_RDRAG;
+extern wxEventType wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT;
+extern wxEventType wxEVT_COMMAND_TREE_END_LABEL_EDIT;
+extern wxEventType wxEVT_COMMAND_TREE_DELETE_ITEM;
+extern wxEventType wxEVT_COMMAND_TREE_GET_INFO;
+extern wxEventType wxEVT_COMMAND_TREE_SET_INFO;
+extern wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDED;
+extern wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDING;
+extern wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
+extern wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
+extern wxEventType wxEVT_COMMAND_TREE_SEL_CHANGED;
+extern wxEventType wxEVT_COMMAND_TREE_SEL_CHANGING;
+extern wxEventType wxEVT_COMMAND_TREE_KEY_DOWN;
+extern wxEventType wxEVT_COMMAND_TREE_ITEM_ACTIVATED;
+extern wxEventType wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
+extern wxEventType wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK;
+extern wxEventType wxEVT_COMMAND_TREE_END_DRAG;
 
 // List control event types
-extern const int wxEVT_COMMAND_LIST_BEGIN_DRAG;
-extern const int wxEVT_COMMAND_LIST_BEGIN_RDRAG;
-extern const int wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
-extern const int wxEVT_COMMAND_LIST_END_LABEL_EDIT;
-extern const int wxEVT_COMMAND_LIST_DELETE_ITEM;
-extern const int wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
-extern const int wxEVT_COMMAND_LIST_GET_INFO;
-extern const int wxEVT_COMMAND_LIST_SET_INFO;
-extern const int wxEVT_COMMAND_LIST_ITEM_SELECTED;
-extern const int wxEVT_COMMAND_LIST_ITEM_DESELECTED;
-extern const int wxEVT_COMMAND_LIST_KEY_DOWN;
-extern const int wxEVT_COMMAND_LIST_INSERT_ITEM;
-extern const int wxEVT_COMMAND_LIST_COL_CLICK;
-extern const int wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
-extern const int wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
-extern const int wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+extern wxEventType wxEVT_COMMAND_LIST_BEGIN_DRAG;
+extern wxEventType wxEVT_COMMAND_LIST_BEGIN_RDRAG;
+extern wxEventType wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
+extern wxEventType wxEVT_COMMAND_LIST_END_LABEL_EDIT;
+extern wxEventType wxEVT_COMMAND_LIST_DELETE_ITEM;
+extern wxEventType wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
+extern wxEventType wxEVT_COMMAND_LIST_GET_INFO;
+extern wxEventType wxEVT_COMMAND_LIST_SET_INFO;
+extern wxEventType wxEVT_COMMAND_LIST_ITEM_SELECTED;
+extern wxEventType wxEVT_COMMAND_LIST_ITEM_DESELECTED;
+extern wxEventType wxEVT_COMMAND_LIST_KEY_DOWN;
+extern wxEventType wxEVT_COMMAND_LIST_INSERT_ITEM;
+extern wxEventType wxEVT_COMMAND_LIST_COL_CLICK;
+extern wxEventType wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
+extern wxEventType wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
+extern wxEventType wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
 
 // Tab and notebook control event types
-extern const int wxEVT_COMMAND_TAB_SEL_CHANGED;
-extern const int wxEVT_COMMAND_TAB_SEL_CHANGING;
-extern const int wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED;
-extern const int wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
+extern wxEventType wxEVT_COMMAND_TAB_SEL_CHANGED;
+extern wxEventType wxEVT_COMMAND_TAB_SEL_CHANGING;
+extern wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED;
+extern wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
 
 // Splitter events
-extern const int wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED;
-extern const int wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING;
-extern const int wxEVT_COMMAND_SPLITTER_DOUBLECLICKED;
-extern const int wxEVT_COMMAND_SPLITTER_UNSPLIT;
+extern wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED;
+extern wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING;
+extern wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED;
+extern wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT;
 
 // Wizard events
-extern const int wxEVT_WIZARD_PAGE_CHANGED;
-extern const int wxEVT_WIZARD_PAGE_CHANGING;
-extern const int wxEVT_WIZARD_CANCEL;
+extern wxEventType wxEVT_WIZARD_PAGE_CHANGED;
+extern wxEventType wxEVT_WIZARD_PAGE_CHANGING;
+extern wxEventType wxEVT_WIZARD_CANCEL;
 
 // Calendar events
-extern const int wxEVT_CALENDAR_SEL_CHANGED;
-extern const int wxEVT_CALENDAR_DAY_CHANGED;
-extern const int wxEVT_CALENDAR_MONTH_CHANGED;
-extern const int wxEVT_CALENDAR_YEAR_CHANGED;
-extern const int wxEVT_CALENDAR_DOUBLECLICKED;
-extern const int wxEVT_CALENDAR_WEEKDAY_CLICKED;
+extern wxEventType wxEVT_CALENDAR_SEL_CHANGED;
+extern wxEventType wxEVT_CALENDAR_DAY_CHANGED;
+extern wxEventType wxEVT_CALENDAR_MONTH_CHANGED;
+extern wxEventType wxEVT_CALENDAR_YEAR_CHANGED;
+extern wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
+extern wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
 
 // Help events
-extern const int wxEVT_HELP;
-extern const int wxEVT_DETAILED_HELP;
+extern wxEventType wxEVT_HELP;
+extern wxEventType wxEVT_DETAILED_HELP;
 
 // Compatibility
 
@@ -1454,21 +1454,10 @@ typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
 struct WXDLLEXPORT wxEventTableEntry
 {
-    wxEventTableEntry( const int &eventType,
-                       int id,
-                       int lastId,
-                       wxObjectEventFunction fn,
-                       wxObject *data ) :
-        m_eventType(eventType)
-    {
-        m_id = id;
-        m_lastId = lastId;
-        m_fn = fn;
-        m_callbackUserData = data;
-    }
+    wxEventTableEntry(int evType, int id, int idLast,
+                      wxObjectEventFunction fn, wxObject *data);
 
-    // For some reason, this can't be wxEventType, or VC++ complains.
-    int m_eventType;            // main event type
+    int m_eventType;            // the event type
     int m_id;                   // control/menu/toolbar id
     int m_lastId;               // used for ranges of ids
     wxObjectEventFunction m_fn; // function to call: not wxEventFunction,
@@ -1477,22 +1466,19 @@ struct WXDLLEXPORT wxEventTableEntry
     wxObject* m_callbackUserData;
 };
 
-struct WXDLLEXPORT wxDynamicEventTableEntry
+struct WXDLLEXPORT wxDynamicEventTableEntry : public wxEventTableEntry
 {
-    // For some reason, this can't be wxEventType, or VC++ complains.
-    int m_eventType;            // main event type
-    int m_id;                   // control/menu/toolbar id
-    int m_lastId;               // used for ranges of ids
-    wxObjectEventFunction m_fn; // function to call: not wxEventFunction,
-                                // because of dependency problems
-
-    wxObject* m_callbackUserData;
+    wxDynamicEventTableEntry(int evType, int id, int idLast,
+                             wxObjectEventFunction fn, wxObject *data)
+        : wxEventTableEntry(evType, id, idLast, fn, data)
+    {
+    }
 };
 
 struct WXDLLEXPORT wxEventTable
 {
-    const wxEventTable *baseTable;        // Points to base event table (next in chain)
-    const wxEventTableEntry *entries;        // Points to bottom of entry array
+    const wxEventTable *baseTable;    // base event table (next in chain)
+    const wxEventTableEntry *entries; // bottom of entry array
 };
 
 class WXDLLEXPORT wxEvtHandler : public wxObject

@@ -86,13 +86,13 @@ const wxEventType wxEVT_TASKBAR_LEFT_DCLICK =           wxEVT_FIRST + 1555;
 const wxEventType wxEVT_TASKBAR_RIGHT_DCLICK =          wxEVT_FIRST + 1556;
 
 
-#define EVT_TASKBAR_MOVE(fn)         { wxEVT_TASKBAR_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
-#define EVT_TASKBAR_LEFT_DOWN(fn)    { wxEVT_TASKBAR_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
-#define EVT_TASKBAR_LEFT_UP(fn)      { wxEVT_TASKBAR_LEFT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
-#define EVT_TASKBAR_RIGHT_DOWN(fn)   { wxEVT_TASKBAR_RIGHT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
-#define EVT_TASKBAR_RIGHT_UP(fn)     { wxEVT_TASKBAR_RIGHT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
-#define EVT_TASKBAR_LEFT_DCLICK(fn)  { wxEVT_TASKBAR_LEFT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
-#define EVT_TASKBAR_RIGHT_DCLICK(fn) { wxEVT_TASKBAR_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
+#define EVT_TASKBAR_MOVE(fn)         wxEventTableEntry(wxEVT_TASKBAR_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
+#define EVT_TASKBAR_LEFT_DOWN(fn)    wxEventTableEntry(wxEVT_TASKBAR_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
+#define EVT_TASKBAR_LEFT_UP(fn)      wxEventTableEntry(wxEVT_TASKBAR_LEFT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
+#define EVT_TASKBAR_RIGHT_DOWN(fn)   wxEventTableEntry(wxEVT_TASKBAR_RIGHT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
+#define EVT_TASKBAR_RIGHT_UP(fn)     wxEventTableEntry(wxEVT_TASKBAR_RIGHT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
+#define EVT_TASKBAR_LEFT_DCLICK(fn)  wxEventTableEntry(wxEVT_TASKBAR_LEFT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
+#define EVT_TASKBAR_RIGHT_DCLICK(fn) wxEventTableEntry(wxEVT_TASKBAR_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
 
 
 #endif
