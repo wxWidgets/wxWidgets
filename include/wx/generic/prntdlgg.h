@@ -21,7 +21,11 @@
 #include "wx/dialog.h"
 #include "wx/dc.h"
 #include "wx/cmndata.h"
-#include "wx/postscrp.h"
+#include "wx/dialog.h"
+
+#if wxUSE_POSTSCRIPT
+#include "wx/dcps.h"
+#endif
 
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxButton;

@@ -1,62 +1,45 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        postscrp.h
+// Name:        dcps.h
 // Purpose:     wxPostScriptDC class
 // Author:      Julian Smart and others
 // Modified by:
-// Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
+// Copyright:   (c) Julian Smart, Robert Roebling and Markus Holzem
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_POSTSCRPH__
-#define _WX_POSTSCRPH__
+#ifndef _WX_DCPSG_H_
+#define _WX_DCPSG_H_
 
 #ifdef __GNUG__
-#pragma interface "postscrp.h"
+#pragma interface
 #endif
 
 #include "wx/dc.h"
-#include "wx/dialog.h"
-#include "wx/module.h"
 
 #if wxUSE_POSTSCRIPT
 
-// A module to allow initialization/cleanup of PostScript-related
-// things without calling these functions from app.cpp.
+#include "wx/dialog.h"
+#include "wx/module.h"
+#include <fstream.h>
 
-class WXDLLEXPORT wxPostScriptModule: public wxModule
-{
-DECLARE_DYNAMIC_CLASS(wxPostScriptModule)
-public:
-    wxPostScriptModule() {}
-    bool OnInit();
-    void OnExit();
-};
 
-#if wxUSE_IOSTREAMH
-#  include <fstream.h>
-#else
-#  include <fstream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
-#endif
+//-----------------------------------------------------------------------------
+// classes
+//-----------------------------------------------------------------------------
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+class wxPostScriptDC;
 
-// wxGTK has its own wxPostscriptDC
-
-#include "wx/gtk/dcps.h"
-
-#else
+//-----------------------------------------------------------------------------
+// wxPostScriptDC
+//-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPostScriptDC: public wxDC
 {
   DECLARE_DYNAMIC_CLASS(wxPostScriptDC)
 
- public:
-  // Create a printer DC
+public:
+
   wxPostScriptDC();
   wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
 
@@ -64,10 +47,12 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 
   bool Create(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
 
+  virtual bool Ok() const;
+
   virtual bool PrinterDialog(wxWindow *parent = (wxWindow *) NULL);
 
-  inline virtual void BeginDrawing(void) {} ;
-  inline virtual void EndDrawing(void) {} ;
+  virtual void BeginDrawing() {}
+  virtual void EndDrawing() {}
 
   void FloodFill(long x1, long y1, const wxColour &col, int style=wxFLOOD_SURFACE) ;
   bool GetPixel(long x1, long y1, wxColour *col) const;
@@ -93,17 +78,22 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 
   void DrawSpline(wxList *points);
 
+  bool Blit(long xdest, long ydest, long width, long height,
+            wxDC *source, long xsrc, long ysrc, int rop = wxCOPY, bool useMask = FALSE);
+  inline bool CanDrawBitmap(void) const { return TRUE; }
+
   void DrawIcon( const wxIcon& icon, long x, long y );
   void DrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask=FALSE );
+
   void DrawText(const wxString& text, long x, long y, bool use16 = FALSE);
 
   void Clear();
-  void SetFont(const wxFont& font);
-  void SetPen(const wxPen& pen);
-  void SetBrush(const wxBrush& brush);
-  void SetLogicalFunction(int function);
-  void SetBackground(const wxBrush& brush);
-  
+  void SetFont( const wxFont& font );
+  void SetPen( const wxPen& pen );
+  void SetBrush( const wxBrush& brush );
+  void SetLogicalFunction( int function );
+  void SetBackground( const wxBrush& brush );
+
   void SetClippingRegion(long x, long y, long width, long height);
   void SetClippingRegion( const wxRegion &region );
   void DestroyClippingRegion();
@@ -115,52 +105,50 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 
   long GetCharHeight();
   long GetCharWidth();
+  inline bool CanGetTextExtent(void) const { return FALSE; }
   void GetTextExtent(const wxString& string, long *x, long *y,
                      long *descent = (long *) NULL,
                      long *externalLeading = (long *) NULL,
                      wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE);
-  virtual void SetLogicalOrigin(long x, long y);
-  virtual void CalcBoundingBox(long x, long y);
-
-  void SetMapMode(int mode);
-  void SetUserScale(double x, double y);
-  long DeviceToLogicalX(int x) const;
-  long DeviceToLogicalY(int y) const;
-  long DeviceToLogicalXRel(int x) const;
-  long DeviceToLogicalYRel(int y) const;
-  long LogicalToDeviceX(long x) const;
-  long LogicalToDeviceY(long y) const;
-  long LogicalToDeviceXRel(long x) const;
-  long LogicalToDeviceYRel(long y) const;
-  bool Blit(long xdest, long ydest, long width, long height,
-            wxDC *source, long xsrc, long ysrc, int rop = wxCOPY, bool useMask = FALSE);
-  inline bool CanGetTextExtent(void) const { return FALSE; }
-  inline bool CanDrawBitmap(void) const { return FALSE; }
 
   void GetSize(int* width, int* height) const;
   void GetSizeMM(long *width, long *height) const;
 
-  inline void SetBackgroundMode(int WXUNUSED(mode)) {};
-  inline void SetPalette(const wxPalette& WXUNUSED(palette)) {}
-  
-  inline ofstream *GetStream(void) const { return m_pstream; }
-  inline int GetYOrigin(void) const { return m_yOrigin; }
+  void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
+  void SetDeviceOrigin( long x, long y );
 
-  void SetupCTM();
+  inline void SetBackgroundMode(int WXUNUSED(mode)) {}
+  inline void SetPalette(const wxPalette& WXUNUSED(palette)) {}
+
+  inline ofstream *GetStream(void) const { return m_pstream; }
 
 protected:
-  int               m_yOrigin;          // For EPS
+
   ofstream *        m_pstream;    // PostScript output stream
   wxString          m_title;
   unsigned char     m_currentRed;
   unsigned char     m_currentGreen;
   unsigned char     m_currentBlue;
-  double            m_scaleFactor;
+  int               m_pageNumber;
+  bool              m_clipping;
+  double            m_underlinePosition;
+  double            m_underlineThickness;
 };
 
-#endif 
-        // __WXGTK__
-      
+// A module to allow initialization/cleanup of PostScript-related
+// things without calling these functions from app.cpp.
+
+class WXDLLEXPORT wxPostScriptModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxPostScriptModule)
+public:
+    wxPostScriptModule() {}
+    bool OnInit();
+    void OnExit();
+};
+
+// TODO Needed? Should perhaps use wxGenericPrintDialog instead.
+#if 1
 #define wxID_PRINTER_COMMAND        1
 #define wxID_PRINTER_OPTIONS        2
 #define wxID_PRINTER_ORIENTATION    3
@@ -180,7 +168,7 @@ public:
 
     virtual int ShowModal(void) ;
 };
-
+#endif
 
 // Print Orientation (Should also add Left, Right)
 enum {
@@ -319,10 +307,8 @@ private:
 
 WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;
 
-#endif 
-      // wxUSE_POSTSCRIPT
+#endif
+    // wxUSE_POSTSCRIPT
 
 #endif
-        // _WX_POSTSCRPH__
-	
-	
+        // _WX_DCPSG_H_

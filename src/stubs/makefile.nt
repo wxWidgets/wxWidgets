@@ -99,6 +99,7 @@ DOCDIR = $(WXDIR)\docs
 GENERICOBJS= \
   $(GENDIR)\choicdgg.obj \
   $(GENDIR)\colrdlgg.obj \
+  $(GENDIR)\dcpsg.obj \
   $(GENDIR)\fontdlgg.obj \
   $(GENDIR)\gridg.obj \
   $(GENDIR)\msgdlgg.obj \
@@ -136,7 +137,6 @@ COMMONOBJS = \
   $(COMMDIR)\memory.obj \
   $(COMMDIR)\module.obj \
   $(COMMDIR)\object.obj \
-  $(COMMDIR)\postscrp.obj \
   $(COMMDIR)\prntbase.obj \
   $(COMMDIR)\resource.obj \
   $(COMMDIR)\tbarbase.obj \
@@ -710,11 +710,6 @@ $(COMMDIR)/odbc.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
-$(COMMDIR)/postscrp.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
-<<
-
 $(COMMDIR)/prntbase.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
@@ -867,6 +862,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(GENDIR)/colrdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/dcpsg.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

@@ -597,4 +597,3 @@ wxChoice *wxGenericPageSetupDialog::CreatePaperTypeChoice(int *x, int *y)
   return choice;
 }
 
-

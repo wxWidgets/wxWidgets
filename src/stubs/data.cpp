@@ -16,7 +16,7 @@
 #include "wx/wx.h"
 
 #if wxUSE_POSTSCRIPT
-#include "wx/postscrp.h"
+#include "wx/dcps.h"
 #endif
 
 #define _MAXPATHLEN 500

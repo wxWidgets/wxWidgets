@@ -17,7 +17,7 @@
 #include "wx/window.h"
 #include "wx/dc.h"
 #include "wx/accel.h"
-#include "wx/postscrp.h"
+#include "wx/dcps.h"
 
 #define _MAXPATHLEN 500
 

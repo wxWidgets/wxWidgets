@@ -35,7 +35,6 @@ LIB_CPP_SRC=\
  common/mimetype.cpp \
  common/module.cpp \
  common/object.cpp \
- common/postscrp.cpp \
  common/prntbase.cpp \
  common/resource.cpp \
  common/serbase.cpp \
@@ -132,6 +131,7 @@ LIB_CPP_SRC=\
 \
  generic/choicdgg.cpp \
  generic/colrdlgg.cpp \
+ generic/dcpsg.cpp \
  generic/fontdlgg.cpp \
  generic/gridg.cpp \
  generic/helpext.cpp \

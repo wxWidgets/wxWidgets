@@ -134,6 +134,9 @@
 #define wxUSE_STD_IOSTREAM  1
                                   // Use standard C++ streams if 1. If 0, use wxWin
                                   // streams implementation.
+#define wxUSE_STREAMS       1
+                                  // Use wxStream implementation within wxWindows code
+
 /*
  * Finer detail
  *

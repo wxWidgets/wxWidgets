@@ -315,7 +315,7 @@ IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
 #endif
 
 #if wxUSE_POSTSCRIPT
-#include "wx/postscrp.h"
+#include "wx/dcps.h"
 IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPageSetupData, wxObject)

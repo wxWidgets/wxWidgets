@@ -37,7 +37,6 @@ LIB_CPP_SRC=\
  common/object.cpp \
  common/db.cpp \
  common/dbtable.cpp \
- common/postscrp.cpp \
  common/prntbase.cpp \
  common/serbase.cpp \
  common/string.cpp \
@@ -87,7 +86,6 @@ LIB_CPP_SRC=\
  gtk/dc.cpp \
  gtk/dcclient.cpp \
  gtk/dcmemory.cpp \
- gtk/dcps.cpp \
  gtk/dcscreen.cpp \
  gtk/dnd.cpp \
  gtk/dialog.cpp \
@@ -123,6 +121,7 @@ LIB_CPP_SRC=\
  gtk/window.cpp \
 \
  generic/choicdgg.cpp \
+ generic/dcpsg.cpp \
  generic/colrdlgg.cpp \
  generic/dirdlgg.cpp \
  generic/fontdlgg.cpp \

@@ -22,7 +22,6 @@
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
-#include "wx/postscrp.h"
 #endif
 
 #if !wxUSE_PRINTING_ARCHITECTURE

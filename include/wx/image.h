@@ -18,7 +18,10 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/gdicmn.h"
+
+#if wxUSE_STREAMS
 #include "wx/stream.h"
+#endif
 
 //-----------------------------------------------------------------------------
 // classes
@@ -44,8 +47,10 @@ class WXDLLEXPORT wxImageHandler: public wxObject
 public:
   wxImageHandler() { m_name = ""; m_extension = ""; m_type = 0; }
 
+#if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
+#endif
 
   inline void SetName(const wxString& name) { m_name = name; }
   inline void SetExtension(const wxString& ext) { m_extension = ext; }
@@ -79,8 +84,11 @@ public:
       m_type = wxBITMAP_TYPE_PNG;
   };
 
+#if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
+#endif
+
 };
 #endif
 
@@ -101,7 +109,9 @@ public:
       m_type = wxBITMAP_TYPE_BMP;
   };
 
+#if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream );
+#endif
 };
 
 //-----------------------------------------------------------------------------
@@ -140,9 +150,16 @@ public:
   unsigned char GetBlue( int x, int y );
   
   virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_PNG );
+
+#if wxUSE_STREAMS
   virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_PNG );
+#endif
+
   virtual bool SaveFile( const wxString& name, int type );
+
+#if wxUSE_STREAMS
   virtual bool SaveFile( wxOutputStream& stream, int type );
+#endif
 
   bool Ok() const;
   int GetWidth() const;
