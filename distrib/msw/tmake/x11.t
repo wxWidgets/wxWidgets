@@ -22,17 +22,6 @@
         $project{"GUIOBJS"} .= $fileobj . " ";
     }
 
-    foreach $file (sort keys %wxUNIV) {
-        ($fileobj = $file) =~ s/cp?p?$/\o/;
-
-        if ( $wxUNIV{$file} =~ /Theme/ ) {
-            $file = "themes/" . $file
-        }
-
-        $project{"X11_SOURCES"} .= "univ/" . $file . " ";
-        $project{"GUIOBJS"} .= $fileobj . " ";
-    }
-
     foreach $file (sort keys %wxGeneric) {
         next if $wxGeneric{$file} =~ /\bNotX11\b/;
 
@@ -103,7 +92,7 @@ ALL_SOURCES = \
 ALL_HEADERS = \
 		#$ ExpandList("X11_HEADERS");
 
-GUIOBJS = \
+GUI_LOWLEVEL_OBJS = \
 		#$ ExpandList("GUIOBJS");
 
 COMMONOBJS = \

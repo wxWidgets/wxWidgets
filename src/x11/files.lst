@@ -31,41 +31,6 @@ ALL_SOURCES = \
 		x11/toplevel.cpp \
 		x11/utils.cpp \
 		x11/window.cpp \
-		univ/bmpbuttn.cpp \
-		univ/button.cpp \
-		univ/checkbox.cpp \
-		univ/checklst.cpp \
-		univ/choice.cpp \
-		univ/colschem.cpp \
-		univ/combobox.cpp \
-		univ/control.cpp \
-		univ/dialog.cpp \
-		univ/framuniv.cpp \
-		univ/gauge.cpp \
-		univ/themes/gtk.cpp \
-		univ/inpcons.cpp \
-		univ/inphand.cpp \
-		univ/listbox.cpp \
-		univ/menu.cpp \
-		univ/notebook.cpp \
-		univ/radiobox.cpp \
-		univ/radiobut.cpp \
-		univ/renderer.cpp \
-		univ/scrarrow.cpp \
-		univ/scrolbar.cpp \
-		univ/scrthumb.cpp \
-		univ/slider.cpp \
-		univ/spinbutt.cpp \
-		univ/statbmp.cpp \
-		univ/statbox.cpp \
-		univ/statline.cpp \
-		univ/stattext.cpp \
-		univ/statusbr.cpp \
-		univ/textctrl.cpp \
-		univ/theme.cpp \
-		univ/topluniv.cpp \
-		univ/themes/win32.cpp \
-		univ/winuniv.cpp \
 		generic/accel.cpp \
 		generic/busyinfo.cpp \
 		generic/calctrl.cpp \
@@ -626,7 +591,7 @@ ALL_HEADERS = \
 		protocol/http.h \
 		protocol/protocol.h
 
-GUIOBJS = \
+GUI_LOWLEVEL_OBJS = \
 		app.o \
 		bitmap.o \
 		brush.o \
@@ -656,42 +621,7 @@ GUIOBJS = \
 		timer.o \
 		toplevel.o \
 		utils.o \
-		window.o \
-		bmpbuttn.o \
-		button.o \
-		checkbox.o \
-		checklst.o \
-		choice.o \
-		colschem.o \
-		combobox.o \
-		control.o \
-		dialog.o \
-		framuniv.o \
-		gauge.o \
-		gtk.o \
-		inpcons.o \
-		inphand.o \
-		listbox.o \
-		menu.o \
-		notebook.o \
-		radiobox.o \
-		radiobut.o \
-		renderer.o \
-		scrarrow.o \
-		scrolbar.o \
-		scrthumb.o \
-		slider.o \
-		spinbutt.o \
-		statbmp.o \
-		statbox.o \
-		statline.o \
-		stattext.o \
-		statusbr.o \
-		textctrl.o \
-		theme.o \
-		topluniv.o \
-		win32.o \
-		winuniv.o
+		window.o
 
 COMMONOBJS = \
 		parser.o \
