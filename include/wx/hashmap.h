@@ -365,7 +365,7 @@ CLASSEXP CLASSNAME \
 { \
 public: \
     CLASSNAME() { } \
-    KEY_T operator()( PAIR_T pair ) const { return pair.first; } \
+    const KEY_T& operator()( const PAIR_T& pair ) const { return pair.first; }\
     \
     /* the dummy assignment operator is needed to suppress compiler */ \
     /* warnings from hash table class' operator=(): gcc complains about */ \
