@@ -945,32 +945,32 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& itemId)
 
 void wxTreeCtrl::Delete(const wxTreeItemId& itemId)
 {
-  wxGenericTreeItem *item = itemId.m_pItem;
-  wxGenericTreeItem *parent = item->GetParent();
+    wxGenericTreeItem *item = itemId.m_pItem;
+    wxGenericTreeItem *parent = item->GetParent();
 
-  if ( parent )
-  {
-    parent->GetChildren().Remove(item);
-  }
+    if ( parent )
+    {
+        parent->GetChildren().Remove( item );  // remove by value
+    }
 
-  item->DeleteChildren(this);
-  SendDeleteEvent(item);
-  delete item;
+    item->DeleteChildren(this);
+    SendDeleteEvent(item);
+    delete item;
 
-  m_dirty = TRUE;
+    m_dirty = TRUE;
 }
 
 void wxTreeCtrl::DeleteAllItems()
 {
-  if ( m_anchor )
-  {
-    m_anchor->DeleteChildren(this);
-    delete m_anchor;
+    if ( m_anchor )
+    {
+        m_anchor->DeleteChildren(this);
+        delete m_anchor;
 
-    m_anchor = NULL;
+        m_anchor = NULL;
 
-    m_dirty = TRUE;
-  }
+        m_dirty = TRUE;
+    }
 }
 
 void wxTreeCtrl::Expand(const wxTreeItemId& itemId)

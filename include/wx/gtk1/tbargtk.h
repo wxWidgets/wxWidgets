@@ -83,8 +83,13 @@ public:
     // Add space
     virtual void AddSeparator();
     
+    // Delete tool by index (=id)
+    virtual bool DeleteTool(int toolIndex);
+
+    // Delete all tools
     virtual void ClearTools();
     
+    // Has to be called after adding tools or changing something
     virtual bool Realize();
 
     virtual void EnableTool(int toolIndex, bool enable);

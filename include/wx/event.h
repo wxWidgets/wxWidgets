@@ -1380,6 +1380,16 @@ public:
                   wxObject *userData = (wxObject *) NULL )
         { Connect(id, -1, eventType, func, userData); }
 
+    bool Disconnect( int id, int lastId = -1, wxEventType eventType = wxEVT_NULL,
+                  wxObjectEventFunction func = NULL,
+                  wxObject *userData = (wxObject *) NULL );
+
+    // Convenience function: take just one id
+    bool Disconnect( int id, wxEventType eventType = wxEVT_NULL,
+                  wxObjectEventFunction func = NULL,
+                  wxObject *userData = (wxObject *) NULL )
+        { return Disconnect(id, -1, eventType, func, userData); }
+	
     // implementation from now on
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
     bool SearchDynamicEventTable( wxEvent& event );

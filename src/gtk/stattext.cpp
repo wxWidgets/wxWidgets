@@ -61,6 +61,8 @@ bool wxStaticText::Create(wxWindow *parent,
     // effect of changing the control size which might not be desirable
     wxControl::SetLabel(label);
     m_widget = gtk_label_new( m_label.mbc_str() );
+    
+    gtk_label_set_line_wrap( GTK_LABEL(m_widget), FALSE );
 
     SetFont( parent->GetFont() );
 
@@ -79,7 +81,7 @@ bool wxStaticText::Create(wxWindow *parent,
 
     GtkRequisition req;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
-
+    
     wxSize newSize = size;
     if (newSize.x == -1) newSize.x = req.width;
     if (newSize.y == -1) newSize.y = req.height;

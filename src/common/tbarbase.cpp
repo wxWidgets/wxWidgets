@@ -90,6 +90,7 @@ wxToolBarTool::wxToolBarTool(int theIndex,
   }
   m_shortHelpString = helpS1;
   m_longHelpString = helpS2;
+  m_control = (wxControl*) NULL;
 }
 
 wxToolBarTool::wxToolBarTool(wxControl *control)

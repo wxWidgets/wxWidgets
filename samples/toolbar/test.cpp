@@ -76,11 +76,8 @@ public:
 
     void OnToggleToolbar(wxCommandEvent& event);
     void OnEnablePrint(wxCommandEvent& event) { DoEnablePrint(); }
+    void OnDeletePrint(wxCommandEvent& event) { DoDeletePrint(); }
     void OnToggleHelp(wxCommandEvent& event) { DoToggleHelp(); }
-
-    void OnAppendMenu(wxCommandEvent& event);
-    void OnDeleteMenu(wxCommandEvent& event);
-    void OnToggleMenu(wxCommandEvent& event);
 
     void OnToolLeftClick(wxCommandEvent& event);
     void OnToolEnter(wxCommandEvent& event);
@@ -89,6 +86,7 @@ public:
 
 private:
     void DoEnablePrint();
+    void DoDeletePrint();
     void DoToggleHelp();
 
     bool                m_smallToolbar;
@@ -107,6 +105,7 @@ enum
 {
     IDM_TOOLBAR_TOGGLETOOLBAR = 200,
     IDM_TOOLBAR_ENABLEPRINT,
+    IDM_TOOLBAR_DELETEPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
 
     ID_COMBO = 1000
@@ -125,6 +124,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBAR, MyFrame::OnToggleToolbar)
     EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, MyFrame::OnEnablePrint)
+    EVT_MENU(IDM_TOOLBAR_DELETEPRINT, MyFrame::OnDeletePrint)
     EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
 
     EVT_MENU(-1, MyFrame::OnToolLeftClick)
@@ -214,8 +214,6 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   currentX += width + 5;
   toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
 
-  toolBar->AddSeparator();
-
   wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO);
   combo->Append("This");
   combo->Append("is a");
@@ -224,8 +222,6 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   combo->Append("toolbar");
   toolBar->AddControl(combo);
 
-  toolBar->AddSeparator();
-  
   if ( !smallicons )
   {
       currentX += width + 5;
@@ -235,8 +231,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
       currentX += width + 5;
       toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Paste");
       currentX += width + 5;
-      toolBar->AddSeparator();
-      toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Print");
+      toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Delete this tool");
       currentX += width + 5;
       toolBar->AddSeparator();
       toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Help button");
@@ -278,6 +273,7 @@ MyFrame::MyFrame(wxFrame* parent,
     wxMenu *tbarMenu = new wxMenu;
     tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBAR, "&Toggle toolbar", "Change the toolbar kind");
     tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, "&Enable print button", "");
+    tbarMenu->Append(IDM_TOOLBAR_DELETEPRINT, "&Delete print button", "");
     tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button", "");
 
     wxMenu *fileMenu = new wxMenu;
@@ -353,6 +349,11 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
     {
         DoToggleHelp();
     }
+    
+    if (event.GetId() == wxID_PRINT)
+    {
+        DoDeletePrint();
+    }
 }
 
 void MyFrame::OnCombo(wxCommandEvent& event)
@@ -367,6 +368,12 @@ void MyFrame::DoEnablePrint()
         tb->EnableTool( wxID_PRINT, FALSE );
     else
         tb->EnableTool( wxID_PRINT, TRUE );
+}
+
+void MyFrame::DoDeletePrint()
+{
+    wxToolBar *tb = GetToolBar();
+    tb->DeleteTool( wxID_PRINT );
 }
 
 void MyFrame::DoToggleHelp()

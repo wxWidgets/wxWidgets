@@ -178,6 +178,7 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new( GTK_ORIENTATION_HORIZONTAL,
                                               GTK_TOOLBAR_ICONS ) );
 
+//    gtk_toolbar_set_space_style( m_toolbar, GTK_TOOLBAR_SPACE_LINE );
     m_separation = 5;
     gtk_toolbar_set_space_size( m_toolbar, m_separation );
     m_hasToolAlready = FALSE;
@@ -368,6 +369,28 @@ bool wxToolBar::AddControl(wxControl *control)
 void wxToolBar::AddSeparator()
 {
     gtk_toolbar_append_space( m_toolbar );
+}
+
+bool wxToolBar::DeleteTool(int toolIndex)
+{
+    wxNode *node = m_tools.First();
+    while (node)
+    {
+        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
+        if (tool->m_index == toolIndex)
+        {
+            if (tool->m_control)
+                tool->m_control->Destroy();
+            else
+                gtk_widget_destroy( tool->m_item );
+            m_tools.DeleteNode( node );
+	    
+            return TRUE;
+        }
+        node = node->Next();
+    }
+
+    return FALSE;
 }
 
 void wxToolBar::ClearTools()

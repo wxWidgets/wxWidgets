@@ -760,6 +760,7 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
     }
     return FALSE;
 }
+
 void wxEvtHandler::Connect( int id, int lastId,
                             wxEventType eventType,
                             wxObjectEventFunction func,
@@ -776,6 +777,33 @@ void wxEvtHandler::Connect( int id, int lastId,
         m_dynamicEvents = new wxList;
 
     m_dynamicEvents->Append( (wxObject*) entry );
+}
+
+bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
+                  wxObjectEventFunction func,
+                  wxObject *userData )
+{
+    if (!m_dynamicEvents)
+        return FALSE;
+	
+    wxNode *node = m_dynamicEvents->First();
+    while (node)
+    {
+        wxEventTableEntry *entry = (wxEventTableEntry*)node->Data();
+        if ((entry->m_id == id) &&
+            ((entry->m_lastId == lastId) || (lastId == -1)) &&
+            ((entry->m_eventType == eventType) || (eventType == wxEVT_NULL)) &&
+            ((entry->m_fn == func) || (func == (wxObjectEventFunction)NULL)) &&
+            ((entry->m_callbackUserData == userData) || (userData == (wxObject*)NULL)))
+        {
+            if (entry->m_callbackUserData) delete entry->m_callbackUserData;
+            m_dynamicEvents->DeleteNode( node );
+            delete entry;
+            return TRUE;
+        }
+        node = node->Next();
+    }
+    return FALSE;
 }
 
 bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
