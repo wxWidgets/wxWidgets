@@ -705,7 +705,7 @@
 // disable the settings which don't work for some compilers
 // ----------------------------------------------------------------------------
 
-#if defined(__MINGW32__) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+#if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
 #ifndef wxUSE_NORLANDER_HEADERS
 #   define wxUSE_NORLANDER_HEADERS 1
 #endif
@@ -725,11 +725,13 @@
 #undef wxUSE_MS_HTML_HELP
 #define wxUSE_MS_HTML_HELP 0
 
-// Cygwin b20 doesn't have wcslen
-#ifndef __MINGW32__
-    #undef wxUSE_WCHAR_T
-    #define wxUSE_WCHAR_T 0
-#endif // Cygwin
+// Cygwin betas don't have wcslen
+#if defined(__CYGWIN__) || defined(__CYGWIN32__)
+#  if ! ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+#    undef wxUSE_WCHAR_T
+#    define wxUSE_WCHAR_T 0
+#  endif
+#endif
 
 #endif // __GNUWIN32__
 
