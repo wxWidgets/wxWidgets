@@ -183,9 +183,12 @@
 
 // Recommended setting: 1 (always)
 #define wxUSE_LOGWINDOW 1
-#define wxUSE_LOG_DIALOG 0
+
 // Recommended setting: 1 (always)
 #define wxUSE_LOGGUI 1
+
+// Recommended setting: 1 (always)
+#define wxUSE_LOG_DIALOG 1
 
 // Support for multithreaded applications: if 1, compile in thread classes
 // (thread.h) and make the library a bit more thread safe. Although thread
@@ -416,6 +419,7 @@
 #define wxUSE_GAUGE        1    // wxGauge
 #define wxUSE_LISTBOX      1    // wxListBox
 #define wxUSE_LISTCTRL     1    // wxListCtrl
+#define wxUSE_PROPSHEET    1    // wxProperty
 #define wxUSE_RADIOBOX     1    // wxRadioBox
 #define wxUSE_RADIOBTN     1    // wxRadioButton
 #define wxUSE_SCROLLBAR    1    // wxScrollBar
@@ -623,6 +627,12 @@
 // color chooser dialog
 #define wxUSE_COLOURDLG 1
 
+// splash screen class
+#define wxUSE_SPLASH 1
+
+// wizards
+#define wxUSE_WIZARDDLG 1
+
 // ----------------------------------------------------------------------------
 // Metafiles support
 // ----------------------------------------------------------------------------
@@ -712,6 +722,8 @@
 // Recommended setting: 1 (the class is tiny, disabling it won't save much
 // space)
 #define wxUSE_SNGLINST_CHECKER  1
+
+#define wxUSE_DRAGIMAGE   1
 
 #define wxUSE_IPC         0
                                 // 0 for no interprocess comms
