@@ -844,7 +844,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
                         {
 
                             if ( wxSscanf(fileList[i].c_str(),
-                                          _("%*s %*s %*s %*s %i %*s %*s %*s %*s"),
+                                          _T("%*s %*s %*s %*s %i %*s %*s %*s %*s"),
                                           &filesize) == 9 )
                             {
                                 // We've gotten a good response
