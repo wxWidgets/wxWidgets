@@ -43,7 +43,7 @@
     <lib id="netlib" template="wx_base_lib"
          cond="SHARED=='0' and MONOLITHIC=='0'">
         <sources>$(NET_SRC)</sources>
-        <msvc-headers>$(NET_CMN_HDR)</msvc-headers>
+        <msvc-headers>$(NET_CMN_HDR) $(NET_PLATFORM_HDR)</msvc-headers>
     </lib>
     
     <set var="MSVC6PRJ_MERGED_TARGETS" append="1">net=netlib+netdll</set>
