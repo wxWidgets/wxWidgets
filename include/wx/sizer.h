@@ -69,6 +69,15 @@ public:
   bool IsWindow();
   bool IsSizer();
   bool IsSpacer();
+  
+  void SetInitSize( int x, int y )
+    { m_minSize.x = x; m_minSize.y = y; }
+  void SetOption( int option )
+    { m_option = option; }
+  void SetFlag( int flag )
+    { m_flag = flag; }
+  void SetBorder( int border )
+    { m_border = border; }
 
   wxWindow *GetWindow() const
     { return m_window; }
