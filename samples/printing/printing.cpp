@@ -492,7 +492,7 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
         wxString words[8] = {"This ", "is ", "a very long string for testing:"," GetTextExtent", " testing", "string. ", "Enjoy ", "it!"};
         long w, h;
         long x = 200, y= 250;
-        wxFont fnt(15, wxTELETYPE, wxBOLD, wxNORMAL);
+        wxFont fnt(15, wxTELETYPE, wxNORMAL, wxBOLD);
         
         dc->SetFont(fnt);
         for (int i = 0; i < 8; i++) {
