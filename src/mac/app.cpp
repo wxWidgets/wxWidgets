@@ -288,6 +288,9 @@ void wxApp::MacNewFile()
         { kEventClassCommand, kEventProcessCommand } ,
         { kEventClassCommand, kEventCommandUpdateStatus } ,
 
+        { kEventClassMenu, kEventMenuOpening },
+        { kEventClassMenu, kEventMenuClosed },
+
         { kEventClassApplication , kEventAppActivated } ,
         { kEventClassApplication , kEventAppDeactivated } ,
         // handling the quit event is not recommended by apple
@@ -299,9 +302,35 @@ void wxApp::MacNewFile()
         { 'WXMC' , 'WXMC' }
     } ;
 
-static pascal OSStatus MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+static pascal OSStatus
+MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
-    return eventNotHandledErr ;
+    // FIXME: this doesn't work for multiple windows
+    wxWindow *win = wxTheApp->GetTopWindow();
+    if ( win )
+    {
+        // VZ: we could find the menu from its handle here by examining all
+        //     the menus in the menu bar recursively but knowing that neither
+        //     wxMSW nor wxGTK do it why bother...
+#if 0
+        MenuRef menuRef;
+
+        GetEventParameter(event,
+                          kEventParamDirectObject,
+                          typeMenuRef, NULL,
+                          sizeof(menuRef), NULL,
+                          &menuRef);
+#endif // 0
+
+        wxMenuEvent event(GetEventKind(event) == kEventMenuOpening
+                        ? wxEVT_MENU_OPEN
+                        : wxEVT_MENU_CLOSE);
+        event.SetEventObject(win);
+
+        (void)win->GetEventHandler()->ProcessEvent(event);
+    }
+
+    return eventNotHandledErr;
 }
 
 // due to the rather low-level event API of wxWindows, we cannot use RunApplicationEventLoop

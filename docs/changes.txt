@@ -147,6 +147,7 @@ wxGTK:
 wxMac:
 
 - generate wxEVT_SCROLL_THUMBRELEASE and wxEVT_SCROLLWIN_THUMBRELEASE events
+- generate wxEVT_MENU_OPEN and wxEVT_MENU_CLOSE events
 
 wxMSW:
 
