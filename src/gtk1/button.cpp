@@ -60,6 +60,22 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *
 }
 
 //-----------------------------------------------------------------------------
+// "style_set" from m_widget
+//-----------------------------------------------------------------------------
+
+static gint
+gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), wxButton *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+    
+    if (GTK_WIDGET_REALIZED(m_widget))
+        win->SetSize( win->m_x, win->m_y, win->m_width, win->m_height );
+
+    return FALSE;
+}
+
+//-----------------------------------------------------------------------------
 // wxButton
 //-----------------------------------------------------------------------------
 
@@ -148,6 +164,9 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     gtk_signal_connect_after( GTK_OBJECT(m_widget), "clicked",
       GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
 
+    gtk_signal_connect_after( GTK_OBJECT(m_widget), "style_set",
+      GTK_SIGNAL_FUNC(gtk_button_style_set_callback), (gpointer*) this );
+      
     m_parent->DoAddChild( this );
 
     PostCreation(size);
