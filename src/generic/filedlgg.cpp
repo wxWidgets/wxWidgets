@@ -476,7 +476,7 @@ void wxFileCtrl::UpdateItem(const wxListItem &item)
     fd->ReadData();
 
     SetItemText(item, fd->GetFileName());
-    SetItemImage(item, fd->GetImageId(), fd->GetImageId());
+    SetItemImage(item, fd->GetImageId());
 
     if (GetWindowStyleFlag() & wxLC_REPORT)
     {

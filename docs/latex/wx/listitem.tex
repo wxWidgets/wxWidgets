@@ -77,12 +77,12 @@ can be any combination of the following values:
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{wxLIST\_MASK\_STATE}{The {\bf GetState} is valid.}
-\twocolitem{wxLIST\_MASK\_TEXT}{The {\bf GetText} is valid.}
-\twocolitem{wxLIST\_MASK\_IMAGE}{The {\bf GetImage} is valid.}
-\twocolitem{wxLIST\_MASK\_DATA}{The {\bf GetData} is valid.}
-\twocolitem{wxLIST\_MASK\_WIDTH}{The {\bf GetWidth} is valid.}
-\twocolitem{wxLIST\_MASK\_FORMAT}{The {\bf GetAlign} is valid.}
+\twocolitem{wxLIST\_MASK\_STATE}{{\bf GetState} is valid.}
+\twocolitem{wxLIST\_MASK\_TEXT}{{\bf GetText} is valid.}
+\twocolitem{wxLIST\_MASK\_IMAGE}{{\bf GetImage} is valid.}
+\twocolitem{wxLIST\_MASK\_DATA}{{\bf GetData} is valid.}
+\twocolitem{wxLIST\_MASK\_WIDTH}{{\bf GetWidth} is valid.}
+\twocolitem{wxLIST\_MASK\_FORMAT}{{\bf GetFormat} is valid.}
 \end{twocollist}
 
 \membersection{wxListItem::GetState}\label{wxlistitemgetstate}
@@ -162,7 +162,7 @@ Sets the zero-based item position.
 
 \func{void}{SetImage}{\param{int }{image}}
 
-Returns the zero-based index of the image associated with the item
+Sets the zero-based index of the image associated with the item
 into the image list.
 
 \membersection{wxListItem::SetMask}\label{wxlistitemsetmask}

@@ -808,12 +808,6 @@ The {\bf m\_mask} member contains a bitlist specifying which of the other fields
 
 The {\bf m\_stateMask} and {\bf m\_state} members take flags from the following:
 
-The wxListItem object can also contain item-specific colour and font
-information: for this you need to call one of SetTextColour(),
-SetBackgroundColour() or SetFont() functions on it passing it the colour/font
-to use. If the colour/font is not specified, the default list control
-colour/font is used.
-
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{wxLIST\_STATE\_DONTCARE}{Don't care what the state is. Win32 only. }
@@ -822,6 +816,12 @@ colour/font is used.
 \twocolitem{wxLIST\_STATE\_SELECTED}{The item is selected.}
 \twocolitem{wxLIST\_STATE\_CUT}{The item is in the cut state. Win32 only. }
 \end{twocollist}
+
+The wxListItem object can also contain item-specific colour and font
+information: for this you need to call one of SetTextColour(),
+SetBackgroundColour() or SetFont() functions on it passing it the colour/font
+to use. If the colour/font is not specified, the default list control
+colour/font is used.
 
 \func{long}{SetItem}{\param{long }{index}, \param{int }{col}, \param{const wxString\& }{label}, \param{int }{imageId = -1}}
 
@@ -867,17 +867,23 @@ Associates application-defined data with this item.
 
 \membersection{wxListCtrl::SetItemImage}\label{wxlistctrlsetitemimage}
 
+\func{bool}{SetItemImage}{\param{long }{item}, \param{int }{image}}
+
+Sets the image associated with the item. The image is an index into the
+image list associated with the list control.
+
 \func{bool}{SetItemImage}{\param{long }{item}, \param{int }{image}, \param{int }{selImage}}
 
 Sets the unselected and selected images associated with the item. The images are indices into the
-image list associated with the list control.
+image list associated with the list control. This form is deprecated: {\it selImage} is not
+used.
 
 
 \membersection{wxListCtrl::SetItemPosition}\label{wxlistctrlsetitemposition}
 
 \func{bool}{SetItemPosition}{\param{long }{item}, \param{const wxPoint\& }{pos}}
 
-Sets the position of the item, in icon or small icon view.
+Sets the position of the item, in icon or small icon view. Windows only.
 
 
 \membersection{wxListCtrl::SetItemState}\label{wxlistctrlsetitemstate}

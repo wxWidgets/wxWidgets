@@ -221,8 +221,10 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_END_LABEL_EDIT)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ITEM)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS)
+#if WXWIN_COMPATIBILITY_2_4
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_GET_INFO)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_SET_INFO)
+#endif
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_SELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_DESELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_KEY_DOWN)
@@ -901,7 +903,20 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 }
 
 // Sets the item image
+#if WXWIN_COMPATIBILITY_2_4
 bool wxListCtrl::SetItemImage(long item, int image, int WXUNUSED(selImage))
+{
+    wxListItem info;
+
+    info.m_mask = wxLIST_MASK_IMAGE;
+    info.m_image = image;
+    info.m_itemId = item;
+
+    return SetItem(info);
+}
+#endif
+
+bool wxListCtrl::SetItemImage(long item, int image)
 {
     wxListItem info;
 
@@ -1917,6 +1932,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 wxDeleteInternalData(this, iItem);
                 break;
 
+#if WXWIN_COMPATIBILITY_2_4
             case LVN_SETDISPINFO:
                 {
                     eventType = wxEVT_COMMAND_LIST_SET_INFO;
@@ -1924,6 +1940,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
                 }
                 break;
+#endif
 
             case LVN_INSERTITEM:
                 eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;

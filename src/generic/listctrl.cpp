@@ -94,8 +94,10 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_END_LABEL_EDIT)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ITEM)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS)
+#if WXWIN_COMPATIBILITY_2_4
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_GET_INFO)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_SET_INFO)
+#endif
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_SELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_DESELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_KEY_DOWN)
@@ -4822,7 +4824,19 @@ bool wxGenericListCtrl::SetItemState( long item, long state, long stateMask )
     return true;
 }
 
+#if WXWIN_COMPATIBILITY_2_4
 bool wxGenericListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
+{
+    wxListItem info;
+    info.m_image = image;
+    info.m_mask = wxLIST_MASK_IMAGE;
+    info.m_itemId = item;
+    m_mainWin->SetItem( info );
+    return true;
+}
+#endif
+
+bool wxGenericListCtrl::SetItemImage( long item, int image )
 {
     wxListItem info;
     info.m_image = image;

@@ -153,7 +153,7 @@ An item object, used by some events. See also \helpref{wxListCtrl::SetItem}{wxli
 This method only makes sense for \texttt{EVT\_LIST\_END\_LABEL\_EDIT} message
 and returns \true if it the label editing has been cancelled by the user
 (\helpref{GetLabel}{wxlisteventgetlabel} returns an empty string in this case
-but it doesn't allow to distinguish between really cancelling the edit and,
-admittedly rare, case when the user wants to rename it to an empty string0.
+but it doesn't allow the application to distinguish between really cancelling the edit and
+the admittedly rare case when the user wants to rename it to an empty string).
 
 

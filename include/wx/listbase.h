@@ -421,8 +421,10 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_END_LABEL_EDIT, 703)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ITEM, 704)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, 705)
+#if WXWIN_COMPATIBILITY_2_4
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_GET_INFO, 706)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_SET_INFO, 707)
+#endif
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_SELECTED, 708)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_DESELECTED, 709)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_KEY_DOWN, 710)
@@ -447,8 +449,10 @@ typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 #define EVT_LIST_END_LABEL_EDIT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_END_LABEL_EDIT, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxListEventFunction, & fn ), NULL ),
 #define EVT_LIST_DELETE_ITEM(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_DELETE_ITEM, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxListEventFunction, & fn ), NULL ),
 #define EVT_LIST_DELETE_ALL_ITEMS(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxListEventFunction, & fn ), NULL ),
+#if WXWIN_COMPATIBILITY_2_4
 #define EVT_LIST_GET_INFO(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_GET_INFO, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxListEventFunction, & fn ), NULL ),
 #define EVT_LIST_SET_INFO(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_SET_INFO, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxListEventFunction, & fn ), NULL ),
+#endif
 #define EVT_LIST_KEY_DOWN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_KEY_DOWN, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxListEventFunction, & fn ), NULL ),
 #define EVT_LIST_INSERT_ITEM(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_INSERT_ITEM, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxListEventFunction, & fn ), NULL ),
 

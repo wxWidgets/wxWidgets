@@ -98,7 +98,10 @@ public:
     long SetItem( long index, int col, const wxString& label, int imageId = -1 );
     int  GetItemState( long item, long stateMask ) const;
     bool SetItemState( long item, long state, long stateMask);
-    bool SetItemImage( long item, int image, int selImage);
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED(bool SetItemImage( long item, int image, int selImage ));
+#endif
+    bool SetItemImage( long item, int image );
     wxString GetItemText( long item ) const;
     void SetItemText( long item, const wxString& str );
     wxUIntPtr GetItemData( long item ) const;

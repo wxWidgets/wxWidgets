@@ -322,7 +322,7 @@ int wxListbook::GetPageImage(size_t WXUNUSED(n)) const
 
 bool wxListbook::SetPageImage(size_t n, int imageId)
 {
-    return m_list->SetItemImage(n, imageId, imageId);
+    return m_list->SetItemImage(n, imageId);
 }
 
 // ----------------------------------------------------------------------------
