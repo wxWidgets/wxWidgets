@@ -26,22 +26,23 @@
 
 MustHaveApp(wxGenericDragImage);
 
-%name (DragImage) class wxGenericDragImage : public wxObject
+%rename (DragImage) wxGenericDragImage;
+class wxGenericDragImage : public wxObject
 {
 public:
 
     wxGenericDragImage(const wxBitmap& image,
                        const wxCursor& cursor = wxNullCursor);
     
-    %name(DragIcon)wxGenericDragImage(const wxIcon& image,
-                                        const wxCursor& cursor = wxNullCursor);
+    %RenameCtor(DragIcon, wxGenericDragImage(const wxIcon& image,
+                                        const wxCursor& cursor = wxNullCursor));
 
-    %name(DragString)wxGenericDragImage(const wxString& str,
-                                          const wxCursor& cursor = wxNullCursor);
+    %RenameCtor(DragString, wxGenericDragImage(const wxString& str,
+                                          const wxCursor& cursor = wxNullCursor));
 
-    %name(DragTreeItem)wxGenericDragImage(const wxPyTreeCtrl& treeCtrl, wxTreeItemId& id);
+    %RenameCtor(DragTreeItem, wxGenericDragImage(const wxPyTreeCtrl& treeCtrl, wxTreeItemId& id));
 
-    %name(DragListItem)wxGenericDragImage(const wxPyListCtrl& listCtrl, long id);
+    %RenameCtor(DragListItem, wxGenericDragImage(const wxPyListCtrl& listCtrl, long id));
 
     ~wxGenericDragImage();
 
@@ -57,8 +58,8 @@ public:
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image. This is full screen only. fullScreenRect gives the
     // position of the window on the screen, to restrict the drag to.
-    %name(BeginDragBounded) bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
-                                           wxWindow* boundingWindow);
+    %Rename(BeginDragBounded,  bool, BeginDrag(const wxPoint& hotspot, wxWindow* window,
+                                           wxWindow* boundingWindow));
 
 
     // End drag

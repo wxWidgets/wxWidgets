@@ -113,15 +113,15 @@ enum wxStockCursor
 
 DocStr( wxSize,
 "wx.Size is a useful data structure used to represent the size of
-something.  It simply contians integer width and height proprtites.
-In most places in wxPython where a wx.Size is expected a
-(width,height) tuple can be used instead.", "");
+something.  It simply contians integer width and height
+proprtites.  In most places in wxPython where a wx.Size is
+expected a (width, height) tuple can be used instead.", "");
 
 class wxSize
 {
 public:
-    %name(width) int x;
-    %name(height)int y;
+    %Rename(width, int,  x);
+    %Rename(height,int,  y);
     %pythoncode { x = width; y = height }
     
     DocCtorStr(
@@ -532,7 +532,7 @@ bottom, otherwise it is moved to the left or top respectively.", "",
 
     
     DocStr( Inside, "Return True if the point is (not strcitly) inside the rect.", "");
-    %name(InsideXY)bool Inside(int x, int y) const;
+    %Rename(InsideXY, bool, Inside(int x, int y) const);
     bool Inside(const wxPoint& pt) const;
 
     DocDeclStr(    
@@ -626,8 +626,8 @@ class wxPoint2D
 public:
     DocStr(wxPoint2D, "Create a w.Point2D object.", "");
     wxPoint2D( double x=0.0 , double y=0.0 );
-    %name(Point2DCopy) wxPoint2D( const wxPoint2D &pt );
-    %name(Point2DFromPoint) wxPoint2D( const wxPoint &pt );
+    %RenameCtor(Point2DCopy, wxPoint2D( const wxPoint2D &pt ));
+    %RenameCtor(Point2DFromPoint, wxPoint2D( const wxPoint &pt ));
 
     DocDeclAStr(
         void, GetFloor( int *OUTPUT , int *OUTPUT ) const,
@@ -677,8 +677,8 @@ public:
         bool, operator!=(const wxPoint2D& pt) const,
         "Test for inequality", "");
 
-    %name(x)double m_x;
-    %name(y)double m_y;
+    %Rename(x, double,  m_x);
+    %Rename(y, double,  m_y);
 
     %extend {
         void Set( double x=0 , double y=0 ) {

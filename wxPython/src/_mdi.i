@@ -47,7 +47,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const wxString& name = wxPyFrameNameStr);
-    %name(PreMDIParentFrame)wxMDIParentFrame();
+    %RenameCtor(PreMDIParentFrame, wxMDIParentFrame());
 
     bool Create(wxWindow *parent,
                      const wxWindowID id=-1,
@@ -95,7 +95,7 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
                     const wxString& name = wxPyFrameNameStr);
-    %name(PreMDIChildFrame)wxMDIChildFrame();
+    %RenameCtor(PreMDIChildFrame, wxMDIChildFrame());
 
     // Turn it back on again
     %typemap(out) wxMDIChildFrame* { $result = wxPyMake_wxObject($1, $owner); }
@@ -126,7 +126,7 @@ public:
     %typemap(out) wxMDIClientWindow*;    // turn off this typemap
 
     wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
-    %name(PreMDIClientWindow)wxMDIClientWindow();
+    %RenameCtor(PreMDIClientWindow, wxMDIClientWindow());
 
     // Turn it back on again
     %typemap(out) wxMDIClientWindow* { $result = wxPyMake_wxObject($1, $owner); }

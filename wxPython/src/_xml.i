@@ -85,14 +85,14 @@ public:
 
 
     // user-friendly creation:
-    %name(XmlNodeEasy) wxXmlNode(wxXmlNodeType type, const wxString& name,
-                                  const wxString& content = wxPyEmptyString);
+    %RenameCtor(XmlNodeEasy,  wxXmlNode(wxXmlNodeType type, const wxString& name,
+                                  const wxString& content = wxPyEmptyString));
 
     void AddChild(wxXmlNode *child);
     void InsertChild(wxXmlNode *child, wxXmlNode *before_node);
     bool RemoveChild(wxXmlNode *child);
     void AddProperty(wxXmlProperty *prop);
-    %name(AddPropertyName) void AddProperty(const wxString& name, const wxString& value);
+    %Rename(AddPropertyName,  void,  AddProperty(const wxString& name, const wxString& value));
     bool DeleteProperty(const wxString& name);
 
     // access methods:
@@ -128,9 +128,9 @@ class wxXmlDocument : public wxObject
 public:
     wxXmlDocument(const wxString& filename,
                   const wxString& encoding = wxPyUTF8String);
-    %name(XmlDocumentFromStream) wxXmlDocument(wxInputStream& stream,
-                                                const wxString& encoding = wxPyUTF8String);
-    %name(EmptyXmlDocument) wxXmlDocument();
+    %RenameCtor(XmlDocumentFromStream,  wxXmlDocument(wxInputStream& stream,
+                                                const wxString& encoding = wxPyUTF8String));
+    %RenameCtor(EmptyXmlDocument,  wxXmlDocument());
 
     ~wxXmlDocument();
 
@@ -139,12 +139,12 @@ public:
     // otherwise.
     bool Load(const wxString& filename,
               const wxString& encoding = wxPyUTF8String);
-    %name(LoadFromStream)bool Load(wxInputStream& stream,
-                                   const wxString& encoding = wxPyUTF8String);
+    %Rename(LoadFromStream, bool,  Load(wxInputStream& stream,
+                                   const wxString& encoding = wxPyUTF8String));
 
     // Saves document as .xml file.
     bool Save(const wxString& filename) const;
-    %name(SaveToStream)bool Save(wxOutputStream& stream) const;
+    %Rename(SaveToStream, bool,  Save(wxOutputStream& stream) const);
 
     bool IsOk() const;
 

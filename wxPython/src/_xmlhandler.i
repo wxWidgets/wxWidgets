@@ -138,7 +138,8 @@ IMP_PYCALLBACK_BOOL_NODE_pure(wxPyXmlResourceHandler, wxXmlResourceHandler, CanH
 // Now the version that will be SWIGged.
 
 
-%name(XmlResourceHandler) class wxPyXmlResourceHandler : public wxObject {
+%rename(XmlResourceHandler) wxPyXmlResourceHandler;
+class wxPyXmlResourceHandler : public wxObject {
 public:
     %pythonAppend wxPyXmlResourceHandler "self._setCallbackInfo(self, XmlResourceHandler)"
     wxPyXmlResourceHandler() : wxXmlResourceHandler() {}

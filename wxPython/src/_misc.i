@@ -62,9 +62,9 @@ public:
     
 
     wxWindow *GetWindow();
-    %name(MoveXY)void Move(int x, int y);
+    %Rename(MoveXY, void, Move(int x, int y));
     void Move(const wxPoint& pt);
-    %name(SetSizeWH) void SetSize(int width, int height);
+    %Rename(SetSizeWH,  void, SetSize(int width, int height));
     void SetSize(const wxSize& size);
     void Show(int show = true);
     void Hide();
@@ -159,7 +159,7 @@ public:
     void Save(wxConfigBase& config);
 
     void AddFilesToMenu();
-    %name(AddFilesToThisMenu)void AddFilesToMenu(wxMenu* menu);
+    %Rename(AddFilesToThisMenu, void, AddFilesToMenu(wxMenu* menu));
 
     // Accessors
     wxString GetHistoryFile(int i) const;
@@ -184,7 +184,7 @@ public:
                             const wxString& path = wxPyEmptyString);
 
     // default ctor, use Create() after it
-    %name(PreSingleInstanceChecker) wxSingleInstanceChecker();
+    %RenameCtor(PreSingleInstanceChecker,  wxSingleInstanceChecker());
 
     ~wxSingleInstanceChecker();
 

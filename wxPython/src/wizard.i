@@ -96,7 +96,7 @@ public:
 //     wxWizardPage(wxWizard *parent,
 //                  const wxBitmap& bitmap = wxNullBitmap,
 //                  const char* resource = NULL);
-//     %name(PreWizardPage)wxWizardPage();
+//     %RenameCtor(PreWizardPage, wxWizardPage());
 
     %extend {
         bool Create(wxWizard *parent,
@@ -224,7 +224,7 @@ public:
         }
     }
 
-    %name(PrePyWizardPage)wxPyWizardPage();
+    %RenameCtor(PrePyWizardPage, wxPyWizardPage());
 
     // Turn it back on again
     %typemap(out) wxPyWizardPage* { $result = wxPyMake_wxObject($1, $owner); }
@@ -297,7 +297,7 @@ public:
                        wxWizardPage *next = NULL,
                        const wxBitmap& bitmap = wxNullBitmap,
                        const wxChar* resource = NULL);
-    %name(PreWizardPageSimple)wxWizardPageSimple();
+    %RenameCtor(PreWizardPageSimple, wxWizardPageSimple());
 
     bool Create(wxWizard *parent = NULL,
                 wxWizardPage *prev = NULL,
@@ -331,7 +331,7 @@ public:
              const wxBitmap& bitmap = wxNullBitmap,
              const wxPoint& pos = wxDefaultPosition,
              long style = wxDEFAULT_DIALOG_STYLE);
-    %name(PreWizard)wxWizard();
+    %RenameCtor(PreWizard, wxWizard());
 
     bool Create(wxWindow *parent,
              int id = -1,

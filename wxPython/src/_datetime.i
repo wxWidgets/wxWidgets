@@ -343,15 +343,15 @@ public:
 
         // returns the number of days in this year (356 or 355 for Gregorian
         // calendar usually :-)
-    %name(GetNumberOfDaysinYear)
-        static wxDateTime_t GetNumberOfDays(int year, Calendar cal = Gregorian);
+    %Rename(GetNumberOfDaysinYear, 
+        static wxDateTime_t, GetNumberOfDays(int year, Calendar cal = Gregorian));
 
         // get the number of the days in the given month (default value for
         // the year means the current one)
-    %name(GetNumberOfDaysInMonth)
-        static wxDateTime_t GetNumberOfDays(Month month,
+    %Rename(GetNumberOfDaysInMonth, 
+        static wxDateTime_t, GetNumberOfDays(Month month,
                                             int year = Inv_Year,
-                                            Calendar cal = Gregorian);
+                                            Calendar cal = Gregorian));
 
         // get the full (default) or abbreviated month name in the current
         // locale, returns empty string on error
@@ -400,19 +400,19 @@ public:
     // constructors
 
     wxDateTime();
-    %name(DateTimeFromTimeT)wxDateTime(time_t timet);
-    %name(DateTimeFromJDN)wxDateTime(double jdn);
-    %name(DateTimeFromHMS)wxDateTime(wxDateTime_t hour,
+    %RenameCtor(DateTimeFromTimeT, wxDateTime(time_t timet));
+    %RenameCtor(DateTimeFromJDN, wxDateTime(double jdn));
+    %RenameCtor(DateTimeFromHMS, wxDateTime(wxDateTime_t hour,
                                      wxDateTime_t minute = 0,
                                      wxDateTime_t second = 0,
-                                     wxDateTime_t millisec = 0);
-    %name(DateTimeFromDMY)wxDateTime(wxDateTime_t day,
+                                     wxDateTime_t millisec = 0));
+    %RenameCtor(DateTimeFromDMY, wxDateTime(wxDateTime_t day,
                                      Month        month = Inv_Month,
                                      int          year = Inv_Year,
                                      wxDateTime_t hour = 0,
                                      wxDateTime_t minute = 0,
                                      wxDateTime_t second = 0,
-                                     wxDateTime_t millisec = 0);
+                                     wxDateTime_t millisec = 0));
             
     ~wxDateTime();
 
@@ -422,16 +422,16 @@ public:
     wxDateTime& SetToCurrent();
 
         // set to given time_t value
-    %name(SetTimeT)wxDateTime& Set(time_t timet);
+    %Rename(SetTimeT, wxDateTime&, Set(time_t timet));
 
         // set to given JDN (beware of rounding errors)
-    %name(SetJDN)wxDateTime& Set(double jdn);
+    %Rename(SetJDN, wxDateTime&, Set(double jdn));
 
         // set to given time, date = today
-    %name(SetHMS)wxDateTime& Set(wxDateTime_t hour,
+    %Rename(SetHMS, wxDateTime&, Set(wxDateTime_t hour,
                     wxDateTime_t minute = 0,
                     wxDateTime_t second = 0,
-                    wxDateTime_t millisec = 0);
+                    wxDateTime_t millisec = 0));
 
         // from separate values for each component with explicit date
         // (defaults for month and year are the current values)
@@ -681,15 +681,15 @@ public:
     // arithmetics with dates (see also below for more operators)
 
         // add a time span (positive or negative)
-    %name(AddTS) wxDateTime& Add(const wxTimeSpan& diff);
+    %Rename(AddTS,  wxDateTime&, Add(const wxTimeSpan& diff));
         // add a date span (positive or negative)
-    %name(AddDS) wxDateTime& Add(const wxDateSpan& diff);
+    %Rename(AddDS,  wxDateTime&, Add(const wxDateSpan& diff));
 
         // subtract a time span (positive or negative)
-    %name(SubtractTS) wxDateTime& Subtract(const wxTimeSpan& diff);
+    %Rename(SubtractTS,  wxDateTime&, Subtract(const wxTimeSpan& diff));
 
         // subtract a date span (positive or negative)
-    %name(SubtractDS) wxDateTime& Subtract(const wxDateSpan& diff);
+    %Rename(SubtractDS,  wxDateTime&, Subtract(const wxDateSpan& diff));
 
         // return the difference between two dates
     wxTimeSpan Subtract(const wxDateTime& dt) const;

@@ -127,7 +127,8 @@ IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, Est
 
 MustHaveApp(wxPyVScrolledWindow);
 
-%name(VScrolledWindow) class wxPyVScrolledWindow : public wxPanel
+%rename(VScrolledWindow) wxPyVScrolledWindow;
+class wxPyVScrolledWindow : public wxPanel
 {
 public:
     %pythonAppend wxPyVScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, VScrolledWindow)"
@@ -141,7 +142,7 @@ public:
                         long style = 0,
                         const wxString& name = wxPyPanelNameStr);
 
-    %name(PreVScrolledWindow)wxPyVScrolledWindow();
+    %RenameCtor(PreVScrolledWindow, wxPyVScrolledWindow());
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
@@ -176,7 +177,7 @@ public:
 
     // return the item at the specified (in physical coordinates) position or
     // wxNOT_FOUND if none, i.e. if it is below the last item
-    %name(HitTestXY) int HitTest(wxCoord x, wxCoord y) const;
+    %Rename(HitTestXY, int, HitTest(wxCoord x, wxCoord y) const);
     int HitTest(const wxPoint& pt) const;
 
     // recalculate all our parameters and redisplay all lines
@@ -286,7 +287,8 @@ IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyVListBox, wxVListBox, OnDrawBackground
  */
 MustHaveApp(wxPyVListBox);
 
-%name(VListBox) class wxPyVListBox : public wxPyVScrolledWindow
+%rename(VListBox) wxPyVListBox;
+class wxPyVListBox : public wxPyVScrolledWindow
 {
 public:
     %pythonAppend wxPyVListBox         "self._setOORInfo(self);self._setCallbackInfo(self, VListBox)"
@@ -300,7 +302,7 @@ public:
                  long style = 0,
                  const wxString& name = wxPyVListBoxNameStr);
 
-    %name(PreVListBox) wxPyVListBox();
+    %RenameCtor(PreVListBox,  wxPyVListBox());
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
@@ -431,7 +433,7 @@ public:
     //
     // by default both margins are 0
     void SetMargins(const wxPoint& pt);
-    %name(SetMarginsXY) void SetMargins(wxCoord x, wxCoord y);
+    %Rename(SetMarginsXY, void, SetMargins(wxCoord x, wxCoord y));
 
     // change the background colour of the selected cells
     void SetSelectionBackground(const wxColour& col);
@@ -505,7 +507,8 @@ IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup
 
 // wxHtmlListBox is a listbox whose items are wxHtmlCells
 MustHaveApp(wxPyHtmlListBox);
-%name(HtmlListBox) class wxPyHtmlListBox : public wxPyVListBox
+%rename(HtmlListBox) wxPyHtmlListBox;
+class wxPyHtmlListBox : public wxPyVListBox
 {
 public:
     %pythonAppend wxPyHtmlListBox         "self._setOORInfo(self);self._setCallbackInfo(self, HtmlListBox)"
@@ -520,7 +523,7 @@ public:
                     long style = 0,
                     const wxString& name = wxPyVListBoxNameStr);
 
-    %name(PreHtmlListBox) wxPyHtmlListBox();
+    %RenameCtor(PreHtmlListBox,  wxPyHtmlListBox());
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 

@@ -37,7 +37,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxPyStaticBoxNameStr);
-    %name(PreStaticBox)wxStaticBox();
+    %RenameCtor(PreStaticBox, wxStaticBox());
 
     // Turn it back on again
     %typemap(out) wxStaticBox* { $result = wxPyMake_wxObject($1, $owner); }
@@ -70,7 +70,7 @@ public:
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
                   const wxString& name = wxPyStaticTextNameStr);
-    %name(PreStaticLine)wxStaticLine();
+    %RenameCtor(PreStaticLine, wxStaticLine());
 
     bool Create( wxWindow *parent, wxWindowID id=-1,
                   const wxPoint &pos = wxDefaultPosition,
@@ -105,7 +105,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxPyStaticTextNameStr);
-    %name(PreStaticText)wxStaticText();
+    %RenameCtor(PreStaticText, wxStaticText());
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                 const wxString& label = wxPyEmptyString,
@@ -134,7 +134,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxString& name = wxPyStaticBitmapNameStr);
-    %name(PreStaticBitmap)wxStaticBitmap();
+    %RenameCtor(PreStaticBitmap, wxStaticBitmap());
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                    const wxBitmap& bitmap = wxNullBitmap,

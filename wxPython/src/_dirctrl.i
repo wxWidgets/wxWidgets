@@ -70,7 +70,7 @@ public:
                      const wxString& filter = wxPyEmptyString,
                      int defaultFilter = 0,
                      const wxString& name = wxPyTreeCtrlNameStr);
-    %name(PreGenericDirCtrl)wxGenericDirCtrl();
+    %RenameCtor(PreGenericDirCtrl, wxGenericDirCtrl());
 
 
     bool Create(wxWindow *parent, const wxWindowID id = -1,
@@ -150,7 +150,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = 0);
-    %name(PreDirFilterListCtrl)wxDirFilterListCtrl();
+    %RenameCtor(PreDirFilterListCtrl, wxDirFilterListCtrl());
 
     bool Create(wxGenericDirCtrl* parent, const wxWindowID id = -1,
               const wxPoint& pos = wxDefaultPosition,

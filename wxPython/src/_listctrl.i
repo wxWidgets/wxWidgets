@@ -406,7 +406,8 @@ IMP_PYCALLBACK_INT_LONG_virtual(wxPyListCtrl, wxListCtrl, OnGetItemImage);
 
 MustHaveApp(wxPyListCtrl);
 
-%name(ListCtrl)class wxPyListCtrl : public wxControl {
+%rename(ListCtrl) wxPyListCtrl;
+class wxPyListCtrl : public wxControl {
 public:
 
     %pythonAppend wxPyListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)"
@@ -418,7 +419,7 @@ public:
                  long style = wxLC_ICON,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxPyListCtrlNameStr);
-    %name(PreListCtrl)wxPyListCtrl();
+    %RenameCtor(PreListCtrl, wxPyListCtrl());
 
     bool Create(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -494,7 +495,7 @@ public:
     bool SetItem(wxListItem& info) ;
 
     // Sets a string field at a particular column
-    %name(SetStringItem)long SetItem(long index, int col, const wxString& label, int imageId = -1);
+    %Rename(SetStringItem, long, SetItem(long index, int col, const wxString& label, int imageId = -1));
 
     // Gets the item state
     int  GetItemState(long item, long stateMask) const ;
@@ -637,11 +638,11 @@ public:
 
     // Find an item whose data matches this data, starting from the item after 'start'
     // or the beginning if 'start' is -1.
-    %name(FindItemData) long FindItem(long start, long data);
+    %Rename(FindItemData,  long, FindItem(long start, long data));
 
     // Find an item nearest this position in the specified direction, starting from
     // the item after 'start' or the beginning if 'start' is -1.
-    %name(FindItemAtPos) long FindItem(long start, const wxPoint& pt, int direction);
+    %Rename(FindItemAtPos,  long, FindItem(long start, const wxPoint& pt, int direction));
 
 
     DocDeclAStr(
@@ -655,16 +656,16 @@ details in the second return value (see wxLIST_HITTEST_... flags.)", "");
     long InsertItem(wxListItem& info);
 
     // Insert a string item
-    %name(InsertStringItem) long InsertItem(long index, const wxString& label);
+    %Rename(InsertStringItem,  long, InsertItem(long index, const wxString& label));
 
     // Insert an image item
-    %name(InsertImageItem) long InsertItem(long index, int imageIndex);
+    %Rename(InsertImageItem,  long, InsertItem(long index, int imageIndex));
 
     // Insert an image/string item
-    %name(InsertImageStringItem) long InsertItem(long index, const wxString& label, int imageIndex);
+    %Rename(InsertImageStringItem,  long, InsertItem(long index, const wxString& label, int imageIndex));
 
     // For list view mode (only), inserts a column.
-    %name(InsertColumnInfo) long InsertColumn(long col, wxListItem& info);
+    %Rename(InsertColumnInfo,  long, InsertColumn(long col, wxListItem& info));
 
     long InsertColumn(long col,
                       const wxString& heading,
@@ -802,7 +803,7 @@ public:
                 long style = wxLC_REPORT,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxPyListCtrlNameStr);
-    %name(PreListView)wxListView();
+    %RenameCtor(PreListView, wxListView());
 
     bool Create( wxWindow *parent,
                 wxWindowID id = -1,

@@ -68,7 +68,9 @@ enum wxSeekMode
 };
 
 
-%name(InputStream) class wxPyInputStream {
+%rename(InputStream) wxPyInputStream;
+class wxPyInputStream
+{
 public:
     %extend {
         wxPyInputStream(PyObject* p) {

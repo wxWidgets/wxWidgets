@@ -221,12 +221,13 @@ are created automatically when the sizer's Add method is called.", "");
     %extend {
         DocStr(wxGBSizerItem( wxWindow *window, const wxGBPosition& pos,const wxGBSpan& span,int flag,int border,PyObject* userData=NULL ),
                "Construct a `wx.GBSizerItem` for a window.", "");
-        %name(GBSizerItemWindow) wxGBSizerItem( wxWindow *window,
-                                                const wxGBPosition& pos,
-                                                const wxGBSpan& span,
-                                                int flag,
-                                                int border,
-                                                PyObject* userData=NULL )
+        
+        %RenameCtor(GBSizerItemWindow, wxGBSizerItem( wxWindow *window,
+                                                      const wxGBPosition& pos,
+                                                      const wxGBSpan& span,
+                                                      int flag,
+                                                      int border,
+                                                      PyObject* userData=NULL ))
             {
                 wxPyUserData* data = NULL;
                 if ( userData ) {
@@ -240,12 +241,12 @@ are created automatically when the sizer's Add method is called.", "");
 
         DocStr(wxGBSizerItem( wxSizer *sizer,const wxGBPosition& pos,const wxGBSpan& span,int flag,int border,PyObject* userData=NULL ),
                "Construct a `wx.GBSizerItem` for a sizer", "");
-        %name(GBSizerItemSizer) wxGBSizerItem( wxSizer *sizer,
-                                               const wxGBPosition& pos,
-                                               const wxGBSpan& span,
-                                               int flag,
-                                               int border,
-                                               PyObject* userData=NULL )
+        %RenameCtor(GBSizerItemSizer, wxGBSizerItem( wxSizer *sizer,
+                                                     const wxGBPosition& pos,
+                                                     const wxGBSpan& span,
+                                                     int flag,
+                                                     int border,
+                                                     PyObject* userData=NULL ))
             {
                 wxPyUserData* data = NULL;
                 if ( userData ) {
@@ -259,13 +260,13 @@ are created automatically when the sizer's Add method is called.", "");
              
         DocStr(wxGBSizerItem( int width,int height,const wxGBPosition& pos,const wxGBSpan& span,int flag,int border,PyObject* userData=NULL),
                "Construct a `wx.GBSizerItem` for a spacer.", "");
-        %name(GBSizerItemSpacer) wxGBSizerItem( int width,
-                                                int height,
-                                                const wxGBPosition& pos,
-                                                const wxGBSpan& span,
-                                                int flag,
-                                                int border,
-                                                PyObject* userData=NULL)
+        %RenameCtor(GBSizerItemSpacer, wxGBSizerItem( int width,
+                                                      int height,
+                                                      const wxGBPosition& pos,
+                                                      const wxGBSpan& span,
+                                                      int flag,
+                                                      int border,
+                                                      PyObject* userData=NULL))
             {
                 wxPyUserData* data = NULL;
                 if ( userData ) {

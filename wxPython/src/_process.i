@@ -78,7 +78,8 @@ IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
 %}
 
 
-%name(Process)class wxPyProcess : public wxEvtHandler {
+%rename(Process) wxPyProcess;
+class wxPyProcess : public wxEvtHandler {
 public:
     // kill the process with the given PID
     static wxKillError Kill(int pid,

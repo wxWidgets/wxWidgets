@@ -55,7 +55,8 @@ IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 %}
 
 
-%name(DropSource) class wxPyDropSource {
+%rename(DropSource) wxPyDropSource;
+class wxPyDropSource {
 public:
     %pythonAppend wxPyDropSource "self._setCallbackInfo(self, DropSource, 0)"
 #ifndef __WXGTK__
@@ -115,7 +116,8 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyDropTarget, wxDropTarget, OnDrop);
 %}
 
 
-%name(DropTarget) class wxPyDropTarget // : public wxDropTarget
+%rename(DropTarget) wxPyDropTarget;
+class wxPyDropTarget // : public wxDropTarget
 {
 public:
     %pythonAppend wxPyDropTarget
@@ -178,7 +180,8 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyTextDropTarget, wxTextDropTarget, OnDrop);
 
 %}
 
-%name(TextDropTarget) class wxPyTextDropTarget : public wxPyDropTarget {
+%rename(TextDropTarget) wxPyTextDropTarget;
+class wxPyTextDropTarget : public wxPyDropTarget {
 public:
     %pythonAppend wxPyTextDropTarget   "self._setCallbackInfo(self, TextDropTarget)"
 
@@ -238,7 +241,8 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyFileDropTarget, wxFileDropTarget, OnDrop);
 %}
 
 
-%name(FileDropTarget) class wxPyFileDropTarget : public wxPyDropTarget
+%rename(FileDropTarget) wxPyFileDropTarget;
+class wxPyFileDropTarget : public wxPyDropTarget
 {
 public:
     %pythonAppend wxPyFileDropTarget   "self._setCallbackInfo(self, FileDropTarget)"

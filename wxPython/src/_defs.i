@@ -82,14 +82,16 @@ typedef unsigned long   wxUIntPtr;
 %define MAKE_CONST_WXSTRING(strname)
     %{ static const wxString wxPy##strname(wx##strname); %}
     %immutable;
-    %name(strname) const wxString wxPy##strname;
+    %rename(strname) wxPy##strname;
+    const wxString wxPy##strname;
     %mutable;
 %enddef
 
 %define MAKE_CONST_WXSTRING2(strname, val)
     %{ static const wxString wxPy##strname(val); %}
     %immutable;
-    %name(strname) const wxString wxPy##strname;
+    %rename(strname) wxPy##strname;
+    const wxString wxPy##strname;
     %mutable;
 %enddef
 
@@ -163,12 +165,14 @@ typedef unsigned long   wxUIntPtr;
 #ifdef _DO_FULL_DOCS
     %define DocDeclStrName(type, decl, docstr, details, newname)
         %feature("docstring") decl docstr details;
-        %name(newname) type decl
+        %rename(newname) decl;
+        type decl
     %enddef
 #else
     %define DocDeclStrName(type, decl, docstr, details, newname)
         %feature("docstring") decl docstr;
-        %name(newname) type decl
+        %rename(newname) decl;
+        type decl
     %enddef
 #endif
         
@@ -183,7 +187,8 @@ typedef unsigned long   wxUIntPtr;
 // As above, but also give the decl a new %name    
 %define DocDeclAName(type, decl, astr, newname)
     %feature("autodoc") decl astr;
-    %name(newname) type decl
+    %rename(newname) decl;
+    type decl
 %enddef
 
 
@@ -210,13 +215,15 @@ typedef unsigned long   wxUIntPtr;
     %define DocDeclAStrName(type, decl, astr, docstr, details, newname)
         %feature("autodoc") decl astr;
         %feature("docstring") decl docstr details;
-        %name(newname) type decl
+        %rename(newname) decl;
+        type decl
     %enddef
 #else
     %define DocDeclAStrName(type, decl, astr, docstr, details, newname)
         %feature("autodoc") decl astr;
         %feature("docstring") decl docstr;
-        %name(newname) type decl
+        %rename(newname) decl;
+        type decl
     %enddef
 #endif
 
@@ -241,12 +248,14 @@ typedef unsigned long   wxUIntPtr;
 #ifdef _DO_FULL_DOCS
     %define DocCtorStrName(decl, docstr, details, newname)
         %feature("docstring") decl docstr details;
-        %name(newname) decl
+        %rename(newname) decl;
+        decl
     %enddef
 #else
     %define DocCtorStrName(decl, docstr, details, newname)
         %feature("docstring") decl docstr;
-        %name(newname) decl
+        %rename(newname) decl;
+        decl
     %enddef
 #endif
 
@@ -262,7 +271,8 @@ typedef unsigned long   wxUIntPtr;
 // As above, but also give the decl a new %name    
 %define DocCtorAName(decl, astr, newname)
     %feature("autodoc") decl astr;
-    %name(newname) decl
+    %rename(newname) decl;
+    decl
 %enddef
 
 
@@ -290,13 +300,15 @@ typedef unsigned long   wxUIntPtr;
     %define DocCtorAStrName(decl, astr, docstr, details, newname)
         %feature("autodoc") decl astr;
         %feature("docstring") decl docstr details;
-        %name(newname) decl
+        %rename(newname) decl;
+        decl
     %enddef
 #else
     %define DocCtorAStrName(decl, astr, docstr, details, newname)
         %feature("autodoc") decl astr;
         %feature("docstring") decl docstr;
-        %name(newname) decl
+        %rename(newname) decl;
+        decl
     %enddef
 #endif
 
@@ -307,6 +319,20 @@ typedef unsigned long   wxUIntPtr;
 %#---------------------------------------------------------------------------
 }
 %enddef
+
+
+// A set of macros to make using %rename easier, since %name has been
+// deprecated...
+%define %Rename(newname, type, decl)
+    %rename(newname) decl;
+    type decl
+%enddef
+
+%define %RenameCtor(newname, decl)
+    %rename(newname) decl;
+    decl
+%enddef
+
 
 //---------------------------------------------------------------------------
 // Forward declarations and %renames for some classes, so the autodoc strings

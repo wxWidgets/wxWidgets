@@ -195,7 +195,7 @@ public:
     // to implement SetSystemColour/Font/Metric
 
     static void SetOption(const wxString& name, const wxString& value);
-    %name(SetOptionInt) static void SetOption(const wxString& name, int value);
+    %Rename(SetOptionInt,  static void, SetOption(const wxString& name, int value));
     static wxString GetOption(const wxString& name) ;
     static int GetOptionInt(const wxString& name) ;
     static bool HasOption(const wxString& name) ;

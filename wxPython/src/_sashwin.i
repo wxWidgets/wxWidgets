@@ -61,7 +61,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxCLIP_CHILDREN | wxSW_3D,
                  const wxString& name = wxPySashNameStr);
-    %name(PreSashWindow)wxSashWindow();
+    %RenameCtor(PreSashWindow, wxSashWindow());
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -249,7 +249,7 @@ public:
                        const wxSize& size = wxDefaultSize,
                        long style = wxCLIP_CHILDREN | wxSW_3D,
                        const wxString& name = wxPySashLayoutNameStr);
-    %name(PreSashLayoutWindow)wxSashLayoutWindow();
+    %RenameCtor(PreSashLayoutWindow, wxSashLayoutWindow());
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,

@@ -258,7 +258,8 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
 %}
 
 
-%name(HtmlTagHandler) class wxPyHtmlTagHandler : public wxObject {
+%rename(HtmlTagHandler) wxPyHtmlTagHandler;
+class wxPyHtmlTagHandler : public wxObject {
 public:
     %pythonAppend wxPyHtmlTagHandler   "self._setCallbackInfo(self, HtmlTagHandler)"    
     wxPyHtmlTagHandler();
@@ -296,7 +297,8 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, HandleT
 %}
 
 
-%name(HtmlWinTagHandler) class wxPyHtmlWinTagHandler : public wxPyHtmlTagHandler {
+%rename(HtmlWinTagHandler) wxPyHtmlWinTagHandler;
+class wxPyHtmlWinTagHandler : public wxPyHtmlTagHandler {
 public:
     %pythonAppend wxPyHtmlWinTagHandler    "self._setCallbackInfo(self, HtmlWinTagHandler)"
     wxPyHtmlWinTagHandler();
@@ -391,7 +393,7 @@ public:
 
     void Set(const wxPoint& fromPos, const wxHtmlCell *fromCell,
              const wxPoint& toPos, const wxHtmlCell *toCell);
-    %name(SetCells)void Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell);
+    %Rename(SetCells, void, Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell));
 
     const wxHtmlCell *GetFromCell() const;
     const wxHtmlCell *GetToCell() const;
@@ -591,7 +593,7 @@ public:
     int GetIndentUnits(int ind);
     void SetAlign(const wxHtmlTag& tag);
     void SetWidthFloat(int w, int units);
-    %name(SetWidthFloatFromTag)void SetWidthFloat(const wxHtmlTag& tag);
+    %Rename(SetWidthFloatFromTag, void,  SetWidthFloat(const wxHtmlTag& tag));
     void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP);
     void SetBackgroundColour(const wxColour& clr);
     wxColour GetBackgroundColour();
@@ -681,7 +683,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlFilter, wxHtmlFilter);
 
 // And now the version seen by SWIG
 
-%name(HtmlFilter) class wxPyHtmlFilter : public wxObject {
+%rename(HtmlFilter) wxPyHtmlFilter;
+class wxPyHtmlFilter : public wxObject {
 public:
     %pythonAppend wxPyHtmlFilter   "self._setCallbackInfo(self, HtmlFilter)"
     wxPyHtmlFilter();
@@ -794,7 +797,8 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
 
 MustHaveApp(wxPyHtmlWindow);
 
-%name(HtmlWindow) class wxPyHtmlWindow : public wxScrolledWindow {
+%rename(HtmlWindow) wxPyHtmlWindow;
+class wxPyHtmlWindow : public wxScrolledWindow {
 public:
     %pythonAppend wxPyHtmlWindow      "self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)"
     %pythonAppend wxPyHtmlWindow()    ""
@@ -805,7 +809,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  int style=wxHW_DEFAULT_STYLE,
                  const wxString& name = wxPyHtmlWindowNameStr);
-    %name(PreHtmlWindow)wxPyHtmlWindow();
+    %RenameCtor(PreHtmlWindow, wxPyHtmlWindow());
 
     // Turn it back on again
     %typemap(out) wxPyHtmlWindow* { $result = wxPyMake_wxObject($1, $owner); }
@@ -1167,7 +1171,7 @@ public:
     wxHtmlHelpData* GetData();
     void SetTitleFormat(const wxString& format);
     void Display(const wxString& x);
-    %name(DisplayID) void Display(int id);
+    %Rename(DisplayID,  void,  Display(int id));
     void DisplayContents();
     void DisplayIndex();
     bool KeywordSearch(const wxString& keyword);
@@ -1207,7 +1211,7 @@ public:
     void SetTempDir(const wxString& path);
     bool AddBook(const wxString& book, int show_wait_msg = false);
     void Display(const wxString& x);
-    %name(DisplayID) void Display(int id);
+    %Rename(DisplayID,  void,  Display(int id));
     void DisplayContents();
     void DisplayIndex();
     bool KeywordSearch(const wxString& keyword);

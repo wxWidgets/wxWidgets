@@ -50,7 +50,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxSP_HORIZONTAL,
                  const wxString& name = wxPySPIN_BUTTON_NAME);
-    %name(PreSpinButton)wxSpinButton();
+    %RenameCtor(PreSpinButton, wxSpinButton());
 
     bool Create(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -97,7 +97,7 @@ public:
                long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = wxPySpinCtrlNameStr);
-    %name(PreSpinCtrl)wxSpinCtrl();
+    %RenameCtor(PreSpinCtrl, wxSpinCtrl());
 
     bool Create(wxWindow *parent,
                wxWindowID id = -1,
@@ -110,7 +110,7 @@ public:
 
     virtual int GetValue() const;
     virtual void SetValue( int value );
-    %name(SetValueString) void SetValue(const wxString& text);
+    %Rename(SetValueString,  void, SetValue(const wxString& text));
 
     virtual void SetRange( int minVal, int maxVal );
     virtual int GetMin() const;

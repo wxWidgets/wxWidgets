@@ -107,7 +107,7 @@ public:
     bool GoForward();
     bool GoHome();
     bool GoSearch();
-    %name(RefreshPage)bool Refresh(wxIEHtmlRefreshLevel level);
+    %Rename(RefreshPage, bool,  Refresh(wxIEHtmlRefreshLevel level));
     bool Stop();
 
 };

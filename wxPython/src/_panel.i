@@ -37,7 +37,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPyPanelNameStr);
-    %name(PrePanel)wxPanel();
+    %RenameCtor(PrePanel, wxPanel());
 
     // Turn it back on again
     %typemap(out) wxPanel* { $result = wxPyMake_wxObject($1, $owner); }
@@ -96,7 +96,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxHSCROLL | wxVSCROLL,
                      const wxString& name = wxPyPanelNameStr);
-    %name(PreScrolledWindow)wxScrolledWindow();
+    %RenameCtor(PreScrolledWindow, wxScrolledWindow());
 
     // Turn it back on again
     %typemap(out) wxScrolledWindow* { $result = wxPyMake_wxObject($1, $owner); }

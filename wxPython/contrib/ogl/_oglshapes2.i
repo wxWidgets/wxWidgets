@@ -163,13 +163,13 @@ public:
     bool ClearArrow(const wxString& name);
     void ClearArrowsAtPosition(int position = -1);
     void DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool proportionalOffset);
-    %name(DeleteArrowHeadId)bool DeleteArrowHead(long arrowId);
+    %Rename(DeleteArrowHeadId, bool,  DeleteArrowHead(long arrowId));
     bool DeleteArrowHead(int position, const wxString& name);
     bool DeleteLineControlPoint();
     void DrawArrows(wxDC& dc);
     void DrawRegion(wxDC& dc, wxShapeRegion *region, double x, double y);
     void EraseRegion(wxDC& dc, wxShapeRegion *region, double x, double y);
-    %name(FindArrowHeadId)wxArrowHead * FindArrowHead(long arrowId);
+    %Rename(FindArrowHeadId, wxArrowHead *,  FindArrowHead(long arrowId));
     wxArrowHead * FindArrowHead(int position, const wxString& name);
     void FindLineEndPoints(double *OUTPUT, double *OUTPUT,
                            double *OUTPUT, double *OUTPUT);

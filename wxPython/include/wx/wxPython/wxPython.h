@@ -46,7 +46,7 @@ static bool wxPyCoreAPI_IMPORT()
 inline wxPyCoreAPI* wxPyGetCoreAPIPtr()
 {
     if (wxPyCoreAPIPtr == NULL) wxPyCoreAPI_IMPORT();
-    // wxASSERT_MSW(wxPyCoreAPIPtr != NULL, wxT("wxPyCoreAPIPtr is NULL!!!"));  // uncomment when needed for debugging
+    // wxASSERT_MSG(wxPyCoreAPIPtr != NULL, wxT("wxPyCoreAPIPtr is NULL!!!"));  // uncomment when needed for debugging
     return wxPyCoreAPIPtr;
 }
 
@@ -54,24 +54,6 @@ inline wxPyCoreAPI* wxPyGetCoreAPIPtr()
 // The following macros call functions located in wx._core_ of the same name
 // via the API pointer retrieved above.  TODO: Should these be made into
 // inline fucntions?
-
-#define SWIG_Python_TypeRegister(a)             (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeRegister(a))
-#define SWIG_Python_TypeCheck(a,b)              (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeCheck(a,b))
-#define SWIG_Python_TypeCast(a,b)               (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeCast(a,b))
-#define SWIG_Python_TypeDynamicCast(a,b)        (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeDynamicCast(a,b))
-#define SWIG_Python_TypeName(a)                 (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeName(a))
-#define SWIG_Python_TypeQuery(a)                (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeQuery(a))
-#define SWIG_Python_TypeClientData(a,b)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeClientData(a,b))
-#define SWIG_Python_newvarlink()                (wxPyGetCoreAPIPtr()->p_SWIG_Python_newvarlink())
-#define SWIG_Python_addvarlink(a,b,c,d)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_addvarlink(a,b,c,d))
-#define SWIG_Python_ConvertPtr(a,b,c,d)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_ConvertPtr(a,b,c,d))
-#define SWIG_Python_ConvertPacked(a,b,c,d,e)    (wxPyGetCoreAPIPtr()->p_SWIG_Python_ConvertPacked(a,b,c,d,e))
-#define SWIG_Python_PackData(a,b,c)             (wxPyGetCoreAPIPtr()->p_SWIG_Python_PackData(a,b,c))
-#define SWIG_Python_UnpackData(a,b,c)           (wxPyGetCoreAPIPtr()->p_SWIG_Python_UnpackData(a,b,c))
-#define SWIG_Python_NewPointerObj(a,b,c)        (wxPyGetCoreAPIPtr()->p_SWIG_Python_NewPointerObj(a,b,c))
-#define SWIG_Python_NewPackedObj(a,b,c)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_NewPackedObj(a,b,c))
-#define SWIG_Python_InstallConstants(a,b)       (wxPyGetCoreAPIPtr()->p_SWIG_Python_InstallConstants(a,b))
-#define SWIG_Python_MustGetPtr(a,b,c,d)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_MustGetPtr(a,b,c,d))
 
 #define wxPyCheckSwigType(a)                    (wxPyGetCoreAPIPtr()->p_wxPyCheckSwigType(a))
 #define wxPyConstructObject(a,b,c)              (wxPyGetCoreAPIPtr()->p_wxPyConstructObject(a,b,c))

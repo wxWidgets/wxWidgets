@@ -42,7 +42,7 @@ public:
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = wxPyListBoxNameStr);
-    %name(PreListBox)wxListBox();
+    %RenameCtor(PreListBox, wxListBox());
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,
@@ -95,7 +95,7 @@ public:
     // set the specified item at the first visible item or scroll to max
     // range.
     void SetFirstItem(int n);
-    %name(SetFirstItemStr) void SetFirstItem(const wxString& s);
+    %Rename(SetFirstItemStr,  void, SetFirstItem(const wxString& s));
 
     // ensures that the given item is visible scrolling the listbox if
     // necessary
@@ -156,7 +156,7 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxPyListBoxNameStr);
-    %name(PreCheckListBox)wxCheckListBox();
+    %RenameCtor(PreCheckListBox, wxCheckListBox());
 
     bool Create(wxWindow *parent, wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,
@@ -176,7 +176,7 @@ public:
 
     // return the index of the item at this position or wxNOT_FOUND
     int HitTest(const wxPoint& pt) const;
-    %name(HitTestXY)int HitTest(wxCoord x, wxCoord y) const;
+    %Rename(HitTestXY, int, HitTest(wxCoord x, wxCoord y) const);
 };
 
 //---------------------------------------------------------------------------

@@ -62,7 +62,8 @@ void wxPyTimer::base_Notify() {
 
 MustHaveApp(wxPyTimer);
 
-%name(Timer) class wxPyTimer : public wxEvtHandler
+%rename(Timer) wxPyTimer;
+class wxPyTimer : public wxEvtHandler
 {
 public:
     // Don't let the OOR or callback info hold references to the object so

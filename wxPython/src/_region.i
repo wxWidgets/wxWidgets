@@ -46,12 +46,12 @@ MustHaveApp(wxRegion);
 class wxRegion : public wxGDIObject {
 public:
     wxRegion(wxCoord x=0, wxCoord y=0, wxCoord width=0, wxCoord height=0);
-    %name(RegionFromBitmap)wxRegion(const wxBitmap& bmp);
-    %name(RegionFromBitmapColour)wxRegion(const wxBitmap& bmp,
-                                          const wxColour& transColour,
-                                          int   tolerance = 0);
-    %name(RegionFromPoints)wxRegion(int points, wxPoint* points_array,
-                                      int fillStyle = wxWINDING_RULE);
+    %RenameCtor(RegionFromBitmap, wxRegion(const wxBitmap& bmp));
+    %RenameCtor(RegionFromBitmapColour, wxRegion(const wxBitmap& bmp,
+                                                 const wxColour& transColour,
+                                                 int   tolerance = 0));
+    %RenameCtor(RegionFromPoints, wxRegion(int points, wxPoint* points_array,
+                                           int fillStyle = wxWINDING_RULE));
 
     ~wxRegion();
 
@@ -60,29 +60,29 @@ public:
     bool Offset(wxCoord x, wxCoord y);
 
     wxRegionContain Contains(wxCoord x, wxCoord y);
-    %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);
-    %name(ContainsRect)wxRegionContain Contains(const wxRect& rect);
-    %name(ContainsRectDim)wxRegionContain Contains(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
+    %Rename(ContainsPoint, wxRegionContain, Contains(const wxPoint& pt));
+    %Rename(ContainsRect, wxRegionContain, Contains(const wxRect& rect));
+    %Rename(ContainsRectDim, wxRegionContain, Contains(wxCoord x, wxCoord y, wxCoord w, wxCoord h));
 
     wxRect GetBox();
 
     bool Intersect(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    %name(IntersectRect)bool Intersect(const wxRect& rect);
-    %name(IntersectRegion)bool Intersect(const wxRegion& region);
+    %Rename(IntersectRect, bool, Intersect(const wxRect& rect));
+    %Rename(IntersectRegion, bool, Intersect(const wxRegion& region));
 
     bool IsEmpty();
 
     bool Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    %name(UnionRect)bool Union(const wxRect& rect);
-    %name(UnionRegion)bool Union(const wxRegion& region);
+    %Rename(UnionRect, bool, Union(const wxRect& rect));
+    %Rename(UnionRegion, bool, Union(const wxRegion& region));
 
     bool Subtract(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    %name(SubtractRect)bool Subtract(const wxRect& rect);
-    %name(SubtractRegion)bool Subtract(const wxRegion& region);
+    %Rename(SubtractRect, bool, Subtract(const wxRect& rect));
+    %Rename(SubtractRegion, bool, Subtract(const wxRegion& region));
 
     bool Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    %name(XorRect)bool Xor(const wxRect& rect);
-    %name(XorRegion)bool Xor(const wxRegion& region);
+    %Rename(XorRect, bool, Xor(const wxRect& rect));
+    %Rename(XorRegion, bool, Xor(const wxRegion& region));
 
     // Convert the region to a B&W bitmap with the white pixels being inside
     // the region.
@@ -92,10 +92,10 @@ public:
     // with this region.  If the bitmap has a mask then it will be used,
     // otherwise the colour to be treated as transparent may be specified,
     // along with an optional tolerance value.
-    %name(UnionBitmap)bool Union(const wxBitmap& bmp);
-    %name(UnionBitmapColour)bool Union(const wxBitmap& bmp,
-                                       const wxColour& transColour,
-                                       int   tolerance = 0);
+    %Rename(UnionBitmap, bool, Union(const wxBitmap& bmp));
+    %Rename(UnionBitmapColour, bool, Union(const wxBitmap& bmp,
+                                           const wxColour& transColour,
+                                           int   tolerance = 0));
 };
 
 

@@ -41,7 +41,7 @@ public:
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxPySliderNameStr);
-    %name(PreSlider)wxSlider();
+    %RenameCtor(PreSlider, wxSlider());
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
              int value=0, int minValue=0, int maxValue=100,

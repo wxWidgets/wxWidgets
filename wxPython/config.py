@@ -644,7 +644,7 @@ if os.name == 'nt':
                 (WXPLAT, None),
                 ('WXUSINGDLL', '1'),
 
-                ('SWIG_GLOBAL', None),
+                ('SWIG_TYPE_TABLE', 'wxPython_type_table'),
                 ('WXP_USE_THREAD', '1'),
                 ]
 
@@ -698,7 +698,7 @@ if os.name == 'nt':
 elif os.name == 'posix':
     WXDIR = '..'
     includes = ['include', 'src']
-    defines = [('SWIG_GLOBAL', None),
+    defines = [('SWIG_TYPE_TABLE', 'wxPython_type_table'),
                ('HAVE_CONFIG_H', None),
                ('WXP_USE_THREAD', '1'),
                ]
@@ -813,7 +813,6 @@ swig_args = ['-c++',
 
              '-I' + opj(WXPY_SRC, 'src'),
              '-D'+WXPLAT,
-             '-noruntime'
              ]
 if UNICODE:
     swig_args.append('-DwxUSE_UNICODE')
@@ -823,10 +822,7 @@ if FULL_DOCS:
     
 
 swig_deps = [ opj(WXPY_SRC, 'src/my_typemaps.i'),
-              opj(WXPY_SRC, 'src/my_fragments.i'),
-              opj(WXPY_SRC, 'src/common.swg'),
-              opj(WXPY_SRC, 'src/pyrun.swg'),
-              opj(WXPY_SRC, 'src/python.swg'),
+              opj(WXPY_SRC, 'src/pyfragments.swg'),
               ]
 
 depends = [ #'include/wx/wxPython/wxPython.h',

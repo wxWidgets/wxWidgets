@@ -134,7 +134,7 @@ public:
                     const wxValidator& validator = wxDefaultValidator,
                     const wxString& name = wxPyWebKitNameStr);
 
-    %name(PreWebKitCtrl)wxWebKitCtrl();
+    %RenameCtor(PreWebKitCtrl, wxWebKitCtrl());
 
     
     bool Create(wxWindow *parent,

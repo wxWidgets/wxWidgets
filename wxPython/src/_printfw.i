@@ -376,7 +376,8 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
 MustHaveApp(wxPyPrintout);
 
 // Now define the custom class for SWIGging
-%name(Printout) class wxPyPrintout  : public wxObject {
+%rename(Printout) wxPyPrintout;
+class wxPyPrintout  : public wxObject {
 public:
     %pythonAppend wxPyPrintout   "self._setCallbackInfo(self, Printout)"
 

@@ -76,15 +76,32 @@ success flag and rgb values.", "");
 
 class wxImage : public wxObject {
 public:
-    wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    DocCtorStr(
+        wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 ),
+        "", "");
+    
     ~wxImage();
 
     // Alternate constructors
-    %name(ImageFromMime) wxImage(const wxString& name, const wxString& mimetype, int index = -1);
-    %name(ImageFromStream) wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1);
-    %name(ImageFromStreamMime) wxImage(wxInputStream& stream, const wxString& mimetype, int index = -1 );
+    DocCtorStrName(
+        wxImage(const wxString& name, const wxString& mimetype, int index = -1),
+        "", "",
+        ImageFromMime);
+    
+    DocCtorStrName(
+        wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1),
+        "", "",
+        ImageFromStream);
+    
+    DocCtorStrName(
+        wxImage(wxInputStream& stream, const wxString& mimetype, int index = -1 ),
+        "", "",
+        ImageFromStreamMime);
+    
     %extend {
-        %name(EmptyImage) wxImage(int width=0, int height=0, bool clear = true) {
+        %rename(EmptyImage) wxImage(int width=0, int height=0, bool clear = true);
+        wxImage(int width=0, int height=0, bool clear = true)
+        {
             if (width > 0 && height > 0)
                 return new wxImage(width, height, clear);
             else
@@ -92,11 +109,15 @@ public:
         }
 
         MustHaveApp(wxImage(const wxBitmap &bitmap));
-        %name(ImageFromBitmap) wxImage(const wxBitmap &bitmap) {
+        %rename(ImageFromBitmap) wxImage(const wxBitmap &bitmap);
+        wxImage(const wxBitmap &bitmap)
+        {
             return new wxImage(bitmap.ConvertToImage());
         }
 
-        %name(ImageFromData) wxImage(int width, int height, unsigned char* data) {
+        %rename(ImageFromData) wxImage(int width, int height, unsigned char* data);
+        wxImage(int width, int height, unsigned char* data)
+        {
             // Copy the source data so the wxImage can clean it up later
             unsigned char* copy = (unsigned char*)malloc(width*height*3);
             if (copy == NULL) {
@@ -106,8 +127,11 @@ public:
             memcpy(copy, data, width*height*3);
             return new wxImage(width, height, copy, false);
         }
-        %name(ImageFromDataWithAlpha) wxImage(int width, int height,
-                                              unsigned char* data, unsigned char* alpha) {
+
+        
+        %rename(ImageFromDataWithAlpha) wxImage(int width, int height, unsigned char* data, unsigned char* alpha);
+        wxImage(int width, int height, unsigned char* data, unsigned char* alpha)
+        {
             // Copy the source data so the wxImage can clean it up later
             unsigned char* dcopy = (unsigned char*)malloc(width*height*3);
             if (dcopy == NULL) {
@@ -190,14 +214,14 @@ The method will then fill up the whole image with the colour given.", "");
     static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
 
     bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
-    %name(LoadMimeFile)bool LoadFile( const wxString& name, const wxString& mimetype, int index = -1 );
+    %Rename(LoadMimeFile, bool,  LoadFile( const wxString& name, const wxString& mimetype, int index = -1 ));
 
     bool SaveFile( const wxString& name, int type );
-    %name(SaveMimeFile)bool SaveFile( const wxString& name, const wxString& mimetype );
+    %Rename(SaveMimeFile, bool,  SaveFile( const wxString& name, const wxString& mimetype ));
 
-    %name(CanReadStream) static bool CanRead( wxInputStream& stream );
-    %name(LoadStream) bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 );
-    %name(LoadMimeStream) bool LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 );
+    %Rename(CanReadStream, static bool,  CanRead( wxInputStream& stream ));
+    %Rename(LoadStream, bool,  LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 ));
+    %Rename(LoadMimeStream, bool,  LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 ));
 
     bool Ok();
     int GetWidth();
@@ -341,7 +365,7 @@ The method will then fill up the whole image with the colour given.", "");
     wxImage ConvertToMono( unsigned char r, unsigned char g, unsigned char b ) const;
 
     void SetOption(const wxString& name, const wxString& value);
-    %name(SetOptionInt)void SetOption(const wxString& name, int value);
+    %Rename(SetOptionInt, void,  SetOption(const wxString& name, int value));
     wxString GetOption(const wxString& name) const;
     int GetOptionInt(const wxString& name) const;
     bool HasOption(const wxString& name) const;

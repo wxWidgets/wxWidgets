@@ -174,7 +174,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxPyTextCtrlNameStr);
-    %name(PreTextCtrl)wxTextCtrl();
+    %RenameCtor(PreTextCtrl, wxTextCtrl());
 
     // Turn it back on again
     %typemap(out) wxTextCtrl* { $result = wxPyMake_wxObject($1, $owner); }

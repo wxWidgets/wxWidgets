@@ -1,5 +1,7 @@
-// There is a bug in the standard t_output_helper, this one will replace it
-// until it is fixed.
+
+
+// There standard t_output_helper has been changed to return a list rather
+// than a tuple, we'll replace it with the old implementation here.
 
 
 %fragment("t_output_helper","header") %{
@@ -37,17 +39,10 @@
 // it can be converted to a PyInt.  (Specifically, I allow floats where the
 // default SWIG_AsVal_long would just raise an exception.
 //
-// NOTE: This file has to be %included very early in the SWIGging process as
-// it no longer allows existing fragments to be replaced with one of the same
-// name.  So to make this work I had to bring a copy of python.swg into this
-// project and do the %include there before most other of the standard swiglib
-// files are %included.  This may change in 1.3.23, so adjust accordingly then.
-
 
 
 %fragment(SWIG_AsVal_frag(long), "header") {
-// See my_fragments.i
-SWIGSTATICINLINE(int)
+SWIGINTERN int
 SWIG_AsVal(long)(PyObject* obj, long* val)
 {
     if (PyNumber_Check(obj)) {
@@ -55,10 +50,7 @@ SWIG_AsVal(long)(PyObject* obj, long* val)
         return 1;
     }
     else {
-        PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
-                                               obj->ob_type->tp_name);
-        PyErr_SetObject(PyExc_TypeError, errmsg);
-        Py_DECREF(errmsg);
+        SWIG_type_error("number", obj);
     }
     return 0;
 }
@@ -67,14 +59,12 @@ SWIG_AsVal(long)(PyObject* obj, long* val)
 
 %fragment(SWIG_AsVal_frag(unsigned long), "header",
           fragment=SWIG_AsVal_frag(long)) {
-// See my_fragments.i
-SWIGSTATICINLINE(int)
+SWIGINTERN int 
 SWIG_AsVal(unsigned long)(PyObject* obj, unsigned long* val)
 {
     long v = 0;
     if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        PyErr_SetString(PyExc_TypeError, "negative value received for unsigned type");
-        return 0;
+        SWIG_type_error("unsigned number", obj);
     }
     else if (val)
         *val = (unsigned long)v;
@@ -84,8 +74,7 @@ SWIG_AsVal(unsigned long)(PyObject* obj, unsigned long* val)
 
 
 %fragment(SWIG_AsVal_frag(double), "header") {
-// See my_fragments.i
-SWIGSTATICINLINE(int)
+SWIGINTERN int
 SWIG_AsVal(double)(PyObject *obj, double* val)
 {
     if (PyNumber_Check(obj)) {
@@ -93,10 +82,7 @@ SWIG_AsVal(double)(PyObject *obj, double* val)
         return 1;
     }
     else {
-        PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
-                                               obj->ob_type->tp_name);
-        PyErr_SetObject(PyExc_TypeError, errmsg);
-        Py_DECREF(errmsg);
+        SWIG_type_error("number", obj);
     }
     return 0;
 }

@@ -66,7 +66,7 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxPyToggleButtonNameStr);
-    %name(PreToggleButton)wxToggleButton();
+    %RenameCtor(PreToggleButton, wxToggleButton());
 
     bool Create(wxWindow *parent,
                    wxWindowID id=-1,

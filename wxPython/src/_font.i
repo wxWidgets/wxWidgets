@@ -449,19 +449,21 @@ public:
             wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
     ~wxFont();
 
-    %name(FontFromNativeInfo) wxFont(const wxNativeFontInfo& info);
+    %RenameCtor(FontFromNativeInfo,  wxFont(const wxNativeFontInfo& info));
     %extend {
-        %name(FontFromNativeInfoString) wxFont(const wxString& info) {
+        %RenameCtor(FontFromNativeInfoString, wxFont(const wxString& info))
+        {
             wxNativeFontInfo nfi;
             nfi.FromString(info);
             return new wxFont(nfi);
         }
 
-        %name(Font2) wxFont(int pointSize,
-                            wxFontFamily family,
-                            int flags = wxFONTFLAG_DEFAULT,
-                            const wxString& face = wxPyEmptyString,
-                            wxFontEncoding encoding = wxFONTENCODING_DEFAULT) {
+        %RenameCtor(Font2,  wxFont(int pointSize,
+                                   wxFontFamily family,
+                                   int flags = wxFONTFLAG_DEFAULT,
+                                   const wxString& face = wxPyEmptyString,
+                                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT))
+        {
             return wxFont::New(pointSize, family, flags, face, encoding);
         }
     }
@@ -469,13 +471,14 @@ public:
     // There is a real ctor for this on wxMSW, but not the others, so just use
     // the factory funciton in all cases.
     %extend {
-        %name(FontFromPixelSize) wxFont(const wxSize& pixelSize,
-                                        int family,
-                                        int style,
-                                        int weight,
-                                        bool underlined = false,
-                                        const wxString& face = wxEmptyString,
-                                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT) {
+        %RenameCtor(FontFromPixelSize, wxFont(const wxSize& pixelSize,
+                                              int family,
+                                              int style,
+                                              int weight,
+                                              bool underlined = false,
+                                              const wxString& face = wxEmptyString,
+                                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT))
+        {
             return wxFontBase::New(pixelSize, family,
                                    style, weight, underlined,
                                    face, encoding);
@@ -521,7 +524,7 @@ public:
     virtual void SetUnderlined( bool underlined );
     virtual void SetEncoding(wxFontEncoding encoding);
     void SetNativeFontInfo(const wxNativeFontInfo& info);
-    %name(SetNativeFontInfoFromString) void SetNativeFontInfo(const wxString& info);
+    %Rename(SetNativeFontInfoFromString, void, SetNativeFontInfo(const wxString& info));
     void SetNativeFontInfoUserDesc(const wxString& info);
 
     // translate the fonts into human-readable string (i.e. GetStyleString()
@@ -565,7 +568,8 @@ IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEnc
 
 MustHaveApp(wxPyFontEnumerator);
 
-%name(FontEnumerator) class wxPyFontEnumerator {
+%rename(FontEnumerator) wxPyFontEnumerator;
+class wxPyFontEnumerator {
 public:
     %pythonAppend wxPyFontEnumerator "self._setCallbackInfo(self, FontEnumerator, 0)"
 

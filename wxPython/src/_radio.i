@@ -41,7 +41,7 @@ public:
                long style = wxRA_HORIZONTAL,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxPyRadioBoxNameStr);
-    %name(PreRadioBox)wxRadioBox();
+    %RenameCtor(PreRadioBox, wxRadioBox());
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                 const wxString& label = wxPyEmptyString,
@@ -70,8 +70,8 @@ public:
     %pythoncode { SetItemLabel = SetString };
 
     // change the individual radio button state
-    %name(EnableItem) virtual void Enable(int n, bool enable = true);
-    %name(ShowItem) virtual void Show(int n, bool show = true);
+    %Rename(EnableItem,  virtual void, Enable(int n, bool enable = true));
+    %Rename(ShowItem,  virtual void, Show(int n, bool show = true));
 
 #ifndef __WXGTK__
     // layout parameters
@@ -111,7 +111,7 @@ public:
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
                   const wxString& name = wxPyRadioButtonNameStr);
-    %name(PreRadioButton)wxRadioButton();
+    %RenameCtor(PreRadioButton, wxRadioButton());
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                   const wxString& label = wxPyEmptyString,

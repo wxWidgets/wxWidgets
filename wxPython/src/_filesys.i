@@ -88,7 +88,8 @@ IMP_PYCALLBACK_STRING__pure(wxPyFileSystemHandler, wxFileSystemHandler, FindNext
 
 
 
-%name(CPPFileSystemHandler) class wxFileSystemHandler //: public wxObject
+%rename(CPPFileSystemHandler) wxFileSystemHandler;
+class wxFileSystemHandler //: public wxObject
 {
 public:
     //wxFileSystemHandler();
@@ -96,7 +97,8 @@ public:
 
 
 
-%name(FileSystemHandler) class wxPyFileSystemHandler : public wxFileSystemHandler
+%rename(FileSystemHandler) wxPyFileSystemHandler;
+class wxPyFileSystemHandler : public wxFileSystemHandler
 {
 public:
     %pythonAppend    wxPyFileSystemHandler "self._setCallbackInfo(self, FileSystemHandler)";

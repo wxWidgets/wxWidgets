@@ -113,7 +113,7 @@ public:
                 const wxValidator& validator=wxDefaultValidator,
                 const wxString& name = wxPyControlNameStr);
 
-    %name(PrePyControl) wxPyControl();
+    %RenameCtor(PrePyControl,  wxPyControl());
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 

@@ -95,7 +95,7 @@ Note: The present implementation for non-Windows platforms may fail to
 find colour borders if the pixels do not match the colour
 exactly. However the function will still return true.", "");
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE);
-    %name(FloodFillPoint) bool FloodFill(const wxPoint& pt, const wxColour& col, int style = wxFLOOD_SURFACE);
+    %Rename(FloodFillPoint, bool, FloodFill(const wxPoint& pt, const wxColour& col, int style = wxFLOOD_SURFACE));
 
     
     DocStr(
@@ -122,7 +122,7 @@ used for drawing the line. Note that the second point is *not* part of
 the line and is not drawn by this function (this is consistent with
 the behaviour of many other toolkits).", "");
     void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
-    %name(DrawLinePoint) void DrawLine(const wxPoint& pt1, const wxPoint& pt2);
+    %Rename(DrawLinePoint, void, DrawLine(const wxPoint& pt1, const wxPoint& pt2));
 
 
     DocStr(
@@ -131,7 +131,7 @@ the behaviour of many other toolkits).", "");
 horizontal line the height and width of the window, centred on the
 given point.", "");
     void CrossHair(wxCoord x, wxCoord y);
-    %name(CrossHairPoint) void CrossHair(const wxPoint& pt);
+    %Rename(CrossHairPoint, void, CrossHair(const wxPoint& pt));
 
 
     DocStr(
@@ -143,14 +143,14 @@ and the current brush for filling the shape.
 The arc is drawn in an anticlockwise direction from the start point to
 the end point.", "");
     void DrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc);
-    %name(DrawArcPoint) void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& center);
+    %Rename(DrawArcPoint, void, DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& center));
 
 
     DocStr(
         DrawCheckMark,
         "Draws a check mark inside the given rectangle.", "");
     void DrawCheckMark(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    %name(DrawCheckMarkRect) void DrawCheckMark(const wxRect& rect);
+    %Rename(DrawCheckMarkRect, void, DrawCheckMark(const wxRect& rect));
 
     DocStr(
         DrawEllipticArc,
@@ -164,14 +164,14 @@ rectangle. Angles are specified in degrees (360 is a complete
 circle). Positive values mean counter-clockwise motion. If start is
 equal to end, a complete ellipse will be drawn.", "");
     void DrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h, double start, double end);
-    %name(DrawEllipticArcPointSize) void DrawEllipticArc(const wxPoint& pt, const wxSize& sz, double start, double end);
+    %Rename(DrawEllipticArcPointSize, void, DrawEllipticArc(const wxPoint& pt, const wxSize& sz, double start, double end));
 
 
     DocStr(
         DrawPoint,
         "Draws a point using the current pen.", "");
     void DrawPoint(wxCoord x, wxCoord y);
-    %name(DrawPointPoint) void DrawPoint(const wxPoint& pt);
+    %Rename(DrawPointPoint, void, DrawPoint(const wxPoint& pt));
 
 
     DocStr(
@@ -180,8 +180,8 @@ equal to end, a complete ellipse will be drawn.", "");
 size. The current pen is used for the outline and the current brush
 for filling the shape.", "");
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    %name(DrawRectangleRect)void DrawRectangle(const wxRect& rect);
-    %name(DrawRectanglePointSize) void DrawRectangle(const wxPoint& pt, const wxSize& sz);
+    %Rename(DrawRectangleRect,void, DrawRectangle(const wxRect& rect));
+    %Rename(DrawRectanglePointSize, void, DrawRectangle(const wxPoint& pt, const wxSize& sz));
 
 
     DocStr(
@@ -198,8 +198,8 @@ means that the corner can be a sensible size relative to the size of
 the rectangle, and also avoids the strange effects X produces when the
 corners are too big for the rectangle.", "");
     void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius);
-    %name(DrawRoundedRectangleRect) void DrawRoundedRectangle(const wxRect& r, double radius);
-    %name(DrawRoundedRectanglePointSize) void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius);
+    %Rename(DrawRoundedRectangleRect, void, DrawRoundedRectangle(const wxRect& r, double radius));
+    %Rename(DrawRoundedRectanglePointSize, void, DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius));
 
 
     DocStr(
@@ -210,7 +210,7 @@ shape.", "
 
 :see: `DrawEllipse`");
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
-    %name(DrawCirclePoint) void DrawCircle(const wxPoint& pt, wxCoord radius);
+    %Rename(DrawCirclePoint, void, DrawCircle(const wxPoint& pt, wxCoord radius));
 
 
     DocStr(
@@ -220,8 +220,8 @@ is used for the outline and the current brush for filling the shape.", "
 
 :see: `DrawCircle`");
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    %name(DrawEllipseRect) void DrawEllipse(const wxRect& rect);
-    %name(DrawEllipsePointSize) void DrawEllipse(const wxPoint& pt, const wxSize& sz);
+    %Rename(DrawEllipseRect, void, DrawEllipse(const wxRect& rect));
+    %Rename(DrawEllipsePointSize, void, DrawEllipse(const wxPoint& pt, const wxSize& sz));
 
 
     DocStr(
@@ -230,7 +230,7 @@ is used for the outline and the current brush for filling the shape.", "
 PostScript). This can be the simplest way of drawing bitmaps on a
 window.", "");
     void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
-    %name(DrawIconPoint) void DrawIcon(const wxIcon& icon, const wxPoint& pt);
+    %Rename(DrawIconPoint, void, DrawIcon(const wxIcon& icon, const wxPoint& pt));
 
 
     DocStr(
@@ -247,7 +247,7 @@ current text background colour to draw the background (all bits set to
 
 :see: `SetTextForeground`, `SetTextBackground` and `wx.MemoryDC`");
     void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = false);
-    %name(DrawBitmapPoint) void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt, bool useMask = false);
+    %Rename(DrawBitmapPoint, void, DrawBitmap(const wxBitmap &bmp, const wxPoint& pt, bool useMask = false));
 
 
     DocStr(
@@ -265,7 +265,7 @@ logical functions with this function in portable programs.", "
 
 :see: `DrawRotatedText`");
     void DrawText(const wxString& text, wxCoord x, wxCoord y);
-    %name(DrawTextPoint) void DrawText(const wxString& text, const wxPoint& pt);
+    %Rename(DrawTextPoint, void, DrawText(const wxString& text, const wxPoint& pt));
 
 
     DocStr(
@@ -279,7 +279,7 @@ font. ``wx.SWISS_FONT`` is an example of a font which is.","
 
 :see: `DrawText`");
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
-    %name(DrawRotatedTextPoint) void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
+    %Rename(DrawRotatedTextPoint, void, DrawRotatedText(const wxString& text, const wxPoint& pt, double angle));
 
 
     DocDeclStr(
@@ -347,9 +347,9 @@ screen is damaged.", "
 
 :see: `DestroyClippingRegion`, `wx.Region`");
     void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    %name(SetClippingRegionPointSize) void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
-    %name(SetClippingRegionAsRegion) void SetClippingRegion(const wxRegion& region);
-    %name(SetClippingRect) void SetClippingRegion(const wxRect& rect);
+    %Rename(SetClippingRegionPointSize, void, SetClippingRegion(const wxPoint& pt, const wxSize& sz));
+    %Rename(SetClippingRegionAsRegion, void, SetClippingRegion(const wxRegion& region));
+    %Rename(SetClippingRect, void, SetClippingRegion(const wxRect& rect));
 
 
     
@@ -1243,6 +1243,7 @@ class wxBufferedDC : public wxMemoryDC
 public:
     %pythonAppend wxBufferedDC
         "self.__dc = args[0] # save a ref so the other dc will not be deleted before self";
+    
     %nokwargs wxBufferedDC;
 
     DocStr(
@@ -1272,7 +1273,7 @@ public:
 //     // TODO: Keep this one too?
 //     %pythonAppend wxBufferedDC( wxDC *dc, const wxSize &area )
 //         "val.__dc = args[0] # save a ref so the other dc will not be deleted before self";
-//     %name(BufferedDCInternalBuffer) wxBufferedDC( wxDC *dc, const wxSize &area );
+//     %RenameCtor(BufferedDCInternalBuffer,  wxBufferedDC( wxDC *dc, const wxSize &area ));
 
     
     // The buffer is blit to the real DC when the BufferedDC is destroyed.
@@ -1590,11 +1591,6 @@ MustHaveApp(wxPrinterDC);
 class  wxPrinterDC : public wxDC {
 public:
     wxPrinterDC(const wxPrintData& printData);
-//     %name(PrinterDC2) wxPrinterDC(const wxString& driver,
-//                                     const wxString& device,
-//                                     const wxString& output,
-//                                     bool interactive = true,
-//                                     int orientation = wxPORTRAIT);
 };
 
 #else
@@ -1604,19 +1600,12 @@ public:
     wxPrinterDC(const wxPrintData&)
         { wxPyRaiseNotImplemented(); }
 
-//     wxPrinterDC(const wxString&, const wxString&, const wxString&, bool, int)
-//         { wxPyRaiseNotImplemented(); }
 };
 %}
 
 class  wxPrinterDC : public wxDC {
 public:
     wxPrinterDC(const wxPrintData& printData);
-//     %name(PrinterDC2) wxPrinterDC(const wxString& driver,
-//                                     const wxString& device,
-//                                     const wxString& output,
-//                                     bool interactive = true,
-//                                     int orientation = wxPORTRAIT);
 };
 #endif
 

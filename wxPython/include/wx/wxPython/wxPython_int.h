@@ -328,51 +328,9 @@ wxPyCBInputStream* wxPyCBInputStream_create(PyObject *py, bool block);
 // in another shared library.
 
 class wxPyCallbackHelper;
-struct swig_type_info;
-struct swig_const_info;
-
-// Make SunCC happy and make typedef's for these that are extern "C"
-typedef swig_type_info* (*p_SWIG_Python_TypeRegister_t)(swig_type_info *);
-typedef swig_type_info* (*p_SWIG_Python_TypeCheck_t)(char *c, swig_type_info *);
-typedef void*           (*p_SWIG_Python_TypeCast_t)(swig_type_info *, void *);
-typedef swig_type_info* (*p_SWIG_Python_TypeDynamicCast_t)(swig_type_info *, void **);
-typedef const char*     (*p_SWIG_Python_TypeName_t)(const swig_type_info *);
-typedef const char *    (*p_SWIG_Python_TypePrettyName_t)(const swig_type_info *);
-typedef swig_type_info* (*p_SWIG_Python_TypeQuery_t)(const char *);
-typedef void            (*p_SWIG_Python_TypeClientData_t)(swig_type_info *, void *);
-typedef PyObject*       (*p_SWIG_Python_newvarlink_t)(void);
-typedef void            (*p_SWIG_Python_addvarlink_t)(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
-typedef int             (*p_SWIG_Python_ConvertPtr_t)(PyObject *, void **, swig_type_info *, int);
-typedef int             (*p_SWIG_Python_ConvertPacked_t)(PyObject *, void *, int sz, swig_type_info *, int);
-typedef char*           (*p_SWIG_Python_PackData_t)(char *c, void *, int);
-typedef char*           (*p_SWIG_Python_UnpackData_t)(char *c, void *, int);
-typedef PyObject*       (*p_SWIG_Python_NewPointerObj_t)(void *, swig_type_info *,int own);
-typedef PyObject*       (*p_SWIG_Python_NewPackedObj_t)(void *, int sz, swig_type_info *);
-typedef void            (*p_SWIG_Python_InstallConstants_t)(PyObject *d, swig_const_info constants[]);
-typedef void*           (*p_SWIG_Python_MustGetPtr_t)(PyObject *, swig_type_info *, int, int);
-
 
 struct wxPyCoreAPI {
 
-    p_SWIG_Python_TypeRegister_t       p_SWIG_Python_TypeRegister;
-    p_SWIG_Python_TypeCheck_t          p_SWIG_Python_TypeCheck;
-    p_SWIG_Python_TypeCast_t           p_SWIG_Python_TypeCast;
-    p_SWIG_Python_TypeDynamicCast_t    p_SWIG_Python_TypeDynamicCast;
-    p_SWIG_Python_TypeName_t           p_SWIG_Python_TypeName;
-    p_SWIG_Python_TypePrettyName_t     p_SWIG_Python_TypePrettyName; 
-    p_SWIG_Python_TypeQuery_t          p_SWIG_Python_TypeQuery;
-    p_SWIG_Python_TypeClientData_t     p_SWIG_Python_TypeClientData;
-    p_SWIG_Python_newvarlink_t         p_SWIG_Python_newvarlink;
-    p_SWIG_Python_addvarlink_t         p_SWIG_Python_addvarlink;
-    p_SWIG_Python_ConvertPtr_t         p_SWIG_Python_ConvertPtr;
-    p_SWIG_Python_ConvertPacked_t      p_SWIG_Python_ConvertPacked;
-    p_SWIG_Python_PackData_t           p_SWIG_Python_PackData;
-    p_SWIG_Python_UnpackData_t         p_SWIG_Python_UnpackData;
-    p_SWIG_Python_NewPointerObj_t      p_SWIG_Python_NewPointerObj;
-    p_SWIG_Python_NewPackedObj_t       p_SWIG_Python_NewPackedObj;
-    p_SWIG_Python_InstallConstants_t   p_SWIG_Python_InstallConstants;
-    p_SWIG_Python_MustGetPtr_t         p_SWIG_Python_MustGetPtr;
-    
     bool                (*p_wxPyCheckSwigType)(const wxChar* className);
     PyObject*           (*p_wxPyConstructObject)(void* ptr, const wxChar* className, int setThisOwn);
     bool                (*p_wxPyConvertSwigPtr)(PyObject* obj, void **ptr, const wxChar* className);

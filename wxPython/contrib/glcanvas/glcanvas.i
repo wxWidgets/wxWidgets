@@ -134,7 +134,7 @@ public:
                const wxPalette& palette = wxNullPalette);
 
     %pythonAppend wxGLCanvas   "val._setOORInfo(val)"
-    %name(GLCanvasWithContext)
+    %RenameCtor(GLCanvasWithContext, 
         wxGLCanvas( wxWindow *parent,
                     const wxGLContext *shared = NULL,
                     wxWindowID id = -1,
@@ -143,7 +143,7 @@ public:
                     long style = 0,
                     const wxString& name = wxPyGLCanvasNameStr,
                     int *attribList = NULL,
-                    const wxPalette& palette = wxNullPalette );
+                    const wxPalette& palette = wxNullPalette ));
 
 
     void SetCurrent();

@@ -448,8 +448,8 @@ wx.Window.SetSize, since the application need not worry about what
 dimensions the border or title bar have when trying to fit the window
 around panel items, for example.", "");
     void SetClientSize( const wxSize& size );
-    %name(SetClientSizeWH) void SetClientSize( int width, int height );
-    %name(SetClientRect) void SetClientSize(const wxRect& rect);
+    %Rename(SetClientSizeWH, void,  SetClientSize( int width, int height ));
+    %Rename(SetClientRect,  void,  SetClientSize(const wxRect& rect));
 
 
     DocStr(GetPosition,   // sets the docstring for both
@@ -603,9 +603,9 @@ The resizing increments are only significant under Motif or Xt.", "
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = -1, int maxH = -1,
                                int incW = -1, int incH = -1 );
-    %name(SetSizeHintsSz) void SetSizeHints( const wxSize& minSize,
-                                             const wxSize& maxSize=wxDefaultSize,
-                                             const wxSize& incSize=wxDefaultSize);
+    %Rename(SetSizeHintsSz, void,  SetSizeHints( const wxSize& minSize,
+                                                 const wxSize& maxSize=wxDefaultSize,
+                                                 const wxSize& incSize=wxDefaultSize));
 
     
     DocStr(SetVirtualSizeHints,
@@ -615,8 +615,8 @@ used.  If this function is called, the user will not be able to size
 the virtual area of the window outside the given bounds.", "");
     virtual void SetVirtualSizeHints( int minW, int minH,
                                       int maxW = -1, int maxH = -1 );
-    %name(SetVirtualSizeHintsSz)void SetVirtualSizeHints(
-        const wxSize& minSize, const wxSize& maxSize=wxDefaultSize);
+    %Rename(SetVirtualSizeHintsSz, void,  SetVirtualSizeHints(
+                const wxSize& minSize, const wxSize& maxSize=wxDefaultSize));
 
 
     
@@ -663,7 +663,7 @@ max size.", "");
 is just the client area of the window, but for some like scrolled
 windows it is more or less independent of the screen window size.", "");
     void SetVirtualSize(const wxSize& size );
-    %name(SetVirtualSizeWH) void SetVirtualSize( int w, int h );
+    %Rename(SetVirtualSizeWH, void,  SetVirtualSize( int w, int h ));
 
     
     DocStr(GetVirtualSize,
@@ -1138,10 +1138,10 @@ changes. For the x dimension, the dialog units are multiplied by the
 average character width and then divided by 4. For the y dimension,
 the dialog units are multiplied by the average character height and
 then divided by 8.", "");
-    %name(ConvertDialogPointToPixels) wxPoint ConvertDialogToPixels(const wxPoint& pt);
-    %name(ConvertDialogSizeToPixels)  wxSize  ConvertDialogToPixels(const wxSize& sz);
-    %name(DLG_PNT) wxPoint ConvertDialogToPixels(const wxPoint& pt);
-    %name(DLG_SZE) wxSize  ConvertDialogToPixels(const wxSize& sz);
+    %Rename(ConvertDialogPointToPixels, wxPoint, ConvertDialogToPixels(const wxPoint& pt));
+    %Rename(ConvertDialogSizeToPixels,  wxSize,  ConvertDialogToPixels(const wxSize& sz));
+    %Rename(DLG_PNT, wxPoint, ConvertDialogToPixels(const wxPoint& pt));
+    %Rename(DLG_SZE, wxSize,  ConvertDialogToPixels(const wxSize& sz));
 
 
     DocStr(ConvertPixelPointToDialog,
@@ -1151,8 +1151,8 @@ changes. For the x dimension, the dialog units are multiplied by the
 average character width and then divided by 4. For the y dimension,
 the dialog units are multiplied by the average character height and
 then divided by 8.", "");
-    %name(ConvertPixelPointToDialog) wxPoint ConvertPixelsToDialog(const wxPoint& pt);
-    %name(ConvertPixelSizeToDialog)  wxSize  ConvertPixelsToDialog(const wxSize& sz);
+    %Rename(ConvertPixelPointToDialog, wxPoint, ConvertPixelsToDialog(const wxPoint& pt));
+    %Rename(ConvertPixelSizeToDialog,  wxSize,  ConvertPixelsToDialog(const wxSize& sz));
 
 
 
@@ -1277,8 +1277,8 @@ since the last repaint. Call this in an paint event handler to
 optimize redrawing by only redrawing those areas, which have been
 exposed.", "");
     bool IsExposed( int x, int y, int w=1, int h=1 ) const;
-    %name(IsExposedPoint) bool IsExposed( const wxPoint& pt ) const;
-    %name(IsExposedRect)  bool IsExposed( const wxRect& rect ) const;
+    %Rename(IsExposedPoint, bool, IsExposed( const wxPoint& pt ) const);
+    %Rename(IsExposedRect,  bool, IsExposed( const wxRect& rect ) const);
 
 
 
@@ -1564,7 +1564,7 @@ and returns control when the user has dismissed the menu. If a menu item is
 selected, the corresponding menu event is generated and will be processed as
 usual.  If the default position is given then the current position of the
 mouse cursor will be used.", "");
-    %name(PopupMenuXY) bool PopupMenu(wxMenu *menu, int x=-1, int y=-1);
+    %Rename(PopupMenuXY,  bool, PopupMenu(wxMenu *menu, int x=-1, int y=-1));
     bool PopupMenu(wxMenu *menu, const wxPoint& pos=wxDefaultPosition);
 
 
@@ -1736,7 +1736,7 @@ wxHelpProvider implementation, and not in the window object itself.", "");
 
     DocStr(SetToolTip,
            "Attach a tooltip to the window.", "");
-    %name(SetToolTipString) void SetToolTip( const wxString &tip );
+    %Rename(SetToolTipString, void,  SetToolTip( const wxString &tip ));
     void SetToolTip( wxToolTip *tip );
 
     DocDeclStr(

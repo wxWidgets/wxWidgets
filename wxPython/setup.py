@@ -137,7 +137,6 @@ else:
 
 
 ext = Extension('_core_', ['src/helpers.cpp',
-                           'src/libpy.c',
                            ] + rc_file + swig_sources,
 
                 include_dirs = includes,

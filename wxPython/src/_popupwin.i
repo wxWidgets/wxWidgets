@@ -35,7 +35,7 @@ public:
     %pythonAppend wxPopupWindow()       ""
     
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE);
-    %name(PrePopupWindow)wxPopupWindow();
+    %RenameCtor(PrePopupWindow, wxPopupWindow());
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
@@ -81,14 +81,15 @@ MustHaveApp(wxPyPopupTransientWindow);
 // wxPopupTransientWindow: a wxPopupWindow which disappears automatically
 // when the user clicks mouse outside it or if it loses focus in any other way
 
-%name(PopupTransientWindow) class wxPyPopupTransientWindow : public wxPopupWindow
+%rename(PopupTransientWindow) wxPyPopupTransientWindow;
+class wxPyPopupTransientWindow : public wxPopupWindow
 {
 public:
     %pythonAppend wxPyPopupTransientWindow         "self._setOORInfo(self);self._setCallbackInfo(self, PopupTransientWindow)"
     %pythonAppend wxPyPopupTransientWindow()       ""
     
     wxPyPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE);
-    %name(PrePopupTransientWindow)wxPyPopupTransientWindow();
+    %RenameCtor(PrePopupTransientWindow, wxPyPopupTransientWindow());
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
@@ -124,14 +125,15 @@ public:
 class wxPopupWindow : public wxWindow {
 public:
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE);
-    %name(PrePopupWindow)wxPopupWindow();
+    %RenameCtor(PrePopupWindow, wxPopupWindow());
 };
 
-%name(PopupTransientWindow) class wxPyPopupTransientWindow : public wxPopupWindow
+%rename(PopupTransientWindow) wxPyPopupTransientWindow;
+class wxPyPopupTransientWindow : public wxPopupWindow
 {
 public:
     wxPyPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE);
-    %name(PrePopupTransientWindow)wxPyPopupTransientWindow();
+    %RenameCtor(PrePopupTransientWindow, wxPyPopupTransientWindow());
 };
 
 

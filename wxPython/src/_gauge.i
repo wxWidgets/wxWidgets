@@ -42,7 +42,7 @@ public:
             long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxPyGaugeNameStr);
-    %name(PreGauge)wxGauge();
+    %RenameCtor(PreGauge, wxGauge());
 
     bool Create(wxWindow* parent, wxWindowID id=-1, int range=100,
             const wxPoint& pos = wxDefaultPosition,

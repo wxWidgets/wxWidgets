@@ -117,7 +117,8 @@ public:
 // Python code should rarely be neccessary.  Just use the GetItemPyData and
 // SetItemPyData tree methods instead of the GetItemData and SetItemData
 // methods.
-%name(TreeItemData) class wxPyTreeItemData {
+%rename(TreeItemData) wxPyTreeItemData;
+class wxPyTreeItemData {
 public:
     wxPyTreeItemData(PyObject* obj = NULL);
 
@@ -311,7 +312,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyTreeCtrl, wxTreeCtrl);
  
 MustHaveApp(wxPyTreeCtrl);
 
-%name(TreeCtrl)class wxPyTreeCtrl : public wxControl {
+%rename(TreeCtrl) wxPyTreeCtrl;
+class wxPyTreeCtrl : public wxControl {
 public:
     %pythonAppend wxPyTreeCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, TreeCtrl)"
     %pythonAppend wxPyTreeCtrl()       ""
@@ -323,7 +325,7 @@ public:
                  long style = wxTR_DEFAULT_STYLE,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxPyTreeCtrlNameStr);
-    %name(PreTreeCtrl)wxPyTreeCtrl();
+    %RenameCtor(PreTreeCtrl, wxPyTreeCtrl());
 
     // Turn it back on again
     %typemap(out) wxPyTreeCtrl* { $result = wxPyMake_wxObject($1, $owner); }
@@ -601,12 +603,12 @@ public:
                             wxPyTreeItemData *data = NULL);
 
     // insert a new item before the one with the given index
-    %name(InsertItemBefore)
-    wxTreeItemId InsertItem(const wxTreeItemId& parent,
+    %Rename(InsertItemBefore, 
+    wxTreeItemId, InsertItem(const wxTreeItemId& parent,
                             size_t index,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
-                            wxPyTreeItemData *data = NULL);
+                            wxPyTreeItemData *data = NULL));
 
         // insert a new item in as the last child of the parent
     wxTreeItemId AppendItem(const wxTreeItemId& parent,

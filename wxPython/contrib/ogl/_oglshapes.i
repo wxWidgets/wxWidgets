@@ -412,9 +412,9 @@ public:
         }
     }
 
-    %name(AddSimpleConstraint)wxOGLConstraint* AddConstraint(int type,
+    %Rename(AddSimpleConstraint, wxOGLConstraint*,  AddConstraint(int type,
                                                              wxPyShape *constraining,
-                                                             wxPyShape *constrained);
+                                                             wxPyShape *constrained));
 
     void CalculateSize();
     bool ContainsDivision(wxPyDivisionShape *division);

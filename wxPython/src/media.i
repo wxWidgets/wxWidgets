@@ -183,10 +183,10 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxPyMediaCtrlNameStr);
     
-    %name(PreMediaCtrl) wxMediaCtrl();
+    %RenameCtor(PreMediaCtrl,  wxMediaCtrl());
 
 //     %extend {
-//         %name(MediaCtrlFromURI)
+//         %RenameCtor(MediaCtrlFromURI, 
 //              wxMediaCtrl(wxWindow* parent,
 //                          wxWindowID id=-1,
 //                          const wxString& location=wxPyEmptyString,
@@ -195,7 +195,7 @@ public:
 //                          long style = 0,
 //                          const wxString& szBackend = wxPyEmptyString,
 //                          const wxValidator& validator = wxDefaultValidator,
-//                          const wxString& name = wxPyMediaCtrlNameStr)
+//                          const wxString& name = wxPyMediaCtrlNameStr))
 //         {
 //             return new wxMediaCtrl(parent, id, wxURI(location),
 //                                    pos, size, style, szBackend, validator, name);

@@ -142,7 +142,7 @@ public:
                long style = 0,
                const wxString& name = wxPyPanelNameStr);
 
-    %name(PrePyWindow) wxPyWindow();
+    %RenameCtor(PrePyWindow, wxPyWindow());
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
@@ -287,7 +287,7 @@ public:
                long style = 0,
                const wxString& name = wxPyPanelNameStr);
 
-    %name(PrePyPanel) wxPyPanel();
+    %RenameCtor(PrePyPanel,  wxPyPanel());
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
@@ -424,7 +424,7 @@ public:
                long style = 0,
                const wxString& name = wxPyPanelNameStr);
 
-    %name(PrePyScrolledWindow) wxPyScrolledWindow();
+    %RenameCtor(PrePyScrolledWindow,  wxPyScrolledWindow());
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 

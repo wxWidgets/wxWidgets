@@ -55,7 +55,7 @@ public:
     //              subclass property of object nodes will be ignored
     //              (useful for previews in XRC editors)
     wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE);
-    %name(EmptyXmlResource) wxXmlResource(int flags = wxXRC_USE_LOCALE);
+    %RenameCtor(EmptyXmlResource,  wxXmlResource(int flags = wxXRC_USE_LOCALE));
     ~wxXmlResource();
 
 
@@ -118,7 +118,7 @@ public:
 
     // Loads menubar from resource. Returns NULL on failure.
     wxMenuBar *LoadMenuBar(const wxString& name);
-    %name(LoadMenuBarOnFrame) wxMenuBar *LoadMenuBar(wxWindow *parent, const wxString& name);
+    %Rename(LoadMenuBarOnFrame,  wxMenuBar* , LoadMenuBar(wxWindow *parent, const wxString& name));
 
 
     // Loads toolbar
@@ -132,16 +132,16 @@ public:
     //      wxTheXmlResource->LoadDialog(&dlg, mainFrame, "my_dialog");
     //      dlg->ShowModal();
     wxDialog *LoadDialog(wxWindow *parent, const wxString& name);
-    %name(LoadOnDialog)bool LoadDialog(wxDialog *dlg, wxWindow *parent, const wxString& name);
+    %Rename(LoadOnDialog, bool,  LoadDialog(wxDialog *dlg, wxWindow *parent, const wxString& name));
 
     // Loads panel. panel points to parent window (if any). Second form
     // is used to finish creation of already existing instance.
     wxPanel *LoadPanel(wxWindow *parent, const wxString& name);
-    %name(LoadOnPanel)bool LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name);
+    %Rename(LoadOnPanel, bool,  LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name));
 
     // Load a frame's contents from a resource
     wxFrame *LoadFrame(wxWindow* parent, const wxString& name);
-    %name(LoadOnFrame)bool LoadFrame(wxFrame* frame, wxWindow *parent, const wxString& name);
+    %Rename(LoadOnFrame, bool,  LoadFrame(wxFrame* frame, wxWindow *parent, const wxString& name));
 
     // Load an object from the resource specifying both the resource name and
     // the classname.  This lets you load nonstandard container windows.
@@ -151,8 +151,8 @@ public:
     // Load an object from the resource specifying both the resource name and
     // the classname.  This form lets you finish the creation of an existing
     // instance.
-    %name(LoadOnObject)bool LoadObject(wxObject *instance, wxWindow *parent, const wxString& name,
-                                       const wxString& classname);
+    %Rename(LoadOnObject, bool,  LoadObject(wxObject *instance, wxWindow *parent, const wxString& name,
+                                       const wxString& classname));
 
     // Loads a bitmap resource from a file.
     wxBitmap LoadBitmap(const wxString& name);

@@ -30,15 +30,17 @@ public:
     ~wxIcon();
 
     // alternate constructors
-    %name(EmptyIcon) wxIcon();
-    %name(IconFromLocation) wxIcon(const wxIconLocation& loc);
+    %RenameCtor(EmptyIcon, wxIcon());
+    %RenameCtor(IconFromLocation,  wxIcon(const wxIconLocation& loc));
     %extend {
-        %name(IconFromBitmap) wxIcon(const wxBitmap& bmp) {
+        %RenameCtor(IconFromBitmap, wxIcon(const wxBitmap& bmp))
+        {
             wxIcon* icon = new wxIcon();
             icon->CopyFromBitmap(bmp);
             return icon;
         }
-        %name(IconFromXPMData) wxIcon(PyObject* listOfStrings) {
+        %RenameCtor(IconFromXPMData, wxIcon(PyObject* listOfStrings))
+        {
             char**  cArray = NULL;
             wxIcon* icon;
 
@@ -136,10 +138,10 @@ public:
     wxIconBundle();
 
     // initializes the bundle with the icon(s) found in the file
-    %name(IconBundleFromFile) wxIconBundle( const wxString& file, long type );
+    %RenameCtor(IconBundleFromFile, wxIconBundle( const wxString& file, long type ));
 
     // initializes the bundle with a single icon
-    %name(IconBundleFromIcon)wxIconBundle( const wxIcon& icon );
+    %RenameCtor(IconBundleFromIcon, wxIconBundle( const wxIcon& icon ));
 
     ~wxIconBundle();
 
@@ -151,7 +153,7 @@ public:
     // adds all the icons contained in the file to the collection,
     // if the collection already contains icons with the same
     // width and height, they are replaced
-    %name(AddIconFromFile)void AddIcon( const wxString& file, long type );
+    %Rename(AddIconFromFile,void, AddIcon( const wxString& file, long type ));
 
     // returns the icon with the given size; if no such icon exists,
     // returns the icon with size wxSYS_ICON_[XY]; if no such icon exists,

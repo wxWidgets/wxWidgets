@@ -115,9 +115,10 @@ black/white (mask respected).",
 //     %extend {
 //         DocStr(wxCursor,
 //                "");
-//         %name(CursorFromBits) wxCursor(PyObject* bits, int width, int  height,
+//         %RenameCtor(CursorFromBits,  wxCursor(PyObject* bits, int width, int  height,
 //                                          int hotSpotX=-1, int hotSpotY=-1,
-//                                          PyObject* maskBits=NULL) {
+//                                          PyObject* maskBits=NULL))
+//         {
 //             char* bitsbuf;
 //             char* maskbuf = NULL;
 //             int   length;

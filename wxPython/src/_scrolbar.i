@@ -33,7 +33,7 @@ public:
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxPyScrollBarNameStr);
-    %name(PreScrollBar)wxScrollBar();
+    %RenameCtor(PreScrollBar, wxScrollBar());
 
     bool Create(wxWindow* parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,

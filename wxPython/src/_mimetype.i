@@ -48,11 +48,11 @@ public:
 
     // the array elements correspond to the parameters of the ctor above in
     // the same order
-    %name(FileTypeInfoSequence)wxFileTypeInfo(const wxArrayString& sArray);
+    %Rename(FileTypeInfoSequence,, wxFileTypeInfo(const wxArrayString& sArray));
 
     // invalid item - use this to terminate the array passed to
     // wxMimeTypesManager::AddFallbacks
-    %name(NullFileTypeInfo)wxFileTypeInfo();
+    %Rename(NullFileTypeInfo,, wxFileTypeInfo());
 
 
     // test if this object can be used

@@ -43,7 +43,7 @@ public:
     wxStatusBar(wxWindow* parent, wxWindowID id = -1,
                 long style = wxDEFAULT_STATUSBAR_STYLE,
                 const wxString& name = wxPyStatusLineNameStr);
-    %name(PreStatusBar)wxStatusBar();
+    %RenameCtor(PreStatusBar, wxStatusBar());
 
     // Turn it back on again
     %typemap(out) wxStatusBar* { $result = wxPyMake_wxObject($1, $owner); }

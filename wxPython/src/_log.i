@@ -302,22 +302,22 @@ const wxString wxSysErrorMsg(unsigned long nErrCode = 0);
     
 %}
 
-%name(LogFatalError) void wxPyLogFatalError(const wxString& msg);
-%name(LogError) void wxPyLogError(const wxString& msg);
-%name(LogWarning) void wxPyLogWarning(const wxString& msg);
-%name(LogMessage) void wxPyLogMessage(const wxString& msg);
-%name(LogInfo) void wxPyLogInfo(const wxString& msg);
-%name(LogDebug) void wxPyLogDebug(const wxString& msg);
-%name(LogVerbose) void wxPyLogVerbose(const wxString& msg);
-%name(LogStatus) void wxPyLogStatus(const wxString& msg);
-%name(LogStatusFrame) void wxPyLogStatusFrame(wxFrame *pFrame, const wxString& msg);
-%name(LogSysError) void wxPyLogSysError(const wxString& msg);
+%Rename(LogFatalError,  void, wxPyLogFatalError(const wxString& msg));
+%Rename(LogError,  void, wxPyLogError(const wxString& msg));
+%Rename(LogWarning,  void, wxPyLogWarning(const wxString& msg));
+%Rename(LogMessage,  void, wxPyLogMessage(const wxString& msg));
+%Rename(LogInfo,  void, wxPyLogInfo(const wxString& msg));
+%Rename(LogDebug,  void, wxPyLogDebug(const wxString& msg));
+%Rename(LogVerbose,  void, wxPyLogVerbose(const wxString& msg));
+%Rename(LogStatus,  void, wxPyLogStatus(const wxString& msg));
+%Rename(LogStatusFrame,  void, wxPyLogStatusFrame(wxFrame *pFrame, const wxString& msg));
+%Rename(LogSysError,  void, wxPyLogSysError(const wxString& msg));
 
-%name(LogGeneric) void wxPyLogGeneric(unsigned long level, const wxString& msg);
+%Rename(LogGeneric,  void, wxPyLogGeneric(unsigned long level, const wxString& msg));
 
 %nokwargs wxPyLogTrace;
-%name(LogTrace) void wxPyLogTrace(unsigned long mask, const wxString& msg);
-%name(LogTrace) void wxPyLogTrace(const wxString& mask, const wxString& msg);
+%Rename(LogTrace,  void, wxPyLogTrace(unsigned long mask, const wxString& msg));
+%Rename(LogTrace,  void, wxPyLogTrace(const wxString& mask, const wxString& msg));
 
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,

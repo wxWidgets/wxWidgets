@@ -150,7 +150,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                         long style = wxCLIP_CHILDREN | wxDS_MANAGE_SCROLLBARS | wxDS_DRAG_CORNER,
                         const wxString& name = wxPyDynamicSashNameStr);
-    %name(PreDynamicSashWindow)wxDynamicSashWindow();
+    %RenameCtor(PreDynamicSashWindow, wxDynamicSashWindow());
 
     bool Create(wxWindow *parent, wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -305,7 +305,8 @@ public:
 
 MustHaveApp(wxPyTreeCompanionWindow);
 
-%name(TreeCompanionWindow) class wxPyTreeCompanionWindow: public wxWindow
+%rename(TreeCompanionWindow) wxPyTreeCompanionWindow;
+class wxPyTreeCompanionWindow: public wxWindow
 {
 public:
     %pythonAppend wxPyTreeCompanionWindow         "self._setOORInfo(self);self._setCallbackInfo(self, TreeCompanionWindow)"
@@ -398,7 +399,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style =  wxLED_ALIGN_LEFT | wxLED_DRAW_FADED);
-    %name(PreLEDNumberCtrl) wxLEDNumberCtrl();
+    %RenameCtor(PreLEDNumberCtrl,  wxLEDNumberCtrl());
 
     bool Create(wxWindow *parent, wxWindowID id = -1,
                     const wxPoint& pos = wxDefaultPosition,
@@ -521,7 +522,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyTreeListCtrl, wxTreeListCtrl)
 
 MustHaveApp(wxPyTreeListCtrl);
 
-%name(TreeListCtrl) class wxPyTreeListCtrl : public wxControl
+%rename(TreeListCtrl) wxPyTreeListCtrl;
+class wxPyTreeListCtrl : public wxControl
 {
 public:
     %pythonAppend wxPyTreeListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, TreeListCtrl)"
@@ -533,7 +535,7 @@ public:
                    long style = wxTR_DEFAULT_STYLE,
                    const wxValidator &validator = wxDefaultValidator,
                    const wxString& name = wxPyTreeListCtrlNameStr );
-    %name(PreTreeListCtrl)wxPyTreeListCtrl();
+    %RenameCtor(PreTreeListCtrl, wxPyTreeListCtrl());
 
     bool Create(wxWindow *parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,
@@ -590,11 +592,11 @@ public:
 //     void AddColumn(const wxString& text,
 //                    size_t width,
 //                    wxTreeListColumnAlign alignment = wxTL_ALIGN_LEFT);
-    %name(AddColumnInfo) void AddColumn(const wxTreeListColumnInfo& col);
+    %Rename(AddColumnInfo,  void,  AddColumn(const wxTreeListColumnInfo& col));
 
     // inserts a column before the given one
     void InsertColumn(size_t before, const wxString& text);
-    %name(InsertColumnInfo) void InsertColumn(size_t before, const wxTreeListColumnInfo& col);
+    %Rename(InsertColumnInfo,  void,  InsertColumn(size_t before, const wxTreeListColumnInfo& col));
 
     // deletes the given column - does not delete the corresponding column
     // of each item
@@ -861,12 +863,12 @@ public:
                             wxPyTreeItemData *data = NULL);
 
     // insert a new item before the one with the given index
-    %name(InsertItemBefore)
-        wxTreeItemId InsertItem(const wxTreeItemId& parent,
+    %Rename(InsertItemBefore, 
+        wxTreeItemId,  InsertItem(const wxTreeItemId& parent,
                                 size_t index,
                                 const wxString& text,
                                 int image = -1, int selectedImage = -1,
-                                wxPyTreeItemData *data = NULL);
+                                wxPyTreeItemData *data = NULL));
 
     // insert a new item in as the last child of the parent
     wxTreeItemId AppendItem(const wxTreeItemId& parent,

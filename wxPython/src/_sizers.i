@@ -51,8 +51,9 @@ methods are called.
                          int border, PyObject* userData=NULL ),
             "Constructs a `wx.SizerItem` for tracking a window.", ""); 
     
-        %name(SizerItemWindow) wxSizerItem( wxWindow *window, int proportion, int flag,
-                                            int border, PyObject* userData=NULL ) {
+        %RenameCtor(SizerItemWindow, wxSizerItem( wxWindow *window, int proportion, int flag,
+                                                  int border, PyObject* userData=NULL ))
+        {
             wxPyUserData* data = NULL;
             if ( userData ) {
                 bool blocked = wxPyBeginBlockThreads();
@@ -67,8 +68,10 @@ methods are called.
             wxSizerItem( int width, int height, int proportion, int flag,
                          int border, PyObject* userData=NULL),
             "Constructs a `wx.SizerItem` for tracking a spacer.", "");
-        %name(SizerItemSpacer) wxSizerItem( int width, int height, int proportion, int flag,
-                                            int border, PyObject* userData=NULL) {
+        
+        %RenameCtor(SizerItemSpacer,  wxSizerItem( int width, int height, int proportion, int flag,
+                                                   int border, PyObject* userData=NULL))
+        {
             wxPyUserData* data = NULL;
             if ( userData ) {
                 bool blocked = wxPyBeginBlockThreads();
@@ -81,9 +84,11 @@ methods are called.
         DocStr(
             wxSizerItem( wxSizer *sizer, int proportion, int flag,
                          int border, PyObject* userData=NULL ),
-            "Constructs a `wx.SizerItem` for tracking a subsizer", ""); 
-        %name(SizerItemSizer)  wxSizerItem( wxSizer *sizer, int proportion, int flag,
-                                            int border, PyObject* userData=NULL ) {
+            "Constructs a `wx.SizerItem` for tracking a subsizer", "");
+        
+        %RenameCtor(SizerItemSizer,  wxSizerItem( wxSizer *sizer, int proportion, int flag,
+                                                  int border, PyObject* userData=NULL ))
+        {
             wxPyUserData* data = NULL;
             if ( userData ) {
                 bool blocked = wxPyBeginBlockThreads();
@@ -139,8 +144,8 @@ added, if needed.", "");
 
     DocStr(SetRatio,
            "Set the ratio item attribute.", "");
-    %name(SetRatioWH) void SetRatio( int width, int height );
-    %name(SetRatioSize) void SetRatio( wxSize size );
+    %Rename(SetRatioWH, void, SetRatio( int width, int height ));
+    %Rename(SetRatioSize, void, SetRatio( wxSize size ));
     void SetRatio( float ratio );
     
     DocDeclStr(

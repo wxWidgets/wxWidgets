@@ -36,7 +36,7 @@ public:
 //                const wxSize& size = wxDefaultSize,
 //                long style = 0,
 //                const wxString& name = wxPyEmptyString);
-//     %name(PreBookCtrlBase)wxBookCtrlBase();
+//     %RenameCtor(PreBookCtrlBase, wxBookCtrlBase());
 //     bool Create(wxWindow *parent,
 //                 wxWindowID id,
 //                 const wxPoint& pos = wxDefaultPosition,
@@ -179,7 +179,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxString& name = wxPyNOTEBOOK_NAME);
-    %name(PreNotebook)wxNotebook();
+    %RenameCtor(PreNotebook, wxNotebook());
 
     // Turn it back on again
     %typemap(out) wxNotebook* { $result = wxPyMake_wxObject($1, $owner); }
@@ -307,7 +307,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxString& name = wxPyEmptyString);
-    %name(PreListbook)wxListbook();
+    %RenameCtor(PreListbook, wxListbook());
 
     bool Create(wxWindow *parent,
                 wxWindowID id=-1,
@@ -371,7 +371,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxPyEmptyString);
-    %name(PreChoicebook)wxChoicebook();
+    %RenameCtor(PreChoicebook, wxChoicebook());
 
     // quasi ctor
     bool Create(wxWindow *parent,

@@ -85,7 +85,8 @@ public:
             else
                 return new wxSound(fileName);
         }
-        %name(SoundFromData) wxSound(PyObject* data) {
+        %RenameCtor(SoundFromData,  wxSound(PyObject* data))
+        {
             unsigned char* buffer; int size;
             wxSound *sound = NULL;
 
@@ -135,7 +136,7 @@ public:
     bool Play(unsigned flags = wxSOUND_ASYNC) const;
 
     // Plays sound from filename:
-    %name(PlaySound) static bool Play(const wxString& filename, unsigned flags = wxSOUND_ASYNC);
+    %Rename(PlaySound,  static bool, Play(const wxString& filename, unsigned flags = wxSOUND_ASYNC));
 
 #ifndef __WXMAC__
     static void Stop();

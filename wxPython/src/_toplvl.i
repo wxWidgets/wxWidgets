@@ -168,7 +168,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
             const wxString& name = wxPyFrameNameStr);
-    %name(PreFrame)wxFrame();
+    %RenameCtor(PreFrame, wxFrame());
 
     // Turn it back on again
     %typemap(out) wxFrame* { $result = wxPyMake_wxObject($1, $owner); }
@@ -287,7 +287,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
              const wxString& name = wxPyDialogNameStr);
-    %name(PreDialog)wxDialog();
+    %RenameCtor(PreDialog, wxDialog());
 
     // Turn it back on again
     %typemap(out) wxDialog* { $result = wxPyMake_wxObject($1, $owner); }
@@ -352,7 +352,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxPyFrameNameStr);
-    %name(PreMiniFrame)wxMiniFrame();
+    %RenameCtor(PreMiniFrame, wxMiniFrame());
 
     bool Create(wxWindow* parent, const wxWindowID id=-1,
                 const wxString& title = wxPyEmptyString,

@@ -128,7 +128,9 @@ that a colour reduction may have to take place.", "",
     %extend {
         DocStr(wxBitmap(PyObject* listOfStrings),
                "Construct a Bitmap from a list of strings formatted as XPM data.", "");
-        %name(BitmapFromXPMData) wxBitmap(PyObject* listOfStrings) {
+        
+        %RenameCtor(BitmapFromXPMData, wxBitmap(PyObject* listOfStrings))
+        {
             char**    cArray = NULL;
             wxBitmap* bmp;
 
@@ -145,7 +147,9 @@ that a colour reduction may have to take place.", "",
 function for monochrome bitmaps (depth 1) in portable programs: in
 this case the bits parameter should contain an XBM image.  For other
 bit depths, the behaviour is platform dependent.", "");
-        %name(BitmapFromBits) wxBitmap(PyObject* bits, int width, int height, int depth=1 ) {
+        
+        %RenameCtor(BitmapFromBits, wxBitmap(PyObject* bits, int width, int height, int depth=1 ))
+        {
             char* buf;
             int   length;
             PyString_AsStringAndSize(bits, &buf, &length);

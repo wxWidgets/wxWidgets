@@ -1603,7 +1603,7 @@ public:
             long style = wxWANTS_CHARS,
             const wxString& name = wxPyPanelNameStr);
 
-    %name(PreGrid) wxGrid();
+    %RenameCtor(PreGrid,  wxGrid());
 
     
     // Turn it back on again
