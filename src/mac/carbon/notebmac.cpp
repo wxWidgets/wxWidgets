@@ -614,7 +614,7 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
                 wxNotebookEvent changing(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
                     ::GetControl32BitValue(control) - 1, m_nSelection);
                 changing.SetEventObject(this);
-                ProcessEvent(changing);
+                GetEventHandler()->ProcessEvent(changing);
 
                 if(changing.IsAllowed())
                 {
@@ -626,7 +626,7 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
                         ::GetControl32BitValue(control) - 1, m_nSelection);
                     event.SetEventObject(this);
 
-                    ProcessEvent(event);
+                    GetEventHandler()->ProcessEvent(event);
                 }
             }
         }
