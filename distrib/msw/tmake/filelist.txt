@@ -349,6 +349,7 @@ frame.cpp	R
 gauge.cpp	R
 gdiobj.cpp	R
 icon.cpp	R
+joystick.cpp	R
 listbox.cpp	R
 main.cpp	R
 mdi.cpp	R
