@@ -930,6 +930,12 @@ wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
 {
+    // first, associate this piece of data with this item
+    if ( data )
+    {
+        data->SetId(item);
+    }
+
     wxTreeViewItem tvItem(item, TVIF_PARAM);
 
     if ( HasIndirectData(item) )
@@ -2272,8 +2278,12 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 
         case TVN_ENDLABELEDIT:
-            // return TRUE to set the label to the new string
+            // return TRUE to set the label to the new string: note that we
+            // also must pretend that we did process the message or it is going
+            // to be passed to DefWindowProc() which will happily return FALSE
+            // cancelling the label change
             *result = event.IsAllowed();
+            processed = TRUE;
 
             // ensure that we don't have the text ctrl which is going to be
             // deleted any more
