@@ -62,6 +62,10 @@ Added wxPython.lib.popupctl by Gerrit van Dyk which is a combobox-like
 gizmo for poping up arbitrary controls.  It is currently using
 wxDialog because of some issues with wxPopupWindow...
 
+Added wxPython.lib.gridmovers by Gerrit van Dyk which facilitates the
+dragging of columns and/or rows in a wxGrid.
+
+
 
 
 2.3.3.1
