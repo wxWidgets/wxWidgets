@@ -716,13 +716,6 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         }
     }
 
- //   if ( !::GetExitCodeThread(hThread, (LPDWORD)&rc) )
-    {
-        wxLogLastError("GetExitCodeThread");
-
-        rc = (ExitCode)-1;
-    }
-
     if ( IsDetached() )
     {
         // if the thread exits normally, this is done in WinThreadStart, but in
@@ -731,9 +724,6 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         // closed while we were waiting on it, so we must do it here
         delete this;
     }
-
- //   wxASSERT_MSG( (DWORD)rc != STILL_ACTIVE,
- //                 wxT("thread must be already terminated.") );
 
     if ( pRc )
         *pRc = rc;
