@@ -387,6 +387,12 @@ to the list of windows pending real deletion.
 
 Destroys all children of a window.  Called automatically by the destructor.
 
+\membersection{wxWindow::Disable}\label{wxwindowdisable}
+
+\func{void}{Disable}{\void}
+
+Disables the window, same as \helpref{Enable(FALSE)}{wxwindowenable}.
+
 \membersection{wxWindow::DragAcceptFiles}\label{wxwindowdragacceptfiles}
 
 \func{virtual void}{DragAcceptFiles}{\param{bool}{ accept}}
@@ -408,7 +414,7 @@ Windows only.
 
 \membersection{wxWindow::Enable}\label{wxwindowenable}
 
-\func{virtual void}{Enable}{\param{bool}{ enable}}
+\func{virtual void}{Enable}{\param{bool}{ enable = TRUE}}
 
 Enable or disable the window for user input.
 
@@ -418,7 +424,8 @@ Enable or disable the window for user input.
 
 \wxheading{See also}
 
-\helpref{wxWindow::IsEnabled}{wxwindowisenabled}
+\helpref{wxWindow::IsEnabled}{wxwindowisenabled},\rtfsp
+\helpref{wxWindow::Disable}{wxwindowdisable}
 
 \membersection{wxWindow::FindFocus}\label{wxwindowfindfocus}
 
