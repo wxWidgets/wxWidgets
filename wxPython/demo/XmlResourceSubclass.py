@@ -53,7 +53,6 @@ class MyCustomPanel(wx.Panel):
         if hasattr(self, 't'):
             sz = self.GetSize()
             w, h = self.t.GetTextExtent(self.t.GetLabel())
-            print w, h
             self.t.SetPosition(((sz.width-w)/2, (sz.height-h)/2))
     
 #----------------------------------------------------------------------
