@@ -84,7 +84,7 @@ class wxSizePtr :
         return "<C wxSize instance at %s>" % (self.this,)
     
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxSize'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
@@ -146,7 +146,7 @@ class wxRealPointPtr :
         return "<C wxRealPoint instance at %s>" % (self.this,)
     
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxRealPoint'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
@@ -208,7 +208,7 @@ class wxPointPtr :
         return "<C wxPoint instance at %s>" % (self.this,)
     
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxPoint'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
@@ -341,7 +341,7 @@ class wxRectPtr :
         return "<C wxRect instance at %s>" % (self.this,)
     
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxRect'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
@@ -495,7 +495,7 @@ class wxPoint2DDoublePtr :
     
     
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxPoint2DDouble'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):

@@ -11952,9 +11952,6 @@ SWIGEXPORT(void) initcontrolsc() {
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultValidator",_wrap_wxDefaultValidator_get, _wrap_wxDefaultValidator_set);
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TOGGLEBUTTON_CLICKED", PyInt_FromLong((long) wxEVT_COMMAND_TOGGLEBUTTON_CLICKED));
-
-    // wxRTTI is screwed up for wxGauge on wxMSW, it uses wxGauge95 class name
-    wxPyPtrTypeMap_Add("wxGauge", "wxGauge95");
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
