@@ -6212,9 +6212,7 @@ else dnl we build wxBase only
     SUBDIRS="samples utils"
 fi
 dnl Add tests to the list of subdirs if cppunit 1.8.0+ is detected
-AM_PATH_CPPUNIT(1.8.0, [AC_MSG_RESULT([yes])
-                        SUBDIRS="$SUBDIRS tests"],
-                       [AC_MSG_RESULT([no])])
+AM_PATH_CPPUNIT(1.8.0, [SUBDIRS="$SUBDIRS tests"])
 
 for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then

@@ -18630,12 +18630,6 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
-  if test "$cross_compiling" = "yes"; then
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_IOSTREAMH 1
-_ACEOF
-
-  else
 
 
     ac_ext=cc
@@ -18811,7 +18805,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-  fi
 
 
 
@@ -21884,7 +21877,7 @@ fi
     if pkg-config --atleast-pkgconfig-version 0.7 ; then
       :
     else
-      echo *** pkg-config too old; version 0.7 or better required.
+      echo "*** pkg-config too old; version 0.7 or better required."
       no_gtk=yes
       PKG_CONFIG=no
     fi
@@ -39842,6 +39835,7 @@ BAKEFILE_AUTOCONF_INC_M4_VERSION="0.1.4"
 
 
 
+
     # Check whether --enable-precomp-headers or --disable-precomp-headers was given.
 if test "${enable_precomp_headers+set}" = set; then
   enableval="$enable_precomp_headers"
@@ -41481,6 +41475,8 @@ echo $ECHO_N "checking for Cppunit - version >= $cppunit_version_min... $ECHO_C"
   no_cppunit=""
   if test "$CPPUNIT_CONFIG" = "no" ; then
     no_cppunit=yes
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
   else
     CPPUNIT_CFLAGS=`$CPPUNIT_CONFIG --cflags`
     CPPUNIT_LIBS=`$CPPUNIT_CONFIG --libs`
@@ -41519,14 +41515,11 @@ echo "${ECHO_T}no" >&6
   fi
 
   if test "x$no_cppunit" = x ; then
-     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                        SUBDIRS="$SUBDIRS tests"
+     SUBDIRS="$SUBDIRS tests"
   else
      CPPUNIT_CFLAGS=""
      CPPUNIT_LIBS=""
-     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+     :
   fi
 
 
