@@ -1114,9 +1114,8 @@ bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
 }
 
 bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
-                            bool verbose, int index)
+                            bool WXUNUSED(verbose), int index)
 {
-    (void) verbose;
     bool bResult = FALSE;
     bool IsBmp = FALSE;
 
