@@ -716,7 +716,7 @@ DEFAULT_wxUSE_OPENGL=0
 DEFAULT_wxUSE_METAFILE=0
 DEFAULT_wxUSE_WXGRAPH=0
 DEFAULT_wxUSE_WXTREE=0
-DEFAULT_wxUSE_HELP=0
+DEFAULT_wxUSE_HELP=1
 
 DEFAULT_wxUSE_UNICODE=1
 DEFAULT_wxUSE_WCSRTOMBS=0
@@ -953,6 +953,10 @@ AC_OVERRIDES(printarch,printarch,
 **--with-printarch        use printing architecture,
 wxUSE_PRINTING_ARCHITECTURE)
 
+AC_OVERRIDES(help,help,
+**--with-help             use help (using external browser at present),
+wxUSE_HELP)
+
 dnl ----------------------------------------------------------------
 dnl user options with no effect yet
 dnl ----------------------------------------------------------------
@@ -960,10 +964,6 @@ dnl
 dnl AC_OVERRIDES(metafile, metafile,
 dnl **--with-metafile         use metafile (no effect),
 dnl wxUSE_METAFILE)
-dnl
-dnl AC_OVERRIDES(help,help,
-dnl **--with-help             use help (no effect),
-dnl wxUSE_HELP)
 dnl
 dnl AC_OVERRIDES(wxgraph,wxgraph,
 dnl **--with-wxgraph          use wxgraph (no effect),

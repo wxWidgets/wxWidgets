@@ -4,7 +4,7 @@
 #ifdef __WXMSW__
 #include "wx/msw/helpwin.h"
 #elif defined(__WXGTK__)
-#include "wx/generic/helphtml.h"
+#include "wx/generic/helpext.h"
 #else
 #include "wx/generic/helpxlp.h"
 #endif
@@ -13,8 +13,8 @@
 #define wxHelpController wxWinHelpController
 #define sm_classwxHelpController sm_classwxWinHelpController
 #elif defined(__WXGTK__)
-#define wxHelpController wxHTMLHelpController
-#define sm_classwxHelpController sm_classwxHTMLHelpController
+#define wxHelpController wxExtHelpController
+#define sm_classwxHelpController sm_classwxExtHelpController
 #else
 #define wxHelpController wxXLPHelpController
 #define sm_classwxHelpController sm_classwxXLPHelpController
