@@ -17,27 +17,34 @@ One can Create, Query and Delete Registry Keys using this class.
 
 Windows Registry is easy to understand. There are 5 Registry Keys namely,
 
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf 1)}}{HKEY\_CLASSES\_ROOT (HKCR)}
-\twocolitem{{\bf 2)}}{HKEY\_CURRENT\_USER (HKCU)}
-\twocolitem{{\bf 3)}}{HKEY\_LOCAL\_MACHINE (HKLM)}
-\twocolitem{{\bf 4)}}{HKEY\_CURRENT\_CONFIG (HKCC)}
-\twocolitem{{\bf 5)}}{HKEY\_USERS (HKU)}
-\end{twocollist}
+\begin{enumerate}\itemsep=0pt
+\item HKEY\_CLASSES\_ROOT (HKCR)
+\item HKEY\_CURRENT\_USER (HKCU)
+\item HKEY\_LOCAL\_MACHINE (HKLM)
+\item HKEY\_CURRENT\_CONFIG (HKCC)
+\item HKEY\_USERS (HKU)
+\end{enumerate}
 
 After creating a Key , it can hold a Value. The Values can be ,
 
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf 1)}}{String Value}
-\twocolitem{{\bf 2)}}{Binary Value}
-\twocolitem{{\bf 3)}}{DWORD Value}
-\twocolitem{{\bf 4)}}{Multi String Value}
-\twocolitem{{\bf 5)}}{Expandable String Value}
-\end{twocollist}
+\begin{enumerate}\itemsep=0pt
+\item String Value
+\item Binary Value
+\item DWORD Value
+\item Multi String Value
+\item Expandable String Value
+\end{enumerate}
 
-Example:
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/config.h>
+
+\wxheading{Example}
+
 \begin{verbatim}
 wxRegKey *pRegKey = new wxRegKey("HKEY_LOCAL_MACHINE\\Software\\MyKey");
 
@@ -67,13 +74,9 @@ for(int i=0;i<nSubKeys;i++)
 }
 \end{verbatim}
 
-\wxheading{Derived from}
-None
+\latexignore{\rtfignore{\wxheading{Members}}}
 
-\wxheading{Include files}
-<wx/config.h>
-
-\membersection{wxRegKey::wxRegKey}\label{wxregkeyregkey}
+\membersection{wxRegKey::wxRegKey}\label{wxregkeyctor}
 
 \func{}{wxRegKey}{\void}
 
@@ -97,7 +100,7 @@ Close the Key
 
 \membersection{wxRegKey::Create}\label{wxregkeycreate}
 
-\func{bool}{Create}{\param{bool }{bOkIfExists = TRUE}}
+\func{bool}{Create}{\param{bool }{bOkIfExists = true}}
 
 Create the Key,Will fail if the Key already exists and !bOkIfExists
 
@@ -127,12 +130,12 @@ Deletes the named value
 
 \constfunc{static bool}{Exists}{\void}
 
-Return True if the Key Exists
+Return true if the Key Exists
 
 
 \membersection{wxRegKey::GetName}\label{wxregkeygetname}
 
-\constfunc{wxString}{GetName}{\param{bool }{bShortPrefix = TRUE}}
+\constfunc{wxString}{GetName}{\param{bool }{bShortPrefix = true}}
 
 Get the name of the Registry Key
 
