@@ -1133,7 +1133,7 @@ void wxGrid::CalcDimensions()
         GetViewStart( &x, &y );
         SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE,
                        right/GRID_SCROLL_LINE, bottom/GRID_SCROLL_LINE,
-                       x, y );
+                       x, y, TRUE );
     }
 }
 
@@ -1595,6 +1595,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                   // Only needed to get the correct rect.y:
                   wxRect rect ( CellToRect( m_dragRowOrCol, 0 ) );
                   rect.x = 0;
+                  CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
                   rect.width = m_rowLabelWidth;
                   rect.height = ch - rect.y;
                   m_rowLabelWin->Refresh( TRUE, &rect );
@@ -1782,6 +1783,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                   // Only needed to get the correct rect.x:
                   wxRect rect ( CellToRect( 0, m_dragRowOrCol ) );
                   rect.y = 0;
+                  CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
                   rect.width = cw - rect.x;
                   rect.height = m_colLabelHeight;
                   m_colLabelWin->Refresh( TRUE, &rect );
@@ -3963,6 +3965,7 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
             wxRect rect = CellToRect( row, 0);
             if ( rect.height > 0 )
             {
+                CalcScrolledPosition(0, rect.y, &rect.x, &rect.y);
                 rect.x = m_left;
                 rect.width = m_rowLabelWidth;
                 m_rowLabelWin->Refresh( TRUE, &rect );
@@ -3981,6 +3984,7 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
             wxRect rect = CellToRect( 0, col );
             if ( rect.width > 0 )
             {
+                CalcScrolledPosition(rect.x, 0, &rect.x, &rect.y);
                 rect.y = m_top;
                 rect.height = m_colLabelHeight;
                 m_colLabelWin->Refresh( TRUE, &rect );
@@ -4483,65 +4487,65 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
             temp = oldLeft;
             oldLeft = leftCol;
             leftCol = temp;
-	}
+        }
         if (oldTop > topRow )
         {
             temp = oldTop;
             oldTop = topRow;
             topRow = temp;
-	}
-	if (oldRight < rightCol )
+        }
+        if (oldRight < rightCol )
         {
             temp = oldRight;
             oldRight = rightCol;
             rightCol = temp;
-	}
-	if (oldBottom < bottomRow)
-	{
+        }
+        if (oldBottom < bottomRow)
+        {
             temp = oldBottom;
             oldBottom = bottomRow;
             bottomRow = temp;
-	}
+        }
 
         // Now, either the stuff marked old is the outer
         // rectangle or we don't have a situation where one
         // is contained in the other.
         
-	if ( oldLeft < leftCol )
-	{
-	    need_refresh[0] = TRUE;
-	    rect[0] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
-							    oldLeft ),
-					 wxGridCellCoords ( oldBottom, 
-							    leftCol - 1 ) );
-	}
+        if ( oldLeft < leftCol )
+        {
+            need_refresh[0] = TRUE;
+            rect[0] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
+                                                            oldLeft ),
+                                         wxGridCellCoords ( oldBottom, 
+                                                            leftCol - 1 ) );
+        }
 
-	if ( oldTop  < topRow )
-	{
-	    need_refresh[1] = TRUE;
-	    rect[1] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
-							    leftCol ),
-					 wxGridCellCoords ( topRow - 1, 
-							    rightCol ) );
-	}
+        if ( oldTop  < topRow )
+        {
+            need_refresh[1] = TRUE;
+            rect[1] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
+                                                            leftCol ),
+                                         wxGridCellCoords ( topRow - 1, 
+                                                            rightCol ) );
+        }
 
-	if ( oldRight > rightCol )
-	{
-	    need_refresh[2] = TRUE;
-	    rect[2] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
-							    rightCol + 1 ),
-					 wxGridCellCoords ( oldBottom,
-							    oldRight ) );
-	}
+        if ( oldRight > rightCol )
+        {
+            need_refresh[2] = TRUE;
+            rect[2] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
+                                                            rightCol + 1 ),
+                                         wxGridCellCoords ( oldBottom,
+                                                            oldRight ) );
+        }
 
-	if ( oldBottom > bottomRow )
-	{
-	    need_refresh[3] = TRUE;
-	    rect[3] = BlockToDeviceRect( wxGridCellCoords ( bottomRow + 1,
-							    leftCol ),
-					 wxGridCellCoords ( oldBottom,
-							    rightCol ) );
-	}
+        if ( oldBottom > bottomRow )
+        {
+            need_refresh[3] = TRUE;
+            rect[3] = BlockToDeviceRect( wxGridCellCoords ( bottomRow + 1,
+                                                            leftCol ),
+                                         wxGridCellCoords ( oldBottom,
+                                                            rightCol ) );
+        }
 
 
         // Change Selection
