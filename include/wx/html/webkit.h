@@ -55,14 +55,14 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("webkitctrl"));
     virtual ~wxWebKitCtrl();
-    
+
     void LoadURL(const wxString &url);
-    
+
     bool CanGoBack();
     bool CanGoForward();
     bool GoBack();
     bool GoForward();
-    void Reload(); 
+    void Reload();
     void Stop();
     bool CanGetPageSource();
     wxString GetPageSource();
@@ -118,13 +118,13 @@ protected:
 typedef void (wxEvtHandler::*wxWebKitStateChangedEventFunction)(wxWebKitStateChangedEvent&);
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_LOCAL_EVENT_TYPE(wxEVT_WEBKIT_STATE_CHANGED, -1)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_WEBKIT_STATE_CHANGED, wxID_ANY)
 END_DECLARE_EVENT_TYPES()
 
 #define EVT_WEBKIT_STATE_CHANGED(func) \
             DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_STATE_CHANGED, \
-                            -1,                       \
-                            -1,                       \
+                            wxID_ANY, \
+                            wxID_ANY, \
                             (wxObjectEventFunction)   \
                             (wxWebKitStateChangedEventFunction) & func, \
                             (wxObject *) NULL ),

@@ -36,7 +36,7 @@ class WXDLLIMPEXP_HTML wxHtmlContainerCell;
 class WXDLLIMPEXP_HTML wxHtmlSelection
 {
 public:
-    wxHtmlSelection() 
+    wxHtmlSelection()
         : m_fromPos(wxDefaultPosition), m_toPos(wxDefaultPosition),
           m_fromPrivPos(wxDefaultPosition), m_toPrivPos(wxDefaultPosition),
           m_fromCell(NULL), m_toCell(NULL) {}
@@ -44,14 +44,14 @@ public:
     void Set(const wxPoint& fromPos, const wxHtmlCell *fromCell,
              const wxPoint& toPos, const wxHtmlCell *toCell);
     void Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell);
-    
+
     const wxHtmlCell *GetFromCell() const { return m_fromCell; }
     const wxHtmlCell *GetToCell() const { return m_toCell; }
-    
+
     // these values are in absolute coordinates:
     const wxPoint& GetFromPos() const { return m_fromPos; }
     const wxPoint& GetToPos() const { return m_toPos; }
-    
+
     // these are From/ToCell's private data
     const wxPoint& GetFromPrivPos() const { return m_fromPrivPos; }
     const wxPoint& GetToPrivPos() const { return m_toPrivPos; }
@@ -59,8 +59,8 @@ public:
     void SetToPrivPos(const wxPoint& pos) { m_toPrivPos = pos; }
     void ClearPrivPos() { m_toPrivPos = m_fromPrivPos = wxDefaultPosition; }
 
-    bool IsEmpty() const 
-        { return m_fromPos == wxDefaultPosition && 
+    bool IsEmpty() const
+        { return m_fromPos == wxDefaultPosition &&
                  m_toPos == wxDefaultPosition; }
 
 private:
@@ -85,14 +85,14 @@ class WXDLLIMPEXP_HTML wxHtmlRenderingState
 public:
     wxHtmlRenderingState() : m_selState(wxHTML_SEL_OUT) {}
 
-    void SetSelectionState(wxHtmlSelectionState s) { m_selState = s; }  
+    void SetSelectionState(wxHtmlSelectionState s) { m_selState = s; }
     wxHtmlSelectionState GetSelectionState() const { return m_selState; }
 
     void SetFgColour(const wxColour& c) { m_fgColour = c; }
     const wxColour& GetFgColour() const { return m_fgColour; }
     void SetBgColour(const wxColour& c) { m_bgColour = c; }
     const wxColour& GetBgColour() const { return m_bgColour; }
-    
+
 private:
     wxHtmlSelectionState  m_selState;
     wxColour              m_fgColour, m_bgColour;
@@ -127,12 +127,12 @@ public:
 
     void SetSelection(wxHtmlSelection *s) { m_selection = s; }
     wxHtmlSelection *GetSelection() const { return m_selection; }
-    
+
     void SetStyle(wxHtmlRenderingStyle *style) { m_style = style; }
     wxHtmlRenderingStyle& GetStyle() { return *m_style; }
 
     wxHtmlRenderingState& GetState() { return m_state; }
-    
+
 protected:
     wxHtmlSelection      *m_selection;
     wxHtmlRenderingStyle *m_style;
@@ -172,7 +172,7 @@ public:
     int GetPosX() const {return m_PosX;}
     int GetPosY() const {return m_PosY;}
     int GetWidth() const {return m_Width;}
-    
+
     // Returns the maximum possible length of the cell.
     // Call Layout at least once before using GetMaxTotalWidth()
     virtual int GetMaxTotalWidth() const { return m_Width; }
@@ -259,7 +259,7 @@ public:
     // Sets cell's behaviour on pagebreaks (see AdjustPagebreak). Default
     // is true - the cell can be split on two pages
     void SetCanLiveOnPagebreak(bool can) { m_CanLiveOnPagebreak = can; }
-    
+
     // Can the line be broken before this cell?
     virtual bool IsLinebreakAllowed() const
         { return !IsFormattingCell(); }
@@ -281,20 +281,20 @@ public:
 
     // Returns first (last) terminal cell inside this cell. It may return NULL,
     // but it is rare -- only if there are no terminals in the tree.
-    virtual wxHtmlCell *GetFirstTerminal() const 
+    virtual wxHtmlCell *GetFirstTerminal() const
         { return wxConstCast(this, wxHtmlCell); }
-    virtual wxHtmlCell *GetLastTerminal() const 
+    virtual wxHtmlCell *GetLastTerminal() const
         { return wxConstCast(this, wxHtmlCell); }
 
     // Returns cell's depth, i.e. how far under the root cell it is
     // (if it is the root, depth is 0)
     unsigned GetDepth() const;
-    
+
     // Returns true if the cell appears before 'cell' in natural order of
     // cells (= as they are read). If cell A is (grand)parent of cell B,
     // then both A.IsBefore(B) and B.IsBefore(A) always return true.
     bool IsBefore(wxHtmlCell *cell) const;
-    
+
     // Converts the cell into text representation. If sel != NULL then
     // only part of the cell inside the selection is converted.
     virtual wxString ConvertToText(wxHtmlSelection *WXUNUSED(sel)) const
@@ -351,7 +351,7 @@ protected:
     void Split(wxDC& dc,
                const wxPoint& selFrom, const wxPoint& selTo,
                unsigned& pos1, unsigned& pos2) const;
-    
+
     wxString m_Word;
     bool     m_allowLinebreak;
 
@@ -424,11 +424,11 @@ public:
 
     virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
                                   unsigned flags = wxHTML_FIND_EXACT) const;
-    
+
     virtual wxHtmlCell *GetFirstTerminal() const;
     virtual wxHtmlCell *GetLastTerminal() const;
-    
-    
+
+
     // Removes indentation on top or bottom of the container (i.e. above or
     // below first/last terminal cell). For internal use only.
     void RemoveExtraSpacing(bool top, bool bottom);
@@ -442,7 +442,7 @@ protected:
                                  wxHtmlCell *cell) const;
     void UpdateRenderingStatePost(wxHtmlRenderingInfo& info,
                                   wxHtmlCell *cell) const;
-    
+
 protected:
     int m_IndentLeft, m_IndentRight, m_IndentTop, m_IndentBottom;
             // indentation of subcells. There is always m_Indent pixels
@@ -469,7 +469,7 @@ protected:
     int m_MaxTotalWidth;
             // Maximum possible length if ignoring line wrap
 
-    
+
     DECLARE_ABSTRACT_CLASS(wxHtmlContainerCell)
     DECLARE_NO_COPY_CLASS(wxHtmlContainerCell)
 };

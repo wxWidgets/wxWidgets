@@ -35,8 +35,8 @@ public:
 
     void SetTitleFormat(const wxString& format);
     void SetTempDir(const wxString& path) { m_helpData.SetTempDir(path); }
-    bool AddBook(const wxString& book_url, bool show_wait_msg = FALSE);
-    bool AddBook(const wxFileName& book_file, bool show_wait_msg = FALSE);
+    bool AddBook(const wxString& book_url, bool show_wait_msg = false);
+    bool AddBook(const wxFileName& book_file, bool show_wait_msg = false);
 
     bool Display(const wxString& x);
     bool Display(int id);
@@ -68,7 +68,7 @@ public:
     virtual void SetFrameParameters(const wxString& title,
                                const wxSize& size,
                                const wxPoint& pos = wxDefaultPosition,
-                               bool newFrameEachTime = FALSE);
+                               bool newFrameEachTime = false);
     /// Obtains the latest settings used by the help frame and the help
     /// frame.
     virtual wxFrame *GetFrameParameters(wxSize *size = NULL,

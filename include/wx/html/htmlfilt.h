@@ -38,7 +38,7 @@ public:
     wxHtmlFilter() : wxObject() {}
     virtual ~wxHtmlFilter() {}
 
-    // returns TRUE if this filter is able to open&read given file
+    // returns true if this filter is able to open&read given file
     virtual bool CanRead(const wxFSFile& file) const = 0;
 
     // Reads given file and returns HTML document.

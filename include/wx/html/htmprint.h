@@ -30,7 +30,7 @@
 
 //--------------------------------------------------------------------------------
 // wxHtmlDCRenderer
-//                  This class is capable of rendering HTML into specified 
+//                  This class is capable of rendering HTML into specified
 //                  portion of DC
 //--------------------------------------------------------------------------------
 
@@ -52,9 +52,9 @@ public:
     // Sets the text to be displayed.
     // Basepath is base directory (html string would be stored there if it was in
     // file). It is used to determine path for loading images, for example.
-    // isdir is FALSE if basepath is filename, TRUE if it is directory name
+    // isdir is false if basepath is filename, true if it is directory name
     // (see wxFileSystem for detailed explanation)
-    void SetHtmlText(const wxString& html, const wxString& basepath = wxEmptyString, bool isdir = TRUE);
+    void SetHtmlText(const wxString& html, const wxString& basepath = wxEmptyString, bool isdir = true);
 
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = NULL);
@@ -123,13 +123,13 @@ public:
     wxHtmlPrintout(const wxString& title = wxT("Printout"));
     ~wxHtmlPrintout();
 
-    void SetHtmlText(const wxString& html, const wxString &basepath = wxEmptyString, bool isdir = TRUE); 
+    void SetHtmlText(const wxString& html, const wxString &basepath = wxEmptyString, bool isdir = true);
             // prepares the class for printing this html document.
             // Must be called before using the class, in fact just after constructor
             //
             // basepath is base directory (html string would be stored there if it was in
             // file). It is used to determine path for loading images, for example.
-            // isdir is FALSE if basepath is filename, TRUE if it is directory name
+            // isdir is false if basepath is filename, true if it is directory name
             // (see wxFileSystem for detailed explanation)
 
     void SetHtmlFile(const wxString &htmlfile);
@@ -154,12 +154,12 @@ public:
                           const wxString& normal_face = wxEmptyString,
                           const wxString& fixed_face = wxEmptyString);
 
-    void SetMargins(float top = 25.2, float bottom = 25.2, float left = 25.2, float right = 25.2, 
+    void SetMargins(float top = 25.2, float bottom = 25.2, float left = 25.2, float right = 25.2,
                     float spaces = 5);
             // sets margins in milimeters. Defaults to 1 inch for margins and 0.5cm for space
             // between text and header and/or footer
 
-    // wxPrintout stuff:        
+    // wxPrintout stuff:
     bool OnPrintPage(int page);
     bool HasPage(int page);
     void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
@@ -206,12 +206,12 @@ private:
 
 //--------------------------------------------------------------------------------
 // wxHtmlEasyPrinting
-//                  This class provides very simple interface to printing 
+//                  This class provides very simple interface to printing
 //                  architecture. It allows you to print HTML documents only
-//                  with very few commands. 
+//                  with very few commands.
 //
 //                  Note : do not create this class on stack only.
-//                         You should create an instance on app startup and 
+//                         You should create an instance on app startup and
 //                         use this instance for all printing. Why? The class
 //                         stores page&printer settings in it.
 //--------------------------------------------------------------------------------
@@ -254,10 +254,10 @@ public:
     void SetStandardFonts(int size = -1,
                           const wxString& normal_face = wxEmptyString,
                           const wxString& fixed_face = wxEmptyString);
-    
+
     wxPrintData *GetPrintData();
     wxPageSetupDialogData *GetPageSetupData() {return m_PageSetupData;}
-            // return page setting data objects. 
+            // return page setting data objects.
             // (You can set their parameters.)
 
 protected:
@@ -279,7 +279,7 @@ private:
         FontMode_Standard
     };
     FontMode m_fontMode;
-    
+
     wxString m_Headers[2], m_Footers[2];
     wxWindow *m_ParentWindow;
 

@@ -57,7 +57,7 @@ public:
     wxFileSystem* GetFS() const { return m_FS; }
 
     // Opens file if the parser is allowed to open given URL (may be forbidden
-    // for security reasons)    
+    // for security reasons)
     virtual wxFSFile *OpenURL(wxHtmlURLType type, const wxString& url) const;
 
     // You can simply call this method when you need parsed output.
@@ -72,9 +72,9 @@ public:
     virtual void InitParser(const wxString& source);
     // This must be called after Parse().
     virtual void DoneParser();
-    
+
     // May be called during parsing to immediately return from Parse().
-    virtual void StopParsing() { m_stopParsing = TRUE; }
+    virtual void StopParsing() { m_stopParsing = true; }
 
     // Parses the m_Source from begin_pos to end_pos-1.
     // (in noparams version it parses whole m_Source)
@@ -93,7 +93,7 @@ public:
     // adds handler to the list & hash table of handlers.
     virtual void AddTagHandler(wxHtmlTagHandler *handler);
 
-    // Forces the handler to handle additional tags (not returned by GetSupportedTags). 
+    // Forces the handler to handle additional tags (not returned by GetSupportedTags).
     // The handler should already be in use by this parser.
     // Example: you want to parse following pseudo-html structure:
     //   <myitems>
@@ -111,21 +111,21 @@ public:
 
     wxString* GetSource() {return &m_Source;}
     void SetSource(const wxString& src);
-    
+
     // Sets HTML source and remebers current parser's state so that it can
-    // later be restored. This is useful for on-line modifications of 
+    // later be restored. This is useful for on-line modifications of
     // HTML source (for example, <pre> handler replaces spaces with &nbsp;
     // and newlines with <br>)
     virtual void SetSourceAndSaveState(const wxString& src);
-    // Restores parser's state from stack or returns FALSE if the stack is
+    // Restores parser's state from stack or returns false if the stack is
     // empty
     virtual bool RestoreState();
-    
+
     // Parses HTML string 'markup' and extracts charset info from <meta> tag
     // if present. Returns empty string if the tag is missing.
     // For wxHTML's internal use.
     static wxString ExtractCharsetInformation(const wxString& markup);
-    
+
     // Returns entity parser object, used to substitute HTML &entities;
     wxHtmlEntitiesParser *GetEntitiesParser() const { return m_entitiesParser; }
 
@@ -134,7 +134,7 @@ protected:
     void CreateDOMTree();
     void DestroyDOMTree();
     void CreateDOMSubTree(wxHtmlTag *cur,
-                          int begin_pos, int end_pos, 
+                          int begin_pos, int end_pos,
                           wxHtmlTagsCache *cache);
 
     // Adds text to the output.
@@ -159,9 +159,9 @@ protected:
     size_t m_CurTextPiece;
 
     wxString m_Source;
-    
+
     wxHtmlParserState *m_SavedStates;
-    
+
     // handlers that handle particular tags. The table is accessed by
     // key = tag's name.
     // This attribute MUST be filled by derived class otherwise it would
@@ -180,10 +180,10 @@ protected:
     wxFileSystem *m_FS;
     // handlers stack used by PushTagHandler and PopTagHandler
     wxList *m_HandlersStack;
-    
+
     // entity parse
     wxHtmlEntitiesParser *m_entitiesParser;
-    
+
     // flag indicating that the parser should stop
     bool m_stopParsing;
 };
@@ -208,7 +208,7 @@ public:
     // NOTE : each _instance_ of handler is guaranteed to be called
     // only by one parser. This means you don't have to care about
     // reentrancy.
-    virtual void SetParser(wxHtmlParser *parser) 
+    virtual void SetParser(wxHtmlParser *parser)
         { m_Parser = parser; }
 
     // Returns list of supported tags. The list is in uppercase and
@@ -219,14 +219,14 @@ public:
 
     // This is hadling core method. It does all the Steps 1-3.
     // To process step 2, you can call ParseInner()
-    // returned value : TRUE if it called ParseInner(),
-    //                  FALSE etherwise
+    // returned value : true if it called ParseInner(),
+    //                  false etherwise
     virtual bool HandleTag(const wxHtmlTag& tag) = 0;
 
 protected:
     // parses input between beginning and ending tag.
     // m_Parser must be set.
-    void ParseInner(const wxHtmlTag& tag) 
+    void ParseInner(const wxHtmlTag& tag)
         { m_Parser->DoParsing(tag.GetBeginPos(), tag.GetEndPos1()); }
 
     wxHtmlParser *m_Parser;
@@ -244,11 +244,11 @@ class WXDLLIMPEXP_HTML wxHtmlEntitiesParser : public wxObject
 public:
     wxHtmlEntitiesParser();
     virtual ~wxHtmlEntitiesParser();
-    
+
     // Sets encoding of output string.
     // Has no effect if wxUSE_WCHAR_T==0 or wxUSE_UNICODE==1
     void SetEncoding(wxFontEncoding encoding);
-    
+
     // Parses entities in input and replaces them with respective characters
     // (with respect to output encoding)
     wxString Parse(const wxString& input);

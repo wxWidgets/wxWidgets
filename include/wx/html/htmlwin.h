@@ -68,7 +68,7 @@ class WXDLLIMPEXP_HTML wxHtmlWindow : public wxScrolledWindow
 
 public:
     wxHtmlWindow() { Init(); }
-    wxHtmlWindow(wxWindow *parent, wxWindowID id = -1,
+    wxHtmlWindow(wxWindow *parent, wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxHW_DEFAULT_STYLE,
@@ -79,7 +79,7 @@ public:
     }
     ~wxHtmlWindow();
 
-    bool Create(wxWindow *parent, wxWindowID id = -1,
+    bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxHW_SCROLLBAR_AUTO,
@@ -88,7 +88,7 @@ public:
     // Set HTML page and display it. !! source is HTML document itself,
     // it is NOT address/filename of HTML document. If you want to
     // specify document location, use LoadPage() istead
-    // Return value : FALSE if an error occured, TRUE otherwise
+    // Return value : false if an error occured, true otherwise
     bool SetPage(const wxString& source);
 
     // Append to current page
@@ -135,7 +135,7 @@ public:
     void SetStandardFonts(int size = -1,
                           const wxString& normal_face = wxEmptyString,
                           const wxString& fixed_face = wxEmptyString);
-    
+
     // Sets space between text and window borders.
     void SetBorders(int b) {m_Borders = b;}
 
@@ -147,7 +147,7 @@ public:
     virtual void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
 
     // Goes to previous/next page (in browsing history)
-    // Returns TRUE if successful, FALSE otherwise
+    // Returns true if successful, false otherwise
     bool HistoryBack();
     bool HistoryForward();
     bool HistoryCanBack();
@@ -192,19 +192,19 @@ public:
 
     // Called when wxHtmlWindow wants to fetch data from an URL (e.g. when
     // loading a page or loading an image). The data are downloaded if and only if
-    // OnOpeningURL returns TRUE. If OnOpeningURL returns wxHTML_REDIRECT,
+    // OnOpeningURL returns true. If OnOpeningURL returns wxHTML_REDIRECT,
     // it must set *redirect to the new URL
     virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType WXUNUSED(type),
                                              const wxString& WXUNUSED(url),
                                              wxString *WXUNUSED(redirect)) const
         { return wxHTML_OPEN; }
-   
+
 #if wxUSE_CLIPBOARD
     // Helper functions to select parts of page:
     void SelectWord(const wxPoint& pos);
     void SelectLine(const wxPoint& pos);
     void SelectAll();
-    
+
     // Convert selection to text:
     wxString SelectionToText() { return DoSelectionToText(m_selection); }
 
@@ -214,14 +214,14 @@ public:
 
     virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
         { /* do nothing */ }
-    
+
 protected:
     void Init();
 
     // Scrolls to anchor of this name. (Anchor is #news
     // or #features etc. it is part of address sometimes:
     // http://www.ms.mff.cuni.cz/~vsla8348/wxhtml/index.html#news)
-    // Return value : TRUE if anchor exists, FALSE otherwise
+    // Return value : true if anchor exists, false otherwise
     bool ScrollToAnchor(const wxString& anchor);
 
     // Prepares layout (= fill m_PosX, m_PosY for fragments) based on
@@ -272,7 +272,7 @@ protected:
 
 protected:
     wxString DoSelectionToText(wxHtmlSelection *sel);
-    
+
     // This is pointer to the first cell in parsed data.  (Note: the first cell
     // is usually top one = all other cells are sub-cells of this one)
     wxHtmlContainerCell *m_Cell;
@@ -328,7 +328,7 @@ private:
     wxHtmlCell *m_tmpSelFromCell;
 
     // a flag indicated if mouse moved
-    // (if TRUE we will try to change cursor in last call to OnIdle)
+    // (if true we will try to change cursor in last call to OnIdle)
     bool m_tmpMouseMoved;
     // contains last link name
     wxHtmlLinkInfo *m_tmpLastLink;

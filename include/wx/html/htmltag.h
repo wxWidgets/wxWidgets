@@ -87,17 +87,17 @@ public:
     // Returns tag's name in uppercase.
     inline wxString GetName() const {return m_Name;}
 
-    // Returns TRUE if the tag has given parameter. Parameter
+    // Returns true if the tag has given parameter. Parameter
     // should always be in uppercase.
-    // Example : <IMG SRC="test.jpg"> HasParam("SRC") returns TRUE
+    // Example : <IMG SRC="test.jpg"> HasParam("SRC") returns true
     bool HasParam(const wxString& par) const;
 
     // Returns value of the param. Value is in uppercase unless it is
     // enclosed with "
     // Example : <P align=right> GetParam("ALIGN") returns (RIGHT)
     //           <P IMG SRC="WhaT.jpg"> GetParam("SRC") returns (WhaT.jpg)
-    //                           (or ("WhaT.jpg") if with_commas == TRUE)
-    wxString GetParam(const wxString& par, bool with_commas = FALSE) const;
+    //                           (or ("WhaT.jpg") if with_commas == true)
+    wxString GetParam(const wxString& par, bool with_commas = false) const;
 
     // Convenience functions:
     bool GetParamAsColour(const wxString& par, wxColour *clr) const;
@@ -105,7 +105,7 @@ public:
 
     // Scans param like scanf() functions family does.
     // Example : ScanParam("COLOR", "\"#%X\"", &clr);
-    // This is always with with_commas=FALSE
+    // This is always with with_commas=false
     // Returns number of scanned values
     // (like sscanf() does)
     // NOTE: unlike scanf family, this function only accepts
@@ -116,12 +116,12 @@ public:
     wxString GetAllParams() const;
 
 #if WXWIN_COMPATIBILITY_2_2
-    // return TRUE if this is ending tag (</something>) or FALSE
+    // return true if this is ending tag (</something>) or false
     // if it isn't (<something>)
-    inline bool IsEnding() const {return FALSE;}
+    inline bool IsEnding() const {return false;}
 #endif
 
-    // return TRUE if this there is matching ending tag
+    // return true if this there is matching ending tag
     inline bool HasEnding() const {return m_End1 >= 0;}
 
     // returns beginning position of _internal_ block of text

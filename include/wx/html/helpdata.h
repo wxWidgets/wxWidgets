@@ -35,7 +35,7 @@ class WXDLLIMPEXP_HTML wxHtmlHelpData;
 class WXDLLIMPEXP_HTML wxHtmlBookRecord
 {
 public:
-    wxHtmlBookRecord(const wxString& bookfile, const wxString& basepath, 
+    wxHtmlBookRecord(const wxString& bookfile, const wxString& basepath,
                      const wxString& title, const wxString& start)
     {
         m_BookFile = bookfile;
@@ -62,8 +62,8 @@ public:
     void SetBasePath(const wxString& path) { m_BasePath = path; }
     void SetStart(const wxString& start) { m_Start = start; }
 
-    // returns full filename of page (which is part of the book), 
-    // i.e. with book's basePath prepended. If page is already absolute 
+    // returns full filename of page (which is part of the book),
+    // i.e. with book's basePath prepended. If page is already absolute
     // path, basePath is _not_ prepended.
     wxString GetFullPath(const wxString &page) const;
 
@@ -82,7 +82,7 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray,
 
 struct WXDLLIMPEXP_HTML wxHtmlHelpDataItem
 {
-    wxHtmlHelpDataItem() : level(0), parent(NULL), id(-1), book(NULL) {}
+    wxHtmlHelpDataItem() : level(0), parent(NULL), id(wxID_ANY), book(NULL) {}
 
     short int level;
     wxHtmlHelpDataItem *parent;
@@ -90,7 +90,7 @@ struct WXDLLIMPEXP_HTML wxHtmlHelpDataItem
     wxString name;
     wxString page;
     wxHtmlBookRecord *book;
-    
+
     // returns full filename of m_Page, i.e. with book's basePath prepended
     wxString GetFullPath() const { return book->GetFullPath(page); }
 
@@ -115,7 +115,7 @@ struct wxHtmlContentsItem
     wxChar *m_Name;
     wxChar *m_Page;
     wxHtmlBookRecord *m_Book;
-    
+
     // returns full filename of m_Page, i.e. with book's basePath prepended
     wxString GetFullPath() const { return m_Book->GetFullPath(m_Page); }
 
@@ -141,7 +141,7 @@ public:
     virtual void LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only);
 
     // Scans the stream for the keyword.
-    // Returns TRUE if the stream contains keyword, fALSE otherwise
+    // Returns true if the stream contains keyword, fALSE otherwise
     virtual bool Scan(const wxFSFile& file);
 
 private:
@@ -243,7 +243,7 @@ protected:
 
     wxHtmlHelpDataItems m_contents; // list of all available books and pages
     wxHtmlHelpDataItems m_index; // list of index itesm
-    
+
 #if WXWIN_COMPATIBILITY_2_4
     // deprecated data structures, set only if GetContents(), GetIndex()
     // called

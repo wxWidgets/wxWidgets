@@ -77,7 +77,7 @@ public:
     void SetStandardFonts(int size = -1,
                           const wxString& normal_face = wxEmptyString,
                           const wxString& fixed_face = wxEmptyString);
-    
+
     // Adds tags module. see wxHtmlTagsModule for details.
     static void AddModule(wxHtmlTagsModule *module);
 
@@ -154,7 +154,7 @@ private:
     wxHtmlContainerCell *m_Container;
             // current container. See Open/CloseContainer for details.
 
-    int m_FontBold, m_FontItalic, m_FontUnderlined, m_FontFixed; // this is not TRUE,FALSE but 1,0, we need it for indexing
+    int m_FontBold, m_FontItalic, m_FontUnderlined, m_FontFixed; // this is not true,false but 1,0, we need it for indexing
     int m_FontSize; /* -2 to +4,  0 is default */
     wxColour m_LinkColor;
     wxColour m_ActualColor;
@@ -162,7 +162,7 @@ private:
     wxHtmlLinkInfo m_Link;
             // actual hypertext link or empty string
     bool m_UseLink;
-            // TRUE if m_Link is not empty
+            // true if m_Link is not empty
     long m_CharHeight, m_CharWidth;
             // average height of normal-sized text
     int m_Align;
@@ -190,7 +190,7 @@ private:
 #endif
 
     wxHtmlWordCell *m_lastWordCell;
-    
+
     DECLARE_NO_COPY_CLASS(wxHtmlWinParser)
 };
 

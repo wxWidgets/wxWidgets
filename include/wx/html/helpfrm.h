@@ -243,7 +243,7 @@ protected:
 private:
     void DisplayIndexItem(const wxHtmlHelpMergedIndexItem *it);
     wxHtmlHelpMergedIndex *m_mergedIndex;
-    
+
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxHtmlHelpFrame)
 };
