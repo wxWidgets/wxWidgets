@@ -1253,7 +1253,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
         wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
-        if (entry->m_fn)
+        if ((event.m_eventType == entry->m_eventType) && entry->m_fn)
         {
             wxEvtHandler *handler =
 #if !WXWIN_COMPATIBILITY_EVENT_TYPES
