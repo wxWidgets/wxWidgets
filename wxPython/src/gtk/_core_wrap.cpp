@@ -11522,6 +11522,54 @@ static PyObject *_wrap_Image_InitAlpha(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_Image_IsTransparent(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    unsigned char arg4 = (unsigned char) wxIMAGE_ALPHA_THRESHOLD ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "x",(char *) "y",(char *) "threshold", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:Image_IsTransparent",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = (int)(SWIG_As_int(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+            if (SWIG_arg_fail(4)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxImage const *)arg1)->IsTransparent(arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Image_FindFirstUnusedColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
@@ -11595,7 +11643,7 @@ static PyObject *_wrap_Image_FindFirstUnusedColour(PyObject *, PyObject *args, P
 static PyObject *_wrap_Image_ConvertAlphaToMask(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    byte arg2 = (byte) 128 ;
+    byte arg2 = (byte) wxIMAGE_ALPHA_THRESHOLD ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -45456,6 +45504,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_GetAlpha", (PyCFunction) _wrap_Image_GetAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_HasAlpha", (PyCFunction) _wrap_Image_HasAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_InitAlpha", (PyCFunction) _wrap_Image_InitAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_IsTransparent", (PyCFunction) _wrap_Image_IsTransparent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_FindFirstUnusedColour", (PyCFunction) _wrap_Image_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ConvertAlphaToMask", (PyCFunction) _wrap_Image_ConvertAlphaToMask, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ConvertColourToAlpha", (PyCFunction) _wrap_Image_ConvertColourToAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -47676,6 +47725,9 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"NO_BORDER", SWIG_From_int((int)(wxNO_BORDER))); 
     }
     {
+        PyDict_SetItemString(d,"DEFAULT_CONTROL_BORDER", SWIG_From_int((int)(wxDEFAULT_CONTROL_BORDER))); 
+    }
+    {
         PyDict_SetItemString(d,"TAB_TRAVERSAL", SWIG_From_int((int)(wxTAB_TRAVERSAL))); 
     }
     {
@@ -49464,6 +49516,15 @@ SWIGEXPORT(void) SWIG_init(void) {
     
     wxPyPtrTypeMap_Add("wxFileSystemHandler", "wxPyFileSystemHandler");
     
+    {
+        PyDict_SetItemString(d,"IMAGE_ALPHA_TRANSPARENT", SWIG_From_int((int)(wxIMAGE_ALPHA_TRANSPARENT))); 
+    }
+    {
+        PyDict_SetItemString(d,"IMAGE_ALPHA_THRESHOLD", SWIG_From_int((int)(wxIMAGE_ALPHA_THRESHOLD))); 
+    }
+    {
+        PyDict_SetItemString(d,"IMAGE_ALPHA_OPAQUE", SWIG_From_int((int)(wxIMAGE_ALPHA_OPAQUE))); 
+    }
     SWIG_addvarlink(SWIG_globals,(char*)"NullImage",_wrap_NullImage_get, _wrap_NullImage_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_FILENAME",_wrap_IMAGE_OPTION_FILENAME_get, _wrap_IMAGE_OPTION_FILENAME_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_BMP_FORMAT",_wrap_IMAGE_OPTION_BMP_FORMAT_get, _wrap_IMAGE_OPTION_BMP_FORMAT_set);

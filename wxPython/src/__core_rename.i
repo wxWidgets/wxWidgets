@@ -15,6 +15,7 @@
 %rename(STATIC_BORDER)                      wxSTATIC_BORDER;
 %rename(TRANSPARENT_WINDOW)                 wxTRANSPARENT_WINDOW;
 %rename(NO_BORDER)                          wxNO_BORDER;
+%rename(DEFAULT_CONTROL_BORDER)             wxDEFAULT_CONTROL_BORDER;
 %rename(TAB_TRAVERSAL)                      wxTAB_TRAVERSAL;
 %rename(WANTS_CHARS)                        wxWANTS_CHARS;
 %rename(POPUP_WINDOW)                       wxPOPUP_WINDOW;
@@ -496,6 +497,9 @@
 %rename(InternetFSHandler)                  wxInternetFSHandler;
 %rename(ZipFSHandler)                       wxZipFSHandler;
 %rename(MemoryFSHandler)                    wxMemoryFSHandler;
+%rename(IMAGE_ALPHA_TRANSPARENT)            wxIMAGE_ALPHA_TRANSPARENT;
+%rename(IMAGE_ALPHA_THRESHOLD)              wxIMAGE_ALPHA_THRESHOLD;
+%rename(IMAGE_ALPHA_OPAQUE)                 wxIMAGE_ALPHA_OPAQUE;
 %rename(ImageHandler)                       wxImageHandler;
 %rename(ImageHistogram)                     wxImageHistogram;
 %rename(Image)                              wxImage;
