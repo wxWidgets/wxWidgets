@@ -1858,7 +1858,7 @@ error2:
     if (!isFast)
         Py_DECREF(o);
 error1:
-    delete temp;
+    delete [] temp;
 error0:
     PyErr_SetString(PyExc_TypeError, "Expected a sequence of length-2 sequences or wxPoints.");
     return NULL;
