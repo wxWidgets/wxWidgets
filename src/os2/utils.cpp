@@ -19,7 +19,6 @@
 #endif  //WX_PRECOMP
 
 #include "wx/os2/private.h"
-#include "wx/timer.h"
 #include "wx/intl.h"
 #include "wx/apptrait.h"
 
@@ -147,7 +146,6 @@ bool wxShell(
 {
     wxChar*                         zShell = _T("CMD.EXE");
     wxString                        sInputs;
-    wxChar                          zTmp[255];
     STARTDATA                       SData = {0};
     PSZ                             PgmTitle = "Command Shell";
     APIRET                          rc;
