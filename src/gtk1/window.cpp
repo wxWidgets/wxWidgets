@@ -1148,23 +1148,19 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
 #endif
     
+    bool IM_ret = FALSE;
 #ifdef __WXGTK20__
     // 2005.01.26 modified by Hong Jen Yee (hzysoft@sina.com.tw):
     // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
-    // docs, if IM filter returns true, NO FURTHER PROCESSING SHOULD BE DONE for
-    // this keystroke. Making wxWidgets unable to receive EVT_KEY_DOWN in this
-    // situation is resonable. In reality, when IM is activated, wxWidgets should
-    // receive EVT_CHAR instead.
+    // docs, if IM filter returns true, no further processing should be done.
+    // wWe should send the key_down event anyway. 
     if (useIM)
     {
         // it may be useful for the input method, though:
-        bool ret = gtk_im_context_filter_keypress(win->m_imData->context, gdk_event);
+        IM_ret = gtk_im_context_filter_keypress(win->m_imData->context, gdk_event);
         win->m_imData->lastKeyEvent = NULL;
-        if( ret )
-        {
+        if (IM_ret)
             wxLogTrace(TRACE_KEYS, _T("Key event intercepted by IM"));
-            return ret;
-        }
     }
 #endif
 
@@ -1187,13 +1183,17 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     // When using Input Methods to support internationalized text input, the composed
     // characters appear here after the pre-editing has been completed.
 
-#ifndef __WXGTK20__     // This is for GTK+ 1.2 only.
-    if ( (gdk_event->length > 1) ) // If this event contains a pre-edited string from IM.
+#ifndef __WXGTK20__     
+    // This is for GTK+ 1.2 only. The char event generatation for
+    // GTK+ 2.0 is done in the emit handler.
+    
+    if ( (!ret) && (gdk_event->length > 1) ) // If this event contains a pre-edited string from IM.
     {
         // We should translate this key event into wxEVT_CHAR not wxEVT_KEY_DOWN.
         #if wxUSE_UNICODE   // GTK+ 1.2 is not UTF-8 based.
             const wxWCharBuffer string = wxConvLocal.cMB2WC( gdk_event->string );
-            if( !string )   return FALSE;
+            if( !string )
+                return false;
         #else
             const char* string = gdk_event->string;
         #endif
@@ -1223,21 +1223,24 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
                 window->GetEventHandler()->ProcessEvent( event );
             }
         }
-        return TRUE;
+        return true;
     }
     // Only translate the key event when it's not sent with a pre-edited string.
     else 
 #endif  // #ifndef  __WXGTK20__
+
     if( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
         // unknown key pressed, ignore (the event would be useless anyhow)
-            return FALSE;
+        return false;
     }
     else // This event doesn't contain a pre-edited string and is not an invalid key either.
     {
-    // Emit KEY_DOWN event
+        // Emit KEY_DOWN event
         ret = win->GetEventHandler()->ProcessEvent( event );
     }
+    if (IM_ret)
+        return false;
 
 #if wxUSE_ACCEL
     if (!ret)
