@@ -433,6 +433,11 @@ public:
       nCount (or till the end if nCount = default value)
       */
   wxString Mid(size_t nFirst, size_t nCount = STRING_MAXLEN) const;
+      /// Compatibility with wxWindows 1.xx
+  wxString SubString(size_t from, size_t to) const
+  {
+      return Mid(from, (to - from + 1));
+  }
       /// get first nCount characters
   wxString Left(size_t nCount) const;
       /// get all characters before the first occurence of ch
@@ -547,6 +552,8 @@ public:
     { *this = str + *this; return *this; }
     /// same as Len
   size_t Length() const { return Len(); }
+    /// Count the number of characters
+  int Freq(char ch) const;
     /// same as MakeLower
   void LowerCase() { MakeLower(); }
     /// same as MakeUpper

@@ -1075,6 +1075,19 @@ bool wxString::Matches(const char *pszMask) const
   return *pszTxt == '\0';
 }
 
+// Count the number of chars
+int wxString::Freq(char ch) const
+{
+    int count = 0;
+    int len = Len();
+    for (int i = 0; i < len; i++)
+    {
+        if (GetChar(i) == ch)
+            count ++;
+    }
+    return count;
+}
+
 // ---------------------------------------------------------------------------
 // standard C++ library string functions
 // ---------------------------------------------------------------------------

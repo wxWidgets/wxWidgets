@@ -9,7 +9,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifdef __GNUG__
 #pragma interface "dbtest.h"
+#endif
 
 #include <wx/string.h>
 #include <wx/dbtable.h>
@@ -104,7 +106,7 @@ class DatabaseDemoApp: public wxApp
 {
 	public:
 		Cparameters  params;
-		wxFrame		*OnInit(void);
+		bool         OnInit();
 };  // DatabaseDemoApp
 
 DECLARE_APP(DatabaseDemoApp)
@@ -117,14 +119,19 @@ class DatabaseDemoFrame: public wxFrame
 		CparameterDlg	*pParamDlg;
 
 	public:
-		DatabaseDemoFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+		DatabaseDemoFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& sz);
 
-		void	OnMenuCommand(int id);
-		bool	OnClose(void);
+		void    OnCloseWindow(wxCloseEvent& event);
+        void    OnCreate(wxCommandEvent& event);
+        void    OnExit(wxCommandEvent& event);
+        void    OnEditParameters(wxCommandEvent& event);
+        void    OnAbout(wxCommandEvent& event);
 
 		void	CreateDataTable();
 		void	BuildEditorDialog();
 		void	BuildParameterDialog(wxWindow *parent);
+
+DECLARE_EVENT_TABLE()
 };  // DatabaseDemoFrame
 
 
@@ -141,13 +148,13 @@ class CeditorDlg : public wxPanel
 		wxButton		*pCreateBtn,  *pEditBtn,      *pDeleteBtn,  *pCopyBtn,  *pSaveBtn,  *pCancelBtn;
 		wxButton		*pPrevBtn,    *pNextBtn,      *pQueryBtn,   *pResetBtn, *pDoneBtn,  *pHelpBtn;
 		wxButton		*pNameListBtn;
-		wxText		*pNameTxt,    *pAddress1Txt,  *pAddress2Txt,*pCityTxt,  *pStateTxt, *pCountryTxt,*pPostalCodeTxt;
-		wxMessage	*pNameMsg,    *pAddress1Msg,  *pAddress2Msg,*pCityMsg,  *pStateMsg, *pCountryMsg,*pPostalCodeMsg;
-		wxText		*pJoinDateTxt,*pContribTxt,   *pLinesTxt;
-		wxMessage   *pJoinDateMsg,*pContribMsg,   *pLinesMsg;
+		wxTextCtrl		*pNameTxt,    *pAddress1Txt,  *pAddress2Txt,*pCityTxt,  *pStateTxt, *pCountryTxt,*pPostalCodeTxt;
+		wxStaticText	*pNameMsg,    *pAddress1Msg,  *pAddress2Msg,*pCityMsg,  *pStateMsg, *pCountryMsg,*pPostalCodeMsg;
+		wxTextCtrl		*pJoinDateTxt,*pContribTxt,   *pLinesTxt;
+		wxStaticText   *pJoinDateMsg,*pContribMsg,   *pLinesMsg;
 		wxRadioBox	*pDeveloperRadio;
 		wxChoice    *pNativeLangChoice;
-		wxMessage	*pNativeLangMsg;
+		wxStaticText	*pNativeLangMsg;
 
 	public:
 		enum	DialogModes		 mode;
@@ -168,10 +175,51 @@ class CeditorDlg : public wxPanel
 		bool	GetRec(char *whereStr);
 };  // CeditorDlg
 
+#define EDITOR_DIALOG                   199
+
+// Editor dialog control ids
+#define EDITOR_DIALOG_FN_GROUP          200
+#define EDITOR_DIALOG_SEARCH_GROUP      201
+#define EDITOR_DIALOG_CREATE            202
+#define EDITOR_DIALOG_EDIT              203
+#define EDITOR_DIALOG_DELETE            204
+#define EDITOR_DIALOG_COPY              205
+#define EDITOR_DIALOG_SAVE              206
+#define EDITOR_DIALOG_CANCEL            207
+#define EDITOR_DIALOG_PREV              208
+#define EDITOR_DIALOG_NEXT              209
+#define EDITOR_DIALOG_QUERY             211
+#define EDITOR_DIALOG_RESET             212
+#define EDITOR_DIALOG_NAME_MSG          213
+#define EDITOR_DIALOG_NAME_TEXT         214
+#define EDITOR_DIALOG_LOOKUP            215
+#define EDITOR_DIALOG_ADDRESS1_MSG      216
+#define EDITOR_DIALOG_ADDRESS1_TEXT     217
+#define EDITOR_DIALOG_ADDRESS2_MSG      218
+#define EDITOR_DIALOG_ADDRESS2_TEXT     219
+#define EDITOR_DIALOG_CITY_MSG          220
+#define EDITOR_DIALOG_CITY_TEXT         221
+#define EDITOR_DIALOG_COUNTRY_MSG       222
+#define EDITOR_DIALOG_COUNTRY_TEXT      223
+#define EDITOR_DIALOG_POSTAL_MSG        224
+#define EDITOR_DIALOG_POSTAL_TEXT       225
+#define EDITOR_DIALOG_LANG_MSG          226
+#define EDITOR_DIALOG_LANG_CHOICE       227
+#define EDITOR_DIALOG_DATE_MSG          228
+#define EDITOR_DIALOG_DATE_TEXT         229
+#define EDITOR_DIALOG_CONTRIB_MSG       230
+#define EDITOR_DIALOG_CONTRIB_TEXT      231
+#define EDITOR_DIALOG_LINES_MSG         232
+#define EDITOR_DIALOG_LINES_TEXT        233
+#define EDITOR_DIALOG_STATE_MSG         234
+#define EDITOR_DIALOG_STATE_TEXT        235
+#define EDITOR_DIALOG_DEVELOPER         236
+#define EDITOR_DIALOG_JOIN_MSG          237
+#define EDITOR_DIALOG_JOIN_TEXT         238
 
 // *************************** CparameterDlg ***************************
 
-class CparameterDlg : public wxDialogBox
+class CparameterDlg : public wxDialog
 {
 	private:
 		bool						 widgetPtrsSet;
@@ -180,10 +228,10 @@ class CparameterDlg : public wxDialogBox
 		Cparameters				 savedParamSettings;
 
 		// Pointers to all widgets on the dialog
-		wxMessage	*pParamODBCSourceMsg;
+		wxStaticText	*pParamODBCSourceMsg;
 		wxListBox	*pParamODBCSourceList;
-		wxMessage	*pParamUserNameMsg,		*pParamPasswordMsg;
-		wxText		*pParamUserNameTxt,		*pParamPasswordTxt;
+		wxStaticText	*pParamUserNameMsg,		*pParamPasswordMsg;
+		wxTextCtrl		*pParamUserNameTxt,		*pParamPasswordTxt;
 		wxButton		*pParamSaveBtn,			*pParamCancelBtn;
 
 	public:
@@ -199,6 +247,17 @@ class CparameterDlg : public wxDialogBox
 
 };  // CparameterDlg
 
+#define PARAMETER_DIALOG                    400
+
+// Parameter dialog control ids
+#define PARAMETER_DIALOG_SOURCE_MSG         401
+#define PARAMETER_DIALOG_SOURCE_LISTBOX     402
+#define PARAMETER_DIALOG_NAME_MSG           403
+#define PARAMETER_DIALOG_NAME_TEXT          404
+#define PARAMETER_DIALOG_PASSWORD_MSG       405
+#define PARAMETER_DIALOG_PASSWORD_TEXT      406
+#define PARAMETER_DIALOG_SAVE               407
+#define PARAMETER_DIALOG_CANCEL             408
 
 // *************************** CqueryDlg ***************************
 
@@ -230,7 +289,7 @@ char * const langQRY_LIKE									= "% matches 0 or more of any char; _ matches 
 char * const langQRY_BETWEEN								= "column BETWEEN value AND value";
 
 
-class CqueryDlg : public wxDialogBox
+class CqueryDlg : public wxDialog
 {
 	private:
 		CcolInf	*colInf;		// Column inf. returned by db->GetColumns()
@@ -243,20 +302,20 @@ class CqueryDlg : public wxDialogBox
 		bool					widgetPtrsSet;
 
 		// Widget pointers
-		wxMessage			*pQueryCol1Msg;
+		wxStaticText			*pQueryCol1Msg;
 		wxChoice				*pQueryCol1Choice;
-		wxMessage			*pQueryNotMsg;
+		wxStaticText			*pQueryNotMsg;
 		wxCheckBox			*pQueryNotCheck;
-		wxMessage			*pQueryOperatorMsg;
+		wxStaticText			*pQueryOperatorMsg;
 		wxChoice				*pQueryOperatorChoice;
-		wxMessage			*pQueryCol2Msg;
+		wxStaticText			*pQueryCol2Msg;
 		wxChoice				*pQueryCol2Choice;
-		wxMessage			*pQueryValue1Msg;
-		wxText				*pQueryValue1Txt;
-		wxMessage			*pQueryValue2Msg;
-		wxText				*pQueryValue2Txt;
-		wxMessage			*pQuerySqlWhereMsg;
-		wxMultiText			*pQuerySqlWhereMtxt;
+		wxStaticText			*pQueryValue1Msg;
+		wxTextCtrl				*pQueryValue1Txt;
+		wxStaticText			*pQueryValue2Msg;
+		wxTextCtrl				*pQueryValue2Txt;
+		wxStaticText			*pQuerySqlWhereMsg;
+		wxTextCtrl			*pQuerySqlWhereMtxt;
 		wxButton				*pQueryAddBtn;
 		wxButton				*pQueryAndBtn;
 		wxButton				*pQueryOrBtn;
@@ -266,10 +325,10 @@ class CqueryDlg : public wxDialogBox
 		wxButton				*pQueryClearBtn;
 		wxButton				*pQueryCountBtn;
 		wxButton				*pQueryHelpBtn;
-		wxGroupBox			*pQueryHintGrp;
-		wxMessage			*pQueryHintMsg;
+		wxStaticBox			*pQueryHintGrp;
+		wxStaticText			*pQueryHintMsg;
 
-		wxText 				*pFocusTxt;
+		wxTextCtrl 				*pFocusTxt;
 
 		CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereArg);
 
@@ -284,3 +343,32 @@ class CqueryDlg : public wxDialogBox
 		bool		ValidateWhereClause();
 
 };  // CqueryDlg
+
+#define QUERY_DIALOG                    300
+
+// Parameter dialog control ids
+#define QUERY_DIALOG_COL_MSG            301
+#define QUERY_DIALOG_COL_CHOICE         302
+#define QUERY_DIALOG_NOT_MSG            303
+#define QUERY_DIALOG_NOT_CHECKBOX       304
+#define QUERY_DIALOG_OP_MSG             305
+#define QUERY_DIALOG_OP_CHOICE          306
+#define QUERY_DIALOG_COL2_MSG           307
+#define QUERY_DIALOG_COL2_CHOICE        308
+#define QUERY_DIALOG_WHERE_MSG          309
+#define QUERY_DIALOG_WHERE_TEXT         310
+#define QUERY_DIALOG_ADD                311
+#define QUERY_DIALOG_AND                312
+#define QUERY_DIALOG_OR                 313
+#define QUERY_DIALOG_LPAREN             314
+#define QUERY_DIALOG_RPAREN             315
+#define QUERY_DIALOG_DONE               316
+#define QUERY_DIALOG_CLEAR              317
+#define QUERY_DIALOG_COUNT              318
+#define QUERY_DIALOG_VALUE1_MSG         319
+#define QUERY_DIALOG_VALUE1_TEXT        320
+#define QUERY_DIALOG_VALUE2_MSG         321
+#define QUERY_DIALOG_VALUE2_TEXT        322
+#define QUERY_DIALOG_HINT_GROUP         323
+#define QUERY_DIALOG_HINT_MSG           324
+

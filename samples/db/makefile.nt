@@ -1,53 +1,31 @@
 #
 # File:		makefile.nt
-# Author:	George Tasker
-# Created:	1998
+# Author:	Julian Smart
+# Created:	1993
 # Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
 #
 # "%W% %G%"
 #
-# Makefile : Builds database example (MS VC++).
-
-!if "$(FINAL)" == ""
-FINAL=0
-!endif
-
-
-!if "$(MSVCDIR)" == ""
-MSVCDIR=c:\devstudio\vc
-!endif
+# Makefile : Builds db example (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
 
 # Set WXDIR for your system
-WXDIR     = $(WXWIN)
-THISDIR   = $(WXDIR)\samples\database
-WXODBCDIR = $(WXDIR)\utils\wxodbc
+WXDIR = $(WXWIN)
 
-!if "$(MSVCDIR)" == ""
-DBLIBS=$(MSDEVDIR)\lib\odbc32.lib
-!else
-DBLIBS=$(MSVCDIR)\lib\odbc32.lib
-!endif
-
-EXTRAINC = -I$(WXODBCDIR)\src
-EXTRALIBS = $(DBLIBS) $(WXODBCDIR)\lib\wxodbc.lib
+WXUSINGDLL=0
 
 !include $(WXDIR)\src\ntwxwin.mak
 
-PROGRAM=database
+THISDIR = $(WXDIR)\samples\db
+PROGRAM=dbtest
 
-OBJECTS = $(PROGRAM).$(OBJSUFF) listdb.$(OBJSUFF)
-
-all:    wxodbc $(PROGRAM).exe
+OBJECTS = $(PROGRAM).obj listdb.obj
 
 $(PROGRAM):    $(PROGRAM).exe
 
-gt:
-		cd $(CPPFLAGS)
-
-wxodbc:
-        cd $(WXODBCDIR)\src
-        nmake -f makefile.nt FINAL=$(FINAL)
-        cd $(THISDIR)
+all:    wx $(PROGRAM).exe
 
 wx:
         cd $(WXDIR)\src\msw
@@ -58,12 +36,8 @@ wxclean:
         cd $(WXDIR)\src\msw
         nmake -f makefile.nt clean
         cd $(THISDIR)
-        cd $(WXODBCDIR)\src
-        nmake -f makefile.nt clean
-        cd $(THISDIR)
 
-
-$(PROGRAM).exe: $(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res
+$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
 	$(link) @<<
 -out:$(PROGRAM).exe
 $(LINKFLAGS)
@@ -72,19 +46,17 @@ $(LIBS)
 <<
 
 
-listdb.$(OBJSUFF): $(*B).$(SRCSUFF) $(*B).h 
-	$(cc) @<<
-$(CPPFLAGS) /c /Fo$(*B).$(OBJSUFF) /Tp $(*B).$(SRCSUFF)
+$(PROGRAM).obj:      $(PROGRAM).$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-
-$(PROGRAM).$(OBJSUFF): $(PROGRAM).$(SRCSUFF) $(PROGRAM).h listdb.h
-	$(cc) @<<
-$(CPPFLAGS) /c /Fo$(*B).$(OBJSUFF) /Tp $(*B).$(SRCSUFF)
+listdb.obj:      listdb.cpp $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-
-$(PROGRAM).res: $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
+$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
     $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
 
 

@@ -9,7 +9,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifdef __GNUG__
 #pragma interface "listdb.h"
+#endif
 
 /*
 /*
@@ -54,7 +56,7 @@ class Clookup2 : public wxTable
 
 };  // Clookup2
 
-class ClookUpDlg : public wxDialogBox
+class ClookUpDlg : public wxDialog
 {
 	private:
 		bool			 widgetPtrsSet;
@@ -119,6 +121,12 @@ class ClookUpDlg : public wxDialogBox
 		bool		OnClose();
 		void		OnActivate(bool) {};  // necessary for hot keys
 };
+
+#define LOOKUP_DIALOG                   500
+
+#define LOOKUP_DIALOG_SELECT            501
+#define LOOKUP_DIALOG_OK                502
+#define LOOKUP_DIALOG_CANCEL            503
 
 #endif  // LISTDB_DOT_H
 

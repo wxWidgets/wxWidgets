@@ -46,24 +46,24 @@ const ROWID_LEN = 24;  // 18 is the max, 24 is in case it gets larger
 class CcolDef
 {
 public:
-	char		 ColName[DB_MAX_COLUMN_NAME_LEN+1];	// Column Name  glt 4/19/97 added one for the null terminator
-	int		 DbDataType;								// Logical Data Type; e.g. DB_DATA_TYPE_INTEGER
-	int		 SqlCtype;									// C data type; e.g. SQL_C_LONG
-	void		*PtrDataObj;								// Address of the data object
-	int		 SzDataObj;									// Size, in bytes, of the data object
-	bool		 KeyField;									// TRUE if this column is part of the PRIMARY KEY to the table; Date fields should NOT be KeyFields.
-	bool		 Updateable;								// Specifies whether this column is updateable
-	bool		 InsertAllowed;							// Specifies whether this column should be included in an INSERT statement
-	bool		 DerivedCol;								// Specifies whether this column is a derived value
-	SDWORD	 CbValue;									// Internal use only!!!
+	char    ColName[DB_MAX_COLUMN_NAME_LEN+1];	// Column Name  glt 4/19/97 added one for the null terminator
+	int     DbDataType;									// Logical Data Type; e.g. DB_DATA_TYPE_INTEGER
+	int     SqlCtype;										// C data type; e.g. SQL_C_LONG
+	void   *PtrDataObj;									// Address of the data object
+	int	  SzDataObj;									// Size, in bytes, of the data object
+	bool	  KeyField;										// TRUE if this column is part of the PRIMARY KEY to the table; Date fields should NOT be KeyFields.
+	bool	  Updateable;									// Specifies whether this column is updateable
+	bool    InsertAllowed;								// Specifies whether this column should be included in an INSERT statement
+	bool    DerivedCol;									// Specifies whether this column is a derived value
+	SDWORD  CbValue;										// Internal use only!!!
 };  // CcolDef
 
 // This structure is used when creating secondary indexes.
 class CidxDef
 {
 public:
-	char		 ColName[DB_MAX_COLUMN_NAME_LEN+1];	// Column Name  glt 4/19/97 added one for the null terminator
-	bool		 Ascending;
+	char ColName[DB_MAX_COLUMN_NAME_LEN+1];	// Column Name  glt 4/19/97 added one for the null terminator
+	bool Ascending;
 };  // CidxDef
 
 class wxTable
@@ -106,9 +106,10 @@ public:
 	// Column Definitions
 	CcolDef *colDefs;	// Array of CcolDef structures
 
-	// Where and Order By clauses
+	// Where, Order By and From clauses
 	char *where;			// Standard SQL where clause, minus the word WHERE
 	char *orderBy;			// Standard SQL order by clause, minus the ORDER BY
+	char *from;				// Allows for joins in a Ctable::Query().  Format: ",tbl,tbl..."
 
 	// Flags
 	bool selectForUpdate;
@@ -116,50 +117,49 @@ public:
 	// Public member functions
 	wxTable(wxDB *pwxDB, const char *tblName, const int nCols, const char *qryTblName = 0);
 	~wxTable();
-	bool	 Open(void);
-	bool	 CreateTable(void);
-	bool	 CreateIndex(char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs);
-	bool	 CloseCursor(HSTMT cursor);
-	int	 Insert(void);
-	bool	 Update(void);
-	bool	 Update(char *pSqlStmt);
-	bool	 UpdateWhere(char *pWhereClause);
-	bool	 Delete(void);
-	bool	 DeleteWhere(char *pWhereClause);
-	bool	 DeleteMatching(void);
-	bool	 Query(bool forUpdate = FALSE, bool distinct = FALSE);
-	bool	 QueryBySqlStmt(char *pSqlStmt);
-	bool	 QueryMatching(bool forUpdate = FALSE, bool distinct = FALSE);
-	bool	 QueryOnKeyFields(bool forUpdate = FALSE, bool distinct = FALSE);
-	bool	 GetNext(void)   { return(getRec(SQL_FETCH_NEXT));  }
-	bool	 operator++(int) { return(getRec(SQL_FETCH_NEXT));  }
+	bool	Open(void);
+	bool	CreateTable(void);
+	bool	CreateIndex(char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs);
+	bool	CloseCursor(HSTMT cursor);
+	int   Insert(void);
+	bool	Update(void);
+	bool	Update(char *pSqlStmt);
+	bool	UpdateWhere(char *pWhereClause);
+	bool	Delete(void);
+	bool	DeleteWhere(char *pWhereClause);
+	bool	DeleteMatching(void);
+	virtual bool Query(bool forUpdate = FALSE, bool distinct = FALSE);
+	bool	QueryBySqlStmt(char *pSqlStmt);
+	bool	QueryMatching(bool forUpdate = FALSE, bool distinct = FALSE);
+	bool	QueryOnKeyFields(bool forUpdate = FALSE, bool distinct = FALSE);
+	bool	GetNext(void)   { return(getRec(SQL_FETCH_NEXT));  }
+	bool	operator++(int) { return(getRec(SQL_FETCH_NEXT));  }
 #ifndef FWD_ONLY_CURSORS
-	bool	 GetPrev(void)   { return(getRec(SQL_FETCH_PRIOR)); }
-	bool	 operator--(int) { return(getRec(SQL_FETCH_PRIOR)); }
-	bool	 GetFirst(void)  { return(getRec(SQL_FETCH_FIRST)); }
-	bool	 GetLast(void)   { return(getRec(SQL_FETCH_LAST));  }
+	bool	GetPrev(void)   { return(getRec(SQL_FETCH_PRIOR)); }
+	bool	operator--(int) { return(getRec(SQL_FETCH_PRIOR)); }
+	bool	GetFirst(void)  { return(getRec(SQL_FETCH_FIRST)); }
+	bool	GetLast(void)   { return(getRec(SQL_FETCH_LAST));  }
 #endif
-	bool	 IsCursorClosedOnCommit(void);
-	bool	 IsColNull(int colNo);
-	UWORD	 GetRowNum(void);
-	void	 GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct);
-	void	 GetDeleteStmt(char *pSqlStmt, int typeOfDel, char *pWhereClause = 0);
-	void	 GetUpdateStmt(char *pSqlStmt, int typeOfUpd, char *pWhereClause = 0);
-	void	 GetWhereClause(char *pWhereClause, int typeOfWhere);
-	bool	 CanSelectForUpdate(void);
-	bool	 CanUpdByROWID(void);
-	void	 ClearMemberVars(void);
-	bool	 SetQueryTimeout(UDWORD nSeconds);
-	void	 SetColDefs (int index, char *fieldName, int dataType, void *pData, int cType,
-						  int size, bool keyField = FALSE, bool upd = TRUE,
-						  bool insAllow = TRUE, bool derivedCol = FALSE);
-	bool	 SetCursor(int cursorNo = DB_CURSOR0);
-	int	 GetCursor(void) { return(currCursorNo); }
-	ULONG	 Count(void);
-	int	 DB_STATUS(void) { return(pDb->DB_STATUS); }
-	bool	 Refresh(void);
+	bool	IsCursorClosedOnCommit(void);
+	bool	IsColNull(int colNo);
+	UWORD GetRowNum(void);
+	void  GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct);
+	void  GetDeleteStmt(char *pSqlStmt, int typeOfDel, char *pWhereClause = 0);
+	void  GetUpdateStmt(char *pSqlStmt, int typeOfUpd, char *pWhereClause = 0);
+	void  GetWhereClause(char *pWhereClause, int typeOfWhere, char *qualTableName = 0);
+	bool	CanSelectForUpdate(void);
+	bool	CanUpdByROWID(void);
+	void  ClearMemberVars(void);
+	bool	SetQueryTimeout(UDWORD nSeconds);
+	void  SetColDefs (int index, char *fieldName, int dataType, void *pData, int cType,
+							int size, bool keyField = FALSE, bool upd = TRUE,
+							bool insAllow = TRUE, bool derivedCol = FALSE);
+	bool	SetCursor(int cursorNo = DB_CURSOR0);
+	int	GetCursor(void) { return(currCursorNo); }
+	ULONG Count(void);
+	int   DB_STATUS(void) { return(pDb->DB_STATUS); }
+	bool	Refresh(void);
 
 };  // wxTable
 
 #endif
-

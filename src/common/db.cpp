@@ -5,6 +5,8 @@
 //              source such as opening and closing the data source.
 // Author:      Doug Card
 // Modified by:
+// Mods:        Dec, 1998: Added support for SQL statement logging and database
+//              cataloging
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
@@ -20,17 +22,17 @@
 //                 the wxWindows GUI development toolkit.
 ///////////////////////////////////////////////////////////////////////////////
 
-/*
-// SYNOPSIS START
-// SYNOPSIS STOP
-*/
-
 #ifdef __GNUG__
 #pragma implementation "db.h"
 #endif
 
 /*
-#ifdef _CONSOLE
+// SYNOPSIS START
+// SYNOPSIS STOP
+*/
+
+/*
+#ifdef DBDEBUG_CONSOLE
 	#include <iostream.h>
 #endif
 */
@@ -47,11 +49,10 @@
 
 #if wxUSE_ODBC
 
-#include <wx/db.h>
-
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include "wx/db.h"
 
 DbList *PtrBegDbList = 0;
 
@@ -59,6 +60,9 @@ DbList *PtrBegDbList = 0;
 wxDB::wxDB(HENV &aHenv)
 {
 	int i;
+
+	fpSqlLog		= 0;				// Sql Log file pointer
+	sqlLogState = sqlLogOFF;	// By default, logging is turned off
 	
 	strcpy(sqlState,"");
 	strcpy(errorMsg,"");
@@ -112,7 +116,7 @@ wxDB::wxDB(HENV &aHenv)
 /********** wxDB::Open() **********/
 bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
 {
-	assert(Dsn);
+	assert(Dsn && strlen(Dsn));
 	dsn		= Dsn;
 	uid		= Uid;
 	authStr	= AuthStr;
@@ -125,7 +129,7 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
 	// specified before the connection is made.
 	retcode = SQLSetConnectOption(hdbc, SQL_ODBC_CURSORS, SQL_CUR_USE_IF_NEEDED);
 
-	#ifdef _CONSOLE
+	#ifdef DBDEBUG_CONSOLE
 		if (retcode == SQL_SUCCESS)
 			cout << "SQLSetConnectOption(CURSOR_LIB) successful" << endl;
 		else
@@ -240,7 +244,7 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
 	else
 		typeInfDate.FsqlType = SQL_TIMESTAMP;
 
-#ifdef _CONSOLE
+#ifdef DBDEBUG_CONSOLE
 	cout << "VARCHAR DATA TYPE: " << typeInfVarchar.TypeName << endl;
 	cout << "INTEGER DATA TYPE: " << typeInfInteger.TypeName << endl;
 	cout << "FLOAT   DATA TYPE: " << typeInfFloat.TypeName << endl;
@@ -262,7 +266,7 @@ bool wxDB::setConnectionOptions(void)
 	SQLSetConnectOption(hdbc, SQL_OPT_TRACE, SQL_OPT_TRACE_OFF);
 
 	// Display the connection options to verify them
-#ifdef _CONSOLE
+#ifdef DBDEBUG_CONSOLE
 	long l;
 	cout << ">>>>> CONNECTION OPTIONS <<<<<<" << endl;
 	
@@ -394,7 +398,7 @@ bool wxDB::getDbInfo(void)
 	if (SQLGetInfo(hdbc, SQL_LOGIN_TIMEOUT, &dbInf.loginTimeout, sizeof(dbInf.loginTimeout), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-#ifdef _CONSOLE
+#ifdef DBDEBUG_CONSOLE
 	cout << ">>>>> DATA SOURCE INFORMATION <<<<<" << endl;
 	cout << "SERVER Name: " << dbInf.serverName << endl;
 	cout << "DBMS Name: " << dbInf.dbmsName << "; DBMS Version: " << dbInf.dbmsVer << endl;
@@ -612,7 +616,7 @@ bool wxDB::getDataTypeInfo(SWORD fSqlType, SqlTypeInfo &structSQLTypeInfo)
 	// Fetch the record
 	if ((retcode = SQLFetch(hstmt)) != SQL_SUCCESS)
 	{
-#ifdef _CONSOLE
+#ifdef DBDEBUG_CONSOLE
 		if (retcode == SQL_NO_DATA_FOUND)
 			cout << "SQL_NO_DATA_FOUND fetching inf. about data type." << endl;
 #endif
@@ -647,6 +651,13 @@ bool wxDB::getDataTypeInfo(SWORD fSqlType, SqlTypeInfo &structSQLTypeInfo)
 /********** wxDB::Close() **********/
 void wxDB::Close(void)
 {
+	// Close the Sql Log file
+	if (fpSqlLog)
+	{
+		fclose(fpSqlLog);
+		fpSqlLog = 0;  //glt
+	}
+
 	// Free statement handle
 	if (dbIsOpen)
 	{
@@ -699,7 +710,7 @@ bool wxDB::DispAllErrors(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
 		logError(odbcErrMsg, sqlState);
 		if (!silent)
 		{
-#ifdef _CONSOLE
+#ifdef DBDEBUG_CONSOLE
 			// When run in console mode, use standard out to display errors.
 			cout << odbcErrMsg << endl;
 			cout << "Press any key to continue..." << endl;
@@ -733,7 +744,7 @@ void wxDB::DispNextError(void)
 	if (silent)
 		return;
 
-#ifdef _CONSOLE
+#ifdef DBDEBUG_CONSOLE
 	// When run in console mode, use standard out to display errors.
 	cout << odbcErrMsg << endl;
 	cout << "Press any key to continue..."  << endl;
@@ -994,9 +1005,11 @@ bool wxDB::Grant(int privileges, char *tableName, char *userList)
 	strcat(sqlStmt, " TO ");
 	strcat(sqlStmt, userList);
 
-#ifdef _CONSOLE
+#ifdef DBDEBUG_CONSOLE
 	cout << endl << sqlStmt << endl;
 #endif
+
+	WriteSqlLog(sqlStmt);
 
 	return(ExecSql(sqlStmt));
 
@@ -1025,7 +1038,9 @@ bool wxDB::CreateView(char *viewName, char *colList, char *pSqlStmt)
 		}
 	}
 
-#ifdef _CONSOLE
+	WriteSqlLog(sqlStmt);
+
+#ifdef DBDEBUG_CONSOLE
 	cout << endl << sqlStmt << endl;
 #endif
 
@@ -1043,7 +1058,9 @@ bool wxDB::CreateView(char *viewName, char *colList, char *pSqlStmt)
 	strcat(sqlStmt, " AS ");
 	strcat(sqlStmt, pSqlStmt);
 
-#ifdef _CONSOLE
+	WriteSqlLog(sqlStmt);
+
+#ifdef DBDEBUG_CONSOLE
 	cout << sqlStmt << endl;
 #endif
 
@@ -1161,6 +1178,101 @@ CcolInf *wxDB::GetColumns(char *tableName[])
 }  // wxDB::GetColumns()
 
 
+/********** wxDB::Catalog() **********/
+bool wxDB::Catalog(char *userID, char *fileName)
+{
+	assert(userID && strlen(userID));
+	assert(fileName && strlen(fileName));
+
+	RETCODE	retcode;
+	SDWORD	cb;
+	char		tblName[DB_MAX_TABLE_NAME_LEN+1];
+	char		tblNameSave[DB_MAX_TABLE_NAME_LEN+1];
+	char		colName[DB_MAX_COLUMN_NAME_LEN+1];
+	SWORD		sqlDataType;
+	char		typeName[16];
+	SWORD		precision, length;
+
+	FILE *fp = fopen(fileName,"wt");
+	if (fp == NULL)
+		return(FALSE);
+
+	SQLFreeStmt(hstmt, SQL_CLOSE);
+
+	int i = 0;
+	char userIdUC[81];
+	for (char *p = userID; *p; p++)
+		userIdUC[i++] = toupper(*p);
+	userIdUC[i] = 0;
+
+	retcode = SQLColumns(hstmt,
+								NULL, 0,											// All qualifiers
+								(UCHAR *) userIdUC, SQL_NTS,				// User specified
+								NULL, 0,											// All tables
+								NULL, 0);										// All columns
+	if (retcode != SQL_SUCCESS)
+	{
+		DispAllErrors(henv, hdbc, hstmt);
+		fclose(fp);
+		return(FALSE);
+	}
+
+	SQLBindCol(hstmt, 3, SQL_C_CHAR,   tblName,      DB_MAX_TABLE_NAME_LEN+1,  &cb);
+	SQLBindCol(hstmt, 4, SQL_C_CHAR,   colName,      DB_MAX_COLUMN_NAME_LEN+1, &cb);
+	SQLBindCol(hstmt, 5, SQL_C_SSHORT, &sqlDataType, 0,                        &cb);
+	SQLBindCol(hstmt, 6, SQL_C_CHAR,	  typeName,		 16,                       &cb);
+	SQLBindCol(hstmt, 7, SQL_C_SSHORT, &precision,	 0,                        &cb);
+	SQLBindCol(hstmt, 8, SQL_C_SSHORT, &length,   	 0,                        &cb);
+
+	char outStr[256];
+	strcpy(tblNameSave,"");
+	int cnt = 0;
+
+	while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
+	{
+		if (strcmp(tblName,tblNameSave))
+		{
+			if (cnt)
+				fputs("\n", fp);
+			fputs("================================ ", fp);
+			fputs("================================ ", fp);
+			fputs("===================== ", fp);
+			fputs("========= ", fp);
+			fputs("=========\n", fp);
+			sprintf(outStr, "%-32s %-32s %-21s %9s %9s\n",
+				"TABLE NAME", "COLUMN NAME", "DATA TYPE", "PRECISION", "LENGTH");
+			fputs(outStr, fp);
+			fputs("================================ ", fp);
+			fputs("================================ ", fp);
+			fputs("===================== ", fp);
+			fputs("========= ", fp);
+			fputs("=========\n", fp);
+			strcpy(tblNameSave,tblName);
+		}
+		sprintf(outStr, "%-32s %-32s (%04d)%-15s %9d %9d\n",
+			tblName, colName, sqlDataType, typeName, precision, length);
+		if (fputs(outStr, fp) == EOF)
+		{
+			fclose(fp);
+			return(FALSE);
+		}
+		cnt++;
+	}
+
+	if (retcode != SQL_NO_DATA_FOUND)
+	{
+		DispAllErrors(henv, hdbc, hstmt);
+		fclose(fp);
+		return(FALSE);
+	}
+
+	SQLFreeStmt(hstmt, SQL_CLOSE);
+	fclose(fp);
+	return(TRUE);
+
+}  // wxDB::Catalog()
+
+
 // Table name can refer to a table, view, alias or synonym.  Returns true
 // if the object exists in the database.  This function does not indicate
 // whether or not the user has privleges to query or perform other functions
@@ -1188,6 +1300,54 @@ bool wxDB::TableExists(char *tableName)
 	return(TRUE);
 
 }  // wxDB::TableExists()
+
+
+/********** wxDB::SqlLog() **********/
+bool wxDB::SqlLog(enum sqlLog state, char *filename, bool append)
+{
+	assert(state == sqlLogON  || state == sqlLogOFF);
+	assert(state == sqlLogOFF || filename);
+
+	if (state == sqlLogON)
+	{
+		if (fpSqlLog == 0)
+		{
+			fpSqlLog = fopen(filename, (append ? "at" : "wt"));
+			if (fpSqlLog == NULL)
+				return(FALSE);
+		}
+	}
+	else  // sqlLogOFF
+	{
+		if (fpSqlLog)
+		{
+			if (fclose(fpSqlLog))
+				return(FALSE);
+			fpSqlLog = 0;
+		}
+	}
+
+	sqlLogState = state;
+	return(TRUE);
+
+}  // wxDB::SqlLog()
+
+
+/********** wxDB::WriteSqlLog() **********/
+bool wxDB::WriteSqlLog(char *logMsg)
+{
+	assert(logMsg);
+
+	if (fpSqlLog == 0 || sqlLogState == sqlLogOFF)
+		return(FALSE);
+
+	if (fputs("\n",   fpSqlLog) == EOF) return(FALSE);
+	if (fputs(logMsg, fpSqlLog) == EOF) return(FALSE);
+	if (fputs("\n",   fpSqlLog) == EOF) return(FALSE);
+
+	return(TRUE);
+
+}  // wxDB::WriteSqlLog()
 
 
 /********** GetDbConnection() **********/
@@ -1319,4 +1479,5 @@ bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDes
 }  // GetDataSource()
 
 #endif
-    // wxUSE_ODBC
+ // wxUSE_ODBC
+

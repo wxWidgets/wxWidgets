@@ -5,6 +5,8 @@
 //              source such as opening and closing the data source.
 // Author:      Doug Card
 // Modified by:
+// Mods:        Dec, 1998: Added support for SQL statement logging and database
+//              cataloging
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
@@ -18,6 +20,7 @@
 //              3) These classes may not be distributed as part of any other class library,
 //                 DLL, text (written or electronic), other than a complete distribution of
 //                 the wxWindows GUI development toolkit.
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -27,12 +30,12 @@
 
 #ifndef DB_DOT_H
 #define DB_DOT_H
-
+ 
 #ifdef __GNUG__
 #pragma interface "db.h"
 #endif
 
-#if defined(wx_msw) || defined(WIN32)
+#if defined(__WXMSW__) || defined(WIN32)
 #include <windows.h>
 #endif
 
@@ -44,20 +47,6 @@ enum		enumDummy		{enumDum1};
 
 #define SQL_C_BOOLEAN (sizeof(int) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
 #define SQL_C_ENUM (sizeof(enumDummy) == 2 ? SQL_C_USHORT : SQL_C_ULONG)    //glt 2-21-97
-
-/*
-#ifndef Bool
-#define Bool int
-#endif
-
-#ifndef TRUE
-#define TRUE 1
-#endif
-
-#ifndef FALSE
-#define FALSE 0
-#endif
-*/
 
 // Database Globals
 const DB_TYPE_NAME_LEN						= 40;
@@ -224,15 +213,23 @@ public:
 	int  sqlDataType;
 };
 
+enum sqlLog
+{
+	sqlLogOFF,
+	sqlLogON
+};
+
 class wxDB
 {
 private:
 
 	// Private data
-	bool dbIsOpen;
-	char *dsn;			// Data source name
-	char *uid;			// User ID
-	char *authStr;		// Authorization string (password)
+	bool			dbIsOpen;
+	char			*dsn;				// Data source name
+	char			*uid;				// User ID
+	char			*authStr;		// Authorization string (password)
+	FILE			*fpSqlLog;		// Sql Log file pointer
+	enum sqlLog sqlLogState;	// On or Off
 
 	// Private member functions
 	bool getDbInfo(void);
@@ -303,28 +300,31 @@ public:
 	
 	// Public member functions
 	wxDB(HENV &aHenv);
-	bool		Open(char *Dsn, char *Uid, char *AuthStr);  // Data Source Name, User ID, Password
-	void		Close(void);
-	bool		CommitTrans(void);
-	bool		RollbackTrans(void);
-   bool		DispAllErrors(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
-   bool		GetNextError(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
-   void		DispNextError(void);
-	bool		CreateView(char *viewName, char *colList, char *pSqlStmt);
-	bool		ExecSql(char *pSqlStmt);
-	bool	   Grant(int privileges, char *tableName, char *userList = "PUBLIC");
-	int	   TranslateSqlState(char *SQLState);
-	CcolInf *GetColumns(char *tableName[]);
-	char	  *GetDatabaseName(void)	{return dbInf.dbmsName;}
-	char	  *GetDataSource(void)		{return dsn;}
-	char	  *GetUsername(void)			{return uid;}
-	char	  *GetPassword(void)			{return authStr;}
-	bool		IsOpen(void)				{return dbIsOpen;}
-	HENV		GetHENV(void)				{return henv;}
-	HDBC		GetHDBC(void)				{return hdbc;}
-	HSTMT		GetHSTMT(void)				{return hstmt;}
-	bool		TableExists(char *tableName);  // Table name can refer to a table, view, alias or synonym
-	void		LogError(char *errMsg, char *SQLState = 0) {logError(errMsg, SQLState);}
+	bool		 Open(char *Dsn, char *Uid, char *AuthStr);  // Data Source Name, User ID, Password
+	void		 Close(void);
+	bool		 CommitTrans(void);
+	bool		 RollbackTrans(void);
+	bool		 DispAllErrors(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
+	bool		 GetNextError(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
+	void		 DispNextError(void);
+	bool		 CreateView(char *viewName, char *colList, char *pSqlStmt);
+	bool		 ExecSql(char *pSqlStmt);
+	bool	    Grant(int privileges, char *tableName, char *userList = "PUBLIC");
+	int	    TranslateSqlState(char *SQLState);
+	bool		 Catalog(char *userID, char *fileName = "Catalog.txt");
+	CcolInf	*GetColumns(char *tableName[]);
+	char		*GetDatabaseName(void)	{return dbInf.dbmsName;}
+	char		*GetDataSource(void)		{return dsn;}
+	char		*GetUsername(void)		{return uid;}
+	char		*GetPassword(void)		{return authStr;}
+	bool		 IsOpen(void)				{return dbIsOpen;}
+	HENV		 GetHENV(void)				{return henv;}
+	HDBC		 GetHDBC(void)				{return hdbc;}
+	HSTMT		 GetHSTMT(void)			{return hstmt;}
+	bool		 TableExists(char *tableName);  // Table name can refer to a table, view, alias or synonym
+	void		 LogError(char *errMsg, char *SQLState = 0) {logError(errMsg, SQLState);}
+	bool		 SqlLog(enum sqlLog state, char *filename = "sqllog.txt", bool append = FALSE);
+	bool		 WriteSqlLog(char *logMsg);
 
 };  // wxDB
 
@@ -359,4 +359,3 @@ bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDes
 						 UWORD direction = SQL_FETCH_NEXT);
 
 #endif
-

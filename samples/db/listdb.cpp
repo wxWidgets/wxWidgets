@@ -103,7 +103,7 @@ Clookup2::Clookup2(char *tblName, char *colName1, char *colName2, wxDB *pDb)
 
 // This is a generic lookup constructor that will work with any table and any column
 ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName, char *colName,
-	char *where, char *orderBy)  : wxDialogBox (parent, "Select...", 1, -1, -1, 400, 290)
+	char *where, char *orderBy)  : wxDialog (parent, LOOKUP_DIALOG, "Select...", wxPoint(-1, -1), wxSize(400, 290))
 {
 	wxBeginBusyCursor();
 	
@@ -114,19 +114,9 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName, cha
 	noDisplayCols = 1;
 	col1Len = 0;
 
-	// Build the dialog
-	SetLabelPosition(wxVERTICAL);
-
-	wxFont *ButtonFont = new wxFont(12,wxSWISS,wxNORMAL,wxBOLD);
-	wxFont *TextFont   = new wxFont(12,wxSWISS,wxNORMAL,wxNORMAL);
-
-	SetButtonFont(ButtonFont);
-	SetLabelFont(TextFont);
-	SetLabelPosition(wxVERTICAL);
-
-	pLookUpSelectList		= new wxListBox(this, NULL, "", wxSINGLE|wxALWAYS_SB, 5, 15, 384, 195, 0, 0, 0, "LookUpSelectList");
-	pLookUpOkBtn			= new wxButton(this, NULL, "&Ok",		113, 222, 70, 35, 0, "LookUpOkBtn");
-	pLookUpCancelBtn		= new wxButton(this, NULL, "C&ancel",	212, 222, 70, 35, 0, "LookUpCancelBtn");
+	pLookUpSelectList		= new wxListBox(this, LOOKUP_DIALOG_SELECT, wxPoint(5, 15), wxSize(384, 195), 0, 0, wxLB_SINGLE|wxLB_ALWAYS_SB, wxDefaultValidator, "LookUpSelectList");
+	pLookUpOkBtn			= new wxButton(this, LOOKUP_DIALOG_OK, "&Ok",		wxPoint(113, 222), wxSize(70, 35), 0, wxDefaultValidator, "LookUpOkBtn");
+	pLookUpCancelBtn		= new wxButton(this, LOOKUP_DIALOG_CANCEL, "C&ancel",	wxPoint(212, 222), wxSize(70, 35), 0, wxDefaultValidator, "LookUpCancelBtn");
 
 	widgetPtrsSet = TRUE;
 
@@ -141,8 +131,8 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName, cha
 	if (!lookup->Open())
 	{
 		wxString tStr;
-		tStr.sprintf("Unable to open the table '%s'.",tableName);
-		wxMessageBox(tStr.GetData(),"ODBC Error...");
+		tStr.Printf("Unable to open the table '%s'.",tableName);
+		wxMessageBox(tStr,"ODBC Error...");
 		Close();
 		return;
 	}
@@ -176,7 +166,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName, cha
 	SetTitle(windowTitle);
 	Centre(wxBOTH);
 	wxEndBusyCursor();
-	Show(TRUE);
+	ShowModal();
 
 }  // Generic lookup constructor
 
@@ -207,7 +197,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName, cha
 //
 ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
 	char *dispCol1, char *dispCol2, char *where, char *orderBy, bool distinctValues,
-	char *selectStmt, int maxLenCol1, wxDB *pDb, bool allowOk)  : wxDialogBox (parent, "Select...", 1, -1, -1, 400, 290)
+	char *selectStmt, int maxLenCol1, wxDB *pDb, bool allowOk)  : wxDialog (parent, LOOKUP_DIALOG, "Select...", wxPoint(-1, -1), wxSize(400, 290))
 {
 	wxBeginBusyCursor();
 	
@@ -219,24 +209,16 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
 	noDisplayCols = (strlen(dispCol2) ? 2 : 1);
 	col1Len = 0;
 
-	// Build the dialog
-	SetLabelPosition(wxVERTICAL);
-
-	wxFont *ButtonFont = new wxFont(12,wxSWISS,wxNORMAL,wxBOLD);
-	wxFont *TextFont   = new wxFont(12,wxSWISS,wxNORMAL,wxNORMAL);
-	wxFont *FixedFont  = new wxFont(12,wxMODERN,wxNORMAL,wxNORMAL);
-
-	SetButtonFont(ButtonFont);
-	SetLabelFont(TextFont);
-	SetLabelPosition(wxVERTICAL);
+	wxFont fixedFont(12,wxMODERN,wxNORMAL,wxNORMAL);
 
 	// this is done with fixed font so that the second column (if any) will be left
 	// justified in the second column
-	SetButtonFont(FixedFont);
-	pLookUpSelectList		= new wxListBox(this, NULL, "", wxSINGLE|wxALWAYS_SB, 5, 15, 384, 195, 0, 0, 0, "LookUpSelectList");
-	SetButtonFont(ButtonFont);
-	pLookUpOkBtn			= new wxButton(this, NULL, "&Ok",		113, 222, 70, 35, 0, "LookUpOkBtn");
-	pLookUpCancelBtn		= new wxButton(this, NULL, "C&ancel",	212, 222, 70, 35, 0, "LookUpCancelBtn");
+	pLookUpSelectList		= new wxListBox(this, LOOKUP_DIALOG_SELECT, wxPoint(5, 15), wxSize(384, 195), 0, 0, wxLB_SINGLE|wxLB_ALWAYS_SB, wxDefaultValidator, "LookUpSelectList");
+
+    pLookUpSelectList->SetFont(fixedFont);
+
+	pLookUpOkBtn			= new wxButton(this, LOOKUP_DIALOG_OK, "&Ok",		wxPoint(113, 222), wxSize(70, 35), 0, wxDefaultValidator, "LookUpOkBtn");
+	pLookUpCancelBtn		= new wxButton(this, LOOKUP_DIALOG_CANCEL, "C&ancel",	wxPoint(212, 222), wxSize(70, 35), 0, wxDefaultValidator, "LookUpCancelBtn");
 
 	widgetPtrsSet = TRUE;
 
@@ -251,8 +233,8 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
 	if (!lookup2->Open())
 	{
 		wxString tStr;
-		tStr.sprintf("Unable to open the table '%s'.",tableName);
-		wxMessageBox(tStr.GetData(),"ODBC Error...");
+		tStr.Printf("Unable to open the table '%s'.",tableName);
+		wxMessageBox(tStr,"ODBC Error...");
 		Close();
 		return;
 	}
@@ -276,7 +258,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
 				q += " WHERE ";
 				q += where;
 			}
-			if (!lookup2->QueryBySqlStmt(q.GetData()))
+			if (!lookup2->QueryBySqlStmt((char*) (const char*) q))
 			{
 				wxMessageBox("ODBC error during QueryBySqlStmt()","ODBC Error...");
 				Close();
@@ -321,7 +303,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
 			s.Append(' ', (maxColLen + LISTDB_NO_SPACES_BETWEEN_COLS - strlen(lookup2->lookupCol1)));
 			s.Append(lookup2->lookupCol2);
 		}
-		pLookUpSelectList->Append(s.GetData());
+		pLookUpSelectList->Append(s);
 	}
 
 	// Highlight the first list item
@@ -342,7 +324,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
 	SetTitle(windowTitle);
 	Centre(wxBOTH);
 	wxEndBusyCursor();
-	Show(TRUE);
+	ShowModal();
 
 }  // Generic lookup constructor 2
 
@@ -382,12 +364,12 @@ void ClookUpDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 					// Column 1
 					s = s.SubString(0, col1Len-1);
 					s = s.Strip();
-					strcpy(ListDB_Selection, s.GetData());
+					strcpy(ListDB_Selection, s);
 					// Column 2
 					s = pLookUpSelectList->GetStringSelection();
-					s = s.From(col1Len + LISTDB_NO_SPACES_BETWEEN_COLS);
+					s = s.Mid(col1Len + LISTDB_NO_SPACES_BETWEEN_COLS);
 					s = s.Strip();
-					strcpy(ListDB_Selection2, s.GetData());
+					strcpy(ListDB_Selection2, s);
 				}
 			}
 			else
