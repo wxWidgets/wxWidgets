@@ -17,6 +17,10 @@ WXUSINGDLL=0
 
 !include $(WXDIR)\src\makevc.env
 
+!if "$(RM)" == ""
+RM= erase
+!endif
+
 all:    $(PROGRAM).exe
 
 wx:
@@ -41,9 +45,9 @@ $(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
     $(rc) -r /i$(WXDIR)\include /i$(WXDIR)\contrib\include -fo$@ $(PROGRAM).rc
 
 clean:
-        -erase $(OBJECTS)
-        -erase *.exe
-        -erase *.res
-        -erase *.map
-        -erase *.sbr
-        -erase *.pdb
+        -$(RM) $(OBJECTS)
+        -$(RM) *.exe
+        -$(RM) *.res
+        -$(RM) *.map
+        -$(RM) *.sbr
+        -$(RM) *.pdb
