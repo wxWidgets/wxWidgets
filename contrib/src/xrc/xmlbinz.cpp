@@ -48,11 +48,12 @@ bool wxXmlIOHandlerBinZ::Save(wxOutputStream& stream, const wxXmlDocument& doc)
 
 
 
-bool wxXmlIOHandlerBinZ::Load(wxInputStream& stream, wxXmlDocument& doc)
+bool wxXmlIOHandlerBinZ::Load(wxInputStream& stream, wxXmlDocument& doc,
+                              const wxString& encoding)
 {
     ReadHeader(stream);
     wxZlibInputStream costr(stream);
-    return wxXmlIOHandlerBin::Load(costr, doc);
+    return wxXmlIOHandlerBin::Load(costr, doc, encoding);
 }
 
 

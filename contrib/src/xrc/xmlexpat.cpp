@@ -30,23 +30,32 @@
 /*
 
     FIXME:
-
-     - handle unknown encodings
      - process all elements, including CDATA
-     - XRC resources should automatically select desired encoding based on
-       runtime environment (?) (would need BIN and BINZ formats modification,
-       too)
 
  */
 
 
 // converts Expat-produced string in UTF-8 into wxString.
-inline static wxString CharToString(const char *s, size_t len = wxSTRING_MAXLEN)
+inline static wxString CharToString(wxMBConv *conv,
+                                    const char *s, size_t len = wxSTRING_MAXLEN)
 {
 #if wxUSE_UNICODE
+    (void)conv;
     return wxString(s, wxConvUTF8, len);
 #else
-    return wxString(s, len);
+    if ( conv )
+    {
+        size_t nLen = (len != wxSTRING_MAXLEN) ? len :
+                          nLen = wxConvUTF8.MB2WC((wchar_t*) NULL, s, 0);
+    
+        wchar_t *buf = new wchar_t[nLen+1];
+        wxConvUTF8.MB2WC(buf, s, nLen);
+        buf[nLen] = 0;
+        return wxString(buf, *conv, len);
+        delete[] buf;
+    }
+    else
+        return wxString(s, len);
 #endif
 }
 
@@ -62,21 +71,23 @@ bool wxXmlIOHandlerExpat::CanLoad(wxInputStream& stream)
 
 struct wxXmlParsingContext
 {
+    wxMBConv  *conv;
+
     wxXmlNode *root;
     wxXmlNode *node;
     wxXmlNode *lastAsText;
-    wxString encoding;
-    wxString version;
+    wxString   encoding;
+    wxString   version;
 };
 
 static void StartElementHnd(void *userData, const char *name, const char **atts)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
-    wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE, CharToString(name));
+    wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE, CharToString(ctx->conv, name));
     const char **a = atts;
     while (*a)
     {
-        node->AddProperty(CharToString(a[0]), CharToString(a[1]));
+        node->AddProperty(CharToString(ctx->conv, a[0]), CharToString(ctx->conv, a[1]));
         a += 2;
     }
     if (ctx->root == NULL)
@@ -106,7 +117,7 @@ static void TextHnd(void *userData, const char *s, int len)
     if (ctx->lastAsText)
     {
         ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() +
-                                    CharToString(buf));
+                                    CharToString(ctx->conv, buf));
     }
     else
     {
@@ -120,7 +131,7 @@ static void TextHnd(void *userData, const char *s, int len)
         if (!whiteOnly)
         {
             ctx->lastAsText = new wxXmlNode(wxXML_TEXT_NODE, wxT("text"),
-                                            CharToString(buf));
+                                            CharToString(ctx->conv, buf));
             ctx->node->AddChild(ctx->lastAsText);
         }
     }
@@ -138,7 +149,7 @@ static void CommentHnd(void *userData, const char *data)
         //     the root element (e.g. wxDesigner's output). We ignore such
         //     comments, no big deal...
         ctx->node->AddChild(new wxXmlNode(wxXML_COMMENT_NODE,
-                            wxT("comment"), CharToString(data)));
+                            wxT("comment"), CharToString(ctx->conv, data)));
     }
     ctx->lastAsText = NULL;
 }
@@ -150,7 +161,7 @@ static void DefaultHnd(void *userData, const char *s, int len)
     {
         wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
-        wxString buf = CharToString(s, (size_t)len);
+        wxString buf = CharToString(ctx->conv, s, (size_t)len);
         int pos;
         pos = buf.Find(wxT("encoding="));
         if (pos != wxNOT_FOUND)
@@ -161,7 +172,36 @@ static void DefaultHnd(void *userData, const char *s, int len)
     }
 }
 
-bool wxXmlIOHandlerExpat::Load(wxInputStream& stream, wxXmlDocument& doc)
+static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
+                               const XML_Char *name, XML_Encoding *info)
+{
+    // We must build conversion table for expat. The easiest way to do so
+    // is to let wxCSConv convert as string containing all characters to
+    // wide character representation:
+    wxCSConv conv(name);
+    char mbBuf[255];
+    wchar_t wcBuf[255];
+    size_t i;
+    
+    for (i = 0; i < 255; i++)
+        mbBuf[i] = i+1;
+    mbBuf[255] = 0;
+    conv.MB2WC(wcBuf, mbBuf, 255);
+    wcBuf[255] = 0;
+    
+    info->map[0] = 0;
+    for (i = 0; i < 255; i++)
+        info->map[i+1] = (int)wcBuf[i];
+    
+    info->data = NULL;
+    info->convert = NULL;
+    info->release = NULL;
+    
+    return 1;
+}
+
+bool wxXmlIOHandlerExpat::Load(wxInputStream& stream, wxXmlDocument& doc,
+                               const wxString& encoding)
 {
     const size_t BUFSIZE = 1024;
     char buf[BUFSIZE];
@@ -170,11 +210,19 @@ bool wxXmlIOHandlerExpat::Load(wxInputStream& stream, wxXmlDocument& doc)
     XML_Parser parser = XML_ParserCreate(NULL);
 
     ctx.root = ctx.node = NULL;
+    ctx.encoding = wxT("UTF-8"); // default in absence of encoding=""
+    ctx.conv = NULL;
+#if !wxUSE_UNICODE
+    if ( encoding != wxT("UTF-8") && encoding != wxT("utf-8") )
+        ctx.conv = new wxCSConv(encoding);
+#endif
+    
     XML_SetUserData(parser, (void*)&ctx);
     XML_SetElementHandler(parser, StartElementHnd, EndElementHnd);
     XML_SetCharacterDataHandler(parser, TextHnd);
     XML_SetCommentHandler(parser, CommentHnd);
     XML_SetDefaultHandler(parser, DefaultHnd);
+    XML_SetUnknownEncodingHandler(parser, UnknownEncodingHnd, NULL);
 
     do
     {
@@ -190,9 +238,14 @@ bool wxXmlIOHandlerExpat::Load(wxInputStream& stream, wxXmlDocument& doc)
     } while (!done);
 
     doc.SetVersion(ctx.version);
-    doc.SetEncoding(ctx.encoding);
+    doc.SetFileEncoding(ctx.encoding);
     doc.SetRoot(ctx.root);
 
     XML_ParserFree(parser);
+#if !wxUSE_UNICODE
+    if ( ctx.conv )
+        delete ctx.conv;
+#endif
+    
     return TRUE;
 }

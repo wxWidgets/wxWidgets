@@ -44,22 +44,22 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str)
 {
     wxString buf;
     size_t i, last, len;
-    char c;
+    wxChar c;
     
     len = str.Len();
     last = 0;
     for (i = 0; i < len; i++)
     {
         c = str.GetChar(i);
-        if (c == '<' || c == '>' || 
-            (c == '&' && str.Mid(i+1, 4) != wxT("amp;")))
+        if (c == wxT('<') || c == wxT('>') || 
+            (c == wxT('&') && str.Mid(i+1, 4) != wxT("amp;")))
         {
             OutputString(stream, str.Mid(last, i - last));
             switch (c)
             {
-                case '<': OutputString(stream, wxT("&lt;")); break;
-                case '>': OutputString(stream, wxT("&gt;")); break;
-                case '&': OutputString(stream, wxT("&amp;")); break;
+                case wxT('<'): OutputString(stream, wxT("&lt;")); break;
+                case wxT('>'): OutputString(stream, wxT("&gt;")); break;
+                case wxT('&'): OutputString(stream, wxT("&amp;")); break;
                 default: break;
             }
             last = i + 1;

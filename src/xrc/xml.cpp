@@ -300,10 +300,11 @@ wxList *wxXmlDocument::sm_handlers = NULL;
 
 
 
-wxXmlDocument::wxXmlDocument(const wxString& filename, wxXmlIOType io_type)
+wxXmlDocument::wxXmlDocument(const wxString& filename, wxXmlIOType io_type,
+                             const wxString& encoding)
                           : wxObject(), m_root(NULL)
 {
-    if (!Load(filename, io_type))
+    if (!Load(filename, io_type, encoding))
     {
         wxDELETE(m_root);
     }
@@ -311,10 +312,11 @@ wxXmlDocument::wxXmlDocument(const wxString& filename, wxXmlIOType io_type)
 
 
 
-wxXmlDocument::wxXmlDocument(wxInputStream& stream, wxXmlIOType io_type)
+wxXmlDocument::wxXmlDocument(wxInputStream& stream, wxXmlIOType io_type,
+                             const wxString& encoding)
                           : wxObject(), m_root(NULL)
 {
-    if (!Load(stream, io_type))
+    if (!Load(stream, io_type, encoding))
     {
         wxDELETE(m_root);
     }
@@ -341,22 +343,33 @@ wxXmlDocument& wxXmlDocument::operator=(const wxXmlDocument& doc)
 void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
 {
     m_version = doc.m_version;
+#if !wxUSE_UNICODE
     m_encoding = doc.m_encoding;
+#endif
+    m_fileEncoding = doc.m_fileEncoding;
     m_root = new wxXmlNode(*doc.m_root);
 }
 
 
 
-bool wxXmlDocument::Load(const wxString& filename, wxXmlIOType io_type)
+bool wxXmlDocument::Load(const wxString& filename, wxXmlIOType io_type,
+                         const wxString& encoding)
 {
     wxFileInputStream stream(filename);
-    return Load(stream, io_type);
+    return Load(stream, io_type, encoding);
 }
 
 
 
-bool wxXmlDocument::Load(wxInputStream& stream, wxXmlIOType io_type)
+bool wxXmlDocument::Load(wxInputStream& stream, wxXmlIOType io_type,
+                         const wxString& encoding)
 {
+#if wxUSE_UNICODE
+    (void)encoding;
+#else
+    m_encoding = encoding;
+#endif
+
     wxNode *n = sm_handlers->GetFirst();
     while (n)
     {
@@ -365,7 +378,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, wxXmlIOType io_type)
         if ((io_type == wxXML_IO_AUTO || io_type == h->GetType()) &&
             h->CanLoad(stream))
         {
-            return h->Load(stream, *this);
+            return h->Load(stream, *this, encoding);
         }
         n = n->GetNext();
     }

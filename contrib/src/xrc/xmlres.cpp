@@ -100,9 +100,9 @@ bool wxXmlResource::Load(const wxString& filemask)
     {
 #if wxUSE_FILESYSTEM
         if (filemask.Lower().Matches(wxT("*.zip")) ||
-            filemask.Lower().Matches(wxT("*.rsc")))
+            filemask.Lower().Matches(wxT("*.xrs")))
         {
-            rt = rt && Load(fnd + wxT("#zip:*.xmb"));
+            rt = rt && Load(fnd + wxT("#zip:*.xmlbin"));
             rt = rt && Load(fnd + wxT("#zip:*.xrc"));
         }
         else
@@ -286,6 +286,17 @@ void wxXmlResource::UpdateResources()
     wxFileSystem fsys;
 #   endif
 
+    wxString encoding(wxT("UTF-8"));
+#if !wxUSE_UNICODE && wxUSE_INTL
+    if ( (GetFlags() & wxXRC_USE_LOCALE) == 0 )
+    {
+        // In case we are not using wxLocale to translate strings, convert the strings
+        // GUI's charset. This must not be done when wxXRC_USE_LOCALE is on, because
+        // it could break wxGetTranslation lookup.
+        encoding = wxLocale::GetSystemEncodingName();
+    }
+#endif
+
     for (size_t i = 0; i < m_data.GetCount(); i++)
     {
         modif = (m_data[i].Doc == NULL);
@@ -305,7 +316,7 @@ void wxXmlResource::UpdateResources()
 
         if (modif)
         {
-			wxInputStream *stream = NULL;
+            wxInputStream *stream = NULL;
 
 #           if wxUSE_FILESYSTEM
             file = fsys.OpenFile(m_data[i].File);
@@ -320,9 +331,10 @@ void wxXmlResource::UpdateResources()
                 delete m_data[i].Doc;
                 m_data[i].Doc = new wxXmlDocument;
             }
-            if (!stream || !m_data[i].Doc->Load(*stream))
+            if (!stream || !m_data[i].Doc->Load(*stream, wxXML_IO_AUTO, encoding))
             {
-                wxLogError(_("Cannot load resources from file '%s'."), m_data[i].File.c_str());
+                wxLogError(_("Cannot load resources from file '%s'."),
+                           m_data[i].File.c_str());
                 wxDELETE(m_data[i].Doc);
             }
             else if (m_data[i].Doc->GetRoot()->GetName() != wxT("resource"))

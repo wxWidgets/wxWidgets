@@ -101,7 +101,12 @@ bool wxXmlIOHandlerBin::Save(wxOutputStream& stream, const wxXmlDocument& doc)
 {
     WriteHeader(stream, "XMLBIN ");
     wxDataOutputStream ds(stream);
-    ds << doc.GetVersion() << doc.GetEncoding();
+    ds << doc.GetVersion();
+#if wxUSE_UNICODE
+    ds << wxString(wxT("UTF-8"));
+#else
+    ds << doc.GetEncoding();
+#endif
     SaveBinNode(ds, doc.GetRoot());
     return stream.LastError() == wxSTREAM_NOERROR;
 }
@@ -142,7 +147,8 @@ static wxXmlNode *LoadBinNode(wxDataInputStream& ds, wxXmlNode *parent)
 
 
 
-bool wxXmlIOHandlerBin::Load(wxInputStream& stream, wxXmlDocument& doc)
+bool wxXmlIOHandlerBin::Load(wxInputStream& stream, wxXmlDocument& doc,
+                             const wxString& encoding)
 {
     ReadHeader(stream);
     wxDataInputStream ds(stream);
@@ -151,7 +157,7 @@ bool wxXmlIOHandlerBin::Load(wxInputStream& stream, wxXmlDocument& doc)
     ds >> tmp;
     doc.SetVersion(tmp);
     ds >> tmp;
-    doc.SetEncoding(tmp);
+    doc.SetFileEncoding(tmp);
 
     doc.SetRoot(LoadBinNode(ds, NULL));
         
