@@ -119,7 +119,7 @@ Unix:
 
 wxGTK:
 
-- fixed wrong colour of tooltips under some themes
+- fixed many rendering artifacts and wrong colours with lots of GTK+ themes
 - implemented wxColourDialog as native dialog
 - wxTreeCtrl::GetCount() counts root as well now (compatible with MSW)
 

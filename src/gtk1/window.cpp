@@ -267,10 +267,6 @@ extern bool g_mainThreadLocked;
 // debug
 //-----------------------------------------------------------------------------
 
-#ifndef __WXGTK20__
-#define DISABLE_STYLE_IF_BROKEN_THEME 0
-#endif
-
 #ifdef __WXDEBUG__
 
 #if wxUSE_THREADS
@@ -2566,7 +2562,6 @@ void wxWindowGTK::Init()
     m_oldClientHeight = 0;
 
     m_resizing = FALSE;
-    m_widgetStyle = (GtkStyle*) NULL;
 
     m_insertCallback = (wxInsertChildFunction) NULL;
 
@@ -2759,16 +2754,6 @@ wxWindowGTK::~wxWindowGTK()
     if (m_icattr)
         gdk_ic_attr_destroy (m_icattr);
 #endif
-
-    if (m_widgetStyle)
-    {
-#if DISABLE_STYLE_IF_BROKEN_THEME
-        // don't delete if it's a pixmap theme style
-        if (!m_widgetStyle->engine_data)
-            gtk_style_unref( m_widgetStyle );
-#endif
-        m_widgetStyle = (GtkStyle*) NULL;
-    }
 
     if (m_wxwindow)
     {
@@ -4097,131 +4082,69 @@ PangoContext *wxWindowGTK::GtkGetPangoX11Context()
     return m_x11Context;
 }
 #endif
-
-GtkStyle *wxWindowGTK::GetWidgetStyle()
+ 
+GtkRcStyle *wxWindowGTK::CreateWidgetStyle()
 {
-    if (m_widgetStyle)
+    // do we need to apply any changes at all?
+    if ( !m_hasFont && !m_hasFgCol &&
+         (!m_hasBgCol || !m_backgroundColour.Ok()) )
     {
-        GtkStyle *remake = gtk_style_copy( m_widgetStyle );
-
-        // FIXME: no more klass in 2.0
-#ifndef __WXGTK20__
-        remake->klass = m_widgetStyle->klass;
-#endif
-
-        gtk_style_unref( m_widgetStyle );
-        m_widgetStyle = remake;
-    }
-    else
-    {
-        GtkStyle *def = gtk_rc_get_style( m_widget );
-
-        if (!def)
-            def = gtk_widget_get_default_style();
-
-        m_widgetStyle = gtk_style_copy( def );
-
-        // FIXME: no more klass in 2.0
-#ifndef __WXGTK20__
-        m_widgetStyle->klass = def->klass;
-#endif
+        return NULL;
     }
 
-    return m_widgetStyle;
-}
-
-void wxWindowGTK::SetWidgetStyle()
-{
-#if DISABLE_STYLE_IF_BROKEN_THEME
-    if (m_widget->style->engine_data)
-    {
-        static bool s_warningPrinted = FALSE;
-        if (!s_warningPrinted)
-        {
-            printf( "wxWidgets warning: Widget styles disabled due to buggy GTK theme.\n" );
-            s_warningPrinted = TRUE;
-        }
-        m_widgetStyle = m_widget->style;
-        return;
-    }
-#endif
-
-    GtkStyle *style = GetWidgetStyle();
+    GtkRcStyle *style = gtk_rc_style_new();
 
     if ( m_hasFont )
     {
 #ifdef __WXGTK20__
-        pango_font_description_free( style->font_desc );
-        style->font_desc = pango_font_description_copy( m_font.GetNativeFontInfo()->description );
+        style->font_desc = 
+            pango_font_description_copy( m_font.GetNativeFontInfo()->description );
 #else
-        gdk_font_unref( style->font );
-        style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+        wxString xfontname = m_font.GetNativeFontInfo()->GetXFontName();
+        style->fontset_name = g_strdup(xfontname.c_str());
 #endif
     }
 
     if ( m_hasFgCol )
     {
         m_foregroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
-        if (m_foregroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT))
-        {
-            style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
-            style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
-            style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
-        }
-        else
-        {
-            // Try to restore the gtk default style.  This is still a little
-            // oversimplified for what is probably really needed here for controls
-            // other than buttons, but is better than not being able to (re)set a
-            // control's foreground colour to *wxBLACK -- RL
-            GtkStyle *def = gtk_rc_get_style( m_widget );
-
-            if (!def)
-                def = gtk_widget_get_default_style();
-
-            style->fg[GTK_STATE_NORMAL] = def->fg[GTK_STATE_NORMAL];
-            style->fg[GTK_STATE_PRELIGHT] = def->fg[GTK_STATE_PRELIGHT];
-            style->fg[GTK_STATE_ACTIVE] = def->fg[GTK_STATE_ACTIVE];
-        }
+        
+        style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
+        style->color_flags[GTK_STATE_NORMAL] = GTK_RC_FG;
+        
+        style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
+        style->color_flags[GTK_STATE_PRELIGHT] = GTK_RC_FG;
+        
+        style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
+        style->color_flags[GTK_STATE_ACTIVE] = GTK_RC_FG;
     }
 
     if ( m_hasBgCol && m_backgroundColour.Ok() )
     {
         m_backgroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
-        if (m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE))
-        {
-            style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-            style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-            style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
-            style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
-            style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
-            style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
-            style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
-            style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
-        }
-        else
-        {
-            // Try to restore the gtk default style.  This is still a little
-            // oversimplified for what is probably really needed here for controls
-            // other than buttons, but is better than not being able to (re)set a
-            // control's background colour to default grey and means resetting a
-            // button to wxSYS_COLOUR_BTNFACE will restore its usual highlighting
-            // behavior -- RL
-            GtkStyle *def = gtk_rc_get_style( m_widget );
-
-            if (!def)
-                def = gtk_widget_get_default_style();
-
-            style->bg[GTK_STATE_NORMAL] = def->bg[GTK_STATE_NORMAL];
-            style->base[GTK_STATE_NORMAL] = def->base[GTK_STATE_NORMAL];
-            style->bg[GTK_STATE_PRELIGHT] = def->bg[GTK_STATE_PRELIGHT];
-            style->base[GTK_STATE_PRELIGHT] = def->base[GTK_STATE_PRELIGHT];
-            style->bg[GTK_STATE_ACTIVE] = def->bg[GTK_STATE_ACTIVE];
-            style->base[GTK_STATE_ACTIVE] = def->base[GTK_STATE_ACTIVE];
-            style->bg[GTK_STATE_INSENSITIVE] = def->bg[GTK_STATE_INSENSITIVE];
-            style->base[GTK_STATE_INSENSITIVE] = def->base[GTK_STATE_INSENSITIVE];
-        }
+        
+        style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+        style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+        style->color_flags[GTK_STATE_NORMAL] = (GtkRcFlags)
+            (style->color_flags[GTK_STATE_NORMAL] | GTK_RC_BG | GTK_RC_BASE);
+        
+        style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+        style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+        style->color_flags[GTK_STATE_PRELIGHT] = (GtkRcFlags)
+            (style->color_flags[GTK_STATE_PRELIGHT] | GTK_RC_BG | GTK_RC_BASE);
+        
+        style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+        style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+        style->color_flags[GTK_STATE_ACTIVE] = (GtkRcFlags)
+            (style->color_flags[GTK_STATE_ACTIVE] | GTK_RC_BG | GTK_RC_BASE);
+        
+        style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+        style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+        style->color_flags[GTK_STATE_INSENSITIVE] = (GtkRcFlags)
+            (style->color_flags[GTK_STATE_INSENSITIVE] | GTK_RC_BG | GTK_RC_BASE);
     }
+    
+    return style;
 }
 
 void wxWindowGTK::ApplyWidgetStyle()

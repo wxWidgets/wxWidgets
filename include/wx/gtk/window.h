@@ -153,10 +153,6 @@ public:
     virtual bool IsOwnGtkWindow( GdkWindow *window );
     void ConnectWidget( GtkWidget *widget );
 
-    // Creates a new widget style if none is there
-    // and sets m_widgetStyle to this value.
-    GtkStyle *GetWidgetStyle();
-
 #ifdef __WXGTK20__
     // Returns the default context which usually is anti-aliased
     PangoContext   *GtkGetPangoDefaultContext();
@@ -167,12 +163,6 @@ public:
     PangoContext   *GtkGetPangoX11Context();
     PangoContext   *m_x11Context;
 #endif
-
-    // Called by SetFont() and SetXXXColour etc
-    void SetWidgetStyle();
-
-    // Overridden in many GTK widgets who have to handle subwidgets
-    virtual void ApplyWidgetStyle();
 
 #if wxUSE_TOOLTIPS
     virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
@@ -247,12 +237,6 @@ public:
     bool                 m_delayedForegroundColour:1;
     bool                 m_delayedBackgroundColour:1;
 
-    // Contains GTK's widgets internal information about non-default widget
-    // font and colours. we create one for each widget that gets any
-    // non-default attribute set via SetFont() or SetForegroundColour() /
-    // SetBackgroundColour().
-    GtkStyle            *m_widgetStyle;
-
     // C++ has no virtual methods in the constrcutor of any class but we need
     // different methods of inserting a child window into a wxFrame,
     // wxMDIFrame, wxNotebook etc. this is the callback that will get used.
@@ -280,6 +264,14 @@ public:
 protected:
     // common part of all ctors (not virtual because called from ctor)
     void Init();
+    
+    // Called by ApplyWidgetStyle (which is called by SetFont() and
+    // SetXXXColour etc to apply style changed to native widgets) to create
+    // modified GTK style with non-standard attributes. 
+    GtkRcStyle *CreateWidgetStyle();
+
+    // Overridden in many GTK widgets who have to handle subwidgets
+    virtual void ApplyWidgetStyle();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)

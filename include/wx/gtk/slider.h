@@ -65,7 +65,6 @@ public:
     
     // implementation
     bool IsOwnGtkWindow( GdkWindow *window );
-    void ApplyWidgetStyle();
     void GtkDisableEvents();
     void GtkEnableEvents();
 

@@ -681,19 +681,17 @@ void wxRadioBox::GtkEnableEvents()
     }
 }
 
-void wxRadioBox::ApplyWidgetStyle()
+void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    SetWidgetStyle();
-
-    gtk_widget_set_style( m_widget, m_widgetStyle );
+    gtk_widget_modify_style( m_widget, style );
 
     wxList::compatibility_iterator node = m_boxes.GetFirst();
     while (node)
     {
         GtkWidget *widget = GTK_WIDGET( node->GetData() );
-        gtk_widget_set_style( widget, m_widgetStyle );
 
-        gtk_widget_set_style( BUTTON_CHILD(node->GetData()), m_widgetStyle );
+        gtk_widget_modify_style( widget, style );
+        gtk_widget_modify_style( BUTTON_CHILD(node->GetData()), style );
 
         node = node->GetNext();
     }

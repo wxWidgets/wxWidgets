@@ -1535,10 +1535,9 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
     }
 }
 
-void wxTextCtrl::ApplyWidgetStyle()
+void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    SetWidgetStyle();
-    gtk_widget_set_style( m_text, m_widgetStyle );
+    gtk_widget_modify_style(m_text, style);
 }
 
 void wxTextCtrl::OnCut(wxCommandEvent& WXUNUSED(event))

@@ -45,8 +45,6 @@ public:
 
     // implementation
 
-    virtual void ApplyWidgetStyle();
-
     virtual bool IsTransparentForMouse() const { return TRUE; }
 
 private:

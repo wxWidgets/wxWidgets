@@ -65,8 +65,6 @@ public:
     
     // implementation
     // --------------
-    
-    void ApplyWidgetStyle();
 
 protected:
     virtual wxSize DoGetBestSize() const;

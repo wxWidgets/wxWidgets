@@ -193,12 +193,12 @@ wxString wxBitmapButton::GetLabel() const
     return wxControl::GetLabel();
 }
 
-void wxBitmapButton::ApplyWidgetStyle()
+void wxBitmapButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     if ( !BUTTON_CHILD(m_widget) )
         return;
 
-    wxButton::ApplyWidgetStyle();
+    wxButton::DoApplyWidgetStyle(style);
 }
 
 void wxBitmapButton::OnSetBitmap()

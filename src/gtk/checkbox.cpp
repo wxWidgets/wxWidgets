@@ -170,11 +170,10 @@ bool wxCheckBox::Enable( bool enable )
     return TRUE;
 }
 
-void wxCheckBox::ApplyWidgetStyle()
+void wxCheckBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widgetCheckbox, m_widgetStyle );
-    gtk_widget_set_style( m_widgetLabel, m_widgetStyle );
+    gtk_widget_modify_style(m_widgetCheckbox, style);
+    gtk_widget_modify_style(m_widgetLabel, style);
 }
 
 bool wxCheckBox::IsOwnGtkWindow( GdkWindow *window )

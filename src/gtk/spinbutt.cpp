@@ -225,15 +225,9 @@ bool wxSpinButton::IsOwnGtkWindow( GdkWindow *window )
     return GTK_SPIN_BUTTON(m_widget)->panel == window;
 }
 
-void wxSpinButton::ApplyWidgetStyle()
-{
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
 wxSize wxSpinButton::DoGetBestSize() const
 {
-    return wxSize(15, 26);
+    return wxSize(15, 26); // FIXME
 }
 
 // static

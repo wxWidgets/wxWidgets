@@ -133,7 +133,7 @@ public:
 
     GtkWidget* GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
-    void ApplyWidgetStyle();
+    void DoApplyWidgetStyle(GtkRcStyle *style);
     void CalculateScrollbar();
     void OnInternalIdle();
     void UpdateFontIfNeeded();

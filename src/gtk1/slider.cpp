@@ -265,12 +265,6 @@ bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
 #endif
 }
 
-void wxSlider::ApplyWidgetStyle()
-{
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
 void wxSlider::GtkDisableEvents()
 {
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_adjust),

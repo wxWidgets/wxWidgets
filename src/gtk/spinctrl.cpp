@@ -298,12 +298,6 @@ bool wxSpinCtrl::IsOwnGtkWindow( GdkWindow *window )
     return FALSE;
 }
 
-void wxSpinCtrl::ApplyWidgetStyle()
-{
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
     wxSize ret( wxControl::DoGetBestSize() );

@@ -437,19 +437,17 @@ void wxChoice::SetSelection( int n )
     gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
 }
 
-void wxChoice::ApplyWidgetStyle()
+void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    SetWidgetStyle();
-
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
 
-    gtk_widget_set_style( m_widget, m_widgetStyle );
-    gtk_widget_set_style( GTK_WIDGET( menu_shell ), m_widgetStyle );
+    gtk_widget_modify_style( m_widget, style );
+    gtk_widget_modify_style( GTK_WIDGET( menu_shell ), style );
 
     GList *child = menu_shell->children;
     while (child)
     {
-        gtk_widget_set_style( GTK_WIDGET( child->data ), m_widgetStyle );
+        gtk_widget_modify_style( GTK_WIDGET( child->data ), style );
 
         GtkBin *bin = GTK_BIN( child->data );
         GtkWidget *label = (GtkWidget *) NULL;
@@ -458,7 +456,7 @@ void wxChoice::ApplyWidgetStyle()
         if (!label)
             label = BUTTON_CHILD(m_widget);
 
-        gtk_widget_set_style( label, m_widgetStyle );
+        gtk_widget_modify_style( label, style );
 
         child = child->next;
     }
@@ -513,7 +511,7 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, int pos, const wxString& item)
         gtk_widget_realize( menu_item );
         gtk_widget_realize( GTK_BIN(menu_item)->child );
 
-        if (m_widgetStyle) ApplyWidgetStyle();
+        ApplyWidgetStyle();
     }
 
     gtk_signal_connect( GTK_OBJECT( menu_item ), "activate",

@@ -113,7 +113,7 @@ public:
     // set all page's font
     bool SetFont(const wxFont& font);
     
-    void ApplyWidgetStyle();
+    void DoApplyWidgetStyle(GtkRcStyle *style);
 
     // report if window belongs to notebook
     bool IsOwnGtkWindow( GdkWindow *window );

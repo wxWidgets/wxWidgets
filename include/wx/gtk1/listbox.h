@@ -105,7 +105,7 @@ public:
     int GtkGetIndex( GtkWidget *item ) const;
     GtkWidget *GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
-    void ApplyWidgetStyle();
+    void DoApplyWidgetStyle(GtkRcStyle *style);
     void OnInternalIdle();
 
 #if wxUSE_TOOLTIPS

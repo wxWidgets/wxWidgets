@@ -91,12 +91,6 @@ void wxStaticBox::SetLabel( const wxString &label )
                          m_label.empty() ? (char *)NULL : (const char*) wxGTK_CONV( m_label ) );
 }
 
-void wxStaticBox::ApplyWidgetStyle()
-{
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
 // static
 wxVisualAttributes
 wxStaticBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))

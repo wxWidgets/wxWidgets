@@ -75,7 +75,6 @@ public:
     // --------------
 
     bool IsOwnGtkWindow( GdkWindow *window );
-    void ApplyWidgetStyle();
 
     GtkAdjustment  *m_adjust;
     float           m_oldPos;

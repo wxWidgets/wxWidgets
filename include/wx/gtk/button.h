@@ -64,7 +64,7 @@ public:
     // implementation
     // --------------
 
-    void ApplyWidgetStyle();
+    void DoApplyWidgetStyle(GtkRcStyle *style);
     bool IsOwnGtkWindow( GdkWindow *window );
 
     // Since this wxButton doesn't derive from wxButtonBase (why?) we need

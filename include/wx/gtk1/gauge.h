@@ -83,8 +83,6 @@ public:
     // implementation
     // -------------
 
-    void ApplyWidgetStyle();
-
     // the max and current gauge values
     int m_rangeMax,
         m_gaugePos;

@@ -239,7 +239,7 @@ int wxComboBox::DoAppend( const wxString &item )
         gtk_widget_realize( list_item );
         gtk_widget_realize( GTK_BIN(list_item)->child );
 
-        if (m_widgetStyle) ApplyWidgetStyle();
+        ApplyWidgetStyle();
     }
 
     gtk_widget_show( list_item );
@@ -284,8 +284,7 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
         gtk_widget_realize( list_item );
         gtk_widget_realize( GTK_BIN(list_item)->child );
 
-        if (m_widgetStyle)
-            ApplyWidgetStyle();
+        ApplyWidgetStyle();
     }
 
     gtk_widget_show( list_item );
@@ -722,22 +721,20 @@ void wxComboBox::OnSize( wxSizeEvent &event )
 #endif // 0
 }
 
-void wxComboBox::ApplyWidgetStyle()
+void wxComboBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    SetWidgetStyle();
-
-//    gtk_widget_set_style( GTK_COMBO(m_widget)->button, m_widgetStyle );
-    gtk_widget_set_style( GTK_COMBO(m_widget)->entry, m_widgetStyle );
-    gtk_widget_set_style( GTK_COMBO(m_widget)->list, m_widgetStyle );
+//    gtk_widget_modify_style( GTK_COMBO(m_widget)->button, syle );
+    gtk_widget_modify_style( GTK_COMBO(m_widget)->entry, style );
+    gtk_widget_modify_style( GTK_COMBO(m_widget)->list, style );
 
     GtkList *list = GTK_LIST( GTK_COMBO(m_widget)->list );
     GList *child = list->children;
     while (child)
     {
-        gtk_widget_set_style( GTK_WIDGET(child->data), m_widgetStyle );
+        gtk_widget_modify_style( GTK_WIDGET(child->data), style );
 
         GtkBin *bin = GTK_BIN(child->data);
-        gtk_widget_set_style( bin->child, m_widgetStyle );
+        gtk_widget_modify_style( bin->child, style );
 
         child = child->next;
     }

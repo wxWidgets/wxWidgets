@@ -61,7 +61,7 @@ public:
     void NotFocus();
     void StartSelect();
     void EndSelect();
-    void ApplyWidgetStyle();
+    void DoApplyWidgetStyle(GtkRcStyle *style);
 
     bool         m_hasFocus:1;
     bool         m_isSelected:1;

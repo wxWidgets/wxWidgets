@@ -130,7 +130,7 @@ public:
     void EnableEvents();
     GtkWidget* GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
-    void ApplyWidgetStyle();
+    void DoApplyWidgetStyle(GtkRcStyle *style);
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 

@@ -92,6 +92,14 @@ wxSize wxControl::DoGetBestSize() const
 void wxControl::PostCreation(const wxSize& size)
 {
     wxWindow::PostCreation();
+
+    // NB: GetBestSize needs to know the style, otherwise it will assume
+    //     default font and if the user uses a different font, determined
+    //     best size will be different (typically, smaller) than the desired
+    //     size. This call ensure that a style is available at the time
+    //     GetBestSize is called.
+    gtk_widget_ensure_style(m_widget);
+    
     InheritAttributes();
     ApplyWidgetStyle();
     SetInitialBestSize(size);
@@ -257,6 +265,21 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(GtkAdjustm
     attr = GetDefaultAttributesFromGTKWidget(widget, useBase, state);
     gtk_widget_destroy(widget);
     return attr;
+}
+
+void wxControl::ApplyWidgetStyle()
+{
+    GtkRcStyle *style = CreateWidgetStyle();
+    if ( style )
+    {
+        DoApplyWidgetStyle(style);
+        gtk_rc_style_unref(style);
+    }
+}
+
+void wxControl::DoApplyWidgetStyle(GtkRcStyle *style)
+{
+    gtk_widget_modify_style(m_widget, style);
 }
 
 

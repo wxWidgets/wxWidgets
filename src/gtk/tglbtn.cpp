@@ -159,11 +159,10 @@ bool wxToggleBitmapButton::Enable(bool enable /*=TRUE*/)
     return TRUE;
 }
 
-void wxToggleBitmapButton::ApplyWidgetStyle()
+void wxToggleBitmapButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    SetWidgetStyle();
-    gtk_widget_set_style(m_widget, m_widgetStyle);
-    gtk_widget_set_style(BUTTON_CHILD(m_widget), m_widgetStyle);
+    gtk_widget_modify_style(m_widget, style);
+    gtk_widget_modify_style(BUTTON_CHILD(m_widget), style);
 }
 
 bool wxToggleBitmapButton::IsOwnGtkWindow(GdkWindow *window)
@@ -300,11 +299,10 @@ bool wxToggleButton::Enable(bool enable /*=TRUE*/)
     return TRUE;
 }
 
-void wxToggleButton::ApplyWidgetStyle()
+void wxToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    SetWidgetStyle();
-    gtk_widget_set_style(m_widget, m_widgetStyle);
-    gtk_widget_set_style(BUTTON_CHILD(m_widget), m_widgetStyle);
+    gtk_widget_modify_style(m_widget, style);
+    gtk_widget_modify_style(BUTTON_CHILD(m_widget), style);
 }
 
 bool wxToggleButton::IsOwnGtkWindow(GdkWindow *window)

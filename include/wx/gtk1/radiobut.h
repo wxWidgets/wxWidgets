@@ -57,7 +57,7 @@ public:
     virtual bool IsRadioButton() const { return TRUE; }
 
     GSList *m_radioButtonGroup;
-    void ApplyWidgetStyle();
+    void DoApplyWidgetStyle(GtkRcStyle *style);
     bool IsOwnGtkWindow( GdkWindow *window );
     void OnInternalIdle();
 

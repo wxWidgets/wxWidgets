@@ -66,7 +66,6 @@ public:
     void OnChar( wxKeyEvent &event );
     
     bool IsOwnGtkWindow( GdkWindow *window );
-    void ApplyWidgetStyle();
     void GtkDisableEvents();
     void GtkEnableEvents();
 

@@ -187,11 +187,10 @@ bool wxRadioButton::Enable( bool enable )
     return TRUE;
 }
 
-void wxRadioButton::ApplyWidgetStyle()
+void wxRadioButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widget, m_widgetStyle );
-    gtk_widget_set_style( BUTTON_CHILD(m_widget), m_widgetStyle );
+    gtk_widget_modify_style(m_widget, style);
+    gtk_widget_modify_style(BUTTON_CHILD(m_widget), style);
 }
 
 bool wxRadioButton::IsOwnGtkWindow( GdkWindow *window )

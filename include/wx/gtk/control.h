@@ -56,6 +56,11 @@ public:
     virtual wxVisualAttributes GetDefaultAttributes() const;
 
 protected:
+    virtual void ApplyWidgetStyle();
+    // helper function to ease native widgets wrapping, called by 
+    // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+
     virtual wxSize DoGetBestSize() const;
     void PostCreation(const wxSize& size);
 

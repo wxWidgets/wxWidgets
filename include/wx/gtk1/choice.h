@@ -83,7 +83,7 @@ public:
 protected:
     wxList m_clientList;    // contains the client data for the items
 
-    void ApplyWidgetStyle();
+    void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual int DoAppend(const wxString& item);
     virtual int DoInsert(const wxString& item, int pos);
 

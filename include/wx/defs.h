@@ -2342,7 +2342,7 @@ typedef struct _GdkICAttr       GdkICAttr;
 
 /* Stand-ins for GTK types */
 typedef struct _GtkWidget         GtkWidget;
-typedef struct _GtkStyle          GtkStyle;
+typedef struct _GtkRcStyle        GtkRcStyle;
 typedef struct _GtkAdjustment     GtkAdjustment;
 typedef struct _GtkList           GtkList;
 typedef struct _GtkToolbar        GtkToolbar;

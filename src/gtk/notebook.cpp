@@ -72,13 +72,6 @@ public:
         m_image = -1;
         m_page = (GtkNotebookPage *) NULL;
         m_box = (GtkWidget *) NULL;
-        m_labelStyle = (GtkStyle*) NULL;
-    }
-    
-    ~wxGtkNotebookPage()
-    {
-        if (m_labelStyle)
-            gtk_style_unref( m_labelStyle );
     }
     
     bool SetFont(const wxFont& font);
@@ -88,7 +81,6 @@ public:
     GtkNotebookPage   *m_page;
     GtkLabel          *m_label;
     GtkWidget         *m_box;     // in which the label and image are packed
-    GtkStyle          *m_labelStyle;
 };
 
 
@@ -97,41 +89,16 @@ bool wxGtkNotebookPage::SetFont(const wxFont& font)
     if (!m_label)
 		return false;
 
-    if (m_labelStyle)
-    {
-        GtkStyle *remake = gtk_style_copy( m_labelStyle );
-
-#ifndef __WXGTK20__
-        remake->klass = m_labelStyle->klass;
-#endif
-
-        gtk_style_unref( m_labelStyle );
-        m_labelStyle = remake;
-    }
-    else
-    {
-        GtkStyle *def = gtk_rc_get_style( GTK_WIDGET(m_label) );
-
-        if (!def)
-            def = gtk_widget_get_default_style();
-
-        m_labelStyle = gtk_style_copy( def );
-
-        // FIXME: no more klass in 2.0
-#ifndef __WXGTK20__
-        m_labelStyle->klass = def->klass;
-#endif
-    }
-
 #ifdef __WXGTK20__
-	pango_font_description_free( m_labelStyle->font_desc );
-	m_labelStyle->font_desc = pango_font_description_copy( font.GetNativeFontInfo()->description );
+    gtk_widget_modify_font(GTK_WIDGET(m_label),
+                           font.GetNativeFontInfo()->description);
 #else
-	gdk_font_unref( m_labelStyle->font );
-	m_labelStyle->font = gdk_font_ref( font.GetInternalFont( 1.0 ) );
+    GtkRcStyle *style = gtk_rc_style_new();
+    style->fontset_name = 
+        g_strdup(font.GetNativeFontInfo()->GetXFontName().c_str());
+    gtk_widget_modify_style(GTK_WIDGET(m_label), style);
+    gtk_rc_style_unref(style);
 #endif
-
-    gtk_widget_set_style( GTK_WIDGET(m_label), m_labelStyle );
 
 	return true;
 }
@@ -839,12 +806,10 @@ bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 
 #endif
 
-void wxNotebook::ApplyWidgetStyle()
+void wxNotebook::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     // TODO, font for labels etc
-
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widget, m_widgetStyle );
+    gtk_widget_modify_style( m_widget, style );
 }
 
 bool wxNotebook::IsOwnGtkWindow( GdkWindow *window )

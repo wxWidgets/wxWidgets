@@ -168,12 +168,6 @@ bool wxStaticText::SetFont( const wxFont &font )
     return ret;
 }
 
-void wxStaticText::ApplyWidgetStyle()
-{
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
 wxSize wxStaticText::DoGetBestSize() const
 {
     // Do not return any arbitrary default value...

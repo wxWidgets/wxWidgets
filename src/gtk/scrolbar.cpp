@@ -325,12 +325,6 @@ bool wxScrollBar::IsOwnGtkWindow( GdkWindow *window )
            );
 }
 
-void wxScrollBar::ApplyWidgetStyle()
-{
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
 wxSize wxScrollBar::DoGetBestSize() const
 {
     return wxControl::DoGetBestSize();

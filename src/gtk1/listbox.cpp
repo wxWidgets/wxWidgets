@@ -575,12 +575,14 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
         gtk_widget_realize( GTK_BIN(list_item)->child );
 
         // Apply current widget style to the new list_item
-        if (m_widgetStyle)
+        GtkRcStyle *style = CreateWidgetStyle();
+        if (style)
         {
-            gtk_widget_set_style( GTK_WIDGET( list_item ), m_widgetStyle );
+            gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
             GtkBin *bin = GTK_BIN( list_item );
             GtkWidget *label = GTK_WIDGET( bin->child );
-            gtk_widget_set_style( label, m_widgetStyle );
+            gtk_widget_modify_style( label, style );
+            gtk_rc_style_unref( style );
         }
 
 #if wxUSE_TOOLTIPS
@@ -981,11 +983,9 @@ bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
     return FALSE;
 }
 
-void wxListBox::ApplyWidgetStyle()
+void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    SetWidgetStyle();
-
-    if (m_backgroundColour.Ok())
+    if (m_hasBgCol && m_backgroundColour.Ok())
     {
         GdkWindow *window = GTK_WIDGET(m_list)->window;
         if ( window )
@@ -999,11 +999,11 @@ void wxListBox::ApplyWidgetStyle()
     GList *child = m_list->children;
     while (child)
     {
-        gtk_widget_set_style( GTK_WIDGET(child->data), m_widgetStyle );
+        gtk_widget_modify_style( GTK_WIDGET(child->data), style );
 
         GtkBin *bin = GTK_BIN( child->data );
         GtkWidget *label = GTK_WIDGET( bin->child );
-        gtk_widget_set_style( label, m_widgetStyle );
+        gtk_widget_modify_style( label, style );
 
         child = child->next;
     }

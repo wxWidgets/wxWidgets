@@ -106,12 +106,6 @@ int wxGauge::GetValue() const
     return m_gaugePos;
 }
 
-void wxGauge::ApplyWidgetStyle()
-{
-    SetWidgetStyle();
-    gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
 wxVisualAttributes wxGauge::GetDefaultAttributes() const
 {
     // Visible gauge colours use a different colour state
