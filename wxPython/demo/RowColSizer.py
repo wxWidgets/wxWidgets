@@ -10,11 +10,13 @@ class TestPanel(wxPanel):
         wxPanel.__init__(self, parent, -1)
 
         sizer = RowColSizer()
-        text = "This sizer lays out it's items by row and column that are"\
-               "specified explicitly when the item is added to the sizer.\n"\
-               "Grid cells with nothing in them are supported and column-"\
-               "or row-spanning is handled as well.  Growable rows and\n"\
-               "columns are specified just like the wxFlexGridSizer."
+        text = "This sizer lays out it's items by row and column "\
+               "that are specified explicitly when the item is \n"\
+               "added to the sizer.  Grid cells with nothing in "\
+               "them are supported and column- or row-spanning is \n"\
+               "handled as well.  Growable rows and columns are "\
+               "specified just like the wxFlexGridSizer."
+
         sizer.Add(wxStaticText(self, -1, text), row=1, col=1, colspan=5)
 
         sizer.Add(wxTextCtrl(self, -1, "(3,1)"), flag=wxEXPAND, row=3, col=1)
