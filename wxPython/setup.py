@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #----------------------------------------------------------------------
 
-import sys, os, glob
+import sys, os, glob, fnmatch
 from distutils.core      import setup, Extension
 from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
@@ -300,6 +300,24 @@ def build_locale_list(srcdir):
     return file_list
 
 
+def find_data_files(srcdir, *wildcards):
+    # get a list of all files under the srcdir matching wildcards,
+    # returned in a format to be used for install_data
+
+    def walk_helper(arg, dirname, files):
+        names = []
+        lst, wildcards = arg
+        for wc in wildcards:
+            for f in files:
+                filename = opj(dirname, f)
+                if fnmatch.fnmatch(filename, wc) and not os.path.isdir(filename):
+                    names.append(filename)
+        if names:
+            lst.append( (dirname, names ) )
+
+    file_list = []
+    os.path.walk(srcdir, walk_helper, (file_list, wildcards))
+    return file_list
 
 
 
@@ -405,6 +423,9 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
     WXPLAT = '__WXMAC__'
     GENDIR = 'mac'
 
+    if debug:
+        BUILD_BASE = BUILD_BASE + '-dbg'
+
     includes = ['src']
     defines = [('SWIG_GLOBAL', None),
                ('HAVE_CONFIG_H', None),
@@ -451,6 +472,9 @@ elif os.name == 'posix':
         BUILD_BASE = BUILD_BASE + '-' + WXPORT
     else:
         raise SystemExit, "Unknown WXPORT value: " + WXPORT
+
+    if debug:
+        BUILD_BASE = BUILD_BASE + '-dbg'
 
     includes = ['src']
     defines = [('SWIG_GLOBAL', None),
@@ -1197,18 +1221,17 @@ else:
                opj('scripts/xrced'),
                opj('scripts/pyshell'),
                opj('scripts/pycrust'),
-               opj('scripts/pycwrap'),
+               opj('scripts/pywrap'),
+               opj('scripts/pywrap'),
+               opj('scripts/pyalacarte'),
+               opj('scripts/pyalamode'),
                ]
 
 
-DATA_FILES.append( ('wxPython/tools/XRCed', glob.glob('wxPython/tools/XRCed/*.txt') +
-                                            [ 'wxPython/tools/XRCed/xrced.xrc']))
+DATA_FILES += find_data_files('wxPython/tools/XRCed', '*.txt', '*.xrc')
+DATA_FILES += find_data_files('wxPython/py', '*.txt', '*.ico', '*.css', '*.html')
+DATA_FILES += find_data_files('wx', '*.txt', '*.ico', '*.css', '*.html', '*.jpg', '*.png')
 
-DATA_FILES.append( ('wxPython/lib/PyCrust', glob.glob('wxPython/lib/PyCrust/*.txt') +
-                                            glob.glob('wxPython/lib/PyCrust/*.ico')))
-
-
-# TODO:  get datafiles under the new wx pacakge
 
 #----------------------------------------------------------------------
 # Do the Setup/Build/Install/Whatever
@@ -1225,26 +1248,27 @@ if __name__ == "__main__":
               url              = URL,
               license          = LICENSE,
 
-              packages = [PKGDIR,
-                          PKGDIR+'.lib',
-                          PKGDIR+'.lib.colourchooser',
-                          PKGDIR+'.lib.editor',
-                          PKGDIR+'.lib.mixins',
-                          PKGDIR+'.lib.PyCrust',
-                          PKGDIR+'.lib.PyCrust.wxd',
-                          PKGDIR+'.tools',
-                          PKGDIR+'.tools.XRCed',
+              packages = ['wxPython',
+                          'wxPython.lib',
+                          'wxPython.lib.colourchooser',
+                          'wxPython.lib.editor',
+                          'wxPython.lib.mixins',
+                          'wxPython.lib.PyCrust',
+                          'wxPython.py',
+                          'wxPython.py.tests',
+                          'wxPython.py.wxd',
+                          'wxPython.tools',
+                          'wxPython.tools.XRCed',
 
                           'wx',
                           'wx.examples',
                           'wx.examples.basic',
                           'wx.examples.hello',
                           'wx.lib',
-                          'wx.lib.PyCrust',
-                          #'wx.lib.PyCrust.wxd',  ???
                           'wx.lib.colourchooser',
                           'wx.lib.editor',
                           'wx.lib.mixins',
+                          'wx.py',
                           #'wx.tools',            ???
                           #'wx.tools.XRCed',      ???
                           ],

@@ -1424,70 +1424,66 @@ MANUAL_DIST:
 
 # this target does not generate a complete wxPython dist, it only includes
 # those files needed for the Debian source package.
-# see utils/wxPython/distrib for scripts to make a proper wxPython dist.
+# see wxPython/distrib for scripts to make a proper wxPython dist.
+#
+# first copy everything and then clean up the CVS stuff and etc...
 PYTHON_DIST:
-	mkdir $(DISTDIR)/wxPython
-	mkdir $(DISTDIR)/wxPython/contrib
-	mkdir $(DISTDIR)/wxPython/contrib/dllwidget
-	mkdir $(DISTDIR)/wxPython/contrib/gizmos
-	mkdir $(DISTDIR)/wxPython/contrib/glcanvas
-	mkdir $(DISTDIR)/wxPython/contrib/glcanvas/gtk
-	mkdir $(DISTDIR)/wxPython/contrib/ogl
-	mkdir $(DISTDIR)/wxPython/contrib/stc
-	mkdir $(DISTDIR)/wxPython/contrib/stc/gtk
-	mkdir $(DISTDIR)/wxPython/contrib/xrc
-	mkdir $(DISTDIR)/wxPython/demo
-	mkdir $(DISTDIR)/wxPython/demo/bitmaps
-	mkdir $(DISTDIR)/wxPython/demo/bmp_source
-	mkdir $(DISTDIR)/wxPython/demo/data
-	mkdir $(DISTDIR)/wxPython/demo/dllwidget
-	mkdir $(DISTDIR)/wxPython/distutils
-	mkdir $(DISTDIR)/wxPython/distutils/command
-	mkdir $(DISTDIR)/wxPython/src
-	mkdir $(DISTDIR)/wxPython/src/gtk
-	mkdir $(DISTDIR)/wxPython/scripts
-	mkdir $(DISTDIR)/wxPython/wxPython
-	mkdir $(DISTDIR)/wxPython/wxPython/lib
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/PyCrust
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/PyCrust/wxd
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/colourchooser
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/editor
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/mixins
-	mkdir $(DISTDIR)/wxPython/wxPython/tools
-	mkdir $(DISTDIR)/wxPython/wxPython/tools/XRCed
-
-	cp $(WXDIR)/wxPython/*.txt $(DISTDIR)/wxPython
-	cp $(WXDIR)/wxPython/*.py $(DISTDIR)/wxPython
-	cp $(WXDIR)/wxPython/setup.cfg $(DISTDIR)/wxPython
-	cp $(WXDIR)/wxPython/MANIFEST.in $(DISTDIR)/wxPython
-	cp $(WXDIR)/wxPython/contrib/dllwidget/*.{py,cpp,h,i} $(DISTDIR)/wxPython/contrib/dllwidget
-	cp $(WXDIR)/wxPython/contrib/gizmos/*.{py,cpp,i} $(DISTDIR)/wxPython/contrib/gizmos
-	-cp $(WXDIR)/wxPython/contrib/glcanvas/* $(DISTDIR)/wxPython/contrib/glcanvas
-	cp $(WXDIR)/wxPython/contrib/glcanvas/gtk/glcanvas.* $(DISTDIR)/wxPython/contrib/glcanvas/gtk
-	-cp $(WXDIR)/wxPython/contrib/ogl/* $(DISTDIR)/wxPython/contrib/ogl
-	-cp $(WXDIR)/wxPython/contrib/stc/* $(DISTDIR)/wxPython/contrib/stc
-	-cp $(WXDIR)/wxPython/contrib/stc/gtk/* $(DISTDIR)/wxPython/contrib/stc/gtk
-	-cp $(WXDIR)/wxPython/contrib/xrc/xrc.* $(DISTDIR)/wxPython/contrib/xrc
-	-cp $(WXDIR)/wxPython/demo/* $(DISTDIR)/wxPython/demo
-	-cp $(WXDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/wxPython/demo/bitmaps
-	-cp $(WXDIR)/wxPython/demo/bmp_source/* $(DISTDIR)/wxPython/demo/bmp_source
-	-cp $(WXDIR)/wxPython/demo/data/* $(DISTDIR)/wxPython/demo/data
-	-cp $(WXDIR)/wxPython/demo/dllwidget/Makefile $(DISTDIR)/wxPython/demo/dllwidget
-	-cp $(WXDIR)/wxPython/demo/dllwidget/test_* $(DISTDIR)/wxPython/demo/dllwidget
-	cp $(WXDIR)/wxPython/distutils/*.py $(DISTDIR)/wxPython/distutils
-	cp $(WXDIR)/wxPython/distutils/command/*.py $(DISTDIR)/wxPython/distutils/command
-	-cp $(WXDIR)/wxPython/scripts/* $(DISTDIR)/wxPython/scripts
-	-cp $(WXDIR)/wxPython/src/* $(DISTDIR)/wxPython/src
-	cp $(WXDIR)/wxPython/src/gtk/*.py $(DISTDIR)/wxPython/src/gtk
-	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
-	cp $(WXDIR)/wxPython/wxPython/lib/*.py $(DISTDIR)/wxPython/wxPython/lib
-	cp $(WXDIR)/wxPython/wxPython/lib/PyCrust/*.py $(DISTDIR)/wxPython/wxPython/lib/PyCrust
-	cp $(WXDIR)/wxPython/wxPython/lib/PyCrust/wxd/*.py $(DISTDIR)/wxPython/wxPython/lib/PyCrust/wxd
-	cp $(WXDIR)/wxPython/wxPython/lib/colourchooser/*.py $(DISTDIR)/wxPython/wxPython/lib/colourchooser
-	cp $(WXDIR)/wxPython/wxPython/lib/editor/*.py $(DISTDIR)/wxPython/wxPython/lib/editor
-	cp $(WXDIR)/wxPython/wxPython/lib/mixins/*.py $(DISTDIR)/wxPython/wxPython/lib/mixins
-	cp $(WXDIR)/wxPython/wxPython/tools/*.py $(DISTDIR)/wxPython/wxPython/tools
-	cp $(WXDIR)/wxPython/wxPython/tools/XRCed/*.{py,ico,sh,xrc} $(DISTDIR)/wxPython/wxPython/tools/XRCed
+	for dir in \
+		wxPython \
+		wxPython/contrib \
+		wxPython/contrib/dllwidget \
+		wxPython/contrib/gizmos \
+		wxPython/contrib/glcanvas \
+		wxPython/contrib/glcanvas/gtk \
+		wxPython/contrib/ogl \
+		wxPython/contrib/stc \
+		wxPython/contrib/stc/gtk \
+		wxPython/contrib/xrc \
+		wxPython/demo \
+		wxPython/demo/bitmaps \
+		wxPython/demo/bmp_source \
+		wxPython/demo/data \
+		wxPython/demo/dllwidget \
+		wxPython/distutils \
+		wxPython/distutils/command \
+		wxPython/scripts \
+		wxPython/src \
+		wxPython/src/gtk \
+		wxPython/wx \
+		wxPython/wx/examples \
+		wxPython/wx/examples/basic \
+		wxPython/wx/examples/hello \
+		wxPython/wx/examples/screenshots \
+		wxPython/wx/lib \
+		wxPython/wx/lib/colourchooser \
+		wxPython/wx/lib/editor \
+		wxPython/wx/lib/mixins \
+		wxPython/wx/py \
+		wxPython/wxPython \
+		wxPython/wxPython/lib \
+		wxPython/wxPython/lib/PyCrust \
+		wxPython/wxPython/lib/colourchooser \
+		wxPython/wxPython/lib/editor \
+		wxPython/wxPython/lib/mixins \
+		wxPython/wxPython/tools \
+		wxPython/wxPython/tools/XRCed \
+		wxPython/wxPython/tools/XRCed/src-images \
+		wxPython/wxPython/py \
+		wxPython/wxPython/py/tests \
+		wxPython/wxPython/py/wxd \
+		; do \
+			echo "Copying dir: $$dir..."; \
+			mkdir $(DISTDIR)/$$dir; \
+			cp $(WXDIR)/$$dir/* $(DISTDIR)/$$dir > /dev/null 2>&1; \
+		done; \
+		\
+		find $(DISTDIR)/wxPython -name "*~"           > RM_FILES; \
+		find $(DISTDIR)/wxPython -name "*.pyc"       >> RM_FILES; \
+		find $(DISTDIR)/wxPython -name "*.bat"       >> RM_FILES; \
+		find $(DISTDIR)/wxPython -name "core"        >> RM_FILES; \
+		find $(DISTDIR)/wxPython -name "core.[0-9]*" >> RM_FILES; \
+		for f in `cat RM_FILES`; do rm $$f; done; \
+		rm RM_FILES
 
 distclean:
 	$(RM) -r _dist_dir
