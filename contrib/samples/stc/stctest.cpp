@@ -78,7 +78,7 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-    MyFrame *frame = new MyFrame("Testing wxStyledTextCtrl",
+    MyFrame *frame = new MyFrame(_T("Testing wxStyledTextCtrl"),
                                  wxPoint(5, 5), wxSize(400, 600));
 
     frame->Show(TRUE);
@@ -99,25 +99,25 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 
     // create a menu bar
-    wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ID_About, "&About...\tCtrl-A", "Show about dialog");
+    helpMenu->Append(ID_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
 
-    menuFile->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(ID_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(helpMenu, "&Help");
+    menuBar->Append(menuFile, _T("&File"));
+    menuBar->Append(helpMenu, _T("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
-    SetStatusText("Testing wxStyledTextCtrl");
+    SetStatusText(_T("Testing wxStyledTextCtrl"));
 #endif // wxUSE_STATUSBAR
 
 
@@ -146,33 +146,35 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     ed->StyleSetBold(10, TRUE);
 
 #ifdef __WXMSW__
-    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Arial,size:9");
+    ed->StyleSetSpec(2, _T("fore:#007f00,bold,face:Arial,size:9"));
 #else
-    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Helvetica,size:9");
+    ed->StyleSetSpec(2, _T("fore:#007f00,bold,face:Helvetica,size:9"));
 #endif
 
     // give it some text to play with
-    wxFile   file("stctest.cpp");
     wxString st;
-
-    char* buff = st.GetWriteBuf(file.Length());
-    file.Read(buff, file.Length());
-    st.UngetWriteBuf();
+    wxFileInputStream stream(wxT("stctest.cpp"));
+    size_t sz = stream.GetSize();
+    char* buf = new char[sz + 1];
+    stream.Read((void*) buf, stream.GetSize());
+    buf[sz] = 0;
+    st = wxString::FromAscii(buf);
+    delete[] buf;
 
     ed->InsertText(0, st);
     ed->EmptyUndoBuffer();
 
     ed->SetLexer(wxSTC_LEX_CPP);
     ed->SetKeyWords(0,
-                    "asm auto bool break case catch char class const "
-                    "const_cast continue default delete do double "
-                    "dynamic_cast else enum explicit export extern "
-                    "false float for friend goto if inline int long "
-                    "mutable namespace new operator private protected "
-                    "public register reinterpret_cast return short signed "
-                    "sizeof static static_cast struct switch template this "
-                    "throw true try typedef typeid typename union unsigned "
-                    "using virtual void volatile wchar_t while");
+_T("asm auto bool break case catch char class const \
+const_cast continue default delete do double \
+dynamic_cast else enum explicit export extern \
+false float for friend goto if inline int long \
+mutable namespace new operator private protected \
+public register reinterpret_cast return short signed \
+sizeof static static_cast struct switch template this \
+throw true try typedef typeid typename union unsigned \
+using virtual void volatile wchar_t while"));
 
 }
 
@@ -190,5 +192,5 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxString msg;
     msg.Printf( _T("Testing wxStyledTextCtrl...\n"));
 
-    wxMessageBox(msg, "About This Test", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, _T("About This Test"), wxOK | wxICON_INFORMATION, this);
 }
