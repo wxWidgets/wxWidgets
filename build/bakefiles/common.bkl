@@ -273,7 +273,7 @@
             <libname>$(id)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
         </if>
         <if cond="FORMAT!='autoconf'">
-            <libname>$(id)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)</libname>
+            <libname>$(id)$(WXDEBUGFLAG)$(HOST_SUFFIX)</libname>
         </if>
         <!--
         we want to install 3rd party libs system-wide only with static

@@ -13,7 +13,7 @@
         <set var="wxUSE_LIBPNG">builtin</set>
         <set var="LIB_PNG">
             <if cond="wxUSE_LIBPNG=='builtin' and USE_GUI=='1'">
-                wxpng$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)
+                wxpng$(WXDEBUGFLAG)$(HOST_SUFFIX)
             </if>
         </set>
     </if>

@@ -147,15 +147,15 @@ __WXLIB_MONO_p = &
 !endif
 __LIB_TIFF_p =
 !ifeq USE_GUI 1
-__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
-__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
 !endif
 __LIB_PNG_p =
 !ifeq USE_GUI 1
-__LIB_PNG_p = wxpng$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
 LIBDIRNAME =
 !ifeq SHARED 0
@@ -226,7 +226,7 @@ $(OBJS)\xrcdemo.exe :  $(XRCDEMO_OBJECTS) $(OBJS)\xrcdemo_xrcdemo.res
 	@%append $(OBJS)\xrcdemo.lbc option caseexact
 	@%append $(OBJS)\xrcdemo.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(XRCDEMO_OBJECTS)) do @%append $(OBJS)\xrcdemo.lbc file %i
-	@for %i in ( $(__WXLIB_XRC_p)  $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\xrcdemo.lbc library %i
+	@for %i in ( $(__WXLIB_XRC_p)  $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\xrcdemo.lbc library %i
 	@%append $(OBJS)\xrcdemo.lbc option resource=$(OBJS)\xrcdemo_xrcdemo.res
 	wlink @$(OBJS)\xrcdemo.lbc
 

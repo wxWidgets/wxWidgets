@@ -54,16 +54,16 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg25.pdb /I "..\..\lib\vc_dll\mswunivu" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg25.pdb /I "..\..\lib\vc_dll\mswunivu" /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg.pdb /I "..\..\lib\vc_dll\mswunivu" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg.pdb /I "..\..\lib\vc_dll\mswunivu" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Universal Unicode Debug"
 
@@ -77,16 +77,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd25.pdb /I "..\..\lib\vc_dll\mswunivud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd25.pdb /I "..\..\lib\vc_dll\mswunivud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd.pdb /I "..\..\lib\vc_dll\mswunivud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd.pdb /I "..\..\lib\vc_dll\mswunivud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Universal Release"
 
@@ -100,16 +100,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg25.pdb /I "..\..\lib\vc_dll\mswuniv" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg25.pdb /I "..\..\lib\vc_dll\mswuniv" /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg.pdb /I "..\..\lib\vc_dll\mswuniv" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg.pdb /I "..\..\lib\vc_dll\mswuniv" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Universal Debug"
 
@@ -123,16 +123,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd25.pdb /I "..\..\lib\vc_dll\mswunivd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd25.pdb /I "..\..\lib\vc_dll\mswunivd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd.pdb /I "..\..\lib\vc_dll\mswunivd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd.pdb /I "..\..\lib\vc_dll\mswunivd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Unicode Release"
 
@@ -146,16 +146,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg25.pdb /I "..\..\lib\vc_dll\mswu" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg25.pdb /I "..\..\lib\vc_dll\mswu" /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg.pdb /I "..\..\lib\vc_dll\mswu" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg.pdb /I "..\..\lib\vc_dll\mswu" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Unicode Debug"
 
@@ -169,16 +169,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd25.pdb /I "..\..\lib\vc_dll\mswud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd25.pdb /I "..\..\lib\vc_dll\mswud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd.pdb /I "..\..\lib\vc_dll\mswud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd.pdb /I "..\..\lib\vc_dll\mswud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Release"
 
@@ -192,16 +192,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg25.pdb /I "..\..\lib\vc_dll\msw" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg25.pdb /I "..\..\lib\vc_dll\msw" /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg.pdb /I "..\..\lib\vc_dll\msw" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxjpeg.pdb /I "..\..\lib\vc_dll\msw" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpeg.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Debug"
 
@@ -215,16 +215,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd25.pdb /I "..\..\lib\vc_dll\mswd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd25.pdb /I "..\..\lib\vc_dll\mswd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd.pdb /I "..\..\lib\vc_dll\mswd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxjpegd.pdb /I "..\..\lib\vc_dll\mswd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxjpegd.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 Universal Unicode Release"
 
@@ -238,16 +238,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg25.pdb /I "..\..\lib\vc_lib\mswunivu" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg25.pdb /I "..\..\lib\vc_lib\mswunivu" /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg.pdb /I "..\..\lib\vc_lib\mswunivu" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg.pdb /I "..\..\lib\vc_lib\mswunivu" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 Universal Unicode Debug"
 
@@ -261,16 +261,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd25.pdb /I "..\..\lib\vc_lib\mswunivud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd25.pdb /I "..\..\lib\vc_lib\mswunivud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd.pdb /I "..\..\lib\vc_lib\mswunivud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd.pdb /I "..\..\lib\vc_lib\mswunivud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 Universal Release"
 
@@ -284,16 +284,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg25.pdb /I "..\..\lib\vc_lib\mswuniv" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg25.pdb /I "..\..\lib\vc_lib\mswuniv" /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg.pdb /I "..\..\lib\vc_lib\mswuniv" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg.pdb /I "..\..\lib\vc_lib\mswuniv" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 Universal Debug"
 
@@ -307,16 +307,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd25.pdb /I "..\..\lib\vc_lib\mswunivd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd25.pdb /I "..\..\lib\vc_lib\mswunivd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd.pdb /I "..\..\lib\vc_lib\mswunivd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd.pdb /I "..\..\lib\vc_lib\mswunivd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 Unicode Release"
 
@@ -330,16 +330,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg25.pdb /I "..\..\lib\vc_lib\mswu" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg25.pdb /I "..\..\lib\vc_lib\mswu" /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg.pdb /I "..\..\lib\vc_lib\mswu" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg.pdb /I "..\..\lib\vc_lib\mswu" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 Unicode Debug"
 
@@ -353,16 +353,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd25.pdb /I "..\..\lib\vc_lib\mswud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd25.pdb /I "..\..\lib\vc_lib\mswud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd.pdb /I "..\..\lib\vc_lib\mswud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd.pdb /I "..\..\lib\vc_lib\mswud" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 Release"
 
@@ -376,16 +376,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg25.pdb /I "..\..\lib\vc_lib\msw" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg25.pdb /I "..\..\lib\vc_lib\msw" /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg.pdb /I "..\..\lib\vc_lib\msw" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxjpeg.pdb /I "..\..\lib\vc_lib\msw" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpeg.lib"
 
 !ELSEIF  "$(CFG)" == "wxjpeg - Win32 Debug"
 
@@ -399,16 +399,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\wxjpeg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd25.pdb /I "..\..\lib\vc_lib\mswd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd25.pdb /I "..\..\lib\vc_lib\mswd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd.pdb /I "..\..\lib\vc_lib\mswd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxjpegd.pdb /I "..\..\lib\vc_lib\mswd" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxjpegd.lib"
 
 !ENDIF
 

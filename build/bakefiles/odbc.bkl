@@ -13,7 +13,7 @@
             <if cond="PLATFORM_UNIX=='0'">0</if>
         </set>
         <set var="LIB_ODBC">
-            <if cond="wxUSE_ODBC=='builtin'">wxodbc$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)</if>
+            <if cond="wxUSE_ODBC=='builtin'">wxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX)</if>
         </set>
     </if>
     <set var="INC_ODBC">

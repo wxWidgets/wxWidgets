@@ -13,7 +13,7 @@
         <set var="wxUSE_EXPAT">builtin</set>
         <set var="LIB_EXPAT">
             <if cond="wxUSE_EXPAT=='builtin'">
-                wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)
+                wxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)
             </if>
         </set>
     </if>

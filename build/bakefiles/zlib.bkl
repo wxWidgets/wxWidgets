@@ -13,7 +13,7 @@
         <set var="wxUSE_ZLIB">builtin</set>
         <set var="LIB_ZLIB">
             <if cond="wxUSE_ZLIB=='builtin'">
-                wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)
+                wxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
             </if>
         </set>
     </if>

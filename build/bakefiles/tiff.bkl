@@ -17,7 +17,7 @@
         </set>
         <set var="LIB_TIFF">
             <if cond="wxUSE_LIBTIFF=='builtin' and USE_GUI=='1'">
-                wxtiff$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)
+                wxtiff$(WXDEBUGFLAG)$(HOST_SUFFIX)
             </if>
         </set>
     </if>

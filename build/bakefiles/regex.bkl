@@ -19,7 +19,7 @@
         </set>
         <set var="LIB_REGEX">
             <if cond="wxUSE_REGEX=='builtin'">
-                wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)
+                wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(HOST_SUFFIX)
             </if>
         </set>
     </if>
@@ -33,7 +33,7 @@
             $(id)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
         </libname>
         <libname cond="FORMAT!='autoconf'">
-            $(id)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(HOST_SUFFIX)
+            $(id)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(HOST_SUFFIX)
         </libname>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
