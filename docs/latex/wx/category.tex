@@ -400,6 +400,7 @@ overview}{wxfileoverview} for more details.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxDir}{wxdir}}{Class for enumerating files/subdirectories.}
+\twocolitem{\helpref{wxDirTraverser}{wxdirtraverser}}{Class used together with wxDir for recursively enumerating the files/subdirectories}
 \twocolitem{\helpref{wxFile}{wxfile}}{Low-level file input/output class.}
 \twocolitem{\helpref{wxFFile}{wxffile}}{Another low-level file input/output class.}
 \twocolitem{\helpref{wxTempFile}{wxtempfile}}{Class to safely replace an existing file}
@@ -494,6 +495,38 @@ used internally by the HTML classes.
 \twocolitem{\helpref{wxToolTip}{wxtooltip}}{Class implementing tooltips}
 \end{twocollist}
 
+{\large {\bf Database classes}}
+
+\overview{Database classes overview}{odbcoverview}
+
+wxWindows provides two alternative sets of classes for accessing Microsoft's ODBC (Open Database Connectivity)
+product. The new version by Remstar, known as wxODBC, is more powerful,
+portable, flexible and better supported, so please use the classes below for
+working with databases:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDb}{wxdb}}{ODBC database connection}
+\twocolitem{\helpref{wxDbTable}{wxdbtable}}{Provides access to a database table}
+\twocolitem{\helpref{wxDbInf}{wxdbinf}}{}
+\twocolitem{\helpref{wxDbTableInf}{wxdbtableinf}}{}
+\twocolitem{\helpref{wxDbColDef}{wxdbcoldef}}{}
+\twocolitem{\helpref{wxDbColInf}{wxdbcolinf}}{}
+\twocolitem{\helpref{wxDbColDatatr}{wxdbcoldatatr}}{}
+\twocolitem{\helpref{wxDbColFor}{wxdbcolfor}}{}
+\twocolitem{\helpref{wxDbConnectInf}{wxdbconnectinf}}{}
+\twocolitem{\helpref{wxDbIdxDef}{wxdbidxdef}}{}
+\end{twocollist}
+
+The documentation for the older classes is still included, but you should avoid
+using any of them in the new programs:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDatabase}{wxdatabase}}{Database class}
+\twocolitem{\helpref{wxQueryCol}{wxquerycol}}{Class representing a column}
+\twocolitem{\helpref{wxQueryField}{wxqueryfield}}{Class representing a field}
+\twocolitem{\helpref{wxRecordSet}{wxrecordset}}{Class representing one or more record}
+\end{twocollist}
+
 {\large {\bf Miscellaneous}}
 
 \begin{twocollist}\itemsep=0pt
@@ -514,20 +547,5 @@ used internally by the HTML classes.
 \twocolitem{\helpref{wxEncodingConverter}{wxencodingconverter}}{Encoding conversions}
 \twocolitem{\helpref{wxCalendarDateAttr}{wxcalendardateattr}}{Used with \helpref{wxCalendarCtrl}{wxcalendarctrl}}
 \twocolitem{\helpref{wxQuantize}{wxquantize}}{Class to perform quantization, or colour reduction}
-\end{twocollist}
-
-{\large {\bf Database classes}}
-
-\overview{Database classes overview}{odbcoverview}
-
-wxWindows provides two alternative sets of classes for accessing Microsoft's ODBC (Open Database Connectivity)
-product. The new version by Remstar is documented in a separate manual.
-The older classes are as follows:
-
-\begin{twocollist}\itemsep=0pt
-\twocolitem{\helpref{wxDatabase}{wxdatabase}}{Database class}
-\twocolitem{\helpref{wxQueryCol}{wxquerycol}}{Class representing a column}
-\twocolitem{\helpref{wxQueryField}{wxqueryfield}}{Class representing a field}
-\twocolitem{\helpref{wxRecordSet}{wxrecordset}}{Class representing one or more record}
 \end{twocollist}
 

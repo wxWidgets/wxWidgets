@@ -55,6 +55,8 @@ users have successfully used the classes with the following datasources:
 \item INFORMIX
 \item VIRTUOSO
 \item DB2
+\item Interbase
+\item Pervasive SQL
 \end{itemize}
 
 An up-to-date list can be obtained by looking in the comments of the function 
@@ -283,17 +285,17 @@ The wxWindows setup.h file has several settings in it pertaining to compiling
 the wxODBC classes.
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{wxUSE_ODBC}{This must be set to 1 in order for the compiler to 
+\twocolitem{wxUSE\_ODBC}{This must be set to 1 in order for the compiler to 
 compile the wxODBC classes.  Without setting this to 1, there will be no 
 access to any of the wxODBC classes.  The default is 0.}
-\twocolitem{wxODBC_FWD_ONLY_CURSORS}{When a new database connection is 
+\twocolitem{wxODBC\_FWD\_ONLY\_CURSORS}{When a new database connection is 
 requested, this setting controls the default of whether the connection allows 
 only forward scrolling cursors, or forward and backward scrolling cursors 
 (see the section in "WHERE TO START" on cursors for more information on 
 cursors).  This default can be overridden by passing a second parameter to 
 either the \helpref{wxDbGetConnection}{wxdbfunctions} or 
 \helpref{wxDb constructor}{wxdbconstr}.  The default is 1.}
-\twocolitem{wxODBC_BACKWARD_COMPATABILITY}{Between v2.0 and 2.2, massive 
+\twocolitem{wxODBC\_BACKWARD\_COMPATABILITY}{Between v2.0 and 2.2, massive 
 renaming efforts were done to the ODBC classes to get naming conventions 
 similar to those used throughout wxWindows, as well as to preface all wxODBC 
 classes names and functions with a wxDb preface.  Because this renaming would 
@@ -523,7 +525,7 @@ queried, rather than re-querying the datasource for all those same settings.
 One final note on creating a connection.  When a connection is created, it 
 will default to only allowing cursor scrolling to be either forward only, 
 or both backward and forward scrolling cursors.  The default behavior is 
-determined by the setting "wxODBC_FWD_ONLY_CURSORS" in setup.h when you 
+determined by the setting {\tt wxODBC\_FWD\_ONLY\_CURSORS} in setup.h when you 
 compile the wxWindows library.  The library default is to only support 
 forward scrolling cursors only, though this can be overridden by parameters 
 for wxDb() constructor or the \helpref{wxDbGetConnection}{wxdbfunctions} 
@@ -564,11 +566,11 @@ connecting to the datasource.
 Each of the above parameters are described in detail in the wxDbTable 
 class' description, but one special note here about the fifth 
 parameter - queryOnly setting.  If a wxDbTable instance is created as 
-wxDB_QUERY_ONLY, then no inserts/deletes/updates are able to be performed 
+{\tt wxDB\_QUERY\_ONLY}, then no inserts/deletes/updates are able to be performed 
 using this instance of the wxDbTable.  Any calls to \helpref{wxDb::CommitTrans}{wxdbcommittrans} 
 or \helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} against the datasource 
 connection used by this wxDbTable instance are ignored by this instance.  If 
-the wxDbTable instance is created with "!wxDB_QUERY_ONLY" as shown above, 
+the wxDbTable instance is created with {\tt !wxDB\_QUERY\_ONLY} as shown above, 
 then all the cursors and other overhead associated with being able to 
 insert/update/delete data in the table are created, and thereby those 
 operations can then be performed against the associated table with this 
@@ -615,7 +617,7 @@ variables contain valid data.
 It is not necessary to define column definitions for columns whose data is 
 not going to be returned to the client.  For example, if you want to query 
 the datasource for all users with a first name of 'GEORGE', but you only want 
-the list of last names associated with those rows (why return the FIRST_NAME 
+the list of last names associated with those rows (why return the FIRST\_NAME 
 column every time when you already know it is 'GEORGE'), you would only have 
 needed to define one column above.
 
@@ -632,7 +634,7 @@ house keeping of checking that the specified table exists, that the current
 connected user has at least SELECT privileges for accessing the table, 
 setting up the requisite cursors,  binding columns and cursors, and 
 constructing the default INSERT statement that is used when a new row is 
-inserted into the table (non-wxDB_QUERY_ONLY tables only).
+inserted into the table (non-wxDB\_QUERY\_ONLY tables only).
 
 \begin{verbatim}
     if (!table->Open())
@@ -671,11 +673,11 @@ it where to get the data from, and in what sequence we want the data returned.
 \end{verbatim}
 
 The above lines will be used to tell the datasource to return in the result 
-all the rows in the table whose column "FIRST_NAME" contains the name 
+all the rows in the table whose column "FIRST\_NAME" contains the name 
 'GEORGE' (note the required use of the single quote around the string 
 literal) and that the result set will return the rows sorted by ascending 
 last names (ascending is the default, and can be overridden with the 
-"DESC" keyword for datasources that support it - "LAST_NAME DESC").
+"DESC" keyword for datasources that support it - "LAST\_NAME DESC").
 
 Specifying a blank WHERE clause will result in the result set containing 
 all rows in the datasource.
@@ -907,7 +909,7 @@ NOTE: dBase is not a true ODBC datasource.  You only have access to as much
 functionality as the driver can emulate.
 
 \begin{itemize}\itemsep=0pt
-\item Does not support the SQL_TIMESTAMP structure
+\item Does not support the SQL\_TIMESTAMP structure
 \item Supports only one cursor and one connect (apparently? with Microsoft driver only?)
 \item Does not automatically create the primary index if the 'keyField' param of SetColDef is TRUE.  The user must create ALL indexes from their program with calls to \helpref{wxDbTable::CreateIndex}{wxdbtablecreateindex}
 \item Table names can only be 8 characters long
@@ -928,7 +930,7 @@ functionality as the driver can emulate.
 \item Maximum row size is somewhere in the neighborhood of 1920 bytes
 \end{itemize}
 
-{\it MY_SQL}
+{\it mySQL}
 \begin{itemize}\itemsep=0pt
 \item If a column is part of the Primary Key, the column cannot be NULL.
 \item Cannot support selecting for update [\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate}].  Always returns FALSE.
@@ -950,10 +952,9 @@ functionality as the driver can emulate.
 
 {\bf UNICODE with wxODBC classes}
 
-Currently there is no support for Unicode with the wxODBC classes.  In 
-fact, Unicode builds must be disabled if wxWindows is compiled with 
-wxUSE_ODBC set to 1 in setup.h
-
+The ODBC classes support for Unicode is yet in early experimental stage and
+hasn't been tested extensively. It might work for you or it might not: please
+report the bugs/problems you have encountered in the latter case.
 
 \subsection{wxODBC - Sample Code #1}\label{wxodbcsamplecode1}
 
