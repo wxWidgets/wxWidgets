@@ -16,6 +16,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 
 #import <AppKit/NSBox.h>
 #import <Foundation/NSString.h>
@@ -37,7 +38,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID winid,
         return false;
     m_cocoaNSView = NULL;
     SetNSBox([[NSBox alloc] initWithFrame:MakeDefaultNSRect(size)]);
-    [GetNSBox() setTitle:[NSString stringWithCString:title.c_str()]];
+    [GetNSBox() setTitle:wxNSStringWithWxString(wxStripMenuCodes(title))];
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
