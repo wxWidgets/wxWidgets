@@ -395,7 +395,46 @@ private:
    HDC m_hdc;
    HGDIOBJ m_hgdiobj;
 
-    DECLARE_NO_COPY_CLASS(SelectInHDC)
+   DECLARE_NO_COPY_CLASS(SelectInHDC)
+};
+
+// when working with global pointers (which is unfortunately still necessary
+// sometimes, e.g. for clipboard) it is important to unlock them exactly as
+// many times as we lock them which just asks for using a "smart lock" class
+class GlobalHandle
+{
+public:
+    GlobalHandle(HGLOBAL hGlobal) : m_hGlobal(hGlobal)
+    {
+        m_ptr = ::GlobalLock(hGlobal);
+        if ( !m_ptr )
+        {
+            wxLogLastError(_T("GlobalLock"));
+        }
+    }
+
+    ~GlobalHandle()
+    {
+        if ( !::GlobalUnlock(m_hGlobal) )
+        {
+#ifdef __WXDEBUG__
+            // this might happen simply because the block became unlocked
+            DWORD dwLastError = ::GetLastError();
+            if ( dwLastError != NO_ERROR )
+            {
+                wxLogApiError(_T("GlobalUnlock"), dwLastError);
+            }
+#endif // __WXDEBUG__
+        }
+    }
+
+    operator void *() const { return m_ptr; }
+
+private:
+    HGLOBAL m_hGlobal;
+    void *m_ptr;
+
+    DECLARE_NO_COPY_CLASS(GlobalHandle)
 };
 
 // ---------------------------------------------------------------------------
