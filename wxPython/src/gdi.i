@@ -330,11 +330,7 @@ public:
 %new wxCursor* wxCursorFromImage(const wxImage& image);
 %{
     wxCursor* wxCursorFromImage(const wxImage& image) {
-    #ifndef __WXMAC__
         return new wxCursor(image);
-    #else
-        return NULL;
-    #endif
     }
 %}
 
