@@ -2278,23 +2278,56 @@ AC_CACHE_CHECK([for wchar_t], wx_cv_type_wchar_t,
 [
     AC_TRY_COMPILE([#include <wchar.h>],
         [
-	    wchar_t wc, *ws;
-	    wc = L'a';
-	    ws = L"Hello, world!";
+            wchar_t wc, *ws;
+            wc = L'a';
+            ws = L"Hello, world!";
         ],
-	wx_cv_type_wchar_t=yes,
+        wx_cv_type_wchar_t=yes,
         AC_TRY_COMPILE([#include <stdlib.h>],
             [
-	        wchar_t wc, *ws;
-	        wc = L'a';
-	        ws = L"Hello, world!";
+                wchar_t wc, *ws;
+                wc = L'a';
+                ws = L"Hello, world!";
             ],
-	    wx_cv_type_wchar_t=yes,
-	    wx_cv_type_wchar_t=no)
-	)
+        wx_cv_type_wchar_t=yes,
+        wx_cv_type_wchar_t=no)
+    )
 ])
-if test "$wx_cv_type_wchar_t" = yes ; then
+
+if test "$wx_cv_type_wchar_t" = "yes"; then
     AC_DEFINE(wxUSE_WCHAR_T)
+fi
+
+dnl check what exactly size_t is on this machine - this is necessary to avoid
+dnl ambiguos overloads in several places, notably wx/string.h and wx/array.h
+AC_CACHE_CHECK([if size_t is unsigned int],
+    wx_cv_size_t_is_uint,
+    AC_TRY_COMPILE([#include <stddef.h>],
+        [
+            struct Foo { void foo(size_t); void foo(unsigned int); };
+        ],
+        wx_cv_size_t_is_uint=no,
+        wx_cv_size_t_is_uint=yes
+    )
+)
+
+if test "$wx_cv_size_t_is_uint" = "yes"; then
+    AC_DEFINE(wxSIZE_T_IS_UINT)
+else
+    AC_CACHE_CHECK([if size_t is unsigned long],
+        wx_cv_size_t_is_ulong,
+        AC_TRY_COMPILE([#include <stddef.h>],
+            [
+                struct Foo { void foo(size_t); void foo(unsigned long); };
+            ],
+            wx_cv_size_t_is_ulong=no,
+            wx_cv_size_t_is_ulong=yes
+        )
+    )
+
+    if test "$wx_cv_size_t_is_ulong" = "yes"; then
+        AC_DEFINE(wxSIZE_T_IS_ULONG)
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
