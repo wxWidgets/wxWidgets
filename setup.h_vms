@@ -154,7 +154,7 @@
  * Use OpenGL
  */
 #define wxUSE_OPENGL 1
-
+#define wxUSE_GLCANVAS 1
 /*
  * Use GUI
  */

@@ -248,6 +248,7 @@ wxLongLong wxGetLocalTimeMillis()
         val *= tp.tv_sec;
         return (val + (tp.tv_usec / 1000));
     }
+   return 0;
 #elif defined(HAVE_FTIME)
     struct timeb tp;
     if ( ftime(&tp) == 0 )
