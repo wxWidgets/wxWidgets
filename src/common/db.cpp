@@ -579,13 +579,13 @@ const wxChar *wxDb::convertUserID(const wxChar *userID, wxString &UserID)
 
 bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
 {
-    int iIndex;
+    size_t iIndex;
 
     // These are the possible SQL types we check for use against the datasource we are connected
     // to for the purpose of determining which data type to use for the basic character strings
     // column types
     //
-    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    // NOTE: The first type in this enumeration that is determined to be supported by the
     //       datasource/driver is the one that will be used.
     SWORD PossibleSqlCharTypes[] = {
 #if wxUSE_UNICODE && defined(SQL_WVARCHAR)
@@ -602,7 +602,7 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
     // to for the purpose of determining which data type to use for the basic non-floating point
     // column types
     //
-    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    // NOTE: The first type in this enumeration that is determined to be supported by the
     //       datasource/driver is the one that will be used.
     SWORD PossibleSqlIntegerTypes[] = {
         SQL_INTEGER
@@ -612,7 +612,7 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
     // to for the purpose of determining which data type to use for the basic floating point number
     // column types
     //
-    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    // NOTE: The first type in this enumeration that is determined to be supported by the
     //       datasource/driver is the one that will be used.
     SWORD PossibleSqlFloatTypes[] = {
         SQL_DOUBLE,
@@ -625,7 +625,7 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
     // These are the possible SQL types we check for use agains the datasource we are connected
     // to for the purpose of determining which data type to use for the date/time column types
     //
-    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    // NOTE: The first type in this enumeration that is determined to be supported by the
     //       datasource/driver is the one that will be used.
     SWORD PossibleSqlDateTypes[] = {
         SQL_TIMESTAMP,
@@ -638,7 +638,7 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
     // These are the possible SQL types we check for use agains the datasource we are connected
     // to for the purpose of determining which data type to use for the BLOB column types.
     //
-    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    // NOTE: The first type in this enumeration that is determined to be supported by the
     //       datasource/driver is the one that will be used.
     SWORD PossibleSqlBlobTypes[] = {
         SQL_LONGVARBINARY,
@@ -691,8 +691,8 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
     if (!getDbInfo(failOnDataTypeUnsupported))
         return false;
 
-    // --------------- Varchar - (Variable length character string) --------------- 
-    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlCharTypes) && 
+    // --------------- Varchar - (Variable length character string) ---------------
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlCharTypes) &&
                      !getDataTypeInfo(PossibleSqlCharTypes[iIndex], typeInfVarchar); ++iIndex)
     {}
 
@@ -701,8 +701,8 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
     else if (failOnDataTypeUnsupported)
         return false;
 
-    // --------------- Float --------------- 
-    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlFloatTypes) && 
+    // --------------- Float ---------------
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlFloatTypes) &&
                      !getDataTypeInfo(PossibleSqlFloatTypes[iIndex], typeInfFloat); ++iIndex)
     {}
 
@@ -712,7 +712,7 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
         return false;
 
     // --------------- Integer -------------
-    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlIntegerTypes) && 
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlIntegerTypes) &&
                      !getDataTypeInfo(PossibleSqlIntegerTypes[iIndex], typeInfInteger); ++iIndex)
     {}
 
@@ -731,8 +731,8 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
             typeInfInteger.FsqlType = typeInfFloat.FsqlType;
     }
 
-    // --------------- Date/Time --------------- 
-    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlDateTypes) && 
+    // --------------- Date/Time ---------------
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlDateTypes) &&
                      !getDataTypeInfo(PossibleSqlDateTypes[iIndex], typeInfDate); ++iIndex)
     {}
 
@@ -741,8 +741,8 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
     else if (failOnDataTypeUnsupported)
         return false;
 
-    // --------------- BLOB --------------- 
-    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlBlobTypes) && 
+    // --------------- BLOB ---------------
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlBlobTypes) &&
                      !getDataTypeInfo(PossibleSqlBlobTypes[iIndex], typeInfBlob); ++iIndex)
     {}
 

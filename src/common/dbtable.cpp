@@ -792,7 +792,8 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
     else if (checkPrivileges)
     {
         // Verify the user has rights to access the table.
-        bool hasPrivs = true;
+        bool hasPrivs wxDUMMY_INITIALIZE(true);
+
         if (pDb->Dbms() == dbmsPOSTGRES)
             hasPrivs = pDb->TablePrivileges(tableName, wxT("SELECT"), pDb->GetUsername(), NULL, tablePath);
         else
@@ -802,11 +803,11 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
             s = wxT("Connecting user does not have sufficient privileges to access this table.\n");
     }
 
-    if (!s.IsEmpty())
+    if (!s.empty())
     {
         wxString p;
 
-        if (!tablePath.IsEmpty())
+        if (!tablePath.empty())
             p.Printf(wxT("Error opening '%s/%s'.\n"),tablePath.c_str(),tableName.c_str());
         else
             p.Printf(wxT("Error opening '%s'.\n"), tableName.c_str());
@@ -1313,7 +1314,7 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
                 case SQL_C_CHAR:
 #ifndef __UNIX__
                 case SQL_C_WCHAR:
-#endif                 
+#endif
                 //case SQL_C_WXCHAR:  SQL_C_WXCHAR is covered by either SQL_C_CHAR or SQL_C_WCHAR
                     colValue.Printf(wxT("'%s'"), (UCHAR FAR *) colDefs[colNumber].PtrDataObj);
                     break;
