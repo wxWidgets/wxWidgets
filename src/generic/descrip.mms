@@ -43,9 +43,11 @@ OBJECTS = \
 		caret.obj,\
 		choicdgg.obj,\
 		colrdlgg.obj,\
+		datectlg.obj,\
 		dcpsg.obj,\
 		dirctrlg.obj,\
 		dirdlgg.obj,\
+		fdrepdlg.obj,\
 		fontdlgg.obj,\
 		grid.obj,\
 		gridctrl.obj,\
@@ -79,10 +81,12 @@ SOURCES = \
 		caret.cpp,\
 		choicdgg.cpp,\
 		colrdlgg.cpp,\
+		datectlg.cpp,\
 		dcpsg.cpp,\
 		dirctrlg.cpp,\
 		dirdlgg.cpp,\
 		filedlgg.cpp,\
+		fdrepdlg.cpp,\
 		fontdlgg.cpp,\
 		grid.cpp,\
 		gridctrl.cpp,\
@@ -156,11 +160,13 @@ calctrl.obj : calctrl.cpp
 caret.obj : caret.cpp
 choicdgg.obj : choicdgg.cpp
 colrdlgg.obj : colrdlgg.cpp
+datectlg.obj : datectlg.cpp
 dcpsg.obj : dcpsg.cpp
 dirctrlg.obj : dirctrlg.cpp
 dirdlgg.obj : dirdlgg.cpp
 filedlgg.obj : filedlgg.cpp
 fontdlgg.obj : fontdlgg.cpp
+fdrepdlg.obj : fdrepdlg.cpp
 grid.obj : grid.cpp
 gridctrl.obj : gridctrl.cpp
 gridsel.obj : gridsel.cpp

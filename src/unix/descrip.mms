@@ -40,6 +40,7 @@ CC_DEFINE =
 OBJECTS =       baseunix.obj,\
 		dialup.obj,\
 		dir.obj,\
+		dlunix.obj,\
 		fontenum.obj,\
 		fontutil.obj,\
 		gsocket.obj,\
@@ -57,6 +58,7 @@ OBJECTS =       baseunix.obj,\
 SOURCES =       baseunix.cpp,\
 		dialup.cpp,\
 		dir.cpp,\
+		dlunix.cpp,\
 		fontenum.cpp,\
 		fontutil.cpp,\
 		gsocket.cpp,\
@@ -88,6 +90,7 @@ all : $(SOURCES)
 baseunix.obj : baseunix.cpp
 dialup.obj : dialup.cpp
 dir.obj : dir.cpp
+dlunix.obj : dlunix.cpp
 fontenum.obj : fontenum.cpp
 fontutil.obj : fontutil.cpp
 gsocket.obj : gsocket.cpp

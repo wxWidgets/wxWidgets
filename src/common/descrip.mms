@@ -77,6 +77,7 @@ OBJECTS = \
 		encconv.obj,\
 		event.obj,\
 		extended.obj,\
+		fddlgcmn.obj,\
 		ffile.obj,\
 		file.obj,\
 		fileconf.obj,\
@@ -217,6 +218,7 @@ SOURCES = \
 		event.cpp,\
 		extended.c,\
 		ffile.cpp,\
+		fddlgcmn.cpp,\
 		file.cpp,\
 		fileconf.cpp,\
 		filename.cpp,\
@@ -390,6 +392,7 @@ encconv.obj : encconv.cpp
 event.obj : event.cpp
 extended.obj : extended.c
 ffile.obj : ffile.cpp
+fddlgcmn.obj : fddlgcmn.cpp
 file.obj : file.cpp
 fileconf.obj : fileconf.cpp
 filefn.obj : filefn.cpp
