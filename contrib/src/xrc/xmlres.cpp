@@ -40,16 +40,16 @@
 WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords);
 
 
-wxXmlResource::wxXmlResource(bool use_locale)
+wxXmlResource::wxXmlResource(int flags)
 {
     m_handlers.DeleteContents(TRUE);
-    m_useLocale = use_locale;
+    m_flags = flags;
     m_version = -1;
 }
 
-wxXmlResource::wxXmlResource(const wxString& filemask, bool use_locale)
+wxXmlResource::wxXmlResource(const wxString& filemask, int flags)
 {
-    m_useLocale = use_locale;
+    m_flags = flags;
     m_version = -1;
     m_handlers.DeleteContents(TRUE);
     Load(filemask);
@@ -421,10 +421,28 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
     wxObject *myParent = m_parent, *myInstance = m_instance;
     wxWindow *myParentAW = m_parentAsWindow, *myInstanceAW = m_instanceAsWindow;
 
+    m_instance = instance;
+    if (!m_instance && node->HasProp(wxT("subclass")) && 
+        !(m_resource->GetFlags() & wxXRC_NO_SUBCLASSING))
+    {
+        wxString subclass = node->GetPropVal(wxT("subclass"), wxEmptyString);
+        wxClassInfo* classInfo = wxClassInfo::FindClass(subclass);
+
+        if (classInfo)
+            m_instance = classInfo->CreateObject();
+        
+        if (!m_instance)
+        {
+            wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
+                       subclass.c_str(), node->GetPropVal(wxT("name"), wxEmptyString).c_str());
+        }
+
+        m_instance = classInfo->CreateObject();
+    }
+
     m_node = node;
     m_class = node->GetPropVal(wxT("class"), wxEmptyString);
     m_parent = parent;
-    m_instance = instance;
     m_parentAsWindow = wxDynamicCast(m_parent, wxWindow);
     m_instanceAsWindow = wxDynamicCast(m_instance, wxWindow);
 
@@ -449,15 +467,15 @@ void wxXmlResourceHandler::AddStyle(const wxString& name, int value)
 
 void wxXmlResourceHandler::AddWindowStyles()
 {
-    ADD_STYLE(wxSIMPLE_BORDER);
-    ADD_STYLE(wxSUNKEN_BORDER);
-    ADD_STYLE(wxDOUBLE_BORDER);
-    ADD_STYLE(wxRAISED_BORDER);
-    ADD_STYLE(wxSTATIC_BORDER);
-    ADD_STYLE(wxNO_BORDER);
-    ADD_STYLE(wxTRANSPARENT_WINDOW);
-    ADD_STYLE(wxWANTS_CHARS);
-    ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
+    XRC_ADD_STYLE(wxSIMPLE_BORDER);
+    XRC_ADD_STYLE(wxSUNKEN_BORDER);
+    XRC_ADD_STYLE(wxDOUBLE_BORDER);
+    XRC_ADD_STYLE(wxRAISED_BORDER);
+    XRC_ADD_STYLE(wxSTATIC_BORDER);
+    XRC_ADD_STYLE(wxNO_BORDER);
+    XRC_ADD_STYLE(wxTRANSPARENT_WINDOW);
+    XRC_ADD_STYLE(wxWANTS_CHARS);
+    XRC_ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
 }
 
 
@@ -499,7 +517,7 @@ wxString wxXmlResourceHandler::GetText(const wxString& param)
     const wxChar *dt;
     wxChar amp_char;
 
-    if (m_resource->GetUseLocale())
+    if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
         str1 = wxGetTranslation(GetParamValue(param));
     else
         str1 = GetParamValue(param);

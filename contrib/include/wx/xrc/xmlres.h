@@ -80,19 +80,26 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
 WX_DECLARE_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
 #endif
 
+enum wxXmlResourceFlags
+{
+    wxXRC_USE_LOCALE     = 1,
+    wxXRC_NO_SUBCLASSING = 2
+};
 
 // This class holds XML resources from one or more .xml files
 // (or derived forms, either binary or zipped -- see manual for
 // details).
-
 class WXXMLDLLEXPORT wxXmlResource : public wxObject
 {
 public:
-    // Ctor. If use_locale is TRUE, translatable strings are
-    // translated via _(). You can disable it by passing use_locale=FALSE
-    // (for example if you provide resource file for each locale)
-    wxXmlResource(bool use_locale = TRUE);
-    wxXmlResource(const wxString& filemask, bool use_locale = TRUE);
+    // Ctor. 
+    // Flags: wxXRC_USE_LOCALE
+    //              translatable strings will be translated via _()
+    //        wxXRC_NO_SUBCLASSING
+    //              subclass property of object nodes will be ignored
+    //              (useful for previews in XRC editors)
+    wxXmlResource(int flags = wxXRC_USE_LOCALE);
+    wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE);
     ~wxXmlResource();
 
     // Loads resources from XML files that match given filemask.
@@ -176,12 +183,12 @@ protected:
     // Creates resource from info in given node:
     wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL);
 
-    bool GetUseLocale() { return m_useLocale; }
+    int GetFlags() { return m_flags; }
 
 private:
     long m_version;
 
-    bool m_useLocale;
+    int m_flags;
     wxList m_handlers;
     wxXmlResourceDataRecords m_data;
 #if wxUSE_FILESYSTEM
@@ -348,9 +355,21 @@ protected:
 #endif
 };
 
-#define ADD_STYLE(style) AddStyle(wxT(#style), style)
+
+// Programmer-friendly macros for writing XRC handlers:
+
+#define XRC_ADD_STYLE(style) AddStyle(wxT(#style), style)
+#define ADD_STYLE XRC_ADD_STYLE /* deprecated, don't use!! */
+
+#define XRC_MAKE_INSTANCE(variable, classname) \
+   classname *variable = NULL; \
+   if (m_instance) \
+       variable = wxStaticCast(m_instance, classname); \
+   if (!variable) \
+       variable = new classname;
 
 
+// FIXME -- remove this $%^#$%#$@# as soon as Ron checks his changes in!!
 void wxXmlInitResourceModule();
 
 #endif // _WX_XMLRES_H_
