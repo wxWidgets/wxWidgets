@@ -212,8 +212,8 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PFE_FILE_C_DIALECTS = "c++";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ../include/wx_xcode.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXDEBUG__ __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1";
+				GCC_PREFIX_HEADER = ../include/wx/wxprec.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXDEBUG__ __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1 WX_PRECOMP=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OTHER_CFLAGS = "";
@@ -247,7 +247,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4086C745063AB2FF00D4CD53,
-				40B6E74D063D4ABA00442FB3,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2999,8 +2998,8 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PFE_FILE_C_DIALECTS = "c++";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ../include/wx_xcode.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1";
+				GCC_PREFIX_HEADER = ../include/wx/wxprec.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1 WX_PRECOMP=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OTHER_CFLAGS = "";
@@ -3034,7 +3033,6 @@
 		4086C8CE063AB30000D4CD53 = {
 			buildActionMask = 2147483647;
 			files = (
-				40B6E74C063D4ABA00442FB3,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5776,13 +5774,13 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PFE_FILE_C_DIALECTS = "c++";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ../include/wx_xcode.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXDEBUG__ WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1";
+				GCC_PREFIX_HEADER = ../include/wx/wxprec.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXDEBUG__ WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1 WX_PRECOMP=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
 				INSTALL_PATH = "";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/3.1;
@@ -5818,7 +5816,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4086CA58063AB30000D4CD53,
-				40B6E74A063D4ABA00442FB3,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8592,8 +8589,8 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PFE_FILE_C_DIALECTS = "c++";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ../include/wx_xcode.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1";
+				GCC_PREFIX_HEADER = ../include/wx/wxprec.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1 WX_PRECOMP=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex jpeg common png regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
 				LIBRARY_STYLE = DYNAMIC;
 				OTHER_CFLAGS = "";
@@ -8627,7 +8624,6 @@
 		4086CBE4063AB30000D4CD53 = {
 			buildActionMask = 2147483647;
 			files = (
-				40B6E74B063D4ABA00442FB3,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11447,38 +11443,6 @@
 			target = 4086CBE2063AB30000D4CD53;
 			targetProxy = 4086D208063BC05E00D4CD53;
 		};
-		40B6E749063D4ABA00442FB3 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = wx_xcode.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		40B6E74A063D4ABA00442FB3 = {
-			fileRef = 40B6E749063D4ABA00442FB3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		40B6E74B063D4ABA00442FB3 = {
-			fileRef = 40B6E749063D4ABA00442FB3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		40B6E74C063D4ABA00442FB3 = {
-			fileRef = 40B6E749063D4ABA00442FB3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		40B6E74D063D4ABA00442FB3 = {
-			fileRef = 40B6E749063D4ABA00442FB3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 //400
 //401
 //402
@@ -11755,7 +11719,6 @@
 		};
 		F5A85C1A01FA022A0175ACA7 = {
 			children = (
-				40B6E749063D4ABA00442FB3,
 				F5A85C1C01FA022A0175ACA7,
 				F5FD822102CCECE601000133,
 			);
@@ -11808,7 +11771,6 @@
 				F5A85C4401FA022A0175ACA7,
 				F5A85C4501FA022A0175ACA7,
 				F5A85C4601FA022A0175ACA7,
-				F5CC83DF0379C20901000133,
 				F5A85C4701FA022A0175ACA7,
 				F5A85C4801FA022A0175ACA7,
 				F5A85C4901FA022A0175ACA7,
@@ -11822,7 +11784,6 @@
 				F5A85C5101FA022A0175ACA7,
 				F5A85C5201FA022A0175ACA7,
 				F5A85C5301FA022A0175ACA7,
-				F5CC83E00379C20901000133,
 				F5A85C5401FA022A0175ACA7,
 				F5A85C5501FA022A0175ACA7,
 				F5A85C5601FA022A0175ACA7,
@@ -11835,7 +11796,6 @@
 				F5A85C5D01FA022A0175ACA7,
 				F5A85C5E01FA022A0175ACA7,
 				F5A85C6001FA022A0175ACA7,
-				F5CC83E10379C20901000133,
 				F5A85C6101FA022A0175ACA7,
 				F5A85C6201FA022A0175ACA7,
 				F5A85C6301FA022A0175ACA7,
@@ -11863,14 +11823,12 @@
 				F5A85CB301FA022A0175ACA7,
 				F5A85CB401FA022A0175ACA7,
 				F5A85CF901FA022B0175ACA7,
-				F5CC83E20379C20901000133,
 				F5A85CFA01FA022B0175ACA7,
 				F5A85CFB01FA022B0175ACA7,
 				F5A85CFC01FA022B0175ACA7,
 				F5A85CFD01FA022B0175ACA7,
 				F5A85CFF01FA022B0175ACA7,
 				F5A85D2101FA022B0175ACA7,
-				F5CC83E30379C20901000133,
 				F5A85D2201FA022B0175ACA7,
 				F5A85D2301FA022B0175ACA7,
 				F5A85D2401FA022B0175ACA7,
@@ -11884,7 +11842,6 @@
 				F5A85D2C01FA022B0175ACA7,
 				F5A85D2D01FA022B0175ACA7,
 				F5A85D2E01FA022B0175ACA7,
-				F5CC83E40379C20901000133,
 				F5A85D2F01FA022B0175ACA7,
 				F5A85D3001FA022B0175ACA7,
 				F5A85D3101FA022B0175ACA7,
@@ -11892,7 +11849,6 @@
 				F5A85D3301FA022B0175ACA7,
 				F5A85D3401FA022B0175ACA7,
 				F5A85D3501FA022B0175ACA7,
-				F5CC83E50379C20901000133,
 				F5A85D3601FA022B0175ACA7,
 				F5A85D3701FA022B0175ACA7,
 				F5A8703A01FA0B7F0175ACA7,
@@ -11911,7 +11867,6 @@
 				F5A85DAE01FA022B0175ACA7,
 				F5A85DAF01FA022B0175ACA7,
 				F5A85DF101FA022B0175ACA7,
-				F5CC83E60379C20901000133,
 				F5A85DF201FA022B0175ACA7,
 				F5A85E9701FA022B0175ACA7,
 				F5A85E9801FA022B0175ACA7,
@@ -11928,7 +11883,6 @@
 				F5A85F0901FA022B0175ACA7,
 				F5A85F0A01FA022B0175ACA7,
 				F5A85F0E01FA022B0175ACA7,
-				F5CC83E70379C20901000133,
 				F5A85F1401FA022B0175ACA7,
 				F5A85F1501FA022B0175ACA7,
 				F5A85F1601FA022B0175ACA7,
@@ -11952,9 +11906,9 @@
 				F5A85F2B01FA022B0175ACA7,
 				F5A85F2C01FA022B0175ACA7,
 				F5A85F2D01FA022B0175ACA7,
+				F5A85F3001FA022B0175ACA7,
 				F5A85F2E01FA022B0175ACA7,
 				F5A85F2F01FA022B0175ACA7,
-				F5A85F3001FA022B0175ACA7,
 				F5A85F3101FA022B0175ACA7,
 				F5A85F3201FA022B0175ACA7,
 				F5A85F3301FA022B0175ACA7,
@@ -11963,7 +11917,6 @@
 				F5A85F3601FA022B0175ACA7,
 				F5A85F3701FA022B0175ACA7,
 				F5A85F3801FA022B0175ACA7,
-				F5A85F3901FA022B0175ACA7,
 				F5A85F3A01FA022B0175ACA7,
 				F5A85F3B01FA022B0175ACA7,
 				F5A85F3C01FA022B0175ACA7,
@@ -12698,12 +12651,8 @@
 				F5A85C8801FA022A0175ACA7,
 				F5A85C8901FA022A0175ACA7,
 				F5A85C8A01FA022A0175ACA7,
-				F5A85C8B01FA022A0175ACA7,
 				F5A85C8C01FA022A0175ACA7,
 				F5A85C8D01FA022A0175ACA7,
-				F5A85C8E01FA022A0175ACA7,
-				F5A85C8F01FA022A0175ACA7,
-				F5A85C9001FA022A0175ACA7,
 				F5A85C9201FA022A0175ACA7,
 				F5A85C9401FA022A0175ACA7,
 				F5A85C9501FA022A0175ACA7,
@@ -12724,7 +12673,6 @@
 				F5A85CA801FA022A0175ACA7,
 				F5A85CA901FA022A0175ACA7,
 				F5A85CAC01FA022A0175ACA7,
-				F5A85CAD01FA022A0175ACA7,
 				F5A85CAF01FA022A0175ACA7,
 			);
 			isa = PBXGroup;
@@ -12844,14 +12792,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F5A85C8B01FA022A0175ACA7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			path = gridg.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F5A85C8C01FA022A0175ACA7 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -12865,30 +12805,6 @@
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = helpext.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F5A85C8E01FA022A0175ACA7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			path = helphtml.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F5A85C8F01FA022A0175ACA7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			path = helpwxht.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F5A85C9001FA022A0175ACA7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			path = helpxlp.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -13049,14 +12965,6 @@
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = treectlg.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F5A85CAD01FA022A0175ACA7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			path = treelay.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -13562,7 +13470,6 @@
 				F5A85D8901FA022B0175ACA7,
 				F5A85D8A01FA022B0175ACA7,
 				F5A85D8B01FA022B0175ACA7,
-				F5A85D8C01FA022B0175ACA7,
 				F5A85D8D01FA022B0175ACA7,
 			);
 			isa = PBXGroup;
@@ -14186,14 +14093,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F5A85D8C01FA022B0175ACA7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			path = wave.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F5A85D8D01FA022B0175ACA7 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -14731,14 +14630,6 @@
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = tbarbase.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F5A85F3901FA022B0175ACA7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			path = tbarsmpl.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -18565,87 +18456,6 @@
 			path = build.h;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		F5CC83DF0379C20901000133 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = dcbuffer.h;
-			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/dcbuffer.h;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		F5CC83E00379C20901000133 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = display.h;
-			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/display.h;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		F5CC83E10379C20901000133 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = features.h;
-			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/features.h;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		F5CC83E20379C20901000133 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = hashmap.h;
-			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/hashmap.h;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		F5CC83E30379C20901000133 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = iconbndl.h;
-			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/iconbndl.h;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		F5CC83E40379C20901000133 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = ipc.h;
-			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/ipc.h;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		F5CC83E50379C20901000133 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = listbase.h;
-			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/listbase.h;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		F5CC83E60379C20901000133 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = msgout.h;
-			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/msgout.h;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		F5CC83E70379C20901000133 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = ptr_scpd.h;
-			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/ptr_scpd.h;
-			refType = 0;
-			sourceTree = "<absolute>";
 		};
 		F5CC83E80379C20901000133 = {
 			fileEncoding = 30;
