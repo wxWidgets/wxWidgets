@@ -6851,6 +6851,7 @@ clean:
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a
+	(cd samples && $(MAKE) clean)
 	rm -f lib/libwx_$(TOOLCHAIN_NAME).0.rsrc lib/libwx_$(TOOLCHAIN_NAME).0.r
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__coredll_PCH_DEP)  $(COREDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__basedll___depname)
@@ -11182,6 +11183,17 @@ install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__in
 	fi; \
 	$(INSTALL_DATA) $(srcdir)/include//$$f $(includedir)/$$f; \
 	done
+	@echo " "
+	@echo " The installation of wxWindows is finished.  On certain"
+	@echo " platforms (e.g. Linux) you'll now have to run ldconfig"
+	@echo " if you installed a shared library and also modify the"
+	@echo " LD_LIBRARY_PATH (or equivalent) environment variable."
+	@echo " "
+	@echo " wxWindows comes with no guarantees and doesn't claim"
+	@echo " to be suitable for any purpose."
+	@echo " "
+	@echo " Read the wxWindows Licence on licencing conditions."
+	@echo " "
 
 @COND_USE_GUI_1@install-afm: 
 @COND_USE_GUI_1@	$(INSTALL_DIR) $(datadir)/wx/2.5/afm
@@ -16501,6 +16513,9 @@ odbclib_db.o: $(srcdir)/src/common/db.cpp
 odbclib_dbtable.o: $(srcdir)/src/common/dbtable.cpp
 	$(CXXC) -c -o $@ $(ODBCLIB_CXXFLAGS) $<
 
+samples: 
+	(cd samples && $(MAKE) all)
+
 uninstall: 
 
 @COND_WXUSE_EXPAT_BUILTIN@$(LIBDIRNAME)/libwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX).a: $(WXEXPAT_OBJECTS)
@@ -16959,4 +16974,4 @@ xmllib_xml.o: $(srcdir)/src/xml/xml.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean install install_advdll install_advlib install_basedll install_baselib install_coredll install_corelib install_dbgriddll install_dbgridlib install_gldll install_gllib install_htmldll install_htmllib install_monodll install_monolib install_netdll install_netlib install_odbcdll install_odbclib install_wxexpat install_wxjpeg install_wxodbc install_wxpng install_wxregex install_wxtiff install_wxzlib install_xmldll install_xmllib uninstall
+.PHONY: all clean distclean install install_advdll install_advlib install_basedll install_baselib install_coredll install_corelib install_dbgriddll install_dbgridlib install_gldll install_gllib install_htmldll install_htmllib install_monodll install_monolib install_netdll install_netlib install_odbcdll install_odbclib install_wxexpat install_wxjpeg install_wxodbc install_wxpng install_wxregex install_wxtiff install_wxzlib install_xmldll install_xmllib samples uninstall

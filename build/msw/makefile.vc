@@ -9569,6 +9569,11 @@ $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.lib: $(OBJS)\odbclib_d
 <<
 !endif
 
+sub_samples: 
+	cd ..\..\samples
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
 $(LIBDIRNAME)\wx\setup.h: 
 	if not exist $(LIBDIRNAME)\wx\setup.h copy ..\..\include\wx\msw\setup.h $(LIBDIRNAME)\wx\setup.h
 
