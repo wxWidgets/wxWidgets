@@ -47,9 +47,10 @@ else:
     ID_DRAWMAP_MENU = wxNewId()
     ID_DRAWMAP2_MENU = wxNewId()
     ID_CLEAR_MENU = wxNewId()
-    
+
+    wxPython.lib.colourdb.updateColourDB()
     colors = wxPython.lib.colourdb.getColourList()
-    
+
     LineStyles = floatcanvas.draw_object.LineStyleList.keys()
     
     class DrawFrame(wxFrame):

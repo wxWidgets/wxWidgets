@@ -920,9 +920,9 @@ class FloatCanvas(wxPanel):
 
     def MakeNewBuffers(self):
         # Make new offscreen bitmap:
-        self._Buffer = wxEmptyBitmap(self.PanelSize[0],self.PanelSize[1])
+        self._Buffer = wxEmptyBitmap(int(self.PanelSize[0]), int(self.PanelSize[1]))
         if self.UseBackground:
-            self._BackBuffer = wxEmptyBitmap(self.PanelSize[0],self.PanelSize[1])
+            self._BackBuffer = wxEmptyBitmap((self.PanelSize[0]), (self.PanelSize[1]))
             self._BackgroundDirty = 1
         else:
             pass
@@ -1006,7 +1006,7 @@ class FloatCanvas(wxPanel):
                         i+=1
                         Object._Draw(dc,self.WorldToPixel,self.ScaleFunction)
                         if i % self.NumBetweenBlits == 0:
-                            ScreenDC.Blit(0, 0, self.PanelSize[0],self.PanelSize[1], dc, 0, 0)
+                            ScreenDC.Blit(0, 0, int(self.PanelSize[0]), int(self.PanelSize[1]), dc, 0, 0)
                 print "there were %i objects drawn"%i
                 dc.EndDrawing()
             else:
