@@ -163,7 +163,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    if(obj && eventId == WXLOWIN_MENU_LCLICK)
    {
       m_llist->MoveCursorTo(cursorPos);
-      m_ScrollToCursor = true;
+      ScrollToCursor();
       Refresh();
    }
    if(!m_doSendEvents) // nothing to do
@@ -357,8 +357,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    }
    SetDirty();
    SetModified();
-   m_ScrollToCursor = true;
-   //DoPaint(true); // paint and scroll to cursor
+   ScrollToCursor();
    wxRect r = *m_llist->GetUpdateRect();
    Refresh( FALSE, &r);
 }
@@ -397,20 +396,16 @@ wxLayoutWindow::ScrollToCursor(void)
       cursor is visible if we are editing. */
       /** Scroll so that cursor is visible! */
    WXLO_DEBUG(("m_ScrollToCursor = %d", (int) m_ScrollToCursor));
-   if(IsEditable() && m_ScrollToCursor)
+   wxPoint cc = m_llist->GetCursorScreenPos(*m_memDC);
+   if(cc.x < x0 || cc.y < y0
+      || cc.x >= x0+(9*x1)/10 || cc.y >= y0+(9*y1/10))  // (9*x)/10 ==  90%
    {
-      wxPoint cc = m_llist->GetCursorScreenPos(*m_memDC);
-      if(cc.x < x0 || cc.y < y0
-         || cc.x >= x0+(9*x1)/10 || cc.y >= y0+(9*y1/10))  // (9*x)/10 ==  90%
-      {
-         int nx, ny;
-         nx = cc.x - x1/2; if(nx < 0) nx = 0;
-         ny = cc.y - y1/2; if(ny < 0) ny = 0;
-         Scroll(nx/dx,ny/dy); // new view start
-         x0 = nx; y0 = ny;
-         m_ScrollToCursor = false; // avoid recursion
-         Refresh(FALSE);  /// Re-entering this function!
-      }
+      int nx, ny;
+      nx = cc.x - x1/2; if(nx < 0) nx = 0;
+      ny = cc.y - y1/2; if(ny < 0) ny = 0;
+      Scroll(nx/dx,ny/dy); // new view start
+      x0 = nx; y0 = ny;
+      m_ScrollToCursor = false; // avoid recursion
    }
 }
 
@@ -453,32 +448,13 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    if(x1 > m_maxx) m_maxx = x1;  
    if(y1 > m_maxy) m_maxy = y1;
 
-
-   //m_llist->InvalidateUpdateRect();
-   //const wxRect *r = m_llist->GetUpdateRect();
    WXLO_DEBUG(("Update rect: %ld,%ld / %ld,%ld",
                updateRect->x, updateRect->y,
                updateRect->x+updateRect->width,
                updateRect->y+updateRect->height));
 
-#if 0
-   //FIXME: we should never need to call Layout at all because the
-   //       list does it automatically.
-// Maybe we need to change the scrollbar sizes or positions,
-   // so layout the list and check:
-   if(IsDirty())
-      m_llist->Layout(dc);
-   wxLogDebug("Update rect after calling Layout: %ld,%ld / %ld,%ld",
-              r->x, r->y, r->x+r->width, r->y+r->height);
-   // this is needed even when only the cursor moved
-   m_llist->Layout(dc,y0+y1);
-   wxLogDebug("Update rect after calling Layout again: %ld,%ld / %ld,%ld",
-              r->x, r->y, r->x+r->width, r->y+r->height);
-#endif
-   
    if(IsDirty())
       ResizeScrollbars();
-   
    
    /* Check whether the window has grown, if so, we need to reallocate 
       the bitmap to be larger. */
@@ -494,8 +470,6 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       m_memDC->SelectObject(*m_bitmap);
    }
 
-   // Device origins on the memDC are suspect, we translate manually
-   // with the translate parameter of Draw().
    m_memDC->SetDeviceOrigin(0,0);
    m_memDC->SetBrush(wxBrush(m_llist->GetDefaults()->GetBGColour(),wxSOLID));
    m_memDC->SetPen(wxPen(m_llist->GetDefaults()->GetBGColour(),
@@ -529,11 +503,15 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
                updateRect->x+updateRect->width,
                updateRect->y+updateRect->height)); 
    
+   // Device origins on the memDC are suspect, we translate manually
+   // with the translate parameter of Draw().
    wxPoint offset(-x0+WXLO_XOFFSET,-y0+WXLO_YOFFSET);
    m_llist->Draw(*m_memDC,offset, y0, y0+y1);
+
    // We start calculating a new update rect before drawing the
    // cursor, so that the cursor coordinates get included in the next
-   // update rectangle:
+   // update rectangle (although they are drawn on the memDC, this is
+   // needed to erase it):
    m_llist->InvalidateUpdateRect(); 
    if(IsEditable()) //we draw the cursor
       m_llist->DrawCursor(*m_memDC,m_HaveFocus,offset);
