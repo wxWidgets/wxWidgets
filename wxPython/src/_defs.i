@@ -259,6 +259,20 @@ typedef unsigned long   wxUIntPtr;
     %enddef
 #endif
 
+#ifdef _DO_FULL_DOCS
+    %define RenameDocCtorStr(newname, docstr, details, decl)
+        %feature("docstring") decl docstr details;
+        %rename(newname) decl;
+        decl
+    %enddef
+#else
+    %define RenameDocCtorStr(newname, docstr, details, decl)
+        %feature("docstring") decl docstr;
+        %rename(newname) decl;
+        decl
+    %enddef
+#endif
+        
 
         
 // Set the autodoc string for a constructor decl and then define the decl too.
@@ -333,6 +347,19 @@ typedef unsigned long   wxUIntPtr;
     decl
 %enddef
 
+#ifdef _DO_FULL_DOCS
+    %define %RenameDocCtor(newname, docstr, details, decl)
+        %feature("docstring") decl docstr details;
+        %rename(newname) decl;
+        decl
+    %enddef
+#else
+    %define %RenameDocCtor(newname, docstr, details, decl)
+        %feature("docstring") decl docstr;
+        %rename(newname) decl;
+        decl
+    %enddef
+#endif
 
 //---------------------------------------------------------------------------
 // Forward declarations and %renames for some classes, so the autodoc strings

@@ -104,6 +104,18 @@ key value from a RGB tripple.", "");
 
 //---------------------------------------------------------------------------
 
+%{
+    typedef unsigned char* buffer;
+%}    
+
+%typemap(in) (buffer data, int DATASIZE)
+    { if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail; }
+
+%typemap(in) (buffer alpha, int ALPHASIZE)
+    { if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail; }
+
+//---------------------------------------------------------------------------
+
 
 class wxImage : public wxObject {
 public:
@@ -130,55 +142,85 @@ public:
         ImageFromStreamMime);
     
     %extend {
-        %rename(EmptyImage) wxImage(int width=0, int height=0, bool clear = true);
-        wxImage(int width=0, int height=0, bool clear = true)
-        {
-            if (width > 0 && height > 0)
-                return new wxImage(width, height, clear);
-            else
-                return new wxImage;
-        }
-
-        MustHaveApp(wxImage(const wxBitmap &bitmap));
-        %rename(ImageFromBitmap) wxImage(const wxBitmap &bitmap);
-        wxImage(const wxBitmap &bitmap)
-        {
-            return new wxImage(bitmap.ConvertToImage());
-        }
-
-        %rename(ImageFromData) wxImage(int width, int height, unsigned char* data);
-        wxImage(int width, int height, unsigned char* data)
-        {
-            // Copy the source data so the wxImage can clean it up later
-            unsigned char* copy = (unsigned char*)malloc(width*height*3);
-            if (copy == NULL) {
-                PyErr_NoMemory();
-                return NULL;
+        %RenameDocCtor(
+            EmptyImage,
+            "Construct an empty image of a given size, optionally setting all
+pixels to black.", "",
+            wxImage(int width=0, int height=0, bool clear = true))
+            {
+                if (width > 0 && height > 0)
+                    return new wxImage(width, height, clear);
+                else
+                    return new wxImage;
             }
-            memcpy(copy, data, width*height*3);
-            return new wxImage(width, height, copy, false);
-        }
 
         
-        %rename(ImageFromDataWithAlpha) wxImage(int width, int height, unsigned char* data, unsigned char* alpha);
-        wxImage(int width, int height, unsigned char* data, unsigned char* alpha)
-        {
-            // Copy the source data so the wxImage can clean it up later
-            unsigned char* dcopy = (unsigned char*)malloc(width*height*3);
-            if (dcopy == NULL) {
-                PyErr_NoMemory();
-                return NULL;
+       MustHaveApp(wxImage(const wxBitmap &bitmap));
+        
+        %RenameDocCtor(
+            ImageFromBitmap,
+            "Construct an Image from a `wx.Bitmap`.", "",
+            wxImage(const wxBitmap &bitmap))
+            {
+                return new wxImage(bitmap.ConvertToImage());
             }
-            memcpy(dcopy, data, width*height*3);
-            unsigned char* acopy = (unsigned char*)malloc(width*height);
-            if (acopy == NULL) {
-                PyErr_NoMemory();
-                return NULL;
-            }
-            memcpy(acopy, alpha, width*height);
+
+        %RenameDocCtor(
+            ImageFromData,
+            "Construct an Image from a buffer of RGB bytes.  Accepts either a
+string or a buffer object holding the data and the length of the data
+must be width*height*3.", "",
+            wxImage(int width, int height, buffer data, int DATASIZE))
+            {
+                if (DATASIZE != width*height*3) {
+                    wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+                    return NULL;
+                }
             
-            return new wxImage(width, height, dcopy, acopy, false);
-        }
+                // Copy the source data so the wxImage can clean it up later
+                buffer copy = (buffer)malloc(DATASIZE);
+                if (copy == NULL) {
+                    wxPyBLOCK_THREADS(PyErr_NoMemory());
+                    return NULL;
+                }            
+                memcpy(copy, data, DATASIZE);
+                return new wxImage(width, height, copy, false);
+            }
+
+        
+        %RenameDocCtor(
+            ImageFromDataWithAlpha,
+            "Construct an Image from a buffer of RGB bytes with an Alpha channel.
+Accepts either a string or a buffer object holding the data and the
+length of the data must be width*height*3.", "",
+            wxImage(int width, int height, buffer data, int DATASIZE, buffer alpha, int ALPHASIZE))
+            {
+                if (DATASIZE != width*height*3) {
+                    wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+                    return NULL;
+                }
+                if (ALPHASIZE != width*height) {
+                    wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+                    return NULL;
+                }
+
+                // Copy the source data so the wxImage can clean it up later
+                buffer dcopy = (buffer)malloc(DATASIZE);
+                if (dcopy == NULL) {
+                    wxPyBLOCK_THREADS(PyErr_NoMemory());
+                    return NULL;
+                }
+                memcpy(dcopy, data, DATASIZE);
+            
+                buffer acopy = (buffer)malloc(ALPHASIZE);
+                if (acopy == NULL) {
+                    wxPyBLOCK_THREADS(PyErr_NoMemory());
+                    return NULL;
+                }
+                memcpy(acopy, alpha, ALPHASIZE);
+            
+                return new wxImage(width, height, dcopy, acopy, false);
+            }
     }
 
     // TODO: wxImage( char** xpmData );
@@ -301,59 +343,68 @@ The method will then fill up the whole image with the colour given.", "");
     //void SetData( unsigned char *data );
 
     %extend {
-        PyObject* GetData() {
-            unsigned char* data = self->GetData();
+        DocStr(GetData,
+               "Returns a string containing a copy of the RGB bytes of the image.", "");
+        PyObject* GetData()
+        {
+            buffer data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
             PyObject* rv;
             wxPyBLOCK_THREADS( rv = PyString_FromStringAndSize((char*)data, len));
             return rv;
         }
-        void SetData(PyObject* data) {
-            unsigned char* dataPtr;
-
-            if (! PyString_Check(data)) {
-                wxPyBLOCK_THREADS(PyErr_SetString(PyExc_TypeError,
-                                                  "Expected string object"));
-                return /* NULL */ ;
-            }
-
-            size_t len = self->GetWidth() * self->GetHeight() * 3;
-            dataPtr = (unsigned char*) malloc(len);
-            wxPyBLOCK_THREADS( memcpy(dataPtr, PyString_AsString(data), len) );
-            self->SetData(dataPtr);
-            // wxImage takes ownership of dataPtr...
+        DocStr(SetData,
+               "Resets the Image's RGB data from a buffer of RGB bytes.  Accepts
+either a string or a buffer object holding the data and the length of
+the data must be width*height*3.", "");
+        void SetData(buffer data, int DATASIZE)
+        {
+            if (DATASIZE != self->GetWidth() * self->GetHeight() * 3) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+                return;
+            }            
+            buffer copy = (buffer)malloc(DATASIZE);
+            if (copy == NULL) {
+                wxPyBLOCK_THREADS(PyErr_NoMemory());
+                return;
+            }            
+            memcpy(copy, data, DATASIZE);
+            self->SetData(copy, false);
+            // wxImage takes ownership of copy...
         }
 
 
-
-        PyObject* GetDataBuffer() {
-            unsigned char* data = self->GetData();
+        DocStr(GetDataBuffer,
+               "Returns a writable Python buffer object that is pointing at the RGB
+image data buffer inside the wx.Image.", "");
+        PyObject* GetDataBuffer()
+        {
+            buffer data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
             PyObject* rv;
             wxPyBLOCK_THREADS( rv = PyBuffer_FromReadWriteMemory(data, len) );
             return rv;
         }
-        void SetDataBuffer(PyObject* data) {
-            unsigned char* buffer;
-            int size;
 
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
-            if (!PyArg_Parse(data, "t#", &buffer, &size))
-                goto done;
-
-            if (size != self->GetWidth() * self->GetHeight() * 3) {
-                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
-                goto done;
+        DocStr(SetDataBuffer,
+               "Sets the internal image data pointer to point at a Python buffer
+object.  This can save a copy of the data but you must ensure that the
+buffer object lives longer than the wx.Image does.", "");
+        void SetDataBuffer(buffer data, int DATASIZE)
+        {
+            if (DATASIZE != self->GetWidth() * self->GetHeight() * 3) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+                return;
             }
-            self->SetData(buffer);
-        done:
-            wxPyEndBlockThreads(blocked);
+            self->SetData(data, true);
         }
 
 
 
+        DocStr(GetAlphaData,
+               "Returns a string containing a copy of the alpha bytes of the image.", "");
         PyObject* GetAlphaData() {
-            unsigned char* data = self->GetAlpha();
+            buffer data = self->GetAlpha();
             if (! data) {
                 RETURN_NONE();
             } else {
@@ -363,45 +414,53 @@ The method will then fill up the whole image with the colour given.", "");
                 return rv;
             }
         }
-        void SetAlphaData(PyObject* data) {
-            unsigned char* dataPtr;
 
-            if (! PyString_Check(data)) {
-                PyErr_SetString(PyExc_TypeError, "Expected string object");
-                return /* NULL */ ;
+        DocStr(SetAlphaData,
+               "Resets the Image's alpha data from a buffer of bytes.  Accepts either
+a string or a buffer object holding the data and the length of the
+data must be width*height.", ""); 
+        void SetAlphaData(buffer alpha, int ALPHASIZE)
+        {
+            if (ALPHASIZE != self->GetWidth() * self->GetHeight()) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+                return;
             }
-
-            size_t len = self->GetWidth() * self->GetHeight();
-            dataPtr = (unsigned char*) malloc(len);
-            wxPyBLOCK_THREADS( memcpy(dataPtr, PyString_AsString(data), len) );
-            self->SetAlpha(dataPtr);
-            // wxImage takes ownership of dataPtr...
+            buffer acopy = (buffer)malloc(ALPHASIZE);
+            if (acopy == NULL) {
+                wxPyBLOCK_THREADS(PyErr_NoMemory());
+                return;
+            }
+            memcpy(acopy, alpha, ALPHASIZE);
+            self->SetAlpha(acopy, false);
+            // wxImage takes ownership of acopy...
         }
 
 
-
-        PyObject* GetAlphaBuffer() {
-            unsigned char* data = self->GetAlpha();
+        
+        DocStr(GetDataBuffer,
+               "Returns a writable Python buffer object that is pointing at the Alpha
+data buffer inside the wx.Image.", "");
+        PyObject* GetAlphaBuffer()
+        {
+            buffer data = self->GetAlpha();
             int len = self->GetWidth() * self->GetHeight();
             PyObject* rv;
             wxPyBLOCK_THREADS( rv = PyBuffer_FromReadWriteMemory(data, len) );
             return rv;
         }
-        void SetAlphaBuffer(PyObject* data) {
-            unsigned char* buffer;
-            int size;
 
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
-            if (!PyArg_Parse(data, "t#", &buffer, &size))
-                goto done;
-
-            if (size != self->GetWidth() * self->GetHeight()) {
-                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
-                goto done;
+        
+        DocStr(SetDataBuffer,
+               "Sets the internal image alpha pointer to point at a Python buffer
+object.  This can save a copy of the data but you must ensure that the
+buffer object lives longer than the wx.Image does.", "");
+        void SetAlphaBuffer(buffer alpha, int ALPHASIZE)
+        {
+            if (ALPHASIZE != self->GetWidth() * self->GetHeight()) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+                return;
             }
-            self->SetAlpha(buffer);
-        done:
-            wxPyEndBlockThreads(blocked);
+            self->SetAlpha(alpha, true);
         }
     }
 
