@@ -2935,7 +2935,16 @@ bool wxWindow::SetCursor( const wxCursor &cursor )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, wxT("invalid window") );
 
-    return wxWindowBase::SetCursor( cursor );
+    if (cursor == m_cursor)
+       return FALSE;
+
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+        
+    if (cursor == wxNullCursor)
+       return wxWindowBase::SetCursor( *wxSTANDARD_CURSOR );
+    else
+       return wxWindowBase::SetCursor( cursor );
 }
 
 void wxWindow::WarpPointer( int x, int y )
