@@ -295,6 +295,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_HTML=no
   DEFAULT_wxUSE_FS_INET=no
   DEFAULT_wxUSE_FS_ZIP=no
+  DEFAULT_wxUSE_BUSYINFO=no
+  DEFAULT_wxUSE_ZIPSTREAM=no
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=no
@@ -397,6 +399,8 @@ else
   DEFAULT_wxUSE_HTML=no
   DEFAULT_wxUSE_FS_INET=no
   DEFAULT_wxUSE_FS_ZIP=no
+  DEFAULT_wxUSE_BUSYINFO=no
+  DEFAULT_wxUSE_ZIPSTREAM=no
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=yes
@@ -531,6 +535,7 @@ WX_ARG_ENABLE(joystick,      [  --enable-joystick       compile in joystick supp
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
 WX_ARG_ENABLE(fs_zip,        [  --enable-fs_zip         use virtual ZIP filesystems], wxUSE_FS_ZIP)
+WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZipInputStream], wxUSE_ZIPSTREAM)
 
 dnl ---------------------------------------------------------------------------
 dnl "big" options (i.e. those which change a lot of things throughout the library)
@@ -687,6 +692,7 @@ WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], w
 WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
 WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
+WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
 
 dnl cache the options values before (may be) aborting below
 WX_ARG_CACHE_FLUSH
@@ -1554,6 +1560,14 @@ fi
 
 if test "$wxUSE_FS_ZIP" = "yes"; then
   AC_DEFINE(wxUSE_FS_ZIP)
+fi
+
+if test "$wxUSE_ZIPSTREAM" = "yes"; then
+  AC_DEFINE(wxUSE_ZIPSTREAM)
+fi
+
+if test "$wxUSE_BUSYINFO" = "yes"; then
+  AC_DEFINE(wxUSE_BUSYINFO)
 fi
 
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then

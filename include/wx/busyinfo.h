@@ -23,6 +23,7 @@
 #include <wx/wx.h>
 #endif
 
+#if wxUSE_BUSYINFO
 
 #include <wx/dialog.h>
 
@@ -55,4 +56,4 @@ class wxBusyInfo : public wxObject
 
 #endif
 
-
+#endif

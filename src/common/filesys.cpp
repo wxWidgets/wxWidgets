@@ -23,7 +23,6 @@
 #endif
 
 #include <wx/wfstream.h>
-#include <wx/url.h>
 #include <wx/module.h>
 #include <wx/filesys.h>
 

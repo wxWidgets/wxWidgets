@@ -545,6 +545,17 @@
 #define wxUSE_FS_ZIP 0
 
 /*
+ * A class that shows info window when app is busy
+ * (works exactly like wxBusyCursor)
+ */
+#define wxUSE_BUSYINFO 0 
+
+/*
+ * Zip stream for accessing files stored inside .zip archives
+ */
+#define wxUSE_ZIPSTREAM 0
+ 
+/*
  * Disable this if your compiler can't cope
  * with omission of prototype parameters.
  */

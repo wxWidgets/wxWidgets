@@ -20,6 +20,8 @@
 #include <wx/wx.h>
 #endif
 
+#if wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
+
 #include <wx/stream.h>
 #include <wx/wfstream.h>
 #include <wx/zipstream.h>
@@ -108,3 +110,4 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
     return m_Pos;
 }
 
+#endif

@@ -200,6 +200,14 @@
                                   // Set to 1 to use socket classes
 #define wxUSE_HTML          0
                                   // Set to 1 to use wxHTML sub-library
+#define wxUSE_FS_ZIP        0
+#define wxUSE_FS_INET       0     // Set to 1 to enable virtual file systems
+
+#define wxUSE_BUSYINFO      0
+                                  // wxBusyInfo displays window with message
+                                  // when app is busy. Works in same way as
+                                  // wxBusyCursor
+
 
 /*
  * Finer detail

@@ -20,6 +20,8 @@
 #include <wx/wx.h>
 #endif
 
+#if wxUSE_BUSYINFO
+
 #include "wx/busyinfo.h"
 
 
@@ -59,11 +61,4 @@ wxBusyInfo::~wxBusyInfo()
 
 
 
-
-
-
-
-
-
-
-
+#endif
