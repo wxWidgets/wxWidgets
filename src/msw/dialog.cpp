@@ -331,6 +331,13 @@ void wxDialog::DoShowModal()
 
     wxWindow* oldFocus = m_oldFocus;
 
+    // We have to remember the HWND because we need to check
+    // the HWND still exists (oldFocus can be garbage when the dialog
+    // exits, if it has been destroyed)
+    HWND hwndOldFocus = 0;
+    if (oldFocus)
+        hwndOldFocus = (HWND) oldFocus->GetHWND();
+
     // inside this block, all app windows are disabled
     {
         wxWindowDisabler wd(this);
@@ -339,6 +346,7 @@ void wxDialog::DoShowModal()
         if ( !oldFocus )
         {
             oldFocus = parent;
+            hwndOldFocus = (HWND) parent->GetHWND();
         }
 
         // enter the modal loop
@@ -365,7 +373,7 @@ void wxDialog::DoShowModal()
     // Note that this code MUST NOT access the dialog object's data
     // in case the object has been deleted (which will be the case
     // for a modal dialog that has been destroyed before calling EndModal).
-    if ( oldFocus && (oldFocus != this) )
+    if ( oldFocus && (oldFocus != this) && ::IsWindow(hwndOldFocus))
     {
         oldFocus->SetFocus();
     }

@@ -740,14 +740,10 @@
 #endif
 
 #if defined(__WXMSW__) && defined(__WATCOMC__)
-#undef wxUSE_LIBJPEG
-#define wxUSE_LIBJPEG 0
-
-#undef wxUSE_LIBTIFF
-#define wxUSE_LIBTIFF 0
-
+/*
 #undef  wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0
+*/
 
 #undef wxUSE_MS_HTML_HELP
 #define wxUSE_MS_HTML_HELP 0

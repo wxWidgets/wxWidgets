@@ -46,7 +46,13 @@
  * directory ftp://ftp.uu.net/pub/archiving/zip/doc.  The library was
  * last found at ftp://ftp.uu.net/pub/archiving/zip/zlib/zlib-0.99.tar.gz.
  */
+// Watcom C++ (or its make utility) doesn't like long filenames
+#ifdef __WATCOMC__
+#include "tif_pred.h"
+#else
 #include "tif_predict.h"
+#endif
+
 #include "zlib.h"
 
 #include <stdio.h>
