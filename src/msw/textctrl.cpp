@@ -564,9 +564,8 @@ wxString wxTextCtrl::GetRange(long from, long to) const
                 if ( !str.empty() )
                 {
                     // we have to manually extract the required part, luckily
-                    // this is easy in this case as EOL characters in richedit
-                    // version > 1 are just '\r's and so positions map to
-                    // string indices one to one (unlike with richedit 1)
+                    // this is easy in this case as EOL characters in str are
+                    // just LFs because we remove CRs in wxRichEditStreamOut
                     str = str.Mid(from, to - from);
                 }
             }
@@ -681,24 +680,37 @@ wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
     return 0;
 }
 
+// helper struct used to pass parameters from wxTextCtrl to wxRichEditStreamOut
+struct wxStreamOutData
+{
+    wchar_t *wpc;
+    size_t len;
+};
+
 DWORD CALLBACK
 wxRichEditStreamOut(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 {
     *pcb = 0;
 
-    wchar_t ** const ppws = (wchar_t **)dwCookie;
+    wxStreamOutData *data = (wxStreamOutData *)dwCookie;
 
     const wchar_t *wbuf = (const wchar_t *)buf;
-    wchar_t *wpc = *ppws;
-    while ( cb && *wpc )
+    wchar_t *wpc = data->wpc;
+    while ( cb )
     {
-         *wpc++ = *wbuf++;
+        wchar_t wch = *wbuf++;
+
+        // turn "\r\n" into "\n" on the fly
+        if ( wch != L'\r' )
+            *wpc++ = wch;
+        else
+            data->len--;
 
         cb -= sizeof(wchar_t);
         (*pcb) += sizeof(wchar_t);
     }
 
-    *ppws = wpc;
+    data->wpc = wpc;
 
     return 0;
 }
@@ -783,9 +795,13 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
     wchar_t *wpc = wchBuf;
 #endif
 
+    wxStreamOutData data;
+    data.wpc = wpc;
+    data.len = len;
+
     EDITSTREAM eds;
     wxZeroMemory(eds);
-    eds.dwCookie = (DWORD)&wpc;
+    eds.dwCookie = (DWORD)&data;
     eds.pfnCallback = wxRichEditStreamOut;
 
     ::SendMessage
@@ -802,6 +818,10 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
     }
     else // streamed out ok
     {
+        // NUL-terminate the string because its length could have been
+        // decreased by wxRichEditStreamOut
+        *(wchBuf.data() + data.len) = L'\0';
+
         // now convert to the given encoding (this is a lossful conversion but
         // what else can we do)
         wxCSConv conv(encoding);
