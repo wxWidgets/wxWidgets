@@ -21,6 +21,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/filename.h"
+#include "wx/filefn.h"
 
 // ----------------------------------------------------------------------------
 // test data
@@ -87,11 +88,13 @@ private:
         CPPUNIT_TEST( TestConstruction );
         CPPUNIT_TEST( TestSplit );
         CPPUNIT_TEST( TestSetPath );
+        CPPUNIT_TEST( TestStrip );
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
     void TestSplit();
     void TestSetPath();
+    void TestStrip();
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -158,3 +161,20 @@ void FileNameTestCase::TestSetPath()
     CPPUNIT_ASSERT( fn.SameAs(wxFileName(_T("/usr/local/bin/ls"), wxPATH_UNIX)) );
 }
 
+wxString wxGetRealFile(wxString szFile)
+{
+    wxStripExtension(szFile);
+    return szFile;
+}
+
+void FileNameTestCase::TestStrip()
+{
+    //test a crash
+    CPPUNIT_ASSERT( wxGetRealFile( _T("") ) == _T("") );
+
+    //others
+    CPPUNIT_ASSERT( wxGetRealFile( _T(".") ) == _T("") );
+    CPPUNIT_ASSERT( wxGetRealFile( _T(".wav") ) == _T("") );
+    CPPUNIT_ASSERT( wxGetRealFile( _T("good.wav") ) == _T("good") );
+    CPPUNIT_ASSERT( wxGetRealFile( _T("good.wav.wav") ) == _T("good.wav") );
+}
