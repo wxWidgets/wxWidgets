@@ -623,8 +623,8 @@ htb:
 	cd $(WXDIR)\docs\html\wx
     -erase /Y wx.zip wx.htb
     zip32 wx.zip *.htm *.gif *.hhp *.hhc *.hhk
-    -mkdir $(DOCDIR)\html\htb
-    move wx.zip $(DOCDIR)\html\htb\wx.htb
+    -mkdir $(DOCDIR)\htb
+    move wx.zip $(DOCDIR)\htb\wx.htb
     cd $(THISDIR)
 
 # In order to force document reprocessing

@@ -884,7 +884,9 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
     // in any case, our size changed - update
     sizer->SetSizeHints(this);
     sizer->Fit(this);
-    Show(TRUE);
+    // JACS: can't call Show again, because it's a modal dialog
+    // and will generate an assert under MSW.
+    //Show(TRUE);
 }
 
 wxLogDialog::~wxLogDialog()

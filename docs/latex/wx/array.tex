@@ -249,7 +249,6 @@ This macro defines a new sorted array class named {\it name} and containing
 the elements of type {\it T}. The second form is used when compiling DLL
 under Windows and array needs to be visible outside the DLL.
 
-
 Example:
 
 \begin{verbatim}
@@ -259,7 +258,7 @@ class MyClass;
 WX_DEFINE_SORTED_ARRAY(MyClass *, wxArrayOfMyClass);
 \end{verbatim}
 
-You will have to initialize the objects of this class by passing a comparaison
+You will have to initialize the objects of this class by passing a comparison
 function to the array object constructor like this:
 
 \begin{verbatim}
@@ -356,7 +355,7 @@ Default constructor initializes an empty array object.
 \func{}{wxSortedArray}{\param{int (*)(T first, T second)}{compareFunction}}
 
 There is no default constructor for wxSortedArray classes - you must initialize it
-with a function to use for item comparaison. It is a function which is passed
+with a function to use for item comparison. It is a function which is passed
 two arguments of type {\it T} where {\it T} is the array element type and which
 should return a negative, zero or positive value according to whether the first
 element passed to it is less than, equal to or greater than the second one.

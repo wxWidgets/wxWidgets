@@ -1239,6 +1239,11 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
         mask |= TVIF_TEXT;
         tvIns.item.pszText = (wxChar *)text.c_str();  // cast is ok
     }
+    else
+    {
+        tvIns.item.pszText = NULL;
+        tvIns.item.cchTextMax = 0;
+    }
 
     if ( image != -1 )
     {

@@ -476,7 +476,14 @@ is available under Windows only.
 
 \func{virtual wxMDIClientWindow*}{OnCreateClient}{\void}
 
-Override this to return a different kind of client window.
+Override this to return a different kind of client window. If you override this function,
+you must create your parent frame in two stages, or your function will never be called,
+due to the way C++ treats virtual functions called from constructors. For example:
+
+\begin{verbatim}
+  frame = new MyParentFrame;
+  frame->Create(parent, myParentFrameId, wxT("My Parent Frame"));
+\end{verbatim}
 
 \wxheading{Remarks}
 

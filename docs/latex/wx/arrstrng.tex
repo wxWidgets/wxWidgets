@@ -205,22 +205,18 @@ Returns the last element of the array. Attempt to access the last element of
 an empty array will result in assert failure in debug build, however no checks
 are done in release mode.
 
-\membersection{wxArrayString::Remove (by value)}\label{wxarraystringremoveval}
+\membersection{wxArrayString::Remove}\label{wxarraystringremove}
 
 \func{void}{Remove}{\param{const char *}{ sz}}
 
 Removes the first item matching this value. An assert failure is provoked by
 an attempt to remove an element which does not exist in debug build.
 
-See also: \helpref{Index}{wxarraystringindex}, \helpref{Remove}{wxarraystringremove}
-
-\membersection{wxArrayString::Remove (by index)}\label{wxarraystringremove}
+See also: \helpref{Index}{wxarraystringindex}
 
 \func{void}{Remove}{\param{size\_t }{nIndex}}
 
 Removes the item at given position.
-
-See also: \helpref{Remove}{wxarraystringremoveval}
 
 \membersection{wxArrayString::Shrink}\label{wxarraystringshrink}
 
@@ -231,7 +227,7 @@ minimize the array memory consumption.
 
 See also: \helpref{Alloc}{wxarraystringalloc}, \helpref{Dynamic array memory management}{wxarraymemorymanagement}
 
-\membersection{wxArrayString::Sort (alphabetically)}\label{wxarraystringsort}
+\membersection{wxArrayString::Sort}\label{wxarraystringsort}
 
 \func{void}{Sort}{\param{bool}{ reverseOrder = FALSE}}
 
@@ -241,10 +237,6 @@ Sorts the array in alphabetical order or in reverse alphabetical order if
 {\bf Warning:} this function should not be used with sorted array because it
 could break the order of items and, for example, subsequent calls to 
 \helpref{Index()}{wxarraystringindex} would then not work!
-
-See also: \helpref{Sort}{wxarraystringsortcallback}
-
-\membersection{wxArrayString::Sort (user defined)}\label{wxarraystringsortcallback}
 
 \func{void}{Sort}{\param{CompareFunction }{compareFunction}}
 
@@ -279,6 +271,4 @@ array.Sort(CompareStringLen);
 {\bf Warning:} this function should not be used with sorted array because it
 could break the order of items and, for example, subsequent calls to 
 \helpref{Index()}{wxarraystringindex} would then not work!
-
-See also: \helpref{Sort}{wxarraystringsort}
 
