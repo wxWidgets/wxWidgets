@@ -132,18 +132,22 @@ private:
     wxArrayLong m_times;
 
     // the "toggle" button and its state
+#ifndef __SMARTPHONE__
     wxButton *m_btnDetails;
+#endif
     bool      m_showingDetails;
 
     // the controls which are not shown initially (but only when details
     // button is pressed)
     wxListCtrl *m_listctrl;
+#ifndef __SMARTPHONE__
 #if wxUSE_STATLINE
     wxStaticLine *m_statline;
 #endif // wxUSE_STATLINE
 #if wxUSE_FILE
     wxButton *m_btnSave;
 #endif // wxUSE_FILE
+#endif // __SMARTPHONE__
 
     // the translated "Details" string
     static wxString ms_details;
@@ -689,7 +693,11 @@ wxLogWindow::~wxLogWindow()
 
 #if wxUSE_LOG_DIALOG
 
+#ifndef __SMARTPHONE__
 static const size_t MARGIN = 10;
+#else
+static const size_t MARGIN = 0;
+#endif
 
 wxString wxLogDialog::ms_details;
 
@@ -709,6 +717,9 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
         // happens to pop up a Log message while translating this :-)
         ms_details = wxTRANSLATE("&Details");
         ms_details = wxGetTranslation(ms_details);
+#ifdef __SMARTPHONE__
+        ms_details = wxStripMenuCodes(ms_details);
+#endif
     }
 
     size_t count = messages.GetCount();
@@ -728,6 +739,8 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     m_showingDetails = false; // not initially
     m_listctrl = (wxListCtrl *)NULL;
 
+#ifndef __SMARTPHONE__
+
 #if wxUSE_STATLINE
     m_statline = (wxStaticLine *)NULL;
 #endif // wxUSE_STATLINE
@@ -736,19 +749,28 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     m_btnSave = (wxButton *)NULL;
 #endif // wxUSE_FILE
 
+#endif // __SMARTPHONE__
+
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-    
+
     // create the controls which are always shown and layout them: we use
     // sizers even though our window is not resizeable to calculate the size of
     // the dialog properly
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+#ifndef __SMARTPHONE__
     wxBoxSizer *sizerButtons = new wxBoxSizer(isPda ? wxHORIZONTAL : wxVERTICAL);
+#endif
     wxBoxSizer *sizerAll = new wxBoxSizer(isPda ? wxVERTICAL : wxHORIZONTAL);
 
+#ifdef __SMARTPHONE__
+    SetLeftMenu(wxID_OK);
+    SetRightMenu(wxID_MORE, ms_details + EXPAND_SUFFIX);
+#else
     wxButton *btnOk = new wxButton(this, wxID_OK);
     sizerButtons->Add(btnOk, 0, isPda ? wxCENTRE : wxCENTRE|wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + EXPAND_SUFFIX);
     sizerButtons->Add(m_btnDetails, 0, isPda ? wxCENTRE|wxLEFT : wxCENTRE | wxTOP, MARGIN/2 - 1);
+#endif
 
     wxBitmap bitmap;
     switch ( style & wxICON_MASK )
@@ -777,7 +799,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
         default:
             wxFAIL_MSG(_T("incorrect log style"));
     }
-    
+
     if (!isPda)
         sizerAll->Add(new wxStaticBitmap(this, wxID_ANY, bitmap), 0,
                   wxALIGN_CENTRE_VERTICAL);
@@ -785,7 +807,9 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     const wxString& message = messages.Last();
     sizerAll->Add(CreateTextSizer(message), 1,
                   wxALIGN_CENTRE_VERTICAL | wxLEFT | wxRIGHT, MARGIN);
+#ifndef __SMARTPHONE__
     sizerAll->Add(sizerButtons, 0, isPda ? wxCENTRE|wxTOP|wxBOTTOM : (wxALIGN_RIGHT | wxLEFT), MARGIN);
+#endif
 
     sizerTop->Add(sizerAll, 0, wxALL | wxEXPAND, MARGIN);
 
@@ -805,10 +829,12 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     m_maxHeight = size.y;
     SetSizeHints(size.x, size.y, m_maxWidth, m_maxHeight);
 
+#ifndef __SMARTPHONE__
     btnOk->SetFocus();
+#endif
 
     Centre();
-    
+
     if (isPda)
     {
         // Move up the screen so that when we expand the dialog,
@@ -819,6 +845,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
 void wxLogDialog::CreateDetailsControls()
 {
+#ifndef __SMARTPHONE__
     // create the save button and separator line if possible
 #if wxUSE_FILE
     m_btnSave = new wxButton(this, wxID_SAVE);
@@ -827,6 +854,8 @@ void wxLogDialog::CreateDetailsControls()
 #if wxUSE_STATLINE
     m_statline = new wxStaticLine(this, wxID_ANY);
 #endif // wxUSE_STATLINE
+
+#endif // __SMARTPHONE__
 
     // create the list ctrl now
     m_listctrl = new wxListCtrl(this, wxID_ANY,
@@ -839,7 +868,7 @@ void wxLogDialog::CreateDetailsControls()
     // This maks a big aesthetic difference on WinCE but I
     // don't want to risk problems on other platforms
     m_listctrl->Hide();
-#endif                                
+#endif
 
     // no need to translate these strings as they're not shown to the
     // user anyhow (we use wxLC_NO_HEADER style)
@@ -1001,9 +1030,15 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 
     if ( m_showingDetails )
     {
+#ifdef __SMARTPHONE__
+        SetRightMenu(wxID_MORE, ms_details + EXPAND_SUFFIX);
+#else
         m_btnDetails->SetLabel(ms_details + EXPAND_SUFFIX);
+#endif
 
         sizer->Detach( m_listctrl );
+
+#ifndef __SMARTPHONE__
 
 #if wxUSE_STATLINE
         sizer->Detach( m_statline );
@@ -1012,17 +1047,23 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_FILE
         sizer->Detach( m_btnSave );
 #endif // wxUSE_FILE
+
+#endif // __SMARTPHONE__
     }
     else // show details now
     {
+#ifdef __SMARTPHONE__
+        SetRightMenu(wxID_MORE, wxString(_T("<< ")) + ms_details);
+#else
         m_btnDetails->SetLabel(wxString(_T("<< ")) + ms_details);
+#endif
 
         if ( !m_listctrl )
         {
             CreateDetailsControls();
         }
 
-#if wxUSE_STATLINE
+#if wxUSE_STATLINE && !defined(__SMARTPHONE__)
         bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
         if (!isPda)
             sizer->Add(m_statline, 0, wxEXPAND | (wxALL & ~wxTOP), MARGIN);
@@ -1039,7 +1080,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
         sizer->SetItemMinSize(m_listctrl, 100, 3*GetCharHeight());
 #endif // 0
 
-#if wxUSE_FILE
+#if wxUSE_FILE && !defined(__SMARTPHONE__)
         sizer->Add(m_btnSave, 0, wxALIGN_RIGHT | (wxALL & ~wxTOP), MARGIN);
 #endif // wxUSE_FILE
     }
@@ -1075,7 +1116,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 #ifdef __WXWINCE__
     if (m_showingDetails)
         m_listctrl->Show();
-#endif                                
+#endif
 
     // don't change the width when expanding/collapsing
     SetSize(wxDefaultCoord, size.y);
