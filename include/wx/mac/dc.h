@@ -236,7 +236,6 @@ protected:
         GetClippingBox(x, y, width, height);
     }
 
-    virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
 
     virtual void DoDrawLines(int n, wxPoint points[],
