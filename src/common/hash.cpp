@@ -106,10 +106,10 @@ void wxHashTable::Put (long key, long value, wxObject * object)
 {
   // Should NEVER be
   long k = (long) key;
-  if (k < 0)
-    k = -k;
 
   int position = (int) (k % n);
+  if (position < 0) position = -position;
+
   if (!hash_table[position])
   {
     hash_table[position] = new wxList (wxKEY_INTEGER);
@@ -123,11 +123,11 @@ void wxHashTable::Put (long key, long value, wxObject * object)
 void wxHashTable::Put (long key, const wxChar *value, wxObject * object)
 {
   // Should NEVER be
-  long k = (long) key;
-  if (k < 0)
-    k = -k;
+  long k = (long) key; 
 
   int position = (int) (k % n);
+  if (position < 0) position = -position;
+ 
   if (!hash_table[position])
   {
     hash_table[position] = new wxList (wxKEY_INTEGER);
@@ -142,10 +142,10 @@ void wxHashTable::Put (long key, wxObject * object)
 {
   // Should NEVER be
   long k = (long) key;
-  if (k < 0)
-    k = -k;
-
+  
   int position = (int) (k % n);
+  if (position < 0) position = -position;
+
   if (!hash_table[position])
   {
     hash_table[position] = new wxList (wxKEY_INTEGER);
@@ -159,6 +159,7 @@ void wxHashTable::Put (long key, wxObject * object)
 void wxHashTable::Put (const wxChar *key, wxObject * object)
 {
   int position = (int) (MakeKey (key) % n);
+  if (position < 0) position = -position;
 
   if (!hash_table[position])
   {
@@ -174,10 +175,10 @@ wxObject *wxHashTable::Get (long key, long value) const
 {
   // Should NEVER be
   long k = (long) key;
-  if (k < 0)
-    k = -k;
 
   int position = (int) (k % n);
+  if (position < 0) position = -position;
+
   if (!hash_table[position])
     return (wxObject *) NULL;
   else
@@ -194,10 +195,10 @@ wxObject *wxHashTable::Get (long key, const wxChar *value) const
 {
   // Should NEVER be
   long k = (long) key;
-  if (k < 0)
-    k = -k;
-
+ 
   int position = (int) (k % n);
+  if (position < 0) position = -position;
+
   if (!hash_table[position])
     return (wxObject *) NULL;
   else
@@ -214,10 +215,10 @@ wxObject *wxHashTable::Get (long key) const
 {
   // Should NEVER be
   long k = (long) key;
-  if (k < 0)
-    k = -k;
 
   int position = (int) (k % n);
+  if (position < 0) position = -position;
+
   if (!hash_table[position])
     return (wxObject *) NULL;
   else
@@ -230,6 +231,7 @@ wxObject *wxHashTable::Get (long key) const
 wxObject *wxHashTable::Get (const wxChar *key) const
 {
   int position = (int) (MakeKey (key) % n);
+  if (position < 0) position = -position;
 
   if (!hash_table[position])
     return (wxObject *) NULL;
@@ -244,10 +246,10 @@ wxObject *wxHashTable::Delete (long key)
 {
   // Should NEVER be
   long k = (long) key;
-  if (k < 0)
-    k = -k;
 
   int position = (int) (k % n);
+  if (position < 0) position = -position;
+
   if (!hash_table[position])
     return (wxObject *) NULL;
   else
@@ -268,6 +270,8 @@ wxObject *wxHashTable::Delete (long key)
 wxObject *wxHashTable::Delete (const wxChar *key)
 {
   int position = (int) (MakeKey (key) % n);
+  if (position < 0) position = -position;
+
   if (!hash_table[position])
     return (wxObject *) NULL;
   else
@@ -288,11 +292,11 @@ wxObject *wxHashTable::Delete (const wxChar *key)
 wxObject *wxHashTable::Delete (long key, int value)
 {
   // Should NEVER be
-  long k = (long) key;
-  if (k < 0)
-    k = -k;
+  long k = (long) key; 
 
   int position = (int) (k % n);
+  if (position < 0) position = -position;
+
   if (!hash_table[position])
     return (wxObject *) NULL;
   else
@@ -313,6 +317,8 @@ wxObject *wxHashTable::Delete (long key, int value)
 wxObject *wxHashTable::Delete (long key, const wxChar *value)
 {
   int position = (int) (key % n);
+  if (position < 0) position = -position;
+
   if (!hash_table[position])
     return (wxObject *) NULL;
   else
