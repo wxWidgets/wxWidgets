@@ -88,10 +88,24 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
 public:
     wxTreeTextCtrl(wxGenericTreeCtrl *owner, wxGenericTreeItem *item);
 
+    // wxGenericTreeCtrl can use this one to abandon editing the given item,
+    // it's not an error to call it if this item is not being edited
+    void StopEditing(wxGenericTreeItem *item)
+    {
+        if ( item == m_itemEdited )
+            DoStopEditing();
+    }
+
 protected:
     void OnChar( wxKeyEvent &event );
     void OnKeyUp( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
+
+    void DoStopEditing()
+    {
+        Finish();
+        m_owner->OnRenameCancelled(m_itemEdited);
+    }
 
     bool AcceptChanges();
     void Finish();
@@ -413,12 +427,10 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
                 Finish();
             }
             // else do nothing, do not accept and do not close
-
             break;
 
         case WXK_ESCAPE:
-            Finish();
-            m_owner->OnRenameCancelled(m_itemEdited);
+            DoStopEditing();
             break;
 
         default:
@@ -1295,7 +1307,7 @@ wxTreeItemId wxGenericTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 // called by wxTextTreeCtrl when it marks itself for deletion
 void wxGenericTreeCtrl::ResetTextControl()
 {
-  m_textCtrl = NULL;
+    m_textCtrl = NULL;
 }
 
 // find the first item starting with the given prefix after the given item
@@ -1494,6 +1506,12 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
     m_dirty = true;     // do this first so stuff below doesn't cause flicker
 
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
+
+    if ( m_textCtrl )
+    {
+        // can't delete the item being edited, cancel editing it first
+        m_textCtrl->StopEditing(item);
+    }
 
     wxGenericTreeItem *parent = item->GetParent();
 
@@ -2866,6 +2884,8 @@ void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )
         return;
     }
 
+    m_itemEdited = itemEdit;
+
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
@@ -2912,9 +2932,6 @@ void wxGenericTreeCtrl::OnRenameCancelled(wxGenericTreeItem *item)
 
     GetEventHandler()->ProcessEvent( le );
 }
-
-
-
 
 void wxGenericTreeCtrl::OnRenameTimer()
 {
