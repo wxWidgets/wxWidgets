@@ -80,6 +80,8 @@ bool wxScrolledWindow::Create(wxWindow *parent, wxWindowID id,
     m_yScrollLinesPerPage = 0;
     m_scaleX = 1.0;
     m_scaleY = 1.0;
+    
+    m_targetWindow = this;
 
     return wxPanel::Create(parent, id, pos, size, style, name);
 }
@@ -147,12 +149,27 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     AdjustScrollbars();
    
     if (do_refresh && !noRefresh) 
-	Refresh(); 
+	m_targetWindow->Refresh(); 
    
 #ifdef __WXMSW__
    // Necessary?
     UpdateWindow ((HWND) GetHWND());
 #endif
+}
+
+wxScrolledWindow::~wxScrolledWindow()
+{
+}
+
+void wxScrolledWindow::SetTargetWindow( wxWindow *target )
+{
+    wxASSERT_MSG( target, wxT("target window must not be NULL") );
+    m_targetWindow = target;
+}
+
+wxWindow *wxScrolledWindow::GetTargetWindow()
+{
+    return m_targetWindow;
 }
 
 void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
@@ -185,130 +202,132 @@ void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
     if (orient == wxHORIZONTAL)
     {
        if (m_xScrollingEnabled)
-            ScrollWindow(-m_xScrollPixelsPerLine * nScrollInc, 0, (const wxRect *) NULL);
+            m_targetWindow->ScrollWindow(-m_xScrollPixelsPerLine * nScrollInc, 0, (const wxRect *) NULL);
        else
-            Refresh();
+            m_targetWindow->Refresh();
     }
     else
     {
         if (m_yScrollingEnabled)
-            ScrollWindow(0, -m_yScrollPixelsPerLine * nScrollInc, (const wxRect *) NULL);
+            m_targetWindow->ScrollWindow(0, -m_yScrollPixelsPerLine * nScrollInc, (const wxRect *) NULL);
         else
-            Refresh();
+            m_targetWindow->Refresh();
   }
 }
 
 int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
 {
-  int pos = event.GetPosition();
-  int orient = event.GetOrientation();
+    int pos = event.GetPosition();
+    int orient = event.GetOrientation();
 
-  int nScrollInc = 0;
-  switch (event.GetEventType())
-  {
-    case wxEVT_SCROLLWIN_TOP:
+    int nScrollInc = 0;
+    switch (event.GetEventType())
     {
-      if (orient == wxHORIZONTAL)
-        nScrollInc = - m_xScrollPosition;
-      else
-        nScrollInc = - m_yScrollPosition;
-      break;
+        case wxEVT_SCROLLWIN_TOP:
+        {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = - m_xScrollPosition;
+            else
+                nScrollInc = - m_yScrollPosition;
+            break;
+        }
+        case wxEVT_SCROLLWIN_BOTTOM:
+        {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = m_xScrollLines - m_xScrollPosition;
+            else
+                nScrollInc = m_yScrollLines - m_yScrollPosition;
+            break;
+        }
+        case wxEVT_SCROLLWIN_LINEUP:
+        {
+            nScrollInc = -1;
+            break;
+        }
+        case wxEVT_SCROLLWIN_LINEDOWN:
+        {
+            nScrollInc = 1;
+            break;
+        }
+        case wxEVT_SCROLLWIN_PAGEUP:
+        {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = -GetScrollPageSize(wxHORIZONTAL);
+            else
+                nScrollInc = -GetScrollPageSize(wxVERTICAL);
+            break;
+        }
+        case wxEVT_SCROLLWIN_PAGEDOWN:
+        {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = GetScrollPageSize(wxHORIZONTAL);
+            else
+                nScrollInc = GetScrollPageSize(wxVERTICAL);
+            break;
+        }
+        case wxEVT_SCROLLWIN_THUMBTRACK:
+        {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = pos - m_xScrollPosition;
+            else
+                nScrollInc = pos - m_yScrollPosition;
+            break;
+        }
+        default:
+        {
+            break;
+        }
     }
-    case wxEVT_SCROLLWIN_BOTTOM:
-    {
-      if (orient == wxHORIZONTAL)
-        nScrollInc = m_xScrollLines - m_xScrollPosition;
-      else
-        nScrollInc = m_yScrollLines - m_yScrollPosition;
-      break;
-    }
-    case wxEVT_SCROLLWIN_LINEUP:
-    {
-      nScrollInc = -1;
-      break;
-    }
-    case wxEVT_SCROLLWIN_LINEDOWN:
-    {
-      nScrollInc = 1;
-      break;
-    }
-    case wxEVT_SCROLLWIN_PAGEUP:
-    {
-      if (orient == wxHORIZONTAL)
-        nScrollInc = -GetScrollPageSize(wxHORIZONTAL);
-      else
-        nScrollInc = -GetScrollPageSize(wxVERTICAL);
-      break;
-    }
-    case wxEVT_SCROLLWIN_PAGEDOWN:
-    {
-      if (orient == wxHORIZONTAL)
-        nScrollInc = GetScrollPageSize(wxHORIZONTAL);
-      else
-        nScrollInc = GetScrollPageSize(wxVERTICAL);
-      break;
-    }
-    case wxEVT_SCROLLWIN_THUMBTRACK:
-    {
-      if (orient == wxHORIZONTAL)
-        nScrollInc = pos - m_xScrollPosition;
-      else
-        nScrollInc = pos - m_yScrollPosition;
-      break;
-    }
-    default:
-    {
-      break;
-    }
-  }
 
-  if (orient == wxHORIZONTAL)
-  {
-    if (m_xScrollPixelsPerLine > 0) {
-      int w, h;
-      GetClientSize(&w, &h);
+    if (orient == wxHORIZONTAL)
+    {
+        if (m_xScrollPixelsPerLine > 0) 
+        {
+            int w, h;
+            m_targetWindow->GetClientSize(&w, &h);
 
-      int nMaxWidth = m_xScrollLines*m_xScrollPixelsPerLine;
-      int noPositions = (int) ( ((nMaxWidth - w)/(float)m_xScrollPixelsPerLine) + 0.5 );
-      if (noPositions < 0)
-	noPositions = 0;
+            int nMaxWidth = m_xScrollLines*m_xScrollPixelsPerLine;
+            int noPositions = (int) ( ((nMaxWidth - w)/(double)m_xScrollPixelsPerLine) + 0.5 );
+            if (noPositions < 0)
+	        noPositions = 0;
 
-      if ( (m_xScrollPosition + nScrollInc) < 0 )
-	nScrollInc = -m_xScrollPosition; // As -ve as we can go
-      else if ( (m_xScrollPosition + nScrollInc) > noPositions )
-	nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
+            if ( (m_xScrollPosition + nScrollInc) < 0 )
+	        nScrollInc = -m_xScrollPosition; // As -ve as we can go
+            else if ( (m_xScrollPosition + nScrollInc) > noPositions )
+	        nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
+        }
+        else
+            m_targetWindow->Refresh();
     }
     else
-      Refresh();
-  }
-  else
-  {
-    if (m_yScrollPixelsPerLine > 0) {
-      int w, h;
-      GetClientSize(&w, &h);
+    {
+        if (m_yScrollPixelsPerLine > 0) 
+	{
+            int w, h;
+            m_targetWindow->GetClientSize(&w, &h);
       
-      int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
-      int noPositions = (int) ( ((nMaxHeight - h)/(float)m_yScrollPixelsPerLine) + 0.5 );
-      if (noPositions < 0)
-	noPositions = 0;
+            int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
+            int noPositions = (int) ( ((nMaxHeight - h)/(double)m_yScrollPixelsPerLine) + 0.5 );
+            if (noPositions < 0)
+	        noPositions = 0;
       
-      if ( (m_yScrollPosition + nScrollInc) < 0 )
-	nScrollInc = -m_yScrollPosition; // As -ve as we can go
-      else if ( (m_yScrollPosition + nScrollInc) > noPositions )
-	nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
+            if ( (m_yScrollPosition + nScrollInc) < 0 )
+	        nScrollInc = -m_yScrollPosition; // As -ve as we can go
+            else if ( (m_yScrollPosition + nScrollInc) > noPositions )
+	        nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
+        }
+        else
+            m_targetWindow->Refresh();
     }
-    else
-      Refresh();
-  }
 
-  return nScrollInc;
+    return nScrollInc;
 }
 
 // Adjust the scrollbars - new version.
 void wxScrolledWindow::AdjustScrollbars()
 {
     int w, h;
-    GetClientSize(&w, &h);
+    m_targetWindow->GetClientSize(&w, &h);
     
     int oldXScroll = m_xScrollPosition;
     int oldYScroll = m_yScrollPosition;
@@ -317,7 +336,7 @@ void wxScrolledWindow::AdjustScrollbars()
     {
 	// Calculate page size i.e. number of scroll units you get on the
 	// current client window
-        int noPagePositions = (int) ( (w/(float)m_xScrollPixelsPerLine) + 0.5 );
+        int noPagePositions = (int) ( (w/(double)m_xScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
@@ -339,7 +358,7 @@ void wxScrolledWindow::AdjustScrollbars()
     {
 	// Calculate page size i.e. number of scroll units you get on the
 	// current client window
-        int noPagePositions = (int) ( (h/(float)m_yScrollPixelsPerLine) + 0.5 );
+        int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
@@ -360,17 +379,17 @@ void wxScrolledWindow::AdjustScrollbars()
     if (oldXScroll != m_xScrollPosition)
     {
        if (m_xScrollingEnabled)
-            ScrollWindow( m_xScrollPixelsPerLine * (oldXScroll-m_xScrollPosition), 0, (const wxRect *) NULL );
+            m_targetWindow->ScrollWindow( m_xScrollPixelsPerLine * (oldXScroll-m_xScrollPosition), 0, (const wxRect *) NULL );
        else
-            Refresh();
+            m_targetWindow->Refresh();
     }
     
     if (oldYScroll != m_yScrollPosition)
     {
         if (m_yScrollingEnabled)
-            ScrollWindow( 0, m_yScrollPixelsPerLine * (oldYScroll-m_yScrollPosition), (const wxRect *) NULL );
+            m_targetWindow->ScrollWindow( 0, m_yScrollPixelsPerLine * (oldYScroll-m_yScrollPosition), (const wxRect *) NULL );
         else
-            Refresh();
+            m_targetWindow->Refresh();
     }
 }
 
@@ -452,7 +471,7 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
   
     int w, h;
-    GetClientSize(&w, &h);
+    m_targetWindow->GetClientSize(&w, &h);
 
     if (x_pos != -1)
     {
@@ -461,7 +480,7 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
     
 	// Calculate page size i.e. number of scroll units you get on the
 	// current client window
-        int noPagePositions = (int) ( (w/(float)m_xScrollPixelsPerLine) + 0.5 );
+        int noPagePositions = (int) ( (w/(double)m_xScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
@@ -469,9 +488,9 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition );
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
       
-        SetScrollPos( wxHORIZONTAL, m_xScrollPosition, TRUE );
+        m_targetWindow->SetScrollPos( wxHORIZONTAL, m_xScrollPosition, TRUE );
 	
-	ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
+	m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
     }
     if (y_pos != -1)
     {
@@ -480,7 +499,7 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
 	
 	// Calculate page size i.e. number of scroll units you get on the
 	// current client window
-        int noPagePositions = (int) ( (h/(float)m_yScrollPixelsPerLine) + 0.5 );
+        int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
@@ -488,9 +507,9 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
 	
-        SetScrollPos( wxVERTICAL, m_yScrollPosition, TRUE );
+        m_targetWindow->SetScrollPos( wxVERTICAL, m_yScrollPosition, TRUE );
 	
-	ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
+	m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
     }
     
     

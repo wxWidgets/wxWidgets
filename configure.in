@@ -3000,6 +3000,7 @@ AC_OUTPUT([
             samples/resource/Makefile
             samples/sashtest/Makefile
             samples/scroll/Makefile
+            samples/scrollsub/Makefile
             samples/splitter/Makefile
             samples/text/Makefile
             samples/thread/Makefile
