@@ -343,7 +343,7 @@ wxString wxFileConfig::GetGlobalFileName(const wxChar *szFile)
 
 wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 {
-#ifdef __VMS__ 
+#ifdef __VMS__
     // On VMS I saw the problem that the home directory was appended
     // twice for the configuration file. Does that also happen for
     // other platforms?
@@ -390,9 +390,9 @@ void wxFileConfig::Init()
         wxTextFile fileGlobal(m_strGlobalFile);
 
 #if defined(__WXGTK20__) && wxUSE_UNICODE
-        if ( fileGlobal.Open( wxConvUTF8 ) ) 
+        if ( fileGlobal.Open( wxConvUTF8 ) )
 #else
-        if ( fileGlobal.Open() ) 
+        if ( fileGlobal.Open() )
 #endif
         {
             Parse(fileGlobal, FALSE /* global */);
@@ -409,9 +409,9 @@ void wxFileConfig::Init()
     {
         wxTextFile fileLocal(m_strLocalFile);
 #if defined(__WXGTK20__) && wxUSE_UNICODE
-        if ( fileLocal.Open( wxConvUTF8 ) ) 
+        if ( fileLocal.Open( wxConvUTF8 ) )
 #else
-        if ( fileLocal.Open() ) 
+        if ( fileLocal.Open() )
 #endif
         {
             Parse(fileLocal, TRUE /* local */);
@@ -468,7 +468,7 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
     }
 
     SetUmask(-1);
-    
+
     Init();
 }
 
@@ -564,7 +564,7 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
   wxString strLine;
 
   size_t nLineCount = buffer.GetLineCount();
-  
+
   for ( size_t n = 0; n < nLineCount; n++ )
   {
     strLine = buffer[n];
@@ -873,7 +873,7 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
     wxConfigPathChanger     path(this, key);
     wxString                strName = path.Name();
-  
+
     wxLogTrace( _T("wxFileConfig"),
                 _T("  Writing String '%s' = '%s' to Group '%s'"),
                 strName.c_str(),
@@ -1518,13 +1518,17 @@ wxFileConfigGroup *wxFileConfigGroup::AddSubgroup(const wxString& strName)
 
 bool wxFileConfigGroup::DeleteSubgroupByName(const wxChar *szName)
 {
-  return DeleteSubgroup(FindSubgroup(szName));
+    wxFileConfigGroup * const pGroup = FindSubgroup(szName);
+
+    return pGroup ? DeleteSubgroup(pGroup) : FALSE;
 }
 
 // Delete the subgroup and remove all references to it from
 // other data structures.
 bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 {
+    wxCHECK_MSG( pGroup, FALSE, _T("deleting non existing group?") );
+
     wxLogTrace( _T("wxFileConfig"),
                 _T("Deleting group '%s' from '%s'"),
                 pGroup->Name().c_str(),
@@ -1539,11 +1543,8 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
                 _T("  text: '%s'"),
                 ((m_pLine) ? m_pLine->Text().c_str() : wxEmptyString) );
 
-    wxCHECK_MSG( pGroup != 0, FALSE, _T("deleting non existing group?") );
-
-        // delete all entries
-
-    size_t  nCount = pGroup->m_aEntries.Count();
+    // delete all entries
+    size_t nCount = pGroup->m_aEntries.Count();
 
     wxLogTrace(_T("wxFileConfig"),
                _T("Removing %lu Entries"),
@@ -1627,7 +1628,7 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
             {
                 wxLogTrace( _T("wxFileConfig"),
                             _T("  ------- No previous group found -------") );
-                
+
                 wxASSERT_MSG( !pNewLast || m_pLine == 0,
                               _T("how comes it has the same line as we?") );
 
