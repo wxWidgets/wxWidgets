@@ -764,7 +764,7 @@ void wxWindowOS2::SetScrollbar(
     int                             nPageSize = nThumbVisible;
     SBCDATA                         vInfo;
     HWND                            hWnd = GetHwnd();
-    ULONG                           ulStyle = WS_VISIBLE | WS_SYNCPAINT;
+    ULONG                           ulStyle = WS_VISIBLE;
     RECTL                           vRect;
 
     ::WinQueryWindowRect(hWnd, &vRect);
@@ -798,7 +798,7 @@ void wxWindowOS2::SetScrollbar(
                                                     ,20
                                                     ,hWnd
                                                     ,HWND_TOP
-                                                    ,FID_HORZSCROLL
+                                                    ,60000
                                                     ,&vInfo
                                                     ,NULL
                                                    );
@@ -848,7 +848,7 @@ void wxWindowOS2::SetScrollbar(
                                                     ,vRect.yTop - (vRect.yBottom + 20)
                                                     ,hWnd
                                                     ,HWND_TOP
-                                                    ,FID_VERTSCROLL
+                                                    ,60001
                                                     ,&vInfo
                                                     ,NULL
                                                    );
@@ -892,10 +892,13 @@ void wxWindowOS2::ScrollWindow(
 , const wxRect*                     pRect
 )
 {
+    nDy *= -1; // flip the sign of Dy as OS/2 is opposite Windows.
     RECTL                           vRect;
     RECTL                           vRect2;
+    RECTL                           vRectHorz;
+    RECTL                           vRectVert;
+    RECTL                           vRectChild;
 
-    nDy *= -1; // flip the sign of Dy as OS/2 is opposite wxWin.
     if (pRect)
     {
         vRect2.xLeft   = pRect->x;
@@ -905,36 +908,28 @@ void wxWindowOS2::ScrollWindow(
     }
     else
     {
-        ::WinQueryWindowRect(GetHwnd(), &vRect2);
-        ::WinQueryWindowRect(m_hWndScrollBarHorz, &vRect);
+        ::WinQueryWindowRect(GetHwnd(), &vRect);
+        ::WinQueryWindowRect(m_hWndScrollBarHorz, &vRectHorz);
         vRect2.yBottom += vRect.yTop - vRect.yBottom;
-        ::WinQueryWindowRect(m_hWndScrollBarVert, &vRect);
+        ::WinQueryWindowRect(m_hWndScrollBarVert, &vRectVert);
         vRect2.xRight -= vRect.xRight - vRect.xLeft;
 
     }
-    if (pRect)
-        ::WinScrollWindow( GetHwnd()
-                          ,(LONG)nDx
-                          ,(LONG)nDy
-                          ,&vRect2
-                          ,NULL
-                          ,NULLHANDLE
-                          ,NULL
-                          ,SW_INVALIDATERGN
-                         );
-    else
-        ::WinScrollWindow( GetHwnd()
-                          ,nDx
-                          ,nDy
-                          ,NULL
-                          ,NULL
-                          ,NULLHANDLE
-                          ,NULL
-                          ,SW_INVALIDATERGN
-                         );
+    ::WinScrollWindow( GetHwnd()
+                      ,(LONG)nDx
+                      ,(LONG)nDy
+                      ,&vRect
+                      ,NULL
+                      ,NULLHANDLE
+                      ,NULL
+                      ,SW_INVALIDATERGN
+                     );
+    ::WinInvalidateRect(m_hWndScrollBarHorz, &vRectHorz, FALSE);
+    ::WinInvalidateRect(m_hWndScrollBarVert, &vRectVert, FALSE);
 
     //
     // Move the children
+    //
     wxWindowList::Node*             pCurrent = GetChildren().GetFirst();
     SWP                             vSwp;
 
@@ -945,31 +940,53 @@ void wxWindowOS2::ScrollWindow(
         if (pChildWin->GetHWND() != NULLHANDLE)
         {
             ::WinQueryWindowPos(pChildWin->GetHWND(), &vSwp);
-            ::WinQueryWindowRect(pChildWin->GetHWND(), &vRect);
-            if (pChildWin->GetHWND() == m_hWndScrollBarVert ||
-                pChildWin->GetHWND() == m_hWndScrollBarHorz)
+            ::WinQueryWindowRect(pChildWin->GetHWND(), &vRectChild);
+            if (pChildWin->IsKindOf(CLASSINFO(wxControl)))
             {
-                ::WinSetWindowPos( pChildWin->GetHWND()
-                                  ,HWND_TOP
-                                  ,vSwp.x + nDx
-                                  ,vSwp.y + nDy
-                                  ,0
-                                  ,0
-                                  ,SWP_MOVE | SWP_SHOW | SWP_ZORDER
-                                 );
+                wxControl*          pCtrl;
+
+                //
+                // Must deal with controls that have margins like ENTRYFIELD.  The SWP
+                // struct of such a control will have and origin offset from its intended
+                // position by the width of the margins.
+                //
+                pCtrl = wxDynamicCast(pChildWin, wxControl);
+                vSwp.y -= pCtrl->GetYComp();
+                vSwp.x -= pCtrl->GetXComp();
             }
-            else
+            ::WinSetWindowPos( pChildWin->GetHWND()
+                              ,HWND_BOTTOM
+                              ,vSwp.x + nDx
+                              ,vSwp.y + nDy
+                              ,0
+                              ,0
+                              ,SWP_MOVE | SWP_ZORDER
+                             );
+            if (pChildWin->IsKindOf(CLASSINFO(wxRadioBox)))
             {
-                ::WinSetWindowPos( pChildWin->GetHWND()
-                                  ,HWND_BOTTOM
-                                  ,vSwp.x + nDx
-                                  ,vSwp.y + nDy
-                                  ,0
-                                  ,0
-                                  ,SWP_MOVE | SWP_ZORDER
-                                 );
-                ::WinInvalidateRect(pChildWin->GetHWND(), &vRect, FALSE);
+                wxRadioBox*         pRadioBox;
+
+                pRadioBox = wxDynamicCast(pChildWin, wxRadioBox);
+                pRadioBox->AdjustButtons( (int)vSwp.x + nDx
+                                         ,(int)vSwp.y + nDy
+                                         ,(int)vSwp.cx
+                                         ,(int)vSwp.cy
+                                         ,pRadioBox->GetSizeFlags()
+                                        );
             }
+            if (pChildWin->IsKindOf(CLASSINFO(wxSlider)))
+            {
+                wxSlider*           pSlider;
+
+                pSlider = wxDynamicCast(pChildWin, wxSlider);
+                pSlider->AdjustSubControls( (int)vSwp.x + nDx
+                                           ,(int)vSwp.y + nDy
+                                           ,(int)vSwp.cx
+                                           ,(int)vSwp.cy
+                                           ,pSlider->GetSizeFlags()
+                                          );
+            }
+            ::WinInvalidateRect(pChildWin->GetHWND(), &vRectChild, FALSE);
         }
         pCurrent = pCurrent->GetNext();
     }
@@ -2421,7 +2438,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
             // child controls, so we need to already be sized
             // in order to get the child controls positoned properly.
             //
-            if (IsKindOf(CLASSINFO(wxDialog)))
+            if (IsKindOf(CLASSINFO(wxDialog)) || IsKindOf(CLASSINFO(wxFrame)))
             {
                 PSWP                pSwp = (PSWP)PVOIDFROMMP(wParam);
                 PSWP                pSwp2 = pSwp++;
@@ -2432,6 +2449,16 @@ MRESULT wxWindowOS2::OS2WindowProc(
                                             ,pSwp->cy
                                             ,(WXUINT)lParam
                                            );
+                if (IsKindOf(CLASSINFO(wxFrame)))
+                {
+                    wxFrame*            pFrame = wxDynamicCast(this, wxFrame);
+
+                    if (pFrame)
+                    {
+                        if (pFrame->GetStatusBar())
+                            pFrame->PositionStatusBar();
+                    }
+                }
             }
             break;
 

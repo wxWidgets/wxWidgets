@@ -269,6 +269,18 @@ bool wxTopLevelWindowOS2::CreateDialog(
         nX = (vSizeDpy.x - nWidth) / 2;
         nY = (vSizeDpy.y - nHeight) / 2;
     }
+    m_backgroundColour.Set(wxString("LIGHT GREY"));
+
+    LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
+
+    if (!::WinSetPresParam( m_hWnd
+                           ,PP_BACKGROUNDCOLOR
+                           ,sizeof(LONG)
+                           ,(PVOID)&lColor
+                          ))
+    {
+        return FALSE;
+    }
     ::WinSetWindowPos( GetHwnd()
                       ,HWND_TOP
                       ,nX
@@ -277,6 +289,10 @@ bool wxTopLevelWindowOS2::CreateDialog(
                       ,nHeight
                       ,SWP_MOVE | SWP_SIZE | SWP_ZORDER | SWP_SHOW
                      );
+    //
+    // Set the m_hFrame to m_hWnd for Dialogs
+    //
+    m_hFrame = m_hWnd;
     SubclassWin(m_hWnd);
     return TRUE;
 } // end of wxTopLevelWindowOS2::CreateDialog
