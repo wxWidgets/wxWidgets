@@ -513,7 +513,16 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, int pos, const wxString& item)
 
         ApplyWidgetStyle();
     }
+    else
 
+    // The best size of a wxChoice should probably
+    // be changed everytime the control has been
+    // changed, but at least after adding an item
+    // it has to change. Adapted from Matt Ownby.
+    InvalidateBestSize();
+    
+     gtk_signal_connect( GTK_OBJECT( menu_item ), "activate",
+       GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
     gtk_signal_connect( GTK_OBJECT( menu_item ), "activate",
       GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
 
