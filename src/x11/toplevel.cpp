@@ -585,11 +585,11 @@ void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 
 void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    wxLogDebug( "Setting pos: %d, %d", x, y );
+    // wxLogDebug( "Setting pos: %d, %d", x, y );
     wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
 
     wxPoint pt = GetPosition();
-    wxLogDebug( "After, pos: %d, %d", pt.x, pt.y );
+    // wxLogDebug( "After, pos: %d, %d", pt.x, pt.y );
 #if 0
     XSync(wxGlobalDisplay(), False);
     int w, h;
@@ -605,14 +605,14 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
 
     if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
-	int yy = 0;
+        int yy = 0;
         AdjustForParentClientOrigin( x, yy, sizeFlags);
         windowChanges.x = x;
         valueMask |= CWX;
     }
     if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
-	int xx = 0;
+        int xx = 0;
         AdjustForParentClientOrigin( xx, y, sizeFlags);
         windowChanges.y = y;
         valueMask |= CWY;
@@ -647,12 +647,12 @@ void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
         int offsetY = 0;
 	
 #if !wxUSE_NANOX
-        wxLogDebug("Translating...");
+        // wxLogDebug("Translating...");
         Window childWindow;
         XTranslateCoordinates(wxGlobalDisplay(), window, XDefaultRootWindow(wxGlobalDisplay()),
 				  0, 0, & offsetX, & offsetY, & childWindow);
 
-        wxLogDebug("Offset: %d, %d", offsetX, offsetY);
+        // wxLogDebug("Offset: %d, %d", offsetX, offsetY);
 #endif
 	
         XWindowAttributes attr;

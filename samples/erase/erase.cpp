@@ -180,17 +180,29 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc(this);
     PrepareDC( dc );
-        
+    
+#if 0  
     wxRegionIterator upd( GetUpdateRegion() );
     while (upd)
     {
         wxLogDebug( "Paint: %d %d %d %d", upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
         upd ++;
     }
+#endif
+
+#if 0
+    wxSize size = GetSize();
+    wxSize client_size = GetClientSize();
+    wxLogDebug( "size %d %d client_size %d %d", size.x, size.y, client_size.x, client_size.y );
+#endif
     
     dc.SetPen( *wxWHITE_PEN );
     for (int i = 0; i < 20; i += 2)
        dc.DrawLine( i,i, i+100,i );
+    
+    dc.SetPen( *wxWHITE_PEN );
+    for (int i = 200; i < 220; i += 2)
+       dc.DrawLine( i-200,i, i-100,i );
     
     wxRegion region( 110, 110, 80, 80 );
     wxRegion hole( 130, 130, 40, 1 );

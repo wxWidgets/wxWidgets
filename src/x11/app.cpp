@@ -411,7 +411,42 @@ int wxApp::MainLoop()
     return rt;
 }
 
+//-----------------------------------------------------------------------
+// X11 predicate function for exposure compression
+//-----------------------------------------------------------------------
+
+struct wxExposeInfo
+{
+    Window window;
+    Bool found_non_matching;
+};
+
+static Bool expose_predicate (Display *display, XEvent *xevent, XPointer arg)
+{
+    wxExposeInfo *info = (wxExposeInfo*) arg;
+    
+    if (info->found_non_matching)
+       return FALSE;
+    
+    if (xevent->xany.type != Expose)
+    {
+        info->found_non_matching = TRUE;
+        return FALSE;
+    }
+    
+    if (xevent->xexpose.window != info->window)
+    {
+        info->found_non_matching = TRUE;
+        return FALSE;
+    }
+    
+    return TRUE;
+}
+
+//-----------------------------------------------------------------------
 // Processes an X event.
+//-----------------------------------------------------------------------
+
 void wxApp::ProcessXEvent(WXEvent* _event)
 {
     XEvent* event = (XEvent*) _event;
@@ -541,13 +576,23 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
                                          XExposeEventGetWidth(event), XExposeEventGetHeight(event));
                                               
+
 #if !wxUSE_NANOX
-            if (event->xexpose.count == 0)
-#endif
+            XEvent tmp_event;
+            wxExposeInfo info;
+            info.window = event->xexpose.window;
+            info.found_non_matching = FALSE;
+            while (XCheckIfEvent( wxGlobalDisplay(), &tmp_event, expose_predicate, (XPointer) &info ))
             {
-                // Only erase background, paint in idle time.
-                win->SendEraseEvents();
+                win->GetUpdateRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
+                                              tmp_event.xexpose.width, tmp_event.xexpose.height );
+                                              
+                win->GetClearRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
+                                             tmp_event.xexpose.width, tmp_event.xexpose.height );
             }
+#endif
+
+            win->SendEraseEvents();
 
             return;
         }
@@ -621,6 +666,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                     focusEvent.SetEventObject(win);
                     focusEvent.SetWindow( g_prevFocus );
                     g_prevFocus = NULL;
+                    
                     win->GetEventHandler()->ProcessEvent(focusEvent);
                 }
                 break;

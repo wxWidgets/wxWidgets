@@ -164,6 +164,24 @@ wxScrollBar::~wxScrollBar()
 {
 }
 
+bool wxScrollBar::AcceptsFocus() const
+{
+    if (!wxWindow::AcceptsFocus()) return FALSE;
+    
+    wxWindow *parent = (wxWindow*) GetParent();
+    
+    if (parent)
+    {
+        if ((parent->GetScrollbar( wxHORIZONTAL ) == this) ||
+            (parent->GetScrollbar( wxVERTICAL ) == this))
+        {
+            return FALSE;
+        }
+    }
+    
+    return TRUE;
+}
+
 // ----------------------------------------------------------------------------
 // scrollbar API
 // ----------------------------------------------------------------------------

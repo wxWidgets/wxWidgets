@@ -562,8 +562,8 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
     else
     {
         wxRect rect;
-        if (dx < 0) rect.x = cw+dx; else rect.x = s_x;
-        if (dy < 0) rect.y = ch+dy; else rect.y = s_y;
+        if (dx < 0) rect.x = cw+dx + offset.x; else rect.x = s_x;
+        if (dy < 0) rect.y = ch+dy + offset.y; else rect.y = s_y;
         if (dy != 0) rect.width = cw; else rect.width = abs(dx);
         if (dx != 0) rect.height = ch; else rect.height = abs(dy);
     

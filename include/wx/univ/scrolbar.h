@@ -99,6 +99,10 @@ public:
                                long numArg = 0,
                                const wxString& strArg = wxEmptyString);
 
+    // The scrollbars around a normal window should not
+    // receive the focus.
+    virtual bool AcceptsFocus() const;
+
     // wxScrollBar sub elements state (combination of wxCONTROL_XXX)
     void SetState(Element which, int flags);
     int GetState(Element which) const;
