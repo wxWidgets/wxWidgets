@@ -235,7 +235,7 @@ function DoOSXBuild {
 	$STAGING_DIR/wxPythonDocs-$VERSION.tar.gz \
 	$STAGING_DIR/wxPythonDemo-$VERSION.tar.gz \
 	distrib/all/build-osx \
-	$host:$OSX_BUILD
+	root@$host:$OSX_BUILD
 
      echo "Running build script on $host..."
      wxdir=$OSX_BUILD/wxPythonSrc-$VERSION
@@ -243,8 +243,8 @@ function DoOSXBuild {
      ssh root@$host "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $flavor $PYVER && rm $cmd"
 
      echo "Fetching the results..."
-     scp "$host:$OSX_BUILD/wxPythonOSX*"  $STAGING_DIR
-     ssh $host "rm $OSX_BUILD/wxPythonOSX*"
+     scp "root@$host:$OSX_BUILD/wxPythonOSX*"  $STAGING_DIR
+     ssh root@$host "rm $OSX_BUILD/wxPythonOSX*"
 
 }
 
@@ -262,8 +262,8 @@ fi
 
 # The remote Linux builds are different than those above.  The source
 # RPMs were already built in the source step, and so building the
-# binary RPMs is a very simple followup step.  Add to that the fact
-# that we need to build on more than one distro...
+# binary RPMs is a very simple followup step.  But then add to that
+# the fact that we need to build on more than one distro...
 
 function DoLinuxBuild {
     local host=$1
