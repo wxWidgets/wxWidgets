@@ -24,10 +24,6 @@
 
 #if wxUSE_FSVOLUME
 
-#if wxUSE_GUI
-    #include "wx/iconbndl.h" // for wxIconArray
-#endif // wxUSE_GUI
-
 // the volume flags
 enum
 {
@@ -56,22 +52,7 @@ enum wxFSVolumeKind
     wxFS_VOL_MAX
 };
 
-#if wxUSE_GUI
-
-#include "wx/icon.h"
-
-enum wxFSIconType
-{
-    wxFS_VOL_ICO_SMALL = 0,
-    wxFS_VOL_ICO_LARGE,
-    wxFS_VOL_ICO_SEL_SMALL,
-    wxFS_VOL_ICO_SEL_LARGE,
-    wxFS_VOL_ICO_MAX
-};
-
-#endif // wxUSE_GUI
-
-class WXDLLEXPORT wxFSVolume
+class WXDLLEXPORT wxFSVolumeBase
 {
 public:
     // return the array containing the names of the volumes
@@ -88,8 +69,8 @@ public:
 
     // create the volume object with this name (should be one of those returned
     // by GetVolumes()).
-    wxFSVolume();
-    wxFSVolume(const wxString& name);
+    wxFSVolumeBase();
+    wxFSVolumeBase(const wxString& name);
     bool Create(const wxString& name);
 
     // accessors
@@ -112,21 +93,60 @@ public:
     wxString GetName() const { return m_volName; }
     wxString GetDisplayName() const { return m_dispName; }
 
-#if wxUSE_GUI
-    wxIcon GetIcon(wxFSIconType type) const;
-#endif
-
     // TODO: operatios (Mount(), Unmount(), Eject(), ...)?
 
-private:
+protected:
+    // the internal volume name
     wxString m_volName;
-    wxString m_dispName;
-#if wxUSE_GUI
-    wxIconArray m_icons;
-#endif
-    bool m_isOk;
 
+    // the volume name as it is displayed to the user
+    wxString m_dispName;
+
+    // have we been initialized correctly?
+    bool m_isOk;
 };
+
+#if wxUSE_GUI
+
+#include "wx/icon.h"
+#include "wx/iconbndl.h" // only for wxIconArray
+
+enum wxFSIconType
+{
+    wxFS_VOL_ICO_SMALL = 0,
+    wxFS_VOL_ICO_LARGE,
+    wxFS_VOL_ICO_SEL_SMALL,
+    wxFS_VOL_ICO_SEL_LARGE,
+    wxFS_VOL_ICO_MAX
+};
+
+// wxFSVolume adds GetIcon() to wxFSVolumeBase
+class wxFSVolume : public wxFSVolumeBase
+{
+public:
+    wxFSVolume() : wxFSVolumeBase() { InitIcons(); }
+    wxFSVolume(const wxString& name) : wxFSVolumeBase(name) { InitIcons(); }
+
+    wxIcon GetIcon(wxFSIconType type) const;
+
+private:
+    void InitIcons();
+
+    // the different icons for this volume (created on demand)
+    wxIconArray m_icons;
+};
+
+#else // !wxUSE_GUI
+
+// wxFSVolume is the same thing as wxFSVolume in wxBase
+class wxFSVolume : public wxFSVolumeBase
+{
+public:
+    wxFSVolume() : wxFSVolumeBase() { }
+    wxFSVolume(const wxString& name) : wxFSVolumeBase(name) { }
+};
+
+#endif // wxUSE_GUI/!wxUSE_GUI
 
 #endif // wxUSE_FSVOLUME
 

@@ -241,6 +241,50 @@ struct HH_AKLINK
 };
 
 // ----------------------------------------------------------------------------
+// SHGetFileInfo-related things
+// ----------------------------------------------------------------------------
+
+#ifndef SHGetFileInfo
+    #ifdef UNICODE
+        #define SHGetFileInfo SHGetFileInfoW
+    #else
+        #define SHGetFileInfo SHGetFileInfoA
+    #endif
+#endif
+
+#ifndef SHGFI_ATTRIBUTES
+    #define SHGFI_ATTRIBUTES 2048
+#endif
+
+#ifndef SFGAO_READONLY
+    #define SFGAO_READONLY 0x00040000L
+#endif
+
+#ifndef SFGAO_REMOVABLE
+    #define SFGAO_REMOVABLE 0x02000000L
+#endif
+
+#ifndef SHGFI_DISPLAYNAME
+    #define SHGFI_DISPLAYNAME 512
+#endif
+
+#ifndef SHGFI_ICON
+    #define SHGFI_ICON 256
+#endif
+
+#ifndef SHGFI_SMALLICON
+     #define SHGFI_SMALLICON 1
+#endif
+
+#ifndef SHGFI_SHELLICONSIZE
+    #define SHGFI_SHELLICONSIZE 4
+#endif
+
+#ifndef SHGFI_OPENICON
+    #define SHGFI_OPENICON 2
+#endif
+
+// ----------------------------------------------------------------------------
 // Rich text control
 // ----------------------------------------------------------------------------
 
@@ -319,7 +363,7 @@ typedef struct _paraformat2 {
 
 #endif
 
-#endif
+#endif // wxUSE_RICHEDIT
 
 // ----------------------------------------------------------------------------
 // Misc stuff

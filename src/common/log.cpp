@@ -18,57 +18,38 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-  #pragma implementation "log.h"
+    #pragma implementation "log.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
-
-// wxWindows
-#ifndef WX_PRECOMP
-    #include "wx/string.h"
-    #include "wx/intl.h"
-    #include "wx/app.h"
-
-    #if wxUSE_GUI
-        #include "wx/window.h"
-        #include "wx/msgdlg.h"
-        #ifdef __WXMSW__
-            #include "wx/msw/private.h"
-        #endif
-    #endif
-#endif //WX_PRECOMP
-
-#include  "wx/file.h"
-#include  "wx/textfile.h"
-#include  "wx/utils.h"
-#include  "wx/wxchar.h"
-#include  "wx/log.h"
-#include  "wx/thread.h"
 
 #if wxUSE_LOG
 
+// wxWindows
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/intl.h"
+    #include "wx/string.h"
+#endif //WX_PRECOMP
+
+#include "wx/apptrait.h"
+#include "wx/file.h"
+#include "wx/log.h"
+#include "wx/msgout.h"
+#include "wx/textfile.h"
+#include "wx/thread.h"
+#include "wx/utils.h"
+#include "wx/wxchar.h"
+
 // other standard headers
-#include  <errno.h>
-#include  <stdlib.h>
-#include  <time.h>
-
-#if defined(__WXMSW__)
-  #include  "wx/msw/private.h"      // includes windows.h for OutputDebugString
-#endif
-
-#if defined(__WXMAC__)
-  #include  "wx/mac/private.h"  // includes mac headers
-#endif
-
-#if defined(__MWERKS__) && wxUSE_UNICODE
-    #include <wtime.h>
-#endif
-
+#include <errno.h>
+#include <stdlib.h>
+#include <time.h>
 
 // ----------------------------------------------------------------------------
 // non member functions
@@ -524,192 +505,6 @@ wxLogStderr::wxLogStderr(FILE *fp)
         m_fp = fp;
 }
 
-#if defined(__WXMAC__) && !defined(__DARWIN__) && defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
-
-// MetroNub stuff doesn't seem to work in CodeWarrior 5.3 Carbon builds...
-
-#ifndef __MetroNubUtils__
-#include "MetroNubUtils.h"
-#endif
-
-#ifdef __cplusplus
-    extern "C" {
-#endif
-
-#ifndef __GESTALT__
-#include <Gestalt.h>
-#endif
-
-#ifndef true
-#define true 1
-#endif
-
-#ifndef false
-#define false 0
-#endif
-
-#if TARGET_API_MAC_CARBON
-
-    #include <CodeFragments.h>
-
-    EXTERN_API_C( long )
-    CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
-
-    ProcPtr gCallUniversalProc_Proc = NULL;
-
-#endif
-
-static MetroNubUserEntryBlock*    gMetroNubEntry = NULL;
-
-static long fRunOnce = false;
-
-Boolean IsCompatibleVersion(short inVersion);
-
-/* ---------------------------------------------------------------------------
-        IsCompatibleVersion
-   --------------------------------------------------------------------------- */
-
-Boolean IsCompatibleVersion(short inVersion)
-{
-    Boolean result = false;
-
-    if (fRunOnce)
-    {
-        MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
-
-        result = (inVersion <= block->apiHiVersion);
-    }
-
-    return result;
-}
-
-/* ---------------------------------------------------------------------------
-        IsMetroNubInstalled
-   --------------------------------------------------------------------------- */
-
-Boolean IsMetroNubInstalled()
-{
-    if (!fRunOnce)
-    {
-        long result, value;
-
-        fRunOnce = true;
-        gMetroNubEntry = NULL;
-
-        if (Gestalt(gestaltSystemVersion, &value) == noErr && value < 0x1000)
-        {
-            /* look for MetroNub's Gestalt selector */
-            if (Gestalt(kMetroNubUserSignature, &result) == noErr)
-            {
-
-            #if TARGET_API_MAC_CARBON
-                if (gCallUniversalProc_Proc == NULL)
-                {
-                    CFragConnectionID   connectionID;
-                    Ptr                 mainAddress;
-                    Str255              errorString;
-                    ProcPtr             symbolAddress;
-                    OSErr               err;
-                    CFragSymbolClass    symbolClass;
-
-                    symbolAddress = NULL;
-                    err = GetSharedLibrary("\pInterfaceLib", kPowerPCCFragArch, kFindCFrag,
-                                           &connectionID, &mainAddress, errorString);
-
-                    if (err != noErr)
-                    {
-                        gCallUniversalProc_Proc = NULL;
-                        goto end;
-                    }
-
-                    err = FindSymbol(connectionID, "\pCallUniversalProc",
-                                    (Ptr *) &gCallUniversalProc_Proc, &symbolClass);
-
-                    if (err != noErr)
-                    {
-                        gCallUniversalProc_Proc = NULL;
-                        goto end;
-                    }
-                }
-            #endif
-
-                {
-                    MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
-
-                    /* make sure the version of the API is compatible */
-                    if (block->apiLowVersion <= kMetroNubUserAPIVersion &&
-                        kMetroNubUserAPIVersion <= block->apiHiVersion)
-                        gMetroNubEntry = block;        /* success! */
-                }
-
-            }
-        }
-    }
-
-end:
-
-#if TARGET_API_MAC_CARBON
-    return (gMetroNubEntry != NULL && gCallUniversalProc_Proc != NULL);
-#else
-    return (gMetroNubEntry != NULL);
-#endif
-}
-
-/* ---------------------------------------------------------------------------
-        IsMWDebuggerRunning                                            [v1 API]
-   --------------------------------------------------------------------------- */
-
-Boolean IsMWDebuggerRunning()
-{
-    if (IsMetroNubInstalled())
-        return CallIsDebuggerRunningProc(gMetroNubEntry->isDebuggerRunning);
-    else
-        return false;
-}
-
-/* ---------------------------------------------------------------------------
-        AmIBeingMWDebugged                                            [v1 API]
-   --------------------------------------------------------------------------- */
-
-Boolean AmIBeingMWDebugged()
-{
-    if (IsMetroNubInstalled())
-        return CallAmIBeingDebuggedProc(gMetroNubEntry->amIBeingDebugged);
-    else
-        return false;
-}
-
-/* ---------------------------------------------------------------------------
-        UserSetWatchPoint                                            [v2 API]
-   --------------------------------------------------------------------------- */
-
-OSErr UserSetWatchPoint (Ptr address, long length, WatchPointIDT* watchPointID)
-{
-    if (IsMetroNubInstalled() && IsCompatibleVersion(kMetroNubUserAPIVersion))
-        return CallUserSetWatchPointProc(gMetroNubEntry->userSetWatchPoint,
-                                         address, length, watchPointID);
-    else
-        return errProcessIsNotClient;
-}
-
-/* ---------------------------------------------------------------------------
-        ClearWatchPoint                                                [v2 API]
-   --------------------------------------------------------------------------- */
-
-OSErr ClearWatchPoint (WatchPointIDT watchPointID)
-{
-    if (IsMetroNubInstalled() && IsCompatibleVersion(kMetroNubUserAPIVersion))
-        return CallClearWatchPointProc(gMetroNubEntry->clearWatchPoint, watchPointID);
-    else
-        return errProcessIsNotClient;
-}
-
-#ifdef __cplusplus
-    }
-#endif
-
-#endif // defined(__WXMAC__) && !defined(__DARWIN__) && (__MWERKS__ >= 0x2400)
-
 void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     wxString str;
@@ -720,43 +515,18 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     fputc(_T('\n'), m_fp);
     fflush(m_fp);
 
-    // under Windows, programs usually don't have stderr at all, so show the
-    // messages also under debugger (unless it's a console program which does
-    // have stderr or unless this is a file logger which doesn't use stderr at
-    // all)
-#if defined(__WXMSW__) && wxUSE_GUI && !defined(__WXMICROWIN__)
+    // under GUI systems such as Windows or Mac, programs usually don't have
+    // stderr at all, so show the messages also somewhere else, typically in
+    // the debugger window so that they go at least somewhere instead of being
+    // simply lost
     if ( m_fp == stderr )
     {
-        str += wxT("\r\n") ;
-        OutputDebugString(str.c_str());
+        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+        if ( traits && !traits->HasStderr() )
+        {
+            wxMessageOutputDebug().Printf(_T("%s"), str.c_str());
+        }
     }
-#endif // MSW
-
-#if defined(__WXMAC__) && !defined(__DARWIN__) && wxUSE_GUI
-    Str255 pstr ;
-    wxString output = str + wxT(";g") ;
-    wxMacStringToPascal( output.c_str() , pstr ) ;
-
-    Boolean running = false ;
-
-#if defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
-
-    if ( IsMWDebuggerRunning() && AmIBeingMWDebugged() )
-    {
-        running = true ;
-    }
-
-#endif
-
-    if (running)
-    {
-#ifdef __powerc
-        DebugStr(pstr);
-#else
-        SysBreakStr(pstr);
-#endif
-    }
-#endif // Mac
 }
 
 // ----------------------------------------------------------------------------
@@ -870,11 +640,7 @@ wxLogLevel      wxLog::ms_logLevel     = wxLOG_Max;  // log everything by defaul
 
 size_t          wxLog::ms_suspendCount = 0;
 
-#if wxUSE_GUI
-    const wxChar *wxLog::ms_timestamp  = wxT("%X");  // time only, no date
-#else
-    const wxChar *wxLog::ms_timestamp  = NULL;       // save space
-#endif
+const wxChar   *wxLog::ms_timestamp    = wxT("%X");  // time only, no date
 
 wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 wxArrayString   wxLog::ms_aTraceMasks;
@@ -989,6 +755,5 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 #endif  // Win/Unix
 }
 
-#endif //wxUSE_LOG
+#endif // wxUSE_LOG
 
-// vi:sts=4:sw=4:et

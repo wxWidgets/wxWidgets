@@ -7,7 +7,7 @@ by category (and sorted by alphabetical order inside each category).
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\_\_WINDOWS\_\_}{any Windows, yom may also use \_\_WXMSW\_\_}
-\twocolitem{\_\_WIN16\_\_}{Win16 API}
+\twocolitem{\_\_WIN16\_\_}{Win16 API (not supported since wxWindows 2.6)}
 \twocolitem{\_\_WIN32\_\_}{Win32 API}
 \twocolitem{\_\_WIN95\_\_}{Windows 95 or NT 4.0 and above system (not NT 3.5x)}
 \twocolitem{\_\_WXGTK\_\_}{GTK}
@@ -15,7 +15,8 @@ by category (and sorted by alphabetical order inside each category).
 \twocolitem{\_\_WXGTK20\_\_}{GTK 2.0 or higher}
 \twocolitem{\_\_WXMOTIF\_\_}{Motif}
 \twocolitem{\_\_WXMOTIF20\_\_}{Motif 2.0 or higher}
-\twocolitem{\_\_WXMAC\_\_}{Mac OS whether Classic (Mac OS 8/9 TARGET\_CARBON == 0) or Carbon (including Mac OS X TARGET\_CARBON == 1)}
+\twocolitem{\_\_WXMAC\_\_}{Mac OS whether Classic (Mac OS 8/9 TARGET\_CARBON
+== 0) or Carbon (including Mac OS X TARGET\_CARBON == 1)}
 \twocolitem{\_\_WXMGL\_\_}{SciTech Soft MGL (\_\_WXUNIVERSAL\_\_ will be also
 defined)}
 \twocolitem{\_\_WXMSW\_\_}{Any Windows}
@@ -31,9 +32,8 @@ to one of the symbols above so this should be tested first.}
 \twocolitem{\_\_X\_\_}{any X11-based GUI toolkit except GTK+}
 \end{twocollist}
 
-In fact, they should better all start with \_\_WX instead of \_\_ only. The
-only GUIs implemented for 2.0 are \_\_WXGTK\_\_, \_\_WXMSW\_\_ and
-\_\_WXMOTIF\_\_ yet. Any new ones, please start the define with \_\_WX.
+In fact, they should better all start with \_\_WX instead of \_\_ only,
+so please start any new defines with \_\_WX.
 
 \subsection{Operating systems}
 
@@ -47,6 +47,7 @@ only GUIs implemented for 2.0 are \_\_WXGTK\_\_, \_\_WXMSW\_\_ and
 \twocolitem{\_\_DOS\_GENERAL\_\_}{DOS (used with wxMGL only)}
 \twocolitem{\_\_FREEBSD\_\_}{FreeBSD}
 \twocolitem{\_\_HPUX\_\_}{HP-UX (Unix)}
+\twocolitem{\_\_GNU\_\_}{GNU Hurd}
 \twocolitem{\_\_LINUX\_\_}{Linux}
 \twocolitem{\_\_MACH\_\_}{Mach-O Architecture (Mac OS X only builds)}
 \twocolitem{\_\_OSF\_\_}{OSF/1}
@@ -99,6 +100,11 @@ the compiler version, $1100$ is $11.0$ and $1200$ is OpenWatcom.}
 \subsection{Miscellaneous}
 
 \begin{twocollist}\itemsep=0pt
+\twocolitem{\_\_WXWINDOWS\_\_}{always defined in wxWindows applications, see
+also \helpref{wxCHECK\_VERSION}{wxcheckversion}}
+\twocolitem{\_\_WXBASE\_\_}{only used by wxWindows internally (defined when
+building wxBase code, either as a standalone library or as part of the
+monolithis wxWindows library, not defined when building GUI library only)}
 \twocolitem{\_\_WXDEBUG\_\_}{defined in debug mode, undefined in release mode}
 \twocolitem{wxUSE\_XXX}{if defined as $1$, feature XXX is active
 (the symbols of this form are always defined, use \#if and not \#ifdef to test

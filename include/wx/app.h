@@ -27,13 +27,10 @@
     #include "wx/window.h"  // for wxTopLevelWindows
 #endif // wxUSE_GUI
 
-#if WXWIN_COMPATIBILITY_2_2
-    #include "wx/icon.h"
-#endif
-
 #include "wx/build.h"
 
 class WXDLLEXPORT wxApp;
+class WXDLLEXPORT wxAppTraits;
 class WXDLLEXPORT wxCmdLineParser;
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxMessageOutput;
@@ -49,8 +46,11 @@ typedef wxApp* (*wxAppInitializerFunction)();
 // constants
 // ----------------------------------------------------------------------------
 
-static const int wxPRINT_WINDOWS = 1;
-static const int wxPRINT_POSTSCRIPT = 2;
+enum
+{
+    wxPRINT_WINDOWS = 1,
+    wxPRINT_POSTSCRIPT = 2
+};
 
 // ----------------------------------------------------------------------------
 // support for framebuffer ports
@@ -76,16 +76,222 @@ private:
     unsigned m_width, m_height, m_depth;
     bool     m_ok;
 };
-#endif
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
-// the common part of wxApp implementations for all platforms
+// wxAppConsole: wxApp for non-GUI applications
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAppBase : public wxEvtHandler
+class WXDLLEXPORT wxAppConsole : public wxEvtHandler
 {
-    DECLARE_NO_COPY_CLASS(wxAppBase)
+public:
+    // ctor and dtor
+    wxAppConsole();
+    virtual ~wxAppConsole();
 
+
+    // the virtual functions which may/must be overridden in the derived class
+    // -----------------------------------------------------------------------
+
+    // Called before OnRun(), this is a good place to do initialization -- if
+    // anything fails, return false from here to prevent the program from
+    // continuing. The command line is normally parsed here, call the base
+    // class OnInit() to do it.
+    virtual bool OnInit();
+
+    // This is the replacement for the normal main(): all program work should
+    // be done here. When OnRun() returns, the programs starts shutting down.
+    virtual int OnRun() = 0;
+
+    // This is only called if OnInit() returned true so it's a good place to do
+    // any cleanup matching the initializations done there.
+    virtual int OnExit();
+
+    // Called when a fatal exception occurs, this function should take care not
+    // to do anything which might provoke a nested exception! It may be
+    // overridden if you wish to react somehow in non-default way (core dump
+    // under Unix, application crash under Windows) to fatal program errors,
+    // however extreme care should be taken if you don't want this function to
+    // crash.
+    virtual void OnFatalException() { }
+
+    // Called from wxExit() function, should terminate the application a.s.a.p.
+    virtual void Exit();
+
+
+    // application info: name, description, vendor
+    // -------------------------------------------
+
+    // NB: all these should be set by the application itself, there are no
+    //     reasonable default except for the application name which is taken to
+    //     be argv[0]
+
+        // set/get the application name
+    wxString GetAppName() const
+    {
+        return m_appName.empty() ? m_className : m_appName;
+    }
+    void SetAppName(const wxString& name) { m_appName = name; }
+
+        // set/get the app class name
+    wxString GetClassName() const { return m_className; }
+    void SetClassName(const wxString& name) { m_className = name; }
+
+        // set/get the vendor name
+    const wxString& GetVendorName() const { return m_vendorName; }
+    void SetVendorName(const wxString& name) { m_vendorName = name; }
+
+
+    // cmd line parsing stuff
+    // ----------------------
+
+    // all of these methods may be overridden in the derived class to
+    // customize the command line parsing (by default only a few standard
+    // options are handled)
+    //
+    // you also need to call wxApp::OnInit() from YourApp::OnInit() for all
+    // this to work
+
+#if wxUSE_CMDLINE_PARSER
+    // this one is called from OnInit() to add all supported options
+    // to the given parser
+    virtual void OnInitCmdLine(wxCmdLineParser& parser);
+
+    // called after successfully parsing the command line, return TRUE
+    // to continue and FALSE to exit
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+
+    // called if "--help" option was specified, return TRUE to continue
+    // and FALSE to exit
+    virtual bool OnCmdLineHelp(wxCmdLineParser& parser);
+
+    // called if incorrect command line options were given, return
+    // FALSE to abort and TRUE to continue
+    virtual bool OnCmdLineError(wxCmdLineParser& parser);
+#endif // wxUSE_CMDLINE_PARSER
+
+
+    // miscellaneous customization functions
+    // -------------------------------------
+
+    // create the app traits object to which we delegate for everything which
+    // either should be configurable by the user (then he can change the
+    // default behaviour simply by overriding CreateTraits() and returning his
+    // own traits object) or which is GUI/console dependent as then wxAppTraits
+    // allows us to abstract the differences behind the common façade
+    wxAppTraits *GetTraits();
+
+    // the functions below shouldn't be used now that we have wxAppTraits
+#if WXWIN_COMPATIBILITY_2_4
+
+#if wxUSE_LOG
+        // override this function to create default log target of arbitrary
+        // user-defined class (default implementation creates a wxLogGui
+        // object) -- this log object is used by default by all wxLogXXX()
+        // functions.
+    virtual wxLog *CreateLogTarget();
+#endif // wxUSE_LOG
+
+        // similar to CreateLogTarget() but for the global wxMessageOutput
+        // object
+    virtual wxMessageOutput *CreateMessageOutput();
+
+#endif // WXWIN_COMPATIBILITY_2_4
+
+
+    // event processing functions
+    // --------------------------
+
+    // this method allows to filter all the events processed by the program, so
+    // you should try to return quickly from it to avoid slowing down the
+    // program to the crawl
+    //
+    // return value should be -1 to continue with the normal event processing,
+    // or TRUE or FALSE to stop further processing and pretend that the event
+    // had been already processed or won't be processed at all, respectively
+    virtual int FilterEvent(wxEvent& event);
+
+    // process all events in the wxPendingEvents list -- it is necessary to
+    // call this function to process posted events. This happens during each
+    // event loop iteration in GUI mode but if there is no main loop, it may be
+    // also called directly.
+    virtual void ProcessPendingEvents();
+
+    // doesn't do anything in this class, just a hook for GUI wxApp
+    virtual bool Yield(bool WXUNUSED(onlyIfNeeded) = false) { return true; }
+
+    // make sure that idle events are sent again
+    virtual void WakeUpIdle() { }
+
+
+    // debugging support
+    // -----------------
+
+    // this function is called when an assert failure occurs, the base class
+    // version does the normal processing (i.e. shows the usual assert failure
+    // dialog box)
+    //
+    // the arguments are the place where the assert occured, the text of the
+    // assert itself and the user-specified message
+#ifdef __WXDEBUG__
+    virtual void OnAssert(const wxChar *file,
+                          int line,
+                          const wxChar *cond,
+                          const wxChar *msg);
+#endif // __WXDEBUG__
+
+    // check that the wxBuildOptions object (constructed in the application
+    // itself, usually the one from IMPLEMENT_APP() macro) matches the build
+    // options of the library and abort if it doesn't
+    static bool CheckBuildOptions(const wxBuildOptions& buildOptions);
+
+
+    // implementation only from now on
+    // -------------------------------
+
+    // helpers for dynamic wxApp construction
+    static void SetInitializerFunction(wxAppInitializerFunction fn)
+        { ms_appInitFn = fn; }
+    static wxAppInitializerFunction GetInitializerFunction()
+        { return ms_appInitFn; }
+
+
+    // command line arguments (public for backwards compatibility)
+    int      argc;
+    wxChar **argv;
+
+protected:
+    // the function which creates the traits object when GetTraits() needs it
+    // for the first time
+    virtual wxAppTraits *CreateTraits();
+
+
+    // function used for dynamic wxApp creation
+    static wxAppInitializerFunction ms_appInitFn;
+
+    // application info (must be set from the user code)
+    wxString m_vendorName,      // vendor name (ACME Inc)
+             m_appName,         // app name
+             m_className;       // class name
+
+    // the class defining the application behaviour, NULL initially and created
+    // by GetTraits() when first needed
+    wxAppTraits *m_traits;
+
+
+    // the application object is a singleton anyhow, there is no sense in
+    // copying it
+    DECLARE_NO_COPY_CLASS(wxAppConsole)
+};
+
+// ----------------------------------------------------------------------------
+// wxAppBase: the common part of wxApp implementations for all platforms
+// ----------------------------------------------------------------------------
+
+#if wxUSE_GUI
+
+class WXDLLEXPORT wxAppBase : public wxAppConsole
+{
 public:
     wxAppBase();
     virtual ~wxAppBase();
@@ -93,20 +299,11 @@ public:
     // the virtual functions which may/must be overridden in the derived class
     // -----------------------------------------------------------------------
 
-        // called during the program initialization, returning FALSE from here
-        // prevents the program from continuing - it's a good place to create
-        // the top level program window and return TRUE.
-        //
-        // Override: always in GUI application, rarely in console ones.
-    virtual bool OnInit();
-
-#if wxUSE_GUI
         // a platform-dependent version of OnInit(): the code here is likely to
         // depend on the toolkit. default version does nothing.
         //
         // Override: rarely.
     virtual bool OnInitGui();
-#endif // wxUSE_GUI
 
         // called to start program execution - the default version just enters
         // the main GUI loop in which events are received and processed until
@@ -115,34 +312,15 @@ public:
         // of the program really starts here
         //
         // Override: rarely in GUI applications, always in console ones.
-#if wxUSE_GUI
     virtual int OnRun();
-#else // !GUI
-    virtual int OnRun() = 0;
-#endif // wxUSE_GUI
 
-        // called after the main loop termination. This is a good place for
-        // cleaning up (it may be too late in dtor) and is also useful if you
-        // want to return some non-default exit code - this is just the return
-        // value of this method.
-        //
-        // Override: often.
-    virtual int OnExit();
+        // exit the main loop thus terminating the application
+    virtual void Exit();
 
-        // called when a fatal exception occurs, this function should take care
-        // not to do anything which might provoke a nested exception! It may be
-        // overridden if you wish to react somehow in non-default way (core
-        // dump under Unix, application crash under Windows) to fatal program
-        // errors, however extreme care should be taken if you don't want this
-        // function to crash.
-        //
-        // Override: rarely.
-    virtual void OnFatalException() { }
 
     // the worker functions - usually not used directly by the user code
     // -----------------------------------------------------------------
 
-#if wxUSE_GUI
         // execute the main GUI loop, the function returns when the loop ends
     virtual int MainLoop() = 0;
 
@@ -177,34 +355,8 @@ public:
         //
         // it should return TRUE if more idle events are needed, FALSE if not
     virtual bool ProcessIdle() = 0;
-#endif // wxUSE_GUI
 
-    // application info: name, description, vendor
-    // -------------------------------------------
 
-    // NB: all these should be set by the application itself, there are no
-    //     reasonable default except for the application name which is taken to
-    //     be argv[0]
-
-        // set/get the application name
-    wxString GetAppName() const
-    {
-        if ( !m_appName )
-            return m_className;
-        else
-            return m_appName;
-    }
-    void SetAppName(const wxString& name) { m_appName = name; }
-
-        // set/get the app class name
-    wxString GetClassName() const { return m_className; }
-    void SetClassName(const wxString& name) { m_className = name; }
-
-        // set/get the vendor name
-    const wxString& GetVendorName() const { return m_vendorName; }
-    void SetVendorName(const wxString& name) { m_vendorName = name; }
-
-#if wxUSE_GUI
     // top level window functions
     // --------------------------
 
@@ -237,65 +389,16 @@ public:
     bool GetExitOnFrameDelete() const
         { return m_exitOnFrameDelete == Yes; }
 
-#endif // wxUSE_GUI
 
-    // cmd line parsing stuff
-    // ----------------------
+    // display mode, visual, printing mode, ...
+    // ------------------------------------------------------------------------
 
-    // all of these methods may be overridden in the derived class to
-    // customize the command line parsing (by default only a few standard
-    // options are handled)
-    //
-    // you also need to call wxApp::OnInit() from YourApp::OnInit() for all
-    // this to work
-
-#if wxUSE_CMDLINE_PARSER
-    // this one is called from OnInit() to add all supported options
-    // to the given parser
-    virtual void OnInitCmdLine(wxCmdLineParser& parser);
-
-    // called after successfully parsing the command line, return TRUE
-    // to continue and FALSE to exit
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
-
-    // called if "--help" option was specified, return TRUE to continue
-    // and FALSE to exit
-    virtual bool OnCmdLineHelp(wxCmdLineParser& parser);
-
-    // called if incorrect command line options were given, return
-    // FALSE to abort and TRUE to continue
-    virtual bool OnCmdLineError(wxCmdLineParser& parser);
-#endif // wxUSE_CMDLINE_PARSER
-
-    // miscellaneous customization functions
-    // -------------------------------------
-
-#if wxUSE_LOG
-        // override this function to create default log target of arbitrary
-        // user-defined class (default implementation creates a wxLogGui
-        // object) - this log object is used by default by all wxLogXXX()
-        // functions.
-    virtual wxLog *CreateLogTarget();
-#endif // wxUSE_LOG
-
-        // similar to CreateLogTarget() but for the global wxMessageOutput
-        // object
-    virtual wxMessageOutput *CreateMessageOutput();
-
-#if wxUSE_GUI
-
-#if WXWIN_COMPATIBILITY_2_2
-        // get the standard icon used by wxWin dialogs - this allows the user
-        // to customize the standard dialogs. The 'which' parameter is one of
-        // wxICON_XXX values
-    virtual wxIcon GetStdIcon(int WXUNUSED(which)) const { return wxNullIcon; }
-#endif
-
-        // Get display mode that is used use. This is only used in framebuffer wxWin ports
-        // (such as wxMGL).
+        // Get display mode that is used use. This is only used in framebuffer
+        // wxWin ports (such as wxMGL).
     virtual wxDisplayModeInfo GetDisplayMode() const { return wxDisplayModeInfo(); }
-        // Set display mode to use. This is only used in framebuffer wxWin ports
-        // (such as wxMGL). This method should be called from wxApp:OnInitGui
+        // Set display mode to use. This is only used in framebuffer wxWin
+        // ports (such as wxMGL). This method should be called from
+        // wxApp::OnInitGui
     virtual bool SetDisplayMode(const wxDisplayModeInfo& WXUNUSED(info)) { return TRUE; }
 
         // set use of best visual flag (see below)
@@ -309,81 +412,22 @@ public:
     virtual void SetPrintMode(int WXUNUSED(mode)) { }
     int GetPrintMode() const { return wxPRINT_POSTSCRIPT; }
 
+
+    // miscellaneous other stuff
+    // ------------------------------------------------------------------------
+
     // called by toolkit-specific code to set the app status: active (we have
     // focus) or not and also the last window which had focus before we were
     // deactivated
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
-#endif // wxUSE_GUI
 
-    // this method allows to filter all the events processed by the program, so
-    // you should try to return quickly from it to avoid slowing down the
-    // program to the crawl
-    //
-    // return value should be -1 to continue with the normal event processing,
-    // or TRUE or FALSE to stop further processing and pretend that the event
-    // had been already processed or won't be processed at all, respectively
-    virtual int FilterEvent(wxEvent& event);
-
-    // debugging support
-    // -----------------
-
-    // this function is called when an assert failure occurs, the base class
-    // version does the normal processing (i.e. shows the usual assert failure
-    // dialog box)
-    //
-    // the arguments are the place where the assert occured, the text of the
-    // assert itself and the user-specified message
-#ifdef __WXDEBUG__
-    virtual void OnAssert(const wxChar *file,
-                          int line,
-                          const wxChar *cond,
-                          const wxChar *msg);
-#endif // __WXDEBUG__
-
-    // check that the wxBuildOptions object (constructed in the application
-    // itself, usually the one from IMPLEMENT_APP() macro) matches the build
-    // options of the library and abort if it doesn't
-    static bool CheckBuildOptions(const wxBuildOptions& buildOptions);
-
-    // deprecated functions, please updae your code to not use them!
-    // -------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_2
-    // used by obsolete wxDebugMsg only
-    void SetWantDebugOutput( bool flag ) { m_wantDebugOutput = flag; }
-    bool GetWantDebugOutput() const { return m_wantDebugOutput; }
-
-    // TRUE if the application wants to get debug output
-    bool m_wantDebugOutput;
-#endif // WXWIN_COMPATIBILITY_2_2
-
-    // implementation only from now on
-    // -------------------------------
-
-    // helpers for dynamic wxApp construction
-    static void SetInitializerFunction(wxAppInitializerFunction fn)
-        { m_appInitFn = fn; }
-    static wxAppInitializerFunction GetInitializerFunction()
-        { return m_appInitFn; }
-
-    // process all events in the wxPendingEvents list
-    virtual void ProcessPendingEvents();
-
-    // access to the command line arguments
-    int      argc;
-    wxChar **argv;
 
 protected:
-    // function used for dynamic wxApp creation
-    static wxAppInitializerFunction m_appInitFn;
+    // override base class method to use GUI traits
+    virtual wxAppTraits *CreateTraits();
 
-    // application info (must be set from the user code)
-    wxString m_vendorName,      // vendor name (ACME Inc)
-             m_appName,         // app name
-             m_className;       // class name
 
-#if wxUSE_GUI
-    // the main top level window - may be NULL
+    // the main top level window (may be NULL)
     wxWindow *m_topWindow;
 
     // if Yes, exit the main loop when the last top level window is deleted, if
@@ -403,8 +447,12 @@ protected:
 
     // does any of our windows has focus?
     bool m_isActive;
-#endif // wxUSE_GUI
+
+
+    DECLARE_NO_COPY_CLASS(wxAppBase)
 };
+
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // now include the declaration of the real class
@@ -430,7 +478,7 @@ protected:
     #endif
 #else // !GUI
     // can't use typedef because wxApp forward declared as a class
-    class WXDLLEXPORT wxApp : public wxAppBase
+    class WXDLLEXPORT wxApp : public wxAppConsole
     {
     };
 #endif // GUI/!GUI
@@ -461,18 +509,6 @@ extern bool WXDLLEXPORT wxYield();
 // Yield to other apps/messages
 extern void WXDLLEXPORT wxWakeUpIdle();
 
-// Post a message to the given eventhandler which will be processed during the
-// next event loop iteration
-inline void wxPostEvent(wxEvtHandler *dest, wxEvent& event)
-{
-    wxCHECK_RET( dest, wxT("need an object to post event to in wxPostEvent") );
-
-#if wxUSE_GUI
-    dest->AddPendingEvent(event);
-#else
-    dest->ProcessEvent(event);
-#endif // wxUSE_GUI
-}
 
 // console applications may avoid using DECLARE_APP and IMPLEMENT_APP macros
 // and call these functions instead at the program startup and termination

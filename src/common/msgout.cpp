@@ -48,6 +48,12 @@
 // implementation
 // ===========================================================================
 
+#ifdef __WXBASE__
+
+// ----------------------------------------------------------------------------
+// wxMessageOutput
+// ----------------------------------------------------------------------------
+
 wxMessageOutput* wxMessageOutput::ms_msgOut = 0;
 
 wxMessageOutput* wxMessageOutput::Get()
@@ -84,6 +90,64 @@ void wxMessageOutputStderr::Printf(const wxChar* format, ...)
 }
 
 // ----------------------------------------------------------------------------
+// wxMessageOutputDebug
+// ----------------------------------------------------------------------------
+
+void wxMessageOutputDebug::Printf(const wxChar* format, ...)
+{
+    wxString out;
+
+    va_list args;
+    va_start(args, format);
+
+    out.PrintfV(format, args);
+    va_end(args);
+
+#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+    out.Replace(wxT("\t"), wxT("        "));
+    out += _T("\r\n");
+    ::OutputDebugString(out);
+#elif defined(__WXMAC__) && !defined(__DARWIN__)
+    if ( wxIsDebuggerRunning() )
+    {
+        Str255 pstr;
+        wxString output = str + wxT(";g") ;
+        wxMacStringToPascal(output.c_str(), pstr);
+
+        #ifdef __powerc
+            DebugStr(pstr);
+        #else
+            SysBreakStr(pstr);
+        #endif
+    }
+#else // !MSW, !Mac
+    wxFputs(out, stderr);
+    fflush(stderr);
+#endif // platform
+}
+
+// ----------------------------------------------------------------------------
+// wxMessageOutputLog
+// ----------------------------------------------------------------------------
+
+void wxMessageOutputLog::Printf(const wxChar* format, ...)
+{
+    wxString out;
+
+    va_list args;
+    va_start(args, format);
+
+    out.PrintfV(format, args);
+    va_end(args);
+
+    out.Replace(wxT("\t"), wxT("        "));
+
+    ::wxLogMessage(wxT("%s"), out.c_str());
+}
+
+#endif // __WXBASE__
+
+// ----------------------------------------------------------------------------
 // wxMessageOutputMessageBox
 // ----------------------------------------------------------------------------
 
@@ -112,21 +176,3 @@ void wxMessageOutputMessageBox::Printf(const wxChar* format, ...)
 
 #endif // wxUSE_GUI
 
-// ----------------------------------------------------------------------------
-// wxMessageOutputLog
-// ----------------------------------------------------------------------------
-
-void wxMessageOutputLog::Printf(const wxChar* format, ...)
-{
-    wxString out;
-
-    va_list args;
-    va_start(args, format);
-
-    out.PrintfV(format, args);
-    va_end(args);
-
-    out.Replace(wxT("\t"), wxT("        "));
-
-    ::wxLogMessage(wxT("%s"), out.c_str());
-}

@@ -52,8 +52,12 @@ class WXDLLEXPORT wxApp: public wxAppBase
     virtual bool Initialized();
     virtual bool Pending() ;
     virtual void Dispatch() ;
+
+    virtual void Exit();
+
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual bool ProcessIdle();
+    virtual void WakeUpIdle();
     
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }

@@ -76,8 +76,12 @@ public:
     virtual bool Initialized(void);
     virtual bool Pending(void) ;
     virtual void Dispatch(void);
+
+    virtual void Exit();
+
     virtual bool Yield(bool onlyIfNeeded = FALSE);
-    virtual bool         ProcessIdle(void);
+    virtual bool ProcessIdle(void);
+    virtual void WakeUpIdle(void);
 
     virtual void SetPrintMode(int mode) { m_nPrintMode = mode; }
     virtual int  GetPrintMode(void) const { return m_nPrintMode; }

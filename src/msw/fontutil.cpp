@@ -118,83 +118,10 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
         encoding = wxFont::GetDefaultEncoding();
     }
 
-    switch ( encoding )
-    {
-        // although this function is supposed to return an exact match, do do
-        // some mappings here for the most common case of "standard" encoding
-        case wxFONTENCODING_SYSTEM:
-            info->charset = DEFAULT_CHARSET;
-            break;
-
-        case wxFONTENCODING_ISO8859_1:
-        case wxFONTENCODING_ISO8859_15:
-        case wxFONTENCODING_CP1252:
-            info->charset = ANSI_CHARSET;
-            break;
-
-#if !defined(__WIN16__) && !defined(__WXMICROWIN__)
-
-        // The following four fonts are multi-byte charsets
-        case wxFONTENCODING_CP932:
-            info->charset = SHIFTJIS_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP936:
-            info->charset = GB2312_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP949:
-            info->charset = HANGUL_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP950:
-            info->charset = CHINESEBIG5_CHARSET;
-            break;
-
-        // The rest are single byte encodings
-        case wxFONTENCODING_CP1250:
-            info->charset = EASTEUROPE_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP1251:
-            info->charset = RUSSIAN_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP1253:
-            info->charset = GREEK_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP1254:
-            info->charset = TURKISH_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP1255:
-            info->charset = HEBREW_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP1256:
-            info->charset = ARABIC_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP1257:
-            info->charset = BALTIC_CHARSET;
-            break;
-
-        case wxFONTENCODING_CP874:
-            info->charset = THAI_CHARSET;
-            break;
-
-
-#endif // !Win16
-
-        case wxFONTENCODING_CP437:
-            info->charset = OEM_CHARSET;
-            break;
-
-        default:
-            // no way to translate this encoding into a Windows charset
-            return FALSE;
-    }
+    extern long wxEncodingToCharset(wxFontEncoding encoding);
+    info->charset = wxEncodingToCharset(encoding);
+    if ( info->charset == -1 )
+        return FALSE;
 
     info->encoding = encoding;
 

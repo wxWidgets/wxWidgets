@@ -32,68 +32,64 @@
     class WXDLLEXPORT wxConfigBase;
 #endif // wxUSE_CONFIG
 
+class WXDLLEXPORT wxFontMapper;
+
 #if wxUSE_GUI
     class WXDLLEXPORT wxWindow;
 #endif // wxUSE_GUI
 
-// ----------------------------------------------------------------------------
-// wxFontMapper manages user-definable correspondence between logical font
-// names and the fonts present on the machine.
+// ============================================================================
+// wxFontMapper manages user-definable correspondence between wxWindows font
+// encodings and the fonts present on the machine.
 //
-// The default implementations of all functions will ask the user if they are
-// not capable of finding the answer themselves and store the answer in a
-// config file (configurable via SetConfigXXX functions). This behaviour may
-// be disabled by giving the value of FALSE to "interactive" parameter.
-// However, the functions will always consult the config file to allow the
-// user-defined values override the default logic and there is no way to
-// disable this - which shouldn't be ever needed because if "interactive" was
-// never TRUE, the config file is never created anyhow.
+// This is a singleton class, font mapper objects can only be accessed using
+// wxFontMapper::Get().
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxFontMapperBase: this is a non-interactive class which just uses its built
+//                   in knowledge of the encodings equivalence
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFontMapper
+class WXDLLEXPORT wxFontMapperBase
 {
 public:
-    // default ctor
-    wxFontMapper();
+    // constructtor and such
+    // ---------------------
 
-    // virtual dtor for a base class
-    virtual ~wxFontMapper();
+    // default ctor
+    wxFontMapperBase();
+
+    // virtual dtor for any base class
+    virtual ~wxFontMapperBase();
 
     // return instance of the wxFontMapper singleton
     static wxFontMapper *Get();
+
     // set the sigleton to 'mapper' instance and return previous one
     static wxFontMapper *Set(wxFontMapper *mapper);
 
-#if wxUSE_GUI
-    // find an alternative for the given encoding (which is supposed to not be
-    // available on this system). If successful, return TRUE and fill info
-    // structure with the parameters required to create the font, otherwise
-    // return FALSE
-    virtual bool GetAltForEncoding(wxFontEncoding encoding,
-                                   wxNativeEncodingInfo *info,
-                                   const wxString& facename = wxEmptyString,
-                                   bool interactive = TRUE);
 
-    // version better suitable for 'public' use. Returns wxFontEcoding
-    // that can be used it wxFont ctor
-    bool GetAltForEncoding(wxFontEncoding encoding,
-                           wxFontEncoding *alt_encoding,
-                           const wxString& facename = wxEmptyString,
-                           bool interactive = TRUE);
-
-    // checks whether given encoding is available in given face or not.
-    // If no facename is given, 
-    virtual bool IsEncodingAvailable(wxFontEncoding encoding,
-                                     const wxString& facename = wxEmptyString);
-#endif // wxUSE_GUI
+    // translates charset strings to encoding
+    // --------------------------------------
 
     // returns the encoding for the given charset (in the form of RFC 2046) or
     // wxFONTENCODING_SYSTEM if couldn't decode it
+    //
+    // interactive parameter is ignored in the base class, we behave as if it
+    // were always false
     virtual wxFontEncoding CharsetToEncoding(const wxString& charset,
-                                             bool interactive = TRUE);
+                                             bool interactive = true);
 
-    // encoding names
-    // --------------
+
+    // information about supported encodings
+    // -------------------------------------
+
+    // get the number of font encodings we know about
+    static size_t GetSupportedEncodingsCount();
+
+    // get the n-th supported encoding
+    static wxFontEncoding GetEncoding(size_t n);
 
     // return internal string identifier for the encoding (see also
     // GetEncodingDescription())
@@ -104,16 +100,6 @@ public:
     // NB: hard-coded now, but might change later (read it from config?)
     static wxString GetEncodingDescription(wxFontEncoding encoding);
 
-    // configure the appearance of the dialogs we may popup
-    // ----------------------------------------------------
-
-#if wxUSE_GUI
-    // the parent window for modal dialogs
-    void SetDialogParent(wxWindow *parent) { m_windowParent = parent; }
-
-    // the title for the dialogs (note that default is quite reasonable)
-    void SetDialogTitle(const wxString& title) { m_titleDialog = title; }
-#endif // wxUSE_GUI
 
     // functions which allow to configure the config object used: by default,
     // the global one (from wxConfigBase::Get() will be used) and the default
@@ -130,22 +116,21 @@ public:
 
     // return default config path
     static const wxChar *GetDefaultConfigPath();
-#endif
+#endif // wxUSE_CONFIG
+
 
 protected:
-
 #if wxUSE_CONFIG
-    // get the config object we're using - if it wasn't set explicitly, this
+    // get the config object we're using -- if it wasn't set explicitly, this
     // function will use wxConfig::Get() to get the global one
     wxConfigBase *GetConfig();
 
-    // gets the root path for our settings - if itwasn't set explicitly, use
+    // gets the root path for our settings -- if it wasn't set explicitly, use
     // GetDefaultConfigPath()
     const wxString& GetConfigPath();
-#endif
 
-    // change to the given (relative) path in the config, return TRUE if ok
-    // (then GetConfig() will return something !NULL), FALSE if no config
+    // change to the given (relative) path in the config, return true if ok
+    // (then GetConfig() will return something !NULL), false if no config
     // object
     //
     // caller should provide a pointer to the string variable which should be
@@ -155,7 +140,87 @@ protected:
     // restore the config path after use
     void RestorePath(const wxString& pathOld);
 
+    // config object and path (in it) to use
+    wxConfigBase *m_config;
+    bool m_configIsDummy;
+
+    wxString m_configRootPath;
+#endif // wxUSE_CONFIG
+
+private:
+    // the global fontmapper object or NULL
+    static wxFontMapper *sm_instance;
+
+    friend class wxFontMapperPathChanger;
+
+    DECLARE_NO_COPY_CLASS(wxFontMapperBase)
+};
+
+// ----------------------------------------------------------------------------
+// wxFontMapper: interactive extension of wxFontMapperBase
+//
+// The default implementations of all functions will ask the user if they are
+// not capable of finding the answer themselves and store the answer in a
+// config file (configurable via SetConfigXXX functions). This behaviour may
+// be disabled by giving the value of false to "interactive" parameter.
+// However, the functions will always consult the config file to allow the
+// user-defined values override the default logic and there is no way to
+// disable this -- which shouldn't be ever needed because if "interactive" was
+// never true, the config file is never created anyhow.
+// ----------------------------------------------------------------------------
+
 #if wxUSE_GUI
+
+class WXDLLEXPORT wxFontMapper : public wxFontMapperBase
+{
+public:
+    // default ctor
+    wxFontMapper();
+
+    // virtual dtor for a base class
+    virtual ~wxFontMapper();
+
+    // working with the encodings
+    // --------------------------
+
+    // returns the encoding for the given charset (in the form of RFC 2046) or
+    // wxFONTENCODING_SYSTEM if couldn't decode it
+    virtual wxFontEncoding CharsetToEncoding(const wxString& charset,
+                                             bool interactive = true);
+
+    // find an alternative for the given encoding (which is supposed to not be
+    // available on this system). If successful, return true and fill info
+    // structure with the parameters required to create the font, otherwise
+    // return false
+    virtual bool GetAltForEncoding(wxFontEncoding encoding,
+                                   wxNativeEncodingInfo *info,
+                                   const wxString& facename = wxEmptyString,
+                                   bool interactive = true);
+
+    // version better suitable for 'public' use. Returns wxFontEcoding
+    // that can be used it wxFont ctor
+    bool GetAltForEncoding(wxFontEncoding encoding,
+                           wxFontEncoding *alt_encoding,
+                           const wxString& facename = wxEmptyString,
+                           bool interactive = true);
+
+    // checks whether given encoding is available in given face or not.
+    // If no facename is given, 
+    virtual bool IsEncodingAvailable(wxFontEncoding encoding,
+                                     const wxString& facename = wxEmptyString);
+
+
+    // configure the appearance of the dialogs we may popup
+    // ----------------------------------------------------
+
+    // the parent window for modal dialogs
+    void SetDialogParent(wxWindow *parent) { m_windowParent = parent; }
+
+    // the title for the dialogs (note that default is quite reasonable)
+    void SetDialogTitle(const wxString& title) { m_titleDialog = title; }
+
+
+protected:
     // GetAltForEncoding() helper: tests for the existence of the given
     // encoding and saves the result in config if ok - this results in the
     // following (desired) behaviour: when an unknown/unavailable encoding is
@@ -166,38 +231,31 @@ protected:
     bool TestAltEncoding(const wxString& configEntry,
                          wxFontEncoding encReplacement,
                          wxNativeEncodingInfo *info);
-#endif // wxUSE_GUI
 
-#if wxUSE_CONFIG
-    // config object and path (in it) to use
-    wxConfigBase *m_config;
-    bool m_configIsDummy;
-#endif
-
-    wxString  m_configRootPath;
-
-#if wxUSE_GUI
     // the title for our dialogs
     wxString m_titleDialog;
 
     // the parent window for our dialogs
     wxWindow *m_windowParent;
-#endif // wxUSE_GUI
 
-    friend class wxFontMapperPathChanger;
-    
 private:
-    static wxFontMapper *sm_instance;
-
     DECLARE_NO_COPY_CLASS(wxFontMapper)
 };
+
+#else // !wxUSE_GUI
+
+class WXDLLEXPORT wxFontMapper : public wxFontMapperBase
+{
+};
+
+#endif // wxUSE_GUI/!wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
 
-// the default font mapper for wxWindows programs
-// do NOT use! This is for backward compatibility, use wxFontMapper::Get() instead
+// the default font mapper for wxWindows programs do NOT use! This is for
+// backward compatibility, use wxFontMapper::Get() instead
 #define wxTheFontMapper (wxFontMapper::Get())
 
 #else // !wxUSE_FONTMAP
@@ -210,3 +268,4 @@ private:
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
 
 #endif // _WX_FONTMAPPER_H_
+

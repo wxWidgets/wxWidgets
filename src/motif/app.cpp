@@ -161,6 +161,13 @@ void wxApp::CleanUp()
     delete wxLog::SetActiveTarget(NULL);
 }
 
+void wxApp::Exit()
+{
+    wxApp::CleanUp();
+
+    wxAppConsole::Exit();
+}
+
 // ============================================================================
 // wxEntry*
 // ============================================================================
@@ -591,21 +598,6 @@ WXWidget wxApp::GetTopLevelWidget()
 void wxApp::SetTopLevelWidget(WXDisplay* display, WXWidget widget)
 {
     (*m_perDisplayData)[display].m_topLevelWidget = (Widget)widget;
-}
-
-void wxExit()
-{
-    int retValue = 0;
-    if (wxTheApp)
-        retValue = wxTheApp->OnExit();
-
-    wxApp::CleanUp();
-    /*
-    * Exit in some platform-specific way.
-    * Not recommended that the app calls this:
-    * only for emergencies.
-    */
-    exit(retValue);
 }
 
 // Yield to other processes

@@ -131,6 +131,8 @@ WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn)
 // Missing libc file manipulation functions in Win9x
 //------------------------------------------------------------------------
 
+#ifdef __WXBASE__
+
 WXDLLEXPORT int wxMSLU__trename(const wxChar *oldname, const wxChar *newname)
 {
     if ( wxUsingUnicowsDll() )
@@ -196,6 +198,8 @@ WXDLLEXPORT int wxMSLU__wstat(const wxChar *name, struct _stat *buffer)
         return _wstat(name, buffer);
 }
 
-#endif
+#endif // compilers having wopen() &c
+
+#endif // __WXBASE__
 
 #endif // wxUSE_UNICODE_MSLU

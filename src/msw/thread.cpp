@@ -26,10 +26,11 @@
 #endif
 
 #ifndef WX_PRECOMP
-#    include "wx/wx.h"
 #endif
 
 #if wxUSE_THREADS
+
+#include "wx/apptrait.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
@@ -1000,10 +1001,11 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
             m_internal->Cancel();
         }
 
-#if wxUSE_GUI
         // we can't just wait for the thread to terminate because it might be
         // calling some GUI functions and so it will never terminate before we
         // process the Windows messages that result from these functions
+        // (note that even in console applications we might have to process
+        // messages if we use wxExecute() or timers or ...)
         DWORD result = 0;       // suppress warnings from broken compilers
         do
         {
@@ -1041,12 +1043,17 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
                 case WAIT_OBJECT_0 + 1:
                     // new message arrived, process it
-                    if ( !wxTheApp->DoMessage() )
                     {
-                        // WM_QUIT received: kill the thread
-                        Kill();
+                        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits()
+                                                       : NULL;
 
-                        return wxTHREAD_KILLED;
+                        if ( traits && !traits->DoMessageFromThreadWait() )
+                        {
+                            // WM_QUIT received: kill the thread
+                            Kill();
+
+                            return wxTHREAD_KILLED;
+                        }
                     }
                     break;
 
@@ -1054,16 +1061,6 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
                     wxFAIL_MSG(wxT("unexpected result of MsgWaitForMultipleObject"));
             }
         } while ( result != WAIT_OBJECT_0 );
-#else // !wxUSE_GUI
-        // simply wait for the thread to terminate
-        //
-        // OTOH, even console apps create windows (in wxExecute, for WinSock
-        // &c), so may be use MsgWaitForMultipleObject() too here?
-        if ( WaitForSingleObject(hThread, INFINITE) != WAIT_OBJECT_0 )
-        {
-            wxFAIL_MSG(wxT("unexpected result of WaitForSingleObject"));
-        }
-#endif // wxUSE_GUI/!wxUSE_GUI
 
         if ( IsMain() )
         {

@@ -1226,7 +1226,7 @@ void wxApp::OnIdle(wxIdleEvent& event)
     wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();
 }
 
-void wxWakeUpIdle()
+void wxApp::WakeUpIdle()
 {
     wxMacWakeUp() ;
 }
@@ -1289,10 +1289,8 @@ void wxApp::DeletePendingObjects()
   }
 }
 
-void wxExit()
+void wxApp::Exit()
 {
-    wxLogError(_("Fatal error: exiting"));
-
     wxApp::CleanUp();
     ::ExitToShell() ;
 }

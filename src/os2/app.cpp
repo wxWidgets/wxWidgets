@@ -1100,11 +1100,12 @@ void wxApp::OnQueryEndSession(
     }
 } // end of wxApp::OnQueryEndSession
 
-void wxExit()
+void wxApp::Exit()
 {
-    wxLogError(_("Fatal error: exiting"));
-
     wxApp::CleanUp();
+
+    // VZ: must really exit somehow, insert appropriate OS/2 syscall (FIXME)
+    wxAppConsole::Exit();
 } // end of wxExit
 
 //
@@ -1213,7 +1214,7 @@ void wxApp::RemoveSocketHandler(int handle)
 // wxWakeUpIdle
 //-----------------------------------------------------------------------------
 
-void wxWakeUpIdle()
+void wxApp::WakeUpIdle()
 {
     //
     // Send the top window a dummy message so idle handler processing will

@@ -19,14 +19,18 @@
 
 #if wxUSE_FILESYSTEM && wxUSE_STREAMS
 
+#include "wx/image.h"
+#include "wx/bitmap.h"
+#include "wx/fs_mem.h"
+
+#ifdef __WXBASE__
+
 #ifndef WXPRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/hash.h"
 #endif
 
-#include "wx/filesys.h"
-#include "wx/fs_mem.h"
 #include "wx/mstream.h"
 
 class MemFSHashObj : public wxObject
@@ -77,28 +81,31 @@ class MemFSHashObj : public wxObject
 //--------------------------------------------------------------------------------
 
 
-wxHashTable *wxMemoryFSHandler::m_Hash = NULL;
+wxHashTable *wxMemoryFSHandlerBase::m_Hash = NULL;
 
 
-wxMemoryFSHandler::wxMemoryFSHandler() : wxFileSystemHandler()
+wxMemoryFSHandlerBase::wxMemoryFSHandlerBase() : wxFileSystemHandler()
 {
 }
 
 
 
-wxMemoryFSHandler::~wxMemoryFSHandler()
+wxMemoryFSHandlerBase::~wxMemoryFSHandlerBase()
 {
     // as only one copy of FS handler is supposed to exist, we may silently
     // delete static data here. (There is no way how to remove FS handler from
     // wxFileSystem other than releasing _all_ handlers.)
 
-    if (m_Hash) delete m_Hash;
-    m_Hash = NULL;
+    if (m_Hash)
+    {
+        delete m_Hash;
+        m_Hash = NULL;
+    }
 }
 
 
 
-bool wxMemoryFSHandler::CanOpen(const wxString& location)
+bool wxMemoryFSHandlerBase::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
     return (p == wxT("memory"));
@@ -107,7 +114,7 @@ bool wxMemoryFSHandler::CanOpen(const wxString& location)
 
 
 
-wxFSFile* wxMemoryFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
+wxFSFile* wxMemoryFSHandlerBase::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
     if (m_Hash)
     {
@@ -127,25 +134,25 @@ wxFSFile* wxMemoryFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString
 
 
 
-wxString wxMemoryFSHandler::FindFirst(const wxString& WXUNUSED(spec),
+wxString wxMemoryFSHandlerBase::FindFirst(const wxString& WXUNUSED(spec),
                                       int WXUNUSED(flags))
 {
-    wxFAIL_MSG(wxT("wxMemoryFSHandler::FindFirst not implemented"));
+    wxFAIL_MSG(wxT("wxMemoryFSHandlerBase::FindFirst not implemented"));
 
     return wxEmptyString;
 }
 
 
 
-wxString wxMemoryFSHandler::FindNext()
+wxString wxMemoryFSHandlerBase::FindNext()
 {
-    wxFAIL_MSG(wxT("wxMemoryFSHandler::FindNext not implemented"));
+    wxFAIL_MSG(wxT("wxMemoryFSHandlerBase::FindNext not implemented"));
 
     return wxEmptyString;
 }
 
 
-bool wxMemoryFSHandler::CheckHash(const wxString& filename)
+bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
 {
     if (m_Hash == NULL)
     {
@@ -166,9 +173,8 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
 
 
 
-#if wxUSE_GUI
-
-/*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, wxImage& image, long type)
+/*static*/ void
+wxMemoryFSHandlerBase::AddFile(const wxString& filename, wxImage& image, long type)
 {
     if (!CheckHash(filename)) return;
 
@@ -186,21 +192,13 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
 }
 
 
-/*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, const wxBitmap& bitmap, long type)
-{
-    wxImage img = bitmap.ConvertToImage();
-    AddFile(filename, img, type);
-}
-
-#endif
-
-/*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, const wxString& textdata)
+/*static*/ void wxMemoryFSHandlerBase::AddFile(const wxString& filename, const wxString& textdata)
 {
     AddFile(filename, (const void*) textdata.mb_str(), textdata.Length());
 }
 
 
-/*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, const void *binarydata, size_t size)
+/*static*/ void wxMemoryFSHandlerBase::AddFile(const wxString& filename, const void *binarydata, size_t size)
 {
     if (!CheckHash(filename)) return;
     m_Hash -> Put(filename, new MemFSHashObj(binarydata, size));
@@ -208,7 +206,7 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
 
 
 
-/*static*/ void wxMemoryFSHandler::RemoveFile(const wxString& filename)
+/*static*/ void wxMemoryFSHandlerBase::RemoveFile(const wxString& filename)
 {
     if (m_Hash == NULL ||
         m_Hash -> Get(filename) == NULL)
@@ -222,6 +220,18 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
         delete m_Hash -> Delete(filename);
 }
 
+#endif // __WXBASE__
+
+#if wxUSE_GUI
+
+/*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, const wxBitmap& bitmap, long type)
+{
+    wxImage img = bitmap.ConvertToImage();
+    AddFile(filename, img, type);
+}
+
+#endif
 
 
 #endif // wxUSE_FILESYSTEM && wxUSE_FS_ZIP
+

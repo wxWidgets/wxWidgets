@@ -205,20 +205,11 @@ int wxEntry( int argc, char *argv[])
     return retValue;
 }
 
-// ----------------------------------------------------------------------------
-// other functions
-// ----------------------------------------------------------------------------
-void wxWakeUpIdle()
+void wxApp::Exit()
 {
-    wxTheApp->CocoaRequestIdle();
-}
-
-void wxExit()
-{
-    wxLogError(_("Fatal error: exiting"));
-
     wxApp::CleanUp();
-    exit(1);
+
+    wxAppConsole::Exit();
 }
 
 // ============================================================================

@@ -23,47 +23,49 @@
 
 #include "wx/filesys.h"
 
-#if wxUSE_GUI
-    #include "wx/image.h"
-    #include "wx/bitmap.h"
-#endif
+class WXDLLEXPORT wxBitmap;
+class WXDLLEXPORT wxImage;
 
 //--------------------------------------------------------------------------------
 // wxMemoryFSHandler
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMemoryFSHandler : public wxFileSystemHandler
+class WXDLLEXPORT wxMemoryFSHandlerBase : public wxFileSystemHandler
 {
-    public:
-        wxMemoryFSHandler();
-        ~wxMemoryFSHandler();
+public:
+    wxMemoryFSHandlerBase();
+    ~wxMemoryFSHandlerBase();
 
-        // Add file to list of files stored in memory. Stored data (bitmap, text or raw data)
-        // will be copied into private memory stream and available under name "memory:" + filename
-#if wxUSE_GUI
-        static void AddFile(const wxString& filename, wxImage& image, long type);
-        static void AddFile(const wxString& filename, const wxBitmap& bitmap, long type);
-#endif
-        static void AddFile(const wxString& filename, const wxString& textdata);
-        static void AddFile(const wxString& filename, const void *binarydata, size_t size);
+    // Add file to list of files stored in memory. Stored data (bitmap, text or
+    // raw data) will be copied into private memory stream and available under
+    // name "memory:" + filename
+    static void AddFile(const wxString& filename, wxImage& image, long type);
+    static void AddFile(const wxString& filename, const wxString& textdata);
+    static void AddFile(const wxString& filename, const void *binarydata, size_t size);
 
-        // Remove file from memory FS and free occupied memory
-        static void RemoveFile(const wxString& filename);
+    // Remove file from memory FS and free occupied memory
+    static void RemoveFile(const wxString& filename);
 
-        virtual bool CanOpen(const wxString& location);
-        virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
-        virtual wxString FindFirst(const wxString& spec, int flags = 0);
-        virtual wxString FindNext();
+    virtual bool CanOpen(const wxString& location);
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
+    virtual wxString FindFirst(const wxString& spec, int flags = 0);
+    virtual wxString FindNext();
 
-    private:
-        static wxHashTable *m_Hash;
+private:
+    static wxHashTable *m_Hash;
 
-        static bool CheckHash(const wxString& filename);
+    static bool CheckHash(const wxString& filename);
 };
 
-#endif
-  // wxUSE_FILESYSTEM
+class wxMemoryFSHandler : public wxMemoryFSHandlerBase
+{
+public:
+#if wxUSE_GUI
+    static void AddFile(const wxString& filename, const wxBitmap& bitmap, long type);
+#endif // wxUSE_GUI
+};
 
+#endif // wxUSE_FILESYSTEM
 
 #endif // _WX_FS_MEM_H_
 

@@ -50,8 +50,12 @@ public:
     virtual bool Initialized();
     virtual bool Pending();
     virtual void Dispatch();
+
+    virtual void Exit();
+
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual bool ProcessIdle();
+    virtual bool WakeUpIdle() { CocoaRequestIdle(); }
     
     /* Idle Processing */
     void OnIdle(wxIdleEvent& event);

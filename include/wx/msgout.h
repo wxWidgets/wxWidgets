@@ -75,6 +75,18 @@ public:
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
+// implementation using the native way of outputting debug messages
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxMessageOutputDebug : public wxMessageOutput
+{
+public:
+    wxMessageOutputDebug() { }
+
+    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+};
+
+// ----------------------------------------------------------------------------
 // implementation using wxLog (mainly for backwards compatibility)
 // ----------------------------------------------------------------------------
 

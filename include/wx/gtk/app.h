@@ -46,8 +46,12 @@ public:
     virtual bool Initialized();
     virtual bool Pending();
     virtual void Dispatch();
+
+    virtual void Exit();
+
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual bool ProcessIdle();
+    virtual void WakeUpIdle();
 
     // implementation only from now on
     void OnIdle( wxIdleEvent &event );

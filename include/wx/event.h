@@ -2145,6 +2145,15 @@ private:
     DECLARE_DYNAMIC_CLASS(wxEvtHandler)
 };
 
+// Post a message to the given eventhandler which will be processed during the
+// next event loop iteration
+inline void wxPostEvent(wxEvtHandler *dest, wxEvent& event)
+{
+    wxCHECK_RET( dest, wxT("need an object to post event to in wxPostEvent") );
+
+    dest->AddPendingEvent(event);
+}
+
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 #if wxUSE_GUI
 typedef void (wxEvtHandler::*wxCommandEventFunction)(wxCommandEvent&);

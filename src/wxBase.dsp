@@ -248,7 +248,7 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\common\appcmn.cpp
+SOURCE=.\common\appbase.cpp
 # End Source File
 # Begin Source File
 
@@ -328,7 +328,7 @@ SOURCE=.\common\filesys.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\fontmap.cpp
+SOURCE=.\common\fmapbase.cpp
 # End Source File
 # Begin Source File
 
@@ -436,6 +436,10 @@ SOURCE=.\common\socket.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\stopwatch.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\strconv.cpp
 # End Source File
 # Begin Source File
@@ -457,10 +461,6 @@ SOURCE=.\common\textbuf.cpp
 # Begin Source File
 
 SOURCE=.\common\textfile.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\timercmn.cpp
 # End Source File
 # Begin Source File
 
@@ -525,6 +525,10 @@ SOURCE=.\msw\dummy.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\console.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\dde.cpp
 # End Source File
 # Begin Source File
@@ -538,6 +542,10 @@ SOURCE=.\msw\main.cpp
 # Begin Source File
 
 SOURCE=.\msw\mimetype.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\mslu.cpp
 # End Source File
 # Begin Source File
 
@@ -664,6 +672,10 @@ SOURCE=..\include\wx\app.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\apptrait.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\buffer.h
 # End Source File
 # Begin Source File
@@ -777,6 +789,10 @@ SOURCE=..\include\wx\filename.h
 # Begin Source File
 
 SOURCE=..\include\wx\filesys.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fmappriv.h
 # End Source File
 # Begin Source File
 
@@ -1011,6 +1027,14 @@ SOURCE=..\include\wx\zstream.h
 # Begin Group "MSW"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\include\wx\msw\apptbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\apptrait.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\include\wx\msw\dde.h

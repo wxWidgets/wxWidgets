@@ -50,23 +50,6 @@ protected:
 #define ART(artId, xpmRc) \
     if ( id == artId ) return wxBitmap(xpmRc##_xpm);
 
-// Compatibility hack to use wxApp::GetStdIcon of overriden by the user
-#if WXWIN_COMPATIBILITY_2_2
-    #define GET_STD_ICON_FROM_APP(iconId) \
-        if ( client == wxART_MESSAGE_BOX ) \
-        { \
-            wxIcon icon = wxTheApp->GetStdIcon(iconId); \
-            if ( icon.Ok() ) \
-            { \
-                wxBitmap bmp; \
-                bmp.CopyFromIcon(icon); \
-                return bmp; \
-            } \
-        }
-#else
-    #define GET_STD_ICON_FROM_APP(iconId)
-#endif
-
 // There are two ways of getting the standard icon: either via XPMs or via
 // wxIcon ctor. This depends on the platform:
 #if defined(__WXUNIVERSAL__)
@@ -87,7 +70,6 @@ protected:
 #define ART_MSGBOX(artId, iconId, xpmRc) \
     if ( id == artId ) \
     { \
-        GET_STD_ICON_FROM_APP(iconId) \
         CREATE_STD_ICON(#iconId, xpmRc) \
     }
 

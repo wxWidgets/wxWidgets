@@ -48,7 +48,7 @@ CFG=wxWindows - Win32 Debug
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W4 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdllu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "NDEBUG" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D "__WXBASE__" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdllu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -77,7 +77,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdllud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "_DEBUG" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D "__WXBASE__" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdllud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "_DEBUG" /D WINVER=0x0400 /D "STRICT" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -105,7 +105,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "NDEBUG" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D "__WXBASE__" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -130,7 +130,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_DEBUG" /D "__WXDEBUG__" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D "__WXBASE__" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "_DEBUG" /D "__WXDEBUG__" /D WINVER=0x0400 /D "STRICT" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W4 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdll" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "NDEBUG" /D "WXMAKINGDLL" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D "__WXBASE__" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdll" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "WXMAKINGDLL" /Yu"wx/wxprec.h" /FD /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -185,7 +185,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdlld" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "_DEBUG" /D "WXMAKINGDLL" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D "__WXBASE__" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdlld" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "_DEBUG" /D WINVER=0x0400 /D "STRICT" /D "WXMAKINGDLL" /Yu"wx/wxprec.h" /FD /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -213,7 +213,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/msw" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "NDEBUG" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D "__WXBASE__" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/msw" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -238,7 +238,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswd" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_DEBUG" /D "__WXDEBUG__" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D "__WXBASE__" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswd" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "_DEBUG" /D "__WXDEBUG__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -270,10 +270,6 @@ SOURCE=.\common\accesscmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\appbase.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\appcmn.cpp
 # End Source File
 # Begin Source File
@@ -294,23 +290,11 @@ SOURCE=.\common\clipcmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\clntdata.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\cmdline.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\cmdproc.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\common\cmndata.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\config.cpp
 # End Source File
 # Begin Source File
 
@@ -334,31 +318,11 @@ SOURCE=.\common\datacmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\datetime.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\datstrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\db.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\dbgrid.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\dbtable.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\dcbase.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\dircmn.cpp
 # End Source File
 # Begin Source File
 
@@ -390,23 +354,7 @@ SOURCE=.\common\dseldlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\dynarray.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\dynlib.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\dynload.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\effects.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\encconv.cpp
 # End Source File
 # Begin Source File
 
@@ -414,44 +362,11 @@ SOURCE=.\common\event.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\extended.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\fddlgcmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\ffile.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\file.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\fileconf.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\filefn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\filename.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\filesys.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\fldlgcmn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\fmapbase.cpp
 # End Source File
 # Begin Source File
 
@@ -467,19 +382,7 @@ SOURCE=.\common\framecmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\fs_inet.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\fs_mem.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\fs_zip.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\ftp.cpp
 # End Source File
 # Begin Source File
 
@@ -499,19 +402,7 @@ SOURCE=.\common\gifdecod.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\hash.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\hashmap.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\helpbase.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\http.cpp
 # End Source File
 # Begin Source File
 
@@ -567,14 +458,6 @@ SOURCE=.\common\imagxpm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\intl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\ipcbase.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\layout.cpp
 # End Source File
 # Begin Source File
@@ -583,23 +466,7 @@ SOURCE=.\common\lboxcmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\list.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\log.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\longlong.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\matrix.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\memory.cpp
 # End Source File
 # Begin Source File
 
@@ -607,27 +474,11 @@ SOURCE=.\common\menucmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\mimecmn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\module.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\msgout.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\mstream.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\nbkbase.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\object.cpp
 # End Source File
 # Begin Source File
 
@@ -643,14 +494,6 @@ SOURCE=.\common\prntbase.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\process.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\protocol.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\quantize.cpp
 # End Source File
 # Begin Source File
@@ -659,27 +502,7 @@ SOURCE=.\common\radiocmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\regex.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\rgncmn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\sckaddr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\sckfile.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\sckipc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\sckstrm.cpp
 # End Source File
 # Begin Source File
 
@@ -691,31 +514,7 @@ SOURCE=.\common\sizer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\socket.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\statbar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\stopwatch.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\strconv.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\stream.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\string.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\sysopt.cpp
 # End Source File
 # Begin Source File
 
@@ -727,23 +526,11 @@ SOURCE=.\common\tbarbase.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\textbuf.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\textcmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\textfile.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\timercmn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\tokenzr.cpp
 # End Source File
 # Begin Source File
 
@@ -752,19 +539,6 @@ SOURCE=.\common\toplvcmn.cpp
 # Begin Source File
 
 SOURCE=.\common\treebase.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\txtstrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\unzip.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\url.cpp
 # End Source File
 # Begin Source File
 
@@ -784,31 +558,11 @@ SOURCE=.\common\valtext.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\variant.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\wfstream.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\wincmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\wxchar.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\xpmdecod.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\zipstrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\zstream.cpp
 # End Source File
 # End Group
 # Begin Group "Generic Files"
@@ -1056,10 +810,6 @@ SOURCE=.\msw\app.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\basemsw.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\bitmap.cpp
 # End Source File
 # Begin Source File
@@ -1140,10 +890,6 @@ SOURCE=.\msw\dcscreen.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\dde.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\dialog.cpp
 # End Source File
 # Begin Source File
@@ -1153,10 +899,6 @@ SOURCE=.\msw\dialup.cpp
 # Begin Source File
 
 SOURCE=.\msw\dib.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\dir.cpp
 # End Source File
 # Begin Source File
 
@@ -1229,16 +971,6 @@ SOURCE=.\msw\glcanvas.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\gsocket.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\gsockmsw.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\helpbest.cpp
 # End Source File
 # Begin Source File
@@ -1292,10 +1024,6 @@ SOURCE=.\msw\menuitem.cpp
 # Begin Source File
 
 SOURCE=.\msw\metafile.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\mimetype.cpp
 # End Source File
 # Begin Source File
 
@@ -1355,15 +1083,7 @@ SOURCE=.\msw\radiobut.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\regconf.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\region.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\registry.cpp
 # End Source File
 # Begin Source File
 
@@ -1376,10 +1096,6 @@ SOURCE=.\msw\settings.cpp
 # Begin Source File
 
 SOURCE=.\msw\slider95.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\snglinst.cpp
 # End Source File
 # Begin Source File
 
@@ -1431,10 +1147,6 @@ SOURCE=.\msw\tglbtn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\thread.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\timer.cpp
 # End Source File
 # Begin Source File
@@ -1448,14 +1160,6 @@ SOURCE=.\msw\toplevel.cpp
 # Begin Source File
 
 SOURCE=.\msw\treectrl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\utils.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\utilsexc.cpp
 # End Source File
 # Begin Source File
 
@@ -1586,10 +1290,6 @@ SOURCE=..\include\wx\access.h
 # Begin Source File
 
 SOURCE=..\include\wx\app.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\apptrait.h
 # End Source File
 # Begin Source File
 
@@ -1882,10 +1582,6 @@ SOURCE=..\include\wx\filename.h
 # Begin Source File
 
 SOURCE=..\include\wx\filesys.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\fmappriv.h
 # End Source File
 # Begin Source File
 
@@ -2534,14 +2230,6 @@ SOURCE=..\include\wx\msw\access.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\app.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\apptbase.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\apptrait.h
 # End Source File
 # Begin Source File
 

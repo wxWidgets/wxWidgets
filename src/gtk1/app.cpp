@@ -93,15 +93,6 @@ extern bool g_isIdle;
 void wxapp_install_idle_handler();
 
 //-----------------------------------------------------------------------------
-// wxExit
-//-----------------------------------------------------------------------------
-
-void wxExit()
-{
-    gtk_main_quit();
-}
-
-//-----------------------------------------------------------------------------
 // wxYield
 //-----------------------------------------------------------------------------
 
@@ -168,20 +159,15 @@ bool wxApp::Yield(bool onlyIfNeeded)
 // wxWakeUpIdle
 //-----------------------------------------------------------------------------
 
-static bool gs_WakeUpIdle = false;
-
-void wxWakeUpIdle()
+void wxApp::WakeUpIdle()
 {
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
         wxMutexGuiEnter();
 #endif
 
-    if (g_isIdle) {
-        gs_WakeUpIdle = true;
+    if (g_isIdle)
         wxapp_install_idle_handler();
-        gs_WakeUpIdle = false;
-    }
 
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
@@ -658,6 +644,13 @@ int wxApp::MainLoop()
 {
     gtk_main();
     return 0;
+}
+
+void wxApp::Exit()
+{
+    // VZ: no idea why is it different from ExitMainLoop() but this is what
+    //     wxExit() used to do
+    gtk_main_quit();
 }
 
 void wxApp::ExitMainLoop()

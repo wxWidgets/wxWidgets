@@ -14,6 +14,8 @@
 
 #include "wx/version.h"
 
+class WXDLLEXPORT wxAppConsole;
+
 // ----------------------------------------------------------------------------
 // wxBuildOptions
 // ----------------------------------------------------------------------------
@@ -48,7 +50,7 @@ private:
     bool m_isDebug;
 
     // actually only CheckBuildOptions() should be our friend but well...
-    friend class wxAppBase;
+    friend class wxAppConsole;
 };
 
 #endif // _WX_BUILD_H_

@@ -45,11 +45,7 @@ wxApp *wxTheApp = NULL;
 wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 
-//-----------------------------------------------------------------------------
-// wxExit
-//-----------------------------------------------------------------------------
-
-void wxExit()
+void wxApp::Exit()
 {
     MGL_exit();
     exit(0);
@@ -108,14 +104,15 @@ bool wxApp::Yield(bool onlyIfNeeded)
 // wxWakeUpIdle
 //-----------------------------------------------------------------------------
 
-void wxWakeUpIdle()
+void wxApp::WakeUpIdle()
 {
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
         wxMutexGuiEnter();
 #endif
 
-    while (wxTheApp->ProcessIdle()) {}
+    while (wxTheApp->ProcessIdle())
+        ;
 
 #if wxUSE_THREADS
     if (!wxThread::IsMain())

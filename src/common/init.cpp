@@ -33,22 +33,14 @@
 #include "wx/module.h"
 
 // ----------------------------------------------------------------------------
-// global vars
-// ----------------------------------------------------------------------------
-
-WXDLLEXPORT wxApp *wxTheApp = NULL;
-
-wxAppInitializerFunction
-    wxAppBase::m_appInitFn = (wxAppInitializerFunction)NULL;
-
-// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
-class /* no WXDLLEXPORT */ wxConsoleApp : public wxApp
+// we need a dummy app object if the user doesn't want to create a real one
+class wxDummyConsoleApp : public wxApp
 {
 public:
-    virtual int OnRun() { wxFAIL_MSG(wxT("unreachable")); return 0; }
+    virtual int OnRun() { wxFAIL_MSG( _T("unreachable code") ); return 0; }
 };
 
 // ----------------------------------------------------------------------------
@@ -67,21 +59,6 @@ static size_t gs_nInitCount = 0;
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// stubs for some GUI functions
-// ----------------------------------------------------------------------------
-
-void WXDLLEXPORT wxExit()
-{
-    abort();
-}
-
-// Yield to other apps/messages
-void WXDLLEXPORT wxWakeUpIdle()
-{
-    // do nothing
-}
 
 // ----------------------------------------------------------------------------
 // wxBase-specific functions
@@ -103,7 +80,7 @@ bool WXDLLEXPORT wxInitialize()
         return FALSE;
     }
 
-    wxTheApp = new wxConsoleApp;
+    wxTheApp = new wxDummyConsoleApp;
 
     if ( !wxTheApp )
     {

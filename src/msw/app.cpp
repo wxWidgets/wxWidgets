@@ -48,6 +48,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/apptrait.h"
 #include "wx/cmdline.h"
 #include "wx/filename.h"
 #include "wx/module.h"
@@ -130,7 +131,6 @@ extern void wxSetKeyboardHook(bool doIt);
 #endif
 
 MSG s_currentMsg;
-wxApp *wxTheApp = NULL;
 
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
 //     with NR suffix - wxWindow::MSWCreate() supposes this
@@ -168,11 +168,92 @@ LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 #endif
 
 // ===========================================================================
-// implementation
+// wxGUIAppTraits implementation
+// ===========================================================================
+
+// private class which we use to pass parameters from BeforeChildWaitLoop() to
+// AfterChildWaitLoop()
+struct ChildWaitLoopData
+{
+    ChildWaitLoopData(wxWindowDisabler *wd_, wxWindow *winActive_)
+    {
+        wd = wd_;
+        winActive = winActive_;
+    }
+
+    wxWindowDisabler *wd;
+    wxWindow *winActive;
+};
+
+void *wxGUIAppTraits::BeforeChildWaitLoop()
+{
+    /*
+       We use a dirty hack here to disable all application windows (which we
+       must do because otherwise the calls to wxYield() could lead to some very
+       unexpected reentrancies in the users code) but to avoid losing
+       focus/activation entirely when the child process terminates which would
+       happen if we simply disabled everything using wxWindowDisabler. Indeed,
+       remember that Windows will never activate a disabled window and when the
+       last childs window is closed and Windows looks for a window to activate
+       all our windows are still disabled. There is no way to enable them in
+       time because we don't know when the childs windows are going to be
+       closed, so the solution we use here is to keep one special tiny frame
+       enabled all the time. Then when the child terminates it will get
+       activated and when we close it below -- after reenabling all the other
+       windows! -- the previously active window becomes activated again and
+       everything is ok.
+     */
+    wxBeginBusyCursor();
+
+    // first disable all existing windows
+    wxWindowDisabler *wd = new wxWindowDisabler;
+
+    // then create an "invisible" frame: it has minimal size, is positioned
+    // (hopefully) outside the screen and doesn't appear on the taskbar
+    wxWindow *winActive = new wxFrame
+                    (
+                        wxTheApp->GetTopWindow(),
+                        -1,
+                        _T(""),
+                        wxPoint(32600, 32600),
+                        wxSize(1, 1),
+                        wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR
+                    );
+    winActive->Show();
+
+    return new ChildWaitLoopData(wd, winActive);
+}
+
+void wxGUIAppTraits::AlwaysYield()
+{
+    wxYield();
+}
+
+void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
+{
+    wxEndBusyCursor();
+
+    const ChildWaitLoopData * const data = (ChildWaitLoopData *)dataOrig;
+
+    delete data->wd;
+
+    // finally delete the dummy frame and, as wd has been already destroyed and
+    // the other windows reenabled, the activation is going to return to the
+    // window which had had it before
+    data->winActive->Destroy();
+}
+
+bool wxGUIAppTraits::DoMessageFromThreadWait()
+{
+    return !wxTheApp || wxTheApp->DoMessage();
+}
+
+// ===========================================================================
+// wxApp implementation
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
-// wxApp
+// wxWin macros
 // ---------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
@@ -799,8 +880,6 @@ int wxEntry(WXHINSTANCE hInstance)
 
 //// Static member initialization
 
-wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
-
 wxApp::wxApp()
 {
     argc = 0;
@@ -1146,6 +1225,23 @@ bool wxApp::SendIdleEvents(wxWindow* win)
     return needMore;
 }
 
+void wxApp::WakeUpIdle()
+{
+    // Send the top window a dummy message so idle handler processing will
+    // start up again.  Doing it this way ensures that the idle handler
+    // wakes up in the right thread (see also wxWakeUpMainThread() which does
+    // the same for the main app thread only)
+    wxWindow *topWindow = wxTheApp->GetTopWindow();
+    if ( topWindow )
+    {
+        if ( !::PostMessage(GetHwndOf(topWindow), WM_NULL, 0, 0) )
+        {
+            // should never happen
+            wxLogLastError(wxT("PostMessage(WM_NULL)"));
+        }
+    }
+}
+
 void wxApp::DeletePendingObjects()
 {
     wxNode *node = wxPendingDelete.GetFirst();
@@ -1295,19 +1391,6 @@ int wxApp::GetComCtl32Version()
 #endif
 }
 
-void wxExit()
-{
-    if ( wxTheApp )
-    {
-        wxTheApp->ExitMainLoop();
-    }
-    else
-    {
-        // what else can we do?
-        exit(-1);
-    }
-}
-
 // Yield to incoming messages
 
 bool wxApp::Yield(bool onlyIfNeeded)
@@ -1373,27 +1456,6 @@ bool wxHandleFatalExceptions(bool doit)
     (void)doit;
     return FALSE;
 #endif
-}
-
-//-----------------------------------------------------------------------------
-// wxWakeUpIdle
-//-----------------------------------------------------------------------------
-
-void wxWakeUpIdle()
-{
-    // Send the top window a dummy message so idle handler processing will
-    // start up again.  Doing it this way ensures that the idle handler
-    // wakes up in the right thread (see also wxWakeUpMainThread() which does
-    // the same for the main app thread only)
-    wxWindow *topWindow = wxTheApp->GetTopWindow();
-    if ( topWindow )
-    {
-        if ( !::PostMessage(GetHwndOf(topWindow), WM_NULL, 0, 0) )
-        {
-            // should never happen
-            wxLogLastError(wxT("PostMessage(WM_NULL)"));
-        }
-    }
 }
 
 //-----------------------------------------------------------------------------

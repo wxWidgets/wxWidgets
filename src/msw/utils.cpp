@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-// #pragma implementation "utils.h"   // Note: this is done in utilscmn.cpp now.
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -33,9 +29,6 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-#if wxUSE_GUI
-    #include "wx/cursor.h"
-#endif
 #endif  //WX_PRECOMP
 
 #include "wx/msw/private.h"     // includes <windows.h>
@@ -94,32 +87,6 @@
     #endif
 #endif
 
-//// BEGIN for console support: VC++ only
-#ifdef __VISUALC__
-
-#include "wx/msw/msvcrt.h"
-
-#include <fcntl.h>
-
-#include "wx/ioswrap.h"
-
-/* Need to undef new if including crtdbg.h */
-#  ifdef new
-#  undef new
-#  endif
-
-#ifndef __WIN16__
-#  include <crtdbg.h>
-#endif
-
-#  if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
-#  define new new(__TFILE__,__LINE__)
-#  endif
-
-#endif
-  // __VISUALC__
-/// END for console support
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -133,8 +100,6 @@ static const wxChar eUSERNAME[]  = wxT("UserName");
 static const wxChar eHOSTNAME[]  = wxT("HostName");
 static const wxChar eUSERID[]    = wxT("UserId");
 #endif // !Win32
-
-#ifndef __WXMICROWIN__
 
 // ============================================================================
 // implementation
@@ -1073,77 +1038,6 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 // sleep functions
 // ----------------------------------------------------------------------------
 
-#if wxUSE_GUI
-
-#if wxUSE_TIMER
-
-// Sleep for nSecs seconds. Attempt a Windows implementation using timers.
-static bool gs_inTimer = FALSE;
-
-class wxSleepTimer : public wxTimer
-{
-public:
-    virtual void Notify()
-    {
-        gs_inTimer = FALSE;
-        Stop();
-    }
-};
-
-static wxTimer *wxTheSleepTimer = NULL;
-
-void wxUsleep(unsigned long milliseconds)
-{
-#ifdef __WIN32__
-    ::Sleep(milliseconds);
-#else // !Win32
-    if (gs_inTimer)
-        return;
-    if (miliseconds <= 0)
-        return;
-
-    wxTheSleepTimer = new wxSleepTimer;
-    gs_inTimer = TRUE;
-    wxTheSleepTimer->Start(milliseconds);
-    while (gs_inTimer)
-    {
-        if (wxTheApp->Pending())
-            wxTheApp->Dispatch();
-    }
-    delete wxTheSleepTimer;
-    wxTheSleepTimer = NULL;
-#endif // Win32/!Win32
-}
-
-void wxSleep(int nSecs)
-{
-    if (gs_inTimer)
-        return;
-    if (nSecs <= 0)
-         return;
-
-    wxTheSleepTimer = new wxSleepTimer;
-    gs_inTimer = TRUE;
-    wxTheSleepTimer->Start(nSecs*1000);
-    while (gs_inTimer)
-    {
-        if (wxTheApp->Pending())
-            wxTheApp->Dispatch();
-    }
-    delete wxTheSleepTimer;
-    wxTheSleepTimer = NULL;
-}
-
-// Consume all events until no more left
-void wxFlushEvents()
-{
-//  wxYield();
-}
-
-#endif // wxUSE_TIMER
-
-#elif defined(__WIN32__) // wxUSE_GUI
-
 void wxUsleep(unsigned long milliseconds)
 {
     ::Sleep(milliseconds);
@@ -1154,497 +1048,90 @@ void wxSleep(int nSecs)
     wxUsleep(1000*nSecs);
 }
 
-#endif // wxUSE_GUI/!wxUSE_GUI
-#endif // __WXMICROWIN__
-
 // ----------------------------------------------------------------------------
-// deprecated (in favour of wxLog) log functions
+// font encoding <-> Win32 codepage conversion functions
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_2
-
-// Output a debug mess., in a system dependent fashion.
-#ifndef __WXMICROWIN__
-void wxDebugMsg(const wxChar *fmt ...)
+extern long wxEncodingToCharset(wxFontEncoding encoding)
 {
-  va_list ap;
-  static wxChar buffer[512];
-
-  if (!wxTheApp->GetWantDebugOutput())
-    return;
-
-  va_start(ap, fmt);
-
-  wvsprintf(buffer,fmt,ap);
-  OutputDebugString((LPCTSTR)buffer);
-
-  va_end(ap);
-}
-
-// Non-fatal error: pop up message box and (possibly) continue
-void wxError(const wxString& msg, const wxString& title)
-{
-  wxSprintf(wxBuffer, wxT("%s\nContinue?"), WXSTRINGCAST msg);
-  if (MessageBox(NULL, (LPCTSTR)wxBuffer, (LPCTSTR)WXSTRINGCAST title,
-             MB_ICONSTOP | MB_YESNO) == IDNO)
-    wxExit();
-}
-
-// Fatal error: pop up message box and abort
-void wxFatalError(const wxString& msg, const wxString& title)
-{
-  wxSprintf(wxBuffer, wxT("%s: %s"), WXSTRINGCAST title, WXSTRINGCAST msg);
-  FatalAppExit(0, (LPCTSTR)wxBuffer);
-}
-#endif // __WXMICROWIN__
-
-#endif // WXWIN_COMPATIBILITY_2_2
-
-#if wxUSE_GUI
-
-// ----------------------------------------------------------------------------
-// functions to work with .INI files
-// ----------------------------------------------------------------------------
-
-// Reading and writing resources (eg WIN.INI, .Xdefaults)
-#if wxUSE_RESOURCES
-bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
-{
-  if (file != wxT(""))
-// Don't know what the correct cast should be, but it doesn't
-// compile in BC++/16-bit without this cast.
-#if !defined(__WIN32__)
-    return (WritePrivateProfileString((const char*) section, (const char*) entry, (const char*) value, (const char*) file) != 0);
-#else
-    return (WritePrivateProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)value, (LPCTSTR)WXSTRINGCAST file) != 0);
-#endif
-  else
-    return (WriteProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)WXSTRINGCAST value) != 0);
-}
-
-bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
-{
-    wxString buf;
-    buf.Printf(wxT("%.4f"), value);
-
-    return wxWriteResource(section, entry, buf, file);
-}
-
-bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file)
-{
-    wxString buf;
-    buf.Printf(wxT("%ld"), value);
-
-    return wxWriteResource(section, entry, buf, file);
-}
-
-bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file)
-{
-    wxString buf;
-    buf.Printf(wxT("%d"), value);
-
-    return wxWriteResource(section, entry, buf, file);
-}
-
-bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file)
-{
-    static const wxChar defunkt[] = wxT("$$default");
-    if (file != wxT(""))
+    switch ( encoding )
     {
-        int n = GetPrivateProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)defunkt,
-                (LPTSTR)wxBuffer, 1000, (LPCTSTR)WXSTRINGCAST file);
-        if (n == 0 || wxStrcmp(wxBuffer, defunkt) == 0)
-            return FALSE;
-    }
-    else
-    {
-        int n = GetProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)defunkt,
-                (LPTSTR)wxBuffer, 1000);
-        if (n == 0 || wxStrcmp(wxBuffer, defunkt) == 0)
-            return FALSE;
-    }
-    if (*value) delete[] (*value);
-    *value = copystring(wxBuffer);
-    return TRUE;
-}
+        // although this function is supposed to return an exact match, do do
+        // some mappings here for the most common case of "standard" encoding
+        case wxFONTENCODING_SYSTEM:
+            return DEFAULT_CHARSET;
 
-bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
-{
-    wxChar *s = NULL;
-    bool succ = wxGetResource(section, entry, (wxChar **)&s, file);
-    if (succ)
-    {
-        *value = (float)wxStrtod(s, NULL);
-        delete[] s;
-        return TRUE;
-    }
-    else return FALSE;
-}
+        case wxFONTENCODING_ISO8859_1:
+        case wxFONTENCODING_ISO8859_15:
+        case wxFONTENCODING_CP1252:
+            return ANSI_CHARSET;
 
-bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file)
-{
-    wxChar *s = NULL;
-    bool succ = wxGetResource(section, entry, (wxChar **)&s, file);
-    if (succ)
-    {
-        *value = wxStrtol(s, NULL, 10);
-        delete[] s;
-        return TRUE;
-    }
-    else return FALSE;
-}
+#if !defined(__WXMICROWIN__)
+        // The following four fonts are multi-byte charsets
+        case wxFONTENCODING_CP932:
+            return SHIFTJIS_CHARSET;
 
-bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file)
-{
-    wxChar *s = NULL;
-    bool succ = wxGetResource(section, entry, (wxChar **)&s, file);
-    if (succ)
-    {
-        *value = (int)wxStrtol(s, NULL, 10);
-        delete[] s;
-        return TRUE;
-    }
-    else return FALSE;
-}
-#endif // wxUSE_RESOURCES
+        case wxFONTENCODING_CP936:
+            return GB2312_CHARSET;
 
-// ---------------------------------------------------------------------------
-// helper functions for showing a "busy" cursor
-// ---------------------------------------------------------------------------
+        case wxFONTENCODING_CP949:
+            return HANGUL_CHARSET;
 
-static HCURSOR gs_wxBusyCursor = 0;     // new, busy cursor
-static HCURSOR gs_wxBusyCursorOld = 0;  // old cursor
-static int gs_wxBusyCursorCount = 0;
+        case wxFONTENCODING_CP950:
+            return CHINESEBIG5_CHARSET;
 
-extern HCURSOR wxGetCurrentBusyCursor()
-{
-    return gs_wxBusyCursor;
-}
+        // The rest are single byte encodings
+        case wxFONTENCODING_CP1250:
+            return EASTEUROPE_CHARSET;
 
-// Set the cursor to the busy cursor for all windows
-void wxBeginBusyCursor(wxCursor *cursor)
-{
-    if ( gs_wxBusyCursorCount++ == 0 )
-    {
-        gs_wxBusyCursor = (HCURSOR)cursor->GetHCURSOR();
-#ifndef __WXMICROWIN__
-        gs_wxBusyCursorOld = ::SetCursor(gs_wxBusyCursor);
-#endif
-    }
-    //else: nothing to do, already set
-}
+        case wxFONTENCODING_CP1251:
+            return RUSSIAN_CHARSET;
 
-// Restore cursor to normal
-void wxEndBusyCursor()
-{
-    wxCHECK_RET( gs_wxBusyCursorCount > 0,
-                 wxT("no matching wxBeginBusyCursor() for wxEndBusyCursor()") );
+        case wxFONTENCODING_CP1253:
+            return GREEK_CHARSET;
 
-    if ( --gs_wxBusyCursorCount == 0 )
-    {
-#ifndef __WXMICROWIN__
-        ::SetCursor(gs_wxBusyCursorOld);
-#endif
-        gs_wxBusyCursorOld = 0;
-    }
-}
+        case wxFONTENCODING_CP1254:
+            return TURKISH_CHARSET;
 
-// TRUE if we're between the above two calls
-bool wxIsBusy()
-{
-  return gs_wxBusyCursorCount > 0;
-}
+        case wxFONTENCODING_CP1255:
+            return HEBREW_CHARSET;
 
-// Check whether this window wants to process messages, e.g. Stop button
-// in long calculations.
-bool wxCheckForInterrupt(wxWindow *wnd)
-{
-    wxCHECK( wnd, FALSE );
+        case wxFONTENCODING_CP1256:
+            return ARABIC_CHARSET;
 
-    MSG msg;
-    while ( ::PeekMessage(&msg, GetHwndOf(wnd), 0, 0, PM_REMOVE) )
-    {
-        ::TranslateMessage(&msg);
-        ::DispatchMessage(&msg);
-    }
+        case wxFONTENCODING_CP1257:
+            return BALTIC_CHARSET;
 
-    return TRUE;
-}
-
-// MSW only: get user-defined resource from the .res file.
-// Returns NULL or newly-allocated memory, so use delete[] to clean up.
-
-#ifndef __WXMICROWIN__
-wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourceType)
-{
-    HRSRC hResource = ::FindResource(wxGetInstance(), resourceName, resourceType);
-    if ( hResource == 0 )
-        return NULL;
-
-    HGLOBAL hData = ::LoadResource(wxGetInstance(), hResource);
-    if ( hData == 0 )
-        return NULL;
-
-    wxChar *theText = (wxChar *)::LockResource(hData);
-    if ( !theText )
-        return NULL;
-
-    // Not all compilers put a zero at the end of the resource (e.g. BC++ doesn't).
-    // so we need to find the length of the resource.
-    int len = ::SizeofResource(wxGetInstance(), hResource);
-    wxChar  *s = new wxChar[len+1];
-    wxStrncpy(s,theText,len);
-    s[len]=0;
-
-    // wxChar *s = copystring(theText);
-
-    // Obsolete in WIN32
-#ifndef __WIN32__
-    UnlockResource(hData);
-#endif
-
-    // No need??
-    //  GlobalFree(hData);
-
-    return s;
-}
-#endif // __WXMICROWIN__
-
-// ----------------------------------------------------------------------------
-// get display info
-// ----------------------------------------------------------------------------
-
-// See also the wxGetMousePosition in window.cpp
-// Deprecated: use wxPoint wxGetMousePosition() instead
-void wxGetMousePosition( int* x, int* y )
-{
-    POINT pt;
-    GetCursorPos( & pt );
-    if ( x ) *x = pt.x;
-    if ( y ) *y = pt.y;
-};
-
-// Return TRUE if we have a colour display
-bool wxColourDisplay()
-{
-#ifdef __WXMICROWIN__
-    // MICROWIN_TODO
-    return TRUE;
-#else
-    // this function is called from wxDC ctor so it is called a *lot* of times
-    // hence we optimize it a bit but doign the check only once
-    //
-    // this should be MT safe as only the GUI thread (holding the GUI mutex)
-    // can call us
-    static int s_isColour = -1;
-
-    if ( s_isColour == -1 )
-    {
-        ScreenHDC dc;
-        int noCols = ::GetDeviceCaps(dc, NUMCOLORS);
-
-        s_isColour = (noCols == -1) || (noCols > 2);
-    }
-
-    return s_isColour != 0;
-#endif
-}
-
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    ScreenHDC dc;
-    return GetDeviceCaps(dc, PLANES) * GetDeviceCaps(dc, BITSPIXEL);
-}
-
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-#ifdef __WXMICROWIN__
-    RECT rect;
-    HWND hWnd = GetDesktopWindow();
-    ::GetWindowRect(hWnd, & rect);
-
-    if ( width )
-        *width = rect.right - rect.left;
-    if ( height )
-        *height = rect.bottom - rect.top;
-#else // !__WXMICROWIN__
-    ScreenHDC dc;
-
-    if ( width )
-        *width = ::GetDeviceCaps(dc, HORZRES);
-    if ( height )
-        *height = ::GetDeviceCaps(dc, VERTRES);
-#endif // __WXMICROWIN__/!__WXMICROWIN__
-}
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-#ifdef __WXMICROWIN__
-    // MICROWIN_TODO
-    if ( width )
-        *width = 0;
-    if ( height )
-        *height = 0;
-#else
-    ScreenHDC dc;
-
-    if ( width )
-        *width = ::GetDeviceCaps(dc, HORZSIZE);
-    if ( height )
-        *height = ::GetDeviceCaps(dc, VERTSIZE);
-#endif
-}
-
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
-{
-#if defined(__WIN16__) || defined(__WXMICROWIN__)
-    *x = 0; *y = 0;
-    wxDisplaySize(width, height);
-#else
-    // Determine the desktop dimensions minus the taskbar and any other
-    // special decorations...
-    RECT r;
-
-    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-    if (x)      *x = r.left;
-    if (y)      *y = r.top;
-    if (width)  *width = r.right - r.left;
-    if (height) *height = r.bottom - r.top;
-#endif
-}
-
-// ---------------------------------------------------------------------------
-// window information functions
-// ---------------------------------------------------------------------------
-
-wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd)
-{
-    wxString str;
-
-    if ( hWnd )
-    {
-        int len = GetWindowTextLength((HWND)hWnd) + 1;
-        ::GetWindowText((HWND)hWnd, str.GetWriteBuf(len), len);
-        str.UngetWriteBuf();
-    }
-
-    return str;
-}
-
-wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
-{
-    wxString str;
-
-    // MICROWIN_TODO
-#ifndef __WXMICROWIN__
-    if ( hWnd )
-    {
-        int len = 256; // some starting value
-
-        for ( ;; )
-        {
-            int count = ::GetClassName((HWND)hWnd, str.GetWriteBuf(len), len);
-
-            str.UngetWriteBuf();
-            if ( count == len )
-            {
-                // the class name might have been truncated, retry with larger
-                // buffer
-                len *= 2;
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
+        case wxFONTENCODING_CP874:
+            return THAI_CHARSET;
 #endif // !__WXMICROWIN__
 
-    return str;
+        case wxFONTENCODING_CP437:
+            return OEM_CHARSET;
+    }
+
+    // no way to translate this encoding into a Windows charset
+    return -1;
 }
 
-WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
-{
-#ifndef __WIN32__
-    return (WXWORD)GetWindowWord((HWND)hWnd, GWW_ID);
-#else // Win32
-    return (WXWORD)GetWindowLong((HWND)hWnd, GWL_ID);
-#endif // Win16/32
-}
-
-// ----------------------------------------------------------------------------
-// Metafile helpers
-// ----------------------------------------------------------------------------
-
-extern void PixelToHIMETRIC(LONG *x, LONG *y)
-{
-    ScreenHDC hdcRef;
-
-    int iWidthMM = GetDeviceCaps(hdcRef, HORZSIZE),
-        iHeightMM = GetDeviceCaps(hdcRef, VERTSIZE),
-        iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
-        iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
-
-    *x *= (iWidthMM * 100);
-    *x /= iWidthPels;
-    *y *= (iHeightMM * 100);
-    *y /= iHeightPels;
-}
-
-extern void HIMETRICToPixel(LONG *x, LONG *y)
-{
-    ScreenHDC hdcRef;
-
-    int iWidthMM = GetDeviceCaps(hdcRef, HORZSIZE),
-        iHeightMM = GetDeviceCaps(hdcRef, VERTSIZE),
-        iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
-        iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
-
-    *x *= iWidthPels;
-    *x /= (iWidthMM * 100);
-    *y *= iHeightPels;
-    *y /= (iHeightMM * 100);
-}
-
-#endif // wxUSE_GUI
-
-#ifdef __WXMICROWIN__
-int wxGetOsVersion(int *majorVsn, int *minorVsn)
-{
-    // MICROWIN_TODO
-    if (majorVsn) *majorVsn = 0;
-    if (minorVsn) *minorVsn = 0;
-    return wxUNIX;
-}
-#endif // __WXMICROWIN__
-
-// ----------------------------------------------------------------------------
-// Win32 codepage conversion functions
-// ----------------------------------------------------------------------------
-
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
-
-// wxGetNativeFontEncoding() doesn't exist neither in wxBase nor in wxUniv
-#if wxUSE_GUI && !defined(__WXUNIVERSAL__)
+// we have 2 versions of wxCharsetToCodepage(): the old one which directly
+// looks up the vlaues in the registry and the new one which is more
+// politically correct and has more chances to work on other Windows versions
+// as well but the old version is still needed for !wxUSE_FONTMAP case
+#if wxUSE_FONTMAP
 
 #include "wx/fontmap.h"
-
-// VZ: the new version of wxCharsetToCodepage() is more politically correct
-//     and should work on other Windows versions as well but the old version is
-//     still needed for !wxUSE_FONTMAP || !wxUSE_GUI case
 
 extern long wxEncodingToCodepage(wxFontEncoding encoding)
 {
     // translate encoding into the Windows CHARSET
-    wxNativeEncodingInfo natveEncInfo;
-    if ( !wxGetNativeFontEncoding(encoding, &natveEncInfo) )
+    long charset = wxEncodingToCharset(encoding);
+    if ( charset == -1 )
         return -1;
 
     // translate CHARSET to code page
     CHARSETINFO csetInfo;
-    if ( !::TranslateCharsetInfo((DWORD *)(DWORD)natveEncInfo.charset,
+    if ( !::TranslateCharsetInfo((DWORD *)(DWORD)charset,
                                  &csetInfo,
                                  TCI_SRCCHARSET) )
     {
@@ -1655,8 +1142,6 @@ extern long wxEncodingToCodepage(wxFontEncoding encoding)
 
     return csetInfo.ciACP;
 }
-
-#if wxUSE_FONTMAP
 
 extern long wxCharsetToCodepage(const wxChar *name)
 {
@@ -1672,12 +1157,7 @@ extern long wxCharsetToCodepage(const wxChar *name)
     return wxEncodingToCodepage(enc);
 }
 
-#endif // wxUSE_FONTMAP
-
-#endif // wxUSE_GUI
-
-// include old wxCharsetToCodepage() by OK if needed
-#if !wxUSE_GUI || !wxUSE_FONTMAP
+#else // !wxUSE_FONTMAP
 
 #include "wx/msw/registry.h"
 
@@ -1687,15 +1167,18 @@ extern long wxCharsetToCodepage(const wxChar *name)
     if (!name)
         return GetACP();
 
-    long CP=-1;
+    long CP = -1;
 
+    wxString path(wxT("MIME\\Database\\Charset\\"));
     wxString cn(name);
-    do {
-        wxString path(wxT("MIME\\Database\\Charset\\"));
-        path += cn;
-        wxRegKey key(wxRegKey::HKCR, path);
 
-        if (!key.Exists()) break;
+    // follow the alias loop
+    for ( ;; )
+    {
+        wxRegKey key(wxRegKey::HKCR, path + cn);
+
+        if (!key.Exists())
+            break;
 
         // two cases: either there's an AliasForCharset string,
         // or there are Codepage and InternetEncoding dwords.
@@ -1703,17 +1186,17 @@ extern long wxCharsetToCodepage(const wxChar *name)
         // the Codepage just says which Windows character set to
         // use when displaying the data.
         if (key.HasValue(wxT("InternetEncoding")) &&
-            key.QueryValue(wxT("InternetEncoding"), &CP)) break;
+            key.QueryValue(wxT("InternetEncoding"), &CP))
+            break;
 
         // no encoding, see if it's an alias
         if (!key.HasValue(wxT("AliasForCharset")) ||
-            !key.QueryValue(wxT("AliasForCharset"), cn)) break;
-    } while (1);
+            !key.QueryValue(wxT("AliasForCharset"), cn))
+            break;
+    }
 
     return CP;
 }
 
-#endif // !wxUSE_GUI || !wxUSE_FONTMAP
-
-#endif // Win32
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
 

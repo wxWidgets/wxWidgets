@@ -887,9 +887,10 @@ void wxApp::OnIdle(wxIdleEvent& event)
     s_inOnIdle = FALSE;
 }
 
-void wxWakeUpIdle()
+void wxApp::WakeUpIdle()
 {
-    // **** please implement me! ****
+    // TODO: use wxMotif implementation?
+
     // Wake up the idle handler processor, even if it is in another thread...
 }
 
@@ -1061,18 +1062,11 @@ Window wxGetWindowParent(Window window)
         return (Window) 0;
 }
 
-void wxExit()
+void wxApp::Exit()
 {
-    int retValue = 0;
-    if (wxTheApp)
-        retValue = wxTheApp->OnExit();
-
     wxApp::CleanUp();
-    /*
-    * Exit in some platform-specific way. Not recommended that the app calls this:
-    * only for emergencies.
-    */
-    exit(retValue);
+
+    wxAppConsole::Exit();
 }
 
 // Yield to other processes

@@ -27,6 +27,7 @@
 #if wxUSE_SOCKETS
 
 #include "wx/app.h"
+#include "wx/apptrait.h"
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
@@ -36,10 +37,6 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/event.h"
-
-#if wxUSE_GUI
-  #include "wx/gdicmn.h"      // for wxPendingDelete
-#endif // wxUSE_GUI
 
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
@@ -51,30 +48,24 @@
 // discard buffer
 #define MAX_DISCARD_SIZE (10 * 1024)
 
-// what to do within waits: in wxBase we don't do anything as we don't have
-// the event loop anyhow (for now). In GUI apps we have 2 cases: from the main
-// thread itself we have to call wxYield() to let the events (including the
-// GUI events and the low-level (not wxWindows) events from GSocket) be
-// processed. From another thread it is enough to just call wxThread::Yield()
-// which will give away the rest of our time slice: the explanation is that
-// the events will be processed by the main thread anyhow, without calling
-// wxYield(), but we don't want to eat the CPU time uselessly while sitting
-// in the loop waiting for the data
-#if wxUSE_GUI
-    #if wxUSE_THREADS
-        #define PROCESS_EVENTS()        \
-        {                               \
-            if ( wxThread::IsMain() )   \
-                wxYield();              \
-            else                        \
-                wxThread::Yield();      \
-        }
-    #else // !wxUSE_THREADS
-        #define PROCESS_EVENTS() wxYield()
-    #endif // wxUSE_THREADS/!wxUSE_THREADS
-#else // !wxUSE_GUI
-    #define PROCESS_EVENTS()
-#endif // wxUSE_GUI/!wxUSE_GUI
+// what to do within waits: we have 2 cases: from the main thread itself we
+// have to call wxYield() to let the events (including the GUI events and the
+// low-level (not wxWindows) events from GSocket) be processed. From another
+// thread it is enough to just call wxThread::Yield() which will give away the
+// rest of our time slice: the explanation is that the events will be processed
+// by the main thread anyhow, without calling wxYield(), but we don't want to
+// eat the CPU time uselessly while sitting in the loop waiting for the data
+#if wxUSE_THREADS
+    #define PROCESS_EVENTS()        \
+    {                               \
+        if ( wxThread::IsMain() )   \
+            wxYield();              \
+        else                        \
+            wxThread::Yield();      \
+    }
+#else // !wxUSE_THREADS
+    #define PROCESS_EVENTS() wxYield()
+#endif // wxUSE_THREADS/!wxUSE_THREADS
 
 #define wxTRACE_Socket _T("wxSocket")
 
@@ -213,9 +204,9 @@ wxSocketBase::~wxSocketBase()
 {
   // Just in case the app called Destroy() *and* then deleted
   // the socket immediately: don't leave dangling pointers.
-#if wxUSE_GUI
-  wxPendingDelete.DeleteObject(this);
-#endif
+  wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+  if ( traits )
+      traits->RemoveFromPendingDelete(this);
 
   // Shutdown and close the socket
   if (!m_beingDeleted)
@@ -243,12 +234,18 @@ bool wxSocketBase::Destroy()
   // Supress events from now on
   Notify(FALSE);
 
-#if wxUSE_GUI
-  if ( !wxPendingDelete.Member(this) )
-    wxPendingDelete.Append(this);
-#else
-  delete this;
-#endif
+  // schedule this object for deletion
+  wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+  if ( traits )
+  {
+      // let the traits object decide what to do with us
+      traits->ScheduleForDestroy(this);
+  }
+  else // no app or no traits
+  {
+      // in wxBase we might have no app object at all, don't leak memory
+      delete this;
+  }
 
   return TRUE;
 }

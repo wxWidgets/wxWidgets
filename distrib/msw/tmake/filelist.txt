@@ -120,7 +120,8 @@ treectlg.cpp	Generic
 wizard.cpp	Generic
 
 accesscmn.cpp	Common
-appcmn.cpp	Common	Base
+appbase.cpp	Common	Base
+appcmn.cpp	Common
 artprov.cpp	Common
 artstd.cpp	Common
 bmpbase.cpp	Common	NotGTK,NotOS2,NotMSW,NotMicro
@@ -165,8 +166,9 @@ filefn.cpp	Common	Base
 filename.cpp	Common	Base
 filesys.cpp	Common	Base
 fldlgcmn.cpp	Common
+fmapbase.cpp	Common	Base
 fontcmn.cpp	Common
-fontmap.cpp	Common	Base
+fontmap.cpp	Common
 framecmn.cpp	Common
 toplvcmn.cpp	Common
 fs_inet.cpp	Common	Base
@@ -228,6 +230,7 @@ settcmn.cpp	Common
 sizer.cpp	Common
 socket.cpp	Common	Socket,Base
 statbar.cpp	Common
+stopwatch.cpp	Common	Base
 strconv.cpp	Common	Base
 stream.cpp	Common	Base
 string.cpp	Common	Base
@@ -237,7 +240,7 @@ tbarbase.cpp	Common
 textbuf.cpp	Common	Base
 textcmn.cpp	Common
 textfile.cpp	Common	Base
-timercmn.cpp	Common	Base
+timercmn.cpp	Common
 tokenzr.cpp	Common	Base
 treebase.cpp	Common
 txtstrm.cpp	Common	Base
@@ -262,6 +265,7 @@ accel.cpp	MSW
 access.cpp	MSW	OLE
 app.cpp	MSW	LowLevel
 automtn.cpp	MSW	OLE,LowLevel
+basemsw.cpp	MSW	Base
 bitmap.cpp	MSW	LowLevel
 bmpbuttn.cpp	MSW
 brush.cpp	MSW	LowLevel
@@ -366,12 +370,14 @@ toplevel.cpp	MSW	LowLevel
 treectrl.cpp	MSW	Win32Only
 utils.cpp	MSW	Base,LowLevel
 utilsexc.cpp	MSW	Base,LowLevel
+utilsgui.cpp	MSW	LowLevel
 uuid.cpp	MSW	OLE,LowLevel
 uxtheme.cpp	MSW
 volume.cpp	MSW	Base
 wave.cpp	MSW	LowLevel
 window.cpp	MSW	LowLevel
 
+baseunix.cpp	Unix	Base
 dialup.cpp	Unix	NotMac
 dir.cpp	Unix	Base,NotMac
 fontenum.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
@@ -381,6 +387,8 @@ mimetype.cpp	Unix	Base,NotMac,NotMicro
 snglinst.cpp	Unix	Base
 taskbarx11.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
 threadpsx.cpp	Unix	Base,NotMac
+# not yet
+# utilsgui.cpp	Unix
 utilsunx.cpp	Unix	Base
 utilsx11.cpp	Unix	NotMac,NotMGL,NotMicro
 
@@ -809,6 +817,7 @@ access.h	WXH
 accel.h	WXH
 access.h	WXH
 app.h	WXH	Base
+apptrait.h	WXH	Base
 artprov.h	WXH
 bitmap.h	WXH
 bmpbuttn.h	WXH
@@ -881,6 +890,7 @@ filedlg.h	WXH
 filefn.h	WXH	Base
 filename.h	WXH	Base
 filesys.h	WXH	Base
+fmappriv.h	WXH	Base
 font.h	WXH
 fontdlg.h	WXH
 fontenc.h	WXH	Base
@@ -950,7 +960,7 @@ minifram.h	WXH
 module.h	WXH	Base
 msgdlg.h	WXH
 msgout.h	WXH	Base
-mslu.cpp	MSW
+mslu.cpp	MSW	Base
 mstream.h	WXH	Base
 notebook.h	WXH
 object.h	WXH	Base
@@ -1350,6 +1360,8 @@ window.h	MGLH
 access.h	MSWH
 accel.h	MSWH
 app.h	MSWH
+apptbase.h	MSWH	Base
+apptrait.h	MSWH	Base
 bitmap.h	MSWH
 bmpbuttn.h	MSWH
 brush.h	MSWH
@@ -1547,10 +1559,13 @@ pnghand.h	OS2H
 statbox.h	OS2H
 toplevel.h	OS2H
 
+apptbase.h	UnixH	Base
+apptrait.h	UnixH	Base
 execute.h	UnixH
 fontutil.h	UnixH
 gsockunx.h	UnixH	Base
 mimetype.h	UnixH	Base
+pipe.h	UnixH	Base
 taskbarx11.h	UnixH
 utilsx11.h	UnixH
 

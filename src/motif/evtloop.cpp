@@ -463,7 +463,7 @@ static void wxBreakDispatch()
     write( idleFds[1], &dummy, 1 );
 }
 
-void wxWakeUpIdle()
+void wxApp::WakeUpIdle()
 {
     ::wxBreakDispatch();
 }
