@@ -18,4 +18,6 @@ AC_OUTPUT([
             dialoged/src/Makefile
             emulator/Makefile
             emulator/src/Makefile
+            helpview/Makefile
+            helpview/src/Makefile
          ])
