@@ -22,6 +22,7 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
+#include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/NSView.h"
 
 #import <Appkit/NSView.h>

@@ -22,6 +22,8 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
+#include "wx/cocoa/ObjcPose.h"
+
 #include "wx/cocoa/NSButton.h"
 #import <AppKit/NSButton.h>
 

@@ -26,8 +26,9 @@
     #include "wx/dc.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/cocoa/ObjcPose.h"
 #endif
+
+#include "wx/cocoa/ObjcPose.h"
 
 #if wxUSE_WX_RESOURCES
 #  include "wx/resource.h"
