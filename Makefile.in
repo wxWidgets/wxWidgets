@@ -1059,7 +1059,7 @@ dist: @GUIDIST@
 
 debian-dist: GTK_DIST DEMOS_DIST UTILS_DIST MISC_DIST MANUAL_DIST
 	mkdir $(DISTDIR)/debian
-	cp $(WXDIR)/debian/* $(DISTDIR)/debian
+	-cp $(WXDIR)/debian/* $(DISTDIR)/debian
 	cp $(DOCDIR)/licence.txt $(DISTDIR)/docs
 	cp $(DOCDIR)/licendoc.txt $(DISTDIR)/docs
 	cp $(DOCDIR)/preamble.txt $(DISTDIR)/docs
