@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -24,7 +24,7 @@
  */
 
 /*****************************************************************************\
-* XpmCrIFrBuf.c:                                                              *
+*  CrIFrBuf.c:                                                                *
 *                                                                             *
 *  XPM library                                                                *
 *  Parse an Xpm buffer (file in memory) and create the image and possibly its *
@@ -32,36 +32,47 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
-#include "xpm34p.h"
+#include "XpmI.h"
+
+LFUNC(OpenBuffer, void, (char *buffer, xpmData *mdata));
 
 int
-XpmCreateImageFromBuffer(Display *display, char *buffer, XImage **image_return,
-			 XImage **shapeimage_return, XpmAttributes *attributes)
+XpmCreateImageFromBuffer(display, buffer, image_return,
+			 shapeimage_return, attributes)
+    Display *display;
+    char *buffer;
+    XImage **image_return;
+    XImage **shapeimage_return;
+    XpmAttributes *attributes;
 {
     XpmImage image;
     XpmInfo info;
     int ErrorStatus;
+    xpmData mdata;
 
-    /* create an XpmImage from the buffer */
+    xpmInitXpmImage(&image);
+    xpmInitXpmInfo(&info);
+
+    /* open buffer to read */
+    OpenBuffer(buffer, &mdata);
+
+    /* create the XImage from the XpmData */
     if (attributes) {
 	xpmInitAttributes(attributes);
 	xpmSetInfoMask(&info, attributes);
-	ErrorStatus = XpmCreateXpmImageFromBuffer(buffer, &image, &info);
+	ErrorStatus = xpmParseDataAndCreate(display, &mdata,
+					    image_return, shapeimage_return,
+					    &image, &info, attributes);
     } else
-	ErrorStatus = XpmCreateXpmImageFromBuffer(buffer, &image, NULL);
-
-    if (ErrorStatus != XpmSuccess)
-	return (ErrorStatus);
-
-    /* create the related ximages */
-    ErrorStatus = XpmCreateImageFromXpmImage(display, &image,
-					     image_return, shapeimage_return,
-					     attributes);
+	ErrorStatus = xpmParseDataAndCreate(display, &mdata,
+					    image_return, shapeimage_return,
+					    &image, NULL, attributes);
     if (attributes) {
 	if (ErrorStatus >= 0)		/* no fatal error */
 	    xpmSetAttributes(attributes, &image, &info);
 	XpmFreeXpmInfo(&info);
     }
+
     /* free the XpmImage */
     XpmFreeXpmImage(&image);
 
@@ -69,7 +80,10 @@ XpmCreateImageFromBuffer(Display *display, char *buffer, XImage **image_return,
 }
 
 int
-XpmCreateXpmImageFromBuffer(char *buffer, XpmImage *image, XpmInfo *info)
+XpmCreateXpmImageFromBuffer(buffer, image, info)
+    char *buffer;
+    XpmImage *image;
+    XpmInfo *info;
 {
     xpmData mdata;
     int ErrorStatus;
@@ -79,12 +93,23 @@ XpmCreateXpmImageFromBuffer(char *buffer, XpmImage *image, XpmInfo *info)
     xpmInitXpmInfo(info);
 
     /* open buffer to read */
-    xpmOpenBuffer(buffer, &mdata);
+    OpenBuffer(buffer, &mdata);
 
     /* create the XpmImage from the XpmData */
     ErrorStatus = xpmParseData(&mdata, image, info);
 
-    xpmDataClose(&mdata);
-
     return (ErrorStatus);
+}
+
+/*
+ * open the given buffer to be read or written as an xpmData which is returned
+ */
+static void
+OpenBuffer(buffer, mdata)
+    char *buffer;
+    xpmData *mdata;
+{
+    mdata->type = XPMBUFFER;
+    mdata->cptr = buffer;
+    mdata->CommentLength = 0;
 }

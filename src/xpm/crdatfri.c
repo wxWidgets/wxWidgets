@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -24,7 +24,7 @@
  */
 
 /*****************************************************************************\
-* XpmCrDataFI.c:                                                              *
+*  CrDataFI.c:                                                                *
 *                                                                             *
 *  XPM library                                                                *
 *  Scan an image and possibly its mask and create an XPM array                *
@@ -32,16 +32,7 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
-#include "xpm34p.h"
-#ifdef VMS
-#include "sys$library:string.h"
-#else
-#if defined(SYSV) || defined(SVR4)
-#include <string.h>
-#else
-#include <strings.h>
-#endif
-#endif
+#include "XpmI.h"
 
 LFUNC(CreateColors, int, (char **dataptr, unsigned int *data_size,
 			  XpmColor *colors, unsigned int ncolors,
@@ -60,8 +51,12 @@ LFUNC(CreateExtensions, void, (char **dataptr, unsigned int offset,
 			       unsigned int ext_nlines));
 
 int
-XpmCreateDataFromImage(Display *display, char ***data_return, XImage *image,
-  XImage *shapeimage, XpmAttributes *attributes)
+XpmCreateDataFromImage(display, data_return, image, shapeimage, attributes)
+    Display *display;
+    char ***data_return;
+    XImage *image;
+    XImage *shapeimage;
+    XpmAttributes *attributes;
 {
     XpmImage xpmimage;
     XpmInfo info;
@@ -93,17 +88,15 @@ XpmCreateDataFromImage(Display *display, char ***data_return, XImage *image,
 #undef RETURN
 #define RETURN(status) \
 { \
-    if (header) { \
-	for (l = 0; l < header_nlines; l++) \
-	    if (header[l]) \
-		XpmFree(header[l]); \
-		XpmFree(header); \
-    } \
-    return(status); \
+      ErrorStatus = status; \
+      goto exit; \
 }
 
 int
-XpmCreateDataFromXpmImage(char ***data_return, XpmImage *image, XpmInfo *info)
+XpmCreateDataFromXpmImage(data_return, image, info)
+    char ***data_return;
+    XpmImage *image;
+    XpmInfo *info;
 {
     /* calculation variables */
     int ErrorStatus;
@@ -136,18 +129,29 @@ XpmCreateDataFromXpmImage(char ***data_return, XpmImage *image, XpmInfo *info)
 
     /* print the hints line */
     s = buf;
+#ifndef VOID_SPRINTF
+    s +=
+#endif
     sprintf(s, "%d %d %d %d", image->width, image->height,
 	    image->ncolors, image->cpp);
+#ifdef VOID_SPRINTF
     s += strlen(s);
+#endif
 
     if (info && (info->valuemask & XpmHotspot)) {
+#ifndef VOID_SPRINTF
+	s +=
+#endif
 	sprintf(s, " %d %d", info->x_hotspot, info->y_hotspot);
+#ifdef VOID_SPRINTF
 	s += strlen(s);
+#endif
     }
-    if (extensions)
-	sprintf(s, " XPMEXT");
-
-    l = strlen(buf) + 1;
+    if (extensions) {
+	strcpy(s, " XPMEXT");
+	s += 7;
+    }
+    l = s - buf + 1;
     *header = (char *) XpmMalloc(l);
     if (!*header)
 	RETURN(XpmNoMemory);
@@ -192,12 +196,26 @@ XpmCreateDataFromXpmImage(char ***data_return, XpmImage *image, XpmInfo *info)
 			 ext_nlines);
 
     *data_return = data;
+    ErrorStatus = XpmSuccess;
 
-    RETURN(XpmSuccess);
+/* exit point, free only locally allocated variables */
+exit:
+    if (header) {
+	for (l = 0; l < header_nlines; l++)
+	    if (header[l])
+		XpmFree(header[l]);
+		XpmFree(header);
+    }
+    return(ErrorStatus);
 }
 
 static int
-CreateColors(char **dataptr, unsigned int *data_size, XpmColor *colors, unsigned int ncolors, unsigned int cpp)
+CreateColors(dataptr, data_size, colors, ncolors, cpp)
+    char **dataptr;
+    unsigned int *data_size;
+    XpmColor *colors;
+    unsigned int ncolors;
+    unsigned int cpp;
 {
     char buf[BUFSIZ];
     unsigned int a, key, l;
@@ -212,24 +230,33 @@ CreateColors(char **dataptr, unsigned int *data_size, XpmColor *colors, unsigned
 
 	for (key = 1; key <= NKEYS; key++, defaults++) {
 	    if (s2 = *defaults) {
+#ifndef VOID_SPRINTF
+		s +=
+#endif
 		sprintf(s, "\t%s %s", xpmColorKeys[key - 1], s2);
+#ifdef VOID_SPRINTF
 		s += strlen(s);
+#endif
 	    }
 	}
-	l = strlen(buf) + 1;
+	l = s - buf + 1;
 	s = (char *) XpmMalloc(l);
 	if (!s)
 	    return (XpmNoMemory);
 	*data_size += l;
-	strcpy(s, buf);
-	*dataptr = s;
+	*dataptr = strcpy(s, buf);
     }
     return (XpmSuccess);
 }
 
 static void
-CreatePixels(char **dataptr, unsigned int width, unsigned int height, unsigned int cpp,
-   unsigned int *pixels, XpmColor *colors)
+CreatePixels(dataptr, width, height, cpp, pixels, colors)
+    char **dataptr;
+    unsigned int width;
+    unsigned int height;
+    unsigned int cpp;
+    unsigned int *pixels;
+    XpmColor *colors;
 {
     char *s;
     unsigned int x, y, h, offset;
@@ -255,7 +282,11 @@ CreatePixels(char **dataptr, unsigned int width, unsigned int height, unsigned i
 }
 
 static void
-CountExtensions(XpmExtension *ext, unsigned int num, unsigned int *ext_size, unsigned int *ext_nlines)
+CountExtensions(ext, num, ext_size, ext_nlines)
+    XpmExtension *ext;
+    unsigned int num;
+    unsigned int *ext_size;
+    unsigned int *ext_nlines;
 {
     unsigned int x, y, a, size, nlines;
     char **line;
@@ -277,7 +308,12 @@ CountExtensions(XpmExtension *ext, unsigned int num, unsigned int *ext_size, uns
 }
 
 static void
-CreateExtensions(char **dataptr, unsigned int offset, XpmExtension *ext, unsigned int num, unsigned int ext_nlines)
+CreateExtensions(dataptr, offset, ext, num, ext_nlines)
+    char **dataptr;
+    unsigned int offset;
+    XpmExtension *ext;
+    unsigned int num;
+    unsigned int ext_nlines;
 {
     unsigned int x, y, a, b;
     char **line;

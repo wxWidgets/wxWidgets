@@ -14,23 +14,25 @@ WXLIB = $(WXDIR)\lib
 
 LIBTARGET   = $(WXLIB)\xpm.lib
 
-OBJECTS = 	crbuffri.obj &
+OBJECTS = 	attrib.obj &
+		crbuffri.obj &
 		crdatfri.obj &
 		create.obj &
-        crifrbuf.obj &
+		crifrbuf.obj &
 		crifrdat.obj &
 		data.obj &
+		image.obj &
+		info.obj &
 		hashtab.obj &
-        misc.obj &
+		misc.obj &
 		parse.obj &
-        rdftodat.obj &
+		rdftodat.obj &
 		rdftoi.obj &
 		rgb.obj &
-        scan.obj &
+		scan.obj &
 		simx.obj &
-        wrffrdat.obj &
-		wrffrp.obj &
-        wrffri.obj
+		wrffrdat.obj &
+		wrffri.obj
 
 all:        $(OBJECTS) $(LIBTARGET)
 

@@ -70,12 +70,15 @@ $(CPPFLAGS) /Fo$@ /Tp $<
 <<
 
 OBJECTS = \
+  ..\xpm\$D\attrib.obj \
   ..\xpm\$D\crbuffri.obj \
   ..\xpm\$D\crdatfri.obj \
   ..\xpm\$D\create.obj \
   ..\xpm\$D\crifrbuf.obj \
   ..\xpm\$D\crifrdat.obj \
   ..\xpm\$D\data.obj \
+  ..\xpm\$D\image.obj \
+  ..\xpm\$D\info.obj \
   ..\xpm\$D\hashtab.obj \
   ..\xpm\$D\misc.obj \
   ..\xpm\$D\parse.obj \
@@ -85,7 +88,6 @@ OBJECTS = \
   ..\xpm\$D\scan.obj \
   ..\xpm\$D\simx.obj \
   ..\xpm\$D\wrffrdat.obj \
-  ..\xpm\$D\wrffrp.obj \
   ..\xpm\$D\wrffri.obj
 
 all:  $(OS2XPMLIB)

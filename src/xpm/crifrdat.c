@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -24,7 +24,7 @@
  */
 
 /*****************************************************************************\
-* XpmCrIFrData.c:                                                             *
+*  CrIFrData.c:                                                               *
 *                                                                             *
 *  XPM library                                                                *
 *  Parse an Xpm array and create the image and possibly its mask              *
@@ -32,43 +32,58 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
-#include "xpm34p.h"
+#include "XpmI.h"
+
+LFUNC(OpenArray, void, (char **data, xpmData *mdata));
 
 int
-XpmCreateImageFromData(Display *display, char **data, XImage **image_return,
-		       XImage **shapeimage_return, XpmAttributes *attributes)
+XpmCreateImageFromData(display, data, image_return,
+		       shapeimage_return, attributes)
+    Display *display;
+    char **data;
+    XImage **image_return;
+    XImage **shapeimage_return;
+    XpmAttributes *attributes;
 {
     XpmImage image;
     XpmInfo info;
     int ErrorStatus;
+    xpmData mdata;
+
+    xpmInitXpmImage(&image);
+    xpmInitXpmInfo(&info);
+
+    /* open data */
+    OpenArray(data, &mdata);
 
     /* create an XpmImage from the file */
     if (attributes) {
 	xpmInitAttributes(attributes);
 	xpmSetInfoMask(&info, attributes);
-	ErrorStatus = XpmCreateXpmImageFromData(data, &image, &info);
+	ErrorStatus = xpmParseDataAndCreate(display, &mdata,
+					    image_return, shapeimage_return,
+					    &image, &info, attributes);
     } else
-	ErrorStatus = XpmCreateXpmImageFromData(data, &image, NULL);
-
-    if (ErrorStatus != XpmSuccess)
-	return (ErrorStatus);
-
-    /* create the related ximages */
-    ErrorStatus = XpmCreateImageFromXpmImage(display, &image,
-					     image_return, shapeimage_return,
-					     attributes);
+	ErrorStatus = xpmParseDataAndCreate(display, &mdata,
+					    image_return, shapeimage_return,
+					    &image, NULL, attributes);
     if (attributes) {
 	if (ErrorStatus >= 0)		/* no fatal error */
 	    xpmSetAttributes(attributes, &image, &info);
 	XpmFreeXpmInfo(&info);
     }
+
+    /* free the XpmImage */
     XpmFreeXpmImage(&image);
 
     return (ErrorStatus);
 }
 
 int
-XpmCreateXpmImageFromData(char **data, XpmImage *image, XpmInfo *info)
+XpmCreateXpmImageFromData(data, image, info)
+    char **data;
+    XpmImage *image;
+    XpmInfo *info;
 {
     xpmData mdata;
     int ErrorStatus;
@@ -78,12 +93,28 @@ XpmCreateXpmImageFromData(char **data, XpmImage *image, XpmInfo *info)
     xpmInitXpmInfo(info);
 
     /* open data */
-    xpmOpenArray(data, &mdata);
+    OpenArray(data, &mdata);
 
     /* create the XpmImage from the XpmData */
     ErrorStatus = xpmParseData(&mdata, image, info);
 
-    xpmDataClose(&mdata);
-
     return (ErrorStatus);
+}
+
+/*
+ * open the given array to be read or written as an xpmData which is returned
+ */
+static void
+OpenArray(data, mdata)
+    char **data;
+    xpmData *mdata;
+{
+    mdata->type = XPMARRAY;
+    mdata->stream.data = data;
+    mdata->cptr = *data;
+    mdata->line = 0;
+    mdata->CommentLength = 0;
+    mdata->Bcmt = mdata->Ecmt = NULL;
+    mdata->Bos = mdata->Eos = '\0';
+    mdata->format = 0;			/* this can only be Xpm 2 or 3 */
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to

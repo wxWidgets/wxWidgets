@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -28,6 +28,259 @@
 *  			HISTORY of user-visible changes			   *
 * 									   *
 \**************************************************************************/
+
+3.4k    (98/03/18)
+
+    ENHANCEMENTS:
+	- A new program called cxpm is provided to check on XPM files and help
+	  figuring out where the file might be invalid.
+        - The FAQ and README are now in HTML.
+
+    BUGS CORRECTED:
+        - A bug in writing pixmaps out on an 32 bit depth visual and MSBFirst
+	  machine.
+		- patch from Uwe Langenkamp <Uwe.Langenkamp@t-online.de>
+        - A severe bug in parsing the pixels section when an unknown character
+	  is encountered.
+
+3.4j	(96/12/31)
+
+    ENHANCEMENTS:
+	- The XPM library can now be built under Amiga DOS. This entirely comes
+	  from: Lorens Younes <d93-hyo@nada.kth.se>
+	  See the README.AMIGA file for details.
+	- Changes for MSW: big performance improvement in ParseAndPutPixels(),
+		fixed creation of the mask in SetColor()
+		- patch from Jan Wielemaker <jan@swi.psy.uva.nl>
+	- makefiles are provided for VMS
+		- given by Martin P.J. Zinser m.zinser@gsi.de  
+	- Imakefiles reworked to get smoother builds and fixes from:
+		- Paul DuBois dubois@primate.wisc.edu
+		- Larry Schwimmer schwim@cyclone.stanford.edu
+	- thanks to some code rearrangement the library is smaller (the size
+	  reduction goes from 4 to 7% depending on the system)
+
+    BUGS CORRECTED:
+	- A severe bug (introduced in 3.4i as part of the sprintf
+	  optimization) in code writing XPM extensions to a buffer
+	  XpmCreateBufferFromImage/Pixmap.
+	- The XpmAttributes definition in xpm.h was declaring nalloc_colors to
+	  be Bool, it's an int.
+
+3.4i	(96/09/13)
+
+    NEW FEATURES:
+	- The XPM library now allows the application to pass its own color
+	  allocation/free functions. For this matter the following was done:
+	  The XpmAttributes structure has three new fields alloc_color,
+	  free_color, and color_closure. The following new valuemasks were
+	  added XpmAllocColorFunc, XpmFreeColorsFunc, XpmColorClosure. And
+	  two new types were defined XpmAllocColorFunc and XpmFreeColorsFunc.
+	  See documentation for details.
+
+    ENHANCEMENTS:
+	- Windows NT support. It should compile and run fine based on the X
+	  Consortium X11R6 distribution.
+	- The README file contains information to compile on Solaris with gcc.
+	- Part of the code has been optimized by using the value returned by
+	  sprintf instead of calling strlen. Add the flag -DVOID_SPRINTF
+	  if on your system sprintf returns void.
+		  - patch from Thomas Ott thommy@rz.fh-augsburg.de
+
+    BUGS CORRECTED:
+	- XpmFree is now a real function (simply calling free by default).
+
+    CHANGES TO THE DOC:
+	- The documentation describes the new XpmAttributes fields and their
+	  use.
+
+3.4h	(96/02/01)
+
+    NEW FEATURES:
+	- The XpmAttributes has a new member called 'alloc_close_colors' which
+	  lets the caller specify whether close colors should be allocated
+	  using XAllocColor or not. This is especially useful when one uses a
+	  private colormap full of read/write cells.
+	  The xpm.h header file define a new bitmap flag called
+	  XpmAllocCloseColors to use along with this new slot.
+		  - Dale Pease peased@bigbird.cso.gtegsc.com
+	- The XpmAttributes has a new member called 'bitmap_format' which lets
+	  the caller specify the format of 1 bit depth images (XYBitmap or
+	  ZPixmap). The xpm.h header file define a new bitmap flag called
+	  XpmBitmapFormat to use along with this new field.
+
+    ENHANCEMENTS:
+	- XpmReadFileTo[Image/Pixmap], XpmCreate[Image/Pixmap]FromData,
+	  XpmCreateImageFromDataFromBuffer functions do no longer use a
+	  temporary XpmImage object, which reduces a lot the amount of memory
+	  used. On the other hand it can take a little more time, but given the
+	  following figures (based on sxpm) it is a real good trade-off.
+
+	  Reading a 22x22 pixmap with 5 colors no time change is detected
+	  using time:
+		  real        0.3
+		  user        0.1
+		  sys         0.1
+
+	  Reading a 1279x1023 pixmap with 14 colors (quite extreme case for
+	  XPM!) the time goes from:
+		  real        1.9
+		  user        0.8
+		  sys         0.8
+
+	  to:
+		  real        2.2
+		  user        1.8
+		  sys         0.3
+
+	  Reading the 22x22 pixmap with 5 colors the memory usage (under
+	  purify) goes from:
+		  255256 code
+		   55496 data/bss
+		  163848 heap (peak use)
+		    4248 stack
+	  to:
+		  271240 code
+		   55472 data/bss
+		  159752 heap (peak use)
+		    4224 stack
+
+	  And reading the 1279x1023 pixmap with 14 colors it goes from:
+		  255256 code
+		   55496 data/bss
+		 6705160 heap (peak use)
+		    4280 stack
+	  to:
+		  271240 code
+		   55472 data/bss
+		 1732616 heap (peak use)
+		    4264 stack
+
+	  This clearly shows that while for small pixmaps there is no real
+	  difference on both sides, for large pixmaps this makes a huge
+	  difference about the amount of memory used and it is not much
+	  slower.
+
+	  Note that you can still get the old behavior using both
+	  XpmReadFileToXpmImage and XpmCreate[Image/Pixmap]FromXpmImage instead
+	  of XpmReadFileTo[Image/Pixmap]. Once more XPM gives you the choice!
+
+    BUGS CORRECTED:
+        - when defined locally the global symbols strcasecmp and strdup are
+	  now called xpmstrcasecmp and xpmstrdup to avoid any possible
+	  conflict.
+	- VMS has a bogus file system which requires a work around in
+	  XpmReadFileToBuffer.
+		  - patch from Bob.Deen@jpl.nasa.gov
+	- the type of the exactColors attribute has been changed from unsigned
+	  int to Bool.
+
+    CHANGES TO THE DOC:
+	- the documentation describes the new XpmAttributes fields
+	  alloc_close_colors and bitmap_format.
+
+3.4g	(95/10/08)
+
+    ENHANCEMENTS:
+	- The XpmAttributes structure has now two new slots: alloc_pixels and
+	  nalloc_pixels in order to provide an easy way to free allocated
+	  colors. The new bitmask XpmReturnAllocPixels should be used to
+	  request this data through the valuemask. Unless you really know why,
+	  you should use this instead of XpmReturnPixels, pixels, and npixels.
+	- the XPM1 format parsing has been improved.
+		  - patch from Chuck Thompson <cthomp@cs.uiuc.edu>
+	- compilers defining _STDC_ to something different from 1 are now
+	  considered as ANSI compilers.
+	- the README file provides now more info on how to build XPM depending
+	  on the system.
+
+    BUGS CORRECTED:
+	- a bug introduced in 3.4f in the XPM1 format parsing function.
+		  - fix from Chuck Thompson <cthomp@cs.uiuc.edu>
+	- the hashtable was not free when the color parsing failed.
+		  - patch from ackley@cs.unm.edu (David Ackley)
+	- the close color mechanism wasn't used if one of the closeness
+          parameter was null. Now only one needs to be different from 0.
+                    Lorens Younes d93-hyo@nada.kth.se
+	- parsing of long comments failed with a segmentation fault.
+
+    CHANGES TO THE DOC:
+	- the documentation describes the new XpmAttributes fields
+	  alloc_pixels and nalloc_pixels and how they are used.
+
+3.4f	(95/05/29)
+
+    ENHANCEMENTS:
+    	- Defines IMAKE_DEFINES in the top Imakefile so one can easily avoid
+    	  building the shared library.
+	- Add some information about the installation process in the README.
+	- filenames are surrounded with quotes when calling gzip or compress in
+          order to allow spaces within filenames.
+		  - William Parn <parn@fgm.com>
+	- the compilation and the shared library building should be smoother
+	  on Alpha OSF/1.
+		  - patch from Dale Moore <Dale.Moore@CS.cmu.edu>
+
+    BUGS CORRECTED:
+	- a segmentation fault occurring in some weird case.
+
+3.4e	(95/03/01)
+
+    ENHANCEMENTS:
+    	- The top Imakefile passes CDEBUGFLAGS and DEFINES to subdirs. Thus
+    	  only this Imakefile should need to be edited by users.
+	- FAQ includes the answer to the question "How can I get a non
+    	  rectangular icon using XPM ?"
+	- VMS support updated
+		  - patch from Martin P.J. Zinser m.zinser@gsi.de
+
+    BUGS CORRECTED:
+	- XpmCreateImageFromXpmImage() called from XpmReadFileToPixmap() could
+	  lead to a segmentation fault since free was called on a memory block
+	  size variable instead of the block itself. Note: this bug has been
+	  introduced in 3.4d.
+
+3.4d	(95/01/31)
+
+    ENHANCEMENTS:
+    	- sxpm now supports a -version option command.
+
+    BUGS CORRECTED:
+	- the list of pixels returned in XpmAttributes was wrong when two
+	  colors were defined as None in the read XPM
+		  - Lionel.Mallet@sophia.inria.fr
+	- the parser was skipping whitespace reading extensions strings. This
+	  has been fixed so extensions lines are now returned exactly as they
+	  are.
+	- some compilation control added for the dec alpha with X11R5 (LONG64)
+		  - patch from Fredrik Lundh <Fredrik_Lundh@ivab.se>
+	- when writing an XPM file, '-' characters are replaced with '_'
+	  characters in the array name, in order to get a valid C syntax name.
+	- XYPixmap format images were not correctly handled.
+	- XPM1 file with names using multiple '_' characters are now handled
+	  correctly.
+	  	  - todd@erda.rl.af.mil (Todd Gleason)
+
+3.4c	(94/06/06)
+
+    Yes, this is kind of quick. But this is because no code has been modified,
+    this is just a new packaging to make the whole stuff more suitable to the
+    X development team's requests for inclusion in the R6 contrib.
+
+    ENHANCEMENTS:
+	- Several filenames were too long to fit without any conflict on DOS
+	  and CD-ROM filesystems. They have been renamed.
+	- Imakefiles use XCOMM for comments instead of the # character.
+	- the Postscript documentation file doc/xpm.ps is now distributed as
+	  doc/xpm.PS.gz and allows browsing with tools such as ghostview.
+	- Besides, parts of lib/misc.c have been moved to several new files,
+	  and some functions of data.c have been moved to other files in
+	  order to get a better link profile.
+	- I've also added a FAQ hoping this will prevent people from
+	  continuously filling my mailbox with the same questions.
+	- sxpm.c includes <X11/xpm.h> instead of "xpm.h" and BUILDINCTOP is
+	  used in Makefiles as expected.
+	- Everything can be done simply using "xmkmf -a" and "make".
 
 3.4b	(94/05/24)
 
@@ -109,10 +362,10 @@
 	  defined.
 	- The XpmInfo struct has been extended to avoid having to deal with an
 	  XpmAttributes at the lower level. The idea is that all the data
-	  stored in an Xpm file can be retreive through both an XpmImage and
+	  stored in an Xpm file can be retrieve through both an XpmImage and
 	  an XpmInfo struct. See the documentation for details.
 	- XpmUndefPixel is defined and exported by xpm.h in order to let
-	  clients providing their own colorTable when writting out an Xpm file.
+	  clients providing their own colorTable when writing out an Xpm file.
 	  See the documentation for details.
 	- in sxpm/sxpm.c, set attribute XtNinput to True on toplevel widget.
 	  Windows that don't "take" input, never get focus, as mandated by
@@ -122,7 +375,7 @@
                 patch from simon@lia.di.epfl.ch (Simon Leinen)
 
     NEW FEATURES:
-	- a new funtion and a new define should help client figuring out with
+	- a new function and a new define should help client figuring out with
 	  which Xpm library version they are working. These are
 	  XpmIncludeVersion and XpmLibraryVersion().
 
@@ -145,7 +398,7 @@
     BUGS CORRECTED:
 	- reading some binary file was leading to a bus error.
 		- patch from Detlef Schmier <detlef@mfr.dec.com>
-	- the ? character is no longer used when writting an XPM file in order
+	- the ? character is no longer used when writing an XPM file in order
 	  to avoid possible ANSI trigraphs.
 
 3.3alpha (93/08/13)
@@ -161,7 +414,7 @@
 	- a separate distribution called xpm-contrib is available. This
 	  includes the converters which used to be part of this distribution
 	  plus:
-		two new appplications:
+		two new applications:
 		* nexpm to draw a pixmap in *any* existing window from
 			 Ralph Betza <gnohmon@ssiny.com>
 		* xpmview to display a list of Xpm files from
@@ -255,7 +508,7 @@
 	- The documentation has been ported from LaTeX to FrameMaker and is
 	  now included in the distribution in its PostScript form (doc/xpm.ps).
 	  Source files are available on request.
-	  Also the documentation has been reoreganized and includes a table of
+	  Also the documentation has been reorganized and includes a table of
 	  contents and an index of the functions (the number of functions
 	  increasing this became a requisite).
 
@@ -272,7 +525,7 @@
     BUGS CORRECTED:
 	- Intrinsic.h is no longer included.
 	- bzero is defined as memset on SYSV and SVR4.
-	- some memory initialisation bug concerning XpmAttributes.
+	- some memory initialization bug concerning XpmAttributes.
 
 3.2d		(93/01/27)
 
@@ -317,7 +570,7 @@
 		- Jason Patterson <jasonp@fitmail.qut.edu.au>
 	- errors while parsing or allocating colors now revert to other
 	  visual defaults, creating pixmap/image as expected, and returning
-	  XpmSuccess. The old behaviour of XpmColorError being returned and no
+	  XpmSuccess. The old behavior of XpmColorError being returned and no
 	  pixmap/image being created can be retained by setting the
 	  exactColors attribute.
 		- Jason Patterson <jasonp@fitmail.qut.edu.au>
@@ -408,7 +661,7 @@
 	[-rgb filename]              Search color names in the rgb text file
 				     'filename'.
 
-	if no input is specified sxpm reads from stdandard input.
+	if no input is specified sxpm reads from standard input.
 
 
 	- Xpm functions and Ppm converters now deal with multiword colornames.
@@ -513,7 +766,7 @@
 	the XCreatePixmapFromData function later on.
 	- a new structure: XpmAttributes which replace the XpmInfo structure
 	and which leads to a much simpler API with less arguments.
-	- arguments such as visual, colormap and depth are optionnal, default
+	- arguments such as visual, colormap and depth are optional, default
 	values are taken if omitted.
 	- parsing and allocating color failures don't simply break anymore. If
 	another default color can be found it is used and a PixmapColorError
@@ -541,7 +794,7 @@
     BUGS CORRECTED:
 	- I've again improved the memory management.
 	- the parser is also improved.
-	- when writting a pixmap to a file the variable name could be
+	- when writing a pixmap to a file the variable name could be
 	"plaid.xpm" which is not valid in C. Now the extension name is cut off
 	to give "plaid" as variable name.
 	- reading multiple words colornames such as "peach puff" where leading
@@ -592,7 +845,7 @@
     BUGS CORRECTED:
 	- the memory management has been much improved in order to avoid
 	memory leaks.
-	- the XImage building algorythm has been changed to support correctly
+	- the XImage building algorithm has been changed to support correctly
 	different visual depths. There is special code to handle depths 1, 4,
 	6, 8, 24, and 32 to build the image and send it in one whack, and
 	other depths are supported by building the image with XPutPixel which
@@ -671,7 +924,7 @@
 2.5		(90/10/17)
 
     BUGS CORRECTED:
-	- XWritePixmapFile was not closing the file while ending normaly.
+	- XWritePixmapFile was not closing the file while ending normally.
 
 2.4		(90/09/06)
 
@@ -690,7 +943,7 @@
 2.3		(90/08/30)
 
     BUGS CORRECTED:
-	- handle monochrom display correctly,
+	- handle monochrome display correctly,
 	- comments can be empty.
 
 2.2		(90/08/27)

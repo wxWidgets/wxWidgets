@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -23,61 +23,39 @@
  * in this Software without prior written authorization from GROUPE BULL.
  */
 
-#include "xpm34.h"
-
-#ifndef FOR_MSW
-
 /*****************************************************************************\
-* XpmWrFFrP.c:                                                                *
+*  Image.c:                                                                   *
 *                                                                             *
 *  XPM library                                                                *
-*  Write a pixmap and possibly its mask to an XPM file                        *
+*  Functions to init and free the XpmImage structure.                         *
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
-#include "xpm34p.h"
-#ifdef VMS
-#include "sys$library:string.h"
-#else
-#if defined(SYSV) || defined(SVR4)
-#include <string.h>
-#else
-#include <strings.h>
-#endif
-#endif
+#include "XpmI.h"
 
-int
-XpmWriteFileFromPixmap(Display *display, char *filename, Pixmap pixmap, Pixmap shapemask, XpmAttributes *attributes)
+/*
+ * Init returned data to free safely later on
+ */
+void
+xpmInitXpmImage(image)
+    XpmImage *image;
 {
-    XImage *ximage = NULL;
-    XImage *shapeimage = NULL;
-    unsigned int width = 0;
-    unsigned int height = 0;
-    int ErrorStatus;
-
-    /* get geometry */
-    if (attributes && attributes->valuemask & XpmSize) {
-	width = attributes->width;
-	height = attributes->height;
-    }
-    /* get the ximages */
-    if (pixmap)
-	xpmCreateImageFromPixmap(display, pixmap, &ximage, &width, &height);
-    if (shapemask)
-	xpmCreateImageFromPixmap(display, shapemask, &shapeimage,
-				 &width, &height);
-
-    /* write to the file */
-    ErrorStatus = XpmWriteFileFromImage(display, filename, ximage, shapeimage,
-					attributes);
-
-    /* destroy the ximages */
-    if (ximage)
-	XDestroyImage(ximage);
-    if (shapeimage)
-	XDestroyImage(shapeimage);
-
-    return (ErrorStatus);
+    image->ncolors = 0;
+    image->colorTable = NULL;
+    image->data = NULL;
 }
-#endif
+
+/*
+ * Free the XpmImage data which have been allocated
+ */
+void
+XpmFreeXpmImage(image)
+    XpmImage *image;
+{
+    if (image->colorTable)
+	xpmFreeColorTable(image->colorTable, image->ncolors);
+    if (image->data)
+	XpmFree(image->data);
+    image->data = NULL;
+}

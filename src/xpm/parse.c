@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -38,41 +38,13 @@
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
 
-#include "xpm34p.h"
-#ifdef VMS
-#include "sys$library:ctype.h"
-#else
+#include "XpmI.h"
 #include <ctype.h>
-#endif
-
-#ifdef sun
-#ifdef SVR4
-#define __ORIGINAL_XORG_CODE
-#include <X11/Xfuncs.h> /* bzero, bcopy */
-#endif
-#endif
-
-#include <string.h>
-#ifdef __sgi
-#include <bstring.h>
-#endif
-
-LFUNC(ParseValues, int, (xpmData *data, unsigned int *width,
-			 unsigned int *height, unsigned int *ncolors,
-			 unsigned int *cpp, unsigned int *x_hotspot,
-			 unsigned int *y_hotspot, unsigned int *hotspot,
-			 unsigned int *extensions));
-
-LFUNC(ParseColors, int, (xpmData *data, unsigned int ncolors, unsigned int cpp,
-			 XpmColor **colorTablePtr, xpmHashTable *hashtable));
 
 LFUNC(ParsePixels, int, (xpmData *data, unsigned int width,
 			 unsigned int height, unsigned int ncolors,
 			 unsigned int cpp, XpmColor *colorTable,
 			 xpmHashTable *hashtable, unsigned int **pixels));
-
-LFUNC(ParseExtensions, int, (xpmData *data, XpmExtension **extensions,
-			     unsigned int *nextensions));
 
 char *xpmColorKeys[] = {
     "s",				/* key #1: symbol */
@@ -82,147 +54,13 @@ char *xpmColorKeys[] = {
     "c",				/* key #5: color visual */
 };
 
-
-/* function call in case of error, frees only locally allocated variables */
-#undef RETURN
-#define RETURN(status) \
-{ \
-    if (colorTable) xpmFreeColorTable(colorTable, ncolors); \
-    if (pixelindex) XpmFree(pixelindex); \
-    if (hints_cmt)  XpmFree(hints_cmt); \
-    if (colors_cmt) XpmFree(colors_cmt); \
-    if (pixels_cmt) XpmFree(pixels_cmt); \
-    return(status); \
-}
-
-/*
- * This function parses an Xpm file or data and store the found informations
- * in an an XpmImage structure which is returned.
- */
 int
-xpmParseData(xpmData *data, XpmImage *image, XpmInfo *info)
-{
-    /* variables to return */
-    unsigned int width, height, ncolors, cpp;
-    unsigned int x_hotspot, y_hotspot, hotspot = 0, extensions = 0;
-    XpmColor *colorTable = NULL;
-    unsigned int *pixelindex = NULL;
-    char *hints_cmt = NULL;
-    char *colors_cmt = NULL;
-    char *pixels_cmt = NULL;
-
-    unsigned int cmts;
-    int ErrorStatus;
-    xpmHashTable hashtable;
-
-    cmts = info && (info->valuemask & XpmReturnComments);
-
-    /*
-     * parse the header
-     */
-    ErrorStatus = xpmParseHeader(data);
-    if (ErrorStatus != XpmSuccess)
-	return (ErrorStatus);
-
-    /*
-     * read values
-     */
-    ErrorStatus = ParseValues(data, &width, &height, &ncolors, &cpp,
-			    &x_hotspot, &y_hotspot, &hotspot, &extensions);
-    if (ErrorStatus != XpmSuccess)
-	return (ErrorStatus);
-
-    /*
-     * store the hints comment line
-     */
-    if (cmts)
-	xpmGetCmt(data, &hints_cmt);
-
-    /*
-     * init the hastable
-     */
-    if (USE_HASHTABLE) {
-	ErrorStatus = xpmHashTableInit(&hashtable);
-	if (ErrorStatus != XpmSuccess)
-	    return (ErrorStatus);
-    }
-
-    /*
-     * read colors
-     */
-    ErrorStatus = ParseColors(data, ncolors, cpp, &colorTable, &hashtable);
-    if (ErrorStatus != XpmSuccess)
-	RETURN(ErrorStatus);
-
-    /*
-     * store the colors comment line
-     */
-    if (cmts)
-	xpmGetCmt(data, &colors_cmt);
-
-    /*
-     * read pixels and index them on color number
-     */
-    ErrorStatus = ParsePixels(data, width, height, ncolors, cpp, colorTable,
-			      &hashtable, &pixelindex);
-
-    /*
-     * free the hastable
-     */
-    if (USE_HASHTABLE)
-	xpmHashTableFree(&hashtable);
-
-    if (ErrorStatus != XpmSuccess)
-	RETURN(ErrorStatus);
-
-    /*
-     * store the pixels comment line
-     */
-    if (cmts)
-	xpmGetCmt(data, &pixels_cmt);
-
-    /*
-     * parse extensions
-     */
-    if (info && (info->valuemask & XpmReturnExtensions))
-	if (extensions) {
-	    ErrorStatus = ParseExtensions(data, &info->extensions,
-					  &info->nextensions);
-	    if (ErrorStatus != XpmSuccess)
-		RETURN(ErrorStatus);
-	} else {
-	    info->extensions = NULL;
-	    info->nextensions = 0;
-	}
-
-    /*
-     * store found informations in the XpmImage structure
-     */
-    image->width = width;
-    image->height = height;
-    image->cpp = cpp;
-    image->ncolors = ncolors;
-    image->colorTable = colorTable;
-    image->data = pixelindex;
-
-    if (info) {
-	if (cmts) {
-	    info->hints_cmt = hints_cmt;
-	    info->colors_cmt = colors_cmt;
-	    info->pixels_cmt = pixels_cmt;
-	}
-	if (hotspot) {
-	    info->x_hotspot = x_hotspot;
-	    info->y_hotspot = y_hotspot;
-	    info->valuemask |= XpmHotspot;
-	}
-    }
-    return (XpmSuccess);
-}
-
-static int
-ParseValues(xpmData *data, unsigned int *width, unsigned int *height, unsigned int *ncolors, unsigned int *cpp,
-	    unsigned int *x_hotspot, unsigned int *y_hotspot, unsigned int *hotspot, unsigned int *extensions)
+xpmParseValues(data, width, height, ncolors, cpp,
+	    x_hotspot, y_hotspot, hotspot, extensions)
+    xpmData *data;
+    unsigned int *width, *height, *ncolors, *cpp;
+    unsigned int *x_hotspot, *y_hotspot, *hotspot;
+    unsigned int *extensions;
 {
     unsigned int l;
     char buf[BUFSIZ];
@@ -246,7 +84,7 @@ ParseValues(xpmData *data, unsigned int *width, unsigned int *height, unsigned i
 		*hotspot = (xpmNextUI(data, x_hotspot)
 			    && xpmNextUI(data, y_hotspot));
 	    else {
-		*hotspot = (atoui(buf, l, x_hotspot)
+		*hotspot = (xpmatoui(buf, l, x_hotspot)
 			    && xpmNextUI(data, y_hotspot));
 		l = xpmNextWord(data, buf, BUFSIZ);
 		*extensions = (l == 6 && !strncmp("XPMEXT", buf, 6));
@@ -259,6 +97,8 @@ ParseValues(xpmData *data, unsigned int *width, unsigned int *height, unsigned i
 	 */
 	int i;
 	char *ptr;
+	Bool got_one, saw_width = False, saw_height = False;
+	Bool saw_ncolors = False, saw_chars_per_pixel = False;
 
 	for (i = 0; i < 4; i++) {
 	    l = xpmNextWord(data, buf, BUFSIZ);
@@ -267,41 +107,70 @@ ParseValues(xpmData *data, unsigned int *width, unsigned int *height, unsigned i
 	    l = xpmNextWord(data, buf, BUFSIZ);
 	    if (!l)
 		return (XpmFileInvalid);
-	    ptr = strchr(buf, '_');
-	    if (!ptr)
-		return (XpmFileInvalid);
-	    switch (l - (ptr - buf)) {
-	    case 6:
-		if (!strncmp("_width", ptr, 6) && !xpmNextUI(data, width))
+	    buf[l] = '\0';
+	    ptr = buf;
+	    got_one = False;
+	    while (!got_one) {
+		ptr = index(ptr, '_');
+		if (!ptr)
 		    return (XpmFileInvalid);
-		break;
-	    case 7:
-		if (!strncmp("_height", ptr, 7) && !xpmNextUI(data, height))
-		    return (XpmFileInvalid);
-		break;
-	    case 8:
-		if (!strncmp("_ncolors", ptr, 8) && !xpmNextUI(data, ncolors))
-		    return (XpmFileInvalid);
-		break;
-	    case 16:
-		if (!strncmp("_chars_per_pixel", ptr, 16)
-		    && !xpmNextUI(data, cpp))
-		    return (XpmFileInvalid);
-		break;
-	    default:
-		return (XpmFileInvalid);
+		switch (l - (ptr - buf)) {
+		case 6:
+		    if (saw_width || strncmp("_width", ptr, 6)
+			|| !xpmNextUI(data, width))
+			return (XpmFileInvalid);
+		    else
+			saw_width = True;
+		    got_one = True;
+		    break;
+		case 7:
+		    if (saw_height || strncmp("_height", ptr, 7)
+			|| !xpmNextUI(data, height))
+			return (XpmFileInvalid);
+		    else
+			saw_height = True;
+		    got_one = True;
+		    break;
+		case 8:
+		    if (saw_ncolors || strncmp("_ncolors", ptr, 8)
+			|| !xpmNextUI(data, ncolors))
+			return (XpmFileInvalid);
+		    else
+			saw_ncolors = True;
+		    got_one = True;
+		    break;
+		case 16:
+		    if (saw_chars_per_pixel
+			|| strncmp("_chars_per_pixel", ptr, 16)
+			|| !xpmNextUI(data, cpp))
+			return (XpmFileInvalid);
+		    else
+			saw_chars_per_pixel = True;
+		    got_one = True;
+		    break;
+		default:
+		    ptr++;
+		}
 	    }
 	    /* skip the end of line */
 	    xpmNextString(data);
 	}
+	if (!saw_width || !saw_height || !saw_ncolors || !saw_chars_per_pixel)
+	  return (XpmFileInvalid);
+
 	*hotspot = 0;
 	*extensions = 0;
     }
     return (XpmSuccess);
 }
 
-static int
-ParseColors(xpmData *data, unsigned int ncolors, unsigned int cpp, XpmColor **colorTablePtr, xpmHashTable *hashtable)
+int
+xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
+    xpmData *data;
+    unsigned int ncolors;
+    unsigned int cpp;
+    XpmColor **colorTablePtr;
+    xpmHashTable *hashtable;
 {
     unsigned int key, l, a, b;
     unsigned int curkey;		/* current color key */
@@ -456,8 +325,15 @@ ParseColors(xpmData *data, unsigned int ncolors, unsigned int cpp, XpmColor **co
 }
 
 static int
-ParsePixels(xpmData *data, unsigned int width, unsigned int height, unsigned int ncolors,
-  unsigned int cpp, XpmColor *colorTable, xpmHashTable *hashtable, unsigned int **pixels)
+ParsePixels(data, width, height, ncolors, cpp, colorTable, hashtable, pixels)
+    xpmData *data;
+    unsigned int width;
+    unsigned int height;
+    unsigned int ncolors;
+    unsigned int cpp;
+    XpmColor *colorTable;
+    xpmHashTable *hashtable;
+    unsigned int **pixels;
 {
     unsigned int *iptr, *iptr2;
     unsigned int a, x, y;
@@ -487,15 +363,15 @@ ParsePixels(xpmData *data, unsigned int width, unsigned int height, unsigned int
 
 	    bzero((char *)colidx, 256 * sizeof(short));
 	    for (a = 0; a < ncolors; a++)
-		colidx[colorTable[a].string[0]] = a + 1;
+		colidx[(unsigned char)colorTable[a].string[0]] = a + 1;
 
 	    for (y = 0; y < height; y++) {
 		xpmNextString(data);
 		for (x = 0; x < width; x++, iptr++) {
-		    int idx = colidx[xpmGetC(data)];
+		    int c = xpmGetC(data);
 
-		    if (idx != 0)
-			*iptr = idx - 1;
+		    if (c > 0 && c < 256 && colidx[c] != 0)
+			*iptr = colidx[c] - 1;
 		    else {
 			XpmFree(iptr2);
 			return (XpmFileInvalid);
@@ -529,18 +405,24 @@ if (cidx[f]) XpmFree(cidx[f]);}
 			return (XpmNoMemory);
 		    }
 		}
-		cidx[char1][colorTable[a].string[1]] = a + 1;
+		cidx[char1][(unsigned char)colorTable[a].string[1]] = a + 1;
 	    }
 
 	    for (y = 0; y < height; y++) {
 		xpmNextString(data);
 		for (x = 0; x < width; x++, iptr++) {
 		    int cc1 = xpmGetC(data);
-		    int idx = cidx[cc1][xpmGetC(data)];
-
-		    if (idx != 0)
-			*iptr = idx - 1;
-		    else {
+		    if (cc1 > 0 && cc1 < 256) {
+			int cc2 = xpmGetC(data);
+			if (cc2 > 0 && cc2 < 256 &&
+			    cidx[cc1] && cidx[cc1][cc2] != 0)
+			    *iptr = cidx[cc1][cc2] - 1;
+			else {
+			    FREE_CIDX;
+			    XpmFree(iptr2);
+			    return (XpmFileInvalid);
+			}
+		    } else {
 			FREE_CIDX;
 			XpmFree(iptr2);
 			return (XpmFileInvalid);
@@ -598,8 +480,11 @@ if (cidx[f]) XpmFree(cidx[f]);}
     return (XpmSuccess);
 }
 
-static int
-ParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *nextensions)
+int
+xpmParseExtensions(data, extensions, nextensions)
+    xpmData *data;
+    XpmExtension **extensions;
+    unsigned int *nextensions;
 {
     XpmExtension *exts = NULL, *ext;
     unsigned int num = 0;
@@ -702,4 +587,159 @@ ParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *nextensi
     *nextensions = num;
     *extensions = exts;
     return (XpmSuccess);
+}
+
+
+/* function call in case of error */
+#undef RETURN
+#define RETURN(status) \
+{ \
+      goto error; \
+}
+
+/*
+ * This function parses an Xpm file or data and store the found informations
+ * in an an XpmImage structure which is returned.
+ */
+int
+xpmParseData(data, image, info)
+    xpmData *data;
+    XpmImage *image;
+    XpmInfo *info;
+{
+    /* variables to return */
+    unsigned int width, height, ncolors, cpp;
+    unsigned int x_hotspot, y_hotspot, hotspot = 0, extensions = 0;
+    XpmColor *colorTable = NULL;
+    unsigned int *pixelindex = NULL;
+    char *hints_cmt = NULL;
+    char *colors_cmt = NULL;
+    char *pixels_cmt = NULL;
+
+    unsigned int cmts;
+    int ErrorStatus;
+    xpmHashTable hashtable;
+
+    cmts = info && (info->valuemask & XpmReturnComments);
+
+    /*
+     * parse the header
+     */
+    ErrorStatus = xpmParseHeader(data);
+    if (ErrorStatus != XpmSuccess)
+	return (ErrorStatus);
+
+    /*
+     * read values
+     */
+    ErrorStatus = xpmParseValues(data, &width, &height, &ncolors, &cpp,
+				 &x_hotspot, &y_hotspot, &hotspot,
+				 &extensions);
+    if (ErrorStatus != XpmSuccess)
+	return (ErrorStatus);
+
+    /*
+     * store the hints comment line
+     */
+    if (cmts)
+	xpmGetCmt(data, &hints_cmt);
+
+    /*
+     * init the hastable
+     */
+    if (USE_HASHTABLE) {
+	ErrorStatus = xpmHashTableInit(&hashtable);
+	if (ErrorStatus != XpmSuccess)
+	    return (ErrorStatus);
+    }
+
+    /*
+     * read colors
+     */
+    ErrorStatus = xpmParseColors(data, ncolors, cpp, &colorTable, &hashtable);
+    if (ErrorStatus != XpmSuccess) {
+	if (USE_HASHTABLE)
+	    xpmHashTableFree(&hashtable);
+	RETURN(ErrorStatus);
+    }
+
+    /*
+     * store the colors comment line
+     */
+    if (cmts)
+	xpmGetCmt(data, &colors_cmt);
+
+    /*
+     * read pixels and index them on color number
+     */
+    ErrorStatus = ParsePixels(data, width, height, ncolors, cpp, colorTable,
+			      &hashtable, &pixelindex);
+
+    /*
+     * free the hastable
+     */
+    if (USE_HASHTABLE)
+	xpmHashTableFree(&hashtable);
+
+    if (ErrorStatus != XpmSuccess)
+	RETURN(ErrorStatus);
+
+    /*
+     * store the pixels comment line
+     */
+    if (cmts)
+	xpmGetCmt(data, &pixels_cmt);
+
+    /*
+     * parse extensions
+     */
+    if (info && (info->valuemask & XpmReturnExtensions))
+	if (extensions) {
+	    ErrorStatus = xpmParseExtensions(data, &info->extensions,
+					     &info->nextensions);
+	    if (ErrorStatus != XpmSuccess)
+		RETURN(ErrorStatus);
+	} else {
+	    info->extensions = NULL;
+	    info->nextensions = 0;
+	}
+
+    /*
+     * store found informations in the XpmImage structure
+     */
+    image->width = width;
+    image->height = height;
+    image->cpp = cpp;
+    image->ncolors = ncolors;
+    image->colorTable = colorTable;
+    image->data = pixelindex;
+
+    if (info) {
+	if (cmts) {
+	    info->hints_cmt = hints_cmt;
+	    info->colors_cmt = colors_cmt;
+	    info->pixels_cmt = pixels_cmt;
+	}
+	if (hotspot) {
+	    info->x_hotspot = x_hotspot;
+	    info->y_hotspot = y_hotspot;
+	    info->valuemask |= XpmHotspot;
+	}
+    }
+    return (XpmSuccess);
+
+/* exit point in case of error, free only locally allocated variables */
+error:
+    if (colorTable)
+	xpmFreeColorTable(colorTable, ncolors);
+    if (pixelindex)
+	XpmFree(pixelindex);
+    if (hints_cmt)
+	XpmFree(hints_cmt);
+    if (colors_cmt)
+	XpmFree(colors_cmt);
+    if (pixels_cmt)
+	XpmFree(pixels_cmt);
+
+    return(ErrorStatus);
 }

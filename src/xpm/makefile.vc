@@ -17,17 +17,25 @@ LIBTARGET=$(WXDIR)\lib\xpm.lib
 
 XPMDIR=$(WXDIR)\src\xpm
 
-OBJECTS = 	$(XPMDIR)\crbuffri.obj\
+OBJECTS = 	$(XPMDIR)\attrib.obj\
+		$(XPMDIR)\crbuffri.obj\
 		$(XPMDIR)\crdatfri.obj\
-		$(XPMDIR)\create.obj $(XPMDIR)\crifrbuf.obj\
+		$(XPMDIR)\create.obj\
+		$(XPMDIR)\crifrbuf.obj\
 		$(XPMDIR)\crifrdat.obj\
 		$(XPMDIR)\data.obj\
-		$(XPMDIR)\hashtab.obj $(XPMDIR)\misc.obj\
-		$(XPMDIR)\parse.obj $(XPMDIR)\rdftodat.obj\
+		$(XPMDIR)\image.obj\
+		$(XPMDIR)\info.obj\
+		$(XPMDIR)\hashtab.obj\
+		$(XPMDIR)\misc.obj\
+		$(XPMDIR)\parse.obj\
+		$(XPMDIR)\rdftodat.obj\
 		$(XPMDIR)\rdftoi.obj\
-		$(XPMDIR)\rgb.obj $(XPMDIR)\scan.obj\
-		$(XPMDIR)\simx.obj $(XPMDIR)\wrffrdat.obj\
-		$(XPMDIR)\wrffrp.obj $(XPMDIR)\wrffri.obj
+		$(XPMDIR)\rgb.obj\
+		$(XPMDIR)\scan.obj\
+		$(XPMDIR)\simx.obj\
+		$(XPMDIR)\wrffrdat.obj\
+		$(XPMDIR)\wrffri.obj
 
 all:    $(LIBTARGET)
 
@@ -39,24 +47,19 @@ $(LIBTARGET):      $(OBJECTS)
 $(OBJECTS) $(PERIPH_LIBS)
 <<
 
+$(XPMDIR)\crbuffri.obj: $(XPMDIR)\attrib.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
 $(XPMDIR)\crbuffri.obj: $(XPMDIR)\crbuffri.c
 	 	cl @<<
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
-$(XPMDIR)\crbuffrp.obj: $(XPMDIR)\crbuffrp.c
-	 	cl @<<
-$(CPPFLAGS2) /c  $*.c /Fo$@
-<<
-
 $(XPMDIR)\crdatfri.obj: $(XPMDIR)\crdatfri.c
 	 	cl @<<
 $(CPPFLAGS2) /c  $*.c /Fo$@
-<<
-
-$(XPMDIR)\crdatfrp.obj: $(XPMDIR)\crdatfrp.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
 $(XPMDIR)\create.obj: $(XPMDIR)\create.c
@@ -74,17 +77,17 @@ $(XPMDIR)\crifrdat.obj: $(XPMDIR)\crifrdat.c
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
-$(XPMDIR)\crpfrbuf.obj: $(XPMDIR)\crpfrbuf.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\crpfrdat.obj: $(XPMDIR)\crpfrdat.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
 $(XPMDIR)\data.obj: $(XPMDIR)\data.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\data.obj: $(XPMDIR)\image.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\data.obj: $(XPMDIR)\info.c
 	 	cl @<<
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
@@ -114,11 +117,6 @@ $(XPMDIR)\rdftoi.obj: $(XPMDIR)\rdftoi.c
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
-$(XPMDIR)\rdftop.obj: $(XPMDIR)\rdftop.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
 $(XPMDIR)\rgb.obj: $(XPMDIR)\rgb.c
 	 	cl @<<
 $(CPPFLAGS2) /c $*.c /Fo$@
@@ -140,11 +138,6 @@ $(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
 $(XPMDIR)\wrffri.obj: $(XPMDIR)\wrffri.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\wrffrp.obj: $(XPMDIR)\wrffrp.c
 	 	cl @<<
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -24,7 +24,7 @@
  */
 
 /*****************************************************************************\
-* XpmWrFFrData.c:                                                             *
+*  WrFFrData.c:                                                               *
 *                                                                             *
 *  XPM library                                                                *
 *  Parse an Xpm array and write a file that corresponds to it.                *
@@ -32,11 +32,12 @@
 *  Developed by Dan Greening dgreen@cs.ucla.edu / dgreen@sti.com              *
 \*****************************************************************************/
 
-#include "xpm34.h"
-#include "xpm34p.h"
+#include "XpmI.h"
 
 int
-XpmWriteFileFromData(char *filename, char **data)
+XpmWriteFileFromData(filename, data)
+    char *filename;
+    char **data;
 {
     XpmImage image;
     XpmInfo info;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -24,7 +24,7 @@
  */
 
 /*****************************************************************************\
-* XpmRdFToData.c:                                                             *
+*  RdFToDat.c:                                                                *
 *                                                                             *
 *  XPM library                                                                *
 *  Parse an XPM file and create an array of strings corresponding to it.      *
@@ -32,10 +32,12 @@
 *  Developed by Dan Greening dgreen@cs.ucla.edu / dgreen@sti.com              *
 \*****************************************************************************/
 
-#include "xpm34p.h"
+#include "XpmI.h"
 
 int
-XpmReadFileToData(char *filename, char ***data_return)
+XpmReadFileToData(filename, data_return)
+    char *filename;
+    char ***data_return;
 {
     XpmImage image;
     XpmInfo info;

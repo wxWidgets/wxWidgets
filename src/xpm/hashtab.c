@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -24,7 +24,7 @@
  */
 
 /*****************************************************************************\
-* hashtable.c:                                                                *
+* hashtab.c:                                                                  *
 *                                                                             *
 *  XPM library                                                                *
 *                                                                             *
@@ -33,15 +33,15 @@
 *                                                                             *
 \*****************************************************************************/
 
-#include "xpm34p.h"
+#include "XpmI.h"
 
 LFUNC(AtomMake, xpmHashAtom, (char *name, void *data));
 LFUNC(HashTableGrows, int, (xpmHashTable * table));
 
 static xpmHashAtom
-AtomMake(char *name, void *data)			/* makes an atom */
-/*    char *name; */				/* WARNING: is just pointed to */
-/*    void *data; */
+AtomMake(name, data)			/* makes an atom */
+    char *name;				/* WARNING: is just pointed to */
+    void *data;
 {
     xpmHashAtom object = (xpmHashAtom) XpmMalloc(sizeof(struct _xpmHashAtom));
 
@@ -104,7 +104,9 @@ AtomMake(char *name, void *data)			/* makes an atom */
  */
 
 xpmHashAtom *
-xpmHashSlot(xpmHashTable *table, char *s)
+xpmHashSlot(table, s)
+    xpmHashTable *table;
+    char *s;
 {
     xpmHashAtom *atomTable = table->atomTable;
     unsigned int hash;
@@ -129,7 +131,8 @@ xpmHashSlot(xpmHashTable *table, char *s)
 }
 
 static int
-HashTableGrows(xpmHashTable *table)
+HashTableGrows(table)
+    xpmHashTable *table;
 {
     xpmHashAtom *atomTable = table->atomTable;
     int size = table->size;
@@ -163,7 +166,10 @@ HashTableGrows(xpmHashTable *table)
  */
 
 int
-xpmHashIntern(xpmHashTable *table, char *tag, void *data)
+xpmHashIntern(table, tag, data)
+    xpmHashTable *table;
+    char *tag;
+    void *data;
 {
     xpmHashAtom *slot;
 
@@ -189,7 +195,8 @@ xpmHashIntern(xpmHashTable *table, char *tag, void *data)
  */
 
 int
-xpmHashTableInit(xpmHashTable *table)
+xpmHashTableInit(table)
+    xpmHashTable *table;
 {
     xpmHashAtom *p;
     xpmHashAtom *atomTable;
@@ -211,11 +218,14 @@ xpmHashTableInit(xpmHashTable *table)
  */
 
 void
-xpmHashTableFree(xpmHashTable *table)
+xpmHashTableFree(table)
+    xpmHashTable *table;
 {
     xpmHashAtom *p;
     xpmHashAtom *atomTable = table->atomTable;
 
+    if (!atomTable)
+	return;
     for (p = atomTable + table->size; p > atomTable;)
 	if (*--p)
 	    XpmFree(*p);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -33,11 +33,12 @@
 * Developed by HeDu 3/94 (hedu@cul-ipn.uni-kiel.de)                           *
 \*****************************************************************************/
 
-#include "xpm34.h"
+/* Moved here so that FOR_MSW gets defined if we are using wxWindows (GRG) */
+#include "xpm.h"
 
 #ifdef FOR_MSW
 
-#include "xpm34p.h"			/* for XpmMalloc */
+#include "xpmi.h"			/* for XpmMalloc */
 
 /*
  * On DOS size_t is only 2 bytes, thus malloc(size_t s) can only malloc
@@ -119,21 +120,14 @@ XDefaultScreen(Display *d)
 }
 
 /* I get only 1 plane but 8 bits per pixel,
-   so I think BITSPIXEL should be depth
-
-   TRS: I assume that all "displays" have the same number of
-        planes later in the code, which is based on the assumption
-        that the display variable is ignored below. :)
- */
-int
+   so I think BITSPIXEL should be depth */
+int 
 XDefaultDepth(Display *display, Screen *screen)
 {
     int d, b;
 
-#if !defined(__VISAGECPP__) /* fisme for OS/2 */
     b = GetDeviceCaps(*display, BITSPIXEL);
     d = GetDeviceCaps(*display, PLANES);
-#endif
     return (b);
 }
 
@@ -145,8 +139,8 @@ XDefaultColormap(Display *display, Screen *screen)
 
 /* convert hex color names,
    wrong digits (not a-f,A-F,0-9) are treated as zero */
-static int
-hexCharToInt(char c)
+static int 
+hexCharToInt(c)
 {
     int r;
 
@@ -162,7 +156,7 @@ hexCharToInt(char c)
     return (r);
 }
 
-static int
+static int 
 rgbFromHex(char *hex, int *r, int *g, int *b)
 {
     int len;
@@ -192,7 +186,7 @@ rgbFromHex(char *hex, int *r, int *g, int *b)
 }
 
 /* Color related functions */
-int
+int 
 XParseColor(Display *d, Colormap *cmap, char *name, XColor *color)
 {
     int r, g, b;			/* only 8 bit values used */
@@ -210,9 +204,7 @@ XParseColor(Display *d, Colormap *cmap, char *name, XColor *color)
     }
 
     if (okay) {
-#if !defined(__VISAGECPP__) /* fixme for OS/2 */
 	color->pixel = RGB(r, g, b);
-#endif
 	color->red = (BYTE) r;
 	color->green = (BYTE) g;
 	color->blue = (BYTE) b;
@@ -222,14 +214,16 @@ XParseColor(Display *d, Colormap *cmap, char *name, XColor *color)
 }
 
 
-int
+/* GRG: 2nd arg is Colormap*, not Colormap */
+
+int 
 XAllocColor(Display *d, Colormap *cmap, XColor *color)
 {
 /* colormap not used yet so color->pixel is the real COLORREF (RBG) and not an
    index in some colormap as in X */
     return (1);
 }
-void
+void 
 XQueryColors(Display *display, Colormap *colormap,
 	     XColor *xcolors, int ncolors)
 {
@@ -238,16 +232,14 @@ XQueryColors(Display *display, Colormap *colormap,
     XColor *xc = xcolors;
     int i;
 
-#if !defined(__VISAGECPP__) /* fixme for OS/2 */
     for (i = 0; i < ncolors; i++, xc++) {
 	xc->red = GetRValue(xc->pixel);
 	xc->green = GetGValue(xc->pixel);
 	xc->blue = GetBValue(xc->pixel);
     }
-#endif
     return;
 }
-int
+int 
 XFreeColors(Display *d, Colormap cmap,
 	    unsigned long pixels[], int npixels, unsigned long planes)
 {
@@ -265,15 +257,16 @@ XCreateImage(Display *d, Visual *v,
     XImage *img = (XImage *) XpmMalloc(sizeof(XImage));
 
     if (img) {
-	/* *img = CreateCompatibleBitmap(*d, width, height); */
-        
-#if !defined(__VISAGECPP__) /* fixme for OS/2 */
-    /* create the bitmap with the same number of planes as the default display
-     * (otherwise it wouldn't work for 16 color mode) */
-	img->bitmap = CreateBitmap(width, height,
-				   GetDeviceCaps(*d, PLANES),
-				   depth /* bits per pixel */ , NULL);
-#endif
+	/*JW: This is what it should be, but the picture comes out
+	      just black!?  It appears to be doing monochrome reduction,
+	      but I've got no clue why.  Using CreateBitmap() is supposed
+	      to be slower, but otherwise ok
+	  if ( depth == GetDeviceCaps(*d, BITSPIXEL) ) {
+	    img->bitmap = CreateCompatibleBitmap(*d, width, height);
+        } else*/ {
+	    img->bitmap = CreateBitmap(width, height, 1 /* plane */ ,
+				       depth /* bits per pixel */ , NULL);
+	}
 	img->width = width;
 	img->height = height;
 	img->depth = depth;
@@ -282,20 +275,18 @@ XCreateImage(Display *d, Visual *v,
 
 }
 
-void
+void 
 XImageFree(XImage *img)
 {
     if (img) {
 	XpmFree(img);
     }
 }
-void
+void 
 XDestroyImage(XImage *img)
 {
     if (img) {
-#if !defined(__VISAGECPP__) /* fixme for OS/2 */
 	DeleteObject(img->bitmap);	/* check return ??? */
-#endif
 	XImageFree(img);
     }
 }

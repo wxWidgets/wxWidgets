@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -42,18 +42,8 @@
  * W. Snitily but has been modified for my special need
  */
 
-#include "xpm34p.h"
-#ifdef VMS
-#include "sys$library:ctype.h"
-#include "sys$library:string.h"
-#else
+#include "XpmI.h"
 #include <ctype.h>
-#if defined(SYSV) || defined(SVR4)
-#include <string.h>
-#else
-#include <strings.h>
-#endif
-#endif
 
 #ifndef FOR_MSW				/* normal part first, MSW part at
 					 * the end, (huge ifdef!) */
@@ -63,11 +53,14 @@
  * number of entries stored.
  */
 int
-xpmReadRgbNames(char *rgb_fname, xpmRgbName rgbn[])
+xpmReadRgbNames(rgb_fname, rgbn)
+    char *rgb_fname;
+    xpmRgbName rgbn[];
+
 {
     FILE *rgbf;
-    int i, items, red, green, blue;
-    char line[512], name[512], *rgbname, *n, *m;
+    int n, items, red, green, blue;
+    char line[512], name[512], *rgbname, *s1, *s2;
     xpmRgbName *rgb;
 
     /* Open the rgb text file.  Abort if error. */
@@ -75,19 +68,15 @@ xpmReadRgbNames(char *rgb_fname, xpmRgbName rgbn[])
 	return 0;
 
     /* Loop reading each line in the file. */
-    for (i = 0, rgb = rgbn; fgets(line, sizeof(line), rgbf); i++, rgb++) {
+    n = 0;
+    rgb = rgbn; 
+    /* Quit if rgb text file has too many entries. */
+    while (fgets(line, sizeof(line), rgbf) && n < MAX_RGBNAMES) {
 
-	/* Quit if rgb text file is too large. */
-	if (i == MAX_RGBNAMES) {
-	    /* Too many entries in rgb text file, give up here */
-	    break;
-	}
-	/* Read the line.  Skip silently if bad. */
+	/* Skip silently if line is bad. */
 	items = sscanf(line, "%d %d %d %[^\n]\n", &red, &green, &blue, name);
-	if (items != 4) {
-	    i--;
+	if (items != 4)
 	    continue;
-	}
 
 	/*
 	 * Make sure rgb values are within 0->255 range. Skip silently if
@@ -95,40 +84,41 @@ xpmReadRgbNames(char *rgb_fname, xpmRgbName rgbn[])
 	 */
 	if (red < 0 || red > 0xFF ||
 	    green < 0 || green > 0xFF ||
-	    blue < 0 || blue > 0xFF) {
-	    i--;
+	    blue < 0 || blue > 0xFF)
 	    continue;
-	}
+
 	/* Allocate memory for ascii name. If error give up here. */
 	if (!(rgbname = (char *) XpmMalloc(strlen(name) + 1)))
 	    break;
 
 	/* Copy string to ascii name and lowercase it. */
-	for (n = name, m = rgbname; *n; n++)
-	    *m++ = tolower(*n);
-	*m = '\0';
+	for (s1 = name, s2 = rgbname; *s1; s1++)
+	    *s2++ = tolower(*s1);
+	*s2 = '\0';
 
 	/* Save the rgb values and ascii name in the array. */
 	rgb->r = red * 257;		/* 65535/255 = 257 */
 	rgb->g = green * 257;
 	rgb->b = blue * 257;
 	rgb->name = rgbname;
+	rgb++;
+	n++;
     }
 
     fclose(rgbf);
 
     /* Return the number of read rgb names. */
-    return i < 0 ? 0 : i;
+    return n < 0 ? 0 : n;
 }
 
 /*
  * Return the color name corresponding to the given rgb values
  */
 char *
-xpmGetRgbName(xpmRgbName rgbn[], int rgbn_max, int red, int green, int blue)
-/*    xpmRgbName rgbn[]; */			/* rgb mnemonics from rgb text file */
-/*    int rgbn_max; */			/* number of rgb mnemonics in table */
-/*    int red, green, blue; */		/* rgb values */
+xpmGetRgbName(rgbn, rgbn_max, red, green, blue)
+    xpmRgbName rgbn[];			/* rgb mnemonics from rgb text file */
+    int rgbn_max;			/* number of rgb mnemonics in table */
+    int red, green, blue;		/* rgb values */
 
 {
     int i;
@@ -151,7 +141,10 @@ xpmGetRgbName(xpmRgbName rgbn[], int rgbn_max, int red, int green, int blue)
  * Free the strings which have been malloc'ed in xpmReadRgbNames
  */
 void
-xpmFreeRgbNames(xpmRgbName rgbn[], int rgbn_max)
+xpmFreeRgbNames(rgbn, rgbn_max)
+    xpmRgbName rgbn[];
+    int rgbn_max;
+
 {
     int i;
     xpmRgbName *rgb;
@@ -166,7 +159,9 @@ xpmFreeRgbNames(xpmRgbName rgbn[], int rgbn_max)
 #include "rgbtab.h"			/* hard coded rgb.txt table */
 
 int
-xpmReadRgbNames(char *rgb_fname, xpmRgbName rgbn[])
+xpmReadRgbNames(rgb_fname, rgbn)
+    char *rgb_fname;
+    xpmRgbName rgbn[];
 {
     /*
      * check for consistency???
@@ -180,11 +175,11 @@ xpmReadRgbNames(char *rgb_fname, xpmRgbName rgbn[])
  * which has something like #0303 for one color
  */
 char *
-xpmGetRgbName(xpmRgbName rgbn[], int rgbn_max, int red, int green, int blue)
-/*    xpmRgbName rgbn[]; */			/* rgb mnemonics from rgb text file
+xpmGetRgbName(rgbn, rgbn_max, red, green, blue)
+    xpmRgbName rgbn[];			/* rgb mnemonics from rgb text file
 					 * not used */
-/*    int rgbn_max; */			/* not used */
-/*    int red, green, blue; */		/* rgb values */
+    int rgbn_max;			/* not used */
+    int red, green, blue;		/* rgb values */
 
 {
     int i;
@@ -193,12 +188,10 @@ xpmGetRgbName(xpmRgbName rgbn[], int rgbn_max, int red, int green, int blue)
     i = 0;
     while (i < numTheRGBRecords) {
 	rgbVal = theRGBRecords[i].rgb;
-#if !defined(__VISAGECPP__)
 	if (GetRValue(rgbVal) == red &&
 	    GetGValue(rgbVal) == green &&
 	    GetBValue(rgbVal) == blue)
 	    return (theRGBRecords[i].name);
-#endif
 	i++;
     }
     return (NULL);
@@ -206,7 +199,9 @@ xpmGetRgbName(xpmRgbName rgbn[], int rgbn_max, int red, int green, int blue)
 
 /* used in XParseColor in simx.c */
 int
-xpmGetRGBfromName(char *inname, int *r, int *g, int *b)
+xpmGetRGBfromName(inname, r, g, b)
+    char *inname;
+    int *r, *g, *b;
 {
     int left, right, middle;
     int cmp;
@@ -214,7 +209,7 @@ xpmGetRGBfromName(char *inname, int *r, int *g, int *b)
     char *name;
     char *grey, *p;
 
-    name = strdup(inname);
+    name = xpmstrdup(inname);
 
     /*
      * the table in rgbtab.c has no names with spaces, and no grey, but a
@@ -246,14 +241,12 @@ xpmGetRGBfromName(char *inname, int *r, int *g, int *b)
     right = numTheRGBRecords - 1;
     do {
 	middle = (left + right) / 2;
-	cmp = strcasecmp(name, theRGBRecords[middle].name);
+	cmp = xpmstrcasecmp(name, theRGBRecords[middle].name);
 	if (cmp == 0) {
 	    rgbVal = theRGBRecords[middle].rgb;
-#if !defined(__VISAGECPP__)
 	    *r = GetRValue(rgbVal);
 	    *g = GetGValue(rgbVal);
 	    *b = GetBValue(rgbVal);
-#endif
 	    free(name);
 	    return (1);
 	} else if (cmp < 0) {
@@ -278,7 +271,10 @@ xpmGetRGBfromName(char *inname, int *r, int *g, int *b)
 }
 
 void
-xpmFreeRgbNames(xpmRgbName rgbn[], int rgbn_max)
+xpmFreeRgbNames(rgbn, rgbn_max)
+    xpmRgbName rgbn[];
+    int rgbn_max;
+
 {
     /* nothing to do */
 }

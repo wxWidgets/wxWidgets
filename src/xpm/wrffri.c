@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -24,7 +24,7 @@
  */
 
 /*****************************************************************************\
-* XpmWrFFrI.c:                                                                *
+*  WrFFrI.c:                                                                  *
 *                                                                             *
 *  XPM library                                                                *
 *  Write an image and possibly its mask to an XPM file                        *
@@ -32,12 +32,20 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
-#include "xpm34p.h"
-#ifdef FOR_MSW
-#include "ctype.h"
+/*
+ * The code related to AMIGA has been added by
+ * Lorens Younes (d93-hyo@nada.kth.se) 4/96
+ */
+
+#include "XpmI.h"
+#if !defined(NO_ZPIPE) && defined(WIN32)
+# define popen _popen
+# define pclose _pclose
 #endif
 
-#include <string.h>
+/* MS Windows define a function called WriteFile @#%#&!!! */
+LFUNC(xpmWriteFile, int, (FILE *file, XpmImage *image, char *name,
+			  XpmInfo *info));
 
 LFUNC(WriteColors, void, (FILE *file, XpmColor *colors, unsigned int ncolors));
 
@@ -48,8 +56,16 @@ LFUNC(WritePixels, int, (FILE *file, unsigned int width, unsigned int height,
 LFUNC(WriteExtensions, void, (FILE *file, XpmExtension *ext,
 			      unsigned int num));
 
+LFUNC(OpenWriteFile, int, (char *filename, xpmData *mdata));
+LFUNC(xpmDataClose, void, (xpmData *mdata));
+
 int
-XpmWriteFileFromImage(Display *display, char *filename, XImage *image, XImage *shapeimage, XpmAttributes *attributes)
+XpmWriteFileFromImage(display, filename, image, shapeimage, attributes)
+    Display *display;
+    char *filename;
+    XImage *image;
+    XImage *shapeimage;
+    XpmAttributes *attributes;
 {
     XpmImage xpmimage;
     XpmInfo info;
@@ -75,15 +91,17 @@ XpmWriteFileFromImage(Display *display, char *filename, XImage *image, XImage *s
 }
 
 int
-XpmWriteFileFromXpmImage(char *filename, XpmImage *image, XpmInfo *info)
+XpmWriteFileFromXpmImage(filename, image, info)
+    char *filename;
+    XpmImage *image;
+    XpmInfo *info;
 {
     xpmData mdata;
     char *name, *dot, *s, new_name[BUFSIZ];
     int ErrorStatus;
-    int len, i;
 
     /* open file to write */
-    if ((ErrorStatus = xpmWriteFile(filename, &mdata)) != XpmSuccess)
+    if ((ErrorStatus = OpenWriteFile(filename, &mdata)) != XpmSuccess)
 	return (ErrorStatus);
 
     /* figure out a name */
@@ -91,26 +109,33 @@ XpmWriteFileFromXpmImage(char *filename, XpmImage *image, XpmInfo *info)
 #ifdef VMS
 	name = filename;
 #else
-#ifdef FOR_MSW
-	if (!(name = strchr(filename, '\\')))
-#else
-	if (!(name = strchr(filename, '/')))
+	if (!(name = rindex(filename, '/'))
+#ifdef AMIGA
+	    && !(name = rindex(filename, ':'))
 #endif
+     )
 	    name = filename;
 	else
 	    name++;
 #endif
-	if (dot = strchr(name, '.')) {
+	/* let's try to make a valid C syntax name */
+	if (dot = index(name, '.')) {
 	    strcpy(new_name, name);
-#ifdef FOR_MSW
-            // Convert to lower case
-            len = strlen(new_name);
-            for (i = 0; i < len; i++)
-              new_name[i] = tolower(new_name[i]);
-#endif
-	    /* change '.' to '_' to get a valid C syntax name */
+	    /* change '.' to '_' */
 	    name = s = new_name;
-	    while (dot = strchr(s, '.')) {
+	    while (dot = index(s, '.')) {
+		*dot = '_';
+		s = dot;
+	    }
+	}
+	if (dot = index(name, '-')) {
+	    if (name != new_name) {
+		strcpy(new_name, name);
+		name = new_name;
+	    }
+	    /* change '-' to '_' */
+	    s = name;
+	    while (dot = index(s, '-')) {
 		*dot = '_';
 		s = dot;
 	    }
@@ -120,23 +145,23 @@ XpmWriteFileFromXpmImage(char *filename, XpmImage *image, XpmInfo *info)
 
     /* write the XpmData from the XpmImage */
     if (ErrorStatus == XpmSuccess)
-	ErrorStatus = xpmWriteData(&mdata, image, name, info);
+	ErrorStatus = xpmWriteFile(mdata.stream.file, image, name, info);
 
     xpmDataClose(&mdata);
 
     return (ErrorStatus);
 }
 
-int
-xpmWriteData(xpmData *mdata, XpmImage *image, char *name, XpmInfo *info)
+static int
+xpmWriteFile(file, image, name, info)
+    FILE *file;
+    XpmImage *image;
+    char *name;
+    XpmInfo *info;
 {
     /* calculation variables */
     unsigned int cmts, extensions;
-    FILE *file;
     int ErrorStatus;
-
-    /* store this to speed up */
-    file = mdata->stream.file;
 
     cmts = info && (info->valuemask & XpmComments);
     extensions = info && (info->valuemask & XpmExtensions)
@@ -186,7 +211,10 @@ xpmWriteData(xpmData *mdata, XpmImage *image, char *name, XpmInfo *info)
 }
 
 static void
-WriteColors(FILE *file, XpmColor *colors, unsigned int ncolors)
+WriteColors(file, colors, ncolors)
+    FILE *file;
+    XpmColor *colors;
+    unsigned int ncolors;
 {
     unsigned int a, key;
     char *s;
@@ -207,7 +235,13 @@ WriteColors(FILE *file, XpmColor *colors, unsigned int ncolors)
 
 
 static int
-WritePixels(FILE *file, unsigned int width, unsigned int height, unsigned int cpp, unsigned int *pixels, XpmColor *colors)
+WritePixels(file, width, height, cpp, pixels, colors)
+    FILE *file;
+    unsigned int width;
+    unsigned int height;
+    unsigned int cpp;
+    unsigned int *pixels;
+    XpmColor *colors;
 {
     char *s, *p, *buf;
     unsigned int x, y, h;
@@ -243,7 +277,10 @@ WritePixels(FILE *file, unsigned int width, unsigned int height, unsigned int cp
 }
 
 static void
-WriteExtensions(FILE *file, XpmExtension *ext, unsigned int num)
+WriteExtensions(file, ext, num)
+    FILE *file;
+    XpmExtension *ext;
+    unsigned int num;
 {
     unsigned int x, y, n;
     char **line;
@@ -255,4 +292,68 @@ WriteExtensions(FILE *file, XpmExtension *ext, unsigned int num)
 	    fprintf(file, ",\n\"%s\"", *line);
     }
     fprintf(file, ",\n\"XPMENDEXT\"");
+}
+
+/*
+ * open the given file to be written as an xpmData which is returned
+ */
+static int
+OpenWriteFile(filename, mdata)
+    char *filename;
+    xpmData *mdata;
+{
+#ifndef NO_ZPIPE
+    char buf[BUFSIZ];
+
+#endif
+
+    if (!filename) {
+	mdata->stream.file = (stdout);
+	mdata->type = XPMFILE;
+    } else {
+#ifndef NO_ZPIPE
+	int len = strlen(filename);
+	if (len > 2 && !strcmp(".Z", filename + (len - 2))) {
+	    sprintf(buf, "compress > \"%s\"", filename);
+	    if (!(mdata->stream.file = popen(buf, "w")))
+		return (XpmOpenFailed);
+
+	    mdata->type = XPMPIPE;
+	} else if (len > 3 && !strcmp(".gz", filename + (len - 3))) {
+	    sprintf(buf, "gzip -q > \"%s\"", filename);
+	    if (!(mdata->stream.file = popen(buf, "w")))
+		return (XpmOpenFailed);
+
+	    mdata->type = XPMPIPE;
+	} else {
+#endif
+	    if (!(mdata->stream.file = fopen(filename, "w")))
+		return (XpmOpenFailed);
+
+	    mdata->type = XPMFILE;
+#ifndef NO_ZPIPE
+	}
+#endif
+    }
+    return (XpmSuccess);
+}
+
+/*
+ * close the file related to the xpmData if any
+ */
+static void
+xpmDataClose(mdata)
+    xpmData *mdata;
+{
+    switch (mdata->type) {
+    case XPMFILE:
+	if (mdata->stream.file != (stdout))
+	    fclose(mdata->stream.file);
+	break;
+#ifndef NO_ZPIPE
+    case XPMPIPE:
+	pclose(mdata->stream.file);
+	break;
+#endif
+    }
 }

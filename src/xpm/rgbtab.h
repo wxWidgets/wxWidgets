@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -47,13 +47,6 @@ typedef struct {
 #define myRGB(r,g,b) \
 	((unsigned long)r<<16|(unsigned long)g<<8|(unsigned long)b)
 */
-
-/* Need an RBG conversion confunction here for OS/2 */
-#if defined(__VISAGECPP__)
-/* Bogus stuff to make it compile for now */
-static rgbRecord theRGBRecords[] = { {"AliceBlue", 0L}, {"AntiqueWhite", 1L}, NULL };
-static int numTheRGBRecords = 2;
-#else
 #define myRGB(r,g,b)	RGB(r,g,b)	/* MSW has this macro */
 
 
@@ -297,4 +290,3 @@ static rgbRecord theRGBRecords[] =
 };
 
 static int numTheRGBRecords = 234;
-#endif

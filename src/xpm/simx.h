@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1989-94 GROUPE BULL
+ * Copyright (C) 1989-95 GROUPE BULL
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -39,12 +39,7 @@
 
 #ifdef FOR_MSW
 
-#if defined(__OS2__)
-#define INCL_OS2
-#include<os2.h>
-#else
 #include "windows.h"			/* MS windows GDI types */
-#endif
 
 /*
  * minimal portability layer between ansi and KR C
@@ -77,12 +72,7 @@ typedef void *Visual;			/* not used yet, is for GRAY, COLOR,
 typedef void *Colormap;			/* should be COLORPALETTE, not done
 					 * yet */
 
-#if !defined(__OS2__)
 typedef COLORREF Pixel;
-#else
-typedef unsigned long COLORREF;
-typedef unsigned long Pixel;
-#endif
 
 #define PIXEL_ALREADY_TYPEDEFED		/* to let xpm.h know about it */
 
@@ -131,18 +121,15 @@ extern "C" {
 #endif /* cplusplus */
 
 #define ZPixmap 1			/* not really used */
+#define XYBitmap 1			/* not really used */
 
 #ifndef True
 #define True 1
 #define False 0
 #endif
-
-/*
 #ifndef Bool
-typedef BOOL Bool;
+typedef BOOL Bool;		/* take MSW bool */
 #endif
-*/
-
 /* make these local here, simx.c gets the same from xpm.h */
 #undef LFUNC
 #undef FUNC
