@@ -184,6 +184,7 @@ protected:
 
     // set the current node and item withotu refreshing anything
     void SetCurrent(wxMenuItemList::compatibility_iterator node);
+    virtual bool SetCurrent(bool doit = true){return wxPopupTransientWindow::SetCurrent(doit);};
 
     // change the current item refreshing the old and new items
     void ChangeCurrent(wxMenuItemList::compatibility_iterator node);
@@ -331,7 +332,7 @@ void wxPopupMenuWindow::ResetCurrent()
 #if wxUSE_STL
     SetCurrent(wxMenuItemList::compatibility_iterator());
 #else
-    SetCurrent(NULL);
+    SetCurrent((wxwxMenuItemListNode *)NULL);
 #endif
 }
 
@@ -1111,7 +1112,10 @@ void wxMenu::EndRadioGroup()
 
 bool wxMenu::DoAppend(wxMenuItem *item)
 {
+    #if 0
+    // not used at all
     bool check = FALSE;
+    #endif
 
     if ( item->GetKind() == wxITEM_RADIO )
     {
@@ -1127,7 +1131,10 @@ bool wxMenu::DoAppend(wxMenuItem *item)
             item->SetRadioGroupEnd(m_startRadioGroup);
 
             // ensure that we have a checked item in the radio group
+            #if 0
+            // not used at all
             check = TRUE;
+            #endif
         }
         else // extend the current radio group
         {

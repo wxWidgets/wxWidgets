@@ -74,7 +74,6 @@ WX_CHECK_BUILD_OPTIONS("wxODBC")
 
 WXDLLIMPEXP_DATA_ODBC(wxDbList*) PtrBegDbList = 0;
 
-
 wxChar const *SQL_LOG_FILENAME         = wxT("sqllog.txt");
 wxChar const *SQL_CATALOG_FILENAME     = wxT("catalog.txt");
 
@@ -601,9 +600,9 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
     }
 
     // Connect to the data source
-    retcode = SQLConnect(hdbc, (UCHAR FAR *) dsn.c_str(), SQL_NTS,
-                         (UCHAR FAR *) uid.c_str(), SQL_NTS,
-                         (UCHAR FAR *) authStr.c_str(), SQL_NTS);
+    retcode = SQLConnect(hdbc, (SQLTCHAR FAR *) dsn.c_str(), SQL_NTS,
+                         (SQLTCHAR FAR *) uid.c_str(), SQL_NTS,
+                         (SQLTCHAR FAR *) authStr.c_str(), SQL_NTS);
 
     if ((retcode != SQL_SUCCESS) &&
         (retcode != SQL_SUCCESS_WITH_INFO))
@@ -803,9 +802,9 @@ bool wxDb::Open(wxDb *copyDb)
     }
 
     // Connect to the data source
-    retcode = SQLConnect(hdbc, (UCHAR FAR *) dsn.c_str(), SQL_NTS,
-                         (UCHAR FAR *) uid.c_str(), SQL_NTS,
-                         (UCHAR FAR *) authStr.c_str(), SQL_NTS);
+    retcode = SQLConnect(hdbc, (SQLTCHAR FAR *) dsn.c_str(), SQL_NTS,
+                         (SQLTCHAR FAR *) uid.c_str(), SQL_NTS,
+                         (SQLTCHAR FAR *) authStr.c_str(), SQL_NTS);
 
     if (retcode == SQL_ERROR)
         return(DispAllErrors(henv, hdbc));
@@ -1483,7 +1482,7 @@ bool wxDb::DispAllErrors(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
 {
     wxString odbcErrMsg;
 
-    while (SQLError(aHenv, aHdbc, aHstmt, (UCHAR FAR *) sqlState, &nativeError, (UCHAR FAR *) errorMsg, SQL_MAX_MESSAGE_LENGTH - 1, &cbErrorMsg) == SQL_SUCCESS)
+    while (SQLError(aHenv, aHdbc, aHstmt, (SQLTCHAR FAR *) sqlState, &nativeError, (SQLTCHAR FAR *) errorMsg, SQL_MAX_MESSAGE_LENGTH - 1, &cbErrorMsg) == SQL_SUCCESS)
     {
         odbcErrMsg.Printf(wxT("SQL State = %s\nNative Error Code = %li\nError Message = %s\n"), sqlState, nativeError, errorMsg);
         logError(odbcErrMsg, sqlState);
@@ -1510,7 +1509,7 @@ bool wxDb::DispAllErrors(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
 /********** wxDb::GetNextError() **********/
 bool wxDb::GetNextError(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
 {
-    if (SQLError(aHenv, aHdbc, aHstmt, (UCHAR FAR *) sqlState, &nativeError, (UCHAR FAR *) errorMsg, SQL_MAX_MESSAGE_LENGTH - 1, &cbErrorMsg) == SQL_SUCCESS)
+    if (SQLError(aHenv, aHdbc, aHstmt, (SQLTCHAR FAR *) sqlState, &nativeError, (SQLTCHAR FAR *) errorMsg, SQL_MAX_MESSAGE_LENGTH - 1, &cbErrorMsg) == SQL_SUCCESS)
         return(TRUE);
     else
         return(FALSE);
@@ -1866,7 +1865,7 @@ bool wxDb::DropView(const wxString &viewName)
     cout << endl << sqlStmt.c_str() << endl;
 #endif
 
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+    if (SQLExecDirect(hstmt, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
     {
         // Check for "Base table not found" error and ignore
         GetNextError(henv, hdbc, hstmt);
@@ -1899,7 +1898,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt)
 
     SQLFreeStmt(hstmt, SQL_CLOSE);
 
-    retcode = SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
+    retcode = SQLExecDirect(hstmt, (SQLTCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
     if (retcode == SQL_SUCCESS ||
         (Dbms() == dbmsDB2 && (retcode == SQL_SUCCESS_WITH_INFO || retcode == SQL_NO_DATA_FOUND)))
     {
@@ -1977,7 +1976,7 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
     retcode = SQLPrimaryKeys(hstmt,
                              NULL, 0,                               /* Catalog name  */
                              NULL, 0,                               /* Schema name   */
-                             (UCHAR FAR *) tableName.c_str(), SQL_NTS); /* Table name    */
+                             (SQLTCHAR FAR *) tableName.c_str(), SQL_NTS); /* Table name    */
 
     /*---------------------------------------------------------------------*/
     /* Fetch and display the result set. This will be a list of the        */
@@ -2004,7 +2003,7 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
     retcode = SQLForeignKeys(hstmt,
                              NULL, 0,                            /* Primary catalog */
                              NULL, 0,                            /* Primary schema  */
-                             (UCHAR FAR *)tableName.c_str(), SQL_NTS,/* Primary table   */
+                             (SQLTCHAR FAR *)tableName.c_str(), SQL_NTS,/* Primary table   */
                              NULL, 0,                            /* Foreign catalog */
                              NULL, 0,                            /* Foreign schema  */
                              NULL, 0);                           /* Foreign table   */
@@ -2050,7 +2049,7 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
                              NULL, 0,                             /* Primary table     */
                              NULL, 0,                             /* Foreign catalog   */
                              NULL, 0,                             /* Foreign schema    */
-                             (UCHAR *)tableName.c_str(), SQL_NTS);/* Foreign table     */
+                             (SQLTCHAR *)tableName.c_str(), SQL_NTS);/* Foreign table     */
 
     /*---------------------------------------------------------------------*/
     /*  Fetch and display the result set. This will be all of the          */
@@ -2167,8 +2166,8 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
             {
                 retcode = SQLColumns(hstmt,
                                      NULL, 0,                                // All qualifiers
-                                     (UCHAR *) UserID.c_str(), SQL_NTS,      // Owner
-                                     (UCHAR *) TableName.c_str(), SQL_NTS,
+                                     (SQLTCHAR *) UserID.c_str(), SQL_NTS,      // Owner
+                                     (SQLTCHAR *) TableName.c_str(), SQL_NTS,
                                      NULL, 0);                               // All columns
             }
             else
@@ -2176,7 +2175,7 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
                 retcode = SQLColumns(hstmt,
                                      NULL, 0,                                // All qualifiers
                                      NULL, 0,                                // Owner
-                                     (UCHAR *) TableName.c_str(), SQL_NTS,
+                                     (SQLTCHAR *) TableName.c_str(), SQL_NTS,
                                      NULL, 0);                               // All columns
             }
             if (retcode != SQL_SUCCESS)
@@ -2322,8 +2321,8 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, UWORD *numCols, const wx
         {
             retcode = SQLColumns(hstmt,
                                  NULL, 0,                                // All qualifiers
-                                 (UCHAR *) UserID.c_str(), SQL_NTS,    // Owner
-                                 (UCHAR *) TableName.c_str(), SQL_NTS,
+                                 (SQLTCHAR *) UserID.c_str(), SQL_NTS,    // Owner
+                                 (SQLTCHAR *) TableName.c_str(), SQL_NTS,
                                  NULL, 0);                               // All columns
         }
         else
@@ -2331,7 +2330,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, UWORD *numCols, const wx
             retcode = SQLColumns(hstmt,
                                  NULL, 0,                                 // All qualifiers
                                  NULL, 0,                                 // Owner
-                                 (UCHAR *) TableName.c_str(), SQL_NTS,
+                                 (SQLTCHAR *) TableName.c_str(), SQL_NTS,
                                  NULL, 0);                                // All columns
         }
         if (retcode != SQL_SUCCESS)
@@ -2815,8 +2814,8 @@ int wxDb::GetColumnCount(const wxString &tableName, const wxChar *userID)
     {
         retcode = SQLColumns(hstmt,
                              NULL, 0,                                // All qualifiers
-                             (UCHAR *) UserID.c_str(), SQL_NTS,      // Owner
-                             (UCHAR *) TableName.c_str(), SQL_NTS,
+                             (SQLTCHAR *) UserID.c_str(), SQL_NTS,      // Owner
+                             (SQLTCHAR *) TableName.c_str(), SQL_NTS,
                              NULL, 0);                               // All columns
     }
     else
@@ -2824,7 +2823,7 @@ int wxDb::GetColumnCount(const wxString &tableName, const wxChar *userID)
         retcode = SQLColumns(hstmt,
                              NULL, 0,                                // All qualifiers
                              NULL, 0,                                // Owner
-                             (UCHAR *) TableName.c_str(), SQL_NTS,
+                             (SQLTCHAR *) TableName.c_str(), SQL_NTS,
                              NULL, 0);                               // All columns
     }
     if (retcode != SQL_SUCCESS)
@@ -2906,7 +2905,7 @@ wxDbInf *wxDb::GetCatalog(const wxChar *userID)
         {
             retcode = SQLTables(hstmt,
                                 NULL, 0,                             // All qualifiers
-                                (UCHAR *) UserID.c_str(), SQL_NTS,   // User specified
+                                (SQLTCHAR *) UserID.c_str(), SQL_NTS,   // User specified
                                 NULL, 0,                             // All tables
                                 NULL, 0);                            // All columns
         }
@@ -2995,7 +2994,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     wxChar    typeName[30+1];
     SDWORD    precision, length;
 
-    FILE *fp = fopen(fileName.c_str(),wxT("wt"));
+    FILE *fp = wxFopen(fileName.c_str(),wxT("wt"));
     if (fp == NULL)
         return(FALSE);
 
@@ -3012,7 +3011,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     {
         retcode = SQLColumns(hstmt,
                              NULL, 0,                                // All qualifiers
-                             (UCHAR *) UserID.c_str(), SQL_NTS,      // User specified
+                             (SQLTCHAR *) UserID.c_str(), SQL_NTS,      // User specified
                              NULL, 0,                                // All tables
                              NULL, 0);                               // All columns
     }
@@ -3044,20 +3043,20 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
         if (wxStrcmp(tblName, tblNameSave.c_str()))
         {
             if (cnt)
-                fputs(wxT("\n"), fp);
-            fputs(wxT("================================ "), fp);
-            fputs(wxT("================================ "), fp);
-            fputs(wxT("===================== "), fp);
-            fputs(wxT("========= "), fp);
-            fputs(wxT("=========\n"), fp);
+                wxFputs(wxT("\n"), fp);
+            wxFputs(wxT("================================ "), fp);
+            wxFputs(wxT("================================ "), fp);
+            wxFputs(wxT("===================== "), fp);
+            wxFputs(wxT("========= "), fp);
+            wxFputs(wxT("=========\n"), fp);
             outStr.Printf(wxT("%-32s %-32s %-21s %9s %9s\n"),
                 wxT("TABLE NAME"), wxT("COLUMN NAME"), wxT("DATA TYPE"), wxT("PRECISION"), wxT("LENGTH"));
-            fputs(outStr.c_str(), fp);
-            fputs(wxT("================================ "), fp);
-            fputs(wxT("================================ "), fp);
-            fputs(wxT("===================== "), fp);
-            fputs(wxT("========= "), fp);
-            fputs(wxT("=========\n"), fp);
+            wxFputs(outStr.c_str(), fp);
+            wxFputs(wxT("================================ "), fp);
+            wxFputs(wxT("================================ "), fp);
+            wxFputs(wxT("===================== "), fp);
+            wxFputs(wxT("========= "), fp);
+            wxFputs(wxT("=========\n"), fp);
             tblNameSave = tblName;
         }
 
@@ -3070,7 +3069,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
 
         outStr.Printf(wxT("%-32s %-32s (%04d)%-15s %9ld %9ld\n"),
             tblName, colName, sqlDataType, typeName, precision, length);
-        if (fputs(outStr.c_str(), fp) == EOF)
+        if (wxFputs(outStr.c_str(), fp) == EOF)
         {
             SQLFreeStmt(hstmt, SQL_CLOSE);
             fclose(fp);
@@ -3145,8 +3144,8 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
     {
         retcode = SQLTables(hstmt,
                             NULL, 0,                                  // All qualifiers
-                            (UCHAR *) UserID.c_str(), SQL_NTS,        // Only tables owned by this user
-                            (UCHAR FAR *)TableName.c_str(), SQL_NTS,
+                            (SQLTCHAR *) UserID.c_str(), SQL_NTS,        // Only tables owned by this user
+                            (SQLTCHAR FAR *)TableName.c_str(), SQL_NTS,
                             NULL, 0);                                 // All table types
     }
     else
@@ -3154,7 +3153,7 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
         retcode = SQLTables(hstmt,
                             NULL, 0,                                  // All qualifiers
                             NULL, 0,                                  // All owners
-                            (UCHAR FAR *)TableName.c_str(), SQL_NTS,
+                            (SQLTCHAR FAR *)TableName.c_str(), SQL_NTS,
                             NULL, 0);                                 // All table types
     }
     if (retcode != SQL_SUCCESS)
@@ -3176,7 +3175,7 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
 
 /********** wxDb::TablePrivileges() **********/
 bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, const wxChar *userID,
-                            const wxChar *schema, const wxString &tablePath)
+                            const wxChar *schema, const wxString &WXUNUSED(tablePath))
 {
     wxASSERT(tableName.Length());
 
@@ -3212,19 +3211,19 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
     {
         retcode = SQLTablePrivileges(hstmt,
                                      NULL, 0,                                    // Catalog
-                                     (UCHAR FAR *)Schema.c_str(), SQL_NTS,               // Schema
-                                     (UCHAR FAR *)TableName.c_str(), SQL_NTS);
+                                     (SQLTCHAR FAR *)Schema.c_str(), SQL_NTS,               // Schema
+                                     (SQLTCHAR FAR *)TableName.c_str(), SQL_NTS);
     }
     else
     {
         retcode = SQLTablePrivileges(hstmt,
                                      NULL, 0,                                    // Catalog
                                      NULL, 0,                                    // Schema
-                                     (UCHAR FAR *)TableName.c_str(), SQL_NTS);
+                                     (SQLTCHAR FAR *)TableName.c_str(), SQL_NTS);
     }
 
 #ifdef DBDEBUG_CONSOLE
-    fprintf(stderr ,wxT("SQLTablePrivileges() returned %i \n"),retcode);
+    wxFprintf(stderr ,wxT("SQLTablePrivileges() returned %i \n"),retcode);
 #endif
 
     if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
@@ -3260,7 +3259,7 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
             return(DispAllErrors(henv, hdbc, hstmt));
         }
 #ifdef DBDEBUG_CONSOLE
-        fprintf(stderr,wxT("Scanning %s privilege on table %s.%s granted by %s to %s\n"),
+        wxFprintf(stderr,wxT("Scanning %s privilege on table %s.%s granted by %s to %s\n"),
                 result.privilege,result.tableOwner,result.tableName,
                 result.grantor, result.grantee);
 #endif
@@ -3299,10 +3298,10 @@ const wxString wxDb::SQLTableName(const wxChar *tableName)
     wxString TableName;
 
     if (Dbms() == dbmsACCESS)
-        TableName = '"';
+        TableName = _T("\"");
     TableName += tableName;
     if (Dbms() == dbmsACCESS)
-        TableName += '"';
+        TableName += _T("\"");
 
     return TableName;
 }  // wxDb::SQLTableName()
@@ -3313,10 +3312,10 @@ const wxString wxDb::SQLColumnName(const wxChar *colName)
     wxString ColName;
 
     if (Dbms() == dbmsACCESS)
-        ColName = '"';
+        ColName = _T("\"");
     ColName += colName;
     if (Dbms() == dbmsACCESS)
-        ColName += '"';
+        ColName += _T("\"");
 
     return ColName;
 }  // wxDb::SQLColumnName()
@@ -3332,7 +3331,7 @@ bool wxDb::SetSqlLogging(wxDbSqlLogState state, const wxString &filename, bool a
     {
         if (fpSqlLog == 0)
         {
-            fpSqlLog = fopen(filename, (append ? wxT("at") : wxT("wt")));
+            fpSqlLog = wxFopen(filename, (append ? wxT("at") : wxT("wt")));
             if (fpSqlLog == NULL)
                 return(FALSE);
         }
@@ -3361,11 +3360,11 @@ bool wxDb::WriteSqlLog(const wxString &logMsg)
     if (fpSqlLog == 0 || sqlLogState == sqlLogOFF)
         return(FALSE);
 
-    if (fputs(wxT("\n"),   fpSqlLog) == EOF)
+    if (wxFputs(wxT("\n"),   fpSqlLog) == EOF)
         return(FALSE);
-    if (fputs(logMsg, fpSqlLog) == EOF)
+    if (wxFputs(logMsg, fpSqlLog) == EOF)
         return(FALSE);
-    if (fputs(wxT("\n"),   fpSqlLog) == EOF)
+    if (wxFputs(wxT("\n"),   fpSqlLog) == EOF)
         return(FALSE);
 
     return(TRUE);
@@ -3557,10 +3556,10 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
     switch (Dbms())
     {
         case dbmsORACLE :
-            alterSlashModify = "MODIFY";
+            alterSlashModify = _T("MODIFY");
             break;
         case dbmsMS_SQL_SERVER :
-            alterSlashModify = "ALTER COLUMN";
+            alterSlashModify = _T("ALTER COLUMN");
             break;
         case dbmsUNIDENTIFIED :
             return FALSE;
@@ -3572,7 +3571,7 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
         case dbmsDBASE :
         case dbmsXBASE_SEQUITER :
         default :
-            alterSlashModify = "MODIFY";
+            alterSlashModify = _T("MODIFY");
             break;
     }
 
@@ -3590,7 +3589,7 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
 
     // For varchars only, append the size of the column
     if (dataType == DB_DATA_TYPE_VARCHAR &&
-        (Dbms() != dbmsMY_SQL || dataTypeName != "text"))
+        (Dbms() != dbmsMY_SQL || dataTypeName != _T("text")))
     {
         wxString s;
         s.Printf(wxT("(%lu)"), columnLength);
@@ -3918,8 +3917,8 @@ bool wxDbGetDataSource(HENV henv, wxChar *Dsn, SWORD DsnMax, wxChar *DsDesc,
 {
     SWORD cb1,cb2;
 
-    if (SQLDataSources(henv, direction, (UCHAR FAR *) Dsn, DsnMax, &cb1,
-                             (UCHAR FAR *) DsDesc, DsDescMax, &cb2) == SQL_SUCCESS)
+    if (SQLDataSources(henv, direction, (SQLTCHAR FAR *) Dsn, DsnMax, &cb1,
+                             (SQLTCHAR FAR *) DsDesc, DsDescMax, &cb2) == SQL_SUCCESS)
         return(TRUE);
     else
         return(FALSE);

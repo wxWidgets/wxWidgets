@@ -44,7 +44,12 @@
 // macros
 // ----------------------------------------------------------------------------
 
+#if 0
+// due to unsigned type nPage is always >= 0
 #define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((size_t(nPage)) < GetPageCount()))
+#else
+#define IS_VALID_PAGE(nPage) ((size_t(nPage)) < GetPageCount())
+#endif
 
 // ----------------------------------------------------------------------------
 // constants

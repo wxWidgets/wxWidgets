@@ -123,12 +123,12 @@ public:
 
     virtual int GetNumberRows()
     {
-        wxLogDebug(" GetNumberRows() = %i",m_rowtotal);
+        wxLogDebug(_T(" GetNumberRows() = %i"),m_rowtotal);
         return m_rowtotal;
     }
     virtual int GetNumberCols()
     {
-        wxLogDebug(" GetNumberCols() = %i",m_nocols);
+        wxLogDebug(_T(" GetNumberCols() = %i"),m_nocols);
         return m_nocols;
     }
     virtual bool     IsEmptyCell(int row, int col) ;

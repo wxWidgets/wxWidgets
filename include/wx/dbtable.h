@@ -189,13 +189,13 @@ public:
 #endif
     // Public member functions
     wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
-              const wxString &qryTblName="", bool qryOnly = !wxDB_QUERY_ONLY, 
-              const wxString &tblPath="");
+              const wxString &qryTblName=wxEmptyString, bool qryOnly = !wxDB_QUERY_ONLY, 
+              const wxString &tblPath=wxEmptyString);
 
     // DEPRECATED
     wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
-              const wxChar *qryTblName="", bool qryOnly = !wxDB_QUERY_ONLY, 
-              const wxString &tblPath="");
+              const wxChar *qryTblName=wxEmptyString, bool qryOnly = !wxDB_QUERY_ONLY, 
+              const wxString &tblPath=wxEmptyString);
 
     virtual ~wxDbTable();
 
@@ -267,14 +267,14 @@ public:
     void            BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool distinct);
     void            BuildSelectStmt(wxChar *pSqlStmt, int typeOfSelect, bool distinct);
 
-    void            BuildDeleteStmt(wxString &pSqlStmt, int typeOfDel, const wxString &pWhereClause="");
-    void            BuildDeleteStmt(wxChar *pSqlStmt, int typeOfDel, const wxString &pWhereClause="");
+    void            BuildDeleteStmt(wxString &pSqlStmt, int typeOfDel, const wxString &pWhereClause=wxEmptyString);
+    void            BuildDeleteStmt(wxChar *pSqlStmt, int typeOfDel, const wxString &pWhereClause=wxEmptyString);
 
-    void            BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxString &pWhereClause="");
-    void            BuildUpdateStmt(wxChar *pSqlStmt, int typeOfUpd, const wxString &pWhereClause="");
+    void            BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxString &pWhereClause=wxEmptyString);
+    void            BuildUpdateStmt(wxChar *pSqlStmt, int typeOfUpd, const wxString &pWhereClause=wxEmptyString);
 
-    void            BuildWhereClause(wxString &pWhereClause, int typeOfWhere, const wxString &qualTableName="", bool useLikeComparison=FALSE);
-    void            BuildWhereClause(wxChar *pWhereClause, int typeOfWhere, const wxString &qualTableName="", bool useLikeComparison=FALSE);
+    void            BuildWhereClause(wxString &pWhereClause, int typeOfWhere, const wxString &qualTableName=wxEmptyString, bool useLikeComparison=FALSE);
+    void            BuildWhereClause(wxChar *pWhereClause, int typeOfWhere, const wxString &qualTableName=wxEmptyString, bool useLikeComparison=FALSE);
 
 #if wxODBC_BACKWARD_COMPATABILITY
 // The following member functions are deprecated.  You should use the BuildXxxxxStmt functions (above)
@@ -311,7 +311,7 @@ public:
     HSTMT          *NewCursor(bool setCursor = FALSE, bool bindColumns = TRUE) {  return GetNewCursor(setCursor,bindColumns); }
 #endif
 
-    ULONG           Count(const wxString &args="*");
+    ULONG           Count(const wxString &args=_T("*"));
     int             DB_STATUS(void) { return(pDb->DB_STATUS); }
 
     bool            IsColNull(UWORD colNo) const;

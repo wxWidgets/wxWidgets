@@ -528,6 +528,8 @@ public:
 
     virtual bool CanUndo() const;
     virtual bool Do(wxTextCtrl *text);
+    virtual bool Do() { return wxTextCtrlCommand::Do(); }
+    virtual bool Undo() { return wxTextCtrlCommand::Undo(); }
     virtual bool Undo(wxTextCtrl *text);
 
 private:
@@ -551,6 +553,8 @@ public:
 
     virtual bool CanUndo() const;
     virtual bool Do(wxTextCtrl *text);
+    virtual bool Do() { return wxTextCtrlCommand::Do(); }
+    virtual bool Undo() { return wxTextCtrlCommand::Undo(); }
     virtual bool Undo(wxTextCtrl *text);
 
 private:

@@ -80,7 +80,7 @@ ULONG lastTableID = 0;
 #endif
 
 
-void csstrncpyt(char *target, const char *source, int n)
+void csstrncpyt(wxChar *target, const wxChar *source, int n)
 {
     while ( (*target++ = *source++) != '\0' && --n )
         ;
@@ -614,7 +614,7 @@ bool wxDbTable::execDelete(const wxString &pSqlStmt)
     RETCODE retcode;
 
     // Execute the DELETE statement
-    retcode = SQLExecDirect(hstmtDelete, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
+    retcode = SQLExecDirect(hstmtDelete, (SQLTCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
 
     if (retcode == SQL_SUCCESS ||
         retcode == SQL_NO_DATA_FOUND ||
@@ -636,7 +636,7 @@ bool wxDbTable::execUpdate(const wxString &pSqlStmt)
     RETCODE retcode;
 
     // Execute the UPDATE statement
-    retcode = SQLExecDirect(hstmtUpdate, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
+    retcode = SQLExecDirect(hstmtUpdate, (SQLTCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
 
     if (retcode == SQL_SUCCESS ||
         retcode == SQL_NO_DATA_FOUND ||
@@ -648,7 +648,8 @@ bool wxDbTable::execUpdate(const wxString &pSqlStmt)
     else if (retcode == SQL_NEED_DATA)
     {
         PTR pParmID;
-        while ((retcode = SQLParamData(hstmtUpdate, &pParmID) == SQL_NEED_DATA))
+        retcode = SQLParamData(hstmtUpdate, &pParmID);
+        while (retcode == SQL_NEED_DATA)
         {
             // Find the parameter
             int i;
@@ -706,7 +707,7 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const wxStri
 
     // Execute the SQL SELECT statement
     int retcode;
-    retcode = SQLExecDirect(hstmt, (UCHAR FAR *) (queryType == DB_SELECT_STATEMENT ? pSqlStmt.c_str() : sqlStmt.c_str()), SQL_NTS);
+    retcode = SQLExecDirect(hstmt, (SQLTCHAR FAR *) (queryType == DB_SELECT_STATEMENT ? pSqlStmt.c_str() : sqlStmt.c_str()), SQL_NTS);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
         return(pDb->DispAllErrors(henv, hdbc, hstmt));
 
@@ -837,7 +838,7 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
         // Prepare the insert statement for execution
         if (insertableCount)
         {
-            if (SQLPrepare(hstmtInsert, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+            if (SQLPrepare(hstmtInsert, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
                 return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
         }
         else
@@ -1426,7 +1427,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
         }
         // For varchars, append the size of the string
         if (colDefs[i].DbDataType == DB_DATA_TYPE_VARCHAR &&
-            (pDb->Dbms() != dbmsMY_SQL || pDb->GetTypeInfVarchar().TypeName != "text"))// ||
+            (pDb->Dbms() != dbmsMY_SQL || pDb->GetTypeInfVarchar().TypeName != _T("text")))// ||
 //            colDefs[i].DbDataType == DB_DATA_TYPE_BLOB)
         {
             wxString s;
@@ -1532,7 +1533,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
 #endif
 
     // Execute the CREATE TABLE statement
-    RETCODE retcode = SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
+    RETCODE retcode = SQLExecDirect(hstmt, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
     {
         pDb->DispAllErrors(henv, hdbc, hstmt);
@@ -1572,7 +1573,7 @@ bool wxDbTable::DropTable()
     cout << endl << sqlStmt.c_str() << endl;
 #endif
 
-    RETCODE retcode = SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
+    RETCODE retcode = SQLExecDirect(hstmt, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
     if (retcode != SQL_SUCCESS)
     {
         // Check for "Base table not found" error and ignore
@@ -1652,11 +1653,14 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
 
                 if (!ok)
                 {
+                    #if 0
+                    // retcode is not used
                     wxODBC_ERRORS retcode;
                     // Oracle returns a DB_ERR_GENERAL_ERROR if the column is already
                     // defined to be NOT NULL, but reportedly MySQL doesn't mind.
                     // This line is just here for debug checking of the value
                     retcode = (wxODBC_ERRORS)pDb->DB_STATUS;
+                    #endif
                 }
             }
             else
@@ -1712,7 +1716,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
         }
         
         // Postgres and SQL Server 7 do not support the ASC/DESC keywords for index columns
-        if (!((pDb->Dbms() == dbmsMS_SQL_SERVER) && (strncmp(pDb->dbInf.dbmsVer,"07",2)==0)) &&
+        if (!((pDb->Dbms() == dbmsMS_SQL_SERVER) && (wxStrncmp(pDb->dbInf.dbmsVer,_T("07"),2)==0)) &&
             !(pDb->Dbms() == dbmsPOSTGRES))
         {
             if (pIdxDefs[i].Ascending)
@@ -1721,7 +1725,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
                 sqlStmt += wxT(" DESC");
         }
         else
-            wxASSERT_MSG(pIdxDefs[i].Ascending, "Datasource does not support DESCending index columns");
+            wxASSERT_MSG(pIdxDefs[i].Ascending, _T("Datasource does not support DESCending index columns"));
 
         if ((i + 1) < noIdxCols)
             sqlStmt += wxT(",");
@@ -1737,7 +1741,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
 #endif
 
     // Execute the CREATE INDEX statement
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+    if (SQLExecDirect(hstmt, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
     {
         pDb->DispAllErrors(henv, hdbc, hstmt);
         pDb->RollbackTrans();
@@ -1788,7 +1792,7 @@ bool wxDbTable::DropIndex(const wxString &idxName)
     cout << endl << sqlStmt.c_str() << endl;
 #endif
 
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+    if (SQLExecDirect(hstmt, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
     {
         // Check for "Index not found" error and ignore
         pDb->GetNextError(henv, hdbc, hstmt);
@@ -1888,7 +1892,8 @@ int wxDbTable::Insert(void)
     if (retcode == SQL_NEED_DATA)
     {
         PTR pParmID;
-        while ((retcode = SQLParamData(hstmtInsert, &pParmID) == SQL_NEED_DATA))
+        retcode = SQLParamData(hstmtInsert, &pParmID);
+        while (retcode == SQL_NEED_DATA)
         {
             // Find the parameter
             int i;
@@ -2389,7 +2394,7 @@ ULONG wxDbTable::Count(const wxString &args)
     }
 
     // Execute the SQL statement
-    if (SQLExecDirect(*hstmtCount, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+    if (SQLExecDirect(*hstmtCount, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
     {
         pDb->DispAllErrors(henv, hdbc, *hstmtCount);
         return(0);
@@ -2429,8 +2434,8 @@ bool wxDbTable::Refresh(void)
     hstmt = hstmtInternal;
 #if wxODBC_BACKWARD_COMPATABILITY
     // Save the where and order by clauses
-    char *saveWhere = where;
-    char *saveOrderBy = orderBy;
+    wxChar *saveWhere = where;
+    wxChar *saveOrderBy = orderBy;
 #else
     wxString saveWhere = where;
     wxString saveOrderBy = orderBy;
@@ -2647,10 +2652,10 @@ wxVariant wxDbTable::GetCol(const int colNo) const
                 val = (long)(*(unsigned long *)(colDefs[colNo].PtrDataObj));
                 break;
             case SQL_C_TINYINT:
-                val = (long)(*(char *)(colDefs[colNo].PtrDataObj));
+                val = (long)(*(wxChar *)(colDefs[colNo].PtrDataObj));
                 break;
             case SQL_C_UTINYINT:
-                val = (long)(*(unsigned char *)(colDefs[colNo].PtrDataObj));
+                val = (long)(*(wxChar *)(colDefs[colNo].PtrDataObj));
                 break;
             case SQL_C_USHORT:
                 val = (long)(*(UWORD *)(colDefs[colNo].PtrDataObj));
@@ -2697,7 +2702,7 @@ void wxDbTable::SetCol(const int colNo, const wxVariant val)
         {
             case SQL_CHAR:
             case SQL_VARCHAR:
-                csstrncpyt((char *)(colDefs[colNo].PtrDataObj),
+                csstrncpyt((wxChar *)(colDefs[colNo].PtrDataObj),
                            val.GetString().c_str(),
                            colDefs[colNo].SzDataObj-1);
                 break;
@@ -2713,10 +2718,10 @@ void wxDbTable::SetCol(const int colNo, const wxVariant val)
                 *(unsigned long *)(colDefs[colNo].PtrDataObj) = val.GetLong();
                 break;
             case SQL_C_TINYINT:
-                *(char *)(colDefs[colNo].PtrDataObj) = val.GetChar();
+                *(wxChar *)(colDefs[colNo].PtrDataObj) = val.GetChar();
                 break;
             case SQL_C_UTINYINT:
-                *(unsigned char *)(colDefs[colNo].PtrDataObj) = val.GetChar();
+                *(wxChar *)(colDefs[colNo].PtrDataObj) = val.GetChar();
                 break;
             case SQL_C_USHORT:
                 *(unsigned short *)(colDefs[colNo].PtrDataObj) = val.GetLong();

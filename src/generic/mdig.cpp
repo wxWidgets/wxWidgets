@@ -439,7 +439,7 @@ wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
             }
             else
             {
-                if (pClientWindow->GetPageCount() - 1 >= 0)
+                if ((int)pClientWindow->GetPageCount() - 1 >= 0)
                     pClientWindow->SetSelection(pClientWindow->GetPageCount() - 1);
             }
         }
@@ -714,7 +714,7 @@ bool wxGenericMDIClientWindow::CreateClient( wxGenericMDIParentFrame *parent, lo
         return FALSE;
 }
 
-int wxGenericMDIClientWindow::SetSelection(int nPage)
+int wxGenericMDIClientWindow::SetSelection(size_t nPage)
 {
     int oldSelection = wxNotebook::SetSelection(nPage);
 

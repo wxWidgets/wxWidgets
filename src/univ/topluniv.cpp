@@ -354,7 +354,10 @@ static bool wxGetResizingCursor(long hitTestResult, wxCursor& cursor)
                 break;
             default:
                 return FALSE;
+                #if 0
+                // not rachable due to earlier return
                 break;
+                #endif
         }
         return TRUE;
     }

@@ -92,6 +92,9 @@ public:
 
     // is this item the current one?
     bool IsCurrent(size_t item) const { return item == (size_t)m_current; }
+    #ifdef __WXUNIVERSAL__
+    bool IsCurrent() const { return wxVScrolledWindow::IsCurrent(); }
+    #endif
 
     // is this item selected?
     bool IsSelected(size_t item) const;

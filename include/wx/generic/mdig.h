@@ -237,7 +237,7 @@ public:
     ~wxGenericMDIClientWindow();
     virtual bool CreateClient( wxGenericMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
 
-    virtual int SetSelection(int nPage);
+    virtual int SetSelection(size_t nPage);
 
 protected:
     void PageChanged(int OldSelection, int newSelection);

@@ -104,6 +104,10 @@ class WXDLLIMPEXP_GL wxGLCanvas: public wxWindow
           const wxPoint& pos, const wxSize& size, long style, const wxString& name);
 
    void SetCurrent();
+   #ifdef __WXUNIVERSAL__
+   virtual bool SetCurrent(bool doit = true){ return wxWindow::SetCurrent(doit); }; 
+   #endif
+
    void SetColour(const wxChar *colour);
    void SwapBuffers();
 

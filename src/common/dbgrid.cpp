@@ -263,7 +263,7 @@ bool wxDbGridTableBase::AssignDbTable(wxDbTable *tab, int count, bool takeOwners
     return TRUE;
 }
 
-wxString wxDbGridTableBase::GetTypeName(int row, int col)
+wxString wxDbGridTableBase::GetTypeName(int WXUNUSED(row), int col)
 {
     if (GetNumberCols() > col)
     {
@@ -370,7 +370,7 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
     return FALSE;
 }
 
-bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName)
+bool wxDbGridTableBase::CanSetValueAs(int WXUNUSED(row), int col, const wxString& typeName)
 {
     if (typeName == wxGRID_VALUE_STRING)
     {
@@ -680,7 +680,7 @@ void wxDbGridTableBase::ValidateRow(int row)
         m_data->SetKey(k);
         if (!m_data->QueryOnKeyFields())
         {
-            wxDbLogExtendedErrorMsg("ODBC error during Query()\n\n", m_data->GetDb(),__FILE__,__LINE__);
+            wxDbLogExtendedErrorMsg(_T("ODBC error during Query()\n\n"), m_data->GetDb(),__TFILE__,__LINE__);
         }
 
         m_data->GetNext();

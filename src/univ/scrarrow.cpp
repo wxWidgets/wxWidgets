@@ -187,7 +187,7 @@ bool wxScrollArrows::HandleMouseMove(const wxMouseEvent& event) const
                 return TRUE;
             }
         }
-        else if ( 1 ) //FIXME: m_control->ShouldPauseScrolling() )
+        else // if ( 1 ) FIXME: m_control->ShouldPauseScrolling() )
         {
             // we may want to stop it
             if ( arrow != m_captureData->m_arrowPressed )

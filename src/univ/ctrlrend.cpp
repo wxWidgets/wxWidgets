@@ -675,7 +675,11 @@ void wxControlRenderer::DrawItems(const wxListBox *lbox,
 
 void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
                                     size_t itemFirst, size_t itemLast,
+#if wxUSE_CHECKLISTBOX
                                     bool isCheckLbox)
+#else
+                                    bool WXUNUSED(isCheckLbox))
+#endif
 {
     // prepare for the drawing: calc the initial position
     wxCoord lineHeight = lbox->GetLineHeight();

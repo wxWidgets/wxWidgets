@@ -2838,11 +2838,14 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
 # pragma message disable initnotreach
 #endif
 
-void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
+void wxListMainWindow::OnRenameCancelled(size_t WXUNUSED(itemEdit))
 {
     // wxMSW seems not to notify the program about
     // cancelled label edits.
     return;
+
+  #if 0
+    // above unconditional return cause warning about not reachable code
 
     // let owner know that the edit was cancelled
     wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
@@ -2860,6 +2863,7 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
     data->GetItem( 0, le.m_item );
 
     GetEventHandler()->ProcessEvent( le );
+  #endif
 }
 #ifdef __VMS__
 # pragma message enable initnotreach
@@ -3965,13 +3969,19 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
             // the window, we recalculate after subtracting the space taken by the
             // scrollbar
 
-            int entireWidth = 0,
-                entireHeight = 0;
+            int entireWidth = 0;
+            #if 0
+            // entireHeight is not used so no need to define it
+            int entireHeight = 0;
+            #endif
 
             for (int tries = 0; tries < 2; tries++)
             {
                 entireWidth = 2*EXTRA_BORDER_X;
+                #if 0
+                // entireHeight is not used so no need to define it
                 entireHeight = 2*EXTRA_BORDER_Y;
+                #endif
 
                 if (tries == 1)
                 {
@@ -4340,18 +4350,39 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 
     m_dirty = TRUE;
 
+    #if 0
+    // this is unused variable
     int mode = 0;
+    #endif
     if ( HasFlag(wxLC_REPORT) )
     {
+        #if 0
+        // this is unused variable
         mode = wxLC_REPORT;
+        #endif
         ResetVisibleLinesRange();
     }
     else if ( HasFlag(wxLC_LIST) )
+        #if 0
+        // this is unused variable
         mode = wxLC_LIST;
+        #else
+        {}
+        #endif
     else if ( HasFlag(wxLC_ICON) )
+        #if 0
+        // this is unused variable
         mode = wxLC_ICON;
+        #else
+        {}
+        #endif
     else if ( HasFlag(wxLC_SMALL_ICON) )
+        #if 0
+        // this is unused variable
         mode = wxLC_ICON;  // no typo
+        #else
+        {}
+        #endif
     else
     {
         wxFAIL_MSG( _T("unknown mode") );

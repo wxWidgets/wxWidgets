@@ -123,6 +123,8 @@ public:
 
     // implement wxComboPopup methods
     virtual bool SetSelection(const wxString& value);
+    virtual void SetSelection(int n, bool select)
+        { wxListBox::SetSelection( n, select); };
     virtual wxControl *GetControl() { return this; }
     virtual void OnShow();
     virtual wxCoord GetBestWidth() const;
