@@ -208,6 +208,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <set var="BASE_CMN_SRC" hints="files">
     src/common/appbase.cpp
+    src/common/archive.cpp
     src/common/clntdata.cpp
     src/common/cmdline.cpp
     src/common/config.cpp
@@ -253,7 +254,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/textfile.cpp
     src/common/tokenzr.cpp
     src/common/txtstrm.cpp
-    src/common/archive.cpp
     src/common/uri.cpp
     src/common/variant.cpp
     src/common/wfstream.cpp
@@ -273,6 +273,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/afterstd.h
     wx/app.h
     wx/apptrait.h
+    wx/archive.h
     wx/arrimpl.cpp
     wx/arrstr.h
     wx/beforestd.h
