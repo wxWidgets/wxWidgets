@@ -30025,6 +30025,12 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"FRAME_DRAWER", SWIG_From_int((int)(wxFRAME_DRAWER))); 
     }
     {
+        PyDict_SetItemString(d,"FRAME_EX_METAL", SWIG_From_int((int)(wxFRAME_EX_METAL))); 
+    }
+    {
+        PyDict_SetItemString(d,"DIALOG_EX_METAL", SWIG_From_int((int)(wxDIALOG_EX_METAL))); 
+    }
+    {
         PyDict_SetItemString(d,"DIALOG_MODAL", SWIG_From_int((int)(wxDIALOG_MODAL))); 
     }
     {

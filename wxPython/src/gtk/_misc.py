@@ -155,7 +155,7 @@ class SystemSettings(object):
 
     GetFont = staticmethod(GetFont)
     def GetMetric(*args, **kwargs):
-        """GetMetric(int index) -> int"""
+        """GetMetric(int index, Window win=None) -> int"""
         return _misc_.SystemSettings_GetMetric(*args, **kwargs)
 
     GetMetric = staticmethod(GetMetric)
@@ -191,7 +191,7 @@ def SystemSettings_GetFont(*args, **kwargs):
     return _misc_.SystemSettings_GetFont(*args, **kwargs)
 
 def SystemSettings_GetMetric(*args, **kwargs):
-    """SystemSettings_GetMetric(int index) -> int"""
+    """SystemSettings_GetMetric(int index, Window win=None) -> int"""
     return _misc_.SystemSettings_GetMetric(*args, **kwargs)
 
 def SystemSettings_HasFeature(*args, **kwargs):

@@ -21,11 +21,6 @@
 %rename(CENTER_FRAME)                       wxCENTER_FRAME;
 %rename(CENTRE_ON_SCREEN)                   wxCENTRE_ON_SCREEN;
 %rename(CENTER_ON_SCREEN)                   wxCENTER_ON_SCREEN;
-%rename(ED_CLIENT_MARGIN)                   wxED_CLIENT_MARGIN;
-%rename(ED_BUTTONS_BOTTOM)                  wxED_BUTTONS_BOTTOM;
-%rename(ED_BUTTONS_RIGHT)                   wxED_BUTTONS_RIGHT;
-%rename(ED_STATIC_LINE)                     wxED_STATIC_LINE;
-%rename(EXT_DIALOG_STYLE)                   wxEXT_DIALOG_STYLE;
 %rename(CLIP_CHILDREN)                      wxCLIP_CHILDREN;
 %rename(CLIP_SIBLINGS)                      wxCLIP_SIBLINGS;
 %rename(ALWAYS_SHOW_SB)                     wxALWAYS_SHOW_SB;
