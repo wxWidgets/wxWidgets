@@ -633,6 +633,7 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
         szx, szy,       // view size (total)
         clix, cliy;     // view size (on screen)
 
+    int y;
     ViewStart(&stx, &sty);
     GetClientSize(&clix, &cliy);
     GetVirtualSize(&szx, &szy);
@@ -662,7 +663,7 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
     {
         case WXK_PAGEUP:
         case WXK_PRIOR:
-            int y = sty - (5 * cliy / 6);
+            y = sty - (5 * cliy / 6);
             Scroll(-1, (y == -1) ? 0 : y);
             break;
 
