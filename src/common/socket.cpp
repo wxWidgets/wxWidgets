@@ -9,8 +9,6 @@
 // License:    see wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include <windows.h>
-
 #ifdef __GNUG__
 #pragma implementation "socket.h"
 #endif
@@ -82,7 +80,7 @@ wxSocketBase::wxSocketBase(wxSocketBase::wxSockFlags _flags,
   m_cbk(NULL), m_cdata(NULL),
   m_connected(FALSE), m_establishing(FALSE),
   m_notify_state(FALSE), m_id(-1),
-  m_defering(NO_DEFER),
+  m_defering(NO_DEFER), m_error(FALSE),
   m_states()
 {
 }
@@ -96,7 +94,7 @@ wxSocketBase::wxSocketBase() :
   m_cbk(NULL), m_cdata(NULL),
   m_connected(FALSE), m_establishing(FALSE),
   m_notify_state(FALSE), m_id(-1),
-  m_defering(NO_DEFER),
+  m_defering(NO_DEFER), m_error(FALSE),
   m_states()
 {
 }
@@ -142,6 +140,13 @@ bool wxSocketBase::Close()
 // no longer have to change the event mask with SetNotify()
 // in internal functions like DeferRead, DeferWrite, and
 // the like. This solves a lot of problems.
+
+// GRG: I added m_error handling to IO operations. Now,
+// wxSocketBase::Error() correctly indicates if the last
+// operation from {Read, Write, ReadMsg, WriteMsg, Peek,
+// Unread, Discard} failed. Note that now, every function
+// that updates m_lcount, also updates m_error. While I
+// was at it, also fixed an UGLY bug in ReadMsg.
 
 class _wxSocketInternalTimer: public wxTimer
 {
@@ -197,12 +202,21 @@ wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
 {
   int ret = 1;
 
+  m_error = FALSE;
+
+  // we try this even if the connection has already been closed.
   m_lcount = GetPushback(buffer, nbytes, FALSE);
   nbytes -= m_lcount;
   buffer += m_lcount;
 
-  if (!m_connected)
+  if (!m_connected || !m_socket)
+  {
+    // if no data retrieved AND not connected, it is an error.
+    if (!m_lcount)
+      m_error = TRUE;
+
     return *this;
+  }
 
   // If we have got the whole needed buffer, return immediately
   if (!nbytes)
@@ -238,13 +252,23 @@ wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
       m_lcount += ret;
   }
 
+  // If we have read some data, then it is not an error, even
+  // when in WAITALL mode, the last low-level IO call might
+  // have failed.
+  if (!m_lcount)
+    m_error = TRUE;
+
   return *this;
 }
 
 wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
 {
+#define MAX_BUFSIZE (10 * 1024)
+
+  int old_flags;
   unsigned long len, len2, sig;
-  struct {
+  struct
+  {
     char sig[4];
     char len[4];
   } msg;
@@ -252,9 +276,16 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   // sig should be an explicit 32-bit unsigned integer; I've seen
   // compilers in which wxUint32 was actually a 16-bit unsigned integer
 
+  old_flags = m_flags;
+  SetFlags(WAITALL | SPEED);
+
   Read((char *)&msg, sizeof(msg));
   if (m_lcount != sizeof(msg))
+  {
+    SetFlags(old_flags);
+    m_error = TRUE;
     return *this;
+  }
 
   sig = msg.sig[0] & 0xff;
   sig |= (wxUint32)(msg.sig[1] & 0xff) << 8;
@@ -262,41 +293,79 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   sig |= (wxUint32)(msg.sig[3] & 0xff) << 24;
 
   if (sig != 0xfeeddead)
+  {
+    wxLogDebug(_T("Warning: invalid signature returned to ReadMsg\n"));
+    SetFlags(old_flags);
+    m_error = TRUE;
     return *this;
+  }
+
   len = msg.len[0] & 0xff;
   len |= (wxUint32)(msg.len[1] & 0xff) << 8;
   len |= (wxUint32)(msg.len[2] & 0xff) << 16;
   len |= (wxUint32)(msg.len[3] & 0xff) << 24;
 
-  // len2 is incorrectly computed in the original; this sequence is
-  // the fix
-  if (len > nbytes) {
+  if (len > nbytes)
+  {
     len2 = len - nbytes;
     len = nbytes;
   }
   else
     len2 = 0;
 
-  // the "len &&" in the following statement is necessary so that
-  // we don't attempt to read (and possibly hang the system)
+  // The "len &&" in the following statements is necessary so 
+  // that we don't attempt to read (and possibly hang the system)
   // if the message was zero bytes long
   if (len && Read(buffer, len).LastCount() != len)
+  {
+    SetFlags(old_flags);
+    m_error = TRUE;
     return *this;
-  if (len2 && (Read(NULL, len2).LastCount() != len2))
-    return *this;
+  }
+  if (len2)
+  {
+    char *discard_buffer = new char[MAX_BUFSIZE];
+    long discard_len;
+
+    do
+    {
+      discard_len = ((len2 > MAX_BUFSIZE)? MAX_BUFSIZE : len2);
+      discard_len = Read(discard_buffer, discard_len).LastCount();
+      len2 -= discard_len;
+    }
+    while ((discard_len > 0) && len2);
+
+    delete [] discard_buffer;
+
+    if (len2 != 0)
+    {
+      SetFlags(old_flags);
+      m_error = TRUE;
+      return *this;
+    }
+  }
   if (Read((char *)&msg, sizeof(msg)).LastCount() != sizeof(msg))
+  {
+    SetFlags(old_flags);
+    m_error = TRUE;
     return *this;
+  }
 
   sig = msg.sig[0] & 0xff;
   sig |= (wxUint32)(msg.sig[1] & 0xff) << 8;
   sig |= (wxUint32)(msg.sig[2] & 0xff) << 16;
   sig |= (wxUint32)(msg.sig[3] & 0xff) << 24;
 
-// ERROR
   if (sig != 0xdeadfeed)
+  {
+    m_error = TRUE;
     wxLogDebug(_T("Warning: invalid signature returned to ReadMsg\n"));
+  }
 
+  SetFlags(old_flags);
   return *this;
+
+#undef MAX_BUFSIZE
 }
 
 wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
@@ -349,9 +418,13 @@ wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
   int ret = 1;
 
   m_lcount = 0;
+  m_error = FALSE;
 
-  if (!m_connected)
+  if (!m_connected || !m_socket)
+  {
+    m_error = TRUE;
     return *this;
+  }
 
   if (m_flags & SPEED & WAITALL)    // SPEED && WAITALL
   {
@@ -381,11 +454,18 @@ wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
       m_lcount += ret;
   }
 
+  // If we have written some data, then it is not an error,
+  // even when in WAITALL mode, the last low-level IO call
+  // might have failed.
+  if (!m_lcount)
+    m_error = TRUE;
+
   return *this;
 }
 
 wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
 {
+  int old_flags;
   struct {
     char sig[4];
     char len[4];
@@ -406,18 +486,33 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
   msg.len[2] = (char) (nbytes >> 16) & 0xff;
   msg.len[3] = (char) (nbytes >> 24) & 0xff;
 
+  // GRG: We need WAITALL | SPEED
+  old_flags = m_flags;
+  SetFlags(WAITALL | SPEED);
+
   if (Write((char *)&msg, sizeof(msg)).LastCount() < sizeof(msg))
+  {
+    SetFlags(old_flags);
+    m_error = TRUE;
     return *this;
+  }
   if (Write(buffer, nbytes).LastCount() < nbytes)
+  {
+    SetFlags(old_flags);
+    m_error = TRUE;
     return *this;
+  }
 
   msg.sig[0] = (char) 0xed;
   msg.sig[1] = (char) 0xfe;
   msg.sig[2] = (char) 0xad;
   msg.sig[3] = (char) 0xde;
   msg.len[0] = msg.len[1] = msg.len[2] = msg.len[3] = (char) 0;
-  Write((char *)&msg, sizeof(msg));
 
+  if (Write((char *)&msg, sizeof(msg)).LastCount() < sizeof(msg))
+    m_error = TRUE;
+
+  SetFlags(old_flags);
   return *this;
 
 #ifdef __VISUALC__
@@ -427,7 +522,9 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
 
 wxSocketBase& wxSocketBase::Unread(const char *buffer, wxUint32 nbytes)
 {
+  m_error = FALSE;
   m_lcount = 0;
+
   if (nbytes != 0)
   {
     CreatePushbackAfter(buffer, nbytes);
@@ -490,17 +587,22 @@ void wxSocketBase::Discard()
 
   char *my_data = new char[MAX_BUFSIZE];
   wxUint32 recv_size = MAX_BUFSIZE;
+  wxUint32 total = 0;
 
   SaveState();
-  SetFlags(NOWAIT | SPEED);
+  SetFlags(NOWAIT);     // GRG: SPEED was not needed here!
 
   while (recv_size == MAX_BUFSIZE)
   {
     recv_size = Read(my_data, MAX_BUFSIZE).LastCount();
+    total += recv_size;
   }
 
   RestoreState();
   delete [] my_data;
+
+  m_lcount = total;
+  m_error = FALSE;
 
 #undef MAX_BUFSIZE
 }
@@ -646,6 +748,14 @@ bool wxSocketBase::WaitForWrite(long seconds, long milliseconds)
 bool wxSocketBase::WaitForLost(long seconds, long milliseconds)
 {
   return _Wait(seconds, milliseconds, GSOCK_LOST_FLAG);
+}
+
+void wxSocketBase::SetTimeout(long seconds)
+{
+  m_timeout = seconds;
+
+  if (m_socket)
+    GSocket_SetTimeout(m_socket, m_timeout);
 }
 
 // --------------------------------------------------------------
@@ -873,6 +983,9 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
 {
   GSocket *child_socket;
 
+  if (!m_socket)
+    return FALSE;
+
   // GRG: If wait == FALSE, then the call should be nonblocking.
   // When we are finished, we put the socket to blocking mode
   // again.
@@ -913,7 +1026,7 @@ wxSocketBase *wxSocketServer::Accept(bool wait)
   return sock;
 }
 
-bool wxSocketServer::WaitOnAccept(long seconds, long milliseconds)
+bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
 {
   return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
 }
@@ -994,7 +1107,7 @@ bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
   if (m_connected)      // Already connected
     return TRUE;
 
-  if (!m_establishing)  // No connection in progress
+  if (!m_establishing || !m_socket)  // No connection in progress
     return FALSE;
 
   ret = _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
@@ -1013,12 +1126,6 @@ bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
   }
 
   return m_connected;
-}
-
-
-void wxSocketClient::OnRequest(wxSocketNotify req_evt)
-{
-  wxSocketBase::OnRequest(req_evt);
 }
 
 
