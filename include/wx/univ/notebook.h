@@ -139,8 +139,8 @@ protected:
     // is the spin button currently shown?
     bool HasSpinBtn() const;
 
-    // calculate last (fully) visible tab
-    size_t CalcLastVisibleTab() const;
+    // calculate last (fully) visible tab: updates m_lastVisible
+    void CalcLastVisibleTab();
 
     // show or hide the spin control for tabs scrolling depending on whether it
     // is needed or not
@@ -210,9 +210,16 @@ protected:
     // the offset of the first page shown (may be changed with m_spinbtn)
     wxCoord m_offset;
 
-    // the first and last currently visible tabs
+    // the first and last currently visible tabs: the name is not completely
+    // accurate as m_lastVisible is, in fact, the first tab which is *not*
+    // visible: so the visible tabs are those with indexes such that
+    // m_firstVisible <= n < m_lastVisible
     size_t m_firstVisible,
            m_lastVisible;
+
+    // the last fully visible item, usually just m_lastVisible - 1 but may be
+    // different from it
+    size_t m_lastFullyVisible;
 
     // the height of tabs in a normal notebook or the width of tabs in a
     // notebook with tabs on a side
