@@ -29,8 +29,11 @@
 /*  ---------------------------------------------------------------------------- */
 
 /*  helpers for wxVERSION_NUM_XXX */
-#define wxMAKE_VERSION_STRING(x, y, z) #x #y #z
-#define wxMAKE_VERSION_DOT_STRING(x, y, z) #x "." #y "." #z
+#define wxSTRINGIZE(x)  #x
+#define wxMAKE_VERSION_STRING(x, y, z) \
+    wxSTRINGIZE(x) wxSTRINGIZE(y) wxSTRINGIZE(z)
+#define wxMAKE_VERSION_DOT_STRING(x, y, z) \
+    wxSTRINGIZE(x) "." wxSTRINGIZE(y) "." wxSTRINGIZE(z)
 
 /*  these are used by src/msw/version.rc and should always be ASCII, not Unicode */
 #define wxVERSION_NUM_STRING \
