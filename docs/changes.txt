@@ -7,6 +7,8 @@ wxWidgets 2.5 Change Log - For more verbose changes, see the manual
 
 All:
 
+- wxEvent and its derivatives have their variable members nonpublic now.
+  Use the Get/Set accessors (Mart Raudsepp)
 - new classes for reading and writing ZIP files (M.J.Wetherell)
 - large files support for wxFFile (M.J.Wetherell)
 - classes in the manual are now cross-referenced (Zbigniew Zagórski)
@@ -71,6 +73,7 @@ wxGTK:
   runtime, which library version is installed so that these functions
   are only called with GTK+ 2.4.x installed and should yield linker
   errors otherwise.
+- wxTextCtrl text insertion efficiency fixed. (Mart Raudsepp)
 
 wxMac:
 
