@@ -508,7 +508,7 @@
             // time.h functions
             #define  wxAsctime   wasciitime
             #define  wxCtime     wctime
-            #define  wxStrftime  wcsftime
+            // #define  wxStrftime  wcsftime
 
             /*
             #define wxNEED_FPUTWC
@@ -527,8 +527,8 @@
             // use our own versions
             #define wxNEED_WX_STDIO_H
             #define wxNEED_WX_STDLIB_H
-            #define wxNEED_WX_TIME_H
             */
+            #define wxNEED_WX_TIME_H
         #else // !metrowerks for apple
             #error  "Please define wide character functions for your environment"
         #endif
@@ -580,7 +580,7 @@
         #define  wxStrxfrm   strxfrm
 
         // stdio.h functions
-        #if defined(__WXMAC__) && !defined(__DARWIN__)
+        #if defined(__WXMAC__) && !defined(__DARWIN__)  && !defined(wxUSE_UNICODE)
         #include <stdio.h>
         WXDLLIMPEXP_BASE FILE *   wxFopen(const wxChar *path, const wxChar *mode);
         WXDLLIMPEXP_BASE FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);
