@@ -222,9 +222,9 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
 
     TAG_HANDLER_PROC(tag)
     {
-        if(tag.HasParam("STYLE"))
+        if (tag.HasParam(wxT("STYLE")))
         {
-            if(tag.GetParam("STYLE").IsSameAs(wxString("PAGE-BREAK-BEFORE:ALWAYS"), FALSE))
+            if (tag.GetParam(wxT("STYLE")).IsSameAs(wxString(wxT("PAGE-BREAK-BEFORE:ALWAYS")), FALSE))
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer()->InsertCell(new wxHtmlPageBreakCell);
@@ -238,7 +238,7 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
                 return FALSE;
             }
         }
-        else if(tag.HasParam("ALIGN"))
+        else if (tag.HasParam(wxT("ALIGN")))
         {
             int old = m_WParser->GetAlign();
             wxHtmlContainerCell *c = m_WParser->GetContainer();
@@ -290,7 +290,7 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
             if (wfr)
             {
                 const wxString& src = *m_WParser->GetSource();
-                wfr->OnSetTitle(src.Mid(tag.GetBeginPos(), 
+                wfr->OnSetTitle(src.Mid(tag.GetBeginPos(),
                                         tag.GetEndPos1()-tag.GetBeginPos()));
             }
         }
