@@ -1445,7 +1445,9 @@ void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
     EventRecord* ev = (EventRecord*) evr ;
 #if TARGET_CARBON
     if ( ev->what == mouseDown || ev->what == mouseUp || ev->what == activateEvt ||
-        ev->what == keyDown || ev->what == autoKey || ev->what == keyUp || ev->what == nullEvent )
+        ev->what == keyDown || ev->what == autoKey || ev->what == keyUp || ev->what == kHighLevelEvent ||
+        ev->what == nullEvent
+        )
     {
         // in these cases the modifiers are already correctly setup by carbon
     }
