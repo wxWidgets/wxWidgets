@@ -171,8 +171,8 @@ void wxListBase::DoCopy(const wxListBase& list)
     m_nodeFirst =
     m_nodeLast = (wxNodeBase *) NULL;
 
-    switch (m_keyType) {
-
+    switch (m_keyType)
+    {
         case wxKEY_INTEGER:
             {
                 long key;

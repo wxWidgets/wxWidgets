@@ -70,7 +70,7 @@ bool MyApp::OnInit(void)
     
     //// Create a document manager
     m_docManager = new wxDocManager;
-    
+
     //// Create a template relating drawing documents to their views
     (void) new wxDocTemplate(m_docManager, "Drawing", "*.drw", "", "drw", "Drawing Doc", "Drawing View",
         CLASSINFO(DrawingDocument), CLASSINFO(DrawingView));
