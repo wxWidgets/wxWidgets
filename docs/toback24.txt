@@ -28,13 +28,6 @@ Checking in wx.rc;
 new revision: 1.29; previous revision: 1.28
 done
 
-4. Fix wxLocale::Init with Unicode-only languages (does it work with BCC?)
-
-Checking in intl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
-new revision: 1.93; previous revision: 1.92
-done
-
 5. proper AcceptsFocus() implementation for containers
 
 http://sf.net/tracker/index.php?func=detail&aid=718913&group_id=9863&atid=309863
@@ -126,21 +119,6 @@ Checking in src/msw/fdrepdlg.cpp;
 new revision: 1.10; previous revision: 1.9
 
 
-14. Crash in ~wxLocale and incorrect GetLanguage() return value
-
-http://sf.net/tracker/index.php?func=detail&aid=729758&group_id=9863&atid=309863
-
-Checking in src/common/intl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
-new revision: 1.95; previous revision: 1.94
-done
-Checking in intl.cpp
-/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
-new revision: 1.102; previous revision: 1.101
-done
-
-
-
 15. Fixes for mono bitmaps in wxGTK
 
 http://sf.net/tracker/index.php?func=detail&aid=728768&group_id=9863&atid=309863
@@ -219,23 +197,6 @@ Checking in src/msw/window.cpp;
 new revision: 1.381; previous revision: 1.380
 done
 
-24. Fix wxLocale::Init to try xx_YY.utf8 on systems where xx_YY fails
-(presumably RedHat; do it in Unicode mode only)
-
-See: Patch [ 766893 ], [ 775994 ]
-Checking in intl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
-new revision: 1.97; previous revision: 1.96
-done
-Checking in intl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
-new revision: 1.100; previous revision: 1.99
-done
-Checking in changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.297; previous revision: 1.296
-done
-
 25. wxGenericListCtrl::Refresh() (didn't work at all before)
 
 Checking in include//wx/generic/listctrl.h;
@@ -275,6 +236,11 @@ new revision: 1.71; previous revision: 1.70
 Checking in window.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/window.cpp,v  <--  window.cpp
 new revision: 1.431; previous revision: 1.430
+
+29. Fix wxString::Format() for C99-compatible vsnprintf()
+Checking in src/common/string.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/string.cpp,v  <--  string.cpp
+new revision: 1.194; previous revision: 1.193
 
 29. Fix infinite loop in IsDialoMessage when a panel is reparented after
     creation (as happens with XRC)
