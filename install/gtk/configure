@@ -36,7 +36,7 @@ ac_help="$ac_help
 ac_help="$ac_help
 **--with-opengl           use opengl (OpenGL or Mesa)"
 ac_help="$ac_help
-**--with-apple-ieee	  use the Apple IEEE codec"
+**--with_apple_ieee	  use the Apple IEEE codec"
 ac_help="$ac_help
 **--with-storable         use storable classes"
 ac_help="$ac_help
@@ -4739,15 +4739,15 @@ fi
 
 
 
-echo $ac_n "checking "for apple-ieee"""... $ac_c" 1>&6
-echo "configure:4744: checking "for apple-ieee"" >&5
-# Check whether --with-apple-ieee or --without-apple-ieee was given.
+echo $ac_n "checking "for apple_ieee"""... $ac_c" 1>&6
+echo "configure:4744: checking "for apple_ieee"" >&5
+# Check whether --with-apple_ieee or --without-apple_ieee was given.
 if test "${with_apple_ieee+set}" = set; then
   withval="$with_apple_ieee"
-  if test "x$with_apple-ieee" = xyes; then
-  ac_cv_use_apple-ieee='USE_APPLE_IEEE="1"'
+  if test "x$with_apple_ieee" = xyes; then
+  ac_cv_use_apple_ieee='USE_APPLE_IEEE="1"'
 else
-  ac_cv_use_apple-ieee='USE_APPLE_IEEE="0"'
+  ac_cv_use_apple_ieee='USE_APPLE_IEEE="0"'
 fi
 else
   
@@ -4755,12 +4755,12 @@ else
   if test "x$LINE" != x ; then
     eval "DEFAULT_$LINE"
   fi
-  ac_cv_use_apple-ieee='USE_APPLE_IEEE='$DEFAULT_USE_APPLE_IEEE
+  ac_cv_use_apple_ieee='USE_APPLE_IEEE='$DEFAULT_USE_APPLE_IEEE
 
 fi
 
-eval "$ac_cv_use_apple-ieee"
-echo $ac_cv_use_apple-ieee >> ${OSTYPE}.system.cache.tmp
+eval "$ac_cv_use_apple_ieee"
+echo $ac_cv_use_apple_ieee >> ${OSTYPE}.system.cache.tmp
 if test "$USE_APPLE_IEEE" = 1; then
   echo "$ac_t""yes" 1>&6
 else

@@ -784,8 +784,8 @@ dnl ----------------------------------------------------------------
 dnl user options for code features (no choice yet)
 dnl ----------------------------------------------------------------
 
-AC_OVERRIDES(apple-ieee, apple-ieee,
-**--with-apple-ieee	  use the Apple IEEE codec,
+AC_OVERRIDES(apple_ieee, apple_ieee,
+**--with_apple_ieee	  use the Apple IEEE codec,
 USE_APPLE_IEEE)
 
 AC_OVERRIDES(storable,storable,
