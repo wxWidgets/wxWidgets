@@ -74,9 +74,14 @@ are more short and clear than versions with {\tt #ifdef}s.
 \subsection{Supported bitmap file formats}\label{supportedbitmapformats}
 
 The following lists the formats handled on different platforms. Note
-that missing or partially-implemented formats can be supplemented
-by using \helpref{wxImage}{wximage} to load the data, and then converting
-it to wxBitmap form.
+that missing or partially-implemented formats are automatically supplemented
+by the \helpref{wxImage}{wximage} to load the data, and then converting
+it to wxBitmap form. Note that using wxImage is the preferred way to
+load images in wxWindows, with the exception of resources (XPM-files or
+native Windows resources). Writing an image format handler for wxImage
+is also far easier than writing one for wxBitmap, because wxImage has
+exactly one format on all platforms wheras wxBitmap can store pixel data
+very differently, depending on colour depths and platform.
 
 \wxheading{wxBitmap}
 
@@ -85,25 +90,23 @@ Under Windows, wxBitmap may load the following formats:
 \begin{itemize}\itemsep=0pt
 \item Windows bitmap resource (wxBITMAP\_TYPE\_BMP\_RESOURCE)
 \item Windows bitmap file (wxBITMAP\_TYPE\_BMP)
-\item PNG file (wxBITMAP\_TYPE\_PNG). Currently 4-bit (16-colour) PNG files do not load properly.
 \item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\item All formats that are supported by the \helpref{wxImage}{wximage} class.
 \end{itemize}
 
 Under wxGTK, wxBitmap may load the following formats:
 
 \begin{itemize}\itemsep=0pt
-\item Windows bitmap file (wxBITMAP\_TYPE\_BMP)
-\item PNG (wxBITMAP\_TYPE\_PNG).
 \item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\item All formats that are supported by the \helpref{wxImage}{wximage} class.
 \end{itemize}
 
 Under wxMotif, wxBitmap may load the following formats:
 
 \begin{itemize}\itemsep=0pt
-%\item Windows bitmap file (wxBITMAP\_TYPE\_BMP)
-%\item PNG (wxBITMAP\_TYPE\_PNG).
 \item XBM data and file (wxBITMAP\_TYPE\_XBM)
 \item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\item All formats that are supported by the \helpref{wxImage}{wximage} class.
 \end{itemize}
 
 \wxheading{wxIcon}
@@ -119,17 +122,16 @@ Under Windows, wxIcon may load the following formats:
 Under wxGTK, wxIcon may load the following formats:
 
 \begin{itemize}\itemsep=0pt
-\item PNG (wxBITMAP\_TYPE\_PNG).
 \item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\item All formats that are supported by the \helpref{wxImage}{wximage} class.
 \end{itemize}
 
 Under wxMotif, wxIcon may load the following formats:
 
 \begin{itemize}\itemsep=0pt
-%\item Windows bitmap file (wxBITMAP\_TYPE\_BMP)
-%\item PNG (wxBITMAP\_TYPE\_PNG).
 \item XBM data and file (wxBITMAP\_TYPE\_XBM)
 \item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\item All formats that are supported by the \helpref{wxImage}{wximage} class (?).
 \end{itemize}
 
 \wxheading{wxCursor}

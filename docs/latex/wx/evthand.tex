@@ -47,16 +47,16 @@ method.
 \wxheading{Remarks}
 
 Note that this requires that the event has a fully implemented Clone()
-methods so that the event can be duplicated and stored until later processing.
+method so that the event can be duplicated and stored until it gets processed later.
 Not all events in wxWindows currently have a fully implemented Clone() method,
-you may have to look at the source to verify this.
+so you may have to look at the source to verify this.
 
 This methods automatically wakes up idle handling even if the underlying window 
 system is currently idle anyway and thus would not send any idle events. (Waking
 up the idle handling is done calling \helpref{::wxWakeUpIdle}{wxwakeupidle}.)
 
-This is also the method to call for inter-thread communication. When using
-a multi-threading program, you will often have to inform the main GUI thread
+This is also the method to call for inter-thread communication. In
+a multi-threaded program, you will often have to inform the main GUI thread
 about the status of other working threads and this has to be done using this
 method - which also means that this method is thread safe by means of using
 crtical sections where needed.
@@ -109,10 +109,10 @@ is an alternative to the use of static event tables. See the 'dynamic' sample fo
  \param{wxObject*}{ userData = NULL}}
 
 Disconnects the given function dynamically from the event handler, using the specified
-parameters as search criteria and returning TRUE if a matching event handler has been
-found and removed. This method can only disconnect from functions which have been added
+parameters as search criteria and returning TRUE if a matching function has been
+found and removed. This method can only disconnect functions which have been added
 using the \helpref{wxEvtHandler::Connect}{wxevthandlerconnect} method. There is no way
-to disconnect from events used in the (static) event tables.
+to disconnect functions connected using the (static) event tables.
 
 \wxheading{Parameters}
 
@@ -124,19 +124,18 @@ to disconnect from events used in the (static) event tables.
 
 \docparam{function}{The event handler function.}
 
-\docparam{userData}{Data to be associated with the event table entry.}
+\docparam{userData}{Data associated with the event table entry.}
 
 \membersection{wxEvtHandler::GetClientData}\label{wxevthandlergetclientdata}
 
-\func{char* }{GetClientData}{\void}
+\func{void* }{GetClientData}{\void}
 
 Gets user-supplied client data.
 
 \wxheading{Remarks}
 
 Normally, any extra data the programmer wishes to associate with the object
-should be made available by deriving a new class
-with new data members.
+should be made available by deriving a new class with new data members.
 
 \wxheading{See also}
 
@@ -270,7 +269,7 @@ fail, and searching will continue.
 
 \membersection{wxEvtHandler::SetClientData}\label{wxevthandlersetclientdata}
 
-\func{void}{SetClientData}{\param{char* }{data}}
+\func{void}{SetClientData}{\param{void* }{data}}
 
 Sets user-supplied client data.
 
@@ -280,10 +279,9 @@ Sets user-supplied client data.
 
 \wxheading{Remarks}
 
-Normally, any extra data the programmer wishes
-to associate with the object should be made available by deriving a new class
+Normally, any extra data the programmer wishes to associate with 
+the object should be made available by deriving a new class
 with new data members.
-%TODO: make this void*, char* only in compatibility mode.
 
 \wxheading{See also}
 

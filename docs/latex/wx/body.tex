@@ -79,27 +79,29 @@ here are some of the benefits:
 \item Low cost (free, in fact!)
 \item You get the source.
 \item Available on a variety of popular platforms.
-\item Works with almost all popular C++ compilers.
-\item Several example programs.
+\item Works with almost all popular C++ compilers and Python.
+\item Over 40 example programs.
 \item Over 900 pages of printable and on-line documentation.
 \item Includes Tex2RTF, to allow you to produce your own documentation
 in Windows Help, HTML and Word RTF formats.
 \item Simple-to-use, object-oriented API.
 \item Flexible event system.
 \item Graphics calls include lines, rounded rectangles, splines, polylines, etc.
-\item Constraint-based layout option.
+\item Constraint-based and sizer-based layouting.
 \item Print/preview and document/view architectures.
 \item Toolbar, notebook, tree control, advanced list control classes.
-\item PostScript generation under Unix, normal MS Windows printing on the
-PC.
+\item PostScript generation under Unix, normal MS Windows printing on the PC.
 \item MDI (Multiple Document Interface) support.
 \item Can be used to create DLLs under Windows, dynamic libraries on Unix.
 \item Common dialogs for file browsing, printing, colour selection, etc.
 \item Under MS Windows, support for creating metafiles and copying
 them to the clipboard.
 \item An API for invoking help from applications.
+\item Ready to use HTML window (supporting a subset of HTML).
 \item Dialog Editor for building dialogs.
 \item Network support via a family of socket and protocol classes.
+\item Support for platform independent image procesing.
+\item Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM, PNM, PCX).
 \end{itemize}
 
 \section{Changes from version 1.xx}\label{versionchanges}
@@ -165,6 +167,36 @@ borders;
 \item MDI classes brought out of wxFrame into separate classes, and made more flexible.
 \end{itemize}
 
+
+\section{Changes from version 2.0}\label{versionchanges20}
+
+These are a few of the differences between versions 2.0 and 2.2.
+
+Removals:
+
+\begin{itemize}\itemsep=0pt
+\item GTK 1.0 no longer supported.
+\end{itemize}
+
+Additions and changes:
+
+\begin{itemize}\itemsep=0pt
+\item Corrected many classes to conform better to documented behaviour.
+\item Added handlers for more image formats (Now GIF, JPEG, PCX, BMP, XPM, PNG, PNM).
+\item Improved support for socket and network functions.
+\item Support for different national font encodings.
+\item Sizer based layout system.
+\item HTML widget and help system.
+\item Added some controls (e.g. wxSpinCtrl) and supplemented many.
+\item Many optical improvements to GTK port.
+\item Support for menu accelerators in GTK port.
+\item Enhanced and improved support for scrolling, including child windows.
+\item Complete rewrite of clipboard and drag'n'drop classes.
+\item Improved support for ODBC databases.
+\item Improved tab traversal in dialogs.
+\end{itemize}
+
+
 \section{wxWindows requirements}\label{requirements}
 
 To make use of wxWindows, you currently need one or both of the
@@ -184,7 +216,7 @@ Metrowerks CodeWarrior.
 
 \begin{enumerate}\itemsep=0pt
 \item Almost any C++ compiler, including GNU C++ (EGCS 1.1.1 or above).
-\item Almost any Unix workstation, and one of: GTK+ 1.0, GTK+ 1.2, Motif 1.2 or higher, Lesstif.
+\item Almost any Unix workstation, and one of: GTK+ 1.2, Motif 1.2 or higher, Lesstif.
 \item At least 60 MB of disk space.
 \end{enumerate}
 
@@ -287,31 +319,52 @@ multi-megabyte .pch files.
 
 \section{Libraries}
 
-Please the wxGTK or wxMotif documentation for use of the Unix version of wxWindows.
+The GTK and Motif ports of wxWindow can create either a static library or a shared
+library on most Unix or Unix-like systems. The static library is called libwx_gtk.a
+and libwx_motif.a whereas the name of the shared library is dependent on the
+system it is created on and the version you are using. The library name for the
+GTK version of wxWindows 2.2 on Linux and Solaris will be libwx_gtk-2.2.so.0.0.0,
+on HP-UX, it will be libwx_gtk-2.2.sl, on AIX just libwx_gtk.a etc.
+
 Under Windows, use the library wx.lib for stand-alone Windows
 applications, or wxdll.lib for creating DLLs.
 
 \section{Configuration}
 
 Options are configurable in the file
-\rtfsp{\tt "wx/XXX/setup.h"} where XXX is the required platform (such as msw, motif, gtk, mac). Some settings are a matter
-of taste, some help with platform-specific problems, and
+\rtfsp{\tt "wx/XXX/setup.h"} where XXX is the required platform (such as msw, motif, gtk, mac). Some 
+settings are a matter of taste, some help with platform-specific problems, and
 others can be set to minimize the size of the library. Please see the setup.h file
 and {\tt install.txt} files for details on configuration.
+
+Under Unix (GTK and Motif) the corresponding setup.h files are generated automatically
+when configuring the wxWindows using the "configure" script. When using the RPM packages
+for installing wxWindows on Linux, a correct setup.h is shipped in the package and
+this must not be changed.
 
 \section{Makefiles}
 
 At the moment there is no attempt to make Unix makefiles and
 PC makefiles compatible, i.e. one makefile is required for
-each environment. wxGTK has its own configure system which can also
-be used with wxMotif, although wxMotif has a simple makefile system of its own.
+each environment. The Unix ports use a sophisticated system based
+on the GNU autoconf tool and this system will create the
+makefiles as required on the respective platform. Although the
+makefiles are not identical in Windows, Mac and Unix, care has
+been taken to make them relatively similar so that moving from
+one platform to another will be painless.
 
-Sample makefiles for Unix (suffix .UNX), MS C++ (suffix .DOS and .NT), Borland
+Sample makefiles for Unix (suffix .unx), MS C++ (suffix .DOS and .NT), Borland
 C++ (.BCC and .B32) and Symantec C++ (.SC) are included for the library, demos
 and utilities.
 
-The controlling makefile for wxWindows is in the platform-specific
-directory, such as {\tt src/msw} or {\tt src/motif}.
+The controlling makefile for wxWindows is in the MS-Windows
+directory {\tt src/msw} for the different Windows compiler and
+in the build directory when using the Unix ports. The build
+directory can be chosen by the user. It is the directory in
+which the "configure" script is run. This can be the normal
+base directory (by running {\tt ./configure} there) or any other
+directory (e.g. {\tt ../configure} after creating a build-directory
+in the directory level above the base directory).
 
 Please see the platform-specific {\tt install.txt} file for further details.
 
