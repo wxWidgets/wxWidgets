@@ -270,7 +270,7 @@ struct wxHtmlEntityInfo
     unsigned code;
 };
 
-static int compar_entity(const void *key, const void *item)
+static int LINKAGEMODE compar_entity(const void *key, const void *item)
 {
     return wxStrcmp((wxChar*)key, ((wxHtmlEntityInfo*)item)->name);
 }
