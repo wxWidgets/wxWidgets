@@ -44,6 +44,12 @@
 
 %(VALUES)s
 
+
+//-----------------------------------------
+// Commands that can be bound to keystrokes
+%(CMDS)s
+
+
 // END of generated section
 //----------------------------------------------------------------------
 
