@@ -369,7 +369,7 @@ private:                                                            \
    @memo declare objarray class 'name' containing elements of type 'T'
   */
 #define WX_DECLARE_OBJARRAY(T, name)  typedef T _L##name;                 \
-                                      _WX_DECLARE_LIST(_L##name, name)
+                                      _WX_DECLARE_OBJARRAY(_L##name, name)
   /**
     To use an objarray class you must
     <ll>
