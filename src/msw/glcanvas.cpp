@@ -351,11 +351,11 @@ static void AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, int *attribList)
         case WX_GL_LEVEL:
           // this member looks like it may be obsolete
           if (attribList[arg] > 0) {
-            pfd.iLayerType = PFD_OVERLAY_PLANE;
+            pfd.iLayerType = (BYTE)PFD_OVERLAY_PLANE;
           } else if (attribList[arg] < 0) {
-            pfd.iLayerType = PFD_UNDERLAY_PLANE;
+            pfd.iLayerType = (BYTE)PFD_UNDERLAY_PLANE;
           } else {
-            pfd.iLayerType = PFD_MAIN_PLANE;
+            pfd.iLayerType = (BYTE)PFD_MAIN_PLANE;
           }
           arg++;
           break;
