@@ -17,13 +17,13 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#include <wx/setup.h>
+#include "wx/setup.h"
 
 #if wxUSE_GLCANVAS
 
-#include <wx/gdicmn.h>
-#include <wx/palette.h>
-#include <wx/scrolwin.h>
+#include "wx/gdicmn.h"
+#include "wx/palette.h"
+#include "wx/scrolwin.h"
 
 #include <GL/glx.h>
 
