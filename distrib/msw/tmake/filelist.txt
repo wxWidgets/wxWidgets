@@ -114,6 +114,7 @@ wizard.cpp	Generic
 appcmn.cpp	Common	Base
 choiccmn.cpp	Common
 clipcmn.cpp	Common
+clntdata.cpp	Common
 cmdline.cpp	Common	Base
 cmdproc.cpp	Common
 cmndata.cpp	Common
@@ -703,6 +704,7 @@ chkconf.h	WXH	Base
 choicdlg.h	WXH
 choice.h	WXH
 clipbrd.h	WXH
+clntdata.h	WXH
 cmdline.h	WXH	Base
 cmdproc.h	WXH
 cmndata.h	WXH

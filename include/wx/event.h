@@ -18,6 +18,7 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
+#include "wx/clntdata.h"
 
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
@@ -33,7 +34,6 @@
 class WXDLLEXPORT wxList;
 
 #if wxUSE_GUI
-    class WXDLLEXPORT wxClientData;
     class WXDLLEXPORT wxDC;
     class WXDLLEXPORT wxMenu;
     class WXDLLEXPORT wxWindow;
@@ -1551,6 +1551,7 @@ protected:
  wxEVT_COMPARE_ITEM
 */
 
+
 // ============================================================================
 // event handler and related classes
 // ============================================================================
@@ -1650,7 +1651,7 @@ struct WXDLLEXPORT wxEventTable
 // wxEvtHandler: the base class for all objects handling wxWindows events
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxEvtHandler : public wxObject
+class WXDLLEXPORT wxEvtHandler : public wxObject, public wxClientDataContainer
 {
 public:
     wxEvtHandler();
