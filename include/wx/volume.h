@@ -65,7 +65,7 @@ enum wxFSIconType
     wxFS_VOL_ICO_MAX
 };
 
-WX_DECLARE_OBJARRAY(wxIcon, wxIconArray);
+WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
 
 #endif // wxUSE_GUI
 
