@@ -257,10 +257,15 @@ public:
 
     void Broadcast()
     {
+        // we need to save the original value as m_nWaiters is goign to be
+        // decreased by the signalled thread resulting in the loop being
+        // executed less times than needed
+        LONG nWaiters = m_nWaiters;
+
         // this works because all these threads are already waiting and so each
         // SetEvent() inside Signal() is really a PulseEvent() because the
         // event state is immediately returned to non-signaled
-        for ( LONG n = 0; n < m_nWaiters; n++ )
+        for ( LONG n = 0; n < nWaiters; n++ )
         {
             Signal();
         }
