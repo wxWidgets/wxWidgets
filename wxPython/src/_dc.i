@@ -602,7 +602,7 @@ public:
 class wxPostScriptDC : public wxDC {
 public:
     wxPostScriptDC(const wxPrintData& printData);
-//     %name(wxPostScriptDC2)wxPostScriptDC(const wxString& output,
+//     %name(PostScriptDC2)wxPostScriptDC(const wxString& output,
 //                                          bool interactive = TRUE,
 //                                          wxWindow* parent = NULL);
 
@@ -617,7 +617,6 @@ public:
 
 #ifdef __WXMSW__
 %newgroup
-
 
 
 class wxMetaFile : public wxObject {
@@ -649,7 +648,18 @@ public:
     wxMetaFile* Close();
 };
 
+
+class  wxPrinterDC : public wxDC {
+public:
+    wxPrinterDC(const wxPrintData& printData);
+    %name(PrinterDC2) wxPrinterDC(const wxString& driver,
+                                    const wxString& device,
+                                    const wxString& output,
+                                    bool interactive = TRUE,
+                                    int orientation = wxPORTRAIT);
+};
 #endif
+
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

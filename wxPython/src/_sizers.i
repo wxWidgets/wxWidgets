@@ -121,10 +121,13 @@ public:
             // try wxWindow
             if ( ! wxPyConvertSwigPtr(item, (void**)&window, wxT("wxWindow")) ) {
                 PyErr_Clear();
+                window = NULL;
+                
                 // try wxSizer
                 if ( ! wxPyConvertSwigPtr(item, (void**)&sizer, wxT("wxSizer")) ) {
                     PyErr_Clear();
-
+                    sizer = NULL;
+                    
                     // try wxSize or (w,h)
                     if ( ! wxSize_helper(item, &sizePtr))
                         PyErr_SetString(PyExc_TypeError,
