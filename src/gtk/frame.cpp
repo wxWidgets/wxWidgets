@@ -191,8 +191,8 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
-    long decor = (long) 0;
-    long func = (long) GDK_FUNC_MOVE|GDK_FUNC_CLOSE;
+    long decor = (long) GDK_DECOR_BORDER;
+    long func = (long) GDK_FUNC_MOVE;
     
     if ((win->m_windowStyle & wxCAPTION) != 0)
 	decor |= GDK_DECOR_TITLE;
@@ -205,19 +205,16 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
     {
 	func |= GDK_FUNC_MINIMIZE;
 	decor |= GDK_DECOR_MINIMIZE;
-        decor |= GDK_DECOR_BORDER;
     }
     if ((win->m_windowStyle & wxMAXIMIZE_BOX) != 0)
     {
 	func |= GDK_FUNC_MAXIMIZE;
 	decor |= GDK_DECOR_MAXIMIZE;
-        decor |= GDK_DECOR_BORDER;
     }
     if ((win->m_windowStyle & wxRESIZE_BORDER) != 0)
     {
        func |= GDK_FUNC_RESIZE;
        decor |= GDK_DECOR_RESIZEH;
-       decor |= GDK_DECOR_BORDER;
     }
 
     
