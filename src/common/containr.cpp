@@ -237,7 +237,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             if ( !child->GetEventHandler()->ProcessEvent(event) )
             {
                 // everything is simple: just give focus to it
-                child->SetFocus();
+                child->SetFocusFromKbd();
 
                 m_winLastFocused = child;
             }
@@ -360,7 +360,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
                        _T("SetFocusToChild() => last child (0x%08x)."),
                        (*childLastFocused)->GetHandle());
 
-            (*childLastFocused)->SetFocus();
+            (*childLastFocused)->SetFocusFromKbd();
             return TRUE;
         }
         else
@@ -383,7 +383,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
                        child->GetHandle());
 
             *childLastFocused = child;  // should be redundant, but it is not
-            child->SetFocus();
+            child->SetFocusFromKbd();
             return TRUE;
         }
 
