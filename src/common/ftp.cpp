@@ -760,6 +760,9 @@ bool wxFTP::Abort()
 
 wxInputStream *wxFTP::GetInputStream(const wxString& path)
 {
+#if !wxUSE_URL
+    return NULL;
+#else
     if ( ( m_currentTransfermode == NONE ) && !SetTransferMode(BINARY) )
         return NULL;
 
@@ -786,6 +789,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
     wxInputFTPStream *in_stream = new wxInputFTPStream(this, sock);
 
     return in_stream;
+#endif
 }
 
 wxOutputStream *wxFTP::GetOutputStream(const wxString& path)

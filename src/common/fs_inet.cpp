@@ -84,13 +84,14 @@ static wxString StripProtocolAnchor(const wxString& location)
 
 bool wxInternetFSHandler::CanOpen(const wxString& location)
 {
+#if wxUSE_URL
     wxString p = GetProtocol(location);
     if ((p == wxT("http")) || (p == wxT("ftp")))
     {
         wxURL url(p + wxT(":") + StripProtocolAnchor(location));
         return (url.GetError() == wxURL_NOERR);
     }
-
+#endif
     return false;
 }
 
@@ -98,6 +99,9 @@ bool wxInternetFSHandler::CanOpen(const wxString& location)
 wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
                                         const wxString& location)
 {
+#if !wxUSE_URL
+    return NULL;
+#else
     wxString right =
         GetProtocol(location) + wxT(":") + StripProtocolAnchor(location);
 
@@ -130,6 +134,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     }
 
     return (wxFSFile*) NULL; // incorrect URL
+#endif
 }
 
 
