@@ -32,6 +32,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/renderer.h"
+#include "wx/mac/uma.h"
 
 // ----------------------------------------------------------------------------
 // wxRendererMac: our wxRendererNative implementation
@@ -240,44 +241,88 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
                                 wxOrientation orient,
                                 int WXUNUSED(flags))
 {
-    // VZ: we have to somehow determine if we're drawing a normal sash or
-    //     a brushed metal one as they look quite differently... this is
-    //     completely bogus anyhow, of course (TODO)
+#if ( TARGET_API_MAC_OSX == 1 ) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3 )
+    if ( UMAGetSystemVersion() >= 0x1030 )
+    {
+        bool hasMetal = win->MacGetTopLevelWindow()->MacGetMetalAppearance() ;
+        SInt32 height ;
+        GetThemeMetric( kThemeMetricSmallPaneSplitterHeight , &height ) ;
+        HIRect splitterRect ;
+        if ( orient == wxVERTICAL )
+            splitterRect = CGRectMake( position , 0 , height, size.y);
+        else
+            splitterRect = CGRectMake( 0 , position , size.x , height );
+        HIViewConvertRect( &splitterRect , (HIViewRef) win->GetHandle() , (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() ) ;
 
-#if 0
-    dc.SetPen(*wxLIGHT_GREY_PEN);
-    dc.SetBrush(*wxWHITE_BRUSH);
-    if ( orient == wxVERTICAL )
-        dc.DrawRectangle(position, 0, 7, size.y);
-    else
-        dc.DrawRectangle(0, position, size.x, 7);
-#else
-    // Do the gradient fill:
-    static int grayValues[] = 
-    {
-        0xA0, 0xF6, 0xED, 0xE4, 0xE2, 0xD0, 0xA0
-    };
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
-    if ( orient == wxVERTICAL )
-    {
-        int i;
-        for (i=0; i < (int)WXSIZEOF(grayValues); i++) 
+        // under compositing we should only draw when called by the OS, otherwise just issue a redraw command
+        // strange redraw errors occur if we don't do this
+
+        if ( dc.IsKindOf( CLASSINFO( wxPaintDC ) ) == false )
         {
-            dc.SetPen( wxPen( wxColour( grayValues[i] , grayValues[i] , grayValues[i] ),
-                            1 , wxSOLID ) );
-            dc.DrawRectangle( position+i, 0, 1, size.y );
+            Rect r = { splitterRect.origin.y , splitterRect.origin.x , 
+                splitterRect.origin.y + splitterRect.size.height , splitterRect.origin.x + splitterRect.size.width } ;
+            RgnHandle updateRgn = NewRgn() ;
+            RectRgn( updateRgn , &r ) ;
+            HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle() , updateRgn , true ) ;
+            DisposeRgn( updateRgn ) ;
+        }
+        else
+        {
+            CGContextRef cgContext ;
+            Rect bounds ;
+            GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
+            QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
+            CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
+            CGContextScaleCTM( cgContext , 1 , -1 ) ;
+
+            {
+                HIThemeSplitterDrawInfo drawInfo ;
+                drawInfo.version = 0 ;
+                drawInfo.state = kThemeStateActive ;
+                drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone ;
+                HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;    
+            }
+            QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
         }
     }
     else
-    {
-        int i;
-        for (i=0; i < (int)WXSIZEOF(grayValues); i++) 
-        {
-            dc.SetPen( wxPen( wxColour( grayValues[i] , grayValues[i] , grayValues[i] ),
-                            1 , wxSOLID ) );
-            dc.DrawRectangle( 0, position+i, size.x, 1 );
-        }
-    }
 #endif
+    {
+#if 0
+        dc.SetPen(*wxLIGHT_GREY_PEN);
+        dc.SetBrush(*wxWHITE_BRUSH);
+        if ( orient == wxVERTICAL )
+            dc.DrawRectangle(position, 0, 7, size.y);
+        else
+            dc.DrawRectangle(0, position, size.x, 7);
+#else
+        // Do the gradient fill:
+        static int grayValues[] = 
+        {
+            0xA0, 0xF6, 0xED, 0xE4, 0xE2, 0xD0, 0xA0
+        };
+        dc.SetBrush( *wxTRANSPARENT_BRUSH );
+        if ( orient == wxVERTICAL )
+        {
+            int i;
+            for (i=0; i < (int)WXSIZEOF(grayValues); i++) 
+            {
+                dc.SetPen( wxPen( wxColour( grayValues[i] , grayValues[i] , grayValues[i] ),
+                                1 , wxSOLID ) );
+                dc.DrawRectangle( position+i, 0, 1, size.y );
+            }
+        }
+        else
+        {
+            int i;
+            for (i=0; i < (int)WXSIZEOF(grayValues); i++) 
+            {
+                dc.SetPen( wxPen( wxColour( grayValues[i] , grayValues[i] , grayValues[i] ),
+                                1 , wxSOLID ) );
+                dc.DrawRectangle( 0, position+i, size.x, 1 );
+            }
+        }
+#endif
+    }
 }
 
