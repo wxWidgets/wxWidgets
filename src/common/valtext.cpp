@@ -281,7 +281,7 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
               ((m_validatorStyle & wxFILTER_ALPHA) && !isalpha(keyCode)) ||
               ((m_validatorStyle & wxFILTER_ALPHANUMERIC) && !isalnum(keyCode)) ||
               ((m_validatorStyle & wxFILTER_NUMERIC) && !isdigit(keyCode)
-                                && keyCode != '.' && keyCode != '-')
+                                && keyCode != '.' && keyCode != ',' && keyCode != '-')
              )
            )
         {
@@ -301,7 +301,9 @@ static bool wxIsNumeric(const wxString& val)
     int i;
     for ( i = 0; i < (int)val.Length(); i++)
     {
-        if ((!isdigit(val[i])) && (val[i] != '.'))
+        // Allow for "," (French) as well as "." -- in future we should
+        // use wxSystemSettings or other to do better localisation
+        if ((!isdigit(val[i])) && (val[i] != '.') && (val[i] != ','))
           if(!((i == 0) && (val[i] == '-')))
             return FALSE;
     }
