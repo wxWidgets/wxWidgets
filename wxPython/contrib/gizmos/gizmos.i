@@ -36,6 +36,7 @@
 %import windows.i
 %import controls.i
 %pythoncode { wx = core }
+%pythoncode { __docfilter__ = wx.__docfilter__ }
 
 
 MAKE_CONST_WXSTRING2(DynamicSashNameStr,     wxT("dynamicSashWindow"));

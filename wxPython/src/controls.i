@@ -23,6 +23,7 @@
 
 %import core.i
 %pythoncode { wx = core }
+%pythoncode { __docfilter__ = wx.__docfilter__ }
 
 %include _controls_rename.i
 

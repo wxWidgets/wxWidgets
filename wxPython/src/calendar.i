@@ -24,6 +24,7 @@
 
 %import misc.i
 %pythoncode { wx = core }
+%pythoncode { __docfilter__ = wx.__docfilter__ }
 
 %include _calendar_rename.i
 

@@ -213,6 +213,24 @@ class FutureCall:
             wx.CallAfter(self.Stop)
 
 
+
+#----------------------------------------------------------------------------
+# Control which items in this module should be documented by epydoc.
+# We allow only classes and functions, which will help reduce the size
+# of the docs by filtering out the zillions of constants, EVT objects,
+# and etc that don't make much sense by themselves, but are instead
+# documented (or will be) as part of the classes/functions/methods
+# where they should be used.
+
+def __docfilter__(name):
+    import types
+    obj = globals().get(name, None)
+    if type(obj) not in [type, types.ClassType, types.FunctionType, types.BuiltinFunctionType]:
+        return False
+    if name.startswith('_') or name.endswith('Ptr') or name.startswith('EVT'):
+        return False
+    return True
+
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 
