@@ -84,7 +84,7 @@ wxString syntaxTokens[] =
   "\\begin{comment}",
   "\\end{comment}",
   "\\verbatiminput",
-  "\\par",
+//  "\\par",
   "\\input",
   "\\helpinput",
   "\\include",
@@ -419,8 +419,8 @@ bool readInVerbatim = FALSE;  // Within a verbatim, but not nec. verbatiminput
 // detection of \verb yet.
 // #define CHECK_BRACES 1
 
-unsigned long leftCurly = 0;
-unsigned long rightCurly = 0;
+unsigned long leftCurley = 0;
+unsigned long rightCurley = 0;
 static wxString currentFileName = "";
 
 bool read_a_line(char *buf)
@@ -455,19 +455,19 @@ bool read_a_line(char *buf)
     if (checkCurleyBraces)
     {
         if (ch == '{' && !readInVerbatim)
-           leftCurly++;
+           leftCurley++;
         if (ch == '}' && !readInVerbatim)
         {
-           rightCurly++;
-           if (rightCurly > leftCurly)
+           rightCurley++;
+           if (rightCurley > leftCurley)
            {
                wxString errBuf;
-               errBuf.Printf("An extra right curly brace ('}') was detected at line %lu inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+               errBuf.Printf("An extra right Curley brace ('}') was detected at line %lu inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
                OnError((char *)errBuf.c_str());
 
-               // Reduce the count of right curly braces, so the mismatched count
+               // Reduce the count of right Curley braces, so the mismatched count
                // isn't reported on every line that has a '}' after the first mismatch
-               rightCurly--;
+               rightCurley--;
            }
         }
     }
@@ -623,14 +623,14 @@ bool read_a_line(char *buf)
 
       if (checkCurleyBraces)
       {
-          if (leftCurly != rightCurly)
+          if (leftCurley != rightCurley)
           {
             wxString errBuf;
-            errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
+            errBuf.Printf("Curley braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurley,rightCurley);
             OnError((char *)errBuf.c_str());
           }
-          leftCurly = 0;
-          rightCurly = 0;
+          leftCurley = 0;
+          rightCurley = 0;
       }
 
       if (readingVerbatim)
@@ -830,10 +830,10 @@ bool read_a_line(char *buf)
 
   if (checkCurleyBraces)
   {
-      if (ch == EOF && leftCurly != rightCurly)
+      if (ch == EOF && leftCurley != rightCurley)
       {
         wxString errBuf;
-        errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
+        errBuf.Printf("Curley braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurley,rightCurley);
         OnError((char *)errBuf.c_str());
       }
   }

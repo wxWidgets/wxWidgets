@@ -667,7 +667,7 @@ void ProcessText2RTF(TexChunk *chunk)
       i += 1;
       changed = TRUE;
     }
-    else if (inVerbatim && (ch == '{' || ch == '}')) // Escape the curly bracket
+    else if (inVerbatim && (ch == '{' || ch == '}')) // Escape the curley bracket
     {
       BigBuffer[ptr] = '\\'; ptr ++;
       BigBuffer[ptr] = ch; ptr ++;
