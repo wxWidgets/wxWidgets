@@ -54,12 +54,12 @@ public:
     // ------------
 
     wxDC*                           m_pSelectedInto;
-    HPS                             m_hPresentationSpace;
-    LONG                            m_lId;
 
-    // optional mask for transparent drawing
+    //
+    // Optional mask for transparent drawing
+    //
     wxMask*                         m_pBitmapMask;
-};
+}; // end of CLASS wxBitmapRefData
 
 // ----------------------------------------------------------------------------
 // wxBitmap: a mono or colour bitmap
@@ -83,9 +83,8 @@ public:
             );
 
     // Initialize with XPM data
-    wxBitmap( char**     ppData
-             ,wxControl* pAnItem = NULL
-            );
+    wxBitmap(const char** ppData);
+    wxBitmap(char** ppData);
 
     // Load a file or resource
     wxBitmap( const wxString& rName
@@ -214,8 +213,8 @@ public:
     // An OS/2 version that probably doesn't do anything like the msw version
     wxBitmap GetBitmapForDC(wxDC& rDc) const;
 
-    inline LONG GetId() const
-      { return (GetBitmapData() ? GetBitmapData()->m_lId : 0L); }
+//    inline LONG GetId() const
+//      { return (GetBitmapData() ? GetBitmapData()->m_lId : 0L); }
 
 
 protected:
@@ -281,10 +280,7 @@ public:
 protected:
     WXHBITMAP                       m_hMaskBitmap;
     DECLARE_DYNAMIC_CLASS(wxMask)
-private:
-    HDC                             m_hDc;
-    HPS                             m_hPs;
-}; // end of wxMask
+}; // end of CLASS wxMask
 
 // ----------------------------------------------------------------------------
 // wxBitmapHandler is a class which knows how to load/save bitmaps to/from file
@@ -348,7 +344,7 @@ public:
                      );
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
-}; // end of wxBitmapHandler
+}; // end of CLASS wxBitmapHandler
 
 #endif
   // _WX_BITMAP_H_

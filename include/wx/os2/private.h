@@ -143,6 +143,9 @@ extern LONG APIENTRY wxSubclassedGenericControlProc(WXHWND hWnd, WXDWORD message
 #define GetHdc()                ((HDC)GetHDC())
 #define GetHdcOf(dc)            ((HDC)(dc).GetHDC())
 
+#define GetHbitmap()            ((HBITMAP)GetHBITMAP())
+#define GetHbitmapOf(bmp)       ((HBITMAP)(bmp).GetHBITMAP())
+
 #define GetHicon()              ((HICON)GetHICON())
 #define GetHiconOf(icon)        ((HICON)(icon).GetHICON())
 
@@ -151,6 +154,16 @@ extern LONG APIENTRY wxSubclassedGenericControlProc(WXHWND hWnd, WXDWORD message
 
 #define GetHmenu()              ((HMENU)GetHMenu())
 #define GetHmenuOf(menu)        ((HMENU)menu->GetHMenu())
+
+#define GetHcursor()            ((HCURSOR)GetHCURSOR())
+#define GetHcursorOf(cursor)    ((HCURSOR)(cursor).GetHCURSOR())
+
+#define GetHfont()              ((HFONT)GetHFONT())
+#define GetHfontOf(font)        ((HFONT)(font).GetHFONT())
+
+// OS/2 convention of the mask is opposed to the wxWindows one, so we need
+// to invert the mask each time we pass one/get one to/from Windows
+extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 
 // ---------------------------------------------------------------------------
 // global data

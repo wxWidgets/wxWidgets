@@ -59,6 +59,8 @@ public:
            ,int        nWidth
            ,int        nHeight
           );
+    inline wxIcon(const char** ppData) { CreateIconFromXpm(ppData); }
+    inline wxIcon(char** ppData) { CreateIconFromXpm((const char**)ppData); }
     wxIcon( const wxString& rName
            ,long            lFlags = wxBITMAP_TYPE_ICO_RESOURCE
            ,int             nDesiredWidth = -1
@@ -84,11 +86,13 @@ public:
     inline void SetHICON(WXHICON hIcon) { SetHandle((WXHANDLE)hIcon); }
     inline WXHICON GetHICON() const { return (WXHICON)GetHandle(); }
 
+    void CopyFromBitmap(const wxBitmap& rBmp);
 protected:
     virtual wxGDIImageRefData* CreateData() const
     {
         return new wxIconRefData;
     }
+    void    CreateIconFromXpm(const char **ppData);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxIcon)
