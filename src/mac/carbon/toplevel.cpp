@@ -925,6 +925,9 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
     MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    
+    if (GetExtraStyle() & wxFRAME_EX_METAL)
+        MacSetMetalAppearance(true);
 
     wxTopLevelWindows.Append(this);
 

@@ -1359,6 +1359,10 @@ enum wxBorder
 #define wxFRAME_EX_CONTEXTHELP  0x00000004
 #define wxDIALOG_EX_CONTEXTHELP 0x00000004
 
+/*  Draw the window in a metal theme on Mac */
+#define wxFRAME_EX_METAL                0x00000040
+#define wxDIALOG_EX_METAL               0x00000040
+
 /*  Create a window which is attachable to another top level window */
 #define wxFRAME_DRAWER          0x0020
 
