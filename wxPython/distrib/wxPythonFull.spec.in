@@ -241,7 +241,7 @@ $GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
 
 #----------------------------------------------------------------
 %clean
-##[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 
 #----------------------------------------------------------------
