@@ -90,19 +90,23 @@ wxString wxDataInputStream::ReadString()
 
   len = Read32();
 
+  if (len > 0)
+  {
 #if wxUSE_UNICODE
-  char *tmp = new char[len + 1];
-  m_input->Read(tmp, len);
-  tmp[len] = 0;
-  wxString s(tmp);
-  delete[] tmp;
+    char *tmp = new char[len + 1];
+    m_input->Read(tmp, len);
+    tmp[len] = 0;
+    wxString s(tmp);
+    delete[] tmp;
 #else
-  wxString s;
-  m_input->Read(s.GetWriteBuf(len), len);
-  s.UngetWriteBuf();
+    wxString s;
+    m_input->Read(s.GetWriteBuf(len), len);
+    s.UngetWriteBuf();
 #endif
-
-  return s;
+    return s;
+  }
+  else 
+    return wxEmptyString;
 }
 
 wxDataInputStream& wxDataInputStream::operator>>(wxString& s)
@@ -203,8 +207,9 @@ void wxDataOutputStream::Write8(wxUint8 i)
 void wxDataOutputStream::WriteString(const wxString& string)
 {
   const wxWX2MBbuf buf = string.mb_str();
-  Write32(string.Length());
-  m_output->Write(buf, string.Len());
+  Write32(string.Len());
+  if (string.Len() > 0)
+      m_output->Write(buf, string.Len());
 }
 
 // Must be at global scope for VC++ 5
