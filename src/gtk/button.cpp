@@ -157,9 +157,19 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, wxStockItemID stock,
                       const wxValidator& validator, const wxString& name)
 {
 #ifdef __WXGTK20__
-    m_widget = gtk_button_new_from_stock(wxStockItemToGTK(stock));
-    return Create(parent, id, wxEmptyString,
-                  pos, wxDefaultSize, style, validator, name);
+    const char *gtkstock = wxStockItemToGTK(stock);
+    if (gtkstock)
+    {
+        m_widget = gtk_button_new_from_stock(gtkstock);
+        return Create(parent, id, wxEmptyString,
+                      pos, wxDefaultSize, style, validator, name);
+    }
+    else
+    {
+        // not supported by this GTK+ version
+        return Create(parent, id, wxGetStockItemLabel(stock),
+                      pos, wxDefaultSize, style, validator, name);
+    }
 #else
     return CreateStock(parent, id, stock, descriptiveLabel,
                        pos, style, validator, name);

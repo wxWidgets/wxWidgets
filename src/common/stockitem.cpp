@@ -109,10 +109,21 @@ wxString wxGetStockItemLabel(wxStockItemID item)
 
 const char *wxStockItemToGTK(wxStockItemID item)
 {
-    #define STOCKITEM(stockid)    \
-        case wx##stockid:         \
-            return GTK_##stockid; \
+    #define STOCKITEM(stockid)            \
+        case wx##stockid:                 \
+            return GTK_##stockid;         \
             break;
+    
+    #define STOCKITEM_MISSING(stockid)    \
+        case wx##stockid:                 \
+            return wxEmptyString;         \
+            break;
+
+    #if GTK_CHECK_VERSION(2,4,0)
+        #define STOCKITEM_24(stockid) STOCKITEM(stockid)
+    #else
+        #define STOCKITEM_24(stockid) STOCKITEM_MISSING(stockid)
+    #endif
 
     switch (item)
     {
@@ -133,7 +144,7 @@ const char *wxStockItemToGTK(wxStockItemID item)
         STOCKITEM(STOCK_GO_UP)
         STOCKITEM(STOCK_HELP)
         STOCKITEM(STOCK_HOME)
-        STOCKITEM(STOCK_INDENT)
+        STOCKITEM_24(STOCK_INDENT)
         STOCKITEM(STOCK_INDEX)
         STOCKITEM(STOCK_ITALIC)
         STOCKITEM(STOCK_JUSTIFY_CENTER)
@@ -160,7 +171,7 @@ const char *wxStockItemToGTK(wxStockItemID item)
         STOCKITEM(STOCK_UNDELETE)
         STOCKITEM(STOCK_UNDERLINE)
         STOCKITEM(STOCK_UNDO)
-        STOCKITEM(STOCK_UNINDENT)
+        STOCKITEM_24(STOCK_UNINDENT)
         STOCKITEM(STOCK_YES)
         STOCKITEM(STOCK_ZOOM_100)
         STOCKITEM(STOCK_ZOOM_FIT)
