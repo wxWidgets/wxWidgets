@@ -137,7 +137,8 @@ for i in "$@"; do
 	    echo Usage: $0 "[ options ]" 1>&2
 	    echo Options:
 	    echo "    --help         Display this help message"
-	    echo "    --wise         Build setup.exe"
+	    echo "    --wise         Also build setup.exe and wxMSW-version.zip"
+	    echo "    --wiseonly     Build setup.exe and wxMSW-version.zip only"
 	    exit 1
 	    ;;
     esac
