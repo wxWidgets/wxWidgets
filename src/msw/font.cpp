@@ -399,6 +399,45 @@ wxString wxNativeFontInfo::GetFaceName() const
     return lf.lfFaceName;
 }
 
+wxFontFamily wxNativeFontInfo::GetFamily() const
+{
+    // extract family from pitch-and-family
+    int lfFamily = lf.lfPitchAndFamily;
+    int family;
+
+    if ( lfFamily & FIXED_PITCH )
+        lfFamily -= FIXED_PITCH;
+    if ( lfFamily & VARIABLE_PITCH )
+        lfFamily -= VARIABLE_PITCH;
+
+    switch ( lfFamily )
+    {
+        case FF_ROMAN:
+            family = wxROMAN;
+            break;
+
+        case FF_SWISS:
+            family = wxSWISS;
+            break;
+
+        case FF_SCRIPT:
+            family = wxSCRIPT;
+            break;
+
+        case FF_MODERN:
+            family = wxMODERN;
+            break;
+
+        case FF_DECORATIVE:
+            family = wxDECORATIVE;
+            break;
+
+        default:
+            family = wxSWISS;
+    }
+    return (wxFontFamily)family;
+}
+
 wxFontEncoding wxNativeFontInfo::GetEncoding() const
 {
     return wxGetFontEncFromCharSet(lf.lfCharSet);
