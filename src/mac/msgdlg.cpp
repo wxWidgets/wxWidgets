@@ -91,8 +91,8 @@ int wxMessageDialog::ShowModal()
 		
 		cfTitle = wxMacCreateCFString( m_caption ) ;
 		cfText = wxMacCreateCFString( m_message ) ;
-		cfNoString = wxMacCreateCFString( _("Yes") ) ;
-		cfYesString = wxMacCreateCFString( _("No") ) ;
+		cfNoString = wxMacCreateCFString( _("No") ) ;
+		cfYesString = wxMacCreateCFString( _("Yes") ) ;
 		
 	 	param.movable = true;
 	 	param.flags = 0 ;
