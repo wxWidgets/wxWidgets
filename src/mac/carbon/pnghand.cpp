@@ -39,6 +39,7 @@
 #include "wx/bitmap.h"
 #include "wx/mac/pnghand.h"
 #include "wx/mac/pngread.h"
+#include "wx/mac/private.h"
 
 extern "C" {
 #include "png.h"
@@ -116,7 +117,7 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
 
   if (lpbi)  
   {
-  	wxMacDestroyGWorld( lpbi ) ;
+  	wxMacDestroyGWorld( (GWorldPtr) lpbi ) ;
   }
   lpbi = wxMacCreateGWorld( Width , Height , Depth);
   if (lpbi)
@@ -135,7 +136,7 @@ wxPNGReader::~wxPNGReader ( )
 {
  	delete[] RawImage ;
   if (lpbi)  {
-  	wxMacDestroyGWorld( lpbi ) ;
+  	wxMacDestroyGWorld( (GWorldPtr) lpbi ) ;
   }
   delete m_palette;
 }
@@ -258,7 +259,7 @@ wxPNGReader::SetPalette(int n, rgb_color_struct *rgb_struct)
 void wxPNGReader::NullData()
 {
   if (lpbi)  {
-  	wxMacDestroyGWorld( lpbi ) ;
+  	wxMacDestroyGWorld( (GWorldPtr) lpbi ) ;
   }
   delete m_palette;
   lpbi = NULL;
@@ -512,7 +513,7 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
 		
 		GetGWorld( &origPort , &origDevice ) ;
 		// ignore shapedc
-		SetGWorld( lpbi , NULL ) ;
+		SetGWorld( (GWorldPtr) lpbi , NULL ) ;
 	  do  
 	  {
 	//    (unsigned char *)iter.GetRow();
