@@ -460,6 +460,15 @@ separators.
 \helpref{GetPathSeparator}{wxfilenamegetpathseparator}
 
 
+\membersection{wxFileName::GetPathTerminators}\label{wxfilenamegetpathterminators}
+
+\func{static wxString}{GetPathTerminators}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+Returns the string of characters which may terminate the path part. This is the
+same as \helpref{GetPathSeparators}{wxfilenamegetpathseparators} except for VMS
+path format where $]$ is used at the end of the path part.
+
+
 \membersection{wxFileName::GetShortPath}\label{wxfilenamegetshortpath}
 
 \constfunc{wxString}{GetShortPath}{\void}
@@ -761,6 +770,18 @@ On return, {\it path} contains the file path (without the trailing separator),
 without leading dot. All three of them may be empty if the corresponding
 component is. The old contents of the strings pointed to by these parameters
 will be overwritten in any case (if the pointers are not {\tt NULL}).
+
+
+\membersection{wxFileName::SplitVolume}\label{wxfilenamesplitvolume}
+
+\func{static void}{SplitVolume}{\param{const wxString\& }{fullpath}, \param{wxString* }{volume}, \param{wxString* }{path}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+Splits the given \arg{fullpath} into the volume part (which may be empty) and
+the pure path part, not containing any volume.
+
+\wxheading{See also}
+
+\helpref{SplitPath}{wxfilenamesplitpath}
 
 
 \membersection{wxFileName::Touch}\label{wxfilenametouch}

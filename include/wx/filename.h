@@ -338,6 +338,10 @@ public:
     // get the string of path separators for this format
     static wxString GetPathSeparators(wxPathFormat format = wxPATH_NATIVE);
 
+    // get the string of path terminators, i.e. characters which terminate the
+    // path
+    static wxString GetPathTerminators(wxPathFormat format = wxPATH_NATIVE);
+
     // get the canonical path separator for this format
     static wxChar GetPathSeparator(wxPathFormat format = wxPATH_NATIVE)
         { return GetPathSeparators(format)[0u]; }
@@ -411,6 +415,11 @@ public:
                           wxString *ext,
                           wxPathFormat format = wxPATH_NATIVE);
 
+        // split a path into volume and pure path part
+    static void SplitVolume(const wxString& fullpathWithVolume,
+                            wxString *volume,
+                            wxString *path,
+                            wxPathFormat format = wxPATH_NATIVE);
 
     // deprecated methods, don't use any more
     // --------------------------------------
