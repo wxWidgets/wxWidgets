@@ -105,7 +105,7 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
   return stricmp(psz1, psz2);
 #elif defined(__EMX__)
   return stricmp(psz1, psz2);
-#elif defined(__VISAGECPP__)
+#elif defined(__WXPM__)
   return stricmp(psz1, psz2);
 #elif defined(__UNIX__) || defined(__GNUWIN32__)
   return strcasecmp(psz1, psz2);
