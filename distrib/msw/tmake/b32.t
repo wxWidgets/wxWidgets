@@ -195,14 +195,14 @@ nul
 $(PERIPH_LIBS) $(LIBS)
 wxb32
 !
-	-erase $(WXLIBDIR)\version.res
-        brc32 -r -i$(WXDIR)\include\ $(MSWDIR)\version.rc
         implib -c $(LIBTARGET) $(WXLIBDIR)\wx.dll
-
 !endif
 
 dummy.obj: dummy.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
 dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h version.res
+
+version.res: 
+	brc32 -r -i$(WXDIR)\include\ $(MSWDIR)\version.rc
 
 $(MSWDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
 
