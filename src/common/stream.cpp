@@ -752,7 +752,12 @@ wxOutputStream& wxOutputStream::operator<<(const char *string)
 
 wxOutputStream& wxOutputStream::operator<<(wxString& string)
 {
+#if wxUSE_UNICODE
+  const wxWX2MBbuf buf = string.mb_str();
+  return *this << buf;
+#else
   return Write(string, string.Len());
+#endif
 }
 
 wxOutputStream& wxOutputStream::operator<<(char c)
@@ -764,32 +769,32 @@ wxOutputStream& wxOutputStream::operator<<(short i)
 {
   wxString strint;
 
-  strint.Printf("%i", i);
-  return Write(strint, strint.Len());
+  strint.Printf(_T("%i"), i);
+  return *this << strint;
 }
 
 wxOutputStream& wxOutputStream::operator<<(int i)
 {
   wxString strint;
 
-  strint.Printf("%i", i);
-  return Write(strint, strint.Len());
+  strint.Printf(_T("%i"), i);
+  return *this << strint;
 }
 
 wxOutputStream& wxOutputStream::operator<<(long i)
 {
   wxString strlong;
 
-  strlong.Printf("%i", i);
-  return Write((const char *)strlong, strlong.Len());
+  strlong.Printf(_T("%i"), i);
+  return *this << strlong;
 }
 
 wxOutputStream& wxOutputStream::operator<<(double f)
 {
   wxString strfloat;
 
-  strfloat.Printf("%f", f);
-  return Write(strfloat, strfloat.Len());
+  strfloat.Printf(_T("%f"), f);
+  return *this << strfloat;
 }
 
 #if wxUSE_SERIAL

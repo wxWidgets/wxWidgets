@@ -71,7 +71,7 @@
 
 #define _MAXPATHLEN 500
 
-extern char *wxBuffer;
+extern wxChar *wxBuffer;
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -258,48 +258,47 @@ StringToLong (char *s, long *number)
     *number = strtol (s, (char **) NULL, 10);
 }
 
-char *
+wxChar *
 IntToString (int number)
 {
-  static char buf[20];
+  static wxChar buf[20];
 
-  sprintf (buf, "%d", number);
+  wxSprintf (buf, _T("%d"), number);
   return buf;
 }
 
-char *
+wxChar *
 LongToString (long number)
 {
-  static char buf[20];
+  static wxChar buf[20];
 
-  sprintf (buf, "%ld", number);
+  wxSprintf (buf, _T("%ld"), number);
   return buf;
 }
 
 // Array used in DecToHex conversion routine.
-static char hexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
-  'C', 'D', 'E', 'F' };
+static wxChar hexArray[] = _T("0123456789ABCDEF");
 
 // Convert 2-digit hex number to decimal
 int wxHexToDec(const wxString& buf)
 {
   int firstDigit, secondDigit;
 
-  if (buf.GetChar(0) >= 'A')
-    firstDigit = buf.GetChar(0) - 'A' + 10;
+  if (buf.GetChar(0) >= _T('A'))
+    firstDigit = buf.GetChar(0) - _T('A') + 10;
   else
-    firstDigit = buf.GetChar(0) - '0';
+    firstDigit = buf.GetChar(0) - _T('0');
 
-  if (buf.GetChar(1) >= 'A')
-    secondDigit = buf.GetChar(1) - 'A' + 10;
+  if (buf.GetChar(1) >= _T('A'))
+    secondDigit = buf.GetChar(1) - _T('A') + 10;
   else
-    secondDigit = buf.GetChar(1) - '0';
+    secondDigit = buf.GetChar(1) - _T('0');
 
   return firstDigit * 16 + secondDigit;
 }
 
 // Convert decimal integer to 2-character hex string
-void wxDecToHex(int dec, char *buf)
+void wxDecToHex(int dec, wxChar *buf)
 {
   int firstDigit = (int)(dec/16.0);
   int secondDigit = (int)(dec - (firstDigit*16.0));
@@ -311,7 +310,7 @@ void wxDecToHex(int dec, char *buf)
 // Convert decimal integer to 2-character hex string
 wxString wxDecToHex(int dec)
 {
-    char buf[3];
+    wxChar buf[3];
     wxDecToHex(dec, buf);
     return wxString(buf);
 }
@@ -407,8 +406,8 @@ char *wxStripMenuCodes (char *in, char *out)
 
 wxString wxStripMenuCodes(const wxString& str)
 {
-    char *buf = new char[str.Length() + 1];
-    wxStripMenuCodes((char*) (const char*) str, buf);
+    wxChar *buf = new wxChar[str.Length() + 1];
+    wxStripMenuCodes(WXSTRINGCAST str, buf);
     wxString str1(buf);
     delete[] buf;
     return str1;
@@ -816,14 +815,14 @@ int isascii( int c )
 // ----------------------------------------------------------------------------
 
 // Get Full RFC822 style email address
-bool wxGetEmailAddress(char *address, int maxSize)
+bool wxGetEmailAddress(wxChar *address, int maxSize)
 {
     wxString email = wxGetEmailAddress();
     if ( !email )
         return FALSE;
 
-    strncpy(address, email, maxSize - 1);
-    address[maxSize - 1] = '\0';
+    wxStrncpy(address, email, maxSize - 1);
+    address[maxSize - 1] = _T('\0');
 
     return TRUE;
 }
@@ -839,7 +838,7 @@ wxString wxGetEmailAddress()
         if ( !!user )
         {
             wxString email(user);
-            email << '@' << host;
+            email << _T('@') << host;
         }
     }
 

@@ -24,6 +24,7 @@
   #pragma hdrstop
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
@@ -126,7 +127,26 @@ int WXDLLEXPORT wxVprintf(const wxChar *fmt, va_list argptr)
 {
   wxString str;
   str.PrintfV(fmt,argptr);
-  printf("%s",(const char*)str.mb_str());
+  printf("%s", (const char*)str.mb_str());
+  return str.Len();
+}
+
+int WXDLLEXPORT wxFprintf(FILE *stream, const wxChar *fmt, ...)
+{
+  va_list argptr;
+  int ret;
+
+  va_start(argptr, fmt);
+  ret = wxFvprintf(stream, fmt, argptr);
+  va_end(argptr);
+  return ret;
+}
+
+int WXDLLEXPORT wxFvprintf(FILE *stream, const wxChar *fmt, va_list argptr)
+{
+  wxString str;
+  str.PrintfV(fmt,argptr);
+  fprintf(stream, "%s", (const char*)str.mb_str());
   return str.Len();
 }
 

@@ -171,18 +171,18 @@ void wxDataOutputStream::Write8(unsigned char i)
 void wxDataOutputStream::WriteLine(const wxString& line)
 {
 #ifdef __WXMSW__
-  wxString tmp_string = line + "\r\n";
+  wxString tmp_string = line + _T("\r\n");
 #else
-  wxString tmp_string = line + '\n';
+  wxString tmp_string = line + _T('\n');
 #endif
 
-  Write((const char *) tmp_string, tmp_string.Length());
+  Write((const wxChar *) tmp_string, tmp_string.Length()*sizeof(wxChar));
 }
 
 void wxDataOutputStream::WriteString(const wxString& string)
 {
   Write32(string.Length());
-  Write((const char *) string, string.Length());
+  Write((const wxChar *) string, string.Length()*sizeof(wxChar));
 }
 
 // Must be at global scope for VC++ 5

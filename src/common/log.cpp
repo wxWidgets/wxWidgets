@@ -535,9 +535,9 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                         OutputDebugString(wxString(szString) + _T("\n\r"));
                     #else
                         // send them to stderr
-                        fprintf(stderr, "%s: %s\n",
-                                level == wxLOG_Trace ? "Trace" : "Debug",
-                                (const char*)wxConv_libc.cWX2MB(szString));
+                        wxFprintf(stderr, _T("%s: %s\n"),
+                                level == wxLOG_Trace ? _T("Trace") : _T("Debug"),
+                                szString);
                         fflush(stderr);
                     #endif
                 }
@@ -1018,7 +1018,7 @@ void wxOnAssert(const char *szFile, int nLine, const wxChar *szMsg)
     // make life easier for people using VC++ IDE: clicking on the message
     // will take us immediately to the place of the failed assert
 #ifdef __VISUALC__
-    sprintf(szBuf, _T("%s(%d): assert failed"), szFile, nLine);
+    wxSprintf(szBuf, _T("%s(%d): assert failed"), szFile, nLine);
 #else  // !VC++
     // make the error message more clear for all the others
 #ifdef wxSprintf

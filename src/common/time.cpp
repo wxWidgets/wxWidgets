@@ -319,7 +319,7 @@ wxTime wxTime::Min(const wxTime& t) const
 }
 
 #ifndef __SALFORDC__
-wxTime::operator char *(void)
+wxTime::operator wxChar *(void)
 {
   return FormatTime();
 }
@@ -332,8 +332,8 @@ void wxTime::SetFormat(const wxTime::tFormat lFormat,
   wxTime::Precision  = lPrecision;
 }
 
-char *wxTime::FormatTime() const {
-  static char  timeBuf[30];
+wxChar *wxTime::FormatTime() const {
+  static wxChar  timeBuf[30];
   unsigned    hh(GetHour());
 
   switch (Format) {
@@ -346,18 +346,18 @@ char *wxTime::FormatTime() const {
 
   switch (Precision) {
   case wxStdMinSec:
-    sprintf(timeBuf,"%2d:%02d:%02d",hh,GetMinute(),GetSecond());
+    wxSprintf(timeBuf,_T("%2d:%02d:%02d"),hh,GetMinute(),GetSecond());
     break;
   case wxStdMin:
-    sprintf(timeBuf,"%2d:%02d",hh,GetMinute());
+    wxSprintf(timeBuf,_T("%2d:%02d"),hh,GetMinute());
     break;
   }
 
   if (Format == wx12h)
     if (GetHour() <= 12)
-      strcat(timeBuf,_("am"));
+      wxStrcat(timeBuf,_("am"));
     else
-      strcat(timeBuf,_("pm"));
+      wxStrcat(timeBuf,_("pm"));
 
   return timeBuf;
 }
