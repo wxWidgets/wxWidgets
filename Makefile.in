@@ -616,8 +616,10 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
 	mkdir $(DISTDIR)/include/wx/protocol
+	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/src/common
+	mkdir $(DISTDIR)/src/msw
 	mkdir $(DISTDIR)/src/unix
 	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)/@PORT_FILES@
 	cp $(WXDIR)/@RPM_FILES@ $(DISTDIR)/@RPM_FILES@
@@ -1307,7 +1309,10 @@ dist: @GUIDIST@
 
 bzip-dist-only:
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
-	@cd _dist_dir; tar ch @DISTDIR@ | bzip2 -f9 > $(WXARCHIVE_BZIP); mv $(WXARCHIVE_BZIP) ..
+	@cd _dist_dir; \
+	mv @DISTDIR@ @DISTDIR@-$(VER_SUFFIX); \
+	tar ch @DISTDIR@-$(VER_SUFFIX) | bzip2 -f9 > ../$(WXARCHIVE_BZIP); \
+	mv @DISTDIR@-$(VER_SUFFIX) @DISTDIR@
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
 	mv samples wxSamples-${VER_SUFFIX}; \
@@ -1323,7 +1328,10 @@ bzip-dist-only:
 bzip-dist: @GUIDIST@
 	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
-	cd _dist_dir; tar ch @DISTDIR@ | bzip2 -f9 > $(WXARCHIVE_BZIP); mv $(WXARCHIVE_BZIP) ..
+	@cd _dist_dir; \
+	mv @DISTDIR@ @DISTDIR@-$(VER_SUFFIX); \
+	tar ch @DISTDIR@-$(VER_SUFFIX) | bzip2 -f9 > ../$(WXARCHIVE_BZIP); \
+	mv @DISTDIR@-$(VER_SUFFIX) @DISTDIR@
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
 	mv samples wxSamples-${VER_SUFFIX}; \
