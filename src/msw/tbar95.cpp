@@ -240,6 +240,8 @@ bool wxToolBar::Create(wxWindow *parent,
     if ( !MSWCreateToolbar(pos, size) )
         return FALSE;
 
+    wxSetCCUnicodeFormat(GetHwnd());
+
     // set up the colors and fonts
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));

@@ -757,6 +757,8 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 
     SetSize(pos.x, pos.y, size.x, size.y);
 
+    wxSetCCUnicodeFormat(GetHwnd());
+
     return true;
 }
 

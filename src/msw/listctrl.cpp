@@ -353,9 +353,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
     // versions of _some_ messages (notably LVN_GETDISPINFOA) in MSLU build
-#if wxUSE_UNICODE
-    ::SendMessage(GetHwnd(), LVM_SETUNICODEFORMAT, TRUE, 0);
-#endif
+    wxSetCCUnicodeFormat(GetHwnd());
 
     // for comctl32.dll v 4.70+ we want to have this attribute because it's
     // prettier (and also because wxGTK does it like this)
