@@ -99,6 +99,9 @@ static const int AUTOSIZE_COL_MARGIN = 10;
 static const int WIDTH_COL_DEFAULT = 80;
 static const int WIDTH_COL_MIN = 10;
 
+// the space between the image and the text in the report mode
+static const int IMAGE_MARGIN_IN_REPORT_MODE = 5;
+
 // ============================================================================
 // private classes
 // ============================================================================
@@ -1622,6 +1625,8 @@ void wxListLineData::Draw( wxDC *dc )
     if (item->HasText())
     {
         wxRect rectLabel = m_gi->m_rectLabel;
+
+        wxDCClipper clipper(*dc, rectLabel);
         dc->DrawText( item->GetText(), rectLabel.x, rectLabel.y );
     }
 }
@@ -1651,26 +1656,28 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     {
         wxListItemData *item = node->GetData();
 
+        int width = m_owner->GetColumnWidth(col++);
         int xOld = x;
+        x += width;
 
         if ( item->HasImage() )
         {
             int ix, iy;
-            m_owner->DrawImage( item->GetImage(), dc, x, y );
+            m_owner->DrawImage( item->GetImage(), dc, xOld, y );
             m_owner->GetImageSize( item->GetImage(), ix, iy );
-            x += ix + 5; // FIXME: what is "5"?
+
+            ix += IMAGE_MARGIN_IN_REPORT_MODE;
+
+            xOld += ix;
+            width -= ix;
         }
 
-        int width = m_owner->GetColumnWidth(col++);
-
-        wxDCClipper clipper(*dc, x, y, width, rect.height);
+        wxDCClipper clipper(*dc, xOld, y, width, rect.height);
 
         if ( item->HasText() )
         {
-            dc->DrawText( item->GetText(), x, y );
+            dc->DrawText( item->GetText(), xOld, y );
         }
-
-        x = xOld + width;
 
         node = node->GetNext();
     }
@@ -1845,9 +1852,11 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetPen( *wxWHITE_PEN );
 
         DoDrawRect( &dc, x, HEADER_OFFSET_Y, cw, h-2 );
-        dc.SetClippingRegion( x, HEADER_OFFSET_Y, cw-5, h-4 );
-        dc.DrawText( item.GetText(), x + EXTRA_WIDTH, HEADER_OFFSET_Y + EXTRA_HEIGHT );
-        dc.DestroyClippingRegion();
+        wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw-5, h-4 );
+
+        dc.DrawText( item.GetText(),
+                     x + EXTRA_WIDTH, HEADER_OFFSET_Y + EXTRA_HEIGHT );
+
         x += wCol;
 
         if (xEnd > w+5)
