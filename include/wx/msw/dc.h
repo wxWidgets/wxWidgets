@@ -261,6 +261,10 @@ public:
     GetClippingBox(&x, &y, &w, &h); rect.x = x; rect.y = y; rect.width = w; rect.height = h;
   }
 
+  // This should probably be made available on other platforms
+  int wxDC::GetDepth(void) const ;
+
+// Implementation
   virtual void SetRop(WXHDC cdc);
   virtual void DoClipping(WXHDC cdc);
   virtual void SelectOldObjects(WXHDC dc);

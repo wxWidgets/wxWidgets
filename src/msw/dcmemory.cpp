@@ -84,8 +84,19 @@ void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
     wxFatalError("Error in wxMemoryDC::SelectObject\nBitmap is selected in another wxMemoryDC.\nDelete the first wxMemoryDC or use SelectObject(NULL)");
     return;
   }
-  
-  m_selectedBitmap = bitmap;
+
+  // Check if the bitmap has the correct depth for this device context
+  if (bitmap.Ok() && (bitmap.GetDepth() != GetDepth()))
+  {
+      // Make a new bitmap that has the correct depth.
+      wxBitmap newBitmap = bitmap.GetBitmapForDC(* this);
+
+      m_selectedBitmap = newBitmap ;
+  }
+  else
+  {
+      m_selectedBitmap = bitmap;
+  }
 
   if (!m_selectedBitmap.Ok())
     return;

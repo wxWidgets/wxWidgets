@@ -379,6 +379,47 @@ wxBitmapHandler *wxBitmap::FindHandler(long bitmapType)
   return NULL;
 }
 
+// New Create/FreeDIB functions since ones in dibutils.cpp are confusing
+static long createDIB(long xSize, long ySize, long bitsPerPixel,
+                       HPALETTE hPal, LPBITMAPINFO* lpDIBHeader);
+static long freeDIB(LPBITMAPINFO lpDIBHeader);
+
+// Creates a bitmap that matches the device context, from
+// an arbitray bitmap. At present, the original bitmap must have an
+// associated palette. TODO: use a default palette if no palette exists.
+// Contributed by Frederic Villeneuve <frederic.villeneuve@natinst.com>
+wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
+{
+    wxMemoryDC      memDC;
+    wxBitmap        tmpBitmap(this->GetWidth(), this->GetHeight(), dc.GetDepth());
+    HPALETTE        hPal = NULL;
+    LPBITMAPINFO    lpDib;
+    void            *lpBits = NULL;
+
+    wxASSERT( this->GetPalette() && this->GetPalette()->Ok() && (this->GetPalette()->GetHPALETTE() != NULL) );
+
+    tmpBitmap.SetPalette(this->GetPalette());
+    memDC.SelectObject(tmpBitmap);
+    memDC.SetPalette(this->GetPalette());
+
+    hPal = (HPALETTE) this->GetPalette()->GetHPALETTE();
+
+    // set the height negative because in a DIB the order of the lines is reversed
+    createDIB(this->GetWidth(), -this->GetHeight(), this->GetDepth(), hPal, &lpDib);
+
+    lpBits = malloc(lpDib->bmiHeader.biSizeImage);
+
+    ::GetBitmapBits((HBITMAP)GetHBITMAP(), lpDib->bmiHeader.biSizeImage, lpBits);
+
+    ::SetDIBitsToDevice((HDC) memDC.GetHDC(), 0, 0, this->GetWidth(), this->GetHeight(),
+                        0, 0, 0, this->GetHeight(), lpBits, lpDib, DIB_RGB_COLORS);
+
+    free(lpBits);
+
+    freeDIB(lpDib);
+    return (tmpBitmap);
+}
+
 /*
  * wxMask
  */
@@ -573,7 +614,7 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long
       GetObject((HBITMAP) M_BITMAPHANDLERDATA->m_hBitmap, sizeof(BITMAP), (LPSTR) &bm);
       M_BITMAPHANDLERDATA->m_width = bm.bmWidth;
       M_BITMAPHANDLERDATA->m_height = bm.bmHeight;
-      M_BITMAPHANDLERDATA->m_depth = bm.bmPlanes;
+      M_BITMAPHANDLERDATA->m_depth = bm.bmBitsPixel;
       return TRUE;
     }
 
@@ -822,3 +863,65 @@ void wxBitmap::InitStandardHandlers(void)
   AddHandler(new wxICOResourceHandler);
   AddHandler(new wxICOFileHandler);
 }
+
+static long createDIB(long xSize, long ySize, long bitsPerPixel,
+                       HPALETTE hPal, LPBITMAPINFO* lpDIBHeader)
+{
+   unsigned long   i, headerSize;
+   LPBITMAPINFO    lpDIBheader = NULL;
+   LPPALETTEENTRY  lpPe = NULL;
+
+
+   // Allocate space for a DIB header
+   headerSize = (sizeof(BITMAPINFOHEADER) + (256 * sizeof(PALETTEENTRY)));
+   lpDIBheader = (BITMAPINFO *) malloc(headerSize);
+   lpPe = (PALETTEENTRY *)((BYTE*)lpDIBheader + sizeof(BITMAPINFOHEADER));
+
+   GetPaletteEntries(hPal, 0, 256, lpPe);
+
+
+   memset(lpDIBheader, 0x00, sizeof(BITMAPINFOHEADER));
+
+
+   // Fill in the static parts of the DIB header
+   lpDIBheader->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+   lpDIBheader->bmiHeader.biWidth = xSize;
+   lpDIBheader->bmiHeader.biHeight = ySize;
+   lpDIBheader->bmiHeader.biPlanes = 1;
+
+   // this value must be 1, 4, 8 or 24 so PixelDepth can only be
+   lpDIBheader->bmiHeader.biBitCount = (WORD)(bitsPerPixel);
+   lpDIBheader->bmiHeader.biCompression = BI_RGB;
+   lpDIBheader->bmiHeader.biSizeImage = xSize * abs(ySize) * bitsPerPixel >>
+3;
+   lpDIBheader->bmiHeader.biClrUsed = 256;
+
+
+   // Initialize the DIB palette
+   for (i = 0; i < 256; i++) {
+      lpDIBheader->bmiColors[i].rgbReserved = lpPe[i].peFlags;
+      lpDIBheader->bmiColors[i].rgbRed = lpPe[i].peRed;
+      lpDIBheader->bmiColors[i].rgbGreen = lpPe[i].peGreen;
+      lpDIBheader->bmiColors[i].rgbBlue = lpPe[i].peBlue;
+   }
+
+   *lpDIBHeader = lpDIBheader;
+
+
+   return (0);
+
+}
+
+
+
+static long freeDIB(LPBITMAPINFO lpDIBHeader)
+{
+
+   if (lpDIBHeader != NULL) {
+      free(lpDIBHeader);
+   }
+
+   return (0);
+}
+
+

@@ -1441,3 +1441,9 @@ void wxDC::GetTextExtent(const wxString& string, float *x, float *y,
 }
 #endif
 
+int wxDC::GetDepth(void) const
+{
+  return (int) ::GetDeviceCaps((HDC) m_hDC,BITSPIXEL);
+}
+
+
