@@ -21,6 +21,7 @@
 #include <math.h>               // for floating-point functions
 
 #include <gdk/gdk.h>
+#include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
@@ -153,10 +154,6 @@ static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
         {
             wxGCPool[i].m_gc = gdk_gc_new( window );
             gdk_gc_set_exposures( wxGCPool[i].m_gc, FALSE );
-            // This allows you to e.g. copy from the screen
-            // without clipping the windows on it.
-            gdk_gc_set_subwindow( wxGCPool[i].m_gc, 
-				  GDK_INCLUDE_INFERIORS );
             wxGCPool[i].m_type = type;
             wxGCPool[i].m_used = FALSE;
         }
@@ -909,7 +906,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
     int old_logical_func = m_logicalFunction;
     SetLogicalFunction( logical_func );
-
+    
     if (use_bitmap_method)
     {
         /* scale/translate bitmap size */
@@ -986,6 +983,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
         /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
            drawing a mono-bitmap (XBitmap) we use the current text GC */
+    
         if (is_mono)
             gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
         else
@@ -1028,10 +1026,21 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
                for a different implementation of the same problem. */
 
             wxBitmap bitmap( width, height );
-            gdk_window_copy_area( bitmap.GetPixmap(), m_penGC, 0, 0,
+            
+            /* We have to use the srcDC's GC as it might be a 
+               wxScreenDC and we only have the GDK_INCLUDE_INFERIORS
+               flag set there. */
+
+            if (srcDC->GetWindow() == GDK_ROOT_PARENT())
+                gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
+
+            gdk_window_copy_area( bitmap.GetPixmap(), srcDC->m_penGC, 0, 0,
                                   srcDC->GetWindow(),
                                   xsrc, ysrc, width, height );
 
+            if (srcDC->GetWindow() == GDK_ROOT_PARENT())
+                gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
+                
             /* scale image */
 
             wxImage image( bitmap );
@@ -1048,11 +1057,17 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
         }
         else
         {
-            /* no scaling and not a memory dc with a mask either */
+            /* No scaling and not a memory dc with a mask either */
+
+            if (srcDC->GetWindow() == GDK_ROOT_PARENT())
+                gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
 
             gdk_window_copy_area( m_window, m_penGC, xx, yy,
                                   srcDC->GetWindow(),
                                   xsrc, ysrc, width, height );
+                                  
+            if (srcDC->GetWindow() == GDK_ROOT_PARENT())
+                gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
         }
     }
 
@@ -1635,8 +1650,11 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
     rect.width = XLOG2DEVREL(width);
     rect.height = YLOG2DEVREL(height);
     
-    m_currentClippingRegion.Clear();
-    m_currentClippingRegion.Union( rect );
+    if (!m_currentClippingRegion.IsEmpty())
+        m_currentClippingRegion.Intersect( rect );
+    else
+        m_currentClippingRegion.Union( rect );
+        
 #if USE_PAINT_REGION    
     if (!m_paintClippingRegion.IsEmpty())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
@@ -1665,8 +1683,11 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 
     if (!m_window) return;
     
-    m_currentClippingRegion.Clear();
-    m_currentClippingRegion.Union( region );
+    if (!m_currentClippingRegion.IsEmpty())
+        m_currentClippingRegion.Intersect( region );
+    else
+        m_currentClippingRegion.Union( region );
+    
 #if USE_PAINT_REGION    
     if (!m_paintClippingRegion.IsEmpty())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
@@ -1686,8 +1707,10 @@ void wxWindowDC::DestroyClippingRegion()
 
     m_currentClippingRegion.Clear();
     
+#if USE_PAINT_REGION    
     if (!m_paintClippingRegion.IsEmpty())
         m_currentClippingRegion.Union( m_paintClippingRegion );
+#endif
 
     if (!m_window) return;
 

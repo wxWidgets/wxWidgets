@@ -1,5 +1,13 @@
 12th March '2000: wxWindows 2.1.14 released
 
+
+
+Added support for pipes and a stream class to get data
+out of them.
+
+Added memory file system (so you can save html pages with
+images in memory).
+
 Added wxDragImage class for dragging easily images.
 
 The DEB and RPM packages now conform better to various

@@ -897,14 +897,18 @@ void MyCanvas::DrawRegions(wxDC& dc)
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.DrawRectangle( 10,10,310,310 );
     
-    wxRegion region( 20,20,100,270 );
-    dc.SetClippingRegion( region );
+    dc.SetClippingRegion( 20,20,100,270 );
     
     dc.SetBrush( *wxRED_BRUSH );
     dc.DrawRectangle( 10,10,310,310 );
+
+    dc.SetClippingRegion( 20,20,100,100 );
     
-    region = wxRegion( 120,30,100,270 );
-    dc.SetClippingRegion( region );
+    dc.SetBrush( *wxCYAN_BRUSH );
+    dc.DrawRectangle( 10,10,310,310 );
+
+    dc.DestroyClippingRegion();
+    dc.SetClippingRegion( 120,30,100,270 );
     
     dc.SetBrush( *wxGREY_BRUSH );
     dc.DrawRectangle( 10,10,310,310 );

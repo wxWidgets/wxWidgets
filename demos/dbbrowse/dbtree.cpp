@@ -159,7 +159,7 @@ int  DBTree::OnPopulate()
         Temp2 = ((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkTableName;
         if (Temp2 == "")
          Temp2 = _("None");
-        Temp2.Printf(_("This Primary Key is used in the following Tables : %s"),Temp2);
+        Temp2.Printf(_("This Primary Key is used in the following Tables : %s"),Temp2.c_str());
         Funkt = AppendItem(Docu,Temp2,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData("KEY"));
        }
        else
