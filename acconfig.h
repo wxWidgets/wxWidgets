@@ -293,6 +293,10 @@
  */
 #define wxUSE_TIMEDATE 0
 /*
+ * Use wave class
+ */
+#define wxUSE_WAVE 0
+/*
  * Use config system
  */
 #define wxUSE_CONFIG 0
