@@ -341,7 +341,8 @@ enum wxDBMS
     dbmsPOSTGRES,
     dbmsACCESS,
     dbmsDBASE,
-    dbmsINFORMIX
+    dbmsINFORMIX,
+    dbmsVIRTUOSO
 };
 
 

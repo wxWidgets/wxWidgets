@@ -68,6 +68,7 @@
     #include "wx/wxchar.h"
 #endif
 
+
 #if wxMAJOR_VERSION == 1
 #    if defined(wx_msw) || defined(wx_x)
 #        ifdef WX_PRECOMP
@@ -840,11 +841,11 @@ bool wxDb::getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "varchar")) wxStrcpy(structSQLTypeInfo.TypeName, "char");
     }
 
-   // BJO 20000427 : OpenLink driver 
-   if (!wxStrncmp(dbInf.driverName, "oplodbc", 7) ||
-          !wxStrncmp(dbInf.driverName, "OLOD", 4))    
-    if (!wxStrcmp(structSQLTypeInfo.TypeName, "double precision")) wxStrcpy(structSQLTypeInfo.TypeName, "real");
-
+    // BJO 20000427 : OpenLink driver 
+    if (!wxStrncmp(dbInf.driverName, "oplodbc", 7) ||
+	!wxStrncmp(dbInf.driverName, "OLOD", 4))    
+      if (!wxStrcmp(structSQLTypeInfo.TypeName, "double precision")) wxStrcpy(structSQLTypeInfo.TypeName, "real");
+    
 
     if (SQLGetData(hstmt, 3, SQL_C_LONG, (UCHAR*) &structSQLTypeInfo.Precision, 0, &cbRet) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
@@ -1865,8 +1866,14 @@ wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char *userID)
                     colInf[colNo].FkCol = 0;           // Foreign key column   0=No; 1= First Key, 2 = Second Key etc.
                     colInf[colNo].FkTableName[0] = 0;  // Foreign key table name
 
-		    
-		    
+		    // BJO 20000428 : Virtuoso returns type names with upper cases!
+		    if (Dbms() == dbmsVIRTUOSO)
+		      {
+			wxString s =  colInf[colNo].typeName;
+			s = s.MakeLower();
+			wxStrcmp(colInf[colNo].typeName, s.c_str());		
+		      }
+		    		   
 		    // Determine the wxDb data type that is used to represent the native data type of this data source
 		    colInf[colNo].dbDataType = 0;
 		    if (!wxStricmp(typeInfVarchar.TypeName,colInf[colNo].typeName))
@@ -2486,19 +2493,23 @@ wxDBMS wxDb::Dbms(void)
     wxChar baseName[25+1];
     wxStrncpy(baseName,dbInf.dbmsName,25);
 
+    // BJO 20000428 : add support for Virtuoso
+    if (!wxStricmp(dbInf.dbmsName,"OpenLink Virtuoso VDBMS"))
+      return(dbmsVIRTUOSO);
+    
 
     if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
         return(dbmsSYBASE_ASA);
     
     // BJO 20000427 : The "SQL Server" string is also returned by SQLServer when
-    // connected trhough an OpenLink driver.
-    // Is it also returned by Sybase?    
+    // connected through an OpenLink driver.
+    // Is it also returned by Sybase Adapatitve server?    
     // OpenLink driver name is OLOD3032.DLL for msw and oplodbc.so for unix	
     if (!wxStricmp(dbInf.dbmsName,"SQL Server"))       
       if (!wxStrncmp(dbInf.driverName, "oplodbc", 7) ||
           !wxStrncmp(dbInf.driverName, "OLOD", 4))
-			 return dbmsMS_SQL_SERVER; else return dbmsSYBASE_ASE;
-     
+	return dbmsMS_SQL_SERVER; else return dbmsSYBASE_ASE;
+    
 
     if (!wxStricmp(dbInf.dbmsName,"Microsoft SQL Server"))
         return(dbmsMS_SQL_SERVER);
