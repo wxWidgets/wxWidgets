@@ -251,6 +251,25 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
+#ifdef __SMARTPHONE__
+
+    // 1) text message
+    topsizer->Add( CreateTextSizer( message ), 0, wxEXPAND, 0 );
+
+    // 2) list box
+    m_listbox = new wxListBox( this, wxID_LISTBOX,
+                               wxDefaultPosition, wxDefaultSize,
+                               n, choices,
+                               styleLbox );
+    if ( n > 0 )
+        m_listbox->SetSelection(0);
+
+    topsizer->Add( m_listbox, 1, wxEXPAND, 0 );
+
+    SetRightMenu(wxID_CANCEL, _("Cancel"));
+
+#else // __SMARTPHONE__/!__SMARTPHONE__
+
     // 1) text message
     topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
 
@@ -271,6 +290,8 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( styleDlg & (wxOK|wxCANCEL) ), 0, wxCENTRE | wxALL, 10 );
+
+#endif // !__SMARTPHONE__
 
     SetAutoLayout( true );
     SetSizer( topsizer );
@@ -303,7 +324,11 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxSingleChoiceDialog, wxDialog)
+#if defined(__SMARTPHONE__)
+    EVT_MENU(wxID_OK, wxSingleChoiceDialog::OnOK)
+#else
     EVT_BUTTON(wxID_OK, wxSingleChoiceDialog::OnOK)
+#endif
     EVT_LISTBOX_DCLICK(wxID_LISTBOX, wxSingleChoiceDialog::OnListBoxDClick)
 END_EVENT_TABLE()
 
