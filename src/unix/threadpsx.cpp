@@ -1168,6 +1168,8 @@ wxThreadError wxThread::Create(unsigned int WXUNUSED(stackSize))
         return wxTHREAD_NO_RESOURCE;
     }
 
+    m_state = STATE_NEW;
+
     return wxTHREAD_NO_ERROR;
 }
 

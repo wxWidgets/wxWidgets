@@ -484,6 +484,9 @@ bool wxThreadInternal::Create(
     {
         SetPriority(m_nPriority);
     }
+
+    m_eState = STATE_NEW;
+
     return(TRUE);
 }
 
