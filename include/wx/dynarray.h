@@ -168,7 +168,7 @@ private:
 // ----------------------------------------------------------------------------
 #define  _WX_DEFINE_ARRAY(T, name)                                  \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);       \
-class WXDLLEXPORTLOCAL name : public wxBaseArray                                     \
+class WXDLLEXPORT name : public wxBaseArray                         \
 {                                                                   \
 public:                                                             \
   name()                                                            \
@@ -226,7 +226,7 @@ public:                                                             \
 // ----------------------------------------------------------------------------
 #define  _WX_DEFINE_SORTED_ARRAY(T, name)                           \
 typedef int (CMPFUNC_CONV *SCMPFUNC##T)(T pItem1, T pItem2);        \
-class WXDLLEXPORTLOCAL  name : public wxBaseArray                                     \
+class WXDLLEXPORT name : public wxBaseArray                         \
 {                                                                   \
 public:                                                             \
   name(SCMPFUNC##T fn)                                              \
@@ -267,7 +267,7 @@ private:                                                            \
 // ----------------------------------------------------------------------------
 #define _WX_DECLARE_OBJARRAY(T, name)                               \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T** pItem1, T** pItem2);     \
-class WXDLLEXPORTLOCAL name : public wxBaseArray                    \
+class WXDLLEXPORT name : public wxBaseArray                         \
 {                                                                   \
 public:                                                             \
   name() { }                                                        \
@@ -403,8 +403,6 @@ private:                                                            \
 // # overhead if not used?
 // ----------------------------------------------------------------------------
 
-#define WXDLLEXPORTLOCAL WXDLLEXPORT
-
 //@{
   /** @name ArrayInt */
 WX_DEFINE_ARRAY(int,    wxArrayInt);
@@ -415,9 +413,6 @@ WX_DEFINE_ARRAY(void *, wxArrayPtrVoid);
 //@}
 
 //@}
-
-#undef  WXDLLEXPORTLOCAL
-#define WXDLLEXPORTLOCAL
 
 // -----------------------------------------------------------------------------
 // convinience macros
