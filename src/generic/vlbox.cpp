@@ -188,6 +188,10 @@ bool wxVListBox::DoSelectAll(bool select)
 
 bool wxVListBox::DoSetCurrent(int current)
 {
+    wxASSERT_MSG( current == wxNOT_FOUND ||
+                    (current >= 0 && (size_t)current < GetItemCount()),
+                  _T("wxVListBox::DoSetCurrent(): invalid item index") );
+
     if ( current == m_current )
     {
         // nothing to do
@@ -239,6 +243,10 @@ void wxVListBox::SendSelectedEvent()
 
 void wxVListBox::SetSelection(int selection)
 {
+    wxCHECK_RET( selection == wxNOT_FOUND ||
+                  (selection >= 0 && (size_t)selection < GetItemCount()),
+                  _T("wxVListBox::SetSelection(): invalid item index") );
+
     wxASSERT_MSG( !HasMultipleSelection(),
                   _T("SetSelection() is invalid with multiselection listbox") );
 
@@ -502,13 +510,18 @@ void wxVListBox::OnLeftDown(wxMouseEvent& event)
 {
     int item = HitTest(event.GetPosition());
 
-    DoHandleItemClick(item, event.ShiftDown(),
+    if ( item != wxNOT_FOUND )
+    {
+        // under Mac Apple-click is used in the same way as Ctrl-click
+        // elsewhere
+        DoHandleItemClick(item, event.ShiftDown(),
 #ifdef __WXMAC__
-                            event.MetaDown()
+                                event.MetaDown()
 #else
-                            event.ControlDown()
+                                event.ControlDown()
 #endif
-                     );
+                         );
+    }
 }
 
 void wxVListBox::OnLeftDClick(wxMouseEvent& event)
