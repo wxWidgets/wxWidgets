@@ -632,8 +632,11 @@ bool wxListCtrl::SetItem(wxListItem& info)
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-        delete m_attrs.Delete(item.iItem); // remove existing attributes
-        m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        wxListItemAttr *attr;
+        attr = (wxListItemAttr*) m_attrs.Get(item.iItem);
+        if (attr == NULL)
+            m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        else *attr = *info.GetAttributes();
 
         m_hasAnyAttr = TRUE;
     }
@@ -1125,7 +1128,11 @@ long wxListCtrl::InsertItem(wxListItem& info)
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-        m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        wxListItemAttr *attr;
+        attr = (wxListItemAttr*) m_attrs.Get(item.iItem);
+        if (attr == NULL)
+            m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        else *attr = *info.GetAttributes();
 
         m_hasAnyAttr = TRUE;
     }
