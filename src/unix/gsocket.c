@@ -25,7 +25,8 @@
 
 #ifdef __VMS__
 #include <socket.h>
-struct sockaddr_un {
+struct sockaddr_un
+{
     u_char  sun_len;        /* sockaddr len including null */
     u_char  sun_family;     /* AF_UNIX */
     char    sun_path[108];  /* path name (gag) */
@@ -122,9 +123,9 @@ struct sockaddr_un {
 
 /* Global initialisers */
 
-bool GSocket_Init(void)
+int GSocket_Init(void)
 {
-  return TRUE;
+  return 1;
 }
 
 void GSocket_Cleanup(void)
@@ -895,7 +896,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
  *  Sets the socket to non-blocking mode. All IO calls will return
  *  immediately.
  */
-void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
+void GSocket_SetNonBlocking(GSocket *socket, int non_block)
 {
   assert(socket != NULL);
 

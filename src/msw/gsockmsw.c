@@ -82,7 +82,7 @@ static int firstAvailable;
 
 /* Global initializers */
 
-bool GSocket_Init(void)
+int GSocket_Init(void)
 {
   WSADATA wsaData;
   WNDCLASS winClass;

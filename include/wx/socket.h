@@ -58,8 +58,9 @@ typedef GSocketEventFlags wxSocketEventFlags;
 
 enum wxSocketError
 {
+  // from GSocket
   wxSOCKET_NOERROR = GSOCK_NOERROR,
-  wxSOCKET_INPOP = GSOCK_INVOP,
+  wxSOCKET_INVOP = GSOCK_INVOP,
   wxSOCKET_IOERR = GSOCK_IOERR,
   wxSOCKET_INVADDR = GSOCK_INVADDR,
   wxSOCKET_INVSOCK = GSOCK_INVSOCK,
@@ -67,7 +68,10 @@ enum wxSocketError
   wxSOCKET_INVPORT = GSOCK_INVPORT,
   wxSOCKET_WOULDBLOCK = GSOCK_WOULDBLOCK,
   wxSOCKET_TIMEDOUT = GSOCK_TIMEDOUT,
-  wxSOCKET_MEMERR = GSOCK_MEMERR
+  wxSOCKET_MEMERR = GSOCK_MEMERR,
+
+  // wxSocket-specific (not yet implemented)
+  wxSOCKET_DUMMY
 };
 
 enum
@@ -191,7 +195,7 @@ public:
   // Implementation from now on
   // --------------------------
 
-  // do not use, should be private
+  // do not use, should be private (called from GSocket)
   void OnRequest(wxSocketNotify notify);
 
   // do not use, not documented nor supported
@@ -206,13 +210,14 @@ private:
   // low level IO
   wxUint32 _Read(void* buffer, wxUint32 nbytes);
   wxUint32 _Write(const void *buffer, wxUint32 nbytes);
-  bool _Wait(long seconds, long milliseconds, wxSocketEventFlags flags);
+  bool     _Wait(long seconds, long milliseconds, wxSocketEventFlags flags);
 
   // pushback buffer
-  void Pushback(const void *buffer, wxUint32 size);
+  void     Pushback(const void *buffer, wxUint32 size);
   wxUint32 GetPushback(void *buffer, wxUint32 size, bool peek);
 
 private:
+  // socket
   GSocket      *m_socket;           // GSocket
   wxSocketType  m_type;             // wxSocket type
 
@@ -223,6 +228,7 @@ private:
   bool          m_reading;          // busy reading?
   bool          m_writing;          // busy writing?
   bool          m_error;            // did last IO call fail?
+  wxSocketError m_lasterror;        // last error (not cleared on success)
   wxUint32      m_lcount;           // last IO transaction size
   unsigned long m_timeout;          // IO timeout value
   wxList        m_states;           // stack of states
@@ -304,6 +310,10 @@ public:
   wxDatagramSocket& SendTo( wxSockAddress& addr,
                             const void* buf,
                             wxUint32 nBytes );
+
+/* TODO:
+  bool Connect(wxSockAddress& addr);
+*/
 };
 
 
@@ -323,8 +333,10 @@ public:
   void           *GetClientData() const  { return m_clientData; }
 
   // backwards compatibility
+#if WXWIN_COMPATIBILITY_2
   wxSocketNotify  SocketEvent() const    { return m_event; }
   wxSocketBase   *Socket() const         { return (wxSocketBase *) GetEventObject(); }
+#endif // WXWIN_COMPATIBILITY_2
 
   void CopyObject(wxObject& object_dest) const;
 

@@ -28,6 +28,18 @@
 extern "C" {
 #endif
 
+#if !defined(__cplusplus)
+typedef int bool;
+#endif
+
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
 /* Definition of GSocket */
 struct _GSocket
 {

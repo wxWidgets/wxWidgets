@@ -20,19 +20,6 @@
 #include <stddef.h>
 #include <sys/types.h>
 
-#if !defined(__cplusplus)
-typedef unsigned int bool;
-#endif
-
-#ifndef TRUE
-#define TRUE 1
-#endif
-
-#ifndef FALSE
-#define FALSE 0
-#endif
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -91,7 +78,7 @@ typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
 /* Global initializers */
 
 /* GSocket_Init() must be called at the beginning */
-bool GSocket_Init(void);
+int GSocket_Init(void);
 
 /* GSocket_Cleanup() must be called at the end */
 void GSocket_Cleanup(void);
@@ -231,7 +218,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags);
  *  Sets the socket to non-blocking mode. All IO calls will return
  *  immediately.
  */
-void GSocket_SetNonBlocking(GSocket *socket, bool non_block);
+void GSocket_SetNonBlocking(GSocket *socket, int non_block);
 
 /* GSocket_SetTimeout:
  *  Sets the timeout for blocking calls. Time is expressed in

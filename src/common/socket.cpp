@@ -255,26 +255,27 @@ wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
 
   // Possible combinations (they are checked in this order)
   // wxSOCKET_NOWAIT
-  // wxSOCKET_WAITALL | wxSOCKET_BLOCK
-  // wxSOCKET_WAITALL
+  // wxSOCKET_WAITALL (with or without wxSOCKET_BLOCK)
   // wxSOCKET_BLOCK
   // wxSOCKET_NONE
   //
   if (m_flags & wxSOCKET_NOWAIT)
   {
-    GSocket_SetNonBlocking(m_socket, TRUE);
+    GSocket_SetNonBlocking(m_socket, 1);
     ret = GSocket_Read(m_socket, (char *)buffer, nbytes);
-    GSocket_SetNonBlocking(m_socket, FALSE);
+    GSocket_SetNonBlocking(m_socket, 0);
 
     if (ret > 0)
       total += ret;
   }
-  else if (m_flags & wxSOCKET_WAITALL)
+  else
   {
-    while (ret > 0 && nbytes > 0)
+    bool more = TRUE;
+
+    while (more)
     {
-      if (!(m_flags & wxSOCKET_BLOCK) && !WaitForRead())
-          break;
+      if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForRead() )
+        break;
 
       ret = GSocket_Read(m_socket, (char *)buffer, nbytes);
 
@@ -284,16 +285,12 @@ wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
         nbytes -= ret;
         buffer  = (char *)buffer + ret;
       }
-    }
-  }
-  else
-  {
-    if ((m_flags & wxSOCKET_BLOCK) || WaitForRead())
-    {
-      ret = GSocket_Read(m_socket, (char *)buffer, nbytes);
 
-      if (ret > 0)
-        total += ret;
+      // If we got here and wxSOCKET_WAITALL is not set, we can leave
+      // now. Otherwise, wait until we recv all the data or until there
+      // is an error.
+      //
+      more = (ret > 0 && nbytes > 0 && (m_flags & wxSOCKET_WAITALL));
     }
   }
 
@@ -329,7 +326,7 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
 
   if (sig != 0xfeeddead)
   {
-    wxLogWarning( _("wxSocket: invalid signature in ReadMsg."));
+    wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
     goto exit;
   }
 
@@ -383,7 +380,7 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
 
   if (sig != 0xdeadfeed)
   {
-    wxLogWarning( _("wxSocket: invalid signature in ReadMsg."));
+    wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
     goto exit;
   }
 
@@ -443,51 +440,60 @@ wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
   wxUint32 total = 0;
   int ret = 1;
 
-  // If the socket is invalid, return immediately
-  if (!m_socket)
+  // If the socket is invalid or parameters are ill, return immediately
+  if (!m_socket || !buffer || !nbytes)
     return 0;
 
   // Possible combinations (they are checked in this order)
   // wxSOCKET_NOWAIT
-  // wxSOCKET_WAITALL | wxSOCKET_BLOCK
-  // wxSOCKET_WAITALL
+  // wxSOCKET_WAITALL (with or without wxSOCKET_BLOCK)
   // wxSOCKET_BLOCK
   // wxSOCKET_NONE
   //
   if (m_flags & wxSOCKET_NOWAIT)
   {
-    GSocket_SetNonBlocking(m_socket, TRUE);
+    GSocket_SetNonBlocking(m_socket, 1);
     ret = GSocket_Write(m_socket, (const char *)buffer, nbytes);
-    GSocket_SetNonBlocking(m_socket, FALSE);
+    GSocket_SetNonBlocking(m_socket, 0);
 
     if (ret > 0)
       total = ret;
   }
-  else if (m_flags & wxSOCKET_WAITALL)
+  else
   {
-    while (ret > 0 && nbytes > 0)
+    bool more = TRUE;
+
+    while (more)            
     {
-      if (!(m_flags & wxSOCKET_BLOCK) && !WaitForWrite())
-          break;
+      if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForWrite() )
+        break;
 
       ret = GSocket_Write(m_socket, (const char *)buffer, nbytes);
-      
+
       if (ret > 0)
       {
         total  += ret;
         nbytes -= ret;
         buffer  = (const char *)buffer + ret;
       }
-    }
-  }
-  else
-  {
-    if ((m_flags & wxSOCKET_BLOCK) || WaitForWrite())
-    {
-      ret = GSocket_Write(m_socket, (const char *)buffer, nbytes);
 
-      if (ret > 0)
-        total = ret;
+      // Yes, this can happen even when the socket selects as writable!
+      // (probably due to a buggy kernel; Linux 2.0.36 seems to do this).
+      // Fake it so that we stay in the loop, but do it only for ret < 0,
+      // as ret == 0 means that the socket is closed. I'm not applying
+      // this hack for read calls as it seems unnecessary there.
+      //
+      if ((ret < 0) && (GSocket_GetError(m_socket) == GSOCK_WOULDBLOCK))
+      {
+        wxLogDebug(_("wxSocket: working around select() bug in Write."));
+        continue;
+      }
+
+      // If we got here and wxSOCKET_WAITALL is not set, we can leave
+      // now. Otherwise, wait until we send all the data or until there
+      // is an error.
+      //
+      more = (ret > 0 && nbytes > 0 && (m_flags & wxSOCKET_WAITALL));
     }
   }
 
@@ -906,7 +912,7 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
     case GSOCK_CONNECTION: flag = GSOCK_CONNECTION_FLAG; break;
     case GSOCK_LOST:       flag = GSOCK_LOST_FLAG; break;
     default:
-      wxLogWarning( _("wxSocket: unknown event!."));
+      wxLogWarning(_("wxSocket: unknown event!."));
       return;
   }
 
@@ -1047,12 +1053,12 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
   // again.
 
   if (!wait)
-    GSocket_SetNonBlocking(m_socket, TRUE);
+    GSocket_SetNonBlocking(m_socket, 1);
 
   child_socket = GSocket_WaitConnection(m_socket);
 
   if (!wait)
-    GSocket_SetNonBlocking(m_socket, FALSE);
+    GSocket_SetNonBlocking(m_socket, 0);
 
   if (!child_socket)
     return FALSE;
@@ -1135,13 +1141,13 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
   // again.
 
   if (!wait)
-    GSocket_SetNonBlocking(m_socket, TRUE);
+    GSocket_SetNonBlocking(m_socket, 1);
 
   GSocket_SetPeer(m_socket, addr_man.GetAddress());
   err = GSocket_Connect(m_socket, GSOCK_STREAMED);
 
   if (!wait)
-    GSocket_SetNonBlocking(m_socket, FALSE);
+    GSocket_SetNonBlocking(m_socket, 0);
 
   if (err != GSOCK_NOERROR)
   {

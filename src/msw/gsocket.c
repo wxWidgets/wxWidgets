@@ -768,7 +768,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
  *  Sets the socket to non-blocking mode. All IO calls will return
  *  immediately.
  */
-void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
+void GSocket_SetNonBlocking(GSocket *socket, int non_block)
 {
   assert(socket != NULL);
 
