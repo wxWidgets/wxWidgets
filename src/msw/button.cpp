@@ -41,6 +41,7 @@
 #endif
 
 #include "wx/stockitem.h"
+#include "wx/tokenzr.h"
 #include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
@@ -204,17 +205,38 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxButton::DoGetBestSize() const
 {
-    int wBtn;
-    GetTextExtent(wxGetWindowText(GetHWND()), &wBtn, NULL);
-
-    int wChar, hChar;
+    int wBtn = 0;
+    int wChar, hChar, hBtn;
     wxGetCharSize(GetHWND(), &wChar, &hChar, GetFont());
 
+    wxString label = wxGetWindowText(GetHWND());
+    if ( label.find(_T('\n')) != wxString::npos )
+    {
+        wxStringTokenizer tokens( label, wxT("\n") );
+
+        // the button height is proportional to the height of the font used
+        hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
+        hBtn += hChar*(tokens.CountTokens()-1);
+        
+        while (tokens.HasMoreTokens())
+        {
+            wxString sub = tokens.GetNextToken();
+            int w;
+            GetTextExtent( sub, &w, NULL);
+            if (w > wBtn)
+                wBtn = w;
+        }
+    }
+    else
+    {
+        GetTextExtent( label, &wBtn, NULL);
+
+        // the button height is proportional to the height of the font used
+        hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
+    }
+    
     // add a margin -- the button is wider than just its label
     wBtn += 3*wChar;
-
-    // the button height is proportional to the height of the font used
-    int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
 
     // all buttons have at least the standard size unless the user explicitly
     // wants them to be of smaller size and used wxBU_EXACTFIT style when
