@@ -262,8 +262,13 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
             return false;
         }
     }
-    /*
-    //Brian Victor's patch (X11 can't change bit depth yet), here for reference
+}
+
+
+#else // !HAVE_X11_EXTENSIONS_XF86VMODE_H
+
+wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
+{
   Display *disp = (Display*)wxGetDisplay();
   int count_return;
   int* depths = XListDepths(disp, 0, &count_return);
@@ -277,16 +282,6 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     }
   }
   return modes;
-    */
-}
-
-
-#else // !HAVE_X11_EXTENSIONS_XF86VMODE_H
-
-wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
-{
-    // Not implemented
-    return wxArrayVideoModes();
 }
 
 wxVideoMode wxDisplay::GetCurrentMode() const
