@@ -2,10 +2,13 @@
 #----------------------------------------------------------------------
 # Build MacPython 2.3 and make an Installer package of it
 
+# TODO:  Parameterize the versions, builddirs, etc...
+
 # Script configs
 PYVERSION=2.3a1
-BUILDNUM=1
-DOCLEANUP=yes
+PYVER=2.3
+BUILDNUM=2
+DOCLEANUP=no
 
 PROGDIR="`dirname \"$0\"`"
 TMPDIR=/tmp/_py
@@ -21,6 +24,7 @@ WASTEDIR=/projects/waste
 # Setup
 mkdir -p $BUILDROOT
 mkdir -p $INSTALLROOT
+rm -rf $DMGDIR
 mkdir -p $DMGDIR/root
 
 
@@ -45,7 +49,7 @@ popd
 rm -r $INSTALLROOT/usr
 
 # Next, remove the .pyc/.pyo files
-python $PROGDIR/../zappycfiles.py $INSTALLROOT
+python $PROGDIR/../zappycfiles.py $INSTALLROOT/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER
 
 # Make the welcome message
 cat > $RESOURCEDIR/Welcome.txt <<EOF
@@ -59,11 +63,14 @@ EOF
 
 
 # Finally, build the package...
+rm -rf MacPython-OSX.pkg
 python $PROGDIR/../buildpkg.py \
     --Title=MacPython-OSX \
     --Version=$PYVERSION-$BUILDNUM \
     --Description="Python $PYVERSION for Mac OS X, framework based" \
     --NeedsAuthorization="YES" \
+    --Relocatable="NO" \
+    --InstallOnly="YES" \
     $INSTALLROOT \
     $RESOURCEDIR
 
@@ -77,8 +84,14 @@ mv $DMGDIR/MacPython-OSX-$PYVERSION-$BUILDNUM.dmg $DESTDIR
 
 # Cleanup build/install dirs
 if [ $DOCLEANUP = yes ]; then
-    echo cleaning up...
+    echo "Cleaning up..."
     rm -rf $BUILDROOT
-    rm -r $INSTALLROOT
-    rm -r $DMGDIR
+    rm -rf $INSTALLROOT
+    rm -rf $DMGDIR
+else
+    echo "Cleanup is disabled.  You should remove these dirs when done:"
+    echo "          $BUILDROOT"
+    echo "          $INSTALLROOT"
+    echo "          $DMGDIR"
 fi
+

@@ -13,6 +13,7 @@ DEST=$2
 # if destination is / then use usr/local/bin, otherwise just bin
 if [ "$DEST" = "/" ]; then
     TOOLDIR=/usr/local/bin
+    DEST=
 else
     TOOLDIR=$DEST/bin
 fi
@@ -46,3 +47,10 @@ $TOOLDIR/python -Wi -tt \
 $TOOLDIR/python -Wi -tt -O \
     $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/compileall.py \
     -x badsyntax $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER
+
+
+# Make the site-packages dir writable by the admin.  Should anything else
+# be writable too?
+
+chgrp admin $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/site-packages
+chmod g+w  $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/site-packages

@@ -2,5 +2,5 @@ Welcome!
 
 This program will install Python 2.3a1 for Mac OS X as a Framework.
 
-Build number: 1
-Build date:   Fri Jan 24 16:02:26 PST 2003
+Build number: 2
+Build date:   Sat Jan 25 17:26:30 PST 2003
