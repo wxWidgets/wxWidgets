@@ -22,9 +22,9 @@ O=.obj
 LIBTARGET=..\..\lib\zlib.lib
 
 # variables
-OBJ1=adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) 
-OBJ2=trees$(O) zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) 
-OBJ3=infutil$(O) inffast$(O)
+OBJECTS=adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) &
+        trees$(O) zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) &
+        infutil$(O) inffast$(O)
 
 # all: test
 
@@ -82,7 +82,7 @@ minigzip.obj: minigzip.c zlib.h zconf.h
 
 $(LIBTARGET) : $(OBJECTS)
 	%create tmp.lbc
-	@for %i in ( $(OBJ1) $(OBJ2) $(OBJ3) ) do @%append tmp.lbc +%i
+	@for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
 	wlib /b /c /n /p=512 $^@ @tmp.lbc
 
 
