@@ -69,8 +69,8 @@ typedef struct
 {
     short int m_Level;
     int m_ID;
-    char* m_Name;
-    char* m_Page;
+    wxChar* m_Name;
+    wxChar* m_Page;
     wxHtmlBookRecord *m_Book;
 }
 wxHtmlContentsItem;
@@ -83,7 +83,7 @@ wxHtmlContentsItem;
 class WXDLLEXPORT wxSearchEngine : public wxObject
 {
     private:
-        char *m_Keyword;
+        wxChar *m_Keyword;
 
     public:
         wxSearchEngine() : wxObject() {m_Keyword = NULL; }

@@ -36,7 +36,7 @@ typedef struct {
             // end2 is '>' or both are
             // -1 if there is no ending tag for this one...
             // or -2 if this is ending tag  </...>
-        char *Name;
+        wxChar *Name;
             // name of this tag
     } sCacheItem;
 
@@ -93,7 +93,7 @@ class WXDLLEXPORT wxHtmlTag : public wxObject
                 //           <P IMG SRC="WhaT.jpg"> GetParam("SRC") returns (WhaT.jpg)
                 //                           (or ("WhaT.jpg") if with_commas == TRUE)
 
-        int ScanParam(const wxString& par, char *format, void *param) const;
+        int ScanParam(const wxString& par, wxChar *format, void *param) const;
                 // Scans param like scanf() functions family do.
                 // Example : ScanParam("COLOR", "\"#%X\"", &clr);
                 // This is always with with_commas=FALSE
