@@ -11,10 +11,14 @@
 #ifndef __GSOCKET_H
 #define __GSOCKET_H
 
-/* DFE: Define this and compile gsocket.cpp instead of gsocket.c and
-   compile existing GUI gsock*.c as C++ to try out the new GSocket. */
+#ifdef __WINDOWS__
 /* #define wxUSE_GSOCKET_CPLUSPLUS 1 */
 #undef wxUSE_GSOCKET_CPLUSPLUS
+#else
+/* DFE: Define this and compile gsocket.cpp instead of gsocket.c and
+   compile existing GUI gsock*.c as C++ to try out the new GSocket. */
+#undef wxUSE_GSOCKET_CPLUSPLUS
+#endif
 #if !defined(__cplusplus) && defined(wxUSE_GSOCKET_CPLUSPLUS)
 #error "You need to compile this file (probably a GUI gsock peice) as C++"
 #endif
@@ -45,7 +49,11 @@
 #endif
 
 #ifdef wxUSE_GSOCKET_CPLUSPLUS
+# ifdef __WINDOWS__
+class GSocket;
+# else
 typedef class GSocketBSD GSocket;
+# endif
 #endif
 
 #ifdef __cplusplus
@@ -116,6 +124,26 @@ struct GSocketBaseFunctionsTable
 };
 #endif
 
+#if defined(__WINDOWS__) && defined(wxUSE_GSOCKET_CPLUSPLUS)
+/* Actually this is a misnomer now, but reusing this name means I don't
+   have to ifdef app traits or common socket code */
+class GSocketGUIFunctionsTable
+{
+public:
+    virtual bool OnInit() = 0;
+    virtual void OnExit() = 0;
+    virtual bool CanUseEventLoop() = 0;
+    virtual bool Init_Socket(GSocket *socket) = 0;
+    virtual void Destroy_Socket(GSocket *socket) = 0;
+#ifndef __WINDOWS__
+    virtual void Install_Callback(GSocket *socket, GSocketEvent event) = 0;
+    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event) = 0;
+#endif
+    virtual void Enable_Events(GSocket *socket) = 0;
+    virtual void Disable_Events(GSocket *socket) = 0;
+};
+
+#else
 struct GSocketGUIFunctionsTable
 {
     int  (*GUI_Init)(void);
@@ -129,6 +157,7 @@ struct GSocketGUIFunctionsTable
     void (*Enable_Events)(GSocket *socket);
     void (*Disable_Events)(GSocket *socket);
 };
+#endif /* defined(__WINDOWS__) && defined(wxUSE_GSOCKET_CPLUSPLUS) */
 
 
 /* Global initializers */
@@ -147,7 +176,9 @@ void GSocket_Cleanup(void);
 /* Constructors / Destructors */
 
 GSocket *GSocket_new(void);
+#if !defined(__WINDOWS__) || !defined(wxUSE_GSOCKET_CPLUSPLUS)
 void GSocket_destroy(GSocket *socket);
+#endif
 
 
 #ifndef wxUSE_GSOCKET_CPLUSPLUS
@@ -391,7 +422,11 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 #endif /* __cplusplus */
 
 #ifdef wxUSE_GSOCKET_CPLUSPLUS
-#include "wx/unix/gsockunx.h"
+# ifdef __WINDOWS__
+#  include "wx/msw/gsockmsw.h"
+# else
+#  include "wx/unix/gsockunx.h"
+# endif
 #endif
 
 #endif    /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
