@@ -144,6 +144,7 @@ cd $WXDIR/wxPython
 
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 for s in \
+	helpviewer \
 	img2png \
 	img2py \
 	img2xpm \

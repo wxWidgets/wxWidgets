@@ -7,7 +7,7 @@ Usage:  genfilelist.py [-r] build_root filespec(s)
 """
 
 
-import sys, os, glob
+import sys, os, glob, stat
 
 
 def walktree(names, buildroot, recurse):
@@ -25,7 +25,7 @@ def printfilename(name, buildroot, isdir):
         fmt = "%%dir %%attr(%o, root, root) %s"
     else:
         fmt = "%%attr(%o, root, root) %s"
-    print fmt % (s.st_mode & 0777, realname)
+    print fmt % (s[stat.ST_MODE] & 0777, realname)
 
 
 def main(args):
