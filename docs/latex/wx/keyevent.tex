@@ -17,11 +17,6 @@ from the \helpref{keycodes table}{keycodes}. The translated key is, in
 general, the character the user expects to appear as the result of the key
 combination when typing the text into a text entry zone, for example.
 
-If the key up event is caught and the event handler does not call
-event.Skip() then the coresponding char event will not happen.  This
-is by design and enables the programs that handle both types of events
-to be a bit simpler.
-
 A few examples to clarify this (all assume that {\sc Caps Lock} is unpressed
 and the standard US keyboard): when the {\tt 'A'} key is pressed, the key down
 event key code is equal to {\tt ASCII A} $== 65$. But the char event key code
@@ -44,6 +39,12 @@ $1$, the ASCII value of this key combination.
 You may discover how the other keys on your system behave interactively by
 running the \helpref{text}{sampletext} wxWindows sample and pressing some keys
 in any of the text controls shown in it.
+
+{\bf Note:} If a key down ({\tt EVT\_KEY\_DOWN}) event is caught and
+the event handler does not call {\tt event.Skip()} then the coresponding
+char event ({\tt EVT\_CHAR}) will not happen.  This is by design and
+enables the programs that handle both types of events to be a bit
+simpler.
 
 {\bf Note for Windows programmers:} The key and char events in wxWindows are
 similar to but slightly different from Windows {\tt WM\_KEYDOWN} and
