@@ -25,6 +25,10 @@
 void wxDisplaySize(int *width, int *height)
 {
     // TODO
+    if(width)
+        *width = 1024;
+    if(height)
+        *height = 768;
 }
 
 void wxDisplaySizeMM(int*,int*)
