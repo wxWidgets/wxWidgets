@@ -1,0 +1,48 @@
+#
+# File:		makefile.g95
+# Author:	Julian Smart
+# Created:	1996
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxTree library and example under GNU-WIN32
+#
+WXDIR = ../../..
+include $(WXDIR)/src/makeg95.env
+
+PROPDIR = $(WXDIR)/utils/wxtree
+TREELIB = $(PROPDIR)/lib/$(LIBPREFIX)wxtree.$(LIBSUFF)
+THISDIR = $(PROPDIR)/src
+
+OBJECTS = $(OBJDIR)/wxtree.$(OBJSUFF)
+TESTOBJECTS = $(OBJDIR)/test.$(OBJSUFF) $(OBJDIR)/test_resources.$(OBJSUFF)
+
+LDFLAGS =  -Wl,--subsystem,windows -mwindows -L$(WXDIR)/lib -L../lib
+LDLIBS=-lwxtree $(LIBS)
+
+all:    $(OBJDIR) $(TREELIB)
+
+test:   $(OBJDIR) test.exe
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+$(TREELIB):      $(OBJECTS)
+	rm -f $@
+	ar $(AROPTIONS) $@ $(OBJECTS)
+	$(RANLIB) $@
+
+$(OBJDIR)/test.$(OBJSUFF):		test.h test.$(SRCSUFF) $(TREELIB)
+	$(CC) -c $(CPPFLAGS) -o $@ test.$(SRCSUFF)
+
+test.exe: $(TESTOBJECTS)
+	$(CC) $(LDFLAGS) -o test$(GUISUFFIX)$(EXESUFF) $(TESTOBJECTS) $(LDLIBS)
+
+$(OBJDIR)/wxtree.$(OBJSUFF):      wxtree.h wxtree.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ wxtree.$(SRCSUFF)
+
+$(OBJDIR)/test_resources.o:  test.rc
+	$(RESCOMP) -i test.rc -o $(OBJDIR)/test_resources.o $(RESFLAGS)
+
+clean:
+	rm -f *.$(OBJSUFF) $(TREELIB) objects/test.o *.exe *.res *.map *.rsc
