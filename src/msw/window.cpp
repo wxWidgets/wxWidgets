@@ -782,12 +782,6 @@ void wxWindowMSW::WarpPointer (int x, int y)
 // scrolling stuff
 // ---------------------------------------------------------------------------
 
-// convert wxHORIZONTAL/wxVERTICAL to SB_HORZ/SB_VERT
-static inline int wxDirToWinStyle(int orient)
-{
-    return orient == wxHORIZONTAL ? SB_HORZ : SB_VERT;
-}
-
 inline int GetScrollPosition(HWND hWnd, int wOrient)
 {
 #ifdef __WXMICROWIN__
