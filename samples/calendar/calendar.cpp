@@ -301,7 +301,7 @@ MyPanel::MyPanel(wxFrame *frame)
 {
     // using constraints doesn't work under GTK - the calendar window is never
     // repainted after it had been moved at least once!
-#if 0
+#if 1
     SetAutoLayout(TRUE);
 
     wxString date;

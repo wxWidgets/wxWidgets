@@ -46,9 +46,12 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkprivate.h>
 #include <gdk/gdkkeysyms.h>
-#include <wx/gtk/win_gtk.h>
-
 #include <gdk/gdkx.h>
+
+#include <gtk/gtk.h>
+#include <gtk/gtkprivate.h>
+
+#include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
 // documentation on internals
@@ -621,7 +624,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
         wxapp_install_idle_handler();
         
 /*
-    if (win->GetName() == wxT("status_line"))
+    if (win->GetName() == wxT("panel"))
     {
         wxPrintf( wxT("OnExpose from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -721,7 +724,7 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
         wxapp_install_idle_handler();
         
 /*
-    if (win->GetName() == wxT("status_line"))
+    if (win->GetName() == wxT("panel"))
     {
         wxPrintf( wxT("OnDraw from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -737,6 +740,7 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
         
     if (!win->m_queuedFullRedraw)
     {
+    
         if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
              (pizza->clear_on_draw))
         {
@@ -2571,8 +2575,14 @@ void wxWindow::OnInternalIdle()
            the actual size of window, in which case all expose events that resulted
            from resizing the window have been sent (and discarded) and we can
            now do our full redraw and switch on expose event handling again. */
-           
-        if ((m_width == m_widget->allocation.width) && (m_height == m_widget->allocation.height))
+        
+        bool child_already_resized = FALSE;
+        if (m_isFrame)
+            child_already_resized = gtk_pizza_child_resized( GTK_PIZZA(m_wxwindow->parent), m_wxwindow );
+        else
+            child_already_resized = gtk_pizza_child_resized( GTK_PIZZA(m_widget->parent), m_widget );
+        
+        if (child_already_resized)
         {
             m_queuedFullRedraw = FALSE;
             m_updateRegion.Clear();

@@ -97,6 +97,9 @@ void       gtk_pizza_set_external    (GtkPizza          *pizza,
 void       gtk_pizza_scroll          (GtkPizza          *pizza,	
                                       gint               dx,
                                       gint               dy);
+
+gint       gtk_pizza_child_resized   (GtkPizza          *pizza,
+                                      GtkWidget         *widget);
 					
 void       gtk_pizza_put             (GtkPizza          *pizza,
                                       GtkWidget         *widget,

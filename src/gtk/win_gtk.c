@@ -424,6 +424,33 @@ gtk_pizza_set_size (GtkPizza   *pizza,
     }
 }
 
+gint       
+gtk_pizza_child_resized  (GtkPizza   *pizza,
+                          GtkWidget  *widget)
+{
+    GtkPizzaChild *child;
+    GList *children;
+
+    g_return_val_if_fail (pizza != NULL, FALSE);
+    g_return_val_if_fail (GTK_IS_PIZZA (pizza), FALSE);
+    g_return_val_if_fail (widget != NULL, FALSE);
+
+    children = pizza->children;
+    while (children)
+    {
+        child = children->data;
+        children = children->next;
+
+        if (child->widget == widget)
+        {
+            return ((child->width == widget->allocation.width) &&
+                    (child->height == widget->allocation.height));
+        }
+    }
+    
+    return FALSE;
+}
+					
 static void
 gtk_pizza_map (GtkWidget *widget)
 {

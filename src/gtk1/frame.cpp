@@ -126,6 +126,7 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
 
         win->m_width = alloc->width;
         win->m_height = alloc->height;
+        win->m_queuedFullRedraw = TRUE;
         win->GtkUpdateSize();
     }
 }
@@ -402,7 +403,7 @@ void wxFrame::Init()
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
     m_insertInClientArea = TRUE;
-    m_isFrame = TRUE;
+    m_isFrame = FALSE;
 }
 
 bool wxFrame::Create( wxWindow *parent,
@@ -416,6 +417,7 @@ bool wxFrame::Create( wxWindow *parent,
     wxTopLevelWindows.Append( this );
 
     m_needParent = FALSE;
+    m_isFrame = TRUE;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
