@@ -21,7 +21,11 @@ versions, please update your code to not use them.
 - wxList::Number, First, Last, Nth: use GetCount, GetFirst/Last, Item instead
 - wxNode::Next, Previous, Data: use GetNext, GetPrevious, GetData instead
 - wxListBase::operator wxList&(): use typesafe lists instead
-- wxTheFontMapper, use wxFontMapper::Get() instead
+- wxTheFontMapper: use wxFontMapper::Get() instead
+- wxStringHashTable: use wxHashMap instead
+- wxHashTableLong: use wxHashMap instead
+- wxArrayString::GetStringArray: no replacement
+- wxArrayString::Remove(index, count): use RemoveAt instead
 
 
 OTHER CHANGES

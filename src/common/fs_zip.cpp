@@ -26,7 +26,7 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/hash.h"
+#include "wx/hashmap.h"
 #include "wx/filesys.h"
 #include "wx/zipstrm.h"
 #include "wx/fs_zip.h"
@@ -38,6 +38,8 @@
 #include "unzip.h"
 #endif
 
+WX_DECLARE_EXPORTED_HASH_MAP( long, long, wxIntegerHash, wxIntegerEqual,
+                              wxLongToLongHashMap );
 
 //----------------------------------------------------------------------------
 // wxZipFSHandler
@@ -165,7 +167,7 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
             if (m_AllowDirs)
             {
                 delete m_DirsFound;
-                m_DirsFound = new wxHashTableLong();
+                m_DirsFound = new wxLongToLongHashMap();
             }
             return DoFind();
         }
@@ -203,9 +205,10 @@ wxString wxZipFSHandler::DoFind()
             {
                 long key = 0;
                 for (size_t i = 0; i < dir.Length(); i++) key += (wxUChar)dir[i];
-                if (m_DirsFound->Get(key) == wxNOT_FOUND)
+                wxLongToLongHashMap::iterator it = m_DirsFound->find(key);
+                if (it == m_DirsFound->end())
                 {
-                    m_DirsFound->Put(key, 1);
+                    m_DirsFound[key] = 1;
                     filename = dir.AfterLast(wxT('/'));
                     dir = dir.BeforeLast(wxT('/'));
                     if (!filename.IsEmpty() && m_BaseDir == dir &&

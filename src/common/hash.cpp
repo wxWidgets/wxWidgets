@@ -119,6 +119,8 @@ wxNodeBase *wxHashTableBase::GetNode(long key, long value) const
     return node;
 }
 
+#if WXWIN_COMPATIBILITY_2_4
+
 // ----------------------------------------------------------------------------
 // wxHashTableLong
 // ----------------------------------------------------------------------------
@@ -333,6 +335,8 @@ bool wxStringHashTable::Delete(long key) const
 
     return FALSE;
 }
+
+#endif // WXWIN_COMPATIBILITY_2_4
 
 // ----------------------------------------------------------------------------
 // old not type safe wxHashTable

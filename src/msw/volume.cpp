@@ -354,7 +354,7 @@ static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
             {
                 // Found the element.  Remove it or mark it mounted.
                 if (flagsUnset & wxFS_VOL_MOUNTED)
-                    list.Remove(iList);
+                    list.RemoveAt(iList);
                 else
                     s_fileInfo[list[iList]].m_flags |= wxFS_VOL_MOUNTED;
 

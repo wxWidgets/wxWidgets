@@ -72,6 +72,8 @@ private:
     DECLARE_NO_COPY_CLASS(wxHashTableBase)
 };
 
+#if WXWIN_COMPATIBILITY_2_4
+
 // ----------------------------------------------------------------------------
 // a hash table which stores longs
 // ----------------------------------------------------------------------------
@@ -142,6 +144,8 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxStringHashTable)
 };
+
+#endif
 
 // ----------------------------------------------------------------------------
 // for compatibility only
@@ -304,6 +308,24 @@ private:
 
 #define WX_DECLARE_USER_EXPORTED_HASH(el, list, hash, usergoo)  \
     _WX_DECLARE_HASH(el, list, hash, class usergoo)
+
+// delete all hash elements
+//
+// NB: the class declaration of the hash elements must be visible from the
+//     place where you use this macro, otherwise the proper destructor may not
+//     be called (a decent compiler should give a warning about it, but don't
+//     count on it)!
+#define WX_CLEAR_HASH_TABLE(array)                                           \
+    {                                                                        \
+        (array).BeginFind();                                                 \
+        wxNode* it = (array).Next();                                         \
+        while( it )                                                          \
+        {                                                                    \
+            delete it->GetData();                                            \
+            it = (array).Next();                                             \
+        }                                                                    \
+        (array).Clear();                                                     \
+    }
 
 #endif
     // _WX_HASH_H__

@@ -1140,7 +1140,7 @@ void wxFileName::InsertDir( int before, const wxString &dir )
 
 void wxFileName::RemoveDir( int pos )
 {
-    m_dirs.Remove( (size_t)pos );
+    m_dirs.RemoveAt( (size_t)pos );
 }
 
 // ----------------------------------------------------------------------------

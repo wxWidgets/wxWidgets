@@ -1906,6 +1906,8 @@ void wxArrayString::Shrink()
   }
 }
 
+#if WXWIN_COMPATIBILITY_2_4
+
 // return a wxString[] as required for some control ctors.
 wxString* wxArrayString::GetStringArray() const
 {
@@ -1920,6 +1922,8 @@ wxString* wxArrayString::GetStringArray() const
 
     return array;
 }
+
+#endif // WXWIN_COMPATIBILITY_2_4
 
 // searches the array for an item (forward or backwards)
 int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
@@ -2051,7 +2055,7 @@ void wxArrayString::SetCount(size_t count)
 }
 
 // removes item from array (by index)
-void wxArrayString::Remove(size_t nIndex, size_t nRemove)
+void wxArrayString::RemoveAt(size_t nIndex, size_t nRemove)
 {
   wxCHECK_RET( nIndex < m_nCount, wxT("bad index in wxArrayString::Remove") );
   wxCHECK_RET( nIndex + nRemove <= m_nCount,
@@ -2074,7 +2078,7 @@ void wxArrayString::Remove(const wxChar *sz)
   wxCHECK_RET( iIndex != wxNOT_FOUND,
                wxT("removing inexistent element in wxArrayString::Remove") );
 
-  Remove(iIndex);
+  RemoveAt(iIndex);
 }
 
 // ----------------------------------------------------------------------------
@@ -2142,17 +2146,21 @@ void wxArrayString::Sort(CompareFunction compareFunction)
   END_SORT();
 }
 
+typedef  int (wxC_CALLING_CONV * wxStringCompareFn)(const void *first, const void *second);
+
+void wxArrayString::Sort(CompareFunction2 compareFunction)
+{
+  qsort(m_pItems, m_nCount, sizeof(wxChar *), (wxStringCompareFn)compareFunction);
+}
+
+#if WXWIN_COMPATIBILITY_2_4
+
 void wxArrayString::Sort(bool reverseOrder)
 {
-  START_SORT();
-
-  wxASSERT( !gs_compareFunction );  // must have been reset to NULL
-  gs_sortAscending = !reverseOrder;
-
-  DoSort();
-
-  END_SORT();
+  Sort(reverseOrder ? wxStringSortDescending : wxStringSortAscending);
 }
+
+#endif // WXWIN_COMPATIBILITY_2_4
 
 void wxArrayString::DoSort()
 {
@@ -2177,3 +2185,12 @@ bool wxArrayString::operator==(const wxArrayString& a) const
     return TRUE;
 }
 
+int wxStringSortAscending(wxString* s1, wxString* s2)
+{
+    return wxStrcmp(s1->c_str(), s2->c_str());
+}
+
+int wxStringSortDescending(wxString* s1, wxString* s2)
+{
+    return -wxStrcmp(s1->c_str(), s2->c_str());
+}

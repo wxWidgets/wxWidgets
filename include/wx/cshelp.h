@@ -22,6 +22,7 @@
 
 #include "wx/help.h"
 
+#include "wx/hashmap.h"
 #if wxUSE_BMPBUTTON
 #include "wx/bmpbuttn.h"
 #endif
@@ -140,6 +141,9 @@ private:
     static wxHelpProvider *ms_helpProvider;
 };
 
+WX_DECLARE_HASH_MAP( long, wxString, wxIntegerHash, wxIntegerEqual,
+                     wxLongToStringHashMap );
+
 // wxSimpleHelpProvider is an implementation of wxHelpProvider which supports
 // only plain text help strings and shows the string associated with the
 // control (if any) in a tooltip
@@ -156,8 +160,8 @@ public:
 protected:
     // we use 2 hashes for storing the help strings associated with windows
     // and the ids
-    wxStringHashTable m_hashWindows,
-                     m_hashIds;
+    wxLongToStringHashMap m_hashWindows,
+                          m_hashIds;
 };
 
 // wxHelpControllerHelpProvider is an implementation of wxHelpProvider which supports

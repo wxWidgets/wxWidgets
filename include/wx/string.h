@@ -1027,12 +1027,19 @@ public:
 // from the array (operator[] or Item() method), a reference is returned.
 // ----------------------------------------------------------------------------
 
+int WXDLLIMPEXP_BASE wxStringSortAscending(wxString*, wxString*);
+int WXDLLIMPEXP_BASE wxStringSortDescending(wxString*, wxString*);
+
 class WXDLLIMPEXP_BASE wxArrayString
 {
 public:
   // type of function used by wxArrayString::Sort()
   typedef int (*CompareFunction)(const wxString& first,
                                  const wxString& second);
+  // type of function used by wxArrayString::Sort(), for compatibility with
+  // wxArray
+  typedef int (*CompareFunction2)(wxString* first,
+                                  wxString* second);
 
   // constructors and destructor
     // default ctor
@@ -1095,11 +1102,13 @@ public:
       return Item(Count() - 1);
   }
 
+#if WXWIN_COMPATIBILITY_2_4
     // return a wxString[], useful for the controls which
     // take one in their ctor.  You must delete[] it yourself
     // once you are done with it.  Will return NULL if the
     // ArrayString was empty.
   wxString* GetStringArray() const;
+#endif
 
   // item management
     // Search the element in the array, starting from the beginning if
@@ -1117,8 +1126,10 @@ public:
     // remove first item matching this value
   void Remove(const wxChar *sz);
     // remove item by index
-  void Remove(size_t nIndex, size_t nRemove = 1);
-  void RemoveAt(size_t nIndex, size_t nRemove = 1) { Remove(nIndex, nRemove); }
+#if WXWIN_COMPATIBILITY_2_4
+  void Remove(size_t nIndex, size_t nRemove = 1) { RemoveAt(nIndex, nRemove); }
+#endif
+  void RemoveAt(size_t nIndex, size_t nRemove = 1);
 
   // sorting
     // sort array elements in alphabetical order (or reversed alphabetical
@@ -1126,6 +1137,7 @@ public:
   void Sort(bool reverseOrder = FALSE);
     // sort array elements using specified comparaison function
   void Sort(CompareFunction compareFunction);
+  void Sort(CompareFunction2 compareFunction);
 
   // comparison
     // compare two arrays case sensitively

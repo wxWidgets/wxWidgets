@@ -18,7 +18,7 @@
 #pragma interface "grid.h"
 #endif
 
-#include "wx/hash.h"
+#include "wx/hashmap.h"
 #include "wx/panel.h"
 #include "wx/scrolwin.h"
 #include "wx/string.h"
@@ -79,6 +79,9 @@ class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxComboBox;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxSpinCtrl;
+
+WX_DECLARE_EXPORTED_HASH_MAP( long, long, wxIntegerHash, wxIntegerEqual,
+                              wxLongToLongHashMap );
 
 // ----------------------------------------------------------------------------
 // macros
@@ -1759,8 +1762,8 @@ protected:
 
     // if a column has a minimal width, it will be the value for it in this
     // hash table
-    wxHashTableLong m_colMinWidths,
-                    m_rowMinHeights;
+    wxLongToLongHashMap m_colMinWidths,
+                        m_rowMinHeights;
 
     // get the minimal width of the given column/row
     int GetColMinimalWidth(int col) const;

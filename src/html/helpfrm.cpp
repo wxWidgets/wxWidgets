@@ -496,7 +496,11 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
         delete m_Data;
     if (m_NormalFonts) delete m_NormalFonts;
     if (m_FixedFonts) delete m_FixedFonts;
-    if (m_PagesHash) delete m_PagesHash;
+    if (m_PagesHash) 
+    {
+        WX_CLEAR_HASH_TABLE(*m_PagesHash);
+        delete m_PagesHash;
+    }
 }
 
 
@@ -719,9 +723,12 @@ void wxHtmlHelpFrame::CreateContents()
 
     m_ContentsBox->Clear();
 
-    if (m_PagesHash) delete m_PagesHash;
+    if (m_PagesHash)
+    {
+        WX_CLEAR_HASH_TABLE(*m_PagesHash);
+        delete m_PagesHash;
+    }
     m_PagesHash = new wxHashTable(wxKEY_STRING, 2 * m_Data->GetContentsCnt());
-    m_PagesHash->DeleteContents(TRUE);
 
     int cnt = m_Data->GetContentsCnt();
     int i;
@@ -1310,8 +1317,8 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                 pos = m_BookmarksNames.Index(item);
                 if (pos != wxNOT_FOUND)
                 {
-                    m_BookmarksNames.Remove(pos);
-                    m_BookmarksPages.Remove(pos);
+                    m_BookmarksNames.RemoveAt(pos);
+                    m_BookmarksPages.RemoveAt(pos);
                     m_Bookmarks->Delete(m_Bookmarks->GetSelection());
                 }
             }

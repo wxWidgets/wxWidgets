@@ -657,7 +657,7 @@ void wxListBox::Delete( int n )
     }
 
     if ( m_strings )
-        m_strings->Remove(n);
+        m_strings->RemoveAt(n);
 }
 
 // ----------------------------------------------------------------------------

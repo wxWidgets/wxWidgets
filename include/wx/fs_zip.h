@@ -24,7 +24,7 @@
 
 #include "wx/filesys.h"
 
-class WXDLLIMPEXP_BASE wxHashTableLong;
+class WXDLLIMPEXP_BASE wxLongToLongHashMap;
 
 //--------------------------------------------------------------------------------
 // wxZipFSHandler
@@ -45,7 +45,7 @@ class WXDLLIMPEXP_BASE wxZipFSHandler : public wxFileSystemHandler
         void *m_Archive;
         wxString m_Pattern, m_BaseDir, m_ZipFile;
         bool m_AllowDirs, m_AllowFiles;
-        wxHashTableLong *m_DirsFound;
+        wxLongToLongHashMap *m_DirsFound;
 
         wxString DoFind();
 

@@ -9377,27 +9377,27 @@ void wxGrid::SetColSize( int col, int width )
 void wxGrid::SetColMinimalWidth( int col, int width )
 {
     if (width > GetColMinimalAcceptableWidth()) {
-        m_colMinWidths.Put(col, width);
+        m_colMinWidths[col] = width;
     }
 }
 
 void wxGrid::SetRowMinimalHeight( int row, int width )
 {
     if (width > GetRowMinimalAcceptableHeight()) {
-       m_rowMinHeights.Put(row, width);
+       m_rowMinHeights[row] = width;
     }
 }
 
 int wxGrid::GetColMinimalWidth(int col) const
 {
-    long value = m_colMinWidths.Get(col);
-    return value != wxNOT_FOUND ? (int)value : m_minAcceptableColWidth;
+    wxLongToLongHashMap::const_iterator it = m_colMinWidths.find(col);
+    return it != m_colMinWidths.end() ? (int)it->second : m_minAcceptableColWidth;
 }
 
 int wxGrid::GetRowMinimalHeight(int row) const
 {
-    long value = m_rowMinHeights.Get(row);
-    return value != wxNOT_FOUND ? (int)value : m_minAcceptableRowHeight;
+    wxLongToLongHashMap::const_iterator it = m_rowMinHeights.find(row);
+    return it != m_rowMinHeights.end() ? (int)it->second : m_minAcceptableRowHeight;
 }
 
 void wxGrid::SetColMinimalAcceptableWidth( int width )

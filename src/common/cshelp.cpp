@@ -326,30 +326,34 @@ wxHelpProvider::~wxHelpProvider()
 
 wxString wxSimpleHelpProvider::GetHelp(const wxWindowBase *window)
 {
-    bool wasFound;
-    wxString text = m_hashWindows.Get((long)window, &wasFound);
-    if ( !wasFound )
-        text = m_hashIds.Get(window->GetId());
+    wxLongToStringHashMap::iterator it = m_hashWindows.find((long)window);
 
-    return text;
+    if ( it == m_hashWindows.end() )
+    {
+        it = m_hashIds.find(window->GetId());
+        if ( it == m_hashIds.end() )
+            return wxEmptyString;
+    }
+
+    return it->second;
 }
 
 void wxSimpleHelpProvider::AddHelp(wxWindowBase *window, const wxString& text)
 {
-    m_hashWindows.Delete((long)window);
-    m_hashWindows.Put((long)window, text);
+    m_hashWindows.erase((long)window);
+    m_hashWindows[(long)window] = text;
 }
 
 void wxSimpleHelpProvider::AddHelp(wxWindowID id, const wxString& text)
 {
-    m_hashIds.Delete((long)id);
-    m_hashIds.Put(id, text);
+    m_hashIds.erase((long)id);
+    m_hashIds[id] = text;
 }
 
 // removes the association
 void wxSimpleHelpProvider::RemoveHelp(wxWindowBase* window)
 {
-    m_hashWindows.Delete((long)window);
+    m_hashWindows.erase((long)window);
 }
 
 bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
