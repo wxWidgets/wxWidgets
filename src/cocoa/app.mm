@@ -43,6 +43,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSThread.h>
+#import <AppKit/NSEvent.h>
 
 // ----------------------------------------------------------------------------
 // globals
@@ -192,7 +193,6 @@ wxApp::wxApp()
     m_isInAssert = FALSE;
 #endif // __WXDEBUG__
 
-
     argc = 0;
     argv = NULL;
     m_cocoaApp = NULL;
@@ -316,8 +316,15 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     s_inYield = true;
 
-    wxLogDebug("WARNING: SUPPOSED to have yielded!");
-    // FIXME: Do something!
+    // Run the event loop until it is out of events
+    while(NSEvent *event = [GetNSApplication()
+                nextEventMatchingMask:NSAnyEventMask
+                untilDate:[NSDate distantPast]
+                inMode:NSDefaultRunLoopMode
+                dequeue: YES])
+    {
+        [GetNSApplication() sendEvent: event];
+    }
 
 #if wxUSE_LOG
     // let the logs be flashed again
