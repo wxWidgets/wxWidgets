@@ -94,8 +94,7 @@ public:
     // -----------
 
     // return TRUE if all tabs have the same width
-    bool FixedSizeTabs() const
-        { return GetWindowStyle() & wxNB_FIXEDWIDTH != 0; }
+    bool FixedSizeTabs() const { return HasFlag(wxNB_FIXEDWIDTH); }
 
     // return wxTOP/wxBOTTOM/wxRIGHT/wxLEFT
     wxDirection GetTabOrientation() const;
