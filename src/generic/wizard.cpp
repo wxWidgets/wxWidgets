@@ -2,7 +2,10 @@
 // Name:        generic/wizard.cpp
 // Purpose:     generic implementation of wxWizard class
 // Author:      Vadim Zeitlin
-// Modified by:
+// Modified by: Robert Cavanaugh
+//              1) Added capability for wxWizardPage to accept resources
+//              2) Added "Help" button handler stub
+//              3) Fixed ShowPage() bug on displaying bitmaps
 // Created:     15.08.99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -73,9 +76,21 @@ IMPLEMENT_DYNAMIC_CLASS(wxWizardEvent, wxNotifyEvent)
 // wxWizardPage
 // ----------------------------------------------------------------------------
 
-wxWizardPage::wxWizardPage(wxWizard *parent, const wxBitmap& bitmap)
-            : wxPanel(parent), m_bitmap(bitmap)
+wxWizardPage::wxWizardPage(wxWizard *parent,
+                           const wxBitmap& bitmap,
+                           const wxChar *resource)
+            : wxPanel(parent)
 {
+    if ( resource != NULL )
+    {
+        if ( !LoadFromResource(this, resource) )
+        {
+            wxFAIL_MSG(wxT("wxWizardPage LoadFromResource failed!!!!"));
+        }
+    }
+
+    m_PageBitmap = bitmap;
+
     // initially the page is hidden, it's shown only when it becomes current
     Hide();
 }

@@ -4,7 +4,9 @@
 //              sequence of dialogs which allows to simply perform some task
 // Author:      Vadim Zeitlin (partly based on work by Ron Kuris and Kevin B.
 //              Smith)
-// Modified by:
+// Modified by: Robert Cavanaugh
+//              Added capability to use .WXR resource files in Wizard pages
+//              Added wxWIZARD_HELP event
 // Created:     15.08.99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -48,7 +50,9 @@ public:
     // of the default one for this wizard (should be of the same size). Notice
     // that no other parameters are needed because the wizard will resize and
     // reposition the page anyhow
-    wxWizardPage(wxWizard *parent, const wxBitmap& bitmap = wxNullBitmap);
+    wxWizardPage(wxWizard *parent,
+                const wxBitmap& bitmap = wxNullBitmap,
+                const wxChar* resource = NULL);
 
     // these functions are used by the wizard to show another page when the
     // user chooses "Back" or "Next" button
@@ -59,10 +63,10 @@ public:
     // cases - override this method if you want to create the bitmap to be used
     // dynamically or to do something even more fancy. It's ok to return
     // wxNullBitmap from here - the default one will be used then.
-    virtual wxBitmap GetBitmap() const { return m_bitmap; }
+    virtual wxBitmap GetBitmap() const { return m_PageBitmap; }
 
 protected:
-    wxBitmap m_bitmap;
+    wxBitmap m_PageBitmap;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxWizardPage)
@@ -83,8 +87,10 @@ public:
     // ctor takes the previous and next pages
     wxWizardPageSimple(wxWizard *parent = NULL, // let it be default ctor too
                        wxWizardPage *prev = (wxWizardPage *)NULL,
-                       wxWizardPage *next = (wxWizardPage *)NULL)
-        : wxWizardPage(parent)
+                       wxWizardPage *next = (wxWizardPage *)NULL,
+                       const wxBitmap& bitmap = wxNullBitmap,
+                       const wxChar* resource = NULL)
+        : wxWizardPage(parent, bitmap, resource)
     {
         m_prev = prev;
         m_next = next;

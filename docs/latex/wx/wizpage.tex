@@ -50,12 +50,20 @@ should be very rarely needed.
 
 \membersection{wxWizardPage::wxWizardPage}\label{wxwizardpagewxwizardpage}
 
-\func{}{wxWizardPage}{\param{wxWizard* }{parent}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}}
+\func{}{wxWizardPage}{\param{wxWizard* }{parent}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}, \param{const wxChar }{*resource = NULL}}
 
 Constructor accepts an optional bitmap which will be used for this page
 instead of the default one for this wizard (note that all bitmaps used should
 be of the same size). Notice that no other parameters are needed because the
 wizard will resize and reposition the page anyhow.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent wizard}
+
+\docparam{bitmap}{The page-specific bitmap if different from the global one}
+
+\docparam{resource}{Load the page from the specified resource if non NULL}
 
 \membersection{wxWizardPage::GetPrev}\label{wxwizardpagegetprev}
 
