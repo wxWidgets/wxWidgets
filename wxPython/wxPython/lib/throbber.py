@@ -18,7 +18,6 @@ processing can continue unencumbered.
 #
 
 import threading, os
-##os.putenv('LANG', 'C') # for running on GTK2
 from wxPython.wx import *
 
 # ------------------------------------------------------------------------------
@@ -122,12 +121,6 @@ class Throbber(wxPanel):
 
         self.event = threading.Event()
         self.event.set() # we start out in the "resting" state
-
-
-    def __del__(self):
-        # make sure it's stopped, since EVT_WINDOW_DESTROY may not be sent
-        # on all platforms
-        self.Stop()
 
 
     def OnDestroyWindow(self, event):
