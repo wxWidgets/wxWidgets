@@ -66,6 +66,20 @@ CLEANUP.append('wx/__version__.py')
 
 
 #----------------------------------------------------------------------
+# patch distutils if it can't cope with the "classifiers" or
+# "download_url" keywords 
+#----------------------------------------------------------------------
+
+if sys.version < '2.2.3': 
+    from distutils.dist import DistributionMetadata 
+    DistributionMetadata.classifiers = None 
+    DistributionMetadata.download_url = None
+    depends = {}
+else:
+    depends = {'depends' : depends}
+    
+
+#----------------------------------------------------------------------
 # Define the CORE extension module
 #----------------------------------------------------------------------
 
@@ -135,7 +149,7 @@ ext = Extension('_core_', ['src/helpers.cpp',
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
 
-                depends = depends
+                **depends
                 )
 wxpExtensions.append(ext)
 
@@ -172,7 +186,7 @@ ext = Extension('_gdi_', ['src/drawlist.cpp'] + swig_sources,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
-                depends = depends
+                **depends
                 )
 wxpExtensions.append(ext)
 
@@ -208,7 +222,7 @@ ext = Extension('_windows_', swig_sources,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
-                depends = depends
+                **depends
                 )
 wxpExtensions.append(ext)
 
@@ -250,7 +264,7 @@ ext = Extension('_controls_', swig_sources,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
-                depends = depends
+                **depends
                 )
 wxpExtensions.append(ext)
 
@@ -288,7 +302,7 @@ ext = Extension('_misc_', swig_sources,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
-                depends = depends
+                **depends
                 )
 wxpExtensions.append(ext)
 
@@ -307,7 +321,7 @@ ext = Extension('_calendar', swig_sources,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
-                depends = depends
+                **depends
                 )
 wxpExtensions.append(ext)
 
@@ -321,7 +335,7 @@ ext = Extension('_grid', swig_sources,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
-                depends = depends
+                **depends
                 )
 wxpExtensions.append(ext)
 
@@ -336,7 +350,7 @@ ext = Extension('_html', swig_sources,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
-                depends = depends
+                **depends
                 )
 wxpExtensions.append(ext)
 
@@ -351,7 +365,7 @@ ext = Extension('_wizard', swig_sources,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
-                depends = depends
+                **depends
                 )
 wxpExtensions.append(ext)
 
@@ -626,16 +640,6 @@ if BUILD_DLLWIDGET:
     wxpExtensions.append(ext)
 
 
-
-#----------------------------------------------------------------------
-# patch distutils if it can't cope with the "classifiers" or
-# "download_url" keywords 
-#----------------------------------------------------------------------
-
-if sys.version < '2.2.3': 
-    from distutils.dist import DistributionMetadata 
-    DistributionMetadata.classifiers = None 
-    DistributionMetadata.download_url = None
 
     
 #----------------------------------------------------------------------
