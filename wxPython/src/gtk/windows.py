@@ -946,6 +946,12 @@ class wxMenuPtr(wxEvtHandlerPtr):
     def IsAttached(self, *_args, **_kwargs):
         val = windowsc.wxMenu_IsAttached(self, *_args, **_kwargs)
         return val
+    def Attach(self, *_args, **_kwargs):
+        val = windowsc.wxMenu_Attach(self, *_args, **_kwargs)
+        return val
+    def Detach(self, *_args, **_kwargs):
+        val = windowsc.wxMenu_Detach(self, *_args, **_kwargs)
+        return val
     def SetParent(self, *_args, **_kwargs):
         val = windowsc.wxMenu_SetParent(self, *_args, **_kwargs)
         return val
