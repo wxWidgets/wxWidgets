@@ -155,11 +155,6 @@ void wxRemoveHandleAssociation(wxWindowMSW *win);
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
 wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 
-// this magical function is used to translate VK_APPS key presses to right
-// mouse clicks
-static void TranslateKbdEventToMouse(wxWindowMSW *win,
-                                     int *x, int *y, WPARAM *flags);
-
 // get the text metrics for the current font
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win);
 
@@ -2662,13 +2657,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     // special case of VK_APPS: treat it the same as right mouse
                     // click because both usually pop up a context menu
                     case VK_APPS:
-                        {
-                            WPARAM flags;
-                            int x, y;
-
-                            TranslateKbdEventToMouse(this, &x, &y, &flags);
-                            processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, flags);
-                        }
+                        processed = HandleMouseEvent(WM_RBUTTONDOWN, -1, -1, 0);
                         break;
 #endif // VK_APPS
 
@@ -2687,11 +2676,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             // special case of VK_APPS: treat it the same as right mouse button
             if ( wParam == VK_APPS )
             {
-                WPARAM flags;
-                int x, y;
-
-                TranslateKbdEventToMouse(this, &x, &y, &flags);
-                processed = HandleMouseEvent(WM_RBUTTONUP, x, y, flags);
+                processed = HandleMouseEvent(WM_RBUTTONUP, -1, -1, 0);
             }
             else
 #endif // VK_APPS
@@ -5715,26 +5700,6 @@ const char *wxGetMessageName(int message)
     }
 }
 #endif //__WXDEBUG__
-
-static void TranslateKbdEventToMouse(wxWindowMSW *win,
-                                     int *x, int *y, WPARAM *flags)
-{
-    // construct the key mask
-    WPARAM& fwKeys = *flags;
-
-    fwKeys = MK_RBUTTON;
-    if ( wxIsCtrlDown() )
-        fwKeys |= MK_CONTROL;
-    if ( wxIsShiftDown() )
-        fwKeys |= MK_SHIFT;
-
-    // simulate right mouse button click
-    DWORD dwPos = ::GetMessagePos();
-    *x = GET_X_LPARAM(dwPos);
-    *y = GET_Y_LPARAM(dwPos);
-
-    win->ScreenToClient(x, y);
-}
 
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 {

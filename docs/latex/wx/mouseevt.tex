@@ -289,6 +289,10 @@ Sets *x and *y to the position at which the event occurred.
 
 Returns the physical mouse position in pixels.
 
+Note that if the mouse event has been artificially generated from a special
+keyboard combination (e.g. under Windows when the ``menu'' key is pressed), the
+returned position is \texttt{wxDefaultPosition}.
+
 
 \membersection{wxMouseEvent::GetLogicalPosition}\label{wxmouseeventgetlogicalposition}
 
