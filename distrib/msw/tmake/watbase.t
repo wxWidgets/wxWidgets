@@ -5,6 +5,7 @@
 #! Author:  Vadim Zeitlin
 #! Created: 14.07.99
 #! Version: $Id$
+#! Changelist: 2003-02-25 - Juergen Ulbts - update from wxWindows 2.5.x/HEAD branch
 #!#############################################################################
 #${
     #! include the code which parses filelist.txt file and initializes
@@ -67,10 +68,10 @@ MSWDIR=$(WXDIR)\src\msw
 OLEDIR=$(MSWDIR)\ole
 
 COMMONOBJS = &
-	#$ ExpandGlue("WXCOMMONOBJS", "\$(OUTPUTDIR)", " &\n\t\$(OUTPUTDIR)")
+	#$ ExpandGlue("WXCOMMONOBJS", "\$(OUTPUTDIR)\\", " &\n\t\$(OUTPUTDIR)\\")
 
 MSWOBJS = &
-	#$ ExpandGlue("WXMSWOBJS", "\$(OUTPUTDIR)", " &\n\t\$(OUTPUTDIR)")
+	#$ ExpandGlue("WXMSWOBJS", "\$(OUTPUTDIR)\\", " &\n\t\$(OUTPUTDIR)\\")
 
 OBJECTS = $(COMMONOBJS) $(MSWOBJS)
 
@@ -88,7 +89,7 @@ $(OUTPUTDIR):
 $(SETUP_H): $(WXDIR)\include\wx\msw\setup.h $(ARCHINCDIR)\wx
 	copy $(WXDIR)\include\wx\msw\setup.h $@
 
-LBCFILE=$(OUTPUTDIR)wx$(TOOLKIT).lbc
+LBCFILE=$(OUTPUTDIR)\wx$(TOOLKIT).lbc
 $(LIBTARGET) : $(OBJECTS)
     %create $(LBCFILE)
     @for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i
@@ -96,11 +97,11 @@ $(LIBTARGET) : $(OBJECTS)
 
 
 clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
-    -erase *.obj
+    -erase $(OUTPUTDIR)\*.obj
     -erase $(LIBTARGET)
-    -erase *.pch
-    -erase *.err
-    -erase *.lbc
+    -erase $(OUTPUTDIR)\*.pch
+    -erase $(OUTPUTDIR)\*.err
+    -erase $(OUTPUTDIR)\*.lbc
 
 cleanall:   clean
     -erase $(LBCFILE)
@@ -109,7 +110,7 @@ cleanall:   clean
     $_ = $project{"WXMSWOBJS"};
     my @objs = split;
     foreach (@objs) {
-        $text .= "\$(OUTPUTDIR)" . $_ . ':     $(';
+        $text .= "\$(OUTPUTDIR)\\" . $_ . ':     $(';
         s/\.obj$//;
         $text .= 'MSWDIR)\\';
 
@@ -136,7 +137,7 @@ cleanall:   clean
     $_ = $project{"WXCOMMONOBJS"};
     my @objs = split;
     foreach (@objs) {
-        $text .= "\$(OUTPUTDIR)" . $_;
+        $text .= "\$(OUTPUTDIR)\\" . $_;
         s/\.obj$//;
         $text .= ':     $(COMMDIR)\\';
         my $suffix, $cc;
