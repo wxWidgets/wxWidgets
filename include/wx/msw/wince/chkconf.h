@@ -41,6 +41,9 @@
 #undef wxUSE_MEDIACTRL
 #define wxUSE_MEDIACTRL 0
 
+#undef wxUSE_WXHTML_HELP
+#define wxUSE_WXHTML_HELP 0
+
 // libtiff and regex apparently don't compile with eVC (to check with eVC4?)
 // and they're disabled for WinCE in build/bakefiles/{tiff|regex}.bkl so can't
 // be enabled here
