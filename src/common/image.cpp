@@ -944,7 +944,7 @@ wxBitmap wxImage::ConvertToBitmap() const
      // Retrieve depth
 
     GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
-    if (visual == NULL) visual = gdk_visual_get_best();
+    if (visual == NULL) visual = gdk_visual_get_system();
     int bpp = visual->depth;
 
     bitmap.SetDepth( bpp );
@@ -984,7 +984,7 @@ wxBitmap wxImage::ConvertToBitmap() const
     // Create picture image
 
     GdkImage *data_image =
-        gdk_image_new( GDK_IMAGE_FASTEST, gdk_visual_get_best(), width, height );
+        gdk_image_new( GDK_IMAGE_FASTEST, gdk_visual_get_system(), width, height );
 
     // Create mask image
 
@@ -994,7 +994,7 @@ wxBitmap wxImage::ConvertToBitmap() const
     {
         unsigned char *mask_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
 
-        mask_image =  gdk_image_new_bitmap( gdk_visual_get_best(), mask_data, width, height );
+        mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
 
         wxMask *mask = new wxMask();
         mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
@@ -1009,7 +1009,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 
     if (bpp >= 24)
     {
-        GdkVisual *visual = gdk_visual_get_best();
+        GdkVisual *visual = gdk_visual_get_system();
         if ((visual->red_mask > visual->green_mask) && (visual->green_mask > visual->blue_mask))      b_o = RGB;
         else if ((visual->red_mask > visual->blue_mask) && (visual->blue_mask > visual->green_mask))  b_o = RGB;
         else if ((visual->blue_mask > visual->red_mask) && (visual->red_mask > visual->green_mask))   b_o = BRG;
