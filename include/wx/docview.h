@@ -337,9 +337,6 @@ public:
 
     // called when file format detection didn't work, can be overridden to do
     // something in this case
-    // This is of course completely stupid, because if the file dialog is
-    // cancelled you get an assert. Brilliant. -- JACS
-//    virtual void OnOpenFileFailure() { wxFAIL_MSG(_T("file format mismatch")); }
     virtual void OnOpenFileFailure() { }
 
     virtual wxDocument *CreateDocument(const wxString& path, long flags = 0);
