@@ -522,7 +522,16 @@ The search is recursive in both cases.
 \func{virtual void}{Fit}{\void}
 
 Sizes the window so that it fits around its subwindows. This function won't do
-anything if there are no subwindows.
+anything if there are no subwindows and will only really work correctly if the
+sizers are used for the subwindows layout. Also, if the window has exactly one
+subwindow it is better (faster and the result is more precise as Fit adds some
+margin to account for fuzziness of its calculations) to call
+
+\begin{verbatim}
+    window->SetClientSize(child->GetSize());
+\end{verbatim}
+
+instead of calling Fit.
 
 \membersection{wxWindow::FitInside}\label{wxwindowfitinside}
 
