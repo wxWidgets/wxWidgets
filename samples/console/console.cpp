@@ -1187,7 +1187,7 @@ static void DumpVObject(size_t level, const wxVCardObject& vcard)
     while ( vcObj )
     {
         printf("%s%s",
-               wxString(_T('\t'), level),
+               wxString(_T('\t'), level).c_str(),
                vcObj->GetName().c_str());
 
         wxString value;
@@ -1387,6 +1387,28 @@ static void TestVCardRead()
              "-----------------------------\n");
 
         DumpVObject(0, vcard);
+    }
+}
+
+static void TestVCardWrite()
+{
+    puts("*** Testing wxVCard writing ***\n");
+
+    wxVCard vcard;
+    if ( !vcard.IsOk() )
+    {
+        puts("ERROR: couldn't create vCard.");
+    }
+    else
+    {
+        // set some fields
+        vcard.SetName("Zeitlin", "Vadim");
+        vcard.SetFullName("Vadim Zeitlin");
+        vcard.SetOrganization("wxWindows", "R&D");
+
+        // just dump the vCard back
+        puts("Entire vCard follows:\n");
+        puts(vcard.Write());
     }
 }
 
@@ -2658,6 +2680,55 @@ static int StringLenCompare(const wxString& first, const wxString& second)
     return first.length() - second.length();
 }
 
+#include "wx/dynarray.h"
+
+class Bar // Foo is already taken in the hash test
+{
+public:
+    Bar(const wxString& name) : m_name(name) { ms_bars++; }
+   ~Bar() { ms_bars--; }
+
+   static size_t GetNumber() { return ms_bars; }
+
+private:
+   wxString m_name;
+
+   static size_t ms_bars;
+};
+
+size_t Bar::ms_bars = 0;
+
+WX_DECLARE_OBJARRAY(Bar, ArrayBars);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(ArrayBars);
+
+static void TestArrayOfObjects()
+{
+    puts("*** Testing wxObjArray ***\n");
+
+    {
+        ArrayBars bars;
+        Bar bar("second bar");
+
+        printf("Initially: %u objects in the array, %u objects total.\n",
+               bars.GetCount(), Bar::GetNumber());
+
+        bars.Add(new Bar("first bar"));
+        bars.Add(bar);
+
+        printf("Now: %u objects in the array, %u objects total.\n",
+               bars.GetCount(), Bar::GetNumber());
+
+        bars.Empty();
+
+        printf("After Empty(): %u objects in the array, %u objects total.\n",
+               bars.GetCount(), Bar::GetNumber());
+    }
+
+    printf("Finally: no more objects in the array, %u objects total.\n",
+           Bar::GetNumber());
+}
+
 #endif // TEST_ARRAYS
 
 // ----------------------------------------------------------------------------
@@ -3121,6 +3192,8 @@ int main(int argc, char **argv)
     puts("*** After sorting a1 by the string length");
     a1.Sort(StringLenCompare);
     PrintArray("a1", a1);
+
+    TestArrayOfObjects();
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
@@ -3252,7 +3325,9 @@ int main(int argc, char **argv)
 #endif // TEST_DATETIME
 
 #ifdef TEST_VCARD
+    if ( 0 )
     TestVCardRead();
+    TestVCardWrite();
 #endif // TEST_VCARD
 
 #ifdef TEST_WCHAR
