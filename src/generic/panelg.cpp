@@ -199,9 +199,14 @@ void wxPanel::SetFocus()
     //     notebook page change nor after frame activation under MSW (it calls
     //     SetFocus too)
     //
-    //     If you still want to have old behaviour for wxGTK, edit the
-    //     following line
-#if 0 // def __WXGTK__
+    // RR: yes, when I the tab key to navigate in a panel with some controls and
+    //     a notebook and the focus jumps to the notebook (typically coming from
+    //     a button at the top) the notebook should focus the first child in the
+    //     current notebook page, not the last one which would otherwise get the
+    //     focus if you used the tab key to navigate from the current notebook
+    //     page to button at the bottom. See every page in the controls sample.
+    
+#ifdef __WXGTK__
     m_winLastFocused = (wxWindow *)NULL;
 #endif // 0
 

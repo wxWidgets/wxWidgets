@@ -909,6 +909,7 @@ DEMOS_DIST:
 	
 	mkdir $(DISTDIR)/demos/poem
 	cp $(DEMODIR)/poem/Makefile.in $(DISTDIR)/demos/poem
+	cp $(DEMODIR)/poem/makefile.unx $(DISTDIR)/demos/poem
 	cp $(DEMODIR)/poem/*.cpp $(DISTDIR)/demos/poem
 	cp $(DEMODIR)/poem/*.xpm $(DISTDIR)/demos/poem
 	cp $(DEMODIR)/poem/*.dat $(DISTDIR)/demos/poem
@@ -1005,6 +1006,16 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/dynamic/makefile.unx $(DISTDIR)/samples/dynamic
 	cp $(SAMPDIR)/dynamic/*.cpp $(DISTDIR)/samples/dynamic
 	cp $(SAMPDIR)/dynamic/*.xpm $(DISTDIR)/samples/dynamic
+	
+	mkdir $(DISTDIR)/samples/exec
+	cp $(SAMPDIR)/exec/Makefile.in $(DISTDIR)/samples/exec
+	cp $(SAMPDIR)/exec/*.cpp $(DISTDIR)/samples/exec
+	
+	mkdir $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/Makefile.in $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/*.xpm $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/*.h $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/*.cpp $(DISTDIR)/samples/ipc
 	
 	mkdir $(DISTDIR)/samples/font
 	cp $(SAMPDIR)/font/Makefile.in $(DISTDIR)/samples/font

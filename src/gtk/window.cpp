@@ -1649,7 +1649,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
 // "button_release_event" from scrollbar
 //-----------------------------------------------------------------------------
 
-static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
+static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
                                                    GdkEventButton *WXUNUSED(gdk_event),
                                                    wxWindow *win)
 {
@@ -1661,8 +1661,31 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
 //
 //    if (gdk_event->window != widget->slider) return FALSE;
 
+    wxASSERT( win->m_isScrolling );
+
     g_blockEventsOnScroll = FALSE;
     win->m_isScrolling = FALSE;
+
+    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
+    int value = -1;
+    int dir = -1;
+    
+    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
+    if (widget == GTK_RANGE(scrolledWindow->hscrollbar))
+    {
+        value = (int)(win->m_hAdjust->value+0.5);
+        dir = wxHORIZONTAL;
+    }
+    if (widget == GTK_RANGE(scrolledWindow->vscrollbar))
+    {
+        value = (int)(win->m_vAdjust->value+0.5);
+        dir = wxVERTICAL;
+    }
+
+    wxScrollWinEvent event( command, value, dir );
+    event.SetScrolling( FALSE );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
 
     return FALSE;
 }

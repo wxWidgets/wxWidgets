@@ -409,7 +409,7 @@ dnl WX_INTERFACE_AGE = 0
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=1
-WX_RELEASE_NUMBER=12
+WX_RELEASE_NUMBER=13
 
 WX_INTERFACE_AGE=0
 WX_BINARY_AGE=0
@@ -3316,11 +3316,13 @@ AC_OUTPUT([
             samples/docvwmdi/Makefile
             samples/dnd/Makefile
             samples/drawing/Makefile
+            samples/exec/Makefile
             samples/font/Makefile
             samples/grid/Makefile
             samples/help/Makefile
             samples/image/Makefile
             samples/internat/Makefile
+            samples/ipc/Makefile
             samples/layout/Makefile
             samples/listctrl/Makefile
             samples/mdi/Makefile

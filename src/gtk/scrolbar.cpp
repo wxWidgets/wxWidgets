@@ -103,11 +103,20 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
                                                    wxScrollBar *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
+    
+    wxASSERT( win->m_isScrolling );
 
     win->m_isScrolling = FALSE;
 //  g_blockEventsOnScroll = FALSE;
   
-    gtk_signal_emit_by_name( GTK_OBJECT(win->m_adjust), "value_changed" );
+    wxEventType command = wxEVT_SCROLL_THUMBTRACK;
+    int value = (int)ceil(win->m_adjust->value);
+    int dir = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
+
+    wxScrollEvent event( command, value, dir );
+    event.SetScrolling( FALSE );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
       
     return FALSE;
 }

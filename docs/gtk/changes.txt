@@ -1,4 +1,39 @@
 
+24th January '2000: wxWindows 2.1.13 released
+
+Fixed crashes with GTK Pixmap theme.
+
+Fixed endianness problems in image code.
+
+Minor fixes for sockets related to GUI reentrance and others.
+
+Many enhancements to wxHTML, more tags supported, better support
+for non-English texts etc.
+
+Corrected code handling mono-bitmaps and their conversion to
+wxImage etc.
+
+Fixed a few minor problems in wxListCtrl.
+
+The MIME-type code in now reads KDE and GNOME mime-type bindings
+including icon information. This is used in the file dialog.
+
+Small fix for problems with code that didn't changed the size of a
+window, but not its client size.
+
+Fixed problem with shared contexts in OpenGl canvas.
+
+Fixed keyboard handling in wxCheckListBox.
+
+Corrected the completely unfunctional TIFF code.
+
+Various minor corrections to wxWizard, wxCalendarCtrl and other
+complex controls.
+
+Revamped code for TCP based connections between programs.
+
+Updates to the ODBC classes (George Tasker).
+
 6th January '2000: wxWindows 2.1.12 released
 
 Who has a BigEndian computer (e.g. Sparc or PowerPC) that runs a 15 

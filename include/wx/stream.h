@@ -149,7 +149,7 @@ public:
 // A stream for measuring streamed output
 // ---------------------------------------------------------------------------
 
-class wxCountingOutputStream: public wxOutputStream
+class WXDLLEXPORT wxCountingOutputStream: public wxOutputStream
 {
 public:
     wxCountingOutputStream();
@@ -164,7 +164,6 @@ protected:
 
     size_t m_currentPos;
 };
-
 
 // ---------------------------------------------------------------------------
 // "Filter" streams
