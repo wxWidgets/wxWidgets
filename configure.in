@@ -6062,6 +6062,9 @@ if test "$wxUSE_MAC" = 1 ; then
 fi
 if test "$wxUSE_COCOA" = 1 ; then
     LDFLAGS="$LDFLAGS -framework Cocoa"
+    if test "$wxUSE_MEDIACTRL" = "yes"; then
+        LDFLAGS="$LDFLAGS -framework QuickTime"
+    fi
 fi
 
 dnl FIXME: should this be covered by the conditional above

@@ -73,8 +73,8 @@ public:
     //
     // Normal constructor, much the same as wxNotifyEvent
     // ------------------------------------------------------------------------
-    wxMediaEvent(wxEventType commandType = wxEVT_NULL, int id = 0)
-        : wxNotifyEvent(commandType, id)
+    wxMediaEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
+        : wxNotifyEvent(commandType, winid)
     {                                       }
 
     // ------------------------------------------------------------------------
@@ -112,7 +112,7 @@ public:
     wxMediaCtrl() : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
     {                                                                   }
 
-    wxMediaCtrl(wxWindow* parent, wxWindowID id,
+    wxMediaCtrl(wxWindow* parent, wxWindowID winid,
                 const wxString& fileName = wxT(""),
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -121,10 +121,10 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"))
                 : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
-    {   Create(parent, id, fileName, pos, size, style,
+    {   Create(parent, winid, fileName, pos, size, style,
                szBackend, validator, name);                             }
 
-    wxMediaCtrl(wxWindow* parent, wxWindowID id,
+    wxMediaCtrl(wxWindow* parent, wxWindowID winid,
                 const wxURI& location,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -133,12 +133,12 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"))
                 : m_imp(NULL), m_bLoop(false)
-    {   Create(parent, id, location, pos, size, style,
+    {   Create(parent, winid, location, pos, size, style,
                szBackend, validator, name);                             }
 
     ~wxMediaCtrl();
 
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID winid,
                 const wxString& fileName = wxT(""),
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -147,7 +147,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"));
 
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID winid,
                 const wxURI& location,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -157,7 +157,7 @@ public:
                 const wxString& name = wxT("mediaCtrl")); //DirectShow only
 
     bool DoCreate(wxClassInfo* instance,
-                wxWindow* parent, wxWindowID id,
+                wxWindow* parent, wxWindowID winid,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -193,6 +193,9 @@ protected:
 #ifdef __WXMAC__
     friend class wxMediaBackend;
 #endif
+#ifdef __WXCOCOA__
+    friend class wxQTMediaBackend;
+#endif
     class wxMediaBackend* m_imp;
     bool m_bLoaded;
     bool m_bLoop;
@@ -218,7 +221,7 @@ public:
 
     virtual bool CreateControl(wxControl* WXUNUSED(ctrl),
                                wxWindow* WXUNUSED(parent),
-                               wxWindowID WXUNUSED(id),
+                               wxWindowID WXUNUSED(winid),
                                const wxPoint& WXUNUSED(pos),
                                const wxSize& WXUNUSED(size),
                                long WXUNUSED(style),

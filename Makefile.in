@@ -75,7 +75,7 @@ WXREGEX_OBJECTS =  \
 	wxregex_regexec.o \
 	wxregex_regerror.o \
 	wxregex_regfree.o
-WXZLIB_CFLAGS =      $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXZLIB_CFLAGS =       $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXZLIB_OBJECTS =  \
 	wxzlib_adler32.o \
 	wxzlib_compress.o \
@@ -89,7 +89,7 @@ WXZLIB_OBJECTS =  \
 	wxzlib_infback.o \
 	wxzlib_inftrees.o \
 	wxzlib_inffast.o
-WXPNG_CFLAGS =     $(__INC_ZLIB_p)  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXPNG_CFLAGS =      $(__INC_ZLIB_p)  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	wxpng_png.o \
 	wxpng_pngerror.o \
@@ -108,7 +108,7 @@ WXPNG_OBJECTS =  \
 	wxpng_pngwrite.o \
 	wxpng_pngwtran.o \
 	wxpng_pngwutil.o
-WXJPEG_CFLAGS =      $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXJPEG_CFLAGS =       $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  \
 	wxjpeg_jcomapi.o \
 	wxjpeg_jutils.o \
@@ -193,7 +193,7 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_warning.o \
 	wxtiff_tif_write.o \
 	wxtiff_tif_zip.o
-WXODBC_CFLAGS =      $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXODBC_CFLAGS =       $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXODBC_OBJECTS =  \
 	wxodbc_catalog.o \
 	wxodbc_connect.o \
@@ -210,7 +210,7 @@ WXODBC_OBJECTS =  \
 	wxodbc_misc.o \
 	wxodbc_prepare.o \
 	wxodbc_result.o
-WXEXPAT_CFLAGS =     -I./src/expat  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXEXPAT_CFLAGS =      -I./src/expat  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \
@@ -3874,7 +3874,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS \
 @COND_TOOLKIT_MSW@	= monodll_datectrl.o
-@COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = 
+@COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS =  
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS = 
@@ -5317,7 +5317,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 \
 @COND_TOOLKIT_MSW@	= monolib_datectrl.o
-@COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = 
+@COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_1 =  
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_1 = 
@@ -8239,7 +8239,7 @@ COND_USE_SOSYMLINKS_1___mediadll___so_symlinks_inst_cmd = rm -f \
 	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOSYMLINKS_1@__mediadll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___mediadll___so_symlinks_inst_cmd)
-@COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_2 = 
+@COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_2 = mediadll_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_2 =  
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS_2 = mediadll_mediactrl.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_2 = 
@@ -8255,7 +8255,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___medialib___depname = \
 @COND_GCC_PCH_1@__medialib_PCH_INC = -I.pch/wxprec_medialib
 @COND_GCC_PCH_1@___pch_wxprec_medialib_wx_wxprec_h_gch___depname \
 @COND_GCC_PCH_1@	= .pch/wxprec_medialib/wx/wxprec.h.gch
-@COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_3 = 
+@COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_3 = medialib_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_3 =  
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS_3 = medialib_mediactrl.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_3 = 
@@ -13035,6 +13035,9 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@monodll_mediactrl.o: $(srcdir)/src/mac/carbon/mediactrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/mediactrl.cpp
 
+@COND_TOOLKIT_COCOA_USE_GUI_1@monodll_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/mediactrl.mm
+
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
@@ -16415,6 +16418,9 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1@monolib_mediactrl.o: $(srcdir)/src/mac/carbon/mediactrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/mediactrl.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1@monolib_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/mediactrl.mm
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
@@ -22830,6 +22836,9 @@ mediadll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_MAC@mediadll_mediactrl.o: $(srcdir)/src/mac/carbon/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/mac/carbon/mediactrl.cpp
 
+@COND_TOOLKIT_COCOA@mediadll_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MEDIADLL_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/cocoa/mediactrl.mm
+
 medialib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIALIB_ODEP)
 	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
 
@@ -22841,6 +22850,9 @@ medialib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIALIB_ODEP)
 
 @COND_TOOLKIT_MAC@medialib_mediactrl.o: $(srcdir)/src/mac/carbon/mediactrl.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/mac/carbon/mediactrl.cpp
+
+@COND_TOOLKIT_COCOA@medialib_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MEDIALIB_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/cocoa/mediactrl.mm
 
 odbcdll_db.o: $(srcdir)/src/common/db.cpp $(ODBCDLL_ODEP)
 	$(CXXC) -c -o $@ $(ODBCDLL_CXXFLAGS) $(srcdir)/src/common/db.cpp
