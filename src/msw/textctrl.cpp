@@ -1189,24 +1189,42 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* pMsg)
         }
         else // no Alt
         {
-            if ( wxIsCtrlDown() )
+            // we want to process some Ctrl-foo and Shift-bar but no key
+            // combinations without either Ctrl or Shift nor with both of them
+            // pressed
+            const int ctrl = wxIsCtrlDown(),
+                      shift = wxIsShiftDown();
+            switch ( ctrl + shift )
             {
-                switch ( vkey )
-                {
-                    case 'C':
-                    case 'V':
-                    case 'X':
-                    case VK_INSERT:
-                    case VK_DELETE:
-                    case VK_HOME:
-                    case VK_END:
-                        return FALSE;
-                }
-            }
-            else if ( wxIsShiftDown() )
-            {
-                if ( vkey == VK_INSERT || vkey == VK_DELETE )
-                    return FALSE;
+                default:
+                    wxFAIL_MSG( _T("how many modifiers have we got?") );
+                    // fall through
+
+                case 0:
+                case 2:
+                    break;
+
+                case 1:
+                    // either Ctrl or Shift pressed
+                    if ( ctrl )
+                    {
+                        switch ( vkey )
+                        {
+                            case 'C':
+                            case 'V':
+                            case 'X':
+                            case VK_INSERT:
+                            case VK_DELETE:
+                            case VK_HOME:
+                            case VK_END:
+                                return FALSE;
+                        }
+                    }
+                    else // Shift is pressed
+                    {
+                        if ( vkey == VK_INSERT || vkey == VK_DELETE )
+                            return FALSE;
+                    }
             }
         }
     }
