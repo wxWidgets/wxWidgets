@@ -113,8 +113,11 @@ void OwnerDrawnFrame::InitMenu()
            fontBmp(14, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
 
     // sorry for my artistic skills...
-    wxBitmap bmpBell(_T("bell")), bmpSound(_T("sound")), bmpNoSound(_T("nosound"));
-    wxBitmap bmpInfo(_T("info")), bmpInfo_mono(_T("info_mono"));
+    wxBitmap bmpBell(_T("bell")),
+             bmpSound(_T("sound")),
+             bmpNoSound(_T("nosound")),
+             bmpInfo(_T("info")),
+             bmpInfo_mono(_T("info_mono"));
 
     // construct submenu
     pItem = new wxMenuItem(sub_menu, Menu_Sub1, _T("Submenu &first"), _T("large"));
@@ -182,13 +185,11 @@ void OwnerDrawnFrame::InitMenu()
                                 _T("display program information"), wxITEM_NORMAL);
     pAboutItem->SetBitmap(bmpInfo);
     pAboutItem->SetDisabledBitmap(bmpInfo_mono);
-    pAboutItem->SetOwnerDrawn(TRUE);
     file_menu->Append(pAboutItem);
 
     file_menu->AppendSeparator();
     pItem = new wxMenuItem(file_menu, Menu_Quit, _T("&Quit"), _T("Normal item"),
                            wxITEM_NORMAL);
-    pItem->SetFont(*wxNORMAL_FONT);
     file_menu->Append(pItem);
 
     wxMenuBar *menu_bar = new wxMenuBar;
