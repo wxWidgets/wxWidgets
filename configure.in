@@ -224,51 +224,6 @@ AC_DEFUN(WX_CPP_BOOL,
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl WX_CPP_SIZE_T_IS_NOT_INT checks whether size_t and int are different types,
-dnl i.e. whether we may overload operator[] on its argument type
-dnl ---------------------------------------------------------------------------
-
-AC_DEFUN(WX_CPP_SIZE_T_IS_NOT_INT,
-[
-  AC_CACHE_CHECK([if size_t and int are different types], wx_cv_cpp_sizet_not_int,
-  [
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
-
-    AC_TRY_RUN([
-        #include <stdlib.h>
-
-        class S
-        {
-        public:
-          S(char *s) { m_s = s; }
-
-          char operator[](size_t n) const { return m_s[n]; }
-          char operator[](int n) const { return m_s[n]; }
-
-        private:
-          char *m_s;
-        };
-
-        int main()
-        {
-            S s("dummy");
-            size_t n1 = 2;
-            int n2 = 3;
-
-            return s[n1] == s[n2];
-        }
-      ],
-      AC_DEFINE(wxUSE_SIZE_T_STRING_OPERATOR) wx_cv_cpp_sizet_not_int=yes,
-      wx_cv_cpp_sizet_not_int=no,
-      wx_cv_cpp_sizet_not_int=no
-    )
-
-    AC_LANG_RESTORE
-  ])
-])
-
-dnl ---------------------------------------------------------------------------
 dnl a slightly better AC_C_BIGENDIAN macro which allows cross-compiling
 dnl ---------------------------------------------------------------------------
 
@@ -1902,9 +1857,6 @@ WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
 
 dnl check whether C++ compiler supports bool built-in type
 WX_CPP_BOOL
-
-dnl check whether overloading on size_t/int parameter works
-WX_CPP_SIZE_T_IS_NOT_INT
 
 dnl check whether we should define _GNU_SOURCE
 WX_GNU_EXTENSIONS
