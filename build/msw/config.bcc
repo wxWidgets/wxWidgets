@@ -11,7 +11,7 @@
 
 # Type of compiled binaries [debug,release]
 !ifndef BUILD
-BUILD = release
+BUILD = debug
 !endif
 
 # C compiler 
@@ -88,7 +88,7 @@ RUNTIME_LIBS = dynamic
 
 # What type of library to build? [0,1]
 !ifndef SHARED
-SHARED = 1
+SHARED = 0
 !endif
 
 # Compile Unicode build of wxWindows? [0,1]
