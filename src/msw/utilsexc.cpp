@@ -498,7 +498,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         wxInputStream *inStream = new wxPipeInputStream(hpipeStdout[0]);
         wxOutputStream *outStream = new wxPipeOutputStream(hpipeStdin[1]);
 
-        handler->SetPipeStreams(inStream, outStream);
+        handler->SetPipeStreams(inStream, outStream, NULL);
     }
 #endif // wxUSE_STREAMS
 

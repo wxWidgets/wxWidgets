@@ -436,14 +436,18 @@ long wxExecute(wxChar **argv,
     }
 #endif // wxUSE_GUI
 
-    int pipeIn[2];
-    int pipeOut[2];
+    // pipes for inter process communication
+    int pipeIn[2],      // stdin
+        pipeOut[2],     // stdout
+        pipeErr[2];     // stderr
+
     pipeIn[0] = pipeIn[1] =
-    pipeOut[0] = pipeOut[1] = -1;
+    pipeOut[0] = pipeOut[1] =
+    pipeErr[0] = pipeErr[1] = -1;
 
     if ( process && process->IsRedirected() )
     {
-        if ( pipe(pipeIn) == -1 || pipe(pipeOut) == -1 )
+        if ( pipe(pipeIn) == -1 || pipe(pipeOut) == -1 || pipe(pipeErr) == -1 )
         {
 #if wxUSE_GUI
             // free previously allocated resources
@@ -476,6 +480,8 @@ long wxExecute(wxChar **argv,
         close(pipeIn[1]);
         close(pipeOut[0]);
         close(pipeOut[1]);
+        close(pipeErr[0]);
+        close(pipeErr[1]);
 #endif // wxUSE_GUI
 
         wxLogSysError( _("Fork failed") );
@@ -498,7 +504,7 @@ long wxExecute(wxChar **argv,
         {
             for ( int fd = 0; fd < FD_SETSIZE; fd++ )
             {
-                if ( fd == pipeIn[0] || fd == pipeOut[1]
+                if ( fd == pipeIn[0] || fd == pipeOut[1] || fd == pipeErr[1]
 #if wxUSE_GUI
                      || fd == end_proc_detect[1]
 #endif // wxUSE_GUI
@@ -514,19 +520,19 @@ long wxExecute(wxChar **argv,
             }
         }
 
-        // redirect stdio and stdout
-        // (TODO: what about stderr?)
+        // redirect stdio, stdout and stderr
         if ( pipeIn[0] != -1 )
         {
             if ( dup2(pipeIn[0], STDIN_FILENO) == -1 ||
-                 dup2(pipeOut[1], STDOUT_FILENO) == -1 )
+                 dup2(pipeOut[1], STDOUT_FILENO) == -1 ||
+                 dup2(pipeErr[1], STDERR_FILENO) == -1 )
             {
-                wxLogSysError(_("Failed to redirect child process "
-                                "input/output"));
+                wxLogSysError(_("Failed to redirect child process input/output"));
             }
 
             close(pipeIn[0]);
             close(pipeOut[1]);
+            close(pipeErr[1]);
         }
 
         execvp (*mb_argv, mb_argv);
@@ -544,10 +550,13 @@ long wxExecute(wxChar **argv,
             // These two streams are relative to this process.
             wxOutputStream *outStream = new wxProcessFileOutputStream(pipeIn[1]);
             wxInputStream *inStream = new wxProcessFileInputStream(pipeOut[0]);
+            wxInputStream *errStream = new wxProcessFileInputStream(pipeErr[0]);
+
             close(pipeIn[0]); // close reading side
             close(pipeOut[1]); // close writing side
+            close(pipeErr[1]); // close writing side
 
-            process->SetPipeStreams(inStream, outStream);
+            process->SetPipeStreams(inStream, outStream, errStream);
         }
 
 #if wxUSE_GUI

@@ -78,11 +78,14 @@ public:
 #if wxUSE_STREAMS
     // Pipe handling
     wxInputStream *GetInputStream() const { return m_inputStream; }
+    wxInputStream *GetErrorStream() const { return m_errorStream; }
     wxOutputStream *GetOutputStream() const { return m_outputStream; }
 
     // implementation only (for wxExecute)
-    void SetPipeStreams(wxInputStream *inStream, wxOutputStream *outStream);
-#endif
+    void SetPipeStreams(wxInputStream *inStream,
+                        wxOutputStream *outStream,
+                        wxInputStream *errStream);
+#endif // wxUSE_STREAMS
 
 protected:
     void Init(wxEvtHandler *parent, int id, bool redirect);
@@ -90,9 +93,10 @@ protected:
     int m_id;
 
 #if wxUSE_STREAMS
-    wxInputStream  *m_inputStream;
+    wxInputStream  *m_inputStream,
+                   *m_errorStream;
     wxOutputStream *m_outputStream;
-#endif
+#endif // wxUSE_STREAMS
 
     bool m_redirect;
 };

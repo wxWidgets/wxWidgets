@@ -98,6 +98,10 @@ public:
     wxListBox *GetLogListBox() const { return m_lbox; }
 
 private:
+    void ShowOutput(const wxString& cmd,
+                    const wxArrayString& output,
+                    const wxString& title);
+
     wxString m_cmdLast;
 
     wxListBox *m_lbox;
@@ -381,23 +385,15 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
 
     if ( sync )
     {
-        wxArrayString output;
+        wxArrayString output, errors;
         int code = wxExecute(cmd, output);
         wxLogStatus(_T("command '%s' terminated with exit code %d."),
                     cmd.c_str(), code);
 
         if ( code != -1 )
         {
-            m_lbox->Append(wxString::Format(_T("--- Output of '%s' ---"),
-                                            cmd.c_str()));
-
-            size_t count = output.GetCount();
-            for ( size_t n = 0; n < count; n++ )
-            {
-                m_lbox->Append(output[n]);
-            }
-
-            m_lbox->Append(_T("--- End of output ---"));
+            ShowOutput(cmd, output, _T("Output"));
+            ShowOutput(cmd, errors, _T("Errors"));
         }
     }
     else // async exec
@@ -478,6 +474,26 @@ void MyFrame::OnProcessTerminated(MyPipedProcess *process)
     m_running.Remove(process);
 }
 
+
+void MyFrame::ShowOutput(const wxString& cmd,
+                         const wxArrayString& output,
+                         const wxString& title)
+{
+    size_t count = output.GetCount();
+    if ( !count )
+        return;
+
+    m_lbox->Append(wxString::Format(_T("--- %s of '%s' ---"),
+                                    title.c_str(), cmd.c_str()));
+
+    for ( size_t n = 0; n < count; n++ )
+    {
+        m_lbox->Append(output[n]);
+    }
+
+    m_lbox->Append(_T("--- End of output ---"));
+}
+
 // ----------------------------------------------------------------------------
 // MyProcess
 // ----------------------------------------------------------------------------
@@ -497,6 +513,8 @@ void MyProcess::OnTerminate(int pid, int status)
 
 bool MyPipedProcess::HasInput()
 {
+    bool hasInput = FALSE;
+
     wxInputStream& is = *GetInputStream();
     if ( !is.Eof() )
     {
@@ -504,16 +522,28 @@ bool MyPipedProcess::HasInput()
 
         // this assumes that the output is always line buffered
         wxString msg;
-        msg << m_cmd << _T(": ") << tis.ReadLine();
+        msg << m_cmd << _T(" (stdout): ") << tis.ReadLine();
 
         m_parent->GetLogListBox()->Append(msg);
 
-        return TRUE;
+        hasInput = TRUE;
     }
-    else
+
+    wxInputStream& es = *GetErrorStream();
+    if ( !es.Eof() )
     {
-        return FALSE;
+        wxTextInputStream tis(es);
+
+        // this assumes that the output is always line buffered
+        wxString msg;
+        msg << m_cmd << _T(" (stderr): ") << tis.ReadLine();
+
+        m_parent->GetLogListBox()->Append(msg);
+
+        hasInput = TRUE;
     }
+
+    return hasInput;
 }
 
 void MyPipedProcess::OnTerminate(int pid, int status)
