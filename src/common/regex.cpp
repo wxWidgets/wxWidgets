@@ -38,6 +38,11 @@
     #include "wx/intl.h"
 #endif //WX_PRECOMP
 
+// FreeBSD requires this, it probably doesn't hurt for others
+#ifdef __UNIX__
+    #include <sys/types.h>
+#endif
+
 #include <regex.h>
 
 #include "wx/regex.h"
