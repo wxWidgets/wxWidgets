@@ -310,6 +310,9 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def StyleSetCase(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_StyleSetCase,(self,) + _args, _kwargs)
         return val
+    def StyleSetCharacterSet(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_StyleSetCharacterSet,(self,) + _args, _kwargs)
+        return val
     def SetSelForeground(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SetSelForeground,(self,) + _args, _kwargs)
         return val
@@ -768,9 +771,6 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def GetLayoutCache(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_GetLayoutCache,(self,) + _args, _kwargs)
-        return val
-    def DeleteBackNotLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_DeleteBackNotLine,(self,) + _args, _kwargs)
         return val
     def MoveCaretInsideView(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_MoveCaretInsideView,(self,) + _args, _kwargs)

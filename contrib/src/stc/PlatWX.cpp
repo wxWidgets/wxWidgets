@@ -7,6 +7,8 @@
 #include <ctype.h>
 
 #include <wx/wx.h>
+#include <wx/encconv.h>
+
 
 #include "Platform.h"
 #include "PlatWX.h"
@@ -176,14 +178,16 @@ void Font::Create(const char *faceName, int characterSet, int size, bool bold, b
             break;
     }
 
-    // TODO:  Use wxFontMapper and wxEncodingConverter if encoding not available.
+    wxFontEncodingArray ea = wxEncodingConverter::GetPlatformEquivalents(encoding);
+    if (ea.GetCount())
+        encoding = ea[0];
 
     id = new wxFont(size,
                     wxDEFAULT,
                     italic ? wxITALIC :  wxNORMAL,
                     bold ? wxBOLD : wxNORMAL,
                     false,
-                    faceName,
+                    wxString(faceName, wxConvUTF8),
                     encoding);
 }
 
@@ -320,8 +324,6 @@ int SurfaceImpl::LogPixelsY() {
 
 int SurfaceImpl::DeviceHeightFont(int points) {
     return points;
-//      int logPix = LogPixelsY();
-//      return (points * logPix + logPix / 2) / 72;
 }
 
 void SurfaceImpl::MoveTo(int x_, int y_) {
@@ -391,11 +393,8 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, int ybase,
     hdc->SetTextBackground(wxColourFromCA(back));
     FillRectangle(rc, back);
 
-#if wxUSE_UNICODE
-#error fix this...  Convert s from UTF-8.
-#else
-    wxString str = wxString(s, len);
-#endif
+    // will convert from UTF-8 in unicode mode
+    wxString str(s, wxConvUTF8, len);
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
@@ -411,11 +410,8 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
     FillRectangle(rc, back);
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
-#if wxUSE_UNICODE
-#error fix this...  Convert s from UTF-8.
-#else
-    wxString str = wxString(s, len);
-#endif
+    // will convert from UTF-8 in unicode mode
+    wxString str(s, wxConvUTF8, len);
 
     // see comments above
     hdc->DrawText(str, rc.left, ybase - font.ascent);
@@ -427,43 +423,67 @@ int SurfaceImpl::WidthText(Font &font, const char *s, int len) {
     int w;
     int h;
 
-#if wxUSE_UNICODE
-#error fix this...  Convert s from UTF-8.
-#else
-    wxString str = wxString(s, len);
-#endif
+    // will convert from UTF-8 in unicode mode
+    wxString str(s, wxConvUTF8, len);
 
     hdc->GetTextExtent(str, &w, &h);
     return w;
 }
 
-void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positions) {
-#if wxUSE_UNICODE
-#error fix this...  Convert s from UTF-8.
-#else
-    wxString str = wxString(s, len);
-#endif
 
+void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positions) {
+    // will convert from UTF-8 in unicode mode
+    wxString str(s, wxConvUTF8, len);
     SetFont(font);
+
+    // Calculate the position of each character based on the widths of
+    // the previous characters
+    int* tpos = new int[len];
     int totalWidth = 0;
-    for (size_t i=0; i<(size_t)len; i++) {
-        int w;
-        int h;
+    size_t i;
+    for (i=0; i<str.Length(); i++) {
+        int w, h;
         hdc->GetTextExtent(str[i], &w, &h);
         totalWidth += w;
-        positions[i] = totalWidth;
+        tpos[i] = totalWidth;
     }
+
+#if wxUSE_UNICODE
+    // Map the widths for UCS-2 characters back to the UTF-8 input string
+    i = 0;
+    size_t ui = 0;
+    while (i < len) {
+        unsigned char uch = (unsigned char)s[i];
+        positions[i++] = tpos[ui];
+        if (uch >= 0x80) {
+            if (uch < (0x80 + 0x40 + 0x20)) {
+                positions[i++] = tpos[ui];
+            } else {
+                positions[i++] = tpos[ui];
+                positions[i++] = tpos[ui];
+            }
+        }
+        ui++;
+    }
+#else
+
+    // If not unicode then just use the widths we have
+    memcpy(positions, tpos, len * sizeof(*tpos));
+#endif
+
+    delete [] tpos;
 }
+
 
 int SurfaceImpl::WidthChar(Font &font, char ch) {
     SetFont(font);
     int w;
     int h;
-#if wxUSE_UNICODE
-#error fix this...  Convert s from UTF-8.
-#else
-    hdc->GetTextExtent(ch, &w, &h);
-#endif
+    char s[2] = { ch, 0 };
+
+    // will convert from UTF-8 in unicode mode
+    wxString str(s, wxConvUTF8, 1);
+    hdc->GetTextExtent(str, &w, &h);
     return w;
 }
 
@@ -517,8 +537,14 @@ void SurfaceImpl::FlushCachedState() {
 }
 
 void SurfaceImpl::SetUnicodeMode(bool unicodeMode_) {
-    // TODO:  Make this jive with wxUSE_UNICODE
     unicodeMode=unicodeMode_;
+#if wxUSE_UNICODE
+    wxASSERT_MSG(unicodeMode == wxUSE_UNICODE,
+                 wxT("Only unicode may be used when wxUSE_UNICODE is on."));
+#else
+    wxASSERT_MSG(unicodeMode == wxUSE_UNICODE,
+                 wxT("Only non-unicode may be used when wxUSE_UNICODE is off."));
+#endif
 }
 
 Surface *Surface::Allocate() {
@@ -615,11 +641,9 @@ void Window::SetCursor(Cursor curs) {
 
 
 void Window::SetTitle(const char *s) {
-#if wxUSE_UNICODE
-#error Fix this...
-#else
-    GETWIN(id)->SetTitle(s);
-#endif
+    // will convert from UTF-8 in unicode mode
+    wxString str(s, wxConvUTF8);
+    GETWIN(id)->SetTitle(str);
 }
 
 
@@ -777,12 +801,9 @@ int ListBox::Find(const char *prefix) {
 }
 
 void ListBox::GetValue(int n, char *value, int len) {
-#if wxUSE_UNICODE
-#error fix this...
     wxString text = GETLB(id)->GetString(n);
-    strncpy(value, text.c_str(), len);
+    strncpy(value, text.mb_str(wxConvUTF8), len);
     value[len-1] = '\0';
-#endif
 }
 
 void ListBox::Sort() {
@@ -824,7 +845,9 @@ ColourDesired Platform::ChromeHighlight() {
 }
 
 const char *Platform::DefaultFont() {
-    return wxNORMAL_FONT->GetFaceName();
+    static char buf[128];
+    strcpy(buf, wxNORMAL_FONT->GetFaceName().mbc_str());
+    return buf;
 }
 
 int Platform::DefaultFontSize() {
@@ -836,7 +859,7 @@ unsigned int Platform::DoubleClickTime() {
 }
 
 void Platform::DebugDisplay(const char *s) {
-    wxLogDebug(s);
+    wxLogDebug(wxString(s, *wxConvCurrent));
 }
 
 bool Platform::IsKeyDown(int key) {
@@ -895,7 +918,8 @@ void Platform::Assert(const char *c, const char *file, int line) {
 	char buffer[2000];
 	sprintf(buffer, "Assertion [%s] failed at %s %d", c, file, line);
 	if (assertionPopUps) {
-		int idButton = wxMessageBox(buffer, "Assertion failure",
+		int idButton = wxMessageBox(wxString(buffer, *wxConvCurrent),
+                                            wxT("Assertion failure"),
                                             wxICON_HAND | wxOK);
 //  		if (idButton == IDRETRY) {
 //  			::DebugBreak();

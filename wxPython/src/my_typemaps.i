@@ -188,6 +188,32 @@ $function
 
 
 
+//---------------------------------------------------------------------------
+
+
+%typemap(python, in) wxMemoryBuffer& {
+    if (!PyString_Check($source)) {
+        PyErr_SetString(PyExc_TypeError, "String buffer expected");
+        return NULL;
+    }
+    char* str = PyString_AS_STRING($source);
+    int   len = PyString_GET_SIZE($source);
+    $target = new wxMemoryBuffer(len);
+    memcpy($target->GetData(), str, len);
+}
+
+%typemap(python, freearg) wxMemoryBuffer& {
+    if ($target)
+        delete $source;
+}
+
+%typemap(python, out) wxMemoryBuffer {
+    $target = PyString_FromStringAndSize((char*)$source->GetData(), $source->GetDataLen());
+}
+
+%typemap(python, ret) wxMemoryBuffer {
+    delete $source;
+}
 
 
 //---------------------------------------------------------------------------

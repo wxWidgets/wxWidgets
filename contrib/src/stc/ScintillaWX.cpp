@@ -148,7 +148,7 @@ void ScintillaWX::Finalise() {
 
 void ScintillaWX::StartDrag() {
 #if wxUSE_DRAG_AND_DROP
-    wxString dragText(drag.s, drag.len);
+    wxString dragText(drag.s, wxConvUTF8, drag.len);
 
     // Send an event to allow the drag text to be changed
     wxStyledTextEvent evt(wxEVT_STC_START_DRAG, stc->GetId());
@@ -296,7 +296,8 @@ void ScintillaWX::Copy() {
         SelectionText st;
         CopySelectionRange(&st);
         wxTheClipboard->Open();
-        wxTheClipboard->SetData(new wxTextDataObject(wxString(st.s, st.len)));
+        wxString text(st.s, wxConvUTF8, st.len);
+        wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
 }
@@ -313,9 +314,9 @@ void ScintillaWX::Paste() {
     gotData = wxTheClipboard->GetData(data);
     wxTheClipboard->Close();
     if (gotData) {
-        wxString str = data.GetText();
-        int      len = str.Length();
-        pdoc->InsertString(currentPos, str.c_str(), len);
+        wxWX2MBbuf buf = (wxWX2MBbuf)data.GetText().mb_str(wxConvUTF8);
+        int        len = strlen(buf);
+        pdoc->InsertString(currentPos, buf, len);
         SetEmptySelection(currentPos + len);
     }
 
@@ -329,7 +330,7 @@ bool ScintillaWX::CanPaste() {
     bool canPaste;
 
     wxTheClipboard->Open();
-    canPaste = wxTheClipboard->IsSupported( wxDF_TEXT );
+    canPaste = wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT);
     wxTheClipboard->Close();
 
     return canPaste;
@@ -345,7 +346,7 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
     if (!label[0])
         ((wxMenu*)popup.GetID())->AppendSeparator();
     else
-        ((wxMenu*)popup.GetID())->Append(cmd, label);
+        ((wxMenu*)popup.GetID())->Append(cmd, wxString(label, *wxConvCurrent));
 
     if (!enabled)
         ((wxMenu*)popup.GetID())->Enable(cmd, enabled);
@@ -497,8 +498,8 @@ void ScintillaWX::DoButtonMove(Point pt) {
 }
 
 
-void ScintillaWX::DoAddChar(char ch) {
-    AddChar(ch);
+void ScintillaWX::DoAddChar(int key) {
+    AddChar(key);
 }
 
 int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed) {
@@ -579,7 +580,7 @@ bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
     dragResult = evt.GetDragResult();
     if (dragResult == wxDragMove || dragResult == wxDragCopy) {
         DropAt(evt.GetPosition(),
-               evt.GetDragText(),
+               evt.GetDragText().mb_str(wxConvUTF8),
                dragResult == wxDragMove,
                FALSE); // TODO: rectangular?
         return TRUE;

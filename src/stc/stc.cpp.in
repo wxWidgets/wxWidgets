@@ -25,7 +25,7 @@
 
 //----------------------------------------------------------------------
 
-const wxChar* wxSTCNameStr = "stcwindow";
+const wxChar* wxSTCNameStr = wxT("stcwindow");
 
 DEFINE_EVENT_TYPE( wxEVT_STC_CHANGE )
 DEFINE_EVENT_TYPE( wxEVT_STC_STYLENEEDED )
@@ -105,6 +105,10 @@ wxStyledTextCtrl::wxStyledTextCtrl(wxWindow *parent,
     m_lastKeyDownConsumed = FALSE;
     m_vScrollBar = NULL;
     m_hScrollBar = NULL;
+#if wxUSE_UNICODE
+    // Put Scintilla into unicode (UTF-8) mode
+    SetCodePage(wxSTC_CP_UTF8);
+#endif
 }
 
 
@@ -142,11 +146,12 @@ static wxColour wxColourFromLong(long c) {
 
 
 static wxColour wxColourFromSpec(const wxString& spec) {
-    // spec should be #RRGGBB
-    char* junk;
-    int red   = strtol(spec.Mid(1,2), &junk, 16);
-    int green = strtol(spec.Mid(3,2), &junk, 16);
-    int blue  = strtol(spec.Mid(5,2), &junk, 16);
+    // spec should be "#RRGGBB"
+    long red, green, blue;
+    red = green = blue = 0;
+    spec.Mid(1,2).ToLong(&red,   16);
+    spec.Mid(3,2).ToLong(&green, 16);
+    spec.Mid(5,2).ToLong(&blue,  16);
     return wxColour(red, green, blue);
 }
 
@@ -320,6 +325,7 @@ void wxStyledTextCtrl::OnScroll(wxScrollEvent& evt) {
 void wxStyledTextCtrl::OnSize(wxSizeEvent& evt) {
     wxSize sz = GetClientSize();
     m_swx->DoSize(sz.x, sz.y);
+    Refresh(FALSE);
 }
 
 void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
@@ -362,10 +368,7 @@ void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt) {
 
 
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
-    long key = evt.KeyCode();
-
-//      printf("OnChar  key:%%d  consumed:%%d  ctrl:%%d  alt:%%d\n",
-//             key, m_lastKeyDownConsumed, evt.ControlDown(), evt.AltDown());
+    int key = evt.GetKeyCode();
 
     // AltGr keys???
     // \|@#¬[]{}?£$~  ã,õ,Ã,Õ, ñ, Ñ
@@ -378,7 +381,10 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     bool alt  = evt.AltDown();
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
-    if (key <= 0xff && key >= 32 && !m_lastKeyDownConsumed && !skip) {
+    //printf("OnChar  key:%%d  consumed:%%d  ctrl:%%d  alt:%%d  skip:%%d\n",
+    //       key, m_lastKeyDownConsumed, ctrl, alt, skip);
+
+    if (key <= WXK_START && /*key >= 32 &&*/ !m_lastKeyDownConsumed && !skip) {
         m_swx->DoAddChar(key);
         return;
     }
@@ -387,10 +393,10 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
 
 
 void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
-    long key = evt.KeyCode();
+    int key = evt.GetKeyCode();
     bool shift = evt.ShiftDown(),
-        ctrl  = evt.ControlDown(),
-        alt   = evt.AltDown();
+         ctrl  = evt.ControlDown(),
+         alt   = evt.AltDown();
 
     int processed = m_swx->DoKeyDown(key, shift, ctrl, alt, &m_lastKeyDownConsumed);
 
@@ -488,8 +494,14 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     case SCN_MODIFIED:
         evt.SetEventType(wxEVT_STC_MODIFIED);
         evt.SetModificationType(scn.modificationType);
-        if (scn.text)
-            evt.SetText(wxString(scn.text, scn.length));
+        if (scn.text) {
+            // The unicode conversion MUST have a null byte to terminate the
+            // string so move it into a buffer first and give it one.
+            wxMemoryBuffer buf(scn.length+1);
+            buf.AppendData((void*)scn.text, scn.length);
+            buf.AppendByte(0);
+            evt.SetText(wxString(buf, wxConvUTF8));
+        }
         evt.SetLength(scn.length);
         evt.SetLinesAdded(scn.linesAdded);
         evt.SetLine(scn.line);

@@ -465,7 +465,7 @@ if BUILD_GLCANVAS or GL_ONLY:
     other_sources = []
 
     swig_sources = run_swig(swig_files, location, GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args)
+                            USE_SWIG, swig_force, swig_args, swig_deps)
 
     gl_libs = []
     if os.name == 'posix':
@@ -507,7 +507,7 @@ if not GL_ONLY and BUILD_OGL:
                   'oglcanvas.i']
 
     swig_sources = run_swig(swig_files, location, '', PKGDIR,
-                            USE_SWIG, swig_force, swig_args)
+                            USE_SWIG, swig_force, swig_args, swig_deps)
 
     if IN_CVS_TREE:
         # make sure local copy of contrib files are up to date
@@ -577,7 +577,7 @@ if not GL_ONLY and BUILD_STC:
     swig_sources = run_swig(swig_files, location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force,
                             swig_args + ['-I'+STC_H, '-I'+location],
-                            [opj(STC_H, 'stc.h')])
+                            [opj(STC_H, 'stc.h')] + swig_deps)
 
     # copy a contrib project specific py module to the main package dir
     copy_file(opj(location, 'stc.py'), PKGDIR, update=1, verbose=0)
@@ -666,7 +666,7 @@ if not GL_ONLY and BUILD_IEWIN:
     swig_files = ['iewin.i', ]
 
     swig_sources = run_swig(swig_files, location, '', PKGDIR,
-                            USE_SWIG, swig_force, swig_args)
+                            USE_SWIG, swig_force, swig_args, swig_deps)
 
 
     ext = Extension('iewinc', ['%s/IEHtmlWin.cpp' % location,
@@ -698,7 +698,7 @@ if not GL_ONLY and BUILD_XRC:
     swig_files = ['xrc.i']
 
     swig_sources = run_swig(swig_files, location, '', PKGDIR,
-                            USE_SWIG, swig_force, swig_args)
+                            USE_SWIG, swig_force, swig_args, swig_deps)
 
     xmlres_includes = includes[:]
     xmlres_includes.append('%s/expat/xmlparse' % XMLLOC)
@@ -786,7 +786,7 @@ if not GL_ONLY and BUILD_GIZMOS:
     swig_files = ['gizmos.i']
 
     swig_sources = run_swig(swig_files, location, '', PKGDIR,
-                            USE_SWIG, swig_force, swig_args)
+                            USE_SWIG, swig_force, swig_args, swig_deps)
 
     gizmos_includes = includes[:]
     gizmos_includes.append(GIZMOINC)
@@ -829,7 +829,7 @@ if not GL_ONLY and BUILD_DLLWIDGET:
     swig_files = ['dllwidget_.i']
 
     swig_sources = run_swig(swig_files, location, '', PKGDIR,
-                            USE_SWIG, swig_force, swig_args)
+                            USE_SWIG, swig_force, swig_args, swig_deps)
 
     # copy a contrib project specific py module to the main package dir
     copy_file(opj(location, 'dllwidget.py'), PKGDIR, update=1, verbose=0)

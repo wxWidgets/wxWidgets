@@ -107,7 +107,7 @@ class MySTC(wxStyledTextCtrl):
                                   evt.GetPosition(),
                                   evt.GetLinesAdded(),
                                   evt.GetLength(),
-                                  evt.GetText() ))
+                                  repr(evt.GetText()) ))
 
 
     def transModType(self, modType):
@@ -153,7 +153,23 @@ def runTest(frame, nb, log):
         p.SetSizer(s)
         p.SetAutoLayout(true)
 
+
+##     ed.SetBufferedDraw(false)
+##     ed.StyleClearAll()
     ed.SetText(demoText)
+    if wxUSE_UNICODE:
+        import codecs
+        decode = codecs.lookup("utf-8")[1]
+
+        ed.GotoPos(ed.GetLength())
+        ed.AddText("\n\nwxStyledTextCtrl can also do Unicode:\n")
+        unitext, l = decode('\xd0\x9f\xd0\xb8\xd1\x82\xd0\xbe\xd0\xbd - '
+                            '\xd0\xbb\xd1\x83\xd1\x87\xd1\x88\xd0\xb8\xd0\xb9 '
+                            '\xd1\x8f\xd0\xb7\xd1\x8b\xd0\xba \xd0\xbf\xd1\x80\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xbc\xd0\xb8\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb0\xd0\xbd\xd0\xb8\xd1\x8f!\n\n')
+        ed.AddText('\tRussian: ')
+        ed.AddText(unitext)
+        ed.GotoPos(0)
+
     ed.EmptyUndoBuffer()
 
     # make some styles
@@ -163,8 +179,7 @@ def runTest(frame, nb, log):
     ed.StyleSetSpec(3, "face:%s,bold,size:%d" % (face2, pb+2))
     ed.StyleSetSpec(4, "face:%s,size:%d" % (face1, pb-1))
 
-
-    # now set some text to those styles...  Normally this would be
+    # Now set some text to those styles...  Normally this would be
     # done in an event handler that happens when text needs displayed.
     ed.StartStyling(98, 0xff)
     ed.SetStyling(6, 1)  # set style for 6 characters using style 1
@@ -210,6 +225,7 @@ def runTest(frame, nb, log):
     ed.SetStyling(10, wxSTC_INDIC0_MASK)
     ed.SetStyling(10, wxSTC_INDIC1_MASK)
     ed.SetStyling(10, wxSTC_INDIC2_MASK | wxSTC_INDIC1_MASK)
+
 
     # some test stuff...
     if debug:

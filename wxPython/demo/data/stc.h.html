@@ -42,7 +42,11 @@
 <FONT color=#a020f0>#define wxSTC_START </FONT><FONT color=#ff00ff>2000</FONT>
 <FONT color=#a020f0>#define wxSTC_OPTIONAL_START </FONT><FONT color=#ff00ff>3000</FONT>
 <FONT color=#a020f0>#define wxSTC_LEXER_START </FONT><FONT color=#ff00ff>4000</FONT>
+
+<FONT color=#0000ff>// Redoes the next action on the undo history</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_REDO </FONT><FONT color=#ff00ff>2011</FONT>
+
+<FONT color=#0000ff>// Select all the text in the document.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_SELECTALL </FONT><FONT color=#ff00ff>2013</FONT>
 <FONT color=#a020f0>#define wxSTC_WS_INVISIBLE </FONT><FONT color=#ff00ff>0</FONT>
 <FONT color=#a020f0>#define wxSTC_WS_VISIBLEALWAYS </FONT><FONT color=#ff00ff>1</FONT>
@@ -160,9 +164,17 @@
 <FONT color=#a020f0>#define wxSTC_FIND_MATCHCASE </FONT><FONT color=#ff00ff>4</FONT>
 <FONT color=#a020f0>#define wxSTC_FIND_WORDSTART </FONT><FONT color=#ff00ff>0x00100000</FONT>
 <FONT color=#a020f0>#define wxSTC_FIND_REGEXP </FONT><FONT color=#ff00ff>0x00200000</FONT>
+
+<FONT color=#0000ff>// Undo one action in the undo history.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_UNDO </FONT><FONT color=#ff00ff>2176</FONT>
+
+<FONT color=#0000ff>// Cut the selection to the clipboard.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_CUT </FONT><FONT color=#ff00ff>2177</FONT>
+
+<FONT color=#0000ff>// Copy the selection to the clipboard.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_COPY </FONT><FONT color=#ff00ff>2178</FONT>
+
+<FONT color=#0000ff>// Paste the contents of the clipboard into the document replacing the selection.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_PASTE </FONT><FONT color=#ff00ff>2179</FONT>
 <FONT color=#a020f0>#define wxSTC_FOLDLEVELBASE </FONT><FONT color=#ff00ff>0x400</FONT>
 <FONT color=#a020f0>#define wxSTC_FOLDLEVELWHITEFLAG </FONT><FONT color=#ff00ff>0x1000</FONT>
@@ -175,50 +187,144 @@
 <FONT color=#a020f0>#define wxSTC_CACHE_CARET </FONT><FONT color=#ff00ff>1</FONT>
 <FONT color=#a020f0>#define wxSTC_CACHE_PAGE </FONT><FONT color=#ff00ff>2</FONT>
 <FONT color=#a020f0>#define wxSTC_CACHE_DOCUMENT </FONT><FONT color=#ff00ff>3</FONT>
+
+<FONT color=#0000ff>// Move caret down one line.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINEDOWN </FONT><FONT color=#ff00ff>2300</FONT>
+
+<FONT color=#0000ff>// Move caret down one line extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINEDOWNEXTEND </FONT><FONT color=#ff00ff>2301</FONT>
+
+<FONT color=#0000ff>// Move caret up one line.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINEUP </FONT><FONT color=#ff00ff>2302</FONT>
+
+<FONT color=#0000ff>// Move caret up one line extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINEUPEXTEND </FONT><FONT color=#ff00ff>2303</FONT>
+
+<FONT color=#0000ff>// Move caret left one character.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_CHARLEFT </FONT><FONT color=#ff00ff>2304</FONT>
+
+<FONT color=#0000ff>// Move caret left one character extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_CHARLEFTEXTEND </FONT><FONT color=#ff00ff>2305</FONT>
+
+<FONT color=#0000ff>// Move caret right one character.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_CHARRIGHT </FONT><FONT color=#ff00ff>2306</FONT>
+
+<FONT color=#0000ff>// Move caret right one character extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_CHARRIGHTEXTEND </FONT><FONT color=#ff00ff>2307</FONT>
+
+<FONT color=#0000ff>// Move caret left one word.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_WORDLEFT </FONT><FONT color=#ff00ff>2308</FONT>
+
+<FONT color=#0000ff>// Move caret left one word extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_WORDLEFTEXTEND </FONT><FONT color=#ff00ff>2309</FONT>
+
+<FONT color=#0000ff>// Move caret right one word.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_WORDRIGHT </FONT><FONT color=#ff00ff>2310</FONT>
+
+<FONT color=#0000ff>// Move caret right one word extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_WORDRIGHTEXTEND </FONT><FONT color=#ff00ff>2311</FONT>
+
+<FONT color=#0000ff>// Move caret to first position on line.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_HOME </FONT><FONT color=#ff00ff>2312</FONT>
+
+<FONT color=#0000ff>// Move caret to first position on line extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_HOMEEXTEND </FONT><FONT color=#ff00ff>2313</FONT>
+
+<FONT color=#0000ff>// Move caret to last position on line.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINEEND </FONT><FONT color=#ff00ff>2314</FONT>
+
+<FONT color=#0000ff>// Move caret to last position on line extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINEENDEXTEND </FONT><FONT color=#ff00ff>2315</FONT>
+
+<FONT color=#0000ff>// Move caret to first position in document.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_DOCUMENTSTART </FONT><FONT color=#ff00ff>2316</FONT>
+
+<FONT color=#0000ff>// Move caret to first position in document extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_DOCUMENTSTARTEXTEND </FONT><FONT color=#ff00ff>2317</FONT>
+
+<FONT color=#0000ff>// Move caret to last position in document.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_DOCUMENTEND </FONT><FONT color=#ff00ff>2318</FONT>
+
+<FONT color=#0000ff>// Move caret to last position in document extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_DOCUMENTENDEXTEND </FONT><FONT color=#ff00ff>2319</FONT>
+
+<FONT color=#0000ff>// Move caret one page up.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_PAGEUP </FONT><FONT color=#ff00ff>2320</FONT>
+
+<FONT color=#0000ff>// Move caret one page up extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_PAGEUPEXTEND </FONT><FONT color=#ff00ff>2321</FONT>
+
+<FONT color=#0000ff>// Move caret one page down.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_PAGEDOWN </FONT><FONT color=#ff00ff>2322</FONT>
+
+<FONT color=#0000ff>// Move caret one page down extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_PAGEDOWNEXTEND </FONT><FONT color=#ff00ff>2323</FONT>
+
+<FONT color=#0000ff>// Switch from insert to overtype mode or the reverse.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_EDITTOGGLEOVERTYPE </FONT><FONT color=#ff00ff>2324</FONT>
+
+<FONT color=#0000ff>// Cancel any modes such as call tip or auto-completion list display.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_CANCEL </FONT><FONT color=#ff00ff>2325</FONT>
+
+<FONT color=#0000ff>// Delete the selection or if no selection, the character before the caret.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_DELETEBACK </FONT><FONT color=#ff00ff>2326</FONT>
+
+<FONT color=#0000ff>// If selection is empty or all on one line replace the selection with a tab</FONT>
+<FONT color=#0000ff>// character.</FONT>
+<FONT color=#0000ff>// If more than one line selected, indent the lines.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_TAB </FONT><FONT color=#ff00ff>2327</FONT>
+
+<FONT color=#0000ff>// Dedent the selected lines.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_BACKTAB </FONT><FONT color=#ff00ff>2328</FONT>
+
+<FONT color=#0000ff>// Insert a new line, may use a CRLF, CR or LF depending on EOL mode.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_NEWLINE </FONT><FONT color=#ff00ff>2329</FONT>
+
+<FONT color=#0000ff>// Insert a Form Feed character.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_FORMFEED </FONT><FONT color=#ff00ff>2330</FONT>
+
+<FONT color=#0000ff>// Move caret to before first visible character on line.</FONT>
+<FONT color=#0000ff>// If already there move to first character on line.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_VCHOME </FONT><FONT color=#ff00ff>2331</FONT>
+
+<FONT color=#0000ff>// Like VCHome but extending selection to new caret position.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_VCHOMEEXTEND </FONT><FONT color=#ff00ff>2332</FONT>
+
+<FONT color=#0000ff>// Magnify the displayed text by increasing the sizes by 1 point.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_ZOOMIN </FONT><FONT color=#ff00ff>2333</FONT>
+
+<FONT color=#0000ff>// Make the displayed text smaller by decreasing the sizes by 1 point.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_ZOOMOUT </FONT><FONT color=#ff00ff>2334</FONT>
+
+<FONT color=#0000ff>// Delete the word to the left of the caret.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_DELWORDLEFT </FONT><FONT color=#ff00ff>2335</FONT>
+
+<FONT color=#0000ff>// Delete the word to the right of the caret.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_DELWORDRIGHT </FONT><FONT color=#ff00ff>2336</FONT>
+
+<FONT color=#0000ff>// Cut the line containing the caret.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINECUT </FONT><FONT color=#ff00ff>2337</FONT>
+
+<FONT color=#0000ff>// Delete the line containing the caret.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINEDELETE </FONT><FONT color=#ff00ff>2338</FONT>
+
+<FONT color=#0000ff>// Switch the current line with the previous.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINETRANSPOSE </FONT><FONT color=#ff00ff>2339</FONT>
+
+<FONT color=#0000ff>// Transform the selection to lower case.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LOWERCASE </FONT><FONT color=#ff00ff>2340</FONT>
+
+<FONT color=#0000ff>// Transform the selection to upper case.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_UPPERCASE </FONT><FONT color=#ff00ff>2341</FONT>
+
+<FONT color=#0000ff>// Scroll the document down, keeping the caret visible.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINESCROLLDOWN </FONT><FONT color=#ff00ff>2342</FONT>
+
+<FONT color=#0000ff>// Scroll the document up, keeping the caret visible.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_LINESCROLLUP </FONT><FONT color=#ff00ff>2343</FONT>
+
+<FONT color=#0000ff>// Delete the selection or if no selection, the character before the caret.</FONT>
+<FONT color=#0000ff>// Will not delete the chraacter before at the start of a line.</FONT>
 <FONT color=#a020f0>#define wxSTC_CMD_DELETEBACKNOTLINE </FONT><FONT color=#ff00ff>2344</FONT>
 <FONT color=#a020f0>#define wxSTC_EDGE_NONE </FONT><FONT color=#ff00ff>0</FONT>
 <FONT color=#a020f0>#define wxSTC_EDGE_LINE </FONT><FONT color=#ff00ff>1</FONT>
@@ -742,7 +848,7 @@
     <B><FONT color=#2e8b57>void</FONT></B> AddText(<B><FONT color=#2e8b57>const</FONT></B> wxString&amp; text);
 
     <FONT color=#0000ff>// Add array of cells to document</FONT>
-    <B><FONT color=#2e8b57>void</FONT></B> AddStyledText(<B><FONT color=#2e8b57>const</FONT></B> wxString&amp; text);
+    <B><FONT color=#2e8b57>void</FONT></B> AddStyledText(<B><FONT color=#2e8b57>const</FONT></B> wxMemoryBuffer&amp; data);
 
     <FONT color=#0000ff>// Insert string at a position</FONT>
     <B><FONT color=#2e8b57>void</FONT></B> InsertText(<B><FONT color=#2e8b57>int</FONT></B> pos, <B><FONT color=#2e8b57>const</FONT></B> wxString&amp; text);
@@ -783,7 +889,7 @@
     <B><FONT color=#2e8b57>void</FONT></B> SetSavePoint();
 
     <FONT color=#0000ff>// Retrieve a buffer of cells.</FONT>
-    wxString GetStyledText(<B><FONT color=#2e8b57>int</FONT></B> startPos, <B><FONT color=#2e8b57>int</FONT></B> endPos);
+    wxMemoryBuffer GetStyledText(<B><FONT color=#2e8b57>int</FONT></B> startPos, <B><FONT color=#2e8b57>int</FONT></B> endPos);
 
     <FONT color=#0000ff>// Are there any redoable actions in the undo history.</FONT>
     <B><FONT color=#2e8b57>bool</FONT></B> CanRedo();
@@ -865,7 +971,6 @@
     <B><FONT color=#2e8b57>int</FONT></B> GetTabWidth();
 
     <FONT color=#0000ff>// Set the code page used to interpret the bytes of the document as characters.</FONT>
-    <FONT color=#0000ff>// The SC_CP_UTF8 value can be used to enter Unicode mode.</FONT>
     <B><FONT color=#2e8b57>void</FONT></B> SetCodePage(<B><FONT color=#2e8b57>int</FONT></B> codePage);
 
     <FONT color=#0000ff>// Set the symbol used for a particular marker number,</FONT>
@@ -954,6 +1059,9 @@
 
     <FONT color=#0000ff>// Set a style to be mixed case, or to force upper or lower case.</FONT>
     <B><FONT color=#2e8b57>void</FONT></B> StyleSetCase(<B><FONT color=#2e8b57>int</FONT></B> style, <B><FONT color=#2e8b57>int</FONT></B> caseForce);
+
+    <FONT color=#0000ff>// Set the character set of the font in a style.</FONT>
+    <B><FONT color=#2e8b57>void</FONT></B> StyleSetCharacterSet(<B><FONT color=#2e8b57>int</FONT></B> style, <B><FONT color=#2e8b57>int</FONT></B> characterSet);
 
     <FONT color=#0000ff>// Set the foreground colour of the selection and whether to use this setting.</FONT>
     <B><FONT color=#2e8b57>void</FONT></B> SetSelForeground(<B><FONT color=#2e8b57>bool</FONT></B> useSetting, <B><FONT color=#2e8b57>const</FONT></B> wxColour&amp; fore);
@@ -1446,10 +1554,6 @@
     <FONT color=#0000ff>// Retrieve the degree of caching of layout information</FONT>
     <B><FONT color=#2e8b57>int</FONT></B> GetLayoutCache();
 
-    <FONT color=#0000ff>// Delete the selection or if no selection, the character before the caret.</FONT>
-    <FONT color=#0000ff>// Will not delete the chraacter before at the start of a line.</FONT>
-    <B><FONT color=#2e8b57>void</FONT></B> DeleteBackNotLine();
-
     <FONT color=#0000ff>// Move the caret inside current view if it's not there already</FONT>
     <B><FONT color=#2e8b57>void</FONT></B> MoveCaretInsideView();
 
@@ -1762,7 +1866,7 @@
     <B><FONT color=#2e8b57>void</FONT></B> SetKey(<B><FONT color=#2e8b57>int</FONT></B> k)                    { m_key = k; }
     <B><FONT color=#2e8b57>void</FONT></B> SetModifiers(<B><FONT color=#2e8b57>int</FONT></B> m)              { m_modifiers = m; }
     <B><FONT color=#2e8b57>void</FONT></B> SetModificationType(<B><FONT color=#2e8b57>int</FONT></B> t)       { m_modificationType = t; }
-    <B><FONT color=#2e8b57>void</FONT></B> SetText(<B><FONT color=#2e8b57>const</FONT></B> <B><FONT color=#2e8b57>char</FONT></B>* t)           { m_text = t; }
+    <B><FONT color=#2e8b57>void</FONT></B> SetText(<B><FONT color=#2e8b57>const</FONT></B> wxString&amp; t)       { m_text = t; }
     <B><FONT color=#2e8b57>void</FONT></B> SetLength(<B><FONT color=#2e8b57>int</FONT></B> len)               { m_length = len; }
     <B><FONT color=#2e8b57>void</FONT></B> SetLinesAdded(<B><FONT color=#2e8b57>int</FONT></B> num)           { m_linesAdded = num; }
     <B><FONT color=#2e8b57>void</FONT></B> SetLine(<B><FONT color=#2e8b57>int</FONT></B> val)                 { m_line = val; }
