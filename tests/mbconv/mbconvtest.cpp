@@ -167,7 +167,7 @@ void MBConvTestCase::WC2CP1250()
 #ifdef HAVE_WCHAR_H
 
 // Check that 'charSequence' translates to 'wideSequence' and back.
-// Invalid sequences can be tested by giving NULL or 'wideSequence'. Even
+// Invalid sequences can be tested by giving NULL for 'wideSequence'. Even
 // invalid sequences should roundtrip when an option is given and this is
 // checked.
 //
@@ -230,7 +230,9 @@ void MBConvTestCase::UTF8(const char *charSequence,
     // translate it into wide characters
     wxMBConvUTF8 utf8(option);
     wchar_t widechars[BUFSIZE];
+    size_t lenResult = utf8.MB2WC(NULL, bytes, 0);
     size_t result = utf8.MB2WC(widechars, bytes, BUFSIZE);
+    UTF8ASSERT(result == lenResult);
 
     // check we got the expected result
     if (wideSequence) {
@@ -245,6 +247,7 @@ void MBConvTestCase::UTF8(const char *charSequence,
         wcscat(expected, wideSequence);
 
         UTF8ASSERT(wcscmp(widechars, expected) == 0);
+        UTF8ASSERT(wcslen(widechars) == result);
     }
     else {
         // If 'wideSequence' is NULL, then the result is expected to be
@@ -262,11 +265,14 @@ void MBConvTestCase::UTF8(const char *charSequence,
 
     // translate it back and check we get the original
     char bytesAgain[BUFSIZE];
+    size_t lenResultAgain = utf8.WC2MB(NULL, widechars, 0);
     size_t resultAgain = utf8.WC2MB(bytesAgain, widechars, BUFSIZE);
+    UTF8ASSERT(resultAgain == lenResultAgain);
     UTF8ASSERT(resultAgain != (size_t)-1);
     wxASSERT(resultAgain < BUFSIZE);
 
     UTF8ASSERT(strcmp(bytes, bytesAgain) == 0);
+    UTF8ASSERT(strlen(bytesAgain) == resultAgain);
 }
 
 #endif // HAVE_WCHAR_H
