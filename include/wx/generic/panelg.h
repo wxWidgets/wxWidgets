@@ -17,9 +17,9 @@
 #endif
 
 #include "wx/window.h"
+#include "wx/button.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
-
 
 class WXDLLEXPORT wxPanel : public wxWindow
 {

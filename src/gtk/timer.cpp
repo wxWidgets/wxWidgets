@@ -70,12 +70,23 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
 static gint timeout_callback( gpointer data )
 {
     wxTimer *timer = (wxTimer*)data;
+    
+#if (GTK_MINOR_VERSION > 0)
+    /* when getting called from GDK's timer handler we
+       are no longer within GDK's grab on the GUI
+       thread so we must lock it here ourselves */
+    GDK_THREADS_ENTER ();
+#endif
+    
     timer->Notify();
 
+#if (GTK_MINOR_VERSION > 0)
+    /* release lock again */
+    GDK_THREADS_LEAVE ();
+#endif
+
     if (timer->OneShot())
-    {
         timer->Stop();
-    }
 
     return TRUE;
 }
