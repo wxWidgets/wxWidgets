@@ -33,7 +33,7 @@ public:
   int        m_capStyle;
   wxColour   m_colour;
   int        m_countDashes;
-  wxDash    *m_dash;
+  wxGTKDash *m_dash;
 };
 
 wxPenRefData::wxPenRefData()
@@ -42,7 +42,7 @@ wxPenRefData::wxPenRefData()
     m_style = wxSOLID;
     m_joinStyle = wxJOIN_ROUND;
     m_capStyle = wxCAP_ROUND;
-    m_dash = (wxDash*) NULL;
+    m_dash = (wxGTKDash*) NULL;
     m_countDashes = 0;
 }
 
@@ -120,7 +120,7 @@ void wxPen::SetDashes( int number_of_dashes, const wxDash *dash )
 {
     Unshare();
     M_PENDATA->m_countDashes = number_of_dashes;
-    M_PENDATA->m_dash = (wxDash *)dash; /* TODO */
+    M_PENDATA->m_dash = (wxGTKDash *)dash; /* TODO */
 }
 
 void wxPen::SetColour( int red, int green, int blue )
@@ -155,7 +155,7 @@ void wxPen::SetWidth( int width )
 
 int wxPen::GetDashes( wxDash **ptr ) const 
 {
-     *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); 
+     *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL); 
      return (M_PENDATA ? M_PENDATA->m_countDashes : 0);
 }
 
@@ -166,7 +166,7 @@ int wxPen::GetDashCount() const
 
 wxDash* wxPen::GetDash() const 
 { 
-    return (M_PENDATA->m_dash); 
+    return (wxDash*)M_PENDATA->m_dash; 
 }
 
 int wxPen::GetCap() const

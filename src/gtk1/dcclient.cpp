@@ -1381,15 +1381,15 @@ void wxWindowDC::SetPen( const wxPen &pen )
         width = (int)w;
     }
 
-    static const char dotted[] = {1, 1};
-    static const char short_dashed[] = {2, 2};
-    static const char wxCoord_dashed[] = {2, 4};
-    static const char dotted_dashed[] = {3, 3, 1, 3};
+    static const wxGTKDash dotted[] = {1, 1};
+    static const wxGTKDash short_dashed[] = {2, 2};
+    static const wxGTKDash wxCoord_dashed[] = {2, 4};
+    static const wxGTKDash dotted_dashed[] = {3, 3, 1, 3};
 
     // We express dash pattern in pen width unit, so we are
     // independent of zoom factor and so on...
     int req_nb_dash;
-    const char *req_dash;
+    const wxGTKDash *req_dash;
 
     GdkLineStyle lineStyle = GDK_LINE_SOLID;
     switch (m_pen.GetStyle())
@@ -1398,7 +1398,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
         {
             lineStyle = GDK_LINE_ON_OFF_DASH;
             req_nb_dash = m_pen.GetDashCount();
-            req_dash = m_pen.GetDash();
+            req_dash = (wxGTKDash*)m_pen.GetDash();
             break;
         }
         case wxDOT:
@@ -1438,37 +1438,27 @@ void wxWindowDC::SetPen( const wxPen &pen )
         default:
         {
             lineStyle = GDK_LINE_SOLID;
-            req_dash = (wxDash*)NULL;
+            req_dash = (wxGTKDash*)NULL;
             req_nb_dash = 0;
             break;
         }
     }
 
-#if (GTK_MINOR_VERSION > 0)
+#if (GTK_MINOR_VERSION > 0) || (GTK_MAJOR_VERSION > 1)
     if (req_dash && req_nb_dash)
     {
-        char *real_req_dash = new char[req_nb_dash];
+        wxGTKDash *real_req_dash = new wxGTKDash[req_nb_dash];
         if (real_req_dash)
         {
             for (int i = 0; i < req_nb_dash; i++)
                 real_req_dash[i] = req_dash[i] * width;
-#if GTK_CHECK_VERSION(1,2,7)
-            gdk_gc_set_dashes( m_penGC, 0, (gint8*) real_req_dash,
-			      req_nb_dash );
-#else
-            gdk_gc_set_dashes( m_penGC, 0, real_req_dash,
-			      req_nb_dash );
-#endif
+            gdk_gc_set_dashes( m_penGC, 0, real_req_dash, req_nb_dash );
             delete[] real_req_dash;
         }
         else
         {
             // No Memory. We use non-scaled dash pattern...
-#if GTK_CHECK_VERSION(1,2,7)
-            gdk_gc_set_dashes( m_penGC, 0, (gint8*)req_dash, req_nb_dash );
-#else
-            gdk_gc_set_dashes( m_penGC, 0, (char*)req_dash, req_nb_dash );
-#endif
+            gdk_gc_set_dashes( m_penGC, 0, (wxGTKDash*)req_dash, req_nb_dash );
         }
     }
 #endif
