@@ -663,12 +663,7 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     dc.SetBackgroundMode(wxTRANSPARENT);
     GetViewStart(&x, &y);
 
-    wxHtmlSelection sel;
-    sel.Set(wxPoint(20,80),
-            m_Cell->FindCellByPos(20,80,wxHTML_FIND_TERMINAL|wxHTML_FIND_NONTERMINAL),
-            wxPoint(200,300),
-            m_Cell->FindCellByPos(200,300,wxHTML_FIND_TERMINAL|wxHTML_FIND_NONTERMINAL));
-    wxHtmlRenderingState rstate(IsSelectionEnabled() ? &sel : NULL);
+    wxHtmlRenderingState rstate(NULL);
     m_Cell->Draw(dc, 0, 0,
                  y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
