@@ -821,7 +821,6 @@ control.h	F
 cursor.h	F
 dataform.h	F
 dataobj.h	F
-dataobj2.h	F
 dc.h	F
 dcclient.h	F
 dcmemory.h	F
