@@ -801,7 +801,7 @@ bool wxThreadModule::OnInit()
 	long response;
 	bool hasThreadManager ;
 	hasThreadManager = Gestalt( gestaltThreadMgrAttr, &response) == noErr && response & 1;
-#if GENERATINGPOWERPC || GENERATINGCFM
+#if TARGET_RT_MAC_CFM
 	// verify presence of shared library
 	hasThreadManager = hasThreadManager && ((Ptr)NewThread != (Ptr)kUnresolvedCFragSymbolAddress);
 #endif
