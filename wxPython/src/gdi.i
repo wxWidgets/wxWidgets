@@ -628,6 +628,11 @@ public:
 
 
 
+
+// The list of ints for the dashes needs to exist for the life of the pen
+// so we make it part of the class to save it.  wxPyPen is aliased to wxPen
+// in _extras.py
+
 %{
 class wxPyPen : public wxPen {
 public:
@@ -636,13 +641,16 @@ public:
         { m_dash = NULL; }
     ~wxPyPen() {
         if (m_dash)
-            delete m_dash;
+            delete [] m_dash;
     }
 
     void SetDashes(int nb_dashes, const wxDash *dash) {
+        if (m_dash)
+            delete [] m_dash;
         m_dash = new wxDash[nb_dashes];
-        for (int i=0; i<nb_dashes; i++)
+        for (int i=0; i<nb_dashes; i++) {
             m_dash[i] = dash[i];
+        }
         wxPen::SetDashes(nb_dashes, m_dash);
     }
 
@@ -652,7 +660,6 @@ private:
 %}
 
 
-
 class wxPyPen : public wxPen {
 public:
     wxPyPen(wxColour& colour, int width=1, int style=wxSOLID);
@@ -660,6 +667,7 @@ public:
 
     void SetDashes(int LCOUNT, wxDash* choices);
 };
+
 
 
 
