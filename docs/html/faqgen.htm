@@ -186,6 +186,24 @@ has been built into wxString.<P>
 There is nothing to stop an application using templates or the string class for its own
 purposes.<P>
 
+<H3>Is there a rich edit/markup widget for wxWindows 2?</H3>
+
+These are the possibilities so far:<P>
+
+<ul>
+<li>The richedit sample has a text editor that does markup.
+<li>See <a href="http://www.scintilla.org" target=_top>www.scintilla.org</a> for
+a very nice syntax-highlighting editor widget. Robin Dunn is writing a wxWindows wrapper
+for this widget.
+<li>If you only need to display marked-up information, rather than edit it,
+then wxHTML will suit your needs. wxHTML is built into wxWindows - please see the reference
+manual for details, and samples/html.
+<li>There are rich edit widgets in both WIN32 and GTK+, but there is currently
+no wxWindows wrapper for these.
+</ul>
+
+<P>
+
 <H3>How is wxWindows 2 being developed?</H3>
 
 We are using the <a href="cvs.htm">CVS</a> system to develop and maintain wxWindows. This allows

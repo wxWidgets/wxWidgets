@@ -377,7 +377,7 @@ public:
 #elif defined(__WXMSW__) && defined(WXUSINGDLL)
     // NT defines APIENTRY, 3.x not
     #if !defined(WXAPIENTRY)
-        #define WXAPIENTRY FAR wxSTDCALL
+        #define WXAPIENTRY WXFAR wxSTDCALL
     #endif
 
     #define IMPLEMENT_WXWIN_MAIN \

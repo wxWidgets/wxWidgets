@@ -710,7 +710,7 @@ void wxGridRowLabelWindow::OnPaint( wxPaintEvent &event )
     //
     // m_owner->PrepareDC( dc );
 
-    wxCoord x, y;
+    int x, y;
     m_owner->CalcUnscrolledPosition( 0, 0, &x, &y );
     dc.SetDeviceOrigin( 0, -y );
 
@@ -763,7 +763,7 @@ void wxGridColLabelWindow::OnPaint( wxPaintEvent &event )
     //
     // m_owner->PrepareDC( dc );
 
-    wxCoord x, y;
+    int x, y;
     m_owner->CalcUnscrolledPosition( 0, 0, &x, &y );
     dc.SetDeviceOrigin( -x, 0 );
 

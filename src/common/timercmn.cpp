@@ -258,7 +258,9 @@ wxLongLong wxGetLocalTimeMillis()
         return (val + tp.millitm);
     }
 #else
+#ifndef __BORLANDC__
     #warning "wxStopWatch will be up to second resolution!"
+#endif
 #endif
 
     return val;

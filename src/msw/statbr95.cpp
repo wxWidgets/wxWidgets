@@ -157,7 +157,7 @@ void wxStatusBar95::CopyFieldsWidth(const int widths[])
   }
 }
 
-void wxStatusBar95::SetFieldsCount(int nFields, const int widths[])
+void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
 {
   // this is Windows limitation
   wxASSERT_MSG( (nFields > 0) && (nFields < 255), _T("too many fields") );

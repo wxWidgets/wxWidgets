@@ -232,6 +232,10 @@ either install odbc32.lib from the BC++ CD-ROM into your BC++ lib
 directory, or set wxUSE_ODBC to 0 in include\wx\msw\setup.h and
 recompile wxWindows. The same applies if compiling using the IDE.
 
+Note (5): BC++ 4.5 (not 5.0) trips up over jdmerge.c in the JPEG folder;
+you will therefore need to set wxUSE_LIBJPEG to 0 in setup.h and remove
+the jpeg target from src\msw\makefile.b32.
+
 Compiling using the IDE files:
 
 1. Load src\bc32.ide (Release settings)

@@ -1817,17 +1817,16 @@ typedef WXHWND WXWidget;
 #endif
 
 // the keywords needed for WinMain() declaration
+
 #ifdef __WIN16__
-    #ifndef FAR
         #ifdef __VISUALC__
-            #define FAR __far
+            #define WXFAR __far
         #else // !VC++
-            #define FAR _far
+            #define WXFAR _far
         #endif
-    #endif // no FAR
 #else // Win32
-    #ifndef FAR
-        #define FAR
+    #ifndef WXFAR
+        #define WXFAR
     #endif
 #endif // Win16/32
 

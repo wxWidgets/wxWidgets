@@ -279,7 +279,6 @@ h2v1_merged_upsample (j_decompress_ptr cinfo,
   }
 }
 
-
 /*
  * Upsample and color convert for the case of 2:1 horizontal and 2:1 vertical.
  */
