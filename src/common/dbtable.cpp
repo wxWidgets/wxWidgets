@@ -130,8 +130,6 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
     wxStrcpy(tableName, tblName);               // Table Name
     if (tblPath)
         wxStrcpy(tablePath, tblPath);           // Table Path - used for dBase files
-    else
-        tablePath[0]=0;
 
     if (qryTblName)                             // Name of the table/view to query
         wxStrcpy(queryTableName, qryTblName);
@@ -580,43 +578,20 @@ bool wxTable::Open(void)
     int i;
 //    char sqlStmt[DB_MAX_STATEMENT_LEN];
     wxString sqlStmt;
-    wxString *s = NULL;
 
     // Verify that the table exists in the database
-//    if (!pDb->TableExists(tableName,pDb->GetUsername(),tablePath))
-    if (!pDb->TableExists(tableName,NULL,tablePath))
+    if (!pDb->TableExists(tableName,pDb->GetUsername(),tablePath))
     {
-       s =new wxString("Table/view does not exist in the database");
-       if (*(pDb->dbInf.accessibleTables) == 'Y') 
-       {
-           (*s)+=", or you have insufficient permissions.\n";
-       }
-       else 
-       {
-           (*s)+=".\n";
-       }
-    }
-    else
-    {
-       // Verify the user has rights to access the table.
-       // Shortcut boolean evaluation to optimize out call to TablePrivs
-       // Unfortunely this optimization doesn't seem to be reliable!
-        if (/* *(pDb->dbInf.accessibleTables) == 'N' &&  */
-            !pDb->TablePrivileges(tableName,"SELECT",NULL,tablePath))
-            s = new wxString("Current logged in user has insufficient privileges to access this table.\n");
-    }   
-    
-    if (s) 
-    {           
-        wxString p;
+        wxString s;
         if (wxStrcmp(tablePath,""))
-            p.sprintf("Error opening '%s/%s'.\n",tablePath,tableName);
-        else 
-            p.sprintf("Error opening '%s'.\n", tableName);
-
-        p += (*s);
-        pDb->LogError(p.GetData());
-
+            s.sprintf("Error opening '%s/%s'.\n",tablePath,tableName);
+        else
+            s.sprintf("Error opening '%s'.\n", tableName);
+        if (!pDb->TableExists(tableName,NULL,tablePath))
+            s += "Table/view does not exist in the database.\n";
+        else
+            s += "Current logged in user does not have sufficient privileges to access this table.\n";
+        pDb->LogError(s.GetData());
         return(FALSE);
     }
 
