@@ -212,3 +212,48 @@ MyFrame::~MyFrame()
 }
 \end{verbatim}
 
+\section{Controlling dragging behaviour}\label{controllingdragbehav}
+
+Various pane-dragging behaviours are supported. FL can
+show an outline of where the window would be docked
+if you stopped dragging at that point.
+
+This is a list of properties of interest in the cbCommonPaneProperties
+structure:
+
+\begin{verbatim}
+    bool mRealTimeUpdatesOn;     // default: ON
+    bool mOutOfPaneDragOn;       // default: ON
+    bool mExactDockPredictionOn; // default: OFF
+    bool mNonDestructFrictionOn; // default: OFF
+\end{verbatim}
+
+To get behaviour similar to Microsoft's DevStudio drag-ghost behaviour,
+mRealTimeUpdatesOn have to be set to FALSE, for example:
+
+\begin{verbatim}
+    cbCommonPaneProperties props;
+    ....
+    ....
+    props.mRealTimeUpdatesOn = FALSE;
+    fl->SetPaneProperties( props, wxALL_PANES );
+\end{verbatim}
+
+{\it mOutOfPaneDragOn} specifies whether bars can be dragged
+away from this pane. (Note: this may not currently be working.)
+
+{\it mExactDockPredictionOn} is only relevant when {\it mRealTimeUpdatesOn} is FALSE,
+and then the hint rectangle behaves a little jumpily. It tries to show
+exatly how the bar would look and where it would be docked if the dragging finished right
+now, i.e. the final position, with all the 'friction-physics' calculated.
+Otherwise the hint flies smothly above the surface only hinting whether the bar
+will be docked vertically or horizontally if dropped now.
+This is a feature you won't find anywhere else!
+
+{\it mNonDestructFirctionOn} causes the bars not being dragged
+to stay where they are, while the currently dragged one is 'diving'
+through the underlaying panes, docking itself in and out in real time.
+Otherwise the stationary bars would be pushed around messing up the composition permanently.
+This flag is irelevant when {\it mRealTimeUpdatesOn} is FALSE, as the ghost-rect
+does not do any docking until the drag finishes.
+

@@ -1002,7 +1002,7 @@ class cbCommonPaneProperties : public wxObject
     bool mRealTimeUpdatesOn;     // default: ON
     bool mOutOfPaneDragOn;       // default: ON
     bool mExactDockPredictionOn; // default: OFF
-    bool mNonDestructFirctionOn; // default: OFF
+    bool mNonDestructFrictionOn; // default: OFF
 
     bool mShow3DPaneBorderOn;    // default: ON
 
@@ -1068,7 +1068,7 @@ public: /* protected really */
     // transient properties
 
     wxList          mRowShapeData;   // shapes of bars of recently modified row,
-                                     // stored when in "non-destructive-firction" mode
+                                     // stored when in "non-destructive-friction" mode
     cbRowInfo*      mpStoredRow;     // row-info for which the shapes are stored
 
     friend class wxFrameLayout;

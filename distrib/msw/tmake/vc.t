@@ -505,22 +505,21 @@ docs:   allhlp allhtml allpdfrtf allhtb allhtmlhelp
 alldocs: docs
 hlp:    wxhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
-refhlp: $(DOCDIR)/winhelp/techref.hlp
 rtf:    $(DOCDIR)/winhelp/wx.rtf
 pdfrtf:    $(DOCDIR)/pdf/wx.rtf
-refpdfrtf: $(DOCDIR)/pdf/techref.rtf
 html:	wxhtml
 htb:	$(DOCDIR)\htb\wx.htb
 wxhtml:	$(DOCDIR)\html\wx\wx.htm
 htmlhelp: $(DOCDIR)\htmlhelp\wx.chm
-ps:     wxps referencps
+ps:     wxps
 wxps:	$(WXDIR)\docs\ps\wx.ps
-referencps:	$(WXDIR)\docs\ps\referenc.ps
 
 allhlp: wxhlp
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc hlp
         cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc hlp
+        cd $(WXDIR)\contrib\src\fl
         nmake -f makefile.vc hlp
         cd $(THISDIR)
 
@@ -529,12 +528,15 @@ allhtml: wxhtml
         nmake -f makefile.vc html
         cd $(WXDIR)\utils\tex2rtf\src
         nmake -f makefile.vc html
+        cd $(WXDIR)\contrib\src\fl
         cd $(THISDIR)
 
 allhtmlhelp: htmlhelp
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc htmlhelp
         cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc htmlhelp
+        cd $(WXDIR)\contrib\src\fl
         nmake -f makefile.vc htmlhelp
         cd $(THISDIR)
 
@@ -543,6 +545,8 @@ allhtb: htb
         nmake -f makefile.vc htb
         cd $(WXDIR)\utils\tex2rtf\src
         nmake -f makefile.vc htb
+        cd $(WXDIR)\contrib\src\fl
+        nmake -f makefile.vc htb
         cd $(THISDIR)
 
 allps: wxps referencps
@@ -550,12 +554,16 @@ allps: wxps referencps
         nmake -f makefile.vc ps
         cd $(WXDIR)\utils\tex2rtf\src
         nmake -f makefile.vc ps
+        cd $(WXDIR)\contrib\src\fl
+        nmake -f makefile.vc ps
         cd $(THISDIR)
 
 allpdfrtf: pdfrtf
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc pdfrtf
         cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc pdfrtf
+        cd $(WXDIR)\contrib\src\fl
         nmake -f makefile.vc pdfrtf
         cd $(THISDIR)
 
@@ -569,22 +577,9 @@ $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/w
         move wx.cnt $(DOCDIR)\winhelp\wx.cnt
         cd $(THISDIR)
 
-$(DOCDIR)/winhelp/techref.hlp:         $(DOCDIR)/latex/techref/techref.rtf $(DOCDIR)/latex/techref/techref.hpj
-        cd $(DOCDIR)/latex/techref
-        -erase techref.ph
-        hc techref
-        move techref.hlp $(DOCDIR)\winhelp\techref.hlp
-        move techref.cnt $(DOCDIR)\winhelp\techref.cnt
-        cd $(THISDIR)
-
 $(DOCDIR)/latex/wx/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
         cd $(DOCDIR)\latex\wx
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/latex/wx/wx.rtf -twice -winhelp
-        cd $(THISDIR)
-
-$(DOCDIR)/latex/techref/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
-        cd $(DOCDIR)\latex\techref
-        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/latex/techref/techref.rtf -twice -winhelp
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
@@ -592,13 +587,6 @@ $(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/
         -copy *.wmf $(DOCDIR)\pdf
         -copy *.bmp $(DOCDIR)\pdf
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
-        cd $(THISDIR)
-
-$(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
-        cd $(DOCDIR)\latex\techref
-        -copy *.wmf $(DOCDIR)\pdf
-        -copy *.bmp $(DOCDIR)\pdf
-        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/pdf/techref.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex

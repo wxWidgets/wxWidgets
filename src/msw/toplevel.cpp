@@ -185,7 +185,7 @@ long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
     return msflags;
 }
 
-bool wxTopLevelWindowMSW::CreateDialog(const wxChar *dlgTemplate,
+bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
                                        const wxString& title,
                                        const wxPoint& pos,
                                        const wxSize& size)
@@ -218,16 +218,16 @@ bool wxTopLevelWindowMSW::CreateDialog(const wxChar *dlgTemplate,
         }
     }
 
-    m_hWnd = (WXHWND)::CreateDialog(wxGetInstance(),
-                                    dlgTemplate,
+    m_hWnd = (WXHWND)::CreateDialogIndirect(wxGetInstance(),
+                                    (DLGTEMPLATE*)dlgTemplate,
                                     parent ? GetHwndOf(parent) : NULL,
                                     (DLGPROC)wxDlgProc);
 
     if ( !m_hWnd )
     {
-        wxFAIL_MSG(_("Did you forget to include wx/msw/wx.rc in your resources?"));
+        wxFAIL_MSG(_("Failed to create dialog. Incorrect DLGTEMPLATE?"));
 
-        wxLogSysError(_("Can't create dialog using template '%s'"), dlgTemplate);
+        wxLogSysError(_("Can't create dialog using memory template"));
 
         return FALSE;
     }
@@ -358,15 +358,24 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         // with & without captions under MSWindows, resizeable or not (but a
         // resizeable dialog always has caption - otherwise it would look too
         // strange)
-        const wxChar *dlgTemplate;
-        if ( style & wxRESIZE_BORDER )
-            dlgTemplate = wxT("wxResizeableDialog");
-        else if ( style & wxCAPTION )
-            dlgTemplate = wxT("wxCaptionDialog");
-        else
-            dlgTemplate = wxT("wxNoCaptionDialog");
+        int dlgsize = sizeof(DLGTEMPLATE) + (sizeof(WORD) * 3);
+        DLGTEMPLATE* dlgTemplate = (DLGTEMPLATE*)malloc( dlgsize );
+        memset (dlgTemplate, 0, dlgsize );
+        dlgTemplate->x  = 34;
+        dlgTemplate->y  = 22;
+        dlgTemplate->cx = 144;
+        dlgTemplate->cy = 75;
 
-        return CreateDialog(dlgTemplate, title, pos, size);
+        if ( style & wxRESIZE_BORDER )
+          dlgTemplate->style = DS_MODALFRAME | WS_CAPTION | WS_POPUP | WS_SYSMENU | WS_THICKFRAME;
+        else if ( style & wxCAPTION )
+          dlgTemplate->style = DS_MODALFRAME | WS_CAPTION | WS_POPUP | WS_SYSMENU;
+        else
+          dlgTemplate->style = WS_POPUP;
+
+        bool ret = CreateDialog(dlgTemplate, title, pos, size);
+        free(dlgTemplate);
+        return ret;
     }
     else // !dialog
     {

@@ -2043,7 +2043,7 @@ cbCommonPaneProperties::cbCommonPaneProperties(void)
     : mRealTimeUpdatesOn    ( TRUE  ),
       mOutOfPaneDragOn      ( TRUE  ),
       mExactDockPredictionOn( FALSE ),
-      mNonDestructFirctionOn( FALSE ),
+      mNonDestructFrictionOn( FALSE ),
       mShow3DPaneBorderOn   ( TRUE  ),
       mBarFloatingOn        ( FALSE ),
       mRowProportionsOn     ( FALSE ),
@@ -2303,7 +2303,7 @@ int cbDockPane::GetNotFixedBarsCount( cbRowInfo* pRow )
 
 void cbDockPane::RemoveBar( cbBarInfo* pBar )
 {
-    bool needsRestoring = mProps.mNonDestructFirctionOn && 
+    bool needsRestoring = mProps.mNonDestructFrictionOn && 
                           mpStoredRow == pBar->mpRow;
 
     cbRemoveBarEvent evt( pBar, this );
@@ -2751,7 +2751,7 @@ void cbDockPane::DoInsertBar( cbBarInfo* pBar, int rowNo )
     {
         pRow = mRows[rowNo];
 
-        if ( mProps.mNonDestructFirctionOn == TRUE )
+        if ( mProps.mNonDestructFrictionOn == TRUE )
         {
             // store original shape of the row (before the bar is inserted)
 

@@ -752,12 +752,16 @@ allhlp: wxhlp
         nmake -f makefile.vc hlp
         cd $(WXDIR)\utils\tex2rtf\src
         nmake -f makefile.vc hlp
+        cd $(WXDIR)\contrib\src\fl
+        nmake -f makefile.vc hlp
         cd $(THISDIR)
 
 allhtml: wxhtml
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc html
         cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc html
+        cd $(WXDIR)\contrib\src\fl
         nmake -f makefile.vc html
         cd $(THISDIR)
 
@@ -766,12 +770,16 @@ allhtmlhelp: htmlhelp
         nmake -f makefile.vc htmlhelp
         cd $(WXDIR)\utils\tex2rtf\src
         nmake -f makefile.vc htmlhelp
+        cd $(WXDIR)\contrib\src\fl
+        nmake -f makefile.vc htmlhelp
         cd $(THISDIR)
 
 allhtb: htb
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc htb
         cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc htb
+        cd $(WXDIR)\contrib\src\fl
         nmake -f makefile.vc htb
         cd $(THISDIR)
 
@@ -780,12 +788,16 @@ allps: wxps referencps
         nmake -f makefile.vc ps
         cd $(WXDIR)\utils\tex2rtf\src
         nmake -f makefile.vc ps
+        cd $(WXDIR)\contrib\src\fl
+        nmake -f makefile.vc ps
         cd $(THISDIR)
 
 allpdfrtf: pdfrtf
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc pdfrtf
         cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc pdfrtf
+        cd $(WXDIR)\contrib\src\fl
         nmake -f makefile.vc pdfrtf
         cd $(THISDIR)
 

@@ -40,23 +40,23 @@ $(DOCDIR)/winhelp/fl.hlp:         $(THISDIR)/fl.rtf $(THISDIR)/fl.hpj
         move fl.cnt $(DOCDIR)\winhelp\fl.cnt
         cd $(THISDIR)
 
-$(THISDIR)/fl.rtf:         $(THISDIR)/classes.tex $(THISDIR)/body.tex $(THISDIR)/topics.tex $(THISDIR)/manual.tex
+$(THISDIR)/fl.rtf:         $(THISDIR)/classes.tex $(THISDIR)/body.tex $(THISDIR)/topics.tex $(THISDIR)/fl.tex
         cd $(THISDIR)
-        -start $(WAITFLAG) tex2rtf $(THISDIR)/manual.tex $(THISDIR)/fl.rtf -twice -winhelp
+        -start $(WAITFLAG) tex2rtf $(THISDIR)/fl.tex $(THISDIR)/fl.rtf -twice -winhelp
         cd $(THISDIR)
 
-$(DOCDIR)/pdf/fl.rtf:         $(THISDIR)/classes.tex $(THISDIR)/body.tex $(THISDIR)/topics.tex $(THISDIR)/manual.tex
+$(DOCDIR)/pdf/fl.rtf:         $(THISDIR)/classes.tex $(THISDIR)/body.tex $(THISDIR)/topics.tex $(THISDIR)/fl.tex
         cd $(THISDIR)
         -copy *.wmf $(DOCDIR)\pdf
         -copy *.bmp $(DOCDIR)\pdf
-        -start $(WAITFLAG) tex2rtf $(THISDIR)/manual.tex $(DOCDIR)/pdf/fl.rtf -twice -rtf
+        -start $(WAITFLAG) tex2rtf $(THISDIR)/fl.tex $(DOCDIR)/pdf/fl.rtf -twice -rtf
         cd $(THISDIR)
 
-$(DOCDIR)\html\fl\fl.htm:         $(THISDIR)\classes.tex $(THISDIR)\body.tex $(THISDIR)/topics.tex $(THISDIR)\manual.tex
+$(DOCDIR)\html\fl\fl.htm:         $(THISDIR)\classes.tex $(THISDIR)\body.tex $(THISDIR)/topics.tex $(THISDIR)\fl.tex
         cd $(THISDIR)
         -mkdir $(DOCDIR)\html\fl
         copy *.gif $(DOCDIR)\html\fl
-        -start $(WAITFLAG) tex2rtf $(THISDIR)\manual.tex $(DOCDIR)\html\fl\fl.htm -twice -html
+        -start $(WAITFLAG) tex2rtf $(THISDIR)\fl.tex $(DOCDIR)\html\fl\fl.htm -twice -html
         -erase $(DOCDIR)\html\fl\*.con
         -erase $(DOCDIR)\html\fl\*.ref
         -erase $(THISDIR)\*.con
@@ -84,10 +84,10 @@ $(DOCDIR)\htb\fl.htb: $(DOCDIR)\html\fl\fl.htm
     cd $(THISDIR)
 
 # In order to force document reprocessing
-touchmanual:
-    -touch $(WXDIR)\contrib\docs\latex\fl\manual.tex
+touchfl:
+    -touch $(WXDIR)\contrib\docs\latex\fl\fl.tex
 
-updatedocs: touchmanual alldocs
+updatedocs: touchfl alldocs
 
 cleandocs:
     -erase $(DOCDIR)\winhelp\fl.hlp
@@ -101,7 +101,7 @@ cleandocs:
 
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.
-#updatepdf:  # touchmanual pdfrtf
+#updatepdf:  # touchfl pdfrtf
 #    start $(WAITFLAG) "winword d:\wx2\wxWindows\docs\latex\pdf\fl.rtf /mGeneratePDF"
 
 

@@ -19,7 +19,7 @@ OGLINC = $(WXDIR)\contrib\include\wx\ogl
 THISDIR = $(WXDIR)\contrib\src\ogl
 EXTRAFLAGS=/DPROLOGIO=1
 DOCDIR=$(WXDIR)\contrib\docs
-LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\ogl
+DOCSOURCEDIR=$(WXDIR)\contrib\docs\latex\ogl
 
 !include $(WXDIR)\src\makevc.env
 
@@ -126,10 +126,10 @@ clean:
         -erase *.pdb
         -erase $(LIBTARGET)
 
-DOCSOURCES=$(LOCALDOCDIR)\ogl.tex \
- $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
- $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\intro.tex\
- $(LOCALDOCDIR)\topics.tex $(LOCALDOCDIR)\sample.tex
+DOCSOURCES=$(DOCSOURCEDIR)\ogl.tex \
+ $(DOCSOURCEDIR)\bugs.tex $(DOCSOURCEDIR)\changes.tex\
+ $(DOCSOURCEDIR)\classes.tex $(DOCSOURCEDIR)\intro.tex\
+ $(DOCSOURCEDIR)\topics.tex $(DOCSOURCEDIR)\sample.tex
 
 html: $(DOCDIR)\html\ogl\ogl.htm
 htmlhelp: $(DOCDIR)\htmlhelp\ogl.chm
@@ -139,33 +139,32 @@ pdfrtf: $(DOCDIR)\pdf\ogl.rtf
 ps: $(DOCDIR)\ps\ogl.ps
 
 touchmanual:
-	touch $(LOCALDOCDIR)\ogl.tex
+	touch $(DOCSOURCEDIR)\ogl.tex
 
-
-$(DOCDIR)\winhelp\ogl.hlp:         $(LOCALDOCDIR)\ogl.rtf $(LOCALDOCDIR)\ogl.hpj
-        cd $(LOCALDOCDIR)
+$(DOCDIR)\winhelp\ogl.hlp:         $(DOCSOURCEDIR)\ogl.rtf $(DOCSOURCEDIR)\ogl.hpj
+        cd $(DOCSOURCEDIR)
         -erase ogl.ph
         hc ogl
         move ogl.hlp $(DOCDIR)\winhelp\ogl.hlp
         move ogl.cnt $(DOCDIR)\winhelp\ogl.cnt
         cd $(THISDIR)
 
-$(LOCALDOCDIR)\ogl.rtf: $(DOCSOURCES)
-        cd $(LOCALDOCDIR)
-        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\ogl.tex $(LOCALDOCDIR)\ogl.rtf -twice -winhelp
+$(DOCSOURCEDIR)\ogl.rtf: $(DOCSOURCES)
+        cd $(DOCSOURCEDIR)
+        -start $(WAITFLAG) tex2rtf $(DOCSOURCEDIR)\ogl.tex $(DOCSOURCEDIR)\ogl.rtf -twice -winhelp
         cd $(THISDIR)
 
 $(DOCDIR)\pdf\ogl.rtf: $(DOCSOURCES)
-        cd $(LOCALDOCDIR)
+        cd $(DOCSOURCEDIR)
         -copy *.bmp $(DOCDIR)\pdf
-        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\ogl.tex $(DOCDIR)\pdf\ogl.rtf -twice -rtf
+        -start $(WAITFLAG) tex2rtf $(DOCSOURCEDIR)\ogl.tex $(DOCDIR)\pdf\ogl.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)\html\ogl\ogl.htm:         $(DOCSOURCES)
-        cd $(LOCALDOCDIR)
+        cd $(DOCSOURCEDIR)
         -mkdir $(DOCDIR)\html\ogl
         copy *.gif $(DOCDIR)\html\ogl
-        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\ogl.tex $(DOCDIR)\html\ogl\ogl.htm -twice -html
+        -start $(WAITFLAG) tex2rtf $(DOCSOURCEDIR)\ogl.tex $(DOCDIR)\html\ogl\ogl.htm -twice -html
         -erase $(DOCDIR)\html\ogl\*.con
         -erase *.con
         -erase $(DOCDIR)\html\ogl\*.ref
@@ -192,8 +191,8 @@ $(DOCDIR)\htb\ogl.htb: $(DOCDIR)\html\ogl\ogl.htm
     move ogl.zip $(DOCDIR)\htb\ogl.htb
     cd $(THISDIR)
 
-$(LOCALDOCDIR)\ogl.dvi:	$(DOCSOURCES)
-	cd $(LOCALDOCDIR)
+$(DOCSOURCEDIR)\ogl.dvi:	$(DOCSOURCES)
+	cd $(DOCSOURCEDIR)
         -latex ogl
         -latex ogl
         -makeindx ogl
@@ -202,8 +201,8 @@ $(LOCALDOCDIR)\ogl.dvi:	$(DOCSOURCES)
         -latex ogl
         cd $(THISDIR)
 
-$(WXDIR)\docs\ps\ogl.ps:	$(LOCALDOCDIR)\ogl.dvi
-	cd $(LOCALDOCDIR)
+$(WXDIR)\docs\ps\ogl.ps:	$(DOCSOURCEDIR)\ogl.dvi
+	cd $(DOCSOURCEDIR)
         -dvips32 -o ogl.ps ogl
         move ogl.ps $(WXDIR)\docs\ps\ogl.ps
         cd $(THISDIR)
