@@ -1081,8 +1081,10 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 
     // ListView_FindItem() excludes the first item from search and to look
     // through all the items you need to start from -1 which is unnatural and
-    // inconsitent with the generic version - so we adjust the index
-    return ListView_FindItem(GetHwnd(), (int) start - 1, &findInfo);
+    // inconsistent with the generic version - so we adjust the index
+    if (start != -1)
+        start --;
+    return ListView_FindItem(GetHwnd(), (int) start, &findInfo);
 }
 
 // Find an item whose data matches this data, starting from the item after 'start'
