@@ -634,7 +634,9 @@ bool wxHtmlWindow::IsSelectionEnabled() const
 
 void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
 {
-    LoadPage(link.GetHref());
+    const wxMouseEvent *e = link.GetEvent();
+    if (e == NULL || e->LeftUp())
+        LoadPage(link.GetHref());
 }
 
 void wxHtmlWindow::OnCellClicked(wxHtmlCell *cell,
@@ -681,32 +683,32 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
 }
 
 
-void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
+void wxHtmlWindow::OnMouseMove(wxMouseEvent& event)
 {
-    m_tmpMouseMoved = TRUE;
+    m_tmpMouseMoved = true;
+}
 
-    if (event.ButtonDown())
+void wxHtmlWindow::OnMouseButton(wxMouseEvent& event)
+{
+    SetFocus();
+    if ( m_Cell )
     {
-        SetFocus();
-        if ( m_Cell )
-        {
-            int sx, sy;
-            GetViewStart(&sx, &sy);
-            sx *= wxHTML_SCROLL_STEP;
-            sy *= wxHTML_SCROLL_STEP;
+        int sx, sy;
+        GetViewStart(&sx, &sy);
+        sx *= wxHTML_SCROLL_STEP;
+        sy *= wxHTML_SCROLL_STEP;
 
-            wxPoint pos = event.GetPosition();
-            pos.x += sx;
-            pos.y += sy;
+        wxPoint pos = event.GetPosition();
+        pos.x += sx;
+        pos.y += sy;
 
-            wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
+        wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
 
-            // VZ: is it possible that we don't find anything at all?
-            // VS: yes. FindCellByPos returns terminal cell and
-            //     containers may have empty borders
-            if ( cell )
-                OnCellClicked(cell, pos.x, pos.y, event);
-        }
+        // VZ: is it possible that we don't find anything at all?
+        // VS: yes. FindCellByPos returns terminal cell and
+        //     containers may have empty borders
+        if ( cell )
+            OnCellClicked(cell, pos.x, pos.y, event);
     }
 }
 
@@ -774,9 +776,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindow,wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_SIZE(wxHtmlWindow::OnSize)
-    EVT_LEFT_DOWN(wxHtmlWindow::OnMouseEvent)
-    EVT_RIGHT_DOWN(wxHtmlWindow::OnMouseEvent)
-    EVT_MOTION(wxHtmlWindow::OnMouseEvent)
+    EVT_LEFT_UP(wxHtmlWindow::OnMouseButton)
+    EVT_RIGHT_UP(wxHtmlWindow::OnMouseButton)
+    EVT_MOTION(wxHtmlWindow::OnMouseMove)
     EVT_IDLE(wxHtmlWindow::OnIdle)
 END_EVENT_TABLE()
 

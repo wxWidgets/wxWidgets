@@ -209,7 +209,8 @@ protected:
 
     void OnDraw(wxDC& dc);
     void OnSize(wxSizeEvent& event);
-    void OnMouseEvent(wxMouseEvent& event);
+    void OnMouseMove(wxMouseEvent& event);
+    void OnMouseButton(wxMouseEvent& event);
     void OnIdle(wxIdleEvent& event);
 
     // Returns new filter (will be stored into m_DefaultFilter variable)
