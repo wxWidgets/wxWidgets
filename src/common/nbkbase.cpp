@@ -139,6 +139,29 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage)
     return sizeTotal;
 }
 
+wxSize wxNotebookBase::DoGetBestSize() const
+{
+    wxSize bestSize;
+
+    // iterate over all pages, get the largest width and height
+    const size_t nCount = m_pages.Count();
+    for ( size_t nPage = 0; nPage < nCount; nPage++ )
+    {
+        wxNotebookPage *pPage = m_pages[nPage];
+        wxSize childBestSize(pPage->GetBestSize());
+
+        if ( childBestSize.x > bestSize.x )
+            bestSize.x = childBestSize.x;
+
+        if ( childBestSize.y > bestSize.y )
+            bestSize.y = childBestSize.y;
+    }
+
+    // convert display area to window area, adding the size neccessary for the
+    // tabs
+    return wxConstCast(this, wxNotebookBase)->CalcSizeFromPage(bestSize);
+}
+
 // ----------------------------------------------------------------------------
 // pages management
 // ----------------------------------------------------------------------------

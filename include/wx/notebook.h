@@ -161,6 +161,10 @@ public:
     }
 
 protected:
+    // calculate the best size of the notebook as the max of the best sizes of
+    // its pages
+    virtual wxSize DoGetBestSize() const;
+
     // remove the page and return a pointer to it
     virtual wxNotebookPage *DoRemovePage(int page);
 
