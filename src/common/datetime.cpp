@@ -1305,6 +1305,7 @@ wxDateTime& wxDateTime::ResetTime()
 wxDateTime& wxDateTime::SetFromDOS(unsigned long ddt)
 {
     struct tm tm;
+    InitTm(tm);
 
     long year = ddt & 0xFE000000;
     year >>= 25;
