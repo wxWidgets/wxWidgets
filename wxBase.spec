@@ -51,7 +51,7 @@ fi
 
 mkdir obj-shared
 cd obj-shared
-../configure --prefix=%{pref} --enable-soname --disable-gui --disable-std_iostreams
+../configure --prefix=%{pref} --disable-gui --disable-std_iostreams
 $MAKE
 cd ..
 

@@ -58,7 +58,7 @@ fi
 
 mkdir obj-shared
 cd obj-shared
-../configure --prefix=%{pref} --enable-soname --with-mgl
+../configure --prefix=%{pref} --with-mgl
 $MAKE
 cd ..
 

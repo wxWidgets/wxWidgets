@@ -336,7 +336,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_THREADS=yes
 
   DEFAULT_wxUSE_SHARED=yes
-  DEFAULT_wxUSE_SONAME=no
   DEFAULT_wxUSE_OPTIMISE=no
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
@@ -511,7 +510,6 @@ else
   DEFAULT_wxUSE_THREADS=yes
 
   DEFAULT_wxUSE_SHARED=yes
-  DEFAULT_wxUSE_SONAME=no
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
@@ -744,7 +742,6 @@ dnl compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code], wxUSE_SHARED)
-WX_ARG_ENABLE(soname,      [  --enable-soname         set the DT_SONAME field in ELF shared libraries], wxUSE_SONAME)
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 
@@ -3103,12 +3100,6 @@ if test "$wxUSE_SHARED" = "yes"; then
             fi
         fi
 
-        if test "$wxUSE_SONAME" = "yes" ; then
-            SONAME_FLAGS="-Wl,-soname,${WX_LIBRARY_LINK1}"
-            SONAME_FLAGS_GL="-Wl,-soname,${WX_LIBRARY_LINK1_GL}"
-            dnl substitute this in makelib.env for the contrib libs
-            WX_TARGET_LIBRARY_SONAME="-Wl,-soname,\$(TARGETLIB_LINK1)"
-        fi
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
       ;;
 
@@ -3146,8 +3137,6 @@ if test "$wxUSE_SHARED" = "yes"; then
         else
             SHARED_LD="${CXX} -G -o"
             PIC_FLAG="-KPIC"
-            SONAME_FLAGS="-h ${WX_LIBRARY_NAME_SHARED}"
-            SONAME_FLAGS_GL="-h ${WX_LIBRARY_NAME_SHARED_GL}"
             SAMPLES_RPATH_FLAG="-R\$(top_builddir)lib"
         fi
       ;;
@@ -3164,11 +3153,6 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
         SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace -o"
         PIC_FLAG="-dynamic -fPIC"
-        dnl library installation base name and wxMac resources file base name
-        dnl must be identical in order for the resource file to be found at
-        dnl run time in src/mac/app.cpp
-        SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1}"
-        SONAME_FLAGS_GL="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1_GL}"
       ;;
 
       *-*-aix* )
@@ -5669,9 +5653,6 @@ AC_SUBST(PIC_FLAG)
 AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS_CXX)
 
-AC_SUBST(SONAME_FLAGS)
-AC_SUBST(SONAME_FLAGS_GL)
-AC_SUBST(WX_TARGET_LIBRARY_SONAME)
 AC_SUBST(WX_TARGET_LIBRARY_TYPE)
 
 AC_SUBST(STATIC_FLAG)

@@ -65,7 +65,7 @@ fi
 
 mkdir obj-shared
 cd obj-shared
-../configure --prefix=%{pref} --enable-soname --with-odbc --with-opengl
+../configure --prefix=%{pref} --with-odbc --with-opengl
 $MAKE
 cd ..
 
