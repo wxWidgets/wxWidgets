@@ -138,31 +138,31 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     tmp.Printf( _T("Signed int: %d\n"), si );
     textCtrl.WriteText( tmp );
     text_output << si << _T("\n");
-    std_file_output << si << _T("\n");
+    std_file_output << si << "\n";
 
     unsigned int ui = 0xFFFFFFFF;
     tmp.Printf( _T("Unsigned int: %u\n"), ui );
     textCtrl.WriteText( tmp );
     text_output << ui << _T("\n");
-    std_file_output << ui << _T("\n");
+    std_file_output << ui << "\n";
 
     double d = 2.01234567890123456789;
     tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
     text_output << d << _T("\n");
-    std_file_output << d << _T("\n");
+    std_file_output << d << "\n";
 
     float f = (float)0.00001;
     tmp.Printf( _T("Float: %f\n"), f );
     textCtrl.WriteText( tmp );
     text_output << f << _T("\n");
-    std_file_output << f << _T("\n");
+    std_file_output << f << "\n";
 
     wxString str( _T("Hello!") );
     tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
     text_output << str << _T("\n");
-    std_file_output << str.c_str() << _T("\n");
+    std_file_output << str.ToAscii() << "\n";
 
     textCtrl.WriteText( _T("\nReading from ifstream:\n") );
 
@@ -184,13 +184,11 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     tmp.Printf( _T("Float: %f\n"), f );
     textCtrl.WriteText( tmp );
 
-    // Why doesn't this work?
-#if 0
     char std_buf[200];
     std_file_input >> std_buf;
-    tmp.Printf( _T("String: %s\n"), std_buf );
+    str.FromAscii(std_buf);
+    tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
-#endif
 
     textCtrl.WriteText( _T("\nReading from wxFileInputStream:\n") );
 
