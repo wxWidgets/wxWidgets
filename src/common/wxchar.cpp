@@ -566,7 +566,10 @@ class wxFormatConverter
 public:
     wxFormatConverter(const wxChar *format);
 
-    operator const wxChar *() const { return m_nCopied ? m_fmtOrig : m_fmt.c_str(); }
+    // notice that we only translated the string if m_fmtOrig == NULL (as set
+    // by CopyAllBefore()), otherwise we should simply use the original format
+    operator const wxChar *() const
+        { return m_fmtOrig ? m_fmtOrig : m_fmt.c_str(); }
 
 private:
     // copy another character to the translated format: this function does the
@@ -577,7 +580,7 @@ private:
     {
         if ( !m_fmtOrig )
         {
-            // we're translating, d copy
+            // we're translating, do copy
             m_fmt += ch;
         }
         else
