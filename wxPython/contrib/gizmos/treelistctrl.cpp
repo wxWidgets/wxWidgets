@@ -3238,7 +3238,7 @@ void wxTreeListMainWindow::PaintItem(wxTreeListItem *item, wxDC& dc)
         }
 
         wxDCClipper clipper(dc, /*coord_x,*/ extra_offset,
-                            item->GetY() + extraH, clip_width,
+                            item->GetY(), clip_width,
                             total_h);
 
         if(image != NO_IMAGE) {
