@@ -1894,7 +1894,7 @@ typedef struct _GdkColor        GdkColor;
 typedef struct _GdkColormap     GdkColormap;
 typedef struct _GdkFont         GdkFont;
 typedef struct _GdkGC           GdkGC;
-#ifdef __WXGTK13__
+#ifdef __WXGTK20__
     typedef struct _GdkDrawable     GdkWindow;
     typedef struct _GdkDrawable     GdkBitmap;
     typedef struct _GdkDrawable     GdkPixmap;
