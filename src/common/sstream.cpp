@@ -52,7 +52,8 @@ wxStringInputStream::wxStringInputStream(const wxString& s)
 wxStringInputStream::~wxStringInputStream()
 {
 #if wxUSE_UNICODE
-    delete[] m_buf;
+    // Note: wx[W]CharBuffer uses malloc()/free()
+    free(m_buf);
 #endif
 }
 
