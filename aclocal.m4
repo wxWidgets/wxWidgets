@@ -1506,8 +1506,16 @@ if test \$DEPSMODE = gcc ; then
     done
     depfile=\`basename \$srcfile | sed -e 's/\..*$/.d/g'\`
     depobjname=\`echo \$depfile |sed -e 's/\.d/.o/g'\`
-    sed -e "s,\$depobjname:,\$objfile:,g" \$depfile >\${DEPSDIR}/\${objfile}.d
-    rm -f \$depfile
+    if test -f \$depfile ; then
+        sed -e "s,\$depobjname:,\$objfile:,g" \$depfile >\${DEPSDIR}/\${objfile}.d
+        rm -f \$depfile
+    else
+        depfile=\`basename \$objfile | sed -e 's/\..*$/.d/g'\`
+        if test -f \$depfile ; then
+            sed -e "s,\$depobjname:,\$objfile:,g" \$depfile >\${DEPSDIR}/\${objfile}.d
+            rm -f \$depfile
+        fi
+    fi
     exit 0
 else
     \${*}
@@ -1552,6 +1560,13 @@ AC_DEFUN(AC_BAKEFILE_CHECK_BASIC_STUFF,
             ;;
     esac
     AC_SUBST(INSTALL_DIR)
+
+    LDFLAGS_GUI=
+    case ${host} in
+        *-*-cygwin* | *-*-mingw32* )
+        LDFLAGS_GUI="-Wl,--subsystem,windows -mwindows"
+    esac
+    AC_SUBST(LDFLAGS_GUI)
 ])
 
 

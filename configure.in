@@ -2150,10 +2150,6 @@ if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW
         GUIDIST=MSW_DIST
-
-        dnl -mwindows causes a heap of other default gui libs to be linked in.
-        dnl All platforms need this, except maybe cygwin
-        LDFLAGS="$LDFLAGS -Wl,--subsystem,windows -mwindows"
     fi
 
     if test "$wxUSE_GTK" = 1; then
