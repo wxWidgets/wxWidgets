@@ -5,7 +5,7 @@
 //              derive directly from the Scintilla classes, but instead
 //              delegates most things to the real Scintilla class.
 //              This allows the use of Scintilla without polluting the
-//              namespace with all the classes and itentifiers from Scintilla.
+//              namespace with all the classes and identifiers from Scintilla.
 //
 // Author:      Robin Dunn
 //
@@ -15,10 +15,52 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+#include <ctype.h>
+
 #include "wx/stc/stc.h"
 #include "ScintillaWX.h"
 
 #include <wx/tokenzr.h>
+
+// The following code forces a reference to all of the Scintilla lexers.
+// If we don't do something like this, then the linker tends to "optimize"
+// them away. (eric@sourcegear.com)
+
+int wxForceScintillaLexers(void)
+{
+  extern LexerModule lmCPP;
+  extern LexerModule lmHTML;
+  extern LexerModule lmXML;
+  extern LexerModule lmProps;
+  extern LexerModule lmErrorList;
+  extern LexerModule lmMake;
+  extern LexerModule lmBatch;
+  extern LexerModule lmPerl;
+  extern LexerModule lmPython;
+  extern LexerModule lmSQL;
+  extern LexerModule lmVB;
+
+  if (
+      &lmCPP
+      && &lmHTML
+      && &lmXML
+      && &lmProps
+      && &lmErrorList
+      && &lmMake
+      && &lmBatch
+      && &lmPerl
+      && &lmPython
+      && &lmSQL
+      && &lmVB
+      )
+    {
+      return 1;
+    }
+  else
+    {
+      return 0;
+    }
+}
 
 //----------------------------------------------------------------------
 
@@ -33,12 +75,18 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
     EVT_RIGHT_UP                (wxStyledTextCtrl::OnMouseRightUp)
     EVT_CHAR                    (wxStyledTextCtrl::OnChar)
+    EVT_KEY_DOWN                (wxStyledTextCtrl::OnKeyDown)
     EVT_KILL_FOCUS              (wxStyledTextCtrl::OnLoseFocus)
     EVT_SET_FOCUS               (wxStyledTextCtrl::OnGainFocus)
     EVT_SYS_COLOUR_CHANGED      (wxStyledTextCtrl::OnSysColourChanged)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (-1, -1, wxStyledTextCtrl::OnMenu)
+    EVT_LISTBOX_DCLICK          (-1, wxStyledTextCtrl::OnListBox)
 END_EVENT_TABLE()
+
+
+IMPLEMENT_CLASS(wxStyledTextCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent)
 
 //----------------------------------------------------------------------
 // Constructor and Destructor
@@ -69,7 +117,7 @@ wxStyledTextCtrl::~wxStyledTextCtrl() {
 
 //----------------------------------------------------------------------
 
-inline long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
+long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
 
     return m_swx->WndProc(msg, wp, lp);
 }
@@ -81,9 +129,10 @@ inline long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
 wxString wxStyledTextCtrl::GetText() {
     wxString text;
     int   len  = GetTextLength();
-    char* buff = text.GetWriteBuf(len);
+    char* buff = text.GetWriteBuf(len+1);
 
     SendMsg(WM_GETTEXT, len, (long)buff);
+    buff[len] = 0;
     text.UngetWriteBuf();
     return text;
 }
@@ -99,8 +148,9 @@ wxString wxStyledTextCtrl::GetLine(int line) {
     int   len  = GetLineLength(line);
     char* buff = text.GetWriteBuf(len+1);
 
-    *((WORD*)buff) = len+1;
+    *((WORD*)buff) = len;
     SendMsg(EM_GETLINE, line, (long)buff);
+    buff[len] = 0;
     text.UngetWriteBuf();
     return text;
 }
@@ -283,6 +333,9 @@ void wxStyledTextCtrl::EndUndoAction() {
 }
 
 
+void wxStyledTextCtrl::SetSavePoint() {
+    SendMsg(SCI_SETSAVEPOINT);
+}
 
 
 //----------------------------------------------------------------------
@@ -306,10 +359,11 @@ wxString wxStyledTextCtrl::GetSelectedText() {
 
     GetSelection(&start, &end);
     int   len  = end - start;
-    char* buff = text.GetWriteBuf(len);
-
-    SendMsg(EM_GETSELTEXT, 0, (long)buff);
-    text.UngetWriteBuf();
+    if (len > 0) {
+        char* buff = text.GetWriteBuf(len);
+        SendMsg(EM_GETSELTEXT, 0, (long)buff);
+        text.UngetWriteBuf();
+    }
     return text;
 }
 
@@ -384,7 +438,7 @@ wxString wxStyledTextCtrl::GetCurrentLineText(int* linePos) {
     int   len  = GetLineLength(GetCurrentLine());
     char* buff = text.GetWriteBuf(len+1);
 
-    int pos = SendMsg(SCI_GETCURLINE, len+1, (long)buff);
+    int pos = SendMsg(SCI_GETCURLINE, len, (long)buff);
     text.UngetWriteBuf();
 
     if (linePos)
@@ -410,7 +464,7 @@ int wxStyledTextCtrl::LineFromPoint(wxPoint pt) {
 
 wxPoint wxStyledTextCtrl::PointFromPosition(int pos) {
     Point pt;
-    SendMsg(EM_POSFROMCHAR, pos, (long)&pt);
+    SendMsg(EM_POSFROMCHAR, (long)&pt, pos);
     return wxPoint(pt.x, pt.y);
 }
 
@@ -489,6 +543,27 @@ void wxStyledTextCtrl::SetCaretPolicy(int policy, int slop) {
 int wxStyledTextCtrl::GetSelectionType() {
     return SendMsg(EM_SELECTIONTYPE);
 }
+
+
+int wxStyledTextCtrl::GetLinesOnScreen() {
+    return SendMsg(SCI_LINESONSCREEN);
+}
+
+
+bool wxStyledTextCtrl::IsSelectionRectangle() {
+    return SendMsg(SCI_SELECTIONISRECTANGLE) != 0;
+}
+
+
+void wxStyledTextCtrl::SetUseHorizontalScrollBar(bool use) {
+    SendMsg(SCI_SETHSCROLLBAR, use);
+}
+
+
+bool wxStyledTextCtrl::GetUseHorizontalScrollBar() {
+    return SendMsg(SCI_GETHSCROLLBAR) != 0;
+}
+
 
 
 
@@ -598,6 +673,16 @@ void wxStyledTextCtrl::SetStyleBytes(int length, char* styleBytes) {
 }
 
 
+void wxStyledTextCtrl::SetLineState(int line, int value) {
+    SendMsg(SCI_SETLINESTATE, line, value);
+}
+
+
+int  wxStyledTextCtrl::GetLineState(int line) {
+    return SendMsg(SCI_GETLINESTATE, line);
+}
+
+
 //----------------------------------------------------------------------
 // Style Definition
 
@@ -646,6 +731,7 @@ void wxStyledTextCtrl::StyleResetDefault() {
 //      face:[facename]         sets the font face name to use
 //      size:[num]              sets the font size in points
 //      eol                     turns on eol filling
+//      underline               turns on underlining
 //
 
 void wxStyledTextCtrl::StyleSetSpec(int styleNum, const wxString& spec) {
@@ -662,6 +748,9 @@ void wxStyledTextCtrl::StyleSetSpec(int styleNum, const wxString& spec) {
 
         else if (option == "italic")
             StyleSetItalic(styleNum, true);
+
+        else if (option == "underline")
+            StyleSetUnderline(styleNum, true);
 
         else if (option == "eol")
             StyleSetEOLFilled(styleNum, true);
@@ -699,18 +788,21 @@ void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
     wxString faceName = font.GetFaceName();
     bool     bold     = font.GetWeight() == wxBOLD;
     bool     italic   = font.GetStyle() != wxNORMAL;
+    bool     under    = font.GetUnderlined();
 
-    StyleSetFontAttr(styleNum, size, faceName, bold, italic);
+    StyleSetFontAttr(styleNum, size, faceName, bold, italic, under);
 }
 
 
 void wxStyledTextCtrl::StyleSetFontAttr(int styleNum, int size,
                                         const wxString& faceName,
-                                        bool bold, bool italic) {
+                                        bool bold, bool italic,
+                                        bool underline) {
     StyleSetSize(styleNum, size);
     StyleSetFaceName(styleNum, faceName);
     StyleSetBold(styleNum, bold);
     StyleSetItalic(styleNum, italic);
+    StyleSetUnderline(styleNum, underline);
 }
 
 
@@ -736,6 +828,11 @@ void wxStyledTextCtrl::StyleSetSize(int styleNum, int pointSize) {
 
 void wxStyledTextCtrl::StyleSetEOLFilled(int styleNum, bool fillEOL) {
     SendMsg(SCI_STYLESETEOLFILLED, styleNum, fillEOL);
+}
+
+
+void wxStyledTextCtrl::StyleSetUnderline(int styleNum, bool underline) {
+    SendMsg(SCI_STYLESETUNDERLINE, styleNum, underline);
 }
 
 
@@ -829,7 +926,7 @@ void wxStyledTextCtrl::SetSelectionBackground(const wxColour& colour) {
 
 
 void wxStyledTextCtrl::SetCaretForeground(const wxColour& colour) {
-    SendMsg(SCI_SETCARETFORE, 0, wxColourAsLong(colour));
+    SendMsg(SCI_SETCARETFORE, wxColourAsLong(colour));
 }
 
 
@@ -858,8 +955,38 @@ void wxStyledTextCtrl::SetTabWidth(int numChars) {
 }
 
 
+void wxStyledTextCtrl::SetIndent(int numChars) {
+    SendMsg(SCI_SETINDENT, numChars);
+}
+
+
+void wxStyledTextCtrl::SetUseTabs(bool usetabs) {
+    SendMsg(SCI_SETUSETABS, usetabs);
+}
+
+
+void wxStyledTextCtrl::SetLineIndentation(int line, int indentation) {
+    SendMsg(SCI_SETLINEINDENTATION, line, indentation);
+}
+
+
+int wxStyledTextCtrl:: GetLineIndentation(int line) {
+    return SendMsg(SCI_GETLINEINDENTATION, line);
+}
+
+
+int  wxStyledTextCtrl::GetLineIndentationPos(int line) {
+    return SendMsg(SCI_GETLINEINDENTPOSITION, line);
+}
+
+
 void wxStyledTextCtrl::SetWordChars(const wxString& wordChars) {
     SendMsg(SCI_SETTABWIDTH, 0, (long)wordChars.c_str());
+}
+
+
+void wxStyledTextCtrl::SetUsePop(bool usepopup) {
+    SendMsg(SCI_USEPOPUP, usepopup);
 }
 
 
@@ -926,7 +1053,7 @@ void wxStyledTextCtrl::MarkerDeleteAll(int markerNumber) {
 
 
 int wxStyledTextCtrl::MarkerGet(int line) {
-    return SendMsg(SCI_MARKERGET);
+    return SendMsg(SCI_MARKERGET, line);
 }
 
 
@@ -936,7 +1063,7 @@ int wxStyledTextCtrl::MarkerGetNextLine(int lineStart, int markerMask) {
 
 
 int wxStyledTextCtrl::MarkerGetPrevLine(int lineStart, int markerMask) {
-//    return SendMsg(SCI_MARKERPREV, lineStart, markerMask);
+//   TODO  return SendMsg(SCI_MARKERPREV, lineStart, markerMask);
     return 0;
 }
 
@@ -967,7 +1094,7 @@ int wxStyledTextCtrl::IndicatorGetStyle(int indicNum) {
 
 
 void wxStyledTextCtrl::IndicatorSetColour(int indicNum, const wxColour& colour) {
-    SendMsg(SCI_INDICSETSTYLE, indicNum, wxColourAsLong(colour));
+    SendMsg(SCI_INDICSETFORE, indicNum, wxColourAsLong(colour));
 }
 
 
@@ -1003,6 +1130,21 @@ void wxStyledTextCtrl::AutoCompComplete() {
 
 void wxStyledTextCtrl::AutoCompStopChars(const wxString& stopChars) {
     SendMsg(SCI_AUTOCSHOW, 0, (long)stopChars.c_str());
+}
+
+
+void wxStyledTextCtrl::AutoCompSetSeparator(char separator) {
+    SendMsg(SCI_AUTOCSETSEPARATOR, separator);
+}
+
+
+char wxStyledTextCtrl::AutoCompGetSeparator() {
+    return SendMsg(SCI_AUTOCGETSEPARATOR);
+}
+
+
+void wxStyledTextCtrl::AutoCompSelect(const wxString& stringtoselect) {
+    SendMsg(SCI_AUTOCSELECT, 0, (long)stringtoselect.c_str());
 }
 
 
@@ -1129,8 +1271,8 @@ int  wxStyledTextCtrl::GetFoldLevel(int line) {
 }
 
 
-int  wxStyledTextCtrl::GetLastChild(int line) {
-    return SendMsg(SCI_GETLASTCHILD,  line);
+int  wxStyledTextCtrl::GetLastChild(int line, int level) {
+    return SendMsg(SCI_GETLASTCHILD,  line, level);
 }
 
 
@@ -1154,8 +1296,8 @@ bool wxStyledTextCtrl::GetLineVisible(int line) {
 }
 
 
-void wxStyledTextCtrl::SetFoldExpanded(int line) {
-    SendMsg(SCI_SETFOLDEXPANDED, line);
+void wxStyledTextCtrl::SetFoldExpanded(int line, bool expanded) {
+    SendMsg(SCI_SETFOLDEXPANDED, line, expanded);
 }
 
 
@@ -1173,6 +1315,33 @@ void wxStyledTextCtrl::EnsureVisible(int line) {
     SendMsg(SCI_ENSUREVISIBLE, line);
 }
 
+
+void wxStyledTextCtrl::SetFoldFlags(int flags) {
+    SendMsg(SCI_SETFOLDFLAGS, flags);
+}
+
+
+//----------------------------------------------------------------------
+// Zooming
+
+void wxStyledTextCtrl::ZoomIn() {
+    SendMsg(SCI_ZOOMIN);
+}
+
+
+void wxStyledTextCtrl::ZoomOut() {
+    SendMsg(SCI_ZOOMOUT);
+}
+
+
+void wxStyledTextCtrl::SetZoom(int zoom) {
+    SendMsg(SCI_SETZOOM, zoom);
+}
+
+
+int  wxStyledTextCtrl::GetZoom() {
+    return SendMsg(SCI_GETZOOM);
+}
 
 //----------------------------------------------------------------------
 // Long Lines
@@ -1233,6 +1402,18 @@ void     wxStyledTextCtrl::SetKeywords(int keywordSet, const wxString& keywordLi
 
 
 //----------------------------------------------------------------------
+// Event mask for Modified Event
+
+void wxStyledTextCtrl::SetModEventMask(int mask) {
+    SendMsg(SCI_SETMODEVENTMASK, mask);
+}
+
+
+//int wxStyledTextCtrl::GetModEventMask() {
+//    return SendMsg(SCI_GETMODEVENTMASK);
+//}
+
+//----------------------------------------------------------------------
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& evt) {
@@ -1278,20 +1459,23 @@ void wxStyledTextCtrl::OnMouseRightUp(wxMouseEvent& evt) {
 }
 
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
-    int  processed = 0;
     long key = evt.KeyCode();
     if ((key > WXK_ESCAPE) &&
         (key != WXK_DELETE) && (key < 255) &&
         !evt.ControlDown() && !evt.AltDown()) {
 
         m_swx->DoAddChar(key);
-        processed = true;
     }
     else {
-        key = toupper(key);
-        processed = m_swx->DoKeyDown(key, evt.ShiftDown(),
-                                     evt.ControlDown(), evt.AltDown());
+        evt.Skip();
     }
+}
+
+void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
+    long key = evt.KeyCode();
+    key = toupper(key);
+    int processed = m_swx->DoKeyDown(key, evt.ShiftDown(),
+                                     evt.ControlDown(), evt.AltDown());
     if (! processed)
         evt.Skip();
 }
@@ -1319,8 +1503,14 @@ void wxStyledTextCtrl::OnMenu(wxCommandEvent& evt) {
 }
 
 
+void wxStyledTextCtrl::OnListBox(wxCommandEvent& evt) {
+    m_swx->DoOnListBox();
+}
+
+
 //----------------------------------------------------------------------
 // Turn notifications from Scintilla into events
+
 
 void wxStyledTextCtrl::NotifyChange() {
     wxStyledTextEvent evt(wxEVT_STC_CHANGE, GetId());
@@ -1375,7 +1565,8 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetModifiers(scn.modifiers);
         if (eventType == wxEVT_STC_MODIFIED) {
             evt.SetModificationType(scn.modificationType);
-            evt.SetText(scn.text);
+            if (scn.text)
+                evt.SetText(wxString(scn.text, scn.length));
             evt.SetLength(scn.length);
             evt.SetLinesAdded(scn.linesAdded);
             evt.SetLine(scn.line);

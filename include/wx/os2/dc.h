@@ -78,148 +78,253 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual void Clear();
+    virtual void Clear(void);
 
-    virtual bool StartDoc(const wxString& message);
-    virtual void EndDoc();
+    virtual bool    StartDoc(const wxString& rsMessage);
+    virtual void    EndDoc(void);
 
-    virtual void StartPage();
-    virtual void EndPage();
+    virtual void    StartPage(void);
+    virtual void    EndPage(void);
 
-    virtual void SetFont(const wxFont& font);
-    virtual void SetPen(const wxPen& pen);
-    virtual void SetBrush(const wxBrush& brush);
-    virtual void SetBackground(const wxBrush& brush);
-    virtual void SetBackgroundMode(int mode);
-    virtual void SetPalette(const wxPalette& palette);
+    virtual void    SetFont(const wxFont& rFont);
+    virtual void    SetPen(const wxPen& rPen);
+    virtual void    SetBrush(const wxBrush& rBrush);
+    virtual void    SetBackground(const wxBrush& rBrush);
+    virtual void    SetBackgroundMode(int nMode);
+    virtual void    SetPalette(const wxPalette& rPalette);
 
-    virtual void DestroyClippingRegion();
+    virtual void    DestroyClippingRegion(void);
 
-    virtual wxCoord GetCharHeight() const;
-    virtual wxCoord GetCharWidth() const;
-    virtual void DoGetTextExtent(const wxString& string,
-                                 wxCoord *x, wxCoord *y,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL,
-                                 wxFont *theFont = NULL) const;
+    virtual wxCoord GetCharHeight(void) const;
+    virtual wxCoord GetCharWidth(void) const;
+    virtual void    DoGetTextExtent( const wxString& rsString
+                                    ,wxCoord*        pX
+                                    ,wxCoord*        pY
+                                    ,wxCoord*        pDescent = NULL
+                                    ,wxCoord*        pExternalLeading = NULL
+                                    ,wxFont*         pTheFont = NULL
+                                   ) const;
+    virtual bool    CanDrawBitmap(void) const;
+    virtual bool    CanGetTextExtent(void) const;
+    virtual int     GetDepth(void) const;
+    virtual wxSize  GetPPI(void) const;
 
-    virtual bool CanDrawBitmap() const;
-    virtual bool CanGetTextExtent() const;
-    virtual int GetDepth() const;
-    virtual wxSize GetPPI() const;
-
-    virtual void SetMapMode(int mode);
-    virtual void SetUserScale(double x, double y);
-    virtual void SetSystemScale(double x, double y);
-    virtual void SetLogicalScale(double x, double y);
-    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
-    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
-    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-    virtual void SetLogicalFunction(int function);
+    virtual void    SetMapMode(int nMode);
+    virtual void    SetUserScale( double dX
+                                 ,double dY
+                                );
+    virtual void    SetSystemScale( double dX
+                                   ,double dY
+                                  );
+    virtual void    SetLogicalScale( double dX
+                                    ,double dY
+                                   );
+    virtual void    SetLogicalOrigin( wxCoord vX
+                                     ,wxCoord vY
+                                    );
+    virtual void    SetDeviceOrigin( wxCoord vX
+                                    ,wxCoord vY
+                                   );
+    virtual void    SetAxisOrientation( bool bXLeftRight
+                                       ,bool bYBottomUp
+                                      );
+    virtual void    SetLogicalFunction(int nFunction);
 
     // implementation from now on
     // --------------------------
 
-    virtual void SetRop(WXHDC cdc);
-    virtual void DoClipping(WXHDC cdc);
-    virtual void SelectOldObjects(WXHDC dc);
+    virtual void    SetRop(WXHDC hCdc);
+    virtual void    SelectOldObjects(WXHDC hDc);
 
-    wxWindow *GetWindow() const { return m_canvas; }
-    void SetWindow(wxWindow *win) { m_canvas = win; }
+    wxWindow*       GetWindow(void) const { return m_pCanvas; }
+    void            SetWindow(wxWindow* pWin) { m_pCanvas = pWin; }
 
-    WXHDC GetHDC() const { return m_hDC; }
-    void SetHDC(WXHDC dc, bool bOwnsDC = FALSE)
+    WXHDC           GetHDC(void) const { return m_hDC; }
+    void            SetHDC( WXHDC hDc
+                           ,bool  bOwnsDC = FALSE
+                          )
     {
-        m_hDC = dc;
+        m_hDC = hDc;
         m_bOwnsDC = bOwnsDC;
     }
 
+    const wxBitmap& GetSelectedBitmap(void) const { return m_vSelectedBitmap; }
+    wxBitmap&       GetSelectedBitmap(void) { return m_vSelectedBitmap; }
+
 protected:
-    virtual void DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
-                             int style = wxFLOOD_SURFACE);
+    virtual void DoFloodFill( wxCoord         vX
+                             ,wxCoord         vY
+                             ,const wxColour& rCol
+                             ,int             nStyle = wxFLOOD_SURFACE
+                            );
 
-    virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
+    virtual bool DoGetPixel( wxCoord   vX
+                            ,wxCoord   vY
+                            ,wxColour* pCol
+                           ) const;
 
-    virtual void DoDrawPoint(wxCoord x, wxCoord y);
-    virtual void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
+    virtual void DoDrawPoint( wxCoord vX
+                             ,wxCoord vY
+                            );
+    virtual void DoDrawLine( wxCoord vX1
+                            ,wxCoord vY1
+                            ,wxCoord vX2
+                            ,wxCoord vY2
+                           );
 
-    virtual void DoDrawArc(wxCoord x1, wxCoord y1,
-                           wxCoord x2, wxCoord y2,
-                           wxCoord xc, wxCoord yc);
-    virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
-                                   double sa, double ea);
+    virtual void DoDrawArc( wxCoord vX1
+                           ,wxCoord vY1
+                           ,wxCoord vX2
+                           ,wxCoord vY2
+                           ,wxCoord vXc
+                           ,wxCoord vYc
+                          );
+    virtual void DoDrawCheckMark( wxCoord vX
+                                 ,wxCoord vY
+                                 ,wxCoord vWidth
+                                 ,wxCoord vHeight
+                                );
+    virtual void DoDrawEllipticArc( wxCoord vX
+                                   ,wxCoord vY
+                                   ,wxCoord vW
+                                   ,wxCoord vH
+                                   ,double  dSa
+                                   ,double  dEa
+                                  );
 
-    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    virtual void DoDrawRoundedRectangle(wxCoord x, wxCoord y,
-                                        wxCoord width, wxCoord height,
-                                        double radius);
-    virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    virtual void DoDrawRectangle( wxCoord vX
+                                 ,wxCoord vY
+                                 ,wxCoord vWidth
+                                 ,wxCoord vHeight
+                                );
+    virtual void DoDrawRoundedRectangle( wxCoord vX
+                                        ,wxCoord vY
+                                        ,wxCoord vWidth
+                                        ,wxCoord vHeight
+                                        ,double  dRadius
+                                       );
+    virtual void DoDrawEllipse( wxCoord vX
+                               ,wxCoord vY
+                               ,wxCoord vWidth
+                               ,wxCoord vHeight
+                              );
 
-    virtual void DoCrossHair(wxCoord x, wxCoord y);
+    virtual void DoCrossHair( wxCoord vX
+                             ,wxCoord vY
+                            );
 
-    virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
-    virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                              bool useMask = FALSE);
+    virtual void DoDrawIcon( const wxIcon& rIcon
+                            ,wxCoord       vX
+                            ,wxCoord       vY
+                           );
+    virtual void DoDrawBitmap( const wxBitmap& rBmp
+                              ,wxCoord         vX
+                              ,wxCoord         vY
+                              ,bool            bUseMask = FALSE
+                             );
 
-    virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
-    virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
-                                   double angle);
+    virtual void DoDrawText( const wxString& rsText
+                            ,wxCoord         vX
+                            ,wxCoord         vY
+                           );
+    virtual void DoDrawRotatedText( const wxString& rsText
+                                   ,wxCoord         vX
+                                   ,wxCoord         vY
+                                   ,double          dAngle
+                                  );
 
-    virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-                        wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE);
+    virtual bool DoBlit( wxCoord vXdest
+                        ,wxCoord vYdest
+                        ,wxCoord vWidth
+                        ,wxCoord vHeight
+                        ,wxDC*   pSource
+                        ,wxCoord vXsrc
+                        ,wxCoord vYsrc
+                        ,int     nRop = wxCOPY
+                        ,bool    bUseMask = FALSE
+                       );
 
-    // this is gnarly - we can't even call this function DoSetClippingRegion()
-    // because of virtual function hiding
-    virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
-    virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
-                                     wxCoord width, wxCoord height);
-    virtual void DoGetClippingRegion(wxCoord *x, wxCoord *y,
-                                     wxCoord *width, wxCoord *height)
+    virtual void DoSetClippingRegionAsRegion(const wxRegion& rRegion);
+    virtual void DoSetClippingRegion( wxCoord vX
+                                     ,wxCoord vY
+                                     ,wxCoord vWidth
+                                     ,wxCoord vHeight
+                                    );
+    virtual void DoGetClippingRegion( wxCoord* pX
+                                     ,wxCoord* pY
+                                     ,wxCoord* pWidth
+                                     ,wxCoord* pHeight)
     {
-        GetClippingBox(x, y, width, height);
+        GetClippingBox( pX
+                       ,pY
+                       ,pWidth
+                       ,pHeight
+                      );
     }
 
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetSizeMM(int* width, int* height) const;
+    virtual void DoGetSize( int* pWidth
+                           ,int* pHeight
+                          ) const;
+    virtual void DoGetSizeMM( int* pWidth
+                             ,int* pHeight
+                            ) const;
 
-    virtual void DoDrawLines(int n, wxPoint points[],
-                             wxCoord xoffset, wxCoord yoffset);
-    virtual void DoDrawPolygon(int n, wxPoint points[],
-                               wxCoord xoffset, wxCoord yoffset,
-                               int fillStyle = wxODDEVEN_RULE);
+    virtual void DoDrawLines( int     n
+                             ,wxPoint vaPoints[]
+                             ,wxCoord vXoffset
+                             ,wxCoord yYoffset
+                            );
+    virtual void DoDrawPolygon( int     n
+                               ,wxPoint vaPoints[]
+                               ,wxCoord vXoffset
+                               ,wxCoord vYoffset
+                               ,int     nFillStyle = wxODDEVEN_RULE
+                              );
 
 #if wxUSE_SPLINES
-    virtual void DoDrawSpline(wxList *points);
+    virtual void DoDrawSpline(wxList* pPoints);
 #endif // wxUSE_SPLINES
 
-    // OS2-specific member variables
-    int               m_windowExtX;
-    int               m_windowExtY;
+    //
+    // common part of DoDrawText() and DoDrawRotatedText()
+    //
+    void DrawAnyText( const wxString& rsText
+                     ,wxCoord         vX
+                     ,wxCoord         vY
+                    );
 
+    // OS2-specific member variables ?? do we even need this under OS/2?
+    int                             m_nWindowExtX;
+    int                             m_nWindowExtY;
+
+    //
     // the window associated with this DC (may be NULL)
-    wxWindow         *m_canvas;
+    //
+    wxWindow*                       m_pCanvas;
+    wxBitmap                        m_vSelectedBitmap;
 
-    wxBitmap          m_selectedBitmap;
-
+    //
     // TRUE => DeleteDC() in dtor, FALSE => only ReleaseDC() it
-    bool              m_bOwnsDC:1;
+    //
+    bool                            m_bOwnsDC:1;
 
+    //
     // our HDC and its usage count: we only free it when the usage count drops
     // to 0
-    WXHDC             m_hDC;
-    int               m_hDCCount;
+    //
+    WXHDC                           m_hDC;
+    int                             m_nDCCount;
 
+    //
     // Store all old GDI objects when do a SelectObject, so we can select them
     // back in (this unselecting user's objects) so we can safely delete the
     // DC.
-    WXHBITMAP         m_oldBitmap;
-    WXHPEN            m_oldPen;
-    WXHBRUSH          m_oldBrush;
-    WXHFONT           m_oldFont;
-    WXHPALETTE        m_oldPalette;
-
-    float             m_scaleFactor;  // wxPSDC wants to have this. Will disappear.
+    //
+    WXHBITMAP                       m_hOldBitmap;
+    WXHPEN                          m_hOldPen;
+    WXHBRUSH                        m_hOldBrush;
+    WXHFONT                         m_hOldFont;
+    WXHPALETTE                      m_hOldPalette;
 };
 #endif
     // _WX_DC_H_

@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.1.14
+%define ver 2.2.2
 %define rel 0
 
 Summary: The GTK+ 1.2 port of the wxWindows library
@@ -9,10 +9,9 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: wxGTK-%{ver}.tgz
-URL: http://wesley.informatik.uni-freiburg.de/~wxxt/docs.html
-Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
-BuildRoot: /tmp/wxgtk_root
+Source: wxGTK-%{ver}.tar.gz
+URL: http://wxwindows.org
+Packager: Robert Roebling <robert@roebling.de>
 
 # all packages providing an implementation of wxWindows library (regardless of
 # the toolkit used) should provide the (virtual) wxwin package, this makes it
@@ -53,11 +52,7 @@ fi
 $MAKE
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make prefix=$RPM_BUILD_ROOT%{pref} install
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+make install
 
 %post
 /sbin/ldconfig
@@ -70,7 +65,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
 %dir %{pref}/share/wx
 %{pref}/share/wx/*
-%attr(755, -, -) %{pref}/lib/libwx_gtk*
+%attr(755, -, -) %{pref}/lib/libwx_gtk.*
+%attr(755, -, -) %{pref}/lib/libwx_gtk-2.2.*
 
 %files devel
 %defattr (644, root, root, 755)

@@ -11,11 +11,11 @@
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 
-WXUSINGDLL=0
+# WXUSINGDLL=0
 
 !include $(WXDIR)\src\makeva.env
 
-PROGRAM=$D\minimal
+PROGRAM=minimal
 OBJECTS = $(PROGRAM).obj
 
 !if [md $D]

@@ -103,17 +103,33 @@ const size_t32 MSGCATALOG_MAGIC_SW = 0xde120495;
 // global functions
 // ----------------------------------------------------------------------------
 
-// suppress further error messages about missing translations
-// (if you don't have one catalog file, you wouldn't like to see the
-//  error message for each string in it, so normally it's given only
-//  once)
-void wxSuppressTransErrors();
+#ifdef __WXDEBUG__
 
-// restore the logging
-void wxRestoreTransErrors();
+// small class to suppress the translation erros until exit from current scope
+class NoTransErr
+{
+public:
+    NoTransErr() { ms_suppressCount++; }
+   ~NoTransErr() { ms_suppressCount--;  }
 
-// get the current state
-bool wxIsLoggingTransErrors();
+   static bool Suppress() { return ms_suppressCount > 0; }
+
+private:
+   static size_t ms_suppressCount;
+};
+
+size_t NoTransErr::ms_suppressCount = 0;
+
+#else // !Debug
+
+class NoTransErr
+{
+public:
+    NoTransErr() { }
+   ~NoTransErr() { }
+};
+
+#endif // Debug/!Debug
 
 static wxLocale *wxSetLocale(wxLocale *pLocale);
 
@@ -253,14 +269,6 @@ wxMsgCatalog::~wxMsgCatalog()
   wxDELETEA(m_pszName);
 }
 
-// small class to suppress the translation erros until exit from current scope
-class NoTransErr
-{
-public:
-    NoTransErr() { wxSuppressTransErrors(); }
-   ~NoTransErr() { wxRestoreTransErrors();  }
-};
-
 // return all directories to search for given prefix
 static wxString GetAllMsgCatalogSubdirs(const wxChar *prefix,
                                         const wxChar *lang)
@@ -292,19 +300,21 @@ static wxString GetFullSearchPath(const wxChar *lang)
 
     // LC_PATH is a standard env var containing the search path for the .mo
     // files
-    const wxChar *pszLcPath = wxGetenv("LC_PATH");
+    const wxChar *pszLcPath = wxGetenv(wxT("LC_PATH"));
     if ( pszLcPath != NULL )
         searchPath << GetAllMsgCatalogSubdirs(pszLcPath, lang);
 
     // then take the current directory
     // FIXME it should be the directory of the executable
-    searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang) << wxPATH_SEP;
+    searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang);
 
+#ifdef __UNIX_LIKE__
     // and finally add some standard ones
     searchPath
         << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
+#endif // __UNIX_LIKE__
 
     return searchPath;
 }
@@ -321,6 +331,21 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool b
       szName = szName.Left(szName.Find(wxT('.')));
 
   wxString searchPath = GetFullSearchPath(szDirPrefix);
+
+#ifdef __UNIX_LIKE__
+  if ( szName == "wxstd" )
+  {
+    // WXDIR is the env var holding the installation directory of wxWindows
+    const wxChar *pszWxDir = wxGetenv(wxT("WXDIR"));
+    if ( pszWxDir )
+    {
+        wxString strWxLoc;
+        strWxLoc << pszWxDir << wxFILE_SEP_PATH << wxT("share/locale");
+        searchPath << GetAllMsgCatalogSubdirs(strWxLoc, szDirPrefix);
+    }
+  }
+#endif // __UNIX_LIKE__
+
   const wxChar *sublocale = wxStrchr(szDirPrefix, wxT('_'));
   if ( sublocale )
   {
@@ -538,7 +563,11 @@ bool wxLocale::Init(const wxChar *szName,
   }
   m_pszOldLocale = wxSetlocale(LC_ALL, szLocale);
   if ( m_pszOldLocale == NULL )
-    wxLogError(_("locale '%s' can not be set."), szLocale);
+  {
+    // this is not an error as most systems don't support anything but "C"
+    // anyhow
+    wxLogVerbose(_("locale '%s' can not be set."), szLocale);
+  }
 
   // the short name will be used to look for catalog files as well,
   // so we need something here
@@ -617,37 +646,28 @@ const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
   }
 
   if ( pszTrans == NULL ) {
-    if ( wxIsLoggingTransErrors() ) {
-      // suppress further error messages if we're not debugging: this avoids
-      // flooding the user with messages about each and every missing string if,
-      // for example, a whole catalog file is missing.
-
-      // do it before calling LogWarning to prevent infinite recursion!
 #ifdef __WXDEBUG__
+    if ( !NoTransErr::Suppress() ) {
       NoTransErr noTransErr;
-#else // !debug
-      wxSuppressTransErrors();
-#endif // debug/!debug
 
       if ( szDomain != NULL )
       {
-        wxLogWarning(_("string '%s' not found in domain '%s' for locale '%s'."),
+        wxLogDebug(_T("string '%s' not found in domain '%s' for locale '%s'."),
                      szOrigString, szDomain, m_strLocale.c_str());
       }
       else
       {
-        wxLogWarning(_("string '%s' not found in locale '%s'."),
-                     szOrigString, m_strLocale.c_str());
+        wxLogDebug(_T("string '%s' not found in locale '%s'."),
+                   szOrigString, m_strLocale.c_str());
       }
     }
+#endif // __WXDEBUG__
 
     return (wxMB2WXbuf)(szOrigString);
   }
-  else
-  {
-    return wxConvertMB2WX(pszTrans); // or preferably wxCSConv(charset).cMB2WX(pszTrans) or something,
-                                     // a macro similar to wxConvertMB2WX could be written for that
-  }
+
+  return wxConvertMB2WX(pszTrans); // or preferably wxCSConv(charset).cMB2WX(pszTrans) or something,
+                                   // a macro similar to wxConvertMB2WX could be written for that
 
   #undef szOrgString
 }
@@ -655,7 +675,7 @@ const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
 // find catalog by name in a linked list, return NULL if !found
 wxMsgCatalog *wxLocale::FindCatalog(const wxChar *szDomain) const
 {
-// linear search in the linked list
+  // linear search in the linked list
   wxMsgCatalog *pMsgCat;
   for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) {
     if ( wxStricmp(pMsgCat->GetName(), szDomain) == 0 )
@@ -695,26 +715,6 @@ bool wxLocale::AddCatalog(const wxChar *szDomain)
 // ----------------------------------------------------------------------------
 // global functions and variables
 // ----------------------------------------------------------------------------
-
-// translation errors logging
-// --------------------------
-
-static bool gs_bGiveTransErrors = TRUE;
-
-void wxSuppressTransErrors()
-{
-  gs_bGiveTransErrors = FALSE;
-}
-
-void wxRestoreTransErrors()
-{
-  gs_bGiveTransErrors = TRUE;
-}
-
-bool wxIsLoggingTransErrors()
-{
-  return gs_bGiveTransErrors;
-}
 
 // retrieve/change current locale
 // ------------------------------

@@ -36,6 +36,16 @@ class wxFileDropTarget;
 
 class wxDropSource;
 
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
+// this macro may be used instead for wxDropSource ctor arguments: it will use
+// the icon 'name' from an XPM file under GTK, but will expand to something
+// else under MSW. If you don't use it, you will have to use #ifdef in the
+// application code.
+#define wxDROP_ICON(name)   wxICON(name)
+
 //-------------------------------------------------------------------------
 // wxDropTarget
 //-------------------------------------------------------------------------
@@ -78,12 +88,16 @@ class wxDropSource: public wxDropSourceBase
 public:
     /* constructor. set data later with SetData() */
     wxDropSource( wxWindow *win = (wxWindow *)NULL,
-                  const wxIcon &go = wxNullIcon );
+                  const wxIcon &copy = wxNullIcon,
+                  const wxIcon &move = wxNullIcon,
+                  const wxIcon &none = wxNullIcon);
 
     /* constructor for setting one data object */
     wxDropSource( wxDataObject& data,
                   wxWindow *win,
-                  const wxIcon &go = wxNullIcon );
+                  const wxIcon &copy = wxNullIcon,
+                  const wxIcon &move = wxNullIcon,
+                  const wxIcon &none = wxNullIcon);
 
     ~wxDropSource();
 
@@ -94,7 +108,7 @@ public:
     void RegisterWindow();
     void UnregisterWindow();
 
-    void PrepareIcon( int hot_x, int hot_y, GdkDragContext *context );
+    void PrepareIcon( int action, GdkDragContext *context );
 
     GtkWidget       *m_widget;
     GtkWidget       *m_iconWindow;
@@ -102,9 +116,17 @@ public:
     wxWindow        *m_window;
 
     wxDragResult     m_retValue;
-    wxIcon           m_icon;
+    wxIcon           m_iconCopy,
+                     m_iconMove,
+                     m_iconNone;
 
     bool             m_waiting;
+
+private:
+    // common part of both ctors
+    void SetIcons(const wxIcon& copy,
+                  const wxIcon& move,
+                  const wxIcon& none);
 };
 
 #endif

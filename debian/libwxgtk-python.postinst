@@ -2,11 +2,11 @@
 
 set -e
 
-WXPYTHONDIR="/usr/lib/python1.5/site-packages/wxPython"
+WXPYTHONDIR="/usr/lib/=PY/site-packages/wxPython"
 
 if [ "$1" = "configure" ]; then
-	python /usr/lib/python1.5/compileall.py -q ${WXPYTHONDIR}
-	python -O /usr/lib/python1.5/compileall.py -q ${WXPYTHONDIR}
+	python /usr/lib/=PY/compileall.py -q ${WXPYTHONDIR}
+	python -O /usr/lib/=PY/compileall.py -q ${WXPYTHONDIR}
 	ldconfig
 fi
 

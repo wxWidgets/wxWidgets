@@ -29,6 +29,7 @@ include/wx/motif/*.h
 include/install-sh
 include/wx/install-sh
 
+docs/base/*.txt
 docs/motif/*.txt
 docs/motif/makewxmotif
 

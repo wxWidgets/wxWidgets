@@ -90,7 +90,7 @@ accordingly until all requested data is read.
 \wxheading{Return value}
 
 It returns the size of the data read. If the returned size is different of the specified 
-{\it size}, an error has occured and should be tested using 
+{\it size}, an error has occurred and should be tested using 
 \helpref{LastError}{wxstreambaselasterror}.
 
 \func{size\_t}{Read}{\param{wxStreamBuffer *}{buffer}}
@@ -121,7 +121,7 @@ Gets a single char from the stream buffer. It acts like the Read call.
 
 \wxheading{Problem}
 
-You aren't directly notified if an error occured during the IO call.
+You aren't directly notified if an error occurred during the IO call.
 
 \wxheading{See also}
 
@@ -135,7 +135,7 @@ Puts a single char to the stream buffer.
 
 \wxheading{Problem}
 
-You aren't directly notified if an error occured during the IO call.
+You aren't directly notified if an error occurred during the IO call.
 
 \wxheading{See also}
 
@@ -195,7 +195,7 @@ you create an empty stream buffer (See \helpref{wxStreamBuffer::wxStreamBuffer}{
 
 \wxheading{Remarks}
 
-When you use this function, you'll have to destroy the IO buffers yourself
+When you use this function, you will have to destroy the IO buffers yourself
 after the stream buffer is destroyed or don't use it anymore.
 In the case you use it with an empty buffer, the stream buffer will not resize
 it when it is full.

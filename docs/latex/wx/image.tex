@@ -29,7 +29,7 @@ handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or
 \twocolitem{{\bf \indexit{wxGIFHandler}}}{Only for loading, due to legal issues.}
 \twocolitem{{\bf \indexit{wxPCXHandler}}}{For loading and saving (see below).}
 \twocolitem{{\bf \indexit{wxPNMHandler}}}{For loading and saving (see below).}
-\twocolitem{{\bf \indexit{wxTIFFHandler}}}{For loading and saving.}
+\twocolitem{{\bf \indexit{wxTIFFHandler}}}{For loading.}
 \end{twocollist}
 
 When saving in PCX format, {\bf wxPCXHandler} will count the number of
@@ -73,6 +73,13 @@ and forth without loss in that respect.
 \func{}{wxImage}{\param{int}{ width}, \param{int}{ height}}
 
 Creates an image with the given width and height.
+
+\func{}{wxImage}{\param{int}{ width}, \param{int}{ height}, \param{unsigned char*}{ data}, \param{bool}{ static_data=FALSE}}
+
+Creates an image from given data with the given width and height. If 
+{\it static_data} is TRUE, then wxImage will not delete the actual
+image data in its destructor, otherwise it will free it by calling
+{\it free()}.
 
 \func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
 
@@ -179,6 +186,16 @@ When in 8-bit mode (PseudoColour mode), the GTK port will use a color cube creat
 on program start-up to look up colors. This ensures a very fast conversion, but
 the image quality won't be perfect (and could be better for photo images using more
 sophisticated dithering algorithms).
+
+On Windows, if there is a palette present (set with SetPalette), it will be used when
+creating the wxBitmap (most useful in 8-bit display mode). On other platforms,
+the palette is currently ignored.
+
+\membersection{wxImage::Copy}\label{wximagecopy}
+
+\constfunc{wxImage}{Copy}{\void}
+
+Returns an identical copy of the image.
 
 \membersection{wxImage::Create}\label{wximagecreate}
 
@@ -295,6 +312,15 @@ Gets the green value of the mask colour.
 \constfunc{unsigned char}{GetMaskRed}{\void}
 
 Gets the red value of the mask colour.
+
+\membersection{wxImage::GetPalette}\label{wximagegetpalette}
+
+\constfunc{const wxPalette\&}{GetPalette}{\void}
+
+Returns the palette associated with the image. Currently the palette is only
+used in ConvertToBitmap under Windows.
+
+Eventually wxImage handlers will set the palette if one exists in the image file.
 
 \membersection{wxImage::GetSubImage}\label{wximagegetsubimage}
 
@@ -458,7 +484,6 @@ Saves a image in the given stream.
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Save a PNG image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PCX}}{Save a PCX image file (tries to save as 8-bit if possible, falls back to 24-bit otherwise).}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNM}}{Save a PNM image file (as raw RGB always).}
-\twocolitem{{\bf wxBITMAP\_TYPE\_TIF}}{Save a TIFF image file.}
 \end{twocollist}}
 
 \docparam{mimetype}{MIME type.}
@@ -484,6 +509,13 @@ type to the named file}
 mimetype to the named file}
 \end{twocollist}}
 }
+
+\membersection{wxImage::Mirror}\label{wximagemirror}
+
+\constfunc{wxImage}{Mirror}{\param{bool}{ horizontally = TRUE}}
+
+Returns a mirrored copy of the image. The parameter {\it horizontally}
+indicates the orientation.
 
 \membersection{wxImage::Replace}\label{wximagereplace}
 
@@ -517,6 +549,13 @@ rotated image background. Else, black (rgb 0, 0, 0) will be used.
 
 Returns the rotated image, leaving this image intact.
 
+\membersection{wxImage::Rotate90}\label{wximagerotate90}
+
+\constfunc{wxImage}{Rotate90}{\param{bool}{ clockwise = TRUE}}
+
+Returns a copy of the image rotated 90 degrees in the direction
+indicated by {\it clockwise}.
+
 \membersection{wxImage::Scale}\label{wximagescale}
 
 \constfunc{wxImage}{Scale}{\param{int}{ width}, \param{int}{ height}}
@@ -526,7 +565,7 @@ scaling bitmaps in general as the only other way to scale bitmaps
 is to blit a wxMemoryDC into another wxMemoryDC.
 
 It may be mentioned that the GTK port uses this function internally
-to scale bitmaps when using mapping mode in wxDC. 
+to scale bitmaps when using mapping modes in wxDC. 
 
 Example:
 
@@ -571,9 +610,15 @@ Specifies whether there is a mask or not. The area of the mask is determined by 
 
 Sets the mask colour for this image (and tells the image to use the mask).
 
+\membersection{wxImage::SetPalette}\label{wximagesetpalette}
+
+\func{void}{SetPalette}{\param{const wxPalette\&}{ palette}}
+
+Associates a palette with the image. Currently, the palette is not used.
+
 \membersection{wxImage::SetRGB}\label{wximagesetrgb}
 
-\func{void}{SetRGB}{\param{int }{x}, \param{int }{y}, \param{unsigned char }{red}, \param{unsigned char }{blue}, \param{unsigned char }{green}}
+\func{void}{SetRGB}{\param{int }{x}, \param{int }{y}, \param{unsigned char }{red}, \param{unsigned char }{green}, \param{unsigned char }{blue}}
 
 Sets the pixel at the given coordinate. This routine performs bounds-checks
 for the coordinate so it can be considered a safe way to manipulate the
@@ -779,6 +824,16 @@ Sets the handler extension.
 
 \docparam{extension}{Handler extension.}
 
+\membersection{wxImageHandler::SetMimeType}\label{wximagehandlersetmimetype}
+
+\func{void}{SetMimeType}{\param{const wxString\& }{mimetype}}
+
+Sets the handler MIME type.
+
+\wxheading{Parameters}
+
+\docparam{mimename}{Handler MIME type.}
+
 \membersection{wxImageHandler::SetType}
 
 \func{void}{SetType}{\param{long }{type}}
@@ -788,15 +843,4 @@ Sets the handler type.
 \wxheading{Parameters}
 
 \docparam{name}{Handler type.}
-
-
-\membersection{wxImageHandler::SetMimeType}
-
-\func{void}{SetMimeType}{\param{const wxString\& }{mimetype}}
-
-Sets the handler MIME type.
-
-\wxheading{Parameters}
-
-\docparam{mimename}{Handler MIME type.}
 

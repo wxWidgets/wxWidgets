@@ -3,7 +3,7 @@
 The basic idea behind a box sizer is that windows will most often be laid out in rather
 simple basic geomerty, typically in a row or a column or several hierachies of either.
 
-As an exmaple, we will construct a dialog that will contain a text field at the top and
+As an example, we will construct a dialog that will contain a text field at the top and
 two buttons at the bottom. This can be seen as a top-hierarchy column with the text at
 the top and buttons at the bottom and a low-hierchary row with an OK button to the left
 and a Cancel button to the right. In many cases (particulary dialogs under Unix and
@@ -14,7 +14,7 @@ a thin border around all controls to make the dialog look nice and - to make mat
 the buttons shall be centred as the width of the dialog changes.
 
 It is the unique feature of a box sizer, that it can grow in both directions (height and
-width) but can distribute its growth in the main direction (horizontal for a row) {\it unevenly}
+width) but can distribute its growth in the main direction (horizontal for a row) {\it unevenly} 
 among its children. In our example case, the vertical sizer is supposed to propagate all its
 height changes to only the text area, not to the button area. This is determined by the {\it option} parameter
 when adding a window (or another sizer) to a sizer. It is interpreted
@@ -24,8 +24,8 @@ relative to the sum of all weight factors of the sizer, so when adding two windo
 a value of 1, they will both get resized equally much and each half as much as the sizer
 owning them. Then what do we do when a column sizer changes its width? This behaviour is
 controlled by {\it flags} (the second parameter of the Add() function): Zero or no flag
-indicates that the window will preserve it's original size, wxGROW flag (same as wxEXPAND)
-forces the window to grow with the sizer, and wxSHAPED flag tells the window to change it's
+indicates that the window will preserve it is original size, wxGROW flag (same as wxEXPAND)
+forces the window to grow with the sizer, and wxSHAPED flag tells the window to change it is
 size proportionally, preserving original aspect ratio.  When wxGROW flag is not used,
 the item can be aligned within available space.  wxALIGN\_LEFT, wxALIGN\_TOP, wxALIGN\_RIGHT,
 wxALIGN\_BOTTOM, wxALIGN\_CENTER\_HORIZONTAL and wxALIGN\_CENTER\_VERTICAL do what they say.
@@ -35,7 +35,7 @@ wxALIGN\_CENTER\_VERTICAL).  Default alignment is wxALIGN\_LEFT | wxALIGN\_TOP.
 As mentioned above, any window belonging to a sizer may have border, and it can be specified
 which of the four sides may have this border, using the wxTOP, wxLEFT, wxRIGHT and wxBOTTOM
 constants or wxALL for all directions (and you may also use wxNORTH, wxWEST etc instead). These
-flags can be used in combintaion with the alignement flags above as the second paramter of the
+flags can be used in combination with the alignment flags above as the second parameter of the
 Add() method using the binary or operator |. The sizer of the border also must be made known,
 and it is the third parameter in the Add() method. This means, that the entire behaviour of
 a sizer and its children can be controlled by the three parameters of the Add() method.

@@ -14,6 +14,15 @@ However, if it is not processed, the object will delete itself and so the
 library users should only delete those objects whose notifications have been
 processed (and call \helpref{Detach()}{wxprocessdetach} for others).
 
+wxProcess also supports IO redirection of the child process. For this, you have
+to call its \helpref{Redirect}{wxprocessredirect} method before passing it to 
+\helpref{wxExecute}{wxexecute}. If the child process was launched successfully, 
+\helpref{GetInputStream}{wxprocessgetinputstream}, 
+\helpref{GetOutputStream}{wxprocessgetoutputstream} and 
+\helpref{GetErrorStream}{wxprocessgeterrorstream} can then be used to retrieve
+the streams corresponding to the child process stdandard output, input and
+error output respectively.
+
 \wxheading{Derived from}
 
 \helpref{wxEvtHandler}{wxevthandler}
@@ -21,6 +30,11 @@ processed (and call \helpref{Detach()}{wxprocessdetach} for others).
 \wxheading{Include files}
 
 <wx/process.h>
+
+\wxheading{See also}
+
+\helpref{wxExecute}{wxexecute}\\
+\helpref{exec sample}{sampleexec}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -48,6 +62,15 @@ macro in the event table of the parent to handle it) with the given {\it id}.
 
 Destroys the wxProcess object.
 
+\membersection{wxProcess::CloseOutput}\label{wxprocesscloseoutput}
+
+\func{void}{CloseOutput}{\void}
+
+Closes the output stream (the one connected to the stdin of the child
+process). This function can be used to indicate to the child process that
+there is no more data to be read - usually, a filter program will only
+terminate when the input stream is closed.
+
 \membersection{wxProcess::Detach}\label{wxprocessdetach}
 
 \func{void}{Detach}{\void}
@@ -62,19 +85,26 @@ from its parent, no notification events will be sent to the parent and the
 object will delete itself upon reception of the process termination
 notification.
 
+\membersection{wxProcess::GetErrorStream}\label{wxprocessgeterrorstream}
+
+\constfunc{wxInputStream* }{GetErrorStream}{\void}
+
+Returns an input stream which corresponds to the standard error output (stderr)
+of the child process.
+
 \membersection{wxProcess::GetInputStream}\label{wxprocessgetinputstream}
 
 \constfunc{wxInputStream* }{GetInputStream}{\void}
 
-It returns a output stream corresponding to the input stream of the subprocess. 
-If it is NULL, you have not turned on the redirection.
+It returns a output stream corresponding to the standard output stream of the
+subprocess. If it is NULL, you have not turned on the redirection.
 See \helpref{wxProcess::Redirect}{wxprocessredirect}.
 
 \membersection{wxProcess::GetOutputStream}\label{wxprocessgetoutputstream}
 
 \constfunc{wxOutputStream* }{GetOutputStream}{\void}
 
-It returns an output stream correspoding to the output stream of the subprocess.
+It returns an output stream correspoding to the input stream of the subprocess.
 If it is NULL, you have not turned on the redirection.
 See \helpref{wxProcess::Redirect}{wxprocessredirect}.
 
@@ -83,7 +113,7 @@ See \helpref{wxProcess::Redirect}{wxprocessredirect}.
 \constfunc{void}{OnTerminate}{\param{int}{ pid}, \param{int}{ status}}
 
 It is called when the process with the pid {\it pid} finishes.
-It raises a wxWindows event when it isn't overriden.
+It raises a wxWindows event when it isn't overridden.
 
 \docparam{pid}{The pid of the process which has just terminated.}
 

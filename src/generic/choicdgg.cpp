@@ -45,10 +45,11 @@ wxString wxGetSingleChoice( const wxString& message, const wxString& caption, in
                             int WXUNUSED(width), int WXUNUSED(height) )
 {
     wxSingleChoiceDialog dialog(parent, message, caption, n, choices);
+    wxString choice;
     if ( dialog.ShowModal() == wxID_OK )
-        return dialog.GetStringSelection();
-    else
-        return wxT("");
+        choice = dialog.GetStringSelection();
+
+    return choice;
 }
 
 // Overloaded for backward compatibility
@@ -75,10 +76,13 @@ int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, in
                 int WXUNUSED(width), int WXUNUSED(height) )
 {
     wxSingleChoiceDialog dialog(parent, message, caption, n, choices);
+    int choice;
     if ( dialog.ShowModal() == wxID_OK )
-        return dialog.GetSelection();
+        choice = dialog.GetSelection();
     else
-        return -1;
+        choice = -1;
+
+    return choice;
 }
 
 // Overloaded for backward compatibility
@@ -102,10 +106,13 @@ void *wxGetSingleChoiceData( const wxString& message, const wxString& caption, i
                    int WXUNUSED(width), int WXUNUSED(height) )
 {
     wxSingleChoiceDialog dialog(parent, message, caption, n, choices, (char **)client_data);
+    void *data;
     if ( dialog.ShowModal() == wxID_OK )
-        return dialog.GetSelectionClientData();
+        data = dialog.GetSelectionClientData();
     else
-        return NULL;
+        data = NULL;
+
+    return data;
 }
 
 // Overloaded for backward compatibility

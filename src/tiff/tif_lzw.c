@@ -36,7 +36,12 @@
  *
  * The original Berkeley copyright notice appears below in its entirety.
  */
+/* Watcom C++ (or its make utility) doesn't like long filenames */
+#ifdef __WATCOMC__
+#include "tif_pred.h"
+#else
 #include "tif_predict.h"
+#endif
 
 #include <assert.h>
 #include <stdio.h>

@@ -139,6 +139,8 @@ protected:
 private:
     wxDateTime m_date;
     wxDateTime::WeekDay m_wday;
+
+    DECLARE_DYNAMIC_CLASS(wxCalendarEvent)
 };
 
 // ----------------------------------------------------------------------------

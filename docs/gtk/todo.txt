@@ -1,22 +1,27 @@
 
 -------------------- High priority ---------------------
 
-Improve, update translations. Install *.mo files somewehere.
+Improve, update translations. Install *.mo files somewhere.
 
 -------------------- Medium priority ---------------------
 
+wxBitmapButton doesn't refresh when parent gets refreshed.
+  -> Not important.
+
 Show accelerator control labels and actually implement them
-  -> Changed in GTK 1.2 (so let's do it for 1.2). Difficult.
+  -> Difficult.
   
 -------------------- Low priority ---------------------
     
 Right aligned checkboxes: focus highlighting is wrong, tooltips can't be set can't be set
+  -> Postponed. GTK 1.4 can do that.
+
+Add wxNoteBook::GetPageIndex()
+Add wxNoteBook::SetTabPosition()
+  -> Postponed.
 
 More testing of Unicode support.
   -> Postponed.
-
-OwnerDraw for wxListCtrl and others
-  -> Hardly necessary.
 
 Implement wxPalette
   -> Postponed.

@@ -498,23 +498,32 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     keyCode = WXK_F1 + n - 1;
                 }
                 else {
-#if 0 // this is not supported by GTK+, apparently
                     // several special cases
                     current.MakeUpper();
                     if ( current == wxT("DEL") ) {
-                        keyCode = VK_DELETE;
+                        keyCode = WXK_DELETE;
                     }
+                    else if ( current == wxT("DELETE") ) {
+                        keyCode = WXK_DELETE;
+                    }
+                    else if ( current == wxT("INS") ) {
+                        keyCode = WXK_INSERT;
+                    }
+                    else if ( current == wxT("INSERT") ) {
+                        keyCode = WXK_INSERT;
+                    }
+#if 0
                     else if ( current == wxT("PGUP") ) {
                         keyCode = VK_PRIOR;
                     }
                     else if ( current == wxT("PGDN") ) {
                         keyCode = VK_NEXT;
                     }
+#endif
                     else
-#endif // 0
                     {
-                        wxLogDebug(wxT("Unrecognized accel key '%s', accel "
-                                       "string ignored."), current.c_str());
+                        wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
+                                   current.c_str());
                     }
                 }
             }
@@ -878,10 +887,13 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
             return wxYES;
         case wxID_NO:
             return wxNO;
-        default:
         case wxID_CANCEL:
             return wxCANCEL;
     }
+
+    wxFAIL_MSG( _T("unexpected return code from wxMessageDialog") );
+
+    return wxCANCEL;
 }
 
 #if wxUSE_TEXTDLG
@@ -1025,7 +1037,7 @@ wxWindowDisabler::~wxWindowDisabler()
     {
         if ( !::SetForegroundWindow(GetHwndOf(m_winTop)) )
         {
-            wxLogLastError("SetForegroundWindow");
+            wxLogLastError(wxT("SetForegroundWindow"));
         }
     }
 #else
@@ -1208,31 +1220,89 @@ wxString wxGetCurrentDir()
 // wxExecute
 // ----------------------------------------------------------------------------
 
-long wxExecute(const wxString& command, wxArrayString& output)
+// this is a private function because it hasn't a clean interface: the first
+// array is passed by reference, the second by pointer - instead we have 2
+// public versions of wxExecute() below
+static long wxDoExecuteWithCapture(const wxString& command,
+                                   wxArrayString& output,
+                                   wxArrayString* error)
 {
 #ifdef __WIN16__
     wxFAIL_MSG("Sorry, this version of wxExecute not implemented on WIN16.");
+
     return 0;
-#else
+#else // !Win16
     // create a wxProcess which will capture the output
     wxProcess *process = new wxProcess;
     process->Redirect();
 
     long rc = wxExecute(command, TRUE /* sync */, process);
+
+#if wxUSE_STREAMS
     if ( rc != -1 )
     {
-        wxInputStream& is = *process->GetInputStream();
-        wxTextInputStream tis(is);
-        while ( !is.Eof() && is.IsOk() )
-        {
-            wxString line = tis.ReadLine();
-            if ( is.LastError() )
-                break;
+        wxInputStream* is = process->GetInputStream();
+        wxCHECK_MSG( is, -1, _T("if wxExecute() succeded, stream can't be NULL") );
+        wxTextInputStream tis(*is);
 
-            output.Add(line);
+        wxTextInputStream *tes = NULL;
+        wxInputStream *es = NULL;
+        if ( error )
+        {
+            es = process->GetErrorStream();
+
+            wxCHECK_MSG( es, -1, _T("stderr can't be NULL") );
+
+            tes = new wxTextInputStream(*es);
         }
+
+        bool cont;
+        do
+        {
+            cont = FALSE;
+
+            if ( !is->Eof() && is->IsOk() )
+            {
+                wxString line = tis.ReadLine();
+                if ( is->LastError() )
+                    break;
+
+                cont = TRUE;
+
+                output.Add(line);
+            }
+
+            if ( error && !es->Eof() && es->IsOk() )
+            {
+                wxString line = tes->ReadLine();
+                if ( es->LastError() )
+                    break;
+
+                cont = TRUE;
+
+                error->Add(line);
+            }
+        }
+        while ( cont );
+
+        delete tes;
     }
+#endif // wxUSE_STREAMS
+
+    delete process;
 
     return rc;
-#endif
+#endif // IO redirection supoprted
+}
+
+long wxExecute(const wxString& command, wxArrayString& output)
+{
+    return wxDoExecuteWithCapture(command, output, NULL);
+}
+
+long wxExecute(const wxString& command,
+               wxArrayString& output,
+               wxArrayString& error)
+{
+    return wxDoExecuteWithCapture(command, output, &error);
 }

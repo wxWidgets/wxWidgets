@@ -7,6 +7,14 @@ It (or an object of a derived class) is sent when the controls state is being
 changed and allows the program to \helpref{Veto()}{wxnotifyeventveto} this
 change if it wants to prevent it from happening.
 
+In some rare cases (so far only dragging the items in the tree control) the
+event is disabled by default in which case 
+\helpref{Allow()}{wxnotifyeventallow} may be called to allow it.
+
+If both \helpref{Allow()}{wxnotifyeventallow} and 
+\helpref{Veto()}{wxnotifyeventveto} are called, only the last method called
+counts.
+
 \wxheading{Derived from}
 
 \helpref{wxCommandEvent}{wxcommandevent}\\
@@ -33,6 +41,12 @@ None
 \func{}{wxNotifyEvent}{\param{wxEventType}{ eventType = wxEVT\_NULL}, \param{int}{ id = 0}}
 
 Constructor (used internally by wxWindows only).
+
+\membersection{wxNotifyEvent::Allow}\label{wxnotifyeventallow}
+
+\func{void}{Allow}{\param{bool }{allow = TRUE}}
+
+Allow the action signalled by this event to be carried.
 
 \membersection{wxNotifyEvent::IsAllowed}\label{wxnotifyeventisallowed}
 

@@ -56,6 +56,8 @@
 /* #define INLINE __inline__ */
 #if defined(__VISAGECPP__) && (__IBMCPP__ >= 400 || __IBMC__ >= 400)
 #define INLINE
+#elif defined(__WATCOMC__)
+#define INLINE
 #else
 #define INLINE inline
 #endif

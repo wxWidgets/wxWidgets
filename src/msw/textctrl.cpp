@@ -38,6 +38,8 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/module.h"
+
 #if wxUSE_CLIPBOARD
     #include "wx/clipbrd.h"
 #endif
@@ -119,6 +121,9 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_PASTE, wxTextCtrl::OnUpdatePaste)
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
+#ifdef __WIN16__
+    EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
+#endif
 END_EVENT_TABLE()
 
 
@@ -154,12 +159,11 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     // translate wxWin style flags to MSW ones, checking for consistency while
     // doing it
-    long msStyle = ES_LEFT | WS_VISIBLE | WS_CHILD | WS_TABSTOP;
+    long msStyle = ES_LEFT | WS_VISIBLE | WS_CHILD | WS_TABSTOP /* | WS_CLIPSIBLINGS */ ;
     if ( m_windowStyle & wxTE_MULTILINE )
     {
         wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),
-                      wxT("wxTE_PROCESS_ENTER style is ignored for multiline "
-                          "text controls (they always process it)") );
+                      wxT("wxTE_PROCESS_ENTER style is ignored for multiline text controls (they always process it)") );
 
         msStyle |= ES_MULTILINE | ES_WANTRETURN;
         if ((m_windowStyle & wxTE_NO_VSCROLL) == 0)
@@ -212,9 +216,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
             // done)
             if ( !wxRichEditModule::Load() )
             {
-                wxLogError(_("Impossible to create a rich edit control, "
-                             "using simple text control instead. Please "
-                             "reinstall riched32.dll"));
+                wxLogError(_("Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"));
 
                 s_errorGiven = TRUE;
             }
@@ -356,10 +358,10 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 void wxTextCtrl::SetupColours()
 {
     wxColour bkgndColour;
-    if (IsEditable() || (m_windowStyle & wxTE_MULTILINE))
+//    if (IsEditable() || (m_windowStyle & wxTE_MULTILINE))
         bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
-    else
-        bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+//    else
+//        bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
 
     SetBackgroundColour(bkgndColour);
     SetForegroundColour(GetParent()->GetForegroundColour());
@@ -422,6 +424,14 @@ void wxTextCtrl::SetValue(const wxString& value)
         wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
 
         SetWindowText(GetHwnd(), valueDos.c_str());
+
+        // for compatibility with the GTK and because it is more logical, we
+        // move the cursor to the end of the text after SetValue()
+
+        // GRG, Jun/2000: Changed this back after a lot of discussion
+        //   in the lists. wxWindows 2.2 will have a set of flags to
+        //   customize this behaviour.
+        //SetInsertionPointEnd();
 
         AdjustSpaceLimit();
     }
@@ -491,7 +501,7 @@ bool wxTextCtrl::CanCut() const
     // Can cut if there's a selection
     long from, to;
     GetSelection(& from, & to);
-    return (from != to);
+    return (from != to) && (IsEditable());
 }
 
 bool wxTextCtrl::CanPaste() const
@@ -523,16 +533,8 @@ bool wxTextCtrl::CanPaste() const
 
 void wxTextCtrl::SetEditable(bool editable)
 {
-    bool isEditable = IsEditable();
-
     HWND hWnd = GetHwnd();
     SendMessage(hWnd, EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
-
-    if (editable != isEditable)
-    {
-       SetupColours();
-       Refresh();
-    }
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
@@ -811,24 +813,20 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    // TODO this should probably be optimized by using GetWriteBuf()
-
     size_t len = (size_t)GetLineLength(lineNo) + 1;
-    if ( len < sizeof(WORD) )
-    {
-        // there must be at least enough place for the length WORD in the
-        // buffer
-        len += sizeof(WORD);
-    }
 
-    char *buf = (char *)malloc(len);
+    // there must be at least enough place for the length WORD in the
+    // buffer
+    len += sizeof(WORD);
+
+    wxString str;
+    wxChar *buf = str.GetWriteBuf(len);
+
     *(WORD *)buf = len;
-    int noChars = (int)SendMessage(GetHwnd(), EM_GETLINE, lineNo, (LPARAM)buf);
-    buf[noChars] = 0;
+    len = (size_t)::SendMessage(GetHwnd(), EM_GETLINE, lineNo, (LPARAM)buf);
+    buf[len] = 0;
 
-    wxString str(buf);
-
-    free(buf);
+    str.UngetWriteBuf(len);
 
     return str;
 }
@@ -892,6 +890,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 InitCommandEvent(event);
+                event.SetString(GetValue());
                 if ( GetEventHandler()->ProcessEvent(event) )
                     return;
             }
@@ -954,6 +953,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         case EN_ERRSPACE:
         case EN_HSCROLL:
         case EN_VSCROLL:
+            return FALSE;
         default:
             return FALSE;
     }
@@ -961,6 +961,71 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     // processed
     return TRUE;
 }
+
+WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+#if wxUSE_CTL3D
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
+
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
+
+    wxColour colBack = GetBackgroundColour();
+
+    if (!IsEnabled() && (GetWindowStyle() & wxTE_MULTILINE) == 0)
+        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+
+    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+    return (WXHBRUSH)brush->GetResourceHandle();
+}
+
+// In WIN16, need to override normal erasing because
+// Ctl3D doesn't use the wxWindows background colour.
+#ifdef __WIN16__
+void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
+{
+    wxColour col(m_backgroundColour);
+
+#if wxUSE_CTL3D
+    if (m_useCtl3D)
+        col = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
+#endif
+
+    RECT rect;
+    ::GetClientRect(GetHwnd(), &rect);
+
+    COLORREF ref = PALETTERGB(col.Red(),
+                              col.Green(),
+                              col.Blue());
+    HBRUSH hBrush = ::CreateSolidBrush(ref);
+    if ( !hBrush )
+        wxLogLastError(wxT("CreateSolidBrush"));
+
+    HDC hdc = (HDC)event.GetDC()->GetHDC();
+
+    int mode = ::SetMapMode(hdc, MM_TEXT);
+
+    ::FillRect(hdc, &rect, hBrush);
+    ::DeleteObject(hBrush);
+    ::SetMapMode(hdc, mode);
+
+}
+#endif
 
 void wxTextCtrl::AdjustSpaceLimit()
 {
@@ -1069,6 +1134,59 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     event.Enable( CanRedo() );
 }
+
+// ----------------------------------------------------------------------------
+// colour setting for the rich edit controls
+// ----------------------------------------------------------------------------
+
+#if wxUSE_RICHEDIT
+
+// Watcom C++ doesn't define this
+#ifndef SCF_ALL
+#define SCF_ALL 0x0004
+#endif
+
+bool wxTextCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxTextCtrlBase::SetBackgroundColour(colour) )
+    {
+        // colour didn't really change
+        return FALSE;
+    }
+
+    if ( IsRich() )
+    {
+        // rich edit doesn't use WM_CTLCOLOR, hence we need to send
+        // EM_SETBKGNDCOLOR additionally
+        ::SendMessage(GetHwnd(), EM_SETBKGNDCOLOR, 0, wxColourToRGB(colour));
+    }
+
+    return TRUE;
+}
+
+bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
+{
+    if ( !wxTextCtrlBase::SetForegroundColour(colour) )
+    {
+        // colour didn't really change
+        return FALSE;
+    }
+
+    if ( IsRich() )
+    {
+        // change the colour of everything
+        CHARFORMAT cf;
+        wxZeroMemory(cf);
+        cf.cbSize = sizeof(cf);
+        cf.dwMask = CFM_COLOR;
+        cf.crTextColor = wxColourToRGB(colour);
+        ::SendMessage(GetHwnd(), EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
+    }
+
+    return TRUE;
+}
+
+#endif // wxUSE_RICHEDIT
 
 // ----------------------------------------------------------------------------
 // wxRichEditModule

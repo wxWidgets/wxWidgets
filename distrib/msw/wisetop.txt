@@ -1,7 +1,7 @@
 Document Type: WSE
 item: Global
   Version=5.0
-  Title=wxWindows 2.1.14 Installation
+  Title=wxWindows 2.2.1 Installation
   Flags=00000100
   Split=1420
   Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -47,7 +47,7 @@ item: End Block
 end
 item: Set Variable
   Variable=APPTITLE
-  Value=wxWindows 2.1.14
+  Value=wxWindows 2.2.1
 end
 item: Set Variable
   Variable=GROUP
@@ -207,7 +207,9 @@ item: Custom Dialog Set
     item: Static
       Rectangle=86 41 256 130
       Create Flags=01010000000000000000000000000000
-      Text=This installation program will install %APPTITLE%. It will need about 25 MB of hard disk space.
+      Text=This installation program will install %APPTITLE%. It will need 30-130 MB of hard disk space,
+      Text=depending on the disk cluster size. Allow further disk space for compiling the library
+      Text=and samples.
       Text=
       Text=Press the Next button to start the installation. You can press the Cancel button now if you do not want to install %APPTITLE% at this time.
       Text French=Ce programme d'installation va installer %APPTITLE%.

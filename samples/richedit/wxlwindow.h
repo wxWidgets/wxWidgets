@@ -1,7 +1,7 @@
 /*-*- c++ -*-********************************************************
  * wxLwindow.h : a scrolled Window for displaying/entering rich text*
  *                                                                  *
- * (C) 1998-1999 by Karsten Ballüder (karsten@phy.hw.ac.uk)         *
+ * (C) 1998-2000 by Karsten Ballüder (ballueder@gmx.net)            *
  *                                                                  *
  * $Id$
  *******************************************************************/
@@ -118,6 +118,11 @@ public:
    */
    void SetWrapMargin(CoordType margin) { m_WrapMargin = margin; }
 
+   /** Toggle wordwrap as we type.
+       @param on true to activate word wrap
+   */
+   void SetWordWrap(bool on = true) { m_DoWordWrap = on; }
+   
    /** Redraws the window.
        Internally, this stores the parameter and calls a refresh on
        wxMSW, draws directly on wxGTK.
@@ -230,6 +235,10 @@ protected:
    int m_maxx;
    int m_maxy;
    int m_lineHeight;
+   /// do we want automatic word wrap?
+   bool m_DoWordWrap;
+   /// wrap margin
+   CoordType    m_WrapMargin;
 
    /// do we have the corresponding scrollbar?
    bool m_hasHScrollbar,
@@ -253,8 +262,6 @@ private:
    bool m_Editable;
    /// Are we currently building a selection with the keyboard?
    bool m_Selecting;
-   /// wrap margin
-   CoordType    m_WrapMargin;
    /// Has list changed since last redraw, e.g. in size?
    bool m_Dirty;
    /// Has the list ever been modified?

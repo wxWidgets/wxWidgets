@@ -7,49 +7,108 @@
 
 #include "Platform.h"
 
+#include "Scintilla.h"
 #include "Style.h"
 
 Style::Style() {
-	Clear();
+	aliasOfDefaultFont = true;
+	Clear(Colour(0,0,0), Colour(0xff,0xff,0xff),
+	        Platform::DefaultFontSize(), 0, SC_CHARSET_DEFAULT,
+		false, false, false, false);
+}
+	
+Style::Style(const Style &source) {
+	Clear(Colour(0,0,0), Colour(0xff,0xff,0xff),
+	        0, 0, 0,
+		false, false, false, false);
+	fore.desired = source.fore.desired;
+	back.desired = source.back.desired;
+	characterSet = source.characterSet;
+	bold = source.bold;
+	italic = source.italic;
+	size = source.size;
+	eolFilled = source.eolFilled;
+	underline = source.underline;
 }
 
 Style::~Style() {
-	font.Release();
+	if (aliasOfDefaultFont)
+		font.SetID(0);
+	else
+		font.Release();
+	aliasOfDefaultFont = false;
 }
 
 Style &Style::operator=(const Style &source) {
 	if (this == &source)
 		return *this;
-	Clear();
+	Clear(Colour(0,0,0), Colour(0xff,0xff,0xff),
+	        0, 0, SC_CHARSET_DEFAULT,
+		false, false, false, false);
 	fore.desired = source.fore.desired;
 	back.desired = source.back.desired;
+	characterSet = source.characterSet;
 	bold = source.bold;
 	italic = source.italic;
 	size = source.size;
-	strcpy(fontName, source.fontName);
 	eolFilled = source.eolFilled;
+	underline = source.underline;
 	return *this;
 }
 
-void Style::Clear(Colour fore_, Colour back_, int size_, const char *fontName_, 
-	bool bold_, bool italic_, bool eolFilled_) {
+void Style::Clear(Colour fore_, Colour back_, int size_, 
+	const char *fontName_, int characterSet_,
+	bool bold_, bool italic_, bool eolFilled_, bool underline_) {
 	fore.desired = fore_;
 	back.desired = back_;
+	characterSet = characterSet_;
 	bold = bold_;
 	italic = italic_;
 	size = size_;
-	strcpy(fontName, fontName_);
+	fontName = fontName_;
 	eolFilled = eolFilled_;
-	font.Release();
+	underline = underline_;
+	if (aliasOfDefaultFont)
+		font.SetID(0);
+	else 
+		font.Release();
+	aliasOfDefaultFont = false;
 }
 
-void Style::Realise(Surface &surface, int zoomLevel) {
+bool Style::EquivalentFontTo(const Style *other) const {
+	if (bold != other->bold ||
+		italic != other->italic ||
+		size != other->size ||
+		characterSet != other->characterSet)
+		return false;
+	if (fontName == other->fontName)
+		return true;
+	if (!fontName)
+		return false;
+	if (!other->fontName)
+		return false;
+	return strcmp(fontName, other->fontName) == 0;
+}
+
+void Style::Realise(Surface &surface, int zoomLevel, Style *defaultStyle) {
 	int sizeZoomed = size + zoomLevel;
 	if (sizeZoomed <= 2)	// Hangs if sizeZoomed <= 1
 		sizeZoomed = 2;
-		
-	int deviceHeight = (sizeZoomed * surface.LogPixelsY()) / 72;
-	font.Create(fontName, deviceHeight, bold, italic);
+
+	if (aliasOfDefaultFont)
+		font.SetID(0);
+	else 
+		font.Release();
+	int deviceHeight = surface.DeviceHeightFont(sizeZoomed);
+	aliasOfDefaultFont = defaultStyle && 
+		(EquivalentFontTo(defaultStyle) || !fontName);
+	if (aliasOfDefaultFont) {
+		font.SetID(defaultStyle->font.GetID());
+	} else if (fontName) {
+		font.Create(fontName, characterSet, deviceHeight, bold, italic);
+	} else {
+		font.SetID(0);
+	}
 
 	ascent = surface.Ascent(font);
 	descent = surface.Descent(font);

@@ -283,7 +283,7 @@ enum
     wxEVT_PLOT_AREA_SEL_CREATED = wxEVT_FIRST + 1015,
     wxEVT_PLOT_AREA_SEL_CHANGING = wxEVT_FIRST + 1016,
     wxEVT_PLOT_AREA_SEL_CHANGED = wxEVT_FIRST + 1017,
-    wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxEVT_FIRST + 1020,  
+    wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxEVT_FIRST + 1020,
     wxEVT_PLOT_END_X_LABEL_EDIT = wxEVT_FIRST + 1021,
     wxEVT_PLOT_BEGIN_Y_LABEL_EDIT = wxEVT_FIRST + 1022,
     wxEVT_PLOT_END_Y_LABEL_EDIT = wxEVT_FIRST + 1023,
@@ -443,7 +443,7 @@ public:
     wxString GetString() const { return m_commandString; }
 
     // Get checkbox value
-    bool Checked() const { return (m_commandInt != 0); }
+    bool IsChecked() const { return m_commandInt != 0; }
 
     // TRUE if the listbox event was a selection.
     bool IsSelection() const { return (m_extraLong != 0); }
@@ -455,6 +455,10 @@ public:
     long GetInt() const { return m_commandInt ; }
 
     void CopyObject(wxObject& obj) const;
+
+#ifdef WXWIN_COMPATIBILITY_2
+    bool Checked() const { return IsChecked(); }
+#endif // WXWIN_COMPATIBILITY_2
 
 public:
     wxString          m_commandString; // String event argument
@@ -768,7 +772,11 @@ public:
     bool MetaDown() const { return m_metaDown; }
     bool AltDown() const { return m_altDown; }
     bool ShiftDown() const { return m_shiftDown; }
-    long KeyCode() const { return m_keyCode; }
+
+    bool HasModifiers() const { return ControlDown() || AltDown() || MetaDown(); }
+
+    // get the key code: an ASCII7 char or an element of wxKeyCode enum
+    int GetKeyCode() const { return (int)m_keyCode; }
 
     // Find the position of the event
     void GetPosition(wxCoord *xpos, wxCoord *ypos) const
@@ -795,6 +803,9 @@ public:
     wxCoord GetY() const { return m_y; }
 
     void CopyObject(wxObject& obj) const;
+
+    // deprecated
+    long KeyCode() const { return m_keyCode; }
 
 public:
     wxCoord       m_x, m_y;
@@ -1369,7 +1380,7 @@ private:
  wxEVT_DESTROY
  */
 
-class WXDLLEXPORT wxWindowCreateEvent : public wxEvent
+class WXDLLEXPORT wxWindowCreateEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS(wxWindowCreateEvent)
 
@@ -1379,7 +1390,7 @@ public:
     wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
 };
 
-class WXDLLEXPORT wxWindowDestroyEvent : public wxEvent
+class WXDLLEXPORT wxWindowDestroyEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS(wxWindowDestroyEvent)
 
@@ -1499,7 +1510,7 @@ public:
                   wxObjectEventFunction func = NULL,
                   wxObject *userData = (wxObject *) NULL )
         { return Disconnect(id, -1, eventType, func, userData); }
-	
+
     // implementation from now on
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
     bool SearchDynamicEventTable( wxEvent& event );
@@ -1795,15 +1806,17 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
  { wxEVT_JOY_BUTTON_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },\
  { wxEVT_JOY_BUTTON_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },\
  { wxEVT_JOY_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },\
- { wxEVT_JOY_ZMOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },\
+ { wxEVT_JOY_ZMOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },
 
 // Idle event
 #define EVT_IDLE(func) \
- { wxEVT_IDLE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxIdleEventFunction) & func, (wxObject *) NULL },\
+ { wxEVT_IDLE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxIdleEventFunction) & func, (wxObject *) NULL },
 
 // Update UI event
 #define EVT_UPDATE_UI(id, func) \
- { wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL },\
+ { wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL },
+#define EVT_UPDATE_UI_RANGE(id1, id2, func) \
+ { wxEVT_UPDATE_UI, id1, id2, (wxObjectEventFunction)(wxEventFunction)(wxUpdateUIEventFunction)&func, (wxObject *) NULL },
 
 // ----------------------------------------------------------------------------
 // Global data

@@ -93,16 +93,22 @@ insensitive comparisons you should use \helpref{CmpNoCase}{wxstringcmpnocase} or
 give a second parameter to IsSameAs. This last function is may be more
 convenient if only equality of the strings matters because it returns a boolean
 true value if the strings are the same and not 0 (which is usually FALSE in C)
-as Cmp does.
+as {\tt Cmp()} does.
 
 \helpref{Matches}{wxstringmatches} is a poor man's regular expression matcher:
 it only understands '*' and '?' metacharacters in the sense of DOS command line
 interpreter.
 
+\helpref{StartsWith}{wxstringstartswith} is helpful when parsing a line of
+text which should start with some predefined prefix and is more efficient than
+doing direct string comparaison as you would also have to precalculate the
+length of the prefix then.
+
 \helpref{Cmp}{wxstringcmp}\\
 \helpref{CmpNoCase}{wxstringcmpnocase}\\
 \helpref{IsSameAs}{wxstringissameas}\\
-\helpref{Matches}{wxstringmatches}
+\helpref{Matches}{wxstringmatches}\\
+\helpref{StartsWith}{wxstringstartswith}
 
 \membersection{Substring extraction}
 
@@ -117,7 +123,8 @@ substring.
 \helpref{BeforeFirst}{wxstringbeforefirst}\\
 \helpref{BeforeLast}{wxstringbeforelast}\\
 \helpref{AfterFirst}{wxstringafterfirst}\\
-\helpref{AfterLast}{wxstringafterlast}
+\helpref{AfterLast}{wxstringafterlast}\\
+\helpref{StartsWith}{wxstringstartswith}
 
 \membersection{Case conversion}
 
@@ -196,9 +203,9 @@ Other string functions.
 \helpref{Pad}{wxstringpad}\\
 \helpref{Truncate}{wxstringtruncate}
 
-\membersection{wxWindows 1.xx compatiblity functions}
+\membersection{wxWindows 1.xx compatibility functions}
 
-These functiosn are deprecated, please consider using new wxWindows 2.0
+These functions are deprecated, please consider using new wxWindows 2.0
 functions instead of them (or, even better, std::string compatible variants).
 
 \helpref{SubString}{wxstringsubstring}\\
@@ -395,7 +402,14 @@ Constructs a string of {\it n} copies of character {\it ch}.
 \func{}{wxString}{\param{const char*}{ psz}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
 Takes first {\it nLength} characters from the C string {\it psz}.
-The default value of wxSTRING\_MAXLEN means take all the string.
+The default value of wxSTRING\_MAXLEN means to take all the string.
+
+Note that this constructor may be used even if {\it psz} points to a buffer
+with binary data (i.e. containing {\tt NUL} characters) as long as you provide
+the correct value for {\it nLength}. However, the default form of it works
+only with strings without intermediate {\tt NUL}s because it uses 
+{\tt strlen()} to calculate the effective length and it would not give correct
+results otherwise.
 
 \func{}{wxString}{\param{const unsigned char*}{ psz}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
@@ -509,7 +523,7 @@ See also: \helpref{Empty}{wxstringempty}
 Case-sensitive comparison.
 
 Returns a positive value if the string is greater than the argument, zero if
-it si equal to it or negative value if it is less than argument (same semantics
+it is equal to it or a negative value if it is less than the argument (same semantics
 as the standard {\it strcmp()} function).
 
 See also \helpref{CmpNoCase}{wxstringcmpnocase}, \helpref{IsSameAs}{wxstringissameas}.
@@ -521,7 +535,7 @@ See also \helpref{CmpNoCase}{wxstringcmpnocase}, \helpref{IsSameAs}{wxstringissa
 Case-insensitive comparison.
 
 Returns a positive value if the string is greater than the argument, zero if
-it si equal to it or negative value if it is less than argument (same semantics
+it is equal to it or a negative value if it is less than the argument (same semantics
 as the standard {\it strcmp()} function).
 
 See also \helpref{Cmp}{wxstringcmp}, \helpref{IsSameAs}{wxstringissameas}.
@@ -597,9 +611,9 @@ This static function returns the string containing the result of calling
 
 \membersection{wxString::Freq}\label{wxstringfreq}
 
-\constfunc{int}{Frec}{\param{char }{ch}}
+\constfunc{int}{Freq}{\param{char }{ch}}
 
-Returns the number of occurences of {it ch} in the string.
+Returns the number of occurrences of {\it ch} in the string.
 
 \membersection{wxString::GetChar}\label{wxstringgetchar}
 
@@ -677,7 +691,7 @@ Returns TRUE if the string is NULL (same as IsEmpty).
 
 \constfunc{bool}{IsNumber}{\void}
 
-Returns TRUE if the string is a number.
+Returns TRUE if the string is a positive or negative integer. Will return FALSE for decimals.
 
 \membersection{wxString::IsSameAs}\label{wxstringissameas}
 
@@ -862,6 +876,16 @@ Minimizes the string's memory. This can be useful after a call to
 
 The same as Printf.
 
+\membersection{wxString::StartsWith}\label{wxstringstartswith}
+
+\constfunc{bool}{StartsWith}{\param{const wxChar }{*prefix}, \param{wxString }{*rest = NULL}}
+
+This function can be used to test if the string starts with the specified 
+{\it prefix}. If it does, the function will return {\tt TRUE} and put the rest
+of the string (i.e. after the prefix) into {\it rest} string if it is not 
+{\tt NULL}. Otherwise, the function returns {\tt FALSE} and doesn't modify the 
+{\it rest}.
+
 \membersection{wxString::Strip}\label{wxstringstrip}
 
 \begin{verbatim}
@@ -875,33 +899,48 @@ doesn't change this string.
 
 \membersection{wxString::SubString}\label{wxstringsubstring}
 
-\constfunc{wxString}{SubString}{\param{size\_t}{ to}, \param{size\_t}{ from}}
+\constfunc{wxString}{SubString}{\param{size\_t}{ from}, \param{size\_t}{ to}}
 
 Same as \helpref{Mid}{wxstringmid}.
 
 \membersection{wxString::ToDouble}\label{wxstringtodouble}
 
-\constfunc{bool}{To}{\param{double}{ *val}}
+\constfunc{bool}{ToDouble}{\param{double}{ *val}}
 
 Attempts to convert the string to a floating point number. Returns TRUE on
-suceess (the number is stored in the location pointed to by {\it val}) or FALSE
+success (the number is stored in the location pointed to by {\it val}) or FALSE
 if the string does not represent such number.
+
+\wxheading{See also}
+
+\helpref{wxString::ToLong}{wxstringtolong},\\
+\helpref{wxString::ToULong}{wxstringtoulong}
 
 \membersection{wxString::ToLong}\label{wxstringtolong}
 
-\constfunc{bool}{To}{\param{long}{ *val}}
+\constfunc{bool}{ToLong}{\param{long}{ *val}}
 
-Attempts to convert the string to a signed integer. Returns TRUE on suceess
+Attempts to convert the string to a signed integer. Returns TRUE on success
 (the number is stored in the location pointed to by {\it val}) or FALSE if the
 string does not represent such number.
+
+\wxheading{See also}
+
+\helpref{wxString::ToDouble}{wxstringtodouble},\\
+\helpref{wxString::ToULong}{wxstringtoulong}
 
 \membersection{wxString::ToULong}\label{wxstringtoulong}
 
-\constfunc{bool}{To}{\param{unsigned long}{ *val}}
+\constfunc{bool}{ToULong}{\param{unsigned long}{ *val}}
 
-Attempts to convert the string to an unsigned integer. Returns TRUE on suceess
+Attempts to convert the string to an unsigned integer. Returns TRUE on success
 (the number is stored in the location pointed to by {\it val}) or FALSE if the
 string does not represent such number.
+
+\wxheading{See also}
+
+\helpref{wxString::ToDouble}{wxstringtodouble},\\
+\helpref{wxString::ToLong}{wxstringtolong}
 
 \membersection{wxString::Trim}\label{wxstringtrim}
 
@@ -960,7 +999,7 @@ See also \helpref{IsEmpty()}{wxstringisempty}.
 Assignment: the effect of each operation is the same as for the corresponding
 constructor (see \helpref{wxString constructors}{wxstringconstruct}).
 
-\membersection{operator wxString::$+$}\label{wxstringoperatorplus}
+\membersection{wxString::operator $+$}\label{wxstringoperatorplus}
 
 Concatenation: all these operators return a new strign equal to the sum of the
 operands.

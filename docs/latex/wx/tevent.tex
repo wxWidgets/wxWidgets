@@ -136,7 +136,7 @@ recursively applied to the parent window's event handler. If this returns TRUE, 
 confused by this powerful feature of the wxWindows event processing
 system.  To put it a different way, events derived either directly or
 indirectly from wxCommandEvent will travel up the containment
-heirarchy from child to parent until an event handler is found that
+hierarchy from child to parent until an event handler is found that
 doesn't call event.Skip().  Events not derived from wxCommandEvent are
 sent only to the window they occurred in and then stop.
 
@@ -238,7 +238,7 @@ in, such as a frame and its children. You may use the wxID\_OK identifier, for e
 any number of dialogs so long as you don't have several within the same dialog.
 
 If you pass -1 to a window constructor, an identifier will be generated for you, but beware:
-if things don't respond in the way they should, it could be because of an id conflict. It's safer
+if things don't respond in the way they should, it could be because of an id conflict. It is safer
 to supply window ids at all times. Automatic generation of identifiers starts at 1 so may well conflict
 with your own identifiers.
 
@@ -328,7 +328,7 @@ called via \helpref{wxWindow::Close}{wxwindowclose}.}
 \twocolitem{\helpref{wxDropFilesEvent}{wxdropfilesevent}}{The EVT\_DROP\_FILES macros handles
 file drop events.}
 \twocolitem{\helpref{wxEraseEvent}{wxeraseevent}}{The EVT\_ERASE\_BACKGROUND macro is used to handle window erase requests.}
-\twocolitem{\helpref{wxFocusEvent}{wxfocusevent}}{The EVT\_SET\_FOCUS and EVT\_KILL\_FOCUS macros are used to handle keybaord focus events.}
+\twocolitem{\helpref{wxFocusEvent}{wxfocusevent}}{The EVT\_SET\_FOCUS and EVT\_KILL\_FOCUS macros are used to handle keyboard focus events.}
 \twocolitem{\helpref{wxKeyEvent}{wxkeyevent}}{EVT\_CHAR and EVT\_CHAR\_HOOK macros handle keyboard
 input for any window.}
 \twocolitem{\helpref{wxIdleEvent}{wxidleevent}}{The EVT\_IDLE macro handle application idle events
@@ -341,7 +341,7 @@ to handle dialog initialisation.}
 mouse events or all mouse events.}
 \twocolitem{\helpref{wxMoveEvent}{wxmoveevent}}{The EVT\_MOVE macro is used to handle a window move.}
 \twocolitem{\helpref{wxPaintEvent}{wxpaintevent}}{The EVT\_PAINT macro is used to handle window paint requests.}
-\twocolitem{\helpref{wxScrollEvent}{wxscrollevent}}{These macros are used to handle scroll events from
+\twocolitem{\helpref{wxScrollEvent}{wxscrollevent}}{These macros are used to handle scroll events from 
 \helpref{wxScrollBar}{wxscrollbar}, \helpref{wxSlider}{wxslider},and \helpref{wxSpinButton}{wxspinbutton}.}
 \twocolitem{\helpref{wxSizeEvent}{wxsizeevent}}{The EVT\_SIZE macro is used to handle a window resize.}
 \twocolitem{\helpref{wxSplitterEvent}{wxsplitterevent}}{The EVT\_SPLITTER\_SASH\_POS\_CHANGED, EVT\_SPLITTER\_UNSPLIT

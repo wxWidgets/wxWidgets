@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include "wx/setup.h"
 #include "wx/radiobut.h"
+#include "wx/settings.h"
 #include "wx/brush.h"
 #endif
 
@@ -38,6 +39,7 @@ bool wxRadioButton::MSWCommand(WXUINT param, WXWORD id)
   {
     wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId);
     event.SetEventObject( this );
+    event.SetInt( GetValue() );
     ProcessCommand(event);
     return TRUE;
   }
@@ -78,7 +80,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     groupStyle = WS_GROUP;
 
 //  long msStyle = groupStyle | RADIO_FLAGS;
-  long msStyle = groupStyle | BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE ;
+  long msStyle = groupStyle | BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE /* | WS_CLIPSIBLINGS */;
 
   bool want3D;
   WXDWORD exStyle = Determine3DEffects(0, &want3D) ;
@@ -163,6 +165,37 @@ void wxRadioButton::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
+WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+#if wxUSE_CTL3D
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
+
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
+
+    wxColour colBack = GetBackgroundColour();
+
+    if (!IsEnabled())
+        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+
+    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+    return (WXHBRUSH)brush->GetResourceHandle();
+}
 
 // Not implemented
 #if 0

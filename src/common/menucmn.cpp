@@ -346,10 +346,10 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
 {
     if ( !source && GetInvokingWindow() )
         source = GetInvokingWindow()->GetEventHandler();
+
+    wxEvtHandler *self = GetEventHandler();
     if ( !source )
-        source = GetEventHandler();
-    if ( !source )
-        source = this;
+        source = self;
 
     wxMenuItemList::Node* node = GetMenuItems().GetFirst();
     while ( node )
@@ -361,7 +361,16 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
             wxUpdateUIEvent event(id);
             event.SetEventObject( source );
 
-            if ( source->ProcessEvent(event) )
+            // let the invoking window process the event and fall back to the
+            // menu itself if it didn't
+            bool processed = source->ProcessEvent(event);
+            if ( !processed && source != self )
+            {
+                event.SetEventObject( self );
+                processed = self->ProcessEvent(event);
+            }
+
+            if ( processed )
             {
                 // if anything changed, update the chanegd attribute
                 if (event.GetSetText())

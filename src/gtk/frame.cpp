@@ -126,7 +126,6 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
 
         win->m_width = alloc->width;
         win->m_height = alloc->height;
-        win->m_queuedFullRedraw = TRUE;
         win->GtkUpdateSize();
     }
 }
@@ -216,7 +215,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
 
     if (!win->m_hasVMT)
         return FALSE;
-    
+
 #if (GTK_MINOR_VERSION > 0)
     int x = 0;
     int y = 0;
@@ -243,7 +242,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
    so we do this directly after realization */
 
 static gint
-gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
+gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -283,7 +282,7 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
            func |= GDK_FUNC_RESIZE;
            decor |= GDK_DECOR_RESIZEH;
         }
-        
+
         gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
         gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
     }
@@ -319,6 +318,33 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
     }
 
     return FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "expose_event" of m_client
+//-----------------------------------------------------------------------------
+
+static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxWindow *win )
+{
+    GtkPizza *pizza = GTK_PIZZA(widget);
+
+    gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+		GTK_SHADOW_NONE, &gdk_event->area, win->m_widget, "base", 0, 0, -1, -1);
+        
+    return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// "draw" of m_client
+//-----------------------------------------------------------------------------
+
+
+static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxWindow *win )
+{
+    GtkPizza *pizza = GTK_PIZZA(widget);
+
+    gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
+		GTK_SHADOW_NONE, rect, win->m_widget, "base", 0, 0, -1, -1);
 }
 
 // ----------------------------------------------------------------------------
@@ -394,21 +420,32 @@ void wxFrame::Init()
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
     m_insertInClientArea = TRUE;
-    m_isFrame = FALSE;
+    m_isFrame = TRUE;
 }
 
 bool wxFrame::Create( wxWindow *parent,
                       wxWindowID id,
-                      const wxString &title,
-                      const wxPoint &pos,
-                      const wxSize &size,
+                      const wxString& title,
+                      const wxPoint& pos,
+                      const wxSize& sizeOrig,
                       long style,
                       const wxString &name )
 {
+    // always create a frame of some reasonable, even if arbitrary, size (at
+    // least for MSW compatibility)
+    wxSize size = sizeOrig;
+    if ( size.x == -1 || size.y == -1 )
+    {
+        wxSize sizeDpy = wxGetDisplaySize();
+        if ( size.x == -1 )
+            size.x = sizeDpy.x / 3;
+        if ( size.y == -1 )
+            size.y = sizeDpy.y / 5;
+    }
+
     wxTopLevelWindows.Append( this );
 
     m_needParent = FALSE;
-    m_isFrame = TRUE;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -447,6 +484,13 @@ bool wxFrame::Create( wxWindow *parent,
     GTK_WIDGET_UNSET_FLAGS( m_mainWidget, GTK_CAN_FOCUS );
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
 
+
+    /* for m_mainWidget themes */
+    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",
+                GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "draw",
+                GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
+                
 #ifdef __WXDEBUG__
     debug_focus_in( m_mainWidget, wxT("wxFrame::m_mainWidget"), name );
 #endif
@@ -475,7 +519,7 @@ bool wxFrame::Create( wxWindow *parent,
     if ((m_x != -1) || (m_y != -1))
         gtk_widget_set_uposition( m_widget, m_x, m_y );
     gtk_widget_set_usize( m_widget, m_width, m_height );
-        
+
     /*  we cannot set MWM hints and icons before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
@@ -535,7 +579,7 @@ void wxFrame::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width)
 {
     wxFAIL_MSG( wxT("DoMoveWindow called for wxFrame") );
 }
-    
+
 void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
@@ -738,23 +782,22 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
-    
-    /* set size hints */
-    gint flag = 0; // GDK_HINT_POS;
-    if ((m_minWidth != -1) || (m_minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
-    if ((m_maxWidth != -1) || (m_maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
-    GdkGeometry geom;
-    geom.min_width = m_minWidth;
-    geom.min_height = m_minHeight;
-    geom.max_width = m_maxWidth;
-    geom.max_height = m_maxHeight;
-    gtk_window_set_geometry_hints( GTK_WINDOW(m_widget), 
-                                   (GtkWidget*) NULL,
-                                   &geom,
-                                   (GdkWindowHints) flag );
 
     if (m_mainWidget)
     {
+        /* set size hints */
+        gint flag = 0; // GDK_HINT_POS;
+        if ((m_minWidth != -1) || (m_minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
+        if ((m_maxWidth != -1) || (m_maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
+        GdkGeometry geom;
+        geom.min_width = m_minWidth;
+        geom.min_height = m_minHeight;
+        geom.max_width = m_maxWidth;
+        geom.max_height = m_maxHeight;
+        gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
+                                       (GtkWidget*) NULL,
+                                       &geom,
+                                       (GdkWindowHints) flag );
 
         /* I revert back to wxGTK's original behaviour. m_mainWidget holds the
          * menubar, the toolbar and the client area, which is represented by
@@ -926,7 +969,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
             gtk_signal_disconnect_by_func( GTK_OBJECT(m_frameMenuBar->m_widget),
                 GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
         }
-        
+
         gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );
         gtk_widget_ref( m_frameMenuBar->m_widget );
         gtk_widget_unparent( m_frameMenuBar->m_widget );
@@ -970,9 +1013,6 @@ wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& na
     m_insertInClientArea = FALSE;
 
     m_frameToolBar = wxFrameBase::CreateToolBar( style, id, name );
-
-    if (m_frameToolBar)
-        GetChildren().DeleteObject( m_frameToolBar );
 
     m_insertInClientArea = TRUE;
 

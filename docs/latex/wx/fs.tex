@@ -2,36 +2,37 @@
 
 The wxHTML library uses a {\bf virtual file systems} mechanism
 similar to the one used in Midnight Commander, Dos Navigator,
-FAR or almost any modern file manager. (Do you remember? You can
-press enter on ZIP file and its contents is displayed as if it
-were a local directory...)
+FAR or almost any modern file manager. It allows the user to access
+data stored in archives as if they were ordinary files. On-the-fly
+generated files that exist only in memory are also supported.
 
 \wxheading{Classes}
 
-Three classes are used in order to provide full VFS:
+Three classes are used in order to provide virtual file systems mechanism:
 
 \begin{itemize}\itemsep=0pt
 \item The \helpref{wxFSFile}{wxfsfile} class provides information
-on opened file (name, input stream, mime type and anchor).
+about opened file (name, input stream, mime type and anchor).
 \item The \helpref{wxFileSystem}{wxfilesystem} class is the interface.
 Its main methods are ChangePathTo() and OpenFile(). This class
 is most often used by the end user.
 \item The \helpref{wxFileSystemHandler}{wxfilesystemhandler} is the core
-if VFS mechanism. You can derive your own handler and pass it to
+of virtual file systems mechanism. You can derive your own handler and pass it to
+of the VFS mechanism. You can derive your own handler and pass it to
 wxFileSystem's AddHandler() method. In the new handler you only need to
-overwrite OpenFile() and CanOpen() methods.
+override the OpenFile() and CanOpen() methods.
 \end{itemize}
 
 \wxheading{Locations}
 
-Locations (aka filenames aka addresses) are constructed from 4 parts:
+Locations (aka filenames aka addresses) are constructed from four parts:
 
 \begin{itemize}\itemsep=0pt
 \item {\bf protocol} - handler can recognize if it is able to open a
 file by checking its protocol. Examples are "http", "file" or "ftp".
 \item {\bf right location} - is the name of file within the protocol.
 In "http://www.wxwindows.org/index.html" the right location is "//www.wxwindows.org/index.html".
-\item {\bf anchor} - anchor is optional and is usually not present.
+\item {\bf anchor} - an anchor is optional and is usually not present.
 In "index.htm\#chapter2" the anchor is "chapter2".
 \item {\bf left location} - this is usually an empty string. 
 It is used by 'local' protocols such as ZIP.
@@ -40,33 +41,37 @@ See Combined Protocols paragraph for details.
 
 \wxheading{Combined Protocols}
 
-Left location pretends protocol in URL string. 
-It's not used by global protocols like HTTP but it's used
-by local ones - for example you can see this address:
+The left location precedes the protocol in the URL string. 
+It is not used by global protocols like HTTP but it becomes handy when nesting
+protocols - for example you may want to access files in ZIP archive that is
+located on some FTP server:
+
+ftp:ftp.archives.org/pub/cpp\_doc.zip\#zip:reference/fopen.htm\#syntax
+
+In fact, you have to use 'left location' even when accessing local ZIPs:
 
 file:archives/cpp\_doc.zip\#zip:reference/fopen.htm\#syntax
 
-In this example, protocol is "zip", left location is
-"reference/fopen.htm", anchor is "syntax" and right location
-is "file:archives/cpp\_doc.zip". It is used by zip handler
-to determine in what file this particular zip VFS is stored.
+In this example, the protocol is "zip", the left location is
+"reference/fopen.htm", the anchor is "syntax" and the right location
+is "file:archives/cpp\_doc.zip". 
 
-In fact there are two protocols used in this example: zip and file.
+There are {\bf two} protocols used in this example: "zip" and "file".
 You can construct even more complicated addresses like this one:
 
 http://www.archives.org/myarchive.zip\#zip:local/docs/cpp/stdio.zip\#zip:index.htm
 
-In this example you access zip VFS stdio.zip stored in another zip (myarchive.zip)
-which is at WWW.
+In this example you access zip virtual file system stdio.zip stored in another zip (myarchive.zip)
+which can be found at WWW.
 
 \wxheading{File Systems Included in wxHTML}
 
-Following VFS handlers are part of wxWindows so far:
+The following virtual file system handlers are part of wxWindows so far:
 
 \begin{twocollist}
-\twocolitem{{\bf wxInternetFSHandler}}{Handler for accessing documents
+\twocolitem{{\bf wxInternetFSHandler}}{A handler for accessing documents
 via HTTP or FTP protocols. Include file is <wx/fs_inet.h>.}
-\twocolitem{{\bf wxZipFSHandler}}{Handler for ZIP archives. 
+\twocolitem{{\bf wxZipFSHandler}}{A handler for ZIP archives. 
 Include file is <wx/fs_zip.h>. URL is in form "archive.zip\#zip:filename".}
 \twocolitem{{\bf wxMemoryFSHandler}}{This handler allows you to access 
 data stored in memory (such as bitmaps) as if they were regular files.
@@ -75,8 +80,10 @@ Include file is <wx/fs_mem.h>. UURL is prefixed with memory:, e.g.
 "memory:myfile.htm"}
 \end{twocollist}
 
-In addition, wxFileSystem can access local files.
+In addition, wxFileSystem itself can access local files.
 
+
+\wxheading{Initializing file system handlers}
 
 Use \helpref{wxFileSystem::AddHandler}{wxfilesystemaddhandler} to initialize
 a handler, for example:
@@ -90,7 +97,6 @@ bool MyApp::OnInit()
 {
     wxFileSystem::AddHandler(new wxMemoryFSHandler);
 ...
+}
 \end{verbatim}
-
-
 

@@ -592,11 +592,11 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     wxRect clientRect = GetAvailableClientSize();
     pPage->SetSize(clientRect.x, clientRect.y, clientRect.width, clientRect.height);
 
+    Refresh();
+
     pPage->Show(TRUE);
     pPage->Raise();
     pPage->SetFocus();
-
-    Refresh();
 
     m_nSelection = nSel;
 }

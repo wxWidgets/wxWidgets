@@ -96,7 +96,7 @@ bool wxYield()
     if (has_idle)
     {
         /* re-add idle handler (very low priority) */
-        wxTheApp->m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
+        wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
     }
 
     // disable log flushing from here because a call to wxYield() shouldn't
@@ -179,15 +179,21 @@ void wxapp_install_idle_handler()
        to the main thread (and processing these in
        idle time). Very low priority. */
 
-    wxTheApp->m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
+    wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
 
     g_isIdle = FALSE;
 }
 
 #if wxUSE_THREADS
 
+static int g_threadUninstallLevel = 0;
+
 void wxapp_install_thread_wakeup()
 {
+    g_threadUninstallLevel++;
+    
+    if (g_threadUninstallLevel != 1) return;
+
     if (wxTheApp->m_wakeUpTimerTag) return;
 
     wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 50, wxapp_wakeup_timerout_callback, (gpointer) NULL );
@@ -195,6 +201,10 @@ void wxapp_install_thread_wakeup()
 
 void wxapp_uninstall_thread_wakeup()
 {
+    g_threadUninstallLevel--;
+    
+    if (g_threadUninstallLevel != 0) return;
+
     if (!wxTheApp->m_wakeUpTimerTag) return;
 
     gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
@@ -250,7 +260,7 @@ wxApp::wxApp()
     m_topWindow = (wxWindow *) NULL;
     m_exitOnFrameDelete = TRUE;
 
-    m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
+    m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
 
 #if wxUSE_THREADS
     m_wakeUpTimerTag = 0;
@@ -415,7 +425,7 @@ bool wxApp::SendIdleEvents( wxWindow* win )
     wxIdleEvent event;
     event.SetEventObject(win);
 
-    win->ProcessEvent(event);
+    win->GetEventHandler()->ProcessEvent(event);
 
     win->OnInternalIdle();
 

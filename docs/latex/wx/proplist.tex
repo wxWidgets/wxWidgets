@@ -333,7 +333,7 @@ one property, and there is no provision for invoking further dialogs. The reader
 may like to work out how the form view could be extended to provide some of the
 functionality of the property list!
 
-Validator objects may be associated explictly with a wxProperty, or they may be
+Validator objects may be associated explicitly with a wxProperty, or they may be
 indirectly associated by virtue of a property `kind' that matches validators having
 that kind. In the latter case, such validators are stored in a validator registry
 which is passed to the view before the dialog is shown. If the validator takes
@@ -453,7 +453,7 @@ example, in Visual Basic and similar programming environments, you can
 `edit a button', or rather, edit the button's properties.  One of the
 properties you can edit is {\it width} - but there is no explicit
 representation of width in a wxWindows button; instead, you call SetSize
-and GetSize members. To translate this into a consisent,
+and GetSize members. To translate this into a consistent,
 property-oriented scheme, we could derive a new class
 wxButtonWithProperties, which has two new functions: SetProperty and
 GetProperty.  SetProperty accepts a property name and a value, and calls

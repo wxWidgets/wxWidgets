@@ -63,20 +63,20 @@ wxChar wxTextInputStream::NextNonSeparators()
 
 }
 
-inline bool wxTextInputStream::EatEOL(const wxChar &c)
+bool wxTextInputStream::EatEOL(const wxChar &c)
 {
-  if (c == wxT('\n')) return TRUE; // eat on UNIX
+    if (c == wxT('\n')) return TRUE; // eat on UNIX
 
-  if (c == wxT('\r')) // eat on both Mac and DOS
+    if (c == wxT('\r')) // eat on both Mac and DOS
     {
-      if (!m_input) return TRUE;
-      wxChar c2 = m_input.GetC();
+        if (!m_input) return TRUE;
+        wxChar c2 = m_input.GetC();
 
-      if (c2 != wxT('\n'))  m_input.Ungetch( c2 ); // Don't eat on Mac
-      return TRUE;
+        if (c2 != wxT('\n'))  m_input.Ungetch( c2 ); // Don't eat on Mac
+        return TRUE;
     }
 
-  return FALSE;
+    return FALSE;
 }
 
 void wxTextInputStream::SkipIfEndOfLine( wxChar c )
@@ -143,12 +143,16 @@ wxUint8 wxTextInputStream::Read8()
 
 double wxTextInputStream::ReadDouble()
 {
-    /* I only implemented a simple float parser */
-    // VZ: what about using strtod()?? (TODO)
-    double f;
-    int sign;
+    /* I only implemented a simple float parser
+     * VZ: what about using strtod()?? (TODO)
+     */
 
-    if (!m_input) return 0;
+    double f;
+    int theSign;
+
+    if (!m_input)
+        return 0;
+
     int c = NextNonSeparators();
     if (c==(wxChar)0) return 0;
 
@@ -156,22 +160,22 @@ double wxTextInputStream::ReadDouble()
     if (! (c == wxT('.') || c == wxT(',') || c == wxT('-') || c == wxT('+') || isdigit(c)) )
     {
         m_input.Ungetch(c);
-        return 0.0;
+        return 0;
     }
 
     if (c == wxT('-'))
     {
-        sign = -1;
+        theSign = -1;
         c = m_input.GetC();
     } else
     if (c == wxT('+'))
     {
-        sign = 1;
+        theSign = 1;
         c = m_input.GetC();
     }
     else
     {
-        sign = 1;
+        theSign = 1;
     }
 
     while (isdigit(c))
@@ -219,8 +223,7 @@ double wxTextInputStream::ReadDouble()
         m_input.Ungetch(c);
     }
 
-    f *= sign;
-
+    f *= theSign;
     return f;
 }
 
@@ -237,6 +240,7 @@ wxString wxTextInputStream::ReadLine()
     while ( !m_input.Eof() )
     {
         c = m_input.GetC();
+        
         if ( !m_input )
             break;
 
@@ -260,8 +264,15 @@ wxString wxTextInputStream::ReadWord()
     if ( !c )
         return word;
 
+    word += c;
+    
     while ( !m_input.Eof() )
     {
+        c = m_input.GetC();
+        
+        if (!m_input)
+            break;
+            
         if (m_separators.Contains(c))
             break;
 
@@ -269,10 +280,6 @@ wxString wxTextInputStream::ReadWord()
             break;
 
         word += c;
-
-        c = m_input.GetC();
-        if (!m_input)
-            break;
     }
 
     return word;
@@ -284,17 +291,19 @@ wxTextInputStream& wxTextInputStream::operator>>(wxString& word)
     return *this;
 }
 
-wxTextInputStream& wxTextInputStream::operator>>(wxChar& c)
+wxTextInputStream& wxTextInputStream::operator>>(char& c)
 {
     if (!m_input)
     {
-        c = (wxChar) 0;
+        c = 0;
         return *this;
     }
 
     c = m_input.GetC();
 
-    if (EatEOL(c)) c=wxT('\n');
+    if (EatEOL(c))
+        c = '\n';
+
     return *this;
 }
 
@@ -444,9 +453,14 @@ wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
     return *this;
 }
 
-wxTextOutputStream& wxTextOutputStream::operator<<(wxChar c)
+wxTextOutputStream& wxTextOutputStream::operator<<(char c)
 {
-    WriteString( wxString(c) );
+    // these strange manipulations are needed in Unicode mode
+    char buf[2];
+    buf[0] = c;
+    buf[1] = 0;
+
+    WriteString( wxString(buf) );
     return *this;
 }
 

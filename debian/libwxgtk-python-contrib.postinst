@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+WXPYTHONDIR="/usr/lib/=PY/site-packages/wxPython"
+
+if [ "$1" = "configure" ]; then
+	python /usr/lib/=PY/compileall.py -q ${WXPYTHONDIR}
+	python -O /usr/lib/=PY/compileall.py -q ${WXPYTHONDIR}
+fi
+
+#DEBHELPER#
+

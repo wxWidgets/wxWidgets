@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+PACKAGE="libwxgtk=V-python-contrib"
+
+dpkg --listfiles $PACKAGE |
+	awk '$0~/\.py$/ {print $0"c\n" $0"o"}' |
+	xargs rm -f >&2
+
+
+#DEBHELPER#
+

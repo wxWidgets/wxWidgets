@@ -48,6 +48,11 @@ wxClassInfo wxObject::sm_classwxObject((wxChar *) wxT("wxObject"), (wxChar *) NU
 wxClassInfo* wxClassInfo::sm_first = (wxClassInfo *) NULL;
 wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
 
+// These are here so we can avoid 'always true/false' warnings
+// by referring to these instead of TRUE/FALSE
+const bool wxTrue = TRUE;
+const bool wxFalse = FALSE;
+
 /*
  * wxWindows root object.
  */
@@ -129,7 +134,7 @@ void wxObject::operator delete (void * buf)
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-void wxObject::operator delete(void* pData, char* /* fileName */, int /* lineNum */)
+void wxObject::operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
     ::operator delete(pData);
 }
@@ -197,16 +202,6 @@ bool wxClassInfo::IsKindOf(wxClassInfo *info) const
     if (info == NULL)
         return FALSE;
 
-    // For some reason, when making/using a DLL, static data has to be included
-    // in both the DLL and the application. This can lead to duplicate
-    // wxClassInfo objects, so we have to test the name instead of the pointers.
-    // PROBABLY NO LONGER TRUE now I've done DLL creation right.
-    /*
-#if WXMAKINGDLL
-if (GetClassName() && info->GetClassName() && (wxStrcmp(GetClassName(), info->GetClassName()) == 0))
-return TRUE;
-#else
-     */
     if (this == info)
         return TRUE;
 
@@ -243,9 +238,7 @@ void wxClassInfo::InitializeClasses()
         if (info->m_className)
         {
             wxASSERT_MSG( ++nClass < nMaxClasses,
-                          _T("an infinite loop detected - have you used "
-                            "IMPLEMENT_DYNAMIC_CLASS() twice (may be by "
-                            "linking some object module(s) twice)?") );
+                          _T("an infinite loop detected - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some object module(s) twice)?") );
 
             sm_classTable->Put(info->m_className, (wxObject *)info);
         }
@@ -391,8 +384,3 @@ wxObjectRefData::wxObjectRefData(void) : m_count(1)
 wxObjectRefData::~wxObjectRefData()
 {
 }
-
-// These are here so we can avoid 'always true/false' warnings
-// by referring to these instead of TRUE/FALSE
-const bool wxTrue = TRUE;
-const bool wxFalse = FALSE;

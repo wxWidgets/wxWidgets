@@ -29,6 +29,16 @@ class WXDLLEXPORT wxDataObject;
 class WXDLLEXPORT wxWindow;
 
 // ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
+// this macro may be used instead for wxDropSource ctor arguments: it will use
+// the cursor 'name' from the resources under MSW, but will expand to
+// something else under GTK. If you don't use it, you will have to use #ifdef
+// in the application code.
+#define wxDROP_ICON(name)   wxCursor(#name)
+
+// ----------------------------------------------------------------------------
 // wxDropSource is used to start the drag-&-drop operation on associated
 // wxDataObject object. It's responsible for giving UI feedback while dragging.
 // ----------------------------------------------------------------------------
