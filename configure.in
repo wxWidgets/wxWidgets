@@ -392,7 +392,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_PROTOCOL_FTP=no
   DEFAULT_wxUSE_PROTOCOL_FILE=no
   DEFAULT_wxUSE_URL=no
-  
+
   DEFAULT_wxUSE_COMMONDLGS=no
   DEFAULT_wxUSE_CHOICEDLG=no
   DEFAULT_wxUSE_COLOURDLG=no
@@ -736,6 +736,13 @@ WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without depe
 
 WX_ARG_ENABLE(compat20,      [  --enable-compat20       enable wxWindows 2.0 compatibility], WXWIN_COMPATIBILITY_2)
 WX_ARG_ENABLE(compat22,      [  --disable-compat22      disable wxWindows 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
+
+AC_ARG_ENABLE(rpath,         [  --enable-rpath=DIR      output the rpath flag from wx-config], [wxRPATH_DIR="$enableval"])
+
+if test "$wxRPATH_DIR" != "" -a "$wxRPATH_DIR" != "disable"; then
+   WXCONFIG_RPATH="-Wl,-rpath -Wl,$wxRPATH_DIR"
+fi
+
 
 dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
@@ -1221,7 +1228,7 @@ dnl   make install path absolute (if not already); will fail with MSDOS paths
 case ${INSTALL} in
   /* ) # Absolute
      ;;
-  *)     
+  *)
      INSTALL=`pwd`/${INSTALL} ;;
 esac
 
@@ -1639,7 +1646,7 @@ PNG_INCLUDE=
 PNG_LINK=
 if test "$wxUSE_LIBPNG" != "no" ; then
     AC_DEFINE(wxUSE_LIBPNG)
-    
+
     if test "$wxUSE_MGL" = 1 -a "$wxUSE_LIBPNG" = "builtin" ; then
         AC_MSG_WARN([wxMGL doesn't work with builtin png library, will use MGL one instead])
         wxUSE_LIBPNG=sys
@@ -2482,7 +2489,7 @@ case "${host}" in
         dnl dynamic shared libraries (in order to embed the resources)
         if test "$wxUSE_MAC" = 1; then
             dnl the name of the resources file for wxMac
-            WX_RESOURCES_MACOSX_ASCII="lib${WX_LIBRARY}.r" 
+            WX_RESOURCES_MACOSX_ASCII="lib${WX_LIBRARY}.r"
             WX_RESOURCES_MACOSX_DATA="lib${WX_LIBRARY}.rsrc"
         fi
         ;;
@@ -4110,7 +4117,7 @@ fi
 
 if test "$wxUSE_UNICODE" = "yes" ; then
   AC_DEFINE(wxUSE_UNICODE)
-  
+
   if test "$wxUSE_MSW" != 1; then
       wxUSE_UNICODE_MSLU=no
   fi
@@ -4588,7 +4595,7 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
         else
             if test "$wxUSE_PM" = 1; then
                 AC_MSG_WARN([wxPopupWindow not yet supported under PM... disabled])
-            else 
+            else
                 AC_DEFINE(wxUSE_POPUPWIN)
 
                 USES_CONTROLS=1
@@ -4600,7 +4607,7 @@ fi
 if test "$wxUSE_TIPWINDOW" = "yes"; then
     if test "$wxUSE_PM" = 1; then
         AC_MSG_WARN([wxTipWindow not yet supported under PM... disabled])
-    else 
+    else
         AC_DEFINE(wxUSE_TIPWINDOW)
     fi
 fi
@@ -4973,6 +4980,7 @@ AC_SUBST(WXCONFIG_LIBS_GL)
 AC_SUBST(WXCONFIG_LIBS_STATIC)
 AC_SUBST(WXCONFIG_LIBS_STATIC_GL)
 AC_SUBST(WXCONFIG_INCLUDE)
+AC_SUBST(WXCONFIG_RPATH)
 
 dnl the list of files to compile/install
 AC_SUBST(ALL_OBJECTS)
