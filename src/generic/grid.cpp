@@ -2668,13 +2668,13 @@ void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
 
     // right hand border
     //
-    dc.DrawLine( m_colRights[col], m_rowBottoms[row] - m_rowHeights[row],
-                 m_colRights[col], m_rowBottoms[row] );
+    dc.DrawLine( m_colRights[col]-1, m_rowBottoms[row] - m_rowHeights[row],
+                 m_colRights[col]-1, m_rowBottoms[row]-1 );
 
     // bottom border
     //
-    dc.DrawLine( m_colRights[col] - m_colWidths[col], m_rowBottoms[row],
-                 m_colRights[col], m_rowBottoms[row] );
+    dc.DrawLine( m_colRights[col] - m_colWidths[col], m_rowBottoms[row]-1,
+                 m_colRights[col]-1, m_rowBottoms[row]-1 );
 }
 
 
@@ -2786,13 +2786,13 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
     int i;
     for ( i = 0; i < m_numRows; i++ )
     {
-        if ( m_rowBottoms[i] > bottom )
+        if ( m_rowBottoms[i]-1 > bottom )
         {
             break;
         }
-        else if ( m_rowBottoms[i] >= top )
+        else if ( m_rowBottoms[i]-1 >= top )
         {
-            dc.DrawLine( left, m_rowBottoms[i], right, m_rowBottoms[i] );
+            dc.DrawLine( left, m_rowBottoms[i]-1, right, m_rowBottoms[i]-1 );
         }
     }
 
@@ -2801,13 +2801,13 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
     //
     for ( i = 0; i < m_numCols; i++ )
     {
-        if ( m_colRights[i] > right )
+        if ( m_colRights[i]-1 > right )
         {
             break;
         }
-        else if ( m_colRights[i] >= left )
+        else if ( m_colRights[i]-1 >= left )
         {
-            dc.DrawLine( m_colRights[i], top, m_colRights[i], bottom );
+            dc.DrawLine( m_colRights[i]-1, top, m_colRights[i]-1, bottom );
         }
     }
 }
