@@ -811,7 +811,7 @@ wxInputStream& wxInputStream::Read(void *buf, size_t size)
             break;
         }
 
-        read = OnSysRead(buf, size);
+        read = OnSysRead(p, size);
         if ( !read )
         {
             // no more data available
