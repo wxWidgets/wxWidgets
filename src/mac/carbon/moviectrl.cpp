@@ -74,8 +74,6 @@ public:
             else
             {
                 Stop();
-                ::GoToBeginningOfMovie(m_movie);
-                wxASSERT( ::GetMoviesError() == noErr );
                 wxMovieEvent theEvent(wxEVT_MOVIE_FINISHED, m_parent->GetId());
                 m_parent->GetParent()->ProcessEvent(theEvent);
             }
@@ -247,12 +245,13 @@ bool wxMovieCtrl::Pause()
 bool wxMovieCtrl::Stop()
 {
     m_timer->SetPaused(false);
+    m_timer->Stop();
 
     ::StopMovie(m_movie);
     if(::GetMoviesError() != noErr)
         return false;
     
-    ::GoToBeginningOfMovie(m_movie);
+    ::GoToEndOfMovie(m_movie);
     return ::GetMoviesError() == noErr;
 }
 
@@ -272,7 +271,8 @@ bool wxMovieCtrl::SetPlaybackRate(double dRate)
 bool wxMovieCtrl::Seek(const wxTimeSpan& where)
 {
     TimeRecord theTimeRecord;
-    theTimeRecord.value.lo = ((size_t)where.GetMilliseconds().ToLong()) * 10;
+    memset(&theTimeRecord, 0, sizeof(TimeRecord));
+    theTimeRecord.value.lo = ((size_t)where.GetMilliseconds().ToLong());
     theTimeRecord.scale = ::GetMovieTimeScale(m_movie);
     theTimeRecord.base = ::GetMovieTimeBase(m_movie);
     ::SetMovieTime(m_movie, &theTimeRecord);
@@ -285,12 +285,12 @@ bool wxMovieCtrl::Seek(const wxTimeSpan& where)
 
 wxTimeSpan wxMovieCtrl::Tell()
 {
-    return (wxTimeSpan) ::GetMovieTime(m_movie, NULL);
+    return wxTimeSpan(0,0,0, ::GetMovieTime(m_movie, NULL));
 }
 
 wxTimeSpan wxMovieCtrl::Length()
 {
-    return (wxTimeSpan) ::GetMovieDuration(m_movie);
+    return wxTimeSpan(0,0,0, ::GetMovieDuration(m_movie));
 }
 
 #endif // wxUSE_DATETIME
@@ -298,10 +298,10 @@ wxTimeSpan wxMovieCtrl::Length()
 wxMovieCtrlState wxMovieCtrl::GetState()
 {
     if( m_timer->IsRunning() == true )
-        return wxMOVIECTRL_STOPPED;
+        return wxMOVIECTRL_PLAYING;
 
     if ( m_timer->GetPaused() == false )
-        return wxMOVIECTRL_PLAYING;
+        return wxMOVIECTRL_STOPPED;
     else
         return wxMOVIECTRL_PAUSED;
 }
