@@ -1,6 +1,7 @@
 /usr/include/wx/app.h
 /usr/include/wx/arrimpl.cpp
 /usr/include/wx/buffer.h
+/usr/include/wx/chkconf.h
 /usr/include/wx/cmdline.h
 /usr/include/wx/confbase.h
 /usr/include/wx/config.h
