@@ -430,17 +430,16 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     {
         /* Case 2) or 4). There is already an image in the gtkhbox. Let's find it */
 
-        GList *children = gtk_container_children(GTK_CONTAINER(nb_page->m_box));
-        for ( child = children; child; child = child->next )
+        GList *child = gtk_container_children(GTK_CONTAINER(nb_page->m_box));
+        while (child)
         {
             if (GTK_IS_PIXMAP(child->data))
             {
                 pixmapwid = GTK_WIDGET(child->data);
                 break;
             }
+            child = child->next;
         }
-
-        g_list_free(children);
 
         /* We should have the pixmap widget now */
         wxASSERT(pixmapwid != NULL);
@@ -649,10 +648,10 @@ bool wxNotebook::InsertPage( size_t position,
     /* set the label text */
     nb_page->m_text = text;
     if (nb_page->m_text.IsEmpty()) nb_page->m_text = wxT("");
-  
+
     nb_page->m_label = GTK_LABEL( gtk_label_new(wxGTK_CONV(nb_page->m_text)) );
     gtk_box_pack_end( GTK_BOX(nb_page->m_box), GTK_WIDGET(nb_page->m_label), FALSE, FALSE, m_padding );
-  
+
     /* show the label */
     gtk_widget_show( GTK_WIDGET(nb_page->m_label) );
     if (select && (m_pagesData.GetCount() > 1))
@@ -670,6 +669,81 @@ bool wxNotebook::InsertPage( size_t position,
       GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer)this );
 
     return TRUE;
+}
+
+// helper for HitTest(): check if the point lies inside the given widget which
+// is the child of the notebook whose position and border size are passed as
+// parameters
+static bool
+IsPointInsideWidget(const wxPoint& pt, GtkWidget *w,
+                    gint x, gint y, gint border = 0)
+{
+    return
+        (pt.x >= w->allocation.x - x - border) &&
+        (pt.x <= w->allocation.x - x + border + w->allocation.width) &&
+        (pt.y >= w->allocation.y - y - border) &&
+        (pt.y <= w->allocation.y - y + border + w->allocation.height);
+}
+
+int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
+{
+    const gint x = m_widget->allocation.x;
+    const gint y = m_widget->allocation.y;
+
+    const size_t count = GetPageCount();
+    for ( size_t i = 0; i < count; i++ )
+    {
+        wxGtkNotebookPage* nb_page = GetNotebookPage(i);
+        GtkWidget *box = nb_page->m_box;
+
+        // VZ: don't know how to find the border width in GTK+ 1.2
+#ifdef __WXGTK20__
+        const gint border = gtk_container_get_border_width(GTK_CONTAINER(box));
+#else // !GTK+ 2.x
+        const gint border = 0;
+#endif
+        if ( IsPointInsideWidget(pt, box, x, y, border) )
+        {
+            // ok, we're inside this tab -- now find out where, if needed
+            if ( flags )
+            {
+                GtkWidget *pixmap = NULL;
+
+                GList *children = gtk_container_children(GTK_CONTAINER(box));
+                for ( GList *child = children; child; child = child->next )
+                {
+                    if ( GTK_IS_PIXMAP(child->data) )
+                    {
+                        pixmap = GTK_WIDGET(child->data);
+                        break;
+                    }
+                }
+
+                if ( children )
+                    g_list_free(children);
+
+                if ( pixmap && IsPointInsideWidget(pt, pixmap, x, y) )
+                {
+                    *flags = wxNB_HITTEST_ONICON;
+                }
+                else if ( IsPointInsideWidget(pt, GTK_WIDGET(nb_page->m_label), x, y) )
+                {
+                    *flags = wxNB_HITTEST_ONLABEL;
+                }
+                else
+                {
+                    *flags = wxNB_HITTEST_ONITEM;
+                }
+            }
+
+            return i;
+        }
+    }
+
+    if ( flags )
+        *flags = wxNB_HITTEST_NOWHERE;
+
+    return wxNOT_FOUND;
 }
 
 void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)

@@ -76,6 +76,8 @@ public:
     // sets the size of the tabs (assumes all tabs are the same size)
   void SetTabSize(const wxSize& sz);
 
+  virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
+
   // operations
   // ----------
     // remove one page from the notebook
