@@ -87,7 +87,7 @@ class WXDLLEXPORT wxTextDataObject : public wxDataObject
 {
 public:
   // ctors
-  wxTextDataObject();
+  wxTextDataObject() { }
   wxTextDataObject(const wxString& strText) : m_strText(strText) { }
   void Init(const wxString& strText) { m_strText = strText; }
 
