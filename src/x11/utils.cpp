@@ -73,7 +73,7 @@ void wxFlushEvents()
 
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
-    wxASSERT_MSG(FALSE, "wxCheckForInterrupt not yet implemented.");
+    wxASSERT_MSG(FALSE, wxT("wxCheckForInterrupt not yet implemented."));
     return FALSE;
 }
 
@@ -605,8 +605,7 @@ wxString wxGetXEventName(XEvent& event)
 		"ClientMessage", "MappingNotify",                         // 33-34
 		"unknown(+)"};                                            // 35
 	    type = wxMin(35, type); type = wxMax(1, type);
-        wxString str(event_name[type]);
-        return str;
+        return wxString::FromAscii(event_name[type]);
 #endif
 }
 #endif

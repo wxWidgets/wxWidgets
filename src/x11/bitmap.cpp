@@ -366,7 +366,7 @@ bool wxBitmap::Create(void *data, wxBitmapType type,
     wxBitmapHandler *handler = FindHandler(type);
 
     if ( handler == NULL ) {
-        wxLogWarning("no data bitmap handler for type %ld defined.",
+        wxLogWarning(wxT("no data bitmap handler for type %ld defined."),
                      (long)type);
 
         return FALSE;
@@ -417,7 +417,7 @@ bool wxBitmap::Create(WXPixmap pixmap)
 
 bool wxBitmap::CreateFromXpm( const char **bits )
 {
-    wxCHECK_MSG( bits, FALSE, _T("NULL pointer in wxBitmap::CreateFromXpm") );
+    wxCHECK_MSG( bits, FALSE, wxT("NULL pointer in wxBitmap::CreateFromXpm") );
 
     return Create(bits, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
@@ -427,7 +427,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 #if wxUSE_NANOX
     if (!image.Ok())
     {
-        wxASSERT_MSG(image.Ok(), "Invalid wxImage passed to wxBitmap::CreateFromImage.");
+        wxASSERT_MSG(image.Ok(), wxT("Invalid wxImage passed to wxBitmap::CreateFromImage."));
         return FALSE;
     }
 
@@ -558,7 +558,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
     if (depth == 1)
     {
-        wxFAIL_MSG( "mono images later" );
+        wxFAIL_MSG( wxT("mono images later") );
     }
     else
     {
@@ -623,7 +623,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         int b_mask = image.GetMaskBlue();
 
         unsigned char* data = image.GetData();
-        wxASSERT_MSG( data, "No image data" );
+        wxASSERT_MSG( data, wxT("No image data") );
 
         unsigned char *colorCube =
             wxTheApp->GetVisualInfo(M_BMPDATA->m_display)->m_colorCube;
@@ -1320,8 +1320,8 @@ class wxXPMFileHandler : public wxBitmapHandler
 public:
     wxXPMFileHandler()
     {
-        m_name = "XPM file";
-        m_extension = "xpm";
+        m_name = wxT("XPM file");
+        m_extension = wxT("xpm");
         m_type = wxBITMAP_TYPE_XPM;
     };
 
@@ -1428,8 +1428,8 @@ class wxXPMDataHandler : public wxBitmapHandler
 public:
     wxXPMDataHandler()
     {
-        m_name = "XPM data";
-        m_extension = "xpm";
+        m_name = wxT("XPM data");
+        m_extension = wxT("xpm");
         m_type = wxBITMAP_TYPE_XPM_DATA;
     };
 
@@ -1529,8 +1529,8 @@ class WXDLLEXPORT wxXBMDataHandler: public wxBitmapHandler
 public:
     inline wxXBMDataHandler()
     {
-        m_name = "XBM data";
-        m_extension = "xbm";
+        m_name = wxT("XBM data");
+        m_extension = wxT("xbm");
         m_type = wxBITMAP_TYPE_XBM_DATA;
     };
 

@@ -1478,7 +1478,7 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
                                 wxCoord *descent, wxCoord *externalLeading,
                                 wxFont *font ) const
 {
-    wxCHECK_RET( Ok(), "invalid dc" );
+    wxCHECK_RET( Ok(), wxT("invalid dc") );
 
     if (string.IsEmpty())
     {
@@ -1516,7 +1516,7 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
     wxFont fontToUse = m_font;
     if (font) fontToUse = *font;
 
-    wxCHECK_RET( fontToUse.Ok(), "invalid font" );
+    wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
 
     XFontStruct *xfont = (XFontStruct*) fontToUse.GetFontStruct( m_scaleY, m_display );
 
@@ -1541,7 +1541,7 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
 
 wxCoord wxWindowDC::GetCharWidth() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid dc" );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid dc") );
     
 #if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( m_context );
@@ -1560,7 +1560,7 @@ wxCoord wxWindowDC::GetCharWidth() const
     
     return w;
 #else
-    wxCHECK_MSG( m_font.Ok(), 0, "invalid font" );
+    wxCHECK_MSG( m_font.Ok(), 0, wxT("invalid font") );
 
     XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
 
@@ -1577,7 +1577,7 @@ wxCoord wxWindowDC::GetCharWidth() const
 
 wxCoord wxWindowDC::GetCharHeight() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid dc" );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid dc") );
     
 #if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( m_context );
@@ -1597,7 +1597,7 @@ wxCoord wxWindowDC::GetCharHeight() const
     
     return h;
 #else
-    wxCHECK_MSG( m_font.Ok(), 0, "invalid font" );
+    wxCHECK_MSG( m_font.Ok(), 0, wxT("invalid font") );
 
     XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
 
@@ -1644,7 +1644,7 @@ void wxWindowDC::Clear()
 
 void wxWindowDC::SetFont( const wxFont &font )
 {
-    wxCHECK_RET( Ok(), "invalid dc" );
+    wxCHECK_RET( Ok(), wxT("invalid dc") );
 
     m_font = font;
 }
@@ -1868,7 +1868,7 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
 
 void wxWindowDC::SetLogicalFunction( int function )
 {
-    wxCHECK_RET( Ok(), "invalid dc" );
+    wxCHECK_RET( Ok(), wxT("invalid dc") );
 
     int x_function;
 

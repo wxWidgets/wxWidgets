@@ -789,7 +789,7 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
 
 Window wxGetWindowParent(Window window)
 {
-    wxASSERT_MSG( window, "invalid window" );
+    wxASSERT_MSG( window, _T("invalid window") );
 
     return (Window) 0;
 

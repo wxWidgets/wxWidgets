@@ -73,12 +73,12 @@ wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win,
     wxGLCanvas *gc = (wxGLCanvas*) win;
     XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
     
-    wxCHECK_RET( vi, "invalid visual for OpenGl" );
+    wxCHECK_RET( vi, wxT("invalid visual for OpenGL") );
     
     m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi,
                                     None, GL_TRUE);
   
-    wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
+    wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGL context") );
 }
 
 wxGLContext::wxGLContext( 
@@ -93,7 +93,7 @@ wxGLContext::wxGLContext(
     wxGLCanvas *gc = (wxGLCanvas*) win;
     XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
     
-    wxCHECK_RET( vi, "invalid visual for OpenGl" );
+    wxCHECK_RET( vi, wxT("invalid visual for OpenGL") );
     
     if( other != 0 )
         m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi, 
@@ -102,7 +102,7 @@ wxGLContext::wxGLContext(
         m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi,
                                         None, GL_TRUE );
     
-    wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
+    wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGL context") );
 }
 
 wxGLContext::~wxGLContext()
@@ -136,7 +136,7 @@ void wxGLContext::SetCurrent()
     }
 }
 
-void wxGLContext::SetColour(const char *colour)
+void wxGLContext::SetColour(const wxChar *colour)
 {
     wxColour *the_colour = wxTheColourDatabase->FindColour(colour);
     if(the_colour) {
@@ -155,7 +155,7 @@ void wxGLContext::SetColour(const char *colour)
 	    GLint pix = (GLint)the_colour->GetPixel();
 	    if(pix == -1)
             {
-                wxLogError("wxGLCanvas: cannot allocate color\n");
+                wxLogError(wxT("wxGLCanvas: cannot allocate color\n"));
 		return;
             }
 	    glIndexi(pix);
@@ -255,7 +255,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     // Check for the presence of the GLX extension
     if(!glXQueryExtension(display, NULL, NULL)) {
-	wxLogDebug("wxGLCanvas: GLX extension is missing\n");
+	wxLogDebug(wxT("wxGLCanvas: GLX extension is missing\n"));
 	return FALSE;
     }
 
@@ -350,7 +350,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     m_vi = vi;  // safe for later use
     
-    wxCHECK_MSG( m_vi, FALSE, "required visual couldn't be found" );
+    wxCHECK_MSG( m_vi, FALSE, wxT("required visual couldn't be found") );
 
     // Create the GLX context and make it current
 
@@ -395,7 +395,7 @@ void wxGLCanvas::SetCurrent()
     // if(glx_cx) glXMakeCurrent(display, (Window) GetClientAreaWindow(), glx_cx);
 }
 
-void wxGLCanvas::SetColour(const char *col)
+void wxGLCanvas::SetColour(const wxChar *col)
 {
     if( m_glContext ) m_glContext->SetColour(col);
 }

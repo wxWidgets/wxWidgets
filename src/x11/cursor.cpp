@@ -125,7 +125,7 @@ wxCursor::wxCursor(const char bits[], int width, int  height,
                    int hotSpotX, int hotSpotY,
                    const char maskBits[], wxColour *fg, wxColour *bg)
 {
-   wxFAIL_MSG( "wxCursor creation from bits not yet implemented" );
+   wxFAIL_MSG( wxT("wxCursor creation from bits not yet implemented") );
 }
 
 
@@ -137,7 +137,7 @@ wxCursor::wxCursor( const wxCursor &cursor )
 #if wxUSE_IMAGE
 wxCursor::wxCursor( const wxImage & image )
 {
-   wxFAIL_MSG( "wxCursor creation from wxImage not yet implemented" );
+   wxFAIL_MSG( wxT("wxCursor creation from wxImage not yet implemented") );
 }
 #endif
 

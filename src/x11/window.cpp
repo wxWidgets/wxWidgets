@@ -123,7 +123,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, "can't create wxWindow without parent" );
+    wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
 
     CreateBase(parent, id, pos, size, style, wxDefaultValidator, name);
 
@@ -471,7 +471,7 @@ void wxWindowX11::DoCaptureMouse()
 {
     if ((g_captureWindow != NULL) && (g_captureWindow != this))
     {
-        wxASSERT_MSG(FALSE, "Trying to capture before mouse released.");
+        wxASSERT_MSG(FALSE, wxT("Trying to capture before mouse released."));
 
         // Core dump now
         int *tmp = NULL;
@@ -989,7 +989,7 @@ void wxWindowX11::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW,
 
 int wxWindowX11::GetCharHeight() const
 {
-    wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
+    wxCHECK_MSG( m_font.Ok(), 0, wxT("valid window font needed") );
 
 #if wxUSE_UNICODE
     // There should be an easier way.
@@ -1016,7 +1016,7 @@ int wxWindowX11::GetCharHeight() const
 
 int wxWindowX11::GetCharWidth() const
 {
-    wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
+    wxCHECK_MSG( m_font.Ok(), 0, wxT("valid window font needed") );
 
 #if wxUSE_UNICODE
     // There should be an easier way.
@@ -1586,7 +1586,7 @@ bool wxWindowX11::SetForegroundColour(const wxColour& col)
 wxWindow *wxGetActiveWindow()
 {
     // TODO
-    wxFAIL_MSG("Not implemented");
+    wxFAIL_MSG(wxT("Not implemented"));
     return NULL;
 }
 
