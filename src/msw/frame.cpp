@@ -393,29 +393,14 @@ void wxFrame::PositionStatusBar()
     if ( !m_frameStatusBar )
         return;
 
-    // native status bar positions itself, but we must forward the WM_SIZE
-    // messages to it
-#if wxUSE_NATIVE_STATUSBAR
-    wxStatusBar95 *sb = wxDynamicCast(m_frameStatusBar, wxStatusBar95);
-    if ( sb )
-    {
-        wxSizeEvent event(GetSize(), sb->GetId());
-        event.SetEventObject(sb);
+    int w, h;
+    GetClientSize(&w, &h);
+    int sw, sh;
+    m_frameStatusBar->GetSize(&sw, &sh);
 
-        sb->GetEventHandler()->ProcessEvent(event);
-    }
-    else
-#endif // wxUSE_NATIVE_STATUSBAR
-    {
-        int w, h;
-        GetClientSize(&w, &h);
-        int sw, sh;
-        m_frameStatusBar->GetSize(&sw, &sh);
-
-        // Since we wish the status bar to be directly under the client area,
-        // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
-        m_frameStatusBar->SetSize(0, h, w, sh);
-    }
+    // Since we wish the status bar to be directly under the client area,
+    // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
+    m_frameStatusBar->SetSize(0, h, w, sh);
 }
 #endif // wxUSE_STATUSBAR
 

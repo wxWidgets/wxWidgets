@@ -58,14 +58,14 @@ public:
     virtual int GetBorderX() const;
     virtual int GetBorderY() const;
 
-    void OnSize(wxSizeEvent& event);
-
 protected:
     void CopyFieldsWidth(const int widths[]);
     void SetFieldsWidth();
 
+    // override base class virtual
+    void DoMoveWindow(int x, int y, int width, int height);
+
 private:
-    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxStatusBar95);
 };
 

@@ -103,14 +103,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     wxClientDC dc(this);
     dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
     long widthText;
-#if defined(__VISAGECPP__)
-// have two versions of this in wxWindowDC tp avoid function hiding
-// since there are two of these in wxDCBase, and in turn in wxDC.
-// VA cannot resolve this so:
     dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL);
-#else
-    dc.GetTextExtent(message, &widthText, (long*)NULL);
-#endif
 
     m_msg = new wxStaticText(this, -1, message);
     c = new wxLayoutConstraints;
@@ -218,14 +211,15 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     Centre(wxCENTER_FRAME | wxBOTH);
 
-    if ( !(style & wxPD_APP_MODAL) )
+    if ( style & wxPD_APP_MODAL )
     {
-        if ( m_parentTop )
-            m_parentTop->Enable(FALSE);
+        m_winDisabler = new wxWindowDisabler(this);
     }
     else
     {
-        wxEnableTopLevelWindows(FALSE);
+        if ( m_parentTop )
+            m_parentTop->Enable(FALSE);
+        m_winDisabler = NULL;
     }
 
     Show(TRUE);
@@ -389,14 +383,14 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
 
 wxProgressDialog::~wxProgressDialog()
 {
-    if ( !(GetWindowStyle() & wxPD_APP_MODAL) )
+    if ( GetWindowStyle() & wxPD_APP_MODAL )
     {
-        if ( m_parentTop )
-            m_parentTop->Enable(TRUE);
+        delete m_winDisabler;
     }
     else
     {
-        wxEnableTopLevelWindows(TRUE);
+        if ( m_parentTop )
+            m_parentTop->Enable(TRUE);
     }
 }
 

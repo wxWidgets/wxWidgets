@@ -235,24 +235,26 @@ wxDialog::~wxDialog()
 // By default, pressing escape cancels the dialog
 void wxDialog::OnCharHook(wxKeyEvent& event)
 {
-  if (GetHWND())
-  {
-    if (event.m_keyCode == WXK_ESCAPE)
+    if (GetHWND())
     {
-        // Behaviour changed in 2.0: we'll send a Cancel message
-        // to the dialog instead of Close.
-        wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-        cancelEvent.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(cancelEvent);
+        // "Esc" works as an accelerator for the "Cancel" button, but it
+        // shouldn't close the dialog which doesn't have any cancel button
+        if ( (event.m_keyCode == WXK_ESCAPE) && FindWindow(wxID_CANCEL) )
+        {
+            wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+            cancelEvent.SetEventObject( this );
+            GetEventHandler()->ProcessEvent(cancelEvent);
 
-        // ensure that there is another message for this window so the
-        // ShowModal loop will exit and won't get stuck in GetMessage().
-        ::PostMessage(GetHwnd(), WM_NULL, 0, 0);
-        return;
+            // ensure that there is another message for this window so the
+            // ShowModal loop will exit and won't get stuck in GetMessage().
+            ::PostMessage(GetHwnd(), WM_NULL, 0, 0);
+
+            return;
+        }
     }
-  }
-  // We didn't process this event.
-  event.Skip();
+
+    // We didn't process this event.
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

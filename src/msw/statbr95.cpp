@@ -47,10 +47,6 @@
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBar95, wxWindow);
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxStatusBar95)
 
-BEGIN_EVENT_TABLE(wxStatusBar95, wxWindow)
-    EVT_SIZE(wxStatusBar95::OnSize)
-END_EVENT_TABLE()
-
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -102,13 +98,15 @@ bool wxStatusBar95::Create(wxWindow *parent,
                            long style,
                            const wxString& name)
 {
+    wxCHECK_MSG( parent, FALSE, wxT("status bar must have a parent") );
+
     SetName(name);
+    SetWindowStyleFlag(style);
     SetParent(parent);
 
-    if (id == -1)
-        m_windowId = NewControlId();
-    else
-        m_windowId = id;
+    parent->AddChild(this);
+
+    m_windowId = id == -1 ? NewControlId() : id;
 
     DWORD wstyle = WS_CHILD | WS_VISIBLE;
     if ( style & wxST_SIZEGRIP )
@@ -125,12 +123,12 @@ bool wxStatusBar95::Create(wxWindow *parent,
         return FALSE;
     }
 
-    // for some reason, subclassing in the usual way doesn't work at all - many
-    // strange things start happening (status bar is not positioned correctly,
-    // all methods fail...)
+    // we can't subclass this window as usual because the status bar window
+    // proc processes WM_SIZE and WM_PAINT specially
     //  SubclassWin(m_hWnd);
 
-    // but we want to process the messages from it still, so must subclass it
+    // but we want to process the messages from it still, so do custom
+    // subclassing here
     gs_wndprocStatBar = (WXFARPROC)GetWindowLong(GetHwnd(), GWL_WNDPROC);
     SetWindowLong(GetHwnd(), GWL_WNDPROC, (LONG)wxStatusBarProc);
     SetWindowLong(GetHwnd(), GWL_USERDATA, (LONG)this);
@@ -301,11 +299,9 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
     return TRUE;
 }
 
-void wxStatusBar95::OnSize(wxSizeEvent& event)
+void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
 {
-  FORWARD_WM_SIZE(GetHwnd(), SIZE_RESTORED,
-                  event.GetSize().x, event.GetSize().y,
-                  SendMessage);
+  FORWARD_WM_SIZE(GetHwnd(), SIZE_RESTORED, x, y, SendMessage);
 
   // adjust fields widths to the new size
   SetFieldsWidth();

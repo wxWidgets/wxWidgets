@@ -952,7 +952,7 @@ int isascii( int c )
 #endif // __MWERKS__
 
 // ----------------------------------------------------------------------------
-// misc functions
+// wxSafeYield and supporting functions
 // ----------------------------------------------------------------------------
 
 void wxEnableTopLevelWindows(bool enable)
@@ -962,13 +962,18 @@ void wxEnableTopLevelWindows(bool enable)
         node->GetData()->Enable(enable);
 }
 
-static void wxFindDisabledWindows(wxWindowList& winDisabled, wxWindow *win)
+static void wxFindDisabledWindows(wxWindowList& winDisabled,
+                                  wxWindow *win,
+                                  wxWindow *winToSkip)
 {
     wxWindowList::Node *node;
     for ( node = win->GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
-        wxFindDisabledWindows(winDisabled, child);
+        if ( child == winToSkip )
+            continue;
+
+        wxFindDisabledWindows(winDisabled, child, winToSkip);
 
         if ( child->IsEnabled() )
         {
@@ -998,20 +1003,13 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *winTop = node->GetData();
-        if ( winTop->IsEnabled() )
+        if ( winTop != winToSkip && winTop->IsEnabled() )
         {
-            wxFindDisabledWindows(*m_winDisabled, winTop);
+            wxFindDisabledWindows(*m_winDisabled, winTop, winToSkip);
 
             m_winDisabled->Append(winTop);
             winTop->Disable();
         }
-    }
-
-    if ( winToSkip && m_winDisabled->Find(winToSkip) )
-    {
-        // always enable ourselves
-        m_winDisabled->DeleteObject(winToSkip);
-        winToSkip->Enable();
     }
 }
 
@@ -1059,6 +1057,10 @@ bool wxSafeYield(wxWindow *win)
 
     return rc;
 }
+
+// ----------------------------------------------------------------------------
+// misc functions
+// ----------------------------------------------------------------------------
 
 // Don't synthesize KeyUp events holding down a key and producing KeyDown
 // events with autorepeat. On by default and always on in wxMSW. wxGTK version

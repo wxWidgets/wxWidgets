@@ -537,9 +537,20 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 MyModelessDialog::MyModelessDialog(wxWindow *parent)
                 : wxDialog(parent, -1, wxString("Modeless dialog"))
 {
-    (void)new wxButton(this, DIALOGS_MODELESS_BTN, "Press me");
-    Fit();
-    Centre();
+    wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+
+    wxButton *btn = new wxButton(this, DIALOGS_MODELESS_BTN, "Press me");
+    wxCheckBox *check = new wxCheckBox(this, -1, "Should be disabled");
+    check->Disable();
+
+    sizerTop->Add(btn, 1, wxEXPAND | wxALL, 5);
+    sizerTop->Add(check, 1, wxEXPAND | wxALL, 5);
+
+    SetAutoLayout(TRUE);
+    SetSizer(sizerTop);
+
+    sizerTop->SetSizeHints(this);
+    sizerTop->Fit(this);
 }
 
 void MyModelessDialog::OnClose(wxCloseEvent& event)

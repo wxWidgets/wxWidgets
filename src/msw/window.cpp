@@ -365,6 +365,10 @@ bool wxWindow::Enable(bool enable)
     if ( hWnd )
         ::EnableWindow(hWnd, (BOOL)enable);
 
+    // VZ: no, this is a bad idea: imagine that you have a dialog with some
+    //     disabled controls and disable it - you really wouldn't like the
+    //     disabled controls eb reenabled too when you reenable the dialog!
+#if 0
     wxWindowList::Node *node = GetChildren().GetFirst();
     while ( node )
     {
@@ -373,6 +377,7 @@ bool wxWindow::Enable(bool enable)
 
         node = node->GetNext();
     }
+#endif // 0
 
     return TRUE;
 }

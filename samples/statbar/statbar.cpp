@@ -33,8 +33,7 @@
     #error "You need to set wxUSE_STATUSBAR to 1 to compile this sample"
 #endif // wxUSE_STATUSBAR
 
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
@@ -45,6 +44,7 @@
     #include "wx/menu.h"
     #include "wx/msgdlg.h"
     #include "wx/textdlg.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/datetime.h"
@@ -135,6 +135,13 @@ private:
 
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
+};
+
+// Our about dialog ith its status bar
+class MyAboutDialog : public wxDialog
+{
+public:
+    MyAboutDialog(wxWindow *parent);
 };
 
 // ----------------------------------------------------------------------------
@@ -346,8 +353,39 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("wxStatusBar sample\n(c) 2000 Vadim Zeitlin",
-                 "About statbar", wxOK | wxICON_INFORMATION, this);
+    MyAboutDialog dlg(this);
+    dlg.ShowModal();
+}
+
+// ----------------------------------------------------------------------------
+// MyAboutDialog
+// ----------------------------------------------------------------------------
+
+MyAboutDialog::MyAboutDialog(wxWindow *parent)
+             : wxDialog(parent, -1, wxString("About statbar"),
+                        wxDefaultPosition, wxDefaultSize,
+                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+{
+    wxStaticText *text = new wxStaticText(this, -1,
+                                          "wxStatusBar sample\n"
+                                          "(c) 2000 Vadim Zeitlin");
+
+    wxStatusBar *statbar = new wxStatusBar(this, -1);
+    statbar->SetFieldsCount(2);
+    statbar->SetStatusText("This is a status bar", 0);
+    statbar->SetStatusText("in a dialog", 1);
+
+    wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->Add(-1, 10, 1, wxGROW);
+    sizerTop->Add(text, 0, wxCENTRE);
+    sizerTop->Add(-1, 10, 1, wxGROW);
+    sizerTop->Add(statbar, 0, wxGROW);
+
+    SetAutoLayout(TRUE);
+    SetSizer(sizerTop);
+
+    sizerTop->Fit(this);
+    sizerTop->SetSizeHints(this);
 }
 
 // ----------------------------------------------------------------------------

@@ -97,10 +97,15 @@ private:
       Continue,            // can be cancelled but wasn't
       Finished             // finished, waiting to be removed from screen
    } m_state;
+
    // the abort button (or NULL if none)
    wxButton *m_btnAbort;
+
    // the maximum value
    int m_maximum;
+
+   // for wxPD_APP_MODAL case
+   class WXDLLEXPORT wxWindowDisabler *m_winDisabler;
 
    DECLARE_EVENT_TABLE()
 };
