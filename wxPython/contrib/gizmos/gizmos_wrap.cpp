@@ -5935,7 +5935,7 @@ static void *_p_wxScrollBarTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxControl *) ((wxScrollBar *) x));
 }
 static void *_p_wxComboBoxTo_p_wxWindow(void *x) {
-    return (void *)((wxWindow *) (wxControl *)(wxControlWithItems *)(wxChoice *) ((wxComboBox *) x));
+    return (void *)((wxWindow *) (wxControl *) ((wxComboBox *) x));
 }
 static void *_p_wxMiniFrameTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxTopLevelWindow *)(wxFrame *) ((wxMiniFrame *) x));
@@ -6073,7 +6073,7 @@ static void *_p_wxPyListCtrlTo_p_wxControl(void *x) {
     return (void *)((wxControl *)  ((wxPyListCtrl *) x));
 }
 static void *_p_wxComboBoxTo_p_wxControl(void *x) {
-    return (void *)((wxControl *) (wxControlWithItems *)(wxChoice *) ((wxComboBox *) x));
+    return (void *)((wxControl *)  ((wxComboBox *) x));
 }
 static void *_p_wxPyTreeListCtrlTo_p_wxControl(void *x) {
     return (void *)((wxControl *)  ((wxPyTreeListCtrl *) x));
@@ -6349,7 +6349,7 @@ static void *_p_wxStaticBitmapTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxControl *) ((wxStaticBitmap *) x));
 }
 static void *_p_wxComboBoxTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxControl *)(wxControlWithItems *)(wxChoice *) ((wxComboBox *) x));
+    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxControl *) ((wxComboBox *) x));
 }
 static void *_p_wxTaskBarIconTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *) ((wxTaskBarIcon *) x));
@@ -7012,7 +7012,7 @@ static void *_p_wxScrollBarTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *) ((wxScrollBar *) x));
 }
 static void *_p_wxComboBoxTo_p_wxEvtHandler(void *x) {
-    return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *)(wxControlWithItems *)(wxChoice *) ((wxComboBox *) x));
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *) ((wxComboBox *) x));
 }
 static void *_p_wxMiniFrameTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxFrame *) ((wxMiniFrame *) x));
