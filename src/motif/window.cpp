@@ -1448,7 +1448,7 @@ void wxWindow::GetTextExtent(const wxString& string,
 
     wxCHECK_RET( fontToUse->Ok(), "valid window font needed" );
     
-    WXFontStructPtr pFontStruct = theFont->GetFontStruct(1.0, GetXDisplay());
+    WXFontStructPtr pFontStruct = fontToUse->GetFontStruct(1.0, GetXDisplay());
 
     int direction, ascent, descent2;
     XCharStruct overall;
