@@ -25,6 +25,15 @@
 #endif
 
 /*
+ * GCC does not have SEH (__try/__catch)
+ */
+
+#if defined(__GNUG__)
+    #undef wxUSE_ON_FATAL_EXCEPTION
+    #define wxUSE_ON_FATAL_EXCEPTION 0
+#endif
+
+/*
  * wxUSE_DEBUG_NEW_ALWAYS doesn't work with CodeWarrior
  */
 

@@ -35,6 +35,8 @@
     #include "wx/list.h"
     #include "wx/log.h"
     #include "wx/msgdlg.h"
+    #include "wx/bitmap.h"
+    #include "wx/confbase.h"
 #endif
 
 #include "wx/apptrait.h"

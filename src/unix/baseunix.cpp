@@ -30,6 +30,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
+#include "wx/utils.h"
 #include "wx/unix/execute.h"
 
 // for waitpid()

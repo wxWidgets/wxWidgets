@@ -30,6 +30,7 @@
 
 #include "wx/event.h"
 #include "wx/app.h"
+#include "wx/init.h"
 #include "wx/cmdline.h"
 
 #include "wx/msw/private.h"

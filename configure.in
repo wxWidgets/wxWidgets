@@ -2102,7 +2102,7 @@ if test "$USE_WIN32" = 1 ; then
 
     dnl --- FIXME: This is still a somewhat random list of libs,
     dnl ---        some of them should probably be included conditionally.
-    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
+    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
 
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
         LIBS="$LIBS -loleacc"
@@ -2111,7 +2111,7 @@ if test "$USE_WIN32" = 1 ; then
     case "${host}" in
         *-*-cygwin* )
             dnl Cygwin doesn't include these by default
-            LIBS="$LIBS -lkernel32 -luser32 -lcomdlg32"
+            LIBS="$LIBS -lkernel32 -luser32"
             TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WIN95__"
     esac
 
