@@ -377,7 +377,6 @@ bool MyApp::OnInit()
                     "Clear the log window contents");
 
     // select only the interesting events by default
-#if 0
     menuLog->Check(TEXT_LOG_KEY, TRUE);
     menuLog->Check(TEXT_LOG_CHAR, TRUE);
     menuLog->Check(TEXT_LOG_TEXT, TRUE);
@@ -385,10 +384,6 @@ bool MyApp::OnInit()
     MyTextCtrl::ms_logKey =
     MyTextCtrl::ms_logChar =
     MyTextCtrl::ms_logText = TRUE;
-#else
-    menuLog->Check(TEXT_LOG_FOCUS, TRUE);
-    MyTextCtrl::ms_logFocus = TRUE;
-#endif
     menu_bar->Append(menuLog, "&Log");
 
     frame->SetMenuBar(menu_bar);
@@ -755,6 +750,10 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 
         case WXK_F7:
             ShowPosition(10);
+            break;
+
+        case WXK_F8:
+            Clear();
             break;
 
         case WXK_F10:
