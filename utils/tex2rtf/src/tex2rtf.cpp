@@ -432,12 +432,12 @@ int MyApp::OnExit()
     node = CustomMacroList.GetFirst();
   }
   MacroDefs.BeginFind();
-  node = MacroDefs.Next();
-  while (node)
+  wxHashTable::Node* mNode = MacroDefs.Next();
+  while (mNode)
   {
-    TexMacroDef* def = (TexMacroDef*) node->GetData();
+    TexMacroDef* def = (TexMacroDef*) mNode->GetData();
     delete def;
-    node = MacroDefs.Next();
+    mNode = MacroDefs.Next();
   }
   MacroDefs.Clear();
 #ifdef __WXMSW__

@@ -2056,22 +2056,22 @@ void TexCleanUp(void)
   }
 /**/
   TexReferences.BeginFind();
-  wxNode *node = TexReferences.Next();
-  while (node)
+  wxHashTable::Node *refNode = TexReferences.Next();
+  while (refNode)
   {
-    TexRef *ref = (TexRef *)node->GetData();
+    TexRef *ref = (TexRef *)refNode->GetData();
     delete ref;
-    node = TexReferences.Next();
+    refNode = TexReferences.Next();
   }
   TexReferences.Clear();
   
-  node = BibList.GetFirst();
-  while (node)
+  wxNode* bibNode = BibList.GetFirst();
+  while (bibNode)
   {
-    BibEntry *entry = (BibEntry *)node->GetData();
+    BibEntry *entry = (BibEntry *)bibNode->GetData();
     delete entry;
-    delete node;
-    node = BibList.GetFirst();
+    delete bibNode;
+    bibNode = BibList.GetFirst();
   }
   CitationList.Clear();
   ResetTopicCounter();

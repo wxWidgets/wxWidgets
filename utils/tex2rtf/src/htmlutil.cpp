@@ -3123,7 +3123,7 @@ void GenerateHTMLIndexFile(wxChar *fname)
     return;
 
   TopicTable.BeginFind();
-  wxNode *node = TopicTable.Next();
+  wxHashTable::Node *node = TopicTable.Next();
   while (node)
   {
     TexTopic *texTopic = (TexTopic *)node->GetData();
@@ -3223,7 +3223,7 @@ void GenerateHTMLWorkshopFiles(wxChar *fname)
       _T("<UL>\n"));
 
   TopicTable.BeginFind();
-  wxNode *node = TopicTable.Next();
+  wxHashTable::Node *node = TopicTable.Next();
   while (node)
   {
     TexTopic *texTopic = (TexTopic *)node->GetData();

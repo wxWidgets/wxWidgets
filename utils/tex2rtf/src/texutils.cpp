@@ -401,7 +401,7 @@ void WriteTexReferences(wxChar *filename)
   if (ostr.bad()) return;
   
   TexReferences.BeginFind();
-  wxNode *node = TexReferences.Next();
+  wxHashTable::Node *node = TexReferences.Next();
   while (node)
   {
     Tex2RTFYield();
@@ -1663,7 +1663,7 @@ void AddKeyWordForTopic(wxChar *topic, wxChar *entry, wxChar *filename)
 void ClearKeyWordTable(void)
 {
   TopicTable.BeginFind();
-  wxNode *node = TopicTable.Next();
+  wxHashTable::Node *node = TopicTable.Next();
   while (node)
   {
     TexTopic *texTopic = (TexTopic *)node->GetData();
