@@ -103,9 +103,7 @@ public:
     virtual bool PositionToXY(long pos, long *x, long *y) const;
 
     virtual void ShowPosition(long pos);
-    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
-                                            wxTextCoord *col,
-                                            wxTextCoord *row) const;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
 
     // Clipboard operations
     virtual void Copy();

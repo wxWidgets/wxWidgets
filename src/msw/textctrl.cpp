@@ -1361,7 +1361,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 }
 
 wxTextCtrlHitTestResult
-wxTextCtrl::HitTest(const wxPoint& pt, wxTextCoord *col, wxTextCoord *row) const
+wxTextCtrl::HitTest(const wxPoint& pt, long *posOut) const
 {
     // first get the position from Windows
     LPARAM lParam;
@@ -1440,11 +1440,8 @@ wxTextCtrl::HitTest(const wxPoint& pt, wxTextCoord *col, wxTextCoord *row) const
     else
         rc = wxTE_HT_ON_TEXT;
 
-    // finally translate to column/row
-    if ( !PositionToXY(pos, col, row) )
-    {
-        wxFAIL_MSG( _T("PositionToXY() not expected to fail in HitTest()") );
-    }
+    if ( posOut )
+        *posOut = pos;
 
     return rc;
 }
