@@ -19,6 +19,7 @@
 
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\b16\b/;
+        next if $wxCommon{$file} =~ /\bBO\b/;
 
         my $tag = $file =~ /\.c$/ ? "WXCSRCS" : "WXCOMMONSRCS";
         $project{$tag} .= $file . " "
@@ -29,7 +30,7 @@
 
         my $tag;
 	if ( $wxMSW{$file} =~ /\bO\b/ ) { $tag = "WXOLESRCS" }
-	else { $tag = $file =~ /\.c$/ ? "WXCSRCS" : "WXMSWSRCS" }
+	else { $tag = $file =~ /\.c$/ ? "WXMSWCSRCS" : "WXMSWSRCS" }
         $project{$tag} .= $file . " "
     }
 
@@ -132,6 +133,7 @@ SOURCE=.\src\msw\dummy.cpp
 #$ ExpandGlue("WXGENERICSRCS", "# Begin Source File\n\nSOURCE=.\\src\\generic\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\generic\\", "\n# End Source File\n");
 #$ ExpandGlue("WXCOMMONSRCS", "# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# End Source File\n");
 #$ ExpandGlue("WXCSRCS", "# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
+#$ ExpandGlue("WXMSWCSRCS", "# Begin Source File\n\nSOURCE=.\\src\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
 #$ ExpandGlue("WXHTMLSRCS", "# Begin Source File\n\nSOURCE=.\\src\\html\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\html\\", "\n# End Source File\n");
 
 # Begin Source File
