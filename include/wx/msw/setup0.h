@@ -1042,6 +1042,13 @@
 // Recommended setting: 1, set to 0 for a small library size reduction
 #define wxUSE_OWNER_DRAWN 1
 
+// Set to 1 to compile MS Windows XP theme engine support
+#define wxUSE_UXTHEME           1
+
+// Set to 1 to auto-adapt to MS Windows XP themes where possible
+// (notably, wxNotebook pages)
+#define wxUSE_UXTHEME_AUTO      1
+
 // ----------------------------------------------------------------------------
 // obsolete settings
 // ----------------------------------------------------------------------------

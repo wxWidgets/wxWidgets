@@ -374,6 +374,7 @@ MSWOBJS     = \
 		$(MSWDIR)/tooltip.$(OBJSUFF) \
 		$(MSWDIR)/toplevel.$(OBJSUFF) \
 		$(MSWDIR)/treectrl.$(OBJSUFF) \
+		$(MSWDIR)/uxtheme.$(OBJSUFF) \
 		$(MSWDIR)/wave.$(OBJSUFF) \
 		$(MSWDIR)/window.$(OBJSUFF)
 

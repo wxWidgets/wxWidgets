@@ -140,6 +140,12 @@ protected:
   DECLARE_EVENT_TABLE()
 };
 
+// Windows only: attempts to get colour for UX theme page background
+WXDLLEXPORT wxColour wxNotebookGetThemeBackgroundColour(wxNotebook* notebook);
+
+// Windows only: attempts to apply the UX theme page background to this page
+WXDLLEXPORT void wxNotebookApplyThemeBackground(wxNotebook* notebook, wxWindow* window, const wxColour& colour);
+
 #endif // wxUSE_NOTEBOOK
 
 #endif // _NOTEBOOK_H

@@ -376,6 +376,7 @@ MSWOBJS = $(MSWDIR)\$D\accel.obj \
 		$(MSWDIR)\$D\utils.obj \
 		$(MSWDIR)\$D\utilsexc.obj \
 		$(OLEDIR)\$D\uuid.obj \
+		$(MSWDIR)\$D\uxtheme.obj \
 		$(MSWDIR)\$D\volume.obj \
 		$(MSWDIR)\$D\wave.obj \
 		$(MSWDIR)\$D\window.obj

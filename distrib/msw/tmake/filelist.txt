@@ -367,6 +367,7 @@ treectrl.cpp	MSW	Win32Only
 utils.cpp	MSW	Base,LowLevel
 utilsexc.cpp	MSW	Base,LowLevel
 uuid.cpp	MSW	OLE,LowLevel
+uxtheme.cpp	MSW
 volume.cpp	MSW	Base
 wave.cpp	MSW	LowLevel
 window.cpp	MSW	LowLevel

@@ -321,6 +321,7 @@ MSWOBJS = $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\utils.obj &
 	$(OUTPUTDIR)\utilsexc.obj &
 	$(OUTPUTDIR)\uuid.obj &
+	$(OUTPUTDIR)\uxtheme.obj &
 	$(OUTPUTDIR)\volume.obj &
 	$(OUTPUTDIR)\wave.obj &
 	$(OUTPUTDIR)\window.obj
@@ -699,6 +700,9 @@ $(OUTPUTDIR)\utilsexc.obj:     $(MSWDIR)\utilsexc.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\uuid.obj:     $(OLEDIR)\uuid.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\uxtheme.obj:     $(MSWDIR)\uxtheme.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\volume.obj:     $(MSWDIR)\volume.cpp
