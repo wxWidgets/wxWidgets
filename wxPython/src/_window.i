@@ -1436,12 +1436,13 @@ of how to call UpdateWindowUI from an idle function::
 
 
     DocStr(PopupMenu,
-           "Pops up the given menu at the specified coordinates, relative to this
-window, and returns control when the user has dismissed the menu. If a
-menu item is selected, the corresponding menu event is generated and
-will be processed as usual.", "");
-    %name(PopupMenuXY) bool PopupMenu(wxMenu *menu, int x, int y);
-    bool PopupMenu(wxMenu *menu, const wxPoint& pos);
+           "Pops up the given menu at the specified coordinates, relative to this window,
+and returns control when the user has dismissed the menu. If a menu item is
+selected, the corresponding menu event is generated and will be processed as
+usual.  If the default position is given then the current position of the
+mouse cursor will be used.", "");
+    %name(PopupMenuXY) bool PopupMenu(wxMenu *menu, int x=-1, int y=-1);
+    bool PopupMenu(wxMenu *menu, const wxPoint& pos=wxDefaultPosition);
 
 
 
