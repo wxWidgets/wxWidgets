@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        palette.h
 // Purpose:     wxPalette class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/12/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PALETTE_H_
 #define _WX_PALETTE_H_
-
-#ifdef __GNUG__
-#pragma interface "palette.h"
-#endif
 
 #include "wx/gdiobj.h"
 
@@ -26,10 +22,8 @@ class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
 public:
     wxPaletteRefData();
     ~wxPaletteRefData();
-/* TODO: implementation
 protected:
  WXHPALETTE m_hPalette;
-*/
 };
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
@@ -54,11 +48,15 @@ public:
   inline bool operator == (const wxPalette& palette) { return m_refData == palette.m_refData; }
   inline bool operator != (const wxPalette& palette) { return m_refData != palette.m_refData; }
 
-/* TODO: implementation
+  virtual bool FreeResource(bool force = FALSE);
+
   inline WXHPALETTE GetHPALETTE() const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
   void SetHPALETTE(WXHPALETTE pal);
-*/
 };
+
+#define wxColorMap wxPalette
+#define wxColourMap wxPalette
 
 #endif
     // _WX_PALETTE_H_
+

@@ -2,20 +2,16 @@
 // Name:        msgdlg.h
 // Purpose:     wxMessageDialog class. Use generic version if no
 //              platform-specific implementation.
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/12/99
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSGBOXDLG_H_
 #define _WX_MSGBOXDLG_H_
-
-#ifdef __GNUG__
-#pragma interface "msgdlg.h"
-#endif
 
 #include "wx/setup.h"
 #include "wx/dialog.h"

@@ -333,6 +333,16 @@ OS2OBJS = \
   ..\os2\$D\menuitem.obj \
   ..\os2\$D\metafile.obj \
   ..\os2\$D\minifram.obj \
+  ..\os2\$D\msgdlg.obj \
+  ..\os2\$D\nativdlg.obj \
+  ..\os2\$D\notebook.obj \
+  ..\os2\$D\ownerdrw.obj \
+  ..\os2\$D\palette.obj \
+  ..\os2\$D\pen.obj \
+  ..\os2\$D\pngread.obj \
+  ..\os2\$D\print.obj \
+  ..\os2\$D\radiobox.obj \
+  ..\os2\$D\radiobut.obj \
   ..\os2\$D\window.obj
 
 OS2LIBOBJS = \
@@ -380,6 +390,16 @@ OS2LIBOBJS = \
   menuitem.obj \
   metafile.obj \
   minifram.obj \
+  msgdlg.obj \
+  nativdlg.obj \
+  notebook.obj \
+  ownerdrw.obj \
+  palette.obj \
+  pen.obj \
+  pngread.obj \
+  print.obj \
+  radiobox.obj \
+  radiobut.obj \
   window.obj
 
 HTMLOBJS = \
@@ -571,6 +591,16 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\menuitem.obj
   copy ..\os2\$D\metafile.obj
   copy ..\os2\$D\minifram.obj
+  copy ..\os2\$D\msgdlg.obj
+  copy ..\os2\$D\nativdlg.obj
+  copy ..\os2\$D\notebook.obj
+  copy ..\os2\$D\ownerdrw.obj
+  copy ..\os2\$D\pallet.obj
+  copy ..\os2\$D\pen.obj
+  copy ..\os2\$D\pngread.obj
+  copy ..\os2\$D\print.obj
+  copy ..\os2\$D\radiobox.obj
+  copy ..\os2\$D\radiobut.obj
   copy ..\os2\$D\window.obj
 
 # wxWindows library as DLL

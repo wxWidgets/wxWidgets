@@ -1,25 +1,28 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        pen.cpp
 // Purpose:     wxPen
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/10/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "pen.h"
-#endif
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+#include <stdio.h>
 #include "wx/setup.h"
+#include "wx/list.h"
 #include "wx/utils.h"
+#include "wx/app.h"
 #include "wx/pen.h"
-
-#if !USE_SHARED_LIBRARIES
-IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 #endif
+
+#include "wx/os2/private.h"
+#include "assert.h"
 
 wxPenRefData::wxPenRefData()
 {
@@ -29,9 +32,7 @@ wxPenRefData::wxPenRefData()
     m_cap = wxCAP_ROUND ;
     m_nbDash = 0 ;
     m_dash = 0 ;
-/* TODO: null data
     m_hPen = 0;
-*/
 }
 
 wxPenRefData::wxPenRefData(const wxPenRefData& data)
@@ -73,13 +74,22 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
     m_refData = new wxPenRefData;
 
     M_PENDATA->m_colour = col;
+//  M_PENDATA->m_stipple = NULL;
     M_PENDATA->m_width = Width;
     M_PENDATA->m_style = Style;
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
     M_PENDATA->m_dash = 0 ;
+    M_PENDATA->m_hPen = 0 ;
 
+// TODO:
+/*
+    if ((Style == wxDOT) || (Style == wxLONG_DASH) ||
+        (Style == wxSHORT_DASH) || (Style == wxDOT_DASH) ||
+        (Style == wxUSER_DASH))
+        M_PENDATA->m_width = 1;
+*/
     RealizeResource();
 
     if ( wxThePenList )
@@ -97,6 +107,7 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
     M_PENDATA->m_dash = 0 ;
+    M_PENDATA->m_hPen = 0 ;
 
     RealizeResource();
 
@@ -104,19 +115,44 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
         wxThePenList->AddPen(this);
 }
 
+bool wxPen::RealizeResource()
+{
+    // TODO: create actual pen
+    return FALSE;
+}
+
+WXHANDLE wxPen::GetResourceHandle()
+{
+    if ( !M_PENDATA )
+        return 0;
+    else
+        return (WXHANDLE)M_PENDATA->m_hPen;
+}
+
+bool wxPen::FreeResource(bool force)
+{
+    if (M_PENDATA && (M_PENDATA->m_hPen != 0))
+    {
+        DeleteObject((HPEN) M_PENDATA->m_hPen);
+        M_PENDATA->m_hPen = 0;
+        return TRUE;
+    }
+    else return FALSE;
+}
+
 void wxPen::Unshare()
 {
-	// Don't change shared data
-	if (!m_refData)
+    // Don't change shared data
+    if (!m_refData)
     {
-		m_refData = new wxPenRefData();
-	}
+        m_refData = new wxPenRefData();
+    }
     else
     {
-		wxPenRefData* ref = new wxPenRefData(*(wxPenRefData*)m_refData);
-		UnRef();
-		m_refData = ref;
-	}
+        wxPenRefData* ref = new wxPenRefData(*(wxPenRefData*)m_refData);
+        UnRef();
+        m_refData = ref;
+    }
 }
 
 void wxPen::SetColour(const wxColour& col)
@@ -193,10 +229,57 @@ void wxPen::SetCap(int Cap)
     RealizeResource();
 }
 
-bool wxPen::RealizeResource()
+void wxPen::SetCap(int Cap)
 {
-    // TODO: create actual pen
-    return FALSE;
+    Unshare();
+
+    M_PENDATA->m_cap = Cap;
+
+    RealizeResource();
+}
+
+int wx2os2PenStyle(int wx_style)
+{
+    int cstyle;
+// TODO:
+/*
+    switch (wx_style)
+    { 
+       case wxDOT:
+           cstyle = PS_DOT;
+       break;
+
+       case wxDOT_DASH:
+	   cstyle = PS_DASHDOT;
+	   break;
+
+       case wxSHORT_DASH:
+       case wxLONG_DASH:
+           cstyle = PS_DASH;
+	   break;
+
+       case wxTRANSPARENT:
+           cstyle = PS_NULL;
+	   break;
+
+       case wxUSER_DASH:
+#ifdef __WIN32__
+           // Win32s doesn't have PS_USERSTYLE
+	   if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
+	       cstyle = PS_USERSTYLE;
+	   else
+               cstyle = PS_DOT; // We must make a choice... This is mine!
+#else
+           cstyle = PS_DASH;
+#endif
+           break;
+       case wxSOLID:
+       default:
+           cstyle = PS_SOLID;
+           break;
+   }
+*/
+   return cstyle;
 }
 
 

@@ -9,12 +9,20 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "print.h"
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+#include <stdio.h>
+#include "wx/setup.h"
+#include "wx/list.h"
+#include "wx/utils.h"
+#include "wx/app.h"
 #endif
 
-#include "wx/stubs/print.h"
-#include "wx/stubs/printdlg.h"
+
+#include "wx/os2/print.h"
+#include "wx/print.h"
+#include "wx/generic/printdlg.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPrinter, wxPrinterBase)

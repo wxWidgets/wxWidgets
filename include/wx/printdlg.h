@@ -12,12 +12,12 @@
 #elif defined(__WXMAC__)
 #include "wx/mac/printdlg.h"
 #elif defined(__WXPM__)
-#include "wx/os2/printdlg.h"
+#include "wx/generic/prntdlgg.h"
 #elif defined(__WXSTUBS__)
 #include "wx/generic/prntdlgg.h"
 #endif
 
-#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXPM__)
+#if !defined(__WXMSW__) && !defined(__WXMAC__)
 #define wxPrintDialog wxGenericPrintDialog
 #define sm_classwxPrintDialog sm_classwxGenericPrintDialog
 

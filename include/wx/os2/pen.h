@@ -1,23 +1,18 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        pen.h
 // Purpose:     wxPen class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/10/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PEN_H_
 #define _WX_PEN_H_
 
-#ifdef __GNUG__
-#pragma interface "pen.h"
-#endif
-
 #include "wx/gdiobj.h"
-#include "wx/colour.h"
 #include "wx/bitmap.h"
 
 typedef    long wxDash ;
@@ -41,9 +36,7 @@ protected:
   int           m_nbDash ;
   wxDash *      m_dash ;
   wxColour      m_colour;
-/* TODO: implementation
   WXHPEN        m_hPen;
-*/
 };
 
 #define M_PENDATA ((wxPenRefData *)m_refData)
@@ -91,9 +84,9 @@ public:
 
   // Useful helper: create the brush resource
   bool RealizeResource();
-
-  // When setting properties, we must make sure we're not changing
-  // another object
+  bool FreeResource(bool force = FALSE);
+  WXHANDLE GetResourceHandle() ;
+  bool IsFree() const;
   void Unshare();
 };
 

@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        radiobut.h
 // Purpose:     wxRadioButton class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     01/02/97
+// Created:     10/12/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_RADIOBUT_H_
 #define _WX_RADIOBUT_H_
-
-#ifdef __GNUG__
-#pragma interface "radiobut.h"
-#endif
 
 #include "wx/control.h"
 
@@ -47,11 +43,11 @@ class WXDLLEXPORT wxRadioButton: public wxControl
   virtual void SetValue(bool val);
   virtual bool GetValue() const ;
 
+  bool OS2Command(WXUINT param, WXWORD id);
   void Command(wxCommandEvent& event);
 };
 
 // Not implemented
-#if 0
 class WXDLLEXPORT wxBitmap ;
 
 WXDLLEXPORT_DATA(extern const char*) wxBitmapRadioButtonNameStr;
@@ -83,8 +79,11 @@ class WXDLLEXPORT wxBitmapRadioButton: public wxRadioButton
   virtual void SetLabel(const wxBitmap *label);
   virtual void SetValue(bool val) ;
   virtual bool GetValue() const ;
+private:
+  // virtual function hiding suppression, do not use
+  virtual void SetLabel(const wxString& label)
+  { wxRadioButton::SetLabel(label); };
 };
-#endif
 
 #endif
     // _WX_RADIOBUT_H_

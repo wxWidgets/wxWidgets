@@ -1,52 +1,71 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        notebook.cpp
 // Purpose:     implementation of wxNotebook
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by: 
-// Created:     ??/??/98
+// Created:     10/12/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-#ifdef __GNUG__
-#pragma implementation "notebook.h"
-#endif
+// wxWindows
+#ifndef WX_PRECOMP
+  #include  <wx/string.h>
+#endif  // WX_PRECOMP
 
-#include  <wx/string.h>
 #include  <wx/log.h>
 #include  <wx/imaglist.h>
+#include  <wx/event.h>
+#include  <wx/control.h>
 #include  <wx/notebook.h>
+
+#include  <wx/os2/private.h>
+
 
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
-
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
+
+// hide the ugly cast
+#define m_hwnd    (HWND)GetHWND()
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// This is a work-around for missing defines in gcc-2.95 headers
+#ifndef TCS_RIGHT
+    #define TCS_RIGHT       0x0002
+#endif
+
+#ifndef TCS_VERTICAL
+    #define TCS_VERTICAL    0x0080
+#endif
+
+#ifndef TCS_BOTTOM
+    #define TCS_BOTTOM      TCS_RIGHT
+#endif
 
 // ----------------------------------------------------------------------------
 // event table
 // ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARIES
-BEGIN_EVENT_TABLE(wxNotebook, wxControl)
+  BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
-
     EVT_SIZE(wxNotebook::OnSize)
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
-END_EVENT_TABLE()
+  END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
+  IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
+  IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 #endif
 
 // ============================================================================
@@ -91,19 +110,53 @@ bool wxNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
-    // base init
-    SetName(name);
-    SetParent(parent);
+  // base init
+  if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
+      return FALSE;
 
-    m_windowId = id == -1 ? NewControlId() : id;
+  // colors and font
+  m_backgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));
+  m_foregroundColour = *wxBLACK ;
 
-    // style
-    m_windowStyle = style;
+    // TODO:
+/*
+  // style
+  m_windowStyle = style | wxTAB_TRAVERSAL;
 
-    if ( parent != NULL )
-        parent->AddChild(this);
+  long tabStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TCS_TABS;
 
-    // TODO
+  if (m_windowStyle & wxCLIP_CHILDREN)
+    tabStyle |= WS_CLIPCHILDREN;
+  if ( m_windowStyle & wxTC_MULTILINE )
+    tabStyle |= TCS_MULTILINE;
+  if ( m_windowStyle & wxBORDER )
+    tabStyle &= WS_BORDER;
+  if (m_windowStyle & wxNB_FIXEDWIDTH)
+    tabStyle |= TCS_FIXEDWIDTH ;
+  if (m_windowStyle & wxNB_BOTTOM)
+    tabStyle |= TCS_RIGHT;
+  if (m_windowStyle & wxNB_LEFT)
+    tabStyle |= TCS_VERTICAL;
+  if (m_windowStyle & wxNB_RIGHT)
+    tabStyle |= TCS_VERTICAL|TCS_RIGHT;
+        
+
+  if ( !MSWCreate(GetId(), GetParent(), WC_TABCONTROL,
+                  this, NULL, pos.x, pos.y, size.x, size.y,
+                  tabStyle, NULL, 0) )
+  {
+    return FALSE;
+  }
+
+  // Not all compilers recognise SetWindowFont
+  ::SendMessage(GetHwnd(), WM_SETFONT,
+                (WPARAM)::GetStockObject(DEFAULT_GUI_FONT), TRUE);
+
+
+  if ( parent != NULL )
+    parent->AddChild(this);
+*/
+  SubclassWin(m_hWnd);
 
     return FALSE;
 }
@@ -129,7 +182,7 @@ int wxNotebook::GetRowCount() const
 
 int wxNotebook::SetSelection(int nPage)
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
     ChangePage(m_nSelection, nPage);
 
@@ -149,7 +202,7 @@ void wxNotebook::AdvanceSelection(bool bForward)
 
 bool wxNotebook::SetPageText(int nPage, const wxString& strText)
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
 
     // TODO
     return FALSE;
@@ -157,7 +210,7 @@ bool wxNotebook::SetPageText(int nPage, const wxString& strText)
 
 wxString wxNotebook::GetPageText(int nPage) const
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxT(""), wxT("notebook page out of range") );
 
     // TODO
     return wxString("");
@@ -165,7 +218,7 @@ wxString wxNotebook::GetPageText(int nPage) const
 
 int wxNotebook::GetPageImage(int nPage) const
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
     // TODO
     return 0;
@@ -173,7 +226,7 @@ int wxNotebook::GetPageImage(int nPage) const
 
 bool wxNotebook::SetPageImage(int nPage, int nImage)
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
 
     // TODO
     return FALSE;
@@ -185,6 +238,11 @@ void wxNotebook::SetImageList(wxImageList* imageList)
     // TODO
 }
 
+void wxNotebook::SetTabSize(const wxSize& sz)
+{
+    // TODO
+}
+
 // ----------------------------------------------------------------------------
 // wxNotebook operations
 // ----------------------------------------------------------------------------
@@ -192,7 +250,7 @@ void wxNotebook::SetImageList(wxImageList* imageList)
 // remove one page from the notebook
 bool wxNotebook::DeletePage(int nPage)
 {
-    wxCHECK( IS_VALID_PAGE(nPage), FALSE );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
 
     // TODO: delete native widget page
 
@@ -205,7 +263,7 @@ bool wxNotebook::DeletePage(int nPage)
 // remove one page from the notebook, without deleting the window
 bool wxNotebook::RemovePage(int nPage)
 {
-    wxCHECK( IS_VALID_PAGE(nPage), FALSE );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
 
     m_aPages.Remove(nPage);
 
@@ -303,8 +361,21 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
 {
     // is it our tab control?
     if ( event.GetEventObject() == this )
-        ChangePage(event.GetOldSelection(), event.GetSelection());
-
+    {
+        int sel = event.GetOldSelection();
+        if ( sel != -1 )
+            m_aPages[sel]->Show(FALSE);
+      
+        sel = event.GetSelection();
+        if ( sel != -1 )
+        {
+            wxNotebookPage *pPage = m_aPages[sel];
+            pPage->Show(TRUE);
+            pPage->SetFocus();
+        }
+      
+        m_nSelection = sel;
+  }
     // we want to give others a chance to process this message as well
     event.Skip();
 }
@@ -350,9 +421,33 @@ bool wxNotebook::DoPhase(int /* nPhase */)
     return TRUE;
 }
 
-void wxNotebook::Command(wxCommandEvent& event)
+bool wxNotebook::OS2OnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
 {
-    wxFAIL_MSG("wxNotebook::Command not implemented");
+  wxNotebookEvent event(wxEVT_NULL, m_windowId);
+//TODO:
+/*
+  NMHDR* hdr = (NMHDR *)lParam;
+  switch ( hdr->code ) {
+    case TCN_SELCHANGE:
+      event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
+      break;
+
+    case TCN_SELCHANGING:
+      event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING);
+      break;
+
+    default:
+      return wxControl::MSWOnNotify(idCtrl, lParam, result);
+  }
+*/
+    event.SetSelection(TabCtrl_GetCurSel(m_hwnd));
+    event.SetOldSelection(m_nSelection);
+    event.SetEventObject(this);
+    event.SetInt(idCtrl);
+
+    bool processed = GetEventHandler()->ProcessEvent(event);
+    *result = !event.IsAllowed();
+    return processed;
 }
 
 // ----------------------------------------------------------------------------
@@ -362,21 +457,35 @@ void wxNotebook::Command(wxCommandEvent& event)
 // hide the currently active panel and show the new one
 void wxNotebook::ChangePage(int nOldSel, int nSel)
 {
-    wxASSERT( nOldSel != nSel ); // impossible
+    // MT-FIXME should use a real semaphore
+    static bool s_bInsideChangePage = FALSE;
 
-    if ( nOldSel != -1 ) {
-        m_aPages[nOldSel]->Show(FALSE);
+    // when we call ProcessEvent(), our own OnSelChange() is called which calls
+    // this function - break the infinite loop
+    if ( s_bInsideChangePage )
+        return;
+
+    // it's not an error (the message may be generated by the tab control itself)
+    // and it may happen - just do nothing
+    if ( nSel == nOldSel )
+        return;
+
+    s_bInsideChangePage = TRUE;
+
+    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
+    event.SetSelection(nSel);
+    event.SetOldSelection(nOldSel);
+    event.SetEventObject(this);
+    if ( ProcessEvent(event) && !event.IsAllowed() )
+    {
+        // program doesn't allow the page change
+        s_bInsideChangePage = FALSE;
+        return;
     }
 
-    wxNotebookPage *pPage = m_aPages[nSel];
-    pPage->Show(TRUE);
-    pPage->SetFocus();
+    event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
+    ProcessEvent(event);
 
-    m_nSelection = nSel;
-}
-
-void wxNotebook::SetTabSize(const wxSize& sz)
-{
-    // TODO
+    s_bInsideChangePage = FALSE;
 }
 

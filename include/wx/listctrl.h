@@ -16,7 +16,7 @@
 #elif defined(__WXMAC__)
 #include "wx/generic/listctrl.h"
 #elif defined(__WXPM__)
-#include "wx/generic/listctrl.h"
+#include "wx/os2/listctrl.h"
 #elif defined(__WXSTUBS__)
 #include "wx/generic/listctrl.h"
 #endif
@@ -38,7 +38,7 @@ public:
     wxPoint       m_pointDrag;
 
     wxListItem    m_item;
-    
+
     inline int GetCode() { return m_code; }
     inline long GetIndex() { return m_itemIndex; }
     inline long GetOldIndex() { return m_oldItemIndex; }
