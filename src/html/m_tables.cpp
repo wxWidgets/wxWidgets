@@ -360,6 +360,7 @@ void wxHtmlTableCell::Layout(int w)
                 fullwid = 0;
                 for (int i = actcol; i < m_CellInfo[actrow][actcol].colspan + actcol; i++)
                     fullwid += m_ColsInfo[i].pixwidth;
+                fullwid += (m_CellInfo[actrow][actcol].colspan - 1) * m_Spacing;
                 actcell -> SetMinHeight(m_CellInfo[actrow][actcol].minheight, m_CellInfo[actrow][actcol].valign);
                 actcell -> Layout(fullwid);
 
@@ -378,11 +379,12 @@ void wxHtmlTableCell::Layout(int w)
                 if (m_CellInfo[actrow][actcol].flag != cellUsed) continue;
                 actcell = m_CellInfo[actrow][actcol].cont;
                 actcell -> SetMinHeight(
-                                 ypos[actrow + m_CellInfo[actrow][actcol].rowspan] - ypos[actrow] - m_CellInfo[actrow][actcol].rowspan * m_Spacing,
+                                 ypos[actrow + m_CellInfo[actrow][actcol].rowspan] - ypos[actrow] -  m_Spacing,
                                  m_CellInfo[actrow][actcol].valign);
                 fullwid = 0;
                 for (int i = actcol; i < m_CellInfo[actrow][actcol].colspan + actcol; i++)
                     fullwid += m_ColsInfo[i].pixwidth;
+                fullwid += (m_CellInfo[actrow][actcol].colspan - 1) * m_Spacing;
                 actcell -> Layout(fullwid);
                 actcell -> SetPos(m_ColsInfo[actcol].leftpos, ypos[actrow]);
             }
