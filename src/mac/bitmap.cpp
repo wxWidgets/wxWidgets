@@ -42,6 +42,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
     #include <PictUtils.h>
 #endif
 
+#include "wx/mac/uma.h"
+
 CTabHandle wxMacCreateColorTable( int numColors )
 {
 	CTabHandle newColors; /* Handle to the new color table */

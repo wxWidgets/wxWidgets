@@ -95,25 +95,25 @@ bool wxApp::s_macSupportPCMenuShortcuts = true ;
 long wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 wxString wxApp::s_macHelpMenuTitleName = "&Help" ;
 
-pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon )
+pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEODoc( (AppleEvent*) event , reply) ;
 }
 
-pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon )
+pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEOApp( (AppleEvent*) event , reply ) ;
 }
 
-pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon )
+pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEPDoc( (AppleEvent*) event , reply ) ;
 }
 
-pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon )
+pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
