@@ -1474,7 +1474,7 @@ wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday)
     }
     else if ( weekday < wdayThis )
     {
-        return Substract(wxDateSpan::Days(wdayThis - weekday));
+        return Subtract(wxDateSpan::Days(wdayThis - weekday));
     }
     else // weekday > wdayThis
     {
@@ -1527,7 +1527,7 @@ wxDateTime& wxDateTime::SetToPrevWeekDay(WeekDay weekday)
         diff = wdayThis - weekday;
     }
 
-    return Substract(wxDateSpan::Days(diff));
+    return Subtract(wxDateSpan::Days(diff));
 }
 
 bool wxDateTime::SetToWeekDay(WeekDay weekday,
@@ -1745,7 +1745,7 @@ wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
         secDiff -= 3600;
     }
 
-    return Substract(wxTimeSpan::Seconds(secDiff));
+    return Subtract(wxTimeSpan::Seconds(secDiff));
 }
 
 // ----------------------------------------------------------------------------
