@@ -701,11 +701,23 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     if (!menu->IsEnabled(id))
         return;
 
-    if ( menu->IsAttached() ) // is this menu on a menubar?
+    // Is this menu on a menubar?  (possibly nested)
+    wxFrame* frame = NULL;
+    wxMenu*  pm = menu;
+    while ( pm && !frame )
     {
-        wxFrame* frame = menu->GetMenuBar()->GetFrame();
+        if ( pm->IsAttached() )
+            frame = pm->GetMenuBar()->GetFrame();
+        else
+            pm = pm->GetParent();
+    }
+
+    // If it is then let the frame send the event
+    if (frame)
+    {
         frame->ProcessCommand(id);
     }
+    // otherwise let the menu have it
     else
     {
         wxMenuItem* item = menu->FindChildItem( id );
