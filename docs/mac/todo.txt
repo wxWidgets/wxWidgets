@@ -1,6 +1,10 @@
-Bugs/Defects (GD)
------------------
-* Implement toggle buttons missing under Mac OS & Mac OS X
+* Implement toggle buttons
+
+* Implement popup windows
+
+* Implement joystick support
+
+* Implement drag and drop
 
 * Correct smart processing errors that provoke the following error:
 
