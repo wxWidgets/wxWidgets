@@ -57,11 +57,6 @@ class MultipleChoiceDialog(wx.Dialog):
         if x == -1 and y == -1:
             self.CenterOnScreen(wx.BOTH)
 
-        dc = wx.ClientDC(self)
-        height = 0
-        for line in msg.splitlines():
-            height = height + dc.GetTextExtent(line)[1] + 2
-
         stat = wx.StaticText(self, -1, msg)
         self.lbox = wx.ListBox(self, 100, wx.DefaultPosition, wx.DefaultSize, 
                                lst, wx.LB_MULTIPLE)
@@ -91,11 +86,7 @@ class MultipleChoiceDialog(wx.Dialog):
 
     def GetValueString(self):
         sel = self.lbox.GetSelections()
-        val = []
-
-        for i in sel:
-            val.append(self.lst[i])
-
+        val = [ self.lst[i] for i in sel ]
         return tuple(val)
 
 
@@ -333,12 +324,13 @@ def singleChoiceDialog(parent=None, message='', title='', lst=[],
     return result
 
 
-def multipleChoiceDialog(parent=None, message='', title='', lst=[], pos=wx.DefaultPosition, 
-                         size=(200,200)):
+def multipleChoiceDialog(parent=None, message='', title='', lst=[],
+                         pos=wx.DefaultPosition, size=wx.DefaultSize):
 
-    dialog = MultipleChoiceDialog(parent, message, title, lst, pos, size)
+    dialog = wx.MultiChoiceDialog(parent, message, title, lst,
+                                  wx.CHOICEDLG_STYLE, pos)
     result = DialogResults(dialog.ShowModal())
-    result.selection = dialog.GetValueString()
+    result.selection = tuple([lst[i] for i in dialog.GetSelections()])
     dialog.Destroy()
     return result
 
