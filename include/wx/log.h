@@ -556,8 +556,8 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
     #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
 
 #else   //!debug
-    #define wxLogApiError(api, rc) {}
-    #define wxLogLastError(api) {}
+    inline void wxLogApiError(const wxChar *, long) { }
+    inline void wxLogLastError(const wxChar *) { }
 #endif  //debug/!debug
 
 #endif  // _WX_LOG_H_
