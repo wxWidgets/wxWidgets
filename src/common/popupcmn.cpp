@@ -267,8 +267,8 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 
         m_focus->PushEventHandler(m_handlerFocus);
     }
-    
-#endif
+
+#endif // !__WXX11__
 }
 
 void wxPopupTransientWindow::Dismiss()
@@ -353,19 +353,41 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
     {
         return;
     }
-    
+
     wxPoint pos = event.GetPosition();
 
     // scrollbar on which the click occured
     wxWindow *sbar = NULL;
 
     wxWindow *win = (wxWindow *)event.GetEventObject();
-    
+
     switch ( win->HitTest(pos.x, pos.y) )
     {
         case wxHT_WINDOW_OUTSIDE:
-            // clicking outside a popup dismisses it
-            m_popup->DismissAndNotify();
+            {
+                // do the coords translation now as after DismissAndNotify()
+                // m_popup may be destroyed
+                wxMouseEvent event2(event);
+
+                m_popup->ClientToScreen(&event2.m_x, &event2.m_y);
+
+                // clicking outside a popup dismisses it
+                m_popup->DismissAndNotify();
+
+                // dismissing a tooltip shouldn't waste a click, i.e. you
+                // should be able to dismiss it and press the button with the
+                // same click, so repost this event to the window beneath us
+                wxWindow *win = wxFindWindowAtPoint(event2.GetPosition());
+                if ( win )
+                {
+                    // translate the event coords to the ones of the window
+                    // which is going to get the event
+                    win->ScreenToClient(&event2.m_x, &event2.m_y);
+
+                    event2.SetEventObject(win);
+                    wxPostEvent(win, event2);
+                }
+            }
             break;
 
 #ifdef __WXUNIVERSAL__
@@ -432,7 +454,7 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
             return;
         win = win->GetParent();
     }
-    
+
     m_popup->DismissAndNotify();
 }
 
