@@ -24,6 +24,9 @@
 #include "wx/app.h"
 #include "wx/utils.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #if defined(__ultrix) || defined(__sgi)
 #include <Xm/Frame.h>
 #endif
@@ -46,6 +49,9 @@
 #include <Xm/Frame.h>
 #if   XmVersion > 1000
 #include <Xm/Protocols.h>
+#endif
+#ifdef __VMS__
+#pragma message enable nosimpint
 #endif
 
 #include "wx/motif/private.h"
@@ -835,6 +841,14 @@ void wxFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     this->Destroy();
 }
+
+#ifdef __VMS__
+// I added this function because I got missing symbols when linking
+// Maybe it should be included on all platforms. But what should it do?
+void wxFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+}
+#endif
 
 // Destroy the window (delayed, if a managed window)
 bool wxFrame::Destroy()

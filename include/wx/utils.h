@@ -354,7 +354,14 @@ WXDLLEXPORT void wxRedirectIOToConsole();
 
 #ifdef __X__
 
+#ifdef __VMS__ // Xlib.h for VMS is not (yet) compatible with C++
+               // The resulting warnings are switched off here
+#pragma message disable nosimpint
+#endif
 #include <X11/Xlib.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #define wxMAX_RGB           0xff
 #define wxMAX_SV            1000

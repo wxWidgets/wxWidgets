@@ -135,7 +135,6 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
     delete client;
     return NULL;
   }
-  return NULL;
 }
 
 wxConnectionBase *wxTCPClient::OnMakeConnection()

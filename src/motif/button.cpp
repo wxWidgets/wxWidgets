@@ -17,8 +17,14 @@
 #include "wx/utils.h"
 #include "wx/panel.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/PushBG.h>
 #include <Xm/PushB.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 

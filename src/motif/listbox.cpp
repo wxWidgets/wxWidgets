@@ -19,7 +19,13 @@
 #include "wx/log.h"
 #include "wx/utils.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/List.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 #include "wx/motif/private.h"
 
 #if !USE_SHARED_LIBRARY

@@ -21,7 +21,13 @@
     #pragma implementation "font.h"
 #endif
 
+#ifdef __VMS
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
+#ifdef __VMS
+#pragma message enable nosimpint
+#endif
 
 #include "wx/defs.h"
 #include "wx/string.h"

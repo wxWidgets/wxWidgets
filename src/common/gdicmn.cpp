@@ -41,7 +41,13 @@
 #endif
 
 #ifdef __WXMOTIF__
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 #endif
 
 #if !USE_SHARED_LIBRARY

@@ -19,6 +19,9 @@
 #include "wx/app.h"
 #include "wx/settings.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
 
 #include <X11/Shell.h>
@@ -37,6 +40,9 @@
 #include <Xm/AtomMgr.h>
 #if   XmVersion > 1000
 #include <Xm/Protocols.h>
+#endif
+#ifdef __VMS__
+#pragma message enable nosimpint
 #endif
 
 #include "wx/motif/private.h"

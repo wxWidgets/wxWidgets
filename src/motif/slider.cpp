@@ -16,11 +16,17 @@
 #include "wx/slider.h"
 #include "wx/utils.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Scale.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 
@@ -93,12 +99,20 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     m_mainWidget = (WXWidget) sliderWidget;
 
+#ifdef __VMS__
+#pragma message disable codcauunr
+   // VMS gives here the compiler warning :
+   // statement either is unreachable or causes unreachable code
+#endif
     if(style & wxSL_NOTIFY_DRAG)
         XtAddCallback (sliderWidget, XmNdragCallback,
         (XtCallbackProc) wxSliderCallback, (XtPointer) this);
     else
         XtAddCallback (sliderWidget, XmNvalueChangedCallback,
         (XtCallbackProc) wxSliderCallback, (XtPointer) this);
+#ifdef __VMS__
+#pragma message enable codcauunr
+#endif
 
     XtAddCallback (sliderWidget, XmNdragCallback, (XtCallbackProc) wxSliderCallback, (XtPointer) this);
 

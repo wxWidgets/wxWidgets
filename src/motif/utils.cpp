@@ -41,7 +41,13 @@
     #include <sysent.h>
 #endif
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/unix/execute.h"
 
@@ -689,8 +695,6 @@ bool wxSetDisplay(const wxString& display_name)
         else
             return FALSE;
     }
-
-    return FALSE;
 }
 
 wxString wxGetDisplayName()
@@ -731,7 +735,8 @@ char * wxFindAccelerator (const char *s)
     //     handling
     return NULL;
 
-    // The accelerator text is after the \t char.
+#if 0
+   // The accelerator text is after the \t char.
     while (*s && *s != '\t')
         s++;
     if (*s == '\0')
@@ -778,6 +783,7 @@ char * wxFindAccelerator (const char *s)
     }
     delete[]tmp;
     return wxBuffer;
+#endif
 }
 
 XmString wxFindAcceleratorText (const char *s)
@@ -786,7 +792,8 @@ XmString wxFindAcceleratorText (const char *s)
     //     handling
     return NULL;
 
-    // The accelerator text is after the \t char.
+#if 0
+   // The accelerator text is after the \t char.
     while (*s && *s != '\t')
         s++;
     if (*s == '\0')
@@ -794,6 +801,7 @@ XmString wxFindAcceleratorText (const char *s)
     s++;
     XmString text = XmStringCreateSimple ((char *)s);
     return text;
+#endif
 }
 
 // ----------------------------------------------------------------------------

@@ -17,7 +17,13 @@
 
 #if wxUSE_COMBOBOX
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 #include "xmcombo/xmcombo.h"
 
 void  wxComboBoxCallback (Widget w, XtPointer clientData,

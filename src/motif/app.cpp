@@ -39,11 +39,17 @@
     #include "wx/resource.h"
 #endif
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
 #include <X11/Xatom.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 

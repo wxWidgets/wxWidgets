@@ -61,8 +61,6 @@ wxChar wxTextInputStream::NextNonSeparators()
 	  return c;
     }
 
-    // this shouldn't happen
-    return (wxChar) 0;
 }
 
 inline bool wxTextInputStream::EatEOL(const wxChar &c)

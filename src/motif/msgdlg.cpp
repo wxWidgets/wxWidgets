@@ -21,10 +21,16 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#ifdef __VMS
+#pragma message disable nosimpint
+#endif
 #include <X11/Xlib.h>
 
 #include <Xm/Xm.h>
 #include <Xm/MessageB.h>
+#ifdef __VMS
+#pragma message enable nosimpint
+#endif
 
 #include "wx/app.h"
 #include "wx/intl.h"

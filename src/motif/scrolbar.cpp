@@ -15,10 +15,16 @@
 
 #include "wx/scrolbar.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <X11/IntrinsicP.h>
 #include <Xm/Xm.h>
 #include <Xm/RowColumn.h>
 #include <Xm/ScrollBar.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 

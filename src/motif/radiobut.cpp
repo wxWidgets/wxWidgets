@@ -16,12 +16,18 @@
 #include "wx/radiobut.h"
 #include "wx/utils.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
 #include <Xm/ToggleB.h>
 #include <Xm/ToggleBG.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Form.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 
@@ -79,8 +85,17 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
         NULL);
     XmStringFree (text);
 
+#ifdef __VMS__
+#pragma message disable voiincconext
+       // VMS gives here the compiler warning:
+       // conversion from pointer to function to void* permitted
+       // as an extension
+#endif
     XtAddCallback (radioButtonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxRadioButtonCallback,
         (XtCallbackProc) this);
+#ifdef __VMS__
+#pragma message enable voiincconext
+#endif
 
     m_mainWidget = (WXWidget) radioButtonWidget;
 

@@ -214,8 +214,10 @@ void wxDataOutputStream::WriteDouble(double d)
 #if wxUSE_APPLE_IEEE
   ConvertToIeeeExtended(d, (unsigned char *)buf);
 #else
-#  pragma warning "wxDataOutputStream::WriteDouble() not using IeeeExtended - will not work!"
- buf[0] = '\0';
+#ifndef __VMS__
+# pragma warning "wxDataOutputStream::WriteDouble() not using IeeeExtended - will not work!"
+#endif
+   buf[0] = '\0';
 #endif
   m_output->Write(buf, 10);
 }

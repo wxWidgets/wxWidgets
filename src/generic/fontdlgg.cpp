@@ -371,7 +371,6 @@ wxChar *wxFontWeightIntToString(int weight)
     default:
       return wxT("Normal");
   }
-  return wxT("Normal");
 }
 
 wxChar *wxFontStyleIntToString(int style)
@@ -386,7 +385,6 @@ wxChar *wxFontStyleIntToString(int style)
     default:
       return wxT("Normal");
   }
-  return wxT("Normal");
 }
 
 wxChar *wxFontFamilyIntToString(int family)
@@ -407,7 +405,6 @@ wxChar *wxFontFamilyIntToString(int family)
     default:
       return wxT("Swiss");
   }
-  return wxT("Swiss");
 }
 
 int wxFontFamilyStringToInt(wxChar *family)

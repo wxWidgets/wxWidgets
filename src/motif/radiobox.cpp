@@ -16,6 +16,9 @@
 #include "wx/radiobox.h"
 #include "wx/utils.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
 #include <Xm/ToggleB.h>
@@ -23,6 +26,9 @@
 #include <Xm/RowColumn.h>
 #include <Xm/Form.h>
 #include <Xm/Frame.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 
@@ -167,8 +173,17 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 #endif
                                     XmNfontList, fontList,
                                                  NULL);
+#ifdef __VMS__
+#pragma message disable voiincconext
+       // VMS gives here the compiler warning:
+       // conversion from pointer to function to void* permitted
+       // as an extension
+#endif
         XtAddCallback ((Widget) m_radioButtons[i], XmNvalueChangedCallback, (XtCallbackProc) wxRadioBoxCallback,
                      (XtCallbackProc) this);
+#ifdef __VMS__
+#pragma message enable voiincconext
+#endif
 
     }
     SetSelection (0);

@@ -17,7 +17,13 @@
 #include "wx/panel.h"
 #include "wx/utils.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)

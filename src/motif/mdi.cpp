@@ -17,6 +17,9 @@
 #include "wx/menu.h"
 #include "wx/settings.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
 #include <Xm/BulletinB.h>
 #include <Xm/Form.h>
@@ -27,6 +30,9 @@
 #include <Xm/PushBG.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/Protocols.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 

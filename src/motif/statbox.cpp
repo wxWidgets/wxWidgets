@@ -16,10 +16,16 @@
 #include "wx/statbox.h"
 #include "wx/utils.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Frame.h>
 #include <Xm/Form.h>
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 

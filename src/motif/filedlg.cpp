@@ -21,6 +21,9 @@
 #include "wx/app.h"
 #include "wx/settings.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
 #include <Xm/MwmUtil.h>
 #include <Xm/Label.h>
@@ -31,6 +34,9 @@
 #include <Xm/FileSB.h>
 #include <Xm/RowColumn.h>
 #include <Xm/LabelG.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 

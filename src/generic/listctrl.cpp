@@ -2592,12 +2592,20 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
 
     long s = style;
 
-    if ((s & wxLC_REPORT == 0) &&
+#ifdef __VMS__
+#pragma message disable codcauunr
+   // VMS reports on this part the warning:
+   // statement either is unreachable or causes unreachable code
+#endif
+   if ((s & wxLC_REPORT == 0) &&
         (s & wxLC_LIST == 0) &&
         (s & wxLC_ICON == 0))
     {
         s = s | wxLC_LIST;
     }
+#ifdef __VMS__
+#pragma message enable codcauunr
+#endif
 
     bool ret = wxControl::Create( parent, id, pos, size, s, name );
 

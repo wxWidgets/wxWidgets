@@ -18,9 +18,15 @@
 
 #include <stdio.h>
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
 #include <Xm/PushBG.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)

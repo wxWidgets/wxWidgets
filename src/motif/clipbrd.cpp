@@ -26,8 +26,14 @@
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
 #include <Xm/CutPaste.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include <string.h>
 

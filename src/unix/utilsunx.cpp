@@ -393,6 +393,7 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
         return exitcode;
 #endif // wxUSE_GUI
     }
+   return 0;
 
     #undef ARGS_CLEANUP
 }

@@ -17,10 +17,16 @@
 #include "wx/choice.h"
 #include "wx/utils.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
 #include <Xm/PushBG.h>
 #include <Xm/PushB.h>
 #include <Xm/RowColumn.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 

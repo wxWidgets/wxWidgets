@@ -15,7 +15,13 @@
 #include "wx/region.h"
 #include "wx/gdicmn.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 // #include "wx/motif/private.h"
 
 #if !USE_SHARED_LIBRARY

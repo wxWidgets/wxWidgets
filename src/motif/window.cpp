@@ -44,6 +44,9 @@
     #include "wx/dnd.h"
 #endif
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
 
 #include <Xm/DrawingA.h>
@@ -52,6 +55,9 @@
 #include <Xm/Frame.h>
 #include <Xm/Label.h>
 #include <Xm/RowColumn.h>           // for XmMenuPosition
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 

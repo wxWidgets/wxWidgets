@@ -414,7 +414,6 @@ wxString wxDate::FormatDate (int type) const
                : (abs(year))  );
             return wxString(buf);
     }
-    return wxString(wxT(""));
 }
 
 void wxDate::SetFormat( int format )
@@ -445,7 +444,6 @@ int wxDate::SetOption( int option, bool action )
         default:
             return 0;
     }
-    return 0;
 }
 
 ///////////////////////////////////////////////////////////////

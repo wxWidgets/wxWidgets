@@ -275,7 +275,6 @@ wxObject *wxCreateDynamicObject(const wxChar *name)
         }
         return (wxObject*) NULL;
     }
-    return (wxObject*) NULL;
 }
 
 #if wxUSE_SERIAL

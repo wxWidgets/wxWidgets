@@ -43,7 +43,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel)
 
 #ifdef __WXMOTIF__
 // For wxRETAINED implementation
+#ifdef __VMS__ //VMS's Xm.h is not (yet) compatible with C++
+               //This code switches off the compiler warnings
+# pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
+#ifdef __VMS__
+# pragma message enable nosimpint
+#endif
 #endif
 
 wxScrolledWindow::wxScrolledWindow()

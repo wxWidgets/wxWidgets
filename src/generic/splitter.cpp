@@ -424,8 +424,6 @@ bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
         else
             return FALSE;
     }
-
-    return FALSE;
 }
 
 // Draw 3D effect borders

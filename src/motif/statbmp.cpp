@@ -15,10 +15,16 @@
 
 #include "wx/statbmp.h"
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
 #include <Xm/RowColumn.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 
