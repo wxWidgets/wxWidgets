@@ -113,13 +113,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         return Py_None;
     }
 
-    wxString wxGetResource(const wxString& section, const wxString& entry,
-                           const wxString& file = wxPyEmptyString) {
-        wxChar * retval;
-        wxGetResource(section, entry, &retval, file);
-        return retval;
-    }
-
 #if 0  // we want to use the definition from the header, not the
        // one SWIG will generate.
 extern wxAcceleratorTable  wxNullAcceleratorTable; 
@@ -620,67 +613,6 @@ static PyObject *_wrap_wxEnableTopLevelWindows(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxGetResource(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxString * _arg0;
-    wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxPyEmptyString;
-    PyObject * _obj0 = 0;
-    PyObject * _obj1 = 0;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "section","entry","file", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxGetResource",_kwnames,&_obj0,&_obj1,&_obj2)) 
-        return NULL;
-{
-    _arg0 = wxString_in_helper(_obj0);
-    if (_arg0 == NULL)
-        return NULL;
-}
-{
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
-}
-    if (_obj2)
-{
-    _arg2 = wxString_in_helper(_obj2);
-    if (_arg2 == NULL)
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxGetResource(*_arg0,*_arg1,*_arg2));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
-{
-    if (_obj0)
-        delete _arg0;
-}
-{
-    if (_obj1)
-        delete _arg1;
-}
-{
-    if (_obj2)
-        delete _arg2;
-}
-{
-    delete _result;
-}
     return _resultobj;
 }
 
@@ -4630,7 +4562,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxGetHostName", (PyCFunction) _wrap_wxGetHostName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetEmailAddress", (PyCFunction) _wrap_wxGetEmailAddress, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStripMenuCodes", (PyCFunction) _wrap_wxStripMenuCodes, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGetResource", (PyCFunction) _wrap_wxGetResource, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEnableTopLevelWindows", (PyCFunction) _wrap_wxEnableTopLevelWindows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxYieldIfNeeded", (PyCFunction) _wrap_wxYieldIfNeeded, METH_VARARGS | METH_KEYWORDS },
 	 { "wxYield", (PyCFunction) _wrap_wxYield, METH_VARARGS | METH_KEYWORDS },

@@ -2926,9 +2926,17 @@ static PyObject *_wrap_wxColour_Set(PyObject *self, PyObject *args, PyObject *kw
 
 static PyObject * wxColour_Get(wxColour *self) {
             PyObject* rv = PyTuple_New(3);
-            PyTuple_SetItem(rv, 0, PyInt_FromLong(self->Red()));
-            PyTuple_SetItem(rv, 1, PyInt_FromLong(self->Green()));
-            PyTuple_SetItem(rv, 2, PyInt_FromLong(self->Blue()));
+            int red = -1;
+            int green = -1;
+            int blue = -1;
+            if (self->Ok()) {
+                red =   self->Red();
+                green = self->Green();
+                blue =  self->Blue();
+            }
+            PyTuple_SetItem(rv, 0, PyInt_FromLong(red));
+            PyTuple_SetItem(rv, 1, PyInt_FromLong(green));
+            PyTuple_SetItem(rv, 2, PyInt_FromLong(blue));
             return rv;
         }
 static PyObject *_wrap_wxColour_Get(PyObject *self, PyObject *args, PyObject *kwargs) {

@@ -193,8 +193,8 @@ class wxToolBarBasePtr(wxControlPtr):
     def DoAddTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_DoAddTool,(self,) + _args, _kwargs)
         return val
-    def InsertTool(self, *_args, **_kwargs):
-        val = apply(stattoolc.wxToolBarBase_InsertTool,(self,) + _args, _kwargs)
+    def DoInsertTool(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarBase_DoInsertTool,(self,) + _args, _kwargs)
         return val
     def AddControl(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_AddControl,(self,) + _args, _kwargs)

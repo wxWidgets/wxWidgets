@@ -3045,18 +3045,19 @@ static PyObject *_wrap_wxDateTime_SetMillisecond(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
-#define wxDateTime_SetToWeekDayInSameWeek(_swigobj,_swigarg0)  (_swigobj->SetToWeekDayInSameWeek(_swigarg0))
+#define wxDateTime_SetToWeekDayInSameWeek(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetToWeekDayInSameWeek(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxDateTime_SetToWeekDayInSameWeek(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDateTime * _result;
     wxDateTime * _arg0;
     wxDateTime::WeekDay  _arg1;
+    wxDateTime::WeekFlags  _arg2 = (wxDateTime::WeekFlags ) wxDateTime::Monday_First;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","weekday", NULL };
+    char *_kwnames[] = { "self","weekday","flags", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxDateTime_SetToWeekDayInSameWeek",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxDateTime_SetToWeekDayInSameWeek",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3067,7 +3068,7 @@ static PyObject *_wrap_wxDateTime_SetToWeekDayInSameWeek(PyObject *self, PyObjec
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxDateTime & _result_ref = wxDateTime_SetToWeekDayInSameWeek(_arg0,_arg1);
+    wxDateTime & _result_ref = wxDateTime_SetToWeekDayInSameWeek(_arg0,_arg1,_arg2);
     _result = (wxDateTime *) &_result_ref;
 
     wxPyEndAllowThreads(__tstate);
@@ -3082,18 +3083,19 @@ static PyObject *_wrap_wxDateTime_SetToWeekDayInSameWeek(PyObject *self, PyObjec
     return _resultobj;
 }
 
-#define wxDateTime_GetWeekDayInSameWeek(_swigobj,_swigarg0)  (_swigobj->GetWeekDayInSameWeek(_swigarg0))
+#define wxDateTime_GetWeekDayInSameWeek(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetWeekDayInSameWeek(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxDateTime_GetWeekDayInSameWeek(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDateTime * _result;
     wxDateTime * _arg0;
     wxDateTime::WeekDay  _arg1;
+    wxDateTime::WeekFlags  _arg2 = (wxDateTime::WeekFlags ) wxDateTime::Monday_First;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","weekday", NULL };
+    char *_kwnames[] = { "self","weekday","flags", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxDateTime_GetWeekDayInSameWeek",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxDateTime_GetWeekDayInSameWeek",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3104,7 +3106,7 @@ static PyObject *_wrap_wxDateTime_GetWeekDayInSameWeek(PyObject *self, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxDateTime (wxDateTime_GetWeekDayInSameWeek(_arg0,_arg1));
+    _result = new wxDateTime (wxDateTime_GetWeekDayInSameWeek(_arg0,_arg1,_arg2));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3345,18 +3347,19 @@ static PyObject *_wrap_wxDateTime_GetLastWeekDay(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
-#define wxDateTime_SetToTheWeek(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetToTheWeek(_swigarg0,_swigarg1))
+#define wxDateTime_SetToTheWeek(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetToTheWeek(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxDateTime_SetToTheWeek(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxDateTime * _arg0;
     wxDateTime::wxDateTime_t  _arg1;
     wxDateTime::WeekDay  _arg2 = (wxDateTime::WeekDay ) wxDateTime::Mon;
+    wxDateTime::WeekFlags  _arg3 = (wxDateTime::WeekFlags ) wxDateTime::Monday_First;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","numWeek","weekday", NULL };
+    char *_kwnames[] = { "self","numWeek","weekday","flags", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oh|i:wxDateTime_SetToTheWeek",_kwnames,&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oh|ii:wxDateTime_SetToTheWeek",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3367,7 +3370,7 @@ static PyObject *_wrap_wxDateTime_SetToTheWeek(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxDateTime_SetToTheWeek(_arg0,_arg1,_arg2);
+    _result = (bool )wxDateTime_SetToTheWeek(_arg0,_arg1,_arg2,_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3375,19 +3378,20 @@ static PyObject *_wrap_wxDateTime_SetToTheWeek(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxDateTime_GetWeek(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetWeek(_swigarg0,_swigarg1))
+#define wxDateTime_GetWeek(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->GetWeek(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxDateTime_GetWeek(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDateTime * _result;
     wxDateTime * _arg0;
     wxDateTime::wxDateTime_t  _arg1;
     wxDateTime::WeekDay  _arg2 = (wxDateTime::WeekDay ) wxDateTime::Mon;
+    wxDateTime::WeekFlags  _arg3 = (wxDateTime::WeekFlags ) wxDateTime::Monday_First;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","numWeek","weekday", NULL };
+    char *_kwnames[] = { "self","numWeek","weekday","flags", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oh|i:wxDateTime_GetWeek",_kwnames,&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oh|ii:wxDateTime_GetWeek",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3398,7 +3402,7 @@ static PyObject *_wrap_wxDateTime_GetWeek(PyObject *self, PyObject *args, PyObje
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxDateTime (wxDateTime_GetWeek(_arg0,_arg1,_arg2));
+    _result = new wxDateTime (wxDateTime_GetWeek(_arg0,_arg1,_arg2,_arg3));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
