@@ -371,7 +371,12 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
     case wxPropertyValueStringPtr:
     {
       wxChar** s = copyFrom.StringValuePtr();
+      // what is this? are you trying to assign a bool or a string?  VA can't figure it out..
+#if defined(__VISAGECPP__)
+      (*this) = s;
+#else
       (*this) = s != 0;
+#endif
       return ;
     }
 

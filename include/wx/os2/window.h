@@ -167,6 +167,14 @@ public:
     // Dialog support: override these and call
     // base class members to add functionality
     // that can't be done using validators.
+    void SetClientSize( int width, int height )
+        { DoSetClientSize(width, height); }
+
+    void SetClientSize( const wxSize& size )
+        { DoSetClientSize(size.x, size.y); }
+
+    void SetClientSize(const wxRect& rect)
+        { SetClientSize( rect.width, rect.height ); }
 
     // Validate controls. If returns FALSE,
     // validation failed: don't quit

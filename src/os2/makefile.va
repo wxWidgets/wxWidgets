@@ -92,7 +92,7 @@ GENERICOBJS= \
 #  ..\generic\$D\listctrl.obj \
 #  ..\generic\$D\notebook.obj \
 
-# These are generic things that don't need to be compiled on MSW,
+# These are generic things that don't need to be compiled on PM,
 # but sometimes it's useful to do so for testing purposes.
 NONESSENTIALOBJS= \
   ..\generic\$D\printps.obj \

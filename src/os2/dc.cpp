@@ -31,6 +31,50 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 #define pt2mm			0.352777777778
 
 //-----------------------------------------------------------------------------
+// wxDCBase
+//-----------------------------------------------------------------------------
+
+long wxDCBase::DeviceToLogicalX(long x) const
+{
+  return XDEV2LOG(x);
+};
+
+long wxDCBase::DeviceToLogicalY(long y) const
+{
+  return YDEV2LOG(y);
+};
+
+long wxDCBase::DeviceToLogicalXRel(long x) const
+{
+  return XDEV2LOGREL(x);
+};
+
+long wxDCBase::DeviceToLogicalYRel(long y) const
+{
+  return YDEV2LOGREL(y);
+};
+
+long wxDCBase::LogicalToDeviceX(long x) const
+{
+  return XLOG2DEV(x);
+};
+
+long wxDCBase::LogicalToDeviceY(long y) const
+{
+  return YLOG2DEV(y);
+};
+
+long wxDCBase::LogicalToDeviceXRel(long x) const
+{
+  return XLOG2DEVREL(x);
+};
+
+long wxDCBase::LogicalToDeviceYRel(long y) const
+{
+  return YLOG2DEVREL(y);
+};
+
+//-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
 
@@ -41,10 +85,10 @@ wxDC::wxDC(void)
   m_autoSetting = FALSE;
   m_colour = TRUE;
   m_clipping = FALSE;
-  
+
   m_mm_to_pix_x = 1.0;
   m_mm_to_pix_y = 1.0;
-  
+
   m_logicalOriginX = 0;
   m_logicalOriginY = 0;
   m_deviceOriginX = 0;
@@ -53,18 +97,18 @@ wxDC::wxDC(void)
   m_internalDeviceOriginY = 0;
   m_externalDeviceOriginX = 0;
   m_externalDeviceOriginY = 0;
-  
+
   m_logicalScaleX = 1.0;
   m_logicalScaleY = 1.0;
   m_userScaleX = 1.0;
   m_userScaleY = 1.0;
   m_scaleX = 1.0;
   m_scaleY = 1.0;
-  
+
   m_mappingMode = wxMM_TEXT;
   m_needComputeScaleX = FALSE;
   m_needComputeScaleY = FALSE;
-  
+
   m_signX = 1;  // default x-axis left to right
   m_signY = 1;  // default y-axis top down
 
@@ -74,14 +118,14 @@ wxDC::wxDC(void)
   m_logicalFunction = wxCOPY;
 //  m_textAlignment = wxALIGN_TOP_LEFT;
   m_backgroundMode = wxTRANSPARENT;
-  
+
   m_textForegroundColour = *wxBLACK;
   m_textBackgroundColour = *wxWHITE;
   m_pen = *wxBLACK_PEN;
   m_font = *wxNORMAL_FONT;
   m_brush = *wxTRANSPARENT_BRUSH;
   m_backgroundBrush = *wxWHITE_BRUSH;
-  
+
 //  m_palette = wxAPP_COLOURMAP;
 };
 
@@ -89,95 +133,9 @@ wxDC::~wxDC(void)
 {
 };
 
-void wxDC::DrawIcon( const wxIcon &WXUNUSED(icon), long WXUNUSED(x), long WXUNUSED(y), bool WXUNUSED(useMask) )
-{
-};
-
-void wxDC::DrawPoint( wxPoint& point ) 
-{ 
-  DrawPoint( point.x, point.y ); 
-};
-
-void wxDC::DrawPolygon( wxList *list, long xoffset, long yoffset, int fillStyle )
-{
-  int n = list->Number();
-  wxPoint *points = new wxPoint[n];
-
-  int i = 0;
-  for( wxNode *node = list->First(); node; node = node->Next() )
-  {
-    wxPoint *point = (wxPoint *)node->Data();
-    points[i].x = point->x;
-    points[i++].y = point->y;
-  };
-  DrawPolygon( n, points, xoffset, yoffset, fillStyle );
-  delete[] points;
-};
-
-void wxDC::DrawLines( wxList *list, long xoffset, long yoffset )
-{
-  int n = list->Number();
-  wxPoint *points = new wxPoint[n];
-
-  int i = 0;
-  for( wxNode *node = list->First(); node; node = node->Next() ) 
-  {
-    wxPoint *point = (wxPoint *)node->Data();
-    points[i].x = point->x;
-    points[i++].y = point->y;
-  };
-  DrawLines( n, points, xoffset, yoffset );
-  delete []points;
-};
-
-void wxDC::DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 )
-{
-  wxList list;
-  list.Append( (wxObject*)new wxPoint(x1, y1) );
-  list.Append( (wxObject*)new wxPoint(x2, y2) );
-  list.Append( (wxObject*)new wxPoint(x3, y3) );
-  DrawSpline(&list);
-  wxNode *node = list.First();
-  while (node)
-  {
-    wxPoint *p = (wxPoint*)node->Data();
-    delete p;
-    node = node->Next();
-  };
-};
-
-void wxDC::DrawSpline( int n, wxPoint points[] )
-{
-  wxList list;
-  for (int i = 0; i < n; i++) list.Append( (wxObject*)&points[i] );
-  DrawSpline( &list );
-};
-
-void wxDC::SetClippingRegion( long x, long y, long width, long height )
-{
-  m_clipping = TRUE;
-  m_clipX1 = x;
-  m_clipY1 = y;
-  m_clipX2 = x + width;
-  m_clipY2 = y + height;
-};
-
 void wxDC::DestroyClippingRegion(void)
 {
   m_clipping = FALSE;
-};
-
-void wxDC::GetClippingBox( long *x, long *y, long *width, long *height ) const
-{
-  if (m_clipping)
-  {
-    if (x) *x = m_clipX1;
-    if (y) *y = m_clipY1;
-    if (width) *width = (m_clipX2 - m_clipX1);
-    if (height) *height = (m_clipY2 - m_clipY1);
-  }
-  else
-   *x = *y = *width = *height = 0;
 };
 
 void wxDC::GetSize( int* width, int* height ) const
@@ -195,21 +153,9 @@ void wxDC::GetSizeMM( long* width, long* height ) const
   *height = long( double(h) / (m_scaleY*m_mm_to_pix_y) );
 };
 
-void wxDC::SetTextForeground( const wxColour &col )
-{
-  if (!Ok()) return;
-  m_textForegroundColour = col;
-};
-
-void wxDC::SetTextBackground( const wxColour &col )
-{
-  if (!Ok()) return;
-  m_textBackgroundColour = col;
-};
-
 void wxDC::SetMapMode( int mode )
 {
-  switch (mode) 
+  switch (mode)
   {
     case wxMM_TWIPS:
       SetLogicalScale( twips2mm*m_mm_to_pix_x, twips2mm*m_mm_to_pix_y );
@@ -257,12 +203,6 @@ void wxDC::SetLogicalScale( double x, double y )
   ComputeScaleAndOrigin();
 };
 
-void wxDC::GetLogicalScale( double *x, double *y )
-{
-  if (x) *x = m_logicalScaleX;
-  if (y) *y = m_logicalScaleY;
-};
-
 void wxDC::SetLogicalOrigin( long x, long y )
 {
   m_logicalOriginX = x * m_signX;   // is this still correct ?
@@ -270,25 +210,11 @@ void wxDC::SetLogicalOrigin( long x, long y )
   ComputeScaleAndOrigin();
 };
 
-void wxDC::GetLogicalOrigin( long *x, long *y )
-{
-  if (x) *x = m_logicalOriginX;
-  if (y) *y = m_logicalOriginY;
-};
-
 void wxDC::SetDeviceOrigin( long x, long y )
 {
   m_externalDeviceOriginX = x;
   m_externalDeviceOriginY = y;
   ComputeScaleAndOrigin();
-};
-
-void wxDC::GetDeviceOrigin( long *x, long *y )
-{
-//  if (x) *x = m_externalDeviceOriginX;
-//  if (y) *y = m_externalDeviceOriginY;
-  if (x) *x = m_deviceOriginX;
-  if (y) *y = m_deviceOriginY;
 };
 
 void wxDC::SetInternalDeviceOrigin( long x, long y )
@@ -311,53 +237,294 @@ void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
   ComputeScaleAndOrigin();
 };
 
-long wxDC::DeviceToLogicalX(long x) const
-{
-  return XDEV2LOG(x);
-};
 
-long wxDC::DeviceToLogicalY(long y) const
+int wxDC::GetDepth() const
 {
-  return YDEV2LOG(y);
-};
+   // TODO:
+   return (1);
+}
 
-long wxDC::DeviceToLogicalXRel(long x) const
+wxSize wxDC::GetPPI() const
 {
-  return XDEV2LOGREL(x);
-};
+   // TODO:
+   return (1);
+}
+void wxDC::GetTextExtent( const wxString& string
+                         ,long* x
+                         ,long* y
+                         ,long* decent
+                         ,long* externalLeading
+                         ,wxFont* theFont
+                        ) const
+{
+   // TODO:
+}
 
-long wxDC::DeviceToLogicalYRel(long y) const
+void wxDC::GetCharWidth() const
 {
-  return YDEV2LOGREL(y);
-};
+    // TODO
+    return(1);
+}
 
-long wxDC::LogicalToDeviceX(long x) const
+void wxDC::GetCharHeight() const
 {
-  return XLOG2DEV(x);
-};
+    // TODO
+    return(1);
+}
 
-long wxDC::LogicalToDeviceY(long y) const
+void wxDC::Clear()
 {
-  return YLOG2DEV(y);
-};
+   // TODO
+}
 
-long wxDC::LogicalToDeviceXRel(long x) const
+void wxDC::SetFont(const wxFont& font)
 {
-  return XLOG2DEVREL(x);
-};
+   // TODO
+}
 
-long wxDC::LogicalToDeviceYRel(long y) const
+void wxDC::SetPen(const wxPen& pen)
 {
-  return YLOG2DEVREL(y);
-};
-    
-void wxDC::CalcBoundingBox( long x, long y )
+   // TODO
+}
+void wxDC::SetBrush(const wxBrush& brush)
 {
-  if (x < m_minX) m_minX = x;
-  if (y < m_minY) m_minY = y;
-  if (x > m_maxX) m_maxX = x;
-  if (y > m_maxY) m_maxY = y;
-};
+   // TODO
+}
+
+void wxDC::SetBackground(const wxBrush& brush)
+{
+   // TODO
+}
+
+void wxDC::SetLogicalFunction(int function)
+{
+   // TODO
+}
+
+void wxDC::SetBackgroundMode(int mode)
+{
+   // TODO
+}
+
+void wxDC::SetPalette(const wxPalette& palette)
+{
+   // TODO
+}
+
+void wxDC::DoFloodFill( long x
+                       ,long y
+                       ,const wxColour& col
+                       ,int style = wxFLOOD_SURFACE
+                      )
+{
+   // TODO
+}
+
+bool wxDC::DoGetPixel(long x, long y, wxColour *col) const
+{
+   // TODO
+   return(TRUE);
+}
+
+void wxDC::DoDrawPoint(long x, long y)
+{
+   // TODO
+}
+
+void wxDC::DoDrawLine(long x1, long y1, long x2, long y2)
+{
+   // TODO
+}
+
+void wxDC::DoDrawArc( long x1, long y1
+                     ,long x2, long y2
+                     ,long xc, long yc
+                    )
+{
+   // TODO
+}
+
+void wxDC::DoDrawEllipticArc( long x
+                             ,long y
+                             ,long w
+                             ,long h
+                             ,double sa
+                             ,double ea
+                            )
+{
+   // TODO
+}
+
+void wxDC::DoDrawRectangle(long x, long y, long width, long height)
+{
+   // TODO
+}
+
+void wxDC::DoDrawRoundedRectangle( long x, long y
+                                  ,long width, long height
+                                  ,double radius
+                                 )
+{
+   // TODO
+}
+
+void wxDC::DoDrawEllipse(long x, long y, long width, long height)
+{
+   // TODO
+}
+
+void wxDC::DoCrossHair(long x, long y)
+{
+   // TODO
+}
+
+void wxDC::DoDrawIcon(const wxIcon& icon, long x, long y)
+{
+   // TODO
+}
+
+void wxDC::DoDrawBitmap( const wxBitmap &bmp
+                        ,long x, long y
+                        ,bool useMask = FALSE
+                       )
+{
+   // TODO
+}
+
+void wxDC::DoDrawText(const wxString& text, long x, long y)
+{
+   // TODO
+}
+
+bool wxDC::DoBlit( long xdest
+                  ,long ydest
+                  ,long width
+                  ,long height
+                  ,wxDC *source
+                  ,long xsrc
+                  ,long ysrc
+                  ,int  rop = wxCOPY
+                  ,bool useMask = FALSE
+                 )
+{
+   // TODO
+   return(TRUE);
+}
+
+void wxDC::DoGetSize(int *width, int *height) const
+{
+   // TODO
+}
+
+void wxDC::DoGetSizeMM(int* width, int* height) const
+{
+   // TODO
+}
+
+void wxDC::DoDrawLines( int n, wxPoint points[]
+                       ,long xoffset, long yoffset
+                      )
+{
+   // TODO
+}
+
+void wxDC::DoDrawPolygon(int n, wxPoint points[]
+                         ,long xoffset, long yoffset
+                         ,int fillStyle = wxODDEVEN_RULE
+                        )
+{
+   // TODO
+}
+
+void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
+{
+   // TODO
+}
+
+void wxDC::DoSetClippingRegion( long x, long y
+                               ,long width, long height
+                              )
+{
+   // TODO
+}
+
+#if wxUSE_SPLINES
+void wxDC::DoDrawSpline(wxList *points)
+{
+   // TODO
+}
+#endif
+
+//
+// Private functions
+//
+long wxDC::XDEV2LOG(long x) const
+{
+    long new_x = x - m_deviceOriginX;
+    if (new_x > 0)
+        return (long)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
+    else
+        return (long)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
+}
+
+long wxDC::XDEV2LOGREL(long x) const
+{
+    if (x > 0)
+        return (long)((double)(x) / m_scaleX + 0.5);
+    else
+        return (long)((double)(x) / m_scaleX - 0.5);
+}
+
+long wxDC::YDEV2LOG(long y) const
+{
+    long new_y = y - m_deviceOriginY;
+    if (new_y > 0)
+        return (long)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
+    else
+        return (long)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
+}
+
+long wxDC::YDEV2LOGREL(long y) const
+{
+    if (y > 0)
+        return (long)((double)(y) / m_scaleY + 0.5);
+    else
+        return (long)((double)(y) / m_scaleY - 0.5);
+}
+
+long wxDC::XLOG2DEV(long x) const
+{
+    long new_x = x - m_logicalOriginX;
+    if (new_x > 0)
+        return (long)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
+    else
+    return (long)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
+}
+
+long wxDC::XLOG2DEVREL(long x) const
+{
+    if (x > 0)
+        return (long)((double)(x) * m_scaleX + 0.5);
+    else
+        return (long)((double)(x) * m_scaleX - 0.5);
+}
+
+long wxDC::YLOG2DEV(long y) const
+{
+    long new_y = y - m_logicalOriginY;
+    if (new_y > 0)
+        return (long)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
+    else
+        return (long)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
+}
+
+long wxDC::YLOG2DEVREL(long y) const
+{
+    if (y > 0)
+        return (long)((double)(y) * m_scaleY + 0.5);
+    else
+        return (long)((double)(y) * m_scaleY - 0.5);
+}
 
 void wxDC::ComputeScaleAndOrigin(void)
 {
@@ -371,7 +538,7 @@ void wxDC::ComputeScaleAndOrigin(void)
   m_deviceOriginX = m_internalDeviceOriginX + m_externalDeviceOriginX;
   m_deviceOriginY = m_internalDeviceOriginY + m_externalDeviceOriginY;
 
-  // CMB: if scale has changed call SetPen to recalulate the line width 
+  // CMB: if scale has changed call SetPen to recalulate the line width
   if (m_scaleX != origScaleX || m_scaleY != origScaleY)
   {
     // this is a bit artificial, but we need to force wxDC to think

@@ -145,7 +145,6 @@ bool wxPropertyListView::UpdatePropertyList(bool clearEditArea)
     wxProperty *property = (wxProperty *)node->Data();
     wxString stringValueRepr(property->GetValue().GetStringRepresentation());
     wxString paddedString(MakeNameValueString(property->GetName(), stringValueRepr));
-
     m_propertyScrollingList->Append(paddedString.GetData(), (void *)property);
     node = node->Next();
   }

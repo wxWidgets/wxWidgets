@@ -54,7 +54,7 @@ class WXDLLEXPORT wxListBox: public wxControl
   ~wxListBox();
 
   virtual void Append(const wxString& item);
-  virtual void Append(const wxString& item, char *clientData);
+  virtual void Append(const wxString& item, void *clientData);
   virtual void Set(int n, const wxString* choices, char **clientData = NULL);
   virtual int FindString(const wxString& s) const ;
   virtual void Clear();

@@ -67,7 +67,14 @@ wxSize wxDialogBase::SplitTextMessage(const wxString& message,
     {
         if ( *pc == _T('\n') || !*pc )
         {
+#if defined(__VISAGECPP__)
+// have two versions of this in wxWindowDC tp avoid function hiding
+// since there are two of these in wxDCBase, and in turn in wxDC.
+// VA cannot resolve this so:
+            dc.GetTextExtent(curLine, &width, &height, NULL, NULL, NULL, FALSE);
+#else
             dc.GetTextExtent(curLine, &width, &height);
+#endif
             if ( width > widthTextMax )
                 widthTextMax = width;
             if ( height > heightTextMax )

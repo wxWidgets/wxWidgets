@@ -100,7 +100,14 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     wxClientDC dc(this);
     dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
     long widthText;
+#if defined(__VISAGECPP__)
+// have two versions of this in wxWindowDC tp avoid function hiding
+// since there are two of these in wxDCBase, and in turn in wxDC.
+// VA cannot resolve this so:
+    dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL, FALSE);
+#else
     dc.GetTextExtent(message, &widthText, NULL);
+#endif
 
     m_msg = new wxStaticText(this, -1, message);
     c = new wxLayoutConstraints;

@@ -81,7 +81,10 @@ public:
     virtual int  ShowModal();
     virtual void EndModal(int retCode);
 
-    void     SetClientSize(int width, int height);
+    void     SetClientSize(int width, int height) { wxWindow::DoSetClientSize(width, height); };
+    void     SetClientSize( const wxSize& size ) { wxWindow::DoSetClientSize(size.x, size.y); };
+    void     SetClientSize(const wxRect& rect) { SetClientSize( rect.width, rect.height ); };
+
     void     GetPosition(int *x, int *y) const;
     bool     Show(bool show);
     void     Iconize(bool iconize);

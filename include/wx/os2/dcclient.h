@@ -68,9 +68,9 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     virtual bool CanGetTextExtent(void) const;
     virtual void GetTextExtent( const wxString &string, long *width, long *height,
                      long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16 = FALSE );
-    virtual long GetCharWidth(void);
-    virtual long GetCharHeight(void);
+                     wxFont *theFont = NULL, bool use16 = FALSE ) const;
+    virtual long GetCharWidth(void) const;
+    virtual long GetCharHeight(void) const;
 
     virtual void Clear(void);
 
@@ -90,6 +90,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
 
     virtual void DrawSpline( wxList *points );
 private:
+    // to supress virtual function hiding, do not use
     void DrawEllipticArc(const wxPoint& pt, const wxSize& sz,
                          double sa, double ea)
     { wxDC::DrawEllipticArc(pt, sz, sa, ea); };
@@ -99,6 +100,10 @@ private:
     { wxDC::DrawSpline(n, points); };
     void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3)
     { wxDC::DrawSpline(x1, y1, x2, y2, x3, y3); };
+    virtual void GetTextExtent( const wxString &string, long *width, long *height,
+                     long *descent = NULL, long *externalLeading = NULL,
+                     wxFont *theFont = NULL) const
+    { GetTextExtent(string, width, height, descent, externalLeading, theFont, FALSE); };
 };
 
 //-----------------------------------------------------------------------------
