@@ -33,6 +33,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - wxApp::SendIdleEvent() now takes 2 arguments
 - wxTabView::GetLayers() changed return type from wxList& to wxTabLayerList&
   (when WXWIN_COMPATIBILITY_2_4 == 0)
+- wxID_SEPARATOR (id used for the menu separators) value changed from -1 to -2
 
 
 DEPRECATED METHODS SINCE 2.4.x
@@ -122,12 +123,9 @@ All (GUI):
 - added wxStatusBar support to XRC (Brian Ravnsgaard Riis)
 - wxMenu::Append and etc. return a pointer to the wxMenuItem that was
   added or inserted, or NULL on failure.
-- Using a -1 (wxID_ANY) for menu or toolbar item IDs will now generate
-  a new ID for the item using wxNewId().  As a consequence of this,
-  the value of wxID_SEPARATOR was changed from -1 to -2 in order to
-  not clash.
+- using a -1 (wxID_ANY) for menu or toolbar item IDs will now generate new id
 - added option to generate C++ headers to wxrc utility (Eduardo Marques)
-
+- added wxDC::DrawPolyPolygon() for MSW/PS (Carl-Friedrich Braun)
 
 wxMSW:
 

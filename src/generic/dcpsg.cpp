@@ -564,7 +564,7 @@ void wxPostScriptDC::DoDrawPoint (wxCoord x, wxCoord y)
     CalcBoundingBox( x, y );
 }
 
-void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int WXUNUSED(fillStyle))
+void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -597,7 +597,7 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
         }
 
         if ( m_pstream )
-            fprintf( m_pstream, "fill\n" );
+            fprintf( m_pstream, (fillStyle == wxODDEVEN_RULE ? "eofill\n" : "fill\n"));
     }
 
     if (m_pen.GetStyle () != wxTRANSPARENT)
@@ -631,6 +631,72 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
             fprintf( m_pstream, "closepath\n" );
             fprintf( m_pstream, "stroke\n" );
         }
+    }
+}
+
+void wxPostScriptDC::DoDrawPolyPolygon (int n, int start[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+{
+    wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
+
+    if (n <= 0) return;
+
+    if (m_brush.GetStyle () != wxTRANSPARENT)
+    {
+        SetBrush( m_brush );
+
+        fprintf( m_pstream, "newpath\n" );
+
+        int ofs = 0;
+        for (int i = 0; i < n; ofs += start[i++])
+        {
+            wxCoord xx = LogicalToDeviceX(points[ofs].x + xoffset);
+            wxCoord yy = LogicalToDeviceY(points[ofs].y + yoffset);
+
+            fprintf( m_pstream, "%d %d moveto\n", xx, yy );
+
+            CalcBoundingBox( points[ofs].x + xoffset, points[ofs].y + yoffset );
+
+            for (int j = 1; j < start[i]; j++)
+            {
+                xx = LogicalToDeviceX(points[ofs+j].x + xoffset);
+                yy = LogicalToDeviceY(points[ofs+j].y + yoffset);
+
+                fprintf( m_pstream, "%d %d lineto\n", xx, yy );
+
+                CalcBoundingBox( points[ofs+j].x + xoffset, points[ofs+j].y + yoffset);
+            }
+        }
+        fprintf( m_pstream, (fillStyle == wxODDEVEN_RULE ? "eofill\n" : "fill\n"));
+    }
+
+    if (m_pen.GetStyle () != wxTRANSPARENT)
+    {
+        SetPen( m_pen );
+
+        fprintf( m_pstream, "newpath\n" );
+
+        int ofs = 0;
+        for (int i = 0; i < n; ofs += start[i++])
+        {
+            wxCoord xx = LogicalToDeviceX(points[ofs].x + xoffset);
+            wxCoord yy = LogicalToDeviceY(points[ofs].y + yoffset);
+
+            fprintf( m_pstream, "%d %d moveto\n", xx, yy );
+
+            CalcBoundingBox( points[ofs].x + xoffset, points[ofs].y + yoffset );
+
+            for (int j = 1; j < start[i]; j++)
+            {
+                xx = LogicalToDeviceX(points[ofs+j].x + xoffset);
+                yy = LogicalToDeviceY(points[ofs+j].y + yoffset);
+
+                fprintf( m_pstream, "%d %d lineto\n", xx, yy );
+
+                CalcBoundingBox( points[ofs+j].x + xoffset, points[ofs+j].y + yoffset);
+            }
+        }
+        fprintf( m_pstream, "closepath\n" );
+        fprintf( m_pstream, "stroke\n" );
     }
 }
 

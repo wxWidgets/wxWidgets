@@ -210,6 +210,11 @@ public:
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE);
 
+    void DrawPolyPolygon(int n, int start[], wxPoint points[],
+                         wxCoord xoffset = 0, wxCoord yoffset = 0,
+                         int fillStyle = wxODDEVEN_RULE)
+        { DoDrawPolyPolygon(n, start, points, xoffset, yoffset, fillStyle); }
+
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         { DoDrawRectangle(x, y, width, height); }
     void DrawRectangle(const wxPoint& pt, const wxSize& sz)
@@ -684,6 +689,9 @@ protected:
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle = wxODDEVEN_RULE) = 0;
+    virtual void DoDrawPolyPolygon(int n, int start[], wxPoint points[],
+                               wxCoord xoffset, wxCoord yoffset,
+                               int fillStyle);
 
     virtual void DoSetClippingRegionAsRegion(const wxRegion& region) = 0;
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,

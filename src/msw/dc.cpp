@@ -793,6 +793,50 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
     }
 }
 
+void
+wxDC::DoDrawPolyPolygon(int n,
+                        int start[],
+                        wxPoint points[],
+                        wxCoord xoffset,
+                        wxCoord yoffset,
+                        int fillStyle)
+{
+#ifdef __WXMICROWIN__
+    if (!GetHDC()) return;
+#endif
+
+    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    int i, cnt;
+    for (i = cnt = 0; i < n; i++)
+        cnt += start[i];
+
+    // Do things less efficiently if we have offsets
+    if (xoffset != 0 || yoffset != 0)
+    {
+        POINT *cpoints = new POINT[cnt];
+        for (i = 0; i < cnt; i++)
+        {
+            cpoints[i].x = (int)(points[i].x + xoffset);
+            cpoints[i].y = (int)(points[i].y + yoffset);
+
+            CalcBoundingBox(cpoints[i].x, cpoints[i].y);
+        }
+        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
+        (void)PolyPolygon(GetHdc(), cpoints, start, n);
+        SetPolyFillMode(GetHdc(),prev);
+        delete[] cpoints;
+    }
+    else
+    {
+        for (i = 0; i < cnt; i++)
+            CalcBoundingBox(points[i].x, points[i].y);
+
+        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
+        (void)PolyPolygon(GetHdc(), (POINT*) points, start, n);
+        SetPolyFillMode(GetHdc(),prev);
+    }
+}
+
 void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
 #ifdef __WXMICROWIN__
