@@ -396,7 +396,7 @@ void wxPolygonShape::AddPolygonPoint(int pos)
   double y = (double)((secondPoint->y - firstPoint->y)/2.0 + firstPoint->y);
   wxRealPoint *point = new wxRealPoint(x, y);
 
-  if (pos >= (m_points->GetCount() - 1))
+  if (pos >= (int) (m_points->GetCount() - 1))
     m_points->Append((wxObject*) point);
   else
     m_points->Insert(node2, (wxObject*) point);
@@ -784,7 +784,7 @@ int wxPolygonShape::GetNumberOfAttachments() const
 bool wxPolygonShape::GetAttachmentPosition(int attachment, double *x, double *y,
                                          int nth, int no_arcs, wxLineShape *line)
 {
-  if ((m_attachmentMode == ATTACHMENT_MODE_EDGE) && m_points && attachment < m_points->GetCount())
+  if ((m_attachmentMode == ATTACHMENT_MODE_EDGE) && m_points && attachment < (int) m_points->GetCount())
   {
     wxRealPoint *point = (wxRealPoint *)m_points->Item(attachment)->GetData();
     *x = point->x + m_xpos;
@@ -800,7 +800,7 @@ bool wxPolygonShape::AttachmentIsValid(int attachment) const
   if (!m_points)
     return FALSE;
 
-  if ((attachment >= 0) && (attachment < m_points->GetCount()))
+  if ((attachment >= 0) && (attachment < (int) m_points->GetCount()))
     return TRUE;
 
   wxNode *node = m_attachmentPoints.GetFirst();

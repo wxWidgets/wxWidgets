@@ -87,6 +87,8 @@ wxSTD istream& DiagramDocument::LoadObject(wxSTD istream& stream)
 
 wxOutputStream& DiagramDocument::SaveObject(wxOutputStream& stream)
 {
+#if wxUSE_PROLOGIO
+
   wxDocument::SaveObject(stream);
   char buf[400];
   (void) wxGetTempFileName("diag", buf);
@@ -96,15 +98,16 @@ wxOutputStream& DiagramDocument::SaveObject(wxOutputStream& stream)
   wxTransferFileToStream(buf, stream);
 
   wxRemoveFile(buf);
-  
+
+#endif
 
   return stream;
 }
 
 wxInputStream& DiagramDocument::LoadObject(wxInputStream& stream)
 {
+#if wxUSE_PROLOGIO
   wxDocument::LoadObject(stream);
-
 
   char buf[400];
   (void) wxGetTempFileName("diag", buf);
@@ -114,6 +117,7 @@ wxInputStream& DiagramDocument::LoadObject(wxInputStream& stream)
   diagram.DeleteAllShapes();
   diagram.LoadFile(buf);
   wxRemoveFile(buf);
+#endif
 
   return stream;
 }
@@ -546,6 +550,8 @@ void MyEvtHandler::OnEndSize(double x, double y)
 /*
  * Diagram
  */
+
+#if wxUSE_PROLOGIO
  
 bool MyDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 {
@@ -567,6 +573,8 @@ bool MyDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
     delete[] label;
   return TRUE;
 }
+
+#endif
 
 /*
  * New shapes

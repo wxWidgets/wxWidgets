@@ -613,7 +613,7 @@ void wxLineCrossings::FindCrossings(wxDiagram& diagram)
             wxLineShape* lineShape1 = (wxLineShape*) shape1;
             // Iterate through the segments
             wxList* pts1 = lineShape1->GetLineControlPoints();
-            int i;
+            size_t i;
             for (i = 0; i < (pts1->GetCount() - 1); i++)
             {
                 wxRealPoint* pt1_a = (wxRealPoint*) (pts1->Item(i)->GetData());
@@ -633,7 +633,7 @@ void wxLineCrossings::FindCrossings(wxDiagram& diagram)
                         // Iterate through the segments
                         wxList* pts2 = lineShape2->GetLineControlPoints();
                         int j;
-                        for (j = 0; j < (pts2->GetCount() - 1); j++)
+                        for (j = 0; j < (int) (pts2->GetCount() - 1); j++)
                         {
                             wxRealPoint* pt2_a = (wxRealPoint*) (pts2->Item(j)->GetData());
                             wxRealPoint* pt2_b = (wxRealPoint*) (pts2->Item(j+1)->GetData());

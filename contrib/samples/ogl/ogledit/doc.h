@@ -21,7 +21,11 @@
 #include <wx/string.h>
 
 #include <wx/deprecated/setup.h>
+
+#if wxUSE_PROLOGIO
 #include <wx/deprecated/wxexpr.h>
+#endif
+
 #include <wx/ogl/ogl.h>
 
 #if wxUSE_STD_IOSTREAM
@@ -36,8 +40,10 @@ class MyDiagram: public wxDiagram
 {
  public:
   MyDiagram(void) {}
+#if wxUSE_PROLOGIO
   bool OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr);
   bool OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr);
+#endif
 };
 
 /*

@@ -1621,7 +1621,7 @@ void wxShape::AddLine(wxLineShape *line, wxShape *other,
     {
         // Don't preserve old ordering if we have new ordering instructions
         m_lines.DeleteObject(line);
-        if (positionFrom < m_lines.GetCount())
+        if (positionFrom < (int) m_lines.GetCount())
         {
             wxNode* node = m_lines.Item(positionFrom);
             m_lines.Insert(node, line);
@@ -1639,7 +1639,7 @@ void wxShape::AddLine(wxLineShape *line, wxShape *other,
     {
         // Don't preserve old ordering if we have new ordering instructions
         other->m_lines.DeleteObject(line);
-        if (positionTo < other->m_lines.GetCount())
+        if (positionTo < (int) other->m_lines.GetCount())
         {
             wxNode* node = other->m_lines.Item(positionTo);
             other->m_lines.Insert(node, line);
@@ -2904,7 +2904,7 @@ wxRealPoint wxShape::CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPo
 // Return the zero-based position in m_lines of line.
 int wxShape::GetLinePosition(wxLineShape* line)
 {
-    int i = 0;
+    size_t i = 0;
     for (i = 0; i < m_lines.GetCount(); i++)
         if ((wxLineShape*) (m_lines.Item(i)->GetData()) == line)
             return i;
