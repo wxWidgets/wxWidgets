@@ -35,7 +35,7 @@
     #include "wx/frame.h"
     #include "wx/button.h"
     #include "wx/stattext.h"
-    #include "wx/layout.h"
+    #include "wx/sizer.h"
     #include "wx/event.h"
     #include "wx/gauge.h"
     #include "wx/intl.h"
@@ -50,8 +50,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-#define LAYOUT_X_MARGIN 8
-#define LAYOUT_Y_MARGIN 8
+#define LAYOUT_MARGIN 8
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -117,24 +116,19 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     m_parentTop = wxGetTopLevelParent(parent);
 
-    wxLayoutConstraints *c;
-
     wxClientDC dc(this);
     dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     long widthText;
     dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL);
 
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+	
     m_msg = new wxStaticText(this, wxID_ANY, message);
-    c = new wxLayoutConstraints;
-    c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
-    c->top.SameAs(this, wxTop, 2*LAYOUT_Y_MARGIN);
-    c->width.AsIs();
-    c->height.AsIs();
-    m_msg->SetConstraints(c);
+    sizer->Add(m_msg, 0, wxLEFT | wxTOP, 2*LAYOUT_MARGIN);
 
     wxSize sizeDlg,
            sizeLabel = m_msg->GetSize();
-    sizeDlg.y = 2*LAYOUT_Y_MARGIN + sizeLabel.y;
+    sizeDlg.y = 2*LAYOUT_MARGIN + sizeLabel.y;
 
     wxWindow *lastWindow = m_msg;
 
@@ -147,17 +141,12 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                               wxDefaultPosition, wxDefaultSize,
                               wxGA_HORIZONTAL);
 
-        c = new wxLayoutConstraints;
-        c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
-        c->top.Below(m_msg, 2*LAYOUT_Y_MARGIN);
-        c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
-        c->height.AsIs();
-        m_gauge->SetConstraints(c);
+        sizer->Add(m_gauge, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 2*LAYOUT_MARGIN);
         m_gauge->SetValue(0);
         lastWindow = m_gauge;
 
         wxSize sizeGauge = m_gauge->GetSize();
-        sizeDlg.y += 2*LAYOUT_Y_MARGIN + sizeGauge.y;
+        sizeDlg.y += 2*LAYOUT_MARGIN + sizeGauge.y;
     }
     else
         m_gauge = (wxGauge *)NULL;
@@ -176,7 +165,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         nTimeLabels++;
 
         label =
-        m_elapsed = CreateLabel(_("Elapsed time : "), &lastWindow);
+        m_elapsed = CreateLabel(_("Elapsed time : "), sizer);
     }
 
     if ( style & wxPD_ESTIMATED_TIME )
@@ -184,7 +173,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         nTimeLabels++;
 
         label =
-        m_estimated = CreateLabel(_("Estimated time : "), &lastWindow);
+        m_estimated = CreateLabel(_("Estimated time : "), sizer);
     }
 
     if ( style & wxPD_REMAINING_TIME )
@@ -192,45 +181,36 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         nTimeLabels++;
 
         label =
-        m_remaining = CreateLabel(_("Remaining time : "), &lastWindow);
+        m_remaining = CreateLabel(_("Remaining time : "), sizer);
     }
 
     if ( nTimeLabels > 0 )
     {
         // set it to the current time
         m_timeStart = wxGetCurrentTime();
-        sizeDlg.y += nTimeLabels * (label->GetSize().y + LAYOUT_Y_MARGIN);
+        sizeDlg.y += nTimeLabels * (label->GetSize().y + LAYOUT_MARGIN);
     }
 
     if ( hasAbortButton )
     {
         m_btnAbort = new wxButton(this, wxID_CANCEL, _("Cancel"));
-        c = new wxLayoutConstraints;
 
         // Windows dialogs usually have buttons in the lower right corner
 #if defined(__WXMSW__) || defined(__WXPM__)
-        c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
+        sizer->Add(m_btnAbort, 0, wxALIGN_RIGHT | wxALL, 2*LAYOUT_MARGIN);
 #else // !MSW
-        c->centreX.SameAs(this, wxCentreX);
+        sizer->Add(m_btnAbort, 0, wxALIGN_CENTER_HORIZONTAL | wxBOTTOM | wxTOP, 2*LAYOUT_MARGIN);
 #endif // MSW/!MSW
-        c->bottom.SameAs(this, wxBottom, 2*LAYOUT_Y_MARGIN);
-
-        c->width.AsIs();
-        c->height.AsIs();
-
-        m_btnAbort->SetConstraints(c);
-
-        sizeDlg.y += 2*LAYOUT_Y_MARGIN + wxButton::GetDefaultSize().y;
+        sizeDlg.y += 2*LAYOUT_MARGIN + wxButton::GetDefaultSize().y;
     }
     else // no "Cancel" button
     {
         m_btnAbort = (wxButton *)NULL;
     }
 
-    SetAutoLayout(true);
-    Layout();
+    SetSizerAndFit(sizer);
 
-    sizeDlg.y += 2*LAYOUT_Y_MARGIN;
+    sizeDlg.y += 2*LAYOUT_MARGIN;
 
     // try to make the dialog not square but rectangular of reasonabel width
     sizeDlg.x = (wxCoord)wxMax(widthText, 4*sizeDlg.y/3);
@@ -266,34 +246,24 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 }
 
 wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
-                                            wxWindow **lastWindow)
+                                            wxSizer *sizer)
 {
-    wxLayoutConstraints *c;
+    wxBoxSizer *locsizer = new wxBoxSizer(wxHORIZONTAL);
 
+    wxStaticText *dummy = new wxStaticText(this, -1, text);
     wxStaticText *label = new wxStaticText(this, wxID_ANY, _("unknown"));
-    c = new wxLayoutConstraints;
 
     // VZ: I like the labels be centered - if the others don't mind, you may
     //     remove "#ifdef __WXMSW__" and use it for all ports
 #if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMAC__)
-    c->left.SameAs(this, wxCentreX, LAYOUT_X_MARGIN);
+    locsizer->Add(dummy, 1, wxALIGN_RIGHT);
+    locsizer->Add(label, 1, wxALIGN_LEFT | wxLEFT, LAYOUT_MARGIN);
+    sizer->Add(locsizer, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP, LAYOUT_MARGIN);
 #else // !MSW
-    c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
+    sizer->Add(locsizer, 0, wxALIGN_RIGHT | wxRIGHT | wxTOP, LAYOUT_MARGIN);
+    locsizer->Add(dummy);
+    locsizer->Add(label, 0, wxLEFT, LAYOUT_MARGIN);
 #endif // MSW/!MSW
-    c->top.Below(*lastWindow, LAYOUT_Y_MARGIN);
-    c->width.AsIs();
-    c->height.AsIs();
-    label->SetConstraints(c);
-
-    wxStaticText *dummy = new wxStaticText(this, wxID_ANY, text);
-    c = new wxLayoutConstraints;
-    c->right.LeftOf(label);
-    c->top.SameAs(label, wxTop, 0);
-    c->width.AsIs();
-    c->height.AsIs();
-    dummy->SetConstraints(c);
-
-    *lastWindow = label;
 
     return label;
 }

@@ -78,9 +78,8 @@ protected:
 
 private:
    // create the label with given text and another one to show the time nearby
-   // under the lastWindow and modify it to be the same as the control created
-   // (which is returned)
-   wxStaticText *CreateLabel(const wxString& text, wxWindow **lastWindow);
+   // as the next windows in the sizer, returns the created control
+   wxStaticText *CreateLabel(const wxString& text, wxSizer *sizer);
 
    // the status bar
    wxGauge *m_gauge;
