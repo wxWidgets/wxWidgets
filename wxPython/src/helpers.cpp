@@ -46,6 +46,7 @@ void WXDLLEXPORT wxEntryCleanup();
 
 wxPyApp* wxPythonApp = NULL;  // Global instance of application object
 bool wxPyDoCleanup = FALSE;
+bool wxPyDoingCleanup = FALSE;
 
 
 #ifdef WXP_WITH_THREAD
@@ -379,6 +380,7 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 
 
 void __wxCleanup() {
+    wxPyDoingCleanup = TRUE;
     if (wxPyDoCleanup)
         wxEntryCleanup();
 #ifdef WXP_WITH_THREAD
@@ -442,15 +444,20 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 //---------------------------------------------------------------------------
 
 void wxPyClientData_dtor(wxPyClientData* self) {
-    wxPyBeginBlockThreads();
-    Py_DECREF(self->m_obj);
-    wxPyEndBlockThreads();
+    if (! wxPyDoingCleanup) {           // Don't do it during cleanup as Python
+                                        // may have already garbage collected the object...
+        wxPyBeginBlockThreads();
+        Py_DECREF(self->m_obj);
+        wxPyEndBlockThreads();
+    }
 }
 
 void wxPyUserData_dtor(wxPyUserData* self) {
-    wxPyBeginBlockThreads();
-    Py_DECREF(self->m_obj);
-    wxPyEndBlockThreads();
+    if (! wxPyDoingCleanup) {
+        wxPyBeginBlockThreads();
+        Py_DECREF(self->m_obj);
+        wxPyEndBlockThreads();
+    }
 }
 
 
@@ -472,6 +479,8 @@ void wxPyOORClientData_dtor(wxPyOORClientData* self) {
         wxASSERT_MSG(deadObjectClass != NULL, wxT("Can't get _wxPyDeadObject class!"));
         Py_INCREF(deadObjectClass);
     }
+
+    // TODO:  If wxPyDOingCleanup, should we skip the code below?
 
     // Clear the instance's dictionary, put the name of the old class into the
     // instance, and then reset the class to be the dead class.
