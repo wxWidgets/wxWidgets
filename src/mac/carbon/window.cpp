@@ -2429,8 +2429,22 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
         else
         {
             DrawThemeFocusRect( &rect , false ) ;
+            
             // as this erases part of the frame we have to redraw borders
-            MacPaintBorders( x , y ) ;
+            // and because our z-ordering is not always correct (staticboxes)
+            // we have to invalidate things, we cannot simple redraw
+            RgnHandle updateInner = NewRgn() , updateOuter = NewRgn() ;
+            RectRgn( updateInner , &rect ) ;
+            InsetRect( &rect , -4 , -4 ) ;
+            RectRgn( updateOuter , &rect ) ;
+            DiffRgn( updateOuter , updateInner ,updateOuter ) ;
+            wxPoint parent(0,0); 
+            GetParent()->MacWindowToRootWindow( &parent.x , &parent.y ) ;
+            parent -= GetParent()->GetClientAreaOrigin() ;
+            OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
+            GetParent()->m_peer->SetNeedsDisplay( true , updateOuter ) ;
+            DisposeRgn(updateOuter) ;
+            DisposeRgn(updateInner) ;
         }
     }
 
@@ -2726,6 +2740,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
                 wxWindowDC dc(this) ;
                 dc.SetClippingRegion(wxRegion(updatergn));
                 wxMacPortSetter helper(&dc) ;
+                OffsetRect( &childRect , dc.m_macLocalOrigin.x , dc.m_macLocalOrigin.y ) ;
                 DrawThemeFocusRect( &childRect , true ) ;
             }
         }
