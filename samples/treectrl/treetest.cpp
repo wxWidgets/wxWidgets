@@ -33,13 +33,15 @@
 
 #include "math.h"
 
-//#define NO_VARIABLE_HEIGHT
-//#define NO_MULTIPLE_SELECTION
-
 #ifdef __WXMSW__
-    // comment out this line to test multiple selection even under MSW (where
-    // it looks ugly - but works)
+    // this is not supported at all under MSW
+    #define NO_VARIABLE_HEIGHT
+
     #define NO_MULTIPLE_SELECTION
+
+    // this is supported (so the next line may be uncommented) but not very
+    // well :-(
+    #undef NO_MULTIPLE_SELECTION
 #endif
 
 #include "treetest.h"
@@ -64,6 +66,8 @@
                            }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_SIZE(MyFrame::OnSize)
+
     EVT_MENU(TreeTest_Quit, MyFrame::OnQuit)
     EVT_MENU(TreeTest_About, MyFrame::OnAbout)
     EVT_MENU(TreeTest_Dump, MyFrame::OnDump)
@@ -71,6 +75,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TreeTest_DumpSelected, MyFrame::OnDumpSelected)
     EVT_MENU(TreeTest_Select, MyFrame::OnSelect)
     EVT_MENU(TreeTest_Unselect, MyFrame::OnUnselect)
+    EVT_MENU(TreeTest_ToggleSel, MyFrame::OnToggleSel)
 #endif // NO_MULTIPLE_SELECTION
     EVT_MENU(TreeTest_Rename, MyFrame::OnRename)
     EVT_MENU(TreeTest_Count, MyFrame::OnCount)
@@ -133,7 +138,8 @@ bool MyApp::OnInit()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
-       : wxFrame((wxFrame *)NULL, -1, title, wxPoint(x, y), wxSize(w, h))
+       : wxFrame((wxFrame *)NULL, -1, title, wxPoint(x, y), wxSize(w, h)),
+         m_treeCtrl(NULL), m_textCtrl(NULL)
 {
     // This reduces flicker effects - even better would be to define
     // OnEraseBackground to do nothing. When the tree control's scrollbars are
@@ -152,6 +158,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     file_menu->AppendSeparator();
     file_menu->Append(TreeTest_Quit, "E&xit\tAlt-X");
 
+#ifndef NO_MULTIPLE_SELECTION
+    tree_menu->Append(TreeTest_ToggleSel, "&Toggle selection mode");
+#endif // NO_MULTIPLE_SELECTION
     tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
     tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
     tree_menu->AppendSeparator();
@@ -189,7 +198,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     item_menu->Append(TreeTest_DumpSelected, "Dump selected items\tAlt-D");
     item_menu->Append(TreeTest_Select, "Select current item\tAlt-S");
     item_menu->Append(TreeTest_Unselect, "Unselect everything\tAlt-U");
-#endif
+#endif // NO_MULTIPLE_SELECTION
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
@@ -201,9 +210,6 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTR_HAS_BUTTONS |
                                 wxTR_EDIT_LABELS |
-#ifndef NO_MULTIPLE_SELECTION
-                                wxTR_MULTIPLE |
-#endif
 #ifndef NO_VARIABLE_HEIGHT
                                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
 #endif
@@ -211,24 +217,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     m_treeCtrl->SetBackgroundColour(wxColour(204, 205, 79));
 
-    wxTextCtrl *textCtrl = new wxTextCtrl(this, -1, "",
+    m_textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
-
-    wxLayoutConstraints *c = new wxLayoutConstraints;
-    c->top.SameAs(this, wxTop);
-    c->left.SameAs(this, wxLeft);
-    c->right.SameAs(this, wxRight);
-    c->height.PercentOf(this, wxHeight, 66);
-    m_treeCtrl->SetConstraints(c);
-
-    c = new wxLayoutConstraints;
-    c->top.Below(m_treeCtrl);
-    c->left.SameAs(this, wxLeft);
-    c->right.SameAs(this, wxRight);
-    c->bottom.SameAs(this, wxBottom);
-    textCtrl->SetConstraints(c);
-    SetAutoLayout(TRUE);
 
     // create a status bar with 3 panes
     CreateStatusBar(3);
@@ -240,7 +231,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     delete wxLog::SetActiveTarget(new wxLogStderr);
 #else
     // set our text control as the log target
-    wxLogTextCtrl *logWindow = new wxLogTextCtrl(textCtrl);
+    wxLogTextCtrl *logWindow = new wxLogTextCtrl(m_textCtrl);
     delete wxLog::SetActiveTarget(logWindow);
 #endif
 }
@@ -248,6 +239,22 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 MyFrame::~MyFrame()
 {
     delete wxLog::SetActiveTarget(NULL);
+}
+
+void MyFrame::OnSize(wxSizeEvent& event)
+{
+    if ( m_treeCtrl && m_textCtrl )
+    {
+        Resize(GetClientSize());
+    }
+
+    event.Skip();
+}
+
+void MyFrame::Resize(const wxSize& size)
+{
+    m_treeCtrl->SetSize(0, 0, size.x, 2*size.y/3);
+    m_textCtrl->SetSize(0, 2*size.y/3, size.x, size.y/3);
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -325,6 +332,22 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 }
 
 #ifndef NO_MULTIPLE_SELECTION
+
+void MyFrame::OnToggleSel(wxCommandEvent& WXUNUSED(event))
+{
+    long style = m_treeCtrl->GetWindowStyle();
+    if ( style & wxTR_MULTIPLE )
+        style &= ~wxTR_MULTIPLE;
+    else
+        style |= wxTR_MULTIPLE;
+
+    delete m_treeCtrl;
+
+    m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
+                                wxDefaultPosition, wxDefaultSize,
+                                style);
+    Resize(GetClientSize());
+}
 
 void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 {

@@ -120,6 +120,7 @@ public:
     void OnDumpSelected(wxCommandEvent& event);
     void OnSelect(wxCommandEvent& event);
     void OnUnselect(wxCommandEvent& event);
+    void OnToggleSel(wxCommandEvent& event);
 #endif // NO_MULTIPLE_SELECTION
     void OnDelete(wxCommandEvent& event);
     void OnDeleteChildren(wxCommandEvent& event);
@@ -150,10 +151,15 @@ public:
 
     void OnToggleIcon(wxCommandEvent& event);
 
+    void OnSize(wxSizeEvent& event);
+
 private:
     void DoSort(bool reverse = FALSE);
 
+    void Resize(const wxSize& size);
+
     MyTreeCtrl *m_treeCtrl;
+    wxTextCtrl *m_textCtrl;
 
     void DoSetBold(bool bold = TRUE);
 
@@ -178,6 +184,7 @@ enum
     TreeTest_DeleteChildren,
     TreeTest_DeleteAll,
     TreeTest_Recreate,
+    TreeTest_ToggleSel,
     TreeTest_CollapseAndReset,
     TreeTest_EnsureVisible,
     TreeTest_AddItem,
