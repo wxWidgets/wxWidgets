@@ -27,8 +27,7 @@
 
 // CreateDialog
 
-#if !defined(__WXWINCE__) && defined(CreateDialog)
-// #if defined(CreateDialog)
+#if defined(CreateDialog)
     #undef CreateDialog
 
     inline HWND CreateDialog(HINSTANCE hInstance,
