@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1772,7 +1772,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -5771,7 +5771,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -12317,12 +12317,12 @@ EXPORTS
       wxTestFontEncoding__FRC20wxNativeEncodingInfo
       ;wxCreateFontFromLogFont(const _FATTRS*,_FONTMETRICS* const,_FACENAMEDESC*)
       wxCreateFontFromLogFont__FPC7_FATTRSCP12_FONTMETRICSP13_FACENAMEDESC
+      ;wxFillLogFont(_FATTRS*,_FACENAMEDESC*,unsigned long*,unsigned long*,long*,wxString&,wxFont*)
+      wxFillLogFont__FP7_FATTRSP13_FACENAMEDESCPUlT3PlR8wxStringP6wxFont
       ;wxGetNativeFontEncoding(wxFontEncoding,wxNativeEncodingInfo*)
       wxGetNativeFontEncoding__F14wxFontEncodingP20wxNativeEncodingInfo
       ;wxOS2SelectMatchingFontByName(_FATTRS*,_FACENAMEDESC*,_FONTMETRICS*,int,const wxFont*)
       wxOS2SelectMatchingFontByName__FP7_FATTRSP13_FACENAMEDESCP12_FONTMETRICSiPC6wxFont
-      ;wxFillLogFont(_FATTRS*,_FACENAMEDESC*,unsigned long*,long*,wxString&,wxFont*)
-      wxFillLogFont__FP7_FATTRSP13_FACENAMEDESCPUlPlR8wxStringP6wxFont
       ;wxGpiStrcmp(char*,char*)
       wxGpiStrcmp__FPcT1
       ;wxNativeEncodingInfo::FromString(const wxString&)

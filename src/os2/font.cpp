@@ -362,13 +362,14 @@ bool wxFontRefData::Alloc(
 )
 {
     wxString                        sFaceName;
-    long                            flId;
+    long                            flId = m_hFont;
 
     if (!m_bNativeFontInfoOk)
     {
         wxFillLogFont( &m_vNativeFontInfo.fa
                       ,&m_vNativeFontInfo.fn
                       ,&m_hPS
+                      ,&m_bInternalPS
                       ,&flId
                       ,sFaceName
                       ,pFont
@@ -381,25 +382,9 @@ bool wxFontRefData::Alloc(
                           ,flId
                           ,&m_vNativeFontInfo.fa
                          ) != GPI_ERROR)
-       m_hFont = (WXHFONT)1;
+       m_hFont = (WXHFONT)flId;
+       m_nFontId = flId;
 
-    //
-    // We don't actuall keep the font around if using a temporary PS
-    //
-    if (m_bInternalPS)
-    {
-        if(m_hFont)
-            ::GpiDeleteSetId( m_hPS
-                             ,flId
-                            );
-
-        ::WinReleasePS(m_hPS);
-    }
-    else
-        //
-        // Select the font into the Presentation space
-        //
-        ::GpiSetCharSet(m_hPS, flId); // sets font for presentation space
     if (!m_hFont)
     {
         wxLogLastError("CreateFont");
@@ -413,7 +398,6 @@ bool wxFontRefData::Alloc(
     //
     // Set refData members with the results
     //
-    m_hFont = (WXHFONT)m_nFontId;
     memcpy(&m_vFattrs, &m_vNativeFontInfo.fa, sizeof(m_vFattrs));
     memcpy(&m_vFname, &m_vNativeFontInfo.fn, sizeof(m_vFname));
     m_nPointSize  = m_vNativeFontInfo.fm.lEmHeight;
@@ -462,6 +446,24 @@ bool wxFontRefData::Alloc(
     m_bUnderlined = ((m_vNativeFontInfo.fa.fsSelection & FATTR_SEL_UNDERSCORE) != 0);
     m_sFaceName = m_vNativeFontInfo.fa.szFacename;
     m_vEncoding = wxGetFontEncFromCharSet(m_vNativeFontInfo.fa.usCodePage);
+
+    //
+    // We don't actuall keep the font around if using a temporary PS
+    //
+    if (m_bInternalPS)
+    {
+        if(m_hFont)
+            ::GpiDeleteSetId( m_hPS
+                             ,flId
+                            );
+
+        ::WinReleasePS(m_hPS);
+    }
+    else
+        //
+        // Select the font into the Presentation space
+        //
+        ::GpiSetCharSet(m_hPS, flId); // sets font for presentation space
     return TRUE;
 } // end of wxFontRefData::Alloc
 

@@ -262,6 +262,7 @@ void wxFillLogFont(
   LOGFONT*                          pFattrs  // OS2 GPI FATTRS
 , PFACENAMEDESC                     pFaceName
 , HPS*                              phPS
+, bool*                             pbInternalPS
 , long*                             pflId
 , wxString&                         sFaceName
 , wxFont*                           pFont
@@ -419,6 +420,7 @@ void wxFillLogFont(
         vError = ::WinGetLastError(vHabmain);
     }
     sFaceName = zFacename;
+    *pbInternalPS = bInternalPS;
 
     //
     // That's it, we now have everything we need to actually create the font
