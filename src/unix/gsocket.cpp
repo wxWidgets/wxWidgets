@@ -254,6 +254,7 @@ GSocket::GSocket()
   m_stream              = true;
   m_gui_dependent       = NULL;
   m_non_blocking        = false;
+  m_reusable            = false;
   m_timeout             = 10*60*1000;
                                 /* 10 minutes * 60 sec * 1000 millisec */
   m_establishing        = false;
