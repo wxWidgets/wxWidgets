@@ -669,7 +669,7 @@ public:
     // is set to _("Save") and m_buttonNegative is set to _("Don't Save")
     // I wouldn't add any other hacks like that into here,
     // but this one I can see being useful.
-    void Finalise();
+    void Realize();
 
     wxButton *GetAffirmativeButton() const { return m_buttonAffirmative; }
     wxButton *GetApplyButton() const { return m_buttonApply; }

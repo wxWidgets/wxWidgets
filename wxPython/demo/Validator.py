@@ -193,7 +193,7 @@ class TestValidateDialog(wx.Dialog):
         b.SetDefault()
         buttons.AddButton(b)
         buttons.AddButton(wx.Button(self, wx.ID_CANCEL, "Cancel"))
-        buttons.Finalise()
+        buttons.Realize()
 
         border = wx.BoxSizer(wx.VERTICAL)
         border.Add(fgs, 1, wx.GROW|wx.ALL, 25)

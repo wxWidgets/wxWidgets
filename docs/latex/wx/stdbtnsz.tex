@@ -9,7 +9,7 @@ When there aren't interface guidelines defined for a particular platform or tool
 to the Windows implementation. 
 
 To use this class, first add buttons to the sizer by calling AddButton (or SetAffirmativeButton, SetNegativeButton,
-or SetCancelButton) and then call Finalise in order to create the actual button layout used. Other than these special
+or SetCancelButton) and then call Realize in order to create the actual button layout used. Other than these special
 operations, this sizer works like any other sizer. 
 
 If you add a button with wxID\_SAVE, on Mac OS X the button will be renamed to "Save" and
@@ -52,9 +52,9 @@ Adds a button to the wxStdDialogButtonSizer. The button must have one of the fol
 \item wxID\_CONTEXT\_HELP
 \end{itemize}
 
-\membersection{wxStdDialogButtonSizer::Finalise}\label{wxstddialogbuttonsizerfinalise}
+\membersection{wxStdDialogButtonSizer::Realize}\label{wxstddialogbuttonsizerrealize}
 
-\func{void}{Finalise}{\void}
+\func{void}{Realize}{\void}
 
 Rearranges the buttons and applies proper spacing between buttons to make them match the platform or toolkit's interface guidelines.
 

@@ -77,7 +77,7 @@ class MultipleChoiceDialog(wx.Dialog):
         btnsizer = wx.StdDialogButtonSizer()
         btnsizer.AddButton(ok)
         btnsizer.AddButton(cancel)
-        btnsizer.Finalise()
+        btnsizer.Realize()
         
         dlgsizer.Add(btnsizer, 0, wx.ALL | wx.ALIGN_RIGHT, 4)
         

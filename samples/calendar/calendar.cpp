@@ -595,7 +595,7 @@ MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
     wxStdDialogButtonSizer *sizerBtns = new wxStdDialogButtonSizer;
     sizerBtns->AddButton(new wxButton(this, wxID_OK));
     sizerBtns->AddButton(new wxButton(this, wxID_CANCEL));
-    sizerBtns->Finalise();
+    sizerBtns->Realize();
 
     wxSizer *sizerText = new wxBoxSizer(wxHORIZONTAL);
     sizerText->Add(new wxStaticText(this, wxID_ANY, _T("Date in ISO format: ")),

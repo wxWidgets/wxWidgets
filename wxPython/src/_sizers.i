@@ -1270,7 +1270,7 @@ DocStr(wxStdDialogButtonSizer,
 "A special sizer that knows how to order and position standard buttons
 in order to conform to the current platform's standards.  You simply
 need to add each `wx.Button` to the sizer, and be sure to create the
-buttons using the standard ID's.  Then call `Finalize` and the sizer
+buttons using the standard ID's.  Then call `Realize` and the sizer
 will take care of the rest.
 ", "");
 
@@ -1287,7 +1287,7 @@ public:
 method in the base class.", "");
     
     DocDeclStr(
-        void , Finalise(),
+        void , Realize(),
         "This funciton needs to be called after all the buttons have been added
 to the sizer.  It will reorder them and position them in a platform
 specifc manner.", "");

@@ -1728,7 +1728,7 @@ void wxStdDialogButtonSizer::SetCancelButton( wxButton *button )
     m_buttonCancel = button;
 }
 
-void wxStdDialogButtonSizer::Finalise()
+void wxStdDialogButtonSizer::Realize()
 {
 #ifdef __WXMAC__
         Add(0, 0, 0, wxLEFT, 6);
