@@ -626,7 +626,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 
     m_fsIsShowing = show;
 
-#ifdef __WXGTK20__
+#if GTK_CHECK_VERSION(2,2,0)
 
     if (show)
         gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
