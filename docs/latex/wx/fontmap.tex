@@ -23,14 +23,14 @@ and "interactive" is false or user denied to choose any replacement),
 the class queries \helpref{wxEncodingConverter}{wxencodingconverter} 
 for "equivalent" encodings (e.g. iso8859-2 and cp1250) and tries them.
 
-\wxheading{Using wxFontMapper in conjunction with wxEncodingConverter}
+\wxheading{Using wxFontMapper in conjunction with wxMBConv classes}
 
 If you need to display text in encoding which is not available at
 host system (see \helpref{IsEncodingAvailable}{wxfontmapperisencodingavailable}),
 you may use these two classes to find font in some similar encoding
 (see \helpref{GetAltForEncoding}{wxfontmappergetaltforencoding})
 and convert the text to this encoding 
-(\helpref{wxEncodingConverter::Convert}{wxencodingconverterconvert}).
+(\helpref{wxMBConv classes}{mbconvclasses}).
 
 Following code snippet demonstrates it:
 
@@ -41,11 +41,9 @@ if (!wxFontMapper::Get()->IsEncodingAvailable(enc, facename))
    if (wxFontMapper::Get()->GetAltForEncoding(enc, &alternative,
                                               facename, false))
    {
-       wxEncodingConverter encconv;
-       if (!encconv.Init(enc, alternative))
-           ...failure...
-       else
-           text = encconv.Convert(text);
+       wxCSConv convFrom(wxFontMapper::Get()->GetEncodingName(enc));
+       wxCSConv convTo(wxFontMapper::Get()->GetEncodingName(alternative));
+       text = wxString(text.mb_str(convFrom), convTo);
    }
    else
        ...failure (or we may try iso8859-1/7bit ASCII)...

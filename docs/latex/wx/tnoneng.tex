@@ -90,24 +90,22 @@ user's operating system. This is default behaviour of the
 
 \wxheading{Font mapping}
 
-You can use \helpref{wxEncodingConverter}{wxencodingconverter} and 
+You can use \helpref{wxMBConv classes}{mbconvclasses} and 
 \helpref{wxFontMapper}{wxfontmapper} to display text:
 
 \begin{verbatim}
 if (!wxFontMapper::Get()->IsEncodingAvailable(enc, facename))
 {
    wxFontEncoding alternative;
-   if (wxTheFontMapper->GetAltForEncoding(enc, &alternative, 
-                                          facename, false))
+   if (wxFontMapper::Get()->GetAltForEncoding(enc, &alternative,
+                                              facename, false))
    {
-       wxEncodingConverted encconv;
-       if (!encconv.Init(enc, alternative))
-           ...failure...
-       else
-           text = encconv.Convert(text);
+       wxCSConv convFrom(wxFontMapper::Get()->GetEncodingName(enc));
+       wxCSConv convTo(wxFontMapper::Get()->GetEncodingName(alternative));
+       text = wxString(text.mb_str(convFrom), convTo);
    }
    else
-       ...failure...
+       ...failure (or we may try iso8859-1/7bit ASCII)...
 }
 ...display text...
 \end{verbatim}
@@ -115,8 +113,10 @@ if (!wxFontMapper::Get()->IsEncodingAvailable(enc, facename))
 \wxheading{Converting data}
 
 You may want to store all program data (created documents etc.) in
-the same encoding, let's say windows1250. Obviously, the best way would
-be to use \helpref{wxEncodingConverter}{wxencodingconverter}.
+the same encoding, let's say {\tt utf-8}. You can use
+\helpref{wxCSConv}{wxcsconv} class to convert data to encoding used by the
+system your application is running on (see
+\helpref{wxLocale::GetSystemEncoding}{wxlocalegetsystemencoding}).
 
 \wxheading{Help files}
 
