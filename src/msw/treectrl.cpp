@@ -2517,18 +2517,6 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         }
     }
 #endif // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-    else if ( nMsg == WM_CHAR )
-    {
-        // don't let the control process Space and Return keys because it
-        // doesn't do anything useful with them anyhow but always beeps
-        // annoyingly when it receives them and there is no way to turn it off
-        // simply if you just process TREEITEM_ACTIVATED event to which Space
-        // and Enter presses are mapped in your code
-        if ( wParam == VK_SPACE || wParam == VK_RETURN )
-        {
-            processed = true;
-        }
-    }
     else if ( nMsg == WM_COMMAND )
     {
         // if we receive a EN_KILLFOCUS command from the in-place edit control
@@ -2563,6 +2551,17 @@ wxTreeCtrl::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     // don't let it see this message at all
     if ( nMsg == WM_RBUTTONDOWN )
         return 0;
+
+    if ( nMsg == WM_CHAR )
+    {
+        // also don't let the control process Space and Return keys because it
+        // doesn't do anything useful with them anyhow but always beeps
+        // annoyingly when it receives them and there is no way to turn it off
+        // simply if you just process TREEITEM_ACTIVATED event to which Space
+        // and Enter presses are mapped in your code
+        if ( wParam == VK_SPACE || wParam == VK_RETURN )
+            return 0;
+    }
 
     return wxControl::MSWDefWindowProc(nMsg, wParam, lParam);
 }
