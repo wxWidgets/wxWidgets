@@ -965,7 +965,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 void MyPanel::OnSize( wxSizeEvent &event )
 {
     wxSize client_area( GetClientSize() );
-    m_log->SetSize( 0, 260, client_area.x, client_area.y - 260 );
+    if (m_log)
+      m_log->SetSize( 0, 260, client_area.x, client_area.y - 260 );
     event.Skip();
 }
 
