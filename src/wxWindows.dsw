@@ -3,6 +3,18 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "expat"=.\expat\expat.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "jpeg"=.\jpeg\jpeg.dsp - Package Owner=<4>
 
 Package=<5>
@@ -73,6 +85,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name zlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name expat
     End Project Dependency
 }}}
 
