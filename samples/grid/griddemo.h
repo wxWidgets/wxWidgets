@@ -38,6 +38,7 @@ class GridFrame : public wxFrame
     void ToggleRowSizing( wxCommandEvent& );
     void ToggleColSizing( wxCommandEvent& );
     void ToggleGridSizing( wxCommandEvent& );
+    void ToggleGridDragCell ( wxCommandEvent& );
     void ToggleGridLines( wxCommandEvent& );
     void AutoSizeCols( wxCommandEvent& );
     void CellOverflow( wxCommandEvent& );
@@ -80,6 +81,7 @@ class GridFrame : public wxFrame
     void OnSelectCell( wxGridEvent& );
     void OnRangeSelected( wxGridRangeSelectEvent& );
     void OnCellValueChanged( wxGridEvent& );
+    void OnCellBeginDrag( wxGridEvent& );
 
     void OnEditorShown(wxGridEvent&);
     void OnEditorHidden(wxGridEvent&);
@@ -105,6 +107,7 @@ public:
         ID_TOGGLEROWSIZING,
         ID_TOGGLECOLSIZING,
         ID_TOGGLEGRIDSIZING,
+        ID_TOGGLEGRIDDRAGCELL,
         ID_TOGGLEGRIDLINES,
         ID_AUTOSIZECOLS,
         ID_CELLOVERFLOW,

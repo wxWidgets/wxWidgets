@@ -109,6 +109,7 @@ DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_LEFT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_LEFT_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_RIGHT_DCLICK)
+DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_BEGIN_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_GRID_LABEL_LEFT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_GRID_LABEL_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_GRID_LABEL_LEFT_DCLICK)
@@ -4139,6 +4140,7 @@ void wxGrid::Init()
     m_canDragRowSize = true;
     m_canDragColSize = true;
     m_canDragGridSize = true;
+    m_canDragCell = false;
     m_dragLastPos  = -1;
     m_dragRowOrCol = -1;
     m_isDragging = false;
@@ -5346,6 +5348,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
     XYToCell( x, y, coords );
 
     int cell_rows, cell_cols;
+    bool isFirstDrag = !m_isDragging;
     GetCellSize( coords.GetRow(), coords.GetCol(), &cell_rows, &cell_cols );
     if ((cell_rows < 0) || (cell_cols < 0))
     {
@@ -5395,6 +5398,19 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     if ( m_selectingKeyboard == wxGridNoCellCoords)
                         m_selectingKeyboard = coords;
                     HighlightBlock ( m_selectingKeyboard, coords );
+                }
+                else if ( CanDragCell() )
+                {
+                    if ( isFirstDrag )
+                    {
+                        if ( m_selectingKeyboard == wxGridNoCellCoords)
+                            m_selectingKeyboard = coords;
+
+                        SendEvent( wxEVT_GRID_CELL_BEGIN_DRAG,
+                                   coords.GetRow(),
+                                   coords.GetCol(),
+                                   event );
+                    }
                 }
                 else
                 {
@@ -9395,6 +9411,10 @@ void wxGrid::EnableDragGridSize( bool enable )
     m_canDragGridSize = enable;
 }
 
+void wxGrid::EnableDragCell( bool enable )
+{
+    m_canDragCell = enable;
+}
 
 void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 {

@@ -74,6 +74,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
     EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
+    EVT_MENU( ID_TOGGLEGRIDDRAGCELL, GridFrame::ToggleGridDragCell )
     EVT_MENU( ID_TOGGLEGRIDLINES, GridFrame::ToggleGridLines )
     EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
     EVT_MENU( ID_CELLOVERFLOW, GridFrame::CellOverflow )
@@ -124,6 +125,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
+    EVT_GRID_CELL_BEGIN_DRAG( GridFrame::OnCellBeginDrag )
 
     EVT_GRID_EDITOR_SHOWN( GridFrame::OnEditorShown )
     EVT_GRID_EDITOR_HIDDEN( GridFrame::OnEditorHidden )
@@ -149,6 +151,7 @@ GridFrame::GridFrame()
     viewMenu->Append( ID_TOGGLEROWSIZING, _T("Ro&w drag-resize"), wxEmptyString, wxITEM_CHECK );
     viewMenu->Append( ID_TOGGLECOLSIZING, _T("C&ol drag-resize"), wxEmptyString, wxITEM_CHECK );
     viewMenu->Append( ID_TOGGLEGRIDSIZING, _T("&Grid drag-resize"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLEGRIDDRAGCELL, _T("&Grid drag-cell"), wxEmptyString, wxITEM_CHECK );
     viewMenu->Append( ID_TOGGLEGRIDLINES, _T("&Grid Lines"), wxEmptyString, wxITEM_CHECK );
     viewMenu->Append( ID_SET_HIGHLIGHT_WIDTH, _T("&Set Cell Highlight Width...") );
     viewMenu->Append( ID_SET_RO_HIGHLIGHT_WIDTH, _T("&Set Cell RO Highlight Width...") );
@@ -348,6 +351,7 @@ GridFrame::GridFrame()
                    wxEXPAND );
 #endif // wxUSE_LOG
 
+    SetAutoLayout(true);
     SetSizer( topSizer );
 
     topSizer->Fit( this );
@@ -373,6 +377,7 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEROWSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
+    GetMenuBar()->Check( ID_TOGGLEGRIDDRAGCELL, false );
     GetMenuBar()->Check( ID_TOGGLEGRIDLINES, true );
     GetMenuBar()->Check( ID_CELLOVERFLOW, true );
 }
@@ -430,6 +435,11 @@ void GridFrame::ToggleGridSizing( wxCommandEvent& WXUNUSED(ev) )
         GetMenuBar()->IsChecked( ID_TOGGLEGRIDSIZING ) );
 }
 
+void GridFrame::ToggleGridDragCell( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableDragCell(
+        GetMenuBar()->IsChecked( ID_TOGGLEGRIDDRAGCELL ) );
+}
 
 void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )
 {
@@ -867,6 +877,18 @@ void GridFrame::OnCellValueChanged( wxGridEvent& ev )
 {
     logBuf = wxEmptyString;
     logBuf  << _T("Value changed for cell at")
+            << _T(" row ") << ev.GetRow()
+            << _T(" col ") << ev.GetCol();
+
+    wxLogMessage( wxT("%s"), logBuf.c_str() );
+
+    ev.Skip();
+}
+
+void GridFrame::OnCellBeginDrag( wxGridEvent& ev )
+{
+    logBuf = _T("");
+    logBuf  << _T("Got request to drag cell at")
             << _T(" row ") << ev.GetRow()
             << _T(" col ") << ev.GetCol();
 
