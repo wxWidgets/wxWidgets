@@ -104,7 +104,7 @@ typedef  _TUCHAR     wxUChar;
 #define  wxVsprintf  _vstprintf
 
    // stdlib.h functions
-#define  wxAtof      _ttof /* does this exist? */
+#define  wxAtof(s)   atof(wxString(s).mb_str())
 #define  wxAtoi      _ttoi
 #define  wxAtol      _ttol
 #define  wxGetenv    _tgetenv
