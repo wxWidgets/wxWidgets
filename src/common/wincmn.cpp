@@ -624,7 +624,7 @@ bool wxWindowBase::Validate()
     {
         wxWindowBase *child = node->GetData();
         wxValidator *validator = child->GetValidator();
-        if ( validator && validator->Validate((wxWindow *)this) )
+        if ( validator && !validator->Validate((wxWindow *)this) )
         {
             return FALSE;
         }
