@@ -5068,7 +5068,7 @@ class App(wx.PyApp):
     ``self.SetTopWindow(frame)``.
 
     :see: `wx.PySimpleApp` for a simpler app class that can be used
-    directly.
+           directly.
     """
     
     outputWindowClass = PyOnDemandOutputWindow
@@ -8658,6 +8658,10 @@ class Sizer(Object):
         """Remove(self, PyObject item) -> bool"""
         return _core_.Sizer_Remove(*args, **kwargs)
 
+    def Detach(*args, **kwargs):
+        """Detach(self, PyObject item) -> bool"""
+        return _core_.Sizer_Detach(*args, **kwargs)
+
     def _SetItemMinSize(*args, **kwargs):
         """_SetItemMinSize(self, PyObject item, Size size)"""
         return _core_.Sizer__SetItemMinSize(*args, **kwargs)
@@ -8728,11 +8732,11 @@ class Sizer(Object):
         return _core_.Sizer_GetMinSize(*args, **kwargs)
 
     def GetSizeTuple(self):
-        return self.GetSize().asTuple()
+        return self.GetSize().Get()
     def GetPositionTuple(self):
-        return self.GetPosition().asTuple()
+        return self.GetPosition().Get()
     def GetMinSizeTuple(self):
-        return self.GetMinSize().asTuple()
+        return self.GetMinSize().Get()
 
     def RecalcSizes(*args, **kwargs):
         """RecalcSizes(self)"""

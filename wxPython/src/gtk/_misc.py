@@ -950,7 +950,7 @@ class Timer(_core.EvtHandler):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setCallbackInfo(self, Timer, 0)
+        self._setCallbackInfo(self, Timer, 0); self._setOORInfo(self)
 
     def __del__(self, destroy=_misc_.delete_Timer):
         """__del__(self)"""
@@ -965,6 +965,10 @@ class Timer(_core.EvtHandler):
     def SetOwner(*args, **kwargs):
         """SetOwner(self, EvtHandler owner, int id=-1)"""
         return _misc_.Timer_SetOwner(*args, **kwargs)
+
+    def GetOwner(*args, **kwargs):
+        """GetOwner(self) -> EvtHandler"""
+        return _misc_.Timer_GetOwner(*args, **kwargs)
 
     def Start(*args, **kwargs):
         """Start(self, int milliseconds=-1, bool oneShot=False) -> bool"""
