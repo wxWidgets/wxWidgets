@@ -580,8 +580,6 @@ bool wxApp::Initialize()
 
     wxClassInfo::InitializeClasses();
 
-    wxSystemSettings::Init();
-    
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
@@ -635,8 +633,6 @@ void wxApp::CleanUp()
     delete wxPendingEvents;
     delete wxPendingEventsLocker;
 #endif
-
-    wxSystemSettings::Done();
 
     delete[] wxBuffer;
 
