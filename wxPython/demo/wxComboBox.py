@@ -23,9 +23,10 @@ class TestComboBox(wxPanel):
 
         wxStaticText(self, -1, "Select one:", wxPoint(15, 50), wxSize(75, 18))
         cb = wxComboBox(self, 500, "default value", wxPoint(80, 50), wxSize(95, -1),
-                        sampleList, wxCB_DROPDOWN)
+                        sampleList, wxCB_DROPDOWN|wxTE_PROCESS_ENTER)
         EVT_COMBOBOX(self, 500, self.EvtComboBox)
         EVT_TEXT(self, 500, self.EvtText)
+        EVT_TEXT_ENTER(self, 500, self.EvtTextEnter)
         EVT_SET_FOCUS(cb, self.OnSetFocus)
         EVT_KILL_FOCUS(cb, self.OnKillFocus)
 
@@ -44,6 +45,9 @@ class TestComboBox(wxPanel):
 
     def EvtText(self, evt):
         self.log.WriteText('EvtText: %s\n' % evt.GetString())
+
+    def EvtTextEnter(self, evt):
+        self.log.WriteText('EvtTextEnter: does this work?')
 
 #---------------------------------------------------------------------------
 
