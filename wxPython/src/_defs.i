@@ -63,6 +63,12 @@ typedef int             wxEventType;
     %mutable;
 %enddef
 
+
+// Generate code in the module init for the event types, since they may not be
+// initialized yet when they are used in the static swig_const_table.
+%typemap(consttab) wxEventType;
+%typemap(constcode) wxEventType "PyDict_SetItemString(d, \"$symname\", PyInt_FromLong($value));";
+
 //---------------------------------------------------------------------------
 
 // General numeric #define's and etc.  Making them all enums makes SWIG use the
