@@ -595,5 +595,9 @@ wxHtmlPrintout *wxHtmlEasyPrinting::CreatePrintout()
 }
 
 
+// This hack forces the linker to always link in m_* files
+// (wxHTML doesn't work without handlers from these files)
+#include "wx/html/forcelnk.h"
+FORCE_WXHTML_MODULES()
 
 #endif // wxUSE_HTML & wxUSE_PRINTING_ARCHITECTURE
