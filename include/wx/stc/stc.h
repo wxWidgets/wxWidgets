@@ -2275,6 +2275,13 @@ public:
     // Load the contents of filename into the editor
     bool LoadFile(const wxString& filename);
 
+    // Allow for simulating a DnD DragOver
+    wxDragResult DoDragOver(wxCoord x, wxCoord y, wxDragResult def); 
+
+    // Allow for simulating a DnD DropText
+    bool DoDropText(long x, long y, const wxString& data);
+ 
+
 
 //----------------------------------------------------------------------
 
