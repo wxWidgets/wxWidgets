@@ -17,15 +17,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// mutable hack (see also registry.cpp)
-// ----------------------------------------------------------------------------
-#if   wxUSE_MUTABLE
-  #define MUTABLE mutable
-#else
-  #define MUTABLE
-#endif
-
-// ----------------------------------------------------------------------------
 // types used in this module
 // ----------------------------------------------------------------------------
 
@@ -217,7 +208,17 @@ public:
   bool  GetFirstKey  (wxString& strKeyName  , long& lIndex);
   bool  GetNextKey   (wxString& strKeyName  , long& lIndex) const;
 
+  // for wxRegConfig usage only: preallocate some memory for the name
+  void ReserveMemoryForName(size_t bytes) { m_strKey.reserve(bytes); }
+
 private:
+  // common part of all ctors
+  void Init()
+  {
+    m_hKey = (WXHKEY) NULL;
+    m_dwLastError = 0;
+  }
+
   // no copy ctor/assignment operator
   wxRegKey(const wxRegKey& key);            // not implemented
   wxRegKey& operator=(const wxRegKey& key); // not implemented
@@ -226,7 +227,7 @@ private:
               m_hRootKey;       // handle of the top key (i.e. StdKey)
   wxString    m_strKey;         // key name (relative to m_hRootKey)
 
-  MUTABLE long m_dwLastError;   // last error (0 if none)
+  long        m_dwLastError;    // last error (0 if none)
 };
 
 #endif  //_REGISTRY_H
