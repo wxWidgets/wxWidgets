@@ -162,6 +162,7 @@ wxFrame::wxFrame()
     m_sizeSet = FALSE;
     m_miniEdge = 0;
     m_miniTitle = 0;
+    m_mainWidget = (GtkWidget*) NULL;
 }
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -175,6 +176,7 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     m_sizeSet = FALSE;
     m_miniEdge = 0;
     m_miniTitle = 0;
+    m_mainWidget = (GtkWidget*) NULL;
     Create( parent, id, title, pos, size, style, name );
 }
 
@@ -200,6 +202,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     gtk_window_set_title( GTK_WINDOW(m_widget), title );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
+    /* needed ? */
     gtk_window_set_policy( GTK_WINDOW(m_widget), 1, 1, 0 );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
@@ -224,30 +227,32 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     gtk_widget_realize( m_widget );
     
-      long decor = (long) GDK_DECOR_ALL;
-      long func = (long) GDK_FUNC_ALL;
-      
-      if ((m_windowStyle & wxCAPTION) == 0)
+    /* all this is for Motif Window Manager "hints" and is supposed to be
+       recognized by other WM as well. not tested. */
+    long decor = (long) GDK_DECOR_ALL;
+    long func = (long) GDK_FUNC_ALL;
+    if ((m_windowStyle & wxCAPTION) == 0)
 	decor |= GDK_DECOR_TITLE;
-      if ((m_windowStyle & wxMINIMIZE) == 0)
+    if ((m_windowStyle & wxMINIMIZE) == 0)
 	func |= GDK_FUNC_MINIMIZE;
-      if ((m_windowStyle & wxMAXIMIZE) == 0)
+    if ((m_windowStyle & wxMAXIMIZE) == 0)
 	func |= GDK_FUNC_MAXIMIZE;
-      if ((m_windowStyle & wxSYSTEM_MENU) == 0)
+    if ((m_windowStyle & wxSYSTEM_MENU) == 0)
 	decor |= GDK_DECOR_MENU;
-      if ((m_windowStyle & wxMINIMIZE_BOX) == 0)
+    if ((m_windowStyle & wxMINIMIZE_BOX) == 0)
 	decor |= GDK_DECOR_MINIMIZE;
-      if ((m_windowStyle & wxMAXIMIZE_BOX) == 0)
+    if ((m_windowStyle & wxMAXIMIZE_BOX) == 0)
 	decor |= GDK_DECOR_MAXIMIZE;
-      if ((m_windowStyle & wxRESIZE_BORDER) == 0)
+    if ((m_windowStyle & wxRESIZE_BORDER) == 0)
 	func |= GDK_FUNC_RESIZE;
-
-      gdk_window_set_decorations(m_widget->window, (GdkWMDecoration)decor);
-      gdk_window_set_functions(m_widget->window, (GdkWMFunction)func);
+    gdk_window_set_decorations(m_widget->window, (GdkWMDecoration)decor);
+    gdk_window_set_functions(m_widget->window, (GdkWMFunction)func);
       
+    /* the user resized the frame by dragging etc. */
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
 
+    /* the only way to get the window size is to connect to this event */
     gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
         GTK_SIGNAL_FUNC(gtk_frame_configure_callback), (gpointer)this );
 
@@ -308,10 +313,11 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
 
-    /* don't do anything for children of wxMDIChildFrame */
-    if (!m_wxwindow) return;
-
-    if (m_resizing) return; // I don't like recursions
+    /* this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
+    wxASSERT_MSG( (m_wxwindow != NULL), "invalid frame" );
+    
+    /* avoid recursions */
+    if (m_resizing) return; 
     m_resizing = TRUE;
 
     int old_x = m_x;
@@ -360,7 +366,9 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
     if ((m_width != old_width) || (m_height != old_height))
     {
-        /* we set the size in GtkOnSize */
+        /* we set the size in GtkOnSize, i.e. mostly the actual resizing is
+	   done either directly before the frame is shown or in idle time
+	   so that different calls to SetSize() don't lead to flicker. */
         m_sizeSet = FALSE;
     }
 
@@ -425,65 +433,79 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     // m_x = x;
     // m_y = y;
 
+    /* avoid recursions */
     if (m_resizing) return;
     m_resizing = TRUE;
 
-    if (!m_wxwindow) return;
-
+    /* this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
+    wxASSERT_MSG( (m_wxwindow != NULL), "invalid frame" );
+    
     m_width = width;
     m_height = height;
 
-    /* check if size is in legal range */
-    if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
-    if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
-    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
-
-    /* I revert back to wxGTK's original behaviour. m_mainWidget holds the
-     * menubar, the toolbar and the client area, which is represented by
-     * m_wxwindow.
-     * this hurts in the eye, but I don't want to call SetSize()
-     * because I don't want to call any non-native functions here. */
-     
+    /* space occupied by m_frameToolBar and m_frameMenuBar */
     int client_area_y_offset = 0; 
 
-    if (m_frameMenuBar)
+    /* wxMDIChildFrame derives from wxFrame but it _is_ a wxWindow as it uses
+       wxWindow::Create to create it's GTK equivalent. m_mainWidget is only
+       set in wxFrame::Create so it is used to check what kind of frame we
+       have here. if m_mainWidget is NULL it is a wxMDIChildFrame and so we
+       skip the part which handles m_frameMenuBar, m_frameToolBar and (most
+       importantly) m_mainWidget */
+       
+    if (m_mainWidget)
     {
-        int xx = m_miniEdge;
-        int yy = m_miniEdge + m_miniTitle;
-        int ww = m_width  - 2*m_miniEdge;
-        int hh = wxMENU_HEIGHT;
-        m_frameMenuBar->m_x = xx;
-        m_frameMenuBar->m_y = yy;
-        m_frameMenuBar->m_width = ww;
-        m_frameMenuBar->m_height = hh;
+        /* check if size is in legal range */
+        if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
+        if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
+        if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
+        if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
-        gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameMenuBar->m_widget, xx, yy );
-        gtk_widget_set_usize( m_frameMenuBar->m_widget, ww, hh );
+        /* I revert back to wxGTK's original behaviour. m_mainWidget holds the
+         * menubar, the toolbar and the client area, which is represented by
+         * m_wxwindow.
+         * this hurts in the eye, but I don't want to call SetSize()
+         * because I don't want to call any non-native functions here. */
+     
+        if (m_frameMenuBar)
+        {
+            int xx = m_miniEdge;
+            int yy = m_miniEdge + m_miniTitle;
+            int ww = m_width  - 2*m_miniEdge;
+            int hh = wxMENU_HEIGHT;
+            m_frameMenuBar->m_x = xx;
+            m_frameMenuBar->m_y = yy;
+            m_frameMenuBar->m_width = ww;
+            m_frameMenuBar->m_height = hh;
+
+            gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameMenuBar->m_widget, xx, yy );
+            gtk_widget_set_usize( m_frameMenuBar->m_widget, ww, hh );
 	
-	client_area_y_offset += hh;
+	    client_area_y_offset += hh;
+        }
+    
+        if (m_frameToolBar)
+        {
+            int xx = m_miniEdge;
+            int yy = m_miniEdge + m_miniTitle;
+            if ((m_frameMenuBar) || (m_mdiMenuBar)) yy += wxMENU_HEIGHT;
+            int ww = m_width - 2*m_miniEdge;
+            int hh = m_frameToolBar->m_height;
+
+            m_frameToolBar->m_x = xx;
+            m_frameToolBar->m_y = yy;
+            m_frameToolBar->m_height = hh;
+            m_frameToolBar->m_width = ww;
+
+            gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameToolBar->m_widget, xx, yy );
+            gtk_widget_set_usize( m_frameToolBar->m_widget, ww, hh );
+	
+	    client_area_y_offset += hh;
+        }
+    
+        gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_wxwindow, 0, client_area_y_offset );
     }
     
-    if (m_frameToolBar)
-    {
-        int xx = m_miniEdge;
-        int yy = m_miniEdge + m_miniTitle;
-        if ((m_frameMenuBar) || (m_mdiMenuBar)) yy += wxMENU_HEIGHT;
-        int ww = m_width - 2*m_miniEdge;
-        int hh = m_frameToolBar->m_height;
-
-        m_frameToolBar->m_x = xx;
-        m_frameToolBar->m_y = yy;
-        m_frameToolBar->m_height = hh;
-        m_frameToolBar->m_width = ww;
-
-        gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameToolBar->m_widget, xx, yy );
-        gtk_widget_set_usize( m_frameToolBar->m_widget, ww, hh );
-	
-	client_area_y_offset += hh;
-    }
-    
-    gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_wxwindow, 0, client_area_y_offset );
     gtk_widget_set_usize( m_wxwindow, m_width, m_height-client_area_y_offset );
 
     if (m_frameStatusBar)
@@ -533,8 +555,6 @@ void wxFrame::OnInternalIdle()
 
 void wxFrame::OnCloseWindow( wxCloseEvent& event )
 {
-    // close the window if it wasn't vetoed by the application
-//    if ( !event.GetVeto() ) // No, this isn't the interpretation of GetVeto.
     Destroy();
 }
 

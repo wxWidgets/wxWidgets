@@ -405,14 +405,15 @@ public:
 
     bool HasVMT();
 
-    /* I don't want users to override what's done in OnIdle */
+    /* I don't want users to override what's done in idle so everything that
+       has to be done in idle time in order for wxGTK to work is done in
+       OnInternalIdle */
     virtual void OnInternalIdle();
 
     /* For compatibility across platforms (not in event table) */
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {};
 
     /* used by all classes in the widget creation process */
-
     void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
             const wxSize &size, long style, const wxString &name );
     void PostCreation();

@@ -48,7 +48,7 @@ class wxMDIParentFrame: public wxFrame
 
   friend class wxMDIChildFrame;
   
-  public:
+public:
 
     wxMDIParentFrame(void);
     wxMDIParentFrame( wxWindow *parent,
@@ -65,32 +65,28 @@ class wxMDIParentFrame: public wxFrame
 
 
     void GetClientSize(int *width, int *height) const;
-    wxMDIChildFrame *GetActiveChild(void) const;
+    wxMDIChildFrame *GetActiveChild() const;
     
-    wxMDIClientWindow *GetClientWindow(void) const; 
-    virtual wxMDIClientWindow *OnCreateClient(void);
+    wxMDIClientWindow *GetClientWindow() const; 
+    virtual wxMDIClientWindow *OnCreateClient();
   
-    virtual void Cascade(void) {};
-    virtual void Tile(void) {};
-    virtual void ArrangeIcons(void) {};
-    virtual void ActivateNext(void);
-    virtual void ActivatePrevious(void);
+    virtual void Cascade() {}
+    virtual void Tile() {}
+    virtual void ArrangeIcons() {}
+    virtual void ActivateNext();
+    virtual void ActivatePrevious();
 
     void OnActivate( wxActivateEvent& event );
     void OnSysColourChanged( wxSysColourChangedEvent& event );
     
- // implementation
- 
-    wxMDIChildFrame                *m_currentChild;
-    
-    void SetMDIMenuBar( wxMenuBar *menu_bar );
-    virtual void GtkOnSize( int x, int y, int width, int height );
-    
- private:
- 
-    wxMDIClientWindow              *m_clientWindow;
-    bool                            m_parentFrameActive;
+  // implementation
 
+    wxMDIClientWindow  *m_clientWindow;
+    bool                m_justInserted;
+
+    virtual void GtkOnSize( int x, int y, int width, int height );
+    virtual void OnInternalIdle();
+    
   DECLARE_EVENT_TABLE()    
 };
 
@@ -104,7 +100,7 @@ class wxMDIChildFrame: public wxFrame
   
   public:
 
-    wxMDIChildFrame(void);
+    wxMDIChildFrame();
     wxMDIChildFrame( wxMDIParentFrame *parent,
       wxWindowID id, const wxString& title,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -121,7 +117,7 @@ class wxMDIChildFrame: public wxFrame
   virtual void GetClientSize( int *width, int *height ) const;
   virtual void AddChild( wxWindow *child );
 
-  virtual void Activate(void);
+  virtual void Activate();
     
     // no status bars
   virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number)=1, long WXUNUSED(style)=1, 
@@ -150,18 +146,16 @@ class wxMDIChildFrame: public wxFrame
   wxString GetTitle() const { return m_title; }
   
     // no maximize etc
-  virtual void Maximize(bool WXUNUSED(maximize)) {}
-  virtual void Restore(void) {}
+  virtual void Maximize( bool WXUNUSED(maximize) ) {}
+  virtual void Restore() {}
     
   void OnActivate( wxActivateEvent &event );
     
-  public:
+  // implementation
   
     wxMenuBar         *m_menuBar;
-    
-//  private:
-  
     GtkNotebookPage   *m_page;
+    bool               m_justInserted;
     
   DECLARE_EVENT_TABLE()    
 };
@@ -174,7 +168,7 @@ class wxMDIClientWindow: public wxWindow
 {
   DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
   
-  public:
+public:
   
     wxMDIClientWindow(void);
     wxMDIClientWindow( wxMDIParentFrame *parent, long style = 0 );
