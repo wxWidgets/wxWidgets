@@ -440,30 +440,34 @@ wxBitmapList::wxBitmapList ()
 wxBitmapList::~wxBitmapList ()
 {
   wxLogDebug("~wxBitmapList: count = %d", Number());
+#ifdef __WXMSW__
 
   wxNode *node = First ();
   while (node)
     {
       wxBitmap *bitmap = (wxBitmap *) node->Data ();
       wxNode *next = node->Next ();
-      delete bitmap;
-//      bitmap->FreeResource(TRUE);
+      if (bitmap->GetVisible())
+        delete bitmap;
       node = next;
     }
+#endif
 }
 
 // Pen and Brush lists
 wxPenList::~wxPenList ()
 {
+#ifdef __WXMSW__
   wxNode *node = First ();
   while (node)
     {
       wxPen *pen = (wxPen *) node->Data ();
       wxNode *next = node->Next ();
-      delete pen;
-//      pen->FreeResource(TRUE);
+      if (pen->GetVisible())
+        delete pen;
       node = next;
     }
+#endif
 }
 
 void wxPenList::AddPen (wxPen * pen)
@@ -510,14 +514,17 @@ wxPen *wxPenList::FindOrCreatePen (const wxString& colour, int width, int style)
 
 wxBrushList::~wxBrushList ()
 {
+#ifdef __WXMSW__
   wxNode *node = First ();
   while (node)
     {
       wxBrush *brush = (wxBrush *) node->Data ();
       wxNode *next = node->Next ();
-      delete brush;
+      if (brush->GetVisible())
+        delete brush;
       node = next;
     }
+#endif
 }
 
 void wxBrushList::AddBrush (wxBrush * brush)
@@ -566,21 +573,16 @@ wxFontList::~wxFontList ()
   wxNode *node = First ();
   while (node)
     {
-/*
+	  // Only delete objects that are 'visible', i.e.
+	  // that have been created using FindOrCreate...,
+	  // where the pointers are expected to be shared
+	  // (and therefore not deleted by any one part of an app).
       wxFont *font = (wxFont *) node->Data ();
       wxNode *next = node->Next ();
-      delete font;
+	  if (font->GetVisible())
+		delete font;
       node = next;
-*/
-	  // New for 2.0: don't delete the font (it may be a member
-	  // of a wxDC, for example)
-      wxFont *font = (wxFont *) node->Data ();
-      wxNode *next = node->Next ();
-
-	  // Force the font to be deleted
-      font->FreeResource(TRUE);
-      node = next;
-    }
+}
 #endif
 }
 

@@ -412,7 +412,12 @@ void wxDC::DrawArc(long x1,long y1,long x2,long y2, long xc, long yc)
   long yyy2 = (long) (yyc+ray);
   if (m_brush.Ok() && m_brush.GetStyle() !=wxTRANSPARENT)
   {
-    Pie((HDC) m_hDC,xxx1,yyy1,xxx2,yyy2,
+    // Have to add 1 to bottom-right corner of rectangle
+    // to make semi-circles look right (crooked line otherwise).
+    // Unfortunately this is not a reliable method, depends
+    // on the size of shape.
+    // TODO: figure out why this happens!
+    Pie((HDC) m_hDC,xxx1,yyy1,xxx2+1,yyy2+1,
         xx1,yy1,xx2,yy2) ;
   }
   else

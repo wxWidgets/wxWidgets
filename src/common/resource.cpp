@@ -99,6 +99,8 @@ void wxInitializeResourceSystem(void)
 void wxCleanUpResourceSystem(void)
 {
     delete wxDefaultResourceTable;
+    if (wxResourceBuffer)
+        delete[] wxResourceBuffer;
 }
 
 void wxLogWarning(char *msg)

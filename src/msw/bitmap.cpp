@@ -133,7 +133,7 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
   M_BITMAPDATA->m_depth = no_bits ;
   M_BITMAPDATA->m_numColors = 0;
 
-  M_BITMAPDATA->m_hBitmap = (WXHBITMAP) CreateBitmap(the_width, the_height, no_bits, 1, bits);
+  M_BITMAPDATA->m_hBitmap = (WXHBITMAP) CreateBitmap(the_width, the_height, 1, no_bits, bits);
 
   if (M_BITMAPDATA->m_hBitmap)
     M_BITMAPDATA->m_ok = TRUE;
@@ -190,7 +190,7 @@ bool wxBitmap::Create(int w, int h, int d)
 
   if (d > 0)
   {
-    M_BITMAPDATA->m_hBitmap = (WXHBITMAP) CreateBitmap(w, h, d, 1, NULL);
+    M_BITMAPDATA->m_hBitmap = (WXHBITMAP) CreateBitmap(w, h, 1, d, NULL);
   }
   else
   {
