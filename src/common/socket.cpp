@@ -68,7 +68,7 @@ class wxSocketState : public wxObject
 public:
   bool notify_state;
   GSocketEventFlags evt_notify_state;
-  wxSocketBase::wxSockFlags socket_flags;
+  wxSockFlags socket_flags;
   wxSocketBase::wxSockCbk c_callback;
   char *c_callback_data;
 
@@ -80,8 +80,7 @@ public:
 // wxSocketBase ctor and dtor
 // --------------------------------------------------------------
 
-wxSocketBase::wxSocketBase(wxSocketBase::wxSockFlags _flags,
-         wxSocketBase::wxSockType _type) :
+wxSocketBase::wxSocketBase(wxSockFlags _flags, wxSockType _type) :
   wxEvtHandler(),
   m_socket(NULL), m_id(-1),
   m_flags(_flags), m_type(_type),

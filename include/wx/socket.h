@@ -35,17 +35,19 @@
 #include "wx/gsocket.h"
 
 // ------------------------------------------------------------------------
-// GSocket type alias
+// constants
 // ------------------------------------------------------------------------
 
-typedef enum {
+enum wxSocketNotify
+{
   wxSOCKET_INPUT = GSOCK_INPUT,
   wxSOCKET_OUTPUT = GSOCK_OUTPUT,
   wxSOCKET_CONNECTION = GSOCK_CONNECTION,
   wxSOCKET_LOST = GSOCK_LOST
-} wxSocketNotify;
+};
 
-enum {
+enum
+{
   wxSOCKET_INPUT_FLAG = GSOCK_INPUT_FLAG,
   wxSOCKET_OUTPUT_FLAG = GSOCK_OUTPUT_FLAG,
   wxSOCKET_CONNECTION_FLAG = GSOCK_CONNECTION_FLAG,
@@ -54,7 +56,8 @@ enum {
 
 typedef GSocketEventFlags wxSocketEventFlags;
 
-typedef enum {
+enum wxSocketError
+{
   wxSOCKET_NOERROR = GSOCK_NOERROR,
   wxSOCKET_INPOP = GSOCK_INVOP,
   wxSOCKET_IOERR = GSOCK_IOERR,
@@ -66,17 +69,26 @@ typedef enum {
   wxSOCKET_TIMEDOUT = GSOCK_TIMEDOUT,
   wxSOCKET_MEMERR = GSOCK_MEMERR,
   wxSOCKET_BUSY
-} wxSocketError;
+};
 
-enum {
+enum
+{
   wxSOCKET_NONE = 0,
   wxSOCKET_NOWAIT = 1,
   wxSOCKET_WAITALL = 2,
   wxSOCKET_BLOCK = 4
 };
 
-// this is ugly but necessary for backwards compatibility
-#define wxSockFlags wxSocketBase::wxSockFlags
+// Type of request
+enum wxSockType
+{
+    SOCK_CLIENT,
+    SOCK_SERVER,
+    SOCK_INTERNAL,
+    SOCK_UNINIT
+};
+
+typedef int wxSockFlags;
 
 // ------------------------------------------------------------------------
 // wxSocket base
@@ -89,17 +101,14 @@ class WXDLLEXPORT wxSocketBase : public wxEvtHandler
   DECLARE_CLASS(wxSocketBase)
 public:
 
-  enum {
+  enum
+  {
     NONE = wxSOCKET_NONE,
     NOWAIT = wxSOCKET_NOWAIT,
     WAITALL = wxSOCKET_WAITALL,
     SPEED = wxSOCKET_BLOCK
   };
 
-  // Type of request
-  typedef int wxSockFlags;
-
-  enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT };
   typedef void (*wxSockCbk)(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
 
 protected:
