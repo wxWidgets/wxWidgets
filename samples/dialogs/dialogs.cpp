@@ -422,9 +422,6 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 // one will use it by default
 void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
 {
-    wxOnAssert( "Test assert.txt", 20, "Test" );
-    return;
-
     static wxString s_extDef;
     wxString path = wxFileSelector(
                                     _T("Select the file to load"),
@@ -639,7 +636,7 @@ void MyFrame::ShowReplaceDialog( wxCommandEvent& WXUNUSED(event) )
                                         "Find and replace dialog",
                                         wxFR_REPLACEDIALOG
                                       );
-    dialog->Show();
+    dialog->Show(TRUE);
 }
 
 void MyFrame::ShowFindDialog( wxCommandEvent& WXUNUSED(event) )
@@ -652,7 +649,7 @@ void MyFrame::ShowFindDialog( wxCommandEvent& WXUNUSED(event) )
                                         // just for testing
                                         wxFR_NOWHOLEWORD
                                       );
-    dialog->Show();
+    dialog->Show(TRUE);
 }
 
 static wxString DecodeFindDialogEventFlags(int flags)
