@@ -180,73 +180,73 @@ public:
     wxSizer();
     ~wxSizer();
 
-    /* These should be called Append() really. */
-    virtual void Add( wxWindow *window,
-                      int proportion = 0,
-                      int flag = 0,
-                      int border = 0,
-                      wxObject* userData = NULL );
-    virtual void Add( wxSizer *sizer,
-                      int proportion = 0,
-                      int flag = 0,
-                      int border = 0,
-                      wxObject* userData = NULL );
-    virtual void Add( int width,
-                      int height,
-                      int proportion = 0,
-                      int flag = 0,
-                      int border = 0,
-                      wxObject* userData = NULL );
-    virtual void Add( wxSizerItem *item );
+    // methods for adding elements to the sizer: there are Add/Insert/Prepend
+    // overloads for each of window/sizer/spacer/wxSizerItem
+    void Add( wxWindow *window,
+              int proportion = 0,
+              int flag = 0,
+              int border = 0,
+              wxObject* userData = NULL );
+    void Add( wxSizer *sizer,
+              int proportion = 0,
+              int flag = 0,
+              int border = 0,
+              wxObject* userData = NULL );
+    void Add( int width,
+              int height,
+              int proportion = 0,
+              int flag = 0,
+              int border = 0,
+              wxObject* userData = NULL );
+    void Add( wxSizerItem *item );
 
-    virtual void AddSpacer(int size);
-    virtual void AddStretchSpacer(int prop = 1);
+    void AddSpacer(int size);
+    void AddStretchSpacer(int prop = 1);
 
-    virtual void Insert( size_t index,
-                         wxWindow *window,
-                         int proportion = 0,
-                         int flag = 0,
-                         int border = 0,
-                         wxObject* userData = NULL );
-    virtual void Insert( size_t index,
-                         wxSizer *sizer,
-                         int proportion = 0,
-                         int flag = 0,
-                         int border = 0,
-                         wxObject* userData = NULL );
-    virtual void Insert( size_t index,
-                         int width,
-                         int height,
-                         int proportion = 0,
-                         int flag = 0,
-                         int border = 0,
-                         wxObject* userData = NULL );
-    virtual void Insert( size_t index,
-                         wxSizerItem *item );
+    void Insert( size_t index,
+                 wxWindow *window,
+                 int proportion = 0,
+                 int flag = 0,
+                 int border = 0,
+                 wxObject* userData = NULL );
+    void Insert( size_t index,
+                 wxSizer *sizer,
+                 int proportion = 0,
+                 int flag = 0,
+                 int border = 0,
+                 wxObject* userData = NULL );
+    void Insert( size_t index,
+                 int width,
+                 int height,
+                 int proportion = 0,
+                 int flag = 0,
+                 int border = 0,
+                 wxObject* userData = NULL );
+    virtual void Insert( size_t index, wxSizerItem *item );
 
-    virtual void InsertSpacer(size_t index, int size);
-    virtual void InsertStretchSpacer(size_t index, int prop = 1);
+    void InsertSpacer(size_t index, int size);
+    void InsertStretchSpacer(size_t index, int prop = 1);
 
-    virtual void Prepend( wxWindow *window,
-                          int proportion = 0,
-                          int flag = 0,
-                          int border = 0,
-                          wxObject* userData = NULL );
-    virtual void Prepend( wxSizer *sizer,
-                          int proportion = 0,
-                          int flag = 0,
-                          int border = 0,
-                          wxObject* userData = NULL );
-    virtual void Prepend( int width,
-                          int height,
-                          int proportion = 0,
-                          int flag = 0,
-                          int border = 0,
-                          wxObject* userData = NULL );
-    virtual void Prepend( wxSizerItem *item );
+    void Prepend( wxWindow *window,
+                  int proportion = 0,
+                  int flag = 0,
+                  int border = 0,
+                  wxObject* userData = NULL );
+    void Prepend( wxSizer *sizer,
+                  int proportion = 0,
+                  int flag = 0,
+                  int border = 0,
+                  wxObject* userData = NULL );
+    void Prepend( int width,
+                  int height,
+                  int proportion = 0,
+                  int flag = 0,
+                  int border = 0,
+                  wxObject* userData = NULL );
+    void Prepend( wxSizerItem *item );
 
-    virtual void PrependSpacer(int size);
-    virtual void PrependStretchSpacer(int prop = 1);
+    void PrependSpacer(int size);
+    void PrependStretchSpacer(int prop = 1);
 
     // Deprecated in 2.6 since historically it does not delete the window,
     // use Detach instead.
