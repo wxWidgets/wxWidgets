@@ -188,19 +188,15 @@ void wxMenuBarManager::WindowDidResignMain(wxTopLevelWindowNative *win)
 
 void wxMenuBarManager::InstallMenuBarForWindow(wxTopLevelWindowNative *win)
 {
-    wxMenuBar *menubar = NULL;
-    for(wxTopLevelWindowNative *destwin = win;
-        !menubar && destwin;
-        destwin = wxDynamicCast(destwin->GetParent(), wxTopLevelWindow))
-    {
-        menubar = destwin->GetAppMenuBar();
-    }
+    wxASSERT(win);
+    wxMenuBar *menubar = win->GetAppMenuBar();
     SetMenuBar(menubar);
 }
 
 void wxMenuBarManager::UpdateWindowMenuBar(wxTopLevelWindowNative *win)
 {
-    InstallMenuBarForWindow(m_windowKey);
+    if(m_windowKey)
+        InstallMenuBarForWindow(m_windowKey);
 }
 
 #endif // wxUSE_MENUS

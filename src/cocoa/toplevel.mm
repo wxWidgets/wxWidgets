@@ -134,6 +134,14 @@ wxTopLevelWindowCocoa::~wxTopLevelWindowCocoa()
 // wxTopLevelWindowCocoa Cocoa Specifics
 // ----------------------------------------------------------------------------
 
+wxMenuBar* wxTopLevelWindowCocoa::GetAppMenuBar()
+{
+    wxTopLevelWindowCocoa *parent = wxDynamicCast(GetParent(),wxTopLevelWindow);
+    if(parent)
+        return parent->GetAppMenuBar();
+    return NULL;
+}
+
 void wxTopLevelWindowCocoa::SetNSWindow(WX_NSWindow cocoaNSWindow)
 {
     bool need_debug = cocoaNSWindow || m_cocoaNSWindow;

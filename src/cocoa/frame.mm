@@ -81,6 +81,13 @@ void wxFrame::SetMenuBar(wxMenuBar *menubar)
     wxMenuBarManager::GetInstance()->UpdateWindowMenuBar(this);
 }
 
+wxMenuBar* wxFrame::GetAppMenuBar()
+{
+    if(GetMenuBar())
+        return GetMenuBar();
+    return wxFrameBase::GetAppMenuBar();
+}
+
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     return wxPoint(0,0);
