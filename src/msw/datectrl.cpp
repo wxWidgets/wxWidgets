@@ -33,6 +33,7 @@
 
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/wrapcctl.h"
+#include "wx/msw/private.h"
 
 // ============================================================================
 // implementation
