@@ -81,7 +81,9 @@ extern wxList wxPendingDelete;
 BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
     EVT_NC_PAINT(wxWindowMac::OnNcPaint)
     EVT_ERASE_BACKGROUND(wxWindowMac::OnEraseBackground)
-// TODO    EVT_PAINT(wxWindowMac::OnPaint)
+#if TARGET_API_MAC_OSX
+    EVT_PAINT(wxWindowMac::OnPaint)
+#endif
     EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
     EVT_KILL_FOCUS(wxWindowMac::OnSetFocus)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
@@ -2582,6 +2584,7 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
 
     if ( MacGetTopLevelWindow() && m_peer->NeedsFocusRect() )
     {
+ #if !wxMAC_USE_CORE_GRAPHICS
         wxMacWindowStateSaver sv( this ) ;
 
         int w , h ;
@@ -2613,6 +2616,9 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
             DisposeRgn(updateOuter) ;
             DisposeRgn(updateInner) ;
         }
+#else
+        GetParent()->Refresh() ;
+#endif
     }
 
     event.Skip();
@@ -2870,21 +2876,12 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
         if ( !m_updateRegion.Empty() )
         {
             // paint the window itself
+
             wxPaintEvent event;
             event.SetTimestamp(time);
             event.SetEventObject(this);
-            handled = GetEventHandler()->ProcessEvent(event);
-
-            // we have to call the default built-in handler, as otherwise our frames will be drawn and immediately erased afterwards
-            if ( !handled )
-            {
-                if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
-                {
-                    CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
-                    handled = true ;
-                }
-            }
-
+            GetEventHandler()->ProcessEvent(event);
+            handled = true ;
         }
 
         // now we cannot rely on having its borders drawn by a window itself, as it does not
@@ -3230,6 +3227,14 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
     else
     {
         event.Skip() ;
+    }
+}
+
+void wxWindowMac::OnPaint( wxPaintEvent & event )
+{
+    if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
+    {
+        CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
     }
 }
 
