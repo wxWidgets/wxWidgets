@@ -15,7 +15,7 @@
 WXDIR = $(WXWIN)
 MMDIR = $(WXDIR)\utils\wxMMedia2
 THISDIR = $(MMDIR)\lib
-EXTRALIBS=$(WXDIR)\lib\glcanvas.lib
+EXTRALIBS=$(WXDIR)\lib\mmedia2.lib
 
 LIBTARGET=$(WXDIR)\lib\mmedia2.lib
 OBJECTS = cdbase.obj cdwin.obj g711.obj g721.obj g723_24.obj sndg72x.obj \

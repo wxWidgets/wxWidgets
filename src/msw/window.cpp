@@ -3020,13 +3020,14 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
         return popupMenu->MSWCommand(cmd, id);
     }
 
-    wxWindow *win;
+    wxWindow *win = (wxWindow*) NULL;
     if ( cmd == 0 || cmd == 1 ) // menu or accel - use id
     {
         // must cast to a signed type before comparing with other ids!
         win = FindItem((signed short)id);
     }
-    else
+
+    if (!win && control)
     {
         // find it from HWND - this works even with the broken programs using
         // the same ids for different controls

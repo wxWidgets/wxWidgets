@@ -285,7 +285,7 @@ csCanvas *csApp::CreateCanvas(wxView *view, wxFrame *parent)
   parent->GetClientSize(&width, &height);
 
   // Non-retained canvas
-  csCanvas *canvas = new csCanvas((csDiagramView*) view, parent, 1000, wxPoint(0, 0), wxSize(width, height), 0);
+  csCanvas *canvas = new csCanvas((csDiagramView*) view, parent, 1000, wxPoint(0, 0), wxSize(width, height), wxSUNKEN_BORDER);
 
   wxColour bgColour("WHITE");
   canvas->SetBackgroundColour(bgColour);
