@@ -30,6 +30,7 @@ ALL_SOURCES = \
 		generic/proplist.cpp \
 		generic/sashwin.cpp \
 		generic/scrlwing.cpp \
+		generic/spinctlg.cpp \
 		generic/splash.cpp \
 		generic/splitter.cpp \
 		generic/statusbr.cpp \
@@ -119,6 +120,7 @@ ALL_SOURCES = \
 		common/process.cpp \
 		common/protocol.cpp \
 		common/quantize.cpp \
+		common/regex.cpp \
 		common/resource.cpp \
 		common/sckaddr.cpp \
 		common/sckfile.cpp \
@@ -517,6 +519,7 @@ COMMONOBJS = \
 		process.o \
 		protocol.o \
 		quantize.o \
+		regex.o \
 		resource.o \
 		sckaddr.o \
 		sckfile.o \
@@ -556,6 +559,7 @@ COMMONDEPS = \
 		choiccmn.d \
 		clipcmn.d \
 		cmdline.d \
+		cmdproc.d \
 		cmndata.d \
 		config.d \
 		cshelp.d \
@@ -566,6 +570,7 @@ COMMONDEPS = \
 		db.d \
 		dbtable.d \
 		dcbase.d \
+		dircmn.d \
 		dlgcmn.d \
 		dndcmn.d \
 		dobjcmn.d \
@@ -581,6 +586,7 @@ COMMONDEPS = \
 		file.d \
 		fileconf.d \
 		filefn.d \
+		filename.d \
 		filesys.d \
 		fontcmn.d \
 		fontmap.d \
@@ -589,6 +595,7 @@ COMMONDEPS = \
 		fs_mem.d \
 		fs_zip.d \
 		ftp.d \
+		gaugecmn.d \
 		gdicmn.d \
 		geometry.d \
 		gifdecod.d \
@@ -612,18 +619,23 @@ COMMONDEPS = \
 		list.d \
 		log.d \
 		longlong.d \
+		matrix.d \
 		memory.d \
 		menucmn.d \
 		mimecmn.d \
 		module.d \
 		mstream.d \
+		nbkbase.d \
 		object.d \
 		objstrm.d \
+		odbc.d \
 		paper.d \
+		popupcmn.d \
 		prntbase.d \
 		process.d \
 		protocol.d \
 		quantize.d \
+		regex.d \
 		resource.d \
 		sckaddr.d \
 		sckfile.d \
@@ -693,6 +705,7 @@ GENERICOBJS = \
 		proplist.o \
 		sashwin.o \
 		scrlwing.o \
+		spinctlg.o \
 		splash.o \
 		splitter.o \
 		statusbr.o \
@@ -713,7 +726,12 @@ GENERICDEPS = \
 		colrdlgg.d \
 		dcpsg.d \
 		dirctrlg.d \
+		dirdlgg.d \
+		dragimgg.d \
+		filedlgg.d \
+		fontdlgg.d \
 		grid.d \
+		gridctrl.d \
 		gridsel.d \
 		helpext.d \
 		helphtml.d \
@@ -733,7 +751,8 @@ GENERICDEPS = \
 		propform.d \
 		proplist.d \
 		sashwin.d \
-		scrolwin.d \
+		scrlwing.d \
+		spinctrl.d \
 		splash.d \
 		splitter.d \
 		statusbr.d \
@@ -748,6 +767,7 @@ GENERICDEPS = \
 #		dirmac.o
 #		filedlg.o
 #		statline.o
+#		spinctrl.o
 #		treectrl.o
 GUIOBJS = \
 		accel.o \
@@ -774,7 +794,6 @@ GUIOBJS = \
 		dcprint.o \
 		dcscreen.o \
 		dialog.o \
-		dir.o \
 		dnd.o \
 		font.o \
 		fontdlg.o \
@@ -810,7 +829,6 @@ GUIOBJS = \
 		settings.o \
 		slider.o \
 		spinbutt.o \
-		spinctrl.o \
 		statbmp.o \
 		statbox.o \
 		statbrma.o \
@@ -831,6 +849,7 @@ GUIOBJS = \
 
 GUIDEPS = \
 		accel.d \
+		aga.d \
 		app.d \
 		bitmap.d \
 		bmpbuttn.d \
@@ -840,6 +859,7 @@ GUIDEPS = \
 		checklst.d \
 		choice.d \
 		clipbrd.d \
+		colordlg.d \
 		colour.d \
 		combobox.d \
 		control.d \
@@ -849,25 +869,36 @@ GUIDEPS = \
 		dc.d \
 		dcclient.d \
 		dcmemory.d \
+		dcprint.d \
 		dcscreen.d \
 		dialog.d \
 		dnd.d \
 		font.d \
 		fontdlg.d \
+		fontenum.d \
+		fontutil.d \
 		frame.d \
 		gauge.d \
 		gdiobj.d \
-		gsockgtk.d \
+		gsocket.d \
 		icon.d \
 		joystick.d \
 		listbox.d \
+		macnotfy.d \
 		main.d \
 		mdi.d \
 		menu.d \
+		menuitem.d \
+		metafile.d \
 		minifram.d \
-		notebook.d \
+		msgdlg.d \
+		notebmac.d \
 		palette.d \
 		pen.d \
+		pnghand.d \
+		print.d \
+		printdlg.d \
+		printmac.d \
 		radiobox.d \
 		radiobut.d \
 		region.d \
@@ -875,19 +906,22 @@ GUIDEPS = \
 		settings.d \
 		slider.d \
 		spinbutt.d \
-		spinctrl.d \
 		statbmp.d \
 		statbox.d \
-		statline.d \
+		statbrma.d \
+		statlmac.d \
 		stattext.d \
-		tbargtk.d \
+		tabctrl.d \
+		taskbar.d \
 		textctrl.d \
+		thread.d \
 		timer.d \
+		toolbar.d \
 		tooltip.d \
-		utilsgtk.d \
-		utilsres.d \
+		uma.d \
+		utils.d \
+		utilsexc.d \
 		wave.d \
-		win_gtk.d \
 		window.d
 
 # Not included for Mac OS X
@@ -899,6 +933,7 @@ GUIDEPS = \
 #		threadpsx.o
 #		dialup.o
 UNIXOBJS = \
+		dir.o \
 		utilsunx.o \
 		dl_macosx.o
 
