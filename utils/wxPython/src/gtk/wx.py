@@ -845,12 +845,6 @@ def _checkForCallback(obj, name, event, theID=-1):
     except: pass
     else:   obj.Connect(theID, -1, event, cb)
 
-##  def _checkClassCallback(obj, name):
-##      try:    cb = getattr(obj, name)
-##      except: pass
-##      else:   obj._addCallback(name, cb)
-
-
 def _StdWindowCallbacks(win):
     _checkForCallback(win, "OnChar",               wxEVT_CHAR)
     _checkForCallback(win, "OnSize",               wxEVT_SIZE)

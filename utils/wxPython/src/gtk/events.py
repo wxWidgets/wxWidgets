@@ -345,7 +345,7 @@ class wxKeyEvent(wxKeyEventPtr):
 
 
 
-class wxNavigationKeyEventPtr(wxCommandEventPtr):
+class wxNavigationKeyEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0

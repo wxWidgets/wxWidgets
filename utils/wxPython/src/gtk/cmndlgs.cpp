@@ -594,7 +594,7 @@ static PyObject *_wrap_wxDirDialog_GetPath(PyObject *self, PyObject *args, PyObj
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -626,7 +626,7 @@ static PyObject *_wrap_wxDirDialog_GetMessage(PyObject *self, PyObject *args, Py
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -872,7 +872,7 @@ static PyObject *_wrap_wxFileDialog_GetDirectory(PyObject *self, PyObject *args,
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -904,7 +904,7 @@ static PyObject *_wrap_wxFileDialog_GetFilename(PyObject *self, PyObject *args, 
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -963,7 +963,7 @@ static PyObject *_wrap_wxFileDialog_GetMessage(PyObject *self, PyObject *args, P
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -995,7 +995,7 @@ static PyObject *_wrap_wxFileDialog_GetPath(PyObject *self, PyObject *args, PyOb
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -1054,7 +1054,7 @@ static PyObject *_wrap_wxFileDialog_GetWildcard(PyObject *self, PyObject *args, 
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -1377,9 +1377,9 @@ static void *SwigwxSingleChoiceDialogTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
-static wxSingleChoiceDialog *new_wxSingleChoiceDialog(wxWindow *parent,wxString *message,wxString *caption,int LCOUNT,wxString *LIST,long style,wxPoint *pos) {
+static wxSingleChoiceDialog *new_wxSingleChoiceDialog(wxWindow *parent,wxString *message,wxString *caption,int LCOUNT,wxString *choices,long style,wxPoint *pos) {
             return new wxSingleChoiceDialog(parent, *message, *caption,
-                                            LCOUNT, LIST, NULL, style, *pos);
+                                            LCOUNT, choices, NULL, style, *pos);
         }
 
 static PyObject *_wrap_new_wxSingleChoiceDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -1398,7 +1398,7 @@ static PyObject *_wrap_new_wxSingleChoiceDialog(PyObject *self, PyObject *args, 
     PyObject * _obj4 = 0;
     wxPoint  temp;
     PyObject * _obj6 = 0;
-    char *_kwnames[] = { "parent","message","caption","LIST","style","pos", NULL };
+    char *_kwnames[] = { "parent","message","caption","choices","style","pos", NULL };
     char _ptemp[128];
 
     self = self;
@@ -1523,7 +1523,7 @@ static PyObject *_wrap_wxSingleChoiceDialog_GetStringSelection(PyObject *self, P
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -1689,7 +1689,7 @@ static PyObject *_wrap_wxTextEntryDialog_GetValue(PyObject *self, PyObject *args
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -2254,14 +2254,14 @@ static PyObject *_wrap_new_wxFontDialog(PyObject *self, PyObject *args, PyObject
     PyObject * _resultobj;
     wxFontDialog * _result;
     wxWindow * _arg0;
-    wxFontData * _arg1 = (wxFontData *) NULL;
+    wxFontData * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     char *_kwnames[] = { "parent","data", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxFontDialog",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:new_wxFontDialog",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }

@@ -51,7 +51,7 @@ class TestToolBar(wxFrame):
 
 
         tb.AddSeparator()
-        tb.AddControl(wxComboBox(tb, -1, "", LIST=["", "This", "is a", "wxComboBox"],
+        tb.AddControl(wxComboBox(tb, -1, "", choices=["", "This", "is a", "wxComboBox"],
                                  size=(150,-1), style=wxCB_DROPDOWN))
 
         tb.Realize()

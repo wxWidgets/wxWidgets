@@ -45,6 +45,14 @@ class wxHtmlLinkInfoPtr :
     def GetTarget(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlLinkInfo_GetTarget,(self,) + _args, _kwargs)
         return val
+    def GetEvent(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlLinkInfo_GetEvent,(self,) + _args, _kwargs)
+        if val: val = wxMouseEventPtr(val) 
+        return val
+    def GetHtmlCell(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlLinkInfo_GetHtmlCell,(self,) + _args, _kwargs)
+        if val: val = wxHtmlCellPtr(val) 
+        return val
     def __repr__(self):
         return "<C wxHtmlLinkInfo instance at %s>" % (self.this,)
 class wxHtmlLinkInfo(wxHtmlLinkInfoPtr):

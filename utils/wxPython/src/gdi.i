@@ -494,7 +494,6 @@ public:
     void GetLogicalOrigin(int *OUTPUT, int *OUTPUT);
     void SetLogicalOrigin(int x, int y);
     void GetDeviceOrigin(int *OUTPUT, int *OUTPUT);
-    void SetDeviceOrigin(int x, int y);
     void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
 };

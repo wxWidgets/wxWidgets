@@ -185,7 +185,7 @@ static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args, PyObject *
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -250,7 +250,7 @@ static PyObject *_wrap_wxGetTextFromUser(PyObject *self, PyObject *args, PyObjec
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     if (_obj0)
@@ -288,7 +288,7 @@ static PyObject *_wrap_wxGetSingleChoice(PyObject *self, PyObject *args, PyObjec
     PyObject * _obj3 = 0;
     PyObject * _argo4 = 0;
     int tempbool7 = (int) TRUE;
-    char *_kwnames[] = { "message","caption","LIST","parent","x","y","centre","width","height", NULL };
+    char *_kwnames[] = { "message","caption","choices","parent","x","y","centre","width","height", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|Oiiiii:wxGetSingleChoice",_kwnames,&_obj0,&_obj1,&_obj3,&_argo4,&_arg5,&_arg6,&tempbool7,&_arg8,&_arg9)) 
@@ -336,7 +336,7 @@ static PyObject *_wrap_wxGetSingleChoice(PyObject *self, PyObject *args, PyObjec
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     if (_obj0)
@@ -373,7 +373,7 @@ static PyObject *_wrap_wxGetSingleChoiceIndex(PyObject *self, PyObject *args, Py
     PyObject * _obj3 = 0;
     PyObject * _argo4 = 0;
     int tempbool7 = (int) TRUE;
-    char *_kwnames[] = { "message","caption","LIST","parent","x","y","centre","width","height", NULL };
+    char *_kwnames[] = { "message","caption","choices","parent","x","y","centre","width","height", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|Oiiiii:wxGetSingleChoiceIndex",_kwnames,&_obj0,&_obj1,&_obj3,&_argo4,&_arg5,&_arg6,&tempbool7,&_arg8,&_arg9)) 
@@ -1255,7 +1255,7 @@ static PyObject *_wrap_wxToolTip_GetTip(PyObject *self, PyObject *args, PyObject
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -1670,6 +1670,70 @@ static PyObject *_wrap_wxCaret_Move(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
+#define wxCaret_SetSizeWH(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxCaret_SetSizeWH(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCaret * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxCaret_SetSizeWH",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCaret_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCaret_SetSizeWH. Expected _wxCaret_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCaret_SetSizeWH(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCaret_SetSize(_swigobj,_swigarg0)  (_swigobj->SetSize(_swigarg0))
+static PyObject *_wrap_wxCaret_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCaret * _arg0;
+    wxSize * _arg1;
+    PyObject * _argo0 = 0;
+    wxSize  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxCaret_SetSize",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCaret_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCaret_SetSize. Expected _wxCaret_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCaret_SetSize(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxCaret_Show(_swigobj,_swigarg0)  (_swigobj->Show(_swigarg0))
 static PyObject *_wrap_wxCaret_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1718,60 +1782,6 @@ static PyObject *_wrap_wxCaret_Hide(PyObject *self, PyObject *args, PyObject *kw
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxCaret_Hide(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCaret_OnSetFocus(_swigobj)  (_swigobj->OnSetFocus())
-static PyObject *_wrap_wxCaret_OnSetFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCaret * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCaret_OnSetFocus",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCaret_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCaret_OnSetFocus. Expected _wxCaret_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxCaret_OnSetFocus(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCaret_OnKillFocus(_swigobj)  (_swigobj->OnKillFocus())
-static PyObject *_wrap_wxCaret_OnKillFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCaret * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCaret_OnKillFocus",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCaret_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCaret_OnKillFocus. Expected _wxCaret_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxCaret_OnKillFocus(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2063,10 +2073,10 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFontEnumerator__setSelf", (PyCFunction) _wrap_wxFontEnumerator__setSelf, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxFontEnumerator", (PyCFunction) _wrap_delete_wxFontEnumerator, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFontEnumerator", (PyCFunction) _wrap_new_wxFontEnumerator, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCaret_OnKillFocus", (PyCFunction) _wrap_wxCaret_OnKillFocus, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCaret_OnSetFocus", (PyCFunction) _wrap_wxCaret_OnSetFocus, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_Hide", (PyCFunction) _wrap_wxCaret_Hide, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_Show", (PyCFunction) _wrap_wxCaret_Show, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCaret_SetSize", (PyCFunction) _wrap_wxCaret_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCaret_SetSizeWH", (PyCFunction) _wrap_wxCaret_SetSizeWH, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_Move", (PyCFunction) _wrap_wxCaret_Move, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_MoveXY", (PyCFunction) _wrap_wxCaret_MoveXY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_GetWindow", (PyCFunction) _wrap_wxCaret_GetWindow, METH_VARARGS | METH_KEYWORDS },

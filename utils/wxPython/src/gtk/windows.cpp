@@ -1752,7 +1752,7 @@ static PyObject *_wrap_wxWindow_GetLabel(PyObject *self, PyObject *args, PyObjec
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -1824,7 +1824,7 @@ static PyObject *_wrap_wxWindow_GetName(PyObject *self, PyObject *args, PyObject
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -2304,7 +2304,7 @@ static PyObject *_wrap_wxWindow_GetTitle(PyObject *self, PyObject *args, PyObjec
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -5070,7 +5070,7 @@ static PyObject *_wrap_wxDialog_GetTitle(PyObject *self, PyObject *args, PyObjec
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -6422,7 +6422,7 @@ static PyObject *_wrap_wxMenu_GetTitle(PyObject *self, PyObject *args, PyObject 
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -6495,7 +6495,7 @@ static PyObject *_wrap_wxMenu_GetLabel(PyObject *self, PyObject *args, PyObject 
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -6569,7 +6569,7 @@ static PyObject *_wrap_wxMenu_GetHelpString(PyObject *self, PyObject *args, PyOb
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -7638,7 +7638,7 @@ static PyObject *_wrap_wxMenuBar_GetLabelTop(PyObject *self, PyObject *args, PyO
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -7918,7 +7918,7 @@ static PyObject *_wrap_wxMenuBar_GetLabel(PyObject *self, PyObject *args, PyObje
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -7992,7 +7992,7 @@ static PyObject *_wrap_wxMenuBar_GetHelpString(PyObject *self, PyObject *args, P
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -8255,7 +8255,7 @@ static PyObject *_wrap_wxMenuItem_GetLabel(PyObject *self, PyObject *args, PyObj
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -8288,7 +8288,7 @@ static PyObject *_wrap_wxMenuItem_GetText(PyObject *self, PyObject *args, PyObje
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
     return _resultobj;
 }
@@ -8653,7 +8653,7 @@ static PyObject *_wrap_wxMenuItem_GetHelp(PyObject *self, PyObject *args, PyObje
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
     return _resultobj;
 }

@@ -274,10 +274,8 @@ public:
     wxWindow *GetWindow();
     %name(MoveXY)void Move(int x, int y);
     void Move(const wxPoint& pt);
-#ifdef POST_2_1_12
     %name(SetSizeWH) void SetSize(int width, int height);
     void SetSize(const wxSize& size);
-#endif
     void Show(int show = TRUE);
     void Hide();
 };

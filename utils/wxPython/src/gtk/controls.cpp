@@ -302,7 +302,7 @@ static PyObject *_wrap_wxControl_GetLabel(PyObject *self, PyObject *args, PyObje
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -1141,7 +1141,7 @@ static PyObject *_wrap_new_wxChoice(PyObject *self, PyObject *args, PyObject *kw
     PyObject * _obj3 = 0;
     PyObject * _obj5 = 0;
     PyObject * _argo7 = 0;
-    char *_kwnames[] = { "parent","id","pos","size","LIST","style","validator","name", NULL };
+    char *_kwnames[] = { "parent","id","pos","size","choices","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
@@ -1392,7 +1392,7 @@ static PyObject *_wrap_wxChoice_GetString(PyObject *self, PyObject *args, PyObje
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -1424,7 +1424,7 @@ static PyObject *_wrap_wxChoice_GetStringSelection(PyObject *self, PyObject *arg
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -1608,7 +1608,7 @@ static PyObject *_wrap_new_wxComboBox(PyObject *self, PyObject *args, PyObject *
     PyObject * _obj4 = 0;
     PyObject * _obj6 = 0;
     PyObject * _argo8 = 0;
-    char *_kwnames[] = { "parent","id","value","pos","size","LIST","style","validator","name", NULL };
+    char *_kwnames[] = { "parent","id","value","pos","size","choices","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
@@ -1968,7 +1968,7 @@ static PyObject *_wrap_wxComboBox_GetString(PyObject *self, PyObject *args, PyOb
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -2000,7 +2000,7 @@ static PyObject *_wrap_wxComboBox_GetStringSelection(PyObject *self, PyObject *a
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -2032,7 +2032,7 @@ static PyObject *_wrap_wxComboBox_GetValue(PyObject *self, PyObject *args, PyObj
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -2913,7 +2913,7 @@ static PyObject *_wrap_wxStaticText_GetLabel(PyObject *self, PyObject *args, PyO
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -3005,7 +3005,7 @@ static PyObject *_wrap_new_wxListBox(PyObject *self, PyObject *args, PyObject *k
     PyObject * _obj3 = 0;
     PyObject * _obj5 = 0;
     PyObject * _argo7 = 0;
-    char *_kwnames[] = { "parent","id","pos","size","LIST","style","validator","name", NULL };
+    char *_kwnames[] = { "parent","id","pos","size","choices","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
@@ -3306,7 +3306,7 @@ static PyObject *_wrap_wxListBox_InsertItems(PyObject *self, PyObject *args, PyO
     int  _arg3;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","LIST","pos", NULL };
+    char *_kwnames[] = { "self","choices","pos", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxListBox_InsertItems",_kwnames,&_argo0,&_obj2,&_arg3)) 
@@ -3370,7 +3370,7 @@ static PyObject *_wrap_wxListBox_GetString(PyObject *self, PyObject *args, PyObj
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -3402,7 +3402,7 @@ static PyObject *_wrap_wxListBox_GetStringSelection(PyObject *self, PyObject *ar
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -3473,7 +3473,7 @@ static PyObject *_wrap_wxListBox_Set(PyObject *self, PyObject *args, PyObject *k
     wxString * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","LIST", NULL };
+    char *_kwnames[] = { "self","choices", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListBox_Set",_kwnames,&_argo0,&_obj2)) 
@@ -3748,7 +3748,7 @@ static PyObject *_wrap_new_wxCheckListBox(PyObject *self, PyObject *args, PyObje
     PyObject * _obj3 = 0;
     PyObject * _obj5 = 0;
     PyObject * _argo7 = 0;
-    char *_kwnames[] = { "parent","id","pos","size","LIST","style","validator","name", NULL };
+    char *_kwnames[] = { "parent","id","pos","size","choices","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
@@ -3879,7 +3879,7 @@ static PyObject *_wrap_wxCheckListBox_InsertItems(PyObject *self, PyObject *args
     int  _arg3;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","LIST","pos", NULL };
+    char *_kwnames[] = { "self","choices","pos", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxCheckListBox_InsertItems",_kwnames,&_argo0,&_obj2,&_arg3)) 
@@ -4249,7 +4249,7 @@ static PyObject *_wrap_wxTextCtrl_GetLineText(PyObject *self, PyObject *args, Py
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -4308,7 +4308,7 @@ static PyObject *_wrap_wxTextCtrl_GetValue(PyObject *self, PyObject *args, PyObj
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -5882,7 +5882,7 @@ static PyObject *_wrap_new_wxRadioBox(PyObject *self, PyObject *args, PyObject *
     PyObject * _obj4 = 0;
     PyObject * _obj6 = 0;
     PyObject * _argo9 = 0;
-    char *_kwnames[] = { "parent","id","label","point","size","LIST","majorDimension","style","validator","name", NULL };
+    char *_kwnames[] = { "parent","id","label","point","size","choices","majorDimension","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
@@ -6084,7 +6084,7 @@ static PyObject *_wrap_wxRadioBox_GetItemLabel(PyObject *self, PyObject *args, P
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -6144,7 +6144,7 @@ static PyObject *_wrap_wxRadioBox_GetString(PyObject *self, PyObject *args, PyOb
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -6176,7 +6176,7 @@ static PyObject *_wrap_wxRadioBox_GetStringSelection(PyObject *self, PyObject *a
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;

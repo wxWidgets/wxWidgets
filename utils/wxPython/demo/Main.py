@@ -383,6 +383,11 @@ class MyApp(wxApp):
 #---------------------------------------------------------------------------
 
 def main():
+    try:
+        demoPath = os.path.split(__file__)[0]
+        os.chdir(demoPath)
+    except:
+        pass
     app = MyApp(0)
     app.MainLoop()
 

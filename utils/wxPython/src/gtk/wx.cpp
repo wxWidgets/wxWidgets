@@ -966,7 +966,7 @@ static PyObject *_wrap_wxPyApp_GetAppName(PyObject *self, PyObject *args, PyObje
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -998,7 +998,7 @@ static PyObject *_wrap_wxPyApp_GetClassName(PyObject *self, PyObject *args, PyOb
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -1118,7 +1118,7 @@ static PyObject *_wrap_wxPyApp_GetVendorName(PyObject *self, PyObject *args, PyO
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;

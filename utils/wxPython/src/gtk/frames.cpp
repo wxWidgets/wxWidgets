@@ -386,7 +386,7 @@ static PyObject *_wrap_wxFrame_GetTitle(PyObject *self, PyObject *args, PyObject
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -708,7 +708,7 @@ static PyObject *_wrap_wxFrame_SetStatusWidths(PyObject *self, PyObject *args, P
     int * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","LIST", NULL };
+    char *_kwnames[] = { "self","choices", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFrame_SetStatusWidths",_kwnames,&_argo0,&_obj2)) 
