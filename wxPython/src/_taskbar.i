@@ -23,8 +23,8 @@
 
 
 %{
-#ifdef __WXMAC__
-// implement dummy classes and such for wxMac
+#ifndef wxHAS_TASK_BAR_ICON
+// implement dummy classes for platforms that don't have it
 
 class wxTaskBarIcon : public wxEvtHandler
 {
@@ -39,6 +39,11 @@ public:
     wxTaskBarIconEvent(wxEventType, wxTaskBarIcon *)
         { wxPyRaiseNotImplemented(); }
     virtual wxEvent* Clone() const { return NULL; }
+    bool IsOk() const { return false; }
+    bool IsIconInstalled() const { return false; }
+    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxPyEmptyString) { return false; }
+    bool RemoveIcon() { return false; }
+    bool PopupMenu(wxMenu *menu) { return false; }
 };
 
 enum {
@@ -95,7 +100,7 @@ enum {
 // there will be a problem in this case with it holding a reference to itself
 // (since it depends on the dtor for cleanup.)  Better safe than sorry!
 //
-// Perhaps a better mechanism for wxPython woudl be to turn CreatePopupMenu
+// Perhaps a better mechanism for wxPython would be to turn CreatePopupMenu
 // into an event...
 
 MustHaveApp(wxTaskBarIcon);
@@ -114,7 +119,6 @@ public:
         }
     }
 
-#ifndef __WXMAC__
     bool IsOk() const;
     %pythoncode { def __nonzero__(self): return self.IsOk() }
 
@@ -123,7 +127,6 @@ public:
     bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxPyEmptyString);
     bool RemoveIcon();
     bool PopupMenu(wxMenu *menu);
-#endif
 };
 
 
