@@ -183,7 +183,7 @@ inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; 
 #endif
 
 #if (defined(__GNUG__) && (__GNUG__ < 3)) || \
-    (defined(_MSC_VER) && (_MSC_VER <= 1100))
+    (defined(_MSC_VER) && (_MSC_VER <= 1200))
     #define wxSTRING_BASE_HASNT_CLEAR
 #endif
 
