@@ -1223,7 +1223,7 @@ toplevel.h	MSWH
 treectrl.h	MSWH
 wave.h	MSWH
 window.h	MSWH
-winundef.h	MSWH
+winundef.h	MSWH	Base
 
 automtn.h	MSWH	OLE
 dataform.h	MSWH	OLE

@@ -972,6 +972,10 @@ SOURCE=..\include\wx\msw\dde.h
 
 SOURCE=..\include\wx\msw\mimetype.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\winundef.h
+# End Source File
 
 # End Group
 # End Group
