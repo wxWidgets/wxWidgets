@@ -22,6 +22,9 @@
 #include <wx/fontutil.h>
 #include <wx/dcbuffer.h>
 #include <wx/iconbndl.h>
+#ifdef __WXMAC__
+#include <wx/mac/private.h>
+#endif
 %}
 
 //----------------------------------------------------------------------
@@ -551,6 +554,11 @@ public:
     void SetColour(wxColour &colour);
     void SetStipple(wxBitmap& bitmap);
     void SetStyle(int style);
+
+#ifdef __WXMAC__
+    short GetMacTheme();
+    void SetMacTheme(short macThemeBrush);
+#endif
 
     %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
