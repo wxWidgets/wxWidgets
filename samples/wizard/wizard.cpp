@@ -100,14 +100,14 @@ public:
     {
         m_bitmap = wxBITMAP(wiztest2);
 
-        m_checkbox = new wxCheckBox(this, -1, "&Check me");
+        m_checkbox = new wxCheckBox(this, -1, _T("&Check me"));
     }
 
     virtual bool TransferDataFromWindow()
     {
         if ( !m_checkbox->GetValue() )
         {
-            wxMessageBox("Check the checkbox first!", "No way",
+            wxMessageBox(_T("Check the checkbox first!"), _T("No way"),
                          wxICON_WARNING | wxOK, this);
 
             return FALSE;
@@ -138,12 +138,12 @@ public:
         //        static wxString choices[] = { "forward", "backward", "both", "neither" };
         // The above syntax can cause an internal compiler error with gcc.
         wxString choices[4];
-        choices[0] = "forward";
-        choices[1] = "backward";
-        choices[2] = "both";
-        choices[3] = "neither";
+        choices[0] = _T("forward");
+        choices[1] = _T("backward");
+        choices[2] = _T("both");
+        choices[3] = _T("neither");
 
-        m_radio = new wxRadioBox(this, -1, "Allow to proceed:",
+        m_radio = new wxRadioBox(this, -1, _T("Allow to proceed:"),
                                  wxPoint(5, 5), wxDefaultSize,
                                  WXSIZEOF(choices), choices,
                                  1, wxRA_SPECIFY_COLS);
@@ -153,7 +153,7 @@ public:
     // wizard event handlers
     void OnWizardCancel(wxWizardEvent& event)
     {
-        if ( wxMessageBox("Do you really want to cancel?", "Question",
+        if ( wxMessageBox(_T("Do you really want to cancel?"), _T("Question"),
                           wxICON_QUESTION | wxYES_NO, this) != wxYES )
         {
             // not confirmed
@@ -174,7 +174,7 @@ public:
         if ( !event.GetDirection() && sel == Backward )
             return;
 
-        wxMessageBox("You can't go there", "Not allowed",
+        wxMessageBox(_T("You can't go there"), _T("Not allowed"),
                      wxICON_WARNING | wxOK, this);
 
         event.Veto();
@@ -198,10 +198,10 @@ public:
         m_prev = prev;
         m_next = next;
 
-        (void)new wxStaticText(this, -1, "Try checking the box below and\n"
-                                         "then going back and clearing it");
+        (void)new wxStaticText(this, -1, _T("Try checking the box below and\n")
+                                         _T("then going back and clearing it"));
 
-        m_checkbox = new wxCheckBox(this, -1, "&Skip the next page",
+        m_checkbox = new wxCheckBox(this, -1, _T("&Skip the next page"),
                                     wxPoint(5, 30));
     }
 
@@ -249,7 +249,7 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
-    MyFrame *frame = new MyFrame("wxWizard Sample");
+    MyFrame *frame = new MyFrame(_T("wxWizard Sample"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -268,17 +268,17 @@ MyFrame::MyFrame(const wxString& title)
                   wxDefaultPosition, wxSize(250, 150))  // small frame
 {
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(Wizard_Run, "&Run wizard...\tCtrl-R");
+    menuFile->Append(Wizard_Run, _T("&Run wizard...\tCtrl-R"));
     menuFile->AppendSeparator();
-    menuFile->Append(Wizard_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(Wizard_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Wizard_About, "&About...\tF1", "Show about dialog");
+    helpMenu->Append(Wizard_About, _T("&About...\tF1"), _T("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(helpMenu, "&Help");
+    menuBar->Append(menuFile, _T("&File"));
+    menuBar->Append(helpMenu, _T("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -295,23 +295,23 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("Demo of wxWizard class\n"
-                 "© 1999, 2000 Vadim Zeitlin",
-                 "About wxWizard sample", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(_T("Demo of wxWizard class\n")
+                 _T("© 1999, 2000 Vadim Zeitlin"),
+                 _T("About wxWizard sample"), wxOK | wxICON_INFORMATION, this);
 }
 
 void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
 {
     wxWizard *wizard = new wxWizard(this, -1,
-                    "Absolutely Useless Wizard",
+                    _T("Absolutely Useless Wizard"),
                     wxBITMAP(wiztest));
 
     // a wizard page may be either an object of predefined class
     wxWizardPageSimple *page1 = new wxWizardPageSimple(wizard);
     wxStaticText *text = new wxStaticText(page1, -1,
-             "This wizard doesn't help you to do anything at all.\n"
-             "\n"
-             "The next pages will present you with more useless controls."
+             _T("This wizard doesn't help you to do anything at all.\n")
+             _T("\n")
+             _T("The next pages will present you with more useless controls.")
         );
     wxSize size = text->GetBestSize();
 
@@ -332,7 +332,7 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
     wizard->SetPageSize(size);
     if ( wizard->RunWizard(page1) )
     {
-        wxMessageBox("The wizard successfully completed", "That's all",
+        wxMessageBox(_T("The wizard successfully completed"), _T("That's all"),
                      wxICON_INFORMATION | wxOK);
     }
 
