@@ -126,6 +126,7 @@ All (GUI):
   a new ID for the item using wxNewId().  As a consequence of this,
   the value of wxID_SEPARATOR was changed from -1 to -2 in order to
   not clash.
+- added option to generate C++ headers to wxrc utility (Eduardo Marques)
 
 
 wxMSW:

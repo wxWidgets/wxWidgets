@@ -1,3 +1,6 @@
+% Note: -e/C++ header generation documentation added by 
+% Eduardo Marques <edrdo@netcabo.pt>
+%
 \section{XML-based resource system overview}\label{xrcoverview}
 
 Classes: \helpref{wxXmlResource}{wxxmlresource}, \helpref{wxXmlResourceHandler}{wxxmlresourcehandler}
@@ -112,6 +115,8 @@ To compile binary resource files, use the command-line wxrc utility. It takes on
 \item -h (--help): show a help message
 \item -v (--verbose): show verbose logging information
 \item -c (--cpp-code): write C++ source rather than a XRS file
+\item -e (--extra-cpp-code): if used together with -c, generates C++ header file
+containing class definitions for the windows defined by the XRC file (see special subsection) 
 \item -u (--uncompressed): do not compress XML files (C++ only)
 \item -g (--gettext): output .po catalog (to stdout, or a file if -o is used)
 \item -n (--function) <name>: specify C++ function name (use with -c)
@@ -447,6 +452,95 @@ This is the XML file (resource.xrc) for the XRC sample.
 
 Please see Technical Note 14 (docs/tech/tn0014.txt) in your wxWindows
 distribution.
+
+\subsection{C++ header file generation}\label{xrccppheader}
+
+Using the {\tt -e} switch together with {\tt -c}, a C++ header file is written
+containing class definitions for the GUI windows defined in the XRC file.
+This code generation can make it easier to use XRC and automate program
+development.
+The classes can be used as basis for development, freeing the
+programmer from dealing with most of the XRC specifities (e.g. {\tt XRCCTRL}).
+
+For each top level window defined in the XRC file a C++ class definition is
+generated, containing as class members the named widgets of the window.
+A default constructor for each class is also generated. Inside the constructor 
+all XRC loading is done and all class members representing widgets are initialized. 
+
+A simple example will help understand how the scheme works. Suppose you have
+a XRC file defining a top level window {\tt TestWnd\_Base}, which subclasses {\tt wxFrame} (any 
+other class like {\tt wxDialog} will do also), and has subwidgets {\tt wxTextCtrl} A and {\tt wxButton} B.
+The XRC file and corresponding class definition in the header file will be something like:
+
+\begin{verbatim}
+<?xml version="1.0"?>
+<resource version="2.3.0.1">
+    <object class="wxFrame" name="TestWnd_Base">
+        <size>-1,-1</size>
+        <title>Test</title>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <object class="wxTextCtrl" name="A">
+                    <label>Test label</label>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <object class="wxButton" name="B">
+                    <label>Test button</label>
+                </object>
+            </object>
+        </object>
+    </object>
+</resource>
+
+
+class TestWnd_Base : public wxFrame {
+protected:
+ wxTextCtrl* A;
+ wxButton* B;
+
+private:
+ void InitWidgetsFromXRC(){
+  wxXmlResource::Get()->LoadObject(this,NULL,"TestWnd","wxFrame");
+  A = XRCCTRL(*this,"A",wxTextCtrl);
+  B = XRCCTRL(*this,"B",wxButton);
+ }
+public:
+TestWnd::TestWnd(){
+  InitWidgetsFromXRC();
+ }
+};
+\end{verbatim}
+
+The generated window class can be used as basis for the full window class. The
+class members which represent widgets may be accessed by name instead of using
+{\tt XRCCTRL} every time you wish to reference them (note that they are {\tt protected} class members), 
+though you must still use {\tt XRCID} to refer to widget ids in the event
+table. 
+
+Example:
+\begin{verbatim}
+#include "resource.h"
+
+class TestWnd : public TestWnd_Base {
+	public:
+		TestWnd(){
+			// A, B already initialised at this point
+			A->SetValue("Updated in TestWnd::TestWnd");
+			B->SetValue("Nice :)");
+		}
+		void OnBPressed(wxEvent& event){
+			Close();
+		}
+		DECLARE_EVENT_TABLE();
+};
+
+BEGIN_EVENT_TABLE(TestWnd,TestWnd_Base)
+EVT_BUTTON(XRCID("B"),TestWnd::OnBPressed)
+END_EVENT_TABLE()
+
+\end{verbatim}
 
 \subsection{Adding new resource handlers}\label{newresourcehandlers}
 
