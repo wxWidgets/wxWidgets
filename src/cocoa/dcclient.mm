@@ -71,13 +71,13 @@ bool wxWindowDC::CocoaUnlockFocusOnNSView()
 
 bool wxWindowDC::CocoaLockFocus()
 {
-    wxLogDebug(wxT("Locking focus on wxWindowDC=%p, NSView=%p"),this, m_window->GetNonClientNSView());
+    wxLogTrace(wxTRACE_COCOA,wxT("Locking focus on wxWindowDC=%p, NSView=%p"),this, m_window->GetNonClientNSView());
     return CocoaLockFocusOnNSView(m_window->GetNonClientNSView());
 }
 
 bool wxWindowDC::CocoaUnlockFocus()
 {
-    wxLogDebug(wxT("Unlocking focus on wxWindowDC=%p, NSView=%p"),this, m_window->GetNonClientNSView());
+    wxLogTrace(wxTRACE_COCOA,wxT("Unlocking focus on wxWindowDC=%p, NSView=%p"),this, m_window->GetNonClientNSView());
     return CocoaUnlockFocusOnNSView();
 }
 
@@ -115,13 +115,13 @@ wxClientDC::~wxClientDC(void)
 
 bool wxClientDC::CocoaLockFocus()
 {
-    wxLogDebug(wxT("Locking focus on wxClientDC=%p, NSView=%p"),this, m_window->GetNSView());
+    wxLogTrace(wxTRACE_COCOA,wxT("Locking focus on wxClientDC=%p, NSView=%p"),this, m_window->GetNSView());
     return CocoaLockFocusOnNSView(m_window->GetNSView());
 }
 
 bool wxClientDC::CocoaUnlockFocus()
 {
-    wxLogDebug(wxT("Unlocking focus on wxClientDC=%p, NSView=%p"),this, m_window->GetNSView());
+    wxLogTrace(wxTRACE_COCOA,wxT("Unlocking focus on wxClientDC=%p, NSView=%p"),this, m_window->GetNSView());
     return CocoaUnlockFocusOnNSView();
 }
 

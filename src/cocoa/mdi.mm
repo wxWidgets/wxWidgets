@@ -158,7 +158,7 @@ wxMenuBar *wxMDIParentFrame::GetAppMenuBar(wxCocoaNSWindow *win)
 
 void wxMDIParentFrame::CocoaDelegate_windowDidBecomeKey(void)
 {
-    wxLogDebug(wxT("wxMDIParentFrame=%p::CocoaDelegate_windowDidBecomeKey"),this);
+    wxLogTrace(wxTRACE_COCOA,wxT("wxMDIParentFrame=%p::CocoaDelegate_windowDidBecomeKey"),this);
     if(sm_cocoaDeactivateWindow && sm_cocoaDeactivateWindow==m_currentChild)
     {
         sm_cocoaDeactivateWindow = NULL;
@@ -183,7 +183,7 @@ void wxMDIParentFrame::CocoaDelegate_windowDidBecomeKey(void)
 
 void wxMDIParentFrame::CocoaDelegate_windowDidResignKey(void)
 {
-    wxLogDebug(wxT("wxMDIParentFrame=%p::CocoaDelegate_windowDidResignKey"),this);
+    wxLogTrace(wxTRACE_COCOA,wxT("wxMDIParentFrame=%p::CocoaDelegate_windowDidResignKey"),this);
     if(m_closed)
         wxFrame::CocoaDelegate_windowDidResignKey();
     else
@@ -280,7 +280,7 @@ void wxMDIChildFrame::Activate()
 
 void wxMDIChildFrame::CocoaDelegate_windowDidBecomeKey(void)
 {
-    wxLogDebug(wxT("wxMDIChildFrame=%p::CocoaDelegate_windowDidBecomeKey"),this);
+    wxLogTrace(wxTRACE_COCOA,wxT("wxMDIChildFrame=%p::CocoaDelegate_windowDidBecomeKey"),this);
     if(sm_cocoaDeactivateWindow && sm_cocoaDeactivateWindow==m_mdiParent)
     {
         sm_cocoaDeactivateWindow = NULL;
@@ -299,7 +299,7 @@ void wxMDIChildFrame::CocoaDelegate_windowDidBecomeMain(void)
 
 void wxMDIChildFrame::CocoaDelegate_windowDidResignKey(void)
 {
-    wxLogDebug(wxT("wxMDIChildFrame=%p::CocoaDelegate_windowDidResignKey"),this);
+    wxLogTrace(wxTRACE_COCOA,wxT("wxMDIChildFrame=%p::CocoaDelegate_windowDidResignKey"),this);
     sm_cocoaDeactivateWindow = this;
 }
 

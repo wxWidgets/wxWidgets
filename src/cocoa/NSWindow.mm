@@ -77,14 +77,14 @@
 
 - (BOOL)windowShouldClose: (id)sender
 {
-    wxLogDebug(wxT("windowShouldClose"));
+    wxLogTrace(wxTRACE_COCOA,wxT("windowShouldClose"));
     wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(sender);
     if(tlw && !tlw->CocoaDelegate_windowShouldClose())
     {
-        wxLogDebug(wxT("Window will not be closed"));
+        wxLogTrace(wxTRACE_COCOA,wxT("Window will not be closed"));
         return NO;
     }
-    wxLogDebug(wxT("Window will be closed"));
+    wxLogTrace(wxTRACE_COCOA,wxT("Window will be closed"));
     return YES;
 }
 

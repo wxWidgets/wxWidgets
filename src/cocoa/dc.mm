@@ -275,7 +275,7 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     [flipTransform concat];
     #if 0
     // Draw+fill a rectangle so we can see where the shit is supposed to be.
-    wxLogDebug(wxT("(%f,%f) (%fx%f)"),usedRect.origin.x,usedRect.origin.y,usedRect.size.width,usedRect.size.height);
+    wxLogTrace(wxTRACE_COCOA,wxT("(%f,%f) (%fx%f)"),usedRect.origin.x,usedRect.origin.y,usedRect.size.width,usedRect.size.height);
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(0,0,usedRect.size.width,usedRect.size.height)];
     [[NSColor blackColor] set];
     [bezpath stroke];
@@ -455,7 +455,7 @@ void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 
 #if 0
     // Draw a rect so we can see where it's supposed to be
-    wxLogDebug(wxT("image at (%d,%d) size %dx%d"),x,y,bmp.GetWidth(),bmp.GetHeight());
+    wxLogTrace(wxTRACE_COCOA,wxT("image at (%d,%d) size %dx%d"),x,y,bmp.GetWidth(),bmp.GetHeight());
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(x,y,bmp.GetWidth(),bmp.GetHeight())];
     [[NSColor blackColor] set];
     [bezpath stroke];

@@ -140,7 +140,7 @@ bool wxRadioButton::GetValue() const
 
 void wxRadioButton::Cocoa_wxNSButtonAction(void)
 {
-    wxLogDebug(wxT("wxRadioButton"));
+    wxLogTrace(wxTRACE_COCOA,wxT("wxRadioButton"));
     if(m_radioMaster && ([GetNSButton() state] == NSOnState))
     {
         for(wxRadioButtonList::compatibility_iterator slaveNode =

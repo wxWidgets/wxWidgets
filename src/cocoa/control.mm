@@ -45,10 +45,10 @@ bool wxControl::Create(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos, const wxSize& size, long style,
             const wxValidator& validator, const wxString& name)
 {
-    wxLogDebug(wxT("Creating control with id=%d"),winid);
+    wxLogTrace(wxTRACE_COCOA,wxT("Creating control with id=%d"),winid);
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
-    wxLogDebug(wxT("Created control with id=%d"),GetId());
+    wxLogTrace(wxTRACE_COCOA,wxT("Created control with id=%d"),GetId());
     m_cocoaNSView = NULL;
     SetNSControl([[wxNonControlNSControl alloc] initWithFrame: MakeDefaultNSRect(size)]);
     // NOTE: YES we want to release this (to match the alloc).
@@ -78,7 +78,7 @@ wxSize wxControl::DoGetBestSize() const
     NSRect cocoaRect = [m_cocoaNSView frame];
     wxSize size((int)cocoaRect.size.width+10,(int)cocoaRect.size.height);
     [m_cocoaNSView setFrame: storedRect];
-    wxLogDebug(wxT("wxControl=%p::DoGetBestSize()==(%d,%d)"),this,size.x,size.y);
+    wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxControl=%p::DoGetBestSize()==(%d,%d)"),this,size.x,size.y);
     return size;
 }
 

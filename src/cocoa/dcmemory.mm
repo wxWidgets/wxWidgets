@@ -135,7 +135,7 @@ bool wxMemoryDC::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
     [transform concat];
     [flipTransform concat];
 
-    wxLogDebug(wxT("[m_cocoaNSImage isFlipped]=%d"), [m_cocoaNSImage isFlipped]);
+    wxLogTrace(wxTRACE_COCOA,wxT("[m_cocoaNSImage isFlipped]=%d"), [m_cocoaNSImage isFlipped]);
     [m_cocoaNSImage drawAtPoint: NSMakePoint(0,0)
         fromRect: NSMakeRect(xsrc,
             m_selectedBitmap.GetHeight()-height-ysrc,

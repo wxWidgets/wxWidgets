@@ -40,7 +40,7 @@
 
 - (void)wxNSControlAction: (id)sender
 {
-    wxLogDebug(wxT("wxNSControlAction"));
+    wxLogTrace(wxTRACE_COCOA,wxT("wxNSControlAction"));
     wxCocoaNSControl *wxcontrol = wxCocoaNSControl::GetFromCocoa(sender);
     wxCHECK_RET(wxcontrol,wxT("wxNSControlAction received but no wxCocoaNSControl exists!"));
     wxcontrol->CocoaTarget_action();

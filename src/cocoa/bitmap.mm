@@ -296,7 +296,7 @@ bool wxBitmap::Create(int w, int h, int d)
             bytesPerRow: 0
             bitsPerPixel: 0];
 
-    wxLogDebug(wxT("M_BITMAPDATA=%p NSBitmapImageRep bitmapData=%p"), M_BITMAPDATA, [M_BITMAPDATA->m_cocoaNSBitmapImageRep bitmapData]);
+    wxLogTrace(wxTRACE_COCOA,wxT("M_BITMAPDATA=%p NSBitmapImageRep bitmapData=%p"), M_BITMAPDATA, [M_BITMAPDATA->m_cocoaNSBitmapImageRep bitmapData]);
     M_BITMAPDATA->m_ok = true;
     M_BITMAPDATA->m_numColors = 0;
     M_BITMAPDATA->m_quality = 0;

@@ -216,7 +216,7 @@ void wxWindowCocoaScroller::DoGetClientSize(int *x, int *y) const
 
 void wxWindowCocoaScroller::Cocoa_FrameChanged(void)
 {
-    wxLogDebug(wxT("Cocoa_FrameChanged"));
+    wxLogTrace(wxTRACE_COCOA,wxT("Cocoa_FrameChanged"));
     wxSizeEvent event(m_owner->GetSize(), m_owner->GetId());
     event.SetEventObject(m_owner);
     m_owner->GetEventHandler()->ProcessEvent(event);
@@ -302,13 +302,13 @@ void wxWindowCocoa::CocoaRemoveFromParent(void)
 void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
 {
     bool need_debug = cocoaNSView || m_cocoaNSView;
-    if(need_debug) wxLogDebug(wxT("wxWindowCocoa=%p::SetNSView [m_cocoaNSView=%p retainCount]=%d"),this,m_cocoaNSView,[m_cocoaNSView retainCount]);
+    if(need_debug) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxWindowCocoa=%p::SetNSView [m_cocoaNSView=%p retainCount]=%d"),this,m_cocoaNSView,[m_cocoaNSView retainCount]);
     DisassociateNSView(m_cocoaNSView);
     [cocoaNSView retain];
     [m_cocoaNSView release];
     m_cocoaNSView = cocoaNSView;
     AssociateNSView(m_cocoaNSView);
-    if(need_debug) wxLogDebug(wxT("wxWindowCocoa=%p::SetNSView [cocoaNSView=%p retainCount]=%d"),this,cocoaNSView,[cocoaNSView retainCount]);
+    if(need_debug) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxWindowCocoa=%p::SetNSView [cocoaNSView=%p retainCount]=%d"),this,cocoaNSView,[cocoaNSView retainCount]);
 }
 
 WX_NSView wxWindowCocoa::GetNSViewForSuperview() const
@@ -329,7 +329,7 @@ WX_NSView wxWindowCocoa::GetNSViewForHiding() const
 
 bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 {
-    wxLogDebug(wxT("Cocoa_drawRect"));
+    wxLogTrace(wxTRACE_COCOA,wxT("Cocoa_drawRect"));
     // Recursion can happen if the event loop runs from within the paint
     // handler.  For instance, if an assertion dialog is shown.
     // FIXME: This seems less than ideal.
@@ -370,7 +370,7 @@ bool wxWindowCocoa::Cocoa_mouseMoved(WX_NSEvent theEvent)
 {
     wxMouseEvent event(wxEVT_MOTION);
     InitMouseEvent(event,theEvent);
-    wxLogDebug(wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
+    wxLogTrace(wxTRACE_COCOA,wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
     return GetEventHandler()->ProcessEvent(event);
 }
 
@@ -388,7 +388,7 @@ bool wxWindowCocoa::Cocoa_mouseDown(WX_NSEvent theEvent)
 {
     wxMouseEvent event([theEvent clickCount]<2?wxEVT_LEFT_DOWN:wxEVT_LEFT_DCLICK);
     InitMouseEvent(event,theEvent);
-    wxLogDebug(wxT("Mouse Down @%d,%d num clicks=%d"),event.m_x,event.m_y,[theEvent clickCount]);
+    wxLogTrace(wxTRACE_COCOA,wxT("Mouse Down @%d,%d num clicks=%d"),event.m_x,event.m_y,[theEvent clickCount]);
     return GetEventHandler()->ProcessEvent(event);
 }
 
@@ -397,7 +397,7 @@ bool wxWindowCocoa::Cocoa_mouseDragged(WX_NSEvent theEvent)
     wxMouseEvent event(wxEVT_MOTION);
     InitMouseEvent(event,theEvent);
     event.m_leftDown = true;
-    wxLogDebug(wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
+    wxLogTrace(wxTRACE_COCOA,wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
     return GetEventHandler()->ProcessEvent(event);
 }
 
@@ -405,7 +405,7 @@ bool wxWindowCocoa::Cocoa_mouseUp(WX_NSEvent theEvent)
 {
     wxMouseEvent event(wxEVT_LEFT_UP);
     InitMouseEvent(event,theEvent);
-    wxLogDebug(wxT("Mouse Up @%d,%d"),event.m_x,event.m_y);
+    wxLogTrace(wxTRACE_COCOA,wxT("Mouse Up @%d,%d"),event.m_x,event.m_y);
     return GetEventHandler()->ProcessEvent(event);
 }
 
@@ -441,7 +441,7 @@ bool wxWindowCocoa::Cocoa_otherMouseUp(WX_NSEvent theEvent)
 
 void wxWindowCocoa::Cocoa_FrameChanged(void)
 {
-    wxLogDebug(wxT("Cocoa_FrameChanged"));
+    wxLogTrace(wxTRACE_COCOA,wxT("Cocoa_FrameChanged"));
     wxSizeEvent event(GetSize(), m_windowId);
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
@@ -528,7 +528,7 @@ bool wxWindow::Show(bool show)
 
 void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-//    wxLogDebug("wxWindow=%p::DoSetSizeWindow(%d,%d,%d,%d,Auto: %s%s)",this,x,y,width,height,(sizeFlags&wxSIZE_AUTO_WIDTH)?"W":".",sizeFlags&wxSIZE_AUTO_HEIGHT?"H":".");
+    wxLogTrace(wxTRACE_COCOA_Window_Size,"wxWindow=%p::DoSetSizeWindow(%d,%d,%d,%d,Auto: %s%s)",this,x,y,width,height,(sizeFlags&wxSIZE_AUTO_WIDTH)?"W":".",sizeFlags&wxSIZE_AUTO_HEIGHT?"H":".");
     int currentX, currentY;
     int currentW, currentH;
     DoGetPosition(&currentX, &currentY);
@@ -569,7 +569,7 @@ void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags
 void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {
     wxAutoNSAutoreleasePool pool;
-//    wxLogDebug("wxWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
+    wxLogTrace(wxTRACE_COCOA_Window_Size,"wxWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
 
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
@@ -614,7 +614,7 @@ void wxWindow::DoGetSize(int *w, int *h) const
         *w=(int)cocoaRect.size.width;
     if(h)
         *h=(int)cocoaRect.size.height;
-//    wxLogDebug("wxWindow=%p::DoGetSize = (%d,%d)",this,(int)cocoaRect.size.width,(int)cocoaRect.size.height);
+    wxLogTrace(wxTRACE_COCOA_Window_Size,"wxWindow=%p::DoGetSize = (%d,%d)",this,(int)cocoaRect.size.width,(int)cocoaRect.size.height);
 }
 
 void wxWindow::DoGetPosition(int *x, int *y) const
@@ -629,7 +629,7 @@ void wxWindow::DoGetPosition(int *x, int *y) const
         *x=(int)cocoaRect.origin.x;
     if(y)
         *y=(int)(parentRect.size.height-(cocoaRect.origin.y+cocoaRect.size.height));
-//    wxLogDebug("wxWindow=%p::DoGetPosition = (%d,%d)",this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
+    wxLogTrace(wxTRACE_COCOA_Window_Size,"wxWindow=%p::DoGetPosition = (%d,%d)",this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
 }
 
 WXWidget wxWindow::GetHandle() const
@@ -672,7 +672,7 @@ void wxWindow::DoClientToScreen(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindow::DoGetClientSize(int *x, int *y) const
 {
-    wxLogDebug(wxT("DoGetClientSize:"));
+    wxLogTrace(wxTRACE_COCOA,wxT("DoGetClientSize:"));
     if(m_cocoaScroller)
         m_cocoaScroller->DoGetClientSize(x,y);
     else
@@ -681,7 +681,7 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
 
 void wxWindow::DoSetClientSize(int width, int height)
 {
-    wxLogDebug(wxT("DoSetClientSize=(%d,%d)"),width,height);
+    wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("DoSetClientSize=(%d,%d)"),width,height);
     if(m_cocoaScroller)
         m_cocoaScroller->ClientSizeToSize(width,height);
     CocoaSetWxWindowSize(width,height);

@@ -32,10 +32,10 @@ bool wxButton::Create(wxWindow *parent, wxWindowID winid,
             const wxValidator& validator, const wxString& name)
 {
     wxAutoNSAutoreleasePool pool;
-    wxLogDebug(wxT("Creating control with id=%d"),winid);
+    wxLogTrace(wxTRACE_COCOA,wxT("Creating control with id=%d"),winid);
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
-    wxLogDebug(wxT("Created control with id=%d"),GetId());
+    wxLogTrace(wxTRACE_COCOA,wxT("Created control with id=%d"),GetId());
     m_cocoaNSView = NULL;
     SetNSButton([[NSButton alloc] initWithFrame: MakeDefaultNSRect(size)]);
     // NOTE: YES we want to release this (to match the alloc).
@@ -60,7 +60,7 @@ wxButton::~wxButton()
 
 void wxButton::Cocoa_wxNSButtonAction(void)
 {
-    wxLogDebug(wxT("YAY!"));
+    wxLogTrace(wxTRACE_COCOA,wxT("YAY!"));
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
     InitCommandEvent(event); //    event.SetEventObject(this);
     Command(event);

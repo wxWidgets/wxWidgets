@@ -113,7 +113,7 @@ wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 
 void wxCheckBox::Cocoa_wxNSButtonAction(void)
 {
-    wxLogDebug(wxT("Checkbox"));
+    wxLogTrace(wxTRACE_COCOA,wxT("Checkbox"));
     // What we really want to do is override [NSCell -nextState] to return
     // NSOnState in lieu of NSMixedState but this works (aside from the
     // very slightly noticeable drawing of - and then a check) -DE

@@ -89,7 +89,7 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
         && ([NSDefaultRunLoopMode isEqualToString:mode] || [NSModalPanelRunLoopMode isEqualToString:mode]))
     {
         sg_needIdle = false;
-        wxLogDebug(wxT("Processing idle events"));
+        wxLogTrace(wxTRACE_COCOA,wxT("Processing idle events"));
         while(wxTheApp->ProcessIdle())
         {
             // Get the same events except don't block
@@ -98,19 +98,19 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
             if(event)
                 return event;
             // we didn't get one, do some idle work
-            wxLogDebug(wxT("Looping idle events"));
+            wxLogTrace(wxTRACE_COCOA,wxT("Looping idle events"));
         }
         // No more idle work requested, block
-        wxLogDebug(wxT("Finished idle processing"));
+        wxLogTrace(wxTRACE_COCOA,wxT("Finished idle processing"));
     }
     else
-        wxLogDebug(wxT("Avoiding idle processing sg_needIdle=%d"),sg_needIdle);
+        wxLogTrace(wxTRACE_COCOA,wxT("Avoiding idle processing sg_needIdle=%d"),sg_needIdle);
     return [super nextEventMatchingMask:mask untilDate:expiration inMode:mode dequeue:flag];
 }
 
 - (void)sendEvent: (NSEvent*)anEvent
 {
-    wxLogDebug(wxT("SendEvent"));
+    wxLogTrace(wxTRACE_COCOA,wxT("SendEvent"));
     sg_needIdle = true;
     [super sendEvent: anEvent];
 }

@@ -55,7 +55,7 @@
 
 - (void)wxMenuItemAction: (id)sender
 {
-    wxLogDebug(wxT("wxMenuItemAction"));
+    wxLogTrace(wxTRACE_COCOA,wxT("wxMenuItemAction"));
     wxMenuItem *item = wxMenuItem::GetFromCocoa(sender);
     wxCHECK_RET(item,wxT("wxMenuItemAction received but no wxMenuItem exists!"));
 
@@ -73,7 +73,7 @@
 - (BOOL)validateMenuItem: (id)menuItem
 {
     // TODO: Do wxWindows validation here and avoid sending during idle time
-    wxLogDebug(wxT("wxMenuItemAction"));
+    wxLogTrace(wxTRACE_COCOA,wxT("wxMenuItemAction"));
     wxMenuItem *item = wxMenuItem::GetFromCocoa(menuItem);
     wxCHECK_MSG(item,NO,wxT("validateMenuItem received but no wxMenuItem exists!"));
     return item->IsEnabled();

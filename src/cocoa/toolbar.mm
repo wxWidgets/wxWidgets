@@ -71,7 +71,7 @@ protected:
 
 - (void)wxNSActionCellAction: (id)sender
 {
-    wxLogDebug(wxT("wxNSActionCellAction"));
+    wxLogTrace(wxTRACE_COCOA,wxT("wxNSActionCellAction"));
     wxCocoaNSActionCell *wxcontrol = wxCocoaNSActionCell::GetFromCocoa(sender);
     wxCHECK_RET(wxcontrol,wxT("wxNSActionCellAction received but no wxCocoaNSActionCell exists!"));
     wxcontrol->CocoaTarget_wxNSActionCellAction();
@@ -297,7 +297,7 @@ bool wxToolBar::Cocoa_mouseDragged(WX_NSEvent theEvent)
                 untilMouseUp:NO])
             {
                 m_mouseDownTool = NULL;
-                wxLogDebug(wxT("Button was clicked after drag!"));
+                wxLogTrace(wxTRACE_COCOA,wxT("Button was clicked after drag!"));
             }
             [buttonCell setHighlighted: NO];
         }
@@ -320,7 +320,7 @@ bool wxToolBar::Cocoa_mouseDown(WX_NSEvent theEvent)
                 untilMouseUp:NO])
             {
                 m_mouseDownTool = NULL;
-                wxLogDebug(wxT("Button was clicked!"));
+                wxLogTrace(wxTRACE_COCOA,wxT("Button was clicked!"));
             }
             [buttonCell setHighlighted: NO];
         }

@@ -273,7 +273,7 @@ void wxMenuBarManager::InstallMenuBarForWindow(wxCocoaNSWindow *win)
     wxASSERT(win);
     m_windowCurrent = win;
     wxMenuBar *menubar = win->GetAppMenuBar(win);
-    wxLogDebug(wxT("Found menubar=%p for window=%p."),menubar,win);
+    wxLogTrace(wxTRACE_COCOA,wxT("Found menubar=%p for window=%p."),menubar,win);
     SetMenuBar(menubar);
 }
 
