@@ -51,6 +51,10 @@
 // wxWidgets
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
@@ -69,20 +73,15 @@
 #include <stdio.h>
 #include <time.h>
 
-// argh, Windows defines this
-#ifdef GetCurrentTime
-#undef GetCurrentTime
-#endif
-
 // -----------------------------------------------------------------------------
 // private functions
 // -----------------------------------------------------------------------------
 
 // return the label for the given function name (i.e. argument of \label)
-static wxString MakeLabel(const char *classname, const char *funcname = NULL);
+static wxString MakeLabel(const wxChar *classname, const wxChar *funcname = NULL);
 
 // return the whole \helpref{arg}{arg_label} string
-static wxString MakeHelpref(const char *argument);
+static wxString MakeHelpref(const wxChar *argument);
 
 // [un]quote special TeX characters (in place)
 static void TeXFilter(wxString* str);
@@ -93,7 +92,7 @@ static wxString GetAllComments(const spContext& ctx);
 
 // get the string with current time (returns pointer to static buffer)
 // timeFormat is used for the call of strftime(3)
-static const char *GetCurrentTime(const char *timeFormat);
+static const char *GetCurrentTimeFormatted(const char *timeFormat);
 
 // get the string containing the program version
 static const wxString GetVersionString();
@@ -137,7 +136,7 @@ struct FunctionDocEntry
                 return 1;
             }
 
-            wxString dtorname = wxString('~') + classname;
+            wxString dtorname = wxString(_T("~")) + classname;
 
             // there is only one dtor, so the logic here is simpler
             if ( (*pp1)->name == dtorname ) {
@@ -148,7 +147,7 @@ struct FunctionDocEntry
             }
 
             // two normal methods
-            return strcmp((*pp1)->name, (*pp2)->name);
+            return wxStrcmp((*pp1)->name, (*pp2)->name);
         }
     }
 
@@ -194,7 +193,7 @@ public:
             return true;
 
         if ( !Write(m_text) ) {
-            wxLogError("Failed to output generated documentation.");
+            wxLogError(_T("Failed to output generated documentation."));
 
             return false;
         }
@@ -238,7 +237,7 @@ public:
     // return true if we ignore this class entirely
     bool IgnoreClass(const wxString& classname) const
     {
-        IgnoreListEntry ignore(classname, "");
+        IgnoreListEntry ignore(classname, _T(""));
 
         return m_ignore.Index(&ignore) != wxNOT_FOUND;
     }
@@ -382,7 +381,7 @@ protected:
 
     // returns the length of 'match' if the string 'str' starts with it or 0
     // otherwise
-    static size_t TryMatch(const char *str, const char *match);
+    static size_t TryMatch(const wxChar *str, const wxChar *match);
 
     // skip spaces: returns pointer to first non space character (also
     // updates the value of m_line)
@@ -943,14 +942,14 @@ void HelpGenVisitor::EndVisit()
     }
 
     wxLogVerbose("%s: finished generating for the current file.",
-                 GetCurrentTime("%H:%M:%S"));
+                 GetCurrentTimeFormatted("%H:%M:%S"));
 }
 
 void HelpGenVisitor::VisitFile( spFile& file )
 {
     m_fileHeader = file.mFileName;
     wxLogVerbose("%s: started generating docs for classes from file '%s'...",
-                 GetCurrentTime("%H:%M:%S"), m_fileHeader.c_str());
+                 GetCurrentTimeFormatted("%H:%M:%S"), m_fileHeader.c_str());
 }
 
 void HelpGenVisitor::VisitClass( spClass& cl )
@@ -1017,7 +1016,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
                   "\\section{\\class{%s}}\\label{%s}\n\n",
                   GetVersionString().c_str(),
                   m_fileHeader.c_str(),
-                  GetCurrentTime("%d/%b/%y %H:%M:%S"),
+                  GetCurrentTimeFormatted("%d/%b/%y %H:%M:%S"),
                   name.c_str(),
                   wxString(name).MakeLower().c_str());
 
@@ -1428,7 +1427,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
     m_line = 1;
 
     wxLogVerbose("%s: starting to parse doc file '%s'.",
-                 GetCurrentTime("%H:%M:%S"), m_filename.c_str());
+                 GetCurrentTimeFormatted("%H:%M:%S"), m_filename.c_str());
 
     // the name of the class from the last "\membersection" command: we assume
     // that the following "\func" or "\constfunc" always documents a method of
@@ -1715,7 +1714,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
     delete [] buf;
 
     wxLogVerbose("%s: finished parsing doc file '%s'.\n",
-                 GetCurrentTime("%H:%M:%S"), m_filename.c_str());
+                 GetCurrentTimeFormatted("%H:%M:%S"), m_filename.c_str());
 
     return true;
 }
@@ -2164,7 +2163,7 @@ static wxString GetAllComments(const spContext& ctx)
     return comments;
 }
 
-static const char *GetCurrentTime(const char *timeFormat)
+static const char *GetCurrentTimeFormatted(const char *timeFormat)
 {
     static char s_timeBuffer[128];
     time_t timeNow;
@@ -2187,6 +2186,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.30  2004/06/18 19:25:50  ABX
+   Small step in making HelpGen up to date unicode application.
+
    Revision 1.29  2004/06/17 19:00:22  ABX
    Warning fixes. Code cleanup. Whitespaces and tabs removed.
 

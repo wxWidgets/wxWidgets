@@ -358,7 +358,7 @@ public:
 
     void SetVirtualContextBody( const string& body,
                                 bool  hasChildren = FALSE,
-                                const string& footer = "" );
+                                const string& footer = wxEmptyString );
 
     string GetVirtualContextBody();
     string GetFooterOfVirtualContextBody();
