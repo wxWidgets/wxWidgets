@@ -20,6 +20,7 @@
 
 #if wxUSE_GLCANVAS
 
+#include <wx/palette.h>
 #include <wx/scrolwin.h>
 
 #include <windows.h>

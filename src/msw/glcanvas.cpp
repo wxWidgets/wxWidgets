@@ -28,6 +28,8 @@
 #endif
 
 #include <wx/msw/private.h>
+#include <wx/settings.h>
+#include <wx/log.h>
 
 #include <wx/glcanvas.h>
 
