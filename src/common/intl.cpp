@@ -1402,7 +1402,9 @@ wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 void wxLocale::DoCommonInit()
 {
   m_pszOldLocale = NULL;
-  m_pOldLocale = NULL;
+
+  m_pOldLocale = wxSetLocale(this);
+
   m_pMsgCat = NULL;
   m_language = wxLANGUAGE_UNKNOWN;
   m_initialized = false;
@@ -1470,9 +1472,6 @@ bool wxLocale::Init(const wxChar *szName,
             m_strShort += (wxChar)wxTolower(szLocale[1]);
     }
   }
-
-  // save the old locale to be able to restore it later
-  m_pOldLocale = wxSetLocale(this);
 
   // load the default catalog with wxWidgets standard messages
   m_pMsgCat = NULL;
@@ -2449,9 +2448,8 @@ wxLocale::~wxLocale()
         delete pTmpCat;
     }
 
-    // restore old locale if we had changed it
-    if ( m_pOldLocale )
-        wxSetLocale(m_pOldLocale);
+    // restore old locale pointer
+    wxSetLocale(m_pOldLocale);
 
     // FIXME
 #ifndef __WXWINCE__
