@@ -679,6 +679,10 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
+#if wxUSE_UXTHEME
+  UpdateBgBrush();
+#endif // wxUSE_UXTHEME
+
   // fit the notebook page to the tab control's display area
   RECT rc;
   rc.left = rc.top = 0;
@@ -716,10 +720,6 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     wxNotebookPage *pPage = m_pages[nPage];
     pPage->SetSize(rc.left, rc.top, width, height);
   }
-
-#if wxUSE_UXTHEME
-  UpdateBgBrush();
-#endif // wxUSE_UXTHEME
 
   event.Skip();
 }
