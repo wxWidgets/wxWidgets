@@ -137,10 +137,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
         return FALSE;
     }
 
-    m_bmpNormal   =
-    m_bmpDisabled =
-    m_bmpFocus    =
-    m_bmpSelected = bitmap;
+    m_bmpNormal = bitmap;
 
     m_widget = gtk_button_new();
 
