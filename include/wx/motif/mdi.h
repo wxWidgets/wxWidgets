@@ -78,7 +78,7 @@ public:
   wxMDIChildFrame *GetActiveChild() const ;
 
   // Get the client window
-  inline wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; };
+  wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; };
 
   // Create the client window class (don't Create the window,
   // just return a new class)

@@ -44,17 +44,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxNotebook)
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
-EVT_SIZE(wxMDIParentFrame::OnSize)
-EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
-EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
+    EVT_SIZE(wxMDIParentFrame::OnSize)
+    EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
+    EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMDIClientWindow, wxNotebook)
-EVT_SCROLL(wxMDIClientWindow::OnScroll)
-EVT_NOTEBOOK_PAGE_CHANGED(wxID_NOTEBOOK_CLIENT_AREA, wxMDIClientWindow::OnPageChanged)
+    EVT_SCROLL(wxMDIClientWindow::OnScroll)
+    EVT_NOTEBOOK_PAGE_CHANGED(wxID_NOTEBOOK_CLIENT_AREA, wxMDIClientWindow::OnPageChanged)
 END_EVENT_TABLE()
 
-#endif
+#endif // USE_SHARED_LIBRARY
 
 // Parent frame
 
@@ -129,6 +129,11 @@ void wxMDIParentFrame::OnSize(wxSizeEvent& event)
     
     if ( GetClientWindow() )
         GetClientWindow()->SetSize(x, y, width, height);
+}
+
+void wxMDIParentFrame::GetClientSize(int *width, int *height) const
+{
+    return wxWindow::GetClientSize(width. height);
 }
 
 void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
@@ -229,6 +234,18 @@ bool wxMDIParentFrame::ProcessEvent(wxEvent& event)
     inEvent = wxEVT_NULL;
     
     return res;
+}
+
+void wxMDIParentFrame::DoSetSize(int x, int y,
+                                 int width, int height,
+                                 int sizeFlags)
+{
+    return wxWindow::DoSetSize(x, y, width, height, sizeFlags);
+}
+
+void wxMDIParentFrame::DoSetClientSize(int width, int height)
+{
+    return wxWindow::DoSetClientSize(width, height);
 }
 
 // Responds to colour changes, and passes event on to children.
