@@ -27,8 +27,10 @@
 
 // define this to compile wxLongLongWx in "test" mode: the results of all
 // calculations will be compared with the real results taken from
-// wxLongLongNative
-#define wxLONGLONG_TEST_MODE
+// wxLongLongNative -- this is extremely useful to find the bugs in
+// wxLongLongWx class!
+
+//#define wxLONGLONG_TEST_MODE
 
 #ifdef wxLONGLONG_TEST_MODE
     #define wxUSE_LONGLONG_WX 1

@@ -91,33 +91,25 @@ wxLongLongWx& wxLongLongWx::Assign(double d)
 {
     bool positive = d >= 0;
     d = fabs(d);
-    if ( d <= LONG_MAX )
+    if ( d <= ULONG_MAX )
     {
         m_hi = 0;
         m_lo = (long)d;
     }
     else
     {
-#if 0
-        m_lo = (long)d;
-        d -= m_lo;
-        d /=  0x1000;
-        d /=  0x1000;
-        d /=  0x100;
-        m_hi = (long)d;
-#else
-        wxFAIL_MSG(_T("TODO"));
-#endif
+        m_hi = (unsigned long)(d / (1.0 + (double)ULONG_MAX));
+        m_lo = (unsigned long)(d - ((double)m_hi * (1.0 + (double)ULONG_MAX)));
     }
-
-    if ( !positive )
-        m_hi = -m_hi;
 
 #ifdef wxLONGLONG_TEST_MODE
     m_ll = (wxLongLong_t)d;
 
     Check();
 #endif // wxLONGLONG_TEST_MODE
+
+    if ( !positive )
+        Negate();
 
     return *this;
 }
