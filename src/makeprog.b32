@@ -14,9 +14,9 @@ WXDIR = $(WXWIN)
 !include $(WXDIR)\src\makeb32.env
 
 !if "$(WXUSINGDLL)" == "1"
-LIBS=$(WXLIB) $(EXTRALIBS) cw32mti import32 ole2w32 winpng zlib jpeg tiff odbc32
+LIBS=$(WXLIB) $(EXTRALIBS) cw32mti import32 ole2w32 winpng regex zlib jpeg tiff odbc32
 !else
-LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib jpeg tiff odbc32
+LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng regex zlib jpeg tiff odbc32
 !endif
 
 # Note: you may need to remove some libraries for earlier versions of BC++, as below
