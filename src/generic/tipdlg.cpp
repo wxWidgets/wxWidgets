@@ -236,23 +236,23 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     m_text->SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL));
 #endif
 
-#if defined(__WXPM__)
+//#if defined(__WXPM__)
     //
     // The only way to get icons into an OS/2 static bitmap control
     //
-    wxBitmap                        vBitmap;
+//    wxBitmap                        vBitmap;
 
-    vBitmap.SetId(wxICON_TIP); // OS/2 specific bitmap method--OS/2 wxBitmaps all have an ID.
-                               // and for StatBmp's under OS/2 it MUST be a valid resource ID.
-
-    wxStaticBitmap*                 bmp = new wxStaticBitmap(this, -1, vBitmap);
-
-#else
+//    vBitmap.SetId(wxICON_TIP); // OS/2 specific bitmap method--OS/2 wxBitmaps all have an ID.
+//                               // and for StatBmp's under OS/2 it MUST be a valid resource ID.
+//
+//    wxStaticBitmap*                 bmp = new wxStaticBitmap(this, -1, vBitmap);
+//
+//#else
 
     wxIcon icon = wxArtProvider::GetIcon(wxART_TIP, wxART_CMN_DIALOG);
     wxStaticBitmap *bmp = new wxStaticBitmap(this, -1, icon);
 
-#endif
+//#endif
 
     // 2) put them in boxes
 
