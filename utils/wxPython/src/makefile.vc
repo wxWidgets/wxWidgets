@@ -81,10 +81,11 @@ GENCODEDIR=msw
 
 TARGET = wxc
 
-OBJECTS = wx.obj         helpers.obj    windows.obj    events.obj     \
+OBJECTS = helpers.obj    libptr.obj     libpy.obj      \
+          wx.obj         windows.obj    events.obj     \
 	  misc.obj       gdi.obj        mdi.obj        controls.obj   \
 	  controls2.obj  windows2.obj   cmndlgs.obj    stattool.obj   \
-	  frames.obj     windows3.obj   image.obj      printfw.obj      \
+	  frames.obj     windows3.obj   image.obj      printfw.obj    \
 	  misc2.obj			\
 !if "$(SEPARATE)" == "0"
 	  utils.obj    \
@@ -103,9 +104,9 @@ TARGET3 = glcanvasc
 OBJECTS3 = glcanvas.obj
 target3=$(TARGETDIR)\$(TARGET3).pyd
 
-TARGET4 = oglcc
-OBJECTS4 = ogl.obj
-target4=$(TARGETDIR)\$(TARGET4).pyd
+#TARGET4 = oglcc
+#OBJECTS4 = ogl.obj
+#target4=$(TARGETDIR)\$(TARGET4).pyd
 !endif
 
 PYMODULES = $(TARGETDIR)\wx.py        $(TARGETDIR)\events.py    \
@@ -181,13 +182,13 @@ $(LIBS) $(WXDIR)\lib\glcanvas.lib glu32.lib opengl32.lib wxc.lib
 <<
 
 
-$(TARGETDIR)\$(TARGET4).pyd : $(DUMMYOBJ) $(WXLIB) $(OBJECTS4)
-	$(link) @<<
-/out:$@ /dll
-$(LFLAGS)  /def:$(TARGET4).def /implib:./$(TARGET4).lib
-$(DUMMYOBJ) $(OBJECTS4)
-$(LIBS) wxc.lib $(WXDIR)\lib\ogl$(LIBEXT).lib
-<<
+#$(TARGETDIR)\$(TARGET4).pyd : $(DUMMYOBJ) $(WXLIB) $(OBJECTS4)
+#	$(link) @<<
+#/out:$@ /dll
+#$(LFLAGS)  /def:$(TARGET4).def /implib:./$(TARGET4).lib
+#$(DUMMYOBJ) $(OBJECTS4)
+#$(LIBS) wxc.lib $(WXDIR)\lib\ogl$(LIBEXT).lib
+#<<
 
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
@@ -195,7 +196,7 @@ $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
 
 
 
-# implicit rule for compiling .cpp files
+# implicit rule for compiling .cpp and .c files
 {}.cpp{}.obj:
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $<
@@ -204,6 +205,11 @@ $(CPPFLAGS) /c /Tp $<
 {$(GENCODEDIR)}.cpp{}.obj:
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $<
+<<
+
+{}.c{}.obj:
+        $(cc) @<<
+$(CPPFLAGS) /c $<
 <<
 
 
@@ -225,9 +231,9 @@ clean:
 	-erase $(TARGET3).exp
 	-erase $(TARGET3).lib
 	-erase $(TARGETDIR)\$(TARGET3).*
-	-erase $(TARGET4).exp
-	-erase $(TARGET4).lib
-	-erase $(TARGETDIR)\$(TARGET4).*
+#	-erase $(TARGET4).exp
+#	-erase $(TARGET4).lib
+#	-erase $(TARGETDIR)\$(TARGET4).*
 !endif
 	-erase $(TARGETDIR)\$(TARGET).pyd
 	-erase $(TARGETDIR)\*.py
@@ -262,13 +268,10 @@ showflags:
 
 
 
-# This one must leave out the -c flag so we define the whole rule
-$(GENCODEDIR)\wx.cpp $(GENCODEDIR)\wx.py : wx.i my_typemaps.i _defs.i _extras.py
-        swig $(SWIGFLAGS) -o $(GENCODEDIR)/wx.cpp wx.i
-
 
 # Define some dependencies.  These MUST use forward slashes so SWIG
 # will write the shadow file to the right directory.
+$(GENCODEDIR)/wx.cpp        $(GENCODEDIR)/wx.py        : wx.i         my_typemaps.i _defs.i
 $(GENCODEDIR)/windows.cpp   $(GENCODEDIR)/windows.py   : windows.i    my_typemaps.i _defs.i
 $(GENCODEDIR)/windows2.cpp  $(GENCODEDIR)/windows2.py  : windows2.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/windows3.cpp  $(GENCODEDIR)/windows3.py  : windows3.i   my_typemaps.i _defs.i
@@ -285,23 +288,10 @@ $(GENCODEDIR)/frames.cpp    $(GENCODEDIR)/frames.py    : frames.i     my_typemap
 $(GENCODEDIR)/image.cpp     $(GENCODEDIR)/image.py     : image.i      my_typemaps.i _defs.i
 $(GENCODEDIR)/printfw.cpp   $(GENCODEDIR)/printfw.py   : printfw.i    my_typemaps.i _defs.i
 
-!if "$(SEPARATE)" == "1"
-$(GENCODEDIR)\utils.cpp $(GENCODEDIR)\utils.py : utils.i my_typemaps.i
-        swig $(SWIGFLAGS) -o $(GENCODEDIR)/utils.cpp utils.i
-
-$(GENCODEDIR)\ogl.cpp $(GENCODEDIR)\ogl.py : ogl.i my_typemaps.i
-        swig $(SWIGFLAGS) -o $(GENCODEDIR)/ogl.cpp ogl.i
-
-!if "$(WITH_GLCANVAS)" == "1"
-$(GENCODEDIR)\glcanvas.cpp $(GENCODEDIR)\glcanvas.py : glcanvas.i my_typemaps.i
-        swig $(SWIGFLAGS) -c -o $(GENCODEDIR)/glcanvas.cpp glcanvas.i
-!endif
-!else
 $(GENCODEDIR)/utils.cpp     $(GENCODEDIR)/utils.py     : utils.i      my_typemaps.i _defs.i
-!if "$(WITH_GLCANVAS)" == "1"
-$(GENCODEDIR)/glcanvas.cpp $(GENCODEDIR)/glcanvas.py : glcanvas.i  my_typemaps.i _defs.i
-!endif
-!endif
+$(GENCODEDIR)/glcanvas.cpp  $(GENCODEDIR)/glcanvas.py  : glcanvas.i   my_typemaps.i _defs.i
+#$(GENCODEDIR)/ogl.cpp       $(GENCODEDIR)/ogl.py       : ogl.i        my_typemaps.i _defs.i
+
 
 
 $(TARGETDIR)\wx.py        : $(GENCODEDIR)\wx.py
@@ -322,13 +312,14 @@ $(TARGETDIR)\__init__.py  : __init__.py
 $(TARGETDIR)\utils.py     : $(GENCODEDIR)\utils.py
 $(TARGETDIR)\image.py     : $(GENCODEDIR)\image.py
 $(TARGETDIR)\printfw.py   : $(GENCODEDIR)\printfw.py
+#$(TARGETDIR)\ogl.py       : $(GENCODEDIR)\ogl.py
 
 !if "$(WITH_GLCANVAS)" == "1"
 $(TARGETDIR)\glcanvas.py  : $(GENCODEDIR)\glcanvas.py
 !endif
 
 
-SOURCES = $(GENCODEDIR)\wx.cpp        $(GENCODEDIR)\wx.py       \
+SOURCES = $(GENCODEDIR)/wx.cpp        $(GENCODEDIR)/wx.py       \
 	  $(GENCODEDIR)/windows.cpp   $(GENCODEDIR)/windows.py  \
 	  $(GENCODEDIR)/windows2.cpp  $(GENCODEDIR)/windows2.py \
 	  $(GENCODEDIR)/windows3.cpp  $(GENCODEDIR)/windows3.py \
@@ -359,3 +350,5 @@ dist:
 
 #------------------------------------------------------------------------
 #
+
+
