@@ -20,8 +20,6 @@
 #include "wx/list.h"
 #include "wx/validate.h"
 
-#define wxControlNameStr _T("control")
-
 // General item class
 class WXDLLEXPORT wxControl: public wxControlBase
 {
