@@ -2437,14 +2437,15 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)
 
     // unfortunately, when wxUSE_STL == 1 DetachNode() is not implemented so we
     // can't just move the node around
-    siblings.DeleteObject(this);
-    if ( move == MoveBefore || ((i = i->GetNext()) != NULL) )
+    wxWindow *self = (wxWindow *)this;
+    siblings.DeleteObject(self);
+    if ( move == MoveBefore || ((i = i->GetNext()) != siblings.end()) )
     {
-        siblings.Insert(i, this);
+        siblings.Insert(i, self);
     }
     else // MoveAfter and win was the last sibling
     {
-        siblings.Append(this);
+        siblings.Append(self);
     }
 }
 
