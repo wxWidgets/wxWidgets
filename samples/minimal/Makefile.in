@@ -118,7 +118,7 @@ minimal$(EXEEXT): $(MINIMAL_OBJECTS) $(__minimal___win32rc)
 	$(__minimal___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-minimal.app/Contents: minimal$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+minimal.app/Contents/PkgInfo: minimal$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p minimal.app/Contents
 	mkdir -p minimal.app/Contents/MacOS
 	mkdir -p minimal.app/Contents/Resources
@@ -139,7 +139,7 @@ minimal.app/Contents: minimal$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc minimal.app/Contents/Resources/minimal.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns minimal.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@minimal_bundle: minimal.app/Contents
+@COND_PLATFORM_MACOSX_1@minimal_bundle: minimal.app/Contents/PkgInfo
 
 minimal_minimal.o: $(srcdir)/minimal.cpp
 	$(CXXC) -c -o $@ $(MINIMAL_CXXFLAGS) $<

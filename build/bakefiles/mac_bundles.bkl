@@ -29,9 +29,10 @@
 
         <!-- bundle directory: -->
         <set var="BUNDLE">$(id).app/Contents</set>
+        <set var="BUNDLE_TGT">$(BUNDLE)/PkgInfo</set>
         
-        <add-target target="$(BUNDLE)" type="action"/>
-        <modify-target target="$(BUNDLE)">            
+        <add-target target="$(BUNDLE_TGT)" type="action"/>
+        <modify-target target="$(BUNDLE_TGT)">
             <!-- required data: -->
             <depends>$(id)</depends>
             <depends-on-file>$(BUNDLE_PLIST)</depends-on-file>
@@ -67,7 +68,7 @@
                     cond="PLATFORM_MACOSX=='1'"/>
         <modify-target target="$(id)_bundle">
             <dependency-of>all</dependency-of>
-            <depends>$(BUNDLE)</depends>
+            <depends>$(BUNDLE_TGT)</depends>
         </modify-target>
 
         <!-- "make clean" should delete the bundle: -->
