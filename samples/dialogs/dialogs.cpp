@@ -42,7 +42,7 @@
 #include "wx/generic/fontdlgg.h"
 #endif
 
-#define wxUSE_DIRDLGG 1
+#define wxUSE_DIRDLGG 0
 
 #if !defined(__WXMSW__) || defined(wxUSE_DIRDLGG) && wxUSE_DIRDLGG
 #include "wx/generic/dirdlgg.h"
