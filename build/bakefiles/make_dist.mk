@@ -20,6 +20,7 @@ JPEGDIR  = $(WXDIR)/src/jpeg
 TIFFDIR  = $(WXDIR)/src/tiff
 ZLIBDIR  = $(WXDIR)/src/zlib
 REGEXDIR = $(WXDIR)/src/regex
+EXPATDIR = $(WXDIR)/src/expat
 GTKDIR   = $(WXDIR)/src/gtk
 X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
@@ -110,6 +111,8 @@ ALL_DIST: distrib_clean
 	cp $(REGEXDIR)/WHATSNEW $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/mkh $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/tests $(DISTDIR)/src/regex
+	cp -Rf $(EXPATDIR) $(DISTDIR)/src
+	(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
 	mkdir $(DISTDIR)/src/iodbc
 	cp $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
 	cp $(ODBCDIR)/*.c $(DISTDIR)/src/iodbc
