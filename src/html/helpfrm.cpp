@@ -129,6 +129,38 @@ class wxHtmlHelpHtmlWindow : public wxHtmlWindow
 // wxHtmlHelpFrame
 //---------------------------------------------------------------------------
 
+// Command IDs :
+enum
+{
+    //wxID_HTML_HELPFRAME = wxID_HIGHEST + 1,
+    wxID_HTML_PANEL = wxID_HIGHEST + 2,
+    wxID_HTML_BACK,
+    wxID_HTML_FORWARD,
+    wxID_HTML_UPNODE,
+    wxID_HTML_UP,
+    wxID_HTML_DOWN,
+    wxID_HTML_PRINT,
+    wxID_HTML_OPENFILE,
+    wxID_HTML_OPTIONS,
+    wxID_HTML_BOOKMARKSLIST,
+    wxID_HTML_BOOKMARKSADD,
+    wxID_HTML_BOOKMARKSREMOVE,
+    wxID_HTML_TREECTRL,
+    wxID_HTML_INDEXPAGE,
+    wxID_HTML_INDEXLIST,
+    wxID_HTML_INDEXTEXT,
+    wxID_HTML_INDEXBUTTON,
+    wxID_HTML_INDEXBUTTONALL,
+    wxID_HTML_NOTEBOOK,
+    wxID_HTML_SEARCHPAGE,
+    wxID_HTML_SEARCHTEXT,
+    wxID_HTML_SEARCHLIST,
+    wxID_HTML_SEARCHBUTTON,
+    wxID_HTML_SEARCHCHOICE,
+    wxID_HTML_COUNTINFO
+};
+
+
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpFrame, wxFrame)
 
 wxHtmlHelpFrame::wxHtmlHelpFrame(wxWindow* parent, wxWindowID id, const wxString& title,
@@ -198,9 +230,11 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 // moreover, if no contents, index or searchpage is needed, m_Splitter and
 // m_NavigPan will be NULL too (with m_HtmlWin directly connected to the frame)
 
-bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& WXUNUSED(title),
-                             int style)
+bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, 
+                             const wxString& WXUNUSED(title), int style)
 {
+    m_hfStyle = style;
+
     wxImageList *ContentsImageList = new wxImageList(16, 16);
     ContentsImageList->Add(wxICON(wbook));
     ContentsImageList->Add(wxICON(wfolder));
@@ -223,11 +257,11 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& WX
     CreateStatusBar();
 
     // toolbar?
-    if (style & (wxHF_TOOLBAR | wxHF_FLATTOOLBAR))
+    if (style & (wxHF_TOOLBAR | wxHF_FLAT_TOOLBAR))
     {
         wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL |
                                            wxTB_DOCKABLE |
-                                           (style & wxHF_FLATTOOLBAR ? wxTB_FLAT : 0));
+                                           (style & wxHF_FLAT_TOOLBAR ? wxTB_FLAT : 0));
         toolBar->SetMargins( 2, 2 );
         AddToolbarButtons(toolBar, style);
         toolBar->Realize();
@@ -533,10 +567,10 @@ void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Next page"));
 
-    if ((style & wxHF_PRINT) || (style & wxHF_OPENFILES))
+    if ((style & wxHF_PRINT) || (style & wxHF_OPEN_FILES))
         toolBar->AddSeparator();
 
-    if (style & wxHF_OPENFILES)
+    if (style & wxHF_OPEN_FILES)
         toolBar->AddTool(wxID_HTML_OPENFILE, wopenBitmap, wxNullBitmap,
                            FALSE, -1, -1, (wxObject *) NULL,
                            _("Open HTML document"));
@@ -693,8 +727,6 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
     return (foundcnt > 0);
 }
 
-#define MAX_ROOTS 64
-
 void wxHtmlHelpFrame::CreateContents()
 {
     if (! m_ContentsBox)
@@ -708,43 +740,89 @@ void wxHtmlHelpFrame::CreateContents()
 
     int cnt = m_Data->GetContentsCnt();
     int i;
+    size_t booksCnt = m_Data->GetBookRecArray().GetCount();
 
     wxHtmlContentsItem *it;
 
+    const int MAX_ROOTS = 64;
     wxTreeItemId roots[MAX_ROOTS];
-    bool imaged[MAX_ROOTS];
-
+    // VS: this array holds information about whether we've set item icon at
+    //     given level. This is neccessary because m_Data has flat structure
+    //     and there's no way of recognizing if some item has subitems or not.
+    //     We set the icon later: when we find an item with level=n, we know
+    //     that the last item with level=n-1 was folder with subitems, so we
+    //     set its icon accordingly
+    bool imaged[MAX_ROOTS]; 
     m_ContentsBox->DeleteAllItems();
-    roots[0] = m_ContentsBox->AddRoot(_("(Help)"));
-    m_ContentsBox->SetItemImage(roots[0], IMG_RootFolder);
-    m_ContentsBox->SetItemSelectedImage(roots[0], IMG_RootFolder);
-    imaged[0] = TRUE;
+    
+    // Don't show (Help) root if there's only one boook
+    if (booksCnt > 1)
+    {
+        roots[0] = m_ContentsBox->AddRoot(_("(Help)"));
+        m_ContentsBox->SetItemImage(roots[0], IMG_RootFolder);
+        m_ContentsBox->SetItemSelectedImage(roots[0], IMG_RootFolder);
+        imaged[0] = TRUE;
+    }
 
     for (it = m_Data->GetContents(), i = 0; i < cnt; i++, it++)
     {
-        roots[it->m_Level + 1] =  m_ContentsBox->AppendItem(
-                                       roots[it->m_Level], it->m_Name, IMG_Page, -1,
-                                       new wxHtmlHelpTreeItemData(i));
+        // Handle books:
+        if (it->m_Level == 0)
+        {
+            // special case, only one book, make it tree's root:
+            if (booksCnt == 1)
+            {
+                roots[0] = roots[1] = m_ContentsBox->AddRoot(
+                                         it->m_Name, IMG_Page, -1,
+                                         new wxHtmlHelpTreeItemData(i));
+            }
+            // multiple books:
+            else
+            {
+                if (m_hfStyle & wxHF_MERGE_BOOKS)
+                    // VS: we don't want book nodes, books' content should
+                    //    appear under tree's root. This line will create "fake"
+                    //    record about book node so that the rest of this look
+                    //    will believe there really _is_ book node and will
+                    //    behave correctly.
+                    roots[1] = roots[0];
+                else
+                {
+                    roots[1] = m_ContentsBox->AppendItem(roots[0],
+                                             it->m_Name, IMG_Book, -1, 
+                                             new wxHtmlHelpTreeItemData(i));
+                    m_ContentsBox->SetItemBold(roots[1], TRUE);
+                }
+                imaged[1] = TRUE;
+            }
+        }
+        // ...and their contents:
+        else 
+        {
+            roots[it->m_Level + 1] = m_ContentsBox->AppendItem(
+                                     roots[it->m_Level], it->m_Name, IMG_Page, 
+                                     -1, new wxHtmlHelpTreeItemData(i));
+	        imaged[it->m_Level + 1] = FALSE;
+        }
+
         m_PagesHash->Put(it->GetFullPath(),
                            new wxHtmlHelpHashData(i, roots[it->m_Level + 1]));
 
-        if (it->m_Level == 0)
-	    {
-            m_ContentsBox->SetItemBold(roots[1], TRUE);
-            m_ContentsBox->SetItemImage(roots[1], IMG_Book);
-            m_ContentsBox->SetItemSelectedImage(roots[1], IMG_Book);
-            imaged[1] = TRUE;
-        }
-	    else
-	        imaged[it->m_Level + 1] = FALSE;
-
+        // Set the icon for the node one level up in the hiearachy,
+        // unless already done (see comment above imaged[] declaration)
         if (!imaged[it->m_Level])
 	    {
-            m_ContentsBox->SetItemImage(roots[it->m_Level], IMG_Folder);
-            m_ContentsBox->SetItemSelectedImage(roots[it->m_Level], IMG_Folder);
+            int image = IMG_Folder;
+            if (m_hfStyle & wxHF_ICONS_BOOK)
+                image = IMG_Book;
+            else if (m_hfStyle & wxHF_ICONS_BOOK_CHAPTER)
+                image = (it->m_Level == 1) ? IMG_Book : IMG_Folder;
+            m_ContentsBox->SetItemImage(roots[it->m_Level], image);
+            m_ContentsBox->SetItemSelectedImage(roots[it->m_Level], image);
             imaged[it->m_Level] = TRUE;
         }
     }
+
     m_ContentsBox->Expand(roots[0]);
 }
 

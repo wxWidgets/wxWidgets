@@ -36,48 +36,25 @@
 
 
 // style flags for the Help Frame
-#define wxHF_TOOLBAR      0x0001
-#define wxHF_CONTENTS     0x0002
-#define wxHF_INDEX        0x0004
-#define wxHF_SEARCH       0x0008
-#define wxHF_BOOKMARKS    0x0010
-#define wxHF_OPENFILES    0x0020
-#define wxHF_PRINT        0x0040
-#define wxHF_FLATTOOLBAR  0x0080
-#define wxHF_DEFAULTSTYLE (wxHF_TOOLBAR | wxHF_CONTENTS | wxHF_INDEX | \
-                           wxHF_SEARCH | wxHF_BOOKMARKS | wxHF_PRINT)
-
-
-// Command IDs :
-enum
-{
-    wxID_HTML_PANEL = wxID_HIGHEST + 1,
-    wxID_HTML_BACK,
-    wxID_HTML_FORWARD,
-    wxID_HTML_UPNODE,
-    wxID_HTML_UP,
-    wxID_HTML_DOWN,
-    wxID_HTML_PRINT,
-    wxID_HTML_OPENFILE,
-    wxID_HTML_OPTIONS,
-    wxID_HTML_BOOKMARKSLIST,
-    wxID_HTML_BOOKMARKSADD,
-    wxID_HTML_BOOKMARKSREMOVE,
-    wxID_HTML_TREECTRL,
-    wxID_HTML_INDEXPAGE,
-    wxID_HTML_INDEXLIST,
-    wxID_HTML_INDEXTEXT,
-    wxID_HTML_INDEXBUTTON,
-    wxID_HTML_INDEXBUTTONALL,
-    wxID_HTML_NOTEBOOK,
-    wxID_HTML_SEARCHPAGE,
-    wxID_HTML_SEARCHTEXT,
-    wxID_HTML_SEARCHLIST,
-    wxID_HTML_SEARCHBUTTON,
-    wxID_HTML_SEARCHCHOICE,
-    wxID_HTML_COUNTINFO,
-    wxID_HTML_HELPFRAME // the id of wxHtmlHelpController's helpframe
-};
+#define wxHF_TOOLBAR                0x0001
+#define wxHF_CONTENTS               0x0002
+#define wxHF_INDEX                  0x0004
+#define wxHF_SEARCH                 0x0008
+#define wxHF_BOOKMARKS              0x0010
+#define wxHF_OPEN_FILES             0x0020
+#define wxHF_PRINT                  0x0040
+#define wxHF_FLAT_TOOLBAR           0x0080
+#define wxHF_MERGE_BOOKS            0x0100
+#define wxHF_ICONS_BOOK             0x0200
+#define wxHF_ICONS_BOOK_CHAPTER     0x0400
+#define wxHF_ICONS_FOLDER           0x0000 // this is 0 since it is default
+#define wxHF_DEFAULT_STYLE          (wxHF_TOOLBAR | wxHF_CONTENTS | \
+                                     wxHF_INDEX | wxHF_SEARCH | \
+                                     wxHF_BOOKMARKS | wxHF_PRINT)
+//compatibility:
+#define wxHF_OPENFILES               wxHF_OPEN_FILES
+#define wxHF_FLATTOOLBAR             wxHF_FLAT_TOOLBAR
+#define wxHF_DEFAULTSTYLE            wxHF_DEFAULT_STYLE
 
 
 struct wxHtmlHelpFrameCfg
@@ -98,9 +75,9 @@ public:
     wxHtmlHelpFrame(wxHtmlHelpData* data = NULL) { Init(data); }
     wxHtmlHelpFrame(wxWindow* parent, wxWindowID wxWindowID,
                     const wxString& title = wxEmptyString,
-                    int style = wxHF_DEFAULTSTYLE, wxHtmlHelpData* data = NULL);
+                    int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL);
     bool Create(wxWindow* parent, wxWindowID id, const wxString& title = wxEmptyString,
-                int style = wxHF_DEFAULTSTYLE);
+                int style = wxHF_DEFAULT_STYLE);
     ~wxHtmlHelpFrame();
 
     wxHtmlHelpData* GetData() { return m_Data; }
@@ -241,6 +218,8 @@ protected:
 #endif
     wxHashTable *m_PagesHash;
     wxHelpControllerBase* m_helpController;
+    
+    int m_hfStyle;
 
     DECLARE_EVENT_TABLE()
 };

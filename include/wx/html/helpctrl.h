@@ -23,12 +23,14 @@
 #include "wx/html/helpfrm.h"
 #include "wx/helpbase.h"
 
+#define wxID_HTML_HELPFRAME   (wxID_HIGHEST + 1)
+
 class WXDLLEXPORT wxHtmlHelpController : public wxHelpControllerBase // wxEvtHandler
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlHelpController)
 
 public:
-    wxHtmlHelpController(int style = wxHF_DEFAULTSTYLE);
+    wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE);
     virtual ~wxHtmlHelpController();
 
     void SetTitleFormat(const wxString& format);
