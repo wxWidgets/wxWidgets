@@ -2111,7 +2111,7 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
           wxWarning(buf);
           return NULL;
         }
-        bitmap = new wxBitmap((char **)item->GetValue1());
+        bitmap = new wxBitmap(item->GetValue1());
 #else
         wxWarning("No XPM facility available!");
 #endif
