@@ -669,8 +669,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
 
         if (gdk_event->count == 0)
         {
-            wxClientDC dc(win);
-            wxEraseEvent eevent( win->GetId(), &dc );
+            wxEraseEvent eevent( win->GetId() );
             eevent.SetEventObject( win );
             win->GetEventHandler()->ProcessEvent(eevent);
 
