@@ -10534,5 +10534,5 @@ fi
 abs_srcdir="`cd $srcdir && pwd`"
 abs_builddir="`pwd`"
 if test "$abs_srcdir" != "$abs_builddir"; then
-  make mkdir-init
+  ${MAKE:-make} mkdir-init
 fi
