@@ -343,7 +343,7 @@ bool wxApp::OnInitGui()
                 int index = -1;
 
                 GdkColor *colors = cmap->colors;
-                if(colors)
+                if (colors)
                 {
                     int max = 3 * 65536;
 
@@ -359,7 +359,16 @@ bool wxApp::OnInitGui()
                         }
                     }
                 }
-
+		else
+		{
+		    /* assume 8-bit true or static colors. this really
+		       exists. */
+		    GdkVisual* vis = gdk_colormap_get_visual( cmap );
+		    index = (r >> (5 - vis->red_prec)) << vis->red_shift;
+		    index |= (g >> (5 - vis->green_prec)) << vis->green_shift;
+		    index |= (b >> (5 - vis->blue_prec)) << vis->blue_shift;
+		}
+		
                 m_colorCube[ (r*1024) + (g*32) + b ] = index;
             }
         }

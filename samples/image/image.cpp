@@ -41,6 +41,7 @@ public:
     wxBitmap  *my_horse_png;
     wxBitmap  *my_horse_jpeg;
     wxBitmap  *my_horse_gif;
+    wxBitmap  *my_horse_bmp;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
 
@@ -91,6 +92,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   my_horse_png = (wxBitmap*) NULL;
   my_horse_jpeg = (wxBitmap*) NULL;
   my_horse_gif = (wxBitmap*) NULL;
+  my_horse_bmp = (wxBitmap*) NULL;
   my_square = (wxBitmap*) NULL;
   my_anti = (wxBitmap*) NULL;
 
@@ -133,6 +135,11 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   else
     my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
   
+  if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
+      wxLogError("Can't load BMP image");
+  else
+    my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
+  
   image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   my_square = new wxBitmap( image.ConvertToBitmap() );
   
@@ -144,6 +151,7 @@ MyCanvas::~MyCanvas()
   delete my_horse_png;
   delete my_horse_jpeg;
   delete my_horse_gif;
+  delete my_horse_bmp;
   delete my_square;
   delete my_anti;
 }
@@ -171,6 +179,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   
   dc.DrawText( "GIF handler", 30, 595 );
   if (my_horse_gif && my_horse_gif->Ok()) dc.DrawBitmap( *my_horse_gif, 30, 610 );
+  
+  dc.DrawText( "BMP handler", 30, 815 );
+  if (my_horse_bmp && my_horse_bmp->Ok()) dc.DrawBitmap( *my_horse_bmp, 30, 830 );
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()

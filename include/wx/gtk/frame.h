@@ -83,6 +83,9 @@ public:
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle() const { return m_title; }
 
+        // make the window modal (all other windows unresponsive)
+    virtual void MakeModal(bool modal = TRUE);
+
     virtual void SetIcon( const wxIcon &icon );
     virtual void Iconize( bool WXUNUSED(iconize)) { }
     virtual bool IsIconized() const { return FALSE; }
