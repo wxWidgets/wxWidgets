@@ -34,6 +34,8 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
+#include "wx/thread.h"
+
 #define wxDEFINE_TIME_CONSTANTS
 
 #include "wx/datetime.h"
@@ -42,17 +44,58 @@
 // constants
 // ----------------------------------------------------------------------------
 
+// note that all these constants should be signed or we'd get some big
+// surprizes with C integer arithmetics
+static const int MONTHS_IN_YEAR = 12;
+
+static const int SECONDS_IN_MINUTE = 60;
+
 // the number of days in month in Julian/Gregorian calendar: the first line is
 // for normal years, the second one is for the leap ones
-static wxDateTime::wxDateTime_t gs_daysInMonth[2][12] =
+static wxDateTime::wxDateTime_t gs_daysInMonth[2][MONTHS_IN_YEAR] =
 {
     { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
     { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 };
 
 // ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+// a critical section is needed to protect GetTimeZone() static
+// variable in MT case
+#ifdef wxUSE_THREADS
+    wxCriticalSection gs_critsectTimezone;
+#endif // wxUSE_THREADS
+
+// ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
+
+// get the number of days in the given month of the given year
+static inline
+wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
+{
+    return gs_daysInMonth[wxDateTime::IsLeapYear(year)][month];
+}
+
+// ensure that the timezone variable is set by calling localtime
+static int GetTimeZone()
+{
+    // set to TRUE when the timezone is set
+    static bool s_timezoneSet = FALSE;
+
+    wxCRIT_SECT_LOCKER(lock, gs_critsectTimezone);
+
+    if ( !s_timezoneSet )
+    {
+        (void)localtime(0);
+
+        s_timezoneSet = TRUE;
+    }
+
+    return (int)timezone;
+}
 
 // this function is a wrapper around strftime(3)
 static wxString CallStrftime(const wxChar *format, const tm* tm)
@@ -119,7 +162,7 @@ wxDateTime::Tm::Tm(const struct tm& tm)
     min = tm.tm_min;
     hour = tm.tm_hour;
     mday = tm.tm_mday;
-    mon = tm.tm_mon;
+    mon = (wxDateTime::Month)tm.tm_mon;
     year = 1900 + tm.tm_year;
     wday = tm.tm_wday;
     yday = tm.tm_yday;
@@ -128,14 +171,109 @@ wxDateTime::Tm::Tm(const struct tm& tm)
 bool wxDateTime::Tm::IsValid() const
 {
     // we allow for the leap seconds, although we don't use them (yet)
-    return (year != wxDateTime::Inv_Year) && (mon < 12) &&
-           (mday < gs_daysInMonth[IsLeapYear(year)][mon]) &&
+    return (year != wxDateTime::Inv_Year) && (mon != wxDateTime::Inv_Month) &&
+           (mday < GetNumOfDaysInMonth(year, mon)) &&
            (hour < 24) && (min < 60) && (sec < 62);
 }
 
 void wxDateTime::Tm::ComputeWeekDay()
 {
     wxFAIL_MSG(_T("TODO"));
+}
+
+void wxDateTime::Tm::AddMonths(wxDateTime::wxDateTime_t monDiff)
+{
+    // normalize the months field
+    while ( monDiff < -mon )
+    {
+        year--;
+
+        monDiff += MONTHS_IN_YEAR;
+    }
+
+    while ( monDiff + mon > MONTHS_IN_YEAR )
+    {
+        year++;
+    }
+
+    mon = (wxDateTime::Month)(mon + monDiff);
+
+    wxASSERT_MSG( mon >= 0 && mon < 12, _T("logic error") );
+}
+
+void wxDateTime::Tm::AddDays(wxDateTime::wxDateTime_t dayDiff)
+{
+    // normalize the days field
+    mday += dayDiff;
+    while ( mday < 1 )
+    {
+        AddMonths(-1);
+
+        mday += GetNumOfDaysInMonth(year, mon);
+    }
+
+    while ( mday > GetNumOfDaysInMonth(year, mon) )
+    {
+        mday -= GetNumOfDaysInMonth(year, mon);
+
+        AddMonths(1);
+    }
+
+    wxASSERT_MSG( mday > 0 && mday <= GetNumOfDaysInMonth(year, mon),
+                  _T("logic error") );
+}
+
+// ----------------------------------------------------------------------------
+// class TimeZone
+// ----------------------------------------------------------------------------
+
+wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
+{
+    switch ( tz )
+    {
+        case wxDateTime::Local:
+            // leave offset to be 0
+            break;
+
+        case wxDateTime::GMT_12:
+        case wxDateTime::GMT_11:
+        case wxDateTime::GMT_10:
+        case wxDateTime::GMT_9:
+        case wxDateTime::GMT_8:
+        case wxDateTime::GMT_7:
+        case wxDateTime::GMT_6:
+        case wxDateTime::GMT_5:
+        case wxDateTime::GMT_4:
+        case wxDateTime::GMT_3:
+        case wxDateTime::GMT_2:
+        case wxDateTime::GMT_1:
+            m_offset = -60*(wxDateTime::GMT0 - tz);
+            break;
+
+        case wxDateTime::GMT0:
+        case wxDateTime::GMT1:
+        case wxDateTime::GMT2:
+        case wxDateTime::GMT3:
+        case wxDateTime::GMT4:
+        case wxDateTime::GMT5:
+        case wxDateTime::GMT6:
+        case wxDateTime::GMT7:
+        case wxDateTime::GMT8:
+        case wxDateTime::GMT9:
+        case wxDateTime::GMT10:
+        case wxDateTime::GMT11:
+        case wxDateTime::GMT12:
+            m_offset = 60*(tz - wxDateTime::GMT0);
+            break;
+
+        case wxDateTime::A_CST:
+            // Central Standard Time in use in Australia = UTC + 9.5
+            m_offset = 9*60 + 30;
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unknown time zone") );
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -167,6 +305,12 @@ bool wxDateTime::IsLeapYear(int year, wxDateTime::Calendar cal)
 
         return FALSE;
     }
+}
+
+/* static */
+int wxDateTime::GetCentury(int year)
+{
+    return year > 0 ? year / 100 : year / 100 - 1;
 }
 
 /* static */
@@ -252,7 +396,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetNumberOfDays(wxDateTime::Month month,
                                                      int year,
                                                      wxDateTime::Calendar cal)
 {
-    wxCHECK_MSG( month < 12, 0, _T("invalid month") );
+    wxCHECK_MSG( month < MONTHS_IN_YEAR, 0, _T("invalid month") );
 
     if ( cal == Gregorian || cal == Julian )
     {
@@ -262,7 +406,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetNumberOfDays(wxDateTime::Month month,
             year = GetCurrentYear();
         }
 
-        return gs_daysInMonth[IsLeapYear(year)][month];
+        return GetNumOfDaysInMonth(year, month);
     }
     else
     {
@@ -391,8 +535,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
     else
     {
         // do time calculations ourselves: we want to calculate the number of
-        // milliseconds between the given date and the epoch (necessarily
-        // negative)
+        // milliseconds between the given date and the epoch
         wxFAIL_MSG(_T("TODO"));
     }
 
@@ -512,8 +655,8 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
     Tm tm(GetTm());
 
     tm.year += diff.GetYears();
-    tm.mon += diff.GetMonths();
-    tm.mday += diff.GetTotalDays();
+    tm.AddMonths(diff.GetMonths());
+    tm.AddDays(diff.GetTotalDays());
 
     Set(tm);
 
@@ -530,7 +673,7 @@ wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
     // take the current month/year if none specified
     ReplaceDefaultYearMonthWithCurrent(&year, &month);
 
-    return Set(gs_daysInMonth[IsLeapYear(year)][month], month, year);
+    return Set(GetNumOfDaysInMonth(year, month), month, year);
 }
 
 bool wxDateTime::SetToWeekDay(WeekDay weekday,
@@ -602,6 +745,27 @@ bool wxDateTime::SetToWeekDay(WeekDay weekday,
 }
 
 // ----------------------------------------------------------------------------
+// timezone stuff
+// ----------------------------------------------------------------------------
+
+wxDateTime& wxDateTime::MakeUTC()
+{
+    return Add(wxTimeSpan::Seconds(GetTimeZone()));
+}
+
+wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz)
+{
+    int minDiff = GetTimeZone() / SECONDS_IN_MINUTE + tz.GetOffset();
+    return Add(wxTimeSpan::Minutes(minDiff));
+}
+
+wxDateTime& wxDateTime::MakeLocalTime(const TimeZone& tz)
+{
+    int minDiff = GetTimeZone() / SECONDS_IN_MINUTE + tz.GetOffset();
+    return Substract(wxTimeSpan::Minutes(minDiff));
+}
+
+// ----------------------------------------------------------------------------
 // wxDateTime to/from text representations
 // ----------------------------------------------------------------------------
 
@@ -624,4 +788,17 @@ wxString wxDateTime::Format(const wxChar *format) const
 
         return _T("");
     }
+}
+
+// ============================================================================
+// wxTimeSpan
+// ============================================================================
+
+wxString wxTimeSpan::Format(const wxChar *format) const
+{
+    wxFAIL_MSG( _T("TODO") );
+
+    wxString str;
+
+    return str;
 }

@@ -254,8 +254,10 @@ public:
         // conversion to byte array: returns a pointer to static buffer!
     void *asArray() const;
 
+#if wxUSE_STD_IOSTREAM
         // input/output
     friend ostream& operator<<(ostream&, const wxLongLongNative&);
+#endif
 
 private:
     wxLongLong_t  m_ll;
@@ -356,8 +358,10 @@ public:
                 wxLongLongWx& quotient,
                 wxLongLongWx& remainder) const;
 
+#if wxUSE_STD_IOSTREAM
     // input/output
     friend ostream& operator<<(ostream&, const wxLongLongWx&);
+#endif // wxUSE_STD_IOSTREAM
 
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs

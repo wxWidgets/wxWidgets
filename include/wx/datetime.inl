@@ -35,7 +35,7 @@ wxDateTime::Country wxDateTime::GetCountry()
     const unsigned int wxDateTime::TIME_T_FACTOR = 1000;
 #endif // wxDEFINE_TIME_CONSTANTS
 
-wxDateTime::IsInStdRange() const
+bool wxDateTime::IsInStdRange() const
 {
     return m_time >= 0l && (m_time / (long)TIME_T_FACTOR) < LONG_MAX;
 }
@@ -238,8 +238,39 @@ wxDateTime& wxDateTime::operator+=(const wxDateSpan& diff)
 }
 
 // ----------------------------------------------------------------------------
+// wxDateTime and timezones
+// ----------------------------------------------------------------------------
+
+wxDateTime wxDateTime::ToUTC() const
+{
+    return wxDateTime(*this).MakeUTC();
+}
+
+wxDateTime wxDateTime::ToTimezone(const wxDateTime::TimeZone& tz) const
+{
+    return wxDateTime(*this).MakeTimezone(tz);
+}
+
+wxDateTime wxDateTime::ToLocalTime(const wxDateTime::TimeZone& tz) const
+{
+    return wxDateTime(*this).MakeLocalTime(tz);
+}
+
+// ----------------------------------------------------------------------------
 // wxTimeSpan
 // ----------------------------------------------------------------------------
+
+wxTimeSpan::wxTimeSpan(int hours, int minutes, int seconds, int milliseconds)
+{
+    // assign first to avoid precision loss
+    m_diff = hours;
+    m_diff *= 60;
+    m_diff += minutes;
+    m_diff *= 60;
+    m_diff += seconds;
+    m_diff *= 1000;
+    m_diff += milliseconds;
+}
 
 wxTimeSpan& wxTimeSpan::Add(const wxTimeSpan& diff)
 {
@@ -324,5 +355,4 @@ wxDateSpan& wxDateSpan::Neg()
 
     return *this;
 }
-
 

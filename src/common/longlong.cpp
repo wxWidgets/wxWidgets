@@ -57,6 +57,8 @@ void *wxLongLongNative::asArray(void) const
     return temp;
 }
 
+#if wxUSE_STD_IOSTREAM
+
 // input/output
 ostream& operator<< (ostream& o, const wxLongLongNative& ll)
 {
@@ -73,6 +75,8 @@ ostream& operator<< (ostream& o, const wxLongLongNative& ll)
 
     return o << result;
 }
+
+#endif // wxUSE_STD_IOSTREAM
 
 #endif // wxUSE_LONGLONG_NATIVE
 
@@ -449,8 +453,9 @@ void *wxLongLongWx::asArray(void) const
     return temp;
 }
 
-// input/output
+#if wxUSE_STD_IOSTREAM
 
+// input/output
 ostream& operator<< (ostream& o, const wxLongLongWx& ll)
 {
     char result[65];
@@ -467,7 +472,8 @@ ostream& operator<< (ostream& o, const wxLongLongWx& ll)
 
     return o << result;
 }
-#endif
-  // wxUSE_LONGLONG_NATIVE
+#endif // wxUSE_STD_IOSTREAM
+
+#endif // wxUSE_LONGLONG_NATIVE
 
 #endif // wxUSE_LONGLONG

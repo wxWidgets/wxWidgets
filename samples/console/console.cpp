@@ -32,8 +32,8 @@
 //#define TEST_ARRAYS
 //#define TEST_LOG
 //#define TEST_STRINGS
-//#define TEST_THREADS
-#define TEST_TIME
+#define TEST_THREADS
+//#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================
@@ -144,8 +144,8 @@ static void TestTimeStatic()
            wxDateTime::GetNumberOfDays(month));
 
     // leap year logic
-    static const nYears = 5;
-    static const int years[2][nYears] =
+    static const size_t nYears = 5;
+    static const size_t years[2][nYears] =
     {
         // first line: the years to test
         { 1990, 1976, 2000, 2030, 1984, },
@@ -177,6 +177,20 @@ static void TestTimeSet()
     printf("Unix epoch:\t%s\n", wxDateTime((time_t)0).Format().c_str());
     printf("Today noon:\t%s\n", wxDateTime(12, 0).Format().c_str());
     printf("May 29, 1976:\t%s\n", wxDateTime(29, wxDateTime::May, 1976).Format().c_str());
+}
+
+// test time zones stuff
+static void TestTimeZones()
+{
+    puts("\n*** wxDateTime timezone test ***");
+
+    wxDateTime now = wxDateTime::Now();
+
+    printf("Current GMT time:\t%s\n", now.ToGMT().Format().c_str());
+    //printf("Unix epoch (GMT):\t%s\n", wxDateTime((time_t)0).MakeGMT().Format().c_str());
+    printf("Current time in Paris:\t%s\n", now.ToTimezone(wxDateTime::CET).Format().c_str());
+    printf("               Moscow:\t%s\n", now.ToTimezone(wxDateTime::MSK).Format().c_str());
+    printf("             New York:\t%s\n", now.ToTimezone(wxDateTime::EST).Format().c_str());
 }
 
 #endif // TEST_TIME
@@ -223,7 +237,14 @@ wxThread::ExitCode MyJoinableThread::Entry()
 class MyDetachedThread : public wxThread
 {
 public:
-    MyDetachedThread(size_t n, char ch) { m_n = n; m_ch = ch; Create(); }
+    MyDetachedThread(size_t n, char ch)
+    {
+        m_n = n;
+        m_ch = ch;
+        m_cancelled = FALSE;
+
+        Create();
+    }
 
     // thread execution starts here
     virtual ExitCode Entry();
@@ -234,6 +255,8 @@ public:
 private:
     size_t m_n; // number of characters to write
     char m_ch;  // character to write
+
+    bool m_cancelled;   // FALSE if we exit normally
 };
 
 wxThread::ExitCode MyDetachedThread::Entry()
@@ -249,7 +272,11 @@ wxThread::ExitCode MyDetachedThread::Entry()
     for ( size_t n = 0; n < m_n; n++ )
     {
         if ( TestDestroy() )
+        {
+            m_cancelled = TRUE;
+
             break;
+        }
 
         putchar(m_ch);
         fflush(stdout);
@@ -265,7 +292,7 @@ void MyDetachedThread::OnExit()
     wxLogTrace("thread", "Thread %ld is in OnExit", GetId());
 
     wxCriticalSectionLocker lock(gs_critsect);
-    if ( !--gs_counter )
+    if ( !--gs_counter && !m_cancelled )
         gs_cond.Signal();
 }
 
@@ -565,6 +592,7 @@ int main(int argc, char **argv)
 #ifdef TEST_TIME
     TestTimeStatic();
     TestTimeSet();
+    TestTimeZones();
 #endif // TEST_TIME
 
     wxUninitialize();

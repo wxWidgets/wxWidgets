@@ -24,9 +24,7 @@
     #pragma implementation "thread.h"
 #endif
 
-// With simple makefiles, we must ignore the file body if not using
-// threads.
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_THREADS
 
@@ -586,6 +584,9 @@ void wxThreadInternal::Wait()
     if ( wxThread::IsMain() )
         wxMutexGuiLeave();
 
+    wxLogTrace(TRACE_THREADS, _T("Starting to wait for thread %ld to exit."),
+               GetId());
+
     // wait until the thread terminates (we're blocking in _another_ thread,
     // of course)
     m_condEnd.Wait();
@@ -622,6 +623,9 @@ void wxThreadInternal::SignalExit()
     // wake up all the threads waiting for our termination - if there are any
     if ( m_shouldBroadcast )
     {
+        wxLogTrace(TRACE_THREADS, _T("Thread %ld signals end condition."),
+                   GetId());
+
         m_condEnd.Broadcast();
     }
 }
@@ -1243,8 +1247,9 @@ static void ScheduleThreadForDeletion()
 
     gs_nThreadsBeingDeleted++;
 
-    wxLogTrace(TRACE_THREADS, _T("%u threads waiting to be deleted"),
-               gs_nThreadsBeingDeleted);
+    wxLogTrace(TRACE_THREADS, _T("%u thread%s waiting to be deleted"),
+               gs_nThreadsBeingDeleted,
+               gs_nThreadsBeingDeleted == 1 ? "" : "s");
 }
 
 static void DeleteThread(wxThread *This)

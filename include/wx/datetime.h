@@ -114,10 +114,45 @@ public:
         // Note that GMT12 and GMT_12 are not the same: there is a difference
         // of exactly one day between them
 
-        // Universal Coordinated Time
-        UTC = GMT0
+        // some symbolic names for TZ
 
-        // TODO add symbolic names for TZ (EST, MET, ...)?
+        // Europe
+        WET = GMT0,                         // Western Europe Time
+        WEST = GMT1,                        // Western Europe Summer Time
+        CET = GMT1,                         // Central Europe Time
+        CEST = GMT2,                        // Central Europe Summer Time
+        EET = GMT2,                         // Eastern Europe Time
+        EEST = GMT3,                        // Eastern Europe Summer Time
+        MSK = GMT3,                         // Moscow Time
+        MSD = GMT4,                         // Moscow Summer Time
+
+        // US and Canada
+        AST = GMT_4,                        // Atlantic Standard Time
+        ADT = GMT_3,                        // Atlantic Daylight Time
+        EST = GMT_5,                        // Eastern Standard Time
+        EDT = GMT_4,                        // Eastern Daylight Saving Time
+        CST = GMT_6,                        // Central Standard Time
+        CDT = GMT_5,                        // Central Daylight Saving Time
+        MST = GMT_7,                        // Mountain Standard Time
+        MDT = GMT_6,                        // Mountain Daylight Saving Time
+        PST = GMT_8,                        // Pacific Standard Time
+        PDT = GMT_7,                        // Pacific Daylight Saving Time
+        HST = GMT_10,                       // Hawaiian Standard Time
+        AKST = GMT_9,                       // Alaska Standard Time
+        AKDT = GMT_8,                       // Alaska Daylight Saving Time
+
+        // Australia
+
+        A_WST = GMT8,                       // Western Standard Time
+        A_CST = GMT12 + 1,                  // Central Standard Time (+9.5)
+        A_EST = GMT10,                      // Eastern Standard Time
+        A_ESST = GMT11,                     // Eastern Summer Time
+
+        // TODO add more symbolic timezone names here
+
+        // Universal Coordinated Time = the new and politically correct name
+        // for GMT
+        UTC = GMT0
     };
 
         // the calendar systems we know about: notice that it's valid (for
@@ -290,10 +325,15 @@ public:
         // standard struct tm is limited to the years from 1900 (because
         // tm_year field is the offset from 1900), so we use our own struct
         // instead to represent broken down time
+        //
+        // NB: this struct should always be kept normalized (i.e. mon should
+        //     be < 12, 1 <= day <= 31 &c), so use AddMonths(), AddDays()
+        //     instead of modifying the member fields directly!
     struct Tm
     {
-        wxDateTime_t sec, min, hour,
-                     mday, mon, year;
+        wxDateTime_t sec, min, hour, mday;
+        Month mon;
+        int year;
 
         // default ctor inits the object to an invalid value
         Tm();
@@ -313,6 +353,12 @@ public:
             return (WeekDay)wday;
         }
 
+        // add the given number of months to the date keeping it normalized
+        void AddMonths(wxDateTime_t monDiff);
+
+        // add the given number of months to the date keeping it normalized
+        void AddDays(wxDateTime_t dayDiff);
+
     private:
         // compute the weekday from other fields
         void ComputeWeekDay();
@@ -330,11 +376,11 @@ public:
         TimeZone(TZ tz);
         TimeZone(wxDateTime_t offset) { m_offset = offset; }
 
-        wxDateTime_t GetOffset() const { return m_offset; }
+        int GetOffset() const { return m_offset; }
 
     private:
         // offset for this timezone from GMT in minutes
-        wxDateTime_t m_offset;
+        int m_offset;
     };
 
     // static methods
@@ -558,17 +604,23 @@ public:
     // anything else, it should be requested explicitly
     // ------------------------------------------------------------------------
 
-        // get the time corresponding to this one in UTC/GMT
-    wxDateTime ToUTC() const;
-    wxDateTime ToGMT() const { return ToUTC(); }
-
         // transform this object to UTC/GMT
     wxDateTime& MakeUTC();
     wxDateTime& MakeGMT() { return MakeUTC(); }
 
-        // generic version: transform time to any given timezone
-    wxDateTime ToTimezone(const TimeZone& tz);
+        // get the time corresponding to this one in UTC/GMT
+    inline wxDateTime ToUTC() const;
+    wxDateTime ToGMT() const { return ToUTC(); }
+
+        // generic versions of the above
+
+        // transform from local time to any given timezone
+    inline wxDateTime ToTimezone(const TimeZone& tz) const;
     wxDateTime& MakeTimezone(const TimeZone& tz);
+
+        // transform time from any timezone to the local time
+    inline wxDateTime ToLocalTime(const TimeZone& tz) const;
+    wxDateTime& MakeLocalTime(const TimeZone& tz);
 
     // accessors: many of them take the timezone parameter which indicates the
     // timezone for which to make the calculations and the default value means
@@ -741,7 +793,7 @@ private:
 
     // returns TRUE if we fall in range in which we can use standard ANSI C
     // functions
-    inline IsInStdRange() const;
+    inline bool IsInStdRange() const;
 
     // the internal representation of the time is the amount of milliseconds
     // elapsed since the origin which is set by convention to the UNIX/C epoch
@@ -761,25 +813,25 @@ public:
     // constructors
     // ------------------------------------------------------------------------
 
+        // return the timespan for the given number of seconds
+    static wxTimeSpan Seconds(int sec) { return wxTimeSpan(0, 0, sec); }
+
+        // return the timespan for the given number of minutes
+    static wxTimeSpan Minutes(int min) { return wxTimeSpan(0, min, 0 ); }
+
+        // return the timespan for the given number of hours
+    static wxTimeSpan Hours(int hours) { return wxTimeSpan(hours, 0, 0); }
+
         // default ctor constructs the 0 time span
     wxTimeSpan() { }
 
         // from separate values for each component, date set to 0 (hours are
         // not restricted to 0..24 range, neither are minutes, seconds or
         // milliseconds)
-    wxTimeSpan(int hours,
-               int minutes = 0,
-               int seconds = 0,
-               int milliseconds = 0);
-        // from separate values for each component with explicit date (none of
-        // the parameters isn't restricted to any range)
-    wxTimeSpan(int years,
-               int months,
-               int days,
-               int hours = 0,
-               int minutes = 0,
-               int seconds = 0,
-               int milliseconds = 0);
+    inline wxTimeSpan(int hours,
+                      int minutes = 0,
+                      int seconds = 0,
+                      int milliseconds = 0);
 
         // from internal representation
     wxTimeSpan(wxLongLong diff) : m_diff(diff) { }
@@ -879,11 +931,11 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const char *format = "%c") const;
+    wxString Format(const wxChar *format = _T("%c")) const;
         // preferred date representation for the current locale
-    wxString FormatDate() const { return Format("%x"); }
+    wxString FormatDate() const { return Format(_T("%x")); }
         // preferred time representation for the current locale
-    wxString FormatTime() const { return Format("%X"); }
+    wxString FormatTime() const { return Format(_T("%X")); }
 
     // implementation
     // ------------------------------------------------------------------------
