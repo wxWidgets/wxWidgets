@@ -25,7 +25,7 @@
 
 #include <limits.h>     // for LONG_MAX
 
-#define wxUSE_LONGLONG_WX 1
+// #define wxUSE_LONGLONG_WX 1 -- for testing (VZ)
 
 // ----------------------------------------------------------------------------
 // decide upon which class we will use

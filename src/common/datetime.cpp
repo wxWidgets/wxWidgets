@@ -2196,7 +2196,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
     }
 
     // and now the interesting part: the timezone
-    wxDateTime_t offset;
+    int offset;
     if ( *p == _T('-') || *p == _T('+') )
     {
         // the explicit offset given: it has the form of hhmm
@@ -2293,7 +2293,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
     // the spec was correct
     Set(day, mon, year, hour, min, sec);
-    MakeTimezone(60*offset);
+    MakeTimezone(60*(wxDateTime_t)offset);
 
     return p;
 }

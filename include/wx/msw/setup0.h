@@ -44,8 +44,36 @@
 #define wxICON_IS_BITMAP    0
 
 // ----------------------------------------------------------------------------
-// General features
+// non GUI features selection
 // ----------------------------------------------------------------------------
+
+// Set wxUSE_LONGLONG to 1 to compile the wxLongLong class. This is a 64 bit
+// integer which is implemented in terms of native 64 bit integers if any or
+// uses emulation otherwise.
+//
+// This class is required by wxDateTime and so you should enable it if you want
+// to use wxDateTime. For most modern platforms, it will use the native 64 bit
+// integers in which case (almost) all of its functions are inline and it
+// almost does not take any space, so there should be no reason to switch it
+// off.
+//
+// Recommended setting: 1
+#define wxUSE_LONGLONG      1
+
+// Set wxUSE_TIMEDATE to 1 to compile the wxDateTime and related classes which
+// allow to manipulate dates, times and time intervals. wxDateTime replaces the
+// old wxTime and wxDate classes which are still provided for backwards
+// compatibility (and implemented in terms of wxDateTime).
+//
+// Note that this class is relatively new and is still officially in alpha
+// stage because some features are not yet (fully) implemented. It is already
+// quite useful though and should only be disabled if you are aiming at
+// absolutely minimal version of the library.
+//
+// Requires: wxUSE_LONGLONG
+//
+// Recommended setting: 1
+#define wxUSE_TIMEDATE      1
 
 // Setting wxUSE_CONFIG to 1 enables the use of wxConfig and related classes
 // which allow the application to store its settings in the persistent
@@ -116,9 +144,6 @@
                                 // 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1
                                 // 0 for no window layout constraint system
-
-#define wxUSE_TIMEDATE    1
-                                // 0 for no wxTime/wxDate classes
 
 #define wxUSE_CLIPBOARD   1
                                 // 0 for no clipboard functions
