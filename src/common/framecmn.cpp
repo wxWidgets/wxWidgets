@@ -129,7 +129,7 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
     wxPoint pt(0, 0);
 
 #if wxUSE_TOOLBAR
-    if ( GetToolBar() )
+    if ( GetToolBar() && GetToolBar()->IsShown() )
     {
         int w, h;
         GetToolBar()->GetSize(& w, & h);

@@ -3550,3 +3550,5 @@ size_t wxDateTimeWorkDays::DoGetHolidaysInRange(const wxDateTime& dtStart,
 
     return holidays.GetCount();
 }
+
+
