@@ -365,8 +365,8 @@ bool wxFTP::SetTransferMode(TransferMode transferMode)
 
     if ( !DoSimpleCommand(_T("TYPE"), mode) )
     {
-        wxLogError(_("Failed to set FTP transfer mode to %s."),
-                   transferMode == ASCII ? _("ASCII") : _("binary"));
+        wxLogError(_("Failed to set FTP transfer mode to %s."), (const wxChar*)
+                   (transferMode == ASCII ? _("ASCII") : _("binary")));
 
         return FALSE;
     }
@@ -571,7 +571,7 @@ wxSocketClient *wxFTP::GetPort()
         return NULL;
     }
 
-    const char *addrStart = wxStrchr(m_lastResult, _T('('));
+    const wxChar *addrStart = wxStrchr(m_lastResult, _T('('));
     if ( !addrStart )
     {
         m_lastError = wxPROTO_PROTERR;
@@ -579,7 +579,7 @@ wxSocketClient *wxFTP::GetPort()
         return NULL;
     }
 
-    const char *addrEnd = wxStrchr(addrStart, _T(')'));
+    const wxChar *addrEnd = wxStrchr(addrStart, _T(')'));
     if ( !addrEnd )
     {
         m_lastError = wxPROTO_PROTERR;
