@@ -94,11 +94,10 @@ int wxDirDialog::ShowModal(void)
 */
  
     // Fill in the BROWSEINFO structure. 
-    wxWX2MBbuf message = m_message.mb_str();
     bi.hwndOwner = hWnd;
     bi.pidlRoot = NULL; // pidlPrograms; 
     bi.pszDisplayName = lpBuffer; 
-    bi.lpszTitle = (const char*)message; // BC++ 4.52 says LPSTR, not LPTSTR?
+    bi.lpszTitle = m_message.mb_str(); // BC++ 4.52 says LPSTR, not LPTSTR?
     bi.ulFlags = 0; 
     bi.lpfn = NULL; 
     bi.lParam = 0; 

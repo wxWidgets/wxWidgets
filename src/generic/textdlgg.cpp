@@ -42,7 +42,7 @@ static wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
     int y = 10;
     int w = 50;
     wxString line( _T("") );
-    for (uint pos = 0; pos < message.Len(); pos++)
+    for (size_t pos = 0; pos < message.Len(); pos++)
     {
         if (message[pos] == _T('\n'))
         {

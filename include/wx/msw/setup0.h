@@ -175,18 +175,6 @@
 #define wxUSE_SOCKETS       0
                                   // Set to 1 to use socket classes
 
-// these settings can't be set to 0 for now
-#define wxUSE_INTL 1
-#define wxUSE_LOG 1
-#define wxUSE_VALIDATORS 1
-#define wxUSE_ACCEL 1
-#define wxUSE_SASH 1
-#define wxUSE_TEXTDLG 1
-#define wxUSE_TOOLBAR 1
-#define wxUSE_STATUSBAR 1
-#define wxUSE_PROGRESSDLG 1
-#define wxUSE_DIRDLG 1
-
 /*
  * Finer detail
  *
@@ -196,6 +184,42 @@
                                 // if enabled, the float codec written by Apple
                                 // will be used to write, in a portable way,
                                 // float on the disk
+
+// use wxFile class - required by i18n code, wxConfig and others - recommended
+#define wxUSE_FILE                1
+
+// use wxTextFile class: requires wxFile, required by wxConfig
+#define wxUSE_TEXTFILE            1
+
+// i18n support: _() macro, wxLocale class. Requires wxFile
+#define wxUSE_INTL                1
+
+// wxLogXXX functions - highly recommended
+#define wxUSE_LOG                   1
+
+// wxValidator class
+#define wxUSE_VALIDATORS 1
+
+// wxAcceleratorTable/Entry classes and support for them in wxMenu(Bar)
+#define wxUSE_ACCEL 1
+
+// wxSashWindow class
+#define wxUSE_SASH 1
+
+// text entry dialog and wxGetTextFromUser function
+#define wxUSE_TEXTDLG 1
+
+// wxToolBar class
+#define wxUSE_TOOLBAR 1
+
+// wxStatusBar class
+#define wxUSE_STATUSBAR 1
+
+// progress dialog class for lengthy operations
+#define wxUSE_PROGRESSDLG 1
+
+// wxDirDlg class for getting a directory name from user
+#define wxUSE_DIRDLG 1
 
 /*
  * MS Windows/Windows NT
