@@ -988,7 +988,7 @@ int STRINGCLASS::compare(size_t nStart, size_t nLen,
 // common conversion routines
 // ---------------------------------------------------------------------------
 
-size_t wxString::WorstEncodingCase(size_t len, wxMBConv& WXUNUSED(conv))
+size_t wxString::WorstEncodingCase(size_t len, const wxMBConv& WXUNUSED(conv))
 {
     //Worst case for UTF7
     return len * 5;
