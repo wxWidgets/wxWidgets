@@ -156,7 +156,7 @@ class ParamPage:
             else:
                 objElem.appendChild(elem)
         else:
-            # Remove parameter 
+            # Remove parameter
             xxx.params[param].remove()
             del xxx.params[param]
             w.SetValue('')
@@ -254,7 +254,7 @@ class StylePage(wxPanel, ParamPage):
         topSizer.Add(sizer, 1, wxALL, 5)
         self.SetAutoLayout(true)
         self.SetSizer(topSizer)
-        
+
         self.modified = false
 
     # Set data for a cahced page
@@ -327,7 +327,7 @@ class XML_Tree(wxTreeCtrl):
         EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
         # One works on Linux, another on Windows
         EVT_TREE_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
-        EVT_LEFT_DCLICK(self, self.OnDClick) 
+        EVT_LEFT_DCLICK(self, self.OnDClick)
         EVT_RIGHT_DOWN(self, self.OnRightDown)
         self.needUpdate = false
         self.pendingHighLight = None
@@ -358,7 +358,7 @@ class XML_Tree(wxTreeCtrl):
         wxTreeCtrl.Unselect(self)
     def GetSelection(self):
         return self.selection
-        
+
     def ExpandAll(self, item):
         if self.ItemHasChildren(item):
             self.Expand(item)
@@ -405,7 +405,7 @@ class XML_Tree(wxTreeCtrl):
                 elif n.nodeType != minidom.Node.ELEMENT_NODE:
                     treeObj.element.removeChild(n)
                     n.unlink()
-                    
+
 
     # Remove leaf of tree, return it's data object
     def RemoveLeaf(self, leaf):
@@ -530,7 +530,7 @@ class XML_Tree(wxTreeCtrl):
         except AttributeError:
             testWin.highLight = HightLightBox(pos, size)
         testWin.highLight.item = item
-                
+
     # Double-click on Linux
     def OnItemActivated(self, evt):
         item = evt.GetItem()
@@ -539,7 +539,7 @@ class XML_Tree(wxTreeCtrl):
         if panel.IsModified():
             self.Apply(xxx, item)       # apply changes
         self.CreateTestWin(item)
-        
+
     # Double-click on Windows
     def OnDClick(self, evt):
         id, flags = self.HitTest(evt.GetPosition())
@@ -553,7 +553,7 @@ class XML_Tree(wxTreeCtrl):
             self.CreateTestWin(item)
         else:
             evt.Skip()
-        
+
     # (re)create test window
     def CreateTestWin(self, node):
         global testWin
@@ -648,7 +648,7 @@ class XML_Tree(wxTreeCtrl):
         testWin.highLight = None
         if highLight and not tree.pendingHighLight:
             self.HighLight(highLight)
-        
+
     def OnCloseTestWin(self, evt):
         global testWin, testWinPos
         testWinPos = testWin.GetPosition()
@@ -669,9 +669,9 @@ class XML_Tree(wxTreeCtrl):
     def OnRightDown(self, evt):
         # Setup menu
         menu = wxMenu()
-        
+
         item = self.GetSelection()
-        if not item.IsOk(): 
+        if not item.IsOk():
             menu.Append(pullDownMenu.ID_EXPAND, 'Expand', 'Expand tree')
         else:
             self.ctrl = evt.ControlDown() # save Ctrl state
@@ -740,7 +740,7 @@ class XML_Tree(wxTreeCtrl):
         # Create main node
         self.mainNode = self.dom.createElement('resource')
         self.dom.appendChild(self.mainNode)
-        
+
     # Apply changes
     def Apply(self, xxx, item):
         if not xxx: return
@@ -794,7 +794,7 @@ class PullDownMenu:
     ID_NEW_RADIO_BOX = wxNewId()
     ID_NEW_COMBO_BOX = wxNewId()
     ID_NEW_LIST_BOX = wxNewId()
-        
+
     ID_NEW_STATIC_LINE = wxNewId()
     ID_NEW_STATIC_BITMAP = wxNewId()
     ID_NEW_CHOICE = wxNewId()
@@ -807,7 +807,7 @@ class PullDownMenu:
     ID_NEW_NOTEBOOK = wxNewId()
     ID_NEW_HTML_WINDOW = wxNewId()
     ID_NEW_CALENDAR = wxNewId()
-        
+
     ID_NEW_BOX_SIZER = wxNewId()
     ID_NEW_STATIC_BOX_SIZER = wxNewId()
     ID_NEW_GRID_SIZER = wxNewId()
@@ -835,7 +835,9 @@ class Frame(wxFrame):
     def __init__(self, size):
         wxFrame.__init__(self, None, -1, '', size=size)
         self.CreateStatusBar()
-        self.SetIcon(wxIconFromXPMData(images.getIconData()))
+        #icon = wxIconFromXPMData(images.getIconData())
+        icon = wxIcon(os.path.join(sys.path[0], "xrced.ico"), wxBITMAP_TYPE_ICO)
+        self.SetIcon(icon)
 
         # Make menus
         menuBar = wxMenuBar()
@@ -848,7 +850,7 @@ class Frame(wxFrame):
         menu.AppendSeparator()
         menu.Append(wxID_EXIT, '&Quit\tCtrl-Q', 'Exit application')
         menuBar.Append(menu, '&File')
-        
+
         menu = wxMenu()
         menu.Append(wxID_UNDO, '&Undo\tCtrl-Z', 'Undo')
         menu.Append(wxID_REDO, '&Redo\tCtrl-R', 'Redo')
@@ -859,7 +861,7 @@ class Frame(wxFrame):
         self.ID_DELETE = wxNewId()
         menu.Append(self.ID_DELETE, '&Delete\tCtrl-D', 'Delete object')
         menuBar.Append(menu, '&Edit')
-        
+
         menu = wxMenu()
         self.ID_REFRESH = wxNewId()
         menu.Append(self.ID_REFRESH, '&Refresh\tCtrl-R', 'Refresh view')
@@ -868,7 +870,7 @@ class Frame(wxFrame):
                     'Toggle auto-refresh mode', true)
         menu.Check(self.ID_AUTO_REFRESH, conf.autoRefresh)
         menuBar.Append(menu, '&View')
-        
+
         menu = wxMenu()
         menu.Append(wxID_ABOUT, 'About...', 'About XCRed')
         if debug:
@@ -965,13 +967,13 @@ class Frame(wxFrame):
             pullDownMenu.ID_NEW_BITMAP_BUTTON: 'wxBitmapButton',
             pullDownMenu.ID_NEW_RADIO_BUTTON: 'wxRadioButton',
             pullDownMenu.ID_NEW_SPIN_BUTTON: 'wxSpinButton',
-            
+
             pullDownMenu.ID_NEW_STATIC_BOX: 'wxStaticBox',
             pullDownMenu.ID_NEW_CHECK_BOX: 'wxCheckBox',
             pullDownMenu.ID_NEW_RADIO_BOX: 'wxRadioBox',
             pullDownMenu.ID_NEW_COMBO_BOX: 'wxComboBox',
             pullDownMenu.ID_NEW_LIST_BOX: 'wxListBox',
-            
+
             pullDownMenu.ID_NEW_STATIC_LINE: 'wxStaticLine',
             pullDownMenu.ID_NEW_STATIC_BITMAP: 'wxStaticBitmap',
             pullDownMenu.ID_NEW_CHOICE: 'wxChoice',
@@ -984,7 +986,7 @@ class Frame(wxFrame):
             pullDownMenu.ID_NEW_NOTEBOOK: 'wxNotebook',
             pullDownMenu.ID_NEW_HTML_WINDOW: 'wxHtmlWindow',
             pullDownMenu.ID_NEW_CALENDAR: 'wxCalendar',
-            
+
             pullDownMenu.ID_NEW_BOX_SIZER: 'wxBoxSizer',
             pullDownMenu.ID_NEW_STATIC_BOX_SIZER: 'wxStaticBoxSizer',
             pullDownMenu.ID_NEW_GRID_SIZER: 'wxGridSizer',
@@ -1040,7 +1042,7 @@ class Frame(wxFrame):
             (pullDownMenu.ID_NEW_TOOL, 'Tool', 'Create tool'),
             (pullDownMenu.ID_NEW_SEPARATOR, 'Separator', 'Create separator'),
             ]
-        
+
         # Initialize
         self.Clear()
 
@@ -1063,7 +1065,7 @@ class Frame(wxFrame):
             self.Open(path)
             wxEndBusyCursor()
             self.SetStatusText('Ready')
-        dlg.Destroy()            
+        dlg.Destroy()
 
     def OnSaveOrSaveAs(self, evt):
         if evt.GetId() == wxID_SAVEAS or not self.dataFile:
@@ -1100,10 +1102,10 @@ class Frame(wxFrame):
                 xxx = MakeXXXFromDOM(tree.GetPyData(parent).treeObject(), elem)
                 item = tree.InsertItem( parent, prev, xxx.treeObject().className,
                                         data=wxTreeItemData(xxx) )
-        
+
     def OnRedo(self, evt):
         print '*** being implemented'
-        
+
     def OnCut(self, evt):
         selected = tree.GetSelection()
         # Undo info
@@ -1146,7 +1148,7 @@ class Frame(wxFrame):
                 appendChild = true
                 selected = tree.GetItemParent(selected)
         # Expanded container (must have children)
-        elif tree.IsExpanded(selected) and tree.ItemHasChildren(selected): 
+        elif tree.IsExpanded(selected) and tree.ItemHasChildren(selected):
             appendChild = false
             nextItem = tree.GetFirstChild(selected, 0)[0]
             parentLeaf = selected
@@ -1307,7 +1309,7 @@ class Frame(wxFrame):
                 appendChild = true
                 selected = tree.GetItemParent(selected)
         # Expanded container (must have children)
-        elif tree.IsExpanded(selected) and tree.ItemHasChildren(selected): 
+        elif tree.IsExpanded(selected) and tree.ItemHasChildren(selected):
             appendChild = false
             nextItem = tree.GetFirstChild(selected, 0)[0]
             parentLeaf = selected
