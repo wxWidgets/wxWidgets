@@ -1074,13 +1074,13 @@ void wxUnixFilename2FSSpec( const char *path , FSSpec *spec )
 #endif // __WXMAC__
 
 void
-wxDos2UnixFilename (char *s)
+wxDos2UnixFilename (wxChar *s)
 {
   if (s)
     while (*s)
       {
-        if (*s == '\\')
-          *s = '/';
+        if (*s == _T('\\'))
+          *s = _T('/');
 #ifdef __WXMSW__
         else
           *s = wxTolower (*s);        // Case INDEPENDENT
