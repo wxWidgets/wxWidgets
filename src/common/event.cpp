@@ -797,35 +797,40 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 
 bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 {
-    int i = 0;
-    int commandId = event.GetId();
+    wxEventType eventType = event.GetEventType();
+    int eventId = event.GetId();
 
-    // BC++ doesn't like while (table.entries[i].m_fn)
-
-#ifdef __SC__
-    while (table.entries[i].m_fn != 0)
-#else
-    while (table.entries[i].m_fn != 0L)
-#endif
+    // BC++ doesn't like testing for m_fn without != 0
+    for ( int i = 0; table.entries[i].m_fn != 0; i++ )
     {
-        if ((event.GetEventType() == table.entries[i].m_eventType) &&
-                (table.entries[i].m_id == -1 || // Match, if event spec says any id will do (id == -1)
-                 (table.entries[i].m_lastId == -1 && commandId == table.entries[i].m_id) ||
-                 (table.entries[i].m_lastId != -1 &&
-                  (commandId >= table.entries[i].m_id && commandId <= table.entries[i].m_lastId))))
+        const wxEventTableEntry& entry = table.entries[i];
+
+        // match only if the event type is the same and the id is either -1 in
+        // the event table (meaning "any") or the event id matches the id
+        // specified in the event table either exactly or by falling into
+        // range between first and last
+        if ( eventType == entry.m_eventType )
         {
-            event.Skip(FALSE);
-            event.m_callbackUserData = table.entries[i].m_callbackUserData;
+            int tableId1 = entry.m_id,
+                tableId2 = entry.m_lastId;
 
-            (this->*((wxEventFunction) (table.entries[i].m_fn)))(event);
+            if ( (tableId1 == -1) ||
+                 (tableId2 == -1 && eventId == tableId1) ||
+                 (tableId2 != -1 &&
+                    (eventId >= tableId1 && eventId <= tableId2)) )
+            {
+                event.Skip(FALSE);
+                event.m_callbackUserData = entry.m_callbackUserData;
 
-            if ( event.GetSkipped() )
-                return FALSE;
-            else
-                return TRUE;
+                (this->*((wxEventFunction) (entry.m_fn)))(event);
+
+                return !event.GetSkipped();
+            }
         }
+
         i++;
     }
+
     return FALSE;
 }
 
