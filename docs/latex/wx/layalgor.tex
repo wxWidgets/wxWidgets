@@ -141,5 +141,8 @@ The MDI client window is set to occupy the remaining space.
 
 Lays out the children of a normal frame or other window.
 
-{\it mainWindow} is set to occupy the remaining space.
+{\it mainWindow} is set to occupy the remaining space. If this is not specified, then
+the last window that responds to a calculate layout event in query mode will get the remaining space
+(that is, a non-query OnCalculateLayout event will not be sent to this window and the window will be set
+to the remaining size).
 
