@@ -947,10 +947,10 @@ bool wxImage::ConvertAlphaToMask(unsigned threshold)
         wxLogError( _("No unused colour in image being masked.") );
         return false;
     }
-    
+
     SetMask(true);
     SetMaskColour(mr, mg, mb);
-    
+
     unsigned char *imgdata = GetData();
     unsigned char *alphadata = GetAlpha();
 
@@ -972,6 +972,8 @@ bool wxImage::ConvertAlphaToMask(unsigned threshold)
 
     free(M_IMGDATA->m_alpha);
     M_IMGDATA->m_alpha = NULL;
+
+    return true;
 }
 
 #if wxUSE_PALETTE
