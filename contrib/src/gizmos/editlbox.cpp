@@ -122,11 +122,13 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     m_bUp = new wxBitmapButton(subp, wxID_ELB_UP, wxBitmap(elup_xpm));
     m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN, wxBitmap(eldown_xpm));
 
+#if wxUSE_TOOLTIPS
     m_bEdit->SetToolTip(wxT("Edit item"));
     m_bNew->SetToolTip(wxT("New item"));
     m_bDel->SetToolTip(wxT("Delete item"));
     m_bUp->SetToolTip(wxT("Move up"));
     m_bDown->SetToolTip(wxT("Move down"));
+#endif
 
     subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL);
     subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL);
