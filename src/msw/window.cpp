@@ -1961,6 +1961,14 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             if ( !bCtrlDown )
             {
                 lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
+
+                // surprizingly, DLGC_WANTALLKEYS bit mask doesn't contain the
+                // DLGC_WANTTAB nor DLGC_WANTARROWS bits although, logically,
+                // it, of course, implies them
+                if ( lDlgCode & DLGC_WANTALLKEYS )
+                {
+                    lDlgCode |= DLGC_WANTTAB | DLGC_WANTARROWS;
+                }
             }
 
             bool bForward = TRUE,
