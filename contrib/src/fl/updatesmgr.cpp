@@ -249,25 +249,25 @@ void cbSimpleUpdatesMgr::UpdateNow()
 
     // step #2 - do ordered refreshing and resizing of bar window objects now
 
-    wxNode* pNode     = mBarsToRefresh.First();
-    wxNode* pPaneNode = mPanesList.First();
+    wxNode* pNode     = mBarsToRefresh.GetFirst();
+    wxNode* pPaneNode = mPanesList.GetFirst();
 
     while( pNode )
     {
-        cbBarInfo*  pBar  = (cbBarInfo*) pNode->Data();
-        cbDockPane* pPane = (cbDockPane*)pPaneNode->Data();
+        cbBarInfo*  pBar  = (cbBarInfo*) pNode->GetData();
+        cbDockPane* pPane = (cbDockPane*)pPaneNode->GetData();
 
         pPane->SizeBar( pBar );
 
-        pNode     = pNode->Next();
-        pPaneNode = pPaneNode->Next();
+        pNode     = pNode->GetNext();
+        pPaneNode = pPaneNode->GetNext();
     }
 
-    pNode = mBarsToRefresh.First();
+    pNode = mBarsToRefresh.GetFirst();
 
     while( pNode )
     {
-        cbBarInfo* pBar = (cbBarInfo*)pNode->Data();
+        cbBarInfo* pBar = (cbBarInfo*)pNode->GetData();
 
         if ( pBar->mpBarWnd ) 
         {
@@ -278,7 +278,7 @@ void cbSimpleUpdatesMgr::UpdateNow()
             //info.mpBarWnd->Show(TRUE);
         }
 
-        pNode  = pNode->Next();
+        pNode  = pNode->GetNext();
     }
 
     if ( clientWindowChanged )

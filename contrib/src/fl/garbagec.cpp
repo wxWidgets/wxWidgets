@@ -32,7 +32,7 @@
 
 inline static GCItem& node_to_item( wxNode* pNode )
 {
-    return *( (GCItem*)(pNode->Data()) );
+    return *( (GCItem*)(pNode->GetData()) );
 }
 
 GarbageCollector::~GarbageCollector()
@@ -44,13 +44,13 @@ GarbageCollector::~GarbageCollector()
 
 void GarbageCollector::DestroyItemList( wxList& lst )
 {
-    wxNode* pNode = lst.First();
+    wxNode* pNode = lst.GetFirst();
 
     while( pNode )
     {
         delete &node_to_item( pNode );
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 
     lst.Clear();
@@ -58,7 +58,7 @@ void GarbageCollector::DestroyItemList( wxList& lst )
 
 wxNode* GarbageCollector::FindItemNode( void* pForObj )
 {
-    wxNode* pNode = mAllNodes.First();
+    wxNode* pNode = mAllNodes.GetFirst();
 
     while( pNode )
     {
@@ -66,7 +66,7 @@ wxNode* GarbageCollector::FindItemNode( void* pForObj )
 
             return pNode;
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 
     int avoidCompilerWarning = 0;
@@ -77,15 +77,15 @@ wxNode* GarbageCollector::FindItemNode( void* pForObj )
 
 wxNode* GarbageCollector::FindReferenceFreeItemNode()
 {
-    wxNode* pNode = mAllNodes.First();
+    wxNode* pNode = mAllNodes.GetFirst();
 
     while( pNode )
     {
-        if ( node_to_item( pNode ).mRefs.Number() == 0 ) 
+        if ( node_to_item( pNode ).mRefs.GetCount() == 0 ) 
 
             return pNode;
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 
     return 0;
@@ -93,18 +93,18 @@ wxNode* GarbageCollector::FindReferenceFreeItemNode()
 
 void GarbageCollector::RemoveReferencesToNode( wxNode* pItemNode )
 {
-    wxNode* pNode = mAllNodes.First();
+    wxNode* pNode = mAllNodes.GetFirst();
 
     while( pNode )
     {
         wxList& refLst   = node_to_item( pNode ).mRefs;
-        wxNode* pRefNode = refLst.First();
+        wxNode* pRefNode = refLst.GetFirst();
 
         while( pRefNode )
         {
-            if ( pRefNode->Data() == (wxObject*)pItemNode )
+            if ( pRefNode->GetData() == (wxObject*)pItemNode )
             {
-                wxNode* pNext = pRefNode->Next();
+                wxNode* pNext = pRefNode->GetNext();
 
                 refLst.DeleteNode( pRefNode );
 
@@ -112,31 +112,31 @@ void GarbageCollector::RemoveReferencesToNode( wxNode* pItemNode )
 
                 continue;
             }
-            else pRefNode = pRefNode->Next();
+            else pRefNode = pRefNode->GetNext();
         }
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 }
 
 void GarbageCollector::ResolveReferences()
 {
-    wxNode* pNode = mAllNodes.First();
+    wxNode* pNode = mAllNodes.GetFirst();
 
     while( pNode )
     {
         GCItem& item = node_to_item( pNode );
 
-        wxNode* pRefNode = item.mRefs.First();
+        wxNode* pRefNode = item.mRefs.GetFirst();
 
         while( pRefNode )
         {
-            pRefNode->SetData( (wxObject*) FindItemNode( (void*)pRefNode->Data() ) );
+            pRefNode->SetData( (wxObject*) FindItemNode( (void*)pRefNode->GetData() ) );
 
-            pRefNode = pRefNode->Next();
+            pRefNode = pRefNode->GetNext();
         }
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 }
 
@@ -173,7 +173,7 @@ void GarbageCollector::ArrangeCollection()
             // append it to the list, where items are contained
             // in the increasing order of dependencies
 
-            mRegularLst.Append( pItemNode->Data() );
+            mRegularLst.Append( pItemNode->GetData() );
 
             mAllNodes.DeleteNode( pItemNode );
 
@@ -187,13 +187,13 @@ void GarbageCollector::ArrangeCollection()
             // otherwise, what is left - all nodes, which
             // are involved into cycled chains (rings)
 
-            wxNode* pNode = mAllNodes.First();
+            wxNode* pNode = mAllNodes.GetFirst();
 
             while( pNode )
             {
-                mCycledLst.Append( pNode->Data() );
+                mCycledLst.Append( pNode->GetData() );
 
-                pNode = pNode->Next();
+                pNode = pNode->GetNext();
             }
 
             mAllNodes.Clear();

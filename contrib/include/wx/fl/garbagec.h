@@ -27,7 +27,7 @@ struct GCItem
 
 inline void* gc_node_to_obj( wxNode* pGCNode )
 {
-    return ( (GCItem*) (pGCNode->Data()) )->mpObj;
+    return ( (GCItem*) (pGCNode->GetData()) )->mpObj;
 }
 
 /*

@@ -53,7 +53,7 @@ struct cbRectInfo
 
 static inline cbRectInfo& node_to_rect_info( wxNode* pNode )
 {
-    return *( (cbRectInfo*) (pNode->Data()) );
+    return *( (cbRectInfo*) (pNode->GetData()) );
 }
 
 /***** Implementation for class cbSimpleUpdatesMgr *****/
@@ -276,13 +276,13 @@ void cbGCUpdatesMgr::UpdateNow()
 
 void cbGCUpdatesMgr::DoRepositionItems( wxList& items )
 {
-    wxNode* pNode1 = items.First();
+    wxNode* pNode1 = items.GetFirst();
 
     while( pNode1 )
     {
         cbRectInfo& info = node_to_rect_info( pNode1 );
 
-        wxNode* pNode2 = items.First();
+        wxNode* pNode2 = items.GetFirst();
 
         // and node itself
 
@@ -305,10 +305,10 @@ void cbGCUpdatesMgr::DoRepositionItems( wxList& items )
                     mGC.AddDependency( &info,      &otherInfo      );
             }
 
-            pNode2 = pNode2->Next();
+            pNode2 = pNode2->GetNext();
         }
 
-        pNode1 = pNode1->Next();
+        pNode1 = pNode1->GetNext();
     }
 
     mGC.ArrangeCollection(); // order nodes according "least-dependency" rule,
@@ -318,7 +318,7 @@ void cbGCUpdatesMgr::DoRepositionItems( wxList& items )
     // they stand in linear (not cyclic) dependency with other
     // regular nodes).
 
-    wxNode* pNode = mGC.GetRegularObjects().First();
+    wxNode* pNode = mGC.GetRegularObjects().GetFirst();
 
     while ( pNode )
     {
@@ -330,12 +330,12 @@ void cbGCUpdatesMgr::DoRepositionItems( wxList& items )
         else
             info.mpPane->SizeBar( info.mpBar );
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 
     // cycled item nodes, need to be both resized and repainted
 
-    pNode = mGC.GetCycledObjects().First();
+    pNode = mGC.GetCycledObjects().GetFirst();
 
     while ( pNode )
     {
@@ -380,20 +380,20 @@ void cbGCUpdatesMgr::DoRepositionItems( wxList& items )
             pWnd->Refresh();
         }
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 
     // release data prepared for GC alg.
 
-    pNode = items.First();
+    pNode = items.GetFirst();
 
     while( pNode )
     {
-        cbRectInfo* pInfo = (cbRectInfo*)(pNode->Data());
+        cbRectInfo* pInfo = (cbRectInfo*)(pNode->GetData());
 
         delete pInfo;
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 
     mGC.Reset(); // reinit GC

@@ -423,19 +423,19 @@ void cbRowDragPlugin::OnDrawPaneBackground ( cbDrawPaneDecorEvent& event )
 
 int cbRowDragPlugin::GetHRowsCountForPane( cbDockPane* pPane )
 {
-    wxNode* pNode = mHiddenBars.First();
+    wxNode* pNode = mHiddenBars.GetFirst();
 
     int maxIconNo = -1;
 
     while( pNode )
     {
-        cbHiddenBarInfo* pHBInfo = (cbHiddenBarInfo*)pNode->Data();
+        cbHiddenBarInfo* pHBInfo = (cbHiddenBarInfo*)pNode->GetData();
 
         if ( pHBInfo->mAlignment == pPane->mAlignment )
 
             maxIconNo = wxMax( maxIconNo, pHBInfo->mIconNo );
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 
     return ( maxIconNo + 1 );
@@ -805,7 +805,7 @@ void cbRowDragPlugin::ExpandRow( int collapsedIconIdx )
 
     cbRowInfo* pNewRow = new cbRowInfo();
 
-    wxNode* pNode = mHiddenBars.First();
+    wxNode* pNode = mHiddenBars.GetFirst();
 
     int rowNo = 0;
 
@@ -813,7 +813,7 @@ void cbRowDragPlugin::ExpandRow( int collapsedIconIdx )
 
     while( pNode )
     {
-        cbHiddenBarInfo* pHBInfo = (cbHiddenBarInfo*)pNode->Data();
+        cbHiddenBarInfo* pHBInfo = (cbHiddenBarInfo*)pNode->GetData();
 
         if ( pHBInfo->mAlignment     == mpPane->mAlignment &&
              pHBInfo->mIconNo        == collapsedIconIdx   )
@@ -831,7 +831,7 @@ void cbRowDragPlugin::ExpandRow( int collapsedIconIdx )
 
             // remove bar info from internal list
 
-            wxNode* pNext = pNode->Next();
+            wxNode* pNext = pNode->GetNext();
 
             delete pHBInfo;
             mHiddenBars.DeleteNode( pNode );
@@ -848,7 +848,7 @@ void cbRowDragPlugin::ExpandRow( int collapsedIconIdx )
 
                 --pHBInfo->mIconNo;
 
-            pNode = pNode->Next();
+            pNode = pNode->GetNext();
         }
     }
 

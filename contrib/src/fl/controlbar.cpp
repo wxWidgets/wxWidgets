@@ -402,11 +402,11 @@ void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 
 void wxFrameLayout::DestroyBarWindows()
 {
-    wxNode* pSpy = mBarSpyList.First();
+    wxNode* pSpy = mBarSpyList.GetFirst();
 
     while( pSpy )
     {
-        cbBarSpy& spy = *((cbBarSpy*)pSpy->Data());
+        cbBarSpy& spy = *((cbBarSpy*)pSpy->GetData());
 
         if ( spy.mpBarWnd->GetEventHandler() == &spy )
 
@@ -414,7 +414,7 @@ void wxFrameLayout::DestroyBarWindows()
 
         delete &spy;
 
-        pSpy = pSpy->Next();
+        pSpy = pSpy->GetNext();
     }
 
     mBarSpyList.Clear();
@@ -432,15 +432,15 @@ void wxFrameLayout::DestroyBarWindows()
 
 void wxFrameLayout::ShowFloatedWindows( bool show )
 {
-    wxNode* pNode = mFloatedFrames.First();
+    wxNode* pNode = mFloatedFrames.GetFirst();
 
     while( pNode )
     {
-        cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->Data());
+        cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->GetData());
 
         pFFrm->Show( show );
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 }
 
@@ -491,11 +491,11 @@ wxFrameLayout::~wxFrameLayout()
     if ( mpNECursor     ) 
         delete mpNECursor;
 
-    wxNode* pSpy = mBarSpyList.First();
+    wxNode* pSpy = mBarSpyList.GetFirst();
 
     while( pSpy )
     {
-        cbBarSpy& spy = *((cbBarSpy*)pSpy->Data());
+        cbBarSpy& spy = *((cbBarSpy*)pSpy->GetData());
 
         if ( spy.mpBarWnd->GetEventHandler() == &spy )
 
@@ -503,7 +503,7 @@ wxFrameLayout::~wxFrameLayout()
 
         delete &spy;
 
-        pSpy = pSpy->Next();
+        pSpy = pSpy->GetNext();
     }
 
     for ( i = 0; i != mAllBars.Count(); ++i )
@@ -715,11 +715,11 @@ void wxFrameLayout::SetBarState( cbBarInfo* pBar, int newState, bool updateNow )
         {
             pBar->mpBarWnd->Show(FALSE); // to avoid flicker upon reparenting
 
-            wxNode* pNode = mFloatedFrames.First();
+            wxNode* pNode = mFloatedFrames.GetFirst();
 
             while( pNode )
             {
-                cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->Data());
+                cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->GetData());
 
                 if ( pFFrm->GetBar() == pBar )
                 {
@@ -739,7 +739,7 @@ void wxFrameLayout::SetBarState( cbBarInfo* pBar, int newState, bool updateNow )
                     pFFrm->Destroy(); break;
                 }
 
-                pNode = pNode->Next();
+                pNode = pNode->GetNext();
             }
 
             // FOR NOW:: excessive!
@@ -826,11 +826,11 @@ void wxFrameLayout::RepositionFloatedBar( cbBarInfo* pBar )
 {
     if ( !(mFloatingOn && pBar->mFloatingOn)) return;
 
-    wxNode* pNode = mFloatedFrames.First();
+    wxNode* pNode = mFloatedFrames.GetFirst();
 
     while( pNode )
     {
-        cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->Data());
+        cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->GetData());
 
         if ( pFFrm->GetBar() == pBar )
         {
@@ -848,7 +848,7 @@ void wxFrameLayout::RepositionFloatedBar( cbBarInfo* pBar )
             break;
         }
 
-        pNode = pNode->Next();
+        pNode = pNode->GetNext();
     }
 }
 
@@ -2128,9 +2128,9 @@ IMPLEMENT_DYNAMIC_CLASS( cbBarInfo, wxObject )
 cbBarInfo::cbBarInfo(void)
 
     : mpRow( NULL ),
+      mFloatingOn( TRUE ),
       mpNext( NULL ),
-      mpPrev( NULL ),
-      mFloatingOn( TRUE )
+      mpPrev( NULL )
 {}
 
 cbBarInfo::~cbBarInfo()
@@ -2500,7 +2500,7 @@ int cbDockPane::GetRowAt( int upperY, int lowerY )
     int range    = lowerY - upperY;
     int oneThird = range / 3;
 
-    wxNode* pRow = mRows.First();
+    wxNode* pRow = mRows.GetFirst();
     int row = 0;
     int curY = 0;
 
@@ -2508,7 +2508,7 @@ int cbDockPane::GetRowAt( int upperY, int lowerY )
 
     while( pRow )
     {
-        int rowHeight = GetRowHeight( (wxList*)pRow->Data() );
+        int rowHeight = GetRowHeight( (wxList*)pRow->GetData() );
 
         if ( upperY >= curY &&
              lowerY < curY ) return row;
@@ -2527,7 +2527,7 @@ int cbDockPane::GetRowAt( int upperY, int lowerY )
 
         ++row;
         curY += rowHeight;
-        pRow = pRow->Next();
+        pRow = pRow->GetNext();
     }
     */
 
@@ -3489,10 +3489,10 @@ void cbDockPane::GetRowShapeData( cbRowInfo* pRow, wxList* pLst )
 
 void cbDockPane::SetRowShapeData( cbRowInfo* pRow, wxList* pLst )
 {
-    if ( pLst->First() == NULL )
+    if ( pLst->GetFirst() == NULL )
         return;
 
-    wxNode* pData = pLst->First();
+    wxNode* pData = pLst->GetFirst();
 
     size_t i;
     for ( i = 0; i != pRow->mBars.Count(); ++i )
@@ -3501,12 +3501,12 @@ void cbDockPane::SetRowShapeData( cbRowInfo* pRow, wxList* pLst )
 
         cbBarInfo& bar = *pRow->mBars[i];;
 
-        cbBarShapeData& data = *((cbBarShapeData*)pData->Data());
+        cbBarShapeData& data = *((cbBarShapeData*)pData->GetData());
 
         bar.mBounds   = data.mBounds;
         bar.mLenRatio = data.mLenRatio;
 
-        pData = pData->Next();
+        pData = pData->GetNext();
     }
 }
 
