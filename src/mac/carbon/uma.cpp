@@ -33,6 +33,9 @@
 #endif
 #include "wx/mac/uma.h"
 
+#if TARGET_API_MAC_OSX
+#include "wx/toplevel.h"
+#endif
 
 // since we have decided that we only support 8.6 upwards we are
 // checking for these minimum requirements in the startup code of

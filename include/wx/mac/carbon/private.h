@@ -47,6 +47,9 @@
 #include "wx/mac/corefoundation/cfstring.h"
 #endif
 
+//forward declarations
+class wxTopLevelWindowMac;
+
 #ifndef FixedToInt
 // as macro in FixMath.h for 10.3
 inline Fixed    IntToFixed( int inInt )

@@ -23,6 +23,7 @@
 #if wxUSE_GUI
     #include "wx/mac/uma.h"
     #include "wx/font.h"
+    #include "wx/toplevel.h"
 #else
     #include "wx/intl.h"
 #endif
