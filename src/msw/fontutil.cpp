@@ -70,10 +70,11 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
     facename = tokenizer.GetNextToken();
 
     wxString tmp = tokenizer.GetNextToken();
-    if ( !tmp )
+    if ( tmp.empty() )
     {
-        // default charset (don't use DEFAULT_CHARSET though because of subtle
-        // Windows 9x/NT differences in handling it)
+        // default charset: but don't use DEFAULT_CHARSET here because it might
+        // be different from the machine on which the file we had read this
+        // encoding desc from was created
         charset = ANSI_CHARSET;
     }
     else
@@ -93,6 +94,8 @@ wxString wxNativeEncodingInfo::ToString() const
     wxString s;
 
     s << (long)encoding << _T(';') << facename;
+
+    // ANSI_CHARSET is assumed anyhow
     if ( charset != ANSI_CHARSET )
     {
          s << _T(';') << charset;
@@ -120,6 +123,9 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
         // although this function is supposed to return an exact match, do do
         // some mappings here for the most common case of "standard" encoding
         case wxFONTENCODING_SYSTEM:
+            info->charset = DEFAULT_CHARSET;
+            break;
+
         case wxFONTENCODING_ISO8859_1:
         case wxFONTENCODING_ISO8859_15:
         case wxFONTENCODING_CP1252:
@@ -227,11 +233,9 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
     switch ( cs )
     {
         default:
-            // JACS: Silently using ANSI_CHARSET
-            // apparently works for Chinese Windows. Assume it works
-            // for all/most other languages.
-            //wxFAIL_MSG(wxT("unsupported charset"));
-            // fall through
+            // assume the system charset
+            fontEncoding = wxFONTENCODING_SYSTEM;
+            break;
 
         case ANSI_CHARSET:
             fontEncoding = wxFONTENCODING_CP1252;
