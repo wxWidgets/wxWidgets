@@ -1756,7 +1756,7 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     {
         gs_widgetLastFocus = NULL;
 
-        return;
+        return FALSE;
     }
 
     // if the focus goes out of our app alltogether, OnIdle() will send
