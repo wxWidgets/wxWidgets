@@ -2049,91 +2049,102 @@ IMPLEMENT_CLASS(wxPostScriptPrintDialog, wxDialog)
 
 wxPostScriptPrintDialog::wxPostScriptPrintDialog (wxWindow *parent, const wxString& title,
 		    const wxPoint& pos, const wxSize& size, long style):
-wxDialog(parent, -1, title, pos, size, style)
+   wxDialog(parent, -1, title, pos, size, style)
 {
-  wxBeginBusyCursor();
-  char buf[100];
+   wxBeginBusyCursor();
 
-  wxButton *okBut = new wxButton (this, wxID_OK, _("OK"), wxPoint(5, 5));
-  (void) new wxButton (this, wxID_CANCEL, _("Cancel"), wxPoint(40, 5));
-  okBut->SetDefault();
+   char buf[100];
+   int yPos = 40;
+   wxString
+      *orientation = new wxString[2],
+      *print_modes = new wxString[3];
+   int features;
+   long wx_printer_translate_x, wx_printer_translate_y;
+   double wx_printer_scale_x, wx_printer_scale_y;
 
-  int yPos = 40;
+   orientation[0] = _("Portrait");
+   orientation[1] = _("Landscape");
+
+   print_modes[0] = _("Send to Printer");
+   print_modes[1] = _("Print to File");
+   print_modes[2] = _("Preview Only");
+
+
+  
+   wxButton *okBut = new wxButton (this, wxID_OK, _("OK"), wxPoint(5, 5));
+   (void) new wxButton (this, wxID_CANCEL, _("Cancel"), wxPoint(40, 5));
+   okBut->SetDefault();
+
 
 #if defined(__WXGTK__) || defined (__WXMOTIF__)
-  (void) new wxStaticText( this, -1, _("Printer Command: "),
-                           wxPoint(5, yPos) );
-  (void) new wxTextCtrl( this, wxID_PRINTER_COMMAND, wxThePrintSetupData->GetPrinterCommand(),
-                         wxPoint(100, yPos), wxSize(100, -1) );
+   (void) new wxStaticText( this, -1, _("Printer Command: "),
+                            wxPoint(5, yPos) );
+   (void) new wxTextCtrl( this, wxID_PRINTER_COMMAND, wxThePrintSetupData->GetPrinterCommand(),
+                          wxPoint(100, yPos), wxSize(100, -1) );
 
-  (void) new wxStaticText( this, -1, _("Printer Options: "),
-                           wxPoint(210, yPos) );
-  (void) new wxTextCtrl( this, wxID_PRINTER_OPTIONS, wxThePrintSetupData->GetPrinterOptions(),
-                         wxPoint(305, yPos), wxSize(150, -1) );
+   (void) new wxStaticText( this, -1, _("Printer Options: "),
+                            wxPoint(210, yPos) );
+   (void) new wxTextCtrl( this, wxID_PRINTER_OPTIONS, wxThePrintSetupData->GetPrinterOptions(),
+                          wxPoint(305, yPos), wxSize(150, -1) );
 
-  yPos += 40;
+   yPos += 40;
 #endif
 
-  wxString orientation[2];
-  orientation[0] = _("Portrait");
-  orientation[1] = _("Landscape");
 
-  wxRadioBox *radio0 = new wxRadioBox(this, wxID_PRINTER_ORIENTATION, "Orientation: ", wxPoint(5, yPos), wxSize(-1,-1),
-  		2,orientation,2,0);
-  radio0->SetSelection((int)wxThePrintSetupData->GetPrinterOrientation() - 1);
+   wxRadioBox *radio0 = new wxRadioBox(this, wxID_PRINTER_ORIENTATION, "Orientation: ", wxPoint(5, yPos), wxSize(-1,-1),
+                                       2,orientation,2,0);
+   radio0->SetSelection((int)wxThePrintSetupData->GetPrinterOrientation() - 1);
 
   // @@@ Configuration hook
-  if (wxThePrintSetupData->GetPrintPreviewCommand() == NULL)
-    wxThePrintSetupData->SetPrintPreviewCommand(PS_VIEWER_PROG);
+   if (wxThePrintSetupData->GetPrintPreviewCommand() == NULL)
+      wxThePrintSetupData->SetPrintPreviewCommand(PS_VIEWER_PROG);
 
-  wxGetResource ("wxWindows", "PSView", &wxThePrintSetupData->previewCommand);
+   wxGetResource ("wxWindows", "PSView", &wxThePrintSetupData->previewCommand);
 
-  wxString print_modes[3];
-  print_modes[0] = _("Send to Printer");
-  print_modes[1] = _("Print to File");
-  print_modes[2] = _("Preview Only");
-
-  int features = (wxThePrintSetupData->GetPrintPreviewCommand() && *wxThePrintSetupData->GetPrintPreviewCommand()) ? 3 : 2;
-  wxRadioBox *radio1 = new wxRadioBox(this, wxID_PRINTER_MODES, _("PostScript:"),
-    wxPoint(150, yPos), wxSize(-1,-1), features, print_modes, features, 0);
+   features = (wxThePrintSetupData->GetPrintPreviewCommand() &&
+               *wxThePrintSetupData->GetPrintPreviewCommand()) ? 3 : 2; 
+  
+   wxRadioBox *radio1 = new wxRadioBox(this, wxID_PRINTER_MODES, _("PostScript:"),
+                                       wxPoint(150, yPos),
+                                       wxSize(-1,-1), features,
+                                       print_modes, features, 0); 
 
 #ifdef __WXMSW__
-  radio1->Enable(0, FALSE);
-  if (wxThePrintSetupData->GetPrintPreviewCommand() && *wxThePrintSetupData->GetPrintPreviewCommand())
-    radio1->Enable(2, FALSE);
+   radio1->Enable(0, FALSE);
+   if (wxThePrintSetupData->GetPrintPreviewCommand() && *wxThePrintSetupData->GetPrintPreviewCommand())
+      radio1->Enable(2, FALSE);
 #endif
 
-  radio1->SetSelection((int)wxThePrintSetupData->GetPrinterMode());
+   radio1->SetSelection((int)wxThePrintSetupData->GetPrinterMode());
+   wxThePrintSetupData->GetPrinterTranslation(&wx_printer_translate_x, &wx_printer_translate_y);
+   wxThePrintSetupData->GetPrinterScaling(&wx_printer_scale_x, &wx_printer_scale_y);
 
-  long wx_printer_translate_x, wx_printer_translate_y;
-  double wx_printer_scale_x, wx_printer_scale_y;
-  wxThePrintSetupData->GetPrinterTranslation(&wx_printer_translate_x, &wx_printer_translate_y);
-  wxThePrintSetupData->GetPrinterScaling(&wx_printer_scale_x, &wx_printer_scale_y);
+   sprintf (buf, "%.2f", wx_printer_scale_x);
 
-  sprintf (buf, "%.2f", wx_printer_scale_x);
+   yPos += 90;
+   (void) new wxStaticText(this, -1, _("X Scaling"), wxPoint(5, yPos));
+   /* wxTextCtrl *text1 = */ (void) new wxTextCtrl(this, wxID_PRINTER_X_SCALE, buf, wxPoint(100, yPos), wxSize(100, -1));
 
-  yPos += 90;
+   sprintf (buf, "%.2f", wx_printer_scale_y);
+   (void) new wxStaticText(this, -1, _("Y Scaling"), wxPoint(220, yPos));
+   /* wxTextCtrl *text2 = */ (void) new wxTextCtrl(this, wxID_PRINTER_Y_SCALE, buf, wxPoint(320, yPos), wxSize(100, -1));
 
-  (void) new wxStaticText(this, -1, _("X Scaling"), wxPoint(5, yPos));
-  /* wxTextCtrl *text1 = */ (void) new wxTextCtrl(this, wxID_PRINTER_X_SCALE, buf, wxPoint(100, yPos), wxSize(100, -1));
+   yPos += 25;
 
-  sprintf (buf, "%.2f", wx_printer_scale_y);
-  (void) new wxStaticText(this, -1, _("Y Scaling"), wxPoint(220, yPos));
-  /* wxTextCtrl *text2 = */ (void) new wxTextCtrl(this, wxID_PRINTER_Y_SCALE, buf, wxPoint(320, yPos), wxSize(100, -1));
+   (void) new wxStaticText(this, -1, _("X Translation"), wxPoint(5, yPos));
+   sprintf (buf, "%.2ld", wx_printer_translate_x);
+   /* wxTextCtrl *text3 = */ (void) new wxTextCtrl(this, wxID_PRINTER_X_TRANS, buf, wxPoint(100, yPos), wxSize(100, -1));
 
-  yPos += 25;
+   (void) new wxStaticText(this, -1, _("Y Translation"), wxPoint(220, yPos));
+   sprintf (buf, "%.2ld", wx_printer_translate_y);
+   /* wxTextCtrl *text4 = */ (void) new wxTextCtrl(this, wxID_PRINTER_Y_TRANS, buf, wxPoint(320, yPos), wxSize(100, -1));
+  
+   Fit ();
 
-  (void) new wxStaticText(this, -1, _("X Translation"), wxPoint(5, yPos));
-  sprintf (buf, "%.2ld", wx_printer_translate_x);
-  /* wxTextCtrl *text3 = */ (void) new wxTextCtrl(this, wxID_PRINTER_X_TRANS, buf, wxPoint(100, yPos), wxSize(100, -1));
+   delete[] orientation;
+   delete[] print_modes;
 
-  (void) new wxStaticText(this, -1, _("Y Translation"), wxPoint(220, yPos));
-  sprintf (buf, "%.2ld", wx_printer_translate_y);
-  /* wxTextCtrl *text4 = */ (void) new wxTextCtrl(this, wxID_PRINTER_Y_TRANS, buf, wxPoint(320, yPos), wxSize(100, -1));
-
-  Fit ();
-
-  wxEndBusyCursor();
+   wxEndBusyCursor();
 }
 
 int wxPostScriptPrintDialog::ShowModal ()
