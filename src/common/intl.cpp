@@ -22,6 +22,12 @@
     #pragma implementation "intl.h"
 #endif
 
+#if defined(__BORLAND__) && !defined(__WXDEBUG__)
+    // There's a bug in Borland's compiler that breaks wxLocale with -O2,
+    // so make sure that flag is not used for this file:
+    #pragma option -O1
+#endif
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
