@@ -156,6 +156,8 @@ public:
     wxImage( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
     wxImage( const wxString& name, const wxString& mimetype, int index = -1 );
+    wxImage( const char** xpmData );
+    wxImage( char** xpmData );
 
 #if wxUSE_STREAMS
     wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 );
@@ -168,6 +170,7 @@ public:
     bool Create( int width, int height, bool clear = true );
     bool Create( int width, int height, unsigned char* data, bool static_data = false );
     bool Create( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
+    bool Create( const char** xpmData );
     void Destroy();
 
     // creates an identical copy of the image (the = operator

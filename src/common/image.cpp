@@ -35,6 +35,10 @@
 #include "wx/utils.h"
 #include "wx/math.h"
 
+#if wxUSE_XPM
+#include "wx/xpmdecod.h"
+#endif
+
 // For memcpy
 #include <string.h>
 
@@ -157,6 +161,29 @@ wxImage::wxImage( const wxImage& image )
 wxImage::wxImage( const wxImage* image )
 {
     if (image) Ref(*image);
+}
+
+wxImage::wxImage( const char** xpmData )
+{
+    Create(xpmData);
+}
+
+wxImage::wxImage( char** xpmData )
+{
+    Create((const char**) xpmData);
+}
+
+bool wxImage::Create( const char** xpmData )
+{
+#if wxUSE_XPM
+    UnRef();
+    
+    wxXPMDecoder decoder;
+    (*this) = decoder.ReadData(xpmData);
+    return Ok();
+#else
+    return false;
+#endif
 }
 
 bool wxImage::Create( int width, int height, bool clear )
