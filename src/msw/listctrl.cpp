@@ -2192,50 +2192,6 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
     RefreshRect(rect);
 }
 
-// ----------------------------------------------------------------------------
-// wxListItem
-// ----------------------------------------------------------------------------
-
-// List item structure
-wxListItem::wxListItem()
-{
-    m_mask = 0;
-    m_itemId = 0;
-    m_col = 0;
-    m_state = 0;
-    m_stateMask = 0;
-    m_image = 0;
-    m_data = 0;
-
-    m_format = wxLIST_FORMAT_CENTRE;
-    m_width = 0;
-
-    m_attr = NULL;
-}
-
-void wxListItem::Clear()
-{
-    m_mask = 0;
-    m_itemId = 0;
-    m_col = 0;
-    m_state = 0;
-    m_stateMask = 0;
-    m_image = 0;
-    m_data = 0;
-    m_format = wxLIST_FORMAT_CENTRE;
-    m_width = 0;
-    m_text = wxEmptyString;
-
-    if (m_attr) delete m_attr;
-    m_attr = NULL;
-}
-
-void wxListItem::ClearAttributes()
-{
-    if (m_attr) delete m_attr;
-    m_attr = NULL;
-}
-
 static void wxConvertFromMSWListItem(HWND hwndListCtrl,
                                      wxListItem& info,
                                      LV_ITEM& lvItem)

@@ -187,16 +187,30 @@ private:
 
 class WXDLLEXPORT wxListItem : public wxObject
 {
-    wxListItem& operator=(const wxListItem& item);
-    
 public:
-    wxListItem();
-    wxListItem(const wxListItem& item);
-    ~wxListItem() { delete m_attr; }
+    wxListItem() { Init(); m_attr = NULL; }
+    wxListItem(const wxListItem& item)
+        : wxObject(),
+          m_mask(item.m_mask),
+          m_itemId(item.m_itemId),
+          m_col(item.m_col),
+          m_state(item.m_state),
+          m_stateMask(item.m_stateMask),
+          m_text(item.m_text),
+          m_image(item.m_image),
+          m_data(item.m_data),
+          m_format(item.m_format),
+          m_width(item.m_width),
+          m_attr(NULL)
+    {
+        // copy list item attributes
+        m_attr = new wxListItemAttr(*item.GetAttributes());
+    }
+    virtual ~wxListItem() { delete m_attr; }
 
     // resetting
-    void Clear();
-    void ClearAttributes();
+    void Clear() { Init(); m_text.clear(); ClearAttributes(); }
+    void ClearAttributes() { if ( m_attr ) { delete m_attr; m_attr = NULL; } }
 
     // setters
     void SetMask(long mask) { m_mask = mask; }
@@ -271,9 +285,26 @@ protected:
         return *m_attr;
     }
 
+    void Init()
+    {
+        m_mask = 0;
+        m_itemId = 0;
+        m_col = 0;
+        m_state = 0;
+        m_stateMask = 0;
+        m_image = 0;
+        m_data = 0;
+
+        m_format = wxLIST_FORMAT_CENTRE;
+        m_width = 0;
+    }
+
     wxListItemAttr *m_attr;     // optional pointer to the items style
 
 private:
+    // VZ: this is strange, we have a copy ctor but not operator=(), why?
+    wxListItem& operator=(const wxListItem& item);
+
     DECLARE_DYNAMIC_CLASS(wxListItem)
 };
 

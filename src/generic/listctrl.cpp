@@ -4492,56 +4492,6 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 
-wxListItem::wxListItem()
-{
-    m_attr = NULL;
-
-    Clear();
-}
-
-wxListItem::wxListItem(const wxListItem& item)
-    : wxObject()
-    , m_mask(item.m_mask)
-    , m_itemId(item.m_itemId)
-    , m_col(item.m_col)
-    , m_state(item.m_state)
-    , m_stateMask(item.m_stateMask)
-    , m_text(item.m_text)
-    , m_image(item.m_image)
-    , m_data(item.m_data)
-    , m_format(item.m_format)
-    , m_width(item.m_width)
-    , m_attr(NULL)
-{
-    // copy list item attributes
-    m_attr = new wxListItemAttr(*item.GetAttributes());
-}
-
-void wxListItem::Clear()
-{
-    m_mask = 0;
-    m_itemId = 0;
-    m_col = 0;
-    m_state = 0;
-    m_stateMask = 0;
-    m_image = -1;
-    m_data = 0;
-    m_format = wxLIST_FORMAT_CENTRE;
-    m_width = 0;
-    m_text.clear();
-
-    ClearAttributes();
-}
-
-void wxListItem::ClearAttributes()
-{
-    if (m_attr)
-    {
-        delete m_attr;
-        m_attr = NULL;
-    }
-}
-
 // -------------------------------------------------------------------------------------
 // wxListCtrl
 // -------------------------------------------------------------------------------------
