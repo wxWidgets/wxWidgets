@@ -347,7 +347,7 @@ enum wxLocaleInfo
     wxLOCALE_THOUSANDS_SEP,
 
     // the character used as decimal point
-    wxLOCALE_DECIMAL_POINT,
+    wxLOCALE_DECIMAL_POINT
 
 };
 
