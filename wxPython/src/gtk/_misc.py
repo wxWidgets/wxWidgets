@@ -5282,6 +5282,14 @@ class DropTarget(object):
         """GetData(self) -> bool"""
         return _misc_.DropTarget_GetData(*args, **kwargs)
 
+    def SetDefaultAction(*args, **kwargs):
+        """SetDefaultAction(self, int action)"""
+        return _misc_.DropTarget_SetDefaultAction(*args, **kwargs)
+
+    def GetDefaultAction(*args, **kwargs):
+        """GetDefaultAction(self) -> int"""
+        return _misc_.DropTarget_GetDefaultAction(*args, **kwargs)
+
 
 class DropTargetPtr(DropTarget):
     def __init__(self, this):

@@ -29101,6 +29101,63 @@ static PyObject *_wrap_DropTarget_GetData(PyObject *, PyObject *args, PyObject *
 }
 
 
+static PyObject *_wrap_DropTarget_SetDefaultAction(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyDropTarget *arg1 = (wxPyDropTarget *) 0 ;
+    wxDragResult arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "action", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DropTarget_SetDefaultAction",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyDropTarget, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (wxDragResult)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetDefaultAction((wxDragResult )arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DropTarget_GetDefaultAction(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyDropTarget *arg1 = (wxPyDropTarget *) 0 ;
+    wxDragResult result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DropTarget_GetDefaultAction",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyDropTarget, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxDragResult)(arg1)->GetDefaultAction();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_From_int((result));
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * DropTarget_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -32051,6 +32108,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DropTarget_base_OnLeave", (PyCFunction) _wrap_DropTarget_base_OnLeave, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget_base_OnDrop", (PyCFunction) _wrap_DropTarget_base_OnDrop, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget_GetData", (PyCFunction) _wrap_DropTarget_GetData, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DropTarget_SetDefaultAction", (PyCFunction) _wrap_DropTarget_SetDefaultAction, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DropTarget_GetDefaultAction", (PyCFunction) _wrap_DropTarget_GetDefaultAction, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget_swigregister", DropTarget_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_TextDropTarget", (PyCFunction) _wrap_new_TextDropTarget, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextDropTarget__setCallbackInfo", (PyCFunction) _wrap_TextDropTarget__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
