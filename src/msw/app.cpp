@@ -322,20 +322,19 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     RegisterWindowClasses();
 
-#if defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     // Create the brush for disabling bitmap buttons
-
     LOGBRUSH lb;
     lb.lbStyle = BS_PATTERN;
     lb.lbColor = 0;
     lb.lbHatch = (int)LoadBitmap( wxhInstance, wxT("wxDISABLE_BUTTON_BITMAP") );
     if ( lb.lbHatch )
     {
-        wxDisableButtonBrush = ::CreateBrushIndirect( & lb );
+        wxDisableButtonBrush = ::CreateBrushIndirect( &lb );
         ::DeleteObject( (HGDIOBJ)lb.lbHatch );
     }
     //else: wxWidgets resources are probably not linked in
-#endif
+#endif // !__WXMICROWIN__ && !__WXWINCE__
 
 #if wxUSE_PENWINDOWS
     wxRegisterPenWin();
