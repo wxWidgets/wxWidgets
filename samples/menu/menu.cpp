@@ -460,6 +460,8 @@ void MyFrame::OnCheckMenuItem(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnUpdateCheckMenuItemUI(wxUpdateUIEvent& event)
 {
+    wxLogNull nolog;
+
     wxMenuItem *item = GetLastMenuItem();
 
     event.Enable(item && item->IsCheckable());

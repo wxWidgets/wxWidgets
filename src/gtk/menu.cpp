@@ -820,7 +820,7 @@ wxMenu::~wxMenu()
    gtk_object_unref( GTK_OBJECT(m_factory) );
 }
 
-bool wxMenu::DoAppend(wxMenuItem *mitem)
+bool wxMenu::GtkAppend(wxMenuItem *mitem)
 {
     GtkWidget *menuItem;
 
@@ -934,56 +934,36 @@ bool wxMenu::DoAppend(wxMenuItem *mitem)
 
     mitem->SetMenuItem(menuItem);
 
-    return wxMenuBase::DoAppend(mitem);
+    return TRUE;
 }
 
-// VZ: this seems to be GTK+ 1.0 only code, I don't understand why there were
-//     both specialized versions of Append() and this one before my changes,
-//     but it seems that the others are better...
-#if 0
-void wxMenu::Append( wxMenuItem *item )
+bool wxMenu::DoAppend(wxMenuItem *mitem)
 {
-    GtkWidget *menuItem = (GtkWidget*) NULL;
-
-    if (item->IsSeparator())
-        menuItem = gtk_menu_item_new();
-    else if (item->IsSubMenu())
-        menuItem = gtk_menu_item_new_with_label(item->GetText().mbc_str());
-    else
-        menuItem = item->IsCheckable() ? gtk_check_menu_item_new_with_label(item->GetText().mbc_str())
-                                       : gtk_menu_item_new_with_label(item->GetText().mbc_str());
-
-    if (!item->IsSeparator())
-    {
-        gtk_signal_connect( GTK_OBJECT(menuItem), "select",
-                            GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
-                            (gpointer*)this );
-
-        gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
-                            GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
-                            (gpointer*)this );
-
-        if (!item->IsSubMenu())
-        {
-            gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
-                                GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
-                                (gpointer*)this );
-        }
-    }
-
-    gtk_menu_append( GTK_MENU(m_menu), menuItem );
-    gtk_widget_show( menuItem );
-
-    item->SetMenuItem(menuItem);
+    return GtkAppend(mitem) && wxMenuBase::DoAppend(mitem);
 }
-#endif // 0
 
 bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
     if ( !wxMenuBase::DoInsert(pos, item) )
         return FALSE;
 
-    wxFAIL_MSG(wxT("not implemented"));
+#ifdef __WXGTK12__
+    // GTK+ doesn't have a function to insert a menu using GtkItemFactory (as
+    // of version 1.2.6), so we first append the item and then change its
+    // index
+    if ( !GtkAppend(item) )
+        return FALSE;
+
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
+    gpointer data = g_list_last(menu_shell->children)->data;
+    menu_shell->children = g_list_remove(menu_shell->children, data);
+    menu_shell->children = g_list_insert(menu_shell->children, data, pos);
+
+    return TRUE;
+#else // GTK < 1.2
+    // this should be easy to do...
+    wxFAIL_MSG( wxT("not implemented") );
+#endif // GTK 1.2/1.0
 
     return FALSE;
 }

@@ -99,6 +99,9 @@ private:
     // common code for all constructors:
     void Init();
 
+    // common part of Append and Insert
+    bool GtkAppend(wxMenuItem *item);
+
     DECLARE_DYNAMIC_CLASS(wxMenu)
 };
 

@@ -153,10 +153,18 @@ bool wxMenuBase::DoAppend(wxMenuItem *item)
 bool wxMenuBase::Insert(size_t pos, wxMenuItem *item)
 {
     wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Insert") );
-    wxCHECK_MSG( pos < GetMenuItemCount(), FALSE,
-                 wxT("invalid index in wxMenu::Insert") );
 
-    return DoInsert(pos, item);
+    if ( pos == GetMenuItemCount() )
+    {
+        return DoAppend(item);
+    }
+    else
+    {
+        wxCHECK_MSG( pos < GetMenuItemCount(), FALSE,
+                     wxT("invalid index in wxMenu::Insert") );
+
+        return DoInsert(pos, item);
+    }
 }
 
 bool wxMenuBase::DoInsert(size_t pos, wxMenuItem *item)
@@ -487,16 +495,23 @@ bool wxMenuBarBase::Append(wxMenu *menu, const wxString& WXUNUSED(title))
 }
 
 bool wxMenuBarBase::Insert(size_t pos, wxMenu *menu,
-                           const wxString& WXUNUSED(title))
+                           const wxString& title)
 {
-    wxCHECK_MSG( menu, FALSE, wxT("can't insert NULL menu") );
+    if ( pos == m_menus.GetCount() )
+    {
+        return Append(menu, title);
+    }
+    else
+    {
+        wxCHECK_MSG( menu, FALSE, wxT("can't insert NULL menu") );
 
-    wxMenuList::Node *node = m_menus.Item(pos);
-    wxCHECK_MSG( node, FALSE, wxT("bad index in wxMenuBar::Insert()") );
+        wxMenuList::Node *node = m_menus.Item(pos);
+        wxCHECK_MSG( node, FALSE, wxT("bad index in wxMenuBar::Insert()") );
 
-    m_menus.Insert(node, menu);
+        m_menus.Insert(node, menu);
 
-    return TRUE;
+        return TRUE;
+    }
 }
 
 wxMenu *wxMenuBarBase::Replace(size_t pos, wxMenu *menu,
