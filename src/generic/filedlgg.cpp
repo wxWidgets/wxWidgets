@@ -54,36 +54,9 @@
 #include "wx/generic/repview.xpm"
 #include "wx/generic/new_dir.xpm"
 #include "wx/generic/dir_up.xpm"
-
-/* XPM */
-static char * folder_xpm[] = {
-/* width height ncolors chars_per_pixel */
-"16 16 6 1",
-/* colors */
-"         s None        c None",
-".        c #000000",
-"+        c #c0c0c0",
-"@        c #808080",
-"#        c #ffff00",
-"$        c #ffffff",
-/* pixels */
-"                ",
-"   @@@@@        ",
-"  @#+#+#@       ",
-" @#+#+#+#@@@@@@ ",
-" @$$$$$$$$$$$$@.",
-" @$#+#+#+#+#+#@.",
-" @$+#+#+#+#+#+@.",
-" @$#+#+#+#+#+#@.",
-" @$+#+#+#+#+#+@.",
-" @$#+#+#+#+#+#@.",
-" @$+#+#+#+#+#+@.",
-" @$#+#+#+#+#+#@.",
-" @@@@@@@@@@@@@@.",
-"  ..............",
-"                ",
-"                "};
-
+#include "wx/generic/folder.xpm"
+#include "wx/generic/deffile.xpm"
+#include "wx/generic/exefile.xpm"
 
 // ----------------------------------------------------------------------------
 // private classes - icons list management
@@ -104,7 +77,7 @@ class wxFileIconsTable
 
         wxFileIconsTable();
         
-        int GetIconID(const wxString& extension);
+        int GetIconID(const wxString& extension, const wxString& mime = wxEmptyString);
         wxImageList *GetImageList() { return &m_ImageList; }
 
     protected:        
@@ -115,6 +88,9 @@ class wxFileIconsTable
 
 static wxFileIconsTable *g_IconsTable = NULL;
 
+#define FI_FOLDER     0
+#define FI_UNKNOWN    1
+#define FI_EXECUTABLE 2
 
 wxFileIconsTable::wxFileIconsTable() :
                     m_ImageList(16, 16),
@@ -122,7 +98,17 @@ wxFileIconsTable::wxFileIconsTable() :
                     m_Mime()
 {
     m_HashTable.DeleteContents(TRUE);
-    m_ImageList.Add(wxBitmap(folder_xpm));
+    m_ImageList.Add(wxBitmap(folder_xpm));  // FI_FOLDER
+    m_ImageList.Add(wxBitmap(deffile_xpm)); // FI_UNKNOWN
+    if (GetIconID(wxEmptyString, _T("application/x-executable")) == FI_UNKNOWN) 
+    {                                       // FI_EXECUTABLE
+        m_ImageList.Add(wxBitmap(exefile_xpm)); 
+        m_HashTable.Delete(_T("exe"));
+        m_HashTable.Put(_T("exe"), new wxFileIconEntry(FI_EXECUTABLE));
+    }
+    /* else put into list by GetIconID
+       (KDE defines application/x-executable for *.exe and has nice icon)
+     */
 }
 
 
@@ -131,7 +117,9 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
 {
     wxImage small(16, 16);
     unsigned char *p1, *p2, *ps;
-    unsigned char mr = img.GetMaskRed(), mg = img.GetMaskGreen(), mb = img.GetMaskBlue();
+    unsigned char mr = img.GetMaskRed(), 
+                  mg = img.GetMaskGreen(), 
+                  mb = img.GetMaskBlue();
     
     unsigned x, y;
     unsigned sr, sg, sb, smask;
@@ -174,17 +162,21 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
 }
 
 
-int wxFileIconsTable::GetIconID(const wxString& extension)
+int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 {
-    wxFileIconEntry *entry = (wxFileIconEntry*) m_HashTable.Get(extension);
-    
-    if (entry) return (entry -> id);
-    
-    wxFileType *ft = m_Mime.GetFileTypeFromExtension(extension);
+    if (!extension.IsEmpty())
+    {
+        wxFileIconEntry *entry = (wxFileIconEntry*) m_HashTable.Get(extension);
+        if (entry) return (entry -> id);
+    }
+
+    wxFileType *ft = (mime.IsEmpty()) ? 
+                   m_Mime.GetFileTypeFromExtension(extension) :
+                   m_Mime.GetFileTypeFromMimeType(mime);
     wxIcon ic;
     if (ft == NULL || (!ft -> GetIcon(&ic)))
     {
-        int newid = GetIconID(wxT("txt"));
+        int newid = FI_UNKNOWN;
         m_HashTable.Put(extension, new wxFileIconEntry(newid));
         return newid;
     }
@@ -383,11 +375,13 @@ void wxFileData::MakeItem( wxListItem &item )
     if (IsDir()) item.SetTextColour(*wxBLUE);
     
     if (IsDir())
-        item.m_image = 0;
+        item.m_image = FI_FOLDER;
+    else if (IsExe()) 
+        item.m_image = FI_EXECUTABLE;
     else if (m_name.Find(wxT('.')) != wxNOT_FOUND)
         item.m_image = g_IconsTable -> GetIconID(m_name.AfterLast(wxT('.')));
     else
-        item.m_image = -1;
+        item.m_image = FI_UNKNOWN;
 
     if (IsLink())
     {
