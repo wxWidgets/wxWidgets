@@ -176,32 +176,40 @@ public:
             apply(self.AddSpacer, args, kw)
         elif isinstance(args[0], wxSizerPtr):
             apply(self.AddSizer, args, kw)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.AddWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Insert(self, *args, **kw):
         if type(args[1]) == type(1):
             apply(self.InsertSpacer, args, kw)
         elif isinstance(args[0], wxSizerPtr):
             apply(self.InsertSizer, args, kw)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.InsertWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Prepend(self, *args, **kw):
         if type(args[0]) == type(1):
             apply(self.PrependSpacer, args, kw)
         elif isinstance(args[0], wxSizerPtr):
             apply(self.PrependSizer, args, kw)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.PrependWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Remove(self, *args, **kw):
         if type(args[0]) == type(1):
             return apply(self.RemovePos, args, kw)
         elif isinstance(args[0], wxSizerPtr):
             return apply(self.RemoveSizer, args, kw)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             return apply(self.RemoveWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def AddMany(self, widgets):
         for childinfo in widgets:
@@ -224,8 +232,10 @@ public:
             apply(self.SetItemMinSizePos, args)
         elif isinstance(args[0], wxSizerPtr):
             apply(self.SetItemMinSizeSizer, args)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.SetItemMinSizeWindow, args)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
      "
 
     wxSize GetSize();
@@ -278,20 +288,26 @@ public:
     def Show(self, *args):
         if isinstance(args[0], wxSizerPtr):
             apply(self.ShowSizer, args)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.ShowWindow, args)
+        else:
+            raise TypeError, 'Expected wxSizer or wxWindow parameter'
 
     def Hide(self, *args):
         if isinstance(args[0], wxSizerPtr):
             apply(self.HideSizer, args)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.HideWindow, args)
+        else:
+            raise TypeError, 'Expected wxSizer or wxWindow parameter'
 
     def IsShown(self, *args):
         if isinstance(args[0], wxSizerPtr):
             return apply(self.IsShownSizer, args)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             return apply(self.IsShownWindow, args)
+        else:
+            raise TypeError, 'Expected wxSizer or wxWindow parameter'
 "
 
     // Recursively call wxWindow::Show () on all sizer items.
