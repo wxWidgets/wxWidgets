@@ -1,6 +1,6 @@
 #Digital Mars (was Symantec) C++ makefile 
 WXDIR = ..\..
 EXTRALIBS=
-TARGET=griddemo
+TARGET=grid
 OBJECTS= $(TARGET).obj
 include $(WXDIR)\src\makeprog.sc
