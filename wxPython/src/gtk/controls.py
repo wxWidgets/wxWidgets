@@ -764,6 +764,9 @@ class wxTextCtrlPtr(wxControlPtr):
     def write(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_write,(self,) + _args, _kwargs)
         return val
+    def GetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetString,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxTextCtrl instance at %s>" % (self.this,)
 class wxTextCtrl(wxTextCtrlPtr):
@@ -1156,6 +1159,11 @@ def wxPreToggleButton(*_args,**_kwargs):
 def wxButton_GetDefaultSize(*_args, **_kwargs):
     val = apply(controlsc.wxButton_GetDefaultSize,_args,_kwargs)
     if val: val = wxSizePtr(val); val.thisown = 1
+    return val
+
+def wxTextAttr_Combine(*_args, **_kwargs):
+    val = apply(controlsc.wxTextAttr_Combine,_args,_kwargs)
+    if val: val = wxTextAttrPtr(val); val.thisown = 1
     return val
 
 
