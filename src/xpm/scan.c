@@ -318,8 +318,10 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 # endif /* AMIGA */
 #else
 
+#ifndef __VISAGECPP30__
 	    ErrorStatus = MSWGetImagePixels(display, image, width, height, &pmap,
 		    			storePixel);
+#endif
 
 #endif
 
