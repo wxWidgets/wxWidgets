@@ -34,6 +34,7 @@
 #include  "wx/control.h"
 #include  "wx/notebook.h"
 #include  "wx/app.h"
+#include  "wx/sysopt.h"
 
 #include  "wx/msw/private.h"
 
@@ -681,6 +682,17 @@ bool wxNotebook::InsertPage(size_t nPage,
         SetSelection(selNew);
 
     InvalidateBestSize();
+
+    if (HasFlag(wxNB_NOPAGETHEME) || (wxSystemOptions::HasOption(wxT("msw.notebook.themed-background")) &&
+                                      wxSystemOptions::GetOptionInt(wxT("msw.notebook.themed-background")) == 0))
+    {
+        wxColour col = GetThemeBackgroundColour();
+        if (col.Ok())
+        {
+            pPage->SetBackgroundColour(col);
+        }
+    }
+    
     return true;
 }
 
@@ -992,6 +1004,53 @@ wxColour wxNotebook::MSWGetBgColourForChild(wxWindow *win)
 }
 
 #endif // wxUSE_UXTHEME
+
+// Windows only: attempts to get colour for UX theme page background
+wxColour wxNotebook::GetThemeBackgroundColour() const
+{
+#if wxUSE_UXTHEME
+    if (wxUxThemeEngine::Get())
+    {
+        wxUxThemeHandle hTheme((wxNotebook*) this, L"TAB");
+        if (hTheme)
+        {
+            // This is total guesswork.
+            // See PlatformSDK\Include\Tmschema.h for values
+            COLORREF themeColor;
+            wxUxThemeEngine::Get()->GetThemeColor(
+                                        hTheme,
+                                        10 /* TABP_BODY */,
+                                        1 /* NORMAL */,
+                                        3821 /* FILLCOLORHINT */,
+                                        &themeColor);
+
+            /*
+            [DS] Workaround for WindowBlinds:
+            Some themes return a near black theme color using FILLCOLORHINT,
+            this makes notebook pages have an ugly black background and makes
+            text (usually black) unreadable. Retry again with FILLCOLOR.
+
+            This workaround potentially breaks appearance of some themes,
+            but in practice it already fixes some themes.
+            */
+            if (themeColor == 1)
+            {
+                wxUxThemeEngine::Get()->GetThemeColor(
+                                            hTheme,
+                                            10 /* TABP_BODY */,
+                                            1 /* NORMAL */,
+                                            3802 /* FILLCOLOR */,
+                                            &themeColor);
+            }
+
+            wxColour colour(GetRValue(themeColor), GetGValue(themeColor), GetBValue(themeColor));
+            return colour;
+        }
+    }
+#endif // wxUSE_UXTHEME
+
+    return GetBackgroundColour();
+}
 
 // ----------------------------------------------------------------------------
 // wxNotebook base class virtuals

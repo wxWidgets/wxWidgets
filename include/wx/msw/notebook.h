@@ -167,6 +167,8 @@ public:
   virtual bool DoPhase(int nPhase);
 #endif // wxUSE_CONSTRAINTS
 
+  // Attempts to get colour for UX theme page background
+  wxColour GetThemeBackgroundColour() const;
 
   // implementation only
   // -------------------

@@ -29,6 +29,7 @@ managed by wxNotebook.
 \twocolitem{\windowstyle{wxNB\_BOTTOM}}{Place tabs under instead of above the notebook pages.}
 \twocolitem{\windowstyle{wxNB\_FIXEDWIDTH}}{(Windows only) All tabs will have same width.}
 \twocolitem{\windowstyle{wxNB\_MULTILINE}}{(Windows only) There can be several rows of tabs.}
+\twocolitem{\windowstyle{wxNB\_NOPAGETHEME}}{(Windows only) Display a solid colour on notebook pages, and not a gradient, which can reduce performance.}
 
 \end{twocollist}
 
@@ -38,6 +39,38 @@ supported under Microsoft Windows XP when using visual themes.
 See also \helpref{window styles overview}{windowstyles}.
 
 \input noteevt.inc
+
+\wxheading{Page backgrounds}
+
+On Windows XP, the default theme paints a gradient on the notebook's pages.
+If you wish to suppress this theme, for aesthetic or performance reasons,
+there are three ways of doing it. You can use wxNB\_NOPAGETHEME to disable
+themed drawing for a particular notebook, you can call {\tt wxSystemOptions::SetOption} 
+to disable it for the whole application, or you can disable it for individual
+pages by using {\tt SetBackgroundColour}.
+
+To disable themed pages globally:
+
+\begin{verbatim}
+    wxSystemOptions::SetOption(wxT("msw.notebook.themed-background"), 0);
+\end{verbatim}
+
+Set the value to 1 to enable it again.
+
+To give a single page a solid background that more or less fits in with the
+overall theme, use:
+
+\begin{verbatim}
+    wxColour col = notebook->GetThemeBackgroundColour();
+    if (col.Ok())
+    {
+        page->SetBackgroundColour(col);
+    }
+\end{verbatim}
+
+On platforms other than Windows, or if the application is not using Windows
+themes, {\tt GetThemeBackgroundColour} will return an uninitialised colour object,
+and the above code will therefore work on all platforms.
 
 \wxheading{See also}
 
@@ -228,6 +261,13 @@ the platform and so\rtfsp
 \helpref{wxNotebookEvent::GetSelection}{wxnotebookeventgetselection} should be
 used instead in this case.
 
+\membersection{wxNotebook::GetThemeBackgroundColour}\label{wxnotebookgetthemebackgroundcolour}
+
+\constfunc{wxColour}{GetThemeBackgroundColour}{\void}
+
+If running under Windows and themes are enabled for the application, this function
+returns a suitable colour for painting the background of a notebook page, and can be passed
+to {\tt SetBackgroundColour}. Otherwise, an uninitialised colour will be returned.
 
 \membersection{wxNotebook::HitTest}\label{wxnotebookhittest}
 

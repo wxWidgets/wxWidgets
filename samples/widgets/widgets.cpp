@@ -39,6 +39,7 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/sysopt.h"
 #include "wx/bookctrl.h"
 #include "wx/sizer.h"
 #include "wx/colordlg.h"
@@ -220,7 +221,7 @@ bool WidgetsApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
-
+    
     // the reason for having these ifdef's is that I often run two copies of
     // this sample side by side and it is useful to see which one is which
     wxString title;
@@ -288,11 +289,15 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 
-    // we have 2 panes: book which pages demonstrating the controls in the
+    // we have 2 panes: book with pages demonstrating the controls in the
     // upper one and the log window with some buttons in the lower
+    
+    int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBC_DEFAULT;
+    // Uncomment to suppress page theme (draw in solid colour)
+    // style |= wxNB_NOPAGETHEME;
 
     m_book = new wxBookCtrl(m_panel, wxID_ANY, wxDefaultPosition,
-        wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBC_DEFAULT);
+        wxDefaultSize, style);
     InitBook();
 
 #ifndef __SMARTPHONE__
@@ -377,6 +382,11 @@ void WidgetsFrame::InitBook()
                         false, // don't select
                         n // image id
                        );
+
+/*
+        wxColour colour = m_book->MSWGetBgColourForChild(pages[n]);
+        pages[n]->SetBackgroundColour(colour);
+*/
     }
 }
 

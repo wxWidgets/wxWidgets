@@ -6,11 +6,11 @@
 \section{\class{wxArtProvider}}\label{wxartprovider}
 
 wxArtProvider class is used to customize the look of wxWidgets application.
-When wxWidgets need to display an icon or a bitmap (e.g. in the standard file
-dialog), it does not use hard-coded resource but asks wxArtProvider for it
-instead. This way the users can plug in own wxArtProvider class and easily
-replace standard art with his/her own version. It is easy thing to do: all
-that is needed is to derive a class from wxArtProvider, override it's
+When wxWidgets needs to display an icon or a bitmap (e.g. in the standard file
+dialog), it does not use a hard-coded resource but asks wxArtProvider for it
+instead. This way users can plug in their own wxArtProvider class and easily
+replace standard art with their own version. All
+that is needed is to derive a class from wxArtProvider, override its
 \helpref{CreateBitmap}{wxartprovidercreatebitmap} method and register the
 provider with
 \helpref{wxArtProvider::PushProvider}{wxartproviderpushprovider}:

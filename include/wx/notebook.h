@@ -91,6 +91,9 @@ public:
     // implement some base class functions
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
+    // On platforms that support it, get the theme page background colour, else invalid colour
+    virtual wxColour GetThemeBackgroundColour() const { return wxNullColour; }
+
 protected:
     DECLARE_NO_COPY_CLASS(wxNotebookBase)
 };
