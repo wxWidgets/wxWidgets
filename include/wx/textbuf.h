@@ -42,7 +42,7 @@ enum wxTextFileType
 // wxTextBuffer
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_EXPORTED_ARRAY(wxTextFileType, ArrayFileType);
+WX_DEFINE_EXPORTED_ARRAY_INT(wxTextFileType, ArrayFileType);
 
 #endif // wxUSE_TEXTBUFFER
 

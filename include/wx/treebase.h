@@ -94,7 +94,7 @@ protected:
     wxTreeItemId m_pItem;
 };
 
-WX_DEFINE_EXPORTED_ARRAY(wxTreeItemId, wxArrayTreeItemIds);
+WX_DEFINE_EXPORTED_ARRAY_LONG(wxTreeItemId, wxArrayTreeItemIds);
 
 // ----------------------------------------------------------------------------
 // constants

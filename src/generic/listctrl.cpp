@@ -124,7 +124,7 @@ static const int IMAGE_MARGIN_IN_REPORT_MODE = 5;
 
 int CMPFUNC_CONV wxSizeTCmpFn(size_t n1, size_t n2) { return n1 - n2; }
 
-WX_DEFINE_SORTED_EXPORTED_ARRAY(size_t, wxIndexArray);
+WX_DEFINE_SORTED_EXPORTED_ARRAY_LONG(size_t, wxIndexArray);
 
 // this class is used to store the selected items in the virtual list control
 // (but it is not tied to list control and so can be used with other controls
@@ -518,7 +518,7 @@ public:
     void OnKillFocus( wxFocusEvent &event );
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxListTextCtrl);
+    DECLARE_DYNAMIC_CLASS(wxListTextCtrl)
     DECLARE_EVENT_TABLE()
 };
 
@@ -859,7 +859,7 @@ private:
     // if this is > 0, the control is frozen and doesn't redraw itself
     size_t m_freezeCount;
 
-    DECLARE_DYNAMIC_CLASS(wxListMainWindow);
+    DECLARE_DYNAMIC_CLASS(wxListMainWindow)
     DECLARE_EVENT_TABLE()
 };
 
@@ -1751,7 +1751,7 @@ void wxListLineData::ReverseHighlight( void )
 //  wxListHeaderWindow
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListHeaderWindow,wxWindow);
+IMPLEMENT_DYNAMIC_CLASS(wxListHeaderWindow,wxWindow)
 
 BEGIN_EVENT_TABLE(wxListHeaderWindow,wxWindow)
     EVT_PAINT         (wxListHeaderWindow::OnPaint)
@@ -2116,7 +2116,7 @@ void wxListRenameTimer::Notify()
 // wxListTextCtrl (internal)
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListTextCtrl,wxTextCtrl);
+IMPLEMENT_DYNAMIC_CLASS(wxListTextCtrl,wxTextCtrl)
 
 BEGIN_EVENT_TABLE(wxListTextCtrl,wxTextCtrl)
     EVT_CHAR           (wxListTextCtrl::OnChar)
@@ -2226,7 +2226,7 @@ void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
 //  wxListMainWindow
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListMainWindow,wxScrolledWindow);
+IMPLEMENT_DYNAMIC_CLASS(wxListMainWindow,wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledWindow)
   EVT_PAINT          (wxListMainWindow::OnPaint)

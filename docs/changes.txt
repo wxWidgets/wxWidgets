@@ -17,6 +17,11 @@ wxBase:
   by all derived classes, if you have user-defined event classes please
   add "wxEvent *Clone() const { return new MyEvent(*this); }" line to them
 
+- wxArray<T> macros have been changed to fix runtime problems under 64 bit
+  architectures. The base class is now implemented once for each needed
+  primitive type in order to avoid invalid reference casts. Macros are
+  provided to implement new arrays using these primitive base arrays.
+
 All (GUI):
 
 - the event type constants are not constants any more but are dynamically

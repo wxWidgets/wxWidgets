@@ -47,7 +47,7 @@ enum
 // types
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_ARRAY(wxFontEncoding, wxFontEncodingArray);
+WX_DEFINE_ARRAY_INT(wxFontEncoding, wxFontEncodingArray);
 
 //--------------------------------------------------------------------------------
 // wxEncodingConverter

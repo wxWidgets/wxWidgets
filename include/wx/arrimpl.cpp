@@ -60,16 +60,16 @@ name::name(const name& src)                                                   \
 void name::DoEmpty()                                                          \
 {                                                                             \
   for ( size_t ui = 0; ui < Count(); ui++ )                                   \
-    delete (T*)wxBaseArray::Item(ui);                                         \
+    delete (T*)wxBaseArrayPtrVoid::Item(ui);                                  \
 }                                                                             \
                                                                               \
 void name::RemoveAt(size_t uiIndex)                                           \
 {                                                                             \
   wxCHECK_RET( uiIndex < Count(), _WX_ERROR_REMOVE2(name) );                  \
                                                                               \
-  delete (T*)wxBaseArray::Item(uiIndex);                                      \
+  delete (T*)wxBaseArrayPtrVoid::Item(uiIndex);                               \
                                                                               \
-  wxBaseArray::RemoveAt(uiIndex);                                             \
+  wxBaseArrayPtrVoid::RemoveAt(uiIndex);                                      \
 }                                                                             \
                                                                               \
 void name::Add(const T& item)                                                 \
@@ -92,7 +92,7 @@ int name::Index(const T& Item, bool bFromEnd) const                           \
     if ( Count() > 0 ) {                                                      \
       size_t ui = Count() - 1;                                                \
       do {                                                                    \
-        if ( (T*)wxBaseArray::Item(ui) == &Item )                             \
+        if ( (T*)wxBaseArrayPtrVoid::Item(ui) == &Item )                      \
           return ui;                                                          \
         ui--;                                                                 \
       }                                                                       \
@@ -101,7 +101,7 @@ int name::Index(const T& Item, bool bFromEnd) const                           \
   }                                                                           \
   else {                                                                      \
     for( size_t ui = 0; ui < Count(); ui++ ) {                                \
-      if( (T*)wxBaseArray::Item(ui) == &Item )                                \
+      if( (T*)wxBaseArrayPtrVoid::Item(ui) == &Item )                         \
         return ui;                                                            \
     }                                                                         \
   }                                                                           \
