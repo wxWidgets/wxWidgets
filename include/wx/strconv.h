@@ -92,6 +92,50 @@ public:
 WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF8) wxConvUTF8;
 
 // ----------------------------------------------------------------------------
+// wxMBConvUTF16LE (for conversion using UTF16 Little Endian encoding)
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxMBConvUTF16LE : public wxMBConv
+{
+public:
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+};
+
+// ----------------------------------------------------------------------------
+// wxMBConvUTF16BE (for conversion using UTF16 Big Endian encoding)
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxMBConvUTF16BE : public wxMBConv
+{
+public:
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+};
+
+// ----------------------------------------------------------------------------
+// wxMBConvUCS4LE (for conversion using UTF32 Little Endian encoding)
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxMBConvUTF32LE : public wxMBConv
+{
+public:
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+};
+
+// ----------------------------------------------------------------------------
+// wxMBConvUCS4BE (for conversion using UTF32 Big Endian encoding)
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxMBConvUTF32BE : public wxMBConv
+{
+public:
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+};
+
+// ----------------------------------------------------------------------------
 // wxCSConv (for conversion based on loadable char sets)
 // ----------------------------------------------------------------------------
 

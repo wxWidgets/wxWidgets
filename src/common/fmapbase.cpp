@@ -87,6 +87,12 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_CP437,
     wxFONTENCODING_UTF7,
     wxFONTENCODING_UTF8,
+    wxFONTENCODING_UTF16,
+    wxFONTENCODING_UTF16BE,
+    wxFONTENCODING_UTF16LE,
+    wxFONTENCODING_UTF32,
+    wxFONTENCODING_UTF32BE,
+    wxFONTENCODING_UTF32LE,
     wxFONTENCODING_EUC_JP,
 };
 
@@ -124,6 +130,12 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Windows/DOS OEM (CP 437)" ),
     wxTRANSLATE( "Unicode 7 bit (UTF-7)" ),
     wxTRANSLATE( "Unicode 8 bit (UTF-8)" ),
+    wxTRANSLATE( "Unicode 16 bit (UTF-16)" ),
+    wxTRANSLATE( "Unicode 16 bit Big Endian (UTF-16BE)" ),
+    wxTRANSLATE( "Unicode 16 bit Little Endian (UTF-16LE)" ),
+    wxTRANSLATE( "Unicode 32 bit (UTF-32)" ),
+    wxTRANSLATE( "Unicode 32 bit Big Endian (UTF-32BE)" ),
+    wxTRANSLATE( "Unicode 32 bit Little Endian (UTF-32LE)" ),
     wxTRANSLATE( "Extended Unix Codepage for Japanese (EUC-JP)" ),
 };
 
@@ -161,6 +173,12 @@ static const wxChar* gs_encodingNames[] =
     wxT( "windows-437" ),
     wxT( "utf-7" ),
     wxT( "utf-8" ),
+    wxT( "utf-16" ),
+    wxT( "utf-16be" ),
+    wxT( "utf-16le" ),
+    wxT( "utf-32" ),
+    wxT( "utf-32be" ),
+    wxT( "utf-32le" ),
     wxT( "euc-jp" ),
 };
 
@@ -454,6 +472,30 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
         else if ( cs == wxT("UTF-8") )
         {
             encoding = wxFONTENCODING_UTF8;
+        }
+        else if ( cs == wxT("UTF-16") )
+        {
+            encoding = wxFONTENCODING_UTF16;
+        }
+        else if ( cs == wxT("UTF-16BE") )
+        {
+            encoding = wxFONTENCODING_UTF16BE;
+        }
+        else if ( cs == wxT("UTF-16LE") )
+        {
+            encoding = wxFONTENCODING_UTF16LE;
+        }
+        else if ( cs == wxT("UTF-32") || cs == wxT("UCS-4") )
+        {
+            encoding = wxFONTENCODING_UTF32;
+        }
+        else if ( cs == wxT("UTF-32BE") || cs == wxT("UCS-4BE") )
+        {
+            encoding = wxFONTENCODING_UTF32BE;
+        }
+        else if ( cs == wxT("UTF-32LE") || cs == wxT("UCS-4LE") )
+        {
+            encoding = wxFONTENCODING_UTF32LE;
         }
         else if ( cs == wxT("GB2312") )
         {

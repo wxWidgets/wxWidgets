@@ -143,16 +143,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxStrConvModule, wxModule)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// UTF-16 en/decoding
+// UTF-16 en/decoding to/from UCS-4
 // ----------------------------------------------------------------------------
 
-#ifdef WC_UTF16
 
-static size_t encode_utf16(wxUint32 input, wchar_t *output)
+static size_t encode_utf16(wxUint32 input, wxUint16 *output)
 {
     if (input<=0xffff)
     {
-        if (output) *output++ = (wchar_t) input;
+        if (output) *output++ = (wxUint16) input;
         return 1;
     }
     else if (input>=0x110000)
@@ -163,14 +162,14 @@ static size_t encode_utf16(wxUint32 input, wchar_t *output)
     {
         if (output)
         {
-            *output++ = (wchar_t) ((input >> 10)+0xd7c0);
-            *output++ = (wchar_t) ((input&0x3ff)+0xdc00);
+            *output++ = (wxUint16) ((input >> 10)+0xd7c0);
+            *output++ = (wxUint16) ((input&0x3ff)+0xdc00);
         }
         return 2;
     }
 }
 
-static size_t decode_utf16(const wchar_t* input, wxUint32& output)
+static size_t decode_utf16(const wxUint16* input, wxUint32& output)
 {
     if ((*input<0xd800) || (*input>0xdfff))
     {
@@ -189,7 +188,6 @@ static size_t decode_utf16(const wchar_t* input, wxUint32& output)
     }
 }
 
-#endif // WC_UTF16
 
 // ----------------------------------------------------------------------------
 // wxMBConv
@@ -266,8 +264,8 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
         size_t nLen = WC2MB(NULL, pwz, 0);
         if ( nLen != (size_t)-1 )
         {
-            wxCharBuffer buf(nLen);
-            WC2MB(buf.data(), pwz, nLen + 1);
+            wxCharBuffer buf(nLen+3);       // space for a wxUint32 trailing zero
+            WC2MB(buf.data(), pwz, nLen + 4);
 
             return buf;
         }
@@ -421,6 +419,463 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
     return len;
 }
+
+
+
+
+// ----------------------------------------------------------------------------
+// UTF-16
+// ----------------------------------------------------------------------------
+
+#ifdef WORDS_BIGENDIAN
+#define wxMBConvUTF16straight wxMBConvUTF16BE
+#define wxMBConvUTF16swap     wxMBConvUTF16LE
+#else
+#define wxMBConvUTF16swap     wxMBConvUTF16BE
+#define wxMBConvUTF16straight wxMBConvUTF16LE
+#endif
+
+
+WXDLLIMPEXP_DATA_BASE(wxMBConvUTF16LE) wxConvUTF16LE;
+WXDLLIMPEXP_DATA_BASE(wxMBConvUTF16BE) wxConvUTF16BE;
+
+
+
+
+
+#ifdef WC_UTF16
+
+
+// copy 16bit MB to 16bit String
+size_t wxMBConvUTF16straight::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*(wxUint16*)psz && (!buf || len < n))
+    {
+        if (buf)
+            *buf++ = *(wxUint16*)psz;
+        len++;
+
+        psz += sizeof(wxUint16);
+    }
+    if (buf && len<n)   *buf=0;
+
+    return len;
+}
+
+
+// copy 16bit String to 16bit MB
+size_t wxMBConvUTF16straight::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*psz && (!buf || len < n))
+    {
+        if (buf)
+        {
+            *(wxUint16*)buf = *psz;
+            buf += sizeof(wxUint16);
+        }
+        len += sizeof(wxUint16);
+        psz++;
+    }
+    if (buf && len<=n-sizeof(wxUint16))   *(wxUint16*)buf=0;
+
+    return len;
+}
+
+
+// swap 16bit MB to 16bit String
+size_t wxMBConvUTF16swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*(wxUint16*)psz && (!buf || len < n))
+    {
+        if (buf)
+        {
+            ((char *)buf)[0] = psz[1];
+            ((char *)buf)[1] = psz[0];
+            buf++;
+        }
+        len++;
+        psz += sizeof(wxUint16);
+    }
+    if (buf && len<n)   *buf=0;
+
+    return len;
+}
+
+
+// swap 16bit MB to 16bit String
+size_t wxMBConvUTF16swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*psz && (!buf || len < n))
+    {
+        if (buf)
+        {
+            *buf++ = ((char*)psz)[1];
+            *buf++ = ((char*)psz)[0];
+        }
+        len += sizeof(wxUint16);
+        psz++;
+    }
+    if (buf && len<=n-sizeof(wxUint16))   *(wxUint16*)buf=0;
+
+    return len;
+}
+
+
+#else // WC_UTF16
+
+
+// copy 16bit MB to 32bit String
+size_t wxMBConvUTF16straight::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*(wxUint16*)psz && (!buf || len < n))
+    {
+        wxUint32 cc;
+        size_t pa=decode_utf16((wxUint16*)psz, cc);
+        if (pa == (size_t)-1)
+            return pa;
+
+        if (buf)
+            *buf++ = cc;
+        len++;
+        psz += pa * sizeof(wxUint16);
+    }
+    if (buf && len<n)   *buf=0;
+
+    return len;
+}
+
+
+// copy 32bit String to 16bit MB
+size_t wxMBConvUTF16straight::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*psz && (!buf || len < n))
+    {
+        wxUint16 cc[2];
+        size_t pa=encode_utf16(*psz, cc);
+
+        if (pa == (size_t)-1)
+            return pa;
+
+        if (buf)
+        {
+            *((wxUint16*)buf)++ = cc[0];
+            if (pa > 1)
+                *((wxUint16*)buf)++ = cc[1];
+        }
+
+        len += pa*sizeof(wxUint16);
+        psz++;
+    }
+    if (buf && len<=n-sizeof(wxUint16))   *(wxUint16*)buf=0;
+
+    return len;
+}
+
+
+// swap 16bit MB to 32bit String
+size_t wxMBConvUTF16swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*(wxUint16*)psz && (!buf || len < n))
+    {
+        wxUint32 cc;
+        char tmp[4];
+        tmp[0]=psz[1];  tmp[1]=psz[0];
+        tmp[2]=psz[3];  tmp[3]=psz[2];
+
+        size_t pa=decode_utf16((wxUint16*)tmp, cc);
+        if (pa == (size_t)-1)
+            return pa;
+
+        if (buf)
+            *buf++ = cc;
+
+        len++;
+        psz += pa * sizeof(wxUint16);
+    }
+    if (buf && len<n)   *buf=0;
+
+    return len;
+}
+
+
+// swap 32bit String to 16bit MB
+size_t wxMBConvUTF16swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*psz && (!buf || len < n))
+    {
+        wxUint16 cc[2];
+        size_t pa=encode_utf16(*psz, cc);
+
+        if (pa == (size_t)-1)
+            return pa;
+
+        if (buf)
+        {
+            *buf++ = ((char*)cc)[1];
+            *buf++ = ((char*)cc)[0];
+            if (pa > 1)
+            {
+                *buf++ = ((char*)cc)[3];
+                *buf++ = ((char*)cc)[2];
+            }
+        }
+
+        len += pa*sizeof(wxUint16);
+        psz++;
+    }
+    if (buf && len<=n-sizeof(wxUint16))   *(wxUint16*)buf=0;
+
+    return len;
+}
+
+#endif // WC_UTF16
+
+
+// ----------------------------------------------------------------------------
+// UTF-32
+// ----------------------------------------------------------------------------
+
+#ifdef WORDS_BIGENDIAN
+#define wxMBConvUTF32straight  wxMBConvUTF32BE
+#define wxMBConvUTF32swap      wxMBConvUTF32LE
+#else
+#define wxMBConvUTF32swap      wxMBConvUTF32BE
+#define wxMBConvUTF32straight  wxMBConvUTF32LE
+#endif
+
+
+WXDLLIMPEXP_DATA_BASE(wxMBConvUTF32LE) wxConvUTF32LE;
+WXDLLIMPEXP_DATA_BASE(wxMBConvUTF32BE) wxConvUTF32BE;
+
+
+#ifdef WC_UTF16
+
+// copy 32bit MB to 16bit String
+size_t wxMBConvUTF32straight::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*(wxUint32*)psz && (!buf || len < n))
+    {
+        wxUint16 cc[2];
+
+        size_t pa=encode_utf16(*(wxUint32*)psz, cc);
+        if (pa == (size_t)-1)
+            return pa;
+
+        if (buf)
+        {
+            *buf++ = cc[0];
+            if (pa > 1)
+                *buf++ = cc[1];
+        }
+        len += pa;
+        psz += sizeof(wxUint32);
+    }
+    if (buf && len<n)   *buf=0;
+
+    return len;
+}
+
+
+// copy 16bit String to 32bit MB
+size_t wxMBConvUTF32straight::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*psz && (!buf || len < n))
+    {
+        wxUint32 cc;
+
+        size_t pa=decode_utf16(psz, cc);
+        if (pa == (size_t)-1)
+            return pa;
+
+        if (buf)
+        {
+            *(wxUint32*)buf = cc;
+            buf += sizeof(wxUint32);
+        }
+        len += sizeof(wxUint32);
+        psz += pa;
+    }
+    if (buf && len<=n-sizeof(wxUint32))   *(wxUint32*)buf=0;
+
+    return len;
+}
+
+
+
+// swap 32bit MB to 16bit String
+size_t wxMBConvUTF32swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*(wxUint32*)psz && (!buf || len < n))
+    {
+        char tmp[4];
+        tmp[0] = psz[3];   tmp[1] = psz[2];
+        tmp[2] = psz[1];   tmp[3] = psz[0];
+
+
+        wxUint16 cc[2];
+
+        size_t pa=encode_utf16(*(wxUint32*)tmp, cc);
+        if (pa == (size_t)-1)
+            return pa;
+
+        if (buf)
+        {
+            *buf++ = cc[0];
+            if (pa > 1)
+                *buf++ = cc[1];
+        }
+        len += pa;
+        psz += sizeof(wxUint32);
+    }
+    if (buf && len<n)   *buf=0;
+
+    return len;
+}
+
+
+// swap 16bit String to 32bit MB
+size_t wxMBConvUTF32swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*psz && (!buf || len < n))
+    {
+        char cc[4];
+
+        size_t pa=decode_utf16(psz, *(wxUint32*)cc);
+        if (pa == (size_t)-1)
+            return pa;
+
+        if (buf)
+        {
+            *buf++ = cc[3];
+            *buf++ = cc[2];
+            *buf++ = cc[1];
+            *buf++ = cc[0];
+        }
+        len += sizeof(wxUint32);
+        psz += pa;
+    }
+    if (buf && len<=n-sizeof(wxUint32))   *(wxUint32*)buf=0;
+
+    return len;
+}
+
+#else // WC_UTF16
+
+
+// copy 32bit MB to 32bit String
+size_t wxMBConvUTF32straight::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*(wxUint32*)psz && (!buf || len < n))
+    {
+        if (buf)
+            *buf++ = *(wxUint32*)psz;
+        len++;
+        psz += sizeof(wxUint32);
+    }
+    if (buf && len<n)   *buf=0;
+
+    return len;
+}
+
+
+// copy 32bit String to 32bit MB
+size_t wxMBConvUTF32straight::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*psz && (!buf || len < n))
+    {
+        if (buf)
+        {
+            *(wxUint32*)buf = *psz;
+            buf += sizeof(wxUint32);
+        }
+
+        len += sizeof(wxUint32);
+        psz++;
+    }
+
+    if (buf && len<=n-sizeof(wxUint32))   *(wxUint32*)buf=0;
+
+    return len;
+}
+
+
+// swap 32bit MB to 32bit String
+size_t wxMBConvUTF32swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*(wxUint32*)psz && (!buf || len < n))
+    {
+        if (buf)
+        {
+            ((char *)buf)[0] = psz[3];
+            ((char *)buf)[1] = psz[2];
+            ((char *)buf)[2] = psz[1];
+            ((char *)buf)[3] = psz[0];
+            buf++;
+        }
+        len++;
+        psz += sizeof(wxUint32);
+    }
+    if (buf && len<n)   *buf=0;
+
+    return len;
+}
+
+
+// swap 32bit String to 32bit MB
+size_t wxMBConvUTF32swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+    size_t len=0;
+
+    while (*psz && (!buf || len < n))
+    {
+        if (buf)
+        {
+            *buf++ = ((char *)psz)[3];
+            *buf++ = ((char *)psz)[2];
+            *buf++ = ((char *)psz)[1];
+            *buf++ = ((char *)psz)[0];
+        }
+        len += sizeof(wxUint32);
+        psz++;
+    }
+    if (buf && len<=n-sizeof(wxUint32))   *(wxUint32*)buf=0;
+
+    return len;
+}
+
+
+#endif // WC_UTF16
+
 
 // ============================================================================
 // wxCharacterSet and derived classes
@@ -891,27 +1346,72 @@ wxGetCharacterSet(const wxChar *name, wxFontEncoding encoding)
         return NULL;
     }
 
-    wxCharacterSet *cset;
+    wxCharacterSet *cset = NULL;
 
-    if ( (name &&
-            (wxStricmp(name, wxT("UTF8")) == 0 ||
-             wxStricmp(name, wxT("UTF-8")) == 0)) ||
-          encoding == wxFONTENCODING_UTF8 )
+    if (name)
     {
-        cset = new ID_CharSet(&wxConvUTF8);
-    }
-    else // !UTF-8
-    {
+        if((wxStricmp(name, wxT("UTF8")) == 0)  ||
+           (wxStricmp(name, wxT("UTF-8")) == 0) ||
+            encoding == wxFONTENCODING_UTF8 )
+        {
+            cset = new ID_CharSet(&wxConvUTF8);
+        }
+        else if((wxStricmp(name, wxT("UTF16")) == 0)  ||
+           (wxStricmp(name, wxT("UTF-16")) == 0) ||
+            encoding == wxFONTENCODING_UTF16 )
+        {
+#ifdef WORDS_BIGENDIAN
+            cset = new ID_CharSet(&wxConvUTF16BE);
+#else
+            cset = new ID_CharSet(&wxConvUTF16LE);
+#endif
+        }
+        else if((wxStricmp(name, wxT("UTF16BE")) == 0)  ||
+           (wxStricmp(name, wxT("UTF-16BE")) == 0) ||
+            encoding == wxFONTENCODING_UTF16BE )
+        {
+            cset = new ID_CharSet(&wxConvUTF16BE);
+        }
+        else if((wxStricmp(name, wxT("UTF16LE")) == 0)  ||
+           (wxStricmp(name, wxT("UTF-16LE")) == 0) ||
+            encoding == wxFONTENCODING_UTF16LE )
+        {
+            cset = new ID_CharSet(&wxConvUTF16LE);
+        }
+        else if((wxStricmp(name, wxT("UTF32")) == 0)  ||
+           (wxStricmp(name, wxT("UTF-32")) == 0) ||
+           (wxStricmp(name, wxT("UCS4")) == 0) ||
+           (wxStricmp(name, wxT("UCS-4")) == 0) ||
+            encoding == wxFONTENCODING_UTF32 )
+        {
+#ifdef WORDS_BIGENDIAN
+            cset = new ID_CharSet(&wxConvUTF32BE);
+#else
+            cset = new ID_CharSet(&wxConvUTF32LE);
+#endif
+        }
+        else if((wxStricmp(name, wxT("UTF32BE")) == 0)  ||
+           (wxStricmp(name, wxT("UTF-32BE")) == 0) ||
+           (wxStricmp(name, wxT("UCS4BE")) == 0) ||
+           (wxStricmp(name, wxT("UCS-4BE")) == 0) ||
+            encoding == wxFONTENCODING_UTF32BE )
+        {
+            cset = new ID_CharSet(&wxConvUTF32BE);
+        }
+        else if((wxStricmp(name, wxT("UTF32LE")) == 0)  ||
+           (wxStricmp(name, wxT("UTF-32LE")) == 0) ||
+           (wxStricmp(name, wxT("UCS4LE")) == 0) ||
+           (wxStricmp(name, wxT("UCS-4LE")) == 0) ||
+            encoding == wxFONTENCODING_UTF32 )
+        {
+            cset = new ID_CharSet(&wxConvUTF32LE);
+        }
 #ifdef HAVE_ICONV
-        if ( name )
+        else
         {
             cset = new IC_CharSet(name);
         }
-        else
 #endif // HAVE_ICONV
-        {
-            cset = NULL;
-        }
     }
 
     // it can only be NULL in this case
