@@ -5312,8 +5312,8 @@ echo "Configured wxWindows ${WX_VERSION} for \`${host}'"
 echo ""
 echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT:-base only}"
 
-echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG-no}"
-echo "  Should wxWindows be linked as a shared library?         ${wxUSE_SHARED}"
+echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
+echo "  Should wxWindows be linked as a shared library?         ${wxUSE_SHARED:-no}"
 
 echo "  Which libraries should wxWindows use?"
 echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"
