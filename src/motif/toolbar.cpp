@@ -411,7 +411,7 @@ void wxToolBar::DestroyPixmaps()
 // If toggle is TRUE, the button toggles between the two states.
 
 wxToolBarTool *wxToolBar::AddTool(int index, const wxBitmap& bitmap, const wxBitmap& WXUNUSED(pushedBitmap),
-             bool toggle, long xPos, long yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
+             bool toggle, wxCoord xPos, wxCoord yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
 {
   wxToolBarTool *tool = new wxToolBarTool(index, bitmap, wxNullBitmap, toggle, xPos, yPos, helpString1, helpString2);
   tool->m_clientData = clientData;
