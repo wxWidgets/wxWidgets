@@ -45,6 +45,8 @@ BUILD_ART2D = 0    # Build a canvas module using code from the wxArt2D project (
 
 CORE_ONLY = 0      # if true, don't build any of the above
 
+PREP_ONLY = 0      # Only run the prepatory steps, not the actual build.
+
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
 
@@ -153,7 +155,7 @@ if os.name == 'nt':
 # Boolean (int) flags
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN',
-             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE',
+             'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
@@ -500,7 +502,7 @@ swig_sources = run_swig(swig_files, 'src', GENDIR, PKGDIR,
 
 copy_file('src/__init__.py', PKGDIR, update=1, verbose=0)
 copy_file('src/__version__.py', PKGDIR, update=1, verbose=0)
-copy_file('src/wxc.pyd.manifest', PKGDIR, update=1, verbose=0)
+
 
 if IN_CVS_TREE:   # update the license files
     mkpath('licence')
@@ -1146,33 +1148,34 @@ else:
 #----------------------------------------------------------------------
 
 if __name__ == "__main__":
-    setup(name             = PKGDIR,
-          version          = VERSION,
-          description      = DESCRIPTION,
-          long_description = LONG_DESCRIPTION,
-          author           = AUTHOR,
-          author_email     = AUTHOR_EMAIL,
-          url              = URL,
-          license          = LICENSE,
+    if not PREP_ONLY:
+        setup(name             = PKGDIR,
+              version          = VERSION,
+              description      = DESCRIPTION,
+              long_description = LONG_DESCRIPTION,
+              author           = AUTHOR,
+              author_email     = AUTHOR_EMAIL,
+              url              = URL,
+              license          = LICENSE,
 
-          packages = [PKGDIR,
-                      PKGDIR+'.lib',
-                      PKGDIR+'.lib.colourchooser',
-                      PKGDIR+'.lib.editor',
-                      PKGDIR+'.lib.mixins',
-                      PKGDIR+'.lib.PyCrust',
-                      PKGDIR+'.tools',
-                      PKGDIR+'.tools.XRCed',
-                      ],
+              packages = [PKGDIR,
+                          PKGDIR+'.lib',
+                          PKGDIR+'.lib.colourchooser',
+                          PKGDIR+'.lib.editor',
+                          PKGDIR+'.lib.mixins',
+                          PKGDIR+'.lib.PyCrust',
+                          PKGDIR+'.tools',
+                          PKGDIR+'.tools.XRCed',
+                          ],
 
-          ext_package = PKGDIR,
-          ext_modules = wxpExtensions,
+              ext_package = PKGDIR,
+              ext_modules = wxpExtensions,
 
-          options = { 'build' : { 'build_base' : BUILD_BASE }},
+              options = { 'build' : { 'build_base' : BUILD_BASE }},
 
-          ##data_files = TOOLS,
-          scripts = SCRIPTS,
-          )
+              ##data_files = TOOLS,
+              scripts = SCRIPTS,
+              )
 
 
 #----------------------------------------------------------------------
