@@ -888,32 +888,40 @@ void wxNotebook::UpdateBgBrush()
     }
 }
 
+WXHBRUSH wxNotebook::GetThemeBackgroundBrush(WXHDC hDC, wxWindow *win) const
+{
+    if ( m_hbrBackground )
+    {
+        // before drawing with the background brush, we need to position it
+        // correctly
+        RECT rc;
+        ::GetWindowRect(GetHwndOf(win), &rc);
+
+        ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 1);
+
+        if ( !::SetBrushOrgEx((HDC)hDC, -rc.left, -rc.top, NULL) )
+        {
+            wxLogLastError(_T("SetBrushOrgEx(notebook bg brush)"));
+        }
+    }
+
+    return m_hbrBackground;
+}
+
 void wxNotebook::DoEraseBackground(wxEraseEvent& event)
 {
     // we can either draw the background ourselves or let DrawThemeBackground()
     // do it, but as we already have the correct brush, let's do it ourselves
     // (note that we use the same code in wxControl::MSWControlColor(), so if
     // it breaks, it should at least break in consistent way)
-    if ( m_hbrBackground )
+    wxWindow *win = (wxWindow *)event.GetEventObject();
+    HDC hdc = GetHdcOf(*event.GetDC());
+    WXHBRUSH hbr = GetThemeBackgroundBrush((WXHDC)hdc, win);
+    if ( hbr )
     {
-        // before drawing with the background brush, we need to position it
-        // correctly
-        wxWindow *win = (wxWindow *)event.GetEventObject();
-
-        RECT rc;
-        ::GetWindowRect(GetHwndOf(win), &rc);
-
-        ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 1);
-
-        HDC hdc = GetHdcOf(*event.GetDC());
-        if ( !::SetBrushOrgEx(hdc, -rc.left, -rc.top, NULL) )
-        {
-            wxLogLastError(_T("SetBrushOrgEx(notebook bg brush)"));
-        }
-
         RECT rectClient;
         ::GetClientRect(GetHwndOf(win), &rectClient);
-        ::FillRect(hdc, &rectClient, (HBRUSH)m_hbrBackground);
+        ::FillRect(hdc, &rectClient, (HBRUSH)hbr);
     }
 }
 

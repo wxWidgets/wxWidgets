@@ -327,24 +327,32 @@ bool wxControl::MSWOnNotify(int idCtrl,
 }
 #endif // Win95
 
-WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
+WXHBRUSH wxControl::MSWControlColorSolid(WXHDC pDC, wxColour colBg)
 {
     HDC hdc = (HDC)pDC;
     if ( m_hasFgCol )
         ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
 
-    if ( m_hasBgCol )
+    if ( colBg.Ok() )
     {
-        wxColour colBack = GetBackgroundColour();
+        ::SetBkColor(hdc, wxColourToRGB(colBg));
 
-        ::SetBkColor(hdc, wxColourToRGB(colBack));
-
-        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg, wxSOLID);
 
         return (WXHBRUSH)brush->GetResourceHandle();
     }
 
-    SetBkMode(hdc, TRANSPARENT);
+    return 0;
+}
+
+WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
+{
+    WXHBRUSH hbr = MSWControlColorSolid(pDC, m_hasBgCol ? m_backgroundColour
+                                                        : wxNullColour);
+    if ( hbr )
+        return hbr;
+
+    ::SetBkMode((HDC)pDC, TRANSPARENT);
 
 #if wxUSE_UXTHEME && wxUSE_NOTEBOOK
     if ( wxUxThemeEngine::GetIfActive() )
@@ -354,22 +362,25 @@ WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
             wxNotebook *nbook = wxDynamicCast(win, wxNotebook);
             if ( nbook )
             {
-                WXHBRUSH hbr = nbook->GetThemeBackgroundBrush();
-                if ( hbr )
-                {
-                    RECT rc;
-                    GetWindowRect(GetHwnd(), &rc);
-
-                    MapWindowPoints(NULL, GetHwndOf(nbook), (POINT *)&rc, 1);
-                    SetBrushOrgEx(hdc, -rc.left, -rc.top, NULL);
-                    return hbr;
-                }
+                // return value may be NULL but it is ok: if the first parent
+                // notebook doesn't use themes, then we don't have to process
+                // this message at all, so let default processing take place
+                return nbook->GetThemeBackgroundBrush(pDC, this);
             }
         }
     }
 #endif // wxUSE_UXTHEME
 
-    return GetStockObject(NULL_BRUSH);
+    return ::GetStockObject(NULL_BRUSH);
+}
+
+WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)
+{
+    return MSWControlColorSolid
+           (
+                pDC,
+                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)
+           );
 }
 
 // ---------------------------------------------------------------------------

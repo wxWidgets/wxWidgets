@@ -167,7 +167,9 @@ public:
 
   // get the brush to be used for painting the background for the controls
   // which need it in their MSWControlColor()
-  WXHBRUSH GetThemeBackgroundBrush() const { return m_hbrBackground; }
+  //
+  // the brush will be adjusted for use with the given window on this DC
+  WXHBRUSH GetThemeBackgroundBrush(WXHDC hDC, wxWindow *win) const;
 #endif // wxUSE_UXTHEME
 
 protected:
