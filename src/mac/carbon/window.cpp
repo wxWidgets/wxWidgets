@@ -387,6 +387,9 @@ static pascal OSStatus wxMacWindowServiceEventHandler( EventHandlerCallRef handl
 
 pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
+    EventRef formerEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
+    EventHandlerCallRef formerEventHandlerCallRef = (EventHandlerCallRef) wxTheApp->MacGetCurrentEventHandlerCallRef() ;
+    wxTheApp->MacSetCurrentEvent( event , handler ) ;
     OSStatus result = eventNotHandledErr ;
 
     switch ( GetEventClass( event ) )
@@ -399,6 +402,7 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
         default :
             break ;
     }
+    wxTheApp->MacSetCurrentEvent( formerEvent, formerEventHandlerCallRef ) ;
     return result ;
 }
 
@@ -2125,10 +2129,7 @@ void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
 
 void wxWindowMac::OnNcPaint( wxNcPaintEvent& event )
 {
-    wxWindowDC dc(this) ;
-    wxMacPortSetter helper(&dc) ;
-
-    MacPaintBorders( dc.m_macLocalOrigin.x , dc.m_macLocalOrigin.y) ;
+    event.Skip() ;
 }
 
 int wxWindowMac::GetScrollPos(int orient) const
@@ -2197,94 +2198,25 @@ void wxWindowMac::MacPaintBorders( int left , int top )
     if( IsTopLevel() )
         return ;
         
-    int major,minor;
-    wxGetOsVersion( &major, &minor );
-
-    RGBColor darkShadow = { 0x0000, 0x0000 , 0x0000 } ;
-    RGBColor lightShadow = { 0x4444, 0x4444 , 0x4444 } ;
-    // OS X has lighter border edges than classic:
-    if (major >= 10) 
-    {
-        darkShadow.red 		= 0x8E8E;
-        darkShadow.green 	= 0x8E8E;
-        darkShadow.blue 	= 0x8E8E;
-        lightShadow.red 	= 0xBDBD;
-        lightShadow.green 	= 0xBDBD;
-        lightShadow.blue 	= 0xBDBD;
-	}
-    
-    PenNormal() ;
-
     int w , h ;
     GetSize( &w , &h ) ;
     Rect rect = { top , left , h + top , w + left } ;
     if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
     {
-#if wxMAC_USE_THEME_BORDER
+        Rect srect = rect ;
         SInt32 border = 0 ;
         GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
-        InsetRect( &rect , border , border );
-        DrawThemeEditTextFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
-#else
-        RGBColor white = { 0xFFFF, 0xFFFF , 0xFFFF } ;
-        RGBColor face = { 0xDDDD, 0xDDDD , 0xDDDD } ;
-    
-        bool sunken = HasFlag( wxSUNKEN_BORDER ) ;
-        RGBForeColor( &face );
-        MoveTo( left + 0 , top + h - 2 );
-        LineTo( left + 0 , top + 0 );
-        LineTo( left + w - 2 , top + 0 );
-
-        MoveTo( left + 2 , top + h - 3 );
-        LineTo( left + w - 3 , top + h - 3 );
-        LineTo( left + w - 3 , top + 2 );
-
-        RGBForeColor( sunken ? &face : &darkShadow );
-        MoveTo( left + 0 , top + h - 1 );
-        LineTo( left + w - 1 , top + h - 1 );
-        LineTo( left + w - 1 , top + 0 );
-
-        RGBForeColor( sunken ? &lightShadow : &white );
-        MoveTo( left + 1 , top + h - 3 );
-        LineTo( left + 1, top + 1 );
-        LineTo( left + w - 3 , top + 1 );
-
-        RGBForeColor( sunken ? &white : &lightShadow );
-        MoveTo( left + 1 , top + h - 2 );
-        LineTo( left + w - 2 , top + h - 2 );
-        LineTo( left + w - 2 , top + 1 );
-
-        RGBForeColor( sunken ? &darkShadow : &face );
-        MoveTo( left + 2 , top + h - 4 );
-        LineTo( left + 2 , top + 2 );
-        LineTo( left + w - 4 , top + 2 );
-#endif
+        InsetRect( &srect , border , border );
+        DrawThemeEditTextFrame(&srect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
     }
     else if (HasFlag(wxSIMPLE_BORDER))
     {
-#if wxMAC_USE_THEME_BORDER
+        Rect srect = rect ;
         SInt32 border = 0 ;
         GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-        InsetRect( &rect , border , border );
+        InsetRect( &srect , border , border );
         DrawThemeListBoxFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;   
-#else
-        Rect rect = { top , left , h + top , w + left } ;
-        RGBForeColor( &darkShadow ) ;
-        FrameRect( &rect ) ;
-#endif
     }
-
-    if ( MacGetTopLevelWindow() && m_peer->NeedsFocusRect() && m_peer->HasFocus() )
-    {
-        int w , h ;
-        int x , y ;
-        x = y = 0 ;
-        MacWindowToRootWindow( &x , &y ) ;
-        GetSize( &w , &h ) ;
-        Rect rect = {y , x , h + y , w + x } ;
-        DrawThemeFocusRect( &rect , true ) ;
-    }
-
 }
 
 void wxWindowMac::RemoveChild( wxWindowBase *child )
@@ -2495,7 +2427,11 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
         if ( event.GetEventType() == wxEVT_SET_FOCUS )
             DrawThemeFocusRect( &rect , true ) ;
         else
+        {
             DrawThemeFocusRect( &rect , false ) ;
+            // as this erases part of the frame we have to redraw borders
+            MacPaintBorders( x , y ) ;
+        }
     }
 
     event.Skip();
@@ -2651,7 +2587,7 @@ wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
             r.top = 0 ;
         }
         if ( includeOuterStructures )
-            InsetRect( &r , -3 , -3 ) ;
+            InsetRect( &r , -4 , -4 ) ;
         RectRgn( visRgn , &r ) ;
 
         if ( !IsTopLevel() )
@@ -2738,6 +2674,17 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             event.m_timeStamp = time ;
             event.SetEventObject(this);
             handled = GetEventHandler()->ProcessEvent(event); 
+
+            // we have to call the default built-in handler, as otherwise our frames will be drawn and immediately erased afterwards
+            if ( !handled )
+            {
+                if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
+                {
+                    CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
+                    handled = true ;
+                }
+            }
+
         }
         
         // now we cannot rely on having its borders drawn by a window itself, as it does not
@@ -2752,22 +2699,35 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             if (child->IsTopLevel()) continue;
             if (!child->IsShown()) continue;
 
+            int x,y;
+            child->GetPosition( &x, &y );
+            int w,h;
+            child->GetSize( &w, &h );
+            Rect childRect = { y , x , y + h , x + w } ;
             if ( child->MacGetTopBorderSize() )
             {
-                int x,y;
-                child->GetPosition( &x, &y );
-                int w,h;
-                child->GetSize( &w, &h );
-                Rect childRect = { y , x , y + h , x + w } ;
                 OffsetRect( &childRect , MacGetLeftBorderSize() , MacGetTopBorderSize() ) ;
                 if ( RectInRgn( &childRect , updatergn ) )
                 {
                     // paint custom borders
                     wxNcPaintEvent eventNc( child->GetId() );
                     eventNc.SetEventObject( child );
-                    child->GetEventHandler()->ProcessEvent( eventNc );
+                    if ( !child->GetEventHandler()->ProcessEvent( eventNc ) )
+                    {
+                        wxWindowDC dc(this) ;
+                        dc.SetClippingRegion(wxRegion(updatergn));
+                        wxMacPortSetter helper(&dc) ;
+                        child->MacPaintBorders( dc.m_macLocalOrigin.x + x , dc.m_macLocalOrigin.y + y)  ;
+                    }
                 }
-            }     
+            } 
+            if ( child->m_peer->NeedsFocusRect() && child->m_peer->HasFocus() )
+            {
+                wxWindowDC dc(this) ;
+                dc.SetClippingRegion(wxRegion(updatergn));
+                wxMacPortSetter helper(&dc) ;
+                DrawThemeFocusRect( &childRect , true ) ;
+            }
         }
     }
     return handled ;
