@@ -19,6 +19,7 @@
 #include "wx/file.h"
 #include "wx/sound.h"
 #include "wx/timer.h"
+#include "wx/intl.h"
 
 #if wxUSE_SOUND
 
