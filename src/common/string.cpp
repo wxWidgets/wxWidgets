@@ -1836,7 +1836,8 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
         // in which case we need to break out
         if ( (len >= 0 && len <= size)
         // No EOVERFLOW on Windows nor Palm 6.0 nor OpenVMS nor MacOS (not X)
-#if !defined(__WXMSW__) && !defined(__WXPALMOS__) && !defined( __VMS ) && !(defined(__WXMAC__) && !defined(__WXMAC_OSX__))
+	// not OS/2 (not Innotek libc).
+#if !defined(__WXMSW__) && !defined(__WXPALMOS__) && !defined( __VMS ) && !(defined(__WXMAC__) && !defined(__WXMAC_OSX__)) && !(defined(__EMX__) && !defined(__INNOTEK_LIBC__))
             || errno != EOVERFLOW
 #endif
             )
