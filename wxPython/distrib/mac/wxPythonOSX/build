@@ -3,6 +3,8 @@
 # Build wxMac and wxPythonOSX from the tarball and then make an
 # Installer package out of it.
 
+##set -x
+
 spectemplate=distrib/wxPythonFull.spec.in
 
 if [ ! -d wxPython -o ! -e ${spectemplate} ]; then
@@ -43,7 +45,7 @@ function usage {
 }
 
 
-if [ $# -lt 1 ]; then
+if [ $# -lt 2 ]; then
     usage
     exit 1
 fi
@@ -257,7 +259,6 @@ if [ $skipbuild != yes ]; then
 
     make $MAKEJOBS
     make $MAKEJOBS -C contrib/src/gizmos
-    make $MAKEJOBS -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0"
     make $MAKEJOBS -C contrib/src/stc
 
     # Build wxPython
@@ -278,7 +279,6 @@ if [ $skipinstall != yes ]; then
     cd $WXBLD
     make prefix=$INSTALLROOT$PREFIX install
     make -C contrib/src/gizmos prefix=$INSTALLROOT$PREFIX install
-    make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" prefix=$INSTALLROOT/$PREFIX install
     make -C contrib/src/stc prefix=$INSTALLROOT$PREFIX install
 
 
@@ -399,9 +399,13 @@ EOF
     
 
     # Build the main Installer Package...
-    rm -rf wxPython${SHORTVER}-osx-$CHARTYPE-$KIND.pkg
-    python $PROGDIR/../buildpkg.py \
-	--Title=wxPython${SHORTVER}-osx-$CHARTYPE-$KIND \
+    PKGNAME=wxPython${SHORTVER}-osx-$CHARTYPE-$KIND
+    if [ $PYVER != 2.3 ]; then
+	PKGNAME=wxPython${SHORTVER}-osx-$CHARTYPE-$KIND-py$PYVER
+    fi
+    rm -rf $PKGNAME.pkg
+    $PYTHON $PROGDIR/../buildpkg.py \
+	--Title=$PKGNAME \
 	--Version=$VERSION \
 	--Description="wxPython $CHARTYPE runtime $VERSION for $W_MSG MacPython-OSX $PYVER" \
 	--NeedsAuthorization="YES" \
@@ -410,7 +414,7 @@ EOF
 	$INSTALLROOT \
 	$RESOURCEDIR
 
-    mv wxPython${SHORTVER}-osx-$CHARTYPE-$KIND.pkg $DMGROOT
+    mv $PKGNAME.pkg $DMGROOT
 
     rm $RESOURCEDIR/postflight
     rm $RESOURCEDIR/preflight
@@ -616,7 +620,7 @@ EOF
 
 
     # and then finally make a disk image containing everything
-    dmgname=wxPython${SHORTVER}-osx-docs-demos-$VERSION-$TAG
+    dmgname=wxPython${SHORTVER}-osx-docs-demos-$VERSION-$TAG-py$PYVER
     $PROGDIR/../makedmg $DMGAPPS $DMGDIR $dmgname
 
     echo Moving $DMGDIR/$dmgname.dmg to $DESTDIR
