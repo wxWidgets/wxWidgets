@@ -53,9 +53,9 @@
 // to be derived from the 'generic' version.
 
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
-    #include "wx/generic/listctrl.h"
-#else
     #include "wx/listctrl.h"
+#else
+    #include "wx/generic/listctrl.h"
 #endif
 
 #if defined(__WXGTK__)
@@ -4575,7 +4575,7 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 // wxListItem
 // -------------------------------------------------------------------------------------
 
-#if !defined(__WIN32__)
+#if !defined(__WIN32__) || defined(__WXUNIVERSAL__)
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 #endif
 
@@ -4587,7 +4587,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxGenericListCtrl, wxControl)
 
 #if !defined(__WIN32__)
 IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
+#endif
 
+#if !defined(__WIN32__) || defined(__WXUNIVERSAL__)
 IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 #endif
 
