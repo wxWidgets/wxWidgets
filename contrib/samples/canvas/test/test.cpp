@@ -63,18 +63,18 @@ void MywxCanvasObjectRef::OnMouseEvent(wxMouseEvent &event)
     if (event.LeftDown())
     {
         CaptureMouse();
-        if (m_dragmode != DRAG_REDRAW)
+        if (m_dragmode != wxDRAG_REDRAW)
             DragStart();
     }
     else if (event.LeftUp())
     {
         ReleaseMouse();
-        if (m_dragmode != DRAG_REDRAW)
+        if (m_dragmode != wxDRAG_REDRAW)
             DragEnd();
     }
     else if (IsCapturedMouse())
     {
-        if (m_dragmode != DRAG_REDRAW)
+        if (m_dragmode != wxDRAG_REDRAW)
             DragRelative(x-xprev,y-yprev);
         else
             MoveRelative(x-xprev,y-yprev);
@@ -120,18 +120,18 @@ void MyEventHandler::OnMouseEvent(wxMouseEvent &event)
     if (event.LeftDown())
     {
         obj->CaptureMouse();
-        if (obj->GetDragMode() != DRAG_REDRAW)
+        if (obj->GetDragMode() != wxDRAG_REDRAW)
             obj->DragStart();
     }
     else if (event.LeftUp())
     {
         obj->ReleaseMouse();
-        if (obj->GetDragMode() != DRAG_REDRAW)
+        if (obj->GetDragMode() != wxDRAG_REDRAW)
             obj->DragEnd();
     }
     else if (obj->IsCapturedMouse())
     {
-        if (obj->GetDragMode() != DRAG_REDRAW)
+        if (obj->GetDragMode() != wxDRAG_REDRAW)
             obj->DragRelative(x-xprev,y-yprev);
         else
             obj->MoveRelative(x-xprev,y-yprev);
@@ -207,7 +207,7 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
     m_splitter = new MySplitterWindow(this, SPLITTER_WINDOW);
 
     m_canvas1 = new MyCanvas(&m_canvasadmin, m_splitter, CANVAS1, wxPoint(0, 0), wxSize(400, 400),wxHSCROLL|wxVSCROLL);
-    m_canvas1->SetYaxis(TRUE);
+    m_canvas1->SetYaxis(FALSE);
     m_canvas1->SetMappingScroll(-300,-300,500,500,false);
     m_canvas1->SetScroll(-400,-400,600,600);
     m_canvas1->SetColour(wxColour(255, 255, 255) );
@@ -282,7 +282,7 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
         m_datatree->Append( new wxCanvasLine( 10,-15,i,300 ) );
 /*
     m_sm4 = new wxCanvasImage( image, 0,270,64,32 );
-    m_sm4->SetDragMode(DRAG_RECTANGLE);
+    m_sm4->SetDragMode(wxDRAG_RECTANGLE);
     m_datatree->Append( m_sm4 );
 */
 
@@ -454,13 +454,13 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
 
     m_ref2 = new MywxCanvasObjectRef(80,450, group1);
     m_ref2->SetRotation(-35);
-    m_ref2->SetDragMode(DRAG_RECTANGLE);
+    m_ref2->SetDragMode(wxDRAG_RECTANGLE);
     m_datatree->Prepend( m_ref2 );
 
     wxCanvasCircle* cir = new  wxCanvasCircle( -100, -150, 100 );
     cir->SetBrush(wxBrush(wxColour(19,215,6),wxHORIZONTAL_HATCH ));
     cir->SetPen(wxPen(wxColour(198,3,105 ),30,wxSOLID));
-    cir->SetDragMode(DRAG_REDRAW);
+    cir->SetDragMode(wxDRAG_REDRAW);
     m_datatree->Prepend( cir );
 
     wxCanvasEllipse* elp = new  wxCanvasEllipse( -100, 250, 100,300 );

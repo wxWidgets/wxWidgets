@@ -121,7 +121,7 @@ MyFrame::MyFrame()
 
     m_plot = new wxPlotWindow( this, -1, wxPoint(0,0), wxSize(100,100), wxSUNKEN_BORDER | wxPLOT_DEFAULT );
     m_plot->SetUnitsPerValue( 0.01 );
-    m_plot->SetScrollOnThumbRelease( TRUE );
+//    m_plot->SetScrollOnThumbRelease( TRUE );
 
     m_plot->Add( new MyPlotCurve( 0,  -1.5, 1.5 ) );
     m_plot->Add( new MyPlotCurve( 50, -1.5, 1.5 ) );

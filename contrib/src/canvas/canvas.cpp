@@ -60,9 +60,9 @@ wxCanvasObject::wxCanvasObject()
     m_isVector = FALSE;
     m_isImage = FALSE;
     m_visible  = TRUE;
-    m_dragmode = DRAG_ONTOP;
+    m_dragmode = wxDRAG_ONTOP;
 //  handy when debugging
-//  m_dragmode = DRAG_RECTANGLE;
+//  m_dragmode = wxDRAG_RECTANGLE;
     m_dragable = TRUE;
 }
 
@@ -216,7 +216,7 @@ void wxCanvasObject::MoveRelative( double x, double y )
 
 void wxCanvasObject::DragStart()
 {
-    if (m_dragmode == DRAG_RECTANGLE)
+    if (m_dragmode == wxDRAG_RECTANGLE)
     {
         this->SetVisible(FALSE);
         wxTransformMatrix help;
@@ -236,7 +236,7 @@ void wxCanvasObject::DragStart()
         dc.SetBrush(wxNullBrush);
         dc.SetPen(wxNullPen);
     }
-    else
+    else if (m_dragmode != wxDRAG_REDRAW)
     {
         this->SetVisible(FALSE);
         wxTransformMatrix help;
@@ -266,7 +266,7 @@ void wxCanvasObject::DragStart()
 
 void wxCanvasObject::DragRelative( double x, double y)
 {
-    if (m_dragmode == DRAG_RECTANGLE)
+    if (m_dragmode == wxDRAG_RECTANGLE)
     {
         wxTransformMatrix help;
 
@@ -285,7 +285,7 @@ void wxCanvasObject::DragRelative( double x, double y)
         dc.SetBrush(wxNullBrush);
         dc.SetPen(wxNullPen);
     }
-    else
+    else if (m_dragmode != wxDRAG_REDRAW)
     {
         wxClientDC dc(m_admin->GetActive());
         wxMemoryDC tmp;
@@ -336,6 +336,8 @@ void wxCanvasObject::DragRelative( double x, double y)
         dcm.SelectObject(wxNullBitmap);
         this->SetVisible(FALSE);
     }
+    else
+        MoveRelative(x,y);
 }
 
 

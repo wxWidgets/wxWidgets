@@ -34,7 +34,12 @@ class wxCanvasAdmin;
 //----------------------------------------------------------------------------
 // wxCanvasObject
 //----------------------------------------------------------------------------
-enum DRAGMODE {DRAG_RECTANGLE,DRAG_ONTOP,DRAG_REDRAW};
+enum wxDRAG_MODE
+{
+    wxDRAG_RECTANGLE,
+    wxDRAG_ONTOP,
+    wxDRAG_REDRAW
+};
 
 //:defenition
 // wxCanvasObject is the base class for  Canvas Objects.
@@ -88,10 +93,10 @@ public:
     //DRAG_RECTANGLE = as a rectangle when drag is in progress |
     //DRAG_ONTOP = only redraw the object when dragging |
     //DRAG_REDRAW = redraw the damaged areas when dragging
-    void SetDragMode(DRAGMODE mode) { m_dragmode=mode; };
+    void SetDragMode(wxDRAG_MODE mode) { m_dragmode=mode; };
 
     //return the dragmode
-    DRAGMODE GetDragMode() { return m_dragmode; };
+    wxDRAG_MODE GetDragMode() { return m_dragmode; };
 
     //called when starting a drag
     virtual void DragStart();
@@ -193,7 +198,7 @@ protected:
     bool m_isImage:1;
     bool m_visible:1;
     bool m_dragable:1;
-    DRAGMODE m_dragmode:2;
+    wxDRAG_MODE m_dragmode:3;
 
     //boundingbox in world coordinates
     wxBoundingBox m_bbox;
