@@ -93,6 +93,8 @@ by dragging a little tab next to the scrollbars.  Added a demo to show
 this and also the ability of multiple wxStyledStectCtrls to share the
 same document.
 
+Added wxEditableListBox gizmo.
+
 
 
 

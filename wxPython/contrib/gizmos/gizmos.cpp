@@ -56,8 +56,9 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "gizmosc"
 
 #include "export.h"
-#include "wx/gizmos/dynamicsash.h"
-#include "wx/gizmos/editlbox.h"
+#include <wx/gizmos/dynamicsash.h>
+#include <wx/gizmos/editlbox.h>
+#include <wx/gizmos/splittree.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -91,6 +92,38 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #else
     static char* wxStringErrorMsg = "String type required";
 #endif
+
+    typedef wxTreeCtrl wxPyTreeCtrl;
+
+class wxPyTreeCompanionWindow: public wxTreeCompanionWindow
+{
+public:
+    wxPyTreeCompanionWindow(wxWindow* parent, wxWindowID id = -1,
+                            const wxPoint& pos = wxDefaultPosition,
+                            const wxSize& size = wxDefaultSize,
+                            long style = 0)
+        : wxTreeCompanionWindow(parent, id, pos, size, style) {}
+
+
+    virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect) {
+        bool found;
+        wxPyTState* state = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "DrawItem"))) {
+            PyObject* dcobj = wxPyMake_wxObject(&dc);
+            PyObject* idobj = wxPyConstructObject((void*)&id, "wxTreeItemId", FALSE);
+            PyObject* recobj= wxPyConstructObject((void*)&rect, "wxRect", FALSE);
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", dcobj, idobj, recobj));
+            Py_DECREF(dcobj);
+            Py_DECREF(idobj);
+            Py_DECREF(recobj);
+        }
+        wxPyEndBlockThreads(state);
+        if (! found)
+            wxTreeCompanionWindow::DrawItem(dc, id, rect);
+    }
+
+    PYPRIVATE;
+};
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -648,7 +681,659 @@ static PyObject *_wrap_wxEditableListBox_GetStrings(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+static void *SwigwxRemotelyScrolledTreeCtrlTowxPyTreeCtrl(void *ptr) {
+    wxRemotelyScrolledTreeCtrl *src;
+    wxPyTreeCtrl *dest;
+    src = (wxRemotelyScrolledTreeCtrl *) ptr;
+    dest = (wxPyTreeCtrl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxRemotelyScrolledTreeCtrlTowxControl(void *ptr) {
+    wxRemotelyScrolledTreeCtrl *src;
+    wxControl *dest;
+    src = (wxRemotelyScrolledTreeCtrl *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxRemotelyScrolledTreeCtrlTowxWindow(void *ptr) {
+    wxRemotelyScrolledTreeCtrl *src;
+    wxWindow *dest;
+    src = (wxRemotelyScrolledTreeCtrl *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxRemotelyScrolledTreeCtrlTowxEvtHandler(void *ptr) {
+    wxRemotelyScrolledTreeCtrl *src;
+    wxEvtHandler *dest;
+    src = (wxRemotelyScrolledTreeCtrl *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxRemotelyScrolledTreeCtrlTowxObject(void *ptr) {
+    wxRemotelyScrolledTreeCtrl *src;
+    wxObject *dest;
+    src = (wxRemotelyScrolledTreeCtrl *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxRemotelyScrolledTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxRemotelyScrolledTreeCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_new_wxRemotelyScrolledTreeCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRemotelyScrolledTreeCtrl * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
+    long  _arg4 = (long ) wxTR_HAS_BUTTONS;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOl:new_wxRemotelyScrolledTreeCtrl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxRemotelyScrolledTreeCtrl. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxRemotelyScrolledTreeCtrl *)new_wxRemotelyScrolledTreeCtrl(_arg0,_arg1,*_arg2,*_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxRemotelyScrolledTreeCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxRemotelyScrolledTreeCtrl_HideVScrollbar(_swigobj)  (_swigobj->HideVScrollbar())
+static PyObject *_wrap_wxRemotelyScrolledTreeCtrl_HideVScrollbar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRemotelyScrolledTreeCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRemotelyScrolledTreeCtrl_HideVScrollbar",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRemotelyScrolledTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRemotelyScrolledTreeCtrl_HideVScrollbar. Expected _wxRemotelyScrolledTreeCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRemotelyScrolledTreeCtrl_HideVScrollbar(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars(_swigobj)  (_swigobj->AdjustRemoteScrollbars())
+static PyObject *_wrap_wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRemotelyScrolledTreeCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRemotelyScrolledTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars. Expected _wxRemotelyScrolledTreeCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxRemotelyScrolledTreeCtrl_GetScrolledWindow(_swigobj)  (_swigobj->GetScrolledWindow())
+static PyObject *_wrap_wxRemotelyScrolledTreeCtrl_GetScrolledWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrolledWindow * _result;
+    wxRemotelyScrolledTreeCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRemotelyScrolledTreeCtrl_GetScrolledWindow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRemotelyScrolledTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRemotelyScrolledTreeCtrl_GetScrolledWindow. Expected _wxRemotelyScrolledTreeCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxScrolledWindow *)wxRemotelyScrolledTreeCtrl_GetScrolledWindow(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxScrolledWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxRemotelyScrolledTreeCtrl_ScrollToLine(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ScrollToLine(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRemotelyScrolledTreeCtrl_ScrollToLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRemotelyScrolledTreeCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","posHoriz","posVert", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRemotelyScrolledTreeCtrl_ScrollToLine",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRemotelyScrolledTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRemotelyScrolledTreeCtrl_ScrollToLine. Expected _wxRemotelyScrolledTreeCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRemotelyScrolledTreeCtrl_ScrollToLine(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxRemotelyScrolledTreeCtrl_SetCompanionWindow(_swigobj,_swigarg0)  (_swigobj->SetCompanionWindow(_swigarg0))
+static PyObject *_wrap_wxRemotelyScrolledTreeCtrl_SetCompanionWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRemotelyScrolledTreeCtrl * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","companion", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRemotelyScrolledTreeCtrl_SetCompanionWindow",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRemotelyScrolledTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRemotelyScrolledTreeCtrl_SetCompanionWindow. Expected _wxRemotelyScrolledTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxRemotelyScrolledTreeCtrl_SetCompanionWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRemotelyScrolledTreeCtrl_SetCompanionWindow(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxRemotelyScrolledTreeCtrl_GetCompanionWindow(_swigobj)  (_swigobj->GetCompanionWindow())
+static PyObject *_wrap_wxRemotelyScrolledTreeCtrl_GetCompanionWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _result;
+    wxRemotelyScrolledTreeCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRemotelyScrolledTreeCtrl_GetCompanionWindow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRemotelyScrolledTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRemotelyScrolledTreeCtrl_GetCompanionWindow. Expected _wxRemotelyScrolledTreeCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxWindow *)wxRemotelyScrolledTreeCtrl_GetCompanionWindow(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+static void *SwigwxPyTreeCompanionWindowTowxWindow(void *ptr) {
+    wxPyTreeCompanionWindow *src;
+    wxWindow *dest;
+    src = (wxPyTreeCompanionWindow *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyTreeCompanionWindowTowxEvtHandler(void *ptr) {
+    wxPyTreeCompanionWindow *src;
+    wxEvtHandler *dest;
+    src = (wxPyTreeCompanionWindow *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyTreeCompanionWindowTowxObject(void *ptr) {
+    wxPyTreeCompanionWindow *src;
+    wxObject *dest;
+    src = (wxPyTreeCompanionWindow *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxTreeCompanionWindow(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxPyTreeCompanionWindow(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_new_wxTreeCompanionWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeCompanionWindow * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1 = (wxWindowID ) -1;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
+    long  _arg4 = (long ) 0;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOl:new_wxTreeCompanionWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxTreeCompanionWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPyTreeCompanionWindow *)new_wxTreeCompanionWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyTreeCompanionWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxTreeCompanionWindow__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTreeCompanionWindow__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeCompanionWindow * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTreeCompanionWindow__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCompanionWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCompanionWindow__setCallbackInfo. Expected _wxPyTreeCompanionWindow_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTreeCompanionWindow__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeCompanionWindow_GetTreeCtrl(_swigobj)  (_swigobj->GetTreeCtrl())
+static PyObject *_wrap_wxTreeCompanionWindow_GetTreeCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRemotelyScrolledTreeCtrl * _result;
+    wxPyTreeCompanionWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTreeCompanionWindow_GetTreeCtrl",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCompanionWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCompanionWindow_GetTreeCtrl. Expected _wxPyTreeCompanionWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxRemotelyScrolledTreeCtrl *)wxTreeCompanionWindow_GetTreeCtrl(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxRemotelyScrolledTreeCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxTreeCompanionWindow_SetTreeCtrl(_swigobj,_swigarg0)  (_swigobj->SetTreeCtrl(_swigarg0))
+static PyObject *_wrap_wxTreeCompanionWindow_SetTreeCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeCompanionWindow * _arg0;
+    wxRemotelyScrolledTreeCtrl * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","treeCtrl", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCompanionWindow_SetTreeCtrl",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCompanionWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCompanionWindow_SetTreeCtrl. Expected _wxPyTreeCompanionWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRemotelyScrolledTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCompanionWindow_SetTreeCtrl. Expected _wxRemotelyScrolledTreeCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTreeCompanionWindow_SetTreeCtrl(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxThinSplitterWindowTowxSplitterWindow(void *ptr) {
+    wxThinSplitterWindow *src;
+    wxSplitterWindow *dest;
+    src = (wxThinSplitterWindow *) ptr;
+    dest = (wxSplitterWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxThinSplitterWindowTowxWindow(void *ptr) {
+    wxThinSplitterWindow *src;
+    wxWindow *dest;
+    src = (wxThinSplitterWindow *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxThinSplitterWindowTowxEvtHandler(void *ptr) {
+    wxThinSplitterWindow *src;
+    wxEvtHandler *dest;
+    src = (wxThinSplitterWindow *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxThinSplitterWindowTowxObject(void *ptr) {
+    wxThinSplitterWindow *src;
+    wxObject *dest;
+    src = (wxThinSplitterWindow *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxThinSplitterWindow(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxThinSplitterWindow(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_new_wxThinSplitterWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxThinSplitterWindow * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1 = (wxWindowID ) -1;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
+    long  _arg4 = (long ) wxSP_3D|wxCLIP_CHILDREN;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOl:new_wxThinSplitterWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxThinSplitterWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxThinSplitterWindow *)new_wxThinSplitterWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxThinSplitterWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static void *SwigwxSplitterScrolledWindowTowxScrolledWindow(void *ptr) {
+    wxSplitterScrolledWindow *src;
+    wxScrolledWindow *dest;
+    src = (wxSplitterScrolledWindow *) ptr;
+    dest = (wxScrolledWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplitterScrolledWindowTowxPanel(void *ptr) {
+    wxSplitterScrolledWindow *src;
+    wxPanel *dest;
+    src = (wxSplitterScrolledWindow *) ptr;
+    dest = (wxPanel *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplitterScrolledWindowTowxWindow(void *ptr) {
+    wxSplitterScrolledWindow *src;
+    wxWindow *dest;
+    src = (wxSplitterScrolledWindow *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplitterScrolledWindowTowxEvtHandler(void *ptr) {
+    wxSplitterScrolledWindow *src;
+    wxEvtHandler *dest;
+    src = (wxSplitterScrolledWindow *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplitterScrolledWindowTowxObject(void *ptr) {
+    wxSplitterScrolledWindow *src;
+    wxObject *dest;
+    src = (wxSplitterScrolledWindow *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxSplitterScrolledWindow(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxSplitterScrolledWindow(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_new_wxSplitterScrolledWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSplitterScrolledWindow * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1 = (wxWindowID ) -1;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
+    long  _arg4 = (long ) 0;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOl:new_wxSplitterScrolledWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxSplitterScrolledWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxSplitterScrolledWindow *)new_wxSplitterScrolledWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSplitterScrolledWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static PyMethodDef gizmoscMethods[] = {
+	 { "new_wxSplitterScrolledWindow", (PyCFunction) _wrap_new_wxSplitterScrolledWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxThinSplitterWindow", (PyCFunction) _wrap_new_wxThinSplitterWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCompanionWindow_SetTreeCtrl", (PyCFunction) _wrap_wxTreeCompanionWindow_SetTreeCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCompanionWindow_GetTreeCtrl", (PyCFunction) _wrap_wxTreeCompanionWindow_GetTreeCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCompanionWindow__setCallbackInfo", (PyCFunction) _wrap_wxTreeCompanionWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxTreeCompanionWindow", (PyCFunction) _wrap_new_wxTreeCompanionWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRemotelyScrolledTreeCtrl_GetCompanionWindow", (PyCFunction) _wrap_wxRemotelyScrolledTreeCtrl_GetCompanionWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRemotelyScrolledTreeCtrl_SetCompanionWindow", (PyCFunction) _wrap_wxRemotelyScrolledTreeCtrl_SetCompanionWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRemotelyScrolledTreeCtrl_ScrollToLine", (PyCFunction) _wrap_wxRemotelyScrolledTreeCtrl_ScrollToLine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRemotelyScrolledTreeCtrl_GetScrolledWindow", (PyCFunction) _wrap_wxRemotelyScrolledTreeCtrl_GetScrolledWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars", (PyCFunction) _wrap_wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRemotelyScrolledTreeCtrl_HideVScrollbar", (PyCFunction) _wrap_wxRemotelyScrolledTreeCtrl_HideVScrollbar, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxRemotelyScrolledTreeCtrl", (PyCFunction) _wrap_new_wxRemotelyScrolledTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEditableListBox_GetStrings", (PyCFunction) _wrap_wxEditableListBox_GetStrings, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEditableListBox_SetStrings", (PyCFunction) _wrap_wxEditableListBox_SetStrings, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxEditableListBox", (PyCFunction) _wrap_new_wxEditableListBox, METH_VARARGS | METH_KEYWORDS },
@@ -680,6 +1365,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
+    { "_wxPyTreeCtrl","_wxRemotelyScrolledTreeCtrl",SwigwxRemotelyScrolledTreeCtrlTowxPyTreeCtrl},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
@@ -690,6 +1376,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
+    { "_wxPanel","_wxSplitterScrolledWindow",SwigwxSplitterScrolledWindowTowxPanel},
     { "_wxPanel","_wxEditableListBox",SwigwxEditableListBoxTowxPanel},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
@@ -722,13 +1409,20 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxSplitterWindow","_wxThinSplitterWindow",SwigwxThinSplitterWindowTowxSplitterWindow},
+    { "_wxObject","_wxSplitterScrolledWindow",SwigwxSplitterScrolledWindowTowxObject},
+    { "_wxObject","_wxThinSplitterWindow",SwigwxThinSplitterWindowTowxObject},
+    { "_wxObject","_wxPyTreeCompanionWindow",SwigwxPyTreeCompanionWindowTowxObject},
+    { "_wxObject","_wxRemotelyScrolledTreeCtrl",SwigwxRemotelyScrolledTreeCtrlTowxObject},
     { "_wxObject","_wxEditableListBox",SwigwxEditableListBoxTowxObject},
     { "_wxObject","_wxDynamicSashWindow",SwigwxDynamicSashWindowTowxObject},
     { "_wxObject","_wxDynamicSashUnifyEvent",SwigwxDynamicSashUnifyEventTowxObject},
     { "_wxObject","_wxDynamicSashSplitEvent",SwigwxDynamicSashSplitEventTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
+    { "_wxScrolledWindow","_wxSplitterScrolledWindow",SwigwxSplitterScrolledWindowTowxScrolledWindow},
     { "_unsigned_char","_byte",0},
+    { "_wxControl","_wxRemotelyScrolledTreeCtrl",SwigwxRemotelyScrolledTreeCtrlTowxControl},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
     { "_unsigned_int","_time_t",0},
@@ -777,8 +1471,16 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
+    { "_wxEvtHandler","_wxSplitterScrolledWindow",SwigwxSplitterScrolledWindowTowxEvtHandler},
+    { "_wxEvtHandler","_wxThinSplitterWindow",SwigwxThinSplitterWindowTowxEvtHandler},
+    { "_wxEvtHandler","_wxPyTreeCompanionWindow",SwigwxPyTreeCompanionWindowTowxEvtHandler},
+    { "_wxEvtHandler","_wxRemotelyScrolledTreeCtrl",SwigwxRemotelyScrolledTreeCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxEditableListBox",SwigwxEditableListBoxTowxEvtHandler},
     { "_wxEvtHandler","_wxDynamicSashWindow",SwigwxDynamicSashWindowTowxEvtHandler},
+    { "_wxWindow","_wxSplitterScrolledWindow",SwigwxSplitterScrolledWindowTowxWindow},
+    { "_wxWindow","_wxThinSplitterWindow",SwigwxThinSplitterWindowTowxWindow},
+    { "_wxWindow","_wxPyTreeCompanionWindow",SwigwxPyTreeCompanionWindowTowxWindow},
+    { "_wxWindow","_wxRemotelyScrolledTreeCtrl",SwigwxRemotelyScrolledTreeCtrlTowxWindow},
     { "_wxWindow","_wxEditableListBox",SwigwxEditableListBoxTowxWindow},
     { "_wxWindow","_wxDynamicSashWindow",SwigwxDynamicSashWindowTowxWindow},
 {0,0,0}};
@@ -801,6 +1503,7 @@ SWIGEXPORT(void) initgizmosc() {
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();
 
+    wxPyPtrTypeMap_Add("wxTreeCompanionWindow", "wxPyTreeCompanionWindow");
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

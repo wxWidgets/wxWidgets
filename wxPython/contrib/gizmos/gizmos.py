@@ -123,6 +123,97 @@ class wxEditableListBox(wxEditableListBoxPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gizmosc.new_wxEditableListBox,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+
+class wxRemotelyScrolledTreeCtrlPtr(wxTreeCtrlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def HideVScrollbar(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_HideVScrollbar,(self,) + _args, _kwargs)
+        return val
+    def AdjustRemoteScrollbars(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars,(self,) + _args, _kwargs)
+        return val
+    def GetScrolledWindow(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_GetScrolledWindow,(self,) + _args, _kwargs)
+        if val: val = wxScrolledWindowPtr(val) 
+        return val
+    def ScrollToLine(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_ScrollToLine,(self,) + _args, _kwargs)
+        return val
+    def SetCompanionWindow(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_SetCompanionWindow,(self,) + _args, _kwargs)
+        return val
+    def GetCompanionWindow(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_GetCompanionWindow,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxRemotelyScrolledTreeCtrl instance at %s>" % (self.this,)
+class wxRemotelyScrolledTreeCtrl(wxRemotelyScrolledTreeCtrlPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gizmosc.new_wxRemotelyScrolledTreeCtrl,_args,_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+
+class wxTreeCompanionWindowPtr(wxWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxTreeCompanionWindow__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def GetTreeCtrl(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxTreeCompanionWindow_GetTreeCtrl,(self,) + _args, _kwargs)
+        if val: val = wxRemotelyScrolledTreeCtrlPtr(val) 
+        return val
+    def SetTreeCtrl(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxTreeCompanionWindow_SetTreeCtrl,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxTreeCompanionWindow instance at %s>" % (self.this,)
+class wxTreeCompanionWindow(wxTreeCompanionWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gizmosc.new_wxTreeCompanionWindow,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxTreeCompanionWindow)
+        self._setOORInfo(self)
+
+
+
+
+class wxThinSplitterWindowPtr(wxSplitterWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxThinSplitterWindow instance at %s>" % (self.this,)
+class wxThinSplitterWindow(wxThinSplitterWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gizmosc.new_wxThinSplitterWindow,_args,_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+
+class wxSplitterScrolledWindowPtr(wxScrolledWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxSplitterScrolledWindow instance at %s>" % (self.this,)
+class wxSplitterScrolledWindow(wxSplitterScrolledWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gizmosc.new_wxSplitterScrolledWindow,_args,_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -148,3 +239,10 @@ wxDS_DRAG_CORNER = gizmosc.wxDS_DRAG_CORNER
 wx.wxDynamicSashSplitEventPtr       = wxDynamicSashSplitEventPtr
 wx.wxDynamicSashUnifyEventPtr       = wxDynamicSashUnifyEventPtr
 wx.wxDynamicSashWindowPtr           = wxDynamicSashWindowPtr
+
+wx.wxEditableListBoxPtr             = wxEditableListBoxPtr
+
+wx.wxRemotelyScrolledTreeCtrlPtr    = wxRemotelyScrolledTreeCtrlPtr
+wx.wxTreeCompanionWindowPtr         = wxTreeCompanionWindowPtr
+wx.wxThinSplitterWindowPtr          = wxThinSplitterWindowPtr
+wx.wxSplitterScrolledWindowPtr      = wxSplitterScrolledWindowPtr

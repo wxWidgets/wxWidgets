@@ -3,7 +3,7 @@ from wxPython.wx import *
 from wxPython.help import *
 
 #----------------------------------------------------------------------
-# We first have to set an application wide help provider.  Normally you
+# We first have to set an application-wide help provider.  Normally you
 # would do this in your app's OnInit or in other startup code...
 
 provider = wxSimpleHelpProvider()

@@ -15,8 +15,9 @@
 
 %{
 #include "export.h"
-#include "wx/gizmos/dynamicsash.h"
-#include "wx/gizmos/editlbox.h"
+#include <wx/gizmos/dynamicsash.h>
+#include <wx/gizmos/editlbox.h>
+#include <wx/gizmos/splittree.h>
 %}
 
 //---------------------------------------------------------------------------
@@ -90,7 +91,7 @@ public:
 
     As an application developer, you will simply create a wxDynamicSashWindow
     using either the Create() function or the more complex constructor
-    provided below, and then create a viewfrom wxPython.wx import * window whose parent is the
+    provided below, and then create a view window whose parent is the
     wxDynamicSashWindow.  The child should respond to
     wxDynamicSashSplitEvents -- perhaps with an OnSplit() event handler -- by
     constructing a new view window whose parent is also the
@@ -102,7 +103,7 @@ public:
     complex.  (You might want to handle scrollbar events yourself, if,
     for instance, you wish to scroll a subwindow of the view you add to
     your wxDynamicSashWindow object, rather than scrolling the whole view.)
-    In this case, you will need to construfrom wxPython.wx import *ct your wxDynamicSashWindow without
+    In this case, you will need to construct your wxDynamicSashWindow without
     the wxDS_MANAGE_SCROLLBARS style and  you will need to use the
     GetHScrollBar() and GetVScrollBar() methods to retrieve the scrollbar
     controls and call SetEventHanler() on them to redirect the scrolling
@@ -165,6 +166,8 @@ public:
                       const wxSize& size = wxDefaultSize,
                       const char* name = "editableListBox");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
     void SetStrings(const wxArrayString& strings);
 
     //void GetStrings(wxArrayString& strings);
@@ -181,11 +184,152 @@ public:
 
 //----------------------------------------------------------------------
 
+
+/*
+ * wxRemotelyScrolledTreeCtrl
+ *
+ * This tree control disables its vertical scrollbar and catches scroll
+ * events passed by a scrolled window higher in the hierarchy.
+ * It also updates the scrolled window vertical scrollbar as appropriate.
+ */
+
+%{
+    typedef wxTreeCtrl wxPyTreeCtrl;
+%}
+
+class wxRemotelyScrolledTreeCtrl: public wxPyTreeCtrl
+{
+public:
+    wxRemotelyScrolledTreeCtrl(wxWindow* parent, wxWindowID id,
+                               const wxPoint& pos = wxDefaultPosition,
+                               const wxSize& size = wxDefaultSize,
+                               long style = wxTR_HAS_BUTTONS);
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
+
+    void HideVScrollbar();
+
+    // Adjust the containing wxScrolledWindow's scrollbars appropriately
+    void AdjustRemoteScrollbars();
+
+    // Find the scrolled window that contains this control
+    wxScrolledWindow* GetScrolledWindow() const;
+
+    // Scroll to the given line (in scroll units where each unit is
+    // the height of an item)
+    void ScrollToLine(int posHoriz, int posVert);
+
+    // The companion window is one which will get notified when certain
+    // events happen such as node expansion
+    void SetCompanionWindow(wxWindow* companion);
+    wxWindow* GetCompanionWindow() const;
+};
+
+
+
+/*
+ * wxTreeCompanionWindow
+ *
+ * A window displaying values associated with tree control items.
+ */
+
+%{
+class wxPyTreeCompanionWindow: public wxTreeCompanionWindow
+{
+public:
+    wxPyTreeCompanionWindow(wxWindow* parent, wxWindowID id = -1,
+                            const wxPoint& pos = wxDefaultPosition,
+                            const wxSize& size = wxDefaultSize,
+                            long style = 0)
+        : wxTreeCompanionWindow(parent, id, pos, size, style) {}
+
+
+    virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect) {
+        bool found;
+        wxPyTState* state = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "DrawItem"))) {
+            PyObject* dcobj = wxPyMake_wxObject(&dc);
+            PyObject* idobj = wxPyConstructObject((void*)&id, "wxTreeItemId", FALSE);
+            PyObject* recobj= wxPyConstructObject((void*)&rect, "wxRect", FALSE);
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", dcobj, idobj, recobj));
+            Py_DECREF(dcobj);
+            Py_DECREF(idobj);
+            Py_DECREF(recobj);
+        }
+        wxPyEndBlockThreads(state);
+        if (! found)
+            wxTreeCompanionWindow::DrawItem(dc, id, rect);
+    }
+
+    PYPRIVATE;
+};
+%}
+
+
+%name(wxTreeCompanionWindow) class wxPyTreeCompanionWindow: public wxWindow
+{
+public:
+    wxPyTreeCompanionWindow(wxWindow* parent, wxWindowID id = -1,
+                            const wxPoint& pos = wxDefaultPosition,
+                            const wxSize& size = wxDefaultSize,
+                            long style = 0);
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxTreeCompanionWindow)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
+    wxRemotelyScrolledTreeCtrl* GetTreeCtrl() const;
+    void SetTreeCtrl(wxRemotelyScrolledTreeCtrl* treeCtrl);
+};
+
+
+
+/*
+ * wxThinSplitterWindow
+ *
+ * Implements a splitter with a less obvious sash
+ * than the usual one.
+ */
+
+class wxThinSplitterWindow: public wxSplitterWindow
+{
+public:
+    wxThinSplitterWindow(wxWindow* parent, wxWindowID id = -1,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style = wxSP_3D | wxCLIP_CHILDREN);
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
+};
+
+
+/*
+ * wxSplitterScrolledWindow
+ *
+ * This scrolled window is aware of the fact that one of its
+ * children is a splitter window. It passes on its scroll events
+ * (after some processing) to both splitter children for them
+ * scroll appropriately.
+ */
+
+class wxSplitterScrolledWindow: public wxScrolledWindow
+{
+public:
+    wxSplitterScrolledWindow(wxWindow* parent, wxWindowID id = -1,
+                             const wxPoint& pos = wxDefaultPosition,
+                             const wxSize& size = wxDefaultSize,
+                             long style = 0);
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+};
+
+
+//----------------------------------------------------------------------
+
 %init %{
 
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();
 
+    wxPyPtrTypeMap_Add("wxTreeCompanionWindow", "wxPyTreeCompanionWindow");
 %}
 
 
@@ -193,5 +337,9 @@ public:
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
+
+
+
+
 
 

@@ -85,7 +85,10 @@ _treeList = [
                           'wxRightTextCtrl',
                           ]),
 
-    ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
+    ('Cool Contribs', ['pyTree', 'hangman',
+                       #'SlashDot',
+                       'XMLtreeview'
+                       ]),
 
     ]
 

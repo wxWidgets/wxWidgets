@@ -36,5 +36,5 @@ def runTest(frame, nb, log):
 
 overview = """\
 This class provides a composite control that lets the
-user easily enter list of strings.
+user easily enter and edit a list of strings.
 """
