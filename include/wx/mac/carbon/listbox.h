@@ -138,8 +138,6 @@ public:
     wxArrayString   m_stringArray ;
     wxListDataArray m_dataArray ;
     wxArrayInt      m_selectionPreImage ;
-    wxArrayLong     m_idArray ;
-    wxUint32        m_nextId ;
     
     void            MacSetRedraw( bool doDraw ) ;
 protected:
