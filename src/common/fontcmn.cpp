@@ -29,8 +29,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/font.h"
-#include "wx/intl.h"
+    #include "wx/font.h"
+    #include "wx/intl.h"
+    #include "wx/dcscreen.h"
 #endif // WX_PRECOMP
 
 #include "wx/gdicmn.h"
@@ -185,10 +186,10 @@ wxFont *wxFontBase::New(const wxSize& pixelSize,
     return new wxFont(pixelSize, family, style, weight, underlined,
                       face, encoding);
 #else
-    wxFont * ret = New(10, family, style, weight, underlined, face, encoding);
+    wxFont *self = New(10, family, style, weight, underlined, face, encoding);
     wxScreenDC dc;
-    ret->AdjustFontSize(*(wxFont *)this, dc, pixelSize);
-    return ret;
+    AdjustFontSize(*(wxFont *)self, dc, pixelSize);
+    return self;
 #endif
 }
 
