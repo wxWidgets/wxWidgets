@@ -1123,6 +1123,7 @@ samples/widgets/*.xpm
 samples/widgets/*.txt
 samples/widgets/*.bmp
 samples/widgets/*.pro
+samples/widgets/icons/*.xpm
 
 samples/wizard/*.cpp
 samples/wizard/*.h
