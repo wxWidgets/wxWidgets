@@ -1,0 +1,69 @@
+#
+#  wGLCanvas source makefile for Unix
+#
+#  Copyright 1998, Robert Roebling
+#
+
+# wxWindows base directory
+WXBASEDIR=@WXBASEDIR@
+
+# set the OS type for compilation
+OS=@OS@
+
+# compile a library only
+RULE=gslib
+
+# needed for unactivated
+NONE=
+
+# define library name
+LIB_TARGET=wx_ogl_gtk
+LIB_MAJOR=0
+LIB_MINOR=1
+
+# define library sources
+
+LIB_CPP_SRC= \
+\
+ basic.cpp basic2.cpp bmpshape.cpp canvas.cpp \
+ composit.cpp divided.cpp drawn.cpp lines.cpp \
+ mfutils.cpp misc.cpp ogldiag.cpp 
+
+#define library objects
+LIB_OBJ= \
+\
+ $(LIB_CPP_SRC:.cpp=.o)
+
+all::
+
+clean::
+
+#additional things needed for compile
+ADD_COMPILE=
+
+# include the definitions now
+include ../../../../template.mak
+
+install::
+	@echo "Installing library files and headers for libwx_ogl_gtk.."
+	@echo "  Creating directory.."
+	@$(WXBASEDIR)/mkinstalldirs /usr/local/include/wx_ogl
+	@echo "  Copying headers from /include/wx"
+	@cd $(WXBASEDIR)/utils/ogl/src ; \
+	for f in *.h ; do \
+	  rm -f /usr/local/include/wx_ogl/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/include/wx_ogl/$$f ; \
+	done
+	@echo "  Copying static library files to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_ogl_gtk.a ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/lib/$$f ; \
+	done
+	@echo "  Copying shared libraries to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_ogl_gtk.so* ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_PROGRAM) $$f /usr/local/lib/$$f ; \
+	done
+

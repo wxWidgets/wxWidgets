@@ -18,7 +18,11 @@
 
 #include <wx/wx.h>
 #include <wx/string.h>
+#ifdef __WXGTK__
+#include <wx/toolbar.h>
+#else
 #include <wx/tbarsmpl.h>
+#endif
 
 /*
  * Object editor tool palette
@@ -28,7 +32,11 @@
 // TODO for wxWin: wxToolBar95 cannot be moved to a non-0,0 position!
 // Needs to have a parent window...
 // So use a simple toolbar at present.
+#ifdef __WXGTK__
+#define TOOLPALETTECLASS    wxToolBar
+#else
 #define TOOLPALETTECLASS    wxToolBarSimple
+#endif
 
 class EditorToolPalette: public TOOLPALETTECLASS
 {
