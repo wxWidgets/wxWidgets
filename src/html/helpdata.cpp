@@ -582,7 +582,7 @@ wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& key
     }
     m_Engine.LookFor(keyword, case_sensitive, whole_words_only);
     m_Active = (m_CurIndex < m_MaxIndex);
-    m_LastPage = wxEmptyString;
+    m_LastPage = NULL;
 }
 
 bool wxHtmlSearchStatus::Search()
@@ -591,6 +591,7 @@ bool wxHtmlSearchStatus::Search()
     wxFSFile *file;
     int i = m_CurIndex;  // shortcut
     bool found = FALSE;
+    wxChar *thepage;
 
     if (!m_Active) {
     // sanity check. Illegal use, but we'll try to prevent a crash anyway
@@ -602,22 +603,35 @@ bool wxHtmlSearchStatus::Search()
         return FALSE;
     }
 
-    m_ContentsItem = NULL;
     m_Name = wxEmptyString;
+    m_ContentsItem = NULL;
+    thepage = m_Data->m_Contents[i].m_Page;
 
-    file = fsys.OpenFile(m_Data->m_Contents[i].m_Book -> GetBasePath() + m_Data->m_Contents[i].m_Page);
-    if (file) {
-        if (m_LastPage != file->GetLocation()) {
-            m_LastPage = file->GetLocation();
-            if (m_Engine.Scan(file -> GetStream())) {
-                m_Name = m_Data->m_Contents[i].m_Name;
-                m_ContentsItem = m_Data->m_Contents + i;
-                found = TRUE;
-            }
+    m_Active = (++m_CurIndex < m_MaxIndex);
+    // check if it is same page with different anchor:
+    if (m_LastPage != NULL)
+    {
+        wxChar *p1, *p2;
+        for (p1 = thepage, p2 = m_LastPage; 
+             *p1 != 0 && *p1 != _T('#') && *p1 == *p2; p1++, p2++) {}
+
+        m_LastPage = thepage;
+
+        if (*p1 == 0 || *p1 == _T('#'))
+            return FALSE;
+    }
+    else m_LastPage = thepage;
+    
+    file = fsys.OpenFile(m_Data->m_Contents[i].m_Book -> GetBasePath() + thepage);
+    if (file) 
+    {
+        if (m_Engine.Scan(file -> GetStream())) {
+            m_Name = m_Data->m_Contents[i].m_Name;
+            m_ContentsItem = m_Data->m_Contents + i;
+            found = TRUE;
         }
         delete file;
     }
-    m_Active = (++m_CurIndex < m_MaxIndex);
     return found;
 }
 

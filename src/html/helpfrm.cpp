@@ -365,7 +365,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
     }
     m_HtmlWin -> Show(TRUE);
 
-    //RefreshLists();
+    RefreshLists();
 
     // showtime
     if (m_NavigPan && m_Splitter) {
@@ -480,14 +480,13 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
 
     while (status.IsActive()) {
         curi = status.GetCurIndex();
-        if (curi % 10 == 0 && progress.Update(curi) == FALSE)
+        if (curi % 32 == 0 && progress.Update(curi) == FALSE)
             break;
         if (status.Search()) {
             foundstr.Printf(_("Found %i matches"), ++foundcnt);
             progress.Update(status.GetCurIndex(), foundstr);
             m_SearchList -> Append(status.GetName(), status.GetContentsItem());
         }
-        wxYield();
     }
 
     m_SearchButton -> Enable(TRUE);
@@ -502,26 +501,17 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
 
 #define MAX_ROOTS 64
 
-void wxHtmlHelpFrame::CreateContents(bool show_progress)
+void wxHtmlHelpFrame::CreateContents()
 {
     if (! m_ContentsBox)
         return ;
 
-    wxProgressDialog *progress = NULL;
-    wxString proginfo;
-
     m_ContentsBox->Clear();
 
     int cnt = m_Data->GetContentsCnt();
-    int div = (cnt / PROGRESS_STEP) + 1;
     int i;
 
     wxHtmlContentsItem *it;
-
-    if (show_progress)
-        progress = new wxProgressDialog(_("Building contents tree..."), wxEmptyString,
-                                        cnt, this, wxPD_APP_MODAL | wxPD_CAN_ABORT |
-                                        wxPD_AUTO_HIDE);
 
     wxTreeItemId roots[MAX_ROOTS];
     bool imaged[MAX_ROOTS];
@@ -533,12 +523,6 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
     imaged[0] = TRUE;
 
     for (it = m_Data->GetContents(), i = 0; i < cnt; i++, it++) {
-        if (show_progress && ((i % div) == 0)) {
-            proginfo.Printf(_("Added %d/%d items"), i, cnt);
-            if (! progress->Update(i, proginfo))
-                break;
-            wxYield();
-        }
         roots[it -> m_Level + 1] =  m_ContentsBox -> AppendItem(
                                        roots[it -> m_Level], it -> m_Name, IMG_Page, -1,
                                        new wxHtmlHelpTreeItemData(it));
@@ -556,19 +540,14 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
             imaged[it -> m_Level] = TRUE;
         }
     }
-    if (show_progress)
-        delete progress;
     m_ContentsBox -> Expand(roots[0]);
 }
 
 
-void wxHtmlHelpFrame::CreateIndex(bool show_progress)
+void wxHtmlHelpFrame::CreateIndex()
 {
     if (! m_IndexList)
         return ;
-
-    wxProgressDialog *progress = NULL;
-    wxString proginfo;
 
     m_IndexList->Clear();
 
@@ -580,26 +559,10 @@ void wxHtmlHelpFrame::CreateIndex(bool show_progress)
     m_IndexCountInfo -> SetLabel(cnttext);
     if (cnt > INDEX_IS_SMALL) return;
     
-    int div = (cnt / PROGRESS_STEP) + 1;
-
     wxHtmlContentsItem* index = m_Data->GetIndex();
 
-    if (show_progress)
-        progress = new wxProgressDialog(_("Building index list..."), wxEmptyString,
-                                        cnt, this, wxPD_APP_MODAL | wxPD_CAN_ABORT |
-                                        wxPD_AUTO_HIDE);
-    for (int i = 0; i < cnt; i++) {
-        if (show_progress && ((i % div) == 0)) {
-            proginfo.Printf(_("Added %d/%d items"), i, cnt);
-            if (! progress->Update(i, proginfo))
-                break;
-            wxYield();
-        }
+    for (int i = 0; i < cnt; i++) 
         m_IndexList -> Append(index[i].m_Name, (char*)(index + i));
-    }
-
-    if (show_progress)
-        delete progress;
 }
 
 void wxHtmlHelpFrame::CreateSearch()
@@ -617,10 +580,10 @@ void wxHtmlHelpFrame::CreateSearch()
 }
 
 
-void wxHtmlHelpFrame::RefreshLists(bool show_progress)
+void wxHtmlHelpFrame::RefreshLists()
 {
-    CreateContents(show_progress);
-    CreateIndex(show_progress);
+    CreateContents();
+    CreateIndex();
     CreateSearch();
 }
 
