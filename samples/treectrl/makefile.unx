@@ -3,7 +3,7 @@
 
 CXX = $(shell wx-config --cxx)
 
-PROGRAM = treectrl
+PROGRAM = treetest
 
 OBJECTS = $(PROGRAM).o
 

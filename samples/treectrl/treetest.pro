@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = treectrl.cpp
-RC_FILE = treectrl.rc
-TARGET  = treectrl
+SOURCES = treetest.cpp
+RC_FILE = treetest.rc
+TARGET  = treetest

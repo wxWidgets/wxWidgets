@@ -1,7 +1,7 @@
 # Purpose: makefile for treectrl example (Salford C++)
 # Created: 2000-03-15
 
-PROGRAM = treectrl
+PROGRAM = treetest
 OBJECTS = $(PROGRAM).obj
 
 include ..\..\src\makeprog.sl

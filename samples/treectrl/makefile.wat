@@ -3,7 +3,7 @@
 
 WXDIR = $(%WXWIN)
 
-PROGRAM = treectrl
+PROGRAM = treetest
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.wat

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treectrl.cpp
+// Name:        treetest.cpp
 // Purpose:     wxTreeCtrl sample
 // Author:      Julian Smart
 // Modified by:
@@ -9,12 +9,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-// important: the #pragma argument must be different from treectrl.cpp,
-// otherwise gcc gets confused (as there is also treectrl.cpp in the library
-// which has identical #pragma) and the sample crashes on startup!
 #ifdef __GNUG__
-  #pragma interface "treetest.cpp"
-  #pragma implementation "treetest.cpp"
+  #pragma implementation
+  #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -42,7 +39,7 @@
     #define NO_VARIABLE_HEIGHT
 #endif
 
-#include "treectrl.h"
+#include "treetest.h"
 
 // under Windows the icons are in the .rc file
 #ifndef __WXMSW__

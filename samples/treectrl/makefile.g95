@@ -3,7 +3,7 @@
 
 WXDIR = ../..
 
-TARGET=treectrl
+TARGET=treetest
 OBJECTS = $(TARGET).o
 
 include $(WXDIR)/src/makeprog.g95

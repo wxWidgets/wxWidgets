@@ -1,17 +1,17 @@
-# Purpose: makefile for treectrl example (Symantec C++)
+# Purpose: makefile for treetest example (Symantec C++)
 # Created: 2000-03-15
 
 WXDIR = $(WXWIN)
 WXLIB = $(WXDIR)\lib\wx.lib
 INCDIR = $(WXDIR)\include
 INCLUDE=$(INCDIR)
-TARGET=treectrl
+TARGET=treetest
 
 include $(WXDIR)\src\makesc.env
 
-treectrl.exe: treectrl.obj $(DEFFILE) treectrl.res
+treetest.exe: treetest.obj $(DEFFILE) treetest.res
 	*$(CC) $(LDFLAGS) -o$@ $** $(LIBS)
-    *$(RC) -k treectrl.res
+    *$(RC) -k treetest.res
 
 sc32.def:
      echo EXETYPE NT > sc32.def

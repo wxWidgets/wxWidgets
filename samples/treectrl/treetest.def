@@ -1,5 +1,5 @@
-NAME         TreeCtrl
-DESCRIPTION  'TreeCtrl wxWindows application'
+NAME         TreeTest
+DESCRIPTION  'TreeTest wxWindows application'
 EXETYPE      WINDOWS
 STUB         'WINSTUB.EXE'
 CODE         PRELOAD MOVEABLE DISCARDABLE
