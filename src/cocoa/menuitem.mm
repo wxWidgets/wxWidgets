@@ -47,6 +47,7 @@
 }
 
 - (void)wxMenuItemAction: (id)sender;
+- (BOOL)validateMenuItem: (id)menuItem;
 @end //interface wxNSMenuItemTarget
 
 @implementation wxNSMenuItemTarget : NSObject
@@ -66,6 +67,15 @@
         wxCHECK_RET(frame, "wxMenuBar MUST be attached to a wxFrame!");
         frame->Command(item->GetId());
     }
+}
+
+- (BOOL)validateMenuItem: (id)menuItem
+{
+    // TODO: Do wxWindows validation here and avoid sending during idle time
+    wxLogDebug("wxMenuItemAction");
+    wxMenuItem *item = wxMenuItem::GetFromCocoa(menuItem);
+    wxCHECK_MSG(item,NO,"validateMenuItem received but no wxMenuItem exists!");
+    return item->IsEnabled();
 }
 
 @end //implementation wxNSMenuItemTarget
