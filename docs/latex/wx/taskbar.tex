@@ -5,11 +5,35 @@ mouse clicks. An icon has an optional tooltip. This class is only supported for 
 
 \wxheading{Derived from}
 
+\helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
 
 \wxheading{Include files}
 
 <wx/taskbar.h>
+
+\wxheading{Event handling}
+
+To process input from a taskbar icon, use the following event handler macros to direct input to member
+functions that take a wxTaskBarIconEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_TASKBAR\_MOVE(func)}}{Process a
+wxEVT\_TASKBAR\_MOVE event.}
+\twocolitem{{\bf EVT\_TASKBAR\_LEFT\_DOWN(func)}}{Process a
+wxEVT\_TASKBAR\_LEFT\_DOWN event.}
+\twocolitem{{\bf EVT\_TASKBAR\_LEFT\_UP(func)}}{Process a
+wxEVT\_TASKBAR\_LEFT\_UP event.}
+\twocolitem{{\bf EVT\_TASKBAR\_RIGHT\_DOWN(func)}}{Process a
+wxEVT\_TASKBAR\_RIGHT\_DOWN event.}
+\twocolitem{{\bf EVT\_TASKBAR\_RIGHT\_UP(func)}}{Process a
+wxEVT\_TASKBAR\_RIGHT\_UP event.}
+\twocolitem{{\bf EVT\_TASKBAR\_LEFT\_DCLICK(func)}}{Process a
+wxEVT\_TASKBAR\_LEFT\_DCLICK event.}
+\twocolitem{{\bf EVT\_TASKBAR\_RIGHT\_DCLICK(func)}}{Process a
+wxEVT\_TASKBAR\_RIGHT\_DCLICK event.}
+\end{twocollist}%
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
