@@ -448,13 +448,13 @@ wxThreadError wxThread::Create()
     pthread_attr_t attr;
     pthread_attr_init(&attr);
 
+#ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
     int prio;
     if ( pthread_attr_getschedpolicy(&attr, &prio) != 0 )
     {
         wxLogError(_("Can not retrieve thread scheduling policy."));
     }
 
-#ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
     int min_prio = sched_get_priority_min(prio),
         max_prio = sched_get_priority_max(prio);
 
