@@ -33,7 +33,14 @@ GdkAtom  g_fileAtom        = 0;
 
 wxDataFormat::wxDataFormat()
 {
-    PrepareFormats();
+    // do *not* call PrepareFormats() from here for 2 reasons:
+    //
+    // 1. we will have time to do it later because some other Set function
+    //    must be called before we really need them
+    //
+    // 2. doing so prevents us from declaring global wxDataFormats because
+    //    calling PrepareFormats (and thus gdk_atom_intern) before GDK is
+    //    initialised will result in a crash
     m_type = wxDF_INVALID;
     m_format = (GdkAtom) 0;
 }
@@ -64,6 +71,7 @@ wxDataFormat::wxDataFormat( NativeFormat format )
 
 void wxDataFormat::SetType( wxDataFormatId type )
 {
+    PrepareFormats();
     m_type = type;
 
     if (m_type == wxDF_TEXT)
@@ -93,6 +101,7 @@ wxString wxDataFormat::GetId() const
 
 void wxDataFormat::SetId( NativeFormat format )
 {
+    PrepareFormats();
     m_format = format;
 
     if (m_format == g_textAtom)
@@ -109,6 +118,7 @@ void wxDataFormat::SetId( NativeFormat format )
 
 void wxDataFormat::SetId( const wxChar *id )
 {
+    PrepareFormats();
     m_type = wxDF_PRIVATE;
     wxString tmp( id );
     m_format = gdk_atom_intern( wxMBSTRINGCAST tmp.mbc_str(), FALSE );  // what is the string cast for?
@@ -162,13 +172,13 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
 bool wxFileDataObject::GetDataHere(void *buf) const
 {
     wxString filenames;
-    
+
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
         filenames += m_filenames[i];
-	filenames += (wxChar) 0;
+        filenames += (wxChar) 0;
     }
-    
+
     memcpy( buf, filenames.mbc_str(), filenames.Len() + 1 );
 
     return TRUE;
@@ -177,20 +187,20 @@ bool wxFileDataObject::GetDataHere(void *buf) const
 size_t wxFileDataObject::GetDataSize() const
 {
     size_t res = 0;
-    
+
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
         res += m_filenames[i].Len();
-	res += 1;
+        res += 1;
     }
-    
+
     return res + 1;
 }
 
 bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
 {
     /* TODO */
-    
+
     wxString file( (const char *)buf );  /* char, not wxChar */
 
     AddFile( file );
@@ -266,7 +276,7 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
     }
 
     m_bitmap = image.ConvertToBitmap();
-    
+
     return m_bitmap.Ok();
 }
 
