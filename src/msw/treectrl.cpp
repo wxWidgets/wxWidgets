@@ -344,6 +344,11 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     !defined( __BORLANDC__ ) && \
     !defined( __WATCOMC__ ) && \
     (!defined(__VISUALC__) || (__VISUALC__ > 1010))
+
+#ifndef TVS_CHECKBOXES
+#define TVS_CHECKBOXES 0x0100
+#endif
+
     // we emulate the multiple selection tree controls by using checkboxes: set
     // up the image list we need for this if we do have multiple selections
     if ( m_windowStyle & wxTR_MULTIPLE )
