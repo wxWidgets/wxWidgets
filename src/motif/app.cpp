@@ -126,7 +126,9 @@ void wxApp::CleanUp()
     // create a module for that as it's part of the core.
 #if wxUSE_THREADS
     delete wxPendingEvents;
+    wxPendingEvents = NULL;
     delete wxPendingEventsLocker;
+    wxPendingEventsLocker = NULL;
 #endif
 
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
