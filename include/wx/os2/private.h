@@ -20,8 +20,9 @@
 #define INCL_WINSYS
 #define INCL_SHLERRORS
 #include <os2.h>
-#if defined (__EMX__) && !defined(USE_OS2_TOOLKIT_HEADERS)
-/* struct missing in "os2emx.h" */
+#if defined (__EMX__) && !defined(USE_OS2_TOOLKIT_HEADERS) && !defined(FCF_CLOSEBUTTON)
+/* struct missing in "os2emx.h" - luckily FCF_CLOSEBUTTON was added in the
+   same version of os2emx.h as SPBCDATA type, so we can do the test above. */
  typedef struct _SPBCDATA {
    ULONG     cbSize;       /*  Size of control block. */
    ULONG     ulTextLimit;  /*  Entryfield text limit. */
