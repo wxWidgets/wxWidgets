@@ -231,6 +231,17 @@ wxTopLevelWindowX11::~wxTopLevelWindowX11()
 
 bool wxTopLevelWindowX11::Show(bool show)
 {
+    // Nano-X has to force a size event,
+    // else there's no initial size.
+#if wxUSE_NANOX
+    if (show)
+    {
+        wxSizeEvent event(GetSize(), GetId());
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+    }
+#endif
+
     return wxWindowX11::Show(show);
 }
 
