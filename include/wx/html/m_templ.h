@@ -1,9 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mod_templ.h
-// Purpose:     wxHtml tags module generic "template"
+// Name:        m_templ.h
+// Purpose:     Modules template file
 // Author:      Vaclav Slavik
-// Copyright:   (c) 1999 Vaclav Slavik
-// Licence:     wxWindows Licence
+// RCS-ID:      $Id$
+// Copyright:   (c) Vaclav Slavik
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -18,8 +19,8 @@ I STRONGLY recommend reading and understanding these macros!!
 */
 
 
-#ifndef __MOD_TEMPL_H__
-#define __MOD_TEMPL_H__
+#ifndef _WX_M_TEMPL_H_
+#define _WX_M_TEMPL_H_
 
 #include "wx/defs.h"
 #if wxUSE_HTML
@@ -43,7 +44,7 @@ I STRONGLY recommend reading and understanding these macros!!
 
 
 
-#include <wx/html/htmlwinparser.h>
+#include "wx/html/winpars.h"
 
 
 #define TAG_HANDLER_BEGIN(name,tags)                                      \

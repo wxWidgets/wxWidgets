@@ -2,6 +2,7 @@
 // Name:        htmltag.cpp
 // Purpose:     wxHtmlTag class (represents single tag)
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,7 +25,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/html/htmltag.h>
+#include "wx/html/htmltag.h"
 #include <stdio.h> // for vsscanf
 #include <stdarg.h>
 

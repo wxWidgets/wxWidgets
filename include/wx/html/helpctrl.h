@@ -4,8 +4,7 @@
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
-// Created:
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -16,7 +15,7 @@
 #include "wx/defs.h"
 
 #ifdef __GNUG__
-#pragma interface "helpctrl.h"
+#pragma interface
 #endif
 
 #if wxUSE_HTML

@@ -36,7 +36,7 @@ TAG HANDER FOR 'MYBIND' TAG
 
 */
 
-#include <wx/html/mod_templ.h>
+#include <wx/html/m_templ.h>
 
 
 TAG_HANDLER_BEGIN(MYBIND, "MYBIND")

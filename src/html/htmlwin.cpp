@@ -2,6 +2,7 @@
 // Name:        htmlwin.cpp
 // Purpose:     wxHtmlWindow class for parsing & displaying HTML (implementation)
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,9 +25,9 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/html/htmlwin.h>
+#include "wx/html/htmlwin.h"
 
-#include <wx/html/forcelink.h>
+#include "wx/html/forcelnk.h"
 
 
 

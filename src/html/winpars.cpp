@@ -1,7 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlwinparser.cpp
+// Name:        winpars.cpp
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,9 +25,9 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/html/htmldefs.h>
-#include <wx/html/htmlwinparser.h>
-#include <wx/html/htmlwin.h>
+#include "wx/html/htmldefs.h"
+#include "wx/html/winpars.h"
+#include "wx/html/htmlwin.h"
 
 
 //-----------------------------------------------------------------------------

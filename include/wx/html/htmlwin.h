@@ -2,13 +2,14 @@
 // Name:        htmlwin.h
 // Purpose:     wxHtmlWindow class for parsing & displaying HTML
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __HTMLWIN_H__
-#define __HTMLWIN_H__
+#ifndef _WX_HTMLWIN_H_
+#define _WX_HTMLWIN_H_
 
 #ifdef __GNUG__
 #pragma interface
@@ -17,14 +18,14 @@
 #include "wx/defs.h"
 #if wxUSE_HTML
 
-#include <wx/window.h>
-#include <wx/scrolwin.h>
-#include <wx/config.h>
-#include <wx/treectrl.h>
-#include <wx/html/htmlwinparser.h>
-#include <wx/html/htmlcell.h>
-#include <wx/filesys.h>
-#include <wx/html/htmlfilter.h>
+#include "wx/window.h"
+#include "wx/scrolwin.h"
+#include "wx/config.h"
+#include "wx/treectrl.h"
+#include "wx/html/winpars.h"
+#include "wx/html/htmlcell.h"
+#include "wx/filesys.h"
+#include "wx/html/htmlfilt.h"
 
 
 //--------------------------------------------------------------------------------
@@ -42,17 +43,17 @@
 // item of history list
 class WXDLLEXPORT HtmlHistoryItem : public wxObject
 {
-    private:
-        wxString m_Page;
-        wxString m_Anchor;
-        int m_Pos;
-
     public:
         HtmlHistoryItem(const wxString& p, const wxString& a) {m_Page = p, m_Anchor = a, m_Pos = 0;}
         int GetPos() const {return m_Pos;}
         void SetPos(int p) {m_Pos = p;}
         const wxString& GetPage() const {return m_Page;}
         const wxString& GetAnchor() const {return m_Anchor;}
+
+    private:
+        wxString m_Page;
+        wxString m_Anchor;
+        int m_Pos;
 };
 
 #undef WXDLLEXPORTLOCAL
@@ -68,34 +69,6 @@ WX_DECLARE_OBJARRAY(HtmlHistoryItem, HtmlHistoryArray);
 class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlWindow)
-
-    protected:
-        wxHtmlContainerCell *m_Cell;
-                // This is pointer to the first cell in parsed data.
-                // (Note: the first cell is usually top one = all other cells are sub-cells of this one)
-        wxHtmlWinParser *m_Parser;
-                // parser which is used to parse HTML input.
-                // Each wxHtmlWindow has it's own parser because sharing one global
-                // parser would be problematic (because of reentrancy)
-        wxString m_OpenedPage;
-                // contains name of actualy opened page or empty string if no page opened
-        wxString m_OpenedAnchor;
-                // contains name of current anchor within m_OpenedPage
-        wxFileSystem* m_FS;
-                // class for opening files (file system)
-
-        wxFrame *m_RelatedFrame;
-        wxString m_TitleFormat;
-        int m_RelatedStatusBar;
-                // frame in which page title should be displayed & number of it's statusbar
-                // reserved for usage with this html window
-
-        int m_Borders;
-                // borders (free space between text and window borders)
-                // defaults to 10 pixels.
-
-        int m_Style;
-
 
     private:
         bool m_tmpMouseMoved;
@@ -215,14 +188,38 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 	virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
 	        // returns new filter (will be stored into m_DefaultFilter variable)
 
+    protected:
+        wxHtmlContainerCell *m_Cell;
+                // This is pointer to the first cell in parsed data.
+                // (Note: the first cell is usually top one = all other cells are sub-cells of this one)
+        wxHtmlWinParser *m_Parser;
+                // parser which is used to parse HTML input.
+                // Each wxHtmlWindow has it's own parser because sharing one global
+                // parser would be problematic (because of reentrancy)
+        wxString m_OpenedPage;
+                // contains name of actualy opened page or empty string if no page opened
+        wxString m_OpenedAnchor;
+                // contains name of current anchor within m_OpenedPage
+        wxFileSystem* m_FS;
+                // class for opening files (file system)
+
+        wxFrame *m_RelatedFrame;
+        wxString m_TitleFormat;
+        int m_RelatedStatusBar;
+                // frame in which page title should be displayed & number of it's statusbar
+                // reserved for usage with this html window
+
+        int m_Borders;
+                // borders (free space between text and window borders)
+                // defaults to 10 pixels.
+
+        int m_Style;
+
+
     DECLARE_EVENT_TABLE()
 };
 
 
-
-#endif // __HTMLWIN_H__
-
 #endif
 
-
-
+#endif // _WX_HTMLWIN_H_

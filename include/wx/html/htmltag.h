@@ -2,13 +2,14 @@
 // Name:        htmltag.h
 // Purpose:     wxHtmlTag class (represents single tag)
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __HTMLTAG_H__
-#define __HTMLTAG_H__
+#ifndef _WX_HTMLTAG_H_
+#define _WX_HTMLTAG_H_
 
 #ifdef __GNUG__
 #pragma interface
@@ -71,18 +72,13 @@ class WXDLLEXPORT wxHtmlTag : public wxObject
 {
     DECLARE_CLASS(wxHtmlTag)
 
-    private:
-        wxString m_Name, m_Params;
-        int m_Begin, m_End1, m_End2;
-        bool m_Ending;
-
     public:
         wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCache* cache);
                 // constructs wxHtmlTag object based on HTML tag.
                 // The tag begins (with '<' character) at position pos in source
                 // end_pos is position where parsing ends (usually end of document)
 
-        inline wxString GetName() const {return m_Name;};
+        inline wxString GetName() const {return m_Name;}
                 // Returns tag's name in uppercase.
         
         bool HasParam(const wxString& par) const;
@@ -106,34 +102,40 @@ class WXDLLEXPORT wxHtmlTag : public wxObject
 		// NOTE: unlike scanf family, this function only accepts
 		//       *one* parameter !
 
-        inline const wxString& GetAllParams() const {return m_Params;};
+        inline const wxString& GetAllParams() const {return m_Params;}
                 // Returns string containing all params.
         
-        inline bool IsEnding() const {return m_Ending;};
+        inline bool IsEnding() const {return m_Ending;}
                 // return TRUE if this is ending tag (</something>) or FALSE
                 // if it isn't (<something>)
         
-        inline bool HasEnding() const {return m_End1 >= 0;};
+        inline bool HasEnding() const {return m_End1 >= 0;}
                 // return TRUE if this is ending tag (</something>) or FALSE
                 // if it isn't (<something>)
 
-        inline int GetBeginPos() const {return m_Begin;};
+        inline int GetBeginPos() const {return m_Begin;}
                 // returns beginning position of _internal_ block of text
                 // See explanation (returned value is marked with *):
                 // bla bla bla <MYTAG>* bla bla intenal text</MYTAG> bla bla
-        inline int GetEndPos1() const {return m_End1;};
+        inline int GetEndPos1() const {return m_End1;}
                 // returns ending position of _internal_ block of text.
                 // bla bla bla <MYTAG> bla bla intenal text*</MYTAG> bla bla
-        inline int GetEndPos2() const {return m_End2;};
+        inline int GetEndPos2() const {return m_End2;}
                 // returns end position 2 :
                 // bla bla bla <MYTAG> bla bla internal text</MYTAG>* bla bla
+
+    private:
+        wxString m_Name, m_Params;
+        int m_Begin, m_End1, m_End2;
+        bool m_Ending;
+
 };
 
 
 
 
 
-
-#endif // __HTMLTAG_H__
-
 #endif
+
+#endif // _WX_HTMLTAG_H_
+

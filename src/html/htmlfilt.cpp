@@ -1,14 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filter.cpp
+// Name:        htmlfilt.cpp
 // Purpose:     wxHtmlFilter - input filter for translating into HTML format
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 
 #ifdef __GNUG__
-#pragma implementation "htmlfilter.h"
+#pragma implementation
 #endif
 
 #include "wx/wxprec.h"
@@ -23,7 +24,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/html/htmlfilter.h"
+#include "wx/html/htmlfilt.h"
 #include "wx/html/htmlwin.h"
 
 

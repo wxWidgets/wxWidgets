@@ -1,17 +1,18 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlfilter.h
+// Name:        htmlfilt.h
 // Purpose:     filters
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __HTMLFILTER_H__
-#define __HTMLFILTER_H__
+#ifndef _WX_HTMLFILT_H_
+#define _WX_HTMLFILT_H_
 
 #ifdef __GNUG__
-#pragma interface "htmlfilter.h"
+#pragma interface 
 #endif
 
 #include "wx/defs.h"
@@ -65,7 +66,6 @@ class WXDLLEXPORT wxHtmlFilterPlainText : public wxHtmlFilter
 
 
 
-
-#endif // __HTMLFILTER_H__
-
 #endif
+#endif // _WX_HTMLFILT_H_
+

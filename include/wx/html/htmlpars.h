@@ -1,14 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlparser.h
+// Name:        htmlpars.h
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __HTMLPARSER_H__
-#define __HTMLPARSER_H__
+#ifndef _WX_HTMLPARS_H_
+#define _WX_HTMLPARS_H_
 
 #ifdef __GNUG__
 #pragma interface
@@ -17,8 +18,8 @@
 #include "wx/defs.h"
 #if wxUSE_HTML
 
-#include <wx/html/htmltag.h>
-#include <wx/filesys.h>
+#include "wx/html/htmltag.h"
+#include "wx/filesys.h"
 
 class wxHtmlParser;
 class wxHtmlTagHandler;
@@ -34,25 +35,6 @@ class wxHtmlTagHandler;
 class WXDLLEXPORT wxHtmlParser : public wxObject
 {
     DECLARE_ABSTRACT_CLASS(wxHtmlParser)
-
-    protected:
-        wxString m_Source;
-                // source being parsed
-        wxHtmlTagsCache *m_Cache;
-                // tags cache, used during parsing.
-        wxHashTable m_HandlersHash;
-        wxList m_HandlersList;
-                // handlers that handle particular tags. The table is accessed by
-                // key = tag's name.
-                // This attribute MUST be filled by derived class otherwise it would
-                // be empty and no tags would be recognized
-                // (see wxHtmlWinParser for details about filling it)
-                // m_HandlersHash is for random access based on knowledge of tag name (BR, P, etc.)
-                //      it may (and often does) contain more references to one object
-                // m_HandlersList is list of all handlers and it is guaranteed to contain
-                //      only one reference to each handler instance.
-        wxFileSystem *m_FS;
-                // class for opening files (file system)
 
     public:
         wxHtmlParser() : wxObject(), m_HandlersHash(wxKEY_STRING) {m_FS = NULL; m_Cache = NULL;}
@@ -115,6 +97,27 @@ class WXDLLEXPORT wxHtmlParser : public wxObject
                 // Default behavior is that it looks for proper handler in m_Handlers. The tag is
                 // ignored if no hander is found.
                 // Derived class is *responsible* for filling in m_Handlers table.
+
+
+    protected:
+        wxString m_Source;
+                // source being parsed
+        wxHtmlTagsCache *m_Cache;
+                // tags cache, used during parsing.
+        wxHashTable m_HandlersHash;
+        wxList m_HandlersList;
+                // handlers that handle particular tags. The table is accessed by
+                // key = tag's name.
+                // This attribute MUST be filled by derived class otherwise it would
+                // be empty and no tags would be recognized
+                // (see wxHtmlWinParser for details about filling it)
+                // m_HandlersHash is for random access based on knowledge of tag name (BR, P, etc.)
+                //      it may (and often does) contain more references to one object
+                // m_HandlersList is list of all handlers and it is guaranteed to contain
+                //      only one reference to each handler instance.
+        wxFileSystem *m_FS;
+                // class for opening files (file system)
+
 };
 
 
@@ -170,7 +173,6 @@ class WXDLLEXPORT wxHtmlTagHandler : public wxObject
 
 
 
-
-#endif // __HTMLPARSER_H__
-
 #endif
+
+#endif // _WX_HTMLPARS_H_

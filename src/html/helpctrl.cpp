@@ -4,14 +4,13 @@
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
-// Created:
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "helpctrl.h"
+#pragma implementation
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -61,7 +60,7 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
 {
     wxBusyCursor cur;
 #if wxUSE_BUSYINFO
-    wxBusyInfo* busy;
+    wxBusyInfo* busy = NULL;
     wxString info;
     if (show_wait_msg) {
 	info.Printf(_("Adding book %s"), book.c_str());

@@ -3,16 +3,17 @@
 // Purpose:     wxHtmlCell class is used by wxHtmlWindow/wxHtmlWinParser
 //              as a basic visual element of HTML page
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __HTMLCELL_H__
-#define __HTMLCELL_H__
+#ifndef _WX_HTMLCELL_H_
+#define _WX_HTMLCELL_H_
 
 #ifdef __GNUG__
-#pragma interface "htmlcell.h"
+#pragma interface
 #endif
 
 #include "wx/defs.h"
@@ -36,19 +37,6 @@ class wxHtmlContainerCell;
 
 class WXDLLEXPORT wxHtmlCell : public wxObject
 {
-    protected:
-        wxHtmlCell *m_Next;
-                // pointer to the next cell
-        wxHtmlContainerCell *m_Parent;
-            // pointer to parent cell
-        long m_Width, m_Height, m_Descent;
-                // dimensions of fragment
-                // m_Descent is used to position text&images..
-        long m_PosX, m_PosY;
-                // position where the fragment is drawn
-        wxString m_Link;
-                // destination address if this fragment is hypertext link, "" otherwise
-
     public:
         wxHtmlCell() : wxObject() {m_Next = NULL; m_Parent = NULL; m_Width = m_Height = m_Descent = 0;};
         virtual ~wxHtmlCell() {if (m_Next) delete m_Next;};
@@ -106,6 +94,21 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // Parent is pointer to wxHtmlWindow that generated the event
                 // HINT: if this handling is not enough for you you should use
                 //       wxHtmlBinderCell
+
+
+    protected:
+        wxHtmlCell *m_Next;
+                // pointer to the next cell
+        wxHtmlContainerCell *m_Parent;
+            // pointer to parent cell
+        long m_Width, m_Height, m_Descent;
+                // dimensions of fragment
+                // m_Descent is used to position text&images..
+        long m_PosX, m_PosY;
+                // position where the fragment is drawn
+        wxString m_Link;
+                // destination address if this fragment is hypertext link, "" otherwise
+
 };
 
 
@@ -281,15 +284,7 @@ class WXDLLEXPORT wxHtmlWidgetCell : public wxHtmlCell
 
 
 
-
-#endif // __HTMLCELL_H__
-
 #endif
 
-
-
-
-
-
-
+#endif // _WX_HTMLCELL_H_
 

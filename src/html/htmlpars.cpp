@@ -1,7 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlparser.cpp
+// Name:        htmlpars.cpp
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,11 +25,11 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/tokenzr.h>
-#include <wx/wfstream.h>
-#include <wx/url.h>
-#include <wx/html/htmldefs.h>
-#include <wx/html/htmlparser.h>
+#include "wx/tokenzr.h"
+#include "wx/wfstream.h"
+#include "wx/url.h"
+#include "wx/html/htmldefs.h"
+#include "wx/html/htmlpars.h"
 
 
 

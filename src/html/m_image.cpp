@@ -2,6 +2,7 @@
 // Name:        mod_image.cpp
 // Purpose:     wxHtml module for displaying images
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik, Joel Lucsy
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,8 +24,8 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/html/forcelink.h"
-#include "wx/html/mod_templ.h"
+#include "wx/html/forcelnk.h"
+#include "wx/html/m_templ.h"
 
 
 #include "wx/image.h"

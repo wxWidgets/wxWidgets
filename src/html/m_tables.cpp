@@ -2,6 +2,7 @@
 // Name:        mod_tables.cpp
 // Purpose:     wxHtml module for tables
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,10 +30,10 @@ REMARKS:
 */
 
 
-#include <wx/html/forcelink.h>
-#include <wx/html/mod_templ.h>
+#include "wx/html/forcelnk.h"
+#include "wx/html/m_templ.h"
 
-#include <wx/html/htmlcell.h>
+#include "wx/html/htmlcell.h"
 
 FORCE_LINK_ME(mod_tables)
 

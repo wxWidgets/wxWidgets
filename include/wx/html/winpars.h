@@ -1,14 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlwinparser.h
+// Name:        winpars.h
 // Purpose:     wxHtmlWinParser class (parser to be used with wxHtmlWindow)
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __HTMLWINPARSER_H__
-#define __HTMLWINPARSER_H__
+#ifndef _WX_WINPARS_H_
+#define _WX_WINPARS_H_
 
 #ifdef __GNUG__
 #pragma interface
@@ -17,9 +18,9 @@
 #include "wx/defs.h"
 #if wxUSE_HTML
 
-#include <wx/module.h>
-#include <wx/html/htmlparser.h>
-#include <wx/html/htmlcell.h>
+#include "wx/module.h"
+#include "wx/html/htmlpars.h"
+#include "wx/html/htmlcell.h"
 
 class wxHtmlWinParser;
 class wxHtmlWinTagHandler;
@@ -37,44 +38,6 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
     DECLARE_DYNAMIC_CLASS(wxHtmlWinParser)
 
     friend class wxHtmlWindow;
-
-    private:
-        wxWindow *m_Window;
-                // window we're parsing for
-        wxDC *m_DC;
-                // Device Context we're parsing for
-        static wxList m_Modules;
-                // list of tags modules (see wxHtmlTagsModule for details)
-                // This list is used to initialize m_Handlers member.
-
-        wxHtmlContainerCell *m_Container;
-                // actual container. See Open/CloseContainer for details.
-
-        int m_FontBold, m_FontItalic, m_FontUnderlined, m_FontFixed; // this is not TRUE,FALSE but 1,0, we need it for indexing
-        int m_FontSize; /* -2 to +4,  0 is default */
-        wxColour m_LinkColor;
-        wxColour m_ActualColor;
-                // basic font parameters.
-        wxString m_Link;
-                // actual hypertext link or empty string
-        bool m_UseLink;
-                // TRUE if m_Link is not empty
-        long m_CharHeight, m_CharWidth;
-                // average height of normal-sized text
-        int m_Align;
-                // actual alignment
-
-        wxFont *m_FontsTable[2][2][2][2][7];
-                // table of loaded fonts. 1st four indexes are 0 or 1, depending on on/off
-                // state of these flags (from left to right):
-                // [bold][italic][underlined][fixed_size]
-                // last index is font size : from 0 to 7 (remapped from html sizes -2 to +4)
-                // Note : this table covers all possible combinations of fonts, but not
-                // all of them are used, so many items in table are usually NULL.
-        int m_FontsSizes[7];
-        wxString m_FontFaceFixed, m_FontFaceNormal;
-        int m_ItalicModeFixed, m_ItalicModeNormal;
-                // html font sizes and faces of fixed and proportional fonts
 
     public:
         wxHtmlWinParser() : wxHtmlParser() {wxHtmlWinParser(NULL);}
@@ -151,6 +114,42 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
     private:
         bool m_tmpLastWasSpace;
             // temporary variable used by AddText
+        wxWindow *m_Window;
+                // window we're parsing for
+        wxDC *m_DC;
+                // Device Context we're parsing for
+        static wxList m_Modules;
+                // list of tags modules (see wxHtmlTagsModule for details)
+                // This list is used to initialize m_Handlers member.
+
+        wxHtmlContainerCell *m_Container;
+                // actual container. See Open/CloseContainer for details.
+
+        int m_FontBold, m_FontItalic, m_FontUnderlined, m_FontFixed; // this is not TRUE,FALSE but 1,0, we need it for indexing
+        int m_FontSize; /* -2 to +4,  0 is default */
+        wxColour m_LinkColor;
+        wxColour m_ActualColor;
+                // basic font parameters.
+        wxString m_Link;
+                // actual hypertext link or empty string
+        bool m_UseLink;
+                // TRUE if m_Link is not empty
+        long m_CharHeight, m_CharWidth;
+                // average height of normal-sized text
+        int m_Align;
+                // actual alignment
+
+        wxFont *m_FontsTable[2][2][2][2][7];
+                // table of loaded fonts. 1st four indexes are 0 or 1, depending on on/off
+                // state of these flags (from left to right):
+                // [bold][italic][underlined][fixed_size]
+                // last index is font size : from 0 to 7 (remapped from html sizes -2 to +4)
+                // Note : this table covers all possible combinations of fonts, but not
+                // all of them are used, so many items in table are usually NULL.
+        int m_FontsSizes[7];
+        wxString m_FontFaceFixed, m_FontFaceNormal;
+        int m_ItalicModeFixed, m_ItalicModeNormal;
+                // html font sizes and faces of fixed and proportional fonts
 };
 
 
@@ -169,14 +168,14 @@ class WXDLLEXPORT wxHtmlWinTagHandler : public wxHtmlTagHandler
 {
     DECLARE_ABSTRACT_CLASS(wxHtmlWinTagHandler)
 
-    protected:
-        wxHtmlWinParser *m_WParser;
-                // same as m_Parser, but overcasted
-
     public:
         wxHtmlWinTagHandler() : wxHtmlTagHandler() {};
 
         virtual void SetParser(wxHtmlParser *parser) {wxHtmlTagHandler::SetParser(parser); m_WParser = (wxHtmlWinParser*) parser;};
+
+    protected:
+        wxHtmlWinParser *m_WParser;
+                // same as m_Parser, but overcasted
 };
 
 
@@ -210,10 +209,10 @@ class WXDLLEXPORT wxHtmlTagsModule : public wxModule
 };
 
 
-
-#endif // __HTMLWINPARSER_H__
-
 #endif
+
+#endif // _WX_WINPARS_H_
+
 
 
 

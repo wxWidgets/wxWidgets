@@ -2,6 +2,7 @@
 // Name:        mod_links.cpp
 // Purpose:     wxHtml module for links & anchors
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,8 +24,8 @@
 #endif
 
 
-#include <wx/html/forcelink.h>
-#include <wx/html/mod_templ.h>
+#include "wx/html/forcelnk.h"
+#include "wx/html/m_templ.h"
 
 
 FORCE_LINK_ME(mod_links)

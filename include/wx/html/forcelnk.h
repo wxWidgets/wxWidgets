@@ -1,9 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        forcelink.h
+// Name:        forcelnk.h
 // Purpose:     see bellow
 // Author:      Vaclav Slavik
-// Copyright:   (c) 1999 Vaclav Slavik
-// Licence:     wxWindows Licence
+// RCS-ID:      $Id$
+// Copyright:   (c) Vaclav Slavik
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -36,8 +37,8 @@ See mod_*.cpp and htmlwin.cpp for example :-)
 */
 
 
-#ifndef __FORCELINK_H__
-#define __FORCELINK_H__
+#ifndef _WX_FORCELNK_H_
+#define _WX_FORCELNK_H_
 
 
 
@@ -56,4 +57,4 @@ See mod_*.cpp and htmlwin.cpp for example :-)
                                _link_dummy_func_##module_name ();
 
 
-#endif // __FORCELINK_H__
+#endif // _WX_FORCELNK_H_
