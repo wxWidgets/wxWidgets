@@ -1448,10 +1448,24 @@ dnl ------------------------------------------------------------------------
 dnl test for strings.h needed under AIX, but do not check for it wxMac as
 dnl it exists but is only a simple redirection to string.h and it is in
 dnl conflict with Strings.h in FlatCarbon headers
-if test "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1; then
-  dnl defines HAVE_STRINGS_H
-  AC_CHECK_HEADERS(strings.h)
+dnl
+dnl Autoconf 2.5 tends to check for strings.h on its own, so avoiding the 
+dnl test (as the current configure script does) is not possible.  Instead, 
+dnl you must remind autoconf that strings.h is NOT valid.  The autoconf 
+dnl test succeeds because there is a strings.h file that simply includes 
+dnl string.h.  Unfortunately, there is also a strings.h as part of the 
+dnl FlatCarbon headers.                                    -- David Elliott
+if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
+    AC_CACHE_CHECK([for strings.h], ac_cv_header_strings_h, 
+                   [ac_cv_header_strings_h=no])
+    if test "$ac_cv_header_strings_h" = "no"; then
+        AC_MSG_RESULT([forced no into cache])
+    else
+        AC_MSG_WARN([strings.h is not compatible with Mac OS X])
+    fi
 fi
+dnl defines HAVE_STRINGS_H
+AC_CHECK_HEADERS(strings.h)
 
 dnl defines HAVE_STDLIB_H
 AC_CHECK_HEADERS(stdlib.h)
@@ -2826,6 +2840,19 @@ if test "$wxUSE_OPENGL" = "yes"; then
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
     else
+        dnl David Elliott: Without this snippet AC_CHECK_HEADER fails to find
+        dnl GL/gl.h on Mac OS X where it is located in
+        dnl /usr/X11R6/include/GL/gl.h:
+
+        WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, GL/gl.h)
+        if test "$ac_find_includes" != "" ; then
+            AC_MSG_RESULT(found in $ac_find_includes)
+            set -x
+            WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
+            CPPFLAGS="$CPPFLAGS$ac_path_to_include"
+            set +x
+        fi
+
         AC_CHECK_HEADER(GL/gl.h,
             [
                 found_gl=0
