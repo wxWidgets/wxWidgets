@@ -76,8 +76,8 @@ protected:
     // common part of all ctors
     void Init();
 
-    // create the toolbar control
-    bool MSWCreateToolbar(const wxPoint& pos, const wxSize& size, long style);
+    // create the native toolbar control
+    bool MSWCreateToolbar(const wxPoint& pos, const wxSize& size);
 
     // recreate the control completely
     void Recreate();

@@ -238,7 +238,7 @@ bool wxToolBar::Create(wxWindow *parent,
         return FALSE;
 
     // MSW-specific initialisation
-    if ( !MSWCreateToolbar(pos, size, style) )
+    if ( !MSWCreateToolbar(pos, size) )
         return FALSE;
 
     // set up the colors and fonts
@@ -248,11 +248,9 @@ bool wxToolBar::Create(wxWindow *parent,
     return TRUE;
 }
 
-bool wxToolBar::MSWCreateToolbar(const wxPoint& pos,
-                                 const wxSize& size,
-                                 long style)
+bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
 {
-    if ( !MSWCreateControl(TOOLBARCLASSNAME, _T(""), pos, size, style) )
+    if ( !MSWCreateControl(TOOLBARCLASSNAME, _T(""), pos, size) )
         return FALSE;
 
     // toolbar-specific post initialisation
@@ -276,7 +274,7 @@ void wxToolBar::Recreate()
 
     UnsubclassWin();
 
-    if ( !MSWCreateToolbar(pos, size, GetWindowStyle()) )
+    if ( !MSWCreateToolbar(pos, size) )
     {
         // what can we do?
         wxFAIL_MSG( _T("recreating the toolbar failed") );
