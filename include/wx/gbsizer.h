@@ -202,6 +202,10 @@ public:
     wxSize GetEmptyCellSize() const          { return m_emptyCellSize; }
     void SetEmptyCellSize(const wxSize& sz)  { m_emptyCellSize = sz; }
 
+    // Get the size of the specified cell, including hgap and vgap.  Only
+    // valid after a Layout.
+    wxSize GetCellSize(int row, int col) const;
+    
     // Get the grid position of the specified item (non-recursive)
     wxGBPosition GetItemPosition(wxWindow *window);
     wxGBPosition GetItemPosition(wxSizer *sizer);

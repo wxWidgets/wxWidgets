@@ -238,6 +238,15 @@ bool wxGridBagSizer::Add( wxGBSizerItem *item )
 
 //---------------------------------------------------------------------------
 
+wxSize wxGridBagSizer::GetCellSize(int row, int col) const
+{
+    wxCHECK_MSG( (row < m_rows) && (col < m_cols),
+                 wxDefaultSize,
+                 wxT("Invalid cell."));
+    return wxSize( m_colWidths[col], m_rowHeights[row] );
+}
+
+
 wxGBPosition wxGridBagSizer::GetItemPosition(wxWindow *window)
 {
     wxGBPosition badpos(-1,-1);
@@ -456,14 +465,14 @@ wxSize wxGridBagSizer::CalcMin()
 
     // Now traverse the heights and widths arrays calcing the totals, including gaps
     int width = 0;
-    int ncols = m_colWidths.GetCount();
-    for (idx=0; idx < ncols; idx++)
-        width += m_colWidths[idx] + ( idx == ncols-1 ? 0 : m_hgap );
+    m_cols = m_colWidths.GetCount();
+    for (idx=0; idx < m_cols; idx++)
+        width += m_colWidths[idx] + ( idx == m_cols-1 ? 0 : m_hgap );
 
     int height = 0;
-    int nrows = m_rowHeights.GetCount();
-    for (idx=0; idx < nrows; idx++)
-        height += m_rowHeights[idx] + ( idx == nrows-1 ? 0 : m_vgap );
+    m_rows = m_rowHeights.GetCount();
+    for (idx=0; idx < m_rows; idx++)
+        height += m_rowHeights[idx] + ( idx == m_rows-1 ? 0 : m_vgap );
 
     return wxSize(width, height);   
 }
@@ -481,17 +490,17 @@ void wxGridBagSizer::RecalcSizes()
     wxPoint pt( GetPosition() );
     wxSize  sz( GetSize() );
    
-    int nrows = m_rowHeights.GetCount();
-    int ncols = m_colWidths.GetCount();
+    m_rows = m_rowHeights.GetCount();
+    m_cols = m_colWidths.GetCount();
     int idx, width, height;
 
-    AdjustForGrowables(sz, minsz, nrows, ncols);
+    AdjustForGrowables(sz, minsz, m_rows, m_cols);
 
     // Find the start positions on the window of the rows and columns
     wxArrayInt rowpos;
-    rowpos.Add(0, nrows);
+    rowpos.Add(0, m_rows);
     int y = pt.y;
-    for (idx=0; idx < nrows; idx++)
+    for (idx=0; idx < m_rows; idx++)
     {
         height = m_rowHeights[idx] + m_vgap;
         rowpos[idx] = y;
@@ -499,9 +508,9 @@ void wxGridBagSizer::RecalcSizes()
     }
 
     wxArrayInt colpos;
-    colpos.Add(0, ncols);
+    colpos.Add(0, m_cols);
     int x = pt.x;
-    for (idx=0; idx < ncols; idx++)
+    for (idx=0; idx < m_cols; idx++)
     {
         width = m_colWidths[idx] + m_hgap;
         colpos[idx] = x;
