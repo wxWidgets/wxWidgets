@@ -25,14 +25,14 @@ and then pressing OK.
 
 \func{}{wxSingleChoiceDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message},\rtfsp
 \param{const wxString\& }{caption}, \param{int }{n}, \param{const wxString* }{choices},\rtfsp
-\param{char**}{ clientData = NULL}, \param{long }{style = wxOK \pipe wxCANCEL \pipe wxCENTRE},\rtfsp
+\param{void**}{ clientData = NULL}, \param{long }{style = wxOK \pipe wxCANCEL \pipe wxCENTRE},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}}
 
 Constructor, taking an array of wxString choices and optional client data.
 
 \func{}{wxSingleChoiceDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message},\rtfsp
 \param{const wxString\& }{caption}, \param{const wxStringList\& }{choices},\rtfsp
-\param{char**}{ clientData = NULL}, \param{long }{style = wxOK \pipe wxCANCEL \pipe wxCENTRE},\rtfsp
+\param{void**}{ clientData = NULL}, \param{long }{style = wxOK \pipe wxCANCEL \pipe wxCENTRE},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}}
 
 Constructor, taking a string list and optional client data.
@@ -89,6 +89,12 @@ Returns the client data associated with the selection.
 \constfunc{wxString}{GetStringSelection}{\void}
 
 Returns the selected string.
+
+\membersection{wxSingleChoiceDialog::SetSelection}
+
+\constfunc{void}{SetSelection}{\param{int}{ selection}}
+
+Sets the index of the initially selected item.
 
 \membersection{wxSingleChoiceDialog::ShowModal}\label{wxsinglechoicedialogshowmodal}
 
