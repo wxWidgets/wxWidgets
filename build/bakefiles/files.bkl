@@ -65,6 +65,7 @@
     src/msw/thread.cpp
     src/msw/utils.cpp
     src/msw/utilsexc.cpp
+    src/msw/crashrpt.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC">
     src/msw/main.cpp
@@ -78,6 +79,7 @@
     wx/msw/winundef.h
     wx/msw/wrapwin.h
     wx/msw/chkconf.h
+    wx/msw/crashrpt.h
 </set>
 
 <set var="BASE_DARWIN_SRC">
