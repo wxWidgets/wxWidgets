@@ -717,7 +717,7 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
 #if defined(__WXMSW__) || defined(__WXPM__)
         format = wxPATH_DOS;
 #elif defined(__WXMAC__)
-        format = wxPATH_UNIX; // that's the way the rest of wx' code works right now
+        format = wxPATH_MAC; 
 #else
         format = wxPATH_UNIX;
 #endif
