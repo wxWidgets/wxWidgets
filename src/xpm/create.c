@@ -563,9 +563,9 @@ SetColor(display, colormap, visual, colorname, color_index,
 	*mask_pixel = 0;
 #else
 #ifdef __OS2__
-	*mask_pixel = OS2RGB(0,0,0);
+    *mask_pixel = OS2RGB(255,255,255);
 #else
-	*mask_pixel = RGB(0,0,0);
+    *mask_pixel = RGB(255,255,255);
 #endif
 #endif
 	/* store the color table index */
