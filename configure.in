@@ -448,27 +448,39 @@ AC_CANONICAL_SYSTEM
 dnl When making releases do:
 dnl
 dnl WX_RELEASE_NUMBER += 1
-dnl WX_INTERFACE_AGE += 1
-dnl WX_BINARY_AGE += 1
 dnl
-dnl if any functions have been added, do:
+dnl ..and update WX_CURRENT, WX_RELEASE and WX_AGE according to the
+dnl following rules:
 dnl
-dnl WX_INTERFACE_AGE = 0
+dnl    If any changes have been made to the public interface, that is if any
+dnl    exported class, method, global or global type has been added, removed
+dnl    or changed in any way, then do:  WX_CURRENT += 1
+dnl
+dnl    If source changes have been made that *do not* alter the public
+dnl    interface then do:  WX_REVISION += 1
+dnl    If WX_CURRENT was incremented (as above) instead do:  WX_REVISION = 0
+dnl
+dnl    If any public interface was added, do:  WX_AGE += 1
+dnl    If any public interface was removed (or altered in a way effectively
+dnl    removing the previous definition), instead do:  WX_AGE = 0
+dnl
+dnl When the major or minor version numbers are incremented, all the above
+dnl variables should be reset to 0.
+dnl
+dnl The resulting library name will be of the form:
+dnl   libwx_$(TOOLKIT)-$(WX_RELEASE).so.$(WX_CURRENT).$(WX_REVISION).$(WX_AGE)
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=3
 WX_RELEASE_NUMBER=0
 
-WX_INTERFACE_AGE=0
-WX_BINARY_AGE=0
-
 WX_VERSION=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER.$WX_RELEASE_NUMBER
-
-dnl wxWindows shared library versioning
 WX_RELEASE=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER
-WX_CURRENT=`expr $WX_RELEASE_NUMBER - $WX_INTERFACE_AGE`
-WX_REVISION=$WX_INTERFACE_AGE
-WX_AGE=`expr $WX_BINARY_AGE - $WX_INTERFACE_AGE`
+
+WX_CURRENT=0
+WX_REVISION=0
+WX_AGE=0
+
 
 dnl ------------------------------------------------------------------------
 dnl Check platform (host system)
