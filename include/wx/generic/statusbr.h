@@ -25,7 +25,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 class WXDLLEXPORT wxStatusBarGeneric : public wxStatusBarBase
 {
 public:
-  wxStatusBarGeneric();
+  wxStatusBarGeneric() { Init(); }
   wxStatusBarGeneric(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -33,17 +33,21 @@ public:
               long style = 0,
               const wxString& name = wxPanelNameStr)
   {
+      Init();
+
       Create(parent, id, pos, size, style, name);
   }
   wxStatusBarGeneric(wxWindow *parent,
-              wxWindowID id,
-              long style,
-              const wxString& name = wxPanelNameStr)
+                     wxWindowID id,
+                     long style,
+                     const wxString& name = wxPanelNameStr)
   {
+      Init();
+
       Create(parent, id, style, name);
   }
 
-  ~wxStatusBarGeneric();
+  virtual ~wxStatusBarGeneric();
 
   bool Create(wxWindow *parent, wxWindowID id,
               const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
@@ -61,7 +65,6 @@ public:
   // Create status line
   virtual void SetFieldsCount(int number = 1,
                               const int *widths = (const int *) NULL);
-  int GetFieldsCount() const { return m_nFields; }
 
   // Set status line text
   virtual void SetStatusText(const wxString& text, int number = 0);
@@ -89,6 +92,7 @@ public:
   void SetBorderY(int y);
 
   void OnPaint(wxPaintEvent& event);
+  void OnSize(wxSizeEvent& event);
 
   virtual void InitColours();
 
@@ -96,7 +100,14 @@ public:
   void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 protected:
+  // common part of all ctors
+  void Init();
+
   wxArrayString     m_statusStrings;
+
+  // the widths of the status bar panes in pixels
+  wxArrayInt        m_widthsAbs;
+
   int               m_borderX;
   int               m_borderY;
   wxFont            m_defaultStatusBarFont;

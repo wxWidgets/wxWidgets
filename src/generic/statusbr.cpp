@@ -44,6 +44,8 @@
 
 BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
+    EVT_SIZE(wxStatusBarGeneric::OnSize)
+
     EVT_SYS_COLOUR_CHANGED(wxStatusBarGeneric::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -51,7 +53,7 @@ END_EVENT_TABLE()
 #define         wxTHICK_LINE_BORDER 2
 #define         wxTHICK_LINE_WIDTH  1
 
-wxStatusBarGeneric::wxStatusBarGeneric()
+void wxStatusBarGeneric::Init()
 {
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
@@ -59,9 +61,10 @@ wxStatusBarGeneric::wxStatusBarGeneric()
 
 wxStatusBarGeneric::~wxStatusBarGeneric()
 {
-#   ifdef __WXMSW__
-        SetFont(wxNullFont);
-#   endif // MSW
+    // VZ: what is this for? please comment...
+#ifdef __WXMSW__
+    SetFont(wxNullFont);
+#endif // MSW
 }
 
 bool wxStatusBarGeneric::Create(wxWindow *parent,
@@ -69,16 +72,10 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
                                 long style,
                                 const wxString& name)
 {
-    // If create is ever meant to be re-entrant over the life of
-    // an object we should:
-    // m_statusStrings.Empty();
-
-  m_borderX = wxTHICK_LINE_BORDER;
-  m_borderY = wxTHICK_LINE_BORDER;
-
-  bool success = wxWindow::Create(parent, id,
-                                  wxDefaultPosition, wxDefaultSize,
-                                  style | wxTAB_TRAVERSAL, name);
+  if ( !wxWindow::Create(parent, id,
+                         wxDefaultPosition, wxDefaultSize,
+                         style | wxTAB_TRAVERSAL, name) )
+      return FALSE;
 
   // The status bar should have a themed background
   SetThemeEnabled( TRUE );
@@ -102,24 +99,19 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
   SetSize(-1, -1, -1, height);
 
-  return success;
+  return TRUE;
 }
 
 void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 {
-    wxASSERT_MSG( number >= 0,
-                  _T("Yes, number should be a size_t and less than no fields is silly.") );
-
-    // if( number > m_nFields )
+    wxASSERT_MSG( number >= 0, _T("negative number of fields in wxStatusBar?") );
 
     int i;
     for(i = m_nFields; i < number; ++i)
         m_statusStrings.Add( wxEmptyString );
 
-    // if( number < m_nFields )
-
     for (i = m_nFields - 1; i >= number; --i)
-        m_statusStrings.Remove(i);
+        m_statusStrings.RemoveAt(i);
 
     m_nFields = number;
 
@@ -161,6 +153,9 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
     //      documented, but let's keep it for now
     ReinitWidths();
 
+    // forget the old cached pixel widths
+    m_widthsAbs.Empty();
+
     if ( !widths_field )
     {
         // not an error, see the comment above
@@ -191,6 +186,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
   for ( i = 0; i < m_nFields; i ++ )
     DrawField(dc, i);
 
+  // VZ: again, what is this for?
 #ifdef __WXMSW__
   dc.SetFont(wxNullFont);
 #endif // MSW
@@ -273,73 +269,36 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
   // Get the position and size of the field's internal bounding rectangle
 bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 {
-  wxCHECK_MSG( (n >= 0) && (n < m_nFields), FALSE,
-               _T("invalid status bar field index") );
+    wxCHECK_MSG( (n >= 0) && (n < m_nFields), FALSE,
+                 _T("invalid status bar field index") );
 
-  int width, height;
+    // FIXME: workarounds for OS/2 bugs have nothing to do here (VZ)
+    int width, height;
 #ifdef __WXPM__
-  GetSize(&width, &height);
+    GetSize(&width, &height);
 #else
-  GetClientSize(&width, &height);
+    GetClientSize(&width, &height);
 #endif
 
-  int i;
-  int sum_of_nonvar = 0;
-  int num_of_var = 0;
-  bool do_same_width = FALSE;
-
-  int fieldWidth = 0;
-  int fieldPosition = 0;
-
-  if (m_statusWidths)
-  {
-    // if sum(not variable Windows) > c_width - (20 points per variable_window)
-    // then do_same_width = TRUE;
-    for (i = 0; i < m_nFields; i++)
+    // we cache m_widthsAbs between calls normally but it's cleared when the
+    // status widths change so recompute it if needed
+    if ( m_widthsAbs.IsEmpty() )
     {
-       if (m_statusWidths[i] > 0) sum_of_nonvar += m_statusWidths[i];
-        else num_of_var++;
-     }
-     if (sum_of_nonvar > (width - 20*num_of_var)) do_same_width = TRUE;
-  }
-  else do_same_width = TRUE;
-  if (do_same_width)
-  {
-    for (i = 0; i < m_nFields; i++)
-    {
-      fieldWidth = (int)(width/m_nFields);
-      fieldPosition = i*fieldWidth;
-      if ( i == n )
-        break;
+        wxConstCast(this, wxStatusBarGeneric)->
+            m_widthsAbs = CalculateAbsWidths(width);
     }
-  }
-  else // no_same_width
-  {
-    int *tempwidth = new int[m_nFields];
-    int temppos = 0;
-    for (i = 0; i < m_nFields; i++)
+
+    rect.x = 0;
+    for ( int i = 0; i < n; i++ )
     {
-      if (m_statusWidths[i] > 0) tempwidth[i] = m_statusWidths[i];
-      else tempwidth[i] = (width - sum_of_nonvar) / num_of_var;
+        rect.x += m_widthsAbs[i];
     }
-    for (i = 0; i < m_nFields; i++)
-    {
-        fieldWidth = tempwidth[i];
-        fieldPosition = temppos;
 
-          temppos += tempwidth[i];
+    rect.x += m_borderX;
+    rect.y = m_borderY;
 
-        if ( i == n )
-            break;
-    }
-    delete [] tempwidth;
-  }
-
-    rect.x = fieldPosition + wxTHICK_LINE_BORDER;
-    rect.y = wxTHICK_LINE_BORDER;
-
-    rect.width = fieldWidth - 2 * wxTHICK_LINE_BORDER ;
-    rect.height = height - 2 * wxTHICK_LINE_BORDER ;
+    rect.width = m_widthsAbs[n] - 2*m_borderX;
+    rect.height = height - 2*m_borderY;
 
     return TRUE;
 }
@@ -400,6 +359,13 @@ void wxStatusBarGeneric::SetMinHeight(int height)
     }
 }
 
+void wxStatusBarGeneric::OnSize(wxSizeEvent& event)
+{
+    // have to recompute the widths in pixels
+    m_widthsAbs.Empty();
+
+    event.Skip();
+}
+
 #endif // wxUSE_STATUSBAR
 
-// vi:sts=4:sw=4:et

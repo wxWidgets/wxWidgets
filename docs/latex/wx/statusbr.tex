@@ -148,72 +148,6 @@ strings.
 Saves the current field text in a per field stack, and sets the field text
 to the string passed as argument.
 
-%% VZ: these functions are not in wxStatusBar API, these are just
-%%     implementation details of wxStatusBarGeneric
-%%
-%% \membersection{wxStatusBar::DrawField}\label{wxstatusbardrawfield}
-%% 
-%% \func{virtual void}{DrawField}{\param{wxDC\& }{dc}, \param{int }{i}}
-%% 
-%% Draws a field, including shaded borders and text.
-%% 
-%% \wxheading{Parameters}
-%% 
-%% \docparam{dc}{The device context to draw onto.}
-%% 
-%% \docparam{i}{The field to be drawn.}
-%% 
-%% \wxheading{See also}
-%% 
-%% \helpref{wxStatusBar::DrawFieldText}{wxstatusbardrawfieldtext}
-%% 
-%% \membersection{wxStatusBar::DrawFieldText}\label{wxstatusbardrawfieldtext}
-%% 
-%% \func{virtual void}{DrawFieldText}{\param{wxDC\& }{dc}, \param{int }{i}}
-%% 
-%% Draws a field's text.
-%% 
-%% \wxheading{Parameters}
-%% 
-%% \docparam{dc}{The device context to draw onto.}
-%% 
-%% \docparam{i}{The field whose text is to be drawn.}
-%% 
-%% \wxheading{See also}
-%% 
-%% \helpref{wxStatusBar::DrawField}{wxstatusbardrawfield}
-%% 
-%% \membersection{wxStatusBar::InitColours}\label{wxstatusbarinitcolours}
-%% 
-%% \func{virtual void}{InitColours}{\void}
-%% 
-%% Sets up the background colour and shading pens using suitable system colours (Windows) or tasteful shades
-%% of grey (other platforms).
-%% 
-%% \wxheading{Remarks}
-%% 
-%% This function is called when the window is created, and also
-%% from \helpref{wxStatusBar::OnSysColourChanged}{wxstatusbaronsyscolourchanged} on Windows.
-%% 
-%% \wxheading{See also}
-%% 
-%% \helpref{wxStatusBar::OnSysColourChanged}{wxstatusbaronsyscolourchanged}
-%% 
-%% \membersection{wxStatusBar::OnSysColourChanged}\label{wxstatusbaronsyscolourchanged}
-%% 
-%% \func{void}{OnSysColourChanged}{\param{wxSysColourChangedEvent\& }{event}}
-%% 
-%% Handles a system colour change by calling \helpref{wxStatusBar::InitColours}{wxstatusbarinitcolours},
-%% and refreshes the window.
-%% 
-%% \wxheading{Parameters}
-%% 
-%% \docparam{event}{The colour change event.}
-%% 
-%% \wxheading{See also}
-%% 
-%% \helpref{wxStatusBar::InitColours}{wxstatusbarinitcolours}
-
 \membersection{wxStatusBar::SetFieldsCount}\label{wxstatusbarsetfieldscount}
 
 \func{virtual void}{SetFieldsCount}{\param{int}{ number = 1}, \param{int* }{widths = NULL}}
@@ -230,9 +164,8 @@ Use SetStatusWidths to set the field widths.}
 
 \docparam{number}{The number of fields.}
 
-\docparam{widths}{An array of {\it n} integers, each of which is a status field width
-in pixels. A value of -1 indicates that the field is variable width; at least one
-field must be -1.}
+\docparam{widths}{An array of {\it n} integers interpreted in the same way as
+in \helpref{SetStatusWidths}{wxstatusbarsetstatuswidths}}
 
 \membersection{wxStatusBar::SetMinHeight}\label{wxstatusbarsetminheight}
 
