@@ -422,10 +422,6 @@ class Dialog(TopLevelWindow):
         """CreateButtonSizer(long flags) -> Sizer"""
         return _windows.Dialog_CreateButtonSizer(*args, **kwargs)
 
-    def SetModal(*args, **kwargs):
-        """SetModal(bool flag)"""
-        return _windows.Dialog_SetModal(*args, **kwargs)
-
     def IsModal(*args, **kwargs):
         """IsModal() -> bool"""
         return _windows.Dialog_IsModal(*args, **kwargs)

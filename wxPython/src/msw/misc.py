@@ -4334,14 +4334,6 @@ class MetafileDataObject(DataObjectSimple):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-    def SetMetafile(*args, **kwargs):
-        """SetMetafile(wxMetafile metafile)"""
-        return _misc.MetafileDataObject_SetMetafile(*args, **kwargs)
-
-    def GetMetafile(*args, **kwargs):
-        """GetMetafile() -> wxMetafile"""
-        return _misc.MetafileDataObject_GetMetafile(*args, **kwargs)
-
 
 class MetafileDataObjectPtr(MetafileDataObject):
     def __init__(self, this):
@@ -4370,7 +4362,7 @@ class DropSource(object):
         return "<%s.%s; proxy of C++ wxPyDropSource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window win=None, Cursor copy=wxNullCursor, Cursor move=wxNullCursor, 
+        __init__(Window win, Cursor copy=wxNullCursor, Cursor move=wxNullCursor, 
             Cursor none=wxNullCursor) -> DropSource
         """
         newobj = _misc.new_DropSource(*args, **kwargs)
