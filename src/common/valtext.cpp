@@ -270,7 +270,10 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 	wxTextCtrl *textCtrl = (wxTextCtrl *)m_validatorWindow;
 
 	int keyCode = event.KeyCode();
-	if ( keyCode == WXK_DELETE || keyCode == WXK_RETURN || keyCode == WXK_BACK)
+	if (keyCode == WXK_DELETE || keyCode == WXK_RETURN || keyCode == WXK_BACK ||
+	    keyCode == WXK_HOME || keyCode == WXK_LEFT || keyCode == WXK_UP ||
+	    keyCode == WXK_RIGHT || keyCode == WXK_DOWN || keyCode == WXK_PRIOR ||
+	    keyCode == WXK_NEXT || keyCode == WXK_END || keyCode == WXK_HOME)
 	{
 		textCtrl->wxTextCtrl::OnChar(event);
 		return ;

@@ -7,7 +7,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKSETTINGSH__
 #define __GTKSETTINGSH__
 
@@ -20,10 +19,10 @@
 #include "wx/pen.h"
 #include "wx/font.h"
 
-class WXDLLEXPORT wxSystemSettings: public wxObject
+class wxSystemSettings: public wxObject
 {
 public:
-    inline wxSystemSettings(void) {}
+    inline wxSystemSettings() {}
 
     inline static void Init() {}
     static void Done();

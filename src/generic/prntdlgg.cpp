@@ -75,22 +75,12 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
   if ( data )
     printData = *data;
   
-  int buttonWidth = 65;
-  int buttonHeight = 25;
-  int spacing = 5;
-  int yPos = 5;
-  int xPos = 5;
+  (void)new wxStaticBox( this, -1, _( "Printer options" ), wxPoint( 5, 5), wxSize( 300, 60 ) );
 
-  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(5, yPos), wxSize(buttonWidth, buttonHeight));
-  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(buttonWidth + 5 + spacing, yPos), wxSize(buttonWidth, buttonHeight));
-
-  setupButton = new wxButton(this, wxPRINTID_SETUP, _("Setup..."), wxPoint(buttonWidth*2 + 5 + 2*spacing, yPos), wxSize(buttonWidth, buttonHeight));
-
-  okButton->SetDefault();
-  okButton->SetFocus();
-
-  yPos += 35;
-
+  printToFileCheckBox = new wxCheckBox(this, wxPRINTID_PRINTTOFILE, _("Print to File"), wxPoint(20, 25) );
+  
+  setupButton = new wxButton(this, wxPRINTID_SETUP, _("Setup..."), wxPoint(160, 25), wxSize(100, -1));
+  
   wxString *choices = new wxString[2];
   choices[0] = _("All");
   choices[1] = _("Pages");
@@ -100,41 +90,30 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
   if(printData.GetFromPage() != 0)
   {
      rangeRadioBox = new wxRadioBox(this, wxPRINTID_RANGE, _("Print Range"),
-                                    wxPoint(5, yPos), wxSize(-1, -1), 2, choices, 2);
+                                    wxPoint(5, 80), wxSize(-1, -1), 2, choices, 1, wxRA_VERTICAL);
      rangeRadioBox->SetSelection(1);
   }
   
-  yPos += 60;
-  xPos = 5;
-  int staticWidth = 45;
-  int textWidth = 40;
-  spacing = 10;
-
   if(printData.GetFromPage() != 0)
   {
-     (void) new wxStaticText(this, wxPRINTID_STATIC, _("From:"), wxPoint(xPos, yPos));
-     xPos += staticWidth;
+     (void) new wxStaticText(this, wxPRINTID_STATIC, _("From:"), wxPoint(5, 135));
 
-     fromText = new wxTextCtrl(this, wxPRINTID_FROM, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
-     xPos += spacing + textWidth;
+     fromText = new wxTextCtrl(this, wxPRINTID_FROM, "", wxPoint(45, 130), wxSize(40, -1));
      
-     (void) new wxStaticText(this, wxPRINTID_STATIC, _("To:"), wxPoint(xPos, yPos));
-     xPos += staticWidth;
+     (void) new wxStaticText(this, wxPRINTID_STATIC, _("To:"), wxPoint(100, 135));
      
-     toText = new wxTextCtrl(this, wxPRINTID_TO, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
-     xPos += spacing + textWidth;
+     toText = new wxTextCtrl(this, wxPRINTID_TO, "", wxPoint(133, 130), wxSize(40, -1));
   }
   
-  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Copies:"), wxPoint(xPos, yPos));
-  xPos += spacing + staticWidth;
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Copies:"), wxPoint(200, 135));
 
-  noCopiesText = new wxTextCtrl(this, wxPRINTID_COPIES, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
+  noCopiesText = new wxTextCtrl(this, wxPRINTID_COPIES, "", wxPoint(252, 130), wxSize(40, -1));
 
-  yPos += 30;
-  xPos = 5;
+  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(40, 180), wxSize(100, -1));
+  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(180, 180), wxSize(100, -1));
 
-  printToFileCheckBox = new wxCheckBox(this, wxPRINTID_PRINTTOFILE, _("Print to File"), wxPoint(xPos, yPos));
-
+  okButton->SetDefault();
+  okButton->SetFocus();
   Fit();
   Centre(wxBOTH);
 
@@ -312,7 +291,7 @@ wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSe
   choices[1] = _("Landscape");
 
   orientationRadioBox = new wxRadioBox(this, wxPRINTID_ORIENTATION, _("Orientation"),
-    wxPoint(10, 80), wxSize(-1, -1), 2, choices, 2);
+    wxPoint(10, 80), wxSize(-1, -1), 2, choices, 1, wxRA_VERTICAL );
   orientationRadioBox->SetSelection(0);
 
   (void) new wxStaticBox(this, wxPRINTID_STATIC, _("Options"), wxPoint(10, 130), wxSize(200,50) );
@@ -330,8 +309,8 @@ wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSe
 
   printerOptionsText = new wxTextCtrl(this, wxPRINTID_OPTIONS, "", wxPoint(260, 135), wxSize(150, -1));
 
-  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(240, 200), wxSize(100, -1));
-  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(360, 200), wxSize(100, -1));
+  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(80, 200), wxSize(100, -1));
+  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(270, 200), wxSize(100, -1));
 
   okButton->SetDefault();
   okButton->SetFocus();

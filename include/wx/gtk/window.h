@@ -307,7 +307,7 @@ public:
   wxCursor            *m_cursor;
   wxFont               m_font;
   wxColour             m_backgroundColour;
-  wxColour             m_foregroundColour ;
+  wxColour             m_foregroundColour;
   wxRegion             m_updateRegion;
   long                 m_windowStyle;
   bool                 m_isShown;
@@ -330,6 +330,7 @@ public:
   bool                 m_resizing;
   GdkGC               *m_scrollGC;
   GtkStyle            *m_widgetStyle;
+  bool                 m_isStaticBox;
 
   wxInsertChildFunction  m_insertCallback;
 

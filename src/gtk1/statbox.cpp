@@ -27,45 +27,47 @@ wxStaticBox::wxStaticBox( wxWindow *parent, wxWindowID id, const wxString &label
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-  Create( parent, id, label, pos, size, style, name );
+    Create( parent, id, label, pos, size, style, name );
 }
 
 bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-  m_needParent = TRUE;
+    m_needParent = TRUE;
 
-  PreCreation( parent, id, pos, size, style, name );
+    PreCreation( parent, id, pos, size, style, name );
 
-  m_widget = gtk_frame_new(m_label);
+    m_isStaticBox = TRUE;
+    
+    m_widget = gtk_frame_new(m_label);
 
-  m_parent->AddChild( this );
+    m_parent->AddChild( this );
 
-  (m_parent->m_insertCallback)( m_parent, this );
+    (m_parent->m_insertCallback)( m_parent, this );
   
-  PostCreation();
+    PostCreation();
 
-  SetLabel(label);
+    SetLabel(label);
   
-  SetBackgroundColour( parent->GetBackgroundColour() );
-  SetForegroundColour( parent->GetForegroundColour() );
+    SetBackgroundColour( parent->GetBackgroundColour() );
+    SetForegroundColour( parent->GetForegroundColour() );
 
-  Show( TRUE );
+    Show( TRUE );
 
-  return TRUE;
+    return TRUE;
 }
 
 void wxStaticBox::SetLabel( const wxString &label )
 {
-  wxControl::SetLabel( label );
-  GtkFrame *frame = GTK_FRAME( m_widget );
-  gtk_frame_set_label( frame, GetLabel() );
+    wxControl::SetLabel( label );
+    GtkFrame *frame = GTK_FRAME( m_widget );
+    gtk_frame_set_label( frame, GetLabel() );
 }
 
 void wxStaticBox::ApplyWidgetStyle()
 {
-  SetWidgetStyle();
-  gtk_widget_set_style( m_widget, m_widgetStyle );
+    SetWidgetStyle();
+    gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 

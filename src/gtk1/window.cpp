@@ -400,16 +400,46 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
-            if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-	        (child->m_x <= event.m_x) &&
-                (child->m_y <= event.m_y) &&
-                (child->m_x+child->m_width  >= event.m_x) &&
-                (child->m_y+child->m_height >= event.m_y))
-            {
-                win = child;
-                event.m_x -= child->m_x;
-                event.m_y -= child->m_y;
-                break;
+	    
+	    if (child->m_isStaticBox)
+	    {
+	        // wxStaticBox is transparent in the box itself
+		int x = event.m_x;
+		int y = event.m_y;
+		int xx1 = child->m_x;
+		int yy1 = child->m_y;
+		int xx2 = child->m_x + child->m_width;
+		int yy2 = child->m_x + child->m_height;
+		
+		// left
+		if (((x >= xx1) && (x <= xx1+10) && (y >= yy1) && (y <= yy2)) ||
+		// right
+	            ((x >= xx2-10) && (x <= xx2) && (y >= yy1) && (y <= yy2)) ||
+		// top
+	            ((x >= xx1) && (x <= xx2) && (y >= yy1) && (y <= yy1+10)) ||
+		// bottom
+	            ((x >= xx1) && (x <= xx2) && (y >= yy2-1) && (y <= yy2)))
+		{
+                    win = child;
+                    event.m_x -= child->m_x;
+                    event.m_y -= child->m_y;
+                    break;
+		}
+		    
+	    }
+	    else
+	    {
+                if ((child->m_wxwindow == (GtkWidget*) NULL) &&
+	            (child->m_x <= event.m_x) &&
+                    (child->m_y <= event.m_y) &&
+                    (child->m_x+child->m_width  >= event.m_x) &&
+                    (child->m_y+child->m_height >= event.m_y))
+                {
+                    win = child;
+                    event.m_x -= child->m_x;
+                    event.m_y -= child->m_y;
+                    break;
+		}
             }
             node = node->Next();
         }
@@ -474,16 +504,46 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
-            if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-	        (child->m_x <= event.m_x) &&
-                (child->m_y <= event.m_y) &&
-                (child->m_x+child->m_width  >= event.m_x) &&
-                (child->m_y+child->m_height >= event.m_y))
-            {
-                win = child;
-                event.m_x -= child->m_x;
-                event.m_y -= child->m_y;
-                break;
+	    
+	    if (child->m_isStaticBox)
+	    {
+	        // wxStaticBox is transparent in the box itself
+		int x = event.m_x;
+		int y = event.m_y;
+		int xx1 = child->m_x;
+		int yy1 = child->m_y;
+		int xx2 = child->m_x + child->m_width;
+		int yy2 = child->m_x + child->m_height;
+		
+		// left
+		if (((x >= xx1) && (x <= xx1+10) && (y >= yy1) && (y <= yy2)) ||
+		// right
+	            ((x >= xx2-10) && (x <= xx2) && (y >= yy1) && (y <= yy2)) ||
+		// top
+	            ((x >= xx1) && (x <= xx2) && (y >= yy1) && (y <= yy1+10)) ||
+		// bottom
+	            ((x >= xx1) && (x <= xx2) && (y >= yy2-1) && (y <= yy2)))
+		{
+                    win = child;
+                    event.m_x -= child->m_x;
+                    event.m_y -= child->m_y;
+                    break;
+		}
+		    
+	    }
+	    else
+	    {
+                if ((child->m_wxwindow == (GtkWidget*) NULL) &&
+	            (child->m_x <= event.m_x) &&
+                    (child->m_y <= event.m_y) &&
+                    (child->m_x+child->m_width  >= event.m_x) &&
+                    (child->m_y+child->m_height >= event.m_y))
+                {
+                    win = child;
+                    event.m_x -= child->m_x;
+                    event.m_y -= child->m_y;
+                    break;
+		}
             }
             node = node->Next();
         }
@@ -538,16 +598,46 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
-            if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-	        (child->m_x <= event.m_x) &&
-                (child->m_y <= event.m_y) &&
-                (child->m_x+child->m_width  >= event.m_x) &&
-                (child->m_y+child->m_height >= event.m_y))
-            {
-                win = child;
-                event.m_x -= child->m_x;
-                event.m_y -= child->m_y;
-                break;
+	    
+	    if (child->m_isStaticBox)
+	    {
+	        // wxStaticBox is transparent in the box itself
+		int x = event.m_x;
+		int y = event.m_y;
+		int xx1 = child->m_x;
+		int yy1 = child->m_y;
+		int xx2 = child->m_x + child->m_width;
+		int yy2 = child->m_x + child->m_height;
+		
+		// left
+		if (((x >= xx1) && (x <= xx1+10) && (y >= yy1) && (y <= yy2)) ||
+		// right
+	            ((x >= xx2-10) && (x <= xx2) && (y >= yy1) && (y <= yy2)) ||
+		// top
+	            ((x >= xx1) && (x <= xx2) && (y >= yy1) && (y <= yy1+10)) ||
+		// bottom
+	            ((x >= xx1) && (x <= xx2) && (y >= yy2-1) && (y <= yy2)))
+		{
+                    win = child;
+                    event.m_x -= child->m_x;
+                    event.m_y -= child->m_y;
+                    break;
+		}
+		    
+	    }
+	    else
+	    {
+                if ((child->m_wxwindow == (GtkWidget*) NULL) &&
+	            (child->m_x <= event.m_x) &&
+                    (child->m_y <= event.m_y) &&
+                    (child->m_x+child->m_width  >= event.m_x) &&
+                    (child->m_y+child->m_height >= event.m_y))
+                {
+                    win = child;
+                    event.m_x -= child->m_x;
+                    event.m_y -= child->m_y;
+                    break;
+		}
             }
             node = node->Next();
         }
@@ -881,6 +971,9 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
                                                  GdkEventButton *WXUNUSED(gdk_event),
 						 wxWindow *win )
 {
+//  don't test here as we can release the mouse while being over
+//  a different window then the slider
+//
 //    if (gdk_event->window != widget->slider) return FALSE;
 
     win->m_isScrolling = TRUE;
@@ -898,7 +991,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 						   wxWindow *win )
 {
 
-//  don't test here as we can reelase the mouse while being over
+//  don't test here as we can release the mouse while being over
 //  a different window then the slider
 //
 //    if (gdk_event->window != widget->slider) return FALSE;
@@ -924,8 +1017,8 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 // C++ has no virtual methods in a constructor. We have to emulate a
 // virtual function here as wxNotebook requires a different way to insert
 // a child in it. I had opted for creating a wxNotebookPage window class
-// which would have made this superflouus (such in the MDI window system),
-// but no-one is listening to me...
+// which would have made this superfluous (such in the MDI window system),
+// but no-one was listening to me...
 
 static void wxInsertChildInWindow( wxWindow* parent, wxWindow* child )
 {
@@ -1009,6 +1102,8 @@ wxWindow::wxWindow()
 
     m_clientObject = (wxClientData*) NULL;
     m_clientData = NULL;
+    
+    m_isStaticBox = FALSE;
 }
 
 wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
@@ -1238,8 +1333,8 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
 
     m_cursor = new wxCursor( wxCURSOR_ARROW );
     m_font = *wxSWISS_FONT;
-//  m_backgroundColour = wxWHITE;
-//  m_foregroundColour = wxBLACK;
+    m_backgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+    m_foregroundColour = *wxBLACK;
     m_windowStyle = style;
     m_windowName = name;
 
@@ -1267,6 +1362,8 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
 
     m_clientObject = (wxClientData*)NULL;
     m_clientData = NULL;
+    
+    m_isStaticBox = FALSE;
 }
 
 void wxWindow::PostCreation()
@@ -1457,7 +1554,7 @@ void wxWindow::Move( int x, int y )
 
 void wxWindow::GetSize( int *width, int *height ) const
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
     if (width) (*width) = m_width;
     if (height) (*height) = m_height;
@@ -1465,136 +1562,136 @@ void wxWindow::GetSize( int *width, int *height ) const
 
 void wxWindow::SetClientSize( int width, int height )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
-  if (!m_wxwindow)
-  {
-    SetSize( width, height );
-  }
-  else
-  {
-    int dw = 0;
-    int dh = 0;
-
-    if (!m_hasScrolling)
+    if (!m_wxwindow)
     {
-      GtkStyleClass *window_class = m_wxwindow->style->klass;
-
-      if ((m_windowStyle & wxRAISED_BORDER) ||
-          (m_windowStyle & wxSUNKEN_BORDER))
-      {
-        dw += 2 * window_class->xthickness;
-        dh += 2 * window_class->ythickness;
-      }
+        SetSize( width, height );
     }
     else
     {
-      GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
-      GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
+        int dw = 0;
+        int dh = 0;
+
+        if (!m_hasScrolling)
+        {
+            GtkStyleClass *window_class = m_wxwindow->style->klass;
+
+            if ((m_windowStyle & wxRAISED_BORDER) ||
+                (m_windowStyle & wxSUNKEN_BORDER))
+            {
+                dw += 2 * window_class->xthickness;
+                dh += 2 * window_class->ythickness;
+            }
+        }
+        else
+        {
+            GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
+            GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
 #ifdef NEW_GTK_SCROLL_CODE
-      GtkWidget *viewport = scroll_window->child;
+            GtkWidget *viewport = scroll_window->child;
 #else
-      GtkWidget *viewport = scroll_window->viewport;
+            GtkWidget *viewport = scroll_window->viewport;
 #endif
 
-      GtkStyleClass *viewport_class = viewport->style->klass;
+            GtkStyleClass *viewport_class = viewport->style->klass;
 
-      GtkWidget *hscrollbar = scroll_window->hscrollbar;
-      GtkWidget *vscrollbar = scroll_window->vscrollbar;
+            GtkWidget *hscrollbar = scroll_window->hscrollbar;
+            GtkWidget *vscrollbar = scroll_window->vscrollbar;
 
-      if ((m_windowStyle & wxRAISED_BORDER) ||
-          (m_windowStyle & wxSUNKEN_BORDER))
-      {
-        dw += 2 * viewport_class->xthickness;
-        dh += 2 * viewport_class->ythickness;
-      }
+            if ((m_windowStyle & wxRAISED_BORDER) ||
+                (m_windowStyle & wxSUNKEN_BORDER))
+            {
+                dw += 2 * viewport_class->xthickness;
+                dh += 2 * viewport_class->ythickness;
+            }
 
-      if (scroll_window->vscrollbar_visible)
-      {
-        dw += vscrollbar->allocation.width;
-        dw += scroll_class->scrollbar_spacing;
-      }
+            if (scroll_window->vscrollbar_visible)
+            {
+                dw += vscrollbar->allocation.width;
+                dw += scroll_class->scrollbar_spacing;
+            }
 
-      if (scroll_window->hscrollbar_visible)
-      {
-        dh += hscrollbar->allocation.height;
-        dw += scroll_class->scrollbar_spacing;
-      }
+            if (scroll_window->hscrollbar_visible)
+            {
+                dh += hscrollbar->allocation.height;
+                dw += scroll_class->scrollbar_spacing;
+            }
+       }
+
+      SetSize( width+dw, height+dh );
     }
-
-    SetSize( width+dw, height+dh );
-  }
 }
 
 void wxWindow::GetClientSize( int *width, int *height ) const
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
-  if (!m_wxwindow)
-  {
-    if (width) (*width) = m_width;
-    if (height) (*height) = m_height;
-  }
-  else
-  {
-    int dw = 0;
-    int dh = 0;
-
-    if (!m_hasScrolling)
+    if (!m_wxwindow)
     {
-      GtkStyleClass *window_class = m_wxwindow->style->klass;
-
-      if ((m_windowStyle & wxRAISED_BORDER) ||
-          (m_windowStyle & wxSUNKEN_BORDER))
-      {
-        dw += 2 * window_class->xthickness;
-        dh += 2 * window_class->ythickness;
-      }
+        if (width) (*width) = m_width;
+        if (height) (*height) = m_height;
     }
     else
     {
-      GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
-      GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
+        int dw = 0;
+        int dh = 0;
+
+        if (!m_hasScrolling)
+        {
+            GtkStyleClass *window_class = m_wxwindow->style->klass;
+
+            if ((m_windowStyle & wxRAISED_BORDER) ||
+                (m_windowStyle & wxSUNKEN_BORDER))
+            {
+                dw += 2 * window_class->xthickness;
+                dh += 2 * window_class->ythickness;
+            }
+        }
+        else
+        {
+            GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
+            GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
 #ifdef NEW_GTK_SCROLL_CODE
-      GtkWidget *viewport = scroll_window->child;
+            GtkWidget *viewport = scroll_window->child;
 #else
-      GtkWidget *viewport = scroll_window->viewport;
+            GtkWidget *viewport = scroll_window->viewport;
 #endif
 
-      GtkStyleClass *viewport_class = viewport->style->klass;
+            GtkStyleClass *viewport_class = viewport->style->klass;
 
-      if ((m_windowStyle & wxRAISED_BORDER) ||
-          (m_windowStyle & wxSUNKEN_BORDER))
-      {
-        dw += 2 * viewport_class->xthickness;
-        dh += 2 * viewport_class->ythickness;
-      }
+            if ((m_windowStyle & wxRAISED_BORDER) ||
+                (m_windowStyle & wxSUNKEN_BORDER))
+            {
+                dw += 2 * viewport_class->xthickness;
+                dh += 2 * viewport_class->ythickness;
+            }
 
-      if (scroll_window->vscrollbar_visible)
-      {
-//        dw += vscrollbar->allocation.width;
-        dw += 15;                               // range.slider_width = 11 + 2*2pts edge
-        dw += scroll_class->scrollbar_spacing;
-      }
+            if (scroll_window->vscrollbar_visible)
+            {
+//              dw += vscrollbar->allocation.width;
+                dw += 15;                               // range.slider_width = 11 + 2*2pts edge
+                dw += scroll_class->scrollbar_spacing;
+            }
 
-      if (scroll_window->hscrollbar_visible)
-      {
-//        dh += hscrollbar->allocation.height;
-        dh += 15;
-        dh += scroll_class->scrollbar_spacing;
-      }
+            if (scroll_window->hscrollbar_visible)
+            {
+//              dh += hscrollbar->allocation.height;
+                dh += 15;
+                dh += scroll_class->scrollbar_spacing;
+            }
+        }
+
+        if (width) (*width) = m_width - dw;
+        if (height) (*height) = m_height - dh;
     }
-
-    if (width) (*width) = m_width - dw;
-    if (height) (*height) = m_height - dh;
-  }
 }
 
 void wxWindow::GetPosition( int *x, int *y ) const
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
     if (x) (*x) = m_x;
     if (y) (*y) = m_y;
@@ -1602,7 +1699,7 @@ void wxWindow::GetPosition( int *x, int *y ) const
 
 void wxWindow::ClientToScreen( int *x, int *y )
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
     GdkWindow *source = (GdkWindow *) NULL;
     if (m_wxwindow)
@@ -1633,90 +1730,89 @@ void wxWindow::ClientToScreen( int *x, int *y )
 
 void wxWindow::ScreenToClient( int *x, int *y )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
-  GdkWindow *source = (GdkWindow *) NULL;
-  if (m_wxwindow)
-    source = m_wxwindow->window;
-  else
-    source = m_widget->window;
+    GdkWindow *source = (GdkWindow *) NULL;
+    if (m_wxwindow)
+        source = m_wxwindow->window;
+    else
+        source = m_widget->window;
 
-  int org_x = 0;
-  int org_y = 0;
-  gdk_window_get_origin( source, &org_x, &org_y );
+    int org_x = 0;
+    int org_y = 0;
+    gdk_window_get_origin( source, &org_x, &org_y );
 
-  if (!m_wxwindow)
-  {
-    if (GTK_WIDGET_NO_WINDOW (m_widget))
+    if (!m_wxwindow)
     {
-      org_x += m_widget->allocation.x;
-      org_y += m_widget->allocation.y;
+        if (GTK_WIDGET_NO_WINDOW (m_widget))
+        {
+            org_x += m_widget->allocation.x;
+            org_y += m_widget->allocation.y;
+        }
     }
-  }
 
-  wxPoint pt(GetClientAreaOrigin());
-  org_x -= pt.x;
-  org_y -= pt.y;
+    wxPoint pt(GetClientAreaOrigin());
+    org_x -= pt.x;
+    org_y -= pt.y;
 
-  if (x) *x -= org_x;
-  if (y) *y -= org_y;
+    if (x) *x -= org_x;
+    if (y) *y -= org_y;
 }
 
 void wxWindow::Centre( int direction )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
-  int x = m_x;
-  int y = m_y;
+    int x = m_x;
+    int y = m_y;
 
-  if (m_parent)
-  {
-      int p_w = 0;
-      int p_h = 0;
-      m_parent->GetSize( &p_w, &p_h );
-      if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (p_w - m_width) / 2;
-      if (direction & wxVERTICAL == wxVERTICAL) y = (p_h - m_height) / 2;
-  }
-  else
-  {
-      if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
-      if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
-  }
+    if (m_parent)
+    {
+        int p_w = 0;
+        int p_h = 0;
+        m_parent->GetSize( &p_w, &p_h );
+        if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (p_w - m_width) / 2;
+        if (direction & wxVERTICAL == wxVERTICAL) y = (p_h - m_height) / 2;
+    }
+    else
+    {
+        if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
+        if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
+    }
 
-  Move( x, y );
+    Move( x, y );
 }
 
 void wxWindow::Fit()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
-  int maxX = 0;
-  int maxY = 0;
-  wxNode *node = m_children.First();
-  while ( node )
-  {
-    wxWindow *win = (wxWindow *)node->Data();
-    int wx, wy, ww, wh;
-    win->GetPosition(&wx, &wy);
-    win->GetSize(&ww, &wh);
-    if ( wx + ww > maxX )
-      maxX = wx + ww;
-    if ( wy + wh > maxY )
-      maxY = wy + wh;
+    int maxX = 0;
+    int maxY = 0;
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxWindow *win = (wxWindow *)node->Data();
+        int wx, wy, ww, wh;
+        win->GetPosition(&wx, &wy);
+        win->GetSize(&ww, &wh);
+        if (wx + ww > maxX) maxX = wx + ww;
+        if (wy + wh > maxY) maxY = wy + wh;
 
-    node = node->Next();
-  }
-  SetClientSize(maxX + 5, maxY + 10);
+        node = node->Next();
+    }
+    
+    SetClientSize(maxX + 7, maxY + 14);
 }
 
 void wxWindow::SetSizeHints( int minW, int minH, int maxW, int maxH, int WXUNUSED(incW), int WXUNUSED(incH) )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
-  m_minWidth = minW;
-  m_minHeight = minH;
-  m_maxWidth = maxW;
-  m_maxHeight = maxH;
+    m_minWidth = minW;
+    m_minHeight = minH;
+    m_maxWidth = maxW;
+    m_maxHeight = maxH;
 }
 
 void wxWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
@@ -1726,67 +1822,57 @@ void wxWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
 
 bool wxWindow::Show( bool show )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_MSG( (m_widget != NULL), FALSE, "invalid window" );
 
-  if (show)
-    gtk_widget_show( m_widget );
-  else
-    gtk_widget_hide( m_widget );
-  m_isShown = show;
-  return TRUE;
+    if (show)
+        gtk_widget_show( m_widget );
+    else
+        gtk_widget_hide( m_widget );
+	
+    m_isShown = show;
+    
+    return TRUE;
 }
 
 void wxWindow::Enable( bool enable )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
-  m_isEnabled = enable;
-  gtk_widget_set_sensitive( m_widget, enable );
-  if (m_wxwindow) gtk_widget_set_sensitive( m_wxwindow, enable );
+    m_isEnabled = enable;
+    
+    gtk_widget_set_sensitive( m_widget, enable );
+    if (m_wxwindow) gtk_widget_set_sensitive( m_wxwindow, enable );
 }
 
 int wxWindow::GetCharHeight() const
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_MSG( (m_widget != NULL), 12, "invalid window" );
 
-  if (!m_font.Ok())
-  {
-    wxFAIL_MSG( "invalid font" );
-    return -1;
-  }
+    wxCHECK_MSG( m_font.Ok(), 12, "invalid font" );
 
-  GdkFont *font = m_font.GetInternalFont( 1.0 );
-  return font->ascent + font->descent;
+    GdkFont *font = m_font.GetInternalFont( 1.0 );
+    
+    return font->ascent + font->descent;
 }
 
 int wxWindow::GetCharWidth() const
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_MSG( (m_widget != NULL), 8, "invalid window" );
 
-    if (!m_font.Ok())
-    {
-      wxFAIL_MSG( "invalid font" );
-      return -1;
-    }
+    wxCHECK_MSG( m_font.Ok(), 8, "invalid font" );
 
     GdkFont *font = m_font.GetInternalFont( 1.0 );
+    
     return gdk_string_width( font, "H" );
 }
 
 void wxWindow::GetTextExtent( const wxString& string, int *x, int *y,
   int *descent, int *externalLeading, const wxFont *theFont, bool WXUNUSED(use16) ) const
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
-
     wxFont fontToUse = m_font;
     if (theFont) fontToUse = *theFont;
 
-    if (!fontToUse.Ok())
-    {
-      wxFAIL_MSG( "invalid font" );
-      return;
-    }
-    wxASSERT_MSG( (m_font.Ok()), "invalid font" );
+    wxCHECK_RET( fontToUse.Ok(), "invalid font" );
 
     GdkFont *font = fontToUse.GetInternalFont( 1.0 );
     if (x) (*x) = gdk_string_width( font, string );
@@ -1797,25 +1883,25 @@ void wxWindow::GetTextExtent( const wxString& string, int *x, int *y,
 
 void wxWindow::MakeModal( bool modal )
 {
-  return;
-  // Disable all other windows
-  if (this->IsKindOf(CLASSINFO(wxDialog)) || this->IsKindOf(CLASSINFO(wxFrame)))
-  {
-    wxNode *node = wxTopLevelWindows.First();
-    while (node)
+    return;
+    
+    // Disable all other windows
+    if (this->IsKindOf(CLASSINFO(wxDialog)) || this->IsKindOf(CLASSINFO(wxFrame)))
     {
-      wxWindow *win = (wxWindow *)node->Data();
-      if (win != this)
-        win->Enable(!modal);
+        wxNode *node = wxTopLevelWindows.First();
+        while (node)
+        {
+            wxWindow *win = (wxWindow *)node->Data();
+            if (win != this) win->Enable(!modal);
 
-      node = node->Next();
+            node = node->Next();
+        }
     }
-  }
 }
 
 void wxWindow::SetFocus()
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
     GtkWidget *connect_widget = GetConnectWidget();
     if (connect_widget)
@@ -1834,27 +1920,29 @@ bool wxWindow::OnClose()
 
 void wxWindow::AddChild( wxWindow *child )
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
-    wxASSERT_MSG( (child != NULL), "invalid child" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (child != NULL), "invalid child" );
 
     m_children.Append( child );
 }
 
 wxWindow *wxWindow::ReParent( wxWindow *newParent )
 {
-  wxWindow *oldParent = GetParent();
+    wxCHECK_MSG( (m_widget != NULL), (wxWindow*) NULL, "invalid window" );
+    
+    wxWindow *oldParent = GetParent();
 
-  if (oldParent) oldParent->RemoveChild( this );
+    if (oldParent) oldParent->RemoveChild( this );
 
-  gtk_widget_unparent( m_widget );
+    gtk_widget_unparent( m_widget );
 
-  if (newParent)
-  {
-     newParent->AddChild( this );
-     (newParent->m_insertCallback)( newParent, this );
-  }
+    if (newParent)
+    {
+        newParent->AddChild( this );
+        (newParent->m_insertCallback)( newParent, this );
+    }
 
-  return oldParent;
+    return oldParent;
 }
 
 void wxWindow::RemoveChild( wxWindow *child )
@@ -1875,14 +1963,14 @@ int wxWindow::GetReturnCode()
 
 void wxWindow::Raise()
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
     if (m_widget) gdk_window_raise( m_widget->window );
 }
 
 void wxWindow::Lower()
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
     if (m_widget) gdk_window_lower( m_widget->window );
 }
@@ -1930,73 +2018,66 @@ wxValidator *wxWindow::GetValidator()
 
 void wxWindow::SetValidator( const wxValidator& validator )
 {
-  if (m_windowValidator) delete m_windowValidator;
-  m_windowValidator = validator.Clone();
-  if (m_windowValidator) m_windowValidator->SetWindow(this);
+    if (m_windowValidator) delete m_windowValidator;
+    m_windowValidator = validator.Clone();
+    if (m_windowValidator) m_windowValidator->SetWindow(this);
 }
 
 void wxWindow::SetClientObject( wxClientData *data )
 {
-  if (m_clientObject) delete m_clientObject;
-  m_clientObject = data;
+    if (m_clientObject) delete m_clientObject;
+    m_clientObject = data;
 }
 
 wxClientData *wxWindow::GetClientObject()
 {
-  return m_clientObject;
+    return m_clientObject;
 }
 
 void wxWindow::SetClientData( void *data )
 {
-  m_clientData = data;
+    m_clientData = data;
 }
 
 void *wxWindow::GetClientData()
 {
-  return m_clientData;
+    return m_clientData;
 }
 
 bool wxWindow::IsBeingDeleted()
 {
-  return FALSE;
+    return FALSE;
 }
 
 void wxWindow::SetId( wxWindowID id )
 {
-  m_windowId = id;
+    m_windowId = id;
 }
 
 wxWindowID wxWindow::GetId() const
 {
-  return m_windowId;
+    return m_windowId;
 }
 
 void wxWindow::SetCursor( const wxCursor &cursor )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( (m_widget != NULL), "invalid window" );
 
-  if (m_cursor == NULL)
-  {
-    wxFAIL_MSG( "wxWindow::SetCursor m_cursor == NULL" );
-    m_cursor = new wxCursor( wxCURSOR_ARROW );
-  }
+    if (cursor.Ok())
+    {
+        if (cursor == *m_cursor) return;
+        *m_cursor = cursor;
+    }
+    else
+    {
+        *m_cursor = *wxSTANDARD_CURSOR;
+    }
 
-  if (cursor.Ok())
-  {
-    if ( cursor == *m_cursor )
-        return;
-    *m_cursor = cursor;
-  }
-  else
-  {
-    *m_cursor = *wxSTANDARD_CURSOR;
-  }
+    if ((m_widget) && (m_widget->window))
+         gdk_window_set_cursor( m_widget->window, m_cursor->GetCursor() );
 
-  if ((m_widget) && (m_widget->window))
-    gdk_window_set_cursor( m_widget->window, m_cursor->GetCursor() );
-
-  if ((m_wxwindow) && (m_wxwindow->window))
-    gdk_window_set_cursor( m_wxwindow->window, m_cursor->GetCursor() );
+    if ((m_wxwindow) && (m_wxwindow->window))
+         gdk_window_set_cursor( m_wxwindow->window, m_cursor->GetCursor() );
 }
 
 void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
@@ -2014,7 +2095,7 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
         }
         else
         {
-           Clear();
+            Clear();
         }
     }
     
@@ -2047,22 +2128,22 @@ wxRegion wxWindow::GetUpdateRegion() const
 
 bool wxWindow::IsExposed( int x, int y) const
 {
-  return (m_updateRegion.Contains( x, y ) != wxOutRegion );
+    return (m_updateRegion.Contains( x, y ) != wxOutRegion );
 }
 
 bool wxWindow::IsExposed( int x, int y, int w, int h ) const
 {
-  return (m_updateRegion.Contains( x, y, w, h ) != wxOutRegion );
+    return (m_updateRegion.Contains( x, y, w, h ) != wxOutRegion );
 }
 
 bool wxWindow::IsExposed( const wxPoint& pt ) const
 {
-  return (m_updateRegion.Contains( pt.x, pt.y ) != wxOutRegion );
+    return (m_updateRegion.Contains( pt.x, pt.y ) != wxOutRegion );
 }
 
 bool wxWindow::IsExposed( const wxRect& rect ) const
 {
-  return (m_updateRegion.Contains( rect.x, rect.y, rect.width, rect.height ) != wxOutRegion );
+    return (m_updateRegion.Contains( rect.x, rect.y, rect.width, rect.height ) != wxOutRegion );
 }
 
 void wxWindow::Clear()
@@ -2083,8 +2164,13 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
 
     if (m_backgroundColour == colour) return;
 
-    if (!m_backgroundColour.Ok())
-        if (wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ) == colour) return;
+    wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+    if (sysbg.Red() == colour.Red() && 
+        sysbg.Green() == colour.Green() && 
+        sysbg.Blue() == colour.Blue())
+    {
+        return;
+    } 
 
     m_backgroundColour = colour;
     if (!m_backgroundColour.Ok()) return;
@@ -2119,42 +2205,42 @@ void wxWindow::SetForegroundColour( const wxColour &colour )
 
 GtkStyle *wxWindow::GetWidgetStyle()
 {
-  if (m_widgetStyle) gtk_style_unref( m_widgetStyle );
+    if (m_widgetStyle) gtk_style_unref( m_widgetStyle );
 
-  m_widgetStyle =
-    gtk_style_copy(
-      gtk_widget_get_style( m_widget ) );
+    m_widgetStyle =
+      gtk_style_copy(
+        gtk_widget_get_style( m_widget ) );
 
-  return m_widgetStyle;
+    return m_widgetStyle;
 }
 
 void wxWindow::SetWidgetStyle()
 {
-  GtkStyle *style = GetWidgetStyle();
+    GtkStyle *style = GetWidgetStyle();
 
-  gdk_font_unref( style->font );
-  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+    gdk_font_unref( style->font );
+    style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
 
-  if (m_foregroundColour.Ok())
-  {
-    m_foregroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
-    style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
-    style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
-    style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
-  }
+    if (m_foregroundColour.Ok())
+    {
+        m_foregroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
+        style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
+        style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
+        style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
+    }
 
-  if (m_backgroundColour.Ok())
-  {
-    m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
-    style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-    style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-    style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
-    style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
-    style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
-    style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
-    style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
-    style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
-  }
+    if (m_backgroundColour.Ok())
+    {
+        m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
+        style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+        style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+        style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+        style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+        style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+        style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+        style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+        style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+    }
 }
 
 void wxWindow::ApplyWidgetStyle()
@@ -2163,93 +2249,99 @@ void wxWindow::ApplyWidgetStyle()
 
 bool wxWindow::Validate()
 {
-  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
+    wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
-  wxNode *node = m_children.First();
-  while (node)
-  {
-    wxWindow *child = (wxWindow *)node->Data();
-    if (child->GetValidator() && /* child->GetValidator()->Ok() && */ !child->GetValidator()->Validate(this))
-      { return FALSE; }
-    node = node->Next();
-  }
-  return TRUE;
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxWindow *child = (wxWindow *)node->Data();
+        if (child->GetValidator() && /* child->GetValidator()->Ok() && */ !child->GetValidator()->Validate(this))
+        { 
+	    return FALSE; 
+	}
+        node = node->Next();
+    }
+    return TRUE;
 }
 
 bool wxWindow::TransferDataToWindow()
 {
-  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
+    wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
-  wxNode *node = m_children.First();
-  while (node)
-  {
-    wxWindow *child = (wxWindow *)node->Data();
-    if (child->GetValidator() && /* child->GetValidator()->Ok() && */
-  !child->GetValidator()->TransferToWindow() )
+    wxNode *node = m_children.First();
+    while (node)
     {
-      wxMessageBox( _("Application Error"), _("Could not transfer data to window"), wxOK|wxICON_EXCLAMATION );
-      return FALSE;
+        wxWindow *child = (wxWindow *)node->Data();
+        if (child->GetValidator() && /* child->GetValidator()->Ok() && */
+            !child->GetValidator()->TransferToWindow() )
+        {
+            wxMessageBox( _("Application Error"), _("Could not transfer data to window"), wxOK|wxICON_EXCLAMATION );
+            return FALSE;
+        }
+        node = node->Next();
     }
-    node = node->Next();
-  }
-  return TRUE;
+    return TRUE;
 }
 
 bool wxWindow::TransferDataFromWindow()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
-  wxNode *node = m_children.First();
-  while (node)
-  {
-    wxWindow *child = (wxWindow *)node->Data();
-    if ( child->GetValidator() && /* child->GetValidator()->Ok() && */ !child->GetValidator()->TransferFromWindow() )
-      { return FALSE; }
-   node = node->Next();
-  }
-  return TRUE;
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxWindow *child = (wxWindow *)node->Data();
+        if ( child->GetValidator() && /* child->GetValidator()->Ok() && */ !child->GetValidator()->TransferFromWindow() )
+        { 
+	    return FALSE; 
+	}
+        node = node->Next();
+    }
+    return TRUE;
 }
 
 void wxWindow::SetAcceleratorTable( const wxAcceleratorTable& accel )
 {
-  m_acceleratorTable = accel;
+    m_acceleratorTable = accel;
 }
 
 void wxWindow::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
 {
-  TransferDataToWindow();
+    TransferDataToWindow();
 }
 
 void wxWindow::InitDialog()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  wxInitDialogEvent event(GetId());
-  event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
+    wxInitDialogEvent event(GetId());
+    event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent(event);
 }
 
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
-  menu->SetInvokingWindow( win );
-  wxNode *node = menu->m_items.First();
-  while (node)
-  {
-    wxMenuItem *menuitem = (wxMenuItem*)node->Data();
-    if (menuitem->IsSubMenu())
-      SetInvokingWindow( menuitem->GetSubMenu(), win );
-    node = node->Next();
-  }
+    menu->SetInvokingWindow( win );
+    wxNode *node = menu->m_items.First();
+    while (node)
+    {
+        wxMenuItem *menuitem = (wxMenuItem*)node->Data();
+        if (menuitem->IsSubMenu())
+        {
+	    SetInvokingWindow( menuitem->GetSubMenu(), win );
+	}
+        node = node->Next();
+    }
 }
 
 bool wxWindow::PopupMenu( wxMenu *menu, int WXUNUSED(x), int WXUNUSED(y) )
 {
-  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
+    wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
-  wxCHECK_MSG( menu != NULL, FALSE, "invalid popup-menu" );
+    wxCHECK_MSG( menu != NULL, FALSE, "invalid popup-menu" );
 
-  SetInvokingWindow( menu, this );
-  gtk_menu_popup(
+    SetInvokingWindow( menu, this );
+    gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
                   (GtkWidget *)NULL,          // parent menu shell
                   (GtkWidget *)NULL,          // parent menu item
@@ -2258,91 +2350,93 @@ bool wxWindow::PopupMenu( wxMenu *menu, int WXUNUSED(x), int WXUNUSED(y) )
                   0,                          // button used to activate it
                   0//gs_timeLastClick            // the time of activation
                 );
-  return TRUE;
+    return TRUE;
 }
 
 void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
 {
-  wxCHECK_RET( m_widget != NULL, "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  GtkWidget *dnd_widget = GetConnectWidget();
+    GtkWidget *dnd_widget = GetConnectWidget();
 
-  if (m_dropTarget) m_dropTarget->UnregisterWidget( dnd_widget );
+    if (m_dropTarget) m_dropTarget->UnregisterWidget( dnd_widget );
 
-  if (m_dropTarget) delete m_dropTarget;
-  m_dropTarget = dropTarget;
+    if (m_dropTarget) delete m_dropTarget;
+    m_dropTarget = dropTarget;
 
-  if (m_dropTarget) m_dropTarget->RegisterWidget( dnd_widget );
+    if (m_dropTarget) m_dropTarget->RegisterWidget( dnd_widget );
 }
 
 wxDropTarget *wxWindow::GetDropTarget() const
 {
-  return m_dropTarget;
+    return m_dropTarget;
 }
 
 GtkWidget* wxWindow::GetConnectWidget()
 {
-  GtkWidget *connect_widget = m_widget;
-  if (m_wxwindow) connect_widget = m_wxwindow;
+    GtkWidget *connect_widget = m_widget;
+    if (m_wxwindow) connect_widget = m_wxwindow;
 
-  return connect_widget;
+    return connect_widget;
 }
 
 bool wxWindow::IsOwnGtkWindow( GdkWindow *window )
 {
-  if (m_wxwindow) return (window == m_wxwindow->window);
-  return (window == m_widget->window);
+    if (m_wxwindow) return (window == m_wxwindow->window);
+    return (window == m_widget->window);
 }
 
 void wxWindow::SetFont( const wxFont &font )
 {
-  wxCHECK_RET( m_widget != NULL, "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  if (((wxFont*)&font)->Ok())
-    m_font = font;
-  else
-    m_font = *wxSWISS_FONT;
+    if (((wxFont*)&font)->Ok())
+        m_font = font;
+    else
+        m_font = *wxSWISS_FONT;
 
-  ApplyWidgetStyle();
+    ApplyWidgetStyle();
 }
 
 void wxWindow::SetWindowStyleFlag( long flag )
 {
-  m_windowStyle = flag;
+    m_windowStyle = flag;
 }
 
 long wxWindow::GetWindowStyleFlag() const
 {
-  return m_windowStyle;
+    return m_windowStyle;
 }
 
 void wxWindow::CaptureMouse()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  wxCHECK_RET( g_capturing == FALSE, "CaptureMouse called twice" );
+    wxCHECK_RET( g_capturing == FALSE, "CaptureMouse called twice" );
 
-  GtkWidget *connect_widget = GetConnectWidget();
-  gtk_grab_add( connect_widget );
-  gdk_pointer_grab ( connect_widget->window, FALSE,
-                    (GdkEventMask)
-        (GDK_BUTTON_PRESS_MASK |
-        GDK_BUTTON_RELEASE_MASK |
-        GDK_POINTER_MOTION_MASK),
-        (GdkWindow *) NULL, (GdkCursor *) NULL, GDK_CURRENT_TIME );
-  g_capturing = TRUE;
+    GtkWidget *connect_widget = GetConnectWidget();
+    gtk_grab_add( connect_widget );
+    gdk_pointer_grab( connect_widget->window, FALSE,
+                      (GdkEventMask)
+                         (GDK_BUTTON_PRESS_MASK |
+                          GDK_BUTTON_RELEASE_MASK |
+                          GDK_POINTER_MOTION_MASK),
+                      (GdkWindow *) NULL, 
+		      (GdkCursor *) NULL, 
+		      GDK_CURRENT_TIME );
+    g_capturing = TRUE;
 }
 
 void wxWindow::ReleaseMouse()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  wxCHECK_RET( g_capturing == TRUE, "ReleaseMouse called twice" );
+    wxCHECK_RET( g_capturing == TRUE, "ReleaseMouse called twice" );
 
-  GtkWidget *connect_widget = GetConnectWidget();
-  gtk_grab_remove( connect_widget );
-  gdk_pointer_ungrab ( GDK_CURRENT_TIME );
-  g_capturing = FALSE;
+    GtkWidget *connect_widget = GetConnectWidget();
+    gtk_grab_remove( connect_widget );
+    gdk_pointer_ungrab ( GDK_CURRENT_TIME );
+    g_capturing = FALSE;
 }
 
 void wxWindow::SetTitle( const wxString &WXUNUSED(title) )
@@ -2351,223 +2445,211 @@ void wxWindow::SetTitle( const wxString &WXUNUSED(title) )
 
 wxString wxWindow::GetTitle() const
 {
-  return (wxString&)m_windowName;
+    return (wxString&)m_windowName;
 }
 
 wxString wxWindow::GetLabel() const
 {
-  return GetTitle();
+    return GetTitle();
 }
 
 void wxWindow::SetName( const wxString &name )
 {
-  m_windowName = name;
+    m_windowName = name;
 }
 
 wxString wxWindow::GetName() const
 {
-  return (wxString&)m_windowName;
+    return (wxString&)m_windowName;
 }
 
 bool wxWindow::IsShown() const
 {
-  return m_isShown;
+    return m_isShown;
 }
 
 bool wxWindow::IsRetained()
 {
-  return FALSE;
+    return FALSE;
 }
 
 wxWindow *wxWindow::FindWindow( long id )
 {
-  if (id == m_windowId) return this;
-  wxNode *node = m_children.First();
-  while (node)
-  {
-    wxWindow *child = (wxWindow*)node->Data();
-    wxWindow *res = child->FindWindow( id );
-    if (res) return res;
-    node = node->Next();
-  }
-  return (wxWindow *) NULL;
+    if (id == m_windowId) return this;
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxWindow *child = (wxWindow*)node->Data();
+        wxWindow *res = child->FindWindow( id );
+        if (res) return res;
+        node = node->Next();
+    }
+    return (wxWindow *) NULL;
 }
 
 wxWindow *wxWindow::FindWindow( const wxString& name )
 {
-  if (name == m_windowName) return this;
-  wxNode *node = m_children.First();
-  while (node)
-  {
-    wxWindow *child = (wxWindow*)node->Data();
-    wxWindow *res = child->FindWindow( name );
-    if (res) return res;
-    node = node->Next();
-  }
-  return (wxWindow *) NULL;
+    if (name == m_windowName) return this;
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxWindow *child = (wxWindow*)node->Data();
+        wxWindow *res = child->FindWindow( name );
+        if (res) return res;
+        node = node->Next();
+    }
+    return (wxWindow *) NULL;
 }
 
 void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
       int range, bool refresh )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  wxASSERT_MSG( (m_wxwindow != NULL), "window needs client area" );
+    wxCHECK_RET( m_wxwindow != NULL, "window needs client area for scrolling" );
 
-  if (!m_wxwindow) return;
+    m_hasScrolling = TRUE;
 
-  m_hasScrolling = TRUE;
-
-  if (orient == wxHORIZONTAL)
-  {
-    float fpos = (float)pos;
-    float frange = (float)range;
-    float fthumb = (float)thumbVisible;
-    if (fpos > frange-fthumb) fpos = frange-fthumb;
-    if (fpos < 0.0) fpos = 0.0;
-
-    if ((fabs(frange-m_hAdjust->upper) < 0.2) &&
-        (fabs(fthumb-m_hAdjust->page_size) < 0.2))
-    {
-      SetScrollPos( orient, pos, refresh );
-      return;
-    }
-
-    m_oldHorizontalPos = fpos;
-
-    m_hAdjust->lower = 0.0;
-    m_hAdjust->upper = frange;
-    m_hAdjust->value = fpos;
-    m_hAdjust->step_increment = 1.0;
-    m_hAdjust->page_increment = (float)(wxMax(fthumb,0));
-    m_hAdjust->page_size = fthumb;
-  }
-  else
-  {
-    float fpos = (float)pos;
-    float frange = (float)range;
-    float fthumb = (float)thumbVisible;
-    if (fpos > frange-fthumb) fpos = frange-fthumb;
-    if (fpos < 0.0) fpos = 0.0;
-
-    if ((fabs(frange-m_vAdjust->upper) < 0.2) &&
-        (fabs(fthumb-m_vAdjust->page_size) < 0.2))
-    {
-      SetScrollPos( orient, pos, refresh );
-      return;
-    }
-
-    m_oldVerticalPos = fpos;
-
-    m_vAdjust->lower = 0.0;
-    m_vAdjust->upper = frange;
-    m_vAdjust->value = fpos;
-    m_vAdjust->step_increment = 1.0;
-    m_vAdjust->page_increment = (float)(wxMax(fthumb,0));
-    m_vAdjust->page_size = fthumb;
-  }
-
-  if (m_wxwindow->window)
-  {
     if (orient == wxHORIZONTAL)
-      gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
-    else
-      gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
+    {
+        float fpos = (float)pos;
+        float frange = (float)range;
+        float fthumb = (float)thumbVisible;
+        if (fpos > frange-fthumb) fpos = frange-fthumb;
+        if (fpos < 0.0) fpos = 0.0;
 
-    gtk_widget_set_usize( m_widget, m_width, m_height );
-  }
+        if ((fabs(frange-m_hAdjust->upper) < 0.2) &&
+            (fabs(fthumb-m_hAdjust->page_size) < 0.2))
+        {
+            SetScrollPos( orient, pos, refresh );
+            return;
+        }
+
+        m_oldHorizontalPos = fpos;
+
+        m_hAdjust->lower = 0.0;
+        m_hAdjust->upper = frange;
+        m_hAdjust->value = fpos;
+        m_hAdjust->step_increment = 1.0;
+        m_hAdjust->page_increment = (float)(wxMax(fthumb,0));
+        m_hAdjust->page_size = fthumb;
+    }
+    else
+    {
+        float fpos = (float)pos;
+        float frange = (float)range;
+        float fthumb = (float)thumbVisible;
+        if (fpos > frange-fthumb) fpos = frange-fthumb;
+        if (fpos < 0.0) fpos = 0.0;
+
+        if ((fabs(frange-m_vAdjust->upper) < 0.2) &&
+            (fabs(fthumb-m_vAdjust->page_size) < 0.2))
+        {
+            SetScrollPos( orient, pos, refresh );
+            return;
+        }
+
+        m_oldVerticalPos = fpos;
+
+        m_vAdjust->lower = 0.0;
+        m_vAdjust->upper = frange;
+        m_vAdjust->value = fpos;
+        m_vAdjust->step_increment = 1.0;
+        m_vAdjust->page_increment = (float)(wxMax(fthumb,0));
+        m_vAdjust->page_size = fthumb;
+    }
+
+    if (m_wxwindow->window)
+    {
+        if (orient == wxHORIZONTAL)
+            gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
+        else
+            gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
+
+        gtk_widget_set_usize( m_widget, m_width, m_height );
+    }
 }
 
 void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  wxASSERT_MSG( (m_wxwindow != NULL), "window needs client area" );
+    wxCHECK_RET( m_wxwindow != NULL, "window needs client area for scrolling" );
 
-  if (!m_wxwindow) return;
-  
-  if (orient == wxHORIZONTAL)
-  {
-    float fpos = (float)pos;
-    if (fpos > m_hAdjust->upper - m_hAdjust->page_size) fpos = m_hAdjust->upper - m_hAdjust->page_size;
-    if (fpos < 0.0) fpos = 0.0;
-    m_oldHorizontalPos = fpos;
-
-    if (fabs(fpos-m_hAdjust->value) < 0.2) return;
-    m_hAdjust->value = fpos;
-  }
-  else
-  {
-    float fpos = (float)pos;
-    if (fpos > m_vAdjust->upper - m_vAdjust->page_size) fpos = m_vAdjust->upper - m_vAdjust->page_size;
-    if (fpos < 0.0) fpos = 0.0;
-    m_oldVerticalPos = fpos;
-    
-    if (fabs(fpos-m_vAdjust->value) < 0.2) return;
-    m_vAdjust->value = fpos;
-  }
-
-  if (!m_isScrolling)
-  {
-    if (m_wxwindow->window)
+    if (orient == wxHORIZONTAL)
     {
-      if (orient == wxHORIZONTAL)
-        gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
-      else
-        gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
+        float fpos = (float)pos;
+        if (fpos > m_hAdjust->upper - m_hAdjust->page_size) fpos = m_hAdjust->upper - m_hAdjust->page_size;
+        if (fpos < 0.0) fpos = 0.0;
+        m_oldHorizontalPos = fpos;
+
+        if (fabs(fpos-m_hAdjust->value) < 0.2) return;
+        m_hAdjust->value = fpos;
     }
-  }
+    else
+    {
+        float fpos = (float)pos;
+        if (fpos > m_vAdjust->upper - m_vAdjust->page_size) fpos = m_vAdjust->upper - m_vAdjust->page_size;
+        if (fpos < 0.0) fpos = 0.0;
+        m_oldVerticalPos = fpos;
+    
+        if (fabs(fpos-m_vAdjust->value) < 0.2) return;
+        m_vAdjust->value = fpos;
+    }
+
+    if (!m_isScrolling)
+    {
+        if (m_wxwindow->window)
+        {
+            if (orient == wxHORIZONTAL)
+                gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
+            else
+                gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
+        }
+    }
 }
 
 int wxWindow::GetScrollThumb( int orient ) const
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_MSG( m_widget != NULL, 0, "invalid window" );
 
-  wxASSERT_MSG( (m_wxwindow != NULL), "window needs client area" );
+    wxCHECK_MSG( m_wxwindow != NULL, 0, "window needs client area for scrolling" );
 
-  if (!m_wxwindow) return 0;
-
-  if (orient == wxHORIZONTAL)
-    return (int)(m_hAdjust->page_size+0.5);
-  else
-    return (int)(m_vAdjust->page_size+0.5);
+    if (orient == wxHORIZONTAL)
+        return (int)(m_hAdjust->page_size+0.5);
+    else
+        return (int)(m_vAdjust->page_size+0.5);
 }
 
 int wxWindow::GetScrollPos( int orient ) const
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_MSG( m_widget != NULL, 0, "invalid window" );
 
-  wxASSERT_MSG( (m_wxwindow != NULL), "window needs client area" );
+    wxCHECK_MSG( m_wxwindow != NULL, 0, "window needs client area for scrolling" );
 
-  if (!m_wxwindow) return 0;
-
-  if (orient == wxHORIZONTAL)
-    return (int)(m_hAdjust->value+0.5);
-  else
-    return (int)(m_vAdjust->value+0.5);
+    if (orient == wxHORIZONTAL)
+        return (int)(m_hAdjust->value+0.5);
+    else
+        return (int)(m_vAdjust->value+0.5);
 }
 
 int wxWindow::GetScrollRange( int orient ) const
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_MSG( m_widget != NULL, 0, "invalid window" );
 
-  wxASSERT_MSG( (m_wxwindow != NULL), "window needs client area" );
+    wxCHECK_MSG( m_wxwindow != NULL, 0, "window needs client area for scrolling" );
 
-  if (!m_wxwindow) return 0;
-
-  if (orient == wxHORIZONTAL)
-    return (int)(m_hAdjust->upper+0.5);
-  else
-    return (int)(m_vAdjust->upper+0.5);
+    if (orient == wxHORIZONTAL)
+        return (int)(m_hAdjust->upper+0.5);
+    else
+        return (int)(m_vAdjust->upper+0.5);
 }
 
 void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  wxASSERT_MSG( (m_wxwindow != NULL), "window needs client area" );
-
-  if (!m_wxwindow) return;
+    wxCHECK_RET( m_wxwindow != NULL, "window needs client area for scrolling" );
 
     int cw = 0;
     int ch = 0;
@@ -2577,8 +2659,8 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     int h = ch - abs(dy);
     if ((h < 0) || (w < 0))
     {
-      Refresh();
-      return;
+        Refresh();
+        return;
     }
     int s_x = 0;
     int s_y = 0;
@@ -2591,12 +2673,12 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     if (!m_scrollGC)
     {
-      m_scrollGC = gdk_gc_new( m_wxwindow->window );
-      gdk_gc_set_exposures( m_scrollGC, TRUE );
+        m_scrollGC = gdk_gc_new( m_wxwindow->window );
+        gdk_gc_set_exposures( m_scrollGC, TRUE );
     }
 
     gdk_window_copy_area( m_wxwindow->window, m_scrollGC, d_x, d_y,
-      m_wxwindow->window, s_x, s_y, w, h );
+        m_wxwindow->window, s_x, s_y, w, h );
 
     wxRect rect;
     if (dx < 0) rect.x = cw+dx; else rect.x = 0;

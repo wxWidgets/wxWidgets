@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/settings.h"
+#include "wx/debug.h"
 
 /*
 #define wxSYS_COLOUR_SCROLLBAR         0
@@ -59,12 +60,13 @@ wxColour *g_systemHighlightColour    = (wxColour *) NULL;
 
 wxFont *g_systemFont = (wxFont *) NULL;
 
-void wxSystemSettings::Done() {
-  wxDELETE(g_systemBtnFaceColour);
-  wxDELETE(g_systemBtnShadowColour);
-  wxDELETE(g_systemBtnHighlightColour);
-  wxDELETE(g_systemHighlightColour);
-  wxDELETE(g_systemFont);
+void wxSystemSettings::Done() 
+{
+    wxDELETE(g_systemBtnFaceColour);
+    wxDELETE(g_systemBtnShadowColour);
+    wxDELETE(g_systemBtnHighlightColour);
+    wxDELETE(g_systemHighlightColour);
+    wxDELETE(g_systemFont);
 }
 
 wxColour wxSystemSettings::GetSystemColour( int index )
@@ -176,12 +178,15 @@ wxFont wxSystemSettings::GetSystemFont( int index )
 
 int wxSystemSettings::GetSystemMetric( int index )
 {
-  switch (index)
-  {
-    case wxSYS_SCREEN_X:
-      return gdk_screen_width();
-    case wxSYS_SCREEN_Y:
-      return gdk_screen_height();
-  }
-  return 0;
+    switch (index)
+    {
+        case wxSYS_SCREEN_X:   return gdk_screen_width();
+        case wxSYS_SCREEN_Y:   return gdk_screen_height();
+        case wxSYS_HSCROLL_Y:  return 15;
+        case wxSYS_VSCROLL_X:  return 15;
+    }
+    
+    wxCHECK_MSG( index, 0, "wxSystemSettings::GetSystemMetric not fully implemented" );
+    
+    return 0;
 }
