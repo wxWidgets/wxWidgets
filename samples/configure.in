@@ -26,6 +26,7 @@ AC_SUBST(WX_TARGET_LIBRARY_GL)
 
 AC_OUTPUT([
             Makefile
+            access/Makefile
             artprov/Makefile
             caret/Makefile
             calendar/Makefile

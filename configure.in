@@ -482,6 +482,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_IFF=no
   DEFAULT_wxUSE_XPM=no
   DEFAULT_wxUSE_ICO_CUR=no
+  DEFAULT_wxUSE_ACCESSIBILITY=no
 else
   DEFAULT_wxUSE_UNIVERSAL=no
 
@@ -654,6 +655,7 @@ else
   DEFAULT_wxUSE_PNM=yes
   DEFAULT_wxUSE_XPM=yes
   DEFAULT_wxUSE_ICO_CUR=yes
+  DEFAULT_wxUSE_ACCESSIBILITY=no
 fi
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
@@ -1053,6 +1055,7 @@ WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUS
 WX_ARG_ENABLE(joystick,    [  --enable-joystick       use wxJoystick (Linux only)], wxUSE_JOYSTICK)
 WX_ARG_ENABLE(metafile,    [  --enable-metafiles      use wxMetaFile (Windows only)], wxUSE_METAFILE)
 WX_ARG_ENABLE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
+WX_ARG_ENABLE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -2065,6 +2068,10 @@ if test "$USE_WIN32" = 1 ; then
     dnl --- FIXME: This is still a somewhat random list of libs,
     dnl ---        some of them should probably be included conditionally.
     LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -ladvapi32 -lwsock32"
+
+    if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
+        LIBS="$LIBS -loleacc"
+    fi
 
     case "${host}" in
         *-*-cygwin* )
@@ -5147,6 +5154,11 @@ dnl fi
 if test "$wxUSE_DRAGIMAGE" = "yes"; then
     AC_DEFINE(wxUSE_DRAGIMAGE)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dragimag"
+fi
+
+if test "$wxUSE_ACCESSIBILITY" = "yes"; then
+    AC_DEFINE(wxUSE_ACCESSIBILITY)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
 fi
 
 if test "$wxUSE_MENUS" = "yes"; then

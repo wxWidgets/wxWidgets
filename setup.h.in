@@ -330,6 +330,11 @@
 #define wxUSE_DRAGIMAGE 0
 
 /*
+ * Enable accessibility support
+ */
+#define wxUSE_ACCESSIBILITY 0
+
+/*
  * Use property sheet classes
  */
 #define wxUSE_PROPSHEET 0
