@@ -11,13 +11,14 @@
     #pragma implementation "app.h"
 #endif
 
-// For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
-
 #ifdef __VMS
-#include <vms_jackets.h>
+// vms_jackets.h should for proper working be included before anything else
+# include <vms_jackets.h>
 #undef ConnectionNumber
 #endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 #include "wx/app.h"
 #include "wx/gdicmn.h"
