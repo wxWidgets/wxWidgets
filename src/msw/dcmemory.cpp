@@ -116,7 +116,7 @@ void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
     m_oldBitmap = (WXHBITMAP) bm;
 }
 
-void wxMemoryDC::GetSize(int *width, int *height) const
+void wxMemoryDC::DoGetSize(int *width, int *height) const
 {
   if (!m_selectedBitmap.Ok())
   {

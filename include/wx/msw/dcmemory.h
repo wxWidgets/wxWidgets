@@ -28,7 +28,7 @@ class WXDLLEXPORT wxMemoryDC: public wxDC
 
   ~wxMemoryDC(void);
   virtual void SelectObject(const wxBitmap& bitmap);
-  virtual void GetSize(int* width, int* height) const;
+  virtual void DoGetSize(int* width, int* height) const;
 };
 
 #endif
