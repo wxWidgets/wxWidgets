@@ -1327,6 +1327,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/statline.h \
 	wx/cocoa/stattext.h \
 	wx/cocoa/textctrl.h \
+	wx/cocoa/toolbar.h \
 	wx/cocoa/toplevel.h \
 	wx/cocoa/window.h \
 	wx/generic/caret.h \
@@ -3242,6 +3243,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_statline2.o \
 	monodll_stattext.o \
 	monodll_textctrl.o \
+	monodll_toolbar.o \
 	monodll_toplevel.o \
 	monodll_utils.o \
 	monodll_utilsexc.o \
@@ -3639,6 +3641,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_statline2.o \
 	monolib_stattext.o \
 	monolib_textctrl.o \
+	monolib_toolbar.o \
 	monolib_toplevel.o \
 	monolib_utils.o \
 	monolib_utilsexc.o \
@@ -4036,6 +4039,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_statline2.o \
 	coredll_stattext.o \
 	coredll_textctrl.o \
+	coredll_toolbar.o \
 	coredll_toplevel.o \
 	coredll_utils.o \
 	coredll_utilsexc.o \
@@ -4433,6 +4437,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_statline2.o \
 	corelib_stattext.o \
 	corelib_textctrl.o \
+	corelib_toolbar.o \
 	corelib_toplevel.o \
 	corelib_utils.o \
 	corelib_utilsexc.o \
@@ -9024,11 +9029,14 @@ coredll_theme.o: $(srcdir)/src/univ/theme.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_toolbar.o: $(srcdir)/src/mac/toolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_USE_GUI_1_WXUNIV_1@coredll_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_toolbar.o: $(srcdir)/src/cocoa/toolbar.mm $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_toolbar.o: $(srcdir)/src/motif/toolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+@COND_USE_GUI_1_WXUNIV_1@coredll_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_tooltip.o: $(srcdir)/src/os2/tooltip.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -11132,11 +11140,14 @@ corelib_theme.o: $(srcdir)/src/univ/theme.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_toolbar.o: $(srcdir)/src/mac/toolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_USE_GUI_1_WXUNIV_1@corelib_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_toolbar.o: $(srcdir)/src/cocoa/toolbar.mm $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_toolbar.o: $(srcdir)/src/motif/toolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_USE_GUI_1_WXUNIV_1@corelib_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_tooltip.o: $(srcdir)/src/os2/tooltip.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -14078,11 +14089,14 @@ monodll_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_toolbar.o: $(srcdir)/src/mac/toolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_USE_GUI_1_WXUNIV_1@monodll_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_toolbar.o: $(srcdir)/src/cocoa/toolbar.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_toolbar.o: $(srcdir)/src/motif/toolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_USE_GUI_1_WXUNIV_1@monodll_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_tooltip.o: $(srcdir)/src/os2/tooltip.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -16681,11 +16695,14 @@ monolib_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_toolbar.o: $(srcdir)/src/mac/toolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_USE_GUI_1_WXUNIV_1@monolib_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_toolbar.o: $(srcdir)/src/cocoa/toolbar.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_toolbar.o: $(srcdir)/src/motif/toolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_USE_GUI_1_WXUNIV_1@monolib_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_tooltip.o: $(srcdir)/src/os2/tooltip.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
