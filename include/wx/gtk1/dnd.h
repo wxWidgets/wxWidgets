@@ -40,68 +40,6 @@ class wxPrivateDropTarget;
 class wxDropSource;
 
 //-------------------------------------------------------------------------
-// wxDropSource
-//-------------------------------------------------------------------------
-
-enum wxDragResult
-{
-  wxDragError,    // error prevented the d&d operation from completing
-  wxDragNone,     // drag target didn't accept the data
-  wxDragCopy,     // the data was successfully copied
-  wxDragMove,     // the data was successfully moved (MSW only)
-  wxDragCancel    // the operation was cancelled by user (not an error)
-};
-
-class wxDropSource: public wxObject
-{
-public:
-
-  /* constructor. set data later with SetData() */
-  wxDropSource( wxWindow *win, const wxIcon &go = wxNullIcon, const wxIcon &stop = wxNullIcon );
-    
-  /* constructor for setting one data object */
-  wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go = wxNullIcon, const wxIcon &stop = wxNullIcon );
-    
-  /* constructor for setting several data objects via wxDataBroker */
-  wxDropSource( wxDataBroker *data, wxWindow *win );
-
-  ~wxDropSource();
-    
-  /* set several dataobjects via wxDataBroker */
-  void SetData( wxDataBroker *data );
-
-  /* set one dataobject */
-  void SetData( wxDataObject *data );
-
-  /* start drag action */
-  wxDragResult DoDragDrop( bool bAllowMove = FALSE );
-    
-  /* override to give feedback */
-  virtual bool GiveFeedback( wxDragResult WXUNUSED(effect), bool WXUNUSED(bScrolling) ) { return TRUE; }
-  
-  /* GTK implementation */
-      
-  void RegisterWindow();
-  void UnregisterWindow();
-  
-    GtkWidget     *m_widget;
-    wxWindow      *m_window;
-    wxDragResult   m_retValue;
-    wxDataBroker  *m_data;
-    
-    wxCursor      m_defaultCursor;
-    wxCursor      m_goaheadCursor;
-    
-    wxIcon        m_goIcon;
-    wxIcon        m_stopIcon;
-    
-    bool          m_waiting;
-};
-
-#include "gtk/gtk.h"
-#if (GTK_MINOR_VERSION > 0)
-
-//-------------------------------------------------------------------------
 // wxDropTarget
 //-------------------------------------------------------------------------
 
@@ -229,104 +167,64 @@ public:
 
 };
 
-#else
-
 //-------------------------------------------------------------------------
-// wxDropTarget
+// wxDropSource
 //-------------------------------------------------------------------------
 
-class wxDropTarget: public wxObject
+enum wxDragResult
 {
-  public:
-
-    wxDropTarget();
-    ~wxDropTarget();
-    
-    virtual void OnEnter() { }
-    virtual void OnLeave() { }
-    virtual void OnMouseMove( long WXUNUSED(x), long WXUNUSED(y) ) { }
-    virtual bool OnDrop( long x, long y, const void *data, size_t size ) = 0;
-
-    // Override these to indicate what kind of data you support: 
-  
-    virtual size_t GetFormatCount() const = 0;
-    virtual wxDataFormat &GetFormat(size_t n) const;
-  
-  // implementation
-  
-    void RegisterWidget( GtkWidget *widget );
-    void UnregisterWidget( GtkWidget *widget );
-    
-    wxDataFormat  *m_format;
+  wxDragError,    // error prevented the d&d operation from completing
+  wxDragNone,     // drag target didn't accept the data
+  wxDragCopy,     // the data was successfully copied
+  wxDragMove,     // the data was successfully moved (MSW only)
+  wxDragCancel    // the operation was cancelled by user (not an error)
 };
 
-//-------------------------------------------------------------------------
-// wxTextDropTarget
-//-------------------------------------------------------------------------
-
-class wxTextDropTarget: public wxDropTarget
-{
-  public:
-
-    wxTextDropTarget();
-    virtual bool OnDrop( long x, long y, const void *data, size_t size );
-    virtual bool OnDropText( long x, long y, const char *psz );
-    
-  protected:
-  
-    virtual size_t GetFormatCount() const;
-};
-
-//-------------------------------------------------------------------------
-// wxPrivateDropTarget
-//-------------------------------------------------------------------------
-
-class wxPrivateDropTarget: public wxDropTarget
+class wxDropSource: public wxObject
 {
 public:
 
-  wxPrivateDropTarget();
+  /* constructor. set data later with SetData() */
+  wxDropSource( wxWindow *win, const wxIcon &go = wxNullIcon, const wxIcon &stop = wxNullIcon );
+    
+  /* constructor for setting one data object */
+  wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go = wxNullIcon, const wxIcon &stop = wxNullIcon );
+    
+  /* constructor for setting several data objects via wxDataBroker */
+  wxDropSource( wxDataBroker *data, wxWindow *win );
+
+  ~wxDropSource();
+    
+  /* set several dataobjects via wxDataBroker */
+  void SetData( wxDataBroker *data );
+
+  /* set one dataobject */
+  void SetData( wxDataObject *data );
+
+  /* start drag action */
+  wxDragResult DoDragDrop( bool bAllowMove = FALSE );
+    
+  /* override to give feedback */
+  virtual bool GiveFeedback( wxDragResult WXUNUSED(effect), bool WXUNUSED(bScrolling) ) { return TRUE; }
   
-  // you have to override OnDrop to get at the data
-    
-  // the string ID identifies the format of clipboard or DnD data. a word
-  // processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
-  // to the clipboard - the latter with the Id "application/wxword" or
-  // "image/png".
-    
-  void SetId( const wxString& id );
-    
-  wxString GetId()
-      { return m_id; }
-
-private:
-
-  virtual size_t GetFormatCount() const;
-    
-  wxString   m_id;
-};
-
-//----------------------------------------------------------------------------
-// A drop target which accepts files (dragged from File Manager or Explorer)
-//----------------------------------------------------------------------------
-
-class wxFileDropTarget: public wxDropTarget
-{
-  public:
-    
-    wxFileDropTarget();
-    
-    virtual bool OnDrop( long x, long y, const void *data, size_t size );
-    virtual bool OnDropFiles( long x, long y, 
-                              size_t nFiles, const char * const aszFiles[] );
-
-  protected:
+  /* GTK implementation */
+      
+  void RegisterWindow();
+  void UnregisterWindow();
   
-    virtual size_t GetFormatCount() const;
+    GtkWidget     *m_widget;
+    wxWindow      *m_window;
+    wxDragResult   m_retValue;
+    wxDataBroker  *m_data;
+    
+    wxCursor      m_defaultCursor;
+    wxCursor      m_goaheadCursor;
+    
+    wxIcon        m_goIcon;
+    wxIcon        m_stopIcon;
+    
+    bool          m_waiting;
 };
-
-#endif
-
 
 #endif
 

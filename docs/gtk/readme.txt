@@ -1,5 +1,5 @@
 
-  Welcome to wxWindows/Gtk 2.1 beta 1,
+  Welcome to wxWindows/Gtk 2.1 beta 2,
 
 you have downloaded version 2.1 of the GTK+ 1.2 port of 
 the wxWindows GUI library. This is a developers release
@@ -19,7 +19,7 @@ at Julian Smart's homepage at:
   
 Information on how to install can be found in the file 
 INSTALL.txt, but if you cannot wait, this should work on
-all systems
+many systems (when using GTK 1.0 read the INSTALL.txt):
 
 ./configure
 make

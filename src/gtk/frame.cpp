@@ -120,7 +120,7 @@ static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 // "child_detached" of tool bar
 //-----------------------------------------------------------------------------
 
-static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
+static void gtk_toolbar_detached_callback( GtkWidget *widget, GtkWidget *WXUNUSED(child), wxFrame *win )
 {
     if (!win->HasVMT()) return;
     
@@ -271,9 +271,6 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     gtk_window_set_title( GTK_WINDOW(m_widget), title.mbc_str() );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
-    /* needed ? */
-    gtk_window_set_policy( GTK_WINDOW(m_widget), 1, 1, 0 );
-
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_frame_delete_callback), (gpointer)this );
 
@@ -319,6 +316,12 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     gdk_window_set_decorations(m_widget->window, (GdkWMDecoration)decor);
     gdk_window_set_functions(m_widget->window, (GdkWMFunction)func);
       
+    /* GTK's shrinking/growing policy */
+    if ((m_windowStyle & wxRESIZE_BORDER) == 0)
+        gtk_window_set_policy(GTK_WINDOW(m_widget), 0, 0, 1);
+    else
+        gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
+	
     /* the user resized the frame by dragging etc. */
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );

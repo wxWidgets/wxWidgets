@@ -2,7 +2,7 @@
 -------------------- High priority ---------------------
 
 DnD
-  -> Must be rewritten for GTK+ 1.2
+  -> Must be rewritten for GTK+ 1.2. Much done.
  
 -------------------- Medium priority ---------------------
 

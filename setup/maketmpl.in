@@ -94,11 +94,13 @@ POSIX4_LINK=@POSIX4_LINK@
 
 # INCLUDES
 WX_INCLUDES = \
+-I$(WXBASEDIR)/src/zlib \
+-I$(WXBASEDIR)/src/png \
+-I$(WXBASEDIR)/src/jpeg \
 $(TOOLKIT_DEF) \
 -I$(WXBASEDIR)/include \
 -I. \
 $(GUI_TK_INCLUDE) \
--I$(WXBASEDIR)/src/zlib \
 -I$(WXBASEDIR)/src/iodbc \
 $(X_CFLAGS)
 

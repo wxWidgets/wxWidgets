@@ -44,6 +44,12 @@ wxDataFormat::wxDataFormat( wxDataType type )
     SetType( type );
 }
 
+wxDataFormat::wxDataFormat( const char *id )
+{
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
+    SetId( id );
+}
+
 wxDataFormat::wxDataFormat( const wxString &id )
 {
     if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
@@ -121,7 +127,7 @@ wxString wxDataFormat::GetId() const
     return m_id;
 }
 
-void wxDataFormat::SetId( const wxString &id )
+void wxDataFormat::SetId( const char *id )
 {
     m_type = wxDF_PRIVATE;
     m_id = id;

@@ -149,14 +149,13 @@ bool wxDialog::Create( wxWindow *parent,
        recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_ALL;
     long func = (long) GDK_FUNC_ALL;
+    
     if ((m_windowStyle & wxCAPTION) == 0)
 	decor |= GDK_DECOR_TITLE;
-/*
-    if ((m_windowStyle & wxMINIMIZE) == 0)
+/*  if ((m_windowStyle & wxMINIMIZE) == 0)
 	func |= GDK_FUNC_MINIMIZE;
     if ((m_windowStyle & wxMAXIMIZE) == 0)
-	func |= GDK_FUNC_MAXIMIZE;
-*/
+	func |= GDK_FUNC_MAXIMIZE; */
     if ((m_windowStyle & wxSYSTEM_MENU) == 0)
 	decor |= GDK_DECOR_MENU;
     if ((m_windowStyle & wxMINIMIZE_BOX) == 0)
@@ -165,9 +164,16 @@ bool wxDialog::Create( wxWindow *parent,
 	decor |= GDK_DECOR_MAXIMIZE;
     if ((m_windowStyle & wxRESIZE_BORDER) == 0)
 	func |= GDK_FUNC_RESIZE;
+	
     gdk_window_set_decorations(m_widget->window, (GdkWMDecoration)decor);
     gdk_window_set_functions(m_widget->window, (GdkWMFunction)func);
-      
+    
+    /* GTK's shrinking/growing policy */
+    if ((m_windowStyle & wxRESIZE_BORDER) == 0)
+        gtk_window_set_policy(GTK_WINDOW(m_widget), 0, 0, 1);
+    else
+        gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
+
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_dialog_size_callback), (gpointer)this );
 

@@ -1122,18 +1122,20 @@ typedef struct _GdkWindow       GdkBitmap;
 typedef struct _GdkWindow       GdkPixmap;
 typedef struct _GdkCursor       GdkCursor;
 typedef struct _GdkRegion       GdkRegion;
+typedef struct _GdkDragContext  GdkDragContext;
 
 /* Stand-ins for GTK types */
-typedef struct _GtkWidget       GtkWidget;
-typedef struct _GtkStyle        GtkStyle;
-typedef struct _GtkAdjustment   GtkAdjustment;
-typedef struct _GtkList         GtkList;
-typedef struct _GtkToolbar      GtkToolbar;
-typedef struct _GtkTooltips     GtkTooltips;
-typedef struct _GtkNotebook     GtkNotebook;
-typedef struct _GtkNotebookPage GtkNotebookPage;
-typedef struct _GtkAccelGroup   GtkAccelGroup;
-typedef	struct _GtkItemFactory  GtkItemFactory;
+typedef struct _GtkWidget         GtkWidget;
+typedef struct _GtkStyle          GtkStyle;
+typedef struct _GtkAdjustment     GtkAdjustment;
+typedef struct _GtkList           GtkList;
+typedef struct _GtkToolbar        GtkToolbar;
+typedef struct _GtkTooltips       GtkTooltips;
+typedef struct _GtkNotebook       GtkNotebook;
+typedef struct _GtkNotebookPage   GtkNotebookPage;
+typedef struct _GtkAccelGroup     GtkAccelGroup;
+typedef	struct _GtkItemFactory    GtkItemFactory;
+typedef	struct _GtkSelectionData  GtkSelectionData;
 
 #endif
 
