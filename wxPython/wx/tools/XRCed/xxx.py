@@ -238,9 +238,11 @@ class xxxObject:
                 else:                   # simple parameter
                     self.params[tag] = xxxParam(node)
             else:
+                pass
                 # Remove all other nodes
-                element.removeChild(node)
-                node.unlink()
+#                element.removeChild(node)
+#                node.unlink()
+
         # Check that all required params are set
         for param in self.required:
             if not self.params.has_key(param):
@@ -416,8 +418,7 @@ class xxxBitmap(xxxObject):
 
 # Just like bitmap
 class xxxIcon(xxxObject):
-    allParams = ['icon']
-    required = ['icon']
+    allParams = []
 
 ################################################################################
 # Controls
