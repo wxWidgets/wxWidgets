@@ -305,7 +305,7 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
                ('WXP_USE_THREAD', '1'),
                ]
     libdirs = []
-    libs = []
+    libs = ['stdc++']
 
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1]
     cflags = string.split(cflags)
@@ -319,6 +319,7 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
     lflags = string.split(lflags)
 
     NO_SCRIPTS = 1
+    BUILD_DLLWIDGET = 0
 
 
 elif os.name == 'posix':
