@@ -41,7 +41,7 @@
 
 #include "wx/app.h"
 #include "wx/intl.h"
-#include "wx/motif/msgdlg.h"
+#include "wx/msgdlg.h"
 #include "wx/motif/private.h"
 
 // ----------------------------------------------------------------------------

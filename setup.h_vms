@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                             *
- * Date : 9 November 1999                                                    *
+ * Date : 15 March 2005                                                      *
  *                                                                           *
  *****************************************************************************/
 
@@ -121,6 +121,9 @@
 
 /* PowerPC Darwin & Mac OS X */
 #undef __POWERPC__
+
+/* Hack to make IOGraphicsTypes.h not define Point conflicting with MacTypes */
+#undef __Point__
 
 /* MS-DOS with DJGPP */
 #undef __DOS__
