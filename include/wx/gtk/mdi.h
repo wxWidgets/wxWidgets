@@ -35,8 +35,8 @@ class wxMDIChildFrame;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char* wxFrameNameStr;
-extern const char* wxStatusLineNameStr;
+extern const wxChar* wxFrameNameStr;
+extern const wxChar* wxStatusLineNameStr;
 
 //-----------------------------------------------------------------------------
 // wxMDIParentFrame

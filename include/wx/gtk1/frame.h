@@ -37,8 +37,8 @@ class wxFrame;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxFrameNameStr;
-extern const char *wxToolBarNameStr;
+extern const wxChar *wxFrameNameStr;
+extern const wxChar *wxToolBarNameStr;
 
 //-----------------------------------------------------------------------------
 // wxFrame
@@ -65,7 +65,7 @@ public:
     virtual void GetClientSize( int *width, int *height ) const;
 
     virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
-            const wxString& name = "statusBar");
+            const wxString& name = _T("statusBar"));
     virtual wxStatusBar *OnCreateStatusBar( int number, long style, wxWindowID id,
             const wxString& name );
     virtual wxStatusBar *GetStatusBar() const;

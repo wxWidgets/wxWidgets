@@ -37,7 +37,7 @@ class wxToolBar;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxToolBarNameStr;
+extern const wxChar *wxToolBarNameStr;
 
 //-----------------------------------------------------------------------------
 // wxToolBar
@@ -118,4 +118,3 @@ class wxToolBar: public wxControl
 
 #endif
     // __TBARGTKH__
-
