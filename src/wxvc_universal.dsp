@@ -620,6 +620,10 @@ SOURCE=.\generic\helpwxht.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\imaglist.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\laywin.cpp
 # End Source File
 # Begin Source File
