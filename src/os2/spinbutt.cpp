@@ -27,6 +27,9 @@
 
 
 #include "wx/spinbutt.h"
+
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
+
 #include "wx/os2/private.h"
 
 // ============================================================================
