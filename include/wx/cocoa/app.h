@@ -4,14 +4,17 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/11/27
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 2002 David Elliott
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_APP_H_
 #define _WX_COCOA_APP_H_
 
+// ========================================================================
+// wxApp
+// ========================================================================
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
 class WXDLLEXPORT wxApp: public wxAppBase
