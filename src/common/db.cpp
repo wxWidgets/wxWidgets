@@ -57,6 +57,7 @@
 	#ifndef WX_PRECOMP
 		#include  "wx/string.h"
 	#endif //WX_PRECOMP
+	#include "wx/filefn.h"
 #endif
 
 #if wxMAJOR_VERSION == 1
