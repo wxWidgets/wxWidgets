@@ -186,9 +186,6 @@ wxBase:
   after (non standard) STL hash_map
 - wxLocale now works in Unicode mode
 - wxLocale can now load message catalogs in arbitrary encoding
-- fixed the bug related to the redrawing on resize introduced in 2.3.2
-- added static wxFontMapper::Get() accessor (use of wxTheFontMapper is now
-  deprecated)
 - added wxShutdown() function (Marco Cavallini)
 - added wxEXPLICIT macro
 - IPC classes improved and memory leaks fixed (Michael Fielding).
@@ -218,7 +215,8 @@ All (GUI):
   wxHashTable
 - added IFF image handler
 - fixed using custom renderers in wxGrid which was broken in 2.3.2
-- support for multiple images in one file added to wxImage (TIFF, GIF and ICO formats)
+- support for multiple images in one file added to wxImage
+  (TIFF, GIF and ICO formats)
 - support for CUR and ANI files in wxImage added (Chris Elliott)
 - wxTextCtrl::GetRange() added
 - added wxGetFontFromUser() convenience function
@@ -243,10 +241,13 @@ All (GUI):
   (Rene Rivera).
 - Added wxTreeEvent::IsEditCancelled so the application can tell
   whether a label edit was cancelled.
+- added static wxFontMapper::Get() accessor (use of wxTheFontMapper is now
+  deprecated)
 
 wxMSW:
 
 - small appearance fixes for native look under Windows XP
+- fixed the bug related to the redrawing on resize introduced in 2.3.2
 - fixed multiple bugs in wxExecute() with IO redirection
 - refresh the buttons properly when the window is resized (Hans Van Leemputten)
 - huge (40*) speed up in wxMask::Create()
@@ -284,8 +285,7 @@ wxMSW:
 - don't fail to register remaining window classes if one fails to register
 - wxFontDialog effects only turned on if a valid colour was
   provided in wxFontData
-- Added wxTE_LEFT, wxTE_CENTRE and wxTE_RIGHT flags for text
-  control alignment.
+- Added wxTE_LEFT, wxTE_CENTRE and wxTE_RIGHT flags for text control alignment.
 - Bitmap printing uses 24 bits now, not 8.
 
 wxGTK:
