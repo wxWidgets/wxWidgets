@@ -97,14 +97,12 @@ unzip32 -o ..\wx200gen.zip
 unzip32 -o ..\wx200vc.zip
 unzip32 -o ..\wx200bc.zip
 unzip32 -o ..\wx200hlp.zip
+Rem Need Word file, for Remstar DB classes
+unzip32 -o ..\wx200wrd.zip
 unzip32 -o ..\glcanvas.zip
 unzip32 -o ..\treedraw.zip
 unzip32 -o ..\ogl3.zip
 unzip32 -o ..\jpeg.zip
-
-rem unzip32 -o ..\wx200doc.zip
-rem unzip32 -o ..\wx200bc.zip
-rem unzip32 -o ..\wx200cw.zip
 
 rem Now delete a few files that are unnecessary
 erase /Y *.in *.spec *.guess *.sub mkinstalldirs modules install-sh *.sh

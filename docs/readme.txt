@@ -1,5 +1,5 @@
-wxWindows 2.1
--------------
+wxWindows 2.1.10
+----------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
@@ -23,13 +23,17 @@ Changes in this release
 
 These are the major improvements:
 
-wxWindows 2.1
-=============
+wxWindows 2.1.10
+================
 
+- Numerous bug fixes and consistency improvements.
+- Further samples.
+- Factoring out of some code into base classes, for easier
+  maintenance.
 - Integration of wxHTML widget and help controller into
   wxWindows. wxHTML allows HTML viewing and printing.
 - New classes wxChrono, wxDialUpManager, wxFontEnumerator,
-  TODO
+  wxWizard, etc.
 - wxSocket and wxThread classes rewritten.
 - Documentation improvements.
 
@@ -41,6 +45,8 @@ wxWindows 2 currently supports the following platforms:
 - Windows 3.1, Windows 95/98, Windows NT
 - Most Unix variants with Motif/Lesstif
 - Most Unix variants with GTK+
+- Mac (not covered here: please see the wxWindows web site
+  for details)
 
 Most popular C++ compilers are supported; see the release notes
 (available via docs/html/index.htm) for details.
@@ -92,7 +98,12 @@ wxWindows for Motif distribution
 
 wxMotif-2.x.x.tgz       wxMotif source distribution. You will
                         need the HTML and/or PDF documentation
-                        from the zip set (above).
+   -- OR --             from the zip set (above).
+
+wx200gen.zip
+wx200msw.zip
+wx200mot.zip
+jpeg.zip
 
 wxWindows for Windows distribution
 ----------------------------------
@@ -108,11 +119,6 @@ As well as the core source, the Windows setup contains:
 
 setup.exe               Setup file (Windows 95/98, NT)
 setup.*                 Other setup files
-
-wxWindows for Mac distribution
-------------------------------
-
-TODO
 
 Installation
 ------------

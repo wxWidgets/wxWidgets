@@ -292,6 +292,10 @@ SOURCE=.\common\memory.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\menucmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\mimetype.cpp
 # End Source File
 # Begin Source File
