@@ -908,6 +908,16 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
     wxGenericTreeItem *gitem = item.m_pItem;
 
+    // first expand all parent branches
+    wxGenericTreeItem *parent = gitem->GetParent();
+    while ( parent && !parent->IsExpanded() )
+    {
+        Expand(parent);
+
+        parent = parent->GetParent();
+    }
+
+    // now scroll to the item
     int item_y = gitem->GetY();
 
     int start_x = 0;
@@ -926,11 +936,9 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
         m_anchor->GetSize( x, y );
         y += 2*m_lineHeight;
         int x_pos = GetScrollPos( wxHORIZONTAL );
-    SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-client_h/2)/10 );
-        return;
+        SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-client_h/2)/10 );
     }
-
-    if (item_y > start_y+client_h-16)
+    else if (item_y > start_y+client_h-16)
     {
        int x = 0;
        int y = 0;
@@ -938,7 +946,6 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
        y += 2*m_lineHeight;
        int x_pos = GetScrollPos( wxHORIZONTAL );
        SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-client_h/2)/10 );
-       return;
     }
 }
 
@@ -1049,7 +1056,7 @@ void wxTreeCtrl::AdjustMyScrollbars()
 
 void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 {
-    /* render bold items in bold */
+    // render bold items in bold
     wxFont fontOld;
     wxFont fontNew;
 
@@ -1058,7 +1065,7 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         fontOld = dc.GetFont();
         if (fontOld.Ok())
         {
-          /* @@ is there any better way to make a bold variant of old font? */
+          // VZ: is there any better way to make a bold variant of old font?
           fontNew = wxFont( fontOld.GetPointSize(),
                             fontOld.GetFamily(),
                             fontOld.GetStyle(),
@@ -1111,7 +1118,7 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     dc.SetBackgroundMode(wxTRANSPARENT);
     dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY() );
 
-    /* restore normal font for bold items */
+    // restore normal font for bold items
     if (fontOld.Ok())
     {
         dc.SetFont( fontOld);
@@ -1198,10 +1205,11 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
             PaintLevel( children[n], dc, level+1, y );
         }
 
-        /* it may happen that the item is expanded but has no items (when you
-         * delete all its children for example) - don't draw the vertical line
-         * in this case */
-        if (count > 0) dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
+        // it may happen that the item is expanded but has no items (when you
+        // delete all its children for example) - don't draw the vertical line
+        // in this case
+        if (count > 0)
+            dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
     }
 }
 
@@ -1455,7 +1463,8 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    if (!IsSelected(item)) SelectItem(item);  /* we dont support multiple selections, BTW */
+    if (!IsSelected(item))
+        SelectItem(item);  /* we dont support multiple selections, BTW */
 
     if (event.LeftDClick())
     {
@@ -1477,7 +1486,8 @@ void wxTreeCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
     /* after all changes have been done to the tree control,
      * we actually redraw the tree when everything is over */
 
-    if (!m_dirty) return;
+    if (!m_dirty)
+        return;
 
     m_dirty = FALSE;
 
@@ -1498,7 +1508,7 @@ void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, i
 
     if ( !item->IsExpanded() )
     {
-        /* we dont need to calculate collapsed branches */
+        // we dont need to calculate collapsed branches
         return;
     }
 
@@ -1507,7 +1517,7 @@ void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, i
     for ( size_t n = 0; n < count; n++ )
     {
         y += m_lineHeight;
-        CalculateLevel( children[n], dc, level+1, y );  /* recurse */
+        CalculateLevel( children[n], dc, level+1, y );  // recurse
     }
 }
 
@@ -1524,7 +1534,7 @@ void wxTreeCtrl::CalculatePositions()
     m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
     int y = m_lineHeight / 2 + 2;
-    CalculateLevel( m_anchor, dc, 0, y ); /* start recursion */
+    CalculateLevel( m_anchor, dc, 0, y ); // start recursion
 }
 
 void wxTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)

@@ -65,6 +65,7 @@ public:
 
   void DoSortChildren(const wxTreeItemId& item, bool reverse = FALSE)
     { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
+  void DoEnsureVisible() { EnsureVisible(m_lastItem); }
 
 protected:
   virtual int OnCompareItems(const wxTreeItemId& item1,
@@ -78,6 +79,7 @@ private:
 
   wxImageList *m_imageListNormal;
   bool         m_reverseSort;           // flag for OnCompareItems
+  wxTreeItemId m_lastItem;              // for OnEnsureVisible()
 
   // NB: due to an ugly wxMSW hack you _must_ use DECLARE_DYNAMIC_CLASS()
   //     if you want your overloaded OnCompareItems() to be called.
@@ -106,6 +108,8 @@ public:
 
   void OnSetBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(TRUE); }
   void OnClearBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(FALSE); }
+
+  void OnEnsureVisible(wxCommandEvent& event);
 
   void OnRename(wxCommandEvent& event);
   void OnSort(wxCommandEvent& event) { DoSort(); }
@@ -136,5 +140,6 @@ enum
   TreeTest_DeleteChildren,
   TreeTest_DeleteAll,
   TreeTest_Recreate,
+  TreeTest_EnsureVisible,
   TreeTest_Ctrl = 100
 };

@@ -61,6 +61,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(TreeTest_DeleteChildren, MyFrame::OnDeleteChildren)
   EVT_MENU(TreeTest_DeleteAll, MyFrame::OnDeleteAll)
   EVT_MENU(TreeTest_Recreate, MyFrame::OnRecreate)
+  EVT_MENU(TreeTest_EnsureVisible, MyFrame::OnEnsureVisible)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
@@ -129,6 +130,8 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
   tree_menu->AppendSeparator();
   tree_menu->Append(TreeTest_Bold, "Make item &bold");
   tree_menu->Append(TreeTest_UnBold, "Make item &not bold");
+  tree_menu->AppendSeparator();
+  tree_menu->Append(TreeTest_EnsureVisible, "Make the last item &visible");
 
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, "&File");
@@ -262,6 +265,11 @@ void MyFrame::OnRecreate(wxCommandEvent& event)
   m_treeCtrl->AddTestItemsToTree(3, 2);
 }
 
+void MyFrame::OnEnsureVisible(wxCommandEvent& event)
+{
+    m_treeCtrl->DoEnsureVisible();
+}
+
 // MyTreeCtrl implementation
 IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
 
@@ -316,24 +324,31 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
                                      size_t depth,
                                      size_t folder)
 {
-  if ( depth > 0 )
-  {
-    wxString str;
-    for ( size_t n = 0; n < numChildren; n++ )
+    if ( depth > 0 )
     {
-      // at depth 1 elements won't have any more children
-      if (depth == 1)
-        str.Printf("%s child %d.%d", "File", folder, n + 1);
-      else
-        str.Printf("%s child %d","Folder", n + 1);
+        wxString str;
+        for ( size_t n = 0; n < numChildren; n++ )
+        {
+            // at depth 1 elements won't have any more children
+            if (depth == 1)
+                str.Printf("%s child %d.%d", "File", folder, n + 1);
+            else
+                str.Printf("%s child %d", "Folder", n + 1);
 
-      int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
-      wxTreeItemId id = AppendItem(idParent, str, image, image,
-                                   new MyTreeItemData(str));
-      AddItemsRecursively(id, numChildren, depth - 1, n + 1);
+            int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
+            wxTreeItemId id = AppendItem(idParent, str, image, image,
+                                         new MyTreeItemData(str));
+
+            // remember the last child for OnEnsureVisible()
+            if ( depth == 1 && n == numChildren - 1 )
+            {
+                m_lastItem = id;
+            }
+
+            AddItemsRecursively(id, numChildren, depth - 1, n + 1);
+        }
     }
-  }
-  //else: done!
+    //else: done!
 }
 
 void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
