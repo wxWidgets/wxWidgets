@@ -2904,7 +2904,9 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     int flags = 0;
     wxGenericTreeItem *thisItem = m_anchor->HitTest(pt, this, flags, 0);
     wxGenericTreeItem *underMouse = thisItem;
+#if wxUSE_TOOLTIPS
     bool underMouseChanged = (underMouse != m_underMouse) ;
+#endif // wxUSE_TOOLTIPS
 
     if ((underMouse) &&
         (flags & wxTREE_HITTEST_ONITEMBUTTON) &&
