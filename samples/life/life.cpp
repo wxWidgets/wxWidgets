@@ -40,7 +40,7 @@
     #pragma hdrstop
 #endif
 
-// for all others, include the necessary headers 
+// for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -250,13 +250,13 @@ BEGIN_EVENT_TABLE(LifeFrame, wxFrame)
     EVT_MENU           (ID_ABOUT,   LifeFrame::OnMenu)
     EVT_MENU           (ID_EXIT,    LifeFrame::OnMenu)
     EVT_COMMAND_SCROLL (ID_SLIDER,  LifeFrame::OnSlider)
-END_EVENT_TABLE()                           
+END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(LifeCanvas, wxScrolledWindow)
     EVT_PAINT          (            LifeCanvas::OnPaint)
     EVT_SIZE           (            LifeCanvas::OnSize)
     EVT_MOUSE_EVENTS   (            LifeCanvas::OnMouse)
-END_EVENT_TABLE()                     
+END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(LifeNewGameDialog, wxDialog)
     EVT_BUTTON         (wxID_OK,    LifeNewGameDialog::OnOK)
@@ -613,7 +613,7 @@ void LifeCanvas::DrawCell(int i, int j, wxDC &dc)
                          m_cellsize - 1);
     }
 }
- 
+
 // event handlers
 void LifeCanvas::OnPaint(wxPaintEvent& event)
 {
@@ -634,7 +634,7 @@ void LifeCanvas::OnPaint(wxPaintEvent& event)
         h = upd.GetH();
         CalcUnscrolledPosition(x, y, &xx, &yy);
 
-        dc.Blit(x, y, w, h, &memdc, xx - m_xoffset, yy - m_yoffset); 
+        dc.Blit(x, y, w, h, &memdc, xx - m_xoffset, yy - m_yoffset);
         upd++;
     }
 
@@ -770,7 +770,7 @@ void LifeNewGameDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 // --------------------------------------------------------------------------
 
 Life::Life(int width, int height)
-{            
+{
     Create(width, height);
 }
 
@@ -824,6 +824,7 @@ void Life::SetCell(int x, int y, bool alive)
 bool Life::NextTic()
 {
     long changed = 0;
+    int  i, j;
 
     /* 1st pass. Find and mark deaths and births for this generation.
      *
@@ -832,8 +833,8 @@ bool Life::NextTic()
      *   An organism with >= 4 neighbors will die due to starvation.
      *   New organisms are born in cells with exactly 3 neighbors.
      */
-    for (int j = 0; j < m_height; j++)
-        for (int i = 0; i < m_width; i++)
+    for (j = 0; j < m_height; j++)
+        for (i = 0; i < m_width; i++)
         {
             int neighbors = GetNeighbors(i, j);
             bool alive    = IsAlive(i, j);
@@ -847,13 +848,13 @@ bool Life::NextTic()
                 (alive && (neighbors <= 1 || neighbors >= 4)))
                 m_cells[j * m_width + i] |= CELL_MARK;
             else
-                m_cells[j * m_width + i] &= ~CELL_MARK;  
+                m_cells[j * m_width + i] &= ~CELL_MARK;
         }
 
     /* 2nd pass. Stabilize.
      */
-    for (int j = 0; j < m_height; j++)
-        for (int i = 0; i < m_width; i++)
+    for (j = 0; j < m_height; j++)
+        for (i = 0; i < m_width; i++)
         {
             /* Toggle CELL_ALIVE for those cells marked in the
              * previous pass. Do not clear the CELL_MARK bit yet;
@@ -888,7 +889,7 @@ int Life::GetNeighbors(int x, int y) const
     if (IsAlive(x, y)) neighbors--;
 
     return neighbors;
-}    
+}
 
 void Life::SetCell(int x, int y, Cell status)
 {
