@@ -2086,14 +2086,19 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ODBC_SRC" hints="files">
     src/common/db.cpp
-    src/common/dbgrid.cpp
     src/common/dbtable.cpp
 </set>
 <set var="ODBC_HDR" hints="files">
     wx/db.h
-    wx/dbgrid.h
     wx/dbkeyg.h
     wx/dbtable.h
+</set>
+
+<set var="DBGRID_SRC" hints="files">
+    src/common/dbgrid.cpp
+</set>
+<set var="DBGRID_HDR" hints="files">
+    wx/dbgrid.h
 </set>
 
 
@@ -2245,7 +2250,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
         $(ALL_GUI_HEADERS) $(ADVANCED_HDR)
         $(HTML_HDR) $(XML_HDR)
-        $(OPENGL_HDR) $(ODBC_HDR)
+        $(OPENGL_HDR) $(ODBC_HDR) $(DBGRID_HDR)
     </set>
 
 </makefile>

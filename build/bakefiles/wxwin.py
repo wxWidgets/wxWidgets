@@ -30,10 +30,11 @@ def mk_wxid(id):
 
 
 # All libs that are part of the main library (i.e. non-contrib):
-MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net', 'odbc']
+MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net',
+             'odbc', 'dbgrid']
 # List of library names/ids for categories with different names:
-LIBS_NOGUI = ['xml', 'net']
-LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'odbc']
+LIBS_NOGUI = ['xml', 'net', 'odbc']
+LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'dbgrid']
 
 def mkLibName(wxid):
     """Returns string that can be used as library name, including name

@@ -46,12 +46,12 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswunivud\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivud"
 # PROP BASE Intermediate_Dir "vc_mswunivud\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswunivud\"
+# PROP Output_Dir "..\lib\vc_mswunivud"
 # PROP Intermediate_Dir "vc_mswunivud\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /Zi /Gm /GZ /Fd..\lib\vc_mswunivud\wxpngd.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
@@ -69,12 +69,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswdll\"
+# PROP BASE Output_Dir "..\lib\vc_mswdll"
 # PROP BASE Intermediate_Dir "vc_mswdll\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswdll\"
+# PROP Output_Dir "..\lib\vc_mswdll"
 # PROP Intermediate_Dir "vc_mswdll\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
@@ -92,12 +92,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswunivuddll\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivuddll"
 # PROP BASE Intermediate_Dir "vc_mswunivuddll\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswunivuddll\"
+# PROP Output_Dir "..\lib\vc_mswunivuddll"
 # PROP Intermediate_Dir "vc_mswunivuddll\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /Zi /Gm /GZ /Fd..\lib\vc_mswunivuddll\wxpngd.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
@@ -115,12 +115,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswunivudll\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivudll"
 # PROP BASE Intermediate_Dir "vc_mswunivudll\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswunivudll\"
+# PROP Output_Dir "..\lib\vc_mswunivudll"
 # PROP Intermediate_Dir "vc_mswunivudll\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
@@ -138,12 +138,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswunivdll\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivdll"
 # PROP BASE Intermediate_Dir "vc_mswunivdll\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswunivdll\"
+# PROP Output_Dir "..\lib\vc_mswunivdll"
 # PROP Intermediate_Dir "vc_mswunivdll\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
@@ -161,12 +161,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswud\"
+# PROP BASE Output_Dir "..\lib\vc_mswud"
 # PROP BASE Intermediate_Dir "vc_mswud\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswud\"
+# PROP Output_Dir "..\lib\vc_mswud"
 # PROP Intermediate_Dir "vc_mswud\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /Zi /Gm /GZ /Fd..\lib\vc_mswud\wxpngd.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
@@ -184,12 +184,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswunivddll\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivddll"
 # PROP BASE Intermediate_Dir "vc_mswunivddll\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswunivddll\"
+# PROP Output_Dir "..\lib\vc_mswunivddll"
 # PROP Intermediate_Dir "vc_mswunivddll\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /Zi /Gm /GZ /Fd..\lib\vc_mswunivddll\wxpngd.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
@@ -207,12 +207,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswd\"
+# PROP BASE Output_Dir "..\lib\vc_mswd"
 # PROP BASE Intermediate_Dir "vc_mswd\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswd\"
+# PROP Output_Dir "..\lib\vc_mswd"
 # PROP Intermediate_Dir "vc_mswd\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /Zi /Gm /GZ /Fd..\lib\vc_mswd\wxpngd.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
@@ -230,12 +230,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswudll\"
+# PROP BASE Output_Dir "..\lib\vc_mswudll"
 # PROP BASE Intermediate_Dir "vc_mswudll\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswudll\"
+# PROP Output_Dir "..\lib\vc_mswudll"
 # PROP Intermediate_Dir "vc_mswudll\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
@@ -253,12 +253,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswuniv\"
+# PROP BASE Output_Dir "..\lib\vc_mswuniv"
 # PROP BASE Intermediate_Dir "vc_mswuniv\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswuniv\"
+# PROP Output_Dir "..\lib\vc_mswuniv"
 # PROP Intermediate_Dir "vc_mswuniv\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswuniv\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
@@ -276,12 +276,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswu\"
+# PROP BASE Output_Dir "..\lib\vc_mswu"
 # PROP BASE Intermediate_Dir "vc_mswu\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswu\"
+# PROP Output_Dir "..\lib\vc_mswu"
 # PROP Intermediate_Dir "vc_mswu\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
@@ -299,12 +299,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswunivd\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivd"
 # PROP BASE Intermediate_Dir "vc_mswunivd\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswunivd\"
+# PROP Output_Dir "..\lib\vc_mswunivd"
 # PROP Intermediate_Dir "vc_mswunivd\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /Zi /Gm /GZ /Fd..\lib\vc_mswunivd\wxpngd.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
@@ -322,12 +322,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswuddll\"
+# PROP BASE Output_Dir "..\lib\vc_mswuddll"
 # PROP BASE Intermediate_Dir "vc_mswuddll\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswuddll\"
+# PROP Output_Dir "..\lib\vc_mswuddll"
 # PROP Intermediate_Dir "vc_mswuddll\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /Zi /Gm /GZ /Fd..\lib\vc_mswuddll\wxpngd.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
@@ -345,12 +345,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswddll\"
+# PROP BASE Output_Dir "..\lib\vc_mswddll"
 # PROP BASE Intermediate_Dir "vc_mswddll\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswddll\"
+# PROP Output_Dir "..\lib\vc_mswddll"
 # PROP Intermediate_Dir "vc_mswddll\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /Zi /Gm /GZ /Fd..\lib\vc_mswddll\wxpngd.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
@@ -368,12 +368,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_msw\"
+# PROP BASE Output_Dir "..\lib\vc_msw"
 # PROP BASE Intermediate_Dir "vc_msw\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_msw\"
+# PROP Output_Dir "..\lib\vc_msw"
 # PROP Intermediate_Dir "vc_msw\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_msw\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
@@ -391,12 +391,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswunivu\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivu"
 # PROP BASE Intermediate_Dir "vc_mswunivu\wxpng"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswunivu\"
+# PROP Output_Dir "..\lib\vc_mswunivu"
 # PROP Intermediate_Dir "vc_mswunivu\wxpng"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c

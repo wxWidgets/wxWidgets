@@ -39,12 +39,12 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswuddll\"
+# PROP BASE Output_Dir "..\lib\vc_mswuddll"
 # PROP BASE Intermediate_Dir "vc_mswuddll\basedll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswuddll\"
+# PROP Output_Dir "..\lib\vc_mswuddll"
 # PROP Intermediate_Dir "vc_mswuddll\basedll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswuddll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\lib\vc_mswuddll\wxbase250ud_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
@@ -64,12 +64,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswdll\"
+# PROP BASE Output_Dir "..\lib\vc_mswdll"
 # PROP BASE Intermediate_Dir "vc_mswdll\basedll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswdll\"
+# PROP Output_Dir "..\lib\vc_mswdll"
 # PROP Intermediate_Dir "vc_mswdll\basedll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_basedll.pch" /Fd..\lib\vc_mswdll\wxbase250_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
@@ -89,12 +89,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswunivuddll\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivuddll"
 # PROP BASE Intermediate_Dir "vc_mswunivuddll\basedll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswunivuddll\"
+# PROP Output_Dir "..\lib\vc_mswunivuddll"
 # PROP Intermediate_Dir "vc_mswunivuddll\basedll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswunivuddll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\lib\vc_mswunivuddll\wxbase250ud_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
@@ -114,12 +114,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswunivudll\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivudll"
 # PROP BASE Intermediate_Dir "vc_mswunivudll\basedll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswunivudll\"
+# PROP Output_Dir "..\lib\vc_mswunivudll"
 # PROP Intermediate_Dir "vc_mswunivudll\basedll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_basedll.pch" /Fd..\lib\vc_mswunivudll\wxbase250u_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
@@ -139,12 +139,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswddll\"
+# PROP BASE Output_Dir "..\lib\vc_mswddll"
 # PROP BASE Intermediate_Dir "vc_mswddll\basedll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswddll\"
+# PROP Output_Dir "..\lib\vc_mswddll"
 # PROP Intermediate_Dir "vc_mswddll\basedll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswddll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\lib\vc_mswddll\wxbase250d_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
@@ -164,12 +164,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswunivdll\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivdll"
 # PROP BASE Intermediate_Dir "vc_mswunivdll\basedll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswunivdll\"
+# PROP Output_Dir "..\lib\vc_mswunivdll"
 # PROP Intermediate_Dir "vc_mswunivdll\basedll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_basedll.pch" /Fd..\lib\vc_mswunivdll\wxbase250_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
@@ -189,12 +189,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswunivddll\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivddll"
 # PROP BASE Intermediate_Dir "vc_mswunivddll\basedll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswunivddll\"
+# PROP Output_Dir "..\lib\vc_mswunivddll"
 # PROP Intermediate_Dir "vc_mswunivddll\basedll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswunivddll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\lib\vc_mswunivddll\wxbase250d_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
@@ -214,12 +214,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswudll\"
+# PROP BASE Output_Dir "..\lib\vc_mswudll"
 # PROP BASE Intermediate_Dir "vc_mswudll\basedll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswudll\"
+# PROP Output_Dir "..\lib\vc_mswudll"
 # PROP Intermediate_Dir "vc_mswudll\basedll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_basedll.pch" /Fd..\lib\vc_mswudll\wxbase250u_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c

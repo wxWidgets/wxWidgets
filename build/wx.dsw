@@ -137,6 +137,60 @@ Package=<4>
 
 ###############################################################################
 
+Project: "dbgriddll"=wx_dbgriddll.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+Begin Project Dependency
+Project_Dep_Name wxtiff
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxjpeg
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxpng
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxexpat
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxzlib
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name wxregex
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name advdll
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name odbcdll
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name coredll
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name basedll
+End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "dbgridlib"=wx_dbgridlib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "gldll"=wx_gldll.dsp - Package Owner=<4>
 
 Package=<5>
@@ -297,12 +351,6 @@ Project_Dep_Name wxzlib
 End Project Dependency
 Begin Project Dependency
 Project_Dep_Name wxregex
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name advdll
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name coredll
 End Project Dependency
 Begin Project Dependency
 Project_Dep_Name basedll

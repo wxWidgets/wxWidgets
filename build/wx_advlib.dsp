@@ -38,12 +38,12 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswuniv\"
+# PROP BASE Output_Dir "..\lib\vc_mswuniv"
 # PROP BASE Intermediate_Dir "vc_mswuniv\advlib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswuniv\"
+# PROP Output_Dir "..\lib\vc_mswuniv"
 # PROP Intermediate_Dir "vc_mswuniv\advlib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
@@ -61,12 +61,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswu\"
+# PROP BASE Output_Dir "..\lib\vc_mswu"
 # PROP BASE Intermediate_Dir "vc_mswu\advlib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswu\"
+# PROP Output_Dir "..\lib\vc_mswu"
 # PROP Intermediate_Dir "vc_mswu\advlib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
@@ -84,12 +84,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswunivd\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivd"
 # PROP BASE Intermediate_Dir "vc_mswunivd\advlib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswunivd\"
+# PROP Output_Dir "..\lib\vc_mswunivd"
 # PROP Intermediate_Dir "vc_mswunivd\advlib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswunivd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivd\wxmswuniv25d_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
@@ -107,12 +107,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_msw\"
+# PROP BASE Output_Dir "..\lib\vc_msw"
 # PROP BASE Intermediate_Dir "vc_msw\advlib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_msw\"
+# PROP Output_Dir "..\lib\vc_msw"
 # PROP Intermediate_Dir "vc_msw\advlib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
@@ -130,12 +130,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswud\"
+# PROP BASE Output_Dir "..\lib\vc_mswud"
 # PROP BASE Intermediate_Dir "vc_mswud\advlib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswud\"
+# PROP Output_Dir "..\lib\vc_mswud"
 # PROP Intermediate_Dir "vc_mswud\advlib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswud\wxmsw25ud_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
@@ -153,12 +153,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\lib\vc_mswunivu\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivu"
 # PROP BASE Intermediate_Dir "vc_mswunivu\advlib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\lib\vc_mswunivu\"
+# PROP Output_Dir "..\lib\vc_mswunivu"
 # PROP Intermediate_Dir "vc_mswunivu\advlib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
@@ -176,12 +176,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswunivud\"
+# PROP BASE Output_Dir "..\lib\vc_mswunivud"
 # PROP BASE Intermediate_Dir "vc_mswunivud\advlib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswunivud\"
+# PROP Output_Dir "..\lib\vc_mswunivud"
 # PROP Intermediate_Dir "vc_mswunivud\advlib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswunivud" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswunivud\wxmswuniv25ud_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
@@ -199,12 +199,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\lib\vc_mswd\"
+# PROP BASE Output_Dir "..\lib\vc_mswd"
 # PROP BASE Intermediate_Dir "vc_mswd\advlib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\lib\vc_mswd\"
+# PROP Output_Dir "..\lib\vc_mswd"
 # PROP Intermediate_Dir "vc_mswd\advlib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\include" /I "..\lib\vc_mswd" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Zi /Gm /GZ /Fd..\lib\vc_mswd\wxmsw25d_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
