@@ -764,7 +764,8 @@ public:
 
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
     {
-#if defined(__BORLANDC__) && (__BORLANDC__ > 0x530)
+#if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) ) \
+    || ( defined(__MWERKS__) && defined(__WXMSW__) )
         size_t inbuf = std::wcslen(psz);
 #else
         size_t inbuf = ::wcslen(psz);
@@ -898,7 +899,8 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         return m_cset->WC2MB(buf, psz, n);
 
     // latin-1 (direct)
-#if defined(__BORLANDC__) && (__BORLANDC__ > 0x530)
+#if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) ) \
+    || ( defined(__MWERKS__) && defined(__WXMSW__) )
     size_t len=std::wcslen(psz);
 #else
     size_t len=::wcslen(psz);

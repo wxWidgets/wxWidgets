@@ -66,7 +66,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 // ----------------------------------------------------------------------------
 
 // Microsoft compiler loves underscores, feed them to it
-#if defined( __VISUALC__ ) || wxCHECK_W32API_VERSION( 0, 5 )
+#if defined( __VISUALC__ ) || wxCHECK_W32API_VERSION( 0, 5 ) \
+    || ( defined(__MWERKS__) && defined(__WXMSW__) )
     // functions
     #define   wxClose      _close
     #define   wxRead       _read

@@ -60,6 +60,11 @@
 #  endif
 #endif
 
+#if defined(__MWERKS__) && defined(__WXMSW__)
+#   undef HAVE_FTIME
+#   undef HAVE_GETTIMEOFDAY
+#endif
+
 #include <time.h>
 #ifndef __WXMAC__
     #include <sys/types.h>      // for time_t

@@ -71,7 +71,8 @@ public:
         wxASSERT_MSG( wcs, wxT("NULL string in wxWCharBuffer") );
 
         if (wcs) {
-#if (defined(__BORLANDC__) && (__BORLANDC__ > 0x530))
+#if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) ) \
+    || ( defined(__MWERKS__) && defined(__WXMSW__) )
           size_t siz = (std::wcslen(wcs)+1)*sizeof(wchar_t);
 #else
           size_t siz = (::wcslen(wcs)+1)*sizeof(wchar_t);

@@ -468,7 +468,8 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                         break;
 #if !defined(__WATCOMC__) && ! (defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
                     case CF_UNICODETEXT:
-#if (defined(__BORLANDC__) && (__BORLANDC__ > 0x530))
+#if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) ) \
+    || ( defined(__MWERKS__) && defined(__WXMSW__) )
                         size = std::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
 #else
                         size = ::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);

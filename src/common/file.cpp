@@ -88,6 +88,9 @@
 #ifndef __MWERKS__
     #include  <sys/types.h>   // needed for stat
     #include  <sys/stat.h>    // stat
+#elif ( defined(__MWERKS__) && defined(__WXMSW__) )
+    #include  <sys/types.h>   // needed for stat
+    #include  <sys/stat.h>    // stat
 #endif
 
 #if defined(__BORLANDC__) || defined(_MSC_VER)
