@@ -225,6 +225,8 @@ class WXDLLEXPORT wxTreeEvent : public wxNotifyEvent
     friend class WXDLLEXPORT wxTreeCtrl;
     friend class WXDLLEXPORT wxGenericTreeCtrl;
 
+    DECLARE_DYNAMIC_CLASS(wxTreeEvent);
+
 public:
     wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
