@@ -17,9 +17,9 @@
     #pragma hdrstop
 #endif
 
-#include "canvas.h"
-#include "polygon.h"
-#include "liner.h"
+#include "wx/canvas/canvas.h"
+#include "wx/canvas/polygon.h"
+#include "wx/canvas/liner.h"
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>

@@ -828,12 +828,15 @@ trap 'rm -fr `echo "
             samples/stc/Makefile
             samples/canvas/Makefile
             samples/canvas/test/Makefile
+            samples/canvas/simple/Makefile
             samples/gizmos/Makefile
             samples/gizmos/multicell/Makefile
             samples/gizmos/splittree/Makefile
+            samples/xml/Makefile
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile
+            utils/convertrc/Makefile
          " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -928,12 +931,15 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             samples/stc/Makefile
             samples/canvas/Makefile
             samples/canvas/test/Makefile
+            samples/canvas/simple/Makefile
             samples/gizmos/Makefile
             samples/gizmos/multicell/Makefile
             samples/gizmos/splittree/Makefile
+            samples/xml/Makefile
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile
+            utils/convertrc/Makefile
          "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

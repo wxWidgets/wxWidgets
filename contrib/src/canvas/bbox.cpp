@@ -17,7 +17,7 @@
     #pragma hdrstop
 #endif
 
-#include "bbox.h"
+#include "wx/canvas/bbox.h"
 
 wxBoundingBox::wxBoundingBox()
 {

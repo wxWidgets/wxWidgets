@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SAMPLES=test
+CONTRIB_SAMPLES=test simple
 
 all:
 	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done

@@ -53,6 +53,7 @@ AC_OUTPUT([
             samples/stc/Makefile
             samples/canvas/Makefile
             samples/canvas/test/Makefile
+            samples/canvas/simple/Makefile
             samples/gizmos/Makefile
             samples/gizmos/multicell/Makefile
             samples/gizmos/splittree/Makefile

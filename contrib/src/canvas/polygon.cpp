@@ -17,8 +17,8 @@
     #pragma hdrstop
 #endif
 
-#include "polygon.h"
-#include "liner.h"
+#include "wx/canvas/polygon.h"
+#include "wx/canvas/liner.h"
 
 void ConvertSplinedPolygon(wxList* list, double Aber);
 void ConvertSplinedPolyline(wxList* list,double Aber);

@@ -12,7 +12,7 @@ Last Update 05-12-1995
 
 #include <stdlib.h>
 
-#include "liner.h"
+#include "wx/canvas/liner.h"
 
 wxLine::wxLine( double x1, double y1, double x2, double y2 )
 {
