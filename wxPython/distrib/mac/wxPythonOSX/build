@@ -158,18 +158,17 @@ if [ -z "$skipconfig" ]; then
 	--with-mac \
 	--disable-monolithic \
 	--with-opengl \
-	--enable-geometry \
-	--enable-optimise \
 	--enable-sound \
 	--enable-display \
+	--enable-geometry \
 	--enable-precomp=no \
-	\
-	--with-libjpeg=builtin \
-	--with-libpng=builtin \
-	--with-libtiff=builtin \
-	--with-zlib=builtin \
-	\
 	--enable-debug_flag
+
+##	--enable-optimise \
+##	--with-libjpeg=builtin \
+##	--with-libpng=builtin \
+##	--with-libtiff=builtin \
+##	--with-zlib=builtin \
 
 fi
 
