@@ -39,8 +39,8 @@
 #define wxRESOURCE_USE_DEFAULTS 2
 
 // Macros to help use dialog units
-#define wxDLG_POINT(x, y, parent, useDlgUnits) (useDlgUnits ? parent->ConvertDialogToPixel(wxPoint(x, y)) : wxPoint(x, y))
-#define wxDLG_SIZE(x, y, parent, useDlgUnits) (useDlgUnits ? parent->ConvertDialogToPixel(wxSize(x, y)) : wxSize(x, y))
+#define wxDLG_POINT(x, y, parent, useDlgUnits) (useDlgUnits ? parent->ConvertDialogToPixels(wxPoint(x, y)) : wxPoint(x, y))
+#define wxDLG_SIZE(x, y, parent, useDlgUnits) (useDlgUnits ? parent->ConvertDialogToPixels(wxSize(x, y)) : wxSize(x, y))
 
 #ifdef FindResource
 #undef FindResource
