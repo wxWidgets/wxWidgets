@@ -245,7 +245,7 @@ public:
 class NotebookPage(wx.Panel):
     """
     There is an old (and apparently unsolvable) bug when placing a
-    window with a nonstandard background colour in a wxNotebook on
+    window with a nonstandard background colour in a wx.Notebook on
     wxGTK, as the notbooks's background colour would always be used
     when the window is refreshed.  The solution is to place a panel in
     the notbook and the coloured window on the panel, sized to cover
@@ -258,7 +258,7 @@ class NotebookPage(wx.Panel):
                  style=wx.TAB_TRAVERSAL, name="panel"):
         wx.Panel.__init__(self, parent, id, pos, size, style, name)
         self.child = None
-        EVT_SIZE(self, self.OnSize)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def OnSize(self, evt):
         if self.child is None:
