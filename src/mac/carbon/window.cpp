@@ -52,6 +52,8 @@
 #ifndef __DARWIN__
 #include <Windows.h>
 #include <ToolUtils.h>
+#include <Scrap.h>
+#include <MacTextEditor.h>
 #endif
 
 #if TARGET_API_MAC_OSX
