@@ -1,0 +1,186 @@
+Index: Source/Swig/swig.h
+===================================================================
+RCS file: /cvsroot/SWIG/Source/Swig/swig.h,v
+retrieving revision 1.76
+diff -u -4 -r1.76 swig.h
+--- Source/Swig/swig.h	11 Nov 2003 20:16:35 -0000	1.76
++++ Source/Swig/swig.h	11 Dec 2003 18:12:49 -0000
+@@ -350,8 +350,10 @@
+ extern void Swig_print_tags(File *obj, Node *root);
+ extern void Swig_print_tree(Node *obj);
+ extern void Swig_print_node(Node *obj);
+ 
++extern void Swig_print_xml(Node *obj, String* filename);
++
+ /* -- Wrapper function Object */
+ 
+ typedef struct {
+   Hash      *localh;
+Index: Source/Modules/main.cxx
+===================================================================
+RCS file: /cvsroot/SWIG/Source/Modules/main.cxx,v
+retrieving revision 1.23
+diff -u -4 -r1.23 main.cxx
+--- Source/Modules/main.cxx	8 Dec 2003 23:42:37 -0000	1.23
++++ Source/Modules/main.cxx	11 Dec 2003 18:12:50 -0000
+@@ -85,15 +85,17 @@
+      -v              - Run in verbose mode\n\
+      -version        - Print SWIG version number\n\
+      -Wall           - Enable all warning messages\n\
+      -w<n>           - Suppress warning number <n>\n\
++     -xmlout <file> - Write an XML version of the parse tree to file after normal processing\n\
+ \n";
+ 
+ // Local variables
+ static int     freeze = 0;
+ static String  *lang_config = 0;
+ static char    *cpp_extension = (char *) "cxx";
+ static String  *outdir = 0;
++static String  *xmlout = 0;
+ 
+ // -----------------------------------------------------------------------------
+ // check_suffix(char *name)
+ //
+@@ -222,8 +224,9 @@
+   int     includecount = 0;
+   extern  int check_suffix(char *);
+   int     dump_tags = 0;
+   int     dump_tree = 0;
++  int     dump_xml = 0;
+   int     browse = 0;
+   int     dump_typedef = 0;
+   int     dump_classes = 0;
+   int     werror = 0;
+@@ -482,8 +485,20 @@
+ 	    Swig_mark_arg(i);
+ 	  } else if (strcmp(argv[i],"-dump_tree") == 0) {
+ 	    dump_tree = 1;
+ 	    Swig_mark_arg(i);
++	  } else if (strcmp(argv[i],"-dump_xml") == 0) {
++	    dump_xml = 1;
++	    Swig_mark_arg(i);
++	  } else if (strcmp(argv[i],"-xmlout") == 0) {
++	    dump_xml = 1;
++	    Swig_mark_arg(i);
++	    if (argv[i+1]) {
++	      xmlout = NewString(argv[i+1]);	    
++	      Swig_mark_arg(i+1);
++	    } else {
++	      Swig_arg_error();
++	    }
+ 	  } else if (strcmp(argv[i],"-nocontract") == 0) {
+ 	    Swig_mark_arg(i);
+ 	    Swig_contract_mode_set(0);
+ 	  } else if (strcmp(argv[i],"-browse") == 0) {
+@@ -725,8 +740,11 @@
+       }
+     }
+     if (dump_tree) {
+       Swig_print_tree(top);
++    }
++    if (dump_xml) {
++      Swig_print_xml(top, xmlout);
+     }
+   }
+   if (tm_debug) Swig_typemap_debug();
+   if (memory_debug) DohMemoryDebug();
+Index: Source/Modules/xml.cxx
+===================================================================
+RCS file: /cvsroot/SWIG/Source/Modules/xml.cxx,v
+retrieving revision 1.8
+diff -u -4 -r1.8 xml.cxx
+--- Source/Modules/xml.cxx	31 Oct 2003 17:42:40 -0000	1.8
++++ Source/Modules/xml.cxx	11 Dec 2003 18:12:50 -0000
+@@ -24,9 +24,8 @@
+ //static Node *view_top = 0;
+ static File *out = 0;
+ static int xmllite = 0;
+ 
+-
+ class XML
+ : public Language
+ {
+ 
+@@ -109,9 +108,9 @@
+ 				Printf(stderr,"*** Can't open '%s'\n", outfile);
+ 				SWIG_exit(EXIT_FAILURE);
+ 			}
+ 		}
+-		Printf( out, "<?xml version=\"1.0\" ?> \n" );
++		Printf( out, "<?xml version=\"1.0\" ?> \n" );
+ 		Xml_print_tree(n);
+     	return SWIG_OK;
+   	}
+ 
+@@ -197,18 +196,19 @@
+ 					Replaceall( o, "&", "&amp;" );
+ 					Replaceall( o, "<", "&lt;" );
+ 					Replaceall( o, "\"", "&quot;" );
+ 					Replaceall( o, "\\", "\\\\" );
+-					Printf(out,"<attribute name=\"%s\" value=\"%s\" id=\"%ld\" addr=\"%x\" />\n", ck, o, ++id, o );
++                                        Replaceall( o, "\n", "&#10;" );
++                                        Printf(out,"<attribute name=\"%s\" value=\"%s\" id=\"%ld\" addr=\"%x\" />\n", ck, o, ++id, o );
+ 					Delete(o);
+ 					Delete(ck);
+ 				}
+ 				else
+ 				{
+ 					o = Getattr(obj,k);
+ 					String *ck = NewString(k);
+ 					Replaceall( ck, ":", "_" );
+-					Printf(out,"<attribute name=\"%s\" value=\"%x\" id=\"%ld\" addr=\"%x\" />\n", ck, o, ++id, o );
++                                        Printf(out,"<attribute name=\"%s\" value=\"%x\" id=\"%ld\" addr=\"%x\" />\n", ck, o, ++id, o );
+ 					Delete(ck);
+ 				}
+ 			}
+ 			ki = Next(ki);
+@@ -318,11 +318,10 @@
+ 		{
+ 			print_indent(0);
+ 			Printf( out, "<%ssitem id=\"%ld\" addr=\"%x\" >\n", markup, ++id, n.item );
+ 			Xml_print_attributes( n.item );
+-			Printf( out, "</%ssitem >\n", markup );
+ 			print_indent(0);
+-			Printf( out, " />\n" );
++			Printf( out, "</%ssitem >\n", markup );
+ 			n = Next(n);
+ 		}
+ 		indent_level -= 4;
+ 		print_indent(0);
+@@ -337,5 +336,36 @@
+ 	Language * swig_xml( void )
+ 	{
+ 		return new XML();
+ 	}
++}
++
++
++/* -----------------------------------------------------------------------------
++ * Swig_print_xml
++ *
++ * Dump an XML version of the parse tree.  This is different from using the -xml
++ * language module normally as it allows the real language module to process the
++ * tree first, possibly stuffing in new attributes, so the XML that is output ends
++ * up being a post-processing version of the tree.
++ * ----------------------------------------------------------------------------- */
++
++void 
++Swig_print_xml(DOH *obj, String* filename)
++{
++    XML xml;
++    xmllite = 1;
++
++    if (! filename) {
++        out = stdout;
++    }
++    else {
++        out = NewFile(filename, "w");
++        if (!out) {
++            Printf(stderr,"*** Can't open '%s'\n", filename);
++            SWIG_exit(EXIT_FAILURE);
++        }
++    }
++    
++    Printf( out, "<?xml version=\"1.0\" ?> \n" );
++    xml.Xml_print_tree(obj);
+ }

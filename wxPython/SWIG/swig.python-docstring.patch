@@ -1,16 +1,15 @@
 Index: Source/Modules/python.cxx
 ===================================================================
 RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
-retrieving revision 1.28
-diff -u -4 -r1.28 python.cxx
---- Source/Modules/python.cxx	18 Nov 2003 20:19:15 -0000	1.28
-+++ Source/Modules/python.cxx	27 Nov 2003 00:52:28 -0000
-@@ -67,8 +67,19 @@
-      -new_repr       - Use more informative version of __repr__ in proxy classes\n\
-      -noexcept       - No automatic exception handling\n\
-      -noproxy        - Don't generate proxy classes \n\n";
+retrieving revision 1.33
+diff -u -4 -r1.33 python.cxx
+--- Source/Modules/python.cxx	9 Dec 2003 02:52:07 -0000	1.33
++++ Source/Modules/python.cxx	11 Dec 2003 18:11:22 -0000
+@@ -54,8 +54,17 @@
+ static  int       have_constructor;
+ static  int       have_repr;
+ static  String   *real_classname;
  
-+
 +/* flags for the make_autodoc function */
 +enum autodoc_t {
 +  AUTODOC_CLASS,
@@ -20,12 +19,11 @@ diff -u -4 -r1.28 python.cxx
 +  AUTODOC_FUNC
 +};
 +
-+
- class PYTHON : public Language {
- public:
- 
-   /* ------------------------------------------------------------
-@@ -414,17 +425,23 @@
+ static const char *usage = (char *)"\
+ Python Options (available with -python)\n\
+      -ldflags        - Print runtime libraries to link with\n\
+      -globals <name> - Set <name> used to access C global variable [default: 'cvar']\n\
+@@ -417,17 +426,23 @@
     *    functions.
     * ------------------------------------------------------------ */
  
@@ -54,7 +52,7 @@ diff -u -4 -r1.28 python.cxx
    }
  
  
-@@ -438,8 +455,246 @@
+@@ -441,8 +456,246 @@
    }
  
  
@@ -301,7 +299,7 @@ diff -u -4 -r1.28 python.cxx
     *    Check if there is a %addtofunc directive and it has text
     * ------------------------------------------------------------ */
  
-@@ -1660,9 +1915,11 @@
+@@ -1663,9 +1916,11 @@
  	  Printf(f_shadow, modern ? "(object)" : "(_object)");
  	}
        }
@@ -314,7 +312,7 @@ diff -u -4 -r1.28 python.cxx
          Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
          if (Len(base_class)) {
            Printf(f_shadow,"%sfor _s in [%s]: __swig_setmethods__.update(_s.__swig_setmethods__)\n",tab4,base_class);
-@@ -1795,16 +2052,22 @@
+@@ -1798,16 +2053,22 @@
  	  Delete(pyaction);
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
@@ -344,7 +342,7 @@ diff -u -4 -r1.28 python.cxx
          }
  
        }
-@@ -1819,14 +2082,20 @@
+@@ -1822,14 +2083,20 @@
    virtual int staticmemberfunctionHandler(Node *n) {
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
@@ -369,7 +367,7 @@ diff -u -4 -r1.28 python.cxx
                 " = staticmethod(", symname, ")\n", NIL);
  
          if (!modern) {
-@@ -1911,8 +2180,10 @@
+@@ -1914,8 +2181,10 @@
   	    }
  
              Printv(f_shadow, tab4, "def __init__(self, *args",
@@ -380,7 +378,7 @@ diff -u -4 -r1.28 python.cxx
              if (!modern) {
                Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
                       funcCallHelper(Swig_name_construct(symname), allow_kwargs), ")\n", NIL);
-@@ -1926,9 +2197,9 @@
+@@ -1929,9 +2198,9 @@
                Printv(f_shadow, tab8, "self.thisown = 1\n", NIL);
                Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
              }
@@ -391,7 +389,7 @@ diff -u -4 -r1.28 python.cxx
    	  }
  	  have_constructor = 1;
  	} else {
-@@ -1944,8 +2215,10 @@
+@@ -1947,8 +2216,10 @@
  	  } else {
  
              Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
@@ -402,7 +400,7 @@ diff -u -4 -r1.28 python.cxx
                     funcCallHelper(Swig_name_construct(symname), allow_kwargs), "\n", NIL);
  	    Printv(f_shadow_stubs, tab4, "val.thisown = 1\n", NIL);
              if ( have_addtofunc(n) )
-@@ -1977,13 +2250,15 @@
+@@ -1980,13 +2251,15 @@
  	Delete(pyaction);
  	Printv(f_shadow,pycode,"\n", NIL);
        } else {
