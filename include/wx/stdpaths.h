@@ -14,7 +14,12 @@
 
 #include "wx/string.h"
 
+#if defined(__WXMAC__)
+class WXDLLIMPEXP_BASE wxStandardPathsCF;
+#define wxStandardPaths wxStandardPathsCF
+#else
 class WXDLLIMPEXP_BASE wxStandardPaths;
+#endif
 
 // ----------------------------------------------------------------------------
 // wxStandardPaths returns the standard locations in the file system
