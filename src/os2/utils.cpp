@@ -343,15 +343,14 @@ void wxBell()
 {
     DosBeep(1000,1000); // 1kHz during 1 sec.
 }
-#if 0
-int wxGUIAppTraits::GetOSVersion(
-  int*                              pMajorVsn
-, int*                              pMinorVsn
-)
+
+wxToolkitInfo & wxConsoleAppTraits::GetToolkitInfo()
 {
+    static wxToolkitInfo	    vInfo;
     ULONG                           ulSysInfo[QSV_MAX] = {0};
     APIRET                          ulrc;
 
+    vInfo.name = _T("wxBase");
     ulrc = ::DosQuerySysInfo( 1L
                              ,QSV_MAX
                              ,(PVOID)ulSysInfo
@@ -359,14 +358,13 @@ int wxGUIAppTraits::GetOSVersion(
                             );
     if (ulrc == 0L)
     {
-        *pMajorVsn = ulSysInfo[QSV_VERSION_MAJOR];
-        *pMajorVsn = *pMajorVsn/10;
-        *pMinorVsn = ulSysInfo[QSV_VERSION_MINOR];
-        return wxWINDOWS_OS2;
+        vInfo.versionMajor = ulSysInfo[QSV_VERSION_MAJOR] / 10;
+        vInfo.versionMinor = ulSysInfo[QSV_VERSION_MINOR];
     }
-    return wxWINDOWS; // error if we get here, return generic value
+    vInfo.os = wxOS2_PM;
+    return vInfo;
 }
-#endif
+
 // ---------------------------------------------------------------------------
 const wxChar* wxGetHomeDir(
   wxString*                         pStr
@@ -501,3 +499,12 @@ wxString WXDLLEXPORT wxPMErrorToStr(
     }
     return(sError);
 } // end of wxPMErrorToStr
+
+// replacement for implementation in unix/utilsunx.cpp,
+// to be used by all X11 based ports.
+struct wxEndProcessData;
+
+void wxHandleProcessTermination(wxEndProcessData *proc_data)
+{
+    // For now, just do nothing. To be filled in as needed.
+}

@@ -470,6 +470,32 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     wxDisplaySize(width, height);
 }
 
+wxToolkitInfo & wxGUIAppTraits::GetToolkitInfo()
+{
+    static wxToolkitInfo	    vInfo;
+    ULONG                           ulSysInfo[QSV_MAX] = {0};
+    APIRET                          ulrc;
+
+    vInfo.shortName = _T("PM");
+    vInfo.name = _T("wxOS2");
+#ifdef __WXUNIVERSAL__
+    vInfo.shortName << _T("univ");
+    vInfo.name << _T("/wxUniversal");
+#endif
+    ulrc = ::DosQuerySysInfo( 1L
+                             ,QSV_MAX
+                             ,(PVOID)ulSysInfo
+                             ,sizeof(ULONG) * QSV_MAX
+                            );
+    if (ulrc == 0L)
+    {
+        vInfo.versionMajor = ulSysInfo[QSV_VERSION_MAJOR] / 10;
+        vInfo.versionMinor = ulSysInfo[QSV_VERSION_MINOR];
+    }
+    vInfo.os = wxOS2_PM;
+    return vInfo;
+}
+
 // ---------------------------------------------------------------------------
 // window information functions
 // ---------------------------------------------------------------------------

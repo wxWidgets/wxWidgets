@@ -119,7 +119,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="BASE_OS2_SRC" hints="files">
-    src/unix/baseunix.cpp
     src/os2/dir.cpp
     src/os2/mimetype.cpp
     src/os2/thread.cpp

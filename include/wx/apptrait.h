@@ -134,7 +134,7 @@ public:
 //     Unix code (and otherwise __UNIX__ wouldn't be defined)
 #if defined(__WXMSW__)
     #include "wx/msw/apptbase.h"
-#elif defined(__UNIX__)
+#elif defined(__UNIX__) && !defined(__EMX__)
     #include "wx/unix/apptbase.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/apptbase.h"
@@ -215,15 +215,22 @@ public:
 
 #if defined(__WXMSW__)
     #include "wx/msw/apptrait.h"
-#elif defined(__UNIX__)
+#elif defined(__UNIX__) && !defined(__EMX__)
     #include "wx/unix/apptrait.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/apptrait.h"
-#else // no platform-specific methods to add to wxAppTraits
+#else 
+    // at least, we need an implementation of GetToolkitInfo !
     #if wxUSE_GUI
-        typedef wxGUIAppTraitsBase wxGUIAppTraits;
+        class wxGUIAppTraits : public wxGUIAppTraitsBase
+        {
+            virtual wxToolkitInfo& GetToolkitInfo();
+        };
     #endif // wxUSE_GUI
-    typedef wxConsoleAppTraitsBase wxConsoleAppTraits;
+    class wxConsoleAppTraits: public wxConsoleAppTraitsBase 
+    {
+        virtual wxToolkitInfo& GetToolkitInfo();
+    };
 #endif // platform
 
 #endif // _WX_APPTRAIT_H_
