@@ -64,6 +64,9 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
     
     if ( win )
     {
+#if 0
+    	// this clipping area was set to the parent window's drawing area, lead to problems
+    	// with MacOSX controls drawing outside their wx' rectangle
         RgnHandle insidergn = NewRgn() ;
         int x = 0 , y = 0;
         wxWindow *parent = win->GetParent() ;
@@ -77,6 +80,13 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
         OffsetRgn( m_newClip , x , y ) ;
         SetClip( m_newClip ) ;
     	DisposeRgn( insidergn ) ;
+#endif
+        RgnHandle insidergn = NewRgn() ;
+        int x = 0 , y = 0;
+        win->MacWindowToRootWindow( &x,&y ) ;
+        CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion().GetWXHRGN() , m_newClip ) ;
+        OffsetRgn( m_newClip , x , y ) ;
+        SetClip( m_newClip ) ;
 	}
 }
 wxMacWindowClipper::~wxMacWindowClipper() 
