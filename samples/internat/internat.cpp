@@ -349,7 +349,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
     	for (int n = first; n <= last; ++n)
         {
         	    s << n << _T(" ") << 
-                     ngettext("file deleted", "files deleted", n) << _T("\n");
+                     wxGetTranslation("file deleted", "files deleted", n) << _T("\n");
     	}
         wxMessageBox(s);
     }

@@ -33,11 +33,10 @@
 // ----------------------------------------------------------------------------
 
 // gettext() style macros (notice that xgettext should be invoked with 
-// --keyword="_" --keyword="ngettext:1,2" options
+// --keyword="_" --keyword="wxGetTranslation:1,2" options
 // to extract the strings from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
     #define _(s)                  wxGetTranslation(_T(s))
-    #define ngettext(s1, s2, n)   wxGetTranslation(_T(s1), _T(s2), n)
 #endif
 
 // another one which just marks the strings for extraction, but doesn't
@@ -559,9 +558,6 @@ inline const wxChar *wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
 #if !defined(WXINTL_NO_GETTEXT_MACRO)
     #if !defined(_)
         #define _(s)                 (_T(s))
-    #endif
-    #if !defined(ngettext)
-        #define ngettext(s1, s2, n)  ((n) == 1 ? _T(s1) : _T(s2))
     #endif
 #endif
 
