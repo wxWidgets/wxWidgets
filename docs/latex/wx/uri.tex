@@ -114,7 +114,7 @@ Builds the URI from its individual components, adds proper seperators, and
 returns escape sequences to normal characters.
 
 Note that it is preferred to call this over Unescape(BuildURI()) since
-BuildUnescapedURI performs some optimizations over the plain method.
+\helpref{BuildUnescapedURI}{wxuribuildunescapeduri} performs some optimizations over the plain method.
 
 
 \membersection{wxURI::Create}\label{wxuricreate}
@@ -330,9 +330,9 @@ to 2396}
 Translates all escape sequences (% hex hex) of \arg{uri} into
 normal characters and returns the result.
 
-This is the preferred over wxURL::ConvertFromURI.
+This is the preferred over deprecated wxURL::ConvertFromURI.
 
-If you want to unescape an entire wxURI, use BuildUnescapedURI instead,
+If you want to unescape an entire wxURI, use \helpref{BuildUnescapedURI}{wxuribuildunescapeduri} instead,
 as it performs some optimizations over this method.
 
 \docparam{uri}{string with escaped characters to convert}

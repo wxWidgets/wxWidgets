@@ -76,13 +76,13 @@ public:
     wxString GetPath() const         { return m_path; }
 
     //Use wxURI instead - this does not work that well
-    static wxString ConvertToValidURI(
+    wxDEPRECATED( static wxString ConvertToValidURI(
                         const wxString& uri,
                         const wxChar* delims = wxT(";/?:@&=+$,")
-                    );
+                  ) );
 
     //Use wxURI::Unescape instead
-    static wxString ConvertFromURI(const wxString& uri);
+    wxDEPRECATED( static wxString ConvertFromURI(const wxString& uri) );
 #endif
 
 protected:
