@@ -398,11 +398,15 @@ m4datainstall: preinstall
 
 win32install: preinstall
 	$(INSTALL) -d $(includedir)/wx/msw
+	$(INSTALL) -d $(includedir)/wx/msw/gnuwin32
+	$(INSTALL) -d $(includedir)/wx/msw/gnuwin32/gl
 	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/*.cur \
 			$(top_srcdir)/include/wx/msw/*.ico \
 			$(top_srcdir)/include/wx/msw/*.bmp \
 			$(top_srcdir)/include/wx/msw/wx.rc \
 				$(includedir)/wx/msw
+	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/gnuwin32/*.h $(include)/wx/msw/gnuwin32
+	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/gnuwin32/gl/*.h $(include)/wx/msw/gnuwin32/gl
 
 # this is the real install target: copies the library, wx-config and the
 # headers to the installation directory
