@@ -191,9 +191,16 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 #ifndef wxSetlocale
 WXDLLEXPORT wxChar * wxSetlocale(int category, const wxChar *locale)
 {
-  setlocale(category, wxConvLibc.cWX2MB(locale));
-  // FIXME
-  return (wxChar *)NULL;
+#ifdef wxUSE_THREADS
+    wxASSERT_MSG( wxThread::IsMain(), _T("wxSetlocale() is not MT-safe") );
+#endif
+
+    static wxWCharBuffer s_wzLocale;
+
+    char *localeOld = setlocale(category, wxConvLibc.cWX2MB(locale));
+    s_wzLocale = wxConvLibc.cMB2WC(localeOld);
+
+    return s_wzLocale;
 }
 #endif
 
