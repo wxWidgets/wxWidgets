@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <wx/app.h>
+#include <wx/frame.h>
 #include <wx/gizmos/dynamicsash.h>
 #include <wx/html/htmlwin.h>
 #include <wx/image.h>

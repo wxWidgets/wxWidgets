@@ -33,7 +33,7 @@
 #include "project.h"
 #include "symbols.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "bitmaps/new.xpm"
 #include "bitmaps/open.xpm"
 #include "bitmaps/save.xpm"
@@ -322,7 +322,7 @@ void csApp::InitToolBar(wxToolBar* toolBar)
     bitmaps[7] = new wxBitmap("help", wxBITMAP_TYPE_RESOURCE);
     bitmaps[8] = new wxBitmap("undo", wxBITMAP_TYPE_RESOURCE);
     bitmaps[9] = new wxBitmap("redo", wxBITMAP_TYPE_RESOURCE);
-#elif defined(__WXGTK__) || defined(__WXMOTIF__)
+#elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     bitmaps[0] = new wxBitmap( new_xpm );
     bitmaps[1] = new wxBitmap( open_xpm );
     bitmaps[2] = new wxBitmap( save_xpm );
@@ -395,7 +395,7 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
     bitmaps[8] = new wxBitmap("newpoint", wxBITMAP_TYPE_RESOURCE);
     bitmaps[9] = new wxBitmap("cutpoint", wxBITMAP_TYPE_RESOURCE);
     bitmaps[10] = new wxBitmap("straighten", wxBITMAP_TYPE_RESOURCE);
-#elif defined(__WXGTK__) || defined(__WXMOTIF__)
+#elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     bitmaps[0] = new wxBitmap( alignl_xpm );
     bitmaps[1] = new wxBitmap( alignr_xpm );
     bitmaps[2] = new wxBitmap( alignt_xpm );

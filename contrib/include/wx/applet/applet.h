@@ -44,7 +44,7 @@ Defines the abstract base class for wxApplet objects.
 class wxApplet : public wxPanel {
 private:
     DECLARE_ABSTRACT_CLASS(wxApplet);
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 
 protected:
     //wxHtmlAppletWindow  *m_parent;

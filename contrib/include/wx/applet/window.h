@@ -30,7 +30,9 @@
 #define __WX_APPLET_WINDOW_H
 
 #include "wx/html/htmlwin.h"
+#include "wx/hash.h"
 #include "wx/process.h"
+#include "wx/toolbar.h"
 
 // Forward declare
 class wxApplet;

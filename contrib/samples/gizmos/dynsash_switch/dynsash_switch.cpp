@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <wx/app.h>
+#include <wx/frame.h>
 #include <wx/choice.h>
 #include <wx/dcclient.h>
 #include <wx/gizmos/dynamicsash.h>

@@ -36,7 +36,7 @@
 #include "palette.h"
 
 // Include pixmaps
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "bitmaps/arrow.xpm"
 #include "bitmaps/tool1.xpm"
 #include "bitmaps/tool2.xpm"
@@ -93,7 +93,7 @@ EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
   wxBitmap PaletteTool3("TOOL3");
   wxBitmap PaletteTool4("TOOL4");
   wxBitmap PaletteArrow("ARROWTOOL");
-#elif defined(__WXGTK__) || defined(__WXMOTIF__)
+#elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
   wxBitmap PaletteTool1(tool1_xpm);
   wxBitmap PaletteTool2(tool2_xpm);
   wxBitmap PaletteTool3(tool3_xpm);
