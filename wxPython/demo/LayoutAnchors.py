@@ -21,38 +21,38 @@ class AnchorsDemoFrame(wxFrame):
         self._init_utils()
 
         self.mainPanel = wxPanel(size = wxSize(320, 160), parent = self, id = wxID_ANCHORSDEMOFRAMEMAINPANEL, name = 'panel1', style = wxTAB_TRAVERSAL | wxCLIP_CHILDREN, pos = wxPoint(0, 0))
-        self.mainPanel.SetAutoLayout(true)
+        self.mainPanel.SetAutoLayout(True)
 
         self.okButton = wxButton(label = 'OK', id = wxID_ANCHORSDEMOFRAMEOKBUTTON, parent = self.mainPanel, name = 'okButton', size = wxSize(72, 24), style = 0, pos = wxPoint(240, 128))
-        self.okButton.SetConstraints(LayoutAnchors(self.okButton, false, false, true, true))
+        self.okButton.SetConstraints(LayoutAnchors(self.okButton, False, False, True, True))
         EVT_BUTTON(self.okButton, wxID_ANCHORSDEMOFRAMEOKBUTTON, self.OnOkButtonButton)
 
         self.backgroundPanel = wxPanel(size = wxSize(304, 80), parent = self.mainPanel, id = wxID_ANCHORSDEMOFRAMEBACKGROUNDPANEL, name = 'backgroundPanel', style = wxSIMPLE_BORDER | wxCLIP_CHILDREN, pos = wxPoint(8, 40))
         self.backgroundPanel.SetBackgroundColour(wxColour(255, 255, 255))
-        self.backgroundPanel.SetConstraints(LayoutAnchors(self.backgroundPanel, true, true, true, true))
+        self.backgroundPanel.SetConstraints(LayoutAnchors(self.backgroundPanel, True, True, True, True))
 
         self.anchoredPanel = wxPanel(size = wxSize(88, 48), id = wxID_ANCHORSDEMOFRAMEANCHOREDPANEL, parent = self.backgroundPanel, name = 'anchoredPanel', style = wxSIMPLE_BORDER, pos = wxPoint(104, 16))
         self.anchoredPanel.SetBackgroundColour(wxColour(0, 0, 222))
-        self.anchoredPanel.SetConstraints(LayoutAnchors(self.anchoredPanel, false, false, false, false))
+        self.anchoredPanel.SetConstraints(LayoutAnchors(self.anchoredPanel, False, False, False, False))
 
         self.leftCheckBox = wxCheckBox(label = 'Left', id = wxID_ANCHORSDEMOFRAMELEFTCHECKBOX, parent = self.mainPanel, name = 'leftCheckBox', size = wxSize(40, 16), style = 0, pos = wxPoint(8, 8))
-        self.leftCheckBox.SetConstraints(LayoutAnchors(self.leftCheckBox, false, true, false, false))
+        self.leftCheckBox.SetConstraints(LayoutAnchors(self.leftCheckBox, False, True, False, False))
         EVT_CHECKBOX(self.leftCheckBox, wxID_ANCHORSDEMOFRAMELEFTCHECKBOX, self.OnCheckboxCheckbox)
 
         self.topCheckBox = wxCheckBox(label = 'Top', id = wxID_ANCHORSDEMOFRAMETOPCHECKBOX, parent = self.mainPanel, name = 'topCheckBox', size = wxSize(40, 16), style = 0, pos = wxPoint(88, 8))
-        self.topCheckBox.SetConstraints(LayoutAnchors(self.topCheckBox, false, true, false, false))
+        self.topCheckBox.SetConstraints(LayoutAnchors(self.topCheckBox, False, True, False, False))
         EVT_CHECKBOX(self.topCheckBox, wxID_ANCHORSDEMOFRAMETOPCHECKBOX, self.OnCheckboxCheckbox)
 
         self.rightCheckBox = wxCheckBox(label = 'Right', id = wxID_ANCHORSDEMOFRAMERIGHTCHECKBOX, parent = self.mainPanel, name = 'rightCheckBox', size = wxSize(48, 16), style = 0, pos = wxPoint(168, 8))
-        self.rightCheckBox.SetConstraints(LayoutAnchors(self.rightCheckBox, false, true, false, false))
+        self.rightCheckBox.SetConstraints(LayoutAnchors(self.rightCheckBox, False, True, False, False))
         EVT_CHECKBOX(self.rightCheckBox, wxID_ANCHORSDEMOFRAMERIGHTCHECKBOX, self.OnCheckboxCheckbox)
 
         self.bottomCheckBox = wxCheckBox(label = 'Bottom', id = wxID_ANCHORSDEMOFRAMEBOTTOMCHECKBOX, parent = self.mainPanel, name = 'bottomCheckBox', size = wxSize(56, 16), style = 0, pos = wxPoint(248, 8))
-        self.bottomCheckBox.SetConstraints(LayoutAnchors(self.bottomCheckBox, false, true, false, false))
+        self.bottomCheckBox.SetConstraints(LayoutAnchors(self.bottomCheckBox, False, True, False, False))
         EVT_CHECKBOX(self.bottomCheckBox, wxID_ANCHORSDEMOFRAMEBOTTOMCHECKBOX, self.OnCheckboxCheckbox)
 
         self.helpStaticText = wxStaticText(label = 'Select anchor options above, then resize window to see the effect', id = wxID_ANCHORSDEMOFRAMEHELPSTATICTEXT, parent = self.mainPanel, name = 'helpStaticText', size = wxSize(224, 24), style = wxST_NO_AUTORESIZE, pos = wxPoint(8, 128))
-        self.helpStaticText.SetConstraints(LayoutAnchors(self.helpStaticText, true, false, true, true))
+        self.helpStaticText.SetConstraints(LayoutAnchors(self.helpStaticText, True, False, True, True))
 
     def __init__(self, parent):
         self._init_ctrls(parent)
@@ -71,7 +71,7 @@ class AnchorsDemoFrame(wxFrame):
 def runTest(frame, nb, log):
     win = AnchorsDemoFrame(frame)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 

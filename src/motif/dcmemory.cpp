@@ -114,7 +114,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
         gcvalues.graphics_exposures = False;
         gcvalues.subwindow_mode = IncludeInferiors;
         gcvalues.line_width = 1;
-        m_gc = (WXGC) XCreateGC (display, RootWindow (display, DefaultScreen (display)),
+        m_gc = (WXGC) XCreateGC (display, (Drawable)m_pixmap/* RootWindow (display, DefaultScreen (display)) */,
             GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
             &gcvalues);
         

@@ -31,7 +31,7 @@
  */
 #include "tiffiop.h"
 /* Watcom C++ (or its make utility) doesn't like long filenames */
-#ifdef __WATCOMC__
+#ifdef wxUSE_SHORTNAMES
 #include "tif_pred.h"
 #else
 #include "tif_predict.h"

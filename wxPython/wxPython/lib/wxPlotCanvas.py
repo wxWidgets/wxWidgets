@@ -20,7 +20,6 @@ Original comment follows below:
 """
 
 from wxPython import wx
-import string
 
 # Not everybody will have Numeric, so let's be cool about it...
 try:
@@ -32,7 +31,7 @@ imported.  It probably is not installed (it's not part of the standard
 Python distribution). See the Python site (http://www.python.org) for
 information on downloading source or binaries."""
 
-    if wxPlatform == '__WXMSW__':
+    if wx.wxPlatform == '__WXMSW__':
         d = wx.wxMessageDialog(wx.NULL, msg, "Numeric not found")
         if d.ShowModal() == wx.wxID_CANCEL:
             d = wx.wxMessageDialog(wx.NULL, "I kid you not! Pressing Cancel won't help you!", "Not a joke", wx.wxOK)
@@ -172,8 +171,10 @@ class PlotGraphics:
 
 class PlotCanvas(wx.wxWindow):
 
-    def __init__(self, parent, id = -1):
-        wx.wxWindow.__init__(self, parent, id, wx.wxPyDefaultPosition, wx.wxPyDefaultSize)
+    def __init__(self, parent, id=-1,
+                 pos = wx.wxDefaultPosition, size = wx.wxDefaultSize,
+                 style = 0, name = 'plotCanvas'):
+        wx.wxWindow.__init__(self, parent, id, pos, size, style, name)
         self.border = (1,1)
         self.SetClientSizeWH(400,400)
         self.SetBackgroundColour(wx.wxNamedColour("white"))
@@ -429,7 +430,7 @@ if __name__ == '__main__':
 """As of this writing, printing support in wxPython is shaky at best.
 Are you sure you want to do this?""", "Danger!", wx.wxYES_NO)
             if d.ShowModal() == wx.wxID_YES:
-                psdc = wx.wxPostScriptDC("out.ps", wx.TRUE, self)
+                psdc = wx.wxPostScriptDC("out.ps", wx.True, self)
                 self.client.redraw(psdc)
 
         def OnFileExit(self, event):
@@ -455,9 +456,9 @@ Are you sure you want to do this?""", "Danger!", wx.wxYES_NO)
     class MyApp(wx.wxApp):
         def OnInit(self):
             frame = AppFrame(wx.NULL, -1, "wxPlotCanvas")
-            frame.Show(wx.TRUE)
+            frame.Show(wx.True)
             self.SetTopWindow(frame)
-            return wx.TRUE
+            return wx.True
 
 
     app = MyApp(0)

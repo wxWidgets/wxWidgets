@@ -1,15 +1,13 @@
-#
-# Makefile for WATCOM
-#
-# Created by Julian Smart, January 1999
 # 
-#
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = mdi
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+THISDIR = $(%WXWIN)\samples\mdi 
+# 
+PROGRAM = mdi 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

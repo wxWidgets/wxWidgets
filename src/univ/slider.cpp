@@ -787,14 +787,15 @@ bool wxSlider::PerformAction(const wxControlAction& action,
 wxScrollThumb::Shaft wxSlider::HitTest(const wxPoint& pt) const
 {
     wxRect rectShaft = GetShaftRect();
-    if ( !rectShaft.Inside(pt) )
+    wxRect rectThumb;
+    CalcThumbRect(&rectShaft, &rectThumb, NULL);
+
+	// check for possible shaft or thumb hit
+    if (!rectShaft.Inside(pt) && !rectThumb.Inside(pt))
     {
         return wxScrollThumb::Shaft_None;
     }
 
-    // inside the shaft, where is it relatively to the thumb?
-    wxRect rectThumb;
-    CalcThumbRect(&rectShaft, &rectThumb, NULL);
 
     // the position to test and the start and end of the thumb
     wxCoord x, x1, x2;

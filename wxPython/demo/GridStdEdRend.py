@@ -1,7 +1,7 @@
 from wxPython.wx import *
 from wxPython.grid import *
 
-import string, random
+import random
 
 #---------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ editorDemoData = [
     ('wxGridCellBoolEditor', '1', wxGridCellBoolEditor, ()),
     ('wxGridCellChoiceEditor', 'one', wxGridCellChoiceEditor, (['one', 'two', 'three', 'four',
                                                          'kick', 'Microsoft', 'out the',
-                                                         'door'], false)),
+                                                         'door'], False)),
     ]
 
 
@@ -139,15 +139,15 @@ Renderers used together.
         attr = wxGridCellAttr()
         attr.SetFont(font)
         attr.SetBackgroundColour(wxLIGHT_GREY)
-        attr.SetReadOnly(true)
+        attr.SetReadOnly(True)
         attr.SetAlignment(wxRIGHT, -1)
         self.SetColAttr(renCol, attr)
         attr.IncRef()
         self.SetColAttr(edCol, attr)
 
         # There is a bug in wxGTK for this method...
-        self.AutoSizeColumns(true)
-        self.AutoSizeRows(true)
+        self.AutoSizeColumns(True)
+        self.AutoSizeRows(True)
 
         EVT_GRID_CELL_LEFT_DCLICK(self, self.OnLeftDClick)
 
@@ -174,7 +174,7 @@ if __name__ == '__main__':
     import sys
     app = wxPySimpleApp()
     frame = TestFrame(None, sys.stdout)
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 
 

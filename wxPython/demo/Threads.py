@@ -30,11 +30,11 @@ class CalcBarThread:
         self.val = val
 
     def Start(self):
-        self.keepGoing = self.running = true
+        self.keepGoing = self.running = True
         thread.start_new_thread(self.Run, ())
 
     def Stop(self):
-        self.keepGoing = false
+        self.keepGoing = False
 
     def IsRunning(self):
         return self.running
@@ -57,7 +57,7 @@ class CalcBarThread:
             if self.val < 0: self.val = 0
             if self.val > 300: self.val = 300
 
-        self.running = false
+        self.running = False
 
 #----------------------------------------------------------------------
 
@@ -172,7 +172,7 @@ class TestFrame(wxFrame):
         sizer.Add(self.graph, 1, wxEXPAND)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         sizer.Fit(self)
 
         EVT_UPDATE_BARGRAPH(self, self.OnUpdate)
@@ -194,7 +194,7 @@ class TestFrame(wxFrame):
 
     def OnUpdate(self, evt):
         self.graph.SetValue(evt.barNum, evt.value)
-        self.graph.Refresh(false)
+        self.graph.Refresh(False)
 
 
     def OnCloseWindow(self, evt):
@@ -217,7 +217,7 @@ class TestFrame(wxFrame):
 def runTest(frame, nb, log):
     win = TestFrame(frame, log)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
     return None
 
 #----------------------------------------------------------------------

@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -356,7 +355,7 @@ static PyObject *_wrap_wxPrintData_GetPrinterName(PyObject *self, PyObject *args
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -821,7 +820,7 @@ static PyObject *_wrap_wxPrintData_GetPrinterCommand(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -856,7 +855,7 @@ static PyObject *_wrap_wxPrintData_GetPrinterOptions(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -891,7 +890,7 @@ static PyObject *_wrap_wxPrintData_GetPreviewCommand(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -926,7 +925,7 @@ static PyObject *_wrap_wxPrintData_GetFilename(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -961,7 +960,7 @@ static PyObject *_wrap_wxPrintData_GetFontMetricPath(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1548,8 +1547,7 @@ static PyObject *_wrap_new_wxPrinterDC(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxPrinterDC",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintData_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintData_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPrinterDC. Expected _wxPrintData_p.");
         return NULL;
         }
@@ -1662,8 +1660,7 @@ static PyObject *_wrap_new_wxPostScriptDC(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxPostScriptDC",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintData_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintData_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPostScriptDC. Expected _wxPrintData_p.");
         return NULL;
         }
@@ -1740,8 +1737,7 @@ static PyObject *_wrap_wxPostScriptDC_SetPrintData(PyObject *self, PyObject *arg
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintData_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintData_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPostScriptDC_SetPrintData. Expected _wxPrintData_p.");
         return NULL;
         }
@@ -2741,8 +2737,7 @@ static PyObject *_wrap_wxPageSetupDialogData_SetPrintData(PyObject *self, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintData_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintData_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPageSetupDialogData_SetPrintData. Expected _wxPrintData_p.");
         return NULL;
         }
@@ -3548,8 +3543,7 @@ static PyObject *_wrap_wxPrintDialogData_SetPrintData(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintData_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintData_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintDialogData_SetPrintData. Expected _wxPrintData_p.");
         return NULL;
         }

@@ -25,7 +25,7 @@ The behaviour and appearance resembles drag and drop positioning
 of the toolbar rows in Netscape Communicator 4.xx.
 */
 
-class cbRowDragPlugin : public cbPluginBase
+class WXFL_DECLSPEC cbRowDragPlugin : public cbPluginBase
 {
     DECLARE_DYNAMIC_CLASS( cbRowDragPlugin )
 public:
@@ -217,7 +217,7 @@ public:
 Internal helper class.
 */
 
-class cbHiddenBarInfo : public wxObject
+class WXFL_DECLSPEC cbHiddenBarInfo : public wxObject
 {
     DECLARE_DYNAMIC_CLASS( cbHiddenBarInfo )
 public:

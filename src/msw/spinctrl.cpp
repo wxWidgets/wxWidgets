@@ -214,6 +214,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // know whether this is a horizontal or vertical control (we're always
     // vertical)
     style |= wxSP_VERTICAL;
+
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+        style |= wxBORDER_SUNKEN;
+
     SetWindowStyle(style);
 
     // calculate the sizes: the size given is the toal size for both controls

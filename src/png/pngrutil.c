@@ -1,7 +1,7 @@
 
 /* pngrutil.c - utilities to read a PNG file
  *
- * libpng 1.2.4 - July 8, 2002
+ * libpng 1.2.5rc3 - September 18, 2002
  * For conditions of distribution and use, see copyright notice in png.h
  * Copyright (c) 1998-2002 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
@@ -2883,7 +2883,7 @@ png_read_finish_row(png_structp png_ptr)
          {
             if (!(png_ptr->zstream.avail_out) || png_ptr->zstream.avail_in ||
                png_ptr->idat_size)
-               png_error(png_ptr, "Extra compressed data");
+               png_warning(png_ptr, "Extra compressed data");
             png_ptr->mode |= PNG_AFTER_IDAT;
             png_ptr->flags |= PNG_FLAG_ZLIB_FINISHED;
             break;
@@ -2893,14 +2893,19 @@ png_read_finish_row(png_structp png_ptr)
                       "Decompression Error");
 
          if (!(png_ptr->zstream.avail_out))
-            png_error(png_ptr, "Extra compressed data");
+         {
+            png_warning(png_ptr, "Extra compressed data.");
+            png_ptr->mode |= PNG_AFTER_IDAT;
+            png_ptr->flags |= PNG_FLAG_ZLIB_FINISHED;
+            break;
+         }
 
       }
       png_ptr->zstream.avail_out = 0;
    }
 
    if (png_ptr->idat_size || png_ptr->zstream.avail_in)
-      png_error(png_ptr, "Extra compression data");
+      png_warning(png_ptr, "Extra compression data");
 
    inflateReset(&png_ptr->zstream);
 

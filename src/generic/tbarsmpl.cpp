@@ -86,7 +86,7 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxToolBarBase)
 
-#if !wxUSE_TOOLBAR_NATIVE
+#if !defined(wxUSE_TOOLBAR_NATIVE) && !defined(__WXUNIVERSAL__)
     #include "wx/toolbar.h"
 
     IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarSimple)
@@ -356,12 +356,14 @@ bool wxToolBarSimple::Realize()
     }
 
     if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
-        m_maxWidth += maxToolWidth;
-    else
         m_maxHeight += maxToolHeight;
+    else
+        m_maxWidth += maxToolWidth;
 
     m_maxWidth += m_xMargin;
     m_maxHeight += m_yMargin;
+
+    SetSize(m_maxWidth, m_maxHeight);
 
     return TRUE;
 }

@@ -216,7 +216,7 @@ bool wxResourceTable::DeleteResource(const wxString& name)
 bool wxResourceTable::ParseResourceFile( wxInputStream *is )
 {
     wxExprDatabase db;
-    int len = is->StreamSize() ;
+    int len = is->GetSize() ;
 
     bool eof = FALSE;
     while ( is->TellI() + 10 < len) // it's a hack because the streams dont support EOF

@@ -150,34 +150,25 @@ WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode );
 // functions
 // ----------------------------------------------------------------------------
 WXDLLEXPORT bool wxFileExists(const wxString& filename);
-#define FileExists wxFileExists
 
 // does the path exist? (may have or not '/' or '\\' at the end)
 WXDLLEXPORT bool wxPathExists(const wxChar *pszPathName);
 
-#define wxDirExists wxPathExists
-#define DirExists wxDirExists
-
 WXDLLEXPORT bool wxIsAbsolutePath(const wxString& filename);
-#define IsAbsolutePath wxIsAbsolutePath
 
 // Get filename
 WXDLLEXPORT wxChar* wxFileNameFromPath(wxChar *path);
 WXDLLEXPORT wxString wxFileNameFromPath(const wxString& path);
-#define FileNameFromPath wxFileNameFromPath
 
 // Get directory
 WXDLLEXPORT wxString wxPathOnly(const wxString& path);
-#define PathOnly wxPathOnly
 
 // wxString version
 WXDLLEXPORT wxString wxRealPath(const wxString& path);
 
 WXDLLEXPORT void wxDos2UnixFilename(wxChar *s);
-#define Dos2UnixFilename wxDos2UnixFilename
 
 WXDLLEXPORT void wxUnix2DosFilename(wxChar *s);
-#define Unix2DosFilename wxUnix2DosFilename
 
 // Strip the extension, in situ
 WXDLLEXPORT void wxStripExtension(wxChar *buffer);
@@ -250,6 +241,19 @@ WXDLLEXPORT bool wxMkdir(const wxString& dir, int perm = 0777);
 
 // Remove directory. Flags reserved for future use.
 WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
+
+// compatibility defines, don't use in new code
+#define wxDirExists wxPathExists
+
+#if WXWIN_COMPATIBILITY_2
+    #define FileExists wxFileExists
+    #define DirExists wxDirExists
+    #define IsAbsolutePath wxIsAbsolutePath
+    #define FileNameFromPath wxFileNameFromPath
+    #define PathOnly wxPathOnly
+    #define Dos2UnixFilename wxDos2UnixFilename
+    #define Unix2DosFilename wxUnix2DosFilename
+#endif
 
 // ----------------------------------------------------------------------------
 // separators in file names

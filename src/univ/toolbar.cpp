@@ -38,6 +38,7 @@
 
 #include "wx/univ/renderer.h"
 
+#include "wx/frame.h"
 #include "wx/toolbar.h"
 #include "wx/image.h"
 #include "wx/log.h"
@@ -156,6 +157,8 @@ bool wxToolBar::Create(wxWindow *parent,
 
 wxToolBar::~wxToolBar()
 {
+    // Make sure the toolbar is removed from the parent.
+    SetSize(0,0);
 }
 
 void wxToolBar::SetMargins(int x, int y)
@@ -423,6 +426,39 @@ wxSize wxToolBar::DoGetBestClientSize() const
     return wxSize(m_maxWidth, m_maxHeight);
 }
 
+void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    int old_width, old_height;
+    GetSize(&old_width, &old_height);
+
+    wxToolBarBase::DoSetSize(x, y, width, height, sizeFlags);
+    
+    // Correct width and height if needed.
+    if ( width == -1 || height == -1 )
+    {
+        int tmp_width, tmp_height;
+        GetSize(&tmp_width, &tmp_height);
+
+        if ( width == -1 )
+            width = tmp_width;
+        if ( height == -1 )
+            height = tmp_height;
+    }
+  
+    // We must refresh the frame size when the toolbar changes size
+    // otherwise the toolbar can be shown incorrectly
+    if ( old_width != width || old_height != height )
+    {
+        // But before we send the size event check it 
+        // we have a frame that is not being deleted.
+        wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
+        if ( frame && !frame->IsBeingDeleted() )
+        {
+            frame->SendSizeEvent();
+        }
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxToolBar drawing
 // ----------------------------------------------------------------------------
@@ -663,10 +699,13 @@ bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
                 m_winCapture = NULL;
             }
 
-            if ( tool == m_toolCapture )
-                consumer->PerformAction( wxACTION_BUTTON_TOGGLE, m_toolCapture->GetId() );
-            else
-                consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolCapture->GetId() );
+            if (m_toolCapture)
+            {
+                if ( tool == m_toolCapture )
+                    consumer->PerformAction( wxACTION_BUTTON_TOGGLE, m_toolCapture->GetId() );
+                else
+                    consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolCapture->GetId() );
+            }
             
             m_toolCapture = NULL;
                 

@@ -160,7 +160,7 @@ int wxEntry(int argc, char **argv)
     wxTheApp->argv = argv;
 #endif
 
-    wxString name = wxFileNameFromPath(argv[0]);
+    wxString name = wxFileNameFromPath(wxTheApp->argv[0]);
     wxStripExtension(name);
     wxTheApp->SetAppName(name);
 

@@ -56,7 +56,7 @@ FortyCanvas::FortyCanvas(wxWindow* parent, int x, int y, int w, int h) :
 	m_arrowCursor = new wxCursor(wxCURSOR_ARROW);
 
 	wxString name = wxTheApp->GetAppName();
-	if (name.Length() <= 0) name = "forty";
+	if (name.Length() <= 0) name = _T("forty");
 	m_scoreFile = new ScoreFile(name);
 	m_game = new Game(0, 0, 0);
 	m_game->Deal();
@@ -159,8 +159,8 @@ Called when the main frame is closed
 bool FortyCanvas::OnCloseCanvas()
 {
 	if (m_game->InPlay() &&
-		wxMessageBox("Are you sure you want to\nabandon the current game?",
-			"Warning", wxYES_NO | wxICON_QUESTION) == wxNO)
+		wxMessageBox(_T("Are you sure you want to\nabandon the current game?"),
+			_T("Warning"), wxYES_NO | wxICON_QUESTION) == wxNO)
 	{
         return FALSE;
 	}

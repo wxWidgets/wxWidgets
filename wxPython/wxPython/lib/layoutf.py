@@ -1,7 +1,7 @@
 from wxPython.wx import wxLayoutConstraints,\
                 wxTop, wxLeft, wxBottom, wxRight, \
                 wxHeight, wxWidth, wxCentreX, wxCentreY
-import re,string
+import re
 
 class Layoutf(wxLayoutConstraints):
     """
@@ -130,8 +130,8 @@ time of this writing not documented.
             self.pack(pstr,winlist)
 
     def pack(self, pstr, winlist):
-        pstr = string.lower(pstr)
-        for item in string.split(pstr,';'):
+        pstr = pstr.lower()
+        for item in pstr.split(';'):
             m = self.rexp1.match(item)
             if m:
                 g = list(m.groups())
@@ -159,8 +159,8 @@ time of this writing not documented.
                 else: func(winlist[g[4]], cmp)
 
     def debug_pack(self, pstr, winlist):
-        pstr = string.lower(pstr)
-        for item in string.split(pstr,';'):
+        pstr = pstr.lower()
+        for item in pstr.split(';'):
             m = self.rexp1.match(item)
             if m:
                 g = list(m.groups())
@@ -202,7 +202,7 @@ if __name__=='__main__':
                              wxPyDefaultPosition, wxSize(500, 300))
             EVT_CLOSE(self, self.OnCloseWindow)
 
-            self.SetAutoLayout(true)
+            self.SetAutoLayout(True)
             EVT_BUTTON(self, 100, self.OnButton)
             EVT_BUTTON(self, 101, self.OnAbout)
 
@@ -234,7 +234,7 @@ if __name__=='__main__':
             wxStaticText(self.panelD, -1, "Panel D", wxPoint(4, 4)).SetBackgroundColour(wxGREEN)
 
         def OnButton(self, event):
-            self.Close(true)
+            self.Close(True)
 
         def OnAbout(self, event):
             try:

@@ -55,20 +55,19 @@ The situation is particularly complicated with Cyrillic encodings for which
 used on the Internet), ISO8859-5 (ISO standard for Cyrillic) and CP1251
 (WinCyrillic).
 
-This abundance of (incompatible) encoding:w
-s should make it clear that using
+This abundance of (incompatible) encodings should make it clear that using
 encodings is less easy than it might seem. The problems arise both from the
 fact that the standard encodings for the given language (say Russian, which is
 written in Cyrillic) are different on different platforms and because the
 fonts in the given encoding might just not be installed (this is especially a
 problem with Unix, or, in general, non-Win32 systems).
 
-To allow to see clearer in this, \helpref{wxFontEnumerator}{wxfontenumerator} 
+To clarify, the \helpref{wxFontEnumerator}{wxfontenumerator} 
 class may be used to enumerate both all available encodings and to find the
 facename(s) in which the given encoding exists. If you can find the font in
 the correct encoding with wxFontEnumerator then your troubles are over, but,
 unfortunately, sometimes this is not enough. For example, there is no standard
-way (I know of, please tell me if you do!) to find a font on a Windows system
+way (that I know of, please tell me if you do!) to find a font on a Windows system
 for KOI8 encoding (only for WinCyrillic one which is quite different), so 
 \helpref{wxFontEnumerator}{wxfontenumerator} will never return one, even if
 the user has installed a KOI8 font on his system.
@@ -80,7 +79,7 @@ course, it would be fairly useless if it tried to determine these mappings by
 itself, so, instead, it (optionally) ask the user and remember his answers
 so that the next time the program will automatically choose the correct font.
 
-All these topics are illustrated by the \helpref{font sample}{samplefont},
+All these topics are illustrated by the \helpref{font sample}{samplefont};
 please refer to it and the documentation of the classes mentioned here for
 further explanations.
 

@@ -8,7 +8,7 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = mmboard
-OBJECTS = $(PROGRAM).obj mmbman.obj
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj  mmbman.obj
 
 !include $(WXDIR)\src\makeprog.wat
 

@@ -1,5 +1,4 @@
 from wxPython.wx import *
-import string
 
 
 class floatValidator(wxPyValidator):
@@ -24,7 +23,7 @@ class floatValidator(wxPyValidator):
         if self.obj and self.attrName:
             tc = wxPyTypeCast(self.GetWindow(), "wxTextCtrl")
             text = tc.GetValue()
-            setattr(self.obj, self.attrName, string.atof(text))
+            setattr(self.obj, self.attrName, float(text))
         return true
 
 

@@ -314,7 +314,7 @@ public:
     // from multibyte string
     // (NB: nLength is right now number of Unicode characters, not
     //  characters in psz! So try not to use it yet!)
-  wxString(const char *psz, wxMBConv& conv = wxConvLibc, size_t nLength = wxSTRING_MAXLEN);
+  wxString(const char *psz, wxMBConv& conv, size_t nLength = wxSTRING_MAXLEN);
     // from wxWCharBuffer (i.e. return from wxGetString)
   wxString(const wxWCharBuffer& psz)
     { InitWith(psz, 0, wxSTRING_MAXLEN); }
@@ -461,14 +461,16 @@ public:
     // the behaviour of these functions with the strings containing anything
     // else than 7 bit ASCII characters is undefined, use at your own risk.
 #if wxUSE_UNICODE
-    static wxString FromAscii(const char *ascii);
+    static wxString FromAscii(const char *ascii);  // string
+    static wxString FromAscii(const char ascii);   // char
     const wxCharBuffer ToAscii() const;
 #else // ANSI
     static wxString FromAscii(const char *ascii) { return wxString( ascii ); }
+    static wxString FromAscii(const char ascii) { return wxString( ascii ); }
     const char *ToAscii() const { return c_str(); }
 #endif // Unicode/!Unicode
 
-    // conversions with (possible) format convertions: have to return a
+    // conversions with (possible) format conversions: have to return a
     // buffer with temporary data
     //
     // the functions defined (in either Unicode or ANSI) mode are mb_str() to
@@ -833,7 +835,7 @@ public:
     // returns true if the string is empty
   bool empty() const { return IsEmpty(); }
     // inform string about planned change in size
-  void reserve(size_t size) { Alloc(size); }
+  void reserve(size_t sz) { Alloc(sz); }
 
   // lib.string.access
     // return the character at position n

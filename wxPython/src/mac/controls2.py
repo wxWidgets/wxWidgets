@@ -186,9 +186,12 @@ class wxListItemPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,controls2c=controls2c):
-        if self.thisown == 1 :
-            controls2c.delete_wxListItem(self)
+    def __del__(self, delfunc=controls2c.delete_wxListItem):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def Clear(self, *_args, **_kwargs):
         val = apply(controls2c.wxListItem_Clear,(self,) + _args, _kwargs)
         return val
@@ -511,6 +514,9 @@ class wxListCtrlPtr(wxControlPtr):
     def GetItemSpacing(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetItemSpacing,(self,) + _args, _kwargs)
         return val
+    def SetItemSpacing(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemSpacing,(self,) + _args, _kwargs)
+        return val
     def GetSelectedItemCount(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetSelectedItemCount,(self,) + _args, _kwargs)
         return val
@@ -569,6 +575,9 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def ClearAll(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_ClearAll,(self,) + _args, _kwargs)
+        return val
+    def EditLabel(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_EditLabel,(self,) + _args, _kwargs)
         return val
     def EnsureVisible(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_EnsureVisible,(self,) + _args, _kwargs)
@@ -661,6 +670,14 @@ class wxListCtrlPtr(wxControlPtr):
         '''get the currently focused item or -1 if none'''
         return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
 
+    def GetFirstSelected(self, *args):
+        '''return first selected item, or -1 when none'''
+        return self.GetNextSelected(-1)
+
+    def GetNextSelected(self, item):
+        '''return subsequent selected items, or -1 when no more'''
+        return self.GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)
+
     def IsSelected(self, idx):
         '''return TRUE if the item is selected'''
         return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0
@@ -678,10 +695,14 @@ class wxListCtrlPtr(wxControlPtr):
         '''Append an item to the list control.  The entry parameter should be a
            sequence with an item for each column'''
         if len(entry):
+            if wx.wxUSE_UNICODE:
+                cvtfunc = unicode
+            else:
+                cvtfunc = str
             pos = self.GetItemCount()
-            self.InsertStringItem(pos, str(entry[0]))
+            self.InsertStringItem(pos, cvtfunc(entry[0]))
             for i in range(1, len(entry)):
-                self.SetStringItem(pos, i, str(entry[i]))
+                self.SetStringItem(pos, i, cvtfunc(entry[i]))
             return pos
     
 class wxListCtrl(wxListCtrlPtr):
@@ -796,9 +817,12 @@ class wxTreeItemIdPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,controls2c=controls2c):
-        if self.thisown == 1 :
-            controls2c.delete_wxTreeItemId(self)
+    def __del__(self, delfunc=controls2c.delete_wxTreeItemId):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def IsOk(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeItemId_IsOk,(self,) + _args, _kwargs)
         return val
@@ -962,6 +986,18 @@ class wxTreeCtrlPtr(wxControlPtr):
     def SetPyData(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetPyData,(self,) + _args, _kwargs)
         return val
+    def GetItemTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetItemTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetItemBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetItemBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetItemFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetItemFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) ; val.thisown = 1
+        return val
     def IsVisible(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_IsVisible,(self,) + _args, _kwargs)
         return val
@@ -1077,6 +1113,9 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def ScrollTo(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_ScrollTo,(self,) + _args, _kwargs)
+        return val
+    def GetEditControl(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetEditControl,(self,) + _args, _kwargs)
         return val
     def EditLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_EditLabel,(self,) + _args, _kwargs)

@@ -498,7 +498,6 @@ public:
         return val
     "
 
-
     // Sets information about the item
     bool SetItem(wxListItem& info) ;
 
@@ -559,6 +558,10 @@ public:
     // If small is TRUE, gets the spacing for the small icon
     // view, otherwise the large icon view.
     int GetItemSpacing(bool isSmall) const;
+
+#ifndef __WXMSW__
+    void SetItemSpacing( int spacing, bool isSmall = FALSE );
+#endif
 
     // Gets the number of selected items in the list control
     int GetSelectedItemCount() const;
@@ -624,6 +627,8 @@ public:
 
     // End label editing, optionally cancelling the edit
     bool EndEditLabel(bool cancel);
+#else
+    void EditLabel(long item);
 #endif
 
     // Ensures this item is visible
@@ -700,6 +705,14 @@ public:
         '''get the currently focused item or -1 if none'''
         return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
 
+    def GetFirstSelected(self, *args):
+        '''return first selected item, or -1 when none'''
+        return self.GetNextSelected(-1)
+
+    def GetNextSelected(self, item):
+        '''return subsequent selected items, or -1 when no more'''
+        return self.GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)
+
     def IsSelected(self, idx):
         '''return TRUE if the item is selected'''
         return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0
@@ -717,10 +730,14 @@ public:
         '''Append an item to the list control.  The entry parameter should be a
            sequence with an item for each column'''
         if len(entry):
+            if wx.wxUSE_UNICODE:
+                cvtfunc = unicode
+            else:
+                cvtfunc = str
             pos = self.GetItemCount()
-            self.InsertStringItem(pos, str(entry[0]))
+            self.InsertStringItem(pos, cvtfunc(entry[0]))
             for i in range(1, len(entry)):
-                self.SetStringItem(pos, i, str(entry[i]))
+                self.SetStringItem(pos, i, cvtfunc(entry[i]))
             return pos
     "
 
@@ -1091,8 +1108,8 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = m_myInst.findCallback("OnCompareItems"))) {
-            PyObject *o1 = wxPyConstructObject((void*)&item1, "wxTreeItemId");
-            PyObject *o2 = wxPyConstructObject((void*)&item2, "wxTreeItemId");
+            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"));
+            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"));
             rval = m_myInst.callCallback(Py_BuildValue("(OO)",o1,o2));
             Py_DECREF(o1);
             Py_DECREF(o2);
@@ -1205,6 +1222,16 @@ public:
     }
 
 
+    // get the item's text colour
+    wxColour GetItemTextColour(const wxTreeItemId& item) const;
+
+    // get the item's background colour
+    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
+
+    // get the item's font
+    wxFont GetItemFont(const wxTreeItemId& item) const;
+
+
     bool IsVisible(const wxTreeItemId& item);
     bool ItemHasChildren(const wxTreeItemId& item);
     bool IsExpanded(const wxTreeItemId& item);
@@ -1212,7 +1239,7 @@ public:
 
     wxTreeItemId GetRootItem();
     wxTreeItemId GetSelection();
-    %name(GetItemParent) wxTreeItemId GetParent(const wxTreeItemId& item);
+    wxTreeItemId GetItemParent(const wxTreeItemId& item);
     //size_t GetSelections(wxArrayTreeItemIds& selection);
     %addmethods {
         PyObject* GetSelections() {
@@ -1223,7 +1250,7 @@ public:
             num = self->GetSelections(array);
             for (x=0; x < num; x++) {
                 wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
-                PyObject* item = wxPyConstructObject((void*)tii, "wxTreeItemId", TRUE);
+                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), TRUE);
                 PyList_Append(rval, item);
             }
             wxPyEndBlockThreads();
@@ -1283,12 +1310,11 @@ public:
     void SelectItem(const wxTreeItemId& item);
     void EnsureVisible(const wxTreeItemId& item);
     void ScrollTo(const wxTreeItemId& item);
-#ifdef __WXMSW__
-    wxTextCtrl* EditLabel(const wxTreeItemId& item);
+
     wxTextCtrl* GetEditControl();
-    void EndEditLabel(const wxTreeItemId& item, int discardChanges = FALSE);
-#else
     void EditLabel(const wxTreeItemId& item);
+#ifdef __WXMSW__
+    void EndEditLabel(const wxTreeItemId& item, int discardChanges = FALSE);
 #endif
 
     void SortChildren(const wxTreeItemId& item);
@@ -1314,7 +1340,7 @@ public:
             if (self->GetBoundingRect(item, rect, textOnly)) {
                 wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
-                PyObject* val = wxPyConstructObject((void*)r, "wxRect");
+                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"));
                 wxPyEndBlockThreads();
                 return val;
             }

@@ -43,44 +43,47 @@ class wxPropertyValidatorRegistry;
 // A storable sheet of values
 class WXDLLEXPORT wxPropertySheet: public wxObject
 {
- DECLARE_DYNAMIC_CLASS(wxPropertySheet)
- public:
-  wxPropertySheet(const wxString& name = "");
-  ~wxPropertySheet(void);
+public:
+    wxPropertySheet(const wxString& name = wxT(""));
+    ~wxPropertySheet();
 
-  // Set the name of the sheet
-  inline virtual void SetName(const wxString& name) { m_name=name; }
-  inline virtual wxString GetName() const { return m_name; }
-  // Does this sheet contain a property with this name
-  virtual bool HasProperty(const wxString& name) const;
+    // Set the name of the sheet
+    inline virtual void SetName(const wxString& name) { m_name=name; }
+    inline virtual wxString GetName() const { return m_name; }
+    
+    // Does this sheet contain a property with this name
+    virtual bool HasProperty(const wxString& name) const;
 
-  // Set property name to value
-  virtual bool SetProperty(const wxString& name, const wxPropertyValue& value);
+    // Set property name to value
+    virtual bool SetProperty(const wxString& name, const wxPropertyValue& value);
 
-  // Remove property from sheet by name, deleting it
-  virtual void RemoveProperty(const wxString& name);
+    // Remove property from sheet by name, deleting it
+    virtual void RemoveProperty(const wxString& name);
 
-  // Get the name of the sheet
-  // Add a property
-  virtual void AddProperty(wxProperty *property);
+    // Get the name of the sheet
+    // Add a property
+    virtual void AddProperty(wxProperty *property);
 
-  // Get property by name
-  virtual wxProperty *GetProperty(const wxString& name) const;
+    // Get property by name
+    virtual wxProperty *GetProperty(const wxString& name) const;
 
-  // Clear all properties
-  virtual void Clear(void);
+    // Clear all properties
+    virtual void Clear();
 
-  virtual void UpdateAllViews(wxPropertyView *thisView = NULL);
-  inline virtual wxList& GetProperties(void) const { return (wxList&) m_properties; }
+    virtual void UpdateAllViews(wxPropertyView *thisView = NULL);
+    inline virtual wxList& GetProperties() const { return (wxList&) m_properties; }
   
-  // Sets/clears the modified flag for each property value
-  virtual void SetAllModified(bool flag = TRUE);
+    // Sets/clears the modified flag for each property value
+    virtual void SetAllModified(bool flag = TRUE);
 
- protected:
-  wxObject*         m_viewedObject;
-  wxList            m_properties;
-  wxPropertyView*   m_propertyView;
-  wxString			m_name;
+protected:
+    wxObject*         m_viewedObject;
+    wxList            m_properties;
+    wxPropertyView*   m_propertyView;
+    wxString			m_name;
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxPropertySheet)
 };
 
 
@@ -88,71 +91,69 @@ class WXDLLEXPORT wxPropertySheet: public wxObject
 // classes: wxPropertyListView, and wxPropertyFormView.
 class WXDLLEXPORT wxPropertyView: public wxEvtHandler
 {
- DECLARE_DYNAMIC_CLASS(wxPropertyView)
- public:
-  wxPropertyView(long flags = 0);
-  ~wxPropertyView(void);
+public:
+    wxPropertyView(long flags = 0);
+    ~wxPropertyView();
 
-  // Associates and shows the view
-  virtual void ShowView(wxPropertySheet *WXUNUSED(propertySheet), wxWindow *WXUNUSED(panel)) {}
+    // Associates and shows the view
+    virtual void ShowView(wxPropertySheet *WXUNUSED(propertySheet), wxWindow *WXUNUSED(panel)) {}
 
-  // Update this view of the viewed object, called e.g. by
-  // the object itself.
-  virtual bool OnUpdateView(void) {return FALSE;};
+    // Update this view of the viewed object, called e.g. by
+    // the object itself.
+    virtual bool OnUpdateView() {return FALSE;};
 
-  // Override this to do something as soon as the property changed,
-  // if the view and validators support it.
-  virtual void OnPropertyChanged(wxProperty *WXUNUSED(property)) {}
+    // Override this to do something as soon as the property changed,
+    // if the view and validators support it.
+    virtual void OnPropertyChanged(wxProperty *WXUNUSED(property)) {}
 
-  virtual void AddRegistry(wxPropertyValidatorRegistry *registry);
-  inline virtual wxList& GetRegistryList(void) const
-   { return (wxList&) m_validatorRegistryList; }
+    virtual void AddRegistry(wxPropertyValidatorRegistry *registry);
+    inline virtual wxList& GetRegistryList() const
+        { return (wxList&) m_validatorRegistryList; }
 
-  virtual wxPropertyValidator *FindPropertyValidator(wxProperty *property);
-  inline virtual void SetPropertySheet(wxPropertySheet *sheet) { m_propertySheet = sheet; }
-  inline virtual wxPropertySheet *GetPropertySheet(void) const { return m_propertySheet; }
+    virtual wxPropertyValidator *FindPropertyValidator(wxProperty *property);
+    inline virtual void SetPropertySheet(wxPropertySheet *sheet) { m_propertySheet = sheet; }
+    inline virtual wxPropertySheet *GetPropertySheet() const { return m_propertySheet; }
 
-/*
-  virtual void OnOk(void) {};
-  virtual void OnCancel(void) {};
-  virtual void OnHelp(void) {};
-*/
+    inline virtual bool OnClose() { return FALSE; }
+    inline long GetFlags(void) { return m_buttonFlags; }
 
-  inline virtual bool OnClose(void) { return FALSE; }
-  inline long GetFlags(void) { return m_buttonFlags; }
-
- protected:
-  long                  m_buttonFlags;
-  wxPropertySheet*      m_propertySheet;
-  wxProperty*           m_currentProperty;
-  wxList                m_validatorRegistryList;
-  wxPropertyValidator*  m_currentValidator;
+protected:
+    long                  m_buttonFlags;
+    wxPropertySheet*      m_propertySheet;
+    wxProperty*           m_currentProperty;
+    wxList                m_validatorRegistryList;
+    wxPropertyValidator*  m_currentValidator;
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxPropertyView)
 };
 
 
 class WXDLLEXPORT wxPropertyValidator: public wxEvtHandler
 {
-  DECLARE_DYNAMIC_CLASS(wxPropertyValidator)
- public:
-  wxPropertyValidator(long flags = 0);
-  ~wxPropertyValidator(void);
+public:
+    wxPropertyValidator(long flags = 0);
+    ~wxPropertyValidator();
 
-  inline long GetFlags(void) const { return m_validatorFlags; }
-  inline void SetValidatorProperty(wxProperty *prop) { m_validatorProperty = prop; }
-  inline wxProperty *GetValidatorProperty(void) const { return m_validatorProperty; }
+    inline long GetFlags() const { return m_validatorFlags; }
+    inline void SetValidatorProperty(wxProperty *prop) { m_validatorProperty = prop; }
+    inline wxProperty *GetValidatorProperty(void) const { return m_validatorProperty; }
 
-  virtual bool StringToFloat (wxChar *s, float *number);
-  virtual bool StringToDouble (wxChar *s, double *number);
-  virtual bool StringToInt (wxChar *s, int *number);
-  virtual bool StringToLong (wxChar *s, long *number);
-  virtual wxChar *FloatToString (float number);
-  virtual wxChar *DoubleToString (double number);
-  virtual wxChar *IntToString (int number);
-  virtual wxChar *LongToString (long number);
+    virtual bool StringToFloat (wxChar *s, float *number);
+    virtual bool StringToDouble (wxChar *s, double *number);
+    virtual bool StringToInt (wxChar *s, int *number);
+    virtual bool StringToLong (wxChar *s, long *number);
+    virtual wxChar *FloatToString (float number);
+    virtual wxChar *DoubleToString (double number);
+    virtual wxChar *IntToString (int number);
+    virtual wxChar *LongToString (long number);
 
- protected:
-  long          m_validatorFlags;
-  wxProperty*   m_validatorProperty;
+protected:
+    long          m_validatorFlags;
+    wxProperty*   m_validatorProperty;
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxPropertyValidator)
 };
 
 
@@ -160,14 +161,16 @@ class WXDLLEXPORT wxPropertyValidator: public wxEvtHandler
 
 class WXDLLEXPORT wxPropertyValidatorRegistry: public wxHashTable
 {
-  DECLARE_DYNAMIC_CLASS(wxPropertyValidatorRegistry)
- public:
-  wxPropertyValidatorRegistry(void);
-  ~wxPropertyValidatorRegistry(void);
+public:
+    wxPropertyValidatorRegistry();
+    ~wxPropertyValidatorRegistry();
 
-  virtual void RegisterValidator(const wxString& roleName, wxPropertyValidator *validator);
-  virtual wxPropertyValidator *GetValidator(const wxString& roleName);
-  void ClearRegistry(void);
+    virtual void RegisterValidator(const wxString& roleName, wxPropertyValidator *validator);
+    virtual wxPropertyValidator *GetValidator(const wxString& roleName);
+    void ClearRegistry();
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxPropertyValidatorRegistry)
 };
 
 /*

@@ -28,12 +28,12 @@ class TestPanel(wxPanel):
 
         b = wxGenButton(self, -1, 'disabled')
         EVT_BUTTON(self, b.GetId(), self.OnButton)
-        b.Enable(false)
+        b.Enable(False)
         sizer.Add(b)
 
         b = wxGenButton(self, -1, 'bigger')
         EVT_BUTTON(self, b.GetId(), self.OnBiggerButton)
-        b.SetFont(wxFont(20, wxSWISS, wxNORMAL, wxBOLD, false))
+        b.SetFont(wxFont(20, wxSWISS, wxNORMAL, wxBOLD, False))
         b.SetBezelWidth(5)
         ###b.SetBestSize()
         b.SetBackgroundColour("Navy")
@@ -45,6 +45,12 @@ class TestPanel(wxPanel):
         b = wxGenBitmapButton(self, -1, bmp)
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         sizer.Add(b)
+
+        bmp = images.getTest2Bitmap()
+        b = wxGenBitmapButton(self, -1, bmp)
+        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        sizer.Add(b)
+        b.Enable(False)
 
         b = wxGenBitmapButton(self, -1, None)
         EVT_BUTTON(self, b.GetId(), self.OnButton)
@@ -58,7 +64,6 @@ class TestPanel(wxPanel):
         b.SetBitmapSelected(bmp)
         b.SetBestSize()
         sizer.Add(b)
-        sizer.Add(10,10)
 
         b = wxGenToggleButton(self, -1, "Toggle Button")
         EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
@@ -74,7 +79,7 @@ class TestPanel(wxPanel):
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
-        b.SetToggle(true)
+        b.SetToggle(True)
         b.SetBestSize()
         sizer.Add(b)
 
@@ -88,7 +93,7 @@ class TestPanel(wxPanel):
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
-        b.SetUseFocusIndicator(false)
+        b.SetUseFocusIndicator(False)
         b.SetBestSize()
         sizer.Add(b)
 
@@ -128,3 +133,11 @@ def runTest(frame, nb, log):
 
 import wxPython.lib.buttons
 overview = wxPython.lib.buttons.__doc__
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

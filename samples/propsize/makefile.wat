@@ -1,11 +1,13 @@
-# Purpose: makefile for propsize example (Watcom)
-# Created: 2000-03-14
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = propsize
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# 
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+THISDIR = $(%WXWIN)\samples\propsize 
+# 
+PROGRAM = propsize 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

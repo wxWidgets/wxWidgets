@@ -17,6 +17,7 @@
 
 #include "wx/popupwin.h"
 #include "wx/app.h"
+#include "wx/settings.h"
 
 #include "wx/x11/private.h"
 #include "X11/Xatom.h"
@@ -33,7 +34,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
 
 bool wxPopupWindow::Create( wxWindow *parent, int style )
 {
-    if (!CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, "popup" ))
+    if (!CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("popup") ))
     {
         wxFAIL_MSG( wxT("wxPopupWindow creation failed") );
         return FALSE;

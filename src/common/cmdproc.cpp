@@ -220,72 +220,82 @@ void wxCommandProcessor::Initialize()
     SetMenuStrings();
 }
 
-static void wxSetMenuLabel(wxMenu* menu, int id, const wxString& label)
-{
-    menu->SetLabel(id, label);
-}
-
 void wxCommandProcessor::SetMenuStrings()
 {
 #if wxUSE_MENUS
     if (m_commandEditMenu)
     {
-        wxString buf;
-        if (m_currentCommand)
+        wxString undoLabel = GetUndoMenuLabel();
+        wxString redoLabel = GetRedoMenuLabel();
+        
+        m_commandEditMenu->SetLabel(wxID_UNDO, undoLabel);
+        m_commandEditMenu->Enable(wxID_UNDO, CanUndo());
+
+        m_commandEditMenu->SetLabel(wxID_REDO, redoLabel);
+        m_commandEditMenu->Enable(wxID_REDO, CanRedo());
+    }
+#endif // wxUSE_MENUS
+}
+
+// Gets the current Undo menu label.
+wxString wxCommandProcessor::GetUndoMenuLabel() const
+{
+    wxString buf;
+    if (m_currentCommand)
+    {
+        wxCommand *command = (wxCommand *)m_currentCommand->Data();
+        wxString commandName(command->GetName());
+        if (commandName == wxT("")) commandName = _("Unnamed command");
+        bool canUndo = command->CanUndo();
+        if (canUndo)
+            buf = wxString(_("&Undo ")) + commandName + m_undoAccelerator;
+        else
+            buf = wxString(_("Can't &Undo ")) + commandName + m_undoAccelerator;
+    }
+    else
+    {
+        buf = _("&Undo") + m_undoAccelerator;
+    }
+    
+    return buf;
+}
+
+// Gets the current Undo menu label.
+wxString wxCommandProcessor::GetRedoMenuLabel() const
+{
+    wxString buf;
+    if (m_currentCommand)
+    {
+        // We can redo, if we're not at the end of the history.
+        if (m_currentCommand->Next())
         {
-            wxCommand *command = (wxCommand *)m_currentCommand->Data();
-            wxString commandName(command->GetName());
-            if (commandName == wxT("")) commandName = _("Unnamed command");
-            bool canUndo = command->CanUndo();
-            if (canUndo)
-                buf = wxString(_("&Undo ")) + commandName + m_undoAccelerator;
-            else
-                buf = wxString(_("Can't &Undo ")) + commandName + m_undoAccelerator;
-
-            wxSetMenuLabel(m_commandEditMenu, wxID_UNDO, buf);
-            
-            m_commandEditMenu->Enable(wxID_UNDO, canUndo);
-
-            // We can redo, if we're not at the end of the history.
-            if (m_currentCommand->Next())
-            {
-                wxCommand *redoCommand = (wxCommand *)m_currentCommand->Next()->Data();
-                wxString redoCommandName(redoCommand->GetName());
-                if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
-                buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
-                wxSetMenuLabel(m_commandEditMenu, wxID_REDO, buf);
-                m_commandEditMenu->Enable(wxID_REDO, TRUE);
-            }
-            else
-            {
-                wxSetMenuLabel(m_commandEditMenu, wxID_REDO, _("&Redo") + m_redoAccelerator);
-                m_commandEditMenu->Enable(wxID_REDO, FALSE);
-            }
+            wxCommand *redoCommand = (wxCommand *)m_currentCommand->Next()->Data();
+            wxString redoCommandName(redoCommand->GetName());
+            if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
+            buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
         }
         else
         {
-            wxSetMenuLabel(m_commandEditMenu, wxID_UNDO, _("&Undo") + m_undoAccelerator);
-            m_commandEditMenu->Enable(wxID_UNDO, FALSE);
-
-            if (m_commands.Number() == 0)
-            {
-                wxSetMenuLabel(m_commandEditMenu, wxID_REDO, _("&Redo") + m_redoAccelerator);
-                m_commandEditMenu->Enable(wxID_REDO, FALSE);
-            }
-            else
-            {
-                // currentCommand is NULL but there are commands: this means that
-                // we've undone to the start of the list, but can redo the first.
-                wxCommand *redoCommand = (wxCommand *)m_commands.First()->Data();
-                wxString redoCommandName(redoCommand->GetName());
-                if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
-                buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
-                wxSetMenuLabel(m_commandEditMenu, wxID_REDO, buf);
-                m_commandEditMenu->Enable(wxID_REDO, TRUE);
-            }
+            buf = _("&Redo") + m_redoAccelerator;
         }
     }
-#endif // wxUSE_MENUS
+    else
+    {
+        if (m_commands.Number() == 0)
+        {
+            buf = _("&Redo") + m_redoAccelerator;
+        }
+        else
+        {
+            // currentCommand is NULL but there are commands: this means that
+            // we've undone to the start of the list, but can redo the first.
+            wxCommand *redoCommand = (wxCommand *)m_commands.First()->Data();
+            wxString redoCommandName(redoCommand->GetName());
+            if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
+            buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
+        }
+    }
+    return buf;
 }
 
 void wxCommandProcessor::ClearCommands()

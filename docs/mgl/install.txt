@@ -11,19 +11,24 @@ IMPORTANT NOTE:
   
   When sending bug reports tell us what version of wxWindows you are 
   using (including the beta) and what compiler on what system. One 
-  example: wxMGL 2.3.3, gcc 2.95.3, Redhat 7.0
+  example: wxMGL 2.3.4, gcc 2.95.3, Redhat 7.0
 
 First steps
 -----------
 
 - Download SciTech MGL library (version 5.0) from http://www.scitechsoft.com.
-  The downloads page is here:
+  The downloads page is here (you need MGL version 5.0beta7 or newer):
   http://www.scitechsoft.com/products/embedded/mgl_home.html
-  (You needed a version newer than Beta 5! Preferably the up-to-date one from 
-  SciTech Perforce repository.)
-  Install it according to provided instructions. In particular, make sure that
+  
+  Install MGL according to provided instructions. In particular, make sure that
   MGL_ROOT and NUCLEUS_PATH environment variables are set before attempting to
   build wxMGL.
+
+  Make sure you installed all MGL components, including the "fonts" package
+  (it's called mgl50b7-font.tar.gz in Linux version). It is important to have
+  SciTech's basic fonts in $(MGL_ROOT)/fonts directory (you may want to add
+  Arial TrueType font for better output quality) and basic cursors in 
+  $(MGL_ROOT)/cursors. wxMGL depends on their presence.
 
 - Download wxMGL-x.y.z.tgz, where x.y.z is the version number.
   Download documentation in a preferred format, such as

@@ -321,7 +321,7 @@ void wxMultiCellSizer::RecalcSizes()
 				minSize.SetHeight(wxMax(minSize.GetHeight(), c_size.GetHeight()));
 				minSize.SetWidth(wxMax(minSize.GetWidth(), c_size.GetWidth()));
 			}
-			if (rect->GetStyle() & wxHORIZENTAL_RESIZABLE ||
+			if (rect->GetStyle() & wxHORIZONTAL_RESIZABLE ||
 				rect->GetWidth() > 1
 				|| m_minSizes[rect->GetColumn()]->GetWidth() < 0)
 			{
@@ -489,7 +489,7 @@ void wxMultiCellSizer :: GetMinimums()
 			// For each column, calculate the max width for those fields which are not
 			// resizable in the horizontal pane
 
-			if (!(rect->GetStyle() & wxHORIZENTAL_RESIZABLE || m_minSizes[col]->GetWidth() < 0))
+			if (!(rect->GetStyle() & wxHORIZONTAL_RESIZABLE || m_minSizes[col]->GetWidth() < 0))
 			{
 				if (m_minSizes[col]->GetWidth())
 				{
