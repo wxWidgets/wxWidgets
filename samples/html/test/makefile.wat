@@ -216,7 +216,7 @@ $(OBJS)\test.exe :  $(TEST_OBJECTS) $(OBJS)\test_test.res
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (f.html fft.html imagemap.htm imagemap.png pic.png pic2.bmp tables.htm test.htm i18n.gif 8859_2.htm cp1250.htm regres.htm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (f.html fft.html imagemap.htm imagemap.png pic.png pic2.bmp tables.htm test.htm listtest.htm i18n.gif 8859_2.htm cp1250.htm regres.htm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\test_test.obj :  .AUTODEPEND .\test.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
