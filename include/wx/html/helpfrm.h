@@ -206,7 +206,6 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         wxSplitterWindow *m_Splitter;
         wxNotebook *m_NavigPan;
         wxTreeCtrl *m_ContentsBox;
-        wxImageList *m_ContentsImageList;
         wxTextCtrl *m_IndexText;
         wxButton *m_IndexButton;
         wxButton *m_IndexButtonAll;

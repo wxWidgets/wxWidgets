@@ -143,12 +143,6 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
         m_DataCreated = TRUE;
     }
 
-    m_ContentsImageList = new wxImageList(16, 16);
-    m_ContentsImageList -> Add(wxICON(wbook));
-    m_ContentsImageList -> Add(wxICON(wfolder));
-    m_ContentsImageList -> Add(wxICON(wpage));
-    m_ContentsImageList -> Add(wxICON(whlproot));
-
     m_ContentsBox = NULL;
     m_IndexList = NULL;
     m_IndexButton = NULL;
@@ -200,6 +194,12 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& title,
                              int style)
 {
+    wxImageList *ContentsImageList = new wxImageList(16, 16);
+    ContentsImageList->Add(wxICON(wbook));
+    ContentsImageList->Add(wxICON(wfolder));
+    ContentsImageList->Add(wxICON(wpage));
+    ContentsImageList->Add(wxICON(whlproot));
+
     // Do the config in two steps. We read the HtmlWindow customization after we
     // create the window.
     if (m_Config)
@@ -289,7 +289,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
             m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
                                            wxDefaultPosition, wxDefaultSize,
                                            wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
-            m_ContentsBox -> SetImageList(m_ContentsImageList);
+            m_ContentsBox -> AssignImageList(ContentsImageList);
 
             b4 -> top.Below (m_Bookmarks, 10);
             b4 -> left.SameAs (dummy, wxLeft, 0);
@@ -308,7 +308,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
             m_ContentsBox = new wxTreeCtrl(m_NavigPan, wxID_HTML_TREECTRL,
                                            wxDefaultPosition, wxDefaultSize,
                                            wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
-            m_ContentsBox -> SetImageList(m_ContentsImageList);
+            m_ContentsBox -> AssignImageList(ContentsImageList);
             m_NavigPan -> AddPage(m_ContentsBox, _("Contents"));
         }
 
@@ -462,7 +462,6 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 wxHtmlHelpFrame::~wxHtmlHelpFrame()
 {
     // PopEventHandler(); // wxhtmlhelpcontroller (not any more!)
-    delete m_ContentsImageList;
     if (m_DataCreated)
         delete m_Data;
     if (m_NormalFonts) delete m_NormalFonts;
