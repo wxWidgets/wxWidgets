@@ -68,7 +68,12 @@ public:
     unsigned char  *m_alpha;
 
     bool            m_ok;
+
+    // if true, m_data is pointer to static data and shouldn't be freed
     bool            m_static;
+
+    // same as m_static but for m_alpha
+    bool            m_staticAlpha;
 
 #if wxUSE_PALETTE
     wxPalette       m_palette;
@@ -93,16 +98,16 @@ wxImageRefData::wxImageRefData()
     m_hasMask = false;
 
     m_ok = false;
-    m_static = false;
+    m_static =
+    m_staticAlpha = false;
 }
 
 wxImageRefData::~wxImageRefData()
 {
-    if (!m_static)
-    {
+    if ( !m_static )
         free( m_data );
+    if ( !m_staticAlpha )
         free( m_alpha );
-    }
 }
 
 wxList wxImage::sm_handlers;
@@ -997,7 +1002,7 @@ void wxImage::SetAlpha( unsigned char *alpha, bool static_data )
 
     free(M_IMGDATA->m_alpha);
     M_IMGDATA->m_alpha = alpha;
-    M_IMGDATA->m_static = static_data;
+    M_IMGDATA->m_staticAlpha = static_data;
 }
 
 unsigned char *wxImage::GetAlpha() const
