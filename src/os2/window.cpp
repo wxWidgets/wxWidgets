@@ -2797,8 +2797,6 @@ bool wxWindow::HandlePaint()
 {
     HRGN                            hRgn = NULLHANDLE;
     wxPaintEvent                    vEvent;
-    HPS                             hPS;
-    RECTL                           vRect;
 
     if (::WinQueryUpdateRegion(GetHwnd(), hRgn) == RGN_NULL)
     {
@@ -2806,10 +2804,6 @@ bool wxWindow::HandlePaint()
          return FALSE;
     }
     m_updateRegion = wxRegion(hRgn);
-
-    hPS = WinBeginPaint(GetHwnd(), 0L, &vRect);
-    WinFillRect(hPS, &vRect, SYSCLR_WINDOW);
-    WinEndPaint(hPS);
 
     vEvent.SetEventObject(this);
     return (GetEventHandler()->ProcessEvent(vEvent));

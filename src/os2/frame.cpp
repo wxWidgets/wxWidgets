@@ -350,21 +350,6 @@ void wxFrame::DoShowWindow(
   int                               bShowCmd
 )
 {
-    HWND                            hClient = NULLHANDLE;
-    SWP                             vSwp;
-
-    //
-    // Reset the window position
-    //
-    WinQueryWindowPos(m_hFrame, &vSwp);
-    WinSetWindowPos( GetHwnd()
-                    ,HWND_TOP
-                    ,vSwp.x
-                    ,vSwp.y
-                    ,vSwp.cx
-                    ,vSwp.cy
-                    ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE
-                   );
     ::WinShowWindow(m_hFrame, (BOOL)bShowCmd);
     ::WinShowWindow(GetHwnd(), (BOOL)bShowCmd);
 } // end of wxFrame::DoShowWindow
@@ -602,27 +587,6 @@ void wxFrame::SetMenuBar(
 
     m_frameMenuBar = pMenuBar;
     pMenuBar->Attach(this);
-
-    //
-    // Now resize the client to fit the new frame
-    //
-    WinQueryWindowPos(m_hFrame, &vSwp);
-    hTitlebar = WinWindowFromID(m_hFrame, FID_TITLEBAR);
-    WinQueryWindowPos(hTitlebar, &vSwpTitlebar);
-    hHScroll = WinWindowFromID(m_hFrame, FID_HORZSCROLL);
-    WinQueryWindowPos(hHScroll, &vSwpHScroll);
-    hVScroll = WinWindowFromID(m_hFrame, FID_VERTSCROLL);
-    WinQueryWindowPos(hVScroll, &vSwpVScroll);
-    hMenuBar = WinWindowFromID(m_hFrame, FID_MENU);
-    WinQueryWindowPos(hMenuBar, &vSwpMenu);
-    WinSetWindowPos( GetHwnd()
-                    ,HWND_TOP
-                    ,SV_CXSIZEBORDER/2
-                    ,(SV_CYSIZEBORDER/2) + vSwpHScroll.cy/2
-                    ,vSwp.cx - ((SV_CXSIZEBORDER + 1) + vSwpVScroll.cx)
-                    ,vSwp.cy - ((SV_CYSIZEBORDER + 1) + vSwpTitlebar.cy + vSwpMenu.cy + vSwpHScroll.cy/2)
-                    ,SWP_SIZE | SWP_MOVE
-                   );
 } // end of wxFrame::SetMenuBar
 
 void wxFrame::InternalSetMenuBar()
@@ -935,18 +899,6 @@ bool wxFrame::OS2Create(
     }
 
     //
-    // Now set the size of the client
-    //
-    WinSetWindowPos( hClient
-                    ,HWND_TOP
-                    ,SV_CXSIZEBORDER/2
-                    ,(SV_CYSIZEBORDER/2) + m_vSwpHScroll.cy/2
-                    ,m_vSwp.cx - ((SV_CXSIZEBORDER + 1) + m_vSwpVScroll.cx)
-                    ,m_vSwp.cy - ((SV_CYSIZEBORDER + 1) + m_vSwpTitleBar.cy + m_vSwpHScroll.cy/2)
-                    ,SWP_SIZE | SWP_MOVE
-                   );
-
-    //
     // Set the client window's background, otherwise it is transparent!
     //
     return TRUE;
@@ -1195,6 +1147,13 @@ bool wxFrame::HandlePaint()
         }
         else
         {
+            HPS                             hPS;
+            RECTL                           vRect;
+
+            hPS = WinBeginPaint(GetHwnd(), 0L, &vRect);
+            WinFillRect(hPS, &vRect, SYSCLR_WINDOW);
+            WinEndPaint(hPS);
+
             return wxWindow::HandlePaint();
         }
     }
