@@ -2422,7 +2422,7 @@ wxGridCellRenderer* wxGridTypeRegistry::GetRenderer(int index)
 wxGridCellEditor* wxGridTypeRegistry::GetEditor(int index)
 {
     wxGridCellEditor* editor = m_typeinfo[index]->m_editor;
-    if (renderer)
+    if (editor)
         editor->IncRef();
     return editor;
 }
