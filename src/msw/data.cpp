@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/treectrl.h"
 #endif
 
 #include "wx/prntbase.h"
