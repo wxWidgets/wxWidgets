@@ -886,7 +886,7 @@ enum wxBorder
 #define wxICONIZE               0x4000
 #define wxMINIMIZE              wxICONIZE
 #define wxMAXIMIZE              0x2000
-// free value: 0x1000
+                                        // free flag value: 0x1000
 #define wxSYSTEM_MENU           0x0800
 #define wxMINIMIZE_BOX          0x0400
 #define wxMAXIMIZE_BOX          0x0200
@@ -901,13 +901,11 @@ enum wxBorder
 // deprecated versions defined for compatibility reasons
 #define wxRESIZE_BOX            wxMAXIMIZE_BOX
 #define wxTHICK_FRAME           wxRESIZE_BORDER
+#define wxFRAME_FLOAT_ON_PARENT wxFRAME_TOOL_WINDOW
 
 // obsolete styles, unused any more
-#define wxDIALOG_MODAL          0x0020
+#define wxDIALOG_MODAL          0x0020  // free flag value 0x0020
 #define wxDIALOG_MODELESS       0x0000
-
-// deprecated flag, don't use any more, defined for compatibility only
-#define wxFRAME_FLOAT_ON_PARENT 0
 
 /*
  * MDI parent frame style flags
