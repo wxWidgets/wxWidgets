@@ -352,12 +352,12 @@ $(build_libdir)/@WX_LIBRARY_LINK1_GL@: $(build_libdir)/@WX_LIBRARY_NAME_SHARED_G
 		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK1_GL@ \
 		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK2_GL@
 
-$(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h
+$(OBJECTS): $(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h
 
-parser.o:    parser.c lexer.c
+parser.o: parser.c lexer.c
 	$(CCLEX) -c $(CFLAGS) -I. $(PICFLAGS) -o $@ parser.c
 
-parser.c:	$(COMMDIR)/parser.y lexer.c
+parser.c: $(COMMDIR)/parser.y lexer.c
 	$(YACC) $(COMMDIR)/parser.y
 	@sed -e "s;$(COMMDIR)/y.tab.c;parser.y;g" < y.tab.c | \
 	sed -e "s/BUFSIZ/5000/g"            | \
@@ -367,7 +367,7 @@ parser.c:	$(COMMDIR)/parser.y lexer.c
 	sed -e "s/unput/PROIO_unput/g"      > parser.c
 	@$(RM) y.tab.c
 
-lexer.c:	$(COMMDIR)/lexer.l
+lexer.c: $(COMMDIR)/lexer.l
 	$(LEX) $(COMMDIR)/lexer.l
 	@sed -e "s;$(COMMDIR)/@LEX_STEM@.c;lexer.l;g" < @LEX_STEM@.c | \
 	sed -e "s/yy/PROIO_yy/g"            | \
@@ -375,8 +375,7 @@ lexer.c:	$(COMMDIR)/lexer.l
 	sed -e "s/unput/PROIO_unput/g"      > lexer.c
 	@$(RM) @LEX_STEM@.c
 
--include $(OBJECTS:.o=.d)
-
+@IF_GNU_MAKE@-include $(OBJECTS:.o=.d)
 
 CREATE_INSTALLED_LINKS: preinstall
 	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
@@ -419,7 +418,7 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLCHAIN_NAME@-config $(bindir)/wx@TOOLCHAIN_NAME@-config
 	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLCHAIN_NAME@-config wx-config
 	@INSTALL_LIBRARY@ $(build_libdir)/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
-	@if test "x@WX_LIBRARY_IMPORTLIB@" != "x"; then	\
+	@if test "x@WX_LIBRARY_IMPORTLIB@" != "x"; then \
 		$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_LIBRARY_IMPORTLIB@ $(libdir)/@WX_LIBRARY_IMPORTLIB@; fi
 
 	$(INSTALL) -d $(libdir)/wx

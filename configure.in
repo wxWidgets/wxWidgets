@@ -1249,6 +1249,25 @@ you are trying to compile.
 ])
 fi
 
+dnl does make support "-include" (only GNU make does AFAIK)?
+AC_CACHE_CHECK([if make is GNU make], wx_make_make_isgnu,
+[
+    if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
+            grep GNU 2>&1 > /dev/null); then
+        wx_make_make_isgnu="yes"
+    else
+        wx_make_make_isgnu="no"
+    fi
+])
+
+if test "x$wx_make_make_isgnu" = "xyes"; then
+    IF_GNU_MAKE=""
+else
+    IF_GNU_MAKE="#"
+fi
+
+AC_SUBST(IF_GNU_MAKE)
+
 dnl YACC checks
 dnl   defines YACC with the appropriate command
 AC_PROG_YACC
