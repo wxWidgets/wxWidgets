@@ -85,6 +85,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
+
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(StatusLineNameStr);
+    DECLARE_DEF_STRING(ToolBarNameStr);
+    static const wxString wxPyEmptyString(wxT(""));
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -119,13 +124,14 @@ static PyObject *_wrap_new_wxStatusBar(PyObject *self, PyObject *args, PyObject 
     wxWindow * _arg0;
     wxWindowID  _arg1 = (wxWindowID ) -1;
     long  _arg2 = (long ) wxST_SIZEGRIP;
-    char * _arg3 = (char *) "statusBar";
+    wxString * _arg3 = (wxString *) &wxPyStatusLineNameStr;
     PyObject * _argo0 = 0;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "parent","id","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ils:new_wxStatusBar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ilO:new_wxStatusBar",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -134,9 +140,15 @@ static PyObject *_wrap_new_wxStatusBar(PyObject *self, PyObject *args, PyObject 
         return NULL;
         }
     }
+    if (_obj3)
+{
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxStatusBar *)new_wxStatusBar(_arg0,_arg1,_arg2,_arg3);
+    _result = (wxStatusBar *)new_wxStatusBar(_arg0,_arg1,_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -147,6 +159,10 @@ static PyObject *_wrap_new_wxStatusBar(PyObject *self, PyObject *args, PyObject 
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj3)
+        delete _arg3;
+}
     return _resultobj;
 }
 
@@ -184,13 +200,14 @@ static PyObject *_wrap_wxStatusBar_Create(PyObject *self, PyObject *args, PyObje
     wxWindow * _arg1;
     wxWindowID  _arg2;
     long  _arg3 = (long ) wxST_SIZEGRIP;
-    char * _arg4 = (char *) "statusBar";
+    wxString * _arg4 = (wxString *) &wxPyStatusLineNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    PyObject * _obj4 = 0;
     char *_kwnames[] = { "self","parent","id","style","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|ls:wxStatusBar_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|lO:wxStatusBar_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_obj4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -206,13 +223,23 @@ static PyObject *_wrap_wxStatusBar_Create(PyObject *self, PyObject *args, PyObje
         return NULL;
         }
     }
+    if (_obj4)
+{
+    _arg4 = wxString_in_helper(_obj4);
+    if (_arg4 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxStatusBar_Create(_arg0,_arg1,_arg2,_arg3,_arg4);
+    _result = (bool )wxStatusBar_Create(_arg0,_arg1,_arg2,_arg3,*_arg4);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj4)
+        delete _arg4;
+}
     return _resultobj;
 }
 
@@ -1522,8 +1549,8 @@ static PyObject *_wrap_wxToolBarBase_AddTool(PyObject *self, PyObject *args, PyO
     wxBitmap * _arg3 = (wxBitmap *) &wxNullBitmap;
     int  _arg4 = (int ) FALSE;
     PyObject * _arg5 = (PyObject *) NULL;
-    wxString * _arg6 = (wxString *) &wxEmptyString;
-    wxString * _arg7 = (wxString *) &wxEmptyString;
+    wxString * _arg6 = (wxString *) &wxPyEmptyString;
+    wxString * _arg7 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
     PyObject * _argo3 = 0;
@@ -1600,8 +1627,8 @@ static PyObject *_wrap_wxToolBarBase_AddSimpleTool(PyObject *self, PyObject *arg
     wxToolBarBase * _arg0;
     int  _arg1;
     wxBitmap * _arg2;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
-    wxString * _arg4 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
+    wxString * _arg4 = (wxString *) &wxPyEmptyString;
     int  _arg5 = (int ) FALSE;
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
@@ -1673,8 +1700,8 @@ static PyObject *_wrap_wxToolBarBase_InsertTool(PyObject *self, PyObject *args, 
     wxBitmap * _arg4 = (wxBitmap *) &wxNullBitmap;
     int  _arg5 = (int ) FALSE;
     PyObject * _arg6 = (PyObject *) NULL;
-    wxString * _arg7 = (wxString *) &wxEmptyString;
-    wxString * _arg8 = (wxString *) &wxEmptyString;
+    wxString * _arg7 = (wxString *) &wxPyEmptyString;
+    wxString * _arg8 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo3 = 0;
     PyObject * _argo4 = 0;
@@ -1752,8 +1779,8 @@ static PyObject *_wrap_wxToolBarBase_InsertSimpleTool(PyObject *self, PyObject *
     size_t  _arg1;
     int  _arg2;
     wxBitmap * _arg3;
-    wxString * _arg4 = (wxString *) &wxEmptyString;
-    wxString * _arg5 = (wxString *) &wxEmptyString;
+    wxString * _arg4 = (wxString *) &wxPyEmptyString;
+    wxString * _arg5 = (wxString *) &wxPyEmptyString;
     int  _arg6 = (int ) FALSE;
     PyObject * _argo0 = 0;
     PyObject * _argo3 = 0;
@@ -3027,17 +3054,18 @@ static PyObject *_wrap_new_wxToolBar(PyObject *self, PyObject *args, PyObject *k
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
-    char * _arg5 = (char *) wxToolBarNameStr;
+    wxString * _arg5 = (wxString *) &wxPyToolBarNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxToolBar",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlO:new_wxToolBar",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3058,9 +3086,15 @@ static PyObject *_wrap_new_wxToolBar(PyObject *self, PyObject *args, PyObject *k
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxToolBar *)new_wxToolBar(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+    _result = (wxToolBar *)new_wxToolBar(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3071,6 +3105,10 @@ static PyObject *_wrap_new_wxToolBar(PyObject *self, PyObject *args, PyObject *k
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 
@@ -3110,17 +3148,18 @@ static PyObject *_wrap_wxToolBar_Create(PyObject *self, PyObject *args, PyObject
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
-    char * _arg6 = (char *) wxToolBarNameStr;
+    wxString * _arg6 = (wxString *) &wxPyToolBarNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "self","parent","id","pos","size","style","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOls:wxToolBar_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOlO:wxToolBar_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3148,13 +3187,23 @@ static PyObject *_wrap_wxToolBar_Create(PyObject *self, PyObject *args, PyObject
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxToolBar_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (bool )wxToolBar_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj6)
+        delete _arg6;
+}
     return _resultobj;
 }
 
@@ -3237,17 +3286,18 @@ static PyObject *_wrap_new_wxToolBarSimple(PyObject *self, PyObject *args, PyObj
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
-    char * _arg5 = (char *) wxToolBarNameStr;
+    wxString * _arg5 = (wxString *) &wxPyToolBarNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxToolBarSimple",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlO:new_wxToolBarSimple",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3268,9 +3318,15 @@ static PyObject *_wrap_new_wxToolBarSimple(PyObject *self, PyObject *args, PyObj
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxToolBarSimple *)new_wxToolBarSimple(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+    _result = (wxToolBarSimple *)new_wxToolBarSimple(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3281,6 +3337,10 @@ static PyObject *_wrap_new_wxToolBarSimple(PyObject *self, PyObject *args, PyObj
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 
@@ -3320,17 +3380,18 @@ static PyObject *_wrap_wxToolBarSimple_Create(PyObject *self, PyObject *args, Py
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
-    char * _arg6 = (char *) wxToolBarNameStr;
+    wxString * _arg6 = (wxString *) &wxPyToolBarNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "self","parent","id","pos","size","style","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOls:wxToolBarSimple_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOlO:wxToolBarSimple_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3358,13 +3419,23 @@ static PyObject *_wrap_wxToolBarSimple_Create(PyObject *self, PyObject *args, Py
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxToolBarSimple_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (bool )wxToolBarSimple_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj6)
+        delete _arg6;
+}
     return _resultobj;
 }
 

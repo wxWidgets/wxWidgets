@@ -87,6 +87,9 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+
     PyObject* wxIntersectRect(wxRect* r1, wxRect* r2) {
         wxRegion  reg1(*r1);
         wxRegion  reg2(*r2);
@@ -111,7 +114,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
 
     wxString wxGetResource(const wxString& section, const wxString& entry,
-                          const wxString& file = wxEmptyString) {
+                           const wxString& file = wxPyEmptyString) {
         wxChar * retval;
         wxGetResource(section, entry, &retval, file);
         return retval;
@@ -396,7 +399,7 @@ static PyObject *_wrap_wxNow(PyObject *self, PyObject *args, PyObject *kwargs) {
 static PyObject *_wrap_wxShell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
-    wxString * _arg0 = (wxString *) &wxEmptyString;
+    wxString * _arg0 = (wxString *) &wxPyEmptyString;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "command", NULL };
 
@@ -606,7 +609,7 @@ static PyObject *_wrap_wxGetResource(PyObject *self, PyObject *args, PyObject *k
     wxString * _result;
     wxString * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -865,15 +868,22 @@ static PyObject *_wrap_wxGetHomeDir(PyObject *self, PyObject *args, PyObject *kw
 static PyObject *_wrap_wxGetUserHome(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
-    char * _arg0 = (char *) "";
+    wxString * _arg0 = (wxString *) &wxPyEmptyString;
+    PyObject * _obj0 = 0;
     char *_kwnames[] = { "user", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|s:wxGetUserHome",_kwnames,&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:wxGetUserHome",_kwnames,&_obj0)) 
         return NULL;
+    if (_obj0)
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxGetUserHome(_arg0));
+    _result = new wxString (wxGetUserHome(*_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -883,6 +893,10 @@ static PyObject *_wrap_wxGetUserHome(PyObject *self, PyObject *args, PyObject *k
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
+}
+{
+    if (_obj0)
+        delete _arg0;
 }
 {
     delete _result;

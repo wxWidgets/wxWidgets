@@ -771,7 +771,6 @@ FALSE = wxc.FALSE
 false = wxc.false
 TRUE = wxc.TRUE
 true = wxc.true
-wxVERSION_STRING = wxc.wxVERSION_STRING
 wxEVT_NULL = wxc.wxEVT_NULL
 wxEVT_FIRST = wxc.wxEVT_FIRST
 wxEVT_COMMAND_BUTTON_CLICKED = wxc.wxEVT_COMMAND_BUTTON_CLICKED

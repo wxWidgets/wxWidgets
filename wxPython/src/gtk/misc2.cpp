@@ -101,6 +101,12 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(FileSelectorPromptStr);
+    DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
+
+    static const wxString wxPyEmptyString(wxT(""));
+
     int wxCaret_GetBlinkTime() {
         return wxCaret::GetBlinkTime();
     }
@@ -289,21 +295,56 @@ extern "C" {
 static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
-    wxChar * _arg0 = (wxChar *) wxFileSelectorPromptStr;
-    wxChar * _arg1 = (wxChar *) NULL;
-    wxChar * _arg2 = (wxChar *) NULL;
-    wxChar * _arg3 = (wxChar *) NULL;
-    wxChar * _arg4 = (wxChar *) wxFileSelectorDefaultWildcardStr;
+    wxString * _arg0 = (wxString *) &wxPyFileSelectorPromptStr;
+    wxString * _arg1 = (wxString *) &wxPyEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
+    wxString * _arg4 = (wxString *) &wxPyFileSelectorDefaultWildcardStr;
     int  _arg5 = (int ) 0;
     wxWindow * _arg6 = (wxWindow *) NULL;
     int  _arg7 = (int ) -1;
     int  _arg8 = (int ) -1;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _obj3 = 0;
+    PyObject * _obj4 = 0;
     PyObject * _argo6 = 0;
     char *_kwnames[] = { "message","default_path","default_filename","default_extension","wildcard","flags","parent","x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|sssssiOii:wxFileSelector",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6,&_arg7,&_arg8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OOOOOiOii:wxFileSelector",_kwnames,&_obj0,&_obj1,&_obj2,&_obj3,&_obj4,&_arg5,&_argo6,&_arg7,&_arg8)) 
         return NULL;
+    if (_obj0)
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+    if (_obj1)
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = wxString_in_helper(_obj4);
+    if (_arg4 == NULL)
+        return NULL;
+}
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
         else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxWindow_p")) {
@@ -313,7 +354,7 @@ static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxFileSelector(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8));
+    _result = new wxString (wxFileSelector(*_arg0,*_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,_arg8));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -323,6 +364,26 @@ static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args, PyObject *
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    if (_obj3)
+        delete _arg3;
+}
+{
+    if (_obj4)
+        delete _arg4;
 }
 {
     delete _result;
@@ -333,16 +394,35 @@ static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args, PyObject *
 static PyObject *_wrap_wxLoadFileSelector(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
-    wxChar * _arg0;
-    wxChar * _arg1;
-    wxChar * _arg2 = (wxChar *) NULL;
+    wxString * _arg0;
+    wxString * _arg1;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     wxWindow * _arg3 = (wxWindow *) NULL;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
     PyObject * _argo3 = 0;
     char *_kwnames[] = { "what","extension","default_name","parent", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ss|sO:wxLoadFileSelector",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OO:wxLoadFileSelector",_kwnames,&_obj0,&_obj1,&_obj2,&_argo3)) 
         return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
         else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
@@ -352,7 +432,7 @@ static PyObject *_wrap_wxLoadFileSelector(PyObject *self, PyObject *args, PyObje
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxLoadFileSelector(_arg0,_arg1,_arg2,_arg3));
+    _result = new wxString (wxLoadFileSelector(*_arg0,*_arg1,*_arg2,_arg3));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -362,6 +442,18 @@ static PyObject *_wrap_wxLoadFileSelector(PyObject *self, PyObject *args, PyObje
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
 }
 {
     delete _result;
@@ -372,16 +464,35 @@ static PyObject *_wrap_wxLoadFileSelector(PyObject *self, PyObject *args, PyObje
 static PyObject *_wrap_wxSaveFileSelector(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
-    wxChar * _arg0;
-    wxChar * _arg1;
-    wxChar * _arg2 = (wxChar *) NULL;
+    wxString * _arg0;
+    wxString * _arg1;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     wxWindow * _arg3 = (wxWindow *) NULL;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
     PyObject * _argo3 = 0;
     char *_kwnames[] = { "what","extension","default_name","parent", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ss|sO:wxSaveFileSelector",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OO:wxSaveFileSelector",_kwnames,&_obj0,&_obj1,&_obj2,&_argo3)) 
         return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
         else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
@@ -391,7 +502,7 @@ static PyObject *_wrap_wxSaveFileSelector(PyObject *self, PyObject *args, PyObje
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxSaveFileSelector(_arg0,_arg1,_arg2,_arg3));
+    _result = new wxString (wxSaveFileSelector(*_arg0,*_arg1,*_arg2,_arg3));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -401,6 +512,18 @@ static PyObject *_wrap_wxSaveFileSelector(PyObject *self, PyObject *args, PyObje
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
 }
 {
     delete _result;
@@ -412,8 +535,8 @@ static PyObject *_wrap_wxGetTextFromUser(PyObject *self, PyObject *args, PyObjec
     PyObject * _resultobj;
     wxString * _result;
     wxString * _arg0;
-    wxString * _arg1 = (wxString *) &wxEmptyString;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg1 = (wxString *) &wxPyEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     wxWindow * _arg3 = (wxWindow *) NULL;
     int  _arg4 = (int ) -1;
     int  _arg5 = (int ) -1;
@@ -488,8 +611,8 @@ static PyObject *_wrap_wxGetPasswordFromUser(PyObject *self, PyObject *args, PyO
     PyObject * _resultobj;
     wxString * _result;
     wxString * _arg0;
-    wxString * _arg1 = (wxString *) &wxEmptyString;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg1 = (wxString *) &wxPyEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     wxWindow * _arg3 = (wxWindow *) NULL;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;
@@ -722,7 +845,7 @@ static PyObject *_wrap_wxMessageBox(PyObject *self, PyObject *args, PyObject *kw
     PyObject * _resultobj;
     int  _result;
     wxString * _arg0;
-    wxString * _arg1 = (wxString *) &wxEmptyString;
+    wxString * _arg1 = (wxString *) &wxPyEmptyString;
     int  _arg2 = (int ) wxOK|wxCENTRE;
     wxWindow * _arg3 = (wxWindow *) NULL;
     int  _arg4 = (int ) -1;
@@ -3048,12 +3171,13 @@ static PyObject *_wrap_wxFontEnumerator_EnumerateEncodings(PyObject *self, PyObj
     PyObject * _resultobj;
     bool  _result;
     wxPyFontEnumerator * _arg0;
-    char * _arg1 = (char *) "";
+    wxString * _arg1 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","facename", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|s:wxFontEnumerator_EnumerateEncodings",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxFontEnumerator_EnumerateEncodings",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3062,13 +3186,23 @@ static PyObject *_wrap_wxFontEnumerator_EnumerateEncodings(PyObject *self, PyObj
         return NULL;
         }
     }
+    if (_obj1)
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxFontEnumerator_EnumerateEncodings(_arg0,_arg1);
+    _result = (bool )wxFontEnumerator_EnumerateEncodings(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
@@ -4893,26 +5027,36 @@ static PyObject *_wrap_wxLog_ClearTraceMasks(PyObject *self, PyObject *args, PyO
 
 static PyObject *_wrap_wxLog_SetTimestamp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxChar * _arg0;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
     char *_kwnames[] = { "ts", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxLog_SetTimestamp",_kwnames,&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLog_SetTimestamp",_kwnames,&_obj0)) 
         return NULL;
 {
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxLog::SetTimestamp(_arg0);
+    wxLog::SetTimestamp(*_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj0)
+        delete _arg0;
+}
     return _resultobj;
 }
 
 static PyObject *_wrap_wxLog_GetTimestamp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxChar * _result;
+    wxString * _result;
     char *_kwnames[] = {  NULL };
 
     self = self;
@@ -4920,11 +5064,18 @@ static PyObject *_wrap_wxLog_GetTimestamp(PyObject *self, PyObject *args, PyObje
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxChar *)wxLog::GetTimestamp();
+    const wxString & _result_ref = wxLog::GetTimestamp();
+    _result = (wxString *) &_result_ref;
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("s", _result);
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
     return _resultobj;
 }
 
@@ -8486,7 +8637,7 @@ static PyObject *_wrap_wxFileType_GetOpenCommand(PyObject *self, PyObject *args,
     PyObject * _result;
     wxFileType * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -8549,7 +8700,7 @@ static PyObject *_wrap_wxFileType_GetPrintCommand(PyObject *self, PyObject *args
     PyObject * _result;
     wxFileType * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -8616,7 +8767,7 @@ static PyObject *_wrap_wxFileType_GetAllCommands(PyObject *self, PyObject *args,
     PyObject * _result;
     wxFileType * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -8721,7 +8872,7 @@ static PyObject *_wrap_wxFileType_SetDefaultIcon(PyObject *self, PyObject *args,
     PyObject * _resultobj;
     bool  _result;
     wxFileType * _arg0;
-    wxString * _arg1 = (wxString *) &wxEmptyString;
+    wxString * _arg1 = (wxString *) &wxPyEmptyString;
     int  _arg2 = (int ) 0;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
@@ -8931,7 +9082,7 @@ static PyObject *_wrap_wxMimeTypesManager_Initialize(PyObject *self, PyObject *a
     PyObject * _resultobj;
     wxMimeTypesManager * _arg0;
     int  _arg1 = (int ) (wxMAILCAP_STANDARD);
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","mailcapStyle","extraDir", NULL };

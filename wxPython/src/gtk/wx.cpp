@@ -2455,7 +2455,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"false", PyInt_FromLong((long) 0));
 	 PyDict_SetItemString(d,"TRUE", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"true", PyInt_FromLong((long) 1));
-	 PyDict_SetItemString(d,"wxVERSION_STRING", PyString_FromString("wxVERSION_STRING"));
 	 PyDict_SetItemString(d,"wxEVT_NULL", PyInt_FromLong((long) wxEVT_NULL));
 	 PyDict_SetItemString(d,"wxEVT_FIRST", PyInt_FromLong((long) wxEVT_FIRST));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_BUTTON_CLICKED", PyInt_FromLong((long) wxEVT_COMMAND_BUTTON_CLICKED));
