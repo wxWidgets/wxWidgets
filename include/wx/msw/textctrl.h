@@ -172,6 +172,8 @@ protected:
     // limit is big enough)
     void AdjustSpaceLimit();
 
+    // override some base class virtuals
+    virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
     virtual wxSize DoGetBestSize() const;
 
 private:

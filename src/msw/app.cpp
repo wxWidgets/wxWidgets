@@ -1079,6 +1079,14 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
     }
 #endif // wxUSE_TOOLTIPS
 
+    // allow the window to prevent certain messages from being
+    // translated/processed (this is currently used by wxTextCtrl to always
+    // grab Ctrl-C/V/X, even if they are also accelerators in some parent)
+    if ( !wndThis->MSWShouldPreProcessMessage(wxmsg) )
+    {
+        return FALSE;
+    }
+
     // try translations first: the accelerators override everything
     wxWindow *wnd;
 
@@ -1094,13 +1102,16 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
             break;
     }
 
-    // now try the other hooks (kbd navigation is handled here)
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
+    // now try the other hooks (kbd navigation is handled here): we start from
+    // wndThis->GetParent() because wndThis->MSWProcessMessage() was already
+    // called above
+    for ( wnd = wndThis->GetParent(); wnd; wnd = wnd->GetParent() )
     {
         if ( wnd->MSWProcessMessage(wxmsg) )
             return TRUE;
     }
 
+    // no special preprocessing for this message, dispatch it normally
     return FALSE;
 }
 

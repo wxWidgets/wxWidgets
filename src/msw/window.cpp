@@ -1958,6 +1958,12 @@ bool wxWindowMSW::MSWTranslateMessage(WXMSG* pMsg)
 #endif // wxUSE_ACCEL
 }
 
+bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* pMsg)
+{
+    // preprocess all messages by default
+    return TRUE;
+}
+
 // ---------------------------------------------------------------------------
 // message params unpackers (different for Win16 and Win32)
 // ---------------------------------------------------------------------------

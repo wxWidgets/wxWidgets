@@ -347,8 +347,20 @@ public:
 
     // Calls an appropriate default window procedure
     virtual long MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
+    // message processing helpers
+
+    // return FALSE if the message shouldn't be translated/preprocessed but
+    // dispatched normally
+    virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
+
+    // return TRUE if the message was preprocessed and shouldn't be dispatched
     virtual bool MSWProcessMessage(WXMSG* pMsg);
+
+    // return TRUE if the message was translated and shouldn't be dispatched
     virtual bool MSWTranslateMessage(WXMSG* pMsg);
+
+    // called when the window is about to be destroyed
     virtual void MSWDestroyWindow();
 
     // Detach "Window" menu from menu bar so it doesn't get deleted

@@ -928,6 +928,52 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
     }
 }
 
+// ----------------------------------------------------------------------------
+// kbd input processing
+// ----------------------------------------------------------------------------
+
+bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* pMsg)
+{
+    MSG *msg = (MSG *)pMsg;
+
+    // check for our special keys here: if we don't do it and the parent frame
+    // uses them as accelerators, they wouldn't work at all, so we disable
+    // usual preprocessing for them
+    if ( msg->message == WM_KEYDOWN )
+    {
+        WORD vkey = msg->wParam;
+        if ( (HIWORD(msg->lParam) & KF_ALTDOWN) == KF_ALTDOWN )
+        {
+            if ( vkey == VK_BACK )
+                return FALSE;
+        }
+        else // no Alt
+        {
+            if ( wxIsCtrlDown() )
+            {
+                switch ( vkey )
+                {
+                    case 'C':
+                    case 'V':
+                    case 'X':
+                    case VK_INSERT:
+                    case VK_DELETE:
+                    case VK_HOME:
+                    case VK_END:
+                        return FALSE;
+                }
+            }
+            else if ( wxIsShiftDown() )
+            {
+                if ( vkey == VK_INSERT || vkey == VK_DELETE )
+                    return FALSE;
+            }
+        }
+    }
+
+    return wxControl::MSWShouldPreProcessMessage(pMsg);
+}
+
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
     switch ( event.KeyCode() )
