@@ -43,7 +43,7 @@
 //   - Mac when compiling with CodeWarrior (__WXMAC__)
 
 const wxTextFileType wxTextBuffer::typeDefault =
-#if   defined(__WINDOWS__)
+#if defined(__WINDOWS__) || defined(__DOS__)
   wxTextFileType_Dos;
 #elif defined(__UNIX__)
   wxTextFileType_Unix;
@@ -251,7 +251,8 @@ wxTextFileType wxTextBuffer::GuessType() const
                                                     : wxTextFileType_##t2
 
         // Watcom C++ doesn't seem to be able to handle the macro
-#if !defined(__WATCOMC__)
+        // VS: Watcom 11 doesn't have a problem...
+#if !(defined(__WATCOMC__) && (__WATCOMC__ < 1100))
         if ( nDos > nUnix )
             return GREATER_OF(Dos, Mac);
         else if ( nDos < nUnix )
