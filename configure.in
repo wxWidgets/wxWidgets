@@ -2650,9 +2650,18 @@ dnl   defines uid_t and gid_t if not already defined
 AC_TYPE_UID_T
 
 dnl   check for wchar_t
+dnl   Mac OS X does not provide wchar.h and wchar_t is defined by stdlib.h (GD)
 AC_CACHE_CHECK([for wchar_t], wx_cv_type_wchar_t,
 [
-    AC_TRY_COMPILE([#include <wchar.h>],
+    AC_TRY_COMPILE(
+        [
+            #ifdef HAVE_WCHAR_H
+            #  include <wchar.h>
+            #endif
+            #ifdef HAVE_STDLIB_H
+            #  include <stdlib.h>
+            #endif
+        ],
         [
             wchar_t wc, *ws;
             wc = L'a';
@@ -2764,7 +2773,7 @@ AC_CHECK_SIZEOF(long, 4)
 AC_CHECK_SIZEOF(long long, 0)
 
 dnl we have to do it ourselves because SGI/Irix's stdio.h does not include
-dnl wchar_t an AC_CHECK_SIZEOF only includes stdio.h
+dnl wchar_t and AC_CHECK_SIZEOF only includes stdio.h
 dnl Mac OS X does not provide wchar.h and wchar_t is defined by stdlib.h (GD)
 AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
 [
