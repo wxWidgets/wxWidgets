@@ -170,11 +170,35 @@ struct wxGC
     bool          m_used;
 };
 
-static wxGC wxGCPool[GC_POOL_SIZE];
+#define GC_POOL_ALLOC_SIZE 100
+
+static int wxGCPoolSize = 0;
+
+static wxGC *wxGCPool = NULL;
 
 static void wxInitGCPool()
 {
-    memset( wxGCPool, 0, GC_POOL_SIZE*sizeof(wxGC) );
+    // This really could wait until the first call to
+    // wxGetPoolGC, but we will make the first allocation
+    // now when other initialization is being performed.
+    
+    // Set initial pool size.
+    wxGCPoolSize = GC_POOL_ALLOC_SIZE;
+    
+    // Allocate initial pool.
+    wxGCPool = (wxGC *)malloc(wxGCPoolSize * sizeof(wxGC));
+    if (wxGCPool == NULL)
+    {
+        // If we cannot malloc, then fail with error
+        // when debug is enabled.  If debug is not enabled,
+        // the problem will eventually get caught
+		// in wxGetPoolGC.
+        wxFAIL_MSG( wxT("Cannot allocate GC pool") );
+        return;
+    }
+    
+    // Zero initial pool.
+    memset(wxGCPool, 0, wxGCPoolSize * sizeof(wxGC));
 }
 
 static void wxCleanUpGCPool()
@@ -184,11 +208,18 @@ static void wxCleanUpGCPool()
         if (wxGCPool[i].m_gc)
             gdk_gc_unref( wxGCPool[i].m_gc );
     }
+
+    free(wxGCPool);
+    wxGCPool = NULL;
+    wxGCPoolSize = 0;
 }
 
 static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
 {
-    for (int i = 0; i < GC_POOL_SIZE; i++)
+    wxGC *pptr;
+    
+    // Look for an available GC.
+    for (int i = 0; i < wxGCPoolSize; i++)
     {
         if (!wxGCPool[i].m_gc)
         {
@@ -204,6 +235,31 @@ static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
         }
     }
 
+    // We did not find an available GC.
+    // We need to grow the GC pool.
+    pptr = (wxGC *)realloc(wxGCPool,
+		(wxGCPoolSize + GC_POOL_ALLOC_SIZE)*sizeof(wxGC));
+    if (pptr != NULL)
+    {
+        // Initialize newly allocated pool.
+        wxGCPool = pptr;
+    	memset(&wxGCPool[wxGCPoolSize], 0,
+			GC_POOL_ALLOC_SIZE*sizeof(wxGC));
+    
+        // Initialize entry we will return.    
+        wxGCPool[wxGCPoolSize].m_gc = gdk_gc_new( window );
+        gdk_gc_set_exposures( wxGCPool[wxGCPoolSize].m_gc, FALSE );
+        wxGCPool[wxGCPoolSize].m_type = type;
+        wxGCPool[wxGCPoolSize].m_used = TRUE;
+        
+        // Set new value of pool size.
+        wxGCPoolSize += GC_POOL_ALLOC_SIZE;
+        
+        // Return newly allocated entry.
+        return wxGCPool[wxGCPoolSize-GC_POOL_ALLOC_SIZE].m_gc;
+    }
+    
+    // The realloc failed.  Fall through to error.
     wxFAIL_MSG( wxT("No GC available") );
 
     return (GdkGC*) NULL;
@@ -211,7 +267,7 @@ static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
 
 static void wxFreePoolGC( GdkGC *gc )
 {
-    for (int i = 0; i < GC_POOL_SIZE; i++)
+    for (int i = 0; i < wxGCPoolSize; i++)
     {
         if (wxGCPool[i].m_gc == gc)
         {
