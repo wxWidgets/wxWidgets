@@ -1567,14 +1567,10 @@ private:
 
 CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
 {
-    CFStringEncoding enc = 0 ;
+    CFStringEncoding enc = kCFStringEncodingInvalidId ;
     if ( encoding == wxFONTENCODING_DEFAULT )
     {
-#if wxUSE_GUI
-        encoding = wxFont::GetDefaultEncoding() ;
-#else
-        encoding = wxLocale::GetSystemEncoding() ;
-#endif
+        enc = CFStringGetSystemEncoding();
     }
     else switch( encoding)
     {
@@ -1662,7 +1658,6 @@ CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
         case wxFONTENCODING_CP950 :
             enc = kCFStringEncodingDOSChineseTrad;
             break ;
-
         case wxFONTENCODING_CP1250 :
             enc = kCFStringEncodingWindowsLatin2;
             break ;
@@ -1687,9 +1682,10 @@ CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
         case wxFONTENCODING_CP1257 :
             enc = kCFStringEncodingWindowsBalticRim;
             break ;
-        case wxFONTENCODING_UTF7 :
-            enc = kCFStringEncodingNonLossyASCII ;
-            break ;
+//   This only really encodes to UTF7 (if that) evidently
+//        case wxFONTENCODING_UTF7 :
+//            enc = kCFStringEncodingNonLossyASCII ;
+//            break ;
         case wxFONTENCODING_UTF8 :
             enc = kCFStringEncodingUTF8 ;
             break ;
@@ -1826,245 +1822,6 @@ CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
     return enc ;
 }
 
-wxFontEncoding wxFontEncFromCFStringEnc(CFStringEncoding encoding)
-{
-    wxFontEncoding enc = wxFONTENCODING_DEFAULT ;
-
-    switch( encoding)
-    {
-        case kCFStringEncodingISOLatin1  :
-            enc = wxFONTENCODING_ISO8859_1 ;
-            break ;
-        case kCFStringEncodingISOLatin2 :
-            enc = wxFONTENCODING_ISO8859_2;
-            break ;
-        case kCFStringEncodingISOLatin3 :
-            enc = wxFONTENCODING_ISO8859_3 ;
-            break ;
-        case kCFStringEncodingISOLatin4 :
-            enc = wxFONTENCODING_ISO8859_4;
-            break ;
-        case kCFStringEncodingISOLatinCyrillic :
-            enc = wxFONTENCODING_ISO8859_5;
-            break ;
-        case kCFStringEncodingISOLatinArabic :
-            enc = wxFONTENCODING_ISO8859_6;
-            break ;
-        case kCFStringEncodingISOLatinGreek :
-            enc = wxFONTENCODING_ISO8859_7;
-            break ;
-        case kCFStringEncodingISOLatinHebrew :
-            enc = wxFONTENCODING_ISO8859_8;
-            break ;
-        case kCFStringEncodingISOLatin5 :
-            enc = wxFONTENCODING_ISO8859_9;
-            break ;
-        case kCFStringEncodingISOLatin6 :
-            enc = wxFONTENCODING_ISO8859_10;
-            break ;
-        case kCFStringEncodingISOLatin7 :
-            enc = wxFONTENCODING_ISO8859_13;
-            break ;
-        case kCFStringEncodingISOLatin8 :
-            enc = wxFONTENCODING_ISO8859_14;
-            break ;
-        case kCFStringEncodingISOLatin9 :
-            enc =wxFONTENCODING_ISO8859_15 ;
-            break ;
-
-        case kCFStringEncodingKOI8_R :
-            enc = wxFONTENCODING_KOI8;
-            break ;
-
-//      case  :
-//          enc = wxFONTENCODING_BULGARIAN;
-//          break ;
-
-        case kCFStringEncodingDOSLatinUS :
-            enc = wxFONTENCODING_CP437;
-            break ;
-        case kCFStringEncodingDOSLatin1 :
-            enc = wxFONTENCODING_CP850;
-            break ;
-        case kCFStringEncodingDOSLatin2 :
-            enc =wxFONTENCODING_CP852 ;
-            break ;
-        case kCFStringEncodingDOSCyrillic :
-            enc = wxFONTENCODING_CP855;
-            break ;
-        case kCFStringEncodingDOSRussian :
-            enc = wxFONTENCODING_CP866;
-            break ;
-        case kCFStringEncodingDOSThai :
-            enc =wxFONTENCODING_CP874 ;
-            break ;
-        case kCFStringEncodingDOSJapanese :
-            enc = wxFONTENCODING_CP932;
-            break ;
-        case kCFStringEncodingDOSChineseSimplif :
-            enc = wxFONTENCODING_CP936;
-            break ;
-        case kCFStringEncodingDOSKorean :
-            enc = wxFONTENCODING_CP949;
-            break ;
-        case kCFStringEncodingDOSChineseTrad :
-            enc = wxFONTENCODING_CP950;
-            break ;
-
-        case kCFStringEncodingWindowsLatin2 :
-            enc = wxFONTENCODING_CP1250;
-            break ;
-        case kCFStringEncodingWindowsCyrillic :
-            enc = wxFONTENCODING_CP1251;
-            break ;
-        case kCFStringEncodingWindowsLatin1 :
-            enc = wxFONTENCODING_CP1252;
-            break ;
-        case kCFStringEncodingWindowsGreek :
-            enc = wxFONTENCODING_CP1253;
-            break ;
-        case kCFStringEncodingWindowsLatin5 :
-            enc = wxFONTENCODING_CP1254;
-            break ;
-        case kCFStringEncodingWindowsHebrew :
-            enc = wxFONTENCODING_CP1255;
-            break ;
-        case kCFStringEncodingWindowsArabic :
-            enc = wxFONTENCODING_CP1256;
-            break ;
-        case kCFStringEncodingWindowsBalticRim :
-            enc =wxFONTENCODING_CP1257 ;
-            break ;
-        case kCFStringEncodingEUC_JP :
-            enc = wxFONTENCODING_EUC_JP;
-            break ;
-        case kCFStringEncodingUnicode :
-            enc = wxFONTENCODING_UTF16;
-            break;
-        case kCFStringEncodingMacRoman :
-            enc = wxFONTENCODING_MACROMAN ;
-            break ;
-        case kCFStringEncodingMacJapanese :
-            enc = wxFONTENCODING_MACJAPANESE ;
-            break ;
-        case kCFStringEncodingMacChineseTrad :
-            enc = wxFONTENCODING_MACCHINESETRAD ;
-            break ;
-        case kCFStringEncodingMacKorean :
-            enc = wxFONTENCODING_MACKOREAN ;
-            break ;
-        case kCFStringEncodingMacArabic :
-            enc =wxFONTENCODING_MACARABIC ;
-            break ;
-        case kCFStringEncodingMacHebrew :
-            enc = wxFONTENCODING_MACHEBREW ;
-            break ;
-        case kCFStringEncodingMacGreek :
-            enc = wxFONTENCODING_MACGREEK ;
-            break ;
-        case kCFStringEncodingMacCyrillic :
-            enc = wxFONTENCODING_MACCYRILLIC ;
-            break ;
-        case kCFStringEncodingMacDevanagari :
-            enc = wxFONTENCODING_MACDEVANAGARI ;
-            break ;
-        case kCFStringEncodingMacGurmukhi :
-            enc = wxFONTENCODING_MACGURMUKHI ;
-            break ;
-        case kCFStringEncodingMacGujarati :
-            enc = wxFONTENCODING_MACGUJARATI ;
-            break ;
-        case kCFStringEncodingMacOriya :
-            enc =wxFONTENCODING_MACORIYA ;
-            break ;
-        case kCFStringEncodingMacBengali :
-            enc =wxFONTENCODING_MACBENGALI ;
-            break ;
-        case kCFStringEncodingMacTamil :
-            enc = wxFONTENCODING_MACTAMIL ;
-            break ;
-        case kCFStringEncodingMacTelugu :
-            enc = wxFONTENCODING_MACTELUGU ;
-            break ;
-        case kCFStringEncodingMacKannada :
-            enc = wxFONTENCODING_MACKANNADA ;
-            break ;
-        case kCFStringEncodingMacMalayalam :
-            enc = wxFONTENCODING_MACMALAJALAM ;
-            break ;
-        case kCFStringEncodingMacSinhalese :
-            enc = wxFONTENCODING_MACSINHALESE ;
-            break ;
-        case kCFStringEncodingMacBurmese :
-            enc = wxFONTENCODING_MACBURMESE ;
-            break ;
-        case kCFStringEncodingMacKhmer :
-            enc = wxFONTENCODING_MACKHMER ;
-            break ;
-        case kCFStringEncodingMacThai :
-            enc = wxFONTENCODING_MACTHAI ;
-            break ;
-        case kCFStringEncodingMacLaotian :
-            enc = wxFONTENCODING_MACLAOTIAN ;
-            break ;
-        case kCFStringEncodingMacGeorgian :
-            enc = wxFONTENCODING_MACGEORGIAN ;
-            break ;
-        case kCFStringEncodingMacArmenian :
-            enc = wxFONTENCODING_MACARMENIAN ;
-            break ;
-        case kCFStringEncodingMacChineseSimp :
-            enc = wxFONTENCODING_MACCHINESESIMP ;
-            break ;
-        case kCFStringEncodingMacTibetan :
-            enc = wxFONTENCODING_MACTIBETAN ;
-            break ;
-        case kCFStringEncodingMacMongolian :
-            enc = wxFONTENCODING_MACMONGOLIAN ;
-            break ;
-        case kCFStringEncodingMacEthiopic :
-            enc = wxFONTENCODING_MACETHIOPIC ;
-            break ;
-        case kCFStringEncodingMacCentralEurRoman:
-            enc = wxFONTENCODING_MACCENTRALEUR  ;
-            break ;
-        case kCFStringEncodingMacVietnamese:
-            enc = wxFONTENCODING_MACVIATNAMESE  ;
-            break ;
-        case kCFStringEncodingMacExtArabic :
-            enc = wxFONTENCODING_MACARABICEXT ;
-            break ;
-        case kCFStringEncodingMacSymbol :
-            enc = wxFONTENCODING_MACSYMBOL ;
-            break ;
-        case kCFStringEncodingMacDingbats :
-            enc = wxFONTENCODING_MACDINGBATS ;
-            break ;
-        case kCFStringEncodingMacTurkish :
-            enc = wxFONTENCODING_MACTURKISH ;
-            break ;
-        case kCFStringEncodingMacCroatian :
-            enc = wxFONTENCODING_MACCROATIAN ;
-            break ;
-        case kCFStringEncodingMacIcelandic :
-            enc = wxFONTENCODING_MACICELANDIC ;
-            break ;
-        case kCFStringEncodingMacRomanian :
-            enc = wxFONTENCODING_MACROMANIAN ;
-            break ;
-        case kCFStringEncodingMacCeltic :
-            enc = wxFONTENCODING_MACCELTIC ;
-            break ;
-        case kCFStringEncodingMacGaelic :
-            enc = wxFONTENCODING_MACGAELIC ;
-            break ;
-//        case kCFStringEncodingMacKeyboardGlyphs :
-//            enc = wxFONTENCODING_MACKEYBOARD ;
-//            break ;
-    } ;
-    return enc ;
-}
-
 class wxMBConv_cocoa : public wxMBConv
 {
 public:
@@ -2089,90 +1846,59 @@ public:
 
     void Init( CFStringEncoding encoding)
     {
-        m_char_encoding = encoding ;
-        m_unicode_encoding = kCFStringEncodingUnicode;
+        m_encoding = encoding ;
     }
 
     size_t MB2WC(wchar_t * szOut, const char * szUnConv, size_t nOutSize) const
     {
         wxASSERT(szUnConv);
 
-        size_t nBufSize = strlen(szUnConv) + 1;
-        size_t nRealOutSize;
-
-        UniChar* szUniCharBuffer    = (UniChar*) szOut;
-        wchar_t* szConvBuffer       = szOut;
-
-        if (szConvBuffer == NULL && nOutSize != 0)
-        {
-            szConvBuffer = new wchar_t[nOutSize] ;
-        }
-
-#if SIZEOF_WCHAR_T == 4
-        szUniCharBuffer = new UniChar[nOutSize];
-#endif
-
-        CFDataRef theData = CFDataCreateWithBytesNoCopy (
-                                            NULL,     //allocator
-                                            (const UInt8*)szUnConv,
-                                            nBufSize - 1,
-                                            NULL      //deallocator
-                                            );
-
-        wxASSERT(theData);
-
-        CFStringRef theString = CFStringCreateFromExternalRepresentation (
-                                                NULL,
-                                                theData,
-                                                m_char_encoding
+        CFStringRef theString = CFStringCreateWithBytes (
+                                                NULL, //the allocator
+                                                (const UInt8*)szUnConv,
+                                                strlen(szUnConv),
+                                                m_encoding,
+                                                false //no BOM/external representation
                                                 );
 
         wxASSERT(theString);
 
-        if (nOutSize == 0)
+        size_t nOutLength = CFStringGetLength(theString);
+
+        if (szOut == NULL)
         {
-            nRealOutSize = CFStringGetLength(theString) + 1;
             CFRelease(theString);
-            return nRealOutSize - 1;
+            return nOutLength;
         }
 
-        CFRange theRange = { 0, CFStringGetLength(theString) };
+        CFRange theRange = { 0, nOutSize };
 
+#if SIZEOF_WCHAR_T == 4
+        UniChar* szUniCharBuffer = new UniChar[nOutSize];
+#endif
+ 
         CFStringGetCharacters(theString, theRange, szUniCharBuffer);
-
-
-        nRealOutSize = (CFStringGetLength(theString) + 1);
-
+        
         CFRelease(theString);
 
-        szUniCharBuffer[nRealOutSize-1] = '\0' ;
+        szUniCharBuffer[nOutLength] = '\0' ;
 
 #if SIZEOF_WCHAR_T == 4
         wxMBConvUTF16 converter ;
-        converter.MB2WC(szConvBuffer  , (const char*)szUniCharBuffer , nRealOutSize ) ;
+        converter.MB2WC(szOut, (const char*)szUniCharBuffer , nOutSize ) ;
         delete[] szUniCharBuffer;
 #endif
-        if ( szOut == NULL )
-            delete [] szConvBuffer;
-
-        return nRealOutSize ;
+    
+        return nOutLength;
     }
 
     size_t WC2MB(char *szOut, const wchar_t *szUnConv, size_t nOutSize) const
     {
-        size_t nBufSize = wxWcslen(szUnConv) + 1;
+        wxASSERT(szUnConv);
+        
         size_t nRealOutSize;
-        char* szBuffer = szOut;
+        size_t nBufSize = wxWcslen(szUnConv);
         UniChar* szUniBuffer = (UniChar*) szUnConv;
-
-        if (szOut == NULL)
-        {
-            // worst case
-            nRealOutSize = ((nBufSize - 1) * 8) +1 ;
-            szBuffer = new char[ nRealOutSize ] ;
-        }
-        else
-            nRealOutSize = nOutSize;
 
 #if SIZEOF_WCHAR_T == 4
         wxMBConvUTF16BE converter ;
@@ -2180,69 +1906,58 @@ public:
         szUniBuffer = new UniChar[ (nBufSize / sizeof(UniChar)) + 1] ;
         converter.WC2MB( (char*) szUniBuffer , szUnConv, nBufSize + sizeof(UniChar)) ;
         nBufSize /= sizeof(UniChar);
-        ++nBufSize;
 #endif
 
         CFStringRef theString = CFStringCreateWithCharactersNoCopy(
                                 NULL, //allocator
                                 szUniBuffer,
                                 nBufSize,
-                                NULL //deallocator
+                                kCFAllocatorNull //deallocator - we want to deallocate it ourselves
                             );
 
         wxASSERT(theString);
 
         //Note that CER puts a BOM when converting to unicode
-        //so we may want to check and use getchars instead in that case
-        CFDataRef theData = CFStringCreateExternalRepresentation(
-                                NULL, //allocator
-                                theString,
-                                m_char_encoding,
-                                0 //what to put in characters that can't be converted -
-                                    //0 tells CFString to return NULL if it meets such a character
+        //so we  check and use getchars instead in that case
+        if (m_encoding == kCFStringEncodingUnicode)
+        {
+            if (szOut != NULL)
+                CFStringGetCharacters(theString, CFRangeMake(0, nOutSize - 1), (UniChar*) szOut);
+            
+            nRealOutSize = CFStringGetLength(theString) + 1;
+        }
+        else
+        {
+            CFStringGetBytes(
+                theString,
+                CFRangeMake(0, CFStringGetLength(theString)),
+                m_encoding,
+                0, //what to put in characters that can't be converted -
+                    //0 tells CFString to return NULL if it meets such a character
+                false, //not an external representation
+                (UInt8*) szOut,
+                nOutSize, 
+                (CFIndex*) &nRealOutSize
                         );
-
-        if(!theData)
-            return (size_t)-1;
+        }
 
         CFRelease(theString);
 
-        nRealOutSize = CFDataGetLength(theData);
+#if SIZEOF_WCHAR_T == 4
+        delete[] szUniBuffer;
+#endif
 
-        if ( szOut == NULL )
-            delete[] szBuffer;
-
-        if(nOutSize == 0)
-        {
-//TODO: This gets flagged as a non-malloced address by the debugger...
-//#if SIZEOF_WCHAR_T == 4
-//        delete[] szUniBuffer;
-//#endif
-            CFRelease(theData);
-            return nRealOutSize - 1;
-        }
-
-        CFRange theRange = {0, CFDataGetLength(theData) };
-        CFDataGetBytes(theData, theRange, (UInt8*) szBuffer);
-
-        CFRelease(theData);
-
-//TODO: This gets flagged as a non-malloced address by the debugger...
-//#if SIZEOF_WCHAR_T == 4
-//        delete[] szUniBuffer;
-//#endif
         return  nRealOutSize - 1;
     }
 
     bool IsOk() const
     {
-        //TODO: check for invalid en/de/coding
-        return true;
+        return m_encoding != kCFStringEncodingInvalidId && 
+              CFStringIsEncodingAvailable(m_encoding);
     }
 
 private:
-    CFStringEncoding m_char_encoding ;
-    CFStringEncoding m_unicode_encoding ;
+    CFStringEncoding m_encoding ;
 };
 
 #endif // defined(__WXCOCOA__)
@@ -2304,7 +2019,8 @@ public:
 
         if (buf == NULL)
         {
-            n = byteInLen ;
+            //apple specs say at least 32
+            n = 32 ;
             tbuf = (wchar_t*) malloc( n * SIZEOF_WCHAR_T) ;
         }
         ByteCount byteBufferLen = n * sizeof( UniChar ) ;
@@ -2334,13 +2050,6 @@ public:
         return res ;
     }
 
-    //NB: This is _broken_ - in invalid conversions, instead of returning -1
-    //like it should, it (sometimes?) converts invalid characters of the encoding to a question
-    //mark character '?'.
-    //
-    //We need to do the msw double-pass check for the question marks as Vadim
-    //lines out above (RN:  I don't recall this happening in the core foundation version,
-    //but it might do it there also, ick)
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
     {
         OSStatus status = noErr ;
@@ -2351,8 +2060,8 @@ public:
 
         if (buf == NULL)
         {
-            // worst case
-            n = ((byteInLen / SIZEOF_WCHAR_T) * 8) + SIZEOF_WCHAR_T;
+            //apple specs say at least 32
+            n = 32;
             tbuf = (char*) malloc( n ) ;
         }
 
@@ -2377,7 +2086,22 @@ public:
 
         size_t res = byteOutLen ;
         if ( buf  && res < n)
+        {
             buf[res] = 0;
+            
+            //we need to double-trip to verify it didn't insert any ? in place
+            //of bogus characters
+            wxWCharBuffer wcBuf(n);
+            size_t pszlen = wxWcslen(psz);
+            if ( MB2WC(wcBuf.data(), buf, n) == (size_t)-1 ||
+                        wxWcslen(wcBuf) != pszlen ||
+                        memcmp(wcBuf, psz, pszlen * sizeof(wchar_t)) != 0 )
+            {
+                // we didn't obtain the same thing we started from, hence
+                // the conversion was lossy and we consider that it failed
+                return (size_t)-1;
+            }
+        }
 
         return res ;
     }
