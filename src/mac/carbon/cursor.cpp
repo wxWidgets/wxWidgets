@@ -240,7 +240,9 @@ wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSE
 
 wxCursor::wxCursor( const wxImage &image )
 {
+#if wxUSE_IMAGE
     CreateFromImage( image ) ;
+#endif
 }
 
 wxCursor::wxCursor(const char **bits) 

@@ -2676,10 +2676,12 @@ bool wxWindowMac::MacSetupCursor( const wxPoint& pt)
 
 wxString wxWindowMac::MacGetToolTipString( wxPoint &pt )
 {
+#if wxUSE_TOOLTIPS
     if ( m_tooltip )
     {
         return m_tooltip->GetTip() ;
     }
+#endif
     return wxEmptyString ;
 }
 
