@@ -267,6 +267,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/regex.h
     wx/scopeguard.h
     wx/snglinst.h
+    wx/stack.h
     wx/stopwatch.h
     wx/strconv.h
     wx/stream.h
@@ -612,7 +613,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/spinbutt.h
     wx/spinctrl.h
     wx/splitter.h
-    wx/stack.h
     wx/statline.h
     wx/tab.h
     wx/tabctrl.h
@@ -624,6 +624,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/treebase.h
     wx/treectrl.h
     wx/valgen.h
+    wx/vidmode.h
     wx/vlbox.h
     wx/vms_x_fix.h
     wx/vscroll.h
