@@ -11,8 +11,8 @@ returns a boolean value which indicates whether processing should continue (TRUE
 You call \helpref{wxApp::SetTopWindow}{wxappsettopwindow} to let wxWindows know
 about the top window.
 
-Note that the program's command line arguments, represented by {\it
-argc} and {\it argv}, are available from within wxApp member functions.
+Note that the program's command line arguments, represented by {\it argc} 
+and {\it argv}, are available from within wxApp member functions.
 
 An application closes by destroying all windows. Because all frames must
 be destroyed for the application to exit, it is advisable to use parent
@@ -37,8 +37,9 @@ IMPLEMENT_APP(DerivedApp)
 
 bool DerivedApp::OnInit()
 {
-  wxFrame *the_frame = new wxFrame(NULL, argv[0]);
+  wxFrame *the_frame = new wxFrame(NULL, ID_MYFRAME, argv[0]);
   ...
+  the_frame->Show(TRUE);
   SetTopWindow(the_frame);
 
   return TRUE;

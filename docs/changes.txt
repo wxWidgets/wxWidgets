@@ -255,6 +255,9 @@ wxMSW:
 - fixed a condition where a thread can hang during
   message/event processing
 - increased space between wxRadioBox label and first radio button
+- don't fail to register remaining window classes if one fails to register
+- set window proc for non-control windows to avoid problems
+  with multiple wxWindows apps running simultaneously
 
 wxGTK:
 

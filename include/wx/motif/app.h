@@ -54,6 +54,7 @@ public:
     virtual bool Pending();
     virtual void Dispatch();
     virtual bool Yield(bool onlyIfNeeded = FALSE);
+    virtual bool ProcessIdle();
     
     virtual bool OnInitGui();
     
@@ -93,7 +94,6 @@ public:
     static void CleanUp();
     
     void DeletePendingObjects();
-    bool ProcessIdle();
     
     // Motif-specific
     WXAppContext   GetAppContext() const { return m_appContext; }

@@ -151,6 +151,8 @@ public:
         // Override: rarely.
     virtual void OnFatalException() { }
 
+    virtual bool ProcessIdle() = 0;
+
     // the worker functions - usually not used directly by the user code
     // -----------------------------------------------------------------
 

@@ -53,6 +53,7 @@ class WXDLLEXPORT wxApp: public wxAppBase
     virtual bool Pending() ;
     virtual void Dispatch() ;
     virtual bool Yield(bool onlyIfNeeded = FALSE);
+    virtual bool ProcessIdle();
     
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
@@ -87,7 +88,6 @@ public:
     
     virtual bool OnInit();
     void DeletePendingObjects();
-    bool ProcessIdle();
     bool IsExiting() { return !m_keepGoing ; }
     
 public:

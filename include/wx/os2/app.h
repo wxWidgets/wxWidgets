@@ -77,6 +77,7 @@ public:
     virtual bool Pending(void) ;
     virtual void Dispatch(void);
     virtual bool Yield(bool onlyIfNeeded = FALSE);
+    virtual bool         ProcessIdle(void);
 
     virtual void SetPrintMode(int mode) { m_nPrintMode = mode; }
     virtual int  GetPrintMode(void) const { return m_nPrintMode; }
@@ -129,7 +130,6 @@ public:
     virtual bool DoMessage(void);
     virtual bool ProcessMessage(WXMSG* pMsg);
     void         DeletePendingObjects(void);
-    bool         ProcessIdle(void);
 
 public:
     int                             m_nCmdShow;

@@ -47,6 +47,7 @@ public:
     virtual bool Pending();
     virtual void Dispatch();
     virtual bool Yield(bool onlyIfNeeded = FALSE);
+    virtual bool ProcessIdle();
 
     // implementation only from now on
     void OnIdle( wxIdleEvent &event );
@@ -57,7 +58,6 @@ public:
     static bool InitialzeVisual();
     static void CleanUp();
 
-    bool ProcessIdle();
     void DeletePendingObjects();
 
 #ifdef __WXDEBUG__

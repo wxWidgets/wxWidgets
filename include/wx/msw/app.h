@@ -42,6 +42,7 @@ public:
     virtual bool Pending();
     virtual void Dispatch();
     virtual bool Yield(bool onlyIfNeeded = FALSE);
+    virtual bool ProcessIdle();
 
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
@@ -97,7 +98,6 @@ public:
     // ---------------
 
     void DeletePendingObjects();
-    bool ProcessIdle();
 
 #if wxUSE_RICHEDIT
     // initialize the richedit DLL of (at least) given version, return TRUE if

@@ -55,6 +55,7 @@ public:
     virtual bool Pending();
     virtual void Dispatch();
     virtual bool Yield(bool onlyIfNeeded = FALSE);
+    virtual bool ProcessIdle();
     
     virtual bool OnInitGui();
     
@@ -87,7 +88,6 @@ public:
     static void CleanUp();
     
     void DeletePendingObjects();
-    bool ProcessIdle();
     
     WXWindow       GetTopLevelWidget() const { return m_topLevelWidget; }
     WXColormap     GetMainColormap(WXDisplay* display);
