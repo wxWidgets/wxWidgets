@@ -345,7 +345,7 @@ class LineShape(Shape):
                     else:
                         y2 = first_point[1]
                         y1 = last_point[1]
-                    self._lineControlPoints[i] = (x2 - x1) / 2.0 + x1, (y2 - y1) / 2.0 + y1
+                    self._lineControlPoints[i] = wx.RealPoint((x2 - x1) / 2.0 + x1, (y2 - y1) / 2.0 + y1)
                     
     def FormatText(self, dc, s, i):
         """Format a text string according to the region size, adding
@@ -490,8 +490,8 @@ class LineShape(Shape):
 
     def SetEnds(self, x1, y1, x2, y2):
         """Set the end positions of the line."""
-        self._lineControlPoints[0] = x1, y1
-        self._lineControlPoints[-1] = x2, y2
+        self._lineControlPoints[0] = wx.RealPoint(x1, y1)
+        self._lineControlPoints[-1] = wx.RealPoint(x2, y2)
 
         # Find centre point
         self._xpos = (x1 + x2) / 2.0
@@ -910,9 +910,6 @@ class LineShape(Shape):
         # Do each end - nothing in the middle. User has to move other points
         # manually if necessary
         end_x, end_y, other_end_x, other_end_y = self.FindLineEndPoints()
-
-        first = self._lineControlPoints[0]
-        last = self._lineControlPoints[-1]
 
         oldX, oldY = self._xpos, self._ypos
 

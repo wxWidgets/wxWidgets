@@ -333,7 +333,7 @@ def GraphicsStraightenLine(point1, point2):
     elif abs(float(dy) / dx) > 1:
         point2[0] = point1[0]
     else:
-        point2[1] = point1[0]
+        point2[1] = point1[1]
 
 
 
