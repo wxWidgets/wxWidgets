@@ -429,7 +429,7 @@ void wxHtmlContainerCell::UpdateRenderingStatePre(wxHtmlRenderingState& state,
 {
     wxHtmlSelection *s = state.GetSelection();
     if (!s) return;
-    if (s->GetFromCell() == this || s->GetToCell() == this)
+    if (s->GetFromCell() == cell || s->GetToCell() == cell)
     {
         state.SetSelectionState(wxHTML_SEL_CHANGING);
     }
@@ -440,9 +440,9 @@ void wxHtmlContainerCell::UpdateRenderingStatePost(wxHtmlRenderingState& state,
 {
     wxHtmlSelection *s = state.GetSelection();
     if (!s) return;
-    if (s->GetFromCell() == this)
+    if (s->GetFromCell() == cell)
         state.SetSelectionState(wxHTML_SEL_IN);
-    else if (s->GetToCell() == this)
+    else if (s->GetToCell() == cell)
         state.SetSelectionState(wxHTML_SEL_OUT);
 }
 
