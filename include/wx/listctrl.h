@@ -278,7 +278,7 @@ private:
 // include the wxListCtrl class declaration
 // ----------------------------------------------------------------------------
 
-#if 0 // defined(__WIN32__) && !defined(__WXUNIVERSAL__)
+#if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/listctrl.h"
 #else
     #include "wx/generic/listctrl.h"
