@@ -133,7 +133,7 @@ bool wxSocketBase::Initialize()
             on a semaphore (a bad idea in any case) or socket operations
             will time out.
         */
-        wxASSERT_MSG( wxThread::IsMain(),
+        wxASSERT_MSG( wxIsMainThread(),
             wxT("Call wxSocketBase::Initialize() from the main thread first!"));
 
         wxAppTraits *traits = wxAppConsole::GetInstance() ?
