@@ -286,43 +286,6 @@ static PyObject *_wrap_wxBell(PyObject *self, PyObject *args, PyObject *kwargs) 
     return _resultobj;
 }
 
-static PyObject *_wrap_wxDisplaySize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int * _arg0;
-    int  temp;
-    int * _arg1;
-    int  temp0;
-    char *_kwnames[] = {  NULL };
-
-    self = self;
-{
-  _arg0 = &temp;
-}
-{
-  _arg1 = &temp0;
-}
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxDisplaySize",_kwnames)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxDisplaySize(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg0));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg1));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxEndBusyCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     char *_kwnames[] = {  NULL };
@@ -5020,7 +4983,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxGetFreeMemory", (PyCFunction) _wrap_wxGetFreeMemory, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetElapsedTime", (PyCFunction) _wrap_wxGetElapsedTime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEndBusyCursor", (PyCFunction) _wrap_wxEndBusyCursor, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDisplaySize", (PyCFunction) _wrap_wxDisplaySize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBell", (PyCFunction) _wrap_wxBell, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetCurrentId", (PyCFunction) _wrap_wxGetCurrentId, METH_VARARGS | METH_KEYWORDS },
 	 { "RegisterId", (PyCFunction) _wrap_RegisterId, METH_VARARGS | METH_KEYWORDS },

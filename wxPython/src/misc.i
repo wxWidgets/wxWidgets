@@ -315,7 +315,6 @@ void wxRegisterId(long id);
 long wxGetCurrentId();
 
 void wxBell();
-void wxDisplaySize(int *OUTPUT, int *OUTPUT);
 void wxEndBusyCursor();
 
 long wxGetElapsedTime(bool resetTimer = TRUE);

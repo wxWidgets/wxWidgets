@@ -1,5 +1,4 @@
 """
-
 This script will generate a setup script for InnoSetup and then run it
 to make the installer executable.  If all goes right the proper versions
 of Python and wxWindows (including hybrid/final settings) will all be
@@ -9,8 +8,6 @@ will be created.
 
 
 import os, string
-
-#----------------------------------------------------------------------
 
 KEEP_TEMPS = 0
 

@@ -667,6 +667,13 @@ def wxGetDisplaySizeMM(*_args, **_kwargs):
     if val: val = wxSizePtr(val); val.thisown = 1
     return val
 
+wxClientDisplayRect = misc2c.wxClientDisplayRect
+
+def wxGetClientDisplayRect(*_args, **_kwargs):
+    val = apply(misc2c.wxGetClientDisplayRect,_args,_kwargs)
+    if val: val = wxRectPtr(val); val.thisown = 1
+    return val
+
 wxSetCursor = misc2c.wxSetCursor
 
 def wxFindWindowByLabel(*_args, **_kwargs):
