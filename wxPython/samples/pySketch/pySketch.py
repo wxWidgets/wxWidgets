@@ -42,7 +42,7 @@
         getting mucked up; when the user quits, we get errors about being
         unable to call del on a 'None' object.
 """
-import string, cPickle, os.path
+import cPickle, os.path
 from wxPython.wx import *
 
 import traceback, types
@@ -2454,7 +2454,7 @@ class EditTextObjectDialog(wxDialog):
         """
         obj.setText(self.textCtrl.GetValue())
         obj.setTextFont(self.fontCombo.GetValue())
-        obj.setTextSize(string.atoi(self.sizeCombo.GetValue()))
+        obj.setTextSize(int(self.sizeCombo.GetValue()))
         obj.setTextBoldface(self.boldCheckbox.GetValue())
         obj.setTextItalic(self.italicCheckbox.GetValue())
         obj.setTextUnderline(self.underlineCheckbox.GetValue())
