@@ -15260,7 +15260,7 @@ if test "$wxUSE_SHARED" = "yes"; then
 
     case "${host}" in
       *-hp-hpux* )
-                if test "$GCC" == "yes"; then
+                if test "$GCC" = "yes"; then
             SHARED_LD="${SHARED_LD} ${PIC_FLAG}"
         else
                         LDFLAGS="$LDFLAGS -L/usr/lib"

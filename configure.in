@@ -2672,7 +2672,7 @@ if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
       *-hp-hpux* )
         dnl default settings are good for gcc but not for the native HP-UX
-        if test "$GCC" == "yes"; then
+        if test "$GCC" = "yes"; then
             SHARED_LD="${SHARED_LD} ${PIC_FLAG}"
         else
             dnl no idea why it wants it, but it does
