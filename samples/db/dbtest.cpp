@@ -1817,9 +1817,9 @@ bool CeditorDlg::GetData()
 
     if (!invalid)
     {
-        wxGetApp().Contact->JoinDate.month = (SQLUSMALLINT)mm;
-        wxGetApp().Contact->JoinDate.day   = (SQLUSMALLINT)dd;
-        wxGetApp().Contact->JoinDate.year  = (SQLSMALLINT)yyyy;
+        wxGetApp().Contact->JoinDate.month = (unsigned short) mm;
+        wxGetApp().Contact->JoinDate.day   = (unsigned short) dd;
+        wxGetApp().Contact->JoinDate.year  = (short) yyyy;
     }
     else
     {
