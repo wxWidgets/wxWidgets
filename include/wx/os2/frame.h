@@ -144,6 +144,9 @@ public:
     void      SetClient(wxWindow* c_Window);
     wxWindow *GetClient();
 
+ friend MRESULT EXPENTRY wxFrameWndProc(HWND  hWnd,ULONG ulMsg, MPARAM wParam, MPARAM lParam);
+ friend MRESULT EXPENTRY wxFrameMainWndProc(HWND  hWnd,ULONG ulMsg, MPARAM wParam, MPARAM lParam);
+
 protected:
     // common part of all ctors
     void         Init(void);
@@ -209,8 +212,11 @@ private:
 #endif // tooltips
 
     //
-    // Handles to child windows of the Frame that we don't have child objects for
+    // Handles to child windows of the Frame, and the frame itself,
+    // that we don't have child objects for (m_hWnd in wxWindow is the
+    // handle of the Frame's client window!
     //
+    WXHWND                          m_hFrame;
     WXHWND                          m_hTitleBar;
     WXHWND                          m_hHScroll;
     WXHWND                          m_hVScroll;
