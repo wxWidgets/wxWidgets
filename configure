@@ -12783,7 +12783,7 @@ echo "$ac_t""$wx_cv_prog_icc" 1>&6
             SHARED_LD="${CXX} -G -o"
             PIC_FLAG="-KPIC"
             SONAME_FLAGS="-h ${WX_LIBRARY_NAME_SHARED}"
-            SONAME_FLAGS_GL="-h ${WX_LIBRARY_NAME_SHARED}"
+            SONAME_FLAGS_GL="-h ${WX_LIBRARY_NAME_SHARED_GL}"
         fi
       ;;
 
