@@ -62,9 +62,9 @@ protected:
                                _wxHashTable_NodeBase** dstTable,
                                BucketFromNode func, ProcessNode proc );
 
-    static void** AllocTable( size_t size )
+    static void** AllocTable( size_t sz )
     {
-        return (void **)calloc(size, sizeof(void*));
+        return (void **)calloc(sz, sizeof(void*));
     }
 };
 
@@ -172,10 +172,10 @@ public: \
         const_pointer operator ->() const { return &(m_node->m_value); } \
     }; \
  \
-    CLASSNAME( size_type size = 10, const hasher& hfun = hasher(), \
+    CLASSNAME( size_type sz = 10, const hasher& hfun = hasher(), \
                const key_equal& k_eq = key_equal(), \
                const key_extractor& k_ex = key_extractor() ) \
-        : m_tableBuckets( GetNextPrime( size ) ), \
+        : m_tableBuckets( GetNextPrime( sz ) ), \
           m_items( 0 ), \
           m_hasher( hfun ), \
           m_equals( k_eq ), \
