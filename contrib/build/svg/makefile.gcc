@@ -235,7 +235,7 @@ endif
 $(OBJS)\svgdll_dummy.o: ../../src/svg/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(SVGDLL_CXXFLAGS) $<
 
-$(OBJS)\svgdll_version_rc.o: ../../src/svg/src/msw/version.rc
+$(OBJS)\svgdll_version_rc.o: ../../src/svg/../../../src/msw/version.rc
 	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/svg/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_gcc$(VENDORTAG)
 
 $(OBJS)\svgdll_dcsvg.o: ../../src/svg/dcsvg.cpp

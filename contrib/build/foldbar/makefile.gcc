@@ -241,7 +241,7 @@ endif
 $(OBJS)\foldbardll_dummy.o: ../../src/foldbar/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(FOLDBARDLL_CXXFLAGS) $<
 
-$(OBJS)\foldbardll_version_rc.o: ../../src/foldbar/src/msw/version.rc
+$(OBJS)\foldbardll_version_rc.o: ../../src/foldbar/../../../src/msw/version.rc
 	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/foldbar/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_gcc$(VENDORTAG)
 
 $(OBJS)\foldbardll_captionbar.o: ../../src/foldbar/captionbar.cpp

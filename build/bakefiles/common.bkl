@@ -548,7 +548,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
                 $(TOP_SRCDIR)include
             </res-include>
         </if>
-        <win32-res>src/msw/version.rc</win32-res>
+        <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
     </template>
 
     <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'">

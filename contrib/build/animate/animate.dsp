@@ -462,7 +462,7 @@ SOURCE=../../src/animate\..\..\..\src\msw\dummy.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/animate\src\msw\version.rc
+SOURCE=../../src/animate\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "animate - Win32 DLL Universal Unicode Release"
 

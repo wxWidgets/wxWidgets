@@ -257,7 +257,7 @@ endif
 $(OBJS)\ogldll_dummy.o: ../../src/ogl/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_version_rc.o: ../../src/ogl/src/msw/version.rc
+$(OBJS)\ogldll_version_rc.o: ../../src/ogl/../../../src/msw/version.rc
 	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/ogl/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_gcc$(VENDORTAG)
 
 $(OBJS)\ogldll_basic2.o: ../../src/ogl/basic2.cpp

@@ -506,7 +506,7 @@ SOURCE=../../src/ogl\oglmisc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/ogl\src\msw\version.rc
+SOURCE=../../src/ogl\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "ogl - Win32 DLL Universal Unicode Release"
 

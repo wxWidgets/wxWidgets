@@ -277,7 +277,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 $(OBJS)\deprecateddll_dummy.obj: ../../src/deprecated\..\..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(DEPRECATEDDLL_CXXFLAGS) -H $**
 
-$(OBJS)\deprecateddll_version.res: ../../src/deprecated\src\msw\version.rc
+$(OBJS)\deprecateddll_version.res: ../../src/deprecated\..\..\..\src\msw\version.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i..\..\src\deprecated\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_bcc$(VENDORTAG) $**
 
 $(OBJS)\deprecateddll_prop.obj: ../../src/deprecated\prop.cpp

@@ -482,7 +482,7 @@ SOURCE=../../src/gizmos\statpict.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/gizmos\src\msw\version.rc
+SOURCE=../../src/gizmos\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "gizmos - Win32 DLL Universal Unicode Release"
 

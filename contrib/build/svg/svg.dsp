@@ -462,7 +462,7 @@ SOURCE=../../src/svg\..\..\..\src\msw\dummy.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/svg\src\msw\version.rc
+SOURCE=../../src/svg\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "svg - Win32 DLL Universal Unicode Release"
 

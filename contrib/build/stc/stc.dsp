@@ -736,7 +736,7 @@ SOURCE=../../src/stc\stc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/stc\src\msw\version.rc
+SOURCE=../../src/stc\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "stc - Win32 DLL Universal Unicode Release"
 

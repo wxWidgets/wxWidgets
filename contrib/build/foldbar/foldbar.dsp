@@ -470,7 +470,7 @@ SOURCE=../../src/foldbar\foldpanelitem.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/foldbar\src\msw\version.rc
+SOURCE=../../src/foldbar\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "foldbar - Win32 DLL Universal Unicode Release"
 

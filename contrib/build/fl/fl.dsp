@@ -526,7 +526,7 @@ SOURCE=../../src/fl\updatesmgr.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/fl\src\msw\version.rc
+SOURCE=../../src/fl\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "fl - Win32 DLL Universal Unicode Release"
 

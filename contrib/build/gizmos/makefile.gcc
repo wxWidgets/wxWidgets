@@ -247,7 +247,7 @@ endif
 $(OBJS)\gizmosdll_dummy.o: ../../src/gizmos/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-$(OBJS)\gizmosdll_version_rc.o: ../../src/gizmos/src/msw/version.rc
+$(OBJS)\gizmosdll_version_rc.o: ../../src/gizmos/../../../src/msw/version.rc
 	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/gizmos/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_gcc$(VENDORTAG)
 
 $(OBJS)\gizmosdll_dynamicsash.o: ../../src/gizmos/dynamicsash.cpp

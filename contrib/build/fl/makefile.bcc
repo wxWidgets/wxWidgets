@@ -278,7 +278,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 $(OBJS)\fldll_dummy.obj: ../../src/fl\..\..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(FLDLL_CXXFLAGS) -H $**
 
-$(OBJS)\fldll_version.res: ../../src/fl\src\msw\version.rc
+$(OBJS)\fldll_version.res: ../../src/fl\..\..\..\src\msw\version.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i..\..\src\fl\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl_bcc$(VENDORTAG) $**
 
 $(OBJS)\fldll_antiflickpl.obj: ../../src/fl\antiflickpl.cpp

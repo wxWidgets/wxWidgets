@@ -290,7 +290,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 $(OBJS)\netutilsdll_dummy.obj :  .AUTODEPEND ../../src/net\..\..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(NETUTILSDLL_CXXFLAGS) $<
 
-$(OBJS)\netutilsdll_version.res :  .AUTODEPEND ../../src/net\src\msw\version.rc
+$(OBJS)\netutilsdll_version.res :  .AUTODEPEND ../../src/net\..\..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG) $<
 
 $(OBJS)\netutilsdll_email.obj :  .AUTODEPEND ../../src/net\email.cpp

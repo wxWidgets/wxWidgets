@@ -462,7 +462,7 @@ SOURCE=../../src/plot\plot.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/plot\src\msw\version.rc
+SOURCE=../../src/plot\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "plot - Win32 DLL Universal Unicode Release"
 

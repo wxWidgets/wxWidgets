@@ -530,7 +530,7 @@ SOURCE=../../src/mmedia\sndwin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/mmedia\src\msw\version.rc
+SOURCE=../../src/mmedia\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "mmedia - Win32 DLL Universal Unicode Release"
 

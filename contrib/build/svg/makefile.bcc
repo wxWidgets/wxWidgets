@@ -248,7 +248,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 $(OBJS)\svgdll_dummy.obj: ../../src/svg\..\..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(SVGDLL_CXXFLAGS) -H $**
 
-$(OBJS)\svgdll_version.res: ../../src/svg\src\msw\version.rc
+$(OBJS)\svgdll_version.res: ../../src/svg\..\..\..\src\msw\version.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i..\..\src\svg\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_bcc$(VENDORTAG) $**
 
 $(OBJS)\svgdll_dcsvg.obj: ../../src/svg\dcsvg.cpp

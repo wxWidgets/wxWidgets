@@ -374,7 +374,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 $(OBJS)\ogldll_dummy.obj: ../../src/ogl\..\..\..\src\msw\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(OGLDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
-$(OBJS)\ogldll_version.res: ../../src/ogl\src\msw\version.rc
+$(OBJS)\ogldll_version.res: ../../src/ogl\..\..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i ..\..\src\ogl\..\..\..\include /i $(SETUPHDIR) /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_vc$(VENDORTAG) $**
 
 $(OBJS)\ogldll_basic2.obj: ../../src/ogl\basic2.cpp

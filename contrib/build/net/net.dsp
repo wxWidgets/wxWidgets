@@ -466,7 +466,7 @@ SOURCE=../../src/net\smapi.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/net\src\msw\version.rc
+SOURCE=../../src/net\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "netutils - Win32 DLL Universal Unicode Release"
 

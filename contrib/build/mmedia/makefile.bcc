@@ -286,7 +286,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 $(OBJS)\mmediadll_dummy.obj: ../../src/mmedia\..\..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(MMEDIADLL_CXXFLAGS) -H $**
 
-$(OBJS)\mmediadll_version.res: ../../src/mmedia\src\msw\version.rc
+$(OBJS)\mmediadll_version.res: ../../src/mmedia\..\..\..\src\msw\version.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i..\..\src\mmedia\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_bcc$(VENDORTAG) $**
 
 $(OBJS)\mmediadll_cdwin.obj: ../../src/mmedia\cdwin.cpp

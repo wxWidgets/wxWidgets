@@ -275,7 +275,7 @@ endif
 $(OBJS)\mmediadll_dummy.o: ../../src/mmedia/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_version_rc.o: ../../src/mmedia/src/msw/version.rc
+$(OBJS)\mmediadll_version_rc.o: ../../src/mmedia/../../../src/msw/version.rc
 	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/mmedia/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_gcc$(VENDORTAG)
 
 $(OBJS)\mmediadll_cdwin.o: ../../src/mmedia/cdwin.cpp

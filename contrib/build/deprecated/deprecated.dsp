@@ -487,7 +487,7 @@ SOURCE=../../src/deprecated\treelay.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/deprecated\src\msw\version.rc
+SOURCE=../../src/deprecated\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "deprecated - Win32 DLL Universal Unicode Release"
 

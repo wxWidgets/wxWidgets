@@ -352,7 +352,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 $(OBJS)\svgdll_dummy.obj: ../../src/svg\..\..\..\src\msw\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(SVGDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
-$(OBJS)\svgdll_version.res: ../../src/svg\src\msw\version.rc
+$(OBJS)\svgdll_version.res: ../../src/svg\..\..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i ..\..\src\svg\..\..\..\include /i $(SETUPHDIR) /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_vc$(VENDORTAG) $**
 
 $(OBJS)\svgdll_dcsvg.obj: ../../src/svg\dcsvg.cpp
