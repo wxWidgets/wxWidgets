@@ -73,14 +73,15 @@ class wxSTCCallTip : public wxSTCCallTipBase {
 public:
     wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx)
         : wxSTCCallTipBase(parent, param2),
-          m_ct(ct), m_swx(swx)
+          m_ct(ct), m_swx(swx), m_cx(-1), m_cy(-1)
         {
         }
 
     ~wxSTCCallTip() {
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP && defined(__WXGTK__)
         wxRect rect = GetRect();
-        GetParent()->ScreenToClient(&rect.x, &rect.y);
+        rect.x = m_cx;
+        rect.y = m_cy;
         GetParent()->Refresh(false, &rect);
 #endif
     }
@@ -112,17 +113,26 @@ public:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) {
-        if (x != -1)
+        if (x != -1) {
+            m_cx = x;
             GetParent()->ClientToScreen(&x, NULL);
-        if (y != -1)
+        }
+        if (y != -1) {
+            m_cy = y;
             GetParent()->ClientToScreen(NULL, &y);
+        }
         wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
     }
 #endif
 
+    wxPoint GetMyPosition() {
+        return wxPoint(m_cx, m_cy);
+    }
+    
 private:
     CallTip*      m_ct;
     ScintillaWX*  m_swx;
+    int           m_cx, m_cy;
     DECLARE_EVENT_TABLE()
 };
 
@@ -926,10 +936,10 @@ void ScintillaWX::ClipChildren(wxDC& dc, PRectangle rect) {
         rgn.Subtract(childRect);
     }
     if (ct.inCallTipMode) {
-        wxWindow* tip = (wxWindow*)ct.wCallTip.GetID();
+        wxSTCCallTip* tip = (wxSTCCallTip*)ct.wCallTip.GetID();
         wxRect childRect = tip->GetRect();
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
-        tip->GetParent()->ScreenToClient(&childRect.x, &childRect.y);
+        childRect.SetPosition(tip->GetMyPosition());
 #endif
         rgn.Subtract(childRect);
     }
