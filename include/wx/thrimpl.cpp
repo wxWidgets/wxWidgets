@@ -64,12 +64,12 @@ wxMutexError wxMutex::Unlock()
 // wxConditionInternal
 // --------------------------------------------------------------------------
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__EMX__)
 // Win32 and OS/2 don't have explicit support for the POSIX condition
 // variables and their events/event semaphores have quite different semantics,
 // so we reimplement the conditions from scratch using the mutexes and
 // semaphores
-#ifdef __WXPM__
+#if defined(__WXPM__) || defined(__EMX__)
 void InterlockedIncrement(LONG *num)
 {
   ::DosEnterCritSec();
