@@ -26,6 +26,8 @@
 #ifndef WX_PRECOMP
 #endif
 
+#if wxUSE_DATEPICKCTRL
+
 #include "wx/datectrl.h"
 
 #define _WX_DEFINE_DATE_EVENTS_
@@ -223,3 +225,4 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     return wxDatePickerCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
 
+#endif // wxUSE_DATEPICKCTRL
