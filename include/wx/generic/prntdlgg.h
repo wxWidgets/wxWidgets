@@ -160,7 +160,8 @@ private:
 class WXDLLEXPORT wxGenericPageSetupDialog : public wxDialog
 {
 public:
-    wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data = (wxPageSetupData*) NULL);
+    wxGenericPageSetupDialog(wxWindow *parent = NULL,
+                             wxPageSetupData* data = NULL);
     virtual ~wxGenericPageSetupDialog();
 
     virtual bool TransferDataFromWindow();
@@ -186,7 +187,7 @@ public:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxGenericPageSetupDialog)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGenericPageSetupDialog)
 };
 
 #endif
