@@ -319,7 +319,7 @@ bool wxStringBase::AllocBeforeWrite(size_t nLen)
   // it doesn't really matter what the string length is as it's going to be
   // overwritten later but, for extra safety, set it to 0 for now as we may
   // have some junk in m_pchData
-  pData->nDataLength = 0;
+  GetStringData()->nDataLength = 0;
 
   return true;
 }
