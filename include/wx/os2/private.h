@@ -34,9 +34,6 @@
  typedef SPBCDATA *PSPBCDATA;
 #endif
 
-#undef WS_VISIBLE
-#define WS_VISIBLE 0
-
 #include "wx/fontenc.h"
 
 class WXDLLEXPORT wxFont;
