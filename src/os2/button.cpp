@@ -13,6 +13,7 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/button.h"
     #include "wx/brush.h"
     #include "wx/panel.h"

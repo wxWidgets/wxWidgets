@@ -16,7 +16,9 @@
 
 // wxWindows
 #ifndef WX_PRECOMP
-  #include  "wx/string.h"
+  #include "wx/app.h"
+  #include "wx/string.h"
+  #include "wx/settings.h"
 #endif  // WX_PRECOMP
 
 #include  "wx/log.h"

@@ -27,6 +27,7 @@
 #include "wx/ownerdrw.h"
 #include "wx/settings.h"
 #include "wx/dcmemory.h"
+#include "wx/dcscreen.h"
 #include "wx/os2/checklst.h"
 #include "wx/log.h"
 

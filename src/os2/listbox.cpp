@@ -21,6 +21,7 @@
 #include "wx/brush.h"
 #include "wx/font.h"
 #include "wx/dc.h"
+#include "wx/dcscreen.h"
 #include "wx/utils.h"
 #include "wx/scrolwin.h"
 #endif
