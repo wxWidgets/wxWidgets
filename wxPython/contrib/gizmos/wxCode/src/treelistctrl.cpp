@@ -3554,48 +3554,6 @@ void wxTreeListMainWindow::PaintLevel (wxTreeListItem *item, wxDC &dc,
             if (HasButtons()) y_mid += 5;
             dc.DrawLine(x, y_mid, x, oldY);
         }
-
-        
-//         // clip to the column width
-//         size_t clip_width = m_owner->GetHeaderWindow()->
-//                             GetColumn(m_main_column).GetWidth();
-//         wxDCClipper clipper(dc, x_colstart, y_top, clip_width, 10000);
-
-//         // process lower levels
-//         int oldY;
-//         if (m_imgWidth > 0) {
-//             oldY = y_mid + m_imgHeight2;
-//         }else{
-//             oldY = y_mid + h/2;
-//         }
-//         int y2;
-//         int n;
-//         for (n = 0; n < (int)children.Count(); ++n) {
-
-//             if (!HasFlag(wxTR_NO_LINES))
-//             {
-//                 // draw line down to last child
-//                 if (children[n]->HasPlus() && HasButtons()) {
-//                     y2 = y + h/2 - m_btnHeight2;
-//                     if (HasButtons()) {
-//                         dc.DrawLine(x+m_indent, oldY, x+m_indent, y2);
-//                     }else{
-//                         dc.DrawLine(x, oldY, x, y2);
-//                     }
-//                     oldY = y2 + m_btnHeight;
-//                 }else{
-//                     y2 = y + h/2;
-//                     if (HasButtons()) {
-//                         dc.DrawLine(x+m_indent, oldY, x+m_indent, y2);
-//                     }else{
-//                         dc.DrawLine(x, oldY, x, y2);
-//                     }
-//                     oldY = y2;
-//                 }
-//             }
-
-//             PaintLevel (children[n], dc, level+1, y, x_colstart);
-//         }
     }
 }
 
