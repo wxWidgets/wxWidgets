@@ -1060,6 +1060,9 @@ class wxMenuItemPtr(wxObjectPtr):
     def GetMenu(self, *_args, **_kwargs):
         val = windowsc.wxMenuItem_GetMenu(self, *_args, **_kwargs)
         return val
+    def SetMenu(self, *_args, **_kwargs):
+        val = windowsc.wxMenuItem_SetMenu(self, *_args, **_kwargs)
+        return val
     def SetId(self, *_args, **_kwargs):
         val = windowsc.wxMenuItem_SetId(self, *_args, **_kwargs)
         return val

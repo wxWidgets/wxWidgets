@@ -10790,6 +10790,43 @@ static PyObject *_wrap_wxMenuItem_GetMenu(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxMenuItem_SetMenu(_swigobj,_swigarg0)  (_swigobj->SetMenu(_swigarg0))
+static PyObject *_wrap_wxMenuItem_SetMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenuItem * _arg0;
+    wxMenu * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","menu", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMenuItem_SetMenu",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_SetMenu. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetMenu. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxMenuItem_SetMenu(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxMenuItem_SetId(_swigobj,_swigarg0)  (_swigobj->SetId(_swigarg0))
 static PyObject *_wrap_wxMenuItem_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11978,6 +12015,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuItem_IsSeparator", (PyCFunction) _wrap_wxMenuItem_IsSeparator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetId", (PyCFunction) _wrap_wxMenuItem_GetId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetId", (PyCFunction) _wrap_wxMenuItem_SetId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuItem_SetMenu", (PyCFunction) _wrap_wxMenuItem_SetMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetMenu", (PyCFunction) _wrap_wxMenuItem_GetMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMenuItem", (PyCFunction) _wrap_new_wxMenuItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_GetHelpString", (PyCFunction) _wrap_wxMenuBar_GetHelpString, METH_VARARGS | METH_KEYWORDS },
