@@ -453,9 +453,17 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
     m_sizeSet = TRUE;
 
+    /* send size event to frame */
+
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
+
+    /* send size event to status bar */
+
+    wxSizeEvent event2( wxSize(m_frameStatusBar->m_width,m_frameStatusBar->m_height), m_frameStatusBar->GetId() );
+    event2.SetEventObject( m_frameStatusBar );
+    m_frameStatusBar->GetEventHandler()->ProcessEvent( event2 );
 
     m_resizing = FALSE;
 }
