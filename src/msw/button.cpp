@@ -131,6 +131,20 @@ wxSize wxButton::DoGetBestSize()
     return wxSize(wBtn, hBtn);
 }
 
+/* static */
+wxSize wxButton::GetDefaultSize()
+{
+    // the base unit is the height of the system GUI font
+    int wChar, hChar;
+    wxGetCharSize(0, &wChar, &hChar, NULL);
+
+    // the button height is proportional to the height of the font used
+    int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
+
+    // and the width/height ration is 75/23
+    return wxSize((75 * hBtn) / 23, hBtn);
+}
+
 // ----------------------------------------------------------------------------
 // set this button as the default one in its panel
 // ----------------------------------------------------------------------------

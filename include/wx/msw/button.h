@@ -49,6 +49,8 @@ public:
 
     virtual void SetDefault();
 
+    static wxSize GetDefaultSize();
+
     // implementation from now on
     virtual void Command(wxCommandEvent& event);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
