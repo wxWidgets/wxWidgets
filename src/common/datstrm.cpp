@@ -116,6 +116,27 @@ wxString wxDataStream::ReadLine()
   return i_strg;
 }
 
+wxString wxDataStream::ReadString()
+{
+  wxString wx_string;
+  char *string;
+  unsigned long len;
+
+  if (!m_istream)
+    return "";
+
+  len = Read32();
+  string = new char[len+1];
+
+  m_istream->read(string, len);
+
+  string[len] = 0;
+  wx_string = string;
+  delete string;
+
+  return wx_string; 
+}
+
 void wxDataStream::Write32(unsigned long i)
 {
   char buf[4];
@@ -152,11 +173,24 @@ void wxDataStream::Write8(unsigned char i)
 
 void wxDataStream::WriteLine(const wxString& line)
 {
+#ifdef __WINDOWS__
+  wxString tmp_string = line + "\r\n";
+#else
   wxString tmp_string = line + '\n';
+#endif
 
   if (!m_ostream)
     return;
 
+  m_ostream->write((const char *) tmp_string, tmp_string.Length());
+}
+
+void wxDataStream::WriteString(const wxString& string)
+{
+  if (!m_ostream)
+    return;
+
+  Write32(tmp_string.Length());
   m_ostream->write((const char *) tmp_string, tmp_string.Length());
 }
 

@@ -1,0 +1,39 @@
+\section{\class{wxProcess}}\label{wxprocess}
+
+This class contains a method which is invoked when a process finishes.
+It can raise a \helpref{wxProcessEvent}{wxprocessevent} if wxProcess::OnTerminate
+isn't overriden.
+
+\wxheading{Derived from}
+
+\helpref{wxEvtHandler}{wxevthandler}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxProcess::wxProcess}\label{wxprocessconstr}
+
+\func{}{wxProcess}{\param{wxEvtHandler *}{ parent = NULL}, \param{int}{ id = -1}}
+
+Constructs a process object. {\it id} is only used in the case you want to
+use wxWindows events. 
+
+\wxheading{Parameters}
+
+\docparam{parent}{The event handler parent.}
+
+\docparam{id}{id of an event.}
+
+\membersection{wxProcess::\destruct{wxProcess}}
+
+\func{}{\destruct{wxProcess}}{\void}
+
+Destroys the wxProcess object.
+
+\membersection{wxProcess::OnTerminate}\label{wxprocessonterminate}
+
+\constfunc{void}{OnTerminate}{\param{int}{ pid}}
+
+It is called when the process with the pid {\it pid} finishes.
+It raises a wxWindows event when it isn't overriden.
+
+\docparam{pid}{The pid of the process which ends.}

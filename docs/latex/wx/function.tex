@@ -905,9 +905,9 @@ See also \helpref{wxIsBusy}{wxisbusy}.
 
 \membersection{::wxExecute}\label{wxexecute}
 
-\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{bool }{sync = FALSE}}
+\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{bool }{sync = FALSE}, \param{wxProcess *}{callback = NULL}}
 
-\func{long}{wxExecute}{\param{const wxString\& *}{argv}, \param{bool }{sync = FALSE}}
+\func{long}{wxExecute}{\param{const wxString\& *}{argv}, \param{bool }{sync = FALSE}, \param{wxProcess *}{callback = NULL}}
 
 Executes another program in UNIX or Windows.
 
@@ -923,7 +923,11 @@ If execution is asynchronous, the return value is the process id,
 otherwise it is a status value.  A zero value indicates that the command could not
 be executed.
 
-See also \helpref{wxShell}{wxshell}.
+If callback isn't NULL and if execution is asynchronous,
+\helpref{wxProcess::OnTerminate}{wxprocessonterminate} will be called when
+the process finishes.
+
+See also \helpref{wxShell}{wxshell}, \helpref{wxProcess}{wxprocess}.
 
 \membersection{::wxExit}\label{wxexit}
 

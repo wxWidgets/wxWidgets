@@ -364,7 +364,7 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
     proc_data->pid = 0;
 };
 
-long wxExecute( char **argv, bool Async, wxProcess *process )
+long wxExecute( char **argv, bool sync, wxProcess *process )
 {
     wxEndProcessData *data = new wxEndProcessData;
     int end_proc_detect[2];
@@ -409,7 +409,7 @@ long wxExecute( char **argv, bool Async, wxProcess *process )
     data->tag = gdk_input_add(end_proc_detect[0], GDK_INPUT_READ,
                               GTK_EndProcessDetector, (gpointer)data);
     data->pid = pid;
-    if (Async) {
+    if (!sync) {
       data->process = process;
     } else {
       data->process = NULL;
@@ -424,7 +424,7 @@ long wxExecute( char **argv, bool Async, wxProcess *process )
     return pid;
 };
 
-long wxExecute( const wxString& command, bool Async, wxProcess *process )
+long wxExecute( const wxString& command, bool sync, wxProcess *process )
 {
     if (command.IsNull() || command == "") return FALSE;
 
@@ -438,6 +438,6 @@ long wxExecute( const wxString& command, bool Async, wxProcess *process )
     argv[argc++] = strtok (tmp, IFS);
     while ((argv[argc++] = strtok(NULL, IFS)) != NULL)
 	/* loop */ ;
-    return wxExecute(argv, Async, process);
+    return wxExecute(argv, sync, process);
 };
 

@@ -31,12 +31,14 @@ public:
   unsigned char Read8();
   double ReadDouble();
   wxString ReadLine();
+  wxString ReadString();
 
   void Write32(unsigned long i);
   void Write16(unsigned short i);
   void Write8(unsigned char i);
   void WriteDouble(double d);
   void WriteLine(const wxString& line);
+  void WriteString(const wxString& string);
 protected:
   istream *m_istream;
   ostream *m_ostream;
