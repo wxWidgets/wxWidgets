@@ -68,6 +68,22 @@
     #define LVS_OWNERDATA 0x1000
 #endif
 
+// mingw32/cygwin don't have declarations for comctl32.dll 4.70+ stuff
+#ifndef NM_CACHEHINT
+    typedef struct tagNMLVCACHEHINT
+    {
+        NMHDR   hdr;
+        int     iFrom;
+        int     iTo;
+    } NMLVCACHEHINT;
+
+    #define NM_CACHEHINT NMLVCACHEHINT
+#endif
+
+#ifndef LVN_ODCACHEHINT
+    #define LVN_ODCACHEHINT (-113)
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
