@@ -659,8 +659,6 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
         SetPriority(m_priority);
     }
 
-    m_state = STATE_NEW;
-    
     return TRUE;
 }
 
