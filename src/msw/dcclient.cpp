@@ -310,15 +310,11 @@ WXHDC wxPaintDC::FindDCInCache(wxWindow* win)
  * wxPaintDCEx
  */
  
+// TODO: don't duplicate wxPaintDC code here!!
+
 wxPaintDCEx::wxPaintDCEx(wxWindow *canvas, WXHDC dc) : saveState(0)
 {
-#ifdef __WXDEBUG__
-    if ( !dc )
-    {
-        wxFAIL_MSG( wxT("wxPaintDCEx requires an existing device context") );
-        return;
-    }
-#endif // __WXDEBUG__
+    wxCHECK_RET( dc, wxT("wxPaintDCEx requires an existing device context") );
 
     m_canvas = canvas;
 
