@@ -16,6 +16,10 @@ OTHER CHANGES
 2.2.10
 ------
 
+All:
+
+- added Hungarian translations (Janos Vegh)
+
 Unix:
 
 - fixed configure bug which prevented it from finding anything with some
