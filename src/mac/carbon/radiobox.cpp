@@ -483,7 +483,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     {
         if (i&&((i%m_majorDim)==0)) // not to do for the zero button!
         {
-            if (m_windowStyle & wxRA_VERTICAL)
+            if (m_windowStyle & wxRA_SPECIFY_ROWS)
             {
                 x_offset += maxWidth + charWidth;
                 y_offset = y_start;
@@ -512,7 +512,7 @@ wxSize wxRadioBox::DoGetBestSize() const
     int eachWidth, eachHeight;
     int totWidth, totHeight;
     
-    wxFont font = GetParent()->GetFont();
+    wxFont font = /*GetParent()->*/GetFont();
     GetTextExtent(wxT("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"),
         &charWidth, &charHeight, NULL, NULL, &font);
 
