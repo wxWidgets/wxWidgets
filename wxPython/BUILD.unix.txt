@@ -50,10 +50,10 @@ A. First of all, check and see if you've already got glib/gtk+ on your
    skip to step #2.
 
 B. If your system has a binary package mechanism, (RPMs, debs,
-   whatever,) check and see if binaries for glib abd gtk+ are
-   available.  Be sure to get the runtime library package and the
-   development package.  Install them with your package tool, and skip
-   to step #2.
+   whatever...) check and see if binaries for glib abd gtk+ are
+   available.  Be sure to get the runtime library package as well as
+   the development package, if they are separate.  Install them with
+   your package tool, and skip to step #2.
 
 C. If all else fails, you can get the source code for glib and gtk+ at
    http://www.gtk.org/.  Fetch the latest of each in the 1.2.x
@@ -66,8 +66,9 @@ C. If all else fails, you can get the source code for glib and gtk+ at
 	    make install
 
    The last step will probably have to be done as root.  Also, if your
-   system needs anything done to update the dynamic loader, (such as
-   running ldconfig on Linux) then do it now.
+   system needs anything done to update the dynamic loader for shared
+   libraries, (such as running ldconfig on Linux) then do it after
+   each library is installed.
 
 
 
@@ -85,7 +86,7 @@ A. You can find the sources and RPMs for wxGTK at
    that it usually has had more testing done.  You can decide which
    method is best for you.
 
-B. You'll usually want to use a version of wxGTK that haa the same
+B. You'll usually want to use a version of wxGTK that has the same
    version number as the wxPython sources you are using.  (Another
    advantage of using CVS is that you'll get both at the same time.)
 
@@ -102,8 +103,8 @@ D. If using the sources (either from the tarball or from CVS) then
 	cd build
 	../configure --with-gtk
 
-   There are gobs abd gobs of options for the configure script, run
-   ../configure --help to see them all.  I'll descibe some that I find
+   There are gobs and gobs of options for the configure script, run
+   ../configure --help to see them all.  I'll describe some that I find
    useful here.
 
    If you have OpenGL or compatible libraries installed, then add the
@@ -126,8 +127,8 @@ E. Now just compile and install.  You need to use GNU make, so if your
        make install
 
    The last step will probably have to be done as root.  Also, if your
-   system needs anything done to update the dynamic loader, (such as
-   running ldconfig on Linux) then do it now.
+   system needs anything done to update the dynamic loader for shared
+   libraries, (such as running ldconfig on Linux) then do it now.
 
 F. You can test your build by changing to one of the directories under
    build/samples or build/demos, running make and then running the
@@ -164,6 +165,26 @@ B. As mentioned previouslly, wxPython is built with the standard
    with
 
          LDSHARED=gcc -G
+
+   While we're on the subject of how Python was built... Since
+   wxPython is a C++ extension some platforms and/or compilers will
+   require that the Python executable was linked with the C++ linker
+   in order for everything to work correctly.  If you build and
+   install Python yourself then this is easy to take care of,
+   otherwise you may have to mess with binary packages or bribe your
+   system administrator...
+
+   In my case on Solaris wxPython applications would core dump on
+   exit.  The core file indicated that the fault happened after
+   _exit() was called and the run-time was trying to execute cleanup
+   code.  After relinking the Python executable the problem went away.
+   To build Python to link with the C++ linker do this:
+
+         cd Python-2.0      # wherever the root of the source tree is
+	 rm python          # in case it's still there from an old build
+         make LINKCC=g++    # or whatever your C++ command is
+	 make install
+
 
 C. Change to the root wxPython directory and look at the setup.py
    file.  This is the script that configures and defines all the

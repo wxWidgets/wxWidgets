@@ -2,10 +2,10 @@
 #----------------------------------------------------------------------
 
 import sys, os, string
-from distutils.core import setup, Extension
+from distutils.core      import setup, Extension
 from distutils.file_util import copy_file
-from distutils.dir_util import mkpath
-from distutils.dep_util import newer
+from distutils.dir_util  import mkpath
+from distutils.dep_util  import newer
 
 from my_distutils import run_swig, contrib_copy_tree
 
@@ -30,7 +30,7 @@ feel (and runtime speed) on the platforms it is supported on.
 BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
-
+CORE_ONLY = 0      # if true, don't build any of the above
 
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
@@ -71,7 +71,7 @@ debug = '--debug' in sys.argv or '-g' in sys.argv
 # Check for build flags on the command line
 #----------------------------------------------------------------------
 
-for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC',
+for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'CORE_ONLY',
              'USE_SWIG', 'IN_CVS_TREE', 'FINAL', 'HYBRID',
              'WXDLLVER', ]:
     for x in range(len(sys.argv)):
@@ -83,6 +83,11 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC',
 
 sys.argv = filter(None, sys.argv)
 
+
+if CORE_ONLY:
+    BUILD_GLCANVAS = 0
+    BUILD_OGL = 0
+    BUILD_STC = 0
 
 #----------------------------------------------------------------------
 # Setup some platform specific stuff
@@ -426,7 +431,6 @@ setup(name             = PKGDIR,
       packages = [PKGDIR,
                   PKGDIR+'.lib',
                   PKGDIR+'.lib.editor',
-                  PKGDIR+'.lib.sizers'
                   ],
 
       ext_package = PKGDIR,
