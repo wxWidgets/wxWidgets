@@ -90,6 +90,7 @@ class wxListBox: public wxControl
     
     int GetIndex( GtkWidget *item ) const;
     GtkWidget *GetConnectWidget(void);
+    bool IsOwnGtkWindow( GdkWindow *window );
     
   private:
   

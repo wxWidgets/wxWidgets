@@ -1451,7 +1451,9 @@ bool wxResourceManager::DeleteResource(wxWindow *win)
     {
       RemoveSelection(item);
       childHandler->SelectItem(FALSE);
+#ifndef __WXGTK__
       item->GetParent()->Refresh();
+#endif
     }
   }
   

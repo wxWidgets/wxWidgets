@@ -58,6 +58,11 @@ LIB_CPP_SRC=\
  common/socket.cpp \
  common/sckaddr.cpp \
  common/sckipc.cpp \
+ common/protocol.cpp \
+ common/ftp.cpp \
+ common/http.cpp \
+ common/url.cpp \
+ common/tokenzr.cpp \
 \
  gtk/accel.cpp \
  gtk/app.cpp \

@@ -188,15 +188,11 @@ The following options handle the kind of library you want to build.
 * Feature Options
 -------------------
 
-When using the Windows version of wxWindows, it is possible
-to edit the file /include/wx/msw/setup.h in order to enable
-or disable some features of wxWindows so that the resulting
-binaries get smaller.
-
 As I don't yet care for binary size and target mainly at
 producing a shared library, wxWindows's configure system auto-
 matically enables all features, as long as they are already
-implemented.
+implemented. It is currently NOT possible to disable these
+options (in contrast to what configure tells you).
 
 * Compiling
 -------------
@@ -204,19 +200,14 @@ implemented.
 The following must be done in the base directory (e.g. ~/wxGTK
 or ~/wxWin or whatever)
 
-Dependencies are generated automatically using
-
-	make depend
-	
-(For some reason, this doesn't seem to work.)
-
-Now the makefiles are created you can compile everything is as simple
-as typing:
+Now the makefiles are created and you can compile everything 
+by typing:
 
 	make
 
 make yourself some coffee, as it will try to compile ALL the 
-files in this distribution.
+files in this distribution. During compilation, you'll get
+a few warning messages.
 
 if you want to be more selective:
 

@@ -51,6 +51,7 @@ install::
 	   /usr/local/include/wx \
 	   /usr/local/include/wx/gtk \
 	   /usr/local/include/wx/common \
+	   /usr/local/include/wx/protocol \
 	   /usr/local/include/wx/generic
 	@echo "  Copying headers from /include/wx"
 	@cd $(WXBASEDIR)/include/wx ; \
@@ -69,6 +70,12 @@ install::
 	for f in *.h ; do \
 	  rm -f $(includedir)/wx/generic/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/generic/$$f ; \
+	done
+	@echo "  Copying headers from /include/wx/protocol"
+	@cd $(WXBASEDIR)/include/wx/protocol ; \
+	for f in *.h ; do \
+	  rm -f $(includedir)/wx/protocol/$$f ; \
+	  $(INSTALL_DATA) $$f $(includedir)/wx/protocol/$$f ; \
 	done
 	@echo "  Copying wx-config"
 	@cd $(WXBASEDIR) ; \

@@ -426,4 +426,19 @@ void wxListBox::SetFont( const wxFont &font )
   }
 }
 
+bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
+{
+  if (wxWindow::IsOwnGtkWindow( window )) return TRUE;
+  
+  GList *child = m_list->children;
+  while (child)
+  {
+    GtkBin *bin = (GtkBin*) child->data;
+    if (bin->child->window == window) return TRUE;
+    child = child->next;
+  }
+  
+  return FALSE;
+}
+
 

@@ -1127,7 +1127,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
    }
   }
 #endif
-#if 0
+#if 1
   else if (controlType == "wxRadioBox")
   {
     PrologExpr *valueList = (PrologExpr *) NULL;

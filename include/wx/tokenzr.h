@@ -18,6 +18,7 @@
 
 #include "wx/object.h"
 #include "wx/string.h"
+#include "wx/filefn.h"
 
 class wxStringTokenizer : wxObject {
 public:

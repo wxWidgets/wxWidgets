@@ -63,15 +63,15 @@ public:
   wxProtocol();
 
   bool Reconnect();
-  virtual bool Connect(const wxString& host) { return FALSE; } 
-  virtual bool Connect(wxSockAddress& addr) { return wxSocketClient::Connect(addr); }
+  virtual bool Connect( const wxString& WXUNUSED(host) ) { return FALSE; } 
+  virtual bool Connect( wxSockAddress& addr) { return wxSocketClient::Connect(addr); }
 
   virtual bool Abort() = 0;
   virtual wxInputStream *GetInputStream(const wxString& path) = 0;
   virtual wxProtocolError GetError() = 0;
   virtual wxString GetContentType() { return (char *)NULL; }
-  virtual void SetUser(const wxString& user) {}
-  virtual void SetPassword(const wxString& passwd) {}
+  virtual void SetUser(const wxString& WXUNUSED(user)) {}
+  virtual void SetPassword(const wxString& WXUNUSED(passwd) ) {}
 };
 
 wxProtocolError WXDLLEXPORT GetLine(wxSocketBase *sock, wxString& result);
