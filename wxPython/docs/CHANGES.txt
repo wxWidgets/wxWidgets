@@ -68,7 +68,8 @@ Extended the wx.calendar.CalendarCtrl class with methods that get/set
 a Python datetime or date object.  (These will only work with Python
 2.3+) The methods are PySetDate, PyGetDate, PySetLowerDateLimit,
 PySetUpperDateLimit, PySetDateRange, PyGetLowerDateLimit, and
-PyGetUpperDateLimit. 
+PyGetUpperDateLimit.  Also, CalendarEvent was extended with PySetDate
+and PyGetDate methods.
 
 
 
