@@ -509,6 +509,14 @@ bool wxWindowOS2::Enable(
     if ( hWnd )
         ::WinEnableWindow(hWnd, (BOOL)bEnable);
 
+    //
+    // The logic below doesn't apply to the top level windows -- otherwise
+    // showing a modal dialog would result in total greying out (and ungreying
+    // out later) of everything which would be really ugly
+    //
+    if (IsTopLevel())
+        return TRUE;
+
     wxWindowList::Node*             pNode = GetChildren().GetFirst();
 
     while (pNode)
