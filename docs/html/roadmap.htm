@@ -97,6 +97,8 @@ combined base/GUI library for GUI applications only.
 <li>Release date: March 5th, 2000
 <li>Miscellaneous fixes and small enhancements.
 <li>wxDateTime class in beta.
+<li>Context sensitive help
+<li>More i18n issues: dates, times, ...
 </ul>
 
 <P>
@@ -155,6 +157,10 @@ that can handle multiple formats).
 add constraint specification to WXR syntax and Dialog Editor; add multilanguage support to WXR.
 May be we'd better change the format completely and replace WXR with XML
 (providing conversion utility for old files)?
+<li>Context sensitive help: we need to have wxHelpEvent which would be
+generated when the help for a given control is requested and a standard
+handler for it in wxWindow which would invoke the default help system with the
+correct help id.
 <li>Rewrite Dialog Editor.
 <li>Modem-oriented classes: wxDialUpManager for dialing up the ISP and
 determining if there is a connection to Internet on the machine and
