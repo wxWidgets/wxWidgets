@@ -3,7 +3,7 @@
 // Purpose:     XRC resource for wxStatusBar
 // Author:      Brian Ravnsgaard Riis
 // Created:     2004/01/21
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Brian Ravnsgaard Riis
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBarXmlHandler, wxXmlResourceHandler)
 
-wxStatusBarXmlHandler::wxStatusBarXmlHandler() : 
+wxStatusBarXmlHandler::wxStatusBarXmlHandler() :
         wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxST_SIZEGRIP);
@@ -51,8 +51,8 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
     if(fields > 1)
     {
         int *width = new int[fields];
-  
-        for (unsigned int i = 0; i < fields; ++i)
+
+        for (int i = 0; i < fields; ++i)
         {
             width[i] = wxAtoi(widths.BeforeFirst(wxT(',')));
             if(widths.Find(wxT(',')))
