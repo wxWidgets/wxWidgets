@@ -70,7 +70,7 @@
     if ( Config("wx") ) {
 	#! default rel path works for all the demos and most of the samples
 	#! if no explicit path given
-	$WXDIR = Project("WXDIR") || "..\\..";
+	$WXDIR = Project("WXDIR") || (Project("WXDIRREL") || "..\\..");
 
 	AddIncludePath("$WXDIR\\include");
 
