@@ -220,11 +220,18 @@ void MyFrame::OnAbout(wxCommandEvent&)
 
 void MyFrame::OnDelete(wxCommandEvent&)
 {
-    if ( wxConfigBase::Get()->DeleteAll() ) 
+    wxConfigBase *pConfig = wxConfigBase::Get();
+    if ( pConfig == NULL )
+    {
+        wxLogError(_T("No config to delete!"));
+        return;
+    }
+
+    if ( pConfig->DeleteAll() )
     {
         wxLogMessage(_T("Config file/registry key successfully deleted."));
 
-        delete wxConfigBase::Set((wxConfigBase *) NULL);
+        delete wxConfigBase::Set(NULL);
         wxConfigBase::DontCreateOnDemand();
     }
     else
@@ -235,10 +242,11 @@ void MyFrame::OnDelete(wxCommandEvent&)
 
 MyFrame::~MyFrame()
 {
-  // save the control's values to the config
   wxConfigBase *pConfig = wxConfigBase::Get();
   if ( pConfig == NULL )
     return;
+
+  // save the control's values to the config
   pConfig->Write("/Controls/Text", m_text->GetValue());
   pConfig->Write("/Controls/Check", m_check->GetValue());
 
@@ -253,3 +261,4 @@ MyFrame::~MyFrame()
 
   pConfig->Write("/TestValue", wxT("A test value"));
 }
+
