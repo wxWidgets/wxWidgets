@@ -74,27 +74,26 @@ wxString wxBestHelpController::GetValidFilename( const wxString& filename ) cons
 
     switch( m_helpControllerType )
     {
-    case wxUseChmHelp:
-        if( ::wxFileExists( tmp + ".chm" ) )
-            return tmp + ".chm";
+        case wxUseChmHelp:
+            if( ::wxFileExists( tmp + ".chm" ) )
+                return tmp + ".chm";
 
-        return filename;
-        break;
-    case wxUseHtmlHelp:
-        if( ::wxFileExists( tmp + ".htb" ) )
-            return tmp + ".htb";
-        if( ::wxFileExists( tmp + ".zip" ) )
-            return tmp + ".zip";
-        if( ::wxFileExists( tmp + ".hhp" ) )
-            return tmp + ".hhp";
+            return filename;
 
-        return filename;
-        break;
-    default:
-        // we CAN'T get here
-        wxFAIL_MSG( wxT("wxBestHelpController: Must call Initialize, first!") );
-        return wxEmptyString;
-        break;
+        case wxUseHtmlHelp:
+            if( ::wxFileExists( tmp + ".htb" ) )
+                return tmp + ".htb";
+            if( ::wxFileExists( tmp + ".zip" ) )
+                return tmp + ".zip";
+            if( ::wxFileExists( tmp + ".hhp" ) )
+                return tmp + ".hhp";
+
+            return filename;
+
+        default:
+            // we CAN'T get here
+            wxFAIL_MSG( wxT("wxBestHelpController: Must call Initialize, first!") );
+            return wxEmptyString;
     }
 }
 
