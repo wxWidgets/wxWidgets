@@ -18,6 +18,7 @@
 #include <ctype.h>
 #include <wx/stream.h>
 #include <wx/datstrm.h>
+#include <wx/objstrm.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -270,6 +271,15 @@ wxInputStream& wxInputStream::operator>>(short& i)
   return *this;
 }
 
+wxInputStream& wxInputStream::operator>>(int& i)
+{
+  long l;
+
+  *this >> l;
+  i = (short)l;
+  return *this;
+}
+
 wxInputStream& wxInputStream::operator>>(long& i)
 {
   /* I only implemented a simple integer parser */
@@ -338,6 +348,13 @@ wxInputStream& wxInputStream::operator>>(float& f)
 
   f *= sign;
 
+  return *this;
+}
+
+wxInputStream& wxInputStream::operator>>(wxObject *& obj)
+{
+  wxObjectInputStream obj_s(*this);
+  obj = obj_s.LoadObject();
   return *this;
 }
 
@@ -502,6 +519,13 @@ wxOutputStream& wxOutputStream::operator<<(double f)
 
   strfloat.Printf("%f", f);
   return Write(strfloat, strfloat.Len());
+}
+
+wxOutputStream& wxOutputStream::operator<<(wxObject& obj)
+{
+  wxObjectOutputStream obj_s(*this);
+  obj_s.SaveObject(obj);
+  return *this;
 }
 
 // ----------------------------------------------------------------------------

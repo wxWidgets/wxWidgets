@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     July 1998
 // RCS-ID:      $Id$
-// Copyright:   (c) Guilhem Lavaux
+// Copyright:   (c) 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -41,7 +41,7 @@ class WXSERIAL(wxWindow) : public WXSERIAL(wxObject)
 DECLARE_SERIAL_CLASS(wxIndividualLayoutConstraint, wxObject)
 DECLARE_SERIAL_CLASS(wxLayoutConstraints, wxObject)
 DECLARE_SERIAL_CLASS(wxFrame, wxWindow)
-//DECLARE_SERIAL_CLASS(wxPanel, wxWindow)
+DECLARE_SERIAL_CLASS(wxPanel, wxWindow)
 //DECLARE_SERIAL_CLASS(wxDialog, wxWindow)
 DECLARE_SERIAL_CLASS(wxMenuBar, wxWindow)
 DECLARE_SERIAL_CLASS(wxMenuItem, wxObject)

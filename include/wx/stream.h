@@ -91,8 +91,15 @@ class WXDLLEXPORT wxInputStream {
   wxInputStream& operator>>(wxString& line);
   wxInputStream& operator>>(char& c);
   wxInputStream& operator>>(short& i);
+  wxInputStream& operator>>(int& i);
   wxInputStream& operator>>(long& i);
   wxInputStream& operator>>(float& i);
+  wxInputStream& operator>>(wxObject *& obj);
+
+  wxInputStream& operator>>(unsigned char& c) { return operator>>((char&)c); }
+  wxInputStream& operator>>(unsigned short& i) { return operator>>((short&)i); }
+  wxInputStream& operator>>(unsigned int& i) { return operator>>((int&)i); }
+  wxInputStream& operator>>(unsigned long& i) { return operator>>((long&)i); }
   wxInputStream& operator>>( __wxInputManip func) { return func(*this); }
 
  protected:
@@ -136,13 +143,13 @@ class WXDLLEXPORT wxOutputStream {
   wxOutputStream& operator<<(int i);
   wxOutputStream& operator<<(long i);
   wxOutputStream& operator<<(double f);
+  wxOutputStream& operator<<(wxObject& obj);
 
   wxOutputStream& operator<<(float f) { return operator<<((double)f); }
   wxOutputStream& operator<<(unsigned char c) { return operator<<((char)c); }
   wxOutputStream& operator<<(unsigned short i) { return operator<<((short)i); }
   wxOutputStream& operator<<(unsigned int i) { return operator<<((int)i); }
   wxOutputStream& operator<<(unsigned long i) { return operator<<((long)i); }
-
   wxOutputStream& operator<<( __wxOutputManip func) { return func(*this); }
 
  protected:

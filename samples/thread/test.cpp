@@ -35,6 +35,8 @@ class MyApp: public wxApp
     bool OnInit(void);
 };
 
+wxMutex text_mutex;
+
 WX_DEFINE_ARRAY(wxThread *,wxArrayThread);
 
 // Define a new frame type
@@ -83,7 +85,9 @@ void *MyThread::Entry()
 
   while (1) {
     TestDestroy();
+    text_mutex.Lock();
     m_frame->m_txtctrl->WriteText(text);
+    text_mutex.UnLock();
     wxSleep(1);
   }
   

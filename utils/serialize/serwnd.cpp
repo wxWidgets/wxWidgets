@@ -3,9 +3,9 @@
 // Purpose:     Serialization: wxWindow classes
 // Author:      Guilhem Lavaux
 // Modified by:
-// Created:     11/07/98
+// Created:     July 1998
 // RCS-ID:      $Id$
-// Copyright:   (c) Guilhem Lavaux
+// Copyright:   (c) 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -20,6 +20,7 @@
 #include <wx/objstrm.h>
 #include <wx/utils.h>
 #include <wx/frame.h>
+#include <wx/panel.h>
 #include <wx/serbase.h>
 #include "serwnd.h"
 
@@ -27,12 +28,11 @@ IMPLEMENT_SERIAL_CLASS(wxWindow, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxIndividualLayoutConstraint, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxLayoutConstraints, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxFrame, wxWindow)
+IMPLEMENT_SERIAL_CLASS(wxPanel, wxWindow)
 //IMPLEMENT_SERIAL_CLASS(wxDialog, wxWindow)
 IMPLEMENT_SERIAL_CLASS(wxMenuBar, wxWindow)
 IMPLEMENT_SERIAL_CLASS(wxMenuItem, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxMenu, wxObject)
-
-// IMPLEMENT_ALIAS_SERIAL_CLASS(wxPanel, wxWindow)
 
 void WXSERIAL(wxWindow)::StoreObject(wxObjectOutputStream& s)
 {
@@ -321,4 +321,17 @@ void WXSERIAL(wxMenuItem)::LoadObject(wxObjectInputStream& s)
   item->Enable( data_s.Read8() );
   item->Check( data_s.Read8() );
   item->SetSubMenu( (wxMenu *)s.GetChild(0) );
+}
+
+void WXSERIAL(wxPanel)::StoreObject(wxObjectOutputStream& s)
+{
+  WXSERIAL(wxWindow)::StoreObject(s);
+}
+
+void WXSERIAL(wxPanel)::LoadObject(wxObjectInputStream& s)
+{
+  WXSERIAL(wxWindow)::LoadObject(s);
+
+  ((wxPanel *)Object())->Create(m_parent, m_id, wxPoint(m_x, m_y),
+                                wxSize(m_w, m_h), m_style, m_name);
 }

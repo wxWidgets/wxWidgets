@@ -26,6 +26,10 @@
 #include <dlfcn.h>
 #endif
 
+#ifdef __WINDOWS__
+#include <windows.h>
+#endif
+
 // ---------------------------------------------------------------------------
 // Global variables
 // ---------------------------------------------------------------------------
@@ -59,7 +63,12 @@ wxLibrary::~wxLibrary()
     else
       delete m_liblist;
 
+#ifdef linux
     dlclose(m_handle);
+#endif
+#ifdef __WINDOWS__
+    FreeLibrary((HMODULE)m_handle);
+#endif
   }
 }
 
@@ -71,8 +80,12 @@ wxObject *wxLibrary::CreateObject(const wxString& name)
 void *wxLibrary::GetSymbol(const wxString& symbname)
 {
 #ifdef linux
-  return dlsym(m_handle, symbname.GetData());
+  return dlsym(m_handle, WXSTRINGCAST symbname);
 #endif
+#ifdef __WINDOWS__
+  return GetProcAddress(m_handle, WXSTRINGCAST symbname);
+#endif
+  return NULL;
 }
 
 // ---------------------------------------------------------------------------
@@ -105,21 +118,24 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     return ((wxLibrary *)node->Data());
 
 #ifdef linux
-  lib_name.Prepend("./lib");
+  lib_name.Prepend("lib");
   lib_name += ".so";
 
   printf("lib_name = %s\n", WXSTRINGCAST lib_name);
 
-  void *handle = dlopen(lib_name.GetData(), RTLD_LAZY);
+  void *handle = dlopen(WXSTRINGCAST lib_name, RTLD_LAZY);
 
-  printf("handle = %x\n", handle);
-  lib = new wxLibrary(handle);
-
+  if (!handle)
+    return NULL;
 #endif
 #ifdef __WINDOWS__
   lib_name += ".dll";
 
+  HMODULE handle = LoadLibrary(lib_name);
+  if (!handle)
+    return NULL;
 #endif
+  lib = new wxLibrary((void *)handle);
 
   m_loaded.Append(name.GetData(), lib);
   return lib;

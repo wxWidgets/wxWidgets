@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        sergdi.h
+// Purpose:     Serialization: GDI classes
+// Author:      Guilhem Lavaux
+// Modified by:
+// Created:     July 1998
+// RCS-ID:      $Id$
+// Copyright:   (c) 1998 Guilhem Lavaux
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef __SERGDI_H__
 #define __SERGDI_H__
 

@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        serctrl.h
+// Purpose:     Serialization: control classes
+// Author:      Guilhem Lavaux
+// Modified by:
+// Created:     July 1998
+// RCS-ID:      $Id$
+// Copyright:   (c) 1998 Guilhem Lavaux
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef __SERCTRL_H__
 #define __SERCTRL_H__
 
