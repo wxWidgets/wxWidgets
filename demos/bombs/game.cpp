@@ -2,7 +2,7 @@
 // Name:        bombs1.cpp
 // Purpose:     Implementation of the class BombsGame
 // Author:      P. Foggia 1996
-// Modified by:
+// Modified by: Wlodzimierz Skiba (ABX) 2003
 // Created:     1996
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 P. Foggia
@@ -10,14 +10,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
+#   pragma implementation
 #endif
 
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+  #pragma hdrstop
+#endif
+
 #ifndef  WX_PRECOMP
-  #include "wx/wx.h"
-#endif //precompiled headers
+#   include "wx/wx.h"
+#endif
 
 #include "game.h"
 #include <stdlib.h>
@@ -26,80 +30,92 @@
 #define PROB 0.2
 
 #ifndef RAND_MAX
-#define RAND_MAX INT_MAX
+#   define RAND_MAX INT_MAX
 #endif
 
 
-/*--------------------  BombsGame::~BombsGame()  ---------------------*/
-/*--------------------------------------------------------------------*/
 BombsGame::~BombsGame()
-  { if (field)
-      free(field);
-  }
+{
+    if (m_field)
+    {
+        delete[] m_field;
+    }
+}
 
-/*------------------  int BombsGame::Init(width,height)  -------------------*/
-/* Initialize the play field.   Returns 0 on failure                        */
-/*--------------------------------------------------------------------------*/
-int BombsGame::Init(int aWidth, int aHeight)
-  { int x, y;
+// Initialize the play field. Returns false on failure
+bool BombsGame::Init(int aWidth, int aHeight)
+{
+    m_gridFocusX = m_gridFocusY = -1;
+
+    int x, y;
     int xx, yy;
 
-    if (field)
-      free(field);
-    field=(short *)malloc(aWidth*aHeight*sizeof(short));
-    if (!field)
-      { width=height=0;
-        return 0;
-      }
-    width=aWidth;
-    height=aHeight;
+    if (m_field)
+    {
+        delete[] m_field;
+    }
 
-    for(x=0; x<width; x++)
-      for(y=0; y<height; y++)
-        { field[x+y*width] = ((float)rand()/RAND_MAX <PROB)?
-                             BG_HIDDEN | BG_BOMB :
-                             BG_HIDDEN;
+    m_field = new short[aWidth*aHeight];
+    if (!m_field)
+    {
+        m_width = m_height = 0;
+        return false;
+    }
+
+    m_width = aWidth;
+    m_height = aHeight;
+
+    for(x=0; x<m_width; x++)
+    {
+        for(y=0; y<m_height; y++)
+        {
+            m_field[x+y*m_width] = ((float)rand()/RAND_MAX <PROB)
+                ? BG_HIDDEN | BG_BOMB
+                : BG_HIDDEN;
         }
+    }
 
-    bombs=0;
-    for(x=0; x<width; x++)
-      for(y=0; y<height; y++)
-        if (field[x+y*width] & BG_BOMB)
-          { bombs++;
-            for(xx=x-1; xx<=x+1; xx++)
-              if (xx>=0 && xx<width)
-                for(yy=y-1; yy<=y+1; yy++)
-                  if (yy>=0 && yy<height && (yy!=y || xx!=x))
-                    field[xx+yy*width]++;
-          }
-    normal_cells=height*width-bombs;
-    return 1;
-  }
+    m_numBombCells = 0;
+    for(x=0; x<m_width; x++)
+        for(y=0; y<m_height; y++)
+            if (m_field[x+y*m_width] & BG_BOMB)
+            {
+                m_numBombCells++;
 
-/*----------------------  BombsGame::Mark(x,y)  -------------------------*/
-/* Marks/unmarks a cell                                                  */
-/*-----------------------------------------------------------------------*/
+                for(xx=x-1; xx<=x+1; xx++)
+                    if (xx>=0 && xx<m_width)
+                        for(yy=y-1; yy<=y+1; yy++)
+                            if (yy>=0 && yy<m_height && (yy!=y || xx!=x))
+                                m_field[xx+yy*m_width]++;
+            }
+
+    m_numRemainingCells = m_height*m_width-m_numBombCells;
+
+    return true;
+}
+
 void BombsGame::Mark(int x, int y)
-  {
-      field[x+y*width] ^= BG_MARKED;
-  }
+{
+    m_field[x+y*m_width] ^= BG_MARKED;
+}
 
-/*-------------------  BombsGame::Unhide(x,y)  ------------------------*/
-/* Unhides a cell                                                      */
-/*---------------------------------------------------------------------*/
 void BombsGame::Unhide(int x, int y)
-  { if (!IsHidden(x,y))
-      return;
-    field[x+y*width] &= ~BG_HIDDEN;
+{
+    if (!IsHidden(x,y))
+    {
+        return;
+    }
+
+    m_field[x+y*m_width] &= ~BG_HIDDEN;
+
     if (!IsBomb(x,y))
-      normal_cells--;
-  }
+    {
+        m_numRemainingCells--;
+    }
+}
 
-/*-------------------  BombsGame::Explode(x,y)  ------------------------*/
-/* Makes a cell exploded                                                */
-/*----------------------------------------------------------------------*/
+
 void BombsGame::Explode(int x, int y)
-  {
-    field[x+y*width] |= BG_EXPLODED;
-  }
-
+{
+    m_field[x+y*m_width] |= BG_EXPLODED;
+}

@@ -2,7 +2,7 @@
 // Name:        bombs.cpp
 // Purpose:     Bombs game
 // Author:      P. Foggia 1996
-// Modified by:
+// Modified by: Wlodzimierz Skiba (ABX) 2003
 // Created:     1996
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 P. Foggia
@@ -10,243 +10,275 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
+#   pragma implementation
 #endif
 
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+#   pragma hdrstop
+#endif
+
 #ifndef  WX_PRECOMP
-  #include "wx/wx.h"
+#   include "wx/wx.h"
 #endif //precompiled headers
 
 #include "bombs.h"
 
-#include <time.h>
 #include <stdlib.h>
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__)
-#include "bombs.xpm"
+#ifndef __WXWINCE__
+#   include <time.h>
 #endif
 
-IMPLEMENT_APP(AppClass)
+#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) \
+    || defined(__WXMAC__) || defined(__WXMGL__)
+#   include "bombs.xpm"
+#endif
+
+IMPLEMENT_APP(BombsApp)
+
+#ifdef __WXWINCE__
+    STDAPI_(__int64) CeGetRandomSeed();
+#endif
 
 // Called to initialize the program
-bool AppClass::OnInit()
+bool BombsApp::OnInit()
 {
-  srand((unsigned)time(NULL));
+#ifdef __WXWINCE__
+    srand((unsigned) CeGetRandomSeed());
+#else
+    srand((unsigned) time(NULL));
+#endif
 
-  // Initialize all the top-level window members to NULL.
-  BombsFrame = NULL;
-  level=IDM_EASY;
+    m_frame = new BombsFrame(&m_game);
 
-  BombsFrame = 
-    new BombsFrameClass(NULL, _T("wxBombs"), wxPoint(155, 165), wxSize(300, 300), wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX );
+    m_frame->NewGame(bombsID_EASY);
 
-  int xmax=BombsFrame->BombsCanvas->field_width*BombsFrame->BombsCanvas->x_cell*X_UNIT;
-  int ymax=BombsFrame->BombsCanvas->field_height*BombsFrame->BombsCanvas->y_cell*Y_UNIT;
-  BombsFrame->SetClientSize(xmax, ymax);
-
-  return TRUE;
+    return true;
 }
 
-BEGIN_EVENT_TABLE(BombsFrameClass, wxFrame)
-    EVT_MENU(IDM_EASY, BombsFrameClass::OnEasy)
-    EVT_MENU(IDM_MEDIUM, BombsFrameClass::OnMedium)
-    EVT_MENU(IDM_DIFFICULT, BombsFrameClass::OnDifficult)
-    EVT_MENU(IDM_EXIT, BombsFrameClass::OnExit)
-    EVT_MENU(IDM_ABOUT, BombsFrameClass::OnAbout)
-    EVT_MENU(IDM_RESTART, BombsFrameClass::OnRestart)
-    EVT_CLOSE(BombsFrameClass::OnCloseWindow)
+BEGIN_EVENT_TABLE(BombsFrame, wxFrame)
+    EVT_MENU(bombsID_EASY, BombsFrame::OnNewEasyGame)
+    EVT_MENU(bombsID_MEDIUM, BombsFrame::OnNewMediumGame)
+    EVT_MENU(bombsID_HARD, BombsFrame::OnNewHardGame)
+    EVT_MENU(wxID_EXIT, BombsFrame::OnExit)
+    EVT_MENU(wxID_ABOUT, BombsFrame::OnAbout)
 END_EVENT_TABLE()
 
-BombsFrameClass::BombsFrameClass(wxFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size, long style):
-  wxFrame(parent, -1, title, pos, size, style)
+BombsFrame::BombsFrame(BombsGame *game)
+    : wxFrame(NULL, wxID_ANY, wxT("wxBombs"), wxDefaultPosition,
+        wxSize(300, 300), wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX)
 {
-  // Initialize child subwindow members.
-  BombsCanvas = NULL;
+    m_game = game;
 
-  SetIcon(wxICON(bombs));
+    SetIcon(wxICON(bombs));
 
-  CreateStatusBar();
-  
-  // Create a menu bar for the frame
-  wxMenuBar *menuBar1 = new wxMenuBar;
-  wxMenu *menu1 = new wxMenu;
-  menu1->Append(IDM_EXIT, _T("E&xit")); // , "Quit the program");
-  menu1->AppendSeparator();
-  menu1->Append(IDM_ABOUT, _T("&About...")); // , "Infos on wxBombs");
-  menuBar1->Append(menu1, _T("&File"));
-  wxMenu *menu2 = new wxMenu;
-  menu2->Append(IDM_RESTART, _T("&Restart")); // , "Clear the play field");
-  menu2->AppendSeparator();
-  menu2->Append(IDM_EASY, _T("&Easy"), wxEmptyString, TRUE); // "10x10 play field", TRUE);
-  menu2->Append(IDM_MEDIUM, _T("&Medium"), wxEmptyString, TRUE); // "15x15 play field", TRUE);
-  menu2->Append(IDM_DIFFICULT, _T("&Difficult"), wxEmptyString, TRUE); // "25x20 play field", TRUE);
-  menuBar1->Append(menu2, _T("&Game"));
-  SetMenuBar(menuBar1);
-  menuBar=menuBar1;
-  menuBar->Check(wxGetApp().level, TRUE);
+#if wxUSE_STATUSBAR
+    CreateStatusBar();
+#endif
 
-  // Create child subwindows.
-  BombsCanvas = new BombsCanvasClass(this);
+    // Create a menu bar for the frame
+    wxMenuBar *menuBar = new wxMenuBar;
+    wxMenu *menuFile = new wxMenu;
+    wxMenu *menuLevel = new wxMenu;
+    menuLevel->AppendRadioItem(bombsID_EASY, wxT("&Easy (10x10)\tCtrl-1"));
+    menuLevel->AppendRadioItem(bombsID_MEDIUM, wxT("&Medium (15x15)\tCtrl-2"));
+    menuLevel->AppendRadioItem(bombsID_HARD, wxT("&Hard (25x20)\tCtrl-3"));
 
-  // Ensure the subwindows get resized o.k.
-//  OnSize(width, height);
+    menuFile->Append(bombsID_NEWGAME, wxT("&New Game"),
+        menuLevel, wxT("Starts a new game"));
 
-  // Centre frame on the screen.
-  Centre(wxBOTH);
+    menuFile->AppendSeparator();
+    menuFile->Append(wxID_EXIT, wxT("E&xit"), wxT("Quits the application"));
 
-  // Show the frame.
-  Show(TRUE);
+    menuBar->Append(menuFile, wxT("&File"));
+
+
+    wxMenu *menuHelp = new wxMenu;
+    menuHelp->Append(wxID_ABOUT, wxT("&About"),
+        wxT("Displays the program information") );
+
+    menuBar->Append(menuHelp, wxT("&Help"));
+
+    SetMenuBar(menuBar);
+
+    // Create child subwindows.
+    m_canvas = new BombsCanvas(this, m_game);
+
+    // Ensure the subwindows get resized o.k.
+    //  OnSize(width, height);
+
+    // Centre frame on the screen.
+    Centre(wxBOTH);
+
+    // Show the frame.
+    Show();
 }
 
-BombsFrameClass::~BombsFrameClass(void)
+void BombsFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
+    Close();
 }
 
-void BombsFrameClass::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
+void BombsFrame::NewGame(int level)
 {
-  this->Destroy();
+
+    int numHorzCells = 20, numVertCells = 20;
+
+    switch(level)
+    {
+    case bombsID_EASY:
+        numHorzCells = numVertCells = 10;
+        break;
+
+    case bombsID_MEDIUM:
+        numHorzCells = numVertCells = 15;
+        break;
+
+    case bombsID_HARD:
+        numHorzCells = 25; numVertCells = 20;
+        break;
+
+    default :
+        wxFAIL_MSG(wxT("Invalid level"));
+        break;
+    }
+
+    m_game->Init(numHorzCells, numVertCells);
+
+    GetMenuBar()->Check(level, true);
+
+    m_canvas->UpdateGridSize();
+    SetClientSize(m_canvas->GetGridSizeInPixels());
 }
 
-void BombsFrameClass::OnExit(wxCommandEvent& WXUNUSED(event))
+void BombsFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    this->Destroy();
+    wxMessageBox(
+        wxT("wxBombs (c) 1996 by P. Foggia\n<foggia@amalfi.dis.unina.it>"),
+        wxT("About wxBombs") );
 }
 
-void BombsFrameClass::OnRestart(wxCommandEvent& WXUNUSED(event))
+void BombsFrame::OnNewEasyGame(wxCommandEvent& WXUNUSED(event))
 {
-    BombsCanvas->UpdateFieldSize();
-    int xmax=BombsCanvas->field_width*BombsCanvas->x_cell*X_UNIT;
-    int ymax=BombsCanvas->field_height*BombsCanvas->y_cell*Y_UNIT;
-    wxGetApp().BombsFrame->SetClientSize(xmax, ymax);
+    NewGame(bombsID_EASY);
 }
 
-void BombsFrameClass::OnAbout(wxCommandEvent& WXUNUSED(event))
+void BombsFrame::OnNewMediumGame(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("wxBombs (c) 1996 by P. Foggia\n<foggia@amalfi.dis.unina.it>"), _T("About wxBombs"));
+    NewGame(bombsID_MEDIUM);
 }
 
-void BombsFrameClass::OnEasy(wxCommandEvent& WXUNUSED(event))
+void BombsFrame::OnNewHardGame(wxCommandEvent& WXUNUSED(event))
 {
-    menuBar->Check(wxGetApp().level, FALSE);
-    wxGetApp().level=IDM_EASY;
-    menuBar->Check(wxGetApp().level, TRUE);
+    NewGame(bombsID_HARD);
 }
 
-void BombsFrameClass::OnMedium(wxCommandEvent& WXUNUSED(event))
-{
-    menuBar->Check(wxGetApp().level, FALSE);
-    wxGetApp().level=IDM_MEDIUM;
-    menuBar->Check(wxGetApp().level, TRUE);
-}
-
-void BombsFrameClass::OnDifficult(wxCommandEvent& WXUNUSED(event))
-{
-    menuBar->Check(wxGetApp().level, FALSE);
-    wxGetApp().level=IDM_DIFFICULT;
-    menuBar->Check(wxGetApp().level, TRUE);
-}
-
-BEGIN_EVENT_TABLE(BombsCanvasClass, wxWindow)
-    EVT_PAINT(BombsCanvasClass::OnPaint)
-    EVT_MOUSE_EVENTS(BombsCanvasClass::OnEvent)
+BEGIN_EVENT_TABLE(BombsCanvas, wxPanel)
+    EVT_PAINT(BombsCanvas::OnPaint)
+    EVT_MOUSE_EVENTS(BombsCanvas::OnMouseEvent)
+    EVT_CHAR(BombsCanvas::OnChar)
 END_EVENT_TABLE()
 
-BombsCanvasClass::BombsCanvasClass(wxFrame *parent, const wxPoint& pos, const wxSize& size, long style):
-  wxWindow(parent, -1, pos, size, style)
-{ 
-  int sx, sy;
-  wxClientDC dc(this);
-  wxFont font= BOMBS_FONT;
-  dc.SetFont(font);
+BombsCanvas::BombsCanvas(wxFrame *parent, BombsGame *game)
+    : wxPanel(parent, wxID_ANY)
+{
+    m_game = game;
+    int sx, sy;
+    wxClientDC dc(this);
+    wxFont font= BOMBS_FONT;
+    dc.SetFont(font);
 
-  long chw, chh;
-  wxChar buf[]=_T("M");
+    long chw, chh;
+    wxString buf = wxT("M");
 
-  dc.GetTextExtent(buf, &chw, &chh);
-  dc.SetFont(wxNullFont);
+    dc.GetTextExtent(buf, &chw, &chh);
+    dc.SetFont(wxNullFont);
 
-  dc.SetMapMode(wxMM_METRIC);
+    dc.SetMapMode(wxMM_METRIC);
 
-  int xcm = dc.LogicalToDeviceX(10);
-  int ycm = dc.LogicalToDeviceY(10);
+    int xcm = dc.LogicalToDeviceX(10);
+    int ycm = dc.LogicalToDeviceY(10);
     // To have a square cell, there must be :
     //    sx*ycm == sy*xcm
-  if (chw*ycm < chh*xcm)
-    { sy=chh;
-      sx=chh*xcm/ycm;
+    if (chw*ycm < chh*xcm)
+    {
+        sy = chh;
+        sx = chh*xcm/ycm;
     }
-  else
-    { sx=chw;
-      sy=chw*ycm/xcm;
+    else
+    {
+        sx = chw;
+        sy = chw*ycm/xcm;
     }
-  x_cell = (sx+3+X_UNIT)/X_UNIT;
-  y_cell = (sy+3+Y_UNIT)/Y_UNIT;
-  dc.SetMapMode(wxMM_TEXT);
-  bmp=NULL;
-  UpdateFieldSize();
+
+    m_cellWidth = (sx+3+X_UNIT)/X_UNIT;
+    m_cellHeight = (sy+3+Y_UNIT)/Y_UNIT;
+    dc.SetMapMode(wxMM_TEXT);
+    m_bmp = NULL;
 }
 
-BombsCanvasClass::~BombsCanvasClass(void)
+BombsCanvas::~BombsCanvas()
 {
-  if (bmp)
-    delete bmp;
+    if (m_bmp)
+    {
+        delete m_bmp;
+        m_bmp = NULL;
+    }
 }
 
 // Called when canvas needs to be repainted.
-void BombsCanvasClass::OnPaint(wxPaintEvent& WXUNUSED(event))
+void BombsCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-  wxPaintDC dc(this);
+    wxPaintDC dc(this);
 
-  // Insert your drawing code here.
-  if (!bmp)
-    { bmp=new wxBitmap(field_width*x_cell*X_UNIT+1,
-                       field_height*y_cell*Y_UNIT+1);
-      if (bmp)
-        { wxMemoryDC memDC;
-          memDC.SelectObject(* bmp);
-          DrawField(&memDC, 0, 0, field_width-1, field_height-1);
-          memDC.SelectObject(wxNullBitmap);
+    const int numHorzCells = m_game->GetWidth();
+    const int numVertCells = m_game->GetHeight();
+    // Insert your drawing code here.
+    if (!m_bmp)
+    {
+        wxSize size = dc.GetSize();
+        m_bmp = new wxBitmap(size.GetWidth(), size.GetHeight());
+        if (m_bmp)
+        {
+            wxMemoryDC memDC;
+            memDC.SelectObject(*m_bmp);
+            DrawField(&memDC, 0, 0, numHorzCells-1, numVertCells-1);
+            memDC.SelectObject(wxNullBitmap);
         }
     }
-  if (bmp)
-    { wxMemoryDC memDC;
-      memDC.SelectObject(* bmp);
-      dc.Blit(0, 0, field_width*x_cell*X_UNIT+1,
-                          field_height*y_cell*Y_UNIT+1,
-                    &memDC, 0, 0, wxCOPY);
+
+    if (m_bmp)
+    {
+        wxMemoryDC memDC;
+        memDC.SelectObject(*m_bmp);
+        wxSize size = dc.GetSize();
+        dc.Blit(0, 0, size.GetWidth(), size.GetHeight(),
+            &memDC, 0, 0, wxCOPY);
       memDC.SelectObject(wxNullBitmap);
     }
-  else
-    DrawField(& dc, 0, 0, field_width-1, field_height-1);
+    else
+    {
+        DrawField(&dc, 0, 0, numHorzCells-1, numVertCells-1);
+    }
 }
 
-// Updates the field size depending on wxGetApp().level and
-// redraws the canvas
-void BombsCanvasClass::UpdateFieldSize()
-  { field_width=20;
-    field_height=20;
+void BombsCanvas::UpdateGridSize()
+{
 
-    switch(wxGetApp().level)
-      { case IDM_EASY:
-          field_width=10;
-          field_height=10;
-          break;
-        case IDM_MEDIUM:
-          field_width=15;
-          field_height=15;
-          break;
-        case IDM_DIFFICULT:
-          field_width=25;
-          field_height=20;
-          break;
-      }
-    wxGetApp().Game.Init(field_width, field_height);
+    if (m_bmp)
+    {
+        delete m_bmp;
+        m_bmp = NULL;
+    }
 
-    if (bmp)
-      delete bmp;
-    bmp=NULL;
-    
-    wxWindow::Refresh();
-  }
+    Refresh();
+}
+
+wxSize BombsCanvas::GetGridSizeInPixels() const
+{
+    return wxSize(m_cellWidth*X_UNIT*m_game->GetWidth(),
+        m_cellHeight*Y_UNIT*m_game->GetHeight());
+}
+

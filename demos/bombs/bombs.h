@@ -2,108 +2,107 @@
 // Name:        bombs.h
 // Purpose:     Bombs game
 // Author:      P. Foggia 1996
-// Modified by:
+// Modified by: Wlodzimierz Skiba (ABX) 2003
 // Created:     1996
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 P. Foggia
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _INC_BOMBS_H
-#define _INC_BOMBS_H
+#ifndef _WX_DEMOS_BOMBS_BOMBS_H_
+#define _WX_DEMOS_BOMBS_BOMBS_H_
 
 #include "game.h"
 
-/*
- * Forward declarations of all top-level window classes.
- */
-class  BombsFrameClass;
-class  AboutFrameClass;
+class BombsFrame;
 
 /*
  * Class representing the entire Application
  */
-class AppClass: public wxApp
+class BombsApp: public wxApp
 {
- public:
-  BombsFrameClass *BombsFrame;
-  int level;
-  BombsGame Game;
+public:
+    virtual bool OnInit();
 
-  bool OnInit();
+private :
+    BombsFrame *m_frame;
+
+    BombsGame m_game;
+
 };
 
-DECLARE_APP(AppClass)
+DECLARE_APP(BombsApp)
 
-class BombsCanvasClass;
+class BombsCanvas;
 
-class BombsFrameClass: public wxFrame
+class BombsFrame : public wxFrame
 {
- private:
- protected:
- public:
-  // Subwindows for reference within the program.
-  BombsCanvasClass *BombsCanvas;
-  wxMenuBar *menuBar;
+public:
 
-  // Constructor and destructor
-  BombsFrameClass(wxFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size, long style);
-  ~BombsFrameClass(void);
+    BombsFrame(BombsGame *bombsGame);
 
- void OnCloseWindow(wxCloseEvent& event);
- void OnExit(wxCommandEvent& event);
- void OnRestart(wxCommandEvent& event);
- void OnAbout(wxCommandEvent& event);
- void OnEasy(wxCommandEvent& event);
- void OnMedium(wxCommandEvent& event);
- void OnDifficult(wxCommandEvent& event);
+    void NewGame(int level);
 
-DECLARE_EVENT_TABLE()
+private:
+
+    void OnNewEasyGame(wxCommandEvent& event);
+    void OnNewMediumGame(wxCommandEvent& event);
+    void OnNewHardGame(wxCommandEvent& event);
+
+    void OnExit(wxCommandEvent& event);
+
+    void OnAbout(wxCommandEvent& event);
+
+    BombsGame *m_game;
+
+    // Subwindows for reference within the program.
+    BombsCanvas *m_canvas;
+
+    DECLARE_EVENT_TABLE()
 };
 
-/* Menu identifiers
- */
-// File
-#define BOMBSFRAMECLASS_FILE 1
-// E&xit
-#define IDM_EXIT 2
-// About...
-#define IDM_ABOUT 3
-// Game
-#define BOMBSFRAMECLASS_GAME 4
-// &Restart
-#define IDM_RESTART 5
-// &Easy
-#define IDM_EASY 6
-// &Medium
-#define IDM_MEDIUM 7
-// &Difficult
-#define IDM_DIFFICULT 8
-
-class BombsCanvasClass: public wxWindow
+// App specific menu identifiers
+enum
 {
- private:
- protected:
- public:
-   int field_width, field_height;
-   int x_cell, y_cell;
-   wxBitmap *bmp;
-  // Constructor and destructor
-  BombsCanvasClass(wxFrame *parent, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
-  ~BombsCanvasClass(void);
-
- void OnPaint(wxPaintEvent& event);
- void DrawField(wxDC *, int xc1, int yc1, int xc2, int yc2);
- void RefreshField(int xc1, int yc1, int xc2, int yc2);
- void Uncover(int x, int y);
- void OnEvent(wxMouseEvent& event);
- void UpdateFieldSize();
-
-DECLARE_EVENT_TABLE()
+    bombsID_NEWGAME = wxID_HIGHEST,
+    bombsID_EASY,
+    bombsID_MEDIUM,
+    bombsID_HARD
 };
 
-/* Menu identifiers
- */
+class BombsCanvas : public wxPanel
+{
+public:
+
+    // Constructor and destructor
+
+    BombsCanvas(wxFrame *parent, BombsGame *game);
+
+    void UpdateGridSize();
+
+    wxSize GetGridSizeInPixels() const;
+
+    ~BombsCanvas();
+
+private:
+
+    void OnPaint(wxPaintEvent& event);
+    void DrawField(wxDC *, int xc1, int yc1, int xc2, int yc2);
+    void RefreshField(int xc1, int yc1, int xc2, int yc2);
+    void Uncover(int x, int y);
+    void OnMouseEvent(wxMouseEvent& event);
+    void OnChar(wxKeyEvent& event);
+
+    BombsGame *m_game;
+
+    wxBitmap *m_bmp;
+
+    // Cell size in pixels
+    int m_cellWidth;
+    int m_cellHeight;
+
+    DECLARE_EVENT_TABLE()
+};
 
 /* The following sizes should probably be redefined */
 /* dimensions of a scroll unit, in pixels */
@@ -111,10 +110,14 @@ DECLARE_EVENT_TABLE()
 #define Y_UNIT 4
 
 /* the dimensions of a cell, in scroll units are in
- * BombsCanvasClass::x_cell and y_cell
+ * BombsCanvas::x_cell and y_cell
  */
 
+#ifdef __WXWINCE__
+#define BOMBS_FONT wxFont(12, wxSWISS, wxNORMAL, wxNORMAL)
+#else
 #define BOMBS_FONT wxFont(14, wxROMAN, wxNORMAL, wxNORMAL)
+#endif
 
-#endif /* mutual exclusion */
+#endif // #ifndef _WX_DEMOS_BOMBS_BOMBS_H_
 
