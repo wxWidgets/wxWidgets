@@ -1903,7 +1903,7 @@ wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
     rectText.Inflate(-10);
 
     if ( extraSpaceBeyond )
-        *extraSpaceBeyond = NULL;
+        *extraSpaceBeyond = 0;
 
     return rectText;
 }

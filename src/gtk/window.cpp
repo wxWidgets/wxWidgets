@@ -2923,7 +2923,7 @@ bool wxWindowGTK::Enable( bool enable )
     return TRUE;
 }
 
-int wxWindowBase::GetCharHeight() const
+int wxWindowGTK::GetCharHeight() const
 {
     wxCHECK_MSG( (m_widget != NULL), 12, wxT("invalid window") );
 
@@ -3602,9 +3602,9 @@ void wxWindowGTK::ReleaseMouse()
 }
 
 /* static */
-wxWindow *wxWindowGTK::GetCapture() const
+wxWindow *wxWindowBase::GetCapture()
 {
-    return g_captureWindow;
+    return (wxWindow *)g_captureWindow;
 }
 
 bool wxWindowGTK::IsRetained() const
