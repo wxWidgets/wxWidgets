@@ -18,20 +18,21 @@
 
 #if wxUSE_BUSYINFO
 
-#include "wx/busyinfo.h"
 #include "wx/stattext.h"
 #include "wx/panel.h"
 #include "wx/utils.h"
+#include "wx/busyinfo.h"
 
 
 wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
            : wxFrame(parent, -1, wxT("Busy"),
                      wxDefaultPosition, wxDefaultSize,
 #if defined(__WXX11__)
-                     wxTHICK_FRAME | wxFRAME_TOOL_WINDOW)
+                     wxTHICK_FRAME
 #else
-                     wxSIMPLE_BORDER | wxFRAME_TOOL_WINDOW)
+                     wxSIMPLE_BORDER
 #endif
+                     | wxFRAME_TOOL_WINDOW)
 {
     wxPanel *panel = new wxPanel( this );
     wxStaticText *text = new wxStaticText(panel, -1, message);
