@@ -133,6 +133,7 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     m_month = t->tm_mon+1;
     m_day = t->tm_mday;
     m_year = t->tm_year;
+    m_year += 1900;
 
     m_permissions.sprintf( wxT("%c%c%c"),
      ((( buff.st_mode & S_IRUSR ) == S_IRUSR ) ? wxT('r') : wxT('-')),
@@ -181,30 +182,37 @@ wxString wxFileData::GetEntry( int num )
     switch (num)
     {
         case 0:
+        {
             s = m_name;
-            break;
+        }
+        break;
         case 1:
+        {   
             if (m_isDir) s = _("<DIR>");
             else if (m_isLink) s = _("<LINK>");
             else s = LongToString( m_size );
-            break;
+        }
+        break;
         case 2:
+        {
             if (m_day < 10) s = wxT("0"); else s = wxT("");
             s += IntToString( m_day );
             s += wxT(".");
             if (m_month < 10) s += wxT("0");
             s += IntToString( m_month );
             s += wxT(".");
-            if (m_year < 10) s += wxT("0"); // this should happen real soon...
             s += IntToString( m_year );
-            break;
+        }
+        break;
         case 3:
+        {
             if (m_hour < 10) s = wxT("0"); else s = wxT("");
             s += IntToString( m_hour );
             s += wxT(":");
             if (m_minute < 10) s += wxT("0");
             s += IntToString( m_minute );
             break;
+        }
         case 4:
             s = m_permissions;
             break;
@@ -339,7 +347,7 @@ void wxFileCtrl::Update()
     {
         InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, 130 );
         InsertColumn( 1, _("Size"), wxLIST_FORMAT_LEFT, 60 );
-        InsertColumn( 2, _("Date"), wxLIST_FORMAT_LEFT, 55 );
+        InsertColumn( 2, _("Date"), wxLIST_FORMAT_LEFT, 70 );
         InsertColumn( 3, _("Time"), wxLIST_FORMAT_LEFT, 50 );
         InsertColumn( 4, _("Permissions"), wxLIST_FORMAT_LEFT, 120 );
     }
@@ -388,6 +396,10 @@ void wxFileCtrl::Update()
     }
 
     SortItems( ListCompare, 0 );
+    
+    SetColumnWidth( 2, wxLIST_AUTOSIZE );
+    SetColumnWidth( 3, wxLIST_AUTOSIZE );
+    SetColumnWidth( 4, wxLIST_AUTOSIZE );
 }
 
 void wxFileCtrl::SetWild( const wxString &wild )

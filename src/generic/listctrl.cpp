@@ -3107,7 +3107,10 @@ long wxListCtrl::InsertItem( long index, const wxString &label, int imageIndex )
 
 long wxListCtrl::InsertColumn( long col, wxListItem &item )
 {
+    wxASSERT( m_headerWin );
     m_mainWin->InsertColumn( col, item );
+    m_headerWin->Refresh();
+    
     return 0;
 }
 
