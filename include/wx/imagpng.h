@@ -21,6 +21,17 @@
 //-----------------------------------------------------------------------------
 
 #if wxUSE_LIBPNG
+
+#define wxIMAGE_OPTION_PNG_FORMAT    wxT("PngFormat")
+#define wxIMAGE_OPTION_PNG_BITDEPTH  wxT("PngBitDepth")
+
+enum
+{
+    wxPNG_TYPE_COLOUR = 0,
+    wxPNG_TYPE_GREY = 2,
+    wxPNG_TYPE_GREY_RED = 3,
+};
+
 class WXDLLEXPORT wxPNGHandler: public wxImageHandler
 {
 public:

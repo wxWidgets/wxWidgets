@@ -619,6 +619,22 @@ If the given option is not present, the function returns $0$. Use
 \helpref{wxImage::HasOption}{wximagehasoption} is $0$ is a possibly valid value
 for the option.
 
+Options for wxPNGHandler
+\twocolwidtha{5cm}%
+\begin{twocollist}
+\twocolitem{wxIMAGE\_OPTION\_PNG\_FORMAT}{Format for saving a PNG file.}
+\twocolitem{wxIMAGE\_OPTION\_PNG\_BITDEPTH}{Bit depth for every channel (R/G/B/A).}
+\end{twocollist}
+
+Supported values for wxIMAGE\_OPTION\_PNG\_FORMAT:
+\twocolwidtha{5cm}%
+\begin{twocollist}
+\twocolitem{wxPNG\_TYPE\_COLOUR}{Stores RGB image.}
+\twocolitem{wxPNG\_TYPE\_GREY}{Stores grey image, converts from RGB.}
+\twocolitem{wxPNG\_TYPE\_GREY\_RED}{Stores grey image, uses red value as grey.}
+\end{twocollist}
+
+
 \wxheading{See also}
 
 \helpref{wxImage::SetOption}{wximagesetoption},\rtfsp

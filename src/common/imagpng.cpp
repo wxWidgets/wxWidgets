@@ -664,57 +664,153 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     //     explanation why this line is mandatory
     png_set_write_fn( png_ptr, &wxinfo, wx_PNG_stream_writer, NULL);
 
-    const bool usesAlpha = (image->HasAlpha() || image->HasMask() );
-    const int bytesPerPixel = usesAlpha ? 4 : 3;
-    png_set_IHDR( png_ptr, info_ptr, image->GetWidth(), image->GetHeight(), 8,
-        usesAlpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB,
-        PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+    const int iColorType = image->HasOption(wxIMAGE_OPTION_PNG_FORMAT)
+                            ? image->GetOptionInt(wxIMAGE_OPTION_PNG_FORMAT)
+                            : wxPNG_TYPE_COLOUR;
+    const int iBitDepth = image->HasOption(wxIMAGE_OPTION_PNG_BITDEPTH)
+                            ? image->GetOptionInt(wxIMAGE_OPTION_PNG_BITDEPTH)
+                            : 8;
 
+    wxASSERT_MSG( iBitDepth == 8 || iBitDepth == 16,
+                    _T("PNG bit depth must be 8 or 16") );
+
+    bool bHasAlpha = image->HasAlpha();
+    bool bHasMask = image->HasMask();
+    bool bUseAlpha = bHasAlpha || bHasMask;
+
+    int iPngColorType;
+    if ( iColorType==wxPNG_TYPE_COLOUR )
+    {
+        iPngColorType = bUseAlpha ? PNG_COLOR_TYPE_RGB_ALPHA
+                                  : PNG_COLOR_TYPE_RGB;
+    }
+    else
+    {
+        iPngColorType = bUseAlpha ? PNG_COLOR_TYPE_GRAY_ALPHA
+                                  : PNG_COLOR_TYPE_GRAY;
+    }
+
+    png_set_IHDR( png_ptr, info_ptr, image->GetWidth(), image->GetHeight(),
+                  iBitDepth, iPngColorType,
+                  PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE,
+                  PNG_FILTER_TYPE_BASE);
+
+    int iElements;
     png_color_8 sig_bit;
-    sig_bit.red = 8;
-    sig_bit.green = 8;
-    sig_bit.blue = 8;
-    sig_bit.alpha = 8;
+
+    if ( iPngColorType & PNG_COLOR_MASK_COLOR )
+    {
+        sig_bit.red =
+        sig_bit.green =
+        sig_bit.blue = (png_byte)iBitDepth;
+        iElements = 3;
+    }
+    else // grey
+    {
+        sig_bit.gray = (png_byte)iBitDepth;
+        iElements = 1;
+    }
+
+    if ( iPngColorType & PNG_COLOR_MASK_ALPHA )
+    {
+        sig_bit.alpha = (png_byte)iBitDepth;
+        iElements++;
+    }
+
     png_set_sBIT( png_ptr, info_ptr, &sig_bit );
     png_write_info( png_ptr, info_ptr );
     png_set_shift( png_ptr, &sig_bit );
     png_set_packing( png_ptr );
 
-    unsigned char *data = (unsigned char *)malloc( image->GetWidth()*bytesPerPixel );
-    if (!data)
+    unsigned char *
+        data = (unsigned char *)malloc( image->GetWidth() * iElements );
+    if ( !data )
     {
         png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
         return false;
     }
 
-    for (int y = 0; y < image->GetHeight(); y++)
-    {
-        unsigned char *ptr = image->GetData() + (y * image->GetWidth() * 3);
-        for (int x = 0; x < image->GetWidth(); x++)
-        {
-            register const int index = x * bytesPerPixel;
-            data[index + 0] = *ptr++;
-            data[index + 1] = *ptr++;
-            data[index + 2] = *ptr++;
+    unsigned char *
+        pAlpha = (unsigned char *)(bHasAlpha ? image->GetAlpha() : NULL);
+    int iHeight = image->GetHeight();
+    int iWidth = image->GetWidth();
 
-            if (usesAlpha)
+    unsigned char uchMaskRed = bHasMask ? image->GetMaskRed() : 0;
+    unsigned char uchMaskGreen = bHasMask ? image->GetMaskGreen() : 0;
+    unsigned char uchMaskBlue = bHasMask ? image->GetMaskBlue() : 0;
+    unsigned char *pColors = image->GetData();
+
+    for (int y = 0; y != iHeight; ++y)
+    {
+        unsigned char *pData = data;
+        for (int x = 0; x != iWidth; x++)
+        {
+            unsigned char uchRed = *pColors++;
+            unsigned char uchGreen = *pColors++;
+            unsigned char uchBlue = *pColors++;
+
+            switch ( iColorType )
             {
-                if ( image->HasAlpha() )
+                default:
+                    wxFAIL_MSG( _T("unknown wxPNG_TYPE_XXX") );
+                    // fall through
+
+                case wxPNG_TYPE_COLOUR:
+                    *pData++ = uchRed;
+                    if (iBitDepth > 8)
+                        *pData++ = 0;
+                    *pData++ = uchGreen;
+                    if (iBitDepth > 8)
+                        *pData++ = 0;
+                    *pData++ = uchBlue;
+                    if (iBitDepth > 8)
+                        *pData++ = 0;
+                    break;
+
+                case wxPNG_TYPE_GREY:
+                    {
+                        unsigned uiColor =
+                            (unsigned) (76.544*(unsigned)uchRed +
+                                        150.272*(unsigned)uchGreen +
+                                        36.864*(unsigned)uchBlue);
+                        uiColor >>= (16 - iBitDepth);
+                        if (iBitDepth > 8)
+                        {
+                            *pData++ = (unsigned char)((uiColor >> 8) & 0xFF);
+                            *pData++ = (unsigned char)(uiColor & 0xFF);
+                        } else {
+                            *pData++ = (unsigned char)(uiColor & 0xFF);
+                        }
+                    }
+                    break;
+
+                case wxPNG_TYPE_GREY_RED:
+                    *pData++ = uchRed;
+                    if (iBitDepth > 8)
+                        *pData++ = 0;
+                    break;
+            }
+
+            if ( bUseAlpha )
+            {
+                unsigned char uchAlpha = 255;
+                if ( bHasAlpha )
+                    uchAlpha = *pAlpha++;
+
+                if ( bHasMask )
                 {
-                    data[index + 3] = image->GetAlpha(x, y);
+                    if ( (uchRed == uchMaskRed)
+                            && (uchGreen == uchMaskGreen)
+                                && (uchBlue == uchMaskBlue) )
+                        uchAlpha = 0;
                 }
-                else if ( (data[index + 0] != image->GetMaskRed())
-                    || (data[index + 1] != image->GetMaskGreen())
-                    || (data[index + 2] != image->GetMaskBlue()) )
-                {
-                    data[index + 3] = 255;
-                }
-                else
-                {
-                    data[index + 3] = 0;
-                }
+
+                *pData++ = uchAlpha;
+                if (iBitDepth > 8)
+                    *pData++ = 0;
             }
         }
+
         png_bytep row_ptr = data;
         png_write_rows( png_ptr, &row_ptr, 1 );
     }
