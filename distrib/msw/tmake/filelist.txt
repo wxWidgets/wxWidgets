@@ -256,6 +256,7 @@ mdi.cpp	M
 menu.cpp	M
 menuitem.cpp	M
 metafile.cpp	M
+mimetype.cpp	M
 minifram.cpp	M
 msgdlg.cpp	M
 nativdlg.cpp	M
@@ -304,6 +305,7 @@ dialup.cpp	U
 dir.cpp	U	B
 fontenum.cpp	U
 fontutil.cpp	U
+mimetype.cpp	U
 threadpsx.cpp	U	B
 utilsunx.cpp	U	B
 gsocket.c	U
