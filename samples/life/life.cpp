@@ -522,6 +522,7 @@ LifeCanvas::LifeCanvas(wxWindow *parent, Life *life)
 {
     m_life     = life;
     m_cellsize = 8;
+	m_bmp      = NULL;
     Reset();
 }
 
