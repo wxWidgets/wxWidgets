@@ -619,25 +619,34 @@ void wxScrolledWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 // this they always have the priority
 void wxScrolledWindow::OnChar(wxKeyEvent& event)
 {
-    if ( !m_xScrollPixelsPerLine || !m_yScrollPixelsPerLine )
-    {
-        // stop now - no scroll line size
-        event.Skip();
-
-        return;
-    }
-
     int stx, sty,       // view origin
         szx, szy,       // view size (total)
         clix, cliy;     // view size (on screen)
 
     ViewStart(&stx, &sty);
     GetClientSize(&clix, &cliy);
-    clix /= m_xScrollPixelsPerLine;
-    cliy /= m_yScrollPixelsPerLine;
     GetVirtualSize(&szx, &szy);
-    szx /= m_xScrollPixelsPerLine;
-    szy /= m_yScrollPixelsPerLine;
+
+    if( m_xScrollPixelsPerLine )
+    {
+        clix /= m_xScrollPixelsPerLine;
+	szx /= m_xScrollPixelsPerLine;
+    }
+    else
+    {
+        clix = 0;
+	szx = -1;
+    }
+    if( m_yScrollPixelsPerLine )
+    {
+        cliy /= m_yScrollPixelsPerLine;
+        szy /= m_yScrollPixelsPerLine;
+    }
+    else
+    {
+        cliy = 0;
+	szy = -1;
+    }
 
     switch ( event.KeyCode() )
     {
