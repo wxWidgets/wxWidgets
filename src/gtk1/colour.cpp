@@ -117,8 +117,8 @@ void wxColourRefData::AllocColour( GdkColormap *cmap )
     FreeColour();
     
 #ifdef __WXGTK20__
-    if ((m_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-	(m_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
+    if ( (cmap->visual->type == GDK_VISUAL_GRAYSCALE) ||
+	     (cmap->visual->type == GDK_VISUAL_PSEUDO_COLOR) )
 #else
     GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) cmap;
     if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
