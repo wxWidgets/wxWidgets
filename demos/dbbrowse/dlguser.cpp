@@ -73,7 +73,7 @@ DlgUser::DlgUser(wxWindow *parent, const wxString& title) :
   layout->height.AsIs();
   m_Password->SetConstraints(layout);
 
-  m_OK = new wxButton(this, wxID_OK, _("Ok"));
+  m_OK = new wxButton(this, wxID_OK, _("OK"));
   layout = new wxLayoutConstraints;
   layout->left.SameAs(this, wxLeft, 10);
   layout->top.SameAs(m_Label2, wxBottom,10);
@@ -99,7 +99,7 @@ DlgUser::DlgUser(wxWindow *parent, const wxString& title) :
 //----------------------------------------------------------------------------------------
 void DlgUser::OnInit()
 {
- wxString Temp; Temp.Printf(_(">>> %s <<< "),s_DSN.c_str());
+ wxString Temp; Temp.Printf(_(">>> %s <<<"),s_DSN.c_str());
  SetTitle(Temp);
  m_UserName->SetLabel(s_User);
  m_Password->SetLabel(s_Password);

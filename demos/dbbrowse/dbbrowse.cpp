@@ -28,36 +28,38 @@
 #endif
 //----------------------------------------------------------------------------------------
 #ifndef __WXMSW__
-#endif
  #include "bitmaps/logo.xpm"
+#endif
 //----------------------------------------------------------------------------------------
 //-- all #includes that every .cpp needs             --- 19990807.mj10777 ----------------
 //----------------------------------------------------------------------------------------
 #include "std.h"    // sorgsam Pflegen !
-#include <iostream>
+// #include <iostream>
 //----------------------------------------------------------------------------------------
 //-- Some Global Vars for this file ------------------------------------------------------
 //----------------------------------------------------------------------------------------
-MainFrame *frame = NULL;      // The one and only MainFrame
+MainFrame *frame = NULL;                            // The one and only MainFrame
 //----------------------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
- EVT_MENU(QUIT, MainFrame::OnQuit)
- EVT_MENU(ABOUT, MainFrame::OnAbout)
- EVT_MENU(HELP, MainFrame::OnHelp)
- EVT_SIZE(MainFrame::OnSize)
+ EVT_MENU(QUIT, MainFrame::OnQuit)                  // Program End
+ EVT_MENU(ABOUT, MainFrame::OnAbout)                // Program Discription
+ EVT_MENU(HELP, MainFrame::OnHelp)                  // Program Help
 END_EVENT_TABLE()
 //----------------------------------------------------------------------------------------
-IMPLEMENT_APP(MainApp)
+IMPLEMENT_APP(MainApp)      // This declares wxApp::MainApp as "the" Application
 //----------------------------------------------------------------------------------------
 // 'Main program' equivalent, creating windows and returning main app frame
 //----------------------------------------------------------------------------------------
-bool MainApp::OnInit(void)
+bool MainApp::OnInit(void)  // Does everything needed for a program start
 {
+ wxString Temp0;            // Use as needed
  //---------------------------------------------------------------------------------------
- // set the language to use
- const char *langhelp = NULL;
- const char *language = NULL;
- const char *langid   = NULL;
+ // set the language to use   // Help.??  (.std = english, .de = german etc.)
+ const char *language = NULL; // czech, german, french, polish
+ const char *langid   = NULL; // std = english , cz, de = german, fr = french, pl = polish
+ wxString   s_LangHelp;       // Directory/Filename.hhp of the Help-Project file
+ wxString   s_LangId, s_Language;
+ s_Language.Empty(); s_LangId.Empty(); s_LangHelp.Empty();
  //---------------------------------------------------------------------------------------
  //-- Graphic File suport - use only when needed, otherwise big .exe's
  //---------------------------------------------------------------------------------------
@@ -77,21 +79,25 @@ bool MainApp::OnInit(void)
  // wxBitmap::AddHandler( new wxXPMDataHandler );   // - Attempt failed
 #endif
  //---------------------------------------------------------------------------------------
- langid = "std"; // Standard language is "std" = english
  switch ( argc )
  {
   default:
       // ignore the other args, fall through
   case 3:
-      language = argv[2];
-      langid   = argv[1];
+      language = argv[2];         // czech, english, french, german , polish
+      langid   = argv[1];         // cz, std, fr, de , pl
       break;
   case 2:
-      langid = argv[1];
+      langid   = argv[1];         // cz, std, fr, de , pl
       break;
   case 1:
       break;
  };
+ //---------------------------------------------------------------------------------------
+ // Win-Registry : Workplace\HKEY_CURRENT_USERS\Software\%GetVendorName()\%GetAppName()
+ //---------------------------------------------------------------------------------------
+ SetVendorName("mj10777");           // Needed to get Configuration Information
+ SetAppName("DBBrowse");            // "" , also needed for s_LangHelp
  //---------------------------------------------------------------------------------------
  // we're using wxConfig's "create-on-demand" feature: it will create the
  // config object when it's used for the first time. It has a number of
@@ -104,71 +110,68 @@ bool MainApp::OnInit(void)
  // to Get() if you want to override the default values (the application
  // name is the name of the executable and the vendor name is the same)
  //---------------------------------------------------------------------------------------
- SetVendorName("mj10777");
- SetAppName("DBBrowser");
- p_ProgramCfg = wxConfigBase::Get();
- // p_ProgramCfg->DeleteAll();
- p_ProgramCfg->SetPath("/");
- wxString Temp0, Temp1;
- Temp0.Empty();
+ p_ProgramCfg = wxConfigBase::Get();  // Get Program Configuration from Registry
+ // p_ProgramCfg->DeleteAll();           // This is how the Config can be erased
+ p_ProgramCfg->SetPath("/");          // Start at root
  //---------------------------------------------------------------------------------------
  //-- Set the Language and remember it for the next time. --------------------------------
  //---------------------------------------------------------------------------------------
- langhelp = "help.std/dbbrowse.hhp";
- if (langid == "std")
+ if (langid == NULL) // No Parameter was given
  {
+  Temp0.Empty();
   p_ProgramCfg->Read("/Local/langid",&Temp0); // >const char *langid< can't be used here
   if (Temp0 == "")
-   langid = "std";
+   langid = "std";  // Standard language is "std" = english
   else
    langid = Temp0;
  }
- Temp0 = langid;
- p_ProgramCfg->Write("/Local/langid",Temp0); // >const char *langid< can't be used here
+ Temp0.Printf("%s",langid);
  //---------------------------------------------------------------------------------------
  // Support the following languages  (std = english)
- if (Temp0 != "std")
- {
+ if ((Temp0 == "a")  || (Temp0 == "cz") || (Temp0 == "de") ||
+     (Temp0 == "fr") || (Temp0 == "pl"))
+ { // The three-letter language-string codes are only valid in Windows NT and Windows 95.
   if (Temp0 == "cz")
-  {
    language = "czech";  // csy or czech
-   langhelp = "help.cz/dbbrowse.hhp";
-  }
   if ((Temp0 == "de") || (Temp0 == "a"))
   {
    language = "german";  // deu or german
-   langhelp = "help.de/dbbrowse.hhp";
-  }
+   if (Temp0 == "a")
+   { langid = Temp0 = "de"; }  // Austrian = german
+  } // german / austrian
   if (Temp0 == "fr")
-  {
    language = "french";  // fra or french
-   langhelp = "help.fr/dbbrowse.hhp";
-  }
   if (Temp0 == "pl")
-  {
    language = "polish";  // plk or polish
-   langhelp = "help.pl/dbbrowse.hhp";
+  if (!m_locale.Init(language, langid, language)) // Don't do this for english (std)
+  { // You should recieve errors here for cz and pl since there is no cz/ and pl/ directory
+   wxLogMessage("-E-> %s : SetLocale error : langid(%s) ; language(%s)",GetAppName().c_str(),langid,language);
+   langid = "std";
+   language = "C";  // english, english-aus , -can , -nz , -uk , -usa
   }
-  if (!m_locale.Init(language, langid, language))      // setlocale(LC_ALL,""); does not work
-   wxMessageBox("SetLocale error");
-  m_locale.AddCatalog("PgmText");
-  m_locale.AddCatalog("Help");
-  Temp0 = language;
-  p_ProgramCfg->Write("/Local/language",Temp0);
- }
+  else
+  { // Read in Foreign language's text for GetAppName() and Help
+   m_locale.AddCatalog(GetAppName().c_str());
+   m_locale.AddCatalog("Help");
+  }
+ } // Support the following languages  (std = english)
  else
  {
-  Temp0 = "english";
-  p_ProgramCfg->Write("/Local/language",Temp0);
-  Temp0 = "std";    // allways english if not german or french (at the moment austrian)
+  langid = "std";
+  language = "C";  // english, english-aus , -can , -nz , -uk , -usa
  }
+ s_Language.Printf("%s",language);                       // language is a pointer
+ s_LangId.Printf("%s",langid);                           // langid   is a pointer
+ p_ProgramCfg->Write("/Local/language",s_Language);
+ p_ProgramCfg->Write("/Local/langid",s_LangId);
+ s_LangHelp.Printf("help.%s/%s.hhp",s_LangId.c_str(),GetAppName().c_str()); // "help.std/Garantie.hhp";
  //---------------------------------------------------------------------------------------
- Temp0 = "NONE";
- p_ProgramCfg->Write("/NONE",Temp0);
- p_ProgramCfg->Write("/Paths/NONE",Temp0);
- p_ProgramCfg->Write("/MainFrame/NONE",Temp0);
+ Temp0 = "NONE";                               // I don't remember why I did this
+ p_ProgramCfg->Write("/NONE",Temp0);           // I don't remember why I did this
+ p_ProgramCfg->Write("/Paths/NONE",Temp0);     // I don't remember why I did this
+ p_ProgramCfg->Write("/MainFrame/NONE",Temp0); // I don't remember why I did this
  //---------------------------------------------------------------------------------------
- p_ProgramCfg->Write("/Paths/Work",wxGetCwd());
+ p_ProgramCfg->Write("/Paths/Work",wxGetCwd()); // Get current Working Path
  p_ProgramCfg->SetPath("/");
  //---------------------------------------------------------------------------------------
  // restore frame position and size, if empty start Values (1,1) and (750,600)
@@ -184,7 +187,17 @@ bool MainApp::OnInit(void)
  // frame->SetBackgroundColour(* wxWHITE);
  //---------------------------------------------------------------------------------------
  // Give it an icon
- frame->SetIcon(wxICON(aLogo));    // Programm Icon = lowest name in RC File
+ //---------------------------------------------------------------------------------------
+ // 12.02.2000 - Guillermo Rodriguez Garcia :
+ //---------------------------------------------------------------------------------------
+ // This is different for Win9x and WinNT; one of them takes the first ico
+ // in the .rc file, while the other takes the icon with the lowest name,
+ // so to be sure that it always work, put your icon the first *and* give
+ // it a name such a 'appicon' or something.
+ //---------------------------------------------------------------------------------------
+ // mj10777 : any special rule in Linux ?
+ //---------------------------------------------------------------------------------------
+ frame->SetIcon(wxICON(aLogo));    // lowest name and first entry in RC File
  //---------------------------------------------------------------------------------------
  // Make a menubar
  wxMenu *file_menu = new wxMenu;
@@ -212,9 +225,6 @@ bool MainApp::OnInit(void)
  frame->pDoc->p_MainFrame          = frame;
  frame->pDoc->p_Splitter           = frame->p_Splitter;
  frame->pDoc->p_Splitter->pDoc     = frame->pDoc;       // ControlBase: saving the Sash
- if (!frame->pDoc->OnNewDocument())
-  frame->Close(TRUE);
- frame->SetClientSize(width, height);    // the wxSplitter does not show correctly without this !
  //---------------------------------------------------------------------------------------
  //-- Problem : GetClientSize(Width,Hight) are not the same as the values given in the ---
  //--            construction of the Frame.                                            ---
@@ -223,18 +233,26 @@ bool MainApp::OnInit(void)
  //---------------------------------------------------------------------------------------
  frame->GetClientSize(&frame->DiffW, &frame->DiffH); frame->DiffW-=w; frame->DiffH-=h;
  //----------------------------------------------------------------------------
- //-- Help    :                                                                        ---
+ //-- Help    : Load the help.%langid/%GetAppName().hhp (help.std/dbbrowse.hhp) file                                                                       ---
  //----------------------------------------------------------------------------
  frame->p_Help = new wxHtmlHelpController();   // construct the Help System
  frame->p_Help->UseConfig(p_ProgramCfg);       // Don't rember what this was for
- frame->p_Help->AddBook(langhelp);             // Use the language set
+ // You should recieve errors here for fr since there is no help.fr/ directory
+ if (!frame->p_Help->AddBook(s_LangHelp))      // Use the language set
+ { // You should recieve errors here for fr since there is no help.fr/ but a fr/ directory
+  wxLogMessage("-E-> %s : AddBook error : s_LangHelp(%s)",GetAppName().c_str(),s_LangHelp.c_str());
+ }
  frame->pDoc->p_Help = frame->p_Help;          // Save the information to the document
  //---------------------------------------------------------------------------------------
- // Show the frame
- frame->Show(TRUE);
- SetTopWindow(frame);
+ frame->Show(TRUE);                            // Show the frame
+ SetTopWindow(frame);                          // At this point the frame can be seen
  //---------------------------------------------------------------------------------------
- p_ProgramCfg->Flush(TRUE);        // sicher Objekt
+ // If you need a "Splash Screen" because of a long OnNewDocument, do it here
+ if (!frame->pDoc->OnNewDocument())
+  frame->Close(TRUE);
+ // Kill a "Splash Screen" because OnNewDocument, if you have one
+ //---------------------------------------------------------------------------------------
+ p_ProgramCfg->Flush(TRUE);        // save the configuration
  return TRUE;
 } // bool MainApp::OnInit(void)
 //----------------------------------------------------------------------------------------
@@ -249,9 +267,9 @@ MainFrame::MainFrame(wxFrame *frame, char *title,  const wxPoint& pos, const wxS
 MainFrame::~MainFrame(void)
 {
  // save the control's values to the config
- if ( p_ProgramCfg == NULL )
+ if (p_ProgramCfg == NULL)
    return;
- // save the frame position
+ // save the frame position before it is destroyed
  int x, y, w, h;
  GetPosition(&x, &y);
  GetClientSize(&w, &h); w -= DiffW; h -= DiffH;
@@ -265,8 +283,8 @@ MainFrame::~MainFrame(void)
  // we want here!)
  // delete wxConfigBase::Set((wxConfigBase *) NULL);
  p_ProgramCfg->Flush(TRUE);        // saves   Objekt
- delete frame->pDoc;               // Cleanup
-}
+ delete frame->pDoc;               // Cleanup (mjDoc::~mjDoc)
+} // MainFrame::~MainFrame(void)
 //----------------------------------------------------------------------------------------
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {

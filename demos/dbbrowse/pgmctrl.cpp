@@ -252,7 +252,7 @@ void PgmCtrl::OnMouseMove(wxMouseEvent &event)
 void PgmCtrl::OnUserPassword()
 {
  // wxMessageBox(SaveDSN);
- int i, rc=0;
+ int i;
  //-------------------------------------------
  DlgUser *p_Dlg = new DlgUser(this, "Username and Password");
  //-------------------------------------------

@@ -1,128 +1,281 @@
-# for wxHelp
-# Copyright (C) 2000 Free Software Foundation, Inc.
-# Mark Johnson <mj10777@gmx.net>, 2000.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#-----------------------------------------------------------
-#: ../Help
-msgid   "Help"
-msgstr  "Hilfe"
+#, fuzzy
+msgid   ""
+msgstr  "Project-Id-Version: PACKAGE VERSION\n"
+        "POT-Creation-Date: 2000-02-13 16:32+0100\n"
+        "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+        "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+        "Language-Team: LANGUAGE <LL@li.org>\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=CHARSET\n"
+        "Content-Transfer-Encoding: ENCODING\n"
 
-#: ../Help
-msgid   "Help: %s"
-msgstr  "Hilfe: %s"
-
-#: ../Help
-msgid   "(Help)"
-msgstr  "(Hilfe)"
-
-#: ../Help
-msgid   "Search"
-msgstr  "Suchen"
-
-#: ../Help
-msgid   "<bookmarks>"
-msgstr  "<Lesezeichen>"
-
-#: ../Help
-msgid   "Contents"
-msgstr  "Inhalt"
-
-#: ../Help
-msgid   "Find"
-msgstr  "Suchen"
-
-#: ../Help
-msgid   "Show all"
-msgstr  "Alles zeigen"
-
-#: ../Help
+#: helpfrm.cpp:566 helpfrm.cpp:567 helpfrm.cpp:976 helpfrm.cpp:1002
+#, c-format
 msgid   "%i of %i"
 msgstr  "%i von %i"
 
-#: ../Help
-msgid   "Show/hide navigation panel"
-msgstr  "Suchbaum Ein-/Ausschalten"
+#: helpfrm.cpp:529
+msgid   "Search in all books"
+msgstr  "Alle Bücher durchsuchen"
 
-#: ../Help
-msgid   "Go back to the previous HTML page"
-msgstr  "Vorherige HTLM Seite zeigen"
+#: helpfrm.cpp:529
+msgid   "(Help)"
+msgstr  "(Hilfe)"
 
-#: ../Help
-msgid   "Go forward to the next HTML page"
-msgstr  "Nächste HTLM Seite zeigen"
+#: helpfrm.cpp:529
+msgid   "(Help)"
+msgstr  "(Hilfe)"
 
-#: ../Help
+#: helpfrm.cpp:606 helpfrm.cpp:660
+msgid   "/"
+msgstr  ""
+
+#: helpfrm.cpp:606 helpfrm.cpp:660
+msgid   "OK"
+msgstr  "OK"
+
+#: helpfrm.cpp:606 helpfrm.cpp:660
+msgid   "Index"
+msgstr  ""
+
+#: helpfrm.cpp:606 helpfrm.cpp:660
+msgid   "Loading:"
+msgstr  "Laden:"
+
+#: helpfrm.cpp:606 helpfrm.cpp:660
+msgid   "text/html"
+msgstr  ""
+
+#: helpfrm.cpp:606 helpfrm.cpp:660
+msgid   "Connecting..."
+msgstr  "baue Verbindung ..."
+
+#: helpfrm.cpp:383 helpfrm.cpp:631 helpfrm.cpp:1024
+msgid   "<bookmarks>"
+msgstr  "<Lesezeichen>"
+
+#: helpfrm.cpp:383 helpfrm.cpp:631 helpfrm.cpp:1024
+msgid   "(bookmarks)"
+msgstr  "<Lesezeichen>"
+
+#: helpfrm.cpp:773
+msgid   "<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> <b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font></tt></body></html>"
+msgstr  "<html><body>Normale    <br>(und <u>äöüßÄÖÜ</u>.<i>Italic face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> <b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font></tt></body></html>"
+
+#: helpfrm.cpp:393
 msgid   "Add current page to bookmarks"
 msgstr  "Aktuelle HTLM Seite als Lesezeichen hinzufügen"
 
-#: ../Help
-msgid   "Remove current page from bookmarks"
-msgstr  "Aktuelle HTLM Seite als Lesezeichen entfernen"
+#: helpfrm.cpp:756
+msgid   "Cancel"
+msgstr  "Abbruch"
 
-#: ../Help
-msgid   "Display options dialog"
-msgstr  "Anzeige Options Dialog"
-
-#: ../Help
-msgid   "Help Browser Options"
-msgstr  "Hilfe Browser Optionen"
-
-#: ../Help
-msgid   "Font size:"
-msgstr  "Font Größe:"
-
-#: ../Help
-msgid   "small"
-msgstr  "Klein"
-
-#: ../Help
-msgid   "medium"
-msgstr  "Mittel"
-
-#: ../Help
-msgid   "large"
-msgstr  "Groß"
-
-#: ../Help
-msgid   "Preview:"
-msgstr  "Vorschau:"
-
-#: ../Help
-msgid   "Show all items in index"
-msgstr  "Alle Themen im Index anzeigen"
-
-#: ../Help
-msgid   "Display all index items that contain given substring. Search is case insensitive."
-msgstr  "Alle Themen im Index nach Suchbegriff durchsuchen. Groß-/Kleinschreibung wird nicht beachtet"
-
-#: ../Help
-msgid   "Search contents of help book(s) for all occurences of the text you typed above"
-msgstr  "Alle Hilfebücher nach Suchbegriff durchsuchen."
-
-#: ../Help
-msgid   "all books"
-msgstr  "alle Bücher"
-
-#: ../Help
+#: helpfrm.cpp:302
 msgid   "Case sensitive"
 msgstr  "Groß-/Kleinschreibung"
 
-#: ../Help
-msgid   "Whole words only"
-msgstr  "Als Wort"
+#: helpfrm.cpp:207
+msgid   "Contents"
+msgstr  "Inhalt"
 
-#: ../Help
-msgid   "Searching..."
-msgstr  "Suchen..."
+#: helpfrm.cpp:259
+msgid   "Display all index items that contain given substring. Search is case insensitive."
+msgstr  "Alle Themen im Index nach Suchbegriff durchsuchen. Groß-/Kleinschreibung wird nicht beachtet"
 
-#: ../Help
-msgid   "No matching page found yet"
-msgstr  "Passende Seite noch nicht gefunden"
+#: helpfrm.cpp:402
+msgid   "Display options dialog"
+msgstr  "Options Dialog anzeigen"
 
-#: ../Help
+#: helpfrm.cpp:233
+msgid   "Find"
+msgstr  "Suchen"
+
+#: helpfrm.cpp:735
+msgid   "Fixed font:"
+msgstr  ""
+
+#: helpfrm.cpp:745
+msgid   "Font size:"
+msgstr  "Font Größe"
+
+#: helpfrm.cpp:495
+#, c-format
 msgid   "Found %i matches"
 msgstr  "Suchbegriff %i mal gefunden"
 
+#: helpfrm.cpp:374
+msgid   "Go back to the previous HTML page"
+msgstr  "Vorherige HTLM Seite zeigen"
+
+#: helpfrm.cpp:377
+msgid   "Go forward to the next HTML page"
+msgstr  "Nächste HTLM Seite zeigen"
+
+#: helpfrm.cpp:377
+msgid   "Print this page"
+msgstr  "Diese Seite Drücken"
+
+#: helpfrm.cpp:377
+msgid   "Next page"
+msgstr  "Nächste HTLM Seite zeigen"
+
+#: helpfrm.cpp:377
+msgid   "Go back"
+msgstr  "Vorherige HTLM Seite zeigen"
+
+#: helpfrm.cpp:377
+msgid   "Go forward"
+msgstr  "Nächste HTLM Seite zeigen"
+
+#: helpfrm.cpp:377
+msgid   "Go one level up in document hierarchy"
+msgstr  "Ins nächste Dokument-Ebene gehen"
+
+#: helpfrm.cpp:377
+msgid   "Previous page"
+msgstr  "Vorherige HTLM Seite zeigen"
+
+#: helpfrm.cpp:166
+msgid   "Help"
+msgstr  "Hilfe"
+
+#: helpfrm.cpp:718
+msgid   "Help Browser Options"
+msgstr  "Hilfe Browser Optionen"
+
+#: helpfrm.cpp:265
+msgid   "Index"
+msgstr  ""
+
+#: helpfrm.cpp:486
+msgid   "No matching page found yet"
+msgstr  "Passende Seite noch nicht gefunden"
+
+#: helpfrm.cpp:727
+msgid   "Normal font:"
+msgstr  "Normale font:"
+
+#: helpfrm.cpp:755
+msgid   "OK"
+msgstr  ""
+
+#: helpfrm.cpp:749
+msgid   "Preview:"
+msgstr  "Vorschau:"
+
+#: helpfrm.cpp:396
+msgid   "Remove current page from bookmarks"
+msgstr  "Aktuelle HTLM Seite als Lesezeichen entfernen"
+
+#: helpfrm.cpp:282 helpfrm.cpp:327
+msgid   "Search"
+msgstr  "Suchen"
+
+#: helpfrm.cpp:284
+msgid   "Search contents of help book(s) for all occurences of the text you typed above"
+msgstr  "Alle Hilfebücher nach Suchbegriff durchsuchen."
+
+#: helpfrm.cpp:486
+msgid   "Searching..."
+msgstr  "Suchen..."
+
+#: helpfrm.cpp:224
+msgid   "Show all"
+msgstr  "Alles zeigen"
+
+#: helpfrm.cpp:258
+msgid   "Show all items in index"
+msgstr  "Alle Themen im Index anzeigen"
+
+#: helpfrm.cpp:370
+msgid   "Show/hide navigation panel"
+msgstr  "Suchbaum Ein-/Ausschalten"
+
+#: helpfrm.cpp:310
+msgid   "Whole words only"
+msgstr  "Als Wort"
+
+#: helpfrm.cpp:583
+msgid   "all books"
+msgstr  "alle Bücher"
+
+#: helpfrm.cpp:635 helpfrm.cpp:680
+#, c-format
+msgid   "hcBookmark_%i"
+msgstr  ""
+
+#: helpfrm.cpp:639 helpfrm.cpp:682
+#, c-format
+msgid   "hcBookmark_%i_url"
+msgstr  ""
+
+#: helpfrm.cpp:625 helpfrm.cpp:678
+msgid   "hcBookmarksCnt"
+msgstr  ""
+
+#: helpfrm.cpp:616 helpfrm.cpp:669
+msgid   "hcFixedFace"
+msgstr  ""
+
+#: helpfrm.cpp:618 helpfrm.cpp:671
+msgid   "hcFontSize"
+msgstr  ""
+
+#: helpfrm.cpp:614 helpfrm.cpp:668
+msgid   "hcH"
+msgstr  ""
+
+#: helpfrm.cpp:609 helpfrm.cpp:663
+msgid   "hcNavigPanel"
+msgstr  ""
+
+#: helpfrm.cpp:617 helpfrm.cpp:670
+msgid   "hcNormalFace"
+msgstr  ""
+
+#: helpfrm.cpp:610 helpfrm.cpp:664
+msgid   "hcSashPos"
+msgstr  ""
+
+#: helpfrm.cpp:613 helpfrm.cpp:667
+msgid   "hcW"
+msgstr  ""
+
+#: helpfrm.cpp:611 helpfrm.cpp:665
+msgid   "hcX"
+msgstr  ""
+
+#: helpfrm.cpp:612 helpfrm.cpp:666
+msgid   "hcY"
+msgstr  ""
+
+#: helpfrm.cpp:720
+msgid   "very large"
+msgstr  "sehr groß"
+
+#: helpfrm.cpp:720
+msgid   "large"
+msgstr  "groß"
+
+#: helpfrm.cpp:720
+msgid   "medium"
+msgstr  "mittel"
+
+#: helpfrm.cpp:720
+msgid   "small"
+msgstr  "klein"
+
+#: helpfrm.cpp:720
+msgid   "very small"
+msgstr  "sehr klein"
+
+#: helpfrm.cpp:166
+msgid   "wxHtmlHelp"
+msgstr  ""
 #-----------------------------------------------------------
 #: ../Help
 msgid   "Done"
@@ -131,3 +284,4 @@ msgstr  ":-) Ich habe Fertig"
 #: ../Help
 msgid   ""
 msgstr  ""
+#-----------------------------------------------------------

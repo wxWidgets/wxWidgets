@@ -76,9 +76,11 @@ int  DBGrid::OnTableView(wxString Table)
  //---------------------------------------------------------------------------------------
  int  i=0,x,y,z, ValidTable=0;
  wxString Temp0;
- //SetLabelFont(* f_Temp);
  wxBeginBusyCursor();
  SetFont(* pDoc->ft_Doc);
+ // wxFont *ft_Temp;
+ // ft_Temp = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
+ // SetFont(*ft_Temp);
  //---------------------------------------------------------------------------------------
  ct_BrowserDB = (db_Br+i_Which)->ct_BrowserDB;                       // Get the DSN Pointer
  //---------------------------------------------------------------------------------------
