@@ -2283,6 +2283,12 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         Rect scrollrect;
         RgnHandle updateRgn = NewRgn() ;
 
+#if TARGET_API_MAC_OSX
+        // if there is already a pending redraw event, we first must flush that, as we don't have
+        // means to retrieve the dirty region of a HIView
+        if ( HIViewGetNeedsDisplay( (ControlRef) m_macControl ) )
+            Update() ;
+#endif
         {
             wxClientDC dc(this) ;
             wxMacPortSetter helper(&dc) ;
@@ -2306,10 +2312,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         }
         // ScrollWindowRect( (WindowRef) MacGetTopLevelWindowRef() , &scrollrect , dx , dy ,  kScrollWindowInvalidate, updateRgn ) ;
 #if TARGET_API_MAC_OSX
-        Rect before,after ;
-        GetRegionBounds( updateRgn , &before ) ;
         HIViewConvertRegion( updateRgn , (ControlRef) MacGetTopLevelWindow()->GetHandle() , (ControlRef) m_macControl ) ;
-        GetRegionBounds( updateRgn , &after ) ;
         HIViewSetNeedsDisplayInRegion( (ControlRef) m_macControl , updateRgn , true ) ;
 #else
         // TODO TEST
@@ -2478,7 +2481,6 @@ wxString wxWindowMac::MacGetToolTipString( wxPoint &pt )
 void wxWindowMac::Update()
 {
 #if TARGET_API_MAC_OSX
-    HIViewSetNeedsDisplay( (ControlRef) m_macControl , true ) ;
     WindowRef window = (WindowRef)MacGetTopLevelWindowRef() ;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     // for composited windows this also triggers a redraw of all
@@ -2507,6 +2509,8 @@ void wxWindowMac::Update()
             OSStatus status = noErr ;
             status = ReceiveNextEvent( 0 , NULL , kEventDurationNoWait , false , &theEvent ) ;
         }
+        else
+            HIViewSetNeedsDisplay( (ControlRef) m_macControl , true ) ;
     }
 #else
     ::Draw1Control( (ControlRef) m_macControl ) ;
