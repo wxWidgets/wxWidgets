@@ -37,6 +37,8 @@
 
 #include "wx/module.h"
 #include "wx/dde.h"
+#include "wx/intl.h"
+
 
 #include "wx/msw/private.h"
 
@@ -898,7 +900,7 @@ static HSZ DDEAtomFromString(const wxString& s)
 {
     wxASSERT_MSG( DDEIdInst, _T("DDE not initialized") );
 
-    HSZ hsz = DdeCreateStringHandle(DDEIdInst, s, DDE_CP);
+    HSZ hsz = DdeCreateStringHandle(DDEIdInst, (char*) s.c_str(), DDE_CP);
     if ( !hsz )
     {
         DDELogError(_("Failed to create DDE string"));
