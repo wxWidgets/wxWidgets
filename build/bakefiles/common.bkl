@@ -65,17 +65,17 @@
     </set>
 
     <if cond="FORMAT=='autoconf'">
-        <set var="WXNAMEPREFIX">wx</set>
+        <set var="WXNAMEPREFIX">wx_base</set>
         <set var="WXNAMEPREFIXGUI">wx_$(PORTNAME)$(WXUNIVNAME)</set>
         <set var="WXVERSIONTAG">-$(WXVER_MAJOR).$(WXVER_MINOR)</set>
     </if>
     <if cond="FORMAT!='autoconf'">
-        <set var="WXNAMEPREFIX">wx$(WXVER_MAJOR)$(WXVER_MINOR)</set>
+        <set var="WXNAMEPREFIX">wxbase$(WXVER_MAJOR)$(WXVER_MINOR)</set>
         <set var="WXNAMEPREFIXGUI">wx$(PORTNAME)$(WXUNIVNAME)$(WXVER_MAJOR)$(WXVER_MINOR)</set>
         <set var="WXVERSIONTAG"></set>
     </if>
     <set var="WXDLLNAMEPREFIX">
-        <if cond="PLATFORM_WIN32=='1'">wx$(WXVER_MAJOR)$(WXVER_MINOR)</if>
+        <if cond="PLATFORM_WIN32=='1'">wxbase$(WXVER_MAJOR)$(WXVER_MINOR)</if>
         <if cond="PLATFORM_WIN32=='0'">$(WXNAMEPREFIX)</if>
     </set>
     <set var="WXDLLNAMEPREFIXGUI">

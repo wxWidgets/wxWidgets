@@ -29,8 +29,8 @@ def mk_wxid(id):
 
 
 # List of library names/ids for categories with different names:
-LIBS_BASE = ['base']
-LIBS_GUI  = ['core', 'html']
+LIBS_NOGUI = ['']
+LIBS_GUI   = ['core', 'html']
 
 def mkLibName(wxid):
     """Returns string that can be used as library name, including name
@@ -38,7 +38,9 @@ def mkLibName(wxid):
        with variables defined in common.bkl!"""
     if wxid == 'mono':
         return '$(WXNAMEPREFIXGUI)$(WXNAMESUFFIX)$(WXVERSIONTAG)'
-    if wxid in LIBS_BASE:
+    if wxid == 'base':
+        return '$(WXNAMEPREFIX)$(WXNAMESUFFIX)$(WXVERSIONTAG)'
+    if wxid in LIBS_NOGUI:
         return '$(WXNAMEPREFIX)$(WXNAMESUFFIX)_%s$(WXVERSIONTAG)' % wxid
     return '$(WXNAMEPREFIXGUI)$(WXNAMESUFFIX)_%s$(WXVERSIONTAG)' % wxid
 
@@ -48,7 +50,9 @@ def mkDllName(wxid):
        with variables defined in common.bkl!"""
     if wxid == 'mono':
         return '$(WXDLLNAMEPREFIXGUI)$(WXNAMESUFFIX)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)'
-    if wxid in LIBS_BASE:
+    if wxid == 'base':
+        return '$(WXDLLNAMEPREFIX)$(WXNAMESUFFIX)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)'
+    if wxid in LIBS_NOGUI:
         return '$(WXDLLNAMEPREFIX)$(WXNAMESUFFIX)_%s$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)' % wxid
     return '$(WXDLLNAMEPREFIXGUI)$(WXNAMESUFFIX)_%s$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)' % wxid
 
