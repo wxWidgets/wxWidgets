@@ -298,9 +298,15 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     m_hfStyle = style;
 
     wxImageList *ContentsImageList = new wxImageList(16, 16);
-    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_BOOK, wxART_HELP_BROWSER));
-    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_FOLDER, wxART_HELP_BROWSER));
-    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_PAGE, wxART_HELP_BROWSER));
+    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_BOOK,
+                                                  wxART_HELP_BROWSER,
+                                                  wxSize(16, 16)));
+    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_FOLDER,
+                                                  wxART_HELP_BROWSER,
+                                                  wxSize(16, 16)));
+    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_PAGE,
+                                                  wxART_HELP_BROWSER,
+                                                  wxSize(16, 16)));
 
     // Do the config in two steps. We read the HtmlWindow customization after we
     // create the window.
@@ -1206,9 +1212,9 @@ public:
 
         wxBoxSizer *sizer2 = new wxBoxSizer(wxHORIZONTAL);
         wxButton *ok;
-        sizer2->Add(ok = new wxButton(this, wxID_OK, _("OK")), 0, wxALL, 10);
+        sizer2->Add(ok = new wxButton(this, wxID_OK, wxSTOCK_OK), 0, wxALL, 10);
         ok->SetDefault();
-        sizer2->Add(new wxButton(this, wxID_CANCEL, _("Cancel")), 0, wxALL, 10);
+        sizer2->Add(new wxButton(this, wxID_CANCEL, wxSTOCK_CANCEL), 0, wxALL, 10);
         topsizer->Add(sizer2, 0, wxALIGN_RIGHT);
 
         SetSizer(topsizer);
@@ -1658,6 +1664,19 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
                     }
                     else break;
                 }
+
+                // finally, it the item we just added is itself a parent for
+                // other items, show them as well, because they are refinements
+                // of the displayed index entry (i.e. it is implicitly contained
+                // in them: "foo" with parent "bar" reads as "bar, foo"):
+                short int level = index[i].items[0]->level;
+                i++;
+                while (i < cnt && index[i].items[0]->level > level)
+                {
+                    m_IndexList->Append(index[i].name, (char*)(&index[i]));
+                    i++;
+                }
+                i--;
             }
         }
 
