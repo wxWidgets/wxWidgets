@@ -5,14 +5,19 @@
 #define __WX_SETUP_H__
 
 #ifdef __GNUG__
-    #pragma interface
+#pragma interface
 #endif
 
-/* never undefine inline keyword for C++ compilation */
+/* never undefine inline or const keywords for C++ compilation */
 #ifndef __cplusplus
+
 /* Define to empty if the keyword does not work.  */
 #undef const
-#endif
+
+/* Define as __inline if that's what the C compiler calls it.  */
+#undef inline
+
+#endif /* __cplusplus */
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef gid_t
@@ -22,9 +27,6 @@
 
 /* Define if you have the vprintf function.  */
 #undef HAVE_VPRINTF
-
-/* Define as __inline if that's what the C compiler calls it.  */
-#undef inline
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef mode_t
@@ -477,17 +479,7 @@
  * Use Apple Ieee-double converter
  */
 #define wxUSE_APPLE_IEEE 0
-/*
- * Compatibility with 1.66 API.
- * Level 0: no backward compatibility, all new features
- * Level 1: wxDC, OnSize (etc.) compatibility, but
- * some new features such as event tables
- */
-#define WXWIN_COMPATIBILITY 0
-/*
- * Compatibility with 2.0 API.
- */
-#define WXWIN_COMPATIBILITY_2 1
+
 /*
  * Enables debugging: memory tracing, assert, etc., contains debug level
  */
