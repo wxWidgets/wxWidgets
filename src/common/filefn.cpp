@@ -213,7 +213,7 @@ void wxPathList::AddEnvList (const wxString& envVariable)
 void wxPathList::EnsureFileAccessible (const wxString& path)
 {
     wxString path_only(wxPathOnly(path));
-    if ( !path_only.IsEmpty() )
+    if ( !path_only.empty() )
     {
         if ( !Member(path_only) )
             Add(path_only);
@@ -361,7 +361,7 @@ void wxStripExtension(wxChar *buffer)
 
 void wxStripExtension(wxString& buffer)
 {
-    //RN:  Be careful about the handling the case where 
+    //RN:  Be careful about the handling the case where
     //buffer.Length() == 0
     for(size_t i = buffer.Length() - 1; i != wxString::npos; --i)
     {
@@ -951,9 +951,9 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
   FILE *fp2 = NULL;
   FILE *fp3 = NULL;
   // Open the inputs and outputs
-  if ((fp1 = wxFopen ( file1, wxT("rb"))) == NULL ||
-      (fp2 = wxFopen ( file2, wxT("rb"))) == NULL ||
-      (fp3 = wxFopen ( outfile, wxT("wb"))) == NULL)
+  if ((fp1 = wxFopen ( file1.fn_str(), wxT("rb"))) == NULL ||
+      (fp2 = wxFopen ( file2.fn_str(), wxT("rb"))) == NULL ||
+      (fp3 = wxFopen ( outfile.fn_str(), wxT("wb"))) == NULL)
     {
       if (fp1)
         fclose (fp1);
@@ -1137,11 +1137,11 @@ bool wxMkdir(const wxString& dir, int perm)
     #error "Unsupported DOS compiler!"
   #endif
 #else  // !MSW, !DOS and !OS/2 VAC++
-    (void)perm;
+    wxUnusedVar(perm);
 #ifdef __WXWINCE__
     if ( !CreateDirectory(dirname, NULL) )
 #else
-    if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
+    if ( wxMkDir(dir.fn_str()) != 0 )
 #endif
 #endif // !MSW/MSW
     {
@@ -1244,7 +1244,7 @@ static wxString gs_dirPath;
 wxString wxFindFirstFile(const wxChar *spec, int flags)
 {
     wxSplitPath(spec, &gs_dirPath, NULL, NULL);
-    if ( gs_dirPath.IsEmpty() )
+    if ( gs_dirPath.empty() )
         gs_dirPath = wxT(".");
     if ( !wxEndsWithPathSeparator(gs_dirPath ) )
         gs_dirPath << wxFILE_SEP_PATH;
@@ -1269,7 +1269,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
 
     wxString result;
     gs_dir->GetFirst(&result, wxFileNameFromPath(wxString(spec)), dirFlags);
-    if ( result.IsEmpty() )
+    if ( result.empty() )
     {
         wxDELETE(gs_dir);
         return result;
@@ -1285,7 +1285,7 @@ wxString wxFindNextFile()
     wxString result;
     gs_dir->GetNext(&result);
 
-    if ( result.IsEmpty() )
+    if ( result.empty() )
     {
         wxDELETE(gs_dir);
         return result;

@@ -33,7 +33,7 @@
 wxFileInputStream::wxFileInputStream(const wxString& fileName)
   : wxInputStream()
 {
-    m_file = new wxFile(fileName, wxFile::read);
+    m_file = new wxFile(fileName.fn_str(), wxFile::read);
     m_file_destroy = true;
 }
 
@@ -109,7 +109,7 @@ wxFileOffset wxFileInputStream::OnSysTell() const
 
 wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
 {
-    m_file = new wxFile(fileName, wxFile::write);
+    m_file = new wxFile(fileName.fn_str(), wxFile::write);
     m_file_destroy = true;
 
     if (!m_file->IsOpened())

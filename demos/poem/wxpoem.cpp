@@ -748,7 +748,7 @@ int LoadIndex(wxChar *file_name)
 
     wxSprintf(buf, _T("%s.idx"), file_name);
 
-    index_file = wxFopen(buf, _T("r"));
+    index_file = wxFopen(wxFNCONV(buf), _T("r"));
     if (index_file == NULL)
       return 0;
 
@@ -823,7 +823,7 @@ bool LoadPoem(wxChar *file_name, long position)
     }
 
     wxSprintf(buf, _T("%s.dat"), file_name);
-    data_file = wxFopen(buf, _T("r"));
+    data_file = wxFopen(wxFNCONV(buf), _T("r"));
 
     if (data_file == NULL)
     {
@@ -897,7 +897,7 @@ long MainWindow::DoSearch(void)
     if (data_filename)
       wxSprintf(buf, _T("%s.dat"), data_filename);
 
-    file = wxFopen(buf, _T("r"));
+    file = wxFopen(wxFNCONV(buf), _T("r"));
     if (! (data_filename && file))
     {
       wxSprintf(error_buf, _T("Poetry data file %s not found\n"), buf);
@@ -979,7 +979,7 @@ bool Compile(void)
     if (data_filename)
       wxSprintf(buf, _T("%s.dat"), data_filename);
 
-    file = wxFopen(buf, _T("r"));
+    file = wxFopen(wxFNCONV(buf), _T("r"));
     if (! (data_filename && file))
     {
       wxSprintf(error_buf, _T("Poetry data file %s not found\n"), buf);
@@ -1011,7 +1011,7 @@ bool Compile(void)
     if (index_filename)
       wxSprintf(buf, _T("%s.idx"), index_filename);
 
-    file = wxFopen(buf, _T("w"));
+    file = wxFopen(wxFNCONV(buf), _T("w"));
     if (! (data_filename && file))
     {
       wxSprintf(error_buf, _T("Poetry index file %s cannot be created\n"), buf);

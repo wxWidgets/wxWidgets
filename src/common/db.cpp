@@ -2163,7 +2163,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt)
 }  // wxDb::ExecSql()
 
 
-/********** wxDb::ExecSql() with column info **********/ 
+/********** wxDb::ExecSql() with column info **********/
 bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcols)
 {
     //execute the statement first
@@ -2176,21 +2176,21 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
         DispAllErrors(henv, hdbc, hstmt);
         return false;
     }
-  
+
     if (noCols == 0)
         return false;
-    else 
+    else
         numcols = noCols;
-      
+
     //  Get column information
     short colNum;
     wxChar name[DB_MAX_COLUMN_NAME_LEN+1];
     SWORD Sword;
     SDWORD Sdword;
     wxDbColInf* pColInf = new wxDbColInf[noCols];
-    
+
     //fill in column information (name, datatype)
-    for (colNum = 0; colNum < noCols; colNum++) 
+    for (colNum = 0; colNum < noCols; colNum++)
     {
         if (SQLColAttributes(hstmt, (UWORD)(colNum+1), SQL_COLUMN_NAME,
             name, sizeof(name),
@@ -2200,9 +2200,9 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
             delete[] pColInf;
             return false;
         }
-  
+
         wxStrncpy(pColInf[colNum].colName, name, DB_MAX_COLUMN_NAME_LEN);
-        
+
         if (SQLColAttributes(hstmt, (UWORD)(colNum+1), SQL_COLUMN_TYPE,
             NULL, 0, &Sword, &Sdword) != SQL_SUCCESS)
         {
@@ -2210,7 +2210,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
             delete[] pColInf;
             return false;
         }
-        
+
         switch (Sdword)
         {
             case SQL_VARCHAR:
@@ -2245,7 +2245,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
 #endif
         }
     }
- 
+
     *columns = pColInf;
     return true;
 }  // wxDb::ExecSql()
@@ -3338,7 +3338,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     wxChar    typeName[30+1];
     SDWORD    precision, length;
 
-    FILE *fp = wxFopen(fileName.c_str(),wxT("wt"));
+    FILE *fp = wxFopen(fileName.fn_str(),wxT("wt"));
     if (fp == NULL)
         return false;
 
@@ -3675,7 +3675,7 @@ bool wxDb::SetSqlLogging(wxDbSqlLogState state, const wxString &filename, bool a
     {
         if (fpSqlLog == 0)
         {
-            fpSqlLog = wxFopen(filename, (append ? wxT("at") : wxT("wt")));
+            fpSqlLog = wxFopen(filename.fn_str(), (append ? wxT("at") : wxT("wt")));
             if (fpSqlLog == NULL)
                 return false;
         }
