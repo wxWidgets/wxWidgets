@@ -953,6 +953,7 @@ void operator delete(void* pData, char* /* fileName */, int /* lineNum */)
 #endif
 
 #if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
+
 void operator delete[] (void * buf)
 {
 #ifdef NO_DEBUG_ALLOCATION

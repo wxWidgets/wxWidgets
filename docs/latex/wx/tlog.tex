@@ -34,7 +34,7 @@ informational messages preceding them meaningless.
 \item{\bf wxLogVerbose} is for verbose output. Normally, it's suppressed, but
 might be activated if the user wishes to know more details about the program
 progress (another, but possibly confusing name for the same function is {\bf
-wxLogInfo}
+wxLogInfo}).
 \item{\bf wxLogStatus} is for status messages - they will go into the status
 bar of the active or specified (as the first argument) \helpref{wxFrame}{wxframe} if it has one.
 \item{\bf wxLogSysError} is mostly used by wxWindows itself, but might be
@@ -64,7 +64,7 @@ classes are. Some of advantages in using wxWindows log functions are:
 \begin{itemize}\itemsep=0pt
 \item{\bf Portability} It's a common practice to use {\it printf()} statements or
 cout/cerr C++ streams for writing out some (debug or otherwise) information.
-Although it works just fine under Unix, these messages go strictly nowever
+Although it works just fine under Unix, these messages go strictly nowhere
 under Windows where the stdout of GUI programs is not assigned to anything.
 Thus, you might view {\it wxLogMessage()} as a simple substitute for {\it
 printf()}.

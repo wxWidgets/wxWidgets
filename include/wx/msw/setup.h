@@ -116,13 +116,13 @@
                                   // NOW MANDATORY: don't change.
 #define wxUSE_MEMORY_TRACING      1
                                   // If 1, enables debugging versions of wxObject::new and
-                                  // wxObject::delete *IF* WXDEBUG is also defined.
+                                  // wxObject::delete *IF* __WXDEBUG__ is also defined.
                                   // WARNING: this code may not work with all architectures, especially
                                   // if alignment is an issue.
 #define wxUSE_DEBUG_CONTEXT       1
                                   // If 1, enables wxDebugContext, for
                                   // writing error messages to file, etc. 
-                                  // If WXDEBUG is not defined, will still use
+                                  // If __WXDEBUG__ is not defined, will still use
                                   // normal memory operators.
                                   // It's recommended to set this to 1,
                                   // since you may well need to output
@@ -131,6 +131,12 @@
 #define wxUSE_GLOBAL_MEMORY_OPERATORS 1
                                   // In debug mode, cause new and delete to be redefined globally.
                                   // If this causes problems (e.g. link errors), set this to 0.
+
+// GnuWin32 (b19) can't copy with these operators.
+#ifdef __GNUWIN32__
+#undef wxUSE_GLOBAL_MEMORY_OPERATORS 1
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
+#endif
 
 #define REMOVE_UNUSED_ARG 1
                                   // Set this to 0 if your compiler can't cope
