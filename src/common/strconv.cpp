@@ -1071,7 +1071,19 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     if (buf)
     {
         for (size_t c = 0; c <= len; c++)
-            buf[c] = (psz[c] > 0xff) ? '?' : psz[c];
+        {
+            if (psz[c] > 0xFF)
+                return (size_t)-1;
+            buf[c] = psz[c];
+        }
+    }
+    else
+    {
+        for (size_t c = 0; c <= len; c++)
+        {
+            if (psz[c] > 0xFF)
+                return (size_t)-1;
+        }
     }
 
     return len;
