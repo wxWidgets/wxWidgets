@@ -62,6 +62,9 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
 
     CreateChildren(dlg);
     
+    if (GetBool(_("centered"), FALSE))
+        dlg->Centre();
+    
     return dlg;
 }
 
