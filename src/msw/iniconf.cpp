@@ -35,6 +35,7 @@
 #include  "wx/dynarray.h"
 #include  "wx/log.h"
 #include  "wx/config.h"
+#include  "wx/file.h"
 
 #include  "wx/msw/iniconf.h"
 

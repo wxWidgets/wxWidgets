@@ -122,7 +122,7 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
         default : nextpos = m_Pos; break; /* just to fool compiler, never happens */
     }
 
-    size_t toskip = 0;
+    size_t toskip;
     if ( nextpos > m_Pos )
     {
         toskip = nextpos - m_Pos;

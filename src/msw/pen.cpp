@@ -142,8 +142,7 @@ bool wxPen::RealizeResource()
            return TRUE;
        }
 
-       COLORREF ms_colour = 0;
-       ms_colour = M_PENDATA->m_colour.GetPixel();
+       COLORREF ms_colour = M_PENDATA->m_colour.GetPixel();
 
        // Join style, Cap style, Pen Stippling only on Win32.
        // Currently no time to find equivalent on Win3.1, sorry

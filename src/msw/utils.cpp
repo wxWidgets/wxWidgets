@@ -922,7 +922,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
                 return FALSE;
         }
 
-        bOK = ::ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE | EWX_REBOOT, 0) != 0;
+        bOK = ::ExitWindowsEx(flags, 0) != 0;
     }
 
     return bOK;

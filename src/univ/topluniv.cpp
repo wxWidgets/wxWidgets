@@ -101,7 +101,7 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
         style &= ~(wxCAPTION | wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
                    wxSYSTEM_MENU | wxRESIZE_BORDER | wxFRAME_TOOL_WINDOW |
                    wxTHICK_FRAME);
-        style = wxSIMPLE_BORDER;
+        style |= wxSIMPLE_BORDER;
         SetExtraStyle(exstyleOrig &
                       ~(wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP));
     }

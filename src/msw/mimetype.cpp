@@ -514,7 +514,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
     wxCHECK_MSG( !ftInfo.GetExtensions().IsEmpty(), NULL,
                  _T("Associate() needs extension") );
 
-    bool ok = FALSE ;
+    bool ok;
     int iExtCount = 0 ;
     wxString filetype;
     wxString extWithDot;
@@ -551,7 +551,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 filetype = filetypeOrig;
             }
 
-            ok = key.SetValue(wxEmptyString, filetype);
+            key.SetValue(wxEmptyString, filetype);
         }
         }
         else
@@ -560,11 +560,11 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
             if (!filetypeOrig.empty())
                 {
                     filetype = filetypeOrig;
-                    ok = key.SetValue(wxEmptyString, filetype);
+                    key.SetValue(wxEmptyString, filetype);
                 }
             else
                 {
-                    ok = key.QueryValue(wxEmptyString, filetype);
+                    key.QueryValue(wxEmptyString, filetype);
                 }
         }
         // now set a mimetypeif we have it, but ignore it if none
@@ -585,7 +585,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 if ( ok )
                 {
                     // and provide a back link to the extension
-                    ok = keyMIME.SetValue(_T("Extension"), extWithDot);
+                    keyMIME.SetValue(_T("Extension"), extWithDot);
                 }
             }
         }
@@ -601,8 +601,8 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
             extWithDot += ext;
 
             wxRegKey key(wxRegKey::HKCR, extWithDot);
-            if ( !key.Exists() ) ok = key.Create();
-            ok = key.SetValue(wxEmptyString, filetype);
+            if ( !key.Exists() ) key.Create();
+            key.SetValue(wxEmptyString, filetype);
 
         // now set any mimetypes we may have, but ignore it if none
         const wxString& mimetype = ftInfo.GetMimeType();
@@ -622,7 +622,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
         if ( ok )
         {
                     // and provide a back link to the extension
-                    ok = keyMIME.SetValue(_T("Extension"), extWithDot);
+                    keyMIME.SetValue(_T("Extension"), extWithDot);
         }
         }
     }
@@ -633,10 +633,9 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
     // create the filetype key itself (it will be empty for now, but
     // SetCommand(), SetDefaultIcon() &c will use it later)
     wxRegKey keyFT(wxRegKey::HKCR, filetype);
-    ok = keyFT.Create();
+    keyFT.Create();
 
-    wxFileType *ft = NULL;
-    ft = CreateFileType(filetype, extWithDot);
+    wxFileType *ft = CreateFileType(filetype, extWithDot);
 
     if (ft)
     {

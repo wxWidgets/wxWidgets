@@ -454,7 +454,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         sizer->Add(m_SearchList, 1, wxALL | wxEXPAND, 2);
 
         m_NavigNotebook->AddPage(dummy, _("Search"));
-        m_SearchPage = notebook_page++;
+        m_SearchPage = notebook_page;
     }
 
     m_HtmlWin->Show(TRUE);

@@ -2345,7 +2345,7 @@ wxSize wxTextCtrl::DoGetBestClientSize() const
             lines = 5;
         else if ( lines > 10 )
             lines = 10;
-        h *= 10;
+        h *= lines;
     }
 
     wxRect rectText;

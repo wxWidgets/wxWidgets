@@ -473,7 +473,7 @@ static bool wxExecuteDDE(const wxString& ddeServer,
                          const wxString& ddeTopic,
                          const wxString& ddeCommand)
 {
-    bool ok = FALSE;
+    bool ok wxDUMMY_INITIALIZE(false);
 
     wxDDEClient client;
     wxConnectionBase *conn = client.MakeConnection(wxEmptyString,

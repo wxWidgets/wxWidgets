@@ -329,12 +329,9 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
 {
   if (!m_useEvents) return;
 
-  int fontFamily = 0;  /* shut up buggy egcs warnings */
-  fontFamily = wxFontFamilyStringToInt(WXSTRINGCAST familyChoice->GetStringSelection());
-  int fontWeight = 0;
-  fontWeight = wxFontWeightStringToInt(WXSTRINGCAST weightChoice->GetStringSelection());
-  int fontStyle = 0;
-  fontStyle = wxFontStyleStringToInt(WXSTRINGCAST styleChoice->GetStringSelection());
+  int fontFamily = wxFontFamilyStringToInt(WXSTRINGCAST familyChoice->GetStringSelection());
+  int fontWeight = wxFontWeightStringToInt(WXSTRINGCAST weightChoice->GetStringSelection());
+  int fontStyle = wxFontStyleStringToInt(WXSTRINGCAST styleChoice->GetStringSelection());
   int fontSize = wxAtoi(pointSizeChoice->GetStringSelection());
   int fontUnderline = underLineCheckBox->GetValue();
 
@@ -342,8 +339,7 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
   m_previewer->SetFont(dialogFont);
   if (colourChoice->GetStringSelection() != wxT(""))
   {
-    wxColour *col = (wxColour*) NULL;
-    col = wxTheColourDatabase->FindColour(colourChoice->GetStringSelection());
+    wxColour *col = wxTheColourDatabase->FindColour(colourChoice->GetStringSelection());
     if (col)
     {
       m_fontData.m_fontColour = *col;

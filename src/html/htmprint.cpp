@@ -381,8 +381,10 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
 
     int ppiPrinterX, ppiPrinterY;
     GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
+    wxUnusedVar(ppiPrinterX);
     int ppiScreenX, ppiScreenY;
     GetPPIScreen(&ppiScreenX, &ppiScreenY);
+    wxUnusedVar(ppiScreenX);
 
     dc->SetUserScale((double)dc_w / (double)pageWidth, (double)dc_w / (double)pageWidth);
 

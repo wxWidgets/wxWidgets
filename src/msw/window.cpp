@@ -4914,7 +4914,7 @@ int wxCharCodeMSWToWX(int keySym)
 int wxCharCodeWXToMSW(int id, bool *isVirtual)
 {
     *isVirtual = TRUE;
-    int keySym = 0;
+    int keySym;
     switch (id)
     {
     case WXK_CANCEL:    keySym = VK_CANCEL; break;

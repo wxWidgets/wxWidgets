@@ -486,7 +486,7 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
     // flags for DoHandleItemClick()
     int flags = ItemClick_Kbd;
 
-    int current = 0; // just to silent the stupid compiler warnings
+    int current;
     switch ( event.GetKeyCode() )
     {
         case WXK_HOME:
@@ -539,6 +539,7 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
 
         default:
             event.Skip();
+            current = 0; // just to silent the stupid compiler warnings
             return;
     }
 

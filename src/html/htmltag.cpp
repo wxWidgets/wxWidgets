@@ -66,7 +66,6 @@ bool wxIsCDATAElement(const wxChar *tag)
 wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 {
     const wxChar *src = source.c_str();
-    int tg, stpos;
     int lng = source.Length();
     wxChar tagBuffer[256];
 
@@ -81,8 +80,9 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
         {
             if (m_CacheSize % CACHE_INCREMENT == 0)
                 m_Cache = (wxHtmlCacheItem*) realloc(m_Cache, (m_CacheSize + CACHE_INCREMENT) * sizeof(wxHtmlCacheItem));
-            tg = m_CacheSize++;
-            m_Cache[tg].Key = stpos = pos++;
+            int tg = m_CacheSize++;
+            int stpos = pos++;
+            m_Cache[tg].Key = stpos;
 
             int i;
             for ( i = 0;

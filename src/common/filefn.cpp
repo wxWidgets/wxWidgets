@@ -325,8 +325,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
   wxChar buf[_MAXPATHLEN];
   wxStrcpy(buf, wxFileFunctionsBuffer);
 
-  wxChar *filename = (wxChar*) NULL; /* shut up buggy egcs warning */
-  filename = wxIsAbsolutePath (buf) ? wxFileNameFromPath (buf) : (wxChar *)buf;
+  wxChar *filename = wxIsAbsolutePath (buf) ? wxFileNameFromPath (buf) : (wxChar *)buf;
 
   for (wxStringList::compatibility_iterator node = GetFirst(); node; node = node->GetNext())
     {
@@ -732,9 +731,9 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 #endif
 
   // Handle environment
-  const wxChar *val = (const wxChar *) NULL;
+  const wxChar *val;
 #ifndef __WXWINCE__
-  wxChar *tcp = (wxChar *) NULL;
+  wxChar *tcp;
   if (envname != WXSTRINGCAST NULL && (val = wxGetenv (WXSTRINGCAST envname)) != NULL &&
      (tcp = wxStrstr (dest, val)) != NULL)
     {
@@ -748,7 +747,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 #endif
 
   // Handle User's home (ignore root homes!)
-  size_t len = 0;
+  size_t len;
   if ((val = wxGetUserHome (user)) != NULL &&
       (len = wxStrlen(val)) > 2 &&
       wxStrncmp(dest, val, len) == 0)
@@ -1144,9 +1143,9 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
   if ( !wxGetTempFileName( wxT("cat"), outfile) )
       return FALSE;
 
-  FILE *fp1 = (FILE *) NULL;
-  FILE *fp2 = (FILE *) NULL;
-  FILE *fp3 = (FILE *) NULL;
+  FILE *fp1 wxDUMMY_INITIALIZE(NULL);
+  FILE *fp2 wxDUMMY_INITIALIZE(NULL);
+  FILE *fp3 wxDUMMY_INITIALIZE(NULL);
   // Open the inputs and outputs
   if ((fp1 = wxFopen ( file1, wxT("rb"))) == NULL ||
       (fp2 = wxFopen ( file2, wxT("rb"))) == NULL ||
@@ -1454,7 +1453,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
         return wxEmptyString;
     }
 
-    int dirFlags = 0;
+    int dirFlags;
     switch (flags)
     {
         case wxDIR:  dirFlags = wxDIR_DIRS; break;
@@ -1503,7 +1502,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         buf = new wxChar[sz + 1];
     }
 
-    bool ok = FALSE;
+    bool ok wxDUMMY_INITIALIZE(FALSE);
 
     // for the compilers which have Unicode version of _getcwd(), call it
     // directly, for the others call the ANSI version and do the translation

@@ -804,7 +804,9 @@ int wxFTP::GetFileSize(const wxString& fileName)
             SetTransferMode(oldTransfermode);
         }
 
-        if ( !ok ) // this is not a direct else clause.. The size command might return an invalid "2yz" reply
+        // this is not a direct else clause.. The size command might return an
+        // invalid "2yz" reply
+        if ( !ok )
         {
             // The server didn't understand the "SIZE"-command or it
             // returned an invalid reply.
@@ -849,12 +851,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
 
                             if ( wxSscanf(fileList[i].c_str(),
                                           _T("%*s %*s %*s %*s %i %*s %*s %*s %*s"),
-                                          &filesize) == 9 )
-                            {
-                                // We've gotten a good response
-                                ok = TRUE;
-                            }
-                            else
+                                          &filesize) != 9 )
                             {
                                 // Hmm... Invalid response
                                 wxLogTrace(FTP_TRACE_MASK,
@@ -865,12 +862,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
                         {
                             if ( wxSscanf(fileList[i].c_str(),
                                           _T("%*s %*s %i %*s"),
-                                          &filesize) == 4 )
-                            {
-                                // valid response
-                                ok = TRUE;
-                            }
-                            else
+                                          &filesize) != 4 )
                             {
                                 // something bad happened..?
                                 wxLogTrace(FTP_TRACE_MASK,

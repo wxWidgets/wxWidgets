@@ -339,7 +339,6 @@ void wxGenericColourDialog::InitializeColours(void)
                 {
                     whichKind = 2;
                     colourSelection = i;
-                    initColourFound = TRUE;
                     break;
                 }
             }

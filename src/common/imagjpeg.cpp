@@ -178,7 +178,6 @@ void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
         cinfo->src = (struct jpeg_source_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
             sizeof(my_source_mgr));
-        src = (my_src_ptr) cinfo->src;
     }
     src = (my_src_ptr) cinfo->src;
     src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */

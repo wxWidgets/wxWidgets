@@ -92,7 +92,7 @@ wxCoord wxVScrolledWindow::EstimateTotalHeight() const
 
         // use the height of the lines we looked as the average
         heightTotal = (wxCoord)
-                (((float)m_heightTotal / (3*NUM_LINES_TO_SAMPLE)) * m_lineMax);
+                (((float)heightTotal / (3*NUM_LINES_TO_SAMPLE)) * m_lineMax);
     }
 
     return heightTotal;

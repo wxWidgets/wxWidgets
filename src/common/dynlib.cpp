@@ -326,6 +326,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     bool     failed = FALSE;
     void    *symbol = 0;
 
+    wxUnusedVar(symbol);
 #if defined(__WXMAC__) && !defined(__DARWIN__)
     Ptr                 symAddress;
     CFragSymbolClass    symClass;

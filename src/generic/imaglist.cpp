@@ -109,17 +109,15 @@ bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap )
 
     wxCHECK_MSG( node, FALSE, wxT("wrong index in image list") );
 
-    wxBitmap* newBitmap = NULL;
-    if (bitmap.IsKindOf(CLASSINFO(wxIcon)))
-#if defined(__VISAGECPP__)
-//just can't do this in VisualAge now, with all this new Bitmap-Icon stuff
-//so construct it from a bitmap object until I can figure this nonsense out. (DW)
-        newBitmap = new wxBitmap(bitmap) ;
-#else
-        newBitmap = new wxBitmap( (const wxIcon&) bitmap );
-#endif
-    else
-        newBitmap = new wxBitmap(bitmap) ;
+    wxBitmap* newBitmap = (bitmap.IsKindOf(CLASSINFO(wxIcon))) ?
+                             #if defined(__VISAGECPP__)
+                               //just can't do this in VisualAge now, with all this new Bitmap-Icon stuff
+                               //so construct it from a bitmap object until I can figure this nonsense out. (DW)
+                               new wxBitmap(bitmap)
+                             #else
+                               new wxBitmap( (const wxIcon&) bitmap )
+                             #endif
+                               : new wxBitmap(bitmap) ;
 
     if (index == (int) m_images.GetCount() - 1)
     {

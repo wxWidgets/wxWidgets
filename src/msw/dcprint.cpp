@@ -345,7 +345,8 @@ bool DrawBitmapUsingStretchDIBits(HDC hdc,
 {
 #if wxUSE_WXDIB
     wxDIB dib(bmp);
-    if ( !dib.IsOk() )
+    bool ok = dib.IsOk();
+    if ( !ok )
         return FALSE;
 
     DIBSECTION ds;
@@ -374,7 +375,7 @@ bool DrawBitmapUsingStretchDIBits(HDC hdc,
 
         return FALSE;
     }
-
+    else
     return TRUE;
 #else
     return FALSE;

@@ -404,7 +404,7 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
     TCHAR* buf = new TCHAR[chars+1];
 
     // Get the list of drives.
-    chars = GetLogicalDriveStrings(chars, buf);
+    GetLogicalDriveStrings(chars, buf);
 
     // Parse the list into an array, applying appropriate filters.
     TCHAR *pVol;

@@ -376,7 +376,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         parent = parent->GetParent();
     }
 
-    bool iconized = FALSE;
+    bool iconized;
 
     wxTopLevelWindow *winTop = wxDynamicCast(parent, wxTopLevelWindow);
     if ( winTop )
@@ -720,7 +720,7 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
     if ( ! IsSplit() )
         return FALSE;
 
-    wxWindow *win = NULL;
+    wxWindow *win;
     if ( toRemove == NULL || toRemove == m_windowTwo)
     {
         win = m_windowTwo ;

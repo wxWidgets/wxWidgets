@@ -460,25 +460,27 @@ void CopyDataFromPNG(wxImage *image,
                     case Transparency_Mask:
                         if ( IsTransparent(a) )
                         {
-                            // if we couldn't find a unique colour for the mask, we
-                            // can have real pixels with the same value as the mask
-                            // and it's better to slightly change their colour than
-                            // to make them transparent
-                            if ( r == rMask && g == gMask && b == bMask )
-                            {
-                                r++;
-                            }
-
                             *ptrDst++ = rMask;
                             *ptrDst++ = bMask;
                             *ptrDst++ = gMask;
                             break;
                         }
-                        // else: !transparent
+                        else // !transparent
+                        {
+                            // must be opaque then as otherwise we shouldn't be
+                            // using the mask at all
+                            wxASSERT_MSG( IsOpaque(a), _T("logic error") );
 
-                        // must be opaque then as otherwise we shouldn't be
-                        // using the mask at all
-                        wxASSERT_MSG( IsOpaque(a), _T("logic error") );
+                            // if we couldn't find a unique colour for the
+                            // mask, we can have real pixels with the same
+                            // value as the mask and it's better to slightly
+                            // change their colour than to make them
+                            // transparent
+                            if ( r == rMask && g == gMask && b == bMask )
+                            {
+                                r++;
+                            }
+                        }
 
                         // fall through
 

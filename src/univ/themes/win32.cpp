@@ -3598,7 +3598,6 @@ void wxWin32Renderer::DrawFrameTitleBar(wxDC& dc,
             DrawFrameButton(dc, x, y, wxTOPLEVEL_BUTTON_HELP,
                             (specialButton == wxTOPLEVEL_BUTTON_HELP) ?
                             specialButtonFlags : 0);
-            x -= FRAME_BUTTON_WIDTH;
         }
     }
 }

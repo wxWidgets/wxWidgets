@@ -725,11 +725,7 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
     {
         // Now, a negative radius is interpreted to mean
         // 'the proportion of the smallest X or Y dimension'
-        double smallest = 0.0;
-        if (width < height)
-            smallest = width;
-        else
-            smallest = height;
+        double smallest = width < height ? width : height;
         radius =  (-radius * smallest);
     }
 
@@ -962,8 +958,6 @@ void wxPostScriptDC::SetFont( const wxFont& font )
         case wxSCRIPT:
         {
             name = "/ZapfChancery-MediumItalic";
-            Style  = wxNORMAL;
-            Weight = wxNORMAL;
             break;
         }
         case wxSWISS:
@@ -1046,7 +1040,8 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
     static const char *wxCoord_dashed = "[4 8] 2";
     static const char *dotted_dashed = "[6 6 2 6] 4";
 
-    const char *psdash = (char *) NULL;
+    const char *psdash;
+
     switch (m_pen.GetStyle())
     {
         case wxDOT:           psdash = dotted;         break;
@@ -1651,7 +1646,8 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
     CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
 
-	while ((node = node->GetNext()))
+  node = node->GetNext();
+	while (node)
     {
         q = (wxPoint *)node->GetData();
 
@@ -1673,6 +1669,8 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
 
         CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
         CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
+
+        node = node->GetNext();
     }
 
     /*
@@ -2194,7 +2192,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         lastStyle =  Style;
         lastWeight = Weight;
 
-        const wxChar *name = NULL;
+        const wxChar *name;
 
         switch (Family)
         {
@@ -2218,8 +2216,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
             case wxSCRIPT:
             {
                 name = wxT("Zapf.afm");
-                Style = wxNORMAL;
-                Weight = wxNORMAL;
+                break;
             }
             case wxSWISS:
             default:

@@ -111,7 +111,8 @@ static size_t encode_utf16(wxUint32 input, wxUint16 *output)
 {
     if (input<=0xffff)
     {
-        if (output) *output++ = (wxUint16) input;
+        if (output)
+            *output = (wxUint16) input;
         return 1;
     }
     else if (input>=0x110000)
@@ -123,7 +124,7 @@ static size_t encode_utf16(wxUint32 input, wxUint16 *output)
         if (output)
         {
             *output++ = (wxUint16) ((input >> 10)+0xd7c0);
-            *output++ = (wxUint16) ((input&0x3ff)+0xdc00);
+            *output = (wxUint16) ((input&0x3ff)+0xdc00);
         }
         return 2;
     }

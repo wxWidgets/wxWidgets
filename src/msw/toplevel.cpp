@@ -445,7 +445,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
                                  long style,
                                  const wxString& name)
 {
-    bool ret = false;
+    bool ret wxDUMMY_INITIALIZE(false);
 
     // init our fields
     Init();

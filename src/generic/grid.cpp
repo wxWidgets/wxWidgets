@@ -1961,10 +1961,9 @@ wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
     if ( !ms_sizeCheckMark.x )
     {
         // get checkbox size
-        wxCoord checkSize = 0;
         wxCheckBox *checkbox = new wxCheckBox(&grid, -1, wxEmptyString);
         wxSize size = checkbox->GetBestSize();
-        checkSize = size.y + 2*wxGRID_CHECKMARK_MARGIN;
+        wxCoord checkSize = size.y + 2*wxGRID_CHECKMARK_MARGIN;
 
         // FIXME wxGTK::wxCheckBox::GetBestSize() gives "wrong" result
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
@@ -2584,13 +2583,9 @@ wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col,
                 {
                     //Basicaly implement old version.
                     //Also check merge cache, so we don't have to re-merge every time..
-                    wxGridCellAttr *attrcell = (wxGridCellAttr *)NULL,
-                                   *attrrow = (wxGridCellAttr *)NULL,
-                                   *attrcol = (wxGridCellAttr *)NULL;
-
-                    attrcell = m_data->m_cellAttrs.GetAttr(row, col);
-                    attrcol = m_data->m_colAttrs.GetAttr(col);
-                    attrrow = m_data->m_rowAttrs.GetAttr(row);
+                    wxGridCellAttr *attrcell = m_data->m_cellAttrs.GetAttr(row, col);
+                    wxGridCellAttr *attrrow = m_data->m_rowAttrs.GetAttr(row);
+                    wxGridCellAttr *attrcol = m_data->m_colAttrs.GetAttr(col);
 
                     if((attrcell != attrrow) && (attrrow !=attrcol) && (attrcell != attrcol)){
                         // Two or move are non NULL
@@ -6002,7 +5997,7 @@ int wxGrid::SendEvent( const wxEventType type,
                         wxMouseEvent& mouseEv )
 {
    bool claimed;
-   bool vetoed= FALSE;
+   bool vetoed;
 
    if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
    {
@@ -6069,7 +6064,7 @@ int wxGrid::SendEvent( const wxEventType type,
                         int row, int col )
 {
    bool claimed;
-   bool vetoed= FALSE;
+   bool vetoed;
 
     if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
     {
@@ -9092,9 +9087,7 @@ void wxGrid::SetColFormatFloat(int col, int width, int precision)
 
 void wxGrid::SetColFormatCustom(int col, const wxString& typeName)
 {
-    wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
-
-    attr = m_table->GetAttr(-1, col, wxGridCellAttr::Col );
+    wxGridCellAttr *attr = m_table->GetAttr(-1, col, wxGridCellAttr::Col );
     if(!attr)
         attr = new wxGridCellAttr;
     wxGridCellRenderer *renderer = GetDefaultRendererForType(typeName);

@@ -752,7 +752,6 @@ void wxHtmlContainerCell::Layout(int w)
                                    ypos + line->GetPosY());
                     line = line->GetNext();
                 }
-                xcnt++;
             }
 
             ypos += ysizedown;
@@ -968,11 +967,9 @@ const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) co
 {
     if (m_Cells)
     {
-        const wxHtmlCell *r = NULL;
-
         for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
         {
-            r = cell->Find(condition, param);
+            const wxHtmlCell *r = cell->Find(condition, param);
             if (r) return r;
         }
     }

@@ -454,7 +454,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
         m_stream->Reset();
     }
 
-    size_t ret = 0;
+    size_t ret;
 
     if ( !HasBuffer() && m_fixed )
     {

@@ -135,7 +135,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
         m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
-    wxDC *dc = (wxDC *) NULL;
+    wxDC *dc;
     if (prompt)
     {
         dc = PrintDialog(parent);

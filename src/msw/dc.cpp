@@ -878,11 +878,7 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     if (radius < 0.0)
     {
-        double smallest = 0.0;
-        if (width < height)
-            smallest = width;
-        else
-            smallest = height;
+        double smallest = (width < height) ? width : height;
         radius = (- radius * smallest);
     }
 
@@ -1432,8 +1428,7 @@ void wxDC::SetBrush(const wxBrush& brush)
 
         if ( m_brush.GetResourceHandle() )
         {
-            HBRUSH b = 0;
-            b = (HBRUSH) ::SelectObject(GetHdc(), (HBRUSH)m_brush.GetResourceHandle());
+            HBRUSH b = (HBRUSH) ::SelectObject(GetHdc(), (HBRUSH)m_brush.GetResourceHandle());
             if (!m_oldBrush)
                 m_oldBrush = (WXHBRUSH) b;
         }
@@ -1869,7 +1864,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         ::SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
     }
 
-    DWORD dwRop = SRCCOPY;
+    DWORD dwRop;
     switch (rop)
     {
         case wxXOR:          dwRop = SRCINVERT;        break;

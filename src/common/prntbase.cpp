@@ -772,12 +772,6 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
     int actualWidth = (int)(zoomScale*m_pageWidth*m_previewScale);
     int actualHeight = (int)(zoomScale*m_pageHeight*m_previewScale);
 
-    int x = (int)((canvasWidth - actualWidth)/2.0);
-    if (x < m_leftMargin)
-        x = m_leftMargin;
-    //  int y = m_topMargin;
-
-
     if (!m_previewBitmap)
     {
         m_previewBitmap = new wxBitmap((int)actualWidth, (int)actualHeight);

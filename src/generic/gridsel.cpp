@@ -589,7 +589,6 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
                 r = m_grid->BlockToDeviceRect( m_cellSelection[n],
                                                m_cellSelection[n] );
                 m_cellSelection.RemoveAt(n);
-                n--; count--;
                 if ( !m_grid->GetBatchCount() )
                     ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
 

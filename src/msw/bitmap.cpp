@@ -1762,14 +1762,11 @@ bool wxCreateDIB(long xSize, long ySize, long bitsPerPixel,
                  HPALETTE hPal, LPBITMAPINFO* lpDIBHeader)
 {
    unsigned long   i, headerSize;
-   LPBITMAPINFO    lpDIBheader = NULL;
-   LPPALETTEENTRY  lpPe = NULL;
-
 
    // Allocate space for a DIB header
    headerSize = (sizeof(BITMAPINFOHEADER) + (256 * sizeof(PALETTEENTRY)));
-   lpDIBheader = (BITMAPINFO *) malloc(headerSize);
-   lpPe = (PALETTEENTRY *)((BYTE*)lpDIBheader + sizeof(BITMAPINFOHEADER));
+   LPBITMAPINFO lpDIBheader = (BITMAPINFO *) malloc(headerSize);
+   LPPALETTEENTRY lpPe = (PALETTEENTRY *)((BYTE*)lpDIBheader + sizeof(BITMAPINFOHEADER));
 
    GetPaletteEntries(hPal, 0, 256, lpPe);
 

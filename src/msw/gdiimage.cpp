@@ -372,7 +372,8 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
 
     wxDIB dib(name);
 
-    return dib.IsOk() && bitmap->CopyFromDIB(dib);
+    bool ok = dib.IsOk() && bitmap->CopyFromDIB(dib);
+    return ok;
 #else
   WXHBITMAP hBitmap = (WXHBITMAP)wxLoadBMP(name);
   if(hBitmap) {

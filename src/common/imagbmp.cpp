@@ -459,7 +459,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     wxUint16        aWord;
 
     // allocate space for palette if needed:
-    _cmap *cmap = NULL;
+    _cmap *cmap;
 
     if ( bpp < 16 )
     {
@@ -602,27 +602,23 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
         ptr = data;
     }
 
-    int line = 0;
-    int column = 0;
     int linesize = ((width * bpp + 31) / 32) * 4;
 
     /* BMPs are stored upside down */
-    for ( line = (height - 1); line >= 0; line-- )
+    for ( int line = (height - 1); line >= 0; line-- )
     {
         int linepos = 0;
-        for ( column = 0; column < width ; )
+        for ( int column = 0; column < width ; )
         {
             if ( bpp < 16 )
             {
-                int index = 0;
                 linepos++;
                 aByte = stream.GetC();
                 if ( bpp == 1 )
                 {
-                    int bit = 0;
-                    for (bit = 0; bit < 8 && column < width; bit++)
+                    for (int bit = 0; bit < 8 && column < width; bit++)
                     {
-                        index = ((aByte & (0x80 >> bit)) ? 1 : 0);
+                        int index = ((aByte & (0x80 >> bit)) ? 1 : 0);
                         ptr[poffset] = cmap[index].r;
                         ptr[poffset + 1] = cmap[index].g;
                         ptr[poffset + 2] = cmap[index].b;
@@ -700,10 +696,9 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                     }
                     else
                     {
-                        int nibble = 0;
-                        for (nibble = 0; nibble < 2 && column < width; nibble++)
+                        for (int nibble = 0; nibble < 2 && column < width; nibble++)
                         {
-                            index = ((aByte & (0xF0 >> nibble * 4)) >> (!nibble * 4));
+                            int index = ((aByte & (0xF0 >> nibble * 4)) >> (!nibble * 4));
                             if ( index >= 16 )
                                 index = 15;
                             ptr[poffset] = cmap[index].r;

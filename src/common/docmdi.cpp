@@ -165,11 +165,9 @@ void wxDocMDIChildFrame::OnCloseWindow(wxCloseEvent& event)
   // ...since it will be deleted by wxWindows if we return TRUE.
   if (m_childView)
   {
-    bool ans = FALSE;
-    if (!event.CanVeto())
-      ans = TRUE; // Must delete.
-    else
-      ans = m_childView->Close(FALSE); // FALSE means don't delete associated window
+    bool ans = event.CanVeto()
+                ? m_childView->Close(FALSE) // FALSE means don't delete associated window
+                : TRUE; // Must delete.
 
     if (ans)
     {

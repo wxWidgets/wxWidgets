@@ -488,11 +488,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
 
     if ( edge == wxSASH_LEFT || edge == wxSASH_RIGHT )
     {
-        int sashPosition = 0;
-        if (edge == wxSASH_LEFT)
-            sashPosition = 0;
-        else
-            sashPosition = w - GetEdgeMargin(edge);
+        int sashPosition = (edge == wxSASH_LEFT) ? 0 : ( w - GetEdgeMargin(edge) );
 
         dc.SetPen(facePen);
         dc.SetBrush(faceBrush);
@@ -518,11 +514,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
     }
     else // top or bottom
     {
-        int sashPosition = 0;
-        if (edge == wxSASH_TOP)
-            sashPosition = 0;
-        else
-            sashPosition = h - GetEdgeMargin(edge);
+        int sashPosition = (edge == wxSASH_TOP) ? 0 : ( h - GetEdgeMargin(edge) );
 
         dc.SetPen(facePen);
         dc.SetBrush(faceBrush);

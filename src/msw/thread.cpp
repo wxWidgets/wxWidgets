@@ -690,7 +690,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
         // process the Windows messages that result from these functions
         // (note that even in console applications we might have to process
         // messages if we use wxExecute() or timers or ...)
-        DWORD result = 0;       // suppress warnings from broken compilers
+        DWORD result wxDUMMY_INITIALIZE(0);
         do
         {
             if ( wxThread::IsMain() )

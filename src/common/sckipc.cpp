@@ -531,7 +531,6 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
   if (!connection)
     return;
 
-  int msg = 0;
   wxDataInputStream *codeci;
   wxDataOutputStream *codeco;
   wxSocketStream *sockstrm;
@@ -551,7 +550,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
   codeci = connection->m_codeci;
   codeco = connection->m_codeco;
   sockstrm = connection->m_sockstrm;
-  msg = codeci->Read8();
+  int msg = codeci->Read8();
 
   switch (msg)
   {

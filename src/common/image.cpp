@@ -1804,8 +1804,8 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                                w3 * *(v3++) + w4 * *(v4++)) /
                               (w1 + w2 + w3 + w4) );
                         *(dst++) = (unsigned char)
-                            ( (w1 * *(v1++) + w2 * *(v2++) +
-                               w3 * *(v3++) + w4 * *(v4++)) /
+                            ( (w1 * *v1 + w2 * *v2 +
+                               w3 * *v3 + w4 * *v4) /
                               (w1 + w2 + w3 + w4) );
                     }
                 }
@@ -1835,7 +1835,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     unsigned char *p = data[ys] + (3 * xs);
                     *(dst++) = *(p++);
                     *(dst++) = *(p++);
-                    *(dst++) = *(p++);
+                    *(dst++) = *p;
                 }
                 else
                 {

@@ -184,7 +184,6 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 
     s_inPopup = true;
 
-    bool        rval = false;
     wxWindow*   win;
     int         x, y;
     wxGetMousePosition(&x, &y);
@@ -202,7 +201,7 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
     // Work around a WIN32 bug
     ::SetForegroundWindow ((HWND) win->GetHWND ());
 
-    rval = win->PopupMenu(menu, 0, 0);
+    bool rval = win->PopupMenu(menu, 0, 0);
 
     // Work around a WIN32 bug
     ::PostMessage ((HWND) win->GetHWND(),WM_NULL,0,0L);

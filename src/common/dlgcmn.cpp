@@ -172,14 +172,9 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
 {
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
     
-    wxBoxSizer *box = NULL;
-    
     // If we have a PDA screen, put yes/no button over 
     // all other buttons, otherwise on the left side.
-    if (is_pda)
-        box = new wxBoxSizer( wxVERTICAL );
-    else
-        box = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer *box = is_pda ? new wxBoxSizer( wxVERTICAL ) : new wxBoxSizer( wxHORIZONTAL );
         
     wxBoxSizer *inner_yes_no = NULL;
     

@@ -272,8 +272,6 @@ bool wxURL::FetchProtocol()
 
 wxInputStream *wxURL::GetInputStream()
 {
-  wxInputStream *the_i_stream = NULL;
-
   if (!m_protocol)
   {
     m_error = wxURL_NOPROTO;
@@ -310,10 +308,9 @@ wxInputStream *wxURL::GetInputStream()
 #endif
 
   // When we use a proxy, we have to pass the whole URL to it.
-  if (m_useProxy)
-    the_i_stream = m_protocol->GetInputStream(m_url);
-  else
-    the_i_stream = m_protocol->GetInputStream(m_path);
+  wxInputStream *the_i_stream = 
+       (m_useProxy) ? m_protocol->GetInputStream(m_url) :
+                      m_protocol->GetInputStream(m_path);
 
   if (!the_i_stream)
   {

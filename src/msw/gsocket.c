@@ -30,7 +30,6 @@
 #include <winsock.h>
 
 #ifndef __GSOCKET_STANDALONE__
-#  include "wx/defs.h"
 #  include "wx/setup.h"
 #endif
 

@@ -1711,21 +1711,12 @@ bool wxGenericTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxG
 
 void wxGenericTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeItem *item2)
 {
-    // item2 is not necessary after item1
-    wxGenericTreeItem *first=NULL, *last=NULL;
     m_select_me = NULL;
 
+    // item2 is not necessary after item1
     // choice first' and 'last' between item1 and item2
-    if (item1->GetY()<item2->GetY())
-    {
-        first=item1;
-        last=item2;
-    }
-    else
-    {
-        first=item2;
-        last=item1;
-    }
+    wxGenericTreeItem *first= (item1->GetY()<item2->GetY()) ? item1 : item2;
+    wxGenericTreeItem *last = (item1->GetY()<item2->GetY()) ? item2 : item1;
 
     bool select = m_current->IsSelected();
 

@@ -952,8 +952,7 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
     if (printout)
     {
         // Pass two printout objects: for preview, and possible printing.
-        wxPrintPreviewBase *preview = (wxPrintPreviewBase *) NULL;
-        preview = new wxPrintPreview(printout, view->OnCreatePrintout());
+        wxPrintPreviewBase *preview = new wxPrintPreview(printout, view->OnCreatePrintout());
 
         wxPreviewFrame *frame = new wxPreviewFrame(preview, (wxFrame *)wxTheApp->GetTopWindow(), _("Print Preview"),
                 wxPoint(100, 100), wxSize(600, 650));
@@ -1175,7 +1174,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
     }
 
     // Existing document
-    wxDocTemplate *temp = (wxDocTemplate *) NULL;
+    wxDocTemplate *temp;
 
     wxString path2(wxT(""));
     if (path != wxT(""))
@@ -1788,11 +1787,9 @@ void wxDocChildFrame::OnCloseWindow(wxCloseEvent& event)
 {
     if (m_childView)
     {
-        bool ans = FALSE;
-        if (!event.CanVeto())
-            ans = TRUE; // Must delete.
-        else
-            ans = m_childView->Close(FALSE); // FALSE means don't delete associated window
+        bool ans = event.CanVeto()
+                    ? m_childView->Close(FALSE) // FALSE means don't delete associated window
+                    : TRUE; // Must delete.
 
         if (ans)
         {
@@ -1906,8 +1903,10 @@ bool wxDocPrintout::OnPrintPage(int WXUNUSED(page))
     // Get the logical pixels per inch of screen and printer
     int ppiScreenX, ppiScreenY;
     GetPPIScreen(&ppiScreenX, &ppiScreenY);
+    wxUnusedVar(ppiScreenY);
     int ppiPrinterX, ppiPrinterY;
     GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
+    wxUnusedVar(ppiPrinterY);
 
     // This scales the DC so that the printout roughly represents the
     // the screen scaling. The text point size _should_ be the right size
@@ -1922,6 +1921,7 @@ bool wxDocPrintout::OnPrintPage(int WXUNUSED(page))
     int w, h;
     dc->GetSize(&w, &h);
     GetPageSizePixels(&pageWidth, &pageHeight);
+    wxUnusedVar(pageHeight);
 
     // If printer pageWidth == current DC width, then this doesn't
     // change. But w might be the preview bitmap width, so scale down.

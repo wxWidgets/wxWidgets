@@ -303,7 +303,6 @@ wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
 wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
 {
   int total;
-  int ret = 1;
 
   // Try the pushback buffer first
   total = GetPushback(buffer, nbytes, FALSE);
@@ -325,6 +324,7 @@ wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
   // wxSOCKET_BLOCK
   // wxSOCKET_NONE
   //
+  int ret;
   if (m_flags & wxSOCKET_NOWAIT)
   {
     GSocket_SetNonBlocking(m_socket, 1);
@@ -504,7 +504,6 @@ wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
 wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
 {
   wxUint32 total = 0;
-  int ret = 1;
 
   // If the socket is invalid or parameters are ill, return immediately
   if (!m_socket || !buffer || !nbytes)
@@ -516,6 +515,7 @@ wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
   // wxSOCKET_BLOCK
   // wxSOCKET_NONE
   //
+  int ret;
   if (m_flags & wxSOCKET_NOWAIT)
   {
     GSocket_SetNonBlocking(m_socket, 1);
@@ -930,6 +930,7 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
   // Schedule the event
 
   wxSocketEventFlags flag = 0;
+  wxUnusedVar(flag);
   switch (notification)
   {
     case GSOCK_INPUT:      flag = GSOCK_INPUT_FLAG; break;

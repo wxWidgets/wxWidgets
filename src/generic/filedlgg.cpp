@@ -490,7 +490,6 @@ void wxFileCtrl::UpdateFiles()
     FreeAllItemsData();
     DeleteAllItems();
 
-    wxFileData *fd = (wxFileData *) NULL;
     wxListItem item;
     item.m_itemId = 0;
     item.m_col = 0;
@@ -504,7 +503,7 @@ void wxFileCtrl::UpdateFiles()
 
         for (n=0; n<count; n++)
             {
-            fd = new wxFileData(paths[n], names[n], wxFileData::is_drive, icons[n]);
+            wxFileData *fd = new wxFileData(paths[n], names[n], wxFileData::is_drive, icons[n]);
                 Add(fd, item);
                 item.m_itemId++;
             }
@@ -519,7 +518,7 @@ void wxFileCtrl::UpdateFiles()
 #ifdef __UNIX__
             if (p.IsEmpty()) p = wxT("/");
 #endif // __UNIX__
-            fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
+            wxFileData *fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
             Add(fd, item);
             item.m_itemId++;
         }
@@ -546,7 +545,7 @@ void wxFileCtrl::UpdateFiles()
             cont = dir.GetFirst(&f, wxEmptyString, wxDIR_DIRS | hiddenFlag);
             while (cont)
             {
-                fd = new wxFileData(dirPrefix + f, f, wxFileData::is_dir, wxFileIconsTable::folder);
+                wxFileData *fd = new wxFileData(dirPrefix + f, f, wxFileData::is_dir, wxFileIconsTable::folder);
                 Add(fd, item);
                 item.m_itemId++;
                 cont = dir.GetNext(&f);
@@ -561,7 +560,7 @@ void wxFileCtrl::UpdateFiles()
                                         wxDIR_FILES | hiddenFlag);
                 while (cont)
                 {
-                    fd = new wxFileData(dirPrefix + f, f, wxFileData::is_file, wxFileIconsTable::file);
+                    wxFileData *fd = new wxFileData(dirPrefix + f, f, wxFileData::is_file, wxFileIconsTable::file);
                     Add(fd, item);
                     item.m_itemId++;
                     cont = dir.GetNext(&f);

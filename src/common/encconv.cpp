@@ -89,7 +89,7 @@ wxEncodingConverter::wxEncodingConverter()
 bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_enc, int method)
 {
     unsigned i;
-    wxUint16 *in_tbl = NULL, *out_tbl = NULL;
+    wxUint16 *in_tbl, *out_tbl = NULL;
 
     if (m_Table) {delete[] m_Table; m_Table = NULL;}
 

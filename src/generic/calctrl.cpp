@@ -668,11 +668,9 @@ bool wxCalendarCtrl::IsDateShown(const wxDateTime& date) const
 
 bool wxCalendarCtrl::IsDateInRange(const wxDateTime& date) const
 {
-    bool retval = TRUE;
     // Check if the given date is in the range specified
-    retval = ( ( ( m_lowdate.IsValid() ) ? ( date >= m_lowdate ) : TRUE )
+    return ( ( ( m_lowdate.IsValid() ) ? ( date >= m_lowdate ) : TRUE )
         && ( ( m_highdate.IsValid() ) ? ( date <= m_highdate ) : TRUE ) );
-    return retval;
 }
 
 bool wxCalendarCtrl::ChangeYear(wxDateTime* target) const
@@ -1371,7 +1369,7 @@ bool wxCalendarCtrl::GetDateCoord(const wxDateTime& date, int *day, int *week) c
         }
         else
         {
-            day += ( startOnMonday ) ? 0 : 1;
+            *day += ( startOnMonday ) ? 0 : 1;
         }
 
         int targetmonth = date.GetMonth() + (12 * date.GetYear());

@@ -1111,7 +1111,7 @@ static int OpenLogFile(wxFile& file, wxString *pFilename)
 
     // open file
     // ---------
-    bool bOk = FALSE;
+    bool bOk;
     if ( wxFile::Exists(filename) ) {
         bool bAppend = FALSE;
         wxString strMsg;

@@ -97,10 +97,9 @@ wxChar wxTextInputStream::NextChar()
 
 wxChar wxTextInputStream::NextNonSeparators()
 {
-    wxChar c = (wxChar) 0;
     for (;;)
     {
-        c = NextChar();
+        wxChar c = NextChar();
         if (c == wxEOT) return (wxChar) 0;
 
         if (c != wxT('\n') &&

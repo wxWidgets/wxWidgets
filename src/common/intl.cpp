@@ -1566,7 +1566,11 @@ bool wxLocale::Init(int language, int flags)
         }
         else
         {
-            int codepage = -1;
+            int codepage 
+                         #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
+                         = -1
+                         #endif
+                         ;
             wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
                                      SORT_DEFAULT);
             // FIXME

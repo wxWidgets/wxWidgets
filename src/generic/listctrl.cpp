@@ -2682,7 +2682,6 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             wxPen pen(GetRuleColour(), 1, wxSOLID);
 
-            int col = 0;
             wxRect firstItemRect;
             wxRect lastItemRect;
             GetItemRect(visibleFrom, firstItemRect);
@@ -2690,7 +2689,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             int x = firstItemRect.GetX();
             dc.SetPen(pen);
             dc.SetBrush(* wxTRANSPARENT_BRUSH);
-            for (col = 0; col < GetColumnCount(); col++)
+            for (int col = 0; col < GetColumnCount(); col++)
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth;
@@ -3196,15 +3195,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_PRIOR:
             {
-                int steps = 0;
-                if ( HasFlag(wxLC_REPORT) )
-                {
-                    steps = m_linesPerPage - 1;
-                }
-                else
-                {
-                    steps = m_current % m_linesPerPage;
-                }
+                int steps = HasFlag(wxLC_REPORT) ? m_linesPerPage - 1 : m_current % m_linesPerPage;
 
                 int index = m_current - steps;
                 if (index < 0)
@@ -3216,15 +3207,9 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_NEXT:
             {
-                int steps = 0;
-                if ( HasFlag(wxLC_REPORT) )
-                {
-                    steps = m_linesPerPage - 1;
-                }
-                else
-                {
-                    steps = m_linesPerPage - (m_current % m_linesPerPage) - 1;
-                }
+                int steps = HasFlag(wxLC_REPORT)
+                               ? m_linesPerPage - 1
+                               : m_linesPerPage - (m_current % m_linesPerPage) - 1;
 
                 size_t index = m_current + steps;
                 size_t count = GetItemCount();
@@ -4023,7 +4008,6 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                         clientHeight -= wxSystemSettings::
                                             GetMetric(wxSYS_HSCROLL_Y);
                         m_linesPerPage = 0;
-                        currentlyVisibleLines = 0;
                         break;
                     }
 
@@ -5325,7 +5309,8 @@ int wxGenericListCtrl::OnGetItemImage(long WXUNUSED(item)) const
     return -1;
 }
 
-wxListItemAttr *wxGenericListCtrl::OnGetItemAttr(long item) const
+wxListItemAttr *
+wxGenericListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) const
 {
     wxASSERT_MSG( item >= 0 && item < GetItemCount(),
                   _T("invalid item index in OnGetItemAttr()") );

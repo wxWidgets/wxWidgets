@@ -35,8 +35,8 @@ FORCE_LINK_ME(m_pre)
 static wxString LINKAGEMODE HtmlizeWhitespaces(const wxString& str)
 {
     wxString out;
-    size_t i = 0, j = 0, len = str.Len();
-    for (i = 0; i < len; i++)
+    size_t len = str.Len();
+    for (size_t i = 0; i < len; i++)
     {
         switch (str[i])
         {
@@ -52,7 +52,10 @@ static wxString LINKAGEMODE HtmlizeWhitespaces(const wxString& str)
                 out << wxT("<br>");
                 break;
             case wxT('\t'):
-                for (j = 8 - i%8; j > 0; j--) out << wxT("&nbsp;");
+                {
+                    for (size_t j = 8 - i%8; j > 0; j--)
+                        out << wxT("&nbsp;");
+                }
                 break;
             default:
                 out << str[i];

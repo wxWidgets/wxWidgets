@@ -125,7 +125,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         path.Printf(wxT("%c:\\"), driveBuffer[i]);
         name.Printf(wxT("%c:"), driveBuffer[i]);
 
-        int imageId = wxFileIconsTable::drive;
+        int imageId;
         int driveType = ::GetDriveType(path);
         switch (driveType)
         {
@@ -1206,8 +1206,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 
     if (n > 0 && defaultFilter < (int) n)
     {
-        size_t i = 0;
-        for (i = 0; i < n; i++)
+        for (size_t i = 0; i < n; i++)
             Append(descriptions[i]);
         SetSelection(defaultFilter);
     }
