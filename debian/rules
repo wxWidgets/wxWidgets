@@ -363,7 +363,12 @@ build-examples-stamp: build-gtk-shared-stamp
 
 build-i18n-stamp: build-gtk-shared-stamp
 	dh_testdir
+
+	# touch .po files first, since if they are not already up
+	# to date then _now_ is not the time to fix it.
+	# That should have been been done before cvs was tagged.
 	cd $(objdir_i18n) \
+		&& touch *.po \
 		&& $(MAKE) allmo
 	touch $@
 
@@ -397,9 +402,21 @@ build-msw-dev-stamp:
 clean: debian/control
 	dh_testdir
 	dh_testroot
+
 	rm -rf config_deb.cache control-files-stamp $(build_stamps) $(objdirs)
 	rm -f docs/lgpl.txt
-	cd wxPython && ./setup.py clean
+	rm -f docs/latex/wx/manual.bb
+	rm -f $(objdir_i18n)/*.mo
+
+	cd wxPython \
+		&& ./setup.py clean \
+		&& rm -rf licence \
+		&& rm -rf build \
+		&& rm -rf contrib/ogl/contrib \
+		&& rm -rf contrib/stc/contrib \
+		&& rm -rf contrib/xrc/contrib \
+		&& rm -rf *.pyc
+
 	dh_clean
 	rm -f debian/$(package_wxbase_lib).*
 	rm -f debian/$(package_wxbase_dev).*
