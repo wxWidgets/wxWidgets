@@ -581,33 +581,35 @@ Loads and displays the named file, if it exists.
 
 {\tt TRUE} if successful, {\tt FALSE} otherwise.
 
-\membersection{wxTextCtrl::OnChar}\label{wxtextctrlonchar}
-
-\func{void}{OnChar}{\param{wxKeyEvent\& }{event}}
-
-Default handler for character input.
-
-\wxheading{Remarks}
-
-It is possible to intercept character
-input by overriding this member. Call this function
-to let the default behaviour take place; not calling
-it results in the character being ignored. You can
-replace the {\it keyCode} member of {\it event} to
-translate keystrokes.
-
-Note that Windows and Motif have different ways
-of implementing the default behaviour. In Windows,
-calling wxTextCtrl::OnChar immediately
-processes the character. In Motif,
-calling this function simply sets a flag
-to let default processing happen. This might affect
-the way in which you write your OnChar function
-on different platforms.
-
-\wxheading{See also}
-
-\helpref{wxKeyEvent}{wxkeyevent}
+% VZ: commenting this out as: (a) the docs are wrong (you can't replace
+%     anything), (b) wxTextCtrl doesn't have any OnChar() anyhow
+%% \membersection{wxTextCtrl::OnChar}\label{wxtextctrlonchar}
+%% 
+%% \func{void}{OnChar}{\param{wxKeyEvent\& }{event}}
+%% 
+%% Default handler for character input.
+%% 
+%% \wxheading{Remarks}
+%% 
+%% It is possible to intercept character
+%% input by overriding this member. Call this function
+%% to let the default behaviour take place; not calling
+%% it results in the character being ignored. You can
+%% replace the {\it keyCode} member of {\it event} to
+%% translate keystrokes.
+%% 
+%% Note that Windows and Motif have different ways
+%% of implementing the default behaviour. In Windows,
+%% calling wxTextCtrl::OnChar immediately
+%% processes the character. In Motif,
+%% calling this function simply sets a flag
+%% to let default processing happen. This might affect
+%% the way in which you write your OnChar function
+%% on different platforms.
+%% 
+%% \wxheading{See also}
+%% 
+%% \helpref{wxKeyEvent}{wxkeyevent}
 
 \membersection{wxTextCtrl::OnDropFiles}\label{wxtextctrlondropfiles}
 
