@@ -37,10 +37,11 @@
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "mondrian.xpm"
-
+#if wxUSE_DRAG_AND_DROP
     #include "dnd_copy.xpm"
     #include "dnd_move.xpm"
     #include "dnd_none.xpm"
+#endif
 #endif
 
 #if wxUSE_DRAG_AND_DROP

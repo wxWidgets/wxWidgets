@@ -55,7 +55,9 @@
     #define USE_LOG_WINDOW 0
 #endif
 
+#if wxUSE_OWNER_DRAWN
 #include "copy.xpm"
+#endif
 
 // ----------------------------------------------------------------------------
 // classes
