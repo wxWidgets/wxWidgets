@@ -657,13 +657,8 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
     // Is this menu on a menubar?  (possibly nested)
     wxFrame* frame = NULL;
-    wxMenu*  pm = menu;
-    while ( pm && !frame )
-    {
-        if ( pm->IsAttached() )
-            frame = pm->GetMenuBar()->GetFrame();
-        pm = pm->GetParent();
-    }
+    if(menu->IsAttached())
+        frame = menu->GetMenuBar()->GetFrame();
 
     // FIXME: why do we have to call wxFrame::GetEventHandler() directly here?
     //        normally wxMenu::SendEvent() should be enough, if it doesn't work
