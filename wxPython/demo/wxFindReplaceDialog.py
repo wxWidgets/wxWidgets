@@ -39,7 +39,7 @@ class TestPanel(wxPanel):
         map = {
             wxEVT_COMMAND_FIND : "FIND",
             wxEVT_COMMAND_FIND_NEXT : "FIND_NEXT",
-            wxEVT_COMMAND_FIND_REPLACE : "REPALCE",
+            wxEVT_COMMAND_FIND_REPLACE : "REPLACE",
             wxEVT_COMMAND_FIND_REPLACE_ALL : "REPLACE_ALL",
             }
         et = evt.GetEventType()
