@@ -12,8 +12,7 @@
 /*
     TODO: support for palettes is very incomplete, several functions simply
           ignore them (we should select and realize the palette, if any, before
-          caling GetDIBits() in the DC we use with it and we shouldn't use
-          GetBitmapBits() at all because we can't do it with it)
+          caling GetDIBits() in the DC we use with it.
  */
 
 // ============================================================================
@@ -60,11 +59,22 @@
 
 // calculate the number of palette entries needed for the bitmap with this
 // number of bits per pixel
-static WORD wxGetNumOfBitmapColors(WORD bitsPerPixel)
+static inline WORD wxGetNumOfBitmapColors(WORD bitsPerPixel)
 {
     // only 1, 4 and 8bpp bitmaps use palettes (well, they could be used with
     // 24bpp ones too but we don't support this as I think it's quite uncommon)
     return bitsPerPixel <= 8 ? 1 << bitsPerPixel : 0;
+}
+
+// wrapper around ::GetObject() for DIB sections
+static inline bool GetDIBSection(HBITMAP hbmp, DIBSECTION *ds)
+{
+    // note that at least under Win9x (this doesn't seem to happen under Win2K
+    // but this doesn't mean anything, of course), GetObject() may return
+    // sizeof(DIBSECTION) for a bitmap which is *not* a DIB section and the way
+    // to check for it is by looking at the bits pointer
+    return ::GetObject(hbmp, sizeof(DIBSECTION), ds) == sizeof(DIBSECTION) &&
+                ds->dsBm.bmBits;
 }
 
 // ============================================================================
@@ -137,7 +147,7 @@ bool wxDIB::Create(const wxBitmap& bmp)
     HBITMAP hbmp = GetHbitmapOf(bmp);
 
     DIBSECTION ds;
-    if ( ::GetObject(hbmp, sizeof(ds), &ds) == sizeof(ds) )
+    if ( GetDIBSection(hbmp, &ds) )
     {
         m_handle = hbmp;
 
@@ -162,12 +172,23 @@ bool wxDIB::Create(const wxBitmap& bmp)
         if ( !Create(w, h, d) )
             return false;
 
-        // we could have used GetDIBits() too but GetBitmapBits() is simpler
-        if ( !::GetBitmapBits
+        if ( !GetDIBSection(m_handle, &ds) )
+        {
+            // we've just created a new DIB section, why should this fail?
+            wxFAIL_MSG( _T("GetObject(DIBSECTION) unexpectedly failed") );
+
+            return false;
+        }
+
+        if ( !::GetDIBits
                 (
-                    GetHbitmapOf(bmp),      // the source DDB
-                    GetLineSize(w, d)*h,    // the number of bytes to copy
-                    m_data                  // the pixels will be copied here
+                    ScreenHDC(),                // the DC to use
+                    hbmp,                       // the source DDB
+                    0,                          // first scan line
+                    h,                          // number of lines to copy
+                    ds.dsBm.bmBits,             // pointer to the buffer
+                    (BITMAPINFO *)&ds.dsBmih,   // bitmap header
+                    DIB_RGB_COLORS              // and not DIB_PAL_COLORS
                 ) )
         {
             wxLogLastError(wxT("GetDIBits()"));
@@ -212,7 +233,7 @@ bool wxDIB::Save(const wxString& filename)
     if ( ok )
     {
         DIBSECTION ds;
-        if ( !::GetObject(m_handle, sizeof(ds), &ds) )
+        if ( !GetDIBSection(m_handle, &ds) )
         {
             wxLogLastError(_T("GetObject(hDIB)"));
         }
@@ -261,7 +282,7 @@ void wxDIB::DoGetObject() const
         // check for this now rather than trying to find out why it doesn't
         // work later
         DIBSECTION ds;
-        if ( !::GetObject(m_handle, sizeof(ds), &ds) )
+        if ( !GetDIBSection(m_handle, &ds) )
         {
             wxLogLastError(_T("GetObject(hDIB)"));
             return;
@@ -285,7 +306,7 @@ HBITMAP wxDIB::CreateDDB(HDC hdc) const
     wxCHECK_MSG( m_handle, 0, _T("wxDIB::CreateDDB(): invalid object") );
 
     DIBSECTION ds;
-    if ( !::GetObject(m_handle, sizeof(ds), &ds) )
+    if ( !GetDIBSection(m_handle, &ds) )
     {
         wxLogLastError(_T("GetObject(hDIB)"));
 
@@ -440,7 +461,7 @@ HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
         return NULL;
     }
 
-    if ( !ConvertFromBitmap((BITMAPINFO *)GlobalPtr(hDIB), hbmp) )
+    if ( !ConvertFromBitmap((BITMAPINFO *)(void *)GlobalPtr(hDIB), hbmp) )
     {
         // this really shouldn't happen... it worked the first time, why not
         // now?
@@ -463,7 +484,7 @@ wxPalette *wxDIB::CreatePalette() const
     wxCHECK_MSG( m_handle, NULL, _T("wxDIB::CreatePalette(): invalid object") );
 
     DIBSECTION ds;
-    if ( !::GetObject(m_handle, sizeof(ds), &ds) )
+    if ( !GetDIBSection(m_handle, &ds) )
     {
         wxLogLastError(_T("GetObject(hDIB)"));
 
