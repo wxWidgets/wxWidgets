@@ -77,6 +77,12 @@
     #include "sql.h"
     #include "sqlext.h"
     #include "odbcinst.h"
+#elif defined( __VMS )
+// For OpenVMS use the ones from the library
+extern "C" {
+    #include <isql.h>
+    #include <isqlext.h>
+}
 #else
 extern "C" {
     #include "wx/isql.h"

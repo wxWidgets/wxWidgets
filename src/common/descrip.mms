@@ -47,6 +47,8 @@ LEX=flex
 OBJECTS = \
 		parser.obj,\
 		appcmn.obj,\
+		artprov.obj,\
+		artstd.obj,\
 		choiccmn.obj,\
 		clipcmn.obj,\
 		clntdata.obj,\
@@ -164,6 +166,8 @@ OBJECTS2=utilscmn.obj,\
 SOURCES = \
 		parser.y,\
 		appcmn.cpp,\
+		artprov.cpp,\
+		artstd.cpp,\
 		choiccmn.cpp,\
 		clipcmn.cpp,\
 		clntdata.cpp,\
@@ -318,6 +322,8 @@ lexer.c : lexer.l
 	delete lexyy.c;*
 
 appcmn.obj : appcmn.cpp
+artprov.obj : artprov.cpp
+artstd.obj : artstd.cpp
 choiccmn.obj : choiccmn.cpp
 clipcmn.obj : clipcmn.cpp
 clntdata.obj : clntdata.cpp

@@ -52,7 +52,6 @@ OBJECTS = \
 		gridsel.obj,\
 		helpext.obj,\
 		helphtml.obj,\
-		helpwxht.obj,\
 		imaglist.obj,\
 		laywin.obj,\
 		listctrl.obj,\
@@ -93,7 +92,6 @@ SOURCES = \
 		gridsel.cpp,\
 		helpext.cpp,\
 		helphtml.cpp,\
-		helpwxht.cpp,\
 		imaglist.cpp,\
 		laywin.cpp,\
 		listctrl.cpp,\
@@ -161,7 +159,6 @@ gridctrl.obj : gridctrl.cpp
 gridsel.obj : gridsel.cpp
 helpext.obj : helpext.cpp
 helphtml.obj : helphtml.cpp
-helpwxht.obj : helpwxht.cpp
 imaglist.obj : imaglist.cpp
 laywin.obj : laywin.cpp
 listctrl.obj : listctrl.cpp
