@@ -233,7 +233,12 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, -1,
                                  _T("wxToolBar Sample"),
-                                 wxPoint(100, 100), wxSize(550, 300));
+#ifdef __WXWINCE__
+                                 wxPoint(0, 0), wxDefaultSize, wxNO_BORDER
+#else
+                                 wxPoint(100, 100), wxSize(550, 300)
+#endif
+                                 );
 
     frame->Show(TRUE);
 
@@ -246,6 +251,12 @@ bool MyApp::OnInit()
 
 void MyFrame::RecreateToolbar()
 {
+#ifdef __WXWINCE__
+    // On Windows CE, we should not delete the
+    // previous toolbar in case it contains the menubar.
+    // We'll try to accomodate this usage in due course.
+    wxToolBar* toolBar = CreateToolBar();
+#else
     // delete and recreate the toolbar
     wxToolBarBase *toolBar = GetToolBar();
     long style = toolBar ? toolBar->GetWindowStyle() : TOOLBAR_STYLE;
@@ -258,6 +269,7 @@ void MyFrame::RecreateToolbar()
     style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
+#endif
 
     // Set up toolbar
     wxBitmap toolBarBitmaps[8];
@@ -349,8 +361,10 @@ MyFrame::MyFrame(wxFrame* parent,
     m_rows = 1;
     m_nPrint = 1;
 
+#ifndef __WXWINCE__
     // Give it a status line
     CreateStatusBar();
+#endif
 
     // Give it an icon
     SetIcon(wxICON(mondrian));

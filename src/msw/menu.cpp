@@ -615,7 +615,10 @@ wxMenuBar::~wxMenuBar()
 {
     // In Windows CE, the menubar is always associated
     // with a toolbar, which destroys the menu implicitly.
-#ifndef __WXWINCE__
+#ifdef __WXWINCE__
+    if (GetToolBar())
+        GetToolBar()->SetMenuBar(NULL);
+#else
     // we should free Windows resources only if Windows doesn't do it for us
     // which happens if we're attached to a frame
     if (m_hMenu && !IsAttached())

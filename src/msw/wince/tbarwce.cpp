@@ -285,44 +285,7 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
 
     if (menuBar)
         menuBar->Create();
-#if 0
-    {
-        HMENU hMenu = (HMENU)::SendMessage(mbi.hwndMB, SHCMBM_GETMENU, (WPARAM)0, (LPARAM)0);
-        if (hMenu)
-        {
-            TBBUTTON tbButton; 
-            memset(&tbButton, 0, sizeof(TBBUTTON));
-            tbButton.iBitmap = I_IMAGENONE;
-            tbButton.fsState = TBSTATE_ENABLED;
-            tbButton.fsStyle = TBSTYLE_DROPDOWN | TBSTYLE_NO_DROPDOWN_ARROW | TBSTYLE_AUTOSIZE;
-            
-            size_t i;
-            for (i = 0; i < menuBar->GetMenuCount(); i++)
-            {
-                HMENU hPopupMenu = (HMENU) menuBar->GetMenu(i)->GetHMenu() ;
-                tbButton.dwData = (DWORD)hPopupMenu;
-                wxString label = wxStripMenuCodes(menuBar->GetLabelTop(i));
-                tbButton.iString = (int) label.c_str();
-
-                tbButton.idCommand = NewControlId();
-                if (!::SendMessage((HWND) GetHWND(), TB_INSERTBUTTON, i, (LPARAM)&tbButton))
-                {
-                    wxLogLastError(wxT("TB_INSERTBUTTON"));
-                }
-            }
-        }
-    }
-#endif
     
-#if 0
-    CommandBar_AddToolTips(    hwndCB,    uNumSmallTips,szSmallTips);
-    
-    CommandBar_AddBitmap(hwndCB, HINST_COMMCTRL, IDB_STD_SMALL_COLOR,
-        15, 16, 16);
-    // Add buttons in tbSTDButton to Commandbar
-    CommandBar_AddButtons(hwndCB, sizeof(tbSTDButton)/sizeof(TBBUTTON),
-        tbSTDButton);
-#endif    
     return TRUE;
 }
 
@@ -378,6 +341,9 @@ void wxToolBar::Recreate()
 
 wxToolBar::~wxToolBar()
 {
+    if (GetMenuBar())
+        GetMenuBar()->SetToolBar(NULL);
+
     // we must refresh the frame size when the toolbar is deleted but the frame
     // is not - otherwise toolbar leaves a hole in the place it used to occupy
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
@@ -548,6 +514,69 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     return TRUE;
 }
 
+struct wxToolBarIdMapping
+{
+    int m_wxwinId;
+    int m_winceId;
+};
+
+static wxToolBarIdMapping sm_ToolBarIdMappingArray[] =
+{
+    { wxID_COPY, STD_COPY },
+    { wxID_CUT, STD_CUT },
+    { wxID_FIND, STD_FIND },
+    { wxID_PASTE, STD_PASTE },
+    { wxID_NEW, STD_FILENEW },
+    { wxID_OPEN, STD_FILEOPEN },
+    { wxID_SAVE, STD_FILESAVE },
+    { wxID_PRINT, STD_PRINT },
+    { wxID_PREVIEW, STD_PRINTPRE },
+    { wxID_UNDO, STD_UNDO  },
+    { wxID_REDO, STD_REDOW },
+    { wxID_HELP, STD_HELP },
+    { wxID_DELETE, STD_DELETE },
+    { wxID_REPLACE, STD_REPLACE },
+    { wxID_PROPERTIES, STD_PROPERTIES },
+    { wxID_VIEW_DETAILS, VIEW_DETAILS },
+    { wxID_VIEW_SORTDATE, VIEW_SORTDATE },
+    { wxID_VIEW_LARGEICONS, VIEW_LARGEICONS },
+    { wxID_VIEW_SORTNAME, VIEW_SORTNAME },
+    { wxID_VIEW_LIST, VIEW_LIST },
+    { wxID_VIEW_SORTSIZE, VIEW_SORTSIZE },
+    { wxID_VIEW_SMALLICONS, VIEW_SMALLICONS },
+    { wxID_VIEW_SORTTYPE, VIEW_SORTTYPE },
+    { 0, 0},
+};
+
+static int wxFindIdForWinceId(int id)
+{
+    int i = 0;
+    while (TRUE)
+    {
+        if (sm_ToolBarIdMappingArray[i].m_winceId == 0)
+            return -1;
+        else if (sm_ToolBarIdMappingArray[i].m_winceId == id)
+            return sm_ToolBarIdMappingArray[i].m_wxwinId;
+        i ++;
+    }
+    return -1;
+}
+
+static int wxFindIdForwxWinId(int id)
+{
+    int i = 0;
+    while (TRUE)
+    {
+        if (sm_ToolBarIdMappingArray[i].m_wxwinId == 0)
+            return -1;
+        else if (sm_ToolBarIdMappingArray[i].m_wxwinId == id)
+            return sm_ToolBarIdMappingArray[i].m_winceId;
+        i ++;
+    }
+    return -1;
+}
+
+
 bool wxToolBar::Realize()
 {
     const size_t nTools = GetToolsCount();
@@ -573,6 +602,10 @@ bool wxToolBar::Realize()
     // add the buttons and separators
     // ------------------------------
 
+    // Use standard buttons
+    CommandBar_AddBitmap((HWND) GetHWND(), HINST_COMMCTRL,
+        IDB_STD_SMALL_COLOR, 0, 16, 16);
+
     TBBUTTON *buttons = new TBBUTTON[nTools];
 
     // this array will hold the indices of all controls in the toolbar
@@ -584,6 +617,8 @@ bool wxToolBar::Realize()
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarToolBase *tool = node->GetData();
+
+        bool processedThis = TRUE;
 
         TBBUTTON& button = buttons[i];
 
@@ -602,10 +637,8 @@ bool wxToolBar::Realize()
                 break;
 
             case wxTOOL_STYLE_BUTTON:
-                    // TODO
-#if 0
-                if ( !HasFlag(wxTB_NOICONS) )
-                    button.iBitmap = bitmapId;
+//                if ( !HasFlag(wxTB_NOICONS) )
+//                    button.iBitmap = bitmapId;
 
                 if ( HasFlag(wxTB_TEXT) )
                 {
@@ -616,7 +649,15 @@ bool wxToolBar::Realize()
                     }
                 }
 
-                button.idCommand = tool->GetId();
+                int winceId = wxFindIdForwxWinId(tool->GetId());
+                if (winceId > -1)
+                {
+                    button.idCommand = tool->GetId();
+//                if ( !HasFlag(wxTB_NOICONS) )
+                    button.iBitmap = winceId;
+                }
+                else
+                    processedThis = FALSE;
 
                 if ( tool->IsEnabled() )
                     button.fsState |= TBSTATE_ENABLED;
@@ -653,17 +694,17 @@ bool wxToolBar::Realize()
                         button.fsStyle = TBSTYLE_BUTTON;
                 }
 
-                bitmapId++;
-#endif
+//                bitmapId++;
                 break;
         }
 
         lastWasRadio = isRadio;
 
-        i++;
+        if (processedThis)
+            i++;
     }
 
-    // Add buttons in tbSTDButton to Commandbar
+    // Add buttons to Commandbar
     if (!CommandBar_AddButtons(GetHwnd(), i, buttons))
     {
         wxLogLastError(wxT("CommandBar_AddButtons"));
