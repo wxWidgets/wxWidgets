@@ -144,7 +144,7 @@ class ColourSelect(wx.BitmapButton):
         data = wx.ColourData()
         data.SetChooseFull(True)
         data.SetColour(self.colour)
-        dlg = wx.ColourDialog(self.GetParent(), data)
+        dlg = wx.ColourDialog(wx.GetTopLevelParent(self), data)
         changed = dlg.ShowModal() == wx.ID_OK
 
         if changed:
