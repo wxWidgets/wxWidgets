@@ -810,6 +810,7 @@ public:
 
 
     wxMenu *GetMenu();
+    void SetMenu(wxMenu* menu);
     void SetId(int id);
     int  GetId();
     bool IsSeparator();
