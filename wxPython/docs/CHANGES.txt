@@ -95,9 +95,10 @@ MigrationGuide_ file for details.
 EVT_STC_POSCHANGED has been removed as it has been deprecated in
 Scintilla for several releases now.
 
-All the Window and GDI (pen, bitmap, etc.) classes and also many
-toplevel functions will now check that a wx.App object has already
-been created and will raise a wx.PyNoAppError exception if not.
+All the Window and GDI (pen, bitmap, etc.) class constructors and also
+many toplevel functions and static methods will now check that a
+wx.App object has already been created and will raise a
+wx.PyNoAppError exception if not.
 
 
 

@@ -53,9 +53,10 @@ operation unless you first have created an app object, (even on
 Windows where most anything was possible before.)
 
 **[Changed in 2.5.2.0]** All the Window and GDI (pen, bitmap, etc.)
-classes and also many toplevel functions will now check that a wx.App
-object has already been created and will raise a wx.PyNoAppError
-exception if not.
+class constructors and also many toplevel functions and static methods
+will now check that a wx.App object has already been created and will
+raise a wx.PyNoAppError exception if not.
+
 
 
 
