@@ -98,6 +98,12 @@ bool wxStaticBitmap::Create(wxWindow *parent,
                             long style,
                             const wxString& name)
 {
+    // default border for this control is none
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+    {
+        style |= wxBORDER_NONE;
+    }
+    
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
