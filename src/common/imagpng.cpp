@@ -57,7 +57,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #if wxUSE_LIBPNG
 
 #ifndef PNGLINKAGEMODE
-  #define PNGLINKAGEMODE LINKAGEMODE
+    #ifdef __WATCOMC__
+        // we need an explicit cdecl for Watcom, at least according to
+        //
+        // http://sf.net/tracker/index.php?func=detail&aid=651492&group_id=9863&atid=109863
+        //
+        // more testing is needed for this however, please remove this comment
+        // if you can confirm that my fix works with Watcom 11
+        #define PNGLINKAGEMODE cdecl
+    #else
+        #define PNGLINKAGEMODE LINKAGEMODE
+    #endif
 #endif
 
 
