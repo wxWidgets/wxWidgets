@@ -5,6 +5,7 @@
     
     <template id="sub">
         <dir>$(id)</dir>
+        <installable>no</installable>
         <dependency-of>all</dependency-of>
     </template>
 
