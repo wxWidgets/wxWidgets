@@ -151,8 +151,17 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #define  wxIsspace   iswspace
 #define  wxIsupper   iswupper
 #define  wxIsxdigit  iswxdigit
-#define  wxTolower   towlower
-#define  wxToupper   towupper
+
+    // VZ: the test is incorrect, should test for glibc2.0 somehow probably
+#ifdef __GNUG__
+    // /usr/include/wctype.h incorrectly declares translations tables which
+    // provokes tons of compile-time warnings - try to correct this
+    #define  wxTolower(wc)   towctrans((wc), (wctrans_t)__ctype_tolower)
+    #define  wxToupper(wc)   towctrans((wc), (wctrans_t)__ctype_toupper)
+#else
+    #define  wxTolower   towlower
+    #define  wxToupper   towupper
+#endif // gcc/!gcc
 
    // string.h functions (wchar.h)
 #define  wxStrcat    wcscat
