@@ -85,7 +85,7 @@ protected:
 static inline void
 HexProperty(wxXmlNode *node, const wxChar *name, unsigned long value)
 {
-    node->AddProperty(name, wxString::Format(_T("%08x"), value));
+    node->AddProperty(name, wxString::Format(_T("%08lx"), value));
 }
 
 static inline void
@@ -105,7 +105,7 @@ TextElement(wxXmlNode *node, const wxChar *name, const wxString& value)
 static inline void
 HexElement(wxXmlNode *node, const wxChar *name, unsigned long value)
 {
-    TextElement(node, name, wxString::Format(_T("%08x"), value));
+    TextElement(node, name, wxString::Format(_T("%08lx"), value));
 }
 
 #if wxUSE_STACKWALKER
@@ -187,7 +187,7 @@ wxDebugReport::wxDebugReport()
     wxFileName fn;
     fn.AssignTempFileName(appname);
     m_dir.Printf(_T("%s%c%s_dbgrpt-%lu-%s"),
-                 fn.GetPath(), wxFILE_SEP_PATH, appname.c_str(),
+                 fn.GetPath().c_str(), wxFILE_SEP_PATH, appname.c_str(),
                  wxGetProcessId(),
                  wxDateTime::Now().Format(_T("%Y%m%dT%H%M%S")).c_str());
 
