@@ -473,6 +473,15 @@ wxString wxColourDatabase::FindName(const wxColour& colour) const
 
 wxColour *wxColourDatabase::FindColour(const wxString& name)
 {
+    // This function is deprecated, use Find() instead.
+    // Formerly this function sometimes would return a deletable pointer and
+    // sometimes a non-deletable one (when returning a colour from the database).
+    // Trying to delete the latter anyway results in problems, so probably
+    // nobody ever freed the pointers. Currently it always returns a new
+    // instance, which means there will be memory leaks.
+    wxLogDebug(wxT("wxColourDataBase::FindColour():")
+        wxT(" Please use wxColourDataBase::Find() instead"));
+
     // using a static variable here is not the most elegant solution but unless
     // we want to make wxStringToColourHashMap public (i.e. move it to the
     // header) so that we could have a member function returning
@@ -481,13 +490,14 @@ wxColour *wxColourDatabase::FindColour(const wxString& name)
     //
     // and knowing that this function is going to disappear in the next release
     // anyhow I don't want to waste time on this
+
     static wxColour s_col;
 
     s_col = Find(name);
     if ( !s_col.Ok() )
         return NULL;
 
-    return &s_col;
+    return new wxColour(s_col);
 }
 
 // ============================================================================
