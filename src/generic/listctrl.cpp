@@ -1668,11 +1668,13 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win,
     wxVisualAttributes attr = wxPanel::GetClassDefaultAttributes();
     SetOwnForegroundColour( attr.colFg );
     SetOwnBackgroundColour( attr.colBg );
-    SetOwnFont( attr.font );
+    if (!m_hasFont)
+        SetOwnFont( attr.font );
 #else
     SetOwnForegroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     SetOwnBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-    SetOwnFont( wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT ));
+    if (!m_hasFont)
+        SetOwnFont( wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT ));
 #endif
 }
 
@@ -2214,7 +2216,8 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
     wxVisualAttributes attr = wxGenericListCtrl::GetClassDefaultAttributes();
     SetOwnForegroundColour( attr.colFg );
     SetOwnBackgroundColour( attr.colBg );
-    SetOwnFont( attr.font );
+    if (!m_hasFont)
+        SetOwnFont( attr.font );
 }
 
 wxListMainWindow::~wxListMainWindow()
