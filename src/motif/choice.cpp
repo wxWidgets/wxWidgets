@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -22,6 +22,8 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_CHOICE
 
 #include "wx/choice.h"
 #include "wx/utils.h"
@@ -71,7 +73,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
                       const wxString& name)
 {
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
-        return FALSE;
+        return false;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -138,13 +140,13 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
 
-    ChangeFont(FALSE);
+    ChangeFont(false);
     ChangeBackgroundColour();
 
     AttachWidget (parent, m_buttonWidget, m_formWidget,
                   pos.x, pos.y, bestSize.x, bestSize.y);
 
-    return TRUE;
+    return true;
 }
 
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
@@ -226,7 +228,7 @@ int wxChoice::DoAppend(const wxString& item)
 
 int wxChoice::DoInsert(const wxString& item, int pos)
 {
-    wxCHECK_MSG(FALSE, -1, wxT("insert not implemented"));
+    wxCHECK_MSG(false, -1, wxT("insert not implemented"));
 
 //    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
 //    if (pos == GetCount()) return DoAppend(item);
@@ -300,7 +302,7 @@ int wxChoice::GetSelection() const
 
 void wxChoice::SetSelection(int n)
 {
-    m_inSetValue = TRUE;
+    m_inSetValue = true;
 
     wxStringList::compatibility_iterator node = m_stringList.Item(n);
     if (node)
@@ -327,7 +329,7 @@ void wxChoice::SetSelection(int n)
             XmNmenuHistory, (Widget) m_widgetArray[n], NULL);
 #endif
     }
-    m_inSetValue = FALSE;
+    m_inSetValue = false;
 }
 
 int wxChoice::FindString(const wxString& s) const
@@ -342,7 +344,7 @@ int wxChoice::FindString(const wxString& s) const
         i++;
     }
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 wxString wxChoice::GetString(int n) const
@@ -471,11 +473,11 @@ void wxChoice::ChangeFont(bool keepOriginalSize)
             XtVaSetValues( (Widget)m_widgetArray[i],
                            fontTag, fontType,
                            NULL );
-        
+
         GetSize(& width1, & height1);
         if (keepOriginalSize && (width != width1 || height != height1))
         {
-            SetSize(-1, -1, width, height);
+            SetSize(wxDefaultCoord, wxDefaultCoord, width, height);
         }
     }
 }
@@ -507,7 +509,7 @@ int wxChoice::GetCount() const
 
 void wxChoice::DoSetItemClientData(int n, void* clientData)
 {
-    m_clientDataDict.Set(n, (wxClientData*)clientData, FALSE);
+    m_clientDataDict.Set(n, (wxClientData*)clientData, false);
 }
 
 void* wxChoice::DoGetItemClientData(int n) const
@@ -518,7 +520,7 @@ void* wxChoice::DoGetItemClientData(int n) const
 void wxChoice::DoSetItemClientObject(int n, wxClientData* clientData)
 {
     // don't delete, wxItemContainer does that for us
-    m_clientDataDict.Set(n, clientData, FALSE);
+    m_clientDataDict.Set(n, clientData, false);
 }
 
 wxClientData* wxChoice::DoGetItemClientObject(int n) const
@@ -557,3 +559,5 @@ wxSize wxChoice::DoGetBestSize() const
     return wxSize( ( items.x ? items.x + WIDTH_OVERHEAD : 120 ),
                      items.y + HEIGHT_OVERHEAD );
 }
+
+#endif // wxUSE_CHOICE

@@ -13,6 +13,10 @@
 #pragma implementation "slider.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_SLIDER
+
 #include "wx/slider.h"
 #include "wx/mac/uma.h"
 
@@ -27,15 +31,15 @@ END_EVENT_TABLE()
 #define wxSLIDER_DIMENSIONACROSS 15
 #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 24
 #define wxSLIDER_DIMENSIONACROSS_ARROW 18
- 
+
 // Distance between slider and text
 #define wxSLIDER_BORDERTEXT 5
- 
+
 /* NB!  The default orientation for a slider is horizontal however if the user specifies
  * some slider styles but dosen't specify the orientation we have to assume he wants a
  * horizontal one.  Therefore in this file when testing for the sliders orientation
  * vertical is tested for if this is not set then we use the horizontal one
- * eg.  if(GetWindowStyle() & wxSL_VERTICAL) {}  else { horizontal case }>  
+ * eg.  if(GetWindowStyle() & wxSL_VERTICAL) {}  else { horizontal case }>
  */
 
  // Slider
@@ -63,51 +67,51 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     Rect bounds ;
     Str255 title ;
     SInt16 procID;
-    
+
     m_macMinimumStatic = NULL ;
     m_macMaximumStatic = NULL ;
     m_macValueStatic = NULL ;
-    
-    
+
+
     m_lineSize = 1;
     m_tickFreq = 0;
-    
+
     m_rangeMax = maxValue;
     m_rangeMin = minValue;
-    
+
     m_pageSize = (int)((maxValue-minValue)/10);
-    
+
     MacPreControlCreate( parent, id, wxEmptyString, pos, size, style,
         validator, name, &bounds, title );
-    
+
     procID = kControlSliderProc + kControlSliderLiveFeedback;
     if(style & wxSL_AUTOTICKS) {
         procID += kControlSliderHasTickMarks;
     }
-    
-    
+
+
     m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()), &bounds, title, false,
         value, minValue, maxValue, procID, (long) this);
-    
+
     wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
-    
+
     ::SetControlAction( (ControlHandle) m_macControl , wxMacLiveScrollbarActionUPP ) ;
-    
+
     if(style & wxSL_LABELS)
     {
-        m_macMinimumStatic = new wxStaticText( this, -1, wxEmptyString );
-        m_macMaximumStatic = new wxStaticText( this, -1, wxEmptyString );
-        m_macValueStatic = new wxStaticText( this, -1, wxEmptyString );
+        m_macMinimumStatic = new wxStaticText( this, wxID_ANY, wxEmptyString );
+        m_macMaximumStatic = new wxStaticText( this, wxID_ANY, wxEmptyString );
+        m_macValueStatic = new wxStaticText( this, wxID_ANY, wxEmptyString );
         SetRange(minValue, maxValue);
         SetValue(value);
     }
-    
+
     else {
         m_macMinimumStatic = NULL ;
         m_macMaximumStatic = NULL ;
         m_macValueStatic = NULL ;
     }
-    
+
     if(style & wxSL_VERTICAL) {
         SetSizeHints(10, -1, 10, -1);  // Forces SetSize to use the proper width
     }
@@ -117,9 +121,9 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     // NB!  SetSizeHints is overloaded by wxSlider and will substitute 10 with the
     // proper dimensions, it also means other people cannot bugger the slider with
     // other values
-    
+
     MacPostControlCreate() ;
-    
+
     return true;
 }
 
@@ -135,7 +139,7 @@ int wxSlider::GetValue() const
 void wxSlider::SetValue(int value)
 {
     wxString valuestring ;
-    valuestring.Printf( wxT("%d") , value ) ;    
+    valuestring.Printf( wxT("%d") , value ) ;
     if ( m_macValueStatic )
         m_macValueStatic->SetLabel( valuestring ) ;
     SetControl32BitValue( (ControlHandle) m_macControl , value ) ;
@@ -144,13 +148,13 @@ void wxSlider::SetValue(int value)
 void wxSlider::SetRange(int minValue, int maxValue)
 {
     wxString value;
-    
+
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
-    
+
     SetControl32BitMinimum( (ControlHandle) m_macControl, m_rangeMin);
     SetControl32BitMaximum( (ControlHandle) m_macControl, m_rangeMax);
-    
+
     if(m_macMinimumStatic) {
         value.Printf(wxT("%d"), m_rangeMin);
         m_macMinimumStatic->SetLabel(value);
@@ -241,28 +245,28 @@ void wxSlider::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bool mouseStillDown ) 
+void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bool mouseStillDown )
 {
     SInt16 value = ::GetControl32BitValue( (ControlHandle) m_macControl ) ;
-    
-    SetValue( value ) ;        
-    
+
+    SetValue( value ) ;
+
     wxEventType scrollEvent = wxEVT_NULL ;
-    
+
    if ( mouseStillDown )
         scrollEvent = wxEVT_SCROLL_THUMBTRACK;
     else
         scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
-    
+
     wxScrollEvent event(scrollEvent, m_windowId);
     event.SetPosition(value);
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent(event);
-    
+
     wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, m_windowId );
     cevent.SetInt( value );
     cevent.SetEventObject( this );
-    
+
     GetEventHandler()->ProcessEvent( cevent );
 }
 
@@ -273,7 +277,7 @@ void wxSlider::SetSizeHints( int minW, int minH,
                             int incW , int incH )
 {
     wxSize size = GetBestSize();
-    
+
     if(GetWindowStyle() & wxSL_VERTICAL) {
         wxWindow::SetSizeHints(size.x, minH, size.x, maxH, incW, incH);
     }
@@ -286,12 +290,12 @@ wxSize wxSlider::DoGetBestSize() const
 {
     wxSize size;
     int textwidth, textheight;
-    
+
     if(GetWindowStyle() & wxSL_LABELS)
     {
         wxString text;
         int ht, wd;
-        
+
         // Get maximum text label width and height
         text.Printf(wxT("%d"), m_rangeMin);
         GetTextExtent(text, &textwidth, &textheight);
@@ -304,7 +308,7 @@ wxSize wxSlider::DoGetBestSize() const
             textwidth = wd;
         }
     }
-    
+
     if(GetWindowStyle() & wxSL_VERTICAL)
     {
         if(GetWindowStyle() & wxSL_AUTOTICKS) {
@@ -339,32 +343,32 @@ void wxSlider::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     wxControl::DoSetSize( x, y , width , height ,sizeFlags ) ;
 }
 
-void wxSlider::MacUpdateDimensions() 
+void wxSlider::MacUpdateDimensions()
 {
     // actually in the current systems this should never be possible, but later reparenting
     // may become a reality
-    
+
     if ( (ControlHandle) m_macControl == NULL )
         return ;
-    
+
     if ( GetParent() == NULL )
         return ;
-    
+
     WindowRef rootwindow = (WindowRef) MacGetRootWindow() ;
     if ( rootwindow == NULL )
         return ;
-    
+
     int  xborder, yborder;
     int  minValWidth, maxValWidth, textwidth, textheight;
     int  sliderBreadth;
-    
+
     xborder = yborder = 0;
-    
+
     if (GetWindowStyle() & wxSL_LABELS)
     {
         wxString text;
         int ht;
-        
+
         // Get maximum text label width and height
         text.Printf(wxT("%d"), m_rangeMin);
         GetTextExtent(text, &minValWidth, &textheight);
@@ -374,10 +378,10 @@ void wxSlider::MacUpdateDimensions()
             textheight = ht;
         }
         textwidth = (minValWidth > maxValWidth ? minValWidth : maxValWidth);
-        
+
         xborder = textwidth + wxSLIDER_BORDERTEXT;
         yborder = textheight + wxSLIDER_BORDERTEXT;
-        
+
         // Get slider breadth
         if(GetWindowStyle() & wxSL_AUTOTICKS) {
             sliderBreadth = wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS;
@@ -385,7 +389,7 @@ void wxSlider::MacUpdateDimensions()
         else {
             sliderBreadth = wxSLIDER_DIMENSIONACROSS_ARROW;
         }
-        
+
         if(GetWindowStyle() & wxSL_VERTICAL)
         {
             m_macMinimumStatic->Move(sliderBreadth + wxSLIDER_BORDERTEXT,
@@ -401,15 +405,15 @@ void wxSlider::MacUpdateDimensions()
             m_macValueStatic->Move(m_width - textwidth, 0);
         }
     }
-    
-    Rect oldBounds ;       
-    GetControlBounds( (ControlHandle) m_macControl , &oldBounds ) ; 
-    
+
+    Rect oldBounds ;
+    GetControlBounds( (ControlHandle) m_macControl , &oldBounds ) ;
+
     int new_x = m_x + MacGetLeftBorderSize() + m_macHorizontalBorder ;
     int new_y = m_y + MacGetTopBorderSize() + m_macVerticalBorder ;
     int new_width = m_width - MacGetLeftBorderSize() - MacGetRightBorderSize() - 2 * m_macHorizontalBorder - xborder ;
     int new_height = m_height - MacGetTopBorderSize() - MacGetBottomBorderSize() - 2 * m_macVerticalBorder - yborder ;
-    
+
     GetParent()->MacWindowToRootWindow( & new_x , & new_y ) ;
     bool doMove = new_x != oldBounds.left || new_y != oldBounds.top ;
     bool doResize =  ( oldBounds.right - oldBounds.left ) != new_width || (oldBounds.bottom - oldBounds.top ) != new_height ;
@@ -431,3 +435,5 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 {
     wxControl::DoMoveWindow(x,y,width,height) ;
 }
+
+#endif // wxUSE_SLIDER

@@ -12,6 +12,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/defs.h"
+
+#if wxUSE_CHOICE
+
 #ifndef WX_PRECOMP
     #include "wx/choice.h"
     #include "wx/utils.h"
@@ -62,7 +66,7 @@ bool wxChoice::Create(
                        ,rValidator
                        ,rsName
                       ))
-        return FALSE;
+        return false;
     lSstyle = CBS_DROPDOWNLIST |
               WS_TABSTOP       |
               WS_VISIBLE;
@@ -79,7 +83,7 @@ bool wxChoice::Create(
     if (!OS2CreateControl( wxT("COMBOBOX")
                           ,lSstyle
                          ))
-        return FALSE;
+        return false;
 
     //
     // A choice/combobox normally has a white background (or other, depending
@@ -102,7 +106,7 @@ bool wxChoice::Create(
             ,rSize.y
            );
     delete pTextFont;
-    return TRUE;
+    return true;
 } // end of wxChoice::Create
 
 // ----------------------------------------------------------------------------
@@ -419,7 +423,7 @@ bool wxChoice::OS2Command(
         //
         // "selection changed" is the only event we're after
         //
-        return FALSE;
+        return false;
     }
     int                             n = GetSelection();
 
@@ -438,7 +442,7 @@ bool wxChoice::OS2Command(
             vEvent.SetClientData(GetClientData(n));
         ProcessCommand(vEvent);
     }
-    return TRUE;
+    return true;
 } // end of wxChoice::OS2Command
 
 void wxChoice::Free()
@@ -452,4 +456,6 @@ void wxChoice::Free()
             delete GetClientObject(n);
         }
     }
-} // end of wxhoice::Free
+} // end of wxChoice::Free
+
+#endif // wxUSE_CHOICE

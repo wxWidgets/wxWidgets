@@ -14,6 +14,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_CHOICE
+
 #include "wx/choice.h"
 #include "wx/menu.h"
 #include "wx/mac/uma.h"
@@ -60,17 +63,17 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    m_macIsUserPane = FALSE ;
-    
+    m_macIsUserPane = false ;
+
     if ( !wxChoiceBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
     m_peer = new wxMacControl() ;
-    verify_noerr ( CreatePopupButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
+    verify_noerr ( CreatePopupButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") ,
         -12345 , false /* no variable width */ , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );
-    
+
 
     m_macPopUpMenuHandle =  NewUniqueMenu() ;
     m_peer->SetData<MenuHandle>( kControlNoPart , kControlPopupButtonMenuHandleTag , (MenuHandle) m_macPopUpMenuHandle ) ;
@@ -82,7 +85,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
         Append(choices[i]);
     }
     SetBestSize(size);   // Needed because it is a wxControlWithItems
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -178,7 +181,7 @@ int wxChoice::FindString(const wxString& s) const
 {
     for( int i = 0 ; i < GetCount() ; i++ )
     {
-        if ( GetString( i ).IsSameAs(s, FALSE) )
+        if ( GetString( i ).IsSameAs(s, false) )
             return i ;
     }
     return wxNOT_FOUND ;
@@ -229,7 +232,7 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
     return (wxClientData *)DoGetItemClientData(n);
 }
 
-wxInt32 wxChoice::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )  
+wxInt32 wxChoice::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
 {
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
     int n = GetSelection();
@@ -299,3 +302,5 @@ wxSize wxChoice::DoGetBestSize() const
     }
     return wxSize(lbWidth, lbHeight);
 }
+
+#endif // wxUSE_CHOICE

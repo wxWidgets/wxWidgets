@@ -16,6 +16,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/defs.h"
+
+#if wxUSE_SPINBTN
+
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 #include "wx/timer.h"
@@ -77,7 +81,7 @@ class wxArrowButton : public wxControl
 {
     friend class wxArrowButtonTimer;
 public:
-    wxArrowButton( int increment ) 
+    wxArrowButton( int increment )
         : m_increment( increment ),
           m_timer( 0 ) {}
 
@@ -230,7 +234,7 @@ bool wxArrowButton::Create( wxSpinButton* parent, wxWindowID id,
 
     SetForegroundColour( parent->GetBackgroundColour() );
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -272,12 +276,12 @@ bool wxSpinButton::Create( wxWindow *parent, wxWindowID id,
 
     if( !wxControl::Create( parent, id, pos, newSize, style ) )
     {
-        return FALSE;
+        return false;
     }
 
     SetName(name);
 
-    m_windowId = ( id == -1 ) ? NewControlId() : id;
+    m_windowId = ( id == wxID_ANY ) ? NewControlId() : id;
 
     bool isVert = IsVertical();
     wxPoint pt1, pt2;
@@ -289,7 +293,7 @@ bool wxSpinButton::Create( wxWindow *parent, wxWindowID id,
                                 isVert ? wxARROW_DOWN : wxARROW_LEFT,
                                 pt2, sz2, -1 );
 
-    return TRUE;
+    return true;
 }
 
 wxSpinButton::~wxSpinButton()
@@ -403,3 +407,5 @@ void wxSpinButton::ChangeForegroundColour()
 {
     // TODO
 }
+
+#endif // wxUSE_SPINBTN

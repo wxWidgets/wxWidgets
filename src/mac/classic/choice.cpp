@@ -14,6 +14,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_CHOICE
+
 #include "wx/choice.h"
 #include "wx/menu.h"
 #include "wx/mac/uma.h"
@@ -82,7 +85,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     {
         Append(choices[i]);
     }
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -178,7 +181,7 @@ int wxChoice::FindString(const wxString& s) const
 {
     for( int i = 0 ; i < GetCount() ; i++ )
     {
-        if ( GetString( i ).IsSameAs(s, FALSE) )
+        if ( GetString( i ).IsSameAs(s, false) )
             return i ;
     }
     return wxNOT_FOUND ;
@@ -229,7 +232,7 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
     return (wxClientData *)DoGetItemClientData(n);
 }
 
-void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown)) 
+void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown))
 {
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
     int n = GetSelection();
@@ -298,3 +301,5 @@ wxSize wxChoice::DoGetBestSize() const
     }
     return wxSize(lbWidth, lbHeight);
 }
+
+#endif // wxUSE_CHOICE
