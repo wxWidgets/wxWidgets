@@ -145,7 +145,11 @@ IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEnc
 
 
     bool wxThread_IsMain() {
+#ifdef WXP_WITH_THREAD
         return wxThread::IsMain();
+#else
+        return TRUE;
+#endif
     }
 
 class wxPyTipProvider : public wxTipProvider {

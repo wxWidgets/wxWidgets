@@ -410,7 +410,11 @@ public:
 
 %inline %{
     bool wxThread_IsMain() {
+#ifdef WXP_WITH_THREAD
         return wxThread::IsMain();
+#else
+        return TRUE;
+#endif
     }
 %}
 
