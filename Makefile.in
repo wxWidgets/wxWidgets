@@ -1346,3 +1346,18 @@ clean:
 	$(RM) ./lib/lib*
 
 cleanall: clean
+
+
+RPMTOP=_dist_dir/_rpm_top
+
+rpm: dist
+	@echo "*** Building RPMs ***"
+	-mkdir $(RPMTOP)
+	-mkdir $(RPMTOP)/SOURCES
+	-mkdir $(RPMTOP)/SPECS
+	-mkdir $(RPMTOP)/BUILD
+	-mkdir $(RPMTOP)/RPMS
+	-mkdir $(RPMTOP)/SRPMS
+	cp -f $(WXARCHIVE) $(RPMTOP)/SOURCES
+	rpm -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
+	mv -f `find $(RPMTOP) -name "wx$(TARGET)*.rpm"` .
