@@ -327,6 +327,12 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
+        // some programs complain about sterr not being open, so
+        // redirect them:
+        open("/dev/null", O_RDONLY);  // stdin
+	open("/dev/null", O_WRONLY);  // stdout
+	open("/dev/null", O_WRONLY);  // stderr
+        
 
 #ifdef _AIX
         execvp ((const char *)*argv, (const char **)argv);
