@@ -884,7 +884,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
 }
 
 
-#ifdef WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2
 // deprecated
 wxList *wxFTP::GetList(const wxString& wildcard, bool details)
 {

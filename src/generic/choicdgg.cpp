@@ -129,7 +129,7 @@ wxString wxGetSingleChoice( const wxString& message,
     return res;
 }
 
-#ifdef WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2
 // Overloaded for backward compatibility
 wxString wxGetSingleChoice( const wxString& message,
                             const wxString& caption,
@@ -186,7 +186,7 @@ int wxGetSingleChoiceIndex( const wxString& message,
     return res;
 }
 
-#ifdef WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2
 // Overloaded for backward compatibility
 int wxGetSingleChoiceIndex( const wxString& message,
                             const wxString& caption,
@@ -244,7 +244,7 @@ void *wxGetSingleChoiceData( const wxString& message,
     return res;
 }
 
-#ifdef WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2
 // Overloaded for backward compatibility
 void *wxGetSingleChoiceData( const wxString& message,
                              const wxString& caption,
@@ -384,7 +384,7 @@ wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
     Create(parent, message, caption, n, choices, clientData, style);
 }
 
-#ifdef WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2
 
 wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
                                            const wxString& message,

@@ -105,7 +105,7 @@ public:
     void OnListBoxDClick(wxCommandEvent& event);
 
     // old, deprecated methods
-#ifdef WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2
     wxSingleChoiceDialog(wxWindow *parent,
                          const wxString& message,
                          const wxString& caption,
@@ -271,7 +271,7 @@ WXDLLEXPORT size_t wxGetMultipleChoices(wxArrayInt& selections,
 // deprecated
 // ----------------------------------------------------------------------------
 
-#ifdef WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2
 
 WXDLLEXPORT wxString wxGetSingleChoice(const wxString& message,
                                        const wxString& caption,

@@ -117,7 +117,7 @@ public:
                  const wxString& wildcard = wxEmptyString,
                  bool details = FALSE);
 
-#ifdef WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2
     // deprecated
     wxList *GetList(const wxString& wildcard, bool details = FALSE);
 #endif // WXWIN_COMPATIBILITY_2
