@@ -1426,7 +1426,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     }
     else // use_bitmap_method
     {
-        if ((memDC->m_selected.GetWidth() != ww) || (memDC->m_selected.GetHeight() != hh))
+        if ((width != ww) || (height != hh))
         {
             // get clip coords
             wxRegion tmp( xx,yy,ww,hh );
