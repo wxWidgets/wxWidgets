@@ -390,7 +390,6 @@
     wx/selstore.h
     wx/generic/accel.h
     wx/generic/calctrl.h
-    wx/generic/caret.h
     wx/generic/choicdgg.h
     wx/generic/colrdlgg.h
     wx/generic/dcpsg.h
@@ -433,6 +432,7 @@
     src/common/taskbarcmn.cpp
     src/unix/taskbarx11.cpp
     src/generic/printps.cpp
+    src/generic/caret.cpp
     src/unix/dialup.cpp
 </set>
 <set var="XWIN_LOWLEVEL_HDR">
@@ -440,6 +440,7 @@
     wx/unix/utilsx11.h
     wx/unix/taskbarx11.h
     wx/generic/printps.h
+    wx/generic/caret.h
 </set>
 
 
@@ -1073,6 +1074,7 @@
     src/mgl/window.cpp
     src/mgl/utils.cpp
     src/generic/timer.cpp
+    src/generic/caret.cpp
 </set>
 <set var="MGL_LOWLEVEL_HDR">
     wx/mgl/app.h
@@ -1097,6 +1099,7 @@
     wx/mgl/toplevel.h
     wx/mgl/window.h
     wx/generic/timer.h
+    wx/generic/caret.h
 </set>
 
 
@@ -1181,6 +1184,7 @@
     src/os2/window.cpp
     src/os2/gsocket.c
     src/os2/gsockpm.c
+    src/generic/caret.cpp
 </set>
 <set var="OS2_HDR">
     wx/os2/accel.h
@@ -1253,6 +1257,7 @@
     wx/os2/pnghand.h
     wx/os2/statbox.h
     wx/os2/toplevel.h
+    wx/generic/caret.h
 </set>
 
 
@@ -1346,6 +1351,7 @@
     src/generic/fdrepdlg.cpp
     src/generic/tabg.cpp
     src/generic/fontdlgg.cpp
+    src/generic/caret.cpp
     <!-- Unix files used by wxMac: -->
     src/unix/snglinst.cpp
 </set>
@@ -1437,6 +1443,7 @@
     wx/generic/listctrl.h
     wx/generic/fdrepdlg.h
     wx/generic/tabg.h
+    wx/generic/caret.h
 </set>
 
 
@@ -1513,6 +1520,7 @@
     src/generic/accel.cpp
     src/generic/paletteg.cpp
     src/generic/timer.cpp
+    src/generic/caret.cpp
 </set>
 <set var="COCOA_HDR">
     wx/cocoa/NSBox.h
@@ -1566,6 +1574,7 @@
     wx/generic/listctrl.h
     wx/generic/fdrepdlg.h
     wx/generic/tabg.h
+    wx/generic/caret.h
 </set>
 
 
@@ -1624,7 +1633,6 @@
     src/univ/toolbar.cpp
     src/univ/theme.cpp
     src/univ/winuniv.cpp
-    src/generic/caret.cpp
     src/generic/mdig.cpp
     src/generic/imaglist.cpp
     src/generic/colrdlgg.cpp
@@ -1677,7 +1685,6 @@
     wx/univ/theme.h
     wx/univ/toolbar.h
     wx/univ/window.h
-    wx/generic/caret.h
     wx/generic/mdig.h
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
