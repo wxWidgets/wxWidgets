@@ -79,9 +79,6 @@ public:
     // (this isn't a virtual size, this is a sensible size for the window)
     virtual wxSize DoGetBestSize() const;
 
-#ifdef __WXMAC__
-    virtual bool MacClipChildren() const { return true ; }
-#endif
 protected:
     // this is needed for wxEVT_PAINT processing hack described in
     // wxScrollHelperEvtHandler::ProcessEvent()

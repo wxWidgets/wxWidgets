@@ -209,7 +209,8 @@ public:
     
     wxRegion            MacGetVisibleRegion( bool includeOuterStructures = false ) ;
     // returns true if children have to clipped to the content area (eg scrolled window)
-    virtual bool		MacClipChildren() const { return false ; }
+    bool		        MacClipChildren() const { return m_clipChildren ; }
+    void                MacSetClipChildren( bool clip ) { m_clipChildren = clip ; }
     // returns true if the grandchildren have to be clipped to the children's content area (eg
     // splitter window)
     virtual bool		MacClipGrandChildren() const { return false ; }
@@ -274,6 +275,10 @@ protected:
     wxScrollBar*        m_hScrollBar ;
     wxScrollBar*        m_vScrollBar ;
     wxString            m_label ;
+    // returns true if we do a sharp clip at the content area of this window
+    // must be dynamic as eg a panel normally is not clipping precisely, but if
+    // it becomes the target window of a scrolled window it has to...
+    bool                m_clipChildren ;
     
     void                MacCreateScrollBars( long style ) ;
     void                MacRepositionScrollBars() ;

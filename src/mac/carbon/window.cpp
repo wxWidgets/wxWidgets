@@ -748,6 +748,7 @@ void wxWindowMac::Init()
 #if wxMAC_USE_CORE_GRAPHICS
     m_cgContextRef = NULL ;
 #endif
+    m_clipChildren = false ;
     // we need a valid font for the encodings
     wxWindowBase::SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 }

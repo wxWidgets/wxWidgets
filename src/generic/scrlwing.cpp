@@ -424,6 +424,9 @@ void wxScrollHelper::SetWindow(wxWindow *win)
 void wxScrollHelper::DoSetTargetWindow(wxWindow *target)
 {
     m_targetWindow = target;
+#ifdef __WXMAC__
+    target->MacSetClipChildren( true ) ;
+#endif
 
     // install the event handler which will intercept the events we're
     // interested in (but only do it for our real window, not the target window
@@ -1250,6 +1253,9 @@ bool wxGenericScrolledWindow::Create(wxWindow *parent,
                               const wxString& name)
 {
     m_targetWindow = this;
+#ifdef __WXMAC__
+    MacSetClipChildren( true ) ;
+#endif
 
     bool ok = wxPanel::Create(parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name);
 
