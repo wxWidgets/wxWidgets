@@ -253,7 +253,8 @@ wxFileOffset wxFFileInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 #ifdef __VMS
 #pragma message disable intsignchange
 #endif
-   return ( m_file->Seek(pos, mode) ? (wxFileOffset)m_file->Tell() : wxInvalidOffset );
+    wxASSERT_MSG( pos >= 0 && pos <= LONG_MAX, _T("no huge wxFFile support") );
+    return ( m_file->Seek((long)pos, mode) ? (wxFileOffset)m_file->Tell() : wxInvalidOffset );
 #ifdef __VMS
 #pragma message enable intsignchange
 #endif
@@ -333,7 +334,8 @@ wxFileOffset wxFFileOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 #ifdef __VMS
 #pragma message disable intsignchange
 #endif
-    return ( m_file->Seek(pos, mode) ? (wxFileOffset)m_file->Tell() : wxInvalidOffset );
+    wxASSERT_MSG( pos >= 0 && pos <= LONG_MAX, _T("no huge wxFFile support") );
+    return ( m_file->Seek((long)pos, mode) ? (wxFileOffset)m_file->Tell() : wxInvalidOffset );
 #ifdef __VMS
 #pragma message enable intsignchange
 #endif
