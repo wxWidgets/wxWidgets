@@ -21,6 +21,8 @@
 #include <gdk/gdkprivate.h>
 #include <gtk/gtk.h>
 
+extern GdkFont *GtkGetDefaultGuiFont();
+
 
 /*
 #define wxSYS_COLOUR_SCROLLBAR         0
@@ -234,17 +236,7 @@ wxFont wxSystemSettings::GetSystemFont( int index )
             if (!g_systemFont)
             {
 #if 0
-                GdkFont *gdk_font = (GdkFont*) NULL;
-                GtkWidget *widget = gtk_button_new();
-                GtkStyle *def = gtk_rc_get_style( widget );
-                if (def)
-                    gdk_font =  def->font;
-                else
-                {
-                    def = gtk_widget_get_default_style();
-                    if (def)
-                        gdk_font =  def->font;
-                }
+                GdkFont *gdk_font = GtkGetDefaultGuiFont();
                 if (gdk_font)
                 {
                     GSList *font_list = ((GdkFontPrivate*)gdk_font)->names;

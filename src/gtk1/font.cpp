@@ -397,7 +397,7 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 
 static GdkFont *g_systemDefaultGuiFont = (GdkFont*) NULL;
 
-static GdkFont *GtkGetDefaultGuiFont()
+GdkFont *GtkGetDefaultGuiFont()
 {
     if (!g_systemDefaultGuiFont)
     {
