@@ -330,7 +330,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
 			 const wxString& defaultPath, long style, 
 			 const wxPoint& pos) : 
   wxDialog(parent, -1, message, pos, wxSize(300,300),
-	   wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+	   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
   m_message = message;
   m_dialogStyle = style;

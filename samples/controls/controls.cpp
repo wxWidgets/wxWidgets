@@ -442,7 +442,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxStaticText( panel, -1,
                             "Drag the slider!",
                             wxPoint(228,30),
-                            wxSize(230, -1)
+                            wxSize(240, -1)
                           );
 #else
     (void)new wxStaticText( panel, -1,
@@ -453,7 +453,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                             "This is also supposed to demonstrate how\n"
                             "to use static controls.\n",
 			    wxPoint(228,25),
-			    wxSize(230, 110)
+			    wxSize(240, 110)
                           );
 #endif
     m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );

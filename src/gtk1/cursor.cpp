@@ -158,6 +158,8 @@ void wxEndBusyCursor()
 
     wxSetCursor( gs_savedCursor );
     gs_savedCursor = wxNullCursor;
+    
+    wxYield();
 }
 
 void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )

@@ -297,7 +297,8 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
     }
     
 #if wxUSE_STATLINE
-    (void) new wxStaticLine( this, -1, wxPoint(0,y-20), wxSize(w+30, 5) );
+    int edge_margin = 7;
+    (void) new wxStaticLine( this, -1, wxPoint(edge_margin,y-20), wxSize(w+30-2*edge_margin, 5) );
 #endif
     
     SetSize( w+30, y+40 );

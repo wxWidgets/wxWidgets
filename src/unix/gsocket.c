@@ -487,7 +487,7 @@ bool GSocket_DataAvailable(GSocket *socket)
   GSocket_SetNonBlocking() puts the socket in non-blocking mode. This is useful
   if we don't want to wait.
 */
-void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
+void GSocket_SetNonBlocking(GSocket *socket, bool block)
 {
   assert(socket != NULL);
 
@@ -501,7 +501,7 @@ void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
  * GSocket_SetTimeout()
  */
 
-#ifndef LINUX
+#if !defined(__LINUX__) && !defined(__FREEBSD__)
 #   define CAN_USE_TIMEOUT
 #elif defined(__GLIBC__) && defined(__GLIBC_MINOR__)
 #   if (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 1)

@@ -240,8 +240,10 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
 {
-    long res = wxGetNumberFromUser("", "Enter a number:", "Numeric input test",
-                                   50, 0, 100, this);
+    long res = wxGetNumberFromUser( "This is some text, actually a lot of text.\n"
+                                    "Even two rows of text.",
+				    "Enter a number:", "Numeric input test",
+                                     50, 0, 100, this );
 
     wxString msg;
     int icon;

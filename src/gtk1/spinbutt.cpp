@@ -55,12 +55,9 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
     wxEventType command = wxEVT_NULL;
 
     float line_step = win->m_adjust->step_increment;
-    float page_step = win->m_adjust->page_increment;
 
     if (fabs(diff-line_step) < sensitivity) command = wxEVT_SCROLL_LINEDOWN;
     else if (fabs(diff+line_step) < sensitivity) command = wxEVT_SCROLL_LINEUP;
-    else if (fabs(diff-page_step) < sensitivity) command = wxEVT_SCROLL_PAGEDOWN;
-    else if (fabs(diff+page_step) < sensitivity) command = wxEVT_SCROLL_PAGEUP;
     else command = wxEVT_SCROLL_THUMBTRACK;
 
     int value = (int)ceil(win->m_adjust->value);
@@ -68,8 +65,17 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
     wxSpinEvent event( command, win->GetId());
     event.SetPosition( value );
     event.SetEventObject( win );
-
     win->GetEventHandler()->ProcessEvent( event );
+    
+    /* always send a thumbtrack event */
+    if (command != wxEVT_SCROLL_THUMBTRACK)
+    {
+        command = wxEVT_SCROLL_THUMBTRACK;
+        wxSpinEvent event2( command, win->GetId());
+        event2.SetPosition( value );
+        event2.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( event2 );
+    }
 }
 
 //-----------------------------------------------------------------------------
