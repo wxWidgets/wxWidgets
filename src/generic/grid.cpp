@@ -8030,7 +8030,7 @@ bool wxGrid::MovePageDown()
     if ( m_currentCellCoords == wxGridNoCellCoords ) return FALSE;
 
     int row = m_currentCellCoords.GetRow();
-    if ( row < m_numRows )
+    if ( (row+1) < m_numRows )
     {
         int cw, ch;
         m_gridWin->GetClientSize( &cw, &ch );
