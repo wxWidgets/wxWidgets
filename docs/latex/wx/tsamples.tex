@@ -41,8 +41,8 @@ may find the following samples showing the corresponding controls:
 \end{twocollist}
 
 Finally, it might be helpful to do a search in the entire sample directory if
-you can't find the sample you showing the control you are interested in by
-name. Most of wxWidgets classes, occur in at least one of the samples.
+you can't find the sample showing the control you are interested in by
+name. Most classes contained in wxWidgets occur in at least one of the samples.
 
 
 \subsection{Minimal sample}\label{sampleminimal}
@@ -73,7 +73,7 @@ menu) and also how to process the notifications from it.
 This sample demonstrates the use of the \helpref{wxCheckListBox}{wxchecklistbox}
 class intercepting check, select and double click events. It also tests the
 use of various methods modifying the control, such as by deleting items
-from it or inserting new once (these functions are actually implemented in
+from it or inserting new ones (these functions are actually implemented in
 the parent class \helpref{wxListBox}{wxlistbox} so the sample tests that class
 as well). The layout of the dialog is created using a \helpref{wxBoxSizer}{wxboxsizer}
 demonstrating a simple dynamic layout.
@@ -94,7 +94,7 @@ features of this class.
 The controls sample is the main test program for most simple controls used in
 wxWidgets. The sample tests their basic functionality, events, placement,
 modification in terms of colour and font as well as the possibility to change
-the controls programmatically, such as adding item to a list box etc. Apart
+the controls programmatically, such as adding an item to a list box etc. Apart
 from that, the sample uses a \helpref{wxNotebook}{wxnotebook} and tests most
 features of this special control (using bitmap in the tabs, using 
 \helpref{wxSizers}{wxsizer} and \helpref{constraints}{wxlayoutconstraints} within
@@ -132,16 +132,16 @@ database with ODBC support to be correctly installed on your system.
 \subsection{Dialogs sample}\label{sampledialogs}
 
 This sample shows how to use the common dialogs available from wxWidgets. These
-dialogs are described in details in the \helpref{Common dialogs overview}{commondialogsoverview}.
+dialogs are described in detail in the \helpref{Common dialogs overview}{commondialogsoverview}.
 
 
 \subsection{Dialup sample}\label{sampledialup}
 
-This sample shows \helpref{wxDialUpManager}{wxdialupmanager} 
+This sample shows the \helpref{wxDialUpManager}{wxdialupmanager} 
 class. It displays in the status bar the information gathered through its
 interface: in particular, the current connection status (online or offline) and
 whether the connection is permanent (in which case a string `LAN' appears in
-the third status bar field - but note that you may have be on a LAN not
+the third status bar field - but note that you may be on a LAN not
 connected to the Internet, in which case you will not see this) or not.
 
 Using the menu entries, you may also dial or hang up the line if you have a
@@ -168,7 +168,7 @@ the sequence of steps of data transfer.
 Finally, the last part is used for dragging text from it to either one of the
 listboxes (only one will accept it) or another application. The last
 functionality available from the main frame is to paste a bitmap from the
-clipboard (or, in the case of Windows version, also a metafile) - it will be
+clipboard (or, in the case of the Windows version, also a metafile) - it will be
 shown in a new frame.
 
 So far, everything we mentioned was implemented with minimal amount of code
@@ -192,11 +192,11 @@ Take a look at DnDShapeDataObject class to see how you may use
 
 This sample is a very small sample that demonstrates the use of the
 \helpref{wxEvtHandler::Connect}{wxevthandlerconnect} method. This method
-should be used whenever it is not known at compile time, which control
+should be used whenever it is not known at compile time which control
 will receive which event or which controls are actually going to be in
 a dialog or frame. This is most typically the case for any scripting
 language that would work as a wrapper for wxWidgets or programs where
-forms or similar datagrams can be created by the uses.
+forms or similar datagrams can be created by the users.
 
 See also the \helpref{event sample}{sampleevent}
 
@@ -220,7 +220,7 @@ doesn't do anything very exciting by itself, you need to study its code to
 understand what goes on.
 
 You need to build the library with \texttt{wxUSE\_EXCEPTIONS} being set to $1$
-and compile your code with the C++ exceptions support to be able to build this
+and compile your code with C++ exceptions support to be able to build this
 sample.
 
 
@@ -254,20 +254,20 @@ TODO.
 \subsection{HTML samples}\label{samplehtml}
 
 Eight HTML samples (you can find them in directory {\tt samples/html})
-cover all features of HTML sub-library.
+cover all features of the HTML sub-library.
 
 {\bf Test} demonstrates how to create \helpref{wxHtmlWindow}{wxhtmlwindow} 
-and also shows most of supported HTML tags.
+and also shows most supported HTML tags.
 
-{\bf Widget} shows how you can embed ordinary controls or windows within
+{\bf Widget} shows how you can embed ordinary controls or windows within an
 HTML page. It also nicely explains how to write new tag handlers and extend
 the library to work with unsupported tags.
 
-{\bf About} may give you an idea how to write good-looking about boxes.
+{\bf About} may give you an idea how to write good-looking About boxes.
 
 {\bf Zip} demonstrates use of virtual file systems in wxHTML. The zip archives
 handler (ships with wxWidgets) allows you to access HTML pages stored 
-in compressed archive as if they were ordinary files.
+in a compressed archive as if they were ordinary files.
 
 {\bf Virtual} is yet another virtual file systems demo. This one generates pages at run-time.
 You may find it useful if you need to display some reports in your application.
@@ -279,7 +279,7 @@ documents without much work. In fact, only few function calls are sufficient.
 {\bf Help} and {\bf Helpview} are variations on displaying HTML help 
 (compatible with MS HTML Help Workshop). {\it Help} shows how to embed 
 \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} in your application
-while {\it Helpview} is simple tool that only pops up help window and
+while {\it Helpview} is a simple tool that only pops up the help window and
 displays help books given at command line.
 
 
@@ -287,13 +287,13 @@ displays help books given at command line.
 
 The image sample demonstrates the use of the \helpref{wxImage}{wximage} class
 and shows how to download images in a variety of formats, currently PNG, GIF,
-TIFF, JPEG, BMP, PNM and PCX. The top of the sample shows to rectangles, one
+TIFF, JPEG, BMP, PNM and PCX. The top of the sample shows two rectangles, one
 of which is drawn directly in the window, the other one is drawn into a 
 \helpref{wxBitmap}{wxbitmap}, converted to a wxImage, saved as a PNG image
 and then reloaded from the PNG file again so that conversions between wxImage
-and wxBitmap as well as loading and save PNG files are tested.
+and wxBitmap as well as loading and saving PNG files are tested.
 
-At the bottom of the main frame is a test for using a monochrome bitmap by
+At the bottom of the main frame there is a test for using a monochrome bitmap by
 drawing into a \helpref{wxMemoryDC}{wxmemorydc}. The bitmap is then drawn
 specifying the foreground and background colours with 
 \helpref{wxDC::SetTextForeground}{wxdcsettextforeground} and 
@@ -305,7 +305,7 @@ replaced with red using \helpref{wxImage::Replace}{wximagereplace}.
 \subsection{Internat(ionalization) sample}\label{sampleinternat}
 
 The not very clearly named internat sample demonstrates the wxWidgets
-internatationalization (i18n for short from now on) features. To be more
+internationalization (i18n for short from now on) features. To be more
 precise, it only shows localization support, i.e. support for translating the
 program messages in another language while true i18n would also involve
 changing the other aspects of the programs behaviour.
@@ -333,7 +333,7 @@ class. See also \helpref{wxSizer}{wxsizer}.
 
 \subsection{Listctrl sample}\label{samplelistctrl}
 
-This sample shows \helpref{wxListCtrl}{wxlistctrl} control. Different modes
+This sample shows the \helpref{wxListCtrl}{wxlistctrl} control. Different modes
 supported by the control (list, icons, small icons, report) may be chosen from
 the menu.
 
@@ -392,7 +392,7 @@ is implemented as a \helpref{wxSocketClient}{wxsocketclient}.
 
 The server binds to the local address, using TCP port number 3000,
 sets up an event handler to be notified of incoming connection requests
-({\bf wxSOCKET\_CONNECTION} events), and stands there, waiting for clients
+({\bf wxSOCKET\_CONNECTION} events), and sits there, waiting for clients
 ({\it listening} in the socket parlance). For each accepted connection,
 a new \helpref{wxSocketBase}{wxsocketbase} object is created. These
 socket objects are independent from the server that created them, so
@@ -422,7 +422,7 @@ both clients and connection objects in the server set up an event handler
 to catch {\bf wxSOCKET\_LOST} events, each one is immediately notified
 if the other end closes the connection.
 
-There is also an URL test which shows how to use
+There is also a URL test which shows how to use
 the \helpref{wxURL}{wxurl} class to fetch data from a given URL.
 
 The sockets sample is work in progress. Some things to do:
@@ -514,13 +514,13 @@ toolbar.
 \end{itemize}
 
 Some buttons in the main toolbar are check buttons, i.e. they stay checked when
-pressed. On the platforms which support it, the sample also add a combobox
+pressed. On the platforms which support it, the sample also adds a combobox
 to the toolbar showing how you can use arbitrary controls and not only buttons
 in it.
 
 If you toggle another toolbar in the sample (using {\tt Ctrl-A}) you will also
 see the radio toolbar buttons in action: the first three buttons form a radio
-group, that is checking any of them automatically unchecks the previously
+group, i.e. checking any of them automatically unchecks the previously
 checked one.
 
 
@@ -552,7 +552,7 @@ to verify that the data entered is correct before passing to the next page
 continuing).
 \item Using more elaborated techniques to allow returning to the previous
 page, but not continuing to the next one or vice versa (in wxRadioboxPage)
-\item This (wxRadioboxPage) page also shows how the page may process {\tt
+\item This (wxRadioboxPage) page also shows how the page may process the {\tt
 Cancel} button itself instead of relying on the wizard parent to do it.
 \item Normally, the order of the pages in the wizard is known at compile-time,
 but sometimes it depends on the user choices: wxCheckboxPage shows how to

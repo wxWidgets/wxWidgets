@@ -92,7 +92,7 @@ public:
     // class OnInit() to do it.
     virtual bool OnInit();
 
-    // this is here only temproary hopefully (FIXME)
+    // this is here only temporary hopefully (FIXME)
     virtual bool OnInitGui() { return true; }
 
     // This is the replacement for the normal main(): all program work should

@@ -358,7 +358,7 @@ public:
     // for them wouldn't work (it needs to do a copy of the event)
     virtual wxEvent *Clone() const = 0;
 
-    // Implementation only: this test is explicitlty anti OO and this functions
+    // Implementation only: this test is explicitly anti OO and this function
     // exists only for optimization purposes.
     bool IsCommandEvent() const { return m_isCommandEvent; }
 

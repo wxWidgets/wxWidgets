@@ -541,7 +541,7 @@ public:
         // is this window a top level one?
     virtual bool IsTopLevel() const;
 
-        // it doesn't really change parent, use ReParent() instead
+        // it doesn't really change parent, use Reparent() instead
     void SetParent( wxWindowBase *parent ) { m_parent = (wxWindow *)parent; }
         // change the real parent of this window, return true if the parent
         // was changed, false otherwise (error or newParent == oldParent)

@@ -219,7 +219,7 @@ bool wxPen::RealizeResource()
                default:
                    logb.lbStyle = BS_SOLID;
 #ifdef __WXDEBUG__
-                   // this should be unnecessary (it's unused) but suppresses the Purigy
+                   // this should be unnecessary (it's unused) but suppresses the Purify
                    // messages about uninitialized memory read
                    logb.lbHatch = 0;
 #endif

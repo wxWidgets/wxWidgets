@@ -281,7 +281,7 @@ private:
 #undef wxCRITSECT_IS_MUTEX
 
 // wxCriticalSectionLocker is the same to critical sections as wxMutexLocker is
-// to th mutexes
+// to mutexes
 class WXDLLIMPEXP_BASE wxCriticalSectionLocker
 {
 public:
@@ -405,7 +405,7 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxThread: class encpasulating a thread of execution
+// wxThread: class encapsulating a thread of execution
 // ----------------------------------------------------------------------------
 
 // there are two different kinds of threads: joinable and detached (default)

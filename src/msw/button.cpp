@@ -418,7 +418,7 @@ bool wxButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     {
         // NOTE: Apparently older versions (NT 4?) of the common controls send
         //       BN_DOUBLECLICKED but not a second BN_CLICKED for owner-drawn
-        //       buttons, so in order to send two EVET_BUTTON events we should
+        //       buttons, so in order to send two EVT_BUTTON events we should
         //       catch both types.  Currently (Feb 2003) up-to-date versions of
         //       win98, win2k and winXP all send two BN_CLICKED messages for
         //       all button types, so we don't catch BN_DOUBLECLICKED anymore
@@ -437,7 +437,7 @@ bool wxButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    // when we receive focus, we want to temporary become the default button in
+    // when we receive focus, we want to temporarily become the default button in
     // our parent panel so that pressing "Enter" would activate us -- and when
     // losing it we should restore the previous default button as well
     if ( nMsg == WM_SETFOCUS )

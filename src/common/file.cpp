@@ -414,10 +414,10 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
 #ifdef __WXWINCE__
-    DWORD bytesRead = 0;
+    DWORD bytesWritten = 0;
     int iRc = 0;
-    if (WriteFile((HANDLE) m_fd, pBuf, (DWORD) nCount, & bytesRead, NULL))
-        iRc = bytesRead;
+    if (WriteFile((HANDLE) m_fd, pBuf, (DWORD) nCount, & bytesWritten, NULL))
+        iRc = bytesWritten;
     else
         iRc = -1;
 #elif defined(__MWERKS__)

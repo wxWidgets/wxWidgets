@@ -77,7 +77,7 @@ wxGLContext::wxGLContext(bool WXUNUSED(isRGB), wxGLCanvas *win, const wxPalette&
   m_hDC = win->GetHDC();
 
   m_glContext = wglCreateContext((HDC) m_hDC);
-  wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGl context") );
+  wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGL context") );
 
   wglMakeCurrent((HDC) m_hDC, m_glContext);
 }
@@ -93,7 +93,7 @@ wxGLContext::wxGLContext(
   m_hDC = win->GetHDC();
 
   m_glContext = wglCreateContext((HDC) m_hDC);
-  wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGl context") );
+  wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGL context") );
 
   if( other != 0 )
     wglShareLists( other->m_glContext, m_glContext );
