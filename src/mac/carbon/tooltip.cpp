@@ -55,15 +55,15 @@ class wxMacToolTip
 class wxMacToolTipTimer : wxTimer
 {
 public:
+	wxMacToolTipTimer() {} ;
 	wxMacToolTipTimer(wxMacToolTip* tip, int iMilliseconds) ;
-
+    virtual ~wxMacToolTipTimer() {} ;
 	void Notify()
 	{
 		if ( m_mark == m_tip->GetMark() )
 			m_tip->Draw() ;
 
 	}
-	
 protected:
 	wxMacToolTip* 	m_tip;
 	long			m_mark ;
@@ -187,7 +187,7 @@ void wxMacToolTip::Setup( WindowRef window  , wxString text , wxPoint localPosit
 {
 	m_mark++ ;
 	Clear() ;
-	m_position = localPosition ; 
+	m_position = localPosition ;
 	m_label = wxMacMakeMacStringFromPC( text ) ;
 	m_window = window ;
 	s_ToolTipWindowRef = window ;
@@ -323,6 +323,11 @@ void wxToolTip::NotifyWindowDelete( WXHWND win )
 void wxMacToolTip::Clear()
 {
 	m_mark++ ;
+	if ( m_timer )
+	{
+	    delete m_timer ;
+	    m_timer = NULL ;
+	}
 	if ( !m_shown )
 		return ;
 		 

@@ -56,9 +56,6 @@
 #if wxUSE_SOCKETS
     #ifdef __DARWIN__
         #include <CoreServices/CoreServices.h>
-    #else
-        #include <OpenTransport.h>
-        #include <OpenTptInternet.h>
     #endif
 #endif
 
@@ -526,6 +523,7 @@ bool wxApp::Initialize()
 
 void wxApp::CleanUp()
 {
+    wxToolTip::RemoveToolTips() ;
 #if wxUSE_LOG
     // flush the logged messages if any and install a 'safer' log target: the
     // default one (wxLogGui) can't be used after the resources are freed just
@@ -562,6 +560,9 @@ void wxApp::CleanUp()
   wxMacDestroyNotifierTable() ;
   if (wxWinMacWindowList)
     delete wxWinMacWindowList ;
+
+  if (wxWinMacControlList)
+    delete wxWinMacControlList ;
 
     delete wxPendingEvents;
 #if wxUSE_THREADS
