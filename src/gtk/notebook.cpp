@@ -564,7 +564,7 @@ bool wxNotebook::DeleteAllPages()
     return wxNotebookBase::DeleteAllPages();
 }
 
-bool wxNotebook::DeletePage( size_t page )
+wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
 {
     if ( m_selection != -1 && (size_t)m_selection >= page )
     {
@@ -572,12 +572,6 @@ bool wxNotebook::DeletePage( size_t page )
         m_selection = -1;
     }
 
-    // it will call our DoRemovePage() to do the real work
-    return wxNotebookBase::DeletePage(page);
-}
-
-wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
-{
     wxNotebookPage *client = wxNotebookBase::DoRemovePage(page);
     if ( !client )
         return NULL;

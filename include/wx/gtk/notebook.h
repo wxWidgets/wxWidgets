@@ -80,8 +80,6 @@ public:
 
   // operations
   // ----------
-    // remove one page from the notebook
-  bool DeletePage(size_t nPage);
     // remove all pages
   bool DeleteAllPages();
 
