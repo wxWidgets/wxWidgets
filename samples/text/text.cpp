@@ -129,6 +129,11 @@ public:
         { m_panel->DoCopyToClipboard(); }
 #endif // wxUSE_CLIPBOARD
 
+    void OnAddTextFreeze( wxCommandEvent& event )
+        { DoAddText(true); }
+    void OnAddText( wxCommandEvent& event )
+        { DoAddText(false); }
+
     void OnMoveToEndOfText( wxCommandEvent &event )
         { m_panel->DoMoveToEndOfText(); }
     void OnMoveToEndOfEntry( wxCommandEvent &event )
@@ -144,6 +149,21 @@ public:
     void OnIdle( wxIdleEvent& event );
 
 private:
+    void DoAddText(bool freeze)
+    {
+        wxTextCtrl *text = m_panel->m_textrich;
+        if ( freeze )
+            text->Freeze();
+
+        for ( int i = 0; i < 100; i++ )
+            text->AppendText(wxString::Format("Line %i\n", i));
+
+        text->SetInsertionPoint(0);
+
+        if ( freeze )
+            text->Thaw();
+    }
+
     MyPanel *m_panel;
 
     DECLARE_EVENT_TABLE()
@@ -176,7 +196,9 @@ enum
     TEXT_TOOLTIPS_ENABLE,
 
     // text menu
-    TEXT_MOVE_ENDTEXT = 400,
+    TEXT_ADD_SOME = 400,
+    TEXT_ADD_FREEZE,
+    TEXT_MOVE_ENDTEXT,
     TEXT_MOVE_ENDENTRY,
     TEXT_SET_EDITABLE,
     TEXT_SET_ENABLED
@@ -224,6 +246,8 @@ bool MyApp::OnInit()
 #endif // wxUSE_CLIPBOARD
 
     wxMenu *menuText = new wxMenu;
+    menuText->Append(TEXT_ADD_SOME, "&Append some text\tCtrl-A");
+    menuText->Append(TEXT_ADD_FREEZE, "&Append text with freeze/thaw\tShift-Ctrl-A");
     menuText->Append(TEXT_MOVE_ENDTEXT, "Move cursor to the end of &text");
     menuText->Append(TEXT_MOVE_ENDENTRY, "Move cursor to the end of &entry");
     menuText->Append(TEXT_SET_EDITABLE, "Toggle &editable state", "", TRUE);
@@ -791,6 +815,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_CLIPBOARD_COPY,     MyFrame::OnCopyToClipboard)
 #endif // wxUSE_CLIPBOARD
 
+    EVT_MENU(TEXT_ADD_SOME,           MyFrame::OnAddText)
+    EVT_MENU(TEXT_ADD_FREEZE,         MyFrame::OnAddTextFreeze)
     EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
     EVT_MENU(TEXT_MOVE_ENDENTRY,      MyFrame::OnMoveToEndOfEntry)
 
