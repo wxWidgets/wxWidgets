@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -237,8 +237,6 @@ EXPORTS
       wxConstructorForwxPrintData__Fv
       ;wxPageSetupDialogData::~wxPageSetupDialogData()
       __dt__21wxPageSetupDialogDataFv
-      ;wxColourData::SetCustomColour(int,wxColour&)
-      SetCustomColour__12wxColourDataFiR8wxColour
       ;wxPrintData::operator=(const wxPrintData&)
       __as__11wxPrintDataFRC11wxPrintData
       ;wxPageSetupDialogData::wxPageSetupDialogData(const wxPageSetupDialogData&)
@@ -255,6 +253,8 @@ EXPORTS
       __ct__21wxPageSetupDialogDataFv
       ;wxPrintDialogData::wxPrintDialogData()
       __ct__17wxPrintDialogDataFv
+      ;wxColourData::SetCustomColour(int,const wxColour&)
+      SetCustomColour__12wxColourDataFiRC8wxColour
   ;From object file:  ..\common\cmdproc.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxCommandProcessor::UndoCommand(wxCommand&)
@@ -9727,6 +9727,8 @@ EXPORTS
       RemoveChild__16wxSplitterWindowFP12wxWindowBase
       ;wxSplitterWindow::ReplaceWindow(wxWindow*,wxWindow*)
       ReplaceWindow__16wxSplitterWindowFP8wxWindowT1
+      ;wxSplitterWindow::AdjustSashPosition(int) const
+      AdjustSashPosition__16wxSplitterWindowCFi
       ;wxSplitterWindow::GetDefaultItem() const
       GetDefaultItem__16wxSplitterWindowCFv
       ;wxSplitterWindow::InitColours()
@@ -9739,6 +9741,8 @@ EXPORTS
       __vft16wxSplitterWindow8wxObject
       ;wxSplitterWindow::OnSetCursor(wxSetCursorEvent&)
       OnSetCursor__16wxSplitterWindowFR16wxSetCursorEvent
+      ;wxSplitterWindow::DoSplit(wxSplitMode,wxWindow*,wxWindow*,int)
+      DoSplit__16wxSplitterWindowF11wxSplitModeP8wxWindowT2i
       ;wxSplitterWindow::DrawSashTracker(int,int)
       DrawSashTracker__16wxSplitterWindowFiT1
       ;wxConstructorForwxSplitterWindow()
@@ -9752,8 +9756,8 @@ EXPORTS
       OnSashPosChanged__16wxSplitterWindowFR15wxSplitterEvent
       ;wxSplitterEvent::sm_classwxSplitterEvent
       sm_classwxSplitterEvent__15wxSplitterEvent
-      ;wxSplitterWindow::SplitHorizontally(wxWindow*,wxWindow*,int)
-      SplitHorizontally__16wxSplitterWindowFP8wxWindowT1i
+      ;wxSplitterWindow::GetWindowSize() const
+      GetWindowSize__16wxSplitterWindowCFv
       ;wxSplitterWindow::SizeWindows()
       SizeWindows__16wxSplitterWindowFv
       ;wxSplitterWindow::SendUnsplitEvent(wxWindow*)
@@ -9788,8 +9792,6 @@ EXPORTS
       SetSashPosition__16wxSplitterWindowFiUl
       ;wxSplitterWindow::SashHitTest(int,int,int)
       SashHitTest__16wxSplitterWindowFiN21
-      ;wxSplitterWindow::SplitVertically(wxWindow*,wxWindow*,int)
-      SplitVertically__16wxSplitterWindowFP8wxWindowT1i
       ;wxConstructorForwxSplitterEvent()
       wxConstructorForwxSplitterEvent__Fv
       ;wxSplitterWindow::DrawSash(wxDC&)
