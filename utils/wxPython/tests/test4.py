@@ -401,30 +401,30 @@ class TestToolBar(wxFrame):
         #self.SetToolBar(tb)
 
         tb.AddTool(10, wxNoRefBitmap('bitmaps/new.bmp',   wxBITMAP_TYPE_BMP),
-                        NULL, false, -1, -1, "New")
+                        wxNullBitmap, false, -1, -1, "New")
         EVT_TOOL(self, 10, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
 
         tb.AddTool(20, wxNoRefBitmap('bitmaps/open.bmp',  wxBITMAP_TYPE_BMP),
-                        NULL, false, -1, -1, "Open")
+                        wxNullBitmap, false, -1, -1, "Open")
         EVT_TOOL(self, 20, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 20, self.OnToolRClick)
 
         tb.AddSeparator()
         tb.AddTool(30, wxNoRefBitmap('bitmaps/copy.bmp',  wxBITMAP_TYPE_BMP),
-                        NULL, false, -1, -1, "Copy")
+                        wxNullBitmap, false, -1, -1, "Copy")
         EVT_TOOL(self, 30, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 30, self.OnToolRClick)
 
         tb.AddTool(40, wxNoRefBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP),
-                        NULL, false, -1, -1, "Paste")
+                        wxNullBitmap, false, -1, -1, "Paste")
         EVT_TOOL(self, 40, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 40, self.OnToolRClick)
 
         tb.AddSeparator()
 
         tb.AddTool(50, wxNoRefBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
-                        NULL, true, -1, -1, "Toggle this")
+                        wxNullBitmap, true, -1, -1, "Toggle this")
         EVT_TOOL(self, 50, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 50, self.OnToolRClick)
 
@@ -804,7 +804,12 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.11  1999/01/29 16:17:59  HH
+# In test4's toolbar sample, changed NULL to wxNullBitmap to prevent SIGSEVS
+# with wxGTK. The sample works now.
+#
 # Revision 1.10  1998/12/16 22:12:47  RD
+#
 # Tweaks needed to be able to build wxPython with wxGTK.
 #
 # Revision 1.9  1998/12/15 20:44:35  RD
