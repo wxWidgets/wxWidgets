@@ -668,7 +668,7 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
         wxTextCtrlHitTestResult rc = HitTest(ev.GetPosition(), &pos);
         if ( rc != wxTE_HT_UNKNOWN )
         {
-            msg << _T("at position ") << pos;
+            msg << _T("at position ") << pos << _T(' ');
         }
 
         msg << _T("[Flags: ")
