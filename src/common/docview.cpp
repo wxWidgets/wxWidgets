@@ -1183,9 +1183,12 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
     int FilterIndex = 0;
     wxString pathTmp = wxFileSelectorEx(_("Select a file"),
-                                        _T(""), _T(""), _T(""),
+                                        _T(""),
+                                        _T(""),
                                         &FilterIndex,
-                                        descrBuf, 0, wxTheApp->GetTopWindow());
+                                        descrBuf,
+                                        0,
+                                        wxTheApp->GetTopWindow());
 
     if (!pathTmp.IsEmpty())
     {
