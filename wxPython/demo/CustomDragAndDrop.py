@@ -13,13 +13,21 @@ class DoodlePad(wxWindow):
         self.SetBackgroundColour(wxWHITE)
         self.lines = []
         self.x = self.y = 0
-        self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
+        self.SetMode("Draw")
 
         EVT_LEFT_DOWN(self, self.OnLeftDown)
         EVT_LEFT_UP(self, self.OnLeftUp)
         EVT_RIGHT_UP(self, self.OnRightUp)
         EVT_MOTION(self, self.OnMotion)
         EVT_PAINT(self, self.OnPaint)
+
+
+    def SetMode(self, mode):
+        self.mode = mode
+        if self.mode == "Draw":
+            self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
+        else:
+            self.SetCursor(wxSTANDARD_CURSOR)
 
 
     def OnPaint(self, event):
@@ -36,12 +44,15 @@ class DoodlePad(wxWindow):
 
 
     def OnLeftDown(self, event):
-        if event.ControlDown():
+        if self.mode == "Drag":
             self.StartDragOpperation()
-        else:
+        elif self.mode == "Draw":
             self.curLine = []
             self.x, self.y = event.GetPositionTuple()
             self.CaptureMouse()
+        else:
+            wxBell()
+            self.log.write("unknown mode!\n")
 
 
     def OnLeftUp(self, event):
@@ -54,7 +65,7 @@ class DoodlePad(wxWindow):
         self.Refresh()
 
     def OnMotion(self, event):
-        if event.Dragging() and not event.ControlDown():
+        if event.Dragging() and not self.mode == "Drag":
             dc = wxClientDC(self)
             dc.BeginDrawing()
             dc.SetPen(wxPen(wxBLUE, 3))
@@ -96,9 +107,11 @@ class DoodlePad(wxWindow):
         dropSource = wxDropSource(self)
         dropSource.SetData(data)
         self.log.WriteText("Begining DragDrop\n")
-        result = dropSource.DoDragDrop()
+        result = dropSource.DoDragDrop(true)
         self.log.WriteText("DragDrop completed: %d\n" % result)
-
+        if result == wxDragMove:
+            self.lines = []
+            self.Refresh()
 
 
 #----------------------------------------------------------------------
@@ -118,15 +131,26 @@ class DoodleDropTarget(wxPyDropTarget):
     # some virtual methods that track the progress of the drag
     def OnEnter(self, x, y, d):
         self.log.WriteText("OnEnter: %d, %d, %d\n" % (x, y, d))
-        return wxDragCopy
+        return d
+
     def OnLeave(self):
         self.log.WriteText("OnLeave\n")
+
     def OnDrop(self, x, y):
         self.log.WriteText("OnDrop: %d %d\n" % (x, y))
         return true
-    #def OnDragOver(self, x, y, d):
-    #    self.log.WriteText("OnDragOver: %d, %d, %d\n" % (x, y, d))
-    #    return wxDragCopy
+
+    def OnDragOver(self, x, y, d):
+        #self.log.WriteText("OnDragOver: %d, %d, %d\n" % (x, y, d))
+
+        # The value returned here tells the source what kind of visual
+        # feedback to give.  For example, if wxDragCopy is returned then
+        # only the copy cursor will be shown, even if the source allows
+        # moves.  You can use the passed in (x,y) to determine what kind
+        # of feedback to give.  In this case we return the suggested value
+        # which is based on whether the Ctrl key is pressed.
+        return d
+
 
 
     # Called when OnDrop returns true.  We need to get the data and
@@ -134,13 +158,15 @@ class DoodleDropTarget(wxPyDropTarget):
     def OnData(self, x, y, d):
         self.log.WriteText("OnData: %d, %d, %d\n" % (x, y, d))
 
-        # copy the data from the drag source to out data object
+        # copy the data from the drag source to our data object
         if self.GetData():
             # convert it back to a list of lines and give it to the viewer
             linesdata = self.data.GetData()
             lines = cPickle.loads(linesdata)
             self.dv.SetLines(lines)
-        return d
+        return d  # what is returned signals the source what to do
+                  # with the original data (move, copy, etc.)  In this
+                  # case we just return the suggested value given to us.
 
 
 
@@ -155,6 +181,7 @@ class DoodleViewer(wxWindow):
         dt = DoodleDropTarget(self, log)
         self.SetDropTarget(dt)
         EVT_PAINT(self, self.OnPaint)
+
 
     def SetLines(self, lines):
         self.lines = lines
@@ -180,26 +207,58 @@ class CustomDnDPanel(wxPanel):
 
         self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, false))
 
-        sizer = wxBoxSizer(wxHORIZONTAL)
-        text = wxStaticText(self, -1,
+        # Make the controls
+        text1 = wxStaticText(self, -1,
                             "Draw a little picture in this window\n"
                             "then Ctrl-Drag it to the lower \n"
                             "window or to another application\n"
-                            "that accepts BMP's as a drop target.\n\n"
-                            "The lower window is accepting a\n"
-                            "custom data type that is a pickled\n"
-                            "Python list of lines data.")
-        sizer.Add(text, 1, wxALL, 10)
+                            "that accepts BMP's as a drop target.\n"
+                            )
 
-        insizer = wxBoxSizer(wxVERTICAL)
-        insizer.Add(DoodlePad(self, log), 1, wxEXPAND|wxALL, 5)
-        insizer.Add(DoodleViewer(self, log), 1, wxEXPAND|wxALL, 5)
+        rb1 = wxRadioButton(self, -1, "Draw", style=wxRB_GROUP)
+        rb1.SetValue(true)
+        rb2 = wxRadioButton(self, -1, "Drag")
+        rb2.SetValue(false)
 
-        sizer.Add(insizer, 1, wxEXPAND)
+        text2 = wxStaticText(self, -1,
+                             "The lower window is accepting a\n"
+                             "custom data type that is a pickled\n"
+                             "Python list of lines data.")
+
+        self.pad = DoodlePad(self, log)
+        view = DoodleViewer(self, log)
+
+        # put them in sizers
+        sizer = wxBoxSizer(wxHORIZONTAL)
+        box = wxBoxSizer(wxVERTICAL)
+        rbox = wxBoxSizer(wxHORIZONTAL)
+
+        rbox.Add(rb1)
+        rbox.Add(rb2)
+        box.Add(text1, 0, wxALL, 10)
+        box.Add(rbox, 0, wxALIGN_CENTER)
+        box.Add(10,90)
+        box.Add(text2, 0, wxALL, 10)
+
+        sizer.Add(box)
+
+        dndsizer = wxBoxSizer(wxVERTICAL)
+        dndsizer.Add(self.pad, 1, wxEXPAND|wxALL, 5)
+        dndsizer.Add(view, 1, wxEXPAND|wxALL, 5)
+
+        sizer.Add(dndsizer, 1, wxEXPAND)
+
         self.SetAutoLayout(true)
         self.SetSizer(sizer)
 
+        # Events
+        EVT_RADIOBUTTON(self, rb1.GetId(), self.OnRadioButton)
+        EVT_RADIOBUTTON(self, rb2.GetId(), self.OnRadioButton)
 
+
+    def OnRadioButton(self, evt):
+        rb = self.FindWindowById(evt.GetId())
+        self.pad.SetMode(rb.GetLabel())
 
 
 #----------------------------------------------------------------------
@@ -230,7 +289,8 @@ class TestPanel(wxPanel):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestPanel(nb, log)
+    #win = TestPanel(nb, log)
+    win = CustomDnDPanel(nb, log)
     return win
 
 
