@@ -672,7 +672,7 @@ wxOutputStream *wxFTP::GetOutputStream(const wxString& path)
 
     wxString tmp_str = wxT("STOR ") + path;
     if ( !CheckCommand(tmp_str, '1') )
-        return FALSE;
+        return NULL;
 
     m_streaming = TRUE;
 
