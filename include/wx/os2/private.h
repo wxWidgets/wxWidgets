@@ -34,6 +34,9 @@
  typedef SPBCDATA *PSPBCDATA;
 #endif
 
+#undef WS_VISIBLE
+#define WS_VISIBLE 0
+
 #include "wx/fontenc.h"
 
 class WXDLLEXPORT wxFont;
@@ -120,7 +123,7 @@ WXDLLEXPORT_DATA(extern const wxChar*)  wxCanvasClassNameNR;
 // standard icons from the resources
 // ---------------------------------------------------------------------------
 
-#if wxUSE_GUI
+#ifdef __WXPM__
 
 WXDLLEXPORT_DATA(extern HICON) wxSTD_FRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxSTD_MDIPARENTFRAME_ICON;
@@ -130,7 +133,7 @@ WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDIPARENTFRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDICHILDFRAME_ICON;
 WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 
-#endif // wxUSE_GUI
+#endif
 
 // ---------------------------------------------------------------------------
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
@@ -187,7 +190,7 @@ typedef MRESULT (APIENTRY * WndProcCast) (HWND, ULONG, MPARAM, MPARAM);
 // Scale font to get edit control height
 #define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
 
-#if wxUSE_GUI
+#ifdef __WXPM__
 
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
@@ -282,7 +285,7 @@ static inline MRESULT MySendMsg(HWND hwnd, ULONG ulMsgid,
 }
 #define WinSendMsg MySendMsg
 
-#if wxUSE_GUI
+#ifdef __WXPM__
 
 WXDLLEXPORT void wxDrawBorder( HPS     hPS
                               ,RECTL&  rRect
@@ -370,6 +373,6 @@ WXDLLEXPORT extern wxBitmap wxDisableBitmap( const wxBitmap& rBmp
 
 WXDLLEXPORT extern COLORREF wxColourToRGB(const wxColour& rColor);
 
-#endif // wxUSE_GUI
+#endif // __WXPM__
 
 #endif // _WX_PRIVATE_H_
