@@ -5,8 +5,8 @@
 # Author:       Lorne White (email: lorne.white@telusplanet.net)
 #
 # Created:
-# Version       0.72
-# Date:         Sept 8, 2001
+# Version       0.75
+# Date:         Sept 18, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -16,6 +16,30 @@ from wxPython.wx import *
 import copy
 
 class PrintBase:
+    def SetPrintFont(self, font):      # set the DC font parameters
+        fattr = font["Attr"]
+        if fattr[0] == 1:
+            weight = wxBOLD
+        else:
+            weight = wxNORMAL
+
+        if fattr[1] == 1:
+            set_style = wxITALIC
+        else:
+            set_style = wxNORMAL
+
+        underline = fattr[2]
+        fcolour = self.GetFontColour(font)
+        self.DC.SetTextForeground(fcolour)
+
+        setfont = wxFont(font["Size"], wxSWISS, set_style, weight, underline)
+        setfont.SetFaceName(font["Name"])
+        self.DC.SetFont(setfont)
+
+    def GetFontColour(self, font):
+        fcolour = font["Colour"]
+        return wxColour(fcolour[0], fcolour[1], fcolour[2])
+
     def OutTextRegion(self, textout, txtdraw = TRUE):
         textlines = string.splitfields(textout, '\n')
         y = copy.copy(self.y) + self.pt_space_before
@@ -123,6 +147,21 @@ class PrintBase:
                 y = y + y_line
         return y - y_line
 
+    def GetDate(self):
+        date, time = self.GetNow()
+        return date
+
+    def GetDateTime(self):
+        date, time = self.GetNow()
+        return date + ' ' + time
+
+    def GetNow(self):
+        full = str(wxDateTime_Now())        # get the current date and time in print format
+        flds = string.splitfields(full)
+        date = flds[0]
+        time = flds[1]
+        return date, time
+
     def SetPreview(self, preview):
         self.preview = preview
 
@@ -183,12 +222,8 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.column_def_line_colour = self.parent.column_def_line_colour
 
         self.text_font = self.parent.text_font
-        self.text_font_name = self.parent.text_font_name
-        self.text_font_colour = self.parent.text_font_colour
 
         self.label_font = self.parent.label_font
-        self.label_font_name = self.parent.label_font_name
-        self.label_font_colour = self.parent.label_font_colour
 
     def AdjustValues(self):
         self.vertical_offset = self.pheight * self.parent.vertical_offset
@@ -262,7 +297,8 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             try:
                 colour = set_column_txtcolour[col]     # check if custom column text colour
             except:
-                colour = self.parent.text_font_colour
+                colour = self.GetFontColour(self.parent.text_font)
+
             self.column_txtcolour.append(colour)
 
             col = col + 1
@@ -270,7 +306,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
     def SetPointAdjust(self):
         f = wxFont(10, wxSWISS, wxNORMAL, wxNORMAL)     # setup using 10 point
         self.DC.SetFont(f)
-        f.SetFaceName(self.text_font_name)
+        f.SetFaceName(self.text_font["Name"])
         x, y = self.DC.GetTextExtent("W")
 
         self.label_pt_space_before = self.parent.label_pt_adj_before * y/10        # extra spacing for label per point value
@@ -292,13 +328,13 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.y_start = self.ptop_margin + self.vertical_offset
         self.y_end = self.parent.page_height * self.pheight - self.pbottom_margin + self.vertical_offset
 
-        self.text_font.SetFaceName(self.label_font_name)
-        self.DC.SetFont(self.label_font)
+        self.SetPrintFont(self.label_font)
+
         x, y = self.DC.GetTextExtent("W")
         self.label_space = y
 
-        self.text_font.SetFaceName(self.text_font_name)
-        self.DC.SetFont(self.text_font)
+        self.SetPrintFont(self.text_font)
+
         x, y = self.DC.GetTextExtent("W")
         self.space = y
 
@@ -382,9 +418,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.pt_space_after = self.label_pt_space_after
 
         self.LabelColorRow(self.label_colour)
-        self.label_font.SetFaceName(self.label_font_name)
-        self.DC.SetFont(self.label_font)
-        self.DC.SetTextForeground(self.label_font_colour)
+        self.SetPrintFont(self.label_font)
 
         self.col = 0
         max_y = 0
@@ -407,15 +441,20 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             return
 
         for val in self.parent.header:
-            f = wxFont(val["Size"], wxSWISS, wxNORMAL, val["Attr"])
-            self.DC.SetFont(f)
-            fontname = val["Name"]
-
-            f.SetFaceName(fontname)
-            self.DC.SetTextForeground(val["Colour"])
+            self.SetPrintFont(val["Font"])
 
             header_indent = val["Indent"] * self.pwidth
-            self.OutTextPageWidth(val["Text"], self.pheader_margin, val["Align"], header_indent, TRUE)
+            text = val["Text"]
+
+            htype = val["Type"]
+            if htype == "Date":
+                addtext = self.GetDate()
+            elif htype == "Date & Time":
+                addtext = self.GetDateTime()
+            else:
+                addtext = ""
+
+            self.OutTextPageWidth(text+addtext, self.pheader_margin, val["Align"], header_indent, TRUE)
 
     def PrintFooter(self):      # print the header array
         if self.draw == FALSE:
@@ -423,25 +462,27 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
 
         footer_pos = self.parent.page_height * self.pheight - self.pfooter_margin + self.vertical_offset
         for val in self.parent.footer:
-            f = wxFont(val["Size"], wxSWISS, wxNORMAL, val["Attr"])
-            self.DC.SetFont(f)
-            fontname = val["Name"]
-
-            f.SetFaceName(fontname)
-            self.DC.SetTextForeground(val["Colour"])
+            self.SetPrintFont(val["Font"])
 
             footer_indent = val["Indent"] * self.pwidth
+            text = val["Text"]
+
             ftype = val["Type"]
             if ftype == "Pageof":
-                text = "Page " + str(self.page) + " of " + str(self.total_pages)
+                addtext = "Page " + str(self.page) + " of " + str(self.total_pages)
             elif ftype == "Page":
-                text = "Page " + str(self.page)
+                addtext = "Page " + str(self.page)
             elif ftype == "Num":
-                text = str(self.page)
+                addtext = str(self.page)
+            elif ftype == "Date":
+                addtext = self.GetDate()
+            elif ftype == "Date & Time":
+                addtext = self.GetDateTime()
             else:
-                text = ""
+                addtext = ""
 
-            self.OutTextPageWidth(text, footer_pos, val["Align"], footer_indent, TRUE)
+            self.OutTextPageWidth(text+addtext, footer_pos, val["Align"], footer_indent, TRUE)
+
 
     def LabelColorRow(self, colour):
         brush = wxBrush(colour, wxSOLID)
@@ -469,15 +510,13 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             col = col + 1
 
     def PrintRow(self, row_val, draw = TRUE, align = wxALIGN_LEFT):
-        self.text_font.SetFaceName(self.text_font_name)
-        self.DC.SetFont(self.text_font)
+        self.SetPrintFont(self.text_font)
 
         self.pt_space_before = self.text_pt_space_before   # set the point spacing
         self.pt_space_after = self.text_pt_space_after
 
         self.col = 0
         max_y = 0
-        self.DC.SetTextForeground(self.text_font_colour)
         for vtxt in row_val:
             self.region = self.column[self.col+1] - self.column[self.col]
             self.indent = self.column[self.col]
@@ -636,15 +675,8 @@ class PrintTable:
         self.label_colour = wxNamedColour('LIGHT GREY')
 
     def SetFonts(self):
-        self.label_font_size = 12
-        self.label_font_attr = wxNORMAL
-        self.label_font_name = "Arial"
-        self.label_font_colour = wxNamedColour('BLACK')
-
-        self.text_font_size = 10
-        self.text_font_attr = wxNORMAL
-        self.text_font_name = "Arial"
-        self.text_font_colour = wxNamedColour('BLACK')
+        self.label_font = { "Name": self.default_font_name, "Size": 12, "Colour": [0, 0, 0], "Attr": [0, 0, 0] }
+        self.text_font = { "Name": self.default_font_name, "Size": 10, "Colour": [0, 0, 0], "Attr": [0, 0, 0] }
 
     def TextSpacing(self):
         self.label_pt_adj_before = 0     # point adjustment before and after the label text
@@ -667,20 +699,14 @@ class PrintTable:
 
     def SetHeaderValue(self):
         self.header_margin = 0.25
-        self.header_font_size = 12
-        self.header_font_colour = wxNamedColour('BLACK')
-        self.header_font_attr = wxBOLD
-        self.header_font_name = self.text_font_name
+        self.header_font = { "Name": self.default_font_name, "Size": 11, "Colour": [0, 0, 0], "Attr": [0, 0, 0] }
         self.header_align = wxALIGN_CENTRE
         self.header_indent = 0
-        self.header_type = None
+        self.header_type = "Text"
 
     def SetFooterValue(self):
         self.footer_margin = 0.7
-        self.footer_font_size = 10
-        self.footer_font_colour = wxNamedColour('BLACK')
-        self.footer_font_attr = wxNORMAL
-        self.footer_font_name = self.text_font_name
+        self.footer_font = { "Name": self.default_font_name, "Size": 11, "Colour": [0, 0, 0], "Attr": [0, 0, 0] }
         self.footer_align = wxALIGN_CENTRE
         self.footer_indent = 0
         self.footer_type = "Pageof"
@@ -713,6 +739,9 @@ class PrintTable:
 
         self.preview = None
         self.page = 0
+
+        self.default_font_name = "Arial"
+        self.default_font = { "Name": self.default_font_name, "Size": 10, "Colour": [0, 0, 0], "Attr": [0, 0, 0] }
 
     def SetColAlignment(self, col, align=wxALIGN_LEFT):
         self.set_column_align[col] = align
@@ -759,23 +788,27 @@ class PrintTable:
     def SetRowLineColour(self, row, colour):
         self.row_line_colour[row] = colour
 
-    def SetHeader(self, text = "", type = None, name=None, size=None, colour = None, align = None, indent = None, attr=None):
+    def GetColour(self, colour):        # returns colours based from wxColour value
+        red = colour.Red()
+        blue = colour.Blue()
+        green = colour.Green()
+        return [red, green, blue ]
+
+    def SetHeader(self, text = "", type = "Text", font=None, align = None, indent = None, colour = None, size = None):
         set = { "Text": text }
 
-        if name == None:
-            set["Name"] = self.header_font_name
+        if font == None:
+            set["Font"] = copy.copy(self.default_font)
         else:
-            set["Name"] = name
+            set["Font"] = font
 
-        if size == None:
-            set["Size"] = self.header_font_size
-        else:
-            set["Size"] = size
+        if colour != None:
+            setfont = set["Font"]
+            setfont["Colour"] = self.GetColour(colour)
 
-        if colour == None:
-            set["Colour"] = self.header_font_colour
-        else:
-            set["Colour"] = colour
+        if size != None:
+            setfont = set["Font"]
+            setfont["Size"] = size
 
         if align == None:
             set["Align"] = self.header_align
@@ -787,11 +820,6 @@ class PrintTable:
         else:
             set["Indent"] = indent
 
-        if attr == None:
-            set["Attr"] = self.header_font_attr
-        else:
-            set["Attr"] = attr
-
         if type == None:
             set["Type"] = self.header_type
         else:
@@ -799,23 +827,21 @@ class PrintTable:
 
         self.header.append(set)
 
-    def SetFooter(self, text = "", type = None, name=None, size=None, colour = None, align = None, indent = None, attr=None):
+    def SetFooter(self, text = "", type = None, font=None, align = None, indent = None, colour = None, size = None):
         set = { "Text": text }
 
-        if name == None:
-            set["Name"] = self.footer_font_name
+        if font == None:
+            set["Font"] = copy.copy(self.default_font)
         else:
-            set["Name"] = name
+            set["Font"] = font
 
-        if size == None:
-            set["Size"] = self.footer_font_size
-        else:
-            set["Size"] = size
+        if colour != None:
+            setfont = set["Font"]
+            setfont["Colour"] = self.GetColour(colour)
 
-        if colour == None:
-            set["Colour"] = self.footer_font_colour
-        else:
-            set["Colour"] = colour
+        if size != None:
+            setfont = set["Font"]
+            setfont["Size"] = size
 
         if align == None:
             set["Align"] = self.footer_align
@@ -831,11 +857,6 @@ class PrintTable:
             set["Type"] = self.footer_type
         else:
             set["Type"] = type
-
-        if attr == None:
-            set["Attr"] = self.footer_font_attr
-        else:
-            set["Attr"] = attr
 
         self.footer.append(set)
 
@@ -857,7 +878,6 @@ class PrintTable:
             frame.SetSize(self.preview_frame_size)
         frame.Show(true)
 
-
     def Print(self):
         pdd = wxPrintDialogData()
         pdd.SetPrintData(self.printData)
@@ -872,9 +892,6 @@ class PrintTable:
     def DoDrawing(self, DC):
         size = DC.GetSizeTuple()
         DC.BeginDrawing()
-
-        self.text_font = wxFont(self.text_font_size, wxSWISS, self.text_font_attr, wxNORMAL)
-        self.label_font = wxFont(self.label_font_size, wxSWISS, self.label_font_attr, wxNORMAL)
 
         table = PrintTableDraw(self, DC, size)
         table.data = self.data

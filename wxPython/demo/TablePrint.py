@@ -40,7 +40,7 @@ class TablePanel(wxPanel):
         eval(code)
 
     def ReadData(self):
-        test_file = "./data/TestTable.txt"
+        test_file = "./data/testtable.txt"
         file = open(test_file,'r',1)
         i = 0
 
@@ -75,6 +75,7 @@ class TablePanel(wxPanel):
 
         prt.SetHeader("wxWindows Applications")
         prt.SetFooter()
+        prt.SetFooter("Date: ", type = "Date", align=wxALIGN_RIGHT, indent = -2, colour = wxNamedColour('RED'))
         prt.Preview()
 
     def PreviewNarrow(self):
@@ -104,7 +105,7 @@ class TablePanel(wxPanel):
         prt.label_font_colour = wxNamedColour('WHITE')
         prt.SetHeader("wxWindows Applications", colour = wxNamedColour('RED'))
 
-        prt.SetHeader("Date", align=wxALIGN_RIGHT, indent = -2, colour = wxNamedColour('BLUE'))
+        prt.SetHeader("Printed: ", type = "Date & Time", align=wxALIGN_RIGHT, indent = -2, colour = wxNamedColour('BLUE'))
         prt.SetFooter("Page No", colour = wxNamedColour('RED'), type ="Num")
         prt.Preview()
 

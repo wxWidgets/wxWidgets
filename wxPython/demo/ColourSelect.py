@@ -5,9 +5,12 @@
 #
 # Author:       Lorne White (email: lorne.white@telusplanet.net)
 #
-# Version       0.5
-# Date:         Feb 26, 2001
+# Version       0.6
+# Date:         Nov 14, 2001
 # Licence:      wxWindows license
+
+# Change Log:  Add Label parameter to accommodate updated library code
+
 #----------------------------------------------------------------------------
 
 from wxPython.wx import *
@@ -45,9 +48,12 @@ class TestColourSelect(wxPanel):
         for i in range(len(colours)):
             wxStaticText(self, -1, names[i], wxPoint(self.x_pos, self.y_pos), wxSize(-1, -1))   # name
 
-            val = ColourSelect(self, -1, colours[i], wxPoint(self.x_pos+100, self.y_pos), sizes[i])     # colour selection button
+            val = ColourSelect(self, -1, "", colours[i], wxPoint(self.x_pos+100, self.y_pos), sizes[i])     # colour selection button
             self.set_val.append(val)     # store control for reference
             self.y_pos = self.y_pos + delta
+
+        self.y_pos = self.y_pos - delta
+        ColourSelect(self, -1, "Color Label", colours[0], wxPoint(self.x_pos+200, self.y_pos), sizes[0])     # colour selection button
 
 
     def OnClick(self, event):

@@ -5,8 +5,8 @@
 # Author:       Lorne White (email: lorne.white@telusplanet.net)
 #
 # Created:
-# Version       0.90
-# Date:         July 19, 2001
+# Version       0.92
+# Date:         Nov 26, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
