@@ -1451,6 +1451,8 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 #endif
     pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
 
+    int w,h;
+    
     if (m_scaleY != 1.0)
     {
          // If there is a user or actually any scale applied to
@@ -1464,6 +1466,14 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
          
          // actually apply scaled font
          pango_layout_set_font_description( m_layout, m_fontdesc );
+        
+         pango_layout_get_pixel_size( m_layout, &w, &h );
+         if ( m_backgroundMode == wxSOLID )
+         {
+            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
+            gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
+            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
+         }
          
          // Draw layout.
          gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
@@ -1476,19 +1486,17 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     }
     else
     {
-         // Draw layout.
-         gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
+        pango_layout_get_pixel_size( m_layout, &w, &h );
+        if ( m_backgroundMode == wxSOLID )
+        {
+            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
+            gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
+            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
+        }
+        // Draw layout.
+        gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
     }
     
-#if 0
-    // Measure layout
-    int w,h;
-    pango_layout_get_pixel_size( m_layout, &w, &h );
-#else
-    int w = 10;
-    int h = 10;
-#endif
-
     wxCoord width = w;
     wxCoord height = h;
     
