@@ -2524,6 +2524,9 @@ wxWindowGTK::~wxWindowGTK()
     if (g_activeFrame == this)
         g_activeFrame = NULL;
 
+    if ( g_delayedFocus == this )
+        g_delayedFocus = NULL;
+
     m_isBeingDeleted = TRUE;
     m_hasVMT = FALSE;
 
