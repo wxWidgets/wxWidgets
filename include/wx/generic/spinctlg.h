@@ -92,7 +92,7 @@ public:
 
 protected:
     // override the base class virtuals involved into geometry calculations
-    virtual wxSize DoGetBestClientSize() const;
+    virtual wxSize DoGetBestSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // common part of all ctors

@@ -16,12 +16,14 @@
 #pragma interface "spinbutt.h"
 #endif
 
+class WXDLLEXPORT wxArrowButton; // internal
+
 class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase
 {
     DECLARE_DYNAMIC_CLASS(wxSpinButton)
         
 public:
-    wxSpinButton() { }
+    wxSpinButton() : m_up( 0 ), m_down( 0 ), m_pos( 0 ) { }
     
     wxSpinButton(wxWindow *parent,
         wxWindowID id = -1,
@@ -29,6 +31,9 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxSP_VERTICAL,
         const wxString& name = "wxSpinButton")
+        : m_up( 0 ),
+        m_down( 0 ),
+        m_pos( 0 )
     {
         Create(parent, id, pos, size, style, name);
     }
@@ -51,14 +56,24 @@ public:
     void SetRange(int minVal, int maxVal);
     
     // Implementation
-    virtual void Command(wxCommandEvent& event) { (void)ProcessCommand(event); };
+    virtual void Command(wxCommandEvent& event)
+        { (void)ProcessCommand(event); };
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
-    
-protected:
-    int   m_min;
-    int   m_max;
+public:
+    // implementation detail
+    void Increment( int delta );
+
+private:
+    virtual void DoSetSize(int x, int y, int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual wxSize DoGetBestSize() const;
+
+    wxArrowButton* m_up;
+    wxArrowButton* m_down;
+    int m_pos;
 };
 
 #endif

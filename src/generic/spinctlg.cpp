@@ -190,7 +190,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     }
     DoSetSize(pos.x, pos.y, csize.x, csize.y);
 #else
-    DoSetSize(pos.x, pos.y, size.x, size.y);
+    wxSize best = GetBestSize();
+    if ( size.x != -1 ) best.x = size.x;
+    if ( size.y != -1 ) best.y = size.y;
+    DoSetSize(pos.x, pos.y, best.x, best.y);
 #endif
     // have to disable this window to avoid interfering it with message
     // processing to the text and the button... but pretend it is enabled to
@@ -220,7 +223,7 @@ wxSpinCtrl::~wxSpinCtrl()
 // geometry
 // ----------------------------------------------------------------------------
 
-wxSize wxSpinCtrl::DoGetBestClientSize() const
+wxSize wxSpinCtrl::DoGetBestSize() const
 {
     wxSize sizeBtn = m_btn->GetBestSize(),
            sizeText = m_text->GetBestSize();
