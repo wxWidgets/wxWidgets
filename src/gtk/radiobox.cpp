@@ -277,7 +277,11 @@ bool wxRadioBox::Show( bool show )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid radiobox") );
 
-    wxWindow::Show( show );
+    if (!wxControl::Show(show))
+    {
+        // nothing to do
+        return FALSE;
+    }
 
     if ((m_windowStyle & wxNO_BORDER) != 0)
         gtk_widget_hide( m_widget );

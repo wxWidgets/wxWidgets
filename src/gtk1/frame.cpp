@@ -615,7 +615,6 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 
 #if wxUSE_TOOLBAR
         /* tool bar */
-/*
         if (m_frameToolBar)
         {
             if (!m_toolBarDetached)
@@ -627,7 +626,6 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
             else
                 (*height) -= wxPLACE_HOLDER;
         }
-*/
 #endif
 
         /* mini edge */
@@ -661,7 +659,6 @@ void wxFrame::DoSetClientSize( int width, int height )
 
 #if wxUSE_TOOLBAR
         /* tool bar */
-/*
         if (m_frameToolBar)
         {
             if (!m_toolBarDetached)
@@ -673,7 +670,6 @@ void wxFrame::DoSetClientSize( int width, int height )
             else
                 height += wxPLACE_HOLDER;
         }
-*/
 #endif
 
     DoSetSize( -1, -1, width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0 );

@@ -208,12 +208,14 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 
 
+#if defined(__VISAGECPP__)
 typedef uLong (ZEXPORT _Optlink *check_func) OF((uLong check, const Bytef *buf,
 				       uInt len));
-#if defined(__VISAGECPP__)
 voidpf _Optlink zcalloc OF((voidpf opaque, unsigned items, unsigned size));
 void  _Optlink zcfree OF((voidpf opaque, voidpf ptr));
 #else
+typedef uLong (ZEXPORT *check_func) OF((uLong check, const Bytef *buf,
+				       uInt len));
 voidpf zcalloc OF((voidpf opaque, unsigned items, unsigned size));
 void   zcfree  OF((voidpf opaque, voidpf ptr));
 #endif

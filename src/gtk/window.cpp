@@ -1122,6 +1122,10 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
+	    
+            node = node->Next();
+	    if (!child->IsShown())
+	        continue;
 
             if (child->m_isStaticBox)
             {
@@ -1161,7 +1165,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
                     break;
                 }
             }
-            node = node->Next();
         }
     }
 
@@ -1247,6 +1250,10 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
         {
             wxWindow *child = (wxWindow*)node->Data();
 
+            node = node->Next();
+	    if (!child->IsShown())
+	        continue;
+
             if (child->m_isStaticBox)
             {
                 // wxStaticBox is transparent in the box itself
@@ -1285,7 +1292,6 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
                     break;
                 }
             }
-            node = node->Next();
         }
     }
 
@@ -1364,6 +1370,10 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
         {
             wxWindow *child = (wxWindow*)node->Data();
 
+            node = node->Next();
+	    if (!child->IsShown())
+	        continue;
+
             if (child->m_isStaticBox)
             {
                 // wxStaticBox is transparent in the box itself
@@ -1402,7 +1412,6 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
                     break;
                 }
             }
-            node = node->Next();
         }
     }
 
