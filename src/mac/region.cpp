@@ -194,7 +194,7 @@ bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
 //-----------------------------------------------------------------------------
 
 // Outer bounds of region
-void wxRegion::GetBox(long& x, long& y, long&w, long &h) const
+void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
 {
 	if (m_refData) 
 	{
@@ -213,7 +213,7 @@ void wxRegion::GetBox(long& x, long& y, long&w, long &h) const
 
 wxRect wxRegion::GetBox() const
 {
-    long x, y, w, h;
+    wxCoord x, y, w, h;
     GetBox(x, y, w, h);
     return wxRect(x, y, w, h);
 }
