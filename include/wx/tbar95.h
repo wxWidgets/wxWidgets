@@ -8,4 +8,6 @@
 #elif defined(__WXGTK__)
 #include "wx/gtk/tbar95.h"
 #endif
+
+#endif
     // _WX_TBAR95_H_BASE_
