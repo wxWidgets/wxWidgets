@@ -809,9 +809,10 @@ int wxEntryStart( int& argc, char *argv[] )
     if (!wxOKlibc()) wxConvCurrent = (wxMBConv*) NULL;
 #endif
 
-    gdk_threads_enter();
-
     gtk_init( &argc, &argv );
+
+    /* we can not enter threads before gtk_init is done */
+    gdk_threads_enter();
 
     wxSetDetectableAutoRepeat( TRUE );
 
