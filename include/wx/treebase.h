@@ -61,8 +61,8 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_4
     // deprecated: only for compatibility, don't work on 64 bit archs
-    wxTreeItemId(long item) { m_pItem = (wxTreeItemIdValue)item; }
-    operator long() const { return (long)m_pItem; }
+    wxTreeItemId(long item) { wxULongToPtr(m_pItem, item); }
+    operator long() const { return (long)wxPtrToUInt(m_pItem); }
 #else // !WXWIN_COMPATIBILITY_2_4
     operator bool() const { return IsOk(); }
 #endif // WXWIN_COMPATIBILITY_2_4/!WXWIN_COMPATIBILITY_2_4
