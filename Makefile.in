@@ -1449,7 +1449,7 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/wxPython
 	mkdir $(DISTDIR)/wxPython/wxPython/lib
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/PyCrust
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/PyCrust/decor
+	mkdir $(DISTDIR)/wxPython/wxPython/lib/PyCrust/wxd
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/colourchooser
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/editor
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/mixins
@@ -1482,7 +1482,7 @@ PYTHON_DIST:
 	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
 	cp $(WXDIR)/wxPython/wxPython/lib/*.py $(DISTDIR)/wxPython/wxPython/lib
 	cp $(WXDIR)/wxPython/wxPython/lib/PyCrust/*.py $(DISTDIR)/wxPython/wxPython/lib/PyCrust
-	cp $(WXDIR)/wxPython/wxPython/lib/PyCrust/decor/*.py $(DISTDIR)/wxPython/wxPython/lib/PyCrust/decor
+	cp $(WXDIR)/wxPython/wxPython/lib/PyCrust/wxd/*.py $(DISTDIR)/wxPython/wxPython/lib/PyCrust/wxd
 	cp $(WXDIR)/wxPython/wxPython/lib/colourchooser/*.py $(DISTDIR)/wxPython/wxPython/lib/colourchooser
 	cp $(WXDIR)/wxPython/wxPython/lib/editor/*.py $(DISTDIR)/wxPython/wxPython/lib/editor
 	cp $(WXDIR)/wxPython/wxPython/lib/mixins/*.py $(DISTDIR)/wxPython/wxPython/lib/mixins
