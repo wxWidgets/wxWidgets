@@ -19,7 +19,7 @@ Rem The following line is for a specific environment -- edit, or comment out
 if not %@INDEX["%WXDIR%","wx2stable"] == "-1" set FATWXWIN=d:\wx2sta~1\wxwind~1
 
 echo Full wxWindows path is %FULLWXWIN%, FAT path is %FATWXWIN%
-set BUILDDEST=o:\wxWinBuild
+set BUILDDEST=%TEMP%\wxWinBuild
 Rem Only carry on if we haven't specified a single target
 set CARRYON=0
 
@@ -217,12 +217,12 @@ make -f makefile.b32
 cd %WXDIR%\contrib\samples\ogl\ogledit
 make -f makefile.b32 clean
 make -f makefile.b32
-copy *.exe %BUILDDEST%\BC55Release
+copy *.exe %BUILDDEST%\BC55Debug
 make -f makefile.b32 clean
 cd %WXDIR%\contrib\samples\ogl\studio
 make -f makefile.b32 clean
 make -f makefile.b32
-copy *.exe %BUILDDEST%\BC55Release
+copy *.exe %BUILDDEST%\BC55Debug
 make -f makefile.b32 clean
 cd %WXDIR%\contrib\src\ogl
 make -f makefile.b32 clean
