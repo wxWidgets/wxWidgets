@@ -1087,12 +1087,11 @@ wxEvtHandler::ProcessEventIfMatches(const wxEventTableEntryBase& entry,
             wxTheApp->HandleEvent(handler, (wxEventFunction)entry.m_fn, event);
         }
         else
-#else // !wxUSE_EXCEPTIONS
+#endif // wxUSE_EXCEPTIONS
         {
             // no need for an extra virtual function call
             (handler->*((wxEventFunction) (entry.m_fn)))(event);
         }
-#endif // wxUSE_EXCEPTIONS
 
         if (!event.GetSkipped())
             return true;
