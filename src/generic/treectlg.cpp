@@ -2996,17 +2996,15 @@ void wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
     wxClientDC dc(this);
     PrepareDC(dc);
 
-    int cw = 0;
-    int ch = 0;
-    GetClientSize( &cw, &ch );
+    wxRect client = GetClientRect();
 
     wxRect rect;
-    rect.x = dc.LogicalToDeviceX( 0 );
-    rect.width = cw;
-    rect.y = dc.LogicalToDeviceY( item->GetY() );
-    rect.height = ch;
+    rect.x = dc.LogicalToDeviceX(-client.x);
+    rect.width = client.width;
+    rect.y = dc.LogicalToDeviceY(-client.y + item->GetY());
+    rect.height = client.height;
 
-    Refresh( TRUE, &rect );
+    Refresh(TRUE, &rect);
 
     AdjustMyScrollbars();
 }
@@ -3016,19 +3014,17 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
     if (m_dirty) return;
 
     wxClientDC dc(this);
-    PrepareDC( dc );
+    PrepareDC(dc);
 
-    int cw = 0;
-    int ch = 0;
-    GetClientSize( &cw, &ch );
+    wxRect client = GetClientRect();
 
     wxRect rect;
-    rect.x = dc.LogicalToDeviceX( 0 );
-    rect.y = dc.LogicalToDeviceY( item->GetY() );
-    rect.width = cw;
+    rect.x = dc.LogicalToDeviceX(-client.x);
+    rect.y = dc.LogicalToDeviceY(-client.y + item->GetY());
+    rect.width = client.width;
     rect.height = GetLineHeight(item); //dc.GetCharHeight() + 6;
 
-    Refresh( TRUE, &rect );
+    Refresh(TRUE, &rect);
 }
 
 void wxGenericTreeCtrl::RefreshSelected()
