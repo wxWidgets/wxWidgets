@@ -16,6 +16,9 @@ python_dir:=python$(shell python -c "import sys;print sys.version[:3]")
 cross_host=i586-mingw32msvc
 cross_build=$(shell ./config.guess)
 
+config_cache=../config_deb.cache
+config_cache_cross=../config_deb_cross.cache
+
 # Packages to build:
 package_wxbase_lib=libwxbase$(release)
 package_wxbase_dev=libwxbase$(release)-dev
@@ -54,9 +57,9 @@ objdir_i18n=locale
 objdir_gtk_univ=objs_gtk_univ
 
 objdir_wxbase_msw_dev=objs_wxbase_msw_dev
-objdir_wxbase_msw_dev=objs_wxbase_msw_dbg
+objdir_wxbase_msw_dbg=objs_wxbase_msw_dbg
 objdir_msw_dev=objs_msw_dev
-objdir_msw_dev=objs_msw_dbg
+objdir_msw_dbg=objs_msw_dbg
 
 objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) $(objdir_gtk_univ) \
@@ -218,7 +221,7 @@ build-wxbase-shared-stamp:
 	mkdir -p $(objdir_wxbase_shared)
 	cd $(objdir_wxbase_shared) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache) \
 				--disable-gui \
 				--enable-soname \
 				--with-zlib=sys \
@@ -230,7 +233,7 @@ build-wxbase-static-stamp:
 	mkdir -p $(objdir_wxbase_static)
 	cd $(objdir_wxbase_static) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache) \
 				--disable-gui \
 				--disable-shared \
 				--with-zlib=sys \
@@ -242,7 +245,7 @@ build-wxbase-debug-stamp:
 	mkdir -p $(objdir_wxbase_debug)
 	cd $(objdir_wxbase_debug) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache) \
 				--disable-gui \
 				--enable-debug \
 				--enable-soname \
@@ -255,7 +258,7 @@ build-gtk-shared-stamp:
 	mkdir -p $(objdir_gtk_shared)
 	cd $(objdir_gtk_shared) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache) \
 				--with-gtk \
 				--with-opengl \
 				--enable-soname \
@@ -271,7 +274,7 @@ build-gtk-static-stamp:
 	mkdir -p $(objdir_gtk_static)
 	cd $(objdir_gtk_static) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache) \
 				--with-gtk \
 				--with-opengl \
 				--disable-shared \
@@ -287,7 +290,7 @@ build-gtk-debug-stamp:
 	mkdir -p $(objdir_gtk_debug)
 	cd $(objdir_gtk_debug) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache) \
 				--with-gtk \
 				--with-opengl \
 				--enable-debug \
@@ -304,7 +307,7 @@ build-gtk-univ-stamp:
 	mkdir -p $(objdir_gtk_univ)
 	cd $(objdir_gtk_univ) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache) \
 				--with-gtk \
 				--with-opengl \
 				--enable-universal \
@@ -391,7 +394,7 @@ build-wxbase-msw-dev-stamp:
 	mkdir -p $(objdir_wxbase_msw_dev)
 	cd $(objdir_wxbase_msw_dev) \
 		&& ../configure --prefix=/usr/$(cross_host) \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
 				--disable-gui \
@@ -403,7 +406,7 @@ build-wxbase-msw-dbg-stamp:
 	mkdir -p $(objdir_wxbase_msw_dbg)
 	cd $(objdir_wxbase_msw_dbg) \
 		&& ../configure --prefix=/usr/$(cross_host) \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
 				--disable-gui \
@@ -416,7 +419,7 @@ build-msw-dev-stamp:
 	mkdir -p $(objdir_msw_dev)
 	cd $(objdir_msw_dev) \
 		&& ../configure --prefix=/usr/$(cross_host) \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
 		&& $(MAKE)
@@ -427,7 +430,7 @@ build-msw-dbg-stamp:
 	mkdir -p $(objdir_msw_dbg)
 	cd $(objdir_msw_dbg) \
 		&& ../configure --prefix=/usr/$(cross_host) \
-				--cache-file=../config_deb.cache \
+				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
 				--enable-debug \
@@ -628,7 +631,7 @@ install-wxbase-msw-dbg: build-wxbase-msw-dbg-stamp
 	dh_clean -k
 	dh_installdirs
 	cp -a $(objdir_wxbase_msw_dbg)/lib/* debian/$(package_wxbase_msw_dbg)/usr/$(cross_host)/lib
-	cp $(objdir_wxbase_msw_dbg)/wxbase-$(release)-$(cross_host)-config debian/$(package_wxbase_msw_dbg)/usr/bin/
+	cp $(objdir_wxbase_msw_dbg)/wxbased-$(release)-$(cross_host)-config debian/$(package_wxbase_msw_dbg)/usr/bin/
 	$(cross_host)-strip --strip-debug debian/$(package_wxbase_msw_dbg)/usr/$(cross_host)/lib/*.a
 
 install-msw-dev: DH_OPTIONS=-p$(package_msw_dev)
@@ -648,7 +651,7 @@ install-msw-dbg: build-msw-dbg-stamp
 	dh_clean -k
 	dh_installdirs
 	cp -a $(objdir_msw_dbg)/lib/* debian/$(package_msw_dbg)/usr/$(cross_host)/lib
-	cp $(objdir_msw_dbg)/wxmsw-$(release)-$(cross_host)-config debian/$(package_msw_dbg)/usr/bin/
+	cp $(objdir_msw_dbg)/wxmswd-$(release)-$(cross_host)-config debian/$(package_msw_dbg)/usr/bin/
 	$(cross_host)-strip --strip-debug debian/$(package_msw_dbg)/usr/$(cross_host)/lib/*.a
 
 install-headers-msw: DH_OPTIONS=-p$(package_headers_msw)
@@ -680,7 +683,7 @@ binary-common:
 
 	@# Don't strip debug libs at all, and strip cross libs elsewhere
 	@# with the cross host tools until dh_strip gets smarter.
-	dh_strip -N$(package_gtk_dbg) -N$(package_wxbase_dbg) -N$(package_wxbase_msw_dev) -N$(package_msw_dev)
+	dh_strip -N$(package_gtk_dbg) -N$(package_wxbase_dbg) -N$(package_wxbase_msw_dbg) -N$(package_msw_dbg)
 
 	dh_compress
 	dh_fixperms
@@ -696,14 +699,14 @@ binary-common:
 # building the arch specific package files needed to create them.
 binary-indep: build_all install
 	$(MAKE) -f debian/rules \
-	DH_OPTIONS="-i -N$(package_wxbase_msw_dev) -N$(package_msw_dev) -N$(package_headers_msw)" \
-	binary-common
+		DH_OPTIONS="-i -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		binary-common
 
 # Build just the architecture-dependent files here.
 binary-arch: build_arch install_arch
 	$(MAKE) -f debian/rules \
-	DH_OPTIONS="-a -N$(package_wxbase_msw_dev) -N$(package_msw_dev) -N$(package_headers_msw)" \
-	binary-common
+		DH_OPTIONS="-a -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		binary-common
 
 # Build all packages target.
 binary: binary-arch binary-indep
@@ -715,8 +718,8 @@ binary: binary-arch binary-indep
 # that is not in the control file.
 binary-cross: control-files-stamp $(install_all_cross)
 	$(MAKE) -f debian/rules \
-	DH_OPTIONS="-p$(package_wxbase_msw_dev) -p$(package_msw_dev) -p$(package_headers_msw)" \
-	binary-common
+		DH_OPTIONS="-p$(package_wxbase_msw_dev) -p$(package_wxbase_msw_dbg) -p$(package_msw_dev) -p$(package_msw_dbg) -p$(package_headers_msw)" \
+		binary-common
 
 
 ############################################################################
