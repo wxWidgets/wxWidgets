@@ -835,9 +835,17 @@ size_t wxGenericTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recurs
 
 void wxGenericTreeCtrl::SetWindowStyle(const long styles)
 {
-        // right now, just sets the styles.  Eventually, we may
-        // want to update the inherited styles, but right now
-        // none of the parents has updatable styles
+    if (!HasFlag(wxTR_HIDE_ROOT) && (styles & wxTR_HIDE_ROOT))
+    {
+        // if we will hide the root, make sure children are visible
+        m_anchor->SetHasPlus();
+        m_anchor->Expand();
+        CalculatePositions();
+    }
+
+    // right now, just sets the styles.  Eventually, we may
+    // want to update the inherited styles, but right now
+    // none of the parents has updatable styles
     m_windowStyle = styles;
     m_dirty = TRUE;
 }
