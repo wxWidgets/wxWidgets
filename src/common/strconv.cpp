@@ -34,6 +34,10 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
+#include "wx/strconv.h"
+
+#if wxUSE_WCHAR_T
+
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
 #endif
@@ -46,56 +50,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "wx/module.h"
-#include "wx/strconv.h"
-
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     #define wxHAVE_WIN32_MB2WC
 #endif // __WIN32__ but !__WXMICROWIN__
 
 // ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-#if wxUSE_WCHAR_T
-    WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc;
-    WXDLLIMPEXP_DATA_BASE(wxCSConv) wxConvLocal((const wxChar *)NULL);
-    WXDLLIMPEXP_DATA_BASE(wxCSConv) wxConvISO8859_1(_T("iso-8859-1"));
-#else
-    // stand-ins in absence of wchar_t
-    WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
-                                    wxConvFile,
-                                    wxConvISO8859_1,
-                                    wxConvLocal,
-                                    wxConvUTF8;
-#endif // wxUSE_WCHAR_T
-
-WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = &wxConvLibc;
-
-class wxStrConvModule: public wxModule
-{
-public:
-    wxStrConvModule() : wxModule() { }
-    virtual bool OnInit() { return true; }
-    virtual void OnExit()
-    {
-#if wxUSE_WCHAR_T
-         wxConvLocal.Clear();
-         wxConvISO8859_1.Clear();
-#endif
-    }
-
-    DECLARE_DYNAMIC_CLASS(wxStrConvModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxStrConvModule, wxModule)
-
-
-// ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
-#if wxUSE_WCHAR_T
 
 #ifdef __SALFORDC__
     #include <clib.h>
@@ -115,12 +76,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxStrConvModule, wxModule)
 #define BSWAP_UCS4(str, len) { unsigned _c; for (_c=0; _c<len; _c++) str[_c]=wxUINT32_SWAP_ALWAYS(str[_c]); }
 #define BSWAP_UTF16(str, len) { unsigned _c; for (_c=0; _c<len; _c++) str[_c]=wxUINT16_SWAP_ALWAYS(str[_c]); }
 
-// under Unix SIZEOF_WCHAR_T is defined by configure, but under other platforms
-// it might be not defined - assume the most common value
-#ifndef SIZEOF_WCHAR_T
-    #define SIZEOF_WCHAR_T 2
-#endif // !defined(SIZEOF_WCHAR_T)
-
 #if SIZEOF_WCHAR_T == 4
     #define WC_NAME         "UCS4"
     #define WC_BSWAP         BSWAP_UCS4
@@ -139,8 +94,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxStrConvModule, wxModule)
       #define WC_NAME_BEST  "UTF-16LE"
     #endif
 #else // sizeof(wchar_t) != 2 nor 4
-    // I don't know what to do about this
-    #error "Weird sizeof(wchar_t): please report your platform details to wx-users mailing list"
+    // does this ever happen?
+    #error "Unknown sizeof(wchar_t): please report this to wx-dev@lists.wxwindows.org"
 #endif
 
 // ============================================================================
@@ -198,47 +153,9 @@ static size_t decode_utf16(const wxUint16* input, wxUint32& output)
 // wxMBConv
 // ----------------------------------------------------------------------------
 
-#define IGNORE_LIBC 0
-
 wxMBConv::~wxMBConv()
 {
     // nothing to do here
-}
-
-size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
-{
-#if IGNORE_LIBC
-    if (buf)
-    {
-        for (size_t i = 0; i < strlen( psz )+1; i++)
-            buf[i] = (wchar_t) psz[i];
-        return strlen( psz );
-    }
-    else
-    {
-        return strlen( psz );
-    }
-#else
-    return wxMB2WC(buf, psz, n);
-#endif
-}
-
-size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
-{
-#if IGNORE_LIBC
-    if (buf)
-    {
-        for (size_t i = 0; i < wxStrlen( psz )+1; i++)
-            buf[i] = (char) psz[i];
-        return wxStrlen( psz );
-    }
-    else
-    {
-        return wxStrlen( psz );
-    }
-#else
-    return wxWC2MB(buf, psz, n);
-#endif
 }
 
 const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
@@ -282,10 +199,22 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
 }
 
 // ----------------------------------------------------------------------------
-// UTF-7
+// wxMBConvLibc
 // ----------------------------------------------------------------------------
 
-WXDLLIMPEXP_DATA_BASE(wxMBConvUTF7) wxConvUTF7;
+size_t wxMBConvLibc::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+    return wxMB2WC(buf, psz, n);
+}
+
+size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+    return wxWC2MB(buf, psz, n);
+}
+
+// ----------------------------------------------------------------------------
+// UTF-7
+// ----------------------------------------------------------------------------
 
 #if 0
 static char utf7_setD[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -315,8 +244,6 @@ size_t wxMBConvUTF7::WC2MB(char * WXUNUSED(buf),
 // ----------------------------------------------------------------------------
 // UTF-8
 // ----------------------------------------------------------------------------
-
-WXDLLIMPEXP_DATA_BASE(wxMBConvUTF8) wxConvUTF8;
 
 static wxUint32 utf8_max[]=
     { 0x7f, 0x7ff, 0xffff, 0x1fffff, 0x3ffffff, 0x7fffffff, 0xffffffff };
@@ -433,23 +360,15 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // ----------------------------------------------------------------------------
 
 #ifdef WORDS_BIGENDIAN
-#define wxMBConvUTF16straight wxMBConvUTF16BE
-#define wxMBConvUTF16swap     wxMBConvUTF16LE
+    #define wxMBConvUTF16straight wxMBConvUTF16BE
+    #define wxMBConvUTF16swap     wxMBConvUTF16LE
 #else
-#define wxMBConvUTF16swap     wxMBConvUTF16BE
-#define wxMBConvUTF16straight wxMBConvUTF16LE
+    #define wxMBConvUTF16swap     wxMBConvUTF16BE
+    #define wxMBConvUTF16straight wxMBConvUTF16LE
 #endif
 
 
-WXDLLIMPEXP_DATA_BASE(wxMBConvUTF16LE) wxConvUTF16LE;
-WXDLLIMPEXP_DATA_BASE(wxMBConvUTF16BE) wxConvUTF16BE;
-
-
-
-
-
 #ifdef WC_UTF16
-
 
 // copy 16bit MB to 16bit String
 size_t wxMBConvUTF16straight::MB2WC(wchar_t *buf, const char *psz, size_t n) const
@@ -918,8 +837,8 @@ public:
     wxMBConv_iconv(const wxChar *name);
     virtual ~wxMBConv_iconv();
 
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n);
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n);
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 
     bool IsOk() const
         { return (m2w != (iconv_t)-1) && (w2m != (iconv_t)-1); }
@@ -1038,7 +957,7 @@ wxMBConv_iconv::~wxMBConv_iconv()
         iconv_close(w2m);
 }
 
-size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n)
+size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
     size_t inbuf = strlen(psz);
     size_t outbuf = n * SIZEOF_WCHAR_T;
@@ -1095,7 +1014,7 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n)
     return res;
 }
 
-size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n)
+size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
     size_t inbuf = wxWcslen(psz) * SIZEOF_WCHAR_T;
     size_t outbuf = n;
@@ -1174,17 +1093,22 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
 class wxMBConv_win32 : public wxMBConv
 {
 public:
+    wxMBConv_win32()
+    {
+        m_CodePage = CP_ACP;
+    }
+
     wxMBConv_win32(const wxChar* name)
-        {
-            m_CodePage = wxCharsetToCodepage(name);
-        }
+    {
+        m_CodePage = wxCharsetToCodepage(name);
+    }
 
     wxMBConv_win32(wxFontEncoding encoding)
-        {
-            m_CodePage = wxEncodingToCodepage(encoding);
-        }
+    {
+        m_CodePage = wxEncodingToCodepage(encoding);
+    }
 
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
+    size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
     {
         const size_t len = ::MultiByteToWideChar
                              (
@@ -1201,7 +1125,7 @@ public:
         return len ? (buf ? len : len - 1) : (size_t)-1;
     }
 
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
+    size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
     {
         const size_t len = ::WideCharToMultiByte
                              (
@@ -1264,7 +1188,7 @@ public:
         Init();
     }
 
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t WXUNUSED(n))
+    size_t MB2WC(wchar_t *buf, const char *psz, size_t WXUNUSED(n)) const
     {
         size_t inbuf = strlen(psz);
         if (buf)
@@ -1272,7 +1196,7 @@ public:
         return inbuf;
     }
 
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t WXUNUSED(n))
+    size_t WC2MB(char *buf, const wchar_t *psz, size_t WXUNUSED(n)) const
     {
         const size_t inbuf = wxWcslen(psz);
         if (buf)
@@ -1565,6 +1489,37 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     return len;
 }
 
-#endif // wxUSE_WCHAR_T
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+#ifdef __WINDOWS__
+    static wxMBConv_win32 wxConvLibcObj;
+#else
+    static wxMBConvSystem wxConvLibcObj;
+#endif
+
+static wxCSConv wxConvLocalObj(wxFONTENCODING_SYSTEM);
+static wxCSConv wxConvISO8859_1Obj(wxFONTENCODING_ISO8859_1);
+static wxMBConvUTF7 wxConvUTF7Obj;
+static wxMBConvUTF8 wxConvUTF8Obj;
+
+
+WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc = wxConvLibcObj;
+WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal = wxConvLocalObj;
+WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvISO8859_1 = wxConvISO8859_1Obj;
+WXDLLIMPEXP_DATA_BASE(wxMBConvUTF7&) wxConvUTF7 = wxConvUTF7Obj;
+WXDLLIMPEXP_DATA_BASE(wxMBConvUTF8&) wxConvUTF8 = wxConvUTF8Obj;
+WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = &wxConvLibcObj;
+
+#else // !wxUSE_WCHAR_T
+
+// stand-ins in absence of wchar_t
+WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
+                                wxConvISO8859_1,
+                                wxConvLocal,
+                                wxConvUTF8;
+
+#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 
 

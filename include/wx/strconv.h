@@ -33,20 +33,24 @@
 #if wxUSE_WCHAR_T
 
 // ----------------------------------------------------------------------------
-// wxMBConv (base class for conversions, using libc conversion itself)
+// wxMBConv (abstract base class for conversions)
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxMBConv
 {
 public:
     // the actual conversion takes place here
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    //
+    // note that n is the size of the output buffer, not the length of input
+    // (which is always supposed to be NUL-terminated)
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const = 0;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const = 0;
 
-    // No longer inline since BC++ complains.
+    // MB <-> WC
     const wxWCharBuffer cMB2WC(const char *psz) const;
     const wxCharBuffer cWC2MB(const wchar_t *psz) const;
 
+    // convenience functions for converting MB or WC to/from wxWin default
 #if wxUSE_UNICODE
     const wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }
     const wxCharBuffer cWX2MB(const wchar_t *psz) const { return cWC2MB(psz); }
@@ -63,7 +67,22 @@ public:
     virtual ~wxMBConv();
 };
 
-WXDLLIMPEXP_DATA_BASE(extern wxMBConv) wxConvLibc;
+// ----------------------------------------------------------------------------
+// wxMBConvLibc uses standard mbstowcs() and wcstombs() functions for
+//              conversion (hence it depends on the current locale)
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxMBConvLibc : public wxMBConv
+{
+public:
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+};
+
+// not very accurately named because it is not necessarily of type wxMBConvLibc
+// (but the name can't eb changed because of backwards compatibility) default
+// conversion
+WXDLLIMPEXP_DATA_BASE(extern wxMBConv&) wxConvLibc;
 
 // ----------------------------------------------------------------------------
 // wxMBConvUTF7 (for conversion using UTF7 encoding)
@@ -76,7 +95,7 @@ public:
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
-WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF7) wxConvUTF7;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF7&) wxConvUTF7;
 
 // ----------------------------------------------------------------------------
 // wxMBConvUTF8 (for conversion using UTF8 encoding)
@@ -89,7 +108,7 @@ public:
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
-WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF8) wxConvUTF8;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF8&) wxConvUTF8;
 
 // ----------------------------------------------------------------------------
 // wxMBConvUTF16LE (for conversion using UTF16 Little Endian encoding)
@@ -184,8 +203,8 @@ private:
 };
 
 #define wxConvFile wxConvLocal
-WXDLLIMPEXP_DATA_BASE(extern wxCSConv) wxConvLocal;
-WXDLLIMPEXP_DATA_BASE(extern wxCSConv) wxConvISO8859_1;
+WXDLLIMPEXP_DATA_BASE(extern wxCSConv&) wxConvLocal;
+WXDLLIMPEXP_DATA_BASE(extern wxCSConv&) wxConvISO8859_1;
 WXDLLIMPEXP_DATA_BASE(extern wxMBConv *) wxConvCurrent;
 
 // ----------------------------------------------------------------------------
@@ -233,8 +252,9 @@ public:
     const char* cWX2MB(const char *psz) const { return psz; }
 };
 
+#define wxConvFile wxConvLocal
+
 WXDLLIMPEXP_DATA_BASE(extern wxMBConv) wxConvLibc,
-                                       wxConvFile,
                                        wxConvLocal,
                                        wxConvISO8859_1,
                                        wxConvUTF8;
