@@ -25,6 +25,7 @@
 
 #include "wx/log.h"
 #include "wx/notebook.h"
+#include "wx/imaglist.h"
 #include "wx/sizer.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookXmlHandler, wxXmlResourceHandler)
@@ -58,8 +59,22 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
             wxWindow *wnd = wxDynamicCast(item, wxWindow);
 
             if (wnd)
+            {
                 m_notebook->AddPage(wnd, GetText(wxT("label")),
                                          GetBool(wxT("selected")));
+                if ( HasParam(wxT("bitmap")) )
+                {
+                    wxBitmap bmp = GetBitmap(wxT("bitmap"), wxART_OTHER);
+                    wxImageList *imgList = m_notebook->GetImageList();
+                    if ( imgList == NULL )
+                    {
+                        imgList = new wxImageList( bmp.GetWidth(), bmp.GetHeight() );
+                        m_notebook->AssignImageList( imgList );
+                    }
+                    int imgIndex = imgList->Add(bmp);
+                    m_notebook->SetPageImage(m_notebook->GetPageCount()-1, imgIndex );
+                }
+            }
             else
                 wxLogError(wxT("Error in resource."));
             return wnd;
