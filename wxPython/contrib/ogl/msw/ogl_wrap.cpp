@@ -247,32 +247,31 @@ SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_co
 #define  SWIGTYPE_p_wxScrolledWindow swig_types[14] 
 #define  SWIGTYPE_p_wxWindow swig_types[15] 
 #define  SWIGTYPE_p_double swig_types[16] 
-#define  SWIGTYPE_p_wxPyDrawnShape swig_types[17] 
-#define  SWIGTYPE_p_wxPyDivisionShape swig_types[18] 
+#define  SWIGTYPE_p_wxPyDivisionShape swig_types[17] 
+#define  SWIGTYPE_p_wxPyDrawnShape swig_types[18] 
 #define  SWIGTYPE_p_wxPyPolygonShape swig_types[19] 
 #define  SWIGTYPE_p_wxBitmap swig_types[20] 
 #define  SWIGTYPE_p_wxObject swig_types[21] 
 #define  SWIGTYPE_p_wxPyBitmapShape swig_types[22] 
-#define  SWIGTYPE_p_wxString swig_types[23] 
-#define  SWIGTYPE_p_wxPyShapeEvtHandler swig_types[24] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[25] 
-#define  SWIGTYPE_p_wxPyEllipseShape swig_types[26] 
-#define  SWIGTYPE_p_wxPyShapeCanvas swig_types[27] 
-#define  SWIGTYPE_p_wxPoint swig_types[28] 
-#define  SWIGTYPE_p_wxDiagram swig_types[29] 
-#define  SWIGTYPE_p_wxPyShape swig_types[30] 
-#define  SWIGTYPE_p_wxAttachmentPoint swig_types[31] 
-#define  SWIGTYPE_p_wxClassInfo swig_types[32] 
-#define  SWIGTYPE_p_wxPyLineShape swig_types[33] 
-#define  SWIGTYPE_p_wxPyRectangleShape swig_types[34] 
-#define  SWIGTYPE_p_wxPyCompositeShape swig_types[35] 
-#define  SWIGTYPE_p_wxPyCircleShape swig_types[36] 
-#define  SWIGTYPE_p_wxPen swig_types[37] 
-#define  SWIGTYPE_p_int swig_types[38] 
-#define  SWIGTYPE_p_wxPseudoMetaFile swig_types[39] 
-#define  SWIGTYPE_p_wxPyTextShape swig_types[40] 
-#define  SWIGTYPE_p_wxPyDividedShape swig_types[41] 
-static swig_type_info *swig_types[43];
+#define  SWIGTYPE_p_wxPyShapeEvtHandler swig_types[23] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[24] 
+#define  SWIGTYPE_p_wxPyEllipseShape swig_types[25] 
+#define  SWIGTYPE_p_wxPyShapeCanvas swig_types[26] 
+#define  SWIGTYPE_p_wxPoint swig_types[27] 
+#define  SWIGTYPE_p_wxDiagram swig_types[28] 
+#define  SWIGTYPE_p_wxPyShape swig_types[29] 
+#define  SWIGTYPE_p_wxAttachmentPoint swig_types[30] 
+#define  SWIGTYPE_p_wxClassInfo swig_types[31] 
+#define  SWIGTYPE_p_wxPyLineShape swig_types[32] 
+#define  SWIGTYPE_p_wxPyRectangleShape swig_types[33] 
+#define  SWIGTYPE_p_wxPyCompositeShape swig_types[34] 
+#define  SWIGTYPE_p_wxPyCircleShape swig_types[35] 
+#define  SWIGTYPE_p_wxPen swig_types[36] 
+#define  SWIGTYPE_p_int swig_types[37] 
+#define  SWIGTYPE_p_wxPseudoMetaFile swig_types[38] 
+#define  SWIGTYPE_p_wxPyTextShape swig_types[39] 
+#define  SWIGTYPE_p_wxPyDividedShape swig_types[40] 
+static swig_type_info *swig_types[42];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -390,15 +389,6 @@ SWIGSTATIC(bool)
 SWIG_PyObj_AsBool(PyObject *obj)
 {
   return PyObject_IsTrue(obj) ? true : false;
-}
-
-
-SWIGSTATIC(PyObject*)
-SWIG_PyObj_FromBool(bool value)
-{
-  PyObject *obj = value ? Py_True : Py_False;
-  Py_INCREF(obj);
-  return obj;
 }
 
 
@@ -2598,7 +2588,7 @@ static PyObject *_wrap_PyShapeEvtHandler_base_OnMovePre(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -3576,7 +3566,7 @@ static PyObject *_wrap_PyShape_GetPerimeterPoint(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         PyObject *o = PyFloat_FromDouble((double) (*arg6));
         resultobj = t_output_helper(resultobj,o);
@@ -4019,7 +4009,7 @@ static PyObject *_wrap_PyShape_GetDrawHandles(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4223,7 +4213,7 @@ static PyObject *_wrap_PyShape_Recompute(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4349,7 +4339,7 @@ static PyObject *_wrap_PyShape_IsHighlighted(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4374,7 +4364,7 @@ static PyObject *_wrap_PyShape_Selected(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4399,7 +4389,7 @@ static PyObject *_wrap_PyShape_AncestorSelected(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4601,7 +4591,7 @@ static PyObject *_wrap_PyShape_GetFixedWidth(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4626,7 +4616,7 @@ static PyObject *_wrap_PyShape_GetFixedHeight(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4681,7 +4671,7 @@ static PyObject *_wrap_PyShape_GetSpaceAttachments(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4787,7 +4777,7 @@ static PyObject *_wrap_PyShape_HitTest(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         PyObject *o = PyInt_FromLong((long) (*arg4));
         resultobj = t_output_helper(resultobj,o);
@@ -4850,7 +4840,7 @@ static PyObject *_wrap_PyShape_GetCentreResize(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4905,7 +4895,7 @@ static PyObject *_wrap_PyShape_GetMaintainAspectRatio(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4985,7 +4975,7 @@ static PyObject *_wrap_PyShape_GetDisableLabel(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5236,7 +5226,7 @@ static PyObject *_wrap_PyShape_IsShown(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5616,7 +5606,7 @@ static PyObject *_wrap_PyShape_Constrain(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6612,7 +6602,7 @@ static PyObject *_wrap_PyShape_GetAttachmentPosition(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         PyObject *o = PyFloat_FromDouble((double) (*arg3));
         resultobj = t_output_helper(resultobj,o);
@@ -6676,7 +6666,7 @@ static PyObject *_wrap_PyShape_AttachmentIsValid(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6759,7 +6749,7 @@ static PyObject *_wrap_PyShape_GetAttachmentPositionEdge(PyObject *self, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         PyObject *o = PyFloat_FromDouble((double) (*arg3));
         resultobj = t_output_helper(resultobj,o);
@@ -6870,7 +6860,7 @@ static PyObject *_wrap_PyShape_AttachmentSortTest(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -7008,7 +6998,7 @@ static PyObject *_wrap_PyShape_MoveLineToNewAttachment(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -7129,7 +7119,7 @@ static PyObject *_wrap_PyShape_GetBranchingAttachmentInfo(PyObject *self, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -7180,7 +7170,7 @@ static PyObject *_wrap_PyShape_GetBranchingAttachmentPoint(PyObject *self, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -7518,7 +7508,7 @@ static PyObject *_wrap_PyShape_Draggable(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -7546,7 +7536,7 @@ static PyObject *_wrap_PyShape_HasDescendant(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8385,7 +8375,7 @@ static PyObject *_wrap_PyShape_base_OnMovePre(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9506,7 +9496,7 @@ static PyObject *_wrap_PseudoMetaFile_LoadFromMetaFile(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -9632,7 +9622,7 @@ static PyObject *_wrap_PseudoMetaFile_GetRotateable(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9884,7 +9874,7 @@ static PyObject *_wrap_PseudoMetaFile_IsValid(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -11218,7 +11208,7 @@ static PyObject *_wrap_PyRectangleShape_base_OnMovePre(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -12627,7 +12617,7 @@ static PyObject *_wrap_PyControlPoint_base_OnMovePre(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14093,7 +14083,7 @@ static PyObject *_wrap_PyBitmapShape_base_OnMovePre(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15501,7 +15491,7 @@ static PyObject *_wrap_PyDrawnShape_LoadFromMetaFile(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -16423,7 +16413,7 @@ static PyObject *_wrap_PyDrawnShape_base_OnMovePre(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17272,7 +17262,7 @@ static PyObject *_wrap_OGLConstraint_Evaluate(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17345,7 +17335,7 @@ static PyObject *_wrap_OGLConstraint_Equals(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17596,7 +17586,7 @@ static PyObject *_wrap_PyCompositeShape_ContainsDivision(PyObject *self, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17776,7 +17766,7 @@ static PyObject *_wrap_PyCompositeShape_Recompute(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -18300,7 +18290,7 @@ static PyObject *_wrap_PyCompositeShape_base_OnMovePre(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19701,7 +19691,7 @@ static PyObject *_wrap_PyDividedShape_base_OnMovePre(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -21842,7 +21832,7 @@ static PyObject *_wrap_PyDivisionShape_base_OnMovePre(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -23171,7 +23161,7 @@ static PyObject *_wrap_PyEllipseShape_base_OnMovePre(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -24492,7 +24482,7 @@ static PyObject *_wrap_PyCircleShape_base_OnMovePre(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26039,7 +26029,7 @@ static PyObject *_wrap_PyLineShape_ClearArrow(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -26155,7 +26145,7 @@ static PyObject *_wrap_PyLineShape_DeleteArrowHeadId(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26194,7 +26184,7 @@ static PyObject *_wrap_PyLineShape_DeleteArrowHead(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp3)
         delete arg3;
@@ -26227,7 +26217,7 @@ static PyObject *_wrap_PyLineShape_DeleteLineControlPoint(PyObject *self, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26897,7 +26887,7 @@ static PyObject *_wrap_PyLineShape_IsEnd(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26922,7 +26912,7 @@ static PyObject *_wrap_PyLineShape_IsSpline(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -27391,7 +27381,7 @@ static PyObject *_wrap_PyLineShape_GetAlignmentOrientation(PyObject *self, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -27945,7 +27935,7 @@ static PyObject *_wrap_PyLineShape_base_OnMovePre(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -29558,7 +29548,7 @@ static PyObject *_wrap_PyPolygonShape_base_OnMovePre(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -30911,7 +30901,7 @@ static PyObject *_wrap_PyTextShape_base_OnMovePre(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -32048,7 +32038,7 @@ static PyObject *_wrap_Diagram_GetQuickEditMode(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -32073,7 +32063,7 @@ static PyObject *_wrap_Diagram_GetSnapToGrid(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -32749,7 +32739,7 @@ static PyObject *_wrap_PyShapeCanvas_GetQuickEditMode(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -35097,13 +35087,12 @@ static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0},{"_p
 static swig_type_info _swigt__p_wxScrolledWindow[] = {{"_p_wxScrolledWindow", 0, "wxScrolledWindow *", 0},{"_p_wxScrolledWindow"},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxScrolledWindow},{"_p_wxPyShapeCanvas", _p_wxPyShapeCanvasTo_p_wxScrolledWindow},{0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxWindow},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxWindow},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxWindow},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxWindow},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxWindow},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxWindow},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxWindow},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxWindow},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxWindow},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxWindow},{"_p_wxPanel", _p_wxPanelTo_p_wxWindow},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxWindow},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxWindow},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxWindow},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxWindow},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxWindow},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxWindow},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxWindow},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxWindow},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxWindow},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxWindow},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxWindow},{"_p_wxWindow"},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxWindow},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxWindow},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxWindow},{"_p_wxControl", _p_wxControlTo_p_wxWindow},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxWindow},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow},{"_p_wxPyShapeCanvas", _p_wxPyShapeCanvasTo_p_wxWindow},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxWindow},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxWindow},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxWindow},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxWindow},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxWindow},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxWindow},{"_p_wxFrame", _p_wxFrameTo_p_wxWindow},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxWindow},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxWindow},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxWindow},{"_p_wxDialog", _p_wxDialogTo_p_wxWindow},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxWindow},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxWindow},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxWindow},{0}};
 static swig_type_info _swigt__p_double[] = {{"_p_double", 0, "double *", 0},{"_p_double"},{0}};
-static swig_type_info _swigt__p_wxPyDrawnShape[] = {{"_p_wxPyDrawnShape", 0, "wxPyDrawnShape *", 0},{"_p_wxPyDrawnShape"},{0}};
 static swig_type_info _swigt__p_wxPyDivisionShape[] = {{"_p_wxPyDivisionShape", 0, "wxPyDivisionShape *", 0},{"_p_wxPyDivisionShape"},{0}};
+static swig_type_info _swigt__p_wxPyDrawnShape[] = {{"_p_wxPyDrawnShape", 0, "wxPyDrawnShape *", 0},{"_p_wxPyDrawnShape"},{0}};
 static swig_type_info _swigt__p_wxPyPolygonShape[] = {{"_p_wxPyPolygonShape", 0, "wxPyPolygonShape *", 0},{"_p_wxPyPolygonShape"},{0}};
 static swig_type_info _swigt__p_wxBitmap[] = {{"_p_wxBitmap", 0, "wxBitmap *", 0},{"_p_wxBitmap"},{0}};
 static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0},{"_p_wxQueryLayoutInfoEvent", _p_wxQueryLayoutInfoEventTo_p_wxObject},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject},{"_p_wxPyControlPoint", _p_wxPyControlPointTo_p_wxObject},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxObject},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxObject},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject},{"_p_wxOGLConstraint", _p_wxOGLConstraintTo_p_wxObject},{"_p_wxPyPolygonShape", _p_wxPyPolygonShapeTo_p_wxObject},{"_p_wxPyDivisionShape", _p_wxPyDivisionShapeTo_p_wxObject},{"_p_wxPyDrawnShape", _p_wxPyDrawnShapeTo_p_wxObject},{"_p_wxSizer", _p_wxSizerTo_p_wxObject},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject},{"_p_wxArrowHead", _p_wxArrowHeadTo_p_wxObject},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxObject},{"_p_wxMenu", _p_wxMenuTo_p_wxObject},{"_p_wxFontData", _p_wxFontDataTo_p_wxObject},{"_p_wxPrintData", _p_wxPrintDataTo_p_wxObject},{"_p_wxEvent", _p_wxEventTo_p_wxObject},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject},{"_p_wxTaskBarIcon", _p_wxTaskBarIconTo_p_wxObject},{"_p_wxLayoutAlgorithm", _p_wxLayoutAlgorithmTo_p_wxObject},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject},{"_p_wxFindDialogEvent", _p_wxFindDialogEventTo_p_wxObject},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxObject},{"_p_wxPyShapeCanvas", _p_wxPyShapeCanvasTo_p_wxObject},{"_p_wxControl", _p_wxControlTo_p_wxObject},{"_p_wxPyEllipseShape", _p_wxPyEllipseShapeTo_p_wxObject},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject},{"_p_wxSplitterEvent", _p_wxSplitterEventTo_p_wxObject},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject},{"_p_wxFindReplaceData", _p_wxFindReplaceDataTo_p_wxObject},{"_p_wxPyBitmapShape", _p_wxPyBitmapShapeTo_p_wxObject},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxObject},{"_p_wxColourData", _p_wxColourDataTo_p_wxObject},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxObject},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxObject},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxObject},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxObject},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxObject},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxObject},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxObject},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxObject},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxObject},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject},{"_p_wxPrinter", _p_wxPrinterTo_p_wxObject},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject},{"_p_wxCalculateLayoutEvent", _p_wxCalculateLayoutEventTo_p_wxObject},{"_p_wxPyShapeEvtHandler", _p_wxPyShapeEvtHandlerTo_p_wxObject},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxObject},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxObject},{"_p_wxPyTextShape", _p_wxPyTextShapeTo_p_wxObject},{"_p_wxPyDividedShape", _p_wxPyDividedShapeTo_p_wxObject},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxObject},{"_p_wxImage", _p_wxImageTo_p_wxObject},{"_p_wxFrame", _p_wxFrameTo_p_wxObject},{"_p_wxPyPrintout", _p_wxPyPrintoutTo_p_wxObject},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject},{"_p_wxTaskBarIconEvent", _p_wxTaskBarIconEventTo_p_wxObject},{"_p_wxDiagram", _p_wxDiagramTo_p_wxObject},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxObject},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxObject},{"_p_wxObject"},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxObject},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxObject},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxObject},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxObject},{"_p_wxWindow", _p_wxWindowTo_p_wxObject},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxObject},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxObject},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxObject},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxObject},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxObject},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxObject},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxObject},{"_p_wxSashEvent", _p_wxSashEventTo_p_wxObject},{"_p_wxPrintPreview", _p_wxPrintPreviewTo_p_wxObject},{"_p_wxPyPrintPreview", _p_wxPyPrintPreviewTo_p_wxObject},{"_p_wxPanel", _p_wxPanelTo_p_wxObject},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxObject},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxObject},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxObject},{"_p_wxDialog", _p_wxDialogTo_p_wxObject},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxObject},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxObject},{"_p_wxPyShape", _p_wxPyShapeTo_p_wxObject},{"_p_wxAttachmentPoint", _p_wxAttachmentPointTo_p_wxObject},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxObject},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxObject},{"_p_wxPyCircleShape", _p_wxPyCircleShapeTo_p_wxObject},{"_p_wxPyLineShape", _p_wxPyLineShapeTo_p_wxObject},{"_p_wxPyCompositeShape", _p_wxPyCompositeShapeTo_p_wxObject},{"_p_wxPyRectangleShape", _p_wxPyRectangleShapeTo_p_wxObject},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject},{"_p_wxPseudoMetaFile", _p_wxPseudoMetaFileTo_p_wxObject},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject},{"_p_wxPageSetupDialogData", _p_wxPageSetupDialogDataTo_p_wxObject},{"_p_wxPrintDialogData", _p_wxPrintDialogDataTo_p_wxObject},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject},{"_p_wxShapeRegion", _p_wxShapeRegionTo_p_wxObject},{0}};
 static swig_type_info _swigt__p_wxPyBitmapShape[] = {{"_p_wxPyBitmapShape", 0, "wxPyBitmapShape *", 0},{"_p_wxPyBitmapShape"},{0}};
-static swig_type_info _swigt__p_wxString[] = {{"_p_wxString", 0, "wxString *", 0},{"_p_wxString"},{0}};
 static swig_type_info _swigt__p_wxPyShapeEvtHandler[] = {{"_p_wxPyShapeEvtHandler", 0, "wxPyShapeEvtHandler *", 0},{"_p_wxPyControlPoint", _p_wxPyControlPointTo_p_wxPyShapeEvtHandler},{"_p_wxPyRectangleShape", _p_wxPyRectangleShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyCompositeShape", _p_wxPyCompositeShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyCircleShape", _p_wxPyCircleShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyLineShape", _p_wxPyLineShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyDividedShape", _p_wxPyDividedShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyEllipseShape", _p_wxPyEllipseShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyPolygonShape", _p_wxPyPolygonShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyDrawnShape", _p_wxPyDrawnShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyDivisionShape", _p_wxPyDivisionShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyShape", _p_wxPyShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyShapeEvtHandler"},{"_p_wxPyBitmapShape", _p_wxPyBitmapShapeTo_p_wxPyShapeEvtHandler},{"_p_wxPyTextShape", _p_wxPyTextShapeTo_p_wxPyShapeEvtHandler},{0}};
 static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxEvtHandler},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxEvtHandler},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxEvtHandler},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxEvtHandler},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxEvtHandler},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxEvtHandler},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxEvtHandler},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxEvtHandler},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxEvtHandler},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxEvtHandler},{"_p_wxPanel", _p_wxPanelTo_p_wxEvtHandler},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxEvtHandler},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxEvtHandler},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxEvtHandler},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxEvtHandler},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxEvtHandler},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxEvtHandler},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxEvtHandler},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxEvtHandler},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxEvtHandler},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxEvtHandler},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxEvtHandler},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxEvtHandler},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxEvtHandler},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxEvtHandler},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxEvtHandler},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler},{"_p_wxEvtHandler"},{"_p_wxPyShapeCanvas", _p_wxPyShapeCanvasTo_p_wxEvtHandler},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxEvtHandler},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxEvtHandler},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxEvtHandler},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxEvtHandler},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxEvtHandler},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxEvtHandler},{"_p_wxTaskBarIcon", _p_wxTaskBarIconTo_p_wxEvtHandler},{"_p_wxFrame", _p_wxFrameTo_p_wxEvtHandler},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxEvtHandler},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxEvtHandler},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxEvtHandler},{"_p_wxDialog", _p_wxDialogTo_p_wxEvtHandler},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxEvtHandler},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxEvtHandler},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxEvtHandler},{0}};
 static swig_type_info _swigt__p_wxPyEllipseShape[] = {{"_p_wxPyEllipseShape", 0, "wxPyEllipseShape *", 0},{"_p_wxPyCircleShape", _p_wxPyCircleShapeTo_p_wxPyEllipseShape},{"_p_wxPyEllipseShape"},{0}};
@@ -35141,13 +35130,12 @@ _swigt__p_wxFont,
 _swigt__p_wxScrolledWindow, 
 _swigt__p_wxWindow, 
 _swigt__p_double, 
-_swigt__p_wxPyDrawnShape, 
 _swigt__p_wxPyDivisionShape, 
+_swigt__p_wxPyDrawnShape, 
 _swigt__p_wxPyPolygonShape, 
 _swigt__p_wxBitmap, 
 _swigt__p_wxObject, 
 _swigt__p_wxPyBitmapShape, 
-_swigt__p_wxString, 
 _swigt__p_wxPyShapeEvtHandler, 
 _swigt__p_wxEvtHandler, 
 _swigt__p_wxPyEllipseShape, 

@@ -273,11 +273,11 @@ SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_co
 #define  SWIGTYPE_p_wxArrayString swig_types[40] 
 #define  SWIGTYPE_p_wxShowEvent swig_types[41] 
 #define  SWIGTYPE_p_wxToolTip swig_types[42] 
-#define  SWIGTYPE_p_wxIconizeEvent swig_types[43] 
-#define  SWIGTYPE_p_wxActivateEvent swig_types[44] 
-#define  SWIGTYPE_p_wxMoveEvent swig_types[45] 
-#define  SWIGTYPE_p_wxSizeEvent swig_types[46] 
-#define  SWIGTYPE_p_wxMaximizeEvent swig_types[47] 
+#define  SWIGTYPE_p_wxMaximizeEvent swig_types[43] 
+#define  SWIGTYPE_p_wxIconizeEvent swig_types[44] 
+#define  SWIGTYPE_p_wxActivateEvent swig_types[45] 
+#define  SWIGTYPE_p_wxMoveEvent swig_types[46] 
+#define  SWIGTYPE_p_wxSizeEvent swig_types[47] 
 #define  SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[48] 
 #define  SWIGTYPE_p_wxWindowCreateEvent swig_types[49] 
 #define  SWIGTYPE_p_wxIdleEvent swig_types[50] 
@@ -293,15 +293,15 @@ SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_co
 #define  SWIGTYPE_p_wxPNGHandler swig_types[60] 
 #define  SWIGTYPE_p_wxANIHandler swig_types[61] 
 #define  SWIGTYPE_p_wxMemoryFSHandler swig_types[62] 
-#define  SWIGTYPE_p_wxZipFSHandler swig_types[63] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[64] 
-#define  SWIGTYPE_p_wxCURHandler swig_types[65] 
-#define  SWIGTYPE_p_wxICOHandler swig_types[66] 
-#define  SWIGTYPE_p_wxBMPHandler swig_types[67] 
-#define  SWIGTYPE_p_wxImageHandler swig_types[68] 
-#define  SWIGTYPE_p_wxFileSystemHandler swig_types[69] 
-#define  SWIGTYPE_p_wxPyFileSystemHandler swig_types[70] 
-#define  SWIGTYPE_p_wxInternetFSHandler swig_types[71] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[63] 
+#define  SWIGTYPE_p_wxCURHandler swig_types[64] 
+#define  SWIGTYPE_p_wxICOHandler swig_types[65] 
+#define  SWIGTYPE_p_wxBMPHandler swig_types[66] 
+#define  SWIGTYPE_p_wxImageHandler swig_types[67] 
+#define  SWIGTYPE_p_wxFileSystemHandler swig_types[68] 
+#define  SWIGTYPE_p_wxPyFileSystemHandler swig_types[69] 
+#define  SWIGTYPE_p_wxInternetFSHandler swig_types[70] 
+#define  SWIGTYPE_p_wxZipFSHandler swig_types[71] 
 #define  SWIGTYPE_p_wxRect swig_types[72] 
 #define  SWIGTYPE_p_wxGBSpan swig_types[73] 
 #define  SWIGTYPE_p_wxPropagateOnce swig_types[74] 
@@ -325,27 +325,26 @@ SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_co
 #define  SWIGTYPE_p_wxWindowDestroyEvent swig_types[92] 
 #define  SWIGTYPE_p_wxWindow swig_types[93] 
 #define  SWIGTYPE_p_wxMenuBar swig_types[94] 
-#define  SWIGTYPE_p_wxString swig_types[95] 
-#define  SWIGTYPE_p_wxFileSystem swig_types[96] 
-#define  SWIGTYPE_p_wxBitmap swig_types[97] 
-#define  SWIGTYPE_p_wxMenuEvent swig_types[98] 
-#define  SWIGTYPE_p_wxContextMenuEvent swig_types[99] 
-#define  SWIGTYPE_p_unsigned_char swig_types[100] 
-#define  SWIGTYPE_p_wxCloseEvent swig_types[101] 
-#define  SWIGTYPE_p_wxEraseEvent swig_types[102] 
-#define  SWIGTYPE_p_wxMouseEvent swig_types[103] 
-#define  SWIGTYPE_p_wxPyApp swig_types[104] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[105] 
-#define  SWIGTYPE_p_wxPyCommandEvent swig_types[106] 
-#define  SWIGTYPE_p_wxPyDropTarget swig_types[107] 
-#define  SWIGTYPE_p_wxChildFocusEvent swig_types[108] 
-#define  SWIGTYPE_p_wxFocusEvent swig_types[109] 
-#define  SWIGTYPE_p_wxDropFilesEvent swig_types[110] 
-#define  SWIGTYPE_p_wxControlWithItems swig_types[111] 
-#define  SWIGTYPE_p_wxColour swig_types[112] 
-#define  SWIGTYPE_p_wxValidator swig_types[113] 
-#define  SWIGTYPE_p_wxPyValidator swig_types[114] 
-static swig_type_info *swig_types[116];
+#define  SWIGTYPE_p_wxFileSystem swig_types[95] 
+#define  SWIGTYPE_p_wxBitmap swig_types[96] 
+#define  SWIGTYPE_p_wxMenuEvent swig_types[97] 
+#define  SWIGTYPE_p_wxContextMenuEvent swig_types[98] 
+#define  SWIGTYPE_p_unsigned_char swig_types[99] 
+#define  SWIGTYPE_p_wxCloseEvent swig_types[100] 
+#define  SWIGTYPE_p_wxEraseEvent swig_types[101] 
+#define  SWIGTYPE_p_wxMouseEvent swig_types[102] 
+#define  SWIGTYPE_p_wxPyApp swig_types[103] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[104] 
+#define  SWIGTYPE_p_wxPyCommandEvent swig_types[105] 
+#define  SWIGTYPE_p_wxPyDropTarget swig_types[106] 
+#define  SWIGTYPE_p_wxChildFocusEvent swig_types[107] 
+#define  SWIGTYPE_p_wxFocusEvent swig_types[108] 
+#define  SWIGTYPE_p_wxDropFilesEvent swig_types[109] 
+#define  SWIGTYPE_p_wxControlWithItems swig_types[110] 
+#define  SWIGTYPE_p_wxColour swig_types[111] 
+#define  SWIGTYPE_p_wxValidator swig_types[112] 
+#define  SWIGTYPE_p_wxPyValidator swig_types[113] 
+static swig_type_info *swig_types[115];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -638,15 +637,6 @@ SWIG_PyObj_AsInt(PyObject *obj)
 { 
   return numeric_cast(int,
     SWIG_PyObj_AsLongInRange(obj, "int", INT_MIN, INT_MAX));
-}
-
-
-SWIGSTATIC(PyObject*)
-SWIG_PyObj_FromBool(bool value)
-{
-  PyObject *obj = value ? Py_True : Py_False;
-  Py_INCREF(obj);
-  return obj;
 }
 
 PyObject *wxSize_Get(wxSize *self){
@@ -1746,7 +1736,7 @@ static PyObject *_wrap_Size___eq__(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -1778,7 +1768,7 @@ static PyObject *_wrap_Size___ne__(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -2274,7 +2264,7 @@ static PyObject *_wrap_RealPoint___eq__(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -2306,7 +2296,7 @@ static PyObject *_wrap_RealPoint___ne__(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -2630,7 +2620,7 @@ static PyObject *_wrap_Point___eq__(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -2662,7 +2652,7 @@ static PyObject *_wrap_Point___ne__(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -3987,7 +3977,7 @@ static PyObject *_wrap_Rect___eq__(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4019,7 +4009,7 @@ static PyObject *_wrap_Rect___ne__(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4056,7 +4046,7 @@ static PyObject *_wrap_Rect_InsideXY(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4088,7 +4078,7 @@ static PyObject *_wrap_Rect_Inside(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4120,7 +4110,7 @@ static PyObject *_wrap_Rect_Intersects(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5027,7 +5017,7 @@ static PyObject *_wrap_Point2D___eq__(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5059,7 +5049,7 @@ static PyObject *_wrap_Point2D___ne__(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5347,7 +5337,7 @@ static PyObject *_wrap_InputStream_eof(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5609,7 +5599,7 @@ static PyObject *_wrap_InputStream_CanRead(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5634,7 +5624,7 @@ static PyObject *_wrap_InputStream_Eof(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5665,7 +5655,7 @@ static PyObject *_wrap_InputStream_Ungetch(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6159,7 +6149,7 @@ static PyObject *_wrap_FileSystemHandler_CanOpen(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -6995,7 +6985,7 @@ static PyObject *_wrap_InternetFSHandler_CanOpen(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -7114,7 +7104,7 @@ static PyObject *_wrap_ZipFSHandler_CanOpen(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -7494,7 +7484,7 @@ static PyObject *_wrap_MemoryFSHandler_CanOpen(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -7795,7 +7785,7 @@ static PyObject *_wrap_ImageHandler_CanRead(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -8080,7 +8070,7 @@ static PyObject *_wrap_ImageHistogram_FindFirstUnusedColour(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         PyObject *o = PyInt_FromLong((long) (*arg2));
         resultobj = t_output_helper(resultobj,o);
@@ -8937,7 +8927,7 @@ static PyObject *_wrap_Image_HasAlpha(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8995,7 +8985,7 @@ static PyObject *_wrap_Image_FindFirstUnusedColour(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         PyObject *o = PyInt_FromLong((long) (*arg2));
         resultobj = t_output_helper(resultobj,o);
@@ -9056,7 +9046,7 @@ static PyObject *_wrap_Image_SetMaskFromImage(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9086,7 +9076,7 @@ static PyObject *_wrap_Image_CanRead(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp1)
         delete arg1;
@@ -9189,7 +9179,7 @@ static PyObject *_wrap_Image_LoadFile(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -9246,7 +9236,7 @@ static PyObject *_wrap_Image_LoadMimeFile(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -9301,7 +9291,7 @@ static PyObject *_wrap_Image_SaveFile(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -9350,7 +9340,7 @@ static PyObject *_wrap_Image_SaveMimeFile(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -9406,7 +9396,7 @@ static PyObject *_wrap_Image_CanReadStream(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (created1)
         delete arg1;
@@ -9473,7 +9463,7 @@ static PyObject *_wrap_Image_LoadStream(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (created2)
         delete arg2;
@@ -9540,7 +9530,7 @@ static PyObject *_wrap_Image_LoadMimeStream(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (created2)
         delete arg2;
@@ -9581,7 +9571,7 @@ static PyObject *_wrap_Image_Ok(PyObject *self, PyObject *args, PyObject *kwargs
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -10120,7 +10110,7 @@ static PyObject *_wrap_Image_HasMask(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -10579,7 +10569,7 @@ static PyObject *_wrap_Image_HasOption(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp2)
         delete arg2;
@@ -10729,7 +10719,7 @@ static PyObject *_wrap_Image_RemoveHandler(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp1)
         delete arg1;
@@ -11459,7 +11449,7 @@ static PyObject *_wrap_EvtHandler_GetEvtHandlerEnabled(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -11520,7 +11510,7 @@ static PyObject *_wrap_EvtHandler_ProcessEvent(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -11666,7 +11656,7 @@ static PyObject *_wrap_EvtHandler_Disconnect(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -11992,7 +11982,7 @@ static PyObject *_wrap_Event_IsCommandEvent(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -12049,7 +12039,7 @@ static PyObject *_wrap_Event_GetSkipped(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -12074,7 +12064,7 @@ static PyObject *_wrap_Event_ShouldPropagate(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -12438,7 +12428,7 @@ static PyObject *_wrap_CommandEvent_IsChecked(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -12463,7 +12453,7 @@ static PyObject *_wrap_CommandEvent_IsSelection(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -12716,7 +12706,7 @@ static PyObject *_wrap_NotifyEvent_IsAllowed(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13114,7 +13104,7 @@ static PyObject *_wrap_MouseEvent_IsButton(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13147,7 +13137,7 @@ static PyObject *_wrap_MouseEvent_ButtonDown(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13180,7 +13170,7 @@ static PyObject *_wrap_MouseEvent_ButtonDClick(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13213,7 +13203,7 @@ static PyObject *_wrap_MouseEvent_ButtonUp(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13244,7 +13234,7 @@ static PyObject *_wrap_MouseEvent_Button(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13275,7 +13265,7 @@ static PyObject *_wrap_MouseEvent_ButtonIsDown(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13325,7 +13315,7 @@ static PyObject *_wrap_MouseEvent_ControlDown(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13350,7 +13340,7 @@ static PyObject *_wrap_MouseEvent_MetaDown(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13375,7 +13365,7 @@ static PyObject *_wrap_MouseEvent_AltDown(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13400,7 +13390,7 @@ static PyObject *_wrap_MouseEvent_ShiftDown(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13425,7 +13415,7 @@ static PyObject *_wrap_MouseEvent_LeftDown(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13450,7 +13440,7 @@ static PyObject *_wrap_MouseEvent_MiddleDown(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13475,7 +13465,7 @@ static PyObject *_wrap_MouseEvent_RightDown(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13500,7 +13490,7 @@ static PyObject *_wrap_MouseEvent_LeftUp(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13525,7 +13515,7 @@ static PyObject *_wrap_MouseEvent_MiddleUp(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13550,7 +13540,7 @@ static PyObject *_wrap_MouseEvent_RightUp(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13575,7 +13565,7 @@ static PyObject *_wrap_MouseEvent_LeftDClick(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13600,7 +13590,7 @@ static PyObject *_wrap_MouseEvent_MiddleDClick(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13625,7 +13615,7 @@ static PyObject *_wrap_MouseEvent_RightDClick(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13650,7 +13640,7 @@ static PyObject *_wrap_MouseEvent_LeftIsDown(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13675,7 +13665,7 @@ static PyObject *_wrap_MouseEvent_MiddleIsDown(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13700,7 +13690,7 @@ static PyObject *_wrap_MouseEvent_RightIsDown(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13725,7 +13715,7 @@ static PyObject *_wrap_MouseEvent_Dragging(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13750,7 +13740,7 @@ static PyObject *_wrap_MouseEvent_Moving(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13775,7 +13765,7 @@ static PyObject *_wrap_MouseEvent_Entering(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13800,7 +13790,7 @@ static PyObject *_wrap_MouseEvent_Leaving(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14052,7 +14042,7 @@ static PyObject *_wrap_MouseEvent_IsPageScroll(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14187,7 +14177,7 @@ static PyObject *_wrap_MouseEvent_m_leftDown_get(PyObject *self, PyObject *args,
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxMouseEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_leftDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14232,7 +14222,7 @@ static PyObject *_wrap_MouseEvent_m_middleDown_get(PyObject *self, PyObject *arg
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxMouseEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_middleDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14277,7 +14267,7 @@ static PyObject *_wrap_MouseEvent_m_rightDown_get(PyObject *self, PyObject *args
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxMouseEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_rightDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14322,7 +14312,7 @@ static PyObject *_wrap_MouseEvent_m_controlDown_get(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxMouseEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_controlDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14367,7 +14357,7 @@ static PyObject *_wrap_MouseEvent_m_shiftDown_get(PyObject *self, PyObject *args
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxMouseEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_shiftDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14412,7 +14402,7 @@ static PyObject *_wrap_MouseEvent_m_altDown_get(PyObject *self, PyObject *args, 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxMouseEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_altDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14457,7 +14447,7 @@ static PyObject *_wrap_MouseEvent_m_metaDown_get(PyObject *self, PyObject *args,
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxMouseEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_metaDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14770,7 +14760,7 @@ static PyObject *_wrap_SetCursorEvent_HasCursor(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14832,7 +14822,7 @@ static PyObject *_wrap_KeyEvent_ControlDown(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14857,7 +14847,7 @@ static PyObject *_wrap_KeyEvent_MetaDown(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14882,7 +14872,7 @@ static PyObject *_wrap_KeyEvent_AltDown(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14907,7 +14897,7 @@ static PyObject *_wrap_KeyEvent_ShiftDown(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14932,7 +14922,7 @@ static PyObject *_wrap_KeyEvent_HasModifiers(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15329,7 +15319,7 @@ static PyObject *_wrap_KeyEvent_m_controlDown_get(PyObject *self, PyObject *args
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxKeyEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_controlDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15374,7 +15364,7 @@ static PyObject *_wrap_KeyEvent_m_shiftDown_get(PyObject *self, PyObject *args, 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxKeyEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_shiftDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15419,7 +15409,7 @@ static PyObject *_wrap_KeyEvent_m_altDown_get(PyObject *self, PyObject *args, Py
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxKeyEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_altDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15464,7 +15454,7 @@ static PyObject *_wrap_KeyEvent_m_metaDown_get(PyObject *self, PyObject *args, P
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxKeyEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_metaDown);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15509,7 +15499,7 @@ static PyObject *_wrap_KeyEvent_m_scanCode_get(PyObject *self, PyObject *args, P
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxKeyEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (bool) ((arg1)->m_scanCode);
     
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -16474,7 +16464,7 @@ static PyObject *_wrap_ActivateEvent_GetActive(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -16611,7 +16601,7 @@ static PyObject *_wrap_MenuEvent_IsPopup(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -16738,7 +16728,7 @@ static PyObject *_wrap_CloseEvent_GetLoggingOff(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -16825,7 +16815,7 @@ static PyObject *_wrap_CloseEvent_CanVeto(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -16850,7 +16840,7 @@ static PyObject *_wrap_CloseEvent_GetVeto(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -16950,7 +16940,7 @@ static PyObject *_wrap_ShowEvent_GetShow(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17020,7 +17010,7 @@ static PyObject *_wrap_IconizeEvent_Iconized(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17205,7 +17195,7 @@ static PyObject *_wrap_UpdateUIEvent_GetChecked(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17230,7 +17220,7 @@ static PyObject *_wrap_UpdateUIEvent_GetEnabled(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17286,7 +17276,7 @@ static PyObject *_wrap_UpdateUIEvent_GetSetText(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17311,7 +17301,7 @@ static PyObject *_wrap_UpdateUIEvent_GetSetChecked(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17336,7 +17326,7 @@ static PyObject *_wrap_UpdateUIEvent_GetSetEnabled(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17510,7 +17500,7 @@ static PyObject *_wrap_UpdateUIEvent_CanUpdate(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17890,7 +17880,7 @@ static PyObject *_wrap_QueryNewPaletteEvent_GetPaletteRealized(PyObject *self, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17944,7 +17934,7 @@ static PyObject *_wrap_NavigationKeyEvent_GetDirection(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -17999,7 +17989,7 @@ static PyObject *_wrap_NavigationKeyEvent_IsWindowChange(PyObject *self, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -18405,7 +18395,7 @@ static PyObject *_wrap_IdleEvent_MoreRequested(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -18479,7 +18469,7 @@ static PyObject *_wrap_IdleEvent_CanSend(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19104,7 +19094,7 @@ static PyObject *_wrap_PyApp_Yield(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19226,7 +19216,7 @@ static PyObject *_wrap_PyApp_Pending(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19251,7 +19241,7 @@ static PyObject *_wrap_PyApp_Dispatch(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19276,7 +19266,7 @@ static PyObject *_wrap_PyApp_ProcessIdle(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19310,7 +19300,7 @@ static PyObject *_wrap_PyApp_SendIdleEvents(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19335,7 +19325,7 @@ static PyObject *_wrap_PyApp_IsActive(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19444,7 +19434,7 @@ static PyObject *_wrap_PyApp_GetExitOnFrameDelete(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19499,7 +19489,7 @@ static PyObject *_wrap_PyApp_GetUseBestVisual(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19631,7 +19621,7 @@ static PyObject *_wrap_PyApp_GetMacSupportPCMenuShortcuts(PyObject *self, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19966,7 +19956,7 @@ static PyObject *_wrap_Yield(PyObject *self, PyObject *args, PyObject *kwargs) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -19988,7 +19978,7 @@ static PyObject *_wrap_YieldIfNeeded(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -20023,7 +20013,7 @@ static PyObject *_wrap_SafeYield(PyObject *self, PyObject *args, PyObject *kwarg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -20462,7 +20452,7 @@ static PyObject *_wrap_AcceleratorTable_Ok(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -20718,7 +20708,7 @@ static PyObject *_wrap_Window_Create(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp7)
         delete arg7;
@@ -20759,7 +20749,7 @@ static PyObject *_wrap_Window_Close(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -20784,7 +20774,7 @@ static PyObject *_wrap_Window_Destroy(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -20809,7 +20799,7 @@ static PyObject *_wrap_Window_DestroyChildren(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -20834,7 +20824,7 @@ static PyObject *_wrap_Window_IsBeingDeleted(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -22544,7 +22534,7 @@ static PyObject *_wrap_Window_Show(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -22569,7 +22559,7 @@ static PyObject *_wrap_Window_Hide(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -22602,7 +22592,7 @@ static PyObject *_wrap_Window_Enable(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -22627,7 +22617,7 @@ static PyObject *_wrap_Window_Disable(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -22652,7 +22642,7 @@ static PyObject *_wrap_Window_IsShown(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -22677,7 +22667,7 @@ static PyObject *_wrap_Window_IsEnabled(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -22818,7 +22808,7 @@ static PyObject *_wrap_Window_HasFlag(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -22843,7 +22833,7 @@ static PyObject *_wrap_Window_IsRetained(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -22985,7 +22975,7 @@ static PyObject *_wrap_Window_GetThemeEnabled(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -23010,7 +23000,7 @@ static PyObject *_wrap_Window_ShouldInheritColours(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -23107,7 +23097,7 @@ static PyObject *_wrap_Window_AcceptsFocus(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -23132,7 +23122,7 @@ static PyObject *_wrap_Window_AcceptsFocusFromKeyboard(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -23320,7 +23310,7 @@ static PyObject *_wrap_Window_IsTopLevel(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -23348,7 +23338,7 @@ static PyObject *_wrap_Window_Reparent(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -23622,7 +23612,7 @@ static PyObject *_wrap_Window_RemoveEventHandler(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -23777,7 +23767,7 @@ static PyObject *_wrap_Window_RegisterHotKey(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -23808,7 +23798,7 @@ static PyObject *_wrap_Window_UnregisterHotKey(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -24157,7 +24147,7 @@ static PyObject *_wrap_Window_HasCapture(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -24461,7 +24451,7 @@ static PyObject *_wrap_Window_IsExposed(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -24493,7 +24483,7 @@ static PyObject *_wrap_Window_IsExposedPoint(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -24525,7 +24515,7 @@ static PyObject *_wrap_Window_isExposedRect(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -24557,7 +24547,7 @@ static PyObject *_wrap_Window_SetBackgroundColour(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -24589,7 +24579,7 @@ static PyObject *_wrap_Window_SetForegroundColour(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -24678,7 +24668,7 @@ static PyObject *_wrap_Window_SetCursor(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -24737,7 +24727,7 @@ static PyObject *_wrap_Window_SetFont(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -25359,7 +25349,7 @@ static PyObject *_wrap_Window_PopupMenuXY(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -25394,7 +25384,7 @@ static PyObject *_wrap_Window_PopupMenu(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -25480,7 +25470,7 @@ static PyObject *_wrap_Window_HasScrollbar(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -25745,7 +25735,7 @@ static PyObject *_wrap_Window_ScrollLines(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -25776,7 +25766,7 @@ static PyObject *_wrap_Window_ScrollPages(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -25801,7 +25791,7 @@ static PyObject *_wrap_Window_LineUp(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -25826,7 +25816,7 @@ static PyObject *_wrap_Window_LineDown(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -25851,7 +25841,7 @@ static PyObject *_wrap_Window_PageUp(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -25876,7 +25866,7 @@ static PyObject *_wrap_Window_PageDown(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26270,7 +26260,7 @@ static PyObject *_wrap_Window_GetAutoLayout(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26295,7 +26285,7 @@ static PyObject *_wrap_Window_Layout(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26687,7 +26677,7 @@ static PyObject *_wrap_Validator_Validate(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26712,7 +26702,7 @@ static PyObject *_wrap_Validator_TransferToWindow(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26737,7 +26727,7 @@ static PyObject *_wrap_Validator_TransferFromWindow(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -26813,7 +26803,7 @@ static PyObject *_wrap_Validator_IsSilent(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -28155,7 +28145,7 @@ static PyObject *_wrap_Menu_Delete(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -28183,7 +28173,7 @@ static PyObject *_wrap_Menu_DeleteItem(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -28238,7 +28228,7 @@ static PyObject *_wrap_Menu_DestroyId(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -28266,7 +28256,7 @@ static PyObject *_wrap_Menu_DestroyItem(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -28490,7 +28480,7 @@ static PyObject *_wrap_Menu_IsEnabled(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -28557,7 +28547,7 @@ static PyObject *_wrap_Menu_IsChecked(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -29059,7 +29049,7 @@ static PyObject *_wrap_Menu_IsAttached(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -29188,7 +29178,7 @@ static PyObject *_wrap_MenuBar_Append(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp3)
         delete arg3;
@@ -29238,7 +29228,7 @@ static PyObject *_wrap_MenuBar_Insert(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp4)
         delete arg4;
@@ -29456,7 +29446,7 @@ static PyObject *_wrap_MenuBar_IsEnabledTop(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -29773,7 +29763,7 @@ static PyObject *_wrap_MenuBar_IsChecked(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -29804,7 +29794,7 @@ static PyObject *_wrap_MenuBar_IsEnabled(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -30022,7 +30012,7 @@ static PyObject *_wrap_MenuBar_IsAttached(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -30302,7 +30292,7 @@ static PyObject *_wrap_MenuItem_IsSeparator(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -30531,7 +30521,7 @@ static PyObject *_wrap_MenuItem_IsCheckable(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -30556,7 +30546,7 @@ static PyObject *_wrap_MenuItem_IsSubMenu(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -30667,7 +30657,7 @@ static PyObject *_wrap_MenuItem_IsEnabled(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -30724,7 +30714,7 @@ static PyObject *_wrap_MenuItem_IsChecked(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -31252,7 +31242,7 @@ static PyObject *_wrap_MenuItem_IsOwnerDrawn(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -31588,7 +31578,7 @@ static PyObject *_wrap_Control_Create(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp8)
         delete arg8;
@@ -31957,7 +31947,7 @@ static PyObject *_wrap_ItemContainer_IsEmpty(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -32791,7 +32781,7 @@ static PyObject *_wrap_SizerItem_IsWindow(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -32816,7 +32806,7 @@ static PyObject *_wrap_SizerItem_IsSizer(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -32841,7 +32831,7 @@ static PyObject *_wrap_SizerItem_IsSpacer(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -33228,7 +33218,7 @@ static PyObject *_wrap_SizerItem_IsShown(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -33518,7 +33508,7 @@ static PyObject *_wrap_Sizer_Remove(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -34166,7 +34156,7 @@ static PyObject *_wrap_Sizer_IsShown(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -35473,7 +35463,7 @@ static PyObject *_wrap_GBPosition___eq__(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -35505,7 +35495,7 @@ static PyObject *_wrap_GBPosition___ne__(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -35757,7 +35747,7 @@ static PyObject *_wrap_GBSpan___eq__(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -35789,7 +35779,7 @@ static PyObject *_wrap_GBSpan___ne__(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -36158,7 +36148,7 @@ static PyObject *_wrap_GBSizerItem_SetPos(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -36190,7 +36180,7 @@ static PyObject *_wrap_GBSizerItem_SetSpan(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -36218,7 +36208,7 @@ static PyObject *_wrap_GBSizerItem_Intersects__SWIG_0(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -36254,7 +36244,7 @@ static PyObject *_wrap_GBSizerItem_Intersects__SWIG_1(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -36519,7 +36509,7 @@ static PyObject *_wrap_GridBagSizer_Add(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -36547,7 +36537,7 @@ static PyObject *_wrap_GridBagSizer_AddItem(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -36822,7 +36812,7 @@ static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_0(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -36854,7 +36844,7 @@ static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_1(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -36889,7 +36879,7 @@ static PyObject *_wrap_GridBagSizer_SetItemPosition__SWIG_2(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -37212,7 +37202,7 @@ static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_0(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -37244,7 +37234,7 @@ static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_1(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -37279,7 +37269,7 @@ static PyObject *_wrap_GridBagSizer_SetItemSpan__SWIG_2(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -37679,7 +37669,7 @@ static PyObject *_wrap_GridBagSizer_CheckForIntersection__SWIG_0(PyObject *self,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -37720,7 +37710,7 @@ static PyObject *_wrap_GridBagSizer_CheckForIntersection__SWIG_1(PyObject *self,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -38441,7 +38431,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_GetDone(PyObject *self, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -38554,7 +38544,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_ResetIfWin(PyObject *self, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -38585,7 +38575,7 @@ static PyObject *_wrap_IndividualLayoutConstraint_SatisfyConstraint(PyObject *se
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -38842,7 +38832,7 @@ static PyObject *_wrap_LayoutConstraints_SatisfyConstraints(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         PyObject *o = PyInt_FromLong((long) (*arg3));
         resultobj = t_output_helper(resultobj,o);
@@ -38871,7 +38861,7 @@ static PyObject *_wrap_LayoutConstraints_AreSatisfied(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -40648,11 +40638,11 @@ static swig_type_info _swigt__p_wxAppTraits[] = {{"_p_wxAppTraits", 0, "wxAppTra
 static swig_type_info _swigt__p_wxArrayString[] = {{"_p_wxArrayString", 0, "wxArrayString *", 0},{"_p_wxArrayString"},{0}};
 static swig_type_info _swigt__p_wxShowEvent[] = {{"_p_wxShowEvent", 0, "wxShowEvent *", 0},{"_p_wxShowEvent"},{0}};
 static swig_type_info _swigt__p_wxToolTip[] = {{"_p_wxToolTip", 0, "wxToolTip *", 0},{"_p_wxToolTip"},{0}};
+static swig_type_info _swigt__p_wxMaximizeEvent[] = {{"_p_wxMaximizeEvent", 0, "wxMaximizeEvent *", 0},{"_p_wxMaximizeEvent"},{0}};
 static swig_type_info _swigt__p_wxIconizeEvent[] = {{"_p_wxIconizeEvent", 0, "wxIconizeEvent *", 0},{"_p_wxIconizeEvent"},{0}};
 static swig_type_info _swigt__p_wxActivateEvent[] = {{"_p_wxActivateEvent", 0, "wxActivateEvent *", 0},{"_p_wxActivateEvent"},{0}};
 static swig_type_info _swigt__p_wxMoveEvent[] = {{"_p_wxMoveEvent", 0, "wxMoveEvent *", 0},{"_p_wxMoveEvent"},{0}};
 static swig_type_info _swigt__p_wxSizeEvent[] = {{"_p_wxSizeEvent", 0, "wxSizeEvent *", 0},{"_p_wxSizeEvent"},{0}};
-static swig_type_info _swigt__p_wxMaximizeEvent[] = {{"_p_wxMaximizeEvent", 0, "wxMaximizeEvent *", 0},{"_p_wxMaximizeEvent"},{0}};
 static swig_type_info _swigt__p_wxQueryNewPaletteEvent[] = {{"_p_wxQueryNewPaletteEvent", 0, "wxQueryNewPaletteEvent *", 0},{"_p_wxQueryNewPaletteEvent"},{0}};
 static swig_type_info _swigt__p_wxWindowCreateEvent[] = {{"_p_wxWindowCreateEvent", 0, "wxWindowCreateEvent *", 0},{"_p_wxWindowCreateEvent"},{0}};
 static swig_type_info _swigt__p_wxIdleEvent[] = {{"_p_wxIdleEvent", 0, "wxIdleEvent *", 0},{"_p_wxIdleEvent"},{0}};
@@ -40668,7 +40658,6 @@ static swig_type_info _swigt__p_wxGIFHandler[] = {{"_p_wxGIFHandler", 0, "wxGIFH
 static swig_type_info _swigt__p_wxPNGHandler[] = {{"_p_wxPNGHandler", 0, "wxPNGHandler *", 0},{"_p_wxPNGHandler"},{0}};
 static swig_type_info _swigt__p_wxANIHandler[] = {{"_p_wxANIHandler", 0, "wxANIHandler *", 0},{"_p_wxANIHandler"},{0}};
 static swig_type_info _swigt__p_wxMemoryFSHandler[] = {{"_p_wxMemoryFSHandler", 0, "wxMemoryFSHandler *", 0},{"_p_wxMemoryFSHandler"},{0}};
-static swig_type_info _swigt__p_wxZipFSHandler[] = {{"_p_wxZipFSHandler", 0, "wxZipFSHandler *", 0},{"_p_wxZipFSHandler"},{0}};
 static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler},{"_p_wxEvtHandler"},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler},{0}};
 static swig_type_info _swigt__p_wxCURHandler[] = {{"_p_wxCURHandler", 0, "wxCURHandler *", 0},{"_p_wxCURHandler"},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxCURHandler},{0}};
 static swig_type_info _swigt__p_wxICOHandler[] = {{"_p_wxICOHandler", 0, "wxICOHandler *", 0},{"_p_wxICOHandler"},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxICOHandler},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxICOHandler},{0}};
@@ -40677,6 +40666,7 @@ static swig_type_info _swigt__p_wxImageHandler[] = {{"_p_wxImageHandler", 0, "wx
 static swig_type_info _swigt__p_wxFileSystemHandler[] = {{"_p_wxFileSystemHandler", 0, "wxFileSystemHandler *", 0},{"_p_wxFileSystemHandler"},{"_p_wxPyFileSystemHandler", _p_wxPyFileSystemHandlerTo_p_wxFileSystemHandler},{"_p_wxInternetFSHandler", _p_wxInternetFSHandlerTo_p_wxFileSystemHandler},{"_p_wxZipFSHandler", _p_wxZipFSHandlerTo_p_wxFileSystemHandler},{"_p_wxMemoryFSHandler", _p_wxMemoryFSHandlerTo_p_wxFileSystemHandler},{0}};
 static swig_type_info _swigt__p_wxPyFileSystemHandler[] = {{"_p_wxPyFileSystemHandler", 0, "wxPyFileSystemHandler *", 0},{"_p_wxPyFileSystemHandler"},{0}};
 static swig_type_info _swigt__p_wxInternetFSHandler[] = {{"_p_wxInternetFSHandler", 0, "wxInternetFSHandler *", 0},{"_p_wxInternetFSHandler"},{0}};
+static swig_type_info _swigt__p_wxZipFSHandler[] = {{"_p_wxZipFSHandler", 0, "wxZipFSHandler *", 0},{"_p_wxZipFSHandler"},{0}};
 static swig_type_info _swigt__p_wxRect[] = {{"_p_wxRect", 0, "wxRect *", 0},{"_p_wxRect"},{0}};
 static swig_type_info _swigt__p_wxGBSpan[] = {{"_p_wxGBSpan", 0, "wxGBSpan *", 0},{"_p_wxGBSpan"},{0}};
 static swig_type_info _swigt__p_wxPropagateOnce[] = {{"_p_wxPropagateOnce", 0, "wxPropagateOnce *", 0},{"_p_wxPropagateOnce"},{0}};
@@ -40700,7 +40690,6 @@ static swig_type_info _swigt__p_wxNavigationKeyEvent[] = {{"_p_wxNavigationKeyEv
 static swig_type_info _swigt__p_wxWindowDestroyEvent[] = {{"_p_wxWindowDestroyEvent", 0, "wxWindowDestroyEvent *", 0},{"_p_wxWindowDestroyEvent"},{0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow},{"_p_wxWindow"},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow},{0}};
 static swig_type_info _swigt__p_wxMenuBar[] = {{"_p_wxMenuBar", 0, "wxMenuBar *", 0},{"_p_wxMenuBar"},{0}};
-static swig_type_info _swigt__p_wxString[] = {{"_p_wxString", 0, "wxString *", 0},{"_p_wxString"},{0}};
 static swig_type_info _swigt__p_wxFileSystem[] = {{"_p_wxFileSystem", 0, "wxFileSystem *", 0},{"_p_wxFileSystem"},{0}};
 static swig_type_info _swigt__p_wxBitmap[] = {{"_p_wxBitmap", 0, "wxBitmap *", 0},{"_p_wxBitmap"},{0}};
 static swig_type_info _swigt__p_wxMenuEvent[] = {{"_p_wxMenuEvent", 0, "wxMenuEvent *", 0},{"_p_wxMenuEvent"},{0}};
@@ -40765,11 +40754,11 @@ _swigt__p_wxAppTraits,
 _swigt__p_wxArrayString, 
 _swigt__p_wxShowEvent, 
 _swigt__p_wxToolTip, 
+_swigt__p_wxMaximizeEvent, 
 _swigt__p_wxIconizeEvent, 
 _swigt__p_wxActivateEvent, 
 _swigt__p_wxMoveEvent, 
 _swigt__p_wxSizeEvent, 
-_swigt__p_wxMaximizeEvent, 
 _swigt__p_wxQueryNewPaletteEvent, 
 _swigt__p_wxWindowCreateEvent, 
 _swigt__p_wxIdleEvent, 
@@ -40785,7 +40774,6 @@ _swigt__p_wxGIFHandler,
 _swigt__p_wxPNGHandler, 
 _swigt__p_wxANIHandler, 
 _swigt__p_wxMemoryFSHandler, 
-_swigt__p_wxZipFSHandler, 
 _swigt__p_wxEvtHandler, 
 _swigt__p_wxCURHandler, 
 _swigt__p_wxICOHandler, 
@@ -40794,6 +40782,7 @@ _swigt__p_wxImageHandler,
 _swigt__p_wxFileSystemHandler, 
 _swigt__p_wxPyFileSystemHandler, 
 _swigt__p_wxInternetFSHandler, 
+_swigt__p_wxZipFSHandler, 
 _swigt__p_wxRect, 
 _swigt__p_wxGBSpan, 
 _swigt__p_wxPropagateOnce, 
@@ -40817,7 +40806,6 @@ _swigt__p_wxNavigationKeyEvent,
 _swigt__p_wxWindowDestroyEvent, 
 _swigt__p_wxWindow, 
 _swigt__p_wxMenuBar, 
-_swigt__p_wxString, 
 _swigt__p_wxFileSystem, 
 _swigt__p_wxBitmap, 
 _swigt__p_wxMenuEvent, 

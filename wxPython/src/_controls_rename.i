@@ -67,6 +67,11 @@
 %rename(TEXT_ATTR_LEFT_INDENT)              wxTEXT_ATTR_LEFT_INDENT;
 %rename(TEXT_ATTR_RIGHT_INDENT)             wxTEXT_ATTR_RIGHT_INDENT;
 %rename(TEXT_ATTR_TABS)                     wxTEXT_ATTR_TABS;
+%rename(TE_HT_UNKNOWN)                      wxTE_HT_UNKNOWN;
+%rename(TE_HT_BEFORE)                       wxTE_HT_BEFORE;
+%rename(TE_HT_ON_TEXT)                      wxTE_HT_ON_TEXT;
+%rename(TE_HT_BELOW)                        wxTE_HT_BELOW;
+%rename(TE_HT_BEYOND)                       wxTE_HT_BEYOND;
 %rename(TextAttr)                           wxTextAttr;
 %rename(TextCtrl)                           wxTextCtrl;
 %rename(TextUrlEvent)                       wxTextUrlEvent;

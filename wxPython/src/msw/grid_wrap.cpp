@@ -899,15 +899,6 @@ void wxGridCellEditor__setOORInfo(wxGridCellEditor *self,PyObject *_self){
             self->SetClientObject(new wxPyOORClientData(_self));
         }
 
-SWIGSTATIC(PyObject*)
-SWIG_PyObj_FromBool(bool value)
-{
-  PyObject *obj = value ? Py_True : Py_False;
-  Py_INCREF(obj);
-  return obj;
-}
-
-
 class wxPyGridCellEditor : public wxGridCellEditor
 {
 public:
@@ -2146,7 +2137,7 @@ static PyObject *_wrap_GridCellEditor_IsCreated(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -2457,7 +2448,7 @@ static PyObject *_wrap_GridCellEditor_EndEdit(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -2639,7 +2630,7 @@ static PyObject *_wrap_GridCellEditor_IsAcceptedKey(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -2937,7 +2928,7 @@ static PyObject *_wrap_PyGridCellEditor_base_IsAcceptedKey(PyObject *self, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4066,7 +4057,7 @@ static PyObject *_wrap_GridCellAttr_HasTextColour(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4091,7 +4082,7 @@ static PyObject *_wrap_GridCellAttr_HasBackgroundColour(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4116,7 +4107,7 @@ static PyObject *_wrap_GridCellAttr_HasFont(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4141,7 +4132,7 @@ static PyObject *_wrap_GridCellAttr_HasAlignment(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4166,7 +4157,7 @@ static PyObject *_wrap_GridCellAttr_HasRenderer(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4191,7 +4182,7 @@ static PyObject *_wrap_GridCellAttr_HasEditor(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4216,7 +4207,7 @@ static PyObject *_wrap_GridCellAttr_HasReadWriteMode(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4241,7 +4232,7 @@ static PyObject *_wrap_GridCellAttr_HasOverflowMode(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4429,7 +4420,7 @@ static PyObject *_wrap_GridCellAttr_GetOverflow(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -4538,7 +4529,7 @@ static PyObject *_wrap_GridCellAttr_IsReadOnly(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5283,7 +5274,7 @@ static PyObject *_wrap_GridTableBase_IsEmptyCell(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5466,7 +5457,7 @@ static PyObject *_wrap_GridTableBase_CanGetValueAs(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp4)
         delete arg4;
@@ -5519,7 +5510,7 @@ static PyObject *_wrap_GridTableBase_CanSetValueAs(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp4)
         delete arg4;
@@ -5638,7 +5629,7 @@ static PyObject *_wrap_GridTableBase_GetValueAsBool(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5829,7 +5820,7 @@ static PyObject *_wrap_GridTableBase_InsertRows(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5862,7 +5853,7 @@ static PyObject *_wrap_GridTableBase_AppendRows(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5903,7 +5894,7 @@ static PyObject *_wrap_GridTableBase_DeleteRows(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5944,7 +5935,7 @@ static PyObject *_wrap_GridTableBase_InsertCols(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -5977,7 +5968,7 @@ static PyObject *_wrap_GridTableBase_AppendCols(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6018,7 +6009,7 @@ static PyObject *_wrap_GridTableBase_DeleteCols(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6209,7 +6200,7 @@ static PyObject *_wrap_GridTableBase_CanHaveAttributes(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6530,7 +6521,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanGetValueAs(PyObject *self, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp4)
         delete arg4;
@@ -6583,7 +6574,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanSetValueAs(PyObject *self, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
         if (temp4)
         delete arg4;
@@ -6656,7 +6647,7 @@ static PyObject *_wrap_PyGridTableBase_base_InsertRows(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6689,7 +6680,7 @@ static PyObject *_wrap_PyGridTableBase_base_AppendRows(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6730,7 +6721,7 @@ static PyObject *_wrap_PyGridTableBase_base_DeleteRows(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6771,7 +6762,7 @@ static PyObject *_wrap_PyGridTableBase_base_InsertCols(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6804,7 +6795,7 @@ static PyObject *_wrap_PyGridTableBase_base_AppendCols(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -6845,7 +6836,7 @@ static PyObject *_wrap_PyGridTableBase_base_DeleteCols(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -7036,7 +7027,7 @@ static PyObject *_wrap_PyGridTableBase_base_CanHaveAttributes(PyObject *self, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -7774,7 +7765,7 @@ static PyObject *_wrap_GridCellCoords___eq__(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -7805,7 +7796,7 @@ static PyObject *_wrap_GridCellCoords___ne__(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -7962,7 +7953,7 @@ static PyObject *_wrap_Grid_CreateGrid(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8098,7 +8089,7 @@ static PyObject *_wrap_Grid_ProcessTableMessage(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8169,7 +8160,7 @@ static PyObject *_wrap_Grid_SetTable(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8242,7 +8233,7 @@ static PyObject *_wrap_Grid_InsertRows(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8283,7 +8274,7 @@ static PyObject *_wrap_Grid_AppendRows(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8332,7 +8323,7 @@ static PyObject *_wrap_Grid_DeleteRows(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8381,7 +8372,7 @@ static PyObject *_wrap_Grid_InsertCols(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8422,7 +8413,7 @@ static PyObject *_wrap_Grid_AppendCols(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8471,7 +8462,7 @@ static PyObject *_wrap_Grid_DeleteCols(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8811,7 +8802,7 @@ static PyObject *_wrap_Grid_IsEditable(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8922,7 +8913,7 @@ static PyObject *_wrap_Grid_CanEnableCellControl(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8947,7 +8938,7 @@ static PyObject *_wrap_Grid_IsCellEditControlEnabled(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8972,7 +8963,7 @@ static PyObject *_wrap_Grid_IsCellEditControlShown(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -8997,7 +8988,7 @@ static PyObject *_wrap_Grid_IsCurrentCellReadOnly(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9370,7 +9361,7 @@ static PyObject *_wrap_Grid_IsVisible(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9473,7 +9464,7 @@ static PyObject *_wrap_Grid_MoveCursorUp(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9504,7 +9495,7 @@ static PyObject *_wrap_Grid_MoveCursorDown(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9535,7 +9526,7 @@ static PyObject *_wrap_Grid_MoveCursorLeft(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9566,7 +9557,7 @@ static PyObject *_wrap_Grid_MoveCursorRight(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9591,7 +9582,7 @@ static PyObject *_wrap_Grid_MovePageDown(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9616,7 +9607,7 @@ static PyObject *_wrap_Grid_MovePageUp(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9647,7 +9638,7 @@ static PyObject *_wrap_Grid_MoveCursorUpBlock(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9678,7 +9669,7 @@ static PyObject *_wrap_Grid_MoveCursorDownBlock(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9709,7 +9700,7 @@ static PyObject *_wrap_Grid_MoveCursorLeftBlock(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -9740,7 +9731,7 @@ static PyObject *_wrap_Grid_MoveCursorRightBlock(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -10759,7 +10750,7 @@ static PyObject *_wrap_Grid_CanDragRowSize(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -10840,7 +10831,7 @@ static PyObject *_wrap_Grid_CanDragColSize(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -10921,7 +10912,7 @@ static PyObject *_wrap_Grid_CanDragGridSize(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -11235,7 +11226,7 @@ static PyObject *_wrap_Grid_GridLinesEnabled(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -11670,7 +11661,7 @@ static PyObject *_wrap_Grid_GetDefaultCellOverflow(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -11707,7 +11698,7 @@ static PyObject *_wrap_Grid_GetCellOverflow(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13131,7 +13122,7 @@ static PyObject *_wrap_Grid_IsReadOnly(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13356,7 +13347,7 @@ static PyObject *_wrap_Grid_IsSelection(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -13417,7 +13408,7 @@ static PyObject *_wrap_Grid_IsInSelection(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14397,7 +14388,7 @@ static PyObject *_wrap_GridEvent_Selecting(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14422,7 +14413,7 @@ static PyObject *_wrap_GridEvent_ControlDown(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14447,7 +14438,7 @@ static PyObject *_wrap_GridEvent_MetaDown(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14472,7 +14463,7 @@ static PyObject *_wrap_GridEvent_ShiftDown(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14497,7 +14488,7 @@ static PyObject *_wrap_GridEvent_AltDown(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14676,7 +14667,7 @@ static PyObject *_wrap_GridSizeEvent_ControlDown(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14701,7 +14692,7 @@ static PyObject *_wrap_GridSizeEvent_MetaDown(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14726,7 +14717,7 @@ static PyObject *_wrap_GridSizeEvent_ShiftDown(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -14751,7 +14742,7 @@ static PyObject *_wrap_GridSizeEvent_AltDown(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15032,7 +15023,7 @@ static PyObject *_wrap_GridRangeSelectEvent_Selecting(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15057,7 +15048,7 @@ static PyObject *_wrap_GridRangeSelectEvent_ControlDown(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15082,7 +15073,7 @@ static PyObject *_wrap_GridRangeSelectEvent_MetaDown(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15107,7 +15098,7 @@ static PyObject *_wrap_GridRangeSelectEvent_ShiftDown(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -15132,7 +15123,7 @@ static PyObject *_wrap_GridRangeSelectEvent_AltDown(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromBool((bool)result);
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
