@@ -82,10 +82,12 @@ wxPrinterBase::wxPrinterBase(wxPrintDialogData *data)
     sm_abortIt = FALSE;
     if (data)
         m_printDialogData = (*data);
+    sm_lastError = wxPRINTER_NO_ERROR;
 }
 
 wxWindow *wxPrinterBase::sm_abortWindow = (wxWindow *) NULL;
 bool wxPrinterBase::sm_abortIt = FALSE;
+wxPrinterError wxPrinterBase::sm_lastError = wxPRINTER_NO_ERROR;
 
 wxPrinterBase::~wxPrinterBase()
 {
