@@ -216,8 +216,8 @@ public:
     void GetEndPos(int& row, int& col);
 
     
-    wxGridBagSizer* GetSizer() const;
-    void SetSizer(wxGridBagSizer* sizer);
+    wxGridBagSizer* GetGBSizer() const;
+    void SetGBSizer(wxGridBagSizer* sizer);
     
 };
 
@@ -253,7 +253,7 @@ public:
             else if ( info.sizer )
                 return self->Add(info.sizer, pos, span, flag, border, data);
             else if (info.gotSize)
-                return self->Add(info.sizePtr->GetWidth(), info.sizePtr->GetHeight(),
+                return self->Add(info.size.GetWidth(), info.size.GetHeight(),
                                  pos, span, flag, border, data);
             return false;
         }

@@ -97,15 +97,13 @@ public:
 struct wxPySizerItemInfo {
     wxPySizerItemInfo()
         : window(NULL), sizer(NULL), gotSize(false),
-          size(wxDefaultSize), sizePtr(&size),
-          gotPos(false), pos(-1)
+          size(wxDefaultSize), gotPos(false), pos(-1)
     {}
     
     wxWindow* window;
     wxSizer*  sizer;
     bool      gotSize;
     wxSize    size;
-    wxSize*   sizePtr;
     bool      gotPos;
     int       pos;
 };
@@ -113,7 +111,8 @@ struct wxPySizerItemInfo {
 static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize, bool checkIdx ) {
 
     wxPySizerItemInfo info;
-    wxSize* sizePtr = &info.size;
+    wxSize  size;
+    wxSize* sizePtr = &size;
 
     // Find out what the type of the item is
     // try wxWindow
@@ -127,8 +126,10 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
             info.sizer = NULL;
             
             // try wxSize or (w,h)
-            if ( checkSize && wxSize_helper(item, &sizePtr))
+            if ( checkSize && wxSize_helper(item, &sizePtr)) {
+                info.size = *sizePtr;
                 info.gotSize = true;
+            }
 
             // or a single int
             if (checkIdx && PyInt_Check(item)) {
@@ -185,7 +186,7 @@ public:
             else if ( info.sizer )
                 self->Add(info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Add(info.sizePtr->GetWidth(), info.sizePtr->GetHeight(),
+                self->Add(info.size.GetWidth(), info.size.GetHeight(),
                           proportion, flag, border, data);
         }
 
@@ -206,7 +207,7 @@ public:
             else if ( info.sizer )
                 self->Insert(before, info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Insert(before, info.sizePtr->GetWidth(), info.sizePtr->GetHeight(),
+                self->Insert(before, info.size.GetWidth(), info.size.GetHeight(),
                              proportion, flag, border, data);
         }
 
@@ -228,7 +229,7 @@ public:
             else if ( info.sizer )
                 self->Prepend(info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Prepend(info.sizePtr->GetWidth(), info.sizePtr->GetHeight(),
+                self->Prepend(info.size.GetWidth(), info.size.GetHeight(),
                               proportion, flag, border, data);
         }
 
