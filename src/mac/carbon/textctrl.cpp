@@ -1326,7 +1326,7 @@ wxString wxMacMLTEControl::GetStringValue() const
         }
 #else
         Handle theText ;
-        err = TXNGetDataEncoded( ((TXNObject) m_macTXN), kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
+        err = TXNGetDataEncoded( m_txn , kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
         // all done
         if ( err )
         {
