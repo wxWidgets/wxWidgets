@@ -57,13 +57,13 @@
         <if cond="FORMAT=='autoconf'">
             <wx-mac-app-bundle/>
             <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
-            <__command>$(LF)$(SAMPLES_RPATH_POSTLINK)</__command>
+            <postlink-command>$(SAMPLES_RPATH_POSTLINK)</postlink-command>
         </if>
     </template>
     <template id="wx_sample_console" template="wx_util_console">
         <if cond="FORMAT=='autoconf'">
             <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
-            <__command>$(LF)$(SAMPLES_RPATH_POSTLINK)</__command>
+            <postlink-command>$(SAMPLES_RPATH_POSTLINK)</postlink-command>
         </if>
     </template>
     
