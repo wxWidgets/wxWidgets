@@ -220,15 +220,12 @@ void wxTextCtrl::Init()
     m_privateContextMenu = NULL;
     m_suppressNextUpdate = false;
     m_isNativeCaretShown = true;
+    m_isCaretAtEnd = true;
 }
 
 wxTextCtrl::~wxTextCtrl()
 {
-    if (m_privateContextMenu)
-    {
-        delete m_privateContextMenu;
-        m_privateContextMenu = NULL;
-    }
+    delete m_privateContextMenu;
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -345,8 +342,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     if ( !MSWCreateControl(windowClass, msStyle, pos, size, valueWin) )
         return false;
-
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
 #if wxUSE_RICHEDIT
     if ( IsRich() )
@@ -943,8 +938,6 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
                 SendUpdateEvent();
         }
     }
-
-    AdjustSpaceLimit();
 }
 
 void wxTextCtrl::AppendText(const wxString& text)
@@ -954,7 +947,8 @@ void wxTextCtrl::AppendText(const wxString& text)
     WriteText(text);
 
 #if wxUSE_RICHEDIT
-    if ( IsMultiLine() && GetRichVersion() > 1 )
+    // don't do this if we're frozen, saves some time
+    if ( !IsFrozen() && IsMultiLine() && GetRichVersion() > 1 )
     {
         // setting the caret to the end and showing it simply doesn't work for
         // RichEdit 2.0 -- force it to still do what we want
@@ -1084,6 +1078,8 @@ void wxTextCtrl::SetEditable(bool editable)
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
     DoSetSelection(pos, pos);
+
+    m_isCaretAtEnd = pos == GetLastPosition();
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
@@ -1093,8 +1089,11 @@ void wxTextCtrl::SetInsertionPointEnd()
     // if it doesn't actually move the caret anywhere and so the simple fact of
     // doing it results in horrible flicker when appending big amounts of text
     // to the control in a few chunks (see DoAddText() test in the text sample)
-    if ( GetInsertionPoint() == GetLastPosition() )
+    if ( m_isCaretAtEnd || GetInsertionPoint() == GetLastPosition() )
+    {
+        m_isCaretAtEnd = true;
         return;
+    }
 
     long pos;
 
@@ -1212,7 +1211,7 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
         ::SendMessage(hWnd, EM_SETSEL, (WPARAM)from, (LPARAM)to);
     }
 
-    if ( scrollCaret )
+    if ( scrollCaret && !IsFrozen() )
     {
 #if wxUSE_RICHEDIT
         // richedit 3.0 (i.e. the version living in riched20.dll distributed
@@ -1473,6 +1472,9 @@ void wxTextCtrl::ShowPosition(long pos)
 
     if (linesToScroll != 0)
       (void)::SendMessage(hWnd, EM_LINESCROLL, (WPARAM)0, (LPARAM)linesToScroll);
+
+    // be pessimistic
+    m_isCaretAtEnd = false;
 }
 
 long wxTextCtrl::GetLengthOfLineContainingPos(long pos) const
@@ -1549,6 +1551,9 @@ void wxTextCtrl::Undo()
     if (CanUndo())
     {
         ::SendMessage(GetHwnd(), EM_UNDO, 0, 0);
+
+        // it's not necessarily at the end any more
+        m_isCaretAtEnd = false;
     }
 }
 
@@ -1563,6 +1568,9 @@ void wxTextCtrl::Redo()
 #endif
         // Same as Undo, since Undo undoes the undo, i.e. a redo.
         ::SendMessage(GetHwnd(), EM_UNDO, 0, 0);
+
+        // it's not necessarily at the end any more
+        m_isCaretAtEnd = false;
     }
 }
 
@@ -2457,10 +2465,13 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
     if ( !wxTextCtrlBase::SetDefaultStyle(style) )
         return false;
 
-    // we have to do this or the style wouldn't apply for the text typed by the
-    // user
-    long posLast = GetLastPosition();
-    SetStyle(posLast, posLast, m_defaultStyle);
+    if ( IsEditable() )
+    {
+        // we have to do this or the style wouldn't apply for the text typed by
+        // the user
+        long posLast = GetLastPosition();
+        SetStyle(posLast, posLast, m_defaultStyle);
+    }
 
     return true;
 }
