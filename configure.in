@@ -505,13 +505,14 @@ dnl than checking it during run-time
 NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
 dnl the list of all available toolkits
-ALL_TOOLKITS="CYGWIN GTK MINGW MOTIF WINE PM"
+ALL_TOOLKITS="CYGWIN GTK MINGW MOTIF MAC WINE PM"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
+DEFAULT_wxUSE_MAC=0
 DEFAULT_wxUSE_WINE=0
 DEFAULT_wxUSE_PM=0
 
@@ -521,6 +522,7 @@ dnl nothing was found in the cache
 DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
+DEFAULT_DEFAULT_wxUSE_MAC=0
 DEFAULT_DEFAULT_wxUSE_WINE=0
 DEFAULT_DEFAULT_wxUSE_PM=0
 
@@ -636,6 +638,15 @@ case "${host}" in
     AC_DEFINE(__EMX__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
+  ;;
+
+  *-*-darwin* )
+    USE_BSD=1
+    USE_MAC=1
+    AC_DEFINE(__MAC__)
+    AC_DEFINE(__BSD__)
+    AC_DEFINE(__UNIX__)
+    DEFAULT_DEFAULT_wxUSE_MAC=1
   ;;
 
   *-*-beos* )
@@ -960,6 +971,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
 AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC="$withval" TOOLKIT_GIVEN=1])
 AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$withval" CACHE_WINE=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows], [wxUSE_CYGWIN="$withval" CACHE_CYGWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mingw,         [  --with-mingw            use GCC Minimal MS-Windows], [wxUSE_MINGW="$withval" CACHE_MINGW=1 TOOLKIT_GIVEN=1])
@@ -1266,7 +1278,7 @@ else
 fi
 
 dnl we suppose that expr exists...
-NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0}`
+NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MAC:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0}`
 
 dnl Allow wxUSE_PM only for OS/2 with EMX.
 dnl Path separator; ':' for unix.
@@ -1890,6 +1902,13 @@ if test "$wxUSE_MOTIF" = 1; then
     GUIDIST=MOTIF_DIST
 fi
 
+if test "$wxUSE_MAC" = 1; then
+    TOOLKIT=MAC
+    UNIXOBJS="\$(UNIX_OBJS)"
+    UNIXDEPS="\$(UNIX_DEPS)"
+    GUIDIST=MAC_DIST
+fi
+
 if test "$wxUSE_PM" = 1; then
     TOOLKIT=PM
 
@@ -1975,8 +1994,8 @@ else
     TOOLKIT_DEF="-D__WXBASE__"
 
     dnl the sources, their dependenices and the headers
-    ALL_OBJECTS="\$(BASE_OBJS) \${BASE_UNIX_OBJS}"
-    ALL_DEPFILES="\${BASE_DEPS} \${BASE_UNIX_DEPS}"
+    ALL_OBJECTS="\$(BASE_OBJS) \$(BASE_UNIX_OBJS)"
+    ALL_DEPFILES="\$(BASE_DEPS) \$(BASE_UNIX_DEPS)"
 
     if test "$wxUSE_ZLIB" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
@@ -1992,6 +2011,12 @@ else
     dnl distribute only wxBase sources/headers
     GUIDIST="BASE_DIST"
     DISTDIR="wxBase"
+
+    dnl Apple MAC OS X specific extras
+    if test "$USE_UNIX" = 1 ; then
+	ALL_OBJECTS="${ALL_OBJECTS} dl_macosx.o"
+	ALL_DEPFILES="${ALL_DEPFILES} dl_macosx.d"
+    fi
 fi
 
 dnl the name of the (libtool) library
@@ -2106,8 +2131,19 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
       ;;
-      *-*-freebsd* | *-*-netbsd*)
+      *-*-freebsd* | *-*-netbsd* )
         SHARED_LD="${CC} -shared -o"
+        PIC_FLAG="-fPIC"
+        if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
+            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
+        else
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+            WX_ALL="CREATE_LINKS"
+        fi
+      ;;
+      *-*-darwin* )
+        SHARED_LD="libtool -dynamic -o"
         PIC_FLAG="-fPIC"
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
@@ -2454,6 +2490,13 @@ if test "$USE_BEOS" = 1; then
     HAVE_SOME_SLEEP_FUNC=1
 fi
 
+if test "$USE_MAC" = 1; then
+    dnl Mac OS X has both nanosleep and usleep
+    dnl but only usleep is defined in unistd.h
+    AC_DEFINE(HAVE_USLEEP)
+    HAVE_SOME_SLEEP_FUNC=1
+fi
+
 if test "$HAVE_SOME_SLEEP_FUNC" != 1; then
     dnl try nanosleep() in libc and libposix4, if this fails - usleep()
     POSIX4_LINK=
@@ -2466,7 +2509,9 @@ if test "$HAVE_SOME_SLEEP_FUNC" != 1; then
                     POSIX4_LINK="-lposix4"
                 ],
                 [
-                    AC_CHECK_FUNCS(usleep)
+                    AC_CHECK_FUNCS(usleep,
+        		AC_DEFINE(HAVE_USLEEP),
+		    )
                     AC_MSG_WARN([wxSleep() function will not work])
                 ]
             )
@@ -2570,9 +2615,15 @@ if test "$wxUSE_THREADS" = "yes" ; then
                 THREADS_OBJ="threadpsx.lo"
                 THREADS_LINK="c_r"
             ], [
-                dnl VZ: SGI threads are not supported currently
-                AC_CHECK_HEADER(sys/prctl.h, [
-                    THREADS_OBJ="threadsgi.lo"
+                dnl thread functions are in libcc_dynamic under Mac OS X/Darwin
+                AC_CHECK_LIB(cc_dynamic, pthread_create, [
+                    THREADS_OBJ="threadpsx.lo"
+                    THREADS_LINK="cc_dynamic"
+                ], [
+                    dnl VZ: SGI threads are not supported currently
+                    AC_CHECK_HEADER(sys/prctl.h, [
+                        THREADS_OBJ="threadsgi.lo"
+                    ])
                 ])
             ])
         ])
@@ -2709,6 +2760,11 @@ fi
 
 if test "$WXWINE" = 1 ; then
   TOOLKIT_DEF="${TOOLKIT_DEF} -D__WXWINE__"
+fi
+
+if test "$wxUSE_MAC" = 1 ; then
+  TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -DTARGET_CARBON"
+  TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE}"
 fi
 
 if test "$wxUSE_CYGWIN" = 1 ; then
@@ -3272,10 +3328,14 @@ if test "$TOOLKIT" != "MSW"; then
 HAVE_DL_FUNCS=0
 HAVE_SHL_FUNCS=0
 if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
-    dnl the test is a bit complicated because we check for dlopen() both with
-    dnl and without -ldl and we also try to find shl_load() if there is no
-    dnl dlopen() on this system
-    AC_CHECK_FUNCS(dlopen,
+    if test "$USE_MAC" = 1; then
+        dnl Mac OS X needs dl_macosx.c to be compiled in to fake dlopen/dlerror
+        HAVE_DL_FUNCS=1
+    else
+        dnl the test is a bit complicated because we check for dlopen() both with
+        dnl and without -ldl and we also try to find shl_load() if there is no
+        dnl dlopen() on this system
+        AC_CHECK_FUNCS(dlopen,
         [
             AC_DEFINE(HAVE_DLOPEN)
             HAVE_DL_FUNCS=1
@@ -3308,6 +3368,7 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
         AC_CHECK_FUNCS(dlerror,
                        AC_DEFINE(HAVE_DLERROR),
                        AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR)))
+    fi
     fi
 
     if test "$HAVE_DL_FUNCS" = 0; then
@@ -3756,9 +3817,15 @@ OPENGL_LIBS="$OPENGL_LINK"
 
 dnl all additional libraries (except wxWindows itself) we link with
 dnl
-dnl note that we always link with -lm - extended.c uses floor() and is always
-dnl linked in
-EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
+dnl note that we always link with -lm except for Mac OS X
+dnl extended.c uses floor() and is always linked in
+if test "$USE_MAC" = 1 ; then
+    EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -framework System"
+    CFLAGS="${CFLAGS} -fpascal-strings"
+    CPPFLAGS="${CPPFLAGS} -fpascal-strings"
+else
+    EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
+fi
 if test "$wxUSE_GUI" = "yes"; then
     EXTRA_LIBS="$GUILIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $FREETYPE_LINK $EXTRA_LIBS"
 fi
