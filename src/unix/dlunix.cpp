@@ -33,9 +33,25 @@
     #include "wx/log.h"
 #endif
 
-#if defined(__DARWIN__)
+// only Mac OS X 10.3+ has dlfcn.h, and it is simpler to always provide our own
+// wrappers using the native functions instead of doing checks for OS version
+#ifndef __DARWIN__
     #include <dlfcn.h>
 #endif
+
+// if some flags are not supported, just ignore them
+#ifndef RTLD_LAZY
+    #define RTLD_LAZY 0
+#endif
+
+#ifndef RTLD_NOW
+    #define RTLD_NOW 0
+#endif
+
+#ifndef RTLD_GLOBAL
+    #define RTLD_GLOBAL
+#endif
+
 
 #if defined(HAVE_DLOPEN) || defined(__DARWIN__)
     #define USE_POSIX_DL_FUNCS
@@ -181,24 +197,18 @@ wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 #ifdef USE_POSIX_DL_FUNCS
     int rtldFlags = 0;
 
-#ifdef RTLD_LAZY
     if ( flags & wxDL_LAZY )
     {
         rtldFlags |= RTLD_LAZY;
     }
-#endif
-#ifdef RTLD_NOW
     if ( flags & wxDL_NOW )
     {
         rtldFlags |= RTLD_NOW;
     }
-#endif
-#ifdef RTLD_GLOBAL
     if ( flags & wxDL_GLOBAL )
     {
         rtldFlags |= RTLD_GLOBAL;
     }
-#endif
 
     return dlopen(libname.fn_str(), rtldFlags);
 #else // !USE_POSIX_DL_FUNCS
