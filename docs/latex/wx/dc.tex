@@ -211,7 +211,8 @@ mapping mode.
 \func{wxCoord}{DeviceToLogicalXRel}{\param{wxCoord}{ x}}
 
 Convert device X coordinate to relative logical coordinate, using the current
-mapping mode. Use this function for converting a width, for example.
+mapping mode but ignoring the x axis orientation.
+Use this function for converting a width, for example.
 
 \membersection{wxDC::DeviceToLogicalY}\label{wxdcdevicetologicaly}
 
@@ -225,7 +226,8 @@ mapping mode.
 \func{wxCoord}{DeviceToLogicalYRel}{\param{wxCoord}{ y}}
 
 Convert device Y coordinate to relative logical coordinate, using the current
-mapping mode. Use this function for converting a height, for example.
+mapping mode but ignoring the y axis orientation.
+Use this function for converting a height, for example.
 
 \membersection{wxDC::DrawArc}\label{wxdcdrawarc}
 
@@ -683,7 +685,8 @@ mapping mode.
 \func{wxCoord}{LogicalToDeviceXRel}{\param{wxCoord}{ x}}
 
 Converts logical X coordinate to relative device coordinate, using the current
-mapping mode. Use this for converting a width, for example.
+mapping mode but ignoring the x axis orientation.
+Use this for converting a width, for example.
 
 \membersection{wxDC::LogicalToDeviceY}\label{wxdclogicaltodevicey}
 
@@ -697,7 +700,8 @@ mapping mode.
 \func{wxCoord}{LogicalToDeviceYRel}{\param{wxCoord}{ y}}
 
 Converts logical Y coordinate to relative device coordinate, using the current
-mapping mode. Use this for converting a height, for example.
+mapping mode but ignoring the y axis orientation.
+Use this for converting a height, for example.
 
 \membersection{wxDC::MaxX}\label{wxdcmaxx}
 
@@ -739,6 +743,23 @@ doesn't contain anything.
 \wxheading{See also}
 
 \helpref{CalcBoundingBox}{wxdccalcboundingbox}
+
+\membersection{wxDC::SetAxisOrientation}\label{wxdcsetaxisorientation}
+
+\func{void}{SetAxisOrientation}{\param{bool}{ xLeftRight},
+                                \param{bool}{ yBottomUp}}
+
+Sets the x and y axis orientation (i.e., the direction from lowest to
+highest values on the axis). The default orientation is the natural
+orientation, e.g. x axis from left to right and y axis from bottom up.
+
+\wxheading{Parameters}
+
+\docparam{xLeftRight}{True to set the x axis orientation to the natural
+left to right orientation, false to invert it.}
+
+\docparam{yBottomUp}{True to set the y axis orientation to the natural
+bottom up orientation, false to invert it.}
 
 \membersection{wxDC::SetDeviceOrigin}\label{wxdcsetdeviceorigin}
 
