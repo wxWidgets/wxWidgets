@@ -5,13 +5,15 @@ Recent Changes for wxPython
 -------
 
 wx.ADJUST_MINSIZE is now the default behaviour for window items in
-sizers.  This means that the item's GetAdjustedBestSize will be called
-when calculating layout and the return value from that will be used
-for the minimum size.  Added wx.FIXED_MINSIZE flag for when you would
-like the old behavior but you should only need it when your desired
-size is smaller than the item's GetBestSize.  When a window is added
-to a sizer it's initial size, if any, is set as the window's minimal
-size using SetSizeHints if there isn't already a minimal size.
+sizers.  This means that the item's GetMinSize and/or GetBestSize will
+be called when calculating layout and the return value from that will
+be used for the minimum size.  The wx.FIXED_MINSIZE flag was added
+that will cause the sizer to *not* call window methods to determine
+the new best size, instead the minsize that the window had when added
+to the sizer (or the size the window was created with) will always be
+used.  When a window is added to a sizer it's initial size, if any, is
+set as the window's minimal size using SetSizeHints if there isn't
+already a minimal size.
 
 Added some convenience methods to wx.Bitmap: SetSize, GetSize, and
 wx.EmptyBitmap can be called with a wx.Size (or a 2-element sequence)
