@@ -182,7 +182,7 @@ typedef struct {
 // ----------------------------------------------------------------------------
 // Toolbar define value missing 
 // ----------------------------------------------------------------------------
-#if defined(__DIGITALMARS__) 
+#if !defined(CCS_VERT)
 #define CCS_VERT                0x00000080L
 #endif
 
