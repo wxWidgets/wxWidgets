@@ -112,6 +112,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(IncSpacing)
     MENU_LINK(DecSpacing)
     MENU_LINK(ToggleIcon)
+    MENU_LINK(SelectRoot)
 #undef MENU_LINK
 
 END_EVENT_TABLE()
@@ -213,6 +214,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_Delete, wxT("&Delete this item"));
     tree_menu->Append(TreeTest_DeleteChildren, wxT("Delete &children"));
     tree_menu->Append(TreeTest_DeleteAll, wxT("Delete &all items"));
+    tree_menu->Append(TreeTest_SelectRoot, wxT("Select root item"));
     tree_menu->AppendSeparator();
     tree_menu->Append(TreeTest_Count, wxT("Count children of current item"));
     tree_menu->Append(TreeTest_CountRec, wxT("Recursively count children of current item"));
@@ -463,6 +465,11 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnSelect(wxCommandEvent& WXUNUSED(event))
 {
     m_treeCtrl->SelectItem(m_treeCtrl->GetSelection());
+}
+
+void MyFrame::OnSelectRoot(wxCommandEvent& WXUNUSED(event))
+{
+    m_treeCtrl->SelectItem(m_treeCtrl->GetRootItem());
 }
 
 void MyFrame::OnUnselect(wxCommandEvent& WXUNUSED(event))

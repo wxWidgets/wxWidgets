@@ -179,6 +179,7 @@ public:
     void OnUnselect(wxCommandEvent& event);
     void OnToggleSel(wxCommandEvent& event);
 #endif // NO_MULTIPLE_SELECTION
+    void OnSelectRoot(wxCommandEvent& event);
     void OnDelete(wxCommandEvent& event);
     void OnDeleteChildren(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
@@ -277,5 +278,6 @@ enum
     TreeTest_ToggleIcon,
     TreeTest_Select,
     TreeTest_Unselect,
+    TreeTest_SelectRoot,
     TreeTest_Ctrl = 1000
 };
