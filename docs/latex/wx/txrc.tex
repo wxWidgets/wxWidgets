@@ -54,7 +54,7 @@ To create an XRC file, you can use one of the following methods.
 \item use \urlref{XRCed}{http://xrced.sf.net}, a wxPython-based
 dialog editor that you can find in the {\tt wxPython/tools} subdirectory of the wxWidgets
 CVS archive;
-\item use \urlref{Glade}{http://wxglade.sf.net}, a GUI designer written in wxPython. At the moment it can generate Python, C++ and XRC;
+\item use \urlref{wxGlade}{http://wxglade.sf.net}, a GUI designer written in wxPython. At the moment it can generate Python, C++ and XRC;
 \item convert WIN32 RC files to XRC with the tool in {\tt contrib/utils/convertrc}.
 \end{itemize}
 
@@ -80,7 +80,7 @@ To compile binary resource files, use the command-line wxrc utility. It takes on
 \item -e (--extra-cpp-code): if used together with -c, generates C++ header file
 containing class definitions for the windows defined by the XRC file (see special subsection) 
 \item -u (--uncompressed): do not compress XML files (C++ only)
-\item -g (--gettext): output .po catalog (to stdout, or a file if -o is used)
+\item -g (--gettext): output underscore-wrapped strings that poEdit or gettext can scan. Outputs to stdout, or a file if -o is used
 \item -n (--function) <name>: specify C++ function name (use with -c)
 \item -o (--output) <filename>: specify the output file, such as resource.xrs or resource.cpp
 \item -l (--list-of-handlers) <filename>: output a list of necessary handlers to this file

@@ -3,6 +3,9 @@
 A radio button item is a button which usually denotes one of several mutually
 exclusive options. It has a text label next to a (usually) round button.
 
+You can create a group of mutually-exclusive radio buttons by specifying {\tt wxRB\_GROUP} for
+the first in the group. The group ends when another radio button group is created, or there are no more radio buttons.
+
 \wxheading{Derived from}
 
 \helpref{wxControl}{wxcontrol}\\
@@ -19,11 +22,11 @@ exclusive options. It has a text label next to a (usually) round button.
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxRB\_GROUP}}{Marks the beginning of a new group of radio buttons.}
-\twocolitem{\windowstyle{wxRB\_SINGLE}}{If your radio buttons are not
-consecutive siblings, they cannot form a group under Windows and you should use
-this style to indicate that each of them is handled individually.}
-\twocolitem{\windowstyle{wxRB\_USE\_CHECKBOX}}{Use of the checkbox control instead of radio
-button (currently supported only on PalmOS)}
+\twocolitem{\windowstyle{wxRB\_SINGLE}}{In some circumstances, radio buttons that are not
+consecutive siblings trigger a hang bug in Windows (only). If this happens, add this style
+to mark the button as not belonging to a group, and implement the mutually-exclusive group behaviour yourself.}
+\twocolitem{\windowstyle{wxRB\_USE\_CHECKBOX}}{Use a checkbox button instead of radio
+button (currently supported only on PalmOS).}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
