@@ -40,6 +40,7 @@ TEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir) \
 	$(__DLLFLAG_p) $(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o \
+	test_archivetest.o \
 	test_arrays.o \
 	test_datetimetest.o \
 	test_fileconftest.o \
@@ -142,6 +143,9 @@ data:
 	done
 
 test_test.o: $(srcdir)/test.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_archivetest.o: $(srcdir)/archive/archivetest.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_arrays.o: $(srcdir)/arrays/arrays.cpp

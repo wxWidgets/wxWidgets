@@ -386,7 +386,7 @@ ALL_BASE_SOURCES =  \
 	src/common/textfile.cpp \
 	src/common/tokenzr.cpp \
 	src/common/txtstrm.cpp \
-	src/common/unzip.c \
+	src/common/archive.cpp \
 	src/common/uri.cpp \
 	src/common/variant.cpp \
 	src/common/wfstream.cpp \
@@ -510,7 +510,7 @@ MONODLL_OBJECTS =  \
 	monodll_textfile.o \
 	monodll_tokenzr.o \
 	monodll_txtstrm.o \
-	monodll_unzip.o \
+	monodll_archive.o \
 	monodll_uri.o \
 	monodll_variant.o \
 	monodll_wfstream.o \
@@ -597,7 +597,7 @@ MONOLIB_OBJECTS =  \
 	monolib_textfile.o \
 	monolib_tokenzr.o \
 	monolib_txtstrm.o \
-	monolib_unzip.o \
+	monolib_archive.o \
 	monolib_uri.o \
 	monolib_variant.o \
 	monolib_wfstream.o \
@@ -685,7 +685,7 @@ BASEDLL_OBJECTS =  \
 	basedll_textfile.o \
 	basedll_tokenzr.o \
 	basedll_txtstrm.o \
-	basedll_unzip.o \
+	basedll_archive.o \
 	basedll_uri.o \
 	basedll_variant.o \
 	basedll_wfstream.o \
@@ -757,7 +757,7 @@ BASELIB_OBJECTS =  \
 	baselib_textfile.o \
 	baselib_tokenzr.o \
 	baselib_txtstrm.o \
-	baselib_unzip.o \
+	baselib_archive.o \
 	baselib_uri.o \
 	baselib_variant.o \
 	baselib_wfstream.o \
@@ -8660,8 +8660,8 @@ monodll_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONODLL_ODEP)
 monodll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-monodll_unzip.o: $(srcdir)/src/common/unzip.c $(MONODLL_ODEP)
-	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+monodll_archive.o: $(srcdir)/src/common/archive.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_uri.o: $(srcdir)/src/common/uri.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -11942,8 +11942,8 @@ monolib_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONOLIB_ODEP)
 monolib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-monolib_unzip.o: $(srcdir)/src/common/unzip.c $(MONOLIB_ODEP)
-	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+monolib_archive.o: $(srcdir)/src/common/archive.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_uri.o: $(srcdir)/src/common/uri.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -15224,8 +15224,8 @@ basedll_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(BASEDLL_ODEP)
 basedll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-basedll_unzip.o: $(srcdir)/src/common/unzip.c $(BASEDLL_ODEP)
-	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
+basedll_archive.o: $(srcdir)/src/common/archive.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 basedll_uri.o: $(srcdir)/src/common/uri.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
@@ -15662,8 +15662,8 @@ baselib_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(BASELIB_ODEP)
 baselib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
-baselib_unzip.o: $(srcdir)/src/common/unzip.c $(BASELIB_ODEP)
-	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
+baselib_archive.o: $(srcdir)/src/common/archive.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_uri.o: $(srcdir)/src/common/uri.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
@@ -21997,6 +21997,12 @@ GTK_DIST: ALL_GUI_DIST
 	cp $(GTKDIR)/*.c $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.xbm $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.mms $(DISTDIR)/src/gtk
+
+	mkdir $(DISTDIR)/include/wx/gtk/gnome
+	mkdir $(DISTDIR)/src/gtk/gnome
+	cp $(INCDIR)/wx/gtk/gnome/*.h $(DISTDIR)/include/wx/gtk/gnome
+	cp $(GTKDIR)/gnome/*.cpp $(DISTDIR)/src/gtk/gnome
+
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 

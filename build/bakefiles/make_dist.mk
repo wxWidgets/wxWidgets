@@ -227,6 +227,12 @@ GTK_DIST: ALL_GUI_DIST
 	cp $(GTKDIR)/*.c $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.xbm $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.mms $(DISTDIR)/src/gtk
+
+	mkdir $(DISTDIR)/include/wx/gtk/gnome
+	mkdir $(DISTDIR)/src/gtk/gnome
+	cp $(INCDIR)/wx/gtk/gnome/*.h $(DISTDIR)/include/wx/gtk/gnome
+	cp $(GTKDIR)/gnome/*.cpp $(DISTDIR)/src/gtk/gnome
+
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 
