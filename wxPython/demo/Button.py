@@ -1,6 +1,5 @@
 
 import  wx
-import  images
 
 #----------------------------------------------------------------------
 
@@ -15,46 +14,17 @@ class TestPanel(wx.Panel):
         b.SetDefault()
         b.SetSize(b.GetBestSize())
 
-        b = wx.Button(self, 20, "HELLO AGAIN!", (20, 80), (120, 45))
+        b = wx.Button(self, 20, "HELLO AGAIN!", (20, 80)) ##, (120, 45))
         self.Bind(wx.EVT_BUTTON, self.OnClick, b)
         b.SetToolTipString("This is a Hello button...")
 
-        if 0:  # a test case for catching wx.PyAssertionError
-
-            #wx.GetApp().SetAssertMode(wx.PYAPP_ASSERT_SUPPRESS)
-            #wx.GetApp().SetAssertMode(wx.PYAPP_ASSERT_EXCEPTION)
-            #wx.GetApp().SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
-            #wx.GetApp().SetAssertMode(wx.PYAPP_ASSERT_EXCEPTION | wx.PYAPP_ASSERT_DIALOG)
-
-            try:
-                bmp = wx.Bitmap("nosuchfile.bmp", wx.BITMAP_TYPE_BMP)
-                mask = wx.MaskColour(bmp, wx.BLUE)
-            except wx.PyAssertionError:
-                self.log.write("Caught wx.PyAssertionError!  I will fix the problem.\n")
-                bmp = images.getTest2Bitmap()
-                mask = wx.MaskColour(bmp, wx.BLUE)
-        else:
-            bmp = images.getTest2Bitmap()
-            mask = wx.MaskColour(bmp, wx.BLUE)
-
-        bmp.SetMask(mask)
-        b = wx.BitmapButton(self, 30, bmp, (260, 20),
-                       (bmp.GetWidth()+10, bmp.GetHeight()+10))
-        b.SetToolTipString("This is a bitmap button.")
-        self.Bind(wx.EVT_BUTTON, self.OnClick, b)
-        
-
         b = wx.Button(self, 40, "Flat Button?", (20,150), style=wx.NO_BORDER)
-        b.SetToolTipString("This button has a style flag of wx.NO_BORDER")
+        b.SetToolTipString("This button has a style flag of wx.NO_BORDER. On some platforms that will give it a flattened look.")
         self.Bind(wx.EVT_BUTTON, self.OnClick, b)
 
 
     def OnClick(self, event):
         self.log.write("Click! (%d)\n" % event.GetId())
-        ##wxLogDebug("debug message")
-
-
-## wxLog_SetLogLevel(wxLOG_Message)  # ignore everything above wxLOG_Message
 
 #----------------------------------------------------------------------
 

@@ -142,6 +142,23 @@ FOR INTERNATIONAL [NON-ENGLISH-SPEAKING] USE:
 
 """
 
+
+#----------------------------------------------------------------------
+import warnings
+
+warningmsg = r"""\
+
+##############################################################\
+# THIS MODULE IS DEPRECATED                                   |
+##############################################################/
+
+"""
+
+warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
+
+#----------------------------------------------------------------------
+
+
 _debug = 0
 #_debug = 1 # uncomment to display some information (to stdout)
 Version = 1.3
