@@ -41,8 +41,8 @@ wxRGN_XOR           // Creates the union of two combined regions except for any 
 };
 
 class WXDLLEXPORT wxRegion : public wxGDIObject {
-DECLARE_DYNAMIC_CLASS(wxRegion);
-	friend class WXDLLEXPORT wxRegionIterator;
+    DECLARE_DYNAMIC_CLASS(wxRegion)
+    friend class WXDLLEXPORT wxRegionIterator;
 public:
     wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
@@ -121,7 +121,7 @@ public:
 };
 
 class WXDLLEXPORT wxRegionIterator : public wxObject {
-DECLARE_DYNAMIC_CLASS(wxRegionIterator);
+    DECLARE_DYNAMIC_CLASS(wxRegionIterator)
 public:
 	wxRegionIterator();
 	wxRegionIterator(const wxRegion& region);
