@@ -109,7 +109,7 @@ public:
     int GetItemCount() const;
     int GetColumnCount() const;
     void SetItemSpacing( int spacing, bool isSmall = FALSE );
-    int GetItemSpacing( bool isSmall ) const;
+    wxSize GetItemSpacing() const;
     void SetItemTextColour( long item, const wxColour& col);
     wxColour GetItemTextColour( long item ) const;
     void SetItemBackgroundColour( long item, const wxColour &col);
@@ -161,6 +161,10 @@ public:
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
     void RefreshItems(long itemFrom, long itemTo);
+
+    // obsolete, don't use
+    wxDEPRECATED( int GetItemSpacing( bool isSmall ) const );
+
 
     // implementation only from now on
     // -------------------------------

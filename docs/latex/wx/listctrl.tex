@@ -369,13 +369,15 @@ ID and code and returns the wxRect.}
 \perlnote{In wxPerl this method takes only the {\bf item} parameter and
 returns a Wx::Rect ( or undef ).}
 
+
 \membersection{wxListCtrl::GetItemSpacing}\label{wxlistctrlgetitemspacing}
 
-\constfunc{int}{GetItemSpacing}{\param{bool }{isSmall}}
+\constfunc{wxSize}{GetItemSpacing}{\void}
 
-Retrieves the spacing between icons in pixels.
-If {\it small} is true, gets the spacing for the small icon
-view, otherwise the large icon view.
+Retrieves the spacing between icons in pixels: horizontal spacing is returned
+as \texttt{x} component of the \helpref{wxSize}{wxsize} object and the vertical
+spacing as its \texttt{y} component.
+
 
 \membersection{wxListCtrl::GetItemState}\label{wxlistctrlgetitemstate}
 

@@ -1110,9 +1110,13 @@ int wxListCtrl::GetItemCount() const
     return m_count;
 }
 
-// Retrieves the spacing between icons in pixels.
-// If small is TRUE, gets the spacing for the small icon
-// view, otherwise the large icon view.
+wxSize wxListCtrl::GetItemSpacing() const
+{
+    const int spacing = GetItemSpacing(HasFlag(wxLC_SMALL_ICON));
+
+    return wxSize(LOWORD(spacing), HIWORD(spacing));
+}
+
 int wxListCtrl::GetItemSpacing(bool isSmall) const
 {
     return ListView_GetItemSpacing(GetHwnd(), (BOOL) isSmall);

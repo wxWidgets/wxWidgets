@@ -189,10 +189,8 @@ public:
     // Gets the number of columns in the list control
     int GetColumnCount() const { return m_colCount; }
 
-    // Retrieves the spacing between icons in pixels.
-    // If small is TRUE, gets the spacing for the small icon
-    // view, otherwise the large icon view.
-    int GetItemSpacing(bool isSmall) const;
+    // get the horizontal and vertical components of the item spacing
+    wxSize GetItemSpacing() const;
 
     // Foreground colour of an item.
     void SetItemTextColour( long item, const wxColour& col);
@@ -354,6 +352,10 @@ public:
     ////////////////////////////////////////////////////////////////////////////
     // Necessary for drawing hrules and vrules, if specified
     void OnPaint(wxPaintEvent& event);
+
+
+    // obsolete stuff, for compatibility only -- don't use
+    wxDEPRECATED( int GetItemSpacing(bool isSmall) const);
 
 protected:
     // common part of all ctors

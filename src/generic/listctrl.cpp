@@ -4757,6 +4757,13 @@ void wxGenericListCtrl::SetItemSpacing( int spacing, bool isSmall )
     m_mainWin->SetItemSpacing( spacing, isSmall );
 }
 
+wxSize wxGenericListCtrl::GetItemSpacing() const
+{
+    const int spacing = GetItemSpacing(HasFlag(wxLC_SMALL_ICON));
+
+    return wxSize(spacing, spacing);
+}
+
 int wxGenericListCtrl::GetItemSpacing( bool isSmall ) const
 {
     return m_mainWin->GetItemSpacing( isSmall );
