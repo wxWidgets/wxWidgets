@@ -1620,7 +1620,7 @@ struct WXDLLEXPORT wxWindowNext
 {
     wxWindow *win;
     wxWindowNext *next;
-} *wxWindow::ms_winCaptureNext = NULL;
+} *wxWindowBase::ms_winCaptureNext = NULL;
 
 void wxWindowBase::CaptureMouse()
 {
