@@ -180,7 +180,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     [tvitem retain];
     [GetNSTabView() removeTabViewItem:tvitem];
     // Remove the child window as a notebook page
-    wxASSERT([tvitem view] == page->GetNSViewForSuperview());
+    wxASSERT(static_cast<NSView*>([tvitem view]) == page->GetNSViewForSuperview());
     [tvitem setView:nil];
     [tvitem release];
     // Make it back into a normal child window
