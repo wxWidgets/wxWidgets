@@ -645,6 +645,8 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
                               const wxString& strArg)
 {
     wxToolBarTool *tool = (wxToolBarTool*) FindById(numArg);
+    if (!tool)
+        return false;
     
     if ( action == wxACTION_TOOLBAR_TOGGLE )
     {
