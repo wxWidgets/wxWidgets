@@ -229,31 +229,14 @@ Enables or disables (greys out) a menu item.
 
 Finds the menu item id for a menu item string.
 
-\wxheading{Parameters}
-
-\docparam{itemString}{Menu item string to find.}
-
-\wxheading{Return value}
-
-Menu item identifier, or wxNOT\_FOUND if none is found.
-
-\wxheading{Remarks}
-
-Any special menu codes are stripped out of source and target strings
-before matching.
-
-\wxheading{See also}
-
-\helpref{wxMenu::FindItem}{wxmenufinditem}
-
-\membersection{wxMenu::FindItem}\label{wxmenufinditem}
-
 \constfunc{wxMenuItem *}{FindItem}{\param{int}{ id}, \param{wxMenu **}{menu = NULL}}
 
 Finds the menu item object associated with the given menu item identifier and,
 optionally, the (sub)menu it belongs to.
 
 \wxheading{Parameters}
+
+\docparam{itemString}{Menu item string to find.}
 
 \docparam{id}{Menu item identifier.}
 
@@ -262,11 +245,14 @@ parent menu (if the item was found)}
 
 \wxheading{Return value}
 
-Returns the menu item object, or NULL if it is not found.
+First form: menu item identifier, or wxNOT\_FOUND if none is found.
 
-\wxheading{See also}
+Second form: returns the menu item object, or NULL if it is not found.
 
-\helpref{wxMenu::FindItem}{wxmenufinditem}
+\wxheading{Remarks}
+
+Any special menu codes are stripped out of source and target strings
+before matching.
 
 \pythonnote{The name of this method in wxPython is {\tt FindItemById}
 and it does not support the second parameter.}
@@ -704,7 +690,7 @@ Returns the menu at {\it menuIndex} (zero-based).
 
 Returns the number of menus in this menubar.
 
-\membersection{wxMenuBar::Insert}{wxmenubarinsert}
+\membersection{wxMenuBar::Insert}\label{wxmenubarinsert}
 
 \func{bool}{Insert}{\param{size\_t }{pos}, \param{wxMenu *}{menu}, \param{const wxString\& }{title}}
 
@@ -799,8 +785,6 @@ responsible for deleting it.
 
 \helpref{wxMenuBar::Insert}{wxmenubarinsert},\rtfsp
 \helpref{wxMenuBar::Remove}{wxmenubarremove}
-
-\membersection{wxMenuBar::IsChecked}\label{wxmenubarischecked}
 
 \membersection{wxMenuBar::SetHelpString}\label{wxmenubarsethelpstring}
 

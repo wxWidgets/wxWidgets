@@ -157,7 +157,7 @@ terminating NULL.
 Destroys the list.  Also destroys any remaining nodes, but does not destroy
 client data held in the nodes.
 
-\membersection{wxList::Append}
+\membersection{wxList::Append}\label{wxlistappend}
 
 \func{wxNode *}{Append}{\param{wxObject *}{object}}
 
@@ -171,7 +171,7 @@ later retrieval using the key. The new node is returned in each case.
 
 The key string is copied and stored by the list implementation.
 
-\membersection{wxList::Clear}
+\membersection{wxList::Clear}\label{wxlistclear}
 
 \func{void}{Clear}{\void}
 
@@ -184,20 +184,20 @@ Clears the list (but does not delete the client data stored with each node).
 If {\it destroy} is TRUE, instructs the list to call {\it delete} on the client contents of
 a node whenever the node is destroyed. The default is FALSE.
 
-\membersection{wxList::DeleteNode}
+\membersection{wxList::DeleteNode}\label{wxlistdeletenode}
 
 \func{bool}{DeleteNode}{\param{wxNode *}{node}}
 
 Deletes the given node from the list, returning TRUE if successful.
 
-\membersection{wxList::DeleteObject}
+\membersection{wxList::DeleteObject}\label{wxlistdeleteobject}
 
 \func{bool}{DeleteObject}{\param{wxObject *}{object}}
 
 Finds the given client {\it object} and deletes the appropriate node from the list, returning
 TRUE if successful. The application must delete the actual object separately.
 
-\membersection{wxList::Find}
+\membersection{wxList::Find}\label{wxlistfind}
 
 \func{wxNode *}{Find}{\param{long}{ key}}
 
@@ -211,26 +211,26 @@ Returns the node whose stored key matches {\it key}. Use on a keyed list only.
 
 Returns the number of elements in the list.
 
-\membersection{wxList::GetFirst}
+\membersection{wxList::GetFirst}\label{wxlistgetfirst}
 
 \func{wxNode *}{GetFirst}{\void}
 
 Returns the first node in the list (NULL if the list is empty).
 
-\membersection{wxList::GetLast}
+\membersection{wxList::GetLast}\label{wxlistgetlast}
 
 \func{wxNode *}{GetLast}{\void}
 
 Returns the last node in the list (NULL if the list is empty).
 
-\membersection{wxList::IndexOf}
+\membersection{wxList::IndexOf}\label{wxlistindexof}
 
 \func{int}{IndexOf}{\param{wxObject*}{ obj }}
 
 Returns the index of {\it obj} within the list or NOT\_FOUND if {\it obj} 
 is not found in the list.
 
-\membersection{wxList::Insert}
+\membersection{wxList::Insert}\label{wxlistinsert}
 
 \func{wxNode *}{Insert}{\param{wxObject *}{object}}
 
@@ -253,7 +253,7 @@ Inserts the object before the given {\it node}.
 
 Returns the node at given position in the list.
 
-\membersection{wxList::Member}
+\membersection{wxList::Member}\label{wxlistmember}
 
 \func{wxNode *}{Member}{\param{wxObject *}{object}}
 
@@ -261,7 +261,7 @@ Returns the node at given position in the list.
 
 Returns the node associated with {\it object} if it is in the list, NULL otherwise.
 
-\membersection{wxList::Nth}
+\membersection{wxList::Nth}\label{wxlistnth}
 
 \func{wxNode *}{Nth}{\param{int}{ n}}
 
@@ -270,7 +270,7 @@ Returns the node associated with {\it object} if it is in the list, NULL otherwi
 Returns the {\it nth} node in the list, indexing from zero (NULL if the list is empty
 or the nth node could not be found).
 
-\membersection{wxList::Number}
+\membersection{wxList::Number}\label{wxlistnumber}
 
 \func{int}{Number}{\void}
 
@@ -278,7 +278,7 @@ or the nth node could not be found).
 
 Returns the number of elements in the list.
 
-\membersection{wxList::Sort}
+\membersection{wxList::Sort}\label{wxlistsort}
 
 \func{void}{Sort}{\param{wxSortCompareFunction}{ compfunc}}
 
@@ -311,5 +311,4 @@ Example:
     list.Sort(listcompare);
   }
 \end{verbatim}
-
 

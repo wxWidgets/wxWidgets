@@ -1230,17 +1230,6 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
         else
 #endif
         {
-            // Old code
-#if 0
-            HDC dc_mask = CreateCompatibleDC((HDC) source->m_hDC);
-            ::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
-            success = (BitBlt(GetHdc(), xdest1, ydest1, (int)width, (int)height,
-                dc_mask, xsrc1, ysrc1, 0x00220326 /* NOTSRCAND */) != 0);
-            success = (BitBlt(GetHdc(), xdest1, ydest1, (int)width, (int)height,
-                (HDC) source->m_hDC, xsrc1, ysrc1, SRCPAINT) != 0);
-            ::SelectObject(dc_mask, 0);
-            ::DeleteDC(dc_mask);
-#endif
             // New code from Chris Breeze, 15/7/98
             // Blit bitmap with mask
 
@@ -1318,11 +1307,37 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     }
     else
     {
+        // If we are printing, source colours are screen colours
+        // not printer colours and so we need copy the bitmap
+        // pixel by pixel.
         if (IsKindOf(CLASSINFO(wxPrinterDC)))
         {
-            // If we are printing, source colours are screen colours
-            // not printer colours and so we need copy the bitmap
-            // pixel by pixel.
+            HDC dc_src = (HDC) source->m_hDC;
+	        RECT rect;
+	        for (int y = 0; y < height; y++)
+	        {
+                // This is Stefan Csomor's optimisation, where
+                // identical adjacent pixels are drawn together.
+                // We still need a faster way of drawing bitmaps,
+                // perhaps converting to a DIB first and using SetDIBitsToDevice.
+	      	    for (int x = 0; x < width; x++)
+	            {
+	                COLORREF col = ::GetPixel(dc_src, x, y) ;
+	                HBRUSH brush = ::CreateSolidBrush( col );
+
+	                rect.left = xdest1 + x;
+	                rect.top = ydest1 + y;
+	                while( (x + 1 < width) && (::GetPixel(dc_src, x + 1, y) == col ) )
+	                {
+	          	        ++x ;
+	                }
+	                rect.right = xdest1 + x + 1;
+	                rect.bottom = rect.top + 1;
+	                ::FillRect((HDC) m_hDC, &rect, brush);
+	                ::DeleteObject(brush);
+                }
+	        }
+/*
             HDC dc_src = (HDC) source->m_hDC;
             RECT rect;
             for (int x = 0; x < width; x++)
@@ -1336,7 +1351,8 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                     ::DeleteObject(brush);
                 }
             }
-        }
+*/
+	    }
         else
         {
             success = (BitBlt(GetHdc(), xdest1, ydest1, (int)width, (int)height, (HDC) source->m_hDC,

@@ -38,7 +38,7 @@ Win32 a thread can only access GDI objects such as pens, brushes, \&c created by
 itself and not by the other threads).
 
 For communication between threads, use 
-\helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingprocessevent}
+\helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent}
 or its short version \helpref{wxPostEvent}{wxpostevent}. These functions
 have thread safe implementation so that they can be used as they are for
 sending event from one thread to another.
