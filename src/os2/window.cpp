@@ -2841,8 +2841,9 @@ MRESULT wxWindowOS2::OS2WindowProc(
                 }
                 else
                 {
-                    bProcessed = OS2OnMeasureItem(nIdCtrl,
-                                                 (WXMEASUREITEMSTRUCT *)lParam);
+                    return MRFROMLONG(OS2OnMeasureItem( nIdCtrl
+                                                       ,(WXMEASUREITEMSTRUCT *)lParam
+                                                      ));
                 }
 
                 if ( bProcessed )
@@ -3807,7 +3808,7 @@ bool wxWindowOS2::OS2OnDrawItem(
     return FALSE;
 } // end of wxWindowOS2::OS2OnDrawItem
 
-bool wxWindowOS2::OS2OnMeasureItem(
+long wxWindowOS2::OS2OnMeasureItem(
   int                               lId
 , WXMEASUREITEMSTRUCT*              pItemStruct
 )
@@ -3833,13 +3834,16 @@ bool wxWindowOS2::OS2OnMeasureItem(
                                          ,&nHeight
                                         ))
             {
+                MRESULT             mRc;
+
                 pMeasureStruct->rclItem.xRight  = nWidth;
                 pMeasureStruct->rclItem.xLeft   = 0L;
                 pMeasureStruct->rclItem.yTop    = nHeight;
                 pMeasureStruct->rclItem.yBottom = 0L;
-                return TRUE;
+                mRc = MRFROM2SHORT(nHeight, nWidth);
+                return LONGFROMMR(mRc);
             }
-            return FALSE;
+            return 0L;
         }
     }
     wxWindow*                      pItem = FindItem(lId);

@@ -24,7 +24,7 @@ class wxCheckListBoxItem; // fwd decl, define in checklst.cpp
 class WXDLLEXPORT wxCheckListBox : public wxListBox
 {
 public:
-    // 
+    //
     // Ctors
     //
     wxCheckListBox();
@@ -41,7 +41,7 @@ public:
                    ,const wxString&    rsName = wxListBoxNameStr
                   );
 
-    // 
+    //
     // Override base class virtuals
     //
     virtual void Delete(int n);
@@ -52,7 +52,7 @@ public:
 
     virtual bool SetFont(const wxFont &rFont);
 
-    // 
+    //
     // Items may be checked
     //
     bool IsChecked(size_t uiIndex) const;
@@ -60,20 +60,20 @@ public:
                ,bool   bCheck = TRUE
               );
 
-    // 
+    //
     // Accessors
     //
     size_t GetItemHeight(void) const { return m_nItemHeight; }
 
 protected:
-    // 
+    //
     // We create our items ourselves and they have non-standard size,
     // so we need to override these functions
     //
     virtual wxOwnerDrawn* CreateItem(size_t n);
-    virtual bool          OS2OnMeasure(WXMEASUREITEMSTRUCT* pItem);
+    virtual long          OS2OnMeasure(WXMEASUREITEMSTRUCT* pItem);
 
-    // 
+    //
     // Pressing space or clicking the check box toggles the item
     //
     void OnChar(wxKeyEvent& rEvent);
@@ -89,7 +89,7 @@ private:
                                   ,const wxItemResource*  pParentResource
                                   ,const wxResourceTable* pTable = (const wxResourceTable *) NULL
                                  )
-    { 
+    {
         return(wxWindowBase::CreateItem( pChildResource
                                         ,pParentResource
                                         ,pTable

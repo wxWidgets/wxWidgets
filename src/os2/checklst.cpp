@@ -112,6 +112,9 @@ bool wxCheckListBoxItem::OnDrawItem (
 {
     wxRect                          vRect = rRect;
 
+    ::WinQueryWindowRect( m_pParent->GetHWND()
+                         ,&rDc.m_vRclPaint
+                        );
     if (IsChecked())
         eStat = (wxOwnerDrawn::wxODStatus)(eStat | wxOwnerDrawn::wxODChecked);
 
@@ -141,9 +144,6 @@ bool wxCheckListBoxItem::OnDrawItem (
         m_pParent->GetSize( NULL
                            ,&nParentHeight
                           );
-        ::WinQueryWindowRect( m_pParent->GetHWND()
-                             ,&rDc.m_vRclPaint
-                            );
 
         nY = nParentHeight - nY - nCheckHeight;
         vPenBack = wxPen(vColour, 1, wxSOLID);
@@ -372,7 +372,7 @@ wxOwnerDrawn* wxCheckListBox::CreateItem (
 // Return item size
 // ----------------
 //
-bool wxCheckListBox::OS2OnMeasure (
+long wxCheckListBox::OS2OnMeasure (
   WXMEASUREITEMSTRUCT*             pItem
 )
 {
@@ -391,9 +391,9 @@ bool wxCheckListBox::OS2OnMeasure (
         // Add place for the check mark
         //
         pStruct->rclItem.xRight += wxOwnerDrawn::GetDefaultMarginWidth();
-        return TRUE;
+        return long(MRFROM2SHORT((USHORT)m_nItemHeight, (USHORT)(pStruct->rclItem.xRight - pStruct->rclItem.xLeft)));
     }
-    return FALSE;
+    return 0L;
 } // end of wxCheckListBox::CreateItem
 
 //

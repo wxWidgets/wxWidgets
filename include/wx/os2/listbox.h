@@ -121,7 +121,7 @@ public:
     // wxCheckListBox support
     //
 #if wxUSE_OWNER_DRAWN
-    bool                  OS2OnMeasure(WXMEASUREITEMSTRUCT *item);
+    long                  OS2OnMeasure(WXMEASUREITEMSTRUCT *item);
     bool                  OS2OnDraw(WXDRAWITEMSTRUCT *item);
 
     virtual wxOwnerDrawn* CreateItem(size_t n);

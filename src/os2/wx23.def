@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -11902,6 +11902,8 @@ EXPORTS
       SetFont__14wxCheckListBoxFRC6wxFont
       ;wxCheckListBox::OnLeftClick(wxMouseEvent&)
       OnLeftClick__14wxCheckListBoxFR12wxMouseEvent
+      ;wxCheckListBox::OS2OnMeasure(void**)
+      OS2OnMeasure__14wxCheckListBoxFPPv
   ;From object file:  ..\os2\choice.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxChoice::DoGetItemClientData(int) const
@@ -14230,11 +14232,19 @@ EXPORTS
       GetValue__10wxSpinCtrlCFv
   ;From object file:  ..\os2\statbmp.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxStaticBitmap::OnPaint(wxPaintEvent&)
+      OnPaint__14wxStaticBitmapFR12wxPaintEvent
+      ;wxStaticBitmap::sm_eventTable
+      sm_eventTable__14wxStaticBitmap
+      ;wxStaticBitmap::sm_eventTableEntries
+      sm_eventTableEntries__14wxStaticBitmap
       __vft14wxStaticBitmap8wxObject
       ;wxStaticBitmap::Free()
       Free__14wxStaticBitmapFv
       ;wxStaticBitmap::Create(wxWindow*,int,const wxGDIImage&,const wxPoint&,const wxSize&,long,const wxString&)
       Create__14wxStaticBitmapFP8wxWindowiRC10wxGDIImageRC7wxPointRC6wxSizelRC8wxString
+      ;wxStaticBitmap::GetEventTable() const
+      GetEventTable__14wxStaticBitmapCFv
       ;wxStaticBitmap::sm_classwxStaticBitmap
       sm_classwxStaticBitmap__14wxStaticBitmap
       ;wxStaticBitmap::SetImage(const wxGDIImage&)

@@ -279,6 +279,9 @@ int wxListBox::DoAppend(
     if (m_windowStyle & wxLB_OWNERDRAW)
     {
         wxOwnerDrawn*               pNewItem = CreateItem(nIndex); // dummy argument
+        wxScreenDC                  vDc;
+        wxCoord                     vHeight;
+
 
         pNewItem->SetName(rsItem);
         m_aItems.Insert(pNewItem, nIndex);
@@ -809,7 +812,7 @@ bool wxListBox::OS2Command(
 //
 #define OWNER_DRAWN_LISTBOX_EXTRA_SPACE    (1)
 
-bool wxListBox::OS2OnMeasure(
+long wxListBox::OS2OnMeasure(
   WXMEASUREITEMSTRUCT*              pItem
 )
 {
@@ -827,21 +830,21 @@ bool wxListBox::OS2OnMeasure(
     vDc.SetFont(GetFont());
 
     wxCoord                         vHeight;
+    wxCoord                         vWidth;
 
-    pMeasureStruct->rclItem.xRight = 0;
+    GetSize( &vWidth
+            ,NULL
+           );
+
+    pMeasureStruct->rclItem.xRight = (USHORT)vWidth;
     pMeasureStruct->rclItem.xLeft  = 0;
     pMeasureStruct->rclItem.yTop   = 0;
     pMeasureStruct->rclItem.yBottom = 0;
 
     vHeight = vDc.GetCharHeight() * 2.5;
-    pMeasureStruct->rclItem.yTop  = vHeight;
+    pMeasureStruct->rclItem.yTop  = (USHORT)vHeight;
 
-    ::WinSendMsg( GetHWND()
-                 ,LM_SETITEMHEIGHT
-                 ,MPFROMLONG(vHeight)
-                 ,MPFROMLONG(pMeasureStruct->idItem)
-                );
-    return TRUE;
+    return long(MRFROM2SHORT((USHORT)vHeight, (USHORT)vWidth));
 } // end of wxListBox::OS2OnMeasure
 
 bool wxListBox::OS2OnDraw (

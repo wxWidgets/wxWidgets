@@ -367,7 +367,7 @@ public:
     virtual bool OS2OnDrawItem( int               nId
                                ,WXDRAWITEMSTRUCT* pItem
                               );
-    virtual bool OS2OnMeasureItem( int                  nId
+    virtual long OS2OnMeasureItem( int                  nId
                                   ,WXMEASUREITEMSTRUCT* pItem
                                  );
 
