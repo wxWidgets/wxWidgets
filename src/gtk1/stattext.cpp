@@ -54,8 +54,40 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
     justify = GTK_JUSTIFY_LEFT;
   gtk_label_set_justify(GTK_LABEL(m_widget), justify);
   
-  if (newSize.x == -1) newSize.x = gdk_string_measure( m_widget->style->font, label );
-  if (newSize.y == -1) newSize.y = 26;
+   int y = 1;
+   if (newSize.x == -1) {
+     char *s = WXSTRINGCAST m_label;
+     char *nl = strchr(s, '\n');
+     if (nl) {
+       do {
+         *nl = 0;
+         int x = gdk_string_measure( m_widget->style->font, s );
+         if (x > newSize.x) {
+           newSize.x = x;
+         }
+         *nl++ = '\n';
+         if ((nl = strchr(s = nl, '\n'))) {
+           ++y;
+         } else {
+           int x = gdk_string_measure( m_widget->style->font, s );
+           if (x > newSize.x) {
+             newSize.x = x;
+           }
+         }
+       } while (nl);
+     } else {
+       newSize.x = gdk_string_measure( m_widget->style->font, label );
+     }
+   }
+   if (newSize.y == -1) {
+     if (y == 1) {
+       newSize.y = 26;
+     } else {
+       newSize.y
+         = y * (m_widget->style->font->ascent +m_widget->style->font->descent);
+     }
+   }
+  
   SetSize( newSize.x, newSize.y );
   
   PostCreation();
