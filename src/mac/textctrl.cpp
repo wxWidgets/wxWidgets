@@ -659,6 +659,29 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 END_EVENT_TABLE()
 #endif
 
+static void SetTXNData( TXNObject txn , const wxString& st , TXNOffset start , TXNOffset end )
+{
+#if wxUSE_UNICODE
+	size_t len = st.Len() ;
+#if SIZEOF_WCHAR_T == 2
+    TXNSetData( txn , kTXNUnicodeTextData,  (void*)st.wc_str(), len * 2,
+      start, end);
+#else
+    ByteCount byteBufferLen = len * sizeof( UniChar ) ;
+	UniChar *unibuf = (UniChar*) malloc(byteBufferLen) ;
+	wxMBConvUTF16BE converter ;
+	converter.WC2MB( (char*) unibuf , st.wc_str() , byteBufferLen ) ;
+    TXNSetData( txn , kTXNUnicodeTextData,  (void*)unibuf, len * 2,
+      start, end);
+	free( unibuf ) ;
+#endif
+#else
+	wxCharBuffer text =  st.mb_str(wxConvLocal)  ;
+    TXNSetData( txn , kTXNTextData,  (void*)text.data(), strlen( text ) ,
+      start, end);
+#endif    
+}
+
 // Text item
 void wxTextCtrl::Init()
 {
@@ -785,14 +808,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         tpvars = (STPTextPaneVars **) GetControlReference((ControlHandle) m_macControl);
             /* set the text in the record */
         m_macTXN =  (**tpvars).fTXNRec ;
-#if wxUSE_UNICODE
-        TXNSetData( ((TXNObject) m_macTXN) , kTXNUnicodeTextData,  (void*)st.wc_str(), st.Length() * 2,
-          kTXNStartOffset, kTXNEndOffset);
-#else
-    	wxCharBuffer text =  st.mb_str(wxConvLocal)  ;
-        TXNSetData( ((TXNObject) m_macTXN) , kTXNTextData,  (void*)text.data(), strlen( text ) ,
-          kTXNStartOffset, kTXNEndOffset);
-#endif
+        SetTXNData( (TXNObject) m_macTXN , st , kTXNStartOffset, kTXNEndOffset ) ;
         m_macTXNvars = tpvars ;
         m_macUsesTXN = true ;
         TXNSetSelection( (TXNObject) m_macTXN, 0, 0);
@@ -840,7 +856,14 @@ wxString wxTextCtrl::GetValue() const
             if ( actualSize > 0 )
             {
                 wxChar *ptr = result.GetWriteBuf(actualSize*sizeof(wxChar)) ;
+#if SIZEOF_WCHAR_T == 2				
                 wxStrncpy( ptr , (wxChar*) *theText , actualSize ) ;
+#else
+				wxMBConvUTF16BE converter ;
+				HLock( theText ) ;
+				converter.MB2WC( ptr , (const char*)*theText , actualSize*sizeof(wxChar) ) ;
+				HUnlock( theText ) ;
+#endif
                 ptr[actualSize] = 0 ;
                 result.UngetWriteBuf( actualSize ) ;
             }
@@ -898,14 +921,7 @@ void wxTextCtrl::SetValue(const wxString& str)
         bool formerEditable = m_editable ;
         if ( !formerEditable )
             SetEditable(true) ;
-#if wxUSE_UNICODE
-        TXNSetData( ((TXNObject) m_macTXN), kTXNUnicodeTextData,  (void*)st.wc_str(), st.Length() * 2 ,
-          kTXNStartOffset, kTXNEndOffset);
-#else
-    	wxCharBuffer text =  st.mb_str(wxConvLocal) ;
-        TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)text.data(), strlen( text ) ,
-          kTXNStartOffset, kTXNEndOffset);
-#endif
+        SetTXNData( (TXNObject) m_macTXN , st , kTXNStartOffset, kTXNEndOffset ) ;
         TXNSetSelection( (TXNObject) m_macTXN, 0, 0);
         TXNShowSelection( (TXNObject) m_macTXN, kTXNShowStart);
         if ( !formerEditable )
@@ -1195,13 +1211,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& str)
             SetEditable(true) ;
         TXNSetSelection( ((TXNObject) m_macTXN) , from , to ) ;
         TXNClear( ((TXNObject) m_macTXN) ) ;
-#if wxUSE_UNICODE
-        TXNSetData( ((TXNObject) m_macTXN), kTXNUnicodeTextData,  (void*)value.wc_str(), value.Length() * 2 ,
-          kTXNUseCurrentSelection, kTXNUseCurrentSelection);
-#else
-        TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)value.c_str(), value.Length(),
-            kTXNUseCurrentSelection, kTXNUseCurrentSelection);
-#endif
+        SetTXNData( (TXNObject) m_macTXN , str , kTXNUseCurrentSelection, kTXNUseCurrentSelection ) ;
         if ( !formerEditable )
             SetEditable( formerEditable ) ;
     }
@@ -1294,14 +1304,7 @@ void wxTextCtrl::WriteText(const wxString& str)
             SetEditable(true) ;
         long start , end , dummy ;
         GetSelection( &start , &dummy ) ;
-#if wxUSE_UNICODE
-        TXNSetData( ((TXNObject) m_macTXN), kTXNUnicodeTextData,  (void*)st.wc_str(), st.Length() * 2 ,
-          kTXNUseCurrentSelection, kTXNUseCurrentSelection);
-#else
-    	wxCharBuffer text =  st.mb_str(wxConvLocal) ;
-        TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)text.data(), strlen( text ) ,
-          kTXNUseCurrentSelection, kTXNUseCurrentSelection);
-#endif
+        SetTXNData( (TXNObject) m_macTXN , st , kTXNUseCurrentSelection, kTXNUseCurrentSelection ) ;
         GetSelection( &dummy , &end ) ;
         SetStyle( start , end , GetDefaultStyle() ) ;
         if ( !formerEditable )
