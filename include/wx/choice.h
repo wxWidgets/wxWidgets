@@ -38,7 +38,7 @@ class WXDLLEXPORT wxChoiceBase : public wxControlWithItems
 {
 public:
     wxChoiceBase() { }
-    virtual ~wxChoiceBase(){};
+    virtual ~wxChoiceBase();
 
     // all generic methods are in wxControlWithItems
 
