@@ -42,8 +42,6 @@ LIBS=$(WXLIB) $(EX_LIBS) cw32mt import32 ole2w32 regex_$(DEBUG_SUFFIX) zlib_$(DE
 LIBS=$(LIBS) odbc32
 !endif
 
-# Note: you may need to remove some libraries for earlier versions of BC++, as below
-#LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib tiff
 
 !if "$(wxUSE_GUI)" == "0"
 LINKOUT = /ap
@@ -78,7 +76,7 @@ EXE_TARGET=$(EXEDIR)\$(TARGET)
 default : all
 
 maked: 
-    -if not exist $(EXEDIR) mkdir $(EXEDIR)
+    -if not exist $(EXEDIR)\nul mkdir $(EXEDIR)
 
 wx: $(EXE_TARGET).exe $(EXTRATARGETS)
 
@@ -98,20 +96,20 @@ $(TARGETRES)
 .path.obj=$(EXEDIR)
 
 .$(SRCSUFF).obj:
-	bcc32 $(CPPFLAGS) -c -o$(EXEDIR)\$(<B).obj {$< }
+	bcc32 $(CPPFLAGS) -c  -n$(EXEDIR) {$< }
 
 .c.obj:
-	bcc32 $(CPPFLAGS) -P- -c -o$(EXEDIR)\$(<B).obj {$< }
+	bcc32 $(CPPFLAGS) -P- -c -n$(EXEDIR) {$< }
 
 $(TARGETRES) :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
     brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include /i$(WXDIR)\contrib\include -fo$(EXEDIR)\$(<B).res $(TARGET)
 
 clean:
-        -erase $(EXEDIR)\*.obj
-        -erase $(EXEDIR)\*.exe
-        -erase $(EXEDIR)\*.res
-        -erase $(EXEDIR)\*.map
-        -erase $(EXEDIR)\*.rws
-        -erase $(EXEDIR)\*.tds
-        -erase $(EXEDIR)\*.il?
+        -$(RM) $(EXEDIR)\*.obj
+        -$(RM) $(EXEDIR)\*.exe
+        -$(RM) $(EXEDIR)\*.res
+        -$(RM) $(EXEDIR)\*.map
+        -$(RM) $(EXEDIR)\*.rws
+        -$(RM) $(EXEDIR)\*.tds
+        -$(RM) $(EXEDIR)\*.il?
 

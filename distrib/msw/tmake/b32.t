@@ -239,8 +239,8 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 !else
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-    -erase $(LIBTARGET)
-    -erase $(WXDLL)
+    -$(RM) $(LIBTARGET)
+    -$(RM) $(WXDLL)
         $(LINK) $(LINK_FLAGS) $(LINKDEBUGFLAGS) /L$(WXLIBDIR);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk @&&!
 c0d32.obj $(OBJECTS)
 $(WXDLL)
@@ -409,52 +409,52 @@ all_execs:
 
 png:    $(CFG)
         cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) lib
         cd $(WXDIR)\src\msw
 
 clean_png:
         cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) clean
         cd $(WXDIR)\src\msw
 
 zlib:   $(CFG)
         cd $(WXDIR)\src\zlib
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) lib
         cd $(WXDIR)\src\msw
 
 clean_zlib:
         cd $(WXDIR)\src\zlib
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) clean
         cd $(WXDIR)\src\msw
 
 jpeg:    $(CFG)
         cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) lib
         cd $(WXDIR)\src\msw
 
 clean_jpeg:
         cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) clean
         cd $(WXDIR)\src\msw
 
 regex:   $(CFG)
         cd $(WXDIR)\src\regex
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) lib
         cd $(WXDIR)\src\msw
 
 clean_regex:
         cd $(WXDIR)\src\regex
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) clean
         cd $(WXDIR)\src\msw
 
 tiff:   $(CFG)
         cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) lib
         cd $(WXDIR)\src\msw
 
 clean_tiff:
         cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
+        ${MAKE} -f makefile.b32 $(MAKEFLAGS) clean
         cd $(WXDIR)\src\msw
 
 $(CFG): makefile.b32
