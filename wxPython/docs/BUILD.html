@@ -78,6 +78,7 @@ cd bld
              --enable-geometry \
              --enable-sound --with-sdl \
              --enable-display \
+             --disable-debugreport \
 </pre>
 <p>On OS X of course you'll want to use --with-mac instead of
 --with-gtk.</p>
@@ -135,7 +136,6 @@ dir I don't lose my scripts too.)  This is what it looks like:</p>
 <pre class="literal-block">
 make $* \
     &amp;&amp; make -C contrib/src/gizmos $* \
-    &amp;&amp; make -C contrib/src/ogl CXXFLAGS=&quot;-DwxUSE_DEPRECATED=0&quot; $* \
     &amp;&amp; make -C contrib/src/stc $* 
 </pre>
 <p>So you just use .make as if it where make, but don't forget to set
@@ -303,6 +303,7 @@ wxUSE_GLCANVAS                 1
 wxUSE_POSTSCRIPT               1
 wxUSE_AFM_FOR_POSTSCRIPT       0
 wxUSE_DISPLAY                  1
+wxUSE_DEBUGREPORT              0
 </pre>
 <p>If you are using my build scripts then a few more settings will be
 changed and then a copy of setup.h is placed in a subdir of
@@ -372,13 +373,8 @@ selection of command-line flags as described above.  Repeat this
 same command from the following directories in order to build the
 contrib libraries:</p>
 <pre class="literal-block">
-    %WXDIR%\contrib\build\gizmos
-    %WXDIR%\contrib\build\stc
-    %WXDIR%\contrib\build\ogl
-
-Note, that the ogl lib build will need an additional flag::
-
-    CPPFLAGS=&quot;-DwxUSE_DEPRECATED=0&quot;
+%WXDIR%\contrib\build\gizmos
+%WXDIR%\contrib\build\stc
 </pre>
 </li>
 <li><p class="first">When that is all done it will have built the main wxWidgets DLLs

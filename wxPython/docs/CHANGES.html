@@ -11,7 +11,238 @@
 <div class="document" id="recent-changes-for-wxpython">
 <h1 class="title">Recent Changes for wxPython</h1>
 <div class="section" id="id1">
-<h1><a name="id1">2.5.3.1</a></h1>
+<h1><a name="id1">2.5.4.1</a></h1>
+<p>wx.Sizer Add, Insert, and Prepend functions now return a reference to the
+wx.SizerItem that was added to the sizer, and the wx.SizerItem has a
+GetRect accessor to give the position of the item on the parent window.</p>
+<p>Added wx.Sizer.GetItem method which returns the wx.SizerItem for the given
+wx.Window, wx.Sizer or position index.</p>
+<p>wxMSW: wx.RadioButtons in the same group no longer have to be
+consecutive (there may be intervening controls). Without this fix, an
+out-of-sync assert is generated when clicking on a radio button and
+then calling GetValue().</p>
+<dl>
+<dt>Some XRC changes: </dt>
+<dd><ul class="first last simple">
+<li>Added 'icon' property to wxFrame and wxDialog</li>
+<li>No longer ignores menu bitmaps on non-MSW platforms</li>
+<li>Notebook page bitmaps are now supported</li>
+<li>added system colours and fonts support (based on patch #1038207)</li>
+</ul>
+</dd>
+</dl>
+<p>wxMSW: fix for [ 1052989 ] TextCtrl.SetBackgroundColour(wx.NullColour)
+bug.</p>
+<p>Added wx.PasswordEntryDialog analagous to wx.TextEntryDialog, allows
+detecting entering an empty string vs. cancel unlike the
+wx.GetPasswordFromUser dialog function.</p>
+<p>OGL patch from Shane Holloway:</p>
+<blockquote>
+<p>Two simple problems found in the new python ogl code.  First is
+the patch for _canvas.py.  Essentially:</p>
+<pre class="literal-block">
+dx = abs(dc.LogicalToDeviceX(x - self._firstDragX))
+dy = abs(dc.LogicalToDeviceY(y - self._firstDragY))
+</pre>
+<p>was incorrect because (x,y) and (self._firstDragX,
+self._firstDragY) are both already in Logical coordinates.
+Therefore the difference between the two is also in logical
+coordinates, and the conversion call is an error.  This bug
+surfaces when you have OGL on a scrollwin, and you are far from
+the origin of the canvas.</p>
+<p>The second change in _composit.py basically removes the assumption
+that the child is in both self._children and self._divisions.
+Causes many problems when it's not.  ;)</p>
+</blockquote>
+<p>Fixed GetSaveData and SetSaveData in wx.lib.multisash to not depend on
+the default way that class objectss are converted to strings.</p>
+<p>Fixed problem in StyledTextCtrl.Set[HV]ScrollBar that could leave the
+internal scrollbar visible.</p>
+<p>Added wx.StandardPaths which provides methods for determining standard
+system paths for each platform.</p>
+<p>wxMSW: The window background is now only erased by default if the
+background colour or background mode has been changed.  This better
+allows the default system themed behaviour to show through for
+uncustomized windows.  Explicit support added for using the correct
+theme texture for wx.Notebook pages and their children.</p>
+<p>wx.Image: Added support for alpha channels in interpolated and
+non-interpolated image rotation.  Added ConvertAlphaToMask helper
+method for turning shades of grey into shades of alpha and a colour.</p>
+<p>wxGTK2: Reimplemented DoDrawRotatedText() by way of a rotation of an
+alpha blended text bitmap.  It would be better if Pango could draw
+directly into an wxImage (as FreeType can,) but that is for later...</p>
+<p>Added wrappers and a demo for the wx.MediaCtrl class, which can play
+various forms of audio/video media using native codecs install on the
+system.  So far it is only implemented for Windows and OSX.</p>
+<p>wxGTK: Patch applied for Freeze()/Thaw() for wxTextCtrtl.</p>
+<p>Added &quot;gravity&quot; for splitter window (patch 1046105). Gravity is a
+floating-point factor between 0.0 and 1.0 which controls position of
+sash while resizing the wx.SplitterWindow.  The gravity specifies
+how much the left/top window will grow while resizing.</p>
+<p>wxMSW: wx.Slider's C++ implementation rewritten to be more
+maintainable and hopefully less buggy.  The position of the labels has
+also been changed in order to better comply with Microsoft's examples
+of how to use the control.</p>
+<p>wxMSW:  Fix wx.TreeCtrl to end label editing if the control loses
+focus (a slightly modified patch 1084592.)</p>
+<p>Added wx.EXEC_NODISABLE flag for wx.Execute, which will prevent all
+the app's windows being disabled while a synchronous child process is
+running.</p>
+<p>wxMSW: Much work to correct painting (or leaving transparent) of
+control backgrounds, properly using background themes on XP, etc.</p>
+<p>Fixed a circular reference problem with wx.Timer.  It will now
+completely cleanup after itself when the last reference to the timer
+is removed.  If you were previously using timer.Destroy() to cleanup
+your timers it will no longer work.  Instead you should hold a
+reference to the timer and then del the reference when you are
+finished with the timer.</p>
+<p>Updated to 1.3.24 of SWIG.  All of my big patches have been applied to
+the main SWIG source tree, but unfortunatly there were also some bugs
+added that affected the wxPython build and a few details in my
+original patch were changed/removed, so we are still not free of
+patches.  A new patch for SWIG is located in the wxPython/SWIG
+directory of the wxPython source tree.  SWIG 1.3.24 plus this patch
+should be used by anyone who is making custom modifications to
+wxPython's .i files, or building their own extension modules or
+etc. that need to interact with the wxPython swigged types.  For the
+morbidly curious, here are a few more details:</p>
+<blockquote>
+<ul class="simple">
+<li>Since it is now possible easily and simply share the SWIG type
+tables across modules I reverted to always using the stock SWIG
+runtime instead of my slightly hacked up version of it exported
+via the wxPython C API.</li>
+<li>The %name directive is now deprecated so I replaced most uses of
+it with a custom %Rename macro that uses %rename internally.
+These will evetually need to be replaced with a DocDecl macro
+when docstrings are added for those items.</li>
+<li>The &quot;this&quot; attribute of all SWIGged classes is no longer a
+string containing a &quot;swigified pointer&quot;, but rather a custom
+built-in type that holds the real C pointer to the object and
+the type info.  It can be converted to a string like the old
+value using str() or to the long integer value of the pointer
+using long().</li>
+</ul>
+</blockquote>
+<p>Added SetDefaultPyEncoding and GetDefaultPyEncoding functions which
+will set/get the encoding used by wxPython to convert string or
+unicode objects to/from wxString objects.  Previously the default
+Python encoding was always used, but unless the user had tweaked their
+sitecustomize.py file it is always &quot;ascii&quot;, which would result in
+errors if the strings contained character codes &gt;= 128.
+SetDefaultPyEncoding will now allow you to control which encoding will
+be used to do those conversions.  The default encoding is set to the
+value of <cite>locale.getdefaultlocale()[1]</cite> when wxPython is first
+imported.  Please see <a class="reference" href="http://www.alanwood.net/demos/charsetdiffs.html">http://www.alanwood.net/demos/charsetdiffs.html</a>
+for information on the differences between the common latin/roman
+encodings.</p>
+<p>Added wxStdDialogButtonSizer, which is a a special sizer that knows
+how to order and position standard buttons in order to conform to the
+current platform's standards.  You simply need to add each <cite>wx.Button</cite>
+to the sizer, and be sure to create the buttons using the standard
+ID's.  Then call <cite>Realize</cite> and the sizer will take care of the rest.</p>
+<p>wxMSW Toolbar: pass correct tool id (and not always -1) to the
+EVT_TOOL_RCLICKED handler</p>
+<p>wxGTK: Applied patch for combo box SELECTED events (no longer get
+lots of surplus events)</p>
+<p>wxGTK: Applied patch for proper menu highlight colour detection in
+wx.SystemSettings.</p>
+<p>wxGTK: Commited scrollbar patch #1093339 which sends lineup, linedown
+events based on intercepting the mouse down events.</p>
+<p>wxGTK: Applied patch #1102789 which solved conflicts between wxWidgets
+and GTK+'s context menu code.</p>
+<p>wxGTK: Applied patch #1100327 for correct feedback from DND actions
+(not all actions are allowed).</p>
+<p>Fixed memory leak in wxGrid::UpdateAttr[Rows][Or][Cols] (patch 1104355)</p>
+<p>For efficiency reasons, text controls no longer set the string for
+each text updated event, but rather query for the string value only
+when GetString is called from an event handler.</p>
+<p>Added wx.SL_INVERSE style which will cause wx.Slider to invert the min
+and max ends of the slider.</p>
+<p>Several patches applied, such as #1111174, #1110252 and others, that
+make the generic wx.TreeCtrl (used on wxGTK and wxMac) be more
+conistent with the wxMSW native wx.TreeCtrl.</p>
+<dl>
+<dt>XRCed:</dt>
+<dd><ul class="first last simple">
+<li>Edit-&gt;Locate command (Ctrl-L) for quick selection of items.
+Works with event-handling controls (buttons, text fields) but
+not with labels/sizers.</li>
+<li>Some improvements: relative paths for files supplied as command-
+line argument work correctly, notebook panels are highlighted
+better.</li>
+</ul>
+</dd>
+</dl>
+<p>wxMac: Fixed a long-standing issue where wxSlider controls with a
+hardcoded size would misplace their labels behind the slider control.</p>
+<p>wx.HtmlListBox fixed so calling RefreshLine(s) will cause the data for
+that line to be refetched from the overridden methods in the derived
+class.</p>
+<p>The default DoGetBestSize now includes the difference (if any) between
+the client size and total size of the window, (such as the size of
+borders.)  Code that sets the client size using the best size, or that
+added extra space to sizers to compensate for this bug may need to be
+changed.</p>
+<p>Can suppress themed notebook pages with the wxNB_NOPAGETHEME style or
+setting system option msw.notebook.themed-background to 0.</p>
+<p>wxSyledTextCtrl updated to use Scintilla 1.62.</p>
+<p>Can now set the msw.window.no-clip-children system option to 1 to
+eliminate weird refresh behaviour (delays between a window being
+erased and repainted, giving a ghostly gradual-redraw effect). May be
+a temporary 'fix' until properly fixed before 2.6.</p>
+<p>wxMac:  Toolbar is now more native looking with borderless toolbar
+buttons.</p>
+<p>wxMac: Switched wx.Bitmap to use newer Quartz object types and APIs
+internally.  This results in faster display and better alpha support.</p>
+<p>Added wx.DatePickerCtrl.</p>
+<p>wx.html.HtmlWindow now supports background images.</p>
+<p>Added wx.lib.gestures module from Daniel Pozmanter which supports
+using Mouse Gestures in an application.</p>
+<p>wxGTK2: ENTER and LEAVE mouse events are now sent for multi-line text
+controls.</p>
+<p>wxMSW:  &quot;Alt&quot; key (VK_MENU) now results in WXK_ALT keyboard event, not
+WXK_MENU</p>
+<p>Added modules from Peter Yared and Morgan Hua that implement the wx
+Doc/View framework in pure Python code.  See wx.lib.docview for the
+base implementation and wx.lib.pydocview for Python-specific
+extensions.  There are also a couple sample applications located in
+samples/docview.</p>
+<p>Added GetBitmap, GetIcon to wx.ImageList.</p>
+<p>wxGTK wx.Button.SetLabel no longer invalidates/resets the font.</p>
+<p>wx.Sizer.AddWindow, AddSizer, AddSpacer and etc. have now been
+undeprecated at the request of Riaan Booysen, the Boa Constructor team
+lead.  Boa needs them to help keep track of what kind of item is being
+managed by the sizer.  They are now just simple compatibility aliases
+for Add, and etc.</p>
+<p>The old C++ version of the OGL lib is no longer built by default.  Use
+the Python version in the wx.lib.ogl package instead.</p>
+<p>The wx.iewin module is no longer built by default.  You can use the
+wx.lib.iewin version instead.</p>
+<p>Fixed wx.BufferedPaintDC for scrolled windows to work whether the
+buffer is covering only the client area or the full virtual area of
+the scrolled window.  By default it will assume that only the client
+area is covered.  This is different than the old behavior so to
+indicate that the entire virtual area is covered simply add a
+style=wx.BUFFER_VIRTUAL_AREA parameter.</p>
+<p>wx.gizmos.TreeListCtrl:  Add support for the EVT_TREE_ITEM_GETTOOLTIP
+event.</p>
+<p>Added Resize, SetRGBRect, Size, and GetOrFindMaskColour methods to
+wx.Image.</p>
+<p>Added wx.Rect.IsEmpty</p>
+<dl>
+<dt>wxGTK:</dt>
+<dd><ul class="first last simple">
+<li>Corrected wx.ListBox selection handling</li>
+<li>Corrected default button size handling for different themes</li>
+<li>Corrected splitter sash size and look for different themes</li>
+<li>Fixed keyboard input for dead-keys</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="id2">
+<h1><a name="id2">2.5.3.1</a></h1>
 <p>wxMac focus and border refreshes corrected.</p>
 <p>Updated internal PNG library.</p>
 <p>wxMac fix for metal appearance on wx.ToolBar.</p>
@@ -31,8 +262,8 @@ button and wxWidgets will choose the stock label to go with it
 automatically.  Additionally on the platforms that have a native
 concept of a stock button (currently only GTK2) then the native stock
 button will be used.  For example, the following will result in a
-button with &quot;Cancel&quot; as the label and an accelerator on the &quot;C&quot;, and
-if run on wxGTK2 then there will also be an image of a red X:</p>
+button with &quot;Cancel&quot; as the label and if run on wxGTK2 then there will
+also be an image of a red X:</p>
 <pre class="literal-block">
 b = wx.Button(parent, wx.ID_CANCEL) 
 </pre>
@@ -164,8 +395,8 @@ it.</p>
 <p>wxPython on OSX can now be built in Unicode mode, can support multiple
 version installs, and comes with an uninstaller script.</p>
 </div>
-<div class="section" id="id2">
-<h1><a name="id2">2.5.2.8</a></h1>
+<div class="section" id="id3">
+<h1><a name="id3">2.5.2.8</a></h1>
 <p>Predominantly a bug-fix release.</p>
 <blockquote>
 <ul class="simple">
@@ -193,8 +424,8 @@ wxCheckListBox.</li>
 </ul>
 </blockquote>
 </div>
-<div class="section" id="id3">
-<h1><a name="id3">2.5.2.7</a></h1>
+<div class="section" id="id4">
+<h1><a name="id4">2.5.2.7</a></h1>
 <p>wx.ADJUST_MINSIZE is now the default behaviour for window items in
 sizers.  This means that the item's GetMinSize and/or GetBestSize will
 be called when calculating layout and the return value from that will
@@ -286,9 +517,11 @@ in the PyShell:</p>
 ...     app.Yield(True)
 ...     wx.MilliSleep(10)
 </pre>
+<p>wxGTK: Applied wxNO_BORDER patch (#1098374) for text control and combo
+box.</p>
 </div>
-<div class="section" id="id4">
-<h1><a name="id4">2.5.1.5</a></h1>
+<div class="section" id="id5">
+<h1><a name="id5">2.5.1.5</a></h1>
 <p>(See also the <a class="reference" href="MigrationGuide.html">MigrationGuide</a> file for details about some of the
 big changes that have happened in this release and how you should
 adapt your code.)</p>
@@ -369,8 +602,8 @@ migrating away from using activexwrapper as well.  Please see the
 MigrationGuide for more details on using the new module.</p>
 <p>Floats are allowed again as function parameters where ints are expected.</p>
 </div>
-<div class="section" id="id6">
-<h1><a name="id6">2.4.2.4</a></h1>
+<div class="section" id="id7">
+<h1><a name="id7">2.4.2.4</a></h1>
 <p>Use wxSTC in the demo for displaying the soucre code of the samples.</p>
 <p>Lots of bug fixes and such from the wxWindows folks.</p>
 <p>Added wxPython.lib.newevent from Miki Tebeka.  Its usage is
@@ -379,8 +612,8 @@ demonstrated in the Threads sample in the demo.</p>
 <p>Added wxMaskedNumCtrl.</p>
 <p>Added Chris Barker's FloatCanvas.</p>
 </div>
-<div class="section" id="id7">
-<h1><a name="id7">2.4.1.2</a></h1>
+<div class="section" id="id8">
+<h1><a name="id8">2.4.1.2</a></h1>
 <p>Added wxScrolledPanel from Will Sadkin</p>
 <p>Added SetShape method to top level windows (e.g. wxFrame.)</p>
 <p>Changed wxSWIG to not generate Python code using apply, (since it will
@@ -431,8 +664,8 @@ release,) SetItemMinSize can now take a wxSize (or 2-tuple) parameter,
 and Spacers can be specified with a wxSize (or 2-tuple) parameter</p>
 <p>Added wxCursorFromBits.</p>
 </div>
-<div class="section" id="id8">
-<h1><a name="id8">2.4.0.7</a></h1>
+<div class="section" id="id9">
+<h1><a name="id9">2.4.0.7</a></h1>
 <p>Gave up on generating a warning upon the use of the old true/false or
 TRUE/FALSE values.</p>
 <p>Fixed wxGenericTreeCtrl (used on wxGTK and wxMac for wxTreeCtrl) so
@@ -462,8 +695,8 @@ think I am testing in the future...</p>
 <p>Updated pycolourchooser.</p>
 <p>Updated to 0.9b of PyCrust.</p>
 </div>
-<div class="section" id="id9">
-<h1><a name="id9">2.4.0.4</a></h1>
+<div class="section" id="id10">
+<h1><a name="id10">2.4.0.4</a></h1>
 <p>Added missing wxRect methods</p>
 <p>Add OOR support for wxApp objects too.</p>
 <p>Added wxCursorFromImage, which works on wxMSW and wxGTK so far.</p>
@@ -519,25 +752,25 @@ doesn't have a standard place for them.</p>
 <p>Fixed typemaps for wxGridCellCoordsArray.</p>
 <p>Updated to the 0.9a version of PyCrust</p>
 </div>
-<div class="section" id="id10">
-<h1><a name="id10">2.4.0.2</a></h1>
+<div class="section" id="id11">
+<h1><a name="id11">2.4.0.2</a></h1>
 <p>Several bug fixes.</p>
 <p>Added wxIntCtrl from Will Sadkin.</p>
 <p>Added wxPyColourChooser by Michael Gilfix.</p>
 </div>
-<div class="section" id="id11">
-<h1><a name="id11">2.4.0.1</a></h1>
+<div class="section" id="id12">
+<h1><a name="id12">2.4.0.1</a></h1>
 <p>No major new features since 2.3.4.2, mostly bug fixes and minor
 enhancements.</p>
 <p>Added function wrappers for the common dialogs from Kevin Altis.  See
 wxPython/lib/dialogs.py for more details.</p>
 </div>
-<div class="section" id="id12">
-<h1><a name="id12">2.3.4.2</a></h1>
+<div class="section" id="id13">
+<h1><a name="id13">2.3.4.2</a></h1>
 <p>Various bug fixes.</p>
 </div>
-<div class="section" id="id13">
-<h1><a name="id13">2.3.4.1</a></h1>
+<div class="section" id="id14">
+<h1><a name="id14">2.3.4.1</a></h1>
 <p>Updated XRCed and wxTimeCtrl contribs.</p>
 <p>Show a couple new wxGrid features in the demo.</p>
 <p>Several bug fixes in wxWindows.</p>
@@ -591,8 +824,8 @@ windows when desired.</p>
 HTMLHelp viewer does.  Changed how the wxPythonDocs tarball is built
 and added a script to launch the doc viewer.</p>
 </div>
-<div class="section" id="id14">
-<h1><a name="id14">2.3.3.1</a></h1>
+<div class="section" id="id15">
+<h1><a name="id15">2.3.3.1</a></h1>
 <p>Added wxSplashScreen.</p>
 <p>Added wxGenericDirCtrl.</p>
 <p>Added wxMultiChoiceDialog.</p>
@@ -734,15 +967,15 @@ example.</p>
 <p>Added wxPython.lib.mixins.rubberband module from Robb Shecter.</p>
 <p>Added wxTimeCtrl from Will Sadkin.</p>
 </div>
-<div class="section" id="id15">
-<h1><a name="id15">2.3.2.1</a></h1>
+<div class="section" id="id16">
+<h1><a name="id16">2.3.2.1</a></h1>
 <p>Changed (again) how the Python global interpreter lock is handled as
 well as the Python thread state.  This time it works on SMP machines
 without barfing and is also still compatible with Python debuggers.</p>
 <p>Added some patches from library contributors.</p>
 </div>
-<div class="section" id="id16">
-<h1><a name="id16">2.3.2</a></h1>
+<div class="section" id="id17">
+<h1><a name="id17">2.3.2</a></h1>
 <p>Added EVT_HELP, EVT_HELP_RANGE, EVT_DETAILED_HELP,
 EVT_DETAILED_HELP_RANGE, EVT_CONTEXT_MENU, wxHelpEvent,
 wxContextMenuEvent, wxContextHelp, wxContextHelpButton, wxTipWindow,
@@ -824,8 +1057,8 @@ SendCommand method, but it is still quite powerful.  See
 wxPython/contrib/dllwidget and wxPython/demo/dllwidget for more
 details.</p>
 </div>
-<div class="section" id="id17">
-<h1><a name="id17">2.3.1</a></h1>
+<div class="section" id="id18">
+<h1><a name="id18">2.3.1</a></h1>
 <p>Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the user
 code can get access to the edit control when it is created, (to push
 on a custom event handler for example.)</p>
@@ -838,8 +1071,8 @@ subclass wxXmlResourceHandler, etc...</p>
 <p>Fixed img2py to work correctly with Python 2.1.</p>
 <p>Added enhanced wxVTKRenderWindow by Prabhu Ramachandran</p>
 </div>
-<div class="section" id="id18">
-<h1><a name="id18">2.3.0</a></h1>
+<div class="section" id="id19">
+<h1><a name="id19">2.3.0</a></h1>
 <p>Removed initial startup dependency on the OpenGL DLLs so only the
 glcanvasc.pyd depends on them, (on wxMSW.)</p>
 <p>Changed wxFont, wxPen, wxBrush to not implicitly use the
@@ -935,13 +1168,13 @@ please send it to me for inclusion in this package.</p>
 by having smaller functional apps to play with.  They can be found in
 wxPython/samples.</p>
 </div>
-<div class="section" id="id19">
-<h1><a name="id19">2.2.6</a></h1>
+<div class="section" id="id20">
+<h1><a name="id20">2.2.6</a></h1>
 <p>No changes happened in the Python wrappers for this release, only
 changes and fixes in the wxWindows library.</p>
 </div>
-<div class="section" id="id20">
-<h1><a name="id20">2.2.5</a></h1>
+<div class="section" id="id21">
+<h1><a name="id21">2.2.5</a></h1>
 <p>New typemaps for wxString when compiling for Python 2.0 and beyond
 that allow Unicode objects to be passed as well as String objects.  If
 a Unicode object is passed PyString_AsStringAndSize is used to convert

@@ -377,7 +377,10 @@ be used from XRC.</p>
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
 wrappers will figure out what to do.  <strong>[Changed in 2.5.2.x]</strong>
 AddWindow, AddSizer, AddSpacer and etc. will now issue a
-DeprecationWarning.</p>
+DeprecationWarning. <strong>[Changed in 2.5.4.x]</strong> These methods have now
+been undeprecated at the request of Riaan Booysen, the Boa Constructor
+team lead.  They are now just simple compatibility aliases for Add,
+and etc.</p>
 <p><strong>[Changed in 2.5.2.x]</strong> The Sizers have had some fundamental internal
 changes in the 2.5.2.x release intended to make them do more of the
 &quot;Right Thing&quot; but also be as backwards compatible as possible.
