@@ -596,7 +596,7 @@ EOF
 
 
     # and then finally make a disk image containing everything
-    dmgname=wxPython${SHORTVER}-osx-docs-demos-$VERSION
+    dmgname=wxPython${SHORTVER}-osx-docs-demos-$VERSION-$KIND
     $PROGDIR/../makedmg $DMGAPPS $DMGDIR $dmgname
 
     echo Moving $DMGDIR/$dmgname.dmg to $DESTDIR
