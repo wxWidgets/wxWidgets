@@ -45,7 +45,8 @@ private:
 #define SWIG_TypeName        SWIG_Python_TypeName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
-
+#define SWIG_PackData        SWIG_Python_PackData
+#define SWIG_UnpackData      SWIG_Python_UnpackData
 
 /***********************************************************************
  * common.swg for wxPython
@@ -59,35 +60,34 @@ private:
 
 #include <string.h>
 
-#if defined(_WIN32) || defined(__WIN32__)
-#       if defined(_MSC_VER)
-#               if defined(STATIC_LINKED)
-#                       define SWIGEXPORT(a) a
-#                       define SWIGIMPORT(a) extern a
-#               else
-#                       define SWIGEXPORT(a) __declspec(dllexport) a
-#                       define SWIGIMPORT(a) extern a
-#               endif
-#       else
-#               if defined(__BORLANDC__)
-#                       define SWIGEXPORT(a) a _export
-#                       define SWIGIMPORT(a) a _export
-#               else
-#                       define SWIGEXPORT(a) a
-#                       define SWIGIMPORT(a) a
-#               endif
-#       endif
+#if defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+#  if defined(_MSC_VER) || defined(__GNUC__)
+#    if defined(STATIC_LINKED)
+#      define SWIGEXPORT(a) a
+#      define SWIGIMPORT(a) extern a
+#    else
+#      define SWIGEXPORT(a) __declspec(dllexport) a
+#      define SWIGIMPORT(a) extern a
+#    endif
+#  else
+#    if defined(__BORLANDC__)
+#      define SWIGEXPORT(a) a _export
+#      define SWIGIMPORT(a) a _export
+#    else
+#      define SWIGEXPORT(a) a
+#      define SWIGIMPORT(a) a
+#    endif
+#  endif
 #else
-#       define SWIGEXPORT(a) a
-#       define SWIGIMPORT(a) a
+#  define SWIGEXPORT(a) a
+#  define SWIGIMPORT(a) a
 #endif
 
 #ifdef SWIG_GLOBAL
-#define SWIGRUNTIME(a) SWIGEXPORT(a)
+#  define SWIGRUNTIME(a) SWIGEXPORT(a)
 #else
-#define SWIGRUNTIME(a) static a
+#  define SWIGRUNTIME(a) static a
 #endif
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -97,10 +97,10 @@ typedef void *(*swig_converter_func)(void *);
 typedef struct swig_type_info *(*swig_dycast_func)(void **);
 
 typedef struct swig_type_info {
-  const char             *name;                 
+  const char             *name;
   swig_converter_func     converter;
   const char             *str;
-  void                   *clientdata;	
+  void                   *clientdata;
   swig_dycast_func        dcast;
   struct swig_type_info  *next;
   struct swig_type_info  *prev;
@@ -114,12 +114,15 @@ SWIGIMPORT(swig_type_info *) SWIG_TypeDynamicCast(swig_type_info *, void **);
 SWIGIMPORT(const char *)     SWIG_TypeName(const swig_type_info *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeQuery(const char *);
 SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
+SWIGIMPORT(char *)           SWIG_PackData(char *, void *, int);
+SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 
 
 #ifdef __cplusplus
 }
 
 #endif
+
 
 /***********************************************************************
  * pyrun.swg for wxPython
@@ -130,7 +133,6 @@ SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
  * anyway.
  *
  ************************************************************************/
-
 
 #include "Python.h"
 
@@ -162,8 +164,6 @@ typedef struct swig_const_info {
     swig_type_info **ptype;
 } swig_const_info;
 
-
-
 /* Common SWIG API */
 #define SWIG_ConvertPtr(obj, pp, type, flags) \
   SWIG_Python_ConvertPtr(obj, pp, type, flags)
@@ -179,33 +179,26 @@ typedef struct swig_const_info {
   SWIG_Python_addvarlink(p, name, get_attr, set_attr)
 #define SWIG_ConvertPacked(obj, ptr, sz, ty, flags) \
   SWIG_Python_ConvertPacked(obj, ptr, sz, ty, flags)
-#define SWIG_PackData(c, ptr, sz) \
-  SWIG_Python_PackData(c, ptr, sz)
-#define SWIG_UnpackData(c, ptr, sz) \
-  SWIG_Python_UnpackData(c, ptr, sz)
 #define SWIG_NewPackedObj(ptr, sz, type) \
   SWIG_Python_NewPackedObj(ptr, sz, type)
 #define SWIG_InstallConstants(d, constants) \
   SWIG_Python_InstallConstants(d, constants)
 
 
-SWIGEXPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
-SWIGEXPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
-SWIGEXPORT(void *)	      SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+SWIGIMPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
+SWIGIMPORT(void *)            SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_newvarlink(void);
+SWIGIMPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
+SWIGIMPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
+SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
-SWIGEXPORT(PyObject *)        SWIG_Python_newvarlink(void);
-SWIGEXPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
-SWIGEXPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
-SWIGEXPORT(char *)            SWIG_Python_PackData(char *c, void *, int);
-SWIGEXPORT(char *)            SWIG_Python_UnpackData(char *c, void *, int);
-SWIGEXPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
-SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
 
 /* Contract support */
 
 #define SWIG_contract_assert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, (char *) msg ); goto fail; } else
-
 
 #ifdef __cplusplus
 }
@@ -5841,6 +5834,31 @@ static PyObject *_wrap_Timer_IsOneShot(PyObject *self, PyObject *args, PyObject 
 }
 
 
+static PyObject *_wrap_Timer_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyTimer *arg1 = (wxPyTimer *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Timer_GetId",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTimer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxPyTimer const *)arg1)->GetId();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Timer_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -7586,44 +7604,45 @@ static PyObject *_wrap_LogSysError(PyObject *self, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_LogTrace(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LogTrace__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
-    wxString *arg1 = 0 ;
-    bool temp1 = False ;
+    unsigned long arg1 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "msg", NULL 
-    };
+    PyObject * obj1 = 0 ;
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:LogTrace",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO:LogTrace",&obj0,&obj1)) goto fail;
+    arg1 = (unsigned long) PyInt_AsLong(obj0);
+    if (PyErr_Occurred()) SWIG_fail;
     {
-        arg1 = wxString_in_helper(obj0);
-        if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogTrace((wxString const &)*arg1);
+        wxLogTrace(arg1,(wxString const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
     {
-        if (temp1)
-        delete arg1;
+        if (temp2)
+        delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (temp1)
-        delete arg1;
+        if (temp2)
+        delete arg2;
     }
     return NULL;
 }
 
 
-static PyObject *_wrap_LogTraceMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_LogTrace__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxString *arg2 = 0 ;
@@ -7631,11 +7650,8 @@ static PyObject *_wrap_LogTraceMask(PyObject *self, PyObject *args, PyObject *kw
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "mask",(char *) "msg", NULL 
-    };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LogTraceMask",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO:LogTrace",&obj0,&obj1)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -7672,6 +7688,67 @@ static PyObject *_wrap_LogTraceMask(PyObject *self, PyObject *args, PyObject *kw
         if (temp2)
         delete arg2;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_LogTrace(PyObject *self, PyObject *args) {
+    int argc;
+    PyObject *argv[3];
+    int ii;
+    
+    argc = PyObject_Length(args);
+    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
+        argv[ii] = PyTuple_GetItem(args,ii);
+    }
+    if (argc == 2) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_wxString, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                void *ptr;
+                if (SWIG_ConvertPtr(argv[1], (void **) &ptr, SWIGTYPE_p_wxString, 0) == -1) {
+                    _v = 0;
+                    PyErr_Clear();
+                } else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                return _wrap_LogTrace__SWIG_1(self,args);
+            }
+        }
+    }
+    if (argc == 2) {
+        int _v;
+        {
+            _v = (PyInt_Check(argv[0]) || PyLong_Check(argv[0])) ? 1 : 0;
+        }
+        if (_v) {
+            {
+                void *ptr;
+                if (SWIG_ConvertPtr(argv[1], (void **) &ptr, SWIGTYPE_p_wxString, 0) == -1) {
+                    _v = 0;
+                    PyErr_Clear();
+                } else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                return _wrap_LogTrace__SWIG_0(self,args);
+            }
+        }
+    }
+    
+    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'LogTrace'");
     return NULL;
 }
 
@@ -10751,7 +10828,13 @@ static PyObject *_wrap_FileTypeInfo_GetMimeType(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10779,7 +10862,13 @@ static PyObject *_wrap_FileTypeInfo_GetOpenCommand(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10807,7 +10896,13 @@ static PyObject *_wrap_FileTypeInfo_GetPrintCommand(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10835,7 +10930,13 @@ static PyObject *_wrap_FileTypeInfo_GetShortDesc(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10863,7 +10964,13 @@ static PyObject *_wrap_FileTypeInfo_GetDescription(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10946,7 +11053,13 @@ static PyObject *_wrap_FileTypeInfo_GetIconFile(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -13296,7 +13409,13 @@ static PyObject *_wrap_ConfigBase_GetPath(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14714,7 +14833,13 @@ static PyObject *_wrap_ConfigPathChanger_Name(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -24462,6 +24587,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Timer_IsRunning", (PyCFunction) _wrap_Timer_IsRunning, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_GetInterval", (PyCFunction) _wrap_Timer_GetInterval, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_IsOneShot", (PyCFunction) _wrap_Timer_IsOneShot, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Timer_GetId", (PyCFunction) _wrap_Timer_GetId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_swigregister", Timer_swigregister, METH_VARARGS },
 	 { (char *)"new_TimerEvent", (PyCFunction) _wrap_new_TimerEvent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TimerEvent_GetInterval", (PyCFunction) _wrap_TimerEvent_GetInterval, METH_VARARGS | METH_KEYWORDS },
@@ -24528,8 +24654,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LogStatus", (PyCFunction) _wrap_LogStatus, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"LogStatusFrame", (PyCFunction) _wrap_LogStatusFrame, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"LogSysError", (PyCFunction) _wrap_LogSysError, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"LogTrace", (PyCFunction) _wrap_LogTrace, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"LogTraceMask", (PyCFunction) _wrap_LogTraceMask, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"LogTrace", _wrap_LogTrace, METH_VARARGS },
 	 { (char *)"LogGeneric", (PyCFunction) _wrap_LogGeneric, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SafeShowMessage", (PyCFunction) _wrap_SafeShowMessage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_LogNull", (PyCFunction) _wrap_new_LogNull, METH_VARARGS | METH_KEYWORDS },

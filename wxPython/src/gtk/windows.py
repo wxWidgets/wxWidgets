@@ -1584,7 +1584,7 @@ class TaskBarIcon(core.EvtHandler):
         return _windows.TaskBarIcon_SetIcon(*args, **kwargs)
 
     def RemoveIcon(*args, **kwargs):
-        """RemoveIcon(void ??) -> bool"""
+        """RemoveIcon() -> bool"""
         return _windows.TaskBarIcon_RemoveIcon(*args, **kwargs)
 
     def PopupMenu(*args, **kwargs):
