@@ -16,18 +16,26 @@ class TestPanel(wx.Panel):
         self.log = log
 
         self.fbb = filebrowse.FileBrowseButton(
-            self, -1, (20, 20), (450, -1), changeCallback = self.fbbCallback
+            self, -1, size=(450, -1), changeCallback = self.fbbCallback
             )
 
         self.fbbh = filebrowse.FileBrowseButtonWithHistory(
-            self, -1, (20, 50), (450, -1),  changeCallback = self.fbbhCallback
+            self, -1, size=(450, -1),  changeCallback = self.fbbhCallback
             )
             
         self.dbb = filebrowse.DirBrowseButton(
-            self, -1, (20, 80), (450, -1), changeCallback = self.dbbCallback
+            self, -1, size=(450, -1), changeCallback = self.dbbCallback
             )
 
         self.fbbh.SetHistory(['You', 'can', 'put', 'some', 'filenames', 'here'])
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.fbb, 0, wx.ALL, 5)
+        sizer.Add(self.fbbh, 0, wx.ALL, 5)
+        sizer.Add(self.dbb, 0, wx.ALL, 5)
+        box = wx.BoxSizer()
+        box.Add(sizer, 0, wx.ALL, 20)
+        self.SetSizer(box)
 
 
     def fbbCallback(self, evt):
