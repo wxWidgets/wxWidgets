@@ -55,6 +55,8 @@
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
 
+class WXDLLIMPEXP_BASE wxString;
+
 // ---------------------------------------------------------------------------
 // macros
 // ---------------------------------------------------------------------------
@@ -164,11 +166,10 @@ inline int Stricmp(const char *psz1, const char *psz2)
 #endif  // OS/compiler
 }
 
-// return an empty wxString
-class WXDLLIMPEXP_BASE wxString; // not yet defined
-inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; }
-
 #if wxUSE_STL
+
+// return an empty wxString (doesn't make much sense with wxUSE_STL == 1)
+inline const wxString wxGetEmptyString() { wxString(); }
 
 #include "wx/beforestd.h"
 #include <string>
@@ -190,6 +191,9 @@ inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; 
 #endif
 
 #else // if !wxUSE_STL
+
+// return an empty wxString
+inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; }
 
 #ifndef HAVE_STD_STRING_COMPARE
     #define HAVE_STD_STRING_COMPARE
