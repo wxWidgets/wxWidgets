@@ -2373,14 +2373,21 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 #define EVT_COMMAND_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_ENTER, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
 
 // Joystick events
-#define EVT_JOY_DOWN(func) \
+
+#define EVT_JOY_BUTTON_DOWN(func) \
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_BUTTON_DOWN, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
-#define EVT_JOY_UP(func) \
+#define EVT_JOY_BUTTON_UP(func) \
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_BUTTON_UP, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
 #define EVT_JOY_MOVE(func) \
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_MOVE, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
 #define EVT_JOY_ZMOVE(func) \
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_ZMOVE, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
+
+// These are obsolete, see _BUTTON_ events
+#define EVT_JOY_DOWN(func) \
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_BUTTON_DOWN, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
+#define EVT_JOY_UP(func) \
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_BUTTON_UP, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
 
 // All joystick events
 #define EVT_JOYSTICK_EVENTS(func) \

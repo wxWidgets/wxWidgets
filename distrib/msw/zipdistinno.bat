@@ -75,6 +75,8 @@ zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\makefile.rsp
 Rem Rearchive under wxWindows-%version%
 call %WXWIN%\distrib\msw\rearchive wxOS2-%version%.zip wxWindows-%version% %dest%
 
+zip32 -d %dest%\wxOS2-%version%.zip %dest%/src/gtk/descrip.mms %dest%/src/motif/descrip.mms
+
 echo Zipping wxMac distribution
 zip32 -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
@@ -90,6 +92,8 @@ zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
 call %WXWIN%\distrib\msw\rearchive wxMac-%version%.zip wxWindows-%version% %dest%
+
+zip32 -d %dest%\wxMac-%version%.zip %dest%/src/gtk/descrip.mms %dest%/src/motif/descrip.mms
 
 Rem Create wxWindows-%version%-win.zip which is used to create wxMSW
 echo Zipping individual components
@@ -110,6 +114,8 @@ zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\utilmake.rsp
 zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\univ.rsp
 
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-win.zip wxWindows-%version% %dest%
+
+zip32 -d %dest%\wxWindows-%version%-win.zip %dest%/src/gtk/descrip.mms %dest%/src/motif/descrip.mms
 
 zip32 -@ %dest\wxWindows-%version%-DocSource.zip < %src\distrib\msw\docsrc.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-DocSource.zip wxWindows-%version% %dest%
