@@ -2732,9 +2732,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
     PostCreation();
 
-    if ( IsShown() )
-        gtk_widget_show( m_widget );
-
     return TRUE;
 }
 
@@ -2919,6 +2916,11 @@ void wxWindowGTK::PostCreation()
     }
 
     m_hasVMT = TRUE;
+
+    // unless the window was created initially hidden (i.e. Hide() had been
+    // called before Create()), we should show it at GTK+ level as well
+    if ( IsShown() )
+        gtk_widget_show( m_widget );
 }
 
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
