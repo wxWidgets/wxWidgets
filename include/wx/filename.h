@@ -175,11 +175,11 @@ public:
     bool IsOk() const { return !m_dirs.IsEmpty() || !m_name.IsEmpty(); }
 
         // does the file with this name exists?
-    bool FileExists();
+    bool FileExists() const;
     static bool FileExists( const wxString &file );
 
         // does the directory with this name exists?
-    bool DirExists();
+    bool DirExists() const;
     static bool DirExists( const wxString &dir );
 
         // VZ: also need: IsDirWritable(), IsFileExecutable() &c (TODO)

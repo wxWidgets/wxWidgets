@@ -461,7 +461,7 @@ wxFileName wxFileName::DirName(const wxString& dir)
 // existence tests
 // ----------------------------------------------------------------------------
 
-bool wxFileName::FileExists()
+bool wxFileName::FileExists() const
 {
     return wxFileName::FileExists( GetFullPath() );
 }
@@ -471,7 +471,7 @@ bool wxFileName::FileExists( const wxString &file )
     return ::wxFileExists( file );
 }
 
-bool wxFileName::DirExists()
+bool wxFileName::DirExists() const
 {
     return wxFileName::DirExists( GetFullPath() );
 }

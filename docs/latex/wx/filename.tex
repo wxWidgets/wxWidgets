@@ -257,9 +257,9 @@ The full temporary file name or an empty string on error.
 
 \membersection{wxFileName::DirExists}\label{wxfilenamedirexists}
 
-\func{bool}{DirExists}{\void}
+\constfunc{bool}{DirExists}{\void}
 
-\func{bool}{DirExists}{\param{const wxString\& }{dir}}
+\func{static bool}{DirExists}{\param{const wxString\& }{dir}}
 
 Returns true if the directory with this name exists.
 
@@ -271,11 +271,15 @@ Returns the directory name.
 
 \membersection{wxFileName::FileExists}\label{wxfilenamefileexists}
 
-\func{bool}{FileExists}{\void}
+\constfunc{bool}{FileExists}{\void}
 
-\func{bool}{FileExists}{\param{const wxString\& }{file}}
+\func{static bool}{FileExists}{\param{const wxString\& }{file}}
 
 Returns true if the file with this name exists.
+
+\wxheading{See also}
+
+\helpref{DirExists}{wxfilenamedirexists}
 
 \membersection{wxFileName::FileName}\label{wxfilenamefilename}
 
