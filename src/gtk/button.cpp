@@ -149,8 +149,6 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
     SetSize( new_size );
 
-    Show( TRUE );
-
     return TRUE;
 }
 
@@ -210,7 +208,24 @@ void wxButton::ApplyWidgetStyle()
 
 wxSize wxButton::DoGetBestSize() const
 {
+    // the default button in wxGTK is bigger than the other ones because of an
+    // extra border around it, but we don't want to take it into account in
+    // our size calculations (otherwsie the result is visually ugly), so
+    // always return the size of non default button from here
+    const bool isDefault = GTK_WIDGET_HAS_DEFAULT(m_widget);
+    if ( isDefault )
+    {
+        // temporarily unset default flag
+        GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_DEFAULT );
+    }
+
     wxSize ret( wxControl::DoGetBestSize() );
+
+    if ( isDefault )
+    {
+        // set it back again
+        GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
+    }
 
 #ifndef __WXGTK20__
     ret.x += 10;  // add a few pixels for sloppy (but common) themes
