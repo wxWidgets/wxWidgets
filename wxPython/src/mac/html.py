@@ -450,6 +450,10 @@ class wxHtmlContainerCellPtr(wxHtmlCellPtr):
     def SetBackgroundColour(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlContainerCell_SetBackgroundColour,(self,) + _args, _kwargs)
         return val
+    def GetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_GetBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
     def SetBorder(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlContainerCell_SetBorder,(self,) + _args, _kwargs)
         return val
@@ -509,7 +513,7 @@ class wxHtmlWidgetCell(wxHtmlWidgetCellPtr):
 
 
 
-class wxHtmlFilterPtr :
+class wxHtmlFilterPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
