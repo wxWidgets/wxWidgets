@@ -78,6 +78,9 @@ static wxString FilterOutValue(const wxString& str);
 static wxString FilterInEntryName(const wxString& str);
 static wxString FilterOutEntryName(const wxString& str);
 
+// get the name to use in wxFileConfig ctor
+static wxString GetAppName(const wxString& appname);
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -198,9 +201,9 @@ void wxFileConfig::Init()
 wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
                            const wxString& strLocal, const wxString& strGlobal,
                            long style)
-            : wxConfigBase(!appName && wxTheApp ? wxTheApp->GetAppName()
-                                                : appName,
-                           vendorName, strLocal, strGlobal, style),
+            : wxConfigBase(::GetAppName(appName), vendorName,
+                           strLocal, strGlobal,
+                           style),
               m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
 {
   // Make up names for files if empty
@@ -1467,3 +1470,12 @@ static wxString FilterOutEntryName(const wxString& str)
   return strResult;
 }
 
+// we can't put ?: in the ctor initializer list because it confuses some
+// broken compilers (Borland C++)
+static wxString GetAppName(const wxString& appName)
+{
+    if ( !appName && wxTheApp )
+        return wxTheApp->GetAppName();
+    else
+        return appName;
+}
