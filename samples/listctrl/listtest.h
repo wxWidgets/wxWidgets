@@ -91,6 +91,15 @@ public:
     wxImageList *m_imageListSmall;
 
 private:
+    // recreate the list control with the new flags
+    void RecreateList(long flags, bool withText = TRUE);
+
+    // fill the control with items depending on the view
+    void InitWithListItems();
+    void InitWithReportItems();
+    void InitWithIconItems(bool withText, bool sameIcon = FALSE);
+    void InitWithVirtualItems();
+
     wxLog *m_logOld;
 
     DECLARE_EVENT_TABLE()
