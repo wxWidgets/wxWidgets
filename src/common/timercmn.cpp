@@ -280,18 +280,35 @@ wxLongLong wxGetLocalTimeMillis()
     val *= wxGetLocalTime();
 
 #if defined(__VISAGECPP__)
+    // If your platform/compiler needs to use two different functions
+    // to get ms resolution, please do NOT just shut off these warnings,
+    // drop me a line instead at <guille@iies.es>
+    #warning "Possible clock skew bug in wxGetLocalTimeMillis()!"
+
     DATETIME dt;
     ::DosGetDateTime(&dt);
     val += (dt.hundredths*10);
 #elif defined (__WIN32__)
+    // If your platform/compiler needs to use two different functions
+    // to get ms resolution, please do NOT just shut off these warnings,
+    // drop me a line instead at <guille@iies.es>
     #warning "Possible clock skew bug in wxGetLocalTimeMillis()!"
+
     SYSTEMTIME st;
     ::GetLocalTime(&st);
     val += st.wMilliseconds;
 #else // !Win32
-    #if !defined(__VISUALC__) && !defined(__BORLANDC__)
+    // If your platform/compiler does not support ms resolution please
+    // do NOT just shut off these warnings, drop me a line instead at
+    // <guille@iies.es>
+
+    #if defined(__VISUALC__)
+        #pragma message("wxStopWatch will be up to second resolution!")
+    #elif defined(__BORLANDC__)
+        #pragma warning "wxStopWatch will be up to second resolution!"
+    #else
         #warning "wxStopWatch will be up to second resolution!"
-    #endif
+    #endif // compiler
 #endif
 
     return val;
