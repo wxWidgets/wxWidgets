@@ -3484,10 +3484,10 @@ if test "$wxUSE_DATETIME" = "yes"; then
                             ],
                             [
                                 int tz;
-                                tz = __timezone;
+                                tz = timezone;
                             ],
                             [
-                                wx_cv_var_timezone=__timezone
+                                wx_cv_var_timezone=timezone
                             ],
                             [
                                 AC_TRY_COMPILE(
@@ -3508,10 +3508,10 @@ if test "$wxUSE_DATETIME" = "yes"; then
                                             ],
                                             [
                                                 int tz;
-                                                tz = timezone;
+                                                tz = __timezone;
                                             ],
                                             [
-                                                wx_cv_var_timezone=timezone
+                                                wx_cv_var_timezone=__timezone
                                             ],
                                             AC_MSG_ERROR(no timezone variable)
                                         )
@@ -3942,6 +3942,7 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
                 ALL_DEPFILES="$ALL_DEPFILES \$(OLEDEPS)"
                 CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
                 LIBS="$LIBS -lole32 -luuid"
+                AC_DEFINE(wxUSE_OLE)
 
                 dnl metafiles need the ole code, right??  if not this
                 dnl doesn't need to be in here.
