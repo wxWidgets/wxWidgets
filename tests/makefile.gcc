@@ -26,6 +26,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_formatconverter.o \
 	$(OBJS)\test_regex.o \
 	$(OBJS)\test_wxregex.o \
+	$(OBJS)\test_filename.o \
 	$(OBJS)\test_filesys.o \
 	$(OBJS)\test_arrays.o \
 	$(OBJS)\test_hashes.o \
@@ -180,6 +181,9 @@ $(OBJS)\test_regex.o: ./regex/regex.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_wxregex.o: ./regex/wxregex.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_filename.o: ./filename/filename.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filesys.o: ./filesys/filesys.cpp
