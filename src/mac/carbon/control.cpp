@@ -214,6 +214,9 @@ void wxControl::SetLabel(const wxString& title)
 
 wxSize wxControl::DoGetBestSize() const
 {
+    if ( (ControlHandle) m_macControl == NULL )
+        return wxWindow::DoGetBestSize() ;
+        
     Rect    bestsize = { 0 , 0 , 0 , 0 } ;
     short   baselineoffset ;
     int bestWidth, bestHeight ;
@@ -235,18 +238,7 @@ wxSize wxControl::DoGetBestSize() const
         }
     }
 
-    if ( IsKindOf( CLASSINFO( wxButton ) ) )
-    {
-        bestWidth = m_label.Length() * 8 + 12 ;
-        if ( bestWidth < 70 )
-          bestWidth = 70 ;
-    }
-    else if ( IsKindOf( CLASSINFO( wxStaticText ) ) )
-    {
-        bestWidth = m_label.Length() * 8 ;
-    }
-    else
-        bestWidth = bestsize.right - bestsize.left ;
+    bestWidth = bestsize.right - bestsize.left ;
         
     bestWidth += 2 * m_macHorizontalBorder ;
 
@@ -462,8 +454,7 @@ void wxControl::MacAdjustControlRect()
 
             m_height += 2 * m_macVerticalBorder + MacGetTopBorderSize() + MacGetBottomBorderSize() ;
         }
-          MacUpdateDimensions() ;      
-//        UMASizeControl( (ControlHandle) m_macControl , m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
+         MacUpdateDimensions() ;      
     }
 }
 
