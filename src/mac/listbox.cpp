@@ -965,9 +965,13 @@ void wxListBox::OnChar(wxKeyEvent& event)
     else if (event.KeyCode() == WXK_ESCAPE || (event.KeyCode() == '.' && event.MetaDown() ) )
     {
     	wxWindow* win = GetParent()->FindWindow( wxID_CANCEL ) ;
-        wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
-        new_event.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( new_event );
+        // FIXME: try ancestor, not just parent
+        if (win)
+        {
+            wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+            new_event.SetEventObject( win );
+            win->GetEventHandler()->ProcessEvent( new_event );
+        }
     }
     else if ( event.KeyCode() == WXK_TAB )
     {
