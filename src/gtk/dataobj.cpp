@@ -327,6 +327,7 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
 {
     Clear();
 
+#if wxUSE_LIBPNG
     m_pngSize = size;
     m_pngData = malloc(m_pngSize);
 
@@ -343,10 +344,14 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
     m_bitmap = image.ConvertToBitmap();
 
     return m_bitmap.Ok();
+#else
+    return FALSE;
+#endif
 }
 
 void wxBitmapDataObject::DoConvertToPng()
 {
+#if wxUSE_LIBPNG
     if (!m_bitmap.Ok())
         return;
 
@@ -361,6 +366,7 @@ void wxBitmapDataObject::DoConvertToPng()
 
     wxMemoryOutputStream mstream( (char*) m_pngData, m_pngSize );
     handler.SaveFile( &image, mstream );
+#endif
 }
 
 

@@ -1522,6 +1522,7 @@ if test "$wxUSE_GTK" = 1; then
     COMMONDEPS="\$(GTK_COMMONDEPS)"
     GENERICDEPS="\$(GTK_GENERICDEPS)"
     UNIXOBJS="\$(UNIX_OBJS)"
+    UNIXDEPS="\$(UNIX_DEPS)"
     GUIDIST=GTK_DIST
 fi
 
@@ -1573,6 +1574,7 @@ if test "$wxUSE_WINE" = 1; then
     COMMONDEPS="\$(MSW_COMMONDEPS)"
     GENERICDEPS="\$(MSW_GENERICDEPS)"
     UNIXOBJS="\$(UNIX_OBJS)"
+    UNIXDEPS="\$(UNIX_DEPS)"
     GUIDIST=MSW_DIST
 fi
 
@@ -1673,6 +1675,7 @@ if test "$wxUSE_MOTIF" = 1; then
     COMMONDEPS="\$(MOTIF_COMMONDEPS)"
     GENERICDEPS="\$(MOTIF_GENERICDEPS)"
     UNIXOBJS="\$(UNIX_OBJS)"
+    UNIXDEPS="\$(UNIX_DEPS)"
     GUIDIST=MOTIF_DIST
 fi
 
@@ -1686,7 +1689,19 @@ dnl the name of the (libtool) library
 WX_LIBRARY="wx_${TOOLKIT_DIR}"
 
     dnl the sources, their dependenices and the headers
-    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(JPEGOBJS) \$(TIFFOBJS) \$(PNGOBJS) \$(ZLIBOBJS) \$(IODBCOBJS)"
+    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(IODBCOBJS)"
+    if test "$wxUSE_LIBJPEG" = "yes" ; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(JPEGOBJS)"  
+    fi
+    if test "$wxUSE_LIBTIFF" = "yes" ; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(TIFFOBJS)"
+    fi
+    if test "$wxUSE_LIBPNG" = "yes" ; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(PNGOBJS)"
+    fi
+    if test "$wxUSE_ZLIB" = "yes" ; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
+    fi
     ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS)"
     ALL_HEADERS="\$(GUIHEADERS) \$(HTML_HEADERS) \$(UNIX_HEADERS) \$(PROTOCOL_HEADERS) \$(GENERIC_HEADERS) \$(WX_HEADERS)"
 else
