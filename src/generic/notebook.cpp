@@ -133,8 +133,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
     m_windowId = id == -1 ? NewControlId() : id;
 
-    // It's like a normal window...
-    if (!wxWindow::Create(parent, id, pos, size, style|wxNO_BORDER, name))
+    if (!wxControl::Create(parent, id, pos, size, style|wxNO_BORDER, wxDefaultValidator, name))
         return FALSE;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
