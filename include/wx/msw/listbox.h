@@ -143,6 +143,11 @@ public:
 protected:
     WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
+    virtual WXHBRUSH MSWControlColor(WXHDC pDC)
+    {
+        return MSWControlColorSolid(pDC);
+    }
+
     // free memory (common part of Clear() and dtor)
     void Free();
 
