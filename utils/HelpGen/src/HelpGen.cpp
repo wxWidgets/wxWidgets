@@ -1278,7 +1278,7 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
 
     // check for the special case of dtor
     wxString dtor;
-    if ( (funcname[0] == '~') && (m_classname == funcname.c_str() + 1) ) {
+    if ( (funcname[0u] == '~') && (m_classname == funcname.c_str() + 1) ) {
         dtor.Printf("\\destruct{%s}", m_classname.c_str());
         funcname = dtor;
     }
@@ -2185,6 +2185,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.27  2003/10/13 17:21:30  MBN
+     Compilation fixes.
+
    Revision 1.26  2003/09/29 15:18:35  MBN
      (Blind) compilation fix for Sun compiler.
 

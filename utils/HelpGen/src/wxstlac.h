@@ -22,7 +22,7 @@
 #endif
 #include <memory.h>
 #include <limits.h>
-#include <new.h>
+/* #include <new.h> */
 
 // the below macro used internally (see actual interface after this macro)
 
