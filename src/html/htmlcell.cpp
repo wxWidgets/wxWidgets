@@ -75,12 +75,14 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
     m_Word = word;
 
     m_Word.Replace(wxT("&nbsp;"), wxT(" "), TRUE);
+    m_Word.Replace(wxT("&copy;"), wxT("(c)"), TRUE);
     m_Word.Replace(wxT("&quot;"), wxT("\""), TRUE);
     m_Word.Replace(wxT("&lt;"), wxT("<"), TRUE);
     m_Word.Replace(wxT("&gt;"), wxT(">"), TRUE);
     m_Word.Replace(wxT("&amp;"), wxT("&"), TRUE);
 
     m_Word.Replace(wxT("&nbsp "), wxT(" "), TRUE);
+    m_Word.Replace(wxT("&copy "), wxT("(c)"), TRUE);
     m_Word.Replace(wxT("&quot "), wxT("\""), TRUE);
     m_Word.Replace(wxT("&lt "), wxT("<"), TRUE);
     m_Word.Replace(wxT("&gt "), wxT(">"), TRUE);
