@@ -1300,12 +1300,15 @@ public:
     void SelectRow( int row, bool addToSelected = FALSE );
     void SelectCol( int col, bool addToSelected = FALSE );
 
-    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol );
+    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
+                      bool addToSelected = FALSE );
 
     void SelectBlock( const wxGridCellCoords& topLeft,
-                      const wxGridCellCoords& bottomRight )
+                      const wxGridCellCoords& bottomRight,
+                      bool addToSelected = FALSE )
         { SelectBlock( topLeft.GetRow(), topLeft.GetCol(),
-                       bottomRight.GetRow(), bottomRight.GetCol() ); }
+                       bottomRight.GetRow(), bottomRight.GetCol(),
+                       addToSelected ); }
 
     void SelectAll();
 
@@ -1734,6 +1737,12 @@ protected:
     void SetCurrentCell( int row, int col )
         { SetCurrentCell( wxGridCellCoords(row, col) ); }
 
+    void HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCol );
+
+    void HighlightBlock( const wxGridCellCoords& topLeft,
+                      const wxGridCellCoords& bottomRight )
+        { HighlightBlock( topLeft.GetRow(), topLeft.GetCol(),
+                       bottomRight.GetRow(), bottomRight.GetCol() ); }
 
     // ------ functions to get/send data (see also public functions)
     //
