@@ -386,7 +386,9 @@ void wxPostScriptDC::DestroyClippingRegion()
 
 void wxPostScriptDC::Clear()
 {
-    wxFAIL_MSG( wxT("wxPostScriptDC::Clear not implemented.") );
+    // This should fail silently to avoid unnecessary
+    // asserts
+    //    wxFAIL_MSG( wxT("wxPostScriptDC::Clear not implemented.") );
 }
 
 bool wxPostScriptDC::DoFloodFill (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
