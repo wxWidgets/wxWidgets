@@ -299,6 +299,9 @@ void MyFrame::OnAllowYearUpdate(wxUpdateUIEvent& event)
 MyPanel::MyPanel(wxFrame *frame)
        : wxPanel(frame, -1)
 {
+    // using constraints doesn't work under GTK - the calendar window is never
+    // repainted after it had been moved at least once!
+#if 0
     SetAutoLayout(TRUE);
 
     wxString date;
@@ -328,6 +331,19 @@ MyPanel::MyPanel(wxFrame *frame)
     c->width.AsIs();
 
     m_calendar->SetConstraints(c);
+#else
+    wxString date;
+    date.Printf("Selected date: %s",
+                wxDateTime::Today().FormatISODate().c_str());
+    m_date = new wxStaticText(this, -1, date, wxPoint(10, 100));
+    m_calendar = new wxCalendarCtrl(this, Calendar_CalCtrl,
+                                    wxDefaultDateTime,
+                                    wxPoint(200, 20),
+                                    wxDefaultSize,
+                                    wxCAL_MONDAY_FIRST |
+                                    wxCAL_SHOW_HOLIDAYS |
+                                    wxRAISED_BORDER);
+#endif
 }
 
 void MyPanel::OnCalendar(wxCalendarEvent& event)
