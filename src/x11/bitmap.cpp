@@ -265,6 +265,35 @@ wxBitmapRefData::~wxBitmapRefData()
 
 //-----------------------------------------------------------------------------
 
+// helper function
+
+static WXPixmap wxGetSubPixmap( WXDisplay* xdisplay, WXPixmap xpixmap,
+                                int x, int y, int width, int height,
+                                int depth )
+{
+    int xscreen = DefaultScreen( (Display*)xdisplay );
+    Window xroot = RootWindow( (Display*)xdisplay, xscreen );
+    Visual* xvisual = DefaultVisual( xdisplay, xscreen );
+
+    XImage* ximage = XCreateImage( (Display*)xdisplay, xvisual, depth,
+                                   ZPixmap, 0, 0, width, height, 32, 0 );
+    ximage->data = (char*)malloc( ximage->bytes_per_line * ximage->height );
+    ximage = XGetSubImage( (Display*)xdisplay, (Pixmap)xpixmap,
+                           x, y, width, height, 
+                           AllPlanes, ZPixmap, ximage, 0, 0 );
+
+    GC gc = XCreateGC( (Display*)xdisplay, (Pixmap)xpixmap, 0, NULL );
+    Pixmap ret = XCreatePixmap( (Display*)xdisplay, xroot,
+                                width, height, depth );
+
+    XPutImage( (Display*)xdisplay, ret, gc, ximage,
+               0, 0, 0, 0, width, height );
+    XDestroyImage( ximage );
+    XFreeGC( (Display*)xdisplay, gc );
+
+    return (WXPixmap)ret;
+}
+
 #define M_BMPDATA ((wxBitmapRefData *)m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxGDIObject)
@@ -329,78 +358,28 @@ bool wxBitmap::Create( int width, int height, int depth )
     return Ok();
 }
 
-bool wxBitmap::CreateFromXpm( const char **bits )
+bool wxBitmap::Create(void *data, wxBitmapType type,
+                      int width, int height, int depth)
 {
-#if wxUSE_XPM
-#if wxHAVE_LIB_XPM
     UnRef();
 
-    wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
+    wxBitmapHandler *handler = FindHandler(type);
 
-    m_refData = new wxBitmapRefData();
+    if ( handler == NULL ) {
+        wxLogWarning("no data bitmap handler for type %ld defined.",
+                     (long)type);
 
-    M_BMPDATA->m_display = wxGlobalDisplay();
-    
-    Display *xdisplay = (Display*) M_BMPDATA->m_display;
-    
-    int xscreen = DefaultScreen( xdisplay );
-    Window xroot = RootWindow( xdisplay, xscreen );
-    
-    int bpp = DefaultDepth( xdisplay, xscreen );
-
-    XpmAttributes xpmAttr;
-    xpmAttr.valuemask = XpmReturnInfos;    // nothing yet, but get infos back
-
-    Pixmap pixmap;
-    Pixmap mask = 0;
-    
-    int ErrorStatus = XpmCreatePixmapFromData( xdisplay, xroot, (char**) bits, &pixmap, &mask, &xpmAttr );
-    
-    if (ErrorStatus == XpmSuccess)
-    {
-        M_BMPDATA->m_width = xpmAttr.width;
-        M_BMPDATA->m_height = xpmAttr.height;
-
-        M_BMPDATA->m_bpp = bpp;  // mono as well?
-
-#if __WXDEBUG__
-        unsigned int depthRet;
-        int xRet, yRet;
-        unsigned int widthRet, heightRet, borderWidthRet;
-        XGetGeometry( xdisplay, pixmap, &xroot, &xRet, &yRet,
-            &widthRet, &heightRet, &borderWidthRet, &depthRet);
-
-        wxASSERT_MSG( bpp == (int)depthRet, wxT("colour depth mismatch") );
-#endif
-
-        XpmFreeAttributes(&xpmAttr);
-        
-        M_BMPDATA->m_pixmap = (WXPixmap) pixmap;
-        
-        if (mask)
-        {
-            M_BMPDATA->m_mask = new wxMask;
-            M_BMPDATA->m_mask->SetBitmap( (WXPixmap) mask );
-            M_BMPDATA->m_mask->SetDisplay( xdisplay );
-        }
-	return TRUE;
-    }
-    else
-    {
-        UnRef();
-        
         return FALSE;
     }
-#else
-    wxXPMDecoder decoder;
-    wxImage image(decoder.ReadData(bits));
-    if (image.Ok())
-	return CreateFromImage(image);
-    else
-	return FALSE;
-#endif
-#endif
-    return FALSE;
+
+    return handler->Create(this, data, type, width, height, depth);
+}
+
+bool wxBitmap::CreateFromXpm( const char **bits )
+{
+    wxCHECK_MSG( bits, FALSE, _T("NULL pointer in wxBitmap::CreateFromXpm") );
+
+    return Create(bits, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
@@ -877,30 +856,16 @@ wxBitmap::wxBitmap( const wxBitmap& bmp )
     Ref( bmp );
 }
 
-wxBitmap::wxBitmap( const wxString &filename, int type )
+wxBitmap::wxBitmap( const wxString &filename, wxBitmapType type )
 {
     LoadFile( filename, type );
 }
 
-wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth) )
+wxBitmap::wxBitmap( const char bits[], int width, int height, int depth )
 {
-#if !wxUSE_NANOX
-    m_refData = new wxBitmapRefData();
+    m_refData = new wxBitmapRefData;
 
-    M_BMPDATA->m_display = wxGlobalDisplay();
-
-    Display *xdisplay = (Display*) M_BMPDATA->m_display;
-    
-    int xscreen = DefaultScreen( xdisplay );
-    Window xroot = RootWindow( xdisplay, xscreen );
-    
-    M_BMPDATA->m_mask = (wxMask *) NULL;
-    M_BMPDATA->m_bitmap = (WXPixmap) XCreateBitmapFromData( xdisplay, xroot, (char *) bits, width, height );
-    M_BMPDATA->m_width = width;
-    M_BMPDATA->m_height = height;
-    M_BMPDATA->m_bpp = 1;
-#endif
-    wxCHECK_RET( M_BMPDATA->m_bitmap, wxT("couldn't create bitmap") );
+    (void) Create((void*) bits, wxBITMAP_TYPE_XBM_DATA, width, height, depth);
 }
 
 wxBitmap::~wxBitmap()
@@ -977,145 +942,103 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 {
     wxCHECK_MSG( Ok() &&
                  (rect.x >= 0) && (rect.y >= 0) &&
-                 (rect.x+rect.width <= M_BMPDATA->m_width) && (rect.y+rect.height <= M_BMPDATA->m_height),
+                 (rect.x+rect.width  <= M_BMPDATA->m_width ) &&
+                 (rect.y+rect.height <= M_BMPDATA->m_height),
                  wxNullBitmap, wxT("invalid bitmap or bitmap region") );
 
     wxBitmap ret( rect.width, rect.height, M_BMPDATA->m_bpp );
     wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
 
-    
-    wxFAIL_MSG( "wxBitmap::GetSubBitmap not yet implemented" );
-    
-#if 0
-    if (ret.GetPixmap())
+    if( GetMask() )
     {
-        GdkGC *gc = gdk_gc_new( ret.GetPixmap() );
-        gdk_draw_pixmap( ret.GetPixmap(), gc, GetPixmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
-        gdk_gc_destroy( gc );
-    }
-    else
-    {
-        GdkGC *gc = gdk_gc_new( ret.GetBitmap() );
-        gdk_wx_draw_bitmap( ret.GetBitmap(), gc, GetBitmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
-        gdk_gc_destroy( gc );
-    }
-
-    if (GetMask())
-    {
-        wxMask *mask = new wxMask;
-        mask->m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, rect.width, rect.height, 1 );
-
-        GdkGC *gc = gdk_gc_new( mask->m_bitmap );
-        gdk_wx_draw_bitmap( mask->m_bitmap, gc, M_BMPDATA->m_mask->m_bitmap, 0, 0, rect.x, rect.y, rect.width, rect.height );
-        gdk_gc_destroy( gc );
+        wxMask* mask = new wxMask();
+        mask->SetDisplay( GetMask()->GetDisplay() );
+        mask->SetBitmap( wxGetSubPixmap( GetMask()->GetDisplay(),
+                                         GetMask()->GetBitmap(),
+                                         rect.x, rect.y,
+                                         rect.width, rect.height,
+                                         1 ) );
 
         ret.SetMask( mask );
     }
-#endif
+
+    if( GetPixmap() )
+    {
+        ret.SetPixmap( wxGetSubPixmap( GetDisplay(),
+                                       GetPixmap(),
+                                       rect.x, rect.y,
+                                       rect.width, rect.height,
+                                       M_BMPDATA->m_bpp ) );
+    }
+
+    if( GetBitmap() )
+    {
+        ret.SetBitmap( wxGetSubPixmap( GetDisplay(),
+                                       GetBitmap(),
+                                       rect.x, rect.y,
+                                       rect.width, rect.height,
+                                       1 ) );
+    }
 
     return ret;
 }
 
-bool wxBitmap::SaveFile( const wxString &name, int type, wxPalette *WXUNUSED(palette) )
+bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type,
+                         const wxPalette *palette ) const
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid bitmap") );
 
+    wxBitmapHandler *handler = FindHandler(type);
+
     // Try to save the bitmap via wxImage handlers:
-    {
-        wxImage image(this->ConvertToImage()) ;
+    if (handler == NULL)
+    { 
+        wxImage image(this->ConvertToImage());
         if (image.Ok()) return image.SaveFile( name, type );
+
+        return FALSE;
     }
 
-    return FALSE;
+    return handler->SaveFile(this, name, type, palette);
 }
 
-bool wxBitmap::LoadFile( const wxString &name, int type )
+bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
 {
     UnRef();
 
     if (!wxFileExists(name)) return FALSE;
 
+    wxBitmapHandler *handler = FindHandler(type);
 
-    if (type == wxBITMAP_TYPE_XPM)
-    {
-#if wxUSE_XPM
-#if wxHAVE_LIB_XPM
-        m_refData = new wxBitmapRefData();
-
-        M_BMPDATA->m_display = wxGlobalDisplay();
-    
-        Display *xdisplay = (Display*) M_BMPDATA->m_display;
-    
-        int xscreen = DefaultScreen( xdisplay );
-        Window xroot = RootWindow( xdisplay, xscreen );
-    
-        int bpp = DefaultDepth( xdisplay, xscreen );
-
-        XpmAttributes xpmAttr;
-        xpmAttr.valuemask = XpmReturnInfos;    // nothing yet, but get infos back
-
-        Pixmap pixmap;
-        Pixmap mask = 0;
-    
-        int ErrorStatus = XpmReadFileToPixmap( xdisplay, xroot, (char*) name.c_str(), &pixmap, &mask, &xpmAttr);
-    
-        if (ErrorStatus == XpmSuccess)
-        {
-            M_BMPDATA->m_width = xpmAttr.width;
-            M_BMPDATA->m_height = xpmAttr.height;
-
-            M_BMPDATA->m_bpp = bpp;  // mono as well?
-
-            XpmFreeAttributes(&xpmAttr);
-        
-            M_BMPDATA->m_bitmap = (WXPixmap) pixmap;
-        
-            if (mask)
-            {
-                M_BMPDATA->m_mask = new wxMask;
-                M_BMPDATA->m_mask->SetBitmap( (WXPixmap) mask );
-                M_BMPDATA->m_mask->SetDisplay( xdisplay );
-            }
-        }
-        else
-        {
-            UnRef();
-            
-            return FALSE;
-        }
-#else
-#if wxUSE_STREAMS
-	wxXPMDecoder decoder;
-	wxFileInputStream stream(name);
-	if (stream.Ok())
-	{
-            wxImage image(decoder.ReadFile(stream));
-	    if (image.Ok())
-		return CreateFromImage(image);
-	    else
-		return FALSE;
-	}
-	else
-	    return FALSE;
-#else
-	return FALSE;
-#endif
-	// wxUSE_STREAMS
-#endif
-	// wxHAVE_LIB_XPM
-#endif
-	// wxUSE_XPM
-	return FALSE;
-    }
-    else // try if wxImage can load it
+    if (handler == NULL)
     {
         wxImage image;
-        if (!image.LoadFile( name, type )) return FALSE;
-        if (image.Ok()) *this = wxBitmap(image);
+        if (!image.LoadFile( name, type ))
+            return FALSE;
+
+        if (image.Ok()) 
+        {
+            *this = wxBitmap(image);
+            return TRUE;
+        }
         else return FALSE;
     }
 
-    return TRUE;
+    return handler->LoadFile(this, name, type, -1, -1);
+}
+
+void wxBitmap::SetPalette(const wxPalette& palette)
+{
+    wxCHECK_RET(Ok(), wxT("invalid bitmap"));
+    wxCHECK_RET(GetDepth() > 1 && GetDepth() <= 8,
+                wxT("cannot set palette for bitmap of this depth"));
+
+    delete M_BMPDATA->m_palette;
+    M_BMPDATA->m_palette = NULL;
+
+    if (!palette.Ok()) return;
+   
+    M_BMPDATA->m_palette = new wxPalette(palette);
 }
 
 wxPalette *wxBitmap::GetPalette() const
@@ -1318,3 +1241,296 @@ int GrGetPixelColor(GR_SCREEN_INFO* sinfo, GR_PALETTE* palette, GR_PIXELVAL pixe
 #endif
   // wxUSE_NANOX
 
+// ============================================================================
+// Bitmap handlers
+// ============================================================================
+
+IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase);
+
+#define M_BMPHANDLERDATA ((wxBitmapRefData *)bitmap->GetRefData())
+
+#if wxUSE_XPM
+
+#if wxHAVE_LIB_XPM || wxUSE_STREAMS
+
+// ----------------------------------------------------------------------------
+// wxXPMFileHandler
+// ----------------------------------------------------------------------------
+
+class wxXPMFileHandler : public wxBitmapHandler
+{
+    DECLARE_DYNAMIC_CLASS(wxXPMFileHandler);
+public:
+    wxXPMFileHandler()
+    {
+        m_name = "XPM file";
+        m_extension = "xpm";
+        m_type = wxBITMAP_TYPE_XPM;
+    };
+
+    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+                          int desiredWidth, int desiredHeight);
+
+    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name,
+                          int type, const wxPalette *palette = NULL);
+
+    virtual bool Create(wxBitmap *bitmap, void *data, long flags,
+                        int width, int height, int depth = 1)
+        { return FALSE; }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler);
+
+bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
+                                long flags, int desiredWidth,
+                                int desiredHeight)
+{
+#if wxHAVE_LIB_XPM
+    if (!bitmap->GetRefData())
+        bitmap->SetRefData( new wxBitmapRefData() );
+
+    M_BMPHANDLERDATA->m_display = wxGlobalDisplay();
+    
+    Display *xdisplay = (Display*) M_BMPHANDLERDATA->m_display;
+    
+    int xscreen = DefaultScreen( xdisplay );
+    Window xroot = RootWindow( xdisplay, xscreen );
+    
+    int bpp = DefaultDepth( xdisplay, xscreen );
+
+    XpmAttributes xpmAttr;
+    xpmAttr.valuemask = XpmReturnInfos;    // nothing yet, but get infos back
+
+    Pixmap pixmap;
+    Pixmap mask = 0;
+    
+    int ErrorStatus = XpmReadFileToPixmap( xdisplay, xroot,
+                                           (char*) name.c_str(),
+                                           &pixmap, &mask, &xpmAttr);
+    
+    if (ErrorStatus == XpmSuccess)
+    {
+        M_BMPHANDLERDATA->m_width = xpmAttr.width;
+        M_BMPHANDLERDATA->m_height = xpmAttr.height;
+
+        M_BMPHANDLERDATA->m_bpp = bpp;  // mono as well?
+
+        XpmFreeAttributes(&xpmAttr);
+
+        M_BMPHANDLERDATA->m_bitmap = (WXPixmap) pixmap;
+        
+        if (mask)
+        {
+            M_BMPHANDLERDATA->m_mask = new wxMask;
+            M_BMPHANDLERDATA->m_mask->SetBitmap( (WXPixmap) mask );
+            M_BMPHANDLERDATA->m_mask->SetDisplay( xdisplay );
+        }
+    }
+    else
+    {
+        UnRef();
+    
+        return FALSE;
+    }
+
+    return TRUE;
+#elif wxUSE_STREAMS
+    wxXPMDecoder decoder;
+    wxFileInputStream stream(name);
+    if (stream.Ok())
+    {
+        wxImage image(decoder.ReadFile(stream));
+        if (image.Ok())
+            return CreateFromImage(image);
+        else
+            return FALSE;
+    }
+    else
+        return FALSE;
+#endif // wxHAVE_LIB_XPM / wxUSE_STREAMS
+}
+
+bool wxXPMFileHandler::SaveFile(const wxBitmap *bitmap, const wxString& name,
+                                int type,
+                                const wxPalette *WXUNUSED(palette))
+{
+    wxImage image(bitmap->ConvertToImage());
+    if (image.Ok()) return image.SaveFile( name, (wxBitmapType)type );
+
+    return FALSE;
+}
+
+#endif // wxHAVE_LIB_XPM || wxUSE_STREAMS
+
+// ----------------------------------------------------------------------------
+// wxXPMDataHandler
+// ----------------------------------------------------------------------------
+
+class wxXPMDataHandler : public wxBitmapHandler
+{
+    DECLARE_DYNAMIC_CLASS(wxXPMDataHandler);
+public:
+    wxXPMDataHandler()
+    {
+        m_name = "XPM data";
+        m_extension = "xpm";
+        m_type = wxBITMAP_TYPE_XPM_DATA;
+    };
+
+    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+                          int desiredWidth, int desiredHeight)
+        { return FALSE; }
+
+    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name,
+                          int type, const wxPalette *palette = NULL)
+        { return FALSE; }
+
+    virtual bool Create(wxBitmap *bitmap, void *data, long flags,
+                        int width, int height, int depth = 1);
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler);
+
+bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *bits,
+                              long WXUNUSED(flags),
+                              int width, int height, int WXUNUSED(depth))
+{
+#if wxHAVE_LIB_XPM
+    wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
+
+    if (!bitmap->GetRefData())
+        bitmap->SetRefData( new wxBitmapRefData() );
+
+    M_BMPHANDLERDATA->m_display = wxGlobalDisplay();
+    
+    Display *xdisplay = (Display*) M_BMPHANDLERDATA->m_display;
+    
+    int xscreen = DefaultScreen( xdisplay );
+    Window xroot = RootWindow( xdisplay, xscreen );
+    
+    int bpp = DefaultDepth( xdisplay, xscreen );
+
+    XpmAttributes xpmAttr;
+    xpmAttr.valuemask = XpmReturnInfos;    // nothing yet, but get infos back
+
+    Pixmap pixmap = 0;
+    Pixmap mask = 0;
+    
+    int ErrorStatus = XpmCreatePixmapFromData( xdisplay, xroot, (char**) bits,
+                                               &pixmap, &mask, &xpmAttr );
+    
+    if (ErrorStatus == XpmSuccess)
+    {
+        M_BMPHANDLERDATA->m_width = xpmAttr.width;
+        M_BMPHANDLERDATA->m_height = xpmAttr.height;
+
+        M_BMPHANDLERDATA->m_bpp = bpp;  // mono as well?
+
+#if __WXDEBUG__
+        unsigned int depthRet;
+        int xRet, yRet;
+        unsigned int widthRet, heightRet, borderWidthRet;
+        XGetGeometry( xdisplay, pixmap, &xroot, &xRet, &yRet,
+            &widthRet, &heightRet, &borderWidthRet, &depthRet);
+
+        wxASSERT_MSG( bpp == (int)depthRet, wxT("colour depth mismatch") );
+#endif
+
+        XpmFreeAttributes(&xpmAttr);
+        
+        M_BMPHANDLERDATA->m_pixmap = (WXPixmap) pixmap;
+        
+        if (mask)
+        {
+            M_BMPHANDLERDATA->m_mask = new wxMask;
+            M_BMPHANDLERDATA->m_mask->SetBitmap( (WXPixmap) mask );
+            M_BMPHANDLERDATA->m_mask->SetDisplay( xdisplay );
+        }
+	return TRUE;
+    }
+    else
+    {
+        bitmap->UnRef();
+        
+        return FALSE;
+    }
+#else
+    wxXPMDecoder decoder;
+    wxImage image(decoder.ReadData(bits));
+    if (image.Ok())
+	return bitmap->CreateFromImage(image);
+    else
+	return FALSE;
+#endif
+}
+
+#endif // wxUSE_XPM
+
+// ----------------------------------------------------------------------------
+// wxXBMDataHandler
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxXBMDataHandler: public wxBitmapHandler
+{
+    DECLARE_DYNAMIC_CLASS(wxXBMDataHandler)
+public:
+    inline wxXBMDataHandler()
+    {
+        m_name = "XBM data";
+        m_extension = "xbm";
+        m_type = wxBITMAP_TYPE_XBM_DATA;
+    };
+
+    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+                          int desiredWidth, int desiredHeight)
+        { return FALSE; }
+
+    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name,
+                          int type, const wxPalette *palette = NULL)
+        { return FALSE; }
+
+    virtual bool Create(wxBitmap *bitmap, void *data, long flags,
+                        int width, int height, int depth = 1);
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxXBMDataHandler, wxBitmapHandler);
+
+bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *bits,
+                               long WXUNUSED(flags),
+                               int width, int height, int depth)
+{
+#if !wxUSE_NANOX
+    if (!bitmap->GetRefData())
+        bitmap->SetRefData( new wxBitmapRefData() );
+
+    M_BMPHANDLERDATA->m_display = wxGlobalDisplay();
+
+    Display *xdisplay = (Display*) M_BMPHANDLERDATA->m_display;
+    
+    int xscreen = DefaultScreen( xdisplay );
+    Window xroot = RootWindow( xdisplay, xscreen );
+    
+    M_BMPHANDLERDATA->m_mask = (wxMask *) NULL;
+    M_BMPHANDLERDATA->m_bitmap =
+        (WXPixmap) XCreateBitmapFromData( xdisplay, xroot,
+                                          (char *) bits, width, height );
+    M_BMPHANDLERDATA->m_width = width;
+    M_BMPHANDLERDATA->m_height = height;
+    M_BMPHANDLERDATA->m_bpp = 1;
+
+    return TRUE;
+#endif
+    wxCHECK_MSG( M_BMPHANDLERDATA->m_bitmap, FALSE,
+                 wxT("couldn't create bitmap") );
+}
+
+void wxBitmap::InitStandardHandlers()
+{
+    AddHandler(new wxXBMDataHandler);
+#if wxUSE_XPM
+#if wxHAVE_LIB_XPM || wxUSE_STREAMS
+    AddHandler(new wxXPMFileHandler);
+#endif
+    AddHandler(new wxXPMDataHandler);
+#endif
+}
