@@ -31,7 +31,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckListBoxXmlHandler, wxXmlResourceHandler)
 wxCheckListBoxXmlHandler::wxCheckListBoxXmlHandler()
 : wxXmlResourceHandler(), m_insideBox(false)
 {
-    // no styles
+    // wxListBox styles:
+    XRC_ADD_STYLE(wxLB_SINGLE);
+    XRC_ADD_STYLE(wxLB_MULTIPLE);
+    XRC_ADD_STYLE(wxLB_EXTENDED);
+    XRC_ADD_STYLE(wxLB_HSCROLL);
+    XRC_ADD_STYLE(wxLB_ALWAYS_SB);
+    XRC_ADD_STYLE(wxLB_NEEDED_SB);
+    XRC_ADD_STYLE(wxLB_SORT);
+    
     AddWindowStyles();
 }
 
