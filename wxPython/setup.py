@@ -23,7 +23,11 @@ DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
 URL              = "http://wxPython.org/"
-LICENSE          = "wxWindows (LGPL derivative)"
+DOWNLOAD_URL     = "http://wxPython.org/download.php"
+LICENSE          = "wxWindows Library License (LGPL derivative)"
+PLATFORMS        = "WIN32,OSX,POSIX"
+KEYWORDS         = "GUI,wx,wxWindows,cross-platform"
+
 LONG_DESCRIPTION = """\
 wxPython is a GUI toolkit for Python that is a wrapper around the
 wxWindows C++ GUI library.  wxPython provides a large variety of
@@ -31,6 +35,22 @@ window types and controls, all implemented with a native look and
 feel (by using the native widgets) on the platforms it is supported
 on.
 """
+
+CLASSIFIERS      = """\
+Development Status :: 6 - Mature
+Environment :: MacOS X :: Carbon
+Environment :: Win32 (MS Windows)
+Environment :: X11 Applications :: GTK
+Intended Audience :: Developers
+License :: OSI Approved
+Operating System :: MacOS :: MacOS X
+Operating System :: Microsoft :: Windows :: Windows 95/98/2000
+Operating System :: POSIX
+Programming Language :: Python
+Topic :: Software Development :: User Interfaces
+"""
+
+## License :: OSI Approved :: wxWindows Library Licence
 
 
 # Config values below this point can be reset on the setup.py command line.
@@ -998,8 +1018,12 @@ if __name__ == "__main__":
               author           = AUTHOR,
               author_email     = AUTHOR_EMAIL,
               url              = URL,
+              download_url     = DOWNLOAD_URL,
               license          = LICENSE,
-
+              platforms        = PLATFORMS,
+              classifiers      = filter(None, CLASSIFIERS.split("\n")),
+              keywords         = KEYWORDS,
+              
               packages = ['wxPython',
                           'wxPython.lib',
                           'wxPython.lib.colourchooser',
