@@ -2547,6 +2547,19 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             processed = HandleNotify((int)wParam, lParam, &rc.result);
             break;
 
+        // we only need to reply to WM_NOTIFYFORMAT manually when using MSLU,
+        // otherwise DefWindowProc() does it perfectly fine for us, but MSLU
+        // apparently doesn't always behave properly and needs some help
+#if wxUSE_UNICODE_MSLU && defined(NF_QUERY)
+        case WM_NOTIFYFORMAT:
+            if ( lParam == NF_QUERY )
+            {
+                processed = true;
+                rc.result = NFR_UNICODE;
+            }
+            break;
+#endif // wxUSE_UNICODE_MSLU
+
             // for these messages we must return true if process the message
 #ifdef WM_DRAWITEM
         case WM_DRAWITEM:
