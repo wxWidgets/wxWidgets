@@ -203,7 +203,10 @@ wxHtmlWindow::~wxHtmlWindow()
 
     if (m_Cell) delete m_Cell;
 
-    WX_CLEAR_LIST(wxHtmlProcessorList, *m_Processors);
+    if ( m_Processors )
+    {
+        WX_CLEAR_LIST(wxHtmlProcessorList, *m_Processors);
+    }
 
     delete m_Parser;
     delete m_FS;
