@@ -42,6 +42,7 @@ public:
     wxBitmap  *my_horse_jpeg;
     wxBitmap  *my_horse_gif;
     wxBitmap  *my_horse_bmp;
+    wxBitmap  *my_horse_pcx;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
 
@@ -93,6 +94,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   my_horse_jpeg = (wxBitmap*) NULL;
   my_horse_gif = (wxBitmap*) NULL;
   my_horse_bmp = (wxBitmap*) NULL;
+  my_horse_pcx = (wxBitmap*) NULL;
   my_square = (wxBitmap*) NULL;
   my_anti = (wxBitmap*) NULL;
 
@@ -135,8 +137,13 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
       wxLogError("Can't load GIF image");
   else
     my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
-  
-  if ( !image.LoadFile( dir + wxString("horse.bmp") ) )
+
+  if ( !image.LoadFile( dir + wxString("horse.pcx"), wxBITMAP_TYPE_PCX ) )
+      wxLogError("Can't load PCX image");
+  else
+    my_horse_pcx = new wxBitmap( image.ConvertToBitmap() );
+
+  if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
       wxLogError("Can't load BMP image");
   else
     my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
@@ -153,6 +160,7 @@ MyCanvas::~MyCanvas()
   delete my_horse_jpeg;
   delete my_horse_gif;
   delete my_horse_bmp;
+  delete my_horse_pcx;
   delete my_square;
   delete my_anti;
 }
@@ -180,9 +188,12 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   
   dc.DrawText( "GIF handler", 30, 595 );
   if (my_horse_gif && my_horse_gif->Ok()) dc.DrawBitmap( *my_horse_gif, 30, 610 );
-  
-  dc.DrawText( "BMP handler", 30, 815 );
-  if (my_horse_bmp && my_horse_bmp->Ok()) dc.DrawBitmap( *my_horse_bmp, 30, 830 );
+
+  dc.DrawText( "PCX handler", 30, 825 );
+  if (my_horse_pcx && my_horse_pcx->Ok()) dc.DrawBitmap( *my_horse_pcx, 30, 840 );
+
+  dc.DrawText( "BMP handler", 30, 1055 );
+  if (my_horse_bmp && my_horse_bmp->Ok()) dc.DrawBitmap( *my_horse_bmp, 30, 1070 );
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -264,7 +275,9 @@ MyFrame::MyFrame()
   SetStatusWidths( 2, widths );
 
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
-  m_canvas->SetScrollbars( 10, 10, 50, 100 );
+
+  // 500 width * 1300 height
+  m_canvas->SetScrollbars( 10, 10, 50, 130 );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
@@ -295,6 +308,7 @@ bool MyApp::OnInit()
 #endif
 
   wxImage::AddHandler( new wxGIFHandler );
+  wxImage::AddHandler( new wxPCXHandler );
 
   wxFrame *frame = new MyFrame();
   frame->Show( TRUE );
