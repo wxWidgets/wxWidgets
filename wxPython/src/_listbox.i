@@ -105,6 +105,28 @@ public:
 
     // return True if this listbox is sorted
     bool IsSorted() const;
+
+
+    %extend {
+        void SetItemForegroundColour(int item, const wxColour& c) {
+            %#ifdef __WXMSW__
+                 if (self->GetWindowStyle() & wxLB_OWNERDRAW)
+                     self->GetItem(item)->SetTextColour(c);
+            %#endif
+        }
+        void SetItemBackgroundColour(int item, const wxColour& c) {
+            %#ifdef __WXMSW__
+                 if (self->GetWindowStyle() & wxLB_OWNERDRAW)
+                     self->GetItem(item)->SetBackgroundColour(c);
+            %#endif
+        }
+        void SetItemFont(int item, const wxFont& f) {
+            %#ifdef __WXMSW__
+                 if (self->GetWindowStyle() & wxLB_OWNERDRAW)
+                     self->GetItem(item)->SetFont(f);
+            %#endif
+        }
+    }
 };
 
 
