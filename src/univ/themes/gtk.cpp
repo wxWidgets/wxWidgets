@@ -205,6 +205,37 @@ public:
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo);
 #endif
+
+    virtual void DrawFrameTitleBar(wxDC& dc,
+                                   const wxRect& rect,
+                                   const wxString& title,
+                                   const wxIcon& icon,
+                                   int flags,
+                                   int pressedButtons = 0);
+    virtual void DrawFrameBorder(wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags);
+    virtual void DrawFrameBackground(wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags);
+    virtual void DrawFrameTitle(wxDC& dc,
+                                const wxRect& rect,
+                                const wxString& title,
+                                int flags);
+    virtual void DrawFrameIcon(wxDC& dc,
+                               const wxRect& rect,
+                               const wxIcon& icon,
+                               int flags);
+    virtual void DrawFrameButton(wxDC& dc,
+                                 wxCoord x, wxCoord y,
+                                 int button,
+                                 int flags = 0);
+
+    // titlebars
+    virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
+    virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const;
+    virtual wxSize GetFrameIconSize() const;
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
@@ -2338,6 +2369,69 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
         size->y += rectBorder.y + rectBorder.height;
     }
 }
+
+// ----------------------------------------------------------------------------
+// top level windows
+// ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawFrameTitleBar(wxDC& dc,
+                                      const wxRect& rect,
+                                      const wxString& title,
+                                      const wxIcon& icon,
+                                      int flags,
+                                      int pressedButtons = 0)
+{
+}
+
+void wxGTKRenderer::DrawFrameBorder(wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags)
+{
+}
+
+void wxGTKRenderer::DrawFrameBackground(wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags)
+{
+}
+
+void wxGTKRenderer::DrawFrameTitle(wxDC& dc,
+                                   const wxRect& rect,
+                                   const wxString& title,
+                                   int flags)
+{
+}
+
+void wxGTKRenderer::DrawFrameIcon(wxDC& dc,
+                                  const wxRect& rect,
+                                  const wxIcon& icon,
+                                  int flags)
+{
+}
+
+void wxGTKRenderer::DrawFrameButton(wxDC& dc,
+                                    wxCoord x, wxCoord y,
+                                    int button,
+                                    int flags = 0)
+{
+}
+
+wxRect wxGTKRenderer::GetFrameClientArea(const wxRect& rect, int flags) const
+{
+    return rect;
+}
+
+wxSize wxGTKRenderer::GetFrameTotalSize(const wxSize& clientSize, int flags) const
+{
+    return clientSize;
+}
+
+wxSize wxGTKRenderer::GetFrameIconSize() const
+{
+    return wxSize(-1, -1);
+}
+
+
 
 // ============================================================================
 // wxInputHandler

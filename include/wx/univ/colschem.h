@@ -57,6 +57,11 @@ public:
         SHADOW_HIGHLIGHT,
         SHADOW_IN,
         SHADOW_OUT,
+        
+        // the titlebar background colours for the normal and focused states
+        TITLEBAR,
+        TITLEBAR_ACTIVE,
+        TITLEBAR_TEXT,
 
         MAX
     };

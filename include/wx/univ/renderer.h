@@ -245,6 +245,42 @@ public:
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo) = 0;
 #endif
+    // draw complete frame/dialog titlebar
+    virtual void DrawFrameTitleBar(wxDC& dc,
+                                   const wxRect& rect,
+                                   const wxString& title,
+                                   const wxIcon& icon,
+                                   int flags,
+                                   int pressedButtons = 0) = 0;
+                                   
+    // draw frame borders
+    virtual void DrawFrameBorder(wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags) = 0;
+
+    // draw frame titlebar background
+    virtual void DrawFrameBackground(wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags) = 0;
+
+    // draw frame title
+    virtual void DrawFrameTitle(wxDC& dc,
+                                const wxRect& rect,
+                                const wxString& title,
+                                int flags) = 0;
+
+    // draw frame icon
+    virtual void DrawFrameIcon(wxDC& dc,
+                               const wxRect& rect,
+                               const wxIcon& icon,
+                               int flags) = 0;
+
+    // draw frame buttons
+    virtual void DrawFrameButton(wxDC& dc,
+                                 wxCoord x, wxCoord y,
+                                 int button,
+                                 int flags = 0) = 0;
+
     // misc functions
     // --------------
 
@@ -348,6 +384,15 @@ public:
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const = 0;
 #endif
+
+    // get client area rectangle of top level window (i.e. subtract
+    // decorations from given rectangle)
+    virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const = 0;
+    // get size of whole top level window, given size of its client area size
+    virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const = 0;
+    // get titlebar icon size
+    virtual wxSize GetFrameIconSize() const = 0;
+
     // virtual dtor for any base class
     virtual ~wxRenderer();
 
@@ -572,10 +617,41 @@ public:
                                    const wxMenuGeometryInfo& geomInfo)
         { m_renderer->DrawMenuSeparator(dc, y, geomInfo); }
 #endif
+    virtual void DrawFrameTitleBar(wxDC& dc,
+                                   const wxRect& rect,
+                                   const wxString& title,
+                                   const wxIcon& icon,
+                                   int flags,
+                                   int pressedButtons = 0)
+        { m_renderer->DrawFrameTitleBar(dc, rect, title, icon, flags, pressedButtons); }
+    virtual void DrawFrameBorder(wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags)
+        { m_renderer->DrawFrameBorder(dc, rect, flags); }
+    virtual void DrawFrameBackground(wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags)
+        { m_renderer->DrawFrameBackground(dc, rect, flags); }
+    virtual void DrawFrameTitle(wxDC& dc,
+                                const wxRect& rect,
+                                const wxString& title,
+                                int flags)
+        { m_renderer->DrawFrameTitle(dc, rect, title, flags); }
+    virtual void DrawFrameIcon(wxDC& dc,
+                               const wxRect& rect,
+                               const wxIcon& icon,
+                               int flags)
+        { m_renderer->DrawFrameIcon(dc, rect, icon, flags); }
+    virtual void DrawFrameButton(wxDC& dc,
+                                 wxCoord x, wxCoord y,
+                                 int button,
+                                 int flags = 0)
+        { m_renderer->DrawFrameButton(dc, x, y, button, flags); }
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
-                                 wxBitmap *bmpDisabled)
+                                 wxBitmap *bmpDisabled) const
         { m_renderer->GetComboBitmaps(bmpNormal, bmpFocus,
                                       bmpPressed, bmpDisabled); }
 
@@ -641,6 +717,13 @@ public:
                                                 const wxMenu& menu) const
         { return m_renderer->GetMenuGeometry(win, menu); }
 #endif
+    virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const
+        { return m_renderer->GetFrameClientArea(rect, flags); }
+    virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const
+        { return m_renderer->GetFrameTotalSize(clientSize, flags); }
+    virtual wxSize GetFrameIconSize() const
+        { return m_renderer->GetFrameIconSize(); }
+
 protected:
     wxRenderer *m_renderer;
 };

@@ -51,7 +51,7 @@
 #include "wx/menu.h"
 
 #include "wx/univ/scrtimer.h"
-
+#include "wx/toplevel.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
@@ -66,6 +66,12 @@ static const int BORDER_THICKNESS = 2;
 // the offset between the label and focus rect around it
 static const int FOCUS_RECT_OFFSET_X = 1;
 static const int FOCUS_RECT_OFFSET_Y = 1;
+
+static const int FRAME_BORDER_THICKNESS            = 3;
+static const int RESIZEABLE_FRAME_BORDER_THICKNESS = 4;
+static const int FRAME_TITLEBAR_HEIGHT             = 18;
+static const int FRAME_BUTTON_WIDTH                = 16;
+static const int FRAME_BUTTON_HEIGHT               = 14;
 
 enum IndicatorType
 {
@@ -116,6 +122,16 @@ public:
         Arrow_Inversed,
         Arrow_InversedDisabled,
         Arrow_StateMax
+    };
+
+    enum wxFrameButtonType
+    {
+        FrameButton_Close,
+        FrameButton_Minimize,
+        FrameButton_Maximize,
+        FrameButton_Restore,
+        FrameButton_Help,
+        FrameButton_Max
     };
 
     // ctor
@@ -258,6 +274,35 @@ public:
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo);
 #endif
+    // titlebars
+    virtual void DrawFrameTitleBar(wxDC& dc,
+                                   const wxRect& rect,
+                                   const wxString& title,
+                                   const wxIcon& icon,
+                                   int flags,
+                                   int pressedButtons = 0);
+    virtual void DrawFrameBorder(wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags);
+    virtual void DrawFrameBackground(wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags);
+    virtual void DrawFrameTitle(wxDC& dc,
+                                const wxRect& rect,
+                                const wxString& title,
+                                int flags);
+    virtual void DrawFrameIcon(wxDC& dc,
+                               const wxRect& rect,
+                               const wxIcon& icon,
+                               int flags);
+    virtual void DrawFrameButton(wxDC& dc,
+                                 wxCoord x, wxCoord y,
+                                 int button,
+                                 int flags = 0);
+    virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
+    virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const;
+    virtual wxSize GetFrameIconSize() const;
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
@@ -412,6 +457,11 @@ private:
           m_penDarkGrey,
           m_penLightGrey,
           m_penHighlight;
+          
+    wxFont m_titlebarFont;
+    
+    // titlebar icons:
+    wxBitmap m_bmpFrameButtons[FrameButton_Max];
 
     // first row is for the normal state, second - for the disabled
     wxBitmap m_bmpArrows[Arrow_StateMax][Arrow_Max];
@@ -538,6 +588,83 @@ private:
 // ----------------------------------------------------------------------------
 // standard bitmaps
 // ----------------------------------------------------------------------------
+
+// frame buttons bitmaps
+
+static const char *frame_button_close_xpm[] = {
+"12 10 2 1",
+" 	c None",
+".	c black",
+"            ",
+"  ..    ..  ",
+"   ..  ..   ",
+"    ....    ",
+"     ..     ",
+"    ....    ",
+"   ..  ..   ",
+"  ..    ..  ",
+"            ",
+"            "};
+
+static const char *frame_button_help_xpm[] = {
+"12 10 2 1",
+" 	c None",
+".	c #000000",
+"    ....    ",
+"   ..  ..   ",
+"   ..  ..   ",
+"      ..    ",
+"     ..     ",
+"     ..     ",
+"            ",
+"     ..     ",
+"     ..     ",
+"            "};
+
+static const char *frame_button_maximize_xpm[] = {
+"12 10 2 1",
+" 	c None",
+".	c #000000",
+" .........  ",
+" .........  ",
+" .       .  ",
+" .       .  ",
+" .       .  ",
+" .       .  ",
+" .       .  ",
+" .       .  ",
+" .........  ",
+"            "};
+
+static const char *frame_button_minimize_xpm[] = {
+"12 10 2 1",
+" 	c None",
+".	c #000000",
+"            ",
+"            ",
+"            ",
+"            ",
+"            ",
+"            ",
+"            ",
+"  ......    ",
+"  ......    ",
+"            "};
+
+static const char *frame_button_restore_xpm[] = {
+"12 10 2 1",
+" 	c None",
+".	c #000000",
+"   ......   ",
+"   ......   ",
+"   .    .   ",
+" ...... .   ",
+" ...... .   ",
+" .    ...   ",
+" .    .     ",
+" .    .     ",
+" ......     ",
+"            "};
 
 // menu bitmaps
 
@@ -1123,6 +1250,10 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 
         case CONTROL_TEXT_DISABLED_SHADOW:
         case SHADOW_OUT:        return wxColour(GetSysColor(COLOR_BTNSHADOW));
+        
+        case TITLEBAR:          return wxColour(GetSysColor(COLOR_INACTIVECAPTION));
+        case TITLEBAR_ACTIVE:   return wxColour(GetSysColor(COLOR_ACTIVECAPTION));
+        case TITLEBAR_TEXT:     return wxColour(GetSysColor(COLOR_CAPTIONTEXT));
 #else // !__WXMSW__
         // use the standard Windows colours elsewhere
         case WINDOW:            return *wxWHITE;
@@ -1141,13 +1272,17 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 
         case SHADOW_DARK:       return *wxBLACK;
 
-        case CONTROL_TEXT_DISABLED:
-        case SHADOW_HIGHLIGHT:  return wxColour(0xe0e0e0);
+        case CONTROL_TEXT_DISABLED:return wxColour(0xe0e0e0);
+        case SHADOW_HIGHLIGHT:  return wxColour(0xffffff);
 
         case SHADOW_IN:         return wxColour(0xc0c0c0);
 
         case CONTROL_TEXT_DISABLED_SHADOW:
         case SHADOW_OUT:        return wxColour(0x7f7f7f);
+
+        case TITLEBAR:          return wxColour(0xaeaaae);
+        case TITLEBAR_ACTIVE:   return wxColour(0x820300);
+        case TITLEBAR_TEXT:     return *wxWHITE;
 #endif // __WXMSW__
 
         case MAX:
@@ -1181,6 +1316,9 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
 
     m_colHighlight = wxSCHEME_COLOUR(scheme, SHADOW_HIGHLIGHT);
     m_penHighlight = wxPen(m_colHighlight, 0, wxSOLID);
+    
+    m_titlebarFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_titlebarFont.SetWeight(wxFONTWEIGHT_BOLD);
 
     // init the arrow bitmaps
     static const size_t ARROW_WIDTH = 7;
@@ -1351,6 +1489,13 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
 
         m_bmpArrows[Arrow_Pressed][n] = m_bmpArrows[Arrow_Normal][n];
     }
+    
+    // init the frame buttons bitmaps
+    m_bmpFrameButtons[FrameButton_Close] = wxBitmap(frame_button_close_xpm);
+    m_bmpFrameButtons[FrameButton_Minimize] = wxBitmap(frame_button_minimize_xpm);
+    m_bmpFrameButtons[FrameButton_Maximize] = wxBitmap(frame_button_maximize_xpm);
+    m_bmpFrameButtons[FrameButton_Restore] = wxBitmap(frame_button_restore_xpm);
+    m_bmpFrameButtons[FrameButton_Help] = wxBitmap(frame_button_help_xpm);
 }
 
 // ----------------------------------------------------------------------------
@@ -2947,6 +3092,192 @@ int wxWin32Renderer::PixelToScrollbar(const wxScrollBar *scrollbar,
 {
     return StandardPixelToScrollbar(scrollbar, coord, m_sizeScrollbarArrow);
 }
+
+// ----------------------------------------------------------------------------
+// top level windows
+// ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawFrameTitleBar(wxDC& dc,
+                                        const wxRect& rect,
+                                        const wxString& title,
+                                        const wxIcon& icon,
+                                        int flags,
+                                        int pressedButtons = 0)
+{
+    if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
+    {
+        DrawFrameBorder(dc, rect, flags);
+    }
+    if ( flags & wxTOPLEVEL_TITLEBAR )
+    {
+        DrawFrameBackground(dc, rect, flags);
+        if ( flags & wxTOPLEVEL_ICON )
+            DrawFrameIcon(dc, rect, icon, flags);
+        DrawFrameTitle(dc, rect, title, flags);
+        
+        wxRect client = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+        wxCoord x,y;
+        x = client.GetRight() -2 - FRAME_BUTTON_WIDTH;
+        y = client.GetTop() + (FRAME_TITLEBAR_HEIGHT-FRAME_BUTTON_HEIGHT)/2;
+        
+        if ( flags & wxTOPLEVEL_CLOSE_BUTTON )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_CLOSE_BUTTON);
+            x -= FRAME_BUTTON_WIDTH + 2;
+        }
+        if ( flags & wxTOPLEVEL_MAXIMIZE_BUTTON )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_MAXIMIZE_BUTTON);
+            x -= FRAME_BUTTON_WIDTH;
+        }
+        if ( flags & wxTOPLEVEL_RESTORE_BUTTON )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_RESTORE_BUTTON);
+            x -= FRAME_BUTTON_WIDTH;
+        }
+        if ( flags & wxTOPLEVEL_MINIMIZE_BUTTON )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_MINIMIZE_BUTTON);
+            x -= FRAME_BUTTON_WIDTH;
+        }
+        if ( flags & wxTOPLEVEL_HELP_BUTTON )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_HELP_BUTTON);
+            x -= FRAME_BUTTON_WIDTH;
+        }
+    }
+}
+
+void wxWin32Renderer::DrawFrameBorder(wxDC& dc,
+                                      const wxRect& rect,
+                                      int flags)
+{
+    if ( !(flags & wxTOPLEVEL_BORDER) ) return;
+    
+    wxRect r(rect);
+    
+    DrawShadedRect(dc, &r, m_penLightGrey, m_penBlack);
+    DrawShadedRect(dc, &r, m_penHighlight, m_penDarkGrey);
+    DrawShadedRect(dc, &r, m_penLightGrey, m_penLightGrey);
+    if ( flags & wxTOPLEVEL_RESIZEABLE )
+        DrawShadedRect(dc, &r, m_penLightGrey, m_penLightGrey);
+}
+
+void wxWin32Renderer::DrawFrameBackground(wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags)
+{
+    if ( !(flags & wxTOPLEVEL_TITLEBAR) ) return;
+
+    wxColour col = (flags & wxTOPLEVEL_ACTIVE) ? 
+                   wxSCHEME_COLOUR(m_scheme, TITLEBAR_ACTIVE) :
+                   wxSCHEME_COLOUR(m_scheme, TITLEBAR);
+
+    wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+    r.height = FRAME_TITLEBAR_HEIGHT;
+    
+    DrawBackground(dc, col, r);
+}
+
+void wxWin32Renderer::DrawFrameTitle(wxDC& dc,
+                                     const wxRect& rect,
+                                     const wxString& title,
+                                     int flags)
+{
+    wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+    r.height = FRAME_TITLEBAR_HEIGHT;
+    if ( flags & wxTOPLEVEL_ICON )
+        r.x += FRAME_TITLEBAR_HEIGHT;
+    else
+        r.x += 1;
+    
+    dc.SetFont(m_titlebarFont);
+    dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, TITLEBAR_TEXT));
+    dc.DrawLabel(title, wxNullBitmap, r, wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
+}
+
+void wxWin32Renderer::DrawFrameIcon(wxDC& dc,
+                                    const wxRect& rect,
+                                    const wxIcon& icon,
+                                    int flags)
+{
+    wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+    dc.DrawIcon(icon, r.x, r.y);
+}
+
+void wxWin32Renderer::DrawFrameButton(wxDC& dc,
+                                      wxCoord x, wxCoord y,
+                                      int button,
+                                      int flags = 0)
+{
+    wxRect r(x, y, FRAME_BUTTON_WIDTH, FRAME_BUTTON_HEIGHT);
+    
+    DrawShadedRect(dc, &r, m_penHighlight, m_penBlack);
+    DrawShadedRect(dc, &r, m_penLightGrey, m_penDarkGrey);
+    DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), r);
+    
+    size_t idx = 0;
+    switch (button)
+    {
+        case wxTOPLEVEL_CLOSE_BUTTON:    idx = FrameButton_Close; break;
+        case wxTOPLEVEL_MAXIMIZE_BUTTON: idx = FrameButton_Maximize; break;
+        case wxTOPLEVEL_MINIMIZE_BUTTON: idx = FrameButton_Minimize; break;
+        case wxTOPLEVEL_RESTORE_BUTTON:  idx = FrameButton_Restore; break;
+        case wxTOPLEVEL_HELP_BUTTON:     idx = FrameButton_Help; break;
+        default:
+            wxFAIL_MSG(wxT("incorrect button specification"));
+    }
+    
+    dc.DrawBitmap(m_bmpFrameButtons[idx], r.x, r.y, TRUE);
+}
+
+
+wxRect wxWin32Renderer::GetFrameClientArea(const wxRect& rect,
+                                           int flags) const
+{
+    wxRect r(rect);
+
+    if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
+    {
+        int border = (flags & wxTOPLEVEL_RESIZEABLE) ? 
+                        RESIZEABLE_FRAME_BORDER_THICKNESS :
+                        FRAME_BORDER_THICKNESS;
+        r.Inflate(-border);
+    }
+    if ( flags & wxTOPLEVEL_TITLEBAR )
+    {
+        r.y += FRAME_TITLEBAR_HEIGHT;
+        r.height -= FRAME_TITLEBAR_HEIGHT;
+    }
+
+    return r;
+}
+
+wxSize wxWin32Renderer::GetFrameTotalSize(const wxSize& clientSize,
+                                     int flags) const
+{
+    wxSize s(clientSize);
+
+    if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
+    {
+        int border = (flags & wxTOPLEVEL_RESIZEABLE) ? 
+                        RESIZEABLE_FRAME_BORDER_THICKNESS :
+                        FRAME_BORDER_THICKNESS;
+        s.x += 2*border;
+        s.y += 2*border;
+    }
+    if ( flags & wxTOPLEVEL_TITLEBAR )
+        s.y += FRAME_TITLEBAR_HEIGHT;
+
+    return s;
+}
+
+wxSize wxWin32Renderer::GetFrameIconSize() const
+{
+    return wxSize(16, 16);
+}
+
+
 
 // ----------------------------------------------------------------------------
 // text control geometry
