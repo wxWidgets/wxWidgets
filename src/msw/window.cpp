@@ -127,6 +127,10 @@ void wxRemoveHandleAssociation(wxWindow *win);
 void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
 wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 
+// this magical function is used to translate VK_APPS key presses to right
+// mouse clicks
+static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flags);
+
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
@@ -1998,20 +2002,11 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 // click because both usually pop up a context menu
                 case VK_APPS:
                     {
-                        // construct the key mask
-                        WPARAM fwKeys = MK_RBUTTON;
-                        if ( (::GetKeyState(VK_CONTROL) & 0x100) != 0 )
-                            fwKeys |= MK_CONTROL;
-                        if ( (::GetKeyState(VK_SHIFT) & 0x100) != 0 )
-                            fwKeys |= MK_SHIFT;
+                        WPARAM flags;
+                        int x, y;
 
-                        // simulate right mouse button click
-                        DWORD dwPos = ::GetMessagePos();
-                        int x = GET_X_LPARAM(dwPos),
-                            y = GET_Y_LPARAM(dwPos);
-
-                        ScreenToClient(&x, &y);
-                        processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, fwKeys);
+                        TranslateKbdEventToMouse(this, &x, &y, &flags);
+                        processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, flags);
                     }
                     break;
 #endif // VK_APPS
@@ -2027,7 +2022,21 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
         case WM_SYSKEYUP:
         case WM_KEYUP:
-            processed = HandleKeyUp((WORD) wParam, lParam);
+#ifdef VK_APPS
+            // special case of VK_APPS: treat it the same as right mouse button
+            if ( wParam == VK_APPS )
+            {
+                WPARAM flags;
+                int x, y;
+
+                TranslateKbdEventToMouse(this, &x, &y, &flags);
+                processed = HandleMouseEvent(WM_RBUTTONUP, x, y, flags);
+            }
+            else
+#endif // VK_APPS
+            {
+                processed = HandleKeyUp((WORD) wParam, lParam);
+            }
             break;
 
         case WM_SYSCHAR:
@@ -4168,3 +4177,22 @@ const char *wxGetMessageName(int message)
     }
 }
 #endif //__WXDEBUG__
+
+static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flags)
+{
+    // construct the key mask
+    WPARAM& fwKeys = *flags;
+
+    fwKeys = MK_RBUTTON;
+    if ( (::GetKeyState(VK_CONTROL) & 0x100) != 0 )
+        fwKeys |= MK_CONTROL;
+    if ( (::GetKeyState(VK_SHIFT) & 0x100) != 0 )
+        fwKeys |= MK_SHIFT;
+
+    // simulate right mouse button click
+    DWORD dwPos = ::GetMessagePos();
+    *x = GET_X_LPARAM(dwPos);
+    *y = GET_Y_LPARAM(dwPos);
+
+    win->ScreenToClient(x, y);
+}

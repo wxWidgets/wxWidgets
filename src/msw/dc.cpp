@@ -74,6 +74,10 @@ static const int MM_METRIC = 10;
     static const double M_PI = 3.14159265358979323846;
 #endif // M_PI
 
+// ROPs which don't have standard names (see "Ternary Raster Operations" in the
+// MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
+#define DSTCOPY 0x00AA0029      // a.k.a. NOP operation
+
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
@@ -679,30 +683,19 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         HDC hdcMem = ::CreateCompatibleDC(GetHdc());
         ::SelectObject(hdcMem, GetHbitmapOf(bmp));
 
-        // this will only work if the transparent part of our bitmap is black
-        // because it is combined with the destination rectangle using OR, so
-        // it won't be really transparent otherwise - I don't know what to do
-        // about it, may be use MAKEROP4(SRCCOPY, DSTINVERT) twice? Or create a
-        // copy of the bitmap with the transparent part replaced with black
-        // pixels?
-
-        // GRG: now this works regardless of what the source bitmap
-        //      contains in the area which is to be transparent.
-        //
+        // use MaskBlt() with ROP which doesn't do anything to dst in the mask
+        // points
         bool ok = ::MaskBlt(GetHdc(), x, y, width, height,
                             hdcMem, 0, 0,
                             hbmpMask, 0, 0,
-                            MAKEROP4(SRCCOPY, 0x00AA0029)) != 0;
+                            MAKEROP4(SRCCOPY, DSTCOPY)) != 0;
         ::DeleteDC(hdcMem);
 
         if ( !ok )
 #endif // Win32
         {
-            // VZ: this is incorrect, Blit() doesn't (and can't) draw
-            //     transparently, but it's still better than nothing at all
-            // GRG: Blit() *should* draw transparently when there is a mask
-
-            // Rather than reproduce wxDC::Blit, let's do it at the wxWin API level
+            // Rather than reproduce wxDC::Blit, let's do it at the wxWin API
+            // level
             wxMemoryDC memDC;
             memDC.SelectObject(bmp);
 
@@ -1048,22 +1041,23 @@ void wxDC::SetRop(WXHDC dc)
 
     switch (m_logicalFunction)
     {
+        case wxCLEAR:        rop = R2_BLACK;         break;
         case wxXOR:          rop = R2_XORPEN;        break;
         case wxINVERT:       rop = R2_NOT;           break;
         case wxOR_REVERSE:   rop = R2_MERGEPENNOT;   break;
         case wxAND_REVERSE:  rop = R2_MASKPENNOT;    break;
-        case wxCLEAR:        rop = R2_WHITE;         break;
-        case wxSET:          rop = R2_BLACK;         break;
-        case wxOR_INVERT:    rop = R2_MERGENOTPEN;   break;
-        case wxAND:          rop = R2_MASKPEN;       break;
-        case wxOR:           rop = R2_MERGEPEN;      break;
-        case wxEQUIV:        rop = R2_NOTXORPEN;     break;
-        case wxNAND:         rop = R2_NOTMASKPEN;    break;
-        case wxAND_INVERT:   rop = R2_MASKNOTPEN;    break;
         case wxCOPY:         rop = R2_COPYPEN;       break;
+        case wxAND:          rop = R2_MASKPEN;       break;
+        case wxAND_INVERT:   rop = R2_MASKNOTPEN;    break;
         case wxNO_OP:        rop = R2_NOP;           break;
-        case wxSRC_INVERT:   rop = R2_NOTCOPYPEN;    break;
         case wxNOR:          rop = R2_NOTMERGEPEN;   break;
+        case wxEQUIV:        rop = R2_NOTXORPEN;     break;
+        case wxSRC_INVERT:   rop = R2_NOTCOPYPEN;    break;
+        case wxOR_INVERT:    rop = R2_MERGENOTPEN;   break;
+        case wxNAND:         rop = R2_NOTMASKPEN;    break;
+        case wxOR:           rop = R2_MERGEPEN;      break;
+        case wxSET:          rop = R2_WHITE;         break;
+
         default:
            wxFAIL_MSG( wxT("unsupported logical function") );
            return;
@@ -1334,7 +1328,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         case wxNAND:         dwRop = 0x007700E6;       break;
         case wxAND_INVERT:   dwRop = 0x00220326;       break;
         case wxCOPY:         dwRop = SRCCOPY;          break;
-        case wxNO_OP:        dwRop = 0x00AA0029;       break;
+        case wxNO_OP:        dwRop = DSTCOPY;          break;
         case wxSRC_INVERT:   dwRop = NOTSRCCOPY;       break;
         case wxNOR:          dwRop = NOTSRCCOPY;       break;
         default:
@@ -1347,46 +1341,14 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     if (useMask)
     {
 #ifdef __WIN32__
-        // prepare the mask bitmap
-        HBITMAP hbmpMask = wxInvertMask((HBITMAP)mask->GetMaskBitmap());
-
-        // select the correct brush: the current one by default, background one
-        // if none
-        HBRUSH hbrNew;
-        if ( m_brush.Ok() )
-        {
-            hbrNew = (HBRUSH)m_brush.GetResourceHandle();
-        }
-        else if ( m_backgroundBrush.Ok() )
-        {
-            hbrNew = (HBRUSH)m_backgroundBrush.GetResourceHandle();
-        }
-        else
-        {
-            hbrNew = 0;
-        }
-
-        HGDIOBJ hbrOld = hbrNew ? ::SelectObject(GetHdc(), hbrNew) : 0;
-
         // we want the part of the image corresponding to the mask to be
-        // transparent, i.e. do PATCOPY there and apply dwRop elsewhere
-
-        // GRG: PATCOPY is not transparent, as can be seen when blitting
-        //      over a pattern: the 'transparent' area would be filled
-        //      with the selected colour. We should use NOP instead, or
-        //      do MaskBlt + BitBlt.
-        //
+        // transparent, so use "DSTCOPY" ROP for the mask points (the usual
+        // meaning of fg and bg is inverted which corresponds to wxWin notion
+        // of the mask which is also contrary to the Windows one)
         success = ::MaskBlt(GetHdc(), xdest, ydest, width, height,
                             GetHdcOf(*source), xsrc, ysrc,
-                            hbmpMask, 0, 0,
-                            MAKEROP4(0x00AA0029, dwRop)) != 0;
-
-        if ( hbrNew )
-        {
-            (void)::SelectObject(GetHdc(), hbrOld);
-        }
-
-        ::DeleteObject(hbmpMask);
+                            (HBITMAP)mask->GetMaskBitmap(), 0, 0,
+                            MAKEROP4(dwRop, DSTCOPY)) != 0;
 
         if ( !success )
 #endif // Win32

@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        controls.cpp
+// Name:        text.cpp
 // Purpose:     TextCtrl wxWindows sample
 // Author:      Robert Roebling
 // Modified by:
 // RCS-ID:      $Id$
-// Copyright:   (c) Robert Roebling, Julian Smart
+// Copyright:   (c) Robert Roebling, Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -67,6 +67,7 @@ public:
     void OnKeyUp(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnText(wxCommandEvent& event);
+    void OnMouseEvent(wxMouseEvent& event);
 
     bool  m_hasCapture;
 
@@ -241,6 +242,7 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_KEY_UP(MyTextCtrl::OnKeyUp)
     EVT_CHAR(MyTextCtrl::OnChar)
     EVT_TEXT(-1, MyTextCtrl::OnText)
+    EVT_MOUSE_EVENTS(MyTextCtrl::OnMouseEvent)
 END_EVENT_TABLE()
 
 void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
@@ -370,6 +372,69 @@ void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
                   GetChar( event.ShiftDown(), _T('S') ),
                   GetChar( event.MetaDown(), _T('M') ) );
 
+}
+
+void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
+{
+    if ( !ev.Moving() )
+    {
+        wxString msg;
+        if ( ev.Entering() )
+        {
+            msg = _T("Mouse entered the window");
+        }
+        else if ( ev.Leaving() )
+        {
+            msg = _T("Mouse left the window");
+        }
+        else
+        {
+            // click event
+            wxString button;
+            bool dbl, up;
+            if ( ev.LeftDown() || ev.LeftUp() || ev.LeftDClick() )
+            {
+                button = _T("Left");
+                dbl = ev.LeftDClick();
+                up = ev.LeftUp();
+            }
+            else if ( ev.MiddleDown() || ev.MiddleUp() || ev.MiddleDClick() )
+            {
+                button = _T("Middle");
+                dbl = ev.MiddleDClick();
+                up = ev.MiddleUp();
+            }
+            else if ( ev.RightDown() || ev.RightUp() || ev.RightDClick() )
+            {
+                button = _T("Right");
+                dbl = ev.RightDClick();
+                up = ev.RightUp();
+            }
+            else
+            {
+                wxLogStatus(_T("Unknown mouse event"));
+                return;
+            }
+
+            msg.Printf(_T("%s mouse button %s"),
+                        button.c_str(),
+                        dbl ? _T("double clicked")
+                            : up ? _T("released") : _T("clicked"));
+        }
+
+        msg << _T(" at (") << ev.GetX() << _T(", ") << ev.GetY() << _T(") ")
+            << _T("Flags: ")
+            << GetChar( ev.LeftDown(), _T('1') )
+            << GetChar( ev.MiddleDown(), _T('2') )
+            << GetChar( ev.RightDown(), _T('3') )
+            << GetChar( ev.ControlDown(), _T('C') )
+            << GetChar( ev.AltDown(), _T('A') )
+            << GetChar( ev.ShiftDown(), _T('S') )
+            << GetChar( ev.MetaDown(), _T('M') );
+
+        wxLogMessage(msg);
+    }
+    //else: we're not interested in mouse move events
 }
 
 void MyTextCtrl::OnText(wxCommandEvent& event)

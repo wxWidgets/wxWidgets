@@ -2884,6 +2884,9 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         }
     }
 
+    delete [] data;
+    delete [] result_data;
+
     return rotated;
 }
 

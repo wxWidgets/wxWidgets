@@ -36,7 +36,7 @@ void MyThread::Foo(void)
 
     // Call GUI here:
     my_window->DrawSomething();
-    
+
     wxMutexGuiLeave();
 }
 \end{verbatim}
@@ -568,6 +568,24 @@ if (s)
 \wxheading{Include files}
 
 <wx/filedlg.h>
+
+\membersection{::wxGetNumberFromUser}\label{wxgetnumberfromuser}
+
+\func{wxColour}{wxGetColourFromUser}{\param{wxWindow *}{parent}, \parent{const wxColour\& }{colInit}}
+
+Shows the colour selection dialog and returns the colour selected by user or
+invalid colour (use \helpref{wxColour::Ok}{wxcolourok} to test whether a colour
+is valid) if the dialog was cancelled.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent window for the colour selection dialog}
+
+\docparam{colInit}{If given, this will be the colour initially selected in the dialog.}
+
+\wxheading{Include files}
+
+<wx/colordlg.h>
 
 \membersection{::wxGetNumberFromUser}\label{wxgetnumberfromuser}
 

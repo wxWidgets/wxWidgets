@@ -84,6 +84,7 @@ public:
     // event handlers
     void OnOk(wxCommandEvent& event);
     void OnDetails(wxCommandEvent& event);
+    void OnListSelect(wxListEvent& event);
 
 private:
     // the data for the listctrl
@@ -104,6 +105,7 @@ private:
 BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
     EVT_BUTTON(wxID_OK,     wxLogDialog::OnOk)
     EVT_BUTTON(wxID_MORE,   wxLogDialog::OnDetails)
+    EVT_LIST_ITEM_SELECTED(-1, wxLogDialog::OnListSelect)
 END_EVENT_TABLE()
 
 #endif // wxUSE_LOG_DIALOG
@@ -642,9 +644,27 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
                          const wxArrayLong& times,
                          const wxString& caption,
                          long style)
-           : wxDialog(parent, -1, caption ),
-             m_messages(messages), m_severity(severity), m_times(times)
+           : wxDialog(parent, -1, caption )
 {
+    size_t count = messages.GetCount();
+    m_messages.Alloc(count);
+    m_severity.Alloc(count);
+    m_times.Alloc(count);
+
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxString msg = messages[n];
+        do
+        {
+            m_messages.Add(msg.BeforeFirst(_T('\n')));
+            msg = msg.AfterFirst(_T('\n'));
+
+            m_severity.Add(severity[n]);
+            m_times.Add(times[n]);
+        }
+        while ( !!msg );
+    }
+
     m_showingDetails = FALSE; // not initially
     m_listctrl = (wxListCtrl *)NULL;
 
@@ -676,7 +696,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
     btnOk->SetFocus();
 
-    if ( m_messages.GetCount() == 1 )
+    if ( count == 1 )
     {
         // no details... it's easier to disable a button than to change the
         // dialog layout depending on whether we have details or not
@@ -684,6 +704,14 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     }
 
     Centre();
+}
+
+void wxLogDialog::OnListSelect(wxListEvent& event)
+{
+    // we can't just disable the control because this looks ugly under Windows
+    // (wrong bg colour, no scrolling...), but we still want to disable
+    // selecting items - it makes no sense here
+    m_listctrl->SetItemState(event.GetItem(), 0, wxLIST_STATE_SELECTED);
 }
 
 void wxLogDialog::OnOk(wxCommandEvent& WXUNUSED(event))
@@ -712,7 +740,8 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
                                         wxDefaultPosition, wxDefaultSize,
                                         wxSUNKEN_BORDER |
                                         wxLC_REPORT |
-                                        wxLC_NO_HEADER );
+                                        wxLC_NO_HEADER |
+                                        wxLC_SINGLE_SEL);
             m_listctrl->InsertColumn(0, _("Message"));
             m_listctrl->InsertColumn(1, _("Time"));
 
