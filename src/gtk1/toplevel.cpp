@@ -224,6 +224,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WX
     if (!win->m_hasVMT || !win->IsShown())
         return FALSE;
 
+
     int x = 0;
     int y = 0;
     gdk_window_get_root_origin( win->m_widget->window, &x, &y );
@@ -625,6 +626,15 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 
     m_fsIsShowing = show;
 
+#ifdef __WXGTK20__
+
+    if (show)
+        gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
+    else
+        gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
+
+#else
+
     GdkWindow *window = m_widget->window;
     wxX11FullScreenMethod method =
         wxGetFullScreenMethodX11((WXDisplay*)GDK_DISPLAY(),
@@ -683,7 +693,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
         SetSize(m_fsSaveFrame.x, m_fsSaveFrame.y,
                 m_fsSaveFrame.width, m_fsSaveFrame.height);
     }
-
+#endif
 
     return TRUE;
 }
@@ -705,7 +715,10 @@ bool wxTopLevelWindowGTK::Show( bool show )
 
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
-
+    
+    if (show)
+        gtk_widget_set_uposition( m_widget, m_x, m_y );
+    
     return wxWindow::Show( show );
 }
 
