@@ -45,10 +45,8 @@
 #if defined(__WXWINCE__)
   #include <ole2.h>
   #include <shellapi.h>
-  // FIXME: aygshell.h is in the PocketPC 2003 SDK,
-  // so for which SDK _is_ it missing, and how do we test
-  // for it?
-  #if 1 // _WIN32_WCE < 400
+  // Standard SDK doesn't have aygshell.dll: see include/wx/msw/wince/libraries.h
+  #if _WIN32_WCE < 400 || !defined(WCE_PLATFORM_STANDARDSDK)
     #include <aygshell.h>
   #endif
 #include "wx/msw/wince/missing.h"
@@ -935,7 +933,8 @@ wxDlgProc(HWND hDlg,
             // for this message, returning TRUE tells system to set focus to
             // the first control in the dialog box, but as we set the focus
             // ourselves, we return FALSE from here as well, so fall through
-#ifdef __WXWINCE__
+			// Standard SDK doesn't have aygshell.dll: see include/wx/msw/wince/libraries.h
+#if defined(__WXWINCE__) && !defined(WCE_PLATFORM_STANDARDSDK)
         {
             SHINITDLGINFO shidi;
             shidi.dwMask = SHIDIM_FLAGS;
