@@ -1,6 +1,0 @@
-node control
-abstract
-icon 0
-derived from window
-derived from panel_item
-derived from toolbar_item
