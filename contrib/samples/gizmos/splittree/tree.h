@@ -77,6 +77,8 @@ public:
     TestTree(wxWindow* parent, wxWindowID id, const wxPoint& pt = wxDefaultPosition,
         const wxSize& sz = wxDefaultSize, long style = wxTR_HAS_BUTTONS);
 	~TestTree();
+
+	void OnPaint(wxPaintEvent& event);
     DECLARE_EVENT_TABLE()
 protected:
 	wxImageList*	m_imageList;

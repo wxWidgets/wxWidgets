@@ -803,9 +803,34 @@ void wxGenericTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font
 // item status inquiries
 // -----------------------------------------------------------------------------
 
-bool wxGenericTreeCtrl::IsVisible(const wxTreeItemId& WXUNUSED(item)) const
+bool wxGenericTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
-    wxFAIL_MSG(wxT("not implemented"));
+    wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
+
+	// An item is only visible if it's not a descendant of a collapsed item
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+	wxGenericTreeItem* parent = pItem->GetParent();
+	while (parent)
+	{
+		if (!parent->IsExpanded())
+			return FALSE;
+		parent = parent->GetParent();
+	}
+
+    int startX, startY;
+    GetViewStart(& startX, & startY);
+
+    wxSize clientSize = GetClientSize();
+
+    wxRect rect;
+    if (!GetBoundingRect(item, rect))
+        return FALSE;
+	if (rect.GetWidth() == 0 || rect.GetHeight() == 0)
+		return FALSE;
+    if (rect.GetBottom() < 0 || rect.GetTop() > clientSize.y)
+        return FALSE;
+    if (rect.GetRight() < 0 || rect.GetLeft() > clientSize.x)
+        return FALSE;
 
     return TRUE;
 }
@@ -921,9 +946,54 @@ wxTreeItemId wxGenericTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
                     : wxTreeItemId(siblings[(size_t)(index - 1)]);
 }
 
+// Only for internal use right now, but should probably be public
+wxTreeItemId wxGenericTreeCtrl::GetNext(const wxTreeItemId& item) const
+{
+  wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
+
+  wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
+
+  // First see if there are any children.
+  wxArrayGenericTreeItems& children = i->GetChildren();
+  if (children.GetCount() > 0)
+  {
+     return children.Item(0);
+  }
+  else
+  {
+     // Try a sibling of this or ancestor instead
+     wxTreeItemId p = item;
+     wxTreeItemId toFind;
+     do
+     {
+        toFind = GetNextSibling(p);
+        p = GetParent(p);
+     } while (p.IsOk() && !toFind.IsOk());
+     return toFind;
+  }
+}
+
+wxTreeItemId wxGenericTreeCtrl::GetPrev(const wxTreeItemId& item) const
+{
+  wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
+
+  wxFAIL_MSG(wxT("not implemented"));
+
+  return wxTreeItemId();
+}
+
 wxTreeItemId wxGenericTreeCtrl::GetFirstVisibleItem() const
 {
-  wxFAIL_MSG(wxT("not implemented"));
+  wxTreeItemId id = GetRootItem();
+  if (!id.IsOk())
+    return id;
+
+  do
+  {
+    if (IsVisible(id))
+        return id;
+    id = GetNext(id);
+  } while (id.IsOk());
 
   return wxTreeItemId();
 }
@@ -932,8 +1002,14 @@ wxTreeItemId wxGenericTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 {
   wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
 
-  wxFAIL_MSG(wxT("not implemented"));
+  wxTreeItemId id = item;
+  while (id.IsOk())
+  {
+	  id = GetNext(id);
 
+	  if (id.IsOk() && IsVisible(id))
+		  return id;
+  }
   return wxTreeItemId();
 }
 
@@ -2121,13 +2197,13 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
     int startX, startY;
     GetViewStart(& startX, & startY);
 
-    rect.x = i->GetX() - startX*PIXELS_PER_UNIT; rect.y = i->GetY()*PIXELS_PER_UNIT;
-    rect.width = i->GetWidth(); rect.height = i->GetHeight();
+    rect.x = i->GetX() - startX*PIXELS_PER_UNIT;
+	rect.y = i->GetY() - startY*PIXELS_PER_UNIT;
+    rect.width = i->GetWidth();
+	//rect.height = i->GetHeight();
+	rect.height = GetLineHeight(i);
 
     return TRUE;
-
-    // wxFAIL_MSG(wxT("GetBoundingRect unimplemented"));
-    // return FALSE;
 }
 
 /* **** */

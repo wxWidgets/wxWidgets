@@ -56,7 +56,6 @@ public:
 
 //// Events
 	void OnSize(wxSizeEvent& event);
-	void OnPaint(wxPaintEvent& event);
 	void OnExpand(wxTreeEvent& event);
     void OnScroll(wxScrollWinEvent& event);
 

@@ -169,6 +169,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 IMPLEMENT_CLASS(TestTree, wxRemotelyScrolledTreeCtrl)
 
 BEGIN_EVENT_TABLE(TestTree, wxRemotelyScrolledTreeCtrl)
+	EVT_PAINT(TestTree::OnPaint)
 END_EVENT_TABLE()
 
 TestTree::TestTree(wxWindow* parent, wxWindowID id, const wxPoint& pt,
@@ -221,6 +222,47 @@ TestTree::~TestTree()
 {
 	SetImageList(NULL);
 	delete m_imageList;
+}
+
+void TestTree::OnPaint(wxPaintEvent& event)
+{
+	wxPaintDC dc(this);
+
+	wxTreeCtrl::OnPaint(event);
+
+    // Reset the device origin since it may have been set
+    dc.SetDeviceOrigin(0, 0);
+
+	wxSize sz = GetClientSize();
+
+	wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+	dc.SetPen(pen);
+	dc.SetBrush(* wxTRANSPARENT_BRUSH);
+
+	wxRect itemRect;
+	if (GetBoundingRect(GetRootItem(), itemRect))
+	{
+		int itemHeight = itemRect.GetHeight();
+		wxRect rcClient = GetRect();
+		wxRect itemRect;
+		int cy=0;
+		wxTreeItemId h, lastH;
+		for(h=GetFirstVisibleItem();h;h=GetNextVisible(h))
+		{
+			if (GetBoundingRect(h, itemRect))
+			{
+				cy = itemRect.GetTop();
+				dc.DrawLine(rcClient.x, cy, rcClient.x + rcClient.width, cy);
+				lastH = h;
+				//cy += itemHeight;
+			}
+		}
+		if (GetBoundingRect(lastH, itemRect))
+		{
+			cy = itemRect.GetBottom();
+			dc.DrawLine(rcClient.x, cy, rcClient.x + rcClient.width, cy);
+		}
+	}
 }
 
 /*

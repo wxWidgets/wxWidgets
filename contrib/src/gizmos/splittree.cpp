@@ -55,7 +55,6 @@ BEGIN_EVENT_TABLE(wxRemotelyScrolledTreeCtrl, wxGenericTreeCtrl)
 BEGIN_EVENT_TABLE(wxRemotelyScrolledTreeCtrl, wxTreeCtrl)
 #endif
 	EVT_SIZE(wxRemotelyScrolledTreeCtrl::OnSize)
-	EVT_PAINT(wxRemotelyScrolledTreeCtrl::OnPaint)
 	EVT_TREE_ITEM_EXPANDED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
 	EVT_TREE_ITEM_COLLAPSED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
 	EVT_SCROLLWIN(wxRemotelyScrolledTreeCtrl::OnScroll)
@@ -195,49 +194,44 @@ void wxRemotelyScrolledTreeCtrl::OnExpand(wxTreeEvent& event)
 // Adjust the containing wxScrolledWindow's scrollbars appropriately
 void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()
 {
-    // WILL THIS BE DONE AUTOMATICALLY BY THE GENERIC TREE CONTROL?
-/*
-
-Problem with remote-scrolling the generic tree control. It relies
-on PrepareDC for adjusting the device origin, which in turn takes
-values from wxScrolledWindow: which we've turned off in order to use
-a different scrollbar :-( So we could override PrepareDC and use
-the _other_ scrolled window's position instead.
-Note also ViewStart would need to be overridden.
-Plus, wxGenericTreeCtrl::OnPaint will reset the device origin.
-
-*/
-
-    // Assumption: wxGenericTreeCtrl will adjust the scrollbars automatically,
-    // since it'll call SetScrollbars and we've defined this to Do The Right Thing.
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
-        return;
-
-	wxScrolledWindow* scrolledWindow = GetScrolledWindow();
-	if (scrolledWindow)
 	{
-		wxRect itemRect;
-		if (GetBoundingRect(GetRootItem(), itemRect))
+		// This is for the generic tree control.
+		// It calls SetScrollbars which has been overridden
+		// to adjust the parent scrolled window vertical
+		// scrollbar.
+		((wxGenericTreeCtrl*) this)->AdjustMyScrollbars();
+        return;
+	}
+	else
+	{
+		// This is for the wxMSW tree control
+		wxScrolledWindow* scrolledWindow = GetScrolledWindow();
+		if (scrolledWindow)
 		{
-			int itemHeight = itemRect.GetHeight();
-
-			int w, h;
-			GetClientSize(&w, &h);
-			
-			wxRect rect(0, 0, 0, 0);
-			CalcTreeSize(rect);
-			int treeViewHeight = rect.GetHeight()/itemHeight;
-			
-			int scrollPixelsPerLine = itemHeight;
-			int scrollPos = - (itemRect.y / itemHeight);
-			
-			scrolledWindow->SetScrollbars(0, scrollPixelsPerLine, 0, treeViewHeight, 0, scrollPos);
-			
-			// Ensure that when a scrollbar becomes hidden or visible,
-			// the contained window sizes are right.
-			// Problem: this is called too early (?)
-			wxSizeEvent event(scrolledWindow->GetSize(), scrolledWindow->GetId());
-			scrolledWindow->GetEventHandler()->ProcessEvent(event);
+			wxRect itemRect;
+			if (GetBoundingRect(GetRootItem(), itemRect))
+			{
+				int itemHeight = itemRect.GetHeight();
+				
+				int w, h;
+				GetClientSize(&w, &h);
+				
+				wxRect rect(0, 0, 0, 0);
+				CalcTreeSize(rect);
+				int treeViewHeight = rect.GetHeight()/itemHeight;
+				
+				int scrollPixelsPerLine = itemHeight;
+				int scrollPos = - (itemRect.y / itemHeight);
+				
+				scrolledWindow->SetScrollbars(0, scrollPixelsPerLine, 0, treeViewHeight, 0, scrollPos);
+				
+				// Ensure that when a scrollbar becomes hidden or visible,
+				// the contained window sizes are right.
+				// Problem: this is called too early (?)
+				wxSizeEvent event(scrolledWindow->GetSize(), scrolledWindow->GetId());
+				scrolledWindow->GetEventHandler()->ProcessEvent(event);
+			}
 		}
 	}
 }
@@ -305,37 +299,6 @@ wxScrolledWindow* wxRemotelyScrolledTreeCtrl::GetScrolledWindow() const
 		parent = parent->GetParent();
 	}
 	return NULL;
-}
-
-void wxRemotelyScrolledTreeCtrl::OnPaint(wxPaintEvent& event)
-{
-	wxPaintDC dc(this);
-
-	wxTreeCtrl::OnPaint(event);
-
-    // Reset the device origin since it may have been set
-    dc.SetDeviceOrigin(0, 0);
-
-	wxSize sz = GetClientSize();
-
-	wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
-	dc.SetPen(pen);
-	dc.SetBrush(* wxTRANSPARENT_BRUSH);
-
-	wxRect itemRect;
-	if (GetBoundingRect(GetRootItem(), itemRect))
-	{
-		int itemHeight = itemRect.GetHeight();
-		wxRect rcClient = GetRect();
-		int cy=0;
-		wxTreeItemId h;
-		for(h=GetFirstVisibleItem();h;h=GetNextVisible(h))
-		{
-			dc.DrawLine(rcClient.x, cy, rcClient.x + rcClient.width, cy);
-			cy += itemHeight;
-		}
-		dc.DrawLine(rcClient.x, cy, rcClient.x + rcClient.width, cy);
-	}
 }
 
 void wxRemotelyScrolledTreeCtrl::OnScroll(wxScrollWinEvent& event)

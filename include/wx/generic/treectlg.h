@@ -210,6 +210,10 @@ public:
         // get the previous visible item: item must be visible itself!
     wxTreeItemId GetPrevVisible(const wxTreeItemId& item) const;
 
+        // Only for internal use right now, but should probably be public
+    wxTreeItemId GetNext(const wxTreeItemId& item) const;
+    wxTreeItemId GetPrev(const wxTreeItemId& item) const;
+
     // operations
     // ----------
 
@@ -371,7 +375,9 @@ protected:
                               int image, int selectedImage,
                               wxTreeItemData *data);
 
+public:
     void AdjustMyScrollbars();
+protected:
     int  GetLineHeight(wxGenericTreeItem *item) const;
     void PaintLevel( wxGenericTreeItem *item, wxDC& dc, int level, int &y );
     void PaintItem( wxGenericTreeItem *item, wxDC& dc);
