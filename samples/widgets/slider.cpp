@@ -493,6 +493,12 @@ void SliderWidgetsPage::OnButtonSetMinAndMax(wxCommandEvent& WXUNUSED(event))
     m_max = maxNew;
 
     m_slider->SetRange(minNew, maxNew);
+
+    if ( m_slider->GetMin() != m_min ||
+         m_slider->GetMax() != m_max )
+    {
+        wxLogWarning(_T("Invalid range in slider."));
+    }
 }
 
 void SliderWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
