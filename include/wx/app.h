@@ -322,18 +322,18 @@ extern bool WXDLLEXPORT wxYield();
 // Yield to other apps/messages
 extern void WXDLLEXPORT wxWakeUpIdle();
 
-#if wxUSE_GUI
-
 // Post a message to the given eventhandler which will be processed during the
 // next event loop iteration
 inline void WXDLLEXPORT wxPostEvent(wxEvtHandler *dest, wxEvent& event)
 {
     wxCHECK_RET( dest, wxT("need an object to post event to in wxPostEvent") );
 
+#if wxUSE_GUI
     dest->AddPendingEvent(event);
-}
-
+#else
+    dest->ProcessEvent(event);
 #endif // wxUSE_GUI
+}
 
 // console applications may avoid using DECLARE_APP and IMPLEMENT_APP macros
 // and call these functions instead at the program startup and termination

@@ -22,6 +22,8 @@
 #include "wx/longlong.h"
 #include "wx/event.h"
 
+#if wxUSE_GUI
+
 // ----------------------------------------------------------------------------
 // wxTimer
 // ----------------------------------------------------------------------------
@@ -122,6 +124,37 @@ protected:
 #endif
 
 // ----------------------------------------------------------------------------
+// wxTimerRunner: starts the timer in its ctor, stops in the dtor
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTimerRunner
+{
+public:
+    wxTimerRunner(wxTimer& timer) : m_timer(timer) { }
+    wxTimerRunner(wxTimer& timer, int milli, bool oneShot = FALSE)
+        : m_timer(timer)
+    {
+        m_timer.Start(milli, oneShot);
+    }
+
+    void Start(int milli, bool oneShot = FALSE)
+    {
+        m_timer.Start(milli, oneShot);
+    }
+
+    ~wxTimerRunner()
+    {
+        if ( m_timer.IsRunning() )
+        {
+            m_timer.Stop();
+        }
+    }
+
+private:
+    wxTimer& m_timer;
+};
+
+// ----------------------------------------------------------------------------
 // wxTimerEvent
 // ----------------------------------------------------------------------------
 
@@ -147,6 +180,8 @@ private:
 typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);
 
 #define EVT_TIMER(id, func) { wxEVT_TIMER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTimerEventFunction) & func, NULL},
+
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // wxStopWatch: measure time intervals with up to 1ms resolution

@@ -70,8 +70,6 @@ wxWindowList wxModelessWindows;
 // all modal dialogs currently shown
 static wxWindowList wxModalDialogs;
 
-static wxWindow *m_oldFocus;
-
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -100,6 +98,7 @@ END_EVENT_TABLE()
 
 wxDialog::wxDialog()
 {
+    m_oldFocus = (wxWindow *)NULL;
     m_isShown = FALSE;
 
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));

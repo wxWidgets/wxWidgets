@@ -117,6 +117,8 @@ protected:
     void DoShowModal();
 
 private:
+    wxWindow *m_oldFocus;
+
     DECLARE_EVENT_TABLE()
 };
 

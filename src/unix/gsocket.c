@@ -53,7 +53,6 @@ struct	sockaddr_un {
 #endif
 #include <signal.h>
 
-
 #ifndef SOCKLEN_T
 
 #ifdef VMS
@@ -102,6 +101,15 @@ struct	sockaddr_un {
 
 #endif /* __GSOCKET_STANDALONE__ */
 
+/* redefine some GUI-only functions to do nothing in console mode */
+#if defined(wxUSE_GUI) && !wxUSE_GUI
+    #define _GSocket_GUI_Init(socket)
+    #define _GSocket_GUI_Destroy(socket)
+    #define _GSocket_Enable_Events(socket)
+    #define _GSocket_Disable_Events(socket)
+    #define _GSocket_Install_Callback(socket, event)
+    #define _GSocket_Uninstall_Callback(socket, event)
+#endif // wxUSE_GUI
 
 /* Global initialisers */
 

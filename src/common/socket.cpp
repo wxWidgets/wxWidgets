@@ -35,7 +35,10 @@
 #include "wx/module.h"
 #include "wx/log.h"
 #include "wx/intl.h"
-#include "wx/gdicmn.h"      // for wxPendingDelete
+
+#if wxUSE_GUI
+    #include "wx/gdicmn.h"      // for wxPendingDelete
+#endif // wxUSE_GUI
 
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
@@ -548,6 +551,8 @@ wxSocketBase& wxSocketBase::Discard()
 // timeout elapses. The polling loop calls PROCESS_EVENTS(), so
 // this won't block the GUI.
 
+#if wxUSE_GUI
+
 class _wxSocketInternalTimer: public wxTimer
 {
 public:
@@ -560,11 +565,17 @@ public:
   }
 };
 
+#endif // wxUSE_GUI
+
 bool wxSocketBase::_Wait(long seconds, long milliseconds,
                          wxSocketEventFlags flags)
 {
   GSocketEventFlags result;
+#if wxUSE_GUI
   _wxSocketInternalTimer timer;
+  wxTimerRunner runTimer(timer);
+#endif // wxUSE_GUI
+
   long timeout;
   int state = -1;
 
@@ -584,9 +595,11 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
   // Activate timer
   if (timeout)
   {
+#if wxUSE_GUI
     timer.m_state = &state;
     timer.m_new_val = 0;
-    timer.Start((int)timeout, TRUE);
+    runTimer.Start((int)timeout, TRUE);
+#endif // wxUSE_GUI
   }
 
   // Active polling (without using events)
@@ -608,7 +621,6 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
     // Incoming connection (server) or connection established (client)
     if (result & GSOCK_CONNECTION_FLAG)
     {
-      timer.Stop();
       m_connected = TRUE;
       m_establishing = FALSE;
       return TRUE;
@@ -617,14 +629,12 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
     // Data available or output buffer ready
     if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
     {
-      timer.Stop();
       return TRUE;
     }
 
     // Connection lost
     if (result & GSOCK_LOST_FLAG)
     {
-      timer.Stop();
       m_connected = FALSE;
       m_establishing = FALSE;
       return (flags & GSOCK_LOST_FLAG);
@@ -637,7 +647,6 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
       PROCESS_EVENTS();
   }
 
-  timer.Stop();
   return FALSE;
 }
 
@@ -872,11 +881,13 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
     event.m_skevt  = req_evt;
 
     if (m_evt_handler)
+    {
 #if USE_DELAYED_EVENTS
       wxPostEvent(m_evt_handler, event);
 #else
       ProcessEvent(event);
 #endif
+    }
 
     OldOnNotify(req_evt);
     if (m_cbk)

@@ -61,7 +61,9 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTimerEvent, wxEvent)
+#if wxUSE_GUI
+    IMPLEMENT_DYNAMIC_CLASS(wxTimerEvent, wxEvent)
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // macros
@@ -88,6 +90,8 @@ wxLongLong wxGetLocalTimeMillis();
 // implementation
 // ============================================================================
 
+#if wxUSE_GUI
+
 // ----------------------------------------------------------------------------
 // wxTimerBase
 // ----------------------------------------------------------------------------
@@ -101,6 +105,8 @@ void wxTimerBase::Notify()
     wxTimerEvent event(m_idTimer, m_milli);
     (void)m_owner->ProcessEvent(event);
 }
+
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // wxStopWatch
