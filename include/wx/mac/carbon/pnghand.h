@@ -18,7 +18,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_PNGLIB
+#if wxUSE_LIBPNG
 
 class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
 {
