@@ -31,7 +31,7 @@
 // ----------------------------------------------------------------------------
 
 // check that the page index is valid
-#define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
+#define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
 
 // ----------------------------------------------------------------------------
@@ -296,7 +296,7 @@ int wxNotebook::GetPageImage(size_t nPage) const
     return m_images[nPage];
 }
 
-bool wxNotebook::SetPageImage(size_t nPage , int nImage)
+bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("invalid notebook page") );
 
@@ -329,7 +329,7 @@ wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
 
     MacSetupTabs();
 
-    if(m_nSelection >= GetPageCount()) {
+    if(m_nSelection >= (int)GetPageCount()) {
         m_nSelection = GetPageCount() - 1;
     }
     if(m_nSelection >= 0) {
@@ -357,13 +357,10 @@ bool wxNotebook::InsertPage(size_t nPage,
                             bool bSelect,
                             int imageId)
 {
-    wxASSERT( pPage != NULL );
-    wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE );
+    if ( !wxNotebookBase::InsertPage(nPage, pPage, strText, bSelect, imageId) )
+        return false;
 
     pPage->SetLabel(strText);
-
-    // save the pointer to the page
-    m_pages.Insert(pPage, nPage);
 
     m_images.Insert(imageId, nPage);
 
@@ -375,7 +372,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     else if ( m_nSelection == -1 ) {
         m_nSelection = 0;
     }
-    else if (m_nSelection >= nPage) {
+    else if ((size_t)m_nSelection >= nPage) {
         m_nSelection++;
     }
     // don't show pages by default (we'll need to adjust their size first)
@@ -406,7 +403,8 @@ void wxNotebook::MacSetupTabs()
     wxNotebookPage *page;
     ControlTabInfoRec info;
 
-    for(int ii = 0; ii < GetPageCount(); ii++)
+    const size_t countPages = GetPageCount();
+    for(size_t ii = 0; ii < countPages; ii++)
     {
         page = m_pages[ii];
         info.version = 0;
