@@ -38,7 +38,15 @@ Default constructor.
 
 \func{}{wxBitmap}{\param{const wxBitmap\& }{bitmap}}
 
-Copy constructor.
+Copy constructor. Note that this does not take a fresh copy of the data,
+but instead makes the internal data point to {\it bitmap}'s data. So
+changing one bitmap will change the other. To make a real copy, you can
+use:
+
+\begin{verbatim}
+    wxBitmap newBitmap = oldBitmap.GetSubBitmap(
+                             wxRect(0, 0, oldBitmap.GetWidth(), oldBitmap.GetHeight()));
+\end{verbatim}
 
 \func{}{wxBitmap}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
