@@ -700,10 +700,8 @@ trap 'rm -fr `echo "
             ownerdrw/Makefile
             png/Makefile
             printing/Makefile
-            proplist/Makefile
             propsize/Makefile
             regtest/Makefile
-            resource/Makefile
             rotate/Makefile
             sashtest/Makefile
             shaped/Makefile
@@ -717,7 +715,6 @@ trap 'rm -fr `echo "
             thread/Makefile
             toolbar/Makefile
             treectrl/Makefile
-            treelay/Makefile
             typetest/Makefile
             validate/Makefile
             widgets/Makefile

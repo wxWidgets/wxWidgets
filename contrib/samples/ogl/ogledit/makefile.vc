@@ -18,9 +18,9 @@ PROGRAM=ogledit
 FINAL=0
 
 !if "$(FINAL)" == "0"
-EXTRALIBS=$(WXDIR)\lib\ogld.lib
+EXTRALIBS=$(WXDIR)\lib\ogld.lib $(WXDIR)\lib\wxdeprecatedd.lib
 !else
-EXTRALIBS=$(WXDIR)\lib\ogl.lib
+EXTRALIBS=$(WXDIR)\lib\ogl.lib $(WXDIR)\lib\wxdeprecated.lib
 !endif
 
 OBJECTS = $(PROGRAM).obj doc.obj view.obj palette.obj

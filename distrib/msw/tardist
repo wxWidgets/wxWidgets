@@ -70,7 +70,7 @@ dospinwxgtk()
 echo Tarring wxGTK...
 
 cd $WXSRC
-cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxgtk_in.txt
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxgtk_in.txt
 expandlines /tmp/wxgtk_in.txt /tmp/wxgtk.txt
 $TAR cf $WXDEST/wxGTK-${WXVER}.tar -T /tmp/wxgtk.txt
 
@@ -91,7 +91,7 @@ dospinwxmotif()
 echo Tarring wxMotif...
 
 cd $WXSRC
-cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmotif_in.txt
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmotif_in.txt
 expandlines /tmp/wxmotif_in.txt /tmp/wxmotif.txt
 $TAR cf $WXDEST/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 
@@ -113,7 +113,7 @@ echo Tarring wxX11...
 
 ### wxX11: combined wxMotif and wxX11 distributions
 cd $WXSRC
-cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
 expandlines /tmp/wxx11_in.txt /tmp/wxx11.txt
 $TAR cf $WXDEST/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
 
@@ -131,7 +131,7 @@ gzip $WXDEST/wxX11-${WXVER}.tar
 
 ### wxMSW
 # cd $WXSRC
-# cat $WXSRC/distrib/msw/msw.rsp $WXSRC/distrib/msw/vc.rsp $WXSRC/distrib/msw/bc.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmsw_in.txt
+# cat $WXSRC/distrib/msw/msw.rsp $WXSRC/distrib/msw/vc.rsp $WXSRC/distrib/msw/bc.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmsw_in.txt
 # expandlines /tmp/wxmsw_in.txt /tmp/wxmsw.txt
 # $TAR cf $WXDEST/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt
 # gzip $WXDEST/wxMSW-${WXVER}.tar
@@ -142,7 +142,7 @@ echo Tarring wxMac...
 ### wxMac
 cp $WXSRC/include/wx/mac/setup0.h $WXSRC/include/wx/setup.h
 cd $WXSRC
-cat $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
+cat $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
 expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
 $TAR cf $WXDEST/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
 
@@ -193,7 +193,7 @@ echo Tarring wxAll...
 
 ### wxAll: all distributions in one giant archive
 cd $WXSRC
-cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/msw.rsp $WXSRC/distrib/msw/vc.rsp $WXSRC/distrib/msw/cw.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/os2.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/mgl.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/utilmake.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/mmedia.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp $WXSRC/distrib/msw/docsrc.rsp | uniq > /tmp/wxall_in.txt
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/msw.rsp $WXSRC/distrib/msw/vc.rsp $WXSRC/distrib/msw/cw.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/os2.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/mgl.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/utilmake.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/mmedia.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp $WXSRC/distrib/msw/docsrc.rsp | uniq > /tmp/wxall_in.txt
 expandlines /tmp/wxall_in.txt /tmp/wxall.txt
 $TAR cf $WXDEST/wxAll-${WXVER}.tar -T /tmp/wxall.txt
 

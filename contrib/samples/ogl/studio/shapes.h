@@ -18,7 +18,8 @@
 
 #include <wx/docview.h>
 #include <wx/string.h>
-#include <wx/wxexpr.h>
+#include <wx/deprecated/setup.h>
+#include <wx/deprecated/wxexpr.h>
 
 #include <wx/ogl/ogl.h>
 #include <wx/ogl/basicp.h>

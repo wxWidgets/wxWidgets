@@ -24,7 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/wxexpr.h>
+#include <wx/deprecated/wxexpr.h>
 
 #include <wx/ogl/basic.h>
 #include <wx/ogl/basicp.h>
@@ -706,13 +706,13 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
     // Each constraint is stored in the form
     // (type name id xspacing yspacing m_constrainingObjectId constrainedObjectIdList)
 
-    wxExpr *typeExpr = constraintExpr->Item(0);
-    wxExpr *nameExpr = constraintExpr->Item(1);
-    wxExpr *idExpr = constraintExpr->Item(2);
-    wxExpr *xExpr = constraintExpr->Item(3);
-    wxExpr *yExpr = constraintExpr->Item(4);
-    wxExpr *constrainingExpr = constraintExpr->Item(5);
-    wxExpr *constrainedExpr = constraintExpr->Item(6);
+    wxExpr *typeExpr = constraintExpr->Nth(0);
+    wxExpr *nameExpr = constraintExpr->Nth(1);
+    wxExpr *idExpr = constraintExpr->Nth(2);
+    wxExpr *xExpr = constraintExpr->Nth(3);
+    wxExpr *yExpr = constraintExpr->Nth(4);
+    wxExpr *constrainingExpr = constraintExpr->Nth(5);
+    wxExpr *constrainedExpr = constraintExpr->Nth(6);
 
     cType = (int)typeExpr->IntegerValue();
     cXSpacing = xExpr->RealValue();
@@ -727,7 +727,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
       wxLogFatalError(wxT("Object graphics error: Couldn't find constraining image of composite."));
 
     int i = 0;
-    wxExpr *currentIdExpr = constrainedExpr->Item(i);
+    wxExpr *currentIdExpr = constrainedExpr->Nth(i);
     while (currentIdExpr)
     {
       long currentId = currentIdExpr->IntegerValue();
@@ -742,7 +742,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
       }
 
       i ++;
-      currentIdExpr = constrainedExpr->Item(i);
+      currentIdExpr = constrainedExpr->Nth(i);
     }
     wxOGLConstraint *newConstraint = AddConstraint(cType, m_constrainingObject, m_constrainedObjects);
     newConstraint->SetSpacing(cXSpacing, cYSpacing);

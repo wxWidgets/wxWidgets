@@ -25,7 +25,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/wxexpr.h>
+#include <wx/deprecated/wxexpr.h>
 
 #ifdef new
 #undef new
@@ -1541,16 +1541,16 @@ void wxLineShape::ReadAttributes(wxExpr *clause)
       wxString arrowName;
       long arrowId = -1;
 
-      wxExpr *type_expr = node->Item(0);
-      wxExpr *end_expr = node->Item(1);
-      wxExpr *dist_expr = node->Item(2);
-      wxExpr *size_expr = node->Item(3);
-      wxExpr *name_expr = node->Item(4);
-      wxExpr *id_expr = node->Item(5);
+      wxExpr *type_expr = node->Nth(0);
+      wxExpr *end_expr = node->Nth(1);
+      wxExpr *dist_expr = node->Nth(2);
+      wxExpr *size_expr = node->Nth(3);
+      wxExpr *name_expr = node->Nth(4);
+      wxExpr *id_expr = node->Nth(5);
 
       // New members of wxArrowHead
-      wxExpr *yOffsetExpr = node->Item(6);
-      wxExpr *spacingExpr = node->Item(7);
+      wxExpr *yOffsetExpr = node->Nth(6);
+      wxExpr *spacingExpr = node->Nth(7);
 
       if (type_expr)
         arrowType = (int)type_expr->IntegerValue();

@@ -24,7 +24,8 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/wxexpr.h>
+#include <wx/deprecated/setup.h>
+#include <wx/deprecated/wxexpr.h>
 
 #include "studio.h"
 #include "doc.h"

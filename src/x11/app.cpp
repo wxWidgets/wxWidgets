@@ -38,10 +38,6 @@
     #include "wx/thread.h"
 #endif
 
-#if wxUSE_WX_RESOURCES
-    #include "wx/resource.h"
-#endif
-
 #include "wx/x11/private.h"
 
 #include <string.h>
@@ -121,10 +117,6 @@ bool wxApp::Initialize()
     wxInitializeStockLists();
     wxInitializeStockObjects();
 
-#if wxUSE_WX_RESOURCES
-    wxInitializeResourceSystem();
-#endif
-
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
     wxClientWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
 
@@ -142,10 +134,6 @@ void wxApp::CleanUp()
     wxClientWidgetHashTable = NULL;
 
     wxModule::CleanUpModules();
-
-#if wxUSE_WX_RESOURCES
-    wxCleanUpResourceSystem();
-#endif
 
     delete wxTheColourDatabase;
     wxTheColourDatabase = NULL;
@@ -239,7 +227,7 @@ int wxEntryStart( int& argc, char *argv[] )
 
     }
 
-    // X11 display stuff    
+    // X11 display stuff
     Display* xdisplay = XOpenDisplay( displayName );
     if (!xdisplay)
     {
@@ -251,7 +239,7 @@ int wxEntryStart( int& argc, char *argv[] )
         XSynchronize(xdisplay, True);
 
     wxApp::ms_display = (WXDisplay*) xdisplay;
-    
+
     XSelectInput( xdisplay, XDefaultRootWindow(xdisplay), PropertyChangeMask);
 
     // Misc.
@@ -260,7 +248,7 @@ int wxEntryStart( int& argc, char *argv[] )
 #if wxUSE_UNICODE
     // Glib's type system required by Pango
     g_type_init();
-#endif    
+#endif
 
     if (!wxApp::Initialize())
         return -1;
@@ -1119,9 +1107,9 @@ PangoContext* wxApp::GetPangoContext()
     static PangoContext *ret = NULL;
     if (ret)
         return ret;
-    
+
     Display *xdisplay = (Display*) wxApp::GetDisplay();
-    
+
 #if 1
     int xscreen = DefaultScreen(xdisplay);
     static int use_xft = -1;
@@ -1130,16 +1118,16 @@ PangoContext* wxApp::GetPangoContext()
         wxString val = wxGetenv( L"GDK_USE_XFT" );
         use_xft = (val == L"1");
     }
-  
+
     if (use_xft)
         ret = pango_xft_get_context( xdisplay, xscreen );
     else
 #endif
         ret = pango_x_get_context( xdisplay );
-        
+
     if (!PANGO_IS_CONTEXT(ret))
         wxLogError( wxT("No pango context.") );
-        
+
     return ret;
 }
 #endif
@@ -1240,7 +1228,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         // Call dispatch at least once so that sockets
         // can be tested
         wxTheApp->Dispatch();
-        
+
         while (wxTheApp && wxTheApp->Pending())
             wxTheApp->Dispatch();
 

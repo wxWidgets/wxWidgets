@@ -66,7 +66,7 @@ rm -f $2/wxAll-${WXVER}*.tar.gz
 
 ### wxAll: all distributions in one giant archive
 cd $1
-cat $1/distrib/msw/generic.rsp $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/cw.rsp $1/distrib/msw/cw_mac.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/mac.rsp $1/distrib/msw/os2.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/mgl.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/utilmake.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/mmedia.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/stc.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp $1/distrib/msw/docsrc.rsp | uniq > /tmp/wxall_in.txt
+cat $1/distrib/msw/generic.rsp $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/cw.rsp $1/distrib/msw/cw_mac.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/mac.rsp $1/distrib/msw/os2.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/mgl.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/deprecated.rsp $1/distrib/msw/utilmake.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/mmedia.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/stc.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp $1/distrib/msw/docsrc.rsp | uniq > /tmp/wxall_in.txt
 expandlines /tmp/wxall_in.txt /tmp/wxall.txt
 $TAR cf $2/wxAll-${WXVER}.tar -T /tmp/wxall.txt
 

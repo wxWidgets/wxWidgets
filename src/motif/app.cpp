@@ -42,10 +42,6 @@
     #include "wx/thread.h"
 #endif
 
-#if wxUSE_WX_RESOURCES
-    #include "wx/resource.h"
-#endif
-
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
@@ -105,10 +101,6 @@ bool wxApp::Initialize()
     wxInitializeStockLists();
     wxInitializeStockObjects();
 
-#if wxUSE_WX_RESOURCES
-    wxInitializeResourceSystem();
-#endif
-
     // For PostScript printing
 #if wxUSE_POSTSCRIPT
     /* Done using wxModule now
@@ -134,10 +126,6 @@ void wxApp::CleanUp()
     wxWidgetHashTable = NULL;
 
     wxModule::CleanUpModules();
-
-#if wxUSE_WX_RESOURCES
-    wxCleanUpResourceSystem();
-#endif
 
     wxDeleteStockObjects() ;
 

@@ -14,7 +14,6 @@
 #include <wx/intl.h>
 #include <wx/laywin.h>
 #include <wx/listctrl.h>
-#include <wx/resource.h>       // wxResourceParsedata/File/String
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
 #include <wx/toolbar.h>

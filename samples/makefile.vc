@@ -118,11 +118,7 @@ all:
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\printing
         nmake -f makefile.vc $(MAKEFLAGS)
-        cd $(WXDIR)\samples\proplist
-        nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\regtest
-        nmake -f makefile.vc $(MAKEFLAGS)
-        cd $(WXDIR)\samples\resource
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\rotate
         nmake -f makefile.vc $(MAKEFLAGS)
@@ -228,11 +224,7 @@ clean:
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\printing
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\proplist
-        nmake -f makefile.vc clean
         cd $(WXDIR)\samples\regtest
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\resource
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\rotate
         nmake -f makefile.vc clean

@@ -10,6 +10,7 @@
 WXDIR = $(WXWIN)
 
 TARGET=resource
+EXTRALIBS=$(WXDIR)\lib\wxdeprecated.lib
 OBJECTS = $(TARGET).obj
 
 !include $(WXDIR)\src\makeprog.b32

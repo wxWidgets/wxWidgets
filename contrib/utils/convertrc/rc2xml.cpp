@@ -36,7 +36,8 @@ cross platform (wxGTK,etc)
 
 #include "rc2xml.h"
 #include "wx/image.h"
-#include "wx/resource.h"
+#include "wx/deprecated/setup.h"
+#include "wx/deprecated/resource.h"
 #include <wx/textfile.h>
 #include <wx/tokenzr.h>
 
@@ -67,7 +68,7 @@ bool rc2xml::Convert(wxString rcfile, wxString xmlfile)
 {
     m_rc.Open(rcfile.c_str());
     m_filesize=m_rc.Length();
-    
+
 
     m_workingpath=wxPathOnly(rcfile);
 
@@ -80,15 +81,15 @@ bool rc2xml::Convert(wxString rcfile, wxString xmlfile)
 
     bool result;
     result=m_xmlfile.Open(xmlfile.c_str(),"w+t");
-    wxASSERT_MSG(result,"Couldn't create XML file");	
+    wxASSERT_MSG(result,"Couldn't create XML file");
     if (!result)
         return FALSE;
 
-	
+
 /* Write Basic header for XML file */
     m_xmlfile.Write("<?xml version=\"1.0\" ?>\n");
     m_xmlfile.Write("<resource>\n");
-    
+
 //Read resource.h
     ParseResourceHeader();
 //Gather all the resource we need for toolbars,menus, and etc
@@ -101,7 +102,7 @@ bool rc2xml::Convert(wxString rcfile, wxString xmlfile)
     m_xmlfile.Write("</resource>\n");
     m_xmlfile.Close();
     m_rc.Close();
-    wxMessageBox(_("Conversion complete."), _("Done"), 
+    wxMessageBox(_("Conversion complete."), _("Done"),
                             wxOK | wxICON_INFORMATION);
 
 return TRUE;
@@ -113,7 +114,7 @@ void rc2xml::ParseDialog(wxString dlgname)
     wxString token;
     static int dlgid=999;
     dlgid++;
-/* Make sure that this really is a dialog 
+/* Make sure that this really is a dialog
 microsoft reuses the keyword DIALOG for other things
 */
     token=PeekToken();
@@ -135,13 +136,13 @@ microsoft reuses the keyword DIALOG for other things
     token=GetToken();
     wxString title;
     wxString ptsize,face;
-    
+
     m_xmlfile.Write("\t<object class=\"wxDialog\"");
     //Avoid duplicate names this way
     dlgname.Replace("IDD_","DLG_");
     WriteBasicInfo(x,y,width,height,dlgname);
     WriteTitle(title);
-    
+
 
     while ((token!="BEGIN")&(token!="{"))
     {
@@ -171,7 +172,7 @@ microsoft reuses the keyword DIALOG for other things
 
 /*
 BEGIN
-    EDITTEXT        IDC_BANDS,36,83,22,14,ES_AUTOHSCROLL | ES_NUMBER | NOT 
+    EDITTEXT        IDC_BANDS,36,83,22,14,ES_AUTOHSCROLL | ES_NUMBER | NOT
                     WS_TABSTOP
     LTEXT           "Bands",IDC_STATIC,11,86,21,8
     EDITTEXT        IDC_NAME,10,3,75,14,ES_AUTOHSCROLL
@@ -353,7 +354,7 @@ bool rc2xml::Seperator(int ch)
         m_done=TRUE;
         return TRUE;
         }
-    
+
     return FALSE;
 }
 
@@ -416,7 +417,7 @@ wxString rc2xml::GetToken(bool *listseperator)
     {
     m_done=TRUE;
     }
-  
+
 
     while (!Seperator(ch))
     {
@@ -442,7 +443,7 @@ wxString rc2xml::GetQuoteField()
     while (ch!=34)
         ReadChar(ch);
     ReadChar(ch);
-  
+
     while (ch!=34)
     {
     phrase+=(char)ch;
@@ -471,8 +472,8 @@ wxString rc2xml::GetStringQuote()
             p=m_rc.Tell();
             ReadChar(ch);
 // RC supports "", for embedded quote, as well as  \"
-            if (ch==34)              
-                phrase+='\\';         
+            if (ch==34)
+                phrase+='\\';
             else
     {
                 m_rc.Seek(p);
@@ -513,7 +514,7 @@ void rc2xml::ReadChar(int &ch)
 
 void rc2xml::ParseComboBox(wxString varname)
 {
-/* COMBOBOX        IDC_SCALECOMBO,10,110,48,52,CBS_DROPDOWNLIST | CBS_SORT | 
+/* COMBOBOX        IDC_SCALECOMBO,10,110,48,52,CBS_DROPDOWNLIST | CBS_SORT |
                     WS_VSCROLL | WS_TABSTOP */
     wxString token,style;
     int x,y,width,height;
@@ -592,7 +593,7 @@ void rc2xml::ParsePopupMenu()
 
     if (token=="POPUP")
         ParsePopupMenu();
-	
+
     if (token=="MENUITEM")
         ParseMenuItem();
     }
@@ -622,7 +623,7 @@ void rc2xml::ParseControlMS()
 
 }
 
-/*    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | 
+/*    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH |
                     TBS_NOTICKS | WS_TABSTOP,52,73,100,15
 */
 
@@ -644,7 +645,7 @@ void rc2xml::ParseSlider(wxString label, wxString varname)
     m_xmlfile.Write("\n\t\t</object>\n");
 
 }
-/*    
+/*
 CONTROL         "Progress1",CG_IDC_PROGDLG_PROGRESS,"msctls_progress32",
                     WS_BORDER,15,52,154,13
 */
@@ -652,7 +653,7 @@ void rc2xml::ParseProgressBar(wxString label, wxString varname)
 {
     wxString token,style;
     ReadOrs(token);
-   
+
     int x,y,width,height;
     ReadRect(x,y,width,height);
 
@@ -674,7 +675,7 @@ bool rc2xml::ReadOrs(wxString & orstring)
 
     while(PeekToken()==_T("|"))
     {
-    //Grab | 
+    //Grab |
     orstring+=GetToken();
     //Grab next token
     orstring+=GetToken();
@@ -697,7 +698,7 @@ void rc2xml::ParseCtrlButton(wxString label, wxString varname)
                   (token.Find("BS_RADIOBUTTON")!=-1))
         ParseRadioButton(label, varname);
     else if (token.Find("BS_GROUPBOX")!=-1)
-        ParseGroupBox(label, varname);        
+        ParseGroupBox(label, varname);
     else  // if ((token.Find("BS_PUSHBUTTON")!=-1)||
 //                (token.Find("BS_DEFPUSHBUTTON")!=-1))
         ParsePushButton(label, varname);           // make default case
@@ -726,7 +727,7 @@ void rc2xml::WriteTitle(wxString title)
 
 void rc2xml::WriteName(wxString name)
 {
-	
+
 //Try to convert any number ids into names
 name=LookUpId(name);
 //Replace common MS ids with wxWindows ids
@@ -796,7 +797,7 @@ void rc2xml::WriteStyle(wxString style)
     m_xmlfile.Write("\t\t\t<style>"+style+"</style>\n");
 }
 /*
-    LISTBOX         IDC_LIST1,16,89,48,40,LBS_SORT | LBS_MULTIPLESEL | 
+    LISTBOX         IDC_LIST1,16,89,48,40,LBS_SORT | LBS_MULTIPLESEL |
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
 */
 void rc2xml::ParseListBox(wxString varname)
@@ -817,7 +818,7 @@ void rc2xml::ParseListBox(wxString varname)
 
 }
 /*
-    CONTROL         "",IDC_RICHEDIT1,"RICHEDIT",ES_AUTOHSCROLL | WS_BORDER | 
+    CONTROL         "",IDC_RICHEDIT1,"RICHEDIT",ES_AUTOHSCROLL | WS_BORDER |
                     WS_TABSTOP,103,110,40,14
 */
 void rc2xml::ParseRichEdit(wxString label, wxString varname)
@@ -843,7 +844,7 @@ CONTROL         "Spin1",IDC_SPIN1,"msctls_updown32",UDS_ARROWKEYS,209,72,
 void rc2xml::ParseSpinCtrl(wxString label, wxString varname)
 {
     wxString token,style;
-    
+
     ReadOrs(token);
     if (token.Find("UDS_HORZ")!=-1)
         style="wxSP_HORIZONTAL";
@@ -872,7 +873,7 @@ void rc2xml::FirstPass()
             ParseStringTable(prevtok);
         else if (token=="ICON")
             ParseIcon(prevtok);
-        
+
         prevtok=token;
         }
 }
@@ -880,7 +881,7 @@ void rc2xml::FirstPass()
 void rc2xml::ParseBitmap(wxString varname)
 {
     wxString token,*bitmapfile;
-    
+
     token=PeekToken();
     //Microsoft notation?
     if (token=="DISCARDABLE")
@@ -907,7 +908,7 @@ void rc2xml::SecondPass()
             ParseMenu(prevtok);
         else if (token=="TOOLBAR")
             ParseToolBar(prevtok);
-        
+
         prevtok=token;
         }
 
@@ -915,7 +916,7 @@ void rc2xml::SecondPass()
 
 void rc2xml::ParseToolBar(wxString varname)
 {
-    wxString token;	
+    wxString token;
     token=GetToken();
     wxASSERT_MSG(token=="DISCARDABLE","Error in toolbar parsing");
 //Look up bitmap for toolbar and load
@@ -942,7 +943,7 @@ void rc2xml::ParseToolBar(wxString varname)
     width=atoi(GetToken());
     height=atoi(GetToken());
 
-    int c=0;	
+    int c=0;
     wxString buttonname,msg,tip,longhelp;
     token=GetToken();
     while ((token!="BEGIN")&(token!="{"))
@@ -1060,7 +1061,7 @@ void rc2xml::ParseMenuItem()
     WriteLabel(token);
 //Look up help if any listed in stringtable
 //can't assume numbers correlate, restrict to string identifiers
-    if ((!name.IsNumber())&&(LookUpString(name,msg)))  
+    if ((!name.IsNumber())&&(LookUpString(name,msg)))
         {
         SplitHelp(msg,tip,longhelp);
         m_xmlfile.Write("\t\t\t<help>"
@@ -1081,11 +1082,11 @@ void rc2xml::ParseMenuItem()
         else if (token=="GRAYED");
         else
             wxLogError("Unknown Menu Item token:"+token);
-        
+
         ptoken=PeekToken();
         ptoken.MakeUpper();
         }
-    m_xmlfile.Write("\t\t\t</object>\n"); 
+    m_xmlfile.Write("\t\t\t</object>\n");
 
 }
 
@@ -1121,7 +1122,7 @@ void rc2xml::ParseIcon(wxString varname)
 
     *iconfile=GetQuoteField();
     m_iconlist->Append(varname,iconfile);
-    
+
 
 }
 
@@ -1234,7 +1235,7 @@ void rc2xml::ParseScrollBar()
     wxString style;
 
     ReadOrs(token);
-    
+
 if (token.Find("SBS_VERT")!=-1)
     style=_T("wxSB_VERTICAL");
 //Default MFC style is horizontal
@@ -1302,7 +1303,7 @@ void rc2xml::WriteBitmap(wxString bitmapname)
         wxLogError("Unable to find bitmap:"+bitmapname);
         return;
         }
-    
+
     wxString *bitmappath;
     bitmappath=(wxString *)node->Data();
 
@@ -1344,7 +1345,7 @@ wxNode *node=m_iconlist->Find(iconname);
     m_xmlfile.Write("\t\t\t<bitmap>"+iconname+"</bitmap>\n");
     bitmap.SaveFile(m_targetpath+iconname,wxBITMAP_TYPE_BMP);
 
-    
+
 }
 /*Unfortunately sometimes the great MSVC Resource editor decides
 to use numbers instead of the word id.  I have no idea why they
@@ -1362,13 +1363,13 @@ wxTextFile r;
         wxLogError("Warining Unable to load resource.h file");
         return;
         }
-    
+
     wxString str;
     wxString id,v;
     wxStringTokenizer tok;
     wxString *varname;
-    
-    
+
+
     long n;
 
 //Read through entire file
@@ -1391,8 +1392,8 @@ wxTextFile r;
         }
     }
 
-  
-    
+
+
 }
 
 

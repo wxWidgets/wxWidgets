@@ -20,7 +20,6 @@
 #include "wx/app.h"
 #include "wx/cursor.h"
 #include "wx/icon.h"
-#include "wx/resource.h"
 #endif
 
 #include "wx/os2/private.h"

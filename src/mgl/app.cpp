@@ -27,7 +27,6 @@
     #include "wx/dialog.h"
     #include "wx/log.h"
     #include "wx/intl.h"
-    #include "wx/resource.h"
 #endif
 
 #include "wx/app.h"
@@ -91,7 +90,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         while (wxEventLoop::GetActive()->Pending())
             wxEventLoop::GetActive()->Dispatch();
     }
-        
+
     /* it's necessary to call ProcessIdle() to update the frames sizes which
        might have been changed (it also will update other things set from
        OnUpdateUI() which is a nice (and desired) side effect) */
@@ -116,7 +115,7 @@ void wxWakeUpIdle()
         wxMutexGuiEnter();
 #endif
 
-    while (wxTheApp->ProcessIdle()) {} 
+    while (wxTheApp->ProcessIdle()) {}
 
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
@@ -139,11 +138,11 @@ class wxRootWindow : public wxWindow
         ~wxRootWindow()
         {
             // we don't want to delete MGL_WM's rootWnd
-            m_wnd = NULL; 
+            m_wnd = NULL;
         }
 
         virtual bool AcceptsFocus() const { return FALSE; }
-        
+
         DECLARE_DYNAMIC_CLASS(wxRootWindow)
 };
 
@@ -159,18 +158,18 @@ static bool wxCreateMGL_WM(const wxDisplayModeInfo& displayMode)
 {
     int mode;
     int refresh = MGL_DEFAULT_REFRESH;
-    
+
 #if wxUSE_SYSTEM_OPTIONS
     if ( wxSystemOptions::HasOption(wxT("mgl.screen-refresh")) )
         refresh = wxSystemOptions::GetOptionInt(wxT("mgl.screen-refresh"));
 #endif
-        
-    mode = MGL_findMode(displayMode.GetWidth(), 
-                        displayMode.GetHeight(), 
+
+    mode = MGL_findMode(displayMode.GetWidth(),
+                        displayMode.GetHeight(),
                         displayMode.GetDepth());
     if ( mode == -1 )
     {
-        wxLogError(_("Mode %ix%i-%i not available."), 
+        wxLogError(_("Mode %ix%i-%i not available."),
                      displayMode.GetWidth(),
                      displayMode.GetHeight(),
                      displayMode.GetDepth());
@@ -183,7 +182,7 @@ static bool wxCreateMGL_WM(const wxDisplayModeInfo& displayMode)
         g_displayDC = NULL;
         return FALSE;
     }
-    
+
     g_winMng = MGL_wmCreate(g_displayDC->getDC());
     if (!g_winMng)
         return FALSE;
@@ -229,7 +228,7 @@ wxDisplayModeInfo wxGetDefaultDisplayMode()
     wxString mode;
     unsigned w, h, bpp;
 
-    if ( !wxGetEnv(wxT("WXMODE"), &mode) || 
+    if ( !wxGetEnv(wxT("WXMODE"), &mode) ||
          (wxSscanf(mode.c_str(), _T("%ux%u-%u"), &w, &h, &bpp) != 3) )
     {
         w = 640, h = 480, bpp = 16;
@@ -430,16 +429,12 @@ bool wxApp::Initialize()
 
     wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
     wxTheColourDatabase->Initialize();
-    
+
     // Can't do this in wxModule, because fonts are needed by stock lists
     wxTheFontsManager = new wxFontsManager;
 
     wxInitializeStockLists();
     wxInitializeStockObjects();
-
-#if wxUSE_WX_RESOURCES
-    wxInitializeResourceSystem();
-#endif
 
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules()) return FALSE;
@@ -461,10 +456,6 @@ void wxApp::CleanUp()
     delete gs_rootWindow;
 
     wxModule::CleanUpModules();
-
-#if wxUSE_WX_RESOURCES
-    wxCleanUpResourceSystem();
-#endif
 
     if (wxTheColourDatabase)
         delete wxTheColourDatabase;

@@ -5,6 +5,8 @@ WXDIR = ../../../..
 
 TARGET=treelay
 OBJECTS = $(TARGET).o
+EXTRAINC = -I$(WXDIR)/contrib/include
+EXTRALIBS = -lwxdeprecated
 
 include $(WXDIR)/src/makeprog.g95
 

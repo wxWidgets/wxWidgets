@@ -121,11 +121,7 @@ all:
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\printing
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\proplist
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\regtest
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\resource
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\rotate
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
@@ -168,8 +164,6 @@ all:
         cd $(WXDIR)\samples\widgets
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\tab
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\treelay
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\erase
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
@@ -253,11 +247,7 @@ clean:
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\printing
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\proplist
-        make -f makefile.b32 clean
         cd $(WXDIR)\samples\regtest
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\resource
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\rotate
         make -f makefile.b32 clean
@@ -300,8 +290,6 @@ clean:
         cd $(WXDIR)\samples\propsize
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\sockets
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\treelay
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\treectrl
         make -f makefile.b32 clean

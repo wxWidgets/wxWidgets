@@ -5,6 +5,12 @@
 WXDIR = $(WXWIN)
 
 PROGRAM=treelay
+FINAL=0
+!if "$(FINAL)" == "0"
+EXTRALIBS=$(WXDIR)\lib\wxdeprecatedd.lib
+!else
+EXTRALIBS=$(WXDIR)\lib\wxdeprecated.lib
+!endif
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.vc

@@ -24,8 +24,6 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/wxexpr.h>
-
 #include "studio.h"
 #include "doc.h"
 #include "view.h"

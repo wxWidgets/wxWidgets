@@ -24,9 +24,10 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/deprecated/setup.h"
 
 #if !wxUSE_PROPSHEET
-#error Please set wxUSE_PROPSHEET to 1 in include/wx/msw/setup.h and recompile.
+#error Please set wxUSE_PROPSHEET to 1 in contrib/include/wx/deprecated/setup.h and recompile.
 #endif
 
 #include "proplist.h"

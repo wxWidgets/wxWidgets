@@ -24,7 +24,8 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/resource.h>
+#include <wx/deprecated/setup.h>
+#include <wx/deprecated/resource.h>
 #include "dialogs.h"
 #include "doc.h"
 #include "view.h"
@@ -39,7 +40,7 @@ END_EVENT_TABLE()
 
 csLabelEditingDialog::csLabelEditingDialog(wxWindow* parent)
 {
-    LoadFromResource(parent, "shape_label_dialog");
+    wxLoadFromResource(this, parent, "shape_label_dialog");
 
     // Accelerators
     wxAcceleratorEntry entries[1];
@@ -99,13 +100,13 @@ csSettingsDialog::csSettingsDialog(wxWindow* parent):
 
     m_generalSettings = new wxPanel;
 
-    bool success = m_generalSettings->LoadFromResource(m_notebook, "general_settings_dialog");
+    bool success = wxLoadFromResource(m_generalSettings, m_notebook, "general_settings_dialog");
     wxASSERT_MSG( (success), "Could not load general settings panel.");
     m_notebook->AddPage(m_generalSettings, "General", TRUE);
 
     m_diagramSettings = new wxPanel;
 
-    success = m_diagramSettings->LoadFromResource(m_notebook, "diagram_settings_dialog");
+    success = wxLoadFromResource(m_diagramSettings, m_notebook, "diagram_settings_dialog");
     wxASSERT_MSG( (success), "Could not load diagram settings panel.");
     m_notebook->AddPage(m_diagramSettings, "Diagram");
 
@@ -258,11 +259,11 @@ csShapePropertiesDialog::csShapePropertiesDialog(wxWindow* parent, const wxStrin
          wxPoint(2, 2), wxSize(SHAPE_PROPERTY_DIALOG_WIDTH - 4, SHAPE_PROPERTY_DIALOG_HEIGHT - 4));
 
     m_generalPropertiesDialog = new csGeneralShapePropertiesDialog;
-    bool success = m_generalPropertiesDialog->LoadFromResource(m_notebook, "general_shape_properties_dialog");
+    bool success = wxLoadFromResource(m_generalPropertiesDialog, m_notebook, "general_shape_properties_dialog");
     wxASSERT_MSG( (success), "Could not load general properties panel.");
     m_notebook->AddPage(m_generalPropertiesDialog, "General");
 
-    success = m_attributeDialog->LoadFromResource(m_notebook, attributeDialogName);
+    success = wxLoadFromResource(m_attributeDialog, m_notebook, attributeDialogName);
     if (!success)
     {
         wxMessageBox("Could not load the attribute dialog for this shape.", "Studio", wxICON_EXCLAMATION);
@@ -278,7 +279,7 @@ csShapePropertiesDialog::csShapePropertiesDialog(wxWindow* parent, const wxStrin
     wxString str(attributeDialogName);
     str += "1";
     m_alternativeAttributeDialog = new wxPanel;
-    success = m_alternativeAttributeDialog->LoadFromResource(m_notebook, str);
+    success = wxLoadFromResource(m_alternativeAttributeDialog, m_notebook, str);
     if (success)
     {
         m_notebook->AddPage(m_alternativeAttributeDialog, "Attributes (alternative)");

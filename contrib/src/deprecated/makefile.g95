@@ -10,7 +10,7 @@
 WXDIR = ../../..
 
 LIBTARGET=$(WXDIR)/lib/libwxdeprecated.a
-OBJECTS = prop.o propform.o proplist.o y_tab.o resource.o treelay.o
+OBJECTS = prop.o propform.o proplist.o y_tab.o wxexpr.o resource.o treelay.o
 
 include $(WXDIR)/src/makelib.g95
 

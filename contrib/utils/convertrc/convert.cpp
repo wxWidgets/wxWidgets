@@ -24,7 +24,9 @@
 #endif
 
 #include <wx/image.h>
-#include "wx/resource.h"
+
+#include "wx/deprecated/setup.h"
+#include "wx/deprecated/resource.h"
 
 #include "convert.h"
 #include "rc2wxr.h"
@@ -62,7 +64,7 @@ bool wxConvertApp::OnInit()
 // Create the main frame window
     m_pFrame = new wxMainFrame(NULL, -1, "wxConvertApp", wxPoint(0, 0), wxSize(500, 400),
         wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
-   
+
     InitMenu();
     m_pFrame->Show(TRUE);
     SetTopWindow(m_pFrame);
@@ -104,12 +106,12 @@ END_EVENT_TABLE()
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-wxMainFrame::wxMainFrame(wxWindow* parent,wxWindowID id, 
+wxMainFrame::wxMainFrame(wxWindow* parent,wxWindowID id,
 const wxString& title, const wxPoint& pos, const wxSize& size,
 long style, const wxString& name)
 :wxFrame(parent,id,title,pos,size,style,name)
 {
-   
+
 }
 
 wxMainFrame::~wxMainFrame()
@@ -163,7 +165,7 @@ void wxMainFrame::OnWXR2XML()
 
     wxr2xml XMLCon;
     XMLCon.Convert(f.GetPath(),xmlfile.GetPath());
-	
+
 }
 
 void wxMainFrame::OnRC2XML()
@@ -189,18 +191,19 @@ void wxMainFrame::OnRC2XML()
 bool wxConvertApp::HandleCommandLine()
 {
 
-   if (argc != 2) 
+   if (argc != 2)
        return FALSE;
 
 //Figure out kind of conversion
     wxString source,target;
+
     wxr2xml trans_wxr2xml;
     rc2xml trans_rc2xml;
     rc2wxr trans_rc2wxr;
 
     source=argv[1];
     target=argv[2];
-    
+
 
     if ((source.Find(".wxr")>0)&&(target.Find(".xml")>0))
         {
@@ -217,6 +220,6 @@ bool wxConvertApp::HandleCommandLine()
         trans_rc2xml.Convert(source,target);
         return TRUE;
         }
-    
-    return FALSE; 
+
+    return FALSE;
 }

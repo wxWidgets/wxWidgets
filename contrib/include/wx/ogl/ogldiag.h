@@ -16,6 +16,12 @@
 #pragma interface "ogldiag.h"
 #endif
 
+#include <wx/deprecated/setup.h>
+
+#if wxUSE_PROLOGIO
+#include <wx/deprecated/wxexpr.h>
+#endif
+
 #include <wx/ogl/basic.h>
 
 class wxDiagram: public wxObject

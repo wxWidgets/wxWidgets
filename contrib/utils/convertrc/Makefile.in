@@ -6,6 +6,9 @@ program_dir = contrib/utils/convertrc
 
 PROGRAM=convert
 
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_wxdeprecated-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+
 OBJECTS=convert.o rc2xml.o rc2wxr.o wxr2xml.o
 
 include $(top_builddir)/src/makeprog.env

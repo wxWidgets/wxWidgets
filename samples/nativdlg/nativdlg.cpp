@@ -28,8 +28,6 @@
 #error Sorry, this sample is only appropriate under Windows.
 #endif
 
-#include "wx/resource.h"
-
 #include <ctype.h>
 #include "nativdlg.h"
 #include "resource.h"

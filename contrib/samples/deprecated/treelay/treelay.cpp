@@ -20,7 +20,13 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/treelay.h"
+#include "wx/deprecated/setup.h"
+
+#if !wxUSE_TREELAYOUT
+#error Please set wxUSE_TREELAYOUT to 1 in contrib/include/wx/deprecated/setup.h and recompile.
+#endif
+
+#include "wx/deprecated/treelay.h"
 
 #include "treelay.h"
 

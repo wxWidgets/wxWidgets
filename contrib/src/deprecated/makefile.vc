@@ -32,7 +32,7 @@ LIBEXT=d
 LIBTARGET=$(WXDIR)\lib\wxdeprecated$(LIBEXT).lib
 EXTRATARGETS=$(D)
 
-OBJECTS=$(D)\prop.obj $(D)\propform.obj $(D)\proplist.obj $(D)\y_tab.obj $(D)\resource.obj $(D)\treelay.obj
+OBJECTS=$(D)\prop.obj $(D)\propform.obj $(D)\proplist.obj $(D)\y_tab.obj $(D)\wxexpr.obj $(D)\resource.obj $(D)\treelay.obj
 
 !include $(WXDIR)\src\makelib.vc
 

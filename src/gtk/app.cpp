@@ -28,11 +28,6 @@
 #include "wx/msgdlg.h"
 #include "wx/file.h"
 #include "wx/filename.h"
-
-#if wxUSE_WX_RESOURCES
-    #include "wx/resource.h"
-#endif
-
 #include "wx/module.h"
 #include "wx/image.h"
 
@@ -709,10 +704,6 @@ bool wxApp::Initialize()
     wxInitializeStockLists();
     wxInitializeStockObjects();
 
-#if wxUSE_WX_RESOURCES
-    wxInitializeResourceSystem();
-#endif
-
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules())
         return FALSE;
@@ -727,10 +718,6 @@ bool wxApp::Initialize()
 void wxApp::CleanUp()
 {
     wxModule::CleanUpModules();
-
-#if wxUSE_WX_RESOURCES
-    wxCleanUpResourceSystem();
-#endif
 
     delete wxTheColourDatabase;
     wxTheColourDatabase = (wxColourDatabase*) NULL;

@@ -24,7 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/wxexpr.h>
+#include <wx/deprecated/wxexpr.h>
 
 #ifdef new
 #undef new
@@ -453,7 +453,7 @@ void wxDiagram::ReadContainerGeometry(wxExprDatabase& database)
       if (divisionExpr)
       {
         int i = 0;
-        wxExpr *idExpr = divisionExpr->Item(i);
+        wxExpr *idExpr = divisionExpr->Nth(i);
         while (idExpr)
         {
           long divisionId = idExpr->IntegerValue();
@@ -510,7 +510,7 @@ void wxDiagram::ReadContainerGeometry(wxExprDatabase& database)
             }
           }
           i ++;
-          idExpr = divisionExpr->Item(i);
+          idExpr = divisionExpr->Nth(i);
         }
       }
     }

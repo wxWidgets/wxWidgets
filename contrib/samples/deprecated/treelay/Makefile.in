@@ -3,7 +3,7 @@
 
 top_srcdir = @top_srcdir@/..
 top_builddir = ../../../..
-program_dir = samples/treelay
+program_dir = contrib/samples/deprecated/treelay
 
 PROGRAM=treelay
 
@@ -11,5 +11,8 @@ OBJECTS =$(PROGRAM).o
 DEPFILES=$(PROGRAM).d
 
 include ../../../../src/makeprog.env
+
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_wxdeprecated-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 @IF_GNU_MAKE@-include $(DEPFILES)

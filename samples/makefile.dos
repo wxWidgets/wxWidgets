@@ -116,14 +116,10 @@ all:
 !endif
         cd $(WXDIR)\samples\printing
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\proplist
-        nmake -f makefile.dos FINAL=$(FINAL)
 !if "$(NOMAKE)"==""
         cd $(WXDIR)\samples\regtest
         nmake -f makefile.dos FINAL=$(FINAL)
 !endif
-        cd $(WXDIR)\samples\resource
-        nmake -f makefile.dos FINAL=$(FINAL)
 !if "$(NOMAKE)"==""
         cd $(WXDIR)\samples\sashtest
         nmake -f makefile.dos FINAL=$(FINAL)
@@ -239,14 +235,10 @@ clean:
 !endif
         cd $(WXDIR)\samples\printing
         nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\proplist
-        nmake -f makefile.dos clean
 !if "$(NOMAKE)"==""
         cd $(WXDIR)\samples\regtest
         nmake -f makefile.dos clean
 !endif
-        cd $(WXDIR)\samples\resource
-        nmake -f makefile.dos clean
 !if "$(NOMAKE)"==""
         cd $(WXDIR)\samples\sashtest
         nmake -f makefile.dos clean

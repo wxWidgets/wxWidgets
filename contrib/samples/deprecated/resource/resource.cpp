@@ -24,6 +24,8 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/deprecated/setup.h"
+
 #if !wxUSE_RESOURCES
     #error "You should set wxUSE_RESOURCES to 1 to compile this sample"
 #endif
@@ -32,7 +34,7 @@
 // #error "This sample can't be compiled in Unicode mode."
 #endif // wxUSE_UNICODE
 
-#include "wx/resource.h"
+#include "wx/deprecated/resource.h"
 
 #include <ctype.h>
 #include "resource.h"
@@ -184,7 +186,7 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event) )
 {
     MyDialog *dialog = new MyDialog;
 
-    if (dialog->LoadFromResource(this, wxT("dialog1")))
+    if (wxLoadFromResource(dialog, this, wxT("dialog1")))
     {
         wxTextCtrl *text = (wxTextCtrl *)wxFindWindowByName(wxT("multitext3"), dialog);
         if (text)

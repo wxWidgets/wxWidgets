@@ -11,7 +11,7 @@ WXDIR = $(WXWIN)
 
 LIBTARGET=$(WXDIR)\lib\wxdeprecated.lib
 
-OBJECTS = prop.obj propform.obj proplist.obj y_tab.obj resource.obj treelay.obj
+OBJECTS = prop.obj propform.obj proplist.obj y_tab.obj wxexpr.obj resource.obj treelay.obj
 
 !include $(WXDIR)\src\makelib.b32
 

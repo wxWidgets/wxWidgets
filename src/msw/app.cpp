@@ -65,10 +65,6 @@
     WX_DEFINE_OBJARRAY(wxMsgArray);
 #endif // wxUSE_THREADS
 
-#if wxUSE_WX_RESOURCES
-    #include "wx/resource.h"
-#endif
-
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
@@ -191,7 +187,7 @@ END_EVENT_TABLE()
 bool wxApp::Initialize()
 {
     // the first thing to do is to check if we're trying to run an Unicode
-    // program under Win9x w/o MSLU emulation layer - if so, abort right now 
+    // program under Win9x w/o MSLU emulation layer - if so, abort right now
     // as it has no chance to work
 #if wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
     if ( wxGetOsVersion() != wxWINDOWS_NT )
@@ -224,10 +220,6 @@ bool wxApp::Initialize()
 
     wxInitializeStockLists();
     wxInitializeStockObjects();
-
-#if wxUSE_WX_RESOURCES
-    wxInitializeResourceSystem();
-#endif
 
     wxBitmap::InitStandardHandlers();
 
@@ -510,12 +502,6 @@ void wxApp::CleanUp()
     wxTheApp->DeletePendingObjects();
 
     wxModule::CleanUpModules();
-
-#if wxUSE_WX_RESOURCES
-    wxCleanUpResourceSystem();
-
-    //  wxDefaultResourceTable->ClearTable();
-#endif
 
     wxDeleteStockObjects();
 

@@ -24,7 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/wxexpr.h>
+#include <wx/deprecated/wxexpr.h>
 
 #ifdef new
 #undef new
@@ -2040,9 +2040,9 @@ void wxShape::ReadAttributes(wxExpr *clause)
     wxExpr *pointExpr = attachmentList->GetFirst();
     while (pointExpr)
     {
-      wxExpr *idExpr = pointExpr->Item(0);
-      wxExpr *xExpr = pointExpr->Item(1);
-      wxExpr *yExpr = pointExpr->Item(2);
+      wxExpr *idExpr = pointExpr->Nth(0);
+      wxExpr *xExpr = pointExpr->Nth(1);
+      wxExpr *yExpr = pointExpr->Nth(2);
       if (idExpr && xExpr && yExpr)
       {
         wxAttachmentPoint *point = new wxAttachmentPoint;
@@ -2104,24 +2104,24 @@ void wxShape::ReadRegions(wxExpr *clause)
 
     if (regionExpr->Type() == wxExprList)
     {
-      wxExpr *nameExpr = regionExpr->Item(0);
-      wxExpr *textExpr = regionExpr->Item(1);
-      wxExpr *xExpr = regionExpr->Item(2);
-      wxExpr *yExpr = regionExpr->Item(3);
-      wxExpr *widthExpr = regionExpr->Item(4);
-      wxExpr *heightExpr = regionExpr->Item(5);
-      wxExpr *minWidthExpr = regionExpr->Item(6);
-      wxExpr *minHeightExpr = regionExpr->Item(7);
-      wxExpr *propXExpr = regionExpr->Item(8);
-      wxExpr *propYExpr = regionExpr->Item(9);
-      wxExpr *formatExpr = regionExpr->Item(10);
-      wxExpr *sizeExpr = regionExpr->Item(11);
-      wxExpr *familyExpr = regionExpr->Item(12);
-      wxExpr *styleExpr = regionExpr->Item(13);
-      wxExpr *weightExpr = regionExpr->Item(14);
-      wxExpr *colourExpr = regionExpr->Item(15);
-      wxExpr *penColourExpr = regionExpr->Item(16);
-      wxExpr *penStyleExpr = regionExpr->Item(17);
+      wxExpr *nameExpr = regionExpr->Nth(0);
+      wxExpr *textExpr = regionExpr->Nth(1);
+      wxExpr *xExpr = regionExpr->Nth(2);
+      wxExpr *yExpr = regionExpr->Nth(3);
+      wxExpr *widthExpr = regionExpr->Nth(4);
+      wxExpr *heightExpr = regionExpr->Nth(5);
+      wxExpr *minWidthExpr = regionExpr->Nth(6);
+      wxExpr *minHeightExpr = regionExpr->Nth(7);
+      wxExpr *propXExpr = regionExpr->Nth(8);
+      wxExpr *propYExpr = regionExpr->Nth(9);
+      wxExpr *formatExpr = regionExpr->Nth(10);
+      wxExpr *sizeExpr = regionExpr->Nth(11);
+      wxExpr *familyExpr = regionExpr->Nth(12);
+      wxExpr *styleExpr = regionExpr->Nth(13);
+      wxExpr *weightExpr = regionExpr->Nth(14);
+      wxExpr *colourExpr = regionExpr->Nth(15);
+      wxExpr *penColourExpr = regionExpr->Nth(16);
+      wxExpr *penStyleExpr = regionExpr->Nth(17);
 
       regionName = nameExpr->StringValue();
       regionText = textExpr->StringValue();

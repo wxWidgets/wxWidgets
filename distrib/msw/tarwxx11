@@ -67,7 +67,7 @@ rm -f $2/wxX11-${WXVER}
 
 ### wxX11: combined wxMotif and wxX11 distributions
 cd $1
-cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
+cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/deprecated.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
 expandlines /tmp/wxx11_in.txt /tmp/wxx11.txt
 $TAR cf $2/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
 

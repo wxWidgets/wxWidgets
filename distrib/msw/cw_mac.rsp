@@ -113,12 +113,8 @@ samples/png/*M?.xml
 samples/png/*.mcp
 samples/printing/*M?.xml
 samples/printing/*.mcp
-samples/proplist/*M?.xml
-samples/proplist/*.mcp
 samples/regtest/*M?.xml
 samples/regtest/*.mcp
-samples/resource/*M?.xml
-samples/resource/*.mcp
 samples/rotate/*M?.xml
 samples/rotate/*.mcp
 samples/sashtest/*M?.xml
@@ -147,8 +143,6 @@ samples/toolbar/*M?.xml
 samples/toolbar/*.mcp
 samples/treectrl/*M?.xml
 samples/treectrl/*.mcp
-samples/treelay/*M?.xml
-samples/treelay/*.mcp
 samples/typetest/*M?.xml
 samples/typetest/*.mcp
 samples/validate/*M?.xml
@@ -270,4 +264,14 @@ contrib/samples/fl/fl_sample3/*.mcp
 
 contrib/src/net/*M?.xml
 contrib/src/net/*.mcp
+
+contrib/src/deprecated/*M?.xml
+contrib/src/deprecated/*.mcp
+
+contrib/samples/deprecated/proplist/*M?.xml
+contrib/samples/deprecated/proplist/*.mcp
+contrib/samples/deprecated/resource/*M?.xml
+contrib/samples/deprecated/resource/*.mcp
+contrib/samples/deprecated/treelay/*M?.xml
+contrib/samples/deprecated/treelay/*.mcp
 

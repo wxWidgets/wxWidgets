@@ -70,7 +70,7 @@ cp $1/include/wx/mac/setup0.h $1/include/wx/setup.h
 echo Tarring...
 
 ### wxMac
-cat $1/distrib/msw/mac.rsp $1/distrib/msw/generic.rsp $1/distrib/msw/cw_mac.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/stc.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
+cat $1/distrib/msw/mac.rsp $1/distrib/msw/generic.rsp $1/distrib/msw/cw_mac.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/stc.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/deprecated.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
 expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
 $TAR cf $2/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
 

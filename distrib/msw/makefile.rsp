@@ -27,7 +27,6 @@ samples/help/Makefile.in
 samples/internat/Makefile.in
 samples/ipc/Makefile.in
 samples/png/Makefile.in
-samples/resource/Makefile.in
 samples/sockets/Makefile.in
 samples/html/Makefile.in
 samples/html/about/Makefile.in
@@ -52,7 +51,6 @@ samples/mobile/styles/Makefile.in
 samples/multimon/Makefile.in
 samples/notebook/Makefile.in
 samples/printing/Makefile.in
-samples/proplist/Makefile.in
 samples/propsize/Makefile.in
 samples/rotate/Makefile.in
 samples/sashtest/Makefile.in
@@ -73,7 +71,6 @@ samples/display/Makefile.in
 samples/font/Makefile.in
 samples/menu/Makefile.in
 samples/memcheck/Makefile.in
-samples/treelay/Makefile.in
 samples/opengl/Makefile.in
 samples/opengl/cube/Makefile.in
 samples/opengl/penguin/Makefile.in
@@ -140,6 +137,11 @@ contrib/samples/fl/fl_sample2/Makefile.in
 contrib/samples/fl/fl_sample3/Makefile.in
 contrib/samples/svg/Makefile.in
 contrib/src/svg/Makefile.in
+
+contrib/src/deprecated/Makefile.in
+contrib/samples/deprecated/proplist/Makefile.in
+contrib/samples/deprecated/treelay/Makefile.in
+contrib/samples/deprecated/resource/Makefile.in
 
 contrib/utils/Makefile.in
 

@@ -899,17 +899,6 @@ samples/printing/*.rc
 samples/printing/*.afm
 samples/printing/*.pro
 
-samples/proplist/*.cpp
-samples/proplist/*.h
-samples/proplist/*.def
-samples/proplist/makefile*
-samples/proplist/*.xbm
-samples/proplist/*.xpm
-samples/proplist/*.ico
-samples/proplist/*.bmp
-samples/proplist/*.rc
-samples/proplist/*.pro
-
 samples/propsize/*.cpp
 samples/propsize/*.h
 samples/propsize/*.def
@@ -920,18 +909,6 @@ samples/propsize/*.ico
 samples/propsize/*.bmp
 samples/propsize/*.rc
 samples/propsize/*.pro
-
-samples/resource/*.cpp
-samples/resource/*.h
-samples/resource/*.def
-samples/resource/*.rc
-samples/resource/*.txt
-samples/resource/*.wxr
-samples/resource/makefile*
-samples/resource/*.xbm
-samples/resource/*.xpm
-samples/resource/*.ico
-samples/resource/*.pro
 
 samples/rotate/*.cpp
 samples/rotate/*.h
@@ -1064,17 +1041,6 @@ samples/thread/*.png
 samples/thread/*.ico
 samples/thread/*.txt
 samples/thread/*.pro
-
-samples/treelay/*.cpp
-samples/treelay/*.h
-samples/treelay/makefile*
-samples/treelay/*.rc
-samples/treelay/*.def
-samples/treelay/*.ico
-samples/treelay/*.xpm
-samples/treelay/*.txt
-samples/treelay/*.bmp
-samples/treelay/*.pro
 
 samples/typetest/*.cpp
 samples/typetest/*.h

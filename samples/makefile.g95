@@ -63,10 +63,8 @@ all clean:
 	-$(MAKE) -C ownerdrw $(CMDLINE) $@
 	-$(MAKE) -C png $(CMDLINE) $@
 	-$(MAKE) -C printing $(CMDLINE) $@
-	-$(MAKE) -C proplist $(CMDLINE) $@
 	-$(MAKE) -C propsize $(CMDLINE) $@
 	-$(MAKE) -C regtest $(CMDLINE) $@
-	-$(MAKE) -C resource $(CMDLINE) $@
 	-$(MAKE) -C rotate $(CMDLINE) $@
 	-$(MAKE) -C sashtest $(CMDLINE) $@
 	-$(MAKE) -C scroll $(CMDLINE) $@
@@ -80,7 +78,6 @@ all clean:
 	-$(MAKE) -C thread $(CMDLINE) $@
 	-$(MAKE) -C toolbar $(CMDLINE) $@
 	-$(MAKE) -C treectrl $(CMDLINE) $@
-	-$(MAKE) -C treelay $(CMDLINE) $@
 	-$(MAKE) -C typetest $(CMDLINE) $@
 	-$(MAKE) -C validate $(CMDLINE) $@
 	-$(MAKE) -C widgets $(CMDLINE) $@

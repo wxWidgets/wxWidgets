@@ -25,7 +25,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/wxexpr.h>
+#include <wx/deprecated/wxexpr.h>
 
 #include <wx/ogl/basic.h>
 #include <wx/ogl/basicp.h>
@@ -563,20 +563,20 @@ void wxOpSetGDI::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
     case DRAWOP_SET_BRUSH:
     case DRAWOP_SET_FONT:
     {
-      m_gdiIndex = (int)expr->Item(1)->IntegerValue();
+      m_gdiIndex = (int)expr->Nth(1)->IntegerValue();
       break;
     }
     case DRAWOP_SET_TEXT_COLOUR:
     case DRAWOP_SET_BK_COLOUR:
     {
-      m_r = (unsigned char)expr->Item(1)->IntegerValue();
-      m_g = (unsigned char)expr->Item(2)->IntegerValue();
-      m_b = (unsigned char)expr->Item(3)->IntegerValue();
+      m_r = (unsigned char)expr->Nth(1)->IntegerValue();
+      m_g = (unsigned char)expr->Nth(2)->IntegerValue();
+      m_b = (unsigned char)expr->Nth(3)->IntegerValue();
       break;
     }
     case DRAWOP_SET_BK_MODE:
     {
-      m_mode = (int)expr->Item(1)->IntegerValue();
+      m_mode = (int)expr->Nth(1)->IntegerValue();
       break;
     }
     default:
@@ -665,10 +665,10 @@ void wxOpSetClipping::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
   {
     case DRAWOP_SET_CLIPPING_RECT:
     {
-      m_x1 = expr->Item(1)->RealValue();
-      m_y1 = expr->Item(2)->RealValue();
-      m_x2 = expr->Item(3)->RealValue();
-      m_y2 = expr->Item(4)->RealValue();
+      m_x1 = expr->Nth(1)->RealValue();
+      m_y1 = expr->Nth(2)->RealValue();
+      m_x2 = expr->Nth(3)->RealValue();
+      m_y2 = expr->Nth(4)->RealValue();
       break;
     }
     default:
@@ -950,44 +950,44 @@ void wxOpDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
     case DRAWOP_DRAW_RECT:
     case DRAWOP_DRAW_ELLIPSE:
     {
-      m_x1 = expr->Item(1)->RealValue();
-      m_y1 = expr->Item(2)->RealValue();
-      m_x2 = expr->Item(3)->RealValue();
-      m_y2 = expr->Item(4)->RealValue();
+      m_x1 = expr->Nth(1)->RealValue();
+      m_y1 = expr->Nth(2)->RealValue();
+      m_x2 = expr->Nth(3)->RealValue();
+      m_y2 = expr->Nth(4)->RealValue();
       break;
     }
     case DRAWOP_DRAW_ROUNDED_RECT:
     {
-      m_x1 = expr->Item(1)->RealValue();
-      m_y1 = expr->Item(2)->RealValue();
-      m_x2 = expr->Item(3)->RealValue();
-      m_y2 = expr->Item(4)->RealValue();
-      m_radius = expr->Item(5)->RealValue();
+      m_x1 = expr->Nth(1)->RealValue();
+      m_y1 = expr->Nth(2)->RealValue();
+      m_x2 = expr->Nth(3)->RealValue();
+      m_y2 = expr->Nth(4)->RealValue();
+      m_radius = expr->Nth(5)->RealValue();
       break;
     }
     case DRAWOP_DRAW_POINT:
     {
-      m_x1 = expr->Item(1)->RealValue();
-      m_y1 = expr->Item(2)->RealValue();
+      m_x1 = expr->Nth(1)->RealValue();
+      m_y1 = expr->Nth(2)->RealValue();
       break;
     }
     case DRAWOP_DRAW_TEXT:
     {
-      m_x1 = expr->Item(1)->RealValue();
-      m_y1 = expr->Item(2)->RealValue();
-      wxString str(expr->Item(3)->StringValue());
+      m_x1 = expr->Nth(1)->RealValue();
+      m_y1 = expr->Nth(2)->RealValue();
+      wxString str(expr->Nth(3)->StringValue());
       m_textString = copystring(str);
       break;
     }
     case DRAWOP_DRAW_ARC:
     case DRAWOP_DRAW_ELLIPTIC_ARC:
     {
-      m_x1 = expr->Item(1)->RealValue();
-      m_y1 = expr->Item(2)->RealValue();
-      m_x2 = expr->Item(3)->RealValue();
-      m_y2 = expr->Item(4)->RealValue();
-      m_x3 = expr->Item(5)->RealValue();
-      m_y3 = expr->Item(6)->RealValue();
+      m_x1 = expr->Nth(1)->RealValue();
+      m_y1 = expr->Nth(2)->RealValue();
+      m_x2 = expr->Nth(3)->RealValue();
+      m_y2 = expr->Nth(4)->RealValue();
+      m_x3 = expr->Nth(5)->RealValue();
+      m_y3 = expr->Nth(6)->RealValue();
       break;
     }
     default:
@@ -1156,7 +1156,7 @@ wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
 
 void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
 {
-  m_noPoints = (int)expr->Item(1)->IntegerValue();
+  m_noPoints = (int)expr->Nth(1)->IntegerValue();
 
   char buf1[5];
   char buf2[5];
@@ -1164,7 +1164,7 @@ void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
   m_points = new wxRealPoint[m_noPoints];
   int i = 0;
   int bufPtr = 0;
-  wxString hexString = expr->Item(2)->StringValue();
+  wxString hexString = expr->Nth(2)->StringValue();
   while (i < m_noPoints)
   {
     buf1[0] = hexString[(size_t)bufPtr];
@@ -1621,16 +1621,16 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
     }
     else
     {
-      wxExpr *idExpr = expr->Item(0);
+      wxExpr *idExpr = expr->Nth(0);
       switch (idExpr->IntegerValue())
       {
         case gyTYPE_PEN:
         {
-          int penWidth = (int)expr->Item(1)->IntegerValue();
-          int penStyle = (int)expr->Item(2)->IntegerValue();
-          int penRed = (int)expr->Item(3)->IntegerValue();
-          int penGreen = (int)expr->Item(4)->IntegerValue();
-          int penBlue = (int)expr->Item(5)->IntegerValue();
+          int penWidth = (int)expr->Nth(1)->IntegerValue();
+          int penStyle = (int)expr->Nth(2)->IntegerValue();
+          int penRed = (int)expr->Nth(3)->IntegerValue();
+          int penGreen = (int)expr->Nth(4)->IntegerValue();
+          int penBlue = (int)expr->Nth(5)->IntegerValue();
           wxColour col(penRed, penGreen, penBlue);
           wxPen *p = wxThePenList->FindOrCreatePen(col, penWidth, penStyle);
           if (!p)
@@ -1640,10 +1640,10 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
         }
         case gyTYPE_BRUSH:
         {
-          int brushStyle = (int)expr->Item(1)->IntegerValue();
-          int brushRed = (int)expr->Item(2)->IntegerValue();
-          int brushGreen = (int)expr->Item(3)->IntegerValue();
-          int brushBlue = (int)expr->Item(4)->IntegerValue();
+          int brushStyle = (int)expr->Nth(1)->IntegerValue();
+          int brushRed = (int)expr->Nth(2)->IntegerValue();
+          int brushGreen = (int)expr->Nth(3)->IntegerValue();
+          int brushBlue = (int)expr->Nth(4)->IntegerValue();
           wxColour col(brushRed, brushGreen, brushBlue);
           wxBrush *b = wxTheBrushList->FindOrCreateBrush(col, brushStyle);
           if (!b)
@@ -1653,11 +1653,11 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
         }
         case gyTYPE_FONT:
         {
-          int fontPointSize = (int)expr->Item(1)->IntegerValue();
-          int fontFamily = (int)expr->Item(2)->IntegerValue();
-          int fontStyle = (int)expr->Item(3)->IntegerValue();
-          int fontWeight = (int)expr->Item(4)->IntegerValue();
-          int fontUnderlined = (int)expr->Item(5)->IntegerValue();
+          int fontPointSize = (int)expr->Nth(1)->IntegerValue();
+          int fontFamily = (int)expr->Nth(2)->IntegerValue();
+          int fontStyle = (int)expr->Nth(3)->IntegerValue();
+          int fontWeight = (int)expr->Nth(4)->IntegerValue();
+          int fontUnderlined = (int)expr->Nth(5)->IntegerValue();
           m_gdiObjects.Append(wxTheFontList->FindOrCreateFont(fontPointSize,
                            fontFamily, fontStyle, fontWeight, (fontUnderlined != 0)));
           break;
@@ -1687,7 +1687,7 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
     }
     else
     {
-      wxExpr *idExpr = expr->Item(0);
+      wxExpr *idExpr = expr->Nth(0);
       int opId = (int)idExpr->IntegerValue();
       switch (opId)
       {

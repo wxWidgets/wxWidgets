@@ -185,17 +185,11 @@ samples/png/png.dsw
 samples/printing/printing.dsp
 samples/printing/printing.dsw
 
-samples/proplist/proplist.dsp
-samples/proplist/proplist.dsw
-
 samples/propsize/propsize.dsp
 samples/propsize/propsize.dsw
 
 samples/regtest/regtest.dsp
 samples/regtest/regtest.dsw
-
-samples/resource/resource.dsp
-samples/resource/resource.dsw
 
 samples/rotate/rotate.dsp
 samples/rotate/rotate.dsw
@@ -237,9 +231,6 @@ samples/toolbar/toolbar.dsw
 
 samples/treectrl/treetest.dsp
 samples/treectrl/treetest.dsw
-
-samples/treelay/treelay.dsp
-samples/treelay/treelay.dsw
 
 samples/typetest/typetest.dsp
 samples/typetest/typetest.dsw
@@ -376,4 +367,16 @@ contrib/samples/fl/fl_sample3/fl_demo.dsw
 
 contrib/src/net/NetVC.dsp
 contrib/src/net/NetVC.dsw
+
+contrib/src/deprecated/deprecated.dsp
+
+contrib/samples/deprecated/proplist/proplist.dsp
+contrib/samples/deprecated/proplist/proplist.dsw
+
+contrib/samples/deprecated/resource/resource.dsp
+contrib/samples/deprecated/resource/resource.dsw
+
+contrib/samples/deprecated/treelay/treelay.dsp
+contrib/samples/deprecated/treelay/treelay.dsw
+
 

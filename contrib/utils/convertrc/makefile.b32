@@ -8,7 +8,7 @@
 # Makefile : Builds convert for 32-bit BC++
 
 WXDIR = $(WXWIN)
-EXTRALIBS=$(WXDIR)\lib\wxxrc.lib
+EXTRALIBS=$(WXDIR)\lib\wxxrc.lib $(WXDIR)\lib\wxdeprecated.lib
 
 TARGET=wxconvert
 

@@ -21,7 +21,8 @@
 #include "wx/mdi.h"
 #endif
 
-#include "wx/resource.h"
+#include <wx/deprecated/setup.h>
+#include <wx/deprecated/resource.h>
 #include "wx/config.h"
 #include "wx/laywin.h"
 
