@@ -167,18 +167,8 @@ void wxDialog::DoShowModal()
 
     wxModalDialogs.Append(this);
 
-      wxWindow *parent = GetParent();
+    wxWindow *parent = GetParent();
 
-    // remember where the focus was
-    wxWindow *winFocus = FindFocus();
-    if ( !winFocus )
-    {
-        winFocus = parent;
-    }
-    if ( !winFocus )
-    {
-        winFocus = wxTheApp->GetTopWindow();
-    }
 #if TARGET_CARBON
     BeginAppModalStateForWindow(  (WindowRef) MacGetWindowRef()) ;
 #else
@@ -198,13 +188,6 @@ void wxDialog::DoShowModal()
     // TODO probably reenable the parent window if any
     s_macIsInModalLoop = formerModal ;
 #endif
-
-
-    // and restore focus
-    if ( winFocus )
-    {
-        winFocus->SetFocus();
-    }
 }
 
 
