@@ -2,13 +2,11 @@
 # Makefile : Builds wxWindows contrib src for Unix.
 #
 
+CONTRIB_SUBDIRS=ogl mmedia stc
+
 all:
-	cd ogl; make
-	cd mmedia; make
-	cd stc; make
+	@for d in $(CONTRIB_SUBDIRS); do (cd $$d && $(MAKE)); done
 
 clean:
-	cd ogl; make clean
-	cd mmedia; make clean
-	cd stc; make clean
+	@for d in $(CONTRIB_SUBDIRS); do (cd $$d && $(MAKE) clean); done
 
