@@ -293,8 +293,8 @@ void wxGenericTreeItem::GetSize( int &x, int &y, const wxTreeCtrl *theTree )
 }
 
 wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
-					       const wxTreeCtrl *theTree,
-					       int &flags)
+                                               const wxTreeCtrl *theTree,
+                                               int &flags)
 {
   if ((point.y > m_y) && (point.y < m_y + theTree->GetLineHeight(this)))
   {
@@ -321,9 +321,9 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
           theTree->m_imageListNormal->GetSize(m_image, image_w, image_h);
 
       if ((image_w != -1) && (point.x <= m_x + image_w + 1))
-	flags|=wxTREE_HITTEST_ONITEMICON;
+        flags|=wxTREE_HITTEST_ONITEMICON;
       else
-	flags|=wxTREE_HITTEST_ONITEMLABEL;
+        flags|=wxTREE_HITTEST_ONITEMLABEL;
 
       return this;
     }
@@ -935,7 +935,7 @@ void wxTreeCtrl::UnselectAllChildren(wxGenericTreeItem *item)
       wxArrayGenericTreeItems& children = item->GetChildren();
       size_t count = children.Count();
       for ( size_t n = 0; n < count; ++n )
-	UnselectAllChildren(children[n]);
+        UnselectAllChildren(children[n]);
     }
 }
 
@@ -980,7 +980,7 @@ bool wxTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericT
       wxArrayGenericTreeItems& children = crt_item->GetChildren();
       size_t count = children.Count();
       for ( size_t n = 0; n < count; ++n )
-	if (TagAllChildrenUntilLast(children[n], last_item, select)) return TRUE;
+        if (TagAllChildrenUntilLast(children[n], last_item, select)) return TRUE;
     }
 
   return FALSE;
@@ -1011,8 +1011,8 @@ void wxTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeItem *it
 }
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
-			    bool unselect_others,
-			    bool extended_select)
+                            bool unselect_others,
+                            bool extended_select)
 {
     wxCHECK_RET( itemId.IsOk(), _T("invalid tree item") );
 
@@ -1043,7 +1043,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     if (unselect_others)
     {
         if (is_single) Unselect(); // to speed up thing
-	else UnselectAll();
+        else UnselectAll();
     }
 
     // shift press
@@ -1057,13 +1057,13 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     {
         bool select=TRUE; // the default
 
-	// Check if we need to toggle hilight (ctrl mode)
-	if (!unselect_others)
-	  select=!item->HasHilight();
+        // Check if we need to toggle hilight (ctrl mode)
+        if (!unselect_others)
+          select=!item->HasHilight();
 
         m_current = m_key_current = item;
-	m_current->SetHilight(select);
-	RefreshLine( m_current );
+        m_current->SetHilight(select);
+        RefreshLine( m_current );
     }
 
     event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
@@ -1079,7 +1079,7 @@ void wxTreeCtrl::FillArray(wxGenericTreeItem *item, wxArrayTreeItemIds &array) c
       wxArrayGenericTreeItems& children = item->GetChildren();
       size_t count = children.Count();
       for ( size_t n = 0; n < count; ++n )
-	FillArray(children[n],array);
+        FillArray(children[n],array);
     }
 }
 
@@ -1137,7 +1137,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId &item)
         m_anchor->GetSize( x, y, this );
         y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
         int x_pos = GetScrollPos( wxHORIZONTAL );
-	// Item should appear at top
+        // Item should appear at top
         SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT, x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT, x_pos, item_y/PIXELS_PER_UNIT );
     }
     else if (item_y+GetLineHeight(gitem) > start_y+client_h)
@@ -1149,7 +1149,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId &item)
        y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
        item_y += PIXELS_PER_UNIT+2;
        int x_pos = GetScrollPos( wxHORIZONTAL );
-	// Item should appear at bottom
+        // Item should appear at bottom
        SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT, x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT, x_pos, (item_y+GetLineHeight(gitem)-client_h)/PIXELS_PER_UNIT );
     }
 }
@@ -1265,7 +1265,7 @@ void wxTreeCtrl::AdjustMyScrollbars()
         int y = 0;
         m_anchor->GetSize( x, y, this );
         //y += GetLineHeight(m_anchor);
-	y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+        y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
         int x_pos = GetScrollPos( wxHORIZONTAL );
         int y_pos = GetScrollPos( wxVERTICAL );
         SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT, x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT, x_pos, y_pos );
@@ -1392,12 +1392,12 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
             dc.SetPen( *wxGREY_PEN );
             dc.SetBrush( *wxWHITE_BRUSH );
             dc.DrawRectangle( horizX+(m_indent-5), y-4, 11, 9 );
-	    
+            
             dc.SetPen( *wxBLACK_PEN );
             dc.DrawLine( horizX+(m_indent-2), y, horizX+(m_indent+3), y );
             if (!item->IsExpanded())
                 dc.DrawLine( horizX+m_indent, y-2, horizX+m_indent, y+3 );
-		
+                
             dc.SetPen( m_dottedPen );
         }
 
@@ -1439,19 +1439,19 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
         wxArrayGenericTreeItems& children = item->GetChildren();
         size_t n, count = children.Count();
         for ( n = 0; n < count; ++n )
-	{
-	    semiOldY=y;
-	    PaintLevel( children[n], dc, level+1, y );
-	}
+        {
+            semiOldY=y;
+            PaintLevel( children[n], dc, level+1, y );
+        }
 
         // it may happen that the item is expanded but has no items (when you
         // delete all its children for example) - don't draw the vertical line
         // in this case
         if (count > 0)
-	  {
-	    semiOldY+=GetLineHeight(children[--n])/2;
+          {
+            semiOldY+=GetLineHeight(children[--n])/2;
             dc.DrawLine( horizX+m_indent, oldY+5, horizX+m_indent, semiOldY );
-	  }
+          }
     }
 }
 
@@ -1588,18 +1588,18 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                 if (!prev)
                 {
                     prev = GetParent( m_key_current );
-		    if (prev)
-		    {
+                    if (prev)
+                    {
                         long cockie = 0;
                         wxTreeItemId current = m_key_current;
                         if (current == GetFirstChild( prev, cockie ))
                         {
                             // otherwise we return to where we came from
                             SelectItem( prev, unselect_others, extended_select );
-			    m_key_current=prev.m_pItem;
-			    EnsureVisible( prev );
+                            m_key_current=prev.m_pItem;
+                            EnsureVisible( prev );
                             break;
-			}
+                        }
                     }
                 }
                 if (prev)
@@ -1614,7 +1614,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                     }
 
                     SelectItem( prev, unselect_others, extended_select );
-		    m_key_current=prev.m_pItem;
+                    m_key_current=prev.m_pItem;
                     EnsureVisible( prev );
                 }
             }
@@ -1645,7 +1645,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                     long cookie = 0;
                     wxTreeItemId child = GetFirstChild( m_key_current, cookie );
                     SelectItem( child, unselect_others, extended_select );
-		    m_key_current=child.m_pItem;
+                    m_key_current=child.m_pItem;
                     EnsureVisible( child );
                 }
                 else
@@ -1665,7 +1665,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                     if (next)
                     {
                         SelectItem( next, unselect_others, extended_select );
-			m_key_current=next.m_pItem;
+                        m_key_current=next.m_pItem;
                         EnsureVisible( next );
                     }
                 }
@@ -1777,7 +1777,8 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
     if (onButton)
     {
         Toggle( item );
-	if (is_multiple) return;
+        if (is_multiple)
+            return;
     }
 
     SelectItem(item, unselect_others, extended_select);
