@@ -42,6 +42,7 @@
         getting mucked up; when the user quits, we get errors about being
         unable to call del on a 'None' object.
 """
+import sys
 import cPickle, os.path
 from wxPython.wx import *
 
@@ -307,7 +308,7 @@ class DrawingFrame(wxFrame):
 
         toolSizer = wxGridSizer(0, 2, 5, 5)
         toolSizer.Add(self.selectIcon)
-        toolSizer.Add(0, 0) # Gap to make tool icons line up nicely.
+        toolSizer.Add((0, 0)) # Gap to make tool icons line up nicely.
         toolSizer.Add(self.lineIcon)
         toolSizer.Add(self.rectIcon)
         toolSizer.Add(self.ellipseIcon)
@@ -333,20 +334,20 @@ class DrawingFrame(wxFrame):
 
         margin = wxTOP | wxLEFT | wxRIGHT | wxALIGN_CENTRE
         self.toolPalette.Add(toolSizer,            0, margin, 5)
-        self.toolPalette.Add(0, 0,                 0, margin, 5) # Spacer.
+        self.toolPalette.Add((0, 0),               0, margin, 5) # Spacer.
         self.toolPalette.Add(self.optionIndicator, 0, margin, 5)
         self.toolPalette.Add(optionSizer,          0, margin, 5)
 
         # Make the tool palette icons respond when the user clicks on them.
 
-        EVT_LEFT_DOWN(self.selectIcon,  self.onToolIconClick)
-        EVT_LEFT_DOWN(self.lineIcon,    self.onToolIconClick)
-        EVT_LEFT_DOWN(self.rectIcon,    self.onToolIconClick)
-        EVT_LEFT_DOWN(self.ellipseIcon, self.onToolIconClick)
-        EVT_LEFT_DOWN(self.textIcon,    self.onToolIconClick)
-        EVT_LEFT_DOWN(self.penOptIcon,  self.onPenOptionIconClick)
-        EVT_LEFT_DOWN(self.fillOptIcon, self.onFillOptionIconClick)
-        EVT_LEFT_DOWN(self.lineOptIcon, self.onLineOptionIconClick)
+        EVT_BUTTON(self.selectIcon,  -1, self.onToolIconClick)
+        EVT_BUTTON(self.lineIcon,    -1, self.onToolIconClick)
+        EVT_BUTTON(self.rectIcon,    -1, self.onToolIconClick)
+        EVT_BUTTON(self.ellipseIcon, -1, self.onToolIconClick)
+        EVT_BUTTON(self.textIcon,    -1, self.onToolIconClick)
+        EVT_BUTTON(self.penOptIcon,  -1, self.onPenOptionIconClick)
+        EVT_BUTTON(self.fillOptIcon, -1, self.onFillOptionIconClick)
+        EVT_BUTTON(self.lineOptIcon, -1, self.onLineOptionIconClick)
 
         # Setup the main drawing area.
 
@@ -408,13 +409,14 @@ class DrawingFrame(wxFrame):
     def onToolIconClick(self, event):
         """ Respond to the user clicking on one of our tool icons.
         """
-        iconID = wxPyTypeCast(event.GetEventObject(), "wxWindow").GetId()
+        iconID = event.GetEventObject().GetId()
+        print iconID
         if   iconID == id_SELECT:   self.doChooseSelectTool()
         elif iconID == id_LINE:     self.doChooseLineTool()
         elif iconID == id_RECT:     self.doChooseRectTool()
         elif iconID == id_ELLIPSE:  self.doChooseEllipseTool()
         elif iconID == id_TEXT:     self.doChooseTextTool()
-        else:                       wxBell()
+        else:                       wxBell(); print "1"
 
 
     def onPenOptionIconClick(self, event):
@@ -519,7 +521,7 @@ class DrawingFrame(wxFrame):
             selecting    = False
             dashedLine   = True
         else:
-            wxBell()
+            wxBell(); print "2"
             return
 
         if event.LeftDown():
@@ -752,7 +754,7 @@ class DrawingFrame(wxFrame):
             self.drawPanel.Refresh()
             self._adjustMenus()
         else:
-            wxBell()
+            wxBell(); print "3"
 
 
     def onRightClick(self, event):
@@ -1174,14 +1176,14 @@ class DrawingFrame(wxFrame):
         btnOK = wxButton(panel, wxID_OK, "OK")
 
         panelSizer.Add(imageSizer, 0, wxALIGN_CENTRE)
-        panelSizer.Add(10, 10) # Spacer.
+        panelSizer.Add((10, 10)) # Spacer.
         panelSizer.Add(lab2, 0, wxALIGN_CENTRE)
-        panelSizer.Add(10, 10) # Spacer.
+        panelSizer.Add((10, 10)) # Spacer.
         panelSizer.Add(lab3, 0, wxALIGN_CENTRE)
         panelSizer.Add(lab4, 0, wxALIGN_CENTRE)
-        panelSizer.Add(10, 10) # Spacer.
+        panelSizer.Add((10, 10)) # Spacer.
         panelSizer.Add(lab5, 0, wxALIGN_CENTRE)
-        panelSizer.Add(10, 10) # Spacer.
+        panelSizer.Add((10, 10)) # Spacer.
         panelSizer.Add(btnOK, 0, wxALL | wxALIGN_CENTRE, 5)
 
         panel.SetAutoLayout(True)
@@ -1526,7 +1528,7 @@ class DrawingFrame(wxFrame):
         """
         if obj.getType() == obj_TEXT:
             # Not allowed to resize text objects -- they're sized to fit text.
-            wxBell()
+            wxBell(); print "4"
             return
 
         self._saveUndoInfo()
@@ -1630,7 +1632,7 @@ class DrawingFrame(wxFrame):
         elif id == id_LINESIZE_4: self._setLineSize(4)
         elif id == id_LINESIZE_5: self._setLineSize(5)
         else:
-            wxBell()
+            wxBell(); print "5"
             return
 
         self.optionIndicator.setLineSize(self.lineSize)
@@ -2231,10 +2233,10 @@ class DrawingObject:
 
 #----------------------------------------------------------------------------
 
-class ToolPaletteIcon(wxStaticBitmap):
+class ToolPaletteIcon(wxBitmapButton):
     """ An icon appearing in the tool palette area of our sketching window.
 
-        Note that this is actually implemented as a wxStaticBitmap rather
+        Note that this is actually implemented as a wxBitmap rather
         than as a wxIcon.  wxIcon has a very specific meaning, and isn't
         appropriate for this more general use.
     """
@@ -2250,7 +2252,7 @@ class ToolPaletteIcon(wxStaticBitmap):
             The icon name is used to get the appropriate bitmap for this icon.
         """
         bmp = wxBitmap("images/" + iconName + "Icon.bmp", wxBITMAP_TYPE_BMP)
-        wxStaticBitmap.__init__(self, parent, iconID, bmp, wxDefaultPosition,
+        wxBitmapButton.__init__(self, parent, iconID, bmp, wxDefaultPosition,
                                 wxSize(bmp.GetWidth(), bmp.GetHeight()))
         self.SetToolTip(wxToolTip(toolTip))
 
@@ -2268,7 +2270,7 @@ class ToolPaletteIcon(wxStaticBitmap):
 
         bmp = wxBitmap("images/" + self.iconName + "IconSel.bmp",
                        wxBITMAP_TYPE_BMP)
-        self.SetBitmap(bmp)
+        self.SetBitmapLabel(bmp)
         self.isSelected = True
 
 
@@ -2281,7 +2283,7 @@ class ToolPaletteIcon(wxStaticBitmap):
 
         bmp = wxBitmap("images/" + self.iconName + "Icon.bmp",
                        wxBITMAP_TYPE_BMP)
-        self.SetBitmap(bmp)
+        self.SetBitmapLabel(bmp)
         self.isSelected = False
 
 #----------------------------------------------------------------------------
@@ -2389,7 +2391,7 @@ class EditTextObjectDialog(wxDialog):
         comboSizer = wxBoxSizer(wxHORIZONTAL)
         comboSizer.Add(fontLabel,      0, gap | wxALIGN_CENTRE_VERTICAL, 5)
         comboSizer.Add(self.fontCombo, 0, gap, 5)
-        comboSizer.Add(5, 5) # Spacer.
+        comboSizer.Add((5, 5)) # Spacer.
         comboSizer.Add(sizeLabel,      0, gap | wxALIGN_CENTRE_VERTICAL, 5)
         comboSizer.Add(self.sizeCombo, 0, gap, 5)
 
@@ -2415,10 +2417,10 @@ class EditTextObjectDialog(wxDialog):
 
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(self.textCtrl, 1, gap | wxEXPAND,       5)
-        sizer.Add(10, 10) # Spacer.
+        sizer.Add((10, 10)) # Spacer.
         sizer.Add(comboSizer,    0, gap | wxALIGN_CENTRE, 5)
         sizer.Add(styleSizer,    0, gap | wxALIGN_CENTRE, 5)
-        sizer.Add(10, 10) # Spacer.
+        sizer.Add((10, 10)) # Spacer.
         sizer.Add(btnSizer,      0, gap | wxALIGN_CENTRE, 5)
 
         self.SetAutoLayout(True)
@@ -2511,7 +2513,7 @@ class TextObjectValidator(wxPyValidator):
     def Validate(self, win):
         """ Validate the contents of the given text control.
         """
-        textCtrl = wxPyTypeCast(self.GetWindow(), "wxTextCtrl")
+        textCtrl = self.GetWindow()
         text = textCtrl.GetValue()
 
         if len(text) == 0:
