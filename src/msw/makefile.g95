@@ -84,6 +84,7 @@ COMMONOBJS = \
   $(COMMDIR)/file.$(OBJSUFF) \
   $(COMMDIR)/fileconf.$(OBJSUFF) \
   $(COMMDIR)/filefn.$(OBJSUFF) \
+  $(COMMDIR)/framecmn.$(OBJSUFF) \
   $(COMMDIR)/gdicmn.$(OBJSUFF) \
   $(COMMDIR)/helpbase.$(OBJSUFF) \
   $(COMMDIR)/intl.$(OBJSUFF) \
@@ -116,7 +117,8 @@ COMMONOBJS = \
   $(COMMDIR)/mstream.$(OBJSUFF) \
   $(COMMDIR)/zstream.$(OBJSUFF) \
   $(COMMDIR)/datstrm.$(OBJSUFF) \
-  $(COMMDIR)/extended.$(OBJSUFF)
+  $(COMMDIR)/extended.$(OBJSUFF) \
+  $(COMMDIR)/wincmn.$(OBJSUFF)
 
 MSWOBJS = \
   app.$(OBJSUFF) \

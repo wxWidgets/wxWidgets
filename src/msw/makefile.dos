@@ -78,6 +78,8 @@ COMMONOBJS = \
   $(COMMDIR)\event.obj \
   $(COMMDIR)\file.obj \
   $(COMMDIR)\filefn.obj \
+  $(COMMDIR)\fileconf.obj \
+  $(COMMDIR)\framecmn.obj \
   $(COMMDIR)\gdicmn.obj \
   $(COMMDIR)\intl.obj \
   $(COMMDIR)\helpbase.obj \
@@ -111,10 +113,8 @@ COMMONOBJS = \
   $(COMMDIR)\mstream.obj \
   $(COMMDIR)\zstream.obj \
   $(COMMDIR)\datstrm.obj \
-  $(COMMDIR)\extended.obj
-
-# Nested classes: won't comple
-#  $(COMMDIR)\fileconf.obj \
+  $(COMMDIR)\extended.obj \
+  $(COMMDIR)\wincmn.obj
 
 MSWOBJS = \
   $(MSWDIR)\app.obj \
@@ -674,6 +674,11 @@ $(COMMDIR)/filefn.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
+$(COMMDIR)/framecmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 $(COMMDIR)/gdicmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -832,6 +837,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 $(COMMDIR)/extended.obj:     $*.c
         cl @<<
 $(CPPFLAGS2) /Fo$@ /c /Tp $*.c
+<<
+
+$(COMMDIR)/wincmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/y_tab.obj:     $*.c $(COMMDIR)/lex_yy.c

@@ -4430,44 +4430,6 @@ void wxWindow::SetupColours(void)
 		SetBackgroundColour(GetParent()->GetBackgroundColour());
 }
 
-// Do Update UI processing for child controls
-
-// TODO: should this be implemented for the child window rather
-// than the parent? Then you can override it e.g. for wxCheckBox
-// to do the Right Thing rather than having to assume a fixed number
-// of control classes.
-
-void wxWindow::UpdateWindowUI(void)
-{
-		wxWindowID id = GetId();
-		if (id > 0)
-		{
-			wxUpdateUIEvent event(id);
-			event.m_eventObject = this;
-
-			if (this->GetEventHandler()->ProcessEvent(event))
-			{
-				if (event.GetSetEnabled())
-					this->Enable(event.GetEnabled());
-
-				if (event.GetSetText() && this->IsKindOf(CLASSINFO(wxControl)))
-					((wxControl*)this)->SetLabel(event.GetText());
-
-				if (this->IsKindOf(CLASSINFO(wxCheckBox)))
-				{
-					if (event.GetSetChecked())
-						((wxCheckBox *) this)->SetValue(event.GetChecked());
-				}
-				else if (this->IsKindOf(CLASSINFO(wxRadioButton)))
-				{
-					if (event.GetSetChecked())
-						((wxRadioButton *) this)->SetValue(event.GetChecked());
-				}
-			}
-		}
-
-}
-
 void wxWindow::OnIdle(wxIdleEvent& event)
 {
     // Check if we need to send a LEAVE event

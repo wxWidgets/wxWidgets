@@ -78,6 +78,7 @@ COMMONOBJS = \
   $(MSWDIR)\file.obj \
   $(MSWDIR)\fileconf.obj \
   $(MSWDIR)\filefn.obj \
+  $(MSWDIR)\framecmn.obj \
   $(MSWDIR)\gdicmn.obj \
   $(MSWDIR)\helpbase.obj \
   $(MSWDIR)\intl.obj \
@@ -110,7 +111,8 @@ COMMONOBJS = \
   $(MSWDIR)\mstream.obj \
   $(MSWDIR)\zstream.obj \
   $(MSWDIR)\datstrm.obj \
-  $(MSWDIR)\extended.obj
+  $(MSWDIR)\extended.obj \
+  $(MSWDIR)\wincmn.obj
 
 #  $(MSWDIR)\matrix.obj \
 
@@ -416,6 +418,8 @@ $(MSWDIR)\fileconf.obj:     $(COMMDIR)\fileconf.$(SRCSUFF)
 
 $(MSWDIR)\filefn.obj:     $(COMMDIR)\filefn.$(SRCSUFF)
 
+$(MSWDIR)\framecmn.obj:     $(COMMDIR)\framecmn.$(SRCSUFF)
+
 $(MSWDIR)\gdicmn.obj:     $(COMMDIR)\gdicmn.$(SRCSUFF)
 
 $(MSWDIR)\intl.obj:     $(COMMDIR)\intl.$(SRCSUFF)
@@ -479,6 +483,8 @@ $(MSWDIR)\zstream.obj:	$(COMMDIR)\zstream.$(SRCSUFF)
 $(MSWDIR)\fstream.obj:	$(COMMDIR)\fstream.$(SRCSUFF)
 
 $(MSWDIR)\stream.obj:	$(COMMDIR)\stream.$(SRCSUFF)
+
+$(MSWDIR)\wincmn.obj:	$(COMMDIR)\wincmn.$(SRCSUFF)
 
 $(MSWDIR)\extended.obj:	$(COMMDIR)\extended.c
 

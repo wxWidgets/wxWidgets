@@ -71,8 +71,6 @@ GENERICOBJS= \
   $(GENDIR)\tabg.obj \
   $(GENDIR)\textdlgg.obj
 
-#  $(COMMDIR)\fileconf.obj \
-
 COMMONOBJS = \
   $(COMMDIR)\cmndata.obj \
   $(COMMDIR)\config.obj \
@@ -81,6 +79,8 @@ COMMONOBJS = \
   $(COMMDIR)\event.obj \
   $(COMMDIR)\file.obj \
   $(COMMDIR)\filefn.obj \
+  $(COMMDIR)\fileconf.obj \
+  $(COMMDIR)\framecmn.obj \
   $(COMMDIR)\gdicmn.obj \
   $(COMMDIR)\intl.obj \
   $(COMMDIR)\ipcbase.obj \
@@ -114,7 +114,9 @@ COMMONOBJS = \
   $(COMMDIR)\mstream.obj \
   $(COMMDIR)\zstream.obj \
   $(COMMDIR)\stream.obj \
-  $(COMMDIR)\datstrm.obj
+  $(COMMDIR)\wincmn.obj
+
+#  $(COMMDIR)\datstrm.obj
 
 MSWOBJS = \
   $(MSWDIR)\app.obj \
@@ -750,6 +752,11 @@ $(COMMDIR)/filefn.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
+$(COMMDIR)/framecmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
 $(COMMDIR)/gdicmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
@@ -927,6 +934,11 @@ $(CPPFLAGS2) /c /Tp $*.c /Fo$@
 <<
 
 $(COMMDIR)/process.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/wincmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS2) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
