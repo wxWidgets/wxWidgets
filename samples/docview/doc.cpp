@@ -23,6 +23,7 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+#include "wx/txtstrm.h"
 
 #if !wxUSE_DOC_VIEW_ARCHITECTURE
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
@@ -42,6 +43,7 @@ DrawingDocument::~DrawingDocument(void)
   doodleSegments.DeleteContents(TRUE);
 }
 
+#if wxUSE_STD_IOSTREAM
 ostream& DrawingDocument::SaveObject(ostream& stream)
 {
   wxDocument::SaveObject(stream);
@@ -58,7 +60,30 @@ ostream& DrawingDocument::SaveObject(ostream& stream)
   }
   return stream;
 }
+#else
+bool DrawingDocument::SaveObject(wxOutputStream &stream)
+{
+  wxDocument::SaveObject(stream);
+  
+  wxTextOutputStream text_stream( stream );
 
+  wxInt32 n = doodleSegments.Number();
+  text_stream << n << "\n";
+  
+  wxNode *node = doodleSegments.First();
+  while (node)
+  {
+    DoodleSegment *segment = (DoodleSegment *)node->Data();
+    segment->SaveObject(stream);
+    text_stream << "\n";
+    
+    node = node->Next();
+  }
+  return TRUE;
+}
+#endif
+
+#if wxUSE_STD_IOSTREAM
 istream& DrawingDocument::LoadObject(istream& stream)
 {
   wxDocument::LoadObject(stream);
@@ -75,6 +100,26 @@ istream& DrawingDocument::LoadObject(istream& stream)
 
   return stream;
 }
+#else
+bool DrawingDocument::LoadObject(wxInputStream& stream)
+{
+  wxDocument::LoadObject(stream);
+
+  wxTextInputStream text_stream( stream );
+  
+  wxInt32 n = 0;
+  text_stream >> n;
+
+  for (int i = 0; i < n; i++)
+  {
+    DoodleSegment *segment = new DoodleSegment;
+    segment->LoadObject(stream);
+    doodleSegments.Append(segment);
+  }
+
+  return TRUE;
+}
+#endif
 
 DoodleSegment::DoodleSegment(void)
 {
@@ -103,6 +148,7 @@ DoodleSegment::~DoodleSegment(void)
   lines.DeleteContents(TRUE);
 }
 
+#if wxUSE_STD_IOSTREAM
 ostream& DoodleSegment::SaveObject(ostream& stream)
 {
   stream << lines.Number() << '\n';
@@ -115,7 +161,29 @@ ostream& DoodleSegment::SaveObject(ostream& stream)
   }
   return stream;
 }
+#else
+bool DoodleSegment::SaveObject(wxOutputStream& stream)
+{
+  wxTextOutputStream text_stream( stream );
 
+  wxInt32 n = lines.Number();
+  text_stream << n << "\n";
+  
+  wxNode *node = lines.First();
+  while (node)
+  {
+    DoodleLine *line = (DoodleLine *)node->Data();
+    text_stream << line->x1 << " " << 
+                   line->y1 << " " << 
+		   line->x2 << " " << 
+		   line->y2 << "\n";
+    node = node->Next();
+  }
+  return TRUE;
+}
+#endif
+
+#if wxUSE_STD_IOSTREAM
 istream& DoodleSegment::LoadObject(istream& stream)
 {
   int n = 0;
@@ -129,6 +197,26 @@ istream& DoodleSegment::LoadObject(istream& stream)
   }
   return stream;
 }
+#else
+bool DoodleSegment::LoadObject(wxInputStream& stream)
+{
+  wxTextInputStream text_stream( stream );
+  
+  wxInt32 n = 0;
+  text_stream >> n;
+
+  for (int i = 0; i < n; i++)
+  {
+    DoodleLine *line = new DoodleLine;
+    text_stream >> line->x1 >> 
+                   line->y1 >> 
+		   line->x2 >> 
+		   line->y2;
+    lines.Append(line);
+  }
+  return TRUE;
+}
+#endif
 
 void DoodleSegment::Draw(wxDC *dc)
 {

@@ -22,10 +22,10 @@
 class DoodleLine: public wxObject
 {
  public:
-  long x1;
-  long y1;
-  long x2;
-  long y2;
+  wxInt32 x1;
+  wxInt32 y1;
+  wxInt32 x2;
+  wxInt32 y2;
 };
 
 // Contains a list of lines: represents a mouse-down doodle
@@ -39,8 +39,14 @@ class DoodleSegment: public wxObject
   ~DoodleSegment(void);
 
   void Draw(wxDC *dc);
+#if wxUSE_STD_IOSTREAM
   ostream& SaveObject(ostream& stream);
   istream& LoadObject(istream& stream);
+#else
+  bool SaveObject(wxOutputStream& stream);
+  bool LoadObject(wxInputStream& stream);
+#endif
+
 };
 
 class DrawingDocument: public wxDocument
@@ -53,8 +59,13 @@ class DrawingDocument: public wxDocument
   DrawingDocument(void);
   ~DrawingDocument(void);
 
+#if wxUSE_STD_IOSTREAM
   ostream& SaveObject(ostream& stream);
   istream& LoadObject(istream& stream);
+#else
+  bool SaveObject(wxOutputStream& stream);
+  bool LoadObject(wxInputStream& stream);
+#endif
 
   inline wxList& GetDoodleSegments(void) const { return (wxList&) doodleSegments; };
 };

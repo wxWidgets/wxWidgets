@@ -419,54 +419,54 @@ enum
 
 // fixed length types
 
-typedef  char    signed  wxInt8;
-typedef  char  unsigned  wxUint8;
+#define wxInt8    char    signed
+#define wxUint8   char  unsigned  
 
 #ifdef __WIN16__
-typedef  int     signed  wxInt16;
-typedef  int   unsigned  wxUint16;
-typedef  long    signed  wxInt32;
-typedef  long  unsigned  wxUint32;
+#define wxInt16    int    signed  
+#define wxUint16   int  unsigned  
+#define wxInt32   long    signed  
+#define wxUint32  long  unsigned  
 #endif
 
 #ifdef __WIN32__
-typedef  short   signed  wxInt16;
-typedef  short unsigned  wxUint16;
-typedef  int     signed  wxInt32;
-typedef  int   unsigned  wxUint32;
+#define wxInt16  short    signed  
+#define wxUint16 short  unsigned  
+#define wxInt32    int    signed  
+#define wxUint32   int  unsigned  
 #endif
 
 #ifdef __WXMAC__
-typedef  short   signed  wxInt16;
-typedef  short unsigned  wxUint16;
-typedef  int     signed  wxInt32;
-typedef  int   unsigned  wxUint32;
+#define wxInt16  short    signed  
+#define wxUint16 short  unsigned  
+#define wxInt32    int    signed  
+#define wxUint32   int  unsigned  
 #endif
 
 #ifdef __WXOS2__
-typedef  short   signed  wxInt16;
-typedef  short unsigned  wxUint16;
-typedef  int     signed  wxInt32;
-typedef  int   unsigned  wxUint32;
+#define wxInt16  short    signed  
+#define wxUint16 short  unsigned  
+#define wxInt32    int    signed  
+#define wxUint32   int  unsigned  
 #endif
 
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXOS2__)
   #if defined(SIZEOF_INT)
     /* well, this shouldn't happen... */
-    typedef  short   signed  wxInt16;
-    typedef  short unsigned  wxUint16;
-    typedef  int     signed  wxInt32;
-    typedef  int   unsigned  wxUint32;
+    #define wxInt16  short    signed  
+    #define wxUint16 short  unsigned  
+    #define wxInt32    int    signed  
+    #define wxUint32   int  unsigned  
   #else
-    typedef  short   signed  wxInt16;
-    typedef  short unsigned  wxUint16;
-    typedef  int     signed  wxInt32;
-    typedef  int   unsigned  wxUint32;
+    #define wxInt16  short    signed  
+    #define wxUint16 short  unsigned  
+    #define wxInt32    int    signed  
+    #define wxUint32   int  unsigned  
   #endif
 #endif
 
-typedef  wxUint8         wxByte;
-typedef  wxUint16        wxWord;
+#define  wxByte   wxUint8
+#define  wxWord   wxUint16        
 
 // byte sex
 
