@@ -145,11 +145,26 @@ void wxWriter::FindConnectEntry(const wxWindow * evSource,const wxDelegateTypeIn
 }
 void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci , wxPersister *persister, wxWriterInternalPropertiesData * data )
 {
+   // in case this object is wxDynamic object we have to hand over the streaming
+    // of the properties of the superclasses to the real super class instance
+    {
+        const wxObject *iterobj = obj ;
+        const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject* > (iterobj ) ;
+        if ( dynobj )
+            iterobj = dynobj->GetSuperClassInstance() ;
+        const wxClassInfo** parents = ci->GetParents() ;
+        for ( int i = 0 ; parents[i] ; ++ i )
+        {
+            WriteAllProperties( iterobj , parents[i] , persister , data ) ;
+        }
+    }
+
     const wxPropertyInfo *pi = ci->GetFirstProperty() ;
     while( pi ) 
     {
         // this property was not written yet in this object and we don't get a veto
-        if ( data->m_writtenProperties.find( pi->GetName() ) == data->m_writtenProperties.end() )
+        // if ( data->m_writtenProperties.find( pi->GetName() ) == data->m_writtenProperties.end() )
+        // we will have to handle property overrides differently 
         {
             data->m_writtenProperties[ pi->GetName() ] = 1 ;
             DoBeginWriteProperty( pi ) ;
@@ -222,17 +237,7 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
         }
         pi = pi->GetNext() ;
     }
-    // in case this object is wxDynamic object we have to hand over the streaming
-    // of the properties of the superclasses to the real super class instance
-    const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject* > (obj ) ;
-    if ( dynobj )
-        obj = dynobj->GetSuperClassInstance() ;
-    const wxClassInfo** parents = ci->GetParents() ;
-    for ( int i = 0 ; parents[i] ; ++ i )
-    {
-        WriteAllProperties( obj , parents[i] , persister , data ) ;
-    }
-}
+ }
 
 int wxWriter::GetObjectID(const wxObject *obj) 
 {
@@ -381,7 +386,7 @@ void wxXmlWriter::DoWriteNullObject()
 }
 
 // writes a delegate in the stream format
-void wxXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *pi , 
+void wxXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(pi) , 
                                   const wxObject *eventSink, int sinkObjectID , const wxClassInfo* WXUNUSED(eventSinkClassInfo) , const wxHandlerInfo* handlerInfo ) 
 {
     if ( eventSink != NULL && handlerInfo != NULL )
@@ -439,6 +444,7 @@ and create params are always toplevel class only
 
 int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
 {
+    wxASSERT_MSG( callbacks , wxT("Does not support reading without a Depersistor") ) ;
     wxString className;
     wxClassInfo *classInfo;
 
@@ -514,6 +520,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         const wxChar* paramName = classInfo->GetCreateParamName(i) ;
         PropertyNodes::iterator propiter = propertyNodes.find( paramName ) ;
         const wxPropertyInfo* pi = classInfo->FindPropertyInfo( paramName ) ;
+        wxASSERT_MSG(pi,wxString::Format("Unkown Property %s",paramName) ) ;
         // if we don't have the value of a create param set in the xml
         // we use the default value
         if ( propiter != propertyNodes.end() )
@@ -563,7 +570,8 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 const wxPropertyInfo* pi = classInfo->FindPropertyInfo( propertyNames[j].c_str() ) ;
                 if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
                 {
-                    const wxTypeInfo * elementType = dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() )->GetElementType() ;
+                    const wxCollectionTypeInfo* collType = dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() ) ;
+                    const wxTypeInfo * elementType = collType->GetElementType() ;
                     while( prop )
                     {
                         wxASSERT_MSG(prop->GetName() == wxT("element") , wxT("A non empty collection must consist of 'element' nodes")) ;
@@ -572,25 +580,20 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                         if ( elementType->IsObjectType() )
                         {
                             int valueId = ReadComponent( elementContent , callbacks ) ;
-                            if ( callbacks )
+                            if ( valueId != wxInvalidObjectID )
                             {
-                                if ( valueId != wxInvalidObjectID )
-                                {
-                                    /*
-                                    callbacks->SetPropertyAsObject( objectID , classInfo , pi , valueId ) ;
-                                    */
-                                    if ( elementType->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
-                                        callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
-                                }
+                                if ( pi->GetAccessor()->HasAdder() )
+                                    callbacks->AddToPropertyCollectionAsObject( objectID , classInfo , pi , valueId ) ;
+                                // TODO for collections we must have a notation on taking over ownership or not 
+                                if ( elementType->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
+                                    callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
                             }
                         }
                         else
                         {
                             wxxVariant elementValue = ReadValue( prop , pi->GetAccessor() ) ;
-                            /*
-                            if ( callbacks )
-                                callbacks->SetProperty( objectID, classInfo ,pi ,  ) ;
-                            */
+                            if ( pi->GetAccessor()->HasAdder() )
+                                callbacks->AddToPropertyCollection( objectID , classInfo ,pi , elementValue ) ;
                         }
                         prop = prop->GetNext() ;
                     }
@@ -598,14 +601,11 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 else if ( pi->GetTypeInfo()->IsObjectType() )
                 {
                     int valueId = ReadComponent( prop , callbacks ) ;
-                    if ( callbacks )
+                    if ( valueId != wxInvalidObjectID )
                     {
-                        if ( valueId != wxInvalidObjectID )
-                        {
-                            callbacks->SetPropertyAsObject( objectID , classInfo , pi , valueId ) ;
-                            if ( pi->GetTypeInfo()->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
-                                callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
-                        }
+                        callbacks->SetPropertyAsObject( objectID , classInfo , pi , valueId ) ;
+                        if ( pi->GetTypeInfo()->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
+                            callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
                     }
                 }
                 else if ( pi->GetTypeInfo()->IsDelegateType() )
@@ -619,16 +619,14 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                         wxString handlerName = resstring.Mid(pos+1) ;
                         wxClassInfo* sinkClassInfo = GetObjectClassInfo( sinkOid ) ;
 
-                        if (callbacks)
-                            callbacks->SetConnect( objectID , classInfo , dynamic_cast<const wxDelegateTypeInfo*>(pi->GetTypeInfo()) , sinkClassInfo ,
-                            sinkClassInfo->FindHandlerInfo(handlerName) ,  sinkOid ) ;
+                        callbacks->SetConnect( objectID , classInfo , dynamic_cast<const wxDelegateTypeInfo*>(pi->GetTypeInfo()) , sinkClassInfo ,
+                        sinkClassInfo->FindHandlerInfo(handlerName) ,  sinkOid ) ;
                     }
 
                 }
                 else
                 {
-                    if ( callbacks )
-                        callbacks->SetProperty( objectID, classInfo ,pi , ReadValue( prop , pi->GetAccessor() ) ) ;
+                    callbacks->SetProperty( objectID, classInfo ,pi , ReadValue( prop , pi->GetAccessor() ) ) ;
                 }
             }
         }
@@ -749,7 +747,6 @@ void wxRuntimeDepersister::SetProperty(int objectID,
     wxObject *o;
     o = m_data->GetObject(objectID);
     classInfo->SetProperty( o , propertyInfo->GetName() , value ) ;
-    // propertyInfo->GetAccessor()->SetProperty( o , value ) ;
 }
 
 void wxRuntimeDepersister::SetPropertyAsObject(int objectID,
@@ -770,8 +767,6 @@ void wxRuntimeDepersister::SetPropertyAsObject(int objectID,
     }
 
     classInfo->SetProperty( o , propertyInfo->GetName() , valClassInfo->InstanceToVariant(valo) ) ;
-    //    propertyInfo->GetAccessor()->SetProperty( o , 
-    //        (dynamic_cast<const wxClassTypeInfo*>(propertyInfo->GetTypeInfo()))->GetClassInfo()->InstanceToVariant(valo) ) ;
 }
 
 void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,
@@ -797,6 +792,38 @@ wxObject *wxRuntimeDepersister::GetObject(int objectID)
     return m_data->GetObject( objectID ) ;
 }
 
+// adds an element to a property collection
+void wxRuntimeDepersister::AddToPropertyCollection( int objectID ,
+    const wxClassInfo *classInfo,
+    const wxPropertyInfo* propertyInfo ,
+    const wxxVariant &value) 
+{
+    wxObject *o;
+    o = m_data->GetObject(objectID);
+    classInfo->AddToPropertyCollection( o , propertyInfo->GetName() , value ) ;
+}
+
+// sets the corresponding property (value is an object)
+void wxRuntimeDepersister::AddToPropertyCollectionAsObject(int objectID,
+    const wxClassInfo *classInfo,
+    const wxPropertyInfo* propertyInfo ,
+    int valueObjectId) 
+{
+    wxObject *o, *valo;
+    o = m_data->GetObject(objectID);
+    valo = m_data->GetObject(valueObjectId);
+    const wxCollectionTypeInfo * collectionTypeInfo = dynamic_cast< const wxCollectionTypeInfo * >(propertyInfo->GetTypeInfo() ) ;
+    const wxClassInfo* valClassInfo = (dynamic_cast<const wxClassTypeInfo*>(collectionTypeInfo->GetElementType()))->GetClassInfo() ;
+    // if this is a dynamic object and we are asked for another class
+    // than wxDynamicObject we cast it down manually.
+    wxDynamicObject *dynvalo = dynamic_cast< wxDynamicObject * > (valo) ;
+    if ( dynvalo!=NULL  && (valClassInfo != dynvalo->GetClassInfo()) )
+    {
+        valo = dynvalo->GetSuperClassInstance() ;
+    }
+
+    classInfo->AddToPropertyCollection( o , propertyInfo->GetName() , valClassInfo->InstanceToVariant(valo) ) ;
+}
 
 // ----------------------------------------------------------------------------
 // depersisting to code 
@@ -919,6 +946,26 @@ void wxCodeDepersister::SetPropertyAsObject(int objectID,
         m_data->GetObjectName(objectID),
         propertyInfo->GetAccessor()->GetSetterName(),
         m_data->GetObjectName( valueObjectId) ) );
+}
+
+void wxCodeDepersister::AddToPropertyCollection( int objectID ,
+    const wxClassInfo *classInfo,
+    const wxPropertyInfo* propertyInfo ,
+    const wxxVariant &value) 
+{
+    m_fp->WriteString( wxString::Format( "\t%s->%s(%s);\n",
+        m_data->GetObjectName(objectID),
+        propertyInfo->GetAccessor()->GetAdderName(),
+        ValueAsCode(value)) );
+}
+
+// sets the corresponding property (value is an object)
+void wxCodeDepersister::AddToPropertyCollectionAsObject(int objectID,
+    const wxClassInfo *classInfo,
+    const wxPropertyInfo* propertyInfo ,
+    int valueObjectId) 
+{
+    // TODO
 }
 
 void wxCodeDepersister::SetConnect(int eventSourceObjectID,

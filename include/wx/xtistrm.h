@@ -268,37 +268,48 @@ class wxDepersister
 {
 public :
     // allocate the new object on the heap, that object will have the passed in ID
-    virtual void AllocateObject(int ObjectID, wxClassInfo *ClassInfo) = 0;
+    virtual void AllocateObject(int objectID, wxClassInfo *classInfo) = 0;
 
-    // initialize the already allocated object having the ID ObjectID with the Create method
+    // initialize the already allocated object having the ID objectID with the Create method
     // creation parameters which are objects are having their Ids passed in objectIDValues
     // having objectId <> wxInvalidObjectID
 
-    virtual void CreateObject(int ObjectID,
-        const wxClassInfo *ClassInfo,
-        int ParamCount,
+    virtual void CreateObject(int objectID,
+        const wxClassInfo *classInfo,
+        int paramCount,
         wxxVariant *VariantValues ,
         int *objectIDValues ,
         const wxClassInfo **objectClassInfos
         ) = 0;
 
-    // destroy the heap-allocated object having the ID ObjectID, this may be used if an object
+    // destroy the heap-allocated object having the ID objectID, this may be used if an object
     // is embedded in another object and set via value semantics, so the intermediate
     // object can be destroyed after safely
-    virtual void DestroyObject(int ObjectID, wxClassInfo *ClassInfo) = 0;
+    virtual void DestroyObject(int objectID, wxClassInfo *classInfo) = 0;
 
     // set the corresponding property
-    virtual void SetProperty(int ObjectID,
-        const wxClassInfo *ClassInfo,
-        const wxPropertyInfo* PropertyInfo ,
+    virtual void SetProperty(int objectID,
+        const wxClassInfo *classInfo,
+        const wxPropertyInfo* propertyInfo ,
         const wxxVariant &VariantValue) = 0;
 
     // sets the corresponding property (value is an object)
-    virtual void SetPropertyAsObject(int ObjectId,
-        const wxClassInfo *ClassInfo,
-        const wxPropertyInfo* PropertyInfo ,
+    virtual void SetPropertyAsObject(int objectID,
+        const wxClassInfo *classInfo,
+        const wxPropertyInfo* propertyInfo ,
         int valueObjectId) = 0;
 
+    // adds an element to a property collection
+    virtual void AddToPropertyCollection( int objectID ,
+        const wxClassInfo *classInfo,
+        const wxPropertyInfo* propertyInfo ,
+        const wxxVariant &VariantValue) = 0;
+
+    // sets the corresponding property (value is an object)
+    virtual void AddToPropertyCollectionAsObject(int objectID,
+        const wxClassInfo *classInfo,
+        const wxPropertyInfo* propertyInfo ,
+        int valueObjectId) = 0;
 
     // sets the corresponding event handler
     virtual void SetConnect(int EventSourceObjectID,
@@ -328,19 +339,19 @@ public :
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo) ;
 
-    // initialize the already allocated object having the ID ObjectID with the Create method
+    // initialize the already allocated object having the ID objectID with the Create method
     // creation parameters which are objects are having their Ids passed in objectIDValues
     // having objectId <> wxInvalidObjectID
 
-    virtual void CreateObject(int ObjectID,
-        const wxClassInfo *ClassInfo,
-        int ParamCount,
+    virtual void CreateObject(int objectID,
+        const wxClassInfo *classInfo,
+        int paramCount,
         wxxVariant *VariantValues ,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos
         ) ;
 
-    // destroy the heap-allocated object having the ID ObjectID, this may be used if an object
+    // destroy the heap-allocated object having the ID objectID, this may be used if an object
     // is embedded in another object and set via value semantics, so the intermediate
     // object can be destroyed after safely
     virtual void DestroyObject(int objectID, wxClassInfo *classInfo) ;
@@ -357,6 +368,17 @@ public :
         const wxPropertyInfo* propertyInfo ,
         int valueObjectId) ;
 
+    // adds an element to a property collection
+    virtual void AddToPropertyCollection( int objectID ,
+        const wxClassInfo *classInfo,
+        const wxPropertyInfo* propertyInfo ,
+        const wxxVariant &VariantValue) ;
+
+    // sets the corresponding property (value is an object)
+    virtual void AddToPropertyCollectionAsObject(int objectID,
+        const wxClassInfo *classInfo,
+        const wxPropertyInfo* propertyInfo ,
+        int valueObjectId) ;
 
     // sets the corresponding event handler
     virtual void SetConnect(int eventSourceObjectID,
@@ -388,7 +410,7 @@ public:
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo) ;
 
-    // initialize the already allocated object having the ID ObjectID with the Create method
+    // initialize the already allocated object having the ID objectID with the Create method
     // creation parameters which are objects are having their Ids passed in objectIDValues
     // having objectId <> wxInvalidObjectID
 
@@ -400,7 +422,7 @@ public:
         const wxClassInfo **objectClassInfos
         ) ;
 
-    // destroy the heap-allocated object having the ID ObjectID, this may be used if an object
+    // destroy the heap-allocated object having the ID objectID, this may be used if an object
     // is embedded in another object and set via value semantics, so the intermediate
     // object can be destroyed after safely
     virtual void DestroyObject(int objectID, wxClassInfo *classInfo) ;
@@ -417,6 +439,17 @@ public:
         const wxPropertyInfo* propertyInfo ,
         int valueObjectId) ;
 
+    // adds an element to a property collection
+    virtual void AddToPropertyCollection( int objectID ,
+        const wxClassInfo *classInfo,
+        const wxPropertyInfo* propertyInfo ,
+        const wxxVariant &VariantValue) ;
+
+    // sets the corresponding property (value is an object)
+    virtual void AddToPropertyCollectionAsObject(int objectID,
+        const wxClassInfo *classInfo,
+        const wxPropertyInfo* propertyInfo ,
+        int valueObjectId) ;
 
     // sets the corresponding event handler
     virtual void SetConnect(int eventSourceObjectID,

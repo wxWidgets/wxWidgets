@@ -519,7 +519,7 @@ wxxVariantArray wxClassInfo::GetPropertyCollection(wxObject *object, const wxCha
     return accessor->GetPropertyCollection(object);
 }
 
-void wxClassInfo::AddPropertyCollection(wxObject *object, const wxChar *propertyName , const wxxVariant& value) const 
+void wxClassInfo::AddToPropertyCollection(wxObject *object, const wxChar *propertyName , const wxxVariant& value) const 
 {
     const wxPropertyAccessor *accessor;
 
