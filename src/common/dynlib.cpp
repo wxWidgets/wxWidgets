@@ -353,7 +353,11 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
         symbol = 0;
 
 #elif defined(__WINDOWS__)
+#ifdef __WXWINCE__
+    symbol = (void*) ::GetProcAddress( m_handle, name );
+#else
     symbol = (void*) ::GetProcAddress( m_handle, name.mb_str() );
+#endif
 
 #else
 #error  "runtime shared lib support not implemented"

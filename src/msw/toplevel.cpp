@@ -43,6 +43,12 @@
 #include "wx/msw/private.h"
 #include "wx/msw/winundef.h"
 
+// This can't be undefed in winundef.h or
+// there are further errors
+#if defined(__WXWINCE__) && defined(CreateDialog)
+#undef CreateDialog
+#endif
+
 #include "wx/display.h"
 
 #ifndef ICON_BIG

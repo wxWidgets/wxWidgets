@@ -144,7 +144,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
-#ifndef __WXMICROWIN__
+#if !defined( __WXMICROWIN__) && wxUSE_DYNAMIC_LOADER
     // TODO should use GetComputerNameEx() when available
 
     // we don't want to always link with Winsock DLL as we might not use it at
