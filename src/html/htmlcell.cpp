@@ -50,7 +50,7 @@ bool wxHtmlCell::AdjustPagebreak(int *pagebreak)
 {
 
     if ((!m_CanLiveOnPagebreak) && 
-                m_PosY < *pagebreak && m_PosY + m_Height >= *pagebreak) {
+                m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak) {
         *pagebreak = m_PosY;
         if (m_Next != NULL) m_Next -> AdjustPagebreak(pagebreak);
         return TRUE;
@@ -153,14 +153,17 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak)
 {
     if (!m_CanLiveOnPagebreak) 
         return wxHtmlCell::AdjustPagebreak(pagebreak);
+
     else {
         wxHtmlCell *c = GetFirstCell();
         bool rt = FALSE;
+        int pbrk = *pagebreak - m_PosY;
 
         while (c) {
-            if (c -> AdjustPagebreak(pagebreak)) rt = TRUE;
+            if (c -> AdjustPagebreak(&pbrk)) rt = TRUE;
             c = c -> GetNext();
         }
+        if (rt) *pagebreak = pbrk + m_PosY;
         return rt;
     }
 }
