@@ -120,8 +120,8 @@ parameters is one of the following values:
     };
 \end{verbatim}
 
-Date calculatiosn often depend on the country adn wxDateTime allows to set the
-country which conventions should be used using
+Date calculations often depend on the country and wxDateTime allows to set the
+country whose conventions should be used using 
 \helpref{SetCountry}{wxdatetimesetcountry}. It takes one of the following
 values as parameter:
 
@@ -148,8 +148,7 @@ values as parameter:
 Differnet parst of the world use different conventions for the week start.
 In some countries, the week starts on Sunday, while in others - on Monday.
 The ISO standard doesn't address this issue, so we support both conventions in
-the functions whose result depends on it (
-\helpref{GetWeekOfYear}{wxdatetimegetweekofyear} and
+the functions whose result depends on it (\helpref{GetWeekOfYear}{wxdatetimegetweekofyear} and 
 \helpref{GetWeekOfMonth}{wxdatetimegetweekofmonth}).
 
 The desired behvaiour may be specified by giving one of the following
@@ -192,7 +191,7 @@ Please note that although several function accept an extra {\it Calendar}
 parameter, it is currently ignored as only the Gregorian calendar is
 supported. Future versions will support other calendars.
 
-\pythonnote{These methods are standalone functions named
+\pythonnote{These methods are standalone functions named 
 {\tt wxDateTime_<StaticMethodName>} in wxPython.}
 
 \helpref{SetCountry}{wxdatetimesetcountry}\\
@@ -251,7 +250,7 @@ values were correct as constructors can not return an error code.
 \membersection{Accessors}
 
 Here are the trivial accessors. Other functions, which might have to perform
-some more complicated calculations to find the answer are under
+some more complicated calculations to find the answer are under the 
 \helpref{Calendar calculations}{wxdatetimecalculations} section.
 
 \helpref{IsValid}{wxdatetimeisvalid}\\
@@ -329,9 +328,9 @@ which (still...) defines the format of email messages on the Internet. This
 format can not be described with {\tt strptime(3)}-like format strings used by
 \helpref{Format}{wxdatetimeformat}, hence the need for a separate function.
 
-But the most interesting functions are
-\helpref{ParseDateTime}{wxdatetimeparsedatetime} and
-\helpref{ParseDate}{wxdatetimeparsedate} and
+But the most interesting functions are 
+\helpref{ParseDateTime}{wxdatetimeparsedatetime} and 
+\helpref{ParseDate}{wxdatetimeparsedate} and 
 \helpref{ParseTime}{wxdatetimeparsetime}. They try to parse the date ans time
 (or only one of them) in `free' format, i.e. allow them to be specified in any
 of possible ways. These functions will usually be used to parse the
@@ -1062,7 +1061,7 @@ the character which stopped the scan.
 \func{const wxChar *}{ParseDate}{\param{const wxChar *}{date}}
 
 This function is like \helpref{ParseDateTime}{wxdatetimeparsedatetime}, but it
-only allows the date to be specified. It is thus flexible then
+only allows the date to be specified. It is thus less flexible then 
 \helpref{ParseDateTime}{wxdatetimeparsedatetime}, but also has less chances to
 misinterpret the user input.
 
