@@ -195,11 +195,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <!-- Base files used by non-wxMac OS X builds -->
-<set var="BASE_DARWIN_SRC" hints="files">
+<set var="BASE_MACOSX_NOTWXMAC_SRC" hints="files">
     $(BASE_UNIX_SRC)
     $(BASE_COREFOUNDATION_SRC)
 </set>
-<set var="BASE_DARWIN_HDR" hints="files">
+<set var="BASE_MACOSX_NOTWXMAC_HDR" hints="files">
     $(BASE_UNIX_HDR)
     $(BASE_COREFOUNDATION_HDR)
 </set>
@@ -2710,15 +2710,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- These are the files for PLATFORM_MACOSX -->
     <set var="BASE_MACOSX_SRC" hints="files">
         <if cond="TOOLKIT=='MAC'">$(BASE_MAC_SRC) $(BASE_MAC_OSX_SRC)</if>
-        <if cond="TOOLKIT=='COCOA'">$(BASE_DARWIN_SRC)</if>
-        <if cond="TOOLKIT=='GTK'">$(BASE_DARWIN_SRC)</if>
-        <if cond="TOOLKIT=='X11'">$(BASE_DARWIN_SRC)</if>
-        <if cond="TOOLKIT=='MOTIF'">$(BASE_DARWIN_SRC)</if>
+        <if cond="TOOLKIT=='COCOA'">$(BASE_MACOSX_NOTWXMAC_SRC)</if>
+        <if cond="TOOLKIT=='GTK'">$(BASE_MACOSX_NOTWXMAC_SRC)</if>
+        <if cond="TOOLKIT=='X11'">$(BASE_MACOSX_NOTWXMAC_SRC)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(BASE_MACOSX_NOTWXMAC_SRC)</if>
         <!-- FIXME: TOOLKIT!='MAC' is what we really want -->
 
         <!-- FIXME: a hack because there are two wxBase versions on
                     Mac; once fixed, this would no longer be needed -->
-        <if cond="TOOLKIT==''">$(BASE_DARWIN_SRC)</if>
+        <if cond="TOOLKIT==''">$(BASE_MACOSX_NOTWXMAC_SRC)</if>
     </set>
     <set var="BASE_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
