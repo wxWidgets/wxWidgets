@@ -44,9 +44,9 @@ typedef char tchar;
 
 #ifdef __WXMAC__
 
-#include "ATSUnicode.h"
-#include "TextCommon.h"
-#include "TextEncodingConverter.h"
+#include <ATSUnicode.h>
+#include <TextCommon.h>
+#include <TextEncodingConverter.h>
 
 #include "wx/fontutil.h"
 #include "wx/mac/private.h"  // includes mac headers
