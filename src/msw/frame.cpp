@@ -194,8 +194,6 @@ bool wxFrame::Create(wxWindow *parent,
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
-    wxModelessWindows.Append(this);
-
     return TRUE;
 }
 

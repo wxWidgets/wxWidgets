@@ -127,8 +127,5 @@ protected:
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW)
 };
 
-// list of all frames and modeless dialogs
-extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
-
 #endif // _WX_MSW_TOPLEVEL_H_
 

@@ -62,7 +62,6 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-extern wxWindowList wxModelessWindows;      // from dialog.cpp
 extern wxMenu *wxCurrentPopupMenu;
 
 extern const wxChar *wxMDIFrameClassName;   // from app.cpp
@@ -222,8 +221,6 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   {
       return false;
   }
-
-  wxModelessWindows.Append(this);
 
   // unlike (almost?) all other windows, frames are created hidden
   m_isShown = false;
@@ -724,8 +721,6 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                                  WM_MDICREATE, 0, (LONG)(LPSTR)&mcs);
 
   wxAssociateWinWithHandle((HWND) GetHWND(), this);
-
-  wxModelessWindows.Append(this);
 
   return true;
 }

@@ -185,16 +185,25 @@ bool wxDialog::Create(wxWindow *parent,
     return TRUE;
 }
 
-void wxDialog::SetModal(bool flag)
+// deprecated ctor
+wxDialog::wxDialog(wxWindow *parent,
+                   const wxString& title,
+                   bool WXUNUSED(modal),
+                   int x,
+                   int y,
+                   int w,
+                   int h,
+                   long style,
+                   const wxString& name)
 {
-    if ( flag )
-    {
-        wxModelessWindows.DeleteObject(this);
-    }
-    else
-    {
-        wxModelessWindows.Append(this);
-    }
+    Init();
+
+    Create(parent, -1, title, wxPoint(x, y), wxSize(w, h), style, name);
+}
+
+void wxDialog::SetModal(bool WXUNUSED(flag))
+{
+    // nothing to do, obsolete method
 }
 
 wxDialog::~wxDialog()
@@ -209,14 +218,9 @@ wxDialog::~wxDialog()
 // showing the dialogs
 // ----------------------------------------------------------------------------
 
-bool wxDialog::IsModal() const
-{
-    return !wxModelessWindows.Find(this);
-}
-
 bool wxDialog::IsModalShowing() const
 {
-    return m_modalData != NULL;
+    return IsModal();
 }
 
 wxWindow *wxDialog::FindSuitableParent() const
@@ -239,49 +243,6 @@ wxWindow *wxDialog::FindSuitableParent() const
     }
 
     return parent;
-}
-
-void wxDialog::DoShowModal()
-{
-    wxCHECK_RET( !IsModalShowing(), _T("DoShowModal() called twice") );
-    wxCHECK_RET( IsModal(), _T("can't DoShowModal() modeless dialog") );
-
-    wxWindow *parent = GetParent();
-
-    wxWindow* oldFocus = m_oldFocus;
-
-    // We have to remember the HWND because we need to check
-    // the HWND still exists (oldFocus can be garbage when the dialog
-    // exits, if it has been destroyed)
-    HWND hwndOldFocus = 0;
-    if (oldFocus)
-        hwndOldFocus = (HWND) oldFocus->GetHWND();
-
-    // remember where the focus was
-    if ( !oldFocus )
-    {
-        oldFocus = parent;
-        if ( parent )
-            hwndOldFocus = GetHwndOf(parent);
-    }
-
-    // enter the modal loop
-    {
-        wxDialogModalDataTiedPtr modalData(&m_modalData,
-                                           new wxDialogModalData(this));
-        modalData->RunLoop();
-    }
-
-    // and restore focus
-    // Note that this code MUST NOT access the dialog object's data
-    // in case the object has been deleted (which will be the case
-    // for a modal dialog that has been destroyed before calling EndModal).
-    if ( oldFocus && (oldFocus != this) && ::IsWindow(hwndOldFocus))
-    {
-        // This is likely to prove that the object still exists
-        if (wxFindWinFromHandle((WXHWND) hwndOldFocus) == oldFocus)
-            oldFocus->SetFocus();
-    }
 }
 
 bool wxDialog::Show(bool show)
@@ -317,20 +278,6 @@ bool wxDialog::Show(bool show)
         InitDialog();
     }
 
-    // EndModal may have been called from InitDialog handler,
-    // which would cause an infinite loop if we didn't take it
-    // into account
-    if ( show && IsModal() && !m_endModalCalled )
-    {
-        // modal dialog needs a parent window, so try to find one
-        if ( !GetParent() )
-        {
-            m_parent = FindSuitableParent();
-        }
-
-        DoShowModal();
-    }
-
     return TRUE;
 }
 
@@ -339,24 +286,68 @@ void wxDialog::Raise()
     ::SetForegroundWindow(GetHwnd());
 }
 
-// a special version for Show(TRUE) for modal dialogs which returns return code
+// show dialog modally
 int wxDialog::ShowModal()
 {
-    m_endModalCalled = FALSE;
-    if ( !IsModal() )
-    {
-        SetModal(TRUE);
-    }
+    wxASSERT_MSG( !IsModal(), _T("wxDialog::ShowModal() reentered?") );
 
-    Show(TRUE);
+    m_endModalCalled = FALSE;
+
+    Show();
+
+    // EndModal may have been called from InitDialog handler (called from
+    // inside Show()), which would cause an infinite loop if we didn't take it
+    // into account
+    if ( !m_endModalCalled )
+    {
+        // modal dialog needs a parent window, so try to find one
+        wxWindow *parent = GetParent();
+        if ( !parent )
+        {
+            parent = FindSuitableParent();
+        }
+
+        // remember where the focus was
+        wxWindow *oldFocus = m_oldFocus;
+        if ( !oldFocus )
+        {
+            // VZ: do we really want to do this?
+            oldFocus = parent;
+        }
+
+        // We have to remember the HWND because we need to check
+        // the HWND still exists (oldFocus can be garbage when the dialog
+        // exits, if it has been destroyed)
+        HWND hwndOldFocus = oldFocus ? GetHwndOf(oldFocus) : NULL;
+
+
+        // enter and run the modal loop
+        {
+            wxDialogModalDataTiedPtr modalData(&m_modalData,
+                                               new wxDialogModalData(this));
+            modalData->RunLoop();
+        }
+
+
+        // and restore focus
+        // Note that this code MUST NOT access the dialog object's data
+        // in case the object has been deleted (which will be the case
+        // for a modal dialog that has been destroyed before calling EndModal).
+        if ( oldFocus && (oldFocus != this) && ::IsWindow(hwndOldFocus))
+        {
+            // This is likely to prove that the object still exists
+            if (wxFindWinFromHandle((WXHWND) hwndOldFocus) == oldFocus)
+                oldFocus->SetFocus();
+        }
+    }
 
     return GetReturnCode();
 }
 
-// NB: this function (surprizingly) may be called for both modal and modeless
-//     dialogs and should work for both of them
 void wxDialog::EndModal(int retCode)
 {
+    wxASSERT_MSG( IsModal(), _T("EndModal() called for non modal dialog") );
+
     m_endModalCalled = TRUE;
     SetReturnCode(retCode);
 
@@ -482,7 +473,7 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             // we want to override the busy cursor for modal dialogs:
             // typically, wxBeginBusyCursor() is called and then a modal dialog
             // is shown, but the modal dialog shouldn't have hourglass cursor
-            if ( IsModalShowing() && wxIsBusy() )
+            if ( IsModal() && wxIsBusy() )
             {
                 // set our cursor for all windows (but see below)
                 wxCursor cursor = m_cursor;
