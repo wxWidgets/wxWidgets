@@ -649,11 +649,11 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
     else
         gtk_list_insert_items( GTK_LIST (m_list), gitem_list, pos );
 
-    gtk_signal_connect( GTK_OBJECT(list_item), "select",
+    gtk_signal_connect_after( GTK_OBJECT(list_item), "select",
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
     if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
-        gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
+        gtk_signal_connect_after( GTK_OBJECT(list_item), "deselect",
           GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
 
     gtk_signal_connect( GTK_OBJECT(list_item),
