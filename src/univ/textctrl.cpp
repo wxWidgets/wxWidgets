@@ -4680,7 +4680,6 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
 
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
         InitCommandEvent(event);
-        event.SetString(GetValue());
         GetEventHandler()->ProcessEvent(event);
 
         // as the text changed...

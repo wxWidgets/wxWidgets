@@ -1103,7 +1103,6 @@ bool wxTextCtrl::OS2Command(
                                           );
 
                 InitCommandEvent(vEvent);
-                vEvent.SetString((char*)GetValue().c_str());
                 ProcessCommand(vEvent);
             }
             break;

@@ -1039,7 +1039,6 @@ void wxTextCtrl::Cut()
             TXNConvertToPublicScrap();
         }
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-        event.SetString( GetValue() ) ;
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event);
       }
@@ -1062,7 +1061,6 @@ void wxTextCtrl::Paste()
             SetStyle( kTXNUseCurrentSelection , kTXNUseCurrentSelection , GetDefaultStyle() ) ;
         }
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-        event.SetString( GetValue() ) ;
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event);
     }
@@ -1704,7 +1702,6 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
          key == WXK_BACK)
     {
         wxCommandEvent event1(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-        event1.SetString( GetValue() ) ;
         event1.SetEventObject( this );
         wxPostEvent(GetEventHandler(),event1);
     }

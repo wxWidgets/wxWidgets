@@ -1836,7 +1836,6 @@ bool wxTextCtrl::SendUpdateEvent()
 
     wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
     InitCommandEvent(event);
-    event.SetString(GetValue());
 
     return ProcessCommand(event);
 }

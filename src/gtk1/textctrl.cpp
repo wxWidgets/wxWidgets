@@ -202,7 +202,6 @@ gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetEventObject( win );
-    event.SetString( win->GetValue() );
     win->GetEventHandler()->ProcessEvent( event );
 }
 
