@@ -438,18 +438,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     // multi line text controls
 
-<<<<<<< controls.cpp
-    m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.",
-      wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
-
-    m_multitext = new MyTextCtrl( this, -1, "Multi line.",
-=======
     m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.",
       wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
     m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD));
 
-    m_multitext = new MyTextCtrl( this, ID_TEXT, "Multi line.",
->>>>>>> 1.3
+    m_multitext = new MyTextCtrl( this, -1, "Multi line.",
       wxPoint(180,10), wxSize(240,70), wxTE_MULTILINE );
     (*m_multitext) << " Appended.";
     m_multitext->SetInsertionPoint(0);
@@ -462,35 +455,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_tab = new MyTextCtrl( this, -1, "Multiline, allow <TAB> processing.",
       wxPoint(180,90), wxSize(240,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
 
-<<<<<<< controls.cpp
     m_enter = new MyTextCtrl( this, -1, "Multiline, allow <ENTER> processing.",
       wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE);
-=======
-    m_enter = new MyTextCtrl( this, -1, "Multiline, allow <ENTER> processing.",
-      wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE |  wxTE_PROCESS_ENTER );
-
-    wxButton *button;
-
-    (void)new wxStaticBox( this, -1, "&Move cursor to the end of:", wxPoint(445, 10), wxSize(160, 100) );
-    button = new wxButton( this, ID_MOVE_END_ENTRY, "&Single-line", wxPoint(470, 30), wxSize(110, 30) );
-#if wxUSE_TOOLTIPS
-    button->SetToolTip("Move cursor in single-line text control to end of line.");
-#endif
-    button = new wxButton( this, ID_MOVE_END_ZONE, "&Multi-line", wxPoint(470, 70), wxSize(110, 30) );
-#if wxUSE_TOOLTIPS
-    button->SetToolTip("Move cursor in multi-line text control to end of first line.");
-#endif
-
-    (void)new wxStaticBox( this, -1, "wx&Clipboard", wxPoint(445,130), wxSize(160,100) );
-    button = new wxButton( this, ID_COPY_TEXT, "C&opy line 1", wxPoint(470,150), wxSize(110,30) );
-#if wxUSE_TOOLTIPS
-    button->SetToolTip("Copy first line of the multi-line text control to the clipboard");
-#endif
-    button = new wxButton( this, ID_PASTE_TEXT, "&Paste text", wxPoint(470,190), wxSize(110,30) );
-#if wxUSE_TOOLTIPS
-    button->SetToolTip("Paste text from clipboard to the end of the multi-line text control.");
-#endif
->>>>>>> 1.3
 }
 
 #if wxUSE_CLIPBOARD
@@ -637,15 +603,6 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
         "About Text Controls",
         wxOK | wxICON_INFORMATION);
 
-<<<<<<< controls.cpp
-=======
-    wxMessageDialog dialog(this, "This is a text control sample. It demonstrates the many different text control\n"
-                                 "styles, the use of the clipboard, setting and handling tooltips and intercepting\n"
-                                 "key and char events.\n"
-                                 "\n"
-                                 "Copyright (c) 1999, Robert Roebling, Julian Smart, Vadim Zeitlin",
-                                 "About Text Controls", wxOK );
->>>>>>> 1.3
     dialog.ShowModal();
 
     wxEndBusyCursor();
@@ -687,7 +644,10 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& event)
 
 void MyFrame::OnFileLoad(wxCommandEvent& event)
 {
-    m_panel->m_multitext->LoadFile("controls.cpp");
+    if ( m_panel->m_multitext->LoadFile("controls.cpp") )
+        wxLogStatus(this, _T("Successfully loaded file"));
+    else
+        wxLogStatus(this, _T("Couldn't load the file"));
 }
 
 void MyFrame::OnIdle( wxIdleEvent& event )
