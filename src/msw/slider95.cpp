@@ -478,12 +478,12 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             int min_len = 0;
 
             ::GetWindowText((HWND) m_staticMin, buf, 300);
-            GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
+            GetTextExtent(buf, &min_len, &cyf);
 
             int max_len = 0;
 
             ::GetWindowText((HWND) m_staticMax, buf, 300);
-            GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
+            GetTextExtent(buf, &max_len, &cyf);
             if (m_staticValue)
             {
                 int new_width = (int)(wxMax(min_len, max_len));
@@ -552,11 +552,11 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         {
             int min_len;
             ::GetWindowText((HWND) m_staticMin, buf, 300);
-            GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
+            GetTextExtent(buf, &min_len, &cyf);
 
             int max_len;
             ::GetWindowText((HWND) m_staticMax, buf, 300);
-            GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
+            GetTextExtent(buf, &max_len, &cyf);
 
             if (m_staticValue)
             {
@@ -642,11 +642,11 @@ wxSize wxSlider95::DoGetBestSize() const
         if (HasFlag(wxSL_LABELS))  // do we need to add more for the labels?
         {
             ::GetWindowText((HWND) m_staticMin, buf, 300);
-            GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
+            GetTextExtent(buf, &min_len, &cyf);
             rv.x += min_len + cx;
 
             ::GetWindowText((HWND) m_staticMax, buf, 300);
-            GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
+            GetTextExtent(buf, &max_len, &cyf);
             rv.x += max_len + cx;
 
             if (m_staticValue)
@@ -675,11 +675,11 @@ wxSize wxSlider95::DoGetBestSize() const
         if (HasFlag(wxSL_LABELS)) // do we need to add more for the labels?
         {
             ::GetWindowText((HWND) m_staticMin, buf, 300);
-            GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
+            GetTextExtent(buf, &min_len, &cyf);
             rv.y += cy;
 
             ::GetWindowText((HWND) m_staticMax, buf, 300);
-            GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
+            GetTextExtent(buf, &max_len, &cyf);
             rv.y += cy;
             
             if (m_staticValue)
