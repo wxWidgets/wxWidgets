@@ -460,16 +460,6 @@ wxChar *wxGetUserHome(const wxString& WXUNUSED(user))
     return (wxChar *)wxGetHomeDir(&s_home);
 }
 
-bool wxDirExists(const wxString& dir)
-{
-#ifdef __WXMICROWIN__
-    return wxPathExist(dir);
-#elif defined(__WIN32__)
-    DWORD attribs = GetFileAttributes(dir);
-    return ((attribs != (DWORD)-1) && (attribs & FILE_ATTRIBUTE_DIRECTORY));
-#endif // Win32/__WXMICROWIN__
-}
-
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
 #ifdef __WXWINCE__
@@ -1231,9 +1221,9 @@ wxToolkitInfo& wxAppTraits::GetToolkitInfo()
 #ifdef __WXWINCE__
                 case VER_PLATFORM_WIN32_CE:
                     s_ver = wxWINDOWS_CE;
-#endif                    
+#endif
             }
-#endif            
+#endif
         }
     }
 

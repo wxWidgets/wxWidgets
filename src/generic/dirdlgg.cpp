@@ -318,7 +318,7 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
     if (!wxEndsWithPathSeparator(path))
         path += wxFILE_SEP_PATH;
     path += new_name;
-    if (wxFileExists(path))
+    if (wxPathExists(path))
     {
         // try NewName0, NewName1 etc.
         int i = 0;
@@ -333,7 +333,7 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
                 path += wxFILE_SEP_PATH;
             path += new_name;
             i++;
-        } while (wxFileExists(path));
+        } while (wxPathExists(path));
     }
 
     wxLogNull log;

@@ -527,7 +527,7 @@ bool wxFileName::DirExists() const
 
 bool wxFileName::DirExists( const wxString &dir )
 {
-    return ::wxDirExists( dir );
+    return ::wxPathExists( dir );
 }
 
 // ----------------------------------------------------------------------------

@@ -912,7 +912,7 @@ void ArchiveTestCase<ClassFactoryT>::VerifyDir(wxString& path,
             name = m_factory->GetInternalName(
                     path.substr(rootlen, wxString::npos));
 
-            bool isDir = wxDirExists(path);
+            bool isDir = wxPathExists(path);
             if (isDir)
                 name += _T("/");
 

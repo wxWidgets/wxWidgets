@@ -119,7 +119,7 @@ static void wxFixOPENFILENAME(LPOPENFILENAME ofn)
     if ( (ofn->Flags & OFN_ALLOWMULTISELECT) &&
          ofn->lpstrFile[ofn->nFileOffset-1] != wxT('\0') )
     {
-        if ( wxDirExists(ofn->lpstrFile) )
+        if ( wxPathExists(ofn->lpstrFile) )
         {
             // 1st component is dir => multiple files selected
             ofn->nFileOffset = wxStrlen(ofn->lpstrFile)+1;

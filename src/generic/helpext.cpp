@@ -259,7 +259,7 @@ bool wxExtHelpController::LoadFile(const wxString& ifile)
       {
          wxString newfile;
          newfile << WXEXTHELP_SEPARATOR << wxGetLocale()->GetName();
-         if(wxDirExists(newfile))
+         if(wxPathExists(newfile))
             file = newfile;
          else
          {
@@ -267,13 +267,13 @@ bool wxExtHelpController::LoadFile(const wxString& ifile)
             const wxChar *cptr = wxGetLocale()->GetName().c_str();
             while(*cptr && *cptr != wxT('_'))
                newfile << *(cptr++);
-            if(wxDirExists(newfile))
+            if(wxPathExists(newfile))
                file = newfile;
          }
       }
 #endif
 
-      if(! wxDirExists(file))
+      if(! wxPathExists(file))
          return false;
 
       mapFile << file << WXEXTHELP_SEPARATOR << WXEXTHELP_MAPFILE;

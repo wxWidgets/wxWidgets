@@ -35,7 +35,6 @@
     3. SameFileAs() function to compare inodes under Unix
  */
 
-// ridiculously enough, this will replace DirExists with wxDirExists etc
 #include "wx/filefn.h"
 #include "wx/datetime.h"
 
@@ -186,7 +185,7 @@ public:
     bool IsOk() const
     {
         // we're fine if we have the path or the name or if we're a root dir
-        return m_dirs.size() != 0 || !m_name.IsEmpty() || !m_relative ||
+        return m_dirs.size() != 0 || !m_name.empty() || !m_relative ||
                 !m_ext.empty() || m_hasExt;
     }
 

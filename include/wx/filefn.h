@@ -150,7 +150,7 @@ enum wxFileKind
     wxFileOffset wxSeek(int fd, wxFileOffset offset, int origin);
     #define wxLSeek wxSeek
     wxFileOffset wxTell(int fd);
-    
+
     // always Unicode under WinCE
     #define   wxMkDir      _wmkdir
     #define   wxRmDir      _wrmdir
@@ -462,7 +462,9 @@ WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(int fd);
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(FILE *fp);
 
 // compatibility defines, don't use in new code
-#define wxDirExists wxPathExists
+#if WXWIN_COMPATIBILITY_2_4
+    #define wxDirExists wxPathExists
+#endif
 
 // ----------------------------------------------------------------------------
 // separators in file names

@@ -1226,6 +1226,8 @@ bool wxPathExists(const wxChar *pszPathName)
     DWORD ret = ::GetFileAttributes(strPath);
 
     return (ret != (DWORD)-1) && (ret & FILE_ATTRIBUTE_DIRECTORY);
+#elif defined(__OS2__)
+    return (::DosSetCurrentDir(WXSTRINGCAST strPath));
 #else // !__WIN32__
 
     wxStructStat st;
@@ -1900,7 +1902,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 // This is important for the archive streams, which benefit greatly from
 // being able to seek on a stream, but which will produce corrupt archives
 // if they unknowingly seek on a non-seekable stream.
-// 
+//
 // wxFILE_KIND_DISK is a good catch all return value, since other values
 // disable features of the archive streams. Some other value must be returned
 // for a file type that appears seekable but isn't.

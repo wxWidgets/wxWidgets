@@ -40,7 +40,7 @@ void NodeInfo::Read(const wxString& filename, wxPathList& list)
     NodeClass.Empty();
 
     wxString path = list.FindValidPath(filename);
-    if (path.IsEmpty()) return;
+    if (path.empty()) return;
 
     wxTextFile tf;
     tf.Open(path);
@@ -98,9 +98,9 @@ void NodeInfo::Read(const wxString& filename, wxPathList& list)
         }
     }
 
-    if (!nd.IsEmpty()) NodeClass = nd;
-    if (!cht.IsEmpty()) ChildType = cht;
-    if (!!tp) Type = tp;
+    if (!nd.empty()) NodeClass = nd;
+    if (!cht.empty()) ChildType = cht;
+    if (!tp.empty()) Type = tp;
     if (icn != -1) Icon = icn;
     Abstract = ab;
 }
@@ -153,7 +153,7 @@ void NodesDb::Load()
 
 void NodesDb::LoadDir(const wxString& path)
 {
-    if (!wxDirExists(path)) return;
+    if (!wxPathExists(path)) return;
 
     wxDir dir(path);
     wxString filename;

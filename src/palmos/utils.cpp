@@ -106,11 +106,6 @@ wxChar *wxGetUserHome(const wxString& WXUNUSED(user))
     return NULL;
 }
 
-bool wxDirExists(const wxString& dir)
-{
-    return false;
-}
-
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
     return false;

@@ -431,7 +431,7 @@ wxChar* wxGetUserHome (
 
     char *wxBuffer = new wxChar[256];
 #ifndef __EMX__
-    if (sUser1 != _T(""))
+    if (!sUser1.empty())
     {
         wxChar                      zTmp[64];
 
@@ -453,7 +453,7 @@ wxChar* wxGetUserHome (
         }
     }
 #endif
-    if (sUser1 == _T(""))
+    if (sUser1.empty())
     {
         if ((zHome = wxGetenv(_T("HOME"))) != NULL)
         {
@@ -466,13 +466,6 @@ wxChar* wxGetUserHome (
     }
     delete[] wxBuffer;
     return NULL; // No home known!
-}
-
-bool wxDirExists(
-  const wxString&                   rDir
-)
-{
-    return (::DosSetCurrentDir(WXSTRINGCAST rDir));
 }
 
 wxString WXDLLEXPORT wxPMErrorToStr(

@@ -695,7 +695,7 @@ void wxFileCtrl::GoToHomeDir()
 
 void wxFileCtrl::GoToDir( const wxString &dir )
 {
-    if (!wxDirExists(dir)) return;
+    if (!wxPathExists(dir)) return;
 
     m_dirName = dir;
     UpdateFiles();
@@ -1225,7 +1225,7 @@ void wxGenericFileDialog::OnSelected( wxListEvent &event )
     if (!IsTopMostDir(dir))
         dir += wxFILE_SEP_PATH;
     dir += filename;
-    if (wxDirExists(dir)) return;
+    if (wxPathExists(dir)) return;
 
     ignoreChanges = true;
     m_text->SetValue( filename );
@@ -1287,7 +1287,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
         filename = dir;
     }
 
-    if (wxDirExists(filename))
+    if (wxPathExists(filename))
     {
         m_list->GoToDir( filename );
         UpdateControls();

@@ -60,7 +60,6 @@ the corresponding topic.
 \helpref{wxDDEInitialize}{wxddeinitialize}\\
 \helpref{wxDROP\_ICON}{wxdropicon}\\
 \helpref{wxDebugMsg}{wxdebugmsg}\\
-\helpref{wxDirExists}{functionwxdirexists}\\
 \helpref{wxDirSelector}{wxdirselector}\\
 \helpref{wxDisplayDepth}{wxdisplaydepth}\\
 \helpref{wxDisplaySize}{wxdisplaysize}\\
@@ -191,6 +190,7 @@ the corresponding topic.
 \helpref{wxOnAssert}{wxonassert}\\
 \helpref{wxOpenClipboard}{wxopenclipboard}\\
 \helpref{wxParseCommonDialogsFilter}{wxparsecommondialogsfilter}\\
+\helpref{wxPathExists}{functionwxpathexists}\\
 \helpref{wxPathOnly}{wxpathonly}\\
 \helpref{wxPostDelete}{wxpostdelete}\\
 \helpref{wxPostEvent}{wxpostevent}\\
@@ -914,13 +914,6 @@ threads.
 \helpref{wxFileName}{wxfilename}
 
 
-\membersection{::wxDirExists}\label{functionwxdirexists}
-
-\func{bool}{wxDirExists}{\param{const wxString\& }{dirname}}
-
-Returns true if the directory exists.
-
-
 \membersection{::wxDos2UnixFilename}\label{wxdos2unixfilename}
 
 \func{void}{wxDos2UnixFilename}{\param{wxChar *}{s}}
@@ -1053,6 +1046,13 @@ Returns the Windows directory under Windows; on other platforms returns the empt
 
 Returns true if the argument is an absolute filename, i.e. with a slash
 or drive name at the beginning.
+
+
+\membersection{::wxPathExists}\label{functionwxpathexists}
+
+\func{bool}{wxPathExists}{\param{const wxString\& }{dirname}}
+
+Returns true if the path exists.
 
 
 \membersection{::wxPathOnly}\label{wxpathonly}
