@@ -333,6 +333,10 @@ bool wxDialog::Show(bool show)
             // this will cause IsModalShowing() return FALSE and our local
             // message loop will terminate
             wxModalDialogs.DeleteObject(this);
+
+            // ensure that there is another message for this window so the
+            // ShowModal loop will exit and won't get stuck in GetMessage().
+            ::PostMessage(GetHwnd(), WM_NULL, 0, 0);
         }
     }
 
