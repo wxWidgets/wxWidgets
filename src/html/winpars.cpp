@@ -234,6 +234,7 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         {
             temp[templen-1] = wxT(' ');
             temp[templen] = 0;
+            if (templen == 1) continue;
             templen = 0;
             if (m_EncConv)
                 m_EncConv->Convert(temp);
@@ -249,7 +250,8 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
             m_tmpLastWasSpace = TRUE;
         }
     }
-    if (templen)
+
+    if (templen && (templen > 1 || temp[0] != wxT(' ')))
     {
         temp[templen] = 0;
         if (m_EncConv)
