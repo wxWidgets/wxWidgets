@@ -288,6 +288,18 @@ wxWindow::~wxWindow()
     m_isBeingDeleted = TRUE;
 
     MSWDetachWindowMenu();
+    
+    // VS: make sure there's no wxFrame with last focus set to us:
+    for (wxWindow *win = GetParent(); win; win = win->GetParent())
+    {
+        wxFrame *frame = wxDynamicCast(win, wxFrame);
+        if ( frame )
+        {
+            if ( frame->GetLastFocus() == this )
+                frame->SetLastFocus((wxWindow*)NULL);
+            break;
+        }
+    }
 
     if ( m_parent )
         m_parent->RemoveChild(this);

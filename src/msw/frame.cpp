@@ -799,13 +799,6 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     }
 }
 
-void wxFrame::RemoveChild( wxWindowBase *child )
-{
-    if ( child == m_winLastFocused )
-        m_winLastFocused = NULL;
-    wxFrameBase::RemoveChild(child);
-}
-
 // ----------------------------------------------------------------------------
 // tool/status bar stuff
 // ----------------------------------------------------------------------------

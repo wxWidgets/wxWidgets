@@ -61,8 +61,6 @@ public:
     // override some more virtuals
     virtual bool Show(bool show = TRUE);
 
-    virtual void RemoveChild( wxWindowBase *child );
-    
     // event handlers
     void OnActivate(wxActivateEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
@@ -117,6 +115,10 @@ public:
     // a MSW only function which sends a size event to the window using its
     // current size - this has an effect of refreshing the window layout
     void SendSizeEvent();
+
+    // called by wxWindow whenever it gets focus
+    void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
+    wxWindow *GetLastFocus() const { return m_winLastFocused; }
 
 protected:
     // common part of all ctors
