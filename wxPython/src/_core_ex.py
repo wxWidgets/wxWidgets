@@ -96,7 +96,10 @@ def CallAfter(callable, *args, **kw):
     """
     Call the specified function after the current and pending event
     handlers have been completed.  This is also good for making GUI
-    method calls from non-GUI threads.
+    method calls from non-GUI threads.  Any extra positional or
+    keyword args are passed on to the callable when it is called.
+
+    :see: `wx.FutureCall`
     """
     app = wx.GetApp()
     assert app, 'No wxApp created yet'
@@ -122,7 +125,7 @@ class FutureCall:
     A convenience class for wx.Timer, that calls the given callable
     object once after the given amount of milliseconds, passing any
     positional or keyword args.  The return value of the callable is
-    availbale after it has been run with the GetResult method.
+    availbale after it has been run with the `GetResult` method.
 
     If you don't need to get the return value or restart the timer
     then there is no need to hold a reference to this object.  It will
@@ -130,6 +133,8 @@ class FutureCall:
     has a reference to self.Notify) but the cycle will be broken when
     the timer completes, automatically cleaning up the wx.FutureCall
     object.
+
+    :see: `wx.CallAfter`
     """
     def __init__(self, millis, callable, *args, **kwargs):
         self.millis = millis

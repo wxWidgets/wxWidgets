@@ -511,8 +511,8 @@ inline const char* dropwx(const char* name) {
 
 //----------------------------------------------------------------------
 
-// This function is called when the wxc module is imported to do some initial
-// setup.  (Before there is a wxApp object.)  The rest happens in
+// This function is called when the wx._core_ module is imported to do some
+// initial setup.  (Before there is a wxApp object.)  The rest happens in
 // wxPyApp::_BootstrapApp
 void __wxPyPreStart(PyObject* moduleDict)
 {
@@ -665,20 +665,20 @@ bool wxPySwigInstance_Check(PyObject* obj) {
 
 //---------------------------------------------------------------------------
 
-// The stock objects are no longer created when the wxc module is imported,
-// but only after the app object has been created.  The
+// The stock objects are no longer created when the wx._core_ module is
+// imported, but only after the app object has been created.  The
 // wxPy_ReinitStockObjects function will be called 3 times to pass the stock
 // objects though various stages of evolution:
 //
 //   pass 1: Set all the pointers to a non-NULL value so the Python proxy
-//           object will be created (otherwise it will just use None.)
+//           object will be created (otherwise SWIG will just use None.)
 //
 //   pass 2: After the module has been imported and the python proxys have
 //           been created, then set the __class__ to be _wxPyUnbornObject so
 //           it will catch any access to the object and will raise an exception.
 //
-//   pass 3: Finally, from OnInit patch things up so the stock objects can
-//           be used.
+//   pass 3: Finally, from BootstrapApp patch things up so the stock objects
+//           can be used.
 
 
 PyObject* __wxPyFixStockObjects(PyObject* /* self */, PyObject* args)
@@ -735,6 +735,17 @@ static void rsoPass3(const char* name, const char* classname, void* ptr)
 void wxPy_ReinitStockObjects(int pass)
 {
 
+    // If there is already an App object then wxPython is probably embedded in
+    // a wx C++ application, so there is no need to do all this.
+    static bool embedded = false;
+    if ((pass == 1 || pass == 2) && wxTheApp) {
+        embedded = true;
+        return;
+    }
+    if (pass == 3 && embedded)
+        return;
+
+
 #define REINITOBJ(name, classname) \
     if (pass == 1) { name = (classname*)0xC0C0C0C0; } \
     else if (pass == 2) { rsoPass2(#name); } \
@@ -745,17 +756,7 @@ void wxPy_ReinitStockObjects(int pass)
     if (pass == 1) { } \
     else if (pass == 2) { rsoPass2(#name); } \
     else if (pass == 3) { rsoPass3(#name, #classname, (void*)&name); }
-
-    // If there is already an App object then wxPython is probably embedded in
-    // a wx C++ application, so there is no need to do all this.
-    static bool embedded = false;
-    if ((pass == 1 || pass == 2) && wxTheApp) {
-        embedded = true;
-        return;
-    }
-    if (pass == 3 && embedded)
-        return;
-    
+       
 
     REINITOBJ(wxNORMAL_FONT, wxFont);
     REINITOBJ(wxSMALL_FONT, wxFont);
