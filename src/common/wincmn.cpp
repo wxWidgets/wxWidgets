@@ -1007,25 +1007,23 @@ wxColour wxWindowBase::GetForegroundColour() const
 
 bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
 {
-    if ( !colour.Ok() || (colour == m_backgroundColour) )
+    if ( colour == m_backgroundColour ) 
         return false;
 
+    m_hasBgCol = colour.Ok();
     m_backgroundColour = colour;
-
-    m_hasBgCol = true;
-
+    SetThemeEnabled( !m_hasBgCol && !m_foregroundColour.Ok() );
     return true;
 }
 
 bool wxWindowBase::SetForegroundColour( const wxColour &colour )
 {
-    if ( !colour.Ok() || (colour == m_foregroundColour) )
+    if (colour == m_foregroundColour )
         return false;
 
+    m_hasFgCol = colour.Ok();
     m_foregroundColour = colour;
-
-    m_hasFgCol = true;
-
+    SetThemeEnabled( !m_hasFgCol && !m_backgroundColour.Ok() );
     return true;
 }
 

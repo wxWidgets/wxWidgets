@@ -3985,13 +3985,19 @@ void wxWindowGTK::GtkSetBackgroundColour( const wxColour &colour )
 
     wxASSERT( window );
 
+    // This will work around the fact that I don't know what to do to reset to
+    // theme settings when colour == wxNullColour, GetBackgroundColour will
+    // fetch the default if needed, giving us a valid colour to use below.
+    // Vaclav needs to help here to implement the RightThing...
+    wxColour newColour = GetBackgroundColour();
+    
     // We need the pixel value e.g. for background clearing.
-    m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+    newColour.CalcPixel( gdk_window_get_colormap( window ) );
 
     if (m_wxwindow)
     {
         // wxMSW doesn't clear the window here, either.
-        gdk_window_set_background( window, m_backgroundColour.GetColor() );
+        gdk_window_set_background( window, newColour.GetColor() );
     }
 
     ApplyWidgetStyle();
@@ -3999,10 +4005,10 @@ void wxWindowGTK::GtkSetBackgroundColour( const wxColour &colour )
 
 bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid window") );
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
 
     if (!wxWindowBase::SetBackgroundColour(colour))
-        return FALSE;
+        return false;
 
     GdkWindow *window = (GdkWindow*) NULL;
     if (m_wxwindow)
@@ -4015,15 +4021,15 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
         // indicate that a new style has been set
         // but it couldn't get applied as the
         // widget hasn't been realized yet.
-        m_delayedBackgroundColour = TRUE;
-        return TRUE;
+        m_delayedBackgroundColour = true;
+        return true;
     }
     else
     {
         GtkSetBackgroundColour( colour );
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxWindowGTK::GtkSetForegroundColour( const wxColour &colour )
@@ -4047,7 +4053,7 @@ bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
     {
         // don't leave if the GTK widget has just
         // been realized
-        if (!m_delayedForegroundColour) return FALSE;
+        if (!m_delayedForegroundColour) return false;
     }
 
     GdkWindow *window = (GdkWindow*) NULL;
@@ -4061,14 +4067,14 @@ bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
         // indicate that a new style has been set
         // but it couldn't get applied as the
         // widget hasn't been realized yet.
-        m_delayedForegroundColour = TRUE;
+        m_delayedForegroundColour = true;
     }
     else
     {
        GtkSetForegroundColour( colour );
     }
 
-    return TRUE;
+    return true;
 }
 
 #ifdef __WXGTK20__
