@@ -170,6 +170,13 @@ wxThread and related classes:
 OTHER CHANGES
 =============
 
+2.4.1
+-----
+
+wxBase
+
+- compilation with wxUSE_ODBC=1 fixed (dbkeyg.h file was missing in the archive)
+
 2.4.0.2
 -------
 
