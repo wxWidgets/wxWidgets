@@ -80,6 +80,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
     EVT_MENU(MDI_REFRESH, MyChild::OnRefresh)
+    EVT_MENU(MDI_CHANGE_TITLE, MyChild::OnChangeTitle)
 
     EVT_CLOSE(MyChild::OnClose)
 END_EVENT_TABLE()
@@ -233,8 +234,8 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 
     wxMenu *option_menu = new wxMenu;
 
-    // Dummy option
     option_menu->Append(MDI_REFRESH, "&Refresh picture");
+    option_menu->Append(MDI_CHANGE_TITLE, "Change &title...");
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(MDI_ABOUT, "&About");
@@ -415,10 +416,25 @@ void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(TRUE);
 }
 
-void MyChild::OnRefresh(wxCommandEvent& event)
+void MyChild::OnRefresh(wxCommandEvent& WXUNUSED(event))
 {
     if ( canvas )
         canvas->Refresh();
+}
+
+void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
+{
+    static wxString s_title = _T("Canvas Frame");
+
+    wxString title = wxGetTextFromUser(_T("Enter the new title for MDI child"),
+                                       _T("MDI sample question"),
+                                       s_title,
+                                       this);
+    if ( !title )
+        return;
+
+    s_title = title;
+    SetTitle(s_title);
 }
 
 void MyChild::OnActivate(wxActivateEvent& event)

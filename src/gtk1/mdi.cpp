@@ -406,6 +406,18 @@ void wxMDIChildFrame::OnMenuHighlight( wxMenuEvent& event )
 #endif // wxUSE_STATUSBAR
 }
 
+void wxMDIChildFrame::SetTitle( const wxString &title )
+{
+    if ( title == m_title )
+        return;
+
+    m_title = title;
+
+    wxMDIParentFrame* parent = (wxMDIParentFrame*) GetParent();
+    GtkNotebook* notebook = GTK_NOTEBOOK(parent->m_widget);
+    gtk_notebook_set_tab_label_text(notebook, m_page->child, title.mbc_str());
+}
+
 //-----------------------------------------------------------------------------
 // "size_allocate"
 //-----------------------------------------------------------------------------
