@@ -457,10 +457,6 @@ inline name::difference_type operator -(const name::const_reverse_iterator& i1,\
 //    cannot handle types with size greater than pointer because of sorting
 // ----------------------------------------------------------------------------
 
-#define _WX_DEFINE_SORTED_TYPEARRAY(T, name, base, defcomp, classexp) \
-typedef int (CMPFUNC_CONV *SCMPFUNC##T)(T pItem1, T pItem2);          \
-_WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp, SCMPFUNC##T)
-
 #define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp, comptype)\
 wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(void *),                   \
                        TypeTooBigToBeStoredInSorted##base,            \
@@ -660,8 +656,9 @@ private:                                                                 \
 
 #define WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base, expmode)  \
     typedef T _wxArray##name;                                             \
-    _WX_DEFINE_SORTED_TYPEARRAY(_wxArray##name, name, base,               \
-                                wxARRAY_EMPTY_CMP, class expmode)
+    typedef int (CMPFUNC_CONV *SCMPFUNC##name)(T pItem1, T pItem2);       \
+    _WX_DEFINE_SORTED_TYPEARRAY_2(_wxArray##name, name, base,             \
+                                wxARRAY_EMPTY_CMP, class expmode, SCMPFUNC##name)
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_SORTED_TYPEARRAY_CMP: exactly the same as above but the comparison
@@ -686,8 +683,9 @@ private:                                                                 \
 #define WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base, \
                                                      expmode)                \
     typedef T _wxArray##name;                                                \
-    _WX_DEFINE_SORTED_TYPEARRAY(_wxArray##name, name, base, = cmpfunc,       \
-                                class expmode)
+    typedef int (CMPFUNC_CONV *SCMPFUNC##name)(T pItem1, T pItem2);          \
+    _WX_DEFINE_SORTED_TYPEARRAY_2(_wxArray##name, name, base, = cmpfunc,     \
+                                class expmode, SCMPFUNC##name)
 
 // ----------------------------------------------------------------------------
 // WX_DECLARE_OBJARRAY(T, name): this macro generates a new array class
