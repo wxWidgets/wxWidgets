@@ -120,6 +120,7 @@
 #define wxUSE_MIMETYPE     1
 #define wxUSE_MSGDLG       1
 #define wxUSE_NOTEBOOK     1
+#define wxUSE_LISTBOOK     1
 #define wxUSE_SPLITTER     1
 #define wxUSE_STOPWATCH    1
 #define wxUSE_TAB_DIALOG   1

@@ -438,6 +438,7 @@
  * Use this control
  */
 #define wxUSE_NOTEBOOK 0
+#define wxUSE_LISTBOOK 0
 /*
  * Use this control
  */

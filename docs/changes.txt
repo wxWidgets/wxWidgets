@@ -78,6 +78,7 @@ wxBase:
 All GUI ports:
 
 - added wxVScrolledWindow, wxVListBox and wxHtmlLbox classes
+- added wxListbook
 - added alpha channel support to wxImage
 - added wxRenderer class allowing to customize the drawing of generic controls
 - added wxCLOSE_BOX style for dialogs and frames

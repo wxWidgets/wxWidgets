@@ -454,6 +454,7 @@
  * Use this control
  */
 #define wxUSE_NOTEBOOK 1
+#define wxUSE_LISTBOOK 1
 /*
  * Use this control
  */
