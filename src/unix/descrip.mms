@@ -23,17 +23,21 @@ CXX_DEFINE =
 
 OBJECTS = \
 		dialup.obj,\
+		dir.obj,\
 		fontenum.obj,\
 		fontutil.obj,\
 		gsocket.obj,\
+		mimetype.obj,\
 		threadpsx.obj,\
 		utilsunx.obj
 
 SOURCES = \
 		dialup.cpp,\
+		dir.cpp,\
 		fontenum.cpp,\
 		fontutil.cpp,\
 		gsocket.c,\
+		mimetype.cpp,\
 		threadpsx.cpp,\
 		utilsunx.cpp
 
@@ -44,8 +48,10 @@ all : $(SOURCES)
 .endif
 
 dialup.obj : dialup.cpp
+dir.obj : dir.cpp
 fontenum.obj : fontenum.cpp
 fontutil.obj : fontutil.cpp
 gsocket.obj : gsocket.c
+mimetype.obj : mimetype.cpp
 threadpsx.obj : threadpsx.cpp
 utilsunx.obj : utilsunx.cpp

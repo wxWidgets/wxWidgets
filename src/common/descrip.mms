@@ -87,7 +87,7 @@ OBJECTS1=framecmn.obj,\
 		longlong.obj,\
 		memory.obj,\
 		menucmn.obj,\
-		mimetype.obj,\
+		mimecmn.obj,\
 		module.obj,\
 		mstream.obj,\
 		object.obj,\
@@ -185,7 +185,7 @@ SOURCES = \
 		longlong.cpp,\
 		memory.cpp,\
 		menucmn.cpp,\
-		mimetype.cpp,\
+		mimecmn.cpp,\
 		module.cpp,\
 		mstream.cpp,\
 		object.cpp,\
@@ -308,7 +308,7 @@ log.obj : log.cpp
 longlong.obj : longlong.cpp
 memory.obj : memory.cpp
 menucmn.obj : menucmn.cpp
-mimetype.obj : mimetype.cpp
+mimecmn.obj : mimecmn.cpp
 module.obj : module.cpp
 mstream.obj : mstream.cpp
 object.obj : object.cpp

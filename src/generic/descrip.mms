@@ -41,6 +41,7 @@ OBJECTS = \
 		notebook.obj,\
 		numdlgg.obj,\
 		panelg.obj,\
+		plot.obj,\
 		printps.obj,\
 		prntdlgg.obj,\
 		progdlgg.obj,\
@@ -81,6 +82,7 @@ SOURCES = \
 		notebook.cpp,\
 		numdlgg.cpp,\
 		panelg.cpp,\
+		plot.cpp,\
 		printps.cpp,\
 		prntdlgg.cpp,\
 		progdlgg.cpp,\
@@ -127,6 +129,7 @@ msgdlgg.obj : msgdlgg.cpp
 notebook.obj : notebook.cpp
 numdlgg.obj : numdlgg.cpp
 panelg.obj : panelg.cpp
+plot.obj : plot.cpp
 printps.obj : printps.cpp
 prntdlgg.obj : prntdlgg.cpp
 progdlgg.obj : progdlgg.cpp
