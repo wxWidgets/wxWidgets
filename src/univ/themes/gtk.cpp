@@ -44,7 +44,7 @@
 // constants (to be removed)
 // ----------------------------------------------------------------------------
 
-static const wxCoord BORDER_THICKNESS = 10;
+static const size_t BORDER_THICKNESS = 10;
 
 // ----------------------------------------------------------------------------
 // wxGTKRenderer: draw the GUI elements in GTK style

@@ -1,19 +1,39 @@
+----------------------------------------------------------------------------
+TODO
+----------------------------------------------------------------------------
+
+wxTextCtrl
+
+o   DoDraw should iterat over update region instead of using bounding box
+
 All
 
-! wxThemeSettings
-! actions/wxInputHandler?
+!   wxThemeSettings
+!   actions/wxInputHandler?
 
-* problem with lbox horz scrolling: the focus rect isn't drawn entirely...
-* write sample testing all listbox styles/events
-+ text ctrl horz scrolling
-* text ctrl wxTE_XXX styles support
-* listbox inc kbd search
+*   problem with lbox horz scrolling: the focus rect isn't drawn entirely...
+*   write sample testing all listbox styles/events
+*   text ctrl wxTE_XXX styles support
+*   listbox inc kbd search
 
 MSW
 
 GTK
 
-* listbox scrolling leaves unpainted areas
+*   listbox scrolling leaves unpainted areas
 
-+ check/radio box remains pressed in win32 mode
-+ wxCheckListBox::HitTest doesn't work (clicking the check)
++   wxCheckListBox::HitTest doesn't work (clicking the check)
+
+----------------------------------------------------------------------------
+DONE
+----------------------------------------------------------------------------
+
+All
+
++   text ctrl horz scrolling
+
+MSW
+
+GTK
+
++   check/radio box remains pressed in win32 mode
