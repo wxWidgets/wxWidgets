@@ -58,7 +58,7 @@ bool MyApp::OnInit(void)
 void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
 {
   m_okButton = new wxButton(window, wxID_OK, "Close", wxPoint(-1, -1), wxSize(80, 25));
-  m_cancelButton = new wxButton(window, wxID_CANCEL, "Cancel", wxPoint(-1, -1), wxSize(80, 25));
+  m_cancelButton = new wxButton(window, ID_DELETE_PAGE, "Delete page", wxPoint(-1, -1), wxSize(80, 25));
   m_addPageButton = new wxButton(window, ID_ADD_PAGE, "Add page", wxPoint(-1, -1), wxSize(80, 25));
   m_okButton->SetDefault();
 
@@ -108,6 +108,11 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
   wxPanel *panel4 = new wxPanel(notebook, -1);
   panel4->SetBackgroundColour(wxColour("YELLOW"));
   notebook->AddPage(panel4, "Sheep");
+  
+  wxPanel *panel5 = new wxPanel(notebook, -1);
+  panel5->SetBackgroundColour(wxColour("MAGENTA"));
+  (void)new wxStaticText(panel5, -1, "This page has been inserted, not added", wxPoint(10, 10) );
+  notebook->InsertPage(0, panel5, "Sheep");
 }
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
@@ -154,7 +159,7 @@ void MyDialog::Init(void)
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(wxID_OK, MyFrame::OnOK)
-    EVT_BUTTON(wxID_CANCEL, MyFrame::OnOK)
+    EVT_BUTTON(ID_DELETE_PAGE, MyFrame::OnDeletePage)
     EVT_BUTTON(ID_ADD_PAGE, MyFrame::OnAddPage)
     EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
@@ -174,6 +179,11 @@ void MyFrame::OnAddPage(wxCommandEvent& WXUNUSED(event))
   (void)new wxButton( panel, -1, "Button", wxPoint( 10,10 ), wxSize(-1,-1) );
   m_notebook->AddPage( panel, "Added" );
   m_notebook->SetSelection( m_notebook->GetPageCount()-1 );
+}
+
+void MyFrame::OnDeletePage(wxCommandEvent& WXUNUSED(event))
+{
+  m_notebook->DeletePage( m_notebook->GetPageCount()-1 );
 }
 
 void MyFrame::OnOK(wxCommandEvent& WXUNUSED(event) )

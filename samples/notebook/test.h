@@ -50,6 +50,7 @@ public:
     void OnOK(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
     void OnAddPage(wxCommandEvent& event);
+    void OnDeletePage(wxCommandEvent& event);
     void OnSize(wxSizeEvent& event);
     void Init(void);
 protected:
@@ -78,4 +79,5 @@ DECLARE_EVENT_TABLE()
 
 #define ID_NOTEBOOK         1000
 #define ID_ADD_PAGE         1200
+#define ID_DELETE_PAGE      1201
 

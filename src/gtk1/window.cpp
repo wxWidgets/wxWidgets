@@ -1982,7 +1982,7 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
         int border = 0;
 
-        if (GTK_WIDGET_HAS_DEFAULT(m_widget))
+        if (GTK_WIDGET_CAN_DEFAULT(m_widget))
 	{
 	    /* the default button has a border around it */
 	    border = 5;

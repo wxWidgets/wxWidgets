@@ -180,6 +180,7 @@ public:
 
   wxImageList*    m_imageList;
   wxList          m_pages;
+  int             m_lastSelection;  /* hack */
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()

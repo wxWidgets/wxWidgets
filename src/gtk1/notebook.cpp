@@ -184,6 +184,7 @@ void wxNotebook::Init()
 {
     m_imageList = (wxImageList *) NULL;
     m_pages.DeleteContents( TRUE );
+    m_lastSelection = -1;
 }
 
 wxNotebook::wxNotebook()
@@ -251,11 +252,9 @@ int wxNotebook::GetSelection() const
 
     GtkNotebook *notebook = GTK_NOTEBOOK(m_widget);
     
-    GtkNotebookPage *page = GTK_NOTEBOOK_PAGE( notebook->cur_page );
+    if (notebook->cur_page == NULL) return m_lastSelection;
     
-    wxCHECK_MSG( page, -1, "no notebook page selected/current" );
-
-    return g_list_index( pages, (gpointer)page );
+    return g_list_index( pages, (gpointer)(notebook->cur_page) );
 }
 
 int wxNotebook::GetPageCount() const
@@ -462,9 +461,14 @@ bool wxNotebook::DeletePage( int page )
     wxNotebookPage* nb_page = GetNotebookPage(page);
     if (!nb_page) return FALSE;
 
+    /* GTK sets GtkNotebook.cur_page to NULL before sending
+       the switvh page event */
+    m_lastSelection = GetSelection();
+    
     nb_page->m_client->Destroy();
-
     m_pages.DeleteObject( nb_page );
+    
+    m_lastSelection = -1;
 
     return TRUE;
 }
