@@ -39,13 +39,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
-#if defined(__WIN95__)
-
 #include "wx/msw/private.h"
-
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
+#include "wx/msw/wrapcctl.h"
 
 // ============================================================================
 // implementation
@@ -318,7 +313,5 @@ bool wxSpinButton::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD WXUNUSED(id))
     // No command messages
     return false;
 }
-
-#endif // __WIN95__
 
 #endif // wxUSE_SPINBTN
