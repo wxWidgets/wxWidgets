@@ -2212,7 +2212,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth ;
-                dc.DrawLine(x, firstItemRect.GetY() - 2, x, itemRect.GetBottom());
+                dc.DrawLine(x-1, firstItemRect.GetY() - 2, x-1, itemRect.GetBottom());
             }
         }
     }

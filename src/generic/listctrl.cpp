@@ -2816,7 +2816,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxPen pen(GetRuleColour(), 1, wxSOLID);
             wxSize clientSize = GetClientSize();
 
-            for ( size_t i = visibleFrom; i <= visibleTo; i++ )
+            // Don't draw the first one
+            for ( size_t i = visibleFrom+1; i <= visibleTo; i++ )
             {
                 dc.SetPen(pen);
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -2825,12 +2826,12 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             }
 
             // Draw last horizontal rule
-            if ( visibleTo > visibleFrom )
+            if ( visibleTo == GetItemCount() - 1 )
             {
                 dc.SetPen(pen);
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
-                dc.DrawLine(0 - dev_x, m_lineTo*lineHeight,
-                            clientSize.x - dev_x , m_lineTo*lineHeight );
+                dc.DrawLine(0 - dev_x, (m_lineTo+1)*lineHeight,
+                            clientSize.x - dev_x , (m_lineTo+1)*lineHeight );
             }
         }
 
@@ -2842,8 +2843,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             int col = 0;
             wxRect firstItemRect;
             wxRect lastItemRect;
-            GetItemRect(0, firstItemRect);
-            GetItemRect(GetItemCount() - 1, lastItemRect);
+            GetItemRect(visibleFrom, firstItemRect);
+            GetItemRect(visibleTo, lastItemRect);
             int x = firstItemRect.GetX();
             dc.SetPen(pen);
             dc.SetBrush(* wxTRANSPARENT_BRUSH);
@@ -2851,8 +2852,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth;
-                dc.DrawLine(x - dev_x, firstItemRect.GetY() - 1 - dev_y,
-                            x - dev_x, lastItemRect.GetBottom() + 1 - dev_y);
+                dc.DrawLine(x - dev_x - 2, firstItemRect.GetY() - 1 - dev_y,
+                            x - dev_x - 2, lastItemRect.GetBottom() + 1 - dev_y);
             }
         }
     }
