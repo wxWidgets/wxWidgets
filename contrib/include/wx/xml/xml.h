@@ -168,7 +168,7 @@ class WXDLLEXPORT wxXmlNode
 class WXDLLEXPORT wxXmlDocument : public wxObject
 {
     public:
-        wxXmlDocument() : wxObject(), m_Version(_T("1.0")), m_Root(NULL)  {}
+        wxXmlDocument() : wxObject(), m_Version(wxT("1.0")), m_Root(NULL)  {}
         wxXmlDocument(const wxString& filename, wxXmlIOType io_type = wxXML_IO_AUTO);
         wxXmlDocument(wxInputStream& stream, wxXmlIOType io_type = wxXML_IO_AUTO);
         ~wxXmlDocument() { delete m_Root; }

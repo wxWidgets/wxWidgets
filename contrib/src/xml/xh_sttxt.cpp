@@ -33,7 +33,7 @@ wxObject *wxStaticTextXmlHandler::DoCreateResource()
 { 
     wxStaticText *text = new wxStaticText(m_ParentAsWindow,
                                     GetID(),
-                                    GetText(_T("label")),
+                                    GetText(wxT("label")),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     GetName()
@@ -47,7 +47,7 @@ wxObject *wxStaticTextXmlHandler::DoCreateResource()
 
 bool wxStaticTextXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxStaticText"));
+    return IsOfClass(node, wxT("wxStaticText"));
 }
 
 

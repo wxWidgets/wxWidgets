@@ -32,8 +32,8 @@ wxUnknownWidgetXmlHandler::wxUnknownWidgetXmlHandler()
 
 wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
 { 
-    long id = GetLong(_T("id"), -1);
-    wxString name = GetParamValue(_T("name"));
+    long id = GetLong(wxT("id"), -1);
+    wxString name = GetParamValue(wxT("name"));
     
     wxWindow *wnd = NULL;
     
@@ -43,7 +43,7 @@ wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
         wnd = m_ParentAsWindow->FindWindow(name);
         
     if (wnd == NULL)
-        wxLogError(_T("Cannot find specified window for class 'unknown' (id=%li, name='%s')."), id, name.mb_str());
+        wxLogError(wxT("Cannot find specified window for class 'unknown' (id=%li, name='%s')."), id, name.mb_str());
     else
     {
         if (wnd->GetParent() != m_ParentAsWindow)
@@ -56,6 +56,6 @@ wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
 
 bool wxUnknownWidgetXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("unknown"));
+    return IsOfClass(node, wxT("unknown"));
 }
 

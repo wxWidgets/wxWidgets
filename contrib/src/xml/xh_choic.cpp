@@ -31,14 +31,14 @@ wxChoiceXmlHandler::wxChoiceXmlHandler()
 
 wxObject *wxChoiceXmlHandler::DoCreateResource()
 { 
-    if( m_Class == _T("wxChoice"))
+    if( m_Class == wxT("wxChoice"))
     {
         // find the selection
-        long selection = GetLong( _T("selection"), -1 );
+        long selection = GetLong( wxT("selection"), -1 );
 
         // need to build the list of strings from children
         m_InsideBox = TRUE;
-        CreateChildrenPrivately( NULL, GetParamNode(_T("content")));
+        CreateChildrenPrivately( NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
         {
@@ -87,8 +87,8 @@ wxObject *wxChoiceXmlHandler::DoCreateResource()
 
 bool wxChoiceXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return (IsOfClass(node, _T("wxChoice")) ||
-           (m_InsideBox && node->GetName() == _T("item"))
+    return (IsOfClass(node, wxT("wxChoice")) ||
+           (m_InsideBox && node->GetName() == wxT("item"))
            );
 }
 

@@ -168,7 +168,7 @@ void wxXmlNode::AddChild(wxXmlNode *child)
 
 void wxXmlNode::InsertChild(wxXmlNode *child, wxXmlNode *before_node)
 {
-    wxASSERT_MSG(before_node->GetParent() == this, _T("wxXmlNode::InsertChild - the node has incorrect parent"));
+    wxASSERT_MSG(before_node->GetParent() == this, wxT("wxXmlNode::InsertChild - the node has incorrect parent"));
 
     if (m_Children == before_node)
        m_Children = child;

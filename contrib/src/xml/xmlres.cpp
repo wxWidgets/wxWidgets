@@ -211,7 +211,7 @@ void wxXmlResource::ProcessPlatformProperty(wxXmlNode *node)
     while (c)
     {
         isok = FALSE;
-        if (!c->GetPropVal(_T("platform"), &s)) 
+        if (!c->GetPropVal(wxT("platform"), &s)) 
             isok = TRUE;
         else
         {
@@ -222,13 +222,13 @@ void wxXmlResource::ProcessPlatformProperty(wxXmlNode *node)
                 s = tkn.GetNextToken();    
                 if (
 #ifdef __WXMSW__
-                    s == wxString(_T("win"))
+                    s == wxString(wxT("win"))
 #elif defined(__UNIX__)
-                    s == wxString(_T("unix"))
+                    s == wxString(wxT("unix"))
 #elif defined(__MAC__)
-                    s == wxString(_T("mac"))
+                    s == wxString(wxT("mac"))
 #elif defined(__OS2__)
-                    s == wxString(_T("os2"))
+                    s == wxString(wxT("os2"))
 #else
                     FALSE
 #endif
@@ -297,7 +297,7 @@ void wxXmlResource::UpdateResources()
                 delete m_Data[i].Doc;
                 m_Data[i].Doc = NULL;
             }
-            else if (m_Data[i].Doc->GetRoot()->GetName() != _T("resource")) 
+            else if (m_Data[i].Doc->GetRoot()->GetName() != wxT("resource")) 
             {
                 wxLogError(_("Invalid XML resource '%s': doesn't have root node 'resource'."), m_Data[i].File.c_str());
                 delete m_Data[i].Doc;
@@ -358,7 +358,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
     while (ND)
     {
         handler = (wxXmlResourceHandler*)ND->GetData();
-        if (node->GetName() == _T("object") && handler->CanHandle(node))
+        if (node->GetName() == wxT("object") && handler->CanHandle(node))
         {
             ret = handler->CreateResource(node, parent, instance);
             if (ret) return ret;
@@ -368,7 +368,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
 
     wxLogError(_("No handler found for XML node '%s', class '%s'!"), 
                node->GetName().c_str(), 
-               node->GetPropVal(_T("class"), wxEmptyString).c_str());
+               node->GetPropVal(wxT("class"), wxEmptyString).c_str());
     return NULL;
 }
 
@@ -395,7 +395,7 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
     wxWindow *myParentAW = m_ParentAsWindow, *myInstanceAW = m_InstanceAsWindow;
     
     m_Node = node;
-    m_Class = node->GetPropVal(_T("class"), wxEmptyString);
+    m_Class = node->GetPropVal(wxT("class"), wxEmptyString);
     m_Parent = parent;
     m_Instance = instance;
     m_ParentAsWindow = wxDynamicCast(m_Parent, wxWindow);
@@ -446,7 +446,7 @@ int wxXmlResourceHandler::GetStyle(const wxString& param, int defaults)
     
     if (!s) return defaults;
     
-    wxStringTokenizer tkn(s, _T("| "), wxTOKEN_STRTOK);
+    wxStringTokenizer tkn(s, wxT("| "), wxTOKEN_STRTOK);
     int style = 0;
     int index;
     wxString fl;
@@ -517,9 +517,9 @@ int wxXmlResourceHandler::GetID()
     wxString sid = GetName();
     long num;
     
-    if (sid == _T("-1")) return -1;
+    if (sid == wxT("-1")) return -1;
     else if (sid.IsNumber() && sid.ToLong(&num)) return num;
-#define stdID(id) else if (sid == _T(#id)) return id
+#define stdID(id) else if (sid == wxT(#id)) return id
     stdID(wxID_OPEN); stdID(wxID_CLOSE); stdID(wxID_NEW);
     stdID(wxID_SAVE); stdID(wxID_SAVEAS); stdID(wxID_REVERT);
     stdID(wxID_EXIT); stdID(wxID_UNDO); stdID(wxID_REDO);
@@ -540,7 +540,7 @@ int wxXmlResourceHandler::GetID()
 
 wxString wxXmlResourceHandler::GetName()
 {
-    return m_Node->GetPropVal(_T("name"), _T("-1"));
+    return m_Node->GetPropVal(wxT("name"), wxT("-1"));
 }
 
 
@@ -550,7 +550,7 @@ bool wxXmlResourceHandler::GetBool(const wxString& param, bool defaultv)
     wxString v = GetParamValue(param);
     v.MakeLower();
     if (!v) return defaultv;
-    else return (v == _T("1"));
+    else return (v == wxT("1"));
 }
 
 
@@ -560,8 +560,8 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
     wxString v = GetParamValue(param);
     unsigned long tmp = 0; 
     
-    if (v.Length() != 7 || v[0] != _T('#') ||
-        wxSscanf(v.c_str(), _T("#%lX"), &tmp) != 1)
+    if (v.Length() != 7 || v[0] != wxT('#') ||
+        wxSscanf(v.c_str(), wxT("#%lX"), &tmp) != 1)
     {
         wxLogError(_("XML resource: Incorrect colour specification '%s' for property '%s'."),
                    v.c_str(), param.c_str());
@@ -589,7 +589,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
     wxImage img(*(fsfile->GetStream()));
     delete fsfile;
 #else
-    wxImage img(GetParamValue(_T("bitmap")));
+    wxImage img(GetParamValue(wxT("bitmap")));
 #endif
     if (!img.Ok()) 
     {
@@ -663,15 +663,15 @@ wxString wxXmlResourceHandler::GetParamValue(const wxString& param)
 wxSize wxXmlResourceHandler::GetSize(const wxString& param)
 {
     wxString s = GetParamValue(param);
-    if (s.IsEmpty()) s = _T("-1,-1");
+    if (s.IsEmpty()) s = wxT("-1,-1");
     bool is_dlg;
     long sx, sy;
     
-    is_dlg = s[s.Length()-1] == _T('d');
+    is_dlg = s[s.Length()-1] == wxT('d');
     if (is_dlg) s.RemoveLast();
     
-    if (!s.BeforeFirst(_T(',')).ToLong(&sx) ||
-        !s.AfterLast(_T(',')).ToLong(&sy))
+    if (!s.BeforeFirst(wxT(',')).ToLong(&sx) ||
+        !s.AfterLast(wxT(',')).ToLong(&sy))
     {
         wxLogError(_("Cannot parse coordinates from '%s'."), s.mb_str());
         return wxDefaultSize;
@@ -709,7 +709,7 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaul
     bool is_dlg;
     long sx;
     
-    is_dlg = s[s.Length()-1] == _T('d');
+    is_dlg = s[s.Length()-1] == wxT('d');
     if (is_dlg) s.RemoveLast();
     
     if (!s.ToLong(&sx))
@@ -747,37 +747,37 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     wxXmlNode *oldnode = m_Node;
     m_Node = font_node;
 
-    long size = GetLong(_T("size"), 12);
+    long size = GetLong(wxT("size"), 12);
 
-    wxString style = GetParamValue(_T("style"));
-    wxString weight = GetParamValue(_T("weight"));
+    wxString style = GetParamValue(wxT("style"));
+    wxString weight = GetParamValue(wxT("weight"));
     int istyle = wxNORMAL, iweight = wxNORMAL;  
-    if (style == _T("italic")) istyle = wxITALIC;
-    else if (style == _T("slant")) istyle = wxSLANT;
-    if (weight == _T("bold")) iweight = wxBOLD;
-    else if (weight == _T("light")) iweight = wxLIGHT;
+    if (style == wxT("italic")) istyle = wxITALIC;
+    else if (style == wxT("slant")) istyle = wxSLANT;
+    if (weight == wxT("bold")) iweight = wxBOLD;
+    else if (weight == wxT("light")) iweight = wxLIGHT;
 
-    wxString family = GetParamValue(_T("family"));
+    wxString family = GetParamValue(wxT("family"));
     int ifamily = wxDEFAULT;
-         if (family == _T("decorative")) ifamily = wxDECORATIVE;
-    else if (family == _T("roman")) ifamily = wxROMAN;
-    else if (family == _T("script")) ifamily = wxSCRIPT;
-    else if (family == _T("swiss")) ifamily = wxSWISS;
-    else if (family == _T("modern")) ifamily = wxMODERN;
+         if (family == wxT("decorative")) ifamily = wxDECORATIVE;
+    else if (family == wxT("roman")) ifamily = wxROMAN;
+    else if (family == wxT("script")) ifamily = wxSCRIPT;
+    else if (family == wxT("swiss")) ifamily = wxSWISS;
+    else if (family == wxT("modern")) ifamily = wxMODERN;
 
-    bool underlined = GetBool(_T("underlined"), FALSE);
+    bool underlined = GetBool(wxT("underlined"), FALSE);
 
-    wxString encoding = GetParamValue(_T("encoding"));
+    wxString encoding = GetParamValue(wxT("encoding"));
     wxFontMapper mapper;
     wxFontEncoding enc = wxFONTENCODING_DEFAULT;
     if (!encoding.IsEmpty()) enc = mapper.CharsetToEncoding(encoding);
     if (enc == wxFONTENCODING_SYSTEM) enc = wxFONTENCODING_SYSTEM;
 
-    wxString faces = GetParamValue(_T("face"));
+    wxString faces = GetParamValue(wxT("face"));
     wxString facename = wxEmptyString;
     wxFontEnumerator enu;
     enu.EnumerateFacenames();
-    wxStringTokenizer tk(faces, _T(","));
+    wxStringTokenizer tk(faces, wxT(","));
     while (tk.HasMoreTokens()) 
     {
         int index = enu.GetFacenames()->Index(tk.GetNextToken(), FALSE);
@@ -799,23 +799,23 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
 {
     //FIXME : add cursor
     
-    if (HasParam(_T("exstyle")))
-        wnd->SetExtraStyle(GetStyle(_T("exstyle")));
-    if (HasParam(_T("bg")))
-        wnd->SetBackgroundColour(GetColour(_T("bg")));
-    if (HasParam(_T("fg")))
-        wnd->SetForegroundColour(GetColour(_T("fg")));
-    if (GetBool(_T("enabled"), 1) == 0)
+    if (HasParam(wxT("exstyle")))
+        wnd->SetExtraStyle(GetStyle(wxT("exstyle")));
+    if (HasParam(wxT("bg")))
+        wnd->SetBackgroundColour(GetColour(wxT("bg")));
+    if (HasParam(wxT("fg")))
+        wnd->SetForegroundColour(GetColour(wxT("fg")));
+    if (GetBool(wxT("enabled"), 1) == 0)
         wnd->Enable(FALSE);
-    if (GetBool(_T("focused"), 0) == 1)
+    if (GetBool(wxT("focused"), 0) == 1)
         wnd->SetFocus();
-    if (GetBool(_T("hidden"), 0) == 1)
+    if (GetBool(wxT("hidden"), 0) == 1)
         wnd->Show(FALSE);
 #if wxUSE_TOOLTIPS
-    if (HasParam(_T("tooltip")))
-        wnd->SetToolTip(GetText(_T("tooltip")));
+    if (HasParam(wxT("tooltip")))
+        wnd->SetToolTip(GetText(wxT("tooltip")));
 #endif      
-    if (HasParam(_T("font")))
+    if (HasParam(wxT("font")))
         wnd->SetFont(GetFont());
 }
 
@@ -827,7 +827,7 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
     while (n)
     {
         if (n->GetType() == wxXML_ELEMENT_NODE &&
-            n->GetName() == _T("object"))
+            n->GetName() == wxT("object"))
         {        
             if (this_hnd_only && CanHandle(n))
                 CreateResource(n, parent, NULL);

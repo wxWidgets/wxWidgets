@@ -54,7 +54,7 @@ wxObject *wxCalendarCtrlXmlHandler::DoCreateResource()
 
 bool wxCalendarCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxCalendarCtrl"));
+    return IsOfClass(node, wxT("wxCalendarCtrl"));
 }
 
 

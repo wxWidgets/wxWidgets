@@ -38,24 +38,24 @@ wxObject *wxGaugeXmlHandler::DoCreateResource()
 { 
     wxGauge *control = new wxGauge(m_ParentAsWindow,
                                     GetID(),
-                                    GetLong( _T("range"), wxGAUGE_DEFAULT_RANGE), 
+                                    GetLong( wxT("range"), wxGAUGE_DEFAULT_RANGE), 
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     wxDefaultValidator,
                                     GetName()
                                     );
 
-    if( HasParam( _T("value") ))
+    if( HasParam( wxT("value") ))
     {
-        control->SetValue( GetLong( _T("value") ));
+        control->SetValue( GetLong( wxT("value") ));
     }
-    if( HasParam( _T("shadow") ))
+    if( HasParam( wxT("shadow") ))
     {
-        control->SetShadowWidth( GetDimension( _T("shadow") ));
+        control->SetShadowWidth( GetDimension( wxT("shadow") ));
     }
-    if( HasParam( _T("bezel") ))
+    if( HasParam( wxT("bezel") ))
     {
-        control->SetBezelFace( GetDimension( _T("bezel") ));
+        control->SetBezelFace( GetDimension( wxT("bezel") ));
     }
 
     SetupWindow(control);
@@ -67,7 +67,7 @@ wxObject *wxGaugeXmlHandler::DoCreateResource()
 
 bool wxGaugeXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxGauge"));
+    return IsOfClass(node, wxT("wxGauge"));
 }
 
 

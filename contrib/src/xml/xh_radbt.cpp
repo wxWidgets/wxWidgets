@@ -42,14 +42,14 @@ wxObject *wxRadioButtonXmlHandler::DoCreateResource()
 
     wxRadioButton *control = new wxRadioButton(m_ParentAsWindow,
                                     GetID(),
-                                    GetText(_T("label")),
+                                    GetText(wxT("label")),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     wxDefaultValidator,
                                     GetName()
                                     );
 
-    control->SetValue( GetBool(_T("value"), 0));
+    control->SetValue( GetBool(wxT("value"), 0));
     SetupWindow(control);
     
     return control;
@@ -59,7 +59,7 @@ wxObject *wxRadioButtonXmlHandler::DoCreateResource()
 
 bool wxRadioButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxRadioButton"));
+    return IsOfClass(node, wxT("wxRadioButton"));
 }
 
 

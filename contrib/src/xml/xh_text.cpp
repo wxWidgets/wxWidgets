@@ -37,7 +37,7 @@ wxObject *wxTextCtrlXmlHandler::DoCreateResource()
 { 
     wxTextCtrl *text = new wxTextCtrl(m_ParentAsWindow,
                                     GetID(),
-                                    GetText(_T("value")),
+                                    GetText(wxT("value")),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     wxDefaultValidator,
@@ -52,7 +52,7 @@ wxObject *wxTextCtrlXmlHandler::DoCreateResource()
 
 bool wxTextCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxTextCtrl"));
+    return IsOfClass(node, wxT("wxTextCtrl"));
 }
 
 

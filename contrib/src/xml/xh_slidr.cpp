@@ -44,38 +44,38 @@ wxObject *wxSliderXmlHandler::DoCreateResource()
 { 
     wxSlider *control = new wxSlider(m_ParentAsWindow,
                                     GetID(),
-                                    GetLong( _T("value"), wxSL_DEFAULT_VALUE), 
-                                    GetLong( _T("min"), wxSL_DEFAULT_MIN),
-                                    GetLong( _T("max"), wxSL_DEFAULT_MAX),
+                                    GetLong( wxT("value"), wxSL_DEFAULT_VALUE), 
+                                    GetLong( wxT("min"), wxSL_DEFAULT_MIN),
+                                    GetLong( wxT("max"), wxSL_DEFAULT_MAX),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     wxDefaultValidator,
                                     GetName()
                                     );
 
-    if( HasParam( _T("tickfreq") ))
+    if( HasParam( wxT("tickfreq") ))
     {
-        control->SetTickFreq( GetLong( _T("tickfreq") ), 0 );
+        control->SetTickFreq( GetLong( wxT("tickfreq") ), 0 );
     }
-    if( HasParam( _T("pagesize") ))
+    if( HasParam( wxT("pagesize") ))
     {
-        control->SetPageSize( GetLong( _T("pagesize") ) );
+        control->SetPageSize( GetLong( wxT("pagesize") ) );
     }
-    if( HasParam( _T("linesize") ))
+    if( HasParam( wxT("linesize") ))
     {
-        control->SetLineSize( GetLong( _T("linesize") ));
+        control->SetLineSize( GetLong( wxT("linesize") ));
     }
-    if( HasParam( _T("thumb") ))
+    if( HasParam( wxT("thumb") ))
     {
-        control->SetThumbLength( GetLong( _T("thumb") ));
+        control->SetThumbLength( GetLong( wxT("thumb") ));
     }
-    if( HasParam( _T("tick") ))
+    if( HasParam( wxT("tick") ))
     {
-        control->SetTick( GetLong( _T("tick") ));
+        control->SetTick( GetLong( wxT("tick") ));
     }
-    if( HasParam( _T("selmin") ) && HasParam( _T("selmax")) )
+    if( HasParam( wxT("selmin") ) && HasParam( wxT("selmax")) )
     {
-        control->SetSelection( GetLong( _T("selmin") ), GetLong( _T("selmax")) );
+        control->SetSelection( GetLong( wxT("selmin") ), GetLong( wxT("selmax")) );
     }
 
     SetupWindow(control);
@@ -87,7 +87,7 @@ wxObject *wxSliderXmlHandler::DoCreateResource()
 
 bool wxSliderXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxSlider"));
+    return IsOfClass(node, wxT("wxSlider"));
 }
 
 

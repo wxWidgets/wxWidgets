@@ -34,12 +34,12 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
 { 
     wxButton *button = new wxButton(m_ParentAsWindow,
                                     GetID(),
-                                    GetText(_T("label")),
+                                    GetText(wxT("label")),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     wxDefaultValidator,
                                     GetName());
-    if (GetBool(_T("default"), 0) == 1) button->SetDefault();
+    if (GetBool(wxT("default"), 0) == 1) button->SetDefault();
     SetupWindow(button);
     
     return button;
@@ -49,7 +49,7 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
 
 bool wxButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxButton"));
+    return IsOfClass(node, wxT("wxButton"));
 }
 
 

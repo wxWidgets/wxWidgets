@@ -41,9 +41,9 @@ wxNotebookXmlHandler::wxNotebookXmlHandler()
 
 wxObject *wxNotebookXmlHandler::DoCreateResource()
 { 
-    if (m_Class == _T("notebookpage"))
+    if (m_Class == wxT("notebookpage"))
     {
-        wxXmlNode *n = GetParamNode(_T("object"));
+        wxXmlNode *n = GetParamNode(wxT("object"));
 
         if (n)
         {
@@ -54,15 +54,15 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
             wxWindow *wnd = wxDynamicCast(item, wxWindow);
 
             if (wnd)
-                m_Notebook->AddPage(wnd, GetText(_T("label")),
-                                         GetBool(_T("selected"), 0));
+                m_Notebook->AddPage(wnd, GetText(wxT("label")),
+                                         GetBool(wxT("selected"), 0));
             else 
-                wxLogError(_T("Error in resource."));              
+                wxLogError(wxT("Error in resource."));              
             return wnd;
         }
         else
         {
-            wxLogError(_T("Error in resource: no control within notebook's <page> tag."));
+            wxLogError(wxT("Error in resource: no control within notebook's <page> tag."));
             return NULL;
         }
     }
@@ -71,7 +71,7 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         wxNotebook *nb = new wxNotebook(m_ParentAsWindow, 
                                         GetID(),
                                         GetPosition(), GetSize(),
-                                        GetStyle( _T("style" )),
+                                        GetStyle( wxT("style" )),
                                         GetName());
     
         wxNotebook *old_par = m_Notebook;
@@ -82,7 +82,7 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         m_IsInside = old_ins;
         m_Notebook = old_par;
 
-        if (GetBool(_T("usenotebooksizer"), FALSE))
+        if (GetBool(wxT("usenotebooksizer"), FALSE))
             return new wxNotebookSizer(nb);
         else
             return nb;
@@ -93,8 +93,8 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
 
 bool wxNotebookXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return ((!m_IsInside && IsOfClass(node, _T("wxNotebook"))) ||
-            (m_IsInside && IsOfClass(node, _T("notebookpage"))));
+    return ((!m_IsInside && IsOfClass(node, wxT("wxNotebook"))) ||
+            (m_IsInside && IsOfClass(node, wxT("notebookpage"))));
 }
 
 #endif

@@ -165,7 +165,7 @@ extern wxXmlResource *wxTheXmlResource;
 //    END_EVENT_TABLE()    
 
 #define XMLID(str_id) \
-    wxXmlResource::GetXMLID(_T(str_id))
+    wxXmlResource::GetXMLID(wxT(str_id))
 
 
 // This macro returns pointer to particular control in dialog
@@ -174,7 +174,7 @@ extern wxXmlResource *wxTheXmlResource;
 // Example:
 //    wxDialog dlg;
 //    wxTheXmlResource->LoadDialog(&dlg, mainFrame, "my_dialog");
-//    XMLCTRL(dlg, "my_textctrl", wxTextCtrl)->SetValue(_T("default value"));
+//    XMLCTRL(dlg, "my_textctrl", wxTextCtrl)->SetValue(wxT("default value"));
 
 #define XMLCTRL(window, id, type) \
     ((type*)((window).FindWindow(XMLID(id))))
@@ -223,7 +223,7 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         // Returns true if the node has property class equal to classname,
         // e.g. <object class="wxDialog">
         bool IsOfClass(wxXmlNode *node, const wxString& classname)
-            { return node->GetPropVal(_T("class"), wxEmptyString) == classname; }
+            { return node->GetPropVal(wxT("class"), wxEmptyString) == classname; }
 
         // Gets node content from wxXML_ENTITY_NODE
         // (the problem is, <tag>content<tag> is represented as
@@ -248,7 +248,7 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         
         // Gets style flags from text in form "flag | flag2| flag3 |..."
         // Only understads flags added with AddStyle
-        int GetStyle(const wxString& param = _T("style"), int defaults = 0);
+        int GetStyle(const wxString& param = wxT("style"), int defaults = 0);
         
         // Gets text from param and does some convertions:
         // - replaces \n, \r, \t by respective chars (according to C syntax)
@@ -270,18 +270,18 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         wxColour GetColour(const wxString& param);
         
         // Get size/position (may be in dlg units):
-        wxSize GetSize(const wxString& param = _T("size"));
-        wxPoint GetPosition(const wxString& param = _T("pos"));
+        wxSize GetSize(const wxString& param = wxT("size"));
+        wxPoint GetPosition(const wxString& param = wxT("pos"));
 
         // Get dimension (may be in dlg units):
         wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0);
         
         // Get bitmap:
-        wxBitmap GetBitmap(const wxString& param = _T("bitmap"), wxSize size = wxDefaultSize);
-        wxIcon GetIcon(const wxString& param = _T("icon"), wxSize size = wxDefaultSize);
+        wxBitmap GetBitmap(const wxString& param = wxT("bitmap"), wxSize size = wxDefaultSize);
+        wxIcon GetIcon(const wxString& param = wxT("icon"), wxSize size = wxDefaultSize);
         
         // Get font:
-        wxFont GetFont(const wxString& param = _T("font"));
+        wxFont GetFont(const wxString& param = wxT("font"));
         
         // Sets common window options:
         void SetupWindow(wxWindow *wnd);
@@ -295,7 +295,7 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         wxFileSystem& GetCurFileSystem() { return m_Resource->GetCurFileSystem(); }
 };
 
-#define ADD_STYLE(style) AddStyle(_T(#style), style)
+#define ADD_STYLE(style) AddStyle(wxT(#style), style)
 
 
 

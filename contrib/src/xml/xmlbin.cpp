@@ -31,7 +31,7 @@
 bool wxXmlIOHandlerBin::CanLoad(wxInputStream& stream)
 {
     bool canread;
-    canread = (ReadHeader(stream) == _T("XMLBIN "));
+    canread = (ReadHeader(stream) == wxT("XMLBIN "));
     stream.SeekI(-9, wxFromCurrent);
     return canread;
 }

@@ -30,14 +30,14 @@ wxBitmapXmlHandler::wxBitmapXmlHandler()
 
 wxObject *wxBitmapXmlHandler::DoCreateResource()
 { 
-    return new wxBitmap(GetBitmap(_T("")));
+    return new wxBitmap(GetBitmap(wxT("")));
 }
 
 
 
 bool wxBitmapXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxBitmap"));
+    return IsOfClass(node, wxT("wxBitmap"));
 }
 
 
@@ -48,13 +48,13 @@ wxIconXmlHandler::wxIconXmlHandler()
 
 wxObject *wxIconXmlHandler::DoCreateResource()
 { 
-    return new wxIcon(GetIcon(_T("")));
+    return new wxIcon(GetIcon(wxT("")));
 }
 
 
 
 bool wxIconXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxIcon"));
+    return IsOfClass(node, wxT("wxIcon"));
 }
 

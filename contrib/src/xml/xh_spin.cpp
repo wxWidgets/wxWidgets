@@ -39,13 +39,13 @@ wxObject *wxSpinButtonXmlHandler::DoCreateResource()
     wxSpinButton *control = new wxSpinButton(m_ParentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
-                                    GetStyle( _T("style"), wxSP_VERTICAL | wxSP_ARROW_KEYS ),
+                                    GetStyle( wxT("style"), wxSP_VERTICAL | wxSP_ARROW_KEYS ),
                                     GetName()
                                     );
 
-    control->SetValue( GetLong( _T("value"), wxSP_DEFAULT_VALUE) );
-    control->SetRange( GetLong( _T("min"), wxSP_DEFAULT_MIN),
-            GetLong( _T("max"), wxSP_DEFAULT_MAX) );
+    control->SetValue( GetLong( wxT("value"), wxSP_DEFAULT_VALUE) );
+    control->SetRange( GetLong( wxT("min"), wxSP_DEFAULT_MIN),
+            GetLong( wxT("max"), wxSP_DEFAULT_MAX) );
     SetupWindow(control);
     
     return control;
@@ -55,7 +55,7 @@ wxObject *wxSpinButtonXmlHandler::DoCreateResource()
 
 bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("spinbutton");
+    return node->GetName() == wxT("spinbutton");
 }
 
 #endif // wxUSE_SPINBTN
@@ -75,12 +75,12 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
 { 
     wxSpinCtrl *control = new wxSpinCtrl(m_ParentAsWindow,
                                     GetID(),
-                                    GetText(_T("value")),
+                                    GetText(wxT("value")),
                                     GetPosition(), GetSize(),
-                                    GetStyle( _T("style"), wxSP_ARROW_KEYS ),
-                                    GetLong( _T("min"), wxSP_DEFAULT_MIN),
-                                    GetLong( _T("max"), wxSP_DEFAULT_MAX),
-                                    GetLong( _T("value"), wxSP_DEFAULT_VALUE),
+                                    GetStyle( wxT("style"), wxSP_ARROW_KEYS ),
+                                    GetLong( wxT("min"), wxSP_DEFAULT_MIN),
+                                    GetLong( wxT("max"), wxSP_DEFAULT_MAX),
+                                    GetLong( wxT("value"), wxSP_DEFAULT_VALUE),
                                     GetName()
                                     );
 
@@ -93,7 +93,7 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
 
 bool wxSpinCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxSpinCtrl"));
+    return IsOfClass(node, wxT("wxSpinCtrl"));
 }
 
 #endif // wxUSE_SPINCTRL

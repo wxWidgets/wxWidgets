@@ -51,7 +51,7 @@ wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
 
 bool wxTreeCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxTreeCtrl"));
+    return IsOfClass(node, wxT("wxTreeCtrl"));
 }
 
 

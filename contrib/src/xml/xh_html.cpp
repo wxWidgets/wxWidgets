@@ -39,22 +39,22 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
     wxHtmlWindow *control = new wxHtmlWindow(m_ParentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
-                                    GetStyle( _T("style" ), wxHW_SCROLLBAR_AUTO),
+                                    GetStyle( wxT("style" ), wxHW_SCROLLBAR_AUTO),
                                     GetName()
                                     );
 
-    if( HasParam( _T("borders") ))
+    if( HasParam( wxT("borders") ))
     {
-        control->SetBorders( GetDimension( _T("borders" )));
+        control->SetBorders( GetDimension( wxT("borders" )));
     }
 
-    if( HasParam( _T("url") ))
+    if( HasParam( wxT("url") ))
     {
-        control->LoadPage( GetParamValue( _T("url" )));
+        control->LoadPage( GetParamValue( wxT("url" )));
     }
-    else if( HasParam( _T("htmlcode") ))
+    else if( HasParam( wxT("htmlcode") ))
     {
-        control->SetPage( GetText(_T("htmlcode")) );
+        control->SetPage( GetText(wxT("htmlcode")) );
     }
 
     SetupWindow(control);
@@ -66,7 +66,7 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
 
 bool wxHtmlWindowXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxHtmlWindow"));
+    return IsOfClass(node, wxT("wxHtmlWindow"));
 }
 
 #endif // wxUSE_HTML

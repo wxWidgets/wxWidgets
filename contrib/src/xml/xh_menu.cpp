@@ -33,11 +33,11 @@ wxMenuXmlHandler::wxMenuXmlHandler() :
 
 wxObject *wxMenuXmlHandler::DoCreateResource()
 {
-    if (m_Class == _T("wxMenu"))
+    if (m_Class == wxT("wxMenu"))
     {
         wxMenu *menu = new wxMenu(GetStyle());
-        wxString title = GetText(_T("label"));
-        wxString help = GetText(_T("help"));
+        wxString title = GetText(wxT("label"));
+        wxString help = GetText(wxT("help"));
     
         bool oldins = m_InsideMenu;
         m_InsideMenu = TRUE;
@@ -61,25 +61,25 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
     {
         wxMenu *p_menu = wxDynamicCast(m_Parent, wxMenu);
         
-        if (m_Class == _T("separator"))
+        if (m_Class == wxT("separator"))
             p_menu->AppendSeparator();
-        else if (m_Class == _T("break"))
+        else if (m_Class == wxT("break"))
             p_menu->Break();
         else /*wxMenuItem*/
         {
             int id = GetID();
-            bool checkable = GetBool(_T("checkable"));
+            bool checkable = GetBool(wxT("checkable"));
 
-            wxMenuItem *mitem = new wxMenuItem(p_menu, id, GetText(_T("label")),
-                                               GetText(_T("help")), checkable);
+            wxMenuItem *mitem = new wxMenuItem(p_menu, id, GetText(wxT("label")),
+                                               GetText(wxT("help")), checkable);
                                                
 #if wxCHECK_VERSION(2,3,0) || defined(__WXMSW__)
-                if (HasParam(_T("bitmap")))
-                    mitem->SetBitmap(GetBitmap(_T("bitmap")));
+                if (HasParam(wxT("bitmap")))
+                    mitem->SetBitmap(GetBitmap(wxT("bitmap")));
 #endif
             p_menu->Append(mitem);
-            mitem->Enable(GetBool(_T("enabled"), TRUE));
-            if (checkable) mitem->Check(GetBool(_T("checked")));
+            mitem->Enable(GetBool(wxT("enabled"), TRUE));
+            if (checkable) mitem->Check(GetBool(wxT("checked")));
         }
         return NULL;
     }
@@ -89,11 +89,11 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
 
 bool wxMenuXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxMenu")) ||
+    return IsOfClass(node, wxT("wxMenu")) ||
            (m_InsideMenu && 
-               (IsOfClass(node, _T("wxMenuItem")) ||
-                IsOfClass(node, _T("break")) ||
-                IsOfClass(node, _T("separator")))
+               (IsOfClass(node, wxT("wxMenuItem")) ||
+                IsOfClass(node, wxT("break")) ||
+                IsOfClass(node, wxT("separator")))
            );
 }
 
@@ -125,6 +125,6 @@ wxObject *wxMenuBarXmlHandler::DoCreateResource()
 
 bool wxMenuBarXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxMenuBar"));
+    return IsOfClass(node, wxT("wxMenuBar"));
 }
 

@@ -32,7 +32,7 @@
 bool wxXmlIOHandlerBinZ::CanLoad(wxInputStream& stream)
 {
     bool canread;
-    canread = (ReadHeader(stream) == _T("XMLBINZ"));
+    canread = (ReadHeader(stream) == wxT("XMLBINZ"));
     stream.SeekI(-9, wxFromCurrent);
     return canread;
 }

@@ -31,11 +31,11 @@ wxCheckListXmlHandler::wxCheckListXmlHandler()
 
 wxObject *wxCheckListXmlHandler::DoCreateResource()
 { 
-    if (m_Class == _T("wxCheckList"))
+    if (m_Class == wxT("wxCheckList"))
     {
         // need to build the list of strings from children
         m_InsideBox = TRUE;
-        CreateChildrenPrivately(NULL, GetParamNode(_T("content")));
+        CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
         {
@@ -57,19 +57,19 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
                                     );
 
         // step through children myself (again.)
-        wxXmlNode *n = GetParamNode(_T("content"));
+        wxXmlNode *n = GetParamNode(wxT("content"));
         if (n) n = n->GetChildren();
         int i = 0;
         while (n)
         {
             if (n->GetType() != wxXML_ELEMENT_NODE ||
-                n->GetName() != _T("item"))
+                n->GetName() != wxT("item"))
                { n = n->GetNext(); continue; }
 
             // checking boolean is a bit ugly here (see GetBool() )
-            wxString v = n->GetPropVal(_T("checked"), wxEmptyString);
+            wxString v = n->GetPropVal(wxT("checked"), wxEmptyString);
             v.MakeLower();
-            if (v && v == _T("1"))
+            if (v && v == wxT("1"))
                 control->Check( i, TRUE );
 
             i++;        
@@ -101,8 +101,8 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
 
 bool wxCheckListXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return (IsOfClass(node, _T("wxCheckList")) ||
-           (m_InsideBox && node->GetName() == _T("item"))
+    return (IsOfClass(node, wxT("wxCheckList")) ||
+           (m_InsideBox && node->GetName() == wxT("item"))
            );
 }
 

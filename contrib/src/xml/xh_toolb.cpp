@@ -38,31 +38,31 @@ wxToolBarXmlHandler::wxToolBarXmlHandler()
 
 wxObject *wxToolBarXmlHandler::DoCreateResource()
 { 
-    if (m_Class == _T("tool"))
+    if (m_Class == wxT("tool"))
     {
-        wxCHECK_MSG(m_Toolbar, NULL, _T("Incorrect syntax of XML resource: tool not within a toolbar!"));
+        wxCHECK_MSG(m_Toolbar, NULL, wxT("Incorrect syntax of XML resource: tool not within a toolbar!"));
         m_Toolbar->AddTool(GetID(),
-                           GetBitmap(_T("bitmap")),
-                           GetBitmap(_T("bitmap2")),
-                           GetBool(_T("toggle")),
+                           GetBitmap(wxT("bitmap")),
+                           GetBitmap(wxT("bitmap2")),
+                           GetBool(wxT("toggle")),
                            GetPosition().x,
                            GetPosition().y,
                            NULL,
-                           GetText(_T("tooltip")),
-                           GetText(_T("longhelp")));
+                           GetText(wxT("tooltip")),
+                           GetText(wxT("longhelp")));
         return m_Toolbar; // must return non-NULL
     }
     
-    else if (m_Class == _T("separator"))
+    else if (m_Class == wxT("separator"))
     {
-        wxCHECK_MSG(m_Toolbar, NULL, _T("Incorrect syntax of XML resource: separator not within a toolbar!"));
+        wxCHECK_MSG(m_Toolbar, NULL, wxT("Incorrect syntax of XML resource: separator not within a toolbar!"));
         m_Toolbar->AddSeparator();
         return m_Toolbar; // must return non-NULL
     }
     
     else /*<object class="wxToolBar">*/
     {
-        int style = GetStyle(_T("style"), wxNO_BORDER | wxTB_HORIZONTAL);
+        int style = GetStyle(wxT("style"), wxNO_BORDER | wxTB_HORIZONTAL);
 #ifdef __WXMSW__
         if (!(style & wxNO_BORDER)) style |= wxNO_BORDER;
 #endif
@@ -73,20 +73,20 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
                                     style,
                                     GetName());
 
-        wxSize bmpsize = GetSize(_T("bitmapsize"));
+        wxSize bmpsize = GetSize(wxT("bitmapsize"));
         if (!(bmpsize == wxDefaultSize))
             toolbar->SetToolBitmapSize(bmpsize);
-        wxSize margins = GetSize(_T("margins"));
+        wxSize margins = GetSize(wxT("margins"));
         if (!(margins == wxDefaultSize))
             toolbar->SetMargins(margins.x, margins.y);
-        long packing = GetLong(_T("packing"), -1);
+        long packing = GetLong(wxT("packing"), -1);
         if (packing != -1)
             toolbar->SetToolPacking(packing);
-        long separation = GetLong(_T("separation"), -1);
+        long separation = GetLong(wxT("separation"), -1);
         if (separation != -1)
             toolbar->SetToolSeparation(separation);
 
-        wxXmlNode *children_node = GetParamNode(_T("object"));
+        wxXmlNode *children_node = GetParamNode(wxT("object"));
         if (children_node == NULL) return toolbar;
 
         m_IsInside = TRUE;
@@ -97,12 +97,12 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         while (n)
         {
             if (n->GetType() == wxXML_ELEMENT_NODE && 
-                n->GetName() == _T("object"))
+                n->GetName() == wxT("object"))
             {
                 wxObject *created = CreateResFromNode(n, toolbar, NULL);
                 wxControl *control = wxDynamicCast(created, wxControl);
-                if (IsOfClass(n, _T("tool")) &&
-                    IsOfClass(n, _T("separator")) &&
+                if (IsOfClass(n, wxT("tool")) &&
+                    IsOfClass(n, wxT("separator")) &&
                     control != NULL)
                     toolbar->AddControl(control);
             }
@@ -121,9 +121,9 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
 bool wxToolBarXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return ((!m_IsInside && IsOfClass(node, _T("wxToolBar"))) ||
-            (m_IsInside && IsOfClass(node, _T("tool"))) || 
-            (m_IsInside && IsOfClass(node, _T("separator"))));
+    return ((!m_IsInside && IsOfClass(node, wxT("wxToolBar"))) ||
+            (m_IsInside && IsOfClass(node, wxT("tool"))) || 
+            (m_IsInside && IsOfClass(node, wxT("separator"))));
 }
 
 #endif

@@ -32,7 +32,7 @@ wxObject *wxStaticBoxXmlHandler::DoCreateResource()
 { 
     wxStaticBox *box = new wxStaticBox(m_ParentAsWindow,
                                     GetID(),
-                                    GetText(_T("label")),
+                                    GetText(wxT("label")),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     GetName()
@@ -46,7 +46,7 @@ wxObject *wxStaticBoxXmlHandler::DoCreateResource()
 
 bool wxStaticBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxStaticBox"));
+    return IsOfClass(node, wxT("wxStaticBox"));
 }
 
 

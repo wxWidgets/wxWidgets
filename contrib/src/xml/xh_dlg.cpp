@@ -54,9 +54,9 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
     
     dlg->Create(m_ParentAsWindow,
                 GetID(),
-                GetText(_T("title")),
+                GetText(wxT("title")),
                 wxDefaultPosition, wxDefaultSize,
-                GetStyle(_T("style"), wxDEFAULT_DIALOG_STYLE),
+                GetStyle(wxT("style"), wxDEFAULT_DIALOG_STYLE),
                 GetName());
     dlg->SetClientSize(GetSize());
     dlg->Move(GetPosition());
@@ -74,7 +74,7 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
 
 bool wxDialogXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxDialog"));
+    return IsOfClass(node, wxT("wxDialog"));
 }
 
 

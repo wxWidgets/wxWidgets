@@ -42,13 +42,13 @@ wxObject *wxPanelXmlHandler::DoCreateResource()
         panel = new wxPanel(m_ParentAsWindow,
                                  GetID(),
                                  GetPosition(), GetSize(),
-                                 GetStyle(_T("style"), 0),
+                                 GetStyle(wxT("style"), 0),
                                  GetName());
     else
         panel->Create(m_ParentAsWindow,
                                  GetID(),
                                  GetPosition(), GetSize(),
-                                 GetStyle(_T("style"), 0),
+                                 GetStyle(wxT("style"), 0),
                                  GetName());
     SetupWindow(panel);
     CreateChildren(panel);
@@ -59,5 +59,5 @@ wxObject *wxPanelXmlHandler::DoCreateResource()
 
 bool wxPanelXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxPanel"));
+    return IsOfClass(node, wxT("wxPanel"));
 }

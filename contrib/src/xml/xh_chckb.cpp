@@ -34,14 +34,14 @@ wxObject *wxCheckBoxXmlHandler::DoCreateResource()
 { 
     wxCheckBox *control = new wxCheckBox(m_ParentAsWindow,
                                     GetID(),
-                                    GetText(_T("label")),
+                                    GetText(wxT("label")),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     wxDefaultValidator,
                                     GetName()
                                     );
 
-    control->SetValue( GetBool( _T("checked")));
+    control->SetValue( GetBool( wxT("checked")));
     SetupWindow(control);
     
     return control;
@@ -51,7 +51,7 @@ wxObject *wxCheckBoxXmlHandler::DoCreateResource()
 
 bool wxCheckBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxCheckBox"));
+    return IsOfClass(node, wxT("wxCheckBox"));
 }
 
 #endif

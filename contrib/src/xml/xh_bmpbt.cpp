@@ -38,20 +38,20 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
 { 
     wxBitmapButton *button = new wxBitmapButton(m_ParentAsWindow,
                                     GetID(),
-                                    GetBitmap(_T("bitmap")),
+                                    GetBitmap(wxT("bitmap")),
                                     GetPosition(), GetSize(),
-                                    GetStyle(_T("style"), wxBU_AUTODRAW),
+                                    GetStyle(wxT("style"), wxBU_AUTODRAW),
                                     wxDefaultValidator,
                                     GetName());
-    if (GetBool(_T("default"), 0) == 1) button->SetDefault();
+    if (GetBool(wxT("default"), 0) == 1) button->SetDefault();
     SetupWindow(button);
     
-    if (!GetParamValue(_T("selected")).IsEmpty())
-        button->SetBitmapSelected(GetBitmap(_T("selected")));
-    if (!GetParamValue(_T("focus")).IsEmpty())
-        button->SetBitmapFocus(GetBitmap(_T("focus")));
-    if (!GetParamValue(_T("disabled")).IsEmpty())
-        button->SetBitmapDisabled(GetBitmap(_T("disabled")));
+    if (!GetParamValue(wxT("selected")).IsEmpty())
+        button->SetBitmapSelected(GetBitmap(wxT("selected")));
+    if (!GetParamValue(wxT("focus")).IsEmpty())
+        button->SetBitmapFocus(GetBitmap(wxT("focus")));
+    if (!GetParamValue(wxT("disabled")).IsEmpty())
+        button->SetBitmapDisabled(GetBitmap(wxT("disabled")));
     
     return button;
 }
@@ -60,7 +60,7 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
 
 bool wxBitmapButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxBitmapButton"));
+    return IsOfClass(node, wxT("wxBitmapButton"));
 }
 
 

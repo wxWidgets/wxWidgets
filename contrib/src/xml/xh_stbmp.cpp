@@ -32,7 +32,7 @@ wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
 { 
     wxStaticBitmap *bmp = new wxStaticBitmap(m_ParentAsWindow,
                                     GetID(),
-                                    GetBitmap(_T("bitmap"), GetSize()),
+                                    GetBitmap(wxT("bitmap"), GetSize()),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     GetName()
@@ -46,7 +46,7 @@ wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
 
 bool wxStaticBitmapXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, _T("wxStaticBitmap"));
+    return IsOfClass(node, wxT("wxStaticBitmap"));
 }
 
 

@@ -142,15 +142,15 @@ static bool LoadLibxml()
     wxLogNull lg;
 #ifdef __UNIX__
     gs_libxmlDLL.Handle = 
-        wxDllLoader::LoadLibrary(_T("wxlibxml.so.2"), &gs_libxmlLoaded);
+        wxDllLoader::LoadLibrary(wxT("wxlibxml.so.2"), &gs_libxmlLoaded);
     if (!gs_libxmlLoaded) gs_libxmlDLL.Handle = 
-        wxDllLoader::LoadLibrary(_T("libxml.so.2"), &gs_libxmlLoaded);
+        wxDllLoader::LoadLibrary(wxT("libxml.so.2"), &gs_libxmlLoaded);
 #endif
 #ifdef __WXMSW__
     gs_libxmlDLL.Handle = 
-        wxDllLoader::LoadLibrary(_T("wxlibxml2.dll"), &gs_libxmlLoaded);
+        wxDllLoader::LoadLibrary(wxT("wxlibxml2.dll"), &gs_libxmlLoaded);
     if (!gs_libxmlLoaded) gs_libxmlDLL.Handle = 
-        wxDllLoader::LoadLibrary(_T("libxml2.dll"), &gs_libxmlLoaded);
+        wxDllLoader::LoadLibrary(wxT("libxml2.dll"), &gs_libxmlLoaded);
 #endif
     }
     
@@ -162,7 +162,7 @@ static bool LoadLibxml()
     
 #define LOAD_SYMBOL(sym) \
     gs_libxmlDLL.sym = \
-        (type_##sym)wxDllLoader::GetSymbol(gs_libxmlDLL.Handle, _T(#sym)); \
+        (type_##sym)wxDllLoader::GetSymbol(gs_libxmlDLL.Handle, wxT(#sym)); \
     if (!gs_libxmlDLL.sym) \
     { \
         ReleaseLibxml(); \
