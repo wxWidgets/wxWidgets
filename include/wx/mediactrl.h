@@ -12,5 +12,5 @@
 #if defined(__WXMSW__)
 #include "wx/msw/mediactrl.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/mediactrl.h"
+#include "wx/mac/carbon/mediactrl.h"
 #endif

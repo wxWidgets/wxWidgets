@@ -20,9 +20,11 @@
 #pragma hdrstop
 #endif
 
-#include "wx/mac/carbon/mediactrl.h"
+#include "wx/defs.h"
 
 #if wxUSE_MEDIACTRL
+
+#include "wx/mac/carbon/mediactrl.h"
 
 #include "wx/timer.h"
 
