@@ -136,7 +136,7 @@ void wxLEDNumberCtrl::SetValue(wxString const &Value, bool Redraw)
     if (Value != m_Value)
     {
 #ifdef __WXDEBUG__
-        if (!Value.IsEmpty())
+        if (!Value.empty())
         {
             for(size_t i=0; i<Value.Length(); i++) {
                 wxChar ch = Value[i];
@@ -259,9 +259,9 @@ void wxLEDNumberCtrl::DrawDigit(wxDC &Dc, int Digit, int Column)
 
     if (Digit == DIGITALL)
     {
-        const int R = LineColor.Red() / 16;
-        const int G = LineColor.Green() / 16;
-        const int B = LineColor.Blue() / 16;
+        const unsigned char R = (unsigned char)(LineColor.Red() / 16);
+        const unsigned char G = (unsigned char)(LineColor.Green() / 16);
+        const unsigned char B = (unsigned char)(LineColor.Blue() / 16);
 
         LineColor.Set(R, G, B);
     }
