@@ -292,7 +292,7 @@ void wxCheckListBox::OnChar(wxKeyEvent& event)
 void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
 {
   // clicking on the item selects it, clicking on the checkmark toggles
-  if ( (uint)event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
+  if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
     // # better use LB_ITEMFROMPOINT perhaps?
     uint nItem = ((uint)event.GetY()) / m_nItemHeight;
     if ( nItem < (uint)m_noItems )
