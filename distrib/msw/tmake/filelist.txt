@@ -14,7 +14,13 @@
 #  U	/src/unix
 #  R	/src/gtk     R for Robert
 #  H	/src/html
-#  I	/include/wx, /include/wx/gtk, /include/wx/msw, etc.
+#  W	/include/wx
+#  K	/include/wx/gtk        K for gtK
+#  F    /include/wx/motif      F for motiF
+#  N    /include/wx/generic    N for geNeric
+#  L    /include/wx/html       L for htmL
+#  P    /include/wx/protocol
+#  S    /include/wx/unix       S for poSix
 #
 # The third column may be empty or contain some additional info about this 
 # file (only compile it in 16bit mode, don't compile it with this or that 
@@ -383,240 +389,287 @@ mod_pre.cpp	H
 mod_tables.cpp	H
 search.cpp	H
 
-arrimpl.cpp	I	WX
-listimpl.cpp	I	WX
-accel.h	I	WX
-app.h	I	WX
-bitmap.h	I	WX
-bmpbuttn.h	I	WX
-brush.h	I	WX
-buffer.h	I	WX
-busyinfo.h	I	WX
-button.h	I	WX
-caret.h	I	WX
-checkbox.h	I	WX
-checklst.h	I	WX
-choicdlg.h	I	WX
-choice.h	I	WX
-clipbrd.h	I	WX
-cmndata.h	I	WX
-colordlg.h	I	WX
-colour.h	I	WX
-combobox.h	I	WX
-confbase.h	I	WX
-config.h	I	WX
-control.h	I	WX
-cursor.h	I	WX
-dataobj.h	I	WX
-date.h	I	WX
-datstrm.h	I	WX
-db.h	I	WX
-dbtable.h	I	WX
-dc.h	I	WX
-dcclient.h	I	WX
-dcmemory.h	I	WX
-dcprint.h	I	WX
-dcps.h	I	WX
-dcscreen.h	I	WX
-dde.h	I	WX
-debug.h	I	WX
-defs.h	I	WX
-dialog.h	I	WX
-dirdlg.h	I	WX
-dnd.h	I	WX
-docmdi.h	I	WX
-docview.h	I	WX
-dragimag.h	I	WX
-dynarray.h	I	WX
-dynlib.h	I	WX
-event.h	I	WX
-expr.h	I	WX
-ffile.h	I	WX
-file.h	I	WX
-fileconf.h	I	WX
-filedlg.h	I	WX
-filefn.h	I	WX
-filesys.h	I	WX
-font.h	I	WX
-fontdlg.h	I	WX
-frame.h	I	WX
-fs_inet.h	I	WX
-fs_zip.h	I	WX
-gauge.h	I	WX
-gdicmn.h	I	WX
-gdiobj.h	I	WX
-grid.h	I	WX
-hash.h	I	WX
-help.h	I	WX
-helpbase.h	I	WX
-helphtml.h	I	WX
-helpwin.h	I	WX
-helpxlp.h	I	WX
-icon.h	I	WX
-image.h	I	WX
-imaglist.h	I	WX
-intl.h	I	WX
-ioswrap.h	I	WX
-ipcbase.h	I	WX
-joystick.h	I	WX
-layout.h	I	WX
-laywin.h	I	WX
-list.h	I	WX
-listbox.h	I	WX
-listctrl.h	I	WX
-log.h	I	WX
-longlong.h	I	WX
-matrix.h	I	WX
-mdi.h	I	WX
-memory.h	I	WX
-menu.h	I	WX
-menuitem.h	I	WX
-metafile.h	I	WX
-mimetype.h	I	WX
-minifram.h	I	WX
-module.h	I	WX
-msgdlg.h	I	WX
-mstream.h	I	WX
-notebook.h	I	WX
-object.h	I	WX
-objstrm.h	I	WX
-odbc.h	I	WX
-ownerdrw.h	I	WX
-palette.h	I	WX
-panel.h	I	WX
-paper.h	I	WX
-pen.h	I	WX
-pnghand.h	I	WX
-print.h	I	WX
-printdlg.h	I	WX
-prntbase.h	I	WX
-process.h	I	WX
-progdlg.h	I	WX
-prop.h	I	WX
-propform.h	I	WX
-proplist.h	I	WX
-radiobox.h	I	WX
-radiobut.h	I	WX
-region.h	I	WX
-resource.h	I	WX
-sashwin.h	I	WX
-sckaddr.h	I	WX
-sckipc.h	I	WX
-sckstrm.h	I	WX
-scrolbar.h	I	WX
-scrolwin.h	I	WX
-serbase.h	I	WX
-settings.h	I	WX
-setup.h	I	WX
-slider.h	I	WX
-socket.h	I	WX
-spinbutt.h	I	WX
-splitter.h	I	WX
-statbmp.h	I	WX
-statbox.h	I	WX
-statline.h	I	WX
-stattext.h	I	WX
-statusbr.h	I	WX
-strconv.h	I	WX
-stream.h	I	WX
-string.h	I	WX
-tab.h	I	WX
-tabctrl.h	I	WX
-taskbar.h	I	WX
-tbar95.h	I	WX
-tbarbase.h	I	WX
-tbarmsw.h	I	WX
-tbarsmpl.h	I	WX
-textctrl.h	I	WX
-textdlg.h	I	WX
-textfile.h	I	WX
-txtstrm.h	I	WX
-thread.h	I	WX
-time.h	I	WX
-timer.h	I	WX
-tipdlg.h	I	WX
-tokenzr.h	I	WX
-toolbar.h	I	WX
-tooltip.h	I	WX
-treectrl.h	I	WX
-types.h	I	WX
-url.h	I	WX
-utils.h	I	WX
-valgen.h	I	WX
-validate.h	I	WX
-valtext.h	I	WX
-variant.h	I	WX
-version.h	I	WX
-wave.h	I	WX
-wfstream.h	I	WX
-window.h	I	WX
-wx.h	I	WX
-wx_cw.h	I	WX
-wx_cw_cm.h	I	WX
-wx_cw_d.h	I	WX
-wxchar.h	I	WX
-wxexpr.h	I	WX
-wxhtml.h	I	WX
-wxprec.h	I	WX
-xpmhand.h	I	WX
-zipstrm.h	I	WX
-zstream.h	I	WX
+arrimpl.cpp	W
+listimpl.cpp	W
+accel.h	W
+app.h	W
+bitmap.h	W
+bmpbuttn.h	W
+brush.h	W
+buffer.h	W
+busyinfo.h	W
+button.h	W
+caret.h	W
+checkbox.h	W
+checklst.h	W
+choicdlg.h	W
+choice.h	W
+clipbrd.h	W
+cmndata.h	W
+colordlg.h	W
+colour.h	W
+combobox.h	W
+confbase.h	W
+config.h	W
+control.h	W
+cursor.h	W
+dataobj.h	W
+date.h	W
+datstrm.h	W
+db.h	W
+dbtable.h	W
+dc.h	W
+dcclient.h	W
+dcmemory.h	W
+dcprint.h	W
+dcps.h	W
+dcscreen.h	W
+dde.h	W
+debug.h	W
+defs.h	W
+dialog.h	W
+dirdlg.h	W
+dnd.h	W
+docmdi.h	W
+docview.h	W
+dragimag.h	W
+dynarray.h	W
+dynlib.h	W
+event.h	W
+expr.h	W
+ffile.h	W
+file.h	W
+fileconf.h	W
+filedlg.h	W
+filefn.h	W
+filesys.h	W
+font.h	W
+fontdlg.h	W
+frame.h	W
+fs_inet.h	W
+fs_zip.h	W
+gauge.h	W
+gdicmn.h	W
+gdiobj.h	W
+grid.h	W
+hash.h	W
+help.h	W
+helpbase.h	W
+helphtml.h	W
+helpwin.h	W
+helpxlp.h	W
+icon.h	W
+image.h	W
+imaglist.h	W
+intl.h	W
+ioswrap.h	W
+ipcbase.h	W
+joystick.h	W
+layout.h	W
+laywin.h	W
+list.h	W
+listbox.h	W
+listctrl.h	W
+log.h	W
+longlong.h	W
+matrix.h	W
+mdi.h	W
+memory.h	W
+menu.h	W
+menuitem.h	W
+metafile.h	W
+mimetype.h	W
+minifram.h	W
+module.h	W
+msgdlg.h	W
+mstream.h	W
+notebook.h	W
+object.h	W
+objstrm.h	W
+odbc.h	W
+ownerdrw.h	W
+palette.h	W
+panel.h	W
+paper.h	W
+pen.h	W
+pnghand.h	W
+print.h	W
+printdlg.h	W
+prntbase.h	W
+process.h	W
+progdlg.h	W
+prop.h	W
+propform.h	W
+proplist.h	W
+radiobox.h	W
+radiobut.h	W
+region.h	W
+resource.h	W
+sashwin.h	W
+sckaddr.h	W
+sckipc.h	W
+sckstrm.h	W
+scrolbar.h	W
+scrolwin.h	W
+serbase.h	W
+settings.h	W
+setup.h	W
+slider.h	W
+socket.h	W
+spinbutt.h	W
+splitter.h	W
+statbmp.h	W
+statbox.h	W
+statline.h	W
+stattext.h	W
+statusbr.h	W
+strconv.h	W
+stream.h	W
+string.h	W
+tab.h	W
+tabctrl.h	W
+taskbar.h	W
+tbar95.h	W
+tbarbase.h	W
+tbarmsw.h	W
+tbarsmpl.h	W
+textctrl.h	W
+textdlg.h	W
+textfile.h	W
+txtstrm.h	W
+thread.h	W
+time.h	W
+timer.h	W
+tipdlg.h	W
+tokenzr.h	W
+toolbar.h	W
+tooltip.h	W
+treectrl.h	W
+types.h	W
+url.h	W
+utils.h	W
+valgen.h	W
+validate.h	W
+valtext.h	W
+variant.h	W
+version.h	W
+wave.h	W
+wfstream.h	W
+window.h	W
+wx.h	W
+wx_cw.h	W
+wx_cw_cm.h	W
+wx_cw_d.h	W
+wxchar.h	W
+wxexpr.h	W
+wxhtml.h	W
+wxprec.h	W
+xpmhand.h	W
+zipstrm.h	W
+zstream.h	W
 
-accel.h	I	GTK
-app.h	I	GTK
-bitmap.h	I	GTK
-bmpbuttn.h	I	GTK
-brush.h	I	GTK
-button.h	I	GTK
-checkbox.h	I	GTK
-checklst.h	I	GTK
-choice.h	I	GTK
-clipbrd.h	I	GTK
-colour.h	I	GTK
-combobox.h	I	GTK
-control.h	I	GTK
-cursor.h	I	GTK
-dataobj.h	I	GTK
-dc.h	I	GTK
-dcclient.h	I	GTK
-dcmemory.h	I	GTK
-dcscreen.h	I	GTK
-dialog.h	I	GTK
-dnd.h	I	GTK
-filedlg.h	I	GTK
-font.h	I	GTK
-frame.h	I	GTK
-gauge.h	I	GTK
-gdiobj.h	I	GTK
-icon.h	I	GTK
-joystick.h	I	GTK
-listbox.h	I	GTK
-mdi.h	I	GTK
-menu.h	I	GTK
-menuitem.h	I	GTK
-msgdlg.h	I	GTK
-minifram.h	I	GTK
-notebook.h	I	GTK
-palette.h	I	GTK
-pen.h	I	GTK
-radiobox.h	I	GTK
-radiobut.h	I	GTK
-region.h	I	GTK
-scrolbar.h	I	GTK
-settings.h	I	GTK
-slider.h	I	GTK
-spinbutt.h	I	GTK
-statbmp.h	I	GTK
-statbox.h	I	GTK
-statline.h	I	GTK
-stattext.h	I	GTK
-tbargtk.h	I	GTK
-textctrl.h	I	GTK
-timer.h	I	GTK
-tooltip.h	I	GTK
-treectrl.h	I	GTK
-wave.h	I	GTK
-win_gtk.h	I	GTK
-window.h	I	GTK
+accel.h	K
+app.h	K
+bitmap.h	K
+bmpbuttn.h	K
+brush.h	K
+button.h	K
+checkbox.h	K
+checklst.h	K
+choice.h	K
+clipbrd.h	K
+colour.h	K
+combobox.h	K
+control.h	K
+cursor.h	K
+dataobj.h	K
+dc.h	K
+dcclient.h	K
+dcmemory.h	K
+dcscreen.h	K
+dialog.h	K
+dnd.h	K
+filedlg.h	K
+font.h	K
+frame.h	K
+gauge.h	K
+gdiobj.h	K
+icon.h	K
+joystick.h	K
+listbox.h	K
+mdi.h	K
+menu.h	K
+menuitem.h	K
+msgdlg.h	K
+minifram.h	K
+notebook.h	K
+palette.h	K
+pen.h	K
+radiobox.h	K
+radiobut.h	K
+region.h	K
+scrolbar.h	K
+settings.h	K
+slider.h	K
+spinbutt.h	K
+statbmp.h	K
+statbox.h	K
+statline.h	K
+stattext.h	K
+tbargtk.h	K
+textctrl.h	K
+timer.h	K
+tooltip.h	K
+treectrl.h	K
+wave.h	K
+win_gtk.h	K
+window.h	K
+
+execute.h	S
+
+file.h	P
+ftp.h	P
+http.h	P
+protocol.h	P
+
+forcelink.h	L
+htmlcell.h	L
+htmldefs.h	L
+htmlfilter.h	L
+htmlhelp.h	L
+htmlparser.h	L
+htmltag.h	L
+htmlwin.h	L
+htmlwinparser.h	L
+mod_templ.h	L
+version.h	L
+
+caret.h	N
+choicdgg.h	N
+colrdlgg.h	N
+dcpsg.h	N
+dirdlgg.h	N
+fontdlgg.h	N
+gridg.h	N
+helpext.h	N
+helpwxht.h	N
+helphtml.h	N
+helpxlp.h	N
+imaglist.h	N
+laywin.h	N
+listctrl.h	N
+msgdlgg.h	N
+notebook.h	N
+panelg.h	N
+printps.h	N
+prntdlgg.h	N
+progdlgg.h	N
+sashwin.h	N
+scrolwin.h	N
+splitter.h	N
+statusbr.h	N
+tabg.h	N
+textdlgg.h	N
+treectrl.h	N
 
 # vi: set noet ts=16 nolist:

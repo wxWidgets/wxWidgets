@@ -47,8 +47,20 @@
             $wxHTML{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "U" ) {
             $wxUNIX{$fields[0]} = $fields[2];
-        } elsif ( $fields[1] eq "I" ) {
-            $wxINCLUDE{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "W" ) {
+            $wxWXINCLUDE{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "P" ) {
+            $wxPROTOCOLINCLUDE{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "L" ) {
+            $wxHTMLINCLUDE{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "F" ) {
+            $wxMOTIFINCLUDE{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "K" ) {
+            $wxGTKINCLUDE{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "S" ) {
+            $wxUNIXINCLUDE{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "N" ) {
+            $wxGENERICINCLUDE{$fields[0]} = $fields[2];
         } else {
             warn "Unknown file type $fields[1] for $fields[0], ignoring.\n";
             next line;
