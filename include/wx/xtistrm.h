@@ -252,9 +252,9 @@ public:
 private :
     int ReadComponent(wxXmlNode *parent, wxDepersister *callbacks);
 
-    // accessor is only used as a temporary measure
+    // read the content of this node (simple type) and return the corresponding value
     wxxVariant ReadValue(wxXmlNode *Node,
-        wxPropertyAccessor *accessor );
+        const wxTypeInfo *type );
 
     wxXmlNode * m_parent ;
 };
