@@ -13,6 +13,8 @@
 #pragma implementation "taskbar.h"
 #endif
 
+#ifdef wxHAS_TASK_BAR_ICON
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -25,3 +27,5 @@ DEFINE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DOWN )
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_UP )
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_DCLICK )
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DCLICK )
+
+#endif //def wxHAS_TASK_BAR_ICON
