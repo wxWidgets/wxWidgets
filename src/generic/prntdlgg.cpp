@@ -503,9 +503,13 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow()
     }
     if (m_paperTypeChoice)
     {
-        wxString val(m_paperTypeChoice->GetStringSelection());
-        if (!val.IsNull() && val != wxT(""))
-            m_printData.SetPaperId(wxThePrintPaperDatabase->ConvertNameToId(val));
+        int selectedItem = m_paperTypeChoice->GetSelection();
+        if (selectedItem != -1)
+        {
+            wxPrintPaperType *paper = (wxPrintPaperType *)wxThePrintPaperDatabase->Nth(selectedItem)->Data();
+            if (paper != NULL)
+              m_printData.SetPaperId( paper->GetId());
+        }
     }
 
     return TRUE;
@@ -765,10 +769,10 @@ bool wxGenericPageSetupDialog::TransferDataFromWindow()
     
     if (m_paperTypeChoice)
     {
-        wxString val(m_paperTypeChoice->GetStringSelection());
-        if (!val.IsEmpty())
+        int selectedItem = m_paperTypeChoice->GetSelection();
+        if (selectedItem != -1)
         {
-            wxPrintPaperType* paper = wxThePrintPaperDatabase->FindPaperType(val);
+            wxPrintPaperType *paper = (wxPrintPaperType *)wxThePrintPaperDatabase->Nth(selectedItem)->Data();
             if ( paper )
             {
                 m_pageData.SetPaperSize(wxSize(paper->GetWidth()/10, paper->GetHeight()/10));
