@@ -1116,7 +1116,7 @@ void wxApp::OnIdle(wxIdleEvent& event)
     // automated DC cache management: clear the cached DCs and bitmap
     // if it's likely that the app has finished with them, that is, we
     // get an idle event and we're not dragging anything.
-    if (!::GetKeyState(MK_LBUTTON) && !::GetKeyState(MK_MBUTTON) && ::GetKeyState(MK_RBUTTON))
+    if (!::GetKeyState(MK_LBUTTON) && !::GetKeyState(MK_MBUTTON) && !::GetKeyState(MK_RBUTTON))
         wxDC::ClearCache();
 #endif // wxUSE_DC_CACHEING
 
