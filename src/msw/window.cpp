@@ -1122,7 +1122,7 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
 
         ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyleReal);
 
-        // we must call SetWindowPos() to flash the cached extended style and
+        // we must call SetWindowPos() to flush the cached extended style and
         // also to make the change to wxSTAY_ON_TOP style take effect: just
         // setting the style simply doesn't work
         if ( !::SetWindowPos(GetHwnd(),
@@ -1504,22 +1504,27 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     if (height < 0)
         height = 0;
 
-    // if our parent had prepared a defer window handle for us, use it (unless
-    // we are a top level window)
-    wxWindowMSW *parent = GetParent();
-    HDWP hdwp = (parent && !IsTopLevel()) ? (HDWP)parent->m_hDWP : NULL;
-    if ( hdwp )
+    HDWP hdwp = 0;
+    
+    if ( wxSystemOptions::GetOptionInt(wxT("msw.window.defersize")) == 1 )
     {
-        hdwp = ::DeferWindowPos(hdwp, GetHwnd(), NULL,
+        // if our parent had prepared a defer window handle for us, use it (unless
+        // we are a top level window)
+        wxWindowMSW *parent = GetParent();
+        hdwp = (parent && !IsTopLevel()) ? (HDWP)parent->m_hDWP : NULL;
+        if ( hdwp )
+        {
+            hdwp = ::DeferWindowPos(hdwp, GetHwnd(), NULL,
                                 x, y, width, height,
                                 SWP_NOZORDER);
-        if ( !hdwp )
-        {
-            wxLogLastError(_T("DeferWindowPos"));
-        }
+            if ( !hdwp )
+            {
+                wxLogLastError(_T("DeferWindowPos"));
+            }
 
-        // hdwp must be updated as it may have been changed
-        parent->m_hDWP = (WXHANDLE)hdwp;
+            // hdwp must be updated as it may have been changed
+            parent->m_hDWP = (WXHANDLE)hdwp;
+        }
     }
 
     // otherwise (or if deferring failed) move the window in place immediately
@@ -4105,10 +4110,13 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
     const int numChildren = GetChildren().GetCount();
     if ( numChildren > 1 )
     {
-        m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
-        if ( !m_hDWP )
+        if ( wxSystemOptions::GetOptionInt(wxT("msw.window.defersize")) == 1 )
         {
-            wxLogLastError(_T("BeginDeferWindowPos"));
+            m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
+            if ( !m_hDWP )
+            {
+                wxLogLastError(_T("BeginDeferWindowPos"));
+            }
         }
     }
 
