@@ -33,10 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.3  1998/10/20 06:45:09  RD
- * New wxTreeCtrl wrappers (untested)
- * some changes in helpers
- * etc.
+ * Revision 1.4  1998/11/03 09:22:50  RD
+ * New generated code
  *
  ************************************************************************/
 
@@ -1722,7 +1720,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.4.1"));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.4.2"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
