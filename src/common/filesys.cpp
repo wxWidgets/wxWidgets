@@ -24,7 +24,7 @@
 #include "wx/module.h"
 #include "wx/filesys.h"
 #include "wx/mimetype.h"
-
+#include "wx/filename.h"
 
 
 
@@ -155,33 +155,24 @@ bool wxLocalFSHandler::CanOpen(const wxString& location)
 
 wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
+    // location has Unix path separators
     wxString right = GetRightLocation(location);
- #ifdef __WXMAC__
-    if ( right[0] != '.' && right[0] != '/' && right.Find( '/' ) != wxNOT_FOUND ) {
-      right = "./" + right ;
-    }
-    right = wxUnix2MacFilename( right ) ;
- #endif
-    if (!wxFileExists(right))
+    wxFileName fn( right, wxPATH_UNIX );
+    
+    if (!wxFileExists( fn.GetFullPath() ))
         return (wxFSFile*) NULL;
-
-    return new wxFSFile(new wxFileInputStream(right),
+        
+    return new wxFSFile(new wxFileInputStream( fn.GetFullPath() ),
                         right,
                         GetMimeTypeFromExt(location),
                         GetAnchor(location),
-                        wxDateTime(wxFileModificationTime(right)));
+                        wxDateTime(wxFileModificationTime( fn.GetFullPath() )));
 
 }
 
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)
 {
     wxString right = GetRightLocation(spec);
- #ifdef __WXMAC__
-    if ( right[0] != '.' && right[0] != '/' && right.Find( '/' ) != wxNOT_FOUND ) {
-      right = "./" + right ;
-    }
-    right = wxUnix2MacFilename( right ) ;
- #endif
     return wxFindFirstFile(right, flags);
 }
 
