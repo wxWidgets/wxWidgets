@@ -28,9 +28,6 @@
 
 #include "wx/artprov.h"
 
-// For the purposes of forcing this module to link
-char g_ArtProviderModule = 0;
-
 // ----------------------------------------------------------------------------
 // wxDefaultArtProvider
 // ----------------------------------------------------------------------------
@@ -79,15 +76,14 @@ protected:
 
 /*static*/ void wxArtProvider::InitStdProvider()
 {
-    // NB: A few notes about this function:
-    //     (1) it is in artstd.cpp and not in artprov.cpp on purpose. I wanted
-    //         to avoid declaring wxDefaultArtProvider in any public header as
-    //         it is only an implementation detail
-    //     (2) other default art providers (e.g. GTK one) should NOT be added
-    //         here. Instead, add them in port-specific initialialization code
-
     wxArtProvider::PushProvider(new wxDefaultArtProvider);
 }
+
+#if !defined(__WXGTK20__) || defined(__WXUNIVERSAL__)
+/*static*/ void wxArtProvider::InitNativeProvider()
+{
+}
+#endif
 
 
 // ----------------------------------------------------------------------------
@@ -163,8 +159,8 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
     ART(wxART_HELP_BOOK,                           htmbook)
     ART(wxART_HELP_FOLDER,                         htmfoldr)
     ART(wxART_HELP_PAGE,                           htmpage)
-    ART(wxART_MISSING_IMAGE,                       missimg)
 #endif // wxUSE_HTML
+    ART(wxART_MISSING_IMAGE,                       missimg)
     ART(wxART_ADD_BOOKMARK,                        addbookm)
     ART(wxART_DEL_BOOKMARK,                        delbookm)
     ART(wxART_GO_BACK,                             back)
