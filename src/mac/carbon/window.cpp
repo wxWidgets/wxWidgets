@@ -886,7 +886,10 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
     if ( MacGetTopLevelWindow() == NULL )
         return ;
 
-    wxPoint client = GetClientAreaOrigin();
+    if ( !MacIsReallyShown() )
+    	return ;
+ 
+     wxPoint client = GetClientAreaOrigin();
     int x1 = -client.x;
     int y1 = -client.y;
     int x2 = m_width - client.x;
