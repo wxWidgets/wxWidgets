@@ -128,7 +128,9 @@ public:
     // inactive (should be called when a background event occurs)
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
-
+    // Is this the active frame (highlighted in the taskbar)?
+    virtual bool IsActive();
+    
 #ifdef __WXMAC__
     void MacSetMetalAppearance( bool on ) ;
     bool MacGetMetalAppearance() const ;
