@@ -34,6 +34,7 @@ functions that take a wxListEvent argument.
 \twocolitem{{\bf EVT\_LIST\_KEY\_DOWN(id, func)}}{A key has been pressed.}
 \twocolitem{{\bf EVT\_LIST\_INSERT\_ITEM(id, func)}}{An item has been inserted.}
 \twocolitem{{\bf EVT\_LIST\_COL\_CLICK(id, func)}}{A column ({\bf m\_col}) has been left-clicked.}
+\twocolitem{{\bf EVT\_LIST\_CACHE\_HINT(id, func)}}{Prepare cache for a virtual list control}
 \end{twocollist}%
 
 \wxheading{See also}
@@ -47,6 +48,20 @@ functions that take a wxListEvent argument.
 \func{}{wxListEvent}{\param{WXTYPE }{commandType = 0}, \param{int }{id = 0}}
 
 Constructor.
+
+\membersection{wxListEvent::GetCacheFrom}\label{wxlisteventgetcachefrom}
+
+\constfunc{long}{GetCacheFrom}{\void}
+
+For {\tt EVT\_LIST\_CACHE\_HINT} event only: return the first item which the
+list control advises us to cache.
+
+\membersection{wxListEvent::GetCacheTo}\label{wxlisteventgetcacheto}
+
+\constfunc{long}{GetCacheTo}{\void}
+
+For {\tt EVT\_LIST\_CACHE\_HINT} event only: return the last item (inclusive)
+which the list control advises us to cache.
 
 \membersection{wxListEvent::GetCode}\label{wxlisteventgetcode}
 

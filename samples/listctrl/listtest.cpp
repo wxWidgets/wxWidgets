@@ -90,6 +90,7 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_KEY_DOWN(LIST_CTRL, MyListCtrl::OnListKeyDown)
     EVT_LIST_ITEM_ACTIVATED(LIST_CTRL, MyListCtrl::OnActivated)
     EVT_LIST_COL_CLICK(LIST_CTRL, MyListCtrl::OnColClick)
+    EVT_LIST_CACHE_HINT(LIST_CTRL, MyListCtrl::OnCacheHint)
 
     EVT_CHAR(MyListCtrl::OnChar)
 END_EVENT_TABLE()
@@ -550,6 +551,12 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 }
 
 // MyListCtrl
+
+void MyListCtrl::OnCacheHint(wxListEvent& event)
+{
+    wxLogMessage( "OnCacheHint: cache items %ld..%ld",
+                  event.GetCacheFrom(), event.GetCacheTo() );
+}
 
 void MyListCtrl::OnColClick(wxListEvent& event)
 {

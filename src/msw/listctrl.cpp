@@ -104,6 +104,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_ACTIVATED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_CACHE_HINT)
 
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
@@ -1615,6 +1616,16 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             return TRUE;
 #endif // _WIN32_IE >= 0x300
 
+        case LVN_ODCACHEHINT:
+            {
+                const NM_CACHEHINT *cacheHint = (NM_CACHEHINT *)lParam;
+
+                eventType = wxEVT_COMMAND_LIST_CACHE_HINT;
+                event.m_oldItemIndex = cacheHint->iFrom;
+                event.m_itemIndex = cacheHint->iTo;
+            }
+            break;
+
         case LVN_GETDISPINFO:
             if ( IsVirtual() )
             {
@@ -1670,10 +1681,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             return TRUE;
 
         case LVN_ENDLABELEDIT:
-            {
-                *result = event.IsAllowed();
-                return TRUE;
-            }
+            // logic here is inversed compared to all the other messages
+            *result = event.IsAllowed();
+
+            return TRUE;
     }
 
     *result = !event.IsAllowed();

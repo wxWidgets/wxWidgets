@@ -1,15 +1,16 @@
 wxWindows 2 Change Log
 ----------------------
 
-2.3.3
+2.3.2
 -----
 
 wxBase:
 
 - wxRegEx class added
 
-2.3.2
------
+All (GUI):
+
+- support for virtual list control added
 
 2.3.1
 -----

@@ -2,8 +2,21 @@
 
 A list control presents lists in a number of formats: list view, report view,
 icon view and small icon view. In any case, elements are numbered from zero.
+For all these modes, the items are stored in the control and must be added to
+it using \helpref{InsertItem}{wxlistctrlinsertitem} method.
 
-Using many of wxListCtrl is shown in the
+A special case of report view quite different from the other modes of the list
+control is a virtual control in which the items data (including text, images
+and attributes) is managed by the main program and is requested by the control
+itself only when needed which allows to have controls with millions of items
+without consuming much memory. To use virtual list control you must use 
+\helpref{SetItemCount}{wxlistctrlsetitemcount} first and overload at least 
+\helpref{OnGetItemText}{wxlistctrlongetitemtext} (and optionally 
+\helpref{OnGetItemImage}{wxlistctrlongetitemimage} and 
+\helpref{OnGetItemAttr}{wxlistctrlongetitemattr}) to return the information
+about the items when the control requests it.
+
+Using many of wxListCtrl features is shown in the
 \helpref{corresponding sample}{samplelistctrl}.
 
 To intercept events from a list control, use the event table macros described
@@ -28,6 +41,7 @@ in \helpref{wxListEvent}{wxlistevent}.
 Columns are computed automatically, i.e. you don't set columns as in wxLC\_REPORT. In other words,
 the list wraps, unlike a wxListBox.}
 \twocolitem{\windowstyle{wxLC\_REPORT}}{single or multicolumn report view, with optional header.}
+\twocolitem{\windowstyle{wxLC\_VIRTUAL}}{virtual control, may only be used with wxLC\_REPORT}
 \twocolitem{\windowstyle{wxLC\_ICON}}{Large icon view, with optional labels.}
 \twocolitem{\windowstyle{wxLC\_SMALL\_ICON}}{Small icon view, with optional labels.}
 \twocolitem{\windowstyle{wxLC\_ALIGN\_TOP}}{Icons align to the top. Win32 default, Win32 only. }
@@ -67,6 +81,7 @@ functions that take a \helpref{wxListEvent}{wxlistevent} argument.
 \twocolitem{{\bf EVT\_LIST\_INSERT\_ITEM(id, func)}}{An item has been inserted.}
 \twocolitem{{\bf EVT\_LIST\_COL\_CLICK(id, func)}}{A column ({\bf m\_col}) has been left-clicked.}
 \twocolitem{{\bf EVT\_LIST\_ITEM\_RIGHT\_CLICK(id, func)}}{An item has been right-clicked.}
+\twocolitem{{\bf EVT\_LIST\_CACHE\_HINT(id, func)}}{Prepare cache for a virtual list control}
 \end{twocollist}%
 
 \wxheading{See also}
@@ -527,6 +542,51 @@ method:\par
 \end{twocollist}
 }}
 
+\membersection{wxListCtrl::OnGetItemAttr}\label{wxlistctrlongetitemattr}
+
+\func{virtual wxString}{OnGetItemAttr}{\param{long }{item}}
+
+This function may be overloaded in the derived class for a control with 
+{\tt wxLC\_VIRTUAL} style. It should return the attribute for the
+for the specified {\tt item} or {\tt NULL} to use the default appearance
+parameters.
+
+The base class version always returns {\tt NULL}.
+
+\wxheading{See also}
+
+\helpref{OnGetItemImage}{wxlistctrlongetitemimage},\\
+\helpref{OnGetItemText}{wxlistctrlongetitemtext}
+
+\membersection{wxListCtrl::OnGetItemImage}\label{wxlistctrlongetitemimage}
+
+\func{virtual wxString}{OnGetItemImage}{\param{long }{item}}
+
+This function may be overloaded in the derived class for a control with 
+{\tt wxLC\_VIRTUAL} style. It should return the index of the items image in the
+controls image list or $-1$ for no image.
+
+The base class version always returns $-1$.
+
+\wxheading{See also}
+
+\helpref{OnGetItemText}{wxlistctrlongetitemtext},\\
+\helpref{OnGetItemAttr}{wxlistctrlongetitemattr}
+
+\membersection{wxListCtrl::OnGetItemText}\label{wxlistctrlongetitemtext}
+
+\func{virtual wxString}{OnGetItemText}{\param{long }{item}, \param{long }{column}}
+
+This function {\bf must} be overloaded in the derived class for a control with 
+{\tt wxLC\_VIRTUAL} style. It should return the string containing the text of
+the given {\it column} for the specified {\tt item}.
+
+\wxheading{See also}
+
+\helpref{SetItemCount}{wxlistctrlsetitemcount},\\
+\helpref{OnGetItemImage}{wxlistctrlongetitemimage},\\
+\helpref{OnGetItemAttr}{wxlistctrlongetitemattr}
+
 \membersection{wxListCtrl::ScrollList}\label{wxlistctrlscrolllist}
 
 \func{bool}{ScrollList}{\param{int }{dx}, \param{int }{dy}}
@@ -645,6 +705,16 @@ implements the following methods:\par
 string or image at a given location.}
 \end{twocollist}}
 }
+
+\membersection{wxListCtrl::SetItemCount}\label{wxlistctrlsetitemcount}
+
+\func{void}{SetItemCount}{\param{long }{count}}
+
+This method can only be used with virtual list controls. It is used to indicate
+to the control the number of items it contains. After calling it, the main
+program should be ready to handle calls to various item callbacks (such as
+\helpref{OnGetItemText}{wxlistctrlongetitemtext}) for all vitems in the range
+from $0$ to {\it count}.
 
 \membersection{wxListCtrl::SetItemData}\label{wxlistctrlsetitemdata}
 
