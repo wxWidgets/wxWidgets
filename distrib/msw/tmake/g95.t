@@ -103,6 +103,7 @@ ZLIBDIR = $(WXDIR)/src/zlib
 OLEDIR  = $(WXDIR)/src/msw/ole
 MSWDIR  = $(WXDIR)/src/msw
 
+XPMLIB = $(WXDIR)/lib/libxpm.a
 PNGLIB = $(WXDIR)/lib/libpng.a
 ZLIBLIB = $(WXDIR)/lib/libzlib.a
 JPEGLIB = $(WXDIR)/lib/libjpeg.a
@@ -219,7 +220,7 @@ JPEGOBJS    = \
 		$(JPEGDIR)/jquant2.$(OBJSUFF) \
 		$(JPEGDIR)/jdmerge.$(OBJSUFF)
 
-XPMOBJECTS = 	$(XPMDIR)/crbuffri.o\
+XPMOBJS =    $(XPMDIR)/crbuffri.o\
 		$(XPMDIR)/crdatfri.o\
 		$(XPMDIR)/create.o $(XPMDIR)/crifrbuf.o\
 		$(XPMDIR)/crifrdat.o\
@@ -233,15 +234,15 @@ XPMOBJECTS = 	$(XPMDIR)/crbuffri.o\
 
 ifeq ($(MINGW32),1)
   ifeq ($(MINGW32VERSION),2.95)
-    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) $(ADVANCEDOBJS) # $(XPMOBJECTS)   
+    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) $(ADVANCEDOBJS)
   else
-    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) # $(XPMOBJECTS)
+    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
   endif
 else
-  OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) # $(XPMOBJECTS)
+  OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
 endif
 
-all:    $(OBJECTS) $(WXLIB) $(ZLIBLIB) $(JPEGLIB) $(PNGLIB)
+all:    $(OBJECTS) $(WXLIB) $(ZLIBLIB) $(JPEGLIB) $(PNGLIB) $(XPMLIB)
 
 $(WXLIB): $(OBJECTS) $(EXTRAOBJS)
 	ar $(AROPTIONS) $@ $(EXTRAOBJS) $(OBJECTS)
@@ -257,6 +258,10 @@ $(PNGLIB): $(PNGOBJS)
 
 $(JPEGLIB): $(JPEGOBJS)
 	ar $(AROPTIONS) $@ $(JPEGOBJS)
+	$(RANLIB) $@
+
+$(XPMLIB): $(XPMOBJS)
+	ar $(AROPTIONS) $@ $(XPMOBJS)
 	$(RANLIB) $@
 
 $(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(WXINC)/wx/setup.h
@@ -317,6 +322,9 @@ clean:
 	-$(RM) ../zlib/*.o
 	-$(RM) ../zlib/*.bak
 	-$(RM) ../jpeg/*.o
+	-$(RM) ../jpeg/*.bak
+	-$(RM) ../xpm/*.o
+	-$(RM) ../xpm/*.bak
 	-$(RM) ../../lib/libwx.a
 
 cleanall: clean
