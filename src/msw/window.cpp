@@ -1146,7 +1146,7 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
 WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 {
     // translate the style
-    WXDWORD style = WS_CHILD;
+    WXDWORD style = WS_CHILD | WS_VISIBLE;
 
     if ( flags & wxCLIP_CHILDREN )
         style |= WS_CLIPCHILDREN;
