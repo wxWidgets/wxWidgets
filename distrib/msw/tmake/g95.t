@@ -15,12 +15,14 @@
     foreach $file (sort keys %wxGeneric) {
         #! native wxDirDlg can't be compiled due to GnuWin32/OLE limitations,
         #! so take the generic version
+        $base = ( $wxGeneric{$file} =~ /\bB\b/ ) ? '_BASE' : '';
+
         if ( $wxGeneric{$file} =~ /\b(PS|G|U|16)\b/ ) {
             next #! unless $file =~ /^dirdlgg\./;
         }
 
         $file =~ s/cp?p?$/\$(OBJSUFF)/;
-        $project{"WXGENERICOBJS"} .= '$(GENDIR)/' . $file . " "
+        $project{"WXGENERICOBJS$base"} .= '$(GENDIR)/' . $file . " "
     }
 
     foreach $file (sort keys %wxCommon) {
@@ -29,16 +31,22 @@
         #! needs extra files (sql*.h) so not compiled by default.
         #! next if $file =~ /^odbc\./;
 
+        $base = ( $wxCommon{$file} =~ /\bB\b/ ) ? '_BASE' : '';
         if ( $file =~ /^odbc\./ )
         {
           $file =~ s/cp?p?$/\$(OBJSUFF)/;
-          $project{"ADVANCEDOBJS"} .= '$(COMMDIR)/' . $file . " "
+          $project{"ADVANCEDOBJS$base"} .= '$(COMMDIR)/' . $file . " "
         }
         else
         {
           $file =~ s/cp?p?$/\$(OBJSUFF)/;
-          $project{"WXCOMMONOBJS"} .= '$(COMMDIR)/' . $file . " "
+          $project{"WXCOMMONOBJS$base"} .= '$(COMMDIR)/' . $file . " "
         }
+    }
+
+    foreach $file (sort keys %wxBase) {
+        $file =~ s/cp?p?$/\$(OBJSUFF)/;
+        $project{"WXCOMMONOBJS_BASEONLY"} .= '$(COMMDIR)/' . $file . " "
     }
 
     foreach $file (sort keys %wxMSW) {
@@ -46,18 +54,19 @@
         next if $file =~ /^dirdlg\./;
 
         next if $wxMSW{$file} =~ /\b(16)\b/;
+        $base = ( $wxMSW{$file} =~ /\bB\b/ ) ? '_BASE' : '';
 
         #! Mingw32 doesn't have the OLE headers and has some troubles with
         #! socket code, so put in  ADVANCEDOBJS
         if ( $wxMSW{$file} =~ /\b(O)\b/ )
         {
           $file =~ s/cp?p?$/\$(OBJSUFF)/;
-          $project{"ADVANCEDOBJS"} .= '$(MSWDIR)/ole/' . $file . " "
+          $project{"ADVANCEDOBJS$base"} .= '$(MSWDIR)/ole/' . $file . " "
         }
         else
         {
           $file =~ s/cp?p?$/\$(OBJSUFF)/;
-          $project{"WXMSWOBJS"} .= '$(MSWDIR)/' . $file . " "
+          $project{"WXMSWOBJS$base"} .= '$(MSWDIR)/' . $file . " "
         }
 
     }
@@ -91,16 +100,20 @@ include $(WXDIR)/src/makeg95.env
 
 # DLL Name, if building wxWindows as a DLL.
 ifdef WXMAKINGDLL
-WXDLL = $(WXDIR)/lib/wxmsw$(WXVERSION)$(UNIEXT).dll
-WXDEF = wxmsw$(WXVERSION)$(UNIEXT).def
+WXDLL = $(WXDIR)/lib/wx$(TOOLKIT)$(WXVERSION)$(UNIEXT)$(DEBEXT).dll
+WXDEF = wx$(TOOLKIT)$(WXVERSION)$(UNIEXT)$(DEBEXT).def
 DLL_EXTRA_LIBS = $(WXDIR)/lib/libzlib.a \
                  $(WXDIR)/lib/libpng.a $(WXDIR)/lib/libjpeg.a \
 	             $(WXDIR)/lib/libtiff.a $(WXDIR)/lib/libregex.a
 DLL_LDFLAGS = -L$(WXDIR)/lib
-DLL_LDLIBS = -mwindows -lcomctl32 -lctl3d32 -lole32 -loleaut32 \
-             -luuid -lrpcrt4 -lodbc32 -lwinmm -lopengl32 \
-             -lwsock32 $(DLL_EXTRA_LIBS) \
-	          -lstdc++
+DLL_BASE_LDLIBS = $(DLL_EXTRA_LIBS) -lstdc++ -lwsock32
+ifeq ($(wxUSE_GUI),0)
+  DLL_LDLIBS = $(DLL_BASE_LDLIBS)
+else
+  DLL_LDLIBS = -mwindows -lcomctl32 -lctl3d32 -lole32 -loleaut32 \
+              -luuid -lrpcrt4 -lodbc32 -lwinmm -lopengl32 \
+               $(DLL_BASE_LDLIBS)
+endif
 endif
 
 # Subordinate library possibilities
@@ -137,21 +150,43 @@ ifeq ($(MINGW32),1)
 else
 		DIRDLGOBJ = $(GENDIR)/dirdlgg.$(OBJSUFF)
 endif
+ifeq ($(wxUSE_GUI),0)
+  DIRDLGOBJ =
+endif
+
+GENERICOBJS_BASE = \
+                #$ ExpandList("WXGENERICOBJS_BASE");
 
 GENERICOBJS = \
+                $(GENERICOBJS_BASE) \
                 #$ ExpandList("WXGENERICOBJS");
 
+COMMONOBJS_BASE  = \
+                #$ ExpandList("WXCOMMONOBJS_BASE");
+
+COMMONOBJS_BASEONLY  = \
+                #$ ExpandList("WXCOMMONOBJS_BASEONLY");
+
 COMMONOBJS  = \
+                $(COMMONOBJS_BASE) \
 		$(COMMDIR)/y_tab.$(OBJSUFF) \
 		#$ ExpandList("WXCOMMONOBJS");
 
 HTMLOBJS = \
                 #$ ExpandList("WXHTMLOBJS");
 
+MSWOBJS_BASE = \
+                #$ ExpandList("WXMSWOBJS_BASE");
+
 MSWOBJS     = \
+                $(MSWOBJS_BASE) \
 		#$ ExpandList("WXMSWOBJS");
 
+ADVANCEDOBJS_BASE = \
+                #$ ExpandList("ADVANCEDOBJS_BASE");
+
 ADVANCEDOBJS     = \
+                $(ADVANCEDOBJS_BASE) \
 		#$ ExpandList("ADVANCEDOBJS");
 
 ZLIBOBJS    = \
@@ -279,6 +314,9 @@ ifeq ($(MINGW32),1)
 else
   OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
 endif
+ifeq ($(wxUSE_GUI),0)
+  OBJECTS = $(MSWOBJS_BASE) $(COMMONOBJS_BASE) $(COMMONOBJS_BASEONLY) $(GENERICOBJS_BASE)
+endif
 
 # MBN: if anyone has a better solution for this kludge, step
 #      forward, *please*
@@ -299,7 +337,7 @@ else
 endif
 
 #ARCHINCDIR=$(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(WXDIR)/lib/msw$(INCEXT))
-ARCHINCDIR=$(WXDIR)/lib/msw$(INCEXT)
+ARCHINCDIR=$(WXDIR)/lib/$(TOOLKIT)$(INCEXT)
 
 SETUP_H=$(ARCHINCDIR)/wx/setup.h
 
