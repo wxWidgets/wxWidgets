@@ -98,7 +98,7 @@ def runTest( frame, nb, log ):
 
 
 overview = """
-<html>
+<html><body>
 <P>
 This demo shows how individual radio buttons can be used to build
 more complicated selection mechanisms...
@@ -107,6 +107,7 @@ It uses 2 groups of wxRadioButtons, where the groups are defined by
 instantiation.  When a wxRadioButton is created with the <I>wxRB_GROUP</I>
 style, all subsequent wxRadioButtons created without it are implicitly
 added to that group by the framework.
+</body></html>
 """
 
 
