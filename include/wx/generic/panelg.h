@@ -23,7 +23,6 @@
 #include "wx/window.h"
 #include "wx/containr.h"
 
-class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxControlContainer;
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
@@ -35,7 +34,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 class WXDLLEXPORT wxPanel : public wxWindow
 {
 public:
-    wxPanel() { Init(); }
+    wxPanel() : m_container(this) { Init(); }
 
     // Old-style constructor (no default values for coordinates to avoid
     // ambiguity with the new one)
@@ -43,6 +42,7 @@ public:
             int x, int y, int width, int height,
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPanelNameStr)
+        : m_container(this)
     {
         Init();
 
@@ -56,6 +56,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPanelNameStr)
+        : m_container(this)
     {
         Init();
 
@@ -89,9 +90,6 @@ public:
 protected:
     // common part of all ctors
     void Init();
-
-    // the object which implements the TAB traversal logic
-    wxControlContainer *m_container;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPanel)

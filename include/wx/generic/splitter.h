@@ -37,6 +37,8 @@ enum
     wxSPLIT_DRAG_LEFT_DOWN
 };
 
+class WXDLLEXPORT wxControlContainer;
+
 // ---------------------------------------------------------------------------
 // wxSplitterWindow maintains one or two panes, with
 // an optional vertical or horizontal split which
@@ -60,7 +62,7 @@ public:
 // Public API
 
     // Default constructor
-    wxSplitterWindow()
+    wxSplitterWindow() : m_container(this)
     {
         Init();
     }
@@ -71,12 +73,13 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxSP_3D,
                      const wxString& name = "splitter")
+        : m_container(this)
     {
         Init();
         Create(parent, id, pos, size, style, name);
     }
 
-    ~wxSplitterWindow();
+    virtual ~wxSplitterWindow();
 
     bool Create(wxWindow *parent, wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition,
@@ -209,8 +212,8 @@ protected:
     void SendUnsplitEvent(wxWindow *winRemoved);
 
 protected:
+    // common part of all ctors
     void Init();
-
 
     int         m_splitMode;
     bool        m_permitUnsplitAlways;
@@ -237,6 +240,8 @@ protected:
     wxPen*      m_facePen;
 
 private:
+    WX_DECLARE_CONTROL_CONTAINER();
+
     DECLARE_DYNAMIC_CLASS(wxSplitterWindow)
     DECLARE_EVENT_TABLE()
 };

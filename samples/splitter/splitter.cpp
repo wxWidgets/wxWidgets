@@ -79,13 +79,12 @@ public:
 private:
   void UpdatePosition();
 
-  wxMenu*    fileMenu;
-  wxMenuBar*  menuBar;
-  MyCanvas*  m_leftCanvas;
-  MyCanvas*  m_rightCanvas;
+  wxWindow *m_left,
+           *m_right;
+
   MySplitterWindow* m_splitter;
 
-DECLARE_EVENT_TABLE()
+  DECLARE_EVENT_TABLE()
 };
 
 class MyCanvas: public wxScrolledWindow
@@ -154,7 +153,7 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title,
   CreateStatusBar(2);
 
   // Make a menubar
-  fileMenu = new wxMenu;
+  wxMenu *fileMenu = new wxMenu;
   fileMenu->Append(SPLIT_VERTICAL, "Split &Vertically\tCtrl-V", "Split vertically");
   fileMenu->Append(SPLIT_HORIZONTAL, "Split &Horizontally\tCtrl-H", "Split horizontally");
   fileMenu->Append(SPLIT_UNSPLIT, "&Unsplit\tCtrl-U", "Unsplit");
@@ -163,33 +162,33 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title,
   fileMenu->AppendSeparator();
   fileMenu->Append(SPLIT_QUIT, "E&xit\tAlt-X", "Exit");
 
-  menuBar = new wxMenuBar;
+  wxMenuBar *menuBar = new wxMenuBar;
   menuBar->Append(fileMenu, "&File");
 
   SetMenuBar(menuBar);
 
   m_splitter = new MySplitterWindow(this, SPLITTER_WINDOW);
 
-#if 0
-  wxSize sz( m_splitter->GetSize() );
-  wxLogMessage( "Initial splitter size: %d %d\n", (int)sz.x, (int)sz.y );
-#endif // 0
+#if 1
+  m_left = new MyCanvas(m_splitter, CANVAS1, wxPoint(0, 0), wxSize(400, 400), "Test1" );
+  m_left->SetBackgroundColour(*wxRED);
+  m_left->SetScrollbars(20, 20, 50, 50);
+  m_left->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
-  m_leftCanvas = new MyCanvas(m_splitter, CANVAS1, wxPoint(0, 0), wxSize(400, 400), "Test1" );
-  m_leftCanvas->SetBackgroundColour(*wxRED);
-  m_leftCanvas->SetScrollbars(20, 20, 50, 50);
-  m_leftCanvas->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
-
-  m_rightCanvas = new MyCanvas(m_splitter, CANVAS2, wxPoint(0, 0), wxSize(400, 400), "Test2" );
-  m_rightCanvas->SetBackgroundColour(*wxCYAN);
-  m_rightCanvas->SetScrollbars(20, 20, 50, 50);
+  m_right = new MyCanvas(m_splitter, CANVAS2, wxPoint(0, 0), wxSize(400, 400), "Test2" );
+  m_right->SetBackgroundColour(*wxCYAN);
+  m_right->SetScrollbars(20, 20, 50, 50);
+#else // for testing kbd navigation inside the splitter
+  m_left = new wxTextCtrl(m_splitter, -1, "first text");
+  m_right = new wxTextCtrl(m_splitter, -1, "second text");
+#endif
 
   // you can also do this to start with a single window
 #if 0
-  m_rightCanvas->Show(FALSE);
-  m_splitter->Initialize(m_leftCanvas);
+  m_right->Show(FALSE);
+  m_splitter->Initialize(m_left);
 #else
-  m_splitter->SplitVertically(m_leftCanvas, m_rightCanvas, 100);
+  m_splitter->SplitVertically(m_left, m_right, 100);
 #endif
 
   SetStatusText("Min pane size = 0", 1);
@@ -208,9 +207,9 @@ void MyFrame::SplitHorizontal(wxCommandEvent& WXUNUSED(event) )
 {
   if ( m_splitter->IsSplit() )
     m_splitter->Unsplit();
-  m_leftCanvas->Show(TRUE);
-  m_rightCanvas->Show(TRUE);
-  m_splitter->SplitHorizontally( m_leftCanvas, m_rightCanvas );
+  m_left->Show(TRUE);
+  m_right->Show(TRUE);
+  m_splitter->SplitHorizontally( m_left, m_right );
   UpdatePosition();
 }
 
@@ -218,9 +217,9 @@ void MyFrame::SplitVertical(wxCommandEvent& WXUNUSED(event) )
 {
   if ( m_splitter->IsSplit() )
     m_splitter->Unsplit();
-  m_leftCanvas->Show(TRUE);
-  m_rightCanvas->Show(TRUE);
-  m_splitter->SplitVertically( m_leftCanvas, m_rightCanvas );
+  m_left->Show(TRUE);
+  m_right->Show(TRUE);
+  m_splitter->SplitVertically( m_left, m_right );
   UpdatePosition();
 }
 

@@ -80,13 +80,17 @@ extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
 
 // declare the methods to be forwarded
 #define WX_DECLARE_CONTROL_CONTAINER() \
+public: \
     void OnNavigationKey(wxNavigationKeyEvent& event); \
     void OnFocus(wxFocusEvent& event); \
     virtual void OnChildFocus(wxChildFocusEvent& event); \
     virtual void SetFocus(); \
     virtual void RemoveChild(wxWindowBase *child); \
     virtual wxWindow *GetDefaultItem() const; \
-    virtual wxWindow *SetDefaultItem(wxWindow *child) \
+    virtual wxWindow *SetDefaultItem(wxWindow *child); \
+\
+protected: \
+    wxControlContainer m_container
 
 // implement the event table entries for wxControlContainer
 #define WX_EVENT_TABLE_CONTROL_CONTAINER(classname) \
@@ -95,43 +99,43 @@ extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
     EVT_NAVIGATION_KEY(classname::OnNavigationKey)
 
 // implement the methods forwarding to the wxControlContainer
-#define WX_DELEGATE_TO_CONTROL_CONTAINER(classname, container)  \
+#define WX_DELEGATE_TO_CONTROL_CONTAINER(classname)  \
 wxWindow *classname::SetDefaultItem(wxWindow *child) \
 { \
-    return container->SetDefaultItem(child); \
+    return m_container.SetDefaultItem(child); \
 } \
  \
 wxWindow *classname::GetDefaultItem() const \
 { \
-    return container->GetDefaultItem(); \
+    return m_container.GetDefaultItem(); \
 } \
  \
 void classname::OnNavigationKey( wxNavigationKeyEvent& event ) \
 { \
-    container->HandleOnNavigationKey(event); \
+    m_container.HandleOnNavigationKey(event); \
 } \
  \
 void classname::RemoveChild(wxWindowBase *child) \
 { \
-    container->HandleOnWindowDestroy(child); \
+    m_container.HandleOnWindowDestroy(child); \
  \
     wxWindow::RemoveChild(child); \
 } \
  \
 void classname::SetFocus() \
 { \
-    if ( !container->DoSetFocus() ) \
+    if ( !m_container.DoSetFocus() ) \
         wxWindow::SetFocus(); \
 } \
  \
 void classname::OnChildFocus(wxChildFocusEvent& event) \
 { \
-    container->SetLastFocus(event.GetWindow()); \
+    m_container.SetLastFocus(event.GetWindow()); \
 } \
  \
 void classname::OnFocus(wxFocusEvent& event) \
 { \
-    container->HandleOnFocus(event); \
+    m_container.HandleOnFocus(event); \
 }
 
 

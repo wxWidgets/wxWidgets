@@ -57,7 +57,7 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxPanel, m_container)
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxPanel)
 
 // ----------------------------------------------------------------------------
 // wxPanel creation
@@ -65,7 +65,6 @@ WX_DELEGATE_TO_CONTROL_CONTAINER(wxPanel, m_container)
 
 void wxPanel::Init()
 {
-    m_container = new wxControlContainer(this);
 }
 
 bool wxPanel::Create(wxWindow *parent, wxWindowID id,
@@ -79,7 +78,6 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
 
 wxPanel::~wxPanel()
 {
-    delete m_container;
 }
 
 // ----------------------------------------------------------------------------

@@ -56,7 +56,11 @@ BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_SPLITTER_SASH_POS_CHANGING(-1, wxSplitterWindow::OnSashPosChanged)
     EVT_SPLITTER_DCLICK(-1,           wxSplitterWindow::OnDoubleClick)
     EVT_SPLITTER_UNSPLIT(-1,          wxSplitterWindow::OnUnsplitEvent)
+
+    WX_EVENT_TABLE_CONTROL_CONTAINER(wxSplitterWindow)
 END_EVENT_TABLE()
+
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxSplitterWindow);
 
 bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
                                    const wxPoint& pos,
@@ -64,6 +68,9 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
                                    long style,
                                    const wxString& name)
 {
+    // allow TABbing from one window to the other
+    style |= wxTAB_TRAVERSAL;
+
     if (!wxWindow::Create(parent, id, pos, size, style, name))
         return FALSE;
 

@@ -1512,8 +1512,6 @@ private:
     DECLARE_DYNAMIC_CLASS(wxContextMenuEvent)
 };
 
-#endif // wxUSE_GUI
-
 // Idle event
 /*
  wxEVT_IDLE
@@ -1535,6 +1533,8 @@ public:
 protected:
     bool m_requestMore;
 };
+
+#endif // wxUSE_GUI
 
 /* TODO
  wxEVT_POWER,

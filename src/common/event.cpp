@@ -52,9 +52,9 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
 
 #if wxUSE_GUI
+    IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent)
