@@ -404,7 +404,7 @@ msgstr "ASCII"
 
 #: ../src/html/helpfrm.cpp:358
 msgid "Add current page to bookmarks"
-msgstr "Aktuelle HTLM-Seite den Lesezeichen hinzufügen"
+msgstr "Aktuelle HTML-Seite den Lesezeichen hinzufügen"
 
 #: ../src/generic/colrdlgg.cpp:287
 msgid "Add to custom colours"
@@ -467,23 +467,23 @@ msgstr "Eigenschaften"
 
 #: ../src/common/paper.cpp:146
 msgid "B4 Envelope, 250 x 353 mm"
-msgstr "B4 Umschlag, 250 x 353 mm"
+msgstr "B4-Umschlag, 250 x 353 mm"
 
 #: ../src/common/paper.cpp:128
 msgid "B4 sheet, 250 x 354 mm"
-msgstr "B4 Blatt, 250 x 354 mm"
+msgstr "B4-Blatt, 250 x 354 mm"
 
 #: ../src/common/paper.cpp:147
 msgid "B5 Envelope, 176 x 250 mm"
-msgstr "B5 Umschlag, 176 x 250 mm"
+msgstr "B5-Umschlag, 176 x 250 mm"
 
 #: ../src/common/paper.cpp:129
 msgid "B5 sheet, 182 x 257 millimeter"
-msgstr "B5 Blatt, 182 x 257 mm"
+msgstr "B5-Blatt, 182 x 257 mm"
 
 #: ../src/common/paper.cpp:148
 msgid "B6 Envelope, 176 x 125 mm"
-msgstr "B6 Umschlag, 176 x 125 mm"
+msgstr "B6-Umschlag, 176 x 125 mm"
 
 #: ../src/common/imagbmp.cpp:476
 #: ../src/common/imagbmp.cpp:492
@@ -544,23 +544,23 @@ msgstr "&Löschen"
 
 #: ../src/common/paper.cpp:142
 msgid "C3 Envelope, 324 x 458 mm"
-msgstr "C3 Umschlag, 324 x 458 mm"
+msgstr "C3-Umschlag, 324 x 458 mm"
 
 #: ../src/common/paper.cpp:143
 msgid "C4 Envelope, 229 x 324 mm"
-msgstr "C4 Umschlag, 229 x 324 mm"
+msgstr "C4-Umschlag, 229 x 324 mm"
 
 #: ../src/common/paper.cpp:141
 msgid "C5 Envelope, 162 x 229 mm"
-msgstr "C5 Umschlag, 162 x 229 mm"
+msgstr "C5-Umschlag, 162 x 229 mm"
 
 #: ../src/common/paper.cpp:144
 msgid "C6 Envelope, 114 x 162 mm"
-msgstr "C6 Umschlag, 114 x 162 mm"
+msgstr "C6-Umschlag, 114 x 162 mm"
 
 #: ../src/common/paper.cpp:145
 msgid "C65 Envelope, 114 x 229 mm"
-msgstr "C65 Umschlag, 114 x 229 mm"
+msgstr "C65-Umschlag, 114 x 229 mm"
 
 #: ../src/html/chm.cpp:783
 #: ../src/html/chm.cpp:842
@@ -692,7 +692,7 @@ msgstr "Kann das komprimieren der zlib-Daten nicht initialisieren"
 #: ../src/common/image.cpp:1048
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
-msgstr "Kann Bild aus Datei '%s' nicht laden : Datei ist nicht vorhanden."
+msgstr "Kann Bild aus Datei '%s' nicht laden: Datei ist nicht vorhanden."
 
 #: ../src/msw/registry.cpp:385
 #, c-format
@@ -812,7 +812,7 @@ msgstr "Kann OLE nicht initialisieren"
 
 #: ../src/mgl/app.cpp:292
 msgid "Cannot initialize SciTech MGL!"
-msgstr "Kann SciTech MGL nicht initialisieren !"
+msgstr "Kann SciTech MGL nicht initialisieren!"
 
 #: ../src/mgl/window.cpp:546
 msgid "Cannot initialize display."
@@ -826,7 +826,7 @@ msgstr "Kann das Icon nicht von \"%s\" laden."
 #: ../contrib/src/xrc/xmlres.cpp:382
 #, c-format
 msgid "Cannot load resources from file '%s'."
-msgstr "Kann die Resourcen nicht aus der Datei '%s'  laden."
+msgstr "Kann die Resourcen nicht aus der Datei '%s' laden."
 
 #: ../src/html/htmlfilt.cpp:164
 #, c-format
@@ -851,7 +851,7 @@ msgstr "Kann den Inhalt der Datei %s nicht öffnen!"
 #: ../contrib/src/xrc/xmlres.cpp:353
 #, c-format
 msgid "Cannot open file '%s'."
-msgstr "Konnte Datei \"%s\" nicht öffnen"
+msgstr "Konnte Datei \"%s\" nicht öffnen."
 
 #: ../src/generic/dcpsg.cpp:1798
 msgid "Cannot open file for PostScript printing!"
@@ -906,11 +906,11 @@ msgstr "Keltisch (ISO-8859-14)"
 
 #: ../src/common/fmapbase.cpp:104
 msgid "Central European (ISO-8859-2)"
-msgstr "Zentral Europäisch (ISO-8859-2)"
+msgstr "Zentral-Europäisch (ISO-8859-2)"
 
 #: ../src/msw/dialup.cpp:750
 msgid "Choose ISP to dial"
-msgstr "Wähle ISP um anzurufen"
+msgstr "Wähle anzurufenden ISP"
 
 #: ../src/gtk/fontdlg.cpp:127
 msgid "Choose font"
