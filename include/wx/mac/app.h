@@ -174,6 +174,7 @@ public:
     virtual short         MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEOApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
+    virtual short         MacHandleAERApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
 
     // in response of an open-document apple event
     virtual void         MacOpenFile(const wxString &fileName) ;
@@ -181,6 +182,8 @@ public:
     virtual void         MacPrintFile(const wxString &fileName) ;
     // in response of a open-application apple event
     virtual void         MacNewFile() ;
+    // in response of a reopen-application apple event
+    virtual void         MacReopenApp() ;
 
     DECLARE_EVENT_TABLE()
 };
