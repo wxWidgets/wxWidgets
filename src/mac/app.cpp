@@ -578,7 +578,7 @@ bool wxApp::OnInitGui()
 
     InstallApplicationEventHandler(
         GetwxAppEventHandlerUPP(),
-        GetEventTypeCount(eventList), eventList, wxTheApp, &((EventHandlerRef)wxTheApp->m_macEventHandler));
+        GetEventTypeCount(eventList), eventList, wxTheApp, (EventHandlerRef *)&(wxTheApp->m_macEventHandler));
 #endif
 
 #if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)

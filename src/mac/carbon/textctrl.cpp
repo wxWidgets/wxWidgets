@@ -722,7 +722,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , "\p" , true , 0 , 0 , 1,
             (style & wxTE_PASSWORD) ? kControlEditTextPasswordProc : kControlEditTextProc , (long) this ) ;
         long size ;
-        ::GetControlData((ControlHandle)  m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &((TEHandle) m_macTE) , &size ) ;
+        ::GetControlData((ControlHandle)  m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*)((TEHandle *)&m_macTE) , &size ) ;
 
     }
     else

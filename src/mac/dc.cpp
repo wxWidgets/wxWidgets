@@ -1781,7 +1781,7 @@ void wxDC::MacInstallFont() const
     Fixed atsuSize = IntToFixed( int(m_scaleY * font->m_macFontSize) ) ;
     Style qdStyle = font->m_macFontStyle ;
     ATSUFontID    atsuFont = font->m_macATSUFontID ;
-    status = ::ATSUCreateStyle(&(ATSUStyle)m_macATSUIStyle) ;
+    status = ::ATSUCreateStyle((ATSUStyle *)&m_macATSUIStyle) ;
     wxASSERT_MSG( status == noErr , wxT("couldn't create ATSU style") ) ;
     ATSUAttributeTag atsuTags[] =
     {

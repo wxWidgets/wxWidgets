@@ -681,7 +681,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 #if TARGET_CARBON
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     InstallWindowEventHandler(MAC_WXHWND(m_macWindow), GetwxMacWindowEventHandlerUPP(),
-        GetEventTypeCount(eventList), eventList, this, &((EventHandlerRef)m_macEventHandler));
+        GetEventTypeCount(eventList), eventList, this, (EventHandlerRef *)&m_macEventHandler);
 #endif
     m_macFocus = NULL ;
 
