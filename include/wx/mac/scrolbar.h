@@ -46,8 +46,8 @@ public:
            const wxString& name = wxScrollBarNameStr);
 
   int GetThumbPosition() const ;
-  inline int GetThumbSize() const { return m_pageSize; }
-  inline int GetPageSize() const { return m_viewSize; }
+  inline int GetThumbSize() const { return m_viewSize; }
+  inline int GetPageSize() const { return m_pageSize; }
   inline int GetRange() const { return m_objectSize; }
 
   bool IsVertical() const { return (m_windowStyle & wxVERTICAL) != 0; }
