@@ -39,7 +39,7 @@
 // resources
 // ----------------------------------------------------------------------------
 // the application icon
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "mondrian.xpm"
 #endif
 
@@ -157,7 +157,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is the about dialog of tghe Erase sample.\n")
+    msg.Printf( _T("This is the about dialog of the Erase sample.\n")
                 _T("Welcome to %s"), wxVERSION_STRING);
 
     wxMessageBox(msg, "About Erase", wxOK | wxICON_INFORMATION, this);

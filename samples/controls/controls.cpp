@@ -34,7 +34,7 @@
     #include "wx/tooltip.h"
 #endif
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #define USE_XPM
 #endif
 
