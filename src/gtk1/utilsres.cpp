@@ -85,7 +85,7 @@ static wxChar *GetResourcePath(wxChar *buf, wxChar *name, bool create)
 // the Real User, then determine the Real home dir.
 static wxChar *GetIniFile(wxChar *dest, const wxChar *filename)
 {
-    wxChar *home = (wxChar *) NULL;
+    const wxChar *home = (const wxChar *) NULL;
     if (filename && wxIsAbsolutePath(filename))
     {
       wxStrcpy(dest, filename);
