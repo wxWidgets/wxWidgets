@@ -49,6 +49,19 @@ wxMSW: Applied patch #1166587, removes all flicker from wx.StaticBox
 Added wx.lib.foldpanelbar, Andrea Gavana's port of Jorgen Bodde's C++
 wxFoldPanelBar classes to Python.
 
+wxGTK: Applied patch #1173802, reimplementation of GtkFileChooser
+wxFileDialog by Mart Raudsepp.  Note that this new file dialog is only
+used on GTK2 >= 2.4.  For earlier GTK2 versions and GTK1 then the
+older generic file dialog is used.
+
+wxMSW: fixes to static box borders calculations (finalizes patch
+#1166587)
+
+wx.Image: Use Python's buffer interface API for all image data and
+alpha Set/Get methods and the ImageFromData* constructors.  They all
+still copy the buffer except for SetDataBuffer and SetAlphaBuffer, but
+this gives more flexibility on where the data can come from.
+
 
 
 
