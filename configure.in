@@ -1458,7 +1458,21 @@ AC_CHECK_PROG(AR, ar, ar, ar)
 
 dnl install checks
 dnl   defines INSTALL with the appropriate command
-AC_PROG_INSTALL
+case "${host}" in
+
+    dnl  The other BSD's should probably go in here too, since this is
+    dnl  to workaround a strange static lib BSDism.
+    powerpc-*-darwin* )
+        INSTALL="cp -p"
+        INSTALL_PROGRAM="cp -p"
+        INSTALL_DATA="cp -p"
+        AC_SUBST(INSTALL)
+        AC_SUBST(INSTALL_PROGRAM)
+        AC_SUBST(INSTALL_DATA)
+        ;;
+    *)
+        AC_PROG_INSTALL
+esac
 
 dnl strip command
 dnl   defines STRIP as strip or nothing if not found

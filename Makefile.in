@@ -413,8 +413,6 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLCHAIN_NAME@-config $(bindir)/wx@TOOLCHAIN_NAME@-config
 	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLCHAIN_NAME@-config wx-config
 	$(INSTALL_PROGRAM) $(build_libdir)/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
-	@if test "@WX_LIBRARY_NAME_STATIC@" = "@WX_TARGET_LIBRARY@"; then $(RANLIB) $(libdir)/@WX_TARGET_LIBRARY@; fi
-	@# this installs the import library for a MSW DLL
 	@if test "x@WX_LIBRARY_IMPORTLIB@" != "x"; then	\
 		$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_LIBRARY_IMPORTLIB@ $(libdir)/@WX_LIBRARY_IMPORTLIB@; fi
 
