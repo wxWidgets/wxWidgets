@@ -170,6 +170,13 @@ wxThread and related classes:
 OTHER CHANGES
 =============
 
+2.4.0
+-----
+
+wxMSW:
+
+- fixed loss of client data in wxChoice::SetString()
+
 2.3.4
 -----
 
