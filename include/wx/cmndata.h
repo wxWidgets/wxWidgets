@@ -16,6 +16,7 @@
 #pragma interface "cmndata.h"
 #endif
 
+#include "wx/window.h"
 #include "wx/font.h"
 #include "wx/colour.h"
 #include "wx/gdicmn.h"

@@ -56,7 +56,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 // window proc
 // ---------------------------------------------------------------------------
 
-#if defined(__GNUWIN32__) && !defined(__MINGW32__)
+#if defined(__GNUWIN32__) 
 #  define CASTWNDPROC (long unsigned)
 #else
 #  ifdef __BORLANDC__
