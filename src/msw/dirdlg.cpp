@@ -153,7 +153,7 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
                     if (strDir.Len() > (size_t) (maxChars - 3))
                     {
                         strDir = strDir.Right(maxChars - 3);
-                        strDir = wxString(_("...")) + strDir;
+                        strDir = wxString(wxT("...")) + strDir;
                     }
                     SendMessage(hwnd, BFFM_SETSTATUSTEXT, 0, (LPARAM) (const wxChar*) strDir);
                 }
