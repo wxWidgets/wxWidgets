@@ -1070,11 +1070,12 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
     {
         m_x = actualX ;
         m_y = actualY ;
-        m_width = actualWidth ;
-        m_height = actualHeight ;
 
         if ( doMove )
             ::MoveWindow((WindowRef)m_macWindow, m_x, m_y  , false); // don't make frontmost
+
+        m_width = actualWidth ;
+        m_height = actualHeight ;
 
         if ( doResize )
             ::SizeWindow((WindowRef)m_macWindow, m_width, m_height  , true);
