@@ -179,9 +179,11 @@ bool MyApp::OnInit()
     // Associate the menu bar with the frame
     frame->SetMenuBar(menu_bar);
 
+#if wxUSE_STATUSBAR
     frame->CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
-    frame->Show(TRUE);
+    frame->Show(true);
 
     SetTopWindow(frame);
 
@@ -391,7 +393,9 @@ wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
 void MyCanvas::OnDraw(wxDC& dc)
 {
     // vars to use ...
+#if wxUSE_STATUSBAR
     wxString s ;
+#endif // wxUSE_STATUSBAR
     wxPen wP ;
     wxBrush wB ;
     wxPoint points[6];
@@ -417,7 +421,9 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawPoint (25,15) ;
             dc.DrawLine(50, 30, 200, 30);
             dc.DrawSpline(50, 200, 50, 100, 200, 10);
+#if wxUSE_STATUSBAR
             s = wxT("Green Cross, Cyan Line and spline");
+#endif // wxUSE_STATUSBAR
             break ;
 
         case 1:
@@ -440,7 +446,9 @@ void MyCanvas::OnDraw(wxDC& dc)
 
             dc.DrawPolygon(5, points);
             dc.DrawLines (6, points, 160);
+#if wxUSE_STATUSBAR
             s = wxT("Blue rectangle, red edge, clear rounded rectangle, gold ellipse, gold and clear stars");
+#endif // wxUSE_STATUSBAR
             break ;
 
         case 2:
@@ -460,7 +468,9 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.SetFont(wF);
             dc.SetTextForeground (wC) ;
             dc.DrawText(wxT("This is a Times-style string"), 50, 60);
+#if wxUSE_STATUSBAR
             s = wxT("Swiss, Times text; red text, rotated and colored orange");
+#endif // wxUSE_STATUSBAR
             break ;
 
         case 3 :
@@ -494,7 +504,9 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawEllipticArc(300, 50,200,100,90.0,145.0) ;
             dc.DrawEllipticArc(300,100,200,100,90.0,345.0) ;
 
+#if wxUSE_STATUSBAR
             s = wxT("This is an arc test page");
+#endif // wxUSE_STATUSBAR
             break ;
 
         case 4:
@@ -502,7 +514,9 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.SetBrush (wxBrush (_T("SALMON"),wxTRANSPARENT));
             dc.DrawCheckMark ( 80,50,75,75);
             dc.DrawRectangle ( 80,50,75,75);
+#if wxUSE_STATUSBAR
             s = wxT("Two check marks");
+#endif // wxUSE_STATUSBAR
             break ;
 
         case 5:
@@ -532,17 +546,23 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
             dc.DrawText(wxT("This is an 18pt string in MapMode"), 50, 60); 
+#if wxUSE_STATUSBAR
             s = wxT("Scaling test page");
+#endif // wxUSE_STATUSBAR
             break ;
 
         case 6:
             dc.DrawIcon( wxIcon(mondrian_xpm), 10, 10 );
             dc.DrawBitmap ( wxBitmap(svgbitmap_xpm), 50,15);
+#if wxUSE_STATUSBAR
             s = wxT("Icon and Bitmap ");
+#endif // wxUSE_STATUSBAR
             break ;
 
     }
+#if wxUSE_STATUSBAR
     m_child->SetStatusText(s);
+#endif // wxUSE_STATUSBAR
 }
 
 
@@ -559,8 +579,10 @@ const long style)
 {
 
     m_frame = (MyFrame *) parent ;
+#if wxUSE_STATUSBAR
     CreateStatusBar();
     SetStatusText(title);    
+#endif // wxUSE_STATUSBAR
 
     int w, h ;
     GetClientSize ( &w, &h );

@@ -122,12 +122,14 @@ MyFrame::MyFrame(wxWindow* parent)
     // needs to be all in one step.
     SetToolBar(wxXmlResource::Get()->LoadToolBar(this, wxT("main_toolbar")));
 
+#if wxUSE_STATUSBAR
     // Give the frame a optional statusbar. The '1' just means one field.
     // A gripsizer will automatically get put on into the corner, if that
     // is the normal OS behaviour for frames on that platform. Helptext
     // for menu items and toolbar tools will automatically get displayed
     // here.
     CreateStatusBar( 1 );
+#endif // wxUSE_STATUSBAR
 }
 
 //-----------------------------------------------------------------------------

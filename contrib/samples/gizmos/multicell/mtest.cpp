@@ -66,7 +66,9 @@ bool MyApp::OnInit(void)
 MyFrame::MyFrame(int type, wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
 wxFrame(frame, wxID_ANY, title, pos, size, wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL)
 {
+#if wxUSE_STATUSBAR
     CreateStatusBar(1);
+#endif // wxUSE_STATUSBAR
     sizer = NULL;
     if (type == 1)
     {

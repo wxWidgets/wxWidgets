@@ -140,7 +140,9 @@ ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, 
 
     SetIcon(wxIcon(wxconfigtool_xpm));
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     wxMenuBar* menuBar = CreateMenuBar();
     SetMenuBar(menuBar);

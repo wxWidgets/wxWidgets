@@ -88,7 +88,9 @@ bool MyApp::OnInit(void)
     
     menu_bar->Append(file_menu, _("&File"));
     
+#if wxUSE_STATUSBAR
     frame->CreateStatusBar(3);
+#endif // wxUSE_STATUSBAR
     frame->SetMenuBar(menu_bar);
     
     frame->Show(true);

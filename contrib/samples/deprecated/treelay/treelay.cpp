@@ -43,8 +43,10 @@ bool MyApp::OnInit()
   // Create the main frame window
   MyFrame* frame = new MyFrame(NULL, _T("Tree Test"), wxPoint(-1, -1), wxSize(400, 550));
 
+#if wxUSE_STATUSBAR
   // Give it a status line
   frame->CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
   // Give it an icon
 #ifdef __WINDOWS__
@@ -85,7 +87,9 @@ bool MyApp::OnInit()
 
   frame->Show(TRUE);
 
+#if wxUSE_STATUSBAR
   frame->SetStatusText(_T("Hello, tree!"));
+#endif // wxUSE_STATUSBAR
 
   // Return the main frame window
   return TRUE;

@@ -180,12 +180,14 @@ bool wxEmulatorApp::OnInit()
     wxEmulatorFrame *frame = new wxEmulatorFrame(_T("wxEmulator"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
+#if wxUSE_STATUSBAR
     frame->SetStatusText(m_emulatorInfo.m_emulatorTitle, 0);
 
     wxString sizeStr;
     sizeStr.Printf(wxT("Screen: %dx%d"), (int) m_emulatorInfo.m_emulatorScreenSize.x,
             (int) m_emulatorInfo.m_emulatorScreenSize.y);
     frame->SetStatusText(sizeStr, 1);
+#endif // wxUSE_STATUSBAR
 
     m_containerWindow = new wxEmulatorContainer(frame, wxID_ANY);
 

@@ -431,7 +431,9 @@ void MMBoardFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     // Update misc info
     UpdateMMedInfo();
 
+#if wxUSE_STATUSBAR
     SetStatusText(selected_file, 2);
+#endif // wxUSE_STATUSBAR
 
     // Update info text
     UpdateInfoText();
@@ -469,7 +471,6 @@ void MMBoardFrame::UpdateInfoText()
 
 void MMBoardFrame::UpdateMMedInfo()
 {
-    wxString temp_string;
     MMBoardTime current, length;
 
     if (m_opened_file) {
@@ -480,10 +481,15 @@ void MMBoardFrame::UpdateMMedInfo()
         length = current;
     }
 
+#if wxUSE_STATUSBAR
     // We refresh the status bar
+    wxString temp_string;
     temp_string.Printf(wxT("%02d:%02d / %02d:%02d"), current.hours * 60 + current.minutes,
                        current.seconds, length.hours * 60 + length.minutes, length.seconds);
     SetStatusText(temp_string, 1);
+#else
+    wxUnusedVar(length);
+#endif // wxUSE_STATUSBAR
 
     // We set the slider position
     m_positionSlider->SetValue(current.hours * 3600 + current.minutes * 60 + current.seconds);

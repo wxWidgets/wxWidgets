@@ -115,9 +115,11 @@ MyFrame::MyFrame()
 
     SetMenuBar( menu_bar );
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
     int widths[] = { -1, 100 };
     SetStatusWidths( 2, widths );
+#endif // wxUSE_STATUSBAR
 
     m_plot = new wxPlotWindow( this, -1, wxPoint(0,0), wxSize(100,100), wxSUNKEN_BORDER | wxPLOT_DEFAULT );
     m_plot->SetUnitsPerValue( 0.01 );

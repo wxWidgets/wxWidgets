@@ -72,6 +72,7 @@ bool csEditorToolPalette::OnLeftClick(int toolIndex, bool toggled)
 
 void csEditorToolPalette::OnMouseEnter(int toolIndex)
 {
+#if wxUSE_STATUSBAR
     wxString msg = wxEmptyString;
     if (toolIndex == PALETTE_ARROW)
         msg = _T("Pointer");
@@ -82,6 +83,9 @@ void csEditorToolPalette::OnMouseEnter(int toolIndex)
             msg = symbol->GetName();
     }
     ((wxFrame*) wxGetApp().GetTopWindow())->SetStatusText(msg);
+#else
+    wxUnusedVar(toolIndex);
+#endif // wxUSE_STATUSBAR
 }
 
 void csEditorToolPalette::SetSize(int x, int y, int width, int height, int sizeFlags)

@@ -170,7 +170,9 @@ bool csApp::OnInit(void)
   wxConfig config(_T("OGL Studio"), _T("wxWidgets"));
   m_docManager->FileHistoryLoad(config);
 
+#if wxUSE_STATUSBAR
   frame->CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
   // The ordering of these is important for layout purposes
   CreateDiagramToolBar(frame);

@@ -159,7 +159,9 @@ void csEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys,
   }
   else
   {
+#if wxUSE_STATUSBAR
     ((wxFrame*)wxGetApp().GetTopWindow())->SetStatusText(m_label);
+#endif // wxUSE_STATUSBAR
   }
 }
 

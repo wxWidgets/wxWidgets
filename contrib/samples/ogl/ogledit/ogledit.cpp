@@ -118,7 +118,9 @@ bool MyApp::OnInit(void)
   //// Associate the menu bar with the frame
   frame->SetMenuBar(menu_bar);
 
+#if wxUSE_STATUSBAR
   frame->CreateStatusBar(1);
+#endif // wxUSE_STATUSBAR
 
   frame->Centre(wxBOTH);
   frame->Show(true);

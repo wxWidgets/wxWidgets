@@ -90,7 +90,9 @@ PreviewFrame::PreviewFrame()
     m_ScrollWin->SetBackgroundColour(_T("light steel blue"));
     m_Splitter->SplitHorizontally(m_ScrollWin, m_LogCtrl, cfg->Read(_T("previewframe_sash"), 300));
 
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
 #ifdef __WXMSW__
     SendSizeEvent(); // force resize for WXMSW

@@ -96,7 +96,9 @@ bool MyApp::OnInit(void)
     menu_bar->Append(file_menu,   _("&File"));
     menu_bar->Append(active_menu, _("Active &Layout"));
 
+#if wxUSE_STATUSBAR
     frame->CreateStatusBar(3);
+#endif // wxUSE_STATUSBAR
 
     frame->SetMenuBar(menu_bar);
 

@@ -107,8 +107,10 @@ bool MyApp::OnInit(void)
                          wxT("wxWidgets Resource Sample"),
                          wxPoint(-1, -1), wxSize(300, 250) );
 
+#if wxUSE_STATUSBAR
     // Give it a status line
     frame->CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     wxMenuBar *menu_bar = wxResourceCreateMenuBar(wxT("menu1"));
 
