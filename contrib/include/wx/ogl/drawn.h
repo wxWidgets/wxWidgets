@@ -74,7 +74,7 @@ class wxPseudoMetaFile: public wxObject
   inline wxList& GetOps() const { return (wxList&) m_ops; }
 
   // Is this a valid (non-empty) metafile?
-  inline bool IsValid() const { return (m_ops.Number() > 0); }
+  inline bool IsValid() const { return (m_ops.GetCount() > 0); }
 
 public:
   /// Set of functions for drawing into a pseudo metafile.

@@ -339,7 +339,7 @@ class wxShape: public wxShapeEvtHandler
   virtual wxFont *GetFont(int regionId = 0) const;
   virtual void SetTextColour(const wxString& colour, int regionId = 0);
   virtual wxString GetTextColour(int regionId = 0) const;
-  virtual inline int GetNumberOfTextRegions() const { return m_regions.Number(); }
+  virtual inline int GetNumberOfTextRegions() const { return m_regions.GetCount(); }
   virtual void SetRegionName(const wxString& name, int regionId = 0);
 
   // Get the name representing the region for this image alone.

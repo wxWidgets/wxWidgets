@@ -62,7 +62,7 @@ public:
   inline void SetMouseTolerance(int tol) { m_mouseTolerance = tol; }
   inline int GetMouseTolerance() const { return m_mouseTolerance; }
   inline wxList *GetShapeList() const { return m_shapeList; }
-  inline int GetCount() const { return m_shapeList->Number(); }
+  inline int GetCount() const { return m_shapeList->GetCount(); }
 
   // Make sure all text that should be centred, is centred.
   void RecentreAll(wxDC& dc);

@@ -479,7 +479,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
         break;
       }
 //      case META_STRETCHDIB:
@@ -504,7 +504,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
         break;
       }
       case META_CREATEBRUSH:
@@ -514,7 +514,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
         break;
       }
       case META_CREATEPATTERNBRUSH:
@@ -524,7 +524,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
         break;
       }
       case META_CREATEPENINDIRECT:
@@ -550,7 +550,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         gdiObjects.Append(rec);
 
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
 
         // For some reason, the size of this record is sometimes 9 words!!!
         // instead of the usual 8. So read 2 characters extra.
@@ -622,7 +622,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
         break;
       }
       case META_CREATEBRUSHINDIRECT:
@@ -679,7 +679,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
         break;
       }
       case META_CREATEBITMAPINDIRECT:
@@ -690,7 +690,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
         break;
       }
       case META_CREATEBITMAP:
@@ -701,7 +701,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
         break;
       }
       case META_CREATEREGION:
@@ -712,7 +712,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
-        rec->param2 = (long)(gdiObjects.Number() - 1);
+        rec->param2 = (long)(gdiObjects.GetCount() - 1);
         break;
       }
       default:
@@ -728,12 +728,12 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
 
 wxXMetaFile::~wxXMetaFile(void)
 {
-  wxNode *node = metaRecords.First();
+  wxNode *node = metaRecords.GetFirst();
   while (node)
   {
-    wxMetaRecord *rec = (wxMetaRecord *)node->Data();
+    wxMetaRecord *rec = (wxMetaRecord *)node->GetData();
     delete rec;
-    wxNode *next = node->Next();
+    wxNode *next = node->GetNext();
     delete node;
     node = next;
   }
@@ -746,10 +746,10 @@ bool wxXMetaFile::SetClipboard(int width, int height)
 
 bool wxXMetaFile::Play(wxDC *dc)
 {
-  wxNode *node = metaRecords.First();
+  wxNode *node = metaRecords.GetFirst();
   while (node)
   {
-    wxMetaRecord *rec = (wxMetaRecord *)node->Data();
+    wxMetaRecord *rec = (wxMetaRecord *)node->GetData();
     int rdFunction = rec->metaFunction;
 
     switch (rdFunction)
@@ -1080,7 +1080,7 @@ bool wxXMetaFile::Play(wxDC *dc)
         break;
       }
     }
-    node = node->Next();
+    node = node->GetNext();
   }
   return TRUE;
 }

@@ -629,9 +629,9 @@ wxSplitterScrolledWindow::wxSplitterScrolledWindow(wxWindow* parent, wxWindowID 
 void wxSplitterScrolledWindow::OnSize(wxSizeEvent& event)
 {
     wxSize sz = GetClientSize();
-    if (GetChildren().First())
+    if (GetChildren().GetFirst())
     {
-        ((wxWindow*) GetChildren().First()->Data())->SetSize(0, 0, sz.x, sz.y);
+        ((wxWindow*) GetChildren().GetFirst()->GetData())->SetSize(0, 0, sz.x, sz.y);
     }
 }
 
@@ -682,10 +682,10 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
     }
 
     // Find targets in splitter window and send the event to them
-    wxNode* node = GetChildren().First();
+    wxWindowListNode* node = GetChildren().GetFirst();
     while (node)
     {
-        wxWindow* child = (wxWindow*) node->Data();
+        wxWindow* child = (wxWindow*) node->GetData();
         if (child->IsKindOf(CLASSINFO(wxSplitterWindow)))
         {
             wxSplitterWindow* splitter = (wxSplitterWindow*) child;
@@ -695,7 +695,7 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
                 splitter->GetWindow2()->ProcessEvent(event);
             break;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
 #ifdef __WXMAC__

@@ -205,7 +205,7 @@ void oglCentreText(wxDC& dc, wxList *text_list,
                 double m_xpos, double m_ypos, double width, double height,
                 int formatMode)
 {
-  int n = text_list->Number();
+  int n = text_list->GetCount();
 
   if (!text_list || (n == 0))
     return;
@@ -219,11 +219,11 @@ void oglCentreText(wxDC& dc, wxList *text_list,
   // Store text extents for speed
   double *widths = new double[n];
 
-  wxNode *current = text_list->First();
+  wxNode *current = text_list->GetFirst();
   int i = 0;
   while (current)
   {
-    wxShapeTextLine *line = (wxShapeTextLine *)current->Data();
+    wxShapeTextLine *line = (wxShapeTextLine *)current->GetData();
     dc.GetTextExtent(line->GetText(), &current_width, &char_height);
     widths[i] = current_width;
 
@@ -262,12 +262,12 @@ void oglCentreText(wxDC& dc, wxList *text_list,
     xOffset = 0.0;
   }
 
-  current = text_list->First();
+  current = text_list->GetFirst();
   i = 0;
 
   while (current)
   {
-    wxShapeTextLine *line = (wxShapeTextLine *)current->Data();
+    wxShapeTextLine *line = (wxShapeTextLine *)current->GetData();
 
     double x;
     if ((formatMode & FORMAT_CENTRE_HORIZ) && (widths[i] < width))
@@ -288,7 +288,7 @@ void oglCentreText(wxDC& dc, wxList *text_list,
 void oglCentreTextNoClipping(wxDC& dc, wxList *text_list,
                               double m_xpos, double m_ypos, double width, double height)
 {
-  int n = text_list->Number();
+  int n = text_list->GetCount();
 
   if (!text_list || (n == 0))
     return;
@@ -302,11 +302,11 @@ void oglCentreTextNoClipping(wxDC& dc, wxList *text_list,
   // Store text extents for speed
   double *widths = new double[n];
 
-  wxNode *current = text_list->First();
+  wxNode *current = text_list->GetFirst();
   int i = 0;
   while (current)
   {
-    wxShapeTextLine *line = (wxShapeTextLine *)current->Data();
+    wxShapeTextLine *line = (wxShapeTextLine *)current->GetData();
     dc.GetTextExtent(line->GetText(), &current_width, &char_height);
     widths[i] = current_width;
 
@@ -322,12 +322,12 @@ void oglCentreTextNoClipping(wxDC& dc, wxList *text_list,
 
   double xoffset = (double)(m_xpos - width/2.0);
 
-  current = text_list->First();
+  current = text_list->GetFirst();
   i = 0;
 
   while (current)
   {
-    wxShapeTextLine *line = (wxShapeTextLine *)current->Data();
+    wxShapeTextLine *line = (wxShapeTextLine *)current->GetData();
 
     double x = (double)((width - widths[i])/2.0 + xoffset);
     double y = (double)(i*char_height + yoffset);
@@ -343,7 +343,7 @@ void oglGetCentredTextExtent(wxDC& dc, wxList *text_list,
                               double m_xpos, double m_ypos, double width, double height,
                               double *actual_width, double *actual_height)
 {
-  int n = text_list->Number();
+  int n = text_list->GetCount();
 
   if (!text_list || (n == 0))
   {
@@ -358,11 +358,11 @@ void oglGetCentredTextExtent(wxDC& dc, wxList *text_list,
   long max_width = 0;
   long current_width = 0;
 
-  wxNode *current = text_list->First();
+  wxNode *current = text_list->GetFirst();
   int i = 0;
   while (current)
   {
-    wxShapeTextLine *line = (wxShapeTextLine *)current->Data();
+    wxShapeTextLine *line = (wxShapeTextLine *)current->GetData();
     dc.GetTextExtent(line->GetText(), &current_width, &char_height);
 
     if (current_width > max_width)
@@ -452,7 +452,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
   {
     wxString oldBuffer(buffer);
 
-    char *s = (char *)node->Data();
+    char *s = (char *)node->GetData();
     if (!s)
     {
       // FORCE NEW LINE
@@ -508,10 +508,10 @@ void oglDrawFormattedText(wxDC& dc, wxList *text_list,
                     (long)(m_xpos - width/2.0), (long)(m_ypos - height/2.0),
                     (long)width, (long)height);
 
-  wxNode *current = text_list->First();
+  wxNode *current = text_list->GetFirst();
   while (current)
   {
-    wxShapeTextLine *line = (wxShapeTextLine *)current->Data();
+    wxShapeTextLine *line = (wxShapeTextLine *)current->GetData();
 
     dc.DrawText(line->GetText(), WXROUND(xoffset + line->GetX()), WXROUND(yoffset + line->GetY()));
     current = current->Next();
@@ -530,17 +530,17 @@ void oglFindPolylineCentroid(wxList *points, double *x, double *y)
   double xcount = 0;
   double ycount = 0;
 
-  wxNode *node = points->First();
+  wxNode *node = points->GetFirst();
   while (node)
   {
-    wxRealPoint *point = (wxRealPoint *)node->Data();
+    wxRealPoint *point = (wxRealPoint *)node->GetData();
     xcount += point->x;
     ycount += point->y;
     node = node->Next();
   }
 
-  *x = (xcount/points->Number());
-  *y = (ycount/points->Number());
+  *x = (xcount/points->GetCount());
+  *y = (ycount/points->GetCount());
 }
 
 /*
@@ -808,10 +808,10 @@ void UpdateListBox(wxListBox *item, wxList *list)
   if (!list)
     return;
 
-  wxNode *node = list->First();
+  wxNode *node = list->GetFirst();
   while (node)
   {
-    char *s = (char *)node->Data();
+    char *s = (char *)node->GetData();
     item->Append(s);
     node = node->Next();
   }

@@ -397,10 +397,10 @@ wxShape *wxShapeCanvas::FindShape(double x, double y, int *attachment, wxClassIn
   //     the other objects
   // (b) to find the control points FIRST if they exist
 
-  wxNode *current = GetDiagram()->GetShapeList()->Last();
+  wxNode *current = GetDiagram()->GetShapeList()->GetLast();
   while (current)
   {
-    wxShape *object = (wxShape *)current->Data();
+    wxShape *object = (wxShape *)current->GetData();
 
     double dist;
     int temp_attachment;
@@ -430,13 +430,13 @@ wxShape *wxShapeCanvas::FindShape(double x, double y, int *attachment, wxClassIn
       }
     }
     if (current)
-      current = current->Previous();
+      current = current->GetPrevious();
   }
 
-  current = GetDiagram()->GetShapeList()->Last();
+  current = GetDiagram()->GetShapeList()->GetLast();
   while (current)
   {
-    wxShape *object = (wxShape *)current->Data();
+    wxShape *object = (wxShape *)current->GetData();
     double dist;
     int temp_attachment;
 
@@ -461,7 +461,7 @@ wxShape *wxShapeCanvas::FindShape(double x, double y, int *attachment, wxClassIn
       }
     }
     if (current)
-      current = current->Previous();
+      current = current->GetPrevious();
   }
 
   *attachment = nearest_attachment;
