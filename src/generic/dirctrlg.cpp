@@ -502,16 +502,11 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     Init();
 
-    long treeStyle = wxTR_HAS_BUTTONS;
+    long treeStyle = wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT;
 
 #ifdef __WXMSW__
     if (style & wxDIRCTRL_EDITABLE)
         treeStyle |= wxTR_EDIT_LABELS;
-#endif
-
-#ifndef __WXMSW__
-    // FIXME, doesn't work for some reason
-    treeStyle |= wxTR_HIDE_ROOT;
 #endif
 
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
@@ -558,7 +553,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     m_rootId = m_treeCtrl->AddRoot( rootName, 3, -1, rootData);
     m_treeCtrl->SetItemHasChildren(m_rootId);
-    m_treeCtrl->Expand(m_rootId); // automatically expand first level
+    ExpandDir(m_rootId); // automatically expand first level
 
     // Expand and select the default path
     if (!m_defaultPath.IsEmpty())
@@ -588,8 +583,7 @@ void wxGenericDirCtrl::ShowHidden( bool show )
     m_showHidden = show;
 
     wxString path = GetPath();
-    m_treeCtrl->Collapse(m_treeCtrl->GetRootItem());
-    m_treeCtrl->Expand(m_treeCtrl->GetRootItem());
+    ReCreateTree();
     SetPath(path);
 }
 
@@ -756,9 +750,14 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
 
 void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event )
 {
-    wxTreeItemId child, parent = event.GetItem();
+    CollapseDir(event.GetItem());
+}
 
-    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(event.GetItem());
+void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
+{
+    wxTreeItemId child;
+
+    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(parentId);
     if (!data->m_isExpanded)
         return;
 
@@ -766,13 +765,13 @@ void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event )
     long cookie;
     /* Workaround because DeleteChildren has disapeared (why?) and
      * CollapseAndReset doesn't work as advertised (deletes parent too) */
-    child = m_treeCtrl->GetFirstChild(parent, cookie);
+    child = m_treeCtrl->GetFirstChild(parentId, cookie);
     while (child.IsOk())
     {
         m_treeCtrl->Delete(child);
         /* Not GetNextChild below, because the cookie mechanism can't
          * handle disappearing children! */
-        child = m_treeCtrl->GetFirstChild(parent, cookie);
+        child = m_treeCtrl->GetFirstChild(parentId, cookie);
     }
 }
 
@@ -908,6 +907,12 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             (void)m_treeCtrl->AppendItem( parentId, eachFilename, 2, -1, dir_item);
         }
     }
+}
+
+void wxGenericDirCtrl::ReCreateTree()
+{
+    CollapseDir(m_treeCtrl->GetRootItem());
+    ExpandDir(m_treeCtrl->GetRootItem());
 }
 
 // Find the child that matches the first part of 'path'.
@@ -1248,8 +1253,7 @@ void wxDirFilterListCtrl::OnSelFilter(wxCommandEvent& WXUNUSED(event))
 
     // If the filter has changed, the view is out of date, so
     // collapse the tree.
-    m_dirCtrl->GetTreeCtrl()->Collapse(m_dirCtrl->GetRootId());
-    m_dirCtrl->GetTreeCtrl()->Expand(m_dirCtrl->GetRootId());
+    m_dirCtrl->ReCreateTree();
 
     // Try to restore the selection, or at least the directory
     m_dirCtrl->ExpandPath(currentPath);

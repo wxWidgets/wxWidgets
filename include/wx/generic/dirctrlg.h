@@ -157,8 +157,12 @@ public:
     // Resize the components of the control
     void DoResize();
     
+    // Collapse & expand the tree, thus re-creating it from scratch:
+    void ReCreateTree();
+    
 protected:
     void ExpandDir(wxTreeItemId parentId);
+    void CollapseDir(wxTreeItemId parentId);
     void AddSection(const wxString& path, const wxString& name, int imageId = 0);
     //void FindChildFiles(wxTreeItemId id, int dirFlags, wxArrayString& filenames);
 
