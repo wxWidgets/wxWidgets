@@ -506,10 +506,16 @@ bool wxWindowMSW::Enable(bool enable)
     // well but when it is enabled back, only those of the children which
     // hadn't been already disabled in the beginning should be enabled again,
     // so we have to keep the list of those children
-    wxWindowList::Node *node = GetChildren().GetFirst();
-    while ( node )
+    for ( wxWindowList::Node *node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
+        if ( child->IsTopLevel() )
+        {
+            // the logic below doesn't apply to top level children
+            continue;
+        }
 
         if ( enable )
         {
@@ -534,8 +540,6 @@ bool wxWindowMSW::Enable(bool enable)
                 m_childrenDisabled->Append(child);
             }
         }
-
-        node = node->GetNext();
     }
 
     if ( enable && m_childrenDisabled )
