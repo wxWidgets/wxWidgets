@@ -174,6 +174,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
+    char *test = NULL;
+    *test = 0;
+
     // TRUE is to force the frame to close
     Close(TRUE);
 }
