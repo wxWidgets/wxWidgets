@@ -65,23 +65,7 @@ WX_CHECK_BUILD_OPTIONS("wxCore")
 // ----------------------------------------------------------------------------
 
 // this defines wxEventLoopPtr
-wxDEFINE_SCOPED_PTR_TYPE(wxEventLoop);
-
-// but we need a smart pointer tied to wxAppBase::m_mainLoop, so we define
-// another helper class
-class wxTiedEventLoopPtr : public wxEventLoopPtr
-{
-public:
-    wxTiedEventLoopPtr(wxEventLoop **ppEvtLoop, wxEventLoop *pLoop)
-        : wxEventLoopPtr(*ppEvtLoop = pLoop), m_ppEvtLoop(ppEvtLoop)
-        {
-        }
-
-    ~wxTiedEventLoopPtr() { *m_ppEvtLoop = NULL; }
-
-private:
-    wxEventLoop **m_ppEvtLoop;
-};
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoop);
 
 // ============================================================================
 // wxAppBase implementation
@@ -273,7 +257,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
 int wxAppBase::MainLoop()
 {
 #if wxUSE_EVTLOOP_IN_APP
-    wxTiedEventLoopPtr mainLoop(&m_mainLoop, new wxEventLoop);
+    wxEventLoopTiedPtr mainLoop(&m_mainLoop, new wxEventLoop);
 
     return m_mainLoop->Run();
 #else // !wxUSE_EVTLOOP_IN_APP
