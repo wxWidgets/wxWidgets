@@ -979,7 +979,7 @@ AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$w
 AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows], [wxUSE_CYGWIN="$withval" CACHE_CYGWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mingw,         [  --with-mingw            use GCC Minimal MS-Windows], [wxUSE_MINGW="$withval" CACHE_MINGW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(mgl,           [  --with-mgl              use MGL], [wxUSE_MGL="$withval" CACHE_MGL=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" CACHE_MGL=1 TOOLKIT_GIVEN=1])
 
 AC_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available (EXPERIMENTAL)],wxUSE_GTK2=1,wxUSE_GTK2=0)
 
@@ -1025,12 +1025,12 @@ WX_ARG_ENABLE(debug_cntxt,   [  --enable-debug_cntxt    use wxDebugContext], wxU
 WX_ARG_ENABLE(mem_tracing,   [  --enable-mem_tracing    create code with memory tracing], wxUSE_MEM_TRACING)
 WX_ARG_ENABLE(profile,       [  --enable-profile        create code with profiling information], wxUSE_PROFILE)
 WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI information], wxUSE_NO_RTTI)
-WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without exceptions information], wxUSE_NO_EXCEPTIONS)
+WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 
-WX_ARG_ENABLE(compat20,      [  --enable-compat20       enable wxWin 2.0 compatibility], WXWIN_COMPATIBILITY_2)
-WX_ARG_ENABLE(compat22,      [  --enable-compat22       enable wxWin 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
+WX_ARG_ENABLE(compat20,      [  --enable-compat20       enable wxWindows 2.0 compatibility], WXWIN_COMPATIBILITY_2)
+WX_ARG_ENABLE(compat22,      [  --enable-compat22       enable wxWindows 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
 
 dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
@@ -1062,7 +1062,6 @@ WX_ARG_ENABLE(ffile,         [  --enable-ffile          use wxFFile classes], wx
 WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile classes], wxUSE_TEXTFILE)
 WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
 WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
-WX_ARG_ENABLE(wcsrtombs,     [  --enable-wcsrtombs      use wcsrtombs instead of buggy (GNU libc1/Linux libc5) wcstombs], wxUSE_WCSRTOMBS)
 WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
@@ -1073,8 +1072,8 @@ WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZipInputStream], w
 WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals and pass them to wxApp::OnFatalException], wxUSE_ON_FATAL_EXCEPTION)
 WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
 
-WX_ARG_ENABLE(mimetype,    [  --enable-mimetypes      use wxMimeTypesManager], wxUSE_MIMETYPE)
-WX_ARG_ENABLE(system_options,    [  --enable-sysoptions      use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
+WX_ARG_ENABLE(mimetype,      [  --enable-mimetypes      use wxMimeTypesManager], wxUSE_MIMETYPE)
+WX_ARG_ENABLE(system_options,[  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
 
 dnl ---------------------------------------------------------------------------
 dnl "big" options (i.e. those which change a lot of things throughout the library)
@@ -1258,7 +1257,7 @@ dnl ---------------------------------------------------------------------------
 dnl common dialogs
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use common dialogs (wxDirDialog, wxProgressDialog, wxTextDialog, ...)], wxUSE_COMMONDLGS)
+WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use all common dialogs], wxUSE_COMMONDLGS)
 WX_ARG_ENABLE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
 WX_ARG_ENABLE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
 WX_ARG_ENABLE(filedlg,     [  --enable-filedlg        use wxFileDialog], wxUSE_FILEDLG)
@@ -1283,7 +1282,7 @@ WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUS
 WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
 WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
-WX_ARG_ENABLE(joystick,    [  --enable-joystick       compile in joystick support (Linux only)], wxUSE_JOYSTICK)
+WX_ARG_ENABLE(joystick,    [  --enable-joystick       use wxJoystick (Linux only)], wxUSE_JOYSTICK)
 WX_ARG_ENABLE(metafile,    [  --enable-metafiles      use wxMetaFile (Windows only)], wxUSE_METAFILE)
 WX_ARG_ENABLE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 
@@ -2520,9 +2519,12 @@ AC_CHECK_LIB(c, wcslen, [
             ])
         ])
 
+dnl use wcsrtombs instead of wcstombs which is buggy in old GNU libc versions
+dnl if possible
+AC_CHECK_FUNCS(wcsrtombs)
+
 dnl check for vprintf/vsprintf() which are GNU extensions
 AC_FUNC_VPRINTF
-
 
 dnl check for vsscanf() and vsnprintf() - on some platforms (Linux, glibc
 dnl 2.1.1 for the first one, HP-UX for the second) it's available in the
@@ -3760,10 +3762,6 @@ fi
 
 if test "$wxUSE_UNICODE" = "yes" ; then
   AC_DEFINE(wxUSE_UNICODE)
-fi
-
-if test "$wxUSE_WCSRTOMBS" = "yes" ; then
-  AC_DEFINE(wxUSE_WCSRTOMBS)
 fi
 
 if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then

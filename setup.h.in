@@ -1005,6 +1005,9 @@
 /* Define if you have the <w32api.h> header file (mingw,cygwin).  */
 #undef HAVE_W32API_H
 
+/* Define if you have wcsrtombs() function */
+#undef HAVE_WCSRTOMBS
+
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
 

@@ -48,10 +48,6 @@
   #include <clib.h>
 #endif
 
-#if wxUSE_WCSRTOMBS
-  #include <wchar.h>    // for wcsrtombs(), see comments where it's used
-#endif // GNU
-
 #ifdef  WXSTRING_IS_WXOBJECT
   IMPLEMENT_DYNAMIC_CLASS(wxString, wxObject)
 #endif  //WXSTRING_IS_WXOBJECT
