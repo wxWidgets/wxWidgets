@@ -2019,9 +2019,9 @@ bool wxVariant::Convert(bool* value) const
     {
         wxString val(((wxVariantDataString*)GetData())->GetValue());
         val.MakeLower();
-        if (val == wxT("TRUE") || val == wxT("yes"))
+        if (val == wxT("true") || val == wxT("yes"))
             *value = TRUE;
-        else if (val == wxT("FALSE") || val == wxT("no"))
+        else if (val == wxT("false") || val == wxT("no"))
             *value = FALSE;
         else
             return FALSE;
