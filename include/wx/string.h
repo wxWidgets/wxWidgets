@@ -168,9 +168,6 @@ inline int Stricmp(const char *psz1, const char *psz2)
 
 #if wxUSE_STL
 
-// return an empty wxString (doesn't make much sense with wxUSE_STL == 1)
-inline const wxString wxGetEmptyString() { wxString(); }
-
 #include "wx/beforestd.h"
 #include <string>
 #include "wx/afterstd.h"
@@ -191,9 +188,6 @@ inline const wxString wxGetEmptyString() { wxString(); }
 #endif
 
 #else // if !wxUSE_STL
-
-// return an empty wxString
-inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; }
 
 #ifndef HAVE_STD_STRING_COMPARE
     #define HAVE_STD_STRING_COMPARE
@@ -1290,6 +1284,17 @@ public:
 #if WXWIN_COMPATIBILITY_2_4 && !wxUSE_STL
     #include "wx/arrstr.h"
 #endif
+
+#if wxUSE_STL
+    // return an empty wxString (not very useful with wxUSE_STL == 1)
+    inline const wxString wxGetEmptyString() { wxString(); }
+#else // !wxUSE_STL
+    // return an empty wxString (more efficient than wxString() here)
+    inline const wxString& wxGetEmptyString()
+    {
+        return *(wxString *)&wxEmptyString;
+    }
+#endif // wxUSE_STL/!wxUSE_STL
 
 // ----------------------------------------------------------------------------
 // wxStringBuffer: a tiny class allowing to get a writable pointer into string
