@@ -253,6 +253,19 @@ bool wxToolBar::Create(wxWindow *parent,
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
+    // workaround for flat toolbar on Windows XP classic style
+    if ( style & wxTB_FLAT )
+    {
+        DWORD dwToolbarStyle;
+
+        dwToolbarStyle = (DWORD)::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L );
+        
+        if ((dwToolbarStyle & TBSTYLE_FLAT) == 0)
+        {
+            dwToolbarStyle |= TBSTYLE_FLAT;
+            ::SendMessage(GetHwnd(), TB_SETSTYLE, 0, (LPARAM)dwToolbarStyle );
+        }
+    }
     return TRUE;
 }
 
