@@ -52,12 +52,12 @@ public:
     // ctor which allows to avoid having to override Notify() in the derived
     // class: the owner will get timer notifications which can be handled with
     // EVT_TIMER
-    wxTimerBase(wxEvtHandler *owner, int id = -1)
-        { Init(); SetOwner(owner, id); }
+    wxTimerBase(wxEvtHandler *owner, int timerid = -1)
+        { Init(); SetOwner(owner, timerid); }
 
     // same as ctor above
-    void SetOwner(wxEvtHandler *owner, int id = -1)
-        { m_owner = owner; m_idTimer = id; }
+    void SetOwner(wxEvtHandler *owner, int timerid = -1)
+        { m_owner = owner; m_idTimer = timerid; }
 
     virtual ~wxTimerBase();
 
@@ -161,7 +161,7 @@ private:
 class WXDLLEXPORT wxTimerEvent : public wxEvent
 {
 public:
-    wxTimerEvent(int id = 0, int interval = 0) : wxEvent(id)
+    wxTimerEvent(int timerid = 0, int interval = 0) : wxEvent(timerid)
     {
         m_eventType = wxEVT_TIMER;
 
@@ -182,8 +182,8 @@ private:
 
 typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);
 
-#define EVT_TIMER(id, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_TIMER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTimerEventFunction) & func, NULL),
+#define EVT_TIMER(timerid, func) \
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_TIMER, timerid, -1, (wxObjectEventFunction) (wxEventFunction) (wxTimerEventFunction) & func, NULL),
 
 #endif // wxUSE_GUI && wxUSE_TIMER
 

@@ -25,7 +25,7 @@ class WXDLLEXPORT wxTimer : public wxTimerBase
 {
 public:
     wxTimer() { Init(); }
-    wxTimer(wxEvtHandler *owner, int id = -1) : wxTimerBase(owner, id)
+    wxTimer(wxEvtHandler *owner, int timerid = -1) : wxTimerBase(owner, timerid)
         { Init(); }
     ~wxTimer();
 
