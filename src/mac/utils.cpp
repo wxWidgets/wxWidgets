@@ -157,7 +157,8 @@ void wxDebugMsg(const char *fmt ...)
 
   vsprintf(buffer,fmt,ap) ;
   strcat(buffer,";g") ;
-  debugstr(buffer) ;
+  c2pstr(buffer) ;
+  DebugStr((unsigned char*) buffer) ;
 
   va_end(ap);
 }

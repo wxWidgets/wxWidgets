@@ -61,7 +61,7 @@ void wxStaticText::OnDraw( wxDC &dc )
         return;
 
     PrepareDC(dc);
-    dc.Clear() ;
+//    dc.Clear() ; this eventually draws in the wrong background colour (appearance panels)
     
     int x = 0 ;
     int y = 0 ;
@@ -259,7 +259,9 @@ void wxStaticText::SetLabel(const wxString& st )
 	m_label = st ;
 	if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
 		SetSizeOrDefault() ;
-	
-    wxClientDC dc(this);
-    OnDraw( dc ) ;
+
+	Refresh() ;	
+	MacUpdateImmediately() ;
+//    wxClientDC dc(this);
+//    OnDraw( dc ) ;
 }

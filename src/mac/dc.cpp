@@ -83,6 +83,10 @@ wxDC::wxDC()
 	m_macClipRect.right = 32000 ;
 	m_macClipRect.bottom = 32000 ;
 	::GetPort( &m_macOrigPort ) ;
+
+    m_pen = *wxBLACK_PEN;
+    m_font = *wxNORMAL_FONT;
+    m_brush = *wxWHITE_BRUSH;
 };
 
 wxDC::~wxDC(void)
