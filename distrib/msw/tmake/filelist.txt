@@ -970,7 +970,6 @@ radiobut.h	GTKH
 region.h	GTKH
 scrolbar.h	GTKH
 scrolwin.h	GTKH
-settings.h	GTKH
 slider.h	GTKH
 spinbutt.h	GTKH
 spinctrl.h	GTKH
