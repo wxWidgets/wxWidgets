@@ -203,16 +203,16 @@ wxObject *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 wxDataFormat  wxEnumClipboardFormats(wxDataFormat dataFormat)
 {
     // Only wxDF_TEXT supported
-    if (dataFormat == (wxDataFormat) 0)
+    if (dataFormat == wxDF_TEXT)
        return wxDF_TEXT;
     else
-       return (wxDataFormat) 0;
+       return wxDF_INVALID;
 }
 
 wxDataFormat  wxRegisterClipboardFormat(char *formatName)
 {
     // Not supported
-    return (wxDataFormat) 0;
+    return (wxDataFormat) wxDF_INVALID;
 }
 
 bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName, int maxCount)
@@ -281,6 +281,7 @@ bool wxClipboard::SetData( wxDataObject *data )
             return wxSetClipboardData(data->GetFormat(), (wxObject*) (const char*) str);
             break;
         }
+/*
         case wxDF_BITMAP:
         case wxDF_DIB:
         {
@@ -289,6 +290,7 @@ bool wxClipboard::SetData( wxDataObject *data )
             return wxSetClipboardData(data->GetFormat(), & bitmap);
             break;
         }
+*/
         default:
         {
             return FALSE;
@@ -332,6 +334,7 @@ bool wxClipboard::GetData( wxDataObject *data )
                 return FALSE;
             break;
         }
+/*
         case wxDF_BITMAP:
         case wxDF_DIB:
         {
@@ -347,6 +350,7 @@ bool wxClipboard::GetData( wxDataObject *data )
                 return FALSE;
             break;
         }
+*/
         default:
         {
             return FALSE;

@@ -40,7 +40,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_windowStyle = style;
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     
     parent->AddChild((wxButton *)this);
     
@@ -54,7 +54,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     XmString text = XmStringCreateSimple ((char*) (const char*) label1);
     Widget parentWidget = (Widget) parent->GetClientWidget();
     
-    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
+    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
     
     /*
     * Patch Note (important)
@@ -89,8 +89,11 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 void wxButton::SetDefault()
 {
     wxWindow *parent = (wxWindow *)GetParent();
+/*
+    TODO
     if (parent)
         parent->SetDefaultItem(this);
+*/
     
     // We initially do not set XmNdefaultShadowThickness, to have small buttons.
     // Unfortunately, buttons are now mis-aligned. We try to correct this

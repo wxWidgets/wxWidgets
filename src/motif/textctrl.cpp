@@ -185,7 +185,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     XtAddCallback((Widget) m_mainWidget, XmNlosingFocusCallback, (XtCallbackProc)wxTextWindowLoseFocusProc, (XtPointer)this);
 
     // font
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     ChangeFont(FALSE);
 
     SetCanAddEventHandler(TRUE);

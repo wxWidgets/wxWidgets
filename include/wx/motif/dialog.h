@@ -84,6 +84,9 @@ public:
     virtual int ShowModal();
     virtual void EndModal(int retCode);
 
+    void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
+    int GetReturnCode() const { return m_returnCode; }
+
     // Standard buttons
     void OnOK(wxCommandEvent& event);
     void OnApply(wxCommandEvent& event);
@@ -104,6 +107,7 @@ public:
     //// Motif-specific
     bool          m_modalShowing;
     wxString      m_dialogTitle;
+    int           m_returnCode;
 
 protected:
     virtual void DoSetSize(int x, int y,

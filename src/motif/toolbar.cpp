@@ -106,7 +106,7 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
     m_mainWidget = (WXWidget) toolbar;
 
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     ChangeFont(FALSE);
 
     SetCanAddEventHandler(TRUE);

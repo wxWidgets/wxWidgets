@@ -1347,6 +1347,9 @@ typedef void*           WXFont;
 typedef void*           WXImage;
 typedef void*           WXCursor;
 typedef void*           WXFontList;
+
+typedef unsigned long   Atom;  /* this might fail on a few architectures */
+
 #endif // Motif
 
 #ifdef __WXGTK__

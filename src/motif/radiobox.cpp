@@ -63,7 +63,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     m_radioButtonLabels = (wxString*) NULL;
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
 
     SetName(name);
     SetValidator(val);
@@ -98,7 +98,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     m_formWidget = (WXWidget) formWidget;
 
-    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
+    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
     if (label1 != "")
     {
         text = XmStringCreateSimple ((char*) (const char*) label1);
@@ -177,7 +177,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     }
     SetSelection (0);
 
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     ChangeFont(FALSE);
 
     //    XtManageChild((Widget) m_formWidget);
@@ -424,7 +424,7 @@ void wxRadioBox::ChangeFont(bool keepOriginalSize)
 {
     wxWindow::ChangeFont(keepOriginalSize);
 
-    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay((Widget) GetTopWidget()));
+    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) GetTopWidget()));
 
     int i;
     for (i = 0; i < m_noItems; i++)

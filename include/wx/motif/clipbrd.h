@@ -22,6 +22,8 @@
 #include "wx/defs.h"
 #include "wx/setup.h"
 
+#include "wx/dataobj.h"
+
 #include "wx/list.h"
 #include "wx/module.h"
 
@@ -69,10 +71,15 @@ public:
   // clears wxTheClipboard and the system's clipboard if possible
   virtual void Clear();
 
+  /// If primary == TRUE, use primary selection in all further ops,
+  /// primary=FALSE resets it.
+  inline void UsePrimarySelection(bool primary = TRUE) { m_usePrimary = primary; }
+    
  // implementation 
  
   bool              m_open;
   wxList            m_data;
+  bool              m_usePrimary;
 };
 
 /* The clipboard */

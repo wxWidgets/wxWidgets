@@ -111,7 +111,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     XtAddCallback (listWidget, XmNdefaultActionCallback, (XtCallbackProc) wxListBoxDefaultActionProc,
         (XtPointer) this);
 
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     ChangeFont(FALSE);
 
     SetCanAddEventHandler(TRUE);

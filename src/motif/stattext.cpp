@@ -45,7 +45,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 	    m_windowId = id;
 
     m_windowStyle = style;
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
 
     char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
 
@@ -56,7 +56,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 //    XmString text = XmStringCreateSimple (label1);
     XmString text = XmStringCreateLtoR (label1, XmSTRING_DEFAULT_CHARSET);
 
-    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
+    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
 
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,
                                          xmLabelWidgetClass,

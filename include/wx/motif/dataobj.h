@@ -23,149 +23,124 @@
 // classes
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDataObject;
-class WXDLLEXPORT wxTextDataObject;
-class WXDLLEXPORT wxBitmapDataObject;
-class WXDLLEXPORT wxPrivateDataObject;
-class WXDLLEXPORT wxFileDataObject;
+class wxDataFormat;
+class wxDataObject;
+class wxTextDataObject;
 
 //-------------------------------------------------------------------------
-// wxDataObject
+// wxDataFormat
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDataObject: public wxObject
+class wxDataFormat : public wxObject
 {
-  DECLARE_ABSTRACT_CLASS( wxDataObject )
+    DECLARE_CLASS( wxDataFormat )
+
+public:
+    wxDataFormat();
+    wxDataFormat( wxDataFormatId type );
+    wxDataFormat( const wxString &id );
+    wxDataFormat( const wxChar *id );
+    wxDataFormat( const wxDataFormat &format );
+    wxDataFormat( const Atom atom );
+
+    void SetType( wxDataFormatId type );
+    wxDataFormatId GetType() const;
+
+    /* the string Id identifies the format of clipboard or DnD data. a word
+     * processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
+     * to the clipboard - the latter with the Id "application/wxword", an
+     * image manipulation program would put a wxBitmapDataObject and a
+     * wxPrivateDataObject to the clipboard - the latter with "image/png". */
+
+    wxString GetId() const;
+    void SetId( const wxChar *id );
+
+    Atom GetAtom();
+    void SetAtom(Atom atom) { m_hasAtom = TRUE; m_atom = atom; }
+
+    // implicit conversion to wxDataFormatId
+    operator wxDataFormatId() const { return m_type; }
+
+    bool operator==(wxDataFormatId type) const { return m_type == type; }
+    bool operator!=(wxDataFormatId type) const { return m_type != type; }
+
+private:
+    wxDataFormatId  m_type;
+    wxString    m_id;
+    bool        m_hasAtom;
+    Atom        m_atom;
+};
+
+//----------------------------------------------------------------------------
+// wxDataObject to be placed in wxDataBroker
+//----------------------------------------------------------------------------
+
+class wxDataObject : public wxObject
+{
+  DECLARE_DYNAMIC_CLASS( wxDataObject )
 
 public:
 
-  wxDataObject() {}
-  ~wxDataObject() {}
+  /* constructor */
+  wxDataObject();
 
-  virtual wxDataFormat GetFormat() const = 0;
-  
-  // implementation
+  /* destructor */
+  ~wxDataObject();
+
+  /* write data to dest */
+  virtual void WriteData( void *dest ) const = 0;
+
+  /* get size of data */
+  virtual size_t GetSize() const = 0;
+
+  /* implementation */
+
+  wxDataFormat &GetFormat();
+
+  wxDataFormatId GetFormatType() const;
+  wxString   GetFormatId() const;
+  Atom    GetFormatAtom() const;
+
+  wxDataFormat m_format;
 };
 
-// ----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // wxTextDataObject is a specialization of wxDataObject for text data
-// ----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextDataObject : public wxDataObject
+class wxTextDataObject : public wxDataObject
 {
   DECLARE_DYNAMIC_CLASS( wxTextDataObject )
 
 public:
 
-  wxTextDataObject() {}
-  wxTextDataObject( const wxString& strText ) 
-    : m_strText(strText) { }
-  
-  virtual wxDataFormat GetFormat() const
-    { return wxDF_TEXT; }
-    
-  void SetText( const wxString& strText) 
-    { m_strText = strText; }
-    
-  wxString GetText() const
-    { return m_strText; }
+  /* default constructor. call SetText() later or override
+     WriteData() and GetSize() for working on-demand */
+  wxTextDataObject();
 
-private:
-  wxString  m_strText;
+  /* constructor */
+  wxTextDataObject( const wxString& data );
 
-};
+  /* set current text data */
+  void SetText( const wxString& data );
 
-// ----------------------------------------------------------------------------
-// wxFileDataObject is a specialization of wxDataObject for file names
-// ----------------------------------------------------------------------------
+  /* get current text data */
+  wxString GetText() const;
 
-class WXDLLEXPORT wxFileDataObject : public wxDataObject
-{
-  DECLARE_DYNAMIC_CLASS( wxFileDataObject )
+  /* by default calls WriteString() with string set by constructor or
+     by SetText(). can be overridden for working on-demand */
+  virtual void WriteData( void *dest ) const;
 
-public:
+  /* by default, returns length of string as set by constructor or
+     by SetText(). can be overridden for working on-demand */
+  virtual size_t GetSize() const;
 
-  wxFileDataObject(void) {}
-  
-  virtual wxDataFormat GetFormat() const
-    { return wxDF_FILENAME; }
-    
-  void AddFile( const wxString &file )
-    { m_files += file; m_files += (char)0; }
-    
-  wxString GetFiles() const
-    { return m_files; }
-    
-private:
-  wxString  m_files;
-  
-};
+  /* write string to dest */
+  void WriteString( const wxString &str, void *dest ) const;
 
-// ----------------------------------------------------------------------------
-// wxBitmapDataObject is a specialization of wxDataObject for bitmaps
-// ----------------------------------------------------------------------------
+  /* implementation */
 
-class WXDLLEXPORT wxBitmapDataObject : public wxDataObject
-{
-  DECLARE_DYNAMIC_CLASS( wxBitmapDataObject )
-
-public:
-
-  wxBitmapDataObject(void) {}
-  
-  virtual wxDataFormat GetFormat() const
-    { return wxDF_BITMAP; }
-    
-  void SetBitmap( const wxBitmap &bitmap )
-    { m_bitmap = bitmap; }
-    
-  wxBitmap GetBitmap() const
-    { return m_bitmap; }
-    
-private:
-  wxBitmap  m_bitmap;
-};
-
-// ----------------------------------------------------------------------------
-// wxPrivateDataObject is a specialization of wxDataObject for app specific data
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxPrivateDataObject : public wxDataObject
-{
-  DECLARE_DYNAMIC_CLASS( wxPrivateDataObject )
-
-public:
-
-  wxPrivateDataObject();
-    
-  ~wxPrivateDataObject();
-  
-  virtual wxDataFormat GetFormat() const
-    { return wxDF_PRIVATE; }
-    
-  // the string ID identifies the format of clipboard or DnD data. a word
-  // processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
-  // to the clipboard - the latter with the Id "WXWORD_FORMAT".
-    
-  void SetId( const wxString& id )
-    { m_id = id; }
-    
-  wxString GetId() const
-    { return m_id; }
-
-  // will make internal copy
-  void SetData( const char *data, size_t size );
-    
-  size_t GetDataSize() const
-    { return m_size; }
-    
-  char* GetData() const
-    { return m_data; }
-    
-private:
-  size_t     m_size;
-  char*      m_data;
-  wxString   m_id;
+  wxString  m_data;
 };
 
 

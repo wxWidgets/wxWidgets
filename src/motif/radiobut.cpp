@@ -47,7 +47,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     SetValidator(validator);
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     
     if (parent) parent->AddChild(this);
     
@@ -64,7 +64,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     
     XmString text = XmStringCreateSimple ((char*) (const char*) label1);
     
-    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
+    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
     
     Widget radioButtonWidget = XtVaCreateManagedWidget ("toggle",
 #if wxUSE_GADGETS

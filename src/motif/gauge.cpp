@@ -123,7 +123,7 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     if (height == -1)
         height = 80;
     
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     ChangeFont(FALSE);
     
     SetCanAddEventHandler(TRUE);

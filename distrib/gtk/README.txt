@@ -1,44 +1,29 @@
 wxPython README
 ---------------
 
-Introduction
-------------
-The code in this subtree is a Python Extension Module that enables the
-use of wxWindows from the Python language.  So what is Python?  Go to
-http://www.python.org to learn more but in a nutshell, it's an
-extremly cool object oriented language.  It's easier than Perl and
-nearly as powerful.  It runs on more platforms than Java, and by some
-reports, is even faster than Java with a JIT compiler!
+Welcome to the wonderful world of wxPython!
 
-So why would you want to use wxPython over just C++ and wxWindows?
-Personally I prefer using Python for everything.  I only use C++ when
-I absolutly have to eek more performance out of an algorithm, and even
-then I ususally code it as an extension module and leave the majority
-of the program in Python.  Another good thing to use wxPython for is
-quick prototyping of your wxWindows apps.  With C++ you have to
-continuously go though the edit-compile-link-run cycle, which can be
-quite time comsuming.  With Python it is only an edit-run cycle.  You
-can easily build an application in a few hours with Python that would
-normally take a few days with C++.  Converting a wxPython app to a
-C++/wxWindows app should be a straight forward task.
+Once you have installed the wxPython extension module, you can try it
+out by going to the [install dir]\wxPython\demo directory and typing:
 
-This extension module attempts to mirror the class heiarchy of
-wxWindows as closely as possble.  This means that there is a wxFrame
-class in wxPython that looks, smells, tastes and acts almost the same
-as the wxFrame class in the C++ version.  Unfortunatly, I wasn't able
-to match things exactly because of differences in the languages, but
-the differences should be easy to absorb because they are natural to
-Python.  For example, some methods that return mutliple values via
-argument pointers in C++ will return a tuple of values in Python.
-These differences have not been documented yet so if something isn't
-working the same as described in the wxWindows documents the best
-thing to do is to scan through the wxPython sources, especially the .i
-files, as that is where the interfaces for wxPython are defined.
+    python demo.py
 
-I have reports of successfully embedding wxPython within a wxWindows
-C++ app on GTK.  It hasn't yet been attempted on MSW (to my knowledge)
-so I don't know how successful such an attempt would be.  However it
-is certainly possible.
+There are also some other sample files there for you to play with and
+learn from.
+
+If you selected to install the documentation then point your browser
+to [install dir]\wxPython\docs\index.htm and you will then be looking
+at the docs for wxWindows.  For the most part you can use the C++ docs
+as most classes and methods are used identically.  Where there are
+differences they are documented with a "wxPython Note."
+
+On Win32 systems the binary self-installer creates a program group on
+the Start Menu that contains a link to running the demo and a link to
+the help file.  To help you save disk space I'm now using Microsoft's
+HTML Help format.  If your system doesn't know what to do with the help
+file, you can install the HTML Help Viewer as part of IE 4+, NT
+Service Pack 4+, or the HTML Workshop at
+http://msdn.microsoft.com/workshop/author/htmlhelp/download.asp.
 
 
 
@@ -56,6 +41,33 @@ going to
 Or you can send mail directly to the list using this address:
 
        wxpython-users@starship.python.net
+
+----------------------------------------------------------------------
+
+
+What's new in 2.1b1
+--------------------
+Fixed wxComboBox.SetSelection so that it actually sets the selected
+item.  (Actually just removed it from wxPython and let it default to
+wxChoice.SetSelection which was already doing the right thing.)
+
+Added the Printing Framework.
+
+Switched back to using the wxWindows DLL for the pre-built Win32
+version.  The problem was needing to reinitialize static class info
+data after loading each extension module.
+
+Lots of little tweaks and additions to reflect changes to various
+wxWindows classes.
+
+Fixed a bug with attaching objects to tree items.  Actually was a
+symptom of a larger problem with not obtaining the interpreter lock
+when doing any Py_DECREFs.
+
+wxSizer and friends.  Sizers are layout tools that manage a colection
+of windows and sizers.  Different types of sizers apply different
+types of layout algorithms.  You saw it here first!  These classes are
+not even in the wxWindows C++ library yet!
 
 
 

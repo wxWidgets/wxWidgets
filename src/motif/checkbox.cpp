@@ -43,7 +43,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_windowStyle = style;
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     
     if (parent) parent->AddChild(this);
     
@@ -56,7 +56,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     
     XmString text = XmStringCreateSimple (label1);
     Widget parentWidget = (Widget) parent->GetClientWidget();
-    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
+    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
     
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("toggle",
         xmToggleButtonWidgetClass, parentWidget,

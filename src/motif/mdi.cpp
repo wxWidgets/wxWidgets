@@ -302,7 +302,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     
     m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
     m_foregroundColour = *wxBLACK;
-    m_windowFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
     
     if ( id > -1 )
         m_windowId = id;

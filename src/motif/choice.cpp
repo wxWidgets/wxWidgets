@@ -66,7 +66,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     
     Widget parentWidget = (Widget) parent->GetClientWidget();
     
@@ -174,9 +174,9 @@ void wxChoice::Append(const wxString& item)
     
     DoChangeBackgroundColour((WXWidget) w, m_backgroundColour);
     
-    if (m_windowFont.Ok())
+    if (m_font.Ok())
         XtVaSetValues (w,
-        XmNfontList, (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay((Widget) m_formWidget)),
+        XmNfontList, (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) m_formWidget)),
         NULL);
     
     WXWidget *new_widgetList = new WXWidget[m_noStrings + 1];
@@ -436,12 +436,12 @@ void wxChoice::ChangeFont(bool keepOriginalSize)
     // Note that this causes the widget to be resized back
     // to its original size! We therefore have to set the size
     // back again. TODO: a better way in Motif?
-    if (m_windowFont.Ok())
+    if (m_font.Ok())
     {
         int width, height, width1, height1;
         GetSize(& width, & height);
         
-        XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay((Widget) m_mainWidget));
+        XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) m_mainWidget));
         XtVaSetValues ((Widget) m_mainWidget, XmNfontList, fontList, NULL);
         XtVaSetValues ((Widget) m_buttonWidget, XmNfontList, fontList, NULL);
         

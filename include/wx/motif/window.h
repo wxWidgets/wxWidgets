@@ -209,6 +209,7 @@ protected:
     int GetPixmapWidth() const { return m_pixmapWidth; }
     int GetPixmapHeight() const { return m_pixmapHeight; }
 
+public:
     // Change properties
     virtual void ChangeFont(bool keepOriginalSize = TRUE);             // Change to the current font (often overridden)
     virtual void DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
@@ -220,6 +221,7 @@ protected:
     // Change foreground colour using current foreground colour setting
     virtual void ChangeForegroundColour();
 
+protected:
     // Adds the widget to the hash table and adds event handlers.
     bool AttachWidget(wxWindow* parent, WXWidget mainWidget,
                       WXWidget formWidget, int x, int y, int width, int height);

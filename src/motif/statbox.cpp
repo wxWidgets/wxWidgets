@@ -27,7 +27,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
-	EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
+//	EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
 END_EVENT_TABLE()
 
 #endif
@@ -53,7 +53,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     m_labelWidget = (WXWidget) 0;
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
 
     SetName(name);
 
@@ -79,7 +79,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 
     if (hasLabel)
     {
-        XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
+        XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
 
         wxString label1(wxStripMenuCodes(label));
         XmString text = XmStringCreateSimple ((char*) (const char*) label1);

@@ -99,7 +99,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     
     XtAddCallback (sliderWidget, XmNdragCallback, (XtCallbackProc) wxSliderCallback, (XtPointer) this);
     
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     
     ChangeFont(FALSE);
     SetCanAddEventHandler(TRUE);

@@ -60,6 +60,8 @@ wxList wxModalDialogs;
 wxList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList wxPendingDelete;
 
+extern wxHashTable *wxWidgetHashTable;
+
 #define wxUSE_INVISIBLE_RESIZE 1
 
 #if !USE_SHARED_LIBRARY
@@ -139,7 +141,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
         XmStringFree(str);
     }
     
-    m_windowFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
     ChangeFont(FALSE);
     
     wxAddWindowToTable(dialogShell, this);

@@ -178,13 +178,11 @@ libwx_motif_la_SOURCES = \
  spinbutt.cpp \
  statbmp.cpp \
  statbox.cpp \
- statline.cpp \
  stattext.cpp \
  textctrl.cpp \
  timer.cpp \
- tooltip.cpp \
- utilsres.cpp \
- wave.cpp \
+ toolbar.cpp \
+ utils.cpp \
  window.cpp
 
 # propform.cpp \

@@ -269,6 +269,8 @@ cp ./src/gtk/* ~/wxgtk_dist/wxGTK/utils/wxPython/src/gtk
 
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/lib
 cp ./lib/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/lib
+mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/lib/sizers
+cp ./lib/sizers/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/lib/sizers
 
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/tests
 cp ./tests/README.txt ~/wxgtk_dist/wxGTK/utils/wxPython/tests

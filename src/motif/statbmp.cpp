@@ -66,7 +66,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                     XmNlabelType, XmPIXMAP,
                     NULL);
 
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     ChangeFont(FALSE);
 
     SetCanAddEventHandler(TRUE);

@@ -38,12 +38,15 @@ wxControl::~wxControl()
 {
     // If we delete an item, we should initialize the parent panel,
     // because it could now be invalid.
+/*
+    TODO
     wxWindow *parent = (wxWindow *)GetParent();
     if (parent)
     {
         if (parent->GetDefaultItem() == (wxButton*) this)
             parent->SetDefaultItem((wxButton*) NULL);
     }
+*/
 }
 
 void wxControl::SetLabel(const wxString& label)

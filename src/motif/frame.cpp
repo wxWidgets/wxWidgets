@@ -50,6 +50,8 @@
 
 #include "wx/motif/private.h"
 
+extern wxHashTable *wxWidgetHashTable;
+
 void wxCloseFrameCallback(Widget, XtPointer, XmAnyCallbackStruct *cbs);
 void wxFrameFocusProc(Widget workArea, XtPointer clientData, 
                       XmAnyCallbackStruct *cbs);
@@ -91,7 +93,7 @@ wxFrame::wxFrame()
     m_frameMenuBar = NULL;
     m_frameStatusBar = NULL;
     
-    m_windowParent = NULL;
+    m_parent = NULL;
     m_iconized = FALSE;
     
     //// Motif-specific
@@ -133,7 +135,7 @@ bool wxFrame::Create(wxWindow *parent,
     
     m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
     m_foregroundColour = *wxBLACK;
-    m_windowFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
     
     if ( id > -1 )
         m_windowId = id;

@@ -84,7 +84,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     
     SetValue(value);
     
-    m_windowFont = parent->GetFont();
+    m_font = parent->GetFont();
     ChangeFont(FALSE);
     
     SetCanAddEventHandler(TRUE);
