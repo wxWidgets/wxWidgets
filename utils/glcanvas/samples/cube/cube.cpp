@@ -52,31 +52,10 @@ bool MyApp::OnInit(void)
 
   frame->m_canvas = new TestGLCanvas(frame, -1, wxPoint(0, 0), wxSize(200, 200));
 
-//  InitGL();
-
   // Show the frame
   frame->Show(TRUE);
   
   return TRUE;
-}
-
-void MyApp::InitGL(void)
-{
-    /* set viewing projection */
-    glMatrixMode(GL_PROJECTION);
-    glFrustum(-0.5F, 0.5F, -0.5F, 0.5F, 1.0F, 3.0F);
-
-    /* position viewer */
-    glMatrixMode(GL_MODELVIEW);
-    glTranslatef(0.0F, 0.0F, -2.0F);
-
-    /* position object */
-    glRotatef(30.0F, 1.0F, 0.0F, 0.0F);
-    glRotatef(30.0F, 0.0F, 1.0F, 0.0F);
-
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
 }
 
 IMPLEMENT_APP(MyApp)
@@ -114,6 +93,7 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name):
   wxGLCanvas(parent, id, pos, size, style, name)
 {
+  m_init = FALSE;
 }
 
 TestGLCanvas::~TestGLCanvas(void)
@@ -126,10 +106,16 @@ void TestGLCanvas::OnPaint( wxPaintEvent& event )
     // OnPaint handlers must always create a wxPaintDC.
     wxPaintDC dc(this);
 
-    if ( !GetContext() )
-        return;
+    if (!GetContext()) return;
 
     SetCurrent();
+
+    /* init OpenGL once, but after SetCurrent */
+    if (!m_init)
+    {
+       InitGL();
+       m_init = TRUE;
+    }
 
     /* clear color and depth buffers */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -179,5 +165,24 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
 void TestGLCanvas::OnEraseBackground(wxEraseEvent& event)
 {
     // Do nothing, to avoid flashing.
+}
+
+void TestGLCanvas::InitGL(void)
+{
+    /* set viewing projection */
+    glMatrixMode(GL_PROJECTION);
+    glFrustum(-0.5F, 0.5F, -0.5F, 0.5F, 1.0F, 3.0F);
+
+    /* position viewer */
+    glMatrixMode(GL_MODELVIEW);
+    glTranslatef(0.0F, 0.0F, -2.0F);
+
+    /* position object */
+    glRotatef(30.0F, 1.0F, 0.0F, 0.0F);
+    glRotatef(30.0F, 0.0F, 1.0F, 0.0F);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 }
 

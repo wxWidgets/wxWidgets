@@ -353,7 +353,7 @@ bool wxTable::query(int queryType, bool forUpdate, bool distinct, char *pSqlStmt
 	// Make sure the cursor is closed first
 	if (! CloseCursor(hstmt))
 		return(FALSE);
-
+		
 	// Execute the SQL SELECT statement
 	if (SQLExecDirect(hstmt, (UCHAR FAR *) (queryType == DB_SELECT_STATEMENT ? pSqlStmt : sqlStmt),
 		               SQL_NTS) != SQL_SUCCESS)
@@ -667,10 +667,16 @@ bool wxTable::CreateTable(void)
 		 * (sqlstate = 42000) rather than an S0002. */
 		 
 		/* PostgreSQL 6.4.0 returns "08S01" or in written form
-		   "ERROR: Relation ... Does Not Exist, Robert Roebling */
+		   "ERROR: Relation ... Does Not Exist", Robert Roebling */
+		
+		/* MySQL 3.23.33b returns "S1000" or in written form
+		   "ERROR: Unknown table ...", Robert Roebling */
+		   
+		/* This routine is bullshit, Robert Roebling */
 		
 		pDb->GetNextError(henv, hdbc, hstmt);
 		if (strcmp(pDb->sqlState, "S0002") && 
+		    strcmp(pDb->sqlState, "S1000") &&
 		    strcmp(pDb->sqlState, "42000") &&
 		    strcmp(pDb->sqlState, "08S01"))
 		{
@@ -753,6 +759,14 @@ bool wxTable::CreateTable(void)
 			sprintf(s, "(%d)", colDefs[i].SzDataObj);
 			strcat(sqlStmt, s);
 		}
+		
+#ifdef __WXGTK__
+		if (colDefs[i].KeyField)
+		{
+		        strcat(sqlStmt, " NOT NULL");
+		}
+#endif
+		
 		needComma = TRUE;
 	}
 	// If there is a primary key defined, include it in the create statement
@@ -766,9 +780,15 @@ bool wxTable::CreateTable(void)
 	}
 	if (j)	// Found a keyfield
 	{
+#ifndef __WXGTK__
+  /* MySQL goes out on this one. We also declare the relevant key NON NULL above */
 		strcat(sqlStmt, ",CONSTRAINT ");
 		strcat(sqlStmt, tableName);
 		strcat(sqlStmt, "_PIDX PRIMARY KEY (");
+#else
+		strcat(sqlStmt, ", PRIMARY KEY (");
+#endif
+
 		// List column name(s) of column(s) comprising the primary key
 		for (i = j = 0; i < noCols; i++)
 		{
@@ -782,8 +802,8 @@ bool wxTable::CreateTable(void)
 	   strcat(sqlStmt, ")");
 	}
 	// Append the closing parentheses for the create table statement
-   strcat(sqlStmt, ")");
-
+        strcat(sqlStmt, ")");
+   
 	pDb->WriteSqlLog(sqlStmt);
 
 #ifdef _CONSOLE
@@ -830,10 +850,15 @@ bool wxTable::CreateIndex(char * idxName, bool unique, int noIdxCols, CidxDef *p
 	for (int i = 0; i < noIdxCols; i++)
 	{
 		strcat(sqlStmt, pIdxDefs[i].ColName);
+
+      /* Postgres doesnt cope with ASC */
+#ifndef __WXGTK__
 		if (pIdxDefs[i].Ascending)
 			strcat(sqlStmt, " ASC");
 		else
 			strcat(sqlStmt, " DESC");
+#endif
+
 		if ((i + 1) < noIdxCols)
 			strcat(sqlStmt, ", ");
 	}

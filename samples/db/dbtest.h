@@ -166,6 +166,7 @@ class CeditorDlg : public wxPanel
 
 		CeditorDlg(wxWindow *parent);
 		bool	OnClose(void);
+		void    OnButton( wxCommandEvent &event );
 		void	OnCommand(wxWindow& win, wxCommandEvent& event);
  		void	OnActivate(bool) {};  // necessary for hot keys
 
@@ -177,6 +178,8 @@ class CeditorDlg : public wxPanel
 		bool	GetNextRec();
 		bool	GetPrevRec();
 		bool	GetRec(char *whereStr);
+		
+DECLARE_EVENT_TABLE()
 };  // CeditorDlg
 
 #define EDITOR_DIALOG                   199
@@ -336,6 +339,7 @@ class CqueryDlg : public wxDialog
 
 		CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereArg);
 
+		void    OnButton( wxCommandEvent &event );
 		void		OnCommand(wxWindow& win, wxCommandEvent& event);
 		bool		OnClose();
 		void		OnActivate(bool) {};  // necessary for hot keys
@@ -346,6 +350,7 @@ class CqueryDlg : public wxDialog
 		void		ProcessCountBtn();
 		bool		ValidateWhereClause();
 
+DECLARE_EVENT_TABLE()
 };  // CqueryDlg
 
 #define QUERY_DIALOG                    300

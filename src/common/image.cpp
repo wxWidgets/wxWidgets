@@ -22,6 +22,7 @@
 #include "wx/bitmap.h"
 #include "wx/debug.h"
 #include "wx/log.h"
+#include "wx/app.h"
 #ifdef wxUSE_LIBPNG
 #include "../png/png.h"
 #endif
@@ -1383,21 +1384,29 @@ wxBitmap wxImage::ConvertToBitmap() const
 	    {
 	        case 8:
 	        {
-	            GdkColormap *cmap = gtk_widget_get_default_colormap();
-                    GdkColor *colors = cmap->colors;
-                    int max = 3 * (65536);
-                    int index = -1;
+                    int pixel = -1;
+		    if (wxTheApp->m_colorCube)
+		    {
+		        pixel = wxTheApp->m_colorCube
+                           [ ((r & 0xf8) << 7) + ((g & 0xf8) << 2) + ((b & 0xf8) >> 3) ];  		      
+                    } 		    
+                    else
+		    {
+	                GdkColormap *cmap = gtk_widget_get_default_colormap();
+                        GdkColor *colors = cmap->colors;
+                        int max = 3 * (65536);
 
-                    for (int i = 0; i < cmap->size; i++)
-                    {
-                        int rdiff = (r << 8) - colors[i].red;
-                        int gdiff = (g << 8) - colors[i].green;
-                        int bdiff = (b << 8) - colors[i].blue;
-                        int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
-                        if (sum < max) { index = i; max = sum; }
+                        for (int i = 0; i < cmap->size; i++)
+                        {
+                            int rdiff = (r << 8) - colors[i].red;
+                            int gdiff = (g << 8) - colors[i].green;
+                            int bdiff = (b << 8) - colors[i].blue;
+                            int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
+                            if (sum < max) { pixel = i; max = sum; }
+			}
                     }
 
-	            gdk_image_put_pixel( data_image, x, y, index );
+	            gdk_image_put_pixel( data_image, x, y, pixel );
 
 	            break;
 	        }

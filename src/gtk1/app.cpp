@@ -161,17 +161,23 @@ wxApp::wxApp()
     m_idleTag = 0;
     m_topWindow = (wxWindow *) NULL;
     m_exitOnFrameDelete = TRUE;
+    m_colorCube = (unsigned char*) NULL;
     wxTheApp = this;
 }
 
 wxApp::~wxApp(void)
 {
     gtk_idle_remove( m_idleTag );
+    
+    if (m_colorCube) free(m_colorCube);
 }
 
 bool wxApp::InitVisual()
 {
-    return TRUE;
+    /* Nothing to do for 15, 16, 24, 32 bit displays */
+
+    GdkVisual *visual = gdk_visual_get_system();
+    if (visual->depth > 8) return TRUE;
 
     /* this initiates the standard palette as defined by GdkImlib
        in the GNOME libraries. it ensures that all GNOME applications
@@ -179,6 +185,7 @@ bool wxApp::InitVisual()
        can use several rather graphics-heavy applications at the
        same time */
     
+    /*
     GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
 
     for (int i = 0; i < 64; i++)
@@ -193,6 +200,41 @@ bool wxApp::InitVisual()
     }
 	
     gtk_widget_set_default_colormap( cmap );
+    */
+    
+    /* initialize color cube for 8-bit color reduction dithering */
+    
+    GdkColormap *cmap = gtk_widget_get_default_colormap();
+    
+    m_colorCube = (unsigned char*)malloc(32 * 32 * 32);
+
+     for (int r = 0; r < 32; r++)
+     {
+	for (int g = 0; g < 32; g++)
+	{
+	    for (int b = 0; b < 32; b++)
+	    {
+		int rr = (r << 3) | (r >> 2);
+		int gg = (g << 3) | (g >> 2);
+		int bb = (b << 3) | (b >> 2);
+		
+                GdkColor *colors = cmap->colors;
+                int max = 3 * (65536);
+                int index = -1;
+
+                for (int i = 0; i < cmap->size; i++)
+                {
+                    int rdiff = ((rr << 8) - colors[i].red);
+                    int gdiff = ((gg << 8)- colors[i].green);
+                    int bdiff = ((bb << 8)- colors[i].blue);
+                    int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
+                    if (sum < max) { index = i; max = sum; }
+                }
+		
+		m_colorCube[ (r*1024) + (g*32) + b ] = index;
+	    }
+	}
+    }
     
     return TRUE;
 }

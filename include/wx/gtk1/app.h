@@ -117,15 +117,16 @@ class wxApp: public wxEvtHandler
     bool ProcessIdle();
     void DeletePendingObjects();
 
-    bool          m_initialized;
-    bool          m_exitOnFrameDelete;
-    bool          m_wantDebugOutput;
-    wxWindow     *m_topWindow;
+    bool            m_initialized;
+    bool            m_exitOnFrameDelete;
+    bool            m_wantDebugOutput;
+    wxWindow       *m_topWindow;
     
-    gint          m_idleTag;
+    gint            m_idleTag;
+    unsigned char  *m_colorCube;
 
-    int         argc;
-    char      **argv;
+    int             argc;
+    char          **argv;
 
     static wxAppInitializerFunction m_appInitFn;
     

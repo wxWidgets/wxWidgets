@@ -108,6 +108,9 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, c
   image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   
   image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG );
+  image.SetRGB( 0, 0, 250, 0, 0 );
+  image.SetRGB( 1, 0, 100, 100, 100 );
+  image.SetRGB( 2, 0, 250, 250, 250 );
   my_horse = new wxBitmap( image.ConvertToBitmap() );
   
   image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );

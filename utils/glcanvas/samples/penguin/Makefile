@@ -20,4 +20,4 @@ glcanvas.o: ../../src/glcanvas.cpp
 	$(CPP) `wx-config --cflags` `gtk-config --cflags` -I../../src -c ../../src/glcanvas.cpp
 
 clean: 
-	rm -f *.o penguin
+	rm -f *.o Penguin

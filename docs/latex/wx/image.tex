@@ -42,11 +42,11 @@ and forth without loss in that respect.
 
 Creates an image with the given width and height.
 
-\func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxIMAGE\_TYPE\_PNG}}
+\func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxBITMAP\_TYPE\_PNG}}
 
 Loads an image from a file.
 
-\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{long}{ type = wxIMAGE\_TYPE\_PNG}}
+\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{long}{ type = wxBITMAP\_TYPE\_PNG}}
 
 Loads an image from an input stream.
 
@@ -64,8 +64,8 @@ Loads an image from an input stream.
 
 \twocolwidtha{5cm}
 \begin{twocollist}
-\twocolitem{{\bf \indexit{wxIMAGE\_TYPE\_BMP}}}{Load a Windows bitmap file.}
-\twocolitem{{\bf \indexit{wxIMAGE\_TYPE\_PNG}}}{Load a PNG bitmap file.}
+\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_BMP}}}{Load a Windows bitmap file.}
+\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PNG}}}{Load a PNG bitmap file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.
@@ -111,10 +111,9 @@ This function is called by wxWindows on exit.
 Converts the image to a platform-specific bitmap object. This has to be done
 to actually display an image as you cannot draw an image directly on a window.
 The resulting bitmap will use the colour depth of the current system which entails
-that a (crude) colour reduction has to take place. Especially when converting
-to 8-bit (or even less) bitmaps, the routine is slow and will reduce the
-quality of the resulting bitmap. A proper set of colour reduction methods has
-not yet been written.
+that a (crude) colour reduction has to take place. When in 8-bit mode, this
+routine will use a color cube created on program start-up to look up colors.
+Still, the image quality won't be perfect for photo images.
 
 \membersection{wxImage::Create}\label{wximagecreate}
 
@@ -156,7 +155,7 @@ Finds the handler associated with the given image type.
 
 \docparam{extension}{The file extension, such as ``bmp".}
 
-\docparam{imageType}{The image type, such as wxIMAGE\_TYPE\_BMP.}
+\docparam{imageType}{The image type, such as wxBITMAP\_TYPE\_BMP.}
 
 \wxheading{Return value}
 
@@ -291,8 +290,8 @@ The meaning of {\it stream} data is determined by the {\it type} parameter.}
 
 \twocolwidtha{5cm}
 \begin{twocollist}
-\twocolitem{{\bf wxIMAGE\_TYPE\_BMP}}{Load a Windows image file.}
-\twocolitem{{\bf wxIMAGE\_TYPE\_PNG}}{Load a PNG image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_BMP}}{Load a Windows image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Load a PNG image file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.}
@@ -348,7 +347,7 @@ Saves a image in the given stream.
 
 \twocolwidtha{5cm}
 \begin{twocollist}
-\twocolitem{{\bf wxIMAGE\_TYPE\_PNG}}{Save a PNG image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Save a PNG image file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration

@@ -19,7 +19,6 @@ class MyApp: public wxApp
 {
 public:
     bool OnInit(void);
-    void InitGL(void);
 };
 
 // Define a new frame type
@@ -48,6 +47,11 @@ class TestGLCanvas: public wxGLCanvas
    void OnPaint(wxPaintEvent& event);
    void OnSize(wxSizeEvent& event);
    void OnEraseBackground(wxEraseEvent& event);
+   void InitGL(void);
+   
+ private:
+ 
+   bool m_init;
 
 DECLARE_EVENT_TABLE()
 };

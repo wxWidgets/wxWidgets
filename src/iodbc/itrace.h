@@ -7,6 +7,8 @@
 #  endif
 # endif
 
+#define NO_TRACE
+
 # define TRACE_TYPE_APP2DM      1
 # define TRACE_TYPE_DM2DRV      2
 # define TRACE_TYPE_DRV2DM      3
