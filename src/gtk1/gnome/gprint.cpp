@@ -180,6 +180,19 @@ void wxGnomePrintDialog::Init()
     m_widget = gnome_print_dialog_new( native->GetPrintJob(), 
                                        (guchar*)"Print",  
                                        GNOME_PRINT_DIALOG_RANGE|GNOME_PRINT_DIALOG_COPIES );
+
+    int flag = 0;
+    if (m_printDialogData.GetEnableSelection())
+        flag |= GNOME_PRINT_RANGE_SELECTION;
+    if (m_printDialogData.GetEnablePageNumbers())
+        flag |= GNOME_PRINT_RANGE_ALL|GNOME_PRINT_RANGE_RANGE;
+
+    gnome_print_dialog_construct_range_page( GNOME_PRINT_DIALOG( m_widget ),
+                                             flag,
+                                             m_printDialogData.GetMinPage(),
+                                             m_printDialogData.GetMaxPage(),
+                                             NULL,
+                                             NULL );
 }
 
 wxGnomePrintDialog::~wxGnomePrintDialog()
@@ -192,14 +205,43 @@ int wxGnomePrintDialog::ShowModal()
     // Transfer data from m_printDalogData to dialog here
 
     int response = gtk_dialog_run (GTK_DIALOG (m_widget));
+    
+	if (response == GNOME_PRINT_DIALOG_RESPONSE_CANCEL)
+    {
+        gtk_widget_destroy(m_widget);
+        m_widget = NULL;
+        
+        return wxID_CANCEL;
+    }
+
+    gint copies = 1;
+    gboolean collate = false;
+    gnome_print_dialog_get_copies( GNOME_PRINT_DIALOG(m_widget), &copies, &collate );
+    m_printDialogData.SetNoCopies( copies );
+    m_printDialogData.SetCollate( collate );
+
+    switch (gnome_print_dialog_get_range( GNOME_PRINT_DIALOG(m_widget) ))
+    {
+        case GNOME_PRINT_RANGE_SELECTION:
+            m_printDialogData.SetSelection( true );
+            break;
+        case GNOME_PRINT_RANGE_ALL:
+            m_printDialogData.SetAllPages( true );
+            m_printDialogData.SetFromPage( 0 );
+            m_printDialogData.SetToPage( 9999 );
+            break;
+        case GNOME_PRINT_RANGE_RANGE:
+        default:
+            gint start,end;
+            gnome_print_dialog_get_range_page( GNOME_PRINT_DIALOG(m_widget), &start, &end );
+            m_printDialogData.SetFromPage( start );
+            m_printDialogData.SetToPage( end );
+            break;
+    }
+
     gtk_widget_destroy(m_widget);
     m_widget = NULL;
     
-	if (response == GNOME_PRINT_DIALOG_RESPONSE_CANCEL)
-        return wxID_CANCEL;
-
-    // Transfer data back here
-
     return wxID_OK;
 }
 
@@ -283,8 +325,8 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
     printout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
                             (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
-    printout->SetPPIPrinter( wxPostScriptDC::GetResolution(),
-                             wxPostScriptDC::GetResolution() );
+    printout->SetPPIPrinter( wxGnomePrintDC::GetResolution(),
+                             wxGnomePrintDC::GetResolution() );
                              
     printout->SetDC(dc);
 
@@ -295,22 +337,51 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     printout->SetPageSizeMM((int)w, (int)h);
     
     printout->OnPreparePrinting();
-    printout->OnBeginPrinting();
+    
+    // Get some parameters from the printout, if defined
+    int fromPage, toPage;
+    int minPage, maxPage;
+    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
 
-    if (!printout->OnBeginDocument(0, 0))
+    if (maxPage == 0)
     {
         sm_lastError = wxPRINTER_ERROR;
+        return false;
     }
-    else
+    
+    printout->OnBeginPrinting();
+
+    int minPageNum = minPage, maxPageNum = maxPage;
+
+    if ( !m_printDialogData.GetAllPages() )
     {
-        int pn;
-        for (pn = 1; pn <= 2; pn++)
+        minPageNum = m_printDialogData.GetFromPage();
+        maxPageNum = m_printDialogData.GetToPage();
+    }
+
+    
+    int copyCount;
+    for ( copyCount = 1;
+          copyCount <= m_printDialogData.GetNoCopies();
+          copyCount++ )
+    {
+        if (!printout->OnBeginDocument(minPageNum, maxPageNum))
         {
+            wxLogError(_("Could not start printing."));
+            sm_lastError = wxPRINTER_ERROR;
+            break;
+        }
+        
+        int pn;
+        for ( pn = minPageNum;
+              pn <= maxPageNum && printout->HasPage(pn);
+              pn++ )
+        {    
             dc->StartPage();
             printout->OnPrintPage(pn);
             dc->EndPage();
         }
-    
+        
         printout->OnEndDocument();
         printout->OnEndPrinting();
     }
@@ -332,6 +403,7 @@ wxDC* wxGnomePrinter::PrintDialog( wxWindow *parent )
         return NULL;
     }
     
+    m_printDialogData = dialog.GetPrintDialogData();
     return new wxGnomePrintDC( this );
 }
 
@@ -535,6 +607,11 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
 
 void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
 {
+    DoDrawRotatedText( text, x, y, 0.0 );
+}
+
+void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle)
+{
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
     
@@ -569,7 +646,18 @@ void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
         unsigned char blue = m_textForegroundColour.Blue();
         unsigned char green = m_textForegroundColour.Green();
 
-        // Set the equivalent PangoAttrStyle
+        if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
+        {
+            double redPS = (double)(red) / 255.0;
+            double bluePS = (double)(blue) / 255.0;
+            double greenPS = (double)(green) / 255.0;
+
+            gnome_print_setrgbcolor( m_gpc, redPS, bluePS, greenPS );
+
+            m_currentRed = red;
+            m_currentBlue = blue;
+            m_currentGreen = green;
+        }
     }
 
     int w,h;
@@ -599,7 +687,17 @@ void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
 #endif         
         // Draw layout.
     	gnome_print_moveto (m_gpc, x, y);
-	    gnome_print_pango_layout( m_gpc, m_layout );
+        if (fabs(angle) > 0.00001)
+        {        
+            gnome_print_gsave( m_gpc );
+            gnome_print_rotate( m_gpc, angle );
+    	    gnome_print_pango_layout( m_gpc, m_layout );
+            gnome_print_grestore( m_gpc );
+        }
+        else
+        {
+    	    gnome_print_pango_layout( m_gpc, m_layout );
+        }
          
         // reset unscaled size
         pango_font_description_set_size( m_fontdesc, oldSize );
@@ -620,10 +718,18 @@ void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
 #endif        
         // Draw layout.
     	gnome_print_moveto (m_gpc, x, y);
-	    gnome_print_pango_layout( m_gpc, m_layout );
+        if (fabs(angle) > 0.00001)
+        {        
+            gnome_print_gsave( m_gpc );
+            gnome_print_rotate( m_gpc, angle );
+    	    gnome_print_pango_layout( m_gpc, m_layout );
+            gnome_print_grestore( m_gpc );
+        }
+        else
+        {
+    	    gnome_print_pango_layout( m_gpc, m_layout );
+        }
     }
-
-
 
     if (underlined)
     {
@@ -631,12 +737,7 @@ void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
         pango_layout_set_attributes(m_layout, NULL);
     }
     
-//    CalcBoundingBox (x + width, y + height);
-    CalcBoundingBox (x, y);
-}
-
-void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle)
-{
+    CalcBoundingBox (x + w, y + h);
 }
 
 void wxGnomePrintDC::Clear()
@@ -764,12 +865,22 @@ void wxGnomePrintDC::EndPage()
 
 wxCoord wxGnomePrintDC::GetCharHeight() const
 {
-    return 0;
+    pango_layout_set_text( m_layout, "H", 1 );
+ 
+    int w,h;
+    pango_layout_get_pixel_size( m_layout, &w, &h );
+    
+    return h;
 }
 
 wxCoord wxGnomePrintDC::GetCharWidth() const
 {
-    return 0;
+    pango_layout_set_text( m_layout, "H", 1 );
+ 
+    int w,h;
+    pango_layout_get_pixel_size( m_layout, &w, &h );
+    
+    return w;
 }
 
 void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxCoord *height,
