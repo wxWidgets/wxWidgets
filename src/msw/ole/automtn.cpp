@@ -24,7 +24,7 @@
 
 // Watcom C++ gives a linker error if this is compiled in.
 // With Borland C++, all samples crash if this is compiled in.
-#if wxUSE_OLE &&!defined(__WATCOMC__) && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) && !defined(__CYGWIN10__)
+#if wxUSE_OLE && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) && !defined(__CYGWIN10__)
 
 #define _FORCENAMELESSUNION
 #include "wx/log.h"
@@ -599,7 +599,7 @@ bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
     {
         oleVariant.vt = VT_BOOL;
         // 'bool' required for VC++ 4 apparently
-#if defined(__WATCOMC__) || (defined(__VISUALC__) && (__VISUALC__ <= 1000))
+#if (defined(__VISUALC__) && (__VISUALC__ <= 1000))
         oleVariant.bool = variant.GetBool();
 #else
         oleVariant.boolVal = variant.GetBool();
@@ -744,7 +744,7 @@ bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 
 	case VT_BOOL:
 		{
-#if defined(__WATCOMC__) || (defined(_MSC_VER) && (_MSC_VER <= 1000) && !defined(__MWERKS__) ) //GC
+#if (defined(_MSC_VER) && (_MSC_VER <= 1000) && !defined(__MWERKS__) ) //GC
 #ifndef HAVE_BOOL // Can't use bool operator if no native bool type
 			variant = (long) (oleVariant.bool != 0);
 #else
@@ -1258,5 +1258,5 @@ void ShowException(LPOLESTR szMember, HRESULT hr, EXCEPINFO *pexcep, unsigned in
 
 #endif
 
-#endif // __WATCOMC__
+#endif // wxUSE_OLE && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) && !defined(__CYGWIN10__)
 
