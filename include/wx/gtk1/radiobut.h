@@ -66,7 +66,8 @@ class wxRadioButton: public wxControl
     
     void ApplyWidgetStyle();
     
-    bool   m_blockFirstEvent;
+    bool        m_blockFirstEvent;
+    GtkWidget*  m_theOtherRadioButtton;
 };
 
 #endif // __GTKRADIOBUTTONH__

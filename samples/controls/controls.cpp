@@ -197,6 +197,9 @@ const int  ID_RADIOBOX_SEL_STR  = 162;
 const int  ID_RADIOBOX_FONT     = 163;
 const int  ID_RADIOBOX_ENABLE   = 164;
 
+const int  ID_RADIOBUTTON_1     = 166;
+const int  ID_RADIOBUTTON_2     = 167;
+
 const int  ID_SET_FONT          = 170;
 
 const int  ID_GAUGE             = 180;
@@ -376,6 +379,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_fontButton->SetForegroundColour("blue");
   (void)new wxButton( panel, ID_RADIOBOX_FONT, "Set Italic font", wxPoint(340,80), wxSize(140,30) );
   (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, "Disable", wxPoint(340,130), wxSize(140,30) );
+  wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, "Radiobutton1", wxPoint(210,170), wxSize(110,30) );
+  rb->SetValue( FALSE );
+  (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, "Radiobutton2", wxPoint(340,170), wxSize(110,30) );
   m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
   
   panel = new wxPanel(m_notebook);
