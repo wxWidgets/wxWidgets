@@ -50,17 +50,20 @@ wxControlContainer::wxControlContainer(wxWindow *winParent)
 
 void wxControlContainer::SetLastFocus(wxWindow *win)
 {
-    // find the last _immediate_ child which got focus
-    while ( win )
+    // if we're setting the focus
+    if ( win )
     {
-        wxWindow *winParent = win->GetParent();
-        if ( winParent == m_winParent )
-            break;
+        // find the last _immediate_ child which got focus but be prepared to
+        // handle the case when win == m_winParent as well
+        wxWindow *winParent = win;
+        while ( winParent != m_winParent )
+        {
+            win = winParent;
+            winParent = win->GetParent();
+        }
 
-        win = winParent;
+        wxASSERT_MSG( win, _T("attempt to set last focus to not a child?") );
     }
-
-    wxASSERT_MSG( win, _T("attempt to set last focus to not a child?") );
 
     m_winLastFocused = win;
 }
