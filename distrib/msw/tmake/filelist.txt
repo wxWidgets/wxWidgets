@@ -134,9 +134,9 @@ filesys.cpp	C	B
 fontcmn.cpp	C
 fontmap.cpp	C
 framecmn.cpp	C
-fs_inet.cpp	C
-fs_zip.cpp	C
-fs_mem.cpp	C
+fs_inet.cpp	C	B
+fs_zip.cpp	C	B
+fs_mem.cpp	C	B
 ftp.cpp	C	S
 gdicmn.cpp	C
 geometry.cpp	C
@@ -165,7 +165,7 @@ memory.cpp	C
 menucmn.cpp	C
 mimecmn.cpp	C	32,B
 module.cpp	C	B
-mstream.cpp	C
+mstream.cpp	C	B
 object.cpp	C	B
 objstrm.cpp	C	B
 odbc.cpp	C	R,X,P
@@ -190,7 +190,7 @@ textfile.cpp	C	B
 timercmn.cpp	C	B
 tokenzr.cpp	C	B
 txtstrm.cpp	C	B
-unzip.c	C
+unzip.c	C	B
 url.cpp	C	S
 utilscmn.cpp	C	B
 valgen.cpp	C
@@ -201,8 +201,8 @@ wfstream.cpp	C	B
 wincmn.cpp	C
 wxchar.cpp	C	B
 wxexpr.cpp	C
-zipstrm.cpp	C
-zstream.cpp	C
+zipstrm.cpp	C	B
+zstream.cpp	C	B
 
 accel.cpp	M
 app.cpp	M
@@ -600,9 +600,9 @@ fontmap.h	W
 fontdlg.h	W
 fontutil.h	W
 frame.h	W
-fs_inet.h	W
-fs_zip.h	W
-fs_mem.h	W
+fs_inet.h	W	B
+fs_zip.h	W	B
+fs_mem.h	W	B
 gauge.h	W
 gdicmn.h	W
 gdiobj.h	W
@@ -651,7 +651,7 @@ mimetype.h	W	B
 minifram.h	W
 module.h	W	B
 msgdlg.h	W
-mstream.h	W
+mstream.h	W	B
 notebook.h	W
 object.h	W	B
 objstrm.h	W	B
@@ -735,8 +735,8 @@ wxexpr.h	W
 wxhtml.h	W
 wxprec.h	W	B
 xpmhand.h	W
-zipstrm.h	W
-zstream.h	W
+zipstrm.h	W	B
+zstream.h	W	B
 
 accel.h	K
 app.h	K
