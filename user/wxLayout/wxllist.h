@@ -59,7 +59,6 @@
 #   define WXLO_BITMAP_FORMAT wxBITMAP_TYPE_PNG
 #endif
 
-
 /// Types of currently supported layout objects.
 enum wxLayoutObjectType
 {
@@ -942,6 +941,14 @@ public:
        @return cursor position in pixels
    */
    wxPoint GetCursorScreenPos(wxDC &dc);
+   /** Calculates the cursor position on the screen.
+       @param dc the dc to use for cursor position calculations
+       @param resetCursorMovedFlag: if true, reset "cursor moved" flag
+       @param translate optional translation of cursor coords on screen
+   */
+   void UpdateCursorScreenPos(wxDC &dc,
+                              bool resetCursorMovedFlag = true,
+                              const wxPoint& translate = wxPoint(0, 0));
 
    /** Draws the cursor.
        @param active If true, draw a bold cursor to mark window as
@@ -973,7 +980,7 @@ public:
    /** Called by the objects to update the update rectangle.
        @param p a point to include in it
    */
-   inline void SetUpdateRect(const wxPoint &p)
+   void SetUpdateRect(const wxPoint &p)
       { SetUpdateRect(p.x,p.y); }
    /// adds the cursor position to the update rectangle
    void AddCursorPosToUpdateRect()
@@ -989,6 +996,9 @@ public:
    /// Returns the update rectangle.
    const wxRect *GetUpdateRect(void) const { return &m_UpdateRect; }
    //@}
+
+   /// get the current cursor size
+   const wxPoint& GetCursorSize() const { return m_CursorSize; }
 
    /**@name For exporting one object after another. */
    //@{
@@ -1044,9 +1054,6 @@ public:
 private:
    /// Clear the list.
    void InternalClear(void);
-   /** Calculates the cursor position on the screen.
-   */
-   void UpdateCursorScreenPos(wxDC &dc);
 
    /// The list of lines.
    wxLayoutLine *m_FirstLine;
@@ -1064,6 +1071,8 @@ private:
    wxLayoutLine *m_CursorLine;
    /// The size of the cursor.
    wxPoint   m_CursorSize;
+   /// Has the cursor moved (is m_CursorScreenPos up to date)?
+   bool      m_movedCursor;
 #ifdef WXLAYOUT_USE_CARET
    /// the caret
    wxCaret  *m_caret;

@@ -75,7 +75,7 @@
 //       waste time looking for it right now. Search for occurences of
 //       MSW_CORRECTION to find all the places where I did it.
 #ifdef __WXMSW__
-   static const int MSW_CORRECTION = 5;
+   static const int MSW_CORRECTION = 10;
 #else
    static const int MSW_CORRECTION = 0;
 #endif
@@ -1453,6 +1453,7 @@ wxLayoutList::Empty(void)
    m_CursorPos = wxPoint(0,0);
    m_CursorScreenPos = wxPoint(0,0);
    m_CursorSize = wxPoint(0,0);
+   m_movedCursor = true;
    m_FirstLine = new wxLayoutLine(NULL, this); // empty first line
    m_CursorLine = m_FirstLine;
    InvalidateUpdateRect();
@@ -1556,6 +1557,8 @@ wxLayoutList::MoveCursorTo(wxPoint const &p)
 {
    AddCursorPosToUpdateRect();
 
+   wxPoint cursorPosOld = m_CursorPos;
+
    wxLayoutLine *line = m_FirstLine;
    while(line && line->GetLineNumber() != p.y)
       line = line->GetNextLine();
@@ -1567,21 +1570,24 @@ wxLayoutList::MoveCursorTo(wxPoint const &p)
       if(len >= p.x)
       {
          m_CursorPos.x = p.x;
-         return true;
       }
       else
       {
          m_CursorPos.x = len;
-         return false;
       }
    }
-   return false;
+
+   m_movedCursor = m_CursorPos != cursorPosOld;
+
+   return m_CursorPos == p;
 }
 
 bool
 wxLayoutList::MoveCursorVertically(int n)
 {
    AddCursorPosToUpdateRect();
+
+   wxPoint cursorPosOld = m_CursorPos;
 
    bool rc;
    if(n  < 0) // move up
@@ -1629,6 +1635,9 @@ wxLayoutList::MoveCursorVertically(int n)
          rc = true;
       }
    }
+
+   m_movedCursor = m_CursorPos != cursorPosOld;
+
    return rc;
 }
 
@@ -1636,6 +1645,8 @@ bool
 wxLayoutList::MoveCursorHorizontally(int n)
 {
    AddCursorPosToUpdateRect();
+
+   wxPoint cursorPosOld = m_CursorPos;
 
    int move;
    while(n < 0)
@@ -1669,6 +1680,9 @@ wxLayoutList::MoveCursorHorizontally(int n)
       m_CursorPos.x += move;
       n -= move;
    }
+
+   m_movedCursor = m_CursorPos != cursorPosOld;
+
    return n == 0;
 }
 
@@ -1760,6 +1774,8 @@ wxLayoutList::Insert(wxString const &text)
 
    m_CursorPos.x += text.Length();
 
+   m_movedCursor = true;
+
    m_CursorLine->RecalculatePositions(0, this);
 
    return true;
@@ -1777,6 +1793,7 @@ wxLayoutList::Insert(wxLayoutObject *obj)
 
    m_CursorLine->Insert(m_CursorPos.x, obj);
    m_CursorPos.x += obj->GetLength();
+   m_movedCursor = true;
 
    m_CursorLine->RecalculatePositions(0, this);
 
@@ -1822,12 +1839,13 @@ wxLayoutList::LineBreak(void)
    if(m_CursorPos.x != 0)
       m_CursorPos.y++;
    m_CursorPos.x = 0;
-// doesn't help   m_CursorLine.MarkDirty();
 
    wxLayoutLine *prev = m_CursorLine->GetPreviousLine();
    wxCHECK_MSG(prev, false, "just broke the line, where is the previous one?");
 
    height += prev->GetHeight();
+
+   m_movedCursor = true;
 
    SetUpdateRect(position);
    SetUpdateRect(position.x + width + MSW_CORRECTION,
@@ -1858,6 +1876,8 @@ wxLayoutList::WrapLine(CoordType column)
 
       m_CursorLine->RecalculatePositions(1, this);
 
+      m_movedCursor = true;
+
       return true;
    }
 }
@@ -1866,7 +1886,9 @@ bool
 wxLayoutList::Delete(CoordType npos)
 {
    wxCHECK_MSG(m_CursorLine, false, "can't delete in non existing line");
-   wxASSERT_MSG(npos > 0, "nothing to delete?");
+
+   if ( npos == 0 )
+       return true;
 
    AddCursorPosToUpdateRect();
 
@@ -1988,16 +2010,43 @@ wxLayoutList::Recalculate(wxDC &dc, CoordType bottom)
 }
 
 void
-wxLayoutList::UpdateCursorScreenPos(wxDC &dc)
+wxLayoutList::UpdateCursorScreenPos(wxDC &dc,
+                                    bool resetCursorMovedFlag,
+                                    const wxPoint& translate)
 {
-   wxASSERT(m_CursorLine);
-   m_CursorLine->Layout(dc, this, (wxPoint *)&m_CursorScreenPos, (wxPoint *)&m_CursorSize, m_CursorPos.x);
+   wxCHECK_RET( m_CursorLine, "no cursor line" );
+
+   if ( m_movedCursor )
+   {
+      m_CursorLine->Layout(dc, this,
+                           &m_CursorScreenPos, &m_CursorSize,
+                           m_CursorPos.x);
+
+      if ( resetCursorMovedFlag )
+      {
+         #ifdef WXLAYOUT_USE_CARET
+            // adjust the caret position
+            wxPoint coords(m_CursorScreenPos);
+            coords += translate;
+
+            // and set it
+            m_caret->Move(coords);
+         #endif // WXLAYOUT_USE_CARET
+
+         m_movedCursor = false;
+      }
+   }
 }
 
 wxPoint
 wxLayoutList::GetCursorScreenPos(wxDC &dc)
 {
-   UpdateCursorScreenPos(dc);
+   // this function is called with wxMemoryDC argument from ScrollToCursor(),
+   // for example, so it shouldn't clear "cursor moved" flag - or else the
+   // cursor won't be moved when UpdateCursorScreenPos() is called with the
+   // "real" (i.e. the one used for drawing) wxDC.
+   UpdateCursorScreenPos(dc, false /* don't reset the flag */);
+
    return m_CursorScreenPos;
 }
 
@@ -2140,6 +2189,20 @@ wxLayoutList::GetSize(void) const
    }
 
    maxPoint.y = last->GetPosition().y + last->GetHeight();
+
+   // if the line was just added, its height would be 0 and we can't call
+   // Layout() from here because we don't have a dc and we might be not drawing
+   // at all, besides... So take the cursor height by default (taking 0 is bad
+   // because then the scrollbars won't be resized and the new line won't be
+   // shown at all)
+   if ( last->IsDirty() )
+   {
+      if ( last->GetHeight() == 0 )
+         maxPoint.y += m_CursorSize.y;
+      if ( last->GetWidth() == 0 && maxPoint.x < m_CursorSize.x )
+         maxPoint.x = m_CursorSize.x;
+   }
+
    return maxPoint;
 }
 
@@ -2161,9 +2224,7 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
    wxLogStatus("Cursor is at (%d, %d)", m_CursorPos.x, m_CursorPos.y);
 #endif
 
-#ifdef WXLAYOUT_USE_CARET
-   m_caret->Move(coords);
-#else // !WXLAYOUT_USE_CARET
+#ifndef WXLAYOUT_USE_CARET
    dc.SetBrush(*wxBLACK_BRUSH);
    dc.SetLogicalFunction(wxXOR);
    dc.SetPen(wxPen(*wxBLACK,1,wxSOLID));

@@ -187,7 +187,7 @@ protected:
    bool m_HaveFocus;
    /// do we handle clicks of the right mouse button?
    bool m_DoPopupMenu;
-   /// Should InternalPaint() scroll to cursor.
+   /// Should InternalPaint() scroll to cursor (VZ: seems unused any more)
    bool m_ScrollToCursor;
    /// Do we currently have a non-standard cursor?
    bool m_HandCursor;

@@ -6,6 +6,14 @@
  * $Id$
  *******************************************************************/
 
+// ===========================================================================
+// declarations
+// ===========================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
 #   pragma implementation "wxlwindow.h"
 #endif
@@ -45,11 +53,19 @@
 
 #include <ctype.h>
 
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
 #ifdef WXLAYOUT_DEBUG
 #  define   WXLO_DEBUG(x)      wxLogDebug x
 #else
 #  define WXLO_DEBUG(x)
 #endif
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
 /// offsets to put a nice frame around text
 #define WXLO_XOFFSET   4
@@ -58,6 +74,14 @@
 /// offset to the right and bottom for when to redraw scrollbars
 #define   WXLO_ROFFSET   20
 #define   WXLO_BOFFSET   20
+
+/// the size of one scrollbar page in pixels
+static const int X_SCROLL_PAGE = 10;
+static const int Y_SCROLL_PAGE = 20;
+
+// ----------------------------------------------------------------------------
+// event tables
+// ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_PAINT    (wxLayoutWindow::OnPaint)
@@ -71,6 +95,14 @@ BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_SET_FOCUS(wxLayoutWindow::OnSetFocus)
    EVT_KILL_FOCUS(wxLayoutWindow::OnKillFocus)
 END_EVENT_TABLE()
+
+// ===========================================================================
+// implementation
+// ===========================================================================
+
+// ----------------------------------------------------------------------------
+// wxLayoutWindow
+// ----------------------------------------------------------------------------
 
 wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
               : wxScrolledWindow(parent, -1,
@@ -95,9 +127,11 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    m_ScrollToCursor = false;
    SetWrapMargin(0);
    wxPoint max = m_llist->GetSize();
-   SetScrollbars(10, 20 /*lineHeight*/, max.x/10+1, max.y/20+1);
-   EnableScrolling(true,true);
-   m_maxx = max.x; m_maxy = max.y;
+   SetScrollbars(X_SCROLL_PAGE, Y_SCROLL_PAGE,
+                 max.x / X_SCROLL_PAGE + 1, max.y / Y_SCROLL_PAGE + 1);
+   EnableScrolling(true, true);
+   m_maxx = max.x + X_SCROLL_PAGE;
+   m_maxy = max.y + Y_SCROLL_PAGE;
    m_Selecting = false;
 
 #ifdef WXLAYOUT_USE_CARET
@@ -220,13 +254,32 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    }
 
    // always move cursor to mouse click:
-   if(obj && eventId == WXLOWIN_MENU_LCLICK)
+   if(eventId == WXLOWIN_MENU_LCLICK)
    {
       m_llist->MoveCursorTo(cursorPos);
+
+      // Calculate where the top of the visible area is:
+      int x0, y0;
+      ViewStart(&x0,&y0);
+      int dx, dy;
+      GetScrollPixelsPerUnit(&dx, &dy);
+      x0 *= dx; y0 *= dy;
+
+      wxPoint offset(-x0+WXLO_XOFFSET, -y0+WXLO_YOFFSET);
+      m_llist->UpdateCursorScreenPos(dc, true, offset);
+
       if(m_CursorVisibility == -1)
          m_CursorVisibility = 1;
+
+      // VZ: this should be unnecessary because mouse can only click on a
+      //     visible part of the canvas
+#if 0
       ScrollToCursor();
+#endif // 0
+
+#ifdef __WXGTK__
       DoPaint(FALSE); // DoPaint suppresses flicker under GTK
+#endif // wxGTK
    }
 
    if(!m_doSendEvents) // nothing to do
@@ -323,10 +376,10 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       m_llist->MoveCursorVertically(1);
       break;
    case WXK_PRIOR:
-      m_llist->MoveCursorVertically(-20);
+      m_llist->MoveCursorVertically(-Y_SCROLL_PAGE);
       break;
    case WXK_NEXT:
-      m_llist->MoveCursorVertically(20);
+      m_llist->MoveCursorVertically(Y_SCROLL_PAGE);
       break;
    case WXK_HOME:
       if ( ctrlDown )
@@ -336,12 +389,11 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       break;
    case WXK_END:
       if ( ctrlDown )
-      {
-         // TODO VZ: how to move the cursor to the last line of the text?
-         m_llist->MoveCursorVertically(1000);
-      }
-      m_llist->MoveCursorToEndOfLine();
+         m_llist->MoveCursorTo(m_llist->GetSize());
+      else
+         m_llist->MoveCursorToEndOfLine();
       break;
+
    default:
       if(keyCode == 'c' && ctrlDown)
       {
@@ -430,11 +482,9 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   && (keyCode < 256 && keyCode >= 32)
                   )
                {
-                  wxString tmp;
-                  tmp += keyCode;
                   if(m_WrapMargin > 0 && isspace(keyCode))
                      m_llist->WrapLine(m_WrapMargin);
-                  m_llist->Insert(tmp);
+                  m_llist->Insert((char)keyCode);
                }
                break;
             }
@@ -454,9 +504,13 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       }
    }
 
+   // we must call ResizeScrollbars() before ScrollToCursor(), otherwise the
+   // ne cursor position might be outside the current scrolllbar range
+   ResizeScrollbars();
    ScrollToCursor();
-   wxRect r = *m_llist->GetUpdateRect();
-   DoPaint(&r);
+
+   // refresh the screen
+   DoPaint(m_llist->GetUpdateRect());
 }
 
 void
@@ -488,34 +542,57 @@ wxLayoutWindow::ScrollToCursor(void)
 
    // Get the size of the visible window:
    GetClientSize(&x1,&y1);
-   wxASSERT(x1 > 0);
-   wxASSERT(y1 > 0);
-   // As we have the values anyway, use them to avoid unnecessary
-   // scrollbar updates.
+
+   // notice that the client size may be (0, 0)...
+   wxASSERT(x1 >= 0 && y1 >= 0);
+
+   // VZ: I think this is false - if you do it here, ResizeScrollbars() won't
+   //     call SetScrollbars() later
+#if 0
+   // As we have the values anyway, use them to avoid unnecessary scrollbar
+   // updates.
    if(x1 > m_maxx) m_maxx = x1;
    if(y1 > m_maxy) m_maxy = y1;
-   /* Make sure that the scrollbars are at a position so that the
-      cursor is visible if we are editing. */
-      /** Scroll so that cursor is visible! */
+#endif // 0
+
+   // Make sure that the scrollbars are at a position so that the cursor is
+   // visible if we are editing
    WXLO_DEBUG(("m_ScrollToCursor = %d", (int) m_ScrollToCursor));
    wxPoint cc = m_llist->GetCursorScreenPos(*m_memDC);
-   if(cc.x < x0 || cc.y < y0
-      || cc.x >= x0+(9*x1)/10 || cc.y >= y0+(9*y1/10))  // (9*x)/10 ==  90%
+
+   // the cursor should be completely visible in both directions
+   wxPoint cs(m_llist->GetCursorSize());
+   int nx = -1,
+       ny = -1;
+   if ( cc.x < x0 || cc.x >= x0 + x1 - cs.x )
    {
-      int nx, ny;
-      nx = cc.x - x1/2; if(nx < 0) nx = 0;
-      ny = cc.y - y1/2; if(ny < 0) ny = 0;
-      Scroll(nx/dx,ny/dy); // new view start
-      x0 = nx; y0 = ny;
-      m_ScrollToCursor = false; // avoid recursion
+      nx = cc.x - x1/2;
+      if ( nx < 0 )
+         nx = 0;
+   }
+
+   if ( cc.y < y0 || cc.y >= y0 + y1 - cs.y )
+   {
+      ny = cc.y - y1/2;
+      if ( ny < 0) 
+         ny = 0;
+   }
+
+   if ( nx != -1 || ny != -1 )
+   {
+      // set new view start
+      Scroll(nx == -1 ? -1 : (nx+dx-1)/dx, ny == -1 ? -1 : (ny+dy-1)/dy);
+
+      // avoid recursion
+      m_ScrollToCursor = false;
    }
 }
 
 void
-wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))  // or: OnDraw(wxDC& dc)
+wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))
 {
    wxRect region = GetUpdateRegion().GetBox();
-   InternalPaint(& region);
+   InternalPaint(&region);
 }
 
 void
@@ -551,13 +628,8 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 
    // Get the size of the visible window:
    GetClientSize(&x1,&y1);
-   wxASSERT(x1 > 0);
-   wxASSERT(y1 > 0);
-   // As we have the values anyway, use them to avoid unnecessary
-   // scrollbar updates.
-   if(x1 > m_maxx) m_maxx = x1;
-   if(y1 > m_maxy) m_maxy = y1;
-
+   wxASSERT(x1 >= 0);
+   wxASSERT(y1 >= 0);
 
    if(updateRect)
    {
@@ -634,10 +706,13 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    // needed to erase it):
    m_llist->InvalidateUpdateRect();
    if(m_CursorVisibility != 0)
+   {
+      m_llist->UpdateCursorScreenPos(dc, true, offset);
       m_llist->DrawCursor(*m_memDC,
                           m_HaveFocus && IsEditable(), // draw a thick
                           // cursor for    editable windows with focus
                           offset);
+   }
 
 // Now copy everything to the screen:
 #if 0
@@ -672,13 +747,22 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 
    ResetDirty();
    m_ScrollToCursor = false;
-   if(m_StatusBar && m_StatusFieldCursor != -1)
+
+   if ( m_StatusBar && m_StatusFieldCursor != -1 )
    {
-      wxString label;
-      label.Printf(_("Ln:%d Col:%d"),
-                   m_llist->GetCursorPos().y+1,
-                   m_llist->GetCursorPos().x+1);
-      m_StatusBar->SetStatusText(label, m_StatusFieldCursor);
+      static wxPoint s_oldCursorPos(-1, -1);
+
+      wxPoint pos(m_llist->GetCursorPos());
+
+      // avoid unnecessary status bar refreshes
+      if ( pos != s_oldCursorPos )
+      {
+         s_oldCursorPos = pos;
+
+         wxString label;
+         label.Printf(_("Ln:%d Col:%d"), pos.y + 1, pos.x + 1);
+         m_StatusBar->SetStatusText(label, m_StatusFieldCursor);
+      }
    }
 }
 
@@ -688,21 +772,26 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 {
    wxPoint max = m_llist->GetSize();
 
-   WXLO_DEBUG(("ResizeScrollbars: GetSize: %ld, %ld", (long int)max.x,
-               (long int) max.y));
-   if(max.x > m_maxx || max.y > m_maxy
-      || max.x > m_maxx-WXLO_ROFFSET || max.y > m_maxy-WXLO_BOFFSET
-      || exact)
+   WXLO_DEBUG(("ResizeScrollbars: max size = (%ld, %ld)",
+               (long int)max.x, (long int) max.y));
+
+   if( max.x > m_maxx - WXLO_ROFFSET || max.y > m_maxy - WXLO_BOFFSET || exact )
    {
-      if(! exact)
+      if ( !exact )
       {
          // add an extra bit to the sizes to avoid future updates
-         max.x = max.x+WXLO_ROFFSET;
-         max.y = max.y+WXLO_BOFFSET;
+         max.x += WXLO_ROFFSET;
+         max.y += WXLO_BOFFSET;
       }
+
       ViewStart(&m_ViewStartX, &m_ViewStartY);
-      SetScrollbars(10, 20, max.x/10+1,max.y/20+1,m_ViewStartX,m_ViewStartY,true);
-      m_maxx = max.x; m_maxy = max.y;
+      SetScrollbars(X_SCROLL_PAGE, Y_SCROLL_PAGE,
+                    max.x / X_SCROLL_PAGE + 1, max.y / Y_SCROLL_PAGE + 1,
+                    m_ViewStartX, m_ViewStartY,
+                    true);
+
+      m_maxx = max.x + X_SCROLL_PAGE;
+      m_maxy = max.y + Y_SCROLL_PAGE;
    }
 }
 
