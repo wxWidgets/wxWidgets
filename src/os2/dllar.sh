@@ -384,10 +384,8 @@ arcFile2="${outimpFile}.lib"
 #create $dllFile as something matching 8.3 restrictions,
 if [ -z $renameScript ] ; then
     dllFile="$outFile"
-    echo "using outFile as dllFile ($outFile)".
 else
     dllFile=`$renameScript $outimpFile`
-    echo "modified $outimpFile to $dllFile"
 fi
 
 if [ $do_backup -ne 0 ] ; then
@@ -416,7 +414,6 @@ done
 rm -f $defFile
 echo "LIBRARY `basnam $dllFile` $library_flags" >> $defFile
 dllFile="${dllFile}.dll"
-echo "dllFile now $dllFile";
 if [ ! -z $description ]; then
     echo "DESCRIPTION  \"${description}\"" >> $defFile
 fi
