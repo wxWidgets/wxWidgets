@@ -230,7 +230,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
   
     m_frameMenuBar = NULL;
     m_frameMenuBar = menuBar;
-    m_frameMenuBar->MacInstallMenuBar() ;
+//    m_frameMenuBar->MacInstallMenuBar() ;
     m_frameMenuBar->Attach(this);
 }
 
@@ -283,8 +283,13 @@ void wxFrame::OnActivate(wxActivateEvent& event)
            )
         {
             child->SetFocus();
-            return;
+            break;
         }
+    }
+    
+    if ( m_frameMenuBar != NULL )
+    {
+    	m_frameMenuBar->MacInstallMenuBar() ;
     }
 }
 

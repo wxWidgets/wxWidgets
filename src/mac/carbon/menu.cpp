@@ -631,6 +631,9 @@ void wxMenuBar::RebuildAccelTable()
 
 void wxMenuBar::MacInstallMenuBar() 
 {
+	if ( s_macInstalledMenuBar == this )
+		return ;
+		
   	Handle menubar = ::GetNewMBar( kwxMacMenuBarResource ) ;
   	wxString message ;
   	wxCHECK_RET( menubar != NULL, "can't read MBAR resource" );
