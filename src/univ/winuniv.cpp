@@ -763,6 +763,12 @@ int wxWindow::GetScrollRange(int orient) const
 
 void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
+#ifdef __WXX11__
+
+    wxWindowX11::ScrollWindow( dx, dy, rect );
+
+#else
+
     // before scrolling it, ensure that we don't have any unpainted areas
     Update();
 
@@ -779,6 +785,8 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         r = ScrollNoRefresh(0, dy, rect);
         Refresh(TRUE /* erase bkgnd */, &r);
     }
+    
+#endif
 }
 
 wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)

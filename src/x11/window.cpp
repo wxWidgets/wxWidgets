@@ -469,34 +469,55 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
     GC xgc = XCreateGC( xdisplay, xwindow, 0, NULL );
     XSetGraphicsExposures( xdisplay, xgc, True );
 
-    int cw = 0;
-    int ch = 0;
-    GetClientSize( &cw, &ch );
+    int s_x;
+    int s_y;
+    int cw;
+    int ch;
+    if (rect)
+    {
+        s_x = rect->x;
+        s_y = rect->y;
+        cw = rect->width;
+        ch = rect->height;
+    }
+    else
+    {
+        s_x = 0;
+        s_y = 0;
+        GetClientSize( &cw, &ch );
+    }
+    
+    wxPoint offset = GetClientAreaOrigin();
+    s_x += offset.x;
+    s_y += offset.y;
+
     int w = cw - abs(dx);
     int h = ch - abs(dy);
-
+        
     if ((h < 0) || (w < 0))
     {
         Refresh();
     }
     else
     {
-        int s_x = 0;
-        int s_y = 0;
-        if (dx < 0) s_x = -dx;
-        if (dy < 0) s_y = -dy;
-        int d_x = 0;
-        int d_y = 0;
+        wxRect rect;
+        if (dx < 0) rect.x = cw+dx; else rect.x = s_x;
+        if (dy < 0) rect.y = ch+dy; else rect.y = s_y;
+        if (dy != 0) rect.width = cw; else rect.width = abs(dx);
+        if (dx != 0) rect.height = ch; else rect.height = abs(dy);
+    
+        int d_x = s_x;
+        int d_y = s_y;
+        if (dx < 0) s_x += -dx;
+        if (dy < 0) s_y += -dy;
         if (dx > 0) d_x = dx;
         if (dy > 0) d_y = dy;
 
         XCopyArea( xdisplay, xwindow, xwindow, xgc, s_x, s_y, w, h, d_x, d_y );
+        
+        // printf( "s_x %d s_y %d w %d h %d d_x %d d_y %d\n", s_x, s_y, w, h, d_x, d_y );
 
-        wxRect rect;
-        if (dx < 0) rect.x = cw+dx; else rect.x = 0;
-        if (dy < 0) rect.y = ch+dy; else rect.y = 0;
-        if (dy != 0) rect.width = cw; else rect.width = abs(dx);
-        if (dx != 0) rect.height = ch; else rect.height = abs(dy);
+        // printf( "rect %d %d %d %d\n", rect.x, rect.y, rect.width, rect.height );
 
         m_updateRegion.Union( rect );
         m_clearRegion.Union( rect );

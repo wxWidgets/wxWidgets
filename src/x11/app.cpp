@@ -405,7 +405,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     wxWindow* win = NULL;
     Window window = event->xany.window;
     Window actualWindow = window;
-
+    
     // Find the first wxWindow that corresponds to this event window
     // Because we're receiving events after a window
     // has been destroyed, assume a 1:1 match between
@@ -548,6 +548,26 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 
             return;
         }
+        case GraphicsExpose:
+        {
+            if (win)
+            {
+                wxLogDebug( "GraphicsExpose from %s", win->GetName().c_str(),
+                                              event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+                                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+                    
+                win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+                                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+                                              
+                win->GetClearRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+                                             event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+                                              
+                // if (event->xgraphicsexpose.count == 0)
+                //    win->Update();
+            }
+
+            return;
+        }
         case EnterNotify:
         case LeaveNotify:
         case ButtonPress:
@@ -585,7 +605,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 if (win && event->xfocus.detail != NotifyPointer)
 #endif
                 {
-                    wxLogDebug( "FocusOut from %s\n", win->GetName().c_str() );
+                    wxLogDebug( "FocusOut from %s", win->GetName().c_str() );
                     
                     wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
