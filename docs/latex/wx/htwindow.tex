@@ -305,6 +305,13 @@ Selects all text in the window.
 \helpref{SelectLine}{wxhtmlwindowselectline},
 \helpref{SelectWord}{wxhtmlwindowselectword}
 
+\membersection{wxHtmlWindow::SelectionToText}\label{wxhtmlwindowselectiontotext}
+
+\func{wxString}{SelectionToText}{\void}
+
+Returns current selection as plain text. Returns empty string if no text
+is currently selected.
+
 \membersection{wxHtmlWindow::SelectLine}\label{wxhtmlwindowselectline}
 
 \func{void}{SelectLine}{\param{const wxPoint\& }{pos}}
@@ -413,6 +420,11 @@ this sets statusbar slot where messages will be displayed.
 
 \docparam{bar}{statusbar slot number (0..n)}
 
+\membersection{wxHtmlWindow::ToText}\label{wxhtmlwindowtotext}
+
+\func{wxString}{ToText}{\void}
+
+Returns content of currently displayed page as plain text.
 
 \membersection{wxHtmlWindow::WriteCustomization}\label{wxhtmlwindowwritecustomization}
 
