@@ -4243,7 +4243,7 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg )
         // find the row labels within these bounds
         //
         int row;
-        for ( row = 0;  row < m_numRows;  row++ )
+        for ( row = YToRow(top);  row < m_numRows;  row++ )
         {
             if ( GetRowBottom(row) < top )
                 continue;
@@ -4294,7 +4294,7 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg )
         // find the cells within these bounds
         //
         int col;
-        for ( col = 0;  col < m_numCols;  col++ )
+        for ( col = XToCol(left);  col < m_numCols;  col++ )
         {
             if ( GetColRight(col) < left )
                 continue;
@@ -4345,7 +4345,7 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg )
         // find the cells within these bounds
         //
         int row, col;
-        for ( row = 0;  row < m_numRows;  row++ )
+        for ( row = YToRow(top);  row < m_numRows;  row++ )
         {
             if ( GetRowBottom(row) <= top )
                 continue;
@@ -4353,8 +4353,7 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg )
             if ( GetRowTop(row) > bottom )
                 break;
 
-
-            for ( col = 0;  col < m_numCols;  col++ )
+            for ( col = XToCol(left);  col < m_numCols;  col++ )
             {
                 if ( GetColRight(col) <= left )
                     continue;
@@ -6294,7 +6293,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     // horizontal grid lines
     //
     int i;
-    for ( i = 0; i < m_numRows; i++ )
+    for ( i = YToRow(top); i < m_numRows; i++ )
     {
         int bot = GetRowBottom(i) - 1;
 
@@ -6312,7 +6311,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 
     // vertical grid lines
     //
-    for ( i = 0; i < m_numCols; i++ )
+    for ( i = XToCol(left); i < m_numCols; i++ )
     {
         int colRight = GetColRight(i) - 1;
         if ( colRight > right )
@@ -6829,31 +6828,68 @@ void wxGrid::XYToCell( int x, int y, wxGridCellCoords& coords )
 }
 
 
-int wxGrid::YToRow( int y )
-{
-    int i;
+// Internal Helper function for computing row or column from some
+// (unscrolled) coordinate value, using either
+// m_defaultRowHeight/m_defaultColWidth or binary search on array 
+// of m_rowBottoms/m_ColRights to speed up the search!
 
-    for ( i = 0;  i < m_numRows;  i++ )
+static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
+                           wxArrayInt BorderArray)
+{
+    if (!defaultDist)
+        defaultDist = 1;
+    unsigned int i_max = coord / defaultDist,
+                 i_min = 0;
+    if (BorderArray.IsEmpty())
     {
-        if ( y < GetRowBottom(i) )
-            return i;
+        return i_max;
     }
 
-    return -1;
+    if ( i_max >= BorderArray.GetCount())
+        i_max = BorderArray.GetCount() - 1;
+    else 
+    {
+        if ( coord >= BorderArray[i_max])
+        {
+            i_min = i_max;
+            i_max = coord / minDist;
+        }
+        if ( i_max >= BorderArray.GetCount())
+            i_max = BorderArray.GetCount() - 1;
+    }
+    if ( coord > BorderArray[i_max])    
+        return -1;
+
+    while ( i_max - i_min > 1 )
+    {
+        wxCHECK_MSG(BorderArray[i_min] <= coord && coord < BorderArray[i_max],
+                    -1, _T("wxGrid: internal error in CoordToRowOrCol"));
+        if (coord >=  BorderArray[ i_max - 1])
+        {
+            return i_max;
+        }
+        else
+            i_max--;
+        int median = i_min + (i_max - i_min + 1) / 2;
+        if (coord < BorderArray[median])
+            i_max = median;
+        else
+            i_min = median;
+    }
+    return i_max;
+}
+
+int wxGrid::YToRow( int y )
+{
+    return CoordToRowOrCol(y, m_defaultRowHeight,
+                           WXGRID_MIN_ROW_HEIGHT, m_rowBottoms);
 }
 
 
 int wxGrid::XToCol( int x )
 {
-    int i;
-
-    for ( i = 0;  i < m_numCols;  i++ )
-    {
-        if ( x < GetColRight(i) )
-            return i;
-    }
-
-    return -1;
+    return CoordToRowOrCol(x, m_defaultColWidth,
+                           WXGRID_MIN_COL_WIDTH, m_colRights);
 }
 
 
@@ -6864,7 +6900,7 @@ int wxGrid::YToEdgeOfRow( int y )
 {
     int i, d;
 
-    for ( i = 0;  i < m_numRows;  i++ )
+    for ( i = YToRow( y ) - 1;  i < m_numRows;  i++ )
     {
         if ( GetRowHeight(i) > WXGRID_LABEL_EDGE_ZONE )
         {
@@ -6885,7 +6921,7 @@ int wxGrid::XToEdgeOfCol( int x )
 {
     int i, d;
 
-    for ( i = 0;  i < m_numCols;  i++ )
+    for (i = XToCol( x ) - 1;  i < m_numCols;  i++ )
     {
         if ( GetColWidth(i) > WXGRID_LABEL_EDGE_ZONE )
         {
@@ -8295,7 +8331,12 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 
     if ( resizeExistingRows )
     {
-        InitRowHeights();
+        // since we are resizing all rows to the default row size,
+        // we can simply clear the row heights and row bottoms
+        // arrays (which also allows us to take advantage of
+        // some speed optimisations)
+        m_rowHeights.Empty();
+        m_rowBottoms.Empty();
         if ( !GetBatchCount() )
             CalcDimensions();
     }
@@ -8330,7 +8371,12 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
 
     if ( resizeExistingCols )
     {
-        InitColWidths();
+        // since we are resizing all columns to the default column size,
+        // we can simply clear the col widths and col rights
+        // arrays (which also allows us to take advantage of
+        // some speed optimisations)
+        m_colWidths.Empty();
+        m_colRights.Empty();
         if ( !GetBatchCount() )
             CalcDimensions();
     }
