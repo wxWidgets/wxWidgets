@@ -440,7 +440,7 @@ private:
             { wxListBase::Sort((wxSortCompareFunction)func); }              \
                                                                             \
     protected:                                                              \
-        wxNodeBase *CreateNode(wxNodeBase *prev, wxNodeBase *next,          \
+        virtual wxNodeBase *CreateNode(wxNodeBase *prev, wxNodeBase *next,  \
                                void *data,                                  \
                                const wxListKey& key = wxDefaultListKey)     \
             {                                                               \
