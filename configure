@@ -18075,10 +18075,6 @@ if test "$wxUSE_GUI" = "yes"; then
                      drawing dynamic erase event exec font image \
                      minimal richedit rotate widgets"
 
-    if test "$wxUSE_UNIVERSAL" = "yes" ; then
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS univ"
-    fi
-
         CPPFLAGS="$CPPFLAGS \$(EXTRADEFS) \$(APPEXTRADEFS)"
 else
     SAMPLES_SUBDIRS="console"
@@ -18190,7 +18186,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:18194: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:18190: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
