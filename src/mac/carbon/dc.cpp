@@ -70,8 +70,8 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
         parent->MacWindowToRootWindow( &x,&y ) ;
         wxSize size = parent->GetSize() ;
         SetRectRgn( insidergn , parent->MacGetLeftBorderSize() , parent->MacGetTopBorderSize() , 
-      	  size.x - parent->MacGetLeftBorderSize() - parent->MacGetRightBorderSize(), 
-      	  size.y - parent->MacGetTopBorderSize() - parent->MacGetBottomBorderSize()) ;
+      	  size.x - parent->MacGetRightBorderSize(), 
+      	  size.y - parent->MacGetBottomBorderSize()) ;
         CopyRgn( (RgnHandle) parent->MacGetVisibleRegion(false).GetWXHRGN() , m_newClip ) ;
     	SectRgn( m_newClip , insidergn , m_newClip ) ;
         OffsetRgn( m_newClip , x , y ) ;
