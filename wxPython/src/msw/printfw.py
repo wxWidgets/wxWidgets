@@ -37,6 +37,9 @@ class wxPrintDataPtr(wxObjectPtr):
     def GetOrientation(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintData_GetOrientation,(self,) + _args, _kwargs)
         return val
+    def Ok(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_Ok,(self,) + _args, _kwargs)
+        return val
     def GetPrinterName(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintData_GetPrinterName,(self,) + _args, _kwargs)
         return val
@@ -274,6 +277,9 @@ class wxPageSetupDialogDataPtr(wxObjectPtr):
         val = apply(printfwc.wxPageSetupDialogData_GetPrintData,(self,) + _args, _kwargs)
         if val: val = wxPrintDataPtr(val) ; val.thisown = 1
         return val
+    def Ok(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPageSetupDialogData_Ok,(self,) + _args, _kwargs)
+        return val
     def SetDefaultInfo(self, *_args, **_kwargs):
         val = apply(printfwc.wxPageSetupDialogData_SetDefaultInfo,(self,) + _args, _kwargs)
         return val
@@ -379,6 +385,9 @@ class wxPrintDialogDataPtr(wxObjectPtr):
         return val
     def GetToPage(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintDialogData_GetToPage,(self,) + _args, _kwargs)
+        return val
+    def Ok(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintDialogData_Ok,(self,) + _args, _kwargs)
         return val
     def SetCollate(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintDialogData_SetCollate,(self,) + _args, _kwargs)

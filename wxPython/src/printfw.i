@@ -61,6 +61,8 @@ public:
     bool GetCollate();
     int  GetOrientation();
 
+    bool Ok();
+
     const wxString& GetPrinterName();
     bool GetColour();
     wxDuplexMode GetDuplex();
@@ -167,6 +169,9 @@ public:
             return new wxPrintData(self->GetPrintData());  // force a copy
         }
     }
+
+    bool Ok();
+
     void SetDefaultInfo(bool flag);
     void SetDefaultMinMargins(bool flag);
     void SetMarginTopLeft(const wxPoint& pt);
@@ -214,6 +219,9 @@ public:
     }
     bool GetPrintToFile();
     int GetToPage();
+
+    bool Ok();
+
     void SetCollate(bool flag);
     void SetFromPage(int page);
     void SetMaxPage(int page);

@@ -363,6 +363,16 @@ void wxStartTimer();
 int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
 wxString wxGetOsDescription();
 
+enum wxShutdownFlags
+{
+    wxSHUTDOWN_POWEROFF,    // power off the computer
+    wxSHUTDOWN_REBOOT       // shutdown and reboot
+};
+
+// Shutdown or reboot the PC
+bool wxShutdown(wxShutdownFlags wFlags);
+
+
 void wxSleep(int secs);
 void wxUsleep(unsigned long milliseconds);
 bool wxYield();

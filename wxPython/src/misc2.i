@@ -673,6 +673,15 @@ void wxLogStatus(const wxString& szFormat);
 %name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const wxString& szFormat);
 void wxLogSysError(const wxString& szFormat);
 
+
+// wxLogFatalError helper: show the (fatal) error to the user in a safe way,
+// i.e. without using wxMessageBox() for example because it could crash
+
+// TODO:  Why am I getting a link error on this???
+// void wxSafeShowMessage(const wxString& title, const wxString& text);
+
+
+
 // Suspress logging while an instance of this class exists
 class wxLogNull
 {
