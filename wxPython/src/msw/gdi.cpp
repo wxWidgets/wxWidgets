@@ -236,7 +236,7 @@ extern wxFont  wxNullFont;
 extern wxColour  wxNullColour; 
 extern wxFontList * wxTheFontList; 
 extern wxPenList * wxThePenList; 
-extern wxBrushlist * wxTheBrushList; 
+extern wxBrushList * wxTheBrushList; 
 extern wxColourDatabase * wxTheColourDatabase; 
 
 #endif
@@ -1240,7 +1240,7 @@ static PyObject *_wrap_wxTheBrushList_get() {
     PyObject * pyobj;
     char ptemp[128];
 
-    SWIG_MakePtr(ptemp, (char *) wxTheBrushList,"_wxBrushlist_p");
+    SWIG_MakePtr(ptemp, (char *) wxTheBrushList,"_wxBrushList_p");
     pyobj = PyString_FromString(ptemp);
     return pyobj;
 }
@@ -6049,6 +6049,14 @@ static PyObject *_wrap_wxBrush_SetStyle(PyObject *self, PyObject *args, PyObject
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
+}
+
+static void *SwigwxBrushListTowxObject(void *ptr) {
+    wxBrushList *src;
+    wxObject *dest;
+    src = (wxBrushList *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
 }
 
 #define wxBrushList_AddBrush(_swigobj,_swigarg0)  (_swigobj->AddBrush(_swigarg0))
@@ -11824,6 +11832,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxScreenDC",SwigwxScreenDCTowxObject},
     { "_wxObject","_wxMemoryDC",SwigwxMemoryDCTowxObject},
     { "_wxObject","_wxDC",SwigwxDCTowxObject},
+    { "_wxObject","_wxBrushList",SwigwxBrushListTowxObject},
     { "_wxObject","_wxBrush",SwigwxBrushTowxObject},
     { "_wxObject","_wxPenList",SwigwxPenListTowxObject},
     { "_wxObject","_wxPen",SwigwxPenTowxObject},

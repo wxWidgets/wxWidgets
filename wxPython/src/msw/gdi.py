@@ -598,7 +598,7 @@ class wxBrush(wxBrushPtr):
 
 
 
-class wxBrushListPtr :
+class wxBrushListPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -1366,6 +1366,7 @@ wxNullFont = wxFontPtr(gdic.cvar.wxNullFont)
 wxNullColour = wxColourPtr(gdic.cvar.wxNullColour)
 wxTheFontList = wxFontListPtr(gdic.cvar.wxTheFontList)
 wxThePenList = wxPenListPtr(gdic.cvar.wxThePenList)
+wxTheBrushList = wxBrushListPtr(gdic.cvar.wxTheBrushList)
 wxTheColourDatabase = wxColourDatabasePtr(gdic.cvar.wxTheColourDatabase)
 wxIMAGELIST_DRAW_NORMAL = gdic.wxIMAGELIST_DRAW_NORMAL
 wxIMAGELIST_DRAW_TRANSPARENT = gdic.wxIMAGELIST_DRAW_TRANSPARENT

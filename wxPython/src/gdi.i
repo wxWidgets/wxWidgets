@@ -655,7 +655,7 @@ public:
 };
 
 
-class wxBrushList {
+class wxBrushList : public wxObject {
 public:
 
     void AddBrush(wxBrush *brush);
@@ -917,7 +917,7 @@ extern wxColour wxNullColour;
 
 extern wxFontList*       wxTheFontList;
 extern wxPenList*        wxThePenList;
-extern wxBrushlist*      wxTheBrushList;
+extern wxBrushList*      wxTheBrushList;
 extern wxColourDatabase* wxTheColourDatabase;
 
 
