@@ -2390,6 +2390,23 @@ bool wxWindow::MSWCreate(int id,
             ::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
                 SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
+#if defined(__WIN95__)
+        // For some reason, the system menu is activated when we use the
+        // WS_EX_CONTEXTHELP style, so let's set a reasonable icon
+        if (extendedStyle & WS_EX_CONTEXTHELP)
+        {
+            if (wxTheApp->GetTopWindow() && (wxTheApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame))))
+            {
+                wxIcon icon = ((wxFrame*)wxTheApp->GetTopWindow())->GetIcon();
+                if (icon.Ok())
+                    SendMessage(GetHwnd(), WM_SETICON,
+                        (WPARAM)TRUE, (LPARAM)(HICON) icon.GetHICON());
+            }
+        }
+#endif // __WIN95__
+
+
+        // JACS: is the following still necessary? The above seems to work.
 
         // ::SetWindowLong(GWL_EXSTYLE) doesn't work for the dialogs, so try
         // to take care of (at least some) extended style flags ourselves
@@ -4367,3 +4384,31 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindow *win)
 
     return tm;
 }
+
+// Find the wxWindow at the current mouse position, returning the mouse
+// position.
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+{
+    // Use current message to find last mouse position
+    extern MSG s_currentMsg;
+    HWND hWndHit = ::WindowFromPoint(s_currentMsg.pt);
+
+    wxWindow* win = wxFindWinFromHandle((WXHWND) hWndHit) ;
+    HWND hWnd = hWndHit;
+
+    // Try to find a window with a wxWindow associated with it
+    while (!win && (hWnd != 0))
+    {
+        hWnd = ::GetParent(hWnd);
+        win = wxFindWinFromHandle((WXHWND) hWnd) ;
+    }
+    return win;
+}
+
+// Get the current mouse position.
+wxPoint wxGetMousePosition()
+{
+    extern MSG s_currentMsg;
+    return wxPoint(s_currentMsg.pt.x, s_currentMsg.pt.y);
+}
+

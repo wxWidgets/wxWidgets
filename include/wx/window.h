@@ -885,10 +885,17 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 }
 
 // ----------------------------------------------------------------------------
-// global function
+// global functions
 // ----------------------------------------------------------------------------
 
 WXDLLEXPORT extern wxWindow* wxGetActiveWindow();
+
+// Find the wxWindow at the current mouse position, also returning the mouse
+// position.
+WXDLLEXPORT extern wxWindow* wxFindWindowAtPointer(wxPoint& pt);
+
+// Get the current mouse position.
+WXDLLEXPORT extern wxPoint wxGetMousePosition();
 
 // deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
 inline WXDLLEXPORT int NewControlId() { return wxWindowBase::NewControlId(); }

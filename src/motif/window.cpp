@@ -2984,7 +2984,23 @@ void wxWindow::ChangeFont(bool keepOriginalSize)
 wxWindow *wxGetActiveWindow()
 {
     // TODO
+    wxFAIL_MSG(_("Not implemented"));
     return NULL;
+}
+
+// Find the wxWindow at the current mouse position, returning the mouse
+// position.
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+{
+    wxFAIL_MSG(_("Not implemented"));
+    return NULL;
+}
+
+// Get the current mouse position.
+wxPoint wxGetMousePosition()
+{
+    wxFAIL_MSG(_("Not implemented"));
+    return wxPoint;
 }
 
 // ----------------------------------------------------------------------------

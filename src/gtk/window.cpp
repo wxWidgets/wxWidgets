@@ -3753,3 +3753,62 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     }
 */
 }
+
+// Helper for wxFindWindowAtPointer
+wxWindow* wxFindWindowForGdkWindow(wxWindow* win, GdkWindow* gdkWindow)
+{
+    GdkWindow* thisGdkWindow1 = 0;
+    GdkWindow* thisGdkWindow2 = 0;
+
+    if (win->m_wxwindow)
+        thisGdkWindow1 = GTK_PIZZA(win->m_wxwindow)->bin_window;
+
+    thisGdkWindow2 = win->m_widget->window;
+
+    if (gdkWindow == thisGdkWindow1 || gdkWindow == thisGdkWindow2)
+      return win;
+
+    wxNode* node = win->GetChildren().First();
+    while (node)
+    {
+        wxWindow* child = (wxWindow*) node->Data();
+        wxWindow* found = wxFindWindowForGdkWindow(child, gdkWindow);
+        if (found)
+          return found;
+
+        node = node->Next();
+    }
+    return NULL;    
+}
+
+// Find the wxWindow at the current mouse position, also returning the mouse
+// position.
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+{
+    int x, y;
+    GdkWindow* windowAtPtr = gdk_window_at_pointer(& x, & y);
+    pt.x = x;
+    pt.y = y;
+    if (windowAtPtr)
+    {
+        wxNode* node = wxTopLevelWindows.First();
+        while (node)
+        {
+            wxWindow* win = (wxWindow*) node->Data();
+            wxWindow* wxWinAtPtr = wxFindWindowForGdkWindow(win, windowAtPtr);
+            if (wxWinAtPtr)
+                return wxWinAtPtr;
+            node = node->Next();
+        }
+    }
+    return NULL;
+}
+
+// Get the current mouse position.
+wxPoint wxGetMousePosition()
+{
+    int x, y;
+    GdkWindow* windowAtPtr = gdk_window_at_pointer(& x, & y);
+    return wxPoint(x, y);
+}
+
