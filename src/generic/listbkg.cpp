@@ -137,8 +137,8 @@ wxSize wxListbook::GetListSize() const
             wxRect r;
             m_list->GetItemRect(i, r);
 
-            wxCoord w = r.x + r.width,
-                    h = r.y + r.height;
+            wxCoord w = r.width,
+                    h = r.height;
 
             if ( w > widthMax )
                 widthMax = w;
@@ -161,9 +161,9 @@ wxSize wxListbook::GetListSize() const
     }
     else // left/right aligned
     {
-        // +10 is due to an apparent bug in wxListCtrl::GetItemRect() but I
+        // +20 is due to an apparent bug in wxListCtrl::GetItemRect() but I
         // can't fix it there right now so just add a fudge here...
-        size.x = widthMax + 10;
+        size.x = widthMax + 20;
         size.y = sizeClient.y;
 
         if ( heightMax >= sizeClient.y )
