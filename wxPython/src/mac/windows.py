@@ -538,6 +538,14 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetValidator(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetValidator,(self,) + _args, _kwargs)
         return val
+    def SetDropTarget(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetDropTarget,(self,) + _args, _kwargs)
+        _args[0].thisown = 0
+        return val
+    def GetDropTarget(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetDropTarget,(self,) + _args, _kwargs)
+        if val: val = wxDropTargetPtr(val) 
+        return val
     def GetBestSize(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetBestSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1

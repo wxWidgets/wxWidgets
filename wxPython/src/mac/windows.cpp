@@ -5444,6 +5444,78 @@ static PyObject *_wrap_wxWindow_SetValidator(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxWindow_SetDropTarget(_swigobj,_swigarg0)  (_swigobj->SetDropTarget(_swigarg0))
+static PyObject *_wrap_wxWindow_SetDropTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    wxDropTarget * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","target", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_SetDropTarget",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetDropTarget. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDropTarget_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetDropTarget. Expected _wxDropTarget_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_SetDropTarget(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_GetDropTarget(_swigobj)  (_swigobj->GetDropTarget())
+static PyObject *_wrap_wxWindow_GetDropTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDropTarget * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetDropTarget",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetDropTarget. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxDropTarget *)wxWindow_GetDropTarget(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDropTarget_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 #define wxWindow_GetBestSize(_swigobj)  (_swigobj->GetBestSize())
 static PyObject *_wrap_wxWindow_GetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11155,6 +11227,8 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_SetCaret", (PyCFunction) _wrap_wxWindow_SetCaret, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetMaxSize", (PyCFunction) _wrap_wxWindow_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetBestSize", (PyCFunction) _wrap_wxWindow_GetBestSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetDropTarget", (PyCFunction) _wrap_wxWindow_GetDropTarget, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_SetDropTarget", (PyCFunction) _wrap_wxWindow_SetDropTarget, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetValidator", (PyCFunction) _wrap_wxWindow_SetValidator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetValidator", (PyCFunction) _wrap_wxWindow_GetValidator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetContainingSizer", (PyCFunction) _wrap_wxWindow_GetContainingSizer, METH_VARARGS | METH_KEYWORDS },

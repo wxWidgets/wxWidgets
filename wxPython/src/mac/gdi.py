@@ -327,6 +327,9 @@ class wxPenPtr(wxGDIObjectPtr):
     def SetDashes(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_SetDashes,(self,) + _args, _kwargs)
         return val
+    def GetDashes(self, *_args, **_kwargs):
+        val = apply(gdic.wxPen_GetDashes,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxPen instance at %s>" % (self.this,)
 class wxPen(wxPenPtr):

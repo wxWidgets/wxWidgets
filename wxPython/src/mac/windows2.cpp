@@ -1177,6 +1177,14 @@ static PyObject *_wrap_wxNotebook_ResizeChildren(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+static void *SwigwxSplitterEventTowxNotifyEvent(void *ptr) {
+    wxSplitterEvent *src;
+    wxNotifyEvent *dest;
+    src = (wxSplitterEvent *) ptr;
+    dest = (wxNotifyEvent *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxSplitterEventTowxCommandEvent(void *ptr) {
     wxSplitterEvent *src;
     wxCommandEvent *dest;
@@ -2318,6 +2326,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
+    { "_wxNotifyEvent","_wxSplitterEvent",SwigwxSplitterEventTowxNotifyEvent},
     { "_wxNotifyEvent","_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},

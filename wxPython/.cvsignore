@@ -3,6 +3,8 @@
 .gdb_history
 MANIFEST
 build
+build-pkg
+build-pkg-debug
 build.local
 build.unicode
 dist
