@@ -23,6 +23,7 @@
 
 #include "wx/textfile.h"
 #include "wx/string.h"
+#include "wx/confbase.h"
 
 // ----------------------------------------------------------------------------
 // wxFileConfig
