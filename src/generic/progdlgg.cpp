@@ -221,16 +221,17 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 #endif // MSW/!MSW
         c->bottom.SameAs(this, wxBottom, 2*LAYOUT_Y_MARGIN);
 
-        wxSize sizeBtn = wxButton::GetDefaultSize();
-        c->width.Absolute(sizeBtn.x);
-        c->height.Absolute(sizeBtn.y);
+        c->width.AsIs();
+        c->height.AsIs();
 
         m_btnAbort->SetConstraints(c);
 
-        sizeDlg.y += 2*LAYOUT_Y_MARGIN + sizeBtn.y;
+        sizeDlg.y += 2*LAYOUT_Y_MARGIN + wxButton::GetDefaultSize().y;
     }
-    else
+    else // no "Cancel" button
+    {
         m_btnAbort = (wxButton *)NULL;
+    }
 
     SetAutoLayout(TRUE);
     Layout();
