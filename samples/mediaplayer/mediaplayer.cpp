@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mediactrltest.
+// Name:        mediaplayer.cpp
 // Purpose:     wxMediaCtrl sample
 // Author:      Ryan Norton
 // Modified by:
@@ -173,7 +173,6 @@ enum
     Minimal_Quit = wxID_EXIT,
     Minimal_Loop,
     Minimal_OpenFile,
-    Minimal_OpenURL,
     Minimal_Play,
     Minimal_Pause,
     Minimal_Stop,
@@ -196,7 +195,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
     EVT_MENU(Minimal_Loop, MyFrame::OnLoop)
     EVT_MENU(Minimal_OpenFile, MyFrame::OnOpenFile)
-    EVT_MENU(Minimal_OpenURL, MyFrame::OnOpenURL)
     EVT_MENU(Minimal_Play, MyFrame::OnPlay)
     EVT_MENU(Minimal_Pause, MyFrame::OnPause)
     EVT_MENU(Minimal_Stop, MyFrame::OnStop)
@@ -250,7 +248,6 @@ MyFrame::MyFrame(const wxString& title)
     helpMenu->Append(Minimal_About, _T("&About...\tF1"), _T("Show about dialog"));
 
     menuFile->Append(Minimal_OpenFile, _T("&Open File"), _T("Open a File"));
-    menuFile->Append(Minimal_OpenURL, _T("Open &URL"), _T("Open a URL"));
     menuFile->AppendSeparator();
     menuFile->Append(Minimal_Play, _T("&Play"), _T("Resume playback"));
     menuFile->Append(Minimal_Pause, _T("P&ause"), _T("Pause playback"));
@@ -399,34 +396,6 @@ void MyFrame::OnOpenFile(wxCommandEvent& WXUNUSED(event))
             
         ResetStatus();
     }
-}
-
-
-//
-//OnOpenURL
-//-------
-//Called from file->openurl.
-//Opens a URL.
-//Windows DirectShow only.
-//
-void MyFrame::OnOpenURL(wxCommandEvent& WXUNUSED(event))
-{
-    wxString theURL = wxGetTextFromUser(wxT("Enter the URL that has the movie to play"));
-
-#if defined(__WXMSW__) && wxUSE_DIRECTSHOW
-    if(!theURL.empty())
-    {
-        if( !m_mediactrl->Load(wxURI(theURL)) )
-            wxMessageBox(wxT("Couldn't load URL!"));
-
-        if( !m_mediactrl->Play() )
-            wxMessageBox(wxT("Couldn't play movie!"));            
-            
-        ResetStatus();
-    }
-#else
-    wxMessageBox(wxT("Not supported!"));     
-#endif
 }
 
 //
