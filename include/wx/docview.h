@@ -161,7 +161,7 @@ protected:
     wxDocument*           m_documentParent;
     wxCommandProcessor*   m_commandProcessor;
     bool                  m_savedYet;
-    
+
 private:
     DECLARE_ABSTRACT_CLASS(wxDocument)
     DECLARE_NO_COPY_CLASS(wxDocument)
@@ -292,7 +292,7 @@ protected:
     // For dynamic creation of appropriate instances.
     wxClassInfo*      m_docClassInfo;
     wxClassInfo*      m_viewClassInfo;
-    
+
 private:
     DECLARE_CLASS(wxDocTemplate)
     DECLARE_NO_COPY_CLASS(wxDocTemplate)
@@ -302,8 +302,6 @@ private:
 // the templates and documents.
 class WXDLLEXPORT wxDocManager: public wxEvtHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxDocManager)
-
 public:
     wxDocManager(long flags = wxDEFAULT_DOCMAN_FLAGS, bool initialize = TRUE);
     ~wxDocManager();
@@ -417,8 +415,8 @@ public:
     // Get the current document manager
     static wxDocManager* GetDocumentManager() { return sm_docManager; }
 
-    // deprecated, don't use
-    virtual size_t GetNoHistoryFiles() const;
+    // deprecated, use GetHistoryFilesCount() instead
+    wxDEPRECATED( size_t GetNoHistoryFiles() const );
 
 protected:
     long              m_flags;
@@ -432,8 +430,14 @@ protected:
     static wxDocManager* sm_docManager;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxDocManager)
     DECLARE_NO_COPY_CLASS(wxDocManager)
 };
+
+inline size_t wxDocManager::GetNoHistoryFiles() const
+{
+    return GetHistoryFilesCount();
+}
 
 // ----------------------------------------------------------------------------
 // A default child frame
@@ -567,8 +571,8 @@ public:
 
     wxList& GetMenus() const { return (wxList&) m_fileMenus; }
 
-    // deprecated, don't use
-    size_t GetNoHistoryFiles() const { return m_fileHistoryN; }
+    // deprecated, use GetCount() instead
+    wxDEPRECATED( size_t GetNoHistoryFiles() const );
 
 protected:
     // Last n files
@@ -579,7 +583,7 @@ protected:
     wxList            m_fileMenus;
     // Max files to maintain
     size_t            m_fileMaxFiles;
-    
+
 private:
     // The ID of the first history menu item (Doesn't have to be wxID_FILE1)
     wxWindowID m_idBase;
@@ -587,6 +591,11 @@ private:
     DECLARE_DYNAMIC_CLASS(wxFileHistory)
     DECLARE_NO_COPY_CLASS(wxFileHistory)
 };
+
+inline size_t wxFileHistory::GetNoHistoryFiles() const
+{
+    return m_fileHistoryN;
+}
 
 #if wxUSE_STD_IOSTREAM
 // For compatibility with existing file formats:
