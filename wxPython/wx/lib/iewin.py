@@ -136,7 +136,7 @@ class IEHtmlWindow(wx.activex.IEHtmlWindowBase):
         return self.Navigate2(URL, Flags)
 
 
-    def GetStringSelection(self, asHTML):
+    def GetStringSelection(self, asHTML=True):
         """
         Returns the contents of the selected portion of the document as
         either html or plain text.
@@ -144,7 +144,7 @@ class IEHtmlWindow(wx.activex.IEHtmlWindowBase):
         return wx.activex.IEHtmlWindowBase.GetStringSelection(self, asHTML)
 
 
-    def GetText(self, asHTML):
+    def GetText(self, asHTML=True):
         """
         Returns the contents of the the html document as either html or plain text.
         """
