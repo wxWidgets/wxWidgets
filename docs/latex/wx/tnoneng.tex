@@ -1,0 +1,53 @@
+\section{Writing non-English applications}\label{nonenglishoverview}
+
+This article describes how to write applications that communicate with
+user in language other than English. Unfortunately many languages use
+different charsets under Unix and Windows (and other platforms, to make
+situation even more complicated). These charsets usually differ in so
+many characters it is impossible to use same texts under all platforms.
+wxWindows provide mechanism that helps you avoid distributing many
+identical, only differently encoded, packages with your application 
+(e.g. help files and menu items in iso8859-13 and windows-1257). Thanks
+to this mechanism you can distribute only let's say iso8859-13 data 
+and it will be handled transparently under all systems.
+
+Please read \helpref{Internationalization}\label{internationalization} which
+describes locales concept.
+
+Whereever in the following text {\it iso8859-2} and {\it windows-1250} are
+used, any encodings are meant and any encodings may be substituted there.
+
+
+\wxheading{Locales}
+
+TODO
+
+\wxheading{Converting data}
+
+before storing / after loading
+
+TODO
+
+\wxheading{Font mapping}
+
+TODO
+
+\wxheading{Help files}
+
+If you're using \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} there is
+no problem at all. You must only make sure that all HTML files contain
+META tag, e.g.
+
+\begin{verbatim}
+<meta http-equiv="Content-Type" content="iso8859-2">
+\end{verbatim}
+
+and that hhp project file contains one additional line in {\tt OPTIONS}
+section:
+
+\begin{verbatim}
+Charset=iso8859-2
+\end{verbatim}
+
+This additional entry tells HTML help controller what encoding is used
+in contents and index tables.
