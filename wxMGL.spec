@@ -87,8 +87,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -f wxstd.lang
 %defattr(-,root,root)
 %doc COPYING.LIB *.txt
-%dir %{_datadir}/wx
-%{_datadir}/wx/*
 %{_libdir}/libwx_mgl*-%{ver2}*.so.*
 
 %files devel

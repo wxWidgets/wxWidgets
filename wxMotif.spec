@@ -255,8 +255,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %doc COPYING.LIB *.txt
-%dir %{_datadir}/wx
-%{_datadir}/wx/*
 %{_libdir}/libwx_%{portname}*_core*.so.*
 %{_libdir}/libwx_%{portname}*_html*.so.*
 %{_libdir}/libwx_%{portname}*_adv*.so.*
