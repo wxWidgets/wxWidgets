@@ -124,7 +124,6 @@ static gint gtk_text_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(ev
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
         return TRUE;
     }
 
@@ -179,7 +178,6 @@ static gint gtk_text_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED(e
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
         return TRUE;
     }
 
