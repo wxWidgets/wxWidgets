@@ -82,6 +82,10 @@ CFG=wxWindows - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
+!MESSAGE "wxWindows - Win32 Release Unicode DLL" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxWindows - Win32 Debug Unicode DLL" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxWindows - Win32 Release Unicode" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Debug Unicode" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxWindows - Win32 Release DLL" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "wxWindows - Win32 Debug DLL" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "wxWindows - Win32 Release" (based on "Win32 (x86) Static Library")
@@ -95,7 +99,105 @@ CFG=wxWindows - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "wxWindows - Win32 Release DLL"
+!IF  "$(CFG)" == "wxWindows - Win32 Release Unicode DLL"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "../lib"
+# PROP BASE Intermediate_Dir "../ReleaseUnicodeDll"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../lib"
+# PROP Intermediate_Dir "../ReleaseUnicodeDll"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MD /W4 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdllu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "_MT" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /i "../include" /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'u.dll"'
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'u.dll"'
+
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode DLL"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "../lib"
+# PROP BASE Intermediate_Dir "../DebugUnicodeDll"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "../lib"
+# PROP Intermediate_Dir "../DebugUnicodeDll"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdllud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "_DEBUG" /D WINVER=0x0400 /D "STRICT" /D "_MT" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /i "../include" /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'ud.dll"'
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.3 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'ud.dll"'
+
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "../lib"
+# PROP BASE Intermediate_Dir "../ReleaseUnicode"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../lib"
+# PROP Intermediate_Dir "../ReleaseUnicode"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\lib\wxmswu.lib"
+
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "../lib"
+# PROP BASE Intermediate_Dir "../DebugUnicode"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "../lib"
+# PROP Intermediate_Dir "../DebugUnicode"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "_DEBUG" /D "__WXDEBUG__" /D WINVER=0x0400 /D "STRICT" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\lib\wxmswud.lib"
+
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -105,7 +207,7 @@ RSC=rc.exe
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "../lib"
-# PROP Intermediate_Dir "../ReleaseDLL"
+# PROP Intermediate_Dir "../ReleaseDll"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W4 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /c
@@ -151,12 +253,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "../Release"
+# PROP BASE Output_Dir "../lib"
 # PROP BASE Intermediate_Dir "../Release"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "../Release"
+# PROP Output_Dir "../lib"
 # PROP Intermediate_Dir "../Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
@@ -174,12 +276,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "../Debug"
+# PROP BASE Output_Dir "../lib"
 # PROP BASE Intermediate_Dir "../Debug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../Debug"
+# PROP Output_Dir "../lib"
 # PROP Intermediate_Dir "../Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
@@ -197,6 +299,10 @@ LIB32=link.exe -lib
 
 # Begin Target
 
+# Name "wxWindows - Win32 Release Unicode DLL"
+# Name "wxWindows - Win32 Debug Unicode DLL"
+# Name "wxWindows - Win32 Release Unicode"
+# Name "wxWindows - Win32 Debug Unicode"
 # Name "wxWindows - Win32 Release DLL"
 # Name "wxWindows - Win32 Debug DLL"
 # Name "wxWindows - Win32 Release"
@@ -208,8 +314,8 @@ LIB32=link.exe -lib
 #$ ExpandGlue("WXCSRCS", "# Begin Source File\n\nSOURCE=.\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
 # Begin Source File
 
-SOURCE=.\common\y_tab.c
-# ADD CPP /W1 /D "USE_DEFINE"
+SOURCE=.\common\dosyacc.c
+# ADD CPP /W1 /D "USE_DEFINE" /D "IDE_INVOKED"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
@@ -248,7 +354,39 @@ SOURCE=.\msw\dummy.cpp
 # Begin Source File
 
 SOURCE=..\include\wx\msw\setup0.h
-!IF  "$(CFG)" == "wxWindows - Win32 Release DLL"
+!IF  "$(CFG)" == "wxWindows - Win32 Release Unicode DLL"
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/mswdllu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\mswdllu\wx\setup.h
+
+# End Custom Build
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode DLL"
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/mswdllud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\mswdllud\wx\setup.h
+
+# End Custom Build
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode"
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/mswu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\mswu\wx\setup.h
+
+# End Custom Build
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode"
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/mswud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\mswud\wx\setup.h
+
+# End Custom Build
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release DLL"
 # Begin Custom Build - Creating wx/setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup0.h
 

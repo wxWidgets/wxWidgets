@@ -107,6 +107,7 @@
 	$WX_BASENAME = "$WXDIR\\lib\\wx$TOOLKIT";
 	$UNICODE_SUFFIX = "u";
 	$DEBUG_SUFFIX = "d";
+	$DLL = "dll";
 
 	#! compiler options: for the given configuration they are just obrained
 	#! by concatenating together all relevant values from the list below
