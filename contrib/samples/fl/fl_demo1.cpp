@@ -49,7 +49,7 @@
 char  wxDummyChar;
 
 
-IMPLEMENT_APP	(MyApp)
+IMPLEMENT_APP (MyApp)
 
 bool MyApp::OnInit(void)
 {
@@ -71,7 +71,7 @@ bool MyApp::OnInit(void)
     
     frame->CreateStatusBar(3);
     
-    frame->Show(TRUE);
+    frame->Show(true);
     
     frame->mpClientWnd->Refresh();
     
@@ -83,7 +83,7 @@ The ONLY purpose is to demonstrate self-layouting toolbars,\nflat-bitmapped-butt
 (cbRowDragPlugin & cbBarHintsPlugin)\n\n\
 BTW, disabled images and label-text are rendered at run-time") );
     
-    return TRUE;
+    return true;
 }
 
 /***** Implementation for class MyFrame *****/
@@ -97,7 +97,7 @@ BEGIN_EVENT_TABLE( MyFrame, wxFrame )
 END_EVENT_TABLE()
 
 void MyFrame::OnLoad( wxCommandEvent& WXUNUSED(event) )
-{						
+{
     wxMessageBox(_T("Hey - you found a BIG question-mark !!"));
 }
 
@@ -115,7 +115,7 @@ wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 {
     wxTextCtrl* pCtrl = 
         
-        new wxTextCtrl( this, -1, value, 
+        new wxTextCtrl( this, wxID_ANY, value, 
         wxDefaultPosition, wxSize(0,0), wxTE_MULTILINE );
     
     pCtrl->SetBackgroundColour( wxColour( 255,255,255 ) );
@@ -124,7 +124,7 @@ wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 }
 
 MyFrame::MyFrame(wxFrame *frame)
-    : wxFrame( frame, -1, _("wxWidgets 2.0 wxFrameLayout Test Application"), wxDefaultPosition, 
+    : wxFrame( frame, wxID_ANY, _("wxWidgets 2.0 wxFrameLayout Test Application"), wxDefaultPosition, 
           wxSize( 700, 500 ), 
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | 
           wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION, 
@@ -138,7 +138,7 @@ MyFrame::MyFrame(wxFrame *frame)
     cbCommonPaneProperties props;
     mpLayout->GetPaneProperties( props );
     
-    props.mRealTimeUpdatesOn = FALSE; // real-time OFF!!!
+    props.mRealTimeUpdatesOn = false; // real-time OFF!!!
     
     mpLayout->SetPaneProperties( props, wxALL_PANES );
 #endif
@@ -161,7 +161,7 @@ MyFrame::MyFrame(wxFrame *frame)
     cbDimInfo sizes0( 200,45, // when docked horizontally      
                       200,85, // when docked vertically        
                       175,35, // when floated                  
-                      FALSE,  // the bar is not fixed-size
+                      false,  // the bar is not fixed-size
                       4,      // vertical gap (bar border)
                       4       // horizontal gap (bar border)
                     ); 
@@ -169,7 +169,7 @@ MyFrame::MyFrame(wxFrame *frame)
     cbDimInfo sizes1( 150,35, // when docked horizontally      
                       150,85, // when docked vertically        
                       175,35, // when floated                  
-                      TRUE,   // the bar is not fixed-size
+                      true,   // the bar is not fixed-size
                       4,      // vertical gap (bar border)
                       4       // horizontal gap (bar border)
                     ); 
@@ -177,7 +177,7 @@ MyFrame::MyFrame(wxFrame *frame)
     cbDimInfo sizes2( 195,35, // when docked horizontally      
                       185,37, // when docked vertically        
                       195,35, // when floated                  
-                      TRUE,   // the bar is not fixed-size
+                      true,   // the bar is not fixed-size
                       4,      // vertical gap (bar border)
                       4,      // horizontal gap (bar border)
                       new cbDynToolBarDimHandler()
@@ -188,7 +188,7 @@ MyFrame::MyFrame(wxFrame *frame)
                       0,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
                       _("InfoViewer1"),            // name to refer in customization pop-ups
-                      TRUE
+                      true
                     );
     
     mpLayout->AddBar( CreateTextCtrl(_("Bye")),    // bar window
@@ -196,7 +196,7 @@ MyFrame::MyFrame(wxFrame *frame)
                       1,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
                       _("InfoViewer2"),            // name to refer in customization pop-ups
-                      TRUE
+                      true
                     );
     
     mpLayout->AddBar( CreateTextCtrl(_("Fixed0")), // bar window
@@ -204,12 +204,12 @@ MyFrame::MyFrame(wxFrame *frame)
                       0,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
                       _("ToolBar1"),               // name to refer in customization pop-ups
-                      TRUE
+                      true
                     );
     
     wxDynamicToolBar* pToolBar = new wxDynamicToolBar();
     
-    pToolBar->Create( this, -1 );
+    pToolBar->Create( this, wxID_ANY );
     
     // 1001-1006 ids of command events fired by added tool-buttons
 
@@ -217,7 +217,7 @@ MyFrame::MyFrame(wxFrame *frame)
     pToolBar->AddSeparator();
     pToolBar->AddTool( 1002, wxString(wxT(BMP_DIR)) + wxT("open.bmp") );
     pToolBar->AddTool( 1003, wxString(wxT(BMP_DIR)) + wxT("save.bmp") );
-    pToolBar->AddSeparator(new wxMySeparatorLine(pToolBar, -1));    
+    pToolBar->AddSeparator(new wxMySeparatorLine(pToolBar, wxID_ANY));    
     pToolBar->AddTool( 1004, wxString(wxT(BMP_DIR)) + wxT("cut.bmp") );
     pToolBar->AddTool( 1005, wxString(wxT(BMP_DIR)) + wxT("copy.bmp") );
     pToolBar->AddTool( 1006, wxString(wxT(BMP_DIR)) + wxT("paste.bmp") );
@@ -228,10 +228,10 @@ MyFrame::MyFrame(wxFrame *frame)
                       0,                    // insert into 0th row (vert. position)
                       0,                    // offset from the start of row (in pixels)
                       wxT("ToolBar2"),           // name to refer in customization pop-ups
-                      FALSE
+                      false
                     );
     
-    mpLayout->EnableFloating( TRUE ); // off, thinking about wxGtk...
+    mpLayout->EnableFloating( true ); // off, thinking about wxGtk...
 }
 
 MyFrame::~MyFrame()

@@ -63,7 +63,7 @@ protected:
                             // labels for particular state
 
     wxBitmap mFocusedBmp;   // may not be always present -
-                            // only if mHasFocusedBmp is TRUE
+                            // only if mHasFocusedBmp is true
 
     wxBitmap* mpDepressedImg;
     wxBitmap* mpPressedImg;
@@ -104,7 +104,7 @@ protected:
                             wxPen& upperLeftSidePen,
                             wxPen& lowerRightSidePen );
 
-        // Returns TRUE if the given point is in the window.
+        // Returns true if the given point is in the window.
     bool IsInWindow( int x, int y );
 
     virtual void OnIdle(wxIdleEvent& event);
@@ -117,13 +117,13 @@ public:
     wxNewBitmapButton( const wxBitmap& labelBitmap = wxNullBitmap,
                        const wxString& labelText   = wxT(""),
                        int   alignText             = NB_ALIGN_TEXT_BOTTOM,
-                       bool  isFlat                = TRUE,
+                       bool  isFlat                = true,
                        // this is the default type of fired events
                        int firedEventType = wxEVT_COMMAND_MENU_SELECTED,
                        int marginX        = NB_DEFAULT_MARGIN,
                        int marginY        = NB_DEFAULT_MARGIN,
                        int textToLabelGap = 2,
-                       bool isSticky      = FALSE
+                       bool isSticky      = false
                      );
 
         // Use this constructor if buttons have to be persistant
@@ -131,13 +131,13 @@ public:
                            const wxBitmapType     bitmapFileType = wxBITMAP_TYPE_BMP,
                            const wxString& labelText      = wxT(""),
                            int alignText                  = NB_ALIGN_TEXT_BOTTOM,
-                           bool  isFlat                   = TRUE,
+                           bool  isFlat                   = true,
                            // this is the default type of fired events
                            int firedEventType = wxEVT_COMMAND_MENU_SELECTED,
                            int marginX        = NB_DEFAULT_MARGIN,
                            int marginY        = NB_DEFAULT_MARGIN,
                            int textToLabelGap = 2,
-                           bool isSticky      = FALSE
+                           bool isSticky      = false
                              );
 
         // Destructor.
@@ -169,8 +169,8 @@ public:
 
         // Renders the label image.
     virtual void RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp, 
-                                   bool isEnabled = TRUE,
-                                   bool isPressed = FALSE);
+                                   bool isEnabled = true,
+                                   bool isPressed = false);
 
         // Renders label images.
     virtual void RenderLabelImages();

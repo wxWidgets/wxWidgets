@@ -6,7 +6,7 @@
 // Created:     06/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -103,17 +103,17 @@ END_EVENT_TABLE()
 
 cbPaneDrawPlugin::cbPaneDrawPlugin(void)
 
-    : mResizeStarted          ( FALSE ),
+    : mResizeStarted          ( false ),
 
-      mResizeCursorOn         ( FALSE ),
+      mResizeCursorOn         ( false ),
       mpDraggedBar              ( NULL  ),
       mpResizedRow            ( NULL  ),
 
-      mRowHandleHitted        ( FALSE ),
-      mIsUpperHandle          ( FALSE ),
-      mBarHandleHitted        ( FALSE ),
-      mIsLeftHandle           ( FALSE ),
-      mBarContentHitted       ( FALSE ),
+      mRowHandleHitted        ( false ),
+      mIsUpperHandle          ( false ),
+      mBarHandleHitted        ( false ),
+      mIsLeftHandle           ( false ),
+      mBarContentHitted       ( false ),
 
       mpClntDc ( NULL ),
       mpPane   ( NULL )
@@ -125,17 +125,17 @@ cbPaneDrawPlugin::cbPaneDrawPlugin( wxFrameLayout* pPanel, int paneMask )
     
       // bar-row resizing state varaibles
 
-      mResizeStarted          ( FALSE ),
+      mResizeStarted          ( false ),
 
-      mResizeCursorOn         ( FALSE ),
+      mResizeCursorOn         ( false ),
       mpDraggedBar              ( NULL ),
       mpResizedRow            ( NULL ),
 
-      mRowHandleHitted        ( FALSE ),
-      mIsUpperHandle          ( FALSE ),
-      mBarHandleHitted        ( FALSE ),
-      mIsLeftHandle           ( FALSE ),
-      mBarContentHitted       ( FALSE ),
+      mRowHandleHitted        ( false ),
+      mIsUpperHandle          ( false ),
+      mBarHandleHitted        ( false ),
+      mIsLeftHandle           ( false ),
+      mBarContentHitted       ( false ),
 
       mpClntDc ( NULL ),
       mpPane   ( NULL )
@@ -254,9 +254,9 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
 
         bool prevWasRowHandle = mRowHandleHitted;
 
-        mBarContentHitted = FALSE;
-        mBarHandleHitted  = FALSE;
-        mRowHandleHitted  = FALSE;
+        mBarContentHitted = false;
+        mBarHandleHitted  = false;
+        mRowHandleHitted  = false;
 
         int testResult =  
             event.mpPane->HitTestPaneItems( event.mPos,        // in pane's coordiantes
@@ -275,9 +275,9 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
                     mpLayout->ReleaseEventsFromPane( event.mpPane );
                     mpLayout->ReleaseEventsFromPlugin( this );
     
-                    mResizeCursorOn = FALSE;
+                    mResizeCursorOn = false;
 
-                    mBarContentHitted = TRUE;
+                    mBarContentHitted = true;
 
                     // In Windows, at least, the frame needs to have a null cursor
                     // else child windows (such as text windows) inherit the cursor
@@ -305,7 +305,7 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
                 else
                     pCurs = mpLayout->mpHorizCursor;
 
-                mRowHandleHitted = TRUE;
+                mRowHandleHitted = true;
                 mIsUpperHandle    = ( testResult == CB_UPPER_ROW_HANDLE_HITTED );
             }
             else
@@ -318,7 +318,7 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
                 else
                     pCurs = mpLayout->mpVertCursor;
 
-                mBarHandleHitted = TRUE;
+                mBarHandleHitted = true;
                 mIsLeftHandle    = ( testResult == CB_LEFT_BAR_HANDLE_HITTED );
             }
 
@@ -336,7 +336,7 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
                 mpLayout->GetParentFrame().SetCursor( *pCurs );
             }
 
-            mResizeCursorOn = TRUE;
+            mResizeCursorOn = true;
 
             // handled is being dragged now, thus event is "eaten" by this plugin
 
@@ -358,7 +358,7 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
             mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
 #endif
 
-            mResizeCursorOn = FALSE;
+            mResizeCursorOn = false;
         }
 
         event.Skip(); // pass event to the next plugin
@@ -406,14 +406,14 @@ void cbPaneDrawPlugin::OnLButtonDown( cbLeftDownEvent& event )
 
     if ( mResizeCursorOn )
     {
-        mResizeStarted = TRUE;
+        mResizeStarted = true;
         mDragOrigin    = event.mPos;
         
         // setup constraints for the dragging handle
 
         int from, till;
         mHandleOfs        = 0;
-        mHandleIsVertical = FALSE;
+        mHandleIsVertical = false;
 
         if ( mRowHandleHitted )
 
@@ -424,7 +424,7 @@ void cbPaneDrawPlugin::OnLButtonDown( cbLeftDownEvent& event )
          
         if ( mRowHandleHitted )
         {
-            mHandleIsVertical = ( event.mpPane->IsHorizontal() ) ? FALSE : TRUE;
+            mHandleIsVertical = ( event.mpPane->IsHorizontal() ) ? false : true;
 
             mHandleDragArea.x      = 0;
             mHandleDragArea.width  = event.mpPane->mPaneWidth;
@@ -447,7 +447,7 @@ void cbPaneDrawPlugin::OnLButtonDown( cbLeftDownEvent& event )
 //            cbRowInfo& rowInfo     = *mpDraggedBar->mpRow;
             wxRect& bounds         = mpDraggedBar->mBounds;
 
-            mHandleIsVertical = ( event.mpPane->IsHorizontal() ) ? TRUE : FALSE;
+            mHandleIsVertical = ( event.mpPane->IsHorizontal() ) ? true : false;
 
             mHandleDragArea.x      = from;
             mHandleDragArea.width  = till - from;
@@ -505,8 +505,8 @@ void cbPaneDrawPlugin::OnLButtonUp( cbLeftUpEvent& event )
     {
         DrawDraggedHandle( event.mPos, *event.mpPane );
 
-        mResizeStarted  = FALSE;
-        mResizeCursorOn = FALSE;
+        mResizeStarted  = false;
+        mResizeCursorOn = false;
 
         mpLayout->ReleaseEventsFromPane( event.mpPane );
         mpLayout->ReleaseEventsFromPlugin( this );
@@ -604,11 +604,11 @@ void cbPaneDrawPlugin::OnSizeBarWindow( cbSizeBarWndEvent& event )
 
         if ( !bar.mpBarWnd->IsShown() )
 
-            bar.mpBarWnd->Show( TRUE );
+            bar.mpBarWnd->Show( true );
     }
     else
         // hide bar if not visible
-        bar.mpBarWnd->Show( FALSE );
+        bar.mpBarWnd->Show( false );
 
     event.Skip(); // pass event to the next plugin in the chain
 }

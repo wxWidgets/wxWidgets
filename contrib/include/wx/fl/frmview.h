@@ -63,7 +63,7 @@ public:
     void CreateLayout();
     wxFrameLayout* GetLayout();
     void SetLayout( wxFrameLayout* pLayout );
-    void SetToolUpdates( bool doToolUpdates = TRUE );
+    void SetToolUpdates( bool doToolUpdates = true );
 
 
     // hooks for specific frame-views

@@ -6,7 +6,7 @@
 // Created:     23/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -32,23 +32,20 @@
 
 static inline bool rect_hits_rect( const wxRect& r1, const wxRect& r2 )
 {
-	if ( ( r2.x >= r1.x && r2.x <= r1.x + r1.width ) ||
-		 ( r1.x >= r2.x && r1.x <= r2.x + r2.width ) )
-
-		if ( ( r2.y >= r1.y && r2.y <= r1.y + r1.height ) ||
-			 ( r1.y >= r2.y && r1.y <= r2.y + r2.height ) )
-			 
-			return TRUE;
-
-	return FALSE;
+    if ( ( r2.x >= r1.x && r2.x <= r1.x + r1.width ) ||
+         ( r1.x >= r2.x && r1.x <= r2.x + r2.width ) )
+        if ( ( r2.y >= r1.y && r2.y <= r1.y + r1.height ) ||
+             ( r1.y >= r2.y && r1.y <= r2.y + r2.height ) )
+            return true;
+    return false;
 }
 
 static inline bool rect_contains_point( const wxRect& rect, int x, int y )
 {
-	return ( x >= rect.x &&
-		     y >= rect.y &&
-			 x <  rect.x + rect.width  &&
-			 y <  rect.y + rect.height );
+    return ( x >= rect.x &&
+             y >= rect.y &&
+             x <  rect.x + rect.width  &&
+             y <  rect.y + rect.height );
 }
 
 /***** Implementation for class cbBarDragPlugin *****/
@@ -57,40 +54,40 @@ IMPLEMENT_DYNAMIC_CLASS( cbBarDragPlugin, cbPluginBase )
 
 BEGIN_EVENT_TABLE( cbBarDragPlugin, cbPluginBase )
 
-	//EVT_PL_LEFT_DOWN          ( cbBarDragPlugin::OnLButtonDown      )
-	EVT_PL_LEFT_UP			  ( cbBarDragPlugin::OnLButtonUp        )
-	EVT_PL_MOTION			  ( cbBarDragPlugin::OnMouseMove        )
-	EVT_PL_DRAW_HINT_RECT     ( cbBarDragPlugin::OnDrawHintRect     )
-	EVT_PL_START_BAR_DRAGGING ( cbBarDragPlugin::OnStartBarDragging )
-	EVT_PL_LEFT_DCLICK		  ( cbBarDragPlugin::OnLDblClick		)
+    //EVT_PL_LEFT_DOWN        ( cbBarDragPlugin::OnLButtonDown      )
+    EVT_PL_LEFT_UP            ( cbBarDragPlugin::OnLButtonUp        )
+    EVT_PL_MOTION             ( cbBarDragPlugin::OnMouseMove        )
+    EVT_PL_DRAW_HINT_RECT     ( cbBarDragPlugin::OnDrawHintRect     )
+    EVT_PL_START_BAR_DRAGGING ( cbBarDragPlugin::OnStartBarDragging )
+    EVT_PL_LEFT_DCLICK        ( cbBarDragPlugin::OnLDblClick        )
 
 END_EVENT_TABLE()
 
 cbBarDragPlugin::cbBarDragPlugin(void)
 
-	: mBarDragStarted    ( FALSE ),
-	  mCanStick          ( TRUE ),
-	  mpScrDc            ( NULL ),
-	  mpCurCursor        ( NULL ),
-	  mpDraggedBar       ( NULL ),
-	  mInClientHintBorder( 4 )
+    : mBarDragStarted    ( false ),
+      mCanStick          ( true ),
+      mpScrDc            ( NULL ),
+      mpCurCursor        ( NULL ),
+      mpDraggedBar       ( NULL ),
+      mInClientHintBorder( 4 )
 {}
 
 cbBarDragPlugin::cbBarDragPlugin( wxFrameLayout* pPanel, int paneMask )
 
-	: cbPluginBase( pPanel, paneMask ),
-		
-	  mBarDragStarted    ( FALSE ),
-	  mCanStick          ( TRUE ),
-	  mpScrDc            ( NULL ),
-	  mpCurCursor        ( NULL ),
-	  mpDraggedBar       ( NULL ),
-	  mInClientHintBorder( 4 )
+    : cbPluginBase( pPanel, paneMask ),
+
+      mBarDragStarted    ( false ),
+      mCanStick          ( true ),
+      mpScrDc            ( NULL ),
+      mpCurCursor        ( NULL ),
+      mpDraggedBar       ( NULL ),
+      mInClientHintBorder( 4 )
 {}
 
 cbBarDragPlugin::~cbBarDragPlugin()
 {
-	// nothing
+    // nothing
 }
 
 // helper methods (protected)
@@ -99,632 +96,607 @@ cbBarDragPlugin::~cbBarDragPlugin()
 
 void do_clip_edges( int len, int& rectPos, int& rectLen )
 {
-	if ( rectPos < 0 )
-	{
-		rectLen += rectPos;
-		rectPos = 0;
-		if ( rectLen < 0 )
+    if ( rectPos < 0 )
+    {
+        rectLen += rectPos;
+        rectPos = 0;
+        if ( rectLen < 0 )
             rectLen = 1;
-	}
-	else
-	if ( rectPos > len-1 )
-	{
-		rectPos = len-1;
-		rectLen = 1;
-	}
-	else
-	if ( rectPos + rectLen - 1 > len )
-	
-		rectLen -= (rectPos + rectLen) - len + 1;
+    }
+    else
+        if ( rectPos > len-1 )
+        {
+            rectPos = len-1;
+            rectLen = 1;
+        }
+        else
+            if ( rectPos + rectLen - 1 > len )
+                 rectLen -= (rectPos + rectLen) - len + 1;
 }
 
 void cbBarDragPlugin::ClipRectInFrame( wxRect& rect )
 {
-	int w, h;
-	mpLayout->GetParentFrame().GetClientSize( &w, &h );
+    int w, h;
+    mpLayout->GetParentFrame().GetClientSize( &w, &h );
 
-	do_clip_edges( w, rect.x, rect.width  );
-	do_clip_edges( h, rect.y, rect.height );
+    do_clip_edges( w, rect.x, rect.width  );
+    do_clip_edges( h, rect.y, rect.height );
 }
 
 void cbBarDragPlugin::ClipPosInFrame( wxPoint& pos )
 {
-	int w, h;
-	mpLayout->GetParentFrame().GetClientSize( &w, &h );
+    int w, h;
+    mpLayout->GetParentFrame().GetClientSize( &w, &h );
 
-	if ( pos.x < 0 )
+    if ( pos.x < 0 )
         pos.x = 0;
-	if ( pos.y < 0 )
+    if ( pos.y < 0 )
         pos.y = 0;
-	if ( pos.x > w )
+    if ( pos.x > w )
         pos.x = w-1;
-	if ( pos.y > h )
+    if ( pos.y > h )
         pos.y = h-1;
 }
 
 void cbBarDragPlugin::AdjustHintRect( wxPoint& mousePos )
 {
-	mHintRect.x = mousePos.x - mMouseInRectX;
-	mHintRect.y = mousePos.y - mMouseInRectY;
+    mHintRect.x = mousePos.x - mMouseInRectX;
+    mHintRect.y = mousePos.y - mMouseInRectY;
 }
 
 cbDockPane* cbBarDragPlugin::HitTestPanes( wxRect& rect )
 {
-	//wxRect clipped = rect;
+    //wxRect clipped = rect;
 
-	//ClipRectInFrame( clipped );
+    //ClipRectInFrame( clipped );
 
-	cbDockPane** pPanes = mpLayout->GetPanesArray();
+    cbDockPane** pPanes = mpLayout->GetPanesArray();
 
-	for( int i = 0; i != MAX_PANES; ++i )
-	
-		if ( rect_hits_rect( pPanes[i]->mBoundsInParent, rect ) )
+    for( int i = 0; i != MAX_PANES; ++i )
+        if ( rect_hits_rect( pPanes[i]->mBoundsInParent, rect ) )
+            return pPanes[i];
 
-			return pPanes[i];
-
-	return NULL;
+    return NULL;
 }
 
 cbDockPane* cbBarDragPlugin::HitTestPanes( wxPoint& pos )
 {
-	wxPoint clipped = pos;
+    wxPoint clipped = pos;
 
-	//ClipPosInFrame( pos );
+    //ClipPosInFrame( pos );
 
-	cbDockPane** pPanes = mpLayout->GetPanesArray();
+    cbDockPane** pPanes = mpLayout->GetPanesArray();
 
-	for( int i = 0; i != MAX_PANES; ++i )
-	
-		if ( rect_contains_point( pPanes[i]->mBoundsInParent, clipped.x, clipped.y ) )
+    for( int i = 0; i != MAX_PANES; ++i )
+        if ( rect_contains_point( pPanes[i]->mBoundsInParent, clipped.x, clipped.y ) )
+            return pPanes[i];
 
-			return pPanes[i];
-
-	return NULL;
+    return NULL;
 }
 
 bool cbBarDragPlugin::HitsPane( cbDockPane* pPane, wxRect& rect )
 {
-	return rect_hits_rect( pPane->mBoundsInParent, rect );
+    return rect_hits_rect( pPane->mBoundsInParent, rect );
 }
 
 int cbBarDragPlugin::GetDistanceToPane( cbDockPane* pPane, wxPoint& mousePos )
 {
-	wxRect& bounds = pPane->mBoundsInParent;
+    wxRect& bounds = pPane->mBoundsInParent;
 
-	switch( pPane->mAlignment )
-	{
-		case FL_ALIGN_TOP    : return mousePos.y - ( bounds.y + bounds.height );
+    switch( pPane->mAlignment )
+    {
+        case FL_ALIGN_TOP    : return mousePos.y - ( bounds.y + bounds.height );
+        case FL_ALIGN_BOTTOM : return bounds.y - mousePos.y;
+        case FL_ALIGN_LEFT   : return mousePos.x - ( bounds.x + bounds.width  );
+        case FL_ALIGN_RIGHT  : return bounds.x - mousePos.x;
+        default : return 0; // never reached
+    }
 
-		case FL_ALIGN_BOTTOM : return bounds.y - mousePos.y;
-
-		case FL_ALIGN_LEFT   : return mousePos.x - ( bounds.x + bounds.width  );
-
-		case FL_ALIGN_RIGHT  : return bounds.x - mousePos.x;
-
-		default : return 0; // never reached
-	}
-
-//	return 0;
+//    return 0;
 }
 
 bool cbBarDragPlugin::IsInOtherPane( wxPoint& mousePos )
 {
-	cbDockPane* pPane = HitTestPanes( mousePos );
+    cbDockPane* pPane = HitTestPanes( mousePos );
 
-	if ( pPane && pPane != mpCurPane ) return TRUE;
-								  else return FALSE;
+    if ( pPane && pPane != mpCurPane ) return true;
+    else return false;
 }
 
 bool cbBarDragPlugin::IsInClientArea( wxPoint& mousePos )
 {
-	return  ( HitTestPanes( mousePos ) == NULL );
+    return  ( HitTestPanes( mousePos ) == NULL );
 }
 
 bool cbBarDragPlugin::IsInClientArea( wxRect& rect )
 {
-	return ( HitTestPanes( rect ) == NULL );
+    return ( HitTestPanes( rect ) == NULL );
 }
 
 void cbBarDragPlugin::CalcOnScreenDims( wxRect& rect )
 {
-	if ( !mpCurPane || mpDraggedBar->IsFixed() ) return;
+    if ( !mpCurPane || mpDraggedBar->IsFixed() ) return;
 
-	wxRect inPane = rect;
+    wxRect inPane = rect;
 
-	mpCurPane->FrameToPane( &inPane );
+    mpCurPane->FrameToPane( &inPane );
 
-	int rowNo = mpCurPane->GetRowAt( inPane.y, inPane.y + inPane.height );
+    int rowNo = mpCurPane->GetRowAt( inPane.y, inPane.y + inPane.height );
 
-	bool isMaximized = ( rowNo >= (int)mpCurPane->GetRowList().Count() || rowNo < 0 );
+    bool isMaximized = ( rowNo >= (int)mpCurPane->GetRowList().Count() || rowNo < 0 );
 
-	if ( isMaximized )
-	{
-		inPane.x = 0;
-		inPane.width = mpCurPane->mPaneWidth;
+    if ( isMaximized )
+    {
+        inPane.x = 0;
+        inPane.width = mpCurPane->mPaneWidth;
 
-		mpCurPane->PaneToFrame( &inPane );
+        mpCurPane->PaneToFrame( &inPane );
 
-		rect = inPane;
-	}
+        rect = inPane;
+    }
 }
 
 // helpers 
 
 static inline void check_upper_overrun( int& pos, int width, int mousePos )
 {
-	if ( mousePos >= pos + width )
-
-		pos = mousePos - width/2;
+    if ( mousePos >= pos + width )
+        pos = mousePos - width/2;
 }
 
 static inline void check_lower_overrun( int& pos, int width, int mousePos )
 {
-	if ( mousePos <= pos )
-
-		pos = mousePos - width/2;
+    if ( mousePos <= pos )
+        pos = mousePos - width/2;
 }
 
 void cbBarDragPlugin::StickToPane( cbDockPane* pPane, wxPoint& mousePos )
 {
-	int wInPane = GetBarWidthInPane ( pPane );
-	int hInPane = GetBarHeightInPane( pPane );
+    int wInPane = GetBarWidthInPane ( pPane );
+    int hInPane = GetBarHeightInPane( pPane );
 
-	// adjsut hint-rect horizontally (in pane's orientation)
-	
-	if ( pPane->IsHorizontal() )
-	{
-		mHintRect.width  = wInPane;
-		mHintRect.height = hInPane;
-	}
-	else
-	{
-		mHintRect.height = wInPane;
-		mHintRect.width  = hInPane;
-	}
+    // adjsut hint-rect horizontally (in pane's orientation)
 
-	// adjsut hint-rect vertically (in pane's orientation)
+    if ( pPane->IsHorizontal() )
+    {
+        mHintRect.width  = wInPane;
+        mHintRect.height = hInPane;
+    }
+    else
+    {
+        mHintRect.height = wInPane;
+        mHintRect.width  = hInPane;
+    }
 
-	wxRect& bounds = pPane->mBoundsInParent;
+    // adjsut hint-rect vertically (in pane's orientation)
 
-	// TRUE, if hint enters the pane through it's lower edge
+    wxRect& bounds = pPane->mBoundsInParent;
 
-	bool fromLowerEdge = ( pPane->IsHorizontal() ) 
-						 ? mousePos.y > bounds.y
-						 : mousePos.x > bounds.x;
+    // true, if hint enters the pane through it's lower edge
 
-	// NOTE:: about all the below min/max things: they are meant to ensure
-	//        that the mouse pointer doesn't overrun (leave) the hint-rectangle
-	//        when its dimensions are recalculated upon sticking it to the pane
+    bool fromLowerEdge = ( pPane->IsHorizontal() ) 
+                           ? mousePos.y > bounds.y
+                           : mousePos.x > bounds.x;
 
-	if ( pPane->IsHorizontal() && fromLowerEdge )
-	{
-		int paneBottomEdgeY = bounds.y + bounds.height;
+    // NOTE:: about all the below min/max things: they are meant to ensure
+    //        that the mouse pointer doesn't overrun (leave) the hint-rectangle
+    //        when its dimensions are recalculated upon sticking it to the pane
 
-		mHintRect.y = wxMin( paneBottomEdgeY, mousePos.y );
+    if ( pPane->IsHorizontal() && fromLowerEdge )
+    {
+        int paneBottomEdgeY = bounds.y + bounds.height;
 
-		check_lower_overrun( mHintRect.y, hInPane, mousePos.y );
+        mHintRect.y = wxMin( paneBottomEdgeY, mousePos.y );
 
-	}
-	else
-	if ( pPane->IsHorizontal() && !fromLowerEdge )
-	{
-		int paneTopEdgeY = bounds.y;
+        check_lower_overrun( mHintRect.y, hInPane, mousePos.y );
 
-		mHintRect.y = wxMax( paneTopEdgeY - hInPane, mousePos.y - hInPane );
+    }
+    else
+        if ( pPane->IsHorizontal() && !fromLowerEdge )
+        {
+            int paneTopEdgeY = bounds.y;
 
-		check_upper_overrun( mHintRect.y, hInPane, mousePos.y );
-	}
-	else
-	if ( !pPane->IsHorizontal() && fromLowerEdge )
-	{
-		int paneRightEdgeX = bounds.x + bounds.width;
+            mHintRect.y = wxMax( paneTopEdgeY - hInPane, mousePos.y - hInPane );
 
-		mHintRect.x = wxMin( paneRightEdgeX, mousePos.x );
+            check_upper_overrun( mHintRect.y, hInPane, mousePos.y );
+        }
+        else
+            if ( !pPane->IsHorizontal() && fromLowerEdge )
+            {
+                int paneRightEdgeX = bounds.x + bounds.width;
 
-		check_lower_overrun( mHintRect.x, hInPane, mousePos.x );
-	}
-	else
-	if ( !pPane->IsHorizontal() && !fromLowerEdge )
-	{
-		int paneLeftEdgeX = bounds.x;
+                mHintRect.x = wxMin( paneRightEdgeX, mousePos.x );
 
-		mHintRect.x = wxMax( paneLeftEdgeX - hInPane, mousePos.x - hInPane );
+                check_lower_overrun( mHintRect.x, hInPane, mousePos.x );
+            }
+            else
+                if ( !pPane->IsHorizontal() && !fromLowerEdge )
+                {
+                    int paneLeftEdgeX = bounds.x;
 
-		check_upper_overrun( mHintRect.x, hInPane, mousePos.x );
-	}
+                    mHintRect.x = wxMax( paneLeftEdgeX - hInPane, mousePos.x - hInPane );
 
-	mMouseInRectX = mousePos.x - mHintRect.x;
-	mMouseInRectY = mousePos.y - mHintRect.y;
+                    check_upper_overrun( mHintRect.x, hInPane, mousePos.x );
+                }
 
-	mpCurPane = pPane; // memorize pane to which the hint is currently sticked
+    mMouseInRectX = mousePos.x - mHintRect.x;
+    mMouseInRectY = mousePos.y - mHintRect.y;
+
+    mpCurPane = pPane; // memorize pane to which the hint is currently sticked
 }
 
 void cbBarDragPlugin::UnstickFromPane( cbDockPane* pPane, wxPoint& mousePos )
 {
-	// unsticking causes rectangle to get the shape in which
-	// dragged control-bar would be when floated
+    // unsticking causes rectangle to get the shape in which
+    // dragged control-bar would be when floated
 
-	int newWidth  = mpDraggedBar->mDimInfo.mSizes[wxCBAR_FLOATING].x;
-	int newHeight = mpDraggedBar->mDimInfo.mSizes[wxCBAR_FLOATING].y;
+    int newWidth  = mpDraggedBar->mDimInfo.mSizes[wxCBAR_FLOATING].x;
+    int newHeight = mpDraggedBar->mDimInfo.mSizes[wxCBAR_FLOATING].y;
 
-	wxRect& flBounds = mpDraggedBar->mDimInfo.mBounds[wxCBAR_FLOATING];
+    wxRect& flBounds = mpDraggedBar->mDimInfo.mBounds[wxCBAR_FLOATING];
 
-	if ( flBounds.width != -1 )
-	{
-		newWidth  = flBounds.width;
-		newHeight = flBounds.height;
-	}
+    if ( flBounds.width != -1 )
+    {
+        newWidth  = flBounds.width;
+        newHeight = flBounds.height;
+    }
 
-	mHintRect.width  = newWidth;
-	mHintRect.height = newHeight;
+    mHintRect.width  = newWidth;
+    mHintRect.height = newHeight;
 
-	wxRect& bounds = pPane->mBoundsInParent;
+    wxRect& bounds = pPane->mBoundsInParent;
 
-	// TRUE, if hint leaves the pane through it's lower edge
+    // true, if hint leaves the pane through it's lower edge
 
-	bool fromLowerEdge = ( pPane->IsHorizontal() ) 
-						 ? mousePos.y > bounds.y
-						 : mousePos.x > bounds.x;
+    bool fromLowerEdge = ( pPane->IsHorizontal() ) 
+                           ? mousePos.y > bounds.y
+                           : mousePos.x > bounds.x;
 
-	// NOTE:: ...all the below min/max things - see comments about it in StickToPane(..)
+    // NOTE:: ...all the below min/max things - see comments about it in StickToPane(..)
 
-	if ( pPane->IsHorizontal() && fromLowerEdge )
-	{	
-//		bool fromLowerEdge = mousePos.y > bounds.y;
+    if ( pPane->IsHorizontal() && fromLowerEdge )
+    {
+        // bool fromLowerEdge = mousePos.y > bounds.y;
 
-		mHintRect.y = wxMax( bounds.y + bounds.height + 1, mousePos.y - newHeight );
+        mHintRect.y = wxMax( bounds.y + bounds.height + 1, mousePos.y - newHeight );
 
-		check_upper_overrun( mHintRect.y, newHeight, mousePos.y );
+        check_upper_overrun( mHintRect.y, newHeight, mousePos.y );
 
-		// this is how MFC's hint behaves:
+        // this is how MFC's hint behaves:
 
-		if ( mMouseInRectX > newWidth )
-		
-			mHintRect.x = mousePos.x - ( newWidth / 2 );
-	}
-	else
-	if ( pPane->IsHorizontal() && !fromLowerEdge )
-	{
-		mHintRect.y = wxMin( bounds.y - newHeight - 1, mousePos.y );
+        if ( mMouseInRectX > newWidth )
+            mHintRect.x = mousePos.x - ( newWidth / 2 );
+    }
+    else
+        if ( pPane->IsHorizontal() && !fromLowerEdge )
+        {
+            mHintRect.y = wxMin( bounds.y - newHeight - 1, mousePos.y );
 
-		// -/-
+            // -/-
 
-		if ( mMouseInRectX > newWidth )
-		
-			mHintRect.x = mousePos.x - ( newWidth / 2 );
+            if ( mMouseInRectX > newWidth )
+                mHintRect.x = mousePos.x - ( newWidth / 2 );
 
-		check_lower_overrun( mHintRect.y, newHeight, mousePos.y );
-	}
-	else
-	if ( !pPane->IsHorizontal() && fromLowerEdge )
-	{
-		mHintRect.x = wxMax( bounds.x + bounds.width, mousePos.x - newWidth );
+            check_lower_overrun( mHintRect.y, newHeight, mousePos.y );
+        }
+        else
+            if ( !pPane->IsHorizontal() && fromLowerEdge )
+            {
+                mHintRect.x = wxMax( bounds.x + bounds.width, mousePos.x - newWidth );
 
-		// -/-
-		
-		if ( mMouseInRectY > newHeight )
+                // -/-
 
-			mHintRect.y = mousePos.y - ( newHeight / 2 );
+                if ( mMouseInRectY > newHeight )
+                    mHintRect.y = mousePos.y - ( newHeight / 2 );
 
-		check_upper_overrun( mHintRect.x, newWidth, mousePos.x );
-	}
-	else
-	if ( !pPane->IsHorizontal() && !fromLowerEdge )
-	{
-		mHintRect.x = wxMin( bounds.x - newWidth - 1, mousePos.x );
+                check_upper_overrun( mHintRect.x, newWidth, mousePos.x );
+            }
+            else
+                if ( !pPane->IsHorizontal() && !fromLowerEdge )
+                {
+                    mHintRect.x = wxMin( bounds.x - newWidth - 1, mousePos.x );
 
-		// -/-
-		
-		if ( mMouseInRectY > newHeight )
+                    // -/-
 
-			mHintRect.y = mousePos.y - ( newHeight / 2 );
+                    if ( mMouseInRectY > newHeight )
+                        mHintRect.y = mousePos.y - ( newHeight / 2 );
 
-		check_lower_overrun( mHintRect.x, newWidth, mousePos.x );
-	}
+                    check_lower_overrun( mHintRect.x, newWidth, mousePos.x );
+                }
 
-	mMouseInRectX = mousePos.x - mHintRect.x;
-	mMouseInRectY = mousePos.y - mHintRect.y;
+    mMouseInRectX = mousePos.x - mHintRect.x;
+    mMouseInRectY = mousePos.y - mHintRect.y;
 
-	mpCurPane = NULL;
-}				
+    mpCurPane = NULL;
+}
 
 int cbBarDragPlugin::GetBarWidthInPane( cbDockPane* pPane )
 {
-	if ( pPane == mpSrcPane )
+    if ( pPane == mpSrcPane )
+        return mBarWidthInSrcPane;
 
-		return mBarWidthInSrcPane;
+    // this is how MFC's bars behave:
 
-	// this is how MFC's bars behave:
-
-	if ( pPane->IsHorizontal() )
-	
-		return mpDraggedBar->mDimInfo.mSizes[wxCBAR_DOCKED_HORIZONTALLY].x;
-	else
-		return mpDraggedBar->mDimInfo.mSizes[wxCBAR_DOCKED_VERTICALLY  ].x;
+    if ( pPane->IsHorizontal() )
+        return mpDraggedBar->mDimInfo.mSizes[wxCBAR_DOCKED_HORIZONTALLY].x;
+    else
+        return mpDraggedBar->mDimInfo.mSizes[wxCBAR_DOCKED_VERTICALLY  ].x;
 }
 
 int cbBarDragPlugin::GetBarHeightInPane( cbDockPane* pPane )
 {
-	if ( pPane->IsHorizontal() )
-	
-		return mpDraggedBar->mDimInfo.mSizes[wxCBAR_DOCKED_HORIZONTALLY].y;
-	else
-		return mpDraggedBar->mDimInfo.mSizes[wxCBAR_DOCKED_VERTICALLY  ].y;
+    if ( pPane->IsHorizontal() )
+        return mpDraggedBar->mDimInfo.mSizes[wxCBAR_DOCKED_HORIZONTALLY].y;
+    else
+        return mpDraggedBar->mDimInfo.mSizes[wxCBAR_DOCKED_VERTICALLY  ].y;
 }
 
 void cbBarDragPlugin::ShowHint( bool prevWasInClient )
 {
-	bool wasDocked = FALSE;
+    bool wasDocked = false;
 
+    if ( mpSrcPane->mProps.mRealTimeUpdatesOn == false )
+    {
+        // do heavy calculations first
 
-	if ( mpSrcPane->mProps.mRealTimeUpdatesOn == FALSE )
-	{
-		// do heavy calculations first
+        wxRect actualRect = mHintRect; // will be adjusted depending on drag-settings
 
-		wxRect actualRect = mHintRect; // will be adjusted depending on drag-settings
+        if ( mpSrcPane->mProps.mExactDockPredictionOn && mpCurPane )
+        {
+#ifdef  __WXDEBUG__
+            bool success = 
+#endif
+                           mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, false );
 
-		if ( mpSrcPane->mProps.mExactDockPredictionOn && mpCurPane )
-		{
-      #ifdef  __WXDEBUG__
-      bool success = 
-      #endif
-                     mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, FALSE );
+            wxASSERT( success ); // DBG::
 
-			wxASSERT( success ); // DBG::
+            actualRect = mpDraggedBar->mBounds;
 
-			actualRect = mpDraggedBar->mBounds;
+            mpCurPane->PaneToFrame( &actualRect );
+        }
+        else
+            CalcOnScreenDims( actualRect );
 
-			mpCurPane->PaneToFrame( &actualRect );
-		}
-		else
-			CalcOnScreenDims( actualRect );
+        // release previous hint
 
-		// release previous hint
+        if ( mPrevHintRect.x != POS_UNDEFINED )
+        {
+            // erase previous rectangle
 
-		if ( mPrevHintRect.x != POS_UNDEFINED )
-		{
-			// erase previous rectangle
+            cbDrawHintRectEvent evt( mPrevHintRect, prevWasInClient, true, false );
 
-			cbDrawHintRectEvent evt( mPrevHintRect, prevWasInClient, TRUE, FALSE );
+            mpLayout->FirePluginEvent( evt );
+        }
 
-			mpLayout->FirePluginEvent( evt );
-		}
+        // draw new hint
 
-		// draw new hint
+        cbDrawHintRectEvent evt( actualRect, mpCurPane == NULL, false, false );
 
-		cbDrawHintRectEvent evt( actualRect, mpCurPane == NULL, FALSE, FALSE );
+        mpLayout->FirePluginEvent( evt );
 
-		mpLayout->FirePluginEvent( evt );
+        mPrevHintRect = actualRect;
+    }
+    else 
+    {
+        // otherwise, if real-time updates option is ON
 
-		mPrevHintRect = actualRect;
-	}
-	else 
-	{
-		// otherwise, if real-time updates option is ON
+        if ( mpDraggedBar->mState != wxCBAR_FLOATING && !mpCurPane )
+        {
+            mpLayout->SetBarState( mpDraggedBar, wxCBAR_FLOATING, true );
+        }
+        else
+            if ( mpDraggedBar->mState == wxCBAR_FLOATING && mpCurPane )
+            {
+                mpLayout->SetBarState( mpDraggedBar, wxCBAR_DOCKED_HORIZONTALLY, false );
 
-	    if ( mpDraggedBar->mState != wxCBAR_FLOATING && !mpCurPane )
-	    {
-		    mpLayout->SetBarState( mpDraggedBar, wxCBAR_FLOATING, TRUE );
-	    }
-         else
-	    if ( mpDraggedBar->mState == wxCBAR_FLOATING && mpCurPane )
-	    {
-		    mpLayout->SetBarState( mpDraggedBar, wxCBAR_DOCKED_HORIZONTALLY, FALSE );
+                wasDocked = true;
+            }
 
-		    wasDocked = TRUE;
-	    }
+        if ( mpCurPane )
+        {
+            mpLayout->GetUpdatesManager().OnStartChanges();
 
-		if ( mpCurPane )
-		{
-			mpLayout->GetUpdatesManager().OnStartChanges();
+            if ( wasDocked )
 
-			if ( wasDocked )
+            mpDraggedBar->mUMgrData.SetDirty( true );
 
-				mpDraggedBar->mUMgrData.SetDirty( TRUE );
+#ifdef  __WXDEBUG__
+            bool success = 
+#endif
+                           mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, false );
 
-      #ifdef  __WXDEBUG__
-      bool success = 
-      #endif
-                     mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, FALSE );
+            wxASSERT( success ); // DBG ::
 
-			wxASSERT( success ); // DBG ::
+            mpLayout->GetUpdatesManager().OnFinishChanges();
+            mpLayout->GetUpdatesManager().UpdateNow();
+        }
+        else
+        {
+            if ( mpLayout->mFloatingOn )
+            {
+                // move the top-most floated bar around as user drags the hint
 
-			mpLayout->GetUpdatesManager().OnFinishChanges();
-			mpLayout->GetUpdatesManager().UpdateNow();
-		}
-		else
-		{
-			if ( mpLayout->mFloatingOn )
-			{
-				// move the top-most floated bar around as user drags the hint
+                mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ] = mHintRect;
 
-				mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ] = mHintRect;
-
-				mpLayout->ApplyBarProperties( mpDraggedBar );
-			}
-		}
-	}
+                mpLayout->ApplyBarProperties( mpDraggedBar );
+            }
+        }
+    }
 }
 
 /*** event handlers ***/
 
 void cbBarDragPlugin::OnMouseMove( cbMotionEvent& event )
 {
-	// calculate postion in frame's coordiantes
+    // calculate postion in frame's coordiantes
 
-	if ( !mBarDragStarted )
-	{
-		event.Skip(); // pass event to the next plugin
-		return;
-	}
-
-	wxPoint mousePos = event.mPos;
-
-	event.mpPane->PaneToFrame( &mousePos.x, &mousePos.y );
-
-	bool   prevIsInClient = ( mpCurPane == 0 );
-
-	AdjustHintRect( mousePos );
-
-	// if the hint-rect is not "tempted" to any pane yet
-
-	if ( mpCurPane == NULL )
-	{
-		cbDockPane* pPane = HitTestPanes( mHintRect );
-
-		if ( !pPane ) 
-			
-			// enable sticking again, if we've left the pane completely
-			mCanStick = TRUE;
-
-		if ( mCanStick && pPane && 
-			 GetDistanceToPane( pPane, mousePos ) < GetBarHeightInPane( pPane ) )
-		
-			StickToPane( pPane, mousePos );
-		else
-			if ( pPane && HitTestPanes( mousePos ) == pPane && 0 ) // FOR NOW:: disabled
-
-				StickToPane( pPane, mousePos );
-	}
-	else
-	{
-		// otherwise, when rect is now sticked to some of the panes
-		// check if it should still remain in this pane
-
-		mCanStick = TRUE;
-
-		bool mouseInOther = IsInOtherPane( mousePos );
-
-		if ( mouseInOther )
-		{
-				cbDockPane* pPane = HitTestPanes( mousePos );
-
-				StickToPane( pPane, mousePos );
-		}
-		else
-		{
-			if ( IsInClientArea( mousePos ) )
-			{
-				cbDockPane* pPane = HitTestPanes( mHintRect );
-
-				if ( pPane && 
-					 pPane != mpCurPane &&
-					 GetDistanceToPane( pPane, mousePos ) < GetBarHeightInPane( pPane ) )
-
-						StickToPane( pPane, mousePos );
-				else
-				if ( !pPane )
-				{
-					UnstickFromPane( mpCurPane, mousePos );
-
-					// FOR NOW:: disabled, would cause some mess
-					//mCanStick = FALSE; // prevents from sticking to this
-								         // pane again, flag is reset when hint-rect
-								         // leaves the pane completely
-				}
-				else
-				if ( GetDistanceToPane( pPane, mousePos ) > GetBarHeightInPane( pPane ) )
-				{
-					if ( !HitsPane( mpCurPane, mHintRect ) )
-					{
-						UnstickFromPane( mpCurPane, mousePos );
-
-						// FOR NOW:: disabled, would cause some mess
-						//mCanStick = FALSE; // prevents from sticking to this
-										     // pane again, flag is reset when hint-rect
-										     // leaves the pane completely
-					}
-				}
-
-			}
-			else
-			{
-			}
-		}
-	}
-
-	ShowHint( prevIsInClient );
-
-	wxCursor* pPrevCurs = mpCurCursor;
-
-	if ( mpCurPane )
+    if ( !mBarDragStarted )
     {
-		mpCurCursor = mpLayout->mpNormalCursor;
+        event.Skip(); // pass event to the next plugin
+        return;
     }
-	else
-	{
+
+    wxPoint mousePos = event.mPos;
+
+    event.mpPane->PaneToFrame( &mousePos.x, &mousePos.y );
+
+    bool   prevIsInClient = ( mpCurPane == 0 );
+
+    AdjustHintRect( mousePos );
+
+    // if the hint-rect is not "tempted" to any pane yet
+
+    if ( mpCurPane == NULL )
+    {
+        cbDockPane* pPane = HitTestPanes( mHintRect );
+
+        // enable sticking again, if we've left the pane completely
+        if ( !pPane ) 
+            mCanStick = true;
+
+        if ( mCanStick && pPane && 
+             GetDistanceToPane( pPane, mousePos ) < GetBarHeightInPane( pPane ) )
+            StickToPane( pPane, mousePos );
+        else
+            if ( pPane && HitTestPanes( mousePos ) == pPane && 0 ) // FOR NOW:: disabled
+
+        StickToPane( pPane, mousePos );
+    }
+    else
+    {
+        // otherwise, when rect is now sticked to some of the panes
+        // check if it should still remain in this pane
+
+        mCanStick = true;
+
+        bool mouseInOther = IsInOtherPane( mousePos );
+
+        if ( mouseInOther )
+        {
+            cbDockPane* pPane = HitTestPanes( mousePos );
+
+            StickToPane( pPane, mousePos );
+        }
+        else
+        {
+            if ( IsInClientArea( mousePos ) )
+            {
+                cbDockPane* pPane = HitTestPanes( mHintRect );
+
+                if ( pPane && 
+                     pPane != mpCurPane &&
+                     GetDistanceToPane( pPane, mousePos ) < GetBarHeightInPane( pPane ) )
+                    StickToPane( pPane, mousePos );
+                else
+                    if ( !pPane )
+                    {
+                        UnstickFromPane( mpCurPane, mousePos );
+
+                        // FOR NOW:: disabled, would cause some mess
+                        // mCanStick = false; // prevents from sticking to this
+                        // pane again, flag is reset when hint-rect
+                        // leaves the pane completely
+                    }
+                    else
+                        if ( GetDistanceToPane( pPane, mousePos ) > GetBarHeightInPane( pPane ) )
+                        {
+                            if ( !HitsPane( mpCurPane, mHintRect ) )
+                            {
+                                UnstickFromPane( mpCurPane, mousePos );
+
+                                // FOR NOW:: disabled, would cause some mess
+                                // mCanStick = false; // prevents from sticking to this
+                                // pane again, flag is reset when hint-rect
+                                // leaves the pane completely
+                            }
+                        }
+
+            }
+        }
+    }
+
+    ShowHint( prevIsInClient );
+
+    wxCursor* pPrevCurs = mpCurCursor;
+
+    if ( mpCurPane )
+    {
+        mpCurCursor = mpLayout->mpNormalCursor;
+    }
+    else
+    {
         // if floating is off, and we are in the client
         // area, the cursor will be invalid, otherwise
         // it will be the normal cursor
-		
+
         if (mpLayout->mFloatingOn)
         {
-			mpCurCursor = mpLayout->mpNormalCursor;
+            mpCurCursor = mpLayout->mpNormalCursor;
         }
-		else
+        else
         {
-			mpCurCursor = mpLayout->mpNECursor;
-	}
+            mpCurCursor = mpLayout->mpNECursor;
+        }
 
-	}
-	if ( pPrevCurs != mpCurCursor )
-		mpLayout->GetParentFrame().SetCursor( *mpCurCursor );
+    }
+    if ( pPrevCurs != mpCurCursor )
+        mpLayout->GetParentFrame().SetCursor( *mpCurCursor );
 }
 
 void cbBarDragPlugin::OnLButtonDown( cbLeftDownEvent& event )
 {
-	if ( mBarDragStarted  )
-	{
-		wxMessageBox(wxT("DblClick!"));
-	}
+    if ( mBarDragStarted  )
+    {
+        wxMessageBox(wxT("DblClick!"));
+    }
 
-	event.Skip();
+    event.Skip();
 }
 
 void cbBarDragPlugin::OnLButtonUp( cbLeftUpEvent& event )
 {
-	if ( mBarDragStarted  )
-	{
-		if ( mpSrcPane->mProps.mRealTimeUpdatesOn == FALSE )
-		{
-			// erase current rectangle, and finsih on-screen drawing session
+    if ( mBarDragStarted  )
+    {
+        if ( mpSrcPane->mProps.mRealTimeUpdatesOn == false )
+        {
+            // erase current rectangle, and finsih on-screen drawing session
 
-			cbDrawHintRectEvent evt( mPrevHintRect, mpCurPane == NULL, TRUE, TRUE );
+            cbDrawHintRectEvent evt( mPrevHintRect, mpCurPane == NULL, true, true );
 
-			mpLayout->FirePluginEvent( evt );
+            mpLayout->FirePluginEvent( evt );
 
-			if ( mpCurPane != NULL )
-			{
-				if ( mpSrcPane->mProps.mExactDockPredictionOn )
-				{
-					mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, FALSE );
+            if ( mpCurPane != NULL )
+            {
+                if ( mpSrcPane->mProps.mExactDockPredictionOn )
+                {
+                    mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, false );
 
-					mpLayout->GetUpdatesManager().OnFinishChanges();
-					mpLayout->GetUpdatesManager().UpdateNow();
-				}
-				else
+                    mpLayout->GetUpdatesManager().OnFinishChanges();
+                    mpLayout->GetUpdatesManager().UpdateNow();
+                }
+                else
                 {
                     if (mpDraggedBar->mState == wxCBAR_FLOATING)
                     {
-		                mpLayout->SetBarState( mpDraggedBar, wxCBAR_DOCKED_HORIZONTALLY, TRUE);
+                        mpLayout->SetBarState( mpDraggedBar, wxCBAR_DOCKED_HORIZONTALLY, true);
                     }
 
-					mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane );
-			}
-		}
-             else
+                    mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane );
+                }
+            }
+            else
             {
                 if (mpDraggedBar->mState != wxCBAR_FLOATING)
                 {
                     mpLayout->SetBarState(mpDraggedBar, wxCBAR_FLOATING, true);
                 }
 
-				mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ] = mHintRect;
-				mpLayout->ApplyBarProperties( mpDraggedBar );
+                mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ] = mHintRect;
+                mpLayout->ApplyBarProperties( mpDraggedBar );
             }
-		}
-	
-		mHintRect.width = -1;
+        }
+
+        mHintRect.width = -1;
 
         // In Windows, at least, the frame needs to have a null cursor
         // else child windows (such as text windows) inherit the cursor
@@ -734,127 +706,125 @@ void cbBarDragPlugin::OnLButtonUp( cbLeftUpEvent& event )
         mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
 #endif
 
-		mpLayout->ReleaseEventsFromPane( event.mpPane );
-		mpLayout->ReleaseEventsFromPlugin( this );
+        mpLayout->ReleaseEventsFromPane( event.mpPane );
+        mpLayout->ReleaseEventsFromPlugin( this );
 
-		mBarDragStarted = FALSE;
+        mBarDragStarted = false;
 
-		if ( mBarWasFloating && mpDraggedBar->mState != wxCBAR_FLOATING )
-		{
-			// save bar's floating position before it was docked 
+        if ( mBarWasFloating && mpDraggedBar->mState != wxCBAR_FLOATING )
+        {
+            // save bar's floating position before it was docked 
 
-			mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ] = mFloatedBarBounds;
-		}
-	}
-	else
-		event.Skip(); // pass event to the next plugin
+            mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ] = mFloatedBarBounds;
+        }
+    }
+    else
+        event.Skip(); // pass event to the next plugin
 }
 
 void cbBarDragPlugin::OnLDblClick( cbLeftDClickEvent& event )
 {
-	int avoidCompilerWarning = 1;
-	if ( avoidCompilerWarning )
-	{
-		cbBarInfo* pHittedBar;
-		cbRowInfo* pRow;
+    int avoidCompilerWarning = 1;
+    if ( avoidCompilerWarning )
+    {
+        cbBarInfo* pHittedBar;
+        cbRowInfo* pRow;
 
-		if ( event.mpPane->HitTestPaneItems( event.mPos, 	  // in pane's coordiantes
-										     &pRow,
-											 &pHittedBar ) == CB_BAR_CONTENT_HITTED
-		   )
-			{
-				mpLayout->SetBarState( pHittedBar, wxCBAR_FLOATING, TRUE );
+        if ( event.mpPane->HitTestPaneItems( event.mPos,   // in pane's coordiantes
+                                             &pRow,
+                                             &pHittedBar ) == CB_BAR_CONTENT_HITTED
+           )
+        {
+            mpLayout->SetBarState( pHittedBar, wxCBAR_FLOATING, true );
 
-				mpLayout->RepositionFloatedBar( pHittedBar );
+            mpLayout->RepositionFloatedBar( pHittedBar );
 
-				return; // event is "eaten" by this plugin
-			}
+            return; // event is "eaten" by this plugin
+        }
 
-		mBarDragStarted = FALSE;
+        mBarDragStarted = false;
 
-		event.Skip();
-	}
+        event.Skip();
+    }
 
-	//wxMessageBox("Hi, dblclick arrived!");
+    //wxMessageBox("Hi, dblclick arrived!");
 }
 
 void cbBarDragPlugin::OnStartBarDragging( cbStartBarDraggingEvent& event )
 {
-	mpDraggedBar = event.mpBar;
-	mpSrcPane    = event.mpPane; 
+    mpDraggedBar = event.mpBar;
+    mpSrcPane    = event.mpPane; 
 
-	mpLayout->CaptureEventsForPane( event.mpPane );
-	mpLayout->CaptureEventsForPlugin( this );
+    mpLayout->CaptureEventsForPane( event.mpPane );
+    mpLayout->CaptureEventsForPlugin( this );
 
-	mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
+    mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
 
-	mBarDragStarted = TRUE;
+    mBarDragStarted = true;
 
-	wxRect inParent = mpDraggedBar->mBounds;
+    wxRect inParent = mpDraggedBar->mBounds;
 
-	mBarWasFloating = mpDraggedBar->mState == wxCBAR_FLOATING;
-		
-	if ( mBarWasFloating )
-	{	
-		inParent = mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ];
-		mFloatedBarBounds = inParent;
-	}
-	else
-		event.mpPane->PaneToFrame( &inParent );
+    mBarWasFloating = mpDraggedBar->mState == wxCBAR_FLOATING;
 
-	mHintRect.x = POS_UNDEFINED;
+    if ( mBarWasFloating )
+    {
+        inParent = mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ];
+        mFloatedBarBounds = inParent;
+    }
+    else
+        event.mpPane->PaneToFrame( &inParent );
 
-	mHintRect.width  = inParent.width;
-	mHintRect.height = inParent.height;
+    mHintRect.x = POS_UNDEFINED;
 
-	mMouseInRectX = event.mPos.x - inParent.x;
-	mMouseInRectY = event.mPos.y - inParent.y;
+    mHintRect.width  = inParent.width;
+    mHintRect.height = inParent.height;
 
-	mpSrcPane = event.mpPane;
+    mMouseInRectX = event.mPos.x - inParent.x;
+    mMouseInRectY = event.mPos.y - inParent.y;
 
-	if ( mpDraggedBar->mState == wxCBAR_FLOATING )
+    mpSrcPane = event.mpPane;
 
-		mpCurPane = NULL;
-	else
-		mpCurPane = event.mpPane;
+    if ( mpDraggedBar->mState == wxCBAR_FLOATING )
 
-	mPrevHintRect.x = POS_UNDEFINED;
+        mpCurPane = NULL;
+    else
+        mpCurPane = event.mpPane;
 
-	mCanStick = FALSE; // we're not stuck into any pane now - 
-					   // there's nowhere to "stick-twice"
+    mPrevHintRect.x = POS_UNDEFINED;
 
-	mBarWidthInSrcPane = mpDraggedBar->mDimInfo.mSizes[ mpDraggedBar->mState ].x;
+    mCanStick = false; // we're not stuck into any pane now - 
+                       // there's nowhere to "stick-twice"
 
-	if ( mpSrcPane->mProps.mRealTimeUpdatesOn == FALSE && 
-		 mpSrcPane->mProps.mExactDockPredictionOn  )
-	
-		mpLayout->GetUpdatesManager().OnStartChanges(); // capture initial state of layout
-	
-	// simulate the first mouse movement
+    mBarWidthInSrcPane = mpDraggedBar->mDimInfo.mSizes[ mpDraggedBar->mState ].x;
 
-	int x = event.mPos.x, y = event.mPos.y;
+    if ( mpSrcPane->mProps.mRealTimeUpdatesOn == false && 
+         mpSrcPane->mProps.mExactDockPredictionOn  )
+        mpLayout->GetUpdatesManager().OnStartChanges(); // capture initial state of layout
 
-	mpSrcPane->FrameToPane( &x, &y );
+    // simulate the first mouse movement
 
-	cbMotionEvent motionEvt( wxPoint(x,y), event.mpPane );
+    int x = event.mPos.x, y = event.mPos.y;
+
+    mpSrcPane->FrameToPane( &x, &y );
+
+    cbMotionEvent motionEvt( wxPoint(x,y), event.mpPane );
 
 
-	this->OnMouseMove( motionEvt );
+    this->OnMouseMove( motionEvt );
 
-	return; // event is "eaten" by this plugin
+    return; // event is "eaten" by this plugin
 }
 
 /*** on-screen hint-tracking related methods ***/
 
 void cbBarDragPlugin::OnDrawHintRect( cbDrawHintRectEvent& event )
 {
-	if ( !mpScrDc ) StartTracking();
+    if ( !mpScrDc ) StartTracking();
 
-	DoDrawHintRect( event.mRect, event.mIsInClient );
+    DoDrawHintRect( event.mRect, event.mIsInClient );
 
-	if ( event.mLastTime )
-
-		FinishTracking();
+    if ( event.mLastTime )
+        FinishTracking();
 }
 
 #define _IMG_A  0xAA    // Note: modified from _A to _IMG_A, _A was already defined (cygwin)
@@ -865,106 +835,106 @@ void cbBarDragPlugin::OnDrawHintRect( cbDrawHintRectEvent& event )
 // FOR NOW:: static
 
 static const unsigned char _gCheckerImg[16] = { _IMG_A,_IMG_B,_IMG_C,_IMG_D,
-											    _IMG_A,_IMG_B,_IMG_C,_IMG_D,
-											    _IMG_A,_IMG_B,_IMG_C,_IMG_D,
-											    _IMG_A,_IMG_B,_IMG_C,_IMG_D
-											  };
+                                                _IMG_A,_IMG_B,_IMG_C,_IMG_D,
+                                                _IMG_A,_IMG_B,_IMG_C,_IMG_D,
+                                                _IMG_A,_IMG_B,_IMG_C,_IMG_D
+                                              };
 
 void cbBarDragPlugin::StartTracking()
 {
-	mpScrDc = new wxScreenDC;
+    mpScrDc = new wxScreenDC;
 
-	wxScreenDC::StartDrawingOnTop(&mpLayout->GetParentFrame());
+    wxScreenDC::StartDrawingOnTop(&mpLayout->GetParentFrame());
 }
 
 void cbBarDragPlugin::DoDrawHintRect( wxRect& rect, bool isInClientRect)
 {
-	wxRect scrRect;
+    wxRect scrRect;
 
-	RectToScr( rect, scrRect );
+    RectToScr( rect, scrRect );
 
-	int prevLF = mpScrDc->GetLogicalFunction();
+    int prevLF = mpScrDc->GetLogicalFunction();
 
-	mpScrDc->SetLogicalFunction( wxINVERT );
+    mpScrDc->SetLogicalFunction( wxINVERT );
 
-	if ( isInClientRect )
-	{
-		// BUG BUG BUG (wx):: somehow stippled brush works only  
-		//					  when the bitmap created on stack, not
-		//					  as a member of the class
+    if ( isInClientRect )
+    {
+        // BUG BUG BUG (wx):: somehow stippled brush works only  
+        // when the bitmap created on stack, not
+        // as a member of the class
 
-		wxBitmap checker( (const char*)_gCheckerImg, 8,8 );
+        wxBitmap checker( (const char*)_gCheckerImg, 8,8 );
 
-		wxBrush checkerBrush( checker );
+        wxBrush checkerBrush( checker );
 
-		mpScrDc->SetPen( mpLayout->mNullPen );
-		mpScrDc->SetBrush( checkerBrush );
+        mpScrDc->SetPen( mpLayout->mNullPen );
+        mpScrDc->SetBrush( checkerBrush );
 
-		int half = mInClientHintBorder / 2;
+        int half = mInClientHintBorder / 2;
 
-		mpScrDc->DrawRectangle( scrRect.x - half, scrRect.y - half,
-			                    scrRect.width + 2*half, mInClientHintBorder );
+        mpScrDc->DrawRectangle( scrRect.x - half, scrRect.y - half,
+                                scrRect.width + 2*half, mInClientHintBorder );
 
-		mpScrDc->DrawRectangle( scrRect.x - half, scrRect.y + scrRect.height - half,
-			                    scrRect.width + 2*half, mInClientHintBorder );
+        mpScrDc->DrawRectangle( scrRect.x - half, scrRect.y + scrRect.height - half,
+                                scrRect.width + 2*half, mInClientHintBorder );
 
-		mpScrDc->DrawRectangle( scrRect.x - half, scrRect.y + half - 1,
-			                    mInClientHintBorder, scrRect.height - 2*half + 2);
+        mpScrDc->DrawRectangle( scrRect.x - half, scrRect.y + half - 1,
+                                mInClientHintBorder, scrRect.height - 2*half + 2);
 
-		mpScrDc->DrawRectangle( scrRect.x + scrRect.width - half,
-								scrRect.y + half - 1,
-			                    mInClientHintBorder, scrRect.height - 2*half + 2);
+        mpScrDc->DrawRectangle( scrRect.x + scrRect.width - half,
+                                scrRect.y + half - 1,
+                                mInClientHintBorder, scrRect.height - 2*half + 2);
 
-		mpScrDc->SetBrush( wxNullBrush );
-	}
-	else
-	{
-		mpScrDc->SetPen( mpLayout->mBlackPen );
+        mpScrDc->SetBrush( wxNullBrush );
+    }
+    else
+    {
+        mpScrDc->SetPen( mpLayout->mBlackPen );
 
-		mpScrDc->DrawLine( scrRect.x, scrRect.y, 
-						   scrRect.x + scrRect.width, scrRect.y );
+        mpScrDc->DrawLine( scrRect.x, scrRect.y, 
+                           scrRect.x + scrRect.width, scrRect.y );
 
-		mpScrDc->DrawLine( scrRect.x, scrRect.y + 1, 
-						   scrRect.x, scrRect.y + scrRect.height );
+        mpScrDc->DrawLine( scrRect.x, scrRect.y + 1, 
+                           scrRect.x, scrRect.y + scrRect.height );
 
-		mpScrDc->DrawLine( scrRect.x+1, scrRect.y + scrRect.height, 
-						   scrRect.x + scrRect.width, scrRect.y + scrRect.height );
+        mpScrDc->DrawLine( scrRect.x+1, scrRect.y + scrRect.height, 
+                           scrRect.x + scrRect.width, scrRect.y + scrRect.height );
 
-		mpScrDc->DrawLine( scrRect.x + scrRect.width , scrRect.y, 
-						   scrRect.x + scrRect.width, scrRect.y + scrRect.height + 1);
-	}
+        mpScrDc->DrawLine( scrRect.x + scrRect.width , scrRect.y, 
+                           scrRect.x + scrRect.width, scrRect.y + scrRect.height + 1);
+    }
 
-	mpScrDc->SetLogicalFunction( prevLF );
+    mpScrDc->SetLogicalFunction( prevLF );
 }
 
 void cbBarDragPlugin::DrawHintRect ( wxRect& rect, bool isInClientRect)
 {
-	DoDrawHintRect( rect, isInClientRect );	
+    DoDrawHintRect( rect, isInClientRect );
 }
 
 void cbBarDragPlugin::EraseHintRect( wxRect& rect, bool isInClientRect)
 {
-	DoDrawHintRect( rect, isInClientRect );	
+    DoDrawHintRect( rect, isInClientRect );
 }
 
 void cbBarDragPlugin::FinishTracking()
 {
-	wxScreenDC::EndDrawingOnTop();
+    wxScreenDC::EndDrawingOnTop();
 
-	delete mpScrDc;
+    delete mpScrDc;
 
-	mpScrDc = NULL;
+    mpScrDc = NULL;
 }
 
 void cbBarDragPlugin::RectToScr( wxRect& frameRect, wxRect& scrRect )
 {
-	scrRect = frameRect;
+    scrRect = frameRect;
 
-	int x = frameRect.x, y = frameRect.y;
+    int x = frameRect.x, y = frameRect.y;
 
-	mpLayout->GetParentFrame().ClientToScreen( &x, &y );
+    mpLayout->GetParentFrame().ClientToScreen( &x, &y );
 
-	scrRect.x = x;
-	scrRect.y = y;
+    scrRect.x = x;
+    scrRect.y = y;
 }
 

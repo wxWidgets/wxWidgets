@@ -148,13 +148,13 @@ public:
     virtual void AddTool( int toolIndex,
                               const wxString& imageFileName,
                               wxBitmapType imageFileType = wxBITMAP_TYPE_BMP,
-                              const wxString& labelText = wxT(""), bool alignTextRight = FALSE,
-                              bool isFlat = TRUE );
+                              const wxString& labelText = wxT(""), bool alignTextRight = false,
+                              bool isFlat = true );
         // Adds a tool. See the documentation for wxToolBar for details.
 
     virtual void AddTool( int toolIndex, wxBitmap labelBmp,
-                              const wxString& labelText = wxT(""), bool alignTextRight = FALSE,
-                              bool isFlat = TRUE );
+                              const wxString& labelText = wxT(""), bool alignTextRight = false,
+                              bool isFlat = true );
 
         // Unhide method from parent.
 
@@ -166,7 +166,7 @@ public:
     // See the documentation for wxToolBar for details.
 
     virtual wxToolBarToolBase *AddTool(const int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
-               const bool toggle = FALSE, const long xPos = -1, const long yPos = -1, wxObject *clientData = NULL,
+               const bool toggle = false, const long xPos = wxDefaultPosition.x, const long yPos = wxDefaultPosition.y, wxObject *clientData = NULL,
                const wxString& helpString1 = wxT(""), const wxString& helpString2 = wxT(""));
 
         // Adds a separator. See the documentation for wxToolBar for details.
@@ -209,7 +209,7 @@ public:
 
         // Enables or disables the given tool.
 
-    virtual void EnableTool(int toolIndex, bool enable = TRUE);
+    virtual void EnableTool(int toolIndex, bool enable = true);
 
         // Responds to size events, calling Layout.
 

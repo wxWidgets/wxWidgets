@@ -6,7 +6,7 @@
 // Created:     19/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas 
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -96,7 +96,7 @@ void cbGCUpdatesMgr::OnStartChanges()
 
         // store pane state
         pane.mUMgrData.StoreItemState( pane.mBoundsInParent );
-        pane.mUMgrData.SetDirty( FALSE );
+        pane.mUMgrData.SetDirty( false );
 
         cbRowInfo* pRow = pane.GetFirstRow();
 
@@ -106,13 +106,13 @@ void cbGCUpdatesMgr::OnStartChanges()
 
             // store row state
             pRow->mUMgrData.StoreItemState( pRow->mBoundsInParent );
-            pRow->mUMgrData.SetDirty( FALSE );
+            pRow->mUMgrData.SetDirty( false );
 
             while( pBar )
             {
                 // store bar state
                 pBar->mUMgrData.StoreItemState( pBar->mBoundsInParent );
-                pBar->mUMgrData.SetDirty( FALSE );
+                pBar->mUMgrData.SetDirty( false );
 
                 pBar = pBar->mpNext;
             }
@@ -164,8 +164,8 @@ void cbGCUpdatesMgr::UpdateNow()
 
             cbBarInfo* pBar = pRow->GetFirstBar();
 
-            bool rowChanged = FALSE;
-//            bool rowBkPainted  = FALSE;
+            bool rowChanged = false;
+//            bool rowBkPainted  = false;
 
             // FIXME:: the below should not be fixed
             cbBarInfo* barsToRepaint[128];
@@ -177,7 +177,7 @@ void cbGCUpdatesMgr::UpdateNow()
 
             if ( WasChanged( pRow->mUMgrData, pRow->mBoundsInParent ) )
             
-                rowChanged = TRUE;
+                rowChanged = true;
             else
                 while( pBar )
                 {
@@ -349,8 +349,8 @@ void cbGCUpdatesMgr::DoRepositionItems( wxList& items )
 
             // FIXME FIXME:: excessive!
 
-            pClntWnd->Show( FALSE );
-            pClntWnd->Show( TRUE  );
+            pClntWnd->Show( false );
+            pClntWnd->Show( true  );
 
             // OLD STUFF:: mpLayout->PositionClientWindow();
         }
@@ -374,8 +374,8 @@ void cbGCUpdatesMgr::DoRepositionItems( wxList& items )
             // FIXME FIXME:: there's no other way to repaint non-client area of the wxWindow!!
             //                 so we do *excessive* "hide 'n show"
 
-            pWnd->Show(FALSE);
-            pWnd->Show(TRUE);
+            pWnd->Show(false);
+            pWnd->Show(true);
                 
             pWnd->Refresh();
         }

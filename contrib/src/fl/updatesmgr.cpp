@@ -75,7 +75,7 @@ void cbSimpleUpdatesMgr::OnStartChanges()
         cbDockPane& pane = *panes[n];
         // store pane state
         pane.mUMgrData.StoreItemState( pane.mBoundsInParent );
-        pane.mUMgrData.SetDirty( FALSE );
+        pane.mUMgrData.SetDirty( false );
 
         for( size_t i = 0; i != pane.GetRowList().Count(); ++i )
         {
@@ -83,7 +83,7 @@ void cbSimpleUpdatesMgr::OnStartChanges()
 
             // store row state
             row.mUMgrData.StoreItemState( row.mBoundsInParent );
-            row.mUMgrData.SetDirty( FALSE );
+            row.mUMgrData.SetDirty( false );
 
             for( size_t k = 0; k != row.mBars.Count(); ++k )
             {
@@ -91,7 +91,7 @@ void cbSimpleUpdatesMgr::OnStartChanges()
 
                 // store bar state
                 bar.mUMgrData.StoreItemState( bar.mBoundsInParent );
-                bar.mUMgrData.SetDirty( FALSE );
+                bar.mUMgrData.SetDirty( false );
             }
         }
     }
@@ -163,7 +163,7 @@ void cbSimpleUpdatesMgr::UpdateNow()
 
             wxDC* pDc = NULL;
 
-            bool rowChanged = FALSE;
+            bool rowChanged = false;
 
             // FIXME:: the below should not be fixed
             cbBarInfo* barsToRepaint[256];
@@ -173,7 +173,7 @@ void cbSimpleUpdatesMgr::UpdateNow()
 
             if ( WasChanged( row.mUMgrData, row.mBoundsInParent ) )
             
-                rowChanged = TRUE;
+                rowChanged = true;
             else
                 for( size_t k = 0; k != row.mBars.Count(); ++k )
 
@@ -274,8 +274,8 @@ void cbSimpleUpdatesMgr::UpdateNow()
             pBar->mpBarWnd->Refresh();
 
             // FIXME::
-            //info.mpBarWnd->Show(FALSE);
-            //info.mpBarWnd->Show(TRUE);
+            //info.mpBarWnd->Show(false);
+            //info.mpBarWnd->Show(true);
         }
 
         pNode  = pNode->GetNext();

@@ -80,7 +80,7 @@ void wxFrameView::Deactivate()
 
 void wxFrameView::CreateLayout()
 {
-    mpLayout = new wxFrameLayout( GetParentFrame(), mpFrameMgr->GetClientWindow(), FALSE );
+    mpLayout = new wxFrameLayout( GetParentFrame(), mpFrameMgr->GetClientWindow(), false );
 }
 
 wxFrameLayout* wxFrameView::GetLayout()
@@ -232,12 +232,12 @@ void wxFrameManager::SyncAllMenus()
     {
         if ( i != mActiveViewNo )
 
-            EnableMenusForView( (wxFrameView*)pNode->GetData(), FALSE );
+            EnableMenusForView( (wxFrameView*)pNode->GetData(), false );
 
         pNode = pNode->GetNext();
     }
 
-    EnableMenusForView( GetView( mActiveViewNo ), TRUE );
+    EnableMenusForView( GetView( mActiveViewNo ), true );
 }
 
 /*** public methods ***/
@@ -368,7 +368,7 @@ void wxFrameManager::ActivateView( wxFrameView* pFrmView )
 
     GetParentFrame()->PushEventHandler( pFrmView );
 
-    EnableMenusForView( pFrmView, TRUE );
+    EnableMenusForView( pFrmView, true );
 }
 
 void wxFrameManager::SetClinetWindow( wxWindow* pFrameClient )
@@ -402,7 +402,7 @@ void wxFrameManager::DeactivateCurrentView()
     if ( pView->mpLayout )
         pView->mpLayout->Deactivate();
 
-    EnableMenusForView( pView, FALSE );
+    EnableMenusForView( pView, false );
 }
 
 void wxFrameManager::SaveViewsNow()
@@ -420,12 +420,12 @@ void wxFrameManager::SaveViewsNow()
 
 bool wxFrameManager::ReloadViews()
 {
-    return FALSE;
+    return false;
 
     // TBD: ????
 #if 0
     if ( mSettingsFile == "" || !wxFileExists( mSettingsFile ) ) 
-        return FALSE;
+        return false;
 
     DestroyViews();
 
@@ -435,7 +435,7 @@ bool wxFrameManager::ReloadViews()
     mStore.SetDataStream( stm );
     DoSerialize( mStore );
 
-    return TRUE;
+    return true;
 #endif
 }
 

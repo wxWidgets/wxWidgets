@@ -6,7 +6,7 @@
 // Created:     ??/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:       wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -82,17 +82,17 @@ bool wxDynamicToolBar::Create(wxWindow *parent, const wxWindowID id,
     // cut&pasted from wxtbatsmpl.h
 
     if ( ! wxWindow::Create(parent, id, pos, size, style, name) )
-        return FALSE;
+        return false;
 
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ));
 
-    return TRUE;
+    return true;
 }
 
 bool wxDynamicToolBar::Realize(void)
 {
     // FOR NOW:: nothing
-    return TRUE;
+    return true;
 }
 
 wxDynamicToolBar::~wxDynamicToolBar(void)
@@ -116,7 +116,7 @@ void wxDynamicToolBar::AddTool( int toolIndex,
 
     pInfo->mpToolWnd    = pToolWindow;
     pInfo->mIndex       = toolIndex;
-    pInfo->mIsSeparator    = FALSE;
+    pInfo->mIsSeparator    = false;
 
     int x,y;
     pToolWindow->GetSize( &x, &y );
@@ -238,7 +238,7 @@ void wxDynamicToolBar::AddSeparator( wxWindow* pSepartorWnd )
 
     pInfo->mpToolWnd    = pSepartorWnd;
     pInfo->mIndex       = -1;
-    pInfo->mIsSeparator = TRUE;
+    pInfo->mIsSeparator = true;
 
     // Do we draw a separator or is a other object?
     if ( pSepartorWnd )
@@ -333,8 +333,8 @@ void wxDynamicToolBar::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 void wxDynamicToolBar::SizeToolWindows()
 {
-    bool bStateCheckDone = FALSE;
-    bool bHorzSeparator  = FALSE;
+    bool bStateCheckDone = false;
+    bool bHorzSeparator  = false;
     int maxWidth         = 0;
     int maxHeight        = 0;
 
@@ -371,7 +371,7 @@ void wxDynamicToolBar::SizeToolWindows()
             // separators and we do it only once (all to do with performance...)
             if (!bStateCheckDone)
             {
-                bStateCheckDone = TRUE;
+                bStateCheckDone = true;
                 
                 size_t j;
                 wxDynToolInfo *pInfo;
@@ -464,7 +464,7 @@ bool wxDynamicToolBar::Layout()
     GetPreferredDim( wndDim, result );
 
     SizeToolWindows();
-    return TRUE;
+    return true;
 }
 
 void wxDynamicToolBar::GetPreferredDim( const wxSize& givenDim, wxSize& prefDim )
@@ -576,12 +576,12 @@ wxToolBarToolBase* wxDynamicToolBar::FindToolForPosition( wxCoord WXUNUSED(x), w
 
 bool wxDynamicToolBar::DoInsertTool( size_t WXUNUSED(pos), wxToolBarToolBase* WXUNUSED(tool) )
 {
-    return TRUE;
+    return true;
 }
 
 bool wxDynamicToolBar::DoDeleteTool( size_t WXUNUSED(pos), wxToolBarToolBase* WXUNUSED(tool) )
 {
-    return TRUE;
+    return true;
 }
 
 void wxDynamicToolBar::DoEnableTool( wxToolBarToolBase* WXUNUSED(tool), bool WXUNUSED(enable) )

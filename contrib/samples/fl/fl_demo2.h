@@ -6,7 +6,7 @@
 // Created:     04/11/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __FLDEMO_G__
@@ -14,7 +14,7 @@
 
 // ID for the menu commands
 
-#define MINIMAL_QUIT 	1
+#define MINIMAL_QUIT    1
 #define MINIMAL_ABOUT 102
 
 #define ID_LOAD      103
@@ -25,7 +25,7 @@
 #define ID_REMOVEALL 108
 #define ID_RECREATE  109
 #define ID_ACTIVATE  110
-#define ID_FIRST	 111
+#define ID_FIRST     111
 #define ID_SECOND    112
 #define ID_THIRD     113
 
@@ -144,10 +144,10 @@ class StartButton95 : public wxPanel
     wxBitmap m_DBmp;
     
 public:
-    StartButton95(void) : m_bPressed(FALSE) {}
+    StartButton95(void) : m_bPressed(false) {}
     
     StartButton95(wxWindow* parent) 
-        : m_bPressed(FALSE) { wxPanel::Create(parent,-1); }
+        : m_bPressed(false) { wxPanel::Create(parent,wxID_ANY); }
     
     void OnMouseDown( wxMouseEvent& event );
     void OnMouseUp( wxMouseEvent& event );

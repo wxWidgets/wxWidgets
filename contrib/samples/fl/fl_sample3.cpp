@@ -61,7 +61,7 @@ public:
     
     void OnButt( wxCommandEvent& event );
     void OnButt2( wxCommandEvent& event );
-    bool OnClose(void) { return TRUE; }
+    bool OnClose(void) { return true; }
     
     DECLARE_EVENT_TABLE()
 };
@@ -91,10 +91,10 @@ bool MyApp::OnInit(void)
     frame->CreateStatusBar(3);
     frame->SetMenuBar(menu_bar);
     
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
     
-    return TRUE;
+    return true;
 }
 
 /***** Immlementation for class MyFrame *****/
@@ -108,14 +108,14 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
-    : wxFrame( parent, -1, title, wxDefaultPosition,
+    : wxFrame( parent, wxID_ANY, title, wxDefaultPosition,
           wxSize( 700, 500 ),
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
           wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION,
           wxT("freimas") )
 {
     
-    mpClientWnd = new wxWindow(this, -1);    
+    mpClientWnd = new wxWindow(this, wxID_ANY);    
     mpLayout = new wxFrameLayout( this, mpClientWnd );
     
     ///  mpLayout->PushDefaultPlugins();
@@ -125,7 +125,7 @@ MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
     cbDimInfo sizes( 80,65,     // when docked horizontally      
                      80,165,    // when docked vertically        
                      180,30,    // when floated                  
-                     TRUE,      // the bar is fixed-size
+                     true,      // the bar is fixed-size
                      5,         // vertical gap (bar border)
                      5          // horizontal gap (bar border)
                    ); 
@@ -145,7 +145,7 @@ MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
         if ( !sizes.mIsFixed ) name += wxT(" (flexible)");
         //      mpLayout->AddBar( CreateTextCtrl(name),// bar window
         if(i != 4 && i!= 5 && i!=11) {
-            mpLayout->AddBar( new wxTextCtrl(this, -1, name),// bar window
+            mpLayout->AddBar( new wxTextCtrl(this, wxID_ANY, name),// bar window
                               sizes, 
                               i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
                               0,            // insert into 0th row (vert. position)
@@ -153,8 +153,8 @@ MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
                               name          // name to refere in customization pop-ups
                             );
         } else if(i==4){
-            mpLayout->AddBar( new wxTextCtrl(this, -1, name),// bar window
-                              cbDimInfo( 100,100, 100,100, 100,100, TRUE, 5, 5), 
+            mpLayout->AddBar( new wxTextCtrl(this, wxID_ANY, name),// bar window
+                              cbDimInfo( 100,100, 100,100, 100,100, true, 5, 5), 
                               i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
                               0,            // insert into 0th row (vert. position)
                               0,            // offset from the start of row (in pixels)
@@ -163,7 +163,7 @@ MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
         } else if(i==5) {
             my_butt = new wxButton(this, ID_BUTT, name);
             mpLayout->AddBar( my_butt,// bar window
-                              cbDimInfo( 100,100, 200,200, 400,400, TRUE, 5, 5), 
+                              cbDimInfo( 100,100, 200,200, 400,400, true, 5, 5), 
                               i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
                               0,            // insert into 0th row (vert. position)
                               0,            // offset from the start of row (in pixels)
@@ -171,7 +171,7 @@ MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
                             );
         } else if(i==11) {
             mpLayout->AddBar( new wxButton(this, ID_BUTT2, name+wxT("_2")),
-                              cbDimInfo( 100,100, 200,200, 400,400, TRUE, 5, 5), 
+                              cbDimInfo( 100,100, 200,200, 400,400, true, 5, 5), 
                               i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
                               0,            // insert into 0th row (vert. position)
                               0,            // offset from the start of row (in pixels)
@@ -194,7 +194,7 @@ MyFrame::~MyFrame()
 
 wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 {
-    wxTextCtrl* pCtrl = new wxTextCtrl( this, -1, value, 
+    wxTextCtrl* pCtrl = new wxTextCtrl( this, wxID_ANY, value, 
                                 wxPoint(0,0), wxSize(1,1), wxTE_MULTILINE );
     
     pCtrl->SetBackgroundColour( wxColour( 255,255,255 ) );
@@ -214,9 +214,9 @@ void MyFrame::OnStore( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
-    Show( FALSE ); // TRICK:: hide it, to avoid flickered destruction
+    Show( false ); // TRICK:: hide it, to avoid flickered destruction
     
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnButt( wxCommandEvent& WXUNUSED(event) )
@@ -242,18 +242,18 @@ void MyFrame::OnButt( wxCommandEvent& WXUNUSED(event) )
             {
                 if(i % 4 == 1) 
                 {
-                    mpLayout->SetBarState(x, wxCBAR_FLOATING, TRUE);
+                    mpLayout->SetBarState(x, wxCBAR_FLOATING, true);
                     //mpLayout->RecalcLayout(true);
                     mpLayout->RepositionFloatedBar(x);
                 } 
                 else 
                 {
-                    mpLayout->SetBarState(x, 0, TRUE);
+                    mpLayout->SetBarState(x, 0, true);
                     //mpLayout->RecalcLayout(true);
                     //mpLayout->RepositionFloatedBar(x);
                 }
-                //  //  //  		x->mState = wxCBAR_FLOATING;
-                //  //  //  		mpLayout->ApplyBarProperties(x);
+                //  //  //  x->mState = wxCBAR_FLOATING;
+                //  //  //  mpLayout->ApplyBarProperties(x);
             } 
             else 
             {
@@ -284,10 +284,10 @@ void MyFrame::OnButt2( wxCommandEvent& WXUNUSED(event) )
                     x->mDimInfo.mSizes[a].y = 200;
                 }
                 x->mpBarWnd->SetSize(200,200);
-                mpLayout->SetBarState(x, wxCBAR_FLOATING, TRUE);  // HACK !!!
-                mpLayout->SetBarState(x, 0, TRUE);	              // HACK !!!
+                mpLayout->SetBarState(x, wxCBAR_FLOATING, true);  // HACK !!!
+                mpLayout->SetBarState(x, 0, true);                // HACK !!!
                 wxYield();                                        // HACK !!! needed to resize BEFORE redraw 
-                mpLayout->RefreshNow( TRUE );                     // HACK !!! needed to trigger redraw
+                mpLayout->RefreshNow( true );                     // HACK !!! needed to trigger redraw
             }
             else    
             {
@@ -309,20 +309,20 @@ void MyFrame::OnButt2( wxCommandEvent& WXUNUSED(event) )
                     x->mDimInfo.mSizes[a].y = 10 + 2 + 2*x->mDimInfo.mVertGap;
                 }
                 x->mpBarWnd->SetSize(10,10);
-                mpLayout->SetBarState(x, wxCBAR_FLOATING, TRUE);  // HACK !!!
-                mpLayout->SetBarState(x, 0, TRUE);	              // HACK !!!
+                mpLayout->SetBarState(x, wxCBAR_FLOATING, true);  // HACK !!!
+                mpLayout->SetBarState(x, 0, true);                // HACK !!!
                 wxYield();                                        // HACK !!! needed to resize BEFORE redraw 
-                mpLayout->RefreshNow( TRUE );                     // HACK !!! needed to trigger redraw
+                mpLayout->RefreshNow( true );                     // HACK !!! needed to trigger redraw
                 
-                //  //  		mpLayout->SetBarState(x, wxCBAR_FLOATING, TRUE);
-                //  //  		mpLayout->RecalcLayout(true);
-                //  //  		//		mpLayout->RepositionFloatedBar(x);
-                //  //  		mpLayout->RecalcLayout(true);
-                //  //  		mpLayout->RepositionFloatedBar(x);
-                //  //  		  mpLayout->SetBarState(x, 0, TRUE);	
-                //  //  		  wxYield();
-                //  //  		  mpLayout->RefreshNow( TRUE );
-                //  //  		  mpLayout->RecalcLayout(true);
+                //  //  mpLayout->SetBarState(x, wxCBAR_FLOATING, true);
+                //  //  mpLayout->RecalcLayout(true);
+                //  //  mpLayout->RepositionFloatedBar(x);
+                //  //  mpLayout->RecalcLayout(true);
+                //  //  mpLayout->RepositionFloatedBar(x);
+                //  //  mpLayout->SetBarState(x, 0, true);
+                //  //  wxYield();
+                //  //  mpLayout->RefreshNow( true );
+                //  //  mpLayout->RecalcLayout(true);
             }
             else    
             {

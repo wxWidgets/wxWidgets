@@ -43,7 +43,7 @@ public:
     MyFrame(wxFrame *frame);
     virtual ~MyFrame();
     
-    bool OnClose(void) { Show(FALSE); return TRUE; }
+    bool OnClose(void) { Show(false); return true; }
     
     void OnLoad( wxCommandEvent& event );
     void OnSave( wxCommandEvent& event );

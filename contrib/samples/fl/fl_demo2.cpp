@@ -203,7 +203,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h
 
     // Create all layouts
     for( i = 0; i != MAX_LAYOUTS; ++i )
-    {	
+    {
         CreateLayout( i );
     }
     // hide others
@@ -671,7 +671,7 @@ wxWindow* MyFrame::CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent )
     pClassView->AppendItem( rootId, _("serializer-classes (grabbed at run-time)"),    0 );
 
     // now create "output" window
-    wxNotebook*	pTabbedArea = new wxNotebook(pParent, wxID_ANY);
+    wxNotebook* pTabbedArea = new wxNotebook(pParent, wxID_ANY);
     // SEB: originally here was a wxpp (wxWorkshop) class used
     //    wxPaggedWindow* pTabbedArea = new wxPaggedWindow();
     //    pTabbedArea->Create( pParent, wxID_ANY );

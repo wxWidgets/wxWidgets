@@ -61,9 +61,9 @@ END_EVENT_TABLE()
 cbBarHintsPlugin::cbBarHintsPlugin(void)
 
     : mpPane( 0 ),
-      mBtnPressed   ( FALSE ),
-      mCloseBoxOn   ( TRUE ),
-      mCollapseBoxOn( TRUE ),
+      mBtnPressed   ( false ),
+      mCloseBoxOn   ( true ),
+      mCollapseBoxOn( true ),
       mGrooveCount  ( 2 ),
       mHintGap      ( 4 ),
       mXWeight      ( 2 )
@@ -76,9 +76,9 @@ cbBarHintsPlugin::cbBarHintsPlugin( wxFrameLayout* pLayout, int paneMask )
 
     : cbPluginBase( pLayout, paneMask ),
       mpPane( 0 ),
-      mBtnPressed   ( FALSE ),
-      mCloseBoxOn   ( TRUE ),
-      mCollapseBoxOn( TRUE ),
+      mBtnPressed   ( false ),
+      mCloseBoxOn   ( true ),
+      mCollapseBoxOn( true ),
       mGrooveCount  ( 2 ),
       mHintGap      ( 5 ),
       mXWeight      ( 2 )
@@ -280,7 +280,7 @@ void cbBarHintsPlugin::GetHintsLayout( wxRect& rect, cbBarInfo& info,
 
         if ( info.IsExpanded() )
         {
-            isAtLeft = FALSE;
+            isAtLeft = false;
 
             cbBarInfo* pCur = info.mpPrev;
 
@@ -288,7 +288,7 @@ void cbBarHintsPlugin::GetHintsLayout( wxRect& rect, cbBarInfo& info,
             {
                 if ( !pCur->IsFixed() )
                 {
-                    isAtLeft = TRUE; break;
+                    isAtLeft = true; break;
                 }
 
                 pCur = pCur->mpPrev;
@@ -363,7 +363,7 @@ int cbBarHintsPlugin::HitTestHints( cbBarInfo& info, const wxPoint& pos )
 
     wxRect& rect = info.mBoundsInParent;
 
-    if ( info.IsFixed() ) return FALSE;
+    if ( info.IsFixed() ) return false;
 
     int boxOfs, grooveOfs, coord;
 
@@ -413,7 +413,7 @@ int cbBarHintsPlugin::HitTestHints( cbBarInfo& info, const wxPoint& pos )
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 // handlers for plugin-events
@@ -468,8 +468,8 @@ void cbBarHintsPlugin::OnLeftDown( cbLeftDownEvent& event )
             int i;
             for ( i = 0; i != BOXES_IN_HINT; ++i )
             {
-                mBoxes[i]->mPressed = FALSE;
-                mBoxes[i]->mWasClicked = FALSE;
+                mBoxes[i]->mPressed = false;
+                mBoxes[i]->mWasClicked = false;
             }
             for ( i = 0; i != BOXES_IN_HINT; ++i )
             {
@@ -477,7 +477,7 @@ void cbBarHintsPlugin::OnLeftDown( cbLeftDownEvent& event )
 
                 if ( mBoxes[i]->mPressed )
                 {
-                    mBtnPressed = TRUE;
+                    mBtnPressed = true;
                     mpClickedBar = &bar;
 
                     return; // event handled
@@ -511,7 +511,7 @@ void cbBarHintsPlugin::OnLeftUp( cbLeftUpEvent&   event )
             {
                 if ( i == 0 )
                 {
-                    mpLayout->SetBarState( mpClickedBar, wxCBAR_HIDDEN, TRUE );
+                    mpLayout->SetBarState( mpClickedBar, wxCBAR_HIDDEN, true );
                     // Notify bar child window of close event:
                     if(mpClickedBar->mpBarWnd!=NULL)
                         mpClickedBar->mpBarWnd->Close();
@@ -526,7 +526,7 @@ void cbBarHintsPlugin::OnLeftUp( cbLeftUpEvent&   event )
             }
         }
 
-        mBtnPressed = FALSE;
+        mBtnPressed = false;
         return;
     }
     else

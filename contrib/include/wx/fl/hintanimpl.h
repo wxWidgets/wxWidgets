@@ -55,8 +55,8 @@ public:
 
     int    mInClientHintBorder; // default: 4 pixels
 
-    bool   mAccelerationOn;     // TRUE, if morph accelerates, otherwise morph
-                                // speed is constant. Default: TRUE
+    bool   mAccelerationOn;     // true, if morph accelerates, otherwise morph
+                                // speed is constant. Default: true
 
     // TBD:: get/set methods for above members
 

@@ -6,7 +6,7 @@
 // Created:     06/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -31,14 +31,14 @@
 class cbContextMenuHandler : public wxEvtHandler
 {
 public:
-	cbSimpleCustomizationPlugin* mpBackRef;
+    cbSimpleCustomizationPlugin* mpBackRef;
 
 public:
-	void OnMenuCommand( wxCommandEvent& evt );
+    void OnMenuCommand( wxCommandEvent& evt );
 
-	void OnCommandEvents( wxCommandEvent& evt );
+    void OnCommandEvents( wxCommandEvent& evt );
 
-	DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 // FIXME:: is this "safe" ?
@@ -49,21 +49,21 @@ public:
 
 BEGIN_EVENT_TABLE( cbContextMenuHandler, wxEvtHandler )
 
-	// FIXME:: what is the right range for these ids ? so that they 
-	//         would not collide with user commands?
+    // FIXME:: what is the right range for these ids ? so that they 
+    //         would not collide with user commands?
 
-	EVT_COMMAND_RANGE( CB_CUSTOMIZE_MENU_FIRST_ITEM_ID,
-					   CB_CUSTOMIZE_MENU_FIRST_ITEM_ID + 300, 
-					   wxEVT_COMMAND_MENU_SELECTED,  
-					   cbContextMenuHandler::OnCommandEvents )
+    EVT_COMMAND_RANGE( CB_CUSTOMIZE_MENU_FIRST_ITEM_ID,
+                       CB_CUSTOMIZE_MENU_FIRST_ITEM_ID + 300, 
+                       wxEVT_COMMAND_MENU_SELECTED,  
+                       cbContextMenuHandler::OnCommandEvents )
 
 END_EVENT_TABLE()
 
 void cbContextMenuHandler::OnCommandEvents( wxCommandEvent& evt )
 {
-	//wxMessageBox("Wowwwww, Yeah!");
+    //wxMessageBox("Wowwwww, Yeah!");
 
-	mpBackRef->OnMenuItemSelected( evt );
+    mpBackRef->OnMenuItemSelected( evt );
 }
 
 /***** Implementation for class cbSimpleCustomizationPlugin *****/
@@ -72,8 +72,8 @@ IMPLEMENT_DYNAMIC_CLASS( cbSimpleCustomizationPlugin, cbPluginBase )
 
 BEGIN_EVENT_TABLE( cbSimpleCustomizationPlugin, cbPluginBase )
 
-	EVT_PL_CUSTOMIZE_BAR   ( cbSimpleCustomizationPlugin::OnCustomizeBar    )
-	EVT_PL_CUSTOMIZE_LAYOUT( cbSimpleCustomizationPlugin::OnCustomizeLayout )
+    EVT_PL_CUSTOMIZE_BAR   ( cbSimpleCustomizationPlugin::OnCustomizeBar    )
+    EVT_PL_CUSTOMIZE_LAYOUT( cbSimpleCustomizationPlugin::OnCustomizeLayout )
 
 END_EVENT_TABLE()
 
@@ -82,124 +82,121 @@ cbSimpleCustomizationPlugin::cbSimpleCustomizationPlugin(void)
 
 cbSimpleCustomizationPlugin::cbSimpleCustomizationPlugin( wxFrameLayout* pPanel, int paneMask )
 
-	: cbPluginBase( pPanel, paneMask )
+    : cbPluginBase( pPanel, paneMask )
 {}
 
 void cbSimpleCustomizationPlugin::OnCustomizeBar( cbCustomizeBarEvent& event )
 {
-	// ingnore bar customization, treat it
-	// as layout-customization...ugly, eh?
+    // ingnore bar customization, treat it
+    // as layout-customization...ugly, eh?
 
-	cbCustomizeLayoutEvent clEvt( event.mClickPos );
+    cbCustomizeLayoutEvent clEvt( event.mClickPos );
 
-	OnCustomizeLayout( clEvt );
+    OnCustomizeLayout( clEvt );
 }
 
 void cbSimpleCustomizationPlugin::OnCustomizeLayout( cbCustomizeLayoutEvent& event )
 {
-	wxString helpStr1 = wxT("Select this item to show the corresponding control bar");
-	wxString helpStr2 = wxT("Select this itme to hide the corresponding control bar");
+    wxString helpStr1 = wxT("Select this item to show the corresponding control bar");
+    wxString helpStr2 = wxT("Select this itme to hide the corresponding control bar");
 
-	int id = CB_CUSTOMIZE_MENU_FIRST_ITEM_ID;
+    int id = CB_CUSTOMIZE_MENU_FIRST_ITEM_ID;
 
-	wxMenu* pMenu = new wxMenu();
+    wxMenu* pMenu = new wxMenu();
 
-	BarArrayT& bars = mpLayout->GetBars();
+    BarArrayT& bars = mpLayout->GetBars();
 
-	for( size_t i = 0; i != bars.GetCount(); ++i )
-	{
-		cbBarInfo& bar = *bars[i];
-		
-		bool isHidden = ( bar.mState == wxCBAR_HIDDEN );
+    for( size_t i = 0; i != bars.GetCount(); ++i )
+    {
+        cbBarInfo& bar = *bars[i];
 
-		wxString* pHelpStr = ( isHidden ) ? &helpStr1 : &helpStr2;
+        bool isHidden = ( bar.mState == wxCBAR_HIDDEN );
 
-		pMenu->Append( id, bar.mName, *pHelpStr, TRUE );
+        wxString* pHelpStr = ( isHidden ) ? &helpStr1 : &helpStr2;
 
-		pMenu->Check( id, (isHidden == FALSE) );
+        pMenu->Append( id, bar.mName, *pHelpStr, true );
 
-		++id;
-	}
+        pMenu->Check( id, (isHidden == false) );
+
+        ++id;
+    }
 
     // Customization dialog not implemented, so don't show the menu item
 #if 0
-	pMenu->AppendSeparator();
-	pMenu->Append( id, "Customize...", "Show layout customization dialog", FALSE );
+    pMenu->AppendSeparator();
+    pMenu->Append( id, "Customize...", "Show layout customization dialog", false );
 #endif    
-	mCustMenuItemId = id;
+    mCustMenuItemId = id;
 
-	cbContextMenuHandler* pHandler = new cbContextMenuHandler();
-	pHandler->mpBackRef            = this;
+    cbContextMenuHandler* pHandler = new cbContextMenuHandler();
+    pHandler->mpBackRef            = this;
 
-	wxWindow* pFrm = &mpLayout->GetParentFrame();
+    wxWindow* pFrm = &mpLayout->GetParentFrame();
 
-	// FOR NOW FOR NOW:: to work-around wxFrame's (MSW) nasty event-handling bugs!!!
+    // FOR NOW FOR NOW:: to work-around wxFrame's (MSW) nasty event-handling bugs!!!
 
-	wxWindow* pTmpWnd = new wxWindow( pFrm, -1, event.mClickPos, wxSize(0,0) );
+    wxWindow* pTmpWnd = new wxWindow( pFrm, wxID_ANY, event.mClickPos, wxSize(0,0) );
 
-	pMenu->SetEventHandler( pHandler );
+    pMenu->SetEventHandler( pHandler );
 
-	pTmpWnd->PopupMenu( pMenu, 0,0 );
+    pTmpWnd->PopupMenu( pMenu, 0,0 );
 
-	pTmpWnd->Destroy();
+    pTmpWnd->Destroy();
 
-	delete pMenu;
-	delete pHandler;
+    delete pMenu;
+    delete pHandler;
 
-	// event is "eaten" by this plugin
+    // event is "eaten" by this plugin
 }
 
 void cbSimpleCustomizationPlugin::OnMenuItemSelected( wxCommandEvent& event )
 {
-	if ( event.GetId() == mCustMenuItemId )
-	{
-		wxMessageBox(wxT("Customization dialog box is not supported by this plugin yet"));
+    if ( event.GetId() == mCustMenuItemId )
+    {
+        wxMessageBox(wxT("Customization dialog box is not supported by this plugin yet"));
 
-		return;
-	}
-	else
-	{
-		cbBarInfo* pBar = mpLayout->GetBars()[ event.GetId() - 
-											   CB_CUSTOMIZE_MENU_FIRST_ITEM_ID
-			                                 ];
+        return;
+    }
+    else
+    {
+        cbBarInfo* pBar = mpLayout->GetBars()[ event.GetId() -  CB_CUSTOMIZE_MENU_FIRST_ITEM_ID ];
 
-		wxASSERT( pBar ); // DBG::
+        wxASSERT( pBar ); // DBG::
 
-		// "inverse" bar-visibility of the selected bar
+        // "inverse" bar-visibility of the selected bar
 
-		int newState;
+        int newState;
 
-		if ( pBar->mState == wxCBAR_HIDDEN )
-		{
-			if ( pBar->mAlignment == -1 )
-			{
-				pBar->mAlignment = 0;       // just remove "-1" marking
-				newState = wxCBAR_FLOATING;
-			}
-			else
-			if ( pBar->mAlignment == FL_ALIGN_TOP ||
-				 pBar->mAlignment == FL_ALIGN_BOTTOM )
+        if ( pBar->mState == wxCBAR_HIDDEN )
+        {
+            if ( pBar->mAlignment == -1 )
+            {
+                pBar->mAlignment = 0;       // just remove "-1" marking
+                newState = wxCBAR_FLOATING;
+            }
+            else
+                if ( pBar->mAlignment == FL_ALIGN_TOP ||
+                     pBar->mAlignment == FL_ALIGN_BOTTOM )
 
-				newState = wxCBAR_DOCKED_HORIZONTALLY;
-			else
-				newState = wxCBAR_DOCKED_VERTICALLY;
-		}
-		else
-		{
-			newState = wxCBAR_HIDDEN;
+                    newState = wxCBAR_DOCKED_HORIZONTALLY;
+                else
+                    newState = wxCBAR_DOCKED_VERTICALLY;
+        }
+        else
+        {
+            newState = wxCBAR_HIDDEN;
 
-			if ( pBar->mState == wxCBAR_FLOATING )
+            if ( pBar->mState == wxCBAR_FLOATING )
 
-				pBar->mAlignment = -1;
-		}
+                pBar->mAlignment = -1;
+        }
 
-		mpLayout->SetBarState( pBar, newState, TRUE );
+        mpLayout->SetBarState( pBar, newState, true );
 
-		if ( newState == wxCBAR_FLOATING )
+        if ( newState == wxCBAR_FLOATING )
+            mpLayout->RepositionFloatedBar( pBar ); 
+    }
 
-			mpLayout->RepositionFloatedBar( pBar ); 
-	}
-
-	// menu-item-selected event is "eaten"
+    // menu-item-selected event is "eaten"
 }
 

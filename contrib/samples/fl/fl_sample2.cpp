@@ -57,7 +57,7 @@ public:
     void OnStore( wxCommandEvent& event );
     void OnQuit( wxCommandEvent& event );
     
-    bool OnClose(void) { return TRUE; }
+    bool OnClose(void) { return true; }
     
     DECLARE_EVENT_TABLE()
 };
@@ -87,11 +87,11 @@ bool MyApp::OnInit(void)
     frame->CreateStatusBar(3);
     frame->SetMenuBar(menu_bar);
     
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
     frame->populateMyFrame();
     
-    return TRUE;
+    return true;
 }
 
 /***** Immlementation for class MyFrame *****/
@@ -103,7 +103,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
-    : wxFrame( parent, -1, title, wxDefaultPosition,
+    : wxFrame( parent, wxID_ANY, title, wxDefaultPosition,
           wxSize( 700, 500 ),
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
           wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION,
@@ -124,7 +124,7 @@ void MyFrame::populateMyFrame()
     cbDimInfo sizes( 80,65,     // when docked horizontally      
                      80,165,    // when docked vertically        
                      180,30,    // when floated                  
-                     TRUE,      // the bar is fixed-size
+                     true,      // the bar is fixed-size
                      5,         // vertical gap (bar border)
                      5          // horizontal gap (bar border)
                    ); 
@@ -144,7 +144,7 @@ void MyFrame::populateMyFrame()
         
         if ( !sizes.mIsFixed ) name += wxT(" (flexible)");
         //      mpLayout->AddBar( CreateTextCtrl(name),// bar window
-        mpLayout->AddBar( new wxTextCtrl(this, -1, name),// bar window
+        mpLayout->AddBar( new wxTextCtrl(this, wxID_ANY, name),// bar window
                           sizes, i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
                           0,                   // insert into 0th row (vert. position)
                           0,                   // offset from the start of row (in pixels)
@@ -167,7 +167,7 @@ MyFrame::~MyFrame()
 
 wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 {
-    wxTextCtrl* pCtrl = new wxTextCtrl( this, -1, value, 
+    wxTextCtrl* pCtrl = new wxTextCtrl( this, wxID_ANY, value, 
                                 wxPoint(0,0), wxSize(1,1), wxTE_MULTILINE );
     
     pCtrl->SetBackgroundColour( wxColour( 255,255,255 ) );
@@ -187,8 +187,8 @@ void MyFrame::OnStore( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
-    Show( FALSE ); // TRICK:: hide it, to avoid flickered destruction
+    Show( false ); // TRICK:: hide it, to avoid flickered destruction
     
-    Close(TRUE);
+    Close(true);
 }
 

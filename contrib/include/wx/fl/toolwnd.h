@@ -186,7 +186,7 @@ public:
         // Set the position of the button.
     void SetPos( const wxPoint& pos );
 
-        // Returns TRUE if the given position was over the button.
+        // Returns true if the given position was over the button.
     bool HitTest( const wxPoint& pos );
 
         // Responds to a left down event.
@@ -205,7 +205,7 @@ public:
         // the desired appearance.
     virtual void Draw( wxDC& dc );
 
-        // Returns TRUE if the button was clicked.
+        // Returns true if the button was clicked.
     bool WasClicked();
 
         // Reset the button.
@@ -214,7 +214,7 @@ public:
         // Enable or disable the button.
     void Enable( bool enable ) { mEnabled = enable; }
 
-        // Returns TRUE if this button is pressed.
+        // Returns true if this button is pressed.
     bool IsPressed() { return mPressed; }
 };
 
