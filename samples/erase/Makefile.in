@@ -19,6 +19,7 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
+NM = @NM@
 RESCOMP = @RESCOMP@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
@@ -40,7 +41,7 @@ ERASE_OBJECTS =  \
 	erase_erase.o \
 	$(__erase___win32rc)
 LIBDIRNAME = $(top_builddir)lib
-WX_VERSION = 2.5.0
+WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
 
@@ -76,7 +77,7 @@ WX_VERSION = 2.5.0
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
 	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o erase$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
 @COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
@@ -92,6 +93,9 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__erase___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__erase___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C erase$(EXEEXT)
+COND_PLATFORM_OS2_1___erase___os2_emxbindcmd = $(NM) erase$(EXEEXT) | if grep -q \
+	pmwin.763 ; then emxbind -ep erase$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__erase___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___erase___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__erase___win32rc = erase_erase_rc.o
 @COND_PLATFORM_MACOSX_1@__erase_bundle___depname = erase_bundle
 
@@ -109,12 +113,13 @@ distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 erase$(EXEEXT): $(ERASE_OBJECTS) $(__erase___win32rc)
-	$(CXX) -o $@ $(ERASE_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
+	$(CXX) -o $@ $(ERASE_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__erase___mac_rezcmd)
 	$(__erase___mac_setfilecmd)
+	$(__erase___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-erase.app/Contents/PkgInfo: erase$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+erase.app/Contents/PkgInfo: erase$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p erase.app/Contents
 	mkdir -p erase.app/Contents/MacOS
 	mkdir -p erase.app/Contents/Resources
@@ -132,7 +137,7 @@ erase.app/Contents/PkgInfo: erase$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $
 	ln -f erase$(EXEEXT) erase.app/Contents/MacOS/erase
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc erase.app/Contents/Resources/erase.rsrc
+	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc erase.app/Contents/Resources/erase.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns erase.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@erase_bundle: erase.app/Contents/PkgInfo
@@ -141,7 +146,7 @@ erase_erase.o: $(srcdir)/erase.cpp
 	$(CXXC) -c -o $@ $(ERASE_CXXFLAGS) $<
 
 erase_erase_rc.o: $(srcdir)/erase.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
 
 install: all
 

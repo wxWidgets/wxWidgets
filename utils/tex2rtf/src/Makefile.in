@@ -21,6 +21,7 @@ INSTALL_DIR = @INSTALL_DIR@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
+NM = @NM@
 RESCOMP = @RESCOMP@
 SETFILE = @SETFILE@
 STRIP = @STRIP@
@@ -95,7 +96,7 @@ TEX2RTF_OBJECTS =  \
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_4) -i $(top_srcdir)/include -i $(srcdir) \
 	$(__DLLFLAG_p_4) -i $(srcdir)/../../../samples -o tex2rtf_gui$(EXEEXT) \
-	Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
+	Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
 @COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
@@ -116,6 +117,10 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__tex2rtf_gui___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__tex2rtf_gui___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C tex2rtf_gui$(EXEEXT)
+COND_PLATFORM_OS2_1___tex2rtf_gui___os2_emxbindcmd = $(NM) \
+	tex2rtf_gui$(EXEEXT) | if grep -q pmwin.763 ; then emxbind -ep \
+	tex2rtf_gui$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__tex2rtf_gui___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___tex2rtf_gui___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__tex2rtf_gui___win32rc = tex2rtf_gui_sample_rc.o
 
 ### Targets: ###
@@ -146,14 +151,15 @@ install_tex2rtf_gui:
 	$(INSTALL_PROGRAM) tex2rtf_gui$(EXEEXT) $(bindir)
 
 tex2rtf$(EXEEXT): $(TEX2RTF_OBJECTS)
-	$(CXX) -o $@ $(TEX2RTF_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)   $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS)
+	$(CXX) -o $@ $(TEX2RTF_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)   $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS)
 	
 	$(__tex2rtf___mac_setfilecmd)
 
 tex2rtf_gui$(EXEEXT): $(TEX2RTF_GUI_OBJECTS) $(__tex2rtf_gui___win32rc)
-	$(CXX) -o $@ $(TEX2RTF_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI)  $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
+	$(CXX) -o $@ $(TEX2RTF_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__tex2rtf_gui___mac_rezcmd)
 	$(__tex2rtf_gui___mac_setfilecmd)
+	$(__tex2rtf_gui___os2_emxbindcmd)
 
 tex2rtf_gui_htmlutil.o: $(srcdir)/htmlutil.cpp
 	$(CXXC) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
@@ -165,7 +171,7 @@ tex2rtf_gui_rtfutils.o: $(srcdir)/rtfutils.cpp
 	$(CXXC) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 tex2rtf_gui_sample_rc.o: $(srcdir)/../../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../../../samples
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../../../samples
 
 tex2rtf_gui_table.o: $(srcdir)/table.cpp
 	$(CXXC) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<

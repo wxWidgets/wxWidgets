@@ -53,7 +53,7 @@ ANIMATELIB_CXXFLAGS = $(__animatelib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 ANIMATELIB_OBJECTS =  \
 	animatelib_animate.o
 LIBDIRNAME = $(top_builddir)lib
-WX_VERSION = 2.5.0
+WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
 
@@ -70,7 +70,7 @@ WX_VERSION = 2.5.0
 @COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT@WXDEBUGFLAG = d
 @COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
-@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)250
+@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)251
 @COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -2.5
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 @COND_UNICODE_1@WXUNICODEFLAG = u
@@ -144,14 +144,14 @@ COND_USE_SOVERSOLARIS_1___animatedll___soname_flags = \
 	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__animatedll___targetsuf3)
 @COND_USE_SOVERSOLARIS_1@__animatedll___soname_flags = $(COND_USE_SOVERSOLARIS_1___animatedll___soname_flags)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@__animatedll___targetsuf2 \
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).0
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).1
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__animatedll___targetsuf2 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__animatedll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@__animatedll___targetsuf3 \
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).0.0.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).1.0.0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__animatedll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__animatedll___targetsuf3 = .$(SO_SUFFIX)
 @COND_GCC_PCH_1@__animatelib_PCH_DEP = \
 @COND_GCC_PCH_1@	.pch/wxprec_animatelib/wx/wxprec.h.gch
@@ -173,7 +173,8 @@ all: $(__animatedll___depname) $(__animatelib___depname)
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_animatelib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(ANIMATELIB_CXXFLAGS)
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__animatedll___targetsuf3): $(__animatedll_PCH_DEP)  $(ANIMATEDLL_OBJECTS)
-@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(ANIMATEDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__animatedll___macinstnamecmd) $(__animatedll___importlib) $(__animatedll___soname_flags) $(__animatedll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(ANIMATEDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__animatedll___macinstnamecmd) $(__animatedll___importlib) $(__animatedll___soname_flags) $(__animatedll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+@COND_SHARED_1@	
 @COND_SHARED_1@	$(__animatedll___so_symlinks_cmd)
 
 animatedll_animate.o: $(srcdir)/animate.cpp

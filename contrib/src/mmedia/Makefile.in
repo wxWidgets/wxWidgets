@@ -88,7 +88,7 @@ MMEDIALIB_OBJECTS =  \
 	mmedialib_sndulaw.o \
 	mmedialib_sndwav.o \
 	mmedialib_vidbase.o
-WX_VERSION = 2.5.0
+WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
 
@@ -105,7 +105,7 @@ WX_VERSION = 2.5.0
 @COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT@WXDEBUGFLAG = d
 @COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
-@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)250
+@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)251
 @COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -2.5
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 @COND_UNICODE_1@WXUNICODEFLAG = u
@@ -197,14 +197,14 @@ COND_USE_SOVERSOLARIS_1___mmediadll___soname_flags = \
 	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
 @COND_USE_SOVERSOLARIS_1@__mmediadll___soname_flags = $(COND_USE_SOVERSOLARIS_1___mmediadll___soname_flags)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@__mmediadll___targetsuf2 \
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).0
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).1
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__mmediadll___targetsuf2 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__mmediadll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@__mmediadll___targetsuf3 \
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).0.0.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).1.0.0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__mmediadll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__mmediadll___targetsuf3 = .$(SO_SUFFIX)
 @COND_GCC_PCH_1@__mmedialib_PCH_DEP = .pch/wxprec_mmedialib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__mmedialib_PCH_INC = -I.pch/wxprec_mmedialib
@@ -256,7 +256,8 @@ install-strip: install
 @COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3): $(__mmediadll_PCH_DEP)  $(MMEDIADLL_OBJECTS)
-@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(MMEDIADLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mmediadll___macinstnamecmd) $(__mmediadll___importlib) $(__mmediadll___soname_flags) $(__mmediadll___macver) $(EXTRALIBS_ESD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(MMEDIADLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mmediadll___macinstnamecmd) $(__mmediadll___importlib) $(__mmediadll___soname_flags) $(__mmediadll___macver) $(EXTRALIBS_ESD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+@COND_SHARED_1@	
 @COND_SHARED_1@	$(__mmediadll___so_symlinks_cmd)
 
 mmediadll_cdbase.o: $(srcdir)/cdbase.cpp

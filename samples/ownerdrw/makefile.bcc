@@ -157,7 +157,7 @@ $(OBJS)\ownerdrw_ownerdrw.obj: .\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(OWNERDRW_CXXFLAGS) $**
 
 $(OBJS)\ownerdrw_ownerdrw.res: .\ownerdrw.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include  -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\samples $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -175,5 +175,5 @@ data:
 
 $(OBJS)\ownerdrw.exe: $(OWNERDRW_OBJECTS)  $(OBJS)\ownerdrw_ownerdrw.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(OWNERDRW_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib oleacc.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\ownerdrw_ownerdrw.res
+	c0w32.obj $(OWNERDRW_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\ownerdrw_ownerdrw.res
 |

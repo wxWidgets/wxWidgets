@@ -20,6 +20,7 @@ EXTRALIBS_XML = @EXTRALIBS_XML@
 HOST_SUFFIX = @HOST_SUFFIX@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
+NM = @NM@
 RESCOMP = @RESCOMP@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
@@ -35,7 +36,7 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 LIBDIRNAME = $(top_builddir)lib
-WX_VERSION = 2.5.0
+WX_VERSION = 2.5.1
 XRCDEMO_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include $(CXXFLAGS)
@@ -80,7 +81,7 @@ XRCDEMO_OBJECTS =  \
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
 	$(__DLLFLAG_p_1) -i $(srcdir)/../../../samples -i $(srcdir)/../../include -o \
-	xrcdemo$(EXEEXT) Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r \
+	xrcdemo$(EXEEXT) Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r \
 	sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 COND_MONOLITHIC_0___WXLIB_ADV_p = \
@@ -105,6 +106,9 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__xrcdemo___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__xrcdemo___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C xrcdemo$(EXEEXT)
+COND_PLATFORM_OS2_1___xrcdemo___os2_emxbindcmd = $(NM) xrcdemo$(EXEEXT) | if \
+	grep -q pmwin.763 ; then emxbind -ep xrcdemo$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__xrcdemo___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___xrcdemo___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__xrcdemo___win32rc = xrcdemo_xrcdemo_rc.o
 @COND_PLATFORM_MACOSX_1@__xrcdemo_bundle___depname = xrcdemo_bundle
 
@@ -139,9 +143,10 @@ xrcdemo$(EXEEXT): $(XRCDEMO_OBJECTS) $(__xrcdemo___win32rc)
 	$(CXX) -o $@ $(XRCDEMO_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX)  $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__xrcdemo___mac_rezcmd)
 	$(__xrcdemo___mac_setfilecmd)
+	$(__xrcdemo___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-xrcdemo.app/Contents/PkgInfo: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+xrcdemo.app/Contents/PkgInfo: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p xrcdemo.app/Contents
 	mkdir -p xrcdemo.app/Contents/MacOS
 	mkdir -p xrcdemo.app/Contents/Resources
@@ -159,7 +164,7 @@ xrcdemo.app/Contents/PkgInfo: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f xrcdemo$(EXEEXT) xrcdemo.app/Contents/MacOS/xrcdemo
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc xrcdemo.app/Contents/Resources/xrcdemo.rsrc
+	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc xrcdemo.app/Contents/Resources/xrcdemo.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns xrcdemo.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@xrcdemo_bundle: xrcdemo.app/Contents/PkgInfo
@@ -177,7 +182,7 @@ xrcdemo_xrcdemo.o: $(srcdir)/xrcdemo.cpp
 	$(CXXC) -c -o $@ $(XRCDEMO_CXXFLAGS) $<
 
 xrcdemo_xrcdemo_rc.o: $(srcdir)/xrcdemo.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples --include-dir $(srcdir)/../../include
 
 
 # Include dependency info, if present:

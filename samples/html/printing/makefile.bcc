@@ -118,10 +118,10 @@ __RUNTIME_LIBS_7 = i
 __RUNTIME_LIBS_7 = 
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = -d_UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -161,12 +161,17 @@ $(OBJS)\printing_printing.obj: .\printing.cpp
 	$(CXX) -q -c -P -o$@ $(PRINTING_CXXFLAGS) $**
 
 $(OBJS)\printing_printing.res: .\printing.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include  -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\..\samples $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\printing.exe del $(OBJS)\printing.exe
+	-if exist $(OBJS)\printing.tds del $(OBJS)\printing.tds
+	-if exist $(OBJS)\printing.ilc del $(OBJS)\printing.ilc
+	-if exist $(OBJS)\printing.ild del $(OBJS)\printing.ild
+	-if exist $(OBJS)\printing.ilf del $(OBJS)\printing.ilf
+	-if exist $(OBJS)\printing.ils del $(OBJS)\printing.ils
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
@@ -174,5 +179,5 @@ data:
 
 $(OBJS)\printing.exe: $(PRINTING_OBJECTS)  $(OBJS)\printing_printing.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(PRINTING_OBJECTS),$@,, $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\printing_printing.res
+	c0w32.obj $(PRINTING_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\printing_printing.res
 |

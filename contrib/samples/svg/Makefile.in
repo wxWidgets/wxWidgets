@@ -19,6 +19,7 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
+NM = @NM@
 RESCOMP = @RESCOMP@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
@@ -40,7 +41,7 @@ SVGTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 SVGTEST_OBJECTS =  \
 	$(__svgtest___win32rc) \
 	svgtest_svgtest.o
-WX_VERSION = 2.5.0
+WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
 
@@ -76,7 +77,7 @@ WX_VERSION = 2.5.0
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
 	$(__DLLFLAG_p_1) -i $(srcdir)/../../../samples -i $(srcdir)/../../include -o \
-	svgtest$(EXEEXT) Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r \
+	svgtest$(EXEEXT) Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r \
 	sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
@@ -93,6 +94,9 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__svgtest___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__svgtest___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C svgtest$(EXEEXT)
+COND_PLATFORM_OS2_1___svgtest___os2_emxbindcmd = $(NM) svgtest$(EXEEXT) | if \
+	grep -q pmwin.763 ; then emxbind -ep svgtest$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__svgtest___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___svgtest___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__svgtest___win32rc = svgtest_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__svgtest_bundle___depname = svgtest_bundle
 
@@ -114,12 +118,13 @@ install: all
 install-strip: install
 
 svgtest$(EXEEXT): $(SVGTEST_OBJECTS) $(__svgtest___win32rc)
-	$(CXX) -o $@ $(SVGTEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
+	$(CXX) -o $@ $(SVGTEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__svgtest___mac_rezcmd)
 	$(__svgtest___mac_setfilecmd)
+	$(__svgtest___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-svgtest.app/Contents/PkgInfo: svgtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+svgtest.app/Contents/PkgInfo: svgtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p svgtest.app/Contents
 	mkdir -p svgtest.app/Contents/MacOS
 	mkdir -p svgtest.app/Contents/Resources
@@ -137,13 +142,13 @@ svgtest.app/Contents/PkgInfo: svgtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f svgtest$(EXEEXT) svgtest.app/Contents/MacOS/svgtest
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc svgtest.app/Contents/Resources/svgtest.rsrc
+	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc svgtest.app/Contents/Resources/svgtest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns svgtest.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@svgtest_bundle: svgtest.app/Contents/PkgInfo
 
 svgtest_sample_rc.o: $(srcdir)/../../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples
 
 svgtest_svgtest.o: $(srcdir)/svgtest.cpp
 	$(CXXC) -c -o $@ $(SVGTEST_CXXFLAGS) $<

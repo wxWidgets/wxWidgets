@@ -17,15 +17,16 @@ OBJS = \
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEX2RTF_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(OBJS)\tex2rtf.pdb $(____DEBUGRUNTIME_2_p) \
-	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
-	/D_CONSOLE /DNO_GUI $(CXXFLAGS) /GR /GX
-TEX2RTF_GUI_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_13) \
-	/DWIN32 $(__DEBUGINFO) /Fd$(OBJS)\tex2rtf_gui.pdb $(____DEBUGRUNTIME_12_p) \
-	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\..\samples $(CXXFLAGS) /GR /GX
+	$(__DEBUGINFO_2) /Fd$(OBJS)\tex2rtf.pdb $(____DEBUGRUNTIME_2_p) \
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
+	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE /DNO_GUI $(CXXFLAGS) /GR /GX
+TEX2RTF_GUI_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_14) \
+	/DWIN32 $(__DEBUGINFO_2) /Fd$(OBJS)\tex2rtf_gui.pdb \
+	$(____DEBUGRUNTIME_13_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	/I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
+	/I.\..\..\..\samples $(CXXFLAGS) /GR /GX
 TEX2RTF_GUI_OBJECTS =  \
 	$(OBJS)\tex2rtf_gui_sample.res \
 	$(OBJS)\tex2rtf_gui_tex2rtf.obj \
@@ -76,7 +77,7 @@ WXUNICODEFLAG = u
 WXUNIVNAME = univ
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO = /Zi
+__DEBUGINFO = d
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO = 
@@ -85,7 +86,7 @@ __DEBUGINFO =
 __DEBUGINFO = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO = /Zi
+__DEBUGINFO = d
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_1 = /DEBUG
@@ -100,7 +101,7 @@ __DEBUGINFO_1 =
 __DEBUGINFO_1 = /DEBUG
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_2 = d
+__DEBUGINFO_2 = /Zi
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_2 = 
@@ -109,16 +110,16 @@ __DEBUGINFO_2 =
 __DEBUGINFO_2 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_2 = d
+__DEBUGINFO_2 = /Zi
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_13 = 
+__DEBUGRUNTIME_14 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_13 = d
+__DEBUGRUNTIME_14 = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_13 = $(__DEBUGINFO_2)
+__DEBUGRUNTIME_14 = $(__DEBUGINFO)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 __DEBUGRUNTIME_3 = 
@@ -127,7 +128,7 @@ __DEBUGRUNTIME_3 =
 __DEBUGRUNTIME_3 = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_3 = $(__DEBUGINFO_2)
+__DEBUGRUNTIME_3 = $(__DEBUGINFO)
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
 __DEBUG_DEFINE_p = /D__WXDEBUG__
@@ -156,6 +157,18 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !if "$(USE_GUI)" == "1"
 __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
+__NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NO_VC_CRTDBG_p_3 = /d __NO_VC_CRTDBG__
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
+__NO_VC_CRTDBG_p_3 = /d __NO_VC_CRTDBG__
+!endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG = /Od
 !endif
@@ -169,10 +182,10 @@ __RUNTIME_LIBS = D
 __RUNTIME_LIBS = T
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = /D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_3 = /d wxUSE_UNICODE=1
+__UNICODE_DEFINE_p_3 = /d _UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -211,34 +224,34 @@ ____DEBUGINFO =
 ____DEBUGINFO = /D_DEBUG
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_12_p_1 = /d _DEBUG
+____DEBUGINFO_13_p_1 = /d _DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_12_p_1 = 
+____DEBUGINFO_13_p_1 = 
 !endif
 !if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO_12_p_1 = 
+____DEBUGINFO_13_p_1 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-____DEBUGINFO_12_p_1 = /d _DEBUG
+____DEBUGINFO_13_p_1 = /d _DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_12_p = 
+____DEBUGRUNTIME_13_p = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_12_p = /D_DEBUG
+____DEBUGRUNTIME_13_p = /D_DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_12_p = $(____DEBUGINFO)
+____DEBUGRUNTIME_13_p = $(____DEBUGINFO)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_12_p_1 = 
+____DEBUGRUNTIME_13_p_1 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_12_p_1 = /d _DEBUG
+____DEBUGRUNTIME_13_p_1 = /d _DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_12_p_1 = $(____DEBUGINFO_12_p_1)
+____DEBUGRUNTIME_13_p_1 = $(____DEBUGINFO_13_p_1)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 ____DEBUGRUNTIME_2_p = 
@@ -269,7 +282,7 @@ $(OBJS)\tex2rtf_gui_rtfutils.obj: .\rtfutils.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEX2RTF_GUI_CXXFLAGS) $**
 
 $(OBJS)\tex2rtf_gui_sample.res: .\..\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_12_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_3) /d _WINDOWS /i .\..\..\..\samples $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_13_p_1) $(__NO_VC_CRTDBG_p_3) /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_3) /d _WINDOWS /i .\..\..\..\samples $**
 
 $(OBJS)\tex2rtf_gui_table.obj: .\table.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEX2RTF_GUI_CXXFLAGS) $**
@@ -314,14 +327,18 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\tex2rtf.exe del $(OBJS)\tex2rtf.exe
+	-if exist $(OBJS)\tex2rtf.ilk del $(OBJS)\tex2rtf.ilk
+	-if exist $(OBJS)\tex2rtf.pdb del $(OBJS)\tex2rtf.pdb
 	-if exist $(OBJS)\tex2rtf_gui.exe del $(OBJS)\tex2rtf_gui.exe
+	-if exist $(OBJS)\tex2rtf_gui.ilk del $(OBJS)\tex2rtf_gui.ilk
+	-if exist $(OBJS)\tex2rtf_gui.pdb del $(OBJS)\tex2rtf_gui.pdb
 
 $(OBJS)\tex2rtf.exe: $(TEX2RTF_OBJECTS)
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE @<<
-	$(TEX2RTF_OBJECTS)  $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+	$(TEX2RTF_OBJECTS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib
 <<
 
 $(OBJS)\tex2rtf_gui.exe: $(TEX2RTF_GUI_OBJECTS) $(OBJS)\tex2rtf_gui_sample.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
-	$(TEX2RTF_GUI_OBJECTS)  $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+	$(TEX2RTF_GUI_OBJECTS)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib
 <<

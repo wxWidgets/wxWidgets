@@ -77,7 +77,7 @@ DEPRECATEDLIB_OBJECTS =  \
 	deprecatedlib_wxexpr.o \
 	deprecatedlib_dosyacc.o
 LIBDIRNAME = $(top_builddir)lib
-WX_VERSION = 2.5.0
+WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
 
@@ -96,7 +96,7 @@ WX_VERSION = 2.5.0
 @COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT@WXDEBUGFLAG = d
 @COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
-@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)250
+@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)251
 @COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -2.5
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 @COND_UNICODE_1@WXUNICODEFLAG = u
@@ -170,14 +170,14 @@ COND_USE_SOVERSOLARIS_1___deprecateddll___soname_flags = \
 	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__deprecateddll___targetsuf3)
 @COND_USE_SOVERSOLARIS_1@__deprecateddll___soname_flags = $(COND_USE_SOVERSOLARIS_1___deprecateddll___soname_flags)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@__deprecateddll___targetsuf2 \
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).0
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).1
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__deprecateddll___targetsuf2 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__deprecateddll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@__deprecateddll___targetsuf3 \
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).0.0.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).1.0.0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__deprecateddll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__deprecateddll___targetsuf3 = .$(SO_SUFFIX)
 @COND_GCC_PCH_1@__deprecatedlib_PCH_DEP = \
 @COND_GCC_PCH_1@	.pch/wxprec_deprecatedlib/wx/wxprec.h.gch
@@ -207,7 +207,8 @@ clean:
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX).a
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__deprecateddll___targetsuf3): $(__deprecateddll_PCH_DEP)  $(DEPRECATEDDLL_OBJECTS)
-@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(DEPRECATEDDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__deprecateddll___macinstnamecmd) $(__deprecateddll___importlib) $(__deprecateddll___soname_flags) $(__deprecateddll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(DEPRECATEDDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__deprecateddll___macinstnamecmd) $(__deprecateddll___importlib) $(__deprecateddll___soname_flags) $(__deprecateddll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+@COND_SHARED_1@	
 @COND_SHARED_1@	$(__deprecateddll___so_symlinks_cmd)
 
 deprecateddll_dosyacc.o: $(srcdir)/dosyacc.c

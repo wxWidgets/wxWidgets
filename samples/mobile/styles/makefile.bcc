@@ -118,10 +118,10 @@ __RUNTIME_LIBS_7 = i
 __RUNTIME_LIBS_7 = 
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = -d_UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -154,7 +154,7 @@ $(OBJS):
 all: $(OBJS)\styles.exe data
 
 $(OBJS)\styles_sample.res: .\..\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include  -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\..\samples $**
 
 $(OBJS)\styles_styles.obj: .\styles.cpp
 	$(CXX) -q -c -P -o$@ $(STYLES_CXXFLAGS) $**
@@ -163,6 +163,11 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\styles.exe del $(OBJS)\styles.exe
+	-if exist $(OBJS)\styles.tds del $(OBJS)\styles.tds
+	-if exist $(OBJS)\styles.ilc del $(OBJS)\styles.ilc
+	-if exist $(OBJS)\styles.ild del $(OBJS)\styles.ild
+	-if exist $(OBJS)\styles.ilf del $(OBJS)\styles.ilf
+	-if exist $(OBJS)\styles.ils del $(OBJS)\styles.ils
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
@@ -170,5 +175,5 @@ data:
 
 $(OBJS)\styles.exe: $(STYLES_OBJECTS)  $(OBJS)\styles_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(STYLES_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\styles_sample.res
+	c0w32.obj $(STYLES_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\styles_sample.res
 |

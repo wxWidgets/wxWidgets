@@ -19,6 +19,7 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
+NM = @NM@
 RESCOMP = @RESCOMP@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
@@ -40,7 +41,7 @@ LED_OBJECTS =  \
 	$(__led___win32rc) \
 	led_led.o
 LIBDIRNAME = $(top_builddir)lib
-WX_VERSION = 2.5.0
+WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
 
@@ -77,7 +78,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
 	$(__DLLFLAG_p_1) -i $(srcdir)/../../../../samples -i \
 	$(srcdir)/../../../include -o led$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
 @COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
@@ -92,6 +93,9 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 @COND_PLATFORM_MAC_1@__led___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__led___mac_setfilecmd = $(SETFILE) -a C led$(EXEEXT)
+COND_PLATFORM_OS2_1___led___os2_emxbindcmd = $(NM) led$(EXEEXT) | if grep -q \
+	pmwin.763 ; then emxbind -ep led$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__led___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___led___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__led___win32rc = led_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__led_bundle___depname = led_bundle
 
@@ -113,12 +117,13 @@ install: all
 install-strip: install
 
 led$(EXEEXT): $(LED_OBJECTS) $(__led___win32rc)
-	$(CXX) -o $@ $(LED_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(HOST_SUFFIX) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
+	$(CXX) -o $@ $(LED_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__led___mac_rezcmd)
 	$(__led___mac_setfilecmd)
+	$(__led___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-led.app/Contents/PkgInfo: led$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+led.app/Contents/PkgInfo: led$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p led.app/Contents
 	mkdir -p led.app/Contents/MacOS
 	mkdir -p led.app/Contents/Resources
@@ -136,7 +141,7 @@ led.app/Contents/PkgInfo: led$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f led$(EXEEXT) led.app/Contents/MacOS/led
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc led.app/Contents/Resources/led.rsrc
+	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc led.app/Contents/Resources/led.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns led.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@led_bundle: led.app/Contents/PkgInfo
@@ -145,7 +150,7 @@ led_led.o: $(srcdir)/led.cpp
 	$(CXXC) -c -o $@ $(LED_CXXFLAGS) $<
 
 led_sample_rc.o: $(srcdir)/../../../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples
 
 uninstall: 
 

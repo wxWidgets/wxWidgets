@@ -16,9 +16,9 @@ OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OWNERDRW_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\ownerdrw.pdb $(____DEBUGRUNTIME_2_p) \
-	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\samples $(CXXFLAGS) /GR /GX
+	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
+	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples $(CXXFLAGS) /GR /GX
 OWNERDRW_OBJECTS =  \
 	$(OBJS)\ownerdrw_ownerdrw.obj \
 	$(OBJS)\ownerdrw_ownerdrw.res
@@ -126,6 +126,18 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !if "$(USE_GUI)" == "1"
 __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
+__NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NO_VC_CRTDBG_p_1 = /d __NO_VC_CRTDBG__
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
+__NO_VC_CRTDBG_p_1 = /d __NO_VC_CRTDBG__
+!endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG_4 = /Od
 !endif
@@ -220,7 +232,7 @@ $(OBJS)\ownerdrw_ownerdrw.obj: .\ownerdrw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(OWNERDRW_CXXFLAGS) $**
 
 $(OBJS)\ownerdrw_ownerdrw.res: .\ownerdrw.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) $(__NO_VC_CRTDBG_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
