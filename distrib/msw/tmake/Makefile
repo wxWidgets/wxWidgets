@@ -19,6 +19,7 @@ all: $(MSW_MAKEFILES_DIR)/makefile.vc \
      $(WXDIR)/src/msw/files.lst \
      $(WXDIR)/src/gtk/files.lst \
      $(WXDIR)/src/mac/files.lst \
+     $(WXDIR)/src/cocoa/files.lst \
      $(WXDIR)/src/motif/files.lst \
      $(WXDIR)/src/os2/files.lst \
      $(WXDIR)/src/mgl/files.lst \
@@ -71,6 +72,9 @@ $(WXDIR)/src/gtk/files.lst: gtk.t filelist.txt wxwin.pro
 
 $(WXDIR)/src/mac/files.lst: mac.t filelist.txt wxwin.pro
 	$(TMAKE) -t mac wxwin.pro -o $@
+
+$(WXDIR)/src/cocoa/files.lst: cocoa.t filelist.txt wxwin.pro
+	$(TMAKE) -t cocoa wxwin.pro -o $@
 
 $(WXDIR)/src/motif/files.lst: motif.t filelist.txt wxwin.pro
 	$(TMAKE) -t motif wxwin.pro -o $@
