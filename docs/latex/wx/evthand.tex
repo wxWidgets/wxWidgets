@@ -142,6 +142,17 @@ should be made available by deriving a new class with new data members.
 
 \helpref{wxEvtHandler::SetClientData}{wxevthandlersetclientdata}
 
+\membersection{wxEvtHandler::GetClientObject}\label{wxevthandlergetclientobject}
+
+\constfunc{wxClientData*}{GetClientObject}{\void}
+
+Get a pointer to the user-supplied client data object.
+
+\wxheading{See also}
+
+\helpref{wxEvtHandler::SetClientObject}{wxevthandlersetclientobject},
+\helpref{wxClientData}{wxclientdata}
+
 \membersection{wxEvtHandler::GetEvtHandlerEnabled}\label{wxevthandlergetevthandlerenabled}
 
 \func{bool}{GetEvtHandlerEnabled}{\void}
@@ -282,11 +293,24 @@ Sets user-supplied client data.
 
 Normally, any extra data the programmer wishes to associate with 
 the object should be made available by deriving a new class
-with new data members.
+with new data members. You must not call this method and
+\helpref{SetClientObject}{wxevthandlersetclientobject} on the
+same class - only one of them.
 
 \wxheading{See also}
 
 \helpref{wxEvtHandler::GetClientData}{wxevthandlergetclientdata}
+
+\membersection{wxEvtHandler::SetClientObject}\label{wxevthandlersetclientobject}
+
+\func{void}{SetClientObject}{\param{wxClientData* }{data}}
+
+Set the client data object. Any previous object will be deleted.
+
+\wxheading{See also}
+
+\helpref{wxEvtHandler::GetClientObject}{wxevthandlergetclientobject},
+\helpref{wxClientData}{wxclientdata}
 
 \membersection{wxEvtHandler::SetEvtHandlerEnabled}\label{wxevthandlersetevthandlerenabled}
 
