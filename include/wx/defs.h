@@ -1446,6 +1446,7 @@ enum
     wxID_HELP_PROCEDURES,
     wxID_HELP_CONTEXT,
     wxID_CLOSE_ALL,
+    wxID_PREFERENCES ,
 
     wxID_CUT = 5030,
     wxID_COPY,
