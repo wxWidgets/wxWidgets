@@ -125,9 +125,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   wxDebugMsg("Loaded m_windowMenu %d\n", m_windowMenu);
 #endif
 
-  // Adding WS_CLIPCHILDREN causes children not to be properly
-  // drawn when first displaying them.
-  DWORD msflags = WS_OVERLAPPED ; // | WS_CLIPCHILDREN ;
+  DWORD msflags = WS_OVERLAPPED ;
   if (style & wxMINIMIZE_BOX)
     msflags |= WS_MINIMIZEBOX;
   if (style & wxMAXIMIZE_BOX)
@@ -142,8 +140,11 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     msflags |= WS_MAXIMIZE;
   if (style & wxCAPTION)
     msflags |= WS_CAPTION;
-  if (style & wxCLIP_CHILDREN)
-    msflags |= WS_CLIPCHILDREN;
+
+  // Adding WS_CLIPCHILDREN causes children not to be properly
+  // drawn when first displaying them.
+//  if (style & wxCLIP_CHILDREN)
+//    msflags |= WS_CLIPCHILDREN;
 
   wxWindow::MSWCreate(m_windowId, parent, wxMDIFrameClassName, this, title, x, y, width, height,
          msflags);

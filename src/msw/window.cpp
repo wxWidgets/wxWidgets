@@ -1936,11 +1936,11 @@ long wxWindow::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
 long wxWindow::Default()
 {
-    // These are fake events, ignore them
-    if (m_lastEvent != wxEVT_ENTER_WINDOW && m_lastEvent != wxEVT_LEAVE_WINDOW)
-        return this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
-    else
+    // Ignore 'fake' events (perhaps generated as a result of a separate real event)
+    if (m_lastMsg == 0)
         return 0;
+
+    return this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
 }
 
 bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
@@ -2444,6 +2444,8 @@ void wxWindow::MSWOnMouseEnter(const int x, const int y, const WXUINT flags)
 
   m_lastEvent = wxEVT_ENTER_WINDOW;
   m_lastXPos = event.m_x; m_lastYPos = event.m_y;
+  // No message - ensure we don't try to call the default behaviour accidentally.
+  m_lastMsg = 0;
   GetEventHandler()->ProcessEvent(event);
 }
 
@@ -2462,6 +2464,8 @@ void wxWindow::MSWOnMouseLeave(const int x, const int y, const WXUINT flags)
 
   m_lastEvent = wxEVT_LEAVE_WINDOW;
   m_lastXPos = event.m_x; m_lastYPos = event.m_y;
+  // No message - ensure we don't try to call the default behaviour accidentally.
+  m_lastMsg = 0;
   GetEventHandler()->ProcessEvent(event);
 }
 
