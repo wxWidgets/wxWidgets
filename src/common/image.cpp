@@ -236,15 +236,15 @@ void wxImage::Replace( unsigned char r1, unsigned char g1, unsigned char b1,
 
     for (int j = 0; j < h; j++)
         for (int i = 0; i < w; i++)
-	{
-	    if ((data[0] == r1) && (data[1] == g1) && (data[2] == b1))
-	    {
-	        data[0] = r2;
-		data[1] = g2;
-		data[2] = b2;
-	    }
-	    data += 3;
-	}
+        {
+            if ((data[0] == r1) && (data[1] == g1) && (data[2] == b1))
+            {
+                data[0] = r2;
+                data[1] = g2;
+                data[2] = b2;
+            }
+            data += 3;
+        }
 }
 
 void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b )
@@ -402,7 +402,7 @@ bool wxImage::LoadFile( const wxString& filename, long type )
     if (wxFileExists(filename))
     {
         wxFileInputStream stream(filename);
-	wxBufferedInputStream bstream( stream );
+        wxBufferedInputStream bstream( stream );
         return LoadFile(bstream, type);
     }
     else
@@ -422,7 +422,7 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
     if (wxFileExists(filename))
     {
         wxFileInputStream stream(filename);
-	wxBufferedInputStream bstream( stream );
+        wxBufferedInputStream bstream( stream );
         return LoadFile(bstream, mimetype);
     }
     else
@@ -443,7 +443,7 @@ bool wxImage::SaveFile( const wxString& filename, int type )
 
     if ( stream.LastError() == wxStream_NOERROR )
     {
-	wxBufferedOutputStream bstream( stream );
+        wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, type);
     }
     else
@@ -458,7 +458,7 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
 
     if ( stream.LastError() == wxStream_NOERROR )
     {
-	wxBufferedOutputStream bstream( stream );
+        wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, mimetype);
     }
     else
@@ -486,7 +486,7 @@ bool wxImage::CanRead( wxInputStream &stream )
     {
       wxImageHandler *handler=(wxImageHandler*)node->GetData();
       if (handler->CanRead( stream ))
-	return TRUE;
+        return TRUE;
     }
 
   return FALSE;
@@ -884,10 +884,10 @@ wxBitmap wxImage::ConvertToBitmap() const
                 for(i=0; i<width; i++ )
                 {
                     // was causing a code gen bug in cw : if( ( cr !=r) || (cg!=g) || (cb!=b) )
-                	unsigned char cr = (*(ptdata++)) ;
-                	unsigned char cg = (*(ptdata++)) ;
-                	unsigned char cb = (*(ptdata++)) ;
-                	
+                        unsigned char cr = (*(ptdata++)) ;
+                        unsigned char cg = (*(ptdata++)) ;
+                        unsigned char cb = (*(ptdata++)) ;
+                        
                     if( ( cr !=r) || (cg!=g) || (cb!=b) )
                     {
                         *(ptbits++) = one;
@@ -1089,7 +1089,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 
     if (HasMask())
     {
-    	/*
+            /*
         unsigned char *mask_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
 
         mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
@@ -1107,11 +1107,11 @@ wxBitmap wxImage::ConvertToBitmap() const
     int g_mask = GetMaskGreen();
     int b_mask = GetMaskBlue();
 
-		CGrafPtr 	origPort ;
-		GDHandle	origDevice ;
-		
-		GetGWorld( &origPort , &origDevice ) ;
-		SetGWorld( bitmap.GetHBITMAP() , NULL ) ;
+                CGrafPtr         origPort ;
+                GDHandle        origDevice ;
+                
+                GetGWorld( &origPort , &origDevice ) ;
+                SetGWorld( bitmap.GetHBITMAP() , NULL ) ;
 
     register unsigned char* data = GetData();
 
@@ -1120,18 +1120,18 @@ wxBitmap wxImage::ConvertToBitmap() const
     {
         for (int x = 0; x < width; x++)
         {
-	    	unsigned char r = data[index++];
-    		unsigned char g = data[index++];
-    		unsigned char b = data[index++];
-       		RGBColor color ;
-       		color.red = ( r  << 8 ) + r ;
-       		color.green = ( g << 8 ) + g ;
-       		color.blue = ( b << 8 ) + b ;
-       		SetCPixel( x , y , &color ) ;
-       	}
+                    unsigned char r = data[index++];
+                    unsigned char g = data[index++];
+                    unsigned char b = data[index++];
+                       RGBColor color ;
+                       color.red = ( r  << 8 ) + r ;
+                       color.green = ( g << 8 ) + g ;
+                       color.blue = ( b << 8 ) + b ;
+                       SetCPixel( x , y , &color ) ;
+               }
     }  // for height
 
-   	SetGWorld( origPort , origDevice ) ;
+           SetGWorld( origPort , origDevice ) ;
 
     if ( HasMask() )
     {
@@ -1228,7 +1228,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
             ptbits += 3;
         }
         ptbits += padding;
-    }	
+    }        
 
     // similarly, set data according to the possible mask bitmap
     if( bitmap.GetMask() && bitmap.GetMask()->GetMaskBitmap() )
@@ -1672,27 +1672,27 @@ wxImage::wxImage( const wxBitmap &bitmap )
         for (int i = 0; i < bitmap.GetWidth(); i++)
         {
             wxUint32 pixel = gdk_image_get_pixel( gdk_image, i, j );
-	        if (bpp == 1)
-	        {
-	            if (pixel == 0)
-		        {
+                if (bpp == 1)
+                {
+                    if (pixel == 0)
+                        {
                     data[pos]   = 0;
                     data[pos+1] = 0;
                     data[pos+2] = 0;
-		        }
-		        else
-		        {
+                        }
+                        else
+                        {
                     data[pos]   = 255;
                     data[pos+1] = 255;
                     data[pos+2] = 255;
-		        }
+                        }
             }
             else if (use_shift)
             {
                 data[pos] =   (pixel >> red_shift_right)   << red_shift_left;
                 data[pos+1] = (pixel >> green_shift_right) << green_shift_left;
                 data[pos+2] = (pixel >> blue_shift_right)  << blue_shift_left;
-	        } 
+                } 
             else if (cmap->colors)
             {
                 data[pos] =   cmap->colors[pixel].red   >> 8;
@@ -1798,50 +1798,50 @@ private:
 
 wxSearchColor::wxSearchColor( void )
 {
-  this->size   = 0;
-  this->colors = (XColor*) NULL;
-  this->color  = (unsigned int *) NULL;
-  this->entry  = (int*) NULL;
+  size   = 0;
+  colors = (XColor*) NULL;
+  color  = (unsigned int *) NULL;
+  entry  = (int*) NULL;
 
-  this->bottom = 0;
-  this->top    = 0;
+  bottom = 0;
+  top    = 0;
 }
 
-wxSearchColor::wxSearchColor( int size, XColor *colors )
+wxSearchColor::wxSearchColor( int size_, XColor *colors_ )
 {
     int i;
-  this->size   = size;
-  this->colors = colors;
-  this->color  = new unsigned int[size];
-  this->entry  = new int         [size];
+    size   = size_;
+    colors = colors_;
+    color  = new unsigned int[size];
+    entry  = new int         [size];
 
-  for (i = 0; i < this->size; i++ ) {
-    this->entry[i] = -1;
-  }
+    for (i = 0; i < size; i++ ) {
+        entry[i] = -1;
+    }
 
-  this->bottom = this->top = ( size >> 1 );
+    bottom = top = ( size >> 1 );
 }
 
 wxSearchColor::~wxSearchColor( void )
 {
-  if ( this->color ) delete this->color;
-  if ( this->entry ) delete this->entry;
+  if ( color ) delete color;
+  if ( entry ) delete entry;
 }
 
 int wxSearchColor::SearchColor( int r, int g, int b )
 {
   unsigned int value = ( ( ( r * 256 ) + g ) * 256 ) + b;
-  int          begin = this->bottom;
-  int          end   = this->top;
+  int          begin = bottom;
+  int          end   = top;
   int          middle;
 
   while ( begin <= end ) {
 
     middle = ( begin + end ) >> 1;
 
-    if ( value == this->color[middle] ) {
-      return( this->entry[middle] );
-    } else if ( value < this->color[middle] ) {
+    if ( value == color[middle] ) {
+      return( entry[middle] );
+    } else if ( value < color[middle] ) {
       end = middle - 1;
     } else {
       begin = middle + 1;
@@ -1865,47 +1865,47 @@ int wxSearchColor::AddColor( unsigned int value, int pos )
     if (sum < max) { pixel = i; max = sum; }
   }
 
-  if ( this->entry[pos] < 0 ) {
-    this->color[pos] = value;
-    this->entry[pos] = pixel;
-  } else if ( value < this->color[pos] ) {
+  if ( entry[pos] < 0 ) {
+    color[pos] = value;
+    entry[pos] = pixel;
+  } else if ( value < color[pos] ) {
 
-    if ( this->bottom > 0 ) {
-      for ( i = this->bottom; i < pos; i++ ) {
-        this->color[i-1] = this->color[i];
-        this->entry[i-1] = this->entry[i];
+    if ( bottom > 0 ) {
+      for ( i = bottom; i < pos; i++ ) {
+        color[i-1] = color[i];
+        entry[i-1] = entry[i];
       }
-      this->bottom--;
-      this->color[pos-1] = value;
-      this->entry[pos-1] = pixel;
-    } else if ( this->top < this->size-1 ) {
-      for ( i = this->top; i >= pos; i-- ) {
-	this->color[i+1] = this->color[i];
-	this->entry[i+1] = this->entry[i];
+      bottom--;
+      color[pos-1] = value;
+      entry[pos-1] = pixel;
+    } else if ( top < size-1 ) {
+      for ( i = top; i >= pos; i-- ) {
+        color[i+1] = color[i];
+        entry[i+1] = entry[i];
       }
-      this->top++;
-      this->color[pos] = value;
-      this->entry[pos] = pixel;
+      top++;
+      color[pos] = value;
+      entry[pos] = pixel;
     }
 
   } else {
 
-    if ( this->top < this->size-1 ) {
-      for ( i = this->top; i > pos; i-- ) {
-	this->color[i+1] = this->color[i];
-	this->entry[i+1] = this->entry[i];
+    if ( top < size-1 ) {
+      for ( i = top; i > pos; i-- ) {
+        color[i+1] = color[i];
+        entry[i+1] = entry[i];
       }
-      this->top++;
-      this->color[pos+1] = value;
-      this->entry[pos+1] = pixel;
-    } else if ( this->bottom > 0 ) {
-      for ( i = this->bottom; i < pos; i++ ) {
-        this->color[i-1] = this->color[i];
-        this->entry[i-1] = this->entry[i];
+      top++;
+      color[pos+1] = value;
+      entry[pos+1] = pixel;
+    } else if ( bottom > 0 ) {
+      for ( i = bottom; i < pos; i++ ) {
+        color[i-1] = color[i];
+        entry[i-1] = entry[i];
       }
-      this->bottom--;
-      this->color[pos] = value;
-      this->entry[pos] = pixel;
+      bottom--;
+      color[pos] = value;
+      entry[pos] = pixel;
     }
 
   }
@@ -2057,8 +2057,8 @@ wxBitmap wxImage::ConvertToBitmap() const
                     */
 #endif
 
-	                // And this is all to get the 'right' color...
-	                int pixel = scolor.SearchColor( r, g, b );
+                    // And this is all to get the 'right' color...
+                    int pixel = scolor.SearchColor( r, g, b );
                     XPutPixel( data_image, x, y, pixel );
                     break;
                 }
