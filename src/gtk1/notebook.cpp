@@ -16,7 +16,6 @@
 #include "wx/panel.h"
 #include "wx/utils.h"
 #include "wx/imaglist.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 
 //-----------------------------------------------------------------------------
@@ -70,7 +69,10 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
 }
 
 static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
-{ 
+{
+  if ( win->GetAutoLayout() )
+    win->Layout();
+
   if ((win->m_x == alloc->x) &&
       (win->m_y == alloc->y) &&
       (win->m_width == alloc->width) &&
@@ -78,31 +80,31 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
   {
     return;
   };
-  
+
 /*
   printf( "OnResize from " );
   if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
     printf( win->GetClassInfo()->GetClassName() );
   printf( " .\n" );
-    
+
   printf( "  Old: X: %d  Y: %d ", win->m_x, win->m_y );
   printf( "  W: %d  H: %d ", win->m_width, win->m_height );
   printf( " .\n" );
-    
+
   printf( "  New: X: %d  Y: %d ", alloc->x, alloc->y );
   printf( "  W: %d  H: %d ", alloc->width, alloc->height );
   printf( " .\n" );
 */
-  
+
   win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
-  
+
 /*
   printf( "  Res: X: %d  Y: %d ", win->m_x, win->m_y );
   printf( "  W: %d  H: %d ", win->m_width, win->m_height );
   printf( " .\n" );
-*/    
+*/
 };
-  
+
 //-----------------------------------------------------------------------------
 // wxNotebook
 //-----------------------------------------------------------------------------
@@ -139,8 +141,6 @@ wxNotebook::~wxNotebook()
   if ( m_idHandler != 0 )
     gtk_signal_disconnect(GTK_OBJECT(m_widget), m_idHandler);
 
-  if (m_imageList)
-    delete m_imageList;
   DeleteAllPages();
 };
 
@@ -153,9 +153,9 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
   PreCreation( parent, id, pos, size, style, name );
 
   m_widget = gtk_notebook_new();
-  
+
   gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
-  
+
   m_idHandler = gtk_signal_connect
                 (
                   GTK_OBJECT(m_widget), "switch_page",
@@ -420,10 +420,10 @@ void wxNotebook::AddChild( wxWindow *win )
     (GtkNotebookPage*) (g_list_last(GTK_NOTEBOOK(m_widget)->children)->data);
 
   page->m_parent = GTK_NOTEBOOK(m_widget);
-  
+
   gtk_signal_connect( GTK_OBJECT(win->m_widget), "size_allocate",
     GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)win );
-  
+
   if (!page->m_page)
   {
      wxLogFatalError( "Notebook page creation error" );
@@ -432,26 +432,6 @@ void wxNotebook::AddChild( wxWindow *win )
 
   m_pages.Append( page );
 };
-
-void wxNotebook::OnSize(wxSizeEvent& event)
-{
-  // forward this event to all pages
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    wxWindow *page = ((wxNotebookPage*)node->Data())->m_client;
-    // @@@@ the numbers I substract here are completely arbitrary, instead we
-    // should somehow calculate the size of the page from the size of the
-    // notebook
-/*    page->SetSize(event.GetSize().GetX() - 5,
-                                 event.GetSize().GetY() - 30);
-
-    if ( page->GetAutoLayout() )
-      page->Layout();
-*/
-    node = node->Next();
-  };
-}
 
 // override these 2 functions to do nothing: everything is done in OnSize
 void wxNotebook::SetConstraintSizes(bool /* recurse */)
