@@ -68,7 +68,7 @@ extern const wxChar *wxCanvasClassName;
 //---------------------------------------------------------------------------
 #include <dshow.h>
 
-class wxAMMediaBackend : public wxMediaBackend
+class WXDLLIMPEXP_MEDIA wxAMMediaBackend : public wxMediaBackend
 {
 public:
     wxAMMediaBackend();
@@ -141,7 +141,7 @@ public:
 //---------------------------------------------------------------------------
 #include <mmsystem.h>
 
-class wxMCIMediaBackend : public wxMediaBackend
+class WXDLLIMPEXP_MEDIA wxMCIMediaBackend : public wxMediaBackend
 {
 public:
 
@@ -206,7 +206,7 @@ public:
 #include <qtml.h>                   //Windoze QT include
 #include <QuickTimeComponents.h>    //Standard QT stuff
 
-class wxQTMediaBackend : public wxMediaBackend
+class WXDLLIMPEXP_MEDIA wxQTMediaBackend : public wxMediaBackend
 {
 public:
 

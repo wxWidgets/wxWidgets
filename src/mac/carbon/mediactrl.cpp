@@ -68,7 +68,7 @@ Boolean _wxIsQuickTime4Installed (void)
     return (error == noErr) && (((result >> 16) & 0xffff) >= 0x0400);
 }
 
-class wxQTMediaBackend : public wxMediaBackend
+class WXDLLIMPEXP_MEDIA wxQTMediaBackend : public wxMediaBackend
 {
 public:
 

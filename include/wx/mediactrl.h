@@ -70,7 +70,7 @@ enum wxMediaTimeFormat
 //
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMediaEvent : public wxNotifyEvent
+class WXDLLIMPEXP_MEDIA wxMediaEvent : public wxNotifyEvent
 {
 public:
     // ------------------------------------------------------------------------
@@ -111,7 +111,7 @@ public:
 //
 // ----------------------------------------------------------------------------
 
-class wxMediaCtrl : public wxControl
+class WXDLLIMPEXP_MEDIA wxMediaCtrl : public wxControl
 {
 public:
     wxMediaCtrl() : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
@@ -211,7 +211,7 @@ protected:
 //
 // ----------------------------------------------------------------------------
 
-class wxMediaBackend : public wxObject
+class WXDLLIMPEXP_MEDIA wxMediaBackend : public wxObject
 {
 public:
     wxMediaBackend()
@@ -270,8 +270,8 @@ public:
 #define wxMEDIA_STOP_ID    13001
 
 //Define our event types - we need to call DEFINE_EVENT_TYPE(EVT) later
-DECLARE_EVENT_TYPE(wxEVT_MEDIA_FINISHED, wxMEDIA_FINISHED_ID)
-DECLARE_EVENT_TYPE(wxEVT_MEDIA_STOP, wxMEDIA_STOP_ID)
+DECLARE_LOCAL_EVENT_TYPE(wxEVT_MEDIA_FINISHED, wxMEDIA_FINISHED_ID)
+DECLARE_LOCAL_EVENT_TYPE(wxEVT_MEDIA_STOP, wxMEDIA_STOP_ID)
 
 //Function type(s) our events need
 typedef void (wxEvtHandler::*wxMediaEventFunction)(wxMediaEvent&);

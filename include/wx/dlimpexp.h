@@ -186,6 +186,14 @@
 #    define WXDLLIMPEXP_XRC
 #endif
 
+#ifdef WXMAKINGDLL_MEDIA
+#    define WXDLLIMPEXP_MEDIA WXEXPORT
+#elif defined(WXUSINGDLL)
+#    define WXDLLIMPEXP_MEDIA WXIMPORT
+#else /* not making nor using DLL */
+#    define WXDLLIMPEXP_MEDIA
+#endif
+
 /* for backwards compatibility, define suffix-less versions too */
 #define WXDLLEXPORT WXDLLIMPEXP_CORE
 #define WXDLLEXPORT_DATA WXDLLIMPEXP_DATA_CORE
