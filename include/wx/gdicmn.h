@@ -153,8 +153,8 @@ enum wxStockCursor
     // Load from a resource
     #define wxICON(X) wxIcon("" #X "")
 #elif defined(__WXMGL__)
-    // Load from a resource
-    #define wxICON(X) wxIcon("" #X "")
+    // Initialize from an included XPM
+    #define wxICON(X) wxIcon( (const char**) X##_xpm )
 #elif defined(__WXGTK__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( (const char**) X##_xpm )
@@ -173,9 +173,9 @@ enum wxStockCursor
    under Unix bitmaps live in XPMs and under Windows they're in ressources.
  */
 
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMGL__)
+#if defined(__WXMSW__) || defined(__WXPM__)
     #define wxBITMAP(name) wxBitmap(#name, wxBITMAP_TYPE_RESOURCE)
-#elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__)
     // Initialize from an included XPM
     #define wxBITMAP(name) wxBitmap( (const char**) name##_xpm )
 #else // other platforms
