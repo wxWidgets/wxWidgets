@@ -37,7 +37,7 @@ class MemFSHashObj : public wxObject
             m_Data = new char[len];
             memcpy(m_Data, data, len);
             m_Len = len;
-            m_Time = wxDateTime::Today();
+            m_Time = wxDateTime::Now();
         }
         
         MemFSHashObj(wxMemoryOutputStream& stream)
@@ -45,7 +45,7 @@ class MemFSHashObj : public wxObject
             m_Len = stream.GetSize();
             m_Data = new char[m_Len];
             stream.CopyTo(m_Data, m_Len);
-            m_Time = wxDateTime::Today();
+            m_Time = wxDateTime::Now();
         }
         
         ~MemFSHashObj()
