@@ -50,6 +50,27 @@
 // =============================================================================
 
 // -----------------------------------------------------------------------------
+// wxListKey
+// -----------------------------------------------------------------------------
+
+bool wxListKey::operator==(wxListKeyValue value) const
+{
+    switch ( m_keyType )
+    {
+        default:
+            wxFAIL_MSG("bad key type.");
+            // let compiler optimize the line above away in release build
+            // by not putting return here...
+
+        case wxKEY_STRING:
+            return strcmp(m_key.string, value.string) == 0;
+
+        case wxKEY_INTEGER:
+            return m_key.integer == value.integer;
+    }
+}                                
+
+// -----------------------------------------------------------------------------
 // wxNodeBase
 // -----------------------------------------------------------------------------
 
@@ -206,16 +227,26 @@ wxNodeBase *wxListBase::Insert(wxNodeBase *position, void *object)
     wxCHECK_MSG( m_keyType == wxKEY_NONE, (wxNodeBase *)NULL,
                  "need a key for the object to insert" );
 
-    wxNodeBase *prev = (wxNodeBase *)NULL;
-    if ( position )
-        prev = position->GetPrevious();
-    //else
-    //  inserting in the beginning of the list
+    wxCHECK_MSG( !position || position->m_list == this, (wxNodeBase *)NULL,
+                 "can't insert before a node from another list" );
 
-    wxNodeBase *node = CreateNode(prev, position, object);
+    // previous and next node for the node being inserted
+    wxNodeBase *prev, *next;
+    if ( position )
+    {
+        prev = position->GetPrevious();
+        next = position;
+    }
+    else
+    {
+        // inserting in the beginning of the list
+        prev = (wxNodeBase *)NULL;
+        next = m_nodeFirst;
+    }
+
+    wxNodeBase *node = CreateNode(prev, next, object);
     if ( !m_nodeFirst )
     {
-        m_nodeFirst = node;
         m_nodeLast = node;
     }
 
@@ -439,23 +470,6 @@ void wxListBase::Sort(const wxSortCompareFunction compfunc)
     // free the array
     delete[] objArray;
 }
-
-bool wxListKey::operator==(wxListKeyValue value) const
-    {
-        switch ( m_keyType )
-        {
-            default:
-                wxFAIL_MSG("bad key type.");
-                // let compiler optimize the line above away in release build
-                // by not putting return here...
-
-            case wxKEY_STRING:
-                return strcmp(m_key.string, value.string) == 0;
-
-            case wxKEY_INTEGER:
-                return m_key.integer == value.integer;
-        }
-    }
 
 // -----------------------------------------------------------------------------
 // wxList (a.k.a. wxObjectList)
