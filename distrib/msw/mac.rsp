@@ -38,9 +38,5 @@ src/mac/macsock/*.lib
 src/mac/morefile/*.h
 src/mac/morefile/*.cpp
 
-src/mac/xpm/*.c
-src/mac/xpm/*.cpp
-src/mac/xpm/*.h
-
 include/wx/mac/*.h
 
