@@ -58,7 +58,7 @@
 
 #include <stdio.h>
 
-#if defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
+#if defined(__PPCC__) || ( defined(__SC__) && !defined(__DMC__) ) || defined(__MRC__)
 #include <types.h>
 #elif !defined(__MWERKS__) && !defined(THINK_C) && !defined(__acornriscos) && !defined(applec)
 #include <sys/types.h>
@@ -79,7 +79,7 @@
  * additional includes are also done to pull in the
  * appropriate definitions we're looking for.
  */
-#if defined(__MWERKS__) || defined(THINK_C) || defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
+#if defined(__MWERKS__) || defined(THINK_C) || defined(__PPCC__) || ( defined(__SC__) && !defined(__DMC__) ) || defined(__MRC__)
 #include <stdlib.h>
 #define	BSDTYPES
 #define	HAVE_UNISTD_H	0
@@ -137,7 +137,7 @@ typedef	unsigned long u_long;
  * stack (when coerced by the compiler).
  */
 /* Note: on MacPowerPC "extended" is undefined. So only use it for 68K-Macs */
-#if defined(__SC__) || defined(THINK_C)
+#if ( defined(__SC__) && !defined(__DMC__) ) || defined(THINK_C)
 typedef extended dblparam_t;
 #else
 typedef double dblparam_t;
