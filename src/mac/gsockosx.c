@@ -16,6 +16,8 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+#define ALL_CALLBACK_TYPES (kCFSocketReadCallBack | kCFSocketWriteCallBack | kCFSocketConnectCallBack)
+
 struct MacGSocketData
 {
   CFSocketRef socket;
@@ -32,7 +34,8 @@ void Mac_Socket_Callback(CFSocketRef s, CFSocketCallBackType callbackType,
   switch (callbackType)
   {
     case kCFSocketConnectCallBack:
-      socket->m_functions->Detected_Read(socket);
+      assert(!socket->m_server);
+      socket->m_functions->Detected_Write(socket);
       break;
     case kCFSocketReadCallBack:
       socket->m_functions->Detected_Read(socket);
@@ -49,23 +52,30 @@ struct MacGSocketData* _GSocket_Get_Mac_Socket(GSocket *socket)
 {
   /* If socket is already created, returns a pointer to the data */
   /* Otherwise, creates socket and returns the pointer */
-  CFOptionFlags c;
   CFSocketContext cont;
   struct MacGSocketData* data = (struct MacGSocketData*)socket->m_gui_dependent;
 
   if (data && data->source) return data;
+
+  /* CFSocket has not been created, create it: */
   if (socket->m_fd < 0 || !data) return NULL;
   cont.version = 0; cont.retain = NULL;
   cont.release = NULL; cont.copyDescription = NULL;
   cont.info = socket;
-  c = kCFSocketReadCallBack | kCFSocketWriteCallBack;
 
-  CFSocketRef cf = CFSocketCreateWithNative(NULL, socket->m_fd, c,
-                                            Mac_Socket_Callback, &cont);
-  CFSocketDisableCallBacks(cf, kCFSocketReadCallBack | kCFSocketWriteCallBack);
+  CFSocketRef cf = CFSocketCreateWithNative(NULL, socket->m_fd,
+  			ALL_CALLBACK_TYPES, Mac_Socket_Callback, &cont);
+  /* Disable the callbacks until we are asked by GSocket to enable them. */
+  CFSocketDisableCallBacks(cf, ALL_CALLBACK_TYPES);
   CFRunLoopSourceRef source = CFSocketCreateRunLoopSource(NULL, cf, 0);
   assert(source);
-  CFSocketSetSocketFlags(cf, 0);  /* Callbacks must be reenabled manually */
+  /* Turn off kCFSocketCloseOnInvalidate  (NOTE: > 10.2 only!) */
+  /* Another default flag that we don't turn on here is for DataCallBack and
+     also AcceptCallback (which overlap in bits) which we don't use anyway */
+  /* FIXME: For < 10.2 compatibility fix GSocket to call a platform-dependent
+     function to close the socket so that we can just call invalidate and
+     avoid having to set any special flags at all. */
+  CFSocketSetSocketFlags(cf, kCFSocketAutomaticallyReenableReadCallBack | kCFSocketAutomaticallyReenableWriteCallBack);
   socket->m_gui_dependent = (char*)data;
   CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
 
@@ -103,8 +113,10 @@ void _GSocket_GUI_Destroy_Socket(GSocket *socket)
     struct MacGSocketData *data = (struct MacGSocketData*)(socket->m_gui_dependent);
     if (data)
     {
+        /* CFSocketInvalidate does this anyway, so perhaps get rid of this: */
         CFRunLoopRemoveSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopCommonModes);
         CFSocketInvalidate(data->socket);
+        CFRelease(data->socket);
         free(data);
     }
 }
@@ -117,8 +129,12 @@ void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
     switch (event)
     {
      case GSOCK_CONNECTION:
-         c = kCFSocketReadCallBack;  /* This works, but I don't know why. */
+         if(socket->m_server)
+            c = kCFSocketReadCallBack;
+         else
+            c = kCFSocketConnectCallBack;
          break;
+     case GSOCK_LOST:
      case GSOCK_INPUT:
          c = kCFSocketReadCallBack;
          break;
@@ -139,8 +155,12 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
     switch (event)
     {
      case GSOCK_CONNECTION:
-         c = kCFSocketConnectCallBack;
+         if(socket->m_server)
+            c = kCFSocketReadCallBack;
+         else
+            c = kCFSocketConnectCallBack;
          break;
+     case GSOCK_LOST:
      case GSOCK_INPUT:
          c = kCFSocketReadCallBack;
          break;
@@ -155,16 +175,20 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
 
 void _GSocket_Enable_Events(GSocket *socket)
 {
+    CFOptionFlags callBackTypes = kCFSocketReadCallBack | kCFSocketWriteCallBack;
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
     if (!data) return;
-    CFSocketEnableCallBacks(data->socket, kCFSocketReadCallBack | kCFSocketWriteCallBack);
+
+    if(!socket->m_server)
+        callBackTypes |= kCFSocketConnectCallBack;
+    CFSocketEnableCallBacks(data->socket, callBackTypes);
 }
 
 void _GSocket_Disable_Events(GSocket *socket)
 {
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
     if (!data) return;
-    CFSocketDisableCallBacks(data->socket, kCFSocketReadCallBack | kCFSocketWriteCallBack);
+    CFSocketDisableCallBacks(data->socket, ALL_CALLBACK_TYPES);
 }
 
 #endif // wxUSE_SOCKETS
