@@ -187,11 +187,22 @@ bool wxAcceleratorTable::Translate(
 ) const
 {
     PQMSG                           pMsg = (PQMSG)pWxmsg;
+    BOOL                            rc = FALSE;
 
-    return Ok() && ::WinTranslateAccel( vHabmain
-                                       ,(HWND)hWnd
-                                       ,GetHaccel()
-                                       ,pMsg
-                                       );
+    rc = ::WinTranslateAccel( vHabmain
+                             ,(HWND)hWnd
+                             ,GetHaccel()
+                             ,pMsg
+                            );
+    if (rc)
+    {
+        int x = 1;
+    }
+    return (Ok() && rc);
+//    ::WinTranslateAccel( vHabmain
+//                        ,(HWND)hWnd
+//                        ,GetHaccel()
+//                        ,pMsg
+//                       );
 } // end of wxAcceleratorTable::Translate
 
