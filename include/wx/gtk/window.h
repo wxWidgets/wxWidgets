@@ -185,6 +185,7 @@ public:
     bool                 m_isRadioButton:1;  /* faster than IS_KIND_OF */
     bool                 m_isFrame:1;        /* faster than IS_KIND_OF */
     bool                 m_acceptsFocus:1;   /* not wxStaticBox, not wxStaticBitmap etc.  */
+    bool                 m_isScrolling;
 
     // these are true if the style were set before the widget was realized
     // (typcally in the constructor) but the actual GTK style must not be set

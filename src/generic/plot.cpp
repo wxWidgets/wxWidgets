@@ -33,15 +33,19 @@
 
 #include "wx/generic/plot.h"
 
+#include <math.h>
+
 //-----------------------------------------------------------------------------
 // wxPlotCurve
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxPlotCurve, wxObject)
 
-wxPlotCurve::wxPlotCurve( int offsetY )
+wxPlotCurve::wxPlotCurve( int offsetY, double startY, double endY )
 {
     m_offsetY = offsetY;
+    m_startY = startY;
+    m_endY = endY;
 }
 
 //-----------------------------------------------------------------------------
@@ -84,10 +88,14 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
     {
         wxPlotCurve *curve = (wxPlotCurve*)node->Data();
             
-        wxCoord offset_y = client_height - curve->GetOffsetY();
-
-        double dy = curve->GetY( x );
-        int curve_y = (wxCoord)(-dy * 100) + offset_y - 1;
+        double double_client_height = (double)client_height;
+        double range = curve->GetEndY() - curve->GetStartY();
+        double end = curve->GetEndY();
+        wxCoord offset_y = curve->GetOffsetY();
+            
+        double dy = (end - curve->GetY( x )) / range;
+        wxCoord curve_y = (wxCoord)(dy * double_client_height) - offset_y - 1;
+                
         if ((y-curve_y < 4) && (y-curve_y > -4))
         {
             m_owner->SetCurrent( curve );
@@ -123,12 +131,14 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
         update_x += view_x;
         update_y += view_y;
         
+/*
         if (m_owner->m_current)
         {
             dc.SetPen( *wxLIGHT_GREY_PEN );
             int base_line = client_height - m_owner->m_current->GetOffsetY();
             dc.DrawLine( update_x-1, base_line-1, update_x+update_width+2, base_line-1 );
         }
+*/
         
         wxNode *node = m_owner->m_curves.First();
         while (node)
@@ -139,16 +149,20 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 dc.SetPen( *wxBLACK_PEN );
             else
                 dc.SetPen( *wxLIGHT_GREY_PEN );
-            wxCoord offset_y = client_height - curve->GetOffsetY();
 
             int start_x = wxMax( update_x-1, curve->GetStartX() );
             int end_x = wxMin( update_x+update_width+2, curve->GetEndX() );
             
+            double double_client_height = (double)client_height;
+            double range = curve->GetEndY() - curve->GetStartY();
+            double end = curve->GetEndY();
+            wxCoord offset_y = curve->GetOffsetY();
+            
             wxCoord y=0,last_y=0;
             for (int x = start_x; x < end_x; x++)
             {
-                double dy = curve->GetY( x );
-                y = (wxCoord)(-dy * 100) + offset_y - 1;
+                double dy = (end - curve->GetY( x )) / range;
+                y = (wxCoord)(dy * double_client_height) - offset_y - 1;
             
                 if (x != start_x)
                     dc.DrawLine( x-1, last_y, x, y );
@@ -238,14 +252,14 @@ wxPlotCurve *wxPlotWindow::GetAt( size_t n )
 void wxPlotWindow::SetCurrent( wxPlotCurve* current )
 {
     m_current = current;
-    m_area->Refresh( TRUE );
+    m_area->Refresh( FALSE );
     
     wxPoint pos( m_area->GetPosition() );
     
     int client_width;
     int client_height;
     GetClientSize( &client_width, &client_height);
-    wxRect rect(pos.x-40,0,40,client_height);
+    wxRect rect(pos.x-45,0,45,client_height);
     Refresh(TRUE,&rect);
 }
 
@@ -268,11 +282,50 @@ void wxPlotWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     
     wxPoint pos( m_area->GetPosition() );
     
+    double range = m_current->GetEndY() - m_current->GetStartY();
+    double offset = ((double) m_current->GetOffsetY() / (double)client_height ) * range;
+    double start = m_current->GetStartY() - offset;
+    double end = m_current->GetEndY() - offset;
+    int int_log_range = (int)floor( log10( range ) );
+    double step = 1.0;
+    if (int_log_range > 0)
+    {
+        for (int i = 0; i < int_log_range; i++)
+           step *= 10; 
+    }
+    if (int_log_range < 0)
+    {
+        for (int i = 0; i < -int_log_range; i++)
+           step /= 10; 
+    }
+    double lower = ceil(start / step) * step;
+    double upper = floor(end / step) * step;
+    int steps = (int)ceil((upper-lower)/step);
+    if (steps < 3)
+    {
+        step /= 2;
+        if (lower-step > start) lower -= step;
+    }
+    
+    double current = lower;
+    while (current < upper+(step/2))
+    {
+        int y = (int)((m_current->GetEndY()-current) / range * (double)client_height) - 1;
+        y -= m_current->GetOffsetY();
+        if ((y > 10) && (y < client_height-7))
+        {
+            dc.DrawLine( pos.x-15, y, pos.x-7, y );
+            wxString label;
+            label.Printf( "%.1f", current );
+            dc.DrawText( label, pos.x-45, y-7 );
+        }
+
+        current += step;
+    }
+    
     dc.DrawLine( pos.x-15, 5, pos.x-15, client_height-5 );
     dc.DrawLine( pos.x-19, 9, pos.x-15, 5 );
     dc.DrawLine( pos.x-10, 10, pos.x-15, 5 );
     
-    int y = client_height - m_current->GetOffsetY() - 1;
-    dc.DrawLine( pos.x-15, y, pos.x-7, y );
 }
 

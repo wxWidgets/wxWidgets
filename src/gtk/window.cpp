@@ -1627,7 +1627,7 @@ static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
 
 static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
                                                  GdkEventButton *WXUNUSED(gdk_event),
-                                                 wxWindow *WXUNUSED(win))
+                                                 wxWindow *win)
 {
     DEBUG_MAIN_THREAD
 
@@ -1640,6 +1640,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
 //    if (gdk_event->window != widget->slider) return FALSE;
 
     g_blockEventsOnScroll = TRUE;
+    win->m_isScrolling = TRUE;
 
     return FALSE;
 }
@@ -1650,7 +1651,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
 
 static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
                                                    GdkEventButton *WXUNUSED(gdk_event),
-                                                   wxWindow *WXUNUSED(win))
+                                                   wxWindow *win)
 {
     DEBUG_MAIN_THREAD
 
@@ -1661,6 +1662,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
 //    if (gdk_event->window != widget->slider) return FALSE;
 
     g_blockEventsOnScroll = FALSE;
+    win->m_isScrolling = FALSE;
 
     return FALSE;
 }
@@ -1926,6 +1928,7 @@ void wxWindow::Init()
     m_nativeSizeEvent = FALSE;
 
     m_hasScrolling = FALSE;
+    m_isScrolling = FALSE;
 
     m_hAdjust = (GtkAdjustment*) NULL;
     m_vAdjust = (GtkAdjustment*) NULL;

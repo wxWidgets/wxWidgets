@@ -39,8 +39,8 @@ class MyApp;
 class MyPlotCurve: public wxPlotCurve
 {
 public:
-    MyPlotCurve( int offsetY ) : 
-        wxPlotCurve( offsetY ) {}
+    MyPlotCurve( int offsetY, double startY, double endY ) : 
+        wxPlotCurve( offsetY, startY, endY ) {}
     
     virtual wxInt32 GetStartX()
         { return 0; }
@@ -51,7 +51,7 @@ public:
         { 
             double dx = x;
             dx /= 100;
-            return sin( dx )+1;
+            return sin( dx );
         }
 };
 
@@ -98,7 +98,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame( (wxFrame *)NULL, -1, "wxScrolledWindow sample",
+       : wxFrame( (wxFrame *)NULL, -1, "wxPlotWindow sample",
                   wxPoint(20,20), wxSize(470,500) )
 {
     wxMenu *file_menu = new wxMenu();
@@ -116,10 +116,9 @@ MyFrame::MyFrame()
 
     m_plot = new wxPlotWindow( this, -1, wxPoint(0,0), wxSize(100,100), wxSUNKEN_BORDER );
     m_plot->SetScrollbars( 10, 10, 500, 0 );
-    
-    m_plot->Add( new MyPlotCurve(100) );
-    m_plot->Add( new MyPlotCurve(40) );
-    m_plot->Add( new MyPlotCurve(30) );
+
+    m_plot->Add( new MyPlotCurve( 0,  -1.5, 1.5 ) );
+    m_plot->Add( new MyPlotCurve( 50, -1.5, 1.5 ) );
   
     m_log = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
@@ -141,9 +140,9 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-  (void)wxMessageBox( "wxScroll demo II\n"
-                      "Robert Roebling (c) 1998",
-                      "About wxScroll II Demo", wxICON_INFORMATION | wxOK );
+  (void)wxMessageBox( "wxPlotWindow Demo\n"
+                      "Robert Roebling (c) 1999,2000",
+                      "About wxPlotWindow Demo", wxICON_INFORMATION | wxOK );
 }
 
 //-----------------------------------------------------------------------------

@@ -33,18 +33,30 @@ class wxPlotWindow;
 class WXDLLEXPORT wxPlotCurve: public wxObject
 {
 public:
-    wxPlotCurve( int offsetY );
+    wxPlotCurve( int offsetY, double startY, double endY );
     
     virtual wxInt32 GetStartX() = 0;
     virtual wxInt32 GetEndX() = 0;
-    
+
+    virtual double GetY( wxInt32 x ) = 0;
+
+    void SetStartY( double startY )
+        { m_startY = startY; }
+    double GetStartY()
+        { return m_startY; }
+    void SetEndY( double endY )
+        { m_endY = endY; }
+    double GetEndY()
+        { return m_endY; }
+    void SetOffsetY( int offsetY )
+       { m_offsetY = offsetY; }
     int GetOffsetY()
        { return m_offsetY; }
     
-    virtual double GetY( wxInt32 x ) = 0;
-    
 private:
     int     m_offsetY;
+    double  m_startY;
+    double  m_endY;
 
     DECLARE_ABSTRACT_CLASS(wxPlotCurve)
 };

@@ -231,7 +231,7 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
 
     if (!listbox->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
-
+    
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
     event.SetEventObject( listbox );
 

@@ -48,6 +48,7 @@
 #elif defined(HAVE_SHL_LOAD)
 #   define wxDllOpen(lib)                shl_load(lib.fn_str(), BIND_DEFERRED, 0)
 #   define wxDllClose      shl_unload
+
     static inline void *wxDllGetSymbol(shl_t handle, const wxString& name)
     {
         void *sym;

@@ -749,6 +749,12 @@ void MyPanel::OnListBox( wxCommandEvent &event )
 {
 //    GetParent()->Move(100, 100);
 
+    if (event.GetInt() == -1)
+    {
+        m_text->AppendText( "ListBox has no selections anymore\n" );
+        return;
+    }
+
     wxListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
                                                      : m_listboxSorted;
 

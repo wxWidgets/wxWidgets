@@ -87,7 +87,6 @@ public:
   
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
-    bool            m_isScrolling;
     
 private:
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
