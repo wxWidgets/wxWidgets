@@ -109,6 +109,17 @@ private:
   wxMsgCatalog  *m_pMsgCat;       // pointer to linked list of catalogs
 };
 
+// ----------------------------------------------------------------------------
+// inline functions
+// ----------------------------------------------------------------------------
+
+// get the translation of the string in the current locale  
+inline const char *wxGetTranslation(const char *sz)
+{
+  wxLocale *pLoc = wxGetLocale();
+  return pLoc == NULL ? sz : pLoc->GetString(sz);
+}
+
 // ============================================================================
 // optional features
 // ============================================================================
@@ -144,16 +155,5 @@ private:
 
 #define TRANSSTRING_DEFINED
   
-// ----------------------------------------------------------------------------
-// inline functions
-// ----------------------------------------------------------------------------
-
-// get the translation of the string in the current locale  
-inline const char *wxGetTranslation(const char *sz)
-{
-  wxLocale *pLoc = wxGetLocale();
-  return pLoc == NULL ? sz : pLoc->GetString(sz);
-}
-
 #endif
 	// __INTLH__
