@@ -2,7 +2,7 @@
 # Makefile : Builds wxWindows demos for Unix.
 #
 
-DEMOS_SUBDIRS=bombs forty fractal life poem
+DEMOS_SUBDIRS=bombs forty fractal life poem dbbrowse
 
 all:
 	@for d in $(DEMOS_SUBDIRS); do (cd $$d && make); done
