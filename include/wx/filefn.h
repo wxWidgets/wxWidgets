@@ -43,11 +43,11 @@
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 //
-// VisualAge C++ V4.0 cannot have any external linkage const decs 
+// VisualAge C++ V4.0 cannot have any external linkage const decs
 // in headers included by more than one primary source
 //
-extern const off_t wxInvalidOffset = (off_t)-1;
-#else 
+extern const off_t wxInvalidOffset;
+#else
 const off_t wxInvalidOffset = (off_t)-1;
 #endif
 
@@ -95,7 +95,7 @@ WXDLLEXPORT void wxUnix2DosFilename(wxChar *s);
 
 #ifdef __WXMAC__
   WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
-  WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ; 
+  WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
   WXDLLEXPORT void wxUnixFilename2FSSpec( const char *path , FSSpec *spec ) ;
   WXDLLEXPORT void wxMacFilename2FSSpec( const char *path , FSSpec *spec ) ;
   WXDLLEXPORT wxString wxMac2UnixFilename( const char *s) ;
