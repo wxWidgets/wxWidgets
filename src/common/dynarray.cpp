@@ -189,6 +189,7 @@ void name::Shrink()                                                         \
         memcpy(pNew, m_pItems, m_nCount*sizeof(T));                         \
         delete [] m_pItems;                                                 \
         m_pItems = pNew;                                                    \
+        m_nSize = m_nCount;                                                 \
     }                                                                       \
   }                                                                         \
 }                                                                           \
