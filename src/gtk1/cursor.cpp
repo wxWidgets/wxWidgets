@@ -133,7 +133,7 @@ bool wxCursor::operator != ( const wxCursor& cursor )
 
 bool wxCursor::Ok(void) const
 {
-  return TRUE;
+  return (m_refData != NULL);
 }
 
 GdkCursor *wxCursor::GetCursor(void) const

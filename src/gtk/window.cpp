@@ -134,6 +134,13 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
            
   if (gdk_event->count > 0) return;
 
+/*
+  printf( "OnExpose from " );
+  if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+    printf( win->GetClassInfo()->GetClassName() );
+  printf( ".\n" );
+*/
+
   wxPaintEvent event( win->GetId() );
   event.SetEventObject( win );
   win->GetEventHandler()->ProcessEvent( event );
@@ -616,7 +623,14 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
   
   if (!win->HasVMT()) return TRUE;
   
-  if (widget->window)
+/*
+  printf( "OnEnter from " );
+  if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+    printf( win->GetClassInfo()->GetClassName() );
+  printf( ".\n" );
+*/
+  
+  if ((widget->window) && (win->m_cursor))
     gdk_window_set_cursor( widget->window, win->m_cursor->GetCursor() );
     
   wxMouseEvent event( wxEVT_ENTER_WINDOW );
@@ -640,7 +654,14 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
   
   if (!win->HasVMT()) return TRUE;
   
-  if (widget->window)
+/*
+  printf( "OnLeave from " );
+  if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+    printf( win->GetClassInfo()->GetClassName() );
+  printf( ".\n" );
+*/
+  
+  if ((widget->window) && (win->m_cursor))
     gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
     
   wxMouseEvent event( wxEVT_LEAVE_WINDOW );
@@ -831,7 +852,7 @@ wxWindow::wxWindow()
   m_eventHandler = this;
   m_windowValidator = (wxValidator *) NULL;
   m_windowId = -1;
-  m_cursor = new wxCursor( wxCURSOR_ARROW );
+  m_cursor = (wxCursor *) NULL;
   m_font = *wxSWISS_FONT;
   m_windowStyle = 0;
   m_windowName = "noname";
@@ -1063,7 +1084,7 @@ void wxWindow::PostCreation(void)
     gdk_gc_set_exposures( m_wxwindow->style->fg_gc[0], TRUE );
   }
   
-  SetCursor( wxSTANDARD_CURSOR );
+  SetCursor( *wxSTANDARD_CURSOR );
   
   m_hasVMT = TRUE;
 }
@@ -1704,15 +1725,26 @@ wxWindowID wxWindow::GetId(void)
 
 void wxWindow::SetCursor( const wxCursor &cursor )
 {
-  wxASSERT(m_cursor != NULL);
+  if (m_cursor == NULL)
+  {
+    wxFAIL_MSG( "wxWindow::SetCursor m_cursor == NULL" );
+    m_cursor = new wxCursor( wxCURSOR_ARROW );
+  }
+    
+  if (cursor.Ok())
+  {
+    if (*((wxCursor*)&cursor) == m_cursor) return;
+    *m_cursor = cursor;
+  }
+  else
+  {
+    *m_cursor = *wxSTANDARD_CURSOR;
+  }
 
-  if (m_cursor != NULL)
-    if (*m_cursor == cursor)
-      return;
-  (*m_cursor) = cursor;
-  if (m_widget->window)
+  if ((m_widget) && (m_widget->window))
     gdk_window_set_cursor( m_widget->window, m_cursor->GetCursor() );
-  if (m_wxwindow && m_wxwindow->window)
+    
+  if ((m_wxwindow) && (m_wxwindow->window))
     gdk_window_set_cursor( m_wxwindow->window, m_cursor->GetCursor() );
 }
 

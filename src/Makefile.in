@@ -48,11 +48,13 @@ install::
 	@echo " "
 	@echo "  Creating directories.."
 	@$(WXBASEDIR)/mkinstalldirs \
-	   @prefix@/include/wx \
-	   @prefix@/include/wx/gtk \
-	   @prefix@/include/wx/common \
-	   @prefix@/include/wx/generic \
-	   @prefix@/include/wx/protocol \
+	   $(includedir)/wx \
+	   $(includedir)/wx/gtk \
+	   $(includedir)/wx/common \
+	   $(includedir)/wx/generic \
+	   $(includedir)/wx/protocol \
+	   $(libdir) \
+	   $(bindir)
 	@echo "  Copying headers from /include/wx"
 	@cd $(WXBASEDIR)/include/wx ; \
 	$(INSTALL) -d $(includedir)/wx ; \
@@ -66,9 +68,7 @@ install::
 	for f in *.h ; do \
 	  rm -f $(includedir)/wx/gtk/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/gtk/$$f ; \
-	done ; \
-	$(INSTALL) -d $(includedir)/wx/@host@/wx/gtk ;\
-	mv $(includedir)/wx/gtk/setup.h $(includedir)/wx/@host@/wx/gtk/setup.h ;\
+	done ;
 	@echo "  Copying headers from /include/wx/generic"
 	@cd $(WXBASEDIR)/include/wx/generic ; \
 	$(INSTALL) -d $(includedir)/wx/generic ; \
@@ -88,20 +88,20 @@ install::
 	  rm -f $(bindir)/wx-config ; \
 	  $(INSTALL_PROGRAM) wx-config $(bindir)/wx-config
 	@echo "  Copying static library"
-	$(INSTALL) -d $(libdir) ;\
 	@cd $(WXBASEDIR)/lib/$(OS) ; \
 	  rm -f $(libdir)/$(STATIC_LIBRARY) ; \
 	  $(INSTALL_DATA) $(STATIC_LIBRARY) $(libdir)/$(STATIC_LIBRARY)
-	@echo "  Copying shared library"
-	@cd $(WXBASEDIR)/lib/$(OS) ; \
-	  rm -f $(libdir)/$(SHARED_LIBRARY) ; \
-	  $(INSTALL_PROGRAM) $(SHARED_LIBRARY) $(libdir)/$(SHARED_LIBRARY) ; \
-	  $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so.$(LIB_MAJOR) ; \
-	  $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so
+	@if test -d $(SHARED_LIBRARY); then \
+	  echo "  Copying shared library" \
+	  cd $(WXBASEDIR)/lib/$(OS) ; \
+	    rm -f $(libdir)/$(SHARED_LIBRARY) ; \
+	    $(INSTALL_PROGRAM) $(SHARED_LIBRARY) $(libdir)/$(SHARED_LIBRARY) ; \
+	    $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so.$(LIB_MAJOR) ; \
+	    $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so ; \
+	fi
 	@echo " "
 	@echo "Installation complete. You may have to run ldconfig!"
 	@echo " "
-	
 	
 clean::
 	$(RM) -rf gtk
