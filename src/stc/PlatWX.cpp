@@ -906,6 +906,10 @@ PRectangle ListBoxImpl::GetDesiredRect() {
         maxh = count * rect.GetHeight();
         if (maxh > 140)  // TODO:  Use desiredVisibleRows??
             maxh = 140;
+
+        // Try to make the size an exact multiple of some number of lines
+        int lines = maxh / rect.GetHeight();
+        maxh = (lines + 1) * rect.GetHeight() + 2;
     }
     else
         maxh = 100;
