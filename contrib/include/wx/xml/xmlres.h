@@ -37,6 +37,29 @@ class WXDLLEXPORT wxXmlResourceHandler;
 
 #include "wx/xml/xml.h"
 
+// These macros indicate current version of XML resources (this information is
+// encoded in root node of XRC file as "version" property).
+//
+// Rules for increasing version number:
+//   - change it only if you made incompatible change to the format. Addition of new
+//     attribute to control handler is _not_ incompatible change, because older
+//     versions of the library may ignore it.
+//   - if you change version number, follow these steps:
+//       - set major, minor and release numbers to respective version numbers of
+//         the wxWindows library (see wx/version.h)
+//       - reset revision to 0 unless the first three are same as before, in which
+//         case you should increase revision by one
+#define WX_XMLRES_CURRENT_VERSION_MAJOR            2
+#define WX_XMLRES_CURRENT_VERSION_MINOR            3
+#define WX_XMLRES_CURRENT_VERSION_RELEASE          0
+#define WX_XMLRES_CURRENT_VERSION_REVISION         1
+#define WX_XMLRES_CURRENT_VERSION_STRING    "2.3.0.1"
+
+#define WX_XMLRES_CURRENT_VERSION \
+                (WX_XMLRES_CURRENT_VERSION_MAJOR * 256*256*256 + \
+                 WX_XMLRES_CURRENT_VERSION_MINOR * 256*256 + \
+                 WX_XMLRES_CURRENT_VERSION_RELEASE * 256 + \
+                 WX_XMLRES_CURRENT_VERSION_REVISION)
 
 class WXDLLEXPORT wxXmlResourceDataRecord
 {
@@ -120,6 +143,15 @@ public:
     // resource. To be used in event tables
     // Macro XMLID is provided for convenience
     static int GetXMLID(const char *str_id);
+    
+    // Returns version info (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a)
+    long GetVersion() const { return m_version; }
+    
+    // Compares resources version to argument. Returns -1 if resources version
+    // is less than the argument, +1 if greater and 0 if they equal.
+    int CompareVersion(int major, int minor, int release, int revision) const
+        { return GetVersion() - 
+                 (major*256*256*256 + minor*256*256 + release*256 + revision); }
 
 protected:
     // Scans resources list for unloaded files and loads them. Also reloads
@@ -139,6 +171,8 @@ protected:
     bool GetUseLocale() { return m_useLocale; }
 
 private:
+    long m_version;
+    
     bool m_useLocale;
     wxList m_handlers;
     wxXmlResourceDataRecords m_data;
@@ -279,9 +313,9 @@ protected:
     wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0);
 
     // Get bitmap:
-    wxBitmap GetBitmap(const wxString& param = wxT("bitmap"), 
+    wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
                        wxSize size = wxDefaultSize);
-    wxIcon GetIcon(const wxString& param = wxT("icon"), 
+    wxIcon GetIcon(const wxString& param = wxT("icon"),
                    wxSize size = wxDefaultSize);
 
     // Get font:
