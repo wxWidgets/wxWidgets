@@ -202,10 +202,11 @@ void ctConfigTreeCtrl::OnHelp(wxHelpEvent& event)
     wxPoint pt = ScreenToClient(event.GetPosition());
     int flags = 0;
     wxTreeItemId id = HitTest(pt, flags);
+    ctTreeItemData *itemData = (ctTreeItemData*) GetItemData(id);
     wxHelpProvider *helpProvider = wxHelpProvider::Get();
-    if ( helpProvider && id > 0)
+    if ( helpProvider && itemData)
     {
-        ctConfigItem* item = ((ctTreeItemData*) GetItemData(id))->GetConfigItem();
+        ctConfigItem* item = itemData->GetConfigItem();
         if (item)
         {
             wxString helpTopic = item->GetPropertyString(wxT("help-topic"));
