@@ -112,7 +112,7 @@ class WXDLLEXPORT wxTreeRenameTimer: public wxTimer
 public:
     // start editing the current item after half a second (if the mouse hasn't
     // been clicked/moved)
-    static const int DELAY = 500;
+    enum { DELAY = 500 };
 
     wxTreeRenameTimer( wxGenericTreeCtrl *owner );
 
@@ -158,7 +158,7 @@ class WXDLLEXPORT wxTreeFindTimer : public wxTimer
 {
 public:
     // reset the current prefix after half a second of inactivity
-    static const int DELAY = 500;
+    enum { DELAY = 500 };
 
     wxTreeFindTimer( wxGenericTreeCtrl *owner ) { m_owner = owner; }
 
@@ -1406,7 +1406,7 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
     wxCHECK_RET( item, _T("invalid item in wxGenericTreeCtrl::Expand") );
-    wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(), 
+    wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(),
                  _T("can't expand hidden root") );
 
     if ( !item->HasPlus() )
@@ -1452,7 +1452,7 @@ void wxGenericTreeCtrl::ExpandAll(const wxTreeItemId& item)
 
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
 {
-    wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(), 
+    wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(),
                  _T("can't collapse hidden root") );
 
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
