@@ -663,6 +663,11 @@ int wxEntry(WXHINSTANCE hInstance,
     // FIXME other compilers must support Win32 SEH (structured exception
     //       handling) too, just find the appropriate keyword in their docs!
     //       Please note that it's _not_ the same as C++ exceptions!
+#ifndef __VISUALC__
+    #undef wxUSE_ON_FATAL_EXCEPTION
+    #define wxUSE_ON_FATAL_EXCEPTION 0
+#endif // VC++
+
 #if wxUSE_ON_FATAL_EXCEPTION
     __try {
 #endif
