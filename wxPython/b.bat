@@ -37,7 +37,7 @@ elseiff "%1" == "d" then
 rem touch all the *.i files so swig will regenerate
 elseiff "%1" == "t" then
 	shift
-	set CMD=touch src\*.i & touch contrib\glcanvas\*.i & touch contrib\ogl\*.i & touch contrib\stc\*.i
+	set CMD=touch src\*.i & touch contrib\glcanvas\*.i & touch contrib\ogl\*.i & touch contrib\stc\*.i & touch contrib\gizmos\*.i & touch contrib\dllwidget\*.i
 
 rem "i" --> install
 elseiff "%1" == "i" then
@@ -68,6 +68,13 @@ rem "a" --> make all installers
 elseiff "%1" == "a" then
 	shift
 	set CMD=echo Finished!
+
+	call b.bat 15 c
+	call b.bat 15 f
+	call b.bat 15 r
+	call b.bat 15 c
+	call b.bat 15 h
+	call b.bat 15 r
 
 	call b.bat 21 c
 	call b.bat 21 f

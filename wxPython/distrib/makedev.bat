@@ -3,39 +3,47 @@ rem   Builds a zip containing stuff needed to link with the wxWindows DLL
 rem   shipped with wxPython.  This allows other developers to create apps
 rem   or extensions that can share the same DLL.
 
-mkdir wxWin
-mkdir wxWin\lib
-copy %WXWIN%\lib\*.lib wxWin\lib
-del wxWin\lib\*_d.lib
+setlocal
 
-mkdir wxWin\src
-copy %WXWIN%\src\makevc.env wxWin\src
-copy %WXWIN%\src\*.vc wxWin\src
+set BASE=wxPython-devel
 
-mkdir wxWin\src\msw
-mkdir wxWin\src\msw\ReleaseDLL
-copy %WXWIN%\src\msw\*.pch wxWin\src\msw
-del wxWin\src\msw\*_d.pch
-copy %WXWIN%\src\msw\ReleaseDLL\dummy*.obj wxWin\src\msw\ReleaseDLL
+mkdir %BASE%
 
-mkdir wxWin\include
-mkdir wxWin\include\wx
-mkdir wxWin\include\wx\msw
-mkdir wxWin\include\wx\generic
-mkdir wxWin\include\wx\html
-mkdir wxWin\include\wx\protocol
+mkdir %BASE%\ReleaseDLL
+mkdir %BASE%\HybridDLL
+copy /s %WXWIN%\ReleaseDLL %BASE%\ReleaseDLL
+copy /s %WXWIN%\HybridDLL %BASE%\HybridDLL
 
-copy %WXWIN%\include\wx\*.* wxWin\include\wx
-copy /s %WXWIN%\include\wx\msw\* wxWin\include\wx\msw
-copy /s %WXWIN%\include\wx\generic\* wxWin\include\wx\generic
-copy /s %WXWIN%\include\wx\html\* wxWin\include\wx\html
-copy /s %WXWIN%\include\wx\protocol\* wxWin\include\wx\protocol
+mkdir %BASE%\lib
+copy %WXWIN%\lib\*.lib %BASE\lib
+del %BASE%\lib\*d.lib
+copy %WXWIN%\lib\*.dll %BASE\lib
+del %BASE%\lib\*d.dll
+copy %WXWIN%\lib\*.pdb %BASE\lib
+del %BASE%\lib\*d.pdb
+copy /s %WXWIN%\lib\mswdll %BASE\lib\mswdll
+copy /s %WXWIN%\lib\mswdllh %BASE\lib\mswdllh
 
 
-zip -r wxPython-dev-%1.zip wxWin
+mkdir %BASE%\src
+copy %WXWIN%\src\makevc.env %BASE%\src
+copy %WXWIN%\src\*.vc %BASE%\src
+
+mkdir %BASE%\src\msw
+mkdir %BASE%\src\msw\ReleaseDLL
+copy %WXWIN%\src\msw\ReleaseDLL\dummy*.obj %BASE%\src\msw\ReleaseDLL
+mkdir %BASE%\src\msw\HybridDLL
+copy %WXWIN%\src\msw\HybridDLL\dummy*.obj %BASE%\src\msw\HybridDLL
+
+mkdir %BASE%\include
+mkdir %BASE%\include\wx
+copy /s %WXWIN%\include\wx\* %BASE%\include\wx
 
 
-del /sx wxWin
+zip -r dist\wxPython-devel-win32-%1.zip %BASE%
+del /sxzy %BASE%
+
+endlocal
 
 
 
