@@ -318,7 +318,7 @@ bool wxListCtrl::Create(wxWindow *parent,
                         const wxPoint& pos,
                         const wxSize& size,
                         long style,
-                        const wxValidator& validator,
+                        const wxValidator& wxVALIDATOR_PARAM(validator),
                         const wxString& name)
 {
 #if wxUSE_VALIDATORS

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        validate.h
+// Name:        wx/validate.h
 // Purpose:     wxValidator class
 // Author:      Julian Smart
 // Modified by:
@@ -9,21 +9,16 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VALIDATEH__
-#define _WX_VALIDATEH__
+#ifndef _WX_VALIDATE_H_
+#define _WX_VALIDATE_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "validate.h"
 #endif
 
-#if defined(wxUSE_VALIDATORS) && !wxUSE_VALIDATORS
-    // wxWindows is compiled without support for wxValidator, but we still
-    // want to be able to pass wxDefaultValidator to the functions which take
-    // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
-    // everywhere
-    class WXDLLEXPORT wxValidator;
-    #define wxDefaultValidator (*((wxValidator *)NULL))
-#else // wxUSE_VALIDATORS
+#include "wx/defs.h"
+
+#if wxUSE_VALIDATORS
 
 #include "wx/event.h"
 
@@ -88,7 +83,20 @@ private:
 
 WXDLLEXPORT_DATA(extern const wxValidator) wxDefaultValidator;
 
-#endif // wxUSE_VALIDATORS
+#define wxVALIDATOR_PARAM(val) val
 
-#endif
-    // _WX_VALIDATEH__
+#else // !wxUSE_VALIDATORS
+    // wxWindows is compiled without support for wxValidator, but we still
+    // want to be able to pass wxDefaultValidator to the functions which take
+    // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
+    // everywhere
+    class WXDLLEXPORT wxValidator;
+    #define wxDefaultValidator (*((wxValidator *)NULL))
+
+    // this macro allows to avoid warnings about unused parameters when
+    // wxUSE_VALIDATORS == 0
+    #define wxVALIDATOR_PARAM(val)
+#endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
+
+#endif // _WX_VALIDATE_H_
+

@@ -55,7 +55,7 @@ bool wxControlBase::Create(wxWindow *parent,
                            const wxPoint &pos,
                            const wxSize &size,
                            long style,
-                           const wxValidator& validator,
+                           const wxValidator& wxVALIDATOR_PARAM(validator),
                            const wxString &name)
 {
     bool ret = wxWindow::Create(parent, id, pos, size, style, name);

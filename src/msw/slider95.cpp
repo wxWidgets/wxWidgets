@@ -121,7 +121,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
            int value, int minValue, int maxValue,
            const wxPoint& pos,
            const wxSize& size, long style,
-           const wxValidator& validator,
+           const wxValidator& wxVALIDATOR_PARAM(validator),
            const wxString& name)
 {
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )

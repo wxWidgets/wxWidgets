@@ -131,7 +131,7 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
            long style,
-           const wxValidator& validator,
+           const wxValidator& wxVALIDATOR_PARAM(validator),
            const wxString& name)
 {
   SetName(name);

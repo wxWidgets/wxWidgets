@@ -40,6 +40,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/log.h"
+#include "wx/evtloop.h"
 
 #if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
     #include <commdlg.h>
@@ -246,7 +247,7 @@ bool wxDialog::IsModal() const
 
 bool wxDialog::IsModalShowing() const
 {
-    return !!wxModalDialogs.Find(wxConstCast(this, wxDialog));
+    return wxModalDialogs.Find(wxConstCast(this, wxDialog)) != NULL;
 }
 
 wxWindow *wxDialog::FindSuitableParent() const
@@ -309,18 +310,8 @@ void wxDialog::DoShowModal()
     wxIsInOnIdleFlag = FALSE;
 
     // enter the modal loop
-    while ( IsModalShowing() )
-    {
-#if wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
-
-        while ( !wxTheApp->Pending() && wxTheApp->ProcessIdle() )
-            ;
-
-        // a message came or no more idle processing to do
-        wxTheApp->DoMessage();
-    }
+    wxEventLoop evtLoop;
+    evtLoop.Run();
 
     wxIsInOnIdleFlag = wasInOnIdle;
 

@@ -202,7 +202,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               const wxPoint& WXUNUSED(pos),
                               const wxSize& WXUNUSED(size),
                               long style,
-                              const wxValidator& validator,
+                              const wxValidator& wxVALIDATOR_PARAM(validator),
                               const wxString& name)
 {
 #if wxUSE_STATBOX
@@ -2144,7 +2144,7 @@ void wxWindowBase::SendDestroyEvent()
 // event processing
 // ----------------------------------------------------------------------------
 
-bool wxWindowBase::TryValidator(wxEvent& event)
+bool wxWindowBase::TryValidator(wxEvent& wxVALIDATOR_PARAM(event))
 {
 #if wxUSE_VALIDATORS
     // Can only use the validator of the window which

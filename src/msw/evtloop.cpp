@@ -96,13 +96,29 @@ void wxEventLoopImpl::ProcessMessage(MSG *msg)
 
 bool wxEventLoopImpl::PreProcessMessage(MSG *msg)
 {
-    HWND hWnd = msg->hwnd;
-    wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hWnd);
+    HWND hwnd = msg->hwnd;
+    wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
+
+    // this may happen if the event occured in a standard modeless dialog (the
+    // only example of which I know of is the find/replace dialog) - then call
+    // IsDialogMessage() to make TAB navigation in it work
+    if ( !wndThis )
+    {
+        // we need to find the dialog containing this control as
+        // IsDialogMessage() just eats all the messages (i.e. returns TRUE for
+        // them) if we call it for the control itself
+        while ( hwnd && ::GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD )
+        {
+            hwnd = ::GetParent(hwnd);
+        }
+
+        return hwnd && ::IsDialogMessage(hwnd, msg) != 0;
+    }
 
 #if wxUSE_TOOLTIPS
     // we must relay WM_MOUSEMOVE events to the tooltip ctrl if we want it to
     // popup the tooltip bubbles
-    if ( wndThis && (msg->message == WM_MOUSEMOVE) )
+    if ( msg->message == WM_MOUSEMOVE )
     {
         wxToolTip *tt = wndThis->GetToolTip();
         if ( tt )
@@ -112,22 +128,39 @@ bool wxEventLoopImpl::PreProcessMessage(MSG *msg)
     }
 #endif // wxUSE_TOOLTIPS
 
-    // try translations first; find the youngest window with a translation
-    // table.
-    wxWindow *wnd;
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
+    // allow the window to prevent certain messages from being
+    // translated/processed (this is currently used by wxTextCtrl to always
+    // grab Ctrl-C/V/X, even if they are also accelerators in some parent)
+    if ( !wndThis->MSWShouldPreProcessMessage((WXMSG *)msg) )
     {
-        if ( wnd->MSWTranslateMessage((WXMSG *)msg) )
-            return TRUE;
+        return FALSE;
     }
 
-    // Anyone for a non-translation message? Try youngest descendants first.
+    // try translations first: the accelerators override everything
+    wxWindow *wnd;
+
     for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
+    {
+        if ( wnd->MSWTranslateMessage((WXMSG *)msg))
+            return TRUE;
+
+        // stop at first top level window, i.e. don't try to process the key
+        // strokes originating in a dialog using the accelerators of the parent
+        // frame - this doesn't make much sense
+        if ( wnd->IsTopLevel() )
+            break;
+    }
+
+    // now try the other hooks (kbd navigation is handled here): we start from
+    // wndThis->GetParent() because wndThis->MSWProcessMessage() was already
+    // called above
+    for ( wnd = wndThis->GetParent(); wnd; wnd = wnd->GetParent() )
     {
         if ( wnd->MSWProcessMessage((WXMSG *)msg) )
             return TRUE;
     }
 
+    // no special preprocessing for this message, dispatch it normally
     return FALSE;
 }
 

@@ -89,7 +89,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size, long style,
-           const wxValidator& validator,
+           const wxValidator& wxVALIDATOR_PARAM(validator),
            const wxString& name)
 {
     if (!parent)
