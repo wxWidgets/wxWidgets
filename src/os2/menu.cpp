@@ -559,72 +559,20 @@ bool wxMenu::OS2Command(
 
     if (vId != (WXWORD)idMenuTitle)
     {
-        wxCommandEvent              vEvent(wxEVT_COMMAND_MENU_SELECTED);
-
-        vEvent.SetEventObject(this);
-        vEvent.SetId(vId);
-        vEvent.SetInt(vId);
-        ProcessCommand(vEvent);
+        SendEvent( vId
+                  ,(int)::WinSendMsg( GetHmenu()
+                                     ,MM_QUERYITEMATTR
+                                     ,(MPARAM)vId
+                                     ,(MPARAM)MIA_CHECKED
+                                    )
+                 );
     }
     return TRUE;
 } // end of wxMenu::OS2Command
 
-bool wxMenu::ProcessCommand(
-  wxCommandEvent&                   rEvent
-)
-{
-    bool                            bProcessed = FALSE;
-
-#if wxUSE_MENU_CALLBACK
-    //
-    // Try a callback
-    //
-    if (m_callback)
-    {
-        (void)(*(m_callback))(*this, rEvent);
-        bProcessed = TRUE;
-    }
-#endif // wxUSE_MENU_CALLBACK
-
-    //
-    // Try the menu's event handler
-    //
-    if (!bProcessed && GetEventHandler())
-    {
-        bProcessed = GetEventHandler()->ProcessEvent(rEvent);
-    }
-
-    //
-    // Try the window the menu was popped up from (and up through the
-    // hierarchy)
-    wxWindow*                       pWin = GetInvokingWindow();
-
-    if (!bProcessed && pWin)
-        bProcessed = pWin->GetEventHandler()->ProcessEvent(rEvent);
-    return bProcessed;
-} // end of wxMenu::ProcessCommand
-
 // ---------------------------------------------------------------------------
 // other
 // ---------------------------------------------------------------------------
-
-void wxMenu::Attach(
-  wxMenuBar*                        pMenubar
-)
-{
-    //
-    // Menu can be in at most one menubar because otherwise they would both
-    // delete the menu pointer
-    //
-    wxASSERT_MSG(!m_menuBar, wxT("menu belongs to 2 menubars, expect a crash"));
-    m_menuBar = pMenubar;
-} // end of
-
-void wxMenu::Detach()
-{
-    wxASSERT_MSG( m_menuBar, wxT("can't detach menu if it's not attached") );
-    m_menuBar = NULL;
-} // end of wxMenu::Detach
 
 wxWindow* wxMenu::GetWindow() const
 {

@@ -248,6 +248,25 @@ void wxNotebook::SetTabSize(const wxSize& sz)
 // wxNotebook operations
 // ----------------------------------------------------------------------------
 
+void wxNotebook::SetPageSize(const wxSize& size)
+{
+    // transform the page size into the notebook size
+    RECT rc;
+    rc.xLeft = rc.yTop = 0;
+    rc.xRight = size.x;
+    rc.yBottom = size.y;
+
+//    TabCtrl_AdjustRect(GetHwnd(), TRUE, &rc);
+
+    // and now set it
+    SetSize(rc.xRight - rc.xLeft, rc.yBottom - rc.yTop);
+}
+
+void wxNotebook::SetPadding(const wxSize& padding)
+{
+//    TabCtrl_SetPadding(GetHwnd(), padding.x, padding.y);
+}
+
 // remove one page from the notebook
 bool wxNotebook::DeletePage(int nPage)
 {

@@ -124,7 +124,8 @@ GENERICOBJS= \
   ..\generic\$D\propform.obj \
   ..\generic\$D\proplist.obj \
   ..\generic\$D\sashwin.obj \
-  ..\generic\$D\scrolwin.obj \
+  ..\generic\$D\scrlwing.obj \
+  ..\generic\$D\spinctlg.obj \
   ..\generic\$D\splitter.obj \
   ..\generic\$D\statusbr.obj \
   ..\generic\$D\tabg.obj \
@@ -169,7 +170,8 @@ GENLIBOBJS= \
   propform.obj \
   proplist.obj \
   sashwin.obj \
-  scrolwin.obj \
+  scrlwing.obj \
+  spinctlg.obj \
   splitter.obj \
   statusbr.obj \
   tabg.obj \
@@ -192,6 +194,7 @@ COMMONOBJS = \
   ..\common\$D\clipcmn.obj \
   ..\common\$D\cmdline.obj \
   ..\common\$D\cmndata.obj \
+  ..\common\$D\cmdproc.obj \
   ..\common\$D\config.obj \
   ..\common\$D\cshelp.obj \
   ..\common\$D\ctrlcmn.obj \
@@ -230,6 +233,7 @@ COMMONOBJS = \
   ..\common\$D\fs_mem.obj \
   ..\common\$D\fs_zip.obj \
   ..\common\$D\ftp.obj \
+  ..\common\$D\gaugecmn.obj \
   ..\common\$D\gdicmn.obj \
   ..\common\$D\geometry.obj \
   ..\common\$D\gifdecod.obj \
@@ -259,6 +263,7 @@ COMMONOBJS = \
   ..\common\$D\mimecmn.obj \
   ..\common\$D\module.obj \
   ..\common\$D\mstream.obj \
+  ..\common\$D\nbkbase.obj \
   ..\common\$D\object.obj \
   ..\common\$D\objstrm.obj \
 !if "$(WXMAKINGDLL)" != "1"
@@ -266,10 +271,12 @@ COMMONOBJS = \
   ..\common\$D\odbc.obj \
 !endif
   ..\common\$D\paper.obj \
+  ..\common\$D\popupcmn.obj \
   ..\common\$D\prntbase.obj \
   ..\common\$D\process.obj \
   ..\common\$D\protocol.obj \
   ..\common\$D\quantize.obj \
+  ..\common\$D\radiocmn.obj \
   ..\common\$D\resource.obj \
   ..\common\$D\sckaddr.obj \
   ..\common\$D\sckfile.obj \
@@ -310,6 +317,7 @@ COMLIBOBJS1 = \
   clipcmn.obj \
   cmdline.obj \
   cmndata.obj \
+  cmdproc.obj \
   config.obj \
   cshelp.obj \
   ctrlcmn.obj \
@@ -345,12 +353,13 @@ COMLIBOBJS1 = \
   fs_mem.obj \
   fs_zip.obj \
   ftp.obj \
+  gaugecmn.obj \
   gdicmn.obj \
-  geometry.obj \
-  gifdecod.obj \
-  hash.obj
+  geometry.obj
 
 COMLIBOBJS2 = \
+  gifdecod.obj \
+  hash.obj \
   helpbase.obj \
   http.obj \
   imagall.obj \
@@ -376,25 +385,28 @@ COMLIBOBJS2 = \
   mimecmn.obj \
   module.obj \
   mstream.obj \
+  nbkbase.obj \
   object.obj \
   objstrm.obj \
   odbc.obj \
   paper.obj \
+  popupcmn.obj \
   prntbase.obj \
   process.obj \
   protocol.obj \
   quantize.obj \
+  radiocmn.obj \
   resource.obj \
   sckaddr.obj \
   sckfile.obj \
-  sckipc.obj \
+  sckipc.obj
+
+COMLIBOBJS3 = \
   sckstrm.obj \
   serbase.obj \
   sizer.obj \
   socket.obj \
-  strconv.obj
-
-COMLIBOBJS3 = \
+  strconv.obj \
   stream.obj \
   string.obj \
   tbarbase.obj \
@@ -654,6 +666,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\clipcmn.obj
   copy ..\common\$D\cmdline.obj
   copy ..\common\$D\cmndata.obj
+  copy ..\common\$D\cmdproc.obj
   copy ..\common\$D\config.obj
   copy ..\common\$D\cshelp.obj
   copy ..\common\$D\ctrlcmn.obj
@@ -689,12 +702,13 @@ $(COMLIBOBJS1):
   copy ..\common\$D\fs_mem.obj
   copy ..\common\$D\fs_zip.obj
   copy ..\common\$D\ftp.obj
+  copy ..\common\$D\gaugecmn.obj
   copy ..\common\$D\gdicmn.obj
   copy ..\common\$D\geometry.obj
-  copy ..\common\$D\gifdecod.obj
-  copy ..\common\$D\hash.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\gifdecod.obj
+  copy ..\common\$D\hash.obj
   copy ..\common\$D\helpbase.obj
   copy ..\common\$D\http.obj
   copy ..\common\$D\imagall.obj
@@ -720,25 +734,28 @@ $(COMLIBOBJS2):
   copy ..\common\$D\mimecmn.obj
   copy ..\common\$D\module.obj
   copy ..\common\$D\mstream.obj
+  copy ..\common\$D\nbkbase.obj
   copy ..\common\$D\object.obj
   copy ..\common\$D\objstrm.obj
   copy ..\common\$D\odbc.obj
   copy ..\common\$D\paper.obj
+  copy ..\common\$D\popupcmn.obj
   copy ..\common\$D\prntbase.obj
   copy ..\common\$D\process.obj
   copy ..\common\$D\protocol.obj
   copy ..\common\$D\quantize.obj
+  copy ..\common\$D\radiocmn.obj
   copy ..\common\$D\resource.obj
   copy ..\common\$D\sckaddr.obj
   copy ..\common\$D\sckfile.obj
   copy ..\common\$D\sckipc.obj
+
+$(COMLIBOBJS3):
   copy ..\common\$D\sckstrm.obj
   copy ..\common\$D\serbase.obj
   copy ..\common\$D\sizer.obj
   copy ..\common\$D\socket.obj
   copy ..\common\$D\strconv.obj
-
-$(COMLIBOBJS3):
   copy ..\common\$D\stream.obj
   copy ..\common\$D\string.obj
   copy ..\common\$D\tbarbase.obj
@@ -794,7 +811,8 @@ $(GENLIBOBJS):
   copy ..\generic\$D\propform.obj
   copy ..\generic\$D\proplist.obj
   copy ..\generic\$D\sashwin.obj
-  copy ..\generic\$D\scrolwin.obj
+  copy ..\generic\$D\scrlwing.obj
+  copy ..\generic\$D\spinctlg.obj
   copy ..\generic\$D\splitter.obj
   copy ..\generic\$D\statusbr.obj
   copy ..\generic\$D\tabg.obj

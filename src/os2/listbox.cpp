@@ -502,9 +502,9 @@ void wxListBox::SetString(int N, const wxString& s)
 
     void *oldData = NULL;
     wxClientData *oldObjData = NULL;
-    if ( m_clientDataItemsType == ClientData_Void )
+    if ( m_clientDataItemsType == wxClientData_Void )
         oldData = GetClientData(N);
-    else if ( m_clientDataItemsType == ClientData_Object )
+    else if ( m_clientDataItemsType == wxClientData_Object )
         oldObjData = GetClientObject(N);
 // TODO:
 /*

@@ -51,6 +51,21 @@ static s_wndprocRadioBtn = NULL;
 // wxRadioBox
 // ---------------------------------------------------------------------------
 
+int wxRadioBox::GetCount() const
+{
+    return m_noItems;
+}
+
+int wxRadioBox::GetColumnCount() const
+{
+    return GetNumHor();
+}
+
+int wxRadioBox::GetRowCount() const
+{
+    return GetNumVer();
+}
+
 int wxRadioBox::GetNumVer() const
 {
     if ( m_windowStyle & wxRA_SPECIFY_ROWS )
@@ -279,6 +294,14 @@ wxRadioBox::~wxRadioBox()
     if (m_radioHeight)
         delete[] m_radioHeight;
 
+}
+
+void wxRadioBox::SetString(int item, const wxString& label)
+{
+    wxCHECK_RET( item >= 0 && item < m_noItems, wxT("invalid radiobox index") );
+
+    m_radioWidth[item] = m_radioHeight[item] = -1;
+    ::WinSetWindowText((HWND)m_radioButtons[item], label.c_str());
 }
 
 wxString wxRadioBox::GetLabel(int item) const

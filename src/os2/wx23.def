@@ -4,22 +4,29 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
   ;From object file:  ..\common\appcmn.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxAppBase::OnInitGui()
+      OnInitGui__9wxAppBaseFv
       __vft9wxAppBase8wxObject
       ;wxAppBase::OnExit()
       OnExit__9wxAppBaseFv
+      ;wxAppBase::wxAppBase()
+      __ct__9wxAppBaseFv
       ;wxAppBase::ProcessPendingEvents()
       ProcessPendingEvents__9wxAppBaseFv
+      ;wxAppBase::SetActive(unsigned long,wxWindow*)
+      SetActive__9wxAppBaseFUlP8wxWindow
   ;From object file:  ..\common\choiccmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxChoiceBase::SetStringSelection(const wxString&)
       SetStringSelection__12wxChoiceBaseFRC8wxString
       __vft12wxChoiceBase8wxObject
+      __vft12wxChoiceBase15wxItemContainer
       ;wxChoiceBase::Command(wxCommandEvent&)
       Command__12wxChoiceBaseFR14wxCommandEvent
   ;From object file:  ..\common\clipcmn.cpp
@@ -37,93 +44,6 @@ EXPORTS
       ;wxConstructorForwxClipboardModule()
       wxConstructorForwxClipboardModule__Fv
   ;From object file:  ..\common\cmdline.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxCmdLineParser::EnableLongOptions(unsigned long)
-      EnableLongOptions__15wxCmdLineParserFUl
-      ;wxArrayParams::Index(const wxCmdLineParam&,unsigned long) const
-      Index__13wxArrayParamsCFRC14wxCmdLineParamUl
-      ;wxCmdLineParser::Found(const wxString&,long*) const
-      Found__15wxCmdLineParserCFRC8wxStringPl
-      ;wxArrayParams::RemoveAt(unsigned int)
-      RemoveAt__13wxArrayParamsFUi
-      ;wxCmdLineParser::AddSwitch(const wxString&,const wxString&,const wxString&,int)
-      AddSwitch__15wxCmdLineParserFRC8wxStringN21i
-      ;wxArrayOptions::Add(const wxCmdLineOption&)
-      Add__14wxArrayOptionsFRC15wxCmdLineOption
-      ;wxCmdLineParser::Reset()
-      Reset__15wxCmdLineParserFv
-      ;wxCmdLineParser::SetCmdLine(int,char**)
-      SetCmdLine__15wxCmdLineParserFiPPc
-      ;wxArrayOptions::wxArrayOptions(const wxArrayOptions&)
-      __ct__14wxArrayOptionsFRC14wxArrayOptions
-      ;wxCmdLineParser::SetSwitchChars(const wxString&)
-      SetSwitchChars__15wxCmdLineParserFRC8wxString
-      ;wxCmdLineParser::SetDesc(const wxCmdLineEntryDesc*)
-      SetDesc__15wxCmdLineParserFPC18wxCmdLineEntryDesc
-      ;wxCmdLineParser::Found(const wxString&,wxString*) const
-      Found__15wxCmdLineParserCFRC8wxStringP8wxString
-      ;wxCmdLineParserData::FindOptionByLongName(const wxString&)
-      FindOptionByLongName__19wxCmdLineParserDataFRC8wxString
-      ;wxArrayOptions::Index(const wxCmdLineOption&,unsigned long) const
-      Index__14wxArrayOptionsCFRC15wxCmdLineOptionUl
-      ;wxArrayOptions::RemoveAt(unsigned int)
-      RemoveAt__14wxArrayOptionsFUi
-      ;wxArrayParams::Insert(const wxCmdLineParam&,unsigned int)
-      Insert__13wxArrayParamsFRC14wxCmdLineParamUi
-      ;wxCmdLineParserData::wxCmdLineParserData()
-      __ct__19wxCmdLineParserDataFv
-      ;wxCmdLineParser::SetCmdLine(const wxString&)
-      SetCmdLine__15wxCmdLineParserFRC8wxString
-      ;wxArrayParams::wxArrayParams(const wxArrayParams&)
-      __ct__13wxArrayParamsFRC13wxArrayParams
-      ;wxArrayOptions::operator=(const wxArrayOptions&)
-      __as__14wxArrayOptionsFRC14wxArrayOptions
-      ;wxCmdLineParserData::SetArguments(const wxString&)
-      SetArguments__19wxCmdLineParserDataFRC8wxString
-      ;wxArrayOptions::Insert(const wxCmdLineOption&,unsigned int)
-      Insert__14wxArrayOptionsFRC15wxCmdLineOptionUi
-      ;wxArrayParams::Add(const wxCmdLineParam&)
-      Add__13wxArrayParamsFRC14wxCmdLineParam
-      ;wxArrayParams::DoEmpty()
-      DoEmpty__13wxArrayParamsFv
-      ;wxArrayOptions::~wxArrayOptions()
-      __dt__14wxArrayOptionsFv
-      ;wxCmdLineParser::Usage()
-      Usage__15wxCmdLineParserFv
-      ;wxCmdLineParser::Parse()
-      Parse__15wxCmdLineParserFv
-      ;wxCmdLineParserData::SetArguments(int,char**)
-      SetArguments__19wxCmdLineParserDataFiPPc
-      ;wxCmdLineParser::Found(const wxString&) const
-      Found__15wxCmdLineParserCFRC8wxString
-      ;wxCmdLineParser::AddParam(const wxString&,wxCmdLineParamType,int)
-      AddParam__15wxCmdLineParserFRC8wxString18wxCmdLineParamTypei
-      ;wxCmdLineParser::GetParam(unsigned int) const
-      GetParam__15wxCmdLineParserCFUi
-      ;wxCmdLineParser::Found(const wxString&,wxDateTime*) const
-      Found__15wxCmdLineParserCFRC8wxStringP10wxDateTime
-      ;wxCmdLineParser::Init()
-      Init__15wxCmdLineParserFv
-      ;wxCmdLineParser::~wxCmdLineParser()
-      __dt__15wxCmdLineParserFv
-      ;wxArrayParams::~wxArrayParams()
-      __dt__13wxArrayParamsFv
-      ;wxArrayParams::operator=(const wxArrayParams&)
-      __as__13wxArrayParamsFRC13wxArrayParams
-      ;wxCmdLineParser::AddOption(const wxString&,const wxString&,const wxString&,wxCmdLineParamType,int)
-      AddOption__15wxCmdLineParserFRC8wxStringN2118wxCmdLineParamTypei
-      ;wxArrayOptions::DoEmpty()
-      DoEmpty__14wxArrayOptionsFv
-      ;wxCmdLineParser::GetParamCount() const
-      GetParamCount__15wxCmdLineParserCFv
-      ;wxArrayOptions::DoCopy(const wxArrayOptions&)
-      DoCopy__14wxArrayOptionsFRC14wxArrayOptions
-      ;wxCmdLineParser::SetLogo(const wxString&)
-      SetLogo__15wxCmdLineParserFRC8wxString
-      ;wxCmdLineParserData::FindOption(const wxString&)
-      FindOption__19wxCmdLineParserDataFRC8wxString
-      ;wxArrayParams::DoCopy(const wxArrayParams&)
-      DoCopy__13wxArrayParamsFRC13wxArrayParams
   ;From object file:  ..\common\cmndata.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxColourData::GetCustomColour(int)
@@ -209,6 +129,46 @@ EXPORTS
       __ct__21wxPageSetupDialogDataFv
       ;wxPrintDialogData::wxPrintDialogData()
       __ct__17wxPrintDialogDataFv
+  ;From object file:  ..\common\cmdproc.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxCommandProcessor::UndoCommand(wxCommand&)
+      UndoCommand__18wxCommandProcessorFR9wxCommand
+      ;wxCommandProcessor::Store(wxCommand*)
+      Store__18wxCommandProcessorFP9wxCommand
+      ;wxCommandProcessor::wxCommandProcessor(int)
+      __ct__18wxCommandProcessorFi
+      ;wxConstructorForwxCommandProcessor()
+      wxConstructorForwxCommandProcessor__Fv
+      ;wxCommandProcessor::DoCommand(wxCommand&)
+      DoCommand__18wxCommandProcessorFR9wxCommand
+      ;wxCommand::sm_classwxCommand
+      sm_classwxCommand__9wxCommand
+      ;wxCommandProcessor::Undo()
+      Undo__18wxCommandProcessorFv
+      ;wxCommandProcessor::SetMenuStrings()
+      SetMenuStrings__18wxCommandProcessorFv
+      ;wxCommandProcessor::CanRedo() const
+      CanRedo__18wxCommandProcessorCFv
+      ;wxCommandProcessor::Submit(wxCommand*,unsigned long)
+      Submit__18wxCommandProcessorFP9wxCommandUl
+      __vft18wxCommandProcessor8wxObject
+      ;wxCommand::~wxCommand()
+      __dt__9wxCommandFv
+      ;wxCommandProcessor::sm_classwxCommandProcessor
+      sm_classwxCommandProcessor__18wxCommandProcessor
+      ;wxCommandProcessor::~wxCommandProcessor()
+      __dt__18wxCommandProcessorFv
+      ;wxCommandProcessor::Initialize()
+      Initialize__18wxCommandProcessorFv
+      ;wxCommandProcessor::CanUndo() const
+      CanUndo__18wxCommandProcessorCFv
+      ;wxCommand::wxCommand(unsigned long,const wxString&)
+      __ct__9wxCommandFUlRC8wxString
+      __vft9wxCommand8wxObject
+      ;wxCommandProcessor::Redo()
+      Redo__18wxCommandProcessorFv
+      ;wxCommandProcessor::ClearCommands()
+      ClearCommands__18wxCommandProcessorFv
   ;From object file:  ..\common\config.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxConfigBase::Write(const wxString&,double)
@@ -332,24 +292,29 @@ EXPORTS
       ;wxControlBase::Command(wxCommandEvent&)
       Command__13wxControlBaseFR14wxCommandEvent
       __vft13wxControlBase8wxObject
+      __vft18wxStaticBitmapBase8wxObject
+      ;wxControlBase::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
+      Create__13wxControlBaseFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
       ;wxControlBase::CreateControl(wxWindowBase*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
       CreateControl__13wxControlBaseFP12wxWindowBaseiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
       ;wxControlBase::InheritAttributes()
       InheritAttributes__13wxControlBaseFv
+      ;wxStaticBitmapBase::DoGetBestClientSize() const
+      DoGetBestClientSize__18wxStaticBitmapBaseCFv
       ;wxControlBase::InitCommandEvent(wxCommandEvent&) const
       InitCommandEvent__13wxControlBaseCFR14wxCommandEvent
   ;From object file:  ..\common\ctrlsub.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxControlWithItems::GetClientData(int) const
-      GetClientData__18wxControlWithItemsCFi
-      ;wxControlWithItems::SetClientObject(int,wxClientData*)
-      SetClientObject__18wxControlWithItemsFiP12wxClientData
-      ;wxControlWithItems::GetStringSelection() const
-      GetStringSelection__18wxControlWithItemsCFv
-      ;wxControlWithItems::SetClientData(int,void*)
-      SetClientData__18wxControlWithItemsFiPv
-      ;wxControlWithItems::GetClientObject(int) const
-      GetClientObject__18wxControlWithItemsCFi
+      ;wxItemContainer::GetClientData(int) const
+      GetClientData__15wxItemContainerCFi
+      ;wxItemContainer::GetClientObject(int) const
+      GetClientObject__15wxItemContainerCFi
+      ;wxItemContainer::SetClientData(int,void*)
+      SetClientData__15wxItemContainerFiPv
+      ;wxItemContainer::GetStringSelection() const
+      GetStringSelection__15wxItemContainerCFv
+      ;wxItemContainer::SetClientObject(int,wxClientData*)
+      SetClientObject__15wxItemContainerFiP12wxClientData
   ;From object file:  ..\common\datetime.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDateTime::wxDateTime(double)
@@ -730,10 +695,14 @@ EXPORTS
       DrawSpline__8wxDCBaseFiP7wxPoint
       wx_spline_point_list
       __vft8wxDCBase8wxObject
+      ;wxDCBase::DrawLabel(const wxString&,const wxBitmap&,const wxRect&,int,int,wxRect*)
+      DrawLabel__8wxDCBaseFRC8wxStringRC8wxBitmapRC6wxRectiT4P6wxRect
       ;wxDCBase::DoDrawSpline(wxList*)
       DoDrawSpline__8wxDCBaseFP6wxList
       ;wxDCBase::DrawLines(const wxList*,int,int)
       DrawLines__8wxDCBaseFPC6wxListiT2
+      ;wxDCBase::GetMultiLineTextExtent(const wxString&,int*,int*,int*,wxFont*)
+      GetMultiLineTextExtent__8wxDCBaseFRC8wxStringPiN22P6wxFont
       ;wx_quadratic_spline(double,double,double,double,double,double,double,double)
       wx_quadratic_spline__FdN71
       ;wxDCBase::DrawPolygon(const wxList*,int,int,int)
@@ -892,8 +861,8 @@ EXPORTS
       Close__6wxViewFUl
       ;wxView::Activate(unsigned long)
       Activate__6wxViewFUl
-      ;wxCommandProcessor::wxCommandProcessor(int)
-      __ct__18wxCommandProcessorFi
+      ;wxDocument::SaveObject(ostream&)
+      SaveObject__10wxDocumentFR7ostream
       ;wxDocParentFrame::sm_eventTable
       sm_eventTable__16wxDocParentFrame
       ;wxDocChildFrame::sm_eventTable
@@ -906,8 +875,6 @@ EXPORTS
       __ct__15wxDocChildFrameFP10wxDocumentP6wxViewP7wxFrameiRC8wxStringRC7wxPointRC6wxSizelT5
       ;wxFileHistory::Save(wxConfigBase&)
       Save__13wxFileHistoryFR12wxConfigBase
-      ;wxDocument::SaveObject(ostream&)
-      SaveObject__10wxDocumentFR7ostream
       ;wxDocManager::RemoveFileFromHistory(int)
       RemoveFileFromHistory__12wxDocManagerFi
       ;wxDocPrintout::OnBeginDocument(int,int)
@@ -916,8 +883,6 @@ EXPORTS
       FileHistoryLoad__12wxDocManagerFR12wxConfigBase
       ;wxConstructorForwxDocManager()
       wxConstructorForwxDocManager__Fv
-      ;wxConstructorForwxCommandProcessor()
-      wxConstructorForwxCommandProcessor__Fv
       ;wxDocManager::sm_docManager
       sm_docManager__12wxDocManager
       ;wxDocTemplate::~wxDocTemplate()
@@ -942,8 +907,6 @@ EXPORTS
       AddFileToHistory__12wxDocManagerFRC8wxString
       ;wxDocument::wxDocument(wxDocument*)
       __ct__10wxDocumentFP10wxDocument
-      ;wxCommand::sm_classwxCommand
-      sm_classwxCommand__9wxCommand
       __vft6wxView8wxObject
       __vft16wxDocParentFrame8wxObject
       __vft13wxFileHistory8wxObject
@@ -989,10 +952,6 @@ EXPORTS
       sm_classwxDocManager__12wxDocManager
       ;wxView::wxView()
       __ct__6wxViewFv
-      ;wxCommandProcessor::Undo()
-      Undo__18wxCommandProcessorFv
-      ;wxCommandProcessor::SetMenuStrings()
-      SetMenuStrings__18wxCommandProcessorFv
       ;wxDocument::Save()
       Save__10wxDocumentFv
       ;wxDocument::OnChangedViewList()
@@ -1003,8 +962,6 @@ EXPORTS
       GetCurrentDocument__12wxDocManagerCFv
       ;wxDocument::DeleteAllViews()
       DeleteAllViews__10wxDocumentFv
-      ;wxCommandProcessor::CanRedo() const
-      CanRedo__18wxCommandProcessorCFv
       ;wxDocument::OnSaveDocument(const wxString&)
       OnSaveDocument__10wxDocumentFRC8wxString
       ;wxDocument::RemoveView(wxView*)
@@ -1017,8 +974,6 @@ EXPORTS
       sm_classwxDocPrintout__13wxDocPrintout
       __vft15wxDocChildFrame8wxObject
       __vft10wxDocument8wxObject
-      ;wxCommandProcessor::Submit(wxCommand*,unsigned long)
-      Submit__18wxCommandProcessorFP9wxCommandUl
       ;wxDocManager::SelectDocumentPath(wxDocTemplate**,int,wxString&,long,unsigned long)
       SelectDocumentPath__12wxDocManagerFPP13wxDocTemplateiR8wxStringlUl
       ;wxDocParentFrame::ProcessEvent(wxEvent&)
@@ -1077,7 +1032,6 @@ EXPORTS
       FileMatchesTemplate__13wxDocTemplateFRC8wxString
       ;wxDocManager::wxDocManager(long,unsigned long)
       __ct__12wxDocManagerFlUl
-      __vft18wxCommandProcessor8wxObject
       ;wxDocManager::SelectViewType(wxDocTemplate**,int,unsigned long)
       SelectViewType__12wxDocManagerFPP13wxDocTemplateiUl
       ;wxDocManager::SelectDocumentType(wxDocTemplate**,int,unsigned long)
@@ -1112,37 +1066,24 @@ EXPORTS
       wxConstructorForwxFileHistory__Fv
       ;wxDocManager::sm_eventTable
       sm_eventTable__12wxDocManager
-      ;wxCommandProcessor::sm_classwxCommandProcessor
-      sm_classwxCommandProcessor__18wxCommandProcessor
-      ;wxCommand::~wxCommand()
-      __dt__9wxCommandFv
-      ;wxCommandProcessor::~wxCommandProcessor()
-      __dt__18wxCommandProcessorFv
       ;wxDocument::SaveAs()
       SaveAs__10wxDocumentFv
       ;wxDocument::OnSaveModified()
       OnSaveModified__10wxDocumentFv
-      ;wxCommandProcessor::Initialize()
-      Initialize__18wxCommandProcessorFv
       ;wxDocManager::Initialize()
       Initialize__12wxDocManagerFv
       ;wxDocParentFrame::GetEventTable() const
       GetEventTable__16wxDocParentFrameCFv
       ;wxDocManager::GetCurrentView() const
       GetCurrentView__12wxDocManagerCFv
-      ;wxCommandProcessor::CanUndo() const
-      CanUndo__18wxCommandProcessorCFv
       ;wxDocManager::MatchTemplate(const wxString&)
       MatchTemplate__12wxDocManagerFRC8wxString
       ;wxTransferStreamToFile(istream&,const wxString&)
       wxTransferStreamToFile__FR7istreamRC8wxString
       ;wxView::sm_classwxView
       sm_classwxView__6wxView
-      ;wxCommand::wxCommand(unsigned long,const wxString&)
-      __ct__9wxCommandFUlRC8wxString
       ;wxDocManager::RemoveDocument(wxDocument*)
       RemoveDocument__12wxDocManagerFP10wxDocument
-      __vft9wxCommand8wxObject
       __vft13wxDocPrintout8wxObject
       __vft12wxDocManager8wxObject
       ;wxDocTemplate::wxDocTemplate(wxDocManager*,const wxString&,const wxString&,const wxString&,const wxString&,const wxString&,const wxString&,wxClassInfo*,wxClassInfo*,long)
@@ -1181,8 +1122,6 @@ EXPORTS
       __dt__13wxFileHistoryFv
       ;wxDocument::Revert()
       Revert__10wxDocumentFv
-      ;wxCommandProcessor::Redo()
-      Redo__18wxCommandProcessorFv
       ;wxDocument::OnCreateCommandProcessor()
       OnCreateCommandProcessor__10wxDocumentFv
       ;wxDocument::GetFirstView() const
@@ -1195,8 +1134,6 @@ EXPORTS
       DeleteContents__10wxDocumentFv
       ;wxDocument::Close()
       Close__10wxDocumentFv
-      ;wxCommandProcessor::ClearCommands()
-      ClearCommands__18wxCommandProcessorFv
       ;wxDocManager::ActivateView(wxView*,unsigned long,unsigned long)
       ActivateView__12wxDocManagerFP6wxViewUlT2
       ;wxDocument::OnOpenDocument(const wxString&)
@@ -1334,8 +1271,8 @@ EXPORTS
       ButtonUp__12wxMouseEventCFi
       ;wxMouseEvent::ButtonDown(int) const
       ButtonDown__12wxMouseEventCFi
-      ;wxConstructorForwxEraseEvent()
-      wxConstructorForwxEraseEvent__Fv
+      ;wxConstructorForwxNcPaintEvent()
+      wxConstructorForwxNcPaintEvent__Fv
       wxEVT_SET_CURSOR
       wxEVT_SCROLLWIN_LINEDOWN
       wxEVT_MENU_CHAR
@@ -1351,6 +1288,8 @@ EXPORTS
       wxConstructorForwxJoystickEvent__Fv
       ;wxConstructorForwxIconizeEvent()
       wxConstructorForwxIconizeEvent__Fv
+      ;wxConstructorForwxEraseEvent()
+      wxConstructorForwxEraseEvent__Fv
       ;wxConstructorForwxDropFilesEvent()
       wxConstructorForwxDropFilesEvent__Fv
       ;wxEvtHandler::sm_eventTableEntries
@@ -1591,6 +1530,8 @@ EXPORTS
       wxConstructorForwxActivateEvent__Fv
       ;wxEvtHandler::ProcessPendingEvents()
       ProcessPendingEvents__12wxEvtHandlerFv
+      ;wxMouseEvent::GetButton() const
+      GetButton__12wxMouseEventCFv
       ;wxWindowCreateEvent::wxWindowCreateEvent(wxWindow*)
       __ct__19wxWindowCreateEventFP8wxWindow
       wxPendingEvents
@@ -1620,6 +1561,8 @@ EXPORTS
       sm_classwxShowEvent__11wxShowEvent
       ;wxScrollWinEvent::sm_classwxScrollWinEvent
       sm_classwxScrollWinEvent__16wxScrollWinEvent
+      ;wxNcPaintEvent::sm_classwxNcPaintEvent
+      sm_classwxNcPaintEvent__14wxNcPaintEvent
       ;wxIdleEvent::sm_classwxIdleEvent
       sm_classwxIdleEvent__11wxIdleEvent
       ;wxDropFilesEvent::sm_classwxDropFilesEvent
@@ -1667,27 +1610,6 @@ EXPORTS
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
   ;From object file:  ..\common\ffile.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxFFile::Seek(long,wxSeekMode)
-      Seek__7wxFFileFl10wxSeekMode
-      ;wxFFile::Read(void*,unsigned int)
-      Read__7wxFFileFPvUi
-      ;wxFFile::Close()
-      Close__7wxFFileFv
-      ;wxFFile::Length() const
-      Length__7wxFFileCFv
-      ;wxFFile::wxFFile(const char*,const char*)
-      __ct__7wxFFileFPCcT1
-      ;wxFFile::Tell() const
-      Tell__7wxFFileCFv
-      ;wxFFile::Write(const void*,unsigned int)
-      Write__7wxFFileFPCvUi
-      ;wxFFile::Open(const char*,const char*)
-      Open__7wxFFileFPCcT1
-      ;wxFFile::Flush()
-      Flush__7wxFFileFv
-      ;wxFFile::ReadAll(wxString*)
-      ReadAll__7wxFFileFP8wxString
   ;From object file:  ..\common\file.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxFile::Tell() const
@@ -2156,6 +2078,8 @@ EXPORTS
       GetClientAreaOrigin__11wxFrameBaseCFv
       ;wxFrameBase::DoMenuUpdates()
       DoMenuUpdates__11wxFrameBaseFv
+      ;wxFrameBase::IsOneOfBars(const wxWindow*) const
+      IsOneOfBars__11wxFrameBaseCFPC8wxWindow
       ;wxFrameBase::DoMenuUpdates(wxMenu*,wxWindow*)
       DoMenuUpdates__11wxFrameBaseFP6wxMenuP8wxWindow
       ;wxFrameBase::ProcessCommand(int)
@@ -2298,6 +2222,27 @@ EXPORTS
       wxProtocolUsewxFTP
       ;wxFTP::sm_classwxFTP
       sm_classwxFTP__5wxFTP
+  ;From object file:  ..\common\gaugecmn.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxGaugeBase::SetShadowWidth(int)
+      SetShadowWidth__11wxGaugeBaseFi
+      ;wxGaugeBase::SetBezelFace(int)
+      SetBezelFace__11wxGaugeBaseFi
+      ;wxGaugeBase::GetRange() const
+      GetRange__11wxGaugeBaseCFv
+      ;wxGaugeBase::GetShadowWidth() const
+      GetShadowWidth__11wxGaugeBaseCFv
+      ;wxGaugeBase::GetBezelFace() const
+      GetBezelFace__11wxGaugeBaseCFv
+      ;wxGaugeBase::GetValue() const
+      GetValue__11wxGaugeBaseCFv
+      ;wxGaugeBase::SetRange(int)
+      SetRange__11wxGaugeBaseFi
+      ;wxGaugeBase::Create(wxWindow*,int,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
+      Create__11wxGaugeBaseFP8wxWindowiT2RC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
+      __vft11wxGaugeBase8wxObject
+      ;wxGaugeBase::SetValue(int)
+      SetValue__11wxGaugeBaseFi
   ;From object file:  ..\common\gdicmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxBrushList::AddBrush(wxBrush*)
@@ -2321,9 +2266,11 @@ EXPORTS
       FindName__16wxColourDatabaseCFRC8wxColour
       ;wxPenList::AddPen(wxPen*)
       AddPen__9wxPenListFP5wxPen
-      __vft9wxPenList8wxObject
+      ;wxRect::Intersect(const wxRect&)
+      Intersect__6wxRectFRC6wxRect
       ;wxBitmapList::sm_classwxBitmapList
       sm_classwxBitmapList__12wxBitmapList
+      __vft9wxPenList8wxObject
       __vft15wxResourceCache8wxObject
       ;wxColourDatabase::wxColourDatabase(int)
       __ct__16wxColourDatabaseFi
@@ -2352,10 +2299,14 @@ EXPORTS
       RemoveFont__10wxFontListFP6wxFont
       ;wxBrushList::RemoveBrush(wxBrush*)
       RemoveBrush__11wxBrushListFP7wxBrush
+      ;wxRect::Intersects(const wxRect&) const
+      Intersects__6wxRectCFRC6wxRect
       ;wxFontList::AddFont(wxFont*)
       AddFont__10wxFontListFP6wxFont
       ;wxBitmapList::AddBitmap(wxBitmap*)
       AddBitmap__12wxBitmapListFP8wxBitmap
+      ;wxRect::Inflate(int,int)
+      Inflate__6wxRectFiT1
       ;wxBitmapList::wxBitmapList()
       __ct__12wxBitmapListFv
       ;wxDeleteStockLists()
@@ -2367,10 +2318,10 @@ EXPORTS
       ;wxBrushList::sm_classwxBrushList
       sm_classwxBrushList__11wxBrushList
       __vft16wxColourDatabase8wxObject
-      ;wxRect::wxRect(const wxPoint&,const wxPoint&)
-      __ct__6wxRectFRC7wxPointT1
       ;wxRect::wxRect(const wxPoint&,const wxSize&)
       __ct__6wxRectFRC7wxPointRC6wxSize
+      ;wxRect::wxRect(const wxPoint&,const wxPoint&)
+      __ct__6wxRectFRC7wxPointT1
       ;wxBrushList::FindOrCreateBrush(const wxColour&,int)
       FindOrCreateBrush__11wxBrushListFRC8wxColouri
       ;wxConstructorForwxBrushList()
@@ -3048,10 +2999,17 @@ EXPORTS
       wxConstructorForwxIndividualLayoutConstraint__Fv
   ;From object file:  ..\common\lboxcmn.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxListBoxBase::AppendAndEnsureVisible(const wxString&)
+      AppendAndEnsureVisible__13wxListBoxBaseFRC8wxString
       ;wxListBoxBase::SetStringSelection(const wxString&,unsigned long)
       SetStringSelection__13wxListBoxBaseFRC8wxStringUl
+      __vft13wxListBoxBase15wxItemContainer
       ;wxListBoxBase::SetFirstItem(const wxString&)
       SetFirstItem__13wxListBoxBaseFRC8wxString
+      ;wxListBoxBase::DeselectAll(int)
+      DeselectAll__13wxListBoxBaseFi
+      ;wxListBoxBase::EnsureVisible(int)
+      EnsureVisible__13wxListBoxBaseFi
       __vft13wxListBoxBase8wxObject
       ;wxListBoxBase::InsertItems(int,const wxString*,int)
       InsertItems__13wxListBoxBaseFiPC8wxStringT1
@@ -3453,6 +3411,10 @@ EXPORTS
       IsEnabled__13wxMenuBarBaseCFi
       ;wxMenuBarBase::IsChecked(int) const
       IsChecked__13wxMenuBarBaseCFi
+      ;wxMenuBarBase::FindItem(int,wxMenu**) const
+      FindItem__13wxMenuBarBaseCFiPP6wxMenu
+      ;wxMenuBarBase::Attach(wxFrame*)
+      Attach__13wxMenuBarBaseFP7wxFrame
       ;wxwxMenuItemListNode::DeleteData()
       DeleteData__20wxwxMenuItemListNodeFv
       ;wxMenuBase::~wxMenuBase()
@@ -3481,6 +3443,10 @@ EXPORTS
       Destroy__10wxMenuBaseFP10wxMenuItem
       ;wxMenuBase::Delete(wxMenuItem*)
       Delete__10wxMenuBaseFP10wxMenuItem
+      ;wxMenuBase::AddSubMenu(wxMenu*)
+      AddSubMenu__10wxMenuBaseFP6wxMenu
+      ;wxMenuBase::Detach()
+      Detach__10wxMenuBaseFv
       ;wxMenuBase::SetHelpString(int,const wxString&)
       SetHelpString__10wxMenuBaseFiRC8wxString
       ;wxMenuBarBase::Append(wxMenu*,const wxString&)
@@ -3492,6 +3458,8 @@ EXPORTS
       Enable__10wxMenuBaseFiUl
       ;wxMenuBase::FindChildItem(int,unsigned int*) const
       FindChildItem__10wxMenuBaseCFiPUi
+      ;wxMenuBase::SendEvent(int,int)
+      SendEvent__10wxMenuBaseFiT1
       ;wxMenuBase::FindItem(int,wxMenu**) const
       FindItem__10wxMenuBaseCFiPP6wxMenu
       ;wxMenuItemBase::~wxMenuItemBase()
@@ -3515,10 +3483,16 @@ EXPORTS
       DeleteData__16wxwxMenuListNodeFv
       ;wxMenuBarBase::wxMenuBarBase()
       __ct__13wxMenuBarBaseFv
-      ;wxMenuBarBase::Replace(unsigned int,wxMenu*,const wxString&)
-      Replace__13wxMenuBarBaseFUiP6wxMenuRC8wxString
+      ;wxMenuItemBase::GetAccel() const
+      GetAccel__14wxMenuItemBaseCFv
+      ;wxMenuBarBase::Detach()
+      Detach__13wxMenuBarBaseFv
+      ;wxGetAccelFromString(const wxString&)
+      wxGetAccelFromString__FRC8wxString
       ;wxMenuBarBase::SetLabel(int,const wxString&)
       SetLabel__13wxMenuBarBaseFiRC8wxString
+      ;wxMenuBarBase::Replace(unsigned int,wxMenu*,const wxString&)
+      Replace__13wxMenuBarBaseFUiP6wxMenuRC8wxString
       ;wxMenuBase::Init(long)
       Init__10wxMenuBaseFl
       __vft14wxMenuItemBase8wxObject
@@ -3528,6 +3502,10 @@ EXPORTS
       Remove__13wxMenuBarBaseFUi
       ;wxMenuBase::IsEnabled(int) const
       IsEnabled__10wxMenuBaseCFi
+      ;wxMenuBarBase::FindMenuItem(const wxString&,const wxString&) const
+      FindMenuItem__13wxMenuBarBaseCFRC8wxStringT1
+      ;wxMenuBase::Attach(wxMenuBarBase*)
+      Attach__10wxMenuBaseFP13wxMenuBarBase
       ;wxMenuBarBase::~wxMenuBarBase()
       __dt__13wxMenuBarBaseFv
       ;wxMenuBase::FindItem(const wxString&) const
@@ -3670,6 +3648,25 @@ EXPORTS
       Eof__19wxMemoryInputStreamCFv
       ;wxMemoryOutputStream::OnSysTell() const
       OnSysTell__20wxMemoryOutputStreamCFv
+  ;From object file:  ..\common\nbkbase.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxNotebookBase::AssignImageList(wxImageList*)
+      AssignImageList__14wxNotebookBaseFP11wxImageList
+      __vft14wxNotebookBase8wxObject
+      ;wxNotebookBase::DoRemovePage(int)
+      DoRemovePage__14wxNotebookBaseFi
+      ;wxNotebookBase::~wxNotebookBase()
+      __dt__14wxNotebookBaseFv
+      ;wxNotebookBase::GetNextPage(unsigned long) const
+      GetNextPage__14wxNotebookBaseCFUl
+      ;wxNotebookBase::SetImageList(wxImageList*)
+      SetImageList__14wxNotebookBaseFP11wxImageList
+      ;wxNotebookBase::DeletePage(int)
+      DeletePage__14wxNotebookBaseFi
+      ;wxNotebookBase::CalcSizeFromPage(const wxSize&)
+      CalcSizeFromPage__14wxNotebookBaseFRC6wxSize
+      ;wxNotebookBase::Init()
+      Init__14wxNotebookBaseFv
   ;From object file:  ..\common\object.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft8wxObject
@@ -3813,6 +3810,7 @@ EXPORTS
       __ct__16wxPrintPaperTypeFv
       ;wxPrintPaperDatabase::AddPaperType(wxPaperSize,const wxString&,int,int)
       AddPaperType__20wxPrintPaperDatabaseF11wxPaperSizeRC8wxStringiT3
+  ;From object file:  ..\common\popupcmn.cpp
   ;From object file:  ..\common\prntbase.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPreviewControlBar::OnZoom(wxCommandEvent&)
@@ -3918,6 +3916,7 @@ EXPORTS
       sm_eventTableEntries__19wxPreviewControlBar
       ;wxPreviewControlBar::sm_classwxPreviewControlBar
       sm_classwxPreviewControlBar__19wxPreviewControlBar
+      __vft15wxPreviewCanvas14wxScrollHelper
       ;wxPreviewControlBar::~wxPreviewControlBar()
       __dt__19wxPreviewControlBarFv
       ;wxPrintPreviewBase::~wxPrintPreviewBase()
@@ -3956,11 +3955,15 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxProcess::SetPipeStreams(wxInputStream*,wxOutputStream*,wxInputStream*)
       SetPipeStreams__9wxProcessFP13wxInputStreamP14wxOutputStreamT1
+      ;wxProcess::Exists(int)
+      Exists__9wxProcessFi
       ;wxConstructorForwxProcess()
       wxConstructorForwxProcess__Fv
       ;wxProcess::Init(wxEvtHandler*,int,unsigned long)
       Init__9wxProcessFP12wxEvtHandleriUl
       __vft9wxProcess8wxObject
+      ;wxProcess::Kill(int,wxSignal)
+      Kill__9wxProcessFi8wxSignal
       wxEVT_END_PROCESS
       ;wxProcess::~wxProcess()
       __dt__9wxProcessFv
@@ -4031,6 +4034,10 @@ EXPORTS
       jinit_2pass_quantizer__FP12j_decompress
       ;wxQuantize::Quantize(const wxImage&,wxImage&,int,unsigned char**,int)
       Quantize__10wxQuantizeFRC7wxImageR7wxImageiPPUcT3
+  ;From object file:  ..\common\radiocmn.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxRadioBoxBase::GetNextItem(int,wxDirection,long) const
+      GetNextItem__14wxRadioBoxBaseCFi11wxDirectionl
   ;From object file:  ..\common\resource.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxResourceTable::ParseResourceFile(wxInputStream*)
@@ -4353,6 +4360,8 @@ EXPORTS
       sm_classwxStaticBoxSizer__16wxStaticBoxSizer
       ;wxGridSizer::sm_classwxGridSizer
       sm_classwxGridSizer__11wxGridSizer
+      ;wxNotebookSizer::RecalcSizes()
+      RecalcSizes__15wxNotebookSizerFv
       ;wxFlexGridSizer::RecalcSizes()
       RecalcSizes__15wxFlexGridSizerFv
       ;wxGridSizer::RecalcSizes()
@@ -4397,12 +4406,15 @@ EXPORTS
       IsWindow__11wxSizerItemFv
       ;wxSizerItem::GetSize()
       GetSize__11wxSizerItemFv
+      ;wxNotebookSizer::CalcMin()
+      CalcMin__15wxNotebookSizerFv
       ;wxSizerItem::CalcMin()
       CalcMin__11wxSizerItemFv
       ;wxSizer::Remove(wxWindow*)
       Remove__7wxSizerFP8wxWindow
       ;wxSizer::FitSize(wxWindow*)
       FitSize__7wxSizerFP8wxWindow
+      __vft15wxNotebookSizer8wxObject
       __vft7wxSizer8wxObject
       ;wxSizer::Remove(int)
       Remove__7wxSizerFi
@@ -4432,6 +4444,8 @@ EXPORTS
       __ct__10wxBoxSizerFi
       ;wxSizerItem::IsSizer()
       IsSizer__11wxSizerItemFv
+      ;wxNotebookSizer::sm_classwxNotebookSizer
+      sm_classwxNotebookSizer__15wxNotebookSizer
       ;wxFlexGridSizer::sm_classwxFlexGridSizer
       sm_classwxFlexGridSizer__15wxFlexGridSizer
       ;wxBoxSizer::sm_classwxBoxSizer
@@ -4464,6 +4478,8 @@ EXPORTS
       SetItemBounds__11wxGridSizerFP11wxSizerItemiN32
       ;wxGridSizer::CalcMin()
       CalcMin__11wxGridSizerFv
+      ;wxNotebookSizer::wxNotebookSizer(wxNotebook*)
+      __ct__15wxNotebookSizerFP10wxNotebook
   ;From object file:  ..\common\socket.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSocketBase::SetTimeout(long)
@@ -5125,12 +5141,20 @@ EXPORTS
       __ct__14wxTextCtrlBaseFv
       ;wxTextCtrlBase::SetDefaultStyle(const wxTextAttr&)
       SetDefaultStyle__14wxTextCtrlBaseFRC10wxTextAttr
+      ;wxTextCtrlBase::CanCut() const
+      CanCut__14wxTextCtrlBaseCFv
+      ;wxTextCtrlBase::CanCopy() const
+      CanCopy__14wxTextCtrlBaseCFv
       ;wxTextCtrlBase::operator<<(long)
       __ls__14wxTextCtrlBaseFl
       ;wxTextCtrlBase::~wxTextCtrlBase()
       __dt__14wxTextCtrlBaseFv
       ;wxTextCtrlBase::GetDefaultStyle() const
       GetDefaultStyle__14wxTextCtrlBaseCFv
+      ;wxTextCtrlBase::CanPaste() const
+      CanPaste__14wxTextCtrlBaseCFv
+      ;wxTextCtrlBase::SelectAll()
+      SelectAll__14wxTextCtrlBaseFv
       ;wxTextCtrlBase::SaveFile(const wxString&)
       SaveFile__14wxTextCtrlBaseFRC8wxString
       ;wxTextCtrlBase::operator<<(const char)
@@ -5170,27 +5194,18 @@ EXPORTS
       Create__10wxTextFileFRC8wxString
   ;From object file:  ..\common\timercmn.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxTimerEvent::sm_classwxTimerEvent
-      sm_classwxTimerEvent__12wxTimerEvent
       ;wxGetLocalTimeMillis()
       wxGetLocalTimeMillis__Fv
-      __vft11wxTimerBase8wxObject
       ;wxStopWatch::GetElapsedTime() const
       GetElapsedTime__11wxStopWatchCFv
       ;wxStopWatch::Time() const
       Time__11wxStopWatchCFv
-      ;wxTimerBase::Notify()
-      Notify__11wxTimerBaseFv
       ;wxStopWatch::Start(long)
       Start__11wxStopWatchFl
       ;wxGetElapsedTime(unsigned long)
       wxGetElapsedTime__FUl
       ;wxGetLocalTime()
       wxGetLocalTime__Fv
-      ;wxTimerBase::Start(int,unsigned long)
-      Start__11wxTimerBaseFiUl
-      ;wxConstructorForwxTimerEvent()
-      wxConstructorForwxTimerEvent__Fv
       ;wxStartTimer()
       wxStartTimer__Fv
       ;wxGetUTCTime()
@@ -5203,6 +5218,8 @@ EXPORTS
       GetNextToken__17wxStringTokenizerFv
       ;wxStringTokenizer::HasMoreTokens() const
       HasMoreTokens__17wxStringTokenizerCFv
+      ;wxStringTokenize(const wxString&,const wxString&,wxStringTokenizerMode)
+      wxStringTokenize__FRC8wxStringT121wxStringTokenizerMode
       ;wxStringTokenizer::wxStringTokenizer(const wxString&,const wxString&,wxStringTokenizerMode)
       __ct__17wxStringTokenizerFRC8wxStringT121wxStringTokenizerMode
       ;wxStringTokenizer::CountTokens() const
@@ -5446,8 +5463,6 @@ EXPORTS
       wxStripMenuCodes__FRC8wxString
       ;wxSafeYield(wxWindow*)
       wxSafeYield__FP8wxWindow
-      ;wxGetAccelFromString(const wxString&)
-      wxGetAccelFromString__FRC8wxString
       ;StringMatch(char*,char*,unsigned long,unsigned long)
       StringMatch__FPcT1UlT3
       ;StringToFloat(char*,float*)
@@ -6161,6 +6176,8 @@ EXPORTS
       SetSizeConstraint__12wxWindowBaseFiN31
       ;wxWindowBase::GetClientSizeConstraint(int*,int*) const
       GetClientSizeConstraint__12wxWindowBaseCFPiT1
+      ;wxWindowBase::DoHitTest(int,int) const
+      DoHitTest__12wxWindowBaseCFiT1
       ;wxWindowBase::DoGetBestSize() const
       DoGetBestSize__12wxWindowBaseCFv
       ;wxWindowBase::TransferDataFromWindow()
@@ -6169,6 +6186,8 @@ EXPORTS
       SetSizer__12wxWindowBaseFP7wxSizer
       ;wxWindowBase::IsTopLevel() const
       IsTopLevel__12wxWindowBaseCFv
+      ;wxWindowBase::GetUpdateClientRect() const
+      GetUpdateClientRect__12wxWindowBaseCFv
       ;wxWindowBase::GetHelpText() const
       GetHelpText__12wxWindowBaseCFv
       ;wxWindowBase::DoGetClientData() const
@@ -6191,6 +6210,12 @@ EXPORTS
       SetCursor__12wxWindowBaseFRC8wxCursor
       ;wxWindowBase::ResetConstraints()
       ResetConstraints__12wxWindowBaseFv
+      ;wxWindowBase::GetDefaultBorder() const
+      GetDefaultBorder__12wxWindowBaseCFv
+      ;wxWindowBase::GetClientAreaOrigin() const
+      GetClientAreaOrigin__12wxWindowBaseCFv
+      ;wxWindowBase::GetBorder() const
+      GetBorder__12wxWindowBaseCFv
       ;wxWindowBase::Fit()
       Fit__12wxWindowBaseFv
       ;wxWindowBase::DeleteRelatedConstraints()
@@ -6954,48 +6979,6 @@ EXPORTS
       ;wxGenericDirCtrl::ExtractWildcard(const wxString&,int,wxString&,wxString&)
       ExtractWildcard__16wxGenericDirCtrlFRC8wxStringiR8wxStringT3
   ;From object file:  ..\generic\dragimgg.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxGenericDragImage::BeginDrag(const wxPoint&,wxWindow*,unsigned long,wxRect*)
-      BeginDrag__18wxGenericDragImageFRC7wxPointP8wxWindowUlP6wxRect
-      ;wxGenericDragImage::Move(const wxPoint&)
-      Move__18wxGenericDragImageFRC7wxPoint
-      ;wxGenericDragImage::~wxGenericDragImage()
-      __dt__18wxGenericDragImageFv
-      ;wxGenericDragImage::BeginDrag(const wxPoint&,wxWindow*,wxWindow*)
-      BeginDrag__18wxGenericDragImageFRC7wxPointP8wxWindowT2
-      ;wxGenericDragImage::Show()
-      Show__18wxGenericDragImageFv
-      ;wxGenericDragImage::Hide()
-      Hide__18wxGenericDragImageFv
-      ;wxGenericDragImage::Create(const wxTreeCtrl&,wxTreeItemId&)
-      Create__18wxGenericDragImageFRC10wxTreeCtrlR12wxTreeItemId
-      __vft18wxGenericDragImage8wxObject
-      ;wxGenericDragImage::Create(const wxCursor&)
-      Create__18wxGenericDragImageFRC8wxCursor
-      ;wxConstructorForwxGenericDragImage()
-      wxConstructorForwxGenericDragImage__Fv
-      ;wxGenericDragImage::RedrawImage(const wxPoint&,const wxPoint&,unsigned long,unsigned long)
-      RedrawImage__18wxGenericDragImageFRC7wxPointT1UlT3
-      ;wxGenericDragImage::GetImageRect(const wxPoint&) const
-      GetImageRect__18wxGenericDragImageCFRC7wxPoint
-      ;wxGenericDragImage::Init()
-      Init__18wxGenericDragImageFv
-      ;wxGenericDragImage::EndDrag()
-      EndDrag__18wxGenericDragImageFv
-      ;wxGenericDragImage::Create(const wxString&,const wxCursor&)
-      Create__18wxGenericDragImageFRC8wxStringRC8wxCursor
-      ;wxGenericDragImage::Create(const wxBitmap&,const wxCursor&)
-      Create__18wxGenericDragImageFRC8wxBitmapRC8wxCursor
-      ;wxGenericDragImage::UpdateBackingFromWindow(wxDC&,wxMemoryDC&,const wxRect&,const wxRect&) const
-      UpdateBackingFromWindow__18wxGenericDragImageCFR4wxDCR10wxMemoryDCRC6wxRectT3
-      ;wxGenericDragImage::Create(const wxListCtrl&,long)
-      Create__18wxGenericDragImageFRC10wxListCtrll
-      ;wxGenericDragImage::DoDrawImage(wxDC&,const wxPoint&) const
-      DoDrawImage__18wxGenericDragImageCFR4wxDCRC7wxPoint
-      ;wxGenericDragImage::sm_classwxGenericDragImage
-      sm_classwxGenericDragImage__18wxGenericDragImage
-      ;wxGenericDragImage::Create(const wxIcon&,const wxCursor&)
-      Create__18wxGenericDragImageFRC6wxIconRC8wxCursor
   ;From object file:  ..\generic\fontdlgg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGenericFontDialog::OnCloseWindow(wxCloseEvent&)
@@ -7322,6 +7305,7 @@ EXPORTS
       sm_eventTable__26wxGridCellEditorEvtHandler
       ;wxGridCellBoolRenderer::ms_sizeCheckMark
       ms_sizeCheckMark__22wxGridCellBoolRenderer
+      __vft6wxGrid14wxScrollHelper
       __vft24wxGridCellNumberRenderer16wxGridCellWorker
       __vft22wxGridCellBoolRenderer16wxGridCellWorker
       __vft20wxGridCellTextEditor16wxGridCellWorker
@@ -8212,6 +8196,8 @@ EXPORTS
       Create__18wxSashLayoutWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxSashLayoutWindow::GetEventTable() const
       GetEventTable__18wxSashLayoutWindowCFv
+      ;wxLayoutAlgorithm::LayoutFrame(wxFrame*,wxWindow*)
+      LayoutFrame__17wxLayoutAlgorithmFP7wxFrameP8wxWindow
       ;wxSashLayoutWindow::sm_classwxSashLayoutWindow
       sm_classwxSashLayoutWindow__18wxSashLayoutWindow
       ;wxCalculateLayoutEvent::sm_classwxCalculateLayoutEvent
@@ -8291,8 +8277,6 @@ EXPORTS
       Notify__17wxListRenameTimerFv
       ;wxListMainWindow::MoveToFocus()
       MoveToFocus__16wxListMainWindowFv
-      ;wxListHeaderData::HasText() const
-      HasText__16wxListHeaderDataCFv
       ;wxListHeaderData::GetWidth() const
       GetWidth__16wxListHeaderDataCFv
       ;wxListCtrl::GetTopItem() const
@@ -8301,8 +8285,6 @@ EXPORTS
       GetItemCount__10wxListCtrlCFv
       ;wxListHeaderWindow::DoDrawRect(wxDC*,int,int,int,int)
       DoDrawRect__18wxListHeaderWindowFP4wxDCiN32
-      ;wxListHeaderData::GetText(wxString&)
-      GetText__16wxListHeaderDataFR8wxString
       wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
       ;wxListMainWindow::GetItemRect(long,wxRect&)
       GetItemRect__16wxListMainWindowFlR6wxRect
@@ -8313,6 +8295,8 @@ EXPORTS
       SetMode__16wxListMainWindowFl
       ;wxListCtrl::SetItemSpacing(int,unsigned long)
       SetItemSpacing__10wxListCtrlFiUl
+      ;wxListMainWindow::SetItemCount(long)
+      SetItemCount__16wxListMainWindowFl
       ;wxListCtrl::SetDropTarget(wxDropTarget*)
       SetDropTarget__10wxListCtrlFP12wxDropTarget
       ;wxListMainWindow::OnKeyDown(wxKeyEvent&)
@@ -8340,6 +8324,8 @@ EXPORTS
       SetColumnWidth__16wxListMainWindowFiT1
       ;wxListMainWindow::SelectLine(wxListLineData*)
       SelectLine__16wxListMainWindowFP14wxListLineData
+      ;wxListCtrl::OnGetItemText(long,long) const
+      OnGetItemText__10wxListCtrlCFlT1
       ;wxListHeaderData::IsHit(int,int) const
       IsHit__16wxListHeaderDataCFiT1
       ;wxListItemData::IsHit(int,int) const
@@ -8354,8 +8340,8 @@ EXPORTS
       FocusLine__16wxListMainWindowFP14wxListLineData
       ;wxListMainWindow::DeselectLine(wxListLineData*)
       DeselectLine__16wxListMainWindowFP14wxListLineData
-      ;wxListItemData::GetX() const
-      GetX__14wxListItemDataCFv
+      ;wxwxListItemDataListNode::DeleteData()
+      DeleteData__24wxwxListItemDataListNodeFv
       ;wxConstructorForwxListHeaderData()
       wxConstructorForwxListHeaderData__Fv
       ;wxConstructorForwxListCtrl()
@@ -8369,6 +8355,8 @@ EXPORTS
       SetPosition__14wxListLineDataFP4wxDCiN22
       ;wxListMainWindow::OnRenameTimer()
       OnRenameTimer__16wxListMainWindowFv
+      ;wxListItemData::GetX() const
+      GetX__14wxListItemDataCFv
       ;wxListCtrl::GetTextColour() const
       GetTextColour__10wxListCtrlCFv
       ;wxListTextCtrl::GetEventTable() const
@@ -8379,8 +8367,8 @@ EXPORTS
       DoDraw__14wxListLineDataFP4wxDCUlT2
       ;wxListItem::ClearAttributes()
       ClearAttributes__10wxListItemFv
-      ;wxListItemData::GetText(wxString&)
-      GetText__14wxListItemDataFR8wxString
+      ;wxListRenameTimer::wxListRenameTimer(wxListMainWindow*)
+      __ct__17wxListRenameTimerFP16wxListMainWindow
       wxEVT_COMMAND_LIST_SET_INFO
       wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK
       wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
@@ -8390,8 +8378,6 @@ EXPORTS
       sm_eventTableEntries__18wxListHeaderWindow
       ;wxListMainWindow::sm_classwxListMainWindow
       sm_classwxListMainWindow__16wxListMainWindow
-      ;wxListRenameTimer::wxListRenameTimer(wxListMainWindow*)
-      __ct__17wxListRenameTimerFP16wxListMainWindow
       ;wxListCtrl::InsertColumn(long,const wxString&,int,int)
       InsertColumn__10wxListCtrlFlRC8wxStringiT3
       ;wxListMainWindow::GetTextLength(wxString&)
@@ -8411,6 +8397,8 @@ EXPORTS
       SetSingleStyle__10wxListCtrlFlUl
       ;wxListMainWindow::SetItemSpacing(int,unsigned long)
       SetItemSpacing__16wxListMainWindowFiUl
+      ;wxListCtrl::SetItemCount(long)
+      SetItemCount__10wxListCtrlFl
       ;wxListMainWindow::SendNotify(wxListLineData*,int,wxPoint)
       SendNotify__16wxListMainWindowFP14wxListLineDatai7wxPoint
       ;wxListCtrl::OnSize(wxSizeEvent&)
@@ -8463,8 +8451,8 @@ EXPORTS
       DeleteColumn__10wxListCtrlFi
       ;wxListCtrl::Arrange(int)
       Arrange__10wxListCtrlFi
-      ;wxListItemData::HasImage() const
-      HasImage__14wxListItemDataCFv
+      ;wxListMainWindow::GetItemCount() const
+      GetItemCount__16wxListMainWindowCFv
       wxEVT_COMMAND_LIST_KEY_DOWN
       ;wxConstructorForwxListMainWindow()
       wxConstructorForwxListMainWindow__Fv
@@ -8472,20 +8460,19 @@ EXPORTS
       wxConstructorForwxListLineData__Fv
       ;wxConstructorForwxListEvent()
       wxConstructorForwxListEvent__Fv
+      __vft16wxListMainWindow14wxScrollHelper
       ;wxListCtrl::SetItem(long,int,const wxString&,int)
       SetItem__10wxListCtrlFliRC8wxStringT2
       ;wxListLineData::ReverseHilight()
       ReverseHilight__14wxListLineDataFv
-      ;wxListItemData::HasText() const
-      HasText__14wxListItemDataCFv
+      ;wxListItemData::HasImage() const
+      HasImage__14wxListItemDataCFv
       ;wxListItemData::GetY() const
       GetY__14wxListItemDataCFv
       ;wxListMainWindow::GetSelectedItemCount()
       GetSelectedItemCount__16wxListMainWindowFv
       ;wxListCtrl::GetNextItem(long,int,int) const
       GetNextItem__10wxListCtrlCFliT2
-      ;wxListMainWindow::GetItemCount()
-      GetItemCount__16wxListMainWindowFv
       ;wxListItemData::GetHeight() const
       GetHeight__14wxListItemDataCFv
       ;wxListHeaderData::GetFormat() const
@@ -8527,6 +8514,8 @@ EXPORTS
       OnSetFocus__16wxListMainWindowFR12wxFocusEvent
       ;wxListMainWindow::OnKillFocus(wxFocusEvent&)
       OnKillFocus__16wxListMainWindowFR12wxFocusEvent
+      ;wxListCtrl::OnGetItemImage(long) const
+      OnGetItemImage__10wxListCtrlCFl
       ;wxListMainWindow::OnArrowChar(wxListLineData*,unsigned long)
       OnArrowChar__16wxListMainWindowFP14wxListLineDataUl
       ;wxListLineData::GetRect(wxRect&)
@@ -8584,6 +8573,8 @@ EXPORTS
       SetForegroundColour__10wxListCtrlFRC8wxColour
       ;wxListLineData::IsHilighted()
       IsHilighted__14wxListLineDataFv
+      ;wxListMainWindow::Init()
+      Init__16wxListMainWindowFv
       ;wxListCtrl::GetSelectedItemCount() const
       GetSelectedItemCount__10wxListCtrlCFv
       ;wxListMainWindow::GetMode() const
@@ -8598,6 +8589,8 @@ EXPORTS
       GetColumnCount__10wxListCtrlCFv
       ;wxListMainWindow::DeleteEverything()
       DeleteEverything__16wxListMainWindowFv
+      ;wxwxListHeaderDataListNode::DeleteData()
+      DeleteData__26wxwxListHeaderDataListNodeFv
       ;wxListMainWindow::DeleteAllItems()
       DeleteAllItems__16wxListMainWindowFv
       ;wxListCtrl::DeleteAllColumns()
@@ -8609,8 +8602,6 @@ EXPORTS
       wxEVT_COMMAND_LIST_GET_INFO
       ;wxListMainWindow::sm_eventTableEntries
       sm_eventTableEntries__16wxListMainWindow
-      ;wxListLineData::GetText(int,wxString&)
-      GetText__14wxListLineDataFiR8wxString
       ;wxListLineData::SetAttributes(wxDC*,const wxListItemAttr*,const wxColour&,const wxFont&,unsigned long)
       SetAttributes__14wxListLineDataFP4wxDCPC14wxListItemAttrRC8wxColourRC6wxFontUl
       wxEVT_COMMAND_LIST_ITEM_SELECTED
@@ -8650,6 +8641,8 @@ EXPORTS
       sm_classwxListItemData__14wxListItemData
       ;wxListHeaderData::sm_classwxListHeaderData
       sm_classwxListHeaderData__16wxListHeaderData
+      __vft26wxwxListHeaderDataListNode10wxNodeBase
+      __vft24wxwxListItemDataListNode10wxNodeBase
       ;wxListItemData::wxListItemData(const wxListItem&)
       __ct__14wxListItemDataFRC10wxListItem
       ;wxListMainWindow::SetItem(wxListItem&)
@@ -8676,6 +8669,8 @@ EXPORTS
       InsertItem__10wxListCtrlFlRC8wxStringi
       ;wxListCtrl::InsertColumn(long,wxListItem&)
       InsertColumn__10wxListCtrlFlR10wxListItem
+      ;wxListLineData::GetText(int) const
+      GetText__14wxListLineDataCFi
       ;wxListLineData::GetSize(int&,int&)
       GetSize__14wxListLineDataFRiT1
       ;wxListMainWindow::GetItemState(long,long)
@@ -8730,13 +8725,11 @@ EXPORTS
       Clear__10wxListItemFv
       ;wxListCtrl::ClearAll()
       ClearAll__10wxListCtrlFv
-      ;wxListItemData::SetText(const wxString&)
-      SetText__14wxListItemDataFRC8wxString
+      ;wxListHeaderWindow::wxListHeaderWindow(wxWindow*,int,wxListMainWindow*,const wxPoint&,const wxSize&,long,const wxString&)
+      __ct__18wxListHeaderWindowFP8wxWindowiP16wxListMainWindowRC7wxPointRC6wxSizelRC8wxString
       wxEVT_COMMAND_LIST_COL_CLICK
       wxEVT_COMMAND_LIST_BEGIN_RDRAG
       wxEVT_COMMAND_LIST_BEGIN_DRAG
-      ;wxListHeaderWindow::wxListHeaderWindow(wxWindow*,int,wxListMainWindow*,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__18wxListHeaderWindowFP8wxWindowiP16wxListMainWindowRC7wxPointRC6wxSizelRC8wxString
       ;wxListMainWindow::wxListMainWindow(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       __ct__16wxListMainWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxListHeaderWindow::AdjustDC(wxDC&)
@@ -8785,12 +8778,12 @@ EXPORTS
       ;wxLogDialog::sm_eventTable
       sm_eventTable__11wxLogDialog
       __vft11wxLogWindow5wxLog
-      ;wxLogTextCtrl::DoLogString(const char*,long)
-      DoLogString__13wxLogTextCtrlFPCcl
-      ;wxLogDialog::OnSave(wxCommandEvent&)
-      OnSave__11wxLogDialogFR14wxCommandEvent
       ;wxLogFrame::OnCloseWindow(wxCloseEvent&)
       OnCloseWindow__10wxLogFrameFR12wxCloseEvent
+      ;wxLogDialog::OnSave(wxCommandEvent&)
+      OnSave__11wxLogDialogFR14wxCommandEvent
+      ;wxLogTextCtrl::DoLogString(const char*,long)
+      DoLogString__13wxLogTextCtrlFPCcl
       ;wxLogWindow::DoLogString(const char*,long)
       DoLogString__11wxLogWindowFPCcl
       ;wxLogStatus(wxFrame*,const char*,...)
@@ -8804,12 +8797,12 @@ EXPORTS
       ;wxLogGui::Clear()
       Clear__8wxLogGuiFv
       __vft8wxLogGui5wxLog
-      ;wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl*)
-      __ct__13wxLogTextCtrlFP10wxTextCtrl
-      __vft11wxLogDialog8wxObject
-      __vft10wxLogFrame8wxObject
       ;wxLogDialog::OnOk(wxCommandEvent&)
       OnOk__11wxLogDialogFR14wxCommandEvent
+      __vft11wxLogDialog8wxObject
+      __vft10wxLogFrame8wxObject
+      ;wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl*)
+      __ct__13wxLogTextCtrlFP10wxTextCtrl
       ;wxLogWindow::OnFrameClose(wxFrame*)
       OnFrameClose__11wxLogWindowFP7wxFrame
       ;wxLogFrame::sm_eventTable
@@ -8825,22 +8818,6 @@ EXPORTS
       ;wxLogWindow::wxLogWindow(wxFrame*,const char*,unsigned long,unsigned long)
       __ct__11wxLogWindowFP7wxFramePCcUlT3
   ;From object file:  ..\generic\numdlgg.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxGetNumberFromUser(const wxString&,const wxString&,const wxString&,long,long,long,wxWindow*,const wxPoint&)
-      wxGetNumberFromUser__FRC8wxStringN21lN24P8wxWindowRC7wxPoint
-      ;wxNumberEntryDialog::GetEventTable() const
-      GetEventTable__19wxNumberEntryDialogCFv
-      ;wxNumberEntryDialog::sm_eventTableEntries
-      sm_eventTableEntries__19wxNumberEntryDialog
-      ;wxNumberEntryDialog::OnOK(wxCommandEvent&)
-      OnOK__19wxNumberEntryDialogFR14wxCommandEvent
-      ;wxNumberEntryDialog::wxNumberEntryDialog(wxWindow*,const wxString&,const wxString&,const wxString&,long,long,long,const wxPoint&)
-      __ct__19wxNumberEntryDialogFP8wxWindowRC8wxStringN22lN25RC7wxPoint
-      ;wxNumberEntryDialog::OnCancel(wxCommandEvent&)
-      OnCancel__19wxNumberEntryDialogFR14wxCommandEvent
-      __vft19wxNumberEntryDialog8wxObject
-      ;wxNumberEntryDialog::sm_eventTable
-      sm_eventTable__19wxNumberEntryDialog
   ;From object file:  ..\generic\panelg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPanel::OnSysColourChanged(wxSysColourChangedEvent&)
@@ -9007,668 +8984,8 @@ EXPORTS
       ;wxProgressDialog::~wxProgressDialog()
       __dt__16wxProgressDialogFv
   ;From object file:  ..\generic\prop.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxPropertyValue::wxPropertyValue(unsigned long)
-      __ct__15wxPropertyValueFUl
-      ;wxPropertyValue::wxPropertyValue(double)
-      __ct__15wxPropertyValueFd
-      ;wxPropertyValue::operator=(const long*)
-      __as__15wxPropertyValueFPCl
-      ;wxPropertyValidator::DoubleToString(double)
-      DoubleToString__19wxPropertyValidatorFd
-      ;wxPropertyValidator::StringToInt(char*,int*)
-      StringToInt__19wxPropertyValidatorFPcPi
-      ;wxPropertyValue::sm_classwxPropertyValue
-      sm_classwxPropertyValue__15wxPropertyValue
-      ;wxPropertyValidatorRegistry::sm_classwxPropertyValidatorRegistry
-      sm_classwxPropertyValidatorRegistry__27wxPropertyValidatorRegistry
-      ;wxConstructorForwxPropertyValue()
-      wxConstructorForwxPropertyValue__Fv
-      ;wxConstructorForwxProperty()
-      wxConstructorForwxProperty__Fv
-      ;wxConstructorForwxPropertyValidatorRegistry()
-      wxConstructorForwxPropertyValidatorRegistry__Fv
-      ;wxConstructorForwxPropertySheet()
-      wxConstructorForwxPropertySheet__Fv
-      ;wxProperty::~wxProperty()
-      __dt__10wxPropertyFv
-      ;wxPropertyValue::wxPropertyValue(float)
-      __ct__15wxPropertyValueFf
-      ;wxPropertyValue::wxPropertyValue(float*)
-      __ct__15wxPropertyValueFPf
-      ;wxPropertyValue::NewCopy() const
-      NewCopy__15wxPropertyValueCFv
-      ;wxPropertyValue::IntegerValue() const
-      IntegerValue__15wxPropertyValueCFv
-      ;wxProperty::GetName() const
-      GetName__10wxPropertyCFv
-      ;wxPropertyValue::BoolValue() const
-      BoolValue__15wxPropertyValueCFv
-      ;wxProperty::SetName(wxString&)
-      SetName__10wxPropertyFR8wxString
-      ;wxPropertySheet::GetProperty(const wxString&) const
-      GetProperty__15wxPropertySheetCFRC8wxString
-      ;wxPropertyValue::wxPropertyValue(wxStringList*)
-      __ct__15wxPropertyValueFP12wxStringList
-      __vft15wxPropertyValue8wxObject
-      ;wxPropertyValue::operator=(const unsigned long*)
-      __as__15wxPropertyValueFPCUl
-      ;wxPropertyValidator::StringToDouble(char*,double*)
-      StringToDouble__19wxPropertyValidatorFPcPd
-      ;wxPropertyValue::Append(wxPropertyValue*)
-      Append__15wxPropertyValueFP15wxPropertyValue
-      ;wxProperty::sm_classwxProperty
-      sm_classwxProperty__10wxProperty
-      ;wxPropertyValue::Delete(wxPropertyValue*)
-      Delete__15wxPropertyValueFP15wxPropertyValue
-      ;wxPropertyValue::Copy(wxPropertyValue&)
-      Copy__15wxPropertyValueFR15wxPropertyValue
-      ;wxPropertyValue::Arg(wxPropertyValueType,int) const
-      Arg__15wxPropertyValueCF19wxPropertyValueTypei
-      ;wxPropertySheet::AddProperty(wxProperty*)
-      AddProperty__15wxPropertySheetFP10wxProperty
-      ;wxPropertyValue::wxPropertyValue()
-      __ct__15wxPropertyValueFv
-      ;wxPropertyValidatorRegistry::~wxPropertyValidatorRegistry()
-      __dt__27wxPropertyValidatorRegistryFv
-      ;wxPropertyValidator::~wxPropertyValidator()
-      __dt__19wxPropertyValidatorFv
-      ;wxPropertyView::~wxPropertyView()
-      __dt__14wxPropertyViewFv
-      ;wxProperty::wxProperty()
-      __ct__10wxPropertyFv
-      ;wxProperty::wxProperty(wxString,wxString,wxPropertyValidator*)
-      __ct__10wxPropertyF8wxStringT1P19wxPropertyValidator
-      ;wxPropertyValue::operator=(const float)
-      __as__15wxPropertyValueFCf
-      ;wxPropertyValue::RealValuePtr() const
-      RealValuePtr__15wxPropertyValueCFv
-      ;wxPropertyValue::GetStringRepresentation()
-      GetStringRepresentation__15wxPropertyValueFv
-      ;wxPropertyValue::BoolValuePtr() const
-      BoolValuePtr__15wxPropertyValueCFv
-      ;wxPropertyValue::wxPropertyValue(const char*)
-      __ct__15wxPropertyValueFPCc
-      ;wxPropertyValue::wxPropertyValue(const wxString&)
-      __ct__15wxPropertyValueFRC8wxString
-      ;wxPropertyValue::operator=(const wxString&)
-      __as__15wxPropertyValueFRC8wxString
-      ;wxPropertySheet::HasProperty(const wxString&) const
-      HasProperty__15wxPropertySheetCFRC8wxString
-      ;wxPropertyValidatorRegistry::GetValidator(const wxString&)
-      GetValidator__27wxPropertyValidatorRegistryFRC8wxString
-      ;wxPropertyValue::wxPropertyValue(long)
-      __ct__15wxPropertyValueFl
-      __vft19wxPropertyValidator8wxObject
-      __vft14wxPropertyView8wxObject
-      ;wxPropertyValue::wxPropertyValue(long*)
-      __ct__15wxPropertyValueFPl
-      ;wxPropertyValue::wxPropertyValue(const wxPropertyValue&)
-      __ct__15wxPropertyValueFRC15wxPropertyValue
-      ;wxProperty::wxProperty(wxProperty&)
-      __ct__10wxPropertyFR10wxProperty
-      ;wxPropertyValue::operator=(const wxPropertyValue&)
-      __as__15wxPropertyValueFRC15wxPropertyValue
-      ;wxPropertySheet::SetProperty(const wxString&,const wxPropertyValue&)
-      SetProperty__15wxPropertySheetFRC8wxStringRC15wxPropertyValue
-      ;wxPropertyValue::Nth(int) const
-      Nth__15wxPropertyValueCFi
-      ;wxPropertyView::AddRegistry(wxPropertyValidatorRegistry*)
-      AddRegistry__14wxPropertyViewFP27wxPropertyValidatorRegistry
-      ;wxPropertyValue::~wxPropertyValue()
-      __dt__15wxPropertyValueFv
-      ;wxPropertySheet::~wxPropertySheet()
-      __dt__15wxPropertySheetFv
-      ;wxPropertyValidatorRegistry::wxPropertyValidatorRegistry()
-      __ct__27wxPropertyValidatorRegistryFv
-      ;wxProperty::wxProperty(wxString,const wxPropertyValue&,wxString,wxPropertyValidator*)
-      __ct__10wxPropertyF8wxStringRC15wxPropertyValueT1P19wxPropertyValidator
-      ;wxPropertyValue::StringValuePtr() const
-      StringValuePtr__15wxPropertyValueCFv
-      ;wxPropertyValidator::StringToFloat(char*,float*)
-      StringToFloat__19wxPropertyValidatorFPcPf
-      ;wxPropertyValidatorRegistry::RegisterValidator(const wxString&,wxPropertyValidator*)
-      RegisterValidator__27wxPropertyValidatorRegistryFRC8wxStringP19wxPropertyValidator
-      ;wxPropertyValue::IntegerValuePtr() const
-      IntegerValuePtr__15wxPropertyValueCFv
-      ;wxProperty::GetValidator() const
-      GetValidator__10wxPropertyCFv
-      ;wxPropertyValidatorRegistry::ClearRegistry()
-      ClearRegistry__27wxPropertyValidatorRegistryFv
-      ;wxPropertyValue::ClearList()
-      ClearList__15wxPropertyValueFv
-      ;wxPropertyValue::wxPropertyValue(char**)
-      __ct__15wxPropertyValueFPPc
-      ;wxPropertySheet::wxPropertySheet(const wxString&)
-      __ct__15wxPropertySheetFRC8wxString
-      ;wxPropertyValue::WritePropertyType(wxString&)
-      WritePropertyType__15wxPropertyValueFR8wxString
-      ;wxPropertySheet::RemoveProperty(const wxString&)
-      RemoveProperty__15wxPropertySheetFRC8wxString
-      ;wxPropertyValue::wxPropertyValue(unsigned long*)
-      __ct__15wxPropertyValueFPUl
-      __vft27wxPropertyValidatorRegistry8wxObject
-      __vft15wxPropertySheet8wxObject
-      __vft10wxProperty8wxObject
-      ;wxPropertyValidator::wxPropertyValidator(long)
-      __ct__19wxPropertyValidatorFl
-      ;wxPropertyView::wxPropertyView(long)
-      __ct__14wxPropertyViewFl
-      ;wxPropertyValue::operator=(const long)
-      __as__15wxPropertyValueFCl
-      ;wxPropertySheet::SetAllModified(unsigned long)
-      SetAllModified__15wxPropertySheetFUl
-      ;wxPropertyValidator::LongToString(long)
-      LongToString__19wxPropertyValidatorFl
-      ;wxProperty::SetValue(const wxPropertyValue&)
-      SetValue__10wxPropertyFRC15wxPropertyValue
-      ;wxPropertyValidator::IntToString(int)
-      IntToString__19wxPropertyValidatorFi
-      ;wxPropertyView::FindPropertyValidator(wxProperty*)
-      FindPropertyValidator__14wxPropertyViewFP10wxProperty
-      ;wxPropertyValue::operator=(const float*)
-      __as__15wxPropertyValueFPCf
-      ;wxProperty::GetValue() const
-      GetValue__10wxPropertyCFv
-      ;wxPropertyValue::WritePropertyClause(wxString&)
-      WritePropertyClause__15wxPropertyValueFR8wxString
-      ;wxPropertyView::sm_classwxPropertyView
-      sm_classwxPropertyView__14wxPropertyView
-      ;wxProperty::SetRole(wxString&)
-      SetRole__10wxPropertyFR8wxString
-      ;wxPropertyValue::wxPropertyValue(wxList*)
-      __ct__15wxPropertyValueFP6wxList
-      ;wxPropertySheet::sm_classwxPropertySheet
-      sm_classwxPropertySheet__15wxPropertySheet
-      ;wxPropertyValue::operator=(const unsigned long)
-      __as__15wxPropertyValueFCUl
-      ;wxPropertyValidator::StringToLong(char*,long*)
-      StringToLong__19wxPropertyValidatorFPcPl
-      ;wxPropertyValue::Insert(wxPropertyValue*)
-      Insert__15wxPropertyValueFP15wxPropertyValue
-      ;wxProperty::operator=(const wxPropertyValue&)
-      __as__10wxPropertyFRC15wxPropertyValue
-      ;wxPropertyValue::Number() const
-      Number__15wxPropertyValueCFv
-      ;wxConstructorForwxPropertyView()
-      wxConstructorForwxPropertyView__Fv
-      ;wxPropertyValidator::sm_classwxPropertyValidator
-      sm_classwxPropertyValidator__19wxPropertyValidator
-      ;wxPropertyValue::StringValue() const
-      StringValue__15wxPropertyValueCFv
-      ;wxProperty::SetValidator(wxPropertyValidator*)
-      SetValidator__10wxPropertyFP19wxPropertyValidator
-      ;wxPropertyValue::RealValue() const
-      RealValue__15wxPropertyValueCFv
-      ;wxProperty::GetRole() const
-      GetRole__10wxPropertyCFv
-      ;wxPropertyValidator::FloatToString(float)
-      FloatToString__19wxPropertyValidatorFf
-      ;wxPropertySheet::Clear()
-      Clear__15wxPropertySheetFv
-      ;wxPropertyValue::operator=(const char**)
-      __as__15wxPropertyValueFPPCc
-      ;wxPropertySheet::UpdateAllViews(wxPropertyView*)
-      UpdateAllViews__15wxPropertySheetFP14wxPropertyView
   ;From object file:  ..\generic\propform.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxPropertyFormView::OnUpdate(wxCommandEvent&)
-      OnUpdate__18wxPropertyFormViewFR14wxCommandEvent
-      __vft20wxPropertyFormDialog8wxObject
-      ;wxPropertyFormView::OnRevert(wxCommandEvent&)
-      OnRevert__18wxPropertyFormViewFR14wxCommandEvent
-      ;wxConstructorForwxPropertyFormView()
-      wxConstructorForwxPropertyFormView__Fv
-      ;wxPropertyFormValidator::sm_classwxPropertyFormValidator
-      sm_classwxPropertyFormValidator__23wxPropertyFormValidator
-      ;wxPropertyFormDialog::GetEventTable() const
-      GetEventTable__20wxPropertyFormDialogCFv
-      ;wxPropertyFormView::AssociateNames()
-      AssociateNames__18wxPropertyFormViewFv
-      ;wxPropertyFormFrame::OnCreatePanel(wxFrame*,wxPropertyFormView*)
-      OnCreatePanel__19wxPropertyFormFrameFP7wxFrameP18wxPropertyFormView
-      ;wxPropertyFormView::sm_eventTableEntries
-      sm_eventTableEntries__18wxPropertyFormView
-      ;wxPropertyFormView::sm_classwxPropertyFormView
-      sm_classwxPropertyFormView__18wxPropertyFormView
-      ;wxBoolFormValidator::OnDisplayValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnDisplayValue__19wxBoolFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxIntegerFormValidator::OnCheckValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnCheckValue__22wxIntegerFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxPropertyFormView::wxPropertyFormView(wxWindow*,long)
-      __ct__18wxPropertyFormViewFP8wxWindowl
-      ;wxPropertyFormPanel::sm_classwxPropertyFormPanel
-      sm_classwxPropertyFormPanel__19wxPropertyFormPanel
-      __vft19wxRealFormValidator8wxObject
-      __vft18wxPropertyFormView8wxObject
-      ;wxPropertyFormDialog::ProcessEvent(wxEvent&)
-      ProcessEvent__20wxPropertyFormDialogFR7wxEvent
-      ;wxPropertyFormPanel::ProcessEvent(wxEvent&)
-      ProcessEvent__19wxPropertyFormPanelFR7wxEvent
-      ;wxPropertyFormView::ProcessEvent(wxEvent&)
-      ProcessEvent__18wxPropertyFormViewFR7wxEvent
-      ;wxPropertyFormPanel::OnDefaultAction(wxControl*)
-      OnDefaultAction__19wxPropertyFormPanelFP9wxControl
-      ;wxPropertyFormDialog::OnCommand(wxWindow&,wxCommandEvent&)
-      OnCommand__20wxPropertyFormDialogFR8wxWindowR14wxCommandEvent
-      ;wxPropertyFormView::OnUpdateView()
-      OnUpdateView__18wxPropertyFormViewFv
-      ;wxConstructorForwxStringFormValidator()
-      wxConstructorForwxStringFormValidator__Fv
-      ;wxConstructorForwxPropertyFormDialog()
-      wxConstructorForwxPropertyFormDialog__Fv
-      ;wxPropertyFormView::OnClose()
-      OnClose__18wxPropertyFormViewFv
-      ;wxRealFormValidator::OnCheckValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnCheckValue__19wxRealFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxPropertyFormView::sm_eventTable
-      sm_eventTable__18wxPropertyFormView
-      ;wxPropertyFormDialog::sm_classwxPropertyFormDialog
-      sm_classwxPropertyFormDialog__20wxPropertyFormDialog
-      ;wxIntegerFormValidator::OnRetrieveValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnRetrieveValue__22wxIntegerFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxBoolFormValidator::OnRetrieveValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnRetrieveValue__19wxBoolFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxStringFormValidator::OnCheckValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnCheckValue__21wxStringFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxPropertyFormView::OnCancel(wxCommandEvent&)
-      OnCancel__18wxPropertyFormViewFR14wxCommandEvent
-      __vft19wxPropertyFormPanel8wxObject
-      ;wxPropertyFormDialog::OnDefaultAction(wxControl*)
-      OnDefaultAction__20wxPropertyFormDialogFP9wxControl
-      ;wxPropertyFormPanel::OnCommand(wxWindow&,wxCommandEvent&)
-      OnCommand__19wxPropertyFormPanelFR8wxWindowR14wxCommandEvent
-      ;wxPropertyFormFrame::sm_eventTable
-      sm_eventTable__19wxPropertyFormFrame
-      ;wxPropertyFormView::Check()
-      Check__18wxPropertyFormViewFv
-      ;wxConstructorForwxPropertyFormPanel()
-      wxConstructorForwxPropertyFormPanel__Fv
-      ;wxBoolFormValidator::sm_classwxBoolFormValidator
-      sm_classwxBoolFormValidator__19wxBoolFormValidator
-      ;wxPropertyFormView::TransferToPropertySheet()
-      TransferToPropertySheet__18wxPropertyFormViewFv
-      ;wxPropertyFormFrame::Initialize()
-      Initialize__19wxPropertyFormFrameFv
-      ;wxPropertyFormView::sm_dialogCancelled
-      sm_dialogCancelled__18wxPropertyFormView
-      ;wxPropertyFormView::OnOk(wxCommandEvent&)
-      OnOk__18wxPropertyFormViewFR14wxCommandEvent
-      __vft22wxIntegerFormValidator8wxObject
-      __vft21wxStringFormValidator8wxObject
-      __vft19wxPropertyFormFrame8wxObject
-      __vft19wxBoolFormValidator8wxObject
-      ;wxPropertyFormView::OnHelp(wxCommandEvent&)
-      OnHelp__18wxPropertyFormViewFR14wxCommandEvent
-      ;wxPropertyFormView::OnDoubleClick(wxControl*)
-      OnDoubleClick__18wxPropertyFormViewFP9wxControl
-      ;wxPropertyFormDialog::OnCloseWindow(wxCloseEvent&)
-      OnCloseWindow__20wxPropertyFormDialogFR12wxCloseEvent
-      ;wxPropertyFormFrame::OnCloseWindow(wxCloseEvent&)
-      OnCloseWindow__19wxPropertyFormFrameFR12wxCloseEvent
-      ;wxPropertyFormFrame::sm_eventTableEntries
-      sm_eventTableEntries__19wxPropertyFormFrame
-      ;wxPropertyFormView::~wxPropertyFormView()
-      __dt__18wxPropertyFormViewFv
-      ;wxConstructorForwxRealFormValidator()
-      wxConstructorForwxRealFormValidator__Fv
-      ;wxConstructorForwxIntegerFormValidator()
-      wxConstructorForwxIntegerFormValidator__Fv
-      ;wxConstructorForwxBoolFormValidator()
-      wxConstructorForwxBoolFormValidator__Fv
-      ;wxStringFormValidator::sm_classwxStringFormValidator
-      sm_classwxStringFormValidator__21wxStringFormValidator
-      ;wxRealFormValidator::sm_classwxRealFormValidator
-      sm_classwxRealFormValidator__19wxRealFormValidator
-      ;wxIntegerFormValidator::sm_classwxIntegerFormValidator
-      sm_classwxIntegerFormValidator__22wxIntegerFormValidator
-      ;wxPropertyFormFrame::GetEventTable() const
-      GetEventTable__19wxPropertyFormFrameCFv
-      ;wxStringFormValidator::OnRetrieveValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnRetrieveValue__21wxStringFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxPropertyFormDialog::sm_eventTable
-      sm_eventTable__20wxPropertyFormDialog
-      ;wxStringFormValidator::OnDisplayValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnDisplayValue__21wxStringFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxPropertyFormView::OnCommand(wxWindow&,wxCommandEvent&)
-      OnCommand__18wxPropertyFormViewFR8wxWindowR14wxCommandEvent
-      ;wxStringFormValidator::wxStringFormValidator(wxStringList*,long)
-      __ct__21wxStringFormValidatorFP12wxStringListl
-      ;wxPropertyFormFrame::sm_classwxPropertyFormFrame
-      sm_classwxPropertyFormFrame__19wxPropertyFormFrame
-      ;wxPropertyFormView::GetEventTable() const
-      GetEventTable__18wxPropertyFormViewCFv
-      ;wxConstructorForwxPropertyFormFrame()
-      wxConstructorForwxPropertyFormFrame__Fv
-      ;wxPropertyFormView::TransferToDialog()
-      TransferToDialog__18wxPropertyFormViewFv
-      ;wxPropertyFormView::ShowView(wxPropertySheet*,wxWindow*)
-      ShowView__18wxPropertyFormViewFP15wxPropertySheetP8wxWindow
-      ;wxPropertyFormDialog::sm_eventTableEntries
-      sm_eventTableEntries__20wxPropertyFormDialog
-      ;wxPropertyFormDialog::wxPropertyFormDialog(wxPropertyFormView*,wxWindow*,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__20wxPropertyFormDialogFP18wxPropertyFormViewP8wxWindowRC8wxStringRC7wxPointRC6wxSizelT3
-      ;wxRealFormValidator::OnRetrieveValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnRetrieveValue__19wxRealFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxIntegerFormValidator::OnDisplayValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnDisplayValue__22wxIntegerFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxRealFormValidator::OnDisplayValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnDisplayValue__19wxRealFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
-      ;wxBoolFormValidator::OnCheckValue(wxProperty*,wxPropertyFormView*,wxWindow*)
-      OnCheckValue__19wxBoolFormValidatorFP10wxPropertyP18wxPropertyFormViewP8wxWindow
   ;From object file:  ..\generic\proplist.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxPropertyListView::ShowView(wxPropertySheet*,wxPanel*)
-      ShowView__18wxPropertyListViewFP15wxPropertySheetP7wxPanel
-      ;wxPropertyListPanel::sm_eventTableEntries
-      sm_eventTableEntries__19wxPropertyListPanel
-      ;wxPropertyListPanel::sm_classwxPropertyListPanel
-      sm_classwxPropertyListPanel__19wxPropertyListPanel
-      __vft23wxFilenameListValidator8wxObject
-      __vft21wxStringListValidator8wxObject
-      ;wxColourListValidator::wxColourListValidator(long)
-      __ct__21wxColourListValidatorFl
-      ;wxPropertyListView::ShowTextControl(unsigned long)
-      ShowTextControl__18wxPropertyListViewFUl
-      ;wxPropertyListView::ShowListBoxControl(unsigned long)
-      ShowListBoxControl__18wxPropertyListViewFUl
-      ;wxPropertyListView::OnPropertySelect(wxCommandEvent&)
-      OnPropertySelect__18wxPropertyListViewFR14wxCommandEvent
-      ;wxPropertyListView::OnPropertyDoubleClick(wxCommandEvent&)
-      OnPropertyDoubleClick__18wxPropertyListViewFR14wxCommandEvent
-      ;wxPropertyListView::OnEdit(wxCommandEvent&)
-      OnEdit__18wxPropertyListViewFR14wxCommandEvent
-      ;wxPropertyListPanel::OnDefaultAction(wxControl*)
-      OnDefaultAction__19wxPropertyListPanelFP9wxControl
-      ;wxPropertyStringListEditorDialog::OnCloseWindow(wxCloseEvent&)
-      OnCloseWindow__32wxPropertyStringListEditorDialogFR12wxCloseEvent
-      ;wxPropertyListView::EnableCheck(unsigned long)
-      EnableCheck__18wxPropertyListViewFUl
-      ;wxPropertyListView::OnUpdateView()
-      OnUpdateView__18wxPropertyListViewFv
-      ;wxConstructorForwxFilenameListValidator()
-      wxConstructorForwxFilenameListValidator__Fv
-      ;wxFilenameListValidator::sm_classwxFilenameListValidator
-      sm_classwxFilenameListValidator__23wxFilenameListValidator
-      ;wxBoolListValidator::sm_classwxBoolListValidator
-      sm_classwxBoolListValidator__19wxBoolListValidator
-      ;wxPropertyStringListEditorDialog::SaveCurrentSelection()
-      SaveCurrentSelection__32wxPropertyStringListEditorDialogFv
-      ;wxPropertyStringListEditorDialog::GetEventTable() const
-      GetEventTable__32wxPropertyStringListEditorDialogCFv
-      ;wxPropertyListPanel::GetEventTable() const
-      GetEventTable__19wxPropertyListPanelCFv
-      ;wxPropertyListFrame::GetEventTable() const
-      GetEventTable__19wxPropertyListFrameCFv
-      ;wxPropertyListFrame::OnCreatePanel(wxFrame*,wxPropertyListView*)
-      OnCreatePanel__19wxPropertyListFrameFP7wxFrameP18wxPropertyListView
-      ;wxPropertyListDialog::sm_eventTableEntries
-      sm_eventTableEntries__20wxPropertyListDialog
-      ;wxPropertyListView::sm_dialogCancelled
-      sm_dialogCancelled__18wxPropertyListView
-      ;wxPropertyListView::sm_classwxPropertyListView
-      sm_classwxPropertyListView__18wxPropertyListView
-      ;wxListOfStringsListValidator::OnRetrieveValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnRetrieveValue__28wxListOfStringsListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyListValidator::OnRetrieveValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnRetrieveValue__23wxPropertyListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxFilenameListValidator::OnRetrieveValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnRetrieveValue__23wxFilenameListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxIntegerListValidator::OnRetrieveValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnRetrieveValue__22wxIntegerListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxBoolListValidator::OnRetrieveValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnRetrieveValue__19wxBoolListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxListOfStringsListValidator::OnPrepareControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnPrepareControls__28wxListOfStringsListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxListOfStringsListValidator::OnDoubleClick(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDoubleClick__28wxListOfStringsListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxListOfStringsListValidator::OnDisplayValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDisplayValue__28wxListOfStringsListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxFilenameListValidator::OnDisplayValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDisplayValue__23wxFilenameListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyListValidator::OnClearControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnClearControls__23wxPropertyListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxStringListValidator::OnCheckValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnCheckValue__21wxStringListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxRealListValidator::OnCheckValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnCheckValue__19wxRealListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxBoolListValidator::OnCheckValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnCheckValue__19wxBoolListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyListView::EnableCross(unsigned long)
-      EnableCross__18wxPropertyListViewFUl
-      __vft23wxPropertyListValidator8wxObject
-      __vft19wxPropertyListPanel8wxObject
-      __vft19wxPropertyListFrame8wxObject
-      __vft19wxBoolListValidator8wxObject
-      __vft18wxPropertyListView8wxObject
-      ;wxListOfStringsListValidator::wxListOfStringsListValidator(long)
-      __ct__28wxListOfStringsListValidatorFl
-      ;wxPropertyListDialog::ProcessEvent(wxEvent&)
-      ProcessEvent__20wxPropertyListDialogFR7wxEvent
-      ;wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent&)
-      OnDelete__32wxPropertyStringListEditorDialogFR14wxCommandEvent
-      ;wxPropertyListDialog::OnDefaultAction(wxControl*)
-      OnDefaultAction__20wxPropertyListDialogFP9wxControl
-      ;wxPropertyListView::OnCross(wxCommandEvent&)
-      OnCross__18wxPropertyListViewFR14wxCommandEvent
-      ;wxPropertyListView::MakeNameValueString(wxString,wxString)
-      MakeNameValueString__18wxPropertyListViewF8wxStringT1
-      ;wxPropertyListFrame::sm_classwxPropertyListFrame
-      sm_classwxPropertyListFrame__19wxPropertyListFrame
-      ;wxPropertyListView::EditProperty(wxProperty*)
-      EditProperty__18wxPropertyListViewFP10wxProperty
-      ;wxConstructorForwxPropertyTextEdit()
-      wxConstructorForwxPropertyTextEdit__Fv
-      ;wxConstructorForwxPropertyListView()
-      wxConstructorForwxPropertyListView__Fv
-      ;wxConstructorForwxPropertyListDialog()
-      wxConstructorForwxPropertyListDialog__Fv
-      ;wxConstructorForwxIntegerListValidator()
-      wxConstructorForwxIntegerListValidator__Fv
-      ;wxRealListValidator::sm_classwxRealListValidator
-      sm_classwxRealListValidator__19wxRealListValidator
-      ;wxIntegerListValidator::sm_classwxIntegerListValidator
-      sm_classwxIntegerListValidator__22wxIntegerListValidator
-      ;wxPropertyStringListEditorDialog::ShowCurrentSelection()
-      ShowCurrentSelection__32wxPropertyStringListEditorDialogFv
-      ;wxPropertyTextEdit::OnSetFocus()
-      OnSetFocus__18wxPropertyTextEditFv
-      ;wxPropertyListView::OnClose()
-      OnClose__18wxPropertyListViewFv
-      ;wxPropertyListValidator::OnSelect(unsigned long,wxProperty*,wxPropertyListView*,wxWindow*)
-      OnSelect__23wxPropertyListValidatorFUlP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyStringListEditorDialog::sm_eventTableEntries
-      sm_eventTableEntries__32wxPropertyStringListEditorDialog
-      ;wxFilenameListValidator::OnPrepareControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnPrepareControls__23wxFilenameListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxRealListValidator::OnPrepareControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnPrepareControls__19wxRealListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxFilenameListValidator::OnDoubleClick(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDoubleClick__23wxFilenameListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyListValidator::OnDisplayValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDisplayValue__23wxPropertyListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxStringListValidator::OnDisplayValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDisplayValue__21wxStringListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxFilenameListValidator::OnCheckValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnCheckValue__23wxFilenameListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyTextEdit::wxPropertyTextEdit(wxPropertyListView*,wxWindow*,const int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__18wxPropertyTextEditFP18wxPropertyListViewP8wxWindowCiRC8wxStringRC7wxPointRC6wxSizelT4
-      ;wxPropertyTextEdit::sm_classwxPropertyTextEdit
-      sm_classwxPropertyTextEdit__18wxPropertyTextEdit
-      __vft32wxPropertyStringListEditorDialog8wxObject
-      __vft28wxListOfStringsListValidator8wxObject
-      __vft20wxPropertyListDialog8wxObject
-      __vft19wxRealListValidator8wxObject
-      ;wxFilenameListValidator::wxFilenameListValidator(wxString,wxString,long)
-      __ct__23wxFilenameListValidatorF8wxStringT1l
-      ;wxStringListValidator::wxStringListValidator(wxStringList*,long)
-      __ct__21wxStringListValidatorFP12wxStringListl
-      ;wxPropertyListView::wxPropertyListView(wxPanel*,long)
-      __ct__18wxPropertyListViewFP7wxPanell
-      ;wxPropertyListView::ShowProperty(wxProperty*,unsigned long)
-      ShowProperty__18wxPropertyListViewFP10wxPropertyUl
-      ;wxPropertyListDialog::OnCloseWindow(wxCloseEvent&)
-      OnCloseWindow__20wxPropertyListDialogFR12wxCloseEvent
-      ;wxPropertyListDialog::OnCancel(wxCommandEvent&)
-      OnCancel__20wxPropertyListDialogFR14wxCommandEvent
-      ;wxPropertyListView::OnCancel(wxCommandEvent&)
-      OnCancel__18wxPropertyListViewFR14wxCommandEvent
-      ;wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent&)
-      OnAdd__32wxPropertyStringListEditorDialogFR14wxCommandEvent
-      ;wxPropertyListView::UpdatePropertyDisplayInList(wxProperty*)
-      UpdatePropertyDisplayInList__18wxPropertyListViewFP10wxProperty
-      ;wxPropertyListView::EndDetailedEditing()
-      EndDetailedEditing__18wxPropertyListViewFv
-      ;wxConstructorForwxBoolListValidator()
-      wxConstructorForwxBoolListValidator__Fv
-      ;wxListOfStringsListValidator::sm_classwxListOfStringsListValidator
-      sm_classwxListOfStringsListValidator__28wxListOfStringsListValidator
-      ;wxColourListValidator::sm_classwxColourListValidator
-      sm_classwxColourListValidator__21wxColourListValidator
-      ;wxPropertyListView::CreateControls()
-      CreateControls__18wxPropertyListViewFv
-      ;wxPropertyListDialog::wxPropertyListDialog(wxPropertyListView*,wxWindow*,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__20wxPropertyListDialogFP18wxPropertyListViewP8wxWindowRC8wxStringRC7wxPointRC6wxSizelT3
-      ;wxPropertyListDialog::sm_eventTable
-      sm_eventTable__20wxPropertyListDialog
-      ;wxPropertyStringListEditorDialog::sm_dialogCancelled
-      sm_dialogCancelled__32wxPropertyStringListEditorDialog
-      ;wxStringListValidator::OnRetrieveValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnRetrieveValue__21wxStringListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxColourListValidator::OnRetrieveValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnRetrieveValue__21wxColourListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxStringListValidator::OnPrepareDetailControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnPrepareDetailControls__21wxStringListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxColourListValidator::OnPrepareControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnPrepareControls__21wxColourListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxBoolListValidator::OnPrepareControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnPrepareControls__19wxBoolListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyListValidator::OnEdit(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnEdit__23wxPropertyListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxStringListValidator::OnDoubleClick(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDoubleClick__21wxStringListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxStringListValidator::OnClearDetailControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnClearDetailControls__21wxStringListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxBoolListValidator::OnClearDetailControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnClearDetailControls__19wxBoolListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxListOfStringsListValidator::OnCheckValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnCheckValue__28wxListOfStringsListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxIntegerListValidator::OnCheckValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnCheckValue__22wxIntegerListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyListView::UpdatePropertyList(unsigned long)
-      UpdatePropertyList__18wxPropertyListViewFUl
-      ;wxPropertyListPanel::sm_eventTable
-      sm_eventTable__19wxPropertyListPanel
-      __vft21wxColourListValidator8wxObject
-      ;wxPropertyStringListEditorDialog::OnText(wxCommandEvent&)
-      OnText__32wxPropertyStringListEditorDialogFR14wxCommandEvent
-      ;wxPropertyListPanel::OnSize(wxSizeEvent&)
-      OnSize__19wxPropertyListPanelFR11wxSizeEvent
-      ;wxPropertyStringListEditorDialog::OnOK(wxCommandEvent&)
-      OnOK__32wxPropertyStringListEditorDialogFR14wxCommandEvent
-      ;wxPropertyListFrame::OnCloseWindow(wxCloseEvent&)
-      OnCloseWindow__19wxPropertyListFrameFR12wxCloseEvent
-      ;wxPropertyListView::FindListIndexForProperty(wxProperty*)
-      FindListIndexForProperty__18wxPropertyListViewFP10wxProperty
-      ;wxPropertyListView::RetrieveProperty(wxProperty*)
-      RetrieveProperty__18wxPropertyListViewFP10wxProperty
-      ;wxPropertyListView::EndShowingProperty(wxProperty*)
-      EndShowingProperty__18wxPropertyListViewFP10wxProperty
-      ;wxPropertyListView::DisplayProperty(wxProperty*)
-      DisplayProperty__18wxPropertyListViewFP10wxProperty
-      ;wxPropertyListView::BeginShowingProperty(wxProperty*)
-      BeginShowingProperty__18wxPropertyListViewFP10wxProperty
-      ;wxPropertyTextEdit::OnKillFocus()
-      OnKillFocus__18wxPropertyTextEditFv
-      ;wxConstructorForwxStringListValidator()
-      wxConstructorForwxStringListValidator__Fv
-      ;wxConstructorForwxPropertyListFrame()
-      wxConstructorForwxPropertyListFrame__Fv
-      ;wxConstructorForwxListOfStringsListValidator()
-      wxConstructorForwxListOfStringsListValidator__Fv
-      ;wxFilenameListValidator::~wxFilenameListValidator()
-      __dt__23wxFilenameListValidatorFv
-      ;wxColourListValidator::~wxColourListValidator()
-      __dt__21wxColourListValidatorFv
-      ;wxPropertyListFrame::Initialize()
-      Initialize__19wxPropertyListFrameFv
-      ;wxPropertyListDialog::GetEventTable() const
-      GetEventTable__20wxPropertyListDialogCFv
-      ;wxPropertyListView::BeginDetailedEditing()
-      BeginDetailedEditing__18wxPropertyListViewFv
-      ;wxPropertyListValidator::OnValueListSelect(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnValueListSelect__23wxPropertyListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyListView::sm_eventTable
-      sm_eventTable__18wxPropertyListView
-      ;wxPropertyListDialog::sm_classwxPropertyListDialog
-      sm_classwxPropertyListDialog__20wxPropertyListDialog
-      ;wxRealListValidator::OnRetrieveValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnRetrieveValue__19wxRealListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxIntegerListValidator::OnPrepareControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnPrepareControls__22wxIntegerListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxStringListValidator::OnPrepareControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnPrepareControls__21wxStringListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxListOfStringsListValidator::OnEdit(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnEdit__28wxListOfStringsListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxColourListValidator::OnEdit(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnEdit__21wxColourListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxColourListValidator::OnDoubleClick(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDoubleClick__21wxColourListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxBoolListValidator::OnDoubleClick(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDoubleClick__19wxBoolListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxColourListValidator::OnDisplayValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDisplayValue__21wxColourListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyListView::OnCheck(wxCommandEvent&)
-      OnCheck__18wxPropertyListViewFR14wxCommandEvent
-      __vft22wxIntegerListValidator8wxObject
-      ;wxPropertyListPanel::ProcessEvent(wxEvent&)
-      ProcessEvent__19wxPropertyListPanelFR7wxEvent
-      ;wxPropertyListView::OnValueListSelect(wxCommandEvent&)
-      OnValueListSelect__18wxPropertyListViewFR14wxCommandEvent
-      ;wxPropertyListView::OnText(wxCommandEvent&)
-      OnText__18wxPropertyListViewFR14wxCommandEvent
-      ;wxPropertyStringListEditorDialog::OnStrings(wxCommandEvent&)
-      OnStrings__32wxPropertyStringListEditorDialogFR14wxCommandEvent
-      ;wxPropertyListView::OnOk(wxCommandEvent&)
-      OnOk__18wxPropertyListViewFR14wxCommandEvent
-      ;wxPropertyListView::OnHelp(wxCommandEvent&)
-      OnHelp__18wxPropertyListViewFR14wxCommandEvent
-      ;wxPropertyStringListEditorDialog::OnCancel(wxCommandEvent&)
-      OnCancel__32wxPropertyStringListEditorDialogFR14wxCommandEvent
-      ;wxPropertyListFrame::sm_eventTableEntries
-      sm_eventTableEntries__19wxPropertyListFrame
-      ;wxPropertyListFrame::sm_eventTable
-      sm_eventTable__19wxPropertyListFrame
-      ;wxPropertyListView::GetEventTable() const
-      GetEventTable__18wxPropertyListViewCFv
-      ;wxConstructorForwxRealListValidator()
-      wxConstructorForwxRealListValidator__Fv
-      ;wxConstructorForwxPropertyListPanel()
-      wxConstructorForwxPropertyListPanel__Fv
-      ;wxConstructorForwxColourListValidator()
-      wxConstructorForwxColourListValidator__Fv
-      ;wxStringListValidator::sm_classwxStringListValidator
-      sm_classwxStringListValidator__21wxStringListValidator
-      ;wxPropertyListValidator::sm_classwxPropertyListValidator
-      sm_classwxPropertyListValidator__23wxPropertyListValidator
-      ;wxPropertyListPanel::~wxPropertyListPanel()
-      __dt__19wxPropertyListPanelFv
-      ;wxPropertyListView::~wxPropertyListView()
-      __dt__18wxPropertyListViewFv
-      ;wxBoolListValidator::OnDisplayValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnDisplayValue__19wxBoolListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxPropertyStringListEditorDialog::sm_eventTable
-      sm_eventTable__32wxPropertyStringListEditorDialog
-      ;wxPropertyListView::sm_eventTableEntries
-      sm_eventTableEntries__18wxPropertyListView
-      ;wxBoolListValidator::OnPrepareDetailControls(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnPrepareDetailControls__19wxBoolListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxFilenameListValidator::OnEdit(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnEdit__23wxFilenameListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxColourListValidator::OnCheckValue(wxProperty*,wxPropertyListView*,wxWindow*)
-      OnCheckValue__21wxColourListValidatorFP10wxPropertyP18wxPropertyListViewP8wxWindow
-      ;wxListOfStringsListValidator::EditStringList(wxWindow*,wxStringList*,const char*)
-      EditStringList__28wxListOfStringsListValidatorFP8wxWindowP12wxStringListPCc
   ;From object file:  ..\generic\sashwin.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSashWindow::OnSize(wxSizeEvent&)
@@ -9715,67 +9032,82 @@ EXPORTS
       sm_classwxSashWindow__12wxSashWindow
       ;wxSashWindow::sm_eventTableEntries
       sm_eventTableEntries__12wxSashWindow
-  ;From object file:  ..\generic\scrolwin.cpp
+  ;From object file:  ..\generic\scrlwing.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxGenericScrolledWindow::OnChar(wxKeyEvent&)
-      OnChar__23wxGenericScrolledWindowFR10wxKeyEvent
+      ;wxScrollHelper::SendAutoScrollEvents(wxScrollWinEvent&) const
+      SendAutoScrollEvents__14wxScrollHelperCFR16wxScrollWinEvent
       __vft23wxGenericScrolledWindow8wxObject
-      ;wxGenericScrolledWindow::GetVirtualSize(int*,int*) const
-      GetVirtualSize__23wxGenericScrolledWindowCFPiT1
-      ;wxGenericScrolledWindow::sm_eventTable
-      sm_eventTable__23wxGenericScrolledWindow
-      ;wxGenericScrolledWindow::OnScroll(wxScrollWinEvent&)
-      OnScroll__23wxGenericScrolledWindowFR16wxScrollWinEvent
-      ;wxGenericScrolledWindow::OnSize(wxSizeEvent&)
-      OnSize__23wxGenericScrolledWindowFR11wxSizeEvent
-      ;wxGenericScrolledWindow::CalcScrollInc(wxScrollWinEvent&)
-      CalcScrollInc__23wxGenericScrolledWindowFR16wxScrollWinEvent
-      ;wxGenericScrolledWindow::Scroll(int,int)
-      Scroll__23wxGenericScrolledWindowFiT1
-      ;wxGenericScrolledWindow::GetViewStart(int*,int*) const
-      GetViewStart__23wxGenericScrolledWindowCFPiT1
-      ;wxGenericScrolledWindow::EnableScrolling(unsigned long,unsigned long)
-      EnableScrolling__23wxGenericScrolledWindowFUlT1
+      ;wxScrollHelper::EnableScrolling(unsigned long,unsigned long)
+      EnableScrolling__14wxScrollHelperFUlT1
+      ;wxAutoScrollTimer::Notify()
+      Notify__17wxAutoScrollTimerFv
+      ;wxScrollHelper::wxScrollHelper(wxWindow*)
+      __ct__14wxScrollHelperFP8wxWindow
+      ;wxAutoScrollTimer::wxAutoScrollTimer(wxWindow*,wxScrollHelper*,int,int,int)
+      __ct__17wxAutoScrollTimerFP8wxWindowP14wxScrollHelperiN23
+      ;wxScrollHelper::HandleOnScroll(wxScrollWinEvent&)
+      HandleOnScroll__14wxScrollHelperFR16wxScrollWinEvent
+      __vft17wxAutoScrollTimer8wxObject
+      ;wxScrollHelper::CalcScrollInc(wxScrollWinEvent&)
+      CalcScrollInc__14wxScrollHelperFR16wxScrollWinEvent
+      ;wxScrollHelper::GetScrollPixelsPerUnit(int*,int*) const
+      GetScrollPixelsPerUnit__14wxScrollHelperCFPiT1
+      ;wxScrollHelper::Scroll(int,int)
+      Scroll__14wxScrollHelperFiT1
+      ;wxScrollHelper::~wxScrollHelper()
+      __dt__14wxScrollHelperFv
       ;wxConstructorForwxGenericScrolledWindow()
       wxConstructorForwxGenericScrolledWindow__Fv
-      ;wxGenericScrolledWindow::PrepareDC(wxDC&)
-      PrepareDC__23wxGenericScrolledWindowFR4wxDC
-      ;wxGenericScrolledWindow::sm_eventTableEntries
-      sm_eventTableEntries__23wxGenericScrolledWindow
-      ;wxGenericScrolledWindow::CalcUnscrolledPosition(int,int,int*,int*) const
-      CalcUnscrolledPosition__23wxGenericScrolledWindowCFiT1PiT3
-      ;wxGenericScrolledWindow::SetScrollbars(int,int,int,int,int,int,unsigned long)
-      SetScrollbars__23wxGenericScrolledWindowFiN51Ul
-      ;wxGenericScrolledWindow::GetEventTable() const
-      GetEventTable__23wxGenericScrolledWindowCFv
+      __vft23wxGenericScrolledWindow14wxScrollHelper
+      ;wxScrollHelper::StopAutoScrolling()
+      StopAutoScrolling__14wxScrollHelperFv
+      ;wxScrollHelper::AdjustScrollbars()
+      AdjustScrollbars__14wxScrollHelperFv
+      ;wxScrollHelper::HandleOnPaint(wxPaintEvent&)
+      HandleOnPaint__14wxScrollHelperFR12wxPaintEvent
+      ;wxScrollHelper::HandleOnSize(wxSizeEvent&)
+      HandleOnSize__14wxScrollHelperFR11wxSizeEvent
+      ;wxScrollHelper::GetVirtualSize(int*,int*) const
+      GetVirtualSize__14wxScrollHelperCFPiT1
+      ;wxScrollHelper::GetTargetWindow() const
+      GetTargetWindow__14wxScrollHelperCFv
+      __vft14wxScrollHelper
       ;wxGenericScrolledWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__23wxGenericScrolledWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
-      ;wxGenericScrolledWindow::SetTargetWindow(wxWindow*)
-      SetTargetWindow__23wxGenericScrolledWindowFP8wxWindow
-      ;wxGenericScrolledWindow::CalcScrolledPosition(int,int,int*,int*) const
-      CalcScrolledPosition__23wxGenericScrolledWindowCFiT1PiT3
-      ;wxGenericScrolledWindow::GetScrollPageSize(int) const
-      GetScrollPageSize__23wxGenericScrolledWindowCFi
-      ;wxGenericScrolledWindow::SetScrollPageSize(int,int)
-      SetScrollPageSize__23wxGenericScrolledWindowFiT1
+      ;wxScrollHelper::CalcUnscrolledPosition(int,int,int*,int*) const
+      CalcUnscrolledPosition__14wxScrollHelperCFiT1PiT3
+      ;wxScrollHelper::CalcScrolledPosition(int,int,int*,int*) const
+      CalcScrolledPosition__14wxScrollHelperCFiT1PiT3
+      ;wxScrollHelper::HandleOnMouseEnter(wxMouseEvent&)
+      HandleOnMouseEnter__14wxScrollHelperFR12wxMouseEvent
+      ;wxScrollHelper::HandleOnMouseLeave(wxMouseEvent&)
+      HandleOnMouseLeave__14wxScrollHelperFR12wxMouseEvent
+      ;wxScrollHelper::HandleOnChar(wxKeyEvent&)
+      HandleOnChar__14wxScrollHelperFR10wxKeyEvent
+      ;wxScrollHelper::SetScrollPageSize(int,int)
+      SetScrollPageSize__14wxScrollHelperFiT1
+      ;wxScrollHelper::GetViewStart(int*,int*) const
+      GetViewStart__14wxScrollHelperCFPiT1
       ;wxGenericScrolledWindow::~wxGenericScrolledWindow()
       __dt__23wxGenericScrolledWindowFv
+      ;wxScrollHelper::SetTargetWindow(wxWindow*)
+      SetTargetWindow__14wxScrollHelperFP8wxWindow
       ;wxScrolledWindow::sm_classwxScrolledWindow
       sm_classwxScrolledWindow__16wxScrolledWindow
-      ;wxGenericScrolledWindow::OnPaint(wxPaintEvent&)
-      OnPaint__23wxGenericScrolledWindowFR12wxPaintEvent
-      ;wxGenericScrolledWindow::OnMouseWheel(wxMouseEvent&)
-      OnMouseWheel__23wxGenericScrolledWindowFR12wxMouseEvent
-      ;wxGenericScrolledWindow::GetScrollPixelsPerUnit(int*,int*) const
-      GetScrollPixelsPerUnit__23wxGenericScrolledWindowCFPiT1
-      ;wxGenericScrolledWindow::wxGenericScrolledWindow()
-      __ct__23wxGenericScrolledWindowFv
-      ;wxGenericScrolledWindow::GetTargetWindow()
-      GetTargetWindow__23wxGenericScrolledWindowFv
-      ;wxGenericScrolledWindow::AdjustScrollbars()
-      AdjustScrollbars__23wxGenericScrolledWindowFv
+      ;wxScrollHelper::DoPrepareDC(wxDC&)
+      DoPrepareDC__14wxScrollHelperFR4wxDC
+      ;wxScrollHelperEvtHandler::ProcessEvent(wxEvent&)
+      ProcessEvent__24wxScrollHelperEvtHandlerFR7wxEvent
+      __vft24wxScrollHelperEvtHandler8wxObject
+      ;wxScrollHelper::SetScrollbars(int,int,int,int,int,int,unsigned long)
+      SetScrollbars__14wxScrollHelperFiN51Ul
+      ;wxScrollHelper::GetScrollPageSize(int) const
+      GetScrollPageSize__14wxScrollHelperCFi
+      ;wxScrollHelper::SetWindow(wxWindow*)
+      SetWindow__14wxScrollHelperFP8wxWindow
       ;wxGenericScrolledWindow::sm_classwxGenericScrolledWindow
       sm_classwxGenericScrolledWindow__23wxGenericScrolledWindow
+  ;From object file:  ..\generic\spinctlg.cpp
   ;From object file:  ..\generic\splitter.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSplitterWindow::OnSize(wxSizeEvent&)
@@ -10316,6 +9648,7 @@ EXPORTS
       DrawDropEffect__17wxGenericTreeCtrlFP17wxGenericTreeItem
       ;wxTreeRenameTimer::Notify()
       Notify__17wxTreeRenameTimerFv
+      __vft17wxGenericTreeCtrl14wxScrollHelper
       ;wxGenericTreeCtrl::UnselectAll()
       UnselectAll__17wxGenericTreeCtrlFv
       ;wxGenericTreeCtrl::SetItemTextColour(const wxTreeItemId&,const wxColour&)
@@ -10330,60 +9663,6 @@ EXPORTS
       FillArray__17wxGenericTreeCtrlCFP17wxGenericTreeItemR18wxArrayTreeItemIds
   ;From object file:  ..\generic\treelay.cpp
   ;From object file:  ..\generic\wizard.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxWizard::wxWizard(wxWindow*,int,const wxString&,const wxBitmap&,const wxPoint&)
-      __ct__8wxWizardFP8wxWindowiRC8wxStringRC8wxBitmapRC7wxPoint
-      __vft8wxWizard8wxObject
-      ;wxWizard::OnCancel(wxCommandEvent&)
-      OnCancel__8wxWizardFR14wxCommandEvent
-      ;wxWizard::SetPageSize(const wxSize&)
-      SetPageSize__8wxWizardFRC6wxSize
-      ;wxWizard::RunWizard(wxWizardPage*)
-      RunWizard__8wxWizardFP12wxWizardPage
-      ;wxWizard::GetEventTable() const
-      GetEventTable__8wxWizardCFv
-      ;wxConstructorForwxWizardPageSimple()
-      wxConstructorForwxWizardPageSimple__Fv
-      ;wxWizard::GetPageSize() const
-      GetPageSize__8wxWizardCFv
-      wxEVT_WIZARD_PAGE_CHANGING
-      ;wxWizard::OnBackOrNext(wxCommandEvent&)
-      OnBackOrNext__8wxWizardFR14wxCommandEvent
-      ;wxWizardPageSimple::sm_classwxWizardPageSimple
-      sm_classwxWizardPageSimple__18wxWizardPageSimple
-      ;wxWizardPageSimple::GetPrev() const
-      GetPrev__18wxWizardPageSimpleCFv
-      ;wxWizardEvent::sm_classwxWizardEvent
-      sm_classwxWizardEvent__13wxWizardEvent
-      wxEVT_WIZARD_CANCEL
-      ;wxConstructorForwxWizard()
-      wxConstructorForwxWizard__Fv
-      ;wxConstructorForwxWizardEvent()
-      wxConstructorForwxWizardEvent__Fv
-      ;wxWizardPageSimple::GetNext() const
-      GetNext__18wxWizardPageSimpleCFv
-      ;wxWizard::sm_classwxWizard
-      sm_classwxWizard__8wxWizard
-      wxEVT_WIZARD_PAGE_CHANGED
-      ;wxWizard::sm_eventTable
-      sm_eventTable__8wxWizard
-      ;wxWizard::sm_eventTableEntries
-      sm_eventTableEntries__8wxWizard
-      ;wxWizard::DoCreateControls()
-      DoCreateControls__8wxWizardFv
-      ;wxWizard::GetCurrentPage() const
-      GetCurrentPage__8wxWizardCFv
-      ;wxWizardPage::wxWizardPage(wxWizard*,const wxBitmap&)
-      __ct__12wxWizardPageFP8wxWizardRC8wxBitmap
-      __vft18wxWizardPageSimple8wxObject
-      ;wxWizardEvent::wxWizardEvent(int,int,unsigned long)
-      __ct__13wxWizardEventFiT1Ul
-      ;wxWizard::ShowPage(wxWizardPage*,unsigned long)
-      ShowPage__8wxWizardFP12wxWizardPageUl
-      ;wxWizardBase::Create(wxWindow*,int,const wxString&,const wxBitmap&,const wxPoint&,const wxSize&)
-      Create__12wxWizardBaseFP8wxWindowiRC8wxStringRC8wxBitmapRC7wxPointRC6wxSize
-      ;wxWizardPage::sm_classwxWizardPage
-      sm_classwxWizardPage__12wxWizardPage
   ;From object file:  ..\html\helpctrl.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxHtmlHelpController::DisplayTextPopup(const wxString&,const wxPoint&)
@@ -10681,16 +9960,31 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxHtmlParser::DoneParser()
       DoneParser__12wxHtmlParserFv
+      ;wxHtmlEntitiesParser::~wxHtmlEntitiesParser()
+      __dt__20wxHtmlEntitiesParserFv
+      ;wxHtmlEntitiesParser::GetEntityChar(const wxString&)
+      GetEntityChar__20wxHtmlEntitiesParserFRC8wxString
+      __vft20wxHtmlEntitiesParser8wxObject
       ;wxHtmlParser::AddTagHandler(wxHtmlTagHandler*)
       AddTagHandler__12wxHtmlParserFP16wxHtmlTagHandler
       ;wxHtmlParser::SetSource(const wxString&)
       SetSource__12wxHtmlParserFRC8wxString
-      ;wxHtmlParser::PopTagHandler()
-      PopTagHandler__12wxHtmlParserFv
+      ;wxHtmlParser::wxHtmlParser()
+      __ct__12wxHtmlParserFv
+      ;wxConstructorForwxHtmlEntitiesParser()
+      wxConstructorForwxHtmlEntitiesParser__Fv
       ;wxHtmlTagHandler::sm_classwxHtmlTagHandler
       sm_classwxHtmlTagHandler__16wxHtmlTagHandler
+      ;wxHtmlParser::PopTagHandler()
+      PopTagHandler__12wxHtmlParserFv
       ;wxHtmlParser::PushTagHandler(wxHtmlTagHandler*,wxString)
       PushTagHandler__12wxHtmlParserFP16wxHtmlTagHandler8wxString
+      ;wxHtmlEntitiesParser::SetEncoding(wxFontEncoding)
+      SetEncoding__20wxHtmlEntitiesParserF14wxFontEncoding
+      ;wxHtmlEntitiesParser::Parse(const wxString&)
+      Parse__20wxHtmlEntitiesParserFRC8wxString
+      ;wxHtmlEntitiesParser::GetCharForCode(unsigned int)
+      GetCharForCode__20wxHtmlEntitiesParserFUi
       ;wxHtmlParser::~wxHtmlParser()
       __dt__12wxHtmlParserFv
       ;wxHtmlParser::AddTag(const wxHtmlTag&)
@@ -10698,8 +9992,12 @@ EXPORTS
       __vft12wxHtmlParser8wxObject
       ;wxHtmlParser::DoParsing(int,int)
       DoParsing__12wxHtmlParserFiT1
+      ;wxHtmlEntitiesParser::wxHtmlEntitiesParser()
+      __ct__20wxHtmlEntitiesParserFv
       ;wxHtmlParser::sm_classwxHtmlParser
       sm_classwxHtmlParser__12wxHtmlParser
+      ;wxHtmlEntitiesParser::sm_classwxHtmlEntitiesParser
+      sm_classwxHtmlEntitiesParser__20wxHtmlEntitiesParser
       ;wxHtmlParser::Parse(const wxString&)
       Parse__12wxHtmlParserFRC8wxString
       ;wxHtmlParser::InitParser(const wxString&)
@@ -10714,12 +10012,18 @@ EXPORTS
       __ct__15wxHtmlTagsCacheFRC8wxString
       ;wxHtmlTag::HasParam(const wxString&) const
       HasParam__9wxHtmlTagCFRC8wxString
-      ;wxHtmlTag::wxHtmlTag(const wxString&,int,int,wxHtmlTagsCache*)
-      __ct__9wxHtmlTagFRC8wxStringiT2P15wxHtmlTagsCache
       ;wxHtmlTagsCache::QueryTag(int,int*,int*)
       QueryTag__15wxHtmlTagsCacheFiPiT2
+      ;wxHtmlTag::GetParamAsInt(const wxString&,int*) const
+      GetParamAsInt__9wxHtmlTagCFRC8wxStringPi
       ;wxHtmlTagsCache::sm_classwxHtmlTagsCache
       sm_classwxHtmlTagsCache__15wxHtmlTagsCache
+      ;wxHtmlTag::wxHtmlTag(const wxString&,int,int,wxHtmlTagsCache*,wxHtmlEntitiesParser*)
+      __ct__9wxHtmlTagFRC8wxStringiT2P15wxHtmlTagsCacheP20wxHtmlEntitiesParser
+      ;wxHtmlTag::GetParamAsColour(const wxString&,wxColour*) const
+      GetParamAsColour__9wxHtmlTagCFRC8wxStringP8wxColour
+      ;wxHtmlTag::GetAllParams() const
+      GetAllParams__9wxHtmlTagCFv
       ;wxHtmlTag::sm_classwxHtmlTag
       sm_classwxHtmlTag__9wxHtmlTag
   ;From object file:  ..\html\htmlwin.cpp
@@ -10805,6 +10109,7 @@ EXPORTS
       CreateLayout__12wxHtmlWindowFv
       ;wxConstructorForwxHtmlWindow()
       wxConstructorForwxHtmlWindow__Fv
+      __vft12wxHtmlWindow14wxScrollHelper
       ;wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo&)
       OnLinkClicked__12wxHtmlWindowFRC14wxHtmlLinkInfo
       ;wxHtmlWindow::m_GlobalProcessors
@@ -11480,6 +10785,7 @@ EXPORTS
       ;wxCheckListBox::GetEventTable() const
       GetEventTable__14wxCheckListBoxCFv
       __vft18wxCheckListBoxItem12wxOwnerDrawn
+      __vft14wxCheckListBox15wxItemContainer
       ;wxCheckListBox::wxCheckListBox(wxWindow*,int,const wxPoint&,const wxSize&,int,const wxString*,long,const wxValidator&,const wxString&)
       __ct__14wxCheckListBoxFP8wxWindowiRC7wxPointRC6wxSizeT2PC8wxStringlRC11wxValidatorRC8wxString
       ;wxCheckListBox::Check(unsigned int,unsigned long)
@@ -11529,6 +10835,7 @@ EXPORTS
       DoSetSize__8wxChoiceFiN41
       ;wxChoice::DoGetBestSize() const
       DoGetBestSize__8wxChoiceCFv
+      __vft8wxChoice15wxItemContainer
       ;wxChoice::DoAppend(const wxString&)
       DoAppend__8wxChoiceFRC8wxString
       ;wxChoice::OS2Command(unsigned int,unsigned short)
@@ -12377,95 +11684,95 @@ EXPORTS
       FromString__20wxNativeEncodingInfoFRC8wxString
   ;From object file:  ..\os2\frame.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxFrame::Show(unsigned long)
-      Show__7wxFrameFUl
-      ;wxFrame::Iconize(unsigned long)
-      Iconize__7wxFrameFUl
-      ;wxFrame::HandleMenuSelect(unsigned short,unsigned short,unsigned long)
-      HandleMenuSelect__7wxFrameFUsT1Ul
-      ;wxFrame::OS2TranslateMessage(void**)
-      OS2TranslateMessage__7wxFrameFPPv
-      ;wxFrame::HandlePaint()
-      HandlePaint__7wxFrameFv
-      ;wxFrame::OnCreateStatusBar(int,long,int,const wxString&)
-      OnCreateStatusBar__7wxFrameFilT1RC8wxString
-      ;wxFrame::OnActivate(wxActivateEvent&)
-      OnActivate__7wxFrameFR15wxActivateEvent
-      __vft7wxFrame8wxObject
-      ;wxFrame::DoSetClientSize(int,int)
-      DoSetClientSize__7wxFrameFiT1
-      ;wxFrame::HandleSize(int,int,unsigned int)
-      HandleSize__7wxFrameFiT1Ui
-      ;wxConstructorForwxFrame()
-      wxConstructorForwxFrame__Fv
-      ;wxFrame::SetIcon(const wxIcon&)
-      SetIcon__7wxFrameFRC6wxIcon
-      ;wxFrame::Restore()
-      Restore__7wxFrameFv
-      ;wxFrame::IsMaximized() const
-      IsMaximized__7wxFrameCFv
-      ;wxFrame::IsIconized() const
-      IsIconized__7wxFrameCFv
-      ;wxFrame::GetClientAreaOrigin() const
-      GetClientAreaOrigin__7wxFrameCFv
-      ;wxFrame::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
-      Create__7wxFrameFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
-      ;wxFrame::OnSysColourChanged(wxSysColourChangedEvent&)
-      OnSysColourChanged__7wxFrameFR23wxSysColourChangedEvent
-      ;wxFrame::ShowFullScreen(unsigned long,long)
-      ShowFullScreen__7wxFrameFUll
-      ;wxFrame::DoShowWindow(int)
-      DoShowWindow__7wxFrameFi
-      ;wxFrame::sm_eventTable
-      sm_eventTable__7wxFrame
-      ;wxFrame::sm_eventTableEntries
-      sm_eventTableEntries__7wxFrame
-      ;wxFrame::sm_classwxFrame
-      sm_classwxFrame__7wxFrame
-      ;wxFrame::m_bUseNativeStatusBar
-      m_bUseNativeStatusBar__7wxFrame
-      ;wxFrame::~wxFrame()
-      __dt__7wxFrameFv
-      ;wxFrame::GetClient()
-      GetClient__7wxFrameFv
-      ;wxFrame::OS2Create(int,wxWindow*,const char*,wxWindow*,const char*,int,int,int,int,long)
-      OS2Create__7wxFrameFiP8wxWindowPCcT2T3N41l
-      ;wxFrame::HandleCommand(unsigned short,unsigned short,unsigned long)
-      HandleCommand__7wxFrameFUsT1Ul
-      ;wxFrame::DoGetSize(int*,int*) const
-      DoGetSize__7wxFrameCFPiT1
-      ;wxFrame::DoGetPosition(int*,int*) const
-      DoGetPosition__7wxFrameCFPiT1
-      ;wxFrame::PositionStatusBar()
-      PositionStatusBar__7wxFrameFv
-      ;wxFrame::PositionToolBar()
-      PositionToolBar__7wxFrameFv
-      ;wxFrame::OS2WindowProc(unsigned int,void*,void*)
-      OS2WindowProc__7wxFrameFUiPvT2
-      ;wxFrame::InternalSetMenuBar()
-      InternalSetMenuBar__7wxFrameFv
-      ;wxFrame::CreateToolBar(long,int,const wxString&)
-      CreateToolBar__7wxFrameFliRC8wxString
-      ;wxFrame::Maximize(unsigned long)
-      Maximize__7wxFrameFUl
-      ;wxFrame::SetClient(unsigned long)
-      SetClient__7wxFrameFUl
-      ;wxFrame::IconizeChildFrames(unsigned long)
-      IconizeChildFrames__7wxFrameFUl
-      ;wxFrame::DoGetClientSize(int*,int*) const
-      DoGetClientSize__7wxFrameCFPiT1
-      ;wxFrame::Init()
-      Init__7wxFrameFv
-      ;wxFrame::SetMenuBar(wxMenuBar*)
-      SetMenuBar__7wxFrameFP9wxMenuBar
-      ;wxFrame::GetEventTable() const
-      GetEventTable__7wxFrameCFv
-      ;wxFrame::DetachMenuBar()
-      DetachMenuBar__7wxFrameFv
-      wxFrameMainWndProc
+      ;wxFrameOS2::OS2Create(int,wxWindow*,const char*,wxWindow*,const char*,int,int,int,int,long)
+      OS2Create__10wxFrameOS2FiP8wxWindowPCcT2T3N41l
+      ;wxFrameOS2::OnActivate(wxActivateEvent&)
+      OnActivate__10wxFrameOS2FR15wxActivateEvent
+      ;wxFrameOS2::Iconize(unsigned long)
+      Iconize__10wxFrameOS2FUl
+      ;wxFrameOS2::DoSetClientSize(int,int)
+      DoSetClientSize__10wxFrameOS2FiT1
+      ;wxFrameOS2::HandleSize(int,int,unsigned int)
+      HandleSize__10wxFrameOS2FiT1Ui
+      ;wxFrameOS2::Restore()
+      Restore__10wxFrameOS2Fv
+      ;wxFrameOS2::sm_eventTableEntries
+      sm_eventTableEntries__10wxFrameOS2
+      ;wxFrameOS2::m_bUseNativeStatusBar
+      m_bUseNativeStatusBar__10wxFrameOS2
+      ;wxFrameOS2::IsIconized() const
+      IsIconized__10wxFrameOS2CFv
+      ;wxFrameOS2::HandlePaint()
+      HandlePaint__10wxFrameOS2Fv
+      ;wxFrameOS2::DetachMenuBar()
+      DetachMenuBar__10wxFrameOS2Fv
+      ;wxFrameOS2::CreateToolBar(long,int,const wxString&)
+      CreateToolBar__10wxFrameOS2FliRC8wxString
+      ;wxFrameOS2::Maximize(unsigned long)
+      Maximize__10wxFrameOS2FUl
+      ;wxFrameOS2::OnSysColourChanged(wxSysColourChangedEvent&)
+      OnSysColourChanged__10wxFrameOS2FR23wxSysColourChangedEvent
+      ;wxFrameOS2::HandleMenuSelect(unsigned short,unsigned short,unsigned long)
+      HandleMenuSelect__10wxFrameOS2FUsT1Ul
+      ;wxFrameOS2::HandleCommand(unsigned short,unsigned short,unsigned long)
+      HandleCommand__10wxFrameOS2FUsT1Ul
+      ;wxFrameOS2::DoGetClientSize(int*,int*) const
+      DoGetClientSize__10wxFrameOS2CFPiT1
+      ;wxFrameOS2::DoGetSize(int*,int*) const
+      DoGetSize__10wxFrameOS2CFPiT1
+      ;wxFrameOS2::~wxFrameOS2()
+      __dt__10wxFrameOS2Fv
+      ;wxFrameOS2::InternalSetMenuBar()
+      InternalSetMenuBar__10wxFrameOS2Fv
+      ;wxFrameOS2::GetClient()
+      GetClient__10wxFrameOS2Fv
+      ;wxFrameOS2::SetClient(wxWindow*)
+      SetClient__10wxFrameOS2FP8wxWindow
+      ;wxFrameOS2::ShowFullScreen(unsigned long,long)
+      ShowFullScreen__10wxFrameOS2FUll
+      ;wxFrameOS2::SetClient(unsigned long)
+      SetClient__10wxFrameOS2FUl
+      ;wxFrameOS2::IconizeChildFrames(unsigned long)
+      IconizeChildFrames__10wxFrameOS2FUl
+      ;wxFrameOS2::GetEventTable() const
+      GetEventTable__10wxFrameOS2CFv
+      ;wxFrameOS2::SetMenuBar(wxMenuBar*)
+      SetMenuBar__10wxFrameOS2FP9wxMenuBar
+      ;wxFrameOS2::PositionStatusBar()
+      PositionStatusBar__10wxFrameOS2Fv
+      ;wxFrameOS2::OS2WindowProc(unsigned int,void*,void*)
+      OS2WindowProc__10wxFrameOS2FUiPvT2
+      ;wxFrameOS2::OS2TranslateMessage(void**)
+      OS2TranslateMessage__10wxFrameOS2FPPv
+      ;wxFrameOS2::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
+      Create__10wxFrameOS2FP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
+      ;wxFrameOS2::Show(unsigned long)
+      Show__10wxFrameOS2FUl
+      __vft10wxFrameOS28wxObject
+      ;wxFrameOS2::DoShowWindow(int)
+      DoShowWindow__10wxFrameOS2Fi
+      ;wxFrameOS2::Init()
+      Init__10wxFrameOS2Fv
+      ;wxFrameOS2::sm_eventTable
+      sm_eventTable__10wxFrameOS2
+      ;wxFrameOS2::sm_classwxFrameOS2
+      sm_classwxFrameOS2__10wxFrameOS2
+      ;wxFrameOS2::DoGetPosition(int*,int*) const
+      DoGetPosition__10wxFrameOS2CFPiT1
+      ;wxConstructorForwxFrameOS2()
+      wxConstructorForwxFrameOS2__Fv
+      ;wxFrameOS2::SetIcon(const wxIcon&)
+      SetIcon__10wxFrameOS2FRC6wxIcon
+      ;wxFrameOS2::PositionToolBar()
+      PositionToolBar__10wxFrameOS2Fv
+      ;wxFrameOS2::IsMaximized() const
+      IsMaximized__10wxFrameOS2CFv
+      ;wxFrameOS2::GetClientAreaOrigin() const
+      GetClientAreaOrigin__10wxFrameOS2CFv
+      ;wxFrameOS2::OnCreateStatusBar(int,long,int,const wxString&)
+      OnCreateStatusBar__10wxFrameOS2FilT1RC8wxString
       wxFrameWndProc
-      ;wxFrame::SetClient(wxWindow*)
-      SetClient__7wxFrameFP8wxWindow
+      wxFrameMainWndProc
   ;From object file:  ..\os2\gauge.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft7wxGauge8wxObject
@@ -12858,6 +12165,7 @@ EXPORTS
       DoSetItemClientObject__9wxListBoxFiP12wxClientData
       ;wxListBox::GetCount() const
       GetCount__9wxListBoxCFv
+      __vft9wxListBox15wxItemContainer
       ;wxListBoxItem::wxListBoxItem(const wxString&)
       __ct__13wxListBoxItemFRC8wxString
       ;wxListBox::SetSelection(int,unsigned long)
@@ -13038,8 +12346,6 @@ EXPORTS
       sm_classwxMenuBar__9wxMenuBar
       ;wxMenuBar::RebuildAccelTable()
       RebuildAccelTable__9wxMenuBarFv
-      ;wxMenu::Detach()
-      Detach__6wxMenuFv
       ;wxMenu::OS2Command(unsigned int,unsigned short)
       OS2Command__6wxMenuFUiUs
       ;wxMenuBar::EnableTop(unsigned int,unsigned long)
@@ -13056,8 +12362,6 @@ EXPORTS
       GetWindow__6wxMenuCFv
       ;wxMenuBar::Create()
       Create__9wxMenuBarFv
-      ;wxMenu::ProcessCommand(wxCommandEvent&)
-      ProcessCommand__6wxMenuFR14wxCommandEvent
       ;wxMenuBar::FindMenuItem(const wxString&,const wxString&) const
       FindMenuItem__9wxMenuBarCFRC8wxStringT1
       ;wxConstructorForwxMenuBar()
@@ -13070,8 +12374,6 @@ EXPORTS
       Init__9wxMenuBarFv
       ;wxMenu::Break()
       Break__6wxMenuFv
-      ;wxMenu::Attach(wxMenuBar*)
-      Attach__6wxMenuFP9wxMenuBar
       ;wxMenuBar::Replace(unsigned int,wxMenu*,const wxString&)
       Replace__9wxMenuBarFUiP6wxMenuRC8wxString
   ;From object file:  ..\os2\menuitem.cpp
@@ -13101,8 +12403,6 @@ EXPORTS
       __dt__10wxMenuItemFv
       ;wxMenuItem::Enable(unsigned long)
       Enable__10wxMenuItemFUl
-      ;wxMenuItem::GetAccel() const
-      GetAccel__10wxMenuItemCFv
       __vft10wxMenuItem12wxOwnerDrawn
   ;From object file:  ..\os2\metafile.cpp
     ;PUBDEFs (Symbols available from object file):
@@ -13476,6 +12776,8 @@ EXPORTS
       GetSize__10wxRadioBoxCFPiT1
       ;wxRadioBox::GetPosition(int*,int*) const
       GetPosition__10wxRadioBoxCFPiT1
+      ;wxRadioBox::GetColumnCount() const
+      GetColumnCount__10wxRadioBoxCFv
       ;wxRadioBox::SetFocus()
       SetFocus__10wxRadioBoxFv
       ;wxRadioBox::OS2Command(unsigned int,unsigned short)
@@ -13484,12 +12786,15 @@ EXPORTS
       SetLabel__10wxRadioBoxFiP8wxBitmap
       ;wxRadioBox::SubclassRadioButton(unsigned long)
       SubclassRadioButton__10wxRadioBoxFUl
+      __vft10wxRadioBox14wxRadioBoxBase
       ;wxConstructorForwxRadioBox()
       wxConstructorForwxRadioBox__Fv
       ;wxRadioBox::wxRadioBox()
       __ct__10wxRadioBoxFv
       ;wxRadioBox::SendNotificationEvent()
       SendNotificationEvent__10wxRadioBoxFv
+      ;wxRadioBox::GetRowCount() const
+      GetRowCount__10wxRadioBoxCFv
       ;wxRadioBox::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,int,const wxString*,int,long,const wxValidator&,const wxString&)
       Create__10wxRadioBoxFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizeT2PC8wxStringT2lRC11wxValidatorT3
       ;wxRadioBox::FindString(const wxString&) const
@@ -13499,10 +12804,12 @@ EXPORTS
       __vft10wxRadioBox8wxObject
       ;wxRadioBox::SetSelection(int)
       SetSelection__10wxRadioBoxFi
-      ;wxRadioBox::GetNumVer() const
-      GetNumVer__10wxRadioBoxCFv
+      ;wxRadioBox::GetCount() const
+      GetCount__10wxRadioBoxCFv
       ;wxRadioBox::~wxRadioBox()
       __dt__10wxRadioBoxFv
+      ;wxRadioBox::GetNumVer() const
+      GetNumVer__10wxRadioBoxCFv
       ;wxRadioBtnWndProc(unsigned long,unsigned int,void*,void*)
       wxRadioBtnWndProc__FUlUiPvT3
       ;wxRadioBox::Show(int,unsigned long)
@@ -13513,12 +12820,12 @@ EXPORTS
       DoSetSize__10wxRadioBoxFiN41
       ;wxRadioBox::GetNumHor() const
       GetNumHor__10wxRadioBoxCFv
+      ;wxRadioBox::SetString(int,const wxString&)
+      SetString__10wxRadioBoxFiRC8wxString
       ;wxRadioBox::SetLabel(int,const wxString&)
       SetLabel__10wxRadioBoxFiRC8wxString
   ;From object file:  ..\os2\radiobut.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxBitmapRadioButton::GetValue() const
-      GetValue__19wxBitmapRadioButtonCFv
       ;wxRadioButton::sm_classwxRadioButton
       sm_classwxRadioButton__13wxRadioButton
       ;wxRadioButton::OS2Command(unsigned int,unsigned short)
@@ -13527,26 +12834,15 @@ EXPORTS
       wxConstructorForwxRadioButton__Fv
       ;wxRadioButton::Command(wxCommandEvent&)
       Command__13wxRadioButtonFR14wxCommandEvent
-      ;wxBitmapRadioButton::SetValue(unsigned long)
-      SetValue__19wxBitmapRadioButtonFUl
-      ;wxBitmapRadioButton::sm_classwxBitmapRadioButton
-      sm_classwxBitmapRadioButton__19wxBitmapRadioButton
-      ;wxBitmapRadioButton::SetLabel(const wxBitmap*)
-      SetLabel__19wxBitmapRadioButtonFPC8wxBitmap
       __vft13wxRadioButton8wxObject
-      ;wxConstructorForwxBitmapRadioButton()
-      wxConstructorForwxBitmapRadioButton__Fv
       ;wxRadioButton::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
       Create__13wxRadioButtonFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelRC11wxValidatorT3
       ;wxRadioButton::SetLabel(const wxString&)
       SetLabel__13wxRadioButtonFRC8wxString
       ;wxRadioButton::SetValue(unsigned long)
       SetValue__13wxRadioButtonFUl
-      __vft19wxBitmapRadioButton8wxObject
       ;wxRadioButton::GetValue() const
       GetValue__13wxRadioButtonCFv
-      ;wxBitmapRadioButton::Create(wxWindow*,int,const wxBitmap*,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
-      Create__19wxBitmapRadioButtonFP8wxWindowiPC8wxBitmapRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
   ;From object file:  ..\os2\region.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxRegion::Combine(const wxRect&,wxRegionOp)
@@ -14344,8 +13640,6 @@ EXPORTS
       wxGetUserName__FPci
       ;wxSleep(int)
       wxSleep__Fi
-      ;wxKill(long,wxSignal,wxKillError*)
-      wxKill__Fl8wxSignalP11wxKillError
       ;wxGetResource(const wxString&,const wxString&,long*,const wxString&)
       wxGetResource__FRC8wxStringT1PlT1
       ;wxGetOsVersion(int*,int*)
@@ -14403,6 +13697,8 @@ EXPORTS
       wxGetResource__FRC8wxStringT1PiT1
       ;wxError(const wxString&,const wxString&)
       wxError__FRC8wxStringT1
+      ;wxKill(long,wxSignal,wxKillError*)
+      wxKill__Fl8wxSignalP11wxKillError
       ;wxBell()
       wxBell__Fv
       ;wxShell(const wxString&)
