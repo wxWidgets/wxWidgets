@@ -45,4 +45,5 @@ docs/*.gif
 docs/*.wmf
 docs/*.shg
 docs/makefile.vc
+docs/Makefile
 

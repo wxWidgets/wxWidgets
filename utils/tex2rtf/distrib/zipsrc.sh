@@ -1,5 +1,5 @@
 #!/bin/sh
-# Zip up StoryLines source
+# Zip up Tex2RTF source
 
 expandlines()
 {
@@ -15,13 +15,20 @@ expandlines()
     done
 }
 
-CAFEDIR=$CAFE
-STDIR=$CAFE/storylines
-COMMONDIR=$CAFE/common
+TEX2RTFDIR=`pwd`/..
 
-cd $CAFE
-expandlines $STDIR/distrib/src.rsp temp.txt
-zip -@ $CAFEDIR/deliver/storylines_src.zip < temp.txt
-expandlines $CAFEDIR/distrib/src.rsp temp.txt
-zip -u -@ $CAFEDIR/deliver/storylines_src.zip < temp.txt
+rm -f $TEX2RTFDIR/deliver/tex2rtf-source.zip
+rm -f $TEX2RTFDIR/deliver/tex2rtf-source.tar.gz
+
+# Make a zip archive
+cd $TEX2RTFDIR
+expandlines $TEX2RTFDIR/distrib/src.rsp temp.txt
+zip -@ $TEX2RTFDIR/deliver/tex2rtf-source.zip < temp.txt
 rm temp.txt
+
+# Now make a tar archive
+ls `cat $TEX2RTFDIR/distrib/src.rsp` > /tmp/tex2rtf.txt
+tar cvf $TEX2RTFDIR/deliver/tex2rtf-source.tar -T /tmp/tex2rtf.txt
+gzip $TEX2RTFDIR/deliver/tex2rtf-source.tar
+rm /tmp/tex2rtf.txt
+

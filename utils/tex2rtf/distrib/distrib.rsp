@@ -11,6 +11,7 @@ docs/*.gif
 docs/*.wmf
 docs/*.shg
 docs/makefile.vc
+docs/Makefile
 
 tex2rtf.exe
 tex2rtf.chm
