@@ -17,72 +17,80 @@ class WXDLLEXPORT wxFrame : public wxFrameBase
 public:
     // construction
     wxFrame() { Init(); }
-    wxFrame(wxWindow *parent,
-            wxWindowID id,
-            const wxString& title,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE,
-            const wxString& name = wxFrameNameStr)
+    wxFrame( wxWindow*       pParent
+            ,wxWindowID      vId
+            ,const wxString& rsTitle
+            ,const wxPoint&  rPos = wxDefaultPosition
+            ,const wxSize&   rSize = wxDefaultSize
+            ,long            lStyle = wxDEFAULT_FRAME_STYLE
+            ,const wxString& rsName = wxFrameNameStr
+           )
     {
         Init();
 
-        Create(parent, id, title, pos, size, style, name);
+        Create(pParent, vId, rsTitle, rPos, rSize, lStyle, rsName);
     }
 
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxString& title,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+    bool Create( wxWindow*       pParent
+                ,wxWindowID      vId
+                ,const wxString& rsTitle
+                ,const wxPoint&  rPos = wxDefaultPosition
+                ,const wxSize&   rSize = wxDefaultSize
+                ,long            lStyle = wxDEFAULT_FRAME_STYLE
+                ,const wxString& rsName = wxFrameNameStr
+               );
 
     virtual ~wxFrame();
 
     // implement base class pure virtuals
-    virtual void Maximize(bool maximize = TRUE);
-    virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = TRUE);
-    virtual bool IsIconized() const;
-    virtual void Restore();
-    virtual void SetMenuBar(wxMenuBar *menubar);
-    virtual void SetIcon(const wxIcon& icon);
+    virtual void Maximize(bool bMaximize = TRUE);
+    virtual bool IsMaximized(void) const;
+    virtual void Iconize(bool bIconize = TRUE);
+    virtual bool IsIconized(void) const;
+    virtual void Restore(void);
+    virtual void SetMenuBar(wxMenuBar* pMenubar);
+    virtual void SetIcon(const wxIcon& rIcon);
+    virtual bool ShowFullScreen( bool bShow
+                                ,long lStyle = wxFULLSCREEN_ALL
+                               );
+    virtual bool IsFullScreen(void) const { return m_fsIsShowing; };
+
 
     // implementation only from now on
     // -------------------------------
 
     // override some more virtuals
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool bShow = TRUE);
 
     // event handlers
-    void OnActivate(wxActivateEvent& event);
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnActivate(wxActivateEvent& rEvent);
+    void OnSysColourChanged(wxSysColourChangedEvent& rEvent);
 
     // Toolbar
 #if wxUSE_TOOLBAR
-    virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER | wxTB_HORIZONTAL | wxTB_FLAT,
-                                     wxWindowID id = -1,
-                                     const wxString& name = wxToolBarNameStr);
+    virtual wxToolBar* CreateToolBar( long            lStyle = wxNO_BORDER | wxTB_HORIZONTAL | wxTB_FLAT
+                                     ,wxWindowID      vId = -1
+                                     ,const wxString& rsName = wxToolBarNameStr
+                                    );
 
-    virtual void PositionToolBar();
+    virtual void       PositionToolBar(void);
 #endif // wxUSE_TOOLBAR
 
     // Status bar
 #if wxUSE_STATUSBAR
-    virtual wxStatusBar* OnCreateStatusBar(int number = 1,
-                                           long style = wxST_SIZEGRIP,
-                                           wxWindowID id = 0,
-                                           const wxString& name = wxStatusLineNameStr);
-
-    virtual void PositionStatusBar();
+    virtual wxStatusBar* OnCreateStatusBar( int             nNumber = 1
+                                           ,long            lStyle = wxST_SIZEGRIP
+                                           ,wxWindowID      vId = 0
+                                           ,const wxString& rsName = wxStatusLineNameStr
+                                          );
+    virtual void PositionStatusBar(void);
 
     // Hint to tell framework which status bar to use: the default is to use
     // native one for the platforms which support it (Win32), the generic one
     // otherwise
 
     // TODO: should this go into a wxFrameworkSettings class perhaps?
-    static void UseNativeStatusBar(bool useNative)
+    static void UseNativeStatusBar(bool bUseNative)
         { m_useNativeStatusBar = useNative; };
     static bool UsesNativeStatusBar()
         { return m_useNativeStatusBar; };
@@ -95,44 +103,65 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
 
     // event handlers
-    bool HandlePaint();
-    bool HandleSize(int x, int y, WXUINT flag);
-    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
-    bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
+    bool HandlePaint(void);
+    bool HandleSize( int    nX
+                    ,int    nY
+                    ,WXUINT uFlag
+                   );
+    bool HandleCommand( WXWORD wId
+                       ,WXWORD wCmd
+                       ,WXHWND wControl
+                      );
+    bool HandleMenuSelect( WXWORD  wItem
+                          ,WXWORD  wFlags
+                          ,WXHMENU hMenu
+                         );
 
-    bool OS2Create(int id, wxWindow *parent, const wxChar *wclass,
-                   wxWindow *wx_win, const wxChar *title,
-                   int x, int y, int width, int height, long style);
+    bool OS2Create( int           nId
+                   ,wxWindow*     pParent
+                   ,const wxChar* zWclass
+                   ,wxWindow*     pWxWin
+                   ,const wxChar* zTitle
+                   ,int           nX
+                   ,int           nY
+                   ,int           nWidth
+                   ,int           nHeight
+                   ,long          nStyle
+                  );
 
     // tooltip management
 #if wxUSE_TOOLTIPS
-    WXHWND GetToolTipCtrl() const { return m_hwndToolTip; }
-    void SetToolTipCtrl(WXHWND hwndTT) { m_hwndToolTip = hwndTT; }
+    WXHWND GetToolTipCtrl(void) const { return m_hwndToolTip; }
+    void   SetToolTipCtrl(WXHWND hHwndTT) { m_hwndToolTip = hwndTT; }
 #endif // tooltips
 
 protected:
     // common part of all ctors
-    void Init();
+    void         Init(void);
 
     // common part of Iconize(), Maximize() and Restore()
-    void DoShowWindow(int nShowCmd);
+    void         DoShowWindow(int nShowCmd);
 
     // override base class virtuals
-    virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetPosition(int *x, int *y) const;
-
-    virtual void DoSetClientSize(int width, int height);
-
-    virtual void DoClientToScreen(int *x, int *y) const;
-    virtual void DoScreenToClient(int *x, int *y) const;
+    virtual void DoGetClientSize( int* pWidth
+                                 ,int* pHeight
+                                ) const;
+    virtual void DoGetSize( int* pWidth
+                           ,int* pHeight
+                          ) const;
+    virtual void DoGetPosition( int* pX
+                               ,int* pY
+                              ) const;
+    virtual void DoSetClientSize( int nWidth
+                                 ,int nWeight
+                                );
 
     // helper
-    void DetachMenuBar();
+    void         DetachMenuBar(void);
 
     // a plug in for MDI frame classes which need to do something special when
     // the menubar is set
-    virtual void InternalSetMenuBar();
+    virtual void InternalSetMenuBar(void);
 
     // propagate our state change to all child frames
     void IconizeChildFrames(bool bIconize);
@@ -141,18 +170,31 @@ protected:
     bool OS2TranslateMessage(WXMSG* pMsg);
 
     // window proc for the frames
-    MRESULT OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    MRESULT OS2WindowProc( WXUINT   uMessage
+                          ,WXWPARAM wParam
+                          ,WXLPARAM lParam
+                         );
 
-    bool                  m_iconized;
-    WXHICON               m_defaultIcon;
+    bool                            m_bIconized;
+    WXHICON                         m_hDefaultIcon;
 
 #if wxUSE_STATUSBAR
-    static bool           m_useNativeStatusBar;
+    static bool                     m_bUseNativeStatusBar;
 #endif // wxUSE_STATUSBAR
+
+    // Data to save/restore when calling ShowFullScreen
+    long                            m_lFsStyle;           // Passed to ShowFullScreen
+    wxRect                          m_vFsOldSize;
+    long                            m_lFsOldWindowStyle;
+    int                             m_nFsStatusBarFields; // 0 for no status bar
+    int                             m_nFsStatusBarHeight;
+    int                             m_nFsToolBarHeight;
+    bool                            m_bFsIsMaximized;
+    bool                            m_bFsIsShowing;
 
 private:
 #if wxUSE_TOOLTIPS
-    WXHWND                m_hwndToolTip;
+    WXHWND                          m_hHwndToolTip;
 #endif // tooltips
 
     DECLARE_EVENT_TABLE()
