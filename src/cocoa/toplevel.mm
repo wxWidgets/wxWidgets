@@ -232,6 +232,15 @@ bool wxTopLevelWindowCocoa::CocoaDelegate_windowShouldClose()
     return wxWindowBase::Close(false);
 }
 
+void wxTopLevelWindowCocoa::CocoaDelegate_wxMenuItemAction(struct objc_object *sender)
+{
+}
+
+bool wxTopLevelWindowCocoa::CocoaDelegate_validateMenuItem(struct objc_object *sender)
+{
+    return false;
+}
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowCocoa maximize/minimize
 // ----------------------------------------------------------------------------

@@ -49,6 +49,10 @@
 - (void)windowDidResignMain: (NSNotification *)notification;
 - (BOOL)windowShouldClose: (id)sender;
 - (void)windowWillClose: (NSNotification *)notification;
+
+// Menu item handlers
+- (void)wxMenuItemAction: (id)sender;
+- (BOOL)validateMenuItem: (id)menuItem;
 @end //interface wxNSWindowDelegate
 
 @implementation wxNSWindowDelegate : NSObject
@@ -69,6 +73,7 @@
     return m_wxCocoaInterface;
 }
 
+// Delegate message handlers
 - (void)windowDidBecomeKey: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
@@ -121,6 +126,19 @@
     wxASSERT(win==m_wxCocoaInterface);
     wxCHECK_RET(win,wxT("windowWillClose received but no wxWindow exists"));
     win->CocoaDelegate_windowWillClose();
+}
+
+// Menu item handlers
+- (void)wxMenuItemAction: (id)sender
+{
+    wxASSERT(m_wxCocoaInterface);
+    m_wxCocoaInterface->CocoaDelegate_wxMenuItemAction(sender);
+}
+
+- (BOOL)validateMenuItem: (id)sender
+{
+    wxASSERT(m_wxCocoaInterface);
+    return m_wxCocoaInterface->CocoaDelegate_validateMenuItem(sender);
 }
 
 @end //implementation wxNSWindowDelegate
