@@ -9,10 +9,7 @@
     #define wxHelpController wxWinHelpController
     #define sm_classwxHelpController sm_classwxWinHelpController
 #else // !MSW
-    #include "wx/generic/helpext.h"
-
-    #define wxHelpController wxExtHelpController
-    #define sm_classwxHelpController sm_classwxExtHelpController
+    #include "wx/generic/helpbase.h"
 #endif // MSW/!MSW
 
 #endif
