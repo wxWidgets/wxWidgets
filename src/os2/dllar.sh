@@ -353,10 +353,10 @@ case $outFile in
 esac
 case $outimpFile in
 *.a)
-    outimpFile=\`basnam $outimpFile .a\`
+    outimpFile=`basnam $outimpFile .a`
     ;;
 *.lib)
-    outimpFile=\`basnam $outimpFile .lib\`
+    outimpFile=`basnam $outimpFile .lib`
     ;;
 *)
     ;;
