@@ -187,6 +187,9 @@
     #elif defined(__SC__)
         #define __SYMANTECC__
     #endif  // compiler
+
+    // size_t is the same as unsigned int for all Windows compilers we know
+    #define wxSIZE_T_IS_UINT
 #endif  // OS
 
 // if we're on a Unix system but didn't use configure (so that setup.h didn't
