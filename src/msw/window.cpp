@@ -91,6 +91,7 @@
 
 #include "wx/textctrl.h"
 #include "wx/notebook.h"
+#include "wx/listctrl.h"
 
 #include <string.h>
 
@@ -265,7 +266,7 @@ WX_BEGIN_FLAGS( wxWindowStyle )
     WX_FLAGS_MEMBER(wxBORDER_RAISED)
     WX_FLAGS_MEMBER(wxBORDER_STATIC)
     WX_FLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
     WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -2318,6 +2319,20 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 }
                 break;
             }
+
+        case WM_PRINT:
+            {
+                // Don't call the wx handlers in this case
+                if ( wxIsKindOf(this, wxListCtrl) )
+                    break;
+
+                if ( lParam & PRF_ERASEBKGND )
+                    HandleEraseBkgnd((WXHDC)(HDC)wParam);
+
+                wxPaintDCEx dc((wxWindow *)this, (WXHDC)wParam);
+                processed = HandlePaint();
+            }
+            break;
 
         case WM_CLOSE:
 #ifdef __WXUNIVERSAL__
