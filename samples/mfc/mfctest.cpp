@@ -194,6 +194,10 @@ BOOL CTheApp::InitInstance()
 
 int CTheApp::ExitInstance()
 {
+#if !START_WITH_MFC_WINDOW
+    delete m_pMainWnd;
+#endif
+
     if ( wxTheApp )
         wxTheApp->OnExit();
     wxEntryCleanup();
@@ -332,6 +336,8 @@ MyChild::MyChild(wxFrame *frame, const wxString& title, const wxPoint& pos, cons
 
 MyChild::~MyChild()
 {
+    if ( IsLastBeforeExit() )
+        PostQuitMessage(0);
 }
 
 void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -354,7 +360,7 @@ void MyChild::OnActivate(wxActivateEvent& event)
 
 // Dummy MFC window for specifying a valid main window to MFC, using
 // a wxWidgets HWND.
-CDummyWindow::CDummyWindow(HWND hWnd):CWnd()
+CDummyWindow::CDummyWindow(HWND hWnd)
 {
     Attach(hWnd);
 }
