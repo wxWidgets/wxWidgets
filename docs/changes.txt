@@ -68,6 +68,10 @@ wxMSW:
 
 - support for the DBCS fonts (CP 932, 936, 949, 950) (Nathan Cook)
 
+wxGTK:
+
+- fixed popup menu positioning bug
+
 wxHTML:
 
 - new HTML parser with correct parsing of character entities and fixes

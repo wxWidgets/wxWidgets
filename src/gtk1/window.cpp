@@ -3734,16 +3734,29 @@ static void SetInvokingWindow( wxMenu *menu, wxWindowGTK *win )
     }
 }
 
+// used to pass the coordinates from wxWindowGTK::DoPopupMenu() to
+// wxPopupMenuPositionCallback()
+//
+// should be safe even in the MT case as the user can hardly popup 2 menus
+// simultaneously, can he?
 static gint gs_pop_x = 0;
 static gint gs_pop_y = 0;
 
-static void pop_pos_callback( GtkMenu * WXUNUSED(menu),
-                              gint *x, gint *y,
-                              wxWindowGTK *win )
+static void wxPopupMenuPositionCallback( GtkMenu *menu,
+                                         gint *x, gint *y,
+                                         gpointer * WXUNUSED(user_data) )
 {
-    win->ClientToScreen( &gs_pop_x, &gs_pop_y );
-    *x = gs_pop_x;
-    *y = gs_pop_y;
+    // ensure that the menu appears entirely on screen
+    GtkRequisition req;
+    gtk_widget_get_child_requisition(GTK_WIDGET(menu), &req);
+
+    wxSize sizeScreen = wxGetDisplaySize();
+
+    gint xmax = sizeScreen.x - req.width,
+         ymax = sizeScreen.y - req.height;
+
+    *x = gs_pop_x < xmax ? gs_pop_x : xmax;
+    *y = gs_pop_y < ymax ? gs_pop_y : ymax;
 }
 
 bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
@@ -3758,6 +3771,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     gs_pop_x = x;
     gs_pop_y = y;
+    ClientToScreen( &gs_pop_x, &gs_pop_y );
 
     bool is_waiting = TRUE;
 
@@ -3766,12 +3780,12 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
-                  (GtkWidget *) NULL,          // parent menu shell
-                  (GtkWidget *) NULL,          // parent menu item
-                  (GtkMenuPositionFunc) pop_pos_callback,
-                  (gpointer) this,             // client data
-                  0,                           // button used to activate it
-                  gs_timeLastClick             // the time of activation
+                  (GtkWidget *) NULL,           // parent menu shell
+                  (GtkWidget *) NULL,           // parent menu item
+                  wxPopupMenuPositionCallback,  // function to position it
+                  NULL,                         // client data
+                  0,                            // button used to activate it
+                  gs_timeLastClick              // the time of activation
                 );
 
     while (is_waiting)
