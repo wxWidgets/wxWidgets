@@ -12,6 +12,7 @@
 #ifndef _WX_APPTRAIT_H_
 #define _WX_APPTRAIT_H_
 
+class WXDLLEXPORT wxObject;
 class WXDLLEXPORT wxAppTraits;
 #if wxUSE_FONTMAP
     class WXDLLEXPORT wxFontMapper;
