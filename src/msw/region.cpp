@@ -119,20 +119,17 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, int fillStyle)
 #endif
 }
 
-/*
- * Destroy the region.
- */
 wxRegion::~wxRegion()
 {
     // m_refData unrefed in ~wxObject
 }
 
-wxObjectRefData *wxRegion::CreateData() const
+wxObjectRefData *wxRegion::CreateRefData() const
 {
     return new wxRegionRefData;
 }
 
-wxObjectRefData *wxRegion::CloneData(wxObjectRefData *data) const
+wxObjectRefData *wxRegion::CloneRefData(wxObjectRefData *data) const
 {
     return new wxRegionRefData(*(wxRegionRefData *)data);
 }

@@ -118,8 +118,8 @@ public:
     WXHRGN GetHRGN() const;
 
 protected:
-    virtual wxObjectRefData *CreateData() const;
-    virtual wxObjectRefData *CloneData(wxObjectRefData *data) const;
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(wxObjectRefData *data) const;
 
     friend class WXDLLEXPORT wxRegionIterator;
 
