@@ -7,6 +7,11 @@ wxwindows2.3 (2.3.3.1) unstable; urgency=low
     know if they still need 2.2 in woody?   If not I'll have them
     removed.  There should be a 2.4 release following very soon.
     (hah, let's see how the date on that comment testifies!)
+  * Yes, I know wxpython is missing man pages for some of its
+    scripts.  File a bug if you must, but preferably, if you know
+    what they do, attach a patch containing one.  I don't use them
+    myself or could even do more than guess what they do today.
+    Sorry, C++.
 
  -- Ron Lee <ron@debian.org>  Thu, 19 Sep 2002 16:25:12 -0700
 
