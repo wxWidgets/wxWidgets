@@ -2419,8 +2419,7 @@ static PyObject *_wrap_wxHtmlTagHandler_ParseInner(PyObject *self, PyObject *arg
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlTag_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlTag_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlTagHandler_ParseInner. Expected _wxHtmlTag_p.");
         return NULL;
         }
@@ -2608,8 +2607,7 @@ static PyObject *_wrap_wxHtmlWinTagHandler_ParseInner(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlTag_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlTag_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlWinTagHandler_ParseInner. Expected _wxHtmlTag_p.");
         return NULL;
         }
@@ -2926,8 +2924,7 @@ static PyObject *_wrap_wxHtmlCell_SetLink(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlLinkInfo_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlLinkInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlCell_SetLink. Expected _wxHtmlLinkInfo_p.");
         return NULL;
         }
@@ -3100,8 +3097,7 @@ static PyObject *_wrap_wxHtmlCell_Draw(PyObject *self, PyObject *args, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlCell_Draw. Expected _wxDC_p.");
         return NULL;
         }
@@ -3139,8 +3135,7 @@ static PyObject *_wrap_wxHtmlCell_DrawInvisible(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlCell_DrawInvisible. Expected _wxDC_p.");
         return NULL;
         }
@@ -3305,8 +3300,7 @@ static PyObject *_wrap_new_wxHtmlWordCell(PyObject *self, PyObject *args, PyObje
         return NULL;
 }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxHtmlWordCell. Expected _wxDC_p.");
         return NULL;
         }
@@ -3642,8 +3636,7 @@ static PyObject *_wrap_wxHtmlContainerCell_SetAlign(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlTag_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlTag_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlContainerCell_SetAlign. Expected _wxHtmlTag_p.");
         return NULL;
         }
@@ -3709,8 +3702,7 @@ static PyObject *_wrap_wxHtmlContainerCell_SetWidthFloatFromTag(PyObject *self, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlTag_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlTag_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlContainerCell_SetWidthFloatFromTag. Expected _wxHtmlTag_p.");
         return NULL;
         }
@@ -5262,8 +5254,7 @@ static PyObject *_wrap_wxHtmlWindow_base_OnLinkClicked(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlLinkInfo_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlLinkInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlWindow_base_OnLinkClicked. Expected _wxHtmlLinkInfo_p.");
         return NULL;
         }
@@ -5388,8 +5379,7 @@ static PyObject *_wrap_wxHtmlWindow_base_OnCellClicked(PyObject *self, PyObject 
         }
     }
     if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxMouseEvent_p")) {
+        if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxMouseEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxHtmlWindow_base_OnCellClicked. Expected _wxMouseEvent_p.");
         return NULL;
         }

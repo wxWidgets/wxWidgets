@@ -1366,8 +1366,7 @@ static PyObject *_wrap_wxToolBarToolBase_SetNormalBitmap(PyObject *self, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBarToolBase_SetNormalBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1403,8 +1402,7 @@ static PyObject *_wrap_wxToolBarToolBase_SetDisabledBitmap(PyObject *self, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBarToolBase_SetDisabledBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1674,15 +1672,13 @@ static PyObject *_wrap_wxToolBarBase_DoAddTool(PyObject *self, PyObject *args, P
         return NULL;
 }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBarBase_DoAddTool. Expected _wxBitmap_p.");
         return NULL;
         }
     }
     if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxToolBarBase_DoAddTool. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1770,15 +1766,13 @@ static PyObject *_wrap_wxToolBarBase_InsertTool(PyObject *self, PyObject *args, 
         return NULL;
 }
     if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxToolBarBase_InsertTool. Expected _wxBitmap_p.");
         return NULL;
         }
     }
     if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of wxToolBarBase_InsertTool. Expected _wxBitmap_p.");
         return NULL;
         }

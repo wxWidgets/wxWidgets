@@ -199,8 +199,7 @@ static PyObject *_wrap_wxDiagram_Clear(PyObject *self, PyObject *args, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_Clear. Expected _wxDC_p.");
         return NULL;
         }
@@ -268,8 +267,7 @@ static PyObject *_wrap_wxDiagram_DrawOutline(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_DrawOutline. Expected _wxDC_p.");
         return NULL;
         }
@@ -611,8 +609,7 @@ static PyObject *_wrap_wxDiagram_ReadContainerGeometry(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExprDatabase_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExprDatabase_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_ReadContainerGeometry. Expected _wxExprDatabase_p.");
         return NULL;
         }
@@ -648,8 +645,7 @@ static PyObject *_wrap_wxDiagram_ReadLines(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExprDatabase_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExprDatabase_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_ReadLines. Expected _wxExprDatabase_p.");
         return NULL;
         }
@@ -685,8 +681,7 @@ static PyObject *_wrap_wxDiagram_ReadNodes(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExprDatabase_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExprDatabase_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_ReadNodes. Expected _wxExprDatabase_p.");
         return NULL;
         }
@@ -722,8 +717,7 @@ static PyObject *_wrap_wxDiagram_RecentreAll(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_RecentreAll. Expected _wxDC_p.");
         return NULL;
         }
@@ -759,8 +753,7 @@ static PyObject *_wrap_wxDiagram_Redraw(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_Redraw. Expected _wxDC_p.");
         return NULL;
         }
@@ -1777,8 +1770,7 @@ static PyObject *_wrap_wxPyShapeCanvas_Redraw(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyShapeCanvas_Redraw. Expected _wxDC_p.");
         return NULL;
         }

@@ -1322,8 +1322,7 @@ static PyObject *_wrap_wxSetCursor(PyObject *self, PyObject *args, PyObject *kwa
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSetCursor",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSetCursor. Expected _wxCursor_p.");
         return NULL;
         }
@@ -1793,8 +1792,7 @@ static PyObject *_wrap_wxPostEvent(PyObject *self, PyObject *args, PyObject *kwa
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPostEvent. Expected _wxEvent_p.");
         return NULL;
         }
@@ -3744,15 +3742,13 @@ static PyObject *_wrap_new_wxDragImage(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxDragImage",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragImage. Expected _wxBitmap_p.");
         return NULL;
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragImage. Expected _wxCursor_p.");
         return NULL;
         }
@@ -3788,15 +3784,13 @@ static PyObject *_wrap_new_wxDragIcon(PyObject *self, PyObject *args, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxDragIcon",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragIcon. Expected _wxIcon_p.");
         return NULL;
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragIcon. Expected _wxCursor_p.");
         return NULL;
         }
@@ -3837,8 +3831,7 @@ static PyObject *_wrap_new_wxDragString(PyObject *self, PyObject *args, PyObject
         return NULL;
 }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragString. Expected _wxCursor_p.");
         return NULL;
         }
@@ -3878,15 +3871,13 @@ static PyObject *_wrap_new_wxDragTreeItem(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:new_wxDragTreeItem",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragTreeItem. Expected _wxTreeCtrl_p.");
         return NULL;
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragTreeItem. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -3921,8 +3912,7 @@ static PyObject *_wrap_new_wxDragListItem(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:new_wxDragListItem",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragListItem. Expected _wxListCtrl_p.");
         return NULL;
         }
@@ -8694,8 +8684,7 @@ static PyObject *_wrap_new_wxFileType(PyObject *self, PyObject *args, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxFileType",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileTypeInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxFileType. Expected _wxFileTypeInfo_p.");
         return NULL;
         }
@@ -9293,8 +9282,7 @@ static PyObject *_wrap_wxFileType_ExpandCommand(PyObject *self, PyObject *args, 
         return NULL;
 }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileType::MessageParameters_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileType::MessageParameters_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileType_ExpandCommand. Expected _wxFileType::MessageParameters_p.");
         return NULL;
         }
@@ -9712,8 +9700,7 @@ static PyObject *_wrap_wxMimeTypesManager_AddFallback(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMimeTypesManager_AddFallback. Expected _wxFileTypeInfo_p.");
         return NULL;
         }
@@ -9751,8 +9738,7 @@ static PyObject *_wrap_wxMimeTypesManager_Associate(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileTypeInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMimeTypesManager_Associate. Expected _wxFileTypeInfo_p.");
         return NULL;
         }
@@ -10357,8 +10343,7 @@ static PyObject *_wrap_wxFileHistory_Load(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_Load. Expected _wxConfigBase_p.");
         return NULL;
         }
@@ -10394,8 +10379,7 @@ static PyObject *_wrap_wxFileHistory_Save(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_Save. Expected _wxConfigBase_p.");
         return NULL;
         }
@@ -11026,8 +11010,7 @@ static PyObject *_wrap_wxEffects_DrawSunkenEdge(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxEffects_DrawSunkenEdge. Expected _wxDC_p.");
         return NULL;
         }
@@ -11079,15 +11062,13 @@ static PyObject *_wrap_wxEffects_TileBitmap(PyObject *self, PyObject *args, PyOb
         return NULL;
 }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxEffects_TileBitmap. Expected _wxDC_p.");
         return NULL;
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxEffects_TileBitmap. Expected _wxBitmap_p.");
         return NULL;
         }

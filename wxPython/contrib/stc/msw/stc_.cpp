@@ -9161,8 +9161,7 @@ static PyObject *_wrap_wxStyledTextCtrl_StyleSetFont(PyObject *self, PyObject *a
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxStyledTextCtrl_StyleSetFont. Expected _wxFont_p.");
         return NULL;
         }

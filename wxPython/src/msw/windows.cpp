@@ -338,8 +338,7 @@ static PyObject *_wrap_wxEvtHandler_ProcessEvent(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxEvtHandler_ProcessEvent. Expected _wxEvent_p.");
         return NULL;
         }
@@ -374,8 +373,7 @@ static PyObject *_wrap_wxEvtHandler_AddPendingEvent(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxEvtHandler_AddPendingEvent. Expected _wxEvent_p.");
         return NULL;
         }
@@ -4265,8 +4263,7 @@ static PyObject *_wrap_wxWindow_SetFont(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -4898,8 +4895,7 @@ static PyObject *_wrap_wxWindow_SetCursor(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetCursor. Expected _wxCursor_p.");
         return NULL;
         }
@@ -5675,8 +5671,7 @@ static PyObject *_wrap_wxWindow_SetValidator(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetValidator. Expected _wxValidator_p.");
         return NULL;
         }
@@ -6359,8 +6354,7 @@ static PyObject *_wrap_wxWindow_SetAcceleratorTable(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxAcceleratorTable_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxAcceleratorTable_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetAcceleratorTable. Expected _wxAcceleratorTable_p.");
         return NULL;
         }
@@ -6431,8 +6425,7 @@ static PyObject *_wrap_wxWindow_OnPaint(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPaintEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPaintEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_OnPaint. Expected _wxPaintEvent_p.");
         return NULL;
         }
@@ -7277,8 +7270,7 @@ static PyObject *_wrap_wxScrolledWindow_PrepareDC(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxScrolledWindow_PrepareDC. Expected _wxDC_p.");
         return NULL;
         }
@@ -11407,8 +11399,7 @@ static PyObject *_wrap_wxMenuItem_SetFont(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -11608,15 +11599,13 @@ static PyObject *_wrap_wxMenuItem_SetBitmaps(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetBitmaps. Expected _wxBitmap_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxMenuItem_SetBitmaps. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -11783,8 +11772,7 @@ static PyObject *_wrap_wxMenuItem_SetBitmap(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetBitmap. Expected _wxBitmap_p.");
         return NULL;
         }

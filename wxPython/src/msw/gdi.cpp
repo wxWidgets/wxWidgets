@@ -348,8 +348,7 @@ static PyObject *_wrap_wxBitmapFromIcon(PyObject *self, PyObject *args, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmapFromIcon",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapFromIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -418,8 +417,7 @@ static PyObject *_wrap_wxMaskColour(PyObject *self, PyObject *args, PyObject *kw
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMaskColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMaskColour. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -512,8 +510,7 @@ static PyObject *_wrap_wxIconFromBitmap(PyObject *self, PyObject *args, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIconFromBitmap",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIconFromBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1767,8 +1764,7 @@ static PyObject *_wrap_wxBitmap_SetPalette(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPalette_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPalette_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmap_SetPalette. Expected _wxPalette_p.");
         return NULL;
         }
@@ -2135,8 +2131,7 @@ static PyObject *_wrap_wxBitmap_CopyFromIcon(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmap_CopyFromIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -2172,8 +2167,7 @@ static PyObject *_wrap_wxBitmap_CopyFromCursor(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmap_CopyFromCursor. Expected _wxCursor_p.");
         return NULL;
         }
@@ -2266,8 +2260,7 @@ static PyObject *_wrap_new_wxMask(PyObject *self, PyObject *args, PyObject *kwar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxMask",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxMask. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -2752,8 +2745,7 @@ static PyObject *_wrap_wxIcon_CopyFromBitmap(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxIcon_CopyFromBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -2846,8 +2838,7 @@ static PyObject *_wrap_new_wxIconBundleFromIcon(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxIconBundleFromIcon",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxIconBundleFromIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -2916,8 +2907,7 @@ static PyObject *_wrap_wxIconBundle_AddIcon(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxIconBundle_AddIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -3630,6 +3620,76 @@ static PyObject *_wrap_wxColour_Get(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
+static bool  wxColour___eq__(wxColour *self,const wxColour & o) { return *self == o; }
+static PyObject *_wrap_wxColour___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxColour * _arg0;
+    wxColour * _arg1;
+    wxColour  temp;
+    PyObject * _obj0 = 0;
+    wxColour  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","o", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxColour___eq__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxColour_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxColour___eq__(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static bool  wxColour___ne__(wxColour *self,const wxColour & o) { return *self != o; }
+static PyObject *_wrap_wxColour___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxColour * _arg0;
+    wxColour * _arg1;
+    wxColour  temp;
+    PyObject * _obj0 = 0;
+    wxColour  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","o", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxColour___ne__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxColour_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxColour___ne__(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxColourDatabaseTowxObject(void *ptr) {
     wxColourDatabase *src;
     wxObject *dest;
@@ -4337,8 +4397,7 @@ static PyObject *_wrap_wxPen_SetStipple(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPen_SetStipple. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -4902,8 +4961,7 @@ static PyObject *_wrap_wxBrush_SetStipple(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBrush_SetStipple. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -5566,8 +5624,7 @@ static PyObject *_wrap_wxDC_DrawIcon(PyObject *self, PyObject *args, PyObject *k
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDC_DrawIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -5670,8 +5727,7 @@ static PyObject *_wrap_wxDC_DrawImageLabel(PyObject *self, PyObject *args, PyObj
         return NULL;
 }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxDC_DrawImageLabel. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -7291,8 +7347,7 @@ static PyObject *_wrap_wxDC_SetBackground(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBrush_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBrush_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDC_SetBackground. Expected _wxBrush_p.");
         return NULL;
         }
@@ -7389,8 +7444,7 @@ static PyObject *_wrap_wxDC_SetClippingRegionAsRegion(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDC_SetClippingRegionAsRegion. Expected _wxRegion_p.");
         return NULL;
         }
@@ -7462,8 +7516,7 @@ static PyObject *_wrap_wxDC_SetPalette(PyObject *self, PyObject *args, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPalette_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPalette_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDC_SetPalette. Expected _wxPalette_p.");
         return NULL;
         }
@@ -7499,8 +7552,7 @@ static PyObject *_wrap_wxDC_SetBrush(PyObject *self, PyObject *args, PyObject *k
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBrush_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBrush_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDC_SetBrush. Expected _wxBrush_p.");
         return NULL;
         }
@@ -7536,8 +7588,7 @@ static PyObject *_wrap_wxDC_SetFont(PyObject *self, PyObject *args, PyObject *kw
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDC_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -7692,8 +7743,7 @@ static PyObject *_wrap_wxDC_SetPen(PyObject *self, PyObject *args, PyObject *kwa
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPen_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPen_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDC_SetPen. Expected _wxPen_p.");
         return NULL;
         }
@@ -7901,8 +7951,7 @@ static PyObject *_wrap_wxDC_DrawBitmap(PyObject *self, PyObject *args, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDC_DrawBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -8657,8 +8706,7 @@ static PyObject *_wrap_wxMemoryDC_SelectObject(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMemoryDC_SelectObject. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -8720,8 +8768,7 @@ static PyObject *_wrap_new_wxBufferedDC(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxBufferedDC. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -8867,8 +8914,7 @@ static PyObject *_wrap_new_wxBufferedPaintDC(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxBufferedPaintDC. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -9862,15 +9908,13 @@ static PyObject *_wrap_wxImageList_Add(PyObject *self, PyObject *args, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImageList_Add. Expected _wxBitmap_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_Add. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -9909,8 +9953,7 @@ static PyObject *_wrap_wxImageList_AddWithColourMask(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImageList_AddWithColourMask. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -9951,8 +9994,7 @@ static PyObject *_wrap_wxImageList_AddIcon(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImageList_AddIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -9991,15 +10033,13 @@ static PyObject *_wrap_wxImageList_Replace(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_Replace. Expected _wxBitmap_p.");
         return NULL;
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxImageList_Replace. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -10041,8 +10081,7 @@ static PyObject *_wrap_wxImageList_Draw(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_Draw. Expected _wxDC_p.");
         return NULL;
         }
@@ -10621,8 +10660,7 @@ static PyObject *_wrap_wxRegion_IntersectRegion(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxRegion_IntersectRegion. Expected _wxRegion_p.");
         return NULL;
         }
@@ -10754,8 +10792,7 @@ static PyObject *_wrap_wxRegion_UnionRegion(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxRegion_UnionRegion. Expected _wxRegion_p.");
         return NULL;
         }
@@ -10859,8 +10896,7 @@ static PyObject *_wrap_wxRegion_SubtractRegion(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxRegion_SubtractRegion. Expected _wxRegion_p.");
         return NULL;
         }
@@ -10964,8 +11000,7 @@ static PyObject *_wrap_wxRegion_XorRegion(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxRegion_XorRegion. Expected _wxRegion_p.");
         return NULL;
         }
@@ -11001,8 +11036,7 @@ static PyObject *_wrap_new_wxRegionIterator(PyObject *self, PyObject *args, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxRegionIterator",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRegion_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxRegionIterator. Expected _wxRegion_p.");
         return NULL;
         }
@@ -11544,6 +11578,8 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxColourDatabase_Append", (PyCFunction) _wrap_wxColourDatabase_Append, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColourDatabase_FindName", (PyCFunction) _wrap_wxColourDatabase_FindName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColourDatabase_FindColour", (PyCFunction) _wrap_wxColourDatabase_FindColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColour___ne__", (PyCFunction) _wrap_wxColour___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColour___eq__", (PyCFunction) _wrap_wxColour___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColour_Get", (PyCFunction) _wrap_wxColour_Get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColour_Set", (PyCFunction) _wrap_wxColour_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColour_Ok", (PyCFunction) _wrap_wxColour_Ok, METH_VARARGS | METH_KEYWORDS },

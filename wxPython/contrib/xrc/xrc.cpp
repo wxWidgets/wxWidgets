@@ -3251,8 +3251,7 @@ static PyObject *_wrap_wxXmlDocument_SaveToStream(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxOutputStream_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxOutputStream_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxXmlDocument_SaveToStream. Expected _wxOutputStream_p.");
         return NULL;
         }
@@ -4677,8 +4676,7 @@ static PyObject *_wrap_wxXmlResourceHandler_GetBitmap(PyObject *self, PyObject *
         return NULL;
 }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxArtClient_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxArtClient_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxXmlResourceHandler_GetBitmap. Expected _wxArtClient_p.");
         return NULL;
         }
@@ -4737,8 +4735,7 @@ static PyObject *_wrap_wxXmlResourceHandler_GetIcon(PyObject *self, PyObject *ar
         return NULL;
 }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxArtClient_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxArtClient_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxXmlResourceHandler_GetIcon. Expected _wxArtClient_p.");
         return NULL;
         }
