@@ -1,0 +1,91 @@
+\section{\class{wxDisplay}}\label{wxdisplay}
+
+Determines the sizes and locations of displays connected to the system.
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/display.h>
+
+\wxheading{See also}
+
+\helpref{wxClientDisplayRect}{wxclientdisplayrect}, \helpref{wxDisplaySize}{wxdisplaysize}, \helpref{wxDisplaySizeMM}{wxdisplaysizemm}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDisplay::wxDisplay}\label{wxdisplayconstr}
+
+\func{}{wxDisplay}{\param{size\_t }{index = 0}}
+
+Constructor, setting up a wxDisplay instance with the specified display.
+
+\wxheading{Parameters}
+
+\docparam{index}{The index of the display to use.  This must be non-negative
+and lower than the value returned by \helpref{GetCount()}{wxdisplaygetcount},
+inclusive.}
+
+\membersection{wxDisplay::\destruct{wxDisplay}}
+
+\func{void}{\destruct{wxDisplay}}{\void}
+
+Destructor.
+
+\membersection{wxDisplay::GetCount}\label{wxdisplaygetcount}
+
+\func{static size\_t}{GetCount}{\void}
+
+Returns the number of connected displays.
+
+\membersection{wxDisplay::GetDepth}\label{wxdisplaygetdepth}
+
+\constfunc{int }{GetDepth}{\void}
+
+Returns the bit depth of the display whose index was passed to the constructor.
+
+\membersection{wxDisplay::GetFromPoint}\label{wxdisplaygetfrompoint}
+
+\func{static int}{GetFromPoint}{\param{const wxPoint\& }{pt}}
+
+Returns the index of the display on which the given point lies.  Returns -1 if
+the point is not on any connected display.
+
+\wxheading{Parameters}
+
+\docparam{pt}{The point to locate.}
+
+\membersection{wxDisplay::GetGeometry}\label{wxdisplaygetgeometry}
+
+\constfunc{wxRect }{GetGeometry}{\void}
+
+Returns the bounding rectangle of the display whose index was passed to the
+constructor.
+
+\membersection{wxDisplay::GetName}\label{wxdisplaygetname}
+
+\constfunc{wxString }{GetName}{\void}
+
+Returns the display's name.  A name is not available on all platforms.
+
+\membersection{wxDisplay::IsColour}\label{wxdisplayiscolour}
+
+\constfunc{bool }{IsColour}{\void}
+
+Returns true if the display is color (has a depth greater than 1).
+
+\membersection{wxDisplay::IsColor}\label{wxdisplayiscolor}
+
+\constfunc{bool }{IsColor}{\void}
+
+Same as \helpref{IsColour()}{wxdisplayiscolour}.
+
+\membersection{wxDisplay::IsPrimary}\label{wxdisplayisprimary}
+
+\func{bool }{IsPrimary}{\void}
+
+Returns true if the display is the primary display.  The primary display is the
+one whose index is 0.
+
