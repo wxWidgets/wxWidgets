@@ -213,7 +213,7 @@ bool wxColour::operator == ( const wxColour& col ) const
 
     return (own->red == other->red)
         && (own->green == other->green)
-        && (own->blue == other->blue)
+        && (own->blue == other->blue) ;
 
 }
 
