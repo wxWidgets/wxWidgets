@@ -702,14 +702,18 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
     gdk_window_get_size (pixmap, &width, &height);
 
     GdkColormap *colormap = gtk_widget_get_colormap( m_widget );
+#ifndef __WXGTK20__
     gtk_widget_push_visual (gdk_colormap_get_visual (colormap));
+#endif
     gtk_widget_push_colormap (colormap);
 
     m_iconWindow = gtk_window_new (GTK_WINDOW_POPUP);
     gtk_widget_set_events (m_iconWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
     gtk_widget_set_app_paintable (GTK_WIDGET (m_iconWindow), TRUE);
 
+#ifndef __WXGTK20__
     gtk_widget_pop_visual ();
+#endif
     gtk_widget_pop_colormap ();
 
     gtk_widget_set_usize (m_iconWindow, width, height);
