@@ -433,7 +433,7 @@ void wxControl::MacAdjustControlRect()
         {
             if ( IsKindOf( CLASSINFO( wxButton ) ) )
             {
-                m_width = m_label.Length() * 10 + 12 ;
+                m_width = m_label.Length() * 8 + 12 ;
                 if ( m_width < 70 )
                   m_width = 70 ;
             }

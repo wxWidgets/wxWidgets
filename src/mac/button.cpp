@@ -87,7 +87,7 @@ wxSize wxButton::DoGetBestSize() const
 {
   wxSize sz = GetDefaultSize() ;
   
-  int wBtn = m_label.Length() * 10 + 12 + 2 * kMacOSXHorizontalBorder ;
+  int wBtn = m_label.Length() * 8 + 12 + 2 * kMacOSXHorizontalBorder ;
     
   if (wBtn > sz.x) sz.x = wBtn;
   

@@ -84,7 +84,7 @@ wxSize wxToggleButton::DoGetBestSize() const
     int wBtn = 70 ; 
     int hBtn = 20 ;
 
-    int lBtn = m_label.Length() * 10 + 12 ;
+    int lBtn = m_label.Length() * 8 + 12 ;
     if (lBtn > wBtn) 
         wBtn = lBtn;
 
