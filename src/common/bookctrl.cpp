@@ -145,7 +145,7 @@ wxBookCtrl::InsertPage(size_t nPage,
                        int imageId)
 {
     wxCHECK_MSG( page, false, _T("NULL page in wxBookCtrl::InsertPage()") );
-    wxCHECK_MSG( nPage < m_pages.size(), false,
+    wxCHECK_MSG( nPage <= m_pages.size(), false,
                  _T("invalid page index in wxBookCtrl::InsertPage()") );
 
     m_pages.Insert(page, nPage);
