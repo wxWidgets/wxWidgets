@@ -108,24 +108,56 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     m_windowId = id == -1 ? NewControlId() : id;
 
     wxTopLevelWindows.Append(this);
-   
-    Atom wm_delete_window = XInternAtom(wxGlobalDisplay(), "WM_DELETE_WINDOW", False);
+    
+    Display *xdisplay = wxGlobalDisplay();
+    int xscreen = DefaultScreen( xdisplay );
+    Visual *xvisual = DefaultVisual( xdisplay, xscreen );
+    Window xparent = RootWindow( xdisplay, xscreen );
+    
+    XSetWindowAttributes xattributes;
+    XSizeHints size_hints;
+    XWMHints wm_hints;
+    
+    long xattributes_mask =
+        CWEventMask |
+        CWBorderPixel | CWBackPixel;
+    xattributes.background_pixel = BlackPixel( xdisplay, xscreen );
+    xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
+    xattributes.override_redirect = False;
+    
+    Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
+       0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
+    
+    XSelectInput( xdisplay, xwindow,
+        ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+        PropertyChangeMask );
 
-    XSetWMProtocols(wxGlobalDisplay(), (Window) GetMainWindow(), &wm_delete_window, 1);
+    wxAddWindowToTable( xwindow, (wxWindow*) this );
+    
+    XSetTransientForHint( xdisplay, xwindow, xparent );
+    
+    size_hints.flags = PSize;
+    size_hints.width = size.x;
+    size_hints.height = size.y;
+    XSetWMNormalHints( xdisplay, xwindow, &size_hints);
+    
+    wm_hints.flags = InputHint | StateHint /* | WindowGroupHint */;
+    wm_hints.input = True;
+    wm_hints.initial_state = NormalState;
+    XSetWMHints( xdisplay, xwindow, &wm_hints);
+    
+    Atom wm_delete_window = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols( xdisplay, xwindow, &wm_delete_window, 1);
+    
 #if 0
     SetWMDecorations((Window) GetMainWindow(), style);
 #endif
 
     SetTitle(title);
-
-    if ( GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
-    {
-        return CreateDialog(title, pos, size);
-    }
-    else // !dialog
-    {
-        return CreateFrame(title, pos, size);
-    }
+    
+    return TRUE;
 }
 
 wxTopLevelWindowX11::~wxTopLevelWindowX11()

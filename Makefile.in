@@ -410,6 +410,7 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 
 	$(INSTALL) -d $(libdir)/wx
 	$(INSTALL) -d $(libdir)/wx/include
+	$(INSTALL) -d $(libdir)/wx/include/univ
 	$(INSTALL) -d $(libdir)/wx/include/@TOOLCHAIN_NAME@
 	$(INSTALL) -d $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx
 	$(INSTALL_DATA) $(build_libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h \
@@ -420,6 +421,7 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/@TOOLKIT_DIR@; fi
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/html; fi
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/generic; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/univ; fi
 	@if test "@TOOLKIT_DIR@" = "msw"; then $(INSTALL) -d $(includedir)/wx/msw/ole; fi
 
 	@# always install msw headers for wxBase, it's much simpler
@@ -510,6 +512,7 @@ uninstall:
 	@if test -d $(includedir)/wx/msw; then rmdir $(includedir)/wx/msw; fi
 	@if test -d $(includedir)/wx/html; then rmdir $(includedir)/wx/html; fi
 	@if test -d $(includedir)/wx/unix; then rmdir $(includedir)/wx/unix; fi
+	@if test -d $(includedir)/wx/univ; then rmdir $(includedir)/wx/univ; fi
 	@if test -d $(includedir)/wx/generic; then rmdir $(includedir)/wx/generic; fi
 	@if test -d $(includedir)/wx/protocol; then rmdir $(includedir)/wx/protocol; fi
 	@if test -d $(includedir)/wx; then rmdir $(includedir)/wx; fi
