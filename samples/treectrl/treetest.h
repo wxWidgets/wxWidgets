@@ -198,8 +198,8 @@ public:
     void OnCountRec(wxCommandEvent& event);
 
     void OnRename(wxCommandEvent& event);
-    void OnSort(wxCommandEvent& event) { DoSort(); }
-    void OnSortRev(wxCommandEvent& event) { DoSort(TRUE); }
+    void OnSort(wxCommandEvent& WXUNUSED(event)) { DoSort(); }
+    void OnSortRev(wxCommandEvent& WXUNUSED(event)) { DoSort(TRUE); }
 
     void OnAddItem(wxCommandEvent& event);
     void OnInsertItem(wxCommandEvent& event);
