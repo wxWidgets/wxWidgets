@@ -1,5 +1,0 @@
-node wxChoice
-var style of flags wxCB_SORT
-var selection of integer
-var content of not_implemented
-derived from control
