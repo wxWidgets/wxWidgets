@@ -33,6 +33,7 @@ public:
 
     // Must call this to set the filename
     virtual bool Initialize(const wxString& file);
+    virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) { return Initialize( file ); }
 
     // If file is "", reloads file given in Initialize
     virtual bool LoadFile(const wxString& file = wxEmptyString)

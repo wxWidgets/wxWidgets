@@ -32,11 +32,13 @@ public:
 
     // Must call this to set the filename
     virtual bool Initialize(const wxString& file);
+    virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) { return Initialize( file ); }
 
     // If file is "", reloads file given in Initialize
     virtual bool LoadFile(const wxString& file = wxEmptyString);
     virtual bool DisplayContents();
     virtual bool DisplaySection(int sectionNo);
+    virtual bool DisplaySection(const wxString& section) { return KeywordSearch(section); }
     virtual bool DisplayBlock(long blockNo);
     virtual bool DisplayContextPopup(int contextId);
     virtual bool KeywordSearch(const wxString& k,

@@ -160,6 +160,15 @@ public:
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
 
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const
+        { return GetDataSize(); }
+    virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
+                             void *buf) const
+        { return GetDataHere(buf); }
+    virtual bool SetData(const wxDataFormat& WXUNUSED(format),
+                         size_t len, const void *buf)
+        { return SetData(len, buf); }
+
 protected:
     wxEnhMetaFile m_metafile;
 
