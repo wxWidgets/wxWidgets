@@ -54,12 +54,51 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxGrid;
+class WXDLLEXPORT wxGridCellAttr;
 class WXDLLEXPORT wxGridCellAttrProviderData;
-class WXDLLEXPORT wxGridRowLabelWindow;
 class WXDLLEXPORT wxGridColLabelWindow;
 class WXDLLEXPORT wxGridCornerLabelWindow;
+class WXDLLEXPORT wxGridRowLabelWindow;
+class WXDLLEXPORT wxGridTableBase;
 class WXDLLEXPORT wxGridWindow;
-class WXDLLEXPORT wxGrid;
+
+// ----------------------------------------------------------------------------
+// wxGridCellRenderer: this class is responsible for actually drawing the cell
+// in the grid. You may pass it to the wxGridCellAttr (below) to change the
+// format of one given cell or to wxGrid::SetDefaultRenderer() to change the
+// view of all cells. This is an ABC, you will normally use one of the
+// predefined derived classes or derive oyur own class from it.
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxGridCellRenderer
+{
+public:
+    // draw the given cell on the provided DC inside the given rectangle
+    // using the style specified by the attribute and the default or selected
+    // state corresponding to the isSelected value.
+    //
+    // this pure virtual function has a default implementation which will
+    // prepare the DC using the given attribute: it will draw the rectangle
+    // with the bg colour from attr and set the text colour and font
+    virtual void Draw(wxGrid& grid,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected) = 0;
+};
+
+// the default renderer for the cells containing string data
+class WXDLLEXPORT wxGridCellStringRenderer : public wxGridCellRenderer
+{
+public:
+    // draw the string
+    virtual void Draw(wxGrid& grid,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected);
+};
 
 // ----------------------------------------------------------------------------
 // wxGridCellAttr: this class can be used to alter the cells appearance in
@@ -107,6 +146,10 @@ public:
         m_vAlign = vAlign;
     }
 
+    // takes ownership of the pointer
+    void SetRenderer(wxGridCellRenderer *renderer)
+        { delete m_renderer; m_renderer = renderer; }
+
     // accessors
     bool HasTextColour() const { return m_colText.Ok(); }
     bool HasBackgroundColour() const { return m_colBack.Ok(); }
@@ -122,12 +165,14 @@ public:
         if ( vAlign ) *vAlign = m_vAlign;
     }
 
+    wxGridCellRenderer *GetRenderer() const { return m_renderer; }
+
 private:
     // the common part of all ctors
-    void Init() { m_nRef = 1; }
+    void Init() { m_nRef = 1; m_renderer = (wxGridCellRenderer *)NULL; }
 
     // the dtor is private because only DecRef() can delete us
-    ~wxGridCellAttr() { }
+    ~wxGridCellAttr() { delete m_renderer; }
 
     // the ref count - when it goes to 0, we die
     size_t   m_nRef;
@@ -137,6 +182,8 @@ private:
     wxFont   m_font;
     int      m_hAlign,
              m_vAlign;
+
+    wxGridCellRenderer *m_renderer;
 
     // suppress the stupid gcc warning about the class having private dtor and
     // no friends
@@ -501,8 +548,6 @@ public:
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
     void DrawAllGridLines( wxDC& dc, const wxRegion & reg );
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
-    void DrawCellBackground( wxDC& dc, const wxGridCellCoords& );
-    void DrawCellValue( wxDC& dc, const wxGridCellCoords& );
 
     void DrawRowLabels( wxDC& dc );
     void DrawRowLabel( wxDC& dc, int row );
@@ -617,7 +662,7 @@ public:
     wxString GetColLabelValue( int col );
     wxColour GetGridLineColour() { return m_gridLineColour; }
 
-        void     SetRowLabelSize( int width );
+    void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
     void     SetLabelBackgroundColour( const wxColour& );
     void     SetLabelTextColour( const wxColour& );
@@ -630,7 +675,6 @@ public:
 
     void     EnableGridLines( bool enable = TRUE );
     bool     GridLinesEnabled() { return m_gridLinesEnabled; }
-
 
     // ------ row and col formatting
     //
@@ -662,6 +706,13 @@ public:
     void     SetDefaultCellAlignment( int horiz, int vert );
     void     SetCellAlignment( int row, int col, int horiz, int vert );
 
+    // takes ownership of the pointer
+    void SetDefaultRenderer(wxGridCellRenderer *renderer)
+        { delete m_defaultRenderer; m_defaultRenderer = renderer; }
+    wxGridCellRenderer *GetDefaultRenderer() const
+        { return m_defaultRenderer; }
+
+    void SetCellRenderer(int row, int col, wxGridCellRenderer *renderer);
 
     // ------ cell value accessors
     //
@@ -956,6 +1007,12 @@ protected:
 
     wxColour   m_gridLineColour;
     bool       m_gridLinesEnabled;
+
+    // get the renderer for the given cell - if it has no special one, the
+    // default one will be returned, never NULL
+    wxGridCellRenderer *GetCellRenderer(int row, int col);
+
+    wxGridCellRenderer *m_defaultRenderer;
 
     // default cell attributes
     wxFont     m_defaultCellFont;

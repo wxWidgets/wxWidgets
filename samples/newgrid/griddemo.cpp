@@ -8,9 +8,17 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation
-#pragma interface
+    #pragma implementation
+    #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -30,9 +38,19 @@
 
 #include "griddemo.h"
 
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_APP( GridApp )
 
+// ============================================================================
+// implementation
+// ============================================================================
 
+// ----------------------------------------------------------------------------
+// GridApp
+// ----------------------------------------------------------------------------
 
 bool GridApp::OnInit()
 {
@@ -42,7 +60,9 @@ bool GridApp::OnInit()
     return TRUE;
 }
 
-
+// ----------------------------------------------------------------------------
+// GridFrame
+// ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEROWLABELS,  GridFrame::ToggleRowLabels )
@@ -60,6 +80,9 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
     EVT_MENU( ID_DELETECOL, GridFrame::DeleteSelectedCols )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
+
+    EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
+    EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
 
     EVT_MENU( ID_ABOUT, GridFrame::About )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
@@ -90,8 +113,6 @@ GridFrame::GridFrame()
     viewMenu->Append( ID_TOGGLEROWLABELS,  "&Row labels", "", TRUE );
     viewMenu->Append( ID_TOGGLECOLLABELS,  "&Col labels", "", TRUE );
     viewMenu->Append( ID_TOGGLEEDIT,  "&Editable", "", TRUE );
-    viewMenu->Append( ID_SETLABELCOLOUR, "Set &label colour" );
-    viewMenu->Append( ID_SETLABELTEXTCOLOUR, "Set label &text colour" );
 
     wxMenu *rowLabelMenu = new wxMenu;
 
@@ -111,7 +132,12 @@ GridFrame::GridFrame()
     colLabelMenu->Append( ID_COLLABELHORIZALIGN, "&Horizontal" );
     colLabelMenu->Append( ID_COLLABELVERTALIGN, "&Vertical" );
 
-    viewMenu->Append( ID_GRIDLINECOLOUR, "&Grid line colour" );
+    wxMenu *colMenu = new wxMenu;
+    colMenu->Append( ID_SETLABELCOLOUR, "Set &label colour" );
+    colMenu->Append( ID_SETLABELTEXTCOLOUR, "Set label &text colour" );
+    colMenu->Append( ID_GRIDLINECOLOUR, "&Grid line colour" );
+    colMenu->Append( ID_SET_CELL_FG_COLOUR, "Set cell &foreground colour" );
+    colMenu->Append( ID_SET_CELL_BG_COLOUR, "Set cell &background colour" );
 
     wxMenu *editMenu = new wxMenu;
     editMenu->Append( ID_INSERTROW, "Insert &row" );
@@ -126,6 +152,7 @@ GridFrame::GridFrame()
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( fileMenu, "&File" );
     menuBar->Append( viewMenu, "&View" );
+    menuBar->Append( colMenu,  "&Colours" );
     menuBar->Append( editMenu, "&Edit" );
     menuBar->Append( helpMenu, "&Help" );
 
@@ -164,10 +191,15 @@ GridFrame::GridFrame()
     grid->SetCellValue( 99, 99, "Ctrl+End\nwill go to\nthis cell" );
 
     grid->SetCellValue(2, 2, "red");
+
     grid->SetCellTextColour(2, 2, *wxRED);
     grid->SetCellValue(3, 3, "green on grey");
     grid->SetCellTextColour(3, 3, *wxGREEN);
     grid->SetCellBackgroundColour(3, 3, *wxLIGHT_GREY);
+
+    grid->SetCellValue(4, 4, "a weird looking cell");
+    grid->SetCellAlignment(4, 4, wxCENTRE, wxCENTRE);
+    grid->SetCellRenderer(4, 4, new MyGridCellRenderer);
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
@@ -411,6 +443,19 @@ void GridFrame::ClearGrid( wxCommandEvent& WXUNUSED(ev) )
     grid->ClearGrid();
 }
 
+void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
+{
+    wxColour col = wxGetColourFromUser(this);
+    if ( col.Ok() )
+        grid->SetDefaultCellTextColour(col);
+}
+
+void GridFrame::SetCellBgColour( wxCommandEvent& WXUNUSED(ev) )
+{
+    wxColour col = wxGetColourFromUser(this);
+    if ( col.Ok() )
+        grid->SetDefaultCellBackgroundColour(col);
+}
 
 void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
 {
@@ -524,3 +569,19 @@ void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
     Close( TRUE );
 }
 
+// ----------------------------------------------------------------------------
+// MyGridCellRenderer
+// ----------------------------------------------------------------------------
+
+void MyGridCellRenderer::Draw(wxGrid& grid,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int row, int col,
+                              bool isSelected)
+{
+    wxGridCellStringRenderer::Draw(grid, dc, rect, row, col, isSelected);
+
+    dc.SetPen(*wxGREEN_PEN);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    dc.DrawEllipse(rect);
+}

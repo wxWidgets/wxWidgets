@@ -20,7 +20,7 @@ class wxGrid;
 
 class GridApp : public wxApp
 {
-  public:
+public:
     bool OnInit();
 };
 
@@ -45,6 +45,9 @@ class GridFrame : public wxFrame
     void SetColLabelVertAlignment( wxCommandEvent& );
     void SetGridLineColour( wxCommandEvent& );
 
+    void SetCellFgColour(wxCommandEvent &);
+    void SetCellBgColour(wxCommandEvent &);
+
     void InsertRow( wxCommandEvent& );
     void InsertCol( wxCommandEvent& );
     void DeleteSelectedRows( wxCommandEvent& );
@@ -59,37 +62,51 @@ class GridFrame : public wxFrame
     void OnRangeSelected( wxGridRangeSelectEvent& );
     void OnCellValueChanged( wxGridEvent& );
 
-  public:
+public:
     GridFrame();
     ~GridFrame();
 
     void OnQuit( wxCommandEvent& );
     void About( wxCommandEvent& );
 
-    enum { ID_TOGGLEROWLABELS = 100,
-           ID_TOGGLECOLLABELS,
-           ID_TOGGLEEDIT,
-           ID_SETLABELCOLOUR,
-           ID_SETLABELTEXTCOLOUR,
-           ID_ROWLABELALIGN,
-           ID_ROWLABELHORIZALIGN,
-           ID_ROWLABELVERTALIGN,
-           ID_COLLABELALIGN,
-           ID_COLLABELHORIZALIGN,
-           ID_COLLABELVERTALIGN,
-           ID_GRIDLINECOLOUR,
-           ID_INSERTROW,
-           ID_INSERTCOL,
-           ID_DELETEROW,
-           ID_DELETECOL,
-           ID_CLEARGRID,
-           ID_ABOUT,
+    enum
+    {
+        ID_TOGGLEROWLABELS = 100,
+        ID_TOGGLECOLLABELS,
+        ID_TOGGLEEDIT,
+        ID_SETLABELCOLOUR,
+        ID_SETLABELTEXTCOLOUR,
+        ID_ROWLABELALIGN,
+        ID_ROWLABELHORIZALIGN,
+        ID_ROWLABELVERTALIGN,
+        ID_COLLABELALIGN,
+        ID_COLLABELHORIZALIGN,
+        ID_COLLABELVERTALIGN,
+        ID_GRIDLINECOLOUR,
+        ID_INSERTROW,
+        ID_INSERTCOL,
+        ID_DELETEROW,
+        ID_DELETECOL,
+        ID_CLEARGRID,
+        ID_SET_CELL_FG_COLOUR,
+        ID_SET_CELL_BG_COLOUR,
+        ID_ABOUT,
 
-           ID_TESTFUNC };
+        ID_TESTFUNC
+    };
 
     DECLARE_EVENT_TABLE()
 };
 
+class MyGridCellRenderer : public wxGridCellStringRenderer
+{
+public:
+    virtual void Draw(wxGrid& grid,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected);
+};
 
 #endif
 

@@ -189,6 +189,74 @@ wxRect           wxGridNoCellRect( -1, -1, -1, -1 );
 // TODO: fixed so far - make configurable later (and also different for x/y)
 static const size_t GRID_SCROLL_LINE = 10;
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxGridCellRenderer
+// ----------------------------------------------------------------------------
+
+void wxGridCellRenderer::Draw(wxGrid& grid,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int row, int col,
+                              bool isSelected)
+{
+    dc.SetBackgroundMode( wxSOLID );
+
+    if ( isSelected )
+    {
+        // FIXME customize
+        dc.SetBrush( *wxBLACK_BRUSH );
+    }
+    else
+    {
+        dc.SetBrush( wxBrush(grid.GetCellBackgroundColour(row, col), wxSOLID) );
+    }
+
+    dc.SetPen( *wxTRANSPARENT_PEN );
+
+    dc.DrawRectangle(rect);
+}
+
+void wxGridCellStringRenderer::Draw(wxGrid& grid,
+                                    wxDC& dc,
+                                    const wxRect& rectCell,
+                                    int row, int col,
+                                    bool isSelected)
+{
+    wxGridCellRenderer::Draw(grid, dc, rectCell, row, col, isSelected);
+
+    // now we only have to draw the text
+    dc.SetBackgroundMode( wxTRANSPARENT );
+
+    if ( isSelected )
+    {
+        // FIXME customize
+        dc.SetTextBackground( wxColour(0, 0, 0) );
+        dc.SetTextForeground( wxColour(255, 255, 255) );
+    }
+    else
+    {
+        dc.SetTextBackground( grid.GetCellBackgroundColour(row, col) );
+        dc.SetTextForeground( grid.GetCellTextColour(row, col) );
+    }
+    dc.SetFont( grid.GetCellFont(row, col) );
+
+    int hAlign, vAlign;
+    grid.GetCellAlignment(row, col, &hAlign, &vAlign);
+
+    wxRect rect = rectCell;
+    rect.x++;
+    rect.y++;
+    rect.width -= 2;
+    rect.height -= 2;
+
+    grid.DrawTextRectangle(dc, grid.GetCellValue(row, col),
+                           rect, hAlign, vAlign);
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellAttrProviderData
 // ----------------------------------------------------------------------------
@@ -1181,6 +1249,7 @@ wxGrid::wxGrid( wxWindow *parent,
 
 wxGrid::~wxGrid()
 {
+    delete m_defaultRenderer;
     delete m_table;
 }
 
@@ -1322,6 +1391,8 @@ void wxGrid::Init()
 
     m_defaultCellHAlign = wxLEFT;
     m_defaultCellVAlign = wxTOP;
+
+    m_defaultRenderer = (wxGridCellRenderer *)NULL;
 
     m_gridLineColour = wxColour( 128, 128, 255 );
     m_gridLinesEnabled = TRUE;
@@ -3096,22 +3167,29 @@ void wxGrid::DrawGridCellArea( wxDC& dc )
 
 void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
 {
-    if ( m_colWidths[coords.GetCol()] <=0  ||
-         m_rowHeights[coords.GetRow()] <= 0 ) return;
+    int row = coords.GetRow();
+    int col = coords.GetCol();
 
+    if ( m_colWidths[col] <= 0 || m_rowHeights[row] <= 0 )
+        return;
+
+    // we draw the cell border ourselves
 #if !WXGRID_DRAW_LINES
     if ( m_gridLinesEnabled )
         DrawCellBorder( dc, coords );
 #endif
 
-    DrawCellBackground( dc, coords );
+    // but all the rest is drawn by the cell renderer and hence may be
+    // customized
+    wxGridCellRenderer *renderer = GetCellRenderer(row, col);
+    wxRect rect;
+    rect.x = m_colRights[col] - m_colWidths[col] + 1;
+    rect.y = m_rowBottoms[row] - m_rowHeights[row] + 1;
+    rect.width = m_colWidths[col] - 1;
+    rect.height = m_rowHeights[row] - 1;
 
-    // TODO: separate functions here for different kinds of cells ?
-    // e.g. text, image
-    //
-    DrawCellValue( dc, coords );
+    renderer->Draw(*this, dc, rect, row, col, IsInSelection(coords));
 }
-
 
 void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
 {
@@ -3132,74 +3210,6 @@ void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
     dc.DrawLine( m_colRights[col] - m_colWidths[col], m_rowBottoms[row],
                  m_colRights[col], m_rowBottoms[row] );
 }
-
-
-void wxGrid::DrawCellBackground( wxDC& dc, const wxGridCellCoords& coords )
-{
-    if ( m_colWidths[coords.GetCol()] <=0  ||
-         m_rowHeights[coords.GetRow()] <= 0 ) return;
-
-    int row = coords.GetRow();
-    int col = coords.GetCol();
-
-    dc.SetBackgroundMode( wxSOLID );
-
-    if ( IsInSelection( coords ) )
-    {
-        // TODO: improve this
-        //
-        dc.SetBrush( *wxBLACK_BRUSH );
-    }
-    else
-    {
-        dc.SetBrush( wxBrush(GetCellBackgroundColour(row, col), wxSOLID) );
-    }
-
-    dc.SetPen( *wxTRANSPARENT_PEN );
-
-    dc.DrawRectangle( m_colRights[col] - m_colWidths[col] + 1,
-                      m_rowBottoms[row] - m_rowHeights[row] + 1,
-                      m_colWidths[col]-1,
-                      m_rowHeights[row]-1 );
-}
-
-
-void wxGrid::DrawCellValue( wxDC& dc, const wxGridCellCoords& coords )
-{
-    if ( m_colWidths[coords.GetCol()] <=0  ||
-         m_rowHeights[coords.GetRow()] <= 0 ) return;
-
-    int row = coords.GetRow();
-    int col = coords.GetCol();
-
-    dc.SetBackgroundMode( wxTRANSPARENT );
-
-    if ( IsInSelection( row, col ) )
-    {
-        // TODO: improve this
-        //
-        dc.SetTextBackground( wxColour(0, 0, 0) );
-        dc.SetTextForeground( wxColour(255, 255, 255) );
-    }
-    else
-    {
-        dc.SetTextBackground( GetCellBackgroundColour(row, col) );
-        dc.SetTextForeground( GetCellTextColour(row, col) );
-    }
-    dc.SetFont( GetCellFont(row, col) );
-
-    int hAlign, vAlign;
-    GetCellAlignment( row, col, &hAlign, &vAlign );
-
-    wxRect rect;
-    rect.SetX( m_colRights[col] - m_colWidths[col] + 2 );
-    rect.SetY( m_rowBottoms[row] - m_rowHeights[row] + 2 );
-    rect.SetWidth( m_colWidths[col] - 4 );
-    rect.SetHeight( m_rowHeights[row] - 4 );
-
-    DrawTextRectangle( dc, GetCellValue( row, col ), rect, hAlign, vAlign );
-}
-
 
 
 // TODO: remove this ???
@@ -4627,6 +4637,30 @@ void wxGrid::GetDefaultCellAlignment( int *horiz, int *vert )
         *vert = m_defaultCellVAlign;
 }
 
+wxGridCellRenderer *wxGrid::GetCellRenderer(int row, int col)
+{
+    wxGridCellRenderer *renderer = (wxGridCellRenderer *)NULL;
+    wxGridCellAttr *attr = m_table ? m_table->GetAttr(row, col) : NULL;
+    if ( attr )
+    {
+        renderer = attr->GetRenderer();
+
+        attr->DecRef();
+    }
+
+    if ( !renderer )
+    {
+        if ( !m_defaultRenderer )
+        {
+            m_defaultRenderer = new wxGridCellStringRenderer;
+        }
+
+        renderer = m_defaultRenderer;
+    }
+
+    return renderer;
+}
+
 // ----------------------------------------------------------------------------
 // access to cell attributes
 // ----------------------------------------------------------------------------
@@ -4764,6 +4798,16 @@ void wxGrid::SetCellAlignment( int row, int col, int horiz, int vert )
     {
         wxGridCellAttr *attr = GetCellAttr(row, col);
         attr->SetAlignment(horiz, vert);
+        attr->DecRef();
+    }
+}
+
+void wxGrid::SetCellRenderer(int row, int col, wxGridCellRenderer *renderer)
+{
+    if ( CanHaveAttributes() )
+    {
+        wxGridCellAttr *attr = GetCellAttr(row, col);
+        attr->SetRenderer(renderer);
         attr->DecRef();
     }
 }
