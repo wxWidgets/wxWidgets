@@ -98,43 +98,59 @@ wxFont   wxNullFont;
 wxColour wxNullColour;
 wxNativeFontInfo wxNullNativeFontInfo;
 
+//
 // Default window names
-const wxChar *wxButtonNameStr = wxT("button");
-const wxChar *wxCanvasNameStr = wxT("canvas");
-const wxChar *wxCheckBoxNameStr = wxT("check");
-const wxChar *wxChoiceNameStr = wxT("choice");
-const wxChar *wxComboBoxNameStr = wxT("comboBox");
-const wxChar *wxDialogNameStr = wxT("dialog");
-const wxChar *wxFrameNameStr = wxT("frame");
-const wxChar *wxGaugeNameStr = wxT("gauge");
-const wxChar *wxStaticBoxNameStr = wxT("groupBox");
-const wxChar *wxListBoxNameStr = wxT("listBox");
-const wxChar *wxStaticTextNameStr = wxT("message");
-const wxChar *wxStaticBitmapNameStr = wxT("message");
-const wxChar *wxMultiTextNameStr = wxT("multitext");
-const wxChar *wxPanelNameStr = wxT("panel");
-const wxChar *wxRadioBoxNameStr = wxT("radioBox");
-const wxChar *wxRadioButtonNameStr = wxT("radioButton");
-const wxChar *wxBitmapRadioButtonNameStr = wxT("radioButton");
-const wxChar *wxScrollBarNameStr = wxT("scrollBar");
-const wxChar *wxSliderNameStr = wxT("slider");
-const wxChar *wxStaticNameStr = wxT("static");
-const wxChar *wxTextCtrlWindowNameStr = wxT("textWindow");
-const wxChar *wxTextCtrlNameStr = wxT("text");
-const wxChar *wxVirtListBoxNameStr = wxT("virtListBox");
-const wxChar *wxButtonBarNameStr = wxT("buttonbar");
-const wxChar *wxEnhDialogNameStr = wxT("Shell");
-const wxChar *wxToolBarNameStr = wxT("toolbar");
-const wxChar *wxStatusLineNameStr = wxT("status_line");
-const wxChar *wxGetTextFromUserPromptStr = wxT("Input Text");
-const wxChar *wxMessageBoxCaptionStr = wxT("Message");
-const wxChar *wxFileSelectorPromptStr = wxT("Select a file");
-const wxChar *wxFileSelectorDefaultWildcardStr = wxT("*.*");
-const wxChar *wxInternalErrorStr = wxT("wxWindows Internal Error");
-const wxChar *wxFatalErrorStr = wxT("wxWindows Fatal Error");
-const wxChar *wxTreeCtrlNameStr = wxT("treeCtrl");
-const wxChar *wxDirDialogNameStr = wxT("wxDirCtrl");
-const wxChar *wxDirDialogDefaultFolderStr = wxT("/");
+//
+const wxChar*                       wxButtonNameStr                  = wxT("button");
+const wxChar*                       wxCanvasNameStr                  = wxT("canvas");
+const wxChar*                       wxCheckBoxNameStr                = wxT("check");
+const wxChar*                       wxChoiceNameStr                  = wxT("choice");
+const wxChar*                       wxComboBoxNameStr                = wxT("comboBox");
+const wxChar*                       wxDialogNameStr                  = wxT("dialog");
+const wxChar*                       wxFrameNameStr                   = wxT("frame");
+const wxChar*                       wxGaugeNameStr                   = wxT("gauge");
+const wxChar*                       wxStaticBoxNameStr               = wxT("groupBox");
+const wxChar*                       wxListBoxNameStr                 = wxT("listBox");
+const wxChar*                       wxStaticTextNameStr              = wxT("message");
+const wxChar*                       wxStaticBitmapNameStr            = wxT("message");
+const wxChar*                       wxMultiTextNameStr               = wxT("multitext");
+const wxChar*                       wxPanelNameStr                   = wxT("panel");
+const wxChar*                       wxRadioBoxNameStr                = wxT("radioBox");
+const wxChar*                       wxRadioButtonNameStr             = wxT("radioButton");
+const wxChar*                       wxBitmapRadioButtonNameStr       = wxT("radioButton");
+const wxChar*                       wxScrollBarNameStr               = wxT("scrollBar");
+const wxChar*                       wxSliderNameStr                  = wxT("slider");
+const wxChar*                       wxStaticNameStr                  = wxT("static");
+const wxChar*                       wxTextCtrlWindowNameStr          = wxT("textWindow");
+const wxChar*                       wxTextCtrlNameStr                = wxT("text");
+const wxChar*                       wxVirtListBoxNameStr             = wxT("virtListBox");
+const wxChar*                       wxButtonBarNameStr               = wxT("buttonbar");
+const wxChar*                       wxEnhDialogNameStr               = wxT("Shell");
+const wxChar*                       wxToolBarNameStr                 = wxT("toolbar");
+const wxChar*                       wxStatusLineNameStr              = wxT("status_line");
+const wxChar*                       wxGetTextFromUserPromptStr       = wxT("Input Text");
+const wxChar*                       wxMessageBoxCaptionStr           = wxT("Message");
+const wxChar*                       wxFileSelectorPromptStr          = wxT("Select a file");
+const wxChar*                       wxFileSelectorDefaultWildcardStr = wxT("*.*");
+const wxChar*                       wxInternalErrorStr               = wxT("wxWindows Internal Error");
+const wxChar*                       wxFatalErrorStr                  = wxT("wxWindows Fatal Error");
+const wxChar*                       wxTreeCtrlNameStr                = wxT("treeCtrl");
+const wxChar*                       wxDirDialogNameStr               = wxT("wxDirCtrl");
+const wxChar*                       wxDirDialogDefaultFolderStr      = wxT("/");
+
+//
+// Class names
+//
+const wxChar*                       wxFrameClassName                 = wxT("wxFrameClass");
+const wxChar*                       wxFrameClassNameNoRedraw         = wxT("wxFrameClassNR");
+const wxChar*                       wxMDIFrameClassName              = wxT("wxMDIFrameClass");
+const wxChar*                       wxMDIFrameClassNameNoRedraw      = wxT("wxMDIFrameClassNR");
+const wxChar*                       wxMDIChildFrameClassName         = wxT("wxMDIChildFrameClass");
+const wxChar*                       wxMDIChildFrameClassNameNoRedraw = wxT("wxMDIChildFrameClassNR");
+const wxChar*                       wxPanelClassName                 = wxT("wxPanelClass");
+const wxChar*                       wxPanelClassNameNR               = wxT("wxPanelClassNR");
+const wxChar*                       wxCanvasClassName                = wxT("wxCanvasClass");
+const wxChar*                       wxCanvasClassNameNR              = wxT("wxCanvasClassNR");
 
 // See wx/utils.h
 const wxChar *wxFloatToStringStr = wxT("%.2f");

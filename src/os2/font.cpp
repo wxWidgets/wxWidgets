@@ -1085,3 +1085,14 @@ void wxFont::SetFM(
 } // end of wxFont::SetFM
 
 
+void wxFont::SetPS(
+  HPS                               hPS
+)
+{
+    Unshare();
+
+    M_FONTDATA->SetPS(hPS);
+
+    RealizeResource();
+} // end of wxFont::SetUnderlined
+

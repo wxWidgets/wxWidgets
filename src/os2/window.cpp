@@ -102,9 +102,6 @@ QMSG                      s_currentMsg;
 wxMenu*                   wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS_NATIVE
 
-#if !defined(__VISAGECPP__) || (__IBMCPP__ < 400)
-extern wxChar             wxCanvasClassName[];
-#endif
 wxList*                   wxWinHandleList = NULL;
 
 // ---------------------------------------------------------------------------

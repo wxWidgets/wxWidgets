@@ -2193,22 +2193,14 @@ EXPORTS
       OpenFile__12wxFileSystemFRC8wxString
   ;From object file:  ..\common\fontcmn.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxNativeFontInfo::SetUnderlined(unsigned long)
-      SetUnderlined__16wxNativeFontInfoFUl
       ;wxFontBase::GetNativeFontInfo() const
       GetNativeFontInfo__10wxFontBaseCFv
-      ;wxNativeFontInfo::GetUnderlined() const
-      GetUnderlined__16wxNativeFontInfoCFv
       ;wxFontBase::New(const wxNativeFontInfo&)
       New__10wxFontBaseFRC16wxNativeFontInfo
       ;wxFontBase::New(const wxString&)
       New__10wxFontBaseFRC8wxString
-      ;wxNativeFontInfo::FromString(const wxString&)
-      FromString__16wxNativeFontInfoFRC8wxString
       ;wxFont::operator=(const wxFont&)
       __as__6wxFontFRC6wxFont
-      ;wxNativeFontInfo::SetFamily(wxFontFamily)
-      SetFamily__16wxNativeFontInfoF12wxFontFamily
       ;wxFontBase::GetNativeFontInfoDesc() const
       GetNativeFontInfoDesc__10wxFontBaseCFv
       ;wxNativeFontInfo::ToUserString() const
@@ -2223,45 +2215,19 @@ EXPORTS
       SetNativeFontInfo__10wxFontBaseFRC16wxNativeFontInfo
       ;wxFontBase::SetNativeFontInfoUserDesc(const wxString&)
       SetNativeFontInfoUserDesc__10wxFontBaseFRC8wxString
-      ;wxNativeFontInfo::SetStyle(wxFontStyle)
-      SetStyle__16wxNativeFontInfoF11wxFontStyle
       ;wxFontBase::ms_encodingDefault
       ms_encodingDefault__10wxFontBase
-      ;wxNativeFontInfo::GetPointSize() const
-      GetPointSize__16wxNativeFontInfoCFv
-      ;wxNativeFontInfo::GetStyle() const
-      GetStyle__16wxNativeFontInfoCFv
-      ;wxNativeFontInfo::GetFamily() const
-      GetFamily__16wxNativeFontInfoCFv
-      ;wxNativeFontInfo::GetFaceName() const
-      GetFaceName__16wxNativeFontInfoCFv
-      ;wxNativeFontInfo::SetEncoding(wxFontEncoding)
-      SetEncoding__16wxNativeFontInfoF14wxFontEncoding
       ;wxFontBase::SetNativeFontInfo(const wxString&)
       SetNativeFontInfo__10wxFontBaseFRC8wxString
-      ;wxNativeFontInfo::SetWeight(wxFontWeight)
-      SetWeight__16wxNativeFontInfoF12wxFontWeight
+      ;wxFontBase::operator==(const wxFont&) const
+      __eq__10wxFontBaseCFRC6wxFont
       __vft10wxFontBase8wxObject
       ;wxFontBase::operator!=(const wxFont&) const
       __ne__10wxFontBaseCFRC6wxFont
-      ;wxFontBase::operator==(const wxFont&) const
-      __eq__10wxFontBaseCFRC6wxFont
-      ;wxNativeFontInfo::SetPointSize(int)
-      SetPointSize__16wxNativeFontInfoFi
-      ;wxNativeFontInfo::ToString() const
-      ToString__16wxNativeFontInfoCFv
       ;wxFontBase::GetFamilyString() const
       GetFamilyString__10wxFontBaseCFv
-      ;wxNativeFontInfo::GetEncoding() const
-      GetEncoding__16wxNativeFontInfoCFv
-      ;wxNativeFontInfo::Init()
-      Init__16wxNativeFontInfoFv
-      ;wxNativeFontInfo::GetWeight() const
-      GetWeight__16wxNativeFontInfoCFv
       ;wxFontBase::New(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
       New__10wxFontBaseFiN31UlRC8wxString14wxFontEncoding
-      ;wxNativeFontInfo::SetFaceName(wxString)
-      SetFaceName__16wxNativeFontInfoF8wxString
       ;wxNativeFontInfo::FromUserString(const wxString&)
       FromUserString__16wxNativeFontInfoFRC8wxString
   ;From object file:  ..\common\fontmap.cpp
@@ -10918,8 +10884,6 @@ EXPORTS
       OnIdle__5wxAppFR11wxIdleEvent
       ;wxMsgArray::wxMsgArray(const wxMsgArray&)
       __ct__10wxMsgArrayFRC10wxMsgArray
-      wxPanelClassName
-      wxMDIFrameClassName
       ;wxMsgArray::Insert(const _QMSG&,unsigned int)
       Insert__10wxMsgArrayFRC5_QMSGUi
       ;wxApp::HandleSockets()
@@ -10956,14 +10920,11 @@ EXPORTS
       Initialized__5wxAppFv
       ;wxApp::GetEventTable() const
       GetEventTable__5wxAppCFv
-      wxFrameClassNameNoRedraw
       ;wxSetInstance(unsigned long)
       wxSetInstance__FUl
       ;wxMsgArray::RemoveAt(unsigned int)
       RemoveAt__10wxMsgArrayFUi
-      wxMDIChildFrameClassName
       wxGetInstance
-      wxFrameClassName
       ;wxApp::GetStdIcon(int) const
       GetStdIcon__5wxAppCFi
       ;wxMsgArray::~wxMsgArray()
@@ -10975,7 +10936,6 @@ EXPORTS
       ;wxApp::CleanUp()
       CleanUp__5wxAppFv
       svCurrentMsg
-      wxMDIChildFrameClassNameNoRedraw
       ;wxMsgArray::Index(const _QMSG&,unsigned long) const
       Index__10wxMsgArrayCFRC5_QMSGUl
       wxDisableButtonBrush
@@ -10985,7 +10945,6 @@ EXPORTS
       Initialize__5wxAppFUl
       ;wxAppBase::m_appInitFn
       m_appInitFn__9wxAppBase
-      wxCanvasClassName
       ;wxApp::DoMessage()
       DoMessage__5wxAppFv
       ;wxExit()
@@ -10996,7 +10955,6 @@ EXPORTS
       Dispatch__5wxAppFv
       ;wxEntry(int,char**)
       wxEntry__FiPPc
-      wxMDIFrameClassNameNoRedraw
       ;wxApp::SendIdleEvents(wxWindow*)
       SendIdleEvents__5wxAppFP8wxWindow
   ;From object file:  ..\os2\bitmap.cpp
@@ -11497,12 +11455,15 @@ EXPORTS
       wxDialogNameStr
       wxCheckBoxNameStr
       wxCanvasNameStr
+      wxCanvasClassNameNR
       wxCYAN_PEN
       wxButtonBarNameStr
       wxNullBitmap
       wxNORMAL_FONT
       wxMEDIUM_GREY_BRUSH
       wxTheColourDatabase
+      wxPanelClassName
+      wxMDIFrameClassName
       wxLIGHT_GREY
       wxDefaultSize
       wxBLUE
@@ -11512,6 +11473,7 @@ EXPORTS
       wxStaticBoxNameStr
       wxSliderNameStr
       wxRED_PEN
+      wxPanelClassNameNR
       wxMultiTextNameStr
       wxMEDIUM_GREY_PEN
       wxGaugeNameStr
@@ -11536,9 +11498,12 @@ EXPORTS
       wxComboBoxNameStr
       wxCROSS_CURSOR
       wxTopLevelWindows
+      wxFrameClassNameNoRedraw
       wxTRANSPARENT_BRUSH
       wxWHITE_BRUSH
       wxRED_BRUSH
+      wxFrameClassName
+      wxMDIChildFrameClassName
       wxNullColour
       wxTRANSPARENT_PEN
       wxStaticNameStr
@@ -11552,11 +11517,13 @@ EXPORTS
       wxBLACK_DASHED_PEN
       g_globalCursor
       wxNullNativeFontInfo
+      wxMDIChildFrameClassNameNoRedraw
       wxBLUE_BRUSH
       wxLIGHT_GREY_BRUSH
       wxBLACK_BRUSH
       wxPendingDelete
       wxNullAcceleratorTable
+      wxCanvasClassName
       wxGREEN_PEN
       wxVirtListBoxNameStr
       wxStatusLineNameStr
@@ -11571,6 +11538,7 @@ EXPORTS
       wxChoiceNameStr
       wxCYAN
       wxBLACK
+      wxMDIFrameClassNameNoRedraw
   ;From object file:  ..\os2\dataobj.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDataFormat::wxDataFormat()
@@ -12014,12 +11982,18 @@ EXPORTS
       sm_classwxFileDialog__12wxFileDialog
   ;From object file:  ..\os2\font.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxFont::Create(const wxNativeFontInfo&,unsigned long)
+      Create__6wxFontFRC16wxNativeFontInfoUl
+      ;wxNativeFontInfo::SetUnderlined(unsigned long)
+      SetUnderlined__16wxNativeFontInfoFUl
       ;wxFont::SetStyle(int)
       SetStyle__6wxFontFi
-      ;wxFont::OS2SelectMatchingFontByName()
-      OS2SelectMatchingFontByName__6wxFontFv
+      ;wxFontRefData::Init(const wxNativeFontInfo&,unsigned long,unsigned long)
+      Init__13wxFontRefDataFRC16wxNativeFontInfoUlT2
       ;wxFont::IsFree() const
       IsFree__6wxFontCFv
+      ;wxNativeFontInfo::GetUnderlined() const
+      GetUnderlined__16wxNativeFontInfoCFv
       ;wxFont::GetHFONT() const
       GetHFONT__6wxFontCFv
       ;wxFont::GetFamily() const
@@ -12028,9 +12002,15 @@ EXPORTS
       GetFaceName__6wxFontCFv
       ;wxFontRefData::Init(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
       Init__13wxFontRefDataFiN31UlRC8wxString14wxFontEncoding
+      ;wxFont::wxFont(const wxString&)
+      __ct__6wxFontFRC8wxString
+      ;wxNativeFontInfo::FromString(const wxString&)
+      FromString__16wxNativeFontInfoFRC8wxString
+      ;wxNativeFontInfo::SetFamily(wxFontFamily)
+      SetFamily__16wxNativeFontInfoF12wxFontFamily
+      __vft13wxFontRefData15wxObjectRefData
       ;wxFont::SetFamily(int)
       SetFamily__6wxFontFi
-      __vft13wxFontRefData15wxObjectRefData
       ;wxConstructorForwxFont()
       wxConstructorForwxFont__Fv
       ;wxFontRefData::~wxFontRefData()
@@ -12039,6 +12019,8 @@ EXPORTS
       GetUnderlined__6wxFontCFv
       ;wxFont::GetStyle() const
       GetStyle__6wxFontCFv
+      ;wxFont::GetNativeFontInfo() const
+      GetNativeFontInfo__6wxFontCFv
       ;wxFont::SetEncoding(wxFontEncoding)
       SetEncoding__6wxFontF14wxFontEncoding
       ;wxFont::FreeResource(unsigned long)
@@ -12047,27 +12029,51 @@ EXPORTS
       SetUnderlined__6wxFontFUl
       ;wxFont::SetPS(unsigned long)
       SetPS__6wxFontFUl
-      ;wxFont::GetFontId() const
-      GetFontId__6wxFontCFv
-      ;wxFont::GetPS() const
-      GetPS__6wxFontCFv
+      ;wxNativeFontInfo::SetStyle(wxFontStyle)
+      SetStyle__16wxNativeFontInfoF11wxFontStyle
+      ;wxNativeFontInfo::GetPointSize() const
+      GetPointSize__16wxNativeFontInfoCFv
+      ;wxNativeFontInfo::GetStyle() const
+      GetStyle__16wxNativeFontInfoCFv
+      ;wxNativeFontInfo::GetFamily() const
+      GetFamily__16wxNativeFontInfoCFv
+      ;wxNativeFontInfo::GetFaceName() const
+      GetFaceName__16wxNativeFontInfoCFv
       ;wxFont::GetEncoding() const
       GetEncoding__6wxFontCFv
+      ;wxNativeFontInfo::SetEncoding(wxFontEncoding)
+      SetEncoding__16wxNativeFontInfoF14wxFontEncoding
+      ;wxFont::SetNativeFontInfo(const wxNativeFontInfo&)
+      SetNativeFontInfo__6wxFontFRC16wxNativeFontInfo
       ;wxFont::SetFaceName(const wxString&)
       SetFaceName__6wxFontFRC8wxString
-      __vft6wxFont8wxObject
+      ;wxNativeFontInfo::SetWeight(wxFontWeight)
+      SetWeight__16wxNativeFontInfoF12wxFontWeight
       ;wxFont::sm_classwxFont
       sm_classwxFont__6wxFont
+      __vft6wxFont8wxObject
+      ;wxNativeFontInfo::SetPointSize(int)
+      SetPointSize__16wxNativeFontInfoFi
       ;wxFont::Init()
       Init__6wxFontFv
+      ;wxNativeFontInfo::ToString() const
+      ToString__16wxNativeFontInfoCFv
       ;wxFont::GetResourceHandle()
       GetResourceHandle__6wxFontFv
+      ;wxNativeFontInfo::GetEncoding() const
+      GetEncoding__16wxNativeFontInfoCFv
+      ;wxFontRefData::Free()
+      Free__13wxFontRefDataFv
+      ;wxFontRefData::Alloc(wxFont*)
+      Alloc__13wxFontRefDataFP6wxFont
       ;wxFont::SetPointSize(int)
       SetPointSize__6wxFontFi
       ;wxFont::SetWeight(int)
       SetWeight__6wxFontFi
       ;wxFont::SetFM(_FONTMETRICS*,int)
       SetFM__6wxFontFP12_FONTMETRICSi
+      ;wxNativeFontInfo::Init()
+      Init__16wxNativeFontInfoFv
       ;wxFont::~wxFont()
       __dt__6wxFontFv
       ;wxFont::Unshare()
@@ -12076,12 +12082,14 @@ EXPORTS
       RealizeResource__6wxFontFv
       ;wxFont::GetWeight() const
       GetWeight__6wxFontCFv
+      ;wxNativeFontInfo::GetWeight() const
+      GetWeight__16wxNativeFontInfoCFv
       ;wxFont::GetPointSize() const
       GetPointSize__6wxFontCFv
       ;wxFont::Create(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
       Create__6wxFontFiN31UlRC8wxString14wxFontEncoding
-      ;wxFont::wxFont(const wxNativeFontInfo&)
-      __ct__6wxFontFRC16wxNativeFontInfo
+      ;wxNativeFontInfo::SetFaceName(wxString)
+      SetFaceName__16wxNativeFontInfoF8wxString
   ;From object file:  ..\os2\fontdlg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxConstructorForwxFontDialog()
@@ -12114,6 +12122,8 @@ EXPORTS
       SetEncoding__22wxFontEnumeratorHelperF14wxFontEncoding
   ;From object file:  ..\os2\fontutil.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxGetFontEncFromCharSet(int)
+      wxGetFontEncFromCharSet__Fi
       ;wxNativeEncodingInfo::ToString() const
       ToString__20wxNativeEncodingInfoCFv
       ;wxTestFontEncoding(const wxNativeEncodingInfo&)
@@ -12122,8 +12132,10 @@ EXPORTS
       wxCreateFontFromLogFont__FPC7_FATTRSCP12_FONTMETRICSP13_FACENAMEDESC
       ;wxGetNativeFontEncoding(wxFontEncoding,wxNativeEncodingInfo*)
       wxGetNativeFontEncoding__F14wxFontEncodingP20wxNativeEncodingInfo
-      ;wxFillLogFont(_FATTRS*,_FACENAMEDESC*,const wxFont*)
-      wxFillLogFont__FP7_FATTRSP13_FACENAMEDESCPC6wxFont
+      ;wxOS2SelectMatchingFontByName(_FATTRS*,_FACENAMEDESC*,_FONTMETRICS*,int,const wxFont*)
+      wxOS2SelectMatchingFontByName__FP7_FATTRSP13_FACENAMEDESCP12_FONTMETRICSiPC6wxFont
+      ;wxFillLogFont(_FATTRS*,_FACENAMEDESC*,unsigned long,long*,wxString&,wxFont*)
+      wxFillLogFont__FP7_FATTRSP13_FACENAMEDESCUlPlR8wxStringP6wxFont
       ;wxGpiStrcmp(char*,char*)
       wxGpiStrcmp__FPcT1
       ;wxNativeEncodingInfo::FromString(const wxString&)

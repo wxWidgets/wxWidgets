@@ -37,8 +37,6 @@
 extern wxWindowList wxModelessWindows;      // from dialog.cpp
 extern wxMenu *wxCurrentPopupMenu;
 
-extern wxChar wxMDIFrameClassName[];
-extern wxChar wxMDIChildFrameClassName[];
 extern wxWindow *wxWndHook;                 // from window.cpp
 
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);

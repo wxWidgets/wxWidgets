@@ -130,8 +130,6 @@ MRESULT APIENTRY wxExecuteWindowCbk(
     return 0;
 }
 
-extern wxChar wxPanelClassName[];
-
 long wxExecute(
   const wxString&                   rCommand
 , bool                              bSync
