@@ -27,12 +27,13 @@
 
 #include "wx/xml/xml.h"
 #include "wx/tokenzr.h"
-#include "wx/xtistrm.h"
-#include "wx/xtixml.h"
 #include "wx/txtstrm.h"
 #include "wx/event.h"
 
 #if wxUSE_EXTENDED_RTTI
+
+#include "wx/xtistrm.h"
+#include "wx/xtixml.h"
 
 #include "wx/beforestd.h"
 #include <map>
