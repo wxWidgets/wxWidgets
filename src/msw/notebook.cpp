@@ -258,6 +258,13 @@ bool wxNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
+#ifdef __WXWINCE__
+    // Not sure why, but without this style, there is no border
+    // around the notebook tabs.
+    if (style & wxNB_FLAT)
+        style |= wxBORDER_SUNKEN;
+#endif
+    
     // comctl32.dll 6.0 doesn't support non-top tabs with visual styles (the
     // control is simply not rendered correctly), so disable them in this case
     const int verComCtl32 = wxApp::GetComCtl32Version();
