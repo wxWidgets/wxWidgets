@@ -410,7 +410,11 @@ bool wxXmlResource::UpdateResources()
                 }
 
                 ProcessPlatformProperty(m_data[i].Doc->GetRoot());
+#if wxUSE_FILESYSTEM
 				m_data[i].Time = file->GetModificationTime();
+#else
+                m_data[i].Time = wxDateTime(wxFileModificationTime(m_data[i].File));
+#endif
 			}
 
 #           if wxUSE_FILESYSTEM
