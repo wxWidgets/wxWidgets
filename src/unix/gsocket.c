@@ -261,7 +261,10 @@ GSocket *GSocket_new(void)
 void GSocket_close(GSocket *socket)
 {
     _GSocket_Disable_Events(socket);
+// gsockosx.c calls CFSocketInvalidate which closes the socket for us
+#if !(defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__)))
     close(socket->m_fd);
+#endif
     socket->m_fd = INVALID_SOCKET;
 }
 
@@ -269,20 +272,12 @@ void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
 
-  /* When using CFSocket we MUST invalidate before closing the fd */
-#ifdef __DARWIN__
-  /* Per-socket GUI-specific cleanup */
-  _GSocket_GUI_Destroy_Socket(socket);
-#endif
-
   /* Check that the socket is really shutdowned */
   if (socket->m_fd != INVALID_SOCKET)
     GSocket_Shutdown(socket);
 
-#ifndef __DARWIN__
   /* Per-socket GUI-specific cleanup */
   _GSocket_GUI_Destroy_Socket(socket);
-#endif
 
   /* Destroy private addresses */
   if (socket->m_local)
