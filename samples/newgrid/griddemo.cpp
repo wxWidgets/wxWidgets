@@ -188,7 +188,7 @@ GridFrame::GridFrame()
     logger->SetTimestamp( NULL );
 
     // this will create a grid and, by default, an associated grid
-    // table for string gs_dataBugsGrid
+    // table for strings
     grid->CreateGrid( 100, 100 );
 
     grid->SetRowSize( 0, 60 );
@@ -756,10 +756,10 @@ static const wxChar* severities[] =
 static struct BugsGridData
 {
     int id;
-    wxString summary;
+    const wxChar *summary;
     Severity severity;
     int prio;
-    wxString platform;
+    const wxChar *platform;
     bool opened;
 } gs_dataBugsGrid [] =
 {
