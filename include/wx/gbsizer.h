@@ -114,6 +114,10 @@ public:
                    int border,
                    wxObject* userData );
 
+    // default ctor
+    wxGBSizerItem();
+
+    
     // Get the grid position of the item
     wxGBPosition GetPos() const { return m_pos; }
     void GetPos(int& row, int& col) const;
@@ -155,7 +159,7 @@ protected:
 
     
 private:    
-    DECLARE_CLASS(wxGBSizerItem)
+    DECLARE_DYNAMIC_CLASS(wxGBSizerItem)
     DECLARE_NO_COPY_CLASS(wxGBSizerItem)        
 };
 

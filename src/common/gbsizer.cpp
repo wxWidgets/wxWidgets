@@ -27,7 +27,7 @@
 
 //---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGBSizerItem, wxSizerItem)
+IMPLEMENT_DYNAMIC_CLASS(wxGBSizerItem, wxSizerItem)
 IMPLEMENT_CLASS(wxGridBagSizer, wxFlexGridSizer)
 
 const wxGBSpan wxDefaultSpan;
@@ -78,6 +78,13 @@ wxGBSizerItem::wxGBSizerItem( wxSizer *sizer,
 {
 }
 
+wxGBSizerItem::wxGBSizerItem()
+    : wxSizerItem(),
+      m_pos(-1,-1),
+      m_span(-1,-1),
+      m_sizer(NULL)
+{
+}
 
 //---------------------------------------------------------------------------
 
