@@ -70,6 +70,7 @@ extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance(void);
  * be available and it must contain the app's instance
  * handle.
  */
+extern HINSTANCE hInst;
 #define INSTANCE hInst
 
 #endif /* __GSOCKET_STANDALONE__ */
@@ -116,7 +117,6 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
 
 /* Global variables */
 
-extern HINSTANCE INSTANCE;
 static HWND hWin;
 static CRITICAL_SECTION critical;
 static GSocket* socketList[MAXSOCKETS];
