@@ -168,7 +168,13 @@ const LifePattern g_patterns[] =
                ".****" ),
     LifePattern(
                _("Max"),
-               _("Max is the fastest-growing known pattern in Conway's Game of Life (possibly the fastest possible). It fills space to a density of 1/2, conjectured to be the maximum density, and does it at a speed of c/2 in each of the 4 directions, which has been proven to be the maximum possible speed.\n\nPopulation growth is:\n[(t+19)^2+463]/4 for t divisible by 4;\n[(t+19)^2+487]/4 for t even, not div. by 4;\n[(t+18)^2+639]/4 for t odd.\n\nOriginal construction, top/bottom stretchers by Hartmut Holzwart; Size optimization, left/right stretchers by David Bell; Original idea, middle part, left/right stretcher connection by Al Hensel.\n\nThis spacefiller by David Bell, September 1993."),
+               _("Max is the fastest-growing known pattern in Conway's Game of Life (possibly the fastest possible).")
+               + wxString(_(" It fills space to a density of 1/2, conjectured to be the maximum density, and does it at a speed"))
+               + wxString(_(" of c/2 in each of the 4 directions, which has been proven to be the maximum possible speed.\n\nPopulation"))
+               + wxString(_(" growth is:\n[(t+19)^2+463]/4 for t divisible by 4;\n[(t+19)^2+487]/4 for t even, not div. by 4;\n"))
+               + wxString(_("[(t+18)^2+639]/4 for t odd.\n\nOriginal construction, top/bottom stretchers by Hartmut Holzwart;"))
+               + wxString(_(" Size optimization, left/right stretchers by David Bell; Original idea, middle part, left/right stretcher"))
+               + wxString(_(" connection by Al Hensel.\n\nThis spacefiller by David Bell, September 1993.")),
                29, 43,
                ".....*.*....................."
                "....*..*....................."
