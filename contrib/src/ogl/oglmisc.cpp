@@ -220,7 +220,7 @@ void oglCentreText(wxDC& dc, wxList *text_list,
   // Store text extents for speed
   double *widths = new double[n];
 
-  wxNode *current = text_list->GetFirst();
+  wxObjectList::compatibility_iterator current = text_list->GetFirst();
   int i = 0;
   while (current)
   {
@@ -303,7 +303,7 @@ void oglCentreTextNoClipping(wxDC& dc, wxList *text_list,
   // Store text extents for speed
   double *widths = new double[n];
 
-  wxNode *current = text_list->GetFirst();
+  wxObjectList::compatibility_iterator current = text_list->GetFirst();
   int i = 0;
   while (current)
   {
@@ -359,7 +359,7 @@ void oglGetCentredTextExtent(wxDC& dc, wxList *text_list,
   long max_width = 0;
   long current_width = 0;
 
-  wxNode *current = text_list->GetFirst();
+  wxObjectList::compatibility_iterator current = text_list->GetFirst();
   while (current)
   {
     wxShapeTextLine *line = (wxShapeTextLine *)current->GetData();
@@ -444,15 +444,15 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
   wxStringList *string_list = new wxStringList;
 
   wxString buffer;
-  wxStringListNode *node = word_list.GetFirst();
+  wxStringList::compatibility_iterator node = word_list.GetFirst();
   long x, y;
 
   while (node)
   {
     wxString oldBuffer(buffer);
 
-    wxChar *s = (wxChar *)node->GetData();
-    if (!s)
+    wxString s = node->GetData();
+    if (s.IsEmpty())
     {
       // FORCE NEW LINE
       if (buffer.Length() > 0)
@@ -507,7 +507,7 @@ void oglDrawFormattedText(wxDC& dc, wxList *text_list,
                     (long)(m_xpos - width/2.0), (long)(m_ypos - height/2.0),
                     (long)width+1, (long)height+1); // +1 to allow for rounding errors
 
-  wxNode *current = text_list->GetFirst();
+  wxObjectList::compatibility_iterator current = text_list->GetFirst();
   while (current)
   {
     wxShapeTextLine *line = (wxShapeTextLine *)current->GetData();
@@ -529,7 +529,7 @@ void oglFindPolylineCentroid(wxList *points, double *x, double *y)
   double xcount = 0;
   double ycount = 0;
 
-  wxNode *node = points->GetFirst();
+  wxObjectList::compatibility_iterator node = points->GetFirst();
   while (node)
   {
     wxRealPoint *point = (wxRealPoint *)node->GetData();
@@ -807,7 +807,7 @@ void UpdateListBox(wxListBox *item, wxList *list)
   if (!list)
     return;
 
-  wxNode *node = list->GetFirst();
+  wxObjectList::compatibility_iterator node = list->GetFirst();
   while (node)
   {
     wxChar *s = (wxChar *)node->GetData();

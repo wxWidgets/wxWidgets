@@ -198,19 +198,17 @@ void csDiagramView::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 wxShape *csDiagramView::FindFirstSelectedShape(void)
 {
   csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
-  wxShape *theShape = NULL;
   wxObjectList::compatibility_iterator node = doc->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
     wxShape *eachShape = (wxShape *)node->GetData();
     if ((eachShape->GetParent() == NULL) && !eachShape->IsKindOf(CLASSINFO(wxLabelShape)) && eachShape->Selected())
     {
-      theShape = eachShape;
-      node = NULL;
+      return eachShape;
     }
     else node = node->GetNext();
   }
-  return theShape;
+  return NULL;
 }
 
 void csDiagramView::FindSelectedShapes(wxList& selections, wxClassInfo* toFind)
@@ -579,7 +577,7 @@ void csDiagramView::OnToggleArrowTool(wxCommandEvent& WXUNUSED(event))
     {
         csDiagramCommand* cmd = new csDiagramCommand(stateName, doc);
 
-        wxNode* node = selections.GetFirst();
+        wxObjectList::compatibility_iterator node = selections.GetFirst();
         while (node)
         {
             wxLineShape *theShape = (wxLineShape*) node->GetData();
@@ -634,7 +632,7 @@ void csDiagramView::ReflectPointSize(int pointSize)
 void csDiagramView::ReflectArrowState(wxLineShape* lineShape)
 {
     bool haveArrow = false;
-    wxNode *node = lineShape->GetArrows().GetFirst();
+    wxObjectList::compatibility_iterator node = lineShape->GetArrows().GetFirst();
     while (node)
     {
       wxArrowHead *arrow = (wxArrowHead *)node->GetData();
@@ -651,7 +649,7 @@ void csDiagramView::OnAlign(wxCommandEvent& event)
     // Make a copy of the selections, keeping only those shapes
     // that are top-level non-line shapes.
     wxList selections;
-    wxNode* node = GetSelectionList().GetFirst();
+    wxObjectList::compatibility_iterator node = GetSelectionList().GetFirst();
     while (node)
     {
         wxShape* shape = (wxShape*) node->GetData();
@@ -751,7 +749,7 @@ void csDiagramView::OnNewLinePoint(wxCommandEvent& WXUNUSED(event))
     csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
     csDiagramCommand* cmd = new csDiagramCommand(_T("New line point"), doc);
 
-    wxNode* node = m_selections.GetFirst();
+    wxObjectList::compatibility_iterator node = m_selections.GetFirst();
     while (node)
     {
         wxShape* shape = (wxShape*) node->GetData();
@@ -772,7 +770,7 @@ void csDiagramView::OnCutLinePoint(wxCommandEvent& WXUNUSED(event))
     csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
     csDiagramCommand* cmd = new csDiagramCommand(_T("Cut line point"), doc);
 
-    wxNode* node = m_selections.GetFirst();
+    wxObjectList::compatibility_iterator node = m_selections.GetFirst();
     while (node)
     {
         wxShape* shape = (wxShape*) node->GetData();
@@ -793,7 +791,7 @@ void csDiagramView::OnStraightenLines(wxCommandEvent& WXUNUSED(event))
     csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
     csDiagramCommand* cmd = new csDiagramCommand(_T("Straighten lines"), doc);
 
-    wxNode* node = m_selections.GetFirst();
+    wxObjectList::compatibility_iterator node = m_selections.GetFirst();
     while (node)
     {
         wxShape* shape = (wxShape*) node->GetData();
@@ -999,7 +997,7 @@ void csCanvas::OnEndDragLeft(double x, double y, int WXUNUSED(keys))
     min_y = wxMin(y, sg_initialY);
     max_y = wxMax(y, sg_initialY);
 
-    wxNode *node = GetDiagram()->GetShapeList()->GetFirst();
+    wxObjectList::compatibility_iterator node = GetDiagram()->GetShapeList()->GetFirst();
     while (node)
     {
         wxShape *shape = (wxShape *)node->GetData();

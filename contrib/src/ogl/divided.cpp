@@ -102,7 +102,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
   double yMargin = 2;
   dc.SetBackgroundMode(wxTRANSPARENT);
 
-  wxNode *node = GetRegions().GetFirst();
+  wxObjectList::compatibility_iterator node = GetRegions().GetFirst();
   while (node)
   {
     wxShapeRegion *region = (wxShapeRegion *)node->GetData();
@@ -157,7 +157,7 @@ void wxDividedShape::SetRegionSizes()
 //  double leftX = (double)(m_xpos - (m_width / 2.0));
 //  double rightX = (double)(m_xpos + (m_width / 2.0));
 
-  wxNode *node = GetRegions().GetFirst();
+  wxObjectList::compatibility_iterator node = GetRegions().GetFirst();
   while (node)
   {
     wxShapeRegion *region = (wxShapeRegion *)node->GetData();
@@ -245,7 +245,7 @@ bool wxDividedShape::GetAttachmentPosition(int attachment, double *x, double *y,
   {
     bool isLeft = !(attachment < (n+1));
     int i = (isLeft) ? (totalNumberAttachments - attachment - 1) : (attachment-1);
-    wxNode *node = GetRegions().Item(i);
+    wxObjectList::compatibility_iterator node = GetRegions().Item(i);
     if (node)
     {
       wxShapeRegion *region = (wxShapeRegion *)node->GetData();
@@ -298,7 +298,7 @@ int wxDividedShape::GetNumberOfAttachments() const
   int n = (GetRegions().GetCount() * 2) + 2;
 
   int maxN = n - 1;
-  wxNode *node = m_attachmentPoints.GetFirst();
+  wxObjectList::compatibility_iterator node = m_attachmentPoints.GetFirst();
   while (node)
   {
     wxAttachmentPoint *point = (wxAttachmentPoint *)node->GetData();
@@ -341,7 +341,7 @@ void wxDividedShape::MakeMandatoryControlPoints()
   double currentY = (double)(GetY() - (m_height / 2.0));
   double maxY = (double)(GetY() + (m_height / 2.0));
 
-  wxNode *node = GetRegions().GetFirst();
+  wxObjectList::compatibility_iterator node = GetRegions().GetFirst();
   int i = 0;
   while (node)
   {
@@ -379,14 +379,14 @@ void wxDividedShape::ResetMandatoryControlPoints()
   double currentY = (double)(GetY() - (m_height / 2.0));
   double maxY = (double)(GetY() + (m_height / 2.0));
 
-  wxNode *node = m_controlPoints.GetFirst();
+  wxObjectList::compatibility_iterator node = m_controlPoints.GetFirst();
   int i = 0;
   while (node)
   {
     wxControlPoint *controlPoint = (wxControlPoint *)node->GetData();
     if (controlPoint->IsKindOf(CLASSINFO(wxDividedShapeControlPoint)))
     {
-      wxNode *node1 = GetRegions().Item(i);
+      wxObjectList::compatibility_iterator node1 = GetRegions().Item(i);
       wxShapeRegion *region = (wxShapeRegion *)node1->GetData();
 
       double proportion = region->m_regionProportionY;
@@ -622,7 +622,7 @@ void wxDividedShapeControlPoint::OnEndDragLeft(double WXUNUSED(x), double y, int
     GetCanvas()->PrepareDC(dc);
 
     wxDividedShape *dividedObject = (wxDividedShape *)m_shape;
-    wxNode *node = dividedObject->GetRegions().Item(regionId);
+    wxObjectList::compatibility_iterator node = dividedObject->GetRegions().Item(regionId);
     if (!node)
     return;
 
@@ -642,10 +642,6 @@ void wxDividedShapeControlPoint::OnEndDragLeft(double WXUNUSED(x), double y, int
 
     // Save values
     double thisRegionTop = 0.0;
-    #if 0
-    // this variable is not readed later
-    double thisRegionBottom = 0.0;
-    #endif
     double nextRegionBottom = 0.0;
 
     node = dividedObject->GetRegions().GetFirst();
@@ -660,10 +656,6 @@ void wxDividedShapeControlPoint::OnEndDragLeft(double WXUNUSED(x), double y, int
       if (region == thisRegion)
       {
         thisRegionTop = currentY;
-        #if 0
-        // no need for assignment if value is not used later
-        thisRegionBottom = actualY;
-        #endif
         if (node->GetNext())
           nextRegion = (wxShapeRegion *)node->GetNext()->GetData();
       }

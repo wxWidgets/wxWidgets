@@ -70,7 +70,7 @@ bool wxDiagramClipboard::DoCopy(wxDiagram* diagramFrom, wxDiagram* diagramTo, bo
 
     // First copy all node shapes.
     wxList* shapeList = diagramFrom->GetShapeList();
-    wxNode* node = shapeList->GetFirst();
+    wxObjectList::compatibility_iterator node = shapeList->GetFirst();
     while (node)
     {
         wxShape* shape = (wxShape*) node->GetData();
@@ -137,7 +137,7 @@ bool wxDiagramClipboard::DoCopy(wxDiagram* diagramFrom, wxDiagram* diagramTo, bo
             // Make a list of all the new lines, in the same order as the old lines.
             // Then apply the list of new lines to the shape.
             wxList newLines;
-            wxNode* lineNode = shape->GetLines().GetFirst();
+            wxObjectList::compatibility_iterator lineNode = shape->GetLines().GetFirst();
             while (lineNode)
             {
                 wxLineShape* lineShape = (wxLineShape*) lineNode->GetData();

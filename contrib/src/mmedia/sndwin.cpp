@@ -50,7 +50,7 @@ wxList *wxSoundHandleList = NULL;
 
 static inline wxSoundStreamWin *wxFindSoundFromHandle(WXHWND hWnd)
 {
-  wxNode *node = wxSoundHandleList->Find((long)hWnd);
+  wxObjectList::compatibility_iterator node = wxSoundHandleList->Find((long)hWnd);
   if (!node)
     return NULL;
   return (wxSoundStreamWin *)node->GetData();

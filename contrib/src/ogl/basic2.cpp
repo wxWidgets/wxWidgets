@@ -1819,9 +1819,9 @@ void wxShapeRegion::ClearText()
   while (node)
   {
     wxShapeTextLine *line = (wxShapeTextLine *)node->GetData();
-    wxNode *next = node->GetNext();
+    wxObjectList::compatibility_iterator next = node->GetNext();
     delete line;
-    delete node;
+    m_formattedText.Erase(node);
     node = next;
   }
 }

@@ -176,19 +176,17 @@ bool DiagramView::OnClose(bool WXUNUSED(deleteWindow))
 wxShape *DiagramView::FindSelectedShape(void)
 {
   DiagramDocument *doc = (DiagramDocument *)GetDocument();
-  wxShape *theShape = NULL;
   wxObjectList::compatibility_iterator node = doc->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
     wxShape *eachShape = (wxShape *)node->GetData();
     if ((eachShape->GetParent() == NULL) && eachShape->Selected())
     {
-      theShape = eachShape;
-      node = NULL;
+      return eachShape;
     }
     else node = node->GetNext();
   }
-  return theShape;
+  return NULL;
 }
 
 void DiagramView::OnCut(wxCommandEvent& WXUNUSED(event))

@@ -208,7 +208,7 @@ void wxFrameManager::EnableMenusForView( wxFrameView* pView, bool enable )
     if ( !pMenuBar )
         return;
 
-    wxStringListNode* pNode = pView->mTopMenus.GetFirst();
+    wxStringList::compatibility_iterator pNode = pView->mTopMenus.GetFirst();
 
     int i;
     while ( pNode )

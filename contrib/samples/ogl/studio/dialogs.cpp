@@ -205,7 +205,7 @@ bool csSettingsDialog::TransferDataFromWindow()
     }
 
     // Apply settings to all open diagram documents
-    wxNode* node = wxGetApp().GetDocManager()->GetDocuments().GetFirst();
+    wxObjectList::compatibility_iterator node = wxGetApp().GetDocManager()->GetDocuments().GetFirst();
     while (node)
     {
         wxDocument* doc = (wxDocument*) node->GetData();
@@ -365,7 +365,7 @@ void csShapePropertiesDialog::SetDefaults()
     if (!m_attributeDialog)
         return;
 
-    wxWindowListNode* node = m_attributeDialog->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = m_attributeDialog->GetChildren().GetFirst();
     while (node)
     {
         wxWindow* child = (wxWindow*) node->GetData();
