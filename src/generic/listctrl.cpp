@@ -2164,8 +2164,8 @@ void wxListMainWindow::CalculatePositions()
         int y = 1;
         int entireHeight = m_lines.Number() * lineSpacing + 2;
         int scroll_pos = GetScrollPos( wxVERTICAL );
-        int x_scroll_pos = GetScrollPos( wxHORIZONTAL );
 #if wxUSE_GENERIC_LIST_EXTENSIONS
+        int x_scroll_pos = GetScrollPos( wxHORIZONTAL );
 #else
         SetScrollbars( m_xScroll, m_yScroll, 0, (entireHeight+15) / m_yScroll, 0, scroll_pos, TRUE );
 #endif
@@ -2312,18 +2312,22 @@ void wxListMainWindow::DeleteAllItems( void )
 {
     m_dirty = TRUE;
     m_current = (wxListLineData *) NULL;
+
+    // to make the deletion of all items faster, we don't send the
+    // notifications in this case: this is compatible with wxMSW and
+    // documented in DeleteAllItems() description
+#if 0
     wxNode *node = m_lines.First();
     while (node)
     {
         wxListLineData *line = (wxListLineData*)node->Data();
 
-        // to make the deletion of all items faster, we don't send the
-        // notifications in this case: this is compatible with wxMSW and
-        // documented in DeleteAllItems() description
-        //DeleteLine( line );
+        DeleteLine( line );
 
         node = node->Next();
     }
+#endif // 0
+
     m_lines.Clear();
 }
 

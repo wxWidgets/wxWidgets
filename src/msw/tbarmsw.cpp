@@ -56,7 +56,7 @@
 #endif
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxToolBarMSW, wxToolBarBase)
+IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
 
 BEGIN_EVENT_TABLE(wxToolBarMSW, wxToolBarBase)
 	EVT_SIZE(wxToolBarMSW::OnSize)

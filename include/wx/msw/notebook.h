@@ -19,9 +19,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifndef   _DYNARRAY_H
-  #include <wx/dynarray.h>
-#endif  //_DYNARRAY_H
+#include "wx/control.h"
+#include "wx/dynarray.h"
 
 // ----------------------------------------------------------------------------
 // types

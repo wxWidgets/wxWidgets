@@ -552,18 +552,7 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
 
-  *-*-cygwin32* )
-    USE_UNIX=0
-    USE_WIN32=1
-    AC_DEFINE(__WIN32__)
-    AC_DEFINE(__WIN95__)
-    AC_DEFINE(__WINDOWS__)
-    AC_DEFINE(__GNUWIN32__)
-    AC_DEFINE(STRICT)
-    AC_DEFINE(WINVER, 0x0400)
-    DEFAULT_DEFAULT_wxUSE_MSW=1
-  ;;
-  *-*-mingw32* )
+  *-*-cygwin32* | *-*-mingw32* )
     USE_UNIX=0
     USE_WIN32=1
     AC_DEFINE(__WIN32__)

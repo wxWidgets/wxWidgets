@@ -7,6 +7,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "frame.h"
 #endif
@@ -17,10 +25,10 @@
 #include "wx/app.h"
 #include "wx/menu.h"
 #if wxUSE_TOOLBAR
-#include "wx/toolbar.h"
+    #include "wx/toolbar.h"
 #endif
 #if wxUSE_STATUSBAR
-#include "wx/statusbr.h"
+    #include "wx/statusbr.h"
 #endif
 #include "wx/dcclient.h"
 
@@ -31,37 +39,51 @@
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdkx.h"
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // constants
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 const int wxMENU_HEIGHT    = 27;
 const int wxSTATUS_HEIGHT  = 25;
 const int wxPLACE_HOLDER   = 0;
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // idle system
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 extern int g_openDialogs;
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// event tables
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
+
+// ----------------------------------------------------------------------------
 // data
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 extern wxList wxPendingDelete;
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // debug
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #ifdef __WXDEBUG__
 
 extern void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window );
 
 #endif
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// GTK callbacks
+// ----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // "focus" from m_window
@@ -190,9 +212,9 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) 
+    if (!win->m_hasVMT)
         return FALSE;
-	
+
 #if (GTK_MINOR_VERSION > 0)
     int x = 0;
     int y = 0;
@@ -280,10 +302,11 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
     }
 
     /* reset the icon */
-    if (win->m_icon != wxNullIcon)
+    wxIcon iconOld = win->GetIcon();
+    if ( iconOld != wxNullIcon )
     {
-        wxIcon icon( win->m_icon );
-        win->m_icon = wxNullIcon;
+        wxIcon icon( iconOld );
+        win->SetIcon( wxNullIcon );
         win->SetIcon( icon );
     }
 
@@ -304,6 +327,10 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 
     return FALSE;
 }
+
+// ----------------------------------------------------------------------------
+// wxFrame itself
+// ----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // InsertChild for wxFrame
@@ -361,28 +388,12 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
     parent->UpdateSize();
 }
 
-//-----------------------------------------------------------------------------
-// wxFrame
-//-----------------------------------------------------------------------------
-
-BEGIN_EVENT_TABLE(wxFrame, wxWindow)
-    EVT_SIZE(wxFrame::OnSize)
-    EVT_IDLE(wxFrame::OnIdle)
-    EVT_CLOSE(wxFrame::OnCloseWindow)
-    EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
-END_EVENT_TABLE()
-
-IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
+// ----------------------------------------------------------------------------
+// wxFrame creation
+// ----------------------------------------------------------------------------
 
 void wxFrame::Init()
 {
-    m_frameMenuBar = (wxMenuBar *) NULL;
-#if wxUSE_STATUSBAR
-    m_frameStatusBar = (wxStatusBar *) NULL;
-#endif // wxUSE_STATUSBAR
-#if wxUSE_TOOLBAR
-    m_frameToolBar = (wxToolBar *) NULL;
-#endif // wxUSE_TOOLBAR
     m_sizeSet = FALSE;
     m_miniEdge = 0;
     m_miniTitle = 0;
@@ -393,18 +404,13 @@ void wxFrame::Init()
     m_isFrame = TRUE;
 }
 
-wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
-{
-    Init();
-
-    Create( parent, id, title, pos, size, style, name );
-}
-
-bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
+bool wxFrame::Create( wxWindow *parent,
+                      wxWindowID id,
+                      const wxString &title,
+                      const wxPoint &pos,
+                      const wxSize &size,
+                      long style,
+                      const wxString &name )
 {
     wxTopLevelWindows.Append( this );
 
@@ -490,18 +496,7 @@ wxFrame::~wxFrame()
 {
     m_isBeingDeleted = TRUE;
 
-    if (m_frameMenuBar) delete m_frameMenuBar;
-    m_frameMenuBar = (wxMenuBar *) NULL;
-
-#if wxUSE_STATUSBAR
-    if (m_frameStatusBar) delete m_frameStatusBar;
-    m_frameStatusBar = (wxStatusBar *) NULL;
-#endif // wxUSE_STATUSBAR
-
-#if wxUSE_TOOLBAR
-    if (m_frameToolBar) delete m_frameToolBar;
-    m_frameToolBar = (wxToolBar *) NULL;
-#endif // wxUSE_TOOLBAR
+    DeleteAllBars();
 
     wxTopLevelWindows.DeleteObject( this );
 
@@ -511,6 +506,10 @@ wxFrame::~wxFrame()
     if (wxTopLevelWindows.Number() == 0)
         wxTheApp->ExitMainLoop();
 }
+
+// ----------------------------------------------------------------------------
+// overridden wxWindow methods
+// ----------------------------------------------------------------------------
 
 bool wxFrame::Show( bool show )
 {
@@ -529,15 +528,6 @@ bool wxFrame::Show( bool show )
     return wxWindow::Show( show );
 }
 
-bool wxFrame::Destroy()
-{
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
-
-    return TRUE;
-}
-
 void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
@@ -546,7 +536,8 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
 
     /* avoid recursions */
-    if (m_resizing) return;
+    if (m_resizing)
+        return;
     m_resizing = TRUE;
 
     int old_x = m_x;
@@ -604,19 +595,6 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     }
 
     m_resizing = FALSE;
-}
-
-void wxFrame::Centre( int direction )
-{
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    int x = 0;
-    int y = 0;
-
-    if ((direction & wxHORIZONTAL) == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
-    if ((direction & wxVERTICAL) == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
-
-    Move( x, y );
 }
 
 void wxFrame::DoGetClientSize( int *width, int *height ) const
@@ -700,7 +678,8 @@ void wxFrame::DoSetClientSize( int width, int height )
     DoSetSize( -1, -1, width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0 );
 }
 
-void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
+void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
+                         int width, int height )
 {
     // due to a bug in gtk, x,y are always 0
     // m_x = x;
@@ -810,14 +789,13 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         m_frameStatusBar->m_width = ww;
         m_frameStatusBar->m_height = hh;
         gtk_pizza_set_size( GTK_PIZZA(m_wxwindow),
-                              m_frameStatusBar->m_widget,
-                              xx, yy, ww, hh );
+                            m_frameStatusBar->m_widget,
+                            xx, yy, ww, hh );
     }
 #endif
 
     /* we actually set the size of a frame here and no-where else */
     gtk_widget_set_usize( m_widget, m_width, m_height );
-
 
     m_sizeSet = TRUE;
 
@@ -868,50 +846,9 @@ void wxFrame::OnInternalIdle()
     wxWindow::OnInternalIdle();
 }
 
-void wxFrame::OnCloseWindow( wxCloseEvent& WXUNUSED(event) )
-{
-    Destroy();
-}
-
-void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
-{
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-#if wxUSE_CONSTRAINTS
-    if (GetAutoLayout())
-    {
-        Layout();
-    }
-    else
-#endif // wxUSE_CONSTRAINTS
-    {
-        /* do we have exactly one child? */
-        wxWindow *child = (wxWindow *)NULL;
-        for ( wxNode *node = GetChildren().First(); node; node = node->Next() )
-        {
-            wxWindow *win = (wxWindow *)node->Data();
-            if ( !wxIS_KIND_OF(win,wxFrame) && !wxIS_KIND_OF(win,wxDialog) )
-            {
-                if (child)
-                {
-                    /* it's the second one: do nothing */
-                    return;
-                }
-
-                child = win;
-            }
-        }
-
-        /* no children at all? */
-        if (child)
-        {
-            /* yes: set it's size to fill all the frame */
-            int client_x, client_y;
-            DoGetClientSize( &client_x, &client_y );
-            child->SetSize( 1, 1, client_x-2, client_y-2 );
-        }
-    }
-}
+// ----------------------------------------------------------------------------
+// menu/tool/status bar stuff
+// ----------------------------------------------------------------------------
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
@@ -951,50 +888,17 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
     m_sizeSet = FALSE;
 }
 
-wxMenuBar *wxFrame::GetMenuBar() const
-{
-    return m_frameMenuBar;
-}
-
-void wxFrame::OnMenuHighlight(wxMenuEvent& event)
-{
-#if wxUSE_STATUSBAR
-    if (GetStatusBar())
-    {
-        // if no help string found, we will clear the status bar text
-        wxString helpString;
-
-        int menuId = event.GetMenuId();
-        if ( menuId != wxID_SEPARATOR && menuId != -2 /* wxID_TITLE */ )
-        {
-            wxMenuBar *menuBar = GetMenuBar();
-            if ( menuBar )
-            {
-                // it's ok if we don't find the item because it might belong to
-                // the popup menu
-                wxMenuItem *item = menuBar->FindItem(menuId);
-                if ( item )
-                    helpString = item->GetHelp();
-            }
-        }
-
-        SetStatusText(helpString);
-    }
-#endif // wxUSE_STATUSBAR
-}
-
 #if wxUSE_TOOLBAR
 wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& name )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    wxCHECK_MSG( m_frameToolBar == NULL, FALSE, wxT("recreating toolbar in wxFrame") );
-
     m_insertInClientArea = FALSE;
 
-    m_frameToolBar = OnCreateToolBar( style, id, name );
+    m_frameToolBar = wxFrameBase::CreateToolBar( style, id, name );
 
-    if (m_frameToolBar) GetChildren().DeleteObject( m_frameToolBar );
+    if (m_frameToolBar)
+        GetChildren().DeleteObject( m_frameToolBar );
 
     m_insertInClientArea = TRUE;
 
@@ -1003,14 +907,10 @@ wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& na
     return m_frameToolBar;
 }
 
-wxToolBar* wxFrame::OnCreateToolBar( long style, wxWindowID id, const wxString& name )
-{
-    return new wxToolBar( this, id, wxDefaultPosition, wxDefaultSize, style, name );
-}
-
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
-    m_frameToolBar = toolbar;
+    wxFrameBase::SetToolBar(toolbar);
+
     if (m_frameToolBar)
     {
         /* insert into toolbar area if not already there */
@@ -1025,97 +925,34 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     }
 }
 
-wxToolBar *wxFrame::GetToolBar() const
-{
-    return m_frameToolBar;
-}
 #endif // wxUSE_TOOLBAR
 
 #if wxUSE_STATUSBAR
-wxStatusBar* wxFrame::CreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
+
+wxStatusBar* wxFrame::CreateStatusBar(int number,
+                                      long style,
+                                      wxWindowID id,
+                                      const wxString& name)
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, wxT("recreating status bar in wxFrame") );
-
-    m_frameStatusBar = OnCreateStatusBar( number, style, id, name );
-
+    // because it will change when toolbar is added
     m_sizeSet = FALSE;
 
-    return m_frameStatusBar;
+    return wxFrameBase::CreateStatusBar( number, style, id, name );
 }
 
-wxStatusBar *wxFrame::OnCreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
-{
-    wxStatusBar *statusBar = (wxStatusBar *) NULL;
-
-    statusBar = new wxStatusBar(this, id, wxPoint(0, 0), wxSize(100, 20), style, name);
-
-    // Set the height according to the font and the border size
-    wxClientDC dc(statusBar);
-    dc.SetFont( statusBar->GetFont() );
-
-    long x, y;
-    dc.GetTextExtent( "X", &x, &y );
-
-    int height = (int)( (y  * 1.1) + 2* statusBar->GetBorderY());
-
-    statusBar->SetSize( -1, -1, 100, height );
-
-    statusBar->SetFieldsCount( number );
-    return statusBar;
-}
-
-wxStatusBar *wxFrame::GetStatusBar() const
-{
-    return m_frameStatusBar;
-}
-
-void wxFrame::SetStatusText(const wxString& text, int number)
-{
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set text for") );
-
-    m_frameStatusBar->SetStatusText(text, number);
-}
-
-void wxFrame::SetStatusWidths(int n, const int widths_field[] )
-{
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set widths for") );
-
-    m_frameStatusBar->SetStatusWidths(n, widths_field);
-}
 #endif // wxUSE_STATUSBAR
 
-void wxFrame::Command( int id )
-{
-    wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
-    commandEvent.SetInt( id );
-    commandEvent.SetEventObject( this );
-
-    wxMenuBar *bar = GetMenuBar();
-    if (!bar) return;
-
-    wxMenuItem *item = bar->FindItem(id) ;
-    if (item && item->IsCheckable())
-    {
-        bar->Check(id, !bar->IsChecked(id)) ;
-    }
-
-    wxEvtHandler* evtHandler = GetEventHandler();
-
-    evtHandler->ProcessEvent(commandEvent);
-}
+// ----------------------------------------------------------------------------
+// frame title/icon
+// ----------------------------------------------------------------------------
 
 void wxFrame::SetTitle( const wxString &title )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
     m_title = title;
-    if (m_title.IsNull()) m_title = wxT("");
     gtk_window_set_title( GTK_WINDOW(m_widget), title.mbc_str() );
 }
 
@@ -1123,10 +960,13 @@ void wxFrame::SetIcon( const wxIcon &icon )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    m_icon = icon;
-    if (!icon.Ok()) return;
+    wxFrameBase::SetIcon(icon);
 
-    if (!m_widget->window) return;
+    if ( !m_icon.Ok() )
+        return;
+
+    if (!m_widget->window)
+        return;
 
     wxMask *mask = icon.GetMask();
     GdkBitmap *bm = (GdkBitmap *) NULL;
@@ -1135,8 +975,17 @@ void wxFrame::SetIcon( const wxIcon &icon )
     gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
 }
 
+// ----------------------------------------------------------------------------
+// frame state: maximized/iconized/normal (TODO)
+// ----------------------------------------------------------------------------
+
 void wxFrame::Maximize(bool WXUNUSED(maximize))
 {
+}
+
+bool wxFrame::IsMaximized() const
+{
+    return FALSE;
 }
 
 void wxFrame::Restore()

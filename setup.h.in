@@ -94,6 +94,11 @@
 #undef STRICT
 #undef WINVER
 
+/* enable native status bar under Win32 */
+#ifdef __WIN95__
+#define wxUSE_NATIVE_STATUSBAR 1
+#endif
+
 /*
  * Supports bool type
  */

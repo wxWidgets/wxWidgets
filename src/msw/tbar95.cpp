@@ -95,7 +95,7 @@ static void wxMapBitmap(HBITMAP hBitmap, int width, int height);
 // ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
-    IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)
+    IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
 #endif
 
 BEGIN_EVENT_TABLE(wxToolBar95, wxToolBarBase)

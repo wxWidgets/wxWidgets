@@ -119,6 +119,26 @@ DECLARE_EVENT_TABLE()
 #define wxTBSTATE_HIDDEN          0x08    // button is hidden
 #define wxTBSTATE_INDETERMINATE   0x10    // button is indeterminate
 
+class WXDLLEXPORT wxToolBar : public wxToolBarMSW
+{
+public:
+    wxToolBar() { }
+
+    wxToolBar(wxWindow *parent,
+              wxWindowID id,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style = wxNO_BORDER | wxTB_HORIZONTAL,
+              const wxString& name = wxToolBarNameStr)
+        : wxToolBarMSW(parent, id, pos, size, style, name)
+    {
+    }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxToolBar)
+};
+
 #endif // wxUSE_TOOL/BUTTONBAR
+
 #endif
     // _WX_TBARMSW_H_

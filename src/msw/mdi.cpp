@@ -35,7 +35,9 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
-    #include "wx/statusbr.h"
+    #if wxUSE_STATUSBAR
+        #include "wx/statusbr.h"
+    #endif
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -44,9 +46,13 @@
 #include "wx/mdi.h"
 #include "wx/msw/private.h"
 
-#if wxUSE_NATIVE_STATUSBAR
+#if wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR
     #include "wx/msw/statbr95.h"
 #endif
+
+#if wxUSE_TOOLBAR
+    #include "wx/toolbar.h"
+#endif // wxUSE_TOOLBAR
 
 #include <string.h>
 
