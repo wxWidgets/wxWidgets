@@ -198,29 +198,16 @@ bool wxGLCanvas::Create( wxWindow *parent, wxWindowID id,
     gtk_widget_push_colormap( colormap );
     gtk_widget_push_visual( visual );
     
-    m_glWidget = gtk_drawing_area_new();
-    gtk_widget_set_events( m_glWidget,
-      GDK_EXPOSURE_MASK	|
-      GDK_POINTER_MOTION_HINT_MASK |
-      GDK_POINTER_MOTION_MASK	|
-      GDK_BUTTON_MOTION_MASK	|
-      GDK_BUTTON1_MOTION_MASK	|
-      GDK_BUTTON2_MOTION_MASK	|
-      GDK_BUTTON3_MOTION_MASK	|
-      GDK_BUTTON_PRESS_MASK	|
-      GDK_BUTTON_RELEASE_MASK	|
-      GDK_KEY_PRESS_MASK	|
-      GDK_KEY_RELEASE_MASK	|
-      GDK_ENTER_NOTIFY_MASK	|
-      GDK_LEAVE_NOTIFY_MASK );
-    
-    GTK_WIDGET_SET_FLAGS( m_glWidget, GTK_CAN_FOCUS );
+    m_glWidget = gtk_myfixed_new();
     
     gtk_widget_pop_visual();
     gtk_widget_pop_colormap();
     
     wxScrolledWindow::Create( parent, id, pos, size, style, name );
   
+    GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+    GTK_WIDGET_SET_FLAGS( m_glWidget, GTK_CAN_FOCUS );
+    
     gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), m_glWidget, 0, 0 );
     
     gtk_signal_connect( GTK_OBJECT(m_glWidget), "expose_event",
@@ -231,6 +218,9 @@ bool wxGLCanvas::Create( wxWindow *parent, wxWindowID id,
       
     /* connect to key press and mouse handlers etc. */  
     ConnectWidget( m_glWidget );
+    
+    /* must be realized for OpenGl output */
+    gtk_widget_realize( m_glWidget );
     
     gtk_widget_show( m_glWidget );
     
@@ -332,7 +322,7 @@ void wxGLCanvas::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 	{
             gtk_widget_set_usize( m_widget, m_width, m_height );
 	    
-            gtk_drawing_area_size( GTK_DRAWING_AREA(m_glWidget), m_width, m_height );
+            gtk_widget_set_usize( m_glWidget, m_width, m_height );
 	    
 	    GtkAllocation allo;
 	    allo.x = 0;
@@ -340,6 +330,7 @@ void wxGLCanvas::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 	    allo.width = m_width;
 	    allo.height = m_height;
             gtk_widget_size_allocate( m_glWidget, &allo );
+
 	}
     }
 

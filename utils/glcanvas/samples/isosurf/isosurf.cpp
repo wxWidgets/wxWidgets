@@ -375,6 +375,11 @@ void TestGLCanvas::OnChar(wxKeyEvent& event)
 	    glDisable(GL_LIGHTING);
 	}
 	break;
+     default:
+      {
+        event.Skip();
+	return;
+      }
     }
 
     Refresh(FALSE);

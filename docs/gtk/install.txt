@@ -25,7 +25,7 @@ You get errors during compilation. The reason is that you
 probably have a broken compiler, which includes almost
 everything that is called gcc. If there is just any way
 for you to use egcs, use egcs. We are sorry, but we cannot
-fix gcc for the moment.
+fix gcc.
 
 * The most simple program
 -------------------------
@@ -66,7 +66,7 @@ You can get the newest version of the GTK+ from the GTK homepage
 at
   http://www.gtk.org
   
-We also mirror GTK+ 1.2.1 at my ftp site. You'll find information
+We also mirror GTK+ 1.2.1 at my ftp site soon. You'll find information
 about downloading at my homepage.
   
 * Additional libraries
@@ -85,10 +85,6 @@ distributions have correct glibc 2 support:
  - DLD 6.0
  - SuSE 6.0
  
-On IRIX you can also use SGI threads if Posix-Threads
-are not present. The SGI threads will be detected by
-configure automatically.
-
 You can enable thread support by running 
 
 ./configure "--with-threads"
@@ -99,13 +95,8 @@ make install
 ldconfig
 exit
   
-NB: I included thread support in wxWindows/Gtk, as this 
-problem will disappear in the near future when all major 
-Linux Variants have moved to glibc 2. Also, the Linux
-Base Standard will include glibc 2 and Posix threads.
-
 NB: DO NOT COMPILE WXGTK WITH GCC AND THREADS, SINCE
-ALL PROGRAMS WILL CRASH UPON START-UP. Just always
+ALL PROGRAMS WILL CRASH UPON START-UP! Just always
 use egcs and be happy.
 
 * Create your configuration
@@ -169,11 +160,17 @@ toolkit. You must do this by running configure with either of:
 
 The following options handle the kind of library you want to build.
 
-	--with-threads          Compile with thread support.
+	--with-threads          Compile with thread support. Threads
+	                        support is also required for the
+				socket code to work.
 
 	--without-shared        Do not create shared libraries.
 
-	--without-optimise	Do not optimise the code.
+	--without-optimise	Do not optimise the code. Can
+	                        sometimes be useful for debugging
+				and is required on some architectures
+				such as Sun with gcc 2.8.X which
+				would otherwise produce segvs.
 
 	--with-profile          Add profiling info to the object 
 				files. Currently broken, I think.
@@ -184,19 +181,50 @@ The following options handle the kind of library you want to build.
 	                        Read more at www.letters.com/dmalloc/
 				
 	--with-debug_info	Add debug info to object files and
-	                        executables.
+	                        executables for use with debuggers
+				such as gdb (or its many frontends).
 
 	--with-debug_flag	Define __DEBUG__ and __WXDEBUG__ when
-	                        compiling.
+	                        compiling. This enable wxWindows' very
+				useful internal debugging tricks (such
+				as automatically reporting illegal calls)
+				to work. Note that program and library
+				must be compiled with the same debug 
+				options.
 
 * Feature Options
 -------------------
 
-As I don't yet care for binary size and target mainly at
-producing a shared library, wxWindows's configure system auto-
-matically enables all features, as long as they are already
-implemented. It is currently NOT possible to disable these
-options (in contrast to what configure tells you).
+When producing an executable that is linked statically with wxGTK
+you'll be surprised at its immense size. This can sometimes be
+drastically reduced by removing features from wxWindows that 
+are not used in your program. The most relevant such features
+are
+
+	--without-libpng	Disables PNG image format code.
+	
+	--without-libjpeg	Disables JPEG image format code.
+	
+	--without-odbc          Disables ODBC code.
+	
+        --without-wxresources   Disables the use of *.wxr type
+	                        resources.
+		
+	--without-threads       Disables threads.
+
+	--without-sockets       Disables sockets.
+
+	--without-dnd           Disables Drag'n'Drop.
+	
+	--without-clipboard     Disables Clipboard.
+	
+	--without-serial        Disables object instance serialiasation.
+	
+	--without-streams       Disables the wxStream classes.
+	
+Apart from disabling certain features you can very often "strip"
+the program of its debugging information resulting in a significant
+reduction in size.
 
 * Compiling
 -------------
@@ -211,13 +239,12 @@ the library by typing:
 
 make yourself some coffee, as it will take some time. On an old
 386SX possibly week. During compilation, you'll get a few 
-warning messages.
+warning messages depending in your compiler.
 
 if you want to be more selective:
 
-	make src	will build only the base libraries
+	make    	will build only the base libraries
 	make samples	will build the samples
-	make other	will build everything in other
 	make user	will build everything in user
 
 Then you may install the library and it's header files under
@@ -241,12 +268,12 @@ The "global" binaries and libraries will be placed in:
 This is also the place where all the object-files will go.
 (Currently there arent any global binaries).
 
-If you want to conserve disk space by removing unnecessary
+If you want to save disk space by removing unnecessary
 object-files:
 
-	 make clean_obj
+	 make clean
 
-will do the work for you.
+in the various directories will do the work for you.
 
 * Creating a new Project
 --------------------------

@@ -195,6 +195,8 @@ cd utils
 mkdir ~/wxgtk_dist/wxGTK/utils
 cp Makefile ~/wxgtk_dist/wxGTK/utils
 
+echo wxGLCanvas..
+
 cd glcanvas
 mkdir ~/wxgtk_dist/wxGTK/utils/glcanvas
 cp ./docs/notes.txt ~/wxgtk_dist/wxGTK/utils/glcanvas/NOTES.txt
@@ -232,6 +234,8 @@ cp lw.cpp ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/penguin
 cp penguin.lwo ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/penguin
 cd ../../..
 
+echo DialogEd..
+
 cd dialoged/src
 mkdir ~/wxgtk_dist/wxGTK/utils/dialoged
 cp Makefile ~/wxgtk_dist/wxGTK/utils/dialoged
@@ -258,19 +262,51 @@ mkdir ~/wxgtk_dist/wxGTK/utils/dialoged/bitmaps
 cp *.xpm ~/wxgtk_dist/wxGTK/utils/dialoged/bitmaps
 cd ../../..
 
+echo wxPython..
+
 cd wxPython
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython
 cp README.txt ~/wxgtk_dist/wxGTK/utils/wxPython
-cp TODO.txt ~/wxgtk_dist/wxGTK/utils/wxPython
+
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/src
 cp ./src/* ~/wxgtk_dist/wxGTK/utils/wxPython/src
+
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/src/gtk
 cp ./src/gtk/* ~/wxgtk_dist/wxGTK/utils/wxPython/src/gtk
+
+mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/lib
+cp ./lib/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/lib
+
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/tests
+cp ./tests/README.txt ~/wxgtk_dist/wxGTK/utils/wxPython/tests
 cp ./tests/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/tests
+
+mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/demo
+cp ./tests/README.txt ~/wxgtk_dist/wxGTK/utils/wxPython/demo
+cp ./tests/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/demo
+cp ./tests/*.pyc ~/wxgtk_dist/wxGTK/utils/wxPython/demo
+mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/demo/bitmaps
+cp ./tests/bitmaps/* ~/wxgtk_dist/wxGTK/utils/wxPython/demo/bitmaps
+
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/tests/bitmaps
 cp ./tests/bitmaps/* ~/wxgtk_dist/wxGTK/utils/wxPython/tests/bitmaps
+cd ..
+
+echo wxOLE..
+
+cd wxOLE
+mkdir ~/wxgtk_dist/wxGTK/utils/wxOLE
+mkdir ~/wxgtk_dist/wxGTK/utils/wxOLE/gtk
+cp ./gtk/wxole.* ~/wxgtk_dist/wxGTK/utils/wxOLE/gtk
+mkdir ~/wxgtk_dist/wxGTK/utils/wxOLE/samples
+mkdir ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
+cp ./samples/servlet/Makefile ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
+cp ./samples/servlet/*.xpm ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
+cp ./samples/servlet/*.cpp ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
+cp ./samples/servlet/*.gnorba ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
+
 cd ../..
+
 
 echo Samples dir..
 
