@@ -3090,7 +3090,7 @@ class NotebookPage(wx.Panel):
         wx.Panel.__init__(self, parent, id, pos, size, style, name)
         self.child = None
         EVT_SIZE(self, self.OnSize)
-        
+
     def OnSize(self, evt):
         if self.child is None:
             children = self.GetChildren()
@@ -3176,6 +3176,80 @@ wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED = _controls_.wxEVT_COMMAND_LISTBOOK_PAGE_CHA
 wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = _controls_.wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING
 EVT_LISTBOOK_PAGE_CHANGED  = wx.PyEventBinder( wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED, 1 )
 EVT_LISTBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, 1 )
+
+CHB_DEFAULT = _controls_.CHB_DEFAULT
+CHB_TOP = _controls_.CHB_TOP
+CHB_BOTTOM = _controls_.CHB_BOTTOM
+CHB_LEFT = _controls_.CHB_LEFT
+CHB_RIGHT = _controls_.CHB_RIGHT
+CHB_ALIGN_MASK = _controls_.CHB_ALIGN_MASK
+class Choicebook(BookCtrl):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxChoicebook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=EmptyString) -> Choicebook
+        """
+        newobj = _controls_.new_Choicebook(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=EmptyString) -> bool
+        """
+        return _controls_.Choicebook_Create(*args, **kwargs)
+
+    def IsVertical(*args, **kwargs):
+        """IsVertical(self) -> bool"""
+        return _controls_.Choicebook_IsVertical(*args, **kwargs)
+
+    def DeleteAllPages(*args, **kwargs):
+        """DeleteAllPages(self) -> bool"""
+        return _controls_.Choicebook_DeleteAllPages(*args, **kwargs)
+
+
+class ChoicebookPtr(Choicebook):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Choicebook
+_controls_.Choicebook_swigregister(ChoicebookPtr)
+
+def PreChoicebook(*args, **kwargs):
+    """PreChoicebook() -> Choicebook"""
+    val = _controls_.new_PreChoicebook(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+class ChoicebookEvent(BookCtrlEvent):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxChoicebookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+            int nOldSel=-1) -> ChoicebookEvent
+        """
+        newobj = _controls_.new_ChoicebookEvent(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+
+class ChoicebookEventPtr(ChoicebookEvent):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = ChoicebookEvent
+_controls_.ChoicebookEvent_swigregister(ChoicebookEventPtr)
+
+wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED = _controls_.wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED
+wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING = _controls_.wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING
+EVT_CHOICEBOOK_PAGE_CHANGED  = wx.PyEventBinder( wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED, 1 )
+EVT_CHOICEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, 1 )
 
 #---------------------------------------------------------------------------
 

@@ -581,7 +581,7 @@ static PyObject *_wrap_new_StyledTextCtrl(PyObject *, PyObject *args, PyObject *
     wxStyledTextCtrl *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = False ;
+    bool temp6 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -619,7 +619,7 @@ static PyObject *_wrap_new_StyledTextCtrl(PyObject *, PyObject *args, PyObject *
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = True;
+            temp6 = true;
         }
     }
     {
@@ -682,7 +682,7 @@ static PyObject *_wrap_StyledTextCtrl_Create(PyObject *, PyObject *args, PyObjec
     wxString *arg7 = (wxString *) &arg7_defvalue ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = False ;
+    bool temp7 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -723,7 +723,7 @@ static PyObject *_wrap_StyledTextCtrl_Create(PyObject *, PyObject *args, PyObjec
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = True;
+            temp7 = true;
         }
     }
     {
@@ -752,7 +752,7 @@ static PyObject *_wrap_StyledTextCtrl_AddText(PyObject *, PyObject *args, PyObje
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -765,7 +765,7 @@ static PyObject *_wrap_StyledTextCtrl_AddText(PyObject *, PyObject *args, PyObje
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -793,7 +793,7 @@ static PyObject *_wrap_StyledTextCtrl_AddStyledText(PyObject *, PyObject *args, 
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxMemoryBuffer *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -811,7 +811,7 @@ static PyObject *_wrap_StyledTextCtrl_AddStyledText(PyObject *, PyObject *args, 
         char* str = PyString_AS_STRING(obj1);
         int   len = PyString_GET_SIZE(obj1);
         arg2 = new wxMemoryBuffer(len);
-        temp2 = True;
+        temp2 = true;
         memcpy(arg2->GetData(), str, len);
         arg2->SetDataLen(len);
     }
@@ -840,7 +840,7 @@ static PyObject *_wrap_StyledTextCtrl_InsertText(PyObject *, PyObject *args, PyO
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -856,7 +856,7 @@ static PyObject *_wrap_StyledTextCtrl_InsertText(PyObject *, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2698,7 +2698,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFaceName(PyObject *, PyObject *arg
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -2714,7 +2714,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFaceName(PyObject *, PyObject *arg
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3251,7 +3251,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWordChars(PyObject *, PyObject *args, P
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3264,7 +3264,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWordChars(PyObject *, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3844,7 +3844,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompShow(PyObject *, PyObject *args, P
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3860,7 +3860,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompShow(PyObject *, PyObject *args, P
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3992,7 +3992,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompStops(PyObject *, PyObject *args, 
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4005,7 +4005,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompStops(PyObject *, PyObject *args, 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4088,7 +4088,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSelect(PyObject *, PyObject *args,
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4101,7 +4101,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSelect(PyObject *, PyObject *args,
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4186,7 +4186,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetFillUps(PyObject *, PyObject *a
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4199,7 +4199,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetFillUps(PyObject *, PyObject *a
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4342,7 +4342,7 @@ static PyObject *_wrap_StyledTextCtrl_UserListShow(PyObject *, PyObject *args, P
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4358,7 +4358,7 @@ static PyObject *_wrap_StyledTextCtrl_UserListShow(PyObject *, PyObject *args, P
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5389,7 +5389,7 @@ static PyObject *_wrap_StyledTextCtrl_FindText(PyObject *, PyObject *args, PyObj
     wxString *arg4 = 0 ;
     int arg5 = (int) 0 ;
     int result;
-    bool temp4 = False ;
+    bool temp4 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5409,7 +5409,7 @@ static PyObject *_wrap_StyledTextCtrl_FindText(PyObject *, PyObject *args, PyObj
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = True;
+        temp4 = true;
     }
     if (obj4) {
         arg5 = (int)SWIG_As_int(obj4); 
@@ -5977,7 +5977,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceSelection(PyObject *, PyObject *arg
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5990,7 +5990,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceSelection(PyObject *, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6253,7 +6253,7 @@ static PyObject *_wrap_StyledTextCtrl_SetText(PyObject *, PyObject *args, PyObje
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6266,7 +6266,7 @@ static PyObject *_wrap_StyledTextCtrl_SetText(PyObject *, PyObject *args, PyObje
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6575,7 +6575,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceTarget(PyObject *, PyObject *args, 
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
     int result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6588,7 +6588,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceTarget(PyObject *, PyObject *args, 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6617,7 +6617,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceTargetRE(PyObject *, PyObject *args
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
     int result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6630,7 +6630,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceTargetRE(PyObject *, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6659,7 +6659,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchInTarget(PyObject *, PyObject *args,
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
     int result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6672,7 +6672,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchInTarget(PyObject *, PyObject *args,
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6756,7 +6756,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipShow(PyObject *, PyObject *args, Py
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6772,7 +6772,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipShow(PyObject *, PyObject *args, Py
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7878,7 +7878,7 @@ static PyObject *_wrap_StyledTextCtrl_TextWidth(PyObject *, PyObject *args, PyOb
     int arg2 ;
     wxString *arg3 = 0 ;
     int result;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -7894,7 +7894,7 @@ static PyObject *_wrap_StyledTextCtrl_TextWidth(PyObject *, PyObject *args, PyOb
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8065,7 +8065,7 @@ static PyObject *_wrap_StyledTextCtrl_AppendText(PyObject *, PyObject *args, PyO
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -8081,7 +8081,7 @@ static PyObject *_wrap_StyledTextCtrl_AppendText(PyObject *, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10228,7 +10228,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchNext(PyObject *, PyObject *args, PyO
     int arg2 ;
     wxString *arg3 = 0 ;
     int result;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -10244,7 +10244,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchNext(PyObject *, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10274,7 +10274,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchPrev(PyObject *, PyObject *args, PyO
     int arg2 ;
     wxString *arg3 = 0 ;
     int result;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -10290,7 +10290,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchPrev(PyObject *, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11551,7 +11551,7 @@ static PyObject *_wrap_StyledTextCtrl_CopyText(PyObject *, PyObject *args, PyObj
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11567,7 +11567,7 @@ static PyObject *_wrap_StyledTextCtrl_CopyText(PyObject *, PyObject *args, PyObj
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12135,7 +12135,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWhitespaceChars(PyObject *, PyObject *a
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -12148,7 +12148,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWhitespaceChars(PyObject *, PyObject *a
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12366,8 +12366,8 @@ static PyObject *_wrap_StyledTextCtrl_SetProperty(PyObject *, PyObject *args, Py
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
     wxString *arg3 = 0 ;
-    bool temp2 = False ;
-    bool temp3 = False ;
+    bool temp2 = false ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12381,12 +12381,12 @@ static PyObject *_wrap_StyledTextCtrl_SetProperty(PyObject *, PyObject *args, Py
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12423,7 +12423,7 @@ static PyObject *_wrap_StyledTextCtrl_SetKeyWords(PyObject *, PyObject *args, Py
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12439,7 +12439,7 @@ static PyObject *_wrap_StyledTextCtrl_SetKeyWords(PyObject *, PyObject *args, Py
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12467,7 +12467,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLexerLanguage(PyObject *, PyObject *arg
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -12480,7 +12480,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLexerLanguage(PyObject *, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12535,7 +12535,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetSpec(PyObject *, PyObject *args, P
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12551,7 +12551,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetSpec(PyObject *, PyObject *args, P
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12622,7 +12622,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *, PyObject *arg
     bool arg5 ;
     bool arg6 ;
     bool arg7 ;
-    bool temp4 = False ;
+    bool temp4 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12644,7 +12644,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *, PyObject *arg
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = True;
+        temp4 = true;
     }
     arg5 = (bool)SWIG_As_bool(obj4); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -13027,7 +13027,7 @@ static PyObject *_wrap_StyledTextCtrl_SaveFile(PyObject *, PyObject *args, PyObj
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13040,7 +13040,7 @@ static PyObject *_wrap_StyledTextCtrl_SaveFile(PyObject *, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13071,7 +13071,7 @@ static PyObject *_wrap_StyledTextCtrl_LoadFile(PyObject *, PyObject *args, PyObj
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13084,7 +13084,7 @@ static PyObject *_wrap_StyledTextCtrl_LoadFile(PyObject *, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13155,7 +13155,7 @@ static PyObject *_wrap_StyledTextCtrl_DoDropText(PyObject *, PyObject *args, PyO
     long arg3 ;
     wxString *arg4 = 0 ;
     bool result;
-    bool temp4 = False ;
+    bool temp4 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -13174,7 +13174,7 @@ static PyObject *_wrap_StyledTextCtrl_DoDropText(PyObject *, PyObject *args, PyO
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = True;
+        temp4 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13443,7 +13443,7 @@ static PyObject *_wrap_StyledTextEvent_SetText(PyObject *, PyObject *args, PyObj
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13456,7 +13456,7 @@ static PyObject *_wrap_StyledTextEvent_SetText(PyObject *, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13832,7 +13832,7 @@ static PyObject *_wrap_StyledTextEvent_SetDragText(PyObject *, PyObject *args, P
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13845,7 +13845,7 @@ static PyObject *_wrap_StyledTextEvent_SetDragText(PyObject *, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();

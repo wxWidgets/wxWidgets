@@ -593,7 +593,7 @@ static PyObject *_wrap_GLContext_SetColour(PyObject *, PyObject *args, PyObject 
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -606,7 +606,7 @@ static PyObject *_wrap_GLContext_SetColour(PyObject *, PyObject *args, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -707,7 +707,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *, PyObject *args, PyObject *kwargs
     wxGLCanvas *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = False ;
+    bool temp6 = false ;
     int *temp7 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -748,7 +748,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *, PyObject *args, PyObject *kwargs
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = True;
+            temp6 = true;
         }
     }
     if (obj6) {
@@ -821,7 +821,7 @@ static PyObject *_wrap_new_GLCanvasWithContext(PyObject *, PyObject *args, PyObj
     wxGLCanvas *result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = False ;
+    bool temp7 = false ;
     int *temp8 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -867,7 +867,7 @@ static PyObject *_wrap_new_GLCanvasWithContext(PyObject *, PyObject *args, PyObj
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = True;
+            temp7 = true;
         }
     }
     if (obj7) {
@@ -951,7 +951,7 @@ static PyObject *_wrap_GLCanvas_SetColour(PyObject *, PyObject *args, PyObject *
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -964,7 +964,7 @@ static PyObject *_wrap_GLCanvas_SetColour(PyObject *, PyObject *args, PyObject *
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
