@@ -129,13 +129,6 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
         xattributes.bit_gravity = StaticGravity;
     }
 
-    // TODO: if we want no border, caption etc.,
-    // I think we set this to True to remove decorations
-    // No. RR.
-    // Yes :-) JACS (because some WMs don't respect
-    // the hints)
-    // xattributes.override_redirect = (style & wxNO_BORDER) ? True : False;
-    
     xattributes_mask |= CWEventMask;
     xattributes.event_mask = 
         ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
@@ -433,11 +426,11 @@ wxString wxTopLevelWindowX11::GetTitle() const
 }
 
 #ifndef MWM_DECOR_BORDER
-/* bit definitions for MwmHints.flags */
-#define MWM_HINTS_FUNCTIONS (1L << 0)
-#define MWM_HINTS_DECORATIONS (1L << 1)
-#define MWM_HINTS_INPUT_MODE (1L << 2)
-#define MWM_HINTS_STATUS (1L << 3)
+
+#define MWM_HINTS_FUNCTIONS     (1L << 0)
+#define MWM_HINTS_DECORATIONS   (1L << 1)
+#define MWM_HINTS_INPUT_MODE    (1L << 2)
+#define MWM_HINTS_STATUS        (1L << 3)
 
 #define MWM_DECOR_ALL           (1L << 0)
 #define MWM_DECOR_BORDER        (1L << 1)
@@ -446,6 +439,22 @@ wxString wxTopLevelWindowX11::GetTitle() const
 #define MWM_DECOR_MENU          (1L << 4)
 #define MWM_DECOR_MINIMIZE      (1L << 5)
 #define MWM_DECOR_MAXIMIZE      (1L << 6)
+
+#define MWM_FUNC_ALL            (1L << 0)
+#define MWM_FUNC_RESIZE         (1L << 1)
+#define MWM_FUNC_MOVE           (1L << 2)
+#define MWM_FUNC_MINIMIZE       (1L << 3)
+#define MWM_FUNC_MAXIMIZE       (1L << 4)
+#define MWM_FUNC_CLOSE          (1L << 5)
+
+#define MWM_INPUT_MODELESS 0
+#define MWM_INPUT_PRIMARY_APPLICATION_MODAL 1
+#define MWM_INPUT_SYSTEM_MODAL 2
+#define MWM_INPUT_FULL_APPLICATION_MODAL 3
+#define MWM_INPUT_APPLICATION_MODAL MWM_INPUT_PRIMARY_APPLICATION_MODAL
+
+#define MWM_TEAROFF_WINDOW	(1L<<0)
+
 #endif
 
 struct MwmHints {
@@ -524,56 +533,51 @@ bool wxSetWMDecorations(Window w, long style)
     GrSetWMProperties(w, & wmProp);
     
 #else
-    if (!wxMWMIsRunning(w))
-        return FALSE;
 
     Atom mwm_wm_hints = XInternAtom(wxGlobalDisplay(),"_MOTIF_WM_HINTS", False);
+    if (mwm_wm_hints == 0)
+       return FALSE;
+    
     MwmHints hints;
-    hints.flags = 0;
+    hints.flags = MWM_HINTS_DECORATIONS | MWM_HINTS_FUNCTIONS;
     hints.decorations = 0;
-
-    if (style & wxRESIZE_BORDER)
+    hints.functions = 0;
+    
+    if ((style & wxSIMPLE_BORDER) || (style & wxNO_BORDER))
     {
-        // wxLogDebug("MWM_DECOR_RESIZEH");
-        hints.flags |= MWM_HINTS_DECORATIONS;
-        hints.decorations |= MWM_DECOR_RESIZEH;
+        // leave zeros
     }
-
-    if (style & wxSYSTEM_MENU)
+    else
     {
-        // wxLogDebug("MWM_DECOR_MENU");
-        hints.flags |= MWM_HINTS_DECORATIONS;
-        hints.decorations |= MWM_DECOR_MENU;
-    }
+        hints.decorations = MWM_DECOR_BORDER;
+        hints.functions = MWM_FUNC_MOVE;
 
-    if ((style & wxCAPTION) ||
-        (style & wxTINY_CAPTION_HORIZ) ||
-        (style & wxTINY_CAPTION_VERT))
-    {
-        // wxLogDebug("MWM_DECOR_TITLE");
-        hints.flags |= MWM_HINTS_DECORATIONS;
-        hints.decorations |= MWM_DECOR_TITLE;
-    }
-
-    if ((style & wxTHICK_FRAME) || (style & wxCAPTION))
-    {
-        // wxLogDebug("MWM_DECOR_BORDER");
-        hints.flags |= MWM_HINTS_DECORATIONS;
-        hints.decorations |= MWM_DECOR_BORDER;
-    }
-
-    if (style & wxMINIMIZE_BOX)
-    {
-        // wxLogDebug("MWM_DECOR_MINIMIZE");
-        hints.flags |= MWM_HINTS_DECORATIONS;
-        hints.decorations |= MWM_DECOR_MINIMIZE;
-    }
-
-    if (style & wxMAXIMIZE_BOX)
-    {
-        // wxLogDebug("MWM_DECOR_MAXIMIZE");
-        hints.flags |= MWM_HINTS_DECORATIONS;
-        hints.decorations |= MWM_DECOR_MAXIMIZE;
+        if ((style & wxCAPTION) != 0)
+            hints.decorations |= MWM_DECOR_TITLE;
+            
+        if ((style & wxSYSTEM_MENU) != 0)
+        {
+            hints.functions |= MWM_FUNC_CLOSE;
+            hints.decorations |= MWM_DECOR_MENU;
+        }
+        
+        if ((style & wxMINIMIZE_BOX) != 0)
+        {
+            hints.functions |= MWM_FUNC_MINIMIZE;
+            hints.decorations |= MWM_DECOR_MINIMIZE;
+        }
+        
+        if ((style & wxMAXIMIZE_BOX) != 0)
+        {
+            hints.functions |= MWM_FUNC_MAXIMIZE;
+            hints.decorations |= MWM_DECOR_MAXIMIZE;
+        }
+        
+        if ((style & wxRESIZE_BORDER) != 0)
+        {
+            hints.functions |= MWM_FUNC_RESIZE;
+            hints.decorations |= MWM_DECOR_RESIZEH;
+        }
     }
 
     XChangeProperty(wxGlobalDisplay(),
@@ -586,31 +590,6 @@ bool wxSetWMDecorations(Window w, long style)
     return TRUE;
 }
 
-bool wxMWMIsRunning(Window w)
-{
-#if wxUSE_NANOX
-    return FALSE;
-#else
-    Display *dpy = (Display*)wxGetDisplay();
-    Atom motifWmInfo = XInternAtom(dpy, "_MOTIF_WM_INFO", False);
-
-    unsigned long length, bytesafter;
-    unsigned char value[20];
-    unsigned char *ptr = &value[0];
-    int ret, format;
-    Atom type;
-
-    type = format = length = 0;
-    value[0] = 0;
-
-    ret = XGetWindowProperty(wxGlobalDisplay(), w, motifWmInfo,
-	    0L, 2, False, motifWmInfo, 
-	    &type, &format, &length, &bytesafter, &ptr);
-
-    return (ret == Success);
-#endif
-}
-    
 // For implementation purposes - sometimes decorations make the client area
 // smaller
 wxPoint wxTopLevelWindowX11::GetClientAreaOrigin() const

@@ -70,9 +70,9 @@ bool wxControl::Create(wxWindow *parent,
                        const wxValidator& validator,
                        const wxString& name)
 {
-    // we use wxNO_FULL_REPAINT_ON_RESIZE by default as it results in much
+    // Ee use wxNO_FULL_REPAINT_ON_RESIZE by default as it results in much
     // less flicker and none of the standard controls needs to be entirely
-    // repainted after resize anyhow
+    // repainted after resize anyhow.
     if ( !wxControlBase::Create(parent, id, pos, size,
                                 style | wxNO_FULL_REPAINT_ON_RESIZE,
                                 validator, name) )
