@@ -1035,7 +1035,7 @@ bool wxMkdir(const wxString& dir, int perm)
 #if (!(defined(__WXMSW__) || defined(__WXPM__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
 #else  // MSW and OS/2
-    if ( mkdir((char*)wxFNCONV(dirname)) != 0 )
+    if ( mkdir((const char*)wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dirname);
