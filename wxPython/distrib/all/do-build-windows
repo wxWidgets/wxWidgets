@@ -27,8 +27,7 @@ WXDIR=$1
 DESTDIR=$2
 SKIPCLEAN=$3
 VERSION=$4
-shift;shift;shift;shift
-PYVER=$@
+PYVER=$5
 
 
 # WXDIR is the cygwin path, WXWIN is the DOS path
@@ -44,6 +43,17 @@ export WXWIN
 # echo $PATH
 # echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
 # exit 0
+
+# setup the compiler
+if [ $PYVER = 2.3 ]; then
+    echo "Using MSVC ver 6"
+    . msvcset local 6
+    echo `which cl.exe`
+else
+    echo "Using MSVC ver 7"
+    . msvcset local 7
+    echo `which cl.exe`
+fi
 
 
 # untar the source 
@@ -64,6 +74,7 @@ unix2dos -D $names
 echo "Setting up for the build..."
 cd $WXDIR/build/msw
 cp $WXDIR/wxPython/distrib/msw/.m* .
+chmod +x .m*
 
 
 # replace some settings in setup0.h and write to setup.h
