@@ -381,7 +381,7 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
 {
 #if 0 // useful for debugging
     dc.SetPen(*wxBLACK_PEN);
-    dc.DrawRectangle(x+m_PosX,y+m_PosY,m_Width,m_Height);
+    dc.DrawRectangle(x+m_PosX,y+m_PosY,m_Width /* VZ: +1? */ ,m_Height);
 #endif
 
     bool drawSelectionAfterCell = false;
@@ -770,29 +770,47 @@ void wxHtmlContainerCell::Layout(int w)
                 // an added complication is that some cells have fixed size and
                 // shouldn't get any increment (it so happens that these cells
                 // also don't allow line break on them which provides with an
-                // easy way to test for this)
+                // easy way to test for this) -- and neither should the cells
+                // adjacent to them as this could result in a visible space
+                // between two cells separated by, e.g. font change, cell which
+                // is wrong
 
                 const int step = s_width - xpos;
                 if ( step > 0 )
                 {
                     // first count the cells which will get extra space
                     int total = 0;
-                    for ( wxHtmlCell *c = line; c != cell; c = c->GetNext() )
+
+                    const wxHtmlCell *c,
+                                     *prev = NULL,
+                                     *next = NULL;
+                    for ( c = line; c != cell; prev = c, c = next )
                     {
-                        if ( c->IsLinebreakAllowed() )
+                        next = c->GetNext();
+                        if ( c->IsLinebreakAllowed() &&
+                                (next == cell || next->IsLinebreakAllowed()) &&
+                                    (!prev || prev->IsLinebreakAllowed()) )
+                        {
                             total++;
+                        }
                     }
 
                     // and now extra space to those cells which merit it
                     if ( total )
                     {
+                        prev =
+                        next = NULL;
                         for ( int n = 0; line != cell; line = line->GetNext() )
                         {
                             line->SetPos(line->GetPosX() + s_indent +
                                            ((n * step) / total),
                                            line->GetPosY() + ypos);
 
-                            if ( line->IsLinebreakAllowed() )
+                            next = line->GetNext();
+                            if ( line->IsLinebreakAllowed() &&
+                                    (next == cell ||
+                                        next->IsLinebreakAllowed()) &&
+                                        (!prev || prev->IsLinebreakAllowed()) )
                             {
                                 // offset the next cell relative to this one
                                 // thus increasing our size
