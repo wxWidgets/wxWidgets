@@ -101,7 +101,7 @@ public:
     bool SetItemImage( long item, int image, int selImage);
     wxString GetItemText( long item ) const;
     void SetItemText( long item, const wxString& str );
-    long GetItemData( long item ) const;
+    wxUIntPtr GetItemData( long item ) const;
     bool SetItemData( long item, long data );
     bool GetItemRect( long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS ) const;
     bool GetItemPosition( long item, wxPoint& pos ) const;
@@ -141,7 +141,7 @@ public:
 
     bool EnsureVisible( long item );
     long FindItem( long start, const wxString& str, bool partial = false );
-    long FindItem( long start, long data );
+    long FindItem( long start, wxUIntPtr data );
     long FindItem( long start, const wxPoint& pt, int direction ); // not supported in wxGLC
     long HitTest( const wxPoint& point, int& flags);
     long InsertItem(wxListItem& info);

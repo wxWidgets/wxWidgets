@@ -938,7 +938,7 @@ void wxListCtrl::SetItemText(long item, const wxString& str)
 }
 
 // Gets the item data
-long wxListCtrl::GetItemData(long item) const
+wxUIntPtr wxListCtrl::GetItemData(long item) const
 {
     wxListItem info;
 
@@ -1375,7 +1375,7 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 // NOTE : Lindsay Mathieson - 14-July-2002
 //        No longer use ListView_FindItem as the data attribute is now stored
 //        in a wxListItemInternalData structure refernced by the actual lParam
-long wxListCtrl::FindItem(long start, long data)
+long wxListCtrl::FindItem(long start, wxUIntPtr data)
 {
     long  idx = start + 1;
     long count = GetItemCount();
