@@ -90,11 +90,8 @@ void WXSERIAL(wxBitmap)::LoadObject(wxObjectInputStream& s)
   w = data_s.Read16();
   h = data_s.Read16();
 
-#ifdef __WXGTK__
-  bitmap->Resize(w, h);
-#else
-  bitmap->Create(w, h);
-#endif
+  bitmap->SetWidth(w);
+  bitmap->SetHeight(h);
   dc.SelectObject(*bitmap);
 
   for (y=0;y<h;y++)

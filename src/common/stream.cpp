@@ -24,6 +24,8 @@
 #pragma hdrstop
 #endif
 
+#define BUF_TEMP_SIZE 10000
+
 // ----------------------------------------------------------------------------
 // wxStreamBuffer
 // ----------------------------------------------------------------------------
@@ -31,15 +33,16 @@
 wxStreamBuffer::wxStreamBuffer(wxStreamBase& stream, BufMode mode)
   : m_buffer_start(NULL), m_buffer_end(NULL), m_buffer_pos(NULL),
     m_buffer_size(0), m_fixed(TRUE), m_flushable(TRUE), m_stream(&stream),
-    m_mode(mode), m_destroybuf(FALSE)
+    m_mode(mode), m_destroybuf(FALSE), m_destroystream(FALSE)
 {
 }
 
 wxStreamBuffer::wxStreamBuffer(BufMode mode)
   : m_buffer_start(NULL), m_buffer_end(NULL), m_buffer_pos(NULL),
     m_buffer_size(0), m_fixed(TRUE), m_flushable(FALSE), m_stream(NULL),
-    m_mode(mode), m_destroybuf(FALSE)
+    m_mode(mode), m_destroybuf(FALSE), m_destroystream(TRUE)
 {
+  m_stream = new wxStreamBase();
 }
 
 wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
@@ -53,24 +56,27 @@ wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
   m_stream = buffer.m_stream;
   m_mode = buffer.m_mode;
   m_destroybuf = FALSE;
+  m_destroystream = FALSE;
 }
 
 wxStreamBuffer::~wxStreamBuffer()
 {
   if (m_destroybuf)
     wxDELETEA(m_buffer_start);
+  if (m_destroystream)
+    delete m_stream;
 }
 
-bool wxStreamBuffer::WriteBack(const char *buf, size_t bufsize)
+size_t wxStreamBuffer::WriteBack(const char *buf, size_t bufsize)
 {
   char *ptrback;
 
   ptrback = AllocSpaceWBack(bufsize);
   if (!ptrback)
-    return FALSE;
+    return 0;
 
   memcpy(ptrback, buf, bufsize);
-  return TRUE;
+  return bufsize;
 }
 
 bool wxStreamBuffer::WriteBack(char c)
@@ -226,8 +232,10 @@ void wxStreamBuffer::PutChar(char c)
     return;
   }
 
-  if (!GetDataLeft() && !FlushBuffer())
+  if (!GetDataLeft() && !FlushBuffer()) {
+    m_stream->m_lasterror = wxStream_EOF;
     return;
+  }
 
   PutToBuffer(&c, 1);
   m_stream->m_lastcount = 1;
@@ -244,15 +252,17 @@ char wxStreamBuffer::GetChar()
     return c;
   }
 
-  if (!GetDataLeft() && !FillBuffer())
+  if (!GetDataLeft()) {
+    m_stream->m_lasterror = wxStream_EOF;
     return 0;
+  }
 
   GetFromBuffer(&c, 1);
   m_stream->m_lastcount = 1;
   return c;
 }
 
-void wxStreamBuffer::Read(void *buffer, size_t size)
+size_t wxStreamBuffer::Read(void *buffer, size_t size)
 {
   wxASSERT(m_stream != NULL);
 
@@ -263,13 +273,12 @@ void wxStreamBuffer::Read(void *buffer, size_t size)
   m_stream->m_lastcount = GetWBack((char *)buffer, size);
   size -= m_stream->m_lastcount;
   if (size == 0)
-    return;
+    return m_stream->m_lastcount;
 
   buffer = (void *)((char *)buffer+m_stream->m_lastcount);
 
   if (!m_buffer_size) {
-    m_stream->m_lastcount += m_stream->OnSysRead(buffer, size);
-    return;
+    return (m_stream->m_lastcount += m_stream->OnSysRead(buffer, size));
   }
 
   // -----------------
@@ -288,8 +297,9 @@ void wxStreamBuffer::Read(void *buffer, size_t size)
       buffer = (char *)buffer + buf_left; // ANSI C++ violation.
 
       if (!FillBuffer()) {
-        m_stream->m_lastcount = orig_size-size;
-        return;
+        if (m_stream->m_lasterror == wxStream_NOERROR)
+          m_stream->m_lasterror = wxStream_EOF;
+        return (m_stream->m_lastcount = orig_size-size);
       }
     } else {
 
@@ -298,10 +308,23 @@ void wxStreamBuffer::Read(void *buffer, size_t size)
       break;
     }
   }
-  m_stream->m_lastcount += orig_size;
+  return (m_stream->m_lastcount += orig_size);
 }
 
-void wxStreamBuffer::Write(const void *buffer, size_t size)
+size_t wxStreamBuffer::Read(wxStreamBuffer *s_buf)
+{
+  char buf[BUF_TEMP_SIZE];
+  size_t s = 0, bytes_read = BUF_TEMP_SIZE;
+
+  while (bytes_read == BUF_TEMP_SIZE) {
+    bytes_read = Read(buf, bytes_read);
+    bytes_read = s_buf->Write(buf, bytes_read);
+    s += bytes_read;
+  }
+  return s;
+}
+
+size_t wxStreamBuffer::Write(const void *buffer, size_t size)
 {
   wxASSERT(m_stream != NULL);
 
@@ -309,10 +332,8 @@ void wxStreamBuffer::Write(const void *buffer, size_t size)
   // Buffering disabled
   // ------------------
 
-  if (!m_buffer_size) {
-    m_stream->m_lastcount = m_stream->OnSysWrite(buffer, size);
-    return;
-  }
+  if (!m_buffer_size)
+    return (m_stream->m_lastcount = m_stream->OnSysWrite(buffer, size));
 
   // ------------------
   // Buffering enabled
@@ -331,9 +352,11 @@ void wxStreamBuffer::Write(const void *buffer, size_t size)
       buffer = (char *)buffer + buf_left; // ANSI C++ violation.
 
       if (!FlushBuffer()) {
-        m_stream->m_lastcount = orig_size-size;
-        return;
+        if (m_stream->m_lasterror == wxStream_NOERROR)
+          m_stream->m_lasterror = wxStream_EOF;
+        return (m_stream->m_lastcount = orig_size-size);
       }
+
       m_buffer_pos = m_buffer_start;
 
     } else {
@@ -343,7 +366,22 @@ void wxStreamBuffer::Write(const void *buffer, size_t size)
       break;
     }
   }
-  m_stream->m_lastcount = orig_size;
+  return (m_stream->m_lastcount = orig_size);
+}
+
+size_t wxStreamBuffer::Write(wxStreamBuffer *sbuf)
+{
+  char buf[BUF_TEMP_SIZE];
+  size_t s = 0, bytes_count = BUF_TEMP_SIZE;
+
+  while (bytes_count == BUF_TEMP_SIZE) {
+    if (m_stream->StreamSize() < bytes_count)
+      bytes_count = m_stream->StreamSize();
+    bytes_count = sbuf->Read(buf, bytes_count);
+    bytes_count = Write(buf, bytes_count);
+    s += bytes_count;
+  }
+  return s;
 }
 
 off_t wxStreamBuffer::Seek(off_t pos, wxSeekMode mode)
@@ -352,7 +390,7 @@ off_t wxStreamBuffer::Seek(off_t pos, wxSeekMode mode)
 
   last_access = GetLastAccess();
 
-  if (m_fixed) {
+  if (!m_flushable) {
     diff = pos + GetIntPosition();
     if (diff < 0 || diff > last_access)
       return wxInvalidOffset;
@@ -392,7 +430,7 @@ off_t wxStreamBuffer::Tell() const
 {
   off_t pos;
 
-  if (!m_fixed) {
+  if (m_flushable) {
     pos = m_stream->OnSysTell();
     if (pos == wxInvalidOffset)
       return wxInvalidOffset;
@@ -401,8 +439,10 @@ off_t wxStreamBuffer::Tell() const
     return GetIntPosition();
 }
 
-size_t wxStreamBuffer::GetDataLeft() const
+size_t wxStreamBuffer::GetDataLeft()
 {
+  if (m_buffer_end == m_buffer_pos && m_flushable)
+    FillBuffer();
   return m_buffer_end-m_buffer_pos;
 }
 
@@ -480,23 +520,20 @@ wxInputStream& wxInputStream::Read(void *buffer, size_t size)
 
 char wxInputStream::Peek()
 {
-  if (!m_i_streambuf->GetDataLeft())
-    m_i_streambuf->FillBuffer();
+  m_i_streambuf->GetDataLeft();
 
   return *(m_i_streambuf->GetBufferPos());
 }
 
-#define BUF_TEMP_SIZE 10000
 
 wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 {
   char buf[BUF_TEMP_SIZE]; 
   size_t bytes_read = BUF_TEMP_SIZE;
 
-  while (bytes_read == BUF_TEMP_SIZE && stream_out.LastError() != wxStream_NOERROR) {
+  while (bytes_read == BUF_TEMP_SIZE) {
     bytes_read = Read(buf, bytes_read).LastRead();
-
-    stream_out.Write(buf, bytes_read);
+    bytes_read = stream_out.Write(buf, bytes_read).LastWrite();
   }
   return *this;
 }

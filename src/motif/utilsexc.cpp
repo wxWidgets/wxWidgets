@@ -55,18 +55,52 @@
 
 #include <Xm/Xm.h>
 
-#define wxEXECUTE_WIN_MESSAGE 10000
+struct wxLocalProcessData
+{
+  int pid, end_process;
+  wxProcess *process;
+};
+
+#ifdef __SOLARIS__
+// somehow missing from sys/wait.h but in the system's docs
+extern "C"
+{
+   pid_t wait4(pid_t pid, int *statusp, int options, struct rusage
+               *rusage);
+}
+#endif
 
 void xt_notify_end_process(XtPointer client, int *fid,
 			   XtInputId *id)
 {
-  Bool *flag = (Bool *) client;
-  *flag = TRUE;
+  wxLocalProcessData *process_data = (wxLocalProcessData *)client;
+
+  int pid;
+
+  pid = (process_data->pid > 0) ? process_data->pid : -(process_data->pid);
+
+  /* wait4 is not part of any standard, use at own risk
+   * not sure what wait4 does, but wait3 seems to be closest, whats a digit ;-)
+   * --- offer@sgi.com */
+#if !defined(__sgi)
+  wait4(process_data->pid, NULL, 0, NULL);
+#else
+  wait3((int *) NULL, 0, (rusage *) NULL);
+#endif
 
   XtRemoveInput(*id);
+  if (process_data->process)
+    process_data->process->OnTerminate(process_data->pid);
+
+  process_data->end_process = TRUE;
+
+  if (process_data->pid > 0)
+    delete process_data;
+  else
+    process_data->pid = 0;
 }
 
-long wxExecute(char **argv, bool sync, wxProcess *WXUNUSED(handler))
+long wxExecute(char **argv, bool sync, wxProcess *handler)
 {
 #ifdef VMS
   return(0);
@@ -114,28 +148,34 @@ long wxExecute(char **argv, bool sync, wxProcess *WXUNUSED(handler))
       _exit (-1);
     }
 
-  int end_process = 0;
+  wxLocalProcessData *process_data = new wxLocalProcessData;
+
+  process_data->end_process = 0;
+  process_data->process = handler;
+  process_data->pid = (sync) ? pid : -pid;
 
   close(proc_link[1]);
   XtAppAddInput((XtAppContext) wxTheApp->GetAppContext(), proc_link[0],
                 (XtPointer *) XtInputReadMask,
                 (XtInputCallbackProc) xt_notify_end_process,
-                (XtPointer) &end_process);
+                (XtPointer) process_data);
 
   if (sync) {
-    while (!end_process)
+    while (!process_data->end_process)
        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
 
-    if (WIFEXITED(end_process) != 0)
-      return WEXITSTATUS(end_process);
+    if (WIFEXITED(process_data->end_process) != 0)
+      return WEXITSTATUS(process_data->end_process);
   }
+
+  delete process_data;
 
   return pid;
 #endif
   // end VMS
 }
 
-long wxExecute (const wxString& command, bool sync, wxProcess* WXUNUSED(process))
+long wxExecute (const wxString& command, bool sync, wxProcess* handler)
 {
 #ifdef VMS
   return(0);
@@ -156,7 +196,7 @@ long wxExecute (const wxString& command, bool sync, wxProcess* WXUNUSED(process)
   while ((argv[argc++] = strtok (NULL, IFS)) != NULL)
     /* loop */ ;
 
-  return wxExecute(argv, sync);
+  return wxExecute(argv, sync, handler);
 #endif
   // VMS
 }

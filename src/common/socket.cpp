@@ -1034,8 +1034,10 @@ void wxSocketBase::WantSpeedBuffer(char *buffer, size_t nbytes,
   if (ret < 0) {
     m_lcount = 0;
     m_error = errno;
-  } else
+  } else {
     m_lcount = ret;
+    m_error = 0;
+  }
 }
 
 void wxSocketBase::WantBuffer(char *buffer, size_t nbytes,

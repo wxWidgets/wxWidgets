@@ -37,7 +37,7 @@ wxOutputStream& WXDLLEXPORT wxEndL(wxOutputStream& o_stream);
 class WXDLLEXPORT wxStreamBuffer {
  public:
   typedef enum {
-    read, write, read_write
+    read = 0, write, read_write
   } BufMode;
 
   // -----------
@@ -51,9 +51,12 @@ class WXDLLEXPORT wxStreamBuffer {
   // -----------
   // Filtered IO
   // -----------
-  void Read(void *buffer, size_t size);
-  void Write(const void *buffer, size_t size);
-  bool WriteBack(const char *buffer, size_t size);
+  size_t Read(void *buffer, size_t size);
+  size_t Read(wxStreamBuffer *buf);
+  size_t Write(const void *buffer, size_t size);
+  size_t Write(wxStreamBuffer *buf);
+
+  size_t WriteBack(const char *buffer, size_t size);
   bool WriteBack(char c);
   char GetChar();
   void PutChar(char c);
@@ -78,7 +81,12 @@ class WXDLLEXPORT wxStreamBuffer {
 
   bool FlushBuffer();
   bool FillBuffer();
-  size_t GetDataLeft() const;
+  size_t GetDataLeft();
+
+  // --------------
+  // Administration
+  // --------------
+  wxStreamBase *Stream() { return m_stream; }
 
  protected:
   char *AllocSpaceWBack(size_t needed_size);
@@ -98,7 +106,7 @@ class WXDLLEXPORT wxStreamBuffer {
 
   wxStreamBase *m_stream;
   BufMode m_mode;
-  bool m_destroybuf;
+  bool m_destroybuf, m_destroystream;
 };
 
 // ---------------------------------------------------------------------------
