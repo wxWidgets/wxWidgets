@@ -399,7 +399,6 @@ static void AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, int *attribList)
 
 void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
 {
-  int pixelFormat;
   PIXELFORMATDESCRIPTOR pfd = {
         sizeof(PIXELFORMATDESCRIPTOR),    /* size */
         1,                /* version */
@@ -423,13 +422,13 @@ void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
 
   AdjustPFDForAttributes(pfd, attribList);
 
-  pixelFormat = ChoosePixelFormat((HDC) m_hDC, &pfd);
+  int pixelFormat = ChoosePixelFormat((HDC) m_hDC, &pfd);
   if (pixelFormat == 0) {
-    wxLogWarning(_("ChoosePixelFormat failed."));
+    wxLogLastError(_T("ChoosePixelFormat"));
   }
   else {
-    if (SetPixelFormat((HDC) m_hDC, pixelFormat, &pfd) != TRUE) {
-      wxLogWarning(_("SetPixelFormat failed."));
+    if ( !::SetPixelFormat((HDC) m_hDC, pixelFormat, &pfd) ) {
+      wxLogLastError(_T("SetPixelFormat"));
     }
   }
 }
