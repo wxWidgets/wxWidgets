@@ -286,7 +286,7 @@ bool wxStdButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
     // the other mouse buttons are ignored
     if ( event.Button(1) )
     {
-        if ( event.ButtonDown(1) )
+        if ( event.LeftDown() || event.LeftDClick() )
         {
             m_winCapture = consumer->GetInputWindow();
             m_winCapture->CaptureMouse();
@@ -296,7 +296,7 @@ bool wxStdButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
 
             return TRUE;
         }
-        else // up
+        else if ( event.LeftUp() )
         {
             if ( m_winCapture )
             {
@@ -314,6 +314,7 @@ bool wxStdButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
             //else: the mouse was released outside the window, this doesn't
             //      count as a click
         }
+        //else: don't do anything special about the double click
     }
 
     return wxStdInputHandler::HandleMouse(consumer, event);
