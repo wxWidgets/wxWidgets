@@ -41,7 +41,7 @@ public:
                            int id = wxID_SEPARATOR,
                            const wxString& text = wxEmptyString,
                            const wxString& help = wxEmptyString,
-                           wxItemKind kind = wxItem_Normal,
+                           wxItemKind kind = wxITEM_NORMAL,
                            wxMenu *subMenu = (wxMenu *)NULL);
 
     // destruction: wxMenuItem will delete its submenu
@@ -71,9 +71,9 @@ public:
     // what kind of menu item we are
     wxItemKind GetKind() const { return m_kind; }
 
-    virtual void SetCheckable(bool checkable) { m_kind = wxItem_Check; }
+    virtual void SetCheckable(bool checkable) { m_kind = wxITEM_CHECK; }
     bool IsCheckable() const
-        { return m_kind == wxItem_Check || m_kind == wxItem_Radio; }
+        { return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO; }
 
     bool IsSubMenu() const { return m_subMenu != NULL; }
     void SetSubMenu(wxMenu *menu) { m_subMenu = menu; }
@@ -116,7 +116,7 @@ public:
                            wxMenu *subMenu = (wxMenu *)NULL)
     {
         return New(parentMenu, id, text, help,
-                   isCheckable ? wxItem_Check : wxItem_Normal, subMenu);
+                   isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu);
     }
 
 protected:
@@ -134,7 +134,7 @@ protected:
                    int id = wxID_SEPARATOR,
                    const wxString& text = wxEmptyString,
                    const wxString& help = wxEmptyString,
-                   wxItemKind kind = wxItem_Normal,
+                   wxItemKind kind = wxITEM_NORMAL,
                    wxMenu *subMenu = (wxMenu *)NULL);
 
 private:

@@ -329,7 +329,7 @@ bool wxMenu::DoAppend(wxMenuItem *item)
 {
     wxCHECK_MSG( item, FALSE, _T("NULL item in wxMenu::DoAppend") );
 
-    if ( item->GetKind() == wxItem_Radio )
+    if ( item->GetKind() == wxITEM_RADIO )
     {
         if ( m_startRadioGroup == -1 )
         {

@@ -79,7 +79,7 @@ public:
     void Append(int id,
                 const wxString& text,
                 const wxString& help = wxEmptyString,
-                wxItemKind kind = wxItem_Normal)
+                wxItemKind kind = wxITEM_NORMAL)
     {
         DoAppend(wxMenuItem::New((wxMenu *)this, id, text, help, kind));
     }
@@ -92,7 +92,7 @@ public:
                          const wxString& text,
                          const wxString& help = wxEmptyString)
     {
-        Append(id, text, help, wxItem_Check);
+        Append(id, text, help, wxITEM_CHECK);
     }
 
     // append a radio item
@@ -100,7 +100,7 @@ public:
                          const wxString& text,
                          const wxString& help = wxEmptyString)
     {
-        Append(id, text, help, wxItem_Radio);
+        Append(id, text, help, wxITEM_RADIO);
     }
 
     // append a submenu
@@ -110,7 +110,7 @@ public:
                 const wxString& help = wxEmptyString)
     {
         DoAppend(wxMenuItem::New((wxMenu *)this, id, text, help,
-                                 wxItem_Normal, submenu));
+                                 wxITEM_NORMAL, submenu));
     }
 
     // the most generic form of Append() - append anything
@@ -128,7 +128,7 @@ public:
                 int id,
                 const wxString& text,
                 const wxString& help = wxEmptyString,
-                wxItemKind kind = wxItem_Normal)
+                wxItemKind kind = wxITEM_NORMAL)
     {
         Insert(pos, wxMenuItem::New((wxMenu *)this, id, text, help, kind));
     }
@@ -145,7 +145,7 @@ public:
                          const wxString& text,
                          const wxString& help = wxEmptyString)
     {
-        Insert(pos, id, text, help, wxItem_Check);
+        Insert(pos, id, text, help, wxITEM_CHECK);
     }
 
     // insert a radio item
@@ -154,7 +154,7 @@ public:
                          const wxString& text,
                          const wxString& help = wxEmptyString)
     {
-        Insert(pos, id, text, help, wxItem_Radio);
+        Insert(pos, id, text, help, wxITEM_RADIO);
     }
 
     // insert a submenu
@@ -165,7 +165,7 @@ public:
                 const wxString& help = wxEmptyString)
     {
         Insert(pos, wxMenuItem::New((wxMenu *)this, id, text, help,
-                                    wxItem_Normal, submenu));
+                                    wxITEM_NORMAL, submenu));
     }
 
     // prepend an item to the menu
@@ -178,7 +178,7 @@ public:
     void Prepend(int id,
                  const wxString& text,
                  const wxString& help = wxEmptyString,
-                 wxItemKind kind = wxItem_Normal)
+                 wxItemKind kind = wxITEM_NORMAL)
     {
         Insert(0u, id, text, help, kind);
     }
@@ -320,7 +320,7 @@ public:
                 const wxString& help,
                 bool isCheckable)
     {
-        Append(id, text, help, isCheckable ? wxItem_Check : wxItem_Normal);
+        Append(id, text, help, isCheckable ? wxITEM_CHECK : wxITEM_NORMAL);
     }
 
     void Insert(size_t pos,
@@ -329,7 +329,7 @@ public:
                 const wxString& help,
                 bool isCheckable)
     {
-        Insert(pos, id, text, help, isCheckable ? wxItem_Check : wxItem_Normal);
+        Insert(pos, id, text, help, isCheckable ? wxITEM_CHECK : wxITEM_NORMAL);
     }
 
     void Prepend(int id,

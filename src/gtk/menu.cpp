@@ -842,7 +842,7 @@ void wxMenuItem::Check( bool check )
     wxMenuItemBase::Check( check );
 
     // GTK+ does it itself for the radio item
-    if ( GetKind() == wxItem_Check )
+    if ( GetKind() == wxITEM_CHECK )
     {
         gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
     }
@@ -1061,11 +1061,11 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         const char *item_type;
         switch ( mitem->GetKind() )
         {
-            case wxItem_Check:
+            case wxITEM_CHECK:
                 item_type = "<CheckItem>";
                 break;
 
-            case wxItem_Radio:
+            case wxITEM_RADIO:
                 if ( m_pathLastRadio.empty() )
                 {
                     // start of a new radio group
@@ -1089,7 +1089,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                 wxFAIL_MSG( _T("unexpected menu item kind") );
                 // fall through
 
-            case wxItem_Normal:
+            case wxITEM_NORMAL:
                 item_type = "<Item>";
                 break;
         }

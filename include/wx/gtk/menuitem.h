@@ -27,7 +27,7 @@ public:
                int id = wxID_SEPARATOR,
                const wxString& text = wxEmptyString,
                const wxString& help = wxEmptyString,
-               wxItemKind kind = wxItem_Normal,
+               wxItemKind kind = wxITEM_NORMAL,
                wxMenu *subMenu = (wxMenu *)NULL);
     ~wxMenuItem();
 

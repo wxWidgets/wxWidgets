@@ -89,7 +89,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        wxMenu *pSubMenu)
           : wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
 #if wxUSE_OWNER_DRAWN
-            , wxOwnerDrawn(GetLabelFromText(text), kind == wxItem_Check)
+            , wxOwnerDrawn(GetLabelFromText(text), kind == wxITEM_CHECK)
 #endif // owner drawn
 {
     wxASSERT_MSG( pParentMenu != NULL, wxT("a menu item should have a parent") );
@@ -173,7 +173,7 @@ void wxMenuItem::Check(bool check)
     int flags = check ? MF_CHECKED : MF_UNCHECKED;
     HMENU hmenu = GetHMenuOf(m_parentMenu);
 
-    if ( GetKind() == wxItem_Radio )
+    if ( GetKind() == wxITEM_RADIO )
     {
         // it doesn't make sense to uncheck a radio item - what would this do?
         if ( !check )

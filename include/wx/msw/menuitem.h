@@ -39,7 +39,7 @@ public:
                int id = wxID_SEPARATOR,
                const wxString& name = wxEmptyString,
                const wxString& help = wxEmptyString,
-               wxItemKind kind = wxItem_Normal,
+               wxItemKind kind = wxITEM_NORMAL,
                wxMenu *subMenu = (wxMenu *)NULL);
     virtual ~wxMenuItem();
 

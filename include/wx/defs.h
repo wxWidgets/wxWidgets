@@ -1282,11 +1282,11 @@ enum wxBorder
 // menu and toolbar item kinds
 enum wxItemKind
 {
-    wxItem_Separator = -1,
-    wxItem_Normal,
-    wxItem_Check,
-    wxItem_Radio,
-    wxItem_Max
+    wxITEM_SEPARATOR = -1,
+    wxITEM_NORMAL,
+    wxITEM_CHECK,
+    wxITEM_RADIO,
+    wxITEM_MAX
 };
 
 // hit test results

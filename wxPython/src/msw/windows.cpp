@@ -7384,7 +7384,7 @@ static PyObject *_wrap_wxMenu_Append(PyObject *self, PyObject *args, PyObject *k
     int  _arg1;
     wxString * _arg2;
     wxString * _arg3 = (wxString *) &wxPyEmptyString;
-    wxItemKind  _arg4 = (wxItemKind ) wxItem_Normal;
+    wxItemKind  _arg4 = (wxItemKind ) wxITEM_NORMAL;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _obj3 = 0;
@@ -7668,7 +7668,7 @@ static PyObject *_wrap_wxMenu_Insert(PyObject *self, PyObject *args, PyObject *k
     int  _arg2;
     wxString * _arg3;
     wxString * _arg4 = (wxString *) &wxPyEmptyString;
-    wxItemKind  _arg5 = (wxItemKind ) wxItem_Normal;
+    wxItemKind  _arg5 = (wxItemKind ) wxITEM_NORMAL;
     PyObject * _argo0 = 0;
     PyObject * _obj3 = 0;
     PyObject * _obj4 = 0;
@@ -7956,7 +7956,7 @@ static PyObject *_wrap_wxMenu_Prepend(PyObject *self, PyObject *args, PyObject *
     int  _arg1;
     wxString * _arg2;
     wxString * _arg3 = (wxString *) &wxPyEmptyString;
-    wxItemKind  _arg4 = (wxItemKind ) wxItem_Normal;
+    wxItemKind  _arg4 = (wxItemKind ) wxITEM_NORMAL;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _obj3 = 0;
@@ -10062,7 +10062,7 @@ static PyObject *_wrap_new_wxMenuItem(PyObject *self, PyObject *args, PyObject *
     int  _arg1 = (int ) wxID_SEPARATOR;
     wxString * _arg2 = (wxString *) &wxPyEmptyString;
     wxString * _arg3 = (wxString *) &wxPyEmptyString;
-    wxItemKind  _arg4 = (wxItemKind ) wxItem_Normal;
+    wxItemKind  _arg4 = (wxItemKind ) wxITEM_NORMAL;
     wxMenu * _arg5 = (wxMenu *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;

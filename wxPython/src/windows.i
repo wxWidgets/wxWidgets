@@ -583,7 +583,7 @@ public:
 
     void Append(int id, const wxString& item,
                 const wxString& helpString = wxPyEmptyString,
-                wxItemKind kind = wxItem_Normal);
+                wxItemKind kind = wxITEM_NORMAL);
     %name(AppendMenu)void Append(int id, const wxString& item, wxMenu *subMenu,
                                  const wxString& helpString = wxPyEmptyString);
     %name(AppendItem)void Append(const wxMenuItem* item);
@@ -600,7 +600,7 @@ public:
                 int id,
                 const wxString& text,
                 const wxString& help = wxPyEmptyString,
-                wxItemKind kind = wxItem_Normal);
+                wxItemKind kind = wxITEM_NORMAL);
     void InsertSeparator(size_t pos);
     void InsertCheckItem(size_t pos,
                          int id,
@@ -621,7 +621,7 @@ public:
     void Prepend(int id,
                  const wxString& text,
                  const wxString& help = wxPyEmptyString,
-                 wxItemKind kind = wxItem_Normal);
+                 wxItemKind kind = wxITEM_NORMAL);
     void PrependSeparator();
     void PrependCheckItem(int id,
                           const wxString& text,
@@ -734,7 +734,7 @@ public:
     wxMenuItem(wxMenu* parentMenu=NULL, int id=wxID_SEPARATOR,
                const wxString& text = wxPyEmptyString,
                const wxString& help = wxPyEmptyString,
-               wxItemKind kind = wxItem_Normal,
+               wxItemKind kind = wxITEM_NORMAL,
                wxMenu* subMenu = NULL);
 
 
