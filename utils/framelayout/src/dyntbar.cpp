@@ -145,6 +145,26 @@ void wxDynamicToolBar::AddTool( int toolIndex,
 	
 	AddTool( toolIndex, pBtn );
 }
+void wxDynamicToolBar::AddTool( int toolIndex, wxBitmap labelBmp,
+								const wxString& labelText, bool alignTextRight,
+								bool isFlat )
+{
+	wxNewBitmapButton* pBtn =
+
+	  new wxNewBitmapButton( labelBmp,
+							 labelText, 
+							 ( alignTextRight ) 
+							 ? NB_ALIGN_TEXT_RIGHT 
+							 : NB_ALIGN_TEXT_BOTTOM,
+							 isFlat
+						   );
+
+	pBtn->Create( this, toolIndex );
+
+	pBtn->Reshape();
+	
+	AddTool( toolIndex, pBtn );
+}
 
 
   wxToolBarTool* 

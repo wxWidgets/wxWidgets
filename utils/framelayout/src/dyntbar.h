@@ -120,6 +120,9 @@ public:
 						  int imageFileType = wxBITMAP_TYPE_BMP,
 						  const wxString& labelText = "", bool alignTextRight = FALSE,
 						  bool isFlat = TRUE );
+	virtual void AddTool( int toolIndex, wxBitmap labelBmp,
+						  const wxString& labelText = "", bool alignTextRight = FALSE,
+						  bool isFlat = TRUE );
 
 	// method from wxToolBarBase (for compatibility), only
 	// first two arguments are valid

@@ -22,6 +22,10 @@ trivial to adapt this for other systems that use a configure build.
 YOU NEED TO RUN THE SAMPLES FROM THIS BITMAP DIR otherwise the binaries
 can't find their pics and horrible things will ensue.
 
+<03-12-99 Russell>
+/samples/demo/fl_demo no longer needs to be run from the bitmap dir under
+windows, it now uses windows resources.
+
 -----------------------------------------------------------------------------
 BUILDING
 -----------------------------------------------------------------------------
