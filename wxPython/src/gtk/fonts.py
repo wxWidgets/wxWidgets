@@ -118,6 +118,10 @@ class wxFontPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def wxFontFromNativeInfoString(self, *_args, **_kwargs):
+        val = apply(fontsc.wxFont_wxFontFromNativeInfoString,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) ; val.thisown = 1
+        return val
     def __del__(self,fontsc=fontsc):
         if self.thisown == 1 :
             fontsc.delete_wxFont(self)

@@ -1435,6 +1435,56 @@ static PyObject *_wrap_new_wxFontFromNativeInfo(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+static wxFont * wxFont_wxFontFromNativeInfoString(wxFont *self,const wxString & info) {
+            wxNativeFontInfo nfi;
+            nfi.FromString(info);
+            return new wxFont(nfi);
+        }
+static PyObject *_wrap_wxFont_wxFontFromNativeInfoString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    wxFont * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","info", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFont_wxFontFromNativeInfoString",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_wxFontFromNativeInfoString. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxFont *)wxFont_wxFontFromNativeInfoString(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 #define delete_wxFont(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3817,6 +3867,7 @@ static PyMethodDef fontscMethods[] = {
 	 { "wxFont_GetPointSize", (PyCFunction) _wrap_wxFont_GetPointSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_Ok", (PyCFunction) _wrap_wxFont_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxFont", (PyCFunction) _wrap_delete_wxFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_wxFontFromNativeInfoString", (PyCFunction) _wrap_wxFont_wxFontFromNativeInfoString, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFontFromNativeInfo", (PyCFunction) _wrap_new_wxFontFromNativeInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFont", (PyCFunction) _wrap_new_wxFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontMapper_GetDefaultConfigPath", (PyCFunction) _wrap_wxFontMapper_GetDefaultConfigPath, METH_VARARGS | METH_KEYWORDS },
