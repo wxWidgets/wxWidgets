@@ -305,7 +305,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
     wxDllGetSymbol(dllHandle, symbol);
 #else
     // mb_str() is necessary in Unicode build
-    symbol = wxDllGetSymbol(dllHandle, name.mb_str());
+    symbol = (void*) wxDllGetSymbol(dllHandle, name.mb_str());
 #endif
 
     if ( !symbol )

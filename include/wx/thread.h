@@ -27,12 +27,12 @@
     #pragma interface "thread.h"
 #endif
 
+#include "wx/module.h"
+
 // Windows headers define it
 #ifdef Yield
     #undef Yield
 #endif
-
-#include "wx/module.h"
 
 // ----------------------------------------------------------------------------
 // constants

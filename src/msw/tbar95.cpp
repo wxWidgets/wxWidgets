@@ -1122,8 +1122,8 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
                 int distance = 0 ;
 
                 distance = abs( GetRValue( pixel ) - GetRValue( ColorMap[k].from )) ;
-                distance = max( distance , abs(GetGValue(pixel ) - GetGValue( ColorMap[k].from ))) ;
-                distance = max( distance , abs(GetBValue(pixel ) - GetBValue( ColorMap[k].from ))) ;
+                distance = wxMax( distance , abs(GetGValue(pixel ) - GetGValue( ColorMap[k].from ))) ;
+                distance = wxMax( distance , abs(GetBValue(pixel ) - GetBValue( ColorMap[k].from ))) ;
                 if ( distance < 0x10 )
                 //if ( ColorMap[k].from == pixel )
                 {

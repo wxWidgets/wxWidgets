@@ -37,6 +37,10 @@
 
 #include "wx/msw/private.h"
 
+#ifdef __GNUWIN32__
+#include "wx/msw/gccpriv.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -132,7 +136,7 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     return TRUE;
 }
 
-#if defined(__GNUWIN32__)
+#if (defined(__GNUWIN32__) && !defined(__CYGWIN10__) && !wxCHECK_W32API_VERSION( 1, 1 ))
     #if wxUSE_NORLANDER_HEADERS
         #define wxFONTENUMPROC int(*)(const LOGFONTA *, const TEXTMETRICA *, long unsigned int, LPARAM)
     #else
