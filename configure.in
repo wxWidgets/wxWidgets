@@ -391,6 +391,7 @@ USE_SUN=
 USE_SOLARIS=
 USE_SUNOS=
 USE_ALPHA=
+USE_IA64=
 USE_OSF=
 USE_BSD=
 USE_DARWIN=
@@ -456,6 +457,10 @@ case "${host}" in
     if test "x$TMP" = "xalpha"; then
       USE_ALPHA=1
       AC_DEFINE(__ALPHA__)
+    fi
+    if test "x$TMP" = "xia64"; then
+      USE_IA64=1
+      AC_DEFINE(__IA64__)
     fi
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
