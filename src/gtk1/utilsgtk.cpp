@@ -94,8 +94,7 @@ bool wxColourDisplay(void)
 
 int wxDisplayDepth(void)
 {
-    wxFAIL_MSG( "wxDisplayDepth always returns 8" );
-    return 8;
+    return gdk_window_get_visual( (GdkWindow*) &gdk_root_parent )->depth;
 }
 
 //------------------------------------------------------------------------

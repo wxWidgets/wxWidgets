@@ -157,26 +157,26 @@ wxColour wxSystemSettings::GetSystemColour( int index )
 
 wxFont wxSystemSettings::GetSystemFont( int index ) 
 {
-  switch (index)
-  {
-    case wxSYS_OEM_FIXED_FONT:
-    case wxSYS_ANSI_FIXED_FONT:
-    case wxSYS_SYSTEM_FIXED_FONT:
+    switch (index)
     {
-      return *wxNORMAL_FONT;
+        case wxSYS_OEM_FIXED_FONT:
+        case wxSYS_ANSI_FIXED_FONT:
+        case wxSYS_SYSTEM_FIXED_FONT:
+        {
+            return *wxNORMAL_FONT;
+        }
+        case wxSYS_ANSI_VAR_FONT:
+        case wxSYS_SYSTEM_FONT:
+        case wxSYS_DEVICE_DEFAULT_FONT:
+        case wxSYS_DEFAULT_GUI_FONT:
+        {
+            if (!g_systemFont)
+                g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
+            return *g_systemFont;
+        }
     }
-    case wxSYS_ANSI_VAR_FONT:
-    case wxSYS_SYSTEM_FONT:
-    case wxSYS_DEVICE_DEFAULT_FONT:
-    case wxSYS_DEFAULT_GUI_FONT:
-    {
-      if (!g_systemFont)
-        g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
-      return *g_systemFont;
-    }
-  }
 
-  return wxNullFont;
+    return wxNullFont;
 }
 
 int wxSystemSettings::GetSystemMetric( int index )

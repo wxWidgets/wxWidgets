@@ -30,37 +30,37 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
 { 
-  if (!win->HasVMT()) return;
-  if (g_blockEventsOnDrag) return;
+    if (!win->HasVMT()) return;
+    if (g_blockEventsOnDrag) return;
     
-  float diff = win->m_adjust->value - win->m_oldPos;
-  if (fabs(diff) < 0.2) return;
+    float diff = win->m_adjust->value - win->m_oldPos;
+    if (fabs(diff) < 0.2) return;
   
-  wxEventType command = wxEVT_NULL;
+    wxEventType command = wxEVT_NULL;
   
-  float line_step = win->m_adjust->step_increment;
-  float page_step = win->m_adjust->page_increment;
+    float line_step = win->m_adjust->step_increment;
+    float page_step = win->m_adjust->page_increment;
   
-  if (fabs(win->m_adjust->value-win->m_adjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
-  else if (fabs(win->m_adjust->value-win->m_adjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
-  else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
-  else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
-  else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
-  else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
-  else command = wxEVT_SCROLL_THUMBTRACK;
+    if (fabs(win->m_adjust->value-win->m_adjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
+    else if (fabs(win->m_adjust->value-win->m_adjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
+    else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
+    else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
+    else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
+    else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
+    else command = wxEVT_SCROLL_THUMBTRACK;
 
-  int value = (int)(win->m_adjust->value+0.5);
+    int value = (int)(win->m_adjust->value+0.5);
       
-  int orient = wxHORIZONTAL;
-  if (win->GetWindowStyleFlag() & wxSB_VERTICAL == wxSB_VERTICAL) orient = wxVERTICAL;
+    int orient = wxHORIZONTAL;
+    if (win->GetWindowStyleFlag() & wxSB_VERTICAL == wxSB_VERTICAL) orient = wxVERTICAL;
   
-  wxScrollEvent event( command, win->GetId(), value, orient );
-  event.SetEventObject( win );
-  win->ProcessEvent( event );
+    wxScrollEvent event( command, win->GetId(), value, orient );
+    event.SetEventObject( win );
+    win->ProcessEvent( event );
   
-  wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
-  cevent.SetEventObject( win );
-  win->ProcessEvent( cevent );
+    wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
+    cevent.SetEventObject( win );
+    win->ProcessEvent( cevent );
 }
 
 //-----------------------------------------------------------------------------
@@ -83,111 +83,117 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         long style, const wxValidator& validator, const wxString& name )
 {
     m_acceptsFocus = TRUE;
-  m_needParent = TRUE;
+    m_needParent = TRUE;
   
-  PreCreation( parent, id, pos, size, style, name );
+    PreCreation( parent, id, pos, size, style, name );
   
-  SetValidator( validator );
+    SetValidator( validator );
 
-  m_oldPos = 0.0;
+    m_oldPos = 0.0;
 
-  if (style & wxSL_VERTICAL == wxSL_VERTICAL)
-    m_widget = gtk_hscale_new( (GtkAdjustment *) NULL );
-  else
-    m_widget = gtk_vscale_new( (GtkAdjustment *) NULL );
+    if (style & wxSL_VERTICAL == wxSL_VERTICAL)
+        m_widget = gtk_hscale_new( (GtkAdjustment *) NULL );
+    else
+        m_widget = gtk_vscale_new( (GtkAdjustment *) NULL );
     
-  gtk_scale_set_draw_value( GTK_SCALE( m_widget ), FALSE );
+    gtk_scale_set_draw_value( GTK_SCALE( m_widget ), FALSE );
   
-  m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
+    m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
   
-  gtk_signal_connect (GTK_OBJECT (m_adjust), "value_changed",
-		      (GtkSignalFunc) gtk_slider_callback, (gpointer) this );
-  SetRange( minValue, maxValue );
-  SetValue( value );
+    gtk_signal_connect( GTK_OBJECT(m_adjust), 
+                        "value_changed",
+		        (GtkSignalFunc) gtk_slider_callback, 
+			(gpointer) this );
+	
+    SetRange( minValue, maxValue );
+    SetValue( value );
   
-  m_parent->AddChild( this );
+    m_parent->AddChild( this );
 
-  (m_parent->m_insertCallback)( m_parent, this );
+    (m_parent->m_insertCallback)( m_parent, this );
   
-  PostCreation();
+    PostCreation();
   
-  SetBackgroundColour( parent->GetBackgroundColour() );
+    SetBackgroundColour( parent->GetBackgroundColour() );
 
-  Show( TRUE );
+    Show( TRUE );
     
-  return TRUE;
+    return TRUE;
 }
 
 int wxSlider::GetValue(void) const
 {
-  return (int)(m_adjust->value+0.5);
+    return (int)(m_adjust->value+0.5);
 }
 
 void wxSlider::SetValue( int value )
 {
-  float fpos = (float)value;
-  m_oldPos = fpos;
-  if (fabs(fpos-m_adjust->value) < 0.2) return;
-  m_adjust->value = fpos;
+    float fpos = (float)value;
+    m_oldPos = fpos;
+    if (fabs(fpos-m_adjust->value) < 0.2) return;
+    
+    m_adjust->value = fpos;
   
-  gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
 }
 
 void wxSlider::SetRange( int minValue, int maxValue )
 {
-  float fmin = (float)minValue;
-  float fmax = (float)maxValue;
+    float fmin = (float)minValue;
+    float fmax = (float)maxValue;
       
-  if ((fabs(fmin-m_adjust->lower) < 0.2) &&
-      (fabs(fmax-m_adjust->upper) < 0.2))
-      return;
+    if ((fabs(fmin-m_adjust->lower) < 0.2) &&
+        (fabs(fmax-m_adjust->upper) < 0.2))
+    {
+        return;
+    }
       
-  m_adjust->lower = fmin;
-  m_adjust->upper = fmax;
+    m_adjust->lower = fmin;
+    m_adjust->upper = fmax;
 
-  gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 }
 
 int wxSlider::GetMin(void) const
 {
-  return (int)(m_adjust->lower+0.5);
+    return (int)(m_adjust->lower+0.5);
 }
 
 int wxSlider::GetMax(void) const
 {
-  return (int)(m_adjust->upper+0.5);
+    return (int)(m_adjust->upper+0.5);
 }
 
 void wxSlider::SetPageSize( int pageSize )
 {
-  float fpage = (float)pageSize;
+    float fpage = (float)pageSize;
       
-  if (fabs(fpage-m_adjust->page_increment) < 0.2) return;
+    if (fabs(fpage-m_adjust->page_increment) < 0.2) return;
       
-  m_adjust->page_increment = fpage;
+    m_adjust->page_increment = fpage;
 
-  gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 }
 
 int wxSlider::GetPageSize(void) const
 {
-  return (int)(m_adjust->page_increment+0.5);
+    return (int)(m_adjust->page_increment+0.5);
 }
 
 void wxSlider::SetThumbLength( int len )
 {
-  float flen = (float)len;
+    float flen = (float)len;
       
-  if (fabs(flen-m_adjust->page_size) < 0.2) return;
+    if (fabs(flen-m_adjust->page_size) < 0.2) return;
       
-  m_adjust->page_size = flen;
+    m_adjust->page_size = flen;
 
-  gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 }
 
 int wxSlider::GetThumbLength(void) const
 {
-  return (int)(m_adjust->page_size+0.5);
+    return (int)(m_adjust->page_size+0.5);
 }
 
 void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
@@ -196,7 +202,7 @@ void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
 
 int wxSlider::GetLineSize(void) const
 {
-  return 0;
+    return 0;
 }
 
 void wxSlider::SetTick( int WXUNUSED(tickPos) )
@@ -209,7 +215,7 @@ void wxSlider::SetTickFreq( int WXUNUSED(n), int WXUNUSED(pos) )
 
 int wxSlider::GetTickFreq(void) const
 {
-  return 0;
+    return 0;
 }
 
 void wxSlider::ClearTicks(void)
@@ -222,12 +228,12 @@ void wxSlider::SetSelection( int WXUNUSED(minPos), int WXUNUSED(maxPos) )
 
 int wxSlider::GetSelEnd(void) const
 {
-  return 0;
+    return 0;
 }
 
 int wxSlider::GetSelStart(void) const
 {
-  return 0;
+    return 0;
 }
 
 void wxSlider::ClearSel(void)
@@ -236,16 +242,16 @@ void wxSlider::ClearSel(void)
 
 bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
 {
-  GtkRange *range = GTK_RANGE(m_widget);
-  return ( (window == GTK_WIDGET(range)->window) ||
-           (window == range->trough) ||
-	   (window == range->slider) ||
-	   (window == range->step_forw) ||
-	   (window == range->step_back) );
+    GtkRange *range = GTK_RANGE(m_widget);
+    return ( (window == GTK_WIDGET(range)->window) ||
+             (window == range->trough) ||
+	     (window == range->slider) ||
+	     (window == range->step_forw) ||
+	     (window == range->step_back) );
 }
 
 void wxSlider::ApplyWidgetStyle()
 {
-  SetWidgetStyle();
-  gtk_widget_set_style( m_widget, m_widgetStyle );
+    SetWidgetStyle();
+    gtk_widget_set_style( m_widget, m_widgetStyle );
 }

@@ -167,6 +167,23 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
     if (!menu->IsEnabled(id)) return;
 
+    wxMenuItem* item = menu->FindItem( id );
+    wxCHECK_RET( item, "error in menu item callback" );
+    
+    if (item->m_isCheckMenu)
+    {
+        if (item->m_isChecked == item->IsChecked())
+        {
+	    /* the menu item has been checked by calling wxMenuItem->Check() */
+            return;
+	}
+	else
+	{
+	    /* the user pressed on the menu item -> report */
+	    item->m_isChecked;  /* make consistent again */
+	}
+    }
+
     wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, id );
     event.SetEventObject( menu );
     event.SetInt(id );
@@ -253,6 +270,8 @@ void wxMenuItem::Check( bool check )
 
     wxCHECK_RET( IsCheckable(), "Can't check uncheckable item!" )
 
+    if (check == m_isChecked) return;
+
     m_isChecked = check;
     gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
 }
@@ -272,8 +291,6 @@ bool wxMenuItem::IsChecked() const
     wxCHECK( IsCheckable(), FALSE ); // can't get state of uncheckable item!
 
     bool bIsChecked = ((GtkCheckMenuItem*)m_menuItem)->active != 0;
-
-    wxASSERT( bIsChecked == m_isChecked ); // consistency check
 
     return bIsChecked;
 }

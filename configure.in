@@ -1136,6 +1136,8 @@ else
   if test "$wxUSE_DEBUG_INFO" = 1 ; then
     WXDEBUG="-g"
     wxUSE_OPTIMISE=0
+  else
+    WX_LINK="-s $WX_LINK"
   fi
 fi
 AC_SUBST(WXDEBUG)

@@ -72,10 +72,10 @@ public:
   const wxString& GetHelp() const { return m_helpStr; }
 
   // implementation
+  
   void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }
   GtkWidget *GetMenuItem() const { return m_menuItem; }
 
-private:
   int           m_id;
   wxString      m_text;
   bool          m_isCheckMenu;

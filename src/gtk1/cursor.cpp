@@ -32,12 +32,12 @@ class wxCursorRefData: public wxObjectRefData
 
 wxCursorRefData::wxCursorRefData()
 {
-  m_cursor = (GdkCursor *) NULL;
+    m_cursor = (GdkCursor *) NULL;
 }
 
 wxCursorRefData::~wxCursorRefData()
 {
-  if (m_cursor) gdk_cursor_destroy( m_cursor );
+    if (m_cursor) gdk_cursor_destroy( m_cursor );
 }
 
 //-----------------------------------------------------------------------------
@@ -52,57 +52,45 @@ wxCursor::wxCursor()
 
 wxCursor::wxCursor( int cursorId )
 {
-  m_refData = new wxCursorRefData();
+    m_refData = new wxCursorRefData();
 
-  GdkCursorType gdk_cur = GDK_LEFT_PTR;
-  switch (cursorId)
-  {
-    case wxCURSOR_HAND:       gdk_cur = GDK_HAND1; break;
-    case wxCURSOR_CROSS:      gdk_cur = GDK_CROSSHAIR; break;
-    case wxCURSOR_SIZEWE:     gdk_cur = GDK_SB_H_DOUBLE_ARROW; break;
-    case wxCURSOR_SIZENS:     gdk_cur = GDK_SB_V_DOUBLE_ARROW; break;
-    case wxCURSOR_WAIT:       gdk_cur = GDK_WATCH; break;
-    case wxCURSOR_WATCH:      gdk_cur = GDK_WATCH; break;
-    case wxCURSOR_SIZING:     gdk_cur = GDK_SIZING; break;
-    case wxCURSOR_SPRAYCAN:   gdk_cur = GDK_SPRAYCAN; break;
-    case wxCURSOR_IBEAM:      gdk_cur = GDK_XTERM; break;
-    case wxCURSOR_PENCIL:     gdk_cur = GDK_PENCIL; break;
-    case wxCURSOR_NO_ENTRY:   gdk_cur = GDK_PIRATE; break;
-  }
-
-  M_CURSORDATA->m_cursor = gdk_cursor_new( gdk_cur );
-
+    GdkCursorType gdk_cur = GDK_LEFT_PTR;
+    switch (cursorId)
+    {
+        case wxCURSOR_HAND:             gdk_cur = GDK_HAND1; break;
+        case wxCURSOR_CROSS:            gdk_cur = GDK_CROSSHAIR; break;
+        case wxCURSOR_SIZEWE:           gdk_cur = GDK_SB_H_DOUBLE_ARROW; break;
+        case wxCURSOR_SIZENS:           gdk_cur = GDK_SB_V_DOUBLE_ARROW; break;
+        case wxCURSOR_WAIT:                                        
+        case wxCURSOR_WATCH:            gdk_cur = GDK_WATCH; break;
+        case wxCURSOR_SIZING:           gdk_cur = GDK_SIZING; break;
+        case wxCURSOR_SPRAYCAN:         gdk_cur = GDK_SPRAYCAN; break;
+        case wxCURSOR_IBEAM:            gdk_cur = GDK_XTERM; break;
+        case wxCURSOR_PENCIL:           gdk_cur = GDK_PENCIL; break;
+        case wxCURSOR_NO_ENTRY:         gdk_cur = GDK_PIRATE; break;
+        case wxCURSOR_SIZENWSE:                                     
+        case wxCURSOR_SIZENESW:         gdk_cur = GDK_FLEUR; break;
+        case wxCURSOR_QUESTION_ARROW:   gdk_cur = GDK_QUESTION_ARROW; break;
+	case wxCURSOR_PAINT_BRUSH:      gdk_cur = GDK_SPRAYCAN; break;
+	case wxCURSOR_MAGNIFIER:        gdk_cur = GDK_PLUS; break;
+	case wxCURSOR_CHAR:             gdk_cur = GDK_XTERM; break;
+        case wxCURSOR_LEFT_BUTTON:      gdk_cur = GDK_LEFTBUTTON; break;
+        case wxCURSOR_MIDDLE_BUTTON:    gdk_cur = GDK_MIDDLEBUTTON; break;
+        case wxCURSOR_RIGHT_BUTTON:     gdk_cur = GDK_RIGHTBUTTON; break;
 /*
-  do that yourself
-
-  wxCURSOR_BULLSEYE,
-  wxCURSOR_CHAR,
-  wxCURSOR_LEFT_BUTTON,
-  wxCURSOR_MAGNIFIER,
-  wxCURSOR_MIDDLE_BUTTON,
-  wxCURSOR_NO_ENTRY,
-  wxCURSOR_PAINT_BRUSH,
-  wxCURSOR_POINT_LEFT,
-  wxCURSOR_POINT_RIGHT,
-  wxCURSOR_QUESTION_ARROW,
-  wxCURSOR_RIGHT_BUTTON,
-  wxCURSOR_SIZENESW,
-  wxCURSOR_SIZENS,
-  wxCURSOR_SIZENWSE,
-  wxCURSOR_SIZEWE,
-  wxCURSOR_BLANK
-,
-  wxCURSOR_CROSS_REVERSE,
-  wxCURSOR_DOUBLE_ARROW,
-  wxCURSOR_BASED_ARROW_UP,
-  wxCURSOR_BASED_ARROW_DOWN
+	case wxCURSOR_DOUBLE_ARROW:     gdk_cur = GDK_DOUBLE_ARROW; break;
+	case wxCURSOR_CROSS_REVERSE:    gdk_cur = GDK_CROSS_REVERSE; break;
+        case wxCURSOR_BASED_ARROW_UP:   gdk_cur = GDK_BASED_ARROW_UP; break;
+        case wxCURSOR_BASED_ARROW_DOWN: gdk_cur = GDK_BASED_ARROW_DOWN; break;
 */
+    }
 
+    M_CURSORDATA->m_cursor = gdk_cursor_new( gdk_cur );
 }
 
 wxCursor::wxCursor( const wxCursor &cursor )
 {
-  Ref( cursor );
+    Ref( cursor );
 }
 
 wxCursor::~wxCursor()
@@ -111,29 +99,30 @@ wxCursor::~wxCursor()
 
 wxCursor& wxCursor::operator = ( const wxCursor& cursor )
 {
-  if (*this == cursor) return (*this);
-  Ref( cursor );
-  return *this;
+    if (*this == cursor) return (*this);
+    Ref( cursor );
+    
+    return *this;
 }
 
 bool wxCursor::operator == ( const wxCursor& cursor ) const
 {
-  return m_refData == cursor.m_refData;
+    return m_refData == cursor.m_refData;
 }
 
 bool wxCursor::operator != ( const wxCursor& cursor ) const
 {
-  return m_refData != cursor.m_refData;
+    return m_refData != cursor.m_refData;
 }
 
 bool wxCursor::Ok() const
 {
-  return (m_refData != NULL);
+    return (m_refData != NULL);
 }
 
 GdkCursor *wxCursor::GetCursor() const
 {
-  return M_CURSORDATA->m_cursor;
+    return M_CURSORDATA->m_cursor;
 }
 
 //-----------------------------------------------------------------------------
@@ -144,25 +133,25 @@ bool g_isBusy = FALSE;
 
 void wxEndBusyCursor()
 {
-  g_isBusy = FALSE;
+    g_isBusy = FALSE;
 }
 
 void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
 {
-  g_isBusy = TRUE;
+    g_isBusy = TRUE;
 }
 
 bool wxIsBusy()
 {
-  return g_isBusy;
+    return g_isBusy;
 }
 
 void wxSetCursor( const wxCursor& cursor )
 {
-  extern wxCursor *g_globalCursor;
-  if (g_globalCursor) (*g_globalCursor) = cursor;
+    extern wxCursor *g_globalCursor;
+    if (g_globalCursor) (*g_globalCursor) = cursor;
 
-  if (cursor.Ok()) {}
+    if (cursor.Ok()) {}
 }
 
 
