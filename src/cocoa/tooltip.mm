@@ -70,7 +70,7 @@ wxWindow *wxToolTip::GetWindow() const
 
 // set the delay after which the tooltip appears
 //static
-    void SetDelay(long milliseconds) 
+    void wxToolTip::SetDelay(long milliseconds) 
 {
     //TODO
     wxFAIL_MSG(wxT("Not implemented"));
