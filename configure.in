@@ -3587,6 +3587,11 @@ if test "$wx_cv_sizeof_wchar_t" != "0"; then
         AC_DEFINE(HAVE_WCSLEN)
     fi
 
+    dnl HP-UX aCC needs this define to find mbstrtowcs() &c
+    if test "$USE_HPUX" = 1 -a "x$GCC" != "xyes"; then
+        CPPFLAGS="$CPPFLAGS -D_INCLUDE__STDC_A1_SOURCE "
+    fi
+
     dnl try to use wcsrtombs instead of wcstombs which is buggy in old GNU
     dnl libc versions if possible
     AC_CHECK_FUNCS(wcsrtombs)
