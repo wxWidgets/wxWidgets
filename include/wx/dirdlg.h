@@ -6,7 +6,7 @@
 #elif defined(__WXMOTIF__)
 #include "wx/generic/dirdlgg.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk/dirdlg.h"
+#include "wx/generic/dirdlgg.h"
 #elif defined(__WXQT__)
 #include "wx/qt/dirdlg.h"
 #elif defined(__WXMAC__)

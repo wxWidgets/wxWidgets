@@ -56,6 +56,34 @@ static char * icon1_xpm[] = {
 "                ",
 "                "};
 
+/* XPM */
+static char * icon2_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"16 16 6 1",
+/* colors */
+" 	s None	c None",
+".	c #000000",
+"+	c #c0c0c0",
+"@	c #808080",
+"#	c #ffff00",
+"$	c #ffffff",
+/* pixels */
+"                ",
+"   @@@@@        ",
+"  @$$$$$@       ",
+" @$#+#+#$@@@@@@ ",
+" @$+#+#+$$$$$$@.",
+" @$#+#+#+#+#+#@.",
+"@@@@@@@@@@@@@#@.",
+"@$$$$$$$$$$@@+@.",
+"@$#+#+#+#+##.@@.",
+" @$#+#+#+#+#+.@.",
+" @$+#+#+#+#+#.@.",
+"  @$+#+#+#+##@..",
+"  @@@@@@@@@@@@@.",
+"   .............",
+"                ",
+"                "};
 
 static const int ID_DIRCTRL = 1000;
 static const int ID_TEXTCTRL = 1001;
@@ -63,6 +91,50 @@ static const int ID_OK = 1002;
 static const int ID_CANCEL = 1003;
 static const int ID_NEW = 1004;
 //static const int ID_CHECK = 1005;
+
+//-----------------------------------------------------------------------------
+// wxDirItemData
+//-----------------------------------------------------------------------------
+
+class wxDirItemData : public wxTreeItemData
+{
+public:
+  wxDirItemData(wxString& path, wxString& name);
+  ~wxDirItemData();
+  bool HasSubDirs();
+  wxString *m_path, *m_name;
+  bool m_isHidden;
+  bool m_hasSubDirs;
+};
+
+//-----------------------------------------------------------------------------
+// wxDirCtrl
+//-----------------------------------------------------------------------------
+
+class wxDirCtrl: public wxTreeCtrl
+{
+  DECLARE_DYNAMIC_CLASS(wxDirCtrl)
+  
+  public:
+    bool   m_showHidden;
+    wxTreeItemId   m_rootId;
+  
+    wxDirCtrl(void);
+    wxDirCtrl(wxWindow *parent, const wxWindowID id = -1, 
+	      const wxString &dir = "/",
+	      const wxPoint& pos = wxDefaultPosition,
+	      const wxSize& size = wxDefaultSize,
+	      const long style = wxTR_HAS_BUTTONS,
+	      const wxString& name = "wxTreeCtrl" );
+    void OnExpandItem( const wxTreeEvent &event );
+    void OnCollapseItem( const wxTreeEvent &event );
+    void ShowHidden( const bool yesno );
+    DECLARE_EVENT_TABLE()
+ protected:
+    void CreateItems(const wxTreeItemId &parent);
+    void SetupSections(void);
+    wxArrayString m_paths, m_names;
+};
 
 //-----------------------------------------------------------------------------
 // wxDirItemData
@@ -117,6 +189,7 @@ wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &WXUN
 {
   m_imageListNormal = new wxImageList(16, 16, TRUE);
   m_imageListNormal->Add(wxICON(icon1));
+  m_imageListNormal->Add(wxICON(icon2));
   SetImageList(m_imageListNormal);
   
   m_showHidden = FALSE;
@@ -157,7 +230,7 @@ void wxDirCtrl::CreateItems(const wxTreeItemId &parent)
   for (unsigned int i=0; i<m_paths.Count(); i++) 
   {
     dir_item = new wxDirItemData(m_paths[i],m_names[i]);
-    id = AppendItem( parent, m_names[i], 0, -1, dir_item);
+    id = AppendItem( parent, m_names[i], 0, 1, dir_item);
     if (dir_item->m_hasSubDirs) SetItemHasChildren(id);
   }
 }

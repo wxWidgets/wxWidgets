@@ -89,7 +89,6 @@ LIB_CPP_SRC=\
  gtk/dcscreen.cpp \
  gtk/dnd.cpp \
  gtk/dialog.cpp \
- gtk/dirdlg.cpp \
  gtk/filedlg.cpp \
  gtk/font.cpp \
  gtk/frame.cpp \
@@ -122,6 +121,7 @@ LIB_CPP_SRC=\
 \
  generic/choicdgg.cpp \
  generic/colrdlgg.cpp \
+ generic/dirdlgg.cpp \
  generic/fontdlgg.cpp \
  generic/gridg.cpp \
  generic/imaglist.cpp \

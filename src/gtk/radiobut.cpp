@@ -108,6 +108,9 @@ void wxRadioButton::SetValue( bool val )
 {
     wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
   
+    if ( val == GetValue() )
+        return;
+
     m_blockFirstEvent = TRUE;
   
     if (val)

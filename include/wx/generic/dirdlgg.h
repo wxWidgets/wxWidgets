@@ -58,51 +58,19 @@
 //#include "wx/checkbox.h"
 #include "wx/treectrl.h"
 
+//-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
 WXDLLEXPORT_DATA(extern const char*) wxFileSelectorPromptStr;
 
 //-----------------------------------------------------------------------------
-// wxDirItemData
+// classes
 //-----------------------------------------------------------------------------
 
-class wxDirItemData : public wxTreeItemData
-{
-public:
-  wxDirItemData(wxString& path, wxString& name);
-  ~wxDirItemData();
-  bool HasSubDirs();
-  wxString *m_path, *m_name;
-  bool m_isHidden;
-  bool m_hasSubDirs;
-};
-
-//-----------------------------------------------------------------------------
-// wxDirCtrl
-//-----------------------------------------------------------------------------
-
-class wxDirCtrl: public wxTreeCtrl
-{
-  DECLARE_DYNAMIC_CLASS(wxDirCtrl)
-  
-  public:
-    bool   m_showHidden;
-    wxTreeItemId   m_rootId;
-  
-    wxDirCtrl(void);
-    wxDirCtrl(wxWindow *parent, const wxWindowID id = -1, 
-	      const wxString &dir = "/",
-	      const wxPoint& pos = wxDefaultPosition,
-	      const wxSize& size = wxDefaultSize,
-	      const long style = wxTR_HAS_BUTTONS,
-	      const wxString& name = "wxTreeCtrl" );
-    void OnExpandItem( const wxTreeEvent &event );
-    void OnCollapseItem( const wxTreeEvent &event );
-    void ShowHidden( const bool yesno );
-    DECLARE_EVENT_TABLE()
- protected:
-    void CreateItems(const wxTreeItemId &parent);
-    void SetupSections(void);
-    wxArrayString m_paths, m_names;
-};
+class wxDirItemData;
+class wxDirCtrl;
+class wxDirDialog;
 
 //-----------------------------------------------------------------------------
 // wxDirDialog

@@ -28,6 +28,7 @@
 #include "wx/dynarray.h"
 #include "wx/dcclient.h"
 #include "wx/imaglist.h"
+#include "wx/msgdlg.h"
 
 // -----------------------------------------------------------------------------
 // array types
@@ -873,40 +874,40 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId)
 
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
-  wxGenericTreeItem *gitem = item.m_pItem;
+    wxGenericTreeItem *gitem = item.m_pItem;
 
-  int item_y = gitem->GetY();
+    int item_y = gitem->GetY();
 
-  int start_x = 0;
-  int start_y = 0;
-  ViewStart( &start_x, &start_y );
-  start_y *= 10;
+    int start_x = 0;
+    int start_y = 0;
+    ViewStart( &start_x, &start_y );
+    start_y *= 10;
 
-  if (item_y < start_y+3)
-  {
-    int x = 0;
-    int y = 0;
-    m_anchor->GetSize( x, y );
-    y += 2*m_lineHeight;
-    int x_pos = GetScrollPos( wxHORIZONTAL );
-    SetScrollbars( 10, 10, x/10, y/10, x_pos, item_y/10 );
-    return;
-  }
+    if (item_y < start_y+3)
+    {
+        int x = 0;
+        int y = 0;
+        m_anchor->GetSize( x, y );
+        y += 2*m_lineHeight;
+        int x_pos = GetScrollPos( wxHORIZONTAL );
+        SetScrollbars( 10, 10, x/10, y/10, x_pos, item_y/10 );
+        return;
+    }
 
-  int w = 0;
-  int h = 0;
-  GetClientSize( &w, &h );
+    int w = 0;
+    int h = 0;
+    GetClientSize( &w, &h );
 
-  if (item_y > start_y+h-26)
-  {
-    int x = 0;
-    int y = 0;
-    m_anchor->GetSize( x, y );
-    y += 2*m_lineHeight;
-    int x_pos = GetScrollPos( wxHORIZONTAL );
-    SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-h+30)/10 );
-     return;
-  }
+    if (item_y > start_y+h-26)
+    {
+       int x = 0;
+       int y = 0;
+       m_anchor->GetSize( x, y );
+       y += 2*m_lineHeight;
+       int x_pos = GetScrollPos( wxHORIZONTAL );
+       SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-h+30)/10 );
+       return;
+    }
 }
 
 void wxTreeCtrl::ScrollTo(const wxTreeItemId& WXUNUSED(item))
@@ -919,25 +920,52 @@ wxTextCtrl *wxTreeCtrl::EditLabel( const wxTreeItemId& WXUNUSED(item),
 {
   wxFAIL_MSG("not implemented");
 
-  return NULL;
+  return (wxTextCtrl*)NULL;
 }
 
 wxTextCtrl *wxTreeCtrl::GetEditControl() const
 {
-  wxFAIL_MSG("not implemented");
+    wxFAIL_MSG("not implemented");
 
-  return NULL;
+    return (wxTextCtrl*)NULL;
 }
 
 void wxTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item), bool WXUNUSED(discardChanges))
 {
-  wxFAIL_MSG("not implemented");
+    wxFAIL_MSG("not implemented");
 }
 
-void wxTreeCtrl::SortChildren( const wxTreeItemId& WXUNUSED(item),
-                               wxTreeItemCmpFunc *WXUNUSED(cmpFunction))
+wxTreeItemCmpFunc tree_ctrl_compare_func_2;
+
+int tree_ctrl_compare_func_1( wxGenericTreeItem **line1, wxGenericTreeItem **line2 )
 {
-  wxFAIL_MSG("not implemented");
+    if (tree_ctrl_compare_func_2 == NULL)
+    {
+        return strcmp( (*line1)->GetText(), (*line2)->GetText() );
+    }
+    else
+    {
+        wxTreeItemData *data1 = (*line1)->GetData();
+        wxTreeItemData *data2 = (*line2)->GetData();
+        return tree_ctrl_compare_func_2( data1, data2 );
+    }
+}
+
+void wxTreeCtrl::SortChildren( const wxTreeItemId& item,
+                               wxTreeItemCmpFunc *cmpFunction)
+{
+    wxGenericTreeItem *gitem = item.m_pItem;
+    
+    if (!gitem) return;
+    
+    if (cmpFunction == NULL)
+       tree_ctrl_compare_func_2 = NULL;
+    else
+       tree_ctrl_compare_func_2 = *cmpFunction;
+       
+    gitem->GetChildren().Sort( *tree_ctrl_compare_func_1 );
+    
+    m_dirty = TRUE;
 }
 
 wxImageList *wxTreeCtrl::GetImageList() const
@@ -963,22 +991,23 @@ void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
 // -----------------------------------------------------------------------------
 // helpers
 // -----------------------------------------------------------------------------
+
 void wxTreeCtrl::AdjustMyScrollbars()
 {
-  if (m_anchor)
-  {
-    int x = 0;
-    int y = 0;
-    m_anchor->GetSize( x, y );
-    y += 2*m_lineHeight;
-    int x_pos = GetScrollPos( wxHORIZONTAL );
-    int y_pos = GetScrollPos( wxVERTICAL );
-    SetScrollbars( 10, 10, x/10, y/10, x_pos, y_pos );
-  }
-  else
-  {
-    SetScrollbars( 0, 0, 0, 0 );
-  }
+    if (m_anchor)
+    {
+        int x = 0;
+        int y = 0;
+        m_anchor->GetSize( x, y );
+        y += 2*m_lineHeight;
+        int x_pos = GetScrollPos( wxHORIZONTAL );
+        int y_pos = GetScrollPos( wxVERTICAL );
+        SetScrollbars( 10, 10, x/10, y/10, x_pos, y_pos );
+    }
+    else
+    {
+        SetScrollbars( 0, 0, 0, 0 );
+    }
 }
 
 void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
@@ -1012,7 +1041,12 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
   int image_h = 0;
   int image_w = 0;
-  if (item->GetImage() != -1)
+  if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
+  {
+    m_imageListNormal->GetSize( item->GetSelectedImage(), image_w, image_h );
+    image_w += 4;
+  } 
+  else if (item->GetImage() != -1)
   {
     m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
     image_w += 4;
@@ -1020,7 +1054,15 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
   dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, text_h+4 );
 
-  if (item->GetImage() != -1)
+  if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
+  {
+    dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
+    m_imageListNormal->Draw( item->GetSelectedImage(), dc,
+                             item->GetX(), item->GetY()-1,
+                             wxIMAGELIST_DRAW_TRANSPARENT );
+    dc.DestroyClippingRegion();
+  }
+  else if (item->GetImage() != -1)
   {
     dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
     m_imageListNormal->Draw( item->GetImage(), dc,
@@ -1131,33 +1173,33 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
 
 void wxTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
-  if ( !m_anchor )
-    return;
+    if ( !m_anchor )
+        return;
 
-  wxPaintDC dc(this);
-  PrepareDC( dc );
+    wxPaintDC dc(this);
+    PrepareDC( dc );
 
-  dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
+    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
 
-  dc.SetPen( m_dottedPen );
-  m_lineHeight = (int)(dc.GetCharHeight() + 4);
+    dc.SetPen( m_dottedPen );
+    m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
-  int y = m_lineHeight / 2 + 2;
-  PaintLevel( m_anchor, dc, 0, y );
+    int y = m_lineHeight / 2 + 2;
+    PaintLevel( m_anchor, dc, 0, y );
 }
 
 void wxTreeCtrl::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
-  m_hasFocus = TRUE;
-  if ( m_current )
-    RefreshLine( m_current );
+    m_hasFocus = TRUE;
+    if ( m_current )
+        RefreshLine( m_current );
 }
 
 void wxTreeCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
-  m_hasFocus = FALSE;
-  if ( m_current )
-    RefreshLine( m_current );
+    m_hasFocus = FALSE;
+    if ( m_current )
+        RefreshLine( m_current );
 }
 
 void wxTreeCtrl::OnChar( wxKeyEvent &event )
