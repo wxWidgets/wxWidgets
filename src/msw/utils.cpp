@@ -500,12 +500,12 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 
         if ( pTotal )
         {
-            *pTotal = wxLongLong(bytesTotal.u.HighPart, bytesTotal.u.LowPart);
+            *pTotal = wxLongLong(bytesTotal.HighPart, bytesTotal.LowPart);
         }
 
         if ( pFree )
         {
-            *pFree = wxLongLong(bytesFree.u.HighPart, bytesFree.u.LowPart);
+            *pFree = wxLongLong(bytesFree.HighPart, bytesFree.LowPart);
         }
     }
     else

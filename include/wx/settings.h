@@ -130,6 +130,14 @@ enum wxSystemFeature
     wxSYS_CAN_ICONIZE_FRAME
 };
 
+// values for wxSystemSettings::GetString
+enum wxSystemString
+{
+    wxSYS_DECIMAL_SEPARATOR = 1,
+    wxSYS_LIST_SEPARATOR,
+    wxSYS_LEADING_ZERO
+};
+
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative: defines the API for wxSystemSettings class
 // ----------------------------------------------------------------------------
@@ -155,6 +163,12 @@ public:
 
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);
+
+    // Windows-only for now
+#ifdef __WXMSW__
+    // Get a system string, e. g. decimal separator
+    static wxString GetString(int index);
+#endif
 };
 
 // ----------------------------------------------------------------------------

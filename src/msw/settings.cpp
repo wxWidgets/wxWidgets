@@ -353,6 +353,41 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
 #endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
+wxString wxSystemSettingsNative::GetString(int index)
+{
+    wxString str;
+    wxChar buffer[256];
+    size_t count;
+    buffer[0] = wxT('\0');
+    switch (index)
+    {
+        case wxSYS_DECIMAL_SEPARATOR:
+            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, buffer, 256);
+            if (!count)
+                str << ".";
+            else
+                str << buffer;
+            break;
+        case wxSYS_LIST_SEPARATOR:
+            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, buffer, 256);
+            if (!count)
+                str << ",";
+            else
+                str << buffer;
+            break;
+        case wxSYS_LEADING_ZERO: // 0 means no leading zero, 1 means leading zero
+            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ILZERO, buffer, 256);
+            if (!count)
+                str << "0";
+            else
+                str << buffer;
+            break;
+        default:
+            wxFAIL_MSG("Unknown System String !");
+    }
+    return str;
+}
+
 bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 {
     switch ( index )

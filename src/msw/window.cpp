@@ -1543,7 +1543,8 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         ::GetClientRect(GetHwnd(), &rectClient);
 
         // if the size is already ok, stop here (rectClient.left = top = 0)
-        if ( rectClient.right == width && rectClient.bottom == height )
+        if ( (rectClient.right == width || width == -1) &&
+             (rectClient.bottom == height || height == -1) )
         {
             break;
         }

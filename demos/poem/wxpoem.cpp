@@ -680,9 +680,13 @@ int MyApp::OnExit()
   delete Corner3;
   delete Corner4;
 
+  // Causes crash since they're deleted by the global font list
+#if 0
   delete NormalFont;
   delete BoldFont;
   delete ItalicFont;
+#endif
+
   delete[] poem_buffer;
   if (search_string)
     delete[] search_string;
