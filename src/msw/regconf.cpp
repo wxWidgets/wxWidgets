@@ -97,14 +97,14 @@ void wxRegConfig::SetPath(const wxString& strPath)
   if ( strPath.IsEmpty() )
     return;
 
-  if ( strPath[0] == APPCONF_PATH_SEPARATOR ) {
+  if ( strPath[0] == wxCONFIG_PATH_SEPARATOR ) {
     // absolute path
     wxSplitPath(aParts, strPath);
   }
   else {
     // relative path, combine with current one
     wxString strFullPath = GetPath();
-    strFullPath << APPCONF_PATH_SEPARATOR << strPath;
+    strFullPath << wxCONFIG_PATH_SEPARATOR << strPath;
     wxSplitPath(aParts, strFullPath);
   }
 
@@ -113,7 +113,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
   m_strPath.Empty();
   for ( uint n = 0; n < aParts.Count(); n++ ) {
     strRegPath << '\\' << aParts[n];
-    m_strPath << APPCONF_PATH_SEPARATOR << aParts[n];
+    m_strPath << wxCONFIG_PATH_SEPARATOR << aParts[n];
   }
 
   // change current key(s)
@@ -355,7 +355,7 @@ bool wxRegConfig::DeleteEntry(const char *szValue, bool bGroupIfEmptyAlso)
     return FALSE;
 
   if ( !m_keyLocal.HasSubkeys() ) {
-    wxString strKey = GetPath().Right(APPCONF_PATH_SEPARATOR);
+    wxString strKey = GetPath().Right(wxCONFIG_PATH_SEPARATOR);
     SetPath("..");  // changes m_keyLocal
     return m_keyLocal.DeleteKey(strKey);
   }

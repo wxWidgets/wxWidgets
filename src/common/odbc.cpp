@@ -607,7 +607,7 @@ bool wxRecordSet::GetResultSet(void)
     curcol = cols.Append(name, col1);
     col1->SetName(name);
     col1->SetType(type);
-    col1->SetNullable(nullable);
+    col1->SetNullable((nullable != 0));
 
     wxQueryField *field1 = new wxQueryField;
     fetch = fetchbuf.Append(field1);

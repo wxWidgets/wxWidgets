@@ -732,7 +732,7 @@ void wxToolBarBase::DoToolbarUpdates(void)
 
 #ifdef __WXMSW__
 // Circumvent wxControl::MSWOnMouseMove which doesn't set the cursor.
-void wxToolBarBase::MSWOnMouseMove(int x, int y, const WXUINT flags)
+void wxToolBarBase::MSWOnMouseMove(int x, int y, WXUINT flags)
 {
     wxWindow::MSWOnMouseMove(x, y, flags);
 }
