@@ -99,11 +99,11 @@ stock cursors are available on all platforms.", "",
         "Constructs a cursor from a `wx.Image`. The mask (if any) will be used
 for setting the transparent portions of the cursor.",
 "
-In MSW the cursor is resized to 32x32.
+In MSW the cursor is resized to 32x32 if it was larger.
 
 In GTK the cursor will be displayed at the size of the image.
 
-On MacOS the cursor is resized to 16x16.",
+On MacOS the cursor is resized to 16x16 if it was larger.",
         CursorFromImage);
     
     
