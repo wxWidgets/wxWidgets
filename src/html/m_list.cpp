@@ -204,6 +204,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
 
     TAG_HANDLER_CONSTR(OLULLI)
     {
+        m_List = NULL;
         m_Numbering = 0;
     }
 
