@@ -669,7 +669,12 @@ bool wxInputStream::Eof() const
 
     char c;
     self->Read(&c, 1);
-    if ( GetLastError() == wxSTREAM_EOF )
+
+    // some streams can know that they're at EOF before actually trying to
+    // read beyond the end of stream (e.g. files) while others have no way of
+    // knowing it, so to provide the same behaviour in all cases we only
+    // return TRUE from here if the character really couldn't be read
+    if ( !self->LastRead() && GetLastError() == wxSTREAM_EOF )
     {
         return TRUE;
     }
