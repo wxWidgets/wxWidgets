@@ -33,6 +33,10 @@
     #include "wx/log.h"
 #endif
 
+#if defined(__DARWIN__)
+    #include <dlfcn.h>
+#endif
+
 #if defined(HAVE_DLOPEN) || defined(__DARWIN__)
     #define USE_POSIX_DL_FUNCS
 #elif !defined(HAVE_SHL_LOAD)
@@ -226,7 +230,7 @@ void wxDynamicLibrary::Unload(wxDllType handle)
     shl_unload(handle);
 #endif // USE_POSIX_DL_FUNCS/!USE_POSIX_DL_FUNCS
 
-#ifdef USE_POSIX_DL_FUNCS
+#if defined(USE_POSIX_DL_FUNCS) && defined(wxHAVE_DYNLIB_ERROR)
     if ( rc != 0 )
         Error();
 #endif
