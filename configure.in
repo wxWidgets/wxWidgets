@@ -2588,6 +2588,7 @@ fi
 dnl library link name
 WX_LIBRARY="wx_${TOOLCHAIN_NAME}"
 WX_LIBRARY_GL="wx_${TOOLCHAIN_NAME_GL}"
+WX_LIBRARY_BASENAME="wx_${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}"
 
 dnl the name of the shared library
 WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
@@ -5194,9 +5195,16 @@ wx_cv_program_ext=$PROGRAM_EXT
 wx_cv_target_library=$WX_TARGET_LIBRARY
 wx_cv_target_library_gl=$WX_TARGET_LIBRARY_GL
 wx_cv_target_libtype=$WX_TARGET_LIBRARY_TYPE
+wx_cv_library_basename=${WX_LIBRARY_BASENAME}
+wx_cv_release=${WX_RELEASE}
+wx_cv_current=${WX_CURRENT}
+wx_cv_revision=${WX_REVISION}
+wx_cv_age=${WX_AGE}
 export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
        wx_cv_path_ifs wx_cv_program_ext \
-       wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype
+       wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype \
+       wx_cv_library_basename wx_cv_release wx_cv_current wx_cv_revision wx_cv_age
+
 
 AC_CONFIG_SUBDIRS(demos samples utils contrib)
 

@@ -19,7 +19,7 @@ DATAFILES=about.html index.html
 
 OBJECTS=applet.o dialogs_wdr.o monitorapplet.o combobox.o
 
-APPEXTRALIBS=$(top_builddir)/lib/libapplet.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_applet-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env
