@@ -608,7 +608,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     for ( line = (height - 1); line >= 0; line-- )
     {
         int linepos = 0;
-        for ( column = 0; column < width; )
+        for ( column = 0; column < width ; )
         {
             if ( bpp < 16 )
             {
@@ -631,11 +631,70 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 {
                     if ( comp == BI_RLE4 )
                     {
-                        if ( verbose )
-                            wxLogError(_("DIB Header: Cannot deal with 4bit encoded yet."));
-                        image->Destroy();
-                        delete[] cmap;
-                        return FALSE;
+                        wxUint8 first;
+                        first = aByte;
+                        aByte = stream.GetC();
+                        if ( first == 0 ) 
+                        {
+                            if ( aByte == 0 )
+                            {
+								if ( column > 0 )
+									column = width;
+                            }
+                            else if ( aByte == 1 )
+                            {
+                                column = width;
+                                line = -1;
+                            }
+                            else if ( aByte == 2 )
+                            {
+                                aByte = stream.GetC();
+                                column += aByte;
+                                linepos = column * bpp / 4;
+                                aByte = stream.GetC();
+                                line -= aByte; // upside down
+                            }
+                            else
+                            {
+                                int absolute = aByte;	
+								wxUint8 nibble[2] ;
+								int readBytes = 0 ;
+								for (int k = 0; k < absolute; k++)
+                                {
+									if ( !(k % 2 ) )
+									{
+										++readBytes ;
+										aByte = stream.GetC();
+										nibble[0] = ( (aByte & 0xF0) >> 4 ) ;
+										nibble[1] = ( aByte & 0x0F ) ;
+									}
+                                    ptr[poffset    ] = cmap[nibble[k%2]].r;
+                                    ptr[poffset + 1] = cmap[nibble[k%2]].g;
+                                    ptr[poffset + 2] = cmap[nibble[k%2]].b;
+                                    column++;
+ 									if ( k % 2 )
+										linepos++;
+                               }
+                                if ( readBytes & 0x01 )
+                                    aByte = stream.GetC();
+                            }
+						}
+                        else
+                        {
+							wxUint8 nibble[2] ;
+							nibble[0] = ( (aByte & 0xF0) >> 4 ) ;
+							nibble[1] = ( aByte & 0x0F ) ;
+
+                            for ( int l = 0; l < first && column < width; l++ )
+                            {
+                                ptr[poffset    ] = cmap[nibble[l%2]].r;
+                                ptr[poffset + 1] = cmap[nibble[l%2]].g;
+                                ptr[poffset + 2] = cmap[nibble[l%2]].b;
+                                column++;
+								if ( l % 2 )
+									linepos++;
+							}
+                        }
                     }
                     else
                     {
@@ -757,7 +816,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                    ptr[poffset + 2] = temp;
                    column++;
                }
-          }
+		  }
           while ( (linepos < linesize) && (comp != 1) && (comp != 2) )
           {
               stream.Read(&aByte, 1);
