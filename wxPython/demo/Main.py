@@ -439,8 +439,10 @@ class wxPythonDemo(wx.Frame):
         icon = images.getMondrianIcon()
         self.SetIcon(icon)
 
-        if wx.Platform == '__WXMSW__':
+        if wx.Platform != '__WXMAC__':
             # setup a taskbar icon, and catch some events from it
+            icon = wx.IconFromBitmap(
+                images.getMondrianImage().Scale(16,16).ConvertToBitmap() )            
             self.tbicon = wx.TaskBarIcon()
             self.tbicon.SetIcon(icon, "wxPython Demo")
             self.tbicon.Bind(wx.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarActivate)
