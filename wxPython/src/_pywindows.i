@@ -90,6 +90,8 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
+    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    
     PYPRIVATE;
 };
 
@@ -119,6 +121,7 @@ IMP_PYCALLBACK_SIZE_const(wxPyWindow, wxWindow, GetMaxSize);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, RemoveChild);
 
+IMP_PYCALLBACK_BOOL_(wxPyWindow, wxWindow, ShouldInheritColours);
 %}
 
 // And now the one for SWIG to see
@@ -215,6 +218,8 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
+    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    
     PYPRIVATE;
 };
 
@@ -244,6 +249,7 @@ IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, GetMaxSize);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, RemoveChild);
 
+IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, ShouldInheritColours);
 %}
 
 // And now the one for SWIG to see

@@ -60,6 +60,8 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
+    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    
     PYPRIVATE;
 };
 
@@ -89,6 +91,7 @@ IMP_PYCALLBACK_SIZE_const(wxPyControl, wxControl, GetMaxSize);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
+IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, ShouldInheritColours);
 %}
 
 // And now the one for SWIG to see
