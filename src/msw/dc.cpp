@@ -297,6 +297,7 @@ void wxDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
         {
             wxLogLastError(_T("SelectClipRgn"));
         }
+        DeleteObject(hrgn);
 
         UpdateClipBox();
     }
