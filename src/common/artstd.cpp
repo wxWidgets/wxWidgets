@@ -23,6 +23,9 @@
 #include "wx/artprov.h"
 #include "wx/module.h"
 
+// For the purposes of forcing this module to link
+char g_ArtProviderModule = 0;
+
 // ----------------------------------------------------------------------------
 // wxDefaultArtProvider
 // ----------------------------------------------------------------------------
