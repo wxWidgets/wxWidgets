@@ -77,14 +77,14 @@ class WXDLLEXPORT wxItemResource: public wxObject
   inline void SetValue4(const wxString& v) { m_value4 = v; }
   inline void SetStringValues(const wxStringList& svalues) { m_stringValues = svalues; }
 
-  inline wxString GetType() const { return m_itemType; }
+  inline const wxString& GetType() const { return m_itemType; }
   inline int GetX() const { return m_x; }
   inline int GetY() const { return m_y; }
   inline int GetWidth() const { return m_width; }
   inline int GetHeight() const { return m_height; }
 
-  inline wxString GetTitle() const { return m_title; }
-  inline wxString GetName() const { return m_name; }
+  inline const wxString& GetTitle() const { return m_title; }
+  inline const wxString& GetName() const { return m_name; }
   inline long GetStyle() const { return m_windowStyle; }
   inline int GetId() const { return m_windowId; }
 
