@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xml.h"
 #pragma implementation "xmlio.h"
@@ -32,15 +32,15 @@
 
 
 
-wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type, 
+wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
                      const wxString& name, const wxString& content,
                      wxXmlProperty *props, wxXmlNode *next)
     : m_type(type), m_name(name), m_content(content),
-      m_properties(props), m_parent(parent), 
+      m_properties(props), m_parent(parent),
       m_children(NULL), m_next(next)
 {
     if (m_parent)
-    { 
+    {
         if (m_parent->m_children)
         {
             m_next = m_parent->m_children;
@@ -53,7 +53,7 @@ wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
 
 
 
-wxXmlNode::wxXmlNode(wxXmlNodeType type, const wxString& name, 
+wxXmlNode::wxXmlNode(wxXmlNodeType type, const wxString& name,
                      const wxString& content)
     : m_type(type), m_name(name), m_content(content),
       m_properties(NULL), m_parent(NULL),
@@ -94,7 +94,7 @@ void wxXmlNode::DoCopy(const wxXmlNode& node)
         AddChild(new wxXmlNode(*n));
         n = n->GetNext();
     }
-    
+
     m_properties = NULL;
     wxXmlProperty *p = node.m_properties;
     while (p)
@@ -108,13 +108,13 @@ void wxXmlNode::DoCopy(const wxXmlNode& node)
 bool wxXmlNode::HasProp(const wxString& propName) const
 {
     wxXmlProperty *prop = GetProperties();
-    
+
     while (prop)
     {
         if (prop->GetName() == propName) return TRUE;
         prop = prop->GetNext();
     }
-    
+
     return FALSE;
 }
 
@@ -123,7 +123,7 @@ bool wxXmlNode::HasProp(const wxString& propName) const
 bool wxXmlNode::GetPropVal(const wxString& propName, wxString *value) const
 {
     wxXmlProperty *prop = GetProperties();
-    
+
     while (prop)
     {
         if (prop->GetName() == propName)
@@ -133,7 +133,7 @@ bool wxXmlNode::GetPropVal(const wxString& propName, wxString *value) const
         }
         prop = prop->GetNext();
     }
-    
+
     return FALSE;
 }
 
@@ -282,7 +282,7 @@ wxList *wxXmlDocument::sm_handlers = NULL;
 wxXmlDocument::wxXmlDocument(const wxString& filename, wxXmlIOType io_type)
                           : wxObject(), m_root(NULL)
 {
-    if (!Load(filename, io_type)) 
+    if (!Load(filename, io_type))
     {
         delete m_root;
         m_root = NULL;
@@ -294,7 +294,7 @@ wxXmlDocument::wxXmlDocument(const wxString& filename, wxXmlIOType io_type)
 wxXmlDocument::wxXmlDocument(wxInputStream& stream, wxXmlIOType io_type)
                           : wxObject(), m_root(NULL)
 {
-    if (!Load(stream, io_type)) 
+    if (!Load(stream, io_type))
     {
         delete m_root;
         m_root = NULL;
@@ -426,3 +426,16 @@ class wxXmlModule: public wxModule
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxXmlModule, wxModule)
+
+
+
+
+// When wxXml is loaded dynamically after the application is already running
+// then the built-in module system won't pick this one up.  Add it manually.
+void wxXmlInitXmlModule()
+{
+    wxModule* module = new wxXmlModule;
+    module->Init();
+    wxModule::RegisterModule(module);
+}
+
