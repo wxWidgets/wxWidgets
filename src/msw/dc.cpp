@@ -1613,7 +1613,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
 
 
 // Each element of the array will be the width of the string up to and
-// including the coresoponding character in text.  
+// including the coresoponding character in text.
 
 bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
@@ -1630,22 +1630,24 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
         maxLenText = version == wxWINDOWS_NT ? 65535 : 8192;
         maxWidth =   version == wxWINDOWS_NT ? INT_MAX : 32767;
     }
-        
+
     widths.Empty();
     widths.Add(0, stlen);  // fill the array with zeros
-    
+
     if (!::GetTextExtentExPoint(GetHdc(),
                                 text.c_str(),           // string to check
                                 wxMin(stlen, maxLenText),
-                                maxWidth, 
-                                &fit,                   // receives count of chars
+                                maxWidth,
+                                &fit,                   // [out] count of chars
                                                         // that will fit
-                                widths.begin(),         // array to fill
-                                &sz)) {
+                                &widths[0],             // array to fill
+                                &sz))
+    {
         // API failed
         wxLogLastError(wxT("GetTextExtentExPoint"));
-        return false;        
-    } 
+        return false;
+    }
+
     return true;
 }
 
