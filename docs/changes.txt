@@ -172,6 +172,7 @@ wxGTK:
 - fixed mouse wheel handling under GTK2 (Hugh Fisher)
 - wxNotebook::HitTest() implemented (Daniel Lundqvist)
 - memory leaks fixes in wxFileDialog (John Labenski)
+- don't drop click events from triple clicks (Frode Solheim)
 
 wxMac:
 

@@ -1539,46 +1539,52 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 
     if (gdk_event->button == 1)
     {
+        // note that GDK generates triple click events which are not supported
+        // by wxWindows but still have to be passed to the app as otherwise
+        // clicks would simply go missing
         switch (gdk_event->type)
         {
-            case GDK_BUTTON_PRESS: event_type = wxEVT_LEFT_DOWN; break;
-            case GDK_2BUTTON_PRESS: event_type = wxEVT_LEFT_DCLICK; break;
-            case GDK_3BUTTON_PRESS: return FALSE;
-            default:  break;
+            case GDK_3BUTTON_PRESS:     // we could also map this to DCLICK...
+            case GDK_BUTTON_PRESS:
+                event_type = wxEVT_LEFT_DOWN;
+                break;
+
+            case GDK_2BUTTON_PRESS:
+                event_type = wxEVT_LEFT_DCLICK;
+                break;
         }
     }
     else if (gdk_event->button == 2)
     {
         switch (gdk_event->type)
         {
-            case GDK_BUTTON_PRESS: event_type = wxEVT_MIDDLE_DOWN; break;
-            case GDK_2BUTTON_PRESS: event_type = wxEVT_MIDDLE_DCLICK; break;
-            default:  break;
+            case GDK_BUTTON_PRESS:
+                event_type = wxEVT_MIDDLE_DOWN;
+                break;
+
+            case GDK_2BUTTON_PRESS:
+                event_type = wxEVT_MIDDLE_DCLICK;
+                break;
         }
     }
     else if (gdk_event->button == 3)
     {
         switch (gdk_event->type)
         {
-            case GDK_BUTTON_PRESS: event_type = wxEVT_RIGHT_DOWN; break;
-            case GDK_2BUTTON_PRESS: event_type = wxEVT_RIGHT_DCLICK; break;
-            default:  break;
+            case GDK_BUTTON_PRESS:
+                event_type = wxEVT_RIGHT_DOWN;
+                break;
+
+            case GDK_2BUTTON_PRESS:
+                event_type = wxEVT_RIGHT_DCLICK;
+                break;
         }
     }
-    else if (gdk_event->button == 4)
+    else if (gdk_event->button == 4 || gdk_event->button == 5)
     {
-        switch (gdk_event->type)
+        if (gdk_event->type == GDK_BUTTON_PRESS )
         {
-            case GDK_BUTTON_PRESS: event_type = wxEVT_MOUSEWHEEL; break;
-            default:  break;
-        }
-    }
-    else if (gdk_event->button == 5)
-    {
-        switch (gdk_event->type)
-        {
-            case GDK_BUTTON_PRESS: event_type = wxEVT_MOUSEWHEEL; break;
-            default:  break;
+            event_type = wxEVT_MOUSEWHEEL;
         }
     }
 
