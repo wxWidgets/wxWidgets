@@ -297,10 +297,17 @@ wxString wxRegKey::GetName(bool bShortPrefix) const
   return str;
 }
 
+#ifdef __GNUWIN32__
+bool wxRegKey::GetKeyInfo(uint* pnSubKeys,
+                          uint* pnMaxKeyLen,
+                          uint* pnValues,
+                          uint* pnMaxValueLen) const
+#else
 bool wxRegKey::GetKeyInfo(ulong *pnSubKeys,
                           ulong *pnMaxKeyLen,
                           ulong *pnValues,
                           ulong *pnMaxValueLen) const
+#endif
 {
 #ifdef  __WIN32__
   m_dwLastError = ::RegQueryInfoKey

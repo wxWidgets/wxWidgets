@@ -50,6 +50,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
   {
     wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
     event.SetString(copystring(GetValue()));
+    event.SetEventObject(this);
     ProcessCommand(event);
     delete[] event.GetString();
     return TRUE;

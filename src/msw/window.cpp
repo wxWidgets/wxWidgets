@@ -504,6 +504,12 @@ void wxWindow::ReleaseMouse(void)
   }
 }
 
+void wxWindow::SetAcceleratorTable(const wxAcceleratorTable& accel)
+{
+    m_acceleratorTable = accel;
+}
+
+
 // Push/pop event handler (i.e. allow a chain of event handlers
 // be searched)
 void wxWindow::PushEventHandler(wxEvtHandler *handler)
@@ -1961,9 +1967,13 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
   return FALSE;
 }
 
-bool wxWindow::MSWTranslateMessage(WXMSG* WXUNUSED(pMsg))
+bool wxWindow::MSWTranslateMessage(WXMSG* pMsg)
 {
-    return FALSE;
+    if (m_acceleratorTable.Ok() &&
+          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable.GetHACCEL(), (MSG *)pMsg))
+        return TRUE;
+    else
+        return FALSE;
 }
 
 long wxWindow::MSWOnMDIActivate(long WXUNUSED(flag), WXHWND WXUNUSED(activate), WXHWND WXUNUSED(deactivate))

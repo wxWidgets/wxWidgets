@@ -149,13 +149,13 @@ void wxDropSource::Init()
   m_pIDropSource->AddRef();
 }
 
-wxDropSource::wxDropSource()
+wxDropSource::wxDropSource(wxWindow* WXUNUSED(win))
 {
   Init();
   m_pData = NULL;
 }
 
-wxDropSource::wxDropSource(wxDataObject& data)
+wxDropSource::wxDropSource(wxDataObject& data, wxWindow* WXUNUSED(win))
 {
   Init();
   SetData(data);

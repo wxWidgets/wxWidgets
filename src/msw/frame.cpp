@@ -352,11 +352,6 @@ void wxFrame::SetIcon(const wxIcon& icon)
 #endif
 }
 
-void wxFrame::SetAcceleratorTable(const wxAcceleratorTable& accel)
-{
-    m_acceleratorTable = accel;
-}
-
 wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name)
 {

@@ -432,6 +432,11 @@ void wxToolBar95::ToggleTool(int toolIndex, bool toggle)
   }
 }
 
+bool wxToolBar95::GetToolState(int toolIndex) const
+{
+    return (::SendMessage((HWND) GetHWND(), TB_ISBUTTONCHECKED, (WPARAM)toolIndex, (LPARAM)0) != 0);
+}
+
 void wxToolBar95::ClearTools(void)
 {
   // TODO: Don't know how to reset the toolbar bitmap, as yet.
