@@ -10,6 +10,7 @@ def runTest(frame, nb, log):
     dlg = wxMultipleChoiceDialog(frame,
                                  "Pick some from\n this list\nblah blah...",
                                  "m.s.d.", lst)
+    dlg.CenterOnScreen(wxBOTH)
     if (dlg.ShowModal() == wxID_OK):
         print "Selection:", dlg.GetValue(), " -> ", dlg.GetValueString()
 

@@ -90,11 +90,14 @@ class TestPanel(wxPanel):
     def OnTestGetSelection(self, evt):
         start, end = self.tc.GetSelection()
         text = self.tc.GetValue()
-        # Looks like a bug here, but only if not wxTE_RICH...
-        if wxPlatform == "__WXMSW__":
+        if wxPlatform == "__WXMSW__":  # This is why GetStringSelection was added
             text = string.replace(text, '\n', '\r\n')
-        self.log.write("GetSelection(): (%d, %d)\n\tSelectedText: %s\n" %
-                       (start, end, repr(text[start:end])))
+        self.log.write("GetSelection(): (%d, %d)\n"
+                       "\tGetStringSelection(): %s\n"
+                       "\tSelectedText: %s\n" %
+                       (start, end,
+                        self.tc.GetStringSelection(),
+                        repr(text[start:end])))
 
 
 #---------------------------------------------------------------------------
