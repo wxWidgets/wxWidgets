@@ -8,8 +8,8 @@
 // Licence:     wxWindows
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_URIH__
-#define _WX_URIH__
+#ifndef _WX_URI_H_
+#define _WX_URI_H_
 
 #if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "uri.h"
@@ -20,16 +20,16 @@
 #include "wx/string.h"
 
 // Host Type that the server can be
-typedef enum 
+enum wxURIHostType
 {
     wxURI_REGNAME,		
     wxURI_IPV4ADDRESS,	
     wxURI_IPV6ADDRESS,  
     wxURI_IPVFUTURE		
-} wxURIHostType;
+};
 
 // Component Flags
-typedef enum
+enum wxURIFieldType
 {
     wxURI_SCHEME = 1,
     wxURI_USER = 2,
@@ -38,7 +38,14 @@ typedef enum
     wxURI_PATH = 16,
     wxURI_QUERY = 32,
     wxURI_FRAGMENT = 64
-} wxURIFieldType;
+};
+
+// Miscellaneous other flags
+enum wxURIFlags
+{
+    wxURI_STRICT = 1
+};
+
 
 // Generic class for parsing URIs.
 //
@@ -52,7 +59,7 @@ public:
     wxURI(const wxString& uri);
     wxURI(const wxURI& uri);
 
-    ~wxURI();
+    virtual ~wxURI();
 
     void Create(const wxString& uri);
 
@@ -75,7 +82,7 @@ public:
 
     wxString Get() const;
 
-    void Resolve(const wxURI& base, const bool& bStrict = true);
+    void Resolve(const wxURI& base, int flags = wxURI_STRICT);
     bool IsReference() const;
 
     wxURI& operator = (const wxURI& uri);
@@ -92,8 +99,9 @@ protected:
     const wxChar* ParseUser      (const wxChar* uri);
     const wxChar* ParseServer    (const wxChar* uri);
     const wxChar* ParsePort      (const wxChar* uri);
-    const wxChar* ParsePath      (const wxChar* uri, const bool& bReference = false,
-                                                            const bool& bNormalize = true);
+    const wxChar* ParsePath      (const wxChar* uri,
+                                  bool bReference = false,
+                                  bool bNormalize = true);
     const wxChar* ParseQuery     (const wxChar* uri);
     const wxChar* ParseFragment  (const wxChar* uri);
 
@@ -104,10 +112,10 @@ protected:
     static bool ParseIPvFuture(const wxChar*& uri);
 
 
-    static void Normalize(wxChar* uri, const bool& bIgnoreLeads = false);
+    static void Normalize(wxChar* uri, bool bIgnoreLeads = false);
     static void UpTree(const wxChar* uristart, const wxChar*& uri);
 
-    static void Unescape(const wxChar*& s, wxChar& c);
+    static wxChar Unescape(const wxChar* s);
     static void Escape  (wxString& s, const wxChar& c);
     static bool IsEscape(const wxChar*& uri);
 
@@ -136,6 +144,7 @@ protected:
     size_t m_fields;
 
     DECLARE_DYNAMIC_CLASS(wxURI)
-};//end of wxURI
+};
 
-#endif //_WX_URIH__
+#endif // _WX_URI_H_
+

@@ -281,7 +281,7 @@ this URI equals {\tt uricomp}, otherwise it returns false.
 
 \membersection{wxURI::Resolve}\label{wxuriresolve}
 
-\func{void}{Resolve}{\param{const wxURI\& }{base}, \param{const bool\& }{bStrict = true}}
+\func{void}{Resolve}{\param{const wxURI\& }{base}, \param{int }{flags = \texttt{wxURI\_STRICT}}}
 
 Inherits this URI from a base URI - components that do not
 exist in this URI are copied from the base, and if this URI's
@@ -296,6 +296,7 @@ of the base's is merged with this URI's path, resulting in the URI
 "http://mysite.com/john/mydir".
 
 \docparam{base}{Base URI to inherit from.  Must be a full URI and not a reference}
-\docparam{bStrict}{If false, some compatability layers are enabled to allow 
-                   loopholes from RFCs prior to 2396}
+\docparam{flags}{Currently either \texttt{wxURI\_STRICT} or $0$, in non strict
+mode some compatability layers are enabled to allow loopholes from RFCs prior
+to 2396}
 

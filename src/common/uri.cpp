@@ -109,10 +109,11 @@ void wxURI::Create(const wxString& uri)
 // if it does, then it moves the input string past the escape sequence
 // ---------------------------------------------------------------------------
 
-void wxURI::Unescape(const wxChar*& s, wxChar& c)
+wxChar wxURI::Unescape(const wxChar* s)
 {
     wxASSERT_MSG(IsHex(*s) && IsHex(*(s+1)), wxT("Invalid escape!"));
-    c = CharToHex(*s) * 0x10 + CharToHex(*++s);
+
+    return CharToHex(*s) * 0x10 + CharToHex(*++s);
 }
 
 void wxURI::Escape(wxString& s, const wxChar& c)
@@ -539,7 +540,7 @@ const wxChar* wxURI::ParsePort(const wxChar* uri)
     return uri;
 }
 
-const wxChar* wxURI::ParsePath(const wxChar* uri, const bool& bReference, const bool& bNormalize)
+const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormalize)
 {
     wxASSERT(uri != NULL);
 
@@ -693,7 +694,7 @@ const wxChar* wxURI::ParseFragment(const wxChar* uri)
 //  (it is shown in comments)
 // ---------------------------------------------------------------------------
 
-void wxURI::Resolve(const wxURI& base, const bool& bStrict)
+void wxURI::Resolve(const wxURI& base, int flags)
 {
     wxASSERT_MSG(!base.IsReference(), 
                 wxT("wxURI to inherit from must not be a reference!"));
@@ -702,9 +703,9 @@ void wxURI::Resolve(const wxURI& base, const bool& bStrict)
     // loophole that allows this uri to inherit other
     // properties from the base uri - even if the scheme
     // is defined
-    if (!bStrict &&
-        HasScheme() && base.HasScheme() &&
-        this->m_scheme == base.m_scheme )
+    if ( !(flags & wxURI_STRICT) &&
+            HasScheme() && base.HasScheme() &&
+                m_scheme == base.m_scheme )
     {   
         m_fields -= wxURI_SCHEME;
     }
@@ -841,7 +842,7 @@ void wxURI::UpTree(const wxChar* uristart, const wxChar*& uri)
     //!!!//
 }
 
-void wxURI::Normalize(wxChar* s, const bool& bIgnoreLeads)
+void wxURI::Normalize(wxChar* s, bool bIgnoreLeads)
 {
     wxChar* cp = s;
     wxChar* bp = s;
