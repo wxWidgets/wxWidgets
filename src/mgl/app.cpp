@@ -170,11 +170,11 @@ static bool wxCreateMGL_WM(const wxDisplayModeInfo& displayMode)
                         displayMode.GetDepth());
     if ( mode == -1 )
     {
-        wxLogWarning(_("Mode %ix%i-%i not available, falling back to default mode."), 
+        wxLogError(_("Mode %ix%i-%i not available."), 
                      displayMode.GetScreenSize().x, 
                      displayMode.GetScreenSize().y, 
                      displayMode.GetDepth());
-        mode = 0; // always available
+        return FALSE;
     }
     g_displayDC = new MGLDisplayDC(mode, 1, refresh);
     if ( !g_displayDC->isValid() )
@@ -187,7 +187,7 @@ static bool wxCreateMGL_WM(const wxDisplayModeInfo& displayMode)
     g_winMng = MGL_wmCreate(g_displayDC->getDC());
     if (!g_winMng)
         return FALSE;
-    
+
     return TRUE;
 }
 
@@ -218,7 +218,6 @@ END_EVENT_TABLE()
 
 wxApp::wxApp() : m_mainLoop(NULL)
 {
-    m_displayMode = wxDisplayModeInfo(wxSize(640, 480), 16);
 }
 
 wxApp::~wxApp()
@@ -234,26 +233,24 @@ bool wxApp::SetDisplayMode(const wxDisplayModeInfo& mode)
     if ( g_displayDC != NULL )
     {
         // FIXME_MGL -- we currently don't allow to switch video mode
-        // at runtime. This can hopefully be changed...
+        // more than once. This can hopefully be changed...
         wxFAIL_MSG(wxT("Can't change display mode after intialization!"));
         return FALSE;
     }
+
+    if ( !wxCreateMGL_WM(mode) )
+        return FALSE;
+    gs_rootWindow = new wxRootWindow;
+
     m_displayMode = mode;
+
     return TRUE;
 }
 
 bool wxApp::OnInitGui()
 {
-    if ( !wxCreateMGL_WM(m_displayMode) )
-        return FALSE;
-
-    // This has to be done *after* wxCreateMGL_WM() because it initializes 
-    // wxUniv's themes
     if ( !wxAppBase::OnInitGui() )
         return FALSE;
-        
-    // ...and this has to be done after wxUniv themes were initialized
-    gs_rootWindow = new wxRootWindow;
 
 #ifdef MGL_DEBUG
     // That damn MGL redirects stdin and stdout to physical console

@@ -42,14 +42,14 @@ void wxBell()
 
 void wxDisplaySize(int *width, int *height)
 {
-    wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
+    wxASSERT_MSG( g_displayDC, wxT("You must call wxApp::SetDisplayMode before using this function") );
     if (width) *width = g_displayDC->sizex()+1;
     if (height) *height = g_displayDC->sizey()+1;
 }
 
 void wxDisplaySizeMM(int *width, int *height)
 {
-    wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
+    wxASSERT_MSG( g_displayDC, wxT("You must call wxApp::SetDisplayMode before using this function") );
     if ( width ) 
         *width = (g_displayDC->sizex()+1) * 25/72;
     if ( height ) 
@@ -67,14 +67,14 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 
 bool wxColourDisplay()
 {
-    wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
+    wxASSERT_MSG( g_displayDC, wxT("You must call wxApp::SetDisplayMode before using this function") );
     
     return (wxDisplayDepth() > 1);
 }
 
 int wxDisplayDepth()
 {
-    wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
+    wxASSERT_MSG( g_displayDC, wxT("You must call wxApp::SetDisplayMode before using this function") );
 
     return g_displayDC->getBitsPerPixel();
 }

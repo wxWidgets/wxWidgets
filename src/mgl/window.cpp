@@ -466,6 +466,11 @@ END_EVENT_TABLE()
 
 void wxWindowMGL::Init()
 {
+    // First of all, make sure window manager is up and running. If it is
+    // not the case, initialize it in default display mode
+    if ( !g_winMng )
+        wxTheApp->SetDisplayMode(wxDisplayModeInfo(wxSize(640, 480), 16));
+
     // generic:
     InitBase();
 
