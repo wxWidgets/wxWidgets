@@ -196,7 +196,7 @@ class wxLogFrame;
 class WXDLLEXPORT wxLogWindow : public wxLog
 {
 public:
-  wxLogWindow(const wxTString& strTitle);
+  wxLogWindow(const wxTString& strTitle, bool bShow = TRUE);
   ~wxLogWindow();
   
   // show/hide the log window
