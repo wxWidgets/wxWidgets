@@ -561,41 +561,47 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
         grey[2] = 'a';
 
     // check for special 'none' colour:
+    bool found;
     if ( strcmp(name, "none") == 0 )
     {
         *isNone = TRUE;
-        return TRUE;
+        found = TRUE;
+    }
+    else // not "None"
+    {
+        found = FALSE;
+
+        // binary search:
+        left = 0;
+        right = numTheRGBRecords - 1;
+        do
+        {
+            middle = (left + right) / 2;
+            cmp = strcmp(name, theRGBRecords[middle].name);
+            if ( cmp == 0 )
+            {
+                rgbVal = theRGBRecords[middle].rgb;
+                *r = (unsigned char)((rgbVal >> 16) & 0xFF);
+                *g = (unsigned char)((rgbVal >> 8) & 0xFF);
+                *b = (unsigned char)((rgbVal) & 0xFF);
+                *isNone = FALSE;
+                found = TRUE;
+                break;
+            }
+            else if ( cmp < 0 )
+            {
+                right = middle - 1;
+            }
+            else // cmp > 0
+            {
+                left = middle + 1;
+            }
+        } while (left <= right);
     }
 
-    // binary search:
-    left = 0;
-    right = numTheRGBRecords - 1;
-    do
-    {
-        middle = (left + right) / 2;
-        cmp = strcmp(name, theRGBRecords[middle].name);
-        if ( cmp == 0 )
-        {
-            rgbVal = theRGBRecords[middle].rgb;
-            *r = (unsigned char)((rgbVal >> 16) & 0xFF);
-            *g = (unsigned char)((rgbVal >> 8) & 0xFF);
-            *b = (unsigned char)((rgbVal) & 0xFF);
-            *isNone = FALSE;
-            free(name);
-            return TRUE;
-        }
-        else if ( cmp < 0 )
-        {
-            right = middle - 1;
-        }
-        else
-        {           // > 0
-            left = middle + 1;
-        }
-    } while (left <= right);
-
     free(name);
-    return FALSE;
+
+    return found;
 }
 
 static const char *ParseColor(const char *data)
