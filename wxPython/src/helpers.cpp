@@ -893,23 +893,19 @@ static inline bool wxPointFromObjects(PyObject* o1, PyObject* o2, wxPoint* point
 }
 
 
-#if PYTHON_API_VERSION < 1009
-#define PySequence_Fast_GET_ITEM(o, i)\
-     (PyList_Check(o) ? PyList_GET_ITEM(o, i) : PyTuple_GET_ITEM(o, i))
-#endif
-
 wxPoint* wxPoint_LIST_helper(PyObject* source, int *count) {
     // Putting all of the declarations here allows
     // us to put the error handling all in one place.
     int x;
     wxPoint* temp;
     PyObject *o, *o1, *o2;
-    int isFast = PyList_Check(source) || PyTuple_Check(source);
+    bool isFast = PyList_Check(source) || PyTuple_Check(source);
 
-    // The length of the sequence is returned in count.
     if (!PySequence_Check(source)) {
         goto error0;
     }
+
+    // The length of the sequence is returned in count.
     *count = PySequence_Length(source);
     if (*count < 0) {
         goto error0;
@@ -1084,6 +1080,99 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
     return temp;
 }
 
+
+wxPen** wxPen_LIST_helper(PyObject* source) {
+    if (!PyList_Check(source)) {
+        PyErr_SetString(PyExc_TypeError, "Expected a list object.");
+        return NULL;
+    }
+    int count = PyList_Size(source);
+    wxPen** temp = new wxPen*[count];
+    if (!temp) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to allocate temporary array");
+        return NULL;
+    }
+    for (int x=0; x<count; x++) {
+        PyObject* o = PyList_GetItem(source, x);
+        if (PyInstance_Check(o)) {
+            wxPen*  pt;
+            if (SWIG_GetPtrObj(o, (void **) &pt,"_wxPen_p")) {
+                delete temp;
+                PyErr_SetString(PyExc_TypeError,"Expected _wxPen_p.");
+                return NULL;
+            }
+            temp[x] = pt;
+        }
+        else {
+            delete temp;
+            PyErr_SetString(PyExc_TypeError, "Expected a list of wxPens.");
+            return NULL;
+        }
+    }
+    return temp;
+}
+
+
+bool _2int_seq_helper(PyObject* source, int* i1, int* i2) {
+    bool isFast = PyList_Check(source) || PyTuple_Check(source);
+    PyObject *o1, *o2;
+
+    if (!PySequence_Check(source) || PySequence_Length(source) != 2)
+        return FALSE;
+
+    if (isFast) {
+        o1 = PySequence_Fast_GET_ITEM(source, 0);
+        o2 = PySequence_Fast_GET_ITEM(source, 1);
+    }
+    else {
+        o1 = PySequence_GetItem(source, 0);
+        o2 = PySequence_GetItem(source, 1);
+    }
+
+    *i1 = PyInt_AsLong(o1);
+    *i2 = PyInt_AsLong(o2);
+
+    if (! isFast) {
+        Py_DECREF(o1);
+        Py_DECREF(o2);
+    }
+    return TRUE;
+}
+
+
+bool _4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
+    bool isFast = PyList_Check(source) || PyTuple_Check(source);
+    PyObject *o1, *o2, *o3, *o4;
+
+    if (!PySequence_Check(source) || PySequence_Length(source) != 4)
+        return FALSE;
+
+    if (isFast) {
+        o1 = PySequence_Fast_GET_ITEM(source, 0);
+        o2 = PySequence_Fast_GET_ITEM(source, 1);
+        o3 = PySequence_Fast_GET_ITEM(source, 2);
+        o4 = PySequence_Fast_GET_ITEM(source, 3);
+    }
+    else {
+        o1 = PySequence_GetItem(source, 0);
+        o2 = PySequence_GetItem(source, 1);
+        o3 = PySequence_GetItem(source, 2);
+        o4 = PySequence_GetItem(source, 3);
+    }
+
+    *i1 = PyInt_AsLong(o1);
+    *i2 = PyInt_AsLong(o2);
+    *i3 = PyInt_AsLong(o3);
+    *i4 = PyInt_AsLong(o4);
+
+    if (! isFast) {
+        Py_DECREF(o1);
+        Py_DECREF(o2);
+        Py_DECREF(o3);
+        Py_DECREF(o4);
+    }
+    return TRUE;
+}
 
 
 //----------------------------------------------------------------------

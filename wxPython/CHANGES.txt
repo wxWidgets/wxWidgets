@@ -54,6 +54,9 @@ Added wxFindReplaceDialog.
 The second phase of OOR is implemented (for wxEvtHandler and derived
 classes at least.)
 
+Added some optimization methods to wxDC: GetBoundingBox, DrawLineList,
+DrawPointList.
+
 
 
 

@@ -818,11 +818,191 @@ public:
     void CalcBoundingBox(int x, int y);
     void ResetBoundingBox();
 
+    %addmethods {
+        void GetBoundingBox(int* OUTPUT, int* OUTPUT, int* OUTPUT, int* OUTPUT);
+        // See below for implementation
+    }
+
 #ifdef __WXMSW__
     long GetHDC();
 #endif
+
+
+    %addmethods {
+        // Draw a point for every set of coordinants in pyPoints, optionally
+        // setting a new pen for each
+        PyObject* _DrawPointList(PyObject* pyPoints, PyObject* pyPens) {
+            bool      isFastSeq  = PyList_Check(pyPoints) || PyTuple_Check(pyPoints);
+            bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
+            int       numObjs = 0;
+            int       numPens = 0;
+            wxPen*    pen;
+            PyObject* obj;
+            int       x1, y1;
+            int       i = 0;
+
+            if (!PySequence_Check(pyPoints)) {
+                goto err0;
+            }
+            if (!PySequence_Check(pyPens)) {
+                goto err1;
+            }
+            numObjs = PySequence_Length(pyPoints);
+            numPens = PySequence_Length(pyPens);
+
+            for (i = 0; i < numObjs; i++) {
+                // Use a new pen?
+                if (i < numPens) {
+                    if (isFastPens) {
+                        obj = PySequence_Fast_GET_ITEM(pyPens, i);
+                    }
+                    else {
+                        obj = PySequence_GetItem(pyPens, i);
+                    }
+                    if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        goto err1;
+                    }
+
+                    self->SetPen(*pen);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                }
+
+                // Get the point coordinants
+                if (isFastSeq) {
+                    obj = PySequence_Fast_GET_ITEM(pyPoints, i);
+                }
+                else {
+                    obj = PySequence_GetItem(pyPoints, i);
+                }
+                if (! _2int_seq_helper(obj, &x1, &y1)) {
+                    Py_DECREF(obj);
+                    goto err0;
+                }
+
+                // Now draw the point
+                self->DrawPoint(x1, y1);
+
+                if (!isFastSeq)
+                    Py_DECREF(obj);
+            }
+
+            Py_INCREF(Py_None);
+            return Py_None;
+
+        err1:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
+            return NULL;
+        err0:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x,y) sequences.");
+            return NULL;
+        }
+
+
+        // Draw a line for every set of coordinants in pyLines, optionally
+        // setting a new pen for each
+        PyObject* _DrawLineList(PyObject* pyLines, PyObject* pyPens) {
+            bool      isFastSeq  = PyList_Check(pyLines) || PyTuple_Check(pyLines);
+            bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
+            int       numObjs = 0;
+            int       numPens = 0;
+            wxPen*    pen;
+            PyObject* obj;
+            int       x1, y1, x2, y2;
+            int       i = 0;
+
+            if (!PySequence_Check(pyLines)) {
+                goto err0;
+            }
+            if (!PySequence_Check(pyPens)) {
+                goto err1;
+            }
+            numObjs = PySequence_Length(pyLines);
+            numPens = PySequence_Length(pyPens);
+
+            for (i = 0; i < numObjs; i++) {
+                // Use a new pen?
+                if (i < numPens) {
+                    if (isFastPens) {
+                        obj = PySequence_Fast_GET_ITEM(pyPens, i);
+                    }
+                    else {
+                        obj = PySequence_GetItem(pyPens, i);
+                    }
+                    if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        goto err1;
+                    }
+
+                    self->SetPen(*pen);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                }
+
+                // Get the line coordinants
+                if (isFastSeq) {
+                    obj = PySequence_Fast_GET_ITEM(pyLines, i);
+                }
+                else {
+                    obj = PySequence_GetItem(pyLines, i);
+                }
+                if (! _4int_seq_helper(obj, &x1, &y1, &x2, &y2)) {
+                    Py_DECREF(obj);
+                    goto err0;
+                }
+
+                // Now draw the line
+                self->DrawLine(x1, y1, x2, y2);
+
+                if (!isFastSeq)
+                    Py_DECREF(obj);
+            }
+
+            Py_INCREF(Py_None);
+            return Py_None;
+
+        err1:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
+            return NULL;
+        err0:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x1,y1, x2,y2) sequences.");
+            return NULL;
+        }
+    }
+
+
+    %pragma(python) addtoclass = "
+    def DrawPointList(self, points, pens=None):
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(points):
+           raise ValueError('points and pens must have same length')
+        return self._DrawPointList(points, pens)
+
+    def DrawLineList(self, lines, pens=None):
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(lines):
+           raise ValueError('lines and pens must have same length')
+        return self._DrawLineList(lines, pens)
+"
+
+
 };
 
+
+
+%{
+static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
+    *x1 = dc->MinX();
+    *y1 = dc->MinY();
+    *x2 = dc->MaxX();
+    *y2 = dc->MaxY();
+}
+%}
 
 //----------------------------------------------------------------------
 

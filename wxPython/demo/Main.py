@@ -30,6 +30,7 @@ _treeList = [
                                 'TablePrint',
                                 'OOR',
                                 'wxFindReplaceDialog',
+                                'DrawXXXList',
                                 ##'wxPopupWindow',
                                 ]),
 
@@ -63,7 +64,7 @@ _treeList = [
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
                         'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
-                        'wxJoystick',
+                        'wxJoystick', 'DrawXXXList',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',

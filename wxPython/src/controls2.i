@@ -517,7 +517,7 @@ public:
     int GetItemCount() const;
 
     // Gets the number of columns in the list control
-    int GetColumnCount() const { return m_colCount; }
+    int GetColumnCount() const;
 
     // Retrieves the spacing between icons in pixels.
     // If small is TRUE, gets the spacing for the small icon

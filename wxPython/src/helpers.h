@@ -134,12 +134,22 @@ wxPoint* wxPoint_LIST_helper(PyObject* source, int* npoints);
 wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 wxString* wxString_LIST_helper(PyObject* source);
 wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
+wxPen** wxPen_LIST_helper(PyObject* source);
 
 bool wxSize_helper(PyObject* source, wxSize** obj);
 bool wxPoint_helper(PyObject* source, wxPoint** obj);
 bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj);
 bool wxRect_helper(PyObject* source, wxRect** obj);
 bool wxColour_helper(PyObject* source, wxColour** obj);
+
+#if PYTHON_API_VERSION < 1009
+#define PySequence_Fast_GET_ITEM(o, i) \
+     (PyList_Check(o) ? PyList_GET_ITEM(o, i) : PyTuple_GET_ITEM(o, i))
+#endif
+
+bool _2int_seq_helper(PyObject* source, int* i1, int* i2);
+bool _4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
+
 
 //----------------------------------------------------------------------
 
@@ -1505,6 +1515,7 @@ public:
         wxPyEndBlockThreads(state); \
         if (! found) \
             return PCLASS::CBNAME(e); \
+        return rval; \
     } \
     bool CLASS::base_##CBNAME(wxMouseEvent& e) { \
         return PCLASS::CBNAME(e); \

@@ -207,6 +207,13 @@ public:
 private:
     wxDash* m_dash;
 };
+
+static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
+    *x1 = dc->MinX();
+    *y1 = dc->MinY();
+    *x2 = dc->MaxX();
+    *y2 = dc->MaxY();
+}
                                       // Alternate 'constructor'
     wxMemoryDC* wxMemoryDCFromDC(wxDC* oldDC) {
         return new wxMemoryDC(oldDC);
@@ -9350,6 +9357,73 @@ static PyObject *_wrap_wxDC_ResetBoundingBox(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+static PyObject *_wrap_wxDC_GetBoundingBox(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    int * _arg1;
+    int  temp;
+    int * _arg2;
+    int  temp0;
+    int * _arg3;
+    int  temp1;
+    int * _arg4;
+    int  temp2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+{
+  _arg3 = &temp1;
+}
+{
+  _arg4 = &temp2;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetBoundingBox",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_GetBoundingBox. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDC_GetBoundingBox(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg4));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
 #define wxDC_GetHDC(_swigobj)  (_swigobj->GetHDC())
 static PyObject *_wrap_wxDC_GetHDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -9375,6 +9449,216 @@ static PyObject *_wrap_wxDC_GetHDC(PyObject *self, PyObject *args, PyObject *kwa
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject * wxDC__DrawPointList(wxDC *self,PyObject * pyPoints,PyObject * pyPens) {
+            bool      isFastSeq  = PyList_Check(pyPoints) || PyTuple_Check(pyPoints);
+            bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
+            int       numObjs = 0;
+            int       numPens = 0;
+            wxPen*    pen;
+            PyObject* obj;
+            int       x1, y1;
+            int       i = 0;
+
+            if (!PySequence_Check(pyPoints)) {
+                goto err0;
+            }
+            if (!PySequence_Check(pyPens)) {
+                goto err1;
+            }
+            numObjs = PySequence_Length(pyPoints);
+            numPens = PySequence_Length(pyPens);
+
+            for (i = 0; i < numObjs; i++) {
+                // Use a new pen?
+                if (i < numPens) {
+                    if (isFastPens) {
+                        obj = PySequence_Fast_GET_ITEM(pyPens, i);
+                    }
+                    else {
+                        obj = PySequence_GetItem(pyPens, i);
+                    }
+                    if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        goto err1;
+                    }
+
+                    self->SetPen(*pen);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                }
+
+                // Get the point coordinants
+                if (isFastSeq) {
+                    obj = PySequence_Fast_GET_ITEM(pyPoints, i);
+                }
+                else {
+                    obj = PySequence_GetItem(pyPoints, i);
+                }
+                if (! _2int_seq_helper(obj, &x1, &y1)) {
+                    Py_DECREF(obj);
+                    goto err0;
+                }
+
+                // Now draw the point
+                self->DrawPoint(x1, y1);
+
+                if (!isFastSeq)
+                    Py_DECREF(obj);
+            }
+
+            Py_INCREF(Py_None);
+            return Py_None;
+
+        err1:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
+            return NULL;
+        err0:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x,y) sequences.");
+            return NULL;
+        }
+static PyObject *_wrap_wxDC__DrawPointList(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxDC * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","pyPoints","pyPens", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxDC__DrawPointList",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC__DrawPointList. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxDC__DrawPointList(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject * wxDC__DrawLineList(wxDC *self,PyObject * pyLines,PyObject * pyPens) {
+            bool      isFastSeq  = PyList_Check(pyLines) || PyTuple_Check(pyLines);
+            bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
+            int       numObjs = 0;
+            int       numPens = 0;
+            wxPen*    pen;
+            PyObject* obj;
+            int       x1, y1, x2, y2;
+            int       i = 0;
+
+            if (!PySequence_Check(pyLines)) {
+                goto err0;
+            }
+            if (!PySequence_Check(pyPens)) {
+                goto err1;
+            }
+            numObjs = PySequence_Length(pyLines);
+            numPens = PySequence_Length(pyPens);
+
+            for (i = 0; i < numObjs; i++) {
+                // Use a new pen?
+                if (i < numPens) {
+                    if (isFastPens) {
+                        obj = PySequence_Fast_GET_ITEM(pyPens, i);
+                    }
+                    else {
+                        obj = PySequence_GetItem(pyPens, i);
+                    }
+                    if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        goto err1;
+                    }
+
+                    self->SetPen(*pen);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                }
+
+                // Get the line coordinants
+                if (isFastSeq) {
+                    obj = PySequence_Fast_GET_ITEM(pyLines, i);
+                }
+                else {
+                    obj = PySequence_GetItem(pyLines, i);
+                }
+                if (! _4int_seq_helper(obj, &x1, &y1, &x2, &y2)) {
+                    Py_DECREF(obj);
+                    goto err0;
+                }
+
+                // Now draw the line
+                self->DrawLine(x1, y1, x2, y2);
+
+                if (!isFastSeq)
+                    Py_DECREF(obj);
+            }
+
+            Py_INCREF(Py_None);
+            return Py_None;
+
+        err1:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
+            return NULL;
+        err0:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x1,y1, x2,y2) sequences.");
+            return NULL;
+        }
+static PyObject *_wrap_wxDC__DrawLineList(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxDC * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","pyLines","pyPens", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxDC__DrawLineList",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC__DrawLineList. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxDC__DrawLineList(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
     return _resultobj;
 }
 
@@ -11633,7 +11917,10 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxScreenDC", (PyCFunction) _wrap_new_wxScreenDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDC_SelectObject", (PyCFunction) _wrap_wxMemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMemoryDC", (PyCFunction) _wrap_new_wxMemoryDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC__DrawLineList", (PyCFunction) _wrap_wxDC__DrawLineList, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC__DrawPointList", (PyCFunction) _wrap_wxDC__DrawPointList, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_GetHDC", (PyCFunction) _wrap_wxDC_GetHDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetBoundingBox", (PyCFunction) _wrap_wxDC_GetBoundingBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_ResetBoundingBox", (PyCFunction) _wrap_wxDC_ResetBoundingBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_CalcBoundingBox", (PyCFunction) _wrap_wxDC_CalcBoundingBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetAxisOrientation", (PyCFunction) _wrap_wxDC_SetAxisOrientation, METH_VARARGS | METH_KEYWORDS },

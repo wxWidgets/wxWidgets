@@ -11,13 +11,13 @@ from clip_dnd import *
 
 from cmndlgs import *
 
+from events import *
+
 from frames import *
 
 from stattool import *
 
 from controls import *
-
-from events import *
 import wx
 class wxPrintDataPtr(wxObjectPtr):
     def __init__(self,this):
