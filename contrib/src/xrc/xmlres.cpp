@@ -911,15 +911,8 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
                                      const wxArtClient& defaultArtClient,
                                      wxSize size)
 {
-#if wxCHECK_VERSION(2,3,0) || defined(__WXMSW__)
     wxIcon icon;
     icon.CopyFromBitmap(GetBitmap(param, defaultArtClient, size));
-#else
-    wxIcon *iconpt;
-    wxBitmap bmppt = GetBitmap(param, size);
-    iconpt = (wxIcon*)(&bmppt);
-    wxIcon icon(*iconpt);
-#endif
     return icon;
 }
 
