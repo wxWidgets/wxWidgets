@@ -64,7 +64,6 @@ class TestPanel(wx.Panel):
             sizer.Add(Tile(buttonPanel, log, factor,      target), 0, wx.ALIGN_CENTER)
             sizer.Add((0,0),1)
 
-        buttonPanel.SetAutoLayout(1)
         buttonPanel.SetSizer(sizer)
         sizer.Fit(buttonPanel)
 
@@ -77,12 +76,11 @@ class TestPanel(wx.Panel):
         sizer.Add(title3,      0, wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT, 16)
         sizer.Add(message2,    0, wx.ALIGN_CENTER | wx.ALL, 6)
         sizer.Add(targetPanel, 2, wx.EXPAND       | wx.LEFT | wx.BOTTOM | wx.RIGHT, 16)
-        self.SetAutoLayout(1)
         self.SetSizer(sizer)
 
 
 
-class Tile(wx.Panel):
+class Tile(wx.Window):
     """
     This outer class is responsible for changing
     its border color in response to certain mouse
@@ -93,14 +91,14 @@ class Tile(wx.Panel):
     hover  = wx.Colour(210,220,210)
 
     def __init__(self, parent, log, factor=1, thingToWatch=None, bgColor=None, active=1, size=(38,38), borderWidth=3):
-        wx.Panel.__init__(self, parent, -1, size=size, style=wx.CLIP_CHILDREN)
+        wx.Window.__init__(self, parent, -1, size=size, style=wx.CLIP_CHILDREN)
         self.tile = InnerTile(self, log, factor, thingToWatch, bgColor)
         self.log  = log
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(self.tile, 1, wx.EXPAND | wx.ALL, borderWidth)
-        self.SetAutoLayout(1)
         self.SetSizer(sizer)
         self.Layout()
+        em.eventManager.Register(self.doLayout, wx.EVT_SIZE, self)
         self.SetBackgroundColour(Tile.normal)
         if active:
             # Register myself for mouse events over self.tile in order to
@@ -110,6 +108,10 @@ class Tile(wx.Panel):
             em.eventManager.Register(self.setActive, wx.EVT_LEFT_DOWN,    self.tile)
             em.eventManager.Register(self.setHover,  wx.EVT_LEFT_UP,      self.tile)
 
+
+    def doLayout(self, event):
+        self.Layout()
+        
 
     def setHover(self, event):
         self.SetBackgroundColour(Tile.hover)
@@ -127,7 +129,7 @@ class Tile(wx.Panel):
 
 
 
-class InnerTile(wx.Panel):
+class InnerTile(wx.Window):
     IDLE_COLOR  = wx.Colour( 80, 10, 10)
     START_COLOR = wx.Colour(200, 70, 50)
     FINAL_COLOR = wx.Colour( 20, 80,240)
@@ -141,7 +143,7 @@ class InnerTile(wx.Panel):
     events over the 'thingToWatch'.
     """
     def __init__(self, parent, log, factor, thingToWatch=None, bgColor=None):
-        wx.Panel.__init__(self, parent, -1)
+        wx.Window.__init__(self, parent, -1)
         self.log=log
         if bgColor:
             self.SetBackgroundColour(bgColor)
