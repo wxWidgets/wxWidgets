@@ -137,7 +137,7 @@ wxConfigBase *wxConfigBase::Create()
                                                                             \
         *val = extra(*val);                                                 \
                                                                             \
-        return FALSE;                                                       \
+        return read;                                                        \
     }
 
 
