@@ -961,6 +961,12 @@ bool wxDialUpManagerMSW::IsOnline() const
 {
     wxCHECK_MSG( IsOk(), FALSE, wxT("using uninitialized wxDialUpManager") );
 
+    if ( IsAlwaysOnline() )
+    {
+        // always => now
+        return true;
+    }
+
     if ( ms_userSpecifiedOnlineStatus != -1 )
     {
         // user specified flag overrides our logic
