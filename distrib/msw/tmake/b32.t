@@ -24,8 +24,11 @@
     }
 
     foreach $file (sort keys %wxCommon) {
+        $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
-        $project{"WXCOMMONOBJS"} .= "\$(MSWDIR)\\" . $file . " "
+        $obj = "\$(MSWDIR)\\" . $file . " ";
+        $project{"WXCOMMONOBJS"} .= $obj;
+        $project{"WXCOBJS"} .= $obj if $isCFile;
     }
 
     foreach $file (sort keys %wxMSW) {
@@ -204,8 +207,9 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
+        $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
         s/MSWDIR/COMMDIR/;
-        s/obj$/\$(SRCSUFF)/;
+        s/obj$/$suffix/;
         $text .= $_ . "\n\n";
     }
 #$}
