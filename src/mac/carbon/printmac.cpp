@@ -295,7 +295,10 @@ void wxMacPrintPreview::DetermineScaling(void)
 		m_pageWidth = x ;
 		m_pageHeight =  y ;
 		m_isOk = true ;
-
+	}
+	else
+	{
+	  m_isOk = false ;
 	}
     // At 100%, the page should look about page-size on the screen.
     // m_previewScale = (float)((float)screenWidth/(float)printerWidth);
