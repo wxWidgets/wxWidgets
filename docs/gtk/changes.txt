@@ -16,6 +16,8 @@ Added EVT_TEXT_UPDATED for spin ctrl.
 Corrected wrongly rounded value in slider and scrollbar
 for negative values.
 
+Small fix for wxTextFile type guessing.
+
 Translation updates.
 
 Various other fixes.
