@@ -100,8 +100,19 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
     if(style & wxFRAME_TOOL_WINDOW)
         cocoaStyle |= NSUtilityWindowMask;
 
+    wxPoint realpos = pos;
+    wxSize realsize = size;
+    // FIXME: this is lame
+    if(realpos.x==-1)
+        realpos.x=100;
+    if(realpos.y==-1)
+        realpos.y=100;
+    if(realsize.x==-1)
+        realsize.x=200;
+    if(realsize.y==-1)
+        realsize.y=200;
     // NOTE: y-origin needs to be flipped.
-    NSRect cocoaRect = [NSWindow contentRectForFrameRect:NSMakeRect(pos.x,pos.y,size.x,size.y) styleMask:cocoaStyle];
+    NSRect cocoaRect = [NSWindow contentRectForFrameRect:NSMakeRect(realpos.x,realpos.y,realsize.x,realsize.y) styleMask:cocoaStyle];
 
     m_cocoaNSWindow = NULL;
     m_cocoaNSView = NULL;
