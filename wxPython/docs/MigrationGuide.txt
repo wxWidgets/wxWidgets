@@ -588,6 +588,8 @@ provided by the makers of the ActiveX control that you are using.
 OGL is dead! LONG LIVE OGL!
 ---------------------------
 
+**[Changed in 2.5.2.0]** 
+
 The wx.ogl module has been deprecated in favor of the new Python port
 of the OGL library located at wx.lib.ogl contributed by Pierre Hjälm.
 This will hopefully greatly extend the life of OGL within wxPython by
