@@ -412,6 +412,9 @@ dnl _REENTRANT" and it's easier to just define this symbol for these platforms
 dnl than checking it during run-time
 NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
+dnl the additional define needed for MT programs
+CPP_MT_FLAG=-D_REENTRANT
+
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
@@ -492,6 +495,7 @@ case "${host}" in
   *-*-freebsd*)
     USE_BSD=1
     USE_FREEBSD=1
+    CPP_MT_FLAG=-D_THREAD_SAFE
     AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
@@ -567,6 +571,7 @@ case "${host}" in
     dnl PowerPC Darwin based distributions (including Mac OS X)
     USE_BSD=1
     USE_DARWIN=1
+    CPP_MT_FLAG=
     SO_SUFFIX=dylib
     AC_DEFINE(__BSD__)
     AC_DEFINE(__DARWIN__)
@@ -1959,17 +1964,24 @@ if test "$wxUSE_GUI" = "yes"; then
                 gtk_version_cached=0
                 AC_MSG_RESULT()
 
+                dnl we must link against lgthread unless the user
+                dnl used --disable-threads
+                GTK_MODULES=
+                if test "$wxUSE_THREADS" = "yes"; then
+                    GTK_MODULES=gthread
+                fi
+
                 wx_cv_lib_gtk=
                 if test "x$wxUSE_GTK2" = "xyes"; then
-                    AM_PATH_GTK_2_0(1.3.1, wx_cv_lib_gtk=2.0, gthread)
+                    AM_PATH_GTK_2_0(1.3.1, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
                 fi
 
                 if test -z "$wx_cv_lib_gtk"; then
-                    AM_PATH_GTK(1.2.7, wx_cv_lib_gtk=1.2.7)
+                    AM_PATH_GTK(1.2.7, wx_cv_lib_gtk=1.2.7, , $GTK_MODULES)
                 fi
 
                 if test -z "$wx_cv_lib_gtk"; then
-                    AM_PATH_GTK(1.2.3, wx_cv_lib_gtk=1.2.3)
+                    AM_PATH_GTK(1.2.3, wx_cv_lib_gtk=1.2.3, , $GTK_MODULES)
                 fi
 
                 if test -z "$wx_cv_lib_gtk"; then
@@ -3434,10 +3446,8 @@ fi
 if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
 
-  dnl must define _REENTRANT for multithreaded code except for Darwin/Mac OS X
-  if test "$USE_DARWIN" != 1; then
-    TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS -D_REENTRANT"
-  fi
+  dnl we must define _REENTRANT or something along these lines for MT code
+  TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS $CPP_MT_FLAG"
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
 else
