@@ -24,6 +24,7 @@
 #include <wx/tokenzr.h>
 #include <wx/mstream.h>
 #include <wx/image.h>
+#include <wx/file.h>
 
 
 //----------------------------------------------------------------------
@@ -474,7 +475,7 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(2049, markerNumber, (long)buff);
         delete [] buff;
-        
+
 }
 
 // Set a margin to be either numeric or symbolic.
@@ -857,7 +858,7 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(2405, type, (long)buff);
         delete [] buff;
-     
+
 }
 
 // Clear all the registered images.
@@ -2074,6 +2075,45 @@ void wxStyledTextCtrl::ScrollToColumn(int column) {
     m_swx->DoScrollToColumn(column);
 }
 
+
+bool wxStyledTextCtrl::SaveFile(const wxString& filename)
+{
+    wxFile file(filename, wxFile::write);
+
+    if (!file.IsOpened())
+        return FALSE;
+
+    bool success = file.Write(GetText());
+
+    if (success)
+        SetSavePoint();
+
+    return success;
+}
+
+bool wxStyledTextCtrl::LoadFile(const wxString& filename)
+{
+    wxFile file(filename, wxFile::read);
+
+    if (!file.IsOpened())
+        return FALSE;
+
+    wxString contents;
+    off_t len = file.Length();
+
+    wxChar *buf = contents.GetWriteBuf(len);
+    bool success = (file.Read(buf, len) == len);
+    contents.UngetWriteBuf();
+
+    if (success)
+    {
+        SetText(contents);
+        EmptyUndoBuffer();
+        SetSavePoint();
+    }
+
+    return success;
+}
 
 
 //----------------------------------------------------------------------
