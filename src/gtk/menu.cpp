@@ -162,6 +162,24 @@ static wxString wxReplaceUnderscore( const wxString& title )
 }
 
 //-----------------------------------------------------------------------------
+// activate message from GTK
+//-----------------------------------------------------------------------------
+
+static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
+{
+    if (g_isIdle) wxapp_install_idle_handler();
+
+    wxMenuEvent event( wxEVT_MENU_OPEN, -1 );
+    event.SetEventObject( menu );
+
+    if (menu->GetEventHandler()->ProcessEvent(event))
+        return;
+
+    wxWindow *win = menu->GetInvokingWindow();
+    if (win) win->GetEventHandler()->ProcessEvent( event );
+}
+
+//-----------------------------------------------------------------------------
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
@@ -391,6 +409,10 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     gtk_menu_bar_append( GTK_MENU_BAR(m_menubar), menu->m_owner );
 
 #endif
+
+    gtk_signal_connect( GTK_OBJECT(menu->m_owner), "activate",
+                        GTK_SIGNAL_FUNC(gtk_menu_open_callback),
+                        (gpointer)menu );
 
     // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
     // addings menu later on.
