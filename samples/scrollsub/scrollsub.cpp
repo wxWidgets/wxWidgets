@@ -154,8 +154,8 @@ MyCanvas::MyCanvas( wxScrolledWindow *parent, wxWindowID id,
 {
     m_owner = parent;
     
-//    (void)new wxButton( this, -1, "Hallo I", wxPoint(0,50), wxSize(100,25) );
-//    (void)new wxButton( this, -1, "Hallo II", wxPoint(200,50), wxSize(100,25) );
+    (void)new wxButton( this, -1, "Hallo I", wxPoint(0,50), wxSize(100,25) );
+    (void)new wxButton( this, -1, "Hallo II", wxPoint(200,50), wxSize(100,25) );
 
     SetBackgroundColour( *wxWHITE );
   

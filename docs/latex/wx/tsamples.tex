@@ -19,6 +19,42 @@ make it easier to find the relevant one if a simple grep through all sources
 didn't help. They also provide some notes about using the samples and what
 features of wxWindows are they supposed to test.
 
+\subsection{Checklist sample}\label{samplechecklist}
+
+This sample demonstrates the use of the \helpref{wxCheckListBox}{wxchecklistbox}
+class intercepting check, select and double click events. It also tests the
+use of various methods modifiying the control, such as by deleting items
+from it or inserting new once (these fucntions are actually implememted in
+the parent class \helpref{wxListBox}{wxlistbox} so the sample tests that class
+as well). The layout of the dialog is created using a \helpref{wxBoxSizer}{wxboxsizer}
+demonstrating a simple dynamic layout.
+
+\subsection{Config sample}\label{sampleconfig}
+
+This sample demonstrates the \helpref{wxConfig}{wxconfigbase} classes in a platform
+indepedent way, i.e. it uses text based files to store a given configuration under
+Unix and uses the Registry under Windows.
+
+See \helpref{wxConfig overview}{wxconfigoverview} for the descriptions of all
+features of this class.
+
+\subsection{Dialogs sample}\label{sampledialogs}
+
+This sample shows how to use the common dialogs available from wxWindows. These
+dialogs are desrcibed in details in the \helpref{Common dialogs overview}{commondialogsoverview}.
+
+\subsection{Scroll subwindow sample}\label{samplescrollsub}
+
+This sample demonstrates the use of the \helpref{wxScrolledWindow}{wxscrolledwindow}
+class including placing subwindows into it and drawing simple graphics. It uses the
+\helpref{SetTargetWindow}{wxscrolledwindowsettargetwindow} method and thus the effect
+of scrolling does not show in the scrolled window itself, but in one of its subwindows.
+
+Additionally, this samples demonstrates how to optimize drawing operations in wxWindows,
+in particular using the \helpref{wxWindow::IsExposed}{wxwindowisexposed} method with 
+the aim to prevent unnecessary drawing in the window and thus reducing or removing 
+flicker on screen.
+
 \subsection{Font sample}\label{samplefont}
 
 The font sample demonstrates \helpref{wxFont}{wxfont}, 
