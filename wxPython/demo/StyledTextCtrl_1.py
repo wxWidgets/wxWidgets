@@ -1,7 +1,6 @@
 # 
 # 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
-# o EVT_STC_DRAG_OVER event GetdragResult() is not an int
 # o wx.TheClipboard.Flush() generates a warning on program exit.
 # 
 
@@ -88,8 +87,6 @@ class MySTC(stc.StyledTextCtrl):
 
 
     def OnDragOver(self, evt):
-        #Todo: evt.GetdragResult() response is not an int
-        
         self.log.write(
             "OnDragOver: x,y=(%d, %d)  pos: %d  DragResult: %d\n"
             % (evt.GetX(), evt.GetY(), evt.GetPosition(), evt.GetDragResult())
