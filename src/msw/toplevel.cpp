@@ -310,9 +310,9 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
 
     if ( !m_hWnd )
     {
-        wxFAIL_MSG(_("Failed to create dialog. Incorrect DLGTEMPLATE?"));
+        wxFAIL_MSG(wxT("Failed to create dialog. Incorrect DLGTEMPLATE?"));
 
-        wxLogSysError(_("Can't create dialog using memory template"));
+        wxLogSysError(wxT("Can't create dialog using memory template"));
 
         return FALSE;
     }

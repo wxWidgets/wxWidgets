@@ -364,9 +364,9 @@ bool wxTopLevelWindowOS2::CreateDialog(
 
     if ( !m_hWnd )
     {
-        wxFAIL_MSG(_("Did you forget to include wx/os2/wx.rc in your resources?"));
+        wxFAIL_MSG(wxT("Did you forget to include wx/os2/wx.rc in your resources?"));
 
-        wxLogSysError(_("Can't create dialog using template '%ul'"), ulDlgTemplate);
+        wxLogSysError(wxT("Can't create dialog using template '%ul'"), ulDlgTemplate);
 
         return FALSE;
     }
