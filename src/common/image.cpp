@@ -32,6 +32,7 @@
 #include "wx/intl.h"
 #include "wx/module.h"
 #include "wx/hash.h"
+#include "wx/utils.h"
 
 // For memcpy
 #include <string.h>
