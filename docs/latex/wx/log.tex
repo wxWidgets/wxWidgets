@@ -151,6 +151,7 @@ window on the corresponding error message. If you wish to enable it, please use
 \helpref{AddTraceMask}{wxlogaddtracemask}\\
 \helpref{RemoveTraceMask}{wxlogremovetracemask}\\
 \helpref{ClearTraceMasks}{wxlogcleartracemasks}\\
+\helpref{GetTraceMasks}{wxloggettracemasks}\\
 \helpref{IsAllowedTraceMask}{wxlogisallowedtracemask}\\
 \helpref{SetVerbose}{wxlogsetverbose}\\
 \helpref{GetVerbose}{wxloggetverbose}\\
@@ -173,7 +174,9 @@ window on the corresponding error message. If you wish to enable it, please use
 Add the {\it mask} to the list of allowed masks for 
 \helpref{wxLogTrace}{wxlogtrace}.
 
-See also: \helpref{RemoveTraceMask}{wxlogremovetracemask}
+\wxheading{See also}
+\helpref{RemoveTraceMask}{wxlogremovetracemask}
+\helpref{GetTraceMasks}{wxloggettracemasks}
 
 \membersection{wxLog::ClearTraceMasks}\label{wxlogcleartracemasks}
 
@@ -182,7 +185,17 @@ See also: \helpref{RemoveTraceMask}{wxlogremovetracemask}
 Removes all trace masks previously set with 
 \helpref{AddTraceMask}{wxlogaddtracemask}.
 
-See also: \helpref{RemoveTraceMask}{wxlogremovetracemask}
+\wxheading{See also}
+\helpref{RemoveTraceMask}{wxlogremovetracemask}
+
+\membersection{wxLog::GetTraceMasks}\label{wxloggettracemasks}
+
+\func{static const wxArrayString &}{GetTraceMasks}{\void}
+
+Returns the currently allowed list of string trace masks.
+
+\wxheading{See also}
+\helpref{AddTraceMask}{wxlogaddtracemask}.
 
 \membersection{wxLog::OnLog}\label{wxlogonlog}
 

@@ -177,6 +177,8 @@ public:
     static void RemoveTraceMask(const wxString& str);
         // remove all string trace masks
     static void ClearTraceMasks();
+    	// get string trace masks
+    static const wxArrayString &GetTraceMasks() { return ms_aTraceMasks; }
 
         // sets the timestamp string: this is used as strftime() format string
         // for the log targets which add time stamps to the messages - set it
@@ -596,3 +598,4 @@ void WXDLLEXPORT wxSafeShowMessage(const wxString& title, const wxString& text);
 
 #endif  // _WX_LOG_H_
 
+// vi:sts=4:sw=4:et
