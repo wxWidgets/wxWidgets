@@ -680,7 +680,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     m_macUsesTXN &= (TXNInitTextension != (void*) kUnresolvedCFragSymbolAddress) ;
 
     // base initialization
-    if ( !CreateBase(parent, id, pos, size, style, validator, name) )
+    if ( !wxTextCtrlBase::Create(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
     wxSize mySize = size ;
