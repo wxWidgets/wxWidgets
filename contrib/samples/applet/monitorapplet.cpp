@@ -34,6 +34,7 @@
 #include "wx/wxprec.h"
 
 // Include private headers
+#include "wx/wx.h"
 #include "monitorapplet.h"
 
 /*---------------------------- Global variables ---------------------------*/
@@ -183,9 +184,9 @@ void MonitorApplet::ReadMfrList()
 
     m_Mfr->Clear();
     for (m = m_Monitors,i = 0; m->m_Mfr[0] != 0; m++) {
-        if (stricmp(buf,m->m_Mfr) != 0) {
+        if (wxStricmp(buf,m->m_Mfr) != 0) {
             m_Mfr->Append(m->m_Mfr);
-            if (stricmp(m_Data->m_Monitor.m_Mfr,m->m_Mfr) == 0)
+            if (wxStricmp(m_Data->m_Monitor.m_Mfr,m->m_Mfr) == 0)
                 selected = i;
             strcpy(buf,m->m_Mfr);
             i++;
@@ -209,9 +210,9 @@ void MonitorApplet::ReadModelList(
     mfrStr = m_Mfr->GetStringSelection();
     m_Model->Clear();
     for (m = m_Monitors,i = 0; m->m_Mfr[0] != 0; m++) {
-        if (stricmp(mfrStr,m->m_Mfr) == 0) {
+        if (wxStricmp(mfrStr,m->m_Mfr) == 0) {
             m_Model->Append(m->m_Model);
-            if (selectCurrent && stricmp(m_Data->m_Monitor.m_Model,m->m_Model) == 0)
+            if (selectCurrent && wxStricmp(m_Data->m_Monitor.m_Model,m->m_Model) == 0)
                 selected = i;
             i++;
             }

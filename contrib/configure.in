@@ -46,6 +46,7 @@ AC_OUTPUT([
             src/canvas/Makefile
             src/gizmos/Makefile
             src/plot/Makefile
+            src/applet/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
@@ -60,6 +61,7 @@ AC_OUTPUT([
             samples/gizmos/splittree/Makefile
             samples/xml/Makefile
             samples/plot/Makefile
+            samples/applet/Makefile
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile

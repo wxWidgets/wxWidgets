@@ -32,6 +32,8 @@
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#include "wx/wx.h"
 #include "wx/applet/window.h"
 #include "applet.h"
 
