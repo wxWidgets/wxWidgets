@@ -220,4 +220,10 @@ extern bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
     #include "wx/mgl/fontutil.h"
 #endif // __WXMGL__
 
+#ifdef __WXMAC__
+
+wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;
+wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;
+
+#endif
 #endif // _WX_FONTUTIL_H_
