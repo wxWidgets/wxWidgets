@@ -133,7 +133,19 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
     {
         case kEventControlDraw :
             {
-                RgnHandle updateRgn = cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle) ;
+                RgnHandle updateRgn = NULL ;
+
+                wxRegion visRegion = thisWindow->MacGetVisibleRegion() ;
+                if ( cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr ) 
+                {
+                    updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
+                }
+                else
+                {
+                    // unfortunately this update region may be incorrect (tree ctrl sample )
+                    // so we have to reset it
+                    updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
+                }
                 // GrafPtr myport = cEvent.GetParameter<GrafPtr>(kEventParamGrafPort,typeGrafPtr) ;
 
 #if 0 // in case we would need a coregraphics compliant background erase first
@@ -1694,7 +1706,15 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
 void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
 {
 #if TARGET_API_MAC_OSX
-    HIViewSetNeedsDisplay( (ControlRef) m_macControl , true ) ; 
+    if ( rect == NULL )
+        HIViewSetNeedsDisplay( (ControlRef) m_macControl , true ) ; 
+    else
+    {
+        RgnHandle update = NewRgn() ;
+        SetRectRgn( update , rect->x , rect->y , rect->x + rect->width , rect->y + rect->height ) ;
+        SectRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , update , update ) ;        
+        HIViewSetNeedsDisplayInRegion( (ControlRef) m_macControl , update , true ) ;
+    }
 #else
     if ( IsControlVisible( (ControlRef) m_macControl ) )
     {
@@ -2297,6 +2317,10 @@ wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
  */
 bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time ) 
 {
+    // we let the OS handle root control redraws
+    if ( m_macControl == MacGetTopLevelWindow()->GetHandle() )
+        return false ;
+        
     RgnHandle updatergn = (RgnHandle) updatergnr ;
     bool handled = false ;
     
