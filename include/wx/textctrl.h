@@ -318,9 +318,9 @@ class WXDLLEXPORT wxTextUrlEvent : public wxCommandEvent
 public:
     wxTextUrlEvent(int id, const wxMouseEvent& evtMouse,
                    long start, long end)
-        : wxCommandEvent(wxEVT_COMMAND_TEXT_URL, id),
-          m_evtMouse(evtMouse)
-        { m_start = start; m_end = end; }
+        : wxCommandEvent(wxEVT_COMMAND_TEXT_URL, id)
+        , m_evtMouse(evtMouse), m_start(start), m_end(end)
+        { }
 
     // get the mouse event which happend over the URL
     const wxMouseEvent& GetMouseEvent() const { return m_evtMouse; }
@@ -344,7 +344,7 @@ private:
 
 public:
     // for wxWin RTTI only, don't use
-    wxTextUrlEvent() { }
+    wxTextUrlEvent() : m_evtMouse(), m_start(0), m_end(0) { }
 };
 
 typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);

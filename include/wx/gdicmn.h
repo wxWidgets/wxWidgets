@@ -205,8 +205,8 @@ public:
     int x, y;
 
     // constructors
-    wxSize() { x = y = 0; }
-    wxSize(int xx, int yy) { Set(xx, yy); }
+    wxSize() : x(0), y(0) { }
+    wxSize(int xx, int yy) : x(xx), y(yy) { }
 
     // no copy ctor or assignment operator - the defaults are ok
 
@@ -240,8 +240,8 @@ public:
     double x;
     double y;
 
-    wxRealPoint() { x = y = 0.0; };
-    wxRealPoint(double xx, double yy) { x = xx; y = yy; };
+    wxRealPoint() : x(0.0), y(0.0) { }
+    wxRealPoint(double xx, double yy) : x(xx), y(yy) { }
 
     wxRealPoint operator+(const wxRealPoint& pt) const { return wxRealPoint(x + pt.x, y + pt.y); }
     wxRealPoint operator-(const wxRealPoint& pt) const { return wxRealPoint(x - pt.x, y - pt.y); }
@@ -254,8 +254,8 @@ class WXDLLEXPORT wxPoint
 public:
     int x, y;
 
-    wxPoint() { x = y = 0; };
-    wxPoint(int xx, int yy) { x = xx; y = yy; };
+    wxPoint() : x(0), y(0) { }
+    wxPoint(int xx, int yy) : x(xx), y(yy) { }
 
     // no copy ctor or assignment operator - the defaults are ok
 
@@ -283,9 +283,12 @@ public:
 class WXDLLEXPORT wxRect
 {
 public:
-    wxRect() { x = y = width = height = 0; }
+    wxRect()
+        : x(0), y(0), width(0), height(0)
+        { }
     wxRect(int xx, int yy, int ww, int hh)
-        { x = xx; y = yy; width = ww; height = hh; }
+        : x(xx), y(yy), width(ww), height(hh)
+        { }
     wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRect(const wxPoint& pos, const wxSize& size);
 

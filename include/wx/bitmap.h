@@ -45,9 +45,10 @@ class WXDLLEXPORT wxBitmapHandlerBase : public wxObject
 {
 public:
     wxBitmapHandlerBase()
-    {
-        m_type = wxBITMAP_TYPE_INVALID;
-    }
+        : m_name()
+        , m_extension()
+        , m_type(wxBITMAP_TYPE_INVALID)
+    { }
 
     virtual ~wxBitmapHandlerBase() { }
 

@@ -27,7 +27,9 @@ public:
   wxIcon();
 
   // Copy constructors
-  inline wxIcon(const wxIcon& icon) { Ref(icon); }
+  wxIcon(const wxIcon& icon)
+      : wxBitmap()
+      { Ref(icon); }
 
   wxIcon(const char **data);
   wxIcon(char **data);

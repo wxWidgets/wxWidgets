@@ -31,10 +31,10 @@ class WXDLLEXPORT wxGDIObject: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxGDIObject)
  public:
-  inline wxGDIObject() { m_visible = FALSE; };
-  inline ~wxGDIObject() {};
+  wxGDIObject() : m_visible(FALSE) { }
+  ~wxGDIObject() { }
 
-  inline bool IsNull() const { return (m_refData == 0); }
+  bool IsNull() const { return (m_refData == 0); }
 
   virtual bool GetVisible() { return m_visible; }
   virtual void SetVisible(bool v) { m_visible = v; }

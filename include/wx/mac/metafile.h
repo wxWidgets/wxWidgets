@@ -51,7 +51,8 @@ class WXDLLEXPORT wxMetafile: public wxGDIObject
   DECLARE_DYNAMIC_CLASS(wxMetafile)
  public:
   // Copy constructor
-  inline wxMetafile(const wxMetafile& metafile)
+  wxMetafile(const wxMetafile& metafile)
+      : wxGDIObject()
   { Ref(metafile); }
 
   wxMetafile(const wxString& file = "");

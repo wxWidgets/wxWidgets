@@ -27,12 +27,14 @@ class wxCharBuffer
 {
 public:
     wxCharBuffer(const char *str)
+        : m_str(NULL)
     {
         wxASSERT_MSG( str, wxT("NULL string in wxCharBuffer") );
 
         m_str = str ? strdup(str) : (char *)NULL;
     }
     wxCharBuffer(size_t len)
+        : m_str(NULL)
     {
         m_str = (char *)malloc(len+1);
         m_str[len] = '\0';
@@ -41,17 +43,17 @@ public:
    ~wxCharBuffer() { free(m_str); }
 
    wxCharBuffer(const wxCharBuffer& src)
+       : m_str(src.m_str)
    {
-     m_str = src.m_str;
-     // no reference count yet...
-     ((wxCharBuffer*)&src)->m_str = (char *)NULL;
+       // no reference count yet...
+       ((wxCharBuffer*)&src)->m_str = (char *)NULL;
    }
    wxCharBuffer& operator=(const wxCharBuffer& src)
    {
-     m_str = src.m_str;
-     // no reference count yet...
-     ((wxCharBuffer*)&src)->m_str = (char *)NULL;
-     return *this;
+       m_str = src.m_str;
+       // no reference count yet...
+       ((wxCharBuffer*)&src)->m_str = (char *)NULL;
+       return *this;
    }
 
    const char *data() const { return m_str; }
@@ -67,6 +69,7 @@ class wxWCharBuffer
 {
 public:
     wxWCharBuffer(const wchar_t *wcs)
+        : m_wcs((wchar_t *)NULL)
     {
         wxASSERT_MSG( wcs, wxT("NULL string in wxWCharBuffer") );
 
@@ -80,9 +83,9 @@ public:
           m_wcs = (wchar_t *)malloc(siz);
           memcpy(m_wcs, wcs, siz);
         }
-        else m_wcs = (wchar_t *)NULL;
     }
     wxWCharBuffer(size_t len)
+        : m_wcs((wchar_t *)NULL)
     {
         m_wcs = (wchar_t *)malloc((len+1)*sizeof(wchar_t));
         m_wcs[len] = L'\0';
@@ -92,17 +95,17 @@ public:
    ~wxWCharBuffer() { free(m_wcs); }
 
    wxWCharBuffer(const wxWCharBuffer& src)
+       : m_wcs(src.m_wcs)
    {
-     m_wcs = src.m_wcs;
-     // no reference count yet...
-     ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
+       // no reference count yet...
+       ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
    }
    wxWCharBuffer& operator=(const wxWCharBuffer& src)
    {
-     m_wcs = src.m_wcs;
-     // no reference count yet...
-     ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
-     return *this;
+       m_wcs = src.m_wcs;
+       // no reference count yet...
+       ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
+       return *this;
    }
 
    const wchar_t *data() const { return m_wcs; }
@@ -137,12 +140,12 @@ class wxMemoryBuffer
 public:
     enum { BLOCK_SIZE = 1024 };
     wxMemoryBuffer(size_t size=wxMemoryBuffer::BLOCK_SIZE)
+        : m_data(NULL), m_size(0), m_len(0)
     {
         wxASSERT(size > 0);
         m_data = malloc(size);
         wxASSERT(m_data != NULL);
         m_size = size;
-        m_len  = 0;
     }
 
     ~wxMemoryBuffer() { free(m_data); }
@@ -193,11 +196,8 @@ public:
 
     // Copy and assignment
     wxMemoryBuffer(const wxMemoryBuffer& src)
+        : m_data(src.m_data), m_size(src.m_size), m_len(src.m_len)
     {
-        m_data = src.m_data;
-        m_size = src.m_size;
-        m_len  = src.m_len;
-
         // no reference count yet...
         ((wxMemoryBuffer*)&src)->m_data = NULL;
         ((wxMemoryBuffer*)&src)->m_size = 0;
@@ -209,7 +209,7 @@ public:
         m_data = src.m_data;
         m_size = src.m_size;
         m_len  = src.m_len;
-
+        
         // no reference count yet...
         ((wxMemoryBuffer*)&src)->m_data = NULL;
         ((wxMemoryBuffer*)&src)->m_size = 0;
