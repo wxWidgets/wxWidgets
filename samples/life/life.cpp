@@ -522,7 +522,8 @@ LifeCanvas::LifeCanvas(wxWindow *parent, Life *life)
 {
     m_life     = life;
     m_cellsize = 8;
-	m_bmp      = NULL;
+    m_bmp      = NULL;
+
     Reset();
 }
 
@@ -812,7 +813,7 @@ bool Life::HasChanged(int x, int y) const
 {
     wxASSERT(x < m_width || y < m_height);
 
-    return (m_cells[y * m_width + x] & CELL_MARK);
+    return (m_cells[y * m_width + x] & CELL_MARK) != 0;
 }
 
 void Life::SetCell(int x, int y, bool alive)

@@ -30,17 +30,58 @@
 // what to test?
 
 //#define TEST_ARRAYS
+#define TEST_CMDLINE
 //#define TEST_DIR
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_STRINGS
-#define TEST_THREADS
+//#define TEST_THREADS
 //#define TEST_TIME
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+#ifdef TEST_CMDLINE
+
+// ----------------------------------------------------------------------------
+// wxCmdLineParser
+// ----------------------------------------------------------------------------
+
+#include <wx/cmdline.h>
+#include <wx/datetime.h>
+
+static void ShowCmdLine(const wxCmdLineParser& parser)
+{
+    wxString s = "Input files: ";
+
+    size_t count = parser.GetParamCount();
+    for ( size_t param = 0; param < count; param++ )
+    {
+        s << parser.GetParam(param) << ' ';
+    }
+
+    s << '\n'
+      << "Verbose:\t" << (parser.Found("v") ? "yes" : "no") << '\n'
+      << "Quiet:\t" << (parser.Found("q") ? "yes" : "no") << '\n';
+
+    wxString strVal;
+    long lVal;
+    wxDateTime dt;
+    if ( parser.Found("o", &strVal) )
+        s << "Output file:\t" << strVal << '\n';
+    if ( parser.Found("i", &strVal) )
+        s << "Input dir:\t" << strVal << '\n';
+    if ( parser.Found("s", &lVal) )
+        s << "Size:\t" << lVal << '\n';
+    if ( parser.Found("d", &dt) )
+        s << "Date:\t" << dt.FormatISODate() << '\n';
+
+    wxLogMessage(s);
+}
+
+#endif // TEST_CMDLINE
 
 // ----------------------------------------------------------------------------
 // wxDir
@@ -1537,6 +1578,41 @@ int main(int argc, char **argv)
     {
         fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
     }
+
+#ifdef TEST_CMDLINE
+    static const wxCmdLineEntryDesc cmdLineDesc[] =
+    {
+        { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
+        { wxCMD_LINE_SWITCH, "q", "quiet",   "be quiet" },
+
+        { wxCMD_LINE_OPTION, "o", "output",  "output file" },
+        { wxCMD_LINE_OPTION, "i", "input",   "input dir" },
+        { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER },
+        { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_NUMBER },
+
+        { wxCMD_LINE_PARAM,  NULL, NULL, "input file",
+            wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
+
+        { wxCMD_LINE_NONE }
+    };
+
+    wxCmdLineParser parser(cmdLineDesc, argc, argv);
+
+    switch ( parser.Parse() )
+    {
+        case -1:
+            wxLogMessage("Help was given, terminating.");
+            break;
+
+        case 0:
+            ShowCmdLine(parser);
+            break;
+
+        default:
+            wxLogMessage("Syntax error detected, aborting.");
+            break;
+    }
+#endif // TEST_CMDLINE
 
 #ifdef TEST_STRINGS
     if ( 0 )
