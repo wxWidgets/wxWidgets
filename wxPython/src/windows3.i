@@ -828,3 +828,11 @@ public:
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
+%init %{
+    // Map renamed classes back to their common name for OOR
+    wxPyPtrTypeMap_Add("wxHtmlListBox", "wxPyHtmlListBox");
+    wxPyPtrTypeMap_Add("wxVListBox", "wxPyVListBox");
+    wxPyPtrTypeMap_Add("wxVScrolledWindow", "wxPyVScrolledWindow");
+%}
+
+//----------------------------------------------------------------------
