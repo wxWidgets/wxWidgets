@@ -376,6 +376,7 @@ typedef int wxWindowID;
 
     #define WXMAKINGDLL_CORE
     #define WXMAKINGDLL_HTML
+    #define WXMAKINGDLL_XML
 #endif // WXMAKINGDLL
 
 // WXDLLEXPORT maps to export declaration when building the DLL, to import
@@ -419,6 +420,14 @@ typedef int wxWindowID;
     #define WXDLLIMPEXP_GL WXIMPORT
 #else // not making nor using DLL
     #define WXDLLIMPEXP_GL
+#endif
+
+#ifdef WXMAKINGDLL_XML
+    #define WXDLLIMPEXP_XML WXEXPORT
+#elif defined(WXUSINGDLL)
+    #define WXDLLIMPEXP_XML WXIMPORT
+#else // not making nor using DLL
+    #define WXDLLIMPEXP_XML
 #endif
 
 // for backwards compatibility, define suffix-less versions too

@@ -155,6 +155,14 @@
 #   endif
 #endif /* !defined(wxUSE_REGEX) */
 
+#ifndef wxUSE_XML
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_XML must be defined."
+#   else
+#       define wxUSE_XML 0
+#   endif
+#endif /* !defined(wxUSE_XML) */
+
 #ifndef wxUSE_SOCKETS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SOCKETS must be defined."
