@@ -281,7 +281,7 @@ bool wxBitmapDataObject::SetData(
         return FALSE;
     }
 
-    m_bitmap = vImage.ConvertToBitmap();
+    m_bitmap = wxBitmap( vImage ) ; 
     return m_bitmap.Ok();
 }
 
@@ -290,17 +290,18 @@ void wxBitmapDataObject::DoConvertToPng()
     if (!m_bitmap.Ok())
         return;
 
-    wxImage                         vImage(m_bitmap);
-    wxPNGHandler                    vHandler;
-    wxCountingOutputStream          vCount;
+    wxCHECK_RET( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != NULL,
+                 wxT("You must call wxImage::AddHandler(new wxPNGHandler); to be able to use clipboard with bitmaps!") );
 
-    vHandler.SaveFile(&vImage, vCount);
+    wxImage image = m_bitmap.ConvertToImage();
 
-    m_pngSize = vCount.GetSize() + 100; // sometimes the size seems to vary ???
+    wxCountingOutputStream count;
+    image.SaveFile(count, wxBITMAP_TYPE_PNG);
+
+    m_pngSize = count.GetSize() + 100; // sometimes the size seems to vary ???
     m_pngData = malloc(m_pngSize);
 
-    wxMemoryOutputStream            vMstream((char*) m_pngData, m_pngSize);
-
-    vHandler.SaveFile(&vImage, vMstream );
+    wxMemoryOutputStream mstream((char*) m_pngData, m_pngSize);
+    image.SaveFile(mstream, wxBITMAP_TYPE_PNG);
 }
 
