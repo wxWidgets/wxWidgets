@@ -38,17 +38,6 @@
 #endif
 #endif  //WX_PRECOMP
 
-// In some mingws there is a missing extern "C" int the winsock header,
-// so we put it here just to be safe. Note that this must appear _before_
-// #include "wx/msw/private.h" which itself includes <windows.h>, as this
-// one in turn includes <winsock.h> unless we define WIN32_LEAN_AND_MEAN.
-//
-#if defined(__WIN32__) && !defined(__TWIN32__) && !defined(__WXMICROWIN__) && ! (defined(__GNUWIN32__) && !defined(__MINGW32__))
-extern "C" {
-    #include <winsock.h>    // we use socket functions in wxGetFullHostName()
-}
-#endif
-
 #include "wx/msw/private.h"     // includes <windows.h>
 
 #include "wx/timer.h"
