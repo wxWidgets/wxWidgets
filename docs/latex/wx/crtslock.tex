@@ -1,0 +1,29 @@
+\section{\class{wxCriticalSectionLocker}}\label{wxcriticalsectionlocker}
+
+This is a small helper class to be used with \helpref{wxCriticalSection}{wxcriticalsection} 
+objects. A wxCriticalSectionLocker enters the critical section in the
+constructor and leaves it in the destructor making it much more difficult to
+forget to leave a critical section (which, in general, will lead to serious
+and difficult to debug problems).
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{See also}
+
+\helpref{wxCriticalSection}{wxcriticalsection},
+\helpref{wxMutexLocker}{wxmutexlocker}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCriticalSectionLocker::wxCriticalSectionLocker}\label{wxcriticalsectionlockerctor}
+\func{}{wxCriticalSectionLocker}{\param{wxCriticalSection *}{criticalsection}}
+
+Constructs a wxCriticalSectionLocker object associated with given
+criticalsection which must be non NULL and enters it.
+
+\membersection{wxCriticalSectionLocker::\destruct{wxCriticalSectionLocker}}\label{wxcriticalsectionlockerdtor}
+\func{}{\destruct{wxCriticalSectionLocker}}{\void}
+
+Destuctor leaves the criticalsection.

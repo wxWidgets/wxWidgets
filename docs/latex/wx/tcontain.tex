@@ -1,0 +1,59 @@
+\section{Container classes overview}\label{wxcontaineroverview}
+
+Classes: \helpref{wxList}{wxlist}, \helpref{wxArray}{wxarray}
+
+wxWindows uses itself several container classes including (double) linked lists
+and dynamic arrays (i.e. arrays which expand automatically when they become
+full). For both historical and portability reasons wxWindows does not
+use STL which provides the standard implementation of many container classes in
+C++: first of all, wxWindows had existed well before STL was written and
+secondly we don't believe that today compilers can deal really well with all of
+STL classes (this is especially true for some less common platforms). Of
+course, the compilers are evolving quite rapidly and hopefully their progress
+will allow to base future versions of wxWindows on STL - but this is not yet
+the case.
+
+wxWindows container classes don't pretend to be as powerful or full as STL
+ones, but they are quite useful and may be compiled with absolutely any C++
+compiler. They're used internally by wxWindows, but may, of course, be used in
+your programs as well if you wish.
+
+The list classes in wxWindows are double-linked lists which may either own the
+objects they contain (meaning that the list deletes the object when it is
+removed from the list or the list itself is destroyed) or just store the
+pointers depending on whether you called or not
+\helpref{wxList::DeleteContents}{wxlistdeletecontents} method.
+
+Dynamic arrays resemble to C arrays but with two important differences: they
+provide run-time range checking in debug builds and they expand automatically
+the allocated memory when there is no more space for new items. They come in
+two sorts: the "plain" arrays which store either built-in types such as "char",
+"int" or "bool" or the pointers to arbitrary objects, or "object arrays" which
+own the object pointers to which they store.
+
+For the same portability reasons, container classes implementation in wxWindows
+does not use templates, but is rather based on C preprocessor i.e. is done with
+the macros: {\it WX\_DECLARE\_LIST} and {\it WX\_DEFINE\_LIST} for the linked
+lists and {\it WX\_DECLARE\_ARRAY}, {\it WX\_DECLARE\_OBJARRAY} and {\it
+WX\_DEFINE\_OBJARRAY} for the dynamic arrays. The "DECLARE" macro declares a
+new container class containing the elements of given type and is needed for all
+three types of container classes: lists, arrays and objarrays. The "DEFINE"
+classes must be inserted in your program in a place where the {\bf full
+declaration of container element class is in scope} (i.e. not just forward
+declaration), otherwise destructors of the container elements will not be
+called! As array classes never delete the items they contain anyhow, there is
+no WX\_DEFINE\_ARRAY macro for them.
+
+Examples of usage of these macros may be found in \helpref{wxList}{wxlist} and
+\helpref{wxArray}{wxarray} documentation.
+
+Finally, wxWindows predefines several commonly used container classes. wxList
+is defined for compatibility with previous versions as a list containing
+wxObjects and wxStringList as a list of C-style strings (char *), both of these
+classes are deprecated and should not be used in new programs. The following
+array classes are defined: wxArrayInt, wxArrayLong, wxArrayPtrVoid and
+wxArrayString. The first three store elements of corresponding types, but
+wxArrayString is somewhat special: it is an optimized version of wxArray which
+uses its knowledge about \helpref{wxString}{wxstring} reference counting
+schema.
+

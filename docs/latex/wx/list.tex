@@ -1,13 +1,78 @@
 \section{\class{wxList}}\label{wxlist}
 
-This class provides linked list functionality for wxWindows, and for an application
-if it wishes.  Depending on the form of constructor used, a list can be keyed on
-integer or string keys to provide a primitive look-up ability. See \helpref{wxHashTable}{wxhashtable}\rtfsp
-for a faster method of storage when random access is required.
+wxList classes provide linked list functionality for wxWindows, and for an
+application if it wishes.  Depending on the form of constructor used, a list
+can be keyed on integer or string keys to provide a primitive look-up ability.
+See \helpref{wxHashTable}{wxhashtable}\rtfsp for a faster method of storage
+when random access is required.
+
+While wxList class in the previous versions of wxWindows only could contain
+elements of type wxObject and had essentially untyped interface (thus allowing
+you to put apples in the list and read back oranges from it), the new wxList
+classes family may contain elements of any type and has much more stricter type
+checking. Unfortunately, it also requires an additional line to be inserted in
+your program for each list class you use (which is the only solution short of
+using templates which is not done in wxWindows because of portability issues).
+
+The general idea is to have the base class wxListBase working with {\it void *}
+data but make all of its dangerous (because untyped) functions protected, so
+that they can only be used from derived classes which, in turn, expose a type
+safe interface. With this approach a new wxList-like class must be defined for
+each list type (i.e. list of ints, of wxStrings or of MyObjects). This is done
+with {\it WX\_DECLARE\_LIST} and {\it WX\_IMPLEMENT\_LIST} macros like this
+(notice the similarity with WX\_DECLARE\_OBJARRAY and WX\_IMPLEMENT\_OBJARRAY
+macros):
+
+\wxheading{Example}
+
+{\small%
+\begin{verbatim}
+    // this part might be in a header or source (.cpp) file
+    class MyListElement
+    {
+        ... // whatever
+    };
+
+    // declare our list class: this macro declares and partly implements MyList
+    // class (which derives from wxListBase)
+    WX_DECLARE_LIST(MyListElement, MyList)
+
+    ...
+
+    // the only requirment for the rest is to be AFTER the full declaration of
+    // MyListElement (for WX_DECLARE_LIST forward declaration is enough), but
+    // usually it will be found in the source file and not in the header
+
+    #include <wx/listimpl.cpp>
+    WX_DEFINE_LIST(MyList)
+
+    // now MyList class may be used as a usual wxList, but all of its methods
+    // will take/return the objects of the right (i.e. MyListElement) type. You
+    // also have MyList::Node type which is the type-safe version of wxNode.
+    MyList list;
+    MyListElement element;
+    list.Add(element);      // ok
+    list.Add(17);           // error: incorrect type
+
+    // let's iterate over the list
+    for ( MyList::Node *node = list.GetFirst(); node; node = node->GetNext() )
+    {
+        MyListElement *current = node->GetData();
+
+        ...process the current element...
+    }
+\end{verbatim}
+}
+
+For compatibility with previous versions wxList and wxStringList classes are
+still defined, but their usage is deprecated and they will disappear in the
+future versions completely.
 
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
+
+{\bf WARNING: } the rest of documentation may be out-of-date.
 
 \wxheading{Example}
 
@@ -60,10 +125,10 @@ types (such as char*) may be used with appropriate casting.
 
 \wxheading{See also}
 
-\helpref{wxNode}{wxnode}, \helpref{wxStringList}{wxstringlist}
+\helpref{wxNode}{wxnode}, \helpref{wxStringList}{wxstringlist},
+\helpref{wxArray}{wxarray}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
-
 
 \membersection{wxList::wxList}
 

@@ -1,10 +1,16 @@
-\section{\class{wxNode}}\label{wxnode}
+\section{\class{wxNodeBase}}\label{wxnode}
 
-A node structure used in linked lists (see \helpref{wxList}{wxlist}).
+A node structure used in linked lists (see \helpref{wxList}{wxlist}) and
+derived classes. You should never use wxNodeBase class directly because it
+works with untyped (void *) data and this is unsafe. Use wxNode-derived classes
+which are defined by WX\_DECLARE\_LIST and WX\_DEFIBE\_LIST macros instead as
+described in \helpref{wxList}{wxlist} documentation (see example there). wxNode
+is defined for compatibility as wxNodeBase containing "wxObject *" pointer, but
+usage of this class is deprecated.
 
 \wxheading{Derived from}
 
-\helpref{wxObject}{wxobject}
+None.
 
 \wxheading{See also}
 
@@ -12,33 +18,32 @@ A node structure used in linked lists (see \helpref{wxList}{wxlist}).
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxNode::Data}
+\membersection{wxNodeBase::GetData}
 
-\func{wxObject *}{Data}{\void}
+\func{void *}{Data}{\void}
 
-Retrieves the client data pointer associated with the node. This will
-have to be cast to the correct type.
+Retrieves the client data pointer associated with the node.
 
-\membersection{wxNode::Next}
+\membersection{wxNodeBase::GetNext}
 
-\func{wxNode *}{Next}{\void}
+\func{wxNodeBase *}{Next}{\void}
 
 Retrieves the next node (NULL if at end of list).
 
-\membersection{wxNode::Previous}
+\membersection{wxNodeBase::Previous}
 
-\func{wxNode *}{Previous}{\void}
+\func{wxNodeBase *}{GetPrevious}{\void}
 
 Retrieves the previous node (NULL if at start of list).
 
-\membersection{wxNode::SetData}
+\membersection{wxNodeBase::SetData}
 
-\func{void}{SetData}{\param{wxObject *}{data}}
+\func{void}{SetData}{\param{void *}{data}}
 
 Sets the data associated with the node (usually the pointer will have been
 set when the node was created).
 
-\membersection{wxNode::IndexOf}
+\membersection{wxNodeBase::IndexOf}
 
 \func{int}{IndexOf}{\void}
 

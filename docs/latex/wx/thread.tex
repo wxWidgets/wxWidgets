@@ -1,6 +1,13 @@
 \section{\class{wxThread}}\label{wxthread}
 
-A wxThread manages a system thread, code which executes as a mini-process within the application.
+A thread is basically a path of execution through a program. Threads are also
+sometimes calls {\it light-wight processes}, but the fundamental difference
+between threads and processes is that memory spaces of different processes are
+separated while all threads share the same address space. While it makes it
+much easier to share common data between several threads, it also makes much
+easier to shoot oneself in a leg, so careful use of synchronization objects
+such as \helpref{mutexes}{wxmutex} and/or \helpref{critical 
+sections}{wxcriticalsection} is recommended.
 
 \wxheading{Derived from}
 
@@ -36,9 +43,9 @@ One of:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf THREAD\_NO\_ERROR}}{There was no error.}
-\twocolitem{{\bf THREAD\_NO\_RESOURCE}}{There were insufficient resources to create a new thread.}
-\twocolitem{{\bf THREAD\_RUNNING}}{The thread is already running.}
+\twocolitem{{\bf wxTHREAD\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxTHREAD\_NO\_RESOURCE}}{There were insufficient resources to create a new thread.}
+\twocolitem{{\bf wxTHREAD\_RUNNING}}{The thread is already running.}
 \end{twocollist}
 
 \membersection{wxThread::DeferDestroy}\label{wxthreaddeferdestroy}
@@ -60,8 +67,8 @@ One of:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf THREAD\_NO\_ERROR}}{There was no error.}
-\twocolitem{{\bf THREAD\_NOT\_RUNNING}}{The thread is not running.}
+\twocolitem{{\bf wxTHREAD\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxTHREAD\_NOT\_RUNNING}}{The thread is not running.}
 \end{twocollist}
 
 \membersection{wxThread::GetID}\label{wxthreadgetid}
@@ -95,7 +102,7 @@ Returns TRUE if the thread is alive.
 
 \constfunc{bool}{IsMain}{\void}
 
-Returns TRUE if the thread is the main application thread.
+Returns TRUE if the calling thread is the main application thread.
 
 \membersection{wxThread::Join}\label{wxthreadjoin}
 
@@ -123,9 +130,3 @@ The following priorities are already defined:
 \twocolitem{{\bf WXTHREAD\_DEFAULT\_PRIORITY}}{50}
 \twocolitem{{\bf WXTHREAD\_MAX\_PRIORITY}}{100}
 \end{twocollist}
-
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "referenc"
-%%% End: 

@@ -27,15 +27,15 @@ application.
 An example of defining an application follows:
 
 \begin{verbatim}
-class DerivedApp: public wxApp
+class DerivedApp : public wxApp
 {
- public:
-  bool OnInit(void);
+public:
+  virtual bool OnInit();
 };
 
 IMPLEMENT_APP(DerivedApp)
 
-bool DerivedApp::OnInit(void)
+bool DerivedApp::OnInit()
 {
   wxFrame *the_frame = new wxFrame(NULL, argv[0]);
   ...

@@ -1,7 +1,61 @@
 \section{\class{wxMutex}}\label{wxmutex}
 
-A wxMutex controls mutual exclusion, to prevent two or more threads accessing
-the same piece of code.
+A mutex object is a synchronization object whose state is set to signaled when
+it is not owned by any thread, and nonsignaled when it is owned. Its name comes
+from its usefulness in coordinating mutually-exclusive access to a shared
+resource. Only one thread at a time can own a mutex object.
+
+For example, when several thread use the data stored in the linked list,
+modifications to the list should be only allowed to one thread at a time
+because during a new node addition the list integrity is temporarily broken
+(this is also called {\it program invariant}).
+
+\wxheading{Example}
+
+{\small%
+\begin{verbatim}
+    // this variable has an "s_" prefix because it is static: seeing an "s_" in
+    // a multithreaded program is in general a good sign that you should use a
+    // mutex (or a critical section)
+    static wxMutex *s_mutexProtectingTheGlobalData;
+
+    // we store some numbers in this global array which is presumably used by
+    // several threads simultaneously
+    wxArrayInt s_data;
+
+    void MyThread::AddNewNode(int num)
+    {
+        // ensure that no other thread accesses the list
+        s_mutexProtectingTheGlobalList->Lock();
+
+        s_data.Add(num);
+
+        s_mutexProtectingTheGlobalList->Unlock();
+    }
+
+    // return TRUE the given number is greater than all array elements
+    bool MyThread::IsGreater(int num)
+    {
+        // before using the list we must acquire the mutex
+        wxMutexLocker lock(s_mutexProtectingTheGlobalData);
+
+        size_t count = s_data.Count();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( s_data[n] > num )
+                return FALSE;
+        }
+
+        return TRUE;
+    }
+\end{verbatim}
+}
+
+Notice how wxMutexLocker was used in the second function to ensure that the
+mutex is unlocked in any case: whether the function returns TRUE or FALSE
+(because the destructor of the local object {\it lock} is always called). Using
+this class instead of directly using wxMutex is, in general safer and is even
+more so if yoor program uses C++ exceptions.
 
 \wxheading{Derived from}
 
@@ -9,7 +63,8 @@ None.
 
 \wxheading{See also}
 
-\helpref{wxThread}{wxthread}, \helpref{wxCondition}{wxcondition}
+\helpref{wxThread}{wxthread}, \helpref{wxCondition}{wxcondition},
+\helpref{wxMutexLocker}{wxmutexlocker}, \helpref{wxCriticalSection}{wxcriticalsection}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -43,9 +98,9 @@ One of:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf MUTEX\_NO\_ERROR}}{There was no error.}
-\twocolitem{{\bf MUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
-\twocolitem{{\bf MUTEX\_BUSY}}{The mutex is already locked by another thread.}
+\twocolitem{{\bf wxMUTEX\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxMUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
+\twocolitem{{\bf wxMUTEX\_BUSY}}{The mutex is already locked by another thread.}
 \end{twocollist}
 
 \membersection{wxMutex::TryLock}\label{wxmutextrylock}
@@ -60,9 +115,9 @@ One of:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf MUTEX\_NO\_ERROR}}{There was no error.}
-\twocolitem{{\bf MUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
-\twocolitem{{\bf MUTEX\_BUSY}}{The mutex is already locked by another thread.}
+\twocolitem{{\bf wxMUTEX\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxMUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
+\twocolitem{{\bf wxMUTEX\_BUSY}}{The mutex is already locked by another thread.}
 \end{twocollist}
 
 \membersection{wxMutex::Unlock}\label{wxmutexunlock}
@@ -77,10 +132,10 @@ One of:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf MUTEX\_NO\_ERROR}}{There was no error.}
-\twocolitem{{\bf MUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
-\twocolitem{{\bf MUTEX\_BUSY}}{The mutex is already locked by another thread.}
-\twocolitem{{\bf MUTEX\_UNLOCKED}}{The calling thread tries to unlock an unlocked mutex.}
+\twocolitem{{\bf wxMUTEX\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxMUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
+\twocolitem{{\bf wxMUTEX\_BUSY}}{The mutex is already locked by another thread.}
+\twocolitem{{\bf wxMUTEX\_UNLOCKED}}{The calling thread tries to unlock an unlocked mutex.}
 \end{twocollist}
 
 
