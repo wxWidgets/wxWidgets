@@ -261,9 +261,6 @@ bool wxDbGridTableBase::AssignDbTable(wxDbTable *tab, int count, bool takeOwners
 
 wxString wxDbGridTableBase::GetTypeName(int row, int col)
 {
-    if (col == 8)
-        int breakpoint = 1;
-
     if (GetNumberCols() > col)
     {
         if (m_ColInfo[col].wxtypename == wxGRID_VALUE_DBAUTO)
