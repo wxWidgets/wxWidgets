@@ -18,10 +18,8 @@
 #include <wx/wx.h>
 #endif
 
-#ifdef __WXGTK__
 // Pizza !
 #include <wx/gtk/win_gtk.h>
-#endif
 
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
