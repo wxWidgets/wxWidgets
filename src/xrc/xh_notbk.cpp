@@ -88,10 +88,7 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         m_isInside = old_ins;
         m_notebook = old_par;
 
-        if (GetBool(wxT("usenotebooksizer"), false))
-            return new wxNotebookSizer(nb);
-        else
-            return nb;
+        return nb;
     }
 }
 

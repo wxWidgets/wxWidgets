@@ -253,7 +253,6 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     m_notebook = new wxNotebook(m_panel, wxID_ANY, wxDefaultPosition,
         wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
     InitNotebook();
-    wxSizer *sizerUp = new wxNotebookSizer(m_notebook);
 
     // the lower one only has the log listbox and a button to clear it
     wxSizer *sizerDown = new wxStaticBoxSizer(
@@ -273,7 +272,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
 
     // put everything together
-    sizerTop->Add(sizerUp, 1, wxGROW | (wxALL & ~(wxTOP | wxBOTTOM)), 10);
+    sizerTop->Add(m_notebook, 1, wxGROW | (wxALL & ~(wxTOP | wxBOTTOM)), 10);
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 

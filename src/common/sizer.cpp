@@ -24,8 +24,10 @@
 #include "wx/sizer.h"
 #include "wx/utils.h"
 #include "wx/statbox.h"
-#include "wx/notebook.h"
 #include "wx/listimpl.cpp"
+#if WXWIN_COMPATIBILITY_2_4
+    #include "wx/notebook.h"
+#endif
 
 #ifdef __WXMAC__
 #   include "wx/mac/uma.h"
@@ -41,12 +43,6 @@ IMPLEMENT_CLASS(wxBoxSizer, wxSizer)
 #if wxUSE_STATBOX
 IMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer)
 #endif
-#if wxUSE_BOOKCTRL
-IMPLEMENT_CLASS(wxBookCtrlSizer, wxSizer)
-#if wxUSE_NOTEBOOK
-IMPLEMENT_CLASS(wxNotebookSizer, wxBookCtrlSizer)
-#endif // wxUSE_NOTEBOOK
-#endif // wxUSE_BOOKCTRL
 
 WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
 
@@ -1643,9 +1639,19 @@ void wxStaticBoxSizer::ShowItems( bool show )
 
 #endif // wxUSE_STATBOX
 
+
+#if WXWIN_COMPATIBILITY_2_4
+
 // ----------------------------------------------------------------------------
 // wxNotebookSizer
 // ----------------------------------------------------------------------------
+
+#if wxUSE_BOOKCTRL
+IMPLEMENT_CLASS(wxBookCtrlSizer, wxSizer)
+#if wxUSE_NOTEBOOK
+IMPLEMENT_CLASS(wxNotebookSizer, wxBookCtrlSizer)
+#endif // wxUSE_NOTEBOOK
+#endif // wxUSE_BOOKCTRL
 
 #if wxUSE_BOOKCTRL
 
@@ -1698,14 +1704,15 @@ wxSize wxBookCtrlSizer::CalcMin()
     return wxSize( maxX, maxY ) + sizeBorder;
 }
 
-
 #if wxUSE_NOTEBOOK
 
 wxNotebookSizer::wxNotebookSizer(wxNotebook *nb)
-    : wxBookCtrlSizer(nb)
 {
+    wxASSERT_MSG( nb, wxT("wxNotebookSizer needs a control") );
+    m_bookctrl = nb;
 }
 
 #endif // wxUSE_NOTEBOOOK
 #endif // wxUSE_BOOKCTRL
 
+#endif // WXWIN_COMPATIBILITY_2_4

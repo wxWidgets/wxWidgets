@@ -518,6 +518,11 @@ private:
 
 #endif // wxUSE_STATBOX
 
+
+#if WXWIN_COMPATIBILITY_2_4
+// NB: wxBookCtrlSizer and wxNotebookSizer are deprecated, they
+//     don't do anything. wxBookCtrl::DoGetBestSize does the job now.
+
 // ----------------------------------------------------------------------------
 // wxBookCtrlSizer
 // ----------------------------------------------------------------------------
@@ -531,14 +536,18 @@ class WXDLLEXPORT wxBookCtrl;
 class WXDLLEXPORT wxBookCtrlSizer : public wxSizer
 {
 public:
-    wxBookCtrlSizer(wxBookCtrl *bookctrl);
+    wxDEPRECATED( wxBookCtrlSizer(wxBookCtrl *bookctrl) );
 
+    wxBookCtrl *GetControl() const { return m_bookctrl; }
+    
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
 
-    wxBookCtrl *GetControl() const { return m_bookctrl; }
-
 protected:
+    // this protected ctor lets us mark the real one above as deprecated
+    // and still has warning-free build of the library itself:
+    wxBookCtrlSizer() {}
+    
     wxBookCtrl *m_bookctrl;
 
 private:
@@ -556,7 +565,7 @@ class WXDLLEXPORT wxNotebook;
 class WXDLLEXPORT wxNotebookSizer : public wxBookCtrlSizer
 {
 public:
-    wxNotebookSizer(wxNotebook *nb);
+    wxDEPRECATED( wxNotebookSizer(wxNotebook *nb) );
 
     wxNotebook *GetNotebook() const { return (wxNotebook *)m_bookctrl; }
 
@@ -568,6 +577,9 @@ private:
 #endif // wxUSE_NOTEBOOK
 
 #endif // wxUSE_BOOKCTRL
+
+#endif // WXWIN_COMPATIBILITY_2_4
+
 
 #endif // __WXSIZER_H__
 

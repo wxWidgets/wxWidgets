@@ -293,10 +293,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
                                              (unsigned long)nDpy));
     }
 
-    wxNotebookSizer *notebookSizer = new wxNotebookSizer(m_notebook);
-    panel->SetSizer(notebookSizer);
-    notebookSizer->Fit(this);
-    notebookSizer->SetSizeHints(this);
+    wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(m_notebook, 1, wxEXPAND);
+    panel->SetSizer(sizer);
+    sizer->Fit(this);
+    sizer->SetSizeHints(this);
 }
 
 wxString MyFrame::VideoModeToText(const wxVideoMode& mode)

@@ -307,10 +307,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         m_NavigPan = new wxPanel(m_Splitter, wxID_ANY);
         m_NavigNotebook = new wxNotebook(m_NavigPan, wxID_HTML_NOTEBOOK,
                                          wxDefaultPosition, wxDefaultSize);
-        wxNotebookSizer *nbs = new wxNotebookSizer(m_NavigNotebook);
 
         navigSizer = new wxBoxSizer(wxVERTICAL);
-        navigSizer->Add(nbs, 1, wxEXPAND);
+        navigSizer->Add(m_NavigNotebook, 1, wxEXPAND);
 
         m_NavigPan->SetSizer(navigSizer);
     }

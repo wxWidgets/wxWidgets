@@ -326,8 +326,7 @@ MySizerDialog::MySizerDialog(wxWindow *parent, const wxChar *title)
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     wxNotebook *notebook = new wxNotebook( this, wxID_ANY );
-    wxNotebookSizer *nbs = new wxNotebookSizer( notebook );
-    topsizer->Add( nbs, 1, wxGROW );
+    topsizer->Add( notebook, 1, wxGROW );
 
     wxButton *button = new wxButton( this, wxID_OK, _T("OK") );
     topsizer->Add( button, 0, wxALIGN_RIGHT | wxALL, 10 );
