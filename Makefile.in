@@ -429,7 +429,7 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	$(INSTALL_DATA) $(build_libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h \
                     $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h
 
-	(INSTALL) -d $(includedir)/wx
+	$(INSTALL) -d $(includedir)/wx
 	@# FIXME: This will erroneously install a wx/base dir for wxBase..
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/@TOOLKIT_DIR@; fi
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/html; fi
