@@ -154,6 +154,11 @@ gint wxapp_pending_callback( gpointer WXUNUSED(data) )
 
     g_pendingTag = 0;
 
+    // flush the logged messages if any
+#if wxUSE_LOG
+    wxLog::FlushActive();
+#endif // wxUSE_LOG
+
     // Release lock again
     gdk_threads_leave();
 
@@ -419,11 +424,6 @@ void wxApp::OnIdle( wxIdleEvent &event )
         event.RequestMore(TRUE);
 
     s_inOnIdle = FALSE;
-
-    // flush the logged messages if any
-#if wxUSE_LOG
-    wxLog::FlushActive();
-#endif // wxUSE_LOG
 }
 
 bool wxApp::SendIdleEvents()

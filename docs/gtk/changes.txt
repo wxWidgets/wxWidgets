@@ -1,7 +1,11 @@
 
-22nd December: wxWindows 2.2.4 released
+5th January: wxWindows 2.2.4 released
+
+Small Postscript bouding box fix.
 
 Patch for better 8-bit-display support.
+
+Corrected log error message box.
 
 Implememted wxCommandEvent::IsSelection() for wxListBox.
 
