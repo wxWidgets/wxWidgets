@@ -12,6 +12,10 @@
 #ifndef _WX_TIMER_H_
 #define _WX_TIMER_H_
 
+#ifdef __GNUG__
+    #pragma interface "timer.h"
+#endif
+
 #include "wx/object.h"
 
 class WXDLLEXPORT wxTimer: public wxTimerBase
