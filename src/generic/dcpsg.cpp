@@ -695,8 +695,8 @@ void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, wxCo
         CalcBoundingBox( LogicalToDeviceX(points[i].x+xoffset), LogicalToDeviceY(points[i].y+yoffset));
     }
 
-    PsPrintf( wxT("newpath\n"
-                  "%d %d moveto\n"),
+    PsPrintf( wxT("newpath\n")
+              wxT("%d %d moveto\n"),
               LogicalToDeviceX(points[0].x+xoffset),
               LogicalToDeviceY(points[0].y+yoffset) );
     
@@ -1673,8 +1673,8 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
        next-to-last and last point respectively, in the point list
      */
 
-    PsPrintf( wxT("%d %d lineto\n"
-                  "stroke\n"),
+    PsPrintf( wxT("%d %d lineto\n")
+              wxT("stroke\n"),
             LogicalToDeviceX((wxCoord)c), LogicalToDeviceY((wxCoord)d) );
 }
 
