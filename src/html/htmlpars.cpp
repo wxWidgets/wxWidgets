@@ -72,6 +72,8 @@ void wxHtmlParser::DoneParser()
 
 void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
 {
+    if (end_pos <= begin_pos) return;
+
     char c;
     char *temp = new char[end_pos - begin_pos + 1];
     int i;
