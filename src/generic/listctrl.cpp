@@ -4902,7 +4902,7 @@ bool wxListCtrl::DeleteAllColumns()
 {
     size_t count = m_mainWin->m_columns.GetCount();
     for ( size_t n = 0; n < count; n++ )
-        DeleteColumn(n);
+        DeleteColumn(0);
 
     return TRUE;
 }
