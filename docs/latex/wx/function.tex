@@ -242,6 +242,7 @@ the corresponding topic.
 \helpref{wxWriteResource}{wxwriteresource}\\
 \helpref{wxYield}{wxyield}\\
 \helpref{wx\_const\_cast}{wxconstcastraw}\\
+\helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw}\\
 \helpref{wx\_static\_cast}{wxstaticcastraw}\\
 \helpref{\_}{underscore}\\
 \helpref{\_T}{underscoret}
@@ -3425,7 +3426,21 @@ arguments is the same as for the standard cast.
 
 \wxheading{See also}
 
-\helpref{wx\_static\_cast}{wxstaticcastraw}\\
+\helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw},\\
+\helpref{wx\_static\_cast}{wxstaticcastraw}
+
+
+\membersection{wx\_reinterpret\_cast}\label{wxreinterpretcastraw}
+
+\func{T}{wx\_reinterpret\_cast}{T, x}
+
+Same as \texttt{reinterpret\_cast<T>(x)} if the compiler supports reinterpret cast or 
+\texttt{(T)x} for old compilers.
+
+\wxheading{See also}
+
+\helpref{wx\_const\_cast}{wxconstcastraw},\\
+\helpref{wx\_static\_cast}{wxstaticcastraw}
 
 
 \membersection{wx\_static\_cast}\label{wxstaticcastraw}
@@ -3440,7 +3455,8 @@ star is not appended to it.
 
 \wxheading{See also}
 
-\helpref{wx\_const\_cast}{wxconstcastraw}\\
+\helpref{wx\_const\_cast}{wxconstcastraw},\\
+\helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw}
 
 
 

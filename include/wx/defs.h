@@ -270,6 +270,9 @@ typedef int wxWindowID;
     #ifndef HAVE_CONST_CAST
         #define HAVE_CONST_CAST
     #endif
+    #ifndef HAVE_REINTERPRET_CAST
+        #define HAVE_REINTERPRET_CAST
+    #endif
     #ifndef HAVE_STATIC_CAST
         #define HAVE_STATIC_CAST
     #endif
@@ -285,6 +288,12 @@ typedef int wxWindowID;
     #define wx_const_cast(t, x) const_cast<t>(x)
 #else
     #define wx_const_cast(t, x) ((t)(x))
+#endif
+
+#ifdef HAVE_REINTERPRET_CAST
+    #define wx_reinterpret_cast(t, x) reinterpret_cast<t>(x)
+#else
+    #define wx_reinterpret_cast(t, x) ((t)(x))
 #endif
 
 /* for consistency with wxStatic/DynamicCast defined in wx/object.h */
