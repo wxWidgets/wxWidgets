@@ -41,13 +41,21 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	
 	m_printData = printdata ;
 	m_printData.ConvertToNative() ;
-	
+
+#if !TARGET_CARBON
 	err = UMAPrOpen() ;
+#else
+	err = UMAPrOpen(&m_macPrintPort) ;
+#endif
 	if ( err )
 	{
 		message.Printf( "Print Error %d", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+#if !TARGET_CARBON
 		UMAPrClose() ;
+#else
+		UMAPrClose(&m_macPrintPort) ;
+#endif
 	}
 	
 #if !TARGET_CARBON
@@ -76,15 +84,22 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	m_macPort = (GrafPtr ) m_macPrintPort ;
 #else
 	m_macPrintPort = kPMNoReference ;
+  #if PM_USE_SESSION_APIS
+    err = PMSessionBeginDocument(
+	m_macPrintPort,
+	m_printData.m_macPrintSettings, 
+    	m_printData.m_macPageFormat);
+  #else
     err = PMBeginDocument(
     	m_printData.m_macPrintSettings, 
     	m_printData.m_macPageFormat, 
     	&m_macPrintPort);
+  #endif
     if ( err != noErr || m_macPrintPort == kPMNoReference )
     {
 		message.Printf( "Print Error %d", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
-		UMAPrClose() ;
+		UMAPrClose(&m_macPrintPort) ;
     }
 	// sets current port
 	::GetPort( &m_macPort ) ;
@@ -129,14 +144,26 @@ wxPrinterDC::~wxPrinterDC(void)
 #else
 	if ( m_ok ) 
 	{
-     	err = PMEndDocument(m_macPrintPort);
+  #if PM_USE_SESSION_APIS
+	    err = PMSessionEndDocument(m_macPrintPort);
+  #else
+	    err = PMEndDocument(m_macPrintPort);
+  #endif
      	if ( !err )
      	{
 			message.Printf( "Print Error %d", err ) ;
 			wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+  #if !TARGET_CARBON
 			UMAPrClose() ;
+  #else
+			UMAPrClose(&m_macPrintPort) ;
+  #endif
      	}
+  #if !TARGET_CARBON
      	UMAPrClose() ;
+  #else
+	UMAPrClose(&m_macPrintPort) ;
+  #endif
 	}
 #endif
 }
@@ -194,14 +221,25 @@ void wxPrinterDC::StartPage(void)
 	   	m_ok = FALSE ;
 	}
 #else
-    err = PMBeginPage(m_macPrintPort, nil);
+  #if PM_USE_SESSION_APIS
+	err = PMSessionBeginPage(m_macPrintPort,
+				 m_printData.m_macPageFormat,
+				 nil);
+  #else
+	err = PMBeginPage(m_macPrintPort, nil);
+  #endif
 	if ( err )
 	{
 		message.Printf( "Print Error %d", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+  #if PM_USE_SESSION_APIS
+   		PMSessionEndPage(m_macPrintPort);
+		PMSessionEndDocument(m_macPrintPort);
+  #else
    		PMEndPage(m_macPrintPort);
 		PMEndDocument(m_macPrintPort);
-		UMAPrClose() ;
+  #endif
+		UMAPrClose(&m_macPrintPort) ;
 	   	::SetPort( macPrintFormerPort ) ;
 	   	m_ok = FALSE ;
 	}
@@ -229,13 +267,21 @@ void wxPrinterDC::EndPage(void)
 	   	m_ok = FALSE ;
 	}
 #else
+  #if PM_USE_SESSION_APIS
+	err = PMSessionEndPage(m_macPrintPort);
+  #else
 	err = PMEndPage(m_macPrintPort);
+  #endif
 	if ( err )
 	{
 		message.Printf( "Print Error %d", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+  #if PM_USE_SESSION_APIS
+		PMSessionEndDocument(m_macPrintPort);
+  #else
 		PMEndDocument(m_macPrintPort);
-		UMAPrClose() ;
+  #endif
+		UMAPrClose(&m_macPrintPort) ;
 	   	::SetPort( macPrintFormerPort ) ;
 	   	m_ok = FALSE ;
 	}
