@@ -120,7 +120,7 @@
                                   // since you may well need to output
                                   // an error log in a production
                                   // version (or non-debugging beta)
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 1
                                   // In debug mode, cause new and delete to be redefined globally.
                                   // If this causes problems (e.g. link errors), set this to 0.
 
