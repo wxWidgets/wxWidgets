@@ -131,6 +131,12 @@ def EVT_WINDOW_CREATE(win, func):
 def EVT_WINDOW_DESTROY(win, func):
     win.Connect(-1, -1, wxEVT_DESTROY, func)
 
+def EVT_WINDOW_CREATE_ID(win, id, func):
+    win.Connect(id, -1, wxEVT_CREATE, func)
+
+def EVT_WINDOW_DESTROY_ID(win, id, func):
+    win.Connect(id, -1, wxEVT_DESTROY, func)
+
 def EVT_SET_CURSOR(win, func):
     win.Connect(-1, -1, wxEVT_SET_CURSOR, func)
 
