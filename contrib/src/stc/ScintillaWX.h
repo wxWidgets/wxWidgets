@@ -55,7 +55,15 @@
 
 //----------------------------------------------------------------------
 
-class wxStyledTextCtrl;           // forward
+#ifdef WXMAKINGDLL_STC
+    #define WXDLLIMPEXP_STC WXEXPORT
+#elif defined(WXUSINGDLL)
+    #define WXDLLIMPEXP_STC WXIMPORT
+#else // not making nor using DLL
+    #define WXDLLIMPEXP_STC
+#endif
+
+class WXDLLIMPEXP_STC wxStyledTextCtrl;           // forward
 class ScintillaWX;
 
 

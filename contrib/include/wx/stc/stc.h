@@ -1062,7 +1062,11 @@ class  WXDLLIMPEXP_STC wxStyledTextEvent;
 
 //----------------------------------------------------------------------
 
+#ifndef SWIG
+class WXDLLIMPEXP_STC wxStyledTextCtrl : public wxControl {
+#else
 class wxStyledTextCtrl : public wxControl {
+#endif
 public:
 
 #ifdef SWIG
@@ -2234,7 +2238,7 @@ private:
     void NotifyParent(SCNotification* scn);
 
     DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxStyledTextCtrl)
+    DECLARE_DYNAMIC_CLASS(wxStyledTextCtrl)
 
 protected:
 
@@ -2261,7 +2265,11 @@ protected:
 #endif
 #endif
 
+#ifndef SWIG
+class WXDLLIMPEXP_STC wxStyledTextEvent : public wxCommandEvent {
+#else
 class wxStyledTextEvent : public wxCommandEvent {
+#endif
 public:
     wxStyledTextEvent(wxEventType commandType=0, int id=0);
 #ifndef SWIG
