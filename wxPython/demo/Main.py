@@ -34,6 +34,7 @@ _treeList = [
         'ScrolledPanel',
         'wxMenu',
         'wxIEHtmlWin',
+        'wxKeyEvents',
         ]),
 
     # managed windows == things with a caption you can close
@@ -116,12 +117,12 @@ _treeList = [
         'wxDynamicSashWindow',
         'wxEditableListBox',
         'wxEditor',
-        'wxFloatBar',
+        #'wxFloatBar',          deprecated
         'wxHtmlWindow',
         'wxIEHtmlWin',
         'wxLEDNumberCtrl',
         'wxMimeTypesManager',
-        'wxMVCTree',
+        #'wxMVCTree',           deprecated
         'wxRightTextCtrl',
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',
@@ -146,6 +147,7 @@ _treeList = [
         'Threads',
         'wxProcess',
         'wxTimer',
+        'wxKeyEvents',
         ]),
 
     # Clipboard and DnD
