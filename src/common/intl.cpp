@@ -1479,7 +1479,7 @@ bool wxLocale::Init(const wxChar *szName,
 }
 
 
-#if defined(__UNIX__) && wxUSE_UNICODE
+#if defined(__UNIX__) && wxUSE_UNICODE && !defined(__WXMAC__)
 static wxWCharBuffer wxSetlocaleTryUTF(int c, const wxChar *lc)
 {
     wxMB2WXbuf l = wxSetlocale(c, lc);
