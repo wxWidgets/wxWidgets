@@ -26,6 +26,8 @@
 // General features
 // ----------------------------------------------------------------------------
 
+#define wxUSE_FILESYSTEM       1 // better have this is you want to compile wxHTML
+
 #define wxUSE_PCX              1 // Utilize PCX images
 
 #define wxUSE_PNM              1 // Utilize PNM images

@@ -527,23 +527,25 @@ void wxFrame::SetMenuBar(
         return;
     }
 
-    wxCHECK_RET(!pMenuBar->GetFrame(), wxT("this menubar is already attached"));
+    m_frameMenuBar = NULL;
 
-    if (m_frameMenuBar)
-        delete m_frameMenuBar;
-
-    m_hMenu = pMenuBar->Create();
-    m_ulMenubarId = pMenuBar->GetMenubarId();
-    if (m_ulMenubarId != FID_MENU)
+    // Can set a menubar several times.
+    // TODO: how to prevent a memory leak if you have a currently-unattached
+    // menubar? wxWindows assumes that the frame will delete the menu (otherwise
+    // there are problems for MDI).
+    if (pMenuBar->GetHMenu())
     {
-        ::WinSetWindowUShort( m_hMenu
-                             ,QWS_ID
-                             ,(unsigned short)m_ulMenubarId
-                            );
+        m_hMenu = pMenuBar->GetHMenu();
     }
+    else
+    {
+        pMenuBar->Detach();
 
-    if (!m_hMenu)
-        return;
+        m_hMenu = pMenuBar->Create();
+
+        if (!m_hMenu)
+            return;
+    }
 
     InternalSetMenuBar();
 

@@ -84,6 +84,10 @@
     #define GET_Y_LPARAM(mp) ((unsigned short)(unsigned long)(mp >> 16))
 #endif // GET_X_LPARAM
 
+#ifndef CW_USEDEFAULT
+#  define CW_USEDEFAULT    ((int)0x80000000)
+#endif
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
