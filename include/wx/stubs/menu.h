@@ -66,6 +66,9 @@ public:
   inline void SetClientData(void* clientData) { m_clientData = clientData; }
   inline void* GetClientData() const { return m_clientData; }
 
+  void      SetInvokingWindow(wxWindow *pWin) { m_pInvokingWindow = pWin; }
+  wxWindow *GetInvokingWindow()         const { return m_pInvokingWindow; }
+
   // item properties
     // title
   void SetTitle(const wxString& label);
@@ -86,6 +89,12 @@ public:
   void ProcessCommand(wxCommandEvent& event);
   inline void Callback(const wxFunction func) { m_callback = func; }
 
+  // Updates the UI for a menu and all submenus recursively.
+  // source is the object that has the update event handlers
+  // defined for it. If NULL, the menu or associated window
+  // will be used.
+  void UpdateUI(wxEvtHandler* source = (wxEvtHandler*) NULL);
+
   virtual void SetParent(wxEvtHandler *parent) { m_parent = parent; }
   inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
   inline wxEvtHandler *GetEventHandler() { return m_eventHandler; }
@@ -102,6 +111,7 @@ public:
   wxEvtHandler *    m_parent;
   wxEvtHandler *    m_eventHandler;
   void*             m_clientData;
+  wxWindow*         m_pInvokingWindow;
 };
 
 // ----------------------------------------------------------------------------

@@ -2727,6 +2727,8 @@ bool wxWindow::PopupMenu( wxMenu *menu, int x, int y )
 
     SetInvokingWindow( menu, this );
 
+    menu->UpdateUI();
+
     gs_pop_x = x;
     gs_pop_y = y;
 

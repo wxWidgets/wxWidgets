@@ -197,6 +197,10 @@ WXDLLEXPORT void wxSplitPath(const char *pszFileName,
 // find a file in a list of directories, returns false if not found
 WXDLLEXPORT bool wxFindFileInPath(wxString *pStr, const char *pszPath, const char *pszFile);
 
+// Get the OS directory if appropriate (such as the Windows directory).
+// On non-Windows platform, probably just return the empty string.
+WXDLLEXPORT wxString wxGetOSDirectory();
+
 // ----------------------------------------------------------------------------
 // classes
 // ----------------------------------------------------------------------------

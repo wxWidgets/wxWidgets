@@ -1451,6 +1451,19 @@ bool wxSetWorkingDirectory(const wxString& d)
 #endif
 }
 
+// Get the OS directory if appropriate (such as the Windows directory).
+// On non-Windows platform, probably just return the empty string.
+wxString wxGetOSDirectory()
+{
+#ifdef __WINDOWS__
+    char buf[256];
+    GetWindowsDirectory(buf, 256);
+    return wxString(buf);
+#else
+    return wxEmptyString;
+#endif
+}
+
 bool wxEndsWithPathSeparator(const char *pszFileName)
 {
   size_t len = Strlen(pszFileName);

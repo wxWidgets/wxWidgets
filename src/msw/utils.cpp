@@ -75,6 +75,7 @@
 #include <stdarg.h>
 
 //// BEGIN for console support: VC++ only
+#ifdef __VISUALC__
 
 #include "wx/msw/msvcrt.h"
 
@@ -103,6 +104,8 @@
 #  define new new(__FILE__,__LINE__)
 #  endif
 
+#endif
+  // __VISUALC__
 /// END for console support
 
 // In the WIN.INI file

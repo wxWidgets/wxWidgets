@@ -1,114 +1,132 @@
-\section{\class{wxDataStream}}\label{wxdatastream}
+\section{\class{wxDataInputStream}}\label{wxdatainputstream}
 
-This class provides functions that read and write integers or double in a
+This class provides functions that read data types in a
 portable way. So, a file written by an Intel processor can be read by a
 Sparc or anything else.
 
+\wxheading{Derived from}
+
+\helpref{wxFilterInputStream}{wxfilterinputstream}\\
+\helpref{wxInputStream}{wxinputstream}\\
+\helpref{wxStreamBase}{wxstreambase}
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDataStream::wxDataStream}\label{wxdatastreamconstr}
+\membersection{wxDataInputStream::wxDataInputStream}\label{wxdatainputstreamconstr}
 
-\func{}{wxDataStream}{\param{istream\&}{ stream}}
+\func{}{wxDataInputStream}{\param{wxInputStream\&}{ stream}}
 
-Constructs a datastream object from a C++ input stream. Only read methods will
+Constructs a datastream object from an input stream. Only read methods will
 be available.
 
 \wxheading{Parameters}
 
-\docparam{stream}{The C++ input stream.}
+\docparam{stream}{The input stream.}
 
-\func{}{wxDataStream}{\param{istream\&}{ stream}}
+\membersection{wxDataInputStream::\destruct{wxDataInputStream}}
 
-Constructs a datastream object from a C++ input stream. Only read methods will
-be available.
+\func{}{\destruct{wxDataInputStream}}{\void}
 
-\wxheading{Parameters}
+Destroys the wxDataInputStream object.
 
-\docparam{stream}{The C++ input stream.}
-
-\membersection{wxDataStream::\destruct{wxDataStream}}
-
-\func{}{\destruct{wxDataStream}}{\void}
-
-Destroys the wxDataStream object.
-
-\membersection{wxDataStream::Read8}
+\membersection{wxDataInputStream::Read8}
 
 \func{unsigned char}{Read8}{\void}
 
 Reads a single byte from the stream.
 
-\membersection{wxDataStream::Read16}
+\membersection{wxDataInputStream::Read16}
 
 \func{unsigned short}{Read16}{\void}
 
 Reads a 16 bit integer from the stream.
 
-\membersection{wxDataStream::Read32}
+\membersection{wxDataInputStream::Read32}
 
 \func{unsigned long}{Read32}{\void}
 
 Reads a 32 bit integer from the stream.
 
-\membersection{wxDataStream::ReadDouble}
+\membersection{wxDataInputStream::ReadDouble}
 
 \func{double}{ReadDouble}{\void}
 
 Reads a double (IEEE encoded) from the stream.
 
-\membersection{wxDataStream::ReadString}
+\membersection{wxDataInputStream::ReadString}
 
-\func{wxString}{wxDataStream::ReadString}{\void}
+\func{wxString}{wxDataInputStream::ReadString}{\void}
 
-Reads a string from a stream. Actually, this function first reads a byte
+Reads a string from a stream. Actually, this function first reads a long integer
 specifying the length of the string (without the last null character) and then
 reads the string.
 
-\membersection{wxDataStream::ReadLine}
+\membersection{wxDataInputStream::ReadLine}
 
-\func{wxString}{wxDataStream::ReadLine}{\void}
+\func{wxString}{wxDataInputStream::ReadLine}{\void}
 
 Reads a line from the stream. A line is a string which ends with \\n or \\r\\n.
 
-\membersection{wxDataStream::Write8}
+\section{\class{wxDataOutputStream}}\label{wxdataoutputstream}
 
-\func{void}{wxDataStream::Write8}{{\param unsigned char }{i8}}
+This class provides functions that write data types in a
+portable way. So, a file written by an Intel processor can be read by a
+Sparc or anything else.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDataOutputStream::wxDataOutputStream}\label{wxdataoutputstreamconstr}
+
+\func{}{wxDataInputStream}{\param{wxOutputStream\&}{ stream}}
+
+Constructs a datastream object from an output stream. Only read methods will
+be available.
+
+\wxheading{Parameters}
+
+\docparam{stream}{The output stream.}
+
+\membersection{wxDataOutputStream::\destruct{wxDataOutputStream}}
+
+\func{}{\destruct{wxDataOutputStream}}{\void}
+
+Destroys the wxDataOutputStream object.
+
+\membersection{wxDataOutputStream::Write8}
+
+\func{void}{wxDataOutputStream::Write8}{{\param unsigned char }{i8}}
 
 Writes the single byte {\it i8} to the stream.
 
-\membersection{wxDataStream::Write16}
+\membersection{wxDataOutputStream::Write16}
 
-\func{void}{wxDataStream::Write16}{{\param unsigned short }{i16}}
+\func{void}{wxDataOutputStream::Write16}{{\param unsigned short }{i16}}
 
 Writes the 16 bit integer {\it i16} to the stream.
 
-\membersection{wxDataStream::Write32}
+\membersection{wxDataOutputStream::Write32}
 
-\func{void}{wxDataStream::Write32}{{\param unsigned long }{i32}}
+\func{void}{wxDataOutputStream::Write32}{{\param unsigned long }{i32}}
 
 Writes the 32 bit integer {\it i32} to the stream.
 
-\membersection{wxDataStream::WriteDouble}
+\membersection{wxDataOutputStream::WriteDouble}
 
-\func{void}{wxDataStream::WriteDouble}{{\param double }{f}}
+\func{void}{wxDataOutputStream::WriteDouble}{{\param double }{f}}
 
 Writes the double {\it f} to the stream using the IEEE format.
 
-\membersection{wxDataStream::WriteString}
+\membersection{wxDataOutputStream::WriteString}
 
-\func{void}{wxDataStream::WriteString}{{\param const wxString\& }{string}}
+\func{void}{wxDataOutputStream::WriteString}{{\param const wxString\& }{string}}
 
 Writes {\it string} to the stream. Actually, this method writes the size of
 the string before writing {\it string} itself.
 
-\membersection{wxDataStream::WriteLine}
+\membersection{wxDataOutputStream::WriteLine}
 
-\func{void}{wxDataStream::WriteLine}{{\param const wxString\& }{string}}
+\func{void}{wxDataOutputStream::WriteLine}{{\param const wxString\& }{string}}
 
 Writes {\it string} as a line. Depending on the operating system, it adds
-\\n or \\r\\n.
+$\backslash$n or $\backslash$r$\backslash$n.
 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "referenc"
-%%% End: 

@@ -19,7 +19,7 @@
 
 #include <wx/metafile.h>
 
-#ifndef __WXMSW__
+#ifndef GetRValue
 #define GetRValue(rgb)	    ((unsigned char)(rgb))
 #define GetGValue(rgb)      ((unsigned char)(((int)(rgb)) >> 8))
 #define GetBValue(rgb)	    ((unsigned char)((rgb)>>16))
@@ -27,7 +27,7 @@
 
 /* Metafile Functions */
 /* Win32s/Borland need these macros, although META_SETBKCOLOR is defined */
-#if !defined(META_SETBKCOLOR) || defined(WIN32)
+#if !defined(META_SETBKCOLOR) // || defined(WIN32)
 
 #define META_SETBKCOLOR		     0x0201
 #define META_SETBKMODE		     0x0102
@@ -129,7 +129,7 @@
 
 /* PitchAndFamily family values (high 4 bits) */
 /* Win32s/Borland don't need this */
-#if !defined(__BORLANDC__) && !defined(WIN32)
+#ifndef FF_DONTCARE // !defined(__BORLANDC__) && !defined(WIN32)
 #define FF_DONTCARE         0x00
 #define FF_ROMAN            0x10
 #define FF_SWISS            0x20

@@ -1,40 +1,4 @@
 % -----------------------------------------------------------------------------
-% wxZlibInputStream
-% -----------------------------------------------------------------------------
-\section{\class{wxZlibInputStream}}
-
-\wxheading{Derived from}
-
-\helpref{wxFilterInputStream}{wxfilterinputstream}
-
-\wxheading{See also}
-
-\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxInputStream}{wxinputstream}
-
-\wxheading{Short description}
-
-This stream uncompresses all data read from it. It uses the ``filtered''
-stream to get new compressed data.
-
-% -----------------------------------------------------------------------------
-% wxZlibOutputStream
-% -----------------------------------------------------------------------------
-\section{\class{wxZlibOutputStream}}
-
-\wxheading{Derived from}
-
-\helpref{wxFilterOutputStream}{wxfilteroutputstream}
-
-\wxheading{See also}
-
-\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxOutputStream}{woutputstream}
-
-\wxheading{Short description}
-
-This stream compresses all data written to it and passed the compressed data
-to the ``filtered'' stream.
-
-% -----------------------------------------------------------------------------
 % wxFileInputStream
 % -----------------------------------------------------------------------------
 \section{\class{wxFileInputStream}}\label{wxfileinputstream}
@@ -144,48 +108,4 @@ Returns TRUE if the stream is initialized and ready.
 
 Initializes a new file stream in read-write mode using the specified 
 \it{iofilename} name.
-
-% -----------------------------------------------------------------------------
-% wxSocketInputStream
-% -----------------------------------------------------------------------------
-\section{\class{wxSocketInputStream}}
-
-\wxheading{Derived from}
-
-\helpref{wxInputStream}{wxinputStream}
-
-\wxheading{See also}
-
-\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxSocketBase}{wxsocketbase}
-
-\latexignore{\rtfignore{\wxheading{Members}}}
-
-\membersection{wxSocketInputStream::wxSocketInputStream}
-
-\func{}{wxSocketInputStream}{\param{wxSocketBase\&}{ s}}
-
-Initializes a new read-only socket stream using the specified initialized
-socket connection.
-
-% -----------------------------------------------------------------------------
-% wxSocketOutputStream
-% -----------------------------------------------------------------------------
-\section{\class{wxSocketInputStream}}
-
-\wxheading{Derived from}
-
-\helpref{wxOutputStream}{wxoutputStream}
-
-\wxheading{See also}
-
-\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxSocketBase}{wxsocketbase}
-
-\latexignore{\rtfignore{\wxheading{Members}}}
-
-\membersection{wxSocketOutputStream::wxSocketOutputStream}
-
-\func{}{wxSocketInputStream}{\param{wxSocketBase\&}{ s}}
-
-Initializes a new write-only socket stream using the specified initialized
-socket connection.
 

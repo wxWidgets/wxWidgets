@@ -330,6 +330,18 @@ This is relevant only to popup menus.
 
 \helpref{wxMenu::SetTitle}{wxmenusettitle}
 
+\membersection{wxMenu::UpdateUI}\label{wxmenuupdateui}
+
+\constfunc{void}{UpdateUI}{\param{wxEvtHandler*}{ source = NULL}}
+
+Sends events to {\it source} (or owning window if NULL) to update the
+menu UI. This is called just before the menu is popped up with \helpref{wxWindow::PopupMenu}{wxwindowpopupmenu}, but
+the application may call it at other times if required.
+
+\wxheading{See also}
+
+\helpref{wxUpdateUIEvent}{wxupdateuievent}
+
 \section{\class{wxMenuBar}}\label{wxmenubar}
 
 A menu bar is a series of menus accessible from the top of a frame.

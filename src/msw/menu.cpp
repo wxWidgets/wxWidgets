@@ -519,6 +519,7 @@ extern wxMenu *wxCurrentPopupMenu;
 bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
 {
   menu->SetInvokingWindow(this);
+  menu->UpdateUI();
 
   HWND hWnd = (HWND) GetHWND();
   HMENU hMenu = (HMENU)menu->m_hMenu;
@@ -945,3 +946,42 @@ WXHMENU wxMenu::GetHMenu() const
   return 0;
 }
 
+// Update a menu and all submenus recursively.
+// source is the object that has the update event handlers
+// defined for it. If NULL, the menu or associated window
+// will be used.
+void wxMenu::UpdateUI(wxEvtHandler* source)
+{
+  if (!source && GetInvokingWindow())
+    source = GetInvokingWindow()->GetEventHandler();
+  if (!source)
+    source = GetEventHandler();
+  if (!source)
+    source = this;
+
+  wxNode* node = GetItems().First();
+  while (node)
+  {
+    wxMenuItem* item = (wxMenuItem*) node->Data();
+    if ( !item->IsSeparator() )
+    {
+      wxWindowID id = item->GetId();
+      wxUpdateUIEvent event(id);
+      event.SetEventObject( source );
+
+      if (source->ProcessEvent(event))
+      {
+        if (event.GetSetText())
+          SetLabel(id, event.GetText());
+        if (event.GetSetChecked())
+          Check(id, event.GetChecked());
+        if (event.GetSetEnabled())
+          Enable(id, event.GetEnabled());
+      }
+
+      if (item->GetSubMenu())
+        item->GetSubMenu()->UpdateUI(source);
+    }
+    node = node->Next();
+  }
+}

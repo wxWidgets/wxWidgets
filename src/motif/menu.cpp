@@ -65,6 +65,7 @@ wxMenu::wxMenu(const wxString& title, const wxFunction func)
     m_eventHandler = this;
     m_noItems = 0;
     m_menuBar = NULL;
+    m_pInvokingWindow = NULL;
     
     //// Motif-specific members
     m_numColumns = 1;
@@ -379,12 +380,50 @@ void wxMenu::ProcessCommand(wxCommandEvent & event)
     {
         processed = GetEventHandler()->ProcessEvent(event);
     }
-    /* TODO
     // Try the window the menu was popped up from (and up
     // through the hierarchy)
     if ( !processed && GetInvokingWindow())
     processed = GetInvokingWindow()->ProcessEvent(event);
-    */
+}
+
+// Update a menu and all submenus recursively.
+// source is the object that has the update event handlers
+// defined for it. If NULL, the menu or associated window
+// will be used.
+void wxMenu::UpdateUI(wxEvtHandler* source)
+{
+  if (!source && GetInvokingWindow())
+    source = GetInvokingWindow()->GetEventHandler();
+  if (!source)
+    source = GetEventHandler();
+  if (!source)
+    source = this;
+
+  wxNode* node = GetItems().First();
+  while (node)
+  {
+    wxMenuItem* item = (wxMenuItem*) node->Data();
+    if ( !item->IsSeparator() )
+    {
+      wxWindowID id = item->GetId();
+      wxUpdateUIEvent event(id);
+      event.SetEventObject( source );
+
+      if (source->ProcessEvent(event))
+      {
+        if (event.GetSetText())
+          SetLabel(id, event.GetText());
+        if (event.GetSetChecked())
+          Check(id, event.GetChecked());
+        if (event.GetSetEnabled())
+          Enable(id, event.GetEnabled());
+      }
+
+      if (item->GetSubMenu())
+        item->GetSubMenu()->UpdateUI(source);
+    }
+    node = node->Next();
+  }
 }
 
 bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
@@ -409,6 +448,10 @@ bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
     
     menu->SetId(1); /* Mark as popped-up */
     menu->CreateMenu(NULL, widget, menu);
+    menu->SetInvokingWindow(this);
+
+    menu->UpdateUI();
+
     //  menu->SetParent(parent);
     //  parent->children->Append(menu);  // Store menu for later deletion
     

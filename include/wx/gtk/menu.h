@@ -128,6 +128,12 @@ public:
   inline void SetClientData( void* clientData ) { m_clientData = clientData; }
   inline void* GetClientData() const { return m_clientData; }
   
+  // Updates the UI for a menu and all submenus recursively.
+  // source is the object that has the update event handlers
+  // defined for it. If NULL, the menu or associated window
+  // will be used.
+  void UpdateUI(wxEvtHandler* source = (wxEvtHandler*) NULL);
+
 // implementation
   
   int FindMenuIdByMenuItem( GtkWidget *menuItem ) const;

@@ -4,7 +4,7 @@ The wxTextFile is a simple class which allows to work with text files on line by
 line basis. It also understands the differences in line termination characters
 under different platforms and will not do anything bad to files with "non
 native" line termination sequences - in fact, it can be also used to modify the
-text files and chaneg the line termination characters from one type (say DOS) to
+text files and change the line termination characters from one type (say DOS) to
 another (say Unix).
 
 One word of warning: the class is not at all optimized for big files and so it
@@ -22,7 +22,7 @@ function which opens the file (name may be specified either as Open argument or
 in the constructor), reads its contents in memory and closes it. If all of these
 operations are successful, Open() will return TRUE and FALSE on error.
 \item Work with the lines in the file: this may be done either with "direct
-access" functions like \helpref{GetLineCount}{wxtextfilegetlinecount} and
+access" functions like \helpref{GetLineCount}{wxtextfilegetlinecount} and 
 \helpref{GetLine}{wxtextfilegetline} ({\it operator[]} does exactly the same
 but looks more like array addressing) or with "sequential access" functions
 which include \helpref{GetFirstLine}{wxtextfilegetfirstline}/
@@ -34,9 +34,9 @@ changed with \helpref{GoToLine}{wxtextfilegotoline}.
 \item Add/remove lines to the file: \helpref{AddLine}{wxtextfileaddline} and 
 \helpref{InsertLine}{wxtextfileinsertline} add new lines while 
 \helpref{RemoveLine}{wxtextfileremoveline} deletes the existing ones.
-\item Save your changes: notice that the changes you do to the file will {\bf
-not} be saved automatically, calling \helpref{Close}{wxtextfileclose} or doing
-nothing discards them! To save the chanegs you must explicitly call 
+\item Save your changes: notice that the changes you make to the file will {\bf
+not} be saved automatically; calling \helpref{Close}{wxtextfileclose} or doing
+nothing discards them! To save the changes you must explicitly call 
 \helpref{Write}{wxtextfilewrite} - here, you may also change the line
 termination type if you wish.
 \end{itemize}
@@ -145,7 +145,7 @@ GoToLine().
 \constfunc{void}{GoToLine}{\param{size\_t }{n}}
 
 Changes the value returned by \helpref{GetCurrentLine}{wxtextfilegetcurrentline} 
-and used by \helpref{GetFirstLine()}{wxtextfilegetfirstline}()/\helpref{GetNextLine()}{wxtextfilegetnextline}.
+and used by \helpref{GetFirstLine()}{wxtextfilegetfirstline}/\helpref{GetNextLine()}{wxtextfilegetnextline}.
 
 \membersection{wxTextFile::Eof}\label{wxtextfileeof}
 
@@ -223,13 +223,13 @@ Insert a line before the line number {\it n}.
 
 \constfunc{void}{RemoveLine}{\param{size\_t }{n}}
 
-Delete one line from the file.
+Delete line number {\it n} from the file.
 
 \membersection{wxTextFile::Write}\label{wxtextfilewrite}
 
 \constfunc{bool}{Write}{\param{wxTextFileType }{typeNew = wxTextFileType\_None}}
 
-Change the file on disk. The {\it typeNew} parameter allows to change the
+Change the file on disk. The {\it typeNew} parameter allows you to change the
 file format (default argument means "don't change type") and may be used to
 convert, for example, DOS files to Unix.
 

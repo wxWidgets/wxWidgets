@@ -1,0 +1,36 @@
+% -----------------------------------------------------------------------------
+% wxZlibInputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxZlibInputStream}}
+
+\wxheading{Derived from}
+
+\helpref{wxFilterInputStream}{wxfilterinputstream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxInputStream}{wxinputstream}
+
+\wxheading{Short description}
+
+This stream uncompresses all data read from it. It uses the ``filtered''
+stream to get new compressed data.
+
+% -----------------------------------------------------------------------------
+% wxZlibOutputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxZlibOutputStream}}
+
+\wxheading{Derived from}
+
+\helpref{wxFilterOutputStream}{wxfilteroutputstream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxOutputStream}{wxoutputstream}
+
+\wxheading{Short description}
+
+This stream compresses all data written to it and passed the compressed data
+to the ``filtered'' stream.
+

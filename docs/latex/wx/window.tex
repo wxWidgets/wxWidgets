@@ -298,30 +298,6 @@ Enable or disable the window for user input.
 
 \helpref{wxWindow::IsEnabled}{wxwindowisenabled}
 
-\membersection{wxWindow::FakePopupMenu}\label{wxwindowfakepopupmenu}
-
-\func{virtual bool}{FakePopupMenu}{\param{wxMenu* }{menu}, \param{int }{x}, \param{int }{y}}
-
-A replacement for wxWindow::PopupMenu for cases where the PopupMenu implementation
-does not work correctly, in particular on Motif platforms.
-
-\wxheading{Parameters}
-
-\docparam{menu}{Menu to pop up.}
-
-\docparam{x}{Required x position for the menu to appear.}
-
-\docparam{y}{Required y position for the menu to appear.}
-
-\wxheading{Remarks}
-
-This is a cut-down version of PopupMenu using a dialog and listbox; pull-right menus
-are not supported.
-
-\wxheading{See also}
-
-\helpref{wxMenu}{wxmenu}, \helpref{wxWindow::PopupMenu}{wxwindowpopupmenu}
-
 \membersection{wxWindow::FindFocus}\label{wxwindowfindfocus}
 
 \func{static wxWindow*}{FindFocus}{\void}
@@ -1409,7 +1385,12 @@ the commandInt member of the event to check the selected menu identifier.
 
 \wxheading{See also}
 
-\helpref{wxMenu}{wxmenu}, \helpref{wxWindow::FakePopupMenu}{wxwindowfakepopupmenu}
+\helpref{wxMenu}{wxmenu}
+
+\wxheading{Remarks}
+
+Just before the menu is popped up, \helpref{wxMenu::UpdateUI}{wxmenuupdateui} is called
+to ensure that the menu items are in the correct state.
 
 \membersection{wxWindow::PushEventHandler}\label{wxwindowpusheventhandler}
 

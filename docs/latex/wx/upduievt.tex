@@ -10,7 +10,7 @@ to give an application the chance to update various user interface elements.
 
 \wxheading{Event table macros}
 
-To process a menu event, use these event handler macros to direct input to member
+To process an update event, use these event handler macros to direct input to member
 functions that take a wxUpdateUIEvent argument.
 
 \twocolwidtha{7cm}
@@ -35,6 +35,10 @@ The same handler can update a menu item and toolbar button, if the identifier is
 Instead of directly manipulating the menu or button, you call functions in the event
 object, such as \helpref{wxUpdateUIEvent::Check}{wxupdateuieventcheck}. wxWindows
 will determine whether such a call has been made, and which UI element to update.
+
+These events will work for popup menus as well as menubars. Just before a menu is popped
+up, \helpref{wxMenu::UpdateUI}{wxmenuupdateui} is called to process any UI events for
+the window that owns the menu.
 
 \wxheading{See also}
 

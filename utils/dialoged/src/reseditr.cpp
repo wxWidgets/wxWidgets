@@ -55,10 +55,6 @@
 #endif
 
 #ifdef __WXMSW__
-#include <windows.h>
-#endif
-
-#ifdef __WXMSW__
 #include "wx/help.h"
 #endif
 
@@ -152,12 +148,13 @@ wxResourceManager::~wxResourceManager()
 bool wxResourceManager::Initialize()
 {
   // Set up the resource filename for each platform.
+  // TODO: This shold be replaced by wxConfig usage.
 #ifdef __WXMSW__
   // dialoged.ini in the Windows directory
-  char buf[256];
-  GetWindowsDirectory(buf, 256);
-  strcat(buf, "\\dialoged.ini");
-  m_optionsResourceFilename = buf;
+  wxString windowsDir = wxGetOSDirectory();
+  windowsDir += "\\dialoged.ini" ;
+
+  m_optionsResourceFilename = windowsDir;
 #elif defined(__WXGTK__) || defined(__WXMOTIF__)
   wxGetHomeDir( &m_optionsResourceFilename );
   m_optionsResourceFilename += "/.dialogedrc";

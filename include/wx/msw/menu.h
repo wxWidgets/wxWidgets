@@ -83,6 +83,12 @@ public:
     // Find wxMenuItem by ID, and item's menu too if itemMenu is !NULL.
   wxMenuItem *FindItemForId(int itemId, wxMenu **itemMenu = NULL) const;
 
+  // Updates the UI for a menu and all submenus recursively.
+  // source is the object that has the update event handlers
+  // defined for it. If NULL, the menu or associated window
+  // will be used.
+  void UpdateUI(wxEvtHandler* source = (wxEvtHandler*) NULL);
+
   void ProcessCommand(wxCommandEvent& event);
   inline void Callback(const wxFunction func) { m_callback = func; }
 
