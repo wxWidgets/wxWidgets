@@ -71,7 +71,7 @@ wxSizerXmlHandler::wxSizerXmlHandler()
     XRC_ADD_STYLE(wxALIGN_CENTRE_VERTICAL);
     
     XRC_ADD_STYLE(wxADJUST_MINSIZE);
-    XRC_ADD_STYLE(wxFIXED_SIZE);
+    XRC_ADD_STYLE(wxFIXED_MINSIZE);
 }
 
 
