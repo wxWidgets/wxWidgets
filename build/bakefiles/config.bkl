@@ -176,6 +176,14 @@ Acts according to DEBUG_INFO by default.
             Use this to name your customized DLLs differently
         </description>
     </option>
+    <!-- These basically do what vendor does in the places it didn't. -->
+    <!-- They should all be unified under some suitable descriptor    -->
+    <option name="WX_FLAVOUR">
+        <default-value></default-value>
+    </option>
+    <option name="WX_LIB_FLAVOUR">
+        <default-value></default-value>
+    </option>
 
     <option name="CFG">
         <default-value></default-value>
@@ -223,8 +231,6 @@ to run the tests, include CppUnit library here.
         <option name="EXTRALIBS_OPENGL"/>
         <option name="EXTRALIBS_SDL"/>
         <option name="HOST_SUFFIX"/>
-        <option name="WX_FLAVOUR"/>
-        <option name="WX_LIB_FLAVOUR"/>
         <option name="SAMPLES_RPATH_FLAG"/>
         <option name="SAMPLES_RPATH_POSTLINK"/>
         
