@@ -93,7 +93,7 @@ private:
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
-                  : wxOwnerDrawn("", TRUE)   // checkable
+                  : wxOwnerDrawn(wxEmptyString, TRUE)   // checkable
 {
   m_bChecked = FALSE;
   m_pParent  = pParent;
