@@ -1445,8 +1445,30 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
 
   if ( m_editable && m_editInPlace )
     {
-      m_inPlaceTextItem->SetSize( m_currentRect.x-2, m_currentRect.y-2,
-                                  m_currentRect.width+4, m_currentRect.height+4 );
+      int x, y, width, height;
+      if ( m_currentRect.x <= 0 )
+        {
+          x = 0;
+          width = m_currentRect.width + 2;
+        }
+      else
+        {
+          x = m_currentRect.x - 2;
+          width = m_currentRect.width + 4;
+        }
+
+      if ( m_currentRect.y <= 0 )
+        {
+          y = 0;
+          height = m_currentRect.height + 2;
+        }
+      else
+        {
+          y = m_currentRect.y - 2;
+          height = m_currentRect.height + 4;
+        }
+
+      m_inPlaceTextItem->SetSize( x, y, width, height );
 
       if ( cell )
         {
