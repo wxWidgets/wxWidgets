@@ -350,7 +350,29 @@ void wxChoice::SetString( int WXUNUSED(n), const wxString& WXUNUSED(string) )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice") );
 
-    wxFAIL_MSG(wxT("not implemented"));
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+    int count = 0;
+    GList *child = menu_shell->children;
+    while (child)
+    {
+        GtkBin *bin = GTK_BIN( child->data );
+        if (count == n)
+        {
+            GtkLabel *label = (GtkLabel *) NULL;
+            if (bin->child)
+                label = GTK_LABEL(bin->child);
+            if (!label)
+                label = GTK_LABEL( BUTTON_CHILD(m_widget) );
+
+            wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
+
+            gtk_label_set_text( label, wxGTK_CONV( str ) ); 
+            
+            return;
+        }
+        child = child->next;
+        count++;
+    }
 }
 
 wxString wxChoice::GetString( int n ) const
