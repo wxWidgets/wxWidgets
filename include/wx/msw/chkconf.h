@@ -113,6 +113,16 @@
 #define wxUSE_WCHAR_T 0
 #endif
 
+/* Media not supported in eVC3 */
+#if defined(_WIN32_WCE)
+    #if (_WIN32_WCE < 400)
+        #undef wxUSE_DIRECTSHOW
+        #undef wxUSE_MEDIACTRL
+        #define wxUSE_DIRECTSHOW 0
+        #define wxUSE_MEDIACTRL 0
+    #endif
+#endif
+
 #endif
     /* _WX_MSW_CHKCONF_H_ */
 
