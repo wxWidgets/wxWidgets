@@ -397,7 +397,7 @@ public:
         // NB: this struct should always be kept normalized (i.e. mon should
         //     be < 12, 1 <= day <= 31 &c), so use AddMonths(), AddDays()
         //     instead of modifying the member fields directly!
-    struct Tm
+    struct WXDLLEXPORT Tm
     {
         wxDateTime_t msec, sec, min, hour, mday;
         Month mon;

@@ -265,7 +265,7 @@ protected:
 // wxBufferedStreams
 // ---------------------------------------------------------------------------
 
-class wxBufferedInputStream: public wxFilterInputStream
+class WXDLLEXPORT wxBufferedInputStream: public wxFilterInputStream
 {
 public:
     wxBufferedInputStream(wxInputStream& stream);
@@ -288,7 +288,7 @@ protected:
     wxStreamBuffer *m_i_streambuf;
 };
 
-class wxBufferedOutputStream: public wxFilterOutputStream
+class WXDLLEXPORT wxBufferedOutputStream: public wxFilterOutputStream
 {
 public:
     wxBufferedOutputStream(wxOutputStream& stream);
