@@ -20,6 +20,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/mbarman.h"
 
 #import <AppKit/NSWindow.h>
 #import <AppKit/NSApplication.h>
@@ -58,29 +59,26 @@ wxFrame::~wxFrame()
 void wxFrame::AttachMenuBar(wxMenuBar *mbar)
 {
     wxFrameBase::AttachMenuBar(mbar);
-    if(m_frameMenuBar)
-    {
-        wxLogDebug("Attached menu");
-        [m_cocoaNSWindow setMenu:m_frameMenuBar->GetNSMenu()];
-    }
+    wxMenuBarManager::GetInstance()->UpdateWindowMenuBar(this);
 }
 
 void wxFrame::DetachMenuBar()
 {
-    if(m_frameMenuBar)
-    {
-        [m_cocoaNSWindow setMenu:nil];
-    }
     wxFrameBase::DetachMenuBar();
+    wxMenuBarManager::GetInstance()->UpdateWindowMenuBar(this);
 }
 
-bool wxFrame::Show(bool show)
+void wxFrame::SetMenuBar(wxMenuBar *menubar)
 {
-    wxAutoNSAutoreleasePool pool;
-    bool ret = wxFrameBase::Show(show);
-    if(show && GetMenuBar())
-        [wxTheApp->GetNSApplication() setMenu:GetMenuBar()->GetNSMenu() ];
-    return ret;
+    if ( menubar == GetMenuBar() )
+    {
+        // nothing to do
+        return;
+    }
+
+    wxFrameBase::DetachMenuBar();
+    wxFrameBase::AttachMenuBar(menubar);
+    wxMenuBarManager::GetInstance()->UpdateWindowMenuBar(this);
 }
 
 wxPoint wxFrame::GetClientAreaOrigin() const

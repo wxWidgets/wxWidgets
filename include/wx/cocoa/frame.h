@@ -50,6 +50,8 @@ protected:
 // ------------------------------------------------------------------------
 // Cocoa specifics
 // ------------------------------------------------------------------------
+public:
+    virtual wxMenuBar* GetAppMenuBar() { return GetMenuBar(); }
 protected:
     virtual void CocoaSetWxWindowSize(int width, int height);
 
@@ -63,14 +65,14 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
-    void AttachMenuBar(wxMenuBar *mbar);
-    void DetachMenuBar();
+    virtual void AttachMenuBar(wxMenuBar *mbar);
+    virtual void DetachMenuBar();
+    virtual void SetMenuBar(wxMenuBar *menubar);
 
     // implementation only from now on
     // -------------------------------
 
     // override some more virtuals
-    virtual bool Show( bool show = true );
 
     // get the origin of the client area (which may be different from (0, 0)
     // if the frame has a toolbar) in client coordinates
