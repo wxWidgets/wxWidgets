@@ -78,7 +78,7 @@
 
 
 /*
- *  Clear the System Palette so that we can ensure an identity palette 
+ *  Clear the System Palette so that we can ensure an identity palette
  *  mapping for fast performance.
  */
 
@@ -102,7 +102,7 @@ void wxClearSystemPalette(void)
   UINT nMapped = 0;
   BOOL bOK = FALSE;
   int  nOK = 0;
-  
+
   // *** Reset everything in the system palette to black
   for(Counter = 0; Counter < 256; Counter++)
   {
@@ -162,26 +162,25 @@ int wxDibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
 
   // write file header
   BITMAPFILEHEADER bmf;
-  bmf.bfType = 'BM';
+  bmf.bfType = BFT_BITMAP;
   bmf.bfSize = sizeof(bmf) + size;
   bmf.bfReserved1 = 0;
   bmf.bfReserved2 = 0;
   bmf.bfOffBits = sizeof(bmf) + (char FAR*)(wxDibPtr(lpbi)) - (char FAR*)lpbi;
-#if defined( __WATCOMC__) || defined(__VISUALC__) || defined(__SC__) || defined(__SALFORDC__) || defined(__MWERKS__) || defined(wxUSE_NORLANDER_HEADERS)
-  if (_hwrite(fh, (LPCSTR)(&bmf), sizeof(bmf))<0 ||
-  _hwrite(fh, (LPCSTR)lpbi, size)<0) {
-    _lclose(fh);
-//   printf("la regamos1");
-    return 0;
-  }
-#else
-  if (_hwrite(fh, (LPBYTE)(&bmf), sizeof(bmf))<0 ||
-  _hwrite(fh, (LPBYTE)lpbi, size)<0) {
-    _lclose(fh);
-//   printf("la regamos1");
-    return 0;
-  }
+#if 1 // defined( __WATCOMC__) || defined(__VISUALC__) || defined(__SC__) || defined(__SALFORDC__) || defined(__MWERKS__) || defined(wxUSE_NORLANDER_HEADERS)
+  #define HWRITE_2ND_ARG_TYPE   LPCSTR
+#else // don't know who needs this...
+  #define HWRITE_2ND_ARG_TYPE   LPBYTE
 #endif
+
+  if ( _hwrite(fh, (HWRITE_2ND_ARG_TYPE)(&bmf), sizeof(bmf)) < 0 ||
+       _hwrite(fh, (HWRITE_2ND_ARG_TYPE)lpbi, size) < 0 )
+  {
+    _lclose(fh);
+    return 0;
+  }
+
+#undef HWRITE_2ND_ARG_TYPE
 
   _lclose(fh);
   return 1;
@@ -417,7 +416,7 @@ BOOL wxDibSetUsage(PDIB pdib, HPALETTE hpal,UINT wUsage)
         return FALSE;
 
     nColors = wxDibNumColors(pdib);
-    
+
     if (nColors == 3 && wxDibCompression(pdib) == BI_BITFIELDS)
         nColors = 0;
 
