@@ -222,6 +222,7 @@ wxMSW:
 wxGTK:
 
 - allow calling wxWindow::SetFont if window not yet created
+- fixed compilation with newer GTK+ versions
 
 wxOS2:
 - fixed various problems in file handling
