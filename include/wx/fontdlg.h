@@ -28,13 +28,14 @@ class WXDLLEXPORT wxFontDialogBase : public wxDialog
 public:
     // create the font dialog
     wxFontDialogBase() { }
-    wxFontDialogBase(wxWindow *parent) { }
-    wxFontDialogBase(wxWindow *parent, const wxFontData& data) { }
+    wxFontDialogBase(wxWindow *parent) { m_parent = parent; }
+    wxFontDialogBase(wxWindow *parent, const wxFontData& data)
+        { m_parent = parent; InitFontData(&data); }
 
     bool Create(wxWindow *parent)
         { return DoCreate(parent); }
     bool Create(wxWindow *parent, const wxFontData& data)
-        { m_fontData = data; return Create(parent); }
+        { InitFontData(&data); return Create(parent); }
 
     virtual ~wxFontDialogBase();
 
@@ -44,13 +45,16 @@ public:
 
     // deprecated interface, for compatibility only, don't use
     wxFontDialogBase(wxWindow *parent, const wxFontData *data)
-        { Init(); Create(parent, data); }
+        { m_parent = parent; InitFontData(data); }
 
     bool Create(wxWindow *parent, const wxFontData *data)
-        { if ( data ) m_fontData = *data; return Create(parent); }
+        { InitFontData(data); return Create(parent); }
 
 protected:
     virtual bool DoCreate(wxWindow *parent) { m_parent = parent; return TRUE; }
+
+    void InitFontData(const wxFontData *data = NULL)
+        { if ( data ) m_fontData = *data; }
 
     wxFontData m_fontData;
 };
