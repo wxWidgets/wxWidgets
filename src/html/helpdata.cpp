@@ -121,18 +121,18 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
     else if (tag.GetName() == wxT("OBJECT")) {
         m_Name = m_Page = wxEmptyString;
         ParseInner(tag);
-        if (m_Page != wxEmptyString) {
-            if (m_ItemsCnt % wxHTML_REALLOC_STEP == 0)
-                m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
-            m_Items[m_ItemsCnt].m_Level = m_Level;
-            m_Items[m_ItemsCnt].m_ID = m_ID;
-            m_Items[m_ItemsCnt].m_Page = new wxChar[m_Page.Length() + 1];
-            wxStrcpy(m_Items[m_ItemsCnt].m_Page, m_Page.c_str());
-            m_Items[m_ItemsCnt].m_Name = new wxChar [m_Name.Length() + 1];
-            wxStrcpy(m_Items[m_ItemsCnt].m_Name, m_Name.c_str());
-            m_Items[m_ItemsCnt].m_Book = m_Book;
-            m_ItemsCnt++;
-        }
+
+        if (m_ItemsCnt % wxHTML_REALLOC_STEP == 0)
+            m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
+        m_Items[m_ItemsCnt].m_Level = m_Level;
+        m_Items[m_ItemsCnt].m_ID = m_ID;
+        m_Items[m_ItemsCnt].m_Page = new wxChar[m_Page.Length() + 1];
+        wxStrcpy(m_Items[m_ItemsCnt].m_Page, m_Page.c_str());
+        m_Items[m_ItemsCnt].m_Name = new wxChar [m_Name.Length() + 1];
+        wxStrcpy(m_Items[m_ItemsCnt].m_Name, m_Name.c_str());
+        m_Items[m_ItemsCnt].m_Book = m_Book;
+        m_ItemsCnt++;
+
         return TRUE;
     }
     else { // "PARAM"
@@ -570,14 +570,14 @@ bool wxHtmlSearchStatus::Search()
     int i = m_CurIndex;  // shortcut
     bool found = FALSE;
 
-    if (! m_Active) {
-	// sanity check. Illegal use, but we'll try to prevent a crash anyway
+    if (!m_Active) {
+    // sanity check. Illegal use, but we'll try to prevent a crash anyway
 #if !defined(__VISAGECPP__)
-wxASSERT(0);
+        wxASSERT(0);
 #else
-wxASSERT(m_Active);
+        wxASSERT(m_Active);
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     m_ContentsItem = NULL;
@@ -625,7 +625,7 @@ void wxSearchEngine::LookFor(const wxString& keyword)
 
 bool wxSearchEngine::Scan(wxInputStream *stream)
 {
-    wxASSERT_MSG(m_Keyword != NULL, _("wxSearchEngine::LookFor must be called before scanning!"));
+    wxASSERT_MSG(m_Keyword != NULL, wxT("wxSearchEngine::LookFor must be called before scanning!"));
 
     int i, j;
     int lng = stream ->GetSize();
@@ -641,7 +641,7 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
     for (i = 0; i < lng - wrd; i++) {
         j = 0;
         while ((j < wrd) && (buf[i + j] == m_Keyword[j])) j++;
-    if (j == wrd) {found = TRUE; break; }
+        if (j == wrd) {found = TRUE; break; }
     }
 
     delete[] buf;
