@@ -188,7 +188,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // Testing wxWebKitCtrl inside a panel
 #if 1
-    wxPanel* panel = new wxPanel(this, -1);
+    wxPanel* panel = new wxPanel(this, wxID_ANY);
 
     wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
     panel->SetSizer(boxSizer);
@@ -224,7 +224,7 @@ void MyFrame::OnStopButton(wxCommandEvent& myEvent){
 }
 
 void MyFrame::OnReloadButton(wxCommandEvent& myEvent){
-	mySafari->Reload();
+    mySafari->Reload();
 }
 
 void MyFrame::OnURLEnter(wxCommandEvent& myEvent){
