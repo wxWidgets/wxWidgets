@@ -3267,6 +3267,7 @@ AC_OUTPUT([
             samples/Makefile
             samples/bombs/Makefile
             samples/caret/Makefile
+            samples/calendar/Makefile
             samples/checklst/Makefile
             samples/config/Makefile
             samples/controls/Makefile
@@ -3280,9 +3281,12 @@ AC_OUTPUT([
             samples/forty/Makefile
             samples/font/Makefile
             samples/fractal/Makefile
+            samples/grid/Makefile
+            samples/help/Makefile
             samples/image/Makefile
             samples/internat/Makefile
             samples/layout/Makefile
+            samples/life/Makefile
             samples/listctrl/Makefile
             samples/mdi/Makefile
             samples/minifram/Makefile

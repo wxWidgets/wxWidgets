@@ -190,7 +190,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
     }
     
 #if wxUSE_CHECKLISTBOX
-    if ((gdk_event->keyval != ' ') && (listbox->m_hasCheckBoxes) && (!ret))
+    if ((gdk_event->keyval == ' ') && (listbox->m_hasCheckBoxes) && (!ret))
     {
         int sel = listbox->GtkGetIndex( widget );
 

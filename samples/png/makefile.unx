@@ -15,7 +15,7 @@
 
 CC = gcc
 
-PROGRAM = grid
+PROGRAM = pngdemo
 
 OBJECTS = $(PROGRAM).o
 

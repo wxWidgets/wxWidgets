@@ -15,7 +15,7 @@
 
 CC = gcc
 
-PROGRAM = grid
+PROGRAM = font
 
 OBJECTS = $(PROGRAM).o
 
