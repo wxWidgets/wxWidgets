@@ -37,7 +37,7 @@
     #include "wx/dialog.h"
     #include "wx/dirdlg.h"
     #include "wx/log.h"
-    #include "wx/app/h"
+    #include "wx/app.h"     // for GetComCtl32Version()
 #endif
 
 #include "wx/msw/private.h"
