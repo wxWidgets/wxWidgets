@@ -144,7 +144,18 @@ void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
         parFuncname = _T("InitXmlResource");
 
     for (size_t i = 0; i < cmdline.GetParamCount(); i++)
+    {
+#ifdef __WINDOWS__
+        wxString fn=wxFindFirstFile(cmdline.GetParam(i), wxFILE);
+        while (!fn.IsEmpty())
+        {
+            parFiles.Add(fn);
+            fn=wxFindNextFile();
+        }
+#else
         parFiles.Add(cmdline.GetParam(i));
+#endif
+    }
 }
 
 
