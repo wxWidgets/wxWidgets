@@ -811,13 +811,25 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
   FD_SET(socket->m_fd, &writefds);
   FD_SET(socket->m_fd, &exceptfds);
 
-  /* Check known state first */
-  result |= (GSOCK_CONNECTION_FLAG & socket->m_detected & flags);
-  result |= (GSOCK_LOST_FLAG       & socket->m_detected & flags);
+  /* Check 'sticky' CONNECTION flag first */
+  result |= (GSOCK_CONNECTION_FLAG & socket->m_detected);
+
+  /* If we have already detected a LOST event, then don't try
+   * to do any further processing.
+   */
+  if ((socket->m_detected & GSOCK_LOST_FLAG) != 0)
+  {
+    socket->m_establishing = FALSE;
+
+    return (GSOCK_LOST_FLAG & flags);
+  }
 
   /* Try select now */
   if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv) <= 0)
-    return result;
+  {
+    /* What to do here? */
+    return (result & flags);
+  }
 
   /* Check for readability */
   if (FD_ISSET(socket->m_fd, &readfds))
@@ -826,19 +838,22 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 
     if (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
     {
-      result |= (GSOCK_INPUT_FLAG & flags);
+      result |= GSOCK_INPUT_FLAG;
     }
     else
     {
       if (socket->m_server && socket->m_stream)
       {
-        result |= (GSOCK_CONNECTION_FLAG & flags);
+        result |= GSOCK_CONNECTION_FLAG;
         socket->m_detected |= GSOCK_CONNECTION_FLAG;
       }
       else
       {
-        result |= (GSOCK_LOST_FLAG & flags);
         socket->m_detected = GSOCK_LOST_FLAG;
+        socket->m_establishing = FALSE;
+    
+        /* LOST event: Abort any further processing */
+        return (GSOCK_LOST_FLAG & flags);
       }
     }
   }
@@ -857,30 +872,34 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 
       if (error)
       {
-        result |= (GSOCK_LOST_FLAG & flags);
         socket->m_detected = GSOCK_LOST_FLAG;
+
+        /* LOST event: Abort any further processing */
+        return (GSOCK_LOST_FLAG & flags);
       }
       else
       {
-        result |= (GSOCK_CONNECTION_FLAG & flags);
+        result |= GSOCK_CONNECTION_FLAG;
         socket->m_detected |= GSOCK_CONNECTION_FLAG;
       }
     }
     else
     {
-      result |= (GSOCK_OUTPUT_FLAG & flags);
+      result |= GSOCK_OUTPUT_FLAG;
     }
   }
 
   /* Check for exceptions and errors (is this useful in Unices?) */
   if (FD_ISSET(socket->m_fd, &exceptfds))
   {
-    result |= (GSOCK_LOST_FLAG & flags);
     socket->m_establishing = FALSE;
     socket->m_detected = GSOCK_LOST_FLAG;
+
+    /* LOST event: Abort any further processing */
+    return (GSOCK_LOST_FLAG & flags);
   }
 
-  return result;
+  return (result & flags);
 
 #else 
 
@@ -1191,6 +1210,18 @@ void _GSocket_Detected_Read(GSocket *socket)
 {
   char c;
 
+  /* If we have already detected a LOST event, then don't try
+   * to do any further processing.
+   */
+  if ((socket->m_detected & GSOCK_LOST_FLAG) != 0)
+  {
+    socket->m_establishing = FALSE;
+
+    CALL_CALLBACK(socket, GSOCK_LOST);
+    GSocket_Shutdown(socket);
+    return;
+  }
+
   if (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
   {
     CALL_CALLBACK(socket, GSOCK_INPUT);
@@ -1204,12 +1235,25 @@ void _GSocket_Detected_Read(GSocket *socket)
     else
     {
       CALL_CALLBACK(socket, GSOCK_LOST);
+      GSocket_Shutdown(socket);
     }
   }
 }
 
 void _GSocket_Detected_Write(GSocket *socket)
 {
+  /* If we have already detected a LOST event, then don't try
+   * to do any further processing.
+   */
+  if ((socket->m_detected & GSOCK_LOST_FLAG) != 0)
+  {
+    socket->m_establishing = FALSE;
+
+    CALL_CALLBACK(socket, GSOCK_LOST);
+    GSocket_Shutdown(socket);
+    return;
+  }
+
   if (socket->m_establishing && !socket->m_server)
   {
     int error;
@@ -1222,6 +1266,7 @@ void _GSocket_Detected_Write(GSocket *socket)
     if (error)
     {
       CALL_CALLBACK(socket, GSOCK_LOST);
+      GSocket_Shutdown(socket);
     }
     else
     {
