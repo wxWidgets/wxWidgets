@@ -1,224 +1,53 @@
-wxWindows Licence
------------------
+                wxWindows Library Licence, Version 3
+                ====================================
 
-Copyright (c) 1998 Julian Smart, Markus Holzem
+  Copyright (c) 1998 Julian Smart, Robert Roebling et al
 
+  Everyone is permitted to copy and distribute verbatim copies
+  of this licence document, but changing it is not allowed.
 
-Preamble
---------
-
-This licence is intended to protect wxWindows, its developers,
-and its users, so that the considerable investment it represents
-is not abused.
-
-Unlike the L-GPL licence, you as a user are not obliged to
-distribute wxWindows source code with your products. However,
-you are prevented from selling the code without permission from
-the authors, or denying others the rights to use or distribute
-wxWindows in the way intended.
-
-The wxWindows Licence establishes the copyright for the code and
-related material, and it gives you legal permission to copy,
-distribute and/or modify the library. It also asserts that no
-warranty is given by the authors for this or derived code.
-
-Finally, the licence specifies that any patent involving
-wxWindows, must be licenced for everyone's free use.
-
-wxWindows Licence
------------------
-
-Terms and conditions for copying, distribution and modification
-
-1. This Licence Agreement applies to any software library which
-contains a notice placed by the copyright holder or other
-authorized party saying it may be distributed under the terms of
-this wxWindows Licence (also called "this Licence").  Each
-licencee is addressed as "you". 
-
-A "library" means a collection of software functions and/or data
-prepared so as to be conveniently linked with application
-programs (which use some of those functions and data) to form
-executables.
-
-The "Library", below, refers to any such software library or
-work which has been distributed under these terms.  A "work
-based on the Library" means either the Library or any derivative
-work under copyright law: that is to say, a work containing the
-Library or a portion of it, either verbatim or with
-modifications and/or translated straightforwardly into another
-language.  (Hereinafter, translation is included without
-limitation in the term "modification".)
-
-"Source code" for a work means the preferred form of the work
-for making modifications to it.  For a library, complete source
-code means all the source code for all modules it contains, plus
-any associated interface definition files, plus the scripts used
-to control compilation and installation of the library.
-
-Activities other than copying, distribution and modification are
-not covered by this Licence; they are outside its scope. The act
-of running a program using the Library is not restricted, and
-output from such a program is covered only if its contents
-constitute a work based on the Library (independent of the use
-of the Library in a tool for writing it). Whether that is true
-depends on what the Library does and what the program that uses
-the Library does.
+                       WXWINDOWS LIBRARY LICENCE
+     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
   
-2. You may copy and distribute verbatim copies of the Library's
-complete source code as you receive it, in any medium, provided
-that you conspicuously and appropriately publish on each copy an
-appropriate copyright notice and disclaimer of warranty; keep
-intact all the notices that refer to this Licence and to the
-absence of any warranty; and distribute a copy of this Licence
-along with the Library.
+  This library is free software; you can redistribute it and/or modify it
+  under the terms of the GNU Library General Public Licence as published by
+  the Free Software Foundation; either version 2 of the Licence, or (at
+  your option) any later version.
+  
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+  General Public Licence for more details.
 
-You may charge a fee for the physical act of transferring a
-copy, and you may at your option offer warranty protection in
-exchange for a fee.
+  You should have received a copy of the GNU Library General Public Licence
+  along with this software, usually in a file named COPYING.LIB.  If not,
+  write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+  Boston, MA 02111-1307 USA.
 
-3. You may modify your copy or copies of the Library or any
-portion of it, thus forming a work based on the Library, and
-copy and distribute such modifications or work under the terms
-of Section 1 above, provided that you cause the files modified
-to carry prominent notices stating that you changed the files
-and the date of any change. With agreement from the authors of
-wxWindows, you may charge for value added to the Library, for
-example, a commercially supported version, or a port to a new
-platform. It is expected that collaboration between such
-commercial interests and the free wxWindows community will yield
-benefits to both parties, since wxWindows represents a
-substantial investment of time and effort. It is not in the
-spirit of this agreement that commercial exploitation of
-wxWindows should in any way detract from the free version.
+  EXCEPTION NOTICE
 
-4. You may copy and distribute the Library in object code or
-derived library form under the terms of Sections 1 and 2 above
-provided that you accompany it with the complete corresponding
-machine-readable source code.
+  1. As a special exception, the copyright holders of this library give
+  permission for additional uses of the text contained in this release of
+  the library as licenced under the wxWindows Library Licence, applying
+  either version 3 of the Licence, or (at your option) any later version of
+  the Licence as published by the copyright holders of version 3 of the
+  Licence document.
 
-If distribution of object code is made by offering access to
-copy from a designated place, then offering equivalent access to
-copy the source code from the same place satisfies the
-requirement to distribute the source code, even though third
-parties are not compelled to copy the source along with the
-object code.
+  2. The exception is that you may use, copy, link, modify and distribute
+  under the user's own terms, binary object code versions of works based
+  on the Library.
 
-5. You may not copy, modify, sublicence, link with, or
-distribute the Library except as expressly provided under this
-Licence.  Any attempt otherwise to copy, modify, sublicence,
-link with, or distribute the Library is void, and will
-automatically terminate your rights under this Licence.
-However, parties who have received copies, or rights, from you
-under this Licence will not have their licences terminated so
-long as such parties remain in full compliance.
+  3. If you copy code from files distributed under the terms of the GNU
+  General Public Licence or the GNU Library General Public Licence into a
+  copy of this library, as this licence permits, the exception does not
+  apply to the code that you add in this way.  To avoid misleading anyone as
+  to the status of such modified files, you must delete this exception
+  notice from such code and/or adjust the licensing conditions notice
+  accordingly.
 
-6. You are not required to accept this Licence, since you have
-not signed it. However, nothing else grants you permission to
-modify or distribute the Library or its derivative works.  These
-actions are prohibited by law if you do not accept this Licence.
-Therefore, by modifying or distributing the Library (or any work
-based on the Library), you indicate your acceptance of this
-Licence to do so, and all its terms and conditions for copying,
-distributing or modifying the Library or works based on it.
+  4. If you write modifications of your own for this library, it is your
+  choice whether to permit this exception to apply to your modifications. 
+  If you do not wish that, you must delete the exception notice from such
+  code and/or adjust the licensing conditions notice accordingly.
 
-7. Each time you redistribute the Library (or any work based on
-the Library), the recipient automatically receives a licence
-from the original licensor to copy, distribute, link with or
-modify the Library subject to these terms and conditions. You
-may not impose any further restrictions on the recipients'
-exercise of the rights granted herein. You are not responsible
-for enforcing compliance by third parties to this Licence.
-
-8. If, as a consequence of a court judgment or allegation of
-patent infringement or for any other reason (not limited to
-patent issues), conditions are imposed on you (whether by court
-order, agreement or otherwise) that contradict the conditions of
-this Licence, they do not excuse you from the conditions of this
-Licence. If you cannot distribute so as to satisfy
-simultaneously your obligations under this Licence and any other
-pertinent obligations, then as a consequence you may not
-distribute the Library at all. For example, if a patent licence
-would not permit royalty-free redistribution of the Library by
-all those who receive copies directly or indirectly through you,
-then the only way you could satisfy both it and this Licence
-would be to refrain entirely from distribution of the Library.
-
-If any portion of this section is held invalid or unenforceable
-under any particular circumstance, the balance of the section is
-intended to apply, and the section as a whole is intended to
-apply in other circumstances.
-
-It is not the purpose of this section to induce you to infringe
-any patents or other property right claims or to contest
-validity of any such claims; this section has the sole purpose
-of protecting the integrity of the free software distribution
-system which is implemented by public licence practices. Many
-people have made generous contributions to the wide range of
-software distributed through that system in reliance on
-consistent application of that system; it is up to the
-author/donor to decide if he or she is willing to distribute
-software through any other system and a licencee cannot impose
-that choice.
-
-This section is intended to make thoroughly clear what is
-believed to be a consequence of the rest of this Licence.
-
-9. If the distribution and/or use of the Library is restricted
-in certain countries either by patents or by copyrighted
-interfaces, the original copyright holder who places the Library
-under this Licence may add an explicit geographical distribution
-limitation excluding those countries, so that distribution is
-permitted only in or among countries not thus excluded. In such
-case, this Licence incorporates the limitation as if written in
-the body of this Licence.
-
-10. The authors of wxWindows may publish revised and/or new
-versions of the wxWindows Licence from time to time. Such new
-versions will be similar in spirit to the present version, but
-may differ in detail to address new problems or concerns.
-
-Each version is given a distinguishing version number. If the
-Library specifies a version number of this Licence which applies
-to it and "any later version", you have the option of following
-the terms and conditions either of that version or of any later
-version published by the wxWindows authors.  If the Library does
-not specify a licence version number, you may choose any version
-ever published by the wxWindows authors.
-
-11. If you wish to incorporate parts of the Library into other
-free programs whose distribution conditions are incompatible
-with these, write to the program author to ask for permission.
-For software which is copyrighted by the wxWindows authors,
-write to the wxWindows authors.  Our decision will be guided by
-the two goals of preserving the free status of all derivatives
-of our free software and of promoting the sharing and reuse of
-software generally.
-
-NO WARRANTY
------------
-
-12. BECAUSE THE LIBRARY IS LICENCED FREE OF CHARGE, THERE IS NO
-WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE
-LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
-HOLDERS AND/OR OTHER PARTIES PROVIDE THE LIBRARY "AS IS" WITHOUT
-WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
-BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS TO THE
-QUALITY AND PERFORMANCE OF THE LIBRARY IS WITH YOU.  SHOULD THE
-LIBRARY PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY
-SERVICING, REPAIR OR CORRECTION.
-
-13. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO
-IN WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY
-MODIFY AND/OR REDISTRIBUTE THE LIBRARY AS PERMITTED ABOVE, BE
-LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL,
-INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR
-INABILITY TO USE THE LIBRARY (INCLUDING BUT NOT LIMITED TO LOSS
-OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
-YOU OR THIRD PARTIES OR A FAILURE OF THE LIBRARY TO OPERATE WITH
-ANY OTHER SOFTWARE), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN
-ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-
-END OF TERMS AND CONDITIONS
 
