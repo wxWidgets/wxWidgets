@@ -55,6 +55,7 @@ class wxRadioBox: public wxControl
     {
       Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
     }
+    ~wxRadioBox(void);
     bool Create( wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
              int n = 0, const wxString choices[] = (const wxString *) NULL,
@@ -86,14 +87,10 @@ class wxRadioBox: public wxControl
     
     bool IsOwnGtkWindow( GdkWindow *window );
     
-    bool            m_alreadySent;
-    
-  private:
-  
-    GtkRadioButton *m_radio;
+    bool             m_alreadySent;
+    wxList           m_boxes;
     
   DECLARE_EVENT_TABLE()    
-    
 };
 
 #endif // __GTKRADIOBOXH__
