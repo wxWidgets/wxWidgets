@@ -389,11 +389,7 @@ void wxFileConfig::Init()
     {
         wxTextFile fileGlobal(m_strGlobalFile);
 
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-        if ( fileGlobal.Open( wxConvUTF8 ) )
-#else
-        if ( fileGlobal.Open() )
-#endif
+        if ( fileGlobal.Open(m_conv/*ignored in ANSI build*/) )
         {
             Parse(fileGlobal, FALSE /* global */);
             SetRootPath();
@@ -408,11 +404,7 @@ void wxFileConfig::Init()
     if ( !m_strLocalFile.IsEmpty() && wxFile::Exists(m_strLocalFile) )
     {
         wxTextFile fileLocal(m_strLocalFile);
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-        if ( fileLocal.Open( wxConvUTF8 ) )
-#else
-        if ( fileLocal.Open() )
-#endif
+        if ( fileLocal.Open(m_conv/*ignored in ANSI build*/) )
         {
             Parse(fileLocal, TRUE /* local */);
             SetRootPath();
@@ -427,11 +419,12 @@ void wxFileConfig::Init()
 // constructor supports creation of wxFileConfig objects of any type
 wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
                            const wxString& strLocal, const wxString& strGlobal,
-                           long style)
+                           long style, wxMBConv& conv)
             : wxConfigBase(::GetAppName(appName), vendorName,
                            strLocal, strGlobal,
                            style),
-              m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
+              m_strLocalFile(strLocal), m_strGlobalFile(strGlobal),
+              m_conv(conv)
 {
     // Make up names for files if empty
     if ( m_strLocalFile.IsEmpty() && (style & wxCONFIG_USE_LOCAL_FILE) )
@@ -474,7 +467,8 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
 
 #if wxUSE_STREAMS
 
-wxFileConfig::wxFileConfig(wxInputStream &inStream)
+wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
+        : m_conv(conv)
 {
     // always local_file when this constructor is called (?)
     SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
@@ -961,12 +955,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   {
     wxString line = p->Text();
     line += wxTextFile::GetEOL();
-#if wxUSE_UNICODE
-    wxCharBuffer buf = wxConvLocal.cWX2MB( line );
-    if ( !file.Write( (const char*)buf, strlen( (const char*) buf ) ) )
-#else
-    if ( !file.Write( line.c_str(), line.Len() ) )
-#endif
+    if ( !file.Write(line, m_conv) )
     {
       wxLogError(_("can't write user configuration file."));
       return FALSE;

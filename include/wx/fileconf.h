@@ -120,11 +120,13 @@ public:
                const wxString& vendorName = wxT(""),
                const wxString& localFilename = wxT(""),
                const wxString& globalFilename = wxT(""),
-               long style = wxCONFIG_USE_LOCAL_FILE);
+               long style = wxCONFIG_USE_LOCAL_FILE,
+               wxMBConv& conv = wxConvUTF8);
 
 #if wxUSE_STREAMS
     // ctor that takes an input stream.
-  wxFileConfig(wxInputStream &inStream);
+  wxFileConfig(wxInputStream &inStream,
+               wxMBConv& conv = wxConvUTF8);
 #endif // wxUSE_STREAMS
 
     // dtor will save unsaved data
@@ -207,6 +209,8 @@ private:
   wxFileConfigGroup *m_pRootGroup,      // the top (unnamed) group
                     *m_pCurrentGroup;   // the current group
 
+  wxMBConv   &m_conv;
+        
 #ifdef __UNIX__
   int m_umask;                    // the umask to use for file creation
 #endif // __UNIX__
