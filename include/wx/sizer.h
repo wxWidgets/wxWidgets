@@ -6,7 +6,6 @@
 // Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn, Robert Roebling
-//              (c) 2003, Ron Lee
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

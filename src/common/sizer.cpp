@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sizer.cpp
 // Purpose:     provide new wxSizer class for layout
-// Author:      Robert Roebling and Robin Dunn
+// Author:      Robert Roebling and Robin Dunn, contributions by
+//              Dirk Holtwick, Ron Lee
 // Modified by: Ron Lee
 // Created:
 // RCS-ID:      $Id$
-// Copyright:   (c) Robin Dunn, Dirk Holtwick and Robert Roebling
-//              (c) 2003, Ron Lee
+// Copyright:   (c) Robin Dunn, Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
