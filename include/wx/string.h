@@ -1149,7 +1149,7 @@ public:
       : wxStringBase(str, nPos, nLen) { }
     // take all characters from pStart to pEnd
   wxString(const void *pStart, const void *pEnd)
-      : wxStringBase((const char*)pStart, (const char*)pEnd) { }
+      : wxStringBase((const wxChar*)pStart, (const wxChar*)pEnd) { }
 #if wxUSE_STL
   wxString(const_iterator first, const_iterator last)
       : wxStringBase(first, last) { }
