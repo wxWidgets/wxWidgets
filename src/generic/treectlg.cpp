@@ -420,7 +420,7 @@ void wxTreeTextCtrl::Finish()
         wxPendingDelete.Append(this);
 
         m_finished = true;
-
+        
         m_owner->SetFocusIgnoringChildren();
     }
 }
@@ -1013,6 +1013,25 @@ void wxGenericTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
         pItem->SetBold(bold);
         RefreshLine(pItem);
     }
+}
+
+void wxGenericTreeCtrl::SetItemDropHighlight(const wxTreeItemId& item,
+                                             bool highlight)
+{
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
+    wxColour fg, bg;
+
+    if (highlight)
+    {
+        bg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+        fg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    }
+
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    pItem->Attr().SetTextColour(fg);
+    pItem->Attr().SetBackgroundColour(bg);
+    RefreshLine(pItem);
 }
 
 void wxGenericTreeCtrl::SetItemTextColour(const wxTreeItemId& item,

@@ -150,6 +150,9 @@ public:
         // the item will be shown in bold
     void SetItemBold(const wxTreeItemId& item, bool bold = true);
 
+        // the item will be shown with a drop highlight
+    void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = true);
+
         // set the item's text colour
     void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
 
