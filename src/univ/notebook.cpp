@@ -1254,9 +1254,14 @@ void wxNotebook::DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags)
 {
-    wxControl::DoSetSize(x, y, width, height, sizeFlags);
+    wxSize old_client_size = GetClientSize();
 
-    Relayout();
+    wxControl::DoSetSize(x, y, width, height, sizeFlags);
+    
+    wxSize new_client_size = GetClientSize();
+    
+    if (old_client_size != new_client_size)
+        Relayout();
 }
 
 // ----------------------------------------------------------------------------
