@@ -91,12 +91,35 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 	HBITMAP hBitmap2 = 0;
 	if ( mask.Ok() )
 	    hBitmap2 = (HBITMAP) mask.GetHBITMAP();
+    else if (bitmap.GetMask())
+        hBitmap2 = (HBITMAP) bitmap.GetMask()->GetMaskBitmap();
 
-    int index = ImageList_Add((HIMAGELIST) GetHIMAGELIST(), hBitmap1, hBitmap2);
+    HBITMAP hBitmapI=0;
+    if(hBitmap2!=0) {
+        // Microsoft imagelist masks are inverted from wxWindows mask standard (white is mask color)
+        BITMAP bm;
+        ::GetObject(hBitmap2,sizeof(BITMAP),(LPVOID)&bm);
+        int w=bm.bmWidth;
+        int h=bm.bmHeight;
+        HDC hdc = ::CreateCompatibleDC(NULL);   
+        HDC hdci = ::CreateCompatibleDC(NULL);  
+        hBitmapI = ::CreateCompatibleBitmap(hdci, w, h);
+        ::SelectObject(hdc, hBitmap2);
+        ::SelectObject(hdci, hBitmapI);
+        ::BitBlt(hdci, 0, 0, w, h, hdc, 0, 0, NOTSRCCOPY);
+        ::DeleteDC(hdc);
+        ::DeleteDC(hdci);
+    }
+
+    int index = ImageList_Add((HIMAGELIST) GetHIMAGELIST(), hBitmap1, hBitmapI);
 	if ( index == -1 )
     {
         wxLogError(_("Couldn't add an image to the image list."));
     }
+
+    // Clean up inverted mask
+    if(hBitmapI!=0)
+        ::DeleteObject(hBitmapI);
 
     return index;
 }
