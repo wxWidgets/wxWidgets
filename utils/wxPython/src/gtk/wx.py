@@ -179,6 +179,8 @@ wxCB_SORT = wxc.wxCB_SORT
 wxCB_READONLY = wxc.wxCB_READONLY
 wxRA_HORIZONTAL = wxc.wxRA_HORIZONTAL
 wxRA_VERTICAL = wxc.wxRA_VERTICAL
+wxRA_SPECIFY_ROWS = wxc.wxRA_SPECIFY_ROWS
+wxRA_SPECIFY_COLS = wxc.wxRA_SPECIFY_COLS
 wxRB_GROUP = wxc.wxRB_GROUP
 wxGA_PROGRESSBAR = wxc.wxGA_PROGRESSBAR
 wxGA_HORIZONTAL = wxc.wxGA_HORIZONTAL
@@ -1247,8 +1249,8 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.7  1999/02/25 07:18:52  RD
-# wxPython version 2.0b5
+# Revision 1.8  1999/03/01 23:21:39  RD
+# Changes for allowing wxRA_SPECIFY_ROWS and wxRA_SPECIFY_COLS.
 #
 # Revision 1.11  1999/02/20 09:02:55  RD
 # Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a

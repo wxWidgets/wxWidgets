@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.8  1999/02/25 07:18:51  RD
- * wxPython version 2.0b5
+ * Revision 1.9  1999/03/01 23:21:37  RD
+ * Changes for allowing wxRA_SPECIFY_ROWS and wxRA_SPECIFY_COLS.
  *
  ************************************************************************/
 
@@ -1267,6 +1267,8 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxCB_READONLY", PyInt_FromLong((long) wxCB_READONLY));
 	 PyDict_SetItemString(d,"wxRA_HORIZONTAL", PyInt_FromLong((long) wxRA_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxRA_VERTICAL", PyInt_FromLong((long) wxRA_VERTICAL));
+	 PyDict_SetItemString(d,"wxRA_SPECIFY_ROWS", PyInt_FromLong((long) wxRA_SPECIFY_ROWS));
+	 PyDict_SetItemString(d,"wxRA_SPECIFY_COLS", PyInt_FromLong((long) wxRA_SPECIFY_COLS));
 	 PyDict_SetItemString(d,"wxRB_GROUP", PyInt_FromLong((long) wxRB_GROUP));
 	 PyDict_SetItemString(d,"wxGA_PROGRESSBAR", PyInt_FromLong((long) wxGA_PROGRESSBAR));
 	 PyDict_SetItemString(d,"wxGA_HORIZONTAL", PyInt_FromLong((long) wxGA_HORIZONTAL));
