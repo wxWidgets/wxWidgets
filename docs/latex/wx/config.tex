@@ -2,7 +2,8 @@
 
 wxConfigBase class defines the basic interface of all config classes. It can
 not be used by itself (it's an abstract base class) and you'll always use one
-of its derivations: wxIniConfig, wxFileConfig, wxRegConfig or
+of its derivations: \helpref{wxIniConfig}{wxiniconfig},
+\helpref{wxFileConfig}{wxfileconfig}, \helpref{wxRegConfig}{wxregconfig} or
 any other.
 
 However, usually you don't even need to know the precise nature of the class
@@ -15,8 +16,8 @@ which is mapped onto the native wxConfigBase implementation on the given
 platform: i.e. wxRegConfig under Win32, wxIniConfig under Win16 and
 wxFileConfig otherwise.
 
-%See \helpref{config overview}{configoverview} for the descriptions of all
-%features of this class.
+See \helpref{config overview}{wxconfigoverview} for the descriptions of all
+features of this class.
 
 \wxheading{Derived from}
 
@@ -98,8 +99,8 @@ disable this behaviour {\it DontCreateOnDemand()} is provided.
 
 \membersection{Path management}
 
-%As explained in \helpref{config overview}{configoverview},
-The config classes support a file system-like hierarchy of keys (files) and groups (directories).
+As explained in \helpref{config overview}{wxconfigoverview}, the config classes
+support a file system-like hierarchy of keys (files) and groups (directories).
 As in the file system case, to specify a key in the config class you must use
 a path to it. Config classes also support the notion of the current group,
 which makes it possible to use the relative paths. To clarify all this, here
@@ -315,35 +316,38 @@ The following functions control this option:
  \param{const wxString\& }{globalFilename = wxEmptyString},
  \param{long}{ style = 0}}
 
-This is the default and only constructor of the wxConfigBase class, and derived classes.
+This is the default and only constructor of the wxConfigBase class, and
+derived classes.
 
 \wxheading{Parameters}
 
-\docparam{appName}{The application name. If this is empty, the class will normally
-use \helpref{wxApp::GetAppName}{wxappgetappname} to set it. The application name
-is used in the registry key on Windows, and can be used to deduce the local filename
-parameter if that is missing.}
+\docparam{appName}{The application name. If this is empty, the class will
+normally use \helpref{wxApp::GetAppName}{wxappgetappname} to set it. The
+application name is used in the registry key on Windows, and can be used to
+deduce the local filename parameter if that is missing.}
 
 \docparam{vendorName}{The vendor name. If this is empty, it is assumed that
 no vendor name is wanted, if this is optional for the current config class.
 The vendor name is appended to the application name for wxRegConfig.}
 
-\docparam{localFilename}{Some config classes require a local filename. If this is not
-present, but required, the application name will be used instead.}
+\docparam{localFilename}{Some config classes require a local filename. If this
+is not present, but required, the application name will be used instead.}
 
-\docparam{globalFilename}{Some config classes require a global filename. If this is not
-present, but required, the application name will be used instead.}
+\docparam{globalFilename}{Some config classes require a global filename. If
+this is not present, but required, the application name will be used instead.}
 
-\docparam{style}{Can be one of wxCONFIG\_USE\_LOCAL\_FILE and wxCONFIG\_USE\_GLOBAL\_FILE.
-The style interpretation depends on the config class and is ignored by some.
-For wxFileConfig, these styles determine whether a local or global config file is created or used.
-If the flag is present but the parameter is empty, the parameter will be set to a default.
-If the parameter is present but the style flag not, the relevant flag will be added to the style.}
+\docparam{style}{Can be one of wxCONFIG\_USE\_LOCAL\_FILE and
+wxCONFIG\_USE\_GLOBAL\_FILE. The style interpretation depends on the config
+class and is ignored by some. For wxFileConfig, these styles determine whether
+a local or global config file is created or used. If the flag is present but
+the parameter is empty, the parameter will be set to a default. If the
+parameter is present but the style flag not, the relevant flag will be added
+to the style.}
 
 \wxheading{Remarks}
 
-By default, environment variable expansion is on and recording
-defaults is off.
+By default, environment variable expansion is on and recording defaults is
+off.
 
 \membersection{wxConfigBase::\destruct{wxConfigBase}}\label{wxconfigbasedtor}
 
@@ -356,9 +360,9 @@ Empty but ensures that dtor of all derived classes is virtual.
 \func{static wxConfigBase *}{Create}{\void}
 
 Create a new config object: this function will create the "best"
-implementation of wxConfig available for the current platform, see
-comments near the definition of wxCONFIG\_WIN32\_NATIVE for details. It returns
-the created object and also sets it as the current one.
+implementation of wxConfig available for the current platform, see comments
+near the definition of wxCONFIG\_WIN32\_NATIVE for details. It returns the
+created object and also sets it as the current one.
 
 \membersection{wxConfigBase::DontCreateOnDemand}\label{wxconfigbasedontcreateondemand}
 
@@ -377,10 +381,11 @@ for use by desinstallation routine.
 
 \membersection{wxConfigBase::DeleteEntry}\label{wxconfigbasedeleteentry}
 
-\func{bool}{DeleteEntry}{\param{const wxString\& }{ key}, \param{bool}{ bDeleteGroupIfEmpty = TRUE}}
+\func{bool}{DeleteEntry}{\param{const wxString\& }{ key}, \param{bool}{
+bDeleteGroupIfEmpty = TRUE}}
 
-Deletes the specified entry and the group it belongs to if
-it was the last key in it and the second parameter is true.
+Deletes the specified entry and the group it belongs to if it was the last key
+in it and the second parameter is true.
 
 \membersection{wxConfigBase::DeleteGroup}\label{wxconfigbasedeletegroup}
 
@@ -416,25 +421,29 @@ Returns the application name.
 
 \membersection{wxConfigBase::GetFirstGroup}\label{wxconfigbasegetfirstgroup}
 
-\constfunc{bool}{GetFirstGroup}{\param{wxString\& }{str}, \param{long\&}{ index}}
+\constfunc{bool}{GetFirstGroup}{\param{wxString\& }{str}, \param{long\&}{
+index}}
 
 Gets the first group.
 
 \membersection{wxConfigBase::GetFirstEntry}\label{wxconfigbasegetfirstentry}
 
-\constfunc{bool}{GetFirstEntry}{\param{wxString\& }{str}, \param{long\&}{ index}}
+\constfunc{bool}{GetFirstEntry}{\param{wxString\& }{str}, \param{long\&}{
+index}}
 
 Gets the first entry.
 
 \membersection{wxConfigBase::GetNextGroup}\label{wxconfigbasegetnextgroup}
 
-\constfunc{bool}{GetNextGroup}{\param{wxString\& }{str}, \param{long\&}{ index}}
+\constfunc{bool}{GetNextGroup}{\param{wxString\& }{str}, \param{long\&}{
+index}}
 
 Gets the next group.
 
 \membersection{wxConfigBase::GetNextEntry}\label{wxconfigbasegetnextentry}
 
-\constfunc{bool}{GetNextEntry}{\param{wxString\& }{str}, \param{long\&}{ index}}
+\constfunc{bool}{GetNextEntry}{\param{wxString\& }{str}, \param{long\&}{
+index}}
 
 Gets the next entry.
 
@@ -446,8 +455,8 @@ Gets the next entry.
 
 \constfunc{uint}{GetNumberOfGroups}{\param{bool }{bRecursive = FALSE}}
 
-Get number of entries/subgroups in the current group, with or without
-its subgroups.
+Get number of entries/subgroups in the current group, with or without its
+subgroups.
 
 \membersection{wxConfigBase::GetPath}\label{wxconfigbasegetpath}
 
@@ -487,71 +496,72 @@ Returns TRUE if we are writing defaults back to the config file.
 
 \membersection{wxConfigBase::Read}\label{wxconfigbaseread}
 
-\constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{ str}}
+\constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{
+str}}
 
-Read a string from the key, returning TRUE if the value was read. If the key was not
-found, {\it str} is not changed.
+Read a string from the key, returning TRUE if the value was read. If the key
+was not found, {\it str} is not changed.
 
-\constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{ str}, \param{const wxString\& }{defaultVal}}
+\constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{
+str}, \param{const wxString\& }{defaultVal}}
 
-Read a string from the key. The default value is returned if the key was not found.
+Read a string from the key. The default value is returned if the key was not
+found.
 
 Returns TRUE if value was really read, FALSE if the default was used.
 
-\constfunc{wxString}{Read}{\param{const wxString\& }{key}, \param{const wxString\& }{defaultVal}}
+\constfunc{wxString}{Read}{\param{const wxString\& }{key}, \param{const
+wxString\& }{defaultVal}}
 
 Another version of {\it Read()}, returning the string value directly.
 
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{long*}{ l}}
 
-Reads a long value, returning TRUE if the value was
-found. If the value was not found, {\it l} is not changed.
+Reads a long value, returning TRUE if the value was found. If the value was
+not found, {\it l} is not changed.
 
-\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{long*}{ l}, \param{long}{ defaultVal}}
+\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{long*}{ l},
+\param{long}{ defaultVal}}
 
-Reads a long value, returning TRUE if the value was
-found. If the value was not found, {\it defaultVal} is used instead.
+Reads a long value, returning TRUE if the value was found. If the value was
+not found, {\it defaultVal} is used instead.
 
-\constfunc{long }{Read}{\param{const wxString\& }{key}, \param{long}{ defaultVal}}
+\constfunc{long }{Read}{\param{const wxString\& }{key}, \param{long}{
+defaultVal}}
 
-Reads a long value from the key and returns it. {\it defaultVal} is returned if the key is not
-found.
+Reads a long value from the key and returns it. {\it defaultVal} is returned
+if the key is not found.
 
 NB: writing
 
-{\small
-\begin{verbatim}
-  conf->Read("key", 0);
-\end{verbatim}
-}
+{\small \begin{verbatim} conf->Read("key", 0); \end{verbatim} }
 
-won't work because the call is ambiguous: compiler can not choose between two {\it Read} functions. Instead, write:
+won't work because the call is ambiguous: compiler can not choose between two
+{\it Read} functions. Instead, write:
 
-{\small
-\begin{verbatim}
-  conf->Read("key", 0l);
-\end{verbatim}
-}
+{\small \begin{verbatim} conf->Read("key", 0l); \end{verbatim} }
 
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{double*}{ d}}
 
-Reads a double value, returning TRUE if the value was
-found. If the value was not found, {\it d} is not changed.
+Reads a double value, returning TRUE if the value was found. If the value was
+not found, {\it d} is not changed.
 
-\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{double*}{ d}, \param{double}{ defaultVal}}
+\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{double*}{ d},
+\param{double}{ defaultVal}}
 
-Reads a double value, returning TRUE if the value was
-found. If the value was not found, {\it defaultVal} is used instead.
+Reads a double value, returning TRUE if the value was found. If the value was
+not found, {\it defaultVal} is used instead.
 
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{bool*}{ b}}
 
-Reads a bool value, returning TRUE if the value was
-found. If the value was not found, {\it b} is not changed.
+Reads a bool value, returning TRUE if the value was found. If the value was
+not found, {\it b} is not changed.
 
-\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{bool*}{ d}, \param{bool}{ defaultVal}}
+\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{bool*}{ d},
+\param{bool}{ defaultVal}}
 
-Reads a bool value, returning TRUE if the value was
-found. If the value was not found, {\it defaultVal} is used instead.
+Reads a bool value, returning TRUE if the value was found. If the value was
+not found, {\it defaultVal} is used instead.
 
 \membersection{wxConfigBase::Set}\label{wxconfigbaseset}
 
@@ -577,8 +587,8 @@ Determine whether we wish to expand environment variables in key values.
 \func{void}{SetPath}{\param{const wxString\& }{strPath}}
 
 Set current path: if the first character is '/', it's the absolute path,
-otherwise it's a relative path. '..' is supported. If the strPath
-doesn't exist it is created.
+otherwise it's a relative path. '..' is supported. If the strPath doesn't
+exist it is created.
 
 \membersection{wxConfigBase::SetRecordDefaults}\label{wxconfigbasesetrecorddefaults}
 
@@ -586,9 +596,9 @@ doesn't exist it is created.
 
 Sets whether defaults are written back to the config file.
 
-If on (default is off) all default values are written back to the config file. This allows
-the user to see what config options may be changed and is probably useful only
-for wxFileConfig.
+If on (default is off) all default values are written back to the config file.
+This allows the user to see what config options may be changed and is probably
+useful only for wxFileConfig.
 
 \membersection{wxConfigBase::SetVendorName}\label{wxconfigbasesetvendorname}
 
@@ -598,7 +608,8 @@ Sets the vendor name.
 
 \membersection{wxConfigBase::Write}\label{wxconfigbasewrite}
 
-\func{bool}{Write}{\param{const wxString\& }{ key}, \param{const wxString\& }{ value}}
+\func{bool}{Write}{\param{const wxString\& }{ key}, \param{const wxString\& }{
+value}}
 
 \func{bool}{Write}{\param{const wxString\& }{ key}, \param{long}{ value}}
 
@@ -606,7 +617,7 @@ Sets the vendor name.
 
 \func{bool}{Write}{\param{const wxString\& }{ key}, \param{bool}{ value}}
 
-These functions write the specified value to the config file and
-return TRUE on success.
+These functions write the specified value to the config file and return TRUE
+on success.
 
 
