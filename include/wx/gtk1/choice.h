@@ -53,8 +53,7 @@ public:
     wxString GetString( int n ) const;
 
     // implementation
-    wxList   m_clientDataList;
-    wxList   m_clientObjectList;
+    wxList   m_clientList;
 
     void DisableEvents();
     void EnableEvents();
@@ -68,6 +67,16 @@ protected:
     virtual void* DoGetClientData( int n ) const;
     virtual void DoSetClientObject( int n, wxClientData* clientData );
     virtual wxClientData* DoGetClientObject( int n ) const;
+
+    // the above virtuals hide these virtuals in wxChoiceBase
+    virtual void DoSetClientData(void* clientData )
+        { wxWindowBase::DoSetClientData(clientData); };
+    virtual void* DoGetClientData() const
+        { return(wxWindowBase::DoGetClientData()); };
+    virtual void DoSetClientObject( wxClientData* clientData )
+        { wxWindowBase::DoSetClientObject(clientData); };
+    virtual wxClientData* DoGetClientObject() const
+        { return(wxWindowBase::DoGetClientObject()); };
 
 private:
     DECLARE_DYNAMIC_CLASS(wxChoice)

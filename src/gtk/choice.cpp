@@ -92,8 +92,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     for (int i = 0; i < n; i++)
     {
-        m_clientDataList.Append( (wxObject*) NULL );
-        m_clientObjectList.Append( (wxObject*) NULL );
+        m_clientList.Append( (wxObject*) NULL );
 
         GtkWidget *item = gtk_menu_item_new_with_label( choices[i].mbc_str() );
         gtk_menu_append( GTK_MENU(menu), item );
@@ -145,18 +144,17 @@ int wxChoice::DoAppend( const wxString &item )
 
     gtk_widget_show( menu_item );
 
-    m_clientDataList.Append( (wxObject*) NULL );
-    m_clientObjectList.Append( (wxObject*) NULL );
+    m_clientList.Append( (wxObject*) NULL );
 
     // return the index of the item in the control
-    return GetCount();
+    return GetCount() - 1;
 }
 
 void wxChoice::DoSetClientData( int n, void* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    wxNode *node = m_clientDataList.Nth( n );
+    wxNode *node = m_clientList.Nth( n );
     wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetClientData") );
 
     node->SetData( (wxObject*) clientData );
@@ -166,7 +164,7 @@ void* wxChoice::DoGetClientData( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid combobox") );
 
-    wxNode *node = m_clientDataList.Nth( n );
+    wxNode *node = m_clientList.Nth( n );
     wxCHECK_MSG( node, NULL, wxT("invalid index in wxChoice::DoGetClientData") );
 
     return node->Data();
@@ -176,7 +174,7 @@ void wxChoice::DoSetClientObject( int n, wxClientData* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    wxNode *node = m_clientObjectList.Nth( n );
+    wxNode *node = m_clientList.Nth( n );
     wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetClientObject") );
 
     wxClientData *cd = (wxClientData*) node->Data();
@@ -189,7 +187,7 @@ wxClientData* wxChoice::DoGetClientObject( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid combobox") );
 
-    wxNode *node = m_clientObjectList.Nth( n );
+    wxNode *node = m_clientList.Nth( n );
     wxCHECK_MSG( node, (wxClientData *)NULL,
                  wxT("invalid index in wxChoice::DoGetClientObject") );
 
@@ -204,16 +202,17 @@ void wxChoice::Clear()
     GtkWidget *menu = gtk_menu_new();
     gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
 
-    wxNode *node = m_clientObjectList.First();
-    while (node)
+    if (m_clientDataItemsType == ClientData_Object)
     {
-        wxClientData *cd = (wxClientData*)node->Data();
-        if (cd) delete cd;
-        node = node->Next();
+        wxNode *node = m_clientList.First();   
+        while (node)
+        {
+            wxClientData *cd = (wxClientData*)node->Data();
+            if (cd) delete cd;
+            node = node->Next();
+	}
     }
-    m_clientObjectList.Clear();
-
-    m_clientDataList.Clear();
+    m_clientList.Clear();
 }
 
 void wxChoice::Delete( int WXUNUSED(n) )

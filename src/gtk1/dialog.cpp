@@ -118,50 +118,11 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
     if (g_isIdle) 
         wxapp_install_idle_handler();
 
-    /* I haven''t been able to set the position of
+    /* I haven't been able to set the position of
        the dialog before it is shown, so I set the
-       position in "realize" and "map" */
+       position in "realize" */
     gtk_widget_set_uposition( widget, win->m_x, win->m_y );
 
-    /* set size hints */
-    gint flag =	GDK_HINT_POS;
-    if ((win->GetMinWidth() != -1) || (win->GetMinHeight() != -1)) flag |= GDK_HINT_MIN_SIZE;
-    if ((win->GetMaxWidth() != -1) || (win->GetMaxHeight() != -1)) flag |= GDK_HINT_MAX_SIZE;
-    if (flag)
-    {
-        gdk_window_set_hints( win->m_widget->window, 
-	                      win->m_x, win->m_y,
-			      win->GetMinWidth(), win->GetMinHeight(),
-			      win->GetMaxWidth(), win->GetMaxHeight(),
-			      flag );
-    }
-
-    /* reset the icon */
-    if (win->m_icon != wxNullIcon)
-    {
-        wxIcon icon( win->m_icon );
-        win->m_icon = wxNullIcon;
-        win->SetIcon( icon );
-    }
-    
-    return FALSE;
-}
-    
-//-----------------------------------------------------------------------------
-// "map" from m_widget
-//-----------------------------------------------------------------------------
-
-static gint 
-gtk_dialog_map_callback( GtkWidget *widget, wxDialog *win )
-{
-    if (g_isIdle) 
-        wxapp_install_idle_handler();
-
-    /* I haven''t been able to set the position of
-       the dialog before it is shown, so I set the
-       position in "realize" and "map" */
-    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
-    
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_BORDER;
@@ -197,6 +158,27 @@ gtk_dialog_map_callback( GtkWidget *widget, wxDialog *win )
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
+    
+    /* set size hints */
+    gint flag =	GDK_HINT_POS;
+    if ((win->GetMinWidth() != -1) || (win->GetMinHeight() != -1)) flag |= GDK_HINT_MIN_SIZE;
+    if ((win->GetMaxWidth() != -1) || (win->GetMaxHeight() != -1)) flag |= GDK_HINT_MAX_SIZE;
+    if (flag)
+    {
+        gdk_window_set_hints( win->m_widget->window, 
+	                      win->m_x, win->m_y,
+			      win->GetMinWidth(), win->GetMinHeight(),
+			      win->GetMaxWidth(), win->GetMaxHeight(),
+			      flag );
+    }
+
+    /* reset the icon */
+    if (win->m_icon != wxNullIcon)
+    {
+        wxIcon icon( win->m_icon );
+        win->m_icon = wxNullIcon;
+        win->SetIcon( icon );
+    }
     
     return FALSE;
 }
@@ -303,11 +285,6 @@ bool wxDialog::Create( wxWindow *parent,
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
                         GTK_SIGNAL_FUNC(gtk_dialog_realized_callback), (gpointer) this );
-
-    /* we set the position of the window after the map event. setting it
-       before has no effect (with KWM) */
-    gtk_signal_connect( GTK_OBJECT(m_widget), "map",
-                        GTK_SIGNAL_FUNC(gtk_dialog_map_callback), (gpointer) this );
 
     /* the user resized the frame by dragging etc. */
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
