@@ -1347,6 +1347,8 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     g_free( buf );
 #endif
 
+    g_object_unref( G_OBJECT( layout ) );
+    
 #else
     wxCoord text_w, text_h, text_descent;
 
@@ -1778,9 +1780,26 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     
     // fprintf( m_pstream, "%%%%Pages: %d\n", (wxPageNumber - 1) );
     
-    // wxPaperSize ps = m_printData.GetPaperId();
-    // if (ps == ...)
-    fprintf( m_pstream, "%%%%DocumentPaperSizes: %s\n", "A4" );
+    char *paper = "A4";
+    switch (m_printData.GetPaperId())
+    {
+       case wxPAPER_LETTER: paper = "Letter"; break;             // Letter: paper ""; 8 1/2 by 11 inches
+       case wxPAPER_LEGAL: paper = "Legal"; break;              // Legal, 8 1/2 by 14 inches
+       case wxPAPER_A4: paper = "A4"; break;          // A4 Sheet, 210 by 297 millimeters
+       case wxPAPER_TABLOID: paper = "Tabloid"; break;     // Tabloid, 11 by 17 inches
+       case wxPAPER_LEDGER: paper = "Ledger"; break;      // Ledger, 17 by 11 inches
+       case wxPAPER_STATEMENT: paper = "Statement"; break;   // Statement, 5 1/2 by 8 1/2 inches
+       case wxPAPER_EXECUTIVE: paper = "Executive"; break;   // Executive, 7 1/4 by 10 1/2 inches
+       case wxPAPER_A3: paper = "A3"; break;          // A3 sheet, 297 by 420 millimeters
+       case wxPAPER_A5: paper = "A5"; break;          // A5 sheet, 148 by 210 millimeters
+       case wxPAPER_B4: paper = "B4"; break;          // B4 sheet, 250 by 354 millimeters
+       case wxPAPER_B5: paper = "B5"; break;          // B5 sheet, 182-by-257-millimeter paper
+       case wxPAPER_FOLIO: paper = "Folio"; break;       // Folio, 8-1/2-by-13-inch paper
+       case wxPAPER_QUARTO: paper = "Quaro"; break;      // Quarto, 215-by-275-millimeter paper
+       case wxPAPER_10X14: paper = "10x14"; break;       // 10-by-14-inch sheet
+       default: paper = "A4";
+    }
+    fprintf( m_pstream, "%%%%DocumentPaperSizes: %s\n", paper );
     fprintf( m_pstream, "%%%%EndComments\n\n" );
 
     fprintf( m_pstream, "%%%%BeginProlog\n" );
@@ -1891,7 +1910,7 @@ void wxPostScriptDC::EndDoc ()
 #endif
 
 #if defined(__X__) || defined(__WXGTK__)
-    if (m_ok)
+    if (m_ok && (m_printData.GetPrintMode() == wxPRINT_MODE_PRINTER))    
     {
         wxString command;
         command += m_printData.GetPrinterCommand();
@@ -1998,6 +2017,54 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     if (!fontToUse) fontToUse = (wxFont*) &m_font;
 
     wxCHECK_RET( fontToUse, wxT("GetTextExtent: no font defined") );
+
+    if (string.IsEmpty())
+    {
+        if (x) (*x) = 0;
+        if (y) (*y) = 0;
+        return;
+    }
+    
+#ifdef __WXGTK20__
+    int dpi = GetResolution();
+    
+    PangoContext *context = pango_ft2_get_context ( dpi, dpi );
+    
+    // What are these for?
+    pango_context_set_language (context, pango_language_from_string ("en_US"));
+    pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
+
+    // Create layout 
+    PangoLayout *layout = pango_layout_new (context);
+    
+    // Set Font
+    PangoFontDescription *desc = fontToUse->GetNativeFontInfo()->description;
+    pango_layout_set_font_description(layout, desc);
+#if wxUSE_UNICODE
+        const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+#else
+        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
+        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
+        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+#endif
+    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+ 
+    PangoRectangle rect;
+    pango_layout_line_get_extents(line, NULL, &rect);
+    
+    if (x) (*x) = (wxCoord) (rect.width / PANGO_SCALE / ms_PSScaleFactor);
+    if (y) (*y) = (wxCoord) (rect.height / PANGO_SCALE / ms_PSScaleFactor);
+    if (descent)
+    {
+        // Do something about metrics here
+        (*descent) = 0;
+    }
+    if (externalLeading) (*externalLeading) = 0;  // ??
+    
+    g_object_unref( G_OBJECT( layout ) );
+#else
+   // GTK 2.0
 
     const wxWX2MBbuf strbuf = string.mb_str();
 
@@ -2323,8 +2390,11 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
     /* currently no idea how to calculate this! */
     if (externalLeading) *externalLeading = 0;
+#endif
+    // Use AFM
 
 #endif
+    // GTK 2.0
 }
 
 #endif
