@@ -2657,7 +2657,7 @@ void wxListMainWindow::CalculatePositions()
                 if (y+lineSpacing-6 >= clientHeight) // -6 for earlier "line breaking"
                 {
                     m_currentVisibleLines = 0;
-                    y = 5;
+                    y = 2;
                     x += maxWidth+6;
                     entireWidth += maxWidth+6;
                     maxWidth = 0;

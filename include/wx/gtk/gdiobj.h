@@ -26,6 +26,8 @@ public:
     virtual bool GetVisible() { return m_visible; }
     virtual void SetVisible( bool visible ) { m_visible = visible; }
 
+    bool IsNull() const { return (m_refData == 0); }
+
 protected:
     bool m_visible; /* can a pointer to this object be safely taken?
                      * - only if created within FindOrCreate... */

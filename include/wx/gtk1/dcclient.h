@@ -115,6 +115,7 @@ public:
     GdkGC        *m_bgGC;
     GdkColormap  *m_cmap;
     bool          m_isMemDC;
+    bool          m_isScreenDC;
     wxWindow     *m_owner;
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;

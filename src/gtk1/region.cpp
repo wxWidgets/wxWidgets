@@ -94,20 +94,11 @@ wxRegion::wxRegion( const wxRect& rect )
     g_rect.height = rect.height;
     M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &g_rect );
     gdk_region_destroy( reg );
-
-    wxNode *node = M_REGIONDATA->m_rects.First();
-    while (node)
-    {
-        wxRect *r = (wxRect*)node->Data();
-        M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(r->x,r->y,r->width,r->height) );
-        node = node->Next();
-    }
+    M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(rect.x,rect.y,rect.width,rect.height) );
 }
 
 wxRegion::wxRegion()
 {
-    m_refData = new wxRegionRefData();
-    M_REGIONDATA->m_region = gdk_region_new();
 }
 
 wxRegion::~wxRegion()
@@ -127,8 +118,6 @@ bool wxRegion::operator != ( const wxRegion& region )
 void wxRegion::Clear()
 {
     UnRef();
-    m_refData = new wxRegionRefData();
-    M_REGIONDATA->m_region = gdk_region_new();
 }
 
 bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -138,29 +127,41 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     rect.y = y;
     rect.width = width;
     rect.height = height;
-    GdkRegion *reg = gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
-    gdk_region_destroy( M_REGIONDATA->m_region );
-    M_REGIONDATA->m_region = reg;
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        GdkRegion *reg = gdk_region_new();
+        M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
+        gdk_region_destroy( reg );
+    }
+    else
+    {
+        GdkRegion *reg = gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
+        gdk_region_destroy( M_REGIONDATA->m_region );
+        M_REGIONDATA->m_region = reg;
+    }
+    
     M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(x,y,width,height) );
+
     return TRUE;
 }
 
 bool wxRegion::Union( const wxRect& rect )
 {
-    GdkRectangle g_rect;
-    g_rect.x = rect.x;
-    g_rect.y = rect.y;
-    g_rect.width = rect.width;
-    g_rect.height = rect.height;
-    GdkRegion *reg = gdk_region_union_with_rect( M_REGIONDATA->m_region, &g_rect );
-    gdk_region_destroy( M_REGIONDATA->m_region );
-    M_REGIONDATA->m_region = reg;
-    M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(rect.x,rect.y,rect.width,rect.height) );
-    return TRUE;
+    return Union( rect.x, rect.y, rect.width, rect.height );
 }
 
 bool wxRegion::Union( const wxRegion& region )
 {
+    if (region.IsNull())
+        return FALSE;
+
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+
     GdkRegion *reg = gdk_regions_union( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
@@ -178,6 +179,12 @@ bool wxRegion::Union( const wxRegion& region )
 
 bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+    
     wxRegion reg( x, y, width, height );
     Intersect( reg );
     return TRUE;
@@ -185,6 +192,12 @@ bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 
 bool wxRegion::Intersect( const wxRect& rect )
 {
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+    
     wxRegion reg( rect );
     Intersect( reg );
     return TRUE;
@@ -192,6 +205,16 @@ bool wxRegion::Intersect( const wxRect& rect )
 
 bool wxRegion::Intersect( const wxRegion& region )
 {
+    if (region.IsNull())
+        return FALSE;
+
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+        return TRUE;
+    }
+    
     GdkRegion *reg = gdk_regions_intersect( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
@@ -200,6 +223,12 @@ bool wxRegion::Intersect( const wxRegion& region )
 
 bool wxRegion::Subtract( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+
     wxRegion reg( x, y, width, height );
     Subtract( reg );
     return TRUE;
@@ -207,6 +236,12 @@ bool wxRegion::Subtract( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 
 bool wxRegion::Subtract( const wxRect& rect )
 {
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+
     wxRegion reg( rect );
     Subtract( reg );
     return TRUE;
@@ -214,6 +249,15 @@ bool wxRegion::Subtract( const wxRect& rect )
 
 bool wxRegion::Subtract( const wxRegion& region )
 {
+    if (region.IsNull())
+        return FALSE;
+
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+
     GdkRegion *reg = gdk_regions_subtract( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
@@ -222,6 +266,12 @@ bool wxRegion::Subtract( const wxRegion& region )
 
 bool wxRegion::Xor( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+
     wxRegion reg( x, y, width, height );
     Xor( reg );
     return TRUE;
@@ -229,6 +279,12 @@ bool wxRegion::Xor( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 
 bool wxRegion::Xor( const wxRect& rect )
 {
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+
     wxRegion reg( rect );
     Xor( reg );
     return TRUE;
@@ -236,6 +292,15 @@ bool wxRegion::Xor( const wxRect& rect )
 
 bool wxRegion::Xor( const wxRegion& region )
 {
+    if (region.IsNull())
+        return NULL;
+
+    if (!m_refData)
+    {
+        m_refData = new wxRegionRefData();
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+
     GdkRegion *reg = gdk_regions_xor( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
@@ -251,12 +316,15 @@ bool wxRegion::Xor( const wxRegion& region )
     return TRUE;
 }
 
-void wxRegion::GetBox( wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h ) const
+void wxRegion::GetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
 {
     x = 0;
     y = 0;
     w = -1;
     h = -1;
+    if (m_refData)
+        return;
+
     GdkRectangle rect;
     gdk_region_get_clipbox( M_REGIONDATA->m_region, &rect );
     x = rect.x;
@@ -277,11 +345,17 @@ wxRect wxRegion::GetBox() const
 
 bool wxRegion::Empty() const
 {
+    if (!m_refData)
+        return TRUE;
+
     return gdk_region_empty( M_REGIONDATA->m_region );
 }
 
 wxRegionContain wxRegion::Contains( wxCoord x, wxCoord y ) const
 {
+    if (!m_refData)
+        return wxOutRegion;
+
     if (gdk_region_point_in( M_REGIONDATA->m_region, x, y ))
         return wxInRegion;
     else
@@ -290,6 +364,9 @@ wxRegionContain wxRegion::Contains( wxCoord x, wxCoord y ) const
 
 wxRegionContain wxRegion::Contains( wxCoord x, wxCoord y, wxCoord w, wxCoord h ) const
 {
+    if (!m_refData)
+        return wxOutRegion;
+
     GdkRectangle rect;
     rect.x = x;
     rect.y = y;
@@ -317,11 +394,17 @@ wxRegionContain wxRegion::Contains(const wxRect& rect) const
 
 GdkRegion *wxRegion::GetRegion() const
 {
+    if (!m_refData)
+        return (GdkRegion*) NULL;
+
     return M_REGIONDATA->m_region;
 }
 
 wxList *wxRegion::GetRectList() const
 {
+    if (!m_refData)
+        return (wxList*) NULL;
+
     return &(M_REGIONDATA->m_rects);
 }
 

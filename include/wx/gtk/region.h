@@ -30,16 +30,19 @@ class wxRegion;
 
 enum wxRegionContain
 {
-  wxOutRegion = 0, wxPartRegion = 1, wxInRegion = 2
+    wxOutRegion = 0, 
+    wxPartRegion = 1, 
+    wxInRegion = 2
 };
 
 // So far, for internal use only
-enum wxRegionOp {
-wxRGN_AND,          // Creates the intersection of the two combined regions.
-wxRGN_COPY,         // Creates a copy of the region identified by hrgnSrc1.
-wxRGN_DIFF,         // Combines the parts of hrgnSrc1 that are not part of hrgnSrc2.
-wxRGN_OR,           // Creates the union of two combined regions.
-wxRGN_XOR           // Creates the union of two combined regions except for any overlapping areas.
+enum wxRegionOp 
+{
+   wxRGN_AND,          // Creates the intersection of the two combined regions.
+   wxRGN_COPY,         // Creates a copy of the region identified by hrgnSrc1.
+   wxRGN_DIFF,         // Combines the parts of hrgnSrc1 that are not part of hrgnSrc2.
+   wxRGN_OR,           // Creates the union of two combined regions.
+   wxRGN_XOR           // Creates the union of two combined regions except for any overlapping areas.
 };
 
 //-----------------------------------------------------------------------------
@@ -48,10 +51,7 @@ wxRGN_XOR           // Creates the union of two combined regions except for any 
 
 class wxRegion : public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxRegion);
-
-  public:
-
+public:
     wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h );
     wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight );
     wxRegion( const wxRect& rect );
@@ -95,10 +95,12 @@ class wxRegion : public wxGDIObject
     wxRegionContain Contains(const wxPoint& pt) const;
     wxRegionContain Contains(const wxRect& rect) const;
 
-  public:
-
+public:
     wxList    *GetRectList() const;
     GdkRegion *GetRegion() const;
+    
+private:
+  DECLARE_DYNAMIC_CLASS(wxRegion);
 };
 
 class wxRegionIterator: public wxObject

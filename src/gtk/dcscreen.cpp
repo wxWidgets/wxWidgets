@@ -38,6 +38,8 @@ wxScreenDC::wxScreenDC()
     m_cmap = gdk_colormap_get_system();
     m_window = GDK_ROOT_PARENT();
 
+    m_isScreenDC = TRUE;
+
     SetUpDC();
 
     gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );

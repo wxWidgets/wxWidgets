@@ -73,6 +73,7 @@ static wxBitmap gs_bmpNoMask,
                 gs_bmpMask,
                 gs_bmpWithMask,
                 gs_bmp4,
+                gs_bmp4_mono,
                 gs_bmp36;
 
 // ----------------------------------------------------------------------------
@@ -243,9 +244,12 @@ bool MyApp::LoadImages()
     wxString path = pathList.FindValidPath("pat4.bmp");
     if ( !path )
         return FALSE;
+    /* 4 colour bitmap */
     gs_bmp4.LoadFile(path, wxBITMAP_TYPE_BMP);
-    wxMask* mask4 = new wxMask(gs_bmp4, *wxBLACK);
-    gs_bmp4.SetMask(mask4);
+    /* turn into mono-bitmap */
+    gs_bmp4_mono.LoadFile(path, wxBITMAP_TYPE_BMP);
+    wxMask* mask4 = new wxMask(gs_bmp4_mono, *wxBLACK);
+    gs_bmp4_mono.SetMask(mask4);
 
     path = pathList.FindValidPath("pat36.bmp");
     if ( !path )
@@ -325,20 +329,21 @@ MyCanvas::MyCanvas( MyFrame *parent ) : wxScrolledWindow( parent )
     m_std_icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
 }
 
-//draw a polygon and an overlapping rectangle
-//is transparent is 1, the fill pattern are made transparent
-//is transparent is 2, the fill pattern are made transparent but inversed
-//is transparent is 0 the text for and background color will be used to represent/map
-//the colors of the monochrome bitmap pixels to the fillpattern
+// Draw a polygon and an overlapping rectangle
+// If transparent is 1, the fill pattern is made transparent.
+// If transparent is 2, the fill pattern is made transparent but inversed
+// If is transparent is 0 the text for and background color will be used to represent/map
+// the colors of the monochrome bitmap pixels to the fillpattern
 //
-//i miss_used the the menu items for setting so called back and fore ground color
-//just to show how the those colors do influence the fillpatterns
-//just play with those,
-//and with the code
-//variations are endless using other logical functions
+// I abused the the menu items for setting so called back and fore ground color
+// just to show how the those colors do influence the fillpatterns just play 
+// with those, and with the code variations are endless using other logical 
+// functions.
+
 void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
 {
-    wxBrush* brush4  = new wxBrush(gs_bmp4);
+    wxBrush* brush4 = new wxBrush(gs_bmp4);
+    wxBrush* brush4_mono = new wxBrush(gs_bmp4_mono);
     wxBrush* brush36 = new wxBrush(gs_bmp36);
 
     wxPoint todraw[5];
@@ -369,20 +374,24 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
     {
         case 0:
             {
+                dc.SetLogicalFunction(wxCOPY);
+
                 dc.SetPen( wxPen( "black", 4, wxSOLID) );
                 dc.SetBrush( *brush4 );
-                dc.SetTextForeground(*wxGREEN);
-                dc.SetTextBackground(m_owner->m_colourForeground);
-                dc.SetLogicalFunction(wxCOPY);
                 dc.DrawPolygon(5,todraw,0,0,wxWINDING_RULE);
 
-                //don't understand hwo but the outline is also depending on logicalfunction
                 dc.SetPen( wxPen( "red", 4, wxSOLID) );
                 dc.SetBrush( *brush36 );
                 dc.SetTextForeground(*wxCYAN);
                 dc.SetTextBackground(m_owner->m_colourBackground);
-                dc.SetLogicalFunction(wxCOPY);
                 dc.DrawRectangle( x+10, y+10, 200, 200 );
+                
+                dc.SetPen( wxPen( "green", 4, wxSOLID) );
+                dc.SetBrush( *brush4_mono );
+                dc.SetTextForeground(*wxCYAN);
+                dc.SetTextBackground(m_owner->m_colourBackground);
+                dc.DrawRectangle( x+50, y+50, 200, 200 );
+                
                 dc.SetBrush(wxNullBrush);
                 dc.SetPen(wxNullPen);
                 break;
@@ -523,6 +532,7 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
     }
 
     delete brush4;
+    delete brush4_mono;
     delete brush36;
 }
 
@@ -943,7 +953,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         }
     }
 
-//    dc.Clear();
+    dc.Clear();
 
     if ( m_owner->m_textureBackground) {
         dc.SetPen(*wxMEDIUM_GREY_PEN);
@@ -974,8 +984,10 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
         case Show_Polygons:
             DrawTestPoly( 0,  100, dc, 0 );
+/*
             DrawTestPoly( 33, 500, dc, 1 );
             DrawTestPoly( 43, 1000, dc, 2 );
+*/
             break;
 
         case Show_Mask:
