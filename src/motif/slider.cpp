@@ -99,10 +99,12 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     XtAddCallback (sliderWidget, XmNdragCallback, (XtCallbackProc) wxSliderCallback, (XtPointer) this);
 
+    m_windowFont = parent->GetFont();
+
+    ChangeFont(FALSE);
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
-    SetFont(* parent->GetFont());
     ChangeBackgroundColour();
 
     return TRUE;
@@ -247,9 +249,9 @@ void wxSlider::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-void wxSlider::ChangeFont()
+void wxSlider::ChangeFont(bool keepOriginalSize)
 {
-    wxWindow::ChangeFont();
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxSlider::ChangeBackgroundColour()

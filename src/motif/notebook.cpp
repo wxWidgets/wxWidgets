@@ -24,6 +24,7 @@
 #include  <wx/log.h>
 #include  <wx/imaglist.h>
 #include  <wx/notebook.h>
+#include  <wx/dcclient.h>
 
 // ----------------------------------------------------------------------------
 // macros
@@ -39,8 +40,9 @@
 #if !USE_SHARED_LIBRARIES
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
-
     EVT_SIZE(wxNotebook::OnSize)
+    EVT_PAINT(wxNotebook::OnPaint)
+    EVT_MOUSE_EVENTS(wxNotebook::OnMouseEvent)
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()
@@ -60,6 +62,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 // common part of all ctors
 void wxNotebook::Init()
 {
+    m_tabView = (wxNotebookTabView*) NULL;
     m_pImageList = NULL;
     m_nSelection = -1;
 }
@@ -103,14 +106,19 @@ bool wxNotebook::Create(wxWindow *parent,
     if ( parent != NULL )
         parent->AddChild(this);
 
-    // TODO
+    // It's like a normal window...
+    if (!wxWindow::Create(parent, id, pos, size, style, name))
+        return FALSE;
 
-    return FALSE;
+    SetTabView(new wxNotebookTabView(this));
+
+    return TRUE;
 }
 
 // dtor
 wxNotebook::~wxNotebook()
 {
+    delete m_tabView;
 }
 
 // ----------------------------------------------------------------------------
@@ -192,6 +200,10 @@ void wxNotebook::SetImageList(wxImageList* imageList)
 // remove one page from the notebook
 bool wxNotebook::DeletePage(int nPage)
 {
+    wxFAIL_MSG("Sorry, DeletePage not implemented for Motif wxNotebook because wxTabView doesn't support it.");
+    return FALSE;
+
+/*
     wxCHECK( IS_VALID_PAGE(nPage), FALSE );
 
     // TODO: delete native widget page
@@ -200,12 +212,13 @@ bool wxNotebook::DeletePage(int nPage)
     m_aPages.Remove(nPage);
 
     return TRUE;
+*/
 }
 
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-    // TODO: delete native widget pages
+    m_tabView->ClearTabs(TRUE);
 
     int nPageCount = GetPageCount();
     int nPage;
@@ -236,7 +249,12 @@ bool wxNotebook::InsertPage(int nPage,
     wxASSERT( pPage != NULL );
     wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE );
 
-    // TODO: insert native widget page
+    m_tabView->AddTab(nPage, strText);
+
+/*
+    if (bSelect)
+        m_tabView->SetTabSelection(nPage, TRUE);
+*/
 
     // save the pointer to the page
     m_aPages.Insert(pPage, nPage);
@@ -265,24 +283,51 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         s_bFirstTime = FALSE;
     }
 
-    // TODO: all this may or may not be necessary for your platform
+    if (m_tabView)
+    {
+        int cw, ch;
+        GetClientSize(& cw, & ch);
 
-    // emulate page change (it's esp. important to do it first time because
-    // otherwise our page would stay invisible)
-    int nSel = m_nSelection;
-    m_nSelection = -1;
-    SetSelection(nSel);
+        int tabHeight = m_tabView->GetTotalTabHeight();
+        wxRect rect;
+        rect.x = 4;
+        rect.y = tabHeight + 4;
+        rect.width = cw - 8;
+        rect.height = ch - 4 - rect.y ;
+  
+        m_tabView->SetViewRect(rect);
 
-    // fit the notebook page to the tab control's display area
-    int w, h;
-    GetSize(&w, &h);
+        m_tabView->Layout();
 
-    unsigned int nCount = m_aPages.Count();
-    for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
-        wxNotebookPage *pPage = m_aPages[nPage];
-        pPage->SetSize(0, 0, w, h);
-        if ( pPage->GetAutoLayout() )
-            pPage->Layout();
+        // Need to do it a 2nd time to get the tab height with
+        // the new view width, since changing the view width changes the
+        // tab layout.
+        tabHeight = m_tabView->GetTotalTabHeight();
+        rect.x = 4;
+        rect.y = tabHeight + 4;
+        rect.width = cw - 8;
+        rect.height = ch - 4 - rect.y ;
+  
+        m_tabView->SetViewRect(rect);
+
+        m_tabView->Layout();
+
+        // emulate page change (it's esp. important to do it first time because
+        // otherwise our page would stay invisible)
+        int nSel = m_nSelection;
+        m_nSelection = -1;
+        SetSelection(nSel);
+
+        // fit the notebook page to the tab control's display area
+
+        unsigned int nCount = m_aPages.Count();
+        for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
+            wxNotebookPage *pPage = m_aPages[nPage];
+            pPage->SetSize(rect.x + 2, rect.y + 2, rect.width - 2, rect.height - 2);
+            if ( pPage->GetAutoLayout() )
+                pPage->Layout();
+        }
+        Refresh();
     }
 
     // Processing continues to next OnSize
@@ -365,18 +410,105 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     m_nSelection = nSel;
 }
 
-void wxNotebook::ChangeFont()
+void wxNotebook::ChangeFont(bool keepOriginalSize)
 {
-    // TODO
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxNotebook::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxNotebook::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
+
+void wxNotebook::OnMouseEvent(wxMouseEvent& event)
+{
+  if (m_tabView)
+    m_tabView->OnEvent(event);
+}
+
+void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event) )
+{
+    wxPaintDC dc(this);
+    if (m_tabView)
+        m_tabView->Draw(dc);
+}
+
+/*
+ * wxNotebookTabView
+ */
+ 
+IMPLEMENT_CLASS(wxNotebookTabView, wxTabView)
+
+wxNotebookTabView::wxNotebookTabView(wxNotebook *notebook, long style): wxTabView(style)
+{
+  m_notebook = notebook;
+
+//  m_currentWindow = (wxWindow *) NULL;
+
+  m_notebook->SetTabView(this);
+
+  SetWindow(m_notebook);
+}
+
+wxNotebookTabView::~wxNotebookTabView(void)
+{
+//  ClearWindows(TRUE);
+}
+
+// Called when a tab is activated
+void wxNotebookTabView::OnTabActivate(int activateId, int deactivateId)
+{
+  if (!m_notebook)
+    return;
+    
+  wxWindow *oldWindow = ((deactivateId == -1) ? 0 : m_notebook->GetPage(deactivateId));
+  wxWindow *newWindow = m_notebook->GetPage(activateId);
+
+  if (oldWindow)
+    oldWindow->Show(FALSE);
+  if (newWindow)
+    newWindow->Show(TRUE);
+    
+  m_notebook->Refresh();
+}
+
+#if 0
+void wxNotebookTabView::AddTabWindow(int id, wxWindow *window)
+{
+  m_tabWindows.Append((long)id, window);
+  window->Show(FALSE);
+}
+
+wxWindow *wxNotebookTabView::GetTabWindow(int id) const
+{
+  wxNode *node = m_tabWindows.Find((long)id);
+  if (!node)
+    return (wxWindow *) NULL;
+  return (wxWindow *)node->Data();    
+}
+
+void wxNotebookTabView::ClearWindows(bool deleteWindows)
+{
+  if (deleteWindows)
+    m_tabWindows.DeleteContents(TRUE);
+  m_tabWindows.Clear();
+  m_tabWindows.DeleteContents(FALSE);
+}
+
+void wxNotebookTabView::ShowWindowForTab(int id)
+{
+  wxWindow *newWindow = GetTabWindow(id);
+  if (newWindow == m_currentWindow)
+    return;
+  if (m_currentWindow)
+    m_currentWindow->Show(FALSE);
+  newWindow->Show(TRUE);
+  newWindow->Refresh();
+}
+#endif
 

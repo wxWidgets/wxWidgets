@@ -9,7 +9,7 @@
 #
 # Makefile for tab example (UNIX).
 
-PROGRAM=tab
+PROGRAM=test
 
 OBJECTS=$(PROGRAM).o
 

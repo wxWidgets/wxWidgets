@@ -172,12 +172,14 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     }
     SetSelection (0);
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     XtManageChild (radioBoxWidget);
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, m_formWidget, pos.x, pos.y, size.x, size.y);
 
-    SetFont(* parent->GetFont());
     ChangeBackgroundColour();
 
     return TRUE;
@@ -391,7 +393,7 @@ void wxRadioBox::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxRadioBox::ChangeFont()
+void wxRadioBox::ChangeFont(bool keepOriginalSize)
 {
     // TODO
 }

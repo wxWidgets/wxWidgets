@@ -923,7 +923,8 @@ inline bool operator>=(const char  * s1, const wxString& s2) { return s2.Cmp(s1)
 // replacing with includes (on advice of ungod@pasdex.com.au)
 // class WXDLLEXPORT istream;
 #if wxUSE_IOSTREAMH
-#include <istream.h>
+// N.B. BC++ doesn't have istream.h, ostream.h
+#include <iostream.h>
 #else
 #include <istream>
 #  ifdef _MSC_VER

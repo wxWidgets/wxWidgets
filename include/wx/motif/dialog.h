@@ -94,7 +94,7 @@ public:
   void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 // Implementation
-  virtual void ChangeFont();
+  virtual void ChangeFont(bool keepOriginalSize = TRUE);
   virtual void ChangeBackgroundColour();
   virtual void ChangeForegroundColour();
   inline WXWidget GetTopWidget() const { return m_mainWidget; }

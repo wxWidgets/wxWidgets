@@ -74,11 +74,12 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     XtAddCallback ((Widget) m_mainWidget, XmNactivateCallback, (XtCallbackProc) wxButtonCallback,
             (XtPointer) this);
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
-    SetFont(* parent->GetFont());
     ChangeBackgroundColour();
 
     return TRUE;
@@ -135,9 +136,9 @@ void wxButtonCallback (Widget w, XtPointer clientData, XtPointer ptr)
   item->ProcessCommand (event);
 }
 
-void wxButton::ChangeFont()
+void wxButton::ChangeFont(bool keepOriginalSize)
 {
-    wxWindow::ChangeFont();
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxButton::ChangeBackgroundColour()

@@ -98,10 +98,12 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
     m_mainWidget = (WXWidget) toolbar;
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
-    SetFont(* parent->GetFont());
     ChangeBackgroundColour();
   
     return TRUE;
@@ -297,20 +299,22 @@ bool wxToolBar::CreateTools()
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
+    // TODO not necessary?
     m_defaultWidth = size.x; m_defaultHeight = size.y;
-    // TODO
 }
 
 wxSize wxToolBar::GetMaxSize() const
 {
-    // TODO
-    return wxSize(0, 0);
+    int w, h;
+    GetSize(& w, & h);
+
+    return wxSize(w, h);
 }
 
 // The button size is bigger than the bitmap size
 wxSize wxToolBar::GetToolSize() const
 {
-    // TODO
+    // TODO not necessary?
     return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
 }
 

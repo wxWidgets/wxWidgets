@@ -181,9 +181,9 @@ void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     }
 }
 
-void wxStaticBox::ChangeFont()
+void wxStaticBox::ChangeFont(bool keepOriginalSize)
 {
-    wxWindow::ChangeFont();
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxStaticBox::ChangeBackgroundColour()

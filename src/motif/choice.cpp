@@ -125,9 +125,11 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     AttachWidget (parent, m_buttonWidget, m_formWidget, pos.x, pos.y, size.x, size.y);
 
-    SetFont(* parent->GetFont());
     ChangeBackgroundColour();
 
     return TRUE;
@@ -173,9 +175,12 @@ void wxChoice::Append(const wxString& item)
 
   WXWidget *new_widgetList = new WXWidget[m_noStrings + 1];
   int i;
-  for (i = 0; i < m_noStrings; i++)
-    new_widgetList[i] = m_widgetList[i];
+  if (m_widgetList)
+    for (i = 0; i < m_noStrings; i++)
+      new_widgetList[i] = m_widgetList[i];
+
   new_widgetList[m_noStrings] = (WXWidget) w;
+
   if (m_widgetList)
     delete[] m_widgetList;
   m_widgetList = new_widgetList;
@@ -420,7 +425,7 @@ void wxChoiceCallback (Widget w, XtPointer clientData,
     }
 }
 
-void wxChoice::ChangeFont()
+void wxChoice::ChangeFont(bool keepOriginalSize)
 {
     // Note that this causes the widget to be resized back
     // to its original size! We therefore have to set the size
@@ -434,11 +439,13 @@ void wxChoice::ChangeFont()
         XtVaSetValues ((Widget) m_mainWidget, XmNfontList, fontList, NULL);
         XtVaSetValues ((Widget) m_buttonWidget, XmNfontList, fontList, NULL);
 
+        /* TODO: why does this cause a crash in XtWidgetToApplicationContext?
         int i;
         for (i = 0; i < m_noStrings; i++)
             XtVaSetValues ((Widget) m_widgetList[i], XmNfontList, fontList, NULL);
+        */
         GetSize(& width1, & height1);
-        if (width != width1 || height != height1)
+        if (keepOriginalSize && (width != width1 || height != height1))
         {
             SetSize(-1, -1, width, height);
         }

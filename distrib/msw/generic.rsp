@@ -393,6 +393,7 @@ samples/controls/*.xpm
 samples/controls/*.ico
 samples/controls/*.bmp
 samples/controls/*.rc
+samples/controls/icons/*
 
 samples/fractal/*.cpp
 samples/fractal/*.h

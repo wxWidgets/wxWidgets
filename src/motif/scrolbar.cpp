@@ -152,7 +152,7 @@ void wxScrollBar::Command(wxCommandEvent& event)
     ProcessCommand(event);
 }
 
-void wxScrollBar::ChangeFont()
+void wxScrollBar::ChangeFont(bool keepOriginalSize)
 {
     // TODO
 }

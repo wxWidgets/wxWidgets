@@ -123,10 +123,12 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     if (height == -1)
         height = 80;
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, x, y, width, height);
 
-    SetFont(* parent->GetFont());
     ChangeBackgroundColour();
 
     return TRUE;
@@ -188,9 +190,9 @@ int wxGauge::GetValue() const
 //    return m_gaugePos;
 }
 
-void wxGauge::ChangeFont()
+void wxGauge::ChangeFont(bool keepOriginalSize)
 {
-    wxWindow::ChangeFont();
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxGauge::ChangeBackgroundColour()

@@ -128,6 +128,7 @@ bool wxFrame::Create(wxWindow *parent,
 
   m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
   m_foregroundColour = *wxBLACK;
+  m_windowFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
   if ( id > -1 )
     m_windowId = id;
@@ -221,6 +222,8 @@ bool wxFrame::Create(wxWindow *parent,
     XtVaSetValues((Widget) m_frameShell, XmNheight, height, NULL);
 
   m_mainWidget = m_frameWidget;
+
+  ChangeFont(FALSE);
 
   // This patch comes from Torsten Liermann lier@lier1.muc.de
   if (XmIsMotifWMRunning( (Widget) m_frameShell ))
@@ -1040,7 +1043,7 @@ WXWidget wxFrame::GetClientWidget() const
   return m_clientArea;
 }
 
-void wxFrame::ChangeFont()
+void wxFrame::ChangeFont(bool keepOriginalSize)
 {
     // TODO
 }

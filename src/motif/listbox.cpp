@@ -107,11 +107,13 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     XtAddCallback (listWidget, XmNdefaultActionCallback, (XtCallbackProc) wxListBoxDefaultActionProc,
          (XtPointer) this);
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, width, height);
 
     m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
 
-    SetFont(* parent->GetFont());
     ChangeBackgroundColour();
 
     return TRUE;
@@ -741,9 +743,9 @@ WXWidget wxListBox::GetTopWidget() const
   return (WXWidget) XtParent( (Widget) m_mainWidget );
 }
 
-void wxListBox::ChangeFont()
+void wxListBox::ChangeFont(bool keepOriginalSize)
 {
-    wxWindow::ChangeFont();
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxListBox::ChangeBackgroundColour()

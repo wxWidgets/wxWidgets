@@ -139,12 +139,15 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
         XmStringFree(str);
     }
 
+    m_windowFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    ChangeFont(FALSE);
+
     wxAddWindowToTable(dialogShell, this);
 
     // Intercept CLOSE messages from the window manager
     Atom WM_DELETE_WINDOW = XmInternAtom(XtDisplay(shell), "WM_DELETE_WINDOW", False);
 
-    /* MATTHEW: [8] Remove and add WM_DELETE_WINDOW so ours is only handler */
+    /* Remove and add WM_DELETE_WINDOW so ours is only handler */
     /* Why do we have to do this for wxDialog, but not wxFrame? */
     XmRemoveWMProtocols(shell, &WM_DELETE_WINDOW, 1);
     XmAddWMProtocols(shell, &WM_DELETE_WINDOW, 1);
@@ -236,7 +239,6 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
        (XtPointer)this);
 
     ChangeBackgroundColour();
-    SetFont(* parent->GetFont());
 
     return TRUE;
 }
@@ -745,7 +747,7 @@ static void wxUnmapBulletinBoard(Widget dialog, wxDialog *client,XtPointer call)
   */
 }
 
-void wxDialog::ChangeFont()
+void wxDialog::ChangeFont(bool keepOriginalSize)
 {
     // TODO
 }

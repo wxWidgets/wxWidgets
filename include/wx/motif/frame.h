@@ -145,7 +145,7 @@ public:
   virtual void ReleaseMouse();
 
 // Implementation
-  virtual void ChangeFont();
+  virtual void ChangeFont(bool keepOriginalSize = TRUE);
   virtual void ChangeBackgroundColour();
   virtual void ChangeForegroundColour();
   WXWidget GetMenuBarWidget() const ;

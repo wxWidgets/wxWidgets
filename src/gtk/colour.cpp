@@ -67,7 +67,7 @@ wxColour::wxColour()
 {
 }
 
-wxColour::wxColour( char red, char green, char blue )
+wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
 {
   m_refData = new wxColourRefData();
   M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
@@ -128,7 +128,7 @@ bool wxColour::operator != ( const wxColour& col)
   return m_refData != col.m_refData; 
 }
 
-void wxColour::Set( const unsigned char red, const unsigned char green, const unsigned char blue )
+void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
 {
   UnRef();
   m_refData = new wxColourRefData();

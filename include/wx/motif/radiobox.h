@@ -69,7 +69,7 @@ public:
   inline void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
 // Implementation
-  virtual void ChangeFont();
+  virtual void ChangeFont(bool keepOriginalSize = TRUE);
   virtual void ChangeBackgroundColour();
   virtual void ChangeForegroundColour();
   WXWidget GetTopWidget() const { return m_formWidget; }

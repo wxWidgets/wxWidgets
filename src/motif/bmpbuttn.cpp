@@ -90,6 +90,9 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
     m_mainWidget = (WXWidget) buttonWidget;
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     ChangeBackgroundColour ();
 
     DoSetBitmap();
@@ -99,9 +102,6 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
-
-    SetFont(* parent->GetFont());
-
 
     return TRUE;
 }

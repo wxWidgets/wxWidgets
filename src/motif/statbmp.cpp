@@ -66,10 +66,11 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                     XmNlabelType, XmPIXMAP,
                     NULL);
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
-
-    SetFont(* parent->GetFont());
 
     ChangeBackgroundColour ();
 
@@ -119,9 +120,9 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
     }
 }
 
-void wxStaticBitmap::ChangeFont()
+void wxStaticBitmap::ChangeFont(bool keepOriginalSize)
 {
-    wxWindow::ChangeFont();
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxStaticBitmap::ChangeBackgroundColour()

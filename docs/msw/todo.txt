@@ -7,19 +7,12 @@ HIGH PRIORITY
 
 Find/add wxThread sample - Arthur T-D?
 
-wxControl dimensions should be optionally based on dialog font
-size for portability (dialog units as per Windows).
-
 Implement wxDC floating point transformations.
 
 Add wxDC::DeviceToLogical -> wxPoint etc (convenience accessors).
 
 Revamp Dialog Editor for new controls and properties (e.g.
 window id).
-
-Tidy wxConfig API.
-
-Change DnD classes to use global symbols, and wxString.
 
 Update manual.
     wxApp changes       DONE
@@ -187,3 +180,5 @@ more efficient).
 
 Perhaps rewrite wxFile to use FILE* descriptors, so Eof and Flush
 can work.
+
+Find out how to set wxFileSelector position.

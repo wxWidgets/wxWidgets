@@ -66,12 +66,13 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     XmToggleButtonSetState ((Widget) m_mainWidget, FALSE, TRUE);
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour();
-    SetFont(* parent->GetFont());
-
     return TRUE;
 }
 
@@ -151,9 +152,9 @@ void wxCheckBoxCallback (Widget w, XtPointer clientData,
   item->ProcessCommand (event);
 }
 
-void wxCheckBox::ChangeFont()
+void wxCheckBox::ChangeFont(bool keepOriginalSize)
 {
-    wxWindow::ChangeFont();
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxCheckBox::ChangeBackgroundColour()

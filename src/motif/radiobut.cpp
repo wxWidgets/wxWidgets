@@ -81,12 +81,14 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
     m_mainWidget = (WXWidget) radioButtonWidget;
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     XtManageChild (radioButtonWidget);
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, NULL, pos.x, pos.y, size.x, size.y);
 
-    SetFont(* parent->GetFont());
     ChangeBackgroundColour();
 
     return TRUE;
@@ -111,9 +113,9 @@ void wxRadioButton::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-void wxRadioButton::ChangeFont()
+void wxRadioButton::ChangeFont(bool keepOriginalSize)
 {
-    wxWindow::ChangeFont();
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxRadioButton::ChangeBackgroundColour()

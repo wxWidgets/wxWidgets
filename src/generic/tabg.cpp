@@ -31,6 +31,10 @@
 
 #include "wx/tab.h"
 
+// not defined: use old, square tab implementation (fills in tabs)
+// defined: use new, rounded tab implementation (doesn't colour in tabs)
+// #define wxUSE_NEW_METHOD
+
 IMPLEMENT_DYNAMIC_CLASS(wxTabControl, wxObject)
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabLayer, wxList)
@@ -56,7 +60,7 @@ wxTabControl::~wxTabControl(void)
 void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
 {
     // Old, but in some ways better (drawing opaque tabs)
-#if 0
+#ifndef wxUSE_NEW_METHOD
   if (!m_view)
     return;
     
@@ -70,23 +74,23 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
   int tabHeightInc = 0;
   if (m_isSelected)
   {
-    tabHeightInc = (view->GetTabSelectionHeight() - view->GetTabHeight());
+    tabHeightInc = (m_view->GetTabSelectionHeight() - m_view->GetTabHeight());
     tabY -= tabHeightInc;
   }
   
-  dc.SetPen(wxTRANSPARENT_PEN);
+  dc.SetPen(*wxTRANSPARENT_PEN);
 
   // Draw grey background
-  if (view->GetTabStyle() & wxTAB_STYLE_COLOUR_INTERIOR)
+  if (m_view->GetTabStyle() & wxTAB_STYLE_COLOUR_INTERIOR)
   {
-    dc.SetBrush(m_view->GetBackgroundBrush());
+    dc.SetBrush(*m_view->GetBackgroundBrush());
 
     // Add 1 because the pen is transparent. Under Motif, may be different.
     dc.DrawRectangle(tabX, tabY, (GetWidth()+1), (GetHeight() + 1 + tabHeightInc));
   }
   
   // Draw highlight and shadow
-  dc.SetPen(m_view->GetHighlightPen());
+  dc.SetPen(*m_view->GetHighlightPen());
 
   // Calculate the top of the tab beneath. It's the height of the tab, MINUS
   // a bit if the tab below happens to be selected. Check.
@@ -107,7 +111,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
     dc.DrawLine(tabX, tabY, tabX, (tabY + GetHeight() + tabHeightInc - subtractThis));
 
   dc.DrawLine(tabX, tabY, (tabX + GetWidth()), tabY);
-  dc.SetPen(m_view->GetShadowPen());
+  dc.SetPen(*m_view->GetShadowPen());
 
   // Test if we're outside the right-hand edge of the view area
   if (((tabX + GetWidth()) >= m_view->GetViewRect().x + m_view->GetViewRect().width) && (m_view->GetTabStyle() & wxTAB_STYLE_DRAW_BOX))
@@ -126,7 +130,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
       (tabX + GetWidth()), (bottomY-1));
 
     // Draw black line to emphasize shadow
-    dc.SetPen(wxBLACK_PEN);
+    dc.SetPen(*wxBLACK_PEN);
     dc.DrawLine((tabX + GetWidth() + 1), (tabY+1),
       (tabX + GetWidth() + 1), bottomY);
 
@@ -145,13 +149,13 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
       int maxPositions = ((wxTabLayer *)m_view->GetLayers().Nth(0)->Data())->Number();
 
       // Only down to the bottom of the tab, not to the top of the view
-      if ( GetColPosition() < maxPositions )
+      if ( GetRowPosition() < (maxPositions - 1) )
         topY = tabY + GetHeight() + tabHeightInc;
 
       // Shadow
       dc.DrawLine((tabX + GetWidth()), tabY, (tabX + GetWidth()), topY);
       // Draw black line to emphasize shadow
-      dc.SetPen(wxBLACK_PEN);
+      dc.SetPen(*wxBLACK_PEN);
       dc.DrawLine((tabX + GetWidth() + 1), (tabY+1), (tabX + GetWidth() + 1),
          topY);
     }
@@ -171,7 +175,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
          (tabX + GetWidth()), (tabY + GetHeight() + tabHeightInc - subtractThis));
 
       // Draw black line to emphasize shadow
-      dc.SetPen(wxBLACK_PEN);
+      dc.SetPen(*wxBLACK_PEN);
       dc.DrawLine((tabX + GetWidth() + 1), (tabY+1), (tabX + GetWidth() + 1),
          (tabY + GetHeight() + tabHeightInc - subtractThis));
     }
@@ -181,15 +185,14 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
   int textY = tabY + m_view->GetVerticalTabTextSpacing() + tabHeightInc;
 
   if (m_isSelected)
-    dc.SetFont(m_view->GetSelectedTabFont());
+    dc.SetFont(*m_view->GetSelectedTabFont());
   else
-    dc.SetFont(GetFont());
+    dc.SetFont(*GetFont());
 
   wxColour col(m_view->GetTextColour());
-  dc.SetTextForeground(&col);
-//  dc.SetTextForeground(&(m_view->GetTextColour()));
+  dc.SetTextForeground(col);
   dc.SetBackgroundMode(wxTRANSPARENT);
-  float textWidth, textHeight;
+  long textWidth, textHeight;
   dc.GetTextExtent(GetLabel(), &textWidth, &textHeight);
 
   int textX = (int)(tabX + (GetWidth() - textWidth)/2.0);
@@ -197,7 +200,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
 
   if (m_isSelected)
   {
-    dc.SetPen(m_view->GetHighlightPen());
+    dc.SetPen(*m_view->GetHighlightPen());
 
     // Draw white highlight from the tab's left side to the left hand edge of the view
     dc.DrawLine(m_view->GetViewRect().x, (tabY + GetHeight() + tabHeightInc),
@@ -207,10 +210,9 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
     dc.DrawLine((tabX + GetWidth()), (tabY + GetHeight() + tabHeightInc),
      m_view->GetViewRect().x + m_view->GetViewRect().width, (tabY + GetHeight() + tabHeightInc));
   }
-#endif
+#else
+    // New HEL version with rounder tabs
 
-// New HEL version with rounder tabs
-#if 1
 	if (!m_view) return;
 
 	int tabInc   = 0;
@@ -518,6 +520,9 @@ wxTabView::~wxTabView()
 }
   
 // Automatically positions tabs
+// TODO: this should just add the tab to a list, and then
+// a layout function (e.g. Realize) should be called when all tabs have been added.
+// The view rect could easily change as the view window is resized.
 wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *existingTab)
 {
   // First, find which layer we should be adding to.
@@ -581,6 +586,32 @@ wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *exi
   return tabControl;
 }
   
+// Returns the total height of the tabs component -- this may be several
+// times the height of a tab, if there are several tab layers (rows).
+int wxTabView::GetTotalTabHeight()
+{
+  int minY = 0;
+
+  wxNode *layerNode = m_layers.First();
+  while (layerNode)
+  {
+    wxTabLayer *layer = (wxTabLayer *)layerNode->Data();
+    wxNode *tabNode = layer->First();
+    while (tabNode)
+    {
+      wxTabControl *tab = (wxTabControl *)tabNode->Data();
+
+      if (tab->GetY() < minY)
+        minY = tab->GetY();
+
+      tabNode = tabNode->Next();
+    }
+    layerNode = layerNode->Next();
+  }
+
+  return - minY;
+}
+
 void wxTabView::ClearTabs(bool deleteTabs)
 {
   wxNode *layerNode = m_layers.First();
@@ -603,7 +634,8 @@ void wxTabView::ClearTabs(bool deleteTabs)
     layerNode = nextLayerNode;
   }
 }
-  
+
+
 // Layout tabs (optional, e.g. if resizing window)
 void wxTabView::Layout(void)
 {
@@ -720,7 +752,7 @@ void wxTabView::Draw(wxDC& dc)
 	}
 
 
-#if 0
+#ifndef wxUSE_NEW_METHOD
 	if (GetTabStyle() & wxTAB_STYLE_DRAW_BOX)
 	{
 		dc.SetPen(GetShadowPen());
@@ -729,7 +761,7 @@ void wxTabView::Draw(wxDC& dc)
 		dc.DrawLine(
 				(GetViewRect().x + 1),
 				(GetViewRect().y + GetViewRect().height),
-				(GetViewRect().x + GetViewRect().width),
+				(GetViewRect().x + GetViewRect().width + 1),
 				(GetViewRect().y + GetViewRect().height)
 				);
 
@@ -747,7 +779,7 @@ void wxTabView::Draw(wxDC& dc)
 		dc.DrawLine(
 				(GetViewRect().x),
 				(GetViewRect().y + GetViewRect().height + 1),
-				(GetViewRect().x + GetViewRect().width),
+				(GetViewRect().x + GetViewRect().width + 2),
 				(GetViewRect().y + GetViewRect().height + 1)
 				);
 
@@ -1088,7 +1120,7 @@ void wxTabbedPanel::OnPaint(wxPaintEvent& WXUNUSED(event) )
 }
 
 /*
- * wxDialogTabView
+ * wxPanelTabView
  */
  
 IMPLEMENT_CLASS(wxPanelTabView, wxTabView)

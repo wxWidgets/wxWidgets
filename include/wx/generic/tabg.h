@@ -20,15 +20,16 @@
 
 #include "wx/hash.h"
 #include "wx/string.h"
+#include "wx/dialog.h"
 
-class wxTabView;
+class WXDLLEXPORT wxTabView;
 
 /*
  * A wxTabControl is the internal and visual representation
  * of the tab.
  */
  
-class wxTabControl: public wxObject
+class WXDLLEXPORT wxTabControl: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxTabControl)
 public:
@@ -82,7 +83,7 @@ protected:
  * are 3 layers in the MS Word Options dialog.
  */
  
-class wxTabLayer: public wxList
+class WXDLLEXPORT wxTabLayer: public wxList
 {
   DECLARE_DYNAMIC_CLASS(wxTabLayer)
   public:
@@ -98,7 +99,7 @@ class wxTabLayer: public wxList
 #define wxTAB_STYLE_DRAW_BOX         1   // Draws 3D boxes round tab layers
 #define wxTAB_STYLE_COLOUR_INTERIOR  2   // Colours interior of tabs, otherwise draws outline
 
-class wxTabView: public wxObject
+class WXDLLEXPORT wxTabView: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxTabView)
 public:
@@ -162,6 +163,10 @@ public:
   inline int GetTabHeight(void) const { return m_tabHeight; }
   inline void SetTabSelectionHeight(int h) { m_tabSelectionHeight = h; }
   inline int GetTabSelectionHeight(void) const { return m_tabSelectionHeight; }
+
+  // Returns the total height of the tabs component -- this may be several
+  // times the height of a tab, if there are several tab layers (rows).
+  int GetTotalTabHeight();
   
   inline int GetTopMargin(void) const { return m_topMargin; }
   inline void SetTopMargin(int margin) { m_topMargin = margin; }
@@ -260,7 +265,7 @@ protected:
  * A dialog box class that is tab-friendly
  */
  
-class wxTabbedDialog: public wxDialog
+class WXDLLEXPORT wxTabbedDialog: public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxTabbedDialog)
  
@@ -289,7 +294,7 @@ DECLARE_EVENT_TABLE()
  * A panel class that is tab-friendly
  */
 
-class wxTabbedPanel: public wxPanel
+class WXDLLEXPORT wxTabbedPanel: public wxPanel
 {
 DECLARE_DYNAMIC_CLASS(wxTabbedPanel)
  
@@ -313,7 +318,7 @@ protected:
 DECLARE_EVENT_TABLE()
 };
 
-class wxPanelTabView: public wxTabView
+class WXDLLEXPORT wxPanelTabView: public wxTabView
 {
 DECLARE_DYNAMIC_CLASS(wxPanelTabView)
 public:
@@ -330,6 +335,7 @@ public:
    inline wxWindow *GetCurrentWindow() const { return m_currentWindow; }
    
    void ShowWindowForTab(int id);
+   inline wxList& GetWindows() const { return (wxList&) m_tabWindows; }
 
 protected:
    // List of panels, one for each tab. Indexed

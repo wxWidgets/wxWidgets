@@ -57,7 +57,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
   virtual bool AcceptsFocus() const { return FALSE; }
 
 // Implementation
-  virtual void ChangeFont();
+  virtual void ChangeFont(bool keepOriginalSize = TRUE);
   virtual void ChangeBackgroundColour();
   virtual void ChangeForegroundColour();
 

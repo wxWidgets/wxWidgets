@@ -3070,7 +3070,7 @@ void wxWindow::SetForegroundColour(const wxColour& col)
     ChangeForegroundColour();
 }
 
-void wxWindow::ChangeFont()
+void wxWindow::ChangeFont(bool keepOriginalSize)
 {
     // Note that this causes the widget to be resized back
     // to its original size! We therefore have to set the size
@@ -3086,7 +3086,7 @@ void wxWindow::ChangeFont()
 		   NULL);
 
         GetSize(& width1, & height1);
-        if (width != width1 || height != height1)
+        if (keepOriginalSize && (width != width1 || height != height1))
         {
             SetSize(-1, -1, width, height);
         }

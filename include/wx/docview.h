@@ -37,8 +37,8 @@ class WXDLLEXPORT wxFileHistory;
 class WXDLLEXPORT wxConfigBase;
 
 #if wxUSE_IOSTREAMH
-#  include <istream.h>
-#  include <ostream.h>
+// N.B. BC++ doesn't have istream.h, ostream.h
+#  include <iostream.h>
 #else
 #  include <istream>
 #  include <ostream>

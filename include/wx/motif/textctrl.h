@@ -127,7 +127,7 @@ public:
   virtual void Command(wxCommandEvent& event);
 
 // Implementation
-  virtual void ChangeFont();
+  virtual void ChangeFont(bool keepOriginalSize = TRUE);
   virtual void ChangeBackgroundColour();
   virtual void ChangeForegroundColour();
   inline void SetModified(bool mod) { m_modified = mod; }

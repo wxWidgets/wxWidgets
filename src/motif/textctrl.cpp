@@ -143,10 +143,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     XtAddCallback((Widget) m_mainWidget, XmNlosingFocusCallback, (XtCallbackProc)wxTextWindowLoseFocusProc, (XtPointer)this);
 
+    m_windowFont = parent->GetFont();
+    ChangeFont(FALSE);
+
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
-    SetFont(* parent->GetFont());
     ChangeBackgroundColour();
 
     return TRUE;
@@ -636,9 +638,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
   }
 }
 
-void wxTextCtrl::ChangeFont()
+void wxTextCtrl::ChangeFont(bool keepOriginalSize)
 {
-    wxWindow::ChangeFont();
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxTextCtrl::ChangeBackgroundColour()

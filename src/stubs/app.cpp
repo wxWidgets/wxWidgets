@@ -69,6 +69,8 @@ bool wxApp::Initialize()
 
   wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
   wxTheColourDatabase->Initialize();
+
+  wxInitializeStockLists();
   wxInitializeStockObjects();
 
 #if wxUSE_WX_RESOURCES

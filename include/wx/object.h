@@ -37,7 +37,8 @@ class WXDLLEXPORT wxHashTable;
 class WXDLLEXPORT wxObject_Serialize;
 
 #if wxUSE_IOSTREAMH
-#  include <ostream.h>
+// N.B. BC++ doesn't have istream.h, ostream.h
+#  include <iostream.h>
 #else
 #  include <ostream>
 #  ifdef _MSC_VER

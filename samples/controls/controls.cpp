@@ -26,7 +26,7 @@
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
 #include "icons/choice.xpm"
 #include "icons/combo.xpm"

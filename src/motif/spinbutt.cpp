@@ -68,7 +68,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 	// TODO
 }
 
-void wxSpinButton::ChangeFont()
+void wxSpinButton::ChangeFont(bool keepOriginalSize)
 {
     // TODO
 }

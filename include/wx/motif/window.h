@@ -488,7 +488,7 @@ public:
   virtual WXRegion GetPaintRegion() const { return m_paintRegion; }
 
   // Change properties
-  virtual void ChangeFont();             // Change to the current font (often overridden)
+  virtual void ChangeFont(bool keepOriginalSize = TRUE);             // Change to the current font (often overridden)
   virtual void DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
   virtual void DoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
   // These to be overridden as needed (may change several widgets)

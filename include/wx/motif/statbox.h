@@ -52,7 +52,7 @@ class WXDLLEXPORT wxStaticBox: public wxControl
   wxString GetLabel() const;
 
 // Implementation
-  virtual void ChangeFont();
+  virtual void ChangeFont(bool keepOriginalSize = TRUE);
   virtual void ChangeBackgroundColour();
   virtual void ChangeForegroundColour();
   WXWidget GetTopWidget() const { return m_formWidget; }

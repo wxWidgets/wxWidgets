@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        notebook.h
-// Purpose:     MSW/GTK compatible notebook (a.k.a. property sheet)
+// Purpose:     wxNotebook class (a.k.a. property sheet, tabbed dialog)
 // Author:      Julian Smart
 // Modified by:
 // RCS-ID:      $Id$
@@ -21,6 +21,7 @@
 #include "wx/dynarray.h"
 #include "wx/event.h"
 #include "wx/control.h"
+#include "wx/generic/tabg.h"
 
 // ----------------------------------------------------------------------------
 // types
@@ -59,9 +60,38 @@ private:
 // wxNotebook
 // ----------------------------------------------------------------------------
 
-// @@@ this class should really derive from wxTabCtrl, but the interface is not
-//     exactly the same, so I can't do it right now and instead we reimplement
-//     part of wxTabCtrl here
+class WXDLLEXPORT wxNotebook;
+
+// This reuses wxTabView to draw the tabs.
+class WXDLLEXPORT wxNotebookTabView: public wxTabView
+{
+DECLARE_DYNAMIC_CLASS(wxNotebookTabView)
+public:
+  wxNotebookTabView(wxNotebook* notebook, long style = wxTAB_STYLE_DRAW_BOX | wxTAB_STYLE_COLOUR_INTERIOR);
+  ~wxNotebookTabView(void);
+
+  // Called when a tab is activated
+  virtual void OnTabActivate(int activateId, int deactivateId);
+
+/*
+  // Specific to this class
+   void AddTabWindow(int id, wxWindow *window);
+   wxWindow *GetTabWindow(int id) const ;
+   void ClearWindows(bool deleteWindows = TRUE);
+   inline wxWindow *GetCurrentWindow() const { return m_currentWindow; }
+   void ShowWindowForTab(int id);
+*/
+
+protected:
+/*
+   // List of panels, one for each tab. Indexed
+   // by tab ID.
+   wxList           m_tabWindows;
+   wxWindow*        m_currentWindow;
+*/
+   wxNotebook*      m_notebook;
+};
+
 class wxNotebook : public wxControl
 {
 public:
@@ -163,7 +193,15 @@ public:
   virtual bool DoPhase(int nPhase);
 
 // Implementation
-  virtual void ChangeFont();
+
+  // wxNotebook on Motif uses a generic wxTabView to implement itself.
+  inline wxTabView *GetTabView() const { return m_tabView; }
+  inline void SetTabView(wxTabView *v) { m_tabView = v; }
+  
+  void OnMouseEvent(wxMouseEvent& event);
+  void OnPaint(wxPaintEvent& event);
+
+  virtual void ChangeFont(bool keepOriginalSize = TRUE);
   virtual void ChangeBackgroundColour();
   virtual void ChangeForegroundColour();
 
@@ -178,6 +216,8 @@ protected:
   wxArrayPages  m_aPages;     // array of pages
 
   int m_nSelection;           // the current selection (-1 if none)
+
+  wxTabView*   m_tabView;
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()

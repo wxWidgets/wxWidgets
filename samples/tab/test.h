@@ -14,13 +14,51 @@ class MyApp: public wxApp
 {
 public:
     bool OnInit(void);
+    void InitTabView(wxPanelTabView* view, wxWindow* window);
+
+    wxButton*   m_okButton;
+    wxButton*   m_cancelButton;
+    wxButton*   m_helpButton;
 };
+
+DECLARE_APP(MyApp)
 
 class MyDialog: public wxTabbedDialog
 {
 public:
     MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
         const wxPoint& pos, const wxSize& size, const long windowStyle = wxDEFAULT_DIALOG_STYLE);
+
+    void OnOK(wxCommandEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
+    void Init(void);
+
+DECLARE_EVENT_TABLE()
+};
+
+class MyFrame: public wxFrame
+{
+public:
+    MyFrame(wxFrame* parent, const wxWindowID id, const wxString& title,
+        const wxPoint& pos, const wxSize& size, const long windowStyle = wxDEFAULT_FRAME_STYLE);
+
+    void OnOK(wxCommandEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
+    void OnSize(wxSizeEvent& event);
+    void Init(void);
+protected:
+    wxTabbedPanel*      m_panel;
+    wxPanelTabView*     m_view;
+
+DECLARE_EVENT_TABLE()
+};
+
+
+class MyTabbedPanel: public wxTabbedPanel
+{
+public:
+    MyTabbedPanel(wxWindow* parent, const wxWindowID id,
+        const wxPoint& pos, const wxSize& size, const long windowStyle = 0);
 
     void OnOK(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
