@@ -122,6 +122,33 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// Unicode support
+// ----------------------------------------------------------------------------
+
+// Set wxUSE_UNICODE to 1 to compile wxWindows in Unicode mode: wxChar will be
+// defined as wchar_t, wxString will use Unicode internally. If you set this
+// to 1, you must use wxT() macro for all literal strings in the program.
+//
+// Unicode is currently only fully supported under Windows NT/2000 (Windows 9x
+// doesn't support it and the programs compiled in Unicode mode will not run
+// under 9x).
+//
+// Default is 0
+//
+// Recommended setting: 0 (unless you only plan to use Windows NT/2000)
+#define wxUSE_UNICODE 0
+
+// Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
+// compiling the program in Unicode mode. More precisely, it will be possible
+// to construct wxString from a wide (Unicode) string and convert any wxString
+// to Unicode.
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_WCHAR_T 1
+
+// ----------------------------------------------------------------------------
 // global features
 // ----------------------------------------------------------------------------
 
@@ -159,9 +186,6 @@
 // ----------------------------------------------------------------------------
 // non GUI features selection
 // ----------------------------------------------------------------------------
-
-// Set to 1 to build in Unicode mode (wxchar.h will define _UNICODE and UNICODE)
-#define wxUSE_UNICODE       1
 
 // Set wxUSE_LONGLONG to 1 to compile the wxLongLong class. This is a 64 bit
 // integer which is implemented in terms of native 64 bit integers if any or
