@@ -114,10 +114,10 @@ public:
 
     void ExtendArea(double x, double y);
 
-    inline int  GetXMin()     { return m_minx; }
-    inline int  GetYMin()     { return m_miny; }
-    inline int  GetXMax()     { return m_maxx; }
-    inline int  GetYMax()     { return m_maxy; }
+    inline double  GetXMin()     { return m_minx; }
+    inline double  GetYMin()     { return m_miny; }
+    inline double  GetXMax()     { return m_maxx; }
+    inline double  GetYMax()     { return m_maxy; }
 
 protected:
     wxCanvas   *m_owner;
@@ -151,8 +151,8 @@ public:
     virtual bool IsHit( int x, int y, int margin );
     void Move( int x, int y );
 
-    inline int  GetPosX()          { return m_x; }
-    inline int  GetPosY()          { return m_y; }
+    inline double  GetPosX()          { return m_x; }
+    inline double  GetPosY()          { return m_y; }
 
     void ExtendArea(double x, double y);
     virtual wxCanvasObject* IsHitObject( int x, int y, int margin );

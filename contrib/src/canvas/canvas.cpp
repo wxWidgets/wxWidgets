@@ -368,8 +368,8 @@ void wxCanvasObjectGroupRef::Recreate()
 
 void wxCanvasObjectGroupRef::Render(int xabs, int yabs, int x, int y, int width, int height )
 {
-    xabs += m_owner->GetDeviceX(m_x);
-    yabs += m_owner->GetDeviceY(m_y);
+    xabs += m_area.x;
+    yabs += m_area.y;
 
     int clip_x = xabs + m_group->GetXMin();
     int clip_width = m_group->GetXMax()-m_group->GetXMin();
@@ -1011,10 +1011,11 @@ void wxCanvasText::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
 {
     if (!m_alpha) return;
 
-#if IMAGE_CANVAS
-    wxImage *image = m_owner->GetBuffer();
     int buffer_x = m_owner->GetBufferX();
     int buffer_y = m_owner->GetBufferY();
+    
+#if IMAGE_CANVAS
+    wxImage *image = m_owner->GetBuffer();
 
     // local coordinates
     int start_x = clip_x - m_area.x;
@@ -1050,6 +1051,52 @@ void wxCanvasText::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
                 image->SetRGB( image_x, image_y, red1+red2, green1+green2, blue1+blue2 );
             }
         }
+#else
+    wxBitmap *bitmap = m_owner->GetBuffer();
+    wxRect sub_rect( clip_x-buffer_x, clip_y-buffer_y, clip_width, clip_height );
+    wxBitmap sub_bitmap( bitmap->GetSubBitmap( sub_rect ) );
+    
+    wxImage image( sub_bitmap );
+
+    // local coordinates
+    int start_x = clip_x - m_area.x;
+    int end_x = clip_width + start_x;
+    int start_y = clip_y - m_area.y;
+    int end_y = clip_height + start_y;
+
+    for (int y = start_y; y < end_y; y++)
+        for (int x = start_x; x < end_x; x++)
+        {
+            int alpha = m_alpha[y*m_area.width + x];
+            if (alpha)
+            {
+                int image_x = x - start_x;
+                int image_y = y - start_y;
+                if (alpha == 255)
+                {
+                    image.SetRGB( image_x, image_y, m_red, m_green, m_blue );
+                    continue;
+                }
+                int red1 = (m_red * alpha) / 255;
+                int green1 = (m_green * alpha) / 255;
+                int blue1 = (m_blue * alpha) / 255;
+
+                alpha = 255-alpha;
+                int red2 = image.GetRed( image_x, image_y );
+                int green2 = image.GetGreen( image_x, image_y );
+                int blue2 = image.GetBlue( image_x, image_y );
+                red2 = (red2 * alpha) / 255;
+                green2 = (green2 * alpha) / 255;
+                blue2 = (blue2 * alpha) / 255;
+
+                image.SetRGB( image_x, image_y, red1+red2, green1+green2, blue1+blue2 );
+            }
+        }
+   
+   sub_bitmap = image.ConvertToBitmap();
+   
+   wxMemoryDC *dc = m_owner->GetDC();
+   dc->DrawBitmap( sub_bitmap, clip_x-buffer_x, clip_y-buffer_y );
 #endif
 }
 
@@ -1064,9 +1111,9 @@ void wxCanvasText::Recreate()
     m_area.x = m_owner->GetDeviceX( m_x );
     m_area.y = m_owner->GetDeviceY( m_y );
 
-    m_area.width = 100;  // TODO, calculate length
-    m_area.height = m_size;
-    m_alpha = new unsigned char[100*m_size];
+    m_area.width = 100;                   // TODO calculate length
+    m_area.height = m_size + (m_size/2);  // TODO space for sub-baseline (pgypq)
+    m_alpha = new unsigned char[m_area.width*m_area.height];
     memset( m_alpha, 0, m_area.width*m_area.height );
 
 #if wxUSE_FREETYPE

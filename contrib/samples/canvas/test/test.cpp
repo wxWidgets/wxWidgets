@@ -229,8 +229,14 @@ MyFrame::MyFrame()
     wxButton *button = new wxButton( m_canvas, -1, "Hello", wxPoint(80,50) );
     m_canvas->Append( new wxCanvasControl( button ) );
 
-    m_canvas->Append( new wxCanvasText( "Hello", 180, 50,
-                      wxGetApp().GetFontPath() + "/times.ttf", 20 ) );
+    m_canvas->Append( new wxCanvasText( "How are you?", 180, 10,
+                      wxGetApp().GetFontPath() + "/times.ttf", 8 ) );
+
+    m_canvas->Append( new wxCanvasText( "How are you?", 180, 20,
+                      wxGetApp().GetFontPath() + "/times.ttf", 10 ) );
+
+    m_canvas->Append( new wxCanvasText( "How are you?", 180, 30,
+                      wxGetApp().GetFontPath() + "/times.ttf", 12 ) );
 
     m_sm3 = new wxCanvasImage( image, 0,210,32,32 );
     m_canvas->Append( m_sm3 );
