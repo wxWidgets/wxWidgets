@@ -42,6 +42,61 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
  */
 
 #include "wx/mac/uma.h"
+#include "wx/notebook.h"
+#include "wx/tabctrl.h"
+    
+
+static wxBrush MacGetBackgroundBrush( wxWindow* window )
+{
+    wxBrush bkdBrush = window->MacGetBackgroundBrush() ;
+#if !TARGET_API_MAC_OSX
+    // transparency cannot be handled by the OS when not using composited windows
+    wxWindow* parent = window->GetParent() ;
+    // if we have some 'pseudo' transparency
+    if ( ! bkdBrush.Ok() || bkdBrush.GetStyle() == wxTRANSPARENT || window->GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE ) )
+    {
+        // walk up until we find something
+        while( parent != NULL )
+        {
+            if ( parent->GetBackgroundColour() != wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE ) )
+            {
+                // if we have any other colours in the hierarchy
+                bkdBrush.SetColour( parent->GetBackgroundColour() ) ;
+                break ;
+            }
+            if ( parent->IsKindOf( CLASSINFO(wxTopLevelWindow) ) )
+            {
+                bkdBrush = parent->MacGetBackgroundBrush() ;
+                break ;
+            }
+            if ( parent->IsKindOf( CLASSINFO( wxNotebook ) ) || parent->IsKindOf( CLASSINFO( wxTabCtrl ) ) )
+            {
+                Rect extent = { 0 , 0 , 0 , 0 } ;
+                int x , y ;
+                x = y = 0 ;
+                wxSize size = parent->GetSize() ;
+                parent->MacClientToRootWindow( &x , &y ) ;
+                extent.left = x ;
+                extent.top = y ;
+                extent.top-- ;
+                extent.right = x + size.x ;
+                extent.bottom = y + size.y ;
+                bkdBrush.MacSetThemeBackground( kThemeBackgroundTabPane , (WXRECTPTR) &extent ) ; 
+                break ;
+            }
+            
+            parent = parent->GetParent() ;  
+        }
+    }
+    if ( !bkdBrush.Ok() || bkdBrush.GetStyle() == wxTRANSPARENT )
+    {
+        // if we did not find something, use a default
+        bkdBrush.MacSetTheme( kThemeBrushDialogBackgroundActive ) ;
+    }
+#endif    
+    return bkdBrush ;
+}    
+
 
 wxWindowDC::wxWindowDC() 
 {
@@ -64,7 +119,7 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
     m_ok = TRUE ;
-    SetBackground(window->MacGetBackgroundBrush());
+    SetBackground(MacGetBackgroundBrush(window));
 }
 
 wxWindowDC::~wxWindowDC()
@@ -110,7 +165,7 @@ wxClientDC::wxClientDC(wxWindow *window)
     m_macPort = UMAGetWindowPort( windowref ) ;
 
     m_ok = TRUE ;
-    SetBackground(window->MacGetBackgroundBrush());
+    SetBackground(MacGetBackgroundBrush(window));
     SetFont( window->GetFont() ) ;
 }
 
@@ -157,7 +212,7 @@ wxPaintDC::wxPaintDC(wxWindow *window)
     m_macPort = UMAGetWindowPort( windowref ) ;
 
     m_ok = TRUE ;
-    SetBackground(window->MacGetBackgroundBrush());
+    SetBackground(MacGetBackgroundBrush(window));
     SetFont( window->GetFont() ) ;
 }
 

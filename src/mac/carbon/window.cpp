@@ -505,14 +505,10 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
                 wxWindow*  wx = (wxWindow*) wxFindControlFromMacControl( iControl ) ;
                 if ( wx != NULL )
                 {
-                    /*
                     const wxBrush &brush = wx->MacGetBackgroundBrush() ;
                     if  ( brush.Ok() )
                     {
-                        
                         wxDC::MacSetupBackgroundForCurrentPort( brush ) ;
-                        */
-                        // this clipping is only needed for non HIView
                         
                         RgnHandle clip = NewRgn() ;
                         int x = 0 , y = 0;
@@ -524,7 +520,6 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
                         DisposeRgn( clip ) ;
 
                         status = noErr ;
-                        /*
                     }
                     else if ( wx->MacIsUserPane() )
                     {
@@ -532,7 +527,6 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
                         // setup of our parent ourselves
                         status = SetUpControlBackground( (ControlRef) wx->GetParent()->GetHandle() , iDepth , iIsColor ) ;
                     }
-                    */
                 }
             }
             break ;
@@ -781,7 +775,7 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
 #if !TARGET_API_MAC_OSX
     // eventually we can fix some clipping issues be reactivating this hook 
     //if ( m_macIsUserPane )
-    // SetControlColorProc( *m_peer , wxMacSetupControlBackgroundUPP ) ;
+    // SetControlColorProc( m_peer->GetControlRef() , wxMacSetupControlBackgroundUPP ) ;
 #endif
     m_peer->SetTitle( wxStripMenuCodes(m_label) ) ;
 
@@ -2040,11 +2034,13 @@ void wxWindowMac::WarpPointer (int x_pos, int y_pos)
 
 void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
 {
+#if TARGET_API_MAC_OSX
     if ( m_macBackgroundBrush.Ok() == false || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT )
     {
         event.Skip() ;
     }
     else
+#endif
         event.GetDC()->Clear() ;
 }
 
