@@ -1357,12 +1357,12 @@ void wxMimeTypesManagerImpl::GetMimeInfo (const wxString& sExtraDir)
     wxString strHome = wxGetenv(wxT("HOME"));
 
     wxArrayString dirs;
+    dirs.Add ( strHome + wxT("/.") );
     dirs.Add ( wxT("/etc/") );
     dirs.Add ( wxT("/usr/etc/") );
     dirs.Add ( wxT("/usr/local/etc/") );
     dirs.Add ( wxT("/etc/mail/") );
     dirs.Add ( wxT("/usr/public/lib/") );
-    dirs.Add ( strHome + wxT("/.") );
     if (!sExtraDir.IsEmpty()) dirs.Add ( sExtraDir + wxT("/") );
 
     size_t nDirs = dirs.GetCount();
