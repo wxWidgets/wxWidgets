@@ -9285,12 +9285,15 @@ void wxGrid::AutoSize()
 
     // round up the size to a multiple of scroll step - this ensures that we
     // won't get the scrollbars if we're sized exactly to this width
-    wxSize sizeFit(GetScrollX(size.x) * GRID_SCROLL_LINE_X,
-                   GetScrollY(size.y) * GRID_SCROLL_LINE_Y);
+    // CalcDimension adds m_extraWidth + 1 etc. to calculate the necessary
+    // scrollbar steps
+    wxSize sizeFit(GetScrollX(size.x + m_extraWidth + 1) * GRID_SCROLL_LINE_X,
+                   GetScrollY(size.y + m_extraHeight + 1) * GRID_SCROLL_LINE_Y);
 
     // distribute the extra space between teh columns/rows to avoid having
     // extra white space
-    wxCoord diff = sizeFit.x - size.x;
+    // Remove the extra m_extraWidth + 1 added above
+    wxCoord diff = sizeFit.x - size.x + (m_extraWidth + 1);
     if ( diff )
     {
         // try to resize the columns uniformly
@@ -9315,7 +9318,7 @@ void wxGrid::AutoSize()
     }
 
     // same for rows
-    diff = sizeFit.y - size.y;
+    diff = sizeFit.y - size.y - (m_extraHeight + 1);
     if ( diff )
     {
         // try to resize the columns uniformly
