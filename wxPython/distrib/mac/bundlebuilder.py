@@ -280,7 +280,7 @@ mainprogram = os.path.join(resdir, "%(mainprogram)s")
 
 sys.argv.insert(1, mainprogram)
 os.environ["PYTHONPATH"] = resdir
-os.environ["PYTHONHOME"] = resdir
+%(pythonhome)s
 os.environ["PYTHONEXECUTABLE"] = executable
 os.environ["DYLD_LIBRARY_PATH"] = libdir
 os.execve(executable, sys.argv, os.environ)
@@ -330,7 +330,7 @@ class AppBuilder(BundleBuilder):
 
 	# If True, build standalone app.
 	standalone = 0
-	
+
 	# If True, add a real main program that emulates sys.argv before calling
 	# mainprogram
 	argv_emulation = 0
@@ -441,10 +441,12 @@ class AppBuilder(BundleBuilder):
 				# XXX we're screwed when the end user has deleted
 				# /usr/bin/python
 				hashbang = "/usr/bin/python"
+                                pythonhome = 'os.environ["PYTHONHOME"] = resdir'
 			else:
 				hashbang = sys.executable
 				while os.path.islink(hashbang):
 					hashbang = os.readlink(hashbang)
+                                pythonhome = ''
 			open(bootstrappath, "w").write(BOOTSTRAP_SCRIPT % locals())
 			os.chmod(bootstrappath, 0775)
 
