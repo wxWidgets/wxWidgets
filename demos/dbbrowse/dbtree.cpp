@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------------------
 static inline const wxChar *bool2String(bool b)
 {
-    return b ? _T("") : _T("not ");
+    return b ? wxEmptyString : _T("not ");
 }
 
 //----------------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ int DBTree::OnPopulate()
                                 Temp2.Printf(_T("(%d) - %s"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkCol,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName);
                                 Docu = AppendItem(Folder,Temp2,TreeIc_KEY,TreeIc_KEY,new DBTreeData(Temp1));
                                 Temp2 = ((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkTableName;
-                                if (Temp2 == _T(""))
+                                if (Temp2.empty())
                                     Temp2 = _("None");
                                 Temp2.Printf(_("This Primary Key is used in the following Tables : %s"),Temp2.c_str());
                                 Funkt = AppendItem(Docu,Temp2,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData(_T("KEY")));
@@ -250,12 +250,12 @@ int DBTree::OnPopulate()
     Expand(Root);
     //---------------------------------------------------------------------------------------
     popupMenu1 = NULL;
-    popupMenu1 = new wxMenu(_T(""));
+    popupMenu1 = new wxMenu;
     popupMenu1->Append(DATA_DB, _("Make wxDB.cpp/h "));
     popupMenu1->AppendSeparator();
     popupMenu1->Append(DATA_TABLE_ALL, _("Make all wxTable.cpp/h classes"));
     popupMenu2 = NULL;
-    popupMenu2 = new wxMenu(_T(""));
+    popupMenu2 = new wxMenu;
     popupMenu2->Append(DATA_SHOW, _("Show Data"));
     popupMenu2->AppendSeparator();
     popupMenu2->Append(DATA_TABLE, _("Make wxTable.cpp/h "));

@@ -191,7 +191,7 @@ ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
     // locate and resize with sizers
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
     topsizer->Add( list, 1, wxALL|wxGROW, 10 );
-    wxButton *button = new wxButton(this, wxID_OK, _("OK"));
+    wxButton *button = new wxButton(this, wxID_OK);
     topsizer->Add( button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL , 10 );
     button->SetFocus();
 

@@ -61,10 +61,7 @@ public:
 
 private:
     enum MenuCommands {
-        NEW_GAME = 10,
-        SCORES,
-        UNDO,
-        REDO,
+        SCORES = 10,
         RIGHT_BUTTON_UNDO,
         HELPING_HAND,
         LARGE_CARDS

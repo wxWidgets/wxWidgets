@@ -45,7 +45,7 @@ public:
     inline wxArrayString GetShape() const       { return m_shape; };
     inline LifePattern   GetPattern() const
     {
-        return LifePattern(_(""), m_description, m_rules, m_shape);
+        return LifePattern(wxEmptyString, m_description, m_rules, m_shape);
     };
 
 private:

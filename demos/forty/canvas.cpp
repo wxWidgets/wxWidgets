@@ -137,7 +137,7 @@ void FortyCanvas::ShowPlayerDialog()
             int wins, games, score;
             m_scoreFile->ReadPlayersScore(m_player, wins, games, score);
             m_game->NewPlayer(wins, games, score);
-                        
+
             wxClientDC dc(this);
             dc.SetFont(* m_font);
             m_game->DisplayScore(dc);
@@ -152,7 +152,7 @@ void FortyCanvas::ShowPlayerDialog()
         }
     }
 }
-        
+
 /*
 Called when the main frame is closed
 */
@@ -172,7 +172,7 @@ void FortyCanvas::OnMouseEvent(wxMouseEvent& event)
     int mouseX = (int)event.GetX();
     int mouseY = (int)event.GetY();
 
-    wxClientDC dc(this); 
+    wxClientDC dc(this);
     PrepareDC(dc);
     dc.SetFont(* m_font);
 
@@ -233,7 +233,7 @@ void FortyCanvas::OnMouseEvent(wxMouseEvent& event)
 void FortyCanvas::SetCursorStyle(int x, int y)
 {
     // Only set cursor to a hand if 'helping hand' is enabled and
-    // the card under the cursor can go somewhere 
+    // the card under the cursor can go somewhere
     if (m_game->CanYouGo(x, y) && m_helpingHand)
     {
         SetCursor(* m_handCursor);
@@ -253,7 +253,7 @@ void FortyCanvas::NewGame()
 
 void FortyCanvas::Undo()
 {
-    wxClientDC dc(this); 
+    wxClientDC dc(this);
     PrepareDC(dc);
     dc.SetFont(* m_font);
     m_game->Undo(dc);
@@ -261,7 +261,7 @@ void FortyCanvas::Undo()
 
 void FortyCanvas::Redo()
 {
-    wxClientDC dc(this); 
+    wxClientDC dc(this);
     PrepareDC(dc);
     dc.SetFont(* m_font);
     m_game->Redo(dc);

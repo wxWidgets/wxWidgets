@@ -47,7 +47,7 @@ LifeReader::LifeReader(wxInputStream& is)
 {
     wxBufferedInputStream buff_is(is);
     wxTextInputStream     text_is(buff_is);
-    wxString              line, rest; 
+    wxString              line, rest;
 
     // check stream
     m_ok = is.IsOk();
@@ -58,7 +58,7 @@ LifeReader::LifeReader(wxInputStream& is)
     LIFE_CHECKVAL(_("Error reading signature. Not a Life pattern?"));
 
     // read description
-    m_description = wxT("");
+    m_description = wxEmptyString;
     line = text_is.ReadLine();
     while (buff_is.IsOk() && line.StartsWith(wxT("#D"), &rest))
     {
@@ -79,7 +79,7 @@ LifeReader::LifeReader(wxInputStream& is)
     {
         line = ( text_is.ReadLine() ).Trim();
 
-        if (!line.IsEmpty())
+        if (!line.empty())
         {
             if (line.StartsWith(wxT("#P "), &rest))
                 m_shape.Add(rest);

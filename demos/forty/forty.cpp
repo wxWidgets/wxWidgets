@@ -37,13 +37,15 @@
 #include "wx/html/htmlwin.h"
 #endif
 
+#include "wx/stockitem.h"
+
 BEGIN_EVENT_TABLE(FortyFrame, wxFrame)
-    EVT_MENU(NEW_GAME, FortyFrame::NewGame)
+    EVT_MENU(wxID_NEW, FortyFrame::NewGame)
     EVT_MENU(wxID_EXIT, FortyFrame::Exit)
     EVT_MENU(wxID_ABOUT, FortyFrame::About)
     EVT_MENU(wxID_HELP_CONTENTS, FortyFrame::Help)
-    EVT_MENU(UNDO, FortyFrame::Undo)
-    EVT_MENU(REDO, FortyFrame::Redo)
+    EVT_MENU(wxID_UNDO, FortyFrame::Undo)
+    EVT_MENU(wxID_REDO, FortyFrame::Redo)
     EVT_MENU(SCORES, FortyFrame::Scores)
     EVT_MENU(RIGHT_BUTTON_UNDO, FortyFrame::ToggleRightButtonUndo)
     EVT_MENU(HELPING_HAND, FortyFrame::ToggleHelpingHand)
@@ -151,13 +153,13 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos
 
     // Make a menu bar
     wxMenu* gameMenu = new wxMenu;
-    gameMenu->Append(NEW_GAME, _T("&New"), _T("Start a new game"));
+    gameMenu->Append(wxID_NEW, wxGetStockLabel(wxID_NEW), _T("Start a new game"));
     gameMenu->Append(SCORES, _T("&Scores..."), _T("Displays scores"));
-    gameMenu->Append(wxID_EXIT, _T("E&xit"), _T("Exits Forty Thieves"));
+    gameMenu->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT), _T("Exits Forty Thieves"));
 
     wxMenu* editMenu = new wxMenu;
-    editMenu->Append(UNDO, _T("&Undo"), _T("Undo the last move"));
-    editMenu->Append(REDO, _T("&Redo"), _T("Redo a move that has been undone"));
+    editMenu->Append(wxID_UNDO, wxGetStockLabel(wxID_UNDO), _T("Undo the last move"));
+    editMenu->Append(wxID_REDO, wxGetStockLabel(wxID_REDO), _T("Redo a move that has been undone"));
 
     wxMenu* optionsMenu = new wxMenu;
     optionsMenu->Append(RIGHT_BUTTON_UNDO,
@@ -308,6 +310,7 @@ FortyFrame::ToggleCardSize(wxCommandEvent& event)
 //----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(FortyAboutDialog,wxDialog)
+    EVT_BUTTON(wxID_CLOSE, wxDialog::OnOK)
 END_EVENT_TABLE()
 
 FortyAboutDialog::FortyAboutDialog( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -336,7 +339,7 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
         }
     }
 
-    if (htmlText.IsEmpty())
+    if (htmlText.empty())
     {
         htmlText.Printf(wxT("<html><head><title>Warning</title></head><body><P>Sorry, could not find resource for About dialog<P></body></html>"));
     }
@@ -366,7 +369,7 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
     wxASSERT( item1 );
     item0->Add( item1, 0, wxALIGN_CENTRE|wxALL, 5 );
 
-    wxButton *item2 = new wxButton( parent, wxID_CANCEL, _T("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item2 = new wxButton( parent, wxID_CLOSE );
     item2->SetDefault();
     item2->SetFocus();
 

@@ -67,9 +67,9 @@ wxGrid(parent, id, pos, size, style)
 {
     b_EditModus = false;
     //---------------------------------------------------------------------------------------
-    popupMenu1 = new wxMenu(_T(""));
+    popupMenu1 = new wxMenu;
     popupMenu1->Append(GRID_EDIT, _("Edit Modus"));
-    popupMenu2 = new wxMenu(_T(""));
+    popupMenu2 = new wxMenu;
     popupMenu2->Append(GRID_BROWSE, _("Browse Modus"));
 }
 
@@ -192,7 +192,7 @@ void DBGrid::OnEditorHidden( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnSelectCell( wxGridEvent& ev )
 {
-    logBuf = _T("");
+    logBuf = wxEmptyString;
     logBuf << _T("Selected cell at row ") << ev.GetRow()
         << _T(" col ") << ev.GetCol();
     wxLogMessage( _T("%s"), logBuf.c_str() );

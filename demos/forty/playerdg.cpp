@@ -63,8 +63,8 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 
     m_textField = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize);
 
-    m_OK = new wxButton(this, wxID_OK, _T("OK"));
-    m_cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
+    m_OK = new wxButton(this, wxID_OK);
+    m_cancel = new wxButton(this, wxID_CANCEL);
 
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
     button_sizer->Add( m_OK, 0, wxALL, 10 );

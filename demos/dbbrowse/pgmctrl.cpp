@@ -45,7 +45,7 @@
 //----------------------------------------------------------------------------------------
 static inline const wxChar *bool2String(bool b)
 {
-    return b ? _T("") : _T("not ");
+    return b ? wxEmptyString : _T("not ");
 }
 
 //----------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ PgmCtrl::PgmCtrl(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const
 PgmCtrl::~PgmCtrl()
 {
     delete p_imageListNormal;
-    delete popupMenu1;  
+    delete popupMenu1;
 }
 
 //----------------------------------------------------------------------------------------
@@ -122,7 +122,7 @@ int  PgmCtrl::OnPopulate()
     }
     //---------------------------------------------------------------------------------------
     popupMenu1 = NULL;
-    popupMenu1 = new wxMenu(_T(""));
+    popupMenu1 = new wxMenu;
     popupMenu1->Append(PGMCTRL_ODBC_USER, _("Set Username and Password"));
     // popupMenu1->AppendSeparator();
     //---------------------------------------------------------------------------------------
@@ -262,7 +262,7 @@ void PgmCtrl::OnUserPassword(wxCommandEvent& WXUNUSED(event))
     // wxMessageBox(SaveDSN);
     int i;
     //--------------------------------------------
-    DlgUser *p_Dlg = new DlgUser(this,pDoc,_T(""));
+    DlgUser *p_Dlg = new DlgUser(this,pDoc,wxEmptyString);
     //-------------------------------------------
     for (i=0;i<pDoc->i_DSN;i++)
     {

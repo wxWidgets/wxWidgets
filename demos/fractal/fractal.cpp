@@ -43,6 +43,7 @@ hack doesn't fix.
 #endif //precompiled headers
 
 #include "wx/math.h"
+#include "wx/stockitem.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -101,7 +102,7 @@ bool MyApp::OnInit()
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
-  file_menu->Append(wxID_EXIT, _T("E&xit"));
+  file_menu->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT));
   menuBar = new wxMenuBar;
   menuBar->Append(file_menu, _T("&File"));
   frame->SetMenuBar(menuBar);

@@ -92,9 +92,9 @@ private:
     wxInt32      m_viewportY;       // first visible cell (y coord)
     wxInt32      m_viewportW;       // number of visible cells (w)
     wxInt32      m_viewportH;       // number of visible cells (h)
-    int          m_thumbX;          // horiz. scrollbar thumb position 
-    int          m_thumbY;          // vert. scrollbar thumb position 
-    wxInt32      m_mi, m_mj;        // last mouse position 
+    int          m_thumbX;          // horiz. scrollbar thumb position
+    int          m_thumbY;          // vert. scrollbar thumb position
+    wxInt32      m_mi, m_mj;        // last mouse position
 };
 
 
@@ -151,7 +151,7 @@ private:
     void OnStop();
     void OnStep();
 
-    Life           *m_life;  
+    Life           *m_life;
     LifeCanvas     *m_canvas;
     LifeNavigator  *m_navigator;
     wxStaticText   *m_text;

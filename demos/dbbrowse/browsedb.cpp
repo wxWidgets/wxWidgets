@@ -70,7 +70,7 @@ wxChar *GetExtendedDBErrorMsg(wxChar *ErrFile, int ErrLine)
             if (pDbList->PtrDb->errorList[i])
             {
                 msg.Append(pDbList->PtrDb->errorList[i]);
-                if (wxStrcmp(pDbList->PtrDb->errorList[i],_T("")) != 0)
+                if (wxStrcmp(pDbList->PtrDb->errorList[i],wxEmptyString) != 0)
                     msg.Append(_T("\n"));
             }
         }
@@ -83,9 +83,9 @@ wxChar *GetExtendedDBErrorMsg(wxChar *ErrFile, int ErrLine)
 BrowserDB::BrowserDB()
 {
     PointerToNULL(0);
-    ODBCSource = _T("");  // ODBC data source name (created with ODBC Administrator under Win95/NT)
-    UserName   = _T("");  // database username - must already exist in the data source
-    Password   = _T("");  // password database username
+    ODBCSource = wxEmptyString;  // ODBC data source name (created with ODBC Administrator under Win95/NT)
+    UserName   = wxEmptyString;  // database username - must already exist in the data source
+    Password   = wxEmptyString;  // password database username
     OnFillSqlTyp();
     OnFilldbTyp();
 }  // BrowserDB Constructor
@@ -126,7 +126,7 @@ bool BrowserDB::OnStartDB(int Quiet)
     // Connect to datasource
     //---------------------------------------------------------------------------------------
     DlgUser *p_Dlg;
-    p_Dlg = new DlgUser(pDoc->p_MainFrame,pDoc,_T(""));
+    p_Dlg = new DlgUser(pDoc->p_MainFrame,pDoc,wxEmptyString);
     p_Dlg->s_DSN      = ODBCSource;
     p_Dlg->s_User     = UserName;
     p_Dlg->s_Password = Password;
@@ -153,9 +153,9 @@ bool BrowserDB::OnStartDB(int Quiet)
         // wxLogMessage(">>>%s<<<>>>%s<<<",UserName.c_str(),Password.c_str());
         if (db_BrowserDB == NULL)
         {
-            DbConnectInf.SetDsn(wxT(""));
-            DbConnectInf.SetUserID(wxT(""));
-            DbConnectInf.SetPassword(wxT(""));
+            DbConnectInf.SetDsn(wxEmptyString);
+            DbConnectInf.SetUserID(wxEmptyString);
+            DbConnectInf.SetPassword(wxEmptyString);
             if (!Quiet)
             {
                 wxLogMessage(_("\n-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the table prior to making a connection\n(using tools provided by the database manufacturer)"));
@@ -251,7 +251,7 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
             switch(i_dbDataType)
             {
             case DB_DATA_TYPE_VARCHAR:
-                wxStrcpy(s_temp,_T(""));
+                wxStrcpy(s_temp,wxEmptyString);
                 if (!db_BrowserDB->GetData((UWORD)(i+1),(SWORD)((cl_BrowserDB+i)->pColFor->i_dbDataType),&s_temp[0],sizeof(s_temp), &cb))
                 {
                     Temp0.Printf(_("\n-E-> BrowserDB::OnGetNext - ODBC-Error with GetNext of >%s<.\n-E-> "),(cl_BrowserDB+i)->tableName);
@@ -490,7 +490,7 @@ void BrowserDB::OnFillSqlTyp()
     i_SqlTyp[21] = SQL_NUMERIC;     s_SqlTyp[21] = _T("SQL_NUMERIC");
     i_SqlTyp[22] = SQL_LONGVARCHAR; s_SqlTyp[22] = _T("SQL_LONGVARCHAR");
     i_SqlTyp[23] = SQL_REAL;        s_SqlTyp[23] = _T("SQL_REAL");
-    i_SqlTyp[0]  = 23;              s_SqlTyp[0]  = _T("");
+    i_SqlTyp[0]  = 23;              s_SqlTyp[0]  = wxEmptyString;
 }
 
 //----------------------------------------------------------------------------------------
@@ -500,6 +500,6 @@ void BrowserDB::OnFilldbTyp()
     i_dbTyp[2] = DB_DATA_TYPE_INTEGER; s_dbTyp[2] = _T("DB_DATA_TYPE_INTEGER");
     i_dbTyp[3] = DB_DATA_TYPE_FLOAT;   s_dbTyp[3] = _T("DB_DATA_TYPE_FLOAT");
     i_dbTyp[4] = DB_DATA_TYPE_DATE;    s_dbTyp[4] = _T("DB_DATA_TYPE_DATE");
-    i_dbTyp[0] = 4;                    s_dbTyp[0] = _T("");
+    i_dbTyp[0] = 4;                    s_dbTyp[0] = wxEmptyString;
 }
 //----------------------------------------------------------------------------------------

@@ -114,9 +114,9 @@ bool LifeCellBox::SetCell(int dx, int dy, bool alive)
 Life::Life()
 {
     // pattern description
-    m_name        = _("");
-    m_rules       = _("");
-    m_description = _("");
+    m_name        = wxEmptyString;
+    m_rules       = wxEmptyString;
+    m_description = wxEmptyString;
 
     // pattern data
     m_numcells    = 0;
@@ -173,9 +173,9 @@ void Life::Clear()
     m_available = NULL;
 
     // reset state
-    m_name        = _("");
-    m_rules       = _("");
-    m_description = _("");
+    m_name        = wxEmptyString;
+    m_rules       = wxEmptyString;
+    m_description = wxEmptyString;
     m_numcells    = 0;
 }
 
@@ -403,7 +403,7 @@ LifeCell Life::FindNorth()
             y = c->m_y;
             first = false;
         }
-    
+
     LifeCell cell;
     cell.i = first? 0 : x + CELLBOX / 2;
     cell.j = first? 0 : y + CELLBOX / 2;
@@ -423,7 +423,7 @@ LifeCell Life::FindSouth()
             y = c->m_y;
             first = false;
         }
-    
+
     LifeCell cell;
     cell.i = first? 0 : x + CELLBOX / 2;
     cell.j = first? 0 : y + CELLBOX / 2;
@@ -443,7 +443,7 @@ LifeCell Life::FindWest()
             y = c->m_y;
             first = false;
         }
-    
+
     LifeCell cell;
     cell.i = first? 0 : x + CELLBOX / 2;
     cell.j = first? 0 : y + CELLBOX / 2;
@@ -463,7 +463,7 @@ LifeCell Life::FindEast()
             y = c->m_y;
             first = false;
         }
-    
+
     LifeCell cell;
     cell.i = first? 0 : x + CELLBOX / 2;
     cell.j = first? 0 : y + CELLBOX / 2;
@@ -870,7 +870,7 @@ bool Life::NextTic()
         t2 |= g_tab[ ((t4 & 0x0000ffff) << 4 ) + ((t3 >> 24) & 0xf) ] << 24;
         t2 |= g_tab[ ((t4 & 0xffff0000) >> 12) + ((t3 >> 28) & 0xf) ] << 28;
 
-        c->m_on[0] = c->m_on[1] = c->m_on[2] = c->m_on[3] = 
+        c->m_on[0] = c->m_on[1] = c->m_on[2] = c->m_on[3] =
         c->m_on[4] = c->m_on[5] = c->m_on[6] = c->m_on[7] = 0;
         c->m_live1 = t1;
         c->m_live2 = t2;
@@ -1136,7 +1136,7 @@ int g_tab1[]=
     0x11112110,
     0x11112121,
     0x11112221,
-    0x11112232,                        
+    0x11112232,
     0x11122100,
     0x11122111,
     0x11122211,

@@ -92,7 +92,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     //layout->height.AsIs();
     m_Password->SetConstraints(layout);
 
-    m_OK = new wxButton(this, wxID_OK, _("OK"));
+    m_OK = new wxButton(this, wxID_OK);
     m_OK->SetFont(* pDoc->ft_Doc);
     layout = new wxLayoutConstraints;
     layout->left.SameAs(this, wxLeft, 10);
@@ -101,7 +101,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     layout->width.Absolute(75);
     m_OK->SetConstraints(layout);
 
-    m_Cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
+    m_Cancel = new wxButton(this, wxID_CANCEL);
     m_Cancel->SetFont(* pDoc->ft_Doc);
     layout = new wxLayoutConstraints;
     layout->left.SameAs(m_OK, wxRight, 10);

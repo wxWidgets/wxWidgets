@@ -56,7 +56,7 @@ public:
     void OnRightSelect(wxTreeEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnUserPassword(wxCommandEvent& event);
-    
+
 public:
     //----------------------------------------------------------------------------------------
     // NB: due to an ugly wxMSW hack you _must_ use DECLARE_DYNAMIC_CLASS()
