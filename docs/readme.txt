@@ -15,6 +15,9 @@ tree controls on Unix, they are emulated.
 A detailed 700-page reference manual is supplied in HTML, PDF and
 Windows Help form.
 
+For a quick start, point your Web browser at docs/html/index.htm for a list of
+important documents and samples.
+
 Platforms supported
 -------------------
 

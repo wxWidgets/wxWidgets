@@ -23,7 +23,7 @@ all:    tex2rtf.exe
 
 wx:
         cd $(WXDIR)\src\msw
-        nmake -f makefile.nt
+        nmake -f makefile.vc
         cd $(TEX2RTFDIR)\src
 
 $(PROGRAM).exe:      $(WXLIB) $(OBJECTS) $(PROGRAM).res

@@ -16,7 +16,9 @@ Please see also:
 
 - Documentation: mention include files with each class.
 
-- Document wxTime.
+- Document/update wxTime.
+
+- Fix TCP/IP mode in dde sample (how to use; why does it crash).
 
 - Get Karsten to remove trashed CVS files:
 

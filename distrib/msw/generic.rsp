@@ -10,7 +10,9 @@ docs/todo.txt
 docs/licence.txt
 docs/symbols.txt
 docs/bugs.txt
-docs/*.html
+docs/*.htm
+docs/html/*.htm
+docs/html/*.gif
 
 src/*.inc
 src/mkdir
@@ -637,4 +639,20 @@ samples/thread/*.xbm
 samples/thread/*.png
 samples/thread/*.ico
 samples/thread/*.txt
+
+samples/dde/*.cpp
+samples/dde/*.h
+samples/dde/makefile*
+samples/dde/client.vc
+samples/dde/server.vc
+samples/dde/client.wat
+samples/dde/server.wat
+samples/dde/*.rc
+samples/dde/*.def
+samples/dde/*.bmp
+samples/dde/*.xpm
+samples/dde/*.xbm
+samples/dde/*.png
+samples/dde/*.ico
+samples/dde/*.txt
 

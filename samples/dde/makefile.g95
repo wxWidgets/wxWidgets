@@ -1,0 +1,46 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for server/client example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS=$(OBJDIR)/server.$(OBJSUFF) $(OBJDIR)/server_resources.$(OBJSUFF)\
+ $(OBJDIR)/client.$(OBJSUFF) $(OBJDIR)/client_resources.$(OBJSUFF)
+
+all:	$(OBJDIR) server$(GUISUFFIX) client$(GUISUFFIX)
+
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+server$(GUISUFFIX): $(OBJDIR)/server.$(OBJSUFF) $(OBJDIR)/server_resources.$(OBJSUFF) $(WXLIB)
+	$(CC) $(LDFLAGS) -o server$(GUISUFFIX)$(EXESUFF) $(OBJDIR)/server.$(OBJSUFF) $(OBJDIR)/server_resources.$(OBJSUFF) $(LDLIBS)
+
+$(OBJDIR)/server.$(OBJSUFF):        server.$(SRCSUFF) server.h
+	$(CC) -c $(CPPFLAGS) -o $@ server.$(SRCSUFF)
+
+client$(GUISUFFIX): $(OBJDIR)/client.$(OBJSUFF) $(OBJDIR)/client_resources.$(OBJSUFF) $(WXLIB)
+	$(CC) $(LDFLAGS) -o client$(GUISUFFIX)$(EXESUFF) $(OBJDIR)/client.$(OBJSUFF) $(OBJDIR)/client_resources.$(OBJSUFF) $(LDLIBS)
+
+$(OBJDIR)/client.$(OBJSUFF):        client.$(SRCSUFF) client.h
+	$(CC) -c $(CPPFLAGS) -o $@ client.$(SRCSUFF)
+        
+$(OBJDIR)/server_resources.o:  server.rc
+	$(RESCOMP) -i server.rc -o $(OBJDIR)/server_resources.o $(RESFLAGS)
+
+$(OBJDIR)/client_resources.o:  client.rc
+	$(RESCOMP) -i client.rc -o $(OBJDIR)/client_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) server$(GUISUFFIX).exe client$(GUISUFFIX).exe core *.rsc *.res

@@ -47,6 +47,7 @@
 
 #ifdef sun
 #ifdef SVR4
+#define __ORIGINAL_XORG_CODE
 #include <X11/Xfuncs.h> /* bzero, bcopy */
 #endif
 #endif

@@ -24,11 +24,22 @@
 
 <P>
 
-Welcome to wxWindows 2.0, the premiere cross-platform C++ framework. This is an index of
+Welcome to wxWindows 2, the premiere cross-platform GUI C++ framework. This is an index of
 the plain text and HTML documentation. Documentation is also available in Acrobat (PDF) and Windows Help,
 from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<P>
 
-<h3>Installation and release notes</h3>
+<CENTER>
+<FONT size=-1>
+[<a href="#install">Install</a>]
+[<a href="#manuals">Manuals</a>]
+[<a href="#thirdparty">3rd party tools</a>] 
+[<a href="#samples">Samples</a>]
+</FONT>
+</CENTER>
+
+<hr>
+
+<h3><a name="install">Installation and release notes</a></h3>
 
 <ul>
 <li>ReadMe: <a href="../readme.txt"><b>General ReadMe</b></a>,
@@ -60,24 +71,108 @@ from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<P>
 <li>List of <a href="../symbols.txt">preprocessor symbols</a> used in wxWindows
 </ul>
 
-<h3>wxWindows manuals</h3>
+<hr>
+
+
+<h3><a name="manuals">wxWindows manuals</a></h3>
 
 <ul>
 <li><a href="wx/wx.htm">Reference Manual</a>
-<li><a href="porting/port.htm">Porting Guide</a> (wxWindows 1.xx to 2.0)
+<li><a href="porting/port.htm">Porting Guide</a> (wxWindows 1.xx to 2)
 <li><a href="dialoged/dlged.htm">Dialog Editor</a>
 <li><a href="proplist/prop.htm">Property List Classes</a>
 <li><a href="wxtree/tree.htm">wxTreeLayout</a>
 <li><a href="odbc/odbc.htm">Remstar ODBC Classes</a>
 </ul>
 
-<h3>Third-party tools</h3>
+<hr>
+
+<h3><a name="thirdparty">Third-party tools</a></h3>
 
 <ul>
 <li><a href="gettext/gettext.htm">gettext manual</a>
 <li><a href="gettext/xgettext.htm">xgettext manual</a>
 <li><a href="gettext/msgfmt.htm">msgfmt manual</a>
 </ul>
+
+<hr>
+
+<h3><a name="samples">Samples</a></h3>
+
+<ul>
+<li><a href="../../samples/bombs">bombs</a>: minesweeper-like game.
+<li><a href="../../samples/checklst">checklst</a>: demonstrates wxCheckListBox on
+supported platforms (currently Windows and GTK only).
+<li><a href="../../samples/config">config</a>: demonstrates use of wxConfig, which
+defaults to wxRegConfig on WIN32, wxIniConfig on WIN16, and wxFileConfig on other platforms.
+<li><a href="../../samples/controls">controls</a>: sample showing a variety of controls, including
+wxNotebook.
+<li><a href="../../samples/db">db</a>: wxDB ODBC sample.
+<li><a href="../../samples/dde">dde</a>: shows the DDE protocol in action, both using real
+DDE on Windows, and TCP/IP on all platforms. Edit <a href="../../samples/dde/ddesetup.h">ddesetup.h</a>
+to switch between compilation modes. Currently the TCP/IP mode needs a bit of work.
+<li><a href="../../samples/dialogs">dialogs</a>: shows some of the common dialogs available -- wxFontDialog,
+wxColourDialog, wxFileDialog, wxDirDialog, wxMessageBox, wxTextEntryDialog, wxSingleChoiceDialog.
+For printing-related dialogs, see the printing sample.
+<li><a href="../../samples/dnd">dnd</a>: demonstrates drag and drop on supported platforms.
+<li><a href="../../samples/docview">docview</a>: demonstrates use of the document view classes,
+using wxFrame.
+<li><a href="../../samples/docvwmdi">docvwmdi</a>: : demonstrates use of the document view classes,
+using wxMDIParentFrame, wxMDIChildFrame.
+<li><a href="../../samples/dynamic">dynamic</a>: shows how to connect events to member functions
+dynamically.
+<li><a href="../../samples/forty">forty</a>: a great little card game by Chris Breeze. A
+fully-fledged application!
+<li><a href="../../samples/fractal">fractal</a>: fractal mountains by Andrew Davison.
+<li><a href="../../samples/grid">grid</a>: demonstrates the wxGrid class.
+<li><a href="../../samples/help">help</a>: shows how to use wxHelpController.
+<li><a href="../../samples/image">image</a>: shows off the cross-platform wxImage class.
+<li><a href="../../samples/internat">internat</a>: use of wxWindows' internationalization support.
+<li><a href="../../samples/joytest">joytest</a>: tests the wxJoystick class (currently Windows and GTK only).
+<li><a href="../../samples/layout">layout</a>: shows the constraint layout system in action.
+<li><a href="../../samples/listctrl">listctrl</a>: demonstrates the wxListCtrl (implemented natively on
+WIN32, and using a generic version on other platforms).
+<li><a href="../../samples/mdi">mdi</a>: shows off the MDI (Multiple Document Interface) classes. On Windows, the regular MDI
+scheme is used whereby child windows have full sizing and moving rights within the main
+window. On other platforms, tabbed windows are used, where the children are always maximized.
+<li><a href="../../samples/memcheck">memcheck</a>: demonstrates the memory checking/debugging facilities.
+<li><a href="../../samples/mfc">mfc</a>: shows how to use MFC and wxWindows code in the same application (Windows only).
+<li><a href="../../samples/minifram">minifram</a>: demonstrates a frame with a small title bar. On
+platforms that don't support it, a normal-sized title bar is displayed.
+<li><a href="../../samples/minimal">minimal</a>: just shows a frame, a menubar, and a statusbar. About as
+small a wxWindows application as you can get.
+<li><a href="../../samples/nativdlg">nativdlg</a>: shows how wxWindows can load a standard Windows
+dialog resource, translating the controls into wxWindows controls (Windows only).
+<li><a href="../../samples/notebook">notebook</a>: shows the wxNotebook (tabbed window) control.
+<li><a href="../../samples/oleauto">oleauto</a>: a little OLE automation controller (Windows only; requires
+Excel to be present).
+<li><a href="../../samples/ownerdrw">ownerdrw</a>: demonstrates owner-draw menus and controls (Windows only).
+<li><a href="../../samples/png">png</a>: demonstrates PNG loading.
+<li><a href="../../samples/printing">printing</a>: shows printing and previewing.
+<li><a href="../../samples/proplist">proplist</a>: demonstrates the property list classes (a VB-style property editor).
+<li><a href="../../samples/regtest">regtest</a>: tests the low-level Windows registry functions (Windows only).
+<li><a href="../../samples/resource">resource</a>: shows how to use wxWindows resources (.wxr files).
+<li><a href="../../samples/sashtest">sashtest</a>: demonstrates use of the wxSashWindow class to allow
+the user to resize subwindows.
+<li><a href="../../samples/splitter">splitter</a>: demonstrates the wxSplitterWindow class.
+<li><a href="../../samples/tab">tab</a>: demonstrates the generic tab window class. You should
+normally use wxNotebook instead, but the generic code is sometimes useful, for example for
+implementing wxNotebook on platforms with no native support.
+<li><a href="../../samples/taskbar">taskbar</a>: demonstrates the wxTaskBarIcon class, for
+adding icons to the system tray. Windows only, but may eventually be implemented for other desktop
+environments that use this metaphor.
+<li><a href="../../samples/thread">thread</a>: tests the family of classes for doing thread
+programming.
+<li><a href="../../samples/toolbar">toolbar</a>: demonstrates wxToolBar.
+<li><a href="../../samples/treectrl">treectrl</a>: demonstrates wxTreeCtrl.
+<li><a href="../../samples/typetest">typetest</a>: tests various data type classes, including
+wxTime, wxDate and wxVariant.
+<li><a href="../../samples/validate">validate</a>: shows simple use of validation.
+<li><a href="../../samples/wxpoem">wxpoem</a>: a little poetry display program.
+<li><a href="../../samples/wxsocket">wxsocket</a>: demonstrates the TCP/IP family of classes.
+</ul>
+
+<hr>
 
 </font>
 

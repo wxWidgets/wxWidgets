@@ -149,14 +149,5 @@ class WXDLLEXPORT wxDDEClient: public wxClientBase
 void WXDLLEXPORT wxDDEInitialize();
 void WXDLLEXPORT wxDDECleanUp();
 
-// Compatibility
-#if WXWIN_COMPATIBILITY
-#define wxServer wxDDEServer
-#define wxClient wxDDEClient
-#define wxConnection wxDDEConnection
-#define wxIPCInitialize wxDDEInitialize
-#define wxIPCCleanUp wxDDECleanUp
-#endif
-
 #endif
     // _WX_DDE_H_

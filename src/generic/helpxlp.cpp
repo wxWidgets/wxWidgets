@@ -97,7 +97,6 @@ bool wxXLPHelpController::Initialize(const wxString& filename, int server)
 
   helpFile = filename;
   helpServer = server;
-  wxIPCInitialize();
   return TRUE;
 }
 

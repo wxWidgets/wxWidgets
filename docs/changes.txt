@@ -25,7 +25,8 @@ wxMotif:
 General:
 
 - wxBusyCursor class added.
-- More doc improvements.
+- Added samples/dde.
+- More doc improvements, incl. expanding docs/html/index.htm.
 
 Beta 2, January 1999
 --------------------

@@ -188,6 +188,10 @@ wxTCPConnection::wxTCPConnection (void)
 {
 }
 
+wxTCPConnection::wxTCPConnection(char *buffer, int size)
+{
+}
+
 wxTCPConnection::~wxTCPConnection (void)
 {
   wxDELETE(m_sock);
