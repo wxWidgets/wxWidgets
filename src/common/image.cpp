@@ -210,7 +210,14 @@ wxImage wxImage::Scale( int width, int height ) const
 
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
-    wxCHECK_MSG( (width > 0) && (height > 0), image, wxT("invalid image size") );
+    // can't scale to/from 0 size
+    wxCHECK_MSG( (width > 0) && (height > 0), image,
+                 wxT("invalid new image size") );
+
+    long old_height = M_IMGDATA->m_height,
+         old_width  = M_IMGDATA->m_width;
+    wxCHECK_MSG( (old_height > 0) && (old_width > 0), image,
+                 wxT("invalid old image size") );
 
     image.Create( width, height );
 
@@ -219,23 +226,32 @@ wxImage wxImage::Scale( int width, int height ) const
     wxCHECK_MSG( data, image, wxT("unable to create image") );
 
     if (M_IMGDATA->m_hasMask)
-        image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
-
-    long old_height = M_IMGDATA->m_height;
-    long old_width  = M_IMGDATA->m_width;
+    {
+        image.SetMaskColour( M_IMGDATA->m_maskRed,
+                             M_IMGDATA->m_maskGreen,
+                             M_IMGDATA->m_maskBlue );
+    }
 
     char unsigned *source_data = M_IMGDATA->m_data;
     char unsigned *target_data = data;
 
-    for (long j = 0; j < height; j++)
+    // We do (x, y) -> (x, y)*oldSize/newSize but the valid values of x and y
+    // are from 0 to size-1, hence all decrement the sizes
+    long old_old_width = old_width;
+    old_height--;
+    old_width--;
+    height--;
+    width--;
+    for ( long j = 0; j <= height; j++ )
     {
-        long y_offset = (j * old_height / height) * old_width;
+        // don't crash for images with height == 1
+        long y_offset = height ? (j * old_height / height)* old_old_width : 0;
 
-        for (long i = 0; i < width; i++)
+        for ( long i = 0; i <= width; i++ )
         {
-            memcpy( target_data,
-                source_data + 3*(y_offset + ((i * old_width )/ width)),
-                3 );
+            long x_offset = width ? (i * old_width) / width : 0;
+
+            memcpy( target_data, source_data + 3*(y_offset + x_offset), 3 );
             target_data += 3;
         }
     }
