@@ -11,7 +11,7 @@ class TestPanel(wx.Panel):
         box = wx.StaticBox(self, -1, "This is a wx.StaticBox")
         bsizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        t = wx.StaticText(self, -1, "Controls placed \"inside\" the box are really it's siblings")
+        t = wx.StaticText(self, -1, "Controls placed \"inside\" the box are really its siblings")
         bsizer.Add(t, 0, wx.TOP|wx.LEFT, 10)
 
 
