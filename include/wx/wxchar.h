@@ -296,12 +296,17 @@ typedef  _TUCHAR     wxUChar;
 #    ifdef HAVE_WCSTR_H
 #      include <wcstr.h>
 #    else
-       // include wchar.h to get wcslen() declaration used by wx/buffer.h
 #      if defined(HAVE_WCHAR_H)
+
+// include wchar.h to get wcslen() declaration used by wx/buffer.h
 #        include <wchar.h>
+
 #      elif defined(__FreeBSD__) || defined(__DARWIN__)
+
+// include stdlib.h for wchar_t, wcslen is provided in wxchar.cpp
 #        include <stdlib.h>
-#        define wxNEED_WCSLEN
+size_t   WXDLLEXPORT wcslen(const wchar_t *s);
+
 #      endif
 #    endif
 #  endif
