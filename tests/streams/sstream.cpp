@@ -23,9 +23,6 @@
 
 #include "bstream.h"
 
-using namespace std;
-using namespace CppUnit;
-
 ///////////////////////////////////////////////////////////////////////////////
 // The test case
 //
@@ -65,7 +62,7 @@ protected:
 
 private:
     // Implement base class functions.
-    virtual wxStringInputStream  *DoCreateInStream();  
+    virtual wxStringInputStream  *DoCreateInStream();
     virtual wxStringOutputStream *DoCreateOutStream();
 
     wxString m_str;
@@ -85,15 +82,15 @@ strStream::~strStream()
 {
 }
 
-wxStringInputStream *strStream::DoCreateInStream()    
-{ 
+wxStringInputStream *strStream::DoCreateInStream()
+{
     wxStringInputStream *pStrInStream = new wxStringInputStream(m_str);
     CPPUNIT_ASSERT(pStrInStream->IsOk());
     return pStrInStream;
 }
 
 wxStringOutputStream *strStream::DoCreateOutStream()
-{ 
+{
     wxStringOutputStream *pStrOutStream = new wxStringOutputStream();
     CPPUNIT_ASSERT(pStrOutStream->IsOk());
     return pStrOutStream;

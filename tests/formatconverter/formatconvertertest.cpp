@@ -56,9 +56,8 @@
 extern wxString wxConvertFormat(const wxChar *format);
 #endif
 
-using namespace std;
-using namespace CppUnit;
-
+using CppUnit::TestCase;
+using std::string;
 
 ///////////////////////////////////////////////////////////////////////////////
 // The test case

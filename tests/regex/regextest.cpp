@@ -15,19 +15,19 @@
 //
 // To run all the regex tests:
 //  test regex
-// 
+//
 // Some tests must be skipped since they use features which we do not make
 // available through wxRegEx. To see the list of tests that have been skipped
 // turn on verbose logging, e.g.:
 //  test --verbose regex
-// 
+//
 // The tests here are for the builtin library, tests for wxRegEx in general
 // should go in wxregex.cpp
 //
 // The tests are generated from Henry Spencer's reg.test, additional test
 // can be added in wxreg.test. These test files are then turned into a C++
 // include file 'regex.inc' (included below) using a script 'regex.pl'.
-// 
+//
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -43,10 +43,16 @@
 
 #include "wx/regex.h"
 #include "wx/cppunit.h"
-#include <stdexcept>
+#include <string>
+#include <vector>
 
-using namespace std;
-using namespace CppUnit;
+using CppUnit::Test;
+using CppUnit::TestCase;
+using CppUnit::TestSuite;
+using CppUnit::Exception;
+
+using std::vector;
+using std::string;
 
 // many of the tests are specific to the builtin regex lib, so only attempts
 // to do them when using the builtin regex lib.
@@ -135,7 +141,7 @@ RegExTestCase::RegExTestCase(
     }
 
     failIf(badconv, _T("cannot convert to default character encoding"));
-    
+
     // the flags need further parsing...
     parseFlags(m_flags);
 
@@ -148,10 +154,10 @@ int wxWcscmp(const wchar_t* s1, const wchar_t* s2)
 {
     size_t nLen1 = wxWcslen(s1);
     size_t nLen2 = wxWcslen(s2);
-    
+
     if (nLen1 != nLen2)
         return nLen1 - nLen2;
-    
+
     return wxMemcmp(s1, s2, nLen1);
 }
 
@@ -221,7 +227,7 @@ void RegExTestCase::runTest()
         doTest(wxRE_ADVANCED);
 #endif
 }
-    
+
 // Try the test for a single flavour of expression
 //
 void RegExTestCase::doTest(int flavor)
@@ -293,7 +299,7 @@ void RegExTestCase::fail(const wxString& msg) const
 
     for (it = m_expected.begin(); it != m_expected.end(); ++it)
         str << _T(" ") << quote(*it);
-    
+
     if (str.length() > 77)
         str = str.substr(0, 74) + _T("...");
 
@@ -314,7 +320,7 @@ wxString RegExTestCase::quote(const wxString& arg)
     for (size_t i = 0; i < arg.length(); i++) {
         wxUChar ch = arg[i];
         const wxChar *p = wxStrchr(needEscape, ch);
-        
+
         if (p)
             str += wxString::Format(_T("\\%c"), escapes[p - needEscape]);
         else if (wxIscntrl(ch))
@@ -358,7 +364,7 @@ void RegExTestSuite::add(
         expected_results.push_back(expected);
 
     va_end(ap);
-        
+
     try {
         addTest(new RegExTestCase(
             name, mode, id, flags, pattern, data, expected_results));

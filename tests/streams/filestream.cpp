@@ -29,9 +29,6 @@
 
 #include "bstream.h"
 
-using namespace std;
-using namespace CppUnit;
-
 #define DATABUFFER_SIZE     1024
 
 static const wxString FILENAME_FILEINSTREAM = _T("fileinstream.test");
@@ -74,7 +71,7 @@ protected:
 
 private:
     // Implement base class functions.
-    virtual wxFileInputStream  *DoCreateInStream();  
+    virtual wxFileInputStream  *DoCreateInStream();
     virtual wxFileOutputStream *DoCreateOutStream();
     virtual void DoDeleteOutStream();
 
@@ -94,14 +91,14 @@ fileStream::~fileStream()
     ::wxRemoveFile(FILENAME_FILEOUTSTREAM);
 }
 
-wxFileInputStream *fileStream::DoCreateInStream()    
-{ 
+wxFileInputStream *fileStream::DoCreateInStream()
+{
     wxFileInputStream *pFileInStream = new wxFileInputStream(GetInFileName());
     CPPUNIT_ASSERT(pFileInStream->IsOk());
     return pFileInStream;
 }
 wxFileOutputStream *fileStream::DoCreateOutStream()
-{ 
+{
     wxFileOutputStream *pFileOutStream = new wxFileOutputStream(FILENAME_FILEOUTSTREAM);
     CPPUNIT_ASSERT(pFileOutStream->IsOk());
     return pFileOutStream;
@@ -123,7 +120,7 @@ wxString fileStream::GetInFileName() const
         // Make sure we have a input file...
         char buf[DATABUFFER_SIZE];
         wxFileOutputStream out(FILENAME_FILEINSTREAM);
-        
+
         // Init the data buffer.
         for (size_t i = 0; i < DATABUFFER_SIZE; i++)
             buf[i] = (i % 0xFF);

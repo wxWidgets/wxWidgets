@@ -24,8 +24,10 @@
 #include "wx/tokenzr.h"
 #include <string>
 
-using namespace std;
-using namespace CppUnit;
+using CppUnit::Test;
+using CppUnit::TestCase;
+using CppUnit::TestSuite;
+using std::string;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -143,7 +145,7 @@ public:
         m_expected(expected),
         m_count(count),
         m_flags(flags)
-    { }    
+    { }
 
 protected:
     void runTest();

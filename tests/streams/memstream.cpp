@@ -29,9 +29,6 @@
 
 #include "bstream.h"
 
-using namespace std;
-using namespace CppUnit;
-
 #define DATABUFFER_SIZE     256
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,7 +71,7 @@ private:
 
 private:
     // Implement base class functions.
-    virtual wxMemoryInputStream  *DoCreateInStream();  
+    virtual wxMemoryInputStream  *DoCreateInStream();
     virtual wxMemoryOutputStream *DoCreateOutStream();
 
 private:
@@ -98,14 +95,14 @@ const char *memStream::GetDataBuffer()
     return m_DataBuffer;
 }
 
-wxMemoryInputStream *memStream::DoCreateInStream()    
-{ 
+wxMemoryInputStream *memStream::DoCreateInStream()
+{
     wxMemoryInputStream *pMemInStream = new wxMemoryInputStream(GetDataBuffer(), DATABUFFER_SIZE);
     CPPUNIT_ASSERT(pMemInStream->IsOk());
     return pMemInStream;
 }
 wxMemoryOutputStream *memStream::DoCreateOutStream()
-{ 
+{
     wxMemoryOutputStream *pMemOutStream = new wxMemoryOutputStream();
     CPPUNIT_ASSERT(pMemOutStream->IsOk());
     return pMemOutStream;

@@ -11,7 +11,6 @@
 #define _WX_TESTBSTREAM_H__
 
 #include "wx/cppunit.h"
-using namespace CppUnit;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Some macros preventing us from typing too much ;-)
@@ -21,10 +20,10 @@ using namespace CppUnit;
 #define COMPOSE_TEST_NAME(Name) \
     STREAM_TEST_NAME "." #Name
 #define STREAM_REGISTER_SUB_SUITE(Name) \
-    extern Test* Get##Name##Suite(); \
+    extern CppUnit::Test* Get##Name##Suite(); \
     suite->addTest(Get##Name##Suite())
 #define STREAM_IMPLEMENT_SUB_REGISTRATION_ROUTINE(Name) \
-    Test* Get##Name##Suite() { return Name::suite(); }
+    CppUnit::Test* Get##Name##Suite() { return Name::suite(); }
 #define STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(Name) \
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Name, COMPOSE_TEST_NAME(Name) ); \
     STREAM_IMPLEMENT_SUB_REGISTRATION_ROUTINE( Name )
@@ -34,7 +33,7 @@ using namespace CppUnit;
 // Template class that implements a test for all base stream functions.
 //
 
-template <class TStreamIn, class TStreamOut> class BaseStreamTestCase : public TestCase
+template <class TStreamIn, class TStreamOut> class BaseStreamTestCase : public CppUnit::TestCase
 {
 protected:
     typedef BaseStreamTestCase<TStreamIn, TStreamOut> StreamTestCase;

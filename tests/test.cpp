@@ -28,8 +28,15 @@
 #include "wx/cppunit.h"
 #include <iostream>
 
-using namespace std;
-using namespace CppUnit;
+using CppUnit::Test;
+using CppUnit::TestSuite;
+using CppUnit::TestFactoryRegistry;
+using CppUnit::TextUi::TestRunner;
+
+using std::string;
+using std::vector;
+using std::auto_ptr;
+using std::cout;
 
 // The application class
 //
@@ -66,7 +73,7 @@ TestApp::TestApp()
 bool TestApp::OnInit()
 {
     cout << "Test program for wxWidgets\n"
-         << "build: " << WX_BUILD_OPTIONS_SIGNATURE << endl;
+         << "build: " << WX_BUILD_OPTIONS_SIGNATURE << std::endl;
     return wxAppConsole::OnInit();
 };
 
@@ -100,7 +107,7 @@ bool TestApp::OnCmdLineParsed(wxCmdLineParser& parser)
             m_registries.push_back(string(parser.GetParam(i).mb_str()));
     else
         m_registries.push_back("");
- 
+
     m_longlist = parser.Found(_T("longlist"));
     m_list = m_longlist || parser.Found(_T("list"));
 
@@ -112,7 +119,7 @@ bool TestApp::OnCmdLineParsed(wxCmdLineParser& parser)
 //
 int TestApp::OnRun()
 {
-    TextUi::TestRunner runner;
+    TestRunner runner;
 
     for (size_t i = 0; i < m_registries.size(); i++) {
         auto_ptr<Test> test(m_registries[i].empty() ?
@@ -132,16 +139,15 @@ int TestApp::OnRun()
 
 #if wxUSE_LOG
     // Switch off logging unless --verbose
-    wxLog::EnableLogging(wxLog::GetVerbose());
-#endif // wxUSE_LOG
-
-    return m_list || runner.run("", false, true, 
-#if wxUSE_LOG
-        !wxLog::GetVerbose()
+    bool verbose = wxLog::GetVerbose();
+    wxLog::EnableLogging(verbose);
 #else
-        true
-#endif // wxUSE_LOG
-    ) ? EXIT_SUCCESS : EXIT_FAILURE;
+    bool verbose = false;
+#endif
+
+    return ( m_list || runner.run("", false, true, !verbose) )
+           ? EXIT_SUCCESS
+           : EXIT_FAILURE;
 }
 
 // List the tests

@@ -27,7 +27,8 @@
 #include "wx/cppunit.h"
 #include "bstream.h"
 
-using namespace CppUnit;
+using CppUnit::TestSuite;
+using CppUnit::Test;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Streams main test suite, it houses all stream test suites.
@@ -36,8 +37,8 @@ using namespace CppUnit;
 class StreamCase : public TestSuite
 {
 public:
-    StreamCase() 
-        :TestSuite(STREAM_TEST_NAME) 
+    StreamCase()
+        :TestSuite(STREAM_TEST_NAME)
     { /* Nothing extra */ }
     static Test *suite();
 };
@@ -49,14 +50,14 @@ Test *StreamCase::suite()
     /*
      * Register all sub stream test suites.
      */
-    
+
     STREAM_REGISTER_SUB_SUITE(memStream);
     STREAM_REGISTER_SUB_SUITE(strStream);
     STREAM_REGISTER_SUB_SUITE(fileStream);
     STREAM_REGISTER_SUB_SUITE(ffileStream);
     STREAM_REGISTER_SUB_SUITE(zlibStream);
 
-    /* 
+    /*
     ** Add more stream subtests here
     */
 
