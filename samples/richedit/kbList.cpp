@@ -6,6 +6,9 @@
  * $Id$          *
  *                                                                  *
  * $Log$
+ * Revision 1.2  2002/01/16 13:39:50  GT
+ * Added checks for wxUSE_IOSTREAMH to determine which iostream(.h) to use
+ *
  * Revision 1.1  1999/06/07 09:57:12  KB
  * Formerly known as wxLayout.
  *
@@ -291,7 +294,11 @@ kbList::size(void) const // inefficient
 
 #ifdef   KBLIST_TEST
 
-#include   <iostream.h>
+#if wxUSE_IOSTREAMH
+    #include <iostream.h>
+#else
+    #include <iostream>
+#endif
 
 KBLIST_DEFINE(kbListInt,int);
    

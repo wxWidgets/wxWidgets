@@ -20,7 +20,11 @@
 #include <wx/textfile.h>
 #include <wx/image.h>
 
-#include <iostream.h>
+#if wxUSE_IOSTREAMH
+    #include <iostream.h>
+#else
+    #include <iostream>
+#endif
 
 #include   "Micon.xpm"
 

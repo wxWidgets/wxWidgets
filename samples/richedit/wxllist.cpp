@@ -45,7 +45,11 @@
 #endif
 
 #ifndef USE_PCH
-#   include <iostream.h>
+#if wxUSE_IOSTREAMH
+    #include <iostream.h>
+#else
+    #include <iostream>
+#endif
 
 #   include <wx/dc.h>
 #   include <wx/dcps.h>
