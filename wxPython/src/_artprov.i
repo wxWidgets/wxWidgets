@@ -261,6 +261,12 @@ wx.NullBitmap if no provider provides it.", "");
                                 const wxSize& size = wxDefaultSize),
         "Query the providers for icon with given ID and return it.  Return
 wx.NullIcon if no provider provides it.", "");
+
+    DocDeclStr(
+        static wxSize , GetSize(const wxString& client, bool platform_dependent = false),
+        "Get the size of an icon from a specific Art Client, queries the
+topmost provider if platform_dependent = false", "");
+    
     
 
     %extend { void Destroy() { delete self; }}
