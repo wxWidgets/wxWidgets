@@ -1003,9 +1003,11 @@ enum wxDirection
 
 // wxCENTRE                   = 0x0400 (defined above)
 
-// centering into frame rather than screen
-#define wxCENTER_FRAME          0x0004
-
+// centering into frame rather than screen (obsolete)
+#define wxCENTER_FRAME          0x0000
+// centre on screen rather than parent
+#define wxCENTRE_ON_SCREEN      0x0004
+#define wxCENTER_ON_SCREEN      wxCENTRE_ON_SCREEN
 
 // ----------------------------------------------------------------------------
 // Possible SetSize flags

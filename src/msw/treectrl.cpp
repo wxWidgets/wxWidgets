@@ -199,12 +199,16 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     // we emulate the multiple selection tree controls by using checkboxes: set
     // up the image list we need for this if we do have multiple selections
     if ( m_windowStyle & wxTR_MULTIPLE )
-	wstyle |= TVS_CHECKBOXES;
+        wstyle |= TVS_CHECKBOXES;
 #endif
 
     // Create the tree control.
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )
         return FALSE;
+
+    // the treectrl with any other background looks ugly because the items
+    // background is white anyhow
+    SetBackgroundColour(*wxWHITE);
 
     // VZ: this is some experimental code which may be used to get the
     //     TVS_CHECKBOXES style functionality for comctl32.dll < 4.71.

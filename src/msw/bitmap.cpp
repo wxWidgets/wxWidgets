@@ -9,42 +9,60 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "bitmap.h"
+    #pragma implementation "bitmap.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/setup.h"
-#include "wx/list.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/palette.h"
-#include "wx/dcmemory.h"
-#include "wx/bitmap.h"
-#include "wx/icon.h"
+    #include <stdio.h>
+
+    #include "wx/list.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/palette.h"
+    #include "wx/dcmemory.h"
+    #include "wx/bitmap.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/msw/private.h"
 #include "wx/log.h"
 
-#include "assert.h"
-
 #include "wx/msw/dib.h"
 
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
 #if !USE_SHARED_LIBRARIES
-IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
-IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 #endif
 
-wxBitmapRefData::wxBitmapRefData(void)
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxBitmapRefData
+// ----------------------------------------------------------------------------
+
+wxBitmapRefData::wxBitmapRefData()
 {
   m_ok = FALSE;
   m_width = 0;
@@ -57,7 +75,7 @@ wxBitmapRefData::wxBitmapRefData(void)
   m_bitmapMask = NULL;
 }
 
-wxBitmapRefData::~wxBitmapRefData(void)
+wxBitmapRefData::~wxBitmapRefData()
 {
   if (m_selectedInto)
   {
@@ -77,15 +95,44 @@ wxBitmapRefData::~wxBitmapRefData(void)
 
 }
 
+// ----------------------------------------------------------------------------
+// wxBitmap
+// ----------------------------------------------------------------------------
+
 wxList wxBitmap::sm_handlers;
 
-wxBitmap::wxBitmap(void)
+wxBitmap::wxBitmap()
 {
   if ( wxTheBitmapList )
     wxTheBitmapList->AddBitmap(this);
 }
 
-wxBitmap::~wxBitmap(void)
+wxBitmap::wxBitmap(const wxBitmap& bitmap)
+{
+    wxIcon *icon = wxDynamicCast(&bitmap, wxIcon);
+    if ( icon )
+    {
+        HDC hdc = ::CreateCompatibleDC(NULL);   // screen DC
+        HBITMAP hbitmap = ::CreateCompatibleBitmap(hdc,
+                                                   icon->GetWidth(),
+                                                   icon->GetHeight());
+        ::SelectObject(hdc, hbitmap);
+        ::DrawIcon(hdc, 0, 0, (HICON)icon->GetHICON());
+
+        ::DeleteDC(hdc);
+
+        SetHBITMAP((WXHBITMAP)hbitmap);
+    }
+    else
+    {
+        Ref(bitmap);
+    }
+
+    if ( wxTheBitmapList )
+        wxTheBitmapList->AddBitmap(this);
+}
+
+wxBitmap::~wxBitmap()
 {
     if (wxTheBitmapList)
         wxTheBitmapList->DeleteObject(this);
@@ -435,7 +482,7 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
  * wxMask
  */
 
-wxMask::wxMask(void)
+wxMask::wxMask()
 {
     m_maskBitmap = 0;
 }
@@ -463,7 +510,7 @@ wxMask::wxMask(const wxBitmap& bitmap)
   Create(bitmap);
 }
 
-wxMask::~wxMask(void)
+wxMask::~wxMask()
 {
     if ( m_maskBitmap )
         ::DeleteObject((HBITMAP) m_maskBitmap);
@@ -601,7 +648,7 @@ class WXDLLEXPORT wxBMPResourceHandler: public wxBitmapHandler
 {
   DECLARE_DYNAMIC_CLASS(wxBMPResourceHandler)
 public:
-  inline wxBMPResourceHandler(void)
+  inline wxBMPResourceHandler()
   {
   m_name = "Windows bitmap resource";
   m_extension = "";
@@ -644,7 +691,7 @@ class WXDLLEXPORT wxBMPFileHandler: public wxBitmapHandler
 {
   DECLARE_DYNAMIC_CLASS(wxBMPFileHandler)
 public:
-  inline wxBMPFileHandler(void)
+  inline wxBMPFileHandler()
   {
   m_name = "Windows bitmap file";
   m_extension = "bmp";
@@ -697,7 +744,7 @@ bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int WXUN
 #endif
 }
 
-void wxBitmap::CleanUpHandlers(void)
+void wxBitmap::CleanUpHandlers()
 {
   wxNode *node = sm_handlers.First();
   while ( node )
@@ -710,7 +757,7 @@ void wxBitmap::CleanUpHandlers(void)
   }
 }
 
-void wxBitmap::InitStandardHandlers(void)
+void wxBitmap::InitStandardHandlers()
 {
   AddHandler(new wxBMPResourceHandler);
   AddHandler(new wxBMPFileHandler);

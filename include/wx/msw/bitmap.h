@@ -36,7 +36,7 @@ class WXDLLEXPORT wxMask: public wxObject
   DECLARE_DYNAMIC_CLASS(wxMask)
 
 public:
-  wxMask(void);
+  wxMask();
 
   // Construct a mask from a bitmap and a colour indicating
   // the transparent area
@@ -49,7 +49,7 @@ public:
   // Construct a mask from a mono bitmap (copies the bitmap).
   wxMask(const wxBitmap& bitmap);
 
-  ~wxMask(void);
+  ~wxMask();
 
   bool Create(const wxBitmap& bitmap, const wxColour& colour);
   bool Create(const wxBitmap& bitmap, int paletteIndex);
@@ -68,8 +68,8 @@ class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxIcon;
     friend class WXDLLEXPORT wxCursor;
 public:
-    wxBitmapRefData(void);
-    ~wxBitmapRefData(void);
+    wxBitmapRefData();
+    ~wxBitmapRefData();
 
 public:
   int           m_width;
@@ -121,11 +121,10 @@ class WXDLLEXPORT wxBitmap: public wxGDIObject
   friend class WXDLLEXPORT wxBitmapHandler;
 
 public:
-  wxBitmap(void); // Platform-specific
+  wxBitmap(); // Platform-specific
 
   // Copy constructors
-  inline wxBitmap(const wxBitmap& bitmap)
-  { Ref(bitmap); if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this); }
+  wxBitmap(const wxBitmap& bitmap);
 
   // Initialize with raw data
   wxBitmap(const char bits[], int width, int height, int depth = 1);
@@ -141,7 +140,7 @@ public:
 
   // If depth is omitted, will create a bitmap compatible with the display
   wxBitmap(int width, int height, int depth = -1);
-  ~wxBitmap(void);
+  ~wxBitmap();
 
   virtual bool Create(int width, int height, int depth = -1);
   virtual bool Create(void *data, long type, int width, int height, int depth = 1);
@@ -182,8 +181,8 @@ public:
   static wxBitmapHandler *FindHandler(const wxString& extension, long bitmapType);
   static wxBitmapHandler *FindHandler(long bitmapType);
 
-  static void InitStandardHandlers(void);
-  static void CleanUpHandlers(void);
+  static void InitStandardHandlers();
+  static void CleanUpHandlers();
 protected:
   static wxList sm_handlers;
 

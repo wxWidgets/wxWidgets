@@ -591,6 +591,9 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
         HDC cdc = GetHdc();
         HDC memdc = ::CreateCompatibleDC( cdc );
         HBITMAP hbitmap = (HBITMAP) bmp.GetHBITMAP( );
+
+        wxASSERT_MSG( hbitmap, _T("bitmap is ok but HBITMAP is NULL?") );
+
         ::SelectObject( memdc, hbitmap );
         ::BitBlt( cdc, x, y, bmp.GetWidth(), bmp.GetHeight(), memdc, 0, 0, SRCCOPY);
         ::DeleteDC( memdc );

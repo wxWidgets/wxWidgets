@@ -303,14 +303,21 @@ void wxWindowBase::Centre(int direction)
     int widthParent, heightParent;
 
     wxWindow *parent = GetParent();
-    if ( (direction & wxCENTER_FRAME) && parent )
+    if ( !parent )
     {
-        parent->GetClientSize(&widthParent, &heightParent);
+        // no other choice
+        direction |= wxCENTRE_ON_SCREEN;
     }
-    else
+
+    if ( direction & wxCENTRE_ON_SCREEN )
     {
         // centre with respect to the whole screen
         wxDisplaySize(&widthParent, &heightParent);
+    }
+    else
+    {
+        // centre inside the parents rectangle
+        parent->GetClientSize(&widthParent, &heightParent);
     }
 
     int width, height;
@@ -327,8 +334,11 @@ void wxWindowBase::Centre(int direction)
 
     // controls are always centered on their parent because it doesn't make
     // sense to centre them on the screen
-    if ( (direction & wxCENTER_FRAME) || wxDynamicCast(this, wxControl) )
+    if ( !(direction & wxCENTRE_ON_SCREEN) || wxDynamicCast(this, wxControl) )
     {
+        // theo nly chance to get this is to have a wxControl without parent
+        wxCHECK_RET( parent, _T("a control must have a parent") );
+
         // adjust to the parents client area origin
         wxPoint posParent = parent->ClientToScreen(wxPoint(0, 0));
 
