@@ -201,23 +201,57 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 RgnHandle updateRgn = NULL ;
                 RgnHandle allocatedRgn = NULL ;
                 wxRegion visRegion = thisWindow->MacGetVisibleRegion() ;
+                Rect controlBounds ;
+                if ( thisWindow->GetPeer()->IsCompositing() == false )
+                {
+                    if ( thisWindow->GetPeer()->IsRootControl() == false )
+                    {
+                        GetControlBounds( thisWindow->GetPeer()->GetControlRef() , &controlBounds ) ;
+                    }
+                    else
+                    {
+                        thisWindow->GetPeer()->GetRect( &controlBounds ) ;
+                    }
+                }
+                
                 if ( cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr )
                 {
                     updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
                 }
                 else
                 {
-                    if ( thisWindow->MacGetLeftBorderSize() != 0 || thisWindow->MacGetTopBorderSize() != 0 )
+                    if ( thisWindow->GetPeer()->IsCompositing() == false )
                     {
-                        // as this update region is in native window locals we must adapt it to wx window local
+                        if ( thisWindow->GetPeer()->IsRootControl() == false )
+                        {
+                            GetControlBounds( thisWindow->GetPeer()->GetControlRef() , &controlBounds ) ;
+                        }
+                        else
+                        {
+                            thisWindow->GetPeer()->GetRect( &controlBounds ) ;
+                        }
                         allocatedRgn = NewRgn() ;
                         CopyRgn( updateRgn , allocatedRgn ) ;
+                        OffsetRgn( allocatedRgn , -controlBounds.left , -controlBounds.top ) ;
                         // hide the given region by the new region that must be shifted
                         wxMacNativeToWindow( thisWindow , allocatedRgn ) ;
-                        updateRgn = allocatedRgn ;
+                        updateRgn = allocatedRgn ;                            
+                    }
+                    else
+                    {
+                        if ( thisWindow->MacGetLeftBorderSize() != 0 || thisWindow->MacGetTopBorderSize() != 0 )
+                        {
+                            // as this update region is in native window locals we must adapt it to wx window local
+                            allocatedRgn = NewRgn() ;
+                            CopyRgn( updateRgn , allocatedRgn ) ;
+                            // hide the given region by the new region that must be shifted
+                            wxMacNativeToWindow( thisWindow , allocatedRgn ) ;
+                            updateRgn = allocatedRgn ;
+                        }
                     }
                 }
-
+                Rect rgnBounds ;
+                GetRegionBounds( updateRgn , &rgnBounds ) ;
 #if wxMAC_DEBUG_REDRAW
                 if ( thisWindow->MacIsUserPane() )
                 {
@@ -241,14 +275,52 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #endif
                 {
 #if wxMAC_USE_CORE_GRAPHICS
-                    CGContextRef cgContext = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef) ;
+                    bool created = false ;
+                    CGContextRef cgContext = 0 ;
+                    if ( cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, &cgContext) != noErr )
+                    {
+                        wxASSERT( thisWindow->GetPeer()->IsCompositing() == false ) ;
+                        
+                        // this parameter is not provided on non-composited windows
+                        created = true ;
+                        // rest of the code expects this to be already transformed and clipped for local 
+                        CGrafPtr port = GetWindowPort( (WindowRef) thisWindow->MacGetTopLevelWindowRef() ) ;
+                        Rect bounds ;
+                        GetPortBounds( port , &bounds ) ;
+                        CreateCGContextForPort( port , &cgContext ) ;
+
+                        wxMacWindowToNative( thisWindow , updateRgn ) ;
+                        OffsetRgn( updateRgn , controlBounds.left , controlBounds.top ) ;
+                        ClipCGContextToRegion( cgContext , &bounds , updateRgn ) ;
+                        wxMacNativeToWindow( thisWindow , updateRgn ) ;
+                        OffsetRgn( updateRgn , -controlBounds.left , -controlBounds.top ) ;
+
+                        CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
+                        CGContextScaleCTM( cgContext , 1 , -1 ) ;
+                        
+                        CGContextTranslateCTM( cgContext , controlBounds.left , controlBounds.top ) ;
+                        
+                        /*
+                        CGContextSetRGBFillColor( cgContext , 1.0 , 1.0 , 1.0 , 1.0 ) ;
+                        CGContextFillRect(cgContext , CGRectMake( 0 , 0 , 
+                            controlBounds.right - controlBounds.left , 
+                            controlBounds.bottom - controlBounds.top ) );
+                        */
+
+                    }
                     thisWindow->MacSetCGContextRef( cgContext ) ;
-                    wxMacCGContextStateSaver sg( cgContext ) ;
+                    {
+                        wxMacCGContextStateSaver sg( cgContext ) ;
 #endif
-                    if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
-                        result = noErr ;
+                        if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
+                            result = noErr ;
 #if wxMAC_USE_CORE_GRAPHICS
-                    thisWindow->MacSetCGContextRef( NULL ) ;
+                        thisWindow->MacSetCGContextRef( NULL ) ;
+                    }
+                    if ( created )
+                    {
+                        CGContextRelease( cgContext ) ;
+                    }
 #endif
                 }
                 if ( allocatedRgn )
