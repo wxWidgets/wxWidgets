@@ -909,10 +909,10 @@ void wxWindowMac::MacGetPositionAndSizeFromControl(int& x, int& y,
     {
         Point tlworigin =  { 0 , 0  } ;
         GrafPtr port ;
-        ::GetPort( &port ) ;
-        ::SetPort( UMAGetWindowPort( (WindowRef) tlw->MacGetWindowRef() ) ) ;
+        bool swapped = QDSwapPort( UMAGetWindowPort( (WindowRef) tlw->MacGetWindowRef() ) , &port ) ;
         ::LocalToGlobal( &tlworigin ) ;
-        ::SetPort( port ) ;
+        if ( swapped )
+            ::SetPort( port ) ;
         x = tlworigin.h ;
         y = tlworigin.v ;    
     }

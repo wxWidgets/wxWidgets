@@ -79,8 +79,7 @@ public :
     wxMacFastPortSetter( const wxDC *dc ) 
     {
 	    wxASSERT( dc->Ok() ) ;
-	    GetPort( &m_oldPort ) ;
-	    SetPort( (GrafPtr) dc->m_macPort ) ;
+	    m_swapped = QDSwapPort( (GrafPtr) dc->m_macPort , &m_oldPort ) ;
 	    m_clipRgn = NewRgn() ;
 	    GetClip( m_clipRgn ) ;
 	    m_dc = dc ;
@@ -88,13 +87,15 @@ public :
     }
     ~wxMacFastPortSetter()
     {
-        SetPort( (GrafPtr) m_dc->m_macPort ) ;
+        // SetPort( (GrafPtr) m_dc->m_macPort ) ;
         SetClip( m_clipRgn ) ;
-	    SetPort( m_oldPort ) ;
+        if ( m_swapped )
+	        SetPort( m_oldPort ) ;
 	    m_dc->MacCleanupPort( NULL ) ;
 	    DisposeRgn( m_clipRgn ) ;
     }
 private :
+    bool m_swapped ;
     RgnHandle m_clipRgn ;
     GrafPtr m_oldPort ;
     const wxDC*   m_dc ;
