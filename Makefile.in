@@ -556,6 +556,7 @@ ALL_DIST: distclean
 	cp $(REGEXDIR)/*.ih $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.c $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/Makefile $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/makefile.* $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/README $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/WHATSNEW $(DISTDIR)/src/regex
