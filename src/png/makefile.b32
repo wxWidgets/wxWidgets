@@ -11,72 +11,10 @@
 
 # WXWIN and BCCDIR are set by parent make
 
-WXDIR = $(WXWIN)
-!include $(WXDIR)\src\makeb32.env
-
-WINPNGLIB = ..\..\lib\winpng.lib
-
-WXLIBDIR = $(WXDIR)\lib
-WXINC = $(WXDIR)\include\msw
-WXLIB = $(WXLIBDIR)\wx32.lib 
-
-!if "$(FINAL)" == "0"
-OPT = -Od
-DEBUG_FLAGS= -v
-!else
-OPT = -Od
-DEBUG_FLAGS =
-!endif
-CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
+LIBTARGET =..\..\lib\winpng.lib
 
 OBJECTS = png.obj pngread.obj pngrtran.obj pngrutil.obj \
- pngpread.obj pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj \
- pngerror.obj pngmem.obj pngwio.obj pngrio.obj pngget.obj pngset.obj
+          pngpread.obj pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj \
+          pngerror.obj pngmem.obj pngwio.obj pngrio.obj pngget.obj pngset.obj
 
-all: $(WINPNGLIB)
-
-$(WINPNGLIB): $(OBJECTS) 
-        -erase $(WINPNGLIB)
-	tlib $(WINPNGLIB) /P512 @&&!
--+$(OBJECTS:.obj =.obj -+) 
-!
-
-.$(SRCSUFF).obj:
-	bcc32 $(CPPFLAGS) -c {$< }
-
-.c.obj:
-	bcc32 $(CPPFLAGS) -P- -c {$< }
-
-$(CFG): makefile.b32
-	copy &&!
--3
--P
--d
--w-hid
--w-par
--w-pia
--w-aus
--w-rch
--Oxt
--WE
-
--I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/zlib
--I$(WXDIR)\include\wx\msw\gnuwin32
-
--L$(BCCDIR)\lib
--D__WXWIN__
--D__WXMSW__
--D__WINDOWS__
--DWIN32
-$(OPT)
-$(DEBUG_FLAGS)
-$(WIN95FLAG)
-! $(CFG)
-
-clean:
-        -erase *.obj
-        -erase *.exe
-        -erase *.res
-        -erase *.map
-        -erase *.rws
-
+!include $(WXWIN)\src\makelib.b32

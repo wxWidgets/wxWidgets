@@ -13,97 +13,12 @@
 # See zconf.h for details about the memory requirements.
 
 # ------------- Borland C++ -------------
-MODEL=-WX 
-CFLAGS= $(MODEL) -P-C -K -N- -k- -d -3 -r- -v- -f -DMSDOS
-CC=bcc32
-LD=bcc32
-LIB=tlib
-LDFLAGS= $(MODEL)
-O=.obj
 
 LIBTARGET=..\..\lib\zlib.lib
 
-# variables
-OBJ1 = adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) \
-  trees$(O)
-OBJP1 = adler32$(O)+compress$(O)+crc32$(O)+gzio$(O)+uncompr$(O)+deflate$(O)+\
-  trees$(O)
-OBJ2 = zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) \
-  infutil$(O) inffast$(O)
-OBJP2 = zutil$(O)+inflate$(O)+infblock$(O)+inftrees$(O)+infcodes$(O)+\
-  infutil$(O)+inffast$(O)
+OBJECTS = adler32.obj compress.obj crc32.obj gzio.obj uncompr.obj deflate.obj \
+          trees.obj zutil.obj inflate.obj infblock.obj inftrees.obj infcodes.obj \
+          infutil.obj inffast.obj
 
-all: test
+!include $(WXWIN)\src\makelib.b32
 
-adler32.obj: adler32.c zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-compress.obj: compress.c zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-crc32.obj: crc32.c zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-deflate.obj: deflate.c deflate.h zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-gzio.obj: gzio.c zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-infblock.obj: infblock.c zutil.h zlib.h zconf.h infblock.h inftrees.h\
-   infcodes.h infutil.h
-	$(CC) -c $(CFLAGS) $*.c
-
-infcodes.obj: infcodes.c zutil.h zlib.h zconf.h inftrees.h infutil.h\
-   infcodes.h inffast.h
-	$(CC) -c $(CFLAGS) $*.c
-
-inflate.obj: inflate.c zutil.h zlib.h zconf.h infblock.h
-	$(CC) -c $(CFLAGS) $*.c
-
-inftrees.obj: inftrees.c zutil.h zlib.h zconf.h inftrees.h
-	$(CC) -c $(CFLAGS) $*.c
-
-infutil.obj: infutil.c zutil.h zlib.h zconf.h inftrees.h infutil.h
-	$(CC) -c $(CFLAGS) $*.c
-
-inffast.obj: inffast.c zutil.h zlib.h zconf.h inftrees.h infutil.h inffast.h
-	$(CC) -c $(CFLAGS) $*.c
-
-trees.obj: trees.c deflate.h zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-uncompr.obj: uncompr.c zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-zutil.obj: zutil.c zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-example.obj: example.c zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-minigzip.obj: minigzip.c zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
-
-lib:    $(LIBTARGET)
-
-# we must cut the command line to fit in the MS/DOS 128 byte limit:
-$(LIBTARGET): $(OBJ1) $(OBJ2)
-	del $(LIBTARGET)
-	$(LIB) $(LIBTARGET) +$(OBJP1)
-	$(LIB) $(LIBTARGET) +$(OBJP2)
-
-example.exe: example.obj $(LIBTARGET)
-	$(LD) $(LDFLAGS) example.obj $(LIBTARGET)
-
-minigzip.exe: minigzip.obj $(LIBTARGET)
-	$(LD) $(LDFLAGS) minigzip.obj $(LIBTARGET)
-
-test: example.exe minigzip.exe
-	example
-	echo hello world | minigzip | minigzip -d 
-
-clean:
-	-erase *.obj
-	-erase *.exe
-   -erase $(LIBTARGET)
