@@ -13,5 +13,5 @@ automatically and add them to the list.  The zip file just needs to
 contain a .hhp file that defines the contents of the book.  See the
 docs on wxHtmlHelpController for details.
 
-If you'd still ike to view these docs in your regular browser you can
+If you'd still like to view these docs in your regular browser you can
 simply unzip each of the books into their own directory.
