@@ -323,9 +323,6 @@ private:
     // this filter is used when no filter is able to read some file
     static wxHtmlFilter *m_DefaultFilter;
 
-    static wxCursor *s_cur_hand;
-    static wxCursor *s_cur_arrow;
-
     wxHtmlHistoryArray *m_History;
     // browser history
     int m_HistoryPos;

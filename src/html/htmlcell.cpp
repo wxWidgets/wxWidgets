@@ -30,7 +30,17 @@
 #include "wx/html/htmlcell.h"
 #include "wx/html/htmlwin.h"
 #include "wx/settings.h"
+#include "wx/module.h"
+
 #include <stdlib.h>
+
+//-----------------------------------------------------------------------------
+// Global variables
+//-----------------------------------------------------------------------------
+
+static wxCursor *gs_cursorLink = NULL;
+static wxCursor *gs_cursorText = NULL;
+
 
 //-----------------------------------------------------------------------------
 // Helper classes
@@ -105,6 +115,18 @@ void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
 }
 
 
+wxCursor wxHtmlCell::GetCursor() const
+{
+    if ( GetLink() )
+    {
+        if ( !gs_cursorLink )
+            gs_cursorLink = new wxCursor(wxCURSOR_HAND);
+        return *gs_cursorLink;
+    }
+    else
+        return *wxSTANDARD_CURSOR;
+}
+
 
 bool wxHtmlCell::AdjustPagebreak(int *pagebreak, int* WXUNUSED(known_pagebreaks), int WXUNUSED(number_of_pages)) const
 {
@@ -127,7 +149,6 @@ void wxHtmlCell::SetLink(const wxHtmlLinkInfo& link)
     if (link.GetHref() != wxEmptyString)
         m_Link = new wxHtmlLinkInfo(link);
 }
-
 
 
 void wxHtmlCell::Layout(int WXUNUSED(w))
@@ -425,6 +446,18 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
     }
     else
         return m_Word;
+}
+
+wxCursor wxHtmlWordCell::GetCursor() const
+{
+    if ( !GetLink() )
+    {
+        if ( !gs_cursorText )
+            gs_cursorText = new wxCursor(wxCURSOR_IBEAM);
+        return *gs_cursorText;
+    }
+    else
+        return wxHtmlCell::GetCursor();
 }
 
 
@@ -1166,5 +1199,30 @@ const wxHtmlCell* wxHtmlTerminalCellsInterator::operator++()
     
     return m_pos;
 }
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------
+// Cleanup
+//-----------------------------------------------------------------------------
+
+class wxHtmlCellModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxHtmlCellModule)
+public:
+    wxHtmlCellModule() : wxModule() {}
+    bool OnInit() { return true; }
+    void OnExit()
+    {
+        wxDELETE(gs_cursorLink);
+        wxDELETE(gs_cursorText);
+    }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxHtmlCellModule, wxModule)
 
 #endif

@@ -184,6 +184,9 @@ public:
                                     int WXUNUSED(y) = 0) const
         { return m_Link; }
 
+    // Returns cursor to be used when mouse is over the cell:
+    virtual wxCursor GetCursor() const;
+
     // return next cell among parent's cells
     wxHtmlCell *GetNext() const {return m_Next;}
     // returns first child cell (if there are any, i.e. if this is container):
@@ -329,6 +332,7 @@ public:
     wxHtmlWordCell(const wxString& word, wxDC& dc);
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
               wxHtmlRenderingInfo& info);
+    wxCursor GetCursor() const;
     wxString ConvertToText(wxHtmlSelection *sel) const;
 
 protected:
