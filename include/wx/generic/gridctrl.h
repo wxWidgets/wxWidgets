@@ -16,6 +16,8 @@
     #pragma interface "gridctrl.h"
 #endif
 
+#if wxUSE_GRID || wxUSE_NEW_GRID
+
 #include "wx/grid.h"
 #include "wx/string.h"
 #include "wx/datetime.h"
@@ -145,6 +147,8 @@ private:
                                 int row, int col);
 
 };
+
+#endif  // #if wxUSE_GRID || wxUSE_NEW_GRID
 
 #endif //_WX_GENERIC_GRIDCTRL_H_
 

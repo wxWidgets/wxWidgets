@@ -19,6 +19,9 @@
     #pragma hdrstop
 #endif
 
+
+#if wxUSE_GRID || wxUSE_NEW_GRID 
+
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
     #include "wx/dc.h"
@@ -386,3 +389,4 @@ wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
     return wxSize(width,height);
 }
 
+#endif
