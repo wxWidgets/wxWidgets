@@ -1415,7 +1415,16 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         case WM_QUERYENDSESSION:
         {
             // Same as WM_CLOSE, but inverted results. Thx Microsoft :-)
-            return MSWOnClose();
+//            return MSWOnClose();
+
+            return MSWOnQueryEndSession(lParam);
+            break;
+        }
+        case WM_ENDSESSION:
+        {
+            // Same as WM_CLOSE, but inverted results. Thx Microsoft :-)
+            MSWOnEndSession((wParam != 0), lParam);
+            return 0L;
             break;
         }
         case WM_CLOSE:
@@ -1581,6 +1590,38 @@ bool wxWindow::MSWOnClose(void)
   wxDebugMsg("wxWindow::MSWOnClose %d\n", handle);
 #endif
   return FALSE;
+}
+
+// Return TRUE to end session, FALSE to veto end session.
+bool wxWindow::MSWOnQueryEndSession(long logOff)
+{
+    wxCloseEvent event(wxEVT_QUERY_END_SESSION, -1);
+    event.SetEventObject(wxTheApp);
+    event.SetCanVeto(TRUE);
+    event.SetLoggingOff( (logOff == ENDSESSION_LOGOFF) );
+    if ((this == wxTheApp->GetTopWindow()) && // Only send once
+         wxTheApp->ProcessEvent(event) && event.GetVeto())
+    {
+        return FALSE; // Veto!
+    }
+    else
+    {
+        return TRUE; // Don't veto
+    }
+}
+
+bool wxWindow::MSWOnEndSession(bool endSession, long logOff)
+{
+    wxCloseEvent event(wxEVT_END_SESSION, -1);
+    event.SetEventObject(wxTheApp);
+    event.SetCanVeto(FALSE);
+    event.SetLoggingOff( (logOff == ENDSESSION_LOGOFF) );
+    if (endSession &&                         // No need to send if the session isn't ending
+        (this == wxTheApp->GetTopWindow()) && // Only send once
+         wxTheApp->ProcessEvent(event))
+    {
+    }
+    return TRUE;
 }
 
 bool wxWindow::MSWOnDestroy(void)
@@ -4102,32 +4143,12 @@ void wxWindow::GetPositionConstraint(int *x, int *y) const
 
 bool wxWindow::Close(bool force)
 {
-  // Let's generalise it to work the same for any window.
-/*
-  if (!IsKindOf(CLASSINFO(wxDialog)) && !IsKindOf(CLASSINFO(wxFrame)))
-  {
-    this->Destroy();
-    return TRUE;
-  }
-*/
-
   wxCloseEvent event(wxEVT_CLOSE_WINDOW, m_windowId);
   event.SetEventObject(this);
   event.SetForce(force);
+  event.SetCanVeto(!force);
 
-  return GetEventHandler()->ProcessEvent(event);
-
-/*
-  if ( !force && event.GetVeto() )
-    return FALSE;
-
-  Show(FALSE);
-
-  if (!wxPendingDelete.Member(this))
-    wxPendingDelete.Append(this);
-
-  return TRUE;
-*/
+  return (GetEventHandler()->ProcessEvent(event) && !event.GetVeto());
 }
 
 wxObject* wxWindow::GetChild(int number) const

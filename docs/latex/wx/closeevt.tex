@@ -13,13 +13,20 @@ functions that take a wxCloseEvent argument.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_CLOSE(func)}}{Process a close event, supplying the member function.}
+\twocolitem{{\bf EVT\_CLOSE(func)}}{Process a close event, supplying the member function. This
+event applies to wxFrame and wxDialog classes.}
+\twocolitem{{\bf EVT\_QUERY\_END\_SESSION(func)}}{Process a query end session event, supplying the member function.
+This event applies to wxApp only.}
+\twocolitem{{\bf EVT\__END\_SESSION(func)}}{Process an end session event, supplying the member function.
+This event applies to wxApp only.}
 \end{twocollist}%
 
 \wxheading{See also}
 
 \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
 \helpref{wxWindow::Close}{wxwindowclose},\rtfsp
+\helpref{wxApp::OnQueryEndSession}{wxappqueryendsession},\rtfsp
+\helpref{wxApp::OnEndSession}{wxappendsession},\rtfsp
 \helpref{Window deletion overview}{windowdeletionoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -29,6 +36,14 @@ functions that take a wxCloseEvent argument.
 \func{}{wxCloseEvent}{\param{WXTYPE}{ commandEventType = 0}, \param{int}{ id = 0}}
 
 Constructor.
+
+\membersection{wxCloseEvent::CanVeto}\label{wxcloseeventcanveto}
+
+\func{bool}{CanVeto}{\void}
+
+Returns TRUE if you can veto a system shutdown or a window close event.
+Vetoing a window close event is not possible if the calling code wishes to
+force the application to exit, and so this function must be called to check this.
 
 \membersection{wxCloseEvent::GetLoggingOff}\label{wxcloseeventgetloggingoff}
 
@@ -44,14 +59,37 @@ Returns TRUE if the session is ending.
 
 \membersection{wxCloseEvent::GetForce}\label{wxcloseeventgetforce}
 
-\constfunc{void}{GetForce}{\void}
+\constfunc{bool}{GetForce}{\void}
 
 Returns TRUE if the application wishes to force the window to close.
+This will shortly be obsolete, replaced by CanVeto.
+
+\membersection{wxCloseEvent::SetCanVeto}\label{wxcloseeventsetcanveto}
+
+\func{void}{SetCanVeto}{\param{bool}{ canVeto}}
+
+Sets the 'can veto' flag.
+
+\membersection{wxCloseEvent::SetForce}\label{wxcloseeventsetforce}
+
+\constfunc{void}{SetForce}{\param{bool}{ force}}
+
+Sets the 'force' flag.
+
+\membersection{wxCloseEvent::SetLoggingOff}\label{wxcloseeventsetloggingoff}
+
+\constfunc{void}{SetLoggingOff}{\param{bool}{ loggingOff}}
+
+Sets the 'logging off' flag.
 
 \membersection{wxCloseEvent::Veto}\label{wxcloseeventveto}
 
-\func{void}{Veto}{\void}
+\func{void}{Veto}{\param{bool}{ veto = TRUE}}
 
-Call this from your event handler to veto a system shutdown.
+Call this from your event handler to veto a system shutdown or to signal
+to the calling application that a window close did not happen.
+
+You can only veto a shutdown if \helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto} returns
+TRUE.
 
 

@@ -1313,6 +1313,7 @@ void wxDocManager::ActivateView(wxView *view, bool activate, bool WXUNUSED(delet
 
 BEGIN_EVENT_TABLE(wxDocChildFrame, wxFrame)
     EVT_ACTIVATE(wxDocChildFrame::OnActivate)
+    EVT_CLOSE(wxDocChildFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 wxDocChildFrame::wxDocChildFrame(wxDocument *doc, wxView *view, wxFrame *frame, wxWindowID id, const wxString& title,
@@ -1355,24 +1356,30 @@ void wxDocChildFrame::OnActivate(wxActivateEvent& event)
     m_childView->Activate(event.GetActive());
 }
 
-bool wxDocChildFrame::OnClose(void)
+void wxDocChildFrame::OnCloseWindow(wxCloseEvent& event)
 {
-  // Close view but don't delete the frame while doing so!
-  // ...since it will be deleted by wxWindows if we return TRUE.
   if (m_childView)
   {
-    bool ans = m_childView->Close(FALSE); // FALSE means don't delete associated window
+    bool ans = FALSE;
+    if (!event.CanVeto())
+      ans = TRUE; // Must delete.
+    else
+      ans = m_childView->Close(FALSE); // FALSE means don't delete associated window
+
     if (ans)
     {
       m_childView->Activate(FALSE);
       delete m_childView;
       m_childView = (wxView *) NULL;
       m_childDocument = (wxDocument *) NULL;
+
+      this->Destroy();
     }
-    
-    return ans;
+    else
+      event.Veto();
   }
-  else return TRUE;
+  else
+    event.Veto();
 }
 
 /*
@@ -1382,6 +1389,7 @@ bool wxDocChildFrame::OnClose(void)
 BEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
     EVT_MENU(wxID_EXIT, wxDocParentFrame::OnExit)
     EVT_MENU_RANGE(wxID_FILE1, wxID_FILE9, wxDocParentFrame::OnMRUFile)
+    EVT_CLOSE(wxDocParentFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 wxDocParentFrame::wxDocParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,
@@ -1415,9 +1423,14 @@ bool wxDocParentFrame::ProcessEvent(wxEvent& event)
 
 // Define the behaviour for the frame closing
 // - must delete all frames except for the main one.
-bool wxDocParentFrame::OnClose(void)
+void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
 {
-  return m_docManager->Clear(FALSE);
+  if (m_docManager->Clear(!event.CanVeto()))
+  {
+    this->Destroy();
+  }
+  else
+    event.Veto();
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE

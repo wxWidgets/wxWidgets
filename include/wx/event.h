@@ -680,22 +680,27 @@ class WXDLLEXPORT wxCloseEvent: public wxEvent
 public:
 
   inline wxCloseEvent(wxEventType type = wxEVT_NULL, int id = 0)
-     { m_eventType = type; m_sessionEnding = TRUE; m_loggingOff = TRUE; m_veto = FALSE;
-       m_id = id; m_force = FALSE; }
+     { m_eventType = type; m_loggingOff = TRUE; m_veto = FALSE;
+       m_id = id; m_force = FALSE; m_canVeto = FALSE; }
 
-  inline bool GetSessionEnding(void) const { return m_sessionEnding; }
+  inline void SetLoggingOff(bool logOff) { m_loggingOff = logOff; }
   inline bool GetLoggingOff(void) const { return m_loggingOff; }
   inline void Veto(bool veto = TRUE) { m_veto = veto; }
+  inline void SetCanVeto(bool canVeto) { m_canVeto = canVeto; }
+  inline bool CanVeto() const { return m_canVeto; }
   inline bool GetVeto(void) const { return m_veto; }
+
+  // This is probably obsolete now, since we use CanVeto instead, in
+  // both OnCloseWindow and OnQueryEndSession.
+  // m_force == ! m_canVeto i.e., can't veto means we must force it to close.
   inline void SetForce(bool force) { m_force = force; }
   inline bool GetForce(void) const { return m_force; }
 
  protected:
-  bool m_sessionEnding;
   bool m_loggingOff;
   bool m_veto;
   bool m_force;
-
+  bool m_canVeto;
 };
 
 /*
@@ -1121,6 +1126,8 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_SIZE(func)  { wxEVT_SIZE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) & func, (wxObject *) NULL },
 #define EVT_MOVE(func)  { wxEVT_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMoveEventFunction) & func, (wxObject *) NULL },
 #define EVT_CLOSE(func)  { wxEVT_CLOSE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL },
+#define EVT_END_SESSION(func)  { wxEVT_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL },
+#define EVT_QUERY_END_SESSION(func)  { wxEVT_QUERY_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL },
 #define EVT_PAINT(func)  { wxEVT_PAINT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaintEventFunction) & func, (wxObject *) NULL },
 #define EVT_ERASE_BACKGROUND(func)  { wxEVT_ERASE_BACKGROUND, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxEraseEventFunction) & func, (wxObject *) NULL },
 #define EVT_CHAR(func)  { wxEVT_CHAR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL },

@@ -185,6 +185,60 @@ Applies to managed windows (wxFrame and wxDialog classes) only.
 \helpref{wxWindow::Destroy}{wxwindowdestroy},\rtfsp
 \helpref{wxCloseEvent}{wxcloseevent}
 
+\membersection{wxWindow::ConvertDialogToPixels}\label{wxwindowconvertdialogtopixels}
+
+\func{wxPoint}{ConvertDialogToPixels}{\param{const wxPoint\&}{ pt}}
+
+\func{wxSize}{ConvertDialogToPixels}{\param{const wxSize\&}{ sz}}
+
+Converts a point or size from dialog units to pixels.
+
+For the x dimension, the dialog units are multiplied by the average character width
+and then divided by 4.
+
+For the y dimension, the dialog units are multiplied by the average character height
+and then divided by 8.
+
+\wxheading{Remarks}
+
+Dialog units are used for maintaining a dialog's proportions even if the font changes.
+Dialogs created using Dialog Editor optionally use dialog units.
+
+You can also use these functions programmatically. A convenience macro is defined:
+
+{\small
+\begin{verbatim}
+#define wxDLG_UNIT(parent, pt) parent->ConvertDialogToPixels(pt)
+\end{verbatim}
+}
+
+\wxheading{See also}
+
+\helpref{wxWindow::ConvertPixelsToDialog}{wxwindowconvertpixelstodialog}
+
+\membersection{wxWindow::ConvertPixelsToDialog}\label{wxwindowconvertpixelstodialog}
+
+\func{wxPoint}{ConvertPixelsToDialog}{\param{const wxPoint\&}{ pt}}
+
+\func{wxSize}{ConvertPixelsToDialog}{\param{const wxSize\&}{ sz}}
+
+Converts a point or size from pixels to dialog units.
+
+For the x dimension, the pixels are multiplied by 4 and then divided by the average
+character width.
+
+For the y dimension, the pixels are multipled by 8 and then divided by the average
+character height.
+
+\wxheading{Remarks}
+
+Dialog units are used for maintaining a dialog's proportions even if the font changes.
+Dialogs created using Dialog Editor optionally use dialog units.
+
+\wxheading{See also}
+
+\helpref{wxWindow::ConvertDialogToPixels}{wxwindowconvertdialogtopixels}
+
 \membersection{wxWindow::Destroy}\label{wxwindowdestroy}
 
 \func{virtual bool}{Destroy}{\void}
@@ -811,7 +865,7 @@ you may delete other windows.
 
 \wxheading{Remarks}
 
-Derive your own class to handle this message. The default handler returns FALSE.
+Derive your own class to handle this message. The default handler returns TRUE.
 
 \wxheading{See also}
 
@@ -836,6 +890,14 @@ using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}. If this is TRUE,
 destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
 If not, it is up to you whether you respond by destroying the window.
 
+(Note: GetForce is now superceded by CanVeto. So to test whether forced destruction of
+the window is required, test for the negative of CanVeto. If CanVeto returns FALSE,
+it is not possible to skip window deletion.)
+
+If you don't destroy the window, you should call \helpref{wxCloseEvent::Veto}{wxcloseeventveto} to
+let the calling code know that you did not destroy the window. This allows the \helpref{wxWindow::Close}{wxwindowclose} function
+to return TRUE or FALSE depending on whether the close instruction was honoured or not.
+
 \wxheading{Remarks}
 
 The \helpref{wxWindow::OnClose}{wxwindowonclose} virtual function remains
@@ -849,7 +911,9 @@ destroying the window if it returns TRUE or if the close is being forced.
 \helpref{wxWindow::Close}{wxwindowclose},\rtfsp
 \helpref{wxWindow::OnClose}{wxwindowonclose},\rtfsp
 \helpref{wxWindow::Destroy}{wxwindowdestroy},\rtfsp
-\helpref{wxCloseEvent}{wxcloseevent}
+\helpref{wxCloseEvent}{wxcloseevent},\rtfsp
+\helpref{wxApp::OnQueryEndSession}{wxapponqueryendsession},\rtfsp
+\helpref{wxApp::OnEndSession}{wxapponendsession}
 
 \membersection{wxWindow::OnDropFiles}\label{wxwindowondropfiles}
 
@@ -1123,8 +1187,6 @@ void MyWindow::OnPaint(wxPaintEvent& event)
 \helpref{wxPaintEvent}{wxpaintevent},\rtfsp
 \helpref{wxPaintDC}{wxpaintdc},\rtfsp
 \helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnScroll}\label{wxwindowonscroll}
 
 \func{void}{OnScroll}{\param{wxScrollEvent\& }{event}}
 

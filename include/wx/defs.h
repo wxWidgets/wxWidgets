@@ -850,7 +850,7 @@ enum {
 #define wxID_HIGHEST            5999
 
 // Shortcut for easier dialog-unit-to-pixel conversion
-#define wxDLG_UNIT(parent, pt) parent->ConvertDialogToPixel(pt)
+#define wxDLG_UNIT(parent, pt) parent->ConvertDialogToPixels(pt)
 
 #ifdef __WXMSW__
 // Stand-ins for Windows types, to avoid

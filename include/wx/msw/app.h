@@ -54,6 +54,8 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   virtual void Dispatch() ;
 
   void OnIdle(wxIdleEvent& event);
+  void OnEndSession(wxCloseEvent& event);
+  void OnQueryEndSession(wxCloseEvent& event);
 
 // Generic
   virtual bool OnInit() { return FALSE; };

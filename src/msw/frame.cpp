@@ -869,6 +869,8 @@ void wxFrame::OnCloseWindow(wxCloseEvent& event)
     {
         this->Destroy();
     }
+    else
+        event.Veto(TRUE);
 }
 
 bool wxFrame::OnClose(void)

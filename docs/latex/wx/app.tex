@@ -238,6 +238,32 @@ goes idle again, when OnIdle is called, and so on.
 \helpref{wxWindow::OnIdle}{wxwindowonidle}, \helpref{wxIdleEvent}{wxidleevent},\rtfsp
 \helpref{wxWindow::SendIdleEvents}{wxappsendidleevents}
 
+\membersection{wxApp::OnEndSession}\label{wxapponendsession}
+
+\func{void}{OnEndSession}{\param{wxCloseEvent\& }{event}}
+
+This is an event handler function called when the operating system or GUI session is
+about to close down. The application has a chance to silently save information,
+and can optionally close itself.
+
+Use the EVT\_END\_SESSION event table macro to handle query end session events.
+
+The default handler calls \helpref{wxWindow::Close}{wxwindowclose} with a TRUE argument
+(forcing the application to close itself silently).
+
+\wxheading{Remarks}
+
+Under X, OnEndSession is called in response to the 'die' event.
+
+Under Windows, OnEndSession is called in response to the WM\_ENDSESSION message.
+
+\wxheading{See also}
+
+\helpref{wxWindow::Close}{wxwindowclose},\rtfsp
+\helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
+\helpref{wxCloseEvent}{wxcloseevent},\rtfsp
+\helpref{wxApp::OnQueryEndSession}{wxappqueryonendsession}
+
 \membersection{wxApp::OnInit}\label{wxapponinit}
 
 \func{bool}{OnInit}{\void}
@@ -247,16 +273,43 @@ application's main window, calling \helpref{wxApp::SetTopWindow}{wxappsettopwind
 
 Return TRUE to continue processing, FALSE to exit the application.
 
-\membersection{wxApp::Pending}\label{wxapppending}
+\membersection{wxApp::OnQueryEndSession}\label{wxapponqueryendsession}
 
-\func{bool}{Pending}{\void}
+\func{void}{OnQueryEndSession}{\param{wxCloseEvent\& }{event}}
 
-Returns TRUE if unprocessed events are in the window system event queue
-(MS Windows and Motif).
+This is an event handler function called when the operating system or GUI session is
+about to close down. Typically, an application will try to save unsaved documents
+at this point.
+
+If \helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto} returns TRUE, the application
+is allowed to veto the shutdown by calling \helpref{wxCloseEvent::Veto}{wxcloseeventveto}.
+The application might veto the shutdown after prompting for documents to be saved, and the
+user has cancelled the save.
+
+Use the EVT\_QUERY\_END\_SESSION event table macro to handle query end session events.
+
+You should check whether the application is forcing the deletion of the window
+using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}. If this is TRUE,
+destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
+If not, it is up to you whether you respond by destroying the window.
+
+The default handler calls \helpref{wxWindow::Close}{wxwindowclose} on the top-level window,
+and vetoes the shutdown if Close returns FALSE. This will be sufficient for many applications.
+
+\wxheading{Remarks}
+
+Under X, OnQueryEndSession is called in response to the 'save session' event.
+
+Under Windows, OnQueryEndSession is called in response to the WM\_QUERYENDSESSION message.
 
 \wxheading{See also}
 
-\helpref{wxApp::Dispatch}{wxappdispatch}
+\helpref{wxWindow::Close}{wxwindowclose},\rtfsp
+\helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
+\helpref{wxCloseEvent}{wxcloseevent},\rtfsp
+\helpref{wxApp::OnEndSession}{wxapponendsession}
+
+\membersection{wxWindow::OnScroll}\label{wxwindowonscroll}
 
 \membersection{wxApp::ProcessMessage}\label{wxappprocessmessage}
 
@@ -281,6 +334,17 @@ BOOL CTheApp::PreTranslateMessage(MSG *msg)
     return CWinApp::PreTranslateMessage(msg);
 }
 \end{verbatim}
+
+\membersection{wxApp::Pending}\label{wxapppending}
+
+\func{bool}{Pending}{\void}
+
+Returns TRUE if unprocessed events are in the window system event queue
+(MS Windows and Motif).
+
+\wxheading{See also}
+
+\helpref{wxApp::Dispatch}{wxappdispatch}
 
 \membersection{wxApp::SendIdleEvents}\label{wxappsendidleevents}
 

@@ -515,6 +515,9 @@ public:
   virtual void MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
   virtual void MSWOnInitMenuPopup(WXHMENU menu, int pos, bool isSystem);
   virtual bool MSWOnClose(void);
+  // Return TRUE to end session, FALSE to veto end session.
+  virtual bool MSWOnQueryEndSession(long logOff);
+  virtual bool MSWOnEndSession(bool endSession, long logOff);
   virtual bool MSWOnDestroy(void);
   virtual bool MSWOnSetFocus(WXHWND wnd);
   virtual bool MSWOnKillFocus(WXHWND wnd);

@@ -41,6 +41,7 @@ IMPLEMENT_CLASS(wxDocMDIParentFrame, wxMDIParentFrame)
 BEGIN_EVENT_TABLE(wxDocMDIParentFrame, wxMDIParentFrame)
     EVT_MENU(wxID_EXIT, wxDocMDIParentFrame::OnExit)
     EVT_MENU_RANGE(wxID_FILE1, wxID_FILE9, wxDocMDIParentFrame::OnMRUFile)
+    EVT_CLOSE(wxDocMDIParentFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 wxDocMDIParentFrame::wxDocMDIParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,
@@ -72,11 +73,14 @@ bool wxDocMDIParentFrame::ProcessEvent(wxEvent& event)
         return TRUE;
 }
 
-// Define the behaviour for the frame closing
-// - must delete all frames except for the main one.
-bool wxDocMDIParentFrame::OnClose(void)
+void wxDocMDIParentFrame::OnCloseWindow(wxCloseEvent& event)
 {
-  return m_docManager->Clear(FALSE);
+  if (m_docManager->Clear(!event.CanVeto()))
+  {
+    this->Destroy();
+  }
+  else
+    event.Veto();
 }
 
 
@@ -88,6 +92,7 @@ IMPLEMENT_CLASS(wxDocMDIChildFrame, wxMDIChildFrame)
 
 BEGIN_EVENT_TABLE(wxDocMDIChildFrame, wxMDIChildFrame)
     EVT_ACTIVATE(wxDocMDIChildFrame::OnActivate)
+    EVT_CLOSE(wxDocMDIChildFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 wxDocMDIChildFrame::wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID  id,
@@ -128,24 +133,32 @@ void wxDocMDIChildFrame::OnActivate(wxActivateEvent& event)
     m_childView->Activate(event.GetActive());
 }
 
-bool wxDocMDIChildFrame::OnClose(void)
+void wxDocMDIChildFrame::OnCloseWindow(wxCloseEvent& event)
 {
   // Close view but don't delete the frame while doing so!
   // ...since it will be deleted by wxWindows if we return TRUE.
   if (m_childView)
   {
-    bool ans = m_childView->Close(FALSE); // FALSE means don't delete associated window
+    bool ans = FALSE;
+    if (!event.CanVeto())
+      ans = TRUE; // Must delete.
+    else
+      ans = m_childView->Close(FALSE); // FALSE means don't delete associated window
+
     if (ans)
     {
       m_childView->Activate(FALSE);
       delete m_childView;
       m_childView = (wxView *) NULL;
       m_childDocument = (wxDocument *) NULL;
+
+      this->Destroy();
     }
-    
-    return ans;
+    else
+        event.Veto();
   }
-  else return TRUE;
+  else
+    event.Veto();
 }
 
 #endif

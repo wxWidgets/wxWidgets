@@ -372,12 +372,11 @@ class WXDLLEXPORT wxDocChildFrame: public wxFrame
     long type = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
   ~wxDocChildFrame(void);
 
-  bool OnClose(void);
   // Extend event processing to search the view's event table
   virtual bool ProcessEvent(wxEvent& event);
 
-//  void OldOnMenuCommand(int id);
   void OnActivate(wxActivateEvent& event);
+  void OnCloseWindow(wxCloseEvent& event);
 
   inline wxDocument *GetDocument(void) const { return m_childDocument; }
   inline wxView *GetView(void) const { return m_childView; }
@@ -403,15 +402,14 @@ class WXDLLEXPORT wxDocParentFrame: public wxFrame
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
     long type = wxDEFAULT_FRAME, const wxString& name = "frame");
 
-  bool OnClose(void);
   // Extend event processing to search the document manager's event table
   virtual bool ProcessEvent(wxEvent& event);
 
-//  void OldOnMenuCommand(int id);
   wxDocManager *GetDocumentManager(void) const { return m_docManager; }
 
   void OnExit(wxCommandEvent& event);
   void OnMRUFile(wxCommandEvent& event);
+  void OnCloseWindow(wxCloseEvent& event);
 
  protected:
   wxDocManager *m_docManager;

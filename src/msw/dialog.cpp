@@ -521,8 +521,8 @@ void wxDialog::OnOK(wxCommandEvent& event)
             EndModal(wxID_OK);
         else
         {
-        SetReturnCode(wxID_OK);
-        this->Show(FALSE);
+            SetReturnCode(wxID_OK);
+            this->Show(FALSE);
         }
   }
 }
@@ -547,7 +547,7 @@ void wxDialog::OnCancel(wxCommandEvent& event)
 
 bool wxDialog::OnClose(void)
 {
-  // Behaviour changed in 2.0: we'll send a Cancel message by default,
+    // Behaviour changed in 2.0: we'll send a Cancel message by default,
     // which may close the dialog.
     // Check for looping if the Cancel event handler calls Close()
 
@@ -558,13 +558,13 @@ bool wxDialog::OnClose(void)
 
     closing.Append(this);
 
-  wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-  cancelEvent.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(cancelEvent);
+    wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+    cancelEvent.SetEventObject( this );
+    GetEventHandler()->ProcessEvent(cancelEvent);
 
     closing.DeleteObject(this);
 
-  return FALSE;
+    return FALSE;
 }
 
 void wxDialog::OnCloseWindow(wxCloseEvent& event)
@@ -574,6 +574,8 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
     {
         this->Destroy();
     }
+    else
+        event.Veto(TRUE);
 }
 
 // Destroy the window (delayed, if a managed window)

@@ -97,6 +97,8 @@ LRESULT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 
   BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
       EVT_IDLE(wxApp::OnIdle)
+      EVT_END_SESSION(wxApp::OnEndSession)
+      EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
   END_EVENT_TABLE()
 #endif
 
@@ -890,6 +892,23 @@ void wxApp::DeletePendingObjects()
     // objects, so start from beginning of list again.
     node = wxPendingDelete.First();
   }
+}
+
+void wxApp::OnEndSession(wxCloseEvent& event)
+{
+    if (GetTopWindow())
+        GetTopWindow()->Close(TRUE);
+}
+
+// Default behaviour: close the application with prompts. The
+// user can veto the close, and therefore the end session.
+void wxApp::OnQueryEndSession(wxCloseEvent& event)
+{
+    if (GetTopWindow())
+    {
+        if (!GetTopWindow()->Close(!event.CanVeto()))
+            event.Veto(TRUE);
+    }
 }
 
 wxLog* wxApp::CreateLogTarget()
