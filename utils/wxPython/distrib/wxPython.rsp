@@ -1,38 +1,44 @@
-wxPython\*.txt
+wxPython/*.txt
 
-wxPython\demo\*.py
-wxPython\demo\bitmaps\*.bmp
-wxPython\demo\bitmaps\*.ico
-wxPython\demo\README.txt
+wxPython/demo/*.py
+wxPython/demo/bitmaps/*.bmp
+wxPython/demo/bitmaps/*.ico
+wxPython/demo/bitmaps/*.gif
+wxPython/demo/bitmaps/*.png
+wxPython/demo/bitmaps/*.jpg
+wxPython/demo/README.txt
+
+wxPython/lib/*.py
+wxPython/lib/*.txt
 
 
-wxPython\src\*.i
-wxPython\src\*.py
-wxPython\src\*.cpp
-wxPython\src\*.h
-wxPython\src\*.ico
-wxPython\src\*.def
-wxPython\src\*.rc
-wxPython\src\makefile.*
-wxPython\src\Makefile.pre.in
-wxPython\src\Setup.*
+wxPython/src/*.i
+wxPython/src/*.py
+wxPython/src/*.cpp
+wxPython/src/*.h
+wxPython/src/*.ico
+wxPython/src/*.def
+wxPython/src/*.rc
+wxPython/src/makefile.*
+wxPython/src/Makefile.pre.in
+wxPython/src/Setup.*
 
-wxPython\src\msw\*.cpp
-wxPython\src\msw\*.h
-wxPython\src\msw\*.py
+wxPython/src/msw/*.cpp
+wxPython/src/msw/*.h
+wxPython/src/msw/*.py
 
-wxPython\src\gtk\*.cpp
-wxPython\src\gtk\*.h
-wxPython\src\gtk\*.py
+wxPython/src/gtk/*.cpp
+wxPython/src/gtk/*.h
+wxPython/src/gtk/*.py
 
-wxPython\src\motif\*.cpp
-wxPython\src\motif\*.h
-wxPython\src\motif\*.py
+wxPython/src/motif/*.cpp
+wxPython/src/motif/*.h
+wxPython/src/motif/*.py
 
-wxPython\src\qt\*.cpp
-wxPython\src\qt\*.h
-wxPython\src\qt\*.py
+wxPython/src/qt/*.cpp
+wxPython/src/qt/*.h
+wxPython/src/qt/*.py
 
-wxPython\SWIG.patches\*.patch
+wxPython/SWIG.patches/*.patch
 
 

@@ -245,6 +245,10 @@ version of Python either from the command line or from a shortcut.
 
 Unix
 ----
+0. I configure wxWindows like this, YMMV:
+
+./configure  --with-gtk --without-shared --with-threads --without-unicode --with-libjpeg
+
 
 1. Change into the $(WXWIN)/utils/wxPython/src directory.
 

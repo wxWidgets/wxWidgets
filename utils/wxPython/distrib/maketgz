@@ -1,0 +1,36 @@
+#!/bin/bash
+#----------------------------------------------------------------------
+# Make a source distribution as a tar.gz file.  This script should be
+# run from the directory that holds the wxPython dir (../..) and be
+# given a version number as an parameter.  The best way to do this is
+# run "make dist" in the wxPython/src/ directory.
+#----------------------------------------------------------------------
+
+if [ -z $1 ]; then
+    echo "Please specify a version number on the command line."
+    exit 1
+fi
+
+if [ ! -d wxPython ]; then
+    echo "Please run this script from the directory containing the wxPython sources."
+    exit 1
+fi
+
+
+rm -f wxPython/distrib/filelist
+for x in `cat wxPython/distrib/wxPython.rsp`; do
+    ls $x >> wxPython/distrib/filelist
+done
+
+
+tar cf wxPython/distrib/dist-temp.tar -T wxPython/distrib/filelist
+cd wxPython/distrib
+tar xf dist-temp.tar
+rm dist-temp.tar
+mv wxPython wxPython-$1
+
+tar cvf wxPython-$1.tar wxPython-$1
+gzip wxPython-$1.tar
+
+rm -rf wxPython-$1
+

@@ -33,9 +33,10 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.10  1999/05/01 04:41:07  RD
- * wxPython 2.0b9, second phase (gtk)
- * Added gobs of stuff, see wxPython/README.txt for details
+ * Revision 1.11  1999/05/04 00:25:56  RD
+ * Some slight cleanup and reorganization
+ *
+ * Added support for making RPM distribution
  *
  ************************************************************************/
 
@@ -1932,6 +1933,10 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxBMPHandler","_wxBMPHandler",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxSashLayoutWindow","_class_wxSashLayoutWindow",0);
+	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
+	 SWIG_RegisterMapping("_size_t","_int",0);
+	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
+	 SWIG_RegisterMapping("_size_t","_uint",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
@@ -1961,6 +1966,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxNotebookEvent","_wxNotebookEvent",0);
 	 SWIG_RegisterMapping("_class_wxSashWindow","_wxSashWindow",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
+	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
@@ -2076,6 +2082,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxMenu","_wxMenu",0);
 	 SWIG_RegisterMapping("_wxControl","_class_wxControl",0);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxListBox",0);
+	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
@@ -2101,11 +2108,13 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
 	 SWIG_RegisterMapping("_class_wxNotebook","_wxNotebook",0);
 	 SWIG_RegisterMapping("_wxJPEGHandler","_class_wxJPEGHandler",0);
+	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
 	 SWIG_RegisterMapping("_int","_wxWindowID",0);

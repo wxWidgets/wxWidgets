@@ -324,6 +324,7 @@ distclean:	clobber
 # Custom rules and dependencies added for wxPython
 #
 
+WXP_VERSION=2.0b9
 
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__ $(SEPARATE)
 
@@ -386,11 +387,35 @@ wxInstall :	sharedmods $(PYMODULES)
 	-for i in $(PYMODULES); do \
 		cp $$i $(TARGETDIR); \
 	done
-	python $(LIBDEST)/compileall.py -l $(TARGETDIR)
-	python -O $(LIBDEST)/compileall.py -l $(TARGETDIR)
+	if [ "$(TARGETDIR)" != ".." ]; then        \
+		mkdir $(TARGETDIR)/lib;            \
+		mkdir $(TARGETDIR)/demo;           \
+		cp ../lib/*.py $(TARGETDIR)/lib;   \
+		cp ../demo/*.py $(TARGETDIR)/demo; \
+		cp ../lib/*.txt $(TARGETDIR)/lib;  \
+		cp ../demo/*.txt $(TARGETDIR)/demo;\
+	fi
+	if [ "$(TARGETDIR)" != ".." ]; then      \
+		python $(LIBDEST)/compileall.py $(TARGETDIR);      \
+		python -O $(LIBDEST)/compileall.py $(TARGETDIR);   \
+	else                                                       \
+		python $(LIBDEST)/compileall.py -l $(TARGETDIR);   \
+		python -O $(LIBDEST)/compileall.py -l $(TARGETDIR);\
+	fi
+
+
 
 
 lib : libwxPython.a
 
 libwxPython.a : lib.a
 	cp $< $@
+
+dist: tgz rpm
+
+tgz:
+	cd ../..; wxPython/distrib/maketgz $(WXP_VERSION)
+
+rpm:
+	cd ../distrib; ./makerpm $(WXP_VERSION)
+

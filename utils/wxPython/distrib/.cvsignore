@@ -1,0 +1,6 @@
+*.gz
+*.rpm
+*.zip
+filelist
+wxPython.spec
+wxp2.wse

@@ -9123,6 +9123,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_GLsizei","_wxWindowID",0);
 	 SWIG_RegisterMapping("_GLsizei","_uint",0);
 	 SWIG_RegisterMapping("_GLsizei","_EBool",0);
+	 SWIG_RegisterMapping("_GLsizei","_size_t",0);
 	 SWIG_RegisterMapping("_GLsizei","_GLenum",0);
 	 SWIG_RegisterMapping("_GLsizei","_GLbitfield",0);
 	 SWIG_RegisterMapping("_GLsizei","_GLint",0);
@@ -9159,6 +9160,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_GLenum","_int",0);
 	 SWIG_RegisterMapping("_GLenum","_wxWindowID",0);
 	 SWIG_RegisterMapping("_GLenum","_uint",0);
+	 SWIG_RegisterMapping("_GLenum","_size_t",0);
 	 SWIG_RegisterMapping("_class_wxPrintDialogData","_wxPrintDialogData",0);
 	 SWIG_RegisterMapping("_wxGLContext","_class_wxGLContext",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
@@ -9172,6 +9174,15 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_class_wxBMPHandler","_wxBMPHandler",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxSashLayoutWindow","_class_wxSashLayoutWindow",0);
+	 SWIG_RegisterMapping("_size_t","_GLuint",0);
+	 SWIG_RegisterMapping("_size_t","_GLsizei",0);
+	 SWIG_RegisterMapping("_size_t","_GLint",0);
+	 SWIG_RegisterMapping("_size_t","_GLbitfield",0);
+	 SWIG_RegisterMapping("_size_t","_GLenum",0);
+	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
+	 SWIG_RegisterMapping("_size_t","_int",0);
+	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
+	 SWIG_RegisterMapping("_size_t","_uint",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
@@ -9205,6 +9216,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_GLuint","_int",0);
 	 SWIG_RegisterMapping("_GLuint","_wxWindowID",0);
 	 SWIG_RegisterMapping("_GLuint","_uint",0);
+	 SWIG_RegisterMapping("_GLuint","_size_t",0);
 	 SWIG_RegisterMapping("_GLuint","_GLenum",0);
 	 SWIG_RegisterMapping("_GLuint","_GLbitfield",0);
 	 SWIG_RegisterMapping("_GLuint","_GLint",0);
@@ -9215,6 +9227,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_uint","_GLint",0);
 	 SWIG_RegisterMapping("_uint","_GLbitfield",0);
 	 SWIG_RegisterMapping("_uint","_GLenum",0);
+	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
@@ -9251,6 +9264,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_GLbitfield","_int",0);
 	 SWIG_RegisterMapping("_GLbitfield","_wxWindowID",0);
 	 SWIG_RegisterMapping("_GLbitfield","_uint",0);
+	 SWIG_RegisterMapping("_GLbitfield","_size_t",0);
 	 SWIG_RegisterMapping("_GLbitfield","_GLenum",0);
 	 SWIG_RegisterMapping("_class_wxPyEvent","_wxPyEvent",0);
 	 SWIG_RegisterMapping("_wxTextEntryDialog","_class_wxTextEntryDialog",0);
@@ -9375,6 +9389,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_unsigned_int","_GLint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_GLbitfield",0);
 	 SWIG_RegisterMapping("_unsigned_int","_GLenum",0);
+	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
@@ -9410,6 +9425,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_wxWindowID","_GLint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_GLbitfield",0);
 	 SWIG_RegisterMapping("_wxWindowID","_GLenum",0);
+	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
@@ -9420,6 +9436,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_int","_GLint",0);
 	 SWIG_RegisterMapping("_int","_GLbitfield",0);
 	 SWIG_RegisterMapping("_int","_GLenum",0);
+	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
 	 SWIG_RegisterMapping("_int","_wxWindowID",0);
@@ -9466,6 +9483,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_GLint","_wxWindowID",0);
 	 SWIG_RegisterMapping("_GLint","_uint",0);
 	 SWIG_RegisterMapping("_GLint","_EBool",0);
+	 SWIG_RegisterMapping("_GLint","_size_t",0);
 	 SWIG_RegisterMapping("_GLint","_GLenum",0);
 	 SWIG_RegisterMapping("_GLint","_GLbitfield",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
