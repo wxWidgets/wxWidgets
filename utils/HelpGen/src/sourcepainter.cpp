@@ -639,18 +639,18 @@ void SourcePainter::GetResultString(string& result, MarkupTagsT tags)
 	// ASSERT( mCollectResultsOn ); 
 	result = "";
 
-	int pos = 0;
+	unsigned pos = 0;
 
 	for( size_t i = 0; i != mBlocks.size(); ++i )
 	{
 		int desc = mBlocks[i];
 
-		int len  = desc & 0xFFFF;
+		unsigned len  = desc & 0xFFFF;
 		int rank = (desc >> 16) & 0xFFFF;
 
 		result += tags[ rank_tags_map[rank] ].start;
 
-		for( int n = 0; n != len; ++n )
+		for( unsigned n = 0; n != len; ++n )
 		
 			result += mResultStr[pos+n];
 

@@ -904,11 +904,11 @@ static void arrange_indirection_tokens_between( string& type,
 {
     // TBD:: FIXME:: return value of operators !
 
-    while ( identifier[0] == '*' ||
-            identifier[0] == '&'
+    while ( identifier[0u] == '*' ||
+            identifier[0u] == '&'
           )
     {
-        type += identifier[0];
+        type += identifier[0u];
         identifier.erase(0,1);
 
         if ( !identifier.length() ) return;
