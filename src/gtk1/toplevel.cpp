@@ -456,10 +456,15 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         // All this is for Motif Window Manager "hints" and is supposed to be
         // recognized by other WMs as well.
         if ((style & wxCAPTION) != 0)
+        {
             m_gdkDecor |= GDK_DECOR_TITLE;
-        if ((style & wxSYSTEM_MENU) != 0)
+        }
+        if ((style & wxCLOSE) != 0)
         {
             m_gdkFunc |= GDK_FUNC_CLOSE;
+        }
+        if ((style & wxSYSTEM_MENU) != 0)
+        {
             m_gdkDecor |= GDK_DECOR_MENU;
         }
         if ((style & wxMINIMIZE_BOX) != 0)
