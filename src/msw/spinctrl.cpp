@@ -436,6 +436,9 @@ int wxSpinCtrl::GetValue() const
     long n;
     if ( (wxSscanf(val, wxT("%lu"), &n) != 1) )
         n = INT_MIN;
+        
+    if (n < m_min) n = m_min;
+    if (n > m_max) n = m_max;
 
     return n;
 }

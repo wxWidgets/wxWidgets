@@ -220,16 +220,22 @@ wxSize wxSpinButton::DoGetBestSize() const
 
 int wxSpinButton::GetValue() const
 {
+    int n;
 #ifdef UDM_GETPOS32
     if ( wxTheApp->GetComCtl32Version() >= 580 )
     {
         // use the full 32 bit range if available
-        return ::SendMessage(GetHwnd(), UDM_GETPOS32, 0, 0);
+        n = ::SendMessage(GetHwnd(), UDM_GETPOS32, 0, 0);
     }
 #endif // UDM_GETPOS32
 
     // we're limited to 16 bit
-    return (short)LOWORD(::SendMessage(GetHwnd(), UDM_GETPOS, 0, 0));
+    n = (short)LOWORD(::SendMessage(GetHwnd(), UDM_GETPOS, 0, 0));
+    
+    if (n < m_min) n = m_min;
+    if (n > m_max) n = m_max;
+    
+    return n;
 }
 
 void wxSpinButton::SetValue(int val)
