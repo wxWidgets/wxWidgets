@@ -1089,7 +1089,13 @@ wxString wxCrashReportImpl::GetExceptionString(DWORD dwCode)
 
 #endif // wxUSE_DBGHELP
 
-bool wxCrashReportImpl::Generate(int WXUNUSED(flags))
+bool wxCrashReportImpl::Generate(
+#if wxUSE_DBGHELP
+    int flags
+#else
+    int WXUNUSED(flags)
+#endif
+)
 {
     if ( m_hFile == INVALID_HANDLE_VALUE )
         return false;
