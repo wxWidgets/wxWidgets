@@ -503,7 +503,6 @@ SOURCE=..\..\src\msw\dummy.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\gsocket.cpp
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
