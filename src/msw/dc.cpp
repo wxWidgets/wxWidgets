@@ -372,6 +372,31 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
 void wxDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2, wxCoord xc, wxCoord yc)
 {
+    COLORREF colFgOld = 0,
+             colBgOld = 0;
+
+    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
+    {
+       oldFgOld = ::GetTextColor(GetHdc());
+       oldBgOld = ::GetBkColor(GetHdc());
+
+       if (m_textForegroundColour.Ok())
+       {   //just the oposite from what is expected see help on pattern brush
+           // 1 in mask becomes bk color
+           ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel() );
+       }
+       if (m_textBackgroundColour.Ok())
+       {   //just the oposite from what is expected
+           // 0 in mask becomes text color
+           ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel() );
+       }
+
+       if (m_backgroundMode == wxTRANSPARENT)
+           SetBkMode(GetHdc(), TRANSPARENT);
+       else
+           SetBkMode(GetHdc(), OPAQUE);
+    }
+
     double dx = xc-x1;
     double dy = yc-y1;
     double radius = (double)sqrt(dx*dx+dy*dy) ;;
@@ -410,6 +435,14 @@ void wxDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2, wxCoord xc, wx
 
     CalcBoundingBox((wxCoord)(xc-radius), (wxCoord)(yc-radius));
     CalcBoundingBox((wxCoord)(xc+radius), (wxCoord)(yc+radius));
+
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    {
+        // restore the colours we changed
+        ::SetBkMode(GetHdc(), TRANSPARENT);
+        ::SetTextColor(GetHdc(), colFgOld);
+        ::SetBkColor(GetHdc(), colBgOld);
+    }
 }
 
 void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
@@ -462,10 +495,13 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
 {
-    COLORREF old_textground = ::GetTextColor(GetHdc());
-    COLORREF old_background = ::GetBkColor(GetHdc());
+    COLORREF colFgOld = 0,
+             colBgOld = 0;
+
     if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
     {
+       oldFgOld = ::GetTextColor(GetHdc());
+       oldBgOld = ::GetBkColor(GetHdc());
 
        if (m_textForegroundColour.Ok())
        {   //just the oposite from what is expected see help on pattern brush
@@ -512,11 +548,12 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
         SetPolyFillMode(GetHdc(),prev);
     }
 
-    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
     {
-       ::SetBkMode(GetHdc(), TRANSPARENT);
-       ::SetTextColor(GetHdc(), old_textground);
-       ::SetBkColor(GetHdc(), old_background);
+        // restore the colours we changed
+        ::SetBkMode(GetHdc(), TRANSPARENT);
+        ::SetTextColor(GetHdc(), colFgOld);
+        ::SetBkColor(GetHdc(), colBgOld);
     }
 }
 
@@ -618,6 +655,32 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
+    COLORREF colFgOld = 0,
+             colBgOld = 0;
+
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    {
+        colFgOld = ::GetTextColor(GetHdc());
+        colBgOld = ::GetBkColor(GetHdc());
+
+        if ( m_textForegroundColour.Ok() )
+        {
+            // just the oposite from what is expected see help on pattern brush
+            // 1 in mask becomes bk color
+            ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel());
+        }
+
+        if ( m_textBackgroundColour.Ok() )
+        {
+            // 0 in mask becomes text color
+            ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel());
+        }
+
+        // VZ: IMHO this does strictly nothing here
+        SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
+                                                              : OPAQUE);
+    }
+
     // Now, a negative radius value is interpreted to mean
     // 'the proportion of the smallest X or Y dimension'
 
@@ -648,10 +711,44 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
+
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    {
+        // restore the colours we changed
+        ::SetBkMode(GetHdc(), TRANSPARENT);
+        ::SetTextColor(GetHdc(), colFgOld);
+        ::SetBkColor(GetHdc(), colBgOld);
+    }
 }
 
 void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    COLORREF colFgOld = 0,
+             colBgOld = 0;
+
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    {
+        colFgOld = ::GetTextColor(GetHdc());
+        colBgOld = ::GetBkColor(GetHdc());
+
+        if ( m_textForegroundColour.Ok() )
+        {
+            // just the oposite from what is expected see help on pattern brush
+            // 1 in mask becomes bk color
+            ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel());
+        }
+
+        if ( m_textBackgroundColour.Ok() )
+        {
+            // 0 in mask becomes text color
+            ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel());
+        }
+
+        // VZ: IMHO this does strictly nothing here
+        SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
+                                                              : OPAQUE);
+    }
+
     wxCoord x2 = (x+width);
     wxCoord y2 = (y+height);
 
@@ -659,11 +756,45 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
+
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    {
+        // restore the colours we changed
+        ::SetBkMode(GetHdc(), TRANSPARENT);
+        ::SetTextColor(GetHdc(), colFgOld);
+        ::SetBkColor(GetHdc(), colBgOld);
+    }
 }
 
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
 void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
+    COLORREF colFgOld = 0,
+             colBgOld = 0;
+
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    {
+        colFgOld = ::GetTextColor(GetHdc());
+        colBgOld = ::GetBkColor(GetHdc());
+
+        if ( m_textForegroundColour.Ok() )
+        {
+            // just the oposite from what is expected see help on pattern brush
+            // 1 in mask becomes bk color
+            ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel());
+        }
+
+        if ( m_textBackgroundColour.Ok() )
+        {
+            // 0 in mask becomes text color
+            ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel());
+        }
+
+        // VZ: IMHO this does strictly nothing here
+        SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
+                                                              : OPAQUE);
+    }
+
     wxCoord x2 = (x+w);
     wxCoord y2 = (y+h);
 
@@ -699,6 +830,14 @@ void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,d
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
+
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    {
+        // restore the colours we changed
+        ::SetBkMode(GetHdc(), TRANSPARENT);
+        ::SetTextColor(GetHdc(), colFgOld);
+        ::SetBkColor(GetHdc(), colBgOld);
+    }
 }
 
 void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
@@ -1016,7 +1155,17 @@ void wxDC::SetBrush(const wxBrush& brush)
 
     if (m_brush.Ok())
     {
-        if (m_brush.GetResourceHandle())
+        // to make sure the brush is alligned with the logical coordinates
+        wxBitmap *stipple = m_brush.GetStipple();
+        if ( stipple && stipple->Ok() )
+        {
+	        ::SetBrushOrgEx(GetHdc(),
+                            m_deviceOriginX % stipple->GetWidth(),
+                            m_deviceOriginY % stipple->GetHeight(),
+                            NULL);  // don't need previous brush origin
+        }
+
+        if ( m_brush.GetResourceHandle() )
         {
             HBRUSH b = 0;
             b = (HBRUSH) ::SelectObject(GetHdc(), (HBRUSH)m_brush.GetResourceHandle());
