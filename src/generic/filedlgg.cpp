@@ -871,8 +871,10 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
 
     // interpret wildcards
     wxArrayString wildDescriptions, wildFilters;
-    int wild_count = ParseWildcard(m_wildCard, wildDescriptions, wildFilters);
-    wxASSERT_MSG(wild_count > 0, wxT("Wrong file type descripition") );
+    if ( !ParseWildcard(m_wildCard, wildDescriptions, wildFilters) )
+    {
+        wxFAIL_MSG( wxT("Wrong file type descripition") );
+    }
 
     // layout
 
