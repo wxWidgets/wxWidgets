@@ -1262,7 +1262,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
                 XLOG2DEV(x), YLOG2DEV(uy),
                 m_underlineThickness,
                 XLOG2DEV(x + text_w), YLOG2DEV(uy) );
-        for (int i = 0; i < 100; i++)
+        for (i = 0; i < 100; i++)
             if (buffer[i] == ',') buffer[i] = '.'; 
         fprintf( m_pstream, buffer );
     }
@@ -1391,7 +1391,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
                  XLOG2DEV(x), YLOG2DEV(uy),
                  m_underlineThickness,
                  XLOG2DEV(x + w), YLOG2DEV(uy) );
-        for (int i = 0; i < 100; i++)
+        for (i = 0; i < 100; i++)
             if (buffer[i] == ',') buffer[i] = '.'; 
         fprintf( m_pstream, buffer );
     }

@@ -43,6 +43,19 @@ private:
 };
 
 
+class MyCanvas: public wxScrolledWindow
+{
+public:
+    MyCanvas(wxWindow* parent);
+
+    void OnMouseLeftUp (wxMouseEvent & event);
+    void OnMouseRightUp (wxMouseEvent & event);
+
+private:
+
+    DECLARE_EVENT_TABLE()
+};
+
 class MyFrame: public wxFrame
 {
 public:
@@ -50,10 +63,7 @@ public:
 
     void OnQuit (wxCommandEvent &);
     void OnAngle(wxCommandEvent &);
-    void OnMouseLeftUp (wxMouseEvent & event);
-    void OnMouseRightUp (wxMouseEvent & event);
 
-private:
     double  m_angle;
 
     DECLARE_EVENT_TABLE()
@@ -65,15 +75,17 @@ enum
     ID_Angle
 };
 
+BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+    EVT_LEFT_UP (MyCanvas::OnMouseLeftUp)
+    EVT_RIGHT_UP (MyCanvas::OnMouseRightUp)
+END_EVENT_TABLE()
+
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU (ID_Quit, MyFrame::OnQuit)
     EVT_MENU (ID_Angle, MyFrame::OnAngle)
-    EVT_LEFT_UP (MyFrame::OnMouseLeftUp)
-    EVT_RIGHT_UP (MyFrame::OnMouseRightUp)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
-
 
 bool MyApp::OnInit()
 {
@@ -92,8 +104,6 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame ("wxWindows rotate sample",
                                   wxPoint(20,20), wxSize(600,450));
 
-    frame->SetBackgroundColour (wxColour (0,80,60));
-    frame->Clear();
     frame->Show (TRUE);
     SetTopWindow (frame);
     return TRUE;
@@ -103,6 +113,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame((wxFrame *)NULL, -1, title, pos, size)
 {
     m_angle = 0.1;
+
+    new MyCanvas(this);
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append (ID_Angle, "Set &angle\tCtrl-A");
@@ -132,13 +144,21 @@ void MyFrame::OnQuit (wxCommandEvent &)
     Close (TRUE);
 }
 
+MyCanvas::MyCanvas(wxWindow* parent):
+  wxScrolledWindow(parent, -1)
+{
+    SetBackgroundColour (wxColour (0,80,60));
+    Clear();
+}
 
 // Rotate with interpolation and with offset correction
-void MyFrame::OnMouseLeftUp (wxMouseEvent & event)
+void MyCanvas::OnMouseLeftUp (wxMouseEvent & event)
 {
+    MyFrame* frame = (MyFrame*) GetParent();
+
     wxPoint offset;
     const wxImage& img = wxGetApp().GetImage();
-    wxImage img2 = img.Rotate(m_angle, wxPoint(img.GetWidth()/2, img.GetHeight()/2), TRUE, &offset);
+    wxImage img2 = img.Rotate(frame->m_angle, wxPoint(img.GetWidth()/2, img.GetHeight()/2), TRUE, &offset);
 
     wxBitmap bmp = img2.ConvertToBitmap ();
 
@@ -147,10 +167,12 @@ void MyFrame::OnMouseLeftUp (wxMouseEvent & event)
 }
 
 // without interpolation, and without offset correction
-void MyFrame::OnMouseRightUp (wxMouseEvent & event)
+void MyCanvas::OnMouseRightUp (wxMouseEvent & event)
 {
+    MyFrame* frame = (MyFrame*) GetParent();
+
     const wxImage& img = wxGetApp().GetImage();
-    wxImage img2 = img.Rotate(m_angle, wxPoint(img.GetWidth()/2, img.GetHeight()/2), FALSE);
+    wxImage img2 = img.Rotate(frame->m_angle, wxPoint(img.GetWidth()/2, img.GetHeight()/2), FALSE);
 
     wxBitmap bmp = img2.ConvertToBitmap ();
 

@@ -25,6 +25,7 @@ distrib/msw/*.bat
 distrib/msw/*.cpp
 distrib/msw/*.txt
 distrib/msw/tardist
+distrib/msw/tarwxmotif
 distrib/msw/tmake/*.t
 distrib/msw/tmake/Makefile
 distrib/msw/tmake/filelist.txt

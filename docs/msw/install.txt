@@ -305,10 +305,25 @@ of how to create your own project files.
 Borland C++Builder compilation
 ------------------------------
 
-C++Builder compilation is the same as for Borland C++ above.
+1. Build the wxWindows libraries using the Borland make utility as
+   specified in the section called "Borland C++ 4.5/5.0 compilation"
+   above. (C++ Builder includes a stand-alone C++ compiler.  For example,
+   C++ Builder 4.0 comes with C++ 5.4.)
 
-Tested with C++Builder 1.0 and 3.0. Only makefiles are currently
-supplied.
+2. Create a template .bpr (project) file for new Borland/wxWindows,
+   being sure to make the following settings:
+
+   a) 32 bit compiler
+   b) Defines: __WXMSW__;__WIN95__
+   c) Data alignment=byte
+   d) Include path: \libs\wx2\include
+
+To use this template project file, just add the wxWindows libraries to
+the project along with your own source files.  If you need to run one or
+two wx source files in the debugger, include them explicitly in your BCB
+project and they will get linked in in preference to any files in the
+lib; just make sure that your include path finds all the wx include
+files.
 
 Watcom C++ 10.6/11 compilation
 ---------------------------

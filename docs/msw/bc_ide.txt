@@ -1,13 +1,13 @@
 Readme for wxWindows 2.0 Ide-files
 First release Feb. 1999, detlev@reymann-online.de
 
-1. What you can do with this IDE files
+1. What you can do with the BC++ IDE files
 2. Where to install the files
 3. How to modify them for your own needs
 4. How to create IDE files for your own wxWindows-programs
 
-1. What you can do with this IDE files
-======================================
+1. What you can do with the IDE files
+=====================================
 
 There are two IDE files. src\bc32.ide should help you to
 create the wxWindows libraries from within the Ide of Borlands
@@ -40,14 +40,14 @@ $inherit-macro (Julian found the trick), this should work.
 
 To add a new sample to samples\bc32.ide, follow these steps:
 
-a. Choose Project->New target... and type in e.g.
+1. Choose Project->New target... and type in e.g.
    samples\newsample. Press OK.
-b. Static, no OWL, MFC or class libraries. Check Multithread
+2. Static, no OWL, MFC or class libraries. Check Multithread
    on. Press OK.
-c. Right-click on the new node, choose Add node... and add
+3. Right-click on the new node, choose Add node... and add
    ..\lib\wx32.lib and ..\lib\xpm.lib. Add any other source
    files you require.
-d. Right-click on the new node, choose Edit Local Options.. and
+4. Right-click on the new node, choose Edit Local Options.. and
    add in Directories, specify the following:
 
    Include: $inherit;.\newsample
@@ -59,22 +59,21 @@ d. Right-click on the new node, choose Edit Local Options.. and
 4. How to create IDE files for your own wxWindows-programs
 ==========================================================
 
-I think you are familiar with the necessary options for your own
-program. So I will only describe what is neccessary to link
-yout program with the wxWindows library. If you want to create
-an IDE file for your own wxWindows program, create a new project
-from the menu file->new->project. Deactivate all the
-standard-options, the only three thing that should be activated is
-"static" for the libraries, if you want to use the library
-produced with the library-ide, the checkbox OLE (you can
-leave this checkbox unchecked, but then you have to add the
-library \bc5\lib\ole2w32.lib to your project), and the
-Multithread checkbox. You have to add
-the include-path of wxWindows to the include-path in the
-options-dialog (options->project->directories->include). The
-result should be something like:
-path_of_my_program;\bc5\include;\wxwin2\include; Then you have
-to add the libraries to the project. Open the project-view and
-activate your program. Then right-click and choose "add" and
-select the wxWindows library (e.g. \wxwin\lib\wx32.lib). Also
-add the xpm library.
+If you want to create an IDE file for your own wxWindows program,
+please follow these steps.
+
+1. Create a new project from the menu file->new->project.
+2. Deactivate all the standard-options, the only three things
+   that should be activated are "static" for the libraries,
+   the checkbox OLE (you can leave this checkbox unchecked,
+   but then you have to add the library \bc5\lib\ole2w32.lib
+   to your project), and the Multithread checkbox.
+3. Add the include-path of wxWindows to the include-path in the
+   options-dialog (options->project->directories->include). The
+   result should be something like:
+   path_of_my_program;\bc5\include;\wxwin2\include;
+4. Add the libraries to the project. Open the project-view and
+   activate your program. Then right-click and choose "add" and
+   select the wxWindows library (e.g. \wxwin\lib\wx32.lib). Also
+   add the xpm library.
+
