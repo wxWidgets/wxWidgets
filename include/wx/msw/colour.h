@@ -54,9 +54,9 @@ public:
     // other methods
     // -------------
 
-    // to have the matching Create also for this class 
+    // to have the matching Create also for this class
     void Create( unsigned char red, unsigned char green, unsigned char blue )
-    {	Set(red, green, blue); }
+    { Set(red, green, blue); }
 
     // Set() functions
     void Set(unsigned char red, unsigned char green, unsigned char blue);
@@ -65,14 +65,14 @@ public:
         // we don't need to know sizeof(long) here because we assume that the three
         // least significant bytes contain the R, G and B values
         Set((unsigned char)colRGB,
-                (unsigned char)(colRGB >> 8),
-                (unsigned char)(colRGB >> 16));
+            (unsigned char)(colRGB >> 8),
+            (unsigned char)(colRGB >> 16));
     }
 
     // accessors
     // ---------
 
-    bool Ok() const {return m_isInit; }
+    bool Ok() const { return m_isInit; }
 
     unsigned char Red() const { return m_red; }
     unsigned char Green() const { return m_green; }
@@ -81,28 +81,30 @@ public:
     // comparison
     bool operator==(const wxColour& colour) const
     {
-        return m_isInit == colour.m_isInit &&
-            m_red == colour.m_red &&
-            m_green == colour.m_green &&
-            m_blue == colour.m_blue;
+        return m_isInit == colour.m_isInit
+            && m_red == colour.m_red
+            && m_green == colour.m_green
+            && m_blue == colour.m_blue;
     }
 
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
     WXCOLORREF GetPixel() const { return m_pixel; };
 
+    void InitFromName(const wxString& colourName);
+
 public:
     WXCOLORREF m_pixel;
+
+protected:
+    // Helper function
+    void Init();
 
 private:
     bool          m_isInit;
     unsigned char m_red;
     unsigned char m_blue;
     unsigned char m_green;
-
-    // ctors helpers
-    void Init();
-    void InitFromName(const wxString& colourName);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

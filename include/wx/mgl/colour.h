@@ -69,15 +69,18 @@ public:
     }
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
+    void InitFromName(const wxString& colourName);
+
+protected:
+
+    // Helper function
+    void Init();
+
 private:
     bool m_isInit;
     unsigned char m_red;
     unsigned char m_blue;
     unsigned char m_green;
-
-    // ctors helpers
-    void Init();
-    void InitFromName(const wxString& colourName);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

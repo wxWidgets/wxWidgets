@@ -142,7 +142,6 @@ wxWindowDC::wxWindowDC(
 
 void wxWindowDC::InitDC()
 {
-    wxColour                        vColor;
 
     //
     // The background mode is only used for text background and is set in
@@ -155,9 +154,10 @@ void wxWindowDC::InitDC()
     //
     SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
 
-    vColor.InitFromName("BLACK");
+    wxColour vColor( wxT("BLACK") );
     m_pen.SetColour(vColor);
-    vColor.Set("WHITE");
+
+    vColor.Set( wxT("WHITE") );
     m_brush.SetColour(vColor);
     InitializePalette();
     wxFont*                         pFont = new wxFont( 12

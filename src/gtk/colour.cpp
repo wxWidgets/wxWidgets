@@ -37,7 +37,7 @@ public:
         m_color.blue = 0;
         m_color.pixel = 0;
         m_colormap = (GdkColormap *) NULL;
-        m_hasPixel = FALSE;
+        m_hasPixel = false;
     }
 
     wxColourRefData(const wxColourRefData& data)
@@ -207,10 +207,10 @@ wxColour::~wxColour()
 bool wxColour::operator == ( const wxColour& col ) const
 {
     if (m_refData == col.m_refData)
-        return TRUE;
+        return true;
 
     if (!m_refData || !col.m_refData)
-        return FALSE;
+        return false;
 
     GdkColor *own = &(((wxColourRefData*)m_refData)->m_color);
     GdkColor *other = &(((wxColourRefData*)col.m_refData)->m_color);
@@ -239,7 +239,7 @@ void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
     M_COLDATA->m_color.pixel = 0;
 
     M_COLDATA->m_colormap = (GdkColormap*) NULL;
-    M_COLDATA->m_hasPixel = FALSE;
+    M_COLDATA->m_hasPixel = false;
 }
 
 unsigned char wxColour::Red() const

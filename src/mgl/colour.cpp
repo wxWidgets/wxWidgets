@@ -32,7 +32,7 @@ void wxColour::Init()
     m_red =
     m_blue =
     m_green = 0;
-    m_isInit = FALSE;
+    m_isInit = false;
 }
 
 wxColour::wxColour(const wxColour& col)
@@ -51,15 +51,18 @@ wxColour& wxColour::operator =(const wxColour& col)
 
 void wxColour::InitFromName(const wxString& name)
 {
-    wxColour *col = wxTheColourDatabase->Find(name);
-    if ( col.Ok() )
+    if ( wxTheColourDatabase )
     {
-        *this = col;
+        wxColour col = wxTheColourDatabase->Find(name);
+        if ( col.Ok() )
+        {
+            *this = col;
+            return;
+        }
     }
-    else
-    {
-        Init();
-    }
+
+    // leave invalid
+    Init();
 }
 
 wxColour::~wxColour()
@@ -71,5 +74,5 @@ void wxColour::Set(unsigned char r, unsigned char g, unsigned char b)
     m_red = r;
     m_green = g;
     m_blue = b;
-    m_isInit = TRUE;
+    m_isInit = true;
 }

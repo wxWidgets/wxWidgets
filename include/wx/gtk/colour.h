@@ -40,7 +40,7 @@ class wxColour: public wxGDIObject
 {
 public:
     wxColour() { }
-  
+
     // Construct from RGB
     wxColour( unsigned char red, unsigned char green, unsigned char blue );
     wxColour( unsigned long colRGB ) { Set(colRGB); }
@@ -61,7 +61,7 @@ public:
     ~wxColour();
 
     bool Ok() const { return m_refData != NULL; }
-  
+
     bool operator == ( const wxColour& col ) const;
     bool operator != ( const wxColour& col ) const { return !(*this == col); }
 
@@ -88,13 +88,13 @@ public:
     int GetPixel() const;
     GdkColor *GetColor() const;
 
+    void InitFromName(const wxString& colourName);
+
 protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
-    
-    // Helper functions
-    void InitFromName(const wxString& colourName);
+
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

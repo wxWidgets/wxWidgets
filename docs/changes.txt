@@ -100,6 +100,7 @@ All (GUI):
 - make it possible to use wxRTTI macros with namespaces (Benjamin I. Williams)
 - wxColourDatabase API now uses objects instead of pointers
 - added resolution option to JPEG image handler (Jeff Burton)
+- added wxCalendarEvent::SetDate, wxCalendarEvent::SetWeekDay
 
 wxMSW:
 
@@ -120,6 +121,11 @@ wxGTK:
 - fix for crash when using user-dashed lines (Chris Borgolte)
 - fixed wxChoice::Delete() in presence of client data
 - allow calling wxWindow::SetFont if window not yet created
+- use same average character width as other ports when calculating dialog units
+
+wxMac:
+
+- use same average character width as other ports when calculating dialog units
 
 wxHTML:
 

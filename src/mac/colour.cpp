@@ -25,7 +25,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 #include "wx/mac/private.h"
 
 static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green ) ;
-static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green ) 
+static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green )
 {
     RGBColor* col = (RGBColor*) color ;
     col->red = (red << 8) + red;
@@ -35,11 +35,11 @@ static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green 
 
 void wxColour::Init()
 {
-    m_isInit = FALSE;
+    m_isInit = false;
     m_red =
     m_blue =
     m_green = 0;
-    
+
     wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
 }
 
@@ -70,23 +70,26 @@ wxColour& wxColour::operator =(const wxColour& col)
     m_green = col.m_green;
     m_blue = col.m_blue;
     m_isInit = col.m_isInit;
-    
+
     memcpy( &m_pixel , &col.m_pixel , 6 ) ;
-    
+
     return *this;
 }
 
 void wxColour::InitFromName(const wxString& name)
 {
-    wxColour col = wxTheColourDatabase->Find(name);
-    if ( col.Ok() )
+    if ( wxTheColourDatabase )
     {
-        *this = col;
+        wxColour col = wxTheColourDatabase->Find(name);
+        if ( col.Ok() )
+        {
+            *this = col;
+            return;
+        }
     }
-    else
-    {
-        Init();
-    }
+
+    // leave invalid
+    Init();
 }
 
 wxColour::~wxColour ()
@@ -98,13 +101,13 @@ void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
     m_red = r;
     m_green = g;
     m_blue = b;
-    m_isInit = TRUE;
+    m_isInit = true;
 
     wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
 }
 
 void wxColour::Set( const WXCOLORREF* color )
-{ 
+{
     RGBColor* col = (RGBColor*) color ;
     memcpy( &m_pixel , color , 6 ) ;
     m_red = col->red>>8 ;

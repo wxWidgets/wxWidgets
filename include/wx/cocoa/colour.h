@@ -33,7 +33,7 @@ public:
     wxColour( unsigned long colRGB )
     :   m_cocoaNSColor(NULL)
     {   Set(colRGB); }
-  
+
     // implicit conversion from the colour name
     wxColour( const wxString &colourName )
     :   m_cocoaNSColor(NULL)
@@ -62,10 +62,10 @@ public:
     // comparison
     bool operator == (const wxColour& colour) const
     {
-        return (m_cocoaNSColor == colour.m_cocoaNSColor &&
-            m_red == colour.m_red && 
-            m_green == colour.m_green && 
-            m_blue == colour.m_blue);
+        return (m_cocoaNSColor == colour.m_cocoaNSColor
+            && m_red == colour.m_red
+            && m_green == colour.m_green
+            && m_blue == colour.m_blue);
     }
     bool operator != (const wxColour& colour) const
     {   return !(*this == colour); }
@@ -83,7 +83,6 @@ public:
             (unsigned char)(colRGB >> 16));
     }
 
-protected:
     void InitFromName(const wxString& col);
 
 private:

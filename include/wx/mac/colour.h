@@ -31,7 +31,7 @@ public:
       { Set(red, green, blue); }
   wxColour( unsigned long colRGB )
       { Set(colRGB); }
-  
+
     // implicit conversion from the colour name
   wxColour( const wxString &colourName )
       { InitFromName(colourName); }
@@ -67,24 +67,27 @@ public:
   // comparison
   bool operator == (const wxColour& colour) const
   {
-    return (m_isInit == colour.m_isInit &&
-            m_red == colour.m_red && 
-            m_green == colour.m_green && 
-            m_blue == colour.m_blue);
+    return (m_isInit == colour.m_isInit
+            && m_red == colour.m_red
+            && m_green == colour.m_green
+            && m_blue == colour.m_blue);
   }
   bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
-  void InitFromName(const wxString& col);
-
   const WXCOLORREF& GetPixel() const { return m_pixel; };
+
+    void InitFromName(const wxString& col);
+
+protected :
+
+    // Helper function
+    void Init();
 
 private:
   bool          m_isInit;
   unsigned char m_red;
   unsigned char m_blue;
   unsigned char m_green;
-
-  void Init();
 
 public:
   WXCOLORREF m_pixel ;

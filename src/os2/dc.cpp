@@ -316,19 +316,19 @@ void wxDC::AddToDCCache(
 
 void wxDC::ClearCache()
 {
-    m_svBitmapCache.DeleteContents(TRUE);
+    m_svBitmapCache.DeleteContents(true);
     m_svBitmapCache.Clear();
-    m_svBitmapCache.DeleteContents(FALSE);
-    m_svDCCache.DeleteContents(TRUE);
+    m_svBitmapCache.DeleteContents(false);
+    m_svDCCache.DeleteContents(true);
     m_svDCCache.Clear();
-    m_svDCCache.DeleteContents(FALSE);
+    m_svDCCache.DeleteContents(false);
 } // end of wxDC::ClearCache
 
 // Clean up cache at app exit
 class wxDCModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return TRUE; }
+    virtual bool OnInit() { return true; }
     virtual void OnExit() { wxDC::ClearCache(); }
 
 private:
@@ -345,8 +345,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 
 wxDC::wxDC(void)
 {
-    wxColour                        vColor;
-
     m_pCanvas      = NULL;
 
     m_hOldBitmap   = 0;
@@ -355,16 +353,18 @@ wxDC::wxDC(void)
     m_hOldFont     = 0;
     m_hOldPalette  = 0;
 
-    m_bOwnsDC      = FALSE;
+    m_bOwnsDC      = false;
     m_hDC          = 0;
     m_hOldPS       = NULL;
     m_hPS          = NULL;
-    m_bIsPaintTime = FALSE; // True at Paint Time
+    m_bIsPaintTime = false; // True at Paint Time
 
-    vColor.InitFromName("BLACK");
+    wxColour vColor( wxT("BLACK") );
     m_pen.SetColour(vColor);
-    vColor.Set("WHITE");
+
+    vColor.Set( wxT("WHITE") );
     m_brush.SetColour(vColor);
+
 } // end of wxDC::wxDC
 
 wxDC::~wxDC(void)
@@ -459,7 +459,7 @@ void wxDC::DoSetClippingRegion(
     RECTL                           vRect;
 
     vY = OS2Y(vY,vHeight);
-    m_clipping    = TRUE;
+    m_clipping    = true;
     vRect.xLeft   = vX;
     vRect.yTop    = vY + vHeight;
     vRect.xRight  = vX + vWidth;
@@ -475,7 +475,7 @@ void wxDC::DoSetClippingRegionAsRegion(
      wxCHECK_RET(rRegion.GetHRGN(), wxT("invalid clipping region"));
      HRGN                           hRgnOld;
 
-     m_clipping = TRUE;
+     m_clipping = true;
      ::GpiSetClipRegion( m_hPS
                         ,(HRGN)rRegion.GetHRGN()
                         ,&hRgnOld
@@ -503,7 +503,7 @@ void wxDC::DestroyClippingRegion(void)
 
          ::GpiSetClipRegion(m_hPS, hRgn, &hRgnOld);
      }
-      m_clipping = FALSE;
+      m_clipping = false;
 } // end of wxDC::DestroyClippingRegion
 
 // ---------------------------------------------------------------------------
@@ -512,7 +512,7 @@ void wxDC::DestroyClippingRegion(void)
 
 bool wxDC::CanDrawBitmap() const
 {
-    return TRUE;
+    return true;
 }
 
 bool wxDC::CanGetTextExtent() const
@@ -571,7 +571,7 @@ bool wxDC::DoFloodFill(
     LONG                            lColor;
     LONG                            lOptions;
     LONG                            lHits;
-    bool                            bSuccess = FALSE;
+    bool                            bSuccess = false;
 
     vPtlPos.x = vX;             // Loads x-coordinate
     vPtlPos.y = OS2Y(vY,0);     // Loads y-coordinate
@@ -582,8 +582,9 @@ bool wxDC::DoFloodFill(
         lOptions = FF_SURFACE;
 
     if ((lHits = ::GpiFloodFill(m_hPS, lOptions, lColor)) != GPI_ERROR)
-        bSuccess = TRUE;
-    return TRUE;
+        bSuccess = true;
+
+    return true;
 } // end of wxDC::DoFloodFill
 
 bool wxDC::DoGetPixel(
@@ -1290,13 +1291,13 @@ void wxDC::DoDrawIcon(
     //
     if (rIcon.IsXpm())
     {
-        DoDrawBitmap(rIcon.GetXpmSrc(), vX, vY, TRUE);
+        DoDrawBitmap(rIcon.GetXpmSrc(), vX, vY, true);
     }
     else
     {
         wxBitmap                        vBitmap(rIcon);
 
-        DoDrawBitmap(vBitmap, vX, vY, FALSE);
+        DoDrawBitmap(vBitmap, vX, vY, false);
     }
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX + rIcon.GetWidth(), vY + rIcon.GetHeight());
@@ -2074,7 +2075,7 @@ void wxDC::SetBackground(
         return;
     if (m_pCanvas)
     {
-        bool                        bCustomColours = TRUE;
+        bool                        bCustomColours = true;
 
         //
         // If we haven't specified wxUSER_COLOURS, don't allow the panel/dialog box to
@@ -2082,12 +2083,12 @@ void wxDC::SetBackground(
         //
         if (m_pCanvas->IsKindOf(CLASSINFO(wxWindow)) &&
             ((m_pCanvas->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))
-            bCustomColours = FALSE;
+            bCustomColours = false;
         if (bCustomColours)
         {
             if (m_backgroundBrush.GetStyle()==wxTRANSPARENT)
             {
-                m_pCanvas->SetTransparent(TRUE);
+                m_pCanvas->SetTransparent(true);
             }
             else
             {
@@ -2101,7 +2102,7 @@ void wxDC::SetBackground(
                 // parent?
                 // m_canvas->SetBackgroundColour(m_backgroundBrush.GetColour());
                 //
-                m_pCanvas->SetTransparent(FALSE);
+                m_pCanvas->SetTransparent(false);
             }
         }
     }
@@ -2192,8 +2193,8 @@ bool wxDC::StartDoc(
   const wxString&                   rsMessage
 )
 {
-    // We might be previewing, so return TRUE to let it continue.
-    return TRUE;
+    // We might be previewing, so return true to let it continue.
+    return true;
 } // end of wxDC::StartDoc
 
 void wxDC::EndDoc()
@@ -2471,7 +2472,7 @@ wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 
 wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
-	// axis orientation is not taken into account for conversion of a distance
+    // axis orientation is not taken into account for conversion of a distance
     return (wxCoord) ((x)/(m_logicalScaleX*m_userScaleX*m_scaleX));
 }
 
@@ -2482,7 +2483,7 @@ wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 
 wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
-	// axis orientation is not taken into account for conversion of a distance
+    // axis orientation is not taken into account for conversion of a distance
     return (wxCoord) ((y)/(m_logicalScaleY*m_userScaleY*m_scaleY));
 }
 
@@ -2493,7 +2494,7 @@ wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 
 wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
-	// axis orientation is not taken into account for conversion of a distance
+    // axis orientation is not taken into account for conversion of a distance
     return (wxCoord) (x*m_logicalScaleX*m_userScaleX*m_scaleX);
 }
 
@@ -2504,7 +2505,7 @@ wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 
 wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
-	// axis orientation is not taken into account for conversion of a distance
+    // axis orientation is not taken into account for conversion of a distance
     return (wxCoord) (y*m_logicalScaleY*m_userScaleY*m_scaleY);
 }
 
@@ -2538,7 +2539,7 @@ bool wxDC::DoBlit(
         pMask = rBmp.GetMask();
         if (!(rBmp.Ok() && pMask && pMask->GetMaskBitmap()))
         {
-            bUseMask = FALSE;
+            bUseMask = false;
         }
     }
 
@@ -2586,7 +2587,7 @@ bool wxDC::DoBlit(
         case wxNOR:          lRop = ROP_NOTSRCCOPY;       break;
         default:
            wxFAIL_MSG( wxT("unsupported logical function") );
-           return FALSE;
+           return false;
     }
 
     bool                            bSuccess;
@@ -2618,7 +2619,7 @@ bool wxDC::DoBlit(
         vBmpHdr.cBitCount = 24;
 
 #if wxUSE_DC_CACHEING
-        if (TRUE)
+        if (true)
         {
             //
             // create a temp buffer bitmap and DCs to access it and the mask
@@ -2649,24 +2650,24 @@ bool wxDC::DoBlit(
         }
 
         POINTL                          aPoint1[4] = { {0, 0}
-						      ,{vWidth, vHeight}
-						      ,{vXdest, vYdest}
-						      ,{vXdest + vWidth, vYdest + vHeight}
+                              ,{vWidth, vHeight}
+                              ,{vXdest, vYdest}
+                              ,{vXdest + vWidth, vYdest + vHeight}
                                                      };
         POINTL                          aPoint2[4] = { {0, 0}
-						      ,{vWidth, vHeight}
-						      ,{vXsrc, vYsrc}
-						      ,{vXsrc + vWidth, vYsrc + vHeight}
+                              ,{vWidth, vHeight}
+                              ,{vXsrc, vYsrc}
+                              ,{vXsrc + vWidth, vYsrc + vHeight}
                                                      };
         POINTL                          aPoint3[4] = { {vXdest, vYdest}
-						      ,{vXdest + vWidth, vYdest + vHeight}
-						      ,{vXsrc, vYsrc}
-						      ,{vXsrc + vWidth, vYsrc + vHeight}
+                              ,{vXdest + vWidth, vYdest + vHeight}
+                              ,{vXsrc, vYsrc}
+                              ,{vXsrc + vWidth, vYsrc + vHeight}
                                                      };
         POINTL                          aPoint4[4] = { {vXdest, vYdest}
-						      ,{vXdest + vWidth, vYdest + vHeight}
-						      ,{0, 0}
-						      ,{vWidth, vHeight}
+                              ,{vXdest + vWidth, vYdest + vHeight}
+                              ,{0, 0}
+                              ,{vWidth, vHeight}
                                                      };
         ::GpiSetBitmap(hPSMask, (HBITMAP) pMask->GetMaskBitmap());
         ::GpiSetBitmap(hPSBuffer, (HBITMAP) hBufBitmap);
@@ -2757,7 +2758,7 @@ bool wxDC::DoBlit(
                         );
         if (rc == GPI_ERROR)
         {
-            bSuccess = FALSE;
+            bSuccess = false;
             wxLogLastError(wxT("BitBlt"));
         }
 
@@ -2773,14 +2774,14 @@ bool wxDC::DoBlit(
         ::DevCloseDC(hDCBuffer);
         ::GpiDeleteBitmap(hBufBitmap);
 #endif
-        bSuccess = TRUE;
+        bSuccess = true;
     }
     else // no mask, just BitBlt() it
     {
       POINTL                          aPoint[4] = { {vXdest, vYdest}
-						   ,{vXdest + vWidth, vYdest + vHeight}
-						   ,{vXsrc, vYsrc}
-						   ,{vXsrc + vWidth, vYsrc + vHeight}
+                           ,{vXdest + vWidth, vYdest + vHeight}
+                           ,{vXsrc, vYsrc}
+                           ,{vXsrc + vWidth, vYsrc + vHeight}
                                                     };
 
         bSuccess = (::GpiBitBlt( m_hPS

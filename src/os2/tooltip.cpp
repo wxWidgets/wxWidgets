@@ -56,7 +56,6 @@ void wxToolTip::Create(
 )
 {
     ULONG                           lStyle = ES_READONLY | ES_MARGIN | ES_CENTER;
-    wxColour                        vColor;
     LONG                            lColor;
     char                            zFont[128];
 
@@ -74,7 +73,7 @@ void wxToolTip::Create(
     if (!m_hWnd)
         wxLogError("Unable to create tooltip window");
 
-    vColor.InitFromName("YELLOW");
+    wxColour                        vColor( wxT("YELLOW") );
     lColor = (LONG)vColor.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_BACKGROUNDCOLOR

@@ -331,7 +331,7 @@ void wxColourDatabase::Initialize()
         {wxT("WHEAT"), 216, 216, 191},
         {wxT("WHITE"), 255, 255, 255},
         {wxT("YELLOW"), 255, 255, 0},
-        {wxT("YELLOW GREEN"), 153, 204, 50},
+        {wxT("YELLOW GREEN"), 153, 204, 50}
     };
 
     size_t n;

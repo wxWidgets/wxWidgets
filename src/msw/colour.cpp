@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -29,38 +29,39 @@
 
 template<> void wxStringReadValue(const wxString &s , wxColour &data )
 {
-	// copied from VS xrc
-	unsigned long tmp = 0;
+    // copied from VS xrc
+    unsigned long tmp = 0;
 
-    if (s.Length() != 7 || s[0u] != wxT('#') ||
-        wxSscanf(s.c_str(), wxT("#%lX"), &tmp) != 1)
+    if (s.Length() != 7 || s[0u] != wxT('#')
+        || wxSscanf(s.c_str(), wxT("#%lX"), &tmp) != 1)
     {
-		wxLogError(_("String To Colour : Incorrect colour specification : %s"),
-                   s.c_str() );
+        wxLogError(_("String To Colour : Incorrect colour specification : %s"),
+            s.c_str() );
         data = wxNullColour;
     }
-	else
-	{
-		data = wxColour((unsigned char) ((tmp & 0xFF0000) >> 16) ,
-                    (unsigned char) ((tmp & 0x00FF00) >> 8),
-                    (unsigned char) ((tmp & 0x0000FF)));
-	}
+    else
+    {
+        data = wxColour((unsigned char) ((tmp & 0xFF0000) >> 16) ,
+            (unsigned char) ((tmp & 0x00FF00) >> 8),
+            (unsigned char) ((tmp & 0x0000FF)));
+    }
 }
 
 template<> void wxStringWriteValue(wxString &s , const wxColour &data )
 {
-	s = wxString::Format(wxT("#%02X%02X%02X"), data.Red() , data.Green() , data.Blue() ) ;
+    s = wxString::Format(wxT("#%02X%02X%02X"),
+        data.Red(), data.Green(), data.Blue() );
 }
 
-IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour , wxObject , "wx/colour.h" ,  &wxToStringConverter<wxColour> , &wxFromStringConverter<wxColour>) 
+IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour , wxObject , "wx/colour.h" ,  &wxToStringConverter<wxColour> , &wxFromStringConverter<wxColour>)
 
 wxBEGIN_PROPERTIES_TABLE(wxColour)
-	wxREADONLY_PROPERTY( Red, unsigned char , Red ,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxREADONLY_PROPERTY( Green, unsigned char  , Green ,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) 
-	wxREADONLY_PROPERTY( Blue, unsigned char , Blue ,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxREADONLY_PROPERTY( Red, unsigned char, Red,  , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxREADONLY_PROPERTY( Green, unsigned char, Green,  , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxREADONLY_PROPERTY( Blue, unsigned char, Blue,  , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
-wxCONSTRUCTOR_3( wxColour , unsigned char , Red , unsigned char , Green , unsigned char , Blue )  
+wxCONSTRUCTOR_3( wxColour, unsigned char, Red, unsigned char, Green, unsigned char, Blue )
 
 wxBEGIN_HANDLERS_TABLE(wxColour)
 wxEND_HANDLERS_TABLE()
@@ -72,14 +73,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 void wxColour::Init()
 {
-    m_isInit = FALSE;
+    m_isInit = false;
     m_pixel = 0;
     m_red =
     m_blue =
     m_green = 0;
 }
 
-wxColour::wxColour (const wxColour& col)
+wxColour::wxColour(const wxColour& col)
 {
     *this = col;
 }
@@ -114,12 +115,12 @@ wxColour::~wxColour()
 {
 }
 
-void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
+void wxColour::Set(unsigned char r, unsigned char g, unsigned char b)
 {
     m_red = r;
     m_green = g;
     m_blue = b;
-    m_isInit = TRUE;
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
+    m_isInit = true;
+    m_pixel = PALETTERGB(m_red, m_green, m_blue);
 }
 
