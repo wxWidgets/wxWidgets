@@ -982,7 +982,8 @@ bool wxFileConfig::ConfigGroup::DeleteSubgroup(const char *szName)
       // go back until we find a subgroup or reach the group's line
       ConfigGroup *pNewLast = NULL;
       uint n, nSubgroups = m_aSubgroups.Count();
-      for ( LineList *pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() ) {
+      LineList *pl;
+      for ( pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() ) {
         // is it our subgroup?
         for ( n = 0; (pNewLast == NULL) && (n < nSubgroups); n++ ) {
           // do _not_ call GetGroupLine! we don't want to add it to the local
@@ -1032,7 +1033,8 @@ bool wxFileConfig::ConfigGroup::DeleteEntry(const char *szName)
       // go back until we find another entry or reach the group's line
       ConfigEntry *pNewLast = NULL;
       uint n, nEntries = m_aEntries.Count();
-      for ( LineList *pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() ) {
+      LineList *pl;
+      for ( pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() ) {
         // is it our subgroup?
         for ( n = 0; (pNewLast == NULL) && (n < nEntries); n++ ) {
           if ( m_aEntries[n]->GetLine() == m_pLine )
