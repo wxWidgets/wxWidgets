@@ -827,7 +827,7 @@ void wxWindowMac::MacSuperShown( bool show )
     wxWindowListNode *node = GetChildren().GetFirst();
     while ( node )
     {
-        wxWindowMac *child = (wxWindowMac *)node->GetData();
+        wxWindowMac *child = node->GetData();
         if ( child->m_isShown )
             child->MacSuperShown( show ) ;
         node = node->GetNext();
@@ -1278,7 +1278,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
     
     for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
-        wxWindowMac *child = (wxWindowMac*)node->GetData();
+        wxWindowMac *child = node->GetData();
         if (child == m_vScrollBar) continue;
         if (child == m_hScrollBar) continue;
         if (child->IsTopLevel()) continue;
@@ -1474,7 +1474,7 @@ bool wxWindowMac::MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac**
     
     for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
-        wxWindowMac *child = (wxWindowMac*)node->GetData();
+        wxWindowMac *child = node->GetData();
         // added the m_isShown test --dmazzoni
         if ( child->MacGetRootWindow() == window && child->m_isShown )
         {
@@ -1579,7 +1579,7 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
     
     for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
-        wxWindowMac *child = (wxWindowMac*)node->GetData();
+        wxWindowMac *child = node->GetData();
         if ( child->MacGetRootWindow() == window && child->IsShown() && child->IsEnabled() )
         {
             if (child->MacDispatchMouseEvent(event))
@@ -1717,7 +1717,7 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
         {
             for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
             {
-                wxWindowMac *child = (wxWindowMac*)node->GetData();
+                wxWindowMac *child = node->GetData();
                 
                 if ( !child->IsTopLevel() && child->IsShown() )
                 {
@@ -1740,7 +1740,7 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
             bool thisWindowThrough = false ;
             for (wxWindowListNode *node = GetParent()->GetChildren().GetFirst(); node; node = node->GetNext())
             {
-                wxWindowMac *sibling = (wxWindowMac*)node->GetData();
+                wxWindowMac *sibling = node->GetData();
                 if ( sibling == this )
                 {
                     thisWindowThrough = true ;
@@ -1829,7 +1829,7 @@ void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
     {
         // calculate the update region for the child windows by intersecting the window rectangle with our own
         // passed in update region and then offset it to be client-wise window coordinates again
-        wxWindowMac *child = (wxWindowMac*)node->GetData();
+        wxWindowMac *child = node->GetData();
         SetRectRgn( childupdate , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
         SectRgn( childupdate , updatergn , childupdate ) ;
         OffsetRgn( childupdate , -child->m_x , -child->m_y ) ;
@@ -1989,7 +1989,7 @@ void wxWindowMac::MacSuperChangedPosition()
     wxWindowListNode *node = GetChildren().GetFirst();
     while ( node )
     {
-        wxWindowMac *child = (wxWindowMac *)node->GetData();
+        wxWindowMac *child = node->GetData();
         child->MacSuperChangedPosition() ;
         node = node->GetNext();
     }
@@ -2002,7 +2002,7 @@ void wxWindowMac::MacTopLevelWindowChangedPosition()
     wxWindowListNode *node = GetChildren().GetFirst();
     while ( node )
     {
-        wxWindowMac *child = (wxWindowMac *)node->GetData();
+        wxWindowMac *child = node->GetData();
         child->MacTopLevelWindowChangedPosition() ;
         node = node->GetNext();
     }
