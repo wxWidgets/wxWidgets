@@ -29,17 +29,16 @@ public:
 
     void SetMessage(const wxString& message) { m_message = message; }
     void SetPath(const wxString& path);
-    void SetStyle(long style) { m_dialogStyle = style; }
+    void SetStyle(long style) { SetWindowStyle(style); }
 
     wxString GetMessage() const { return m_message; }
     wxString GetPath() const { return m_path; }
-    long GetStyle() const { return m_dialogStyle; }
+    long GetStyle() const { return GetWindowStyle(); }
 
     virtual int ShowModal();
 
 protected:
     wxString    m_message;
-    long        m_dialogStyle;
     wxString    m_path;
 
 private:
