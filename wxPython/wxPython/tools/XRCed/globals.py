@@ -16,7 +16,7 @@ else:
     modernFont = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
 
 progname = 'XRCed'
-version = '0.0.9-1'
+version = '0.0.9-4'
 
 # Global variables
 

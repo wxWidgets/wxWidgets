@@ -1,3 +1,21 @@
+0.0.9-4
+-------
+
+Implemented standard bitmap selection.
+
+Fixed a bug in FlexGridSizer code.
+
+0.0.9-3
+-------
+
+File browsing (for bitmaps/icons, etc.) had a small problem when current 
+file was not saved yet.
+
+0.0.9-2
+-------
+
+Small bug fix for initial don't panic message.
+
 0.0.9-1
 -------
 

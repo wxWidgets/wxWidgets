@@ -170,6 +170,8 @@ class ParamPage(wxPanel):
             # Some classes are special
             if param == 'font':
                 xxx.params[param] = xxxParamFont(xxx.element, elem)
+            elif param in xxxObject.bitmapTags:
+                xxx.params[param] = xxxParamBitmap(elem)
             else:
                 xxx.params[param] = xxxParam(elem)
             # Find place to put new element: first present element after param
@@ -247,7 +249,7 @@ class PropPage(ParamPage):
             label = wxStaticText(self, -1, 'XML ID:', size=(100,-1))
             control = ParamText(self, name='XML_name')
             sizer.AddMany([ (label, 0, wxALIGN_CENTER_VERTICAL),
-                            (control, 0, wxALIGN_CENTER_VERTICAL) ])
+                            (control, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM, 5) ])
             self.controlName = control
         for param in xxx.allParams:
             present = xxx.params.has_key(param)

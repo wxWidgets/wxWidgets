@@ -8,6 +8,7 @@ import string
 import os.path
 from globals import *
 from types import *
+from wxPython.xrc import *
 
 genericStyles = ['wxSIMPLE_BORDER', 'wxDOUBLE_BORDER',
                  'wxSUNKEN_BORDER', 'wxRAISED_BORDER',
@@ -305,7 +306,7 @@ class ParamInt(PPanel):
         self.freeze = false
 
 class ParamText(PPanel):
-    def __init__(self, parent, name, textWidth=200):
+    def __init__(self, parent, name, textWidth=260):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         # We use sizer even here to have the same size of text control
@@ -334,8 +335,9 @@ class ParamPosSize(ParamText):
 
 class ContentDialog(wxDialogPtr):
     def __init__(self, parent, value):
-        # Is this normal???
+        # Load from resource
         w = g.frame.res.LoadDialog(parent, 'DIALOG_CONTENT')
+        # Perform initialization with class pointer
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
         self.Center()
@@ -385,7 +387,6 @@ class ContentDialog(wxDialogPtr):
 
 class ContentCheckListDialog(wxDialogPtr):
     def __init__(self, parent, value):
-        # Is this normal???
         w = g.frame.res.LoadDialog(parent, 'DIALOG_CONTENT_CHECK_LIST')
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
@@ -684,6 +685,83 @@ class ParamFile(PPanel):
             self.textModified = false
         dlg.Destroy()
 
+class ParamBitmap(PPanel):
+    def __init__(self, parent, name):
+        # Load from resource
+        w = g.frame.res.LoadPanel(parent, 'PANEL_BITMAP')
+        # Perform initialization with class pointer
+        wxPanelPtr.__init__(self, w.this)
+        self.thisown = 1
+        self.modified = self.freeze = false
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
+        self.radio_std = self.FindWindowByName('RADIO_STD')
+        self.radio_file = self.FindWindowByName('RADIO_FILE')
+        self.combo = self.FindWindowByName('COMBO_STD')
+        self.text = self.FindWindowByName('TEXT_FILE')
+        self.button = self.FindWindowByName('BUTTON_BROWSE')
+        self.textModified = false
+        self.SetAutoLayout(true)
+        self.GetSizer().SetMinSize((260, -1))
+        self.GetSizer().Fit(self)
+        EVT_RADIOBUTTON(self, XMLID('RADIO_STD'), self.OnRadioStd)
+        EVT_RADIOBUTTON(self, XMLID('RADIO_FILE'), self.OnRadioFile)
+        EVT_BUTTON(self, XMLID('BUTTON_BROWSE'), self.OnButtonBrowse)
+        EVT_COMBOBOX(self, XMLID('COMBO_STD'), self.OnCombo)
+        EVT_TEXT(self, XMLID('COMBO_STD'), self.OnChange)
+        EVT_TEXT(self, XMLID('TEXT_FILE'), self.OnChange)
+    def OnRadioStd(self, evt):
+        self.SetModified()
+        self.SetValue('')
+    def OnRadioFile(self, evt):
+        self.SetModified()
+        self.SetValue(['',''])
+    def updateRadios(self):
+        if self.value[0]:
+            self.text.Enable(false)
+            self.button.Enable(false)
+            self.combo.Enable(true)
+        else:
+            self.text.Enable(true)
+            self.button.Enable(true)
+            self.combo.Enable(false)            
+    def OnChange(self, evt):
+        PPanel.OnChange(self, evt)
+        self.textModified = true
+    def OnCombo(self, evt):
+        PPanel.OnChange(self, evt)
+        self.value[0] = self.combo.GetValue()
+    def GetValue(self):
+        if self.textModified:           # text has newer value
+            return [self.combo.GetValue(), self.text.GetValue()]
+        return self.value
+    def SetValue(self, value):
+        self.freeze = true
+        if not value:
+            self.value = ['wxART_MISSING_IMAGE', '']
+        else:
+            self.value = value
+        self.combo.SetValue(self.value[0])
+        self.text.SetValue(self.value[1])  # update text ctrl
+        self.updateRadios()
+        self.freeze = false
+    def OnButtonBrowse(self, evt):
+        if self.textModified:           # text has newer value
+            self.value[1] = self.text.GetValue()
+        dlg = wxFileDialog(self,
+                           defaultDir = os.path.abspath(os.path.dirname(self.value[1])),
+                           defaultFile = os.path.basename(self.value[1]))
+        if dlg.ShowModal() == wxID_OK:
+            # Get common part of selected path and current
+            if g.frame.dataFile:
+                curpath = os.path.abspath(g.frame.dataFile)
+            else:
+                curpath = os.path.join(os.getcwd(), '')
+            common = os.path.commonprefix([curpath, dlg.GetPath()])
+            self.SetValue(['', dlg.GetPath()[len(common):]])
+            self.SetModified()
+            self.textModified = false
+        dlg.Destroy()
+
 paramDict = {
     'flag': ParamFlag,
     'style': ParamStyle, 'exstyle': ParamExStyle,
@@ -696,6 +774,6 @@ paramDict = {
     'min': ParamInt, 'max': ParamInt,
     'fg': ParamColour, 'bg': ParamColour, 'font': ParamFont,
     'enabled': ParamBool, 'focused': ParamBool, 'hidden': ParamBool,
-    'tooltip': ParamText, 'bitmap': ParamFile, 'icon': ParamFile,
+    'tooltip': ParamText, 'bitmap': ParamBitmap, 'icon': ParamBitmap,
     }
 

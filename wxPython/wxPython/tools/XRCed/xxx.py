@@ -151,6 +151,21 @@ class xxxParamContentCheckList(xxxNode):
                 self.l[i][1].setAttribute('checked', str(value[i][1]))
         self.data = value
 
+# Bitmap parameter
+class xxxParamBitmap(xxxParam):
+    def __init__(self, node):
+        xxxParam.__init__(self, node)
+        self.stock_id = node.getAttribute('stock_id')
+    def value(self):
+        return [self.stock_id, xxxParam.value(self)]
+    def update(self, value):
+        self.stock_id = value[0]
+        if self.stock_id:
+            self.node.setAttribute('stock_id', self.stock_id)
+        else:
+            self.node.removeAttribute('stock_id')
+        xxxParam.update(self, value[1])
+
 ################################################################################
 
 # Classes to interface DOM objects
@@ -165,6 +180,8 @@ class xxxObject:
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'tooltip']
     # Special parameters
     specials = []
+    # Bitmap tags
+    bitmapTags = ['bitmap', 'bitmap2', 'icon']
     # Required paremeters: none by default
     required = []
     # Default parameters with default values
@@ -204,6 +221,9 @@ class xxxObject:
                         self.params[tag] = xxxParamContent(node)
                 elif tag == 'font': # has children
                     self.params[tag] = xxxParamFont(element, node)
+                elif tag in self.bitmapTags:
+                    # Can have attributes
+                    self.params[tag] = xxxParamBitmap(node)
                 else:                   # simple parameter
                     self.params[tag] = xxxParam(node)
             else:
@@ -327,7 +347,7 @@ class xxxFrame(xxxContainer):
 class xxxTool(xxxObject):
     allParams = ['bitmap', 'bitmap2', 'toggle', 'tooltip', 'longhelp']
     required = ['bitmap']
-    paramDict = {'bitmap2': ParamFile, 'toggle': ParamBool}
+    paramDict = {'bitmap2': ParamBitmap, 'toggle': ParamBool}
     hasStyle = false
 
 class xxxToolBar(xxxContainer):
@@ -346,6 +366,7 @@ class xxxBitmap(xxxObject):
     allParams = ['bitmap']
     required = ['bitmap']
 
+# Just like bitmap
 class xxxIcon(xxxObject):
     allParams = ['icon']
     required = ['icon']
@@ -530,7 +551,8 @@ class xxxGridSizer(xxxSizer):
 
 # For repeated parameters
 class xxxParamMulti:
-    def __init__(self):
+    def __init__(self, node):
+        self.node = node
         self.l, self.data = [], []
     def append(self, param):
         self.l.append(param)
@@ -550,7 +572,8 @@ class xxxFlexGridSizer(xxxGridSizer):
     # (they are represented by several nodes)
     def special(self, tag, node):
         if not self.params.has_key(tag):
-            self.params[tag] = xxxParamMulti()
+            # Create new multi-group
+            self.params[tag] = xxxParamMulti(node)
         self.params[tag].append(xxxParamInt(node))
     def setSpecial(self, param, value):
         # Straightforward implementation: remove, add again
