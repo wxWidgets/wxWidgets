@@ -481,7 +481,7 @@ void wxFrameMSW::PositionStatusBar()
 
 void wxFrameMSW::AttachMenuBar(wxMenuBar *menubar)
 {
-    m_frameMenuBar = menubar;
+    wxFrameBase::AttachMenuBar(menubar);
 
     if ( !menubar )
     {
@@ -496,15 +496,15 @@ void wxFrameMSW::AttachMenuBar(wxMenuBar *menubar)
         {
             m_hMenu = menubar->GetHMenu();
         }
-        else
+        else // no HMENU yet
         {
-            if ( menubar->IsAttached() )
-                menubar->Detach();
-
             m_hMenu = menubar->Create();
 
             if ( !m_hMenu )
+            {
+                wxFAIL_MSG( _T("failed to create menu bar") );
                 return;
+            }
         }
 
         InternalSetMenuBar();
