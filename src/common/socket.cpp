@@ -1267,7 +1267,6 @@ wxDatagramSocket::wxDatagramSocket( wxSockAddress& addr,
     return;
   }
   // Setup the socket as non connection oriented
-  GSocket_Unstreamed(m_socket);
   GSocket_SetLocal(m_socket, addr.GetAddress());
   if( GSocket_SetNonOriented(m_socket) != GSOCK_NOERROR )
   {
