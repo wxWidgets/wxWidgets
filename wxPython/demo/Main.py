@@ -981,7 +981,7 @@ class wxPythonDemo(wx.Frame):
     overviewText = "wxPython Overview"
 
     def __init__(self, parent, title):
-        wx.Frame.__init__(self, parent, -1, title, size = (950, 750),
+        wx.Frame.__init__(self, parent, -1, title, size = (950, 720),
                           style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
 
         self.loaded = False
