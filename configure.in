@@ -656,8 +656,8 @@ dnl ============================
 dnl these options use AC_ARG_WITH and not WX_ARG_WITH on purpose - we cache
 dnl these values manually
 for toolkit in `echo $ALL_TOOLKITS`; do
-  LINE=`grep "wxUSE_$toolkit" ${wx_arg_cache_file}`
-  if test "x$LINE" != x ; then
+  LINE=`grep "wxUSE_$toolkit=" ${wx_arg_cache_file}`
+  if test "x$LINE" != "x" ; then
     has_toolkit_in_cache=1
     eval "DEFAULT_$LINE"
     eval "CACHE_$toolkit=1"
@@ -688,7 +688,7 @@ AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
 
-AC_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available (EXPERIMENTAL)],wxUSE_GTK2="yes",wxUSE_GTK2="no")
+WX_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available (EXPERIMENTAL)], wxUSE_GTK2)
 
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
@@ -1094,10 +1094,10 @@ if test "$wxUSE_GUI" = "yes"; then
       1)
       ;;
       0)
-        AC_MSG_ERROR(Please specify a toolkit - cannot determine the default for ${host})
+        AC_MSG_ERROR(Please specify a toolkit -- cannot determine the default for ${host})
       ;;
       *)
-        AC_MSG_ERROR(Please specify at most one toolkit (may be some are cached?))
+        AC_MSG_ERROR(Please specify at most one toolkit (maybe some are cached in configarg.cache?))
     esac
 
     dnl cache the wxUSE_<TOOLKIT> values too
@@ -1356,10 +1356,6 @@ if test "$ac_cv_header_wchar_h" != "yes"; then
     dnl defines HAVE_WCSTR_H
     AC_CHECK_HEADERS(wcstr.h)
 fi
-
-dnl checking for wctype.h is useless as we need wcslen(), not just wchar_t and
-dnl this function is never provided by it
-dnl AC_CHECK_HEADERS(wctype.h)
 
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
@@ -2907,46 +2903,34 @@ dnl Check for functions
 dnl ---------------------------------------------------------------------------
 
 dnl don't check for wchar_t functions if we haven't got wchar_t itself
-WCHAR_OK=0
 if test "$wx_cv_sizeof_wchar_t" != "0"; then
-    dnl check for wcslen
-    WCHAR_LINK=
-    AC_CHECK_FUNCS(wcslen, [
-                    AC_DEFINE(HAVE_WCSLEN)
-                    WCHAR_OK=1
-                  ])
+    AC_DEFINE(wxUSE_WCHAR_T)
 
-    if test "$WCHAR_OK" = 0; then
+    dnl check for wcslen in all possible places
+    WCSLEN_FOUND=0
+    WCHAR_LINK=
+    AC_CHECK_FUNCS(wcslen, WCSLEN_FOUND=1)
+
+    if test "$WCSLEN_FOUND" = 0; then
         if test "$TOOLKIT" = "MSW"; then
-            AC_CHECK_LIB(msvcrt, wcslen, [
-                AC_DEFINE(HAVE_WCSLEN)
-                WCHAR_OK=1
-            ])
+            AC_CHECK_LIB(msvcrt, wcslen, WCHAR_OK=1)
         else
             AC_CHECK_LIB(w, wcslen, [
-                            AC_DEFINE(HAVE_WCSLEN)
                             WCHAR_LINK=" -lw"
-                            WCHAR_OK=1
+                            WCSLEN_FOUND=1
                         ])
         fi
     fi
-fi
 
-dnl we need at least the definition of wchar_t itself and wcslen() to compile
-dnl with wchar_t support -- turn it off if we don't have this
-if test "$WCHAR_OK" = 1; then
-    AC_DEFINE(wxUSE_WCHAR_T)
+    if test "$WCSLEN_FOUND" = 1; then
+        AC_DEFINE(HAVE_WCSLEN)
+    fi
 
-    dnl also try to use wcsrtombs instead of wcstombs which is buggy in old GNU
+    dnl try to use wcsrtombs instead of wcstombs which is buggy in old GNU
     dnl libc versions if possible
     AC_CHECK_FUNCS(wcsrtombs)
 else
-    dnl use built-in wcslen for Darwin (what about other BSD based systems?)
-    if test "$USE_DARWIN" = 1; then
-        AC_DEFINE(wxUSE_WCHAR_T)
-    else
-        AC_MSG_WARN([Wide character support is unavailable])
-    fi
+    AC_MSG_WARN([Wide character support is unavailable])
 fi
 
 dnl check for vprintf/vsprintf() which are GNU extensions
@@ -3057,6 +3041,11 @@ AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
 
 if test "$wx_cv_func_vsscanf" = yes; then
     AC_DEFINE(HAVE_VSSCANF)
+fi
+
+if test "$wxUSE_UNICODE" = yes; then
+    dnl look if we have wide char IO functions
+    AC_CHECK_FUNCS(fputwc wprintf)
 fi
 
 dnl the following tests are for Unix(like) systems only
