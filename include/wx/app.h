@@ -141,6 +141,14 @@ public:
     // crash.
     virtual void OnFatalException() { }
 
+#if wxUSE_EXCEPTIONS
+    // Called when an unhandled C++ exception occurs inside OnRun(): note that
+    // the exception type is lost by now, so if you really want to handle the
+    // exception you should override OnRun() and put a try/catch around
+    // MainLoop() call there
+    virtual void OnUnhandledException() { }
+#endif // wxUSE_EXCEPTIONS
+
     // Called from wxExit() function, should terminate the application a.s.a.p.
     virtual void Exit();
 
@@ -238,6 +246,17 @@ public:
     // or TRUE or FALSE to stop further processing and pretend that the event
     // had been already processed or won't be processed at all, respectively
     virtual int FilterEvent(wxEvent& event);
+
+#if wxUSE_EXCEPTIONS
+    // call the specified handler on the given object with the given event
+    //
+    // this method only exists to allow catching the exceptions thrown by any
+    // event handler, it would lead to an extra (useless) virtual function call
+    // if the exceptions were not used, so it doesn't even exist in that case
+    virtual void HandleEvent(wxEvtHandler *handler,
+                             wxEventFunction func,
+                             wxEvent& event) const;
+#endif // wxUSE_EXCEPTIONS
 
     // process all events in the wxPendingEvents list -- it is necessary to
     // call this function to process posted events. This happens during each
