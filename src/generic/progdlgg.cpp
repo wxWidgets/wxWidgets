@@ -322,7 +322,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 
     wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
-    if ( m_gauge )
+    if ( m_gauge && value < m_maximum )
     {
         m_gauge->SetValue(value + 1);
     }

@@ -87,6 +87,7 @@ extern pascal void OTDebugStr(const char* str);
 #endif
 InetSvcRef gInetSvcRef = 0 ;
 int gOTInited = 0 ;
+OTNotifyUPP gOTNotifierUPP = NULL ;
 
 OSStatus DoNegotiateIPReuseAddrOption(EndpointRef ep, Boolean enableReuseIPMode);
 
@@ -185,7 +186,7 @@ static void SetDefaultEndpointModes(EndpointRef ep , void *data )
 	junk = OTSetBlocking(ep);
 	OTAssert("SetDefaultEndpointModes: Could not set blocking", junk == noErr);
 */
-	junk = OTInstallNotifier(ep, OTInetEventHandler, data);
+	junk = OTInstallNotifier(ep, gOTNotifierUPP, data);
 	OTAssert("SetDefaultEndpointModes: Could not install notifier", junk == noErr);
 /*
 	junk = OTUseSyncIdleEvents(ep, true);
@@ -229,6 +230,7 @@ int GSocket_Verify_Inited()
 	OTAssert("Could not open Inet Services", err == noErr);
 	return FALSE ;
     }
+    gOTNotifierUPP = NewOTNotifyUPP( OTInetEventHandler ) ;
     return TRUE ;
 }
 
@@ -243,6 +245,8 @@ void GSocket_Cleanup()
     #else
       CloseOpenTransport() ;
     #endif
+        if ( gOTNotifierUPP )
+            DisposeOTNotifyUPP( gOTNotifierUPP ) ;
     }
 }
 

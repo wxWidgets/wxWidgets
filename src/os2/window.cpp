@@ -33,6 +33,7 @@
     #include "wx/frame.h"
     #include "wx/listbox.h"
     #include "wx/button.h"
+    #include "wx/bmpbuttn.h"
     #include "wx/msgdlg.h"
     #include "wx/scrolwin.h"
     #include "wx/radiobox.h"
@@ -2426,6 +2427,14 @@ bool wxWindowOS2::OS2ProcessMessage(
                                 pBtn->OS2Command(BN_CLICKED, 0 /* unused */);
                                 return TRUE;
                             }
+                            else if (!IsTopLevel())
+                            {
+                                //
+                                // if not a top level window, let parent
+                                // handle it
+                                //
+                                return FALSE;
+                            }
                             // else: but if it does not it makes sense to make
                             //       it work like a TAB - and that's what we do.
                             //       Note that Ctrl-Enter always works this way.
@@ -2814,6 +2823,11 @@ MRESULT wxWindowOS2::OS2WindowProc(
                                                                    ,&nX
                                                                    ,&nY
                                                                   );
+                    if (!pWin->IsOfStandardClass())
+                    {
+                        if (uMsg == WM_BUTTON1DOWN && pWin->AcceptsFocus() )
+                            pWin->SetFocus();
+                    }
                     bProcessed = pWin->HandleMouseEvent( uMsg
                                                         ,nX
                                                         ,nY

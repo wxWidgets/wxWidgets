@@ -46,15 +46,15 @@ extern bool gUseNavServices ;
 // and a copy of the "previous" file spec of the reply record
 // so we can see if the selection has changed
 
-const int kwxMacFileTypes = 10 ;
-
 struct OpenUserDataRec {
   int           currentfilter ;
-  wxString      name [kwxMacFileTypes] ;
-  wxString      extensions[kwxMacFileTypes] ;
-	OSType				filtermactypes[kwxMacFileTypes] ;
-	int					  numfilters ;
+  bool				saveMode ;
+  wxArrayString      name ;
+  wxArrayString      extensions ;
+  wxArrayLong		filtermactypes ;
+  NavMenuItemSpecArrayHandle menuitems ;
 };
+
 typedef struct OpenUserDataRec
 	OpenUserDataRec, *OpenUserDataRecPtr;
 
@@ -75,23 +75,40 @@ NavEventProc(
 	NavCBRecPtr					ioParams,
 	NavCallBackUserData	ioUserData	)
 {
-	  OpenUserDataRec * data = ( OpenUserDataRec *) ioUserData ;
+	OpenUserDataRec * data = ( OpenUserDataRec *) ioUserData ;
 	if (inSelector == kNavCBEvent) {	
-			// In Universal Headers 3.2, Apple changed the definition of
-		/*
-		#if UNIVERSAL_INTERFACES_VERSION >= 0x0320 // Universal Headers 3.2
-			UModalAlerts::ProcessModalEvent(*(ioParams->eventData.eventDataParms.event));
-			
-		#else
-			UModalAlerts::ProcessModalEvent(*(ioParams->eventData.event));
-		#endif
-		*/
-		
          wxTheApp->MacHandleOneEvent(ioParams->eventData.eventDataParms.event);
-	} else if ( inSelector == kNavCBPopupMenuSelect )
+	} 
+	else if ( inSelector == kNavCBStart )
 	{
-	  NavMenuItemSpec * menu = (NavMenuItemSpec *) ioParams->eventData.eventDataParms.param ;
-	  data->currentfilter = menu->menuType ;
+		if ( data->menuitems )
+			NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &(*data->menuitems)[data->currentfilter]);
+	}
+	else if ( inSelector == kNavCBPopupMenuSelect )
+	{
+		NavMenuItemSpec * menu = (NavMenuItemSpec *) ioParams->eventData.eventDataParms.param ;
+		if ( menu->menuCreator == 'WXNG' )
+		{
+			data->currentfilter = menu->menuType ;
+			if ( data->saveMode )
+			{
+				int i = menu->menuType ;
+				wxString extension =  data->extensions[i].AfterLast('.') ;
+				extension.MakeLower() ;
+				Str255 filename ;
+				// get the current filename
+				NavCustomControl(ioParams->context, kNavCtlGetEditFileName, &filename);
+				CopyPascalStringToC( filename , (char*) filename ) ;
+				wxString sfilename( filename ) ;
+				int pos = sfilename.Find('.',TRUE) ;
+				if ( pos != wxNOT_FOUND )
+				{
+					sfilename = sfilename.Left(pos+1)+extension ;
+					CopyCStringToPascal( sfilename.c_str() , filename ) ;
+					NavCustomControl(ioParams->context, kNavCtlSetEditFileName, &filename);
+				}
+			}
+	  	}
 	}
 }
 
@@ -117,23 +134,25 @@ OSType gfiltersmac[] =
 
 void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
 {
-  myData->currentfilter = 0 ;
-  
+	myData->menuitems = NULL ;
+  	myData->currentfilter = 0 ;
+  	myData->saveMode = FALSE ;
+  	
 	if ( filter && filter[0] )
 	{
 	  wxString filter2(filter) ;
     int filterIndex = 0;
     bool isName = true ;
     wxString current ;
-    for( unsigned int i = 0; i < filter2.Len(); i++ )
+    for( unsigned int i = 0; i < filter2.Len() ; i++ )
     {
        if( filter2.GetChar(i) == wxT('|') )
        {
         if( isName ) {
-          myData->name[filterIndex] = current ;
+          myData->name.Add( current ) ;
         }
         else {
-          myData->extensions[filterIndex] = current.MakeUpper() ;
+          myData->extensions.Add( current.MakeUpper() ) ;
           ++filterIndex ;
         }
         isName = !isName ;
@@ -149,35 +168,33 @@ void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
       
     wxASSERT_MSG( filterIndex == 0 || !isName , "incorrect format of format string" ) ;
     if ( current.IsEmpty() )
-        myData->extensions[filterIndex] = myData->name[filterIndex] ;
+        myData->extensions.Add( myData->name[filterIndex] ) ;
     else
-        myData->extensions[filterIndex] = current.MakeUpper() ;
+        myData->extensions.Add( current.MakeUpper() ) ;
+    if ( filterIndex == 0 || isName )
+        myData->name.Add( current.MakeUpper() ) ;
+        
     ++filterIndex ;
 
 
-		myData->numfilters = filterIndex ;
-		for ( int i = 0 ; i < myData->numfilters ; i++ )
+        const size_t extCount = myData->extensions.GetCount();
+		for ( size_t i = 0 ; i < extCount; i++ )
 		{
 			int j ;
 			for ( j = 0 ; gfilters[j] ; j++ )
 			{
 				if ( strcmp( myData->extensions[i] , gfilters[j] ) == 0 )
 				{
-					myData->filtermactypes[i] = gfiltersmac[j] ;
+				    myData->filtermactypes.Add( gfiltersmac[j] ) ;
 					break ;
 				}
 			}
 			if( gfilters[j] == NULL )
 			{
-				myData->filtermactypes[i] = '****' ;
+				myData->filtermactypes.Add( '****' ) ;
 			}
 		}
 	}
-	else
-	{
-		myData->numfilters = 0 ;
-	}
-
 }
 
 static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecPtr data)
@@ -193,7 +210,7 @@ static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecP
     wxString file(filename) ;
     file.MakeUpper() ;
     
-    if ( data->numfilters > 0 )
+    if ( data->extensions.GetCount() > 0 )
     {
 	//for ( int i = 0 ; i < data->numfilters ; ++i )
 	    int i = data->currentfilter ;
@@ -201,7 +218,7 @@ static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecP
 	      return true ;
 	
 	    {
-	      if ( type == data->filtermactypes[i] )
+	      if ( type == (OSType)data->filtermactypes[i] )
 		      return true ;
 	    
 	      wxStringTokenizer tokenizer( data->extensions[i] , ";" ) ;
@@ -314,7 +331,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
         long style, const wxPoint& pos)
 {
-	  wxASSERT_MSG( NavServicesAvailable() , "Navigation Services are not running" ) ;
+	wxASSERT_MSG( NavServicesAvailable() , "Navigation Services are not running" ) ;
     m_message = message;
     m_dialogStyle = style;
     m_parent = parent;
@@ -322,7 +339,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;
-    m_filterIndex = 1;
+    m_filterIndex = 0;
 }
 
 
@@ -408,10 +425,30 @@ int wxFileDialog::ShowModal()
 		c2pstr((char *)mNavOptions.savedFileName ) ;
 #endif
 
+		OpenUserDataRec			myData;
+		MakeUserDataRec( &myData , m_wildCard ) ;
+		myData.currentfilter = m_filterIndex ;
+	  	if ( myData.extensions.GetCount() > 0 )
+	  	{
+		  	mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.extensions.GetCount() ) ;
+			myData.menuitems = mNavOptions.popupExtension ;
+		  	for ( int i = 0 ; i < myData.extensions.GetCount() ; ++i ) 
+		  	{
+		  	    (*mNavOptions.popupExtension)[i].version = kNavMenuItemSpecVersion ;
+		  	    (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
+		  	    (*mNavOptions.popupExtension)[i].menuType = i ;
+	          #if TARGET_CARBON
+	          		c2pstrcpy((StringPtr)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
+	          #else
+	          		strcpy((char *)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
+	          		c2pstr((char *)(*mNavOptions.popupExtension)[i].menuItemName ) ;
+	          #endif
+	  	 	}
+		}
 		if ( m_dialogStyle & wxSAVE )
 		{
-			
-			mNavOptions.dialogOptionFlags |= kNavNoTypePopup ;
+		  	myData.saveMode = true ;
+
 			mNavOptions.dialogOptionFlags |= kNavDontAutoTranslate ;
 			mNavOptions.dialogOptionFlags |= kNavDontAddTranslateItems ;
 			
@@ -420,33 +457,16 @@ int wxFileDialog::ShowModal()
 						&mNavReply,
 						&mNavOptions,
 						sStandardNavEventFilter ,
-						'TEXT',
-						'TEXT',
-						0L);					// User Data
+						NULL,
+						kNavGenericSignature,
+						&myData);					// User Data
+			m_filterIndex = myData.currentfilter ;
 		}
 		else
 		{
-	  	OpenUserDataRec			myData;
-	  	MakeUserDataRec( &myData , m_wildCard ) ;
-	  	NavTypeListHandle typelist = NULL ;
+		  	myData.saveMode = false ;
 
-	  	if ( myData.numfilters > 0 )
-	  	{
-	  	  mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.numfilters ) ;
-	  	  for ( int i = 0 ; i < myData.numfilters ; ++i ) {
-	  	    (*mNavOptions.popupExtension)[i].version = kNavMenuItemSpecVersion ;
-	  	    (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
-	  	    (*mNavOptions.popupExtension)[i].menuType = i ;
-          #if TARGET_CARBON
-          		c2pstrcpy((StringPtr)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
-          #else
-          		strcpy((char *)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
-          		c2pstr((char *)(*mNavOptions.popupExtension)[i].menuItemName ) ;
-          #endif
-	  	  }
-	  	}
-
-      mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
+      		mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
 			if ( m_dialogStyle & wxMULTIPLE )
 				mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
 			else
@@ -459,10 +479,9 @@ int wxFileDialog::ShowModal()
 						sStandardNavEventFilter ,
 						mNavPreviewUPP,
 						mNavFilterUPP,
-						typelist /*inFileTypes.TypeListHandle() */,
-						&myData);							// User Data
-			if ( typelist )
-			  DisposeHandle( (Handle) typelist ) ;
+						NULL ,
+						&myData);						
+			m_filterIndex = myData.currentfilter ;
 		}
 		
 		DisposeNavObjectFilterUPP(mNavFilterUPP);

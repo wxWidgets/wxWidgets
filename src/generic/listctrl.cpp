@@ -47,16 +47,26 @@
     #include "wx/textctrl.h"
 #endif
 
-// Include wx/listctrl.h (with wxListView declaration)
-// only when wxGenericListCtrl is the only
-// implementation, and therefore wxListView needs
-// to be derived from the 'generic' version.
-
+// under Win32 we always use the native version and also may use the generic
+// one, however some things should be done only if we use only the generic
+// version
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
-    #include "wx/generic/listctrl.h"
-#else
-    #include "wx/listctrl.h"
+    #define HAVE_NATIVE_LISTCTRL
 #endif
+
+// if we have the native control, wx/listctrl.h declares it and not this one
+#ifdef HAVE_NATIVE_LISTCTRL
+    #include "wx/generic/listctrl.h"
+#else // !HAVE_NATIVE_LISTCTRL
+    #include "wx/listctrl.h"
+
+    // if we have a native version, its implementation file does all this
+    IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
+    IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
+
+    IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
+#endif // HAVE_NATIVE_LISTCTRL/!HAVE_NATIVE_LISTCTRL
 
 #if defined(__WXGTK__)
     #include <gtk/gtk.h>
@@ -421,6 +431,10 @@ private:
                        const wxListItemAttr *attr,
                        bool highlight);
 
+    // draw the text on the DC with the correct justification; also add an
+    // ellipsis if the text is too large to fit in the current width
+    void DrawTextFormatted(wxDC *dc, const wxString &text, int col, int x, int y, int width);
+
     // these are only used by GetImage/SetImage above, we don't support images
     // with subitems at the public API level yet
     void SetImage( int index, int image );
@@ -462,7 +476,7 @@ public:
                         const wxPoint &pos = wxDefaultPosition,
                         const wxSize &size = wxDefaultSize,
                         long style = 0,
-                        const wxString &name = "wxlistctrlcolumntitles" );
+                        const wxString &name = wxT("wxlistctrlcolumntitles") );
 
     virtual ~wxListHeaderWindow();
 
@@ -879,6 +893,8 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxListMainWindow)
     DECLARE_EVENT_TABLE()
+
+    friend class wxGenericListCtrl;
 };
 
 // ============================================================================
@@ -1736,12 +1752,66 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
             width -= ix;
         }
 
-        wxDCClipper clipper(*dc, xOld, y, width, rect.height);
+        wxDCClipper clipper(*dc, xOld, y, width - 8, rect.height);
 
         if ( item->HasText() )
         {
-            dc->DrawText( item->GetText(), xOld, y );
+            DrawTextFormatted(dc, item->GetText(), col, xOld, y, width - 8);
         }
+    }
+}
+
+void wxListLineData::DrawTextFormatted(wxDC *dc,
+                                       const wxString &text,
+                                       int col,
+                                       int x,
+                                       int y,
+                                       int width)
+{
+    wxString drawntext, ellipsis;
+    wxCoord w, h, base_w;
+    wxListItem item;
+
+    // determine if the string can fit inside the current width
+    dc->GetTextExtent(text, &w, &h);
+
+    // if it can, draw it
+    if (w <= width)
+    {
+        m_owner->GetColumn(col, item);
+        if (item.m_format == wxLIST_FORMAT_LEFT)
+            dc->DrawText(text, x, y);
+        else if (item.m_format == wxLIST_FORMAT_RIGHT)
+            dc->DrawText(text, x + width - w, y);
+        else if (item.m_format == wxLIST_FORMAT_CENTER)
+            dc->DrawText(text, x + ((width - w) / 2), y);
+    }
+    else // otherwise, truncate and add an ellipsis if possible
+    {
+        // determine the base width
+        ellipsis = wxString(wxT("..."));
+        dc->GetTextExtent(ellipsis, &base_w, &h);
+
+        // continue until we have enough space or only one character left
+        drawntext = text.Left(text.Length() - 1);
+        while (drawntext.Length() > 1)
+        {
+            dc->GetTextExtent(drawntext, &w, &h);
+            if (w + base_w <= width)
+                break;
+            drawntext = drawntext.Left(drawntext.Length() - 1);
+        }
+
+        // if still not enough space, remove ellipsis characters
+        while (ellipsis.Length() > 0 && w + base_w > width)
+        {
+            ellipsis = ellipsis.Left(ellipsis.Length() - 1);
+            dc->GetTextExtent(ellipsis, &base_w, &h);
+        }
+
+        // now draw the text
+        dc->DrawText(drawntext, x, y);
+        dc->DrawText(ellipsis, x + w, y);
     }
 }
 
@@ -1811,6 +1881,11 @@ wxListHeaderWindow::~wxListHeaderWindow()
     delete m_resizeCursor;
 }
 
+#ifdef __WXUNIVERSAL__
+#include "wx/univ/renderer.h"
+#include "wx/univ/theme.h"
+#endif
+
 void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 {
 #if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
@@ -1824,7 +1899,11 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
                    (GdkRectangle*) NULL, m_wxwindow,
                    (char *)"button", // const_cast
                    x-1, y-1, w+2, h+2);
-#elif defined( __WXMAC__  )
+#elif defined(__WXUNIVERSAL__)
+    wxTheme *theme = wxTheme::Get();
+    wxRenderer *renderer = theme->GetRenderer();
+    renderer->DrawBorder( *dc, wxBORDER_RAISED, wxRect(x,y,w,h), 0 );
+#elif defined(__WXMAC__)
     const int m_corner = 1;
 
     dc->SetBrush( *wxTRANSPARENT_BRUSH );
@@ -3078,15 +3157,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         m_renameTimer->Stop();
         m_lastOnSame = FALSE;
 
-#ifdef __WXGTK__
-        // FIXME: wxGTK generates bad sequence of events prior to doubleclick
-        //        ("down, up, down, double, up" while other ports
-        //        do "down, up, double, up"). We have to have this hack
-        //        in place till somebody fixes wxGTK...
-        if ( current == m_lineBeforeLastClicked )
-#else
         if ( current == m_lineLastClicked )
-#endif
         {
             SendNotify( current, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
 
@@ -4359,7 +4430,10 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 
     int mode = 0;
     if ( HasFlag(wxLC_REPORT) )
+    {
         mode = wxLC_REPORT;
+        ResetVisibleLinesRange();
+    }
     else if ( HasFlag(wxLC_LIST) )
         mode = wxLC_LIST;
     else if ( HasFlag(wxLC_ICON) )
@@ -4508,38 +4582,15 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 }
 
 // -------------------------------------------------------------------------------------
-// wxListItem
-// -------------------------------------------------------------------------------------
-
-#if !defined(__WIN32__)
-IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
-#endif
-
-// -------------------------------------------------------------------------------------
 // wxGenericListCtrl
 // -------------------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericListCtrl, wxControl)
 
-#if !defined(__WIN32__)
-IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
-
-IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
-#endif
-
 BEGIN_EVENT_TABLE(wxGenericListCtrl,wxControl)
   EVT_SIZE(wxGenericListCtrl::OnSize)
   EVT_IDLE(wxGenericListCtrl::OnIdle)
 END_EVENT_TABLE()
-
-#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
-/*
- * wxListCtrl has to be a real class or we have problems with
- * the run-time information.
- */
-
-IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
-#endif
 
 wxGenericListCtrl::wxGenericListCtrl()
 {
@@ -4882,7 +4933,9 @@ void wxGenericListCtrl::SetTextColour(const wxColour& col)
 
 long wxGenericListCtrl::GetTopItem() const
 {
-    return 0;
+    size_t top;
+    m_mainWin->GetVisibleLinesRange(&top, NULL);
+    return (long)top;
 }
 
 long wxGenericListCtrl::GetNextItem( long item, int geom, int state ) const

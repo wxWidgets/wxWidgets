@@ -111,11 +111,11 @@
 #if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
       wxFileSystem::AddHandler(new wxZipFSHandler);
 #endif
-      SetVendorName("wxWindows");
-      SetAppName("wxHTMLHelp"); 
+      SetVendorName(wxT("wxWindows"));
+      SetAppName(wxT("wxHTMLHelp")); 
 
     // Create the main application window
-      MyFrame *frame = new MyFrame("HTML Help Sample",
+      MyFrame *frame = new MyFrame(_("HTML Help Sample"),
          wxPoint(50, 50), wxSize(150, 50));
 
     // Show it and tell the application that it's our main window
@@ -143,12 +143,12 @@
     // create a menu bar
       wxMenu *menuFile = new wxMenu;
 
-      menuFile->Append(Minimal_Help, "&Help");
-      menuFile->Append(Minimal_Quit, "E&xit");
+      menuFile->Append(Minimal_Help, _("&Help"));
+      menuFile->Append(Minimal_Quit, _("E&xit"));
 
     // now append the freshly created menu to the menu bar...
       wxMenuBar *menuBar = new wxMenuBar;
-      menuBar->Append(menuFile, "&File");
+      menuBar->Append(menuFile, _("&File"));
 
     // ... and attach this menu bar to the frame
       SetMenuBar(menuBar);
@@ -156,20 +156,20 @@
       help.UseConfig(wxConfig::Get());
       bool ret;
 #if defined(__WXMAC__) && !defined(__DARWIN__)
-      ret = help.AddBook(":helpfiles:testing.hhp");
+      ret = help.AddBook(wxT(":helpfiles:testing.hhp"));
 #else
-      help.SetTempDir(".");
-      ret = help.AddBook("helpfiles/testing.hhp");
+      help.SetTempDir(wxT("."));
+      ret = help.AddBook(wxT("helpfiles/testing.hhp"));
 #endif
       if (! ret)
-        wxMessageBox("Failed adding book helpfiles/testing.hhp");
+        wxMessageBox(wxT("Failed adding book helpfiles/testing.hhp"));
 #if defined(__WXMAC__) && !defined(__DARWIN__)
-      ret = help.AddBook(":helpfiles:another.hhp");
+      ret = help.AddBook(wxT(":helpfiles:another.hhp"));
 #else
-      ret = help.AddBook("helpfiles/another.hhp");
+      ret = help.AddBook(wxT("helpfiles/another.hhp"));
 #endif
       if (! ret)
-        wxMessageBox("Failed adding book helpfiles/another.hhp");
+        wxMessageBox(_("Failed adding book helpfiles/another.hhp"));
    }
 
 
@@ -183,7 +183,7 @@
 
    void MyFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
    {
-       help.Display("Test HELPFILE");
+       help.Display(wxT("Test HELPFILE"));
    }
 
    void MyFrame::OnClose(wxCloseEvent& event)

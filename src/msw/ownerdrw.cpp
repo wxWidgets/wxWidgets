@@ -241,8 +241,6 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
     FillRect(hdc, &rectFill, hbr);
 
-    DeleteObject(hbr);
-
     // use default font if no font set
     HFONT hfont;
     if ( m_font.Ok() ) {
@@ -278,6 +276,8 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     (void)SelectObject(hdc, hPrevBrush);
     (void)SelectObject(hdc, hPrevFont);
     (void)SetBkMode(hdc, nPrevMode);
+
+    DeleteObject(hbr);
   #else
     dc.SetFont(GetFont());
     dc.DrawText(wxStripMenuCodes(m_strName), x, rc.y);

@@ -235,10 +235,10 @@ size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
     ret = m_file->Read(buffer, size);
 
     if (m_file->Eof())
-        m_lasterror = wxStream_EOF;
+        m_lasterror = wxSTREAM_EOF;
     if (ret == wxInvalidOffset)
     {
-        m_lasterror = wxStream_READ_ERR;
+        m_lasterror = wxSTREAM_READ_ERROR;
         ret = 0;
     }
 
@@ -307,9 +307,9 @@ size_t wxFFileOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
     size_t ret = m_file->Write(buffer, size);
     if (m_file->Error())
-        m_lasterror = wxStream_WRITE_ERR;
+        m_lasterror = wxSTREAM_WRITE_ERROR;
     else
-        m_lasterror = wxStream_NOERROR;
+        m_lasterror = wxSTREAM_NO_ERROR;
     return ret;
 }
 

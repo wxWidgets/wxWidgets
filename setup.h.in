@@ -83,6 +83,7 @@
 #undef __FREEBSD__
 #undef __DARWIN__
 #undef __NETBSD__
+#undef __OPENBSD__
 #undef __VMS__
 #undef __ULTRIX__
 #undef __DATA_GENERAL__
@@ -889,6 +890,9 @@
 
 /* struct tm doesn't always have the tm_gmtoff field, define this if it does */
 #undef WX_GMTOFF_IN_TM
+
+/* Define if you have poll(2) function */
+#undef HAVE_POLL
 
 /* Define if you have pw_gecos field in struct passwd */
 #undef HAVE_PW_GECOS

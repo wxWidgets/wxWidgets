@@ -67,7 +67,7 @@ public:
   // Make sure all text that should be centred, is centred.
   void RecentreAll(wxDC& dc);
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   virtual bool SaveFile(const wxString& filename);
   virtual bool LoadFile(const wxString& filename);
 

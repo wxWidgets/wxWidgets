@@ -17,6 +17,7 @@ class MyMiniFrame(wxMiniFrame):
         self.Close(true)
 
     def OnCloseWindow(self, event):
+        print "OnCloseWindow"
         self.Destroy()
 
 #---------------------------------------------------------------------------

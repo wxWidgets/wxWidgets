@@ -4,12 +4,13 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 buttonDefs = {
-    814 : ('GridSimple',      'Simple wxGrid, catching all events'),
-    815 : ('GridStdEdRend',   'wxGrid showing Editors and Renderers'),
-    818 : ('GridHugeTable',   'A wxGrid with a HUGE table (100 MILLION cells!)'),
-    817 : ('GridCustTable',   'wxGrid using a custom Table, with non-string data'),
-    819 : ('GridEnterHandler','Remapping keys to behave differently'),
-    820 : ('GridCustEditor',  'Shows how to create a custom Cell Editor'),
+    814 : ('GridSimple',      ' Simple wxGrid, catching all events '),
+    815 : ('GridStdEdRend',   ' wxGrid showing Editors and Renderers '),
+    818 : ('GridHugeTable',   ' A wxGrid with a HUGE table (100 MILLION cells!) '),
+    817 : ('GridCustTable',   ' wxGrid using a custom Table, with non-string data '),
+    819 : ('GridEnterHandler',' Remapping keys to behave differently '),
+    820 : ('GridCustEditor',  ' Shows how to create a custom Cell Editor '),
+    821 : ('GridDragable',    ' A wxGrid with dragable rows and columns '),
     }
 
 

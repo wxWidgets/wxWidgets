@@ -100,7 +100,7 @@ D. If using the sources (either from the tarball or from CVS) then
 	cd wxWindows   # or whatever your top-level directory is called
 	mkdir build
 	cd build
-	../configure --with-gtk
+	../configure --with-gtk --enable-geometry
 
    There are gobs and gobs of options for the configure script, run
    ../configure --help to see them all.  I'll describe some that I find
@@ -117,33 +117,6 @@ D. If using the sources (either from the tarball or from CVS) then
    This sets the -g flag for the compiler and also activates some
    special debugging code in wxWindows by defining the __WXDEBUG__
    macro.  You'll get some extra asserts, failure logging, etc.
-
-   To make a static library and not make a shared library, use the
-   --disable-shared and --enable-static flags.
-
-   NOTE: There is a potential type mismatch between Python and wxGTK.
-   This happens if Python defines some flags that turn on 64-bit file
-   offset support and wxGTK does not.  This causes some basic types,
-   like off_t, to be typedef'd differently causing the C++ method
-   signatures to be incompatible and giving link errors at runtime.
-   If you get errors upon running a wxPython script that looks
-   something like this:
-
-     SeekI_13wxInputStream10wxSeekMode: referenced symbol not found
-
-   then that is probably the issue.  This can be fixed in the current
-   code by predefining these flags before wxGTK's configure is run,
-   for example:
-
-     export CFLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -DHAVE_LARGEFILE_SUPPORT"
-     export CXXFLAGS=$CFLAGS
-     ../configure --with-gtk --with-opengl --enable-debug
-
-   In the 2.3.3 final release there will be a real configure flag for
-   it, and it should be enabled by default.  You will be able to use
-   --enable-largefile or --disable-largefile to control it.  If you
-   still get this or a similar error with 2.3.3 then try disabling
-   largefile support in wxGTK.
 
 E. Now just compile and install.  You need to use GNU make, so if your
    system has something else get GNU make and build and install it and
@@ -249,7 +222,9 @@ C. Change to the root wxPython directory and look at the setup.py
 		       and shadow python files.
 
 	   IN_CVS_TREE If you are using the CVS version of the
-		       wxWindows and wxPython sources then you will
+		       wxWindows and wxPython sources, or a combined
+		       source archive from the CVS snapshots or the
+		       distributed wxPythonSrc-*.tar.gz then you will
 		       need to set this flag to non-zero.  This is
 		       needed because some source files from the
 		       wxWindows tree are copied to be under the
@@ -257,9 +232,6 @@ C. Change to the root wxPython directory and look at the setup.py
 		       With this flag set then setup.py will
 		       automatically keep these copied sources up to
 		       date if the original version is ever updated.
-		       If you are using the tar.gz version of the
-		       Python sources then these copied sources are
-		       already present in your source tree.
 
 
 D. To build and install wxPython you simply need to execute the

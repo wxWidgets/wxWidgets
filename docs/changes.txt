@@ -170,6 +170,44 @@ wxThread and related classes:
 OTHER CHANGES
 =============
 
+2.4.0
+-----
+
+wxMSW:
+
+- fixed loss of client data in wxChoice::SetString()
+
+2.3.4
+-----
+
+All:
+
+- added (partial) Indonesian translations (Bambang Purnomosidi D. P.)
+- added wxSizer::Show()/Hide() (Carl Godkin)
+- fixed bugs in wxDateTime::SetToWeekDay()/GetWeek()
+
+Unix (Base/GUI):
+
+- minor OpenBSD compilation/linking fixes, now builds OOB under OpenBSD 3.1
+- don't include -I/usr/include nor -I/usr/local/include in wx-config output
+- shared library symbols are now versioned on platforms that support it (Linux)
+
+wxGTK:
+- Further work for GTK 2.0 and Unicode support.
+- Addition of native frame site grip.
+
+wxX11:
+- Unicode support through Pango library.
+
+wxMSW:
+
+- fixed crashes in wxListCtrl under XP
+- added context menu for rich edit wxTextCtrl
+
+wxHTML:
+
+- fixed wxHTML to work in Unicode build
+
 2.3.3
 -----
 

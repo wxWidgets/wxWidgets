@@ -64,11 +64,13 @@ class PseudoFile:
         
 class PseudoFileIn(PseudoFile):
     
-    def __init__(self, readline):
+    def __init__(self, readline, readlines=None):
         if callable(readline):
             self.readline = readline
         else:
             raise ValueError, 'readline must be callable'
+        if callable(readlines):
+            self.readlines = readlines
     
     def isatty(self):
         return 1

@@ -2277,8 +2277,7 @@ static PyObject *_wrap_wxMouseEvent_GetLogicalPosition(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMouseEvent_GetLogicalPosition. Expected _wxDC_p.");
         return NULL;
         }
@@ -3332,8 +3331,7 @@ static PyObject *_wrap_wxSetCursorEvent_SetCursor(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSetCursorEvent_SetCursor. Expected _wxCursor_p.");
         return NULL;
         }
@@ -7322,8 +7320,7 @@ static PyObject *_wrap_new_wxTextUrlEvent(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iOll:new_wxTextUrlEvent",_kwnames,&_arg0,&_argo1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMouseEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMouseEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxTextUrlEvent. Expected _wxMouseEvent_p.");
         return NULL;
         }

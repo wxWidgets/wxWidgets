@@ -282,7 +282,7 @@ void read_png(FILE *fp, unsigned int sig_read)  /* file is already open */
       /* This reduces the image to the palette supplied in the file */
       else if (png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette))
       {
-         png_uint_16p histogram;
+         png_uint_16p histogram = NULL;
 
          png_get_hIST(png_ptr, info_ptr, &histogram);
 

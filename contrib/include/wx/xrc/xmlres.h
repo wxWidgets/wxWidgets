@@ -37,6 +37,9 @@ class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxToolBar;
 
 class WXXMLDLLEXPORT wxXmlResourceHandler;
+class WXXMLDLLEXPORT wxXmlSubclassFactory;
+class WXXMLDLLEXPORT wxXmlSubclassFactoriesList;
+class wxXmlResourceModule;
 
 
 // These macros indicate current version of XML resources (this information is
@@ -133,6 +136,11 @@ public:
 
     // Removes all handlers
     void ClearHandlers();
+    
+    // Registers subclasses factory for use in XRC. This function is not meant
+    // for public use, please see the comment above wxXmlSubclassFactory
+    // definition.
+    static void AddSubclassFactory(wxXmlSubclassFactory *factory);
 
     // Loads menu from resource. Returns NULL on failure.
     wxMenu *LoadMenu(const wxString& name);
@@ -216,7 +224,9 @@ public:
     static wxXmlResource *Set(wxXmlResource *res);
 
     // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
-    int GetFlags() { return m_flags; }
+    int GetFlags() const { return m_flags; }
+    // Set flags after construction.
+    void SetFlags(int flags) { m_flags = flags; }
 
 protected:
     // Scans the resources list for unloaded files and loads them. Also reloads
@@ -244,6 +254,9 @@ private:
 #endif
 
     friend class wxXmlResourceHandler;
+    friend class wxXmlResourceModule;
+
+    static wxXmlSubclassFactoriesList *ms_subclassFactories;
 
     // singleton instance:
     static wxXmlResource *ms_instance;
@@ -436,6 +449,20 @@ protected:
 
 // FIXME -- remove this $%^#$%#$@# as soon as Ron checks his changes in!!
 void wxXmlInitResourceModule();
+
+
+// This class is used to create instances of XRC "object" nodes with "subclass"
+// property. It is _not_ supposed to be used by XRC users, you should instead
+// register your subclasses via wxWindows' RTTI mechanism. This class is useful
+// only for language bindings developer who need a way to implement subclassing
+// in wxWindows ports that don't support wxRTTI (e.g. wxPython).
+class WXXMLDLLEXPORT wxXmlSubclassFactory
+{
+public:
+    // Try to create instance of given class and return it, return NULL on failure:
+    virtual wxObject *Create(const wxString& className) = 0;
+    virtual ~wxXmlSubclassFactory() {}
+};
 
 
 /* -------------------------------------------------------------------------

@@ -207,8 +207,15 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
 class wxArtProviderModule: public wxModule
 {
 public:
-    bool OnInit() { return TRUE; }
-    void OnExit() { wxArtProvider::CleanUpProviders(); }
+    bool OnInit()
+    {
+        wxArtProvider::InitStdProvider();
+        return TRUE;
+    }
+    void OnExit()
+    {
+        wxArtProvider::CleanUpProviders();
+    }
 
     DECLARE_DYNAMIC_CLASS(wxArtProviderModule)
 };

@@ -2586,8 +2586,8 @@ wxVariant wxDbTable::GetCol(const int colNo) const
 
 void csstrncpyt(char *s, const char *t, int n)
 {
-    while ((*s++ = *t++) && --n)
-    {};
+    while ( (*s++ = *t++) != '\0' && --n )
+        ;
 
     *s = '\0';
 }

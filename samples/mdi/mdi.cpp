@@ -286,7 +286,7 @@ void MyFrame::OnSize(wxSizeEvent& event)
     // FIXME: On wxX11, we need the MDI frame to process this
     // event, but on other platforms this should not
     // be done.
-#ifdef __WXX11__   
+#ifdef __WXUNIVERSAL__   
     event.Skip();
 #endif
 }
@@ -443,6 +443,7 @@ void MyChild::OnChangeSize(wxCommandEvent& WXUNUSED(event))
 
 void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
 {
+//#if wxUSE_TEXTDLG
     static wxString s_title = _T("Canvas Frame");
 
     wxString title = wxGetTextFromUser(_T("Enter the new title for MDI child"),
@@ -454,6 +455,7 @@ void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
 
     s_title = title;
     SetTitle(s_title);
+//#endif
 }
 
 void MyChild::OnActivate(wxActivateEvent& event)

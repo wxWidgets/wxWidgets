@@ -29,6 +29,11 @@
 #include "wx/dcclient.h"
 #endif
 
+#ifdef __WXGTK20__
+#include "wx/gtk/private.h"
+#include "wx/gtk/win_gtk.h"
+#endif
+
 #include "wx/statusbr.h"
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the
@@ -44,8 +49,8 @@
 
 BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
-    EVT_SIZE(wxStatusBarGeneric::OnSize)
-
+    EVT_LEFT_DOWN(wxStatusBarGeneric::OnLeftDown)
+    EVT_RIGHT_DOWN(wxStatusBarGeneric::OnRightDown)
     EVT_SYS_COLOUR_CHANGED(wxStatusBarGeneric::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -168,28 +173,41 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
 
 void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
-  wxPaintDC dc(this);
+    wxPaintDC dc(this);
 
+#ifdef __WXGTK20__
+    // Draw grip first
+    if (HasFlag( wxST_SIZEGRIP ))
+    {
+        int width, height;
+        GetClientSize(&width, &height);
+        
+        gtk_paint_resize_grip( m_widget->style,
+                               GTK_PIZZA(m_wxwindow)->bin_window,
+                               (GtkStateType) GTK_WIDGET_STATE (m_widget),
+                               NULL,
+                               m_widget,
+                               "statusbar",
+                               GDK_WINDOW_EDGE_SOUTH_EAST,
+                               width-height-2, 1, height-2, height-3 );
+        
+    }
+#endif
 
-  int i;
-  if ( GetFont().Ok() )
-    dc.SetFont(GetFont());
+  if (GetFont().Ok())
+        dc.SetFont(GetFont());
+    
   dc.SetBackgroundMode(wxTRANSPARENT);
 
 #ifdef __WXPM__
-  wxColour                          vColor;
+  wxColour vColor;
 
   vColor = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR);
   ::WinFillRect(dc.m_hPS, &dc.m_vRclPaint, vColor.GetPixel());
 #endif
 
-  for ( i = 0; i < m_nFields; i ++ )
-    DrawField(dc, i);
-
-  // VZ: again, what is this for?
-#ifdef __WXMSW__
-  dc.SetFont(wxNullFont);
-#endif // MSW
+  for (int i = 0; i < m_nFields; i ++)
+        DrawField(dc, i);
 }
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
@@ -222,8 +240,8 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
 
 void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
 {
-  wxRect rect;
-  GetFieldRect(i, rect);
+    wxRect rect;
+    GetFieldRect(i, rect);
 
     // Draw border
     // Have grey background, plus 3-d border -
@@ -280,12 +298,15 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
     GetClientSize(&width, &height);
 #endif
 
-    // we cache m_widthsAbs between calls normally but it's cleared when the
-    // status widths change so recompute it if needed
-    if ( m_widthsAbs.IsEmpty() )
+    // we cache m_widthsAbs between calls and recompute it if client
+    // width has changed (or when it is initially empty)
+    if ( m_widthsAbs.IsEmpty() || (m_lastClientWidth != width) )
     {
         wxConstCast(this, wxStatusBarGeneric)->
             m_widthsAbs = CalculateAbsWidths(width);
+        // remember last width for which we have recomputed the widths in pixels
+        wxConstCast(this, wxStatusBarGeneric)->
+            m_lastClientWidth = width;
     }
 
     rect.x = 0;
@@ -351,7 +372,7 @@ void wxStatusBarGeneric::SetMinHeight(int height)
     // current font
     wxClientDC dc(this);
     wxCoord y;
-    dc.GetTextExtent( _T("X"), NULL, &y );
+    dc.GetTextExtent( wxT("X"), NULL, &y );
 
     if ( height > (11*y)/10 )
     {
@@ -359,12 +380,73 @@ void wxStatusBarGeneric::SetMinHeight(int height)
     }
 }
 
-void wxStatusBarGeneric::OnSize(wxSizeEvent& event)
+void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
 {
-    // have to recompute the widths in pixels
-    m_widthsAbs.Empty();
+#ifdef __WXGTK20__
+    int width, height;
+    GetClientSize(&width, &height);
+    
+    if (HasFlag( wxST_SIZEGRIP ) && (event.GetX() > width-height))
+    {
+        GtkWidget *ancestor = gtk_widget_get_toplevel( m_widget );
 
-    event.Skip();
+        if (!GTK_IS_WINDOW (ancestor))
+            return;
+
+        GdkWindow *source = GTK_PIZZA(m_wxwindow)->bin_window;
+
+        int org_x = 0;
+        int org_y = 0;
+        gdk_window_get_origin( source, &org_x, &org_y );
+
+        gtk_window_begin_resize_drag (GTK_WINDOW (ancestor),
+                                  GDK_WINDOW_EDGE_SOUTH_EAST,
+                                  1,
+                                  org_x + event.GetX(), 
+                                  org_y + event.GetY(), 
+                                  0);
+    }
+    else
+    {
+        event.Skip( TRUE );
+    }
+#else
+    event.Skip( TRUE );
+#endif
+}
+
+void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
+{
+#ifdef __WXGTK20__
+    int width, height;
+    GetClientSize(&width, &height);
+    
+    if (HasFlag( wxST_SIZEGRIP ) && (event.GetX() > width-height))
+    {
+        GtkWidget *ancestor = gtk_widget_get_toplevel( m_widget );
+
+        if (!GTK_IS_WINDOW (ancestor))
+            return;
+
+        GdkWindow *source = GTK_PIZZA(m_wxwindow)->bin_window;
+
+        int org_x = 0;
+        int org_y = 0;
+        gdk_window_get_origin( source, &org_x, &org_y );
+    
+        gtk_window_begin_move_drag (GTK_WINDOW (ancestor),
+                                2,
+                                org_x + event.GetX(), 
+                                org_y + event.GetY(), 
+                                0);
+    }
+    else
+    {
+        event.Skip( TRUE );
+    }
+#else
+    event.Skip( TRUE );
+#endif
 }
 
 #endif // wxUSE_STATUSBAR

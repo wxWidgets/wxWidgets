@@ -244,6 +244,12 @@ $function
         return NULL;
 }
 
+%typemap(python,in) wxPoint2DDouble& (wxPoint2DDouble temp) {
+    $target = &temp;
+    if (! wxPoint2DDouble_helper($source, &$target))
+        return NULL;
+}
+
 //---------------------------------------------------------------------------
 // Typemap to convert strings to wxColour.  Two string formats are accepted,
 // either a colour name, or a hex colour spec like "#RRGGBB"
@@ -305,6 +311,18 @@ $function
 %typemap(python, freearg) wxArrayInt& {
     if ($target)
         delete $source;
+}
+
+
+// Typemap to convert an array of ints to a list
+%typemap(python, out) wxArrayInt& {
+    $target = PyList_New(0);
+    size_t idx;
+    for (idx = 0; idx < $source->GetCount(); idx += 1) {
+        PyObject* val = PyInt_FromLong($source->Item(idx));
+        PyList_Append($target, val);
+        Py_DECREF(val);
+    }
 }
 
 

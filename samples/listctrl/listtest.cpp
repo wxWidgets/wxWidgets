@@ -117,7 +117,9 @@ static const int NUM_ICONS = 9;
 int wxCALLBACK MyCompareFunction(long item1, long item2, long sortData)
 {
     // inverse the order
-    return item1 < item2;
+    if (item1 < item2) return -1;
+    if (item1 > item2) return 1;
+    return 0;
 }
 
 // `Main program' equivalent, creating windows and returning main app frame
@@ -223,7 +225,8 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menubar->Append(menuCol, _T("&Colour"));
     SetMenuBar(menubar);
 
-    m_logWindow = new wxTextCtrl(this, -1, wxEmptyString,
+    m_panel = new wxPanel(this, -1);
+    m_logWindow = new wxTextCtrl(m_panel, -1, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE | wxSUNKEN_BORDER);
 
@@ -328,7 +331,7 @@ void MyFrame::RecreateList(long flags, bool withText)
     {
         delete m_listCtrl;
 
-        m_listCtrl = new MyListCtrl(this, LIST_CTRL,
+        m_listCtrl = new MyListCtrl(m_panel, LIST_CTRL,
                                     wxDefaultPosition, wxDefaultSize,
                                     flags |
                                     wxSUNKEN_BORDER | wxLC_EDIT_LABELS);
@@ -658,19 +661,30 @@ void MyListCtrl::OnColRightClick(wxListEvent& event)
     wxLogMessage( wxT("OnColumnRightClick at %d."), event.GetColumn() );
 }
 
+void MyListCtrl::LogColEvent(const wxListEvent& event, const wxChar *name)
+{
+    const int col = event.GetColumn();
+
+    wxLogMessage(wxT("%s: column %d (width = %d or %d)."),
+                 name,
+                 col,
+                 event.GetItem().GetWidth(),
+                 GetColumnWidth(col));
+}
+
 void MyListCtrl::OnColBeginDrag(wxListEvent& event)
 {
-    wxLogMessage( wxT("OnColBeginDrag: column %d."), event.GetColumn() );
+    LogColEvent( event, wxT("OnColBeginDrag") );
 }
 
 void MyListCtrl::OnColDragging(wxListEvent& event)
 {
-    wxLogMessage( wxT("OnColDragging: column %d."), event.GetColumn() );
+    LogColEvent( event, wxT("OnColDragging") );
 }
 
 void MyListCtrl::OnColEndDrag(wxListEvent& event)
 {
-    wxLogMessage( wxT("OnColEndDrag: column %d."), event.GetColumn() );
+    LogColEvent( event, wxT("OnColEndDrag") );
 }
 
 void MyListCtrl::OnBeginDrag(wxListEvent& event)

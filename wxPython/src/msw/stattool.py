@@ -193,8 +193,8 @@ class wxToolBarBasePtr(wxControlPtr):
     def DoAddTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_DoAddTool,(self,) + _args, _kwargs)
         return val
-    def InsertTool(self, *_args, **_kwargs):
-        val = apply(stattoolc.wxToolBarBase_InsertTool,(self,) + _args, _kwargs)
+    def DoInsertTool(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarBase_DoInsertTool,(self,) + _args, _kwargs)
         return val
     def AddControl(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_AddControl,(self,) + _args, _kwargs)
@@ -370,7 +370,7 @@ class wxToolBarBasePtr(wxControlPtr):
     # 2.3.3.  They are renamed to have 'Label' in the name so as to be
     # able to keep backwards compatibility with using the above
     # methods.  Eventually these should migrate to be the methods used
-    # primarily and loose the 'Label' in the name...
+    # primarily and lose the 'Label' in the name...
 
     def AddLabelTool(self, id, label, bitmap,
                      bmpDisabled = wxNullBitmap,

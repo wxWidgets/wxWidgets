@@ -1181,6 +1181,42 @@ void wxTreeCtrl::RefreshItem(const wxTreeItemId& item)
     }
 }
 
+wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
+{
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        return wxNullColour;
+    }
+
+    return attr->GetTextColour();
+}
+
+wxColour wxTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
+{
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        return wxNullColour;
+    }
+
+    return attr->GetBackgroundColour();
+}
+
+wxFont wxTreeCtrl::GetItemFont(const wxTreeItemId& item) const
+{
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        return wxNullFont;
+    }
+
+    return attr->GetFont();
+}
+
 void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
                                    const wxColour& col)
 {
@@ -1240,6 +1276,12 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 
 bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
+    if ( item == wxTreeItemId(TVI_ROOT) )
+    {
+        // virtual (hidden) root is never visible
+        return FALSE;
+    }
+
     // Bug in Gnu-Win32 headers, so don't use the macro TreeView_GetItemRect
     RECT rect;
 
@@ -2302,8 +2344,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         break;
                 }
 
-                int how = (int)hdr->code == TVN_ITEMEXPANDING ? IDX_DOING
-                                                              : IDX_DONE;
+                int how = hdr->code == TVN_ITEMEXPANDING ? IDX_DOING
+                                                         : IDX_DONE;
 
                 eventType = gs_expandEvents[what][how];
 

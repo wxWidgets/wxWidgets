@@ -159,6 +159,13 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
 wxToolBar::~wxToolBar()
 {
+    size_t index = 0 ;
+    for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
+    {
+        // Delete the control as we get ghosts otherwise
+        ::DisposeControl( (ControlHandle) m_macToolHandles[index] );
+    }
+    
     // we must refresh the frame size when the toolbar is deleted but the frame
     // is not - otherwise toolbar leaves a hole in the place it used to occupy
 }

@@ -70,9 +70,23 @@ bool wxRadioButton::Create(
                         ,rsName))
         return FALSE;
 
-    long                            lSstyle = HasFlag(wxRB_GROUP) ? WS_GROUP : 0;
+    long                            lSstyle = WS_TABSTOP;
 
-    lSstyle |= BS_AUTORADIOBUTTON;
+    if (HasFlag(wxRB_GROUP))
+        lSstyle |= WS_GROUP;
+
+    //
+    // wxRB_SINGLE is a temporary workaround for the following problem: if you
+    // have 2 radiobuttons in the same group but which are not consecutive in
+    // the dialog, Windows can enter an infinite loop! The simplest way to
+    // reproduce it is to create radio button, then a panel and then another
+    // radio button: then checking the last button hangs the app.
+    //
+    // Ideally, we'd detect (and avoid) such situation automatically but for
+    // now, as I don't know how to do it, just allow the user to create
+    // BS_RADIOBUTTON buttons for such situations.
+    //
+    lSstyle |= HasFlag(wxRB_SINGLE) ? BS_RADIOBUTTON : BS_AUTORADIOBUTTON;
 
     if (HasFlag(wxCLIP_SIBLINGS))
         lSstyle |= WS_CLIPSIBLINGS;
@@ -148,18 +162,38 @@ bool wxRadioButton::OS2Command(
 , WXWORD                            wId
 )
 {
-    if (wParam == BN_CLICKED)
+    if (wParam != BN_CLICKED)
+        return FALSE;
+
+    if (m_bFocusJustSet)
     {
+        //
+        // See above: we want to ignore this event
+        //
+        m_bFocusJustSet = FALSE;
+    }
+    else
+    {
+        bool                        bIsChecked = GetValue();
+
+        if (HasFlag(wxRB_SINGLE))
+        {
+            //
+            // When we use a "manual" radio button, we have to check the button
+            // ourselves -- but it's reset to unchecked state by the user code
+            // (presumably when another button is pressed)
+            //
+            if (!bIsChecked )
+                SetValue(TRUE);
+        }
         wxCommandEvent              rEvent( wxEVT_COMMAND_RADIOBUTTON_SELECTED
                                            ,m_windowId
                                           );
 
         rEvent.SetEventObject(this);
         ProcessCommand(rEvent);
-        return TRUE;
     }
-    else
-        return FALSE;
+    return TRUE;
 } // end of wxRadioButton::OS2Command
 
 void wxRadioButton::SetFocus()
@@ -190,6 +224,63 @@ void wxRadioButton::SetValue(
 )
 {
     ::WinSendMsg((HWND)GetHWND(), BM_SETCHECK, (MPARAM)bValue, (MPARAM)0);
+    if (bValue)
+    {
+        const wxWindowList&         rSiblings = GetParent()->GetChildren();
+        wxWindowList::Node*         pNodeThis = rSiblings.Find(this);
+
+        wxCHECK_RET(pNodeThis, _T("radio button not a child of its parent?"));
+
+        // 
+        // Turn off all radio buttons before this one
+        //
+        for ( wxWindowList::Node* pNodeBefore = pNodeThis->GetPrevious();
+              pNodeBefore;
+              pNodeBefore = pNodeBefore->GetPrevious() )
+        {
+            wxRadioButton*          pBtn = wxDynamicCast( pNodeBefore->GetData()
+                                                         ,wxRadioButton
+                                                        );
+            if (!pBtn)
+            {
+                // 
+                // The radio buttons in a group must be consecutive, so there
+                // are no more of them
+                //
+                break;
+            }
+            pBtn->SetValue(FALSE);
+            if (pBtn->HasFlag(wxRB_GROUP))
+            {
+                // 
+                // Even if there are other radio buttons before this one,
+                // they're not in the same group with us
+                //
+                break;
+            }
+        }
+
+        // 
+        // ... and all after this one
+        //
+        for (wxWindowList::Node* pNodeAfter = pNodeThis->GetNext();
+             pNodeAfter;
+             pNodeAfter = pNodeAfter->GetNext())
+        {
+            wxRadioButton*          pBtn = wxDynamicCast( pNodeAfter->GetData()
+                                                         ,wxRadioButton
+                                                        );
+
+            if (!pBtn || pBtn->HasFlag(wxRB_GROUP) )
+            {
+                // 
+                // No more buttons or the first button of the next group
+                //
+                break;
+            }
+            pBtn->SetValue(FALSE);
+        }
+    }
 } // end of wxRadioButton::SetValue
 
 MRESULT wxRadioButton::OS2WindowProc(

@@ -57,16 +57,6 @@ static void CopyStringsAddingPrefix(const wxArrayString& orig,
         copy.Add( Prefix(FALSE) + orig[i] );
 }
 
-static wxString* CopyStringsAddingPrefix(size_t n, const wxString choices[])
-{
-    wxString* copy = new wxString[n];
-
-    for(size_t i = 0; i < n; ++i )
-        copy[i] = Prefix(FALSE) + choices[i];
-
-    return copy;
-}
-
 // def ctor: use Create() to really create the control
 wxCheckListBox::wxCheckListBox() : wxCheckListBoxBase()
 {
@@ -92,10 +82,9 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    wxString* chs = CopyStringsAddingPrefix(n, choices);
-    bool retVal = wxListBox::Create(parent, id, pos, size, n, chs,
+    // wxListBox::Create calls set, which adds the prefixes
+    bool retVal = wxListBox::Create(parent, id, pos, size, n, choices,
                                     style, validator, name);
-    delete[] chs;
     return retVal;
 }   
 

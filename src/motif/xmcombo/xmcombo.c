@@ -1268,24 +1268,32 @@ static struct { String Resource; int Flag; }
 
 static int UpdateColors(XmComboBoxWidget w, int flags)
 {
-    Pixel  Color;
+    Pixel  Color, White, Black, EditCol;
     int    i, size = XtNumber(ColorResources);
     Widget ScrolledWin, ScrollBar;
     
     ScrolledWin = XtParent(w->combobox.ListCtrl);
     XtVaGetValues(ScrolledWin, XmNverticalScrollBar, &ScrollBar, NULL);
+    White = WhitePixel(XtDisplay(w), WidgetToScreen((Widget) w));
+    Black = BlackPixel(XtDisplay(w), WidgetToScreen((Widget) w));
     for ( i=0; i<size; i++ )
 	if ( flags & ColorResources[i].Flag ) {
+            if ( ColorResources[i].Flag == BACKGROUND )
+                EditCol = White;
+            else if ( ColorResources[i].Flag == FOREGROUND )
+                EditCol = Black;
+            else
+                EditCol = Color;
 	    XtVaGetValues((Widget) w, ColorResources[i].Resource, &Color,
 	                  NULL);
-	    XtVaSetValues(w->combobox.ListCtrl, 
-	                  ColorResources[i].Resource, Color, NULL);
-	    XtVaSetValues(ScrolledWin, 
-	                  ColorResources[i].Resource, Color, NULL);
 	    XtVaSetValues(ScrollBar, 
 	                  ColorResources[i].Resource, Color, NULL);
-	    XtVaSetValues(w->combobox.EditCtrl, 
-	                  ColorResources[i].Resource, Color, NULL);
+            XtVaSetValues(w->combobox.ListCtrl, 
+                          ColorResources[i].Resource, EditCol, NULL);
+            XtVaSetValues(w->combobox.EditCtrl, 
+                          ColorResources[i].Resource, EditCol, NULL);
+            XtVaSetValues(ScrolledWin, 
+                          ColorResources[i].Resource, Color, NULL);
 	    XtVaSetValues(w->combobox.LabelCtrl, 
 	                  ColorResources[i].Resource, Color, NULL);
 	    XtVaSetValues(w->combobox.ArrowCtrl, 

@@ -180,6 +180,13 @@ public:
     // remove all items from the m_Handlers list
     static void CleanUpHandlers();
 
+    // Returns the native path for a file URL
+    static wxString URLToNativePath( const wxString& url );
+
+    // Returns the file URL for a native path
+    static wxString NativePathToURL( const wxString& path );
+
+
 protected:
     wxString m_Path;
             // the path (location) we are currently in

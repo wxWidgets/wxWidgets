@@ -40,6 +40,7 @@
 #include "wx/log.h"
 #include "wx/html/htmlpars.h"
 #include "wx/html/htmldefs.h"
+#include "wx/html/htmlfilt.h"
 #include "wx/filename.h"
 
 #include "wx/arrimpl.cpp"
@@ -250,12 +251,10 @@ wxHtmlHelpData::~wxHtmlHelpData()
     }
 }
 
-// defined in htmlfilt.cpp
-void wxPrivate_ReadString(wxString& str, wxInputStream* s);
-
 bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, const wxString& indexfile, const wxString& contentsfile)
 {
     wxFSFile *f;
+    wxHtmlFilterHTML filter;
     wxString buf;
     wxString string;
 
@@ -267,27 +266,31 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     if (f)
     {
         buf.clear();
-        wxPrivate_ReadString(buf, f->GetStream());
+        buf = filter.ReadFile(*f);
         delete f;
         handler->ReadIn(m_Contents, m_ContentsCnt);
         parser.Parse(buf);
         handler->WriteOut(m_Contents, m_ContentsCnt);
     }
     else
+    {
         wxLogError(_("Cannot open contents file: %s"), contentsfile.c_str());
+    }
 
     f = ( indexfile.IsEmpty() ? (wxFSFile*) NULL : fsys.OpenFile(indexfile) );
     if (f)
     {
         buf.clear();
-        wxPrivate_ReadString(buf, f->GetStream());
+        buf = filter.ReadFile(*f);
         delete f;
         handler->ReadIn(m_Index, m_IndexCnt);
         parser.Parse(buf);
         handler->WriteOut(m_Index, m_IndexCnt);
     }
     else if (!indexfile.IsEmpty())
+    {
         wxLogError(_("Cannot open index file: %s"), indexfile.c_str());
+    }
     return TRUE;
 }
 
@@ -307,22 +310,34 @@ inline static wxInt32 CacheReadInt32(wxInputStream *f)
 }
 
 inline static void CacheWriteString(wxOutputStream *f, const wxChar *str)
-{
-    size_t len = wxStrlen(str)+1;
+{    
+#if wxUSE_UNICODE
+    wxWX2MBbuf mbstr(wxConvUTF8.cWX2MB(str));
+#else
+    const wxChar *mbstr = str;
+#endif
+    size_t len = strlen(mbstr)+1;
     CacheWriteInt32(f, len);
-    f->Write(str, len * sizeof(wxChar));
+    f->Write(mbstr, len);
 }
 
-inline static wxChar *CacheReadString(wxInputStream *f)
+inline static wxChar* CacheReadString(wxInputStream *f)
 {
-    wxChar *str;
+    char *str;
     size_t len = (size_t)CacheReadInt32(f);
-    str = new wxChar[len];
-    f->Read(str, len * sizeof(wxChar));
+    str = new char[len];
+    f->Read(str, len);
+#if !wxUSE_UNICODE
     return str;
+#else
+    wxMB2WXbuf wxstr(wxConvUTF8.cMB2WX(str));
+    wxChar *outstr = new wxChar[wxStrlen(wxstr)+1];
+    wxStrcpy(outstr, wxstr);
+    return outstr;
+#endif
 }
 
-#define CURRENT_CACHED_BOOK_VERSION     2
+#define CURRENT_CACHED_BOOK_VERSION     3
 
 bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
 {
@@ -331,7 +346,7 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
 
     /* load header - version info : */
     version = CacheReadInt32(f);
-
+    
     if (version != CURRENT_CACHED_BOOK_VERSION)
     {
         // NB: We can just silently return FALSE here and don't worry about
@@ -555,7 +570,6 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
     {
         wxFSFile *fi;
         wxFileSystem fsys;
-        wxInputStream *s;
         wxString bookFull;
 
         wxString title = _("noname"),
@@ -572,7 +586,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         bookFull = fn.GetFullPath( wxPATH_UNIX );
 #else
         if (wxIsAbsolutePath(book)) bookFull = book;
-        else bookFull = wxGetCwd() + "/" + book;
+        else bookFull = wxGetCwd() + wxT("/") + book;
 #endif
 
         fi = fsys.OpenFile(bookFull);
@@ -582,20 +596,19 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
             return FALSE;
         }
         fsys.ChangePathTo(bookFull);
-        s = fi->GetStream();
 
         const wxChar *lineptr;
         wxChar linebuf[300];
         wxString tmp;
-
-        wxPrivate_ReadString(tmp, s);
+        wxHtmlFilterPlainText filter;
+        tmp = filter.ReadFile(*fi);
         lineptr = tmp.c_str();
 
         do 
         {
             lineptr = ReadLine(lineptr, linebuf, 300);
             
-            for (wxChar *ch = linebuf; *ch != '\0' && *ch != '='; ch++)
+            for (wxChar *ch = linebuf; *ch != wxT('\0') && *ch != wxT('='); ch++)
                *ch = tolower(*ch);
 
             if (wxStrstr(linebuf, _T("title=")) == linebuf)
@@ -773,7 +786,7 @@ bool wxHtmlSearchStatus::Search()
     file = fsys.OpenFile(m_Data->m_Contents[i].m_Book->GetFullPath(thepage));
     if (file)
     {
-        if (m_Engine.Scan(file->GetStream()))
+        if (m_Engine.Scan(*file))
         {
             m_Name = m_Data->m_Contents[i].m_Name;
             m_ContentsItem = m_Data->m_Contents + i;
@@ -792,10 +805,10 @@ bool wxHtmlSearchStatus::Search()
 
 
 //--------------------------------------------------------------------------------
-// wxSearchEngine
+// wxHtmlSearchEngine
 //--------------------------------------------------------------------------------
 
-void wxSearchEngine::LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only)
+void wxHtmlSearchEngine::LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only)
 {
     m_CaseSensitive = case_sensitive;
     m_WholeWords = whole_words_only;
@@ -819,15 +832,15 @@ static inline bool WHITESPACE(wxChar c)
     return c == _T(' ') || c == _T('\n') || c == _T('\r') || c == _T('\t');
 }
 
-bool wxSearchEngine::Scan(wxInputStream *stream)
+bool wxHtmlSearchEngine::Scan(const wxFSFile& file)
 {
-    wxASSERT_MSG(m_Keyword != NULL, wxT("wxSearchEngine::LookFor must be called before scanning!"));
+    wxASSERT_MSG(m_Keyword != NULL, wxT("wxHtmlSearchEngine::LookFor must be called before scanning!"));
 
     int i, j;
     int wrd = wxStrlen(m_Keyword);
     bool found = FALSE;
-    wxString tmp;
-    wxPrivate_ReadString(tmp, stream);
+    wxHtmlFilterHTML filter;
+    wxString tmp = filter.ReadFile(file);
     int lng = tmp.length();
     const wxChar *buf = tmp.c_str();
 

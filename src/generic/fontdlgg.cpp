@@ -74,14 +74,14 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ( font.Ok() )
     {
-        dc.SetFont(GetFont());
+        dc.SetFont(font);
         // Calculate vertical centre
         long w, h;
-        dc.GetTextExtent("X", &w, &h);
+        dc.GetTextExtent( wxT("X"), &w, &h);
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
         dc.DrawText(_("ABCDEFGabcdefg12345"), 
-                    10, h/2 + size.y/2);
+                     10, size.y/2 - h/2);
         dc.DestroyClippingRegion();
     }
 }
@@ -191,6 +191,10 @@ bool wxGenericFontDialog::DoCreate(wxWindow *parent)
   InitializeFont();
   CreateWidgets();
  
+  // sets initial font in preview area
+  wxCommandEvent dummy;
+  OnChangeFont(dummy);
+  
   return TRUE;
 }
 
@@ -237,8 +241,8 @@ void wxGenericFontDialog::CreateWidgets()
   int i;
   for ( i = 0; i < 40; i++)
   {
-    char buf[5];
-    sprintf(buf, "%d", i + 1);
+    wxChar buf[5];
+    wxSprintf(buf, wxT("%d"), i + 1);
     pointSizes[i] = buf;
   }
 
@@ -248,7 +252,7 @@ void wxGenericFontDialog::CreateWidgets()
   m_previewer = new wxFontPreviewer(this);
 
   wxButton *okButton = new wxButton(this, wxID_OK, _("OK"));
-  wxButton *cancelButton = new wxButton(this, wxID_OK, _("Cancel"));
+  wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _("Cancel"));
 
   familyChoice->SetStringSelection( wxFontFamilyIntToString(dialogFont.GetFamily()) );
   styleChoice->SetStringSelection(wxFontStyleIntToString(dialogFont.GetStyle()));

@@ -205,7 +205,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("Font wxWindows demo",
+    MyFrame *frame = new MyFrame(wxT("Font wxWindows demo"),
                                  wxPoint(50, 50), wxSize(600, 400));
 
     // Show it and tell the application that it's our main window
@@ -231,52 +231,52 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Font_ViewMsg, "&View...\tCtrl-V",
-                     "View an email message file");
+    menuFile->Append(Font_ViewMsg, wxT("&View...\tCtrl-V"),
+                     wxT("View an email message file"));
     menuFile->AppendSeparator();
-    menuFile->Append(Font_About, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->Append(Font_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
-    menuFile->Append(Font_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(Font_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     wxMenu *menuFont = new wxMenu;
-    menuFont->Append(Font_IncSize, "&Increase font size by 2 points\tCtrl-I");
-    menuFont->Append(Font_DecSize, "&Decrease font size by 2 points\tCtrl-D");
+    menuFont->Append(Font_IncSize, wxT("&Increase font size by 2 points\tCtrl-I"));
+    menuFont->Append(Font_DecSize, wxT("&Decrease font size by 2 points\tCtrl-D"));
     menuFont->AppendSeparator();
-    menuFont->Append(Font_Bold, "&Bold\tCtrl-B", "Toggle bold state", TRUE);
-    menuFont->Append(Font_Italic, "&Oblique\tCtrl-O", "Toggle italic state", TRUE);
-    menuFont->Append(Font_Underlined, "&Underlined\tCtrl-U",
-                     "Toggle underlined state", TRUE);
+    menuFont->Append(Font_Bold, wxT("&Bold\tCtrl-B"), wxT("Toggle bold state"), TRUE);
+    menuFont->Append(Font_Italic, wxT("&Oblique\tCtrl-O"), wxT("Toggle italic state"), TRUE);
+    menuFont->Append(Font_Underlined, wxT("&Underlined\tCtrl-U"),
+                     wxT("Toggle underlined state"), TRUE);
 
     menuFont->AppendSeparator();
     menuFont->Append(Font_CheckNativeToFromString,
-                     "Check Native Font Info To/From String");
+                     wxT("Check Native Font Info To/From String"));
 
     wxMenu *menuSelect = new wxMenu;
-    menuSelect->Append(Font_Choose, "&Select font...\tCtrl-S",
-                     "Select a standard font");
+    menuSelect->Append(Font_Choose, wxT("&Select font...\tCtrl-S"),
+                     wxT("Select a standard font"));
 
     wxMenu *menuStdFonts = new wxMenu;
-    menuStdFonts->Append(Font_wxNORMAL_FONT, "wxNORMAL_FONT", "Normal font used by wxWindows");
-    menuStdFonts->Append(Font_wxSMALL_FONT,  "wxSMALL_FONT",  "Small font used by wxWindows");
-    menuStdFonts->Append(Font_wxITALIC_FONT, "wxITALIC_FONT", "Italic font used by wxWindows");
-    menuStdFonts->Append(Font_wxSWISS_FONT,  "wxSWISS_FONT",  "Swiss font used by wxWindows");
-    menuSelect->Append(-2, "Standar&d fonts", menuStdFonts);
+    menuStdFonts->Append(Font_wxNORMAL_FONT, wxT("wxNORMAL_FONT"), wxT("Normal font used by wxWindows"));
+    menuStdFonts->Append(Font_wxSMALL_FONT,  wxT("wxSMALL_FONT"),  wxT("Small font used by wxWindows"));
+    menuStdFonts->Append(Font_wxITALIC_FONT, wxT("wxITALIC_FONT"), wxT("Italic font used by wxWindows"));
+    menuStdFonts->Append(Font_wxSWISS_FONT,  wxT("wxSWISS_FONT"),  wxT("Swiss font used by wxWindows"));
+    menuSelect->Append(-2, wxT("Standar&d fonts"), menuStdFonts);
 
     menuSelect->AppendSeparator();
-    menuSelect->Append(Font_EnumFamilies, "Enumerate font &families\tCtrl-F");
+    menuSelect->Append(Font_EnumFamilies, wxT("Enumerate font &families\tCtrl-F"));
     menuSelect->Append(Font_EnumFixedFamilies,
-                     "Enumerate fi&xed font families\tCtrl-X");
+                     wxT("Enumerate fi&xed font families\tCtrl-X"));
     menuSelect->Append(Font_EnumEncodings,
-                     "Enumerate &encodings\tCtrl-E");
+                     wxT("Enumerate &encodings\tCtrl-E"));
     menuSelect->Append(Font_EnumFamiliesForEncoding,
-                     "Find font for en&coding...\tCtrl-C",
-                     "Find font families for given encoding");
+                     wxT("Find font for en&coding...\tCtrl-C"),
+                     wxT("Find font families for given encoding"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuFont, "F&ont");
-    menuBar->Append(menuSelect, "&Select");
+    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(menuFont, wxT("F&ont"));
+    menuBar->Append(menuSelect, wxT("&Select"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -284,8 +284,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxSplitterWindow *splitter = new wxSplitterWindow(this);
 
     m_textctrl = new wxTextCtrl(splitter, -1,
-                                "Paste text here to see how it looks\n"
-                                "like in the given font",
+                                wxT("Paste text here to see how it looks\nlike in the given font"),
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE);
 
@@ -295,7 +294,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar();
-    SetStatusText("Welcome to wxWindows font demo!");
+    SetStatusText(wxT("Welcome to wxWindows font demo!"));
 }
 
 // --------------------------------------------------------
@@ -388,7 +387,7 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
             for ( n = 0; n < nFacenames; n++ )
                 facenames[n] = fontEnumerator.GetFacenames().Item(n);
 
-            n = wxGetSingleChoiceIndex("Choose a facename", "Font demo",
+            n = wxGetSingleChoiceIndex(wxT("Choose a facename"), wxT("Font demo"),
                                        nFacenames, facenames, this);
 
             if ( n != -1 )
@@ -432,18 +431,18 @@ void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
 
     static const wxString encodingNames[] =
     {
-        "Western European (ISO-8859-1)",
-        "Central European (ISO-8859-2)",
-        "Cyrillic (ISO-8859-5)",
-        "Greek (ISO-8859-7)",
-        "Western European with Euro (ISO-8859-15)",
-        "KOI8-R",
-        "Windows Central European (CP 1250)",
-        "Windows Cyrillic (CP 1251)",
-        "Windows Western European (CP 1252)",
+        wxT("Western European (ISO-8859-1)"),
+        wxT("Central European (ISO-8859-2)"),
+        wxT("Cyrillic (ISO-8859-5)"),
+        wxT("Greek (ISO-8859-7)"),
+        wxT("Western European with Euro (ISO-8859-15)"),
+        wxT("KOI8-R"),
+        wxT("Windows Central European (CP 1250)"),
+        wxT("Windows Cyrillic (CP 1251)"),
+        wxT("Windows Western European (CP 1252)"),
     };
 
-    int n = wxGetSingleChoiceIndex("Choose an encoding", "Font demo",
+    int n = wxGetSingleChoiceIndex(wxT("Choose an encoding"), wxT("Font demo"),
                                    WXSIZEOF(encodingNames),
                                    encodingNames,
                                    this);
@@ -574,7 +573,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
 {
     // first, choose the file
     static wxString s_dir, s_file;
-    wxFileDialog dialog(this, "Open an email message file",
+    wxFileDialog dialog(this, wxT("Open an email message file"),
                         s_dir, s_file);
     if ( dialog.ShowModal() != wxID_OK )
         return;
@@ -592,8 +591,8 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
 
     wxString charset;
 
-    static const char *prefix = "Content-Type: text/plain; charset=";
-    const size_t len = strlen(prefix);
+    static const wxChar *prefix = wxT("Content-Type: text/plain; charset=");
+    const size_t len = wxStrlen(prefix);
 
     size_t n, count = file.GetLineCount();
     for ( n = 0; n < count; n++ )
@@ -611,10 +610,10 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
         {
             // found!
             const wxChar *pc = line.c_str() + len;
-            if ( *pc == '"' )
+            if ( *pc == wxT('"') )
                 pc++;
 
-            while ( *pc && *pc != '"' )
+            while ( *pc && *pc != wxT('"') )
             {
                 charset += *pc++;
             }
@@ -687,9 +686,9 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("wxWindows font demo\n"
-                 "(c) 1999 Vadim Zeitlin",
-                 "About Font",
+    wxMessageBox(wxT("wxWindows font demo\n")
+                 wxT("(c) 1999 Vadim Zeitlin"),
+                 wxT("About Font"),
                  wxOK | wxICON_INFORMATION, this);
 }
 
