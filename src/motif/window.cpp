@@ -1411,6 +1411,7 @@ void wxWindow::DoMoveWindowIntr(int xx, int yy, int w, int h,
                 w -= 2 * (thick + margin);
             }
 
+            if( w < 1 ) w = 1;
             XtVaSetValues ((Widget) m_scrolledWindow, XmNwidth, w, NULL);
         }
 
@@ -1427,6 +1428,7 @@ void wxWindow::DoMoveWindowIntr(int xx, int yy, int w, int h,
                 h -= 2 * (thick + margin);
             }
 
+            if( h < 1 ) h = 1;
             XtVaSetValues ((Widget) m_scrolledWindow, XmNheight, h, NULL);
         }
 

@@ -99,7 +99,7 @@ wxString wxControl::GetLabel() const
     if (!widget)
         return wxEmptyString;
 
-    XmString text;
+    XmString text = NULL;
     XtVaGetValues (widget,
         XmNlabelString, &text,
         NULL);
