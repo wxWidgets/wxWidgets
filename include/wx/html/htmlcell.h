@@ -59,7 +59,7 @@ public:
     void SetToPrivPos(const wxPoint& pos) { m_toPrivPos = pos; }
     void ClearPrivPos() { m_toPrivPos = m_fromPrivPos = wxDefaultPosition; }
 
-    const bool IsEmpty() const 
+    bool IsEmpty() const 
         { return m_fromPos == wxDefaultPosition && 
                  m_toPos == wxDefaultPosition; }
 
