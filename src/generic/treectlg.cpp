@@ -825,7 +825,20 @@ wxGenericTreeCtrl::~wxGenericTreeCtrl()
 
 size_t wxGenericTreeCtrl::GetCount() const
 {
-    return m_anchor == NULL ? 0u : m_anchor->GetChildrenCount();
+    if ( !m_anchor )
+    {
+        // the tree is empty
+        return 0;
+    }
+
+    size_t count = m_anchor->GetChildrenCount();
+    if ( !HasFlag(wxTR_HIDE_ROOT) )
+    {
+        // take the root itself into account
+        count++;
+    }
+
+    return count;
 }
 
 void wxGenericTreeCtrl::SetIndent(unsigned int indent)
