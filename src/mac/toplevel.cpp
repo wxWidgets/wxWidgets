@@ -242,7 +242,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
     return result ;
 }
 
-static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
 
@@ -267,7 +267,10 @@ static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef
     WindowRef window ;
     short windowPart = ::FindWindow(point, &window);
 
-    if ( IsWindowActive(window) && windowPart == inContent )
+    // either we really are active or we are capturing mouse events
+
+    if ( (IsWindowActive(window) && windowPart == inContent) || 
+        (wxTheApp->s_captureWindow && wxTheApp->s_captureWindow->MacGetTopLevelWindow() == toplevelWindow) )
     {
         switch ( GetEventKind( event ) )
         {
