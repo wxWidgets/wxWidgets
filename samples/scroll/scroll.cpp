@@ -313,7 +313,7 @@ void MyCanvas::OnQueryPosition( wxCommandEvent &WXUNUSED(event) )
 void MyCanvas::OnAddButton( wxCommandEvent &WXUNUSED(event) )
 {
     wxLogMessage( wxT("Inserting button at position 10,70...") );
-    wxButton *button = new wxButton( this, ID_NEWBUTTON, "new button", wxPoint(10,70), wxSize(80,25) );
+    wxButton *button = new wxButton( this, ID_NEWBUTTON, wxT("new button"), wxPoint(10,70), wxSize(80,25) );
     wxPoint pt( button->GetPosition() );
     wxLogMessage( wxT("-> Position after inserting %d %d"), pt.x, pt.y );
 }

@@ -285,9 +285,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     // try to find the directory with our images
     wxString dir;
     if ( wxFile::Exists(wxT("./horse.png")) )
-        dir = "./";
+        dir = wxT("./");
     else if ( wxFile::Exists(wxT("../horse.png")) )
-        dir = "../";
+        dir = wxT("../");
     else
         wxLogWarning(wxT("Can't find image files in either '.' or '..'!"));
 
@@ -322,7 +322,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #if wxUSE_GIF
     image.Destroy();
 
-    if ( !image.LoadFile( dir + wxString("horse.gif")))
+    if ( !image.LoadFile( dir + _T("horse.gif" )) )
         wxLogError(wxT("Can't load GIF image"));
     else
         my_horse_gif = new wxBitmap( image );
