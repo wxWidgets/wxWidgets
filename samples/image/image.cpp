@@ -406,8 +406,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     image.Destroy();
 
-    image.LoadFile( dir + _T("test.png") );
-    my_square = new wxBitmap( image );
+    if ( image.LoadFile( dir + _T("test.png") ) )
+        my_square = new wxBitmap( image );
 
     image.Destroy();
 
@@ -549,20 +549,23 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     // test image loading from stream
     wxFile file(dir + _T("horse.bmp"));
-    off_t len = file.Length();
-    void *data = malloc(len);
-    if ( file.Read(data, len) != len )
-        wxLogError(_T("Reading bitmap file failed"));
-    else
+    if ( file.IsOpened() )
     {
-        wxMemoryInputStream mis(data, len);
-        if ( !image.LoadFile(mis) )
-            wxLogError(wxT("Can't load BMP image from stream"));
+        off_t len = file.Length();
+        void *data = malloc(len);
+        if ( file.Read(data, len) != len )
+            wxLogError(_T("Reading bitmap file failed"));
         else
-            my_horse_bmp2 = new wxBitmap( image );
-    }
+        {
+            wxMemoryInputStream mis(data, len);
+            if ( !image.LoadFile(mis) )
+                wxLogError(wxT("Can't load BMP image from stream"));
+            else
+                my_horse_bmp2 = new wxBitmap( image );
+        }
 
-    free(data);
+        free(data);
+    }
 }
 
 MyCanvas::~MyCanvas()
