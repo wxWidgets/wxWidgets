@@ -532,7 +532,7 @@ void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
     text->WriteText("\n");
 }
 
-void MyListCtrl::OnDeleteItem(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnDeleteItem(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -541,7 +541,7 @@ void MyListCtrl::OnDeleteItem(wxListEvent& WXUNUSED(event))
     if ( !text )
         return;
 
-        text->WriteText("OnDeleteItem\n");
+    text->WriteText(wxString::Format("%ld OnDeleteItem\n", event.GetIndex()));
 }
 
 void MyListCtrl::OnDeleteAllItems(wxListEvent& WXUNUSED(event))
@@ -553,7 +553,7 @@ void MyListCtrl::OnDeleteAllItems(wxListEvent& WXUNUSED(event))
     if ( !text )
         return;
 
-        text->WriteText("OnDeleteAllItems\n");
+    text->WriteText("OnDeleteAllItems\n");
 }
 
 void MyListCtrl::OnGetInfo(wxListEvent& event)
@@ -590,7 +590,7 @@ void MyListCtrl::OnGetInfo(wxListEvent& event)
     (*text) << "\n";
 }
 
-void MyListCtrl::OnSetInfo(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnSetInfo(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -599,7 +599,7 @@ void MyListCtrl::OnSetInfo(wxListEvent& WXUNUSED(event))
     if ( !text )
         return;
 
-    text->WriteText("OnSetInfo\n");
+    text->WriteText(wxString::Format("%ld OnSetInfo\n", event.GetIndex()));
 }
 
 void MyListCtrl::OnSelected(wxListEvent& event)
@@ -628,10 +628,10 @@ void MyListCtrl::OnSelected(wxListEvent& event)
         }
     }
 
-    text->WriteText("OnSelected\n");
+    text->WriteText(wxString::Format("%ld OnSelected\n", event.GetIndex()));
 }
 
-void MyListCtrl::OnDeselected(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnDeselected(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -640,10 +640,10 @@ void MyListCtrl::OnDeselected(wxListEvent& WXUNUSED(event))
     if ( !text )
         return;
 
-    text->WriteText("OnDeselected\n");
+    text->WriteText(wxString::Format("%ld OnDeselected\n", event.GetIndex()));
 }
 
-void MyListCtrl::OnActivated(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnActivated(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -652,7 +652,7 @@ void MyListCtrl::OnActivated(wxListEvent& WXUNUSED(event))
     if ( !text )
         return;
 
-    text->WriteText("OnActivated\n");
+    text->WriteText(wxString::Format("%ld OnActivated\n", event.GetIndex()));
 }
 
 void MyListCtrl::OnListKeyDown(wxListEvent& event)
@@ -664,7 +664,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
     if ( !text )
         return;
 
-    text->WriteText("OnListKeyDown\n");
+    text->WriteText(wxString::Format("%ld OnListKeyDown\n", event.GetIndex()));
 }
 
 
