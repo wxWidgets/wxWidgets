@@ -77,7 +77,7 @@ wxFont wxSystemSettings::GetSystemFont(int index)
     }
 }
 
-int wxSystemSettings::GetSystemMetric(int WXUNUSED(index))
+int wxSystemSettings::GetSystemMetric(int index)
 {
     int val;
     
