@@ -191,9 +191,12 @@ wxWizardGeneric::wxWizardGeneric(wxWindow *parent,
 
     int x = X_MARGIN;
     int y = m_y + m_height + BITMAP_Y_MARGIN;
+    
+#if wxUSE_STATLINE    
     (void)new wxStaticLine(this, -1, wxPoint(x, y),
                            wxSize(m_x + m_width - x, 2));
-
+#endif
+    
     x = m_x + m_width - 3*sizeBtn.x - BUTTON_MARGIN;
     y += SEPARATOR_LINE_MARGIN;
     m_btnPrev = new wxButton(this, -1, _("< &Back"), wxPoint(x, y), sizeBtn);
