@@ -276,6 +276,7 @@ public:
 // Event handlers
 
     void OnClose(wxCommandEvent& event);
+    void OnIdle(wxIdleEvent& event);
     void OnLeftAlign(wxCommandEvent& event);
     void OnRightAlign(wxCommandEvent& event);
     void OnJustify(wxCommandEvent& event);
@@ -288,6 +289,7 @@ public:
 
 private:
     wxTextCtrl *m_textCtrl;
+    long m_currentPosition;
 
     DECLARE_EVENT_TABLE()
 };
@@ -1311,6 +1313,7 @@ enum
 };
 
 BEGIN_EVENT_TABLE(RichTextFrame, wxFrame)
+    EVT_IDLE(RichTextFrame::OnIdle)
     EVT_MENU(RICHTEXT_CLOSE, RichTextFrame::OnClose)
     EVT_MENU(RICHTEXT_LEFT_ALIGN, RichTextFrame::OnLeftAlign)
     EVT_MENU(RICHTEXT_RIGHT_ALIGN, RichTextFrame::OnRightAlign)
@@ -1326,6 +1329,7 @@ END_EVENT_TABLE()
 RichTextFrame::RichTextFrame(wxWindow* parent, const wxString& title):
     wxFrame(parent, -1, title, wxDefaultPosition, wxSize(300, 400))
 {
+    m_currentPosition = -1;
     m_textCtrl = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition,
             wxDefaultSize, wxTE_MULTILINE|wxTE_RICH2);
 
@@ -1362,6 +1366,7 @@ RichTextFrame::RichTextFrame(wxWindow* parent, const wxString& title):
     menuBar->Append(editMenu, _("Edit"));
 
     SetMenuBar(menuBar);
+    CreateStatusBar();
 }
 
 // Event handlers
@@ -1379,6 +1384,8 @@ void RichTextFrame::OnLeftAlign(wxCommandEvent& event)
     long start, end;
     m_textCtrl->GetSelection(& start, & end);
     m_textCtrl->SetStyle(start, end, attr);
+
+    m_currentPosition = -1;
 }
 
 void RichTextFrame::OnRightAlign(wxCommandEvent& event)
@@ -1389,6 +1396,8 @@ void RichTextFrame::OnRightAlign(wxCommandEvent& event)
     long start, end;
     m_textCtrl->GetSelection(& start, & end);
     m_textCtrl->SetStyle(start, end, attr);
+
+    m_currentPosition = -1;
 }
 
 void RichTextFrame::OnJustify(wxCommandEvent& event)
@@ -1399,6 +1408,8 @@ void RichTextFrame::OnJustify(wxCommandEvent& event)
     long start, end;
     m_textCtrl->GetSelection(& start, & end);
     m_textCtrl->SetStyle(start, end, attr);
+
+    m_currentPosition = -1;
 }
 
 void RichTextFrame::OnCentre(wxCommandEvent& event)
@@ -1409,6 +1420,8 @@ void RichTextFrame::OnCentre(wxCommandEvent& event)
     long start, end;
     m_textCtrl->GetSelection(& start, & end);
     m_textCtrl->SetStyle(start, end, attr);
+
+    m_currentPosition = -1;
 }
 
 void RichTextFrame::OnChangeFont(wxCommandEvent& event)
@@ -1428,6 +1441,8 @@ void RichTextFrame::OnChangeFont(wxCommandEvent& event)
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);
+
+        m_currentPosition = -1;
     }
 }
 
@@ -1455,6 +1470,8 @@ void RichTextFrame::OnChangeTextColour(wxCommandEvent& event)
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);
+
+        m_currentPosition = -1;
     }
 }
 
@@ -1482,6 +1499,8 @@ void RichTextFrame::OnChangeBackgroundColour(wxCommandEvent& event)
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);
+
+        m_currentPosition = -1;
     }
 }
 
@@ -1499,6 +1518,8 @@ void RichTextFrame::OnLeftIndent(wxCommandEvent& event)
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);
+
+        m_currentPosition = -1;
     }
 }
 
@@ -1516,5 +1537,40 @@ void RichTextFrame::OnRightIndent(wxCommandEvent& event)
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);
+
+        m_currentPosition = -1;
+    }
+}
+
+void RichTextFrame::OnIdle(wxIdleEvent& event)
+{
+    long insertionPoint = m_textCtrl->GetInsertionPoint();
+    if (insertionPoint != m_currentPosition)
+    {
+        wxTextAttr attr;
+        if (m_textCtrl->GetStyle(insertionPoint, attr))
+        {
+            wxString msg;
+            wxString facename(wxT("unknown"));
+            if (attr.GetFont().Ok())
+            {
+                facename = attr.GetFont().GetFaceName();
+            }
+            wxString alignment(wxT("unknown alignment"));
+            if (attr.GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
+                alignment = wxT("centred");
+            else if (attr.GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
+                alignment = wxT("right-aligned");
+            else if (attr.GetAlignment() == wxTEXT_ALIGNMENT_LEFT)
+                alignment = wxT("left-aligned");
+            else if (attr.GetAlignment() == wxTEXT_ALIGNMENT_JUSTIFIED)
+                alignment = wxT("justified");
+            msg.Printf(wxT("Facename: %s, wxColour(%d, %d, %d), %s"),
+                (const wxChar*) facename,
+                attr.GetTextColour().Red(), attr.GetTextColour().Green(), attr.GetTextColour().Blue(),
+                (const wxChar*) alignment);
+            SetStatusText(msg);
+        }
+        m_currentPosition = insertionPoint;
     }
 }

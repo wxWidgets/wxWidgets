@@ -2093,10 +2093,135 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
     return TRUE;
 }
 
-bool wxTextCtrl::GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style))
+bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 {
-    // TODO
-    return FALSE;
+    if ( !IsRich() )
+    {
+        // can't do it with normal text control
+        return FALSE;
+    }
+
+    // initialize CHARFORMAT struct
+#if wxUSE_RICHEDIT2
+    CHARFORMAT2 cf;
+#else
+    CHARFORMAT cf;
+#endif
+
+    wxZeroMemory(cf);
+
+    // we can't use CHARFORMAT2 with RichEdit 1.0, so pretend it is a simple
+    // CHARFORMAT in that case
+#if wxUSE_RICHEDIT2
+    if ( m_verRichEdit == 1 )
+    {
+        // this is the only thing the control is going to grok
+        cf.cbSize = sizeof(CHARFORMAT);
+    }
+    else
+#endif
+    {
+        // CHARFORMAT or CHARFORMAT2
+        cf.cbSize = sizeof(cf);
+    }
+    // we can only change the format of the selection, so select the range we
+    // want and restore the old selection later
+    long startOld, endOld;
+    GetSelection(&startOld, &endOld);
+
+    // but do we really have to change the selection?
+    bool changeSel = position != startOld || position != endOld;
+
+    if ( changeSel )
+    {
+        DoSetSelection(position, position, FALSE /* don't scroll caret into view */);
+    }
+
+    // get the selection formatting
+    (void) ::SendMessage(GetHwnd(), EM_GETCHARFORMAT,
+                            SCF_SELECTION, (LPARAM)&cf) ;
+
+    LOGFONT lf;
+    lf.lfHeight = cf.yHeight;
+    lf.lfWidth = 0;
+    lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
+    lf.lfClipPrecision = 0;
+    lf.lfEscapement = 0;
+    wxStrcpy(lf.lfFaceName, cf.szFaceName);
+    if (cf.dwEffects & CFE_ITALIC)
+        lf.lfItalic = TRUE;
+    lf.lfOrientation = 0;
+    lf.lfPitchAndFamily = cf.bPitchAndFamily;
+    lf.lfQuality = 0;
+    if (cf.dwEffects & CFE_STRIKEOUT)
+        lf.lfStrikeOut = TRUE;
+    if (cf.dwEffects & CFE_UNDERLINE)
+        lf.lfUnderline = TRUE;
+    if (cf.dwEffects & CFE_BOLD)
+        lf.lfWeight = FW_BOLD;
+
+    wxFont font = wxCreateFontFromLogFont(& lf);
+    if (font.Ok())
+    {
+        style.SetFont(font);
+    }
+    style.SetTextColour(wxColour(cf.crTextColor));
+
+#if wxUSE_RICHEDIT2
+    if ( m_verRichEdit != 1 )
+    {
+        // cf.dwMask |= CFM_BACKCOLOR;
+        style.SetBackgroundColour(wxColour(cf.crBackColor));
+    }
+#endif // wxUSE_RICHEDIT2
+
+    // now get the paragraph formatting
+    PARAFORMAT2 pf;
+    wxZeroMemory(pf);
+    // we can't use PARAFORMAT2 with RichEdit 1.0, so pretend it is a simple
+    // PARAFORMAT in that case
+#if wxUSE_RICHEDIT2
+    if ( m_verRichEdit == 1 )
+    {
+        // this is the only thing the control is going to grok
+        pf.cbSize = sizeof(PARAFORMAT);
+    }
+    else
+#endif
+    {
+        // PARAFORMAT or PARAFORMAT2
+        pf.cbSize = sizeof(pf);
+    }
+
+    // do format the selection
+    (void) ::SendMessage(GetHwnd(), EM_GETPARAFORMAT, 0, (LPARAM) &pf) ;
+
+    style.SetLeftIndent( (int) ((double) pf.dxStartIndent * twips2mm * 10.0) );
+    style.SetRightIndent( (int) ((double) pf.dxRightIndent * twips2mm * 10.0) );
+
+    if (pf.wAlignment == PFA_CENTER)
+        style.SetAlignment(wxTEXT_ALIGNMENT_CENTRE);
+    else if (pf.wAlignment == PFA_RIGHT)
+        style.SetAlignment(wxTEXT_ALIGNMENT_RIGHT);
+    else if (pf.wAlignment == PFA_JUSTIFY)
+        style.SetAlignment(wxTEXT_ALIGNMENT_JUSTIFIED);
+    else
+        style.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
+
+    wxArrayInt tabStops;
+    size_t i;
+    for (i = 0; i < (size_t) pf.cTabCount; i++)
+    {
+        tabStops[i] = (int) ((double) (pf.rgxTabs[i] & 0xFFFF) * twips2mm * 10.0) ;
+    }
+
+    if ( changeSel )
+    {
+        // restore the original selection
+        DoSetSelection(startOld, endOld, FALSE);
+    }
+
+    return TRUE;
 }
 
 #endif
