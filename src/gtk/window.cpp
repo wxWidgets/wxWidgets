@@ -2948,6 +2948,16 @@ bool wxWindow::Enable( bool enable )
     if ( m_wxwindow )
         gtk_widget_set_sensitive( m_wxwindow, enable );
 
+    // Recurse, so that children have the opportunity to Do The Right Thing.
+    for ( wxWindowList::Node *node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *child = node->GetData();
+	if (!child->IsKindOf(CLASSINFO(wxDialog)) && !child->IsKindOf(CLASSINFO(wxFrame)))
+            child->Enable(enable);
+    }
+
     return TRUE;
 }
 
