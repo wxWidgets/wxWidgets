@@ -45,6 +45,7 @@
     #include "wx/radiobox.h"
     #include "wx/filedlg.h"
     #include "wx/choice.h"
+    #include "wx/combobox.h"
     #include <wx/intl.h>
 #endif
 
@@ -497,7 +498,7 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow()
     return TRUE;
 }
 
-wxChoice *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
+wxComboBox *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
 {
 /* Should not be necessary
     if (!wxThePrintPaperDatabase)
@@ -520,7 +521,9 @@ wxChoice *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
 
     int width = 250;
 
-    wxChoice *choice = new wxChoice(this, wxPRINTID_PAPERSIZE, wxPoint(*x, *y), wxSize(width, -1), n,
+    wxComboBox *choice = new wxComboBox(this, wxPRINTID_PAPERSIZE,
+                                        _("Paper Size"),
+                                        wxPoint(*x, *y), wxSize(width, -1), n,
         choices);
 
     //    SetFont(thisFont);
@@ -741,7 +744,7 @@ bool wxGenericPageSetupDialog::TransferDataFromWindow()
     return TRUE;
 }
 
-wxChoice *wxGenericPageSetupDialog::CreatePaperTypeChoice(int *x, int *y)
+wxComboBox *wxGenericPageSetupDialog::CreatePaperTypeChoice(int *x, int *y)
 {
 /*
     if (!wxThePrintPaperDatabase)
@@ -763,7 +766,9 @@ wxChoice *wxGenericPageSetupDialog::CreatePaperTypeChoice(int *x, int *y)
     (void) new wxStaticText(this, wxPRINTID_STATIC, _("Paper size"), wxPoint(*x, *y));
     *y += 25;
 
-    wxChoice *choice = new wxChoice(this, wxPRINTID_PAPERSIZE, wxPoint(*x, *y), wxSize(300, -1), n,
+    wxComboBox *choice = new wxComboBox(this, wxPRINTID_PAPERSIZE,
+                                        _("Paper Size"),
+                                        wxPoint(*x, *y), wxSize(300, -1), n,
         choices);
     *y += 35;
     delete[] choices;

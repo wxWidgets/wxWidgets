@@ -31,7 +31,7 @@
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxCheckBox;
-class WXDLLEXPORT wxChoice;
+class WXDLLEXPORT wxComboBox;
 class WXDLLEXPORT wxStaticText;
 class WXDLLEXPORT wxRadioBox;
 class WXDLLEXPORT wxPrintSetupData;
@@ -140,14 +140,14 @@ public:
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
 
-    wxChoice *CreatePaperTypeChoice(int* x, int* y);
+    wxComboBox *CreatePaperTypeChoice(int* x, int* y);
 
 public:
     wxRadioBox*         m_orientationRadioBox;
     wxTextCtrl*         m_printerCommandText;
     wxTextCtrl*         m_printerOptionsText;
     wxCheckBox*         m_colourCheckBox;
-    wxChoice*           m_paperTypeChoice;
+    wxComboBox*           m_paperTypeChoice;
 
 #if wxUSE_POSTSCRIPT
     wxPrintData         m_printData;
@@ -170,7 +170,7 @@ public:
 
     void OnPrinter(wxCommandEvent& event);
 
-    wxChoice *CreatePaperTypeChoice(int* x, int* y);
+    wxComboBox *CreatePaperTypeChoice(int* x, int* y);
     wxPageSetupData& GetPageSetupData() { return m_pageData; }
 
 public:
@@ -180,7 +180,7 @@ public:
     wxTextCtrl*     m_marginTopText;
     wxTextCtrl*     m_marginRightText;
     wxTextCtrl*     m_marginBottomText;
-    wxChoice*       m_paperTypeChoice;
+    wxComboBox*       m_paperTypeChoice;
 
     static bool     m_pageSetupDialogCancelled;
 
