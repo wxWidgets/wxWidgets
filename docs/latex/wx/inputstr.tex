@@ -49,8 +49,11 @@ Returns true if the end of stream has been reached.
 
 \wxheading{Note}
 
-This cannot be really implemented for all streams and CanRead() is more 
-reliable than Eof().
+For some streams Eof() will not return true until an
+attempt has been made to read past the end of the stream.
+\helpref{LastRead()}{wxinputstreamlastread}
+should be called after each read to check that
+a non-zero number of bytes have been read.
 
 \membersection{wxInputStream::LastRead}\label{wxinputstreamlastread}
 
