@@ -105,6 +105,46 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// wxDynamicLibrary - friendly interface to wxDllLoader
+// ----------------------------------------------------------------------------
+
+class wxDynamicLibrary
+{
+public:
+    wxDynamicLibrary() { m_library = 0; }
+    wxDynamicLibrary(const wxString& name) { Load(name); }
+
+    bool IsLoaded() const { return m_library != 0; }
+
+    bool Load(const wxString& name)
+    {
+        m_library = wxDllLoader::LoadLibrary(name);
+
+        return IsLoaded();
+    }
+
+    void Unload()
+    {
+        if ( IsLoaded() )
+            wxDllLoader::UnloadLibrary(m_library)
+    }
+
+    void *GetSymbol(const wxString& name) const
+    {
+        wxCHECK_MSG( IsLoaded(), NULL,
+                     _T("can't load symbol from unloaded library") );
+
+        return wxDllLoader::GetSymbol(m_library, name);
+    }
+
+    ~wxDynamicLibrary() { Unload(); }
+
+private:
+    wxDllType m_library;
+};
+
+
+// ----------------------------------------------------------------------------
 // wxLibrary
 // ----------------------------------------------------------------------------
 

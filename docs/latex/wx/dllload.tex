@@ -17,6 +17,9 @@ loading of shared libraries and the resolving of symbols in them. There are no
 instances of this class, it simply serves as a namespace for its static member
 functions.
 
+Please note that class \helpref{wxDynamicLibrary}{wxdynamiclibrary} provides 
+alternative, friendlier interface to wxDllLoader.
+
 The terms {\it DLL} and {\it shared library/object} will both be used in the
 documentation to refer to the same thing: a {\tt .dll} file under Windows or 
 {\tt .so} or {\tt .sl} one under Unix.
@@ -142,4 +145,47 @@ FALSE; may also be {\tt NULL}.}
 This function unloads the shared library. The handle {\it dllhandle} must have
 been returned by \helpref{LoadLibrary}{wxdllloaderloadlibrary} previously.
 
+\section{\class{wxDynamicLibrary}}\label{wxdynamiclibrary}
 
+wxDynamicLibrary is a class representing dynamically loadable library
+(Windows DLL, shared library under Unix etc.). It is implemented as a wrapper
+to \helpref{wxDllLoader}{wxdllloader}.
+
+\wxheading{See also}
+
+\helpref{wxDllLoader}{wxdllloader}
+
+\membersection{wxDynamicLibrary::wxDynamicLibrary}\label{wxdynamiclibrarywxdynamiclibrary}
+
+\func{}{wxDynamicLibrary}{\void}
+
+\func{}{wxDynamicLibrary}{\param{const wxString\& }{name}}
+
+Constructor. Second form calls \helpref{Load}{wxdynamiclibraryload}.
+
+\membersection{wxDynamicLibrary::IsLoaded}\label{wxdynamiclibraryisloaded}
+
+\constfunc{bool}{IsLoaded}{\void}
+
+Returns TRUE if the library was successfully loaded, FALSE otherwise.
+
+\membersection{wxDynamicLibrary::Load}\label{wxdynamiclibraryload}
+
+\func{bool}{Load}{\param{const wxString\& }{name}}
+
+Loads DLL into memory.
+
+Returns TRUE if the library was successfully loaded, FALSE otherwise.
+
+\membersection{wxDynamicLibrary::Unload}\label{wxdynamiclibraryunload}
+
+\func{void}{Unload}{\void}
+
+Unloads the library from memory.
+
+\membersection{wxDynamicLibrary::GetSymbol}\label{wxdynamiclibrarygetsymbol}
+
+\constfunc{void*}{GetSymbol}{\param{const wxString\& }{name}}
+
+Returns pointer to symbol {\it name} in the library or NULL if the library
+contains no such symbol.
