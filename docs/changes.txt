@@ -178,6 +178,15 @@ wxThread and related classes:
 OTHER CHANGES
 =============
 
+2.4.3
+-----
+
+wxMSW:
+
+- strip ampersands from strings returned by wxMenuBar::GetLabelTop()
+- fixed bug in wxIniConfig::DeleteEntry() (Parinya Thipchart)
+
+
 2.4.2
 -----
 
@@ -224,7 +233,6 @@ wxMSW:
 - fixed release mode build with VC 7.x (Martin Ecker)
 - fix iostream.h problem with VC 7.1 (it doesn't support it any longer) 
 - compilation fix for XRC with mingw32
-- strip ampersands from strings returned by wxMenuBar::GetLabelTop()
 
 wxMotif:
 
