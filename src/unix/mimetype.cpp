@@ -369,7 +369,7 @@ bool wxMimeTypesManagerImpl::CheckGnomeDirsExist ()
     {
         if (!wxMkdir ( sTmp ))
         {
-            wxFAIL_MSG (wxString ("Failed to create directory\n.gnome in \nCheckGnomeDirsExist") + sTmp );
+            wxLogError(_("Failed to create directory %s/.gnome."), sTmp.c_str());
             return FALSE;
         }
     }
@@ -378,7 +378,7 @@ bool wxMimeTypesManagerImpl::CheckGnomeDirsExist ()
     {
         if (!wxMkdir ( sTmp ))
         {
-            wxFAIL_MSG (wxString ("Failed to create directory\nmime-info in \nCheckGnomeDirsExist") + sTmp );
+            wxLogError(_("Failed to create directory %s/mime-info."), sTmp.c_str());
             return FALSE;
         }
     }
