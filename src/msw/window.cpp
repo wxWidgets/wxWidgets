@@ -2076,21 +2076,9 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 
-#if defined(__WXUNIVERSAL__) && !defined(__WXMICROWIN__)
         case WM_ACTIVATEAPP:
             wxTheApp->SetActive(wParam != 0, FindFocus());
             break;
-
-        case WM_NCHITTEST:
-            // we shouldn't allow the windows which don't want to get focus to
-            // get it
-            if ( !AcceptsFocus() )
-            {
-                rc.result = HTTRANSPARENT;
-                processed = TRUE;
-            }
-            break;
-#endif // __WXUNIVERSAL__
 
         case WM_ACTIVATE:
             {
@@ -2463,6 +2451,18 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 #endif // __WIN32__
+
+#ifdef __WXUNIVERSAL__
+        case WM_NCHITTEST:
+            // we shouldn't allow the windows which don't want to get focus to
+            // get it
+            if ( !AcceptsFocus() )
+            {
+                rc.result = HTTRANSPARENT;
+                processed = TRUE;
+            }
+            break;
+#endif // __WXUNIVERSAL__
     }
 
     if ( !processed )
