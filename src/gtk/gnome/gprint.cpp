@@ -614,7 +614,7 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
 {
     if (!pen.Ok()) return;
 
-    int oldStyle = m_pen.GetStyle();
+    // TODO: support for pen styles other than solid (use gnome_print_setdash)
 
     m_pen = pen;
 
