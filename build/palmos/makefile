@@ -228,7 +228,6 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/palmos/help.cpp \
 ../../src/palmos/icon.cpp \
 ../../src/palmos/imaglist.cpp \
-../../src/palmos/iniconf.cpp \
 ../../src/palmos/joystick.cpp \
 ../../src/palmos/listbox.cpp \
 ../../src/palmos/listctrl.cpp \
@@ -245,11 +244,11 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/palmos/palette.cpp \
 ../../src/palmos/pen.cpp \
 ../../src/palmos/popupwin.cpp \
+../../src/palmos/prefconf.cpp \
 ../../src/palmos/printdlg.cpp \
 ../../src/palmos/printpalm.cpp \
 ../../src/palmos/radiobox.cpp \
 ../../src/palmos/radiobut.cpp \
-../../src/palmos/regconf.cpp \
 ../../src/palmos/region.cpp \
 ../../src/palmos/scrolbar.cpp \
 ../../src/palmos/settings.cpp \

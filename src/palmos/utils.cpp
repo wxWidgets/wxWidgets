@@ -244,8 +244,6 @@ extern long wxCharsetToCodepage(const wxChar *name)
 
 #else // !wxUSE_FONTMAP
 
-#include "wx/palmos/registry.h"
-
 // this should work if Internet Exploiter is installed
 extern long wxCharsetToCodepage(const wxChar *name)
 {

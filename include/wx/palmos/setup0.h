@@ -335,7 +335,7 @@
 // See also wxUSE_CONFIG_NATIVE below.
 //
 // Recommended setting: 1
-#define wxUSE_CONFIG        0
+#define wxUSE_CONFIG        1
 
 // If wxUSE_CONFIG is 1, you may choose to use either the native config
 // classes under Windows (using .INI files under Win16 and the registry under
@@ -348,7 +348,7 @@
 // not wxFileConfig.
 //
 // Recommended setting: 1
-#define wxUSE_CONFIG_NATIVE   0
+#define wxUSE_CONFIG_NATIVE   1
 
 // If wxUSE_DIALUP_MANAGER is 1, compile in wxDialUpManager class which allows
 // to connect/disconnect from the network and be notified whenever the dial-up
@@ -928,7 +928,7 @@
 // that use the connection) should support forward only scrolling of cursors,
 // or both forward and backward support for backward scrolling cursors is
 // dependent on the data source as well as the ODBC driver being used.
-#define wxODBC_FWD_ONLY_CURSORS	 0
+#define wxODBC_FWD_ONLY_CURSORS 0
 
 // Default is 0.  Set to 1 to use the deprecated classes, enum types, function,
 // member variables.  With a setting of 1, full backward compatability with the

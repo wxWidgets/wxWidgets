@@ -18,6 +18,11 @@
     #error "wxPalmOS port was introduced after 2.4.X"
 #endif
 
+#ifdef wxUSE_FILECONFIG
+    #undef wxUSE_FILECONFIG
+#endif
+#define wxUSE_FILECONFIG 0
+
 /*
  * disable the settings which don't work for some compilers
  */

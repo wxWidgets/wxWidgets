@@ -91,6 +91,8 @@ wxConfigBase *wxConfigBase::Create()
     ms_pConfig =
     #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
         new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+    #elif defined(__WXPALMOS__) && wxUSE_CONFIG_NATIVE
+        new wxPrefConfig(wxTheApp->GetAppName());
     #else // either we're under Unix or wish to use files even under Windows
       new wxFileConfig(wxTheApp->GetAppName());
     #endif

@@ -96,6 +96,7 @@ wxPalmOS:
 - polishing of the port (unnecessary 2.4 API compatibility, removed
   all wxMSW specific code which was base for the new port)
 - enumeration of available volumes
+- native wxPrefConfig around Preferences database
 
 
 2.5.3
