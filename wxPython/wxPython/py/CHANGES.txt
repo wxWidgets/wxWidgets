@@ -20,6 +20,29 @@ should have been::
     if __name__ == '__main__':
         main()
 
+Added pretty-print Display tab to Crust, based on suggestion from
+Jason Whitlark.
+
+Improved ``Can*`` checks in ``EditWindow``, since STC is too lenient,
+particularly when it is set to read-only but returns True for
+CanPaste() (seems like an STC bug to me)::
+
+    def CanCopy(self):
+        """Return True if text is selected and can be copied."""
+        return self.GetSelectionStart() != self.GetSelectionEnd()
+
+    def CanCut(self):
+        """Return True if text is selected and can be cut."""
+        return self.CanCopy() and self.CanEdit()
+
+    def CanEdit(self):
+        """Return True if editing should succeed."""
+        return not self.GetReadOnly()
+
+    def CanPaste(self):
+        """Return True if pasting should succeed."""
+        return stc.StyledTextCtrl.CanPaste(self) and self.CanEdit()
+
 
 0.9.1 (3/21/2003 to 5/2/2003)
 -----------------------------
