@@ -18,22 +18,22 @@ will take precedence.</p>
 <div class="section" id="installing-on-unix-like-systems-not-os-x">
 <h1><a name="installing-on-unix-like-systems-not-os-x">Installing on Unix-like Systems (not OS X)</a></h1>
 <ol class="arabic">
-<li><p class="first">When building wxWindows you need to decide if you want it to be a
+<li><p class="first">When building wxWidgets you need to decide if you want it to be a
 private copy only accessed by wxPython, or if you would like it to
 be installed in a stanard location such as /usr.  Or perhaps you
-already have a version of wxWindows installed on your system (such
+already have a version of wxWidgets installed on your system (such
 as from an RPM) and you want wxPython to use that version too.  If
 so then you'll want to ensure that the flags and options used to
 build the installed version are compatible with wxPython.</p>
 </li>
-<li><p class="first">If you do decide to build and install your own wxWindows then there
+<li><p class="first">If you do decide to build and install your own wxWidgets then there
 are a few tweaks to the configure flags described in BUILD.txt that
 you will probably want to make.  Instead of --enable-debug use
 this configure flag:</p>
 <pre class="literal-block">
 --enable-optimize \
 </pre>
-<p>Normally I also use the following flag in order to have wxWindows
+<p>Normally I also use the following flag in order to have wxWidgets
 runtime assertions turned into Python exceptions where possible.
 It does add extra code to the build but probably not enough to
 worry about it.  However if you want to get as lean a build as
@@ -42,12 +42,12 @@ then instead of exceptions you'll likely get a crash.</p>
 <blockquote>
 <p>--enable-debug_flag </p>
 </blockquote>
-<p>If you are building a private copy of wxWindows (IOW, not installed
+<p>If you are building a private copy of wxWidgets (IOW, not installed
 in a standard library location) then it can be kind of a hassle to
 always have to set the LD_LIBRARY_PATH variable so wxPython can
-find the wxWindows shared libraries.  You can hard code the library
+find the wxWidgets shared libraries.  You can hard code the library
 path into the binaries by using the rpath option when configuring
-wxWindows.  For example:</p>
+wxWidgets.  For example:</p>
 <pre class="literal-block">
 --enable-rpath=/opt/wx/2.5/lib \
 </pre>
@@ -85,9 +85,9 @@ contained in the PYTHONPATH environment variable.</p>
 instructions above, except for a few small, but important details:</p>
 <ol class="arabic simple">
 <li>The --enable-rpath configure option is not needed since the path to
-the wxWindows dylibs will automatically be encoded into the
+the wxWidgets dylibs will automatically be encoded into the
 extension modules when they are built.  If you end up moving the
-wxWindows dynlibs to some other location (such as inside the .app
+wxWidgets dynlibs to some other location (such as inside the .app
 bundle of your applicaiton for distribution to other users,) then
 you will need to set DYLD_LIBRARY_PATH to this location so the
 dylibs can be found at runtime.</li>
@@ -113,10 +113,10 @@ use the GUI display.</li>
 <div class="section" id="installing-on-windows">
 <h1><a name="installing-on-windows">Installing on Windows</a></h1>
 <ol class="arabic">
-<li><p class="first">Build wxWindows and wxPython as described in BUILD.txt.  If you
+<li><p class="first">Build wxWidgets and wxPython as described in BUILD.txt.  If you
 would rather have a version without the code that turns runtime
 assertions into Python exceptions, then use &quot;release&quot; instead of
-&quot;hybrid&quot; when building wxWindows and add &quot;FINAL=1&quot; to the setup.py
+&quot;hybrid&quot; when building wxWidgets and add &quot;FINAL=1&quot; to the setup.py
 command line.</p>
 </li>
 <li><p class="first">Install wxPython like this:</p>
@@ -124,7 +124,7 @@ command line.</p>
 python setup.py install
 </pre>
 </li>
-<li><p class="first">Copy the wxWindows DLLs to the wx package directory so they can be
+<li><p class="first">Copy the wxWidgets DLLs to the wx package directory so they can be
 found at runtime by the extension modules without requiring that
 they be installed on the PATH:</p>
 <pre class="literal-block">
@@ -136,7 +136,7 @@ copy %WXWIN%\BIN\wx*h_*.dll c:\Python23\Lib\site-pacakges\wx
 </div>
 <hr class="footer" />
 <div class="footer">
-Generated on: 2004-02-27 00:27 UTC.
+Generated on: 2004-03-12 19:55 UTC.
 </div>
 </body>
 </html>

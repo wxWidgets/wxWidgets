@@ -18,7 +18,7 @@ have been added to wxPython.</p>
 <div class="section" id="wxname-change">
 <h1><a name="wxname-change">wxName Change</a></h1>
 <p>The <strong>wxWindows</strong> project and library is now known as
-<strong>wxWidgets</strong>.  Please see <a class="reference" href="http://lists.wxwidgets.org/cgi-bin/ezmlm-cgi?13:mss:3:200402:eebaopdhchfoagmnideo">here</a> for more details.</p>
+<strong>wxWidgets</strong>.  Please see <a class="reference" href="http://www.wxwindows.org/name.htm">here</a> for more details.</p>
 <p>This won't really affect wxPython all that much, other than the fact
 that the wxwindows.org domain name will be changing to wxwidgets.org,
 so mail list, CVS, and etc. addresses will be changing.  We're going
@@ -28,7 +28,7 @@ all to be aware of this change if you run into any issues.</p>
 <div class="section" id="module-initialization">
 <h1><a name="module-initialization">Module Initialization</a></h1>
 <p>The import-startup-bootstrap process employed by wxPython was changed
-such that wxWindows and the underlying gui toolkit are <strong>not</strong>
+such that wxWidgets and the underlying gui toolkit are <strong>not</strong>
 initialized until the wx.App object is created (but before wx.App.OnInit
 is called.)  This was required because of some changes that were made
 to the C++ wxApp class.</p>
@@ -371,6 +371,28 @@ be used from XRC.</p>
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
 wrappers will figure out what to do.</p>
 </div>
+<div class="section" id="platforminfo">
+<h1><a name="platforminfo">PlatformInfo</a></h1>
+<p>Added wx.PlatformInfo which is a tuple containing strings that
+describe the platform and build options of wxPython.  This lets you
+know more about the build than just the __WXPORT__ value that
+wx.Platform contains, such as if it is a GTK2 build.  For example,
+instead of:</p>
+<pre class="literal-block">
+if wx.Platform == &quot;__WXGTK__&quot;:
+    ...
+</pre>
+<p>you should do this:</p>
+<pre class="literal-block">
+if &quot;__WXGTK__&quot; in wx.PlatformInfo:
+     ...
+</pre>
+<p>and you can specifically check for a wxGTK2 build by looking for
+&quot;gtk2&quot; in wx.PlatformInfo.  Unicode builds are also detectable this
+way.  If there are any other platform/toolkit/build flags that make
+sense to add to this tuple please let me know.</p>
+<p>BTW, wx.Platform will probably be deprecated in the future.</p>
+</div>
 <div class="section" id="other-stuff">
 <h1><a name="other-stuff">Other Stuff</a></h1>
 <p>Instead of over a dozen separate extension modules linked together
@@ -400,11 +422,18 @@ wxPyTypeCast at all.</p>
 there are compatibility aliases for much of the above items.</p>
 <p>The wxWave class has been renamed to wxSound, and now has a slightly
 different API.</p>
+<p>Instead of a very small 20x20 the default window size is now a more
+reasonable size, (currently 400x250 but that may change...)  If you
+don't specify a size, and the window/control class does not have any
+definition of it's own &quot;best size&quot; (most controls do) then the new
+default will be used.  If you have code that accidentally depends on
+the smaller size then things will look a bit odd.  To work around this
+just give those windows an explicit size when created.</p>
 </div>
 </div>
 <hr class="footer" />
 <div class="footer">
-Generated on: 2004-02-27 23:30 UTC.
+Generated on: 2004-03-12 19:55 UTC.
 </div>
 </body>
 </html>

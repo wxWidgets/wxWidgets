@@ -10,17 +10,24 @@
 <body>
 <div class="document" id="changes-txt-for-wxpython">
 <h1 class="title">CHANGES.txt for wxPython</h1>
-<div class="section" id="x">
-<h1><a name="x">2.5.1.x</a></h1>
+<div class="section" id="id1">
+<h1><a name="id1">2.5.1.1</a></h1>
 <p>(See also the MigrationGuide.txt file for details about some of the
 big changes that have happened in this release and how you should
 adapt your code.)</p>
+<p>The wxWindows project and library is now known as wxWidgets.  Please
+see <a class="reference" href="http://www.wxwindows.org/name.htm">http://www.wxwindows.org/name.htm</a> for more details.  This won't
+really affect wxPython all that much, other than the fact that the
+wxwindows.org domain name will be changing to wxwidgets.org, so mail
+list, CVS, and etc. addresses will be changing.  We're going to try
+and smooth the transition as much as possible, but I wanted you all to
+be aware of this change if you run into any issues.</p>
 <p>Many, many little fixes, changes and additions done as part of the move
-to wxWindows 2.5 that I have forgotten about.</p>
+to wxWidgets 2.5 that I have forgotten about.</p>
 <p>Added wxMirrorDC.</p>
 <p>Added wxIconLocation</p>
-<p>Added Python wrappers for the new wxVScrolledWindow, wxVListBox, and
-wxHtmlListBox classes.</p>
+<p>Added Python wrappers and demos for the new wxVScrolledWindow,
+wxVListBox, and wxHtmlListBox classes.</p>
 <p>Added wrappers for wxBookCtrl and wxListbook.  wxNotebook now derives
 from wxBookCtrl.</p>
 <p>Added Gordon Williams' PyPlot module to the library, available as the
@@ -28,19 +35,19 @@ wx.lib.plot module.</p>
 <p>I made a small but important change in the code that aquires the
 Python Global Interpreter Lock to try and prevent deadlocks that can
 happen when there are nested attempts to aquire the GIL.</p>
-<p>The RPMs will now install menu items on Mandrake in
-Applications/Development/Tools for PyCrust, XRCed, etc.  They are also
-installing icons and <tt class="literal"><span class="pre">*.desktop</span></tt> items in the generic KDE and GNOME
-locations, but I don't know yet if they are resulting in menu items on
-non-Mandrake systems.  (It didn't automatically do it on my RH-9 build
-box but I didn't chase it very far...)  If you have ideas for how to
-improve the .spec file to work better and/or on more distros please
-send me a patch.</p>
-<p>The RPMs are now built on a RH-9 box, and I have tested installing
-them also on my main Mandrake 9.2 box.</p>
+<p>The RPMs will now install menu items on Mandrake Linux in
+Applications/Development/Tools for PyCrust, XRCed, etc.  The RPMs are
+also installing icons and <tt class="literal"><span class="pre">*.desktop</span></tt> items in the generic KDE and
+GNOME locations, but I don't know yet if they are resulting in menu
+items on non-Mandrake systems.  (It didn't automatically do it on my
+RH-9 build box but I didn't chase it very far...)  If you have ideas
+for how to improve the .spec file to work better and/or on more
+distros please send me a patch.</p>
+<p>The RPMs are now built on a fairly generic RH-9 box, and I have tested
+installing them also on my main Mandrake 9.2 box.</p>
 <p>There are some big changes in the OS X disk image.  The actual
 Installer package now <em>only</em> installs the wxMac dynlibs, wxPython
-extension modules and pacakges, and also the command-line tool
+extension modules and Python pacakges, and also the command-line tool
 scripts. The remaining items (demo, samples, and application bundles
 for the Demo, PyCrust and XRCed) are now top-level items in the disk
 image (.dmg file) that users can just drag and drop to wherever they
@@ -49,17 +56,26 @@ want to put them.</p>
 different API.</p>
 <p>Updated the AnalogClockWindow with many enhancements from E. A. Tacão.</p>
 <p>wxMac now has wx.ToggleButton!</p>
-<p>wx.stc.StyledTextCtrl has been update to version 1.58 of Scintilla.</p>
+<p>wx.stc.StyledTextCtrl has been updated to version 1.58 of Scintilla.</p>
 <p>To help with the wx.stc.StyledTextCtrl performance issues on wxMac
-I've added a SetUseAntiAliasing method (and GetUseAntiAliasing) too
+I've added a SetUseAntiAliasing method (and GetUseAntiAliasing too)
 that will turn off the use of antialiased fonts in the wxSTC, allowing
 it to bypass the slow text measuring routines and use the fast and
-simple one instead.  By default the setting is turned off.  When run
-on OSX The Py* apps have a new item on the Options menu for
-controlling this setting if you would like to experiment with it.</p>
+simple one instead.  By default the setting is turned off (on wxMac
+only.)  When run on OSX the Py* apps have a new item on the Options
+menu for controlling this setting if you would like to experiment with
+it.</p>
+<p>Updated wx.lib.calendar with many fixes and enhancements from Joerg
+&quot;Adi&quot; Sieker.</p>
+<p>Added wx.Display and wx.VideoMode.</p>
+<p>AppleEvents can be handled by overriding wx.App methods MacOpenFile,
+MacPrintFile, MacNewFile, and MacReopenApp.</p>
+<p>Added wx.PlatformInfo which is a tuple containing strings that
+describe the platform and build options of wxPython.  See the
+MigrationGuide for more details.</p>
 </div>
-<div class="section" id="id1">
-<h1><a name="id1">2.4.2.4</a></h1>
+<div class="section" id="id2">
+<h1><a name="id2">2.4.2.4</a></h1>
 <p>Use wxSTC in the demo for displaying the soucre code of the samples.</p>
 <p>Lots of bug fixes and such from the wxWindows folks.</p>
 <p>Added wxPython.lib.newevent from Miki Tebeka.  Its usage is
@@ -68,8 +84,8 @@ demonstrated in the Threads sample in the demo.</p>
 <p>Added wxMaskedNumCtrl.</p>
 <p>Added Chris Barker's FloatCanvas.</p>
 </div>
-<div class="section" id="id2">
-<h1><a name="id2">2.4.1.2</a></h1>
+<div class="section" id="id3">
+<h1><a name="id3">2.4.1.2</a></h1>
 <p>Added wxScrolledPanel from Will Sadkin</p>
 <p>Added SetShape method to top level windows (e.g. wxFrame.)</p>
 <p>Changed wxSWIG to not generate Python code using apply, (since it will
@@ -120,8 +136,8 @@ release,) SetItemMinSize can now take a wxSize (or 2-tuple) parameter,
 and Spacers can be specified with a wxSize (or 2-tuple) parameter</p>
 <p>Added wxCursorFromBits.</p>
 </div>
-<div class="section" id="id3">
-<h1><a name="id3">2.4.0.7</a></h1>
+<div class="section" id="id4">
+<h1><a name="id4">2.4.0.7</a></h1>
 <p>Gave up on generating a warning upon the use of the old true/false or
 TRUE/FALSE values.</p>
 <p>Fixed wxGenericTreeCtrl (used on wxGTK and wxMac for wxTreeCtrl) so
@@ -151,8 +167,8 @@ think I am testing in the future...</p>
 <p>Updated pycolourchooser.</p>
 <p>Updated to 0.9b of PyCrust.</p>
 </div>
-<div class="section" id="id4">
-<h1><a name="id4">2.4.0.4</a></h1>
+<div class="section" id="id5">
+<h1><a name="id5">2.4.0.4</a></h1>
 <p>Added missing wxRect methods</p>
 <p>Add OOR support for wxApp objects too.</p>
 <p>Added wxCursorFromImage, which works on wxMSW and wxGTK so far.</p>
@@ -208,25 +224,25 @@ doesn't have a standard place for them.</p>
 <p>Fixed typemaps for wxGridCellCoordsArray.</p>
 <p>Updated to the 0.9a version of PyCrust</p>
 </div>
-<div class="section" id="id5">
-<h1><a name="id5">2.4.0.2</a></h1>
+<div class="section" id="id6">
+<h1><a name="id6">2.4.0.2</a></h1>
 <p>Several bug fixes.</p>
 <p>Added wxIntCtrl from Will Sadkin.</p>
 <p>Added wxPyColourChooser by Michael Gilfix.</p>
 </div>
-<div class="section" id="id6">
-<h1><a name="id6">2.4.0.1</a></h1>
+<div class="section" id="id7">
+<h1><a name="id7">2.4.0.1</a></h1>
 <p>No major new features since 2.3.4.2, mostly bug fixes and minor
 enhancements.</p>
 <p>Added function wrappers for the common dialogs from Kevin Altis.  See
 wxPython/lib/dialogs.py for more details.</p>
 </div>
-<div class="section" id="id7">
-<h1><a name="id7">2.3.4.2</a></h1>
+<div class="section" id="id8">
+<h1><a name="id8">2.3.4.2</a></h1>
 <p>Various bug fixes.</p>
 </div>
-<div class="section" id="id8">
-<h1><a name="id8">2.3.4.1</a></h1>
+<div class="section" id="id9">
+<h1><a name="id9">2.3.4.1</a></h1>
 <p>Updated XRCed and wxTimeCtrl contribs.</p>
 <p>Show a couple new wxGrid features in the demo.</p>
 <p>Several bug fixes in wxWindows.</p>
@@ -280,8 +296,8 @@ windows when desired.</p>
 HTMLHelp viewer does.  Changed how the wxPythonDocs tarball is built
 and added a script to launch the doc viewer.</p>
 </div>
-<div class="section" id="id9">
-<h1><a name="id9">2.3.3.1</a></h1>
+<div class="section" id="id10">
+<h1><a name="id10">2.3.3.1</a></h1>
 <p>Added wxSplashScreen.</p>
 <p>Added wxGenericDirCtrl.</p>
 <p>Added wxMultiChoiceDialog.</p>
@@ -423,15 +439,15 @@ example.</p>
 <p>Added wxPython.lib.mixins.rubberband module from Robb Shecter.</p>
 <p>Added wxTimeCtrl from Will Sadkin.</p>
 </div>
-<div class="section" id="id10">
-<h1><a name="id10">2.3.2.1</a></h1>
+<div class="section" id="id11">
+<h1><a name="id11">2.3.2.1</a></h1>
 <p>Changed (again) how the Python global interpreter lock is handled as
 well as the Python thread state.  This time it works on SMP machines
 without barfing and is also still compatible with Python debuggers.</p>
 <p>Added some patches from library contributors.</p>
 </div>
-<div class="section" id="id11">
-<h1><a name="id11">2.3.2</a></h1>
+<div class="section" id="id12">
+<h1><a name="id12">2.3.2</a></h1>
 <p>Added EVT_HELP, EVT_HELP_RANGE, EVT_DETAILED_HELP,
 EVT_DETAILED_HELP_RANGE, EVT_CONTEXT_MENU, wxHelpEvent,
 wxContextMenuEvent, wxContextHelp, wxContextHelpButton, wxTipWindow,
@@ -513,8 +529,8 @@ SendCommand method, but it is still quite powerful.  See
 wxPython/contrib/dllwidget and wxPython/demo/dllwidget for more
 details.</p>
 </div>
-<div class="section" id="id12">
-<h1><a name="id12">2.3.1</a></h1>
+<div class="section" id="id13">
+<h1><a name="id13">2.3.1</a></h1>
 <p>Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the user
 code can get access to the edit control when it is created, (to push
 on a custom event handler for example.)</p>
@@ -527,8 +543,8 @@ subclass wxXmlResourceHandler, etc...</p>
 <p>Fixed img2py to work correctly with Python 2.1.</p>
 <p>Added enhanced wxVTKRenderWindow by Prabhu Ramachandran</p>
 </div>
-<div class="section" id="id13">
-<h1><a name="id13">2.3.0</a></h1>
+<div class="section" id="id14">
+<h1><a name="id14">2.3.0</a></h1>
 <p>Removed initial startup dependency on the OpenGL DLLs so only the
 glcanvasc.pyd depends on them, (on wxMSW.)</p>
 <p>Changed wxFont, wxPen, wxBrush to not implicitly use the
@@ -624,13 +640,13 @@ please send it to me for inclusion in this package.</p>
 by having smaller functional apps to play with.  They can be found in
 wxPython/samples.</p>
 </div>
-<div class="section" id="id14">
-<h1><a name="id14">2.2.6</a></h1>
+<div class="section" id="id15">
+<h1><a name="id15">2.2.6</a></h1>
 <p>No changes happened in the Python wrappers for this release, only
 changes and fixes in the wxWindows library.</p>
 </div>
-<div class="section" id="id15">
-<h1><a name="id15">2.2.5</a></h1>
+<div class="section" id="id16">
+<h1><a name="id16">2.2.5</a></h1>
 <p>New typemaps for wxString when compiling for Python 2.0 and beyond
 that allow Unicode objects to be passed as well as String objects.  If
 a Unicode object is passed PyString_AsStringAndSize is used to convert
@@ -1211,7 +1227,7 @@ version segfault shortly after starting up.</p>
 </div>
 <hr class="footer" />
 <div class="footer">
-Generated on: 2004-02-27 00:27 UTC.
+Generated on: 2004-03-12 19:55 UTC.
 </div>
 </body>
 </html>
