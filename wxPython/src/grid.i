@@ -771,7 +771,6 @@ public:
     virtual void HandleReturn(wxKeyEvent& event);
     virtual void Destroy();
 
-    virtual wxString GetValue();
 };
 
 
@@ -884,7 +883,7 @@ public:
     DEC_PYCALLBACK__(StartingClick);
     DEC_PYCALLBACK__(Destroy);
     DEC_PYCALLBACK__STRING(SetParameters);
-    DEC_PYCALLBACK_STRING__const(GetValue);
+    DEC_PYCALLBACK_STRING__constpure(GetValue);
 
     PYPRIVATE;
 };
@@ -898,7 +897,7 @@ IMP_PYCALLBACK__any(wxPyGridCellEditor, wxGridCellEditor, StartingKey, wxKeyEven
 IMP_PYCALLBACK__any(wxPyGridCellEditor, wxGridCellEditor, HandleReturn, wxKeyEvent);
 IMP_PYCALLBACK__(wxPyGridCellEditor, wxGridCellEditor, StartingClick);
 IMP_PYCALLBACK__(wxPyGridCellEditor, wxGridCellEditor, Destroy);
-IMP_PYCALLBACK_STRING__const(wxPyGridCellEditor, wxGridCellEditor, GetValue);
+IMP_PYCALLBACK_STRING__constpure(wxPyGridCellEditor, wxGridCellEditor, GetValue);
 
 %}
 
@@ -920,7 +919,6 @@ public:
     void base_HandleReturn(wxKeyEvent& event);
     void base_Destroy();
     void base_SetParameters(const wxString& params);
-    wxString base_GetValue();
 };
 
 //---------------------------------------------------------------------------
@@ -931,6 +929,7 @@ class wxGridCellTextEditor : public wxGridCellEditor
 public:
     wxGridCellTextEditor();
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    virtual wxString GetValue();
 };
 
 
@@ -939,6 +938,7 @@ class wxGridCellNumberEditor : public wxGridCellTextEditor
 public:
     wxGridCellNumberEditor(int min = -1, int max = -1);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    virtual wxString GetValue();
 };
 
 
@@ -947,6 +947,7 @@ class wxGridCellFloatEditor : public wxGridCellTextEditor
 public:
     wxGridCellFloatEditor();
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    virtual wxString GetValue();
 };
 
 
@@ -955,6 +956,7 @@ class wxGridCellBoolEditor : public wxGridCellEditor
 public:
     wxGridCellBoolEditor();
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    virtual wxString GetValue();
 };
 
 class wxGridCellChoiceEditor : public wxGridCellEditor
@@ -964,6 +966,7 @@ public:
                            const wxString* choices = NULL,
                            bool allowOthers = FALSE);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    virtual wxString GetValue();
 };
 
 
@@ -972,6 +975,7 @@ class wxGridCellEnumEditor : public wxGridCellChoiceEditor
 public:
     wxGridCellEnumEditor( const wxString& choices = wxPyEmptyString );
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    virtual wxString GetValue();
 };
 
 
@@ -980,6 +984,7 @@ class wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
 public:
     wxGridCellAutoWrapStringEditor();
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    virtual wxString GetValue();
 };
 
 
