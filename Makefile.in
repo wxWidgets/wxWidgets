@@ -112,6 +112,7 @@ MOTIFDIR = $(WXDIR)/src/motif
 MSWDIR   = $(WXDIR)/src/msw
 PMDIR    = $(WXDIR)/src/os2
 MACDIR   = $(WXDIR)/src/mac
+COCOADIR = $(WXDIR)/src/cocoa
 ODBCDIR  = $(WXDIR)/src/iodbc
 FTDIR    = $(WXDIR)/src/freetype
 INCDIR   = $(WXDIR)/include
@@ -757,6 +758,10 @@ MACX_DIST: ALL_GUI_DIST
 	cp $(MACDIR)/morefile/*.c $(DISTDIR)/src/mac/morefile
 	mkdir $(DISTDIR)/src/mac/macsock
 	cp $(MACDIR)/macsock/*.lib $(DISTDIR)/src/mac/macsock
+
+# TODO: Distribute some files
+COCOA_DIST: ALL_GUI_DIST
+	cp $(COCOADIR)/*.mm $(DISTDIR)/src/cocoa
 
 MSW_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
