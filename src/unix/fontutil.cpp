@@ -385,7 +385,13 @@ bool wxNativeFontInfo::FromXFontName(const wxString& fontname)
     }
 
     // this should be all
-    return !tokenizer.HasMoreTokens();
+    if ( tokenizer.HasMoreTokens() )
+        return FALSE;
+
+    // we're initialized now
+    m_isDefault = FALSE;
+
+    return TRUE;
 }
 
 wxString wxNativeFontInfo::GetXFontName() const
