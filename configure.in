@@ -2295,6 +2295,10 @@ if test "$wxUSE_SHARED" = "no"; then
         WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
     fi
 
+    if test "$wxUSE_MAC" = 1; then
+        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
+    fi
+
     if test "$wxUSE_OPENGL" = "yes"; then
         WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_gl"
         WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_STATIC} \$(build_libdir)/${WX_LIBRARY_NAME_STATIC_GL}"
