@@ -80,9 +80,6 @@ public:
     // from both DoSetSize() and DoSetClientSize()
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
-    // set the icon for this window
-    void DoSetIcon( const wxIcon& icon );
-
     // GTK callbacks
     virtual void GtkOnSize( int x, int y, int width, int height );
     virtual void OnInternalIdle();

@@ -883,21 +883,6 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
 }
 
-void wxTopLevelWindowGTK::DoSetIcon( const wxIcon &icon )
-{
-    if ( !icon.Ok() )
-        return;
-
-    if (!m_widget->window)
-        return;
-
-    wxMask *mask = icon.GetMask();
-    GdkBitmap *bm = (GdkBitmap *) NULL;
-    if (mask) bm = mask->GetBitmap();
-
-    gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
-}
-
 void wxTopLevelWindowGTK::SetIcon( const wxIcon &icon )
 {
     SetIcons( wxIconBundle( icon ) );
@@ -906,16 +891,41 @@ void wxTopLevelWindowGTK::SetIcon( const wxIcon &icon )
 void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-    GdkWindow* window = m_widget->window;
 
     wxTopLevelWindowBase::SetIcons( icons );
 
-    DoSetIcon( icons.GetIcon( -1 ) );
-    if ( window )
+#ifdef __WXGTK20__
+    GList *list = NULL;
+    size_t max = icons.m_icons.GetCount();
+
+    for (size_t i = 0; i < max; i++)
     {
-        wxSetIconsX11( (WXDisplay*)GDK_WINDOW_XDISPLAY( window ),
-                       (WXWindow)GDK_WINDOW_XWINDOW( window ), icons );
+        if (icons.m_icons[i].Ok())
+        {
+            list = g_list_prepend(list, icons.m_icons[i].GetPixbuf());
+        }
     }
+    gtk_window_set_icon_list(GTK_WINDOW(m_widget), list);
+    g_list_free(list);
+    
+#else // !__WXGTK20__
+    GdkWindow* window = m_widget->window;
+    if (!window)
+        return;
+
+    wxIcon icon = icons.GetIcon(-1);
+    if (icon.Ok())
+    {
+        wxMask *mask = icon.GetMask();
+        GdkBitmap *bm = (GdkBitmap *) NULL;
+        if (mask) bm = mask->GetBitmap();
+
+        gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
+    }
+
+    wxSetIconsX11( (WXDisplay*)GDK_WINDOW_XDISPLAY( window ),
+                   (WXWindow)GDK_WINDOW_XWINDOW( window ), icons );
+#endif // !__WXGTK20__
 }
 
 // ----------------------------------------------------------------------------
