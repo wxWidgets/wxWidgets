@@ -1842,7 +1842,7 @@ size_t wxMBConv_file::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // standard gdk conversion
 // ----------------------------------------------------------------------------
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && (GTK_MINOR_VERSION > 0)
 WXDLLEXPORT_DATA(wxMBConv_gdk) wxConv_gdk;
 
 #include <gdk/gdk.h>
@@ -1870,7 +1870,7 @@ size_t wxMBConv_gdk::WC2MB(char *buf, const wchar_t *psz, size_t n) const
   }
   return len;
 }
-#endif
+#endif // GTK > 1.0
 
 // ----------------------------------------------------------------------------
 // UTF-7
