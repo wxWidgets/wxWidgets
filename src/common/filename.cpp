@@ -946,7 +946,7 @@ bool wxFileName::Normalize(int flags,
         m_dirs.Add(dir);
     }
     
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXWINCE__) && wxUSE_OLE
     if ( (flags & wxPATH_NORM_SHORTCUT) )
     {
         wxString filename;
@@ -1001,7 +1001,7 @@ bool wxFileName::Normalize(int flags,
 // files\myapp.exe) that includes spaces needs to be enclosed in
 // quotation marks."
 
-#if defined(__WIN32__) && !defined(__WXWINCE__)
+#if defined(__WIN32__) && !defined(__WXWINCE__) && wxUSE_OLE
 // The following lines are necessary under WinCE
 // #include "wx/msw/private.h"
 // #include <ole2.h>
@@ -1009,15 +1009,9 @@ bool wxFileName::Normalize(int flags,
 #if defined(__WXWINCE__)
 #include <shlguid.h>
 #endif
-#endif
 
-#ifdef __WIN32__
 bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targetFilename, wxString* arguments)
 {
-#ifdef __WXWINCE__
-    // Doesn't compile on WinCE yet
-    return FALSE;
-#else
     wxString path, file, ext;
     wxSplitPath(shortcutPath, & path, & file, & ext);
     
@@ -1063,7 +1057,6 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targe
 	}
 	psl->Release();
 	return success;
-#endif
 }
 #endif
 
