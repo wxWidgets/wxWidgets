@@ -14,6 +14,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 #if defined(__WXMSW__)
     #if defined(__WIN16__) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS) || defined(__SALFORDC__) || !wxUSE_OLE
         #include "wx/generic/dirdlgg.h"
+        #define wxDirDialog wxGenericDirDialog
     #else
         #include "wx/msw/dirdlg.h"
     #endif
