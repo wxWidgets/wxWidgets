@@ -21,6 +21,7 @@
 
 #include "wx/xrc/xh_listb.h"
 #include "wx/listbox.h"
+#include "wx/intl.h"
 
 wxListBoxXmlHandler::wxListBoxXmlHandler() 
 : wxXmlResourceHandler() , m_insideBox(FALSE)
@@ -82,7 +83,7 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
         // handle <item>Label</item>
         
         // add to the list
-        strList.Add(GetNodeContent(m_node));
+        strList.Add(wxGetTranslation(GetNodeContent(m_node)));
 
         return NULL;
     }
