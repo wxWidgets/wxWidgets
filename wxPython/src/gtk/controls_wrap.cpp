@@ -16771,6 +16771,7 @@ static PyObject *_wrap_ListItem_m_text_set(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxListItem *arg1 = (wxListItem *) 0 ;
     wxString *arg2 = (wxString *) 0 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -16779,12 +16780,24 @@ static PyObject *_wrap_ListItem_m_text_set(PyObject *self, PyObject *args, PyObj
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ListItem_m_text_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxListItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
     if (arg1) (arg1)->m_text = *arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
     return resultobj;
     fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
     return NULL;
 }
 
