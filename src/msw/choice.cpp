@@ -281,8 +281,7 @@ void wxChoice::DoSetSize(int x, int y,
     // the _displayed_ size (NOT the drop down menu size) so
     // setting-getting-setting size would not work.
 
-    wxSize sz = GetSize();
-    wxControl::DoSetSize(x, y, width, sz.y, sizeFlags);
+    wxControl::DoSetSize(x, y, width, -1, sizeFlags);
 }
 
 wxSize wxChoice::DoGetBestSize() const
