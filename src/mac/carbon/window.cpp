@@ -1246,6 +1246,20 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     	InvalWindowRgn( GetMacRootWindow() ,  updateRgn ) ;
     	DisposeRgn( updateRgn ) ;
 	}
+	
+	for (wxNode *node = GetChildren().First(); node; node = node->Next())
+	{
+		wxWindow *child = (wxWindow*)node->Data();
+		if (child == m_vScrollBar) continue;
+		if (child == m_hScrollBar) continue;
+		if (child->IsTopLevel()) continue;
+		int x,y;
+		child->GetPosition( &x, &y );
+		int w,h;
+		child->GetSize( &w, &h );
+		child->SetSize( x+dx, y+dy, w, h );
+	}
+	
 }
 
 void wxWindow::MacOnScroll(wxScrollEvent &event )
@@ -1741,6 +1755,7 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 			RgnHandle newupdate = NewRgn() ;
 			wxSize point = GetClientSize() ;
 			wxPoint origin = GetClientAreaOrigin() ;
+
 			SetRectRgn( newupdate , origin.x , origin.y , origin.x + point.x , origin.y+point.y ) ;
 			SectRgn( newupdate , m_macUpdateRgn , newupdate ) ;
 			OffsetRgn( newupdate , -origin.x , -origin.y ) ;
@@ -1754,13 +1769,10 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 		event.SetEventObject(this);
 		GetEventHandler()->ProcessEvent(event);
 	}
-	{
-	}
-
 	
 	
 	RgnHandle childupdate = NewRgn() ;
-
+			
 	for (wxNode *node = GetChildren().First(); node; node = node->Next())
 	{
 		wxWindow *child = (wxWindow*)node->Data();
