@@ -36,7 +36,7 @@
 #include <commctrl.h>
 #endif
 
-HWND wxToolTip::hwndTT = NULL;
+WXHWND wxToolTip::hwndTT = NULL;
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -51,7 +51,7 @@ public:
     wxToolInfo(wxWindow *win)
     {
         // initialize all members
-#ifdef __GNUWIN32__ && !defined(wxUSE_NORLANDER_HEADERS)
+#if __GNUWIN32__ && !defined(wxUSE_NORLANDER_HEADERS)
         memset(this, 0, sizeof(TOOLINFO));
 #else
         ::ZeroMemory(this, sizeof(TOOLINFO));
@@ -80,8 +80,8 @@ inline LRESULT SendTooltipMessage(WXHWND hwnd,
 
 // send a message to all existing tooltip controls
 static void SendTooltipMessageToAll(WXHWND hwnd,
-                                    UINT msg, 
-                                    WPARAM wParam, 
+                                    UINT msg,
+                                    WPARAM wParam,
                                     LPARAM lParam)
 {
    if ( hwnd )
@@ -117,13 +117,14 @@ WXHWND wxToolTip::GetToolTipCtrl()
 {
     if ( !hwndTT )
     {
-        hwndTT = ::CreateWindow(TOOLTIPS_CLASS,
+        hwndTT = (WXHWND)::CreateWindow(TOOLTIPS_CLASS,
                                 (LPSTR)NULL,
                                 TTS_ALWAYSTIP,
                                 CW_USEDEFAULT, CW_USEDEFAULT,
                                 CW_USEDEFAULT, CW_USEDEFAULT,
                                 NULL, (HMENU)NULL,
-                                wxGetInstance(), NULL);
+                                wxGetInstance(),
+                                NULL);
     }
 
     return (WXHWND)hwndTT;
