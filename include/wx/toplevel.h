@@ -77,6 +77,12 @@ public:
     // set the frame icon
     virtual void SetIcon(const wxIcon& icon) { m_icon = icon; }
 
+    // maximize the window to cover entire screen
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) = 0;
+    
+    // return TRUE if the frame is in fullscreen mode
+    virtual bool IsFullScreen() const = 0;
+
     /*
        for now we already have them in wxWindow, but this is wrong: these
        methods really only make sense for wxTopLevelWindow!
