@@ -22,11 +22,14 @@ when adding new bitmap/icon.
 First of all, you have to add new wxArtID constant to include/wx/artprov.h.
 Look for "Art IDs" and add new definition to the list, e.g.
     #define wxART_MY_BITMAP     _T("my_bitmap")
+    
+Add it to docs/latex/wx/artprov.tex, too.
 
 It may happen that the intended use of the new resource doesn't fit into any
 of defined client categories (search for "Art clients" in the header). In case
 the new resource is part of a larger category, you need to define a new
-client. Just add it to the list of existing clients:
+client. Just add it to the list of existing clients (and don't forget to
+update artprov.tex):
     #define wxART_MY_CLIENT _T("my_client_C")
 (Note that you *have* to add the trailing "_C"!)
 
