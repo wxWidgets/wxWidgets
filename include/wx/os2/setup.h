@@ -330,5 +330,8 @@
 
 #define wxUSE_SNGLINST_CHECKER  1
 
+#define wxUSE_GEOMETRY  1
+                                // needed for wxCanvas
+
 #endif
     // _WX_SETUP_H_
