@@ -454,12 +454,12 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     if (orient == wxHORIZONTAL)
     {
         m_xScrollPosition += nScrollInc;
-        m_targetWindow->SetScrollPos(wxHORIZONTAL, m_xScrollPosition);
+        m_win->SetScrollPos(wxHORIZONTAL, m_xScrollPosition);
     }
     else
     {
         m_yScrollPosition += nScrollInc;
-        m_targetWindow->SetScrollPos(wxVERTICAL, m_yScrollPosition);
+        m_win->SetScrollPos(wxVERTICAL, m_yScrollPosition);
     }
 
     bool needsRefresh = FALSE;
@@ -624,14 +624,14 @@ void wxScrollHelper::AdjustScrollbars()
         m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition);
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
 
-        m_targetWindow->SetScrollbar(wxHORIZONTAL, m_xScrollPosition, noPagePositions, m_xScrollLines);
+        m_win->SetScrollbar(wxHORIZONTAL, m_xScrollPosition, noPagePositions, m_xScrollLines);
         // The amount by which we scroll when paging
         SetScrollPageSize(wxHORIZONTAL, noPagePositions);
     }
     else
     {
         m_xScrollPosition = 0;
-        m_targetWindow->SetScrollbar (wxHORIZONTAL, 0, 0, 0, FALSE);
+        m_win->SetScrollbar (wxHORIZONTAL, 0, 0, 0, FALSE);
     }
 
     if (m_yScrollLines > 0)
@@ -648,14 +648,14 @@ void wxScrollHelper::AdjustScrollbars()
         m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
 
-        m_targetWindow->SetScrollbar(wxVERTICAL, m_yScrollPosition, noPagePositions, m_yScrollLines);
+        m_win->SetScrollbar(wxVERTICAL, m_yScrollPosition, noPagePositions, m_yScrollLines);
         // The amount by which we scroll when paging
         SetScrollPageSize(wxVERTICAL, noPagePositions);
     }
     else
     {
         m_yScrollPosition = 0;
-        m_targetWindow->SetScrollbar (wxVERTICAL, 0, 0, 0, FALSE);
+        m_win->SetScrollbar (wxVERTICAL, 0, 0, 0, FALSE);
     }
 
     if (oldXScroll != m_xScrollPosition)
@@ -747,7 +747,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
 
         if (old_x != m_xScrollPosition) {
-            m_targetWindow->SetScrollPos( wxHORIZONTAL, m_xScrollPosition );
+            m_win->SetScrollPos( wxHORIZONTAL, m_xScrollPosition );
             m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0,
                                           GetRect() );
         }
@@ -768,7 +768,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
 
         if (old_y != m_yScrollPosition) {
-            m_targetWindow->SetScrollPos( wxVERTICAL, m_yScrollPosition );
+            m_win->SetScrollPos( wxVERTICAL, m_yScrollPosition );
             m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine,
                                           GetRect() );
         }
@@ -827,8 +827,8 @@ void wxScrollHelper::CalcUnscrolledPosition(int x, int y, int *xx, int *yy) cons
 void wxScrollHelper::HandleOnSize(wxSizeEvent& WXUNUSED(event))
 {
 #if wxUSE_CONSTRAINTS
-    if ( m_targetWindow->GetAutoLayout() )
-        m_targetWindow->Layout();
+    if ( m_win->GetAutoLayout() )
+        m_win->Layout();
 #endif
 
     AdjustScrollbars();

@@ -825,36 +825,23 @@ int wxWindowMSW::GetScrollThumb(int orient) const
 
 void wxWindowMSW::SetScrollPos(int orient, int pos, bool refresh)
 {
+    HWND hWnd = GetHwnd();
+    wxCHECK_RET( hWnd, _T("SetScrollPos: no HWND") );
+
+    int dir = orient == wxHORIZONTAL ? SB_HORZ : SB_VERT;
+
 #if defined(__WIN95__)
     SCROLLINFO info;
-    int dir;
-
-    if ( orient == wxHORIZONTAL ) {
-        dir = SB_HORZ;
-    } else {
-        dir = SB_VERT;
-    }
-
     info.cbSize = sizeof(SCROLLINFO);
     info.nPage = 0;
     info.nMin = 0;
     info.nPos = pos;
     info.fMask = SIF_POS;
 
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-        ::SetScrollInfo(hWnd, dir, &info, refresh);
-#else
-    int wOrient;
-    if ( orient == wxHORIZONTAL )
-        wOrient = SB_HORZ;
-    else
-        wOrient = SB_VERT;
-
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-        ::SetScrollPos(hWnd, wOrient, pos, refresh);
-#endif
+    ::SetScrollInfo(hWnd, dir, &info, refresh);
+#else // !__WIN95__
+    ::SetScrollPos(hWnd, dir, pos, refresh);
+#endif // __WIN95__/!__WIN95__
 }
 
 // New function that will replace some of the above.
