@@ -502,9 +502,6 @@ class ColourInfoPanel(wx.Panel):
         self._fgtxt.SetValue( clr2hex(win.GetForegroundColour(), self._fgclr) )
         self._bgtxt.SetValue( clr2hex(win.GetBackgroundColour(), self._bgclr) )
 
-##         f = win.GetFont()
-##         print f.GetNativeFontInfo().ToString()
-        
 
     def Clear(self):
         self._fgtxt.SetValue("")
