@@ -144,7 +144,7 @@ int_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
   JDIMENSION outcol, outcol_h;	/* outcol_h == outcol*h_expand */
   JDIMENSION output_cols = compptr->width_in_blocks * DCTSIZE;
   JSAMPROW inptr, outptr;
-  INT32 outvalue;
+  JPEG_INT32 outvalue;
 
   h_expand = cinfo->max_h_samp_factor / compptr->h_samp_factor;
   v_expand = cinfo->max_v_samp_factor / compptr->v_samp_factor;
@@ -167,7 +167,7 @@ int_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
       for (v = 0; v < v_expand; v++) {
 	inptr = input_data[inrow+v] + outcol_h;
 	for (h = 0; h < h_expand; h++) {
-	  outvalue += (INT32) GETJSAMPLE(*inptr++);
+	  outvalue += (JPEG_INT32) GETJSAMPLE(*inptr++);
 	}
       }
       *outptr++ = (JSAMPLE) ((outvalue + numpix2) / numpix);
@@ -296,7 +296,7 @@ h2v2_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
   JDIMENSION colctr;
   JDIMENSION output_cols = compptr->width_in_blocks * DCTSIZE;
   register JSAMPROW inptr0, inptr1, above_ptr, below_ptr, outptr;
-  INT32 membersum, neighsum, memberscale, neighscale;
+  JPEG_INT32 membersum, neighsum, memberscale, neighscale;
 
   /* Expand input data enough to let all the output samples be generated
    * by the standard loop.  Special-casing padded output would be more
@@ -396,7 +396,7 @@ fullsize_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info *compptr,
   JDIMENSION colctr;
   JDIMENSION output_cols = compptr->width_in_blocks * DCTSIZE;
   register JSAMPROW inptr, above_ptr, below_ptr, outptr;
-  INT32 membersum, neighsum, memberscale, neighscale;
+  JPEG_INT32 membersum, neighsum, memberscale, neighscale;
   int colsum, lastcolsum, nextcolsum;
 
   /* Expand input data enough to let all the output samples be generated

@@ -29,7 +29,7 @@
 #if BITS_IN_JSAMPLE == 8
 typedef int DCTELEM;		/* 16 or 32 bits is fine */
 #else
-typedef INT32 DCTELEM;		/* must have 32 bits */
+typedef JPEG_INT32 DCTELEM;		/* must have 32 bits */
 #endif
 
 typedef JMETHOD(void, forward_DCT_method_ptr, (DCTELEM * data));
@@ -58,7 +58,7 @@ typedef MULTIPLIER ISLOW_MULT_TYPE; /* short or int, whichever is faster */
 typedef MULTIPLIER IFAST_MULT_TYPE; /* 16 bits is OK, use short if faster */
 #define IFAST_SCALE_BITS  2	/* fractional bits in scale factors */
 #else
-typedef INT32 IFAST_MULT_TYPE;	/* need 32 bits for scaled quantizers */
+typedef JPEG_INT32 IFAST_MULT_TYPE;	/* need 32 bits for scaled quantizers */
 #define IFAST_SCALE_BITS  13	/* fractional bits in scale factors */
 #endif
 typedef FAST_FLOAT FLOAT_MULT_TYPE; /* preferred floating type */
@@ -128,7 +128,7 @@ EXTERN(void) jpeg_idct_1x1
  * and may differ from one module to the next.
  */
 
-#define ONE	((INT32) 1)
+#define ONE	((JPEG_INT32) 1)
 #define CONST_SCALE (ONE << CONST_BITS)
 
 /* Convert a positive real constant to an integer scaled by CONST_SCALE.
@@ -136,7 +136,7 @@ EXTERN(void) jpeg_idct_1x1
  * thus causing a lot of useless floating-point operations at run time.
  */
 
-#define FIX(x)	((INT32) ((x) * CONST_SCALE + 0.5))
+#define FIX(x)	((JPEG_INT32) ((x) * CONST_SCALE + 0.5))
 
 /* Descale and correctly round an INT32 value that's scaled by N bits.
  * We assume RIGHT_SHIFT rounds towards minus infinity, so adding
@@ -158,7 +158,7 @@ EXTERN(void) jpeg_idct_1x1
 #define MULTIPLY16C16(var,const)  (((INT16) (var)) * ((INT16) (const)))
 #endif
 #ifdef SHORTxLCONST_32		/* known to work with Microsoft C 6.0 */
-#define MULTIPLY16C16(var,const)  (((INT16) (var)) * ((INT32) (const)))
+#define MULTIPLY16C16(var,const)  (((INT16) (var)) * ((JPEG_INT32) (const)))
 #endif
 
 #ifndef MULTIPLY16C16		/* default definition */

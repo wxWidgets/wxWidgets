@@ -55,20 +55,20 @@
  */
 
 #if CONST_BITS == 13
-#define FIX_0_211164243  ((INT32)  1730)	/* FIX(0.211164243) */
-#define FIX_0_509795579  ((INT32)  4176)	/* FIX(0.509795579) */
-#define FIX_0_601344887  ((INT32)  4926)	/* FIX(0.601344887) */
-#define FIX_0_720959822  ((INT32)  5906)	/* FIX(0.720959822) */
-#define FIX_0_765366865  ((INT32)  6270)	/* FIX(0.765366865) */
-#define FIX_0_850430095  ((INT32)  6967)	/* FIX(0.850430095) */
-#define FIX_0_899976223  ((INT32)  7373)	/* FIX(0.899976223) */
-#define FIX_1_061594337  ((INT32)  8697)	/* FIX(1.061594337) */
-#define FIX_1_272758580  ((INT32)  10426)	/* FIX(1.272758580) */
-#define FIX_1_451774981  ((INT32)  11893)	/* FIX(1.451774981) */
-#define FIX_1_847759065  ((INT32)  15137)	/* FIX(1.847759065) */
-#define FIX_2_172734803  ((INT32)  17799)	/* FIX(2.172734803) */
-#define FIX_2_562915447  ((INT32)  20995)	/* FIX(2.562915447) */
-#define FIX_3_624509785  ((INT32)  29692)	/* FIX(3.624509785) */
+#define FIX_0_211164243  ((JPEG_INT32)  1730)	/* FIX(0.211164243) */
+#define FIX_0_509795579  ((JPEG_INT32)  4176)	/* FIX(0.509795579) */
+#define FIX_0_601344887  ((JPEG_INT32)  4926)	/* FIX(0.601344887) */
+#define FIX_0_720959822  ((JPEG_INT32)  5906)	/* FIX(0.720959822) */
+#define FIX_0_765366865  ((JPEG_INT32)  6270)	/* FIX(0.765366865) */
+#define FIX_0_850430095  ((JPEG_INT32)  6967)	/* FIX(0.850430095) */
+#define FIX_0_899976223  ((JPEG_INT32)  7373)	/* FIX(0.899976223) */
+#define FIX_1_061594337  ((JPEG_INT32)  8697)	/* FIX(1.061594337) */
+#define FIX_1_272758580  ((JPEG_INT32)  10426)	/* FIX(1.272758580) */
+#define FIX_1_451774981  ((JPEG_INT32)  11893)	/* FIX(1.451774981) */
+#define FIX_1_847759065  ((JPEG_INT32)  15137)	/* FIX(1.847759065) */
+#define FIX_2_172734803  ((JPEG_INT32)  17799)	/* FIX(2.172734803) */
+#define FIX_2_562915447  ((JPEG_INT32)  20995)	/* FIX(2.562915447) */
+#define FIX_3_624509785  ((JPEG_INT32)  29692)	/* FIX(3.624509785) */
 #else
 #define FIX_0_211164243  FIX(0.211164243)
 #define FIX_0_509795579  FIX(0.509795579)
@@ -119,8 +119,8 @@ jpeg_idct_4x4 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 	       JCOEFPTR coef_block,
 	       JSAMPARRAY output_buf, JDIMENSION output_col)
 {
-  INT32 tmp0, tmp2, tmp10, tmp12;
-  INT32 z1, z2, z3, z4;
+  JPEG_INT32 tmp0, tmp2, tmp10, tmp12;
+  JPEG_INT32 z1, z2, z3, z4;
   JCOEFPTR inptr;
   ISLOW_MULT_TYPE * quantptr;
   int * wsptr;
@@ -202,7 +202,7 @@ jpeg_idct_4x4 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     if (wsptr[1] == 0 && wsptr[2] == 0 && wsptr[3] == 0 &&
 	wsptr[5] == 0 && wsptr[6] == 0 && wsptr[7] == 0) {
       /* AC terms all zero */
-      JSAMPLE dcval = range_limit[(int) DESCALE((INT32) wsptr[0], PASS1_BITS+3)
+      JSAMPLE dcval = range_limit[(int) DESCALE((JPEG_INT32) wsptr[0], PASS1_BITS+3)
 				  & RANGE_MASK];
       
       outptr[0] = dcval;
@@ -217,20 +217,20 @@ jpeg_idct_4x4 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     
     /* Even part */
     
-    tmp0 = ((INT32) wsptr[0]) << (CONST_BITS+1);
+    tmp0 = ((JPEG_INT32) wsptr[0]) << (CONST_BITS+1);
     
-    tmp2 = MULTIPLY((INT32) wsptr[2], FIX_1_847759065)
-	 + MULTIPLY((INT32) wsptr[6], - FIX_0_765366865);
+    tmp2 = MULTIPLY((JPEG_INT32) wsptr[2], FIX_1_847759065)
+	 + MULTIPLY((JPEG_INT32) wsptr[6], - FIX_0_765366865);
     
     tmp10 = tmp0 + tmp2;
     tmp12 = tmp0 - tmp2;
     
     /* Odd part */
     
-    z1 = (INT32) wsptr[7];
-    z2 = (INT32) wsptr[5];
-    z3 = (INT32) wsptr[3];
-    z4 = (INT32) wsptr[1];
+    z1 = (JPEG_INT32) wsptr[7];
+    z2 = (JPEG_INT32) wsptr[5];
+    z3 = (JPEG_INT32) wsptr[3];
+    z4 = (JPEG_INT32) wsptr[1];
     
     tmp0 = MULTIPLY(z1, - FIX_0_211164243) /* sqrt(2) * (c3-c1) */
 	 + MULTIPLY(z2, FIX_1_451774981) /* sqrt(2) * (c3+c7) */
@@ -272,7 +272,7 @@ jpeg_idct_2x2 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 	       JCOEFPTR coef_block,
 	       JSAMPARRAY output_buf, JDIMENSION output_col)
 {
-  INT32 tmp0, tmp10, z1;
+  JPEG_INT32 tmp0, tmp10, z1;
   JCOEFPTR inptr;
   ISLOW_MULT_TYPE * quantptr;
   int * wsptr;
@@ -334,7 +334,7 @@ jpeg_idct_2x2 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 #ifndef NO_ZERO_ROW_TEST
     if (wsptr[1] == 0 && wsptr[3] == 0 && wsptr[5] == 0 && wsptr[7] == 0) {
       /* AC terms all zero */
-      JSAMPLE dcval = range_limit[(int) DESCALE((INT32) wsptr[0], PASS1_BITS+3)
+      JSAMPLE dcval = range_limit[(int) DESCALE((JPEG_INT32) wsptr[0], PASS1_BITS+3)
 				  & RANGE_MASK];
       
       outptr[0] = dcval;
@@ -347,14 +347,14 @@ jpeg_idct_2x2 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     
     /* Even part */
     
-    tmp10 = ((INT32) wsptr[0]) << (CONST_BITS+2);
+    tmp10 = ((JPEG_INT32) wsptr[0]) << (CONST_BITS+2);
     
     /* Odd part */
 
-    tmp0 = MULTIPLY((INT32) wsptr[7], - FIX_0_720959822) /* sqrt(2) * (c7-c5+c3-c1) */
-	 + MULTIPLY((INT32) wsptr[5], FIX_0_850430095) /* sqrt(2) * (-c1+c3+c5+c7) */
-	 + MULTIPLY((INT32) wsptr[3], - FIX_1_272758580) /* sqrt(2) * (-c1+c3-c5-c7) */
-	 + MULTIPLY((INT32) wsptr[1], FIX_3_624509785); /* sqrt(2) * (c1+c3+c5+c7) */
+    tmp0 = MULTIPLY((JPEG_INT32) wsptr[7], - FIX_0_720959822) /* sqrt(2) * (c7-c5+c3-c1) */
+	 + MULTIPLY((JPEG_INT32) wsptr[5], FIX_0_850430095) /* sqrt(2) * (-c1+c3+c5+c7) */
+	 + MULTIPLY((JPEG_INT32) wsptr[3], - FIX_1_272758580) /* sqrt(2) * (-c1+c3-c5-c7) */
+	 + MULTIPLY((JPEG_INT32) wsptr[1], FIX_3_624509785); /* sqrt(2) * (c1+c3+c5+c7) */
 
     /* Final output stage */
     
@@ -390,7 +390,7 @@ jpeg_idct_1x1 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
    */
   quantptr = (ISLOW_MULT_TYPE *) compptr->dct_table;
   dcval = DEQUANTIZE(coef_block[0], quantptr[0]);
-  dcval = (int) DESCALE((INT32) dcval, 3);
+  dcval = (int) DESCALE((JPEG_INT32) dcval, 3);
 
   output_buf[0][output_col] = range_limit[dcval & RANGE_MASK];
 }

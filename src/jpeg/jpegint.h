@@ -280,10 +280,10 @@ struct jpeg_color_quantizer {
  */
 
 #ifdef RIGHT_SHIFT_IS_UNSIGNED
-#define SHIFT_TEMPS	INT32 shift_temp;
+#define SHIFT_TEMPS	JPEG_INT32 shift_temp;
 #define RIGHT_SHIFT(x,shft)  \
 	((shift_temp = (x)) < 0 ? \
-	 (shift_temp >> (shft)) | ((~((INT32) 0)) << (32-(shft))) : \
+	 (shift_temp >> (shft)) | ((~((JPEG_INT32) 0)) << (32-(shft))) : \
 	 (shift_temp >> (shft)))
 #else
 #define SHIFT_TEMPS
