@@ -178,10 +178,7 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame("Calendar wxWindows sample",
                                  wxPoint(50, 50), wxSize(450, 340));
 
-    // Show it and tell the application that it's our main window
-    // @@@ what does it do exactly, in fact? is it necessary here?
     frame->Show(TRUE);
-    SetTopWindow(frame);
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned FALSE here, the
@@ -259,30 +256,30 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCalMonday(wxCommandEvent& event)
 {
-    m_panel->StartWithMonday(GetMenuBar()->IsChecked(event.GetInt()));
+    m_panel->StartWithMonday(GetMenuBar()->IsChecked(event.GetId()));
 }
 
 void MyFrame::OnCalHolidays(wxCommandEvent& event)
 {
-    bool enable = GetMenuBar()->IsChecked(event.GetInt());
+    bool enable = GetMenuBar()->IsChecked(event.GetId());
     m_panel->GetCal()->EnableHolidayDisplay(enable);
 }
 
 void MyFrame::OnCalSpecial(wxCommandEvent& event)
 {
-    m_panel->HighlightSpecial(GetMenuBar()->IsChecked(event.GetInt()));
+    m_panel->HighlightSpecial(GetMenuBar()->IsChecked(event.GetId()));
 }
 
 void MyFrame::OnCalAllowMonth(wxCommandEvent& event)
 {
-    bool allow = GetMenuBar()->IsChecked(event.GetInt());
+    bool allow = GetMenuBar()->IsChecked(event.GetId());
 
     m_panel->GetCal()->EnableMonthChange(allow);
 }
 
 void MyFrame::OnCalAllowYear(wxCommandEvent& event)
 {
-    bool allow = GetMenuBar()->IsChecked(event.GetInt());
+    bool allow = GetMenuBar()->IsChecked(event.GetId());
 
     m_panel->GetCal()->EnableYearChange(allow);
 }
