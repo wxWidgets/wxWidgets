@@ -222,7 +222,7 @@ void wxVScrolledWindow::RefreshLines(size_t from, size_t to)
         rect.y += OnGetLineHeight(nBefore);
     }
 
-    for ( size_t nBetween = from; nBetween < to; nBetween++ )
+    for ( size_t nBetween = from; nBetween <= to; nBetween++ )
     {
         rect.height += OnGetLineHeight(nBetween);
     }
