@@ -1011,10 +1011,6 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         use_bitmap = bitmap;
     }
     
-#ifdef __WXGTK20__
-    useMask = FALSE;
-#endif
-
     /* apply mask if any */
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
@@ -1022,6 +1018,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         if (useMask && mask)
         {
             GdkBitmap *new_mask = (GdkBitmap*) NULL;
+#ifndef __WXGTK20__  // TODO fix crash
             if (!m_currentClippingRegion.IsNull())
             {
                 GdkColor col;
@@ -1041,7 +1038,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
                 gdk_gc_unref( gc );
             }
-
+#endif
             if (is_mono)
             {
                 if (new_mask)
@@ -1058,6 +1055,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
                     gdk_gc_set_clip_mask( m_penGC, mask );
                 gdk_gc_set_clip_origin( m_penGC, xx, yy );
             }
+            
             if (new_mask)
                 gdk_bitmap_unref( new_mask );
         }
@@ -1223,6 +1221,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         if (useMask && mask)
         {
             GdkBitmap *new_mask = (GdkBitmap*) NULL;
+#ifndef __WXGTK20__  // TODO fix crash
             if (!m_currentClippingRegion.IsNull())
             {
                 GdkColor col;
@@ -1242,7 +1241,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, bm_ww, bm_hh );
                 gdk_gc_unref( gc );
             }
-
+#endif
             if (is_mono)
             {
                 if (new_mask)
