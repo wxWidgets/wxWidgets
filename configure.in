@@ -2475,6 +2475,14 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                     ]
                 )
             fi
+                
+            save_CFLAGS="$CFLAGS"
+            save_LIBS="$LIBS"
+            CFLAGS="$CFLAGS $GTK_CFLAGS"
+            LIBS="$LIBS $GTK_LIBS"
+            AC_CHECK_FUNCS([pango_font_family_is_monospace])
+            CFLAGS="$save_CFLAGS"
+            LIBS="$save_LIBS"
         else
             if test "$wxUSE_UNICODE" = "yes"; then
                 AC_MSG_WARN([Unicode configuration not supported with GTK+ 1.x])
@@ -2675,6 +2683,13 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                         AC_MSG_WARN([pangoxft library not found, library will be compiled without anti-aliasing support])
                     ]
                 )
+                save_CFLAGS="$CFLAGS"
+                save_LIBS="$LIBS"
+                CFLAGS="$CFLAGS $PANGOX_CFLAGS"
+                LIBS="$LIBS $PANGOX_LIBS"
+                AC_CHECK_FUNCS([pango_font_family_is_monospace])
+                CFLAGS="$save_CFLAGS"
+                LIBS="$save_LIBS"
         fi
 
         wxUSE_UNIVERSAL="yes"

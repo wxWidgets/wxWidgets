@@ -60,11 +60,13 @@ cmp_families (const void *a, const void *b)
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
+#ifndef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
     if ( fixedWidthOnly )
     {
         OnFacename( wxT("monospace") );
     }
     else
+#endif
     {
         PangoFontFamily **families = NULL;
         gint n_families = 0;
@@ -79,10 +81,14 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
         for (int i=0; i<n_families; i++)
         {
-            const gchar *name = pango_font_family_get_name( families[i] );
-            
-            wxString tmp( name, wxConvUTF8 );
-            OnFacename( tmp );
+#ifdef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
+            if (!fixedWidthOnly ||
+                pango_font_family_is_monospace(families[i]))
+#endif
+            {
+                const gchar *name = pango_font_family_get_name(families[i]);
+                OnFacename(wxString(name, wxConvUTF8));
+            }
         }
     }
     
