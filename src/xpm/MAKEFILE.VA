@@ -18,13 +18,22 @@ OS2LINKFLAGS=/BASE:0x00010000 /PMTYPE:PM /NOE /NOD /ALIGN:16
 OS2LIBFLAGS=/NOL /NOE
 OS2LIBS=CPPOM30.lib CPPOOC3.LIB OS2386.LIB
 
+!if "$(WXMAKINGDLL)" != "0"
+EXTRADLLFLAGS=/DWXMAKINGDLL=1 /Ge- /D__OS2DLL__
+EXTRALNKFLAGS=/DLL
+!endif
+
 # Change WXDIR or WXWIN to wherever wxWindows is found
 WXDIR = $(WXWIN)
 
 OS2XPMDIR=$(WXDIR)\src\xpm
 OS2XPMINC=$(WINXPMDIR)
-OS2XPMLIB=$(WXDIR)\lib\os2xpm.lib
 
+!if "$(WXMAKINGDLL)" != "1"
+OS2XPMLIB=$(WXDIR)\lib\os2xpm.lib
+!else
+OS2XPMLIB=$(WXDIR)\lib\os2xpm.dll
+!endif
 INC=-I$(WXDIR)\src\xpm -I$(OS2XPMINC)
 
 !ifndef FINAL
@@ -42,7 +51,11 @@ MAKEPRECOMP=/Fi$(PCH)
 !endif
 
 !if "$(FINAL)" == "0"
+!if "$(WXMAKINGDLL)" == "1"
+D=DebugOS2DLL
+!else
 D=DebugOS2
+!endif
 OPT =
 DEBUG_FLAGS= /Ti /D__WXDEBUG__ #/Fb
 LINK_DEBUG_FLAGS=/DEBUG
@@ -50,7 +63,11 @@ CRTFLAG=/Gm /Gd
 !else
 # /O1 - smallest code
 # /O2 - fastest code
+!if "$(WXMAKINGDLL)" == "1"
+D=RelseOS2DLL
+!else
 D=RelseOS2
+!endif
 OPT = /O+ /Oc /G5
 DEBUG_FLAGS=
 LINK_DEBUG_FLAGS=/RELEASE
@@ -61,7 +78,8 @@ CRTFLAG=/Gm /Gd
 !endif
 
 
-CPPFLAGS=$(OS2FLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(INC) $(OPT) $(CRTFLAG)
+CPPFLAGS=$(OS2FLAGS) $(EXTRADLLFLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(INC) $(OPT) $(CRTFLAG)
+LINKFKAGS=$(OS2LINKFLAGS) $(EXTRALNKFLAGS)
 
 {..\xpm}.c{..\xpm\$D}.obj:
     @echo $<
@@ -113,6 +131,8 @@ LIBOBJECTS = \
 
 all:  $(OBJECTS) $(OS2XPMLIB)
 
+!if "$(WXMAKINGDLL)" != "1"
+
 $(WXDIR)\lib\os2xpm.lib: $(LIBOBJECTS)
  touch $(WXDIR)\lib\os2xpm.lib
  del $(WXDIR)\lib\os2xpm.lib
@@ -120,6 +140,20 @@ $(WXDIR)\lib\os2xpm.lib: $(LIBOBJECTS)
     $**;
 <<
   del *.obj
+
+!else
+
+# Update the dynamic link library
+$(WXDIR)\lib\os2xpm.dll: $(OBJECTS)
+    icc @<<
+    /B" $(LINKFLAGS)" /Fe$@
+    $(LIBS)
+    $(OBJECTS)
+    $(WXDIR)\lib\os2xpm.def
+<<
+    implib $(WXDIR)\lib\os2xpmd.lib $(WXDIR)\lib\os2xpm.def
+
+!endif
 
 clean:
         del      $(OS2XPMLIB)
