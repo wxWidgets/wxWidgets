@@ -32,6 +32,10 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 
+#include "wx/hash.h"
+#include "wx/list.h"
+#include "wx/object.h"
+
 //-----------------------------------------------------------------------------
 // PCX decoding
 //-----------------------------------------------------------------------------
@@ -269,24 +273,33 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 int SavePCX(wxImage *image, wxOutputStream& stream)
 {
     unsigned char hdr[128];         // PCX header
+    unsigned char pal[768];         // palette for 8 bit images
     unsigned char *p;               // space to store one scanline
     unsigned char *src;             // pointer into wxImage data
     unsigned int width, height;     // size of the image
     unsigned int bytesperline;      // bytes per line (each plane)
-    int nplanes = 3;                // number of planes
-    int format = wxPCX_24BIT;       // image format (8 bit, 24 bit)
+    int nplanes;                    // number of planes
+    int format;                     // image format (8 bit, 24 bit)
+    wxHashTable h(wxKEY_INTEGER);   // image histogram
+    unsigned long ncolours;         // num. of different colours
+    unsigned long key;              // key in the hashtable
     unsigned int i;
  
-    /* XXX
-    build_palette();
-    if (num_of_colors <= 256)
+    // Get the histogram of the image, and decide whether to save
+    // as 8 bit or 24 bit, according to the number of colours.
+    //
+    ncolours = image->ComputeHistogram(h);
+
+    if (ncolours <= 256)
     {
         format = wxPCX_8BIT;
         nplanes = 1;
     }
     else
-        free_palette();
-    */
+    {
+        format = wxPCX_24BIT;
+        nplanes = 3;
+    }
 
     // Get image dimensions, calculate bytesperline (must be even,
     // according to PCX specs) and allocate space for one complete
@@ -297,7 +310,6 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
 
     width = image->GetWidth();
     height = image->GetHeight();
-    nplanes = 3;                    /* 1 for wxPCX_8BIT */
     bytesperline = width;
     if (bytesperline % 2)
         bytesperline++;
@@ -334,19 +346,25 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
         switch (format)
         {
             case wxPCX_8BIT:
-            /* XXX
             {
+                unsigned char r, g, b;
+                wxHNode *hnode;
+
                 for (i = 0; i < width; i++)
                 {
-                    hash = *(src++) << 24 +
-                           *(src++) << 16 +
-                           *(src++) << 8;
+                    r = *(src++);
+                    g = *(src++);
+                    b = *(src++);
+                    key = (r << 16) | (g << 8) | b;
 
-                    p[i] = palette_lookup(hash);
+                    hnode = (wxHNode *) h.Get(key);
+                    if (!hnode)
+                        wxLogError("!hnode");
+                    else
+                        p[i] = hnode->index;
                 }
                 break;
             }
-            */
             case wxPCX_24BIT:
             {
                 for (i = 0; i < width; i++)
@@ -364,17 +382,39 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     
     free(p);
 
-    /* XXX
+    // For 8 bit images, build the palette and write it to the stream
+    //
     if (format == wxPCX_8BIT)
     {
+        wxNode *node;
+        wxHNode *hnode;
+
+        // zero unused colours
+        memset(pal, 0, sizeof(pal));
+
+        h.BeginFind();
+        while ((node = h.Next()) != NULL)
+        {
+            key = node->GetKeyInteger();
+            hnode = (wxHNode *) node->GetData();
+
+            if (!hnode)
+                wxLogError("!hnode");
+            else
+            {
+                pal[3 * hnode->index]     = (unsigned char)(key >> 16);
+                pal[3 * hnode->index + 1] = (unsigned char)(key >> 8);
+                pal[3 * hnode->index + 2] = (unsigned char)(key);
+                delete hnode;
+            }
+        }
+
         stream.PutC(12);
-        dump_palette();
+        stream.Write(pal, 768);
     }
-    */
 
     return wxPCX_OK;
 }
-
 
 //-----------------------------------------------------------------------------
 // wxPCXHandler
