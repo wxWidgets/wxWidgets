@@ -248,8 +248,9 @@ void MyFrame::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->DeleteAllItems();
+    m_listCtrl->ClearAll();
     m_logWindow->Clear();
+
     m_listCtrl->SetSingleStyle(wxLC_LIST);
     m_listCtrl->SetImageList((wxImageList *) NULL, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList((wxImageList *) NULL, wxIMAGE_LIST_SMALL);
@@ -264,9 +265,8 @@ void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->DeleteAllItems();
-    m_listCtrl->DeleteAllColumns();
     m_logWindow->Clear();
+    m_listCtrl->ClearAll();
 
     m_listCtrl->SetSingleStyle(wxLC_REPORT);
     m_listCtrl->SetImageList((wxImageList *) NULL, wxIMAGE_LIST_NORMAL);
@@ -325,8 +325,9 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnIconView(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->DeleteAllItems();
     m_logWindow->Clear();
+    m_listCtrl->ClearAll();
+
     m_listCtrl->SetSingleStyle(wxLC_ICON);
     m_listCtrl->SetImageList(wxGetApp().m_imageListNormal, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList(wxGetApp().m_imageListSmall, wxIMAGE_LIST_SMALL);
@@ -339,8 +340,9 @@ void MyFrame::OnIconView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnIconTextView(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->DeleteAllItems();
     m_logWindow->Clear();
+    m_listCtrl->ClearAll();
+
     m_listCtrl->SetSingleStyle(wxLC_ICON);
     m_listCtrl->SetImageList(wxGetApp().m_imageListNormal, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList(wxGetApp().m_imageListSmall, wxIMAGE_LIST_SMALL);
@@ -355,8 +357,9 @@ void MyFrame::OnIconTextView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSmallIconView(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->DeleteAllItems();
     m_logWindow->Clear();
+    m_listCtrl->ClearAll();
+
     m_listCtrl->SetSingleStyle(wxLC_SMALL_ICON);
     m_listCtrl->SetImageList(wxGetApp().m_imageListNormal, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList(wxGetApp().m_imageListSmall, wxIMAGE_LIST_SMALL);
@@ -369,8 +372,9 @@ void MyFrame::OnSmallIconView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSmallIconTextView(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->DeleteAllItems();
     m_logWindow->Clear();
+    m_listCtrl->ClearAll();
+
     m_listCtrl->SetSingleStyle(wxLC_SMALL_ICON);
     m_listCtrl->SetImageList(wxGetApp().m_imageListNormal, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList(wxGetApp().m_imageListSmall, wxIMAGE_LIST_SMALL);
