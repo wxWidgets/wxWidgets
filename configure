@@ -11362,7 +11362,6 @@ do
 done
 done
 
-  test -z "$ac_cv_prog_AR" && ac_cv_prog_AR="ar"
 fi
 fi
 AR=$ac_cv_prog_AR
@@ -11374,6 +11373,11 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
+if test "x$AR" = "x" ; then
+    { { echo "$as_me:$LINENO: error: ar is needed to build wxWindows" >&5
+echo "$as_me: error: ar is needed to build wxWindows" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
@@ -34872,8 +34876,6 @@ fi
 
         ;;
     esac
-
-
 
 
 

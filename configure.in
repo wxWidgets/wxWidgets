@@ -1309,7 +1309,10 @@ AC_PROG_RANLIB
 
 dnl ar command
 dnl   defines AR with the appropriate command
-AC_CHECK_PROG(AR, ar, ar, ar)
+AC_CHECK_PROG(AR, ar, ar)
+if test "x$AR" = "x" ; then
+    AC_MSG_ERROR([ar is needed to build wxWindows])
+fi
 
 dnl install checks
 dnl   defines INSTALL with the appropriate command
