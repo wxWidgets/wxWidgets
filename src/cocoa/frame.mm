@@ -14,6 +14,7 @@
 #include "wx/menuitem.h"
 #include "wx/app.h"
 #include "wx/log.h"
+#include "wx/statusbr.h"
 
 #import <AppKit/NSWindow.h>
 #import <AppKit/NSApplication.h>
@@ -78,8 +79,48 @@ bool wxFrame::Show(bool show)
     return ret;
 }
 
+void wxFrame::Cocoa_FrameChanged(void)
+{
+    PositionStatusBar();
+    wxFrameBase::Cocoa_FrameChanged();
+}
+
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     return wxPoint(0,0);
+}
+
+void wxFrame::DoGetClientSize(int *width, int *height) const
+{
+    wxFrameBase::DoGetClientSize(width,height);
+    if(height)
+    {
+        if(m_frameStatusBar && m_frameStatusBar->IsShown())
+            *height -= m_frameStatusBar->GetSize().y;
+    }
+}
+
+void wxFrame::DoSetClientSize(int width, int height)
+{
+    if(m_frameStatusBar && m_frameStatusBar->IsShown())
+        height += m_frameStatusBar->GetSize().y;
+    wxFrameBase::DoSetClientSize(width,height);
+}
+
+void wxFrame::PositionStatusBar()
+{
+    if( !m_frameStatusBar || !m_frameStatusBar->IsShown() )
+        return;
+
+    // Get the client size.  Since it excludes the StatusBar area we want
+    // the top of the status bar to be directly under it (thus located at h)
+    // The width of the statusbar should then match the client width
+    int w, h;
+    GetClientSize(&w, &h);
+
+    int sh;
+    m_frameStatusBar->GetSize(NULL, &sh);
+
+    m_frameStatusBar->SetSize(0, h, w, sh);
 }
 

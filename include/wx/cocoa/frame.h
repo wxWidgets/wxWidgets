@@ -14,6 +14,7 @@
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxMenuItem;
+class WXDLLEXPORT wxStatusBar;
 
 class WXDLLEXPORT wxFrame: public wxFrameBase 
 {
@@ -68,6 +69,14 @@ public:
     // get the origin of the client area (which may be different from (0, 0)
     // if the frame has a toolbar) in client coordinates
     virtual wxPoint GetClientAreaOrigin() const;
+
+protected:
+    // Catch the Cocoa size event
+    virtual void Cocoa_FrameChanged(void);
+    void PositionStatusBar();
+    // override base class virtuals
+    virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoSetClientSize(int width, int height);
 };
 
 #endif // _WX_COCOA_FRAME_H_
