@@ -228,6 +228,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_textctrl.obj &
 	$(OBJS)\monodll_tglbtn.obj &
 	$(OBJS)\monodll_treectrl.obj &
+	$(OBJS)\monodll_colrdlgg.obj &
 	$(OBJS)\monodll_fdrepdlg.obj &
 	$(OBJS)\monodll_fontdlg.obj &
 	$(OBJS)\monodll_helpchm.obj &
@@ -672,6 +673,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_textctrl.obj &
 	$(OBJS)\monolib_tglbtn.obj &
 	$(OBJS)\monolib_treectrl.obj &
+	$(OBJS)\monolib_colrdlgg.obj &
 	$(OBJS)\monolib_fdrepdlg.obj &
 	$(OBJS)\monolib_fontdlg.obj &
 	$(OBJS)\monolib_helpchm.obj &
@@ -1102,6 +1104,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_textctrl.obj &
 	$(OBJS)\coredll_tglbtn.obj &
 	$(OBJS)\coredll_treectrl.obj &
+	$(OBJS)\coredll_colrdlgg.obj &
 	$(OBJS)\coredll_fdrepdlg.obj &
 	$(OBJS)\coredll_fontdlg.obj &
 	$(OBJS)\coredll_helpchm.obj &
@@ -1504,6 +1507,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_textctrl.obj &
 	$(OBJS)\corelib_tglbtn.obj &
 	$(OBJS)\corelib_treectrl.obj &
+	$(OBJS)\corelib_colrdlgg.obj &
 	$(OBJS)\corelib_fdrepdlg.obj &
 	$(OBJS)\corelib_fontdlg.obj &
 	$(OBJS)\corelib_helpchm.obj &
@@ -3895,9 +3899,6 @@ $(OBJS)\monodll_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
 $(OBJS)\monodll_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4661,6 +4662,11 @@ $(OBJS)\monodll_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
 $(OBJS)\monodll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
@@ -5467,9 +5473,6 @@ $(OBJS)\monolib_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
 $(OBJS)\monolib_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -6233,6 +6236,11 @@ $(OBJS)\monolib_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
 $(OBJS)\monolib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
@@ -7315,9 +7323,6 @@ $(OBJS)\coredll_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
 $(OBJS)\coredll_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
-	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -7961,6 +7966,11 @@ $(OBJS)\coredll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -8540,9 +8550,6 @@ $(OBJS)\corelib_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
-	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
@@ -9185,6 +9192,11 @@ $(OBJS)\corelib_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
 $(OBJS)\corelib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1

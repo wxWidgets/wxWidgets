@@ -1200,6 +1200,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textctrl.obj \
 	$(OBJS)\monodll_tglbtn.obj \
 	$(OBJS)\monodll_treectrl.obj \
+	$(OBJS)\monodll_colrdlgg.obj \
 	$(OBJS)\monodll_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
 	$(OBJS)\monodll_helpchm.obj \
@@ -1653,6 +1654,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textctrl.obj \
 	$(OBJS)\monolib_tglbtn.obj \
 	$(OBJS)\monolib_treectrl.obj \
+	$(OBJS)\monolib_colrdlgg.obj \
 	$(OBJS)\monolib_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
 	$(OBJS)\monolib_helpchm.obj \
@@ -2151,6 +2153,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textctrl.obj \
 	$(OBJS)\coredll_tglbtn.obj \
 	$(OBJS)\coredll_treectrl.obj \
+	$(OBJS)\coredll_colrdlgg.obj \
 	$(OBJS)\coredll_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
 	$(OBJS)\coredll_helpchm.obj \
@@ -2561,6 +2564,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textctrl.obj \
 	$(OBJS)\corelib_tglbtn.obj \
 	$(OBJS)\corelib_treectrl.obj \
+	$(OBJS)\corelib_colrdlgg.obj \
 	$(OBJS)\corelib_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
 	$(OBJS)\corelib_helpchm.obj \
@@ -4220,9 +4224,6 @@ $(OBJS)\monodll_helpchm.obj: ..\..\src\msw\helpchm.cpp
 $(OBJS)\monodll_helpwin.obj: ..\..\src\msw\helpwin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
-$(OBJS)\monodll_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
-
 $(OBJS)\monodll_dirdlgg.obj: ..\..\src\generic\dirdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
@@ -4889,6 +4890,11 @@ $(OBJS)\monodll_textctrl.obj: ..\..\src\msw\textctrl.cpp
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 $(OBJS)\monodll_textctrl.obj: ..\..\src\univ\textctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
@@ -5692,9 +5698,6 @@ $(OBJS)\monolib_helpchm.obj: ..\..\src\msw\helpchm.cpp
 $(OBJS)\monolib_helpwin.obj: ..\..\src\msw\helpwin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
-$(OBJS)\monolib_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
-
 $(OBJS)\monolib_dirdlgg.obj: ..\..\src\generic\dirdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
@@ -6361,6 +6364,11 @@ $(OBJS)\monolib_textctrl.obj: ..\..\src\msw\textctrl.cpp
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 $(OBJS)\monolib_textctrl.obj: ..\..\src\univ\textctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -7440,9 +7448,6 @@ $(OBJS)\coredll_helpchm.obj: ..\..\src\msw\helpchm.cpp
 $(OBJS)\coredll_helpwin.obj: ..\..\src\msw\helpwin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 
-$(OBJS)\coredll_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
-
 $(OBJS)\coredll_dirdlgg.obj: ..\..\src\generic\dirdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 
@@ -7986,6 +7991,11 @@ $(OBJS)\coredll_textctrl.obj: ..\..\src\msw\textctrl.cpp
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 $(OBJS)\coredll_textctrl.obj: ..\..\src\univ\textctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 !endif
 
@@ -8567,9 +8577,6 @@ $(OBJS)\corelib_helpchm.obj: ..\..\src\msw\helpchm.cpp
 $(OBJS)\corelib_helpwin.obj: ..\..\src\msw\helpwin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 
-$(OBJS)\corelib_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
-
 $(OBJS)\corelib_dirdlgg.obj: ..\..\src\generic\dirdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 
@@ -9113,6 +9120,11 @@ $(OBJS)\corelib_textctrl.obj: ..\..\src\msw\textctrl.cpp
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 $(OBJS)\corelib_textctrl.obj: ..\..\src\univ\textctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
