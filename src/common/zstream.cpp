@@ -126,8 +126,14 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream, int level)
   m_deflate->zfree = (free_func)0;
   m_deflate->opaque = (voidpf)0;
 
-  if (level == -1) level = Z_DEFAULT_COMPRESSION;
-  wxASSERT_MSG(level >= 0 && level <= 9, wxT("wxZlibOutputStream compression level must be between 0 and 9!"));
+  if ( level == -1 )
+  {
+      level = Z_DEFAULT_COMPRESSION;
+  }
+  else
+  {
+    wxASSERT_MSG(level >= 0 && level <= 9, wxT("wxZlibOutputStream compression level must be between 0 and 9!"));
+  }
 
   err = deflateInit(m_deflate, level);
   if (err != Z_OK) {
