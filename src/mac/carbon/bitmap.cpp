@@ -273,7 +273,7 @@ PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
   SetGWorld( wp , NULL ) ;
   Rect portRect ;
   if ( clipRgn )
-    portRect = (**clipRgn).rgnBBox ;   
+    GetRegionBounds( clipRgn , &portRect ) ;   
   else
   	GetPortBounds( wp , &portRect ) ;
   pict = OpenPicture(&portRect);   
