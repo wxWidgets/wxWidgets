@@ -99,12 +99,12 @@ void wxTreeLayout::DrawBranches(wxDC& dc)
 
 void wxTreeLayout::DrawNode(long id, wxDC& dc)
 {
-    char buf[80];
+    wxChar buf[80];
     wxString name(GetNodeName(id));
-    if (name != "")
-        sprintf(buf, "%s", (const char*) name);
+    if (name != wxT(""))
+        wxSprintf(buf, wxT("%s"), (const wxChar*) name);
     else
-        sprintf(buf, "<unnamed>");
+        wxSprintf(buf, wxT("<unnamed>"));
     
     long x = 80;
     long y = 20;
@@ -127,7 +127,7 @@ void wxTreeLayout::Initialize(void)
 void wxTreeLayout::GetNodeSize(long id, long *x, long *y, wxDC& dc)
 {
     wxString name(GetNodeName(id));
-    if (name != "")
+    if (name != wxT(""))
         dc.GetTextExtent(name, x, y);
     else
     {
@@ -283,7 +283,7 @@ long wxTreeLayoutStored::AddChild(const wxString& name, const wxString& parent)
     if (m_num < (m_maxNodes -1 ))
     {
         long i = -1;
-        if (parent != "")
+        if (parent != wxT(""))
             i = NameToId(parent);
         else m_parentNode = m_num;
         
