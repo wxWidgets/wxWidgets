@@ -276,10 +276,14 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     else if ((event.Moving() || event.Leaving() || event.Entering()) && (m_dragMode == wxSPLIT_DRAG_NONE))
     {
         // Just change the cursor as required
-        if ( SashHitTest(x, y) )
+        if ( !event.Leaving() && SashHitTest(x, y) )
+        {
             SetResizeCursor();
+        }
         else
+        {
             SetCursor(* wxSTANDARD_CURSOR);
+        }
     }
     else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING))
     {
