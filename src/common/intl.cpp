@@ -666,7 +666,6 @@ bool wxLocale::Init(int language, int flags)
     wxString name = info->Description;
     wxString canonical = info->CanonicalName;
     wxString locale;
-    wxString retloc;
 
     // Set the locale:
 #if defined(__UNIX__) && !defined(__WXMAC__)
@@ -675,14 +674,15 @@ bool wxLocale::Init(int language, int flags)
     else
         locale = info->CanonicalName;
 
-    retloc = wxSetlocale(LC_ALL, locale);
+    wxMB2WXbuf retloc = wxSetlocale(LC_ALL, locale);
 
-    if (retloc.empty())
+    if ((const wxChar*)retloc == NULL)
     {
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        wxMB2WXbuf tmp = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        retloc = tmp;
     }
-    if (retloc.empty())
+    if ((const wxChar*)retloc == NULL)
     {
         // Some C libraries (namely glibc) still use old ISO 639,
         // so will translate the abbrev for them
@@ -690,33 +690,39 @@ bool wxLocale::Init(int language, int flags)
         if (mid == wxT("he")) locale = wxT("iw") + locale.Mid(3);
         else if (mid == wxT("id")) locale = wxT("in") + locale.Mid(3);
         else if (mid == wxT("yi")) locale = wxT("ji") + locale.Mid(3);
-        retloc = wxSetlocale(LC_ALL, locale);
+        wxMB2WXbuf tmp = wxSetlocale(LC_ALL, locale);
+        retloc = tmp;
     }
-    if (retloc.empty())
+    if ((const wxChar*)retloc == NULL)
     {
         // (This time, we changed locale in previous if-branch, so try again.)
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        wxMB2WXbuf tmp = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        retloc = tmp;
     }
-    if (retloc.empty())
+    if ((const wxChar*)retloc == NULL)
     {
         wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
         return FALSE;
     }
 #elif defined(__WIN32__)
+    wxMB2WXbuf retloc(wxT("C"));
     if (language != wxLANGUAGE_DEFAULT)
     {
         if (info->WinLang == 0)
         {
             wxLogWarning(wxT("Locale '%s' not supported by OS."), name.c_str());
-            retloc = wxT("C");
+            // retloc already set to "C"
         }
         else
         {
             wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
                                      SORT_DEFAULT);
             if (SetThreadLocale(lcid))
-                retloc = wxSetlocale(LC_ALL, wxEmptyString);
+            {
+                wxMB2WXbuf tmp = wxSetlocale(LC_ALL, wxEmptyString);
+                retloc = tmp;
+            }
             else
             {
                 // Windows9X doesn't support SetThreadLocale, so we must
@@ -738,20 +744,26 @@ bool wxLocale::Init(int language, int flags)
                     return FALSE;
                 }
                 else
-                    retloc = wxSetlocale(LC_ALL, locale);
+                {
+                    wxMB2WXbuf tmp = wxSetlocale(LC_ALL, locale);
+                    retloc = tmp;
+                }
             }
         }
     }
     else
-        retloc = wxSetlocale(LC_ALL, wxEmptyString);
+    {
+        wxMB2WXbuf tmp = wxSetlocale(LC_ALL, wxEmptyString);
+        retloc = tmp;
+    }
 
-    if (retloc.empty())
+    if ((const wxChar*)retloc == NULL)
     {
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
         return FALSE;
     }
 #elif defined(__WXMAC__)
-    retloc = wxSetlocale(LC_ALL , wxEmptyString);
+    wxMB2WXbuf retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #else
     return FALSE;
 #endif
