@@ -32,10 +32,7 @@
 #include <stdlib.h>
 #include "wx/string.h"
 #include "wx/utils.h"
-// #include "wx/data.h"
-#define WXSOCK_INTERNAL
 #include "wx/sckaddr.h"
-#undef WXSOCK_INTERNAL
 #include "wx/socket.h"
 #include "wx/url.h"
 #include "wx/sckstrm.h"
@@ -67,7 +64,7 @@ wxFTP::wxFTP()
   m_passwd += wxGetHostName();
 
   SetNotify(0);
-  SetFlags(NONE);
+  SetFlags(wxSOCKET_NONE);
 }
 
 wxFTP::~wxFTP()
@@ -129,8 +126,9 @@ bool wxFTP::Close()
     m_lastError = wxPROTO_STREAMING;
     return FALSE;
   }
-  if (m_connected)
+  if (IsConnected())
     SendCommand(wxString(wxT("QUIT")), '2');
+
   return wxSocketClient::Close();
 }
 
@@ -350,7 +348,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
 
     in_stream->m_ftpsize = wxAtoi(WXSTRINGCAST str_size);
   }
-  sock->SetFlags(WAITALL);
+  sock->SetFlags(wxSOCKET_WAITALL);
 
   return in_stream;
 }
