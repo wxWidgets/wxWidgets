@@ -52,42 +52,47 @@ typedef wxObject * (*wxObjectConstructorFn) (void);
 
 class WXDLLEXPORT wxClassInfo
 {
- public:
-   wxClassInfo(wxChar *cName, wxChar *baseName1, wxChar *baseName2, int sz, wxObjectConstructorFn fn);
+public:
+   wxClassInfo(const wxChar *cName,
+               const wxChar *baseName1,
+               const wxChar *baseName2,
+               int sz,
+               wxObjectConstructorFn fn);
 
    wxObject *CreateObject(void);
 
-   inline wxChar *GetClassName(void) const { return m_className; }
-   inline wxChar *GetBaseClassName1(void) const { return m_baseClassName1; }
-   inline wxChar *GetBaseClassName2(void) const { return m_baseClassName2; }
-   inline wxClassInfo* GetBaseClass1() const { return m_baseInfo1; }
-   inline wxClassInfo* GetBaseClass2() const { return m_baseInfo2; }
-   inline int GetSize(void) const { return m_objectSize; }
-   inline wxObjectConstructorFn GetConstructor() const { return m_objectConstructor; }
-   static inline wxClassInfo* GetFirst() { return sm_first; }
-   inline wxClassInfo* GetNext() const { return m_next; }
-   bool IsKindOf(wxClassInfo *info) const;
+   const wxChar *GetClassName() const { return m_className; }
+   const wxChar *GetBaseClassName1() const { return m_baseClassName1; }
+   const wxChar *GetBaseClassName2() const { return m_baseClassName2; }
+   const wxClassInfo* GetBaseClass1() const { return m_baseInfo1; }
+   const wxClassInfo* GetBaseClass2() const { return m_baseInfo2; }
+   int GetSize() const { return m_objectSize; }
+   wxObjectConstructorFn GetConstructor() const { return m_objectConstructor; }
+   static const wxClassInfo* GetFirst() { return sm_first; }
+   const wxClassInfo* GetNext() const { return m_next; }
+   bool IsKindOf(const wxClassInfo *info) const;
 
-   static wxClassInfo *FindClass(wxChar *c);
+   static wxClassInfo *FindClass(const wxChar *c);
 
    // Initializes parent pointers and hash table for fast searching.
-   static void InitializeClasses(void);
+   static void InitializeClasses();
 
    // Cleans up hash table used for fast searching.
-   static void CleanUpClasses(void);
+   static void CleanUpClasses();
 
 public:
-   wxChar*                  m_className;
-   wxChar*                  m_baseClassName1;
-   wxChar*                  m_baseClassName2;
+   const wxChar*            m_className;
+   const wxChar*            m_baseClassName1;
+   const wxChar*            m_baseClassName2;
    int                      m_objectSize;
    wxObjectConstructorFn    m_objectConstructor;
 
    // Pointers to base wxClassInfos: set in InitializeClasses
-   // called from wx_main.cc
-   wxClassInfo*             m_baseInfo1;
-   wxClassInfo*             m_baseInfo2;
+   const wxClassInfo*       m_baseInfo1;
+   const wxClassInfo*       m_baseInfo2;
 
+   // class info object live in a linked list: pointers to its head and the
+   // next element in it
    static wxClassInfo*      sm_first;
    wxClassInfo*             m_next;
 
@@ -115,7 +120,6 @@ WXDLLEXPORT wxObject* wxCreateStoredObject( wxInputStream& stream );
 
 // Single inheritance with one base class
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename) \
-wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void); \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
  wxClassInfo name::sm_class##name((wxChar *) wxT(#name), (wxChar *) wxT(#basename), (wxChar *) NULL, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
@@ -215,15 +219,7 @@ class WXDLLEXPORT wxObject
 
 #if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
   void * operator new (size_t size, wxChar * fileName = NULL, int lineNum = 0);
-
-#if defined(__VISAGECPP__)
-  #if __DEBUG_ALLOC__
-     void operator delete (void * buf,const char * _fname, size_t _line);
-  #endif  //__DEBUG_ALLOC__
-#else
   void operator delete (void * buf);
-#endif
-   // defined(__VISAGECPP__)
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
@@ -261,14 +257,6 @@ class WXDLLEXPORT wxObject
 
   inline wxObjectRefData *GetRefData(void) const { return m_refData; }
   inline void SetRefData(wxObjectRefData *data) { m_refData = data; }
-
-//EK
-#if defined(__WXDEBUG__) && defined(__VISAGECPP__)
-public:
-  static int                        N;
-  static int                        Nid;  // total number of objects and serial counter
-         int                        id; // serial number for current object
-#endif // __WXDEBUG__
 
 protected:
   wxObjectRefData*      m_refData;
