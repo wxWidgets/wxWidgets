@@ -1463,6 +1463,19 @@ AC_DEFINE_UNQUOTED(SIZEOF_WCHAR_T, $wx_cv_sizeof_wchar_t)
 dnl check for large file support
 AC_SYS_LARGEFILE
 
+dnl we need to define _FILE_OFFSET_BITS or _LARGE_FILES on the compiler command
+dnl line because otherwise the system headers risk being included before
+dnl wx/defs.h which defines these constants leading to inconsistent
+dnl sizeof(off_t) in different source files of the same program and linking
+dnl problems
+if test "x$wx_largefile" = "xyes"; then
+    if test "x$ac_cv_sys_file_offset_bits" = "xyes"; then
+        CPPFLAGS="$CPPFLAGS -D_FILE_OFFSET_BITS=64"
+    else
+        CPPFLAGS="$CPPFLAGS -D_LARGE_FILES"
+    fi
+fi
+
 dnl check for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
 WX_C_BIGENDIAN
 

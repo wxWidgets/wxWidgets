@@ -905,12 +905,6 @@
 /* Define if you have support for large (64 bit size) files */
 #undef HAVE_LARGEFILE_SUPPORT
 
-/* Required by HAVE_LARGEFILE_SUPPORT on some systems */
-#undef _FILE_OFFSET_BITS
-
-/* Ditto */
-#undef _LARGE_FILES
-
 /* Define if you have localtime() */
 #undef HAVE_LOCALTIME
 
