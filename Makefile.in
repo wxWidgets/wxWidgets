@@ -762,7 +762,8 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
 	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
-	cp $(SRCDIR)/*.* $(DISTDIR)/src
+	cp $(SRCDIR)/*.??? $(DISTDIR)/src
+	cp $(SRCDIR)/*.?? $(DISTDIR)/src
 	cp $(MSWDIR)/?ake*.* $(DISTDIR)/src/msw
 
 UNIV_DIST: ALL_GUI_DIST
