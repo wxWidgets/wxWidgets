@@ -3,8 +3,8 @@
 // Purpose:     wxGIFDecoder, GIF reader for wxImage and wxAnimation
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
 // Version:     3.02
-// Last rev:    1999/08/18
-// Copyright:   (c) Guillermo Rodriguez Garcia
+// CVS-ID:      $Id$
+// Copyright:   (c) 1999 Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,7 +17,8 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && wxUSE_GIF
+
 #include "wx/stream.h"
 #include "wx/image.h"
 
@@ -46,9 +47,8 @@ typedef struct _IMAGEN
 
 /* error codes */
 #define E_OK            0           /* everything was OK */
-#define E_ARCHIVO       -1          /* error opening file */
-#define E_FORMATO       -2          /* error in gif header */
-#define E_MEMORIA       -3          /* error allocating memory */
+#define E_FORMATO       1           /* error in gif header */
+#define E_MEMORIA       2           /* error allocating memory */
 
 
 class wxGIFDecoder
@@ -117,6 +117,6 @@ public:
 };
 
 
-#endif  // wxUSE_STREAM
+#endif  // wxUSE_STREAM && wxUSE_GIF
 #endif  // _WX_GIFDECOD_H
 

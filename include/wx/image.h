@@ -174,7 +174,8 @@ private:
 // wxGIFHandler
 //-----------------------------------------------------------------------------
 
-#if wxUSE_LIBGIF
+#if wxUSE_GIF
+
 class WXDLLEXPORT wxGIFHandler : public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxGIFHandler)
