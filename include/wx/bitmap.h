@@ -32,7 +32,7 @@ class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxPalette;
 
-#if defined(__WXMGL__)
+#if defined(__WXMGL__) || defined(__WXMAC__)
 // Only used by some ports
 // FIXME -- make all ports (but MSW which uses wxGDIImage) use these base classes
 
