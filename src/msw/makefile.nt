@@ -1535,4 +1535,6 @@ $(WXDIR)\docs\ps\faq.ps:	$(WXDIR)\docs\latex\faq\faq.dvi
         move faq.ps $(WXDIR)\docs\ps\faq.ps
         cd $(THISDIR)
 
-
+# In order to force document reprocessing
+touchmanual:
+    -touch $(WXDIR)\docs\latex\wx\manual.tex

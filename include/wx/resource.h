@@ -171,7 +171,7 @@ extern wxMenuBar* WXDLLEXPORT wxResourceCreateMenuBar(const wxString& resource, 
 extern wxMenu* WXDLLEXPORT wxResourceCreateMenu(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
 extern bool WXDLLEXPORT wxResourceParseData(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
 extern bool WXDLLEXPORT wxResourceParseFile(const wxString& filename, wxResourceTable *table = (wxResourceTable *) NULL);
-extern bool WXDLLEXPORT wxResourceParseString(const wxString& s, wxResourceTable *table = (wxResourceTable *) NULL);
+extern bool WXDLLEXPORT wxResourceParseString(char* s, wxResourceTable *table = (wxResourceTable *) NULL);
 extern void WXDLLEXPORT wxResourceClear(wxResourceTable *table = (wxResourceTable *) NULL);
 // Register XBM/XPM data
 extern bool WXDLLEXPORT wxResourceRegisterBitmapData(const wxString& name, char bits[], int width, int height, wxResourceTable *table = (wxResourceTable *) NULL);

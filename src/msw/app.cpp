@@ -344,87 +344,76 @@ bool wxApp::RegisterWindowClasses()
 
 //// Convert Windows to argc, argv style
 
-// FIXME this code should be rewritten (use wxArrayString instead...)
 void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
 {
-  // Split command line into tokens, as in usual main(argc, argv)
-  int para,count = 0;
-  char *buf = new char[strlen(lpCmdLine) + 1];
+    wxStringList args;
 
-	para=0;
-  /* Model independent strcpy */
-  unsigned int i;
-  for (i = 0; i<strlen(lpCmdLine); i++)
-  {
-		buf[i]=lpCmdLine[i];
-		if (isspace(lpCmdLine[i]))
-			para++;
-  }
-	buf[i]=0;
-  char **command = new char*[para+2];
+    wxString cmdLine(lpCmdLine);
+    int count = 0;
 
-  // Get application name
-  char name[260]; // 260 is MAX_PATH value from windef.h
-  ::GetModuleFileName(wxhInstance, name, WXSIZEOF(name));
+    // Get application name
+    char name[500];
+    ::GetModuleFileName(wxhInstance, name, WXSIZEOF(name));
 
-  // Is it only 16-bit Borland that already copies the program name
-  // to the first argv index?
+    // GNUWIN32 already fills in the first arg with the application name.
 #if !defined(__GNUWIN32__)
-// #if ! (defined(__BORLANDC__) && !defined(__WIN32__))
-  command[count++] = copystring(name);
-// #endif
+    args.Add(name);
+    count ++;
 #endif
 
-  strcpy(name, wxFileNameFromPath(name));
-  wxStripExtension(name);
-  wxTheApp->SetAppName(name);
+    strcpy(name, wxFileNameFromPath(name));
+    wxStripExtension(name);
+    wxTheApp->SetAppName(name);
 
-  /* Break up string */
-  // Treat strings enclosed in double-quotes as single arguments
-  char* str = buf;
-  while (*str)
-  {
-/*
-	if ( count == WXSIZEOF(command) )
+    // Break up string
+    // Treat strings enclosed in double-quotes as single arguments
+    int i = 0;
+    int len = cmdLine.Length();
+    while (i < len)
     {
-      wxFAIL_MSG("too many command line args.");
-      break;
-    }
-*/
-    while ( *str && isspace(*str) )  // skip whitespace
-      str++;
+        // Skip whitespace
+        while ((i < len) && isspace(cmdLine.GetChar(i)))
+            i ++;
 
-    if (*str == '"')
+        if (i < len)
+        {
+            if (cmdLine.GetChar(i) == '"') // We found the start of a string
+            {
+                i ++;
+                int first = i;
+                while ((i < len) && (cmdLine.GetChar(i) != '"'))
+                    i ++;
+
+                wxString arg(cmdLine.Mid(first, (i - first)));
+
+                args.Add(arg);
+                count ++;
+
+                if (i < len)
+                    i ++; // Skip past 2nd quote
+            }
+            else // Unquoted argument
+            {
+                int first = i;
+                while ((i < len) && !isspace(cmdLine.GetChar(i)))
+                    i ++;
+
+                wxString arg(cmdLine.Mid(first, (i - first)));
+
+                args.Add(arg);
+                count ++;
+            }
+        }
+    }
+
+    wxTheApp->argv = new char*[count + 1];
+    for (i = 0; i < count; i++)
     {
-      str++;
-      command[count++] = str;
-      while (*str && *str != '"')
-        str++;
+        wxString arg(args[i]);
+        wxTheApp->argv[i] = copystring((const char*)arg);
     }
-    else if (*str)
-    {
-      command[count++] = str;
-      while (*str && !isspace(*str))
-        str++;
-    }
-    if (*str)
-      *str++ = '\0';
-  }
-
-  wxTheApp->argv = new char*[count + 1];
-  wxTheApp->argv[count] = NULL; /* argv[] is NULL terminated list! */
-  wxTheApp->argc = count;
-
-  for (i = 0; i < count; i++)
-    wxTheApp->argv[i] = copystring(command[i]);
-
-#if !defined(__GNUWIN32__)
-// use copystring than delete this pointer 
-	delete [] command[0];
-#endif
-
-  delete [] command;
-  delete [] buf;
+    wxTheApp->argv[count] = NULL; // argv[] is a NULL-terminated list
+    wxTheApp->argc = count;
 }
 
 //// Cleans up any wxWindows internal structures left lying around
@@ -684,7 +673,7 @@ wxApp::~wxApp()
   {
     delete[] argv[i];
   }
-  delete argv;
+  delete[] argv;
 }
 
 bool wxApp::Initialized()
