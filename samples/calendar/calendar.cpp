@@ -53,6 +53,12 @@
     #endif // wxUSE_DATEPICKCTRL_GENERIC
 #endif // wxUSE_DATEPICKCTRL
 
+// the application icon (under Windows and OS/2 it is in resources and even
+// though we could still include the XPM here it would be unused)
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -181,6 +187,7 @@ enum
     Calendar_DatePicker_AskDate = 300,
     Calendar_DatePicker_ShowCentury,
     Calendar_DatePicker_DropDown,
+    Calendar_DatePicker_AllowNone,
 #if wxUSE_DATEPICKCTRL_GENERIC
     Calendar_DatePicker_Generic,
 #endif // wxUSE_DATEPICKCTRL_GENERIC
@@ -274,6 +281,9 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
+    // set the frame icon
+    SetIcon(wxICON(sample));
+
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(Calendar_File_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
@@ -316,6 +326,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                               _T("Al&ways show century"));
     menuDate->AppendCheckItem(Calendar_DatePicker_DropDown,
                               _T("Use &drop down control"));
+    menuDate->AppendCheckItem(Calendar_DatePicker_AllowNone,
+                              _T("Allow &no date"));
 #if wxUSE_DATEPICKCTRL_GENERIC
     menuDate->AppendCheckItem(Calendar_DatePicker_Generic,
                               _T("Use &generic version of the control"));
@@ -436,22 +448,31 @@ void MyFrame::OnAskDate(wxCommandEvent& WXUNUSED(event))
         style |= wxDP_SHOWCENTURY;
     if ( GetMenuBar()->IsChecked(Calendar_DatePicker_DropDown) )
         style |= wxDP_DROPDOWN;
+    if ( GetMenuBar()->IsChecked(Calendar_DatePicker_AllowNone) )
+        style |= wxDP_ALLOWNONE;
 
     MyDialog dlg(this, m_panel->GetCal()->GetDate(), style);
     if ( dlg.ShowModal() == wxID_OK )
     {
-        const wxDateTime dt = dlg.GetDate(),
-                         today = wxDateTime::Today();
-
-        if ( dt.GetDay() == today.GetDay() &&
-                dt.GetMonth() == today.GetMonth() )
+        const wxDateTime dt = dlg.GetDate();
+        if ( dt.IsValid() )
         {
-            wxMessageBox(_T("Happy birthday!"), _T("Calendar Sample"));
+            const wxDateTime today = wxDateTime::Today();
+
+            if ( dt.GetDay() == today.GetDay() &&
+                    dt.GetMonth() == today.GetMonth() )
+            {
+                wxMessageBox(_T("Happy birthday!"), _T("Calendar Sample"));
+            }
+
+            m_panel->GetCal()->SetDate(dt);
+
+            wxLogStatus(_T("Changed the date to your input"));
         }
-
-        m_panel->GetCal()->SetDate(dt);
-
-        wxLogStatus(_T("Changed the date to your birthday"));
+        else
+        {
+            wxLogStatus(_T("No date entered"));
+        }
     }
 }
 

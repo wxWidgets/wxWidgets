@@ -40,13 +40,22 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 
-#if defined(__GNUWIN32__) && ! wxCHECK_W32API_VERSION( 2, 4 )
+#if defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 2, 4 )
 typedef struct tagNMDATETIMECHANGE
 {
     NMHDR       nmhdr;
     DWORD       dwFlags;
     SYSTEMTIME  st;
-} NMDATETIMECHANGE, FAR * LPNMDATETIMECHANGE;
+} NMDATETIMECHANGE;
+#endif // old gcc headers
+
+// apparently some versions of mingw define these macros erroneously
+#ifndef DateTime_GetSystemtime
+    #define DateTime_GetSystemtime DateTime_GetSystemTime
+#endif
+
+#ifndef DateTime_SetSystemtime
+    #define DateTime_SetSystemtime DateTime_SetSystemTime
 #endif
 
 // ============================================================================
@@ -162,6 +171,9 @@ WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 #endif // DTS_SHORTDATECENTURYFORMAT
         styleMSW |= DTS_SHORTDATEFORMAT;
 
+    if ( style & wxDP_ALLOWNONE )
+        styleMSW |= DTS_SHOWNONE;
+
     return styleMSW;
 }
 
@@ -182,24 +194,17 @@ wxSize wxDatePickerCtrl::DoGetBestSize() const
 // wxDatePickerCtrl operations
 // ----------------------------------------------------------------------------
 
-#ifndef DateTime_GetSystemtime
-    #define DateTime_GetSystemtime DateTime_GetSystemTime
-#endif
-
-#ifndef DateTime_SetSystemtime
-    #define DateTime_SetSystemtime DateTime_SetSystemTime
-#endif
-
 void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
 {
-    // as we don't support DTS_SHOWNONE style so far, we don't allow setting
-    // the control to an invalid date, but this restriction may be lifted in
-    // the future
-    wxCHECK_RET( dt.IsValid(), _T("invalid date") );
+    wxCHECK_RET( dt.IsValid() || HasFlag(wxDP_ALLOWNONE),
+                    _T("this control requires a valid date") );
 
     SYSTEMTIME st;
-    wxToSystemTime(&st, dt);
-    if ( !DateTime_SetSystemtime(GetHwnd(), GDT_VALID, &st) )
+    if ( dt.IsValid() )
+        wxToSystemTime(&st, dt);
+    if ( !DateTime_SetSystemtime(GetHwnd(),
+                                 dt.IsValid() ? GDT_VALID : GDT_NONE,
+                                 &st) )
     {
         wxLogDebug(_T("DateTime_SetSystemtime() failed"));
     }
