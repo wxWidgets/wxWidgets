@@ -350,8 +350,9 @@ void wxWindowBase::Fit()
     int maxX = 0,
         maxY = 0;
 
-    wxWindowList::Node *node = GetChildren().GetFirst();
-    while ( node )
+    for ( wxWindowList::Node *node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
     {
         wxWindow *win = node->GetData();
         if ( win->IsTopLevel() )
@@ -368,8 +369,6 @@ void wxWindowBase::Fit()
             maxX = wx + ww;
         if ( wy + wh > maxY )
             maxY = wy + wh;
-
-        node = node->GetNext();
     }
 
     // leave a margin
