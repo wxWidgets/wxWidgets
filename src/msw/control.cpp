@@ -212,18 +212,23 @@ wxSize wxControl::DoGetBestSize() const
 // wxChoice and others.
 wxSize wxControl::GetBestSpinerSize(const bool is_vertical) const
 {
+    // take size according to layout
+    wxSize bestSize(GetSystemMetrics(is_vertical ? SM_CXVSCROLL : SM_CXHSCROLL),
+                    GetSystemMetrics(is_vertical ? SM_CYVSCROLL : SM_CYHSCROLL));
+
+    // correct size as for undocumented MSW variants cases (WinCE and perhaps others)
+    if (bestSize.x==0)
+        bestSize.x = bestSize.y;
+    if (bestSize.y==0)
+        bestSize.y = bestSize.x;
+
+    // double size according to layout
     if (is_vertical)
-    {
-        // vertical control
-        return wxSize(GetSystemMetrics(SM_CXVSCROLL),
-                      2*GetSystemMetrics(SM_CYVSCROLL));
-    }
+        bestSize.y *= 2;
     else
-    {
-        // horizontal control
-        return wxSize(2*GetSystemMetrics(SM_CXHSCROLL),
-                      GetSystemMetrics(SM_CYHSCROLL));
-    }
+        bestSize.x *= 2;
+
+    return bestSize;
 }
 
 /* static */ wxVisualAttributes
