@@ -411,7 +411,7 @@ public:
                    const wxIcon &go = wxNullIcon)
         : wxDropSource(win, go) {}
 #endif
-    ~wxPyDropSource() { printf("dtor\n"); }
+    ~wxPyDropSource() { }
 
     DEC_PYCALLBACK_BOOL_DR(GiveFeedback);
     PYPRIVATE;
