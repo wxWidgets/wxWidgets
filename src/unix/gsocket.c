@@ -1089,8 +1089,10 @@ GSocketError _GAddress_Init_INET(GAddress *address)
   address->m_family = GSOCK_INET;
   address->m_realfamily = PF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_family = AF_INET;
-  // INADDR_BROADCAST is identical to INADDR_NONE which is not defined
-  // on all unices. INADDR_BROADCAST should be fine to indicate an error. (KB)
+  /*
+     INADDR_BROADCAST is identical to INADDR_NONE which is not defined
+     on all unices. INADDR_BROADCAST should be fine to indicate an error.
+   */
   ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr = INADDR_BROADCAST;
 
   return GSOCK_NOERROR;
