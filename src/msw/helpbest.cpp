@@ -27,7 +27,9 @@
 #include "wx/filefn.h"
 #include "wx/log.h"
 
-#if wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__) && wxUSE_WXHTML_HELP
+#if wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__) \
+    && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
+
 #include "wx/msw/helpchm.h"
 #include "wx/html/helpctrl.h"
 #include "wx/msw/helpbest.h"
