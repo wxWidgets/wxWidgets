@@ -676,37 +676,38 @@ bool wxLocale::Init(int language, int flags)
 
     wxMB2WXbuf retloc = wxSetlocale(LC_ALL, locale);
 
-    if ((const wxChar*)retloc == NULL)
+    if ( !retloc )
     {
         // Some C libraries don't like xx_YY form and require xx only
-        wxMB2WXbuf tmp = wxSetlocale(LC_ALL, locale.Mid(0,2));
-        retloc = tmp;
+        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
     }
-    if ((const wxChar*)retloc == NULL)
+    if ( !retloc )
     {
         // Some C libraries (namely glibc) still use old ISO 639,
         // so will translate the abbrev for them
         wxString mid = locale.Mid(0,2);
-        if (mid == wxT("he")) locale = wxT("iw") + locale.Mid(3);
-        else if (mid == wxT("id")) locale = wxT("in") + locale.Mid(3);
-        else if (mid == wxT("yi")) locale = wxT("ji") + locale.Mid(3);
-        wxMB2WXbuf tmp = wxSetlocale(LC_ALL, locale);
-        retloc = tmp;
+        if (mid == wxT("he"))
+            locale = wxT("iw") + locale.Mid(3);
+        else if (mid == wxT("id"))
+            locale = wxT("in") + locale.Mid(3);
+        else if (mid == wxT("yi"))
+            locale = wxT("ji") + locale.Mid(3);
+
+        retloc = wxSetlocale(LC_ALL, locale);
     }
-    if ((const wxChar*)retloc == NULL)
+    if ( !retloc )
     {
         // (This time, we changed locale in previous if-branch, so try again.)
         // Some C libraries don't like xx_YY form and require xx only
-        wxMB2WXbuf tmp = wxSetlocale(LC_ALL, locale.Mid(0,2));
-        retloc = tmp;
+        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
     }
-    if ((const wxChar*)retloc == NULL)
+    if ( !retloc )
     {
         wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
         return FALSE;
     }
 #elif defined(__WIN32__)
-    wxMB2WXbuf retloc(wxT("C"));
+    wxMB2WXbuf retloc = wxT("C");
     if (language != wxLANGUAGE_DEFAULT)
     {
         if (info->WinLang == 0)
@@ -720,8 +721,7 @@ bool wxLocale::Init(int language, int flags)
                                      SORT_DEFAULT);
             if (SetThreadLocale(lcid))
             {
-                wxMB2WXbuf tmp(wxSetlocale(LC_ALL, wxEmptyString));
-                retloc = tmp;
+                retloc = wxSetlocale(LC_ALL, wxEmptyString);
             }
             else
             {
@@ -745,19 +745,17 @@ bool wxLocale::Init(int language, int flags)
                 }
                 else
                 {
-                    wxMB2WXbuf tmp(wxSetlocale(LC_ALL, locale));
-                    retloc = tmp;
+                    retloc = wxSetlocale(LC_ALL, locale);
                 }
             }
         }
     }
     else
     {
-        wxMB2WXbuf tmp(wxSetlocale(LC_ALL, wxEmptyString));
-        retloc = tmp;
+        retloc = wxSetlocale(LC_ALL, wxEmptyString);
     }
 
-    if ((const wxChar*)retloc == NULL)
+    if ( !retloc )
     {
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
         return FALSE;
