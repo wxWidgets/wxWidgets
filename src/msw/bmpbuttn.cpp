@@ -185,9 +185,8 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         // (for a wxMask this means that this is a non transparent pixel), the
         // bg ROP is applied for all the others
 
-        wxColour colBg = GetBackgroundColour();
         HBRUSH hbrBackground =
-            ::CreateSolidBrush(RGB(colBg.Red(), colBg.Green(), colBg.Blue()));
+            ::CreateSolidBrush(wxColourToRGB(GetBackgroundColour()));
         HBRUSH hbrOld = (HBRUSH)::SelectObject(hDC, hbrBackground);
 
         ok = ::MaskBlt(
@@ -202,6 +201,13 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         ::DeleteObject(hbrBackground);
     }
     else
+    {
+        // this will make the check below fail and BitBlt() will be used if
+        // MaskBlt() is not supported (for example, under Win95)
+        ok = FALSE;
+    }
+
+    if ( !ok )
 #endif // Win32
     {
         ok = ::BitBlt(hDC, x1, y1, wBmp, hBmp,  // dst
