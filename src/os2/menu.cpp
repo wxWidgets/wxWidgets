@@ -267,6 +267,15 @@ bool wxMenu::DoInsertOrAppend(
     wxString                        sError;
 #if wxUSE_ACCEL
     UpdateAccel(pItem);
+
+    //
+    // Ensure the accelerator table is set to the frame (not the client!)
+    //
+    if (!::WinSetAccelTable( vHabmain
+                            ,(HWND)pFrame->GetFrame()
+                            ,m_vAccelTable.GetHACCEL()
+                           ))
+        wxLogLastError("WinSetAccelTable");
 #endif // wxUSE_ACCEL
 
     //

@@ -149,7 +149,11 @@
                                   // since you may well need to output
                                   // an error log in a production
                                   // version (or non-debugging beta)
+#if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
+#else
 #define wxUSE_GLOBAL_MEMORY_OPERATORS 1
+#endif
                                   // In debug mode, cause new and delete to be redefined globally.
                                   // If this causes problems (e.g. link errors), set this to 0.
 
@@ -181,7 +185,7 @@
                                   // Default is 0.  Set to 1 to use the deprecated classes, enum
                                   // types, function, member variables.  With a setting of 1, full
                                   // backward compatability with the 2.0.x release is possible.
-                                  // It is STRONGLY recommended that this be set to 0, as 
+                                  // It is STRONGLY recommended that this be set to 0, as
                                   // future development will be done only on the non-deprecated
                                   // functions/classes/member variables/etc.
 
