@@ -683,7 +683,9 @@ wxMenu::Init( const wxString& title,
 
 wxMenu::~wxMenu()
 {
-    /* how do we delete an item-factory ? */
+   /* how do we delete an item-factory ? */
+   gtk_widget_destroy( m_menu );
+
 }
 
 void wxMenu::SetTitle( const wxString& title )
