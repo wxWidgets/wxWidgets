@@ -107,6 +107,12 @@ TRUE if successful.
 
 Copies {\it file1} to {\it file2}, returning TRUE if successful.
 
+\membersection{::wxGetCwd}\label{wxgetcwd}
+
+\func{wxString}{wxGetCwd}{\void}
+
+Returns a string containing the current (or working) directory.
+
 \membersection{::wxGetHostName}\label{wxgethostname}
 
 \func{bool}{wxGetHostName}{\param{const wxString\& }{buf}, \param{int }{sz}}
@@ -157,6 +163,8 @@ Returns TRUE if successful, FALSE otherwise.
 \membersection{::wxGetWorkingDirectory}
 
 \func{wxString}{wxGetWorkingDirectory}{\param{const wxString\& }{buf=NULL}, \param{int }{sz=1000}}
+
+This function is obsolete: use \helpref{wxGetCwd}{wxgetcwd} instead.
 
 Copies the current working directory into the buffer if supplied, or
 copies the working directory into new storage (which you must delete yourself)

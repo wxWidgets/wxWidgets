@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -97,7 +97,7 @@ public:
 
   // public variable pointing to the next element in a linked list (or NULL)
   wxMsgCatalog *m_pNext;
-  
+
 private:
   // this implementation is binary compatible with GNU gettext() version 0.10
 
@@ -118,11 +118,11 @@ private:
             ofsTransTable;  //        +10:  start of translated string table
     size_t32  nHashSize,      //        +14:  hash table size
             ofsHashTable;   //        +18:  offset of hash table start
-  };                     
-  
+  };
+
   // all data is stored here, NULL if no data loaded
   size_t8 *m_pData;
-  
+
   // data description
   size_t32            m_numStrings,   // number of strings in this domain
                     m_nHashSize;    // number of entries in hash table
@@ -187,21 +187,21 @@ size_t32 wxMsgCatalog::GetHash(const char *sz)
 // swap the 2 halves of 32 bit integer if needed
 size_t32 wxMsgCatalog::Swap(size_t32 ui) const
 {
-  return m_bSwapped ? (ui << 24) | ((ui & 0xff00) << 8) | 
+  return m_bSwapped ? (ui << 24) | ((ui & 0xff00) << 8) |
                       ((ui >> 8) & 0xff00) | (ui >> 24)
                     : ui;
 }
 
-wxMsgCatalog::wxMsgCatalog() 
-{ 
+wxMsgCatalog::wxMsgCatalog()
+{
   m_pData   = NULL;
   m_pszName = NULL;
 }
 
-wxMsgCatalog::~wxMsgCatalog() 
-{ 
-  wxDELETEA(m_pData); 
-  wxDELETEA(m_pszName); 
+wxMsgCatalog::~wxMsgCatalog()
+{
+  wxDELETEA(m_pData);
+  wxDELETEA(m_pszName);
 }
 
 // small class to suppress the translation erros until exit from current scope
@@ -211,7 +211,7 @@ public:
     NoTransErr() { wxSuppressTransErrors(); }
    ~NoTransErr() { wxRestoreTransErrors();  }
 };
-    
+
 // return all directories to search for given prefix
 static wxString GetAllMsgCatalogSubdirs(const char *prefix,
                                         const char *lang)
@@ -220,10 +220,10 @@ static wxString GetAllMsgCatalogSubdirs(const char *prefix,
 
     // search first in prefix/fr/LC_MESSAGES, then in prefix/fr and finally in
     // prefix (assuming the language is 'fr')
-    searchPath << prefix << FILE_SEP_PATH << lang << FILE_SEP_PATH
-                         << "LC_MESSAGES" << PATH_SEP
-               << prefix << FILE_SEP_PATH << lang << PATH_SEP
-               << prefix << PATH_SEP;
+    searchPath << prefix << wxFILE_SEP_PATH << lang << wxFILE_SEP_PATH
+                         << "LC_MESSAGES" << wxPATH_SEP
+               << prefix << wxFILE_SEP_PATH << lang << wxPATH_SEP
+               << prefix << wxPATH_SEP;
 
     return searchPath;
 }
@@ -238,17 +238,17 @@ static wxString GetFullSearchPath(const char *lang)
     for ( size_t n = 0; n < count; n++ )
     {
         searchPath << GetAllMsgCatalogSubdirs(s_searchPrefixes[n], lang)
-                   << PATH_SEP;
+                   << wxPATH_SEP;
     }
 
     // then take the current directory
     // FIXME it should be the directory of the executable
-    searchPath << GetAllMsgCatalogSubdirs(".", lang) << PATH_SEP;
+    searchPath << GetAllMsgCatalogSubdirs(".", lang) << wxPATH_SEP;
 
     // and finally add some standard ones
     searchPath
-        << GetAllMsgCatalogSubdirs("/usr/share/locale", lang) << PATH_SEP
-        << GetAllMsgCatalogSubdirs("/usr/lib/locale", lang) << PATH_SEP
+        << GetAllMsgCatalogSubdirs("/usr/share/locale", lang) << wxPATH_SEP
+        << GetAllMsgCatalogSubdirs("/usr/lib/locale", lang) << wxPATH_SEP
         << GetAllMsgCatalogSubdirs("/usr/local/share/locale", lang);
 
     return searchPath;
@@ -263,7 +263,7 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   if ( pszLcPath != NULL )
       strPath += pszLcPath + wxString(szDirPrefix) + MSG_PATH;
 #endif // 0
-  
+
   wxString searchPath = GetFullSearchPath(szDirPrefix);
   const char *sublocale = strchr(szDirPrefix, '_');
   if ( sublocale )
@@ -273,9 +273,9 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
       // exist
       searchPath << GetFullSearchPath(wxString(szDirPrefix).
                                       Left((size_t)(sublocale - szDirPrefix)))
-                 << PATH_SEP;
+                 << wxPATH_SEP;
   }
-  
+
   wxString strFile = szName;
   strFile += MSGCATALOG_EXTENSION;
 
@@ -297,7 +297,7 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   // open file
   wxLogVerbose(_("using catalog '%s' from '%s'."),
              szName, strFullName.c_str());
-  
+
   wxFile fileMsg(strFullName);
   if ( !fileMsg.IsOpened() )
     return FALSE;
@@ -313,10 +313,10 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
     wxDELETEA(m_pData);
     return FALSE;
   }
-    
+
   // examine header
   bool bValid = (size_t)nSize > sizeof(wxMsgCatalogHeader);
-  
+
   wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)m_pData;
   if ( bValid ) {
     // we'll have to swap all the integers if it's true
@@ -325,20 +325,20 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
     // check the magic number
     bValid = m_bSwapped || pHeader->magic == MSGCATALOG_MAGIC;
   }
-  
+
   if ( !bValid ) {
     // it's either too short or has incorrect magic number
     wxLogWarning(_("'%s' is not a valid message catalog."), strFullName.c_str());
-    
+
     wxDELETEA(m_pData);
     return FALSE;
   }
-      
+
   // initialize
   m_numStrings  = Swap(pHeader->numStrings);
-  m_pOrigTable  = (wxMsgTableEntry *)(m_pData + 
+  m_pOrigTable  = (wxMsgTableEntry *)(m_pData +
                    Swap(pHeader->ofsOrigTable));
-  m_pTransTable = (wxMsgTableEntry *)(m_pData + 
+  m_pTransTable = (wxMsgTableEntry *)(m_pData +
                    Swap(pHeader->ofsTransTable));
 
   m_nHashSize   = Swap(pHeader->nHashSize);
@@ -358,16 +358,16 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
     return NULL;
 
   if ( HasHashTable() ) {   // use hash table for lookup if possible
-    size_t32 nHashVal = GetHash(szOrig); 
+    size_t32 nHashVal = GetHash(szOrig);
     size_t32 nIndex   = nHashVal % m_nHashSize;
 
     size_t32 nIncr = 1 + (nHashVal % (m_nHashSize - 2));
-    
+
     while ( TRUE ) {
       size_t32 nStr = Swap(m_pHashTable[nIndex]);
       if ( nStr == 0 )
         return NULL;
-      
+
       if ( strcmp(szOrig, StringAtOfs(m_pOrigTable, nStr - 1)) == 0 )
         return StringAtOfs(m_pTransTable, nStr - 1);
 
@@ -408,8 +408,8 @@ wxLocale::wxLocale()
 }
 
 // NB: this function has (desired) side effect of changing current locale
-bool wxLocale::Init(const char *szName, 
-                    const char *szShort, 
+bool wxLocale::Init(const char *szName,
+                    const char *szShort,
                     const char *szLocale,
                     bool        bLoadDefault)
 {
@@ -430,10 +430,10 @@ bool wxLocale::Init(const char *szName,
     //       this wild guess is surely wrong
     m_strShort = wxToLower(szLocale[0]) + wxToLower(szLocale[1]);
   }
-  
+
   // save the old locale to be able to restore it later
-	m_pOldLocale = wxSetLocale(this);
-  
+  m_pOldLocale = wxSetLocale(this);
+
   // load the default catalog with wxWindows standard messages
   m_pMsgCat = NULL;
   bool bOk = TRUE;
@@ -469,7 +469,7 @@ wxLocale::~wxLocale()
 }
 
 // get the translation of given string in current locale
-const char *wxLocale::GetString(const char *szOrigString, 
+const char *wxLocale::GetString(const char *szOrigString,
                                 const char *szDomain) const
 {
   wxASSERT( szOrigString != NULL ); // would be pretty silly
@@ -479,7 +479,7 @@ const char *wxLocale::GetString(const char *szOrigString,
   wxMsgCatalog *pMsgCat;
   if ( szDomain != NULL ) {
     pMsgCat = FindCatalog(szDomain);
-    
+
     // does the catalog exist?
     if ( pMsgCat != NULL )
       pszTrans = pMsgCat->GetString(szOrigString);
@@ -505,7 +505,7 @@ const char *wxLocale::GetString(const char *szOrigString,
 #else // !debug
       wxSuppressTransErrors();
 #endif // debug/!debug
-      
+
       if ( szDomain != NULL )
       {
         wxLogWarning(_("string '%s' not found in domain '%s' for locale '%s'."),
@@ -533,7 +533,7 @@ wxMsgCatalog *wxLocale::FindCatalog(const char *szDomain) const
     if ( Stricmp(pMsgCat->GetName(), szDomain) == 0 )
       return pMsgCat;
   }
-  
+
   return NULL;
 }
 
@@ -547,19 +547,19 @@ bool wxLocale::IsLoaded(const char *szDomain) const
 bool wxLocale::AddCatalog(const char *szDomain)
 {
   wxMsgCatalog *pMsgCat = new wxMsgCatalog;
-  
+
   if ( pMsgCat->Load(m_strShort, szDomain) ) {
     // add it to the head of the list so that in GetString it will
     // be searched before the catalogs added earlier
     pMsgCat->m_pNext = m_pMsgCat;
     m_pMsgCat = pMsgCat;
-    
+
     return TRUE;
   }
   else {
     // don't add it because it couldn't be loaded anyway
     delete pMsgCat;
-    
+
     return FALSE;
   }
 }
@@ -596,12 +596,12 @@ wxLocale *g_pLocale = NULL;
 
 wxLocale *wxGetLocale()
 {
-	return g_pLocale;
+  return g_pLocale;
 }
 
 wxLocale *wxSetLocale(wxLocale *pLocale)
 {
-	wxLocale *pOld = g_pLocale;
-	g_pLocale = pLocale;
-	return pOld;
+  wxLocale *pOld = g_pLocale;
+  g_pLocale = pLocale;
+  return pOld;
 }

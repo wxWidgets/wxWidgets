@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "filefn.h"
+    #pragma implementation "filefn.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -18,11 +18,11 @@
 #include "wx/defs.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
+    #include "wx/defs.h"
 #endif
 
 #include "wx/utils.h"
@@ -46,42 +46,42 @@
 #include <time.h>
 
 #ifndef __MWERKS__
-#include <sys/types.h>
-#include <sys/stat.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
 #else
-#include <stat.h>
-#include <unistd.h>
+    #include <stat.h>
+    #include <unistd.h>
 #endif
 
 #ifdef __UNIX__
-#include <unistd.h>
-#include <dirent.h>
+    #include <unistd.h>
+    #include <dirent.h>
 #endif
 
 #ifdef __WINDOWS__
 #if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
-#include <direct.h>
-#include <dos.h>
-#endif
-#endif
+    #include <direct.h>
+    #include <dos.h>
+#endif // __WINDOWS__
+#endif // native Win compiler
 
 #ifdef __GNUWIN32__
-#ifndef __TWIN32__
-#include <sys/unistd.h>
-#endif
+    #ifndef __TWIN32__
+        #include <sys/unistd.h>
+    #endif
 
-#define stricmp strcasecmp
+    #define stricmp strcasecmp
 #endif
 
 #ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
                     // this (3.1 I believe) and how to test for it.
                     // If this works for Borland 4.0 as well, then no worries.
-#include <dir.h>
+    #include <dir.h>
 #endif
 
 #ifdef __SALFORDC__
-#include <dir.h>
-#include <unix.h>
+    #include <dir.h>
+    #include <unix.h>
 #endif
 
 #include "wx/setup.h"
@@ -89,29 +89,29 @@
 
 // No, Cygwin doesn't appear to have fnmatch.h after all.
 #if defined(HAVE_FNMATCH_H)
-#include   "fnmatch.h"
+    #include "fnmatch.h"
 #endif
 
 #ifdef __WINDOWS__
-#include "windows.h"
+    #include "windows.h"
 #endif
 
 #define _MAXPATHLEN 500
 
 extern char *wxBuffer;
 #ifdef __WXMAC__
-extern char gwxMacFileName[] ;
-extern char gwxMacFileName2[] ;
-extern char gwxMacFileName3[] ;
+    extern char gwxMacFileName[] ;
+    extern char gwxMacFileName2[] ;
+    extern char gwxMacFileName3[] ;
 #endif
 
 #if !USE_SHARED_LIBRARIES
-IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
+    IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
 #endif
 
 void wxPathList::Add (const wxString& path)
 {
-  wxStringList::Add ((char *)(const char *)path);
+    wxStringList::Add ((char *)(const char *)path);
 }
 
 // Add paths e.g. from the PATH environment variable
@@ -148,13 +148,12 @@ void wxPathList::AddEnvList (const wxString& envVariable)
 // to the list if not already there.
 void wxPathList::EnsureFileAccessible (const wxString& path)
 {
-  wxString path1(path);
-  char *path_only = wxPathOnly (WXSTRINGCAST path1);
-  if (path_only)
-  {
-      if (!Member (wxString(path_only)))
-            Add (wxString(path_only));
-  }
+    wxString path_only(wxPathOnly(path));
+    if ( !path_only.IsEmpty() )
+    {
+        if ( !Member(path_only) )
+            Add(path_only);
+    }
 }
 
 bool wxPathList::Member (const wxString& path)
@@ -391,7 +390,7 @@ char *wxCopyAbsolutePath(const wxString& filename)
   if (! IsAbsolutePath(wxExpandPath(wxBuffer, filename))) {
     char    buf[_MAXPATHLEN];
     buf[0] = '\0';
-    wxGetWorkingDirectory(buf, sizeof(buf)/sizeof(char));
+    wxGetWorkingDirectory(buf, WXSIZEOF(buf));
     char ch = buf[strlen(buf) - 1];
 #ifdef __WXMSW__
     if (ch != '\\' && ch != '/')
@@ -1135,268 +1134,280 @@ char *wxGetTempFileName(const wxString& prefix, char *buf)
 // Flags are reserved for future use.
 
 #ifndef __VMS__
-static DIR *wxDirStream = (DIR *) NULL;
-static char *wxFileSpec = (char *) NULL;
-static int wxFindFileFlags = 0;
+    static DIR *gs_dirStream = (DIR *) NULL;
+    static wxString gs_strFileSpec;
+    static int gs_findFlags = 0;
 #endif
 
-char *wxFindFirstFile(const char *spec, int flags)
+wxString wxFindFirstFile(const char *spec, int flags)
 {
+    wxString result;
+
 #ifndef __VMS__
-  if (wxDirStream)
-    closedir(wxDirStream); // edz 941103: better housekeping
+    if (gs_dirStream)
+        closedir(gs_dirStream); // edz 941103: better housekeping
 
-  wxFindFileFlags = flags;
+    gs_findFlags = flags;
 
-  if (wxFileSpec)
-    delete[] wxFileSpec;
-  wxFileSpec = copystring(spec);
+    gs_strFileSpec = spec;
 
-  // Find path only so we can concatenate
-  // found file onto path
-  char *p = wxPathOnly(wxFileSpec);
+    // Find path only so we can concatenate
+    // found file onto path
+    wxString path(wxPathOnly(gs_strFileSpec));
 
-  /* MATTHEW: special case: path is really "/" */
-  if (p && !*p && *wxFileSpec == '/')
-    p = "/";
-  /* MATTHEW: p is NULL => Local directory */
-  if (!p)
-    p = ".";
+    // special case: path is really "/"
+    if ( !path && gs_strFileSpec[0u] == '/' )
+        path = '/';
+    // path is empty => Local directory
+    if ( !path )
+        path = '.';
 
-  if ((wxDirStream=opendir(p))==NULL)
-    return (char *) NULL;
+    gs_dirStream = opendir(path);
+    if ( !gs_dirStream )
+    {
+        wxLogSysError(_("Can not enumerate files in directory '%s'"),
+                      path.c_str());
+    }
+    else
+    {
+        result = wxFindNextFile();
+    }
+#endif // !VMS
 
- /* MATTHEW: [5] wxFindNextFile can do the rest of the work */
-  return wxFindNextFile();
-#endif
- // ifndef __VMS__
-  return (char *) NULL;
+    return result;
 }
 
-char *wxFindNextFile(void)
+wxString wxFindNextFile()
 {
+    wxString result;
+
 #ifndef __VMS__
-  static char buf[400]; // FIXME static buffer
+    wxCHECK_MSG( gs_dirStream, result, "must call wxFindFirstFile first" );
 
-  /* MATTHEW: [2] Don't crash if we read too many times */
-  if (!wxDirStream)
-    return (char *) NULL;
+    // Find path only so we can concatenate
+    // found file onto path
+    wxString path(wxPathOnly(gs_strFileSpec));
+    wxString name(wxFileNameFromPath(gs_strFileSpec));
 
-  // Find path only so we can concatenate
-  // found file onto path
-  char *p = wxPathOnly(wxFileSpec);
-  char *n = wxFileNameFromPath(wxFileSpec);
+    /* MATTHEW: special case: path is really "/" */
+    if ( !path && gs_strFileSpec[0u] == '/')
+        path = '/';
 
-  /* MATTHEW: special case: path is really "/" */
-  if (p && !*p && *wxFileSpec == '/')
-    p = "/";
+    // Do the reading
+    struct dirent *nextDir;
+    for ( nextDir = readdir(gs_dirStream);
+          nextDir != NULL;
+          nextDir = readdir(gs_dirStream) )
+    {
+        if (wxMatchWild(name, nextDir->d_name))
+        {
+            result.Empty();
+            if ( !path.IsEmpty() )
+            {
+                result = path;
+                if ( path != '/' )
+                    result += '/';
+            }
 
-  // Do the reading
-  struct dirent *nextDir;
-  for (nextDir = readdir(wxDirStream); nextDir != NULL; nextDir = readdir(wxDirStream))
-  {
+            result += nextDir->d_name;
 
-    /* MATTHEW: [5] Only return "." and ".." when they match, and only return
-       directories when flags & wxDIR */
-    if (wxMatchWild(n, nextDir->d_name)) {
-      bool isdir;
+            // Only return "." and ".." when they match
+            bool isdir;
+            if ( (strcmp(nextDir->d_name, ".") == 0) ||
+                 (strcmp(nextDir->d_name, "..") == 0))
+            {
+                if ( (gs_findFlags & wxDIR) != 0 )
+                    isdir = TRUE;
+                else
+                    continue;
+            }
+            else
+                isdir = wxDirExists(result);
 
-      buf[0] = 0;
-      if (p && *p) {
-        strcpy(buf, p);
-        if (strcmp(p, "/") != 0)
-          strcat(buf, "/");
-      }
-      strcat(buf, nextDir->d_name);
-
-      if ((strcmp(nextDir->d_name, ".") == 0) ||
-          (strcmp(nextDir->d_name, "..") == 0)) {
-        if (wxFindFileFlags && !(wxFindFileFlags & wxDIR))
-          continue;
-        isdir = TRUE;
-      } else
-        isdir = wxDirExists(buf);
-
-      if (!wxFindFileFlags
-          || ((wxFindFileFlags & wxDIR) && isdir)
-          || ((wxFindFileFlags & wxFILE) && !isdir))
-        return buf;
+            // and only return directories when flags & wxDIR
+            if ( !gs_findFlags ||
+                 ((gs_findFlags & wxDIR) && isdir) ||
+                 ((gs_findFlags & wxFILE) && !isdir) )
+            {
+                return result;
+            }
+        }
     }
-  }
-  closedir(wxDirStream);
-  wxDirStream = (DIR *) NULL;
-#endif
- // ifndef __VMS__
 
-  return (char *) NULL;
+    result.Empty(); // not found
+
+    closedir(gs_dirStream);
+    gs_dirStream = (DIR *) NULL;
+#endif // !VMS
+
+    return result;
 }
 
 #elif defined(__WXMSW__)
 
 #ifdef __WIN32__
-HANDLE wxFileStrucHandle = INVALID_HANDLE_VALUE;
-WIN32_FIND_DATA wxFileStruc;
-#else
-#ifdef __BORLANDC__
-static struct ffblk wxFileStruc;
-#else
-static struct _find_t wxFileStruc;
-#endif
-#endif
-static wxString wxFileSpec = "";
-static int wxFindFileFlags;
+    static HANDLE gs_hFileStruct = INVALID_HANDLE_VALUE;
+    static WIN32_FIND_DATA gs_findDataStruct;
+#else // Win16
+    #ifdef __BORLANDC__
+        static struct ffblk gs_findDataStruct;
+    #else
+        static struct _find_t gs_findDataStruct;
+    #endif // Borland
+#endif // Win32/16
 
-char *wxFindFirstFile(const char *spec, int flags)
+static wxString gs_strFileSpec;
+static int gs_findFlags = 0;
+
+wxString wxFindFirstFile(const char *spec, int flags)
 {
-  wxFileSpec = spec;
-  wxFindFileFlags = flags; /* MATTHEW: [5] Remember flags */
+    wxString result;
 
-  // Find path only so we can concatenate
-  // found file onto path
-  wxString path1(wxFileSpec);
-  char *p = wxPathOnly(WXSTRINGCAST path1);
-  if (p && (strlen(p) > 0))
-         strcpy(wxBuffer, p);
-  else
-         wxBuffer[0] = 0;
+    gs_strFileSpec = spec;
+    gs_findFlags = flags; /* MATTHEW: [5] Remember flags */
+
+    // Find path only so we can concatenate found file onto path
+    wxString path(wxPathOnly(gs_strFileSpec));
+    if ( !path.IsEmpty() )
+        result << path << '\\';
 
 #ifdef __WIN32__
-  if (wxFileStrucHandle != INVALID_HANDLE_VALUE)
-         FindClose(wxFileStrucHandle);
+    if ( gs_hFileStruct != INVALID_HANDLE_VALUE )
+        FindClose(gs_hFileStruct);
 
-  wxFileStrucHandle = ::FindFirstFile(WXSTRINGCAST spec, &wxFileStruc);
+    gs_hFileStruct = ::FindFirstFile(WXSTRINGCAST spec, &gs_findDataStruct);
 
-  if (wxFileStrucHandle == INVALID_HANDLE_VALUE)
-         return NULL;
+    if ( gs_hFileStruct == INVALID_HANDLE_VALUE )
+    {
+        wxLogSysError(_("Can not enumerate files in directory '%s'"),
+                      path.c_str());
 
-  bool isdir = !!(wxFileStruc.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+        result.Empty();
 
-  if (isdir && !(flags & wxDIR))
-         return wxFindNextFile();
-  else if (!isdir && flags && !(flags & wxFILE))
-         return wxFindNextFile();
+        return result;
+    }
 
-  if (wxBuffer[0] != 0)
-         strcat(wxBuffer, "\\");
-  strcat(wxBuffer, wxFileStruc.cFileName);
-  return wxBuffer;
-#else
+    bool isdir = !!(gs_findDataStruct.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
 
-  int flag = _A_NORMAL;
-  if (flags & wxDIR) /* MATTHEW: [5] Use & */
-    flag = _A_SUBDIR;
-
-#ifdef __BORLANDC__
-  if (findfirst(WXSTRINGCAST spec, &wxFileStruc, flag) == 0)
-#else
-  if (_dos_findfirst(WXSTRINGCAST spec, flag, &wxFileStruc) == 0)
-#endif
-  {
-    /* MATTHEW: [5] Check directory flag */
-    char attrib;
-
-#ifdef __BORLANDC__
-    attrib = wxFileStruc.ff_attrib;
-#else
-    attrib = wxFileStruc.attrib;
-#endif
-
-    if (attrib & _A_SUBDIR) {
-      if (!(wxFindFileFlags & wxDIR))
+    if (isdir && !(flags & wxDIR))
         return wxFindNextFile();
-    } else if (wxFindFileFlags && !(wxFindFileFlags & wxFILE))
+    else if (!isdir && flags && !(flags & wxFILE))
+        return wxFindNextFile();
+
+    result += gs_findDataStruct.cFileName;
+
+    return result;
+#else
+    int flag = _A_NORMAL;
+    if (flags & wxDIR) /* MATTHEW: [5] Use & */
+        flag = _A_SUBDIR;
+
+#ifdef __BORLANDC__
+    if (findfirst(WXSTRINGCAST spec, &gs_findDataStruct, flag) == 0)
+#else
+        if (_dos_findfirst(WXSTRINGCAST spec, flag, &gs_findDataStruct) == 0)
+#endif
+        {
+            /* MATTHEW: [5] Check directory flag */
+            char attrib;
+
+#ifdef __BORLANDC__
+            attrib = gs_findDataStruct.ff_attrib;
+#else
+            attrib = gs_findDataStruct.attrib;
+#endif
+
+            if (attrib & _A_SUBDIR) {
+                if (!(gs_findFlags & wxDIR))
+                    return wxFindNextFile();
+            } else if (gs_findFlags && !(gs_findFlags & wxFILE))
                 return wxFindNextFile();
 
-         if (wxBuffer[0] != 0)
-                strcat(wxBuffer, "\\");
-
+            result +=
 #ifdef __BORLANDC__
-         strcat(wxBuffer, wxFileStruc.ff_name);
+                    gs_findDataStruct.ff_name
 #else
-         strcat(wxBuffer, wxFileStruc.name);
+                    gs_findDataStruct.name
 #endif
-         return wxBuffer;
-  }
-  else
-    return NULL;
+                    ;
+        }
 #endif // __WIN32__
+
+    return result;
 }
 
-char *wxFindNextFile(void)
+wxString wxFindNextFile()
 {
-  // Find path only so we can concatenate
-  // found file onto path
-  wxString p2(wxFileSpec);
-  char *p = wxPathOnly(WXSTRINGCAST p2);
-  if (p && (strlen(p) > 0))
-         strcpy(wxBuffer, p);
-  else
-         wxBuffer[0] = 0;
+    wxString result;
 
- try_again:
+    // Find path only so we can concatenate found file onto path
+    wxString path(wxPathOnly(gs_strFileSpec));
+
+try_again:
 
 #ifdef __WIN32__
-  if (wxFileStrucHandle == INVALID_HANDLE_VALUE)
-         return NULL;
+    if (gs_hFileStruct == INVALID_HANDLE_VALUE)
+        return NULL;
 
-  bool success = (FindNextFile(wxFileStrucHandle, &wxFileStruc) != 0);
-  if (!success) {
-                FindClose(wxFileStrucHandle);
-      wxFileStrucHandle = INVALID_HANDLE_VALUE;
-                return NULL;
-  }
+    bool success = (FindNextFile(gs_hFileStruct, &gs_findDataStruct) != 0);
+    if (!success)
+    {
+        FindClose(gs_hFileStruct);
+        gs_hFileStruct = INVALID_HANDLE_VALUE;
+    }
+    else
+    {
+        bool isdir = !!(gs_findDataStruct.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
 
-  bool isdir = !!(wxFileStruc.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+        if (isdir && !(gs_findFlags & wxDIR))
+            goto try_again;
+        else if (!isdir && gs_findFlags && !(gs_findFlags & wxFILE))
+            goto try_again;
 
-  if (isdir && !(wxFindFileFlags & wxDIR))
-    goto try_again;
-  else if (!isdir && wxFindFileFlags && !(wxFindFileFlags & wxFILE))
-         goto try_again;
+        if ( !path.IsEmpty() )
+            result << path << '\\';
+        result << gs_findDataStruct.cFileName;
+    }
 
-  if (wxBuffer[0] != 0)
-    strcat(wxBuffer, "\\");
-  strcat(wxBuffer, wxFileStruc.cFileName);
-  return wxBuffer;
-#else
-
-#ifdef __BORLANDC__
-  if (findnext(&wxFileStruc) == 0)
-#else
-  if (_dos_findnext(&wxFileStruc) == 0)
-#endif
-  {
-    /* MATTHEW: [5] Check directory flag */
-    char attrib;
+    return result;
+#else // Win16
 
 #ifdef __BORLANDC__
-    attrib = wxFileStruc.ff_attrib;
+    if (findnext(&gs_findDataStruct) == 0)
 #else
-    attrib = wxFileStruc.attrib;
+        if (_dos_findnext(&gs_findDataStruct) == 0)
 #endif
+        {
+            /* MATTHEW: [5] Check directory flag */
+            char attrib;
 
-    if (attrib & _A_SUBDIR) {
-      if (!(wxFindFileFlags & wxDIR))
-        goto try_again;
-    } else if (wxFindFileFlags && !(wxFindFileFlags & wxFILE))
-      goto try_again;
-
-
-         if (wxBuffer[0] != 0)
-      strcat(wxBuffer, "\\");
 #ifdef __BORLANDC__
-         strcat(wxBuffer, wxFileStruc.ff_name);
+            attrib = gs_findDataStruct.ff_attrib;
 #else
-         strcat(wxBuffer, wxFileStruc.name);
+            attrib = gs_findDataStruct.attrib;
 #endif
-         return wxBuffer;
-  }
-  else
-    return NULL;
+
+            if (attrib & _A_SUBDIR) {
+                if (!(gs_findFlags & wxDIR))
+                    goto try_again;
+            } else if (gs_findFlags && !(gs_findFlags & wxFILE))
+                goto try_again;
+
+
+            result +=
+#ifdef __BORLANDC__
+                      gs_findDataStruct.ff_name
+#else
+                      gs_findDataStruct.name
 #endif
+                      ;
+        }
+#endif // Win32/16
+
+    return result;
 }
 
-#endif
- // __WXMSW__
+#endif // Unix/Windows
 
 // Get current working directory.
 // If buf is NULL, allocates space using new, else
@@ -1414,6 +1425,11 @@ char *wxGetWorkingDirectory(char *buf, int sz)
     buf[1] = '\0';
   }
   return buf;
+}
+
+wxString wxGetCwd()
+{
+    return wxString(wxGetWorkingDirectory());
 }
 
 bool wxSetWorkingDirectory(const wxString& d)
@@ -1490,11 +1506,14 @@ bool wxFindFileInPath(wxString *pStr, const char *pszPath, const char *pszFile)
 
   wxString strFile;
   char *pc;
-  for ( pc = strtok(szPath, PATH_SEP); pc; pc = strtok((char *) NULL, PATH_SEP) ) {
+  for ( pc = strtok(szPath, wxPATH_SEP);
+        pc != NULL;
+        pc = strtok((char *) NULL, wxPATH_SEP) )
+  {
     // search for the file in this directory
     strFile = pc;
     if ( !wxEndsWithPathSeparator(pc) )
-      strFile += FILE_SEP_PATH;
+      strFile += wxFILE_SEP_PATH;
     strFile += pszFile;
 
     if ( FileExists(strFile) ) {
@@ -1515,9 +1534,9 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
 {
   wxCHECK_RET( pszFileName, "NULL file name in wxSplitPath" );
 
-  const char *pDot = strrchr(pszFileName, FILE_SEP_EXT);
-  const char *pSepUnix = strrchr(pszFileName, FILE_SEP_PATH_UNIX);
-  const char *pSepDos = strrchr(pszFileName, FILE_SEP_PATH_DOS);
+  const char *pDot = strrchr(pszFileName, wxFILE_SEP_EXT);
+  const char *pSepUnix = strrchr(pszFileName, wxFILE_SEP_PATH_UNIX);
+  const char *pSepDos = strrchr(pszFileName, wxFILE_SEP_PATH_DOS);
 
   // take the last of the two: nPosUnix containts the last slash in the
   // filename

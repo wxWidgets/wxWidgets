@@ -13,7 +13,7 @@
 #define   _FILEFN_H_
 
 #ifdef __GNUG__
-#pragma interface "filefn.h"
+    #pragma interface "filefn.h"
 #endif
 
 #include <wx/list.h>
@@ -24,9 +24,9 @@
 
 // define off_t
 #ifndef __WXMAC__
-#include  <sys/types.h>
+    #include  <sys/types.h>
 #else
-typedef long off_t;
+    typedef long off_t;
 #endif
 
 #if defined(__VISUALC__) || defined(__MWERKS__)
@@ -39,11 +39,12 @@ typedef long off_t;
 
 const off_t wxInvalidOffset = (off_t)-1;
 
-typedef enum {
+enum wxSeekMode
+{
   wxFromStart,
   wxFromCurrent,
   wxFromEnd
-} wxSeekMode;
+};
 
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
@@ -68,7 +69,6 @@ WXDLLEXPORT wxString wxFileNameFromPath(const wxString& path);
 #define FileNameFromPath wxFileNameFromPath
 
 // Get directory
-WXDLLEXPORT char* wxPathOnly(char *path);
 WXDLLEXPORT wxString wxPathOnly(const wxString& path);
 #define PathOnly wxPathOnly
 
@@ -86,6 +86,7 @@ WXDLLEXPORT void wxUnix2DosFilename(char *s);
   WXDLLEXPORT void wxMac2UnixFilename(char *s);
   WXDLLEXPORT void wxUnix2MacFilename(char *s);
 #endif
+
 // Strip the extension, in situ
 WXDLLEXPORT void wxStripExtension(char *buffer);
 WXDLLEXPORT void wxStripExtension(wxString& buffer);
@@ -113,8 +114,8 @@ WXDLLEXPORT char* wxCopyAbsolutePath(const wxString& path);
 // Flags are reserved for future use.
 #define wxFILE  1
 #define wxDIR   2
-WXDLLEXPORT char* wxFindFirstFile(const char *spec, int flags = wxFILE);
-WXDLLEXPORT char* wxFindNextFile(void);
+WXDLLEXPORT wxString wxFindFirstFile(const char *spec, int flags = wxFILE);
+WXDLLEXPORT wxString wxFindNextFile();
 
 // Does the pattern contain wildcards?
 WXDLLEXPORT bool wxIsWild(const wxString& pattern);
@@ -142,6 +143,9 @@ WXDLLEXPORT bool wxRenameFile(const wxString& file1, const wxString& file2);
 // IMPORTANT NOTE getcwd is know not to work under some releases
 // of Win32s 1.3, according to MS release notes!
 WXDLLEXPORT char* wxGetWorkingDirectory(char *buf = (char *) NULL, int sz = 1000);
+// new and preferred version of wxGetWorkingDirectory
+// NB: can't have the same name because of overloading ambiguity
+WXDLLEXPORT wxString wxGetCwd();
 
 // Set working directory
 WXDLLEXPORT bool wxSetWorkingDirectory(const wxString& d);
@@ -153,23 +157,23 @@ WXDLLEXPORT bool wxMkdir(const wxString& dir);
 WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 
 // separators in file names
-#define FILE_SEP_EXT        '.'
-#define FILE_SEP_DSK        ':'
-#define FILE_SEP_PATH_DOS   '\\'
-#define FILE_SEP_PATH_UNIX  '/'
+#define wxFILE_SEP_EXT        '.'
+#define wxFILE_SEP_DSK        ':'
+#define wxFILE_SEP_PATH_DOS   '\\'
+#define wxFILE_SEP_PATH_UNIX  '/'
 
 // separator in the path list (as in PATH environment variable)
 // NB: these are strings and not characters on purpose!
-#define PATH_SEP_DOS        ";"
-#define PATH_SEP_UNIX       ":"
+#define wxPATH_SEP_DOS        ";"
+#define wxPATH_SEP_UNIX       ":"
 
 // platform independent versions
 #ifdef  __UNIX__
-  #define FILE_SEP_PATH     FILE_SEP_PATH_UNIX
-  #define PATH_SEP          PATH_SEP_UNIX
+  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
+  #define wxPATH_SEP          wxPATH_SEP_UNIX
 #else   // Windows
-  #define FILE_SEP_PATH     FILE_SEP_PATH_DOS
-  #define PATH_SEP          PATH_SEP_DOS
+  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
+  #define wxPATH_SEP          wxPATH_SEP_DOS
 #endif  // Unix/Windows
 
 // this is useful for wxString::IsSameAs(): to compare two file names use
@@ -182,7 +186,7 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 
 // is the char a path separator?
 inline bool wxIsPathSeparator(char c)
-  { return c == FILE_SEP_PATH_DOS || c == FILE_SEP_PATH_UNIX; }
+  { return c == wxFILE_SEP_PATH_DOS || c == wxFILE_SEP_PATH_UNIX; }
 
 // does the string ends with path separator?
 WXDLLEXPORT bool wxEndsWithPathSeparator(const char *pszFileName);
@@ -209,19 +213,20 @@ WXDLLEXPORT wxString wxGetOSDirectory();
 class WXDLLEXPORT wxPathList : public wxStringList
 {
 public:
-    void AddEnvList(const wxString& envVariable);    // Adds all paths in environment variable
+    // Adds all paths in environment variable
+    void AddEnvList(const wxString& envVariable);
 
     void Add(const wxString& path);
     // Avoid compiler warning
     wxNode *Add(const char *s) { return wxStringList::Add(s); }
-
-    wxString FindValidPath(const wxString& filename);   // Find the first full path
-    // for which the file exists
-    wxString FindAbsoluteValidPath(const wxString& filename);   // Find the first full path
-    // for which the file exists; ensure it's an absolute
-    // path that gets returned.
-    void EnsureFileAccessible(const wxString& path); // Given full path and filename,
-    // add path to list
+    // Find the first full path for which the file exists
+    wxString FindValidPath(const wxString& filename);
+    // Find the first full path for which the file exists; ensure it's an
+    // absolute path that gets returned.
+    wxString FindAbsoluteValidPath(const wxString& filename);
+    // Given full path and filename, add path to list
+    void EnsureFileAccessible(const wxString& path);
+    // Returns TRUE if the path is in the list
     bool Member(const wxString& path);
 
 private:
