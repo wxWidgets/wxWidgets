@@ -5802,6 +5802,53 @@ static PyObject *_wrap_wxScrolledWindow_SetTargetWindow(PyObject *self, PyObject
     return _resultobj;
 }
 
+#define wxScrolledWindow_GetViewStart(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetViewStart(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxScrolledWindow_GetViewStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrolledWindow * _arg0;
+    int * _arg1;
+    int  temp;
+    int * _arg2;
+    int  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxScrolledWindow_GetViewStart",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_GetViewStart. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrolledWindow_GetViewStart(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
 #define wxScrolledWindow_ViewStart(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ViewStart(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxScrolledWindow_ViewStart(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -8005,7 +8052,7 @@ static PyObject *_wrap_new_wxMenuItem(PyObject *self, PyObject *args, PyObject *
     PyObject * _resultobj;
     wxMenuItem * _result;
     wxMenu * _arg0 = (wxMenu *) NULL;
-    int  _arg1 = (int ) ID_SEPARATOR;
+    int  _arg1 = (int ) wxID_SEPARATOR;
     wxString * _arg2 = (wxString *) &wxPyEmptyStr;
     wxString * _arg3 = (wxString *) &wxPyEmptyStr;
     bool  _arg4 = (bool ) FALSE;
@@ -8811,6 +8858,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxScrolledWindow_CalcUnscrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcUnscrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_CalcScrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcScrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_ViewStart", (PyCFunction) _wrap_wxScrolledWindow_ViewStart, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_GetViewStart", (PyCFunction) _wrap_wxScrolledWindow_GetViewStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_SetTargetWindow", (PyCFunction) _wrap_wxScrolledWindow_SetTargetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_SetScrollPageSize", (PyCFunction) _wrap_wxScrolledWindow_SetScrollPageSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_SetScrollbars", (PyCFunction) _wrap_wxScrolledWindow_SetScrollbars, METH_VARARGS | METH_KEYWORDS },

@@ -111,6 +111,24 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 
 extern wxValidator wxPyDefaultValidator;
 
+    int wxCALLBACK wxPyTreeCtrl_SortItems(long item1, long item2, long funcPtr) {
+        int retval = 0;
+        PyObject* func = (PyObject*)funcPtr;
+        bool doSave = wxPyRestoreThread();
+
+        PyObject* args = Py_BuildValue("(ii)", item1, item2);
+        PyObject* result = PyEval_CallObject(func, args);
+        Py_DECREF(args);
+        if (result) {
+            retval = PyInt_AsLong(result);
+            Py_DECREF(result);
+        }
+
+        wxPySaveThread(doSave);
+        return retval;
+    }
+
+
 class wxPyTreeItemData : public wxTreeItemData {
 public:
     wxPyTreeItemData(PyObject* obj = NULL) {
@@ -2847,6 +2865,43 @@ static PyObject *_wrap_wxListCtrl_SetWindowStyleFlag(PyObject *self, PyObject *a
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+static bool  wxListCtrl_SortItems(wxListCtrl *self,PyObject * func) {
+            if (!PyCallable_Check(func))
+                return FALSE;
+
+            return self->SortItems(wxPyTreeCtrl_SortItems, (long)func);
+        }
+static PyObject *_wrap_wxListCtrl_SortItems(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxListCtrl * _arg0;
+    PyObject * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","func", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListCtrl_SortItems",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_SortItems. Expected _wxListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxListCtrl_SortItems(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5788,6 +5843,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeItemId_IsOk", (PyCFunction) _wrap_wxTreeItemId_IsOk, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxTreeItemId", (PyCFunction) _wrap_delete_wxTreeItemId, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTreeItemId", (PyCFunction) _wrap_new_wxTreeItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl_SortItems", (PyCFunction) _wrap_wxListCtrl_SortItems, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SetWindowStyleFlag", (PyCFunction) _wrap_wxListCtrl_SetWindowStyleFlag, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SetSingleStyle", (PyCFunction) _wrap_wxListCtrl_SetSingleStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SetItemText", (PyCFunction) _wrap_wxListCtrl_SetItemText, METH_VARARGS | METH_KEYWORDS },

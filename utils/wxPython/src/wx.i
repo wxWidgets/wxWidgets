@@ -108,7 +108,7 @@ public:
 
 %inline %{
     void wxApp_CleanUp() {
-        wxApp::CleanUp();
+        __wxCleanup();
     }
 %}
 

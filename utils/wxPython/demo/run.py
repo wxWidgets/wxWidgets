@@ -72,12 +72,12 @@ class RunDemoApp(wxApp):
 #----------------------------------------------------------------------------
 
 
-def main():
-    if len(sys.argv) != 2:
+def main(argv):
+    if len(argv) != 2:
         print "Please specify a demo module name on the command-line"
         raise SystemExit
 
-    name = sys.argv[1]
+    name = argv[1]
     module = __import__(name)
 
 
@@ -87,6 +87,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
 
 

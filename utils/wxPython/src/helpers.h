@@ -60,6 +60,7 @@ extern wxPyApp *wxPythonApp;
 
 void      __wxPreStart();
 PyObject* __wxStart(PyObject*, PyObject* args);
+void      __wxCleanup();
 
 extern PyObject* wxPython_dict;
 PyObject* __wxSetDictionary(PyObject*, PyObject* args);

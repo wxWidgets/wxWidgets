@@ -114,9 +114,14 @@ static char* wxStringErrorMsg = "string type is required for parameter";
     }
 
 #ifdef __WXMSW__
-    wxBitmap* wxBitmapFromData(char* data, long type,
+    wxBitmap* wxBitmapFromData(PyObject* data, long type,
                                int width, int height, int depth = 1) {
-        return new wxBitmap((void*)data, type, width, height, depth);
+        if (! PyString_Check(data)) {
+            PyErr_SetString(PyExc_TypeError, "Expected string object");
+            return NULL;
+        }
+
+        return new wxBitmap((void*)PyString_AsString(data), type, width, height, depth);
     }
 #endif
 
@@ -6793,7 +6798,7 @@ static PyObject *_wrap_new_wxImageList(PyObject *self, PyObject *args, PyObject 
     wxImageList * _result;
     int  _arg0;
     int  _arg1;
-    int  _arg2 = (int ) FALSE;
+    int  _arg2 = (int ) TRUE;
     int  _arg3 = (int ) 1;
     char *_kwnames[] = { "width","height","mask","initialCount", NULL };
     char _ptemp[128];

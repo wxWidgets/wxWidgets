@@ -32,6 +32,9 @@
 //#include <gdk/gdk.h>
 //#include <gdk/gdkx.h>
 //#include <gtk/gtkwindow.h>
+
+extern GtkWidget *wxRootWindow;
+
 #endif
 
 
@@ -84,42 +87,27 @@ bool wxPyApp::OnInit(void) {
 }
 
 int  wxPyApp::MainLoop(void) {
-    int retval = wxApp::MainLoop();
-//#    AfterMainLoop();
-    wxPythonApp->OnExit();  //#
+    int retval = 0;
+
+    DeletePendingObjects();
+#ifdef __WXGTK__
+    m_initialized = wxTopLevelWindows.GetCount() != 0;
+#endif
+
+    if (Initialized()) {
+        retval = wxApp::MainLoop();
+        wxPythonApp->OnExit();
+    }
     return retval;
 }
 
 
-//#  void wxPyApp::AfterMainLoop(void) {
-//      // more stuff from wxEntry...
-
-//      if (wxPythonApp->GetTopWindow()) {
-//          // Forcibly delete the window.
-//          if (wxPythonApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame)) ||
-//              wxPythonApp->GetTopWindow()->IsKindOf(CLASSINFO(wxDialog))) {
-
-//              wxPythonApp->GetTopWindow()->Close(TRUE);
-//              wxPythonApp->DeletePendingObjects();
-//          }
-//          else {
-//              delete wxPythonApp->GetTopWindow();
-//              wxPythonApp->SetTopWindow(NULL);
-//          }
-//      }
-//  #ifdef __WXGTK__
-//        wxPythonApp->DeletePendingObjects();
-//  #endif
-
-//      wxPythonApp->OnExit();
-//      wxApp::CleanUp();
-//  //    delete wxPythonApp;
-//  }
-
-
 //---------------------------------------------------------------------
-// a few native methods to add to the module
 //----------------------------------------------------------------------
+
+int wxEntryStart( int argc, char *argv[] );
+int wxEntryInitGui();
+void wxEntryCleanup();
 
 
 // This is where we pick up the first part of the wxEntry functionality...
@@ -137,6 +125,8 @@ void __wxPreStart()
     if (wxTopLevelWindows.Number() > 0)
         return;
 
+#if 0
+
 #ifdef __WXMSW__
     wxApp::Initialize();
 #endif
@@ -150,20 +140,52 @@ void __wxPreStart()
         argv[x] = PyString_AsString(PyList_GetItem(sysargv, x));
     argv[argc] = NULL;
 
+#if wxUSE_THREADS
+    /* GTK 1.2 up to version 1.2.3 has broken threads */
+    if ((gtk_major_version == 1) &&
+        (gtk_minor_version == 2) &&
+        (gtk_micro_version < 4))
+    {
+        printf( "wxWindows warning: GUI threading disabled due to outdated GTK version\n" );
+    }
+    else
+    {
+        g_thread_init(NULL);
+    }
+#endif
+
     gtk_set_locale();
+
 #if wxUSE_WCHAR_T
     if (!wxOKlibc()) wxConvCurrent = &wxConvLocal;
 #else
     if (!wxOKlibc()) wxConvCurrent = (wxMBConv*) NULL;
 #endif
+
+    gdk_threads_enter();
     gtk_init( &argc, &argv );
     wxSetDetectableAutoRepeat( TRUE );
     delete [] argv;
 
-    wxApp::Initialize();     // may return FALSE. Should we check?
+    if (!wxApp::Initialize())
+    {
+        gdk_threads_leave();
+    }
 #endif
+#endif // 0
 
+
+    PyObject* sysargv = PySys_GetObject("argv");
+    int argc = PyList_Size(sysargv);
+    char** argv = new char*[argc+1];
+    int x;
+    for(x=0; x<argc; x++)
+        argv[x] = PyString_AsString(PyList_GetItem(sysargv, x));
+    argv[argc] = NULL;
+
+    wxEntryStart(argc, argv);
 }
+
 
 
 #ifdef WXP_WITH_THREAD
@@ -197,8 +219,8 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     // This is the next part of the wxEntry functionality...
     wxPythonApp->argc = 0;
     wxPythonApp->argv = NULL;
-    wxPythonApp->OnInitGui();
 
+    wxEntryInitGui();
 
     // Call the Python App's OnInit function
     arglist = PyTuple_New(0);
@@ -218,14 +240,16 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     }
 
 #ifdef __WXGTK__
-    wxTheApp->m_initialized = (wxTopLevelWindows.Number() > 0);
+    wxTheApp->m_initialized = (wxTopLevelWindows.GetCount() > 0);
 #endif
 
     Py_INCREF(Py_None);
     return Py_None;
 }
 
-
+void __wxCleanup() {
+    wxEntryCleanup();
+}
 
 
 
