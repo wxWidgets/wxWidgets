@@ -160,6 +160,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                        const wxString& name)
 {
     m_macIsUserPane = FALSE ;
+
+    wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
+                  _T("only one of listbox selection modes can be specified") );
     
     if ( !wxListBoxBase::Create(parent, id, pos, size, style & ~(wxHSCROLL|wxVSCROLL), validator, name) )
         return false;
@@ -646,6 +649,15 @@ void wxListBox::MacClear()
 void wxListBox::MacSetSelection( int n , bool select )
 {
     UInt32 id = m_idArray[n] ;
+    if ( !(GetWindowStyle() & (wxLB_MULTIPLE|wxLB_EXTENDED) ) )
+    {
+        int n = MacGetSelection() ;
+        if ( n >= 0 )
+        {
+            UInt32 idOld = m_idArray[n] ;
+            SetDataBrowserSelectedItems((ControlRef) m_macControl , 1 , & idOld , kDataBrowserItemsRemove ) ;
+        }
+    }
     if ( ::IsDataBrowserItemSelected( (ControlRef) m_macControl , id ) != select )
     {
         verify_noerr(::SetDataBrowserSelectedItems((ControlRef) m_macControl , 1 , & id , kDataBrowserItemsToggle ) ) ;
