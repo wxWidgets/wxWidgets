@@ -37,7 +37,6 @@
 #include <sys/wait.h>
 #include <pwd.h>
 #include <errno.h>
-// #include <netdb.h>
 #include <signal.h>
 
 #if (defined(__SUNCC__) || defined(__CLCC__))
@@ -50,14 +49,8 @@
 
 #include "wx/unix/execute.h"
 
-#ifdef __WXMOTIF__
 #include <Xm/Xm.h>
 #include "wx/motif/private.h"
-#endif
-
-#ifdef __WXX11__
-#include "wx/x11/private.h"
-#endif
 
 #if wxUSE_RESOURCES
 #include "X11/Xresource.h"
@@ -100,7 +93,6 @@ void wxFlushEvents()
 
     XSync (display, FALSE);
 
-#ifdef __WXMOTIF__   
     // XtAppPending returns availability of events AND timers/inputs, which
     // are processed via callbacks, so XtAppNextEvent will not return if
     // there are no events. So added '& XtIMXEvent' - Sergey.
@@ -110,18 +102,13 @@ void wxFlushEvents()
         // Jan Lessner: works better when events are non-X events
         XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMXEvent);
     }
-#endif
-#ifdef __WXX11__
-    // TODO for X11
-    // ??
-#endif
 }
 
+#if 0
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
-#ifdef __WXMOTIF__
     wxCHECK_MSG( wnd, FALSE, "NULL window in wxCheckForInterrupt" );
 
     Display *dpy=(Display*) wnd->GetXDisplay();
@@ -148,16 +135,13 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     }
 
     return hadEvents;
-#else
-    wxASSERT_MSG(FALSE, "wxCheckForInterrupt not yet implemented.");
-    return FALSE;
-#endif
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxExecute stuff
 // ----------------------------------------------------------------------------
-#ifdef __WXMOTIF__
+
 static void xt_notify_end_process(XtPointer data, int *WXUNUSED(fid),
                                   XtInputId *id)
 {
@@ -170,11 +154,9 @@ static void xt_notify_end_process(XtPointer data, int *WXUNUSED(fid),
 
     XtRemoveInput(*id);
 }
-#endif
 
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
-#ifdef __WXMOTIF__
     XtInputId id = XtAppAddInput((XtAppContext) wxTheApp->GetAppContext(),
                                  fd,
                                  (XtPointer *) XtInputReadMask,
@@ -182,11 +164,6 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
                                  (XtPointer) proc_data);
 
     return (int)id;
-#endif
-#ifdef __WXX11__
-    // TODO
-    return 0;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -202,7 +179,6 @@ void wxBell()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-#ifdef __WXMOTIF__
     // FIXME TODO
     // This code is WRONG!! Does NOT return the
     // Motif version of the libs but the X protocol
@@ -214,14 +190,6 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
         *minorVsn = ProtocolRevision (display);
 
     return wxMOTIF_X;
-#endif
-#ifdef __WXX11__
-    if (majorVsn)
-        *majorVsn = 0;
-    if (minorVsn)
-        *minorVsn = 0;
-    return wxX11;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -646,16 +614,11 @@ WXDisplay *wxGetDisplay()
 {
     if (gs_currentDisplay)
         return gs_currentDisplay;
-#ifdef __WXMOTIF__
     if (wxTheApp && wxTheApp->GetTopLevelWidget())
         return XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
     else if (wxTheApp)
         return wxTheApp->GetInitialDisplay();
     return NULL;
-#endif
-#ifdef __WXX11__
-    return wxApp::GetDisplay();
-#endif
 }
 
 bool wxSetDisplay(const wxString& display_name)
@@ -670,7 +633,6 @@ bool wxSetDisplay(const wxString& display_name)
     }
     else
     {
-#ifdef __WXMOTIF__
         Cardinal argc = 0;
 
         Display *display = XtOpenDisplay((XtAppContext) wxTheApp->GetAppContext(),
@@ -692,18 +654,6 @@ bool wxSetDisplay(const wxString& display_name)
         }
         else
             return FALSE;
-#endif
-#ifdef __WXX11__
-        Display* display = XOpenDisplay((char*) display_name.c_str());
-
-        if (display)
-        {
-            gs_currentDisplay = (WXDisplay*) display;
-            return TRUE;
-        }
-        else
-            return FALSE;
-#endif
     }
 }
 
@@ -1103,7 +1053,6 @@ wxString wxGetXEventName(XEvent& event)
 }
 #endif
 
-#ifdef __WXMOTIF__
 // ----------------------------------------------------------------------------
 // accelerators
 // ----------------------------------------------------------------------------
@@ -1208,9 +1157,6 @@ XmString wxFindAcceleratorText (const char *s)
 }
 
 
-// These functions duplicate those in wxWindow, but are needed
-// for use outside of wxWindow (e.g. wxMenu, wxMenuBar).
-
 // Change a widget's foreground and background colours.
 
 void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
@@ -1258,9 +1204,6 @@ extern void wxDoChangeFont(WXWidget widget, wxFont& font)
 #endif
 
 }
-
-#endif
-    // __WXMOTIF__
 
 bool wxWindowIsVisible(Window win)
 {
