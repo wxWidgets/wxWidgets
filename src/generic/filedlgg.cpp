@@ -409,8 +409,8 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     }
 #endif
 
-    struct stat buff;
-    wxStat( m_fileName.fn_str(), &buff );
+    wxStructStat buff;
+    wxStat( m_fileName, &buff );
 
 #if defined(__UNIX__) && (!defined( __EMX__ ) && !defined(__VMS))
     struct stat lbuff;
@@ -437,10 +437,21 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     m_year = t->tm_year;
     m_year += 1900;
 
-    m_permissions.sprintf( wxT("%c%c%c"),
-     ((( buff.st_mode & S_IRUSR ) == S_IRUSR ) ? wxT('r') : wxT('-')),
-     ((( buff.st_mode & S_IWUSR ) == S_IWUSR ) ? wxT('w') : wxT('-')),
-     ((( buff.st_mode & S_IXUSR ) == S_IXUSR ) ? wxT('x') : wxT('-')) );
+    char buffer[10];
+    sprintf( buffer, "%c%c%c",
+     ((( buff.st_mode & S_IRUSR ) == S_IRUSR ) ? 'r' : '-'),
+     ((( buff.st_mode & S_IWUSR ) == S_IWUSR ) ? 'w' : '-'),
+     ((( buff.st_mode & S_IXUSR ) == S_IXUSR ) ? 'x' : '-') );
+#if wxUSE_UNICODE
+    m_permissions = wxConvUTF8.cMB2WC( buffer );
+#else
+    m_permissions = buffer;
+#endif
+
+//    m_permissions.sprintf( wxT("%c%c%c"),
+//     ((( buff.st_mode & S_IRUSR ) == S_IRUSR ) ? wxT('r') : wxT('-')),
+//     ((( buff.st_mode & S_IWUSR ) == S_IWUSR ) ? wxT('w') : wxT('-')),
+//     ((( buff.st_mode & S_IXUSR ) == S_IXUSR ) ? wxT('x') : wxT('-')) );
 }
 
 wxString wxFileData::GetName() const
