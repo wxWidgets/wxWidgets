@@ -2765,7 +2765,7 @@ class wxMaskedEditMixin:
                     else:
                         newfield = self._FindField(newpos)
                         if newfield != field and newfield._selectOnFieldEntry:
-                            dbg('queuing selection: (%d, %d)' % newfield._extent[0], newfield._extent[1])
+                            dbg('queuing selection: (%d, %d)' % (newfield._extent[0], newfield._extent[1]))
                             wxCallAfter(self._SetSelection, newfield._extent[0], newfield._extent[1])
                     keep_processing = false
 
@@ -6486,9 +6486,6 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
             kwargs['validRegex'] = "(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))(\.(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))){3}"
 
 
-        if not kwargs.has_key('emptyInvalid'):
-            kwargs['emptyInvalid'] = True
-
         wxMaskedTextCtrl.__init__(
                 self, parent, id=id, value = value,
                 pos=pos, size=size,
@@ -6500,9 +6497,6 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
 
         # set up individual field parameters as well:
         field_params = {}
-        if not kwargs.has_key('validRequired'):
-            field_params['validRequired'] = True
-
         field_params['validRegex'] = "(   |  \d| \d |\d  | \d\d|\d\d |\d \d|(1\d\d|2[0-4]\d|25[0-5]))"
 
         # require "valid" string; this prevents entry of any value > 255, but allows
