@@ -379,8 +379,11 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
     m_widget = gtk_window_new( win_type );
 
-    if ((m_parent) && (HasFlag(wxFRAME_FLOAT_ON_PARENT)) && (GTK_IS_WINDOW(m_parent->m_widget)))
+    if (m_parent && (GTK_IS_WINDOW(m_parent->m_widget)) &&
+        (HasFlag(wxFRAME_FLOAT_ON_PARENT) || (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)))
+    {
         gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
+    }
 
     if (!name.IsEmpty())
         gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );
