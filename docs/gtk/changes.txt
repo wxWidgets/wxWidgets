@@ -1,7 +1,13 @@
 
-5th January: wxWindows 2.2.4 released
+15th January: wxWindows 2.2.4 released
 
-Corrected wxMenuItem::GetLabel() to handle deliberate '-'
+Corrected wxYield() to handle recursive calls
+more gracefully (and with a warning in debug mode).
+This fixes a problem with crashing wxTreeCtrl's 
+built-in drag'n'drop and probably some other as
+well.
+
+Corrected wxMenuItem::GetLabel() to handle deliberate '_'
 characters correctly.
 
 Patch for better 8-bit-display support.
