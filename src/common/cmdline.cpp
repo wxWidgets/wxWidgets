@@ -781,7 +781,11 @@ void wxCmdLineParser::Usage()
         wxStripExtension(appname);
     }
 
-    wxString brief, detailed;
+    // we ocnstruct the brief cmd line desc on the fly, but not the detailed
+    // help message below because we want to align the options descriptions
+    // and for this we must first know the longest one of them
+    wxString brief;
+    wxArrayString namesOptions, descOptions;
     brief.Printf(_("Usage: %s"), appname.c_str());
 
     size_t n, count = m_data->m_options.GetCount();
@@ -796,10 +800,12 @@ void wxCmdLineParser::Usage()
         }
 
         brief << _T('-') << opt.shortName;
-        detailed << _T("  -") << opt.shortName;
+
+        wxString option;
+        option << _T("  -") << opt.shortName;
         if ( !!opt.longName )
         {
-            detailed << _T("  --") << opt.longName;
+            option << _T("  --") << opt.longName;
         }
 
         if ( opt.kind != wxCMD_LINE_SWITCH )
@@ -807,7 +813,7 @@ void wxCmdLineParser::Usage()
             wxString val;
             val << _T('<') << GetTypeName(opt.type) << _T('>');
             brief << _T(' ') << val;
-            detailed << (!opt.longName ? _T(':') : _T('=')) << val;
+            option << (!opt.longName ? _T(':') : _T('=')) << val;
         }
 
         if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
@@ -815,7 +821,8 @@ void wxCmdLineParser::Usage()
             brief << _T(']');
         }
 
-        detailed << _T('\t') << opt.description << _T('\n');
+        namesOptions.Add(option);
+        descOptions.Add(opt.description);
     }
 
     count = m_data->m_paramDesc.GetCount();
@@ -848,6 +855,27 @@ void wxCmdLineParser::Usage()
     }
 
     wxLogMessage(brief);
+
+    // now construct the detailed help message
+    size_t len, lenMax = 0;
+    count = namesOptions.GetCount();
+    for ( n = 0; n < count; n++ )
+    {
+        len = namesOptions[n].length();
+        if ( len > lenMax )
+            lenMax = len;
+    }
+
+    wxString detailed;
+    for ( n = 0; n < count; n++ )
+    {
+        len = namesOptions[n].length();
+        detailed << namesOptions[n]
+                 << wxString(_T(' '), lenMax - len) << _T('\t')
+                 << descOptions[n]
+                 << _T('\n');
+    }
+
     wxLogMessage(detailed);
 }
 
