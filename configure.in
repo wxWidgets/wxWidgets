@@ -3688,7 +3688,27 @@ if test "$ac_cv_func_vsnprintf" = "yes"; then
                     vsnprintf(buf, 10u, "%s", ap);
                 ],
                 wx_cv_func_vsnprintf_decl=yes,
-                wx_cv_func_vsnprintf_decl=no
+                [
+                    dnl Metrowerks does provide a vsnprintf declaration
+                    dnl but in C++ mode it's always in std namespace.
+                    dnl FIXME: Do we have any UNIX C++ compilers that would
+                    dnl fail this test if using namespace std; was
+                    dnl simply always included?
+                    AC_TRY_COMPILE(
+                        [
+                            #include <stdio.h>
+                            #include <stdarg.h>
+                            using namespace std;
+                        ],
+                        [
+                            char *buf;
+                            va_list ap;
+                            vsnprintf(buf, 10u, "%s", ap);
+                        ],
+                        wx_cv_func_vsnprintf_decl=yes,
+                        wx_cv_func_vsnprintf_decl=no
+                    )
+                ]
             )
         ]
     )
