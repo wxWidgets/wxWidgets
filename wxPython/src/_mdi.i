@@ -28,6 +28,7 @@
 #define IDM_WINDOWICONS         4003
 #define IDM_WINDOWNEXT          4004
 #define IDM_WINDOWTILEVERT      4005
+#define IDM_WINDOWPREV          4006
 #define wxFIRST_MDI_CHILD       4100
 #define wxLAST_MDI_CHILD        4600
 

@@ -214,8 +214,6 @@ eliminate weird refresh behaviour (delays between a window being
 erased and repainted, giving a ghostly gradual-redraw effect). May be
 a temporary 'fix' until properly fixed before 2.6.
 
-wxMac: CoreGraphics  [[WRITE MORE HERE]]
-
 wxMac:  Toolbar is now more native looking with borderless toolbar
 buttons.  
 
