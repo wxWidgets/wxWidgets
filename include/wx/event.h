@@ -74,7 +74,9 @@ typedef int wxEventType;
 #define BEGIN_DECLARE_EVENT_TYPES() enum {
 #define END_DECLARE_EVENT_TYPES() };
 #define DECLARE_EVENT_TYPE(name, value) name = wxEVT_FIRST + value,
+#define DECLARE_LOCAL_EVENT_TYPE(name, value) name = wxEVT_FIRST + value,
 #define DEFINE_EVENT_TYPE(name)
+
 
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
 
@@ -85,6 +87,7 @@ typedef int wxEventType;
 #define END_DECLARE_EVENT_TYPES()
 #define DECLARE_EVENT_TYPE(name, value) \
     extern const wxEventType WXDLLEXPORT name;
+#define DECLARE_LOCAL_EVENT_TYPE(name, value) extern const wxEventType name;
 #define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
 
 // generate a new unique event type
