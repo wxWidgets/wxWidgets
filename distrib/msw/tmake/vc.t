@@ -109,6 +109,8 @@ DOCDIR = $(WXDIR)\docs
 HTMLDIR = $(WXDIR)\src\html
 JPEGDIR = $(WXDIR)\src\jpeg
 TIFFDIR = $(WXDIR)\src\tiff
+REGEXDIR = $(WXDIR)\src\regex
+
 
 {$(GENDIR)}.cpp{$(GENDIR)\$D}.obj:
 	cl @<<
@@ -172,7 +174,7 @@ setuph:
     if not exist setup.h copy setup0.h setup.h
     cd $(WXDIR)\src\msw
 
-dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D $(JPEGDIR)\$D $(TIFFDIR)\$D
+dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D $(JPEGDIR)\$D $(TIFFDIR)\$D $(REGEXDIR)\$D
 
 $D:
     mkdir $D
@@ -197,6 +199,9 @@ $(JPEGDIR)\$D:
 
 $(TIFFDIR)\$D:
     mkdir $(TIFFDIR)\$D
+
+$(REGEXDIR)\$D:
+    mkdir $(REGEXDIR)\$D
 
 # wxWindows library as DLL
 dll:
@@ -422,7 +427,7 @@ clean_tiff:
 
 regex:
     cd $(WXDIR)\src\regex
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG)
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG) all
     cd $(WXDIR)\src\msw
 
 clean_regex:
