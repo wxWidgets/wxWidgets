@@ -5,7 +5,7 @@ from Main import opj
 
 #----------------------------------------------------------------------
 
-msg = "Some text will appear in the image's shadow..."
+msg = "Some text will appear mixed in the image's shadow..."
 
 class TestPanel(wx.Panel):
     def __init__(self, parent, log):
@@ -21,15 +21,26 @@ class TestPanel(wx.Panel):
         dc.Clear()
 
         dc.SetFont(wx.Font(16, wx.SWISS, wx.NORMAL, wx.BOLD, True))
-        dc.DrawText("Bitmap alpha blending (on wxMSW and wxMac only)",
+        dc.DrawText("Bitmap alpha blending (on all ports but gtk+ 1.2)",
                     25,25)
         
         bmp = wx.Bitmap(opj('bitmaps/toucan.png'))
-        if "__WXGTK__" in wx.PlatformInfo:
-            # try to make up for lack of alpha support a bit...
+        if "gtk1" in wx.PlatformInfo:
+            # Try to make up for lack of alpha support in wxGTK (gtk+
+            # 1.2) by converting the alpha blending into a
+            # transparency mask.
+
+            # first convert to a wx.Image
             img = bmp.ConvertToImage()
-            img.ConvertAlphaToMask(220) #threshold below which alpha will be made fully transparent
+
+            # Then convert the alpha channel to a mask, specifying the
+            # threshold below which alpha will be made fully
+            # transparent
+            img.ConvertAlphaToMask(220)
+
+            # convert back to a wx.Bitmap
             bmp = img.ConvertToBitmap()
+
             
         dc.DrawBitmap(bmp, 25,100, True)
 
