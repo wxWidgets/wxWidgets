@@ -1429,7 +1429,8 @@ for toolkit in `echo $ALL_TOOLKITS`; do
       echo "$var=$value" >> ${wx_arg_cache_file}
     fi
     if test "$value" = 1; then
-      AC_MSG_RESULT([`echo $toolkit | tr [[A-Z]] [[a-z]]`])
+      toolkit_echo=`echo $toolkit | tr [[A-Z]] [[a-z]]`
+      AC_MSG_RESULT($toolkit_echo)
     fi
   fi
 done
