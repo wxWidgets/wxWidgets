@@ -19,8 +19,9 @@ class MyCellEditor(wxPyGridCellEditor):
         """
         print "Create"
         theStyle = 0
-        if wxPlatform == '__wxMSW__':
-            theStyle = wxTE_MULTILINE | wxTE_NO_VSCROLL | wxTE_AUTO_SCROLL
+        if wxPlatform == '__WXMSW__':
+            theStyle = wxTE_PROCESS_TAB | wxTE_MULTILINE | wxTE_NO_VSCROLL | wxTE_AUTO_SCROLL
+            #theStyle = wxTE_PROCESS_TAB | wxTE_PROCESS_ENTER
 
         self._tc = wxTextCtrl(parent, id, "", style=theStyle)
         self._tc.SetInsertionPoint(0)
@@ -75,49 +76,50 @@ class MyCellEditor(wxPyGridCellEditor):
         self._tc.SetInsertionPointEnd()
 
 
-##     def IsAcceptedKey(self, evt):
-##         """
-##         Return TRUE to allow the given key to start editing: the base class
-##         version only checks that the event has no modifiers.
-##         """
-##         key = evt.GetKeyCode()
-##         print "KeyCode:", key
-##         # For linux the first range means number keys in main keyboard, and
-##         # the second range means numeric keypad keys, with num-lock on.
-##         if key in range(48,58) or key in range(326,336):
-##             return true
-##         else:
-##             return false
-
-##     def StartingKey(self, evt):
-##         """
-##         If the editor is enabled by pressing keys on the grid, this will be
-##         called to let the editor do something about that first key if desired.
-##         """
-##         key = evt.GetKeyCode()
-##         print "StartingKey", key
-##         ch = None
-##         if key in [WXK_NUMPAD0, WXK_NUMPAD1, WXK_NUMPAD2, WXK_NUMPAD3, WXK_NUMPAD4,
-##                    WXK_NUMPAD5, WXK_NUMPAD6, WXK_NUMPAD7, WXK_NUMPAD8, WXK_NUMPAD9]:
-##             ch = ch = chr(ord('0') + key - WXK_NUMPAD0)
-
-##         elif key < 256 and key >= 0 and chr(key) in string.printable:
-##             ch = chr(key)
-##             if not evt.ShiftDown():
-##                 ch = string.lower(ch)
-
-##         if ch is not None:
-##             # Replace the text.  Other option would be to append it.
-##             # self._tc.AppendText(ch)
-##             self._tc.SetValue(ch)
-##             self._tc.SetInsertionPointEnd()
-##         else:
-##             evt.Skip()
+    def IsAcceptedKey(self, evt):
+        """
+        Return TRUE to allow the given key to start editing: the base class
+        version only checks that the event has no modifiers.
+        """
+        key = evt.GetKeyCode()
+        print "KeyCode:", key
+        # For linux the first range means number keys in main keyboard, and
+        # the second range means numeric keypad keys, with num-lock on.
+        if key in range(48,58) or key in range(326,336):
+            return true
+        else:
+            return false
 
 
-##     def Destroy(self):
-##         """final cleanup"""
-##         self.base_Destroy()
+    def StartingKey(self, evt):
+        """
+        If the editor is enabled by pressing keys on the grid, this will be
+        called to let the editor do something about that first key if desired.
+        """
+        key = evt.GetKeyCode()
+        print "StartingKey", key
+        ch = None
+        if key in [WXK_NUMPAD0, WXK_NUMPAD1, WXK_NUMPAD2, WXK_NUMPAD3, WXK_NUMPAD4,
+                   WXK_NUMPAD5, WXK_NUMPAD6, WXK_NUMPAD7, WXK_NUMPAD8, WXK_NUMPAD9]:
+            ch = ch = chr(ord('0') + key - WXK_NUMPAD0)
+
+        elif key < 256 and key >= 0 and chr(key) in string.printable:
+            ch = chr(key)
+            if not evt.ShiftDown():
+                ch = string.lower(ch)
+
+        if ch is not None:
+            # Replace the text.  Other option would be to append it.
+            # self._tc.AppendText(ch)
+            self._tc.SetValue(ch)
+            self._tc.SetInsertionPointEnd()
+        else:
+            evt.Skip()
+
+
+    def Destroy(self):
+        """final cleanup"""
+        self.base_Destroy()
 
 
     def Clone(self):
