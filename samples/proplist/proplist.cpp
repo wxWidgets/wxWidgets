@@ -187,7 +187,7 @@ void MyApp::PropertyListTest(bool useDialog)
 
   if (useDialog)
   {
-    view->ShowView(sheet, propDialog);
+    view->ShowView(sheet, (wxPanel *)propDialog);
     propDialog->Centre(wxBOTH);
     propDialog->Show(TRUE);
   }
@@ -233,7 +233,7 @@ void MyApp::PropertyFormTest(bool useDialog)
     m_childWindow = propFrame;
   }
   
-  wxPanel *panel = propDialog ? propDialog : propFrame->GetPropertyPanel();
+  wxWindow *panel = propDialog ? propDialog : propFrame->GetPropertyPanel();
   wxLayoutConstraints* c;
 
 #if 0
