@@ -40,8 +40,6 @@ extern bool g_isIdle;
 //-----------------------------------------------------------------------------
 
 #if wxUSE_THREADS
-extern void wxapp_install_thread_wakeup();
-extern void wxapp_uninstall_thread_wakeup();
 #endif
 
 //----------------------------------------------------------------------------
@@ -258,7 +256,6 @@ static gboolean target_drag_drop( GtkWidget *widget,
 
 #if wxUSE_THREADS
         /* disable GUI threads */
-        wxapp_uninstall_thread_wakeup();
 #endif
 
         GdkAtom format = drop_target->GetMatchingPair();
@@ -277,7 +274,6 @@ static gboolean target_drag_drop( GtkWidget *widget,
 
 #if wxUSE_THREADS
         /* re-enable GUI threads */
-        wxapp_install_thread_wakeup();
 #endif
     }
 
@@ -555,7 +551,6 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 
 #if wxUSE_THREADS
     /* disable GUI threads */
-    wxapp_uninstall_thread_wakeup();
 #endif
 
                 gtk_selection_data_set( selection_data,
@@ -566,7 +561,6 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 
 #if wxUSE_THREADS
     /* enable GUI threads */
-    wxapp_install_thread_wakeup();
 #endif
 
     delete[] d;
@@ -801,7 +795,6 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
 
 #if wxUSE_THREADS
     /* disable GUI threads */
-    wxapp_uninstall_thread_wakeup();
 #endif
 
     /* don't start dragging if no button is down */
@@ -832,7 +825,6 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
 
 #if wxUSE_THREADS
     /* re-enable GUI threads */
-    wxapp_install_thread_wakeup();
 #endif
 
     g_blockEventsOnDrag = FALSE;

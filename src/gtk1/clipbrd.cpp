@@ -28,8 +28,6 @@
 //-----------------------------------------------------------------------------
 
 #if wxUSE_THREADS
-extern void wxapp_install_thread_wakeup();
-extern void wxapp_uninstall_thread_wakeup();
 #endif
 
 //-----------------------------------------------------------------------------
@@ -341,7 +339,6 @@ void wxClipboard::Clear()
     {
 #if wxUSE_THREADS
         /* disable GUI threads */
-        wxapp_uninstall_thread_wakeup();
 #endif
 
         /*  As we have data we also own the clipboard. Once we no longer own
@@ -374,7 +371,6 @@ void wxClipboard::Clear()
 
 #if wxUSE_THREADS
         /* re-enable GUI threads */
-        wxapp_install_thread_wakeup();
 #endif
     }
 
@@ -443,7 +439,6 @@ bool wxClipboard::AddData( wxDataObject *data )
 
 #if wxUSE_THREADS
     /* disable GUI threads */
-    wxapp_uninstall_thread_wakeup();
 #endif
 
     /* Tell the world we offer clipboard data */
@@ -458,7 +453,6 @@ bool wxClipboard::AddData( wxDataObject *data )
 
 #if wxUSE_THREADS
     /* re-enable GUI threads */
-    wxapp_install_thread_wakeup();
 #endif
 
     return res;
