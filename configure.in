@@ -588,29 +588,29 @@ if test "$USE_BEOS" = 1; then
 fi
 
 dnl check for glibc version
-if test "$USE_LINUX" = 1; then
-    AC_CACHE_CHECK([for glibc version], wx_lib_glibc21,
-        AC_TRY_COMPILE([#include <features.h>],
-            [
-                #if !__GLIBC_PREREQ(2, 1)
-                    #error not glibc2.1
-                #endif
-            ],
-            [
-                AC_MSG_RESULT(2.1 or later),
-                wx_lib_glibc21=yes
-            ],
-            [
-                AC_MSG_RESULT(less than 2.1),
-                wx_lib_glibc21=no
-            ]
-        )
-    )
-
-    if test "$wx_lib_glibc21" = "yes"; then
-        AC_DEFINE(wxHAVE_GLIBC2))
-    fi
-fi
+dnl if test "$USE_LINUX" = 1; then
+dnl     AC_CACHE_CHECK([for glibc version], wx_lib_glibc21,
+dnl         AC_TRY_COMPILE([#include <features.h>],
+dnl             [
+dnl                 #if !__GLIBC_PREREQ(2, 1)
+dnl                     #error not glibc2.1
+dnl                 #endif
+dnl             ],
+dnl             [
+dnl                 AC_MSG_RESULT(2.1 or later),
+dnl                 wx_lib_glibc21=yes
+dnl             ],
+dnl             [
+dnl                 AC_MSG_RESULT(less than 2.1),
+dnl                 wx_lib_glibc21=no
+dnl             ]
+dnl         )
+dnl     )
+dnl 
+dnl     if test "$wx_lib_glibc21" = "yes"; then
+dnl         AC_DEFINE(wxHAVE_GLIBC2)
+dnl     fi
+dnl fi
 
 dnl ---------------------------------------------------------------------------
 dnl command line options for configure
