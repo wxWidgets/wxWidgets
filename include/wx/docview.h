@@ -373,7 +373,8 @@ public:
     virtual void ActivateView(wxView *view, bool activate = TRUE, bool deleting = FALSE);
     virtual wxView *GetCurrentView() const;
 
-    virtual wxList& GetDocuments() const { return (wxList&) m_docs; }
+    wxList& GetDocuments() { return m_docs; }
+    wxList& GetTemplates() { return m_templates; }
 
     // Make a default document name
     virtual bool MakeDefaultName(wxString& buf);
