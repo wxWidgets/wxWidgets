@@ -35,7 +35,7 @@ wxPython is a Python package that can be imported at runtime that
 includes a collection of Python modules and an extension module
 (native code). It provides a series of Python classes that mirror (or
 shadow) many of the wxWindows GUI classes. This extension module
-attempts to mirror the class hierarchy of wxWindows as closely as
+attempts to mirror the class heirarchy of wxWindows as closely as
 possible. This means that there is a wxFrame class in wxPython that
 looks, smells, tastes and acts almost the same as the wxFrame class in
 the C++ version.
@@ -45,16 +45,16 @@ applications, or in situations where Python is embedded in a C++
 application as an internal scripting or macro language.
 
 Currently wxPython is available for Win32 platforms and the GTK
-toolkit (wxGTK) on most Unix/X-windows platforms. The effort to
-enable wxPython for wxMotif will begin shortly. See \helpref{Building Python}{wxpbuild} for
+toolkit (wxGTK) on most Unix/X-windows platforms. See the wxPython
+website \urlref{http://wxPython.org/}{http://wxPython.org/} for
 details about getting wxPython working for you.
 
 %----------------------------------------------------------------------
 \section{Why use wxPython?}\label{wxpwhy}
 
 So why would you want to use wxPython over just C++ and wxWindows?
-Personally I prefer using Python for everything. I only use C++ when
-I absolutely have to eek more performance out of an algorithm, and even
+Personally I prefer using Python for everything. I only use C++ when I
+absolutely have to eek more performance out of an algorithm, and even
 then I usually code it as an extension module and leave the majority
 of the program in Python.
 
@@ -116,77 +116,6 @@ wrappers around some C or C++ toolkit or another, and most are not
 cross-platform compatible. See \urlref{this link}{http://www.python.org/download/Contributed.html\#Graphics}
 for a listing of a few of them.
 
-%----------------------------------------------------------------------
-\section{Building wxPython}\label{wxpbuild}
-
-I used SWIG (\urlref{http://www.swig.org}{http://www.swig.org}) to
-to create the source code for the
-extension module. This enabled me to only have to deal with a small
-amount of code and only have to bother with the exceptional issues.
-SWIG takes care of the rest and generates all the repetitive code for
-me. You don't need SWIG to build the extension module as all the
-generated C++ code is included under the src directory.
-
-I added a few minor features to SWIG to control some of the code
-generation. If you want to play around with this you will need to get
-a recent version of SWIG from their CVS or from a daily build. See
-\urlref{http://www.swig.org/}{http://www.swig.org/} for details.
-
-wxPython is organized as a Python package. This means that the
-directory containing the results of the build process should be a
-subdirectory of a directory on the {\tt PYTHONPATH}. (And preferably should
-be named wxPython.) You can control where the build process will dump
-wxPython by setting the {\tt TARGETDIR} variable for the build utility (see
-below).
-
-\begin{enumerate}\itemsep=0pt
-\item Build wxWindows as described in its BuildCVS.txt file. For Unix
-systems I run configure with these flags:
-
-\begin{verbatim}
-                --with-gtk
-                --with-libjpeg
-                --without-odbc
-                --enable-unicode=no
-                --enable-threads=yes
-                --enable-socket=yes
-                --enable-static=no
-                --enable-shared=yes
-                --disable-std_iostreams
-\end{verbatim}
-
-You can use whatever flags you want, but I know these work.
-
-For Win32 systems I use Visual C++ 6.0, but 5.0 should work also. The
-build utility currently does not support any other Win32 compilers.
-\item At this point you may want to make an alias or symlink, script,
-batch file, whatever on the PATH that invokes {\tt \$(WXWIN)/utils/wxPython/distrib/build.py} to
-help simplify matters somewhat. For example, on my Win32 system I have a file named
- {\tt build}.bat in a directory on the PATH that contains:
-
-{\tt python \%WXWIN/utils/wxPython/distrib/build.py \%1 \%2 \%3 \%4 \%5 \%6}
-\item Change into the {\tt \$(WXWIN)/utils/wxPython/src} directory.
-\item Type "{\tt build -b}" to build wxPython and "{\tt build -i}" to
-install it, or "{\tt build -bi}" to do both steps at once.
-
-The build.py script actually generates a Makefile based on what it
-finds on your system and information found in the build.cfg file.
-If you have troubles building or you want it built or installed in
-a different way, take a look at the docstring in build.py. You are
-able to override many configuration options in a file named
-build.local.
-\item To build and install the add-on modules, change to the appropriate
-directory under {\tt \$(WXWIN)/utils/wxPython/modules} and run the build
-utility again.
-\item Change to the {\tt \$(WXWIN)/utils/wxPython/demo} directory.
-\item Try executing the demo program. For example:
-
-{\tt python demo.py}
-
-To run it without requiring a console on Win32, you can use the
-{\tt pythonw.exe} version of Python either from the command line or from a
-shortcut.
-\end{enumerate}
 
 %----------------------------------------------------------------------
 \section{Using wxPython}\label{wxpusing}
@@ -397,11 +326,14 @@ as possible to the C++ spec over time.
 \item \helpref{wxFileDataObject}{wxfiledataobject}
 \item \helpref{wxFileDialog}{wxfiledialog}
 \item \helpref{wxFileDropTarget}{wxfiledroptarget}
+\item \helpref{wxFileSystem}{wxfilesystem}
+\item \helpref{wxFileSystemHandler}{wxfilesystemhandler}
 \item \helpref{wxFocusEvent}{wxfocusevent}
 \item \helpref{wxFontData}{wxfontdata}
 \item \helpref{wxFontDialog}{wxfontdialog}
 \item \helpref{wxFont}{wxfont}
 \item \helpref{wxFrame}{wxframe}
+\item \helpref{wxFSFile}{wxfsfile}
 \item \helpref{wxGauge}{wxgauge}
 \item wxGIFHandler
 \item wxGLCanvas
@@ -429,6 +361,8 @@ as possible to the C++ spec over time.
 \item \helpref{wxImageList}{wximagelist}
 \item \helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}
 \item \helpref{wxInitDialogEvent}{wxinitdialogevent}
+\item \helpref{wxInputStream}{wxinputstream}
+\item \helpref{wxInternetFSHandler}{wxinternetfshandler}
 \item \helpref{wxJoystickEvent}{wxjoystickevent}
 \item wxJPEGHandler
 \item \helpref{wxKeyEvent}{wxkeyevent}
@@ -438,12 +372,13 @@ as possible to the C++ spec over time.
 \item \helpref{wxListCtrl}{wxlistctrl}
 \item \helpref{wxListEvent}{wxlistevent}
 \item \helpref{wxListItem}{wxlistctrlsetitem}
+\item \helpref{wxMask}{wxmask}
+\item wxMaximizeEvent
 \item \helpref{wxMDIChildFrame}{wxmdichildframe}
 \item \helpref{wxMDIClientWindow}{wxmdiclientwindow}
 \item \helpref{wxMDIParentFrame}{wxmdiparentframe}
-\item \helpref{wxMask}{wxmask}
-\item wxMaximizeEvent
 \item \helpref{wxMemoryDC}{wxmemorydc}
+\item \helpref{wxMemoryFSHandler}{wxmemoryfshandler}
 \item \helpref{wxMenuBar}{wxmenubar}
 \item \helpref{wxMenuEvent}{wxmenuevent}
 \item \helpref{wxMenuItem}{wxmenuitem}
@@ -473,6 +408,7 @@ as possible to the C++ spec over time.
 \item \helpref{wxPrintPreview}{wxprintpreview}
 \item \helpref{wxPrinterDC}{wxprinterdc}
 \item \helpref{wxPrintout}{wxprintout}
+\item \helpref{wxProcess}{wxprocess}
 \item \helpref{wxQueryLayoutInfoEvent}{wxquerylayoutinfoevent}
 \item \helpref{wxRadioBox}{wxradiobox}
 \item \helpref{wxRadioButton}{wxradiobutton}
@@ -525,6 +461,7 @@ as possible to the C++ spec over time.
 \item \helpref{wxValidator}{wxvalidator}
 \item \helpref{wxWindowDC}{wxwindowdc}
 \item \helpref{wxWindow}{wxwindow}
+\item \helpref{wxZipFSHandler}{wxzipfshandler}
 \end{itemize}
 
 %----------------------------------------------------------------------
@@ -537,10 +474,10 @@ various sources of help, but probably the best source is the
 wxPython-users mail list. You can view the archive or subscribe by
 going to
 
-\urlref{http://wxwindows.org/mailman/listinfo/wxpython-users}{http://wxwindows.org/mailman/listinfo/wxpython-users}
+\urlref{http://lists.sourceforge.net/mailman/listinfo/wxpython-users}{http://lists.sourceforge.net/mailman/listinfo/wxpython-users}
 
 Or you can send mail directly to the list using this address:
 
-wxpython-users@wxwindows.org
+wxpython-users@lists.sourceforge.net
 
 

@@ -178,7 +178,7 @@ centered relative to the screen anyhow.
 
 \func{void}{CentreOnParent}{\param{int}{ direction = wxBOTH}}
 
-Centres the window on its parent. This is a more readable synonym for 
+Centres the window on its parent. This is a more readable synonym for
 \helpref{Centre}{wxwindowcentre}.
 
 \wxheading{Parameters}
@@ -190,7 +190,7 @@ or {\tt wxBOTH}.}
 
 This methods provides for a way to center top level windows over their
 parents instead of the entire screen.  If there is no parent or if the
-window is not a top level window, then behaviour is the same as 
+window is not a top level window, then behaviour is the same as
 \helpref{wxWindow::Centre}{wxwindowcentre}.
 
 \wxheading{See also}
@@ -511,7 +511,7 @@ Returns a reference to the list of the window's children.
 
 \constfunc{virtual void}{GetClientSize}{\param{int* }{width}, \param{int* }{height}}
 
-\perlnote{In wxPerl this method takes no parameter and returns 
+\perlnote{In wxPerl this method takes no parameter and returns
 a 2-element list {\tt ( width, height )}.}
 
 \constfunc{virtual wxSize}{GetClientSize}{\void}
@@ -528,8 +528,8 @@ area which may be drawn on by the programmer, excluding title bar, border etc.
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{{\bf wxGetClientSizeTuple()}}{Returns a 2-tuple of (width, height)}
-\twocolitem{{\bf wxGetClientSize()}}{Returns a wxSize object}
+\twocolitem{{\bf GetClientSizeTuple()}}{Returns a 2-tuple of (width, height)}
+\twocolitem{{\bf GetClientSize()}}{Returns a wxSize object}
 \end{twocollist}}
 }
 
@@ -547,7 +547,7 @@ Returns the associated drop target, which may be NULL.
 
 \wxheading{See also}
 
-\helpref{wxWindow::SetDropTarget}{wxwindowsetdroptarget}, 
+\helpref{wxWindow::SetDropTarget}{wxwindowsetdroptarget},
 \helpref{Drag and drop overview}{wxdndoverview}
 
 \membersection{wxWindow::GetEventHandler}\label{wxwindowgeteventhandler}
@@ -1047,7 +1047,7 @@ Note that the ASCII values do not have explicit key codes: they are passed as AS
 values.
 
 Note that not all keypresses can be intercepted this way. If you wish to intercept modifier
-keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow keypresses to be intercepted.
@@ -1084,7 +1084,7 @@ values.
 
 This function is only relevant to top-level windows (frames and dialogs), and under
 Windows only. Under GTK the normal EVT\_CHAR\_ event has the functionality, i.e.
-you can intercepts it and if you don't call \helpref{wxEvent::Skip}{wxeventskip} 
+you can intercepts it and if you don't call \helpref{wxEvent::Skip}{wxeventskip}
 the window won't get the event.
 
 \wxheading{See also}
@@ -1247,7 +1247,7 @@ use the EVT\_KEY\_DOWN macro in an event table definition. Your {\bf OnKeyDown} 
 default function to achieve default keypress functionality.
 
 Note that not all keypresses can be intercepted this way. If you wish to intercept special
-keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow keypresses to be intercepted.
@@ -1276,7 +1276,7 @@ use the EVT\_KEY\_UP macro in an event table definition. Your {\bf OnKeyUp} hand
 default function to achieve default keypress functionality.
 
 Note that not all keypresses can be intercepted this way. If you wish to intercept special
-keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow key up events to be intercepted.
@@ -1806,8 +1806,8 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 \func{void}{SetAutoLayout}{\param{bool}{ autoLayout}}
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
-be called automatically when the window is resized. Use in connection with 
-\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and 
+be called automatically when the window is resized. Use in connection with
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and
 \helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for laying out subwindows.
 
 \wxheading{Parameters}
@@ -1936,7 +1936,7 @@ If the window already has a drop target, it is deleted.
 
 \wxheading{See also}
 
-\helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget}, 
+\helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget},
 \helpref{Drag and drop overview}{wxdndoverview}
 
 \membersection{wxWindow::SetEventHandler}\label{wxwindowseteventhandler}
@@ -2372,9 +2372,9 @@ create a new validator of this type.
 
 \func{void}{SetToolTip}{\param{wxToolTip* }{tip}}
 
-Attach a tooltip to the window. 
+Attach a tooltip to the window.
 
-See also: \helpref{GetToolTip}{wxwindowgettooltip}, 
+See also: \helpref{GetToolTip}{wxwindowgettooltip},
           \helpref{wxToolTip}{wxtooltip}
 
 
