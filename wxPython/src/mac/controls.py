@@ -334,6 +334,10 @@ class ComboBox(core.Control,core.ItemContainer):
         """Replace(long from, long to, wxString value)"""
         return _controls.ComboBox_Replace(*args, **kwargs)
 
+    def SetSelection(*args, **kwargs):
+        """SetSelection(int n)"""
+        return _controls.ComboBox_SetSelection(*args, **kwargs)
+
     def SetMark(*args, **kwargs):
         """SetMark(long from, long to)"""
         return _controls.ComboBox_SetMark(*args, **kwargs)

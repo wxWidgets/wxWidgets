@@ -3348,7 +3348,7 @@ class PreviewCanvas(ScrolledWindow):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._self._setOORInfo(self)
+        self._setOORInfo(self)
 
 
 class PreviewCanvasPtr(PreviewCanvas):
@@ -3370,7 +3370,7 @@ class PreviewFrame(Frame):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._self._setOORInfo(self)
+        self._setOORInfo(self)
 
     def Initialize(*args, **kwargs):
         """Initialize()"""
@@ -3424,7 +3424,7 @@ class PreviewControlBar(Panel):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._self._setOORInfo(self)
+        self._setOORInfo(self)
 
     def GetZoomControl(*args, **kwargs):
         """GetZoomControl() -> int"""

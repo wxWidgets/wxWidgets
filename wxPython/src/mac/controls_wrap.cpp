@@ -2850,6 +2850,31 @@ static PyObject *_wrap_ComboBox_Replace(PyObject *self, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_ComboBox_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "n", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:ComboBox_SetSelection",kwnames,&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxComboBox,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetSelection(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_ComboBox_SetMark(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxComboBox *arg1 = (wxComboBox *) 0 ;
@@ -25573,6 +25598,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComboBox_GetInsertionPoint", (PyCFunction) _wrap_ComboBox_GetInsertionPoint, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ComboBox_GetLastPosition", (PyCFunction) _wrap_ComboBox_GetLastPosition, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ComboBox_Replace", (PyCFunction) _wrap_ComboBox_Replace, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ComboBox_SetSelection", (PyCFunction) _wrap_ComboBox_SetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ComboBox_SetMark", (PyCFunction) _wrap_ComboBox_SetMark, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ComboBox_SetEditable", (PyCFunction) _wrap_ComboBox_SetEditable, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ComboBox_SetInsertionPointEnd", (PyCFunction) _wrap_ComboBox_SetInsertionPointEnd, METH_VARARGS | METH_KEYWORDS },

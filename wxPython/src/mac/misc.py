@@ -2302,12 +2302,6 @@ class ArtProvider(object):
         del newobj.thisown
         self._setCallbackInfo(self, ArtProvider)
 
-    def __del__(self, destroy=_misc.delete_ArtProvider):
-        """__del__()"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(PyObject self, PyObject _class)"""
         return _misc.ArtProvider__setCallbackInfo(*args, **kwargs)
@@ -4380,7 +4374,8 @@ class DropTarget(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        if args: args[1].thisown = 0; self._setCallbackInfo(self, DropTarget)
+        if args: args[0].thisown = 0;
+        self._setCallbackInfo(self, DropTarget)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(PyObject self, PyObject _class)"""
