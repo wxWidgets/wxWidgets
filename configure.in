@@ -738,7 +738,7 @@ else
   DEFAULT_wxUSE_ZLIB=yes
   DEFAULT_wxUSE_LIBPNG=yes
   DEFAULT_wxUSE_LIBJPEG=yes
-  DEFAULT_wxUSE_LIBTIFF=no
+  DEFAULT_wxUSE_LIBTIFF=yes
   DEFAULT_wxUSE_ODBC=yes
 
   DEFAULT_wxUSE_STD_IOSTREAM=no
@@ -1686,7 +1686,7 @@ dnl the name of the (libtool) library
 WX_LIBRARY="wx_${TOOLKIT_DIR}"
 
     dnl the sources, their dependenices and the headers
-    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(JPEGOBJS) \$(PNGOBJS) \$(ZLIBOBJS) \$(IODBCOBJS)"
+    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(JPEGOBJS) \$(TIFFOBJS) \$(PNGOBJS) \$(ZLIBOBJS) \$(IODBCOBJS)"
     ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS)"
     ALL_HEADERS="\$(GUIHEADERS) \$(HTML_HEADERS) \$(UNIX_HEADERS) \$(PROTOCOL_HEADERS) \$(GENERIC_HEADERS) \$(WX_HEADERS)"
 else
@@ -3084,6 +3084,7 @@ AC_OUTPUT([
             samples/checklst/Makefile
             samples/config/Makefile
             samples/controls/Makefile
+            samples/console/Makefile
             samples/db/Makefile
             samples/dialogs/Makefile
             samples/docview/Makefile

@@ -515,6 +515,7 @@ TIFFOBJS	= \
 		tif_jpeg.o \
 		tif_flush.o \
 		tif_lzw.o \
+		tif_luv.o \
 		tif_next.o \
 		tif_open.o \
 		tif_packbits.o \

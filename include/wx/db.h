@@ -395,7 +395,7 @@ public:
 	SqlTypeInfo typeInfVarchar, typeInfInteger, typeInfFloat, typeInfDate;
 	
 	// Public member functions
-	wxDB(HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
+	wxDB(HENV &aHenv, bool FwdOnlyCursors=(bool)TRUE);
 	bool		 Open(char *Dsn, char *Uid, char *AuthStr);  // Data Source Name, User ID, Password
 	void		 Close(void);
 	bool		 CommitTrans(void);
@@ -459,7 +459,7 @@ class CstructTablesInUse : public wxObject
 // for other code segments to use, or close all of them when the application has
 // completed.
 
-wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
+wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors=(bool)TRUE);
 bool  WXDLLEXPORT FreeDbConnection(wxDB *pDb);
 void  WXDLLEXPORT CloseDbConnections(void);
 int   WXDLLEXPORT NumberDbConnectionsInUse(void);
