@@ -474,7 +474,7 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
             m_hostType = wxURI_IPV6ADDRESS;
 
             wxStringBufferLength theBuffer(m_server, uri - uricopy);
-            wxMemcpy(theBuffer, uricopy, uri-uricopy);
+            wxTmemcpy(theBuffer, uricopy, uri-uricopy);
             theBuffer.SetLength(uri-uricopy);
         }
         else
@@ -488,7 +488,7 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
                 m_hostType = wxURI_IPVFUTURE;
 
                 wxStringBufferLength theBuffer(m_server, uri - uricopy);
-                wxMemcpy(theBuffer, uricopy, uri-uricopy);
+                wxTmemcpy(theBuffer, uricopy, uri-uricopy);
                 theBuffer.SetLength(uri-uricopy);
             }
             else
@@ -502,7 +502,7 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
             m_hostType = wxURI_IPV4ADDRESS;
 
             wxStringBufferLength theBuffer(m_server, uri - uricopy);
-            wxMemcpy(theBuffer, uricopy, uri-uricopy);
+            wxTmemcpy(theBuffer, uricopy, uri-uricopy);
             theBuffer.SetLength(uri-uricopy);
         }
         else
@@ -596,7 +596,7 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
         {
             wxStringBufferLength theBuffer(m_path, m_path.length() + 1);
 #if wxUSE_STL
-            wxMemcpy(theBuffer, m_path.c_str(), m_path.length()+1);
+            wxTmemcpy(theBuffer, m_path.c_str(), m_path.length()+1);
 #endif
             Normalize(theBuffer, true);
             theBuffer.SetLength(wxStrlen(theBuffer));
@@ -636,7 +636,7 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
             {
                 wxStringBufferLength theBuffer(m_path, m_path.length() + 1);
 #if wxUSE_STL
-                wxMemcpy(theBuffer, m_path.c_str(), m_path.length()+1);
+                wxTmemcpy(theBuffer, m_path.c_str(), m_path.length()+1);
 #endif
                 Normalize(theBuffer);
                 theBuffer.SetLength(wxStrlen(theBuffer));

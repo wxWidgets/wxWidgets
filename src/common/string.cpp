@@ -209,7 +209,7 @@ void wxStringBase::InitWith(const wxChar *psz, size_t nPos, size_t nLength)
       wxFAIL_MSG( _T("out of memory in wxStringBase::InitWith") );
       return;
     }
-    wxMemcpy(m_pchData, psz + nPos, nLength);
+    wxTmemcpy(m_pchData, psz + nPos, nLength);
   }
 }
 
@@ -274,7 +274,7 @@ bool wxStringBase::CopyBeforeWrite()
       // allocation failures are handled by the caller
       return false;
     }
-    wxMemcpy(m_pchData, pData->data(), nLen);
+    wxTmemcpy(m_pchData, pData->data(), nLen);
   }
 
   wxASSERT( !GetStringData()->IsShared() );  // we must be the only owner
@@ -476,7 +476,7 @@ size_t wxStringBase::find(const wxStringBase& str, size_t nStart) const
   wxASSERT( nStart <= length() );
 
   //anchor
-  const wxChar* p = (const wxChar*)wxMemchr(c_str() + nStart,
+  const wxChar* p = (const wxChar*)wxTmemchr(c_str() + nStart,
                                             str.c_str()[0],
                                             length() - nStart);
 
@@ -484,10 +484,10 @@ size_t wxStringBase::find(const wxStringBase& str, size_t nStart) const
       return npos;
 
   while(p - c_str() + str.length() <= length() &&
-        wxMemcmp(p, str.c_str(), str.length()) )
+        wxTmemcmp(p, str.c_str(), str.length()) )
   {
       //anchor again
-      p = (const wxChar*)wxMemchr(++p,
+      p = (const wxChar*)wxTmemchr(++p,
                                   str.c_str()[0],
                                   length() - (p - c_str()));
 
@@ -507,7 +507,7 @@ size_t wxStringBase::find(wxChar ch, size_t nStart) const
 {
   wxASSERT( nStart <= length() );
 
-  const wxChar *p = (const wxChar*)wxMemchr(c_str() + nStart, ch, length() - nStart);
+  const wxChar *p = (const wxChar*)wxTmemchr(c_str() + nStart, ch, length() - nStart);
 
   return p == NULL ? npos : p - c_str();
 }
@@ -534,7 +534,7 @@ size_t wxStringBase::rfind(const wxStringBase& str, size_t nStart) const
         const wxChar *cursor = c_str() + top;
         do
         {
-            if ( wxMemcmp(cursor, str.c_str(),
+            if ( wxTmemcmp(cursor, str.c_str(),
                         str.length()) == 0 )
             {
                 return cursor - c_str();
@@ -581,7 +581,7 @@ size_t wxStringBase::find_first_of(const wxChar* sz, size_t nStart) const
     size_t i;
     for(i = nStart; i < this->length(); ++i)
     {
-        if (wxMemchr(sz, *(c_str() + i), len))
+        if (wxTmemchr(sz, *(c_str() + i), len))
             break;
     }
 
@@ -613,7 +613,7 @@ size_t wxStringBase::find_last_of(const wxChar* sz, size_t nStart) const
 
     for ( const wxChar *p = c_str() + nStart; p >= c_str(); --p )
     {
-        if ( wxMemchr(sz, *p, len) )
+        if ( wxTmemchr(sz, *p, len) )
             return p - c_str();
     }
 
@@ -642,7 +642,7 @@ size_t wxStringBase::find_first_not_of(const wxChar* sz, size_t nStart) const
     size_t i;
     for(i = nStart; i < this->length(); ++i)
     {
-        if (!wxMemchr(sz, *(c_str() + i), len))
+        if (!wxTmemchr(sz, *(c_str() + i), len))
             break;
     }
 
@@ -686,7 +686,7 @@ size_t wxStringBase::find_last_not_of(const wxChar* sz, size_t nStart) const
 
     for ( const wxChar *p = c_str() + nStart; p >= c_str(); --p )
     {
-        if ( !wxMemchr(sz, *p,len) )
+        if ( !wxTmemchr(sz, *p,len) )
              return p - c_str();
     }
 
@@ -916,20 +916,17 @@ static inline int wxDoCmp(const wxChar* s1, size_t l1,
                           const wxChar* s2, size_t l2)
 {
     if( l1 == l2 )
-        return wxMemcmp(s1, s2, l1);
+        return wxTmemcmp(s1, s2, l1);
     else if( l1 < l2 )
     {
-        int ret = wxMemcmp(s1, s2, l1);
+        int ret = wxTmemcmp(s1, s2, l1);
         return ret == 0 ? -1 : ret;
     }
-    else if( l1 > l2 )
+    else
     {
-        int ret = wxMemcmp(s1, s2, l2);
+        int ret = wxTmemcmp(s1, s2, l2);
         return ret == 0 ? +1 : ret;
     }
-
-    wxFAIL;   // must never get there
-    return 0; // quiet compilers
 }
 
 int STRINGCLASS::compare(const wxStringBase& str) const
@@ -1286,7 +1283,7 @@ static inline int wxDoCmpNoCase(const wxChar* s1, size_t l1,
         }
         return i == l1 ? -1 : wxTolower(s1[i]) < wxTolower(s2[i]) ? -1 : 1;
     }
-    else if( l1 > l2 )
+    else
     {
         for(i = 0; i < l2; ++i)
         {
@@ -1295,9 +1292,6 @@ static inline int wxDoCmpNoCase(const wxChar* s1, size_t l1,
         }
         return i == l2 ? 1 : wxTolower(s1[i]) < wxTolower(s2[i]) ? -1 : 1;
     }
-
-    wxFAIL;   // must never get there
-    return 0; // quiet compilers
 }
 
 int wxString::CmpNoCase(const wxString& s) const

@@ -1115,7 +1115,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
         #include <string.h> //for mem funcs
         
         //implement our own wmem variants
-        inline wxChar* wxMemchr(const wxChar* s, wxChar c, size_t l)
+        inline wxChar* wxTmemchr(const wxChar* s, wxChar c, size_t l)
         {
             for(;l && *s != c;--l, ++s) {}
 
@@ -1124,7 +1124,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
             return NULL;
         }
 
-        inline int wxMemcmp(const wxChar* sz1, const wxChar* sz2, size_t len)
+        inline int wxTmemcmp(const wxChar* sz1, const wxChar* sz2, size_t len)
         {
             for(; *sz1 == *sz2 && len; --len, ++sz1, ++sz2) {}
 
@@ -1134,17 +1134,17 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
                 return 0;
         }
 
-        inline wxChar* wxMemcpy(wxChar* szOut, const wxChar* szIn, size_t len)
+        inline wxChar* wxTmemcpy(wxChar* szOut, const wxChar* szIn, size_t len)
         {
             return (wxChar*) memcpy(szOut, szIn, len * sizeof(wxChar));
         }
 
-        inline wxChar* wxMemmove(wxChar* szOut, const wxChar* szIn, size_t len)
+        inline wxChar* wxTmemmove(wxChar* szOut, const wxChar* szIn, size_t len)
         {
             return (wxChar*) memmove(szOut, szIn, len * sizeof(wxChar));
         }
 
-        inline wxChar* wxMemset(wxChar* szOut, const wxChar cIn, size_t len)
+        inline wxChar* wxTmemset(wxChar* szOut, const wxChar cIn, size_t len)
         {
             wxChar* szRet = szOut;
 
@@ -1155,11 +1155,11 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
         }
 
     #else //!wxUSE_UNICODE
-    #   define wxMemchr memchr
-    #   define wxMemcmp memcmp
-    #   define wxMemcpy memcpy
-    #   define wxMemmove memmove
-    #   define wxMemset memset
+    #   define wxTmemchr memchr
+    #   define wxTmemcmp memcmp
+    #   define wxTmemcpy memcpy
+    #   define wxTmemmove memmove
+    #   define wxTmemset memset
     #endif
 
 #endif /*__cplusplus*/
