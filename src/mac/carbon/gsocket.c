@@ -195,16 +195,28 @@ static void SetDefaultEndpointModes(EndpointRef ep , void *data )
 
 int GSocket_Init()
 {
+    return TRUE;
+}
+
+int GSocket_Verify_Inited() ;
+int GSocket_Verify_Inited()
+{
     OSStatus err ;
 #if TARGET_CARBON
     // Marc Newsam: added the clientcontext variable
     //              however, documentation is unclear how this works
     OTClientContextPtr clientcontext;
 
+    if ( gInetSvcRef )
+      return TRUE ;
+
     InitOpenTransportInContext(kInitOTForApplicationMask, &clientcontext);
     gInetSvcRef = OTOpenInternetServicesInContext(kDefaultInternetServicesPath,
 						NULL, &err, clientcontext);
 #else	
+    if ( gInetSvcRef )
+      return TRUE ;
+ 
     InitOpenTransport() ;
     gInetSvcRef = OTOpenInternetServices(kDefaultInternetServicesPath, NULL, &err);
 #endif
@@ -213,7 +225,7 @@ int GSocket_Init()
 	OTAssert("Could not open Inet Services", err == noErr);
 	return FALSE ;
     }
-    return TRUE;
+    return TRUE ;
 }
 
 void GSocket_Cleanup()
@@ -231,8 +243,12 @@ void GSocket_Cleanup()
 
 GSocket *GSocket_new()
 {
+     
   int i;
   GSocket *socket;
+
+ if ( GSocket_Verify_Inited() == FALSE )
+    return NULL ;
 
   socket = (GSocket *)malloc(sizeof(GSocket));
 
@@ -251,8 +267,8 @@ GSocket *GSocket_new()
   socket->m_server              = FALSE;
   socket->m_stream              = TRUE;
   socket->m_non_blocking        = FALSE;
-  socket->m_timeout             = 10*60*1000;
-                                /* 10 minutes * 60 sec * 1000 millisec */
+  socket->m_timeout             = 10*1000;
+                                /* 10 sec * 1000 millisec */
   socket->m_takesEvents			= TRUE ;
   socket->m_mac_events			= wxMacGetNotifierTable() ;
   return socket;
@@ -958,7 +974,9 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 {
   assert(socket != NULL);
 
-  socket->m_timeout = millisec;
+//  this is usually set too high and we have not yet been able to detect a closed
+//  stream, thus we leave the 10 sec timeout
+//  socket->m_timeout = millisec;
 }
 
 /* GSocket_GetError:
@@ -1054,6 +1072,8 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 	OTByteCount sz = 0 ;
 
   	OTCountDataBytes( socket->m_endpoint , &sz ) ;
+  	if ( size > sz )
+  	  size = sz ;
 	res = OTRcv( socket->m_endpoint , buffer , size , &flags ) ;
 	if ( res < 0 )
 	{
@@ -1249,6 +1269,8 @@ GSocketError _GAddress_translate_from(GAddress *address,
 GSocketError _GAddress_translate_to(GAddress *address,
                                     InetAddress *addr)
 {
+ if ( GSocket_Verify_Inited() == FALSE )
+    return GSOCK_IOERR ;
   memset(addr, 0 , sizeof(struct InetAddress));
   OTInitInetAddress( addr , address->m_port , address->m_host ) ;
   return GSOCK_NOERROR;
@@ -1272,6 +1294,9 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
 {
   InetHostInfo hinfo ;
   OSStatus ret ;
+
+ if ( GSocket_Verify_Inited() == FALSE )
+    return GSOCK_IOERR ;
 
   assert(address != NULL);
 
@@ -1369,6 +1394,8 @@ GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
 GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t sbuf)
 {
   InetDomainName name ;
+ if ( GSocket_Verify_Inited() == FALSE )
+    return GSOCK_IOERR ;
   
   assert(address != NULL); 
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
