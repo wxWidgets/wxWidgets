@@ -1194,9 +1194,12 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 // VZ: testing for wxTE_PROCESS_TAB shouldn't be done here the control may
 //     have this style, yet choose not to process this particular TAB in which
 //     case TAB must still work as a navigational character
-#if 0
+// JS: enabling again to make consistent with other platforms
+//     (with wxTE_PROCESS_TAB you have to call Navigate to get default
+//     navigation behaviour)
+#if 1
          !win->HasFlag(wxTE_PROCESS_TAB) &&
-#endif // 0
+#endif
          win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
         wxNavigationKeyEvent new_event;
