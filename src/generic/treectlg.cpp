@@ -2326,7 +2326,8 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 
                 if (HasFlag(wxTR_AQUA_BUTTONS))
                 {
-#ifdef __WXMAC__
+                    // This causes update problems, so disabling for now.
+#if 0 // def __WXMAC__
                     wxMacPortSetter helper(&dc) ;
                     wxMacWindowClipper clipper(this) ;
                     wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
