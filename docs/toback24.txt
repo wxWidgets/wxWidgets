@@ -513,7 +513,7 @@ done
 
 Checking in src/common/fileconf.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/fileconf.cpp,v  <--  fileconf.cpp
-new revision: 1.97; previous revision: 1.96
+new revision: 1.98 ... previous revision: 1.96 (there were 2 fixes)
 Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.261; previous revision: 1.260
