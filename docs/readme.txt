@@ -146,9 +146,16 @@ which describes conditions for distribution of closed source applications
 linked against LGPL library. Basically you should link dynamicaly and
 include source code of LGPL libraries with your product (unless it is
 already present in user's system - like glibc usually is).
-
 If compiled with --enable-odbc (Unix only), wxWindows library will 
 contain iODBC library which is covered by LGPL.
+
+If you use TIFF image handler, please see src/tiff/COPYRIGHT
+for libtiff license details.
+
+If you use JPEG image handler, documentation for your program should
+contain following sentence: "This software is based in part on the work of
+the Independent JPEG Group". See src/jpeg/README for details.
+
 
 Documentation
 -------------
