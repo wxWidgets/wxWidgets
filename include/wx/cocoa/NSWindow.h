@@ -18,7 +18,7 @@
 WX_DECLARE_OBJC_HASHMAP(NSWindow);
 
 class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxTopLevelWindow;
+class WXDLLEXPORT wxTopLevelWindowCocoa;
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSMenuItem);
 DECLARE_WXCOCOA_OBJC_CLASS(wxNSWindowDelegate);
@@ -41,13 +41,13 @@ public:
     virtual void CocoaDelegate_wxMenuItemAction(WX_NSMenuItem menuItem) = 0;
     virtual bool CocoaDelegate_validateMenuItem(WX_NSMenuItem menuItem) = 0;
     virtual wxMenuBar* GetAppMenuBar(wxCocoaNSWindow *win);
-    inline wxTopLevelWindow* GetWxTopLevelWindow()
-    {   return m_wxTopLevelWindow; }
+    inline wxTopLevelWindowCocoa* GetWxTopLevelWindowCocoa()
+    {   return m_wxTopLevelWindowCocoa; }
 protected:
-    wxCocoaNSWindow(wxTopLevelWindow *tlw = NULL);
+    wxCocoaNSWindow(wxTopLevelWindowCocoa *tlw = NULL);
     virtual ~wxCocoaNSWindow();
     WX_wxNSWindowDelegate m_cocoaDelegate;
-    wxTopLevelWindow *m_wxTopLevelWindow;
+    wxTopLevelWindowCocoa *m_wxTopLevelWindowCocoa;
 };
 
 #endif // _WX_COCOA_NSWINDOW_H_
