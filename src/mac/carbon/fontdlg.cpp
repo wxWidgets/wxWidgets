@@ -46,6 +46,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
 #include "wx/msgdlg.h"
 
+//color isn't working in carbon impl
+#define ISCOLORWORKING 0
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -65,7 +68,9 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
     FMFontFamily fontfamily;
     FMFontStyle fontstyle;
     FMFontSize fontsize;
+#if ISCOLORWORKING
     RGBColor fontcolor;
+#endif
         
     status = GetEventParameter (event, kEventParamFMFontFamily,
                                     typeFMFontFamily, NULL,
@@ -86,19 +91,23 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
 
     check_noerr (status);
 
+#if ISCOLORWORKING
     status = GetEventParameter (event, kEventParamFontColor,
                                     typeRGBColor, NULL,
                                     sizeof( RGBColor ), NULL, &fontcolor); 
     check_noerr (status);
+#endif
     
     //now do the conversion to the wx font data
     wxFontData theFontData;
     wxFont 	   theFont;
- 
+
+#if ISCOLORWORKING 
     //set color
     wxColour theColor;
     theColor.Set(&(WXCOLORREF&)fontcolor);
     theFontData.SetColour(theColor);
+#endif
         
     //set size
     theFont.SetPointSize(fontsize);
@@ -234,7 +243,7 @@ int wxFontDialog::ShowModal()
         while(FPIsFontPanelVisible()) 
         {
             //yeild so we can get events
-            ::wxSafeYield(m_dialogParent, false);
+            wxTheApp->Yield(false);
         }
     }
     else
