@@ -234,19 +234,36 @@ bool wxDataObjectComposite::SetData(const wxDataFormat& format,
 
 size_t wxTextDataObject::GetDataSize() const
 {
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+    // Use UTF8 not UCS4
+    wxCharBuffer buffer = wxConvUTF8.cWX2MB( GetText().c_str() );
+    return strlen( (const char*) buffer ) + 1;
+#else
     return GetTextLength() * sizeof(wxChar);
+#endif
 }
 
 bool wxTextDataObject::GetDataHere(void *buf) const
 {
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+    // Use UTF8 not UCS4
+    wxCharBuffer buffer = wxConvUTF8.cWX2MB( GetText().c_str() );
+    strcpy( (char*) buf, (const char*) buffer );
+#else
     wxStrcpy((wxChar *)buf, GetText().c_str());
+#endif
 
     return TRUE;
 }
 
 bool wxTextDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 {
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+    // Use UTF8 not UCS4
+    SetText( wxConvUTF8.cMB2WX( (const char*) buf ) );
+#else
     SetText(wxString((const wxChar *)buf));
+#endif
 
     return TRUE;
 }
