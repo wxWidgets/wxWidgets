@@ -13,7 +13,7 @@
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer}{wxstreambuffer}
+\helpref{wxStreamBuffer}{wxstreambuffer}, \helpref{wxMemoryOutputStream}{wxmemoutputstream}
 
 % ----------
 % Members
@@ -26,11 +26,11 @@
 
 Initializes a new read-only memory stream which will use the specified buffer
 {\it data} of length {\it len}. The stream does not take ownership of the 
-buffer, i.e. that it will not delete in its constructor.
+buffer, i.e. that it will not delete in its destructor.
 
 \membersection{wxMemoryInputStream::\destruct{wxMemoryInputStream}}
 
-\func{}{\destruct{wxFileInputStream}}{\void}
+\func{}{\destruct{wxMemoryInputStream}}{\void}
 
 Destructor.
 

@@ -655,8 +655,8 @@ void wxToolBar::OnInternalIdle()
 	   as setting the cursor in a parent window also effects the
 	   windows above so that checking for the current cursor is
 	   not possible. */
-	   
-        if (HasFlag(wxTB_DOCKABLE))
+
+        if (HasFlag(wxTB_DOCKABLE) && (m_widget->window))
 	{
 	    /* if the toolbar is dockable, then m_widget stands for the
 	       GtkHandleBox widget, which uses its own window so that we

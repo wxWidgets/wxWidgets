@@ -19,7 +19,8 @@ from (such as a file stream or a memory stream).
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer}{wxstreambuffer}, \helpref{wxInputStream}{wxinputstream}
+\helpref{wxStreamBuffer}{wxstreambuffer}, \helpref{wxInputStream}{wxinputstream},
+\helpref{wxBufferedOutputStream}{wxbufferedoutputstream}
 
 % -----------------------------------------------------------------------------
 % wxBufferedOutputStream
@@ -28,7 +29,7 @@ from (such as a file stream or a memory stream).
 
 This stream acts as a cache. It caches the bytes to be written to the specified
 output stream (See \helpref{wxFilterOutputStream}{wxfilteroutputstream}). The
-datas are only written when the cache is full, when the buffered stream is
+data is only written when the cache is full, when the buffered stream is
 destroyed or when calling SeekO().
 
 This class may not be used without some other stream to write the data
@@ -44,7 +45,7 @@ to (such as a file stream or a memory stream).
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxOutputStream}{wxoutputstream}
+\helpref{wxStreamBuffer}{wxstreambuffer}, \helpref{wxOutputStream}{wxoutputstream}
 
 % ----------
 % Members

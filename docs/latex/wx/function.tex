@@ -12,7 +12,7 @@ The functions defined in wxWindows are described here.
 
 \wxheading{See also}
 
-\helpref{wxPathList}{wxpathlist}
+\helpref{wxPathList}{wxpathlist}, \helpref{wxDir}{wxdir}, \helpref{wxFile}{wxfile}
 
 \membersection{::wxDirExists}
 
@@ -281,6 +281,7 @@ Returns TRUE if successful, FALSE otherwise.
 \membersection{::wxGetHostName}\label{wxgethostname}
 
 \func{wxString}{wxGetHostName}{\void}
+
 \func{bool}{wxGetHostName}{\param{char * }{buf}, \param{int }{sz}}
 
 Copies the current host machine's name into the supplied buffer. Please note
@@ -306,6 +307,7 @@ See also: \helpref{wxGetFullHostName}{wxgetfullhostname}
 \membersection{::wxGetUserId}\label{wxgetuserid}
 
 \func{wxString}{wxGetUserId}{\void}
+
 \func{bool}{wxGetUserId}{\param{char * }{buf}, \param{int }{sz}}
 
 This function returns the "user id" also known as "login name" under Unix i.e.
@@ -328,6 +330,7 @@ See also: \helpref{wxGetUserName}{wxgetusername}
 \membersection{::wxGetUserName}\label{wxgetusername}
 
 \func{wxString}{wxGetUserName}{\void}
+
 \func{bool}{wxGetUserName}{\param{char * }{buf}, \param{int }{sz}}
 
 This function returns the full user name (something like "Mr. John Smith").
@@ -863,7 +866,7 @@ Sets the translation (from the top left corner) for PostScript output. The defau
 \section{Clipboard functions}\label{clipsboard}
 
 These clipboard functions are implemented for Windows only. The use of these functions
-is drepated and the code no longer maintained. Use the \helpref{wxClipboard}{wxclipboard}
+is deprecated and the code is no longer maintained. Use the \helpref{wxClipboard}{wxclipboard}
 class instead.
 
 \wxheading{Include files}
@@ -1293,18 +1296,6 @@ Return the (current) user's home directory.
 \wxheading{See also:}
 
 \helpref{wxGetUserHome}{wxgetuserhome}
-
-\wxheading{Include files}
-
-<wx/utils.h>
-
-\membersection{::wxGetHostName}
-
-\func{bool}{wxGetHostName}{\param{const wxString\& }{buf}, \param{int}{ bufSize}}
-
-Copies the host name of the machine the program is running on into the
-buffer {\it buf}, of maximum size {\it bufSize}, returning TRUE if
-successful.
 
 \wxheading{Include files}
 
