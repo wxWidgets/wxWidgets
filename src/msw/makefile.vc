@@ -250,6 +250,7 @@ MSWOBJS = \
   ..\msw\$D\tbar95.obj \
   ..\msw\$D\tbarmsw.obj \
   ..\msw\$D\textctrl.obj \
+  ..\msw\$D\txtstrm.obj \
   ..\msw\$D\thread.obj \
   ..\msw\$D\timer.obj \
   ..\msw\$D\tooltip.obj \

@@ -28,6 +28,7 @@
 #include "wx/tokenzr.h"
 #include "wx/socket.h"
 #include "wx/protocol/protocol.h"
+#include "wx/url.h"
 #include "wx/protocol/http.h"
 #include "wx/sckstrm.h"
 
@@ -178,13 +179,14 @@ bool wxHTTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 
 bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
-  char *tmp_buf;
-  char buf[HTTP_BSIZE];
-  const wxWX2MBbuf pathbuf = path.mb_str();
+  wxChar *tmp_buf;
+  wxCharBuffer buf("");
+  const wxWX2MBbuf pathbuf;
+  wxString tmp_str;
 
   switch (req) {
   case wxHTTP_GET:
-    tmp_buf = "GET";
+    tmp_buf = _T("GET");
     break;
   default:
     return FALSE;
@@ -194,13 +196,12 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   SetFlags(NONE);
   Notify(FALSE);
 
-  sprintf(buf, "%s %s\n\r", tmp_buf, (const char*) pathbuf);
-  Write(buf, strlen(buf));
+  tmp_str = wxURL::ConvertToValidURI(path);
+  wxSprintf(buf, _T("%s %s\n\r"), tmp_buf, tmp_str.GetData());
+  pathbuf = wxConvLibc.cWX2MB(buf);
+  Write(pathbuf, strlen(pathbuf));
   SendHeaders();
-  sprintf(buf, "\n\r");
-  Write(buf, strlen(buf));
-
-  wxString tmp_str;
+  Write("\n\r", 2);
 
   m_error = GetLine(this, tmp_str);
   if (m_error != wxPROTO_NOERR) {

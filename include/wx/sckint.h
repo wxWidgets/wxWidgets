@@ -83,6 +83,7 @@ class SocketWaiter: public wxThread {
   wxSocketInternal *m_internal;
   int m_fd;
 };
+#endif
 
 class SocketRequester
 #if wxUSE_THREADS
@@ -99,17 +100,17 @@ class SocketRequester
 
   bool WaitFor(wxSocketBase::wxRequestNotify req, int millisec);
 
+#if wxUSE_THREADS
   // Thread Entry point
   // ---
   virtual void *Entry();
+#endif
 
  public:
   wxSocketBase *m_socket;
   wxSocketInternal *m_internal;
   int m_fd;
 };
-#endif
-  // wxUSE_THREADS
 
 class wxSocketInternal {
  public:
@@ -134,6 +135,7 @@ class wxSocketInternal {
   void QueueRequest(SockRequest *request, bool async);
   void WaitForEnd(SockRequest *request);
 
+  // Used by SocketRequester
   SockRequest *WaitForReq();
   void EndRequest(SockRequest *req);
  public:

@@ -44,8 +44,6 @@ wxZlibInputStream::wxZlibInputStream(wxInputStream& stream)
   int err;
 
   // I need a private stream buffer.
-  m_i_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::read);
-  m_i_destroybuf = TRUE;
   m_inflate = new z_stream_s;
 
   m_inflate->zalloc = (alloc_func)0;
@@ -106,8 +104,6 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream)
 {
   int err;
 
-  m_o_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::write);
-  m_o_destroybuf = TRUE;
   m_deflate = new z_stream_s;
 
   m_deflate->zalloc = (alloc_func)0;

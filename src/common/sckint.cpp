@@ -186,6 +186,8 @@ void *SocketWaiter::Entry()
   return NULL;
 }
 
+#endif
+
 // --------------------------------------------------------------
 // --------- SocketRequester ------------------------------------
 // --------------------------------------------------------------
@@ -307,6 +309,8 @@ void SocketRequester::ProcessWaitEvent(SockRequest *req)
   m_internal->EndRequest(req);
 }
 
+
+#if wxUSE_THREADS
 void *SocketRequester::Entry()
 {
   SockRequest *req;

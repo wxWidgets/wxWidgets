@@ -668,6 +668,9 @@ wxThreadError wxThread::Resume()
 
 wxThread::ExitCode wxThread::Delete()
 {
+    if (IsPaused())
+      Resume();
+
     m_critsect.Enter();
     wxThreadState state = p_internal->GetState();
 

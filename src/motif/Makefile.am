@@ -96,6 +96,7 @@ libwx_motif_la_SOURCES = \
  tbarbase.cpp \
  tbarsmpl.cpp \
  textfile.cpp \
+ txtstrm.cpp \
  time.cpp \
  url.cpp \
  valgen.cpp \

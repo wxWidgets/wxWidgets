@@ -39,7 +39,6 @@ wxFileInputStream::wxFileInputStream(const wxString& fileName)
 {
   m_file = new wxFile(fileName, wxFile::read);
   m_file_destroy = TRUE;
-  m_i_streambuf->SetBufferIO(1024);
 }
 
 wxFileInputStream::wxFileInputStream()
@@ -53,14 +52,12 @@ wxFileInputStream::wxFileInputStream(wxFile& file)
 {
   m_file = &file;
   m_file_destroy = FALSE;
-  m_i_streambuf->SetBufferIO(1024);
 }
 
 wxFileInputStream::wxFileInputStream(int fd)
 {
   m_file = new wxFile(fd);
   m_file_destroy = TRUE;
-  m_i_streambuf->SetBufferIO(1024);
 }
 
 wxFileInputStream::~wxFileInputStream()
@@ -81,7 +78,18 @@ size_t wxFileInputStream::StreamSize() const
 
 size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-  return m_file->Read(buffer, size);
+  off_t ret;
+
+  ret = m_file->Read(buffer, size);
+
+  if (m_file->Eof())
+    m_lasterror = wxStream_EOF;
+  if (ret == wxInvalidOffset) {
+    m_lasterror = wxStream_READ_ERR;
+    ret = 0;
+  } 
+
+  return ret;
 }
 
 off_t wxFileInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
@@ -102,20 +110,17 @@ wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
 {
   m_file = new wxFile(fileName, wxFile::write);
   m_file_destroy = TRUE;
-  m_o_streambuf->SetBufferIO(1024);
 }
 
 wxFileOutputStream::wxFileOutputStream(wxFile& file)
 {
   m_file = &file;
   m_file_destroy = FALSE;
-  m_o_streambuf->SetBufferIO(1024);
 }
 
 wxFileOutputStream::wxFileOutputStream()
   : wxOutputStream()
 {
-  m_o_streambuf->SetBufferIO(1024);
   m_file_destroy = FALSE;
   m_file = NULL;
 }
@@ -124,7 +129,6 @@ wxFileOutputStream::wxFileOutputStream(int fd)
 {
   m_file = new wxFile(fd);
   m_file_destroy = TRUE;
-  m_o_streambuf->SetBufferIO(1024);
 }
 
 wxFileOutputStream::~wxFileOutputStream()

@@ -153,6 +153,7 @@ wx_include_HEADERS = \
  textctrl.h \
  textdlg.h \
  textfile.h \
+ txtstrm.h \
  thread.h \
  time.h \
  timer.h \

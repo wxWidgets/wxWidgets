@@ -247,6 +247,7 @@ MSWOBJS = \
   $(MSWDIR)\tabctrl.obj \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
+  $(MSWDIR)\txtstrm.obj \
   $(MSWDIR)\thread.obj \
   $(MSWDIR)\timer.obj \
   $(MSWDIR)\tooltip.obj \
@@ -463,6 +464,8 @@ $(MSWDIR)\tbar95.obj:     $(MSWDIR)\tbar95.$(SRCSUFF)
 $(MSWDIR)\tbarmsw.obj:     $(MSWDIR)\tbarmsw.$(SRCSUFF)
 
 $(MSWDIR)\textctrl.obj:     $(MSWDIR)\textctrl.$(SRCSUFF)
+
+$(MSWDIR)\txtstrm.obj:     $(MSWDIR)\txtstrm.$(SRCSUFF)
 
 $(MSWDIR)\thread.obj:     $(MSWDIR)\thread.$(SRCSUFF)
 

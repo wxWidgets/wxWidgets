@@ -43,16 +43,14 @@
 
 wxStreamBuffer::wxStreamBuffer(wxStreamBase& stream, BufMode mode)
   : m_buffer_start(NULL), m_buffer_end(NULL), m_buffer_pos(NULL),
-    m_buffer_size(0), m_wback(NULL), m_wbacksize(0), m_wbackcur(0),
-    m_fixed(TRUE), m_flushable(TRUE), m_stream(&stream),
+    m_buffer_size(0), m_fixed(TRUE), m_flushable(TRUE), m_stream(&stream),
     m_mode(mode), m_destroybuf(FALSE), m_destroystream(FALSE)
 {
 }
 
 wxStreamBuffer::wxStreamBuffer(BufMode mode)
   : m_buffer_start(NULL), m_buffer_end(NULL), m_buffer_pos(NULL),
-    m_buffer_size(0), m_wback(NULL), m_wbacksize(0), m_wbackcur(0),
-    m_fixed(TRUE), m_flushable(FALSE), m_stream(NULL),
+    m_buffer_size(0), m_fixed(TRUE), m_flushable(FALSE), m_stream(NULL),
     m_mode(mode), m_destroybuf(FALSE), m_destroystream(TRUE)
 {
   m_stream = new wxStreamBase();
@@ -70,46 +68,14 @@ wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
   m_mode = buffer.m_mode;
   m_destroybuf = FALSE;
   m_destroystream = FALSE;
-  m_wback = NULL;
-  m_wbacksize = 0;
-  m_wbackcur = 0;
 }
 
 wxStreamBuffer::~wxStreamBuffer()
 {
-  if (m_wback)
-    free(m_wback);
   if (m_destroybuf)
     wxDELETEA(m_buffer_start);
   if (m_destroystream)
     delete m_stream;
-}
-
-size_t wxStreamBuffer::WriteBack(const char *buf, size_t bufsize)
-{
-  char *ptrback;
-
-  if (m_mode != read)
-    return 0;
-
-  ptrback = AllocSpaceWBack(bufsize);
-  if (!ptrback)
-    return 0;
-
-  memcpy(ptrback, buf, bufsize);
-  return bufsize;
-}
-
-bool wxStreamBuffer::WriteBack(char c)
-{
-  char *ptrback;
-
-  ptrback = AllocSpaceWBack(1);
-  if (!ptrback)
-    return FALSE;
-
-  *ptrback = c;
-  return TRUE;
 }
 
 void wxStreamBuffer::SetBufferIO(char *buffer_start, char *buffer_end)
@@ -152,44 +118,6 @@ void wxStreamBuffer::ResetBuffer()
     m_buffer_pos = m_buffer_end;
   else
     m_buffer_pos = m_buffer_start;
-}
-
-char *wxStreamBuffer::AllocSpaceWBack(size_t needed_size)
-{
-  char *temp_b;
-
-  m_wbacksize += needed_size;
-
-  if (!m_wback)
-    temp_b = (char *)malloc(m_wbacksize);
-  else
-    temp_b = (char *)realloc(m_wback, m_wbacksize);
-
-  if (!temp_b)
-    return NULL;
-  m_wback = temp_b;
-  
-  return (char *)(m_wback+(m_wbacksize-needed_size));
-}
-
-size_t wxStreamBuffer::GetWBack(char *buf, size_t bsize)
-{
-  size_t s_toget = m_wbacksize-m_wbackcur;
-
-  if (bsize < s_toget)
-    s_toget = bsize;
-
-  memcpy(buf, (m_wback+m_wbackcur), s_toget);
-
-  m_wbackcur += s_toget;
-  if (m_wbackcur == m_wbacksize) {
-    free(m_wback);
-    m_wback = (char *)NULL;
-    m_wbacksize = 0;
-    m_wbackcur = 0;
-  }
-    
-  return s_toget;
 }
 
 bool wxStreamBuffer::FillBuffer()
@@ -301,13 +229,6 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
   // ------------------
 
   m_stream->m_lasterror = wxStream_NOERROR;
-  m_stream->m_lastcount = GetWBack((char *)buffer, size);
-  size -= m_stream->m_lastcount;
-  if (size == 0)
-    return m_stream->m_lastcount;
-
-  buffer = (void *)((char *)buffer+m_stream->m_lastcount);
-
   if (!m_buffer_size)
     return (m_stream->m_lastcount += m_stream->OnSysRead(buffer, size));
 
@@ -408,15 +329,18 @@ size_t wxStreamBuffer::Write(wxStreamBuffer *sbuf)
 {
   char buf[BUF_TEMP_SIZE];
   size_t s = 0, bytes_count = BUF_TEMP_SIZE, b_count2;
+  wxInputStream *in_stream;
 
   if (m_mode == read)
     return 0;
+
+  in_stream = (wxInputStream *)sbuf->Stream();
 
   while (bytes_count == BUF_TEMP_SIZE) {
     b_count2 = sbuf->Read(buf, bytes_count);
     bytes_count = Write(buf, b_count2);
     if (b_count2 > bytes_count)
-      sbuf->WriteBack(buf+bytes_count, b_count2-bytes_count);
+      in_stream->Ungetch(buf+bytes_count, b_count2-bytes_count);
     s += bytes_count;
   }
   return s;
@@ -523,78 +447,115 @@ off_t wxStreamBase::OnSysTell() const
 // ----------------------------------------------------------------------------
 
 wxInputStream::wxInputStream()
-  : wxStreamBase()
+  : wxStreamBase(),
+    m_wback(NULL), m_wbacksize(0), m_wbackcur(0)
 {
-  m_i_destroybuf = TRUE;
-  m_i_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::read);
-}
-
-wxInputStream::wxInputStream(wxStreamBuffer *buffer)
-  : wxStreamBase()
-{
-  m_i_destroybuf = FALSE;
-  m_i_streambuf = buffer;
 }
 
 wxInputStream::~wxInputStream()
 {
-  if (m_i_destroybuf)
-    delete m_i_streambuf;
+  if (m_wback)
+    free(m_wback);
+}
+
+char *wxInputStream::AllocSpaceWBack(size_t needed_size)
+{
+  char *temp_b;
+
+  m_wbacksize += needed_size;
+
+  if (!m_wback)
+    temp_b = (char *)malloc(m_wbacksize);
+  else
+    temp_b = (char *)realloc(m_wback, m_wbacksize);
+
+  if (!temp_b)
+    return NULL;
+  m_wback = temp_b;
+  
+  return (char *)(m_wback+(m_wbacksize-needed_size));
+}
+
+size_t wxInputStream::GetWBack(char *buf, size_t bsize)
+{
+  size_t s_toget = m_wbacksize-m_wbackcur;
+
+  if (bsize < s_toget)
+    s_toget = bsize;
+
+  memcpy(buf, (m_wback+m_wbackcur), s_toget);
+
+  m_wbackcur += s_toget;
+  if (m_wbackcur == m_wbacksize) {
+    free(m_wback);
+    m_wback = (char *)NULL;
+    m_wbacksize = 0;
+    m_wbackcur = 0;
+  }
+    
+  return s_toget;
+}
+
+size_t wxInputStream::Ungetch(void *buf, size_t bufsize)
+{
+  char *ptrback;
+
+  ptrback = AllocSpaceWBack(bufsize);
+  if (!ptrback)
+    return 0;
+
+  memcpy(ptrback, buf, bufsize);
+  return bufsize;
+}
+
+bool wxInputStream::Ungetch(char c)
+{
+  char *ptrback;
+
+  ptrback = AllocSpaceWBack(1);
+  if (!ptrback)
+    return FALSE;
+
+  *ptrback = c;
+  return TRUE;
 }
 
 char wxInputStream::GetC()
 {
   char c;
-  m_i_streambuf->Read(&c, 1);
+  Read(&c, 1);
   return c;
-}
-
-
-wxString wxInputStream::ReadLine()
-{
-  char c, last_endl = 0;
-  bool end_line = FALSE;
-  wxString line;
-
-  while (!end_line) {
-    c = GetC();
-    if (LastError() != wxStream_NOERROR)
-      break;
-
-    switch (c) {
-    case '\n':
-      end_line = TRUE;
-      break;
-    case '\r':
-      last_endl = '\r';
-      break;
-    default:
-      if (last_endl == '\r') {
-        end_line = TRUE;
-        InputStreamBuffer()->WriteBack(c);
-        break;
-      }
-      line += c;
-      break;
-    } 
-  }
-  return line;
 }
 
 wxInputStream& wxInputStream::Read(void *buffer, size_t size)
 {
-  m_i_streambuf->Read(buffer, size);
-  // wxStreamBuffer sets all variables for us
+  size_t retsize;
+  char *buf = (char *)buffer;
+
+  retsize = GetWBack(buf, size);
+  if (retsize == size) {
+    m_lastcount = size;
+    m_lasterror = wxStream_NOERROR;
+    return *this;
+  }
+  size     -= retsize;
+  buf      += retsize;
+
+  m_lastcount = OnSysRead(buf, size);
   return *this;
 }
 
 char wxInputStream::Peek()
 {
-  m_i_streambuf->GetDataLeft();
+  char c;
 
-  return *(m_i_streambuf->GetBufferPos());
+  Read(&c, 1);
+  if (m_lasterror == wxStream_NOERROR) {
+    Ungetch(c);
+    return c;
+  }
+  return 0;
 }
-
 
 wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 {
@@ -610,167 +571,17 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 
 off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
-  return m_i_streambuf->Seek(pos, mode);
+  return wxInvalidOffset;
 }
 
 off_t wxInputStream::TellI() const
 {
-  return m_i_streambuf->Tell();
+  return wxInvalidOffset;
 }
 
 // --------------------
 // Overloaded operators
 // --------------------
-
-wxInputStream& wxInputStream::operator>>(wxString& line)
-{
-  line = ReadLine();
-  return *this;
-}
-
-wxInputStream& wxInputStream::operator>>(char& c)
-{
-  c = GetC();
-  return *this;
-}
-
-wxInputStream& wxInputStream::operator>>(signed short& i)
-{
-  signed long l;
-
-  *this >> l;
-  i = (signed short)l;
-  return *this;
-}
-
-wxInputStream& wxInputStream::operator>>(signed int& i)
-{
-  signed long l;
-
-  *this >> l;
-  i = (signed int)l;
-  return *this;
-}
-
-wxInputStream& wxInputStream::operator>>(signed long& i)
-{
-  /* I only implemented a simple integer parser */
-  int c; 
-  int sign;
-
-  while (isspace( c = GetC() ) )
-     /* Do nothing */ ;
-
-  i = 0;
-  if (! (c == '-' || isdigit(c)) ) {
-    InputStreamBuffer()->WriteBack(c);
-    return *this;
-  }
-
-  if (c == '-') {
-    sign = -1;
-    c = GetC();
-  } else if (c == '+') {
-    sign = 1;
-    c = GetC();
-  } else {
-    sign = 1;
-  }
-
-  while (isdigit(c)) {
-    i = i*10 + (c - (int)'0');
-    c = GetC();
-  }
-
-  i *= sign;
-
-  return *this;
-}
-
-wxInputStream& wxInputStream::operator>>(unsigned short& i)
-{
-  unsigned long l;
-
-  *this >> l;
-  i = (unsigned short)l;
-  return *this;
-}
-
-wxInputStream& wxInputStream::operator>>(unsigned int& i)
-{
-  unsigned long l;
-
-  *this >> l;
-  i = (unsigned int)l;
-  return *this;
-}
-
-wxInputStream& wxInputStream::operator>>(unsigned long& i)
-{
-  /* I only implemented a simple integer parser */
-  int c;
-
-  while (isspace( c = GetC() ) )
-     /* Do nothing */ ;
-
-  i = 0;
-  if (!isdigit(c)) {
-    InputStreamBuffer()->WriteBack(c);
-    return *this;
-  }
-
-  while (isdigit(c)) {
-    i = i*10 + c - '0';
-    c = GetC();
-  }
-
-  return *this;
-}
-
-wxInputStream& wxInputStream::operator>>(double& f)
-{
-  /* I only implemented a simple float parser */
-  int c, sign;
-
-  while (isspace( c = GetC() ) )
-     /* Do nothing */ ;
-
-  f = 0.0;
-  if (! (c == '-' || isdigit(c)) ) {
-    InputStreamBuffer()->WriteBack(c);
-    return *this;
-  }
-
-  if (c == '-') {
-    sign = -1;
-    c = GetC();
-  } else if (c == '+') {
-    sign = 1;
-    c = GetC();
-  } else {
-    sign = 1;
-  }
-
-  while (isdigit(c)) {
-    f = f*10 + (c - '0');
-    c = GetC();
-  }
-
-  if (c == '.') {
-    double f_multiplicator = (double) 0.1;
-    c = GetC();
-
-    while (isdigit(c)) {
-      f += (c-'0')*f_multiplicator;
-      f_multiplicator /= 10;
-      c = GetC();
-    }
-  }
-
-  f *= sign;
-
-  return *this;
-}
 
 #if wxUSE_SERIAL
 wxInputStream& wxInputStream::operator>>(wxObject *& obj)
@@ -788,26 +599,15 @@ wxInputStream& wxInputStream::operator>>(wxObject *& obj)
 wxOutputStream::wxOutputStream()
   : wxStreamBase()
 {
-  m_o_destroybuf = TRUE;
-  m_o_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::write);
-}
-
-wxOutputStream::wxOutputStream(wxStreamBuffer *buffer)
-  : wxStreamBase()
-{
-  m_o_destroybuf = FALSE;
-  m_o_streambuf = buffer;
 }
 
 wxOutputStream::~wxOutputStream()
 {
-  if (m_o_destroybuf)
-    delete m_o_streambuf;
 }
 
 wxOutputStream& wxOutputStream::Write(const void *buffer, size_t size)
 {
-  m_o_streambuf->Write(buffer, size);
+  m_lastcount = OnSysWrite(buffer, size);
   return *this;
 }
 
@@ -819,98 +619,16 @@ wxOutputStream& wxOutputStream::Write(wxInputStream& stream_in)
 
 off_t wxOutputStream::TellO() const
 {
-  return m_o_streambuf->Tell();
+  return wxInvalidOffset;
 }
 
 off_t wxOutputStream::SeekO(off_t pos, wxSeekMode mode)
 {
-  return m_o_streambuf->Seek(pos, mode);
+  return wxInvalidOffset;
 }
 
 void wxOutputStream::Sync()
 {
-  m_o_streambuf->FlushBuffer();
-}
-
-void wxOutputStream::WriteLine(const wxString& line)
-{
-#ifdef __WXMSW__
-  wxString tmp_string = line + _T("\r\n");
-#else
-#ifdef __WXMAC__
-  wxString tmp_string = line + _T('\r');
-#else
-  wxString tmp_string = line + _T('\n');
-#endif
-#endif
-
-  Write((const wxChar *) tmp_string, tmp_string.Length()*sizeof(wxChar));
-}
-
-wxOutputStream& wxOutputStream::operator<<(const char *string)
-{
-  return Write(string, strlen(string));
-}
-
-wxOutputStream& wxOutputStream::operator<<(wxString& string)
-{
-#if wxUSE_UNICODE
-  const wxWX2MBbuf buf = string.mb_str();
-  return *this << buf;
-#else
-  return Write(string, string.Len());
-#endif
-}
-
-wxOutputStream& wxOutputStream::operator<<(char c)
-{
-  return Write(&c, 1);
-}
-
-wxOutputStream& wxOutputStream::operator<<(signed short i)
-{
-  signed long l = (signed long)i;
-  return *this << l;
-}
-
-wxOutputStream& wxOutputStream::operator<<(signed int i)
-{
-  signed long l = (signed long)i;
-  return *this << l;
-}
-
-wxOutputStream& wxOutputStream::operator<<(signed long i)
-{
-  wxString strlong;
-  strlong.Printf(_T("%ld"), i);
-  return *this << strlong;
-}
-
-wxOutputStream& wxOutputStream::operator<<(unsigned short i)
-{
-  unsigned long l = (unsigned long)i;
-  return *this << l;
-}
-
-wxOutputStream& wxOutputStream::operator<<(unsigned int i)
-{
-  unsigned long l = (unsigned long)i;
-  return *this << l;
-}
-
-wxOutputStream& wxOutputStream::operator<<(unsigned long i)
-{
-  wxString strlong;
-  strlong.Printf(_T("%lu"), i);
-  return *this << strlong;
-}
-
-wxOutputStream& wxOutputStream::operator<<(double f)
-{
-  wxString strfloat;
-
-  strfloat.Printf(_T("%f"), f);
-  return *this << strfloat;
 }
 
 #if wxUSE_SERIAL
@@ -926,13 +644,12 @@ wxOutputStream& wxOutputStream::operator<<(wxObject& obj)
 // wxFilterInputStream
 // ----------------------------------------------------------------------------
 wxFilterInputStream::wxFilterInputStream()
-  : wxInputStream(NULL)
+  : wxInputStream()
 {
-  // WARNING streambuf set to NULL !
 }
 
 wxFilterInputStream::wxFilterInputStream(wxInputStream& stream)
-  : wxInputStream(stream.InputStreamBuffer())
+  : wxInputStream()
 {
   m_parent_i_stream = &stream;
 }
@@ -945,18 +662,130 @@ wxFilterInputStream::~wxFilterInputStream()
 // wxFilterOutputStream
 // ----------------------------------------------------------------------------
 wxFilterOutputStream::wxFilterOutputStream()
-  : wxOutputStream(NULL)
+  : wxOutputStream()
 {
 }
 
 wxFilterOutputStream::wxFilterOutputStream(wxOutputStream& stream)
-  : wxOutputStream(stream.OutputStreamBuffer())
+  : wxOutputStream()
 {
   m_parent_o_stream = &stream;
 }
 
 wxFilterOutputStream::~wxFilterOutputStream()
 {
+}
+
+// ----------------------------------------------------------------------------
+// wxBufferedInputStream
+// ----------------------------------------------------------------------------
+wxBufferedInputStream::wxBufferedInputStream(wxInputStream& s)
+  : wxFilterInputStream(s)
+{
+  m_i_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::read);
+  m_i_streambuf->SetBufferIO(1024);
+}
+
+wxBufferedInputStream::~wxBufferedInputStream()
+{
+  delete m_i_streambuf;
+}
+
+wxInputStream& wxBufferedInputStream::Read(void *buffer, size_t size)
+{
+  size_t retsize;
+  char *buf = (char *)buffer;
+
+  retsize = GetWBack(buf, size);
+  if (retsize == size) {
+    m_lastcount = size;
+    m_lasterror = wxStream_NOERROR;
+    return *this;
+  }
+  size     -= retsize;
+  buf      += retsize;
+
+  m_i_streambuf->Read(buf, size);
+
+  return *this;
+}
+
+off_t wxBufferedInputStream::SeekI(off_t pos, wxSeekMode mode)
+{
+  return m_i_streambuf->Seek(pos, mode);
+}
+
+off_t wxBufferedInputStream::TellI() const
+{
+  return m_i_streambuf->Tell();
+}
+
+size_t wxBufferedInputStream::OnSysRead(void *buffer, size_t bufsize)
+{
+  return m_parent_i_stream->Read(buffer, bufsize).LastRead();
+}
+
+off_t wxBufferedInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
+{
+  return m_parent_i_stream->SeekI(seek, mode);
+}
+
+off_t wxBufferedInputStream::OnSysTell() const
+{
+  return m_parent_i_stream->TellI();
+}
+
+// ----------------------------------------------------------------------------
+// wxBufferedOutputStream
+// ----------------------------------------------------------------------------
+
+wxBufferedOutputStream::wxBufferedOutputStream(wxOutputStream& s)
+  : wxFilterOutputStream(s)
+{
+  m_o_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::write);
+  m_o_streambuf->SetBufferIO(1024);
+}
+
+wxBufferedOutputStream::~wxBufferedOutputStream()
+{
+  delete m_o_streambuf;
+}
+
+wxOutputStream& wxBufferedOutputStream::Write(const void *buffer, size_t size)
+{
+  m_o_streambuf->Write(buffer, size);
+  return *this;
+}
+
+off_t wxBufferedOutputStream::SeekO(off_t pos, wxSeekMode mode)
+{
+  return m_o_streambuf->Seek(pos, mode);
+}
+
+off_t wxBufferedOutputStream::TellO() const
+{
+  return m_o_streambuf->Tell();
+}
+
+void wxBufferedOutputStream::Sync()
+{
+  m_o_streambuf->FlushBuffer();
+  m_parent_o_stream->Sync();
+}
+
+size_t wxBufferedOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
+{
+  return m_parent_o_stream->Write(buffer, bufsize).LastWrite();
+}
+
+off_t wxBufferedOutputStream::OnSysSeek(off_t seek, wxSeekMode mode)
+{
+  return m_parent_o_stream->SeekO(seek, mode);
+}
+
+off_t wxBufferedOutputStream::OnSysTell() const
+{
+  return m_parent_o_stream->TellO();
 }
 
 // ----------------------------------------------------------------------------

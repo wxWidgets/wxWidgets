@@ -20,28 +20,54 @@
 
 #if wxUSE_STREAMS
 
-class WXDLLEXPORT wxDataInputStream: public wxFilterInputStream {
+class WXDLLEXPORT wxDataInputStream {
 public:
   wxDataInputStream(wxInputStream& s);
-  virtual ~wxDataInputStream();
+  ~wxDataInputStream();
 
   wxUint32 Read32();
   wxUint16 Read16();
   wxUint8 Read8();
   double ReadDouble();
   wxString ReadString();
+
+  wxDataInputStream& operator>>(wxString& s);
+  wxDataInputStream& operator>>(wxInt8& c);
+  wxDataInputStream& operator>>(wxInt16& i);
+  wxDataInputStream& operator>>(wxInt32& i);
+  wxDataInputStream& operator>>(wxUint8& c);
+  wxDataInputStream& operator>>(wxUint16& i);
+  wxDataInputStream& operator>>(wxUint32& i);
+  wxDataInputStream& operator>>(double& i);
+  wxDataInputStream& operator>>(float& f);
+ protected:
+  wxInputStream *m_input;
 };
 
-class WXDLLEXPORT wxDataOutputStream: public wxFilterOutputStream {
+class WXDLLEXPORT wxDataOutputStream {
  public:
   wxDataOutputStream(wxOutputStream& s);
-  virtual ~wxDataOutputStream();
+  ~wxDataOutputStream();
 
   void Write32(wxUint32 i);
   void Write16(wxUint16 i);
   void Write8(wxUint8 i);
   void WriteDouble(double d);
   void WriteString(const wxString& string);
+
+  wxDataOutputStream& operator<<(const wxChar *string);
+  wxDataOutputStream& operator<<(wxString& string);
+  wxDataOutputStream& operator<<(wxInt8 c);
+  wxDataOutputStream& operator<<(wxInt16 i);
+  wxDataOutputStream& operator<<(wxInt32 i);
+  wxDataOutputStream& operator<<(wxUint8 c);
+  wxDataOutputStream& operator<<(wxUint16 i);
+  wxDataOutputStream& operator<<(wxUint32 i);
+  wxDataOutputStream& operator<<(double f);
+  wxDataOutputStream& operator<<(float f);
+
+ protected:
+  wxOutputStream *m_output;
 };
 
 #endif

@@ -26,7 +26,11 @@
 #   include <fstream>
 #endif
 
+#if wxUSE_STREAMS
 #include "wx/stream.h"
+#include "wx/txtstrm.h"
+#endif
+
 #include "wx/string.h"
 #include "wx/variant.h"
 
@@ -371,13 +375,16 @@ bool wxVariantDataLong::Read(istream& str)
 #if wxUSE_STREAMS
 bool wxVariantDataLong::Write(wxOutputStream& str) const
 {
-    str << m_value;
+    wxTextOutputStream s(str);
+
+    s.Write32(m_value);
     return TRUE;
 }
 
 bool wxVariantDataLong::Read(wxInputStream& str)
 {
-   str >> m_value;
+   wxTextInputStream s(str);
+   m_value = s.Read32();
    return TRUE;
 }
 #endif // wxUSE_STREAMS
@@ -469,13 +476,15 @@ bool wxVariantDataReal::Read(istream& str)
 #if wxUSE_STREAMS
 bool wxVariantDataReal::Write(wxOutputStream& str) const
 {
-    str << m_value;
+    wxTextOutputStream s(str);
+    s.WriteDouble((double)m_value);
     return TRUE;
 }
 
 bool wxVariantDataReal::Read(wxInputStream& str)
 {
-    str >> (float&)m_value;
+    wxTextInputStream s(str);
+    m_value = (float)s.ReadDouble();
     return TRUE;
 }
 #endif // wxUSE_STREAMS
@@ -569,13 +578,17 @@ bool wxVariantDataBool::Read(istream& WXUNUSED(str))
 #if wxUSE_STREAMS
 bool wxVariantDataBool::Write(wxOutputStream& str) const
 {
-    str << (char)m_value;
+    wxTextOutputStream s(str);
+
+    s.Write8(m_value); 
     return TRUE;
 }
 
 bool wxVariantDataBool::Read(wxInputStream& str)
 {
-    str >> (char&)m_value;
+    wxTextInputStream s(str);
+
+    m_value = s.Read8();
     return TRUE;
 }
 #endif // wxUSE_STREAMS
@@ -667,13 +680,17 @@ bool wxVariantDataChar::Read(istream& WXUNUSED(str))
 #if wxUSE_STREAMS
 bool wxVariantDataChar::Write(wxOutputStream& str) const
 {
-    str << m_value;
+    wxTextOutputStream s(str);
+
+    s.Write8(m_value);
     return TRUE;
 }
 
 bool wxVariantDataChar::Read(wxInputStream& str)
 {
-    str >> m_value;
+    wxTextInputStream s(str);
+
+    m_value = s.Read8();
     return TRUE;
 }
 #endif // wxUSE_STREAMS
@@ -771,13 +788,16 @@ bool wxVariantDataString::Read(istream& str)
 bool wxVariantDataString::Write(wxOutputStream& str) const
 {
   // why doesn't wxOutputStream::operator<< take "const wxString&"
-    str << (const char*) m_value.mb_str();
+    wxTextOutputStream s(str);
+    s.WriteString(m_value);
     return TRUE;
 }
 
 bool wxVariantDataString::Read(wxInputStream& str)
 {
-    str >> m_value;
+    wxTextInputStream s(str);
+
+    m_value = s.ReadString();
     return TRUE;
 }
 #endif // wxUSE_STREAMS

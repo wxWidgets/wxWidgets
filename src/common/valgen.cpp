@@ -203,9 +203,9 @@ bool wxGenericValidator::TransferToWindow(void)
       pControl->SetSelection(*m_pInt) ;
       return TRUE;
     }
-  }
+  } else
 #endif
-  else if (m_validatorWindow->IsKindOf(CLASSINFO(wxStaticText)) )
+  if (m_validatorWindow->IsKindOf(CLASSINFO(wxStaticText)) )
   {
     wxStaticText* pControl = (wxStaticText*) m_validatorWindow;
 	if (m_pString)

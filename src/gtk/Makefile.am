@@ -86,6 +86,7 @@ libwx_gtk_la_SOURCES = \
  tbarbase.cpp \
  tbarsmpl.cpp \
  textfile.cpp \
+ txtstrm.cpp \
  time.cpp \
  timercmn.cpp \
  tokenzr.cpp \
