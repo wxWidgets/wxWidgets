@@ -423,9 +423,21 @@ public:
     void SetStyle(int style);
     void SetWidth(int width);
 
-            // **** This one needs to return a list of ints (wxDash)
-    //int GetDashes(wxDash **dashes);
+
     void SetDashes(int LCOUNT, wxDash* choices);
+    //int GetDashes(wxDash **dashes);
+    %addmethods {
+        PyObject* GetDashes() {
+            wxDash* dashes;
+            int count = self->GetDashes(&dashes);
+            wxPyBeginBlockThreads();
+            PyObject* retval = PyList_New(0);
+            for (int x=0; x<count; x++)
+                PyList_Append(retval, PyInt_FromLong(dashes[x]));
+            wxPyEndBlockThreads();
+            return retval;
+        }
+    }
 
 #ifdef __WXMSW__
     wxBitmap* GetStipple();

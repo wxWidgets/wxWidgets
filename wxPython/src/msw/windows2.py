@@ -129,7 +129,7 @@ def wxPreNotebook(*_args,**_kwargs):
     return val
 
 
-class wxSplitterEventPtr(wxCommandEventPtr):
+class wxSplitterEventPtr(wxNotifyEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0

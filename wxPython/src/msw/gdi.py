@@ -388,6 +388,9 @@ class wxPenPtr(wxGDIObjectPtr):
     def SetDashes(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_SetDashes,(self,) + _args, _kwargs)
         return val
+    def GetDashes(self, *_args, **_kwargs):
+        val = apply(gdic.wxPen_GetDashes,(self,) + _args, _kwargs)
+        return val
     def GetStipple(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_GetStipple,(self,) + _args, _kwargs)
         if val: val = wxBitmapPtr(val) 

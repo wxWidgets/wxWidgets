@@ -158,7 +158,7 @@ enum
 };
 
 
-class wxSplitterEvent : public wxCommandEvent {
+class wxSplitterEvent : public wxNotifyEvent {
 public:
      wxSplitterEvent(wxEventType type = wxEVT_NULL,
                      wxSplitterWindow *splitter = NULL);
