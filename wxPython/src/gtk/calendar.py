@@ -23,13 +23,14 @@ CAL_BORDER_NONE = _calendar.CAL_BORDER_NONE
 CAL_BORDER_SQUARE = _calendar.CAL_BORDER_SQUARE
 CAL_BORDER_ROUND = _calendar.CAL_BORDER_ROUND
 class CalendarDateAttr(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarDateAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxColour colText, wxColour colBack=wxNullColour, wxColour colBorder=wxNullColour, 
-    wxFont font=wxNullFont, 
-    wxCalendarDateBorder border=CAL_BORDER_NONE) -> CalendarDateAttr"""
+        """
+        __init__(wxColour colText, wxColour colBack=wxNullColour, wxColour colBorder=wxNullColour, 
+            wxFont font=wxNullFont, 
+            wxCalendarDateBorder border=CAL_BORDER_NONE) -> CalendarDateAttr
+        """
         newobj = _calendar.new_CalendarDateAttr(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -117,7 +118,6 @@ def CalendarDateAttrBorder(*args, **kwargs):
     return val
 
 class CalendarEvent(core.CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -156,14 +156,15 @@ EVT_CALENDAR_YEAR =            wx.PyEventBinder( wxEVT_CALENDAR_YEAR_CHANGED, 1)
 EVT_CALENDAR_WEEKDAY_CLICKED = wx.PyEventBinder( wxEVT_CALENDAR_WEEKDAY_CLICKED, 1)
 
 class CalendarCtrl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, DateTime date=wxDefaultDateTime, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
-    wxString name=wxPyCalendarNameStr) -> CalendarCtrl"""
+        """
+        __init__(Window parent, int id, DateTime date=wxDefaultDateTime, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
+            wxString name=wxPyCalendarNameStr) -> CalendarCtrl
+        """
         newobj = _calendar.new_CalendarCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -171,10 +172,12 @@ class CalendarCtrl(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, DateTime date=wxDefaultDateTime, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
-    wxString name=wxPyCalendarNameStr) -> bool"""
+        """
+        Create(Window parent, int id, DateTime date=wxDefaultDateTime, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
+            wxString name=wxPyCalendarNameStr) -> bool
+        """
         return _calendar.CalendarCtrl_Create(*args, **kwargs)
 
     def SetDate(*args, **kwargs):

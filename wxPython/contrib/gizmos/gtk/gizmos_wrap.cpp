@@ -6734,11 +6734,11 @@ static void *_p_wxSplashScreenWindowTo_p_wxObject(void *x) {
 static void *_p_wxTopLevelWindowTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *) ((wxTopLevelWindow *) x));
 }
-static void *_p_wxWindowTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxEvtHandler *) ((wxWindow *) x));
-}
 static void *_p_wxScrolledWindowTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxPanel *) ((wxScrolledWindow *) x));
+}
+static void *_p_wxWindowTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvtHandler *) ((wxWindow *) x));
 }
 static void *_p_wxDynamicSashWindowTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *) ((wxDynamicSashWindow *) x));

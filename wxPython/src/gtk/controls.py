@@ -14,18 +14,22 @@ BU_BOTTOM = _controls.BU_BOTTOM
 BU_EXACTFIT = _controls.BU_EXACTFIT
 BU_AUTODRAW = _controls.BU_AUTODRAW
 class Button(core.Control):
-    """A button is a control that contains a text string, and is one of the most
-common elements of a GUI.  It may be placed on a dialog box or panel, or
-indeed almost any other window."""
+    """
+    A button is a control that contains a text string, and is one of the most
+    common elements of a GUI.  It may be placed on a dialog box or panel, or
+    indeed almost any other window.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyButtonNameStr) -> Button
+        """
+        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyButtonNameStr) -> Button
 
-Create and show a button."""
+        Create and show a button.
+        """
         newobj = _controls.new_Button(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -33,18 +37,22 @@ Create and show a button."""
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyButtonNameStr) -> bool
+        """
+        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyButtonNameStr) -> bool
 
-Acutally create the GUI Button for 2-phase creation."""
+        Acutally create the GUI Button for 2-phase creation.
+        """
         return _controls.Button_Create(*args, **kwargs)
 
     def SetDefault(*args, **kwargs):
-        """SetDefault()
+        """
+        SetDefault()
 
-This sets the button to be the default item for the panel or dialog box."""
+        This sets the button to be the default item for the panel or dialog box.
+        """
         return _controls.Button_SetDefault(*args, **kwargs)
 
     def GetDefaultSize(*args, **kwargs):
@@ -61,9 +69,11 @@ class ButtonPtr(Button):
 _controls.Button_swigregister(ButtonPtr)
 
 def PreButton(*args, **kwargs):
-    """PreButton() -> Button
+    """
+    PreButton() -> Button
 
-Precreate a Button for 2-phase creation."""
+    Precreate a Button for 2-phase creation.
+    """
     val = _controls.new_PreButton(*args, **kwargs)
     val.thisown = 1
     return val
@@ -77,12 +87,14 @@ class BitmapButton(Button):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmapButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=BU_AUTODRAW, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyButtonNameStr) -> BitmapButton
+        """
+        __init__(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=BU_AUTODRAW, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyButtonNameStr) -> BitmapButton
 
-Create and show a button."""
+        Create and show a button.
+        """
         newobj = _controls.new_BitmapButton(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -90,61 +102,79 @@ Create and show a button."""
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=BU_AUTODRAW, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyButtonNameStr) -> bool
+        """
+        Create(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=BU_AUTODRAW, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyButtonNameStr) -> bool
 
-Acutally create the GUI BitmapButton for 2-phase creation."""
+        Acutally create the GUI BitmapButton for 2-phase creation.
+        """
         return _controls.BitmapButton_Create(*args, **kwargs)
 
     def GetBitmapLabel(*args, **kwargs):
-        """GetBitmapLabel() -> wxBitmap
+        """
+        GetBitmapLabel() -> wxBitmap
 
-Returns the label bitmap (the one passed to the constructor)."""
+        Returns the label bitmap (the one passed to the constructor).
+        """
         return _controls.BitmapButton_GetBitmapLabel(*args, **kwargs)
 
     def GetBitmapDisabled(*args, **kwargs):
-        """GetBitmapDisabled() -> wxBitmap
+        """
+        GetBitmapDisabled() -> wxBitmap
 
-Returns the bitmap for the disabled state."""
+        Returns the bitmap for the disabled state.
+        """
         return _controls.BitmapButton_GetBitmapDisabled(*args, **kwargs)
 
     def GetBitmapFocus(*args, **kwargs):
-        """GetBitmapFocus() -> wxBitmap
+        """
+        GetBitmapFocus() -> wxBitmap
 
-Returns the bitmap for the focused state."""
+        Returns the bitmap for the focused state.
+        """
         return _controls.BitmapButton_GetBitmapFocus(*args, **kwargs)
 
     def GetBitmapSelected(*args, **kwargs):
-        """GetBitmapSelected() -> wxBitmap
+        """
+        GetBitmapSelected() -> wxBitmap
 
-Returns the bitmap for the selected state."""
+        Returns the bitmap for the selected state.
+        """
         return _controls.BitmapButton_GetBitmapSelected(*args, **kwargs)
 
     def SetBitmapDisabled(*args, **kwargs):
-        """SetBitmapDisabled(wxBitmap bitmap)
+        """
+        SetBitmapDisabled(wxBitmap bitmap)
 
-Sets the bitmap for the disabled button appearance."""
+        Sets the bitmap for the disabled button appearance.
+        """
         return _controls.BitmapButton_SetBitmapDisabled(*args, **kwargs)
 
     def SetBitmapFocus(*args, **kwargs):
-        """SetBitmapFocus(wxBitmap bitmap)
+        """
+        SetBitmapFocus(wxBitmap bitmap)
 
-Sets the bitmap for the button appearance when it has the keyboard focus."""
+        Sets the bitmap for the button appearance when it has the keyboard focus.
+        """
         return _controls.BitmapButton_SetBitmapFocus(*args, **kwargs)
 
     def SetBitmapSelected(*args, **kwargs):
-        """SetBitmapSelected(wxBitmap bitmap)
+        """
+        SetBitmapSelected(wxBitmap bitmap)
 
-Sets the bitmap for the selected (depressed) button appearance."""
+        Sets the bitmap for the selected (depressed) button appearance.
+        """
         return _controls.BitmapButton_SetBitmapSelected(*args, **kwargs)
 
     def SetBitmapLabel(*args, **kwargs):
-        """SetBitmapLabel(wxBitmap bitmap)
+        """
+        SetBitmapLabel(wxBitmap bitmap)
 
-Sets the bitmap label for the button.  This is the bitmap used for the
-unselected state, and for all other states if no other bitmaps are provided."""
+        Sets the bitmap label for the button.  This is the bitmap used for the
+        unselected state, and for all other states if no other bitmaps are provided.
+        """
         return _controls.BitmapButton_SetBitmapLabel(*args, **kwargs)
 
     def SetMargins(*args, **kwargs):
@@ -168,9 +198,11 @@ class BitmapButtonPtr(BitmapButton):
 _controls.BitmapButton_swigregister(BitmapButtonPtr)
 
 def PreBitmapButton(*args, **kwargs):
-    """PreBitmapButton() -> BitmapButton
+    """
+    PreBitmapButton() -> BitmapButton
 
-Precreate a BitmapButton for 2-phase creation."""
+    Precreate a BitmapButton for 2-phase creation.
+    """
     val = _controls.new_PreBitmapButton(*args, **kwargs)
     val.thisown = 1
     return val
@@ -184,14 +216,15 @@ CHK_UNCHECKED = _controls.CHK_UNCHECKED
 CHK_CHECKED = _controls.CHK_CHECKED
 CHK_UNDETERMINED = _controls.CHK_UNDETERMINED
 class CheckBox(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCheckBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyCheckBoxNameStr) -> CheckBox"""
+        """
+        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyCheckBoxNameStr) -> CheckBox
+        """
         newobj = _controls.new_CheckBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -199,10 +232,12 @@ class CheckBox(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyCheckBoxNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyCheckBoxNameStr) -> bool
+        """
         return _controls.CheckBox_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
@@ -250,14 +285,15 @@ def PreCheckBox(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Choice(core.ControlWithItems):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChoice instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    int choices=0, wxString choices_array=None, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyChoiceNameStr) -> Choice"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            int choices=0, wxString choices_array=None, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyChoiceNameStr) -> Choice
+        """
         newobj = _controls.new_Choice(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -265,10 +301,12 @@ class Choice(core.ControlWithItems):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    int choices=0, wxString choices_array=None, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyChoiceNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            int choices=0, wxString choices_array=None, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyChoiceNameStr) -> bool
+        """
         return _controls.Choice_Create(*args, **kwargs)
 
     def GetColumns(*args, **kwargs):
@@ -308,15 +346,16 @@ def PreChoice(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ComboBox(core.Control,core.ItemContainer):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxComboBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString value=wxPyEmptyString, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    int choices=0, wxString choices_array=None, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyComboBoxNameStr) -> ComboBox"""
+        """
+        __init__(Window parent, int id, wxString value=wxPyEmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            int choices=0, wxString choices_array=None, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyComboBoxNameStr) -> ComboBox
+        """
         newobj = _controls.new_ComboBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -324,11 +363,13 @@ class ComboBox(core.Control,core.ItemContainer):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString value=wxPyEmptyString, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    int choices=0, wxString choices_array=None, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyComboBoxNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString value=wxPyEmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            int choices=0, wxString choices_array=None, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyComboBoxNameStr) -> bool
+        """
         return _controls.ComboBox_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
@@ -408,14 +449,15 @@ GA_VERTICAL = _controls.GA_VERTICAL
 GA_SMOOTH = _controls.GA_SMOOTH
 GA_PROGRESSBAR = _controls.GA_PROGRESSBAR
 class Gauge(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGauge instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, int range, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=GA_HORIZONTAL, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyGaugeNameStr) -> Gauge"""
+        """
+        __init__(Window parent, int id, int range, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=GA_HORIZONTAL, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyGaugeNameStr) -> Gauge
+        """
         newobj = _controls.new_Gauge(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -423,10 +465,12 @@ class Gauge(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, int range, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=GA_HORIZONTAL, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyGaugeNameStr) -> bool"""
+        """
+        Create(Window parent, int id, int range, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=GA_HORIZONTAL, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyGaugeNameStr) -> bool
+        """
         return _controls.Gauge_Create(*args, **kwargs)
 
     def SetRange(*args, **kwargs):
@@ -482,13 +526,14 @@ def PreGauge(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class StaticBox(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    wxString name=wxPyStaticBoxNameStr) -> StaticBox"""
+        """
+        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            wxString name=wxPyStaticBoxNameStr) -> StaticBox
+        """
         newobj = _controls.new_StaticBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -496,9 +541,11 @@ class StaticBox(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    wxString name=wxPyStaticBoxNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            wxString name=wxPyStaticBoxNameStr) -> bool
+        """
         return _controls.StaticBox_Create(*args, **kwargs)
 
 
@@ -518,13 +565,14 @@ def PreStaticBox(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class StaticLine(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticLine instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=LI_HORIZONTAL, 
-    wxString name=wxPyStaticTextNameStr) -> StaticLine"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=LI_HORIZONTAL, 
+            wxString name=wxPyStaticTextNameStr) -> StaticLine
+        """
         newobj = _controls.new_StaticLine(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -532,9 +580,11 @@ class StaticLine(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=LI_HORIZONTAL, 
-    wxString name=wxPyStaticTextNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=LI_HORIZONTAL, 
+            wxString name=wxPyStaticTextNameStr) -> bool
+        """
         return _controls.StaticLine_Create(*args, **kwargs)
 
     def IsVertical(*args, **kwargs):
@@ -567,13 +617,14 @@ def StaticLine_GetDefaultSize(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class StaticText(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticText instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    wxString name=wxPyStaticTextNameStr) -> StaticText"""
+        """
+        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            wxString name=wxPyStaticTextNameStr) -> StaticText
+        """
         newobj = _controls.new_StaticText(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -581,9 +632,11 @@ class StaticText(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    wxString name=wxPyStaticTextNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            wxString name=wxPyStaticTextNameStr) -> bool
+        """
         return _controls.StaticText_Create(*args, **kwargs)
 
 
@@ -603,21 +656,24 @@ def PreStaticText(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class StaticBitmap(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    wxString name=wxPyStaticBitmapNameStr) -> StaticBitmap"""
+        """
+        __init__(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            wxString name=wxPyStaticBitmapNameStr) -> StaticBitmap
+        """
         newobj = _controls.new_StaticBitmap(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    wxString name=wxPyStaticBitmapNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            wxString name=wxPyStaticBitmapNameStr) -> bool
+        """
         return _controls.StaticBitmap_Create(*args, **kwargs)
 
     def GetBitmap(*args, **kwargs):
@@ -649,14 +705,15 @@ def PreStaticBitmap(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ListBox(core.ControlWithItems):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    int choices=0, wxString choices_array=None, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyListBoxNameStr) -> ListBox"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            int choices=0, wxString choices_array=None, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyListBoxNameStr) -> ListBox
+        """
         newobj = _controls.new_ListBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -664,10 +721,12 @@ class ListBox(core.ControlWithItems):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    int choices=0, wxString choices_array=None, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyListBoxNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            int choices=0, wxString choices_array=None, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyListBoxNameStr) -> bool
+        """
         return _controls.ListBox_Create(*args, **kwargs)
 
     def Insert(*args, **kwargs):
@@ -747,23 +806,26 @@ def PreListBox(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class CheckListBox(ListBox):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCheckListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    int choices=0, wxString choices_array=None, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyListBoxNameStr) -> CheckListBox"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            int choices=0, wxString choices_array=None, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyListBoxNameStr) -> CheckListBox
+        """
         newobj = _controls.new_CheckListBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    int choices=0, wxString choices_array=None, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyListBoxNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            int choices=0, wxString choices_array=None, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyListBoxNameStr) -> bool
+        """
         return _controls.CheckListBox_Create(*args, **kwargs)
 
     def IsChecked(*args, **kwargs):
@@ -839,13 +901,14 @@ TEXT_ATTR_LEFT_INDENT = _controls.TEXT_ATTR_LEFT_INDENT
 TEXT_ATTR_RIGHT_INDENT = _controls.TEXT_ATTR_RIGHT_INDENT
 TEXT_ATTR_TABS = _controls.TEXT_ATTR_TABS
 class TextAttr(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
-        """__init__() -> TextAttr
-__init__(wxColour colText, wxColour colBack=wxNullColour, wxFont font=wxNullFont, 
-    wxTextAttrAlignment alignment=TEXT_ALIGNMENT_DEFAULT) -> TextAttr"""
+        """
+        __init__() -> TextAttr
+        __init__(wxColour colText, wxColour colBack=wxNullColour, wxFont font=wxNullFont, 
+            wxTextAttrAlignment alignment=TEXT_ALIGNMENT_DEFAULT) -> TextAttr
+        """
         newobj = _controls.new_TextAttr(*args)
         self.this = newobj.this
         self.thisown = 1
@@ -972,14 +1035,15 @@ def TextAttr_Combine(*args, **kwargs):
     return _controls.TextAttr_Combine(*args, **kwargs)
 
 class TextCtrl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString value=wxPyEmptyString, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyTextCtrlNameStr) -> TextCtrl"""
+        """
+        __init__(Window parent, int id, wxString value=wxPyEmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyTextCtrlNameStr) -> TextCtrl
+        """
         newobj = _controls.new_TextCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -987,10 +1051,12 @@ class TextCtrl(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString value=wxPyEmptyString, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyTextCtrlNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString value=wxPyEmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyTextCtrlNameStr) -> bool
+        """
         return _controls.TextCtrl_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
@@ -1034,9 +1100,11 @@ class TextCtrl(core.Control):
         return _controls.TextCtrl_IsMultiLine(*args, **kwargs)
 
     def GetSelection(*args, **kwargs):
-        """GetSelection() -> (from, to)
+        """
+        GetSelection() -> (from, to)
 
-If the return values from and to are the same, there is no selection."""
+        If the return values from and to are the same, there is no selection.
+        """
         return _controls.TextCtrl_GetSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
@@ -1210,7 +1278,6 @@ wxEVT_COMMAND_TEXT_ENTER = _controls.wxEVT_COMMAND_TEXT_ENTER
 wxEVT_COMMAND_TEXT_URL = _controls.wxEVT_COMMAND_TEXT_URL
 wxEVT_COMMAND_TEXT_MAXLEN = _controls.wxEVT_COMMAND_TEXT_MAXLEN
 class TextUrlEvent(core.CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextUrlEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1247,13 +1314,14 @@ EVT_TEXT_MAXLEN = wx.PyEventBinder( wxEVT_COMMAND_TEXT_MAXLEN, 1)
 #---------------------------------------------------------------------------
 
 class ScrollBar(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScrollBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=SB_HORIZONTAL, 
-    Validator validator=DefaultValidator, wxString name=wxPyScrollBarNameStr) -> ScrollBar"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SB_HORIZONTAL, 
+            Validator validator=DefaultValidator, wxString name=wxPyScrollBarNameStr) -> ScrollBar
+        """
         newobj = _controls.new_ScrollBar(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1261,9 +1329,11 @@ class ScrollBar(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=SB_HORIZONTAL, 
-    Validator validator=DefaultValidator, wxString name=wxPyScrollBarNameStr) -> bool"""
+        """
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SB_HORIZONTAL, 
+            Validator validator=DefaultValidator, wxString name=wxPyScrollBarNameStr) -> bool
+        """
         return _controls.ScrollBar_Create(*args, **kwargs)
 
     def GetThumbPosition(*args, **kwargs):
@@ -1292,8 +1362,10 @@ class ScrollBar(core.Control):
         return _controls.ScrollBar_SetThumbPosition(*args, **kwargs)
 
     def SetScrollbar(*args, **kwargs):
-        """SetScrollbar(int position, int thumbSize, int range, int pageSize, 
-    bool refresh=True)"""
+        """
+        SetScrollbar(int position, int thumbSize, int range, int pageSize, 
+            bool refresh=True)
+        """
         return _controls.ScrollBar_SetScrollbar(*args, **kwargs)
 
 
@@ -1317,13 +1389,14 @@ SP_VERTICAL = _controls.SP_VERTICAL
 SP_ARROW_KEYS = _controls.SP_ARROW_KEYS
 SP_WRAP = _controls.SP_WRAP
 class SpinButton(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSpinButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=SP_HORIZONTAL, 
-    wxString name=wxPySPIN_BUTTON_NAME) -> SpinButton"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SP_HORIZONTAL, 
+            wxString name=wxPySPIN_BUTTON_NAME) -> SpinButton
+        """
         newobj = _controls.new_SpinButton(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1331,9 +1404,11 @@ class SpinButton(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=SP_HORIZONTAL, 
-    wxString name=wxPySPIN_BUTTON_NAME) -> bool"""
+        """
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SP_HORIZONTAL, 
+            wxString name=wxPySPIN_BUTTON_NAME) -> bool
+        """
         return _controls.SpinButton_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
@@ -1383,14 +1458,15 @@ def PreSpinButton(*args, **kwargs):
     return val
 
 class SpinCtrl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSpinCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, wxString value=wxPyEmptyString, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=SP_ARROW_KEYS, int min=0, 
-    int max=100, int initial=0, wxString name=wxPySpinCtrlNameStr) -> SpinCtrl"""
+        """
+        __init__(Window parent, int id=-1, wxString value=wxPyEmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=SP_ARROW_KEYS, int min=0, 
+            int max=100, int initial=0, wxString name=wxPySpinCtrlNameStr) -> SpinCtrl
+        """
         newobj = _controls.new_SpinCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1398,10 +1474,12 @@ class SpinCtrl(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, wxString value=wxPyEmptyString, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=SP_ARROW_KEYS, int min=0, 
-    int max=100, int initial=0, wxString name=wxPySpinCtrlNameStr) -> bool"""
+        """
+        Create(Window parent, int id=-1, wxString value=wxPyEmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=SP_ARROW_KEYS, int min=0, 
+            int max=100, int initial=0, wxString name=wxPySpinCtrlNameStr) -> bool
+        """
         return _controls.SpinCtrl_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
@@ -1452,15 +1530,16 @@ EVT_SPINCTRL = wx.PyEventBinder( wxEVT_COMMAND_SPINCTRL_UPDATED, 1)
 #---------------------------------------------------------------------------
 
 class RadioBox(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRadioBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString label, Point point=DefaultPosition, 
-    Size size=DefaultSize, int choices=0, 
-    wxString choices_array=None, int majorDimension=0, 
-    long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
-    wxString name=wxPyRadioBoxNameStr) -> RadioBox"""
+        """
+        __init__(Window parent, int id, wxString label, Point point=DefaultPosition, 
+            Size size=DefaultSize, int choices=0, 
+            wxString choices_array=None, int majorDimension=0, 
+            long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
+            wxString name=wxPyRadioBoxNameStr) -> RadioBox
+        """
         newobj = _controls.new_RadioBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1468,11 +1547,13 @@ class RadioBox(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString label, Point point=DefaultPosition, 
-    Size size=DefaultSize, int choices=0, 
-    wxString choices_array=None, int majorDimension=0, 
-    long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
-    wxString name=wxPyRadioBoxNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString label, Point point=DefaultPosition, 
+            Size size=DefaultSize, int choices=0, 
+            wxString choices_array=None, int majorDimension=0, 
+            long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
+            wxString name=wxPyRadioBoxNameStr) -> bool
+        """
         return _controls.RadioBox_Create(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
@@ -1546,14 +1627,15 @@ def PreRadioBox(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class RadioButton(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRadioButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyRadioButtonNameStr) -> RadioButton"""
+        """
+        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyRadioButtonNameStr) -> RadioButton
+        """
         newobj = _controls.new_RadioButton(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1561,10 +1643,12 @@ class RadioButton(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyRadioButtonNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyRadioButtonNameStr) -> bool
+        """
         return _controls.RadioButton_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
@@ -1592,14 +1676,15 @@ def PreRadioButton(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Slider(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSlider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, int value, int minValue, int maxValue, 
-    Point point=DefaultPosition, Size size=DefaultSize, 
-    long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
-    wxString name=wxPySliderNameStr) -> Slider"""
+        """
+        __init__(Window parent, int id, int value, int minValue, int maxValue, 
+            Point point=DefaultPosition, Size size=DefaultSize, 
+            long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
+            wxString name=wxPySliderNameStr) -> Slider
+        """
         newobj = _controls.new_Slider(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1607,10 +1692,12 @@ class Slider(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, int value, int minValue, int maxValue, 
-    Point point=DefaultPosition, Size size=DefaultSize, 
-    long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
-    wxString name=wxPySliderNameStr) -> bool"""
+        """
+        Create(Window parent, int id, int value, int minValue, int maxValue, 
+            Point point=DefaultPosition, Size size=DefaultSize, 
+            long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
+            wxString name=wxPySliderNameStr) -> bool
+        """
         return _controls.Slider_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
@@ -1717,14 +1804,15 @@ wxEVT_COMMAND_TOGGLEBUTTON_CLICKED = _controls.wxEVT_COMMAND_TOGGLEBUTTON_CLICKE
 EVT_TOGGLEBUTTON = wx.PyEventBinder( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, 1)
 
 class ToggleButton(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxToggleButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyToggleButtonNameStr) -> ToggleButton"""
+        """
+        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyToggleButtonNameStr) -> ToggleButton
+        """
         newobj = _controls.new_ToggleButton(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1732,10 +1820,12 @@ class ToggleButton(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyToggleButtonNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyToggleButtonNameStr) -> bool
+        """
         return _controls.ToggleButton_Create(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
@@ -1767,7 +1857,6 @@ def PreToggleButton(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class BookCtrl(core.Control):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBookCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1838,8 +1927,10 @@ class BookCtrl(core.Control):
         return _controls.BookCtrl_AddPage(*args, **kwargs)
 
     def InsertPage(*args, **kwargs):
-        """InsertPage(size_t n, Window page, wxString text, bool select=False, 
-    int imageId=-1) -> bool"""
+        """
+        InsertPage(size_t n, Window page, wxString text, bool select=False, 
+            int imageId=-1) -> bool
+        """
         return _controls.BookCtrl_InsertPage(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
@@ -1859,12 +1950,13 @@ class BookCtrlPtr(BookCtrl):
 _controls.BookCtrl_swigregister(BookCtrlPtr)
 
 class BookCtrlEvent(core.NotifyEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBookCtrlEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
-    int nOldSel=-1) -> BookCtrlEvent"""
+        """
+        __init__(wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+            int nOldSel=-1) -> BookCtrlEvent
+        """
         newobj = _controls.new_BookCtrlEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1906,12 +1998,13 @@ NB_HITTEST_ONICON = _controls.NB_HITTEST_ONICON
 NB_HITTEST_ONLABEL = _controls.NB_HITTEST_ONLABEL
 NB_HITTEST_ONITEM = _controls.NB_HITTEST_ONITEM
 class Notebook(BookCtrl):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotebook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=wxPyNOTEBOOK_NAME) -> Notebook"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=wxPyNOTEBOOK_NAME) -> Notebook
+        """
         newobj = _controls.new_Notebook(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1919,8 +2012,10 @@ class Notebook(BookCtrl):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=wxPyNOTEBOOK_NAME) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=wxPyNOTEBOOK_NAME) -> bool
+        """
         return _controls.Notebook_Create(*args, **kwargs)
 
     def GetRowCount(*args, **kwargs):
@@ -1936,9 +2031,11 @@ class Notebook(BookCtrl):
         return _controls.Notebook_SetTabSize(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pt) -> (tab, where)
+        """
+        HitTest(Point pt) -> (tab, where)
 
-Returns the tab which is hit, and flags indicating where using wxNB_HITTEST_ flags."""
+        Returns the tab which is hit, and flags indicating where using wxNB_HITTEST_ flags.
+        """
         return _controls.Notebook_HitTest(*args, **kwargs)
 
     def CalcSizeFromPage(*args, **kwargs):
@@ -1960,12 +2057,13 @@ def PreNotebook(*args, **kwargs):
     return val
 
 class NotebookEvent(BookCtrlEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotebookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
-    int nOldSel=-1) -> NotebookEvent"""
+        """
+        __init__(wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+            int nOldSel=-1) -> NotebookEvent
+        """
         newobj = _controls.new_NotebookEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2023,12 +2121,13 @@ LB_LEFT = _controls.LB_LEFT
 LB_RIGHT = _controls.LB_RIGHT
 LB_ALIGN_MASK = _controls.LB_ALIGN_MASK
 class Listbook(BookCtrl):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListbook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=wxPyEmptyString) -> Listbook"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=wxPyEmptyString) -> Listbook
+        """
         newobj = _controls.new_Listbook(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2036,8 +2135,10 @@ class Listbook(BookCtrl):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=wxPyEmptyString) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=wxPyEmptyString) -> bool
+        """
         return _controls.Listbook_Create(*args, **kwargs)
 
     def IsVertical(*args, **kwargs):
@@ -2059,12 +2160,13 @@ def PreListbook(*args, **kwargs):
     return val
 
 class ListbookEvent(BookCtrlEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListbookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
-    int nOldSel=-1) -> ListbookEvent"""
+        """
+        __init__(wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+            int nOldSel=-1) -> ListbookEvent
+        """
         newobj = _controls.new_ListbookEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2085,7 +2187,6 @@ EVT_LISTBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_LISTBOOK_PAGE_CHANG
 #---------------------------------------------------------------------------
 
 class BookCtrlSizer(core.Sizer):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBookCtrlSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2117,7 +2218,6 @@ class BookCtrlSizerPtr(BookCtrlSizer):
 _controls.BookCtrlSizer_swigregister(BookCtrlSizerPtr)
 
 class NotebookSizer(core.Sizer):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotebookSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2165,7 +2265,6 @@ TB_NOALIGN = _controls.TB_NOALIGN
 TB_HORZ_LAYOUT = _controls.TB_HORZ_LAYOUT
 TB_HORZ_TEXT = _controls.TB_HORZ_TEXT
 class ToolBarToolBase(core.Object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxToolBarToolBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2299,23 +2398,26 @@ class ToolBarToolBasePtr(ToolBarToolBase):
 _controls.ToolBarToolBase_swigregister(ToolBarToolBasePtr)
 
 class ToolBarBase(core.Control):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxToolBarBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def DoAddTool(*args, **kwargs):
-        """DoAddTool(int id, wxString label, wxBitmap bitmap, wxBitmap bmpDisabled=wxNullBitmap, 
-    wxItemKind kind=ITEM_NORMAL, 
-    wxString shortHelp=wxPyEmptyString, 
-    wxString longHelp=wxPyEmptyString, PyObject clientData=None) -> ToolBarToolBase"""
+        """
+        DoAddTool(int id, wxString label, wxBitmap bitmap, wxBitmap bmpDisabled=wxNullBitmap, 
+            wxItemKind kind=ITEM_NORMAL, 
+            wxString shortHelp=wxPyEmptyString, 
+            wxString longHelp=wxPyEmptyString, PyObject clientData=None) -> ToolBarToolBase
+        """
         return _controls.ToolBarBase_DoAddTool(*args, **kwargs)
 
     def DoInsertTool(*args, **kwargs):
-        """DoInsertTool(size_t pos, int id, wxString label, wxBitmap bitmap, 
-    wxBitmap bmpDisabled=wxNullBitmap, wxItemKind kind=ITEM_NORMAL, 
-    wxString shortHelp=wxPyEmptyString, 
-    wxString longHelp=wxPyEmptyString, 
-    PyObject clientData=None) -> ToolBarToolBase"""
+        """
+        DoInsertTool(size_t pos, int id, wxString label, wxBitmap bitmap, 
+            wxBitmap bmpDisabled=wxNullBitmap, wxItemKind kind=ITEM_NORMAL, 
+            wxString shortHelp=wxPyEmptyString, 
+            wxString longHelp=wxPyEmptyString, 
+            PyObject clientData=None) -> ToolBarToolBase
+        """
         return _controls.ToolBarBase_DoInsertTool(*args, **kwargs)
 
     # These match the original Add methods for this class, kept for
@@ -2606,13 +2708,14 @@ class ToolBarBasePtr(ToolBarBase):
 _controls.ToolBarBase_swigregister(ToolBarBasePtr)
 
 class ToolBar(ToolBarBase):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxToolBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxNO_BORDER|wxTB_HORIZONTAL, 
-    wxString name=wxPyToolBarNameStr) -> ToolBar"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxNO_BORDER|wxTB_HORIZONTAL, 
+            wxString name=wxPyToolBarNameStr) -> ToolBar
+        """
         newobj = _controls.new_ToolBar(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2620,9 +2723,11 @@ class ToolBar(ToolBarBase):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxNO_BORDER|wxTB_HORIZONTAL, 
-    wxString name=wxPyToolBarNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxNO_BORDER|wxTB_HORIZONTAL, 
+            wxString name=wxPyToolBarNameStr) -> bool
+        """
         return _controls.ToolBar_Create(*args, **kwargs)
 
     def FindToolForPosition(*args, **kwargs):
@@ -2716,12 +2821,13 @@ LIST_FIND_RIGHT = _controls.LIST_FIND_RIGHT
 #---------------------------------------------------------------------------
 
 class ListItemAttr(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListItemAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxColour colText=wxNullColour, wxColour colBack=wxNullColour, 
-    wxFont font=wxNullFont) -> ListItemAttr"""
+        """
+        __init__(wxColour colText=wxNullColour, wxColour colBack=wxNullColour, 
+            wxFont font=wxNullFont) -> ListItemAttr
+        """
         newobj = _controls.new_ListItemAttr(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2777,7 +2883,6 @@ _controls.ListItemAttr_swigregister(ListItemAttrPtr)
 #---------------------------------------------------------------------------
 
 class ListItem(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2929,7 +3034,6 @@ _controls.ListItem_swigregister(ListItemPtr)
 #---------------------------------------------------------------------------
 
 class ListEvent(core.NotifyEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3058,13 +3162,14 @@ EVT_LIST_ITEM_FOCUSED      = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_FOCUSED   
 #---------------------------------------------------------------------------
 
 class ListCtrl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyListCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=LC_ICON, 
-    Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> ListCtrl"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=LC_ICON, 
+            Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> ListCtrl
+        """
         newobj = _controls.new_ListCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3072,9 +3177,11 @@ class ListCtrl(core.Control):
         self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=LC_ICON, 
-    Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> bool"""
+        """
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=LC_ICON, 
+            Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> bool
+        """
         return _controls.ListCtrl_Create(*args, **kwargs)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -3284,10 +3391,12 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_FindItemAtPos(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point point) -> (item, where)
+        """
+        HitTest(Point point) -> (item, where)
 
-Determines which item (if any) is at the specified point,
-giving details in the second return value (see wxLIST_HITTEST_... flags.)"""
+        Determines which item (if any) is at the specified point,
+        giving details in the second return value (see wxLIST_HITTEST_... flags.)
+        """
         return _controls.ListCtrl_HitTest(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
@@ -3311,8 +3420,10 @@ giving details in the second return value (see wxLIST_HITTEST_... flags.)"""
         return _controls.ListCtrl_InsertColumnInfo(*args, **kwargs)
 
     def InsertColumn(*args, **kwargs):
-        """InsertColumn(long col, wxString heading, int format=LIST_FORMAT_LEFT, 
-    int width=-1) -> long"""
+        """
+        InsertColumn(long col, wxString heading, int format=LIST_FORMAT_LEFT, 
+            int width=-1) -> long
+        """
         return _controls.ListCtrl_InsertColumn(*args, **kwargs)
 
     def SetItemCount(*args, **kwargs):
@@ -3423,13 +3534,14 @@ def PreListCtrl(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ListView(ListCtrl):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListView instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=LC_REPORT, 
-    Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> ListView"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=LC_REPORT, 
+            Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> ListView
+        """
         newobj = _controls.new_ListView(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3437,9 +3549,11 @@ class ListView(ListCtrl):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=LC_REPORT, 
-    Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> bool"""
+        """
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=LC_REPORT, 
+            Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> bool
+        """
         return _controls.ListView_Create(*args, **kwargs)
 
     def Select(*args, **kwargs):
@@ -3528,7 +3642,6 @@ TREE_HITTEST_ONITEM = _controls.TREE_HITTEST_ONITEM
 #---------------------------------------------------------------------------
 
 class TreeItemId(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTreeItemId instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3567,7 +3680,6 @@ class TreeItemIdPtr(TreeItemId):
 _controls.TreeItemId_swigregister(TreeItemIdPtr)
 
 class TreeItemData(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTreeItemData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3647,7 +3759,6 @@ EVT_TREE_STATE_IMAGE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_STATE_IMAGE_CLI
 
 
 class TreeEvent(core.NotifyEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTreeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3719,14 +3830,15 @@ _controls.TreeEvent_swigregister(TreeEventPtr)
 #---------------------------------------------------------------------------
 
 class TreeCtrl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTreeCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPy_TreeCtrlNameStr) -> TreeCtrl"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPy_TreeCtrlNameStr) -> TreeCtrl
+        """
         newobj = _controls.new_TreeCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3734,10 +3846,12 @@ class TreeCtrl(core.Control):
         self._setOORInfo(self);self._setCallbackInfo(self, TreeCtrl)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPy_TreeCtrlNameStr) -> bool"""
+        """
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPy_TreeCtrlNameStr) -> bool
+        """
         return _controls.TreeCtrl_Create(*args, **kwargs)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -3931,28 +4045,38 @@ class TreeCtrl(core.Control):
         return _controls.TreeCtrl_GetPrevVisible(*args, **kwargs)
 
     def AddRoot(*args, **kwargs):
-        """AddRoot(wxString text, int image=-1, int selectedImage=-1, 
-    TreeItemData data=None) -> TreeItemId"""
+        """
+        AddRoot(wxString text, int image=-1, int selectedImage=-1, 
+            TreeItemData data=None) -> TreeItemId
+        """
         return _controls.TreeCtrl_AddRoot(*args, **kwargs)
 
     def PrependItem(*args, **kwargs):
-        """PrependItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
-    TreeItemData data=None) -> TreeItemId"""
+        """
+        PrependItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
+            TreeItemData data=None) -> TreeItemId
+        """
         return _controls.TreeCtrl_PrependItem(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
-        """InsertItem(TreeItemId parent, TreeItemId idPrevious, wxString text, 
-    int image=-1, int selectedImage=-1, TreeItemData data=None) -> TreeItemId"""
+        """
+        InsertItem(TreeItemId parent, TreeItemId idPrevious, wxString text, 
+            int image=-1, int selectedImage=-1, TreeItemData data=None) -> TreeItemId
+        """
         return _controls.TreeCtrl_InsertItem(*args, **kwargs)
 
     def InsertItemBefore(*args, **kwargs):
-        """InsertItemBefore(TreeItemId parent, size_t index, wxString text, int image=-1, 
-    int selectedImage=-1, TreeItemData data=None) -> TreeItemId"""
+        """
+        InsertItemBefore(TreeItemId parent, size_t index, wxString text, int image=-1, 
+            int selectedImage=-1, TreeItemData data=None) -> TreeItemId
+        """
         return _controls.TreeCtrl_InsertItemBefore(*args, **kwargs)
 
     def AppendItem(*args, **kwargs):
-        """AppendItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
-    TreeItemData data=None) -> TreeItemId"""
+        """
+        AppendItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
+            TreeItemData data=None) -> TreeItemId
+        """
         return _controls.TreeCtrl_AppendItem(*args, **kwargs)
 
     def Delete(*args, **kwargs):
@@ -4016,13 +4140,15 @@ class TreeCtrl(core.Control):
         return _controls.TreeCtrl_SortChildren(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point point) -> (item, where)
+        """
+        HitTest(Point point) -> (item, where)
 
-Determine which item (if any) belongs the given point.  The
-coordinates specified are relative to the client area of tree ctrl
-and the where return value is set to a bitmask of wxTREE_HITTEST_xxx
-constants.
-"""
+        Determine which item (if any) belongs the given point.  The
+        coordinates specified are relative to the client area of tree ctrl
+        and the where return value is set to a bitmask of wxTREE_HITTEST_xxx
+        constants.
+
+        """
         return _controls.TreeCtrl_HitTest(*args, **kwargs)
 
     def GetBoundingRect(*args, **kwargs):
@@ -4051,15 +4177,16 @@ DIRCTRL_SHOW_FILTERS = _controls.DIRCTRL_SHOW_FILTERS
 DIRCTRL_3D_INTERNAL = _controls.DIRCTRL_3D_INTERNAL
 DIRCTRL_EDIT_LABELS = _controls.DIRCTRL_EDIT_LABELS
 class GenericDirCtrl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGenericDirCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, wxString dir=wxPyDirDialogDefaultFolderStr, 
-    Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
-    wxString filter=wxPyEmptyString, 
-    int defaultFilter=0, wxString name=wxPy_TreeCtrlNameStr) -> GenericDirCtrl"""
+        """
+        __init__(Window parent, int id=-1, wxString dir=wxPyDirDialogDefaultFolderStr, 
+            Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
+            wxString filter=wxPyEmptyString, 
+            int defaultFilter=0, wxString name=wxPy_TreeCtrlNameStr) -> GenericDirCtrl
+        """
         newobj = _controls.new_GenericDirCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4067,11 +4194,13 @@ class GenericDirCtrl(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, wxString dir=wxPyDirDialogDefaultFolderStr, 
-    Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
-    wxString filter=wxPyEmptyString, 
-    int defaultFilter=0, wxString name=wxPy_TreeCtrlNameStr) -> bool"""
+        """
+        Create(Window parent, int id=-1, wxString dir=wxPyDirDialogDefaultFolderStr, 
+            Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
+            wxString filter=wxPyEmptyString, 
+            int defaultFilter=0, wxString name=wxPy_TreeCtrlNameStr) -> bool
+        """
         return _controls.GenericDirCtrl_Create(*args, **kwargs)
 
     def ExpandPath(*args, **kwargs):
@@ -4135,12 +4264,14 @@ class GenericDirCtrl(core.Control):
         return _controls.GenericDirCtrl_GetFilterListCtrl(*args, **kwargs)
 
     def FindChild(*args, **kwargs):
-        """FindChild(wxTreeItemId parentId, wxString path) -> (item, done)
+        """
+        FindChild(wxTreeItemId parentId, wxString path) -> (item, done)
 
-Find the child that matches the first part of 'path'.  E.g. if a child path is
-"/usr" and 'path' is "/usr/include" then the child for /usr is returned.
-If the path string has been used (we're at the leaf), done is set to True
-"""
+        Find the child that matches the first part of 'path'.  E.g. if a child path is
+        "/usr" and 'path' is "/usr/include" then the child for /usr is returned.
+        If the path string has been used (we're at the leaf), done is set to True
+
+        """
         return _controls.GenericDirCtrl_FindChild(*args, **kwargs)
 
     def DoResize(*args, **kwargs):
@@ -4166,12 +4297,13 @@ def PreGenericDirCtrl(*args, **kwargs):
     return val
 
 class DirFilterListCtrl(Choice):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDirFilterListCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(GenericDirCtrl parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0) -> DirFilterListCtrl"""
+        """
+        __init__(GenericDirCtrl parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0) -> DirFilterListCtrl
+        """
         newobj = _controls.new_DirFilterListCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4179,8 +4311,10 @@ class DirFilterListCtrl(Choice):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(GenericDirCtrl parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0) -> bool"""
+        """
+        Create(GenericDirCtrl parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0) -> bool
+        """
         return _controls.DirFilterListCtrl_Create(*args, **kwargs)
 
     def FillFilterList(*args, **kwargs):
@@ -4204,13 +4338,14 @@ def PreDirFilterListCtrl(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class PyControl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyControl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyControlNameStr) -> PyControl"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyControlNameStr) -> PyControl
+        """
         newobj = _controls.new_PyControl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4313,7 +4448,6 @@ EVT_DETAILED_HELP = wx.PyEventBinder( wxEVT_DETAILED_HELP, 1)
 EVT_DETAILED_HELP_RANGE = wx.PyEventBinder( wxEVT_DETAILED_HELP, 2)
 
 class HelpEvent(core.CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHelpEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4355,7 +4489,6 @@ class HelpEventPtr(HelpEvent):
 _controls.HelpEvent_swigregister(HelpEventPtr)
 
 class ContextHelp(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxContextHelp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4387,12 +4520,13 @@ class ContextHelpPtr(ContextHelp):
 _controls.ContextHelp_swigregister(ContextHelpPtr)
 
 class ContextHelpButton(BitmapButton):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxContextHelpButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=ID_CONTEXT_HELP, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=BU_AUTODRAW) -> ContextHelpButton"""
+        """
+        __init__(Window parent, int id=ID_CONTEXT_HELP, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=BU_AUTODRAW) -> ContextHelpButton
+        """
         newobj = _controls.new_ContextHelpButton(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4408,7 +4542,6 @@ class ContextHelpButtonPtr(ContextHelpButton):
 _controls.ContextHelpButton_swigregister(ContextHelpButtonPtr)
 
 class HelpProvider(object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHelpProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4459,7 +4592,6 @@ def HelpProvider_Get(*args, **kwargs):
     return _controls.HelpProvider_Get(*args, **kwargs)
 
 class SimpleHelpProvider(HelpProvider):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSimpleHelpProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4479,7 +4611,6 @@ _controls.SimpleHelpProvider_swigregister(SimpleHelpProviderPtr)
 #---------------------------------------------------------------------------
 
 class DragImage(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGenericDragImage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4499,8 +4630,10 @@ class DragImage(core.Object):
         return _controls.DragImage_SetBackingBitmap(*args, **kwargs)
 
     def BeginDrag(*args, **kwargs):
-        """BeginDrag(Point hotspot, Window window, bool fullScreen=False, 
-    Rect rect=None) -> bool"""
+        """
+        BeginDrag(Point hotspot, Window window, bool fullScreen=False, 
+            Rect rect=None) -> bool
+        """
         return _controls.DragImage_BeginDrag(*args, **kwargs)
 
     def BeginDragBounded(*args, **kwargs):
@@ -4532,8 +4665,10 @@ class DragImage(core.Object):
         return _controls.DragImage_DoDrawImage(*args, **kwargs)
 
     def UpdateBackingFromWindow(*args, **kwargs):
-        """UpdateBackingFromWindow(wxDC windowDC, wxMemoryDC destDC, Rect sourceRect, 
-    Rect destRect) -> bool"""
+        """
+        UpdateBackingFromWindow(wxDC windowDC, wxMemoryDC destDC, Rect sourceRect, 
+            Rect destRect) -> bool
+        """
         return _controls.DragImage_UpdateBackingFromWindow(*args, **kwargs)
 
     def RedrawImage(*args, **kwargs):

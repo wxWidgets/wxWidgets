@@ -9,7 +9,6 @@ wx = core
 #---------------------------------------------------------------------------
 
 class ShapeRegion(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxShapeRegion instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -139,7 +138,6 @@ class ShapeRegionPtr(ShapeRegion):
 _ogl.ShapeRegion_swigregister(ShapeRegionPtr)
 
 class PyShapeEvtHandler(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyShapeEvtHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -231,13 +229,17 @@ class PyShapeEvtHandler(core.Object):
         return _ogl.PyShapeEvtHandler_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyShapeEvtHandler_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyShapeEvtHandler_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -281,18 +283,24 @@ class PyShapeEvtHandler(core.Object):
         return _ogl.PyShapeEvtHandler_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyShapeEvtHandler_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyShapeEvtHandler_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyShapeEvtHandler_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -312,7 +320,6 @@ class PyShapeEvtHandlerPtr(PyShapeEvtHandler):
 _ogl.PyShapeEvtHandler_swigregister(PyShapeEvtHandlerPtr)
 
 class PyShape(PyShapeEvtHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -336,8 +343,10 @@ class PyShape(PyShapeEvtHandler):
         return _ogl.PyShape_GetBoundingBoxMin(*args, **kwargs)
 
     def GetPerimeterPoint(*args, **kwargs):
-        """GetPerimeterPoint(double x1, double y1, double x2, double y2, double OUTPUT, 
-    double OUTPUT) -> bool"""
+        """
+        GetPerimeterPoint(double x1, double y1, double x2, double y2, double OUTPUT, 
+            double OUTPUT) -> bool
+        """
         return _ogl.PyShape_GetPerimeterPoint(*args, **kwargs)
 
     def GetCanvas(*args, **kwargs):
@@ -625,8 +634,10 @@ class PyShape(PyShapeEvtHandler):
         return _ogl.PyShape_Constrain(*args, **kwargs)
 
     def AddLine(*args, **kwargs):
-        """AddLine(PyLineShape line, PyShape other, int attachFrom=0, 
-    int attachTo=0, int positionFrom=-1, int positionTo=-1)"""
+        """
+        AddLine(PyLineShape line, PyShape other, int attachFrom=0, 
+            int attachTo=0, int positionFrom=-1, int positionTo=-1)
+        """
         return _ogl.PyShape_AddLine(*args, **kwargs)
 
     def GetLinePosition(*args, **kwargs):
@@ -730,8 +741,10 @@ class PyShape(PyShapeEvtHandler):
         return _ogl.PyShape_RemoveLine(*args, **kwargs)
 
     def GetAttachmentPosition(*args, **kwargs):
-        """GetAttachmentPosition(int attachment, double OUTPUT, double OUTPUT, int nth=0, 
-    int no_arcs=1, PyLineShape line=None) -> bool"""
+        """
+        GetAttachmentPosition(int attachment, double OUTPUT, double OUTPUT, int nth=0, 
+            int no_arcs=1, PyLineShape line=None) -> bool
+        """
         return _ogl.PyShape_GetAttachmentPosition(*args, **kwargs)
 
     def GetNumberOfAttachments(*args, **kwargs):
@@ -743,13 +756,17 @@ class PyShape(PyShapeEvtHandler):
         return _ogl.PyShape_AttachmentIsValid(*args, **kwargs)
 
     def GetAttachmentPositionEdge(*args, **kwargs):
-        """GetAttachmentPositionEdge(int attachment, double OUTPUT, double OUTPUT, int nth=0, 
-    int no_arcs=1, PyLineShape line=None) -> bool"""
+        """
+        GetAttachmentPositionEdge(int attachment, double OUTPUT, double OUTPUT, int nth=0, 
+            int no_arcs=1, PyLineShape line=None) -> bool
+        """
         return _ogl.PyShape_GetAttachmentPositionEdge(*args, **kwargs)
 
     def CalcSimpleAttachment(*args, **kwargs):
-        """CalcSimpleAttachment(RealPoint pt1, RealPoint pt2, int nth, int noArcs, 
-    PyLineShape line) -> RealPoint"""
+        """
+        CalcSimpleAttachment(RealPoint pt1, RealPoint pt2, int nth, int noArcs, 
+            PyLineShape line) -> RealPoint
+        """
         return _ogl.PyShape_CalcSimpleAttachment(*args, **kwargs)
 
     def AttachmentSortTest(*args, **kwargs):
@@ -777,8 +794,10 @@ class PyShape(PyShapeEvtHandler):
         return _ogl.PyShape_GetBranchingAttachmentRoot(*args, **kwargs)
 
     def GetBranchingAttachmentInfo(*args, **kwargs):
-        """GetBranchingAttachmentInfo(int attachment, RealPoint root, RealPoint neck, RealPoint shoulder1, 
-    RealPoint shoulder2) -> bool"""
+        """
+        GetBranchingAttachmentInfo(int attachment, RealPoint root, RealPoint neck, RealPoint shoulder1, 
+            RealPoint shoulder2) -> bool
+        """
         return _ogl.PyShape_GetBranchingAttachmentInfo(*args, **kwargs)
 
     def GetBranchingAttachmentPoint(*args, **kwargs):
@@ -926,13 +945,17 @@ class PyShape(PyShapeEvtHandler):
         return _ogl.PyShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -976,18 +999,24 @@ class PyShape(PyShapeEvtHandler):
         return _ogl.PyShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -1009,7 +1038,6 @@ _ogl.PyShape_swigregister(PyShapePtr)
 oglMETAFLAGS_OUTLINE = _ogl.oglMETAFLAGS_OUTLINE
 oglMETAFLAGS_ATTACHMENTS = _ogl.oglMETAFLAGS_ATTACHMENTS
 class PseudoMetaFile(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPseudoMetaFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1189,7 +1217,6 @@ class PseudoMetaFilePtr(PseudoMetaFile):
 _ogl.PseudoMetaFile_swigregister(PseudoMetaFilePtr)
 
 class PyRectangleShape(PyShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyRectangleShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1257,13 +1284,17 @@ class PyRectangleShape(PyShape):
         return _ogl.PyRectangleShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyRectangleShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyRectangleShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -1307,18 +1338,24 @@ class PyRectangleShape(PyShape):
         return _ogl.PyRectangleShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyRectangleShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyRectangleShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyRectangleShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -1338,13 +1375,14 @@ class PyRectangleShapePtr(PyRectangleShape):
 _ogl.PyRectangleShape_swigregister(PyRectangleShapePtr)
 
 class PyControlPoint(PyRectangleShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyControlPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(PyShapeCanvas the_canvas=None, PyShape object=None, 
-    double size=0.0, double the_xoffset=0.0, double the_yoffset=0.0, 
-    int the_type=0) -> PyControlPoint"""
+        """
+        __init__(PyShapeCanvas the_canvas=None, PyShape object=None, 
+            double size=0.0, double the_xoffset=0.0, double the_yoffset=0.0, 
+            int the_type=0) -> PyControlPoint
+        """
         newobj = _ogl.new_PyControlPoint(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1408,13 +1446,17 @@ class PyControlPoint(PyRectangleShape):
         return _ogl.PyControlPoint_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyControlPoint_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyControlPoint_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -1458,18 +1500,24 @@ class PyControlPoint(PyRectangleShape):
         return _ogl.PyControlPoint_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyControlPoint_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyControlPoint_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyControlPoint_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -1489,7 +1537,6 @@ class PyControlPointPtr(PyControlPoint):
 _ogl.PyControlPoint_swigregister(PyControlPointPtr)
 
 class PyBitmapShape(PyRectangleShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyBitmapShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1569,13 +1616,17 @@ class PyBitmapShape(PyRectangleShape):
         return _ogl.PyBitmapShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyBitmapShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyBitmapShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -1619,18 +1670,24 @@ class PyBitmapShape(PyRectangleShape):
         return _ogl.PyBitmapShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyBitmapShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyBitmapShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyBitmapShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -1650,7 +1707,6 @@ class PyBitmapShapePtr(PyBitmapShape):
 _ogl.PyBitmapShape_swigregister(PyBitmapShapePtr)
 
 class PyDrawnShape(PyRectangleShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDrawnShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1826,13 +1882,17 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyDrawnShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyDrawnShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -1876,18 +1936,24 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyDrawnShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyDrawnShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyDrawnShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -1907,7 +1973,6 @@ class PyDrawnShapePtr(PyDrawnShape):
 _ogl.PyDrawnShape_swigregister(PyDrawnShapePtr)
 
 class OGLConstraint(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxOGLConstraint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1937,7 +2002,6 @@ class OGLConstraintPtr(OGLConstraint):
 _ogl.OGLConstraint_swigregister(OGLConstraintPtr)
 
 class PyCompositeShape(PyRectangleShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyCompositeShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2057,13 +2121,17 @@ class PyCompositeShape(PyRectangleShape):
         return _ogl.PyCompositeShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyCompositeShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyCompositeShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -2107,18 +2175,24 @@ class PyCompositeShape(PyRectangleShape):
         return _ogl.PyCompositeShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyCompositeShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyCompositeShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyCompositeShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -2138,7 +2212,6 @@ class PyCompositeShapePtr(PyCompositeShape):
 _ogl.PyCompositeShape_swigregister(PyCompositeShapePtr)
 
 class PyDividedShape(PyRectangleShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDividedShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2210,13 +2283,17 @@ class PyDividedShape(PyRectangleShape):
         return _ogl.PyDividedShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyDividedShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyDividedShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -2260,18 +2337,24 @@ class PyDividedShape(PyRectangleShape):
         return _ogl.PyDividedShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyDividedShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyDividedShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyDividedShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -2291,7 +2374,6 @@ class PyDividedShapePtr(PyDividedShape):
 _ogl.PyDividedShape_swigregister(PyDividedShapePtr)
 
 class PyDivisionShape(PyCompositeShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDivisionShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2455,13 +2537,17 @@ class PyDivisionShape(PyCompositeShape):
         return _ogl.PyDivisionShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyDivisionShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyDivisionShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -2505,18 +2591,24 @@ class PyDivisionShape(PyCompositeShape):
         return _ogl.PyDivisionShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyDivisionShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyDivisionShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyDivisionShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -2536,7 +2628,6 @@ class PyDivisionShapePtr(PyDivisionShape):
 _ogl.PyDivisionShape_swigregister(PyDivisionShapePtr)
 
 class PyEllipseShape(PyShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyEllipseShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2596,13 +2687,17 @@ class PyEllipseShape(PyShape):
         return _ogl.PyEllipseShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyEllipseShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyEllipseShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -2646,18 +2741,24 @@ class PyEllipseShape(PyShape):
         return _ogl.PyEllipseShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyEllipseShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyEllipseShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyEllipseShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -2677,7 +2778,6 @@ class PyEllipseShapePtr(PyEllipseShape):
 _ogl.PyEllipseShape_swigregister(PyEllipseShapePtr)
 
 class PyCircleShape(PyEllipseShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyCircleShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2737,13 +2837,17 @@ class PyCircleShape(PyEllipseShape):
         return _ogl.PyCircleShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyCircleShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyCircleShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -2787,18 +2891,24 @@ class PyCircleShape(PyEllipseShape):
         return _ogl.PyCircleShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyCircleShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyCircleShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyCircleShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -2818,13 +2928,14 @@ class PyCircleShapePtr(PyCircleShape):
 _ogl.PyCircleShape_swigregister(PyCircleShapePtr)
 
 class ArrowHead(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxArrowHead instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int type=0, int end=0, double size=0.0, double dist=0.0, 
-    wxString name=wxPyEmptyString, PseudoMetaFile mf=None, 
-    long arrowId=-1) -> ArrowHead"""
+        """
+        __init__(int type=0, int end=0, double size=0.0, double dist=0.0, 
+            wxString name=wxPyEmptyString, PseudoMetaFile mf=None, 
+            long arrowId=-1) -> ArrowHead
+        """
         newobj = _ogl.new_ArrowHead(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2908,7 +3019,6 @@ class ArrowHeadPtr(ArrowHead):
 _ogl.ArrowHead_swigregister(ArrowHeadPtr)
 
 class PyLineShape(PyShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyLineShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2924,9 +3034,11 @@ class PyLineShape(PyShape):
         return _ogl.PyLineShape__setCallbackInfo(*args, **kwargs)
 
     def AddArrow(*args, **kwargs):
-        """AddArrow(int type, int end=ARROW_POSITION_END, double arrowSize=10.0, 
-    double xOffset=0.0, wxString name=wxPyEmptyString, 
-    PseudoMetaFile mf=None, long arrowId=-1)"""
+        """
+        AddArrow(int type, int end=ARROW_POSITION_END, double arrowSize=10.0, 
+            double xOffset=0.0, wxString name=wxPyEmptyString, 
+            PseudoMetaFile mf=None, long arrowId=-1)
+        """
         return _ogl.PyLineShape_AddArrow(*args, **kwargs)
 
     def AddArrowOrdered(*args, **kwargs):
@@ -3130,13 +3242,17 @@ class PyLineShape(PyShape):
         return _ogl.PyLineShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyLineShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyLineShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -3180,18 +3296,24 @@ class PyLineShape(PyShape):
         return _ogl.PyLineShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyLineShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyLineShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyLineShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -3211,7 +3333,6 @@ class PyLineShapePtr(PyLineShape):
 _ogl.PyLineShape_swigregister(PyLineShapePtr)
 
 class PyPolygonShape(PyShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPolygonShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3295,13 +3416,17 @@ class PyPolygonShape(PyShape):
         return _ogl.PyPolygonShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyPolygonShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyPolygonShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -3345,18 +3470,24 @@ class PyPolygonShape(PyShape):
         return _ogl.PyPolygonShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyPolygonShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyPolygonShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyPolygonShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -3376,7 +3507,6 @@ class PyPolygonShapePtr(PyPolygonShape):
 _ogl.PyPolygonShape_swigregister(PyPolygonShapePtr)
 
 class PyTextShape(PyRectangleShape):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTextShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3440,13 +3570,17 @@ class PyTextShape(PyRectangleShape):
         return _ogl.PyTextShape_base_OnSize(*args, **kwargs)
 
     def base_OnMovePre(*args, **kwargs):
-        """base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True) -> bool"""
+        """
+        base_OnMovePre(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True) -> bool
+        """
         return _ogl.PyTextShape_base_OnMovePre(*args, **kwargs)
 
     def base_OnMovePost(*args, **kwargs):
-        """base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
-    bool display=True)"""
+        """
+        base_OnMovePost(wxDC dc, double x, double y, double old_x, double old_y, 
+            bool display=True)
+        """
         return _ogl.PyTextShape_base_OnMovePost(*args, **kwargs)
 
     def base_OnDragLeft(*args, **kwargs):
@@ -3490,18 +3624,24 @@ class PyTextShape(PyRectangleShape):
         return _ogl.PyTextShape_base_OnMoveLink(*args, **kwargs)
 
     def base_OnSizingDragLeft(*args, **kwargs):
-        """base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingDragLeft(PyControlPoint pt, bool draw, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyTextShape_base_OnSizingDragLeft(*args, **kwargs)
 
     def base_OnSizingBeginDragLeft(*args, **kwargs):
-        """base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingBeginDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyTextShape_base_OnSizingBeginDragLeft(*args, **kwargs)
 
     def base_OnSizingEndDragLeft(*args, **kwargs):
-        """base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
-    int attachment=0)"""
+        """
+        base_OnSizingEndDragLeft(PyControlPoint pt, double x, double y, int keys=0, 
+            int attachment=0)
+        """
         return _ogl.PyTextShape_base_OnSizingEndDragLeft(*args, **kwargs)
 
     def base_OnBeginSize(*args, **kwargs):
@@ -3521,7 +3661,6 @@ class PyTextShapePtr(PyTextShape):
 _ogl.PyTextShape_swigregister(PyTextShapePtr)
 
 class Diagram(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDiagram instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3635,13 +3774,14 @@ class DiagramPtr(Diagram):
 _ogl.Diagram_swigregister(DiagramPtr)
 
 class PyShapeCanvas(windows.ScrolledWindow):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyShapeCanvas instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent=None, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=BORDER, 
-    wxString name=wxPyShapeCanvasNameStr) -> PyShapeCanvas"""
+        """
+        __init__(Window parent=None, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=BORDER, 
+            wxString name=wxPyShapeCanvasNameStr) -> PyShapeCanvas
+        """
         newobj = _ogl.new_PyShapeCanvas(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3659,8 +3799,10 @@ class PyShapeCanvas(windows.ScrolledWindow):
         return _ogl.PyShapeCanvas_AddShape(*args, **kwargs)
 
     def FindShape(*args, **kwargs):
-        """FindShape(double x1, double y, int OUTPUT, wxClassInfo info=None, 
-    PyShape notImage=None) -> PyShape"""
+        """
+        FindShape(double x1, double y, int OUTPUT, wxClassInfo info=None, 
+            PyShape notImage=None) -> PyShape
+        """
         return _ogl.PyShapeCanvas_FindShape(*args, **kwargs)
 
     def FindFirstSensitiveShape(*args, **kwargs):

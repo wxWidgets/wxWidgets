@@ -778,12 +778,13 @@ STC_CMD_PARADOWNEXTEND = _stc.STC_CMD_PARADOWNEXTEND
 STC_CMD_PARAUP = _stc.STC_CMD_PARAUP
 STC_CMD_PARAUPEXTEND = _stc.STC_CMD_PARAUPEXTEND
 class StyledTextCtrl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStyledTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=wxPySTCNameStr) -> StyledTextCtrl"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=wxPySTCNameStr) -> StyledTextCtrl
+        """
         newobj = _stc.new_StyledTextCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -791,8 +792,10 @@ class StyledTextCtrl(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=wxSTCNameStr)"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=wxSTCNameStr)
+        """
         return _stc.StyledTextCtrl_Create(*args, **kwargs)
 
     def AddText(*args, **kwargs):
@@ -948,8 +951,10 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_SetCodePage(*args, **kwargs)
 
     def MarkerDefine(*args, **kwargs):
-        """MarkerDefine(int markerNumber, int markerSymbol, wxColour foreground=wxNullColour, 
-    wxColour background=wxNullColour)"""
+        """
+        MarkerDefine(int markerNumber, int markerSymbol, wxColour foreground=wxNullColour, 
+            wxColour background=wxNullColour)
+        """
         return _stc.StyledTextCtrl_MarkerDefine(*args, **kwargs)
 
     def MarkerSetForeground(*args, **kwargs):
@@ -1401,8 +1406,10 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_FindText(*args, **kwargs)
 
     def FormatRange(*args, **kwargs):
-        """FormatRange(bool doDraw, int startPos, int endPos, wxDC draw, wxDC target, 
-    Rect renderRect, Rect pageRect) -> int"""
+        """
+        FormatRange(bool doDraw, int startPos, int endPos, wxDC draw, wxDC target, 
+            Rect renderRect, Rect pageRect) -> int
+        """
         return _stc.StyledTextCtrl_FormatRange(*args, **kwargs)
 
     def GetFirstVisibleLine(*args, **kwargs):
@@ -2082,8 +2089,10 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_StyleSetFont(*args, **kwargs)
 
     def StyleSetFontAttr(*args, **kwargs):
-        """StyleSetFontAttr(int styleNum, int size, wxString faceName, bool bold, 
-    bool italic, bool underline)"""
+        """
+        StyleSetFontAttr(int styleNum, int size, wxString faceName, bool bold, 
+            bool italic, bool underline)
+        """
         return _stc.StyledTextCtrl_StyleSetFontAttr(*args, **kwargs)
 
     def CmdKeyExecute(*args, **kwargs):
@@ -2161,7 +2170,6 @@ def PreStyledTextCtrl(*args, **kwargs):
     return val
 
 class StyledTextEvent(core.CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStyledTextEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

@@ -27155,9 +27155,6 @@ static void *_p_wxNavigationKeyEventTo_p_wxObject(void *x) {
 static void *_p_wxKeyEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *) ((wxKeyEvent *) x));
 }
-static void *_p_wxScrolledWindowTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxPanel *) ((wxScrolledWindow *) x));
-}
 static void *_p_wxWindowTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *) ((wxWindow *) x));
 }
@@ -27166,6 +27163,9 @@ static void *_p_wxMenuTo_p_wxObject(void *x) {
 }
 static void *_p_wxMenuBarTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *) ((wxMenuBar *) x));
+}
+static void *_p_wxScrolledWindowTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxPanel *) ((wxScrolledWindow *) x));
 }
 static void *_p_wxTopLevelWindowTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *) ((wxTopLevelWindow *) x));

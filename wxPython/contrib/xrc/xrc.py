@@ -14,7 +14,6 @@ WX_XMLRES_CURRENT_VERSION_REVISION = _xrc.WX_XMLRES_CURRENT_VERSION_REVISION
 XRC_USE_LOCALE = _xrc.XRC_USE_LOCALE
 XRC_NO_SUBCLASSING = _xrc.XRC_NO_SUBCLASSING
 class XmlResource(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlResource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -191,7 +190,6 @@ def XRCCTRL(window, str_id, *ignoreargs):
 #---------------------------------------------------------------------------
 
 class XmlSubclassFactory(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyXmlSubclassFactory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -230,12 +228,13 @@ XML_DOCUMENT_FRAG_NODE = _xrc.XML_DOCUMENT_FRAG_NODE
 XML_NOTATION_NODE = _xrc.XML_NOTATION_NODE
 XML_HTML_DOCUMENT_NODE = _xrc.XML_HTML_DOCUMENT_NODE
 class XmlProperty(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlProperty instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString name=wxPyEmptyString, wxString value=wxPyEmptyString, 
-    XmlProperty next=None) -> XmlProperty"""
+        """
+        __init__(wxString name=wxPyEmptyString, wxString value=wxPyEmptyString, 
+            XmlProperty next=None) -> XmlProperty
+        """
         newobj = _xrc.new_XmlProperty(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -273,13 +272,14 @@ class XmlPropertyPtr(XmlProperty):
 _xrc.XmlProperty_swigregister(XmlPropertyPtr)
 
 class XmlNode(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlNode instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(XmlNode parent=None, wxXmlNodeType type=0, wxString name=wxPyEmptyString, 
-    wxString content=wxPyEmptyString, 
-    XmlProperty props=None, XmlNode next=None) -> XmlNode"""
+        """
+        __init__(XmlNode parent=None, wxXmlNodeType type=0, wxString name=wxPyEmptyString, 
+            wxString content=wxPyEmptyString, 
+            XmlProperty props=None, XmlNode next=None) -> XmlNode
+        """
         newobj = _xrc.new_XmlNode(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -393,7 +393,6 @@ def XmlNodeEasy(*args, **kwargs):
     return val
 
 class XmlDocument(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlDocument instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -475,7 +474,6 @@ def EmptyXmlDocument(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class XmlResourceHandler(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyXmlResourceHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -595,13 +593,17 @@ class XmlResourceHandler(core.Object):
         return _xrc.XmlResourceHandler_GetDimension(*args, **kwargs)
 
     def GetBitmap(*args, **kwargs):
-        """GetBitmap(wxString param=wxPyBitmapString, wxArtClient defaultArtClient=wxART_OTHER, 
-    Size size=DefaultSize) -> wxBitmap"""
+        """
+        GetBitmap(wxString param=wxPyBitmapString, wxArtClient defaultArtClient=wxART_OTHER, 
+            Size size=DefaultSize) -> wxBitmap
+        """
         return _xrc.XmlResourceHandler_GetBitmap(*args, **kwargs)
 
     def GetIcon(*args, **kwargs):
-        """GetIcon(wxString param=wxPyIconString, wxArtClient defaultArtClient=wxART_OTHER, 
-    Size size=DefaultSize) -> wxIcon"""
+        """
+        GetIcon(wxString param=wxPyIconString, wxArtClient defaultArtClient=wxART_OTHER, 
+            Size size=DefaultSize) -> wxIcon
+        """
         return _xrc.XmlResourceHandler_GetIcon(*args, **kwargs)
 
     def GetFont(*args, **kwargs):

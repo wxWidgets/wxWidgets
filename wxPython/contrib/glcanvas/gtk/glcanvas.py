@@ -6,12 +6,13 @@ import _glcanvas
 import core
 wx = core 
 class GLContext(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGLContext instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(bool isRGB, GLCanvas win, wxPalette palette=wxNullPalette, 
-    GLContext other=None) -> GLContext"""
+        """
+        __init__(bool isRGB, GLCanvas win, wxPalette palette=wxNullPalette, 
+            GLContext other=None) -> GLContext
+        """
         newobj = _glcanvas.new_GLContext(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -79,14 +80,15 @@ WX_GL_MIN_ACCUM_GREEN = _glcanvas.WX_GL_MIN_ACCUM_GREEN
 WX_GL_MIN_ACCUM_BLUE = _glcanvas.WX_GL_MIN_ACCUM_BLUE
 WX_GL_MIN_ACCUM_ALPHA = _glcanvas.WX_GL_MIN_ACCUM_ALPHA
 class GLCanvas(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGLCanvas instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, wxString name=wxPyGLCanvasNameStr, 
-    int attribList=None, 
-    wxPalette palette=wxNullPalette) -> GLCanvas"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, wxString name=wxPyGLCanvasNameStr, 
+            int attribList=None, 
+            wxPalette palette=wxNullPalette) -> GLCanvas
+        """
         newobj = _glcanvas.new_GLCanvas(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -118,10 +120,12 @@ class GLCanvasPtr(GLCanvas):
 _glcanvas.GLCanvas_swigregister(GLCanvasPtr)
 
 def wxGLCanvasWithContext(*args, **kwargs):
-    """wxGLCanvasWithContext(Window parent, GLContext shared=None, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, 
-    long style=0, wxString name=wxPyGLCanvasNameStr, 
-    int attribList=None, wxPalette palette=wxNullPalette) -> GLCanvas"""
+    """
+    wxGLCanvasWithContext(Window parent, GLContext shared=None, int id=-1, Point pos=DefaultPosition, 
+        Size size=DefaultSize, 
+        long style=0, wxString name=wxPyGLCanvasNameStr, 
+        int attribList=None, wxPalette palette=wxNullPalette) -> GLCanvas
+    """
     val = _glcanvas.new_wxGLCanvasWithContext(*args, **kwargs)
     val.thisown = 1
     val._setOORInfo(val)
