@@ -77,7 +77,7 @@ HRESULT STDMETHODCALLTYPE IStreamAdaptorBase::Read(void __RPC_FAR *pv, ULONG cb,
 {
     if (prepend.size() > 0)
     {
-        int n = min(prepend.size(), cb);
+        int n = wxMin(prepend.size(), cb);
         prepend.copy((char *) pv, n);
         prepend = prepend.substr(n);
         if (pcbRead)
