@@ -561,7 +561,7 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
     wxString v = GetParamValue(param);
     unsigned long tmp = 0; 
     
-    if (v.Length() != 7 || v[0] != wxT('#') ||
+    if (v.Length() != 7 || v[0u] != wxT('#') ||
         wxSscanf(v.c_str(), wxT("#%lX"), &tmp) != 1)
     {
         wxLogError(_("XML resource: Incorrect colour specification '%s' for property '%s'."),
