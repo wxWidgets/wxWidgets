@@ -363,13 +363,21 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
 // wxLocale
 // ----------------------------------------------------------------------------
 
-// NB: ctor has (desired) side effect of changing current locale
-wxLocale::wxLocale(const char *szName, 
-                   const char *szShort, 
-                   const char *szLocale,
-                   bool        bLoadDefault)
-        : m_strLocale(szName), m_strShort(szShort)
+wxLocale::wxLocale()
 {
+  m_pszOldLocale = NULL;
+  m_pMsgCat = NULL;
+}
+
+// NB: this function has (desired) side effect of changing current locale
+bool wxLocale::Init(const char *szName, 
+                    const char *szShort, 
+                    const char *szLocale,
+                    bool        bLoadDefault)
+{
+  m_strLocale = szName;
+  m_strShort = szShort;
+
   // change current locale (default: same as long name)
   if ( szLocale == NULL )
     szLocale = szName;
@@ -390,8 +398,11 @@ wxLocale::wxLocale(const char *szName,
   
   // load the default catalog with wxWindows standard messages
   m_pMsgCat = NULL;
+  bool bOk = TRUE;
   if ( bLoadDefault )
-    AddCatalog("wxstd");
+    bOk = AddCatalog("wxstd");
+
+  return bOk;
 }
 
 // clean up

@@ -57,11 +57,19 @@ class WXDLLEXPORT wxLocale
 {
 public:
   // ctor & dtor
+    // call Init() if you use this ctor
+  wxLocale();
     // the ctor has a side effect of changing current locale
   wxLocale(const char *szName,              // name (for messages)
            const char *szShort = NULL,      // dir prefix (for msg files)
            const char *szLocale = NULL,     // locale (for setlocale)
-           bool bLoadDefault = TRUE);       // preload wxstd.mo?
+           bool bLoadDefault = TRUE)        // preload wxstd.mo?
+    { Init(szName, szShort, szLocale, bLoadDefault); }
+    // the same as a function (returns TRUE on success)
+  bool Init(const char *szName,
+            const char *szShort = NULL,
+            const char *szLocale = NULL,
+            bool bLoadDefault = TRUE);
     // restores old locale
  ~wxLocale();
 
