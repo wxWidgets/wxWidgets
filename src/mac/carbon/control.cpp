@@ -437,6 +437,9 @@ void wxControl::MacPostControlCreate()
      SetSize(pos.x, pos.y, new_size.x, new_size.y);
  
      UMAShowControl( (ControlHandle) m_macControl ) ;
+     
+     SetCursor( *wxSTANDARD_CURSOR ) ;
+     
      Refresh() ;
 }
 
