@@ -44,7 +44,7 @@
 #include <shellapi.h>
 #include "wx/msw/missing.h"
 
-#ifdef __WXBASE__
+#if wxUSE_BASE
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Dynamic library function defs.
@@ -538,7 +538,7 @@ int wxFSVolumeBase::GetFlags() const
     return itr->second.m_flags;
 } // GetFlags
 
-#endif // __WXBASE__
+#endif // wxUSE_BASE
 
 // ============================================================================
 // wxFSVolume

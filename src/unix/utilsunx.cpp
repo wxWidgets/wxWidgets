@@ -39,7 +39,7 @@
 
 #endif // wxUSE_STREAMS
 
-#ifdef __WXBASE__
+#if wxUSE_BASE
 
 #if defined( __MWERKS__ ) && defined(__MACH__)
 #define WXWIN_OS_DESCRIPTION "MacOS X"
@@ -1049,7 +1049,7 @@ void wxFatalError( const wxString &msg, const wxString &title )
 
 #endif // WXWIN_COMPATIBILITY_2_2
 
-#endif // __WXBASE__
+#endif // wxUSE_BASE
 
 #if wxUSE_GUI
 

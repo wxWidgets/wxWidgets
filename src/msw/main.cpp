@@ -127,7 +127,7 @@ DllMain(HANDLE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
 // global HINSTANCE
 // ----------------------------------------------------------------------------
 
-#ifdef __WXBASE__
+#if wxUSE_BASE
 
 HINSTANCE wxhInstance = 0;
 
@@ -141,5 +141,5 @@ void wxSetInstance(HINSTANCE hInst)
     wxhInstance = hInst;
 }
 
-#endif // __WXBASE__
+#endif // wxUSE_BASE
 

@@ -74,7 +74,7 @@ class MemFSHashObj : public wxObject
         }
 };
 
-#ifdef __WXBASE__
+#if wxUSE_BASE
 
 
 //--------------------------------------------------------------------------------
@@ -201,7 +201,7 @@ bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
         delete m_Hash -> Delete(filename);
 }
 
-#endif // __WXBASE__
+#endif // wxUSE_BASE
 
 #if wxUSE_GUI
 

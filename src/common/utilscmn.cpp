@@ -89,7 +89,7 @@
     #include "wx/msw/private.h"
 #endif
 
-#if 1 // def __WXBASE__
+#if wxUSE_BASE
 
 // ----------------------------------------------------------------------------
 // common data
@@ -530,7 +530,7 @@ bool wxYieldIfNeeded()
     return wxTheApp && wxTheApp->Yield(TRUE);
 }
 
-#endif // __WXBASE__
+#endif // wxUSE_BASE
 
 // ============================================================================
 // GUI-only functions from now on

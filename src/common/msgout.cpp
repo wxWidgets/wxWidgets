@@ -48,7 +48,7 @@
 // implementation
 // ===========================================================================
 
-#ifdef __WXBASE__
+#if wxUSE_BASE
 
 // ----------------------------------------------------------------------------
 // wxMessageOutput
@@ -146,7 +146,7 @@ void wxMessageOutputLog::Printf(const wxChar* format, ...)
     ::wxLogMessage(wxT("%s"), out.c_str());
 }
 
-#endif // __WXBASE__
+#endif // wxUSE_BASE
 
 // ----------------------------------------------------------------------------
 // wxMessageOutputMessageBox
