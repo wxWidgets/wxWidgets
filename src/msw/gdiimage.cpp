@@ -402,16 +402,18 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
 #ifdef __WIN32__
     HICON hicon = NULL;
 
-    // Parse the filename: it may be of the form
-    // filename;n in order to specify the nth icon in the file.
-    // For the moment, ignore the issue of possible semicolons in the filename.
+    // Parse the filename: it may be of the form "filename;n" in order to
+    // specify the nth icon in the file.
+    //
+    // For the moment, ignore the issue of possible semicolons in the
+    // filename.
     int iconIndex = 0;
-    wxString name1(name);
+    wxString nameReal(name);
     wxString strIconIndex = name.AfterLast(wxT(';'));
     if (strIconIndex != name)
     {
         iconIndex = wxAtoi(strIconIndex);
-        name1 = name.BeforeLast(wxT(';'));
+        nameReal = name.BeforeLast(wxT(';'));
     }
 
     // were we asked for a large icon?
@@ -419,7 +421,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
          desiredHeight == ::GetSystemMetrics(SM_CYICON) )
     {
         // get the specified large icon from file
-        if ( !::ExtractIconEx(name1, iconIndex, &hicon, NULL, 1) )
+        if ( !::ExtractIconEx(nameReal, iconIndex, &hicon, NULL, 1) )
         {
             // it is not an error, but it might still be useful to be informed
             // about it optionally
@@ -432,7 +434,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
               desiredHeight == ::GetSystemMetrics(SM_CYSMICON) )
     {
         // get the specified small icon from file
-        if ( !::ExtractIconEx(name1, iconIndex, NULL, &hicon, 1) )
+        if ( !::ExtractIconEx(nameReal, iconIndex, NULL, &hicon, 1) )
         {
             wxLogTrace(_T("iconload"),
                        _T("No small icons found in the file '%s'."),
@@ -444,7 +446,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     if ( !hicon )
     {
         // take any (the first one) icon from the file by default
-        hicon = ::ExtractIcon(wxGetInstance(), name1, 0 /* first */);
+        hicon = ::ExtractIcon(wxGetInstance(), nameReal, 0 /* first */);
     }
 
     if ( !hicon )
@@ -491,6 +493,9 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
 {
     HICON hicon;
 
+    // try to load the icon from this program first to allow overriding the
+    // standard icons (although why one would want to do it considering that
+    // we already have wxApp::GetStdIcon() is unclear)
 #if defined(__WIN32__) && !defined(__SC__)
     if ( desiredWidth != -1 && desiredHeight != -1 )
     {
@@ -502,6 +507,34 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
 #endif // Win32
     {
         hicon = ::LoadIcon(wxGetInstance(), name);
+    }
+
+    // next check if it's not a standard icon
+    if ( !hicon )
+    {
+        static const struct
+        {
+            const wxChar *name;
+            LPTSTR id;
+        } stdIcons[] =
+        {
+            { wxT("wxICON_QUESTION"),   IDI_QUESTION    },
+            { wxT("wxICON_WARNING"),    IDI_EXCLAMATION },
+            { wxT("wxICON_ERROR"),      IDI_HAND        },
+            { wxT("wxICON_INFO"),       IDI_ASTERISK    },
+        };
+
+        for ( size_t nIcon = 0; !hicon && nIcon < WXSIZEOF(stdIcons); nIcon++ )
+        {
+            if ( name == stdIcons[nIcon].name )
+            {
+                hicon = (HICON)::LoadImage((HINSTANCE)NULL,
+                                           stdIcons[nIcon].id,
+                                           IMAGE_ICON,
+                                           desiredWidth, desiredHeight,
+                                           LR_DEFAULTCOLOR);
+            }
+        }
     }
 
     wxSize size = GetHiconSize(hicon);

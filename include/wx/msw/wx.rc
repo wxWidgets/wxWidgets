@@ -116,11 +116,13 @@ WXCURSOR_BLANK          CURSOR  DISCARDABLE     "wx/msw/blank.cur"
 //wxDEFAULT_MDICHILDFRAME       ICON "wx/msw/child.ico"
 
 // Standard large icons
-wxICON_QUESTION		        ICON "wx/msw/question.ico"
-wxICON_WARNING		        ICON "wx/msw/warning.ico"
-wxICON_ERROR		        ICON "wx/msw/error.ico"
-wxICON_INFO		        ICON "wx/msw/info.ico"
-wxICON_TIP		        ICON "wx/msw/tip.ico"
+/* we don't use these files any more, use Windows standard icons instead
+wxICON_QUESTION	ICON "wx/msw/question.ico"
+wxICON_WARNING	ICON "wx/msw/warning.ico"
+wxICON_ERROR	ICON "wx/msw/error.ico"
+wxICON_INFO		ICON "wx/msw/info.ico"
+*/
+wxICON_TIP		ICON "wx/msw/tip.ico"
 
 // Standard small icons
 wxICON_SMALL_CLOSED_FOLDER      ICON "wx/msw/folder1.ico"
