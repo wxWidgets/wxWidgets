@@ -310,7 +310,13 @@ public:
     // -------------------------
 
     // get the list of children
-    wxWindowList& GetChildren();  // TODO: Do a typemap or a wrapper for wxWindowList
+    //wxWindowList& GetChildren();  // TODO: Do a typemap or a wrapper for wxWindowList
+    %extend {
+        PyObject* GetChildren() {
+            wxWindowList& list = self->GetChildren();
+            return wxPy_ConvertList(&list, "wxWindow");
+        }
+    }
 
     // get the parent or the parent of the parent
     wxWindow *GetParent() const;
