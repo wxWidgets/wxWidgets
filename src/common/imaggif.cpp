@@ -44,6 +44,7 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     int error;
     bool ok;
 
+//    image->Destroy();
     decod = new wxGIFDecoder(&stream, TRUE);
     error = decod->ReadGIF();
 
@@ -70,14 +71,13 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
     if ((error == wxGIF_TRUNCATED) && verbose)
     {
-        wxLogWarning(_("wxGIFHandler: data stream seems to be truncated."));
+        wxLogError(_("wxGIFHandler: data stream seems to be truncated."));
         /* go on; image data is OK */
     }
 
-    image->Destroy();
     ok = decod->ConvertToImage(image);
-
     delete decod;
+
     return ok;
 }
 
@@ -97,8 +97,8 @@ bool wxGIFHandler::DoCanRead( wxInputStream& stream )
 
     decod = new wxGIFDecoder(&stream);
     ok = decod->CanRead();
-
     delete decod;
+
     return ok;
 }
 
