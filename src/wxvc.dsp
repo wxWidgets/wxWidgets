@@ -300,6 +300,10 @@ SOURCE=.\common\imagtiff.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\imagxpm.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\intl.cpp
 # End Source File
 # Begin Source File
