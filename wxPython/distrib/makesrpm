@@ -7,23 +7,9 @@ if [ ! -d wxPython -o ! -e distrib/makerpm ]; then
 fi
 
 
-#----------------------------------------------------------------------
-# Check parameters
-
-function useage {
-    echo "Usage: $0 wx_version "
-    echo "   wx_version     String to use for version in filenames, etc."
-}
-
-if [ $# -lt 1 ]; then
-    useage
-    exit 1
-fi
-
-ver=$1
 
 
-distrib/makerpm $ver   2.2   skipclean                  srpm
-distrib/makerpm $ver   2.3   skipclean skipcopy skiptar srpm
-distrib/makerpm $ver   2.2   skipclean skipcopy skiptar srpm gtk2
-distrib/makerpm $ver   2.3   skipclean skipcopy skiptar srpm gtk2
+distrib/makerpm    2.2   skipclean                  srpm
+distrib/makerpm    2.3   skipclean skipcopy skiptar srpm
+distrib/makerpm    2.2   skipclean skipcopy skiptar srpm gtk2
+distrib/makerpm    2.3   skipclean skipcopy skiptar srpm gtk2
