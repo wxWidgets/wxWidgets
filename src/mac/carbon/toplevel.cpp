@@ -63,7 +63,9 @@ static   Point     gs_lastWhere;
 static   long      gs_lastWhen = 0;
 
 
+#if TARGET_CARBON
 static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 message, SInt32 param);
+#endif
 
 // ============================================================================
 // wxTopLevelWindowMac implementation
@@ -599,6 +601,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     if (HasFlag(wxSTAY_ON_TOP))
     	wclass = kUtilityWindowClass;
 
+#if TARGET_CARBON
     if ( HasFlag(wxFRAME_SHAPED) )
     {
         WindowDefSpec customWindowDefSpec;
@@ -610,6 +613,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
                               (WindowRef*) &m_macWindow);
     }
     else
+#endif
     {
         ::CreateNewWindow( wclass , attr , &theBoundsRect , (WindowRef*)&m_macWindow ) ;
     }
@@ -625,12 +629,14 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     m_macFocus = NULL ;
 
 
+#if TARGET_CARBON
     if ( HasFlag(wxFRAME_SHAPED) )
     {
         // default shape matches the window size
         wxRegion rgn(0, 0, m_width, m_height);
         SetShape(rgn);
     }
+#endif
 }
 
 void wxTopLevelWindowMac::MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXHWND *window  , wxWindowMac** rootwin)
@@ -1072,6 +1078,7 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), FALSE,
                  _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
+#if TARGET_CARBON
     // The empty region signifies that the shape should be removed from the
     // window.
     if ( region.IsEmpty() )
@@ -1096,6 +1103,9 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
     // Tell the window manager that the window has changed shape
     ReshapeCustomWindow((WindowRef)MacGetWindowRef());
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 
@@ -1105,7 +1115,7 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
 // http://developer.apple.com/samplecode/Sample_Code/Human_Interface_Toolbox/Mac_OS_High_Level_Toolbox/CustomWindow.htm
 // ---------------------------------------------------------------------------
 
-
+#if TARGET_CARBON
 static void wxShapedMacWindowGetPos(WindowRef window, Rect* inRect)
 {
     GetWindowPortBounds(window, inRect);
@@ -1230,5 +1240,5 @@ static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 
 
     return 0;
 }
-
+#endif
 // ---------------------------------------------------------------------------
