@@ -39,6 +39,7 @@ bool wxRadioButton::MSWCommand(WXUINT param, WXWORD id)
   {
     wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId);
     event.SetEventObject( this );
+    event.SetInt( GetValue() );
     ProcessCommand(event);
     return TRUE;
   }
