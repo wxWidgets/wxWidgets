@@ -93,20 +93,20 @@
     #define TEST_ZLIB
 
     #undef TEST_ALL
-    static const bool TEST_ALL = TRUE;
+    static const bool TEST_ALL = true;
 #else
-    #define TEST_DIR
+    #define TEST_SOCKETS
 
-    static const bool TEST_ALL = FALSE;
+    static const bool TEST_ALL = false;
 #endif
 
 // some tests are interactive, define this to run them
 #ifdef TEST_INTERACTIVE
     #undef TEST_INTERACTIVE
 
-    static const bool TEST_INTERACTIVE = TRUE;
+    static const bool TEST_INTERACTIVE = true;
 #else
-    static const bool TEST_INTERACTIVE = FALSE;
+    static const bool TEST_INTERACTIVE = false;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -570,7 +570,7 @@ static void TestExecute()
 
     wxPrintf(_T("Testing wxExecute: "));
     fflush(stdout);
-    if ( wxExecute(COMMAND, TRUE /* sync */) == 0 )
+    if ( wxExecute(COMMAND, true /* sync */) == 0 )
         wxPuts(_T("Ok."));
     else
         wxPuts(_T("ERROR."));
@@ -853,39 +853,39 @@ static struct FileNameInfo
 } filenames[] =
 {
     // Unix file names
-    { _T("/usr/bin/ls"), _T(""), _T("/usr/bin"), _T("ls"), _T(""), TRUE, wxPATH_UNIX },
-    { _T("/usr/bin/"), _T(""), _T("/usr/bin"), _T(""), _T(""), TRUE, wxPATH_UNIX },
-    { _T("~/.zshrc"), _T(""), _T("~"), _T(".zshrc"), _T(""), TRUE, wxPATH_UNIX },
-    { _T("../../foo"), _T(""), _T("../.."), _T("foo"), _T(""), FALSE, wxPATH_UNIX },
-    { _T("foo.bar"), _T(""), _T(""), _T("foo"), _T("bar"), FALSE, wxPATH_UNIX },
-    { _T("~/foo.bar"), _T(""), _T("~"), _T("foo"), _T("bar"), TRUE, wxPATH_UNIX },
-    { _T("/foo"), _T(""), _T("/"), _T("foo"), _T(""), TRUE, wxPATH_UNIX },
-    { _T("Mahogany-0.60/foo.bar"), _T(""), _T("Mahogany-0.60"), _T("foo"), _T("bar"), FALSE, wxPATH_UNIX },
-    { _T("/tmp/wxwin.tar.bz"), _T(""), _T("/tmp"), _T("wxwin.tar"), _T("bz"), TRUE, wxPATH_UNIX },
+    { _T("/usr/bin/ls"), _T(""), _T("/usr/bin"), _T("ls"), _T(""), true, wxPATH_UNIX },
+    { _T("/usr/bin/"), _T(""), _T("/usr/bin"), _T(""), _T(""), true, wxPATH_UNIX },
+    { _T("~/.zshrc"), _T(""), _T("~"), _T(".zshrc"), _T(""), true, wxPATH_UNIX },
+    { _T("../../foo"), _T(""), _T("../.."), _T("foo"), _T(""), false, wxPATH_UNIX },
+    { _T("foo.bar"), _T(""), _T(""), _T("foo"), _T("bar"), false, wxPATH_UNIX },
+    { _T("~/foo.bar"), _T(""), _T("~"), _T("foo"), _T("bar"), true, wxPATH_UNIX },
+    { _T("/foo"), _T(""), _T("/"), _T("foo"), _T(""), true, wxPATH_UNIX },
+    { _T("Mahogany-0.60/foo.bar"), _T(""), _T("Mahogany-0.60"), _T("foo"), _T("bar"), false, wxPATH_UNIX },
+    { _T("/tmp/wxwin.tar.bz"), _T(""), _T("/tmp"), _T("wxwin.tar"), _T("bz"), true, wxPATH_UNIX },
 
     // Windows file names
-    { _T("foo.bar"), _T(""), _T(""), _T("foo"), _T("bar"), FALSE, wxPATH_DOS },
-    { _T("\\foo.bar"), _T(""), _T("\\"), _T("foo"), _T("bar"), FALSE, wxPATH_DOS },
-    { _T("c:foo.bar"), _T("c"), _T(""), _T("foo"), _T("bar"), FALSE, wxPATH_DOS },
-    { _T("c:\\foo.bar"), _T("c"), _T("\\"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
-    { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), TRUE, wxPATH_DOS },
-    { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
-    { _T("\\\\server\\dir\\foo.bar"), _T("server"), _T("\\dir"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
+    { _T("foo.bar"), _T(""), _T(""), _T("foo"), _T("bar"), false, wxPATH_DOS },
+    { _T("\\foo.bar"), _T(""), _T("\\"), _T("foo"), _T("bar"), false, wxPATH_DOS },
+    { _T("c:foo.bar"), _T("c"), _T(""), _T("foo"), _T("bar"), false, wxPATH_DOS },
+    { _T("c:\\foo.bar"), _T("c"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
+    { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), true, wxPATH_DOS },
+    { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
+    { _T("\\\\server\\dir\\foo.bar"), _T("server"), _T("\\dir"), _T("foo"), _T("bar"), true, wxPATH_DOS },
 
     // wxFileName support for Mac file names is broken currently
 #if 0
     // Mac file names
-    { _T("Volume:Dir:File"), _T("Volume"), _T("Dir"), _T("File"), _T(""), TRUE, wxPATH_MAC },
-    { _T("Volume:Dir:Subdir:File"), _T("Volume"), _T("Dir:Subdir"), _T("File"), _T(""), TRUE, wxPATH_MAC },
-    { _T("Volume:"), _T("Volume"), _T(""), _T(""), _T(""), TRUE, wxPATH_MAC },
-    { _T(":Dir:File"), _T(""), _T("Dir"), _T("File"), _T(""), FALSE, wxPATH_MAC },
-    { _T(":File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), FALSE, wxPATH_MAC },
-    { _T("File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), FALSE, wxPATH_MAC },
+    { _T("Volume:Dir:File"), _T("Volume"), _T("Dir"), _T("File"), _T(""), true, wxPATH_MAC },
+    { _T("Volume:Dir:Subdir:File"), _T("Volume"), _T("Dir:Subdir"), _T("File"), _T(""), true, wxPATH_MAC },
+    { _T("Volume:"), _T("Volume"), _T(""), _T(""), _T(""), true, wxPATH_MAC },
+    { _T(":Dir:File"), _T(""), _T("Dir"), _T("File"), _T(""), false, wxPATH_MAC },
+    { _T(":File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), false, wxPATH_MAC },
+    { _T("File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), false, wxPATH_MAC },
 #endif // 0
 
     // VMS file names
-    { _T("device:[dir1.dir2.dir3]file.txt"), _T("device"), _T("dir1.dir2.dir3"), _T("file"), _T("txt"), TRUE, wxPATH_VMS },
-    { _T("file.txt"), _T(""), _T(""), _T("file"), _T("txt"), FALSE, wxPATH_VMS },
+    { _T("device:[dir1.dir2.dir3]file.txt"), _T("device"), _T("dir1.dir2.dir3"), _T("file"), _T("txt"), true, wxPATH_VMS },
+    { _T("file.txt"), _T(""), _T(""), _T("file"), _T("txt"), false, wxPATH_VMS },
 };
 
 static void TestFileNameConstruction()
@@ -1144,7 +1144,7 @@ static void TestHash()
 
     {
         wxHashFoos hash;
-        hash.DeleteContents(TRUE);
+        hash.DeleteContents(true);
 
         wxPrintf(_T("Hash created: %u foos in hash, %u foos totally\n"),
                hash.GetCount(), Foo::count);
@@ -1373,7 +1373,7 @@ static void TestListCtor()
         wxPrintf(_T("After 2nd list creation: %u and %u objects in the lists, %u objects total.\n"),
                list1.GetCount(), list2.GetCount(), Bar::GetNumber());
 
-        list1.DeleteContents(TRUE);
+        list1.DeleteContents(true);
     }
 
     wxPrintf(_T("After list destruction: %u objects left.\n"), Bar::GetNumber());
@@ -2274,26 +2274,26 @@ static void TestRegExCompile()
         bool correct;
     } regExCompTestData[] =
     {
-        { _T("foo"), TRUE },
-        { _T("foo("), FALSE },
-        { _T("foo(bar"), FALSE },
-        { _T("foo(bar)"), TRUE },
-        { _T("foo["), FALSE },
-        { _T("foo[bar"), FALSE },
-        { _T("foo[bar]"), TRUE },
-        { _T("foo{"), TRUE },
-        { _T("foo{1"), FALSE },
-        { _T("foo{bar"), TRUE },
-        { _T("foo{1}"), TRUE },
-        { _T("foo{1,2}"), TRUE },
-        { _T("foo{bar}"), TRUE },
-        { _T("foo*"), TRUE },
-        { _T("foo**"), FALSE },
-        { _T("foo+"), TRUE },
-        { _T("foo++"), FALSE },
-        { _T("foo?"), TRUE },
-        { _T("foo??"), FALSE },
-        { _T("foo?+"), FALSE },
+        { _T("foo"), true },
+        { _T("foo("), false },
+        { _T("foo(bar"), false },
+        { _T("foo(bar)"), true },
+        { _T("foo["), false },
+        { _T("foo[bar"), false },
+        { _T("foo[bar]"), true },
+        { _T("foo{"), true },
+        { _T("foo{1"), false },
+        { _T("foo{bar"), true },
+        { _T("foo{1}"), true },
+        { _T("foo{1,2}"), true },
+        { _T("foo{bar}"), true },
+        { _T("foo*"), true },
+        { _T("foo**"), false },
+        { _T("foo+"), true },
+        { _T("foo++"), false },
+        { _T("foo?"), true },
+        { _T("foo??"), false },
+        { _T("foo?+"), false },
     };
 
     wxRegEx re;
@@ -2320,12 +2320,12 @@ static void TestRegExMatch()
         bool correct;
     } regExMatchTestData[] =
     {
-        { _T("foo"), _T("bar"), FALSE },
-        { _T("foo"), _T("foobar"), TRUE },
-        { _T("^foo"), _T("foobar"), TRUE },
-        { _T("^foo"), _T("barfoo"), FALSE },
-        { _T("bar$"), _T("barbar"), TRUE },
-        { _T("bar$"), _T("barbar "), FALSE },
+        { _T("foo"), _T("bar"), false },
+        { _T("foo"), _T("foobar"), true },
+        { _T("^foo"), _T("foobar"), true },
+        { _T("^foo"), _T("barfoo"), false },
+        { _T("bar$"), _T("barbar"), true },
+        { _T("bar$"), _T("barbar "), false },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(regExMatchTestData); n++ )
@@ -3006,7 +3006,8 @@ static void TestSocketServer()
         return;
     }
 
-    for ( ;; )
+    bool quit = false;
+    while ( !quit )
     {
         wxPrintf(_T("Server: waiting for connection on port %d...\n"), PORT);
 
@@ -3021,7 +3022,8 @@ static void TestSocketServer()
 
         server->SetTimeout(60); // 1 min
 
-        while ( socket->IsConnected() )
+        bool close = false;
+        while ( !close && socket->IsConnected() )
         {
             wxString s;
             wxChar ch = _T('\0');
@@ -3053,19 +3055,31 @@ static void TestSocketServer()
             }
 
             wxPrintf(_T("Server: got '%s'.\n"), s.c_str());
-            if ( s == _T("bye") )
+            if ( s == _T("close") )
             {
-                delete socket;
+                wxPuts(_T("Closing connection"));
 
-                break;
+                close = true;
             }
+            else if ( s == _T("quit") )
+            {
+                close =
+                quit = true;
 
-            socket->Write(s.MakeUpper().c_str(), s.length());
-            socket->Write("\r\n", 2);
-            wxPrintf(_T("Server: wrote '%s'.\n"), s.c_str());
+                wxPuts(_T("Shutting down the server"));
+            }
+            else // not a special command
+            {
+                socket->Write(s.MakeUpper().c_str(), s.length());
+                socket->Write("\r\n", 2);
+                wxPrintf(_T("Server: wrote '%s'.\n"), s.c_str());
+            }
         }
 
-        wxPuts(_T("Server: lost a client."));
+        if ( !close )
+        {
+            wxPuts(_T("Server: lost a client unexpectedly."));
+        }
 
         socket->Destroy();
     }
@@ -3160,7 +3174,7 @@ static bool TestFtpConnect()
     {
         wxPrintf(_T("ERROR: failed to connect to %s\n"), hostname);
 
-        return FALSE;
+        return false;
     }
     else
     {
@@ -3168,7 +3182,7 @@ static bool TestFtpConnect()
                hostname, ftp.Pwd().c_str());
     }
 
-    return TRUE;
+    return true;
 }
 
 // test (fixed?) wxFTP bug with wu-ftpd >= 2.6.0?
@@ -4248,8 +4262,8 @@ static void TestTimeStatic()
         // first line: the years to test
         { 1990, 1976, 2000, 2030, 1984, },
 
-        // second line: TRUE if leap, FALSE otherwise
-        { FALSE, TRUE, TRUE, FALSE, TRUE }
+        // second line: true if leap, false otherwise
+        { false, true, true, false, true }
     };
 
     for ( size_t n = 0; n < nYears; n++ )
@@ -4851,7 +4865,7 @@ static void TestTimeFormat()
             }
             else
             {
-                bool equal = FALSE; // suppress compilaer warning
+                bool equal = false; // suppress compilaer warning
                 switch ( kind )
                 {
                     case CompareBoth:
@@ -4895,8 +4909,8 @@ static void TestTimeParse()
 
     static const ParseTestData parseTestDates[] =
     {
-        { _T("Sat, 18 Dec 1999 00:46:40 +0100"), { 18, wxDateTime::Dec, 1999, 00, 46, 40 }, TRUE },
-        { _T("Wed, 1 Dec 1999 05:17:20 +0300"),  {  1, wxDateTime::Dec, 1999, 03, 17, 20 }, TRUE },
+        { _T("Sat, 18 Dec 1999 00:46:40 +0100"), { 18, wxDateTime::Dec, 1999, 00, 46, 40 }, true },
+        { _T("Wed, 1 Dec 1999 05:17:20 +0300"),  {  1, wxDateTime::Dec, 1999, 03, 17, 20 }, true },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
@@ -5261,7 +5275,7 @@ public:
     {
         m_n = n;
         m_ch = ch;
-        m_cancelled = FALSE;
+        m_cancelled = false;
 
         Create();
     }
@@ -5276,7 +5290,7 @@ private:
     size_t m_n; // number of characters to write
     wxChar m_ch;  // character to write
 
-    bool m_cancelled;   // FALSE if we exit normally
+    bool m_cancelled;   // false if we exit normally
 };
 
 wxThread::ExitCode MyDetachedThread::Entry()
@@ -5293,7 +5307,7 @@ wxThread::ExitCode MyDetachedThread::Entry()
     {
         if ( TestDestroy() )
         {
-            m_cancelled = TRUE;
+            m_cancelled = true;
 
             break;
         }
@@ -5912,7 +5926,7 @@ static void TestStringSub()
     {
         wxString prefix = prefixes[n], rest;
         bool rc = s.StartsWith(prefix, &rest);
-        wxPrintf(_T("StartsWith('%s') = %s"), prefix.c_str(), rc ? _T("TRUE") : _T("FALSE"));
+        wxPrintf(_T("StartsWith('%s') = %s"), prefix.c_str(), rc ? _T("true") : _T("false"));
         if ( rc )
         {
             wxPrintf(_T(" (the rest is '%s')\n"), rest.c_str());
@@ -6358,7 +6372,7 @@ int main(int argc, char **argv)
         PrintArray(_T("a1"), a1);
 
         wxPuts(_T("*** After sorting a1 in reverse order"));
-        a1.Sort(TRUE);
+        a1.Sort(true);
         PrintArray(_T("a1"), a1);
 
         wxPuts(_T("*** After sorting a1 by the string length"));
@@ -6406,11 +6420,16 @@ int main(int argc, char **argv)
 #endif // TEST_LOCALE
 
 #ifdef TEST_LOG
+    wxPuts(_T("*** Testing wxLog ***"));
+
     wxString s;
     for ( size_t n = 0; n < 8000; n++ )
     {
         s << (wxChar)(_T('A') + (n % 26));
     }
+
+    wxLogWarning(_T("The length of the string is %lu"),
+                 (unsigned long)s.length());
 
     wxString msg;
     msg.Printf(_T("A very very long message: '%s', the end!\n"), s.c_str());
