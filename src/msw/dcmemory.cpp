@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/msw/private.h"
