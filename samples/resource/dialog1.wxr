@@ -9,13 +9,13 @@ static char *dialog1 = "dialog(name = 'dialog1',\
   font = [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
   control = [101, wxStaticBox, 'wxStaticBox', '0', 'group6', 5, 7, 184, 103,\
       [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [102, wxRadioBox, 'Radiobox', 'wxRA_SPECIFY_COLS', 'radiobox2', 13, 24, 40, 72, ['One', 'Two', 'Three', 'Four', 'One more'], 1,\
+  control = [102, wxRadioBox, 'Radiobox', 'wxRA_SPECIFY_COLS', 'radiobox2', 13, 24, 45, 72, ['One', 'Two', 'Three', 'Four', 'One more'], 1,\
       [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
   control = [104, wxTextCtrl, '', 'wxTE_MULTILINE', 'multitext3', 62, 24, 67, 33, 'wxWindows rules!',\
       [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
   control = [105, wxListBox, '', '0', 'listbox4', 62, 66, 67, 33, ['Apples', 'Bananas', 'Pears', 'Kiwis'],\
       [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [106, wxCheckBox, 'Checkbox', '0', 'checkbox9', 141, 26, 36, 14, 0,\
+  control = [106, wxCheckBox, 'Checkbox', '0', 'checkbox9', 141, 26, 40, 14, 0,\
       [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
   control = [107, wxStaticText, 'My Message', '0', 'message10', 143, 57, 39, 12, '',\
       [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\

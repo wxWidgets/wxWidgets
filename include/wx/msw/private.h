@@ -155,7 +155,8 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 #define DEFAULT_ITEM_HEIGHT 80
 
 // Scale font to get edit control height
-#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
+//#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
+#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (cy+8)
 
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages

@@ -52,7 +52,7 @@
     #define wxLongLongIsLong
 #elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ )
     #define wxLongLong_t __int64
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x530)
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
     #define wxLongLong_t __int64
 #elif defined(__GNUG__)
     #define wxLongLong_t long long
