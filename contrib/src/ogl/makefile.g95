@@ -7,9 +7,9 @@
 #
 # Makefile for wxWindows OGL library Cygwin/Mingw32).
 
-WXDIR = ../..
+WXDIR = ../../..
 
-LIBTARGET=$(WXDIR)/lib/libogl.a
+LIBTARGET=$(WXDIR)/contrib/lib/libogl.a
 OBJECTS = basic.o basic2.o canvas.o ogldiag.o lines.o misc.o divided.o constrnt.o\
  composit.o drawn.o bmpshape.o mfutils.o
 

@@ -238,11 +238,13 @@ utils/dialoged/test/*.ico
 utils/dialoged/test/*.prj
 utils/dialoged/test/*.bmp
 
+contrib/include/wx/mmedia/*.h
+contrib/include/wx/mmedia/internal/*.h
 contrib/src/mmedia/makefile*
 contrib/src/mmedia/README
-contrib/src/mmedia/lib/*.h
-contrib/src/mmedia/lib/*.cpp
-contrib/src/mmedia/lib/makefile*
+contrib/src/mmedia/*.h
+contrib/src/mmedia/*.cpp
+contrib/src/mmedia/makefile*
 contrib/samples/mmedia/*.h
 contrib/samples/mmedia/*.cpp
 contrib/samples/mmedia/makefile*

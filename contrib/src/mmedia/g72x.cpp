@@ -30,6 +30,7 @@
  * Common routines for G.721 and G.723 conversions.
  */
 
+#include <wx/wxprec.h>
 #include <stdlib.h>
 #include "wx/mmedia/internal/g72x.h"
 

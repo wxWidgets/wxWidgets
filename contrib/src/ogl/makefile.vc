@@ -14,9 +14,9 @@
 
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
-OGLDIR = $(WXDIR)\src\ogl
+OGLDIR = $(WXDIR)\contrib\src\ogl
 OGLINC = $(WXDIR)\contrib\include\wx\ogl
-THISDIR = $(WXDIR)\src\ogl
+THISDIR = $(WXDIR)\contrib\src\ogl
 EXTRAFLAGS=/DPROLOGIO=1
 DOCDIR=$(WXDIR)\contrib\docs
 LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\ogl

@@ -18,7 +18,7 @@ WXDIR = $(WXWIN)
 
 OGLDIR = $(WXDIR)\contrib\src\ogl
 THISDIR = $(OGLDIR)
-DOCDIR = $(WXDIR)\docs\latex\ogl
+DOCDIR = $(WXDIR)\contrib\docs\latex\ogl
 
 GRAPHICSLIB = $(WXDIR)\contrib\lib\ogl.lib
 INC = /I$(WXDIR)\include /I$(WXDIR)\contrib\include
