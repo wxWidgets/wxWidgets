@@ -89,17 +89,13 @@ WXHWND wxPopupWindow::MSWGetParent() const
 
 bool wxPopupWindow::Show(bool show)
 {
-    if ( !wxWindowBase::Show(show) )
+    if ( !wxWindowMSW::Show(show) )
         return FALSE;
-
-    HWND hWnd = GetHwnd();
-    int cshow = show ? SW_SHOW : SW_HIDE;
-    ::ShowWindow(hWnd, cshow);
 
     if ( show )
     {
         // raise to top of z order
-        if (!::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
+        if (!::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
         {
             wxLogLastError(_T("SetWindowPos"));
         }
