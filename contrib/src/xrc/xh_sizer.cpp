@@ -122,7 +122,6 @@ wxObject* wxSizerXmlHandler::Handle_sizeritem()
     {
         // create a sizer item for it
         wxSizerItem* sitem = MakeSizerItem();
-        SetSizerItemAttributes(sitem);
         
         // now fetch the item to be managed
         bool old_gbs = m_isGBS;
@@ -145,6 +144,9 @@ wxObject* wxSizerXmlHandler::Handle_sizeritem()
             sitem->SetWindow(wnd);
         else 
             wxLogError(wxT("Error in resource."));
+
+        // finally, set other wxSizerItem attributes
+        SetSizerItemAttributes(sitem);
 
         AddSizerItem(sitem);
         return item;
@@ -339,7 +341,7 @@ void wxSizerXmlHandler::SetSizerItemAttributes(wxSizerItem* sitem)
     sitem->SetBorder(GetDimension(wxT("border")));
     wxSize sz = GetSize(wxT("minsize"));
     if (!(sz == wxDefaultSize))
-        sitem->SetInitSize(sz.x, sz.y);
+        sitem->SetMinSize(sz);
     sz = GetSize(wxT("ratio"));
     if (!(sz == wxDefaultSize))
         sitem->SetRatio(sz);

@@ -74,8 +74,16 @@ public:
 
     wxSize GetMinSize() const
         { return m_minSize; }
+    void SetMinSize(const wxSize& size)
+        {
+            if (IsWindow() && !(m_flag & wxFIXED_MINSIZE))
+                m_window->SetSizeHints(size);
+            m_minSize = size;            
+        }
+    void SetMinSize( int x, int y )
+        { SetMinSize(wxSize(x, y)); }    
     void SetInitSize( int x, int y )
-        { m_minSize.x = x; m_minSize.y = y; }
+        { SetMinSize(wxSize(x, y)); }
 
     void SetRatio( int width, int height )
         // if either of dimensions is zero, ratio is assumed to be 1

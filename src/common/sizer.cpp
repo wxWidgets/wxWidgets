@@ -735,8 +735,7 @@ bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
 
         if (item->GetWindow() == window)
         {
-            item->SetInitSize( width, height );
-            item->GetWindow()->SetSizeHints(width, height);
+            item->SetMinSize( width, height );
             return true;
         }
         node = node->GetNext();
@@ -815,9 +814,7 @@ bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
     else
     {
         // ... but the minimal size of spacers and windows in stored in them
-        item->SetInitSize( width, height );
-        if (item->GetWindow())
-            item->GetWindow()->SetSizeHints(width, height);
+        item->SetMinSize( width, height );
     }
 
     return true;
