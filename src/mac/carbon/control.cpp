@@ -609,6 +609,7 @@ void  wxControl::DoSetSize(int x, int y,
                              m_width - 2 * m_macHorizontalBorder,
                              m_height -  2 * m_macVerticalBorder ) ;
  
+ 
              wxSizeEvent event(wxSize(m_width, m_height), m_windowId);
              event.SetEventObject(this);
              GetEventHandler()->ProcessEvent(event);
@@ -854,7 +855,7 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
 				{
 					controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
 					wxTheApp->s_lastMouseDown = 0 ;
-					if ( control && controlpart != kControlNoPart &&
+					if ( control && controlpart != kControlNoPart && 
 					    ! IsKindOf( CLASSINFO( wxScrollBar ) ) 
 					) // otherwise we will get the event twice for scrollbar
 					{
