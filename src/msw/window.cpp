@@ -1598,6 +1598,11 @@ bool wxWindow::MSWOnClose(void)
     return FALSE;
 }
 
+// Some compilers don't define this
+#ifndef ENDSESSION_LOGOFF
+#define ENDSESSION_LOGOFF    0x80000000
+#endif
+
 // Return TRUE to end session, FALSE to veto end session.
 bool wxWindow::MSWOnQueryEndSession(long logOff)
 {

@@ -121,6 +121,7 @@ class wxRegionIterator: public wxObject
     long GetWidth(void) const { return GetW(); }
     long GetH(void) const;
     long GetHeight(void) const { return GetH(); }
+    wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
 
   private:
   

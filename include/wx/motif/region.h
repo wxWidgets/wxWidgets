@@ -123,6 +123,7 @@ public:
 	long GetWidth() const { return GetW(); }
 	long GetH() const;
 	long GetHeight() const { return GetH(); }
+    wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
 
 private:
 	long	 m_current;

@@ -23,8 +23,6 @@ src/motif/mdi/lib/Imakefile
 src/motif/mdi/test/*.C
 src/motif/mdi/test/Imakefile
 
-
-
 src/make.env
 src/makeprog.env
 
