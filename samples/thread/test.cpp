@@ -178,7 +178,7 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
-  uint i;
+  unsigned int i;
   for (i=0;i<m_threads.Count();i++)
     delete (m_threads[i]);
   Close(TRUE);
