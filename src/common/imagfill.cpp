@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imagfill.cpp
 // Purpose:     FloodFill for wxImage
-// Author:      
+// Author:
 // RCS-ID:      $Id$
-// Copyright:   
+// Copyright:
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +32,7 @@
 
 bool wxImage::MatchPixel(int x, int y, int w, int h, const wxColour & c)
 {
-    if ((x<0)||(x>=w)||(y<0)||(y>=h)) return false;
+    if ((x<0)||(x>=w)||(y<0)||(y>=h)) return FALSE;
 
     unsigned char r = GetRed(x,y);
     unsigned char g = GetGreen(x,y);
