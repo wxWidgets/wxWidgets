@@ -7,6 +7,8 @@
 
 from wxPython.wx import *
 
+import time
+
 #-------------------------------------------------------------------
 
 class MyFrame(wxFrame):
@@ -76,6 +78,7 @@ check the source for this sample to see how to implement them.
         menu6.Append(601, "Submenu Item")
         menu5.AppendMenu(504, "submenu", menu6)
         menu5.Append(505, "remove this menu")
+        menu5.Append(506, "this is updated")
         menuBar.Append(menu5, "&Fun")
 
         self.SetMenuBar(menuBar)
@@ -107,6 +110,7 @@ check the source for this sample to see how to implement them.
         EVT_MENU(self, 503, self.TestRemove)
         EVT_MENU(self, 505, self.TestRemove2)
 
+        EVT_UPDATE_UI(wxGetApp(), 506, self.TestUpdateUI)
 
     # Methods
 
@@ -183,6 +187,12 @@ check the source for this sample to see how to implement them.
     def TestRemove2(self, evt):
         mb = self.GetMenuBar()
         mb.Remove(4)
+
+
+    def TestUpdateUI(self, evt):
+        #print 'TestUpdateUI'
+        text = time.ctime()
+        evt.SetText(text)
 
 
 #-------------------------------------------------------------------

@@ -126,8 +126,11 @@ class DoodleWindow(wxWindow):
         text = self.menuColours[event.GetId()]
         if text == self.colour:
             event.Check(True)
+            event.SetText(text.upper())
         else:
             event.Check(False)
+            event.SetText(text)
+
     def OnCheckMenuThickness(self, event):
         if event.GetId() == self.thickness:
             event.Check(True)

@@ -106,7 +106,7 @@ class MyEvtHandler(wxShapeEvtHandler):
 
     def OnLeftClick(self, x, y, keys = 0, attachment = 0):
         shape = self.GetShape()
-        print shape.__class__
+        print shape.__class__, shape.GetClassName()
         canvas = shape.GetCanvas()
         dc = wxClientDC(canvas)
         canvas.PrepareDC(dc)
