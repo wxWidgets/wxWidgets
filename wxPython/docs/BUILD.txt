@@ -24,7 +24,7 @@ may already have installed.
 If you want to make changes to any of the ``*.i`` files, (SWIG
 interface definition files,) or to regenerate the extension sources or
 renamer modules, then you will need an up to date version of SWIG,
-plus some patches.  Get the sources for version 1.3.22, and then apply
+plus some patches.  Get the sources for version 1.3.24, and then apply
 the patches in wxPython/SWIG and then build SWIG like normal.  See the
 README.txt in the wxPython/SWIG dir for details about each patch and
 also info about those that may already have been applied to the SWIG
@@ -36,7 +36,7 @@ use it.  See below for an example.
 
 In the text below I'll use WXDIR with environment variable syntax
 (either $WXDIR or %WXDIR%) to refer to the top level directory where
-your wxWidgerts and wxPython sources are located.  It will equate to
+your wxWidgets and wxPython sources are located.  It will equate to
 whereever you checked out the wxWidgets module from CVS, or untarred
 the wxPython-src tarball to.  You can either substitute the $WXDIR text
 below with your actual dir, or set the value in the environment and
@@ -373,7 +373,7 @@ accordingly if you are using the bash shell.
    executing nmake with a bunch of extra command line parameters.
    The base set are::
 
-        -f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=1 USE_OPENGL=1
+        nmake -f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=1 USE_OPENGL=1
 
    If doing a debug build then add::
 

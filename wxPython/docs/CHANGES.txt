@@ -62,6 +62,7 @@ alpha Set/Get methods and the ImageFromData* constructors.  They all
 still copy the buffer except for SetDataBuffer and SetAlphaBuffer, but
 this gives more flexibility on where the data can come from.
 
+Added MDI support to XRC
 
 
 
