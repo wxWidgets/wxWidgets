@@ -112,12 +112,13 @@ void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 
     // if( number > m_nFields )
 
-    for( int i = m_nFields; i < number; ++i )
+    int i;
+    for(i = m_nFields; i < number; ++i)
         m_statusStrings.Add( wxEmptyString );
 
     // if( number < m_nFields )
 
-    for (int i = m_nFields - 1; i >= number; --i)
+    for (i = m_nFields - 1; i >= number; --i)
         m_statusStrings.Remove(i);
 
     m_nFields = number;
