@@ -113,6 +113,8 @@ enum wxStockCursor
 class wxSize
 {
 public:
+    //int x;        // TODO:  Can these be removed and just use width and height?
+    //int y;
     %name(width) int x;
     %name(height)int y;
 
