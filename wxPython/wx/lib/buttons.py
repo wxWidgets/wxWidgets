@@ -66,14 +66,19 @@ class GenButton(wx.PyControl):
                  pos = wx.DefaultPosition, size = wx.DefaultSize,
                  style = 0, validator = wx.DefaultValidator,
                  name = "genbutton"):
-        if style == 0:
-            style = wx.NO_BORDER
-        wx.PyControl.__init__(self, parent, ID, pos, size, style, validator, name)
+        cstyle = style
+        if cstyle == 0:
+            cstyle = wx.NO_BORDER
+        wx.PyControl.__init__(self, parent, ID, pos, size, cstyle, validator, name)
 
         self.up = True
-        self.bezelWidth = 2
         self.hasFocus = False
-        self.useFocusInd = True
+        if style & wx.NO_BORDER:
+            self.bezelWidth = 0
+            self.useFocusInd = False
+        else:
+            self.bezelWidth = 2
+            self.useFocusInd = True
 
         self.SetLabel(label)
         self.InheritAttributes()
