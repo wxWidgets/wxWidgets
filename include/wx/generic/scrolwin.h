@@ -43,13 +43,17 @@ class WXDLLEXPORT wxGenericScrolledWindow : public wxPanel,
                                             public wxScrollHelper
 {
 public:
-    wxGenericScrolledWindow();
+    wxGenericScrolledWindow() : wxScrollHelper(this) { }
     wxGenericScrolledWindow(wxWindow *parent,
                      wxWindowID winid = -1,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxScrolledWindowStyle,
-                     const wxString& name = wxPanelNameStr);
+                     const wxString& name = wxPanelNameStr)
+        : wxScrollHelper(this)
+    {
+        Create(parent, winid, pos, size, style, name);
+    }
 
     virtual ~wxGenericScrolledWindow();
 

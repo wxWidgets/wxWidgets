@@ -24,7 +24,7 @@ class WXDLLEXPORT wxTopLevelWindowMSW : public wxTopLevelWindowBase
 {
 public:
     // constructors and such
-    wxTopLevelWindowMSW();
+    wxTopLevelWindowMSW() { Init(); }
 
     wxTopLevelWindowMSW(wxWindow *parent,
                         wxWindowID id,
@@ -32,7 +32,12 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
-                        const wxString& name = wxFrameNameStr);
+                        const wxString& name = wxFrameNameStr)
+    {
+        Init();
+
+        (void)Create(parent, id, title, pos, size, style, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

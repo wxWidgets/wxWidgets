@@ -2896,19 +2896,4 @@ MRESULT wxListCtrl::OS2WindowProc(
     return lRc;
 } // end of wxListCtrl::WindowProc
 
-wxListView::wxListView()
-{
-}
-
-wxListView::wxListView(wxWindow *parent,
-                       wxWindowID winid,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxValidator& validator,
-                       const wxString &name)
-{
-    Create(parent, winid, pos, size, style, validator, name);
-}
-
 #endif // wxUSE_LISTCTRL

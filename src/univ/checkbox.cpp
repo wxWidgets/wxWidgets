@@ -52,29 +52,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
-wxCheckBoxBase::wxCheckBoxBase()
-{
-}
-
-wxCheckBox::wxCheckBox()
-{
-    Init();
-}
-
-wxCheckBox::wxCheckBox(wxWindow *parent,
-                       wxWindowID id,
-                       const wxString& label,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxValidator& validator,
-                       const wxString& name)
-{
-    Init();
-
-    Create(parent, id, label, pos, size, style, validator, name);
-}
-
 void wxCheckBox::Init()
 {
     m_isPressed = FALSE;

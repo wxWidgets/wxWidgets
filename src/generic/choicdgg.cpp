@@ -238,22 +238,6 @@ size_t wxGetMultipleChoices(wxArrayInt& selections,
 // wxAnyChoiceDialog
 // ----------------------------------------------------------------------------
 
-wxAnyChoiceDialog::wxAnyChoiceDialog()
-{
-}
-
-wxAnyChoiceDialog::wxAnyChoiceDialog(wxWindow *parent,
-                                     const wxString& message,
-                                     const wxString& caption,
-                                     int n,
-                                     const wxString *choices,
-                                     long styleDlg,
-                                     const wxPoint& pos,
-                                     long styleLbox)
-{
-    (void)Create(parent, message, caption, n, choices, styleDlg, pos, styleLbox);
-}
-
 bool wxAnyChoiceDialog::Create(wxWindow *parent,
                                const wxString& message,
                                const wxString& caption,
@@ -311,11 +295,6 @@ BEGIN_EVENT_TABLE(wxSingleChoiceDialog, wxDialog)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxSingleChoiceDialog, wxDialog)
-
-wxSingleChoiceDialog::wxSingleChoiceDialog()
-{
-    m_selection = -1;
-}
 
 wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
                                            const wxString& message,
@@ -386,21 +365,6 @@ void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxMultiChoiceDialog, wxDialog)
-
-wxMultiChoiceDialog::wxMultiChoiceDialog()
-{
-}
-
-wxMultiChoiceDialog::wxMultiChoiceDialog(wxWindow *parent,
-                                         const wxString& message,
-                                         const wxString& caption,
-                                         int n,
-                                         const wxString *choices,
-                                         long style,
-                                         const wxPoint& pos)
-{
-    (void)Create(parent, message, caption, n, choices, style, pos);
-}
 
 bool wxMultiChoiceDialog::Create( wxWindow *parent,
                                   const wxString& message,

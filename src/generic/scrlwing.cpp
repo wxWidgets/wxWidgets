@@ -1202,21 +1202,6 @@ BEGIN_EVENT_TABLE(wxGenericScrolledWindow, wxPanel)
     EVT_PAINT(wxGenericScrolledWindow::OnPaint)
 END_EVENT_TABLE()
 
-wxGenericScrolledWindow::wxGenericScrolledWindow() : wxScrollHelper(this)
-{
-}
-
-wxGenericScrolledWindow::wxGenericScrolledWindow(wxWindow *parent,
-                         wxWindowID winid,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         long style,
-                         const wxString& name)
-                         : wxScrollHelper(this)
-{
-    Create(parent, winid, pos, size, style, name);
-}
-
 bool wxGenericScrolledWindow::Create(wxWindow *parent,
                               wxWindowID id,
                               const wxPoint& pos,
@@ -1291,24 +1276,6 @@ wxGenericScrolledWindow::MSWWindowProc(WXUINT nMsg,
 }
 
 #endif // __WXMSW__
-
-// ----------------------------------------------------------------------------
-// wxScrolledWindow implementation
-// ----------------------------------------------------------------------------
-
-wxScrolledWindow::wxScrolledWindow()
-{
-}
-
-wxScrolledWindow::wxScrolledWindow(wxWindow *parent,
-                                   wxWindowID winid,
-                                   const wxPoint& pos,
-                                   const wxSize& size,
-                                   long style,
-                                   const wxString& name)
-                                   : wxGenericScrolledWindow(parent, winid, pos, size, style, name)
-{
-}
 
 #endif // !wxGTK
 

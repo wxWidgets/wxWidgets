@@ -217,13 +217,16 @@ protected:
     class WXDLLEXPORT wxScrolledWindow : public wxGenericScrolledWindow
     {
     public:
-        wxScrolledWindow();
+        wxScrolledWindow() { }
         wxScrolledWindow(wxWindow *parent,
                          wxWindowID winid = -1,
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          long style = wxScrolledWindowStyle,
-                         const wxString& name = wxPanelNameStr);
+                         const wxString& name = wxPanelNameStr)
+            : wxGenericScrolledWindow(parent, winid, pos, size, style, name)
+        {
+        }
 
     private:
         DECLARE_DYNAMIC_CLASS_NO_COPY(wxScrolledWindow)

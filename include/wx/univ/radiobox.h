@@ -32,7 +32,7 @@ class WXDLLEXPORT wxRadioBox : public wxStaticBox,
 {
 public:
     // wxRadioBox construction
-    wxRadioBox();
+    wxRadioBox() { Init(); }
 
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
@@ -43,7 +43,13 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr);
+               const wxString& name = wxRadioBoxNameStr)
+    {
+        Init();
+
+        (void)Create(parent, id, title, pos, size, n, choices,
+                     majorDim, style, val, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

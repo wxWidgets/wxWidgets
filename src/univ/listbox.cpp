@@ -55,26 +55,6 @@ END_EVENT_TABLE()
 // construction
 // ----------------------------------------------------------------------------
 
-wxListBox::wxListBox()
-{
-    Init();
-}
-
-wxListBox::wxListBox(wxWindow *parent,
-                     wxWindowID id,
-                     const wxPoint& pos,
-                     const wxSize& size,
-                     int n,
-                     const wxString choices[],
-                     long style,
-                     const wxValidator& validator,
-                     const wxString& name)
-{
-    Init();
-
-    Create(parent, id, pos, size, n, choices, style, validator, name);
-}
-
 void wxListBox::Init()
 {
     // will be calculated later when needed

@@ -274,7 +274,7 @@ class wxMDIChildFrame ;
 class WXDLLEXPORT wxMDIParentFrame: public wxGenericMDIParentFrame
 {
 public:
-    wxMDIParentFrame();
+    wxMDIParentFrame() {}
     wxMDIParentFrame(wxWindow *parent,
                      wxWindowID winid,
                      const wxString& title,
@@ -297,7 +297,8 @@ private:
 class WXDLLEXPORT wxMDIChildFrame: public wxGenericMDIChildFrame
 {
 public:
-    wxMDIChildFrame();
+    wxMDIChildFrame() {}
+
     wxMDIChildFrame( wxGenericMDIParentFrame *parent,
                      wxWindowID winid,
                      const wxString& title,
@@ -316,8 +317,12 @@ private:
 class WXDLLEXPORT wxMDIClientWindow: public wxGenericMDIClientWindow
 {
 public:
-    wxMDIClientWindow();
-    wxMDIClientWindow( wxGenericMDIParentFrame *parent, long style = 0 );
+    wxMDIClientWindow() {}
+
+    wxMDIClientWindow( wxGenericMDIParentFrame *parent, long style = 0 )
+        :wxGenericMDIClientWindow(parent, style)
+    {
+    }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)

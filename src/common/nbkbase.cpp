@@ -39,20 +39,6 @@
 // implementation
 // ============================================================================
 
-wxNotebookBase::wxNotebookBase()
-{
-}
-
-wxNotebookBase::wxNotebookBase(wxWindow *parent,
-                               wxWindowID id,
-                               const wxPoint& pos,
-                               const wxSize& size,
-                               long style,
-                               const wxString& name)
-                               : wxBookCtrl(parent, id, pos, size, style, name)
-{
-}
-
 // ----------------------------------------------------------------------------
 // geometry
 // ----------------------------------------------------------------------------

@@ -119,10 +119,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 // creation/destruction
 // ----------------------------------------------------------------------------
 
-wxButtonBase::wxButtonBase()
-{
-}
-
 bool wxButton::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxString& label,

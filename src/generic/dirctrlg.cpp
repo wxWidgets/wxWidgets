@@ -1146,11 +1146,7 @@ bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxStrin
 
 int wxGenericDirCtrl::ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions)
 {
-#if wxUSE_FILEDLG
     return wxFileDialogBase::ParseWildcard(filterStr, descriptions, filters );
-#else
-    return 0;
-#endif
 }
 
 void wxGenericDirCtrl::DoResize()

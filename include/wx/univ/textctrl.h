@@ -101,7 +101,7 @@ public:
     // creation
     // --------
 
-    wxTextCtrl();
+    wxTextCtrl() { Init(); }
 
     wxTextCtrl(wxWindow *parent,
                wxWindowID id,
@@ -110,7 +110,12 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxTextCtrlNameStr);
+               const wxString& name = wxTextCtrlNameStr)
+    {
+        Init();
+
+        Create(parent, id, value, pos, size, style, validator, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

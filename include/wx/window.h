@@ -104,7 +104,7 @@ public:
 
         // default ctor, initializes everything which can be initialized before
         // Create()
-    wxWindowBase();
+    wxWindowBase() ;
 
         // pseudo ctor (can't be virtual, called from ctor)
     bool CreateBase(wxWindowBase *parent,

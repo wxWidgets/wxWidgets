@@ -42,15 +42,7 @@
 #define GetItem(n)    ((wxCheckListBoxItem *)(GetItem(n)))
 
 // ============================================================================
-// implementation of wxCheckListBoxBase
-// ============================================================================
-
-wxCheckListBoxBase::wxCheckListBoxBase()
-{
-}
-
-// ============================================================================
-// implementation of wxCheckListBox
+// implementation
 // ============================================================================
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)

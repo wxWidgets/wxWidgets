@@ -41,14 +41,22 @@ public:
     // construction
     // ------------
 
-    wxBookCtrl();
+    wxBookCtrl()
+    {
+        Init();
+    }
 
     wxBookCtrl(wxWindow *parent,
                wxWindowID winid,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxString& name = wxEmptyString);
+               const wxString& name = wxEmptyString)
+    {
+        Init();
+
+        (void)Create(parent, winid, pos, size, style, name);
+    }
 
     // quasi ctor
     bool Create(wxWindow *parent,

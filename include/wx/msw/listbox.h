@@ -49,7 +49,10 @@ public:
             int n = 0, const wxString choices[] = NULL,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxListBoxNameStr);
+            const wxString& name = wxListBoxNameStr)
+    {
+        Create(parent, id, pos, size, n, choices, style, validator, name);
+    }
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,

@@ -42,7 +42,7 @@ typedef wxString wxControlAction;
 class WXDLLEXPORT wxInputConsumer
 {
 public:
-    wxInputConsumer();
+    wxInputConsumer() { m_inputHandler = NULL; }
 
     // get the input handler
     wxInputHandler *GetInputHandler() const { return m_inputHandler; }

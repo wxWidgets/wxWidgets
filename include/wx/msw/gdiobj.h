@@ -36,7 +36,7 @@ class WXDLLEXPORT wxGDIRefData : public wxObjectRefData
 class WXDLLEXPORT wxGDIObject : public wxObject
 {
 public:
-    wxGDIObject();
+    wxGDIObject() { m_visible = FALSE; };
 
     // Creates the resource
     virtual bool RealizeResource() { return FALSE; };

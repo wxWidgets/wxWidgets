@@ -41,10 +41,6 @@ extern void  wxAssociateWinWithHandle( HWND         hWnd
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
-wxCheckBoxBase::wxCheckBoxBase()
-{
-}
-
 bool wxCheckBox::OS2Command(
   WXUINT                            WXUNUSED(uParam)
 , WXWORD                            WXUNUSED(wId)

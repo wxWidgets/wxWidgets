@@ -42,23 +42,6 @@
 // constructors and destructors
 // ----------------------------------------------------------------------------
 
-wxBookCtrl::wxBookCtrl()
-{
-    Init();
-}
-
-wxBookCtrl::wxBookCtrl(wxWindow *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name)
-{
-    Init();
-
-    (void)Create(parent, id, pos, size, style, name);
-}
-
 void wxBookCtrl::Init()
 {
     m_imageList = NULL;

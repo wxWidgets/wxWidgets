@@ -30,7 +30,7 @@ class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
 {
 public:
     // ctors
-    wxCheckListBox();
+    wxCheckListBox() { Init(); }
 
     wxCheckListBox(wxWindow *parent,
                    wxWindowID id,
@@ -40,7 +40,12 @@ public:
                    const wxString *choices = NULL,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxListBoxNameStr);
+                   const wxString& name = wxListBoxNameStr)
+    {
+        Init();
+
+        Create(parent, id, pos, size, nStrings, choices, style, validator, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

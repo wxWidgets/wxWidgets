@@ -261,7 +261,6 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     // and the standard print dialog. The global printing 'mode'
     // is determined by whether the user checks Print to file
     // or not.
-#if wxUSE_FILEDLG
     if (m_printDialogData.GetPrintToFile())
     {
         m_printDialogData.GetPrintData().SetPrintMode(wxPRINT_MODE_FILE);
@@ -275,7 +274,6 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
         m_printDialogData.GetPrintData().SetFilename( dialog.GetPath() );
     }
     else
-#endif
     {
         m_printDialogData.GetPrintData().SetPrintMode(wxPRINT_MODE_PRINTER);
     }

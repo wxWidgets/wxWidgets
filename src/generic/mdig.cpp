@@ -797,46 +797,6 @@ void wxGenericMDIClientWindow::OnSize(wxSizeEvent& event)
 
 #if wxUSE_GENERIC_MDI_AS_NATIVE
 
-wxMDIParentFrame::wxMDIParentFrame()
-{
-}
-
-wxMDIParentFrame::wxMDIParentFrame(wxWindow *parent,
-                                   wxWindowID id,
-                                   const wxString& title,
-                                   const wxPoint& pos,
-                                   const wxSize& size,
-                                   long style,
-                                   const wxString& name)
-                                   :wxGenericMDIParentFrame(parent, id, title, pos, size, style, name)
-{
-}
-
-wxMDIChildFrame::wxMDIChildFrame()
-{
-}
-
-wxMDIClientWindow::wxMDIClientWindow()
-{
-}
-
-wxMDIClientWindow::wxMDIClientWindow(wxGenericMDIParentFrame *parent,
-                                     long style)
-                                     :wxGenericMDIClientWindow(parent, style)
-{
-}
-
-wxMDIChildFrame::wxMDIChildFrame(wxGenericMDIParentFrame *parent,
-                                 wxWindowID id,
-                                 const wxString& title,
-                                 const wxPoint& pos,
-                                 const wxSize& size,
-                                 long style,
-                                 const wxString& name)
-                                 :wxGenericMDIChildFrame(parent, id, title, pos, size, style, name)
-{
-}
-
 wxMDIChildFrame * wxMDIParentFrame::GetActiveChild() const
     {
         wxGenericMDIChildFrame *pGFrame = wxGenericMDIParentFrame::GetActiveChild();

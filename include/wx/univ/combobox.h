@@ -99,7 +99,10 @@ class WXDLLEXPORT wxComboControl : public wxControl
 {
 public:
     // construction
-    wxComboControl();
+    wxComboControl()
+    {
+        Init();
+    }
 
     wxComboControl(wxWindow *parent,
                    wxWindowID id,
@@ -108,7 +111,12 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxComboBoxNameStr);
+                   const wxString& name = wxComboBoxNameStr)
+    {
+        Init();
+
+        (void)Create(parent, id, value, pos, size, style, validator, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -205,7 +213,7 @@ class WXDLLEXPORT wxComboBox : public wxComboControl, public wxComboBoxBase
 {
 public:
     // ctors and such
-    wxComboBox();
+    wxComboBox() { Init(); }
 
     wxComboBox(wxWindow *parent,
                wxWindowID id,
@@ -216,7 +224,13 @@ public:
                const wxString *choices = (const wxString *) NULL,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxComboBoxNameStr);
+               const wxString& name = wxComboBoxNameStr)
+    {
+        Init();
+
+        (void)Create(parent, id, value, pos, size, n, choices,
+                     style, validator, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

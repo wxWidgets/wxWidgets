@@ -59,24 +59,6 @@ WX_FORWARD_TO_INPUT_CONSUMER(wxTopLevelWindow)
 int wxTopLevelWindow::ms_drawDecorations = -1;
 int wxTopLevelWindow::ms_canIconize = -1;
 
-wxTopLevelWindow::wxTopLevelWindow()
-{
-    Init();
-}
-
-wxTopLevelWindow::wxTopLevelWindow(wxWindow *parent,
-                                   wxWindowID id,
-                                   const wxString& title,
-                                   const wxPoint& pos,
-                                   const wxSize& size,
-                                   long style,
-                                   const wxString& name)
-{
-    Init();
-
-    Create(parent, id, title, pos, size, style, name);
-}
-
 void wxTopLevelWindow::Init()
 {
     m_isActive = FALSE;

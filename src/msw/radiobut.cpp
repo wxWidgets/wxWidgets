@@ -102,25 +102,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 #endif
 
 
-wxRadioButton::wxRadioButton()
-{
-    Init();
-}
-
-wxRadioButton::wxRadioButton(wxWindow *parent,
-                             wxWindowID id,
-                             const wxString& label,
-                             const wxPoint& pos,
-                             const wxSize& size,
-                             long style,
-                             const wxValidator& validator,
-                             const wxString& name)
-{
-    Init();
-
-    Create(parent, id, label, pos, size, style, validator, name);
-}
-
 void wxRadioButton::Init()
 {
     m_isChecked = false;

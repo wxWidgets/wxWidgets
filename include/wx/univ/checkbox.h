@@ -59,7 +59,7 @@ public:
     };
 
     // constructors
-    wxCheckBox();
+    wxCheckBox() { Init(); }
 
     wxCheckBox(wxWindow *parent,
                wxWindowID id,
@@ -68,7 +68,12 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxCheckBoxNameStr);
+               const wxString& name = wxCheckBoxNameStr)
+    {
+        Init();
+
+        Create(parent, id, label, pos, size, style, validator, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

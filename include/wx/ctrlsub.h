@@ -31,7 +31,7 @@
 class WXDLLEXPORT wxItemContainer
 {
 public:
-    wxItemContainer();
+    wxItemContainer() { m_clientDataItemsType = wxClientData_None; }
     virtual ~wxItemContainer();
 
     // adding items
@@ -140,7 +140,7 @@ protected:
 class WXDLLEXPORT wxControlWithItems : public wxControl, public wxItemContainer
 {
 public:
-    wxControlWithItems();
+    wxControlWithItems() { }
     virtual ~wxControlWithItems();
 
     // we have to redefine these functions here to avoid ambiguities in classes

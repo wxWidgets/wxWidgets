@@ -39,23 +39,6 @@ BEGIN_EVENT_TABLE(wxChoice, wxComboBox)
     EVT_COMBOBOX(-1, wxChoice::OnComboBox)
 END_EVENT_TABLE()
 
-wxChoice::wxChoice()
-{
-}
-
-wxChoice::wxChoice(wxWindow *parent,
-                   wxWindowID id,
-                   const wxPoint& pos,
-                   const wxSize& size,
-                   int n,
-                   const wxString choices[],
-                   long style,
-                   const wxValidator& validator,
-                   const wxString& name)
-{
-    Create(parent, id, pos, size, n, choices, style, validator, name);
-}
-
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
                       const wxPoint& pos,
                       const wxSize& size,

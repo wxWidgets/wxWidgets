@@ -251,22 +251,6 @@ wxRadioBox::wxRadioBox()
     m_radioHeight = NULL;
 }
 
-wxRadioBox::wxRadioBox(wxWindow *parent,
-                       wxWindowID id,
-                       const wxString& title,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       int n,
-                       const wxString choices[],
-                       int majorDim,
-                       long style,
-                       const wxValidator& val,
-                       const wxString& name)
-{
-    (void)Create(parent, id, title, pos, size, n, choices, majorDim,
-                 style, val, name);
-}
-
 bool wxRadioBox::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxString& title,

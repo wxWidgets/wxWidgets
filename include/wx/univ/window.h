@@ -55,14 +55,16 @@ public:
     // ctors and create functions
     // ---------------------------
 
-    wxWindow();
+    wxWindow() { Init(); }
 
     wxWindow(wxWindow *parent,
              wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxPanelNameStr);
+             const wxString& name = wxPanelNameStr)
+        : wxWindowNative(parent, id, pos, size, style | wxCLIP_CHILDREN, name)
+        { Init(); }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

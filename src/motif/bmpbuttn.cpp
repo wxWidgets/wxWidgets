@@ -39,16 +39,6 @@ void wxButtonCallback (Widget w, XtPointer clientData, XtPointer ptr);
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
-wxBitmapButtonBase::wxBitmapButtonBase()
-                                      : m_bmpNormal(), 
-                                        m_bmpSelected(), 
-                                        m_bmpFocus(), 
-                                        m_bmpDisabled(), 
-                                        m_marginX(0), 
-                                        m_marginY(0)
-{
-}
-
 wxBitmapButton::wxBitmapButton()
 {
     m_marginX = m_marginY = wxDEFAULT_BUTTON_MARGIN;

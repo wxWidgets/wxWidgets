@@ -35,7 +35,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
 class WXDLLEXPORT wxControlBase : public wxWindow
 {
 public:
-    wxControlBase();
+    wxControlBase() { }
 
     virtual ~wxControlBase();
 

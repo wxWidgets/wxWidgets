@@ -138,23 +138,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl);
 // wxToolBar creation
 // ----------------------------------------------------------------------------
 
-wxToolBar::wxToolBar()
-{
-    Init();
-}
-
-wxToolBar::wxToolBar(wxWindow *parent,
-                     wxWindowID id,
-                     const wxPoint& pos,
-                     const wxSize& size,
-                     long style,
-                     const wxString& name)
-{
-    Init();
-
-    Create(parent, id, pos, size, style, name);
-}
-
 void wxToolBar::Init()
 {
     // no tools yet

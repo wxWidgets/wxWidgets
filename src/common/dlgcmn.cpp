@@ -53,11 +53,6 @@ END_EVENT_TABLE()
 WX_DELEGATE_TO_CONTROL_CONTAINER(wxDialogBase)
 #endif
 
-wxDialogBase::wxDialogBase()
-{
-    Init();
-}
-
 void wxDialogBase::Init()
 {
     m_returnCode = 0;

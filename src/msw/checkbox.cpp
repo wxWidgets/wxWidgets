@@ -112,10 +112,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
-wxCheckBoxBase::wxCheckBoxBase()
-{
-}
-
 bool wxCheckBox::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 {
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId);

@@ -36,10 +36,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialogBase, wxDialog)
 
-wxFileDialogBase::wxFileDialogBase ()
-{
-}
-
 wxFileDialogBase::wxFileDialogBase(wxWindow *parent,
                                    const wxString& message,
                                    const wxString& defaultDir,

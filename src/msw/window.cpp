@@ -380,22 +380,6 @@ END_EVENT_TABLE()
 // implementation
 // ===========================================================================
 
-wxWindowMSW::wxWindowMSW()
-{
-    Init();
-}
-
-wxWindowMSW::wxWindowMSW(wxWindow *parent,
-                         wxWindowID id,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         long style,
-                         const wxString& name)
-{
-    Init();
-    Create(parent, id, pos, size, style, name);
-}
-
 // ---------------------------------------------------------------------------
 // wxWindow utility functions
 // ---------------------------------------------------------------------------

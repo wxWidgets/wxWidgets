@@ -53,7 +53,7 @@ public:
     // ctors
     // -----
 
-    wxNotebookBase();
+    wxNotebookBase() { }
 
     wxNotebookBase(wxWindow *parent,
                    wxWindowID winid,

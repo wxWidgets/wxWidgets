@@ -23,7 +23,7 @@ class WXDLLEXPORT wxEventLoop;
 class WXDLLEXPORT wxDialog : public wxDialogBase
 {
 public:
-    wxDialog();
+    wxDialog() { Init(); }
 
     // Constructor with no modal flag - the new convention.
     wxDialog(wxWindow *parent, wxWindowID id,
@@ -31,7 +31,11 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = wxDialogNameStr);
+             const wxString& name = wxDialogNameStr)
+    {
+        Init();
+        Create(parent, id, title, pos, size, style, name);
+    }
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& title,

@@ -60,44 +60,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 // creation
 // ----------------------------------------------------------------------------
 
-wxButtonBase::wxButtonBase()
-{
-}
-
-wxButton::wxButton()
-{
-    Init();
-}
-
-wxButton::wxButton(wxWindow *parent,
-                   wxWindowID id,
-                   const wxBitmap& bitmap,
-                   const wxString& label,
-                   const wxPoint& pos,
-                   const wxSize& size,
-                   long style,
-                   const wxValidator& validator,
-                   const wxString& name)
-{
-    Init();
-
-    Create(parent, id, bitmap, label, pos, size, style, validator, name);
-}
-
-wxButton::wxButton(wxWindow *parent,
-                   wxWindowID id,
-                   const wxString& label,
-                   const wxPoint& pos,
-                   const wxSize& size,
-                   long style,
-                   const wxValidator& validator,
-                   const wxString& name)
-{
-    Init();
-
-    Create(parent, id, label, pos, size, style, validator, name);
-}
-
 void wxButton::Init()
 {
     m_isPressed =

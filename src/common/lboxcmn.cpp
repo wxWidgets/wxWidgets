@@ -40,10 +40,6 @@
 // implementation
 // ============================================================================
 
-wxListBoxBase::wxListBoxBase()
-{
-}
-
 wxListBoxBase::~wxListBoxBase()
 {
     // this destructor is required for Darwin

@@ -155,19 +155,6 @@ wxListBox::wxListBox()
     m_selected = 0;
 }
 
-wxListBox::wxListBox(wxWindow *parent,
-                     wxWindowID id,
-                     const wxPoint& pos,
-                     const wxSize& size,
-                     int n, 
-                     const wxString choices[],
-                     long style,
-                     const wxValidator& validator,
-                     const wxString& name)
-{
-    Create(parent, id, pos, size, n, choices, style, validator, name);
-}
-
 bool wxListBox::Create(wxWindow *parent,
                        wxWindowID id,
                        const wxPoint& pos,

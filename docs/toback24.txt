@@ -249,6 +249,11 @@ Checking in src/msw/combobox.cpp;
 new revision: 1.72; previous revision: 1.71
 done
 
+34. Apply patch [ 851052 ] [msw] Clipboard: Allow automatic format conversionsChecking in clipbrd.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/clipbrd.cpp,v  <--  clipbrd.cpp
+new revision: 1.54; previous revision: 1.53
+done
+
 
 TODO for 2.4 (items that are not backports)
 ===========================================

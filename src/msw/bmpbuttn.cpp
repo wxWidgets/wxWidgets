@@ -100,16 +100,6 @@ bitmap "disabled" ,
 
 #define BUTTON_HEIGHT_FACTOR (EDIT_CONTROL_FACTOR * 1.1)
 
-wxBitmapButtonBase::wxBitmapButtonBase()
-                                      : m_bmpNormal(), 
-                                        m_bmpSelected(), 
-                                        m_bmpFocus(), 
-                                        m_bmpDisabled(), 
-                                        m_marginX(0), 
-                                        m_marginY(0)
-{
-}
-
 bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos,
            const wxSize& size, long style,

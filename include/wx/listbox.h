@@ -43,7 +43,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxListBoxNameStr;
 class WXDLLEXPORT wxListBoxBase : public wxControlWithItems
 {
 public:
-    wxListBoxBase();
+    wxListBoxBase() { }
     virtual ~wxListBoxBase();
 
     // all generic methods are in wxControlWithItems, except for the following

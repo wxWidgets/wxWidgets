@@ -55,24 +55,6 @@ WX_FORWARD_TO_INPUT_CONSUMER(wxControl)
 // creation
 // ----------------------------------------------------------------------------
 
-wxControl::wxControl()
-{
-    Init();
-}
-
-wxControl::wxControl(wxWindow *parent,
-                     wxWindowID id,
-                     const wxPoint& pos,
-                     const wxSize& size,
-                     long style,
-                     const wxValidator& validator,
-                     const wxString& name)
-{
-    Init();
-
-    Create(parent, id, pos, size, style, validator, name);
-}
-
 void wxControl::Init()
 {
     m_indexAccel = -1;

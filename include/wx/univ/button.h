@@ -36,7 +36,7 @@ class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxButton : public wxButtonBase
 {
 public:
-    wxButton();
+    wxButton() { Init(); }
     wxButton(wxWindow *parent,
              wxWindowID id,
              const wxBitmap& bitmap,
@@ -45,7 +45,12 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxButtonNameStr);
+             const wxString& name = wxButtonNameStr)
+    {
+        Init();
+
+        Create(parent, id, bitmap, label, pos, size, style, validator, name);
+    }
 
     wxButton(wxWindow *parent,
              wxWindowID id,
@@ -54,7 +59,12 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxButtonNameStr);
+             const wxString& name = wxButtonNameStr)
+    {
+        Init();
+
+        Create(parent, id, label, pos, size, style, validator, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

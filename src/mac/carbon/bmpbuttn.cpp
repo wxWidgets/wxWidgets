@@ -23,16 +23,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 #include "wx/mac/uma.h"
 #include "wx/bitmap.h"
 
-wxBitmapButtonBase::wxBitmapButtonBase()
-                                      : m_bmpNormal(), 
-                                        m_bmpSelected(), 
-                                        m_bmpFocus(), 
-                                        m_bmpDisabled(), 
-                                        m_marginX(0), 
-                                        m_marginY(0)
-{
-}
-
 bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos,
            const wxSize& size, long style,

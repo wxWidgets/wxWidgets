@@ -72,7 +72,10 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxT("listctrl") );
+                const wxString &name = wxT("listctrl") )
+    {
+        Create(parent, winid, pos, size, style, validator, name);
+    }
     ~wxGenericListCtrl();
 
     bool Create( wxWindow *parent,
@@ -248,14 +251,17 @@ class WXDLLEXPORT wxListCtrl: public wxGenericListCtrl
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
 
 public:
-    wxListCtrl();
+    wxListCtrl() {}
 
     wxListCtrl(wxWindow *parent, wxWindowID winid = -1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString &name = wxT("listctrl") );
+               const wxString &name = wxT("listctrl") )
+    : wxGenericListCtrl(parent, winid, pos, size, style, validator, name)
+    {
+    }
 };
 #endif // !__WXMSW__ || __WIN16__ || __WXUNIVERSAL__
 
