@@ -18,6 +18,7 @@ src/makesc.env
 src/makeg95.env
 src/makesl.env
 src/makeprog.sl
+src/salford.lnk
 src/ntwxwin.mak
 src/maketwin.env
 src/makeprog.twn
