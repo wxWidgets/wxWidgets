@@ -6,6 +6,7 @@
 #----------------------------------------------------------------------
 
 from wxPython.wx import *
+print "wxVERSION_STRING = ", wxVERSION_STRING
 
 class MyFrame(wxFrame):
     """
