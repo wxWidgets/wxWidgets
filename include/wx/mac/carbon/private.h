@@ -233,23 +233,47 @@ class wxMacCarbonEvent
 {
     
 public :
+    wxMacCarbonEvent()
+    {
+        m_eventRef = 0 ;
+        m_release = false ;
+    }
+    
     wxMacCarbonEvent( EventRef event , bool release = false ) 
     {
         m_eventRef = event ;
         m_release = release ;
     }
+
     wxMacCarbonEvent(UInt32 inClassID,UInt32 inKind,EventTime inWhen = 0 /*now*/,EventAttributes inAttributes=kEventAttributeNone) 
     {
         m_eventRef = NULL ;
         verify_noerr( MacCreateEvent( NULL , inClassID, inKind,inWhen,inAttributes,&m_eventRef) ) ;
         m_release = true ;
     }
+
     ~wxMacCarbonEvent()
     {
         if ( m_release )
             ReleaseEvent( m_eventRef ) ;
     }
     
+    OSStatus Create(UInt32 inClassID,UInt32 inKind,EventTime inWhen = 0 /*now*/,EventAttributes inAttributes=kEventAttributeNone) 
+    {
+        verify( (m_eventRef == NULL) || m_release ) ;
+        if ( m_eventRef && m_release )
+        {
+            ReleaseEvent( m_eventRef ) ;
+            m_release = false ;
+            m_eventRef = NULL ;
+            
+        }
+        OSStatus err = MacCreateEvent( NULL , inClassID, inKind,inWhen,inAttributes,&m_eventRef) ;
+        if ( err == noErr )
+            m_release = true ;
+        return err ;
+    }
+
     OSStatus GetParameter( EventParamName inName, EventParamType inDesiredType, UInt32 inBufferSize, void * outData) ;
     
     template <typename T> OSStatus GetParameter( EventParamName inName, EventParamType type , T *data )
@@ -307,7 +331,13 @@ public :
     {
         return EventTimeToTicks( GetTime() ) ;
     }
-    operator EventRef () { return m_eventRef; }   
+    OSStatus SetTime( EventTime inWhen = 0 /*now*/ ) 
+    {
+        return ::SetEventTime( m_eventRef , inWhen ? inWhen : GetCurrentEventTime() ) ;
+    }
+    operator EventRef () { return m_eventRef; }
+     
+    bool IsValid() { return m_eventRef != 0 ; }  
 protected :
     EventRef m_eventRef ;
     bool     m_release ;
