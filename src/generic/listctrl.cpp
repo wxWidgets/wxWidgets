@@ -54,11 +54,7 @@
 #ifdef __GNUG__
     #pragma implementation "listctrl.h"
     #pragma implementation "listctrlbase.h"
-#endif
-
-#if 0
-#include "listctrl.old.cpp"
-#else
+#endif                                                  
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -956,6 +952,8 @@ void wxSelectionStore::OnItemDelete(size_t item)
     {
         // this item itself was in m_itemsSel, remove it from there
         m_itemsSel.RemoveAt(i);
+
+        count--;
     }
 
     // and adjust the index of all which follow it
@@ -1517,18 +1515,10 @@ void wxListLineData::Draw( wxDC *dc )
 }
 
 void wxListLineData::DrawInReportMode( wxDC *dc,
-                                       const wxRect& r,
+                                       const wxRect& rect,
                                        const wxRect& rectHL,
                                        bool highlighted )
 {
-    wxRect rect = r;
-#if 0
-    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-
-    if ( !m_owner->IsExposed( rect ) )
-        return;
-#endif
-
     // use our own flag if we maintain it
     if ( !IsVirtual() )
         highlighted = m_highlighted;
@@ -1578,9 +1568,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     wxCHECK_RET( node, _T("no subitems at all??") );
 
     size_t col = 0;
-    int x = rect.x + HEADER_OFFSET_X;
-
-    rect.y += (LINE_SPACING + EXTRA_HEIGHT) / 2;
+    wxCoord x = rect.x + HEADER_OFFSET_X,
+            y = rect.y + (LINE_SPACING + EXTRA_HEIGHT) / 2;
 
     while ( node )
     {
@@ -1591,18 +1580,18 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         if ( item->HasImage() )
         {
             int ix, iy;
-            m_owner->DrawImage( item->GetImage(), dc, x, rect.y );
+            m_owner->DrawImage( item->GetImage(), dc, x, y );
             m_owner->GetImageSize( item->GetImage(), ix, iy );
             x += ix + 5; // FIXME: what is "5"?
         }
 
         int width = m_owner->GetColumnWidth(col++);
 
-        wxDCClipper clipper(*dc, x, rect.y, width, rect.height);
+        wxDCClipper clipper(*dc, x, y, width, rect.height);
 
         if ( item->HasText() )
         {
-            dc->DrawText( item->GetText(), x, rect.y );
+            dc->DrawText( item->GetText(), x, y );
         }
 
         x = xOld + width;
@@ -3549,18 +3538,6 @@ void wxListMainWindow::RecalculatePositions()
                        GetScrollPos(wxHORIZONTAL),
                        GetScrollPos(wxVERTICAL),
                        TRUE );
-
-        // FIXME: wxGTK::wxScrolledWindow doesn't have SetTargetRect()
-#if !defined(__WXGTK__) || defined(__WXUNIVERSAL__)
-        // we must have an integer number of lines on screen and so we fit
-        // the real control size to the line height
-        wxRect rect;
-        rect.x = 0;
-        rect.y = LINE_SPACING;
-        rect.width = clientWidth;
-        rect.height = ((clientHeight - LINE_SPACING) / lineHeight)*lineHeight;
-        SetTargetRect(rect);
-#endif
     }
     else // !report
     {
@@ -3723,12 +3700,20 @@ void wxListMainWindow::DeleteItem( long lindex )
 
     SendNotify( index, wxEVT_COMMAND_LIST_DELETE_ITEM );
 
-    if ( IsVirtual() )
+    if ( InReportView() )
     {
-        if ( m_lineTo == --m_countVirt )
+        if ( m_lineTo == GetItemCount() - 1 )
         {
             m_lineTo--;
         }
+    }
+
+    // refresh before removing the line
+    RefreshLines(index, GetItemCount() - 1);
+
+    if ( IsVirtual() )
+    {
+        m_countVirt--;
 
         m_selStore.OnItemDelete(index);
     }
@@ -3736,8 +3721,6 @@ void wxListMainWindow::DeleteItem( long lindex )
     {
         m_lines.RemoveAt( index );
     }
-
-    RefreshLines(index, GetItemCount() - 1);
 }
 
 void wxListMainWindow::DeleteColumn( int col )
@@ -4012,7 +3995,9 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 
         wxASSERT_MSG( m_lineFrom < count, _T("invalid scroll position?") );
 
-        m_lineTo = m_lineFrom + m_linesPerPage - 1;
+        // we redraw one extra line but this is needed to make the redrawing
+        // logic work when there is a fractional number of lines on screen
+        m_lineTo = m_lineFrom + m_linesPerPage;
         if ( m_lineTo >= count )
             m_lineTo = count - 1;
     }
@@ -4824,5 +4809,3 @@ void wxListCtrl::SetItemCount(long count)
 }
 
 #endif // wxUSE_LISTCTRL
-
-#endif
