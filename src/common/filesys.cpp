@@ -230,33 +230,33 @@ static wxString MakeCorrectPath(const wxString& path)
     
     cnt = p.Length();
     for (i = 0; i < cnt; i++)
-        if (p[i] == wxT('\\')) p.GetWritableChar(i) = wxT('/'); // wanna be windows-safe
+      if (p.GetChar(i) == wxT('\\')); p.GetWritableChar(i) = wxT('/'); // wanna be windows-safe
         
     if (p.Left(2) == wxT("./")) { p = p.Mid(2); cnt -= 2; }
     
     if (cnt < 3) return p;
     
-    r << p[0] << p[1];
+    r << p.GetChar(0) << p.GetChar(1);
     
     // skip trailing ../.., if any
-    for (i = 2; i < cnt && (p[i] == wxT('/') || p[i] == wxT('.')); i++) r << p[i];
+    for (i = 2; i < cnt && (p.GetChar(i) == wxT('/') || p.GetChar(i) == wxT('.')); i++) r << p.GetChar(i);
     
     // remove back references: translate dir1/../dir2 to dir2
     for (; i < cnt; i++)
     {
-        r << p[i];
-        if (p[i] == wxT('/') && p[i-1] == wxT('.') && p[i-2] == wxT('.'))
+        r << p.GetChar(i);
+        if (p.GetChar(i) == wxT('/') && p.GetChar(i-1) == wxT('.') && p.GetChar(i-2) == wxT('.'))
         {
-            for (j = r.Length() - 2; j >= 0 && r[j] != wxT('/') && r[j] != wxT(':'); j--) {}
-            if (j >= 0 && r[j] != wxT(':'))
+            for (j = r.Length() - 2; j >= 0 && r.GetChar(j) != wxT('/') && r.GetChar(j) != wxT(':'); j--) {}
+            if (j >= 0 && r.GetChar(j) != wxT(':'))
             {
-                for (j = j - 1; j >= 0 && r[j] != wxT('/') && r[j] != wxT(':'); j--) {}
+                for (j = j - 1; j >= 0 && r.GetChar(j) != wxT('/') && r.GetChar(j) != wxT(':'); j--) {}
                 r.Remove(j + 1);
             }
         }
     }
         
-    for (; i < cnt; i++) r << p[i];
+    for (; i < cnt; i++) r << p.GetChar(i);
         
     return r;
 }

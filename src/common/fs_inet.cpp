@@ -87,7 +87,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
     // fix malformed url:
     if (myloc.Left(2) != wxT("//")) 
     {
-        if (myloc[0] != wxT('/')) myloc = wxT("//") + myloc;
+        if (myloc.GetChar(0) != wxT('/')) myloc = wxT("//") + myloc;
         else myloc = wxT("/") + myloc;
     }
     if (myloc.Mid(2).Find(wxT('/')) == wxNOT_FOUND) myloc << wxT('/');
