@@ -267,7 +267,7 @@ GSocket *GSocket_new()
   socket->m_server              = FALSE;
   socket->m_stream              = TRUE;
   socket->m_non_blocking        = FALSE;
-  socket->m_timeout             = 10*1000;
+  socket->m_timeout             = 1*1000;
                                 /* 10 sec * 1000 millisec */
   socket->m_takesEvents			= TRUE ;
   socket->m_mac_events			= wxMacGetNotifierTable() ;
@@ -1473,7 +1473,7 @@ GSocketError _GSocket_Input_Timeout(GSocket *socket)
     {
     	OTResult state ;
    		OTByteCount sz = 0 ;
- 		state = OTGetEndpointState(socket->m_endpoint);
+ 		  state = OTGetEndpointState(socket->m_endpoint);
   
   		OTCountDataBytes( socket->m_endpoint , &sz ) ;
   		if ( state == T_INCON || sz > 0 )
