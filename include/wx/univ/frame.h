@@ -32,8 +32,12 @@ public:
             long style = wxDEFAULT_FRAME_STYLE,
             const wxString& name = wxFrameNameStr);
 
+    virtual wxPoint GetClientAreaOrigin() const;
+
 protected:
     void OnSize(wxSizeEvent& event);
+    void OnChar(wxKeyEvent& event);
+    void OnKeyUp(wxKeyEvent& event);
 
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes

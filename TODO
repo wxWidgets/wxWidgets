@@ -14,9 +14,10 @@ TODO
 
 wxMenuXXX
 
-* menmonicsi n the menubar
-* accelerators, Alt-letter and F10 (?)
 * popup menus
+* multirow menubar if not enough space
+* Break()?
+* accelerators, Alt-letter and F10 (?) (<-- wxFrame)
 
 * menubar menus don't popup in the same place as under MSW when there is not
   enough space to the right (pretty minor but still)

@@ -19,7 +19,7 @@
 #include "wx/dynarray.h"
 
 // fwd declarations
-struct WXDLLEXPORT wxMenuInfo;
+class WXDLLEXPORT wxMenuInfo;
 WX_DECLARE_OBJARRAY(wxMenuInfo, wxMenuInfoArray);
 
 class wxPopupMenuWindow;
@@ -144,6 +144,19 @@ public:
 
     // called by wxMenu when it is dismissed
     void OnDismissMenu(bool dismissMenuBar = FALSE);
+
+    // get the next item for the givan accel letter (used by wxFrame), return
+    // -1 if none
+    //
+    // if unique is not NULL, filled with TRUE if there is only one item with
+    // this accel, FALSE if two or more
+    int FindNextItemForAccel(int idxStart,
+                             int keycode,
+                             bool *unique = NULL) const;
+
+    // called by wxFrame to set focus to or open the given menu
+    void SelectMenu(size_t pos);
+    void PopupMenu(size_t pos);
 
 protected:
     // common part of all ctors

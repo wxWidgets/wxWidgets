@@ -49,30 +49,45 @@
 // wxMenuInfo contains all extra information about top level menus we need
 // ----------------------------------------------------------------------------
 
-struct WXDLLEXPORT wxMenuInfo
+class WXDLLEXPORT wxMenuInfo
 {
+public:
+    // ctor
     wxMenuInfo(wxMenuBar *menubar, const wxString& text)
     {
         SetLabel(menubar, text);
     }
 
+    // modifiers
+
     void SetLabel(wxMenuBar *menubar, const wxString& text)
     {
-        indexAccel = wxControl::FindAccelIndex(text, &label);
+        // remember the accel char (may be -1 if none)
+        m_indexAccel = wxControl::FindAccelIndex(text, &m_label);
 
         wxSize size;
         wxClientDC dc(menubar);
         dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
-        dc.GetTextExtent(label, &size.x, &size.y);
+        dc.GetTextExtent(m_label, &size.x, &size.y);
 
         // adjust for the renderer we use and store the width
-        width = menubar->GetRenderer()->GetMenuBarItemSize(size).x;
+        m_width = menubar->GetRenderer()->GetMenuBarItemSize(size).x;
     }
 
-    wxString label;
-    wxCoord width;
-    int indexAccel;
-    bool isEnabled;
+    void SetEnabled(bool enabled = TRUE) { m_isEnabled = TRUE; }
+
+    // accessors
+
+    const wxString& GetLabel() const { return m_label; }
+    bool IsEnabled() const { return m_isEnabled; }
+    wxCoord GetWidth() const { return m_width; }
+    int GetAccelIndex() const { return m_indexAccel; }
+
+private:
+    wxString m_label;
+    wxCoord m_width;
+    int m_indexAccel;
+    bool m_isEnabled;
 };
 
 #include "wx/arrimpl.cpp"
@@ -206,8 +221,6 @@ BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
-    EVT_SET_FOCUS(wxMenuBar::OnSetFocus)
-
     EVT_KEY_DOWN(wxMenuBar::OnKeyDown)
 
     EVT_LEFT_DOWN(wxMenuBar::OnLeftDown)
@@ -1331,7 +1344,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
         info.SetLabel(this, title);
 
         // even if the old menu was disabled, the new one is not any more
-        info.isEnabled = TRUE;
+        info.SetEnabled();
 
         // even if we change only this one, the new label has different width,
         // so we need to refresh everything beyond this item as well
@@ -1363,16 +1376,16 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 wxCoord wxMenuBar::GetItemWidth(size_t pos) const
 {
-    return m_menuInfos[pos].width;
+    return m_menuInfos[pos].GetWidth();
 }
 
 void wxMenuBar::EnableTop(size_t pos, bool enable)
 {
     wxCHECK_RET( pos < GetCount(), _T("invalid index in EnableTop") );
 
-    if ( enable != m_menuInfos[pos].isEnabled )
+    if ( enable != m_menuInfos[pos].IsEnabled() )
     {
-        m_menuInfos[pos].isEnabled = enable;
+        m_menuInfos[pos].SetEnabled(enable);
 
         RefreshItem(pos);
     }
@@ -1383,16 +1396,16 @@ bool wxMenuBar::IsEnabledTop(size_t pos) const
 {
     wxCHECK_MSG( pos < GetCount(), FALSE, _T("invalid index in IsEnabledTop") );
 
-    return m_menuInfos[pos].isEnabled;
+    return m_menuInfos[pos].IsEnabled();
 }
 
 void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 {
     wxCHECK_RET( pos < GetCount(), _T("invalid index in EnableTop") );
 
-    if ( label != m_menuInfos[pos].label )
+    if ( label != m_menuInfos[pos].GetLabel() )
     {
-        m_menuInfos[pos].label = label;
+        m_menuInfos[pos].SetLabel(this, label);
 
         RefreshItem(pos);
     }
@@ -1403,7 +1416,7 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
 {
     wxCHECK_MSG( pos < GetCount(), _T(""), _T("invalid index in GetLabelTop") );
 
-    return m_menuInfos[pos].label;
+    return m_menuInfos[pos].GetLabel();
 }
 
 // ----------------------------------------------------------------------------
@@ -1476,9 +1489,9 @@ void wxMenuBar::DoDraw(wxControlRenderer *renderer)
                        (
                             dc,
                             rect,
-                            m_menuInfos[n].label,
+                            m_menuInfos[n].GetLabel(),
                             flags,
-                            m_menuInfos[n].indexAccel
+                            m_menuInfos[n].GetAccelIndex()
                        );
     }
 }
@@ -1550,6 +1563,44 @@ int wxMenuBar::GetMenuFromPoint(const wxPoint& pos) const
 
     // to the right of the last menu item
     return -1;
+}
+
+// ----------------------------------------------------------------------------
+// wxMenuBar menu operations
+// ----------------------------------------------------------------------------
+
+void wxMenuBar::SelectMenu(size_t pos)
+{
+    wxCHECK_RET( pos < GetCount(), _T("invalid menu index in SelectMenu") );
+
+    if ( m_current != -1 )
+    {
+        // close the previous menu
+        if ( IsShowingMenu() )
+        {
+            // restore m_shouldShowMenu flag after DismissMenu() which resets
+            // it to FALSE
+            bool old = m_shouldShowMenu;
+
+            DismissMenu();
+
+            m_shouldShowMenu = old;
+        }
+
+        RefreshItem((size_t)m_current);
+    }
+
+    m_current = pos;
+
+    RefreshItem(pos);
+}
+
+void wxMenuBar::PopupMenu(size_t pos)
+{
+    wxCHECK_RET( pos < GetCount(), _T("invalid menu index in PopupMenu") );
+
+    SelectMenu(pos);
+    PopupMenu();
 }
 
 // ----------------------------------------------------------------------------
@@ -1631,27 +1682,8 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
         return FALSE;
     }
 
-    if ( m_current != -1 )
-    {
-        // close the previous menu
-        if ( IsShowingMenu() )
-        {
-            // restore m_shouldShowMenu flag after DismissMenu() which resets
-            // it to FALSE
-            bool old = m_shouldShowMenu;
-
-            DismissMenu();
-
-            m_shouldShowMenu = old;
-        }
-
-        RefreshItem((size_t)m_current);
-    }
-
-    m_current = currentNew;
-
-    // currentNew is not -1 if we got here because of the initial check
-    RefreshItem((size_t)m_current);
+    // select the new active item
+    SelectMenu(currentNew);
 
     // show the menu if we know that we should, even if we hadn't been showing
     // it before (this may happen if the previous menu was disabled)
@@ -1713,22 +1745,21 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
                     DismissMenu();
                 }
 
-                // and so the old current item loses its selected status
-                RefreshItem(m_current);
+                // cast is safe as we tested for -1 above
+                size_t currentNew = (size_t)m_current;
 
                 if ( key == WXK_LEFT )
                 {
-                    if ( m_current-- == 0 )
-                        m_current = count - 1;
+                    if ( currentNew-- == 0 )
+                        currentNew = count - 1;
                 }
                 else // right
                 {
-                    if ( ++m_current == (int)count )
-                        m_current = 0;
+                    if ( ++currentNew == (int)count )
+                        currentNew = 0;
                 }
 
-                // this one should be shown as selected
-                RefreshItem(m_current);
+                SelectMenu(currentNew);
 
                 if ( wasMenuOpened )
                 {
@@ -1745,9 +1776,118 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
             break;
 
         default:
-            // TODO: support for letters
+            // letters open the corresponding menu
+            {
+                bool unique;
+                int idxFound = FindNextItemForAccel(m_current, key, &unique);
+
+                if ( idxFound != -1 )
+                {
+                    if ( IsShowingMenu() )
+                    {
+                        DismissMenu();
+                    }
+
+                    SelectMenu(m_current);
+
+                    // if the item is not unique, just select it but don't
+                    // activate as the user might have wanted to activate
+                    // another item
+                    //
+                    // also, don't try to open a disabled menu
+                    if ( unique && IsEnabledTop((size_t)idxFound) )
+                    {
+                        // open the menu
+                        PopupMenu();
+                    }
+
+                    // skip the "event.Skip()" below
+                    break;
+                }
+            }
+
             event.Skip();
     }
+}
+
+// ----------------------------------------------------------------------------
+// wxMenuBar accel handling
+// ----------------------------------------------------------------------------
+
+int wxMenuBar::FindNextItemForAccel(int idxStart, int key, bool *unique) const
+{
+    if ( !wxIsalnum(key) )
+    {
+        // we only support letters/digits as accels
+        return -1;
+    }
+
+    // do we have more than one item with this accel?
+    if ( unique )
+        *unique = TRUE;
+
+    // translate everything to lower case before comparing
+    wxChar chAccel = wxTolower(key);
+
+    // the index of the item with this accel
+    int idxFound = -1;
+
+    // loop through all items searching for the item with this
+    // accel starting at the item after the current one
+    int count = GetCount();
+    int n = idxStart == -1 ? 0 : idxStart + 1;
+
+    if ( n == count )
+    {
+        // wrap
+        n = 0;
+    }
+
+    idxStart = n;
+    for ( ;; )
+    {
+        const wxMenuInfo& info = m_menuInfos[n];
+
+        int idxAccel = info.GetAccelIndex();
+        if ( idxAccel != -1 &&
+             wxTolower(info.GetLabel()[(size_t)idxAccel])
+                == chAccel )
+        {
+            // ok, found an item with this accel
+            if ( idxFound == -1 )
+            {
+                // store it but continue searching as we need to
+                // know if it's the only item with this accel or if
+                // there are more
+                idxFound = n;
+            }
+            else // we already had found such item
+            {
+                if ( unique )
+                    *unique = FALSE;
+
+                // no need to continue further, we won't find
+                // anything we don't already know
+                break;
+            }
+        }
+
+        // we want to iterate over all items wrapping around if
+        // necessary
+        if ( ++n == count )
+        {
+            // wrap
+            n = 0;
+        }
+
+        if ( n == idxStart )
+        {
+            // we've seen all items
+            break;
+        }
+    }
+
+    return idxFound;
 }
 
 // ----------------------------------------------------------------------------
