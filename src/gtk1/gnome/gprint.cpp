@@ -52,7 +52,6 @@ wxGnomePrintNativeData::wxGnomePrintNativeData()
 wxGnomePrintNativeData::~wxGnomePrintNativeData()
 {
     g_object_unref (G_OBJECT (m_config));
-    g_object_unref (G_OBJECT (m_job));
 }
 
 bool wxGnomePrintNativeData::TransferTo( wxPrintData &data )
@@ -108,11 +107,11 @@ wxPageSetupDialogBase *wxGnomePrintFactory::CreatePageSetupDialog( wxWindow *par
 //  The native page setup dialog is broken. It
 //  miscalculates newly entered values for the
 //  margins if you have not chose "points" but
-//  e.g. centimerters
-// 
-//    return new wxGnomePageSetupDialog( parent, data );
+//  e.g. centimerters. 
+//  This has been fixed in GNOME CVS (maybe
+//  fixed in libgnomeprintui 2.8.1)
 
-    return new wxGenericPageSetupDialog( parent, data );
+    return new wxGnomePageSetupDialog( parent, data );
 }
                                                   
 bool wxGnomePrintFactory::HasPrintSetupDialog()
@@ -301,11 +300,17 @@ wxGnomePageSetupDialog::wxGnomePageSetupDialog( wxWindow *parent,
         
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) m_pageDialogData.GetPrintData().GetNativeData();
+
+    // This is required as the page setup dialog
+    // calculates wrong values otherwise.
+    gnome_print_config_set( native->GetPrintConfig(),
+                            (const guchar*) GNOME_PRINT_KEY_PREFERED_UNIT,
+                            (const guchar*) "Pts" );
         
     m_widget = gtk_dialog_new();
     
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( _("Page setup") ) );
-    
+
     GtkWidget *main = gnome_paper_selector_new_with_flags( native->GetPrintConfig(), 
         GNOME_PAPER_SELECTOR_MARGINS|GNOME_PAPER_SELECTOR_FEED_ORIENTATION );
     gtk_container_set_border_width (GTK_CONTAINER (main), 8);
@@ -346,11 +351,10 @@ int wxGnomePageSetupDialog::ShowModal()
     if (ret == GTK_RESPONSE_OK)
     {
         // Transfer data back to m_pageDialogData
-#if 0
-        const GnomePrintUnit *margin_unit;
-        const GnomePrintUnit *paper_unit;
-        const GnomePrintUnit *mm_unit = gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
-        
+
+        // I don't know how querying the last parameter works
+        // I cannot test it as the dialog is currently broken
+        // anyways (it only works for points).        
         double ml,mr,mt,mb,pw,ph;
 	    gnome_print_config_get_length (config,
 				(const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_LEFT, &ml, NULL);
@@ -364,19 +368,25 @@ int wxGnomePageSetupDialog::ShowModal()
 			    (const guchar*) GNOME_PRINT_KEY_PAPER_WIDTH, &pw, NULL);
 	    gnome_print_config_get_length (config,
 			    (const guchar*) GNOME_PRINT_KEY_PAPER_HEIGHT, &ph, NULL);
-        
-        gnome_print_convert_distance( &ml, margin_unit, mm_unit );
-        gnome_print_convert_distance( &mr, margin_unit, mm_unit );
-        gnome_print_convert_distance( &mt, margin_unit, mm_unit );
-        gnome_print_convert_distance( &mb, margin_unit, mm_unit );
-        gnome_print_convert_distance( &pw, paper_unit, mm_unit );
-        gnome_print_convert_distance( &ph, paper_unit, mm_unit );
-        
-        m_pageDialogData.SetMarginTopLeft( wxPoint( (int)(ml*72.0/25.4+0.5), (int)(mt+0.5)) );
+
+        // This probably assumes that the user entered the 
+        // values in Pts. Since that is the only the dialog
+        // works right now, we need to fix this later.
+        const GnomePrintUnit *mm_unit = gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
+        const GnomePrintUnit *pts_unit = gnome_print_unit_get_by_abbreviation( (const guchar*) "Pts" );
+        gnome_print_convert_distance( &ml, pts_unit, mm_unit );
+        gnome_print_convert_distance( &mr, pts_unit, mm_unit );
+        gnome_print_convert_distance( &mt, pts_unit, mm_unit );
+        gnome_print_convert_distance( &mb, pts_unit, mm_unit );
+        gnome_print_convert_distance( &pw, pts_unit, mm_unit );
+        gnome_print_convert_distance( &ph, pts_unit, mm_unit );
+
+        m_pageDialogData.SetMarginTopLeft( wxPoint( (int)(ml+0.5), (int)(mt+0.5)) );
         m_pageDialogData.SetMarginBottomRight( wxPoint( (int)(mr+0.5), (int)(mb+0.5)) );
         
         m_pageDialogData.SetPaperSize( wxSize( (int)(pw+0.5), (int)(ph+0.5) ) );
-        
+
+#if 1
         wxPrintf( wxT("paper %d %d, top margin %d\n"), 
             m_pageDialogData.GetPaperSize().x,
             m_pageDialogData.GetPaperSize().y,
@@ -437,14 +447,17 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     }
 
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
-    wxGnomePrintNativeData *data = 
+    wxGnomePrintNativeData *native = 
         (wxGnomePrintNativeData*) printdata.GetNativeData();
+
+    GnomePrintJob *job = gnome_print_job_new( native->GetPrintConfig() );
+    m_gpc = gnome_print_job_get_context (job);
 
     // The GnomePrintJob is temporarily stored in the 
     // native print data as the native print dialog
     // needs to access it.
-    GnomePrintJob *job = data->GetPrintJob();
-    m_gpc = gnome_print_job_get_context (job);
+    native->SetPrintJob( job );
+
 
     printout->SetIsPreview(false);
 
@@ -465,6 +478,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     if (!dc)
     {
         gnome_print_job_close( job );
+        g_object_unref (G_OBJECT (job));
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
@@ -494,6 +508,8 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
     if (maxPage == 0)
     {
+        gnome_print_job_close( job );
+        g_object_unref (G_OBJECT (job));
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
@@ -546,6 +562,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         gnome_print_job_print( job );
     }
     
+    g_object_unref (G_OBJECT (job));
     delete dc;
     
     return (sm_lastError == wxPRINTER_NO_ERROR);
@@ -1112,37 +1129,41 @@ void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxC
 
 void wxGnomePrintDC::DoGetSize(int* width, int* height) const
 {
-    // No idea if that is efficient
-    GnomePrintConfig *config = gnome_print_config_default();
+    wxGnomePrintNativeData *native =
+      (wxGnomePrintNativeData*) m_printData.GetNativeData();
 
-    double w,h;
-    bool result = gnome_print_config_get_page_size( config, &w, &h );
-    
-    if (!result)
-    {
-        // Standard PS resolution DIN A4 size.
-        w = 595.0;
-        h = 842.0;
-    }
-    
+    // Query page size. This seems to omit the margins
+    // right now, although it shouldn't
+    double pw,ph;
+    gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
+
     if (width)
-        *width = (int) w;
+        *width = (int) (pw + 0.5);
     if (height)
-        *height = (int) h;
+        *height = (int) (ph + 0.5);
 }
 
 void wxGnomePrintDC::DoGetSizeMM(int *width, int *height) const
 {
-    double w,h;
+    wxGnomePrintNativeData *native =
+      (wxGnomePrintNativeData*) m_printData.GetNativeData();
+
+    // This code assumes values in Pts. 
     
-    /// Later, for now DIN A4
-    w = 210.0;
-    h = 297.0;
+    double pw,ph;
+    gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
+
+    // Convert to mm.
+    
+    const GnomePrintUnit *mm_unit = gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
+    const GnomePrintUnit *pts_unit = gnome_print_unit_get_by_abbreviation( (const guchar*) "Pts" );
+    gnome_print_convert_distance( &pw, pts_unit, mm_unit );
+    gnome_print_convert_distance( &ph, pts_unit, mm_unit );
     
     if (width)
-        *width = (int) w;
+        *width = (int) (pw + 0.5);
     if (height)
-        *height = (int) h;
+        *height = (int) (ph + 0.5);
 }
 
 wxSize wxGnomePrintDC::GetPPI() const

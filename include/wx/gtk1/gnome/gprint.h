@@ -46,6 +46,7 @@ public:
     virtual bool Ok() const { return true; }
     
     GnomePrintConfig* GetPrintConfig() { return m_config; }
+    void SetPrintJob( GnomePrintJob *job ) { m_job = job; }
     GnomePrintJob* GetPrintJob() { return m_job; }
     
     
