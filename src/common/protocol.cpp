@@ -69,7 +69,8 @@ bool wxProtocol::Reconnect()
 {
   wxIPV4address addr;
 
-  if (!GetPeer(addr)) {
+  if (!GetPeer(addr))
+  {
     Close();
     return FALSE;
   }
@@ -77,6 +78,7 @@ bool wxProtocol::Reconnect()
     return FALSE;
   if (!Connect(addr))
     return FALSE;
+
   return TRUE;
 }
 
@@ -88,7 +90,7 @@ wxProtocolError GetLine(wxSocketBase *sock, wxString& result) {
   bool found;
 
   avail = sock->Read(tmp_buf, PROTO_BSIZE).LastCount();
-  if (sock->LastError() != 0 || avail == 0)
+  if (sock->Error() || avail == 0)
     return wxPROTO_NETERR;
 
   memcpy(tmp_str, tmp_buf, avail);
