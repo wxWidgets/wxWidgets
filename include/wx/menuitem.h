@@ -71,6 +71,7 @@ public:
 
     // what kind of menu item we are
     wxItemKind GetKind() const { return m_kind; }
+    void SetKind(wxItemKind kind) { m_kind = kind; }
 
     virtual void SetCheckable(bool checkable) { m_kind = checkable ? wxITEM_CHECK : wxITEM_NORMAL; }
     bool IsCheckable() const
