@@ -172,25 +172,25 @@ bool wxWindow::MapOrUnmap(WXWidget widget, bool domap)
     if ( !w )
         return FALSE;
 
-    // if the widget is not unmanaged, it still intercepts
-    // mouse events, even if it is not mapped (and hence invisible)
-    if ( domap )
-    {
-        XtManageChild(w);
-        XtMapWidget(w);
-    }
-    else
-    {
-        XtUnmapWidget(w);
-        XtUnmanageChild(w);
-    }
-
     //   Rationale: a lot of common operations (including but not
     // limited to moving, resizing and appending items to a listbox)
     // unmamange the widget, do their work, then manage it again.
     // This means that, for example adding an item to a listbox will show it,
     // or that most controls are shown every time they are moved or resized!
     XtSetMappedWhenManaged( w, domap );
+
+    // if the widget is not unmanaged, it still intercepts
+    // mouse events, even if it is not mapped (and hence invisible)
+    if ( domap )
+    {
+        XtManageChild(w);
+        // XtMapWidget(w);
+    }
+    else
+    {
+        XtUnmanageChild(w);
+        // XtUnmapWidget(w);
+    }
 
     return TRUE;
 }
@@ -634,8 +634,8 @@ bool wxWindow::Show(bool show)
 
     if (m_borderWidget || m_scrolledWindow)
     {
-        MapOrUnmap(m_drawingArea, show);
         MapOrUnmap(m_borderWidget ? m_borderWidget : m_scrolledWindow, show);
+        // MapOrUnmap(m_drawingArea, show);
     }
     else
     {
