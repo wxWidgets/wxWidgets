@@ -54,6 +54,10 @@ Added Throbber from Cliff Wells to the library and the demo.
 
 Windows installer prompts to uninstall old version first.
 
+Added wxPython.lib.evtmgr by Rob Schecter, which is an easier, more
+"Pythonic" and more OO method of registering handlers for wxWindows
+events using the Publish/Subscribe pattern.
+
 
 
 
