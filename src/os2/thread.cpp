@@ -26,6 +26,7 @@
 #include <stdio.h>
 
 #include "wx/app.h"
+#include "wx/apptrait.h"
 #include "wx/module.h"
 #include "wx/intl.h"
 #include "wx/utils.h"
@@ -409,10 +410,13 @@ void wxThreadInternal::OS2ThreadStart(
     }
     else // do run thread
     {
-        HAB     vHab;
-        vHab = ::WinInitialize(0);
+        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+        unsigned long ulHab;
+	if (traits)
+	    traits->InitializeGui(ulHab);
         dwRet = (DWORD)pThread->Entry();
-        ::WinTerminate(vHab);
+	if (traits)
+	    traits->TerminateGui(ulHab);
 
 	// enter m_critsect before changing the thread state
 	pThread->m_critsect.Enter();
