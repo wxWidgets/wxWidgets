@@ -2046,6 +2046,9 @@ SWIGEXPORT(void) initcalendarc() {
 	 PyDict_SetItemString(d,"wxEVT_CALENDAR_MONTH_CHANGED", PyInt_FromLong((long) wxEVT_CALENDAR_MONTH_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_CALENDAR_YEAR_CHANGED", PyInt_FromLong((long) wxEVT_CALENDAR_YEAR_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_CALENDAR_WEEKDAY_CLICKED", PyInt_FromLong((long) wxEVT_CALENDAR_WEEKDAY_CLICKED));
+
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -866,17 +866,9 @@ static PyObject *_wrap_ptrmap(PyObject *self, PyObject *args, PyObject *kwargs) 
 }
 
 static int _wrap_wxDefaultPosition_set(PyObject *val) {
-    wxPoint * temp;
 
-    if (val) {
-        if (val == Py_None) { temp = NULL; }
-        else if (SWIG_GetPtrObj(val,(void **) &temp,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in value of wxDefaultPosition. Expected _wxPoint_p.");
-        return 1;
-        }
-    }
-    wxDefaultPosition = *temp;
-    return 0;
+    PyErr_SetString(PyExc_TypeError,"Variable wxDefaultPosition is read-only.");
+    return 1;
 }
 
 static PyObject *_wrap_wxDefaultPosition_get() {
@@ -889,17 +881,9 @@ static PyObject *_wrap_wxDefaultPosition_get() {
 }
 
 static int _wrap_wxDefaultSize_set(PyObject *val) {
-    wxSize * temp;
 
-    if (val) {
-        if (val == Py_None) { temp = NULL; }
-        else if (SWIG_GetPtrObj(val,(void **) &temp,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in value of wxDefaultSize. Expected _wxSize_p.");
-        return 1;
-        }
-    }
-    wxDefaultSize = *temp;
-    return 0;
+    PyErr_SetString(PyExc_TypeError,"Variable wxDefaultSize is read-only.");
+    return 1;
 }
 
 static PyObject *_wrap_wxDefaultSize_get() {

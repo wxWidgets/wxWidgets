@@ -1220,8 +1220,8 @@ SWIGEXPORT(void) initglcanvasc() {
 	 d = PyModule_GetDict(m);
 
 
-//    wxClassInfo::CleanUpClasses();
-//    wxClassInfo::InitializeClasses();
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
 
 {
    int i;

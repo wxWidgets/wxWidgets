@@ -109,7 +109,6 @@ void WXDLLEXPORT wxEntryCleanup();
 #ifdef WXP_WITH_THREAD
 PyThreadState*  wxPyEventThreadState = NULL;
 #endif
-static char* __nullArgv[1] = { 0 };
 
 
 // This is where we pick up the first part of the wxEntry functionality...
@@ -447,7 +446,6 @@ int wxPyCallbackHelper::callCallback(PyObject* argTuple) const {
 // Invoke the Python callable object, returning the raw PyObject return
 // value.  Caller should DECREF the return value and also call PyEval_SaveThread.
 PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
-    wxPyCallbackHelper* self = (wxPyCallbackHelper*)this; // cast away const
     PyObject* result;
 
     // Save a copy of the pointer in case the callback generates another

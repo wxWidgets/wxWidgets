@@ -13624,6 +13624,9 @@ SWIGEXPORT(void) initgridc() {
 	 PyDict_SetItemString(d,"wxEVT_GRID_SELECT_CELL", PyInt_FromLong((long) wxEVT_GRID_SELECT_CELL));
 	 PyDict_SetItemString(d,"wxEVT_GRID_EDITOR_SHOWN", PyInt_FromLong((long) wxEVT_GRID_EDITOR_SHOWN));
 	 PyDict_SetItemString(d,"wxEVT_GRID_EDITOR_HIDDEN", PyInt_FromLong((long) wxEVT_GRID_EDITOR_HIDDEN));
+
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
 	 PyDict_SetItemString(d,"wxGrid_wxGridSelectCells", PyInt_FromLong((long) wxGrid::wxGridSelectCells));
 	 PyDict_SetItemString(d,"wxGrid_wxGridSelectRows", PyInt_FromLong((long) wxGrid::wxGridSelectRows));
 	 PyDict_SetItemString(d,"wxGrid_wxGridSelectColumns", PyInt_FromLong((long) wxGrid::wxGridSelectColumns));
