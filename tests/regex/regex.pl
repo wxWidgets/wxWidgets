@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/env perl
 #############################################################################
 # Name:        regex.pl
 # Purpose:     Generate test code for wxRegEx from 'reg.test'
@@ -24,6 +24,7 @@
 #
 
 use strict;
+use warnings;
 use File::Basename;
 #use encoding "UTF-8";  # enable in the future when perl 5.6.x is just a memory
 
@@ -291,8 +292,7 @@ Example: $prog -o regex.inc reg.test wxreg.test
 
 Input files should be in UTF-8. If no input files are specified input is
 read from stdin. If no output file is specified output is written to stdout.
-See the comments in reg.test (in src/regex) for details of the input file
-format.
+See the comments in reg.test for details of the input file format.
 EOT
     exit 0;
 }

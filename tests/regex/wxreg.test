@@ -8,8 +8,8 @@
 #############################################################################
 
 #
-# The layout of this file is the same as src/regex/reg.test. See the comments
-# in that file for full details. The encoding used in here is UTF-8.
+# The layout of this file is the same as reg.test. See the comments in that
+# file for full details. The encoding used in here is UTF-8.
 #
 # These tests test the character classifications over the ascii range pretty
 # thoroughly, since hopefully these will be similar for all platforms and
