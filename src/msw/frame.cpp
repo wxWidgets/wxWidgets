@@ -154,6 +154,9 @@ wxFrame::~wxFrame()
   // For some reason, wxWindows can activate another task altogether
   // when a frame is destroyed after a modal dialog has been invoked.
   // Try to bring the parent to the top.
+  // MT:Only do this if this frame is currently the active window, else weird
+  // things start to happen
+  if ( wxGetActiveWindow() == this )
   if (GetParent() && GetParent()->GetHWND())
     ::BringWindowToTop((HWND) GetParent()->GetHWND());
 }
@@ -668,10 +671,8 @@ bool wxFrame::ProcessCommand(int id)
         return FALSE;
 
     wxMenuItem *item = bar->FindItemForId(id);
-    if ( !item )
-        return FALSE;
 
-    if ( item->IsCheckable() )
+    if ( item &&  item->IsCheckable() )
     {
         bar->Check(id, !bar->IsChecked(id)) ;
     }
