@@ -611,7 +611,13 @@ public:
     // bring the current item into view
     void MoveToFocus() { MoveToItem(m_current); }
 
+    // start editing the label of the given item
     void EditLabel( long item );
+
+    // suspend/resume redrawing the control
+    void Freeze();
+    void Thaw();
+
     void OnRenameTimer();
     void OnRenameAccept();
 
@@ -842,6 +848,9 @@ private:
     // the brushes to use for item highlighting when we do/don't have focus
     wxBrush *m_highlightBrush,
             *m_highlightUnfocusedBrush;
+
+    // if this is > 0, the control is frozen and doesn't redraw itself
+    size_t m_freezeCount;
 
     DECLARE_DYNAMIC_CLASS(wxListMainWindow);
     DECLARE_EVENT_TABLE()
@@ -2227,6 +2236,8 @@ void wxListMainWindow::Init()
     m_currentEdit =
     m_lineLastClicked =
     m_lineBeforeLastClicked = (size_t)-1;
+
+    m_freezeCount = 0;
 }
 
 void wxListMainWindow::InitScrolling()
@@ -2662,15 +2673,30 @@ void wxListMainWindow::RefreshSelected()
 #endif // !__WXGTK__/__WXGTK__
 }
 
+void wxListMainWindow::Freeze()
+{
+    m_freezeCount++;
+}
+
+void wxListMainWindow::Thaw()
+{
+    wxCHECK_RET( m_freezeCount > 0, _T("thawing unfrozen list control?") );
+
+    if ( !--m_freezeCount )
+    {
+        Refresh();
+    }
+}
+
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     // Note: a wxPaintDC must be constructed even if no drawing is
     // done (a Windows requirement).
     wxPaintDC dc( this );
 
-    if ( IsEmpty() )
+    if ( IsEmpty() || m_freezeCount )
     {
-        // empty control. nothing to draw
+        // nothing to draw or not the moment to draw it
         return;
     }
 
@@ -5208,6 +5234,16 @@ void wxListCtrl::RefreshItem(long item)
 void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
 {
     m_mainWin->RefreshLines(itemFrom, itemTo);
+}
+
+void wxListCtrl::Freeze()
+{
+    m_mainWin->Freeze();
+}
+
+void wxListCtrl::Thaw()
+{
+    m_mainWin->Thaw();
 }
 
 #endif // wxUSE_LISTCTRL

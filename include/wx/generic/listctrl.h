@@ -158,20 +158,24 @@ public:
 
     // We have to hand down a few functions
 
-    bool SetBackgroundColour( const wxColour &colour );
-    bool SetForegroundColour( const wxColour &colour );
-    bool SetFont( const wxFont &font );
+    virtual void Freeze();
+    virtual void Thaw();
+
+    virtual bool SetBackgroundColour( const wxColour &colour );
+    virtual bool SetForegroundColour( const wxColour &colour );
+    virtual wxColour GetBackgroundColour() const;
+    virtual wxColour GetForegroundColour() const;
+    virtual bool SetFont( const wxFont &font );
+    virtual bool SetCursor( const wxCursor &cursor );
 
 #if wxUSE_DRAG_AND_DROP
-    void SetDropTarget( wxDropTarget *dropTarget );
-    wxDropTarget *GetDropTarget() const;
+    virtual void SetDropTarget( wxDropTarget *dropTarget );
+    virtual wxDropTarget *GetDropTarget() const;
 #endif
 
-    bool SetCursor( const wxCursor &cursor );
-    wxColour GetBackgroundColour() const;
-    wxColour GetForegroundColour() const;
-    bool DoPopupMenu( wxMenu *menu, int x, int y );
-    void SetFocus();
+    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+
+    virtual void SetFocus();
 
     // implementation
     // --------------

@@ -103,6 +103,8 @@ public:
     void OnToggleMultiSel(wxCommandEvent& event);
     void OnShowColInfo(wxCommandEvent& event);
     void OnShowSelInfo(wxCommandEvent& event);
+    void OnFreeze(wxCommandEvent& event);
+    void OnThaw(wxCommandEvent& event);
 
     void OnUpdateShowColInfo(wxUpdateUIEvent& event);
 
@@ -152,6 +154,8 @@ enum
     LIST_SHOW_COL_INFO,
     LIST_SHOW_SEL_INFO,
     LIST_FOCUS_LAST,
+    LIST_FREEZE,
+    LIST_THAW,
 
     LIST_CTRL                   = 1000
 };

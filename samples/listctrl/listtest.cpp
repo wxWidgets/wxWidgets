@@ -73,6 +73,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
     EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
     EVT_MENU(LIST_SHOW_SEL_INFO, MyFrame::OnShowSelInfo)
+    EVT_MENU(LIST_FREEZE, MyFrame::OnFreeze)
+    EVT_MENU(LIST_THAW, MyFrame::OnThaw)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
 END_EVENT_TABLE()
@@ -188,7 +190,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
 
     wxMenu *menuList = new wxMenu;
     menuList->Append(LIST_FOCUS_LAST, _T("&Make last item current\tCtrl-L"));
-    menuList->Append(LIST_TOGGLE_FIRST, _T("&Toggle first item\tCtrl-T"));
+    menuList->Append(LIST_TOGGLE_FIRST, _T("To&ggle first item\tCtrl-G"));
     menuList->Append(LIST_DESELECT_ALL, _T("&Deselect All\tCtrl-D"));
     menuList->Append(LIST_SELECT_ALL, _T("S&elect All\tCtrl-A"));
     menuList->AppendSeparator();
@@ -200,6 +202,9 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuList->Append(LIST_ADD, _T("&Append an item\tCtrl-P"));
     menuList->Append(LIST_DELETE, _T("&Delete first item\tCtrl-X"));
     menuList->Append(LIST_DELETE_ALL, _T("Delete &all items"));
+    menuList->AppendSeparator();
+    menuList->Append(LIST_FREEZE, _T("Free&ze\tCtrl-Z"));
+    menuList->Append(LIST_THAW, _T("Tha&w\tCtrl-W"));
     menuList->AppendSeparator();
     menuList->Append(LIST_TOGGLE_MULTI_SEL, _T("&Multiple selection\tCtrl-M"),
             _T("Toggle multiple selection"), TRUE);
@@ -258,6 +263,20 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
             "About list test", wxOK|wxCANCEL);
 
     dialog.ShowModal();
+}
+
+void MyFrame::OnFreeze(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Freezing the control"));
+
+    m_listCtrl->Freeze();
+}
+
+void MyFrame::OnThaw(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Thawing the control"));
+
+    m_listCtrl->Thaw();
 }
 
 void MyFrame::OnFocusLast(wxCommandEvent& WXUNUSED(event))
