@@ -242,7 +242,6 @@ COMMONOBJS = \
   ..\common\$D\stream.obj \
   ..\common\$D\string.obj \
   ..\common\$D\tbarbase.obj \
-  ..\common\$D\tbarsmpl.obj \
   ..\common\$D\textcmn.obj \
   ..\common\$D\textfile.obj \
   ..\common\$D\time.obj \
