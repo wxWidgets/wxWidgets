@@ -4048,9 +4048,11 @@ WXHBRUSH wxWindowMSW::MSWGetSolidBgBrushForChild(wxWindow *child)
     return 0;
 }
 
-wxColour wxWindowMSW::MSWGetBgColourForChild(wxWindow * WXUNUSED(child))
+wxColour wxWindowMSW::MSWGetBgColourForChild(wxWindow *child)
 {
-    return m_hasBgCol ? GetBackgroundColour() : wxNullColour;
+    return m_inheritBgCol || (m_hasBgCol && child == this)
+                ? GetBackgroundColour()
+                : wxNullColour;
 }
 
 WXHBRUSH wxWindowMSW::MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC)
