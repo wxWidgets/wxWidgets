@@ -314,6 +314,12 @@ wxPopupMenuWindow::wxPopupMenuWindow(wxWindow *parent, wxMenu *menu)
 
 wxPopupMenuWindow::~wxPopupMenuWindow()
 {
+    // When m_popupMenu in wxMenu is deleted because it
+    // is a child of an old menu bar being deleted (note: it does
+    // not get destroyed by the wxMenu destructor, but
+    // by DestroyChildren()), m_popupMenu should be reset to NULL.
+
+    m_menu->m_popupMenu = NULL;
 }
 
 // ----------------------------------------------------------------------------

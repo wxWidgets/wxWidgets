@@ -255,7 +255,7 @@ int wxNotebook::SetSelection(int nPage)
         m_pages[m_sel]->Show();
     }
 
-    return m_sel;
+    return selOld;
 }
 
 void wxNotebook::ChangePage(int nPage)
