@@ -288,6 +288,37 @@ static const int ID_CANCEL = 1003;
 static const int ID_NEW = 1004;
 //static const int ID_CHECK = 1005;
 
+#ifdef __WXMSW__
+static bool wxIsDriveAvailable(const wxString dirName)
+{
+#ifdef __WIN32__
+	UINT errorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
+#endif
+	bool success = TRUE;
+
+    // Check if this is a root directory and if so,
+    // whether the drive is avaiable.
+    if (dirName.Len() == 3 && dirName[1] == wxT(':'))
+    {
+		wxString dirNameLower(dirName.Lower());
+        int currentDrive = _getdrive();
+        int thisDrive = (int) (dirNameLower[0] - 'a' + 1) ;
+        int err = _chdrive( thisDrive ) ;
+        _chdrive( currentDrive );
+
+        if (err == -1)
+        {
+            success = FALSE;
+        }
+    }
+#ifdef __WIN32__
+	(void) SetErrorMode(errorMode);
+#endif
+
+	return success;
+}
+#endif
+
 //-----------------------------------------------------------------------------
 // wxDirItemDataEx
 //-----------------------------------------------------------------------------
@@ -319,7 +350,24 @@ void wxDirItemDataEx::SetNewDirName( wxString path )
 
 bool wxDirItemDataEx::HasSubDirs()
 {
-    wxString search = m_path + wxT("/*");
+	if (m_path.IsEmpty())
+		return TRUE;
+
+	// On WIN32, must check if this volume is mounted or
+	// we get an error dialog for e.g. drive a:
+#ifdef __WIN32__
+	if (!wxIsDriveAvailable(m_path))
+		return FALSE;
+#endif
+
+    wxString search = m_path;
+	
+	if (m_path.Last() != wxFILE_SEP_PATH)
+	{
+		search += wxString(wxFILE_SEP_PATH);
+	}
+	search += wxT("*");
+
     wxLogNull log;
     wxString path = wxFindFirstFile( search, wxDIR );
     return (bool)(!path.IsNull());
@@ -513,9 +561,6 @@ void wxGenericDirCtrl::SetupSections()
     int drive;
     int currentDrive;
 
-    /* Save current drive. */
-    currentDrive = _getdrive();
-
     /* If we can switch to the drive, it exists. */
     for( drive = 1; drive <= 26; drive++ )
     {
@@ -523,15 +568,12 @@ void wxGenericDirCtrl::SetupSections()
         path.Printf(wxT("%c:\\"), (char) (drive + 'a' - 1));
         name.Printf(wxT("(%c:)"), (char) (drive + 'a' - 1));
 
-        if( !_chdrive( drive ) )
+		if (wxIsDriveAvailable(path))
         {
             
             AddSection(path, name);
         }
     }
-
-    /* Restore original drive.*/
-    _chdrive( currentDrive );
 #endif
 
 #else
@@ -581,7 +623,7 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
     wxASSERT( data );
 
     wxString new_name( wxPathOnly( data->m_path ) );
-    new_name += wxT("/");
+    new_name += wxString(wxFILE_SEP_PATH);
     new_name += event.GetLabel();
 
     wxLogNull log;
@@ -658,20 +700,12 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 #ifdef __WXMSW__
     // Check if this is a root directory and if so,
     // whether the drive is avaiable.
-    if (dirName.Len() == 3 && dirName[1] == wxT(':'))
-    {
-        int currentDrive = _getdrive();
-        int thisDrive = (int) (dirName[0] - 'a' + 1) ;
-        int err = _chdrive( thisDrive ) ;
-        _chdrive( currentDrive );
-
-        if (err == -1)
-        {
-            data->m_isExpanded = FALSE;
-            wxMessageBox(wxT("Sorry, this drive is not available."));
-            return;
-        }
-    }
+	if (!wxIsDriveAvailable(dirName))
+	{
+        data->m_isExpanded = FALSE;
+        wxMessageBox(wxT("Sorry, this drive is not available."));
+  		return;
+	}
 #endif
 
     // This may take a longish time. Go to busy cursor
