@@ -108,6 +108,8 @@ protected:
 
   wxArrayString     m_statusStrings;
 
+  // the last known width of the client rect (used to rebuild cache)
+  int               m_lastClientWidth;
   // the widths of the status bar panes in pixels
   wxArrayInt        m_widthsAbs;
 

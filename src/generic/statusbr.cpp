@@ -300,11 +300,16 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 #endif
 
     // we cache m_widthsAbs between calls normally but it's cleared when the
-    // status widths change so recompute it if needed
-    if ( m_widthsAbs.IsEmpty() )
+    // status widths change so recompute it if needed and also if client width
+    // has changed to take into account the fact that derived OnSize is run
+    // before cache has been cleared in own OnSize
+    if ( m_widthsAbs.IsEmpty() || (m_lastClientWidth != width) )
     {
         wxConstCast(this, wxStatusBarGeneric)->
             m_widthsAbs = CalculateAbsWidths(width);
+        // remember last width for which we have recomputed the widths in pixels
+        wxConstCast(this, wxStatusBarGeneric)->
+            m_lastClientWidth = width;
     }
 
     rect.x = 0;
@@ -382,7 +387,7 @@ void wxStatusBarGeneric::OnSize(wxSizeEvent& event)
 {
     // have to recompute the widths in pixels
     m_widthsAbs.Empty();
-
+    
     event.Skip();
 }
 
