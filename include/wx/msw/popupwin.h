@@ -30,16 +30,6 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
-    // implementation only from now on
-    // -------------------------------
-
-    // override Show() to prevent wxPopupWindow from being activated
-    virtual bool Show(bool show = TRUE);
-
-    // find a shown popup window with the given window as parent, return NULL
-    // if none
-    static wxPopupWindow *FindPopupFor(wxWindow *win);
-
 protected:
     // popups handle the position like wxTopLevelWindow, not wxWindow
     virtual void DoGetPosition(int *x, int *y) const;
@@ -47,8 +37,8 @@ protected:
     // return the style to be used for the popup windows
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
 
-    // the list of all currently shown popup windows used by FindPopupFor()
-    static wxWindowList ms_shownPopups;
+    // get the HWND to be used as parent of this window with CreateWindow()
+    virtual WXHWND MSWGetParent() const;
 
     DECLARE_DYNAMIC_CLASS(wxPopupWindow)
 };

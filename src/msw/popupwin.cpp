@@ -33,9 +33,9 @@
 
 #include "wx/popupwin.h"
 
-#include "wx/msw/private.h"     // for WS_CHILD and WS_POPUP
+#include "wx/msw/private.h"     // for GetDesktopWindow()
 
-wxWindowList wxPopupWindow::ms_shownPopups;
+IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
 
 // ============================================================================
 // implementation
@@ -61,13 +61,8 @@ void wxPopupWindow::DoGetPosition(int *x, int *y) const
 
 WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const
 {
-    // we only hnour the border flags
+    // we only honour the border flags, the others don't make sense for us
     WXDWORD style = wxWindow::MSWGetStyle(flags & wxBORDER_MASK, exstyle);
-
-    // and we mustn't have WS_CHILD style or we would be limited to the parents
-    // client area
-    style &= ~WS_CHILD;
-    style |= WS_POPUP;
 
     if ( exstyle )
     {
@@ -78,43 +73,15 @@ WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const
     return style;
 }
 
-bool wxPopupWindow::Show(bool show)
+WXHWND wxPopupWindow::MSWGetParent() const
 {
-    // skip wxWindow::Show() which calls wxBringWindowToTop(): this results in
-    // activating the popup window and stealing the atcivation from our parent
-    // which means that the parent frame becomes deactivated when opening a
-    // combobox, for example -- definitely not what we want
-    if ( !wxWindowBase::Show(show) )
-        return FALSE;
-
-    if ( show )
-    {
-        ms_shownPopups.Append(this);
-    }
-    else // remove from the shown list
-    {
-        ms_shownPopups.DeleteObject(this);
-    }
-
-    ::ShowWindow(GetHwnd(), show ? SW_SHOWNOACTIVATE : SW_HIDE);
-
-    return TRUE;
-}
-
-/* static */
-wxPopupWindow *wxPopupWindow::FindPopupFor(wxWindow *winParent)
-{
-    // find a popup with the given parent in the linked list of all shown
-    // popups
-    for ( wxWindowList::Node *node = ms_shownPopups.GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxWindow *win = node->GetData();
-        if ( win->GetParent() == winParent )
-            return (wxPopupWindow *)win;
-    }
-
-    return NULL;
+    // we must be a child of the desktop to be able to extend beyond the parent
+    // window client area (like the comboboxes drop downs do)
+    //
+    // NB: alternative implementation would be to use WS_POPUP instead of
+    //     WS_CHILD but then showing a popup would deactivate the parent which
+    //     is ugly and working around this, although possible, is even more
+    //     ugly
+    return (WXHWND)::GetDesktopWindow();
 }
 

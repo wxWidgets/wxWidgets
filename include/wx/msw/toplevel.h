@@ -99,9 +99,6 @@ protected:
     // choose the right parent to use with CreateWindow()
     virtual WXHWND MSWGetParent() const;
 
-    // we handle WM_NCACTIVATE specially here
-    virtual long MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
-
     // is the window currently iconized?
     bool m_iconized;
 
