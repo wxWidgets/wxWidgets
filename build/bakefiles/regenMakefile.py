@@ -194,6 +194,7 @@ library: ../../Makefile.in ../makefile.bcc ../makefile.vc ../makefile.wat ../mak
 
 ../../src/wxWindows.dsp: monolithic.bkl files.bkl
 \t$(BAKEFILE) -Icompat -fwx24dsp -DUSE_GUI=1 -DWXUNIV=0 -o$@ wx.bkl
+\ttouch $@
 
 Makefile: regenMakefile.py
 \t./regenMakefile.py
