@@ -1,7 +1,15 @@
 \section{wxLog classes overview}\label{wxlogoverview}
 
-Classes: \helpref{wxLog}{wxlog}, wxLogStderr,
-wxLogOstream, wxLogTextCtrl, wxLogWindow, wxLogGui, wxLogNull
+Classes: \helpref{wxLog}{wxlog},\\
+\helpref{wxLogStderr}{wxlogstderr},\\
+\helpref{wxLogStream}{wxlogstream},\\
+\helpref{wxLogTextCtrl}{wxlogtextctrl},\\
+\helpref{wxLogWindow}{wxlogwindow},\\
+\helpref{wxLogGui}{wxloggui},\\
+\helpref{wxLogNull}{wxlognull},\\
+\helpref{wxLogChain}{wxlogchain},\\
+\helpref{wxLogPassThrough}{wxlogpassthrough},\\
+\helpref{wxStreamToTextRedirector}{wxstreamtotextredirector}
 
 This is a general overview of logging classes provided by wxWindows. The word
 logging here has a broad sense, including all of the program output, not only
@@ -69,25 +77,18 @@ under Windows where the stdout of GUI programs is not assigned to anything.
 Thus, you might view {\it wxLogMessage()} as a simple substitute for {\it
 printf()}.
 
-Moreover {\it wxMSW} doesn't have a {\bf console} as you may have with {\it
-  wxGTK}. Under {\it wxMSW}, a call using {\it cout} just goes nowhere. To
-cope with this problem, {\it wxWindows} provides a way to redirect {\it cout}
-calls to \helpref{wxTextCtrl}{wxtextctrl}, {\it i.e.}:
-{\small
-\begin{verbatim}
-  wxLogWindow *logger=new wxLogWindow(your_frame,"Logger");
-  cout=*new ostream(logger->GetTextCtrl());
-  wxLog::SetActiveTarget(logger);
-\end{verbatim}
-}
-On the opposite, if you like your {\it wxLogXXX} calls to behave as a {\it cout} 
-call does, just write :
+You can also redirect the {\it wxLogXXX} calls to {\it cout} by just writing:
 {\small
 \begin{verbatim}
   wxLog *logger=new wxLogStream(&cout);
   wxLog::SetActiveTarget(logger);
 \end{verbatim}
 }
+
+Finally, there is also a possibility to redirect the output sent to {\it cout} 
+to a \helpref{wxTextCtrl}{wxtextctrl} by using the 
+\helpref{wxStreamToTextRedirector}{wxstreamtotextredirector} class.
+
 \item{\bf Flexibility} The output of wxLog functions can be redirected or
 suppressed entirely based on their importance, which is either impossible or
 difficult to do with traditional methods. For example, only error messages, or
@@ -163,4 +164,9 @@ reasons it is unwanted, just use this construction:
 \end{verbatim}
 }
 \end{itemize}
+
+The log targets can also be combined: for example you may wish to redirect the
+messages somewhere else (for example, to a log file) but also process them as
+normally. For this the \helpful{wxLogChain}{wxlogchain} and 
+\helpful{wxLogPassThrough}{wxlogpassthrough} can be used.
 

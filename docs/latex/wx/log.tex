@@ -431,7 +431,275 @@ This doesn't change the old log target value (the one the messages are
 forwarded to) which still remains the same as was active when wxLogChain
 object was created.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogChain %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogGui %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogGui}}\label{wxloggui}
+
+This is the default log target for the GUI wxWindows applications. It is passed
+to \helpref{wxLog::SetActiveTarget}{wxlogsetactivetarget} at the program
+startup and is deleted by wxWindows during the program shut down.
+
+\wxheading{Derived from}
+
+\helpref{wxLog}{wxlog}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogGui::wxLogGui}
+
+\func{}{wxLogGui}{\void}
+
+Default constructor.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogNull %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogNull}}\label{wxlognull}
+
+This class allows to temporarily suspend logging. All calls to the log
+functions during the life time of an object of this class are just ignored.
+
+In particular, it can be used to suppress the log messages given by wxWindows
+itself but it should be noted that it is rarely the best way to cope with this
+problem as {\bf all} log messages are suppressed, even if they indicate a
+completely different error than the one the programmer wanted to suppress.
+
+For instance, the example of the overview:
+
+{\small
+\begin{verbatim}
+  wxFile file;
+
+  // wxFile.Open() normally complains if file can't be opened, we don't want it
+  {
+    wxLogNull logNo;
+    if ( !file.Open("bar") )
+      ... process error ourselves ...
+  } // ~wxLogNull called, old log sink restored
+
+  wxLogMessage("..."); // ok
+\end{verbatim}
+}
+
+would be better written as:
+
+{\small
+\begin{verbatim}
+  wxFile file;
+
+  // don't try to open file if it doesn't exist, we are prepared to deal with
+  // this ourselves - but all other errors are not expected
+  if ( wxFile::Exists("bar") )
+  {
+      // gives an error message if the file couldn't be opened
+      file.Open("bar");
+  }
+  else
+  {
+      ...
+  }
+\end{verbatim}
+}
+
+\wxheading{Derived from}
+
+\helpref{wxLog}{wxlog}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogNull::wxLogNull}
+
+\func{}{wxLogNull}{\void}
+
+Suspends logging.
+
+\membersection{wxLogNull::\destruct{wxLogNull}}
+
+Resumes logging.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogStderr %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogStderr}}\label{wxlogstderr}
+
+This class can be used to redirect the log messages to a C file stream (not to
+be confused with C++ streams). It is the default log target for the non-GUI
+wxWindows applications which send all the output to {\tt stderr}.
+
+\wxheading{Derived from}
+
+\helpref{wxLog}{wxlog}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\wxheading{See also}
+
+\helpref{wxLogStream}{wxlogstream}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogStderr::wxLogStderr}
+
+\func{}{wxLogStderr}{\param{FILE }{*fp = NULL}}
+
+Constructs a log target which sends all the log messages to the given 
+{\tt FILE}. If it is {\tt NULL}, the messages are sent to {\tt stderr}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogStream %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogStream}}\label{wxlogstream}
+
+This class can be used to redirect the log messages to a C++ stream.
+
+Please note that this class is only available if wxWindows was compiled with
+the standard iostream library support ({\tt wxUSE\_STD\_IOSTREAM} must be on).
+
+\wxheading{Derived from}
+
+\helpref{wxLog}{wxlog}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\wxheading{See also}
+
+\helpref{wxLogStderr}{wxlogstderr},\\
+\helpref{wxStreamToTextRedirector}{wxstreamtotextredirector}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogStream::wxLogStream}
+
+\func{}{wxLogStream}{\param{std::ostream }{*ostr = NULL}}
+
+Constructs a log target which sends all the log messages to the given 
+output stream. If it is {\tt NULL}, the messages are sent to {\tt cerr}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogTextCtrl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogTextCtrl}}\label{wxlogtextctrl}
+
+Using these target all the log messages can be redirected to a text control.
+The text control must have been created with {\tt wxTE\_MULTILINE} style by the
+caller previously.
+
+\wxheading{Derived from}
+
+\helpref{wxLog}{wxlog}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\wxheading{See also}
+
+\helpref{wxLogTextCtrl}{wxlogtextctrl},\\
+\helpref{wxStreamToTextRedirector}{wxstreamtotextredirector}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogTextCtrl::wxLogTextCtrl}
+
+\func{}{wxLogTextCtrl}{\param{wxTextCtrl }{*textctrl}}
+
+Constructs a log target which sends all the log messages to the given text
+control. The {\it textctrl} parameter cannot be {\tt NULL}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogWindow %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogWindow}}\label{wxlogwindow}
+
+This class represents a background log window: to be precise, it collects all
+log messages in the log frame which it manages but also passes them on to the
+log target which was active at the moment of its creation. This allows, for
+example, to show all the log messages in a frame but still continue to process
+them normally by showing the standard log dialog.
+
+\wxheading{Derived from}
+
+\helpref{wxLogPassThrough}{wxlogpassthrough}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\wxheading{See also}
+
+\helpref{wxLogTextCtrl}{wxlogtextctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogWindow::wxLogWindow}
+
+\func{}{wxLogWindow}{\param{wxFrame }{*parent}, \param{const wxChar }{*title}, \param{bool }{show = {\tt TRUE}}, \param{bool }{passToOld = {\tt TRUE}}}
+
+Creates the log frame window and starts collecting the messages in it.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent window for the log frame, may be {\tt NULL}}
+
+\docparam{title}{The title for the log frame}
+
+\docparam{show}{{\tt TRUE} to show the frame initially (default), otherwise 
+\helpref{wxLogWindow::Show}{wxlogwindowshow} must be called later.}
+
+\docparam{passToOld}{{\tt TRUE} to process the log messages normally in addition to
+logging them in the log frame (default), {\tt FALSE} to only log them in the
+log frame.}
+
+\membersection{wxLogWindow::Show}\label{wxlogwindowshow}
+
+\func{void}{Show}{\param{bool }{show = {\tt TRUE}}}
+
+Shows or hides the frame.
+
+\membersection{wxLogWindow::GetFrame}
+
+\constfunc{wxFrame *}{GetFrame}{\void}
+
+Returns the associated log frame window. This may be used to position or resize
+it but use \helpref{wxLogWindow::Show}{wxlogwindowshow} to show or hide it.
+
+\membersection{wxLogWindow::OnFrameCreate}
+
+\func{virtual void}{OnFrameCreate}{\param{wxFrame }{*frame}}
+
+Called immediately after the log frame creation allowing for
+any extra initializations.
+
+\membersection{wxLogWindow::OnFrameClose}\label{wxlogwindowonframeclose}
+
+\func{virtual void}{OnFrameClose}{\param{wxFrame }{*frame}}
+
+Called if the user closes the window interactively, will not be
+called if it is destroyed for another reason (such as when program
+exits).
+
+Return {\tt TRUE} from here to allow the frame to close, {\tt FALSE} to
+prevent this from happening.
+
+\wxheading{See also}
+
+\helpref{wxLogWindow::OnFrameDelete}{wxlogwindowonframedelete}
+
+\membersection{wxLogWindow::OnFrameDelete}\label{wxlogwindowonframedelete}
+
+\func{virtual void}{OnFrameDelete}{\param{wxFrame }{*frame}}
+
+Called right before the log frame is going to be deleted: will
+always be called unlike \helpref{OnFrameClose()}{wxlogwindowonframeclose}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogPassThrough %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\class{wxLogPassThrough}}\label{wxlogpassthrough}
 
