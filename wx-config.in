@@ -154,11 +154,15 @@ remove_field()
     _remf_value="$1"
     _remf_list=''
     shift
-    for _remf_item; do
-        [ "x$_remf_item" = "x$_remf_value" ] ||                        \
-            _remf_list="${_remf_list:+$_remf_list }$_remf_item"
-    done
-    echo "$_remf_list"
+    if [ -n "$_remf_value" ]; then
+        for _remf_item; do
+            [ "x$_remf_item" = "x$_remf_value" ] ||                 \
+                _remf_list="${_remf_list:+$_remf_list }$_remf_item"
+        done
+        echo "$_remf_list"
+    else
+        echo $*
+    fi
 }
 
 # validate_arg _domain _set _name _value
@@ -599,7 +603,7 @@ if [ -n "$output_option_list" ]; then
         echo " to choose between alternate matches."
     fi
 
-    [ -z "$_best_delegate" ] || _delegates=$(remove_field $_best_delegate $_delegates)
+    _delegates=$(remove_field "$_best_delegate" $_delegates)
 
     if [ -n "$_delegates" ]; then
         echo
@@ -659,10 +663,13 @@ if ! user_mask_fits "$this_config" ; then
     if [ $_numdelegates -eq 0 ]; then
         cat 1>&2 <<-EOF
 
-	  No config found to match: $config_spec
-	  in $wxconfdir
-	  Please install the desired library build, or use --list
-	  without any feature specifiers to see all available configs.
+	  Warning: No config found to match: $config_spec
+	           in $wxconfdir
+	  If you require this configuration, please install the desired
+	  library build.  If this is part of an automated configuration
+	  test and no other errors occur, you may safely ignore it.
+	  You may use wx-config --list to see all configs available in
+	  the default prefix.
 
 	EOF
 
@@ -693,7 +700,8 @@ if ! user_mask_fits "$this_config" ; then
         fi
 
         decho
-        decho " Specification was ambiguous."
+        decho " *** Error: Specification is ambiguous"
+        decho "            as $config_spec"
         decho " Use additional feature options to choose between:"
         for i in $(find_eligible_delegates "$configmask"); do
             decho "  $i"
@@ -712,8 +720,6 @@ if ! user_mask_fits "$this_config" ; then
     $wxconfdir/$(find_eligible_delegates $configmask) $*
     exit
 fi
-
-
 
 
 
