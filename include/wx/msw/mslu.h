@@ -57,6 +57,12 @@ WXDLLIMPEXP_BASE FILE* wxMSLU__tfopen(const wxChar *name, const wxChar *mode);
     || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
     || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
     || ( defined(__BORLANDC__) && (__BORLANDC__ > 0x460) )
+
+#ifdef __BORLANDC__
+    // BCC has _stati64() function but struct stati64
+    #define _stati64 stati64
+#endif
+
 WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name, int flags, int mode);
 WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name, int mode);
 WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
