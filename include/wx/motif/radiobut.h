@@ -16,12 +16,9 @@
 #pragma interface "radiobut.h"
 #endif
 
-#include "wx/control.h"
-
 class WXDLLEXPORT wxRadioButton: public wxControl
 {
     DECLARE_DYNAMIC_CLASS(wxRadioButton)
-protected:
 public:
     wxRadioButton();
     ~wxRadioButton() { RemoveFromCycle(); }
@@ -49,12 +46,10 @@ public:
     void Command(wxCommandEvent& event);
     
     // Implementation
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
-    virtual void ChangeForegroundColour();
 
     // *this function is an implementation detail*
-    // clears the selection in the readiobuttons in the cycle
+    // clears the selection in the radiobuttons in the cycle
     // and returns the old selection (if any)
     wxRadioButton* ClearSelections();
 private:

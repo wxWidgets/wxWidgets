@@ -25,12 +25,8 @@
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
-#include <Xm/Label.h>
-#include <Xm/LabelG.h>
 #include <Xm/ToggleB.h>
 #include <Xm/ToggleBG.h>
-#include <Xm/RowColumn.h>
-#include <Xm/Form.h>
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
@@ -53,20 +49,8 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
                            const wxValidator& validator,
                            const wxString& name)
 {
-    SetName(name);
-    SetValidator(validator);
-    m_backgroundColour = parent->GetBackgroundColour();
-    m_foregroundColour = parent->GetForegroundColour();
-    m_font = parent->GetFont();
-
-    if (parent) parent->AddChild(this);
-
-    if ( id == -1 )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
-
-    m_windowStyle = style ;
+    if( !CreateControl( parent, id, pos, size, style, validator, name ) )
+        return false;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -88,14 +72,17 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
         XmNindicatorType, XmONE_OF_MANY, // diamond-shape
         NULL);
 
-    XtAddCallback (radioButtonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxRadioButtonCallback,
-        (XtPointer) this);
+    XtAddCallback (radioButtonWidget,
+                   XmNvalueChangedCallback,
+                   (XtCallbackProc)wxRadioButtonCallback,
+                   (XtPointer)this);
 
     m_mainWidget = (WXWidget) radioButtonWidget;
 
     XtManageChild (radioButtonWidget);
 
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
+                  pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour();
 
@@ -150,11 +137,6 @@ void wxRadioButton::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxRadioButton::ChangeFont(bool keepOriginalSize)
-{
-    wxWindow::ChangeFont(keepOriginalSize);
-}
-
 void wxRadioButton::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
@@ -165,11 +147,6 @@ void wxRadioButton::ChangeBackgroundColour()
     XtVaSetValues ((Widget) GetMainWidget(),
           XmNselectColor, selectPixel,
           NULL);
-}
-
-void wxRadioButton::ChangeForegroundColour()
-{
-    wxWindow::ChangeForegroundColour();
 }
 
 void wxRadioButtonCallback (Widget w, XtPointer clientData,
