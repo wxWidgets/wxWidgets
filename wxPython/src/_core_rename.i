@@ -276,7 +276,7 @@
 %rename(GROW)                               wxGROW;
 %rename(EXPAND)                             wxEXPAND;
 %rename(SHAPED)                             wxSHAPED;
-%rename(FIXED_SIZE)                         wxFIXED_SIZE;
+%rename(FIXED_MINSIZE)                      wxFIXED_MINSIZE;
 %rename(TILE)                               wxTILE;
 %rename(ADJUST_MINSIZE)                     wxADJUST_MINSIZE;
 %rename(BORDER_DEFAULT)                     wxBORDER_DEFAULT;

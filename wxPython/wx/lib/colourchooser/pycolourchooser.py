@@ -202,9 +202,9 @@ class PyColourChooser(wx.Panel):
         self.ventry.SetSize((40, -1))
         hsvgrid = wx.FlexGridSizer(1, 6, 2, 2)
         hsvgrid.AddMany ([
-            (hlabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.hentry, 0, wx.FIXED_SIZE),
-            (slabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.sentry, 0, wx.FIXED_SIZE),
-            (vlabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.ventry, 0, wx.FIXED_SIZE),
+            (hlabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.hentry, 0, wx.FIXED_MINSIZE),
+            (slabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.sentry, 0, wx.FIXED_MINSIZE),
+            (vlabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.ventry, 0, wx.FIXED_MINSIZE),
         ])
 
         rlabel = wx.StaticText(self, -1, _("R:"))
@@ -218,9 +218,9 @@ class PyColourChooser(wx.Panel):
         self.bentry.SetSize((40, -1))
         lgrid = wx.FlexGridSizer(1, 6, 2, 2)
         lgrid.AddMany([
-            (rlabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.rentry, 0, wx.FIXED_SIZE),
-            (glabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.gentry, 0, wx.FIXED_SIZE),
-            (blabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.bentry, 0, wx.FIXED_SIZE),
+            (rlabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.rentry, 0, wx.FIXED_MINSIZE),
+            (glabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.gentry, 0, wx.FIXED_MINSIZE),
+            (blabel, 0, wx.ALIGN_CENTER_VERTICAL), (self.bentry, 0, wx.FIXED_MINSIZE),
         ])
 
         gsizer = wx.GridSizer(2, 1)

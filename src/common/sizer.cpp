@@ -193,7 +193,7 @@ wxSize wxSizerItem::CalcMin()
     }
     else
     {
-        if ( IsWindow() && !(m_flag & wxFIXED_SIZE) )
+        if ( IsWindow() && !(m_flag & wxFIXED_MINSIZE) )
         {
             // the size of the window may change during run-time, we should
             // use the current minimal size

@@ -42241,7 +42241,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"GROW", SWIG_FromInt((int)wxGROW));
     PyDict_SetItemString(d,"EXPAND", SWIG_FromInt((int)wxEXPAND));
     PyDict_SetItemString(d,"SHAPED", SWIG_FromInt((int)wxSHAPED));
-    PyDict_SetItemString(d,"FIXED_SIZE", SWIG_FromInt((int)wxFIXED_SIZE));
+    PyDict_SetItemString(d,"FIXED_MINSIZE", SWIG_FromInt((int)wxFIXED_MINSIZE));
     PyDict_SetItemString(d,"TILE", SWIG_FromInt((int)wxTILE));
     PyDict_SetItemString(d,"ADJUST_MINSIZE", SWIG_FromInt((int)wxADJUST_MINSIZE));
     PyDict_SetItemString(d,"BORDER_DEFAULT", SWIG_FromInt((int)wxBORDER_DEFAULT));

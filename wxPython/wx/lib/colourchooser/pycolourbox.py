@@ -38,7 +38,7 @@ class PyColourBox(wx.Panel):
         self.colour_box = wx.Window(self, -1, style=wx.SIMPLE_BORDER)
 
         sizer = wx.GridSizer(1, 1)
-        sizer.Add(self.colour_box, 0, wx.FIXED_SIZE | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL)
+        sizer.Add(self.colour_box, 0, wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL)
         sizer.SetItemMinSize(self.colour_box, size[0] - 5, size[1] - 5)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
