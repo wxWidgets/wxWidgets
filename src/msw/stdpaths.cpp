@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_STDPATHS
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif //WX_PRECOMP
@@ -292,3 +294,4 @@ wxString wxStandardPathsWin16::GetUserConfigDir() const
     return wxGetHomeDir();
 }
 
+#endif // wxUSE_STDPATHS
