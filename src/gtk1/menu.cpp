@@ -597,9 +597,23 @@ void wxMenu::AppendSeparator()
     wxMenuItem *mitem = new wxMenuItem();
     mitem->SetId(ID_SEPARATOR);
 
+#if (GTK_MINOR_VERSION > 0)
+    GtkItemFactoryEntry entry;
+    entry.path = "/sep";
+    entry.callback = (GtkItemFactoryCallback) NULL;
+    entry.callback_action = 0;
+    entry.item_type = "<Separator>";
+    entry.accelerator = (gchar*) NULL;
+    
+    gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
+    
+    /* this will be wrong for more than one separator. do we care? */
+    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, "<main>/sep" );
+#else
     GtkWidget *menuItem = gtk_menu_item_new();
     gtk_menu_append( GTK_MENU(m_menu), menuItem );
     gtk_widget_show( menuItem );
+#endif
     
     mitem->SetMenuItem(menuItem);
     m_items.Append( mitem );

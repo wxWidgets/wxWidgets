@@ -2002,9 +2002,6 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     }
     else
     {
-        int old_width = m_width;
-        int old_height = m_height;
-
         if ((sizeFlags & wxSIZE_USE_EXISTING) == wxSIZE_USE_EXISTING)
         {
             if (x != -1) m_x = x;

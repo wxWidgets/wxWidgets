@@ -208,7 +208,7 @@ bool wxGLCanvas::Create( wxWindow *parent, wxWindowID id,
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
     GTK_WIDGET_SET_FLAGS( m_glWidget, GTK_CAN_FOCUS );
     
-    gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), m_glWidget, 0, 0 );
+    gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), m_glWidget, 0, 0, m_width, m_height );
     
     gtk_signal_connect( GTK_OBJECT(m_glWidget), "expose_event",
       GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
@@ -316,22 +316,19 @@ void wxGLCanvas::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
         if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
-        gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
+        gtk_myfixed_set_size( GTK_MYFIXED(m_parent->m_wxwindow), 
+	                      m_widget, 
+			      m_x, 
+			      m_y,
+			      m_width,
+			      m_height );
 
-        if ((old_width != m_width) || (old_height != m_height))
-	{
-            gtk_widget_set_usize( m_widget, m_width, m_height );
-	    
-            gtk_widget_set_usize( m_glWidget, m_width, m_height );
-	    
-	    GtkAllocation allo;
-	    allo.x = 0;
-	    allo.y = 0;
-	    allo.width = m_width;
-	    allo.height = m_height;
-            gtk_widget_size_allocate( m_glWidget, &allo );
-
-	}
+        gtk_myfixed_set_size( GTK_MYFIXED(m_wxwindow), 
+	                      m_glWidget,
+			      m_x, 
+			      m_y,
+			      m_width,
+			      m_height );
     }
 
     m_sizeSet = TRUE;
