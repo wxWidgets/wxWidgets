@@ -110,13 +110,6 @@ public:
                                const wxFont *theFont = (const wxFont *) NULL)
                                const;
 
-    virtual void ClientToScreen( int *x, int *y ) const;
-    virtual void ScreenToClient( int *x, int *y ) const;
-    wxPoint ClientToScreen(const wxPoint& pt) const
-        { int x = pt.x; int y = pt.y; ClientToScreen(& x, & y); return wxPoint(x, y); }
-    wxPoint ScreenToClient(const wxPoint& pt) const
-        { int x = pt.x; int y = pt.y; ScreenToClient(& x, & y); return wxPoint(x, y); }
-
     virtual bool PopupMenu( wxMenu *menu, int x, int y );
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
@@ -403,6 +396,8 @@ protected:
     wxButton             *m_btnDefault;
 
     // implement the base class pure virtuals
+    virtual void DoClientToScreen( int *x, int *y ) const;
+    virtual void DoScreenToClient( int *x, int *y ) const;
     virtual void DoGetPosition( int *x, int *y ) const;
     virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoGetClientSize( int *width, int *height ) const;

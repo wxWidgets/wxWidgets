@@ -1099,7 +1099,7 @@ void wxWindow::DoGetPosition(int *x, int *y) const
         *y = point.y;
 }
 
-void wxWindow::ScreenToClient(int *x, int *y) const
+void wxWindow::DoScreenToClient(int *x, int *y) const
 {
     POINT pt;
     if ( x )
@@ -1116,7 +1116,7 @@ void wxWindow::ScreenToClient(int *x, int *y) const
         *y = pt.y;
 }
 
-void wxWindow::ClientToScreen(int *x, int *y) const
+void wxWindow::DoClientToScreen(int *x, int *y) const
 {
     POINT pt;
     if ( x )

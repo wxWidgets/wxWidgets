@@ -2129,7 +2129,7 @@ void wxWindow::DoGetPosition( int *x, int *y ) const
     if (y) (*y) = m_y;
 }
 
-void wxWindow::ClientToScreen( int *x, int *y ) const
+void wxWindow::DoClientToScreen( int *x, int *y ) const
 {
     wxCHECK_RET( (m_widget != NULL), _T("invalid window") );
 
@@ -2158,7 +2158,7 @@ void wxWindow::ClientToScreen( int *x, int *y ) const
     if (y) *y += org_y;
 }
 
-void wxWindow::ScreenToClient( int *x, int *y ) const
+void wxWindow::DoScreenToClient( int *x, int *y ) const
 {
     wxCHECK_RET( (m_widget != NULL), _T("invalid window") );
 

@@ -489,8 +489,25 @@ public:
                                const = 0;
 
         // translate to/from screen/client coordinates (pointers may be NULL)
-    virtual void ClientToScreen( int *x, int *y ) const = 0;
-    virtual void ScreenToClient( int *x, int *y ) const = 0;
+    void ClientToScreen( int *x, int *y ) const
+        { DoClientToScreen(x, y); }
+    void ScreenToClient( int *x, int *y ) const
+        { DoScreenToClient(x, y); }
+    wxPoint ClientToScreen(const wxPoint& pt) const
+    {
+        int x = pt.x, y = pt.y;
+        DoClientToScreen(&x, &y);
+
+        return wxPoint(x, y);
+    }
+
+    wxPoint ScreenToClient(const wxPoint& pt) const
+    {
+        int x = pt.x, y = pt.y;
+        DoScreenToClient(&x, &y);
+
+        return wxPoint(x, y);
+    }
 
     // misc
     // ----
@@ -706,6 +723,10 @@ protected:
     //     general, absolutely not needed. So instead we implement all
     //     overloaded Something()s in terms of DoSomething() which will be the
     //     only one to be virtual.
+
+    // coordinates translation
+    virtual void DoClientToScreen( int *x, int *y ) const = 0;
+    virtual void DoScreenToClient( int *x, int *y ) const = 0;
 
     // retrieve the position/size of the window
     virtual void DoGetPosition( int *x, int *y ) const = 0;
