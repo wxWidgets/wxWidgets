@@ -46,8 +46,8 @@ this style}
 the window completely when its size is changed - you will have to repaint the
 new window area manually if you use this style. Currently only has an effect for
 Windows.}
-\twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar. (Still used?) }
-\twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar. (Still used?) }
+\twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar.}
+\twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar.}
 \twocolitem{\windowstyle{wxCLIP\_CHILDREN}}{Use this style to eliminate flicker caused by the background being
 repainted, then children being painted over them. Windows only.}
 \end{twocollist}
@@ -1094,8 +1094,8 @@ window).
 Invokes the constraint-based layout algorithm or the sizer-based algorithm
 for this window.
 
-See \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} on when
-this function gets called automatically using auto layout.
+See \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout}: when auto
+layout is on, this function gets called automatically when the window is resized.
 
 \membersection{wxWindow::LoadFromResource}\label{wxwindowloadfromresource}
 

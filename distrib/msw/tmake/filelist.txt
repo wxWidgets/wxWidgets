@@ -292,7 +292,7 @@ dragimag.cpp	MSW
 dropsrc.cpp	MSW	OLE
 droptgt.cpp	MSW	OLE
 enhmeta.cpp	MSW	Win32Only
-helpbest.cpp	MSW	Win32Only
+helpbest.cpp	MSW	Win32Only,LowLevel
 evtloop.cpp	MSW	LowLevel
 fdrepdlg.cpp	MSW	Win32Only
 # FIXME: the generic implementation doesn't work under MSW, so we must
@@ -308,8 +308,8 @@ gaugemsw.cpp	MSW	NotWin32
 gdiimage.cpp	MSW	LowLevel
 gdiobj.cpp	MSW	LowLevel
 glcanvas.cpp	MSW
-helpchm.cpp	MSW	Win32Only
-helpwin.cpp	MSW
+helpchm.cpp	MSW	Win32Only,LowLevel
+helpwin.cpp	MSW LowLevel
 icon.cpp	MSW	LowLevel
 imaglist.cpp	MSW	Win32Only
 iniconf.cpp	MSW

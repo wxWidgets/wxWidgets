@@ -888,7 +888,7 @@
 #define wxUSE_MS_HTML_HELP 1
 
 // Use wxHTML-based help controller?
-#define wxUSE_WXHTML_HELP 0 //? error 'type cast' cannot convert from ...
+#define wxUSE_WXHTML_HELP 1
 
 // Use resources
 #define wxUSE_RESOURCES 1
