@@ -22,15 +22,15 @@
 // wxWindow class for Motif - see also wxWindowBase
 // ----------------------------------------------------------------------------
 
-class wxWindow : public wxWindowBase
+class wxWindowX11 : public wxWindowBase
 {
     friend class WXDLLEXPORT wxDC;
     friend class WXDLLEXPORT wxWindowDC;
     
 public:
-    wxWindow() { Init(); }
+    wxWindowX11() { Init(); }
     
-    wxWindow(wxWindow *parent,
+    wxWindowX11(wxWindow *parent,
         wxWindowID id,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
@@ -103,7 +103,7 @@ public:
     virtual void DragAcceptFiles(bool accept);
     
     // Get the unique identifier of a window
-    virtual WXWidget GetHandle() const { return GetMainWidget(); }
+    virtual WXWindow GetHandle() const { return GetMainWindow(); }
     
     // implementation from now on
     // --------------------------
@@ -112,16 +112,16 @@ public:
     // ---------
     
     // Get main widget for this window, e.g. a text widget
-    virtual WXWidget GetMainWidget() const;
+    virtual WXWindow GetMainWindow() const;
     // Get the widget that corresponds to the label (for font setting, label setting etc.)
-    virtual WXWidget GetLabelWidget() const;
+    virtual WXWindow GetLabelWindow() const;
     // Get the client widget for this window (something we can create other
     // windows on)
-    virtual WXWidget GetClientWidget() const;
+    virtual WXWindow GetClientWindow() const;
     // Get the top widget for this window, e.g. the scrolled widget parent of a
     // multi-line text widget. Top means, top in the window hierarchy that
     // implements this window.
-    virtual WXWidget GetTopWidget() const;
+    virtual WXWindow GetTopWindow() const;
     
     // Get the underlying X window and display
     WXWindow GetXWindow() const;
@@ -164,8 +164,8 @@ public:
     void SetUpdateRegion(const wxRegion& region) { m_updateRegion = region; }
     
     // sets the fore/background colour for the given widget
-    static void DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
-    static void DoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
+    static void DoChangeForegroundColour(WXWindow widget, wxColour& foregroundColour);
+    static void DoChangeBackgroundColour(WXWindow widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
     
     // For implementation purposes - sometimes decorations make the client area
     // smaller
@@ -194,7 +194,7 @@ protected:
     void CanvasSetClientSize(int width, int size);
     void CanvasSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
     
-    void SetMainWidget(WXWidget w) { m_mainWidget = w; }
+    void SetMainWindow(WXWindow w) { m_mainWindow = w; }
     
     bool CanAddEventHandler() const { return m_canAddEventHandler; }
     void SetCanAddEventHandler(bool flag) { m_canAddEventHandler = flag; }
@@ -218,9 +218,9 @@ public:
     
 protected:
     // Adds the widget to the hash table and adds event handlers.
-    bool AttachWidget(wxWindow* parent, WXWidget mainWidget,
-        WXWidget formWidget, int x, int y, int width, int height);
-    bool DetachWidget(WXWidget widget);
+    bool AttachWindow(wxWindow* parent, WXWindow mainWidget,
+        int x, int y, int width, int height);
+    bool DetachWindow(WXWindow widget);
     
     // How to implement accelerators. If we find a key event, translate to
     // wxWindows wxKeyEvent form. Find a widget for the window. Now find a
@@ -238,13 +238,6 @@ public:
     virtual bool ProcessAccelerator(wxKeyEvent& event);
     
 protected:
-    // unmanage and destroy an X widget f it's !NULL (passing NULL is ok)
-    void UnmanageAndDestroy(WXWidget widget);
-    
-    // map or unmap an X widget (passing NULL is ok), returns TRUE if widget was
-    // mapped/unmapped
-    bool MapOrUnmap(WXWidget widget, bool map);
-    
     // scrolling stuff
     // ---------------
     
@@ -253,7 +246,7 @@ protected:
     void DestroyScrollbar(wxOrientation orientation);
     
     // get either hor or vert scrollbar widget
-    WXWidget GetScrollbar(wxOrientation orient) const
+    WXWindow GetScrollbar(wxOrientation orient) const
     { return orient == wxHORIZONTAL ? m_hScrollBar : m_vScrollBar; }
     
     // set the scroll pos
@@ -282,12 +275,12 @@ protected:
     wxRectList m_updateRects;
     
 protected:
-    WXWidget              m_mainWidget;
-    WXWidget              m_hScrollBar;
-    WXWidget              m_vScrollBar;
-    WXWidget              m_borderWidget;
-    WXWidget              m_scrolledWindow;
-    WXWidget              m_drawingArea;
+    WXWindow              m_mainWidget;
+    WXWindow              m_hScrollBar;
+    WXWindow              m_vScrollBar;
+    WXWindow              m_borderWidget;
+    WXWindow              m_scrolledWindow;
+    WXWindow              m_drawingArea;
     bool                  m_winCaptured;
     bool                  m_hScroll;
     bool                  m_vScroll;
@@ -326,8 +319,8 @@ private:
     // common part of all ctors
     void Init();
     
-    DECLARE_DYNAMIC_CLASS(wxWindow)
-    DECLARE_NO_COPY_CLASS(wxWindow)
+    DECLARE_DYNAMIC_CLASS(wxWindowX11)
+    DECLARE_NO_COPY_CLASS(wxWindowX11)
     DECLARE_EVENT_TABLE()
 };
 

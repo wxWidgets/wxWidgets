@@ -89,13 +89,6 @@ public:
     bool              m_freePixmap;
     unsigned long*    m_freeColors;
     long              m_freeColorsCount;
-    
-    // These 5 variables are for wxControl
-    WXPixmap          m_insensPixmap ;
-    WXPixmap          m_labelPixmap ;
-    WXPixmap          m_armPixmap ;
-    WXImage*          m_image ;
-    WXImage*          m_insensImage ;
 };
 
 #define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
@@ -144,9 +137,6 @@ public:
     // from XPM
     wxBitmap(const char **data) { (void)CreateFromXpm(data); }
     wxBitmap(char **data) { (void)CreateFromXpm((const char **)data); }
-    
-    // Initialize with XPM data -- deprecated
-    wxBitmap(char **data, wxControl* control);
     
     // Load a file or resource
     wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_XPM);
@@ -209,9 +199,6 @@ public:
 public:
     WXDisplay* GetDisplay() const { return M_BITMAPDATA->m_display; }
     WXPixmap GetPixmap() const { return (WXPixmap) M_BITMAPDATA->m_pixmap; }
-    virtual WXPixmap GetLabelPixmap(WXWidget w) ;
-    virtual WXPixmap GetArmPixmap(WXWidget w) ;
-    virtual WXPixmap GetInsensPixmap(WXWidget w = (WXWidget) 0) ;
     void SetPixmapNull() { M_BITMAPDATA->m_pixmap = 0; }
     
 protected:

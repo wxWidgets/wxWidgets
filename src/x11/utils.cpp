@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __VMS
-#define XtDisplay XTDISPLAY
-#endif
-
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"
@@ -48,14 +44,14 @@
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
-#include <Xm/Xm.h>
+
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
 
 #include "wx/unix/execute.h"
 
-#include "wx/motif/private.h"
+#include "wx/x11/private.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -101,6 +97,9 @@ void wxFlushEvents()
 // in long calculations.
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
+    wxASSERT_MSG(FALSE, "wxCheckForInterrupt not yet implemented.");
+    return FALSE;
+#if 0
     wxCHECK_MSG( wnd, FALSE, "NULL window in wxCheckForInterrupt" );
 
     Display *dpy=(Display*) wnd->GetXDisplay();
@@ -127,12 +126,13 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     }
 
     return hadEvents;
+#endif
 }
 
 // ----------------------------------------------------------------------------
 // wxExecute stuff
 // ----------------------------------------------------------------------------
-
+#if 0
 static void xt_notify_end_process(XtPointer data, int *WXUNUSED(fid),
                                   XtInputId *id)
 {
@@ -156,6 +156,7 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 
     return (int)id;
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // misc
@@ -170,6 +171,7 @@ void wxBell()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
+#if 0
     // FIXME TODO
     // This code is WRONG!! Does NOT return the
     // Motif version of the libs but the X protocol
@@ -181,6 +183,13 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
         *minorVsn = ProtocolRevision (display);
 
     return wxMOTIF_X;
+#else
+    if (majorVsn)
+        *majorVsn = 0;
+    if (minorVsn)
+        *minorVsn = 0;
+    return wxX11;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -670,7 +679,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 }
 
 
-// Configurable display in Motif
+// Configurable display in X11
 static WXDisplay *gs_currentDisplay = NULL;
 static wxString gs_displayName;
 
@@ -678,9 +687,6 @@ WXDisplay *wxGetDisplay()
 {
     if (gs_currentDisplay)
         return gs_currentDisplay;
-
-    if (wxTheApp && wxTheApp->GetTopLevelWidget())
-        return XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
     else if (wxTheApp)
         return wxTheApp->GetInitialDisplay();
     else
@@ -691,7 +697,7 @@ bool wxSetDisplay(const wxString& display_name)
 {
     gs_displayName = display_name;
 
-    if ( !display_name )
+    if ( display_name.IsEmpty() )
     {
         gs_currentDisplay = NULL;
 
@@ -701,17 +707,7 @@ bool wxSetDisplay(const wxString& display_name)
     {
         Cardinal argc = 0;
 
-        Display *display = XtOpenDisplay((XtAppContext) wxTheApp->GetAppContext(),
-            (const char*) display_name,
-            (const char*) wxTheApp->GetAppName(),
-            (const char*) wxTheApp->GetClassName(),
-            NULL,
-#if XtSpecificationRelease < 5
-            0, &argc,
-#else
-            0, (int *)&argc,
-#endif
-            NULL);
+        Display* display = XOpenDisplay((const char*) display_name);
 
         if (display)
         {
@@ -1189,45 +1185,5 @@ void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
         //          cout << "wxAllocColor : Warning : Can not allocate color, attempt find nearest !\n";
         wxAllocNearestColor(d,cmp,xc);
     }
-}
-
-
-// These functions duplicate those in wxWindow, but are needed
-// for use outside of wxWindow (e.g. wxMenu, wxMenuBar).
-
-// Change a widget's foreground and background colours.
-
-void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
-{
-    // When should we specify the foreground, if it's calculated
-    // by wxComputeColours?
-    // Solution: say we start with the default (computed) foreground colour.
-    // If we call SetForegroundColour explicitly for a control or window,
-    // then the foreground is changed.
-    // Therefore SetBackgroundColour computes the foreground colour, and
-    // SetForegroundColour changes the foreground colour. The ordering is
-    // important.
-
-    XtVaSetValues ((Widget) widget,
-        XmNforeground, foregroundColour.AllocColour(XtDisplay((Widget) widget)),
-        NULL);
-}
-
-void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour)
-{
-    wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
-        (wxColour*) NULL);
-
-    XtVaSetValues ((Widget) widget,
-        XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
-        XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
-        XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
-        XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
-        NULL);
-
-    if (changeArmColour)
-        XtVaSetValues ((Widget) widget,
-        XmNarmColor, g_itemColors[wxSELE_INDEX].pixel,
-        NULL);
 }
 

@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------
  * Project: GSocket (Generic Socket) for WX
  * Name:    gsockmot.c
- * Purpose: GSocket: Motif part
+ * Purpose: GSocket: X11 part
  * CVSID:   $Id$
  * ------------------------------------------------------------------------- */
 
@@ -10,9 +10,12 @@
 #if wxUSE_SOCKETS
 
 #include <stdlib.h>
-#include <X11/Intrinsic.h>
+// #include <X11/Intrinsic.h>
 #include "wx/gsocket.h"
 #include "wx/unix/gsockunx.h"
+
+// TODO: Raw X11 version
+#if 0
 
 extern XtAppContext wxGetAppContext();
 
@@ -122,5 +125,8 @@ void _GSocket_Disable_Events(GSocket *socket)
 
 /* some compilers don't like having empty source files */
 static int wxDummyGsockVar = 0;
+
+#endif
+ // 0
 
 #endif /* wxUSE_SOCKETS/!wxUSE_SOCKETS */

@@ -33,26 +33,23 @@
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
-#include <Xm/Xm.h>
-#include <Xm/PushBG.h>
-#include <Xm/PushB.h>
-#include <Xm/Label.h>
-#include <Xm/ToggleB.h>
-#include <Xm/ToggleBG.h>
-#include <Xm/Form.h>
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
 
-#include "wx/motif/private.h"
+
+
+#include "wx/x11/private.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
-#endif
+
+// TODO: a decent generic toolbar implementation that
+// we can put in src/generic
+#if 0
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -664,3 +661,4 @@ void wxToolBarTimer::Notify()
         XtPopup (help_popup, XtGrabNone);
 }
 
+#endif

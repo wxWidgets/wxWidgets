@@ -25,7 +25,7 @@
 #pragma message disable nosimpint
 #include "wx/vms_x_fix.h"
 #endif
-#include <Xm/Xm.h>
+
 #ifdef __VMS
 #pragma message enable nosimpint
 #endif
@@ -54,7 +54,6 @@ public:
     ~wxXFont();
 
     WXFontStructPtr     m_fontStruct;   // XFontStruct
-    WXFontList          m_fontList;     // Motif XmFontList
     WXDisplay*          m_display;      // XDisplay
     int                 m_scale;        // Scale * 100
 };
@@ -119,17 +118,12 @@ protected:
 wxXFont::wxXFont()
 {
     m_fontStruct = (WXFontStructPtr) 0;
-    m_fontList = (WXFontList) 0;
     m_display = (WXDisplay*) 0;
     m_scale = 100;
 }
 
 wxXFont::~wxXFont()
 {
-    XmFontList fontList = (XmFontList) m_fontList;
-
-    XmFontListFree (fontList);
-
     // TODO: why does freeing the font produce a segv???
     // Note that XFreeFont wasn't called in wxWin 1.68 either.
     // XFontStruct* fontStruct = (XFontStruct*) m_fontStruct;
@@ -529,7 +523,6 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     f->m_fontStruct = (WXFontStructPtr)font;
     f->m_display = ( display ? display : wxGetDisplay() );
     f->m_scale = intScale;
-    f->m_fontList = XmFontListCreate ((XFontStruct*) font, XmSTRING_DEFAULT_CHARSET);
     M_FONTDATA->m_fonts.Append(f);
 
     return f;
@@ -540,12 +533,5 @@ WXFontStructPtr wxFont::GetFontStruct(double scale, WXDisplay* display) const
     wxXFont* f = GetInternalFont(scale, display);
 
     return (f ? f->m_fontStruct : (WXFontStructPtr) 0);
-}
-
-WXFontList wxFont::GetFontList(double scale, WXDisplay* display) const
-{
-    wxXFont* f = GetInternalFont(scale, display);
-
-    return (f ? f->m_fontList : (WXFontList) 0);
 }
 

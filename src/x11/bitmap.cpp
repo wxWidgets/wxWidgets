@@ -13,10 +13,6 @@
 #pragma implementation "bitmap.h"
 #endif
 
-#ifdef __VMS
-#define XtParent XTPARENT
-#endif
-
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/palette.h"
@@ -31,12 +27,11 @@
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
-#include <Xm/Xm.h>
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
 
-#include "wx/motif/private.h"
+#include "wx/x11/private.h"
 
 #if wxHAVE_LIB_XPM
     #include <X11/xpm.h>
@@ -63,38 +58,10 @@ wxBitmapRefData::wxBitmapRefData()
     m_freePixmap = TRUE; //TODO: necessary?
     m_freeColors = (unsigned long*) 0;
     m_freeColorsCount = 0;
-
-    // These 5 variables are for wxControl
-    m_insensPixmap = (WXPixmap) 0;
-    m_labelPixmap = (WXPixmap) 0;
-    m_armPixmap = (WXPixmap) 0;
-    m_image = (WXImage*) 0;
-    m_insensImage = (WXImage*) 0;
 }
 
 wxBitmapRefData::~wxBitmapRefData()
 {
-    if (m_labelPixmap)
-        XmDestroyPixmap (DefaultScreenOfDisplay ((Display*) m_display), (Pixmap) m_labelPixmap);
-
-    if (m_armPixmap)
-        XmDestroyPixmap (DefaultScreenOfDisplay ((Display*) m_display), (Pixmap) m_armPixmap);
-
-    if (m_insensPixmap)
-        XmDestroyPixmap (DefaultScreenOfDisplay ((Display*) m_display), (Pixmap) m_insensPixmap);
-
-    if (m_image)
-    {
-        XmUninstallImage ((XImage*) m_image);
-        XtFree ((char *) (XImage*) m_image);
-    }
-
-    if (m_insensImage)
-    {
-        XmUninstallImage ((XImage*) m_insensImage);
-        delete[] ((XImage*) m_insensImage)->data;
-        XtFree ((char *) (XImage*) m_insensImage);
-    }
     if (m_pixmap && m_freePixmap)
         XFreePixmap ((Display*) m_display, (Pixmap) m_pixmap);
 
@@ -148,23 +115,9 @@ wxBitmap::wxBitmap(const wxString& filename, long type)
     LoadFile(filename, (int)type);
 }
 
-// Create from XPM data
-static wxControl* sg_Control = NULL;
-wxBitmap::wxBitmap(char **data, wxControl* control)
+wxBitmap::wxBitmap(char **data)
 {
-    // Pass the control to the Create function using a global
-    sg_Control = control;
-
     (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
-
-    sg_Control = (wxControl*) NULL;
-}
-
-bool wxBitmap::CreateFromXpm(const char **bits)
-{
-    wxCHECK_MSG( bits, FALSE, _T("NULL pointer in wxBitmap::CreateFromXpm") );
-
-    return Create(bits, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
 bool wxBitmap::Create(int w, int h, int d)
@@ -546,57 +499,6 @@ bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *data, long WXUNUSED(flags
     M_BITMAPHANDLERDATA->m_pixmap = (WXPixmap) XCreateBitmapFromData (dpy, RootWindow (dpy, DefaultScreen (dpy)), (char*) data, width, height);
     M_BITMAPHANDLERDATA->m_ok = (M_BITMAPHANDLERDATA->m_pixmap != (WXPixmap) 0) ;
 
-    // code for wxControl. TODO: can we avoid doing this until we need it?
-    // E.g. have CreateButtonPixmaps which is called on demand.
-    XImage* image = (XImage *) XtMalloc (sizeof (XImage));
-    image->width = width;
-    image->height = height;
-    image->data = (char*) data;
-    image->depth = 1;
-    image->xoffset = 0;
-    image->format = XYBitmap;
-    image->byte_order = LSBFirst;
-    image->bitmap_unit = 8;
-    image->bitmap_bit_order = LSBFirst;
-    image->bitmap_pad = 8;
-    image->bytes_per_line = (width + 7) >> 3;
-
-    char tmp[128];
-    sprintf (tmp, "Im%x", (unsigned int) image);
-    XmInstallImage (image, tmp);
-
-    // Build our manually stipped pixmap.
-
-    int bpl = (width + 7) / 8;
-    char *data1 = new char[height * bpl];
-    char* bits = (char*) data;
-    int i;
-    for (i = 0; i < height; i++)
-    {
-        int mask = i % 2 ? 0x55 : 0xaa;
-        int j;
-        for (j = 0; j < bpl; j++)
-            data1[i * bpl + j] = bits[i * bpl + j] & mask;
-    }
-    XImage* insensImage = (XImage *) XtMalloc (sizeof (XImage));
-    insensImage->width = width;
-    insensImage->height = height;
-    insensImage->data = data1;
-    insensImage->depth = 1;
-    insensImage->xoffset = 0;
-    insensImage->format = XYBitmap;
-    insensImage->byte_order = LSBFirst;
-    insensImage->bitmap_unit = 8;
-    insensImage->bitmap_bit_order = LSBFirst;
-    insensImage->bitmap_pad = 8;
-    insensImage->bytes_per_line = bpl;
-
-    sprintf (tmp, "Not%x", (unsigned int)insensImage);
-    XmInstallImage (insensImage, tmp);
-
-    M_BITMAPHANDLERDATA->m_image = (WXImage*) image;
-    M_BITMAPHANDLERDATA->m_insensImage = (WXImage*) insensImage;
-
     return TRUE;
 }
 
@@ -819,122 +721,6 @@ void wxBitmap::InitStandardHandlers()
     AddHandler(new wxXPMFileHandler);
     AddHandler(new wxXPMDataHandler);
 #endif // wxHAVE_LIB_XPM
-}
-
-WXPixmap wxBitmap::GetLabelPixmap (WXWidget w)
-{
-    if (M_BITMAPDATA->m_image == (WXPixmap) 0)
-        return M_BITMAPDATA->m_pixmap;
-
-    Display *dpy = (Display*) M_BITMAPDATA->m_display;
-
-#ifdef FOO
-    /*
-    If we do:
-    if (labelPixmap) return labelPixmap;
-    things can be wrong, because colors can have been changed.
-
-      If we do:
-      if (labelPixmap)
-      XmDestroyPixmap(DefaultScreenOfDisplay(dpy),labelPixmap) ;
-      we got BadDrawable if the pixmap is referenced by multiples widgets
-
-        this is a catch22!!
-
-      So, before doing thing really clean, I just do nothing; if the pixmap is
-      referenced by many widgets, Motif performs caching functions.
-      And if pixmap is referenced with multiples colors, we just have some
-      memory leaks... I hope we can deal with them...
-    */
-    // Must be destroyed, because colours can have been changed!
-    if (M_BITMAPDATA->m_labelPixmap)
-        XmDestroyPixmap (DefaultScreenOfDisplay (dpy), M_BITMAPDATA->m_labelPixmap);
-#endif
-
-    char tmp[128];
-    sprintf (tmp, "Im%x", (unsigned int) M_BITMAPDATA->m_image);
-
-    Pixel fg, bg;
-    Widget widget = (Widget) w;
-
-    while (XmIsGadget ( widget ))
-        widget = XtParent (widget);
-    XtVaGetValues (widget, XmNbackground, &bg, XmNforeground, &fg, NULL);
-
-    M_BITMAPDATA->m_labelPixmap = (WXPixmap) XmGetPixmap (DefaultScreenOfDisplay (dpy), tmp, fg, bg);
-
-    return M_BITMAPDATA->m_labelPixmap;
-}
-
-WXPixmap wxBitmap::GetArmPixmap (WXWidget w)
-{
-    if (M_BITMAPDATA->m_image == (WXPixmap) 0)
-        return M_BITMAPDATA->m_pixmap;
-
-    Display *dpy = (Display*) M_BITMAPDATA->m_display;
-#ifdef FOO
-    // See GetLabelPixmap () comment
-
-    // Must be destroyed, because colours can have been changed!
-    if (M_BITMAPDATA->m_armPixmap)
-        XmDestroyPixmap (DefaultScreenOfDisplay (dpy), M_BITMAPDATA->m_armPixmap);
-#endif
-
-    char tmp[128];
-    sprintf (tmp, "Im%x", (unsigned int) M_BITMAPDATA->m_image);
-
-    Pixel fg, bg;
-    Widget widget = (Widget) w;
-
-    XtVaGetValues (widget, XmNarmColor, &bg, NULL);
-    while (XmIsGadget (widget))
-        widget = XtParent (widget);
-    XtVaGetValues (widget, XmNforeground, &fg, NULL);
-
-    M_BITMAPDATA->m_armPixmap = (WXPixmap) XmGetPixmap (DefaultScreenOfDisplay (dpy), tmp, fg, bg);
-
-    return M_BITMAPDATA->m_armPixmap;
-}
-
-WXPixmap wxBitmap::GetInsensPixmap (WXWidget w)
-{
-    Display *dpy = (Display*) M_BITMAPDATA->m_display;
-
-    if (M_BITMAPDATA->m_insensPixmap)
-        return M_BITMAPDATA->m_insensPixmap;
-
-    if (!w)
-    {
-        M_BITMAPDATA->m_insensPixmap = (WXPixmap) XCreateInsensitivePixmap(dpy, (Pixmap) M_BITMAPDATA->m_pixmap);
-        if (M_BITMAPDATA->m_insensPixmap)
-            return M_BITMAPDATA->m_insensPixmap;
-        else
-            return M_BITMAPDATA->m_pixmap;
-    }
-
-    if (M_BITMAPDATA->m_insensImage == (WXPixmap) 0)
-        return M_BITMAPDATA->m_pixmap;
-
-#ifdef FOO
-    See GetLabelPixmap () comment
-        // Must be destroyed, because colours can have been changed!
-        if (M_BITMAPDATA->m_insensPixmap)
-            XmDestroyPixmap (DefaultScreenOfDisplay (dpy), (Pixmap) M_BITMAPDATA->m_insensPixmap);
-#endif
-
-    char tmp[128];
-    sprintf (tmp, "Not%x", (unsigned int) M_BITMAPDATA->m_insensImage);
-
-    Pixel fg, bg;
-    Widget widget = (Widget) w;
-
-    while (XmIsGadget (widget))
-        widget = XtParent (widget);
-    XtVaGetValues (widget, XmNbackground, &bg, XmNforeground, &fg, NULL);
-
-    M_BITMAPDATA->m_insensPixmap = (WXPixmap) XmGetPixmap (DefaultScreenOfDisplay (dpy), tmp, fg, bg);
-
-    return M_BITMAPDATA->m_insensPixmap;
 }
 
 // We may need this sometime...

@@ -13,7 +13,7 @@
 #pragma implementation "joystick.h"
 #endif
 
-// Not implemented in wxMotif
+// Not implemented in X11
 #if 0
 
 #include "wx/joystick.h"

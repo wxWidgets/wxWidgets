@@ -95,10 +95,8 @@ public:
     wxXFont *GetInternalFont(double scale = 1.0,
         WXDisplay* display = NULL) const;
     
-    // These two are helper functions for convenient access of the above.
+    // Helper function for convenient access of the above.
     WXFontStructPtr GetFontStruct(double scale = 1.0,
-        WXDisplay* display = NULL) const;
-    WXFontList GetFontList(double scale = 1.0,
         WXDisplay* display = NULL) const;
     
 protected:
