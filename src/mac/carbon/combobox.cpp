@@ -119,7 +119,7 @@ protected:
     // but this is less complicated than dealing with idle-ness, and is much better than nothing
     void OnKeyUp( wxKeyEvent& event )
     {
-        if ( event.GetKeyCode() != WXK_RETURN )
+        if ( event.GetKeyCode() != WXK_RETURN && event.GetKeyCode() != WXK_TAB )
         {
             wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_cb->GetId());
             event.SetString( GetValue() );
