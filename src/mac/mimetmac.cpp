@@ -107,20 +107,20 @@ size_t
 wxFileTypeImpl::GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
 			       const wxFileType::MessageParameters& params) const
 {
-    wxFAIL_MSG( _T("TODO") );
+    wxFAIL_MSG( _T("wxFileTypeImpl::GetAllCommands() not yet implemented") );
     return 0;
 }
 
 void
 wxMimeTypesManagerImpl::Initialize(int mailcapStyles, const wxString& extraDir)
 {
-    wxFAIL_MSG( _T("TODO") );
+    wxFAIL_MSG( _T("wxMimeTypesManagerImpl::Initialize() not yet implemented") );
 }
 
 void
 wxMimeTypesManagerImpl::ClearData()
 {
-    wxFAIL_MSG( _T("TODO") );
+    wxFAIL_MSG( _T("wxMimeTypesManagerImpl::ClearData() not yet implemented") );
 }
 
 // extension -> file type
@@ -206,7 +206,8 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 
 size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 {
-    wxFAIL_MSG( _T("TODO") ); // VZ: don't know anything about this for Mac
+    // VZ: don't know anything about this for Mac
+    wxFAIL_MSG( _T("wxMimeTypesManagerImpl::EnumAllFileTypes() not yet implemented") );
 
     return 0;
 }
@@ -214,7 +215,7 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 wxFileType *
 wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 {
-    wxFAIL_MSG( _T("TODO") );
+    wxFAIL_MSG( _T("wxMimeTypesManagerImpl::Associate() not yet implemented") );
 
     return NULL;
 }
