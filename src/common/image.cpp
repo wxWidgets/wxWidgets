@@ -1468,37 +1468,6 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 
 #endif // wxUSE_STREAMS
 
-
-
-//-----------------------------------------------------------------------------
-// Deprecated wxBitmap conversion routines
-//-----------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI
-
-#ifdef __WXGTK__
-wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue ) const
-{
-    wxImage mono = this->ConvertToMono( red, green, blue );
-    wxBitmap bitmap( mono, 1 );
-    return bitmap;
-}
-#endif
-
-wxBitmap wxImage::ConvertToBitmap() const
-{
-    wxBitmap bitmap( *this );
-    return bitmap;
-}
-
-wxImage::wxImage( const wxBitmap &bitmap )
-{
-    *this = bitmap.ConvertToImage();
-}
-
-#endif // WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI
-
-
 // ----------------------------------------------------------------------------
 // image histogram stuff
 // ----------------------------------------------------------------------------

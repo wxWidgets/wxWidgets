@@ -153,15 +153,6 @@ public:
     wxImage( const wxImage& image );
     wxImage( const wxImage* image );
 
-#if WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI
-    // conversion to/from wxBitmap (deprecated, use wxBitmap's methods instead):
-    wxDEPRECATED( wxImage(const wxBitmap &bitmap) );
-    wxDEPRECATED( wxBitmap ConvertToBitmap() const );
-#ifdef __WXGTK__
-    wxBitmap ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue ) const;
-#endif
-#endif
-
     bool Create( int width, int height, bool clear = true );
     bool Create( int width, int height, unsigned char* data, bool static_data = FALSE );
     void Destroy();
