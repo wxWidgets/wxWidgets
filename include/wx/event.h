@@ -937,7 +937,7 @@ public:
           m_size(event.m_size), m_rect(event.m_rect)
         { }
     wxSizeEvent(const wxRect& rect, int id = 0)
-        : m_rect(rect), m_size(rect.GetSize())
+        : m_size(rect.GetSize()), m_rect(rect)
         { m_eventType = wxEVT_SIZING; m_id = id; }
 
     wxSize GetSize() const { return m_size; }
