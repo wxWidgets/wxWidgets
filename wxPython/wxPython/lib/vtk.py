@@ -15,7 +15,7 @@
 # This class has been rewritten and improved by Prabhu Ramachandran
 # <prabhu@aero.iitm.ernet.in>.  It has been tested under Win32 and
 # Linux.  Many thanks to Eric Boix <frog@creatis.insa-lyon.fr> for
-# testing it under Windows(TM) and finding and fixing many errors.
+# testing it under Windows and finding and fixing many errors.
 # Thanks also to Sebastien BARRE <sebastien@barre.nom.fr> for his
 # suggestions.
 
@@ -49,12 +49,12 @@ class wxVTKRenderWindowBase(wxScrolledWindow):
 
     def __init__(self, parent, id, position=wxDefaultPosition,
                  size=wxDefaultSize, style=0):
-        wxScrolledWindow.__init__(self, parent, id, position, size, style)
+        wxScrolledWindow.__init__(self, parent, id, position, size, style | wxWANTS_CHARS)
         style = style | wxWANTS_CHARS
 
         # This box is necessary to eliminate flicker and enable proper
         # event handling under Linux/GTK.
-        self.box = wxPanel(self, -1, position, size, style)
+        #self.box = wxPanel(self, -1, position, size, style)
 
         self._RenderWindow = vtkRenderWindow()
 
@@ -65,14 +65,14 @@ class wxVTKRenderWindowBase(wxScrolledWindow):
             # We can't get the handle in wxGTK until after the widget
             # is created, the window create event happens later so we'll
             # catch it there
-            EVT_WINDOW_CREATE(self.box, self.OnCreateWindow)
+            EVT_WINDOW_CREATE(self, self.OnCreateWindow)
             EVT_PAINT       (self, self.OnExpose)
         else:
             # but in MSW, the window create event happens durring the above
             # call to __init__ so we have to do it here.
-            hdl = self.box.GetHandle()
+            hdl = self.GetHandle()
             self._RenderWindow.SetWindowInfo(str(hdl))
-            EVT_PAINT       (self.box, self.OnExpose)
+            EVT_PAINT       (self, self.OnExpose)
             self.__Created = 1
 
         # common for all platforms
@@ -85,16 +85,16 @@ class wxVTKRenderWindowBase(wxScrolledWindow):
     def SetupEvents(self):
         "Setup the user defined event bindings."
         # Remember to bind everything to self.box and NOT self
-        EVT_LEFT_DOWN    (self.box, self.OnLeftButtonDown)
-        EVT_MIDDLE_DOWN  (self.box, self.OnMiddleButtonDown)
-        EVT_RIGHT_DOWN   (self.box, self.OnRightButtonDown)
-        EVT_LEFT_UP      (self.box, self.OnLeftButtonUp)
-        EVT_MIDDLE_UP    (self.box, self.OnMiddleButtonUp)
-        EVT_RIGHT_UP     (self.box, self.OnRightButtonUp)
-        EVT_MOTION       (self.box, self.OnMouseMove)
-        EVT_ENTER_WINDOW (self.box, self.OnEnter)
-        EVT_LEAVE_WINDOW (self.box, self.OnLeave)
-        EVT_CHAR         (self.box, self.OnChar)
+        EVT_LEFT_DOWN    (self, self.OnLeftButtonDown)
+        EVT_MIDDLE_DOWN  (self, self.OnMiddleButtonDown)
+        EVT_RIGHT_DOWN   (self, self.OnRightButtonDown)
+        EVT_LEFT_UP      (self, self.OnLeftButtonUp)
+        EVT_MIDDLE_UP    (self, self.OnMiddleButtonUp)
+        EVT_RIGHT_UP     (self, self.OnRightButtonUp)
+        EVT_MOTION       (self, self.OnMouseMove)
+        EVT_ENTER_WINDOW (self, self.OnEnter)
+        EVT_LEAVE_WINDOW (self, self.OnLeave)
+        EVT_CHAR         (self, self.OnChar)
         # Add your bindings if you want them in the derived class.
 
 
@@ -122,13 +122,13 @@ class wxVTKRenderWindowBase(wxScrolledWindow):
             self.OnCreateWindow(event)
         if (not self.__InExpose):
             self.__InExpose = 1
-            dc = wxPaintDC(self.box)
+            dc = wxPaintDC(self)
             self._RenderWindow.Render()
             self.__InExpose = 0
 
 
     def OnCreateWindow(self, event):
-	hdl = self.box.GetHandle()
+	hdl = self.GetHandle()
         try:
             self._RenderWindow.SetParentInfo(str(hdl))
         except:
@@ -149,7 +149,7 @@ class wxVTKRenderWindowBase(wxScrolledWindow):
 
     def OnConfigure(self, event):
         sz = self.GetSize()
-        self.box.SetSize(sz)
+        self.SetSize(sz)
         # Ugly hack that according to Eric Boix is necessary under
         # Windows.  If possible Try commenting this out and test under
         # Windows.
@@ -393,13 +393,13 @@ class wxVTKRenderWindow(wxVTKRenderWindowBase):
     def StartMotion(self, event):
         x, y = event.GetPositionTuple()
         self.UpdateRenderer(x,y)
-        self.box.CaptureMouse()
+        self.CaptureMouse()
 
 
     def EndMotion(self, event=None):
         if self._CurrentRenderer:
             self.Render()
-        self.box.ReleaseMouse()
+        self.ReleaseMouse()
 
 
     def Rotate(self,x,y):
