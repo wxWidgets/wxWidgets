@@ -36,7 +36,7 @@
 #include "wx/object.h"
 
 //-----------------------------------------------------------------------------
-// PCX decoding
+// RLE encoding and decoding
 //-----------------------------------------------------------------------------
 
 void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
@@ -75,7 +75,6 @@ void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
             cont = 1;
         }
     }
-
 
     // Write the last one and return;
     //
@@ -120,7 +119,11 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
 }
 
 
-/* PCX header */
+//-----------------------------------------------------------------------------
+// PCX reading and saving
+//-----------------------------------------------------------------------------
+
+// PCX header
 #define HDR_MANUFACTURER    0
 #define HDR_VERSION         1
 #define HDR_ENCODING        2
@@ -278,28 +281,19 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     unsigned char *src;             // pointer into wxImage data
     unsigned int width, height;     // size of the image
     unsigned int bytesperline;      // bytes per line (each plane)
-    int nplanes;                    // number of planes
-    int format;                     // image format (8 bit, 24 bit)
+    int nplanes = 3;                // number of planes
+    int format = wxPCX_24BIT;       // image format (8 bit, 24 bit)
     wxHashTable h(wxKEY_INTEGER);   // image histogram
-    unsigned long ncolours;         // num. of different colours
     unsigned long key;              // key in the hashtable
     unsigned int i;
  
-    // Get the histogram of the image, and decide whether to save
-    // as 8 bit or 24 bit, according to the number of colours.
+    // See if we can save as 8 bit.
     //
-    ncolours = image->CountColours(257);
-
-    if (ncolours <= 256)
+    if (image->CountColours(256) <= 256)
     {
         image->ComputeHistogram(h);
         format = wxPCX_8BIT;
         nplanes = 1;
-    }
-    else
-    {
-        format = wxPCX_24BIT;
-        nplanes = 3;
     }
 
     // Get image dimensions, calculate bytesperline (must be even,
@@ -374,7 +368,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
                 break;
             }
         }
-    
+
         RLEencode(p, bytesperline * nplanes, stream);
     }
     
