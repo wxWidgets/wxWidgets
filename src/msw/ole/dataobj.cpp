@@ -73,6 +73,12 @@ class wxIEnumFORMATETC : public IEnumFORMATETC
 {
 public:
     wxIEnumFORMATETC(const wxDataFormat* formats, ULONG nCount);
+
+    // to suppress the gcc warning about "class has virtual functions but non
+    // virtual dtor"
+#ifdef __GNUG__
+    virtual
+#endif
     ~wxIEnumFORMATETC() { delete [] m_formats; }
 
     DECLARE_IUNKNOWN_METHODS;
@@ -97,6 +103,12 @@ class wxIDataObject : public IDataObject
 {
 public:
     wxIDataObject(wxDataObject *pDataObject);
+
+    // to suppress the gcc warning about "class has virtual functions but non
+    // virtual dtor"
+#ifdef __GNUG__
+    virtual
+#endif
     ~wxIDataObject();
 
     // normally, wxDataObject controls our lifetime (i.e. we're deleted when it
@@ -702,10 +714,10 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
         case CF_LOCALE:       return "CF_LOCALE";
 
         default:
-            if ( !GetClipboardFormatName(format, s_szBuf, WXSIZEOF(s_szBuf)) )
+            if ( !::GetClipboardFormatName(format, s_szBuf, WXSIZEOF(s_szBuf)) )
             {
                 // it must be a new predefined format we don't know the name of
-                sprintf(s_szBuf, "unknown CF (0x%04x)", format);
+                sprintf(s_szBuf, "unknown CF (0x%04x)", format.GetFormatId());
             }
 
             return s_szBuf;
