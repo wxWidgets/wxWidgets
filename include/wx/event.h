@@ -336,7 +336,7 @@ class WXDLLEXPORT wxEvent : public wxObject
 {
 private:
     wxEvent& operator=(const wxEvent&);
-    
+
 protected:
     wxEvent(const wxEvent&);                   // for implementing Clone()
 
@@ -406,7 +406,7 @@ class WXDLLEXPORT wxCommandEvent : public wxEvent
 {
 private:
     wxCommandEvent& operator=(const wxCommandEvent& event);
-    
+
 public:
     wxCommandEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
@@ -593,6 +593,10 @@ class WXDLLEXPORT wxMouseEvent : public wxEvent
 {
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
+    wxMouseEvent(const wxMouseEvent& event) { Assign(event); }
+
+    wxMouseEvent& operator=(const wxMouseEvent& event)
+        { Assign(event); return *this; }
 
     // Was it a button event? (*doesn't* mean: is any button *down*?)
     bool IsButton() const { return Button(-1); }
@@ -738,6 +742,9 @@ public:
     int           m_wheelRotation;
     int           m_wheelDelta;
     int           m_linesPerAction;
+
+protected:
+    void Assign(const wxMouseEvent& evt);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMouseEvent)
@@ -992,7 +999,7 @@ class WXDLLEXPORT wxEraseEvent : public wxEvent
 {
 private:
     wxEraseEvent& operator=(const wxEraseEvent& event);
-    
+
 public:
     wxEraseEvent(int Id = 0, wxDC *dc = (wxDC *) NULL)
         : wxEvent(Id, wxEVT_ERASE_BACKGROUND)
@@ -1024,7 +1031,7 @@ class WXDLLEXPORT wxFocusEvent : public wxEvent
 {
 private:
     wxFocusEvent& operator=(const wxFocusEvent& event);
-    
+
 public:
     wxFocusEvent(wxEventType type = wxEVT_NULL, int id = 0)
         : wxEvent(id, type)
@@ -1354,7 +1361,7 @@ class WXDLLEXPORT wxDropFilesEvent : public wxEvent
 {
 private:
     wxDropFilesEvent& operator=(const wxDropFilesEvent& event);
-    
+
 public:
     int       m_noFiles;
     wxPoint   m_pos;
@@ -1409,7 +1416,7 @@ public:
     wxUpdateUIEvent(wxWindowID commandId = 0)
         : wxCommandEvent(wxEVT_UPDATE_UI, commandId)
         , m_checked(FALSE)
-        , m_enabled(FALSE) 
+        , m_enabled(FALSE)
         , m_setEnabled(FALSE)
         , m_setText(FALSE)
         , m_setChecked(FALSE)
@@ -1469,7 +1476,7 @@ class WXDLLEXPORT wxMouseCaptureChangedEvent : public wxEvent
 {
 private:
     wxMouseCaptureChangedEvent operator=(const wxMouseCaptureChangedEvent& event);
-    
+
 public:
     wxMouseCaptureChangedEvent(wxWindowID id = 0, wxWindow* gainedCapture = NULL)
         : wxEvent(id, wxEVT_MOUSE_CAPTURE_CHANGED)
@@ -1514,7 +1521,7 @@ class WXDLLEXPORT wxPaletteChangedEvent : public wxEvent
 {
 private:
     wxPaletteChangedEvent& operator=(const wxPaletteChangedEvent& event);
-    
+
 public:
     wxPaletteChangedEvent(wxWindowID id = 0)
         : wxEvent(id, wxEVT_PALETTE_CHANGED)
@@ -1573,7 +1580,7 @@ class WXDLLEXPORT wxNavigationKeyEvent : public wxEvent
 {
 private:
     wxNavigationKeyEvent& operator=(const wxNavigationKeyEvent& event);
-    
+
 public:
     wxNavigationKeyEvent()
         : wxEvent(0, wxEVT_NAVIGATION_KEY)
@@ -1806,7 +1813,7 @@ struct WXDLLEXPORT wxEventTableEntryBase
 {
 private:
     wxEventTableEntryBase& operator=(const wxEventTableEntryBase& event);
-    
+
 public:
     wxEventTableEntryBase(int id, int idLast,
                           wxObjectEventFunction fn, wxObject *data)
@@ -1821,7 +1828,7 @@ public:
         , m_lastId(event.m_lastId)
         , m_fn(event.m_fn)
         , m_callbackUserData(event.m_callbackUserData)
-    { }        
+    { }
 
     // the range of ids for this entry: if m_lastId == -1, the range consists
     // only of m_id, otherwise it is m_id..m_lastId inclusive

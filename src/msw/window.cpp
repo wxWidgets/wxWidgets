@@ -179,7 +179,7 @@ static void TranslateKbdEventToMouse(wxWindowMSW *win,
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win);
 
 // find the window for the mouse event at the specified position
-static wxWindowMSW *FindWindowForMouseEvent(wxWindow *win, int *x, int *y);
+static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y); //TW:REQ:Univ
 
 // wrapper around BringWindowToTop() API
 static inline void wxBringWindowToTop(HWND hwnd)
@@ -2427,7 +2427,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                     }
                     else
                     {
-                        wxWindow *win = FindWindowForMouseEvent(this, &x, &y);
+                        wxWindowMSW *win = FindWindowForMouseEvent(this, &x, &y); //TW:REQ:Univ
                         processed = win->HandleMouseEvent(message, x, y, wParam);
                     }
                 }
@@ -3992,7 +3992,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
 // Notice that this is not done for the mouse move events because this could
 // (would?) be too slow, but only for clicks which means that the static texts
 // still don't get move, enter nor leave events.
-static wxWindowMSW *FindWindowForMouseEvent(wxWindow *win, int *x, int *y)
+static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y) //TW:REQ:Univ
 {
     wxCHECK_MSG( x && y, win, _T("NULL pointer in FindWindowForMouseEvent") );
 

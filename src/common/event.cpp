@@ -386,6 +386,25 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
     m_linesPerAction = 0;
 }
 
+void wxMouseEvent::Assign(const wxMouseEvent& event)
+{
+    m_x = event.m_x;
+    m_y = event.m_y;
+
+    m_leftDown = event.m_leftDown;
+    m_middleDown = event.m_middleDown;
+    m_rightDown = event.m_rightDown;
+
+    m_controlDown = event.m_controlDown;
+    m_shiftDown = event.m_shiftDown;
+    m_altDown = event.m_altDown;
+    m_metaDown = event.m_metaDown;
+
+    m_wheelRotation = event.m_wheelRotation;
+    m_wheelDelta = event.m_wheelDelta;
+    m_linesPerAction = event.m_linesPerAction;
+}
+
 // True if was a button dclick event (1 = left, 2 = middle, 3 = right)
 // or any button dclick event (but = -1)
 bool wxMouseEvent::ButtonDClick(int but) const
