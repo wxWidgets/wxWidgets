@@ -306,9 +306,11 @@ public:
     /// operator version of GetChar
     char  operator[](size_t n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
+#ifdef __WXMSW__
     /// operator version of GetChar
     char  operator[](int n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
+#endif
     /// operator version of GetWritableChar
     char& operator[](size_t n)
       { ASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
