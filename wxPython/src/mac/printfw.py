@@ -182,11 +182,6 @@ class wxPostScriptDC(wxPostScriptDCPtr):
 
 
 
-def wxPostScriptDC2(*_args,**_kwargs):
-    val = wxPostScriptDCPtr(apply(printfwc.new_wxPostScriptDC2,_args,_kwargs))
-    val.thisown = 1
-    return val
-
 
 class wxPageSetupDialogDataPtr(wxObjectPtr):
     def __init__(self,this):

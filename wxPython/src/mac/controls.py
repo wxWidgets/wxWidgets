@@ -533,6 +533,12 @@ class wxCheckListBoxPtr(wxListBoxPtr):
     def InsertItems(self, *_args, **_kwargs):
         val = apply(controlsc.wxCheckListBox_InsertItems,(self,) + _args, _kwargs)
         return val
+    def HitTest(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckListBox_HitTest,(self,) + _args, _kwargs)
+        return val
+    def HitTestXY(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckListBox_HitTestXY,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxCheckListBox instance at %s>" % (self.this,)
 class wxCheckListBox(wxCheckListBoxPtr):

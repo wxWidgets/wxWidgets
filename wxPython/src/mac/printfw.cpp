@@ -1570,55 +1570,6 @@ static PyObject *_wrap_new_wxPostScriptDC(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define new_wxPostScriptDC2(_swigarg0,_swigarg1,_swigarg2) (new wxPostScriptDC(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_new_wxPostScriptDC2(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPostScriptDC * _result;
-    wxString * _arg0;
-    bool  _arg1 = (bool ) TRUE;
-    wxWindow * _arg2 = (wxWindow *) NULL;
-    PyObject * _obj0 = 0;
-    int tempbool1 = (int) TRUE;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "output","interactive","parent", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iO:new_wxPostScriptDC2",_kwnames,&_obj0,&tempbool1,&_argo2)) 
-        return NULL;
-{
-    _arg0 = wxString_in_helper(_obj0);
-    if (_arg0 == NULL)
-        return NULL;
-}
-    _arg1 = (bool ) tempbool1;
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxPostScriptDC2. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPostScriptDC *)new_wxPostScriptDC2(*_arg0,_arg1,_arg2);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPostScriptDC_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
 #define wxPostScriptDC_GetPrintData(_swigobj)  (_swigobj->GetPrintData())
 static PyObject *_wrap_wxPostScriptDC_GetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5511,7 +5462,6 @@ static PyMethodDef printfwcMethods[] = {
 	 { "wxPostScriptDC_SetResolution", (PyCFunction) _wrap_wxPostScriptDC_SetResolution, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPostScriptDC_SetPrintData", (PyCFunction) _wrap_wxPostScriptDC_SetPrintData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPostScriptDC_GetPrintData", (PyCFunction) _wrap_wxPostScriptDC_GetPrintData, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxPostScriptDC2", (PyCFunction) _wrap_new_wxPostScriptDC2, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPostScriptDC", (PyCFunction) _wrap_new_wxPostScriptDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintData_SetPrintMode", (PyCFunction) _wrap_wxPrintData_SetPrintMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintData_SetPrinterTranslation", (PyCFunction) _wrap_wxPrintData_SetPrinterTranslation, METH_VARARGS | METH_KEYWORDS },
