@@ -1,5 +1,5 @@
-NAME         Test
-DESCRIPTION  'wxTableWindow Test'
+NAME         Splitter
+DESCRIPTION  'wxSplitterWindow Test'
 EXETYPE      WINDOWS
 STUB         'WINSTUB.EXE'
 CODE         PRELOAD MOVEABLE DISCARDABLE

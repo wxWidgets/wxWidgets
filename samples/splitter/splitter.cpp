@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        m_splitter.cpp
+// Name:        splitter.cpp
 // Purpose:     wxSplitterWindow sample
 // Author:      Julian Smart
 // Modified by:
