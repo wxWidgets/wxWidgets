@@ -20,6 +20,9 @@ All (GUI):
 - Added XPM data constructor to wxImage.
 - Added style parameter to wxBufferedDC to allow buffering just the client, or
   the whole virtual area.
+- Restored ability to set a custom splitter sash size with SetSashSize.
+- Fixed wxScrolledWindow sizer behaviour so that the virtual size
+  isn't used to set the window size.
 
 Unix:
 

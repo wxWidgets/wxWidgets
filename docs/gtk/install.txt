@@ -480,9 +480,6 @@ minimal.o: minimal.cpp mondrian.xpm
 clean:
 	rm -f *.o minimal
 
-This is certain to become the standard way unless we decide
-to stick to tmake.
-
 If your application uses only some of wxWidgets libraries, you can
 specify required libraries when running wx-config. For example,
 `wx-config --libs=html,core` will only output link command to link
