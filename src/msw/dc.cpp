@@ -113,13 +113,17 @@ static const int MM_METRIC = 10;
    coordinates used.
  */
 
-// logical to device
-#define XLOG2DEV(x) (x)
-#define YLOG2DEV(y) (y)
-
-// device to logical
-#define XDEV2LOG(x) (x)
-#define YDEV2LOG(y) (y)
+#ifdef __WXWINCE__
+    #define XLOG2DEV(x) ((x-m_logicalOriginX)*m_signX+m_deviceOriginX)
+    #define YLOG2DEV(y) ((y-m_logicalOriginY)*m_signY+m_deviceOriginY)
+    #define XDEV2LOG(x) ((x-m_deviceOriginX)*m_signX+m_logicalOriginX)
+    #define YDEV2LOG(y) ((y-m_deviceOriginY)*m_signY+m_logicalOriginY)
+#else
+    #define XLOG2DEV(x) (x)
+    #define YLOG2DEV(y) (y)
+    #define XDEV2LOG(x) (x)
+    #define YDEV2LOG(y) (y)
+#endif
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -1776,13 +1780,13 @@ void wxDC::SetSystemScale(double x, double y)
 {
     WXMICROWIN_CHECK_HDC
 
-#ifndef __WXWINCE__
     if ( x == m_scaleX && y == m_scaleY )
         return;
 
     m_scaleX = x;
     m_scaleY = y;
 
+#ifndef __WXWINCE__
     SetMapMode(m_mappingMode);
 #endif
 }
@@ -1791,13 +1795,13 @@ void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
-#ifndef __WXWINCE__
     if ( x == m_logicalOriginX && y == m_logicalOriginY )
         return;
 
     m_logicalOriginX = x;
     m_logicalOriginY = y;
 
+#ifndef __WXWINCE__
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
 #endif
 }
@@ -1806,13 +1810,13 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
-#ifndef __WXWINCE__
     if ( x == m_deviceOriginX && y == m_deviceOriginY )
         return;
 
     m_deviceOriginX = x;
     m_deviceOriginY = y;
 
+#ifndef __WXWINCE__
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
 #endif
 }
