@@ -117,7 +117,8 @@
     #define _WIN32_IE 0x0200
 #endif
 
-#if _WIN32_IE >= 0x0300 && !defined(__MINGW32__)
+#if _WIN32_IE >= 0x0300 && \
+    (!defined(__MINGW32__) || wxCHECK_W32API_VERSION( 2, 0 ))
     #include <shlwapi.h>
 #endif
 
