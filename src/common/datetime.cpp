@@ -2548,6 +2548,30 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
             width += *fmt - _T('0');
         }
 
+        // the default widths for the various fields
+        if ( !width )
+        {
+            switch ( *fmt )
+            {
+                case _T('Y'):               // year has 4 digits
+                    width = 4;
+                    break;
+
+                case _T('j'):               // day of year has 3 digits
+                case _T('l'):               // milliseconds have 3 digits
+                    width = 3;
+                    break;
+
+                case _T('w'):               // week day as number has only one
+                    width = 1;
+                    break;
+
+                default:
+                    // default for all other fields
+                    width = 2;
+            }
+        }
+
         // then the format itself
         switch ( *fmt )
         {
