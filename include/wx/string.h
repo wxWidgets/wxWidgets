@@ -200,15 +200,29 @@ class WXDLLEXPORT wxMBConv
   const wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
 #endif
 };
-WXDLLEXPORT_DATA(extern wxMBConv) wxConv_libc, wxConv_UTF7, wxConv_UTF8;
-#define wxConv_file wxConv_libc
+WXDLLEXPORT_DATA(extern wxMBConv) wxConv_libc;
 
-class WXDLLEXPORT wxCSConv : wxMBConv
+#define wxANOTHER_MBCONV(type) \
+class type : public wxMBConv { \
+ public: \
+  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const; \
+  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const; \
+}
+
+WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_file)) wxConv_file;
+WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_UTF7)) wxConv_UTF7;
+WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_UTF8)) wxConv_UTF8;
+#ifdef __WXGTK__
+WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_gdk)) wxConv_gdk;
+#endif
+
+class WXDLLEXPORT wxCSConv : public wxMBConv
 {
  private:
   wxChar *data;
  public:
   wxCSConv(const wxChar *charset);
+  virtual ~wxCSConv(void);
   virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
   virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
