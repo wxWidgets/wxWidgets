@@ -120,7 +120,7 @@ class wxPythonDemo(wxFrame):
         self.log = wxTextCtrl(splitter2, -1, '', wxDefaultPosition, wxDefaultSize,
                               wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
         (w, self.charHeight) = self.log.GetTextExtent('X')
-        self.WriteText('wxPython Demo Log:\n')
+        #self.WriteText('wxPython Demo Log:\n')
 
 
         # add the windows to the splitter and split it.
@@ -138,11 +138,10 @@ class wxPythonDemo(wxFrame):
     #---------------------------------------------
     def WriteText(self, text):
         self.log.WriteText(text)
-        if wxPlatform == '__WXMSW__':
-            w, h = self.log.GetClientSizeTuple()
-            numLines = h/self.charHeight
-            x, y = self.log.PositionToXY(self.log.GetLastPosition())
-            self.log.ShowPosition(self.log.XYToPosition(x, y-numLines+1))
+        w, h = self.log.GetClientSizeTuple()
+        numLines = h/self.charHeight
+        x, y = self.log.PositionToXY(self.log.GetLastPosition())
+        self.log.ShowPosition(self.log.XYToPosition(x, y-numLines+1))
 
     def write(self, txt):
         self.WriteText(txt)

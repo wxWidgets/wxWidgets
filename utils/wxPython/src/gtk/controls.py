@@ -545,6 +545,27 @@ class wxTextCtrlPtr(wxControlPtr):
     def XYToPosition(self,arg0,arg1):
         val = controlsc.wxTextCtrl_XYToPosition(self.this,arg0,arg1)
         return val
+    def CanCopy(self):
+        val = controlsc.wxTextCtrl_CanCopy(self.this)
+        return val
+    def CanCut(self):
+        val = controlsc.wxTextCtrl_CanCut(self.this)
+        return val
+    def CanPaste(self):
+        val = controlsc.wxTextCtrl_CanPaste(self.this)
+        return val
+    def CanRedo(self):
+        val = controlsc.wxTextCtrl_CanRedo(self.this)
+        return val
+    def CanUndo(self):
+        val = controlsc.wxTextCtrl_CanUndo(self.this)
+        return val
+    def GetSelection(self):
+        val = controlsc.wxTextCtrl_GetSelection(self.this)
+        return val
+    def IsEditable(self):
+        val = controlsc.wxTextCtrl_IsEditable(self.this)
+        return val
     def __repr__(self):
         return "<C wxTextCtrl instance>"
 class wxTextCtrl(wxTextCtrlPtr):
