@@ -581,7 +581,8 @@ ALL_GUI_DIST: ALL_DIST
 	if test -f $(DOCDIR)/$(TOOLKITDIR)/changes.txt ; then \
 	  cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES-$(TOOLKIT).txt ; fi
 	cp $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README-$(TOOLKIT).txt
-	cp $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt
+	if test -f $(DOCDIR)/$(TOOLKITDIR)/todo.txt ; then \
+	  cp $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt ; fi
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
 	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
@@ -789,6 +790,15 @@ UNIV_DIST: ALL_GUI_DIST
 	cp $(SRCDIR)/univ/files.lst $(DISTDIR)/src/univ
 	cp $(SRCDIR)/univ/*.cpp $(DISTDIR)/src/univ
 	cp $(SRCDIR)/univ/themes/*.cpp $(DISTDIR)/src/univ/themes
+
+MGL_DIST: UNIV_DIST
+	cp $(WXDIR)/wxMGL.spec $(DISTDIR)
+	cp $(INCDIR)/wx/mgl/*.h $(DISTDIR)/include/wx/mgl
+	cp $(SRCDIR)/mgl/files.lst $(DISTDIR)/src/mgl
+	cp $(SRCDIR)/mgl/make* $(DISTDIR)/src/mgl
+	cp $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 DEMOS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/demos
