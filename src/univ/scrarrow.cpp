@@ -170,7 +170,7 @@ bool wxScrollArrows::HandleMouseMove(const wxMouseEvent& event) const
         arrow = m_control->HitTest(event.GetPosition());
     }
 
-    if ( m_captureData )
+    if ( m_captureData && m_captureData->m_timerScroll)
     {
         // the mouse is captured, we may want to pause scrolling if it goes
         // outside the arrow or to resume it if we had paused it before
@@ -246,11 +246,23 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
             m_captureData->m_window = m_control->GetWindow();
             m_captureData->m_window->CaptureMouse();
 
-            // start scrolling
-            m_captureData->m_timerScroll =
+            // start scrolling                       
+            wxScrollArrowTimer *tmpTimerScroll =
                 new wxScrollArrowTimer(m_control, arrow);
 
-            m_control->SetArrowFlag(arrow, wxCONTROL_PRESSED, TRUE);
+            // Because in some cases wxScrollArrowTimer can cause 
+            // m_captureData to be destructed we need to test if it 
+            // is still valid before using.
+            if (m_captureData)
+            {
+                m_captureData->m_timerScroll = tmpTimerScroll;
+
+                m_control->SetArrowFlag(arrow, wxCONTROL_PRESSED, TRUE);
+            }
+            else
+            {
+                delete tmpTimerScroll;
+            }
         }
         //else: mouse already captured, nothing to do
     }
