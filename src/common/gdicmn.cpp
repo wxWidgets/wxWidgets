@@ -90,13 +90,13 @@ bool wxRect::operator==(const wxRect& rect) const
 }
 
 const wxRect& wxRect::operator += (const wxRect& rect)
-{ 
-	*this = (*this + rect); 
+{
+	*this = (*this + rect);
 	return ( *this ) ;
 }
 
 wxRect wxRect::operator + (const wxRect& rect) const
-{ 
+{
 	int x1 = wxMin(this->x, rect.x);
 	int y1 = wxMin(this->y, rect.y);
 	int y2 = wxMax(y+height, rect.height+rect.y);
@@ -595,7 +595,12 @@ wxFont *wxFontList::
           //#if defined(__X__)
           //          each_font->GetFontId () == FamilyOrFontId) /* New font system */
           //#else
-          each_font->GetFamily () == FamilyOrFontId &&
+#if defined(__WXGTK__)
+          (each_font->GetFamily() == FamilyOrFontId ||
+           (each_font->GetFamily() == wxSWISS && FamilyOrFontId == wxDEFAULT)) &&
+#else
+          each_font->GetFamily() == FamilyOrFontId &&
+#endif
           ((each_font->GetFaceName() == _T("")) || each_font->GetFaceName() == Face))
         //#endif
         return each_font;
