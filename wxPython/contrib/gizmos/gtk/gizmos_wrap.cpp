@@ -10141,17 +10141,13 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"EditableListBoxNameStr",_wrap_EditableListBoxNameStr_get, _wrap_EditableListBoxNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"TreeListCtrlNameStr",_wrap_TreeListCtrlNameStr_get, _wrap_TreeListCtrlNameStr_set);
     {
-        PyDict_SetItemString(d,"wxEVT_DYNAMIC_SASH_SPLIT", SWIG_From_int((int)(wxEVT_DYNAMIC_SASH_SPLIT))); 
-    }
-    {
-        PyDict_SetItemString(d,"wxEVT_DYNAMIC_SASH_UNIFY", SWIG_From_int((int)(wxEVT_DYNAMIC_SASH_UNIFY))); 
-    }
-    {
         PyDict_SetItemString(d,"DS_MANAGE_SCROLLBARS", SWIG_From_int((int)(wxDS_MANAGE_SCROLLBARS))); 
     }
     {
         PyDict_SetItemString(d,"DS_DRAG_CORNER", SWIG_From_int((int)(wxDS_DRAG_CORNER))); 
     }
+    PyDict_SetItemString(d, "wxEVT_DYNAMIC_SASH_SPLIT", PyInt_FromLong(wxEVT_DYNAMIC_SASH_SPLIT));
+    PyDict_SetItemString(d, "wxEVT_DYNAMIC_SASH_UNIFY", PyInt_FromLong(wxEVT_DYNAMIC_SASH_UNIFY));
     {
         PyDict_SetItemString(d,"EL_ALLOW_NEW", SWIG_From_int((int)(wxEL_ALLOW_NEW))); 
     }

@@ -22,10 +22,10 @@ del sys, _wx
 wxDynamicSashNameStr = wx.gizmos.DynamicSashNameStr
 wxEditableListBoxNameStr = wx.gizmos.EditableListBoxNameStr
 wxTreeListCtrlNameStr = wx.gizmos.TreeListCtrlNameStr
-wxEVT_DYNAMIC_SASH_SPLIT = wx.gizmos.wxEVT_DYNAMIC_SASH_SPLIT
-wxEVT_DYNAMIC_SASH_UNIFY = wx.gizmos.wxEVT_DYNAMIC_SASH_UNIFY
 wxDS_MANAGE_SCROLLBARS = wx.gizmos.DS_MANAGE_SCROLLBARS
 wxDS_DRAG_CORNER = wx.gizmos.DS_DRAG_CORNER
+wxEVT_DYNAMIC_SASH_SPLIT = wx.gizmos.wxEVT_DYNAMIC_SASH_SPLIT
+wxEVT_DYNAMIC_SASH_UNIFY = wx.gizmos.wxEVT_DYNAMIC_SASH_UNIFY
 wxDynamicSashSplitEvent = wx.gizmos.DynamicSashSplitEvent
 wxDynamicSashSplitEventPtr = wx.gizmos.DynamicSashSplitEventPtr
 wxDynamicSashUnifyEvent = wx.gizmos.DynamicSashUnifyEvent

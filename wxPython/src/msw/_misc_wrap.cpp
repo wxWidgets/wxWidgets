@@ -3433,6 +3433,46 @@ static PyObject *_wrap_SystemOptions_HasOption(PyObject *, PyObject *args, PyObj
 }
 
 
+static PyObject *_wrap_SystemOptions_IsFalse(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxString *arg1 = 0 ;
+    bool result;
+    bool temp1 = false ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "name", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SystemOptions_IsFalse",kwnames,&obj0)) goto fail;
+    {
+        arg1 = wxString_in_helper(obj0);
+        if (arg1 == NULL) SWIG_fail;
+        temp1 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxSystemOptions::IsFalse((wxString const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp1)
+        delete arg1;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp1)
+        delete arg1;
+    }
+    return NULL;
+}
+
+
 static PyObject * SystemOptions_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -31454,6 +31494,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SystemOptions_GetOption", (PyCFunction) _wrap_SystemOptions_GetOption, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SystemOptions_GetOptionInt", (PyCFunction) _wrap_SystemOptions_GetOptionInt, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SystemOptions_HasOption", (PyCFunction) _wrap_SystemOptions_HasOption, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"SystemOptions_IsFalse", (PyCFunction) _wrap_SystemOptions_IsFalse, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SystemOptions_swigregister", SystemOptions_swigregister, METH_VARARGS, NULL},
 	 { (char *)"NewId", (PyCFunction) _wrap_NewId, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RegisterId", (PyCFunction) _wrap_RegisterId, METH_VARARGS | METH_KEYWORDS, NULL},

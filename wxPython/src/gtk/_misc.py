@@ -241,6 +241,11 @@ class SystemOptions(_core.Object):
         return _misc_.SystemOptions_HasOption(*args, **kwargs)
 
     HasOption = staticmethod(HasOption)
+    def IsFalse(*args, **kwargs):
+        """IsFalse(String name) -> bool"""
+        return _misc_.SystemOptions_IsFalse(*args, **kwargs)
+
+    IsFalse = staticmethod(IsFalse)
 
 class SystemOptionsPtr(SystemOptions):
     def __init__(self, this):
@@ -270,6 +275,10 @@ def SystemOptions_GetOptionInt(*args, **kwargs):
 def SystemOptions_HasOption(*args, **kwargs):
     """SystemOptions_HasOption(String name) -> bool"""
     return _misc_.SystemOptions_HasOption(*args, **kwargs)
+
+def SystemOptions_IsFalse(*args, **kwargs):
+    """SystemOptions_IsFalse(String name) -> bool"""
+    return _misc_.SystemOptions_IsFalse(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 

@@ -126,6 +126,7 @@ wxSystemOptions_SetOptionInt = wx._misc.SystemOptions_SetOptionInt
 wxSystemOptions_GetOption = wx._misc.SystemOptions_GetOption
 wxSystemOptions_GetOptionInt = wx._misc.SystemOptions_GetOptionInt
 wxSystemOptions_HasOption = wx._misc.SystemOptions_HasOption
+wxSystemOptions_IsFalse = wx._misc.SystemOptions_IsFalse
 wxFileSelectorPromptStr = wx._misc.FileSelectorPromptStr
 wxFileSelectorDefaultWildcardStr = wx._misc.FileSelectorDefaultWildcardStr
 wxDirSelectorPromptStr = wx._misc.DirSelectorPromptStr

@@ -54,10 +54,10 @@ import _core
 import _controls
 import wx 
 __docfilter__ = wx._core.__DocFilter(globals()) 
-wxEVT_DYNAMIC_SASH_SPLIT = _gizmos.wxEVT_DYNAMIC_SASH_SPLIT
-wxEVT_DYNAMIC_SASH_UNIFY = _gizmos.wxEVT_DYNAMIC_SASH_UNIFY
 DS_MANAGE_SCROLLBARS = _gizmos.DS_MANAGE_SCROLLBARS
 DS_DRAG_CORNER = _gizmos.DS_DRAG_CORNER
+wxEVT_DYNAMIC_SASH_SPLIT = _gizmos.wxEVT_DYNAMIC_SASH_SPLIT
+wxEVT_DYNAMIC_SASH_UNIFY = _gizmos.wxEVT_DYNAMIC_SASH_UNIFY
 class DynamicSashSplitEvent(_core.CommandEvent):
     """Proxy of C++ DynamicSashSplitEvent class"""
     def __repr__(self):

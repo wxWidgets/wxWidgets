@@ -3397,7 +3397,7 @@ class MDIParentFrame(Frame):
         return _windows_.MDIParentFrame_SetToolBar(*args, **kwargs)
 
     def Tile(*args, **kwargs):
-        """Tile(self)"""
+        """Tile(self, int orient=HORIZONTAL)"""
         return _windows_.MDIParentFrame_Tile(*args, **kwargs)
 
 
