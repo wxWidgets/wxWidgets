@@ -3440,7 +3440,7 @@ void wxListMainWindow::SetFocus()
 
     wxWindow *oldFocus = FindFocus();
     
-    if ( oldFocus->GetParent() == this )
+    if ( oldFocus && oldFocus->GetParent() == this )
     {
         wxWindow::SetFocus();
     }
