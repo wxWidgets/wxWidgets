@@ -299,10 +299,10 @@ public:
     virtual bool Read(istream& str);
     virtual bool Write(ostream& str) const;
 
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream &str) const;
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
 
     virtual wxString GetType() const { return "long"; };
 
@@ -350,7 +350,7 @@ bool wxVariantDataLong::Read(istream& str)
     return TRUE;
 }
 
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
 bool wxVariantDataLong::Write(wxOutputStream& str) const
 {
     str << m_value;
@@ -362,7 +362,7 @@ bool wxVariantDataLong::Read(wxInputStream& str)
    str >> m_value;
    return TRUE;
 }
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
 
 bool wxVariantDataLong::Read(wxString& str)
 {
@@ -390,10 +390,10 @@ public:
     virtual bool Write(ostream& str) const;
     virtual bool Write(wxString& str) const;
     virtual bool Read(istream& str);
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream &str) const;
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
     virtual wxString GetType() const { return "double"; };
 
 protected:
@@ -440,7 +440,7 @@ bool wxVariantDataReal::Read(istream& str)
     return TRUE;
 }
 
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
 bool wxVariantDataReal::Write(wxOutputStream& str) const
 {
     str << m_value;
@@ -452,7 +452,7 @@ bool wxVariantDataReal::Read(wxInputStream& str)
     str >> (float&)m_value;
     return TRUE;
 }
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
 
 bool wxVariantDataReal::Read(wxString& str)
 {
@@ -480,10 +480,10 @@ public:
     virtual bool Write(wxString& str) const;
     virtual bool Read(wxString& str);
     virtual bool Read(istream& str);
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream& str) const;
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
     virtual wxString GetType() const { return "bool"; };
 
 protected:
@@ -531,7 +531,7 @@ bool wxVariantDataBool::Read(istream& WXUNUSED(str))
     return FALSE;
 }
 
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
 bool wxVariantDataBool::Write(wxOutputStream& str) const
 {
     str << (char)m_value;
@@ -543,7 +543,7 @@ bool wxVariantDataBool::Read(wxInputStream& str)
     str >> (char&)m_value;
     return TRUE;
 }
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
 
 bool wxVariantDataBool::Read(wxString& str)
 {
@@ -571,10 +571,10 @@ public:
     virtual bool Write(ostream& str) const;
     virtual bool Read(wxString& str);
     virtual bool Write(wxString& str) const;
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream& str) const;
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
     virtual wxString GetType() const { return "char"; };
 
 protected:
@@ -622,7 +622,7 @@ bool wxVariantDataChar::Read(istream& WXUNUSED(str))
     return FALSE;
 }
 
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
 bool wxVariantDataChar::Write(wxOutputStream& str) const
 {
     str << m_value;
@@ -634,7 +634,7 @@ bool wxVariantDataChar::Read(wxInputStream& str)
     str >> m_value;
     return TRUE;
 }
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
 
 bool wxVariantDataChar::Read(wxString& str)
 {
@@ -671,10 +671,10 @@ public:
     virtual bool Read(wxString& str);
     virtual bool Write(wxString& str) const;
     virtual bool Read(istream& str);
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream& str) const;
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
     virtual wxString GetType() const { return "string"; };
 
 protected:
@@ -717,7 +717,7 @@ bool wxVariantDataString::Read(istream& str)
     return TRUE;
 }
 
-#if wxUSE_STREAM
+#if wxUSE_STREAMS
 bool wxVariantDataString::Write(wxOutputStream& str) const
 {
     str << (const char*) m_value;
@@ -729,7 +729,7 @@ bool wxVariantDataString::Read(wxInputStream& str)
     str >> m_value;
     return TRUE;
 }
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS
 
 bool wxVariantDataString::Read(wxString& str)
 {
