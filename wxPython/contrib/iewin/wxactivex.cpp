@@ -985,7 +985,7 @@ void wxActiveX::OnSize(wxSizeEvent& event)
 
 void wxActiveX::OnPaint(wxPaintEvent& event)
 {
-	wxLogTrace(wxT("repainting activex win"));
+//	wxLogTrace(wxT("repainting activex win"));
 	wxPaintDC dc(this);
 	dc.BeginDrawing();
 	int w, h;
@@ -1020,12 +1020,12 @@ void wxActiveX::OnMouse(wxMouseEvent& event)
 {
 	if (m_oleObjectHWND == NULL)
     {
-        wxLogTrace(wxT("no oleInPlaceObject"));
+//        wxLogTrace(wxT("no oleInPlaceObject"));
         event.Skip();
         return;
     }
 
-	wxLogTrace(wxT("mouse event"));
+//	wxLogTrace(wxT("mouse event"));
 	UINT msg = 0;
 	WPARAM wParam = 0;
 	LPARAM lParam = 0;
@@ -1068,18 +1068,18 @@ void wxActiveX::OnMouse(wxMouseEvent& event)
 	wxString log;
 	if (msg == 0)
     {
-        wxLogTrace(wxT("no message"));
+//        wxLogTrace(wxT("no message"));
         event.Skip(); return;
     };
 
 	if (!::SendMessage(m_oleObjectHWND, msg, wParam, lParam))
     {
-        wxLogTrace(wxT("msg not delivered"));
+//        wxLogTrace(wxT("msg not delivered"));
         event.Skip();
         return;
     };
 
-	wxLogTrace(wxT("msg sent"));
+//	wxLogTrace(wxT("msg sent"));
 }
 
 long wxActiveX::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)

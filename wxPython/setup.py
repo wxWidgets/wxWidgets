@@ -64,7 +64,7 @@ BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
                    # to be loaded from a DLL and to be used from Python.
 
                    # Internet Explorer wrapper (experimental)
-BUILD_IEWIN = 0 #(os.name == 'nt')
+BUILD_IEWIN = (os.name == 'nt')
 
 
 CORE_ONLY = 0      # if true, don't build any of the above
@@ -996,7 +996,7 @@ if BUILD_STC:
     else:
         STC_H = opj(WXPREFIX, 'include/wx/stc')
 
-## NOTE: need to add this to the stc.bkl...
+## NOTE: need to add something like this to the stc.bkl...
 
 ##         # Check if gen_iface needs to be run for the wxSTC sources
 ##         if (newer(opj(CTRB_SRC, 'stc/stc.h.in'),     opj(CTRB_INC, 'stc/stc.h'  )) or
@@ -1048,7 +1048,7 @@ if BUILD_IEWIN:
                             USE_SWIG, swig_force, swig_args, swig_deps)
 
 
-    ext = Extension('iewinc', ['%s/IEHtmlWin.cpp' % location,
+    ext = Extension('_iewin', ['%s/IEHtmlWin.cpp' % location,
                                '%s/wxactivex.cpp' % location,
                              ] + swig_sources,
 

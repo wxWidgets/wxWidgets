@@ -14,31 +14,22 @@
 %module iewin
 
 %{
-#include "wxPython.h"
+#include "wx/wxPython/wxPython.h"
+#include "wx/wxPython/pyclasses.h"
+#include "wx/wxPython/pyistream.h"    
+
 #include "IEHtmlWin.h"
-#include "pyistream.h"
 %}
 
 //---------------------------------------------------------------------------
 
-%include typemaps.i
-%include my_typemaps.i
+%import core.i
+%pythoncode { wx = core }
 
-%extern wx.i
-%extern windows.i
-%extern _defs.i
-%extern misc.i
-%extern events.i
-%extern streams.i
+MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
 
-%pragma(python) code = "import wx"
+%include _iewin_rename.i
 
-//---------------------------------------------------------------------------
-
-%{
-    // Put some wx default wxChar* values into wxStrings.
-    DECLARE_DEF_STRING(PanelNameStr);
-%}
 
 //---------------------------------------------------------------------------
 
@@ -62,25 +53,15 @@ enum {
 };
 
 
-%pragma(python) code = "
-def EVT_MSHTML_BEFORENAVIGATE2(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2, func)
-
-def EVT_MSHTML_NEWWINDOW2(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_MSHTML_NEWWINDOW2, func)
-
-def EVT_MSHTML_DOCUMENTCOMPLETE(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE, func)
-
-def EVT_MSHTML_PROGRESSCHANGE(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_MSHTML_PROGRESSCHANGE, func)
-
-def EVT_MSHTML_STATUSTEXTCHANGE(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_MSHTML_STATUSTEXTCHANGE, func)
-
-def EVT_MSHTML_TITLECHANGE(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_MSHTML_TITLECHANGE, func)
-"
+%pythoncode {
+    
+EVT_MSHTML_BEFORENAVIGATE2      = wx.PyEventBinder(wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2, 1)
+EVT_MSHTML_NEWWINDOW2           = wx.PyEventBinder(wxEVT_COMMAND_MSHTML_NEWWINDOW2, 1)
+EVT_MSHTML_DOCUMENTCOMPLETE     = wx.PyEventBinder(wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE, 1)
+EVT_MSHTML_PROGRESSCHANGE       = wx.PyEventBinder(wxEVT_COMMAND_MSHTML_PROGRESSCHANGE, 1)
+EVT_MSHTML_STATUSTEXTCHANGE     = wx.PyEventBinder(wxEVT_COMMAND_MSHTML_STATUSTEXTCHANGE, 1)
+EVT_MSHTML_TITLECHANGE          = wx.PyEventBinder(wxEVT_COMMAND_MSHTML_TITLECHANGE, 1)
+}
 
 //---------------------------------------------------------------------------
 
@@ -92,9 +73,11 @@ enum wxIEHtmlRefreshLevel {
 };
 
 
-class wxIEHtmlWin : public wxWindow /* wxActiveX */
+class wxIEHtmlWin : public wxWindow /* wxActiveX */ 
 {
 public:
+    %addtofunc wxIEHtmlWin      "self._setOORInfo(self)"
+    
     wxIEHtmlWin(wxWindow * parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -105,13 +88,13 @@ public:
     bool LoadString(wxString html);
     bool LoadStream(wxInputStream *is);
 
-    %pragma(python) addtoclass = "Navigate = LoadUrl"
+    %pythoncode { Navigate = LoadUrl }
 
     void SetCharset(wxString charset);
     void SetEditMode(bool seton);
     bool GetEditMode();
-    wxString GetStringSelection(bool asHTML = FALSE);
-    wxString GetText(bool asHTML = FALSE);
+    wxString GetStringSelection(bool asHTML = False);
+    wxString GetText(bool asHTML = False);
 
     bool GoBack();
     bool GoForward();
@@ -125,12 +108,4 @@ public:
 
 //---------------------------------------------------------------------------
 
-%init %{
 
-%}
-
-//----------------------------------------------------------------------
-
-%pragma(python) include="_iewinextras.py";
-
-//---------------------------------------------------------------------------
