@@ -201,6 +201,18 @@ directories which each essentially contain a suitable makefile.
 Calling `make' now should start a compile run which hopefully ends
 with a library being placed in the lib subdirectory.
 
+Note however, that the auto-generated .d files (containing depency
+information) use a mixture of "/" and "\" path separators, that
+confuses many make versions. Therefore you'll often get error messages
+indicating that some file with a random character in place of a path
+separator cannot be found on subsequent calls to make. The only solution
+currently available for this requires "sed": Run
+ for %1 in (*.d) do @(sed "s/\//\\/g" < %1 > dep.sed && copy dep.sed %1)
+under "cmd" in the build directory (or a suitable variant of it under a 
+unix like shell). Note however, that a new call to make will generate
+new .d files, so you will likely have to run that between any two calls
+to make.
+
 Now you can change in the samples subdirectory and call make to compile
 all samples, however currently not all will work on OS/2, so you might
 prefer to change into the directory of a specific sample
