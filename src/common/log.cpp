@@ -112,23 +112,9 @@ static inline bool IsLoggingEnabled()
 // generic log function
 void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
 {
-<<<<<<< log.cpp
-  if ( wxLog::GetActiveTarget() != NULL ) {
-    wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
-
-    va_list argptr;
-    va_start(argptr, szFormat);
-    wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
-    va_end(argptr);
-=======
     if ( IsLoggingEnabled() ) {
         wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
->>>>>>> 1.93.2.3
 
-<<<<<<< log.cpp
-    wxLog::OnLog(level, s_szBuf, time(NULL));
-  }
-=======
         va_list argptr;
         va_start(argptr, szFormat);
         wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
@@ -136,7 +122,6 @@ void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
 
         wxLog::OnLog(level, s_szBuf, time(NULL));
     }
->>>>>>> 1.93.2.3
 }
 
 #define IMPLEMENT_LOG_FUNCTION(level)                               \
