@@ -171,10 +171,7 @@ wxToolBar *wxXmlResource::LoadToolBar(wxWindow *parent, const wxString& name)
 
 wxDialog *wxXmlResource::LoadDialog(wxWindow *parent, const wxString& name)
 {
-    wxDialog *dialog = new wxDialog;
-    if (!LoadDialog(dialog, parent, name))
-        { delete dialog; return NULL; }
-    else return dialog;
+    return (wxDialog*)CreateResFromNode(FindResource(name, wxT("wxDialog")), parent, NULL);
 }
 
 bool wxXmlResource::LoadDialog(wxDialog *dlg, wxWindow *parent, const wxString& name)
