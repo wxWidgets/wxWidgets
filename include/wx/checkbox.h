@@ -61,7 +61,7 @@ public:
     wxCheckBoxBase() { }
 
     // set/get the checked status of the listbox
-    virtual void SetValue(const bool value) = 0;
+    virtual void SetValue(bool value) = 0;
     virtual bool GetValue() const = 0;
 
     bool IsChecked() const
