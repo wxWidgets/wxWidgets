@@ -45,15 +45,14 @@ and its make.exe).
 -> type: cd c:\wxWin\src\msw
 -> type: make -f makefile.g95
 
-II) Unix using plain makefiles.
-----------------------------------------
+II) GTK port on Unix using plain makefiles.
+------------------------------------------
 
 Set WXWIN environment variable to the base directory such
 as ~/wxWindows
 
 -> type: export WXWIN=~/wxWindows
-
-Edit ~/wxWindows/src/make.env as you wish.
+-> edit ~/wxWindows/src/gtk.env as you wish.
 -> type: cd ~/wxWindows/src/gtk
 -> type: cp ./setup0.h setup.h
 -> type: make

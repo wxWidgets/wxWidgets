@@ -343,7 +343,7 @@
  * Use standard C++ streams if 1. If 0, use wxWin
  * streams implementation.
  */
-#define wxUSE_STD_IOSTREAM  1
+#define wxUSE_STD_IOSTREAM  0
 /*
  * wxLibrary class
  */

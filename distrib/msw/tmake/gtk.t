@@ -86,7 +86,7 @@ HTMLOBJS = \
 GTKOBJS     = \
 		#$ ExpandList("WXGTKOBJS");
 
-UINXOBJS     = \
+UNIXOBJS     = \
 		#$ ExpandList("WXUNIXOBJS");
 
 ZLIBOBJS    = \

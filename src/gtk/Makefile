@@ -216,7 +216,7 @@ GTKOBJS     = \
 		$(GTKDIR)/win_gtk.$(OBJSUFF) \
 		$(GTKDIR)/window.$(OBJSUFF)
 
-UINXOBJS     = \
+UNIXOBJS     = \
 		$(UNIXDIR)/gsocket.$(OBJSUFF) \
 		$(UNIXDIR)/threadpsx.$(OBJSUFF) \
 		$(UNIXDIR)/utilsunx.$(OBJSUFF)

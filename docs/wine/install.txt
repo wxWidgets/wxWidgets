@@ -28,22 +28,47 @@ change disables the Windows native calling convention.
 * The most simple case
 -----------------------
 
-If you compile wxWindows on Unix for the first time and don't like to read 
+If you compile wxWindows on Linux for the first time and don't like to read 
 install instructions just do (in the base dir):
 
-./configure --with-wine
-make
-su <type root password>
-make install
-ldconfig
-exit
+> ./configure --with-wine
+> make
+> su <type root password>
+> make install
+> ldconfig
+> exit
+
+On all variants of Unix except Linux (and maybe except *BSD), shared libraries 
+are not supportet out of the box due to the utter stupidity of libtool, so you'll 
+have to do this to get shared library support:
+
+> ./configure --with-wine --disable-static --enable-shared
+
+Then you'll have to edit the wrongly created libtool script. There are two
+important entries with respect to shared library creation, which are
+
+  archive_cmds="\$LD -shared ....
+  archive_expsym_cmds="\$LD -shared ....
+  
+which should be something like
+
+  archive_cmds="\$CC -shared ....
+  archive_expsym_cmds="\$CC -shared ....
+  
+Afterwards you can continue with
+
+> make
+> su <type root password>
+> make install
+> ldconfig
+> exit
 
 If you want to remove wxWindows on Unix you can do this:
 
-su <type root password>
-make uninstall
-ldconfig
-exit
+> su <type root password>
+> make uninstall
+> ldconfig
+> exit
 
 * The expert case
 -----------------

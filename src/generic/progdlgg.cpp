@@ -41,7 +41,7 @@
     #include "wx/intl.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
-#   include "wx/timer.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/generic/progdlgg.h"

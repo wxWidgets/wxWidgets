@@ -1,8 +1,10 @@
 
-27th July '99: Eight wxGTK 2.1 snapshot released
+29th July '99: Eight wxGTK 2.1 snapshot released
 
 The new makefile system is not able to produce shared libraries 
-on Unix with the exception of Linux - libtool is really great...
+on Unix with the exception of Linux - libtool is really great.
+Therefore, the build system defaults to static libraries on
+anything but Linux for now.
 
 Work in wxPen, wxBrush and wxDC to match wxMSW more exactly and
 to implement missing feature etc.
