@@ -1,181 +1,353 @@
+#----------------------------------------------------------------------
+# Name:        wxMimeTypesManager
+# Purpose:     Demonstrate use of wx.MimeTypesManager, wx.FileType
+#
+# Author:      Jeff Grimmett (grimmtoo@softhome.net), adapted from original
+#              .wdr-derived demo
+#
+# Created:     12/31/03
+# RCS-ID:      $Id$
+# Copyright:   
+# Licence:     wxWindows license
+#----------------------------------------------------------------------
+#
 
-import pprint, string, os
-from wxPython.wx import *
-from mimetypes_wdr import *
-from Main import opj
+
+import  pprint
+import  wx
+import  images
 
 #----------------------------------------------------------------------------
 
-# WDR: classes
+# A convenient wrapper around wx.TextCtrl to give it a spiffy label.
+class ExtStr(wx.Panel):
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent, -1)
+        sizer = wx.StaticBoxSizer(wx.StaticBox(self, -1, 'Extension'), wx.HORIZONTAL)
+        self.ctl = wx.TextCtrl(self, -1, value="wav", style = wx.TE_PROCESS_ENTER )
+        sizer.Add(self.ctl, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 3)
+        self.Enable(True)
 
-class MimeTypesTestPanel(wxPanel):
-    def __init__(self, parent, id,
-        pos = wxDefaultPosition, size = wxDefaultSize,
-        style = wxTAB_TRAVERSAL ):
-        wxPanel.__init__(self, parent, id, pos, size, style)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
 
-        MakeMimeTypesTestPanel( self, True )
+    def Enable(self, value):
+        self.ctl.Enable(value)
+        
+    def SetValue(self, value):
+        self.ctl.SetValue(value)
+    
+    def GetValue(self):
+        return(self.ctl.GetValue())
+        
+ 
+class MimeTypesDemoPanel(wx.Panel):
+    def __init__(self, parent, log):
+        
+        self.log = log
+        
+        wx.Panel.__init__(self, parent, -1)
 
-        # WDR: handler declarations for MimeTypesTestPanel
-        EVT_LISTBOX(self, ID_LISTBOX, self.OnListbox)
-        EVT_BUTTON(self, ID_LOOKUP_BTN, self.OnLookup)
+        # Contains everything
+        tsizer = wx.BoxSizer(wx.VERTICAL)
+        
+        # Contains upper controls
+        usizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.GetInputText().SetValue("wav")
+        # A little fancy stuff to make things align right.
+        self.ext = ExtStr(self)
+        usizer.Add(self.ext, 0, wx.ALL | wx.ALIGN_TOP, 4)
+        self.ext.Bind(wx.EVT_TEXT_ENTER, self.OnLookup)
+
+        # Select how to look it up
+        self.how = wx.RadioBox(
+                    self, -1, "Lookup method", choices=['By extension', 'By MIME type'], 
+                    majorDimension=2, style=wx.RA_SPECIFY_COLS
+                    )
+        usizer.Add(self.how, 0, wx.ALL | wx.ALIGN_TOP, 4)
+        self.how.SetSelection(0)
+
+        # Trigger a lookup (hitting ENTER in the text ctrl will do the same thing)
+        self.go = wx.Button(self, -1, "Go get it!")
+        usizer.Add(self.go, 0, wx.ALL | wx.ALIGN_CENTER, 4)
+        self.Bind(wx.EVT_BUTTON, self.OnLookup, self.go)
+
+        # StaticBox with larger label than usual
+        lbox = wx.StaticBox(self, -1, 'wx.FileType')
+        lbox.SetFont(
+            wx.Font(
+                self.GetFont().GetPointSize() * 2, 
+                self.GetFont().GetFamily(),
+                self.GetFont().GetStyle(),
+                wx.BOLD
+                ))
+
+        lsizer = wx.StaticBoxSizer(lbox, wx.HORIZONTAL)
+
+        # Contains the wx.FileType info
+        llsizer = wx.GridBagSizer(2, 2)
+        llsizer.AddGrowableCol(2)
+
+        # This will be used for all of the labels that follow (bold label)
+        bfont = wx.Font(
+                    self.GetFont().GetPointSize(), 
+                    self.GetFont().GetFamily(),
+                    self.GetFont().GetStyle(),
+                    wx.BOLD
+                    )
+        
+        #------- Icon info
+
+        t = wx.StaticText(self, -1, 'GetIconInfo: ', style = wx.ALIGN_RIGHT )
+        t.SetFont(bfont)
+        llsizer.Add(t, (0, 0), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.icon = wx.StaticBitmap(self, -1, images.getNoIconBitmap())
+        llsizer.Add(self.icon, (0, 1), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.iconsource = wx.TextCtrl(self, -1, value="", style = wx.TE_READONLY )
+        llsizer.Add(self.iconsource, (0, 2), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.iconoffset = wx.TextCtrl(self, -1, value="", style = wx.TE_READONLY )
+        llsizer.Add(self.iconoffset, (0, 3), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        #------- MIME Type
+
+        t = wx.StaticText(self, -1, 'GetMimeType: ', style = wx.ALIGN_RIGHT )
+        t.SetFont(bfont)
+        llsizer.Add(t, (1, 0), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.mimetype = wx.TextCtrl(self, -1, value="", style = wx.TE_READONLY )
+        llsizer.Add(self.mimetype, (1, 1), (1, 3), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        #------- MIME Types
+
+        t = wx.StaticText(self, -1, 'GetMimeTypes: ', style = wx.ALIGN_RIGHT )
+        t.SetFont(bfont)
+        llsizer.Add(t, (2, 0), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.mimetypes = wx.TextCtrl(self, -1, value="", style = wx.TE_READONLY )
+        llsizer.Add(self.mimetypes, (2, 1), (1, 3), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        #------- Extensions
+
+        t = wx.StaticText(self, -1, 'GetExtensions: ', style = wx.ALIGN_RIGHT )
+        t.SetFont(bfont)
+        llsizer.Add(t, (3, 0), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.extensions = wx.TextCtrl(self, -1, value="", style = wx.TE_READONLY )
+        llsizer.Add(self.extensions, (3, 1), (1, 3), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        #------- Description
+
+        t = wx.StaticText(self, -1, 'GetDescription: ', style = wx.ALIGN_RIGHT )
+        t.SetFont(bfont)
+        llsizer.Add(t, (4, 0), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.description = wx.TextCtrl(self, -1, value="", style = wx.TE_READONLY)
+        llsizer.Add(self.description, (4, 1), (1, 3), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        #------- Open command
+
+        t = wx.StaticText(self, -1, 'GetOpenCommand: ', style = wx.ALIGN_RIGHT )
+        t.SetFont(bfont)
+        llsizer.Add(t, (5, 0), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.opencommand = wx.TextCtrl(self, -1, value="", style = wx.TE_READONLY )
+        llsizer.Add(self.opencommand, (5, 1), (1, 3), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        #------- Print command
+
+        t = wx.StaticText(self, -1, 'GetPrintCommand: ', style = wx.ALIGN_RIGHT )
+        t.SetFont(bfont)
+        llsizer.Add(t, (6, 0), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.printcommand = wx.TextCtrl(self, -1, value="", style = wx.TE_READONLY )
+        llsizer.Add(self.printcommand, (6, 1), (1, 3), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        #------- All commands
+
+        t = wx.StaticText(self, -1, 'GetAllCommands: ', style = wx.ALIGN_RIGHT )
+        t.SetFont(bfont)
+        llsizer.Add(t, (7, 0), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
+
+        self.allcommands = wx.TextCtrl(self, -1, value="", style = wx.TE_READONLY | wx.TE_DONTWRAP | wx.TE_MULTILINE )
+
+        # Set the default height to be smaller than normal (for
+        # multi-line) so the sizer can then expand it to whatever
+        # space is available
+        self.allcommands.SetSize((-1, 20))
+        
+        llsizer.Add(self.allcommands, (7, 1), (1, 3), wx.ALL | wx.GROW | wx.ALIGN_CENTER, 2)
+
+        # Tell the sizer to expand this row as needed
+        llsizer.AddGrowableRow(7)
+        
+        #----------------------------------------------------------------------------
+
+        lrsizer = wx.StaticBoxSizer(wx.StaticBox(self, -1, 'Known MIME types'), wx.HORIZONTAL)
+        
+        #------- List box with known MIME types
+        self.mimelist = wx.ListBox(self, -1, choices=[], style = wx.LB_SINGLE | wx.LB_SORT)
+        lrsizer.Add(self.mimelist, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
+        self.Bind(wx.EVT_LISTBOX, self.OnListbox, self.mimelist)
+
+        #----------------------------------------------------------------------------
+
+        lsizer.Add(llsizer, 1, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
+        lsizer.Add(lrsizer, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
+
+        #----------------------------------------------------------------------------
+
+        tsizer.Add(usizer, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
+        tsizer.Add(lsizer, 1, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
+
+        #----------------------------------------------------------------------------
+
+        self.SetSizer(tsizer)
+        tsizer.Fit(self)
+        
+        # Populate the Known MIME types list with what is in the database
+        mtypes = wx.TheMimeTypesManager.EnumAllFileTypes()
+        for mt in mtypes:
+            self.mimelist.Append(mt)
+
+        # Do a lookup of *.wav for a starting position
         self.OnLookup()
 
-        mimetypes = wxTheMimeTypesManager.EnumAllFileTypes()
-        for mt in mimetypes:
-            self.GetListbox().Append(mt)
-
-
-
-    # WDR: handler implementations for MimeTypesTestPanel
-
+    # Grab the selection from the listbox, push that into
+    # the text box at top, select 'MIME', and then look it up.
     def OnListbox(self, event):
         mimetype = event.GetString()
-        self.GetInputText().SetValue(mimetype)
-        self.GetMimeBtn().SetValue(True)
-        self.GetExtensionBtn().SetValue(False)
+        self.ext.SetValue(mimetype)
+        self.how.SetSelection(1)
         self.OnLookup()
 
-
+    # Look up a given file extension or MIME type.
     def OnLookup(self, event=None):
-        txt = self.GetInputText().GetValue()
-        if self.GetMimeBtn().GetValue():
-            fileType = wxTheMimeTypesManager.GetFileTypeFromMimeType(txt)
+        txt = self.ext.GetValue()
+
+        # For MIME lookups
+        if self.how.GetSelection() == 1:
+            fileType = wx.TheMimeTypesManager.GetFileTypeFromMimeType(txt)
             msg = "Mime type"
+
+            # Select the entered value in the list
+            if fileType:
+                if self.mimelist.FindString(txt) != -1:
+                    self.mimelist.SetSelection(self.mimelist.FindString(txt))
+        
+        # Must be an extension lookup
         else:
-            fileType = wxTheMimeTypesManager.GetFileTypeFromExtension(txt)
+            fileType = wx.TheMimeTypesManager.GetFileTypeFromExtension(txt)
             msg = "File extension"
+
+            # Select the entered value in the list
+            if fileType:
+                if self.mimelist.FindString(str(fileType.GetMimeType())) != -1:
+                    # Using CallAfter to ensure that GUI is ready before trying to
+                    # select it (otherwise, it's selected but not visible)
+                    wx.CallAfter(self.mimelist.SetSelection, self.mimelist.FindString(str(fileType.GetMimeType())))
+
+
         if fileType is None:
-            wxMessageBox(msg + " not found.", "Oops!")
+            wx.MessageBox(msg + " not found.", "Oops!")
         else:
             self.Update(fileType)
 
-
-
+    # Populate the wx.FileType fields with actual values.
     def Update(self, ft):
-        #icon = ft.GetIcon()
+
+        #------- Icon info
         info = ft.GetIconInfo()
+
         if info is None:
-            bmp = MyBitmapsFunc(0)
-            ##print bmp.Ok(), bmp.GetWidth(), bmp.GetHeight()
-            self.GetIconBmp().SetBitmap(bmp)
-            self.GetIconFileTxt().SetValue("")
-            self.GetIconIndexTxt().SetValue("")
+            bmp = images.getNoIconBitmap()
+            self.icon.SetBitmap(bmp)
+            self.iconsource.SetValue("")
+            self.iconoffset.SetValue("")
         else:
             icon, file, idx = info
-            #bmp = wxBitmapFromIcon(icon)
-            #self.GetIconBmp().SetBitmap(bmp)
-            self.GetIconBmp().SetIcon(icon)
-            self.GetIconFileTxt().SetValue(file)
-            self.GetIconIndexTxt().SetValue(str(idx))
+            if icon.Ok():
+                self.icon.SetIcon(icon)
+            else:
+                bmp = images.getNoIconBitmap()
+                self.icon.SetBitmap(bmp)                
+            self.iconsource.SetValue(file)
+            self.iconoffset.SetValue(str(idx))
 
-        self.GetMimeTypeTxt().SetValue(str(ft.GetMimeType()))
-        self.GetMimeTypesTxt().SetValue(str(ft.GetMimeTypes()))
-        self.GetExtensionsTxt().SetValue(str(ft.GetExtensions()))
-        self.GetDescriptionTxt().SetValue(str(ft.GetDescription()))
+        #------- MIME type
+        self.mimetype.SetValue(str(ft.GetMimeType()))
+        #------- MIME types
+        self.mimetypes.SetValue(str(ft.GetMimeTypes()))
+        #------- Associated extensions
+        self.extensions.SetValue(str(ft.GetExtensions()))
+        #------- Description of file type
+        self.description.SetValue(str(ft.GetDescription()))
 
+        #------- Prep a fake command line command
         extList = ft.GetExtensions()
+
         if extList:
             ext = extList[0]
             if ext[0] == ".": ext = ext[1:]
         else:
             ext = ""
+
         filename = "SPAM" + "." + ext
         mime = ft.GetMimeType() or ""
+
+        #------- OPEN command
         cmd = ft.GetOpenCommand(filename, mime)
-        self.GetOpenCmdTxt().SetValue(str(cmd))
+        self.opencommand.SetValue(str(cmd))
 
+        #------- PRINT command
         cmd = ft.GetPrintCommand(filename, mime)
-        self.GetPrintCmdTxt().SetValue(str(cmd))
+        self.printcommand.SetValue(str(cmd))
 
+        #------- All commands
         all = ft.GetAllCommands(filename, mime)
+        
         if all is None:
-            self.GetAllCmdsTxt().SetValue("")
+            self.allcommands.SetValue("")
         else:
             verbs, commands = all
             text = pprint.pformat(map(None, verbs, commands))
-            self.GetAllCmdsTxt().SetValue(text)
-
-
-    # WDR: methods for MimeTypesTestPanel
-
-    def GetListbox(self):
-        return self.FindWindowById(ID_LISTBOX)
-
-    def GetIconIndexTxt(self):
-        return self.FindWindowById(ID_ICON_INDEX_TXT)
-
-    def GetIconFileTxt(self):
-        return self.FindWindowById(ID_ICON_FILE_TXT)
-
-    def GetMimeBtn(self):
-        return self.FindWindowById(ID_MIME_BTN)
-
-    def GetExtensionBtn(self):
-        return self.FindWindowById(ID_EXTENSION_Btn)
-
-    def GetAllCmdsTxt(self):
-        return self.FindWindowById(ID_ALL_CMDS_TXT)
-
-    def GetPrintCmdTxt(self):
-        return self.FindWindowById(ID_PRINT_CMD_TXT)
-
-    def GetOpenCmdTxt(self):
-        return self.FindWindowById(ID_OPEN_CMD_TXT)
-
-    def GetDescriptionTxt(self):
-        return self.FindWindowById(ID_DESCRIPTION_TXT)
-
-    def GetExtensionsTxt(self):
-        return self.FindWindowById(ID_EXTENSIONS_TXT)
-
-    def GetMimeTypesTxt(self):
-        return self.FindWindowById(ID_MIME_TYPES_TXT)
-
-    def GetMimeTypeTxt(self):
-        return self.FindWindowById(ID_MIME_TYPE_TXT)
-
-    def GetIconBmp(self):
-        return self.FindWindowById(ID_ICON_BMP)
-
-    def GetInputText(self):
-        return self.FindWindowById(ID_INPUT_TEXT)
-
-
-
-
+            self.allcommands.SetValue(text)
+            
 
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = MimeTypesTestPanel(nb, -1)
+    win = MimeTypesDemoPanel(nb, log)
     return win
-
 
 #----------------------------------------------------------------------
 
-
-
 overview = """\
+
+The <b>wx.MimeTypesManager</b> class allows the application to retrieve the 
+information about all known MIME types from a system-specific location and the 
+filename extensions to the MIME types and vice versa. After initialization the 
+methods <b>GetFileTypeFromMimeType()</b> and <b>GetFileTypeFromExtension()</b> 
+may be called: they will return a <b>wx.FileType</b> object which may be further 
+queried for file description, icon and other attributes.
+
+A global instance of <b>wx.MimeTypesManager</b> is always available as
+<b>wx.TheMimeTypesManager</b>. It is recommended to use this instance instead 
+of creating your own because gathering MIME information may take quite a long 
+on Unix systems.
+
+This demo shows how to use wx.TheMimeTypesManager to list all known MIME types
+and retrieve that information as a wx.FileType from either an extension or
+MIME type.
+
+For further information please consult the wxWindows documentation for
+<b>wx.MimeTypesManager</b> and <b>wx.FileType</b>.
+
 """
 
-
-
-
-import mimetypes_wdr
-import images
-
-def MyBitmapsFunc( index ):
-    return images.getNoIconBitmap()
-
-mimetypes_wdr.MyBitmapsFunc = MyBitmapsFunc
-
-
-
-
-
+#----------------------------------------------------------------------
 
 if __name__ == '__main__':
     import sys,os
