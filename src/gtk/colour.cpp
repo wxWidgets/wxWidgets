@@ -217,7 +217,6 @@ void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
 {
     AllocExclusive();
     
-    m_refData = new wxColourRefData();
     M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
     M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
     M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
