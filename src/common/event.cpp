@@ -827,8 +827,6 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
                 return !event.GetSkipped();
             }
         }
-
-        i++;
     }
 
     return FALSE;
