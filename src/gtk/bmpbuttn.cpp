@@ -149,7 +149,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
         OnSetBitmap();
     }
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
+    gtk_signal_connect_after( GTK_OBJECT(m_widget), "clicked",
       GTK_SIGNAL_FUNC(gtk_bmpbutton_clicked_callback), (gpointer*)this );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "enter",

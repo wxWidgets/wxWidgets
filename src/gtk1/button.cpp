@@ -145,7 +145,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
+    gtk_signal_connect_after( GTK_OBJECT(m_widget), "clicked",
       GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
 
     m_parent->DoAddChild( this );
