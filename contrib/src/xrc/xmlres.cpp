@@ -713,6 +713,7 @@ void wxXmlResourceHandler::AddStyle(const wxString& name, int value)
 
 void wxXmlResourceHandler::AddWindowStyles()
 {
+    XRC_ADD_STYLE(wxCLIP_CHILDREN);
     XRC_ADD_STYLE(wxSIMPLE_BORDER);
     XRC_ADD_STYLE(wxSUNKEN_BORDER);
     XRC_ADD_STYLE(wxDOUBLE_BORDER);

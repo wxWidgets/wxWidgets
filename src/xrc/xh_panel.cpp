@@ -30,7 +30,7 @@ wxPanelXmlHandler::wxPanelXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxNO_3D);
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
     XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
-    XRC_ADD_STYLE(wxCLIP_CHILDREN);
+    
     AddWindowStyles();
 }
 
