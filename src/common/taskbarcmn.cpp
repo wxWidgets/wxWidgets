@@ -13,10 +13,12 @@
 #pragma implementation "taskbar.h"
 #endif
 
-#ifdef wxHAS_TASK_BAR_ICON
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+
+#include "wx/defs.h"
+
+#ifdef wxHAS_TASK_BAR_ICON
 
 #include "wx/taskbar.h"
 
