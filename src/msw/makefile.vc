@@ -44,6 +44,7 @@ COMMDIR=$(WXDIR)\src\common
 OLEDIR=ole
 MSWDIR=$(WXDIR)\src\msw
 DOCDIR = $(WXDIR)\docs
+HTMLDIR = $(WXDIR)\src\html
 
 {..\generic}.cpp{..\generic\$D}.obj:
 	cl @<<
@@ -65,6 +66,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $<
 $(CPPFLAGS) /Fo$@ /c /Tp $<
 <<
 
+{..\html}.cpp{..\html\$D}.obj:
+	cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $<
+<<
+
 GENERICOBJS= \
   ..\generic\$D\choicdgg.obj \
   ..\generic\$D\gridg.obj \
@@ -81,7 +87,8 @@ GENERICOBJS= \
   ..\generic\$D\tabg.obj \
   ..\generic\$D\textdlgg.obj \
   ..\generic\$D\extdlgg.obj \
-  ..\generic\$D\tipdlg.obj
+  ..\generic\$D\tipdlg.obj \
+  ..\generic\$D\busyinfo.obj
 
 #  ..\generic\$D\imaglist.obj \
 #  ..\generic\$D\treectrl.obj \
@@ -170,7 +177,12 @@ COMMONOBJS = \
   ..\common\$D\dlgcmn.obj \
   ..\common\$D\wincmn.obj \
   ..\common\$D\txtstrm.obj \
-  ..\common\$D\wxchar.obj
+  ..\common\$D\wxchar.obj \
+  ..\common\$D\unzip.obj \
+  ..\common\$D\zipstream.obj \
+  ..\common\$D\filesys.obj \
+  ..\common\$D\fs_inet.obj \
+  ..\common\$D\fs_zip.obj
 
 MSWOBJS = \
   ..\msw\$D\accel.obj \
@@ -268,13 +280,34 @@ MSWOBJS = \
   ..\msw\ole\$D\dropsrc.obj \
   ..\msw\ole\$D\oleutils.obj
 
+HTMLOBJS = \
+  ..\html\$D\htmlcell.obj \
+  ..\html\$D\htmlfilter.obj \
+  ..\html\$D\htmlhelp.obj \
+  ..\html\$D\htmlhelp_io.obj \
+  ..\html\$D\htmlparser.obj \
+  ..\html\$D\htmltag.obj \
+  ..\html\$D\htmlwin.obj \
+  ..\html\$D\htmlwinparser.obj \
+  ..\html\$D\mod_fonts.obj \
+  ..\html\$D\mod_hline.obj \
+  ..\html\$D\mod_image.obj \
+  ..\html\$D\mod_layout.obj \
+  ..\html\$D\mod_links.obj \
+  ..\html\$D\mod_list.obj \
+  ..\html\$D\mod_pre.obj \
+  ..\html\$D\mod_tables.obj \
+  ..\html\$D\search.obj
+
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+# Add $(HTMLOBJS) if wanting wxHTML classes
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) 
 
 # Normal, static library
 all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg $(LIBTARGET)
 
-dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D
+dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D
+
 
 test:   $(MSWDIR)\$D\wave.obj
 test2:  ..\common\Debug\config.obj
@@ -293,6 +326,9 @@ $(GENDIR)\$D:
 
 $(OLEDIR)\$D:
     mkdir $(OLEDIR)\$D
+
+$(HTMLDIR)\$D:
+    mkdir $(HTMLDIR)\$D
 
 # wxWindows library as DLL
 dll:
@@ -398,6 +434,11 @@ $(CPPFLAGS2) /c ..\common\y_tab.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
     copy "..\common"\doslex.c "..\common"\lex_yy.c
 
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
+
+..\common\$D\unzip.obj:     ..\common\unzip.c
+        cl @<<
+$(CPPFLAGS2) /c $(COMMDIR)\unzip.c /Fo$@
+<<
 
 # Peripheral components
 
