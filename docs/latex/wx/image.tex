@@ -73,13 +73,13 @@ and forth without loss in that respect.
 
 Creates an image with the given width and height.
 
-\func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxBITMAP\_TYPE\_PNG}}
+\func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
 
 \func{}{wxImage}{\param{const wxString\& }{name}, \param{const wxString\&}{ mimetype}}
 
 Loads an image from a file.
 
-\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{long}{ type = wxBITMAP\_TYPE\_PNG}}
+\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
 
 \func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{const wxString\&}{ mimetype}}
 
@@ -105,6 +105,7 @@ Loads an image from an input stream.
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_GIF}}}{Load a GIF bitmap file.}
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PCX}}}{Load a PCX bitmap file.}
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PNM}}}{Load a PNM bitmap file.}
+\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_ANY}}}{Will try to autodetect the format.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.
