@@ -262,9 +262,17 @@ bool wxToolBar::Realize()
   if (m_tools.Number() == 0)
       return FALSE;
 
-	Rect toolbarrect = { m_y , m_x , m_y + m_height , m_x + m_width } ;
+	Point localOrigin ;
+	Rect clipRect ;
+	WindowRef window ;
+	wxWindow *win ;
+	
+	MacGetPortParams( &localOrigin , &clipRect , &window , &win ) ;
+
+	Rect toolbarrect = { m_y + localOrigin.v , m_x  + localOrigin.h , 
+		m_y + m_height + localOrigin.v  , m_x + m_width + localOrigin.h} ;
 	ControlFontStyleRec		controlstyle ;
-	WindowPtr				window = GetMacRootWindow() ;
+
 	controlstyle.flags = kControlUseFontMask ;
 	controlstyle.font = kControlFontSmallSystemFont ;
 	
@@ -493,6 +501,55 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
 void wxToolBar::OnPaint(wxPaintEvent& event)
 {
+	Point localOrigin ;
+	Rect clipRect ;
+	WindowRef window ;
+	wxWindow *win ;
+	
+	MacGetPortParams( &localOrigin , &clipRect , &window , &win ) ;
+	if ( window && win )
+	{
+		wxMacDrawingHelper help( win ) ;
+		// the mac control manager always assumes to have the origin at 0,0
+		SetOrigin( 0 , 0 ) ;
+		
+		bool			hasTabBehind = false ;
+		wxWindow* parent = GetParent() ;
+		while ( parent )
+		{
+			if( parent->MacGetWindowData() )
+			{
+				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+				break ;
+			}
+			
+			if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
+			{
+				if ( ((wxControl*)parent)->GetMacControl() )
+					SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
+				break ;
+			}
+			
+			parent = parent->GetParent() ;
+		} 
+		Rect toolbarrect = { m_y + localOrigin.v , m_x + localOrigin.h , 
+			m_y  + localOrigin.v + m_height , m_x + localOrigin.h + m_width } ;
+
+		UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+		{
+			int index = 0 ;
+			for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
+			{
+				if ( m_macToolHandles[index] )
+				{
+					UMADrawControl( (ControlHandle) m_macToolHandles[index] ) ;
+				}
+			}
+		}
+		UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+		wxDC::MacInvalidateSetup() ;
+	}
+	/*
 	WindowRef window = GetMacRootWindow() ;
 	if ( window )
 	{
@@ -539,6 +596,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 			wxDC::MacInvalidateSetup() ;
 		}
 	}
+	*/
 }
 void  wxToolBar::OnMouse( wxMouseEvent &event ) 
 {
