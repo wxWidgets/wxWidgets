@@ -260,8 +260,10 @@ protected:
                                         IgnoreListEntry *second);
 
     // for efficiency, let's sort it
+public: // FIXME: macro requires it
     WX_DEFINE_SORTED_ARRAY(IgnoreListEntry *, ArrayNamesToIgnore);
 
+protected:
     ArrayNamesToIgnore m_ignore;
 
 private:
@@ -437,6 +439,8 @@ protected:
         wxString m_type;
     };
 
+    friend class ParamInfo; // for access to TypeInfo
+
     // info abotu a function parameter
     class ParamInfo
     {
@@ -458,6 +462,7 @@ protected:
         wxString m_value;     // default value
     };
 
+public: // FIXME: macro requires it
     WX_DEFINE_ARRAY(ParamInfo *, ArrayParamInfo);
 
     // info about a function
@@ -503,6 +508,7 @@ protected:
     WX_DEFINE_ARRAY(MethodInfo *, ArrayMethodInfo);
     WX_DEFINE_ARRAY(ArrayMethodInfo *, ArrayMethodInfos);
 
+private:
     // first array contains the names of all classes we found, the second has a
     // pointer to the array of methods of the given class at the same index as
     // the class name appears in m_classes
@@ -2179,6 +2185,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.26  2003/09/29 15:18:35  MBN
+     (Blind) compilation fix for Sun compiler.
+
    Revision 1.25  2003/09/03 17:39:27  MBN
      Compilation fixes.
 
