@@ -29,6 +29,7 @@ handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or
 \twocolitem{{\bf \indexit{wxGIFHandler}}}{Only for loading, due to legal issues.}
 \twocolitem{{\bf \indexit{wxPCXHandler}}}{For loading and saving (see below).}
 \twocolitem{{\bf \indexit{wxPNMHandler}}}{For loading and saving (see below).}
+\twocolitem{{\bf \indexit{wxTIFFHandler}}}{For loading and saving.}
 \end{twocollist}
 
 When saving in PCX format, {\bf wxPCXHandler} will count the number of
@@ -91,32 +92,33 @@ Loads an image from an input stream.
 
 \docparam{height}{Specifies the height of the image.}
 
-\docparam{name}{This refers to an image filename. Its meaning is determined by the {\it type} parameter.}
+\docparam{name}{Name of the file from which to load the image.}
 
-\docparam{stream}{This refers to an input stream. Its meaning is determined by the {\it type} parameter. It is equal to loading from file except that you provide opened stream (file, HTTP or any other custom class).}
+\docparam{stream}{Opened input stream from which to load the image. Currently, the stream must support seeking.}
 
 \docparam{type}{May be one of the following:
 
 \twocolwidtha{5cm}%
 \begin{twocollist}
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_BMP}}}{Load a Windows bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PNG}}}{Load a PNG bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_JPEG}}}{Load a JPEG bitmap file.}
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_GIF}}}{Load a GIF bitmap file.}
+\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_JPEG}}}{Load a JPEG bitmap file.}
+\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PNG}}}{Load a PNG bitmap file.}
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PCX}}}{Load a PCX bitmap file.}
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PNM}}}{Load a PNM bitmap file.}
+\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_TIF}}}{Load a TIFF bitmap file.}
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_ANY}}}{Will try to autodetect the format.}
-\end{twocollist}
-
-The validity of these flags depends on the platform and wxWindows configuration.
-If all possible wxWindows settings are used, the loading a BMP (Windows bitmap) file,
-a PNG (portable network graphics) file and a JPEG file is supported on all platforms that
-implement wxImage.}
+\end{twocollist}}
 
 \docparam{mimetype}{MIME type string (for example 'image/jpeg')}
 
-Note : you must call wxImage::AddHandler(new wxJPEGHandler) during application
-initialization in order to work with JPEGs.
+\wxheading{Remarks}
+
+Depending on how wxWindows has been configured, not all formats may be available.
+
+Note : any handler other than BMP must be previously
+initialized with \helpref{wxImage::AddHandler}{wximageaddhandler} or
+\helpref{wxInitAllImageHandlers}{wxinitallimagehandlers}.
 
 \wxheading{See also}
 
@@ -322,7 +324,7 @@ Returns TRUE if there is a mask active, FALSE otherwise.
 \func{static void}{InitStandardHandlers}{\void}
 
 Internal use only. Adds standard image format handlers. It only install BMP
-for the time being, which is use by wxBitmap.
+for the time being, which is used by wxBitmap.
 
 This function is called by wxWindows on startup, and shouldn't be called by
 the user.
@@ -352,7 +354,7 @@ of a given handler class in an application session.}
 \func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{const wxString\&}{ mimetype}}
 
 Loads an image from a file. If no handler type is provided, the library will
-try to use wxBITMAP\_TYPE\_BMP.
+try to autodetect the format.
 
 \func{bool}{LoadFile}{\param{wxInputStream\&}{ stream}, \param{long}{ type}}
 
@@ -362,11 +364,9 @@ Loads an image from an input stream.
 
 \wxheading{Parameters}
 
-\docparam{name}{A filename.
-The meaning of {\it name} is determined by the {\it type} parameter.}
+\docparam{name}{Name of the file from which to load the image.}
 
-\docparam{stream}{An input stream.
-The meaning of {\it stream} data is determined by the {\it type} parameter.}
+\docparam{stream}{Opened input stream from which to load the image. Currently, the stream must support seeking.}
 
 \docparam{type}{One of the following values:
 
@@ -374,16 +374,19 @@ The meaning of {\it stream} data is determined by the {\it type} parameter.}
 \begin{twocollist}
 \twocolitem{{\bf wxBITMAP\_TYPE\_BMP}}{Load a Windows image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_GIF}}{Load a GIF image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_TIF}}{Load a TIFF image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_JPEG}}{Load a JPEG image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PCX}}{Load a PCX image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Load a PNG image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNM}}{Load a PNM image file.}
-\end{twocollist}
-
-The validity of these flags depends on the platform and wxWindows configuration.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_TIF}}{Load a TIFF image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_ANY}}{Will try to autodetect the format.}
+\end{twocollist}}
 
 \docparam{mimetype}{MIME type string (for example 'image/jpeg')}
+
+\wxheading{Remarks}
+
+Depending on how wxWindows has been configured, not all formats may be available.
 
 \wxheading{Return value}
 
@@ -443,21 +446,20 @@ Saves a image in the given stream.
 
 \wxheading{Parameters}
 
-\docparam{name}{A filename. The meaning of {\it name} is determined by the {\it type} parameter.}
+\docparam{name}{Name of the file to save the image to.}
 
-\docparam{stream}{An output stream. The meaning of {\it stream} is determined by the {\it type} parameter.}
+\docparam{stream}{Opened output stream to save the image to.}
 
 \docparam{type}{Currently three types can be used:
 
 \twocolwidtha{5cm}%
 \begin{twocollist}
-\twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Save a PNG image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_JPEG}}{Save a JPEG image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_PCX}}{Save a PCX image file.}
-\end{twocollist}
-
-The validity of these flags depends on the platform and wxWindows configuration
-as well as user-added handlers.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Save a PNG image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PCX}}{Save a PCX image file (tries to save as 8-bit if possible, falls back to 24-bit otherwise).}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PNM}}{Save a PNM image file (as raw RGB always).}
+\twocolitem{{\bf wxBITMAP\_TYPE\_TIF}}{Save a TIFF image file.}
+\end{twocollist}}
 
 \docparam{mimetype}{MIME type.}
 
@@ -677,7 +679,7 @@ If the image file contains more than one image and the image handler is capable
 of retrieving these individually, this function will return the number of
 available images.
 
-\docparam{stream}{Opened input stream for reading image file.}
+\docparam{stream}{Opened input stream for reading image data. Currently, the stream must support seeking.}
 
 \wxheading{Return value}
 
@@ -707,7 +709,7 @@ indicates which image to read from the stream.
 
 \docparam{image}{The image object which is to be affected by this operation.}
 
-\docparam{stream}{Opened input stream for reading images.}
+\docparam{stream}{Opened input stream for reading image data.}
 
 \docparam{verbose}{If set to TRUE, errors reported by the image handler will produce wxLogMessages.}
 
@@ -733,7 +735,7 @@ Saves a image in the output stream.
 
 \docparam{image}{The image object which is to be affected by this operation.}
 
-\docparam{stream}{An opened stream for writing images.}
+\docparam{stream}{Opened output stream for writing the data.}
 
 \wxheading{Return value}
 
