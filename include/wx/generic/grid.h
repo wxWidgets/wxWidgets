@@ -890,9 +890,9 @@ public:
     wxGridCellRenderer* GetCellRenderer(int row, int col);
 
     // takes ownership of the pointer
-//    void SetDefaultEditor(wxGridCellEditor *editor);
+    void SetDefaultEditor(wxGridCellEditor *editor);
     void SetCellEditor(int row, int col, wxGridCellEditor *editor);
-//    wxGridCellEditor *GetDefaultEditor() const;
+    wxGridCellEditor *GetDefaultEditor() const;
     wxGridCellEditor* GetCellEditor(int row, int col);
 
 

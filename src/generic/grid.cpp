@@ -5866,15 +5866,15 @@ void wxGrid::SetDefaultCellFont( const wxFont& font )
     m_defaultCellAttr->SetFont(font);
 }
 
-//  void wxGrid::SetDefaultRenderer(wxGridCellRenderer *renderer)
-//  {
-//      m_defaultCellAttr->SetRenderer(renderer);
-//  }
+void wxGrid::SetDefaultRenderer(wxGridCellRenderer *renderer)
+{
+    m_defaultCellAttr->SetRenderer(renderer);
+}
 
-//  void wxGrid::SetDefaultEditor(wxGridCellEditor *editor)
-//  {
-//      m_defaultCellAttr->SetEditor(editor);
-//  }
+void wxGrid::SetDefaultEditor(wxGridCellEditor *editor)
+{
+    m_defaultCellAttr->SetEditor(editor);
+}
 
 // ----------------------------------------------------------------------------
 // access to the default attrbiutes
@@ -5900,15 +5900,15 @@ void wxGrid::GetDefaultCellAlignment( int *horiz, int *vert )
     m_defaultCellAttr->GetAlignment(horiz, vert);
 }
 
-//  wxGridCellRenderer *wxGrid::GetDefaultRenderer() const
-//  {
-//      return m_defaultCellAttr->GetRenderer();
-//  }
+wxGridCellRenderer *wxGrid::GetDefaultRenderer() const
+{
+    return m_defaultCellAttr->GetRenderer(NULL);
+}
 
-//  wxGridCellEditor *wxGrid::GetDefaultEditor() const
-//  {
-//      return m_defaultCellAttr->GetEditor();
-//  }
+wxGridCellEditor *wxGrid::GetDefaultEditor() const
+{
+    return m_defaultCellAttr->GetEditor(NULL);
+}
 
 // ----------------------------------------------------------------------------
 // access to cell attributes
