@@ -215,8 +215,8 @@ All:
 All (GUI):
 
 - added wxWindow::MoveBefore/AfterInTabOrder() to change tab navigation order
-- added wxTaskBarIcon::CreatePopupMenu which is now recommended way
-  of showing popup menu; calling wxTaskBarIcon::PopupMenu directly
+- added wxTaskBarIcon::CreatePopupMenu which is now the recommended way
+  of showing a popup menu; calling wxTaskBarIcon::PopupMenu directly
   is discouraged
 - added ..._CMD_...(id) variants for wxGrid event table entry macros
 - added wxWindow::Navigate for programmatic navigation to the next control
@@ -244,6 +244,11 @@ Unix:
 - wx-config script was modified to allow choosing from multiple installed
   builds of wxWidgets and to return flags/libs for selected libraries only
 - wx-config has new --version-full option
+
+wxMAC:
+
+- Fixed MLTE text control GetLineText and GetLineLength on OSX (RN)
+- Added OSX wxTaskBarIcon implementation for the OSX Dock (RN)
 
 wxGTK:
 
