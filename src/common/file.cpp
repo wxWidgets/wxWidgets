@@ -231,6 +231,10 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
             flags |= O_WRONLY | O_CREAT | O_TRUNC;
             break;
 
+        case write_excl:
+            flags |= O_WRONLY | O_CREAT | O_EXCL;
+            break;
+
         case read_write:
             flags |= O_RDWR;
             break;
@@ -518,12 +522,20 @@ bool wxTempFile::Open(const wxString& strName)
     else
     {
         // file probably didn't exist, just create with default mode _using_
-        // user's umask (new files creation should respet umask)
+        // user's umask (new files creation should respect umask)
         changedUmask = FALSE;
     }
 #endif // Unix
 
-    bool ok = m_file.Open(m_strTemp, wxFile::write, access);
+    // Open this file securely, since it surely should not exist unless
+    // nefarious activities (or other random bad things) are at play.
+
+    bool ok = m_file.Open(m_strTemp, wxFile::write_excl, access);
+
+    // FIXME: If !ok here should we loop and try again with another file
+    //        name?  That is the standard recourse if open(O_EXCL) fails,
+    //        though of course it should be protected against possible
+    //        infinite looping too.
 
 #ifdef __UNIX__
     if ( changedUmask )

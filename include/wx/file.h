@@ -58,7 +58,7 @@ public:
   // more file constants
   // -------------------
     // opening mode
-  enum OpenMode { read, write, read_write, write_append };
+  enum OpenMode { read, write, read_write, write_append, write_excl };
     // standard values for file descriptor
   enum { fd_invalid = -1, fd_stdin, fd_stdout, fd_stderr };
 
