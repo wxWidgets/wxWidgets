@@ -23,13 +23,22 @@ class TestPanel(wxPanel):
 
         line = wxStaticLine(self, -1)
 
+        # This shows a few different ways to load XML Resources
         if 0:
             # XML Resources can be loaded from a file like this:
             res = wxXmlResource(RESFILE)
+
+        elif 1:
+            # or from a Virtual FileSystem:
+            wxFileSystem_AddHandler(wxMemoryFSHandler())
+            wxMemoryFSHandler_AddFile("XRC_Resources/data_file", resourceText)
+            res = wxXmlResource("memory:XRC_Resources/data_file")
+
         else:
             # or from a string, like this:
             res = wxEmptyXmlResource()
             res.LoadFromString(resourceText)
+
 
         # Now create a panel from the resource data
         panel = res.LoadPanel(self, "MyPanel")
