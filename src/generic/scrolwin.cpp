@@ -85,6 +85,7 @@ wxScrolledWindow::wxScrolledWindow()
     m_yScrollLinesPerPage = 0;
     m_scaleX = 1.0;
     m_scaleY = 1.0;
+    m_targetWindow = (wxWindow*) NULL;
 }
 
 bool wxScrolledWindow::Create(wxWindow *parent,
@@ -503,6 +504,9 @@ void wxScrolledWindow::SetScrollPageSize(int orient, int pageSize)
  */
 void wxScrolledWindow::Scroll( int x_pos, int y_pos )
 {
+    if (!m_targetWindow)
+        return;
+
     if (((x_pos == -1) || (x_pos == m_xScrollPosition)) &&
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
 

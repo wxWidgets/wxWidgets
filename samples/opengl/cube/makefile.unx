@@ -1,0 +1,23 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for cube example (UNIX).
+
+PROGRAM=cube
+
+OPENGLHOME=/home/jacs/mesa/Mesa-2.3
+
+EXTRACPPFLAGS=-I$(OPENGLHOME)/include
+EXTRALDFLAGS=-L$(OPENGLHOME)/lib
+EXTRALDLIBS=-lMesaGL -lMesaGLU
+
+OBJECTS=$(PROGRAM).o
+
+include ../../../src/makeprog.env
+

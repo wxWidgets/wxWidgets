@@ -851,6 +851,10 @@ SOURCE=.\msw\gdiobj.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\glcanvas.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\gsocket.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File

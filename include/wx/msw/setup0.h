@@ -217,6 +217,9 @@
 // Recommended setting: 1
 #define wxUSE_PLOT           1
 
+// OpenGL canvas
+#define wxUSE_GLCANVAS       0
+
 // ----------------------------------------------------------------------------
 // Postscript support settings
 // ----------------------------------------------------------------------------

@@ -255,6 +255,7 @@ MSWOBJS     = \
 		$(MSWDIR)/gauge95.$(OBJSUFF) \
 		$(MSWDIR)/gdiimage.$(OBJSUFF) \
 		$(MSWDIR)/gdiobj.$(OBJSUFF) \
+		$(MSWDIR)/glcanvas.$(OBJSUFF) \
 		$(MSWDIR)/gsocket.$(OBJSUFF) \
 		$(MSWDIR)/helpwin.$(OBJSUFF) \
 		$(MSWDIR)/icon.$(OBJSUFF) \

@@ -1,0 +1,27 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for isosurf example (UNIX).
+
+PROGRAM=isosurf
+
+OPENGLHOME=/home/jacs/mesa/Mesa-2.3
+
+EXTRACPPFLAGS=-I$(OPENGLHOME)/include
+EXTRALDFLAGS=-L$(OPENGLHOME)/lib
+EXTRALDLIBS=-lMesaGL -lMesaGLU
+
+OBJECTS=$(PROGRAM).o
+EXTRATARGETS=isosurf.dat
+
+include ../../../src/makeprog.env
+
+isosurf.dat:	isosurf.dat.gz
+	gzip -c -d isosurf.dat.gz > isosurf.dat
+

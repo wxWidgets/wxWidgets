@@ -183,6 +183,7 @@ bool MyApp::GenerateSample(const wxString& projectName, const wxString& targetNa
     project.SetLibDirs(wxStringList((const char*) relativeLibPath, 0));
     project.SetDebugLibDirs(wxStringList((const char*) relativeDebugPath, (const char*) relativeDebugPathJPEG, (const char*) relativeDebugPathTIFF, 0));
     project.SetReleaseLibDirs(wxStringList((const char*) relativeReleasePath, (const char*) relativeReleasePathJPEG, (const char*) relativeReleasePathTIFF, 0));
+    project.SetExtraLibs(wxStringList("opengl32.lib", "glu32.lib", 0));
 
     project.SetProjectName(projectName);
     project.SetTargetName(targetName);
@@ -227,6 +228,14 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("GridVC", "test", dir + wxString("/samples/grid"), wxStringList("test.cpp", 0));
     GenerateSample("NewGridVC", "griddemo", dir + wxString("/samples/newgrid"), wxStringList("griddemo.cpp", 0));
     GenerateSample("HelpVC", "demo", dir + wxString("/samples/help"), wxStringList("demo.cpp", 0));
+
+    // OpenGL samples
+    GenerateSample("CubeVC", "cube", dir + wxString("/samples/opengl/cube"), wxStringList("cube.cpp", "cube.h", 0),
+        "../../..");
+    GenerateSample("IsosurfVC", "isosurf", dir + wxString("/samples/opengl/isosurf"), wxStringList("isosurf.cpp", "isousrf.h", 0),
+        "../../..");
+    GenerateSample("PenguinVC", "penguin", dir + wxString("/samples/opengl/penguin"), wxStringList("penguin.cpp", "penguin.h",
+        "lw.cpp", "lw.h", "trackball.c", "trackball.h", 0), "../../..");
 
     // wxHTML samples
     GenerateSample("AboutVC", "about", dir + wxString("/samples/html/about"), wxStringList("about.cpp", 0),
@@ -486,72 +495,6 @@ void MyApp::GenerateSamples(const wxString& dir)
     if (!project.GenerateVCProject())
     {
         wxString msg("Could not generate OGL Studio project");
-        wxMessageBox(msg);
-    }
-
-    // GLCanvas cube sample
-
-    project.SetIncludeDirs(wxStringList("../../../../include", "../../win", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../win/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../win/Release", "../../../../src/jpeg/Release", "../../../../src/tiff/Release", 0));
-
-    project.SetExtraLibs(wxStringList("glcanvas.lib", "opengl32.lib", "glu32.lib", 0));
-
-    project.SetProjectName("CubeVC");
-    project.SetTargetName("cube");
-    project.SetProjectPath(dir + wxString("/utils/glcanvas/samples/cube"));
-    project.SetSourceFiles(wxStringList("cube.cpp", "cube.h",
-        0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate GLCanvas Cube project");
-        wxMessageBox(msg);
-    }
-
-    // GLCanvas isosurf sample
-
-    project.SetIncludeDirs(wxStringList("../../../../include", "../../win", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../win/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../win/Release", "../../../../src/jpeg/Release", "../../../../src/tiff/Release", 0));
-    project.SetExtraLibs(wxStringList("glcanvas.lib", "opengl32.lib", "glu32.lib", 0));
-
-    project.SetProjectName("IsoSurfVC");
-    project.SetTargetName("isosurf");
-    project.SetProjectPath(dir + wxString("/utils/glcanvas/samples/isosurf"));
-    project.SetSourceFiles(wxStringList("isosurf.cpp", "isosurf.h",
-        0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate GLCanvas IsoSurf project");
-        wxMessageBox(msg);
-    }
-
-    // GLCanvas penguin sample
-
-    project.SetIncludeDirs(wxStringList("../../../../include", "../../win", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../win/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../win/Release", "../../../../src/jpeg/Release", "../../../../src/tiff/Release", 0));
-    project.SetExtraLibs(wxStringList("glcanvas.lib", "opengl32.lib", "glu32.lib", 0));
-
-    project.SetProjectName("PenguinVC");
-    project.SetTargetName("penguin");
-    project.SetProjectPath(dir + wxString("/utils/glcanvas/samples/penguin"));
-    project.SetSourceFiles(wxStringList("penguin.cpp", "penguin.h",
-        "lw.cpp", "lw.h",
-        "trackball.c", "trackball.h",
-        0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate GLCanvas Penguin project");
         wxMessageBox(msg);
     }
 }

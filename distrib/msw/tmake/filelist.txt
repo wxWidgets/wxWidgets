@@ -247,6 +247,7 @@ gauge95.cpp	M	32
 gaugemsw.cpp	M	16
 gdiimage.cpp	M
 gdiobj.cpp	M
+glcanvas.cpp	M
 helpwin.cpp	M
 icon.cpp	M
 imaglist.cpp	M	32
@@ -343,6 +344,7 @@ fontdlg.cpp	R
 frame.cpp	R
 gauge.cpp	R
 gdiobj.cpp	R
+glcanvas.cpp	R
 icon.cpp	R
 listbox.cpp	R
 main.cpp	R
@@ -400,6 +402,7 @@ font.cpp	X
 frame.cpp	X
 gauge.cpp	X
 gdiobj.cpp	X
+glcanvas.cpp	X
 icon.cpp	X
 listbox.cpp	X
 main.cpp	X
@@ -603,6 +606,7 @@ gdicmn.h	W
 gdiobj.h	W
 geometry.h	W
 gifdecod.h	W
+glcanvas.h	W
 grid.h	W
 gsocket.h	W
 hash.h	W	B
@@ -761,6 +765,7 @@ fontdlg.h	K
 frame.h	K
 gauge.h	K
 gdiobj.h	K
+glcanvas.h	K
 icon.h	K
 joystick.h	K
 listbox.h	K
@@ -823,6 +828,7 @@ fontdlg.h	F
 frame.h	F
 gauge.h	F
 gdiobj.h	F
+glcanvas.h	F
 icon.h	F
 joystick.h	F
 listbox.h	F
@@ -891,6 +897,7 @@ gauge95.h	9
 gaugemsw.h	9
 gdiimage.h	9
 gdiobj.h	9
+glcanvas.h	9
 helpwin.h	9
 icon.h	9
 imaglist.h	9
