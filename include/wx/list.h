@@ -92,14 +92,14 @@ class WXDLLEXPORT wxListKey
 {
 public:
     // implicit ctors
-    wxListKey()
-        { m_keyType = wxKEY_NONE; }
-    wxListKey(long i)
-        { m_keyType = wxKEY_INTEGER; m_key.integer = i; }
-    wxListKey(const wxChar *s)
-        { m_keyType = wxKEY_STRING; m_key.string = wxStrdup(s); }
-    wxListKey(const wxString& s)
-        { m_keyType = wxKEY_STRING; m_key.string = wxStrdup(s.c_str()); }
+    wxListKey() : m_keyType(wxKEY_NONE)
+        { }
+    wxListKey(long i) : m_keyType(wxKEY_INTEGER)
+        { m_key.integer = i; }
+    wxListKey(const wxChar *s) : m_keyType(wxKEY_STRING)
+        { m_key.string = wxStrdup(s); }
+    wxListKey(const wxString& s) : m_keyType(wxKEY_STRING)
+        { m_key.string = wxStrdup(s.c_str()); }
 
     // accessors
     wxKeyType GetKeyType() const { return m_keyType; }
@@ -183,6 +183,8 @@ private:
                 *m_previous;
 
     wxListBase  *m_list;        // list we belong to
+
+    DECLARE_NO_COPY_CLASS(wxNodeBase)
 };
 
 // -----------------------------------------------------------------------------
@@ -198,7 +200,8 @@ private:
     void Init(wxKeyType keyType = wxKEY_NONE); // Must be declared before it's used (for VC++ 1.5)
 public:
     // default ctor & dtor
-    wxListBase(wxKeyType keyType = wxKEY_NONE) { Init(keyType); }
+    wxListBase(wxKeyType keyType = wxKEY_NONE)
+        { Init(keyType); }
     virtual ~wxListBase();
 
     // accessors
@@ -399,7 +402,7 @@ private:
             : wxListBase(count, (void **)elements) { }                      \
                                                                             \
         name& operator=(const name& list)                                   \
-            { return (name&)wxListBase::operator=(list); }                  \
+            { (void) wxListBase::operator=(list); return *this; }           \
                                                                             \
         nodetype *GetFirst() const                                          \
             { return (nodetype *)wxListBase::GetFirst(); }                  \
@@ -506,7 +509,7 @@ public:
    ~wxList() { }
 
     wxList& operator=(const wxList& list)
-        { return (wxList&)wxListBase::operator=(list); }
+        { (void) wxListBase::operator=(list); return *this; }
 
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }

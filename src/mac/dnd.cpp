@@ -490,8 +490,9 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
     return(noErr);
 }
 
-pascal OSErr wxMacWindowDragReceiveHandler(WindowPtr theWindow, void *handlerRefCon,
-DragReference theDrag)
+pascal OSErr wxMacWindowDragReceiveHandler(WindowPtr theWindow,
+                                           void *handlerRefCon,
+                                           DragReference theDrag)
 { 
     MacTrackingGlobals* trackingGlobals = (MacTrackingGlobals*) handlerRefCon;
     if ( trackingGlobals->m_currentTarget )

@@ -61,7 +61,7 @@ void wxCheckBox::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxCheckBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxCheckBox::MacHandleControlClick( WXWidget WXUNUSED(control), wxInt16 WXUNUSED(controlpart) ) 
 {
 	SetValue( !GetValue() ) ;
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
@@ -71,11 +71,12 @@ void wxCheckBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
 }
 
 // Bitmap checkbox
-bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *label,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-           const wxValidator& validator,
-           const wxString& name)
+bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id,
+                              const wxBitmap *label,
+                              const wxPoint& pos,
+                              const wxSize& size, long style,
+                              const wxValidator& validator,
+                              const wxString& name)
 {
     SetName(name);
     SetValidator(validator);
