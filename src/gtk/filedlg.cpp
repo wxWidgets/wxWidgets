@@ -15,6 +15,7 @@
 #include "wx/filedlg.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
+#include "wx/generic/msgdlgg.h"
 
 //-----------------------------------------------------------------------------
 // wxFileDialog
@@ -24,6 +25,13 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
   wxFileDialog *dialog = (wxFileDialog*)data;
   wxCommandEvent event(wxEVT_NULL);
+
+  if(dialog->GetStyle()&(wxSAVE|wxOVERWRITE_PROMPT))
+	if(wxFileExists(gtk_file_selection_get_filename(GTK_FILE_SELECTION(dialog->m_widget) ))) {
+	  if(wxMessageBox("File exists. Overwrite?","Confirm",wxYES_NO)!=wxYES)
+		return;
+	}
+
   dialog->OnOk( event );
 };
 
@@ -49,11 +57,18 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
   m_fileName = defaultFileName;
   m_dir = defaultDir;
   m_wildCard = wildCard;
+  m_dialogStyle = style;
   m_filterIndex = 1;
   
   m_widget = gtk_file_selection_new( "File selection" );
   
   GtkFileSelection *sel = GTK_FILE_SELECTION(m_widget);
+
+  m_path.Append(m_dir);
+  if(m_path.Last()!='/') m_path.Append('/');
+  m_path.Append(m_fileName);
+
+  if(m_path.Length()>1) gtk_file_selection_set_filename(sel,m_path);
   
   gtk_signal_connect( GTK_OBJECT(sel->ok_button), "clicked", 
     GTK_SIGNAL_FUNC(gtk_filedialog_ok_callback), (gpointer*)this );
@@ -65,6 +80,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 int wxFileDialog::ShowModal(void)
 {
   int ret = wxDialog::ShowModal();
+
   if (ret == wxID_OK)
   {
     m_fileName = gtk_file_selection_get_filename( GTK_FILE_SELECTION(m_widget) );

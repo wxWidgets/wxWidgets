@@ -29,6 +29,8 @@ class wxFileDialog: public wxDialog
 {
 
   DECLARE_DYNAMIC_CLASS(wxFileDialog)
+
+	friend void gtk_filedialog_ok_callback( GtkWidget *widget, gpointer data );
   
   public:
 
