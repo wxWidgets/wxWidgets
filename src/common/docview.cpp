@@ -41,9 +41,9 @@
     #include "wx/filedlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/ffile.h"
 #endif
 
+#include "wx/ffile.h"
 
 #ifdef __WXGTK__
     #include "wx/mdi.h"
