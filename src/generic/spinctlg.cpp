@@ -109,18 +109,15 @@ public:
 protected:
     void OnSpinButton(wxSpinEvent& eventSpin)
     {
-#if defined(__WXMAC__) || defined(__WXMOTIF__)
-      m_spin->SetTextValue(eventSpin.GetPosition());
-
-      wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
-      event.SetEventObject(m_spin);
-      event.SetInt(eventSpin.GetPosition());
-
-      m_spin->GetEventHandler()->ProcessEvent(event);
-#else
         m_spin->SetTextValue(eventSpin.GetPosition());
+
+        wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
+        event.SetEventObject(m_spin);
+        event.SetInt(eventSpin.GetPosition());
+
+        m_spin->GetEventHandler()->ProcessEvent(event);
+
         eventSpin.Skip();
-#endif
     }
 
 private:
