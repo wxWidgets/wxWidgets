@@ -29,6 +29,7 @@ public:
     bool IsSelection();
     bool IsInSelection ( int row, int col );
     void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
+    wxGrid::wxGridSelectionModes GetSelectionMode() { return m_selectionMode; }
     void SelectRow( int row,
                     bool ControlDown = FALSE,  bool ShiftDown = FALSE,
                     bool AltDown = FALSE, bool MetaDown = FALSE );

@@ -7665,7 +7665,17 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
 {
     int temp;
     wxGridCellCoords updateTopLeft, updateBottomRight;
-
+    
+    if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectRows )
+    {
+        leftCol = 0;
+        rightCol = GetNumberCols() - 1;
+    }
+    else if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectColumns )
+    {
+        topRow = 0;
+        bottomRow = GetNumberRows() - 1;
+    }
     if ( topRow > bottomRow )
     {
         temp = topRow;
