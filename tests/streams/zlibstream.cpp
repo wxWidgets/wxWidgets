@@ -401,7 +401,9 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
     {
     case wxZLIB_NO_HEADER:
         break;
+#if WXWIN_COMPATIBILITY_2_4
     case wxZLIB_24COMPATIBLE:
+#endif
     case wxZLIB_ZLIB:
         if (!(data_size >= 1 && data[0] == 0x78))
             wxLogError(_T("zlib data seems to not be zlib data!"));
