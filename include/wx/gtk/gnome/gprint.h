@@ -150,6 +150,7 @@ public:
     
 private:
     GnomePrintContext *m_gpc;
+    bool               m_native_preview;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrinter)

@@ -31,6 +31,7 @@
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-pango.h>
 #include <libgnomeprintui/gnome-print-dialog.h>
+#include <libgnomeprintui/gnome-print-job-preview.h>
 
 //----------------------------------------------------------------------------
 // wxGnomePrintNativeData
@@ -242,6 +243,9 @@ int wxGnomePrintDialog::ShowModal()
     gtk_widget_destroy(m_widget);
     m_widget = NULL;
     
+    if (response == GNOME_PRINT_DIALOG_RESPONSE_PREVIEW)
+        return wxID_PREVIEW;
+    
     return wxID_OK;
 }
 
@@ -276,6 +280,7 @@ wxGnomePrinter::wxGnomePrinter( wxPrintDialogData *data ) :
     wxPrinterBase( data )
 {
     m_gpc = NULL;
+    m_native_preview = false;
 }
 
 wxGnomePrinter::~wxGnomePrinter()
@@ -312,6 +317,9 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         dc = PrintDialog( parent );
     else
         dc = new wxGnomePrintDC( this );
+    
+    if (m_native_preview)
+        printout->SetIsPreview(true);
     
     if (!dc)
     {
@@ -387,7 +395,15 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     }
     
     gnome_print_job_close( job );
-    gnome_print_job_print( job );
+    if (m_native_preview)
+    {
+        wxString title( _("Print preview") );
+        gtk_widget_show( gnome_print_job_preview_new( job, (const guchar*)(const char*)wxGTK_CONV(title) ));
+    }
+    else
+    {
+        gnome_print_job_print( job );
+    }
     
     delete dc;
     
@@ -397,11 +413,14 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 wxDC* wxGnomePrinter::PrintDialog( wxWindow *parent )
 {
     wxGnomePrintDialog dialog( parent, &m_printDialogData );
-    if (dialog.ShowModal() == wxID_CANCEL)
+    int ret = dialog.ShowModal();
+    if (ret == wxID_CANCEL)
     {
         sm_lastError = wxPRINTER_ERROR;
         return NULL;
     }
+    
+    m_native_preview = ret == wxID_PREVIEW;
     
     m_printDialogData = dialog.GetPrintDialogData();
     return new wxGnomePrintDC( this );
