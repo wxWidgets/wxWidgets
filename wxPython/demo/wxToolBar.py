@@ -78,7 +78,7 @@ class TestToolBar(wxFrame):
         event.Skip()
 
 
-    def OnClearSB(self, event):
+    def OnClearSB(self, event):  # called for the timer event handler
         self.SetStatusText("")
         self.timer.Stop()
         self.timer = None

@@ -275,12 +275,14 @@ public:
     }
 
     void OnExit() {
+        bool doSave = wxPyRestoreThread();
         Py_DECREF(m_tagHandlerClass);
         m_tagHandlerClass = NULL;
         for (size_t x=0; x < m_objArray.GetCount(); x++) {
             PyObject* obj = (PyObject*)m_objArray.Item(x);
             Py_DECREF(obj);
         }
+        wxPySaveThread(doSave);
     };
 
     void FillHandlersTable(wxHtmlWinParser *parser) {
@@ -434,6 +436,7 @@ IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
     if (m_myInst.findCallback("OnLinkClicked")) {
         PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo");
         m_myInst.callCallback(Py_BuildValue("(O)", obj));
+        Py_DECREF(obj);
     }
     else
         wxHtmlWindow::OnLinkClicked(link);

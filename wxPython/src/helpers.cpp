@@ -105,6 +105,11 @@ int  wxPyApp::MainLoop(void) {
 //---------------------------------------------------------------------
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
+#include "wx/msw/msvcrt.h"
+#endif
+
+
 int  WXDLLEXPORT wxEntryStart( int argc, char** argv );
 int  WXDLLEXPORT wxEntryInitGui();
 void WXDLLEXPORT wxEntryCleanup();
@@ -121,6 +126,11 @@ static char* __nullArgv[1] = { 0 };
 // wxcmodule is imported.  (Before there is a wxApp object.)
 void __wxPreStart()
 {
+
+#ifdef __WXMSW__
+//    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+#endif
+
 #ifdef WXP_WITH_THREAD
     PyEval_InitThreads();
     wxPyEventThreadState = PyThreadState_Get();
@@ -158,11 +168,12 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     if (!PyArg_ParseTuple(args, "O", &onInitFunc))
         return NULL;
 
+#if 0  // Try it out without this check, soo how it does...
     if (wxTopLevelWindows.Number() > 0) {
         PyErr_SetString(PyExc_TypeError, "Only 1 wxApp per process!");
         return NULL;
     }
-
+#endif
 
     // This is the next part of the wxEntry functionality...
     PyObject* sysargv = PySys_GetObject("argv");
@@ -280,7 +291,9 @@ PyObject* wxPyConstructObject(void* ptr,
     Py_DECREF(arg);
 
     if (setThisOwn) {
-        PyObject_SetAttrString(obj, "thisown", PyInt_FromLong(1));
+        PyObject* one = PyInt_FromLong(1);
+        PyObject_SetAttrString(obj, "thisown", one);
+        Py_DECREF(one);
     }
 
     return obj;
@@ -427,18 +440,21 @@ void wxPyCallbackHelper::setSelf(PyObject* self, PyObject* klass, int incref) {
 // If the object (m_self) has an attibute of the given name, and if that
 // attribute is a method, and if that method's class is not from a base class,
 // then we'll save a pointer to the method so callCallback can call it.
-bool wxPyCallbackHelper::findCallback(const wxString& name) const {
+bool wxPyCallbackHelper::findCallback(const char* name) const {
     wxPyCallbackHelper* self = (wxPyCallbackHelper*)this; // cast away const
     self->m_lastFound = NULL;
-    if (m_self && PyObject_HasAttrString(m_self, (char*)name.c_str())) {
+    if (m_self && PyObject_HasAttrString(m_self, (char*)name)) {
         PyObject* method;
-        method = PyObject_GetAttrString(m_self, (char*)name.c_str());
+        method = PyObject_GetAttrString(m_self, (char*)name);
 
         if (PyMethod_Check(method) &&
             ((PyMethod_GET_CLASS(method) == m_class) ||
              PyClass_IsSubclass(PyMethod_GET_CLASS(method), m_class))) {
 
             self->m_lastFound = method;
+        }
+        else {
+            Py_DECREF(method);
         }
     }
     return m_lastFound != NULL;
@@ -461,10 +477,17 @@ int wxPyCallbackHelper::callCallback(PyObject* argTuple) const {
 // Invoke the Python callable object, returning the raw PyObject return
 // value.  Caller should DECREF the return value and also call PyEval_SaveThread.
 PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
-    PyObject*   result;
+    wxPyCallbackHelper* self = (wxPyCallbackHelper*)this; // cast away const
+    PyObject* result;
 
-    result = PyEval_CallObject(m_lastFound, argTuple);
+    // Save a copy of the pointer in case the callback generates another
+    // callback.  In that case m_lastFound will have a different value when
+    // it gets back here...
+    PyObject* method = m_lastFound;
+
+    result = PyEval_CallObject(method, argTuple);
     Py_DECREF(argTuple);
+    Py_DECREF(method);
     if (!result) {
         PyErr_Print();
     }
@@ -987,7 +1010,7 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
     }
 
  error:
-    PyErr_SetString(PyExc_TypeError, "Expected a wxColour object or a string containing a colour name or #RRGGBB.");
+    PyErr_SetString(PyExc_TypeError, "Expected a wxColour object or a string containing a colour name or '#RRGGBB'.");
     return FALSE;
 }
 
@@ -995,6 +1018,7 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
+
 
 
 

@@ -400,8 +400,10 @@ public:
         if (!PyObject_HasAttrString(py, name))
             return NULL;
         PyObject* o = PyObject_GetAttrString(py, name);
-        if (!PyMethod_Check(o) && !PyCFunction_Check(o))
+        if (!PyMethod_Check(o) && !PyCFunction_Check(o)) {
+            Py_DECREF(o);
             return NULL;
+        }
         return o;
     }
 

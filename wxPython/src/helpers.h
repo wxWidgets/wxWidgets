@@ -15,7 +15,6 @@
 
 #include <wx/wx.h>
 
-
 //----------------------------------------------------------------------
 
 // if we want to handle threads and Python threads are available...
@@ -216,7 +215,7 @@ public:
 
     void        setSelf(PyObject* self, PyObject* klass, int incref=TRUE);
 
-    bool        findCallback(const wxString& name) const;
+    bool        findCallback(const char* name) const;
     int         callCallback(PyObject* argTuple) const;
     PyObject*   callCallbackObj(PyObject* argTuple) const;
 
@@ -393,9 +392,11 @@ public:
 #define IMP_PYCALLBACK__DC(CLASS, PCLASS, CBNAME)               \
     void CLASS::CBNAME(wxDC& a) {                               \
         bool doSave = wxPyRestoreThread();                      \
-        if (m_myInst.findCallback(#CBNAME))                     \
-            m_myInst.callCallback(Py_BuildValue("(O)",          \
-                            wxPyConstructObject(&a, "wxDC")));  \
+        if (m_myInst.findCallback(#CBNAME)) {                   \
+            PyObject* obj = wxPyConstructObject(&a, "wxDC");    \
+            m_myInst.callCallback(Py_BuildValue("(O)", obj));   \
+            Py_DECREF(obj);                                     \
+        }                                                       \
         else                                                    \
             PCLASS::CBNAME(a);                                  \
         wxPySaveThread(doSave);                                 \
@@ -416,9 +417,11 @@ public:
 #define IMP_PYCALLBACK__DCBOOL(CLASS, PCLASS, CBNAME)                   \
     void CLASS::CBNAME(wxDC& a, bool b) {                               \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("(Oi)",                 \
-                            wxPyConstructObject(&a, "wxDC"), (int)b));  \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject(&a, "wxDC");            \
+            m_myInst.callCallback(Py_BuildValue("(Oi)", obj, (int)b));  \
+            Py_DECREF(obj);                                             \
+        }                                                               \
         else                                                            \
             PCLASS::CBNAME(a, b);                                       \
         wxPySaveThread(doSave);                                         \
@@ -437,9 +440,11 @@ public:
 #define IMP_PYCALLBACK__DCBOOL(CLASS, PCLASS, CBNAME)                   \
     void CLASS::CBNAME(wxDC& a, bool b) {                               \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("(Oi)",                 \
-                            wxPyConstructObject(&a, "wxDC"), (int)b));  \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject(&a, "wxDC");            \
+            m_myInst.callCallback(Py_BuildValue("(Oi)", obj, (int)b));  \
+            Py_DECREF(obj);                                             \
+        }                                                               \
         else                                                            \
             PCLASS::CBNAME(a, b);                                       \
                 wxPySaveThread(doSave);                                 \
@@ -499,10 +504,11 @@ public:
 #define IMP_PYCALLBACK__DC4DBLBOOL(CLASS, PCLASS, CBNAME)                               \
     void CLASS::CBNAME(wxDC& a, double b, double c, double d, double e, bool f) {       \
         bool doSave = wxPyRestoreThread();                                              \
-        if (m_myInst.findCallback(#CBNAME))                                             \
-            m_myInst.callCallback(Py_BuildValue("(Oddddi)",                             \
-                                   wxPyConstructObject(&a, "wxDC"),                     \
-                                              b, c, d, e, (int)f));                     \
+        if (m_myInst.findCallback(#CBNAME)) {                                           \
+            PyObject* obj = wxPyConstructObject(&a, "wxDC");                            \
+            m_myInst.callCallback(Py_BuildValue("(Oddddi)", obj, b, c, d, e, (int)f));  \
+            Py_DECREF(obj);                                                             \
+        }                                                                               \
         else                                                                            \
             PCLASS::CBNAME(a, b, c, d, e, f);                                           \
         wxPySaveThread(doSave);                                                         \
@@ -522,10 +528,11 @@ public:
     bool CLASS::CBNAME(wxDC& a, double b, double c, double d, double e, bool f) {       \
         bool doSave = wxPyRestoreThread();                                              \
         bool rval;                                                                      \
-        if (m_myInst.findCallback(#CBNAME))                                             \
-            rval = m_myInst.callCallback(Py_BuildValue("(Oddddi)",                      \
-                                   wxPyConstructObject(&a, "wxDC"),                     \
-                                              b, c, d, e, (int)f));                     \
+        if (m_myInst.findCallback(#CBNAME)) {                                           \
+            PyObject* obj = wxPyConstructObject(&a, "wxDC");                            \
+            rval = m_myInst.callCallback(Py_BuildValue("(Oddddi)", obj, b, c, d, e, (int)f));\
+            Py_DECREF(obj);                                                             \
+        }                                                                               \
         else                                                                            \
             rval = PCLASS::CBNAME(a, b, c, d, e, f);                                    \
         wxPySaveThread(doSave);                                                         \
@@ -566,10 +573,11 @@ public:
 #define IMP_PYCALLBACK__DC4DBL(CLASS, PCLASS, CBNAME)                           \
     void CLASS::CBNAME(wxDC& a, double b, double c, double d, double e) {       \
         bool doSave = wxPyRestoreThread();                                      \
-        if (m_myInst.findCallback(#CBNAME))                                     \
-            m_myInst.callCallback(Py_BuildValue("(Odddd)",                      \
-                                   wxPyConstructObject(&a, "wxDC"),             \
-                                                     b, c, d, e));              \
+        if (m_myInst.findCallback(#CBNAME)) {                                   \
+            PyObject* obj = wxPyConstructObject(&a, "wxDC");                    \
+            m_myInst.callCallback(Py_BuildValue("(Odddd)", obj, b, c, d, e));   \
+            Py_DECREF(obj);                                                     \
+        }                                                                       \
         else                                                                    \
             PCLASS::CBNAME(a, b, c, d, e);                                      \
         wxPySaveThread(doSave);                                                 \
@@ -588,10 +596,11 @@ public:
 #define IMP_PYCALLBACK__DCBOOL(CLASS, PCLASS, CBNAME)                   \
     void CLASS::CBNAME(wxDC& a, bool b) {                               \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("(Oi)",                 \
-                                   wxPyConstructObject(&a, "wxDC"),     \
-                                                     (int)b));          \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject(&a, "wxDC");            \
+            m_myInst.callCallback(Py_BuildValue("(Oi)", obj, (int)b));  \
+            Py_DECREF(obj);                                             \
+        }                                                               \
         else                                                            \
             PCLASS::CBNAME(a, b);                                       \
         wxPySaveThread(doSave);                                         \
@@ -611,10 +620,11 @@ public:
     void CLASS::CBNAME(wxControlPoint* a, bool b, double c, double d,           \
                 int e, int f) {                                                 \
         bool doSave = wxPyRestoreThread();                                      \
-        if (m_myInst.findCallback(#CBNAME))                                     \
-            m_myInst.callCallback(Py_BuildValue("(Oiddii)",                     \
-                                 wxPyConstructObject(a, "wxPyControlPoint"),    \
-                                 (int)b, c, d, e, f));                          \
+        if (m_myInst.findCallback(#CBNAME)) {                                   \
+            PyObject* obj = wxPyConstructObject(a, "wxPyControlPoint");         \
+            m_myInst.callCallback(Py_BuildValue("(Oiddii)", obj, (int)b, c, d, e, f));\
+            Py_DECREF(obj);                                                     \
+        }                                                                       \
         else                                                                    \
             PCLASS::CBNAME(a, b, c, d, e, f);                                   \
         wxPySaveThread(doSave);                                                 \
@@ -634,10 +644,11 @@ public:
 #define IMP_PYCALLBACK__WXCP2DBL2INT(CLASS, PCLASS, CBNAME)                     \
     void CLASS::CBNAME(wxControlPoint* a, double b, double c, int d, int e) {   \
         bool doSave = wxPyRestoreThread();                                      \
-        if (m_myInst.findCallback(#CBNAME))                                     \
-            m_myInst.callCallback(Py_BuildValue("(Oddii)",                      \
-                                 wxPyConstructObject(a, "wxPyControlPoint"),    \
-                                 b, c, d, e));                                  \
+        if (m_myInst.findCallback(#CBNAME)) {                                   \
+            PyObject* obj = wxPyConstructObject(a, "wxPyControlPoint");         \
+            m_myInst.callCallback(Py_BuildValue("(Oddii)", obj, b, c, d, e));   \
+            Py_DECREF(obj);                                                     \
+        }                                                                       \
         else                                                                    \
             PCLASS::CBNAME(a, b, c, d, e);                                      \
         wxPySaveThread(doSave);                                                 \
@@ -758,8 +769,9 @@ public:
             PyObject* ro;                                                       \
             ro = m_myInst.callCallbackObj(Py_BuildValue("(s)", a.c_str()));     \
             if (ro) {                                                           \
-                rval = PyString_AsString(PyObject_Str(ro));                     \
-                Py_DECREF(ro);                                                  \
+                PyObject* str = PyObject_Str(ro);                               \
+                rval = PyString_AsString(str);                                  \
+                Py_DECREF(ro);   Py_DECREF(str);                                \
             }                                                                   \
         }                                                                       \
         wxPySaveThread(doSave);                                                 \
@@ -779,8 +791,9 @@ public:
             PyObject* ro;                                                       \
             ro = m_myInst.callCallbackObj(Py_BuildValue("(si)", a.c_str(),b));  \
             if (ro) {                                                           \
-                rval = PyString_AsString(PyObject_Str(ro));                     \
-                Py_DECREF(ro);                                                  \
+                PyObject* str = PyObject_Str(ro);                               \
+                rval = PyString_AsString(str);                                  \
+                Py_DECREF(ro);   Py_DECREF(str);                                \
             }                                                                   \
         }                                                                       \
         wxPySaveThread(doSave);                                                 \
@@ -825,8 +838,9 @@ public:
             PyObject* ro;                                                       \
             ro = m_myInst.callCallbackObj(Py_BuildValue("()"));                 \
             if (ro) {                                                           \
-                rval = PyString_AsString(PyObject_Str(ro));                     \
-                Py_DECREF(ro);                                                  \
+                PyObject* str = PyObject_Str(ro);                               \
+                rval = PyString_AsString(str);                                  \
+                Py_DECREF(ro);  Py_DECREF(str);                                 \
             }                                                                   \
         }                                                                       \
         else                                                                    \
@@ -852,8 +866,9 @@ public:
             PyObject* ro;                                                       \
             ro = m_myInst.callCallbackObj(Py_BuildValue("()"));                 \
             if (ro) {                                                           \
-                rval = PyString_AsString(PyObject_Str(ro));                     \
-                Py_DECREF(ro);                                                  \
+                PyObject* str = PyObject_Str(ro);                               \
+                rval = PyString_AsString(str);                                  \
+                Py_DECREF(ro);   Py_DECREF(str);                                \
             }                                                                   \
         }                                                                       \
         wxPySaveThread(doSave);                                                 \
@@ -870,9 +885,11 @@ public:
     bool CLASS::CBNAME(const wxHtmlTag& a)  {                                   \
         bool rval = FALSE;                                                      \
         bool doSave = wxPyRestoreThread();                                      \
-        if (m_myInst.findCallback(#CBNAME))                                     \
-            rval = m_myInst.callCallback(Py_BuildValue("(O)",                   \
-                                         wxPyConstructObject((void*)&a,"wxHtmlTag"))); \
+        if (m_myInst.findCallback(#CBNAME)) {                                   \
+            PyObject* obj = wxPyConstructObject((void*)&a,"wxHtmlTag");         \
+            rval = m_myInst.callCallback(Py_BuildValue("(O)", obj));            \
+            Py_DECREF(obj);                                                     \
+        }                                                                       \
         wxPySaveThread(doSave);                                                 \
         return rval;                                                            \
     }
@@ -926,9 +943,11 @@ public:
     bool CLASS::CBNAME(wxWindow* a) {                                   \
         bool rval;                                                      \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            rval = m_myInst.callCallback(Py_BuildValue("(O)",           \
-                            wxPyConstructObject((void*)a,"wxWindow"))); \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject((void*)a,"wxWindow");   \
+            rval = m_myInst.callCallback(Py_BuildValue("(O)", obj));    \
+            Py_DECREF(obj);                                             \
+        }                                                               \
         else                                                            \
             rval = PCLASS::CBNAME(a);                                   \
         wxPySaveThread(doSave);                                         \
@@ -993,13 +1012,15 @@ public:
         wxFSFile* rval=0;                                               \
         if (m_myInst.findCallback(#CBNAME)) {                           \
             PyObject* ro;                                               \
-            ro=m_myInst.callCallbackObj(Py_BuildValue("(Os)",           \
-            wxPyConstructObject(&a, "(wxFileSystemC"),b.c_str()));      \
+            PyObject* obj = wxPyConstructObject(&a, "(wxFileSystem");   \
+            ro = m_myInst.callCallbackObj(Py_BuildValue("(Os)",         \
+                                          obj, b.c_str()));             \
             if (ro) {                                                   \
                 SWIG_GetPtrObj(ro, (void **)&rval, "_wxFSFILE_p");      \
                 Py_DECREF(ro);                                          \
             }                                                           \
-      }                                                                 \
+            Py_DECREF(obj);                                             \
+        }                                                               \
         wxPySaveThread(doSave);                                         \
         return rval;                                                    \
     };
@@ -1117,18 +1138,20 @@ public:
     void base_##CBNAME(const Type& a);
 
 
-#define IMP_PYCALLBACK__constany(CLASS, PCLASS, CBNAME, Type)   \
-    void CLASS::CBNAME(const Type& a) {                         \
-        bool doSave = wxPyRestoreThread();                      \
-        if (m_myInst.findCallback(#CBNAME))                     \
-            m_myInst.callCallback(Py_BuildValue("(O)",          \
-                     wxPyConstructObject((void*)&a, #Type)));   \
-        else                                                    \
-            PCLASS::CBNAME(a);                                  \
-        wxPySaveThread(doSave);                                 \
-    }                                                           \
-    void CLASS::base_##CBNAME(const Type& a) {                  \
-        PCLASS::CBNAME(a);                                      \
+#define IMP_PYCALLBACK__constany(CLASS, PCLASS, CBNAME, Type)           \
+    void CLASS::CBNAME(const Type& a) {                                 \
+        bool doSave = wxPyRestoreThread();                              \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject((void*)&a, #Type);      \
+            m_myInst.callCallback(Py_BuildValue("(O)", obj));           \
+            Py_DECREF(obj);                                             \
+        }                                                               \
+        else                                                            \
+            PCLASS::CBNAME(a);                                          \
+        wxPySaveThread(doSave);                                         \
+    }                                                                   \
+    void CLASS::base_##CBNAME(const Type& a) {                          \
+        PCLASS::CBNAME(a);                                              \
     }
 
 
@@ -1139,18 +1162,20 @@ public:
     void base_##CBNAME(Type& a);
 
 
-#define IMP_PYCALLBACK__any(CLASS, PCLASS, CBNAME, Type)        \
-    void CLASS::CBNAME(Type& a) {                               \
-        bool doSave = wxPyRestoreThread();                      \
-        if (m_myInst.findCallback(#CBNAME))                     \
-            m_myInst.callCallback(Py_BuildValue("(O)",          \
-                            wxPyConstructObject(&a, #Type)));   \
-        else                                                    \
-            PCLASS::CBNAME(a);                                  \
-        wxPySaveThread(doSave);                                 \
-    }                                                           \
-    void CLASS::base_##CBNAME(Type& a) {                        \
-        PCLASS::CBNAME(a);                                      \
+#define IMP_PYCALLBACK__any(CLASS, PCLASS, CBNAME, Type)                \
+    void CLASS::CBNAME(Type& a) {                                       \
+        bool doSave = wxPyRestoreThread();                              \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject((void*)&a, #Type);      \
+            m_myInst.callCallback(Py_BuildValue("(O)", obj));           \
+            Py_DECREF(obj);                                             \
+        }                                                               \
+        else                                                            \
+            PCLASS::CBNAME(a);                                          \
+        wxPySaveThread(doSave);                                         \
+    }                                                                   \
+    void CLASS::base_##CBNAME(Type& a) {                                \
+        PCLASS::CBNAME(a);                                              \
     }
 
 //---------------------------------------------------------------------------
@@ -1160,20 +1185,22 @@ public:
     bool base_##CBNAME(Type& a);
 
 
-#define IMP_PYCALLBACK_bool_any(CLASS, PCLASS, CBNAME, Type)    \
-    bool CLASS::CBNAME(Type& a) {                               \
-        bool rv;                                                \
-        bool doSave = wxPyRestoreThread();                      \
-        if (m_myInst.findCallback(#CBNAME))                     \
-            rv = m_myInst.callCallback(Py_BuildValue("(O)",     \
-                            wxPyConstructObject(&a, #Type)));   \
-        else                                                    \
-            rv = PCLASS::CBNAME(a);                             \
-        wxPySaveThread(doSave);                                 \
-        return rv;                                              \
-    }                                                           \
-    bool CLASS::base_##CBNAME(Type& a) {                        \
-        return PCLASS::CBNAME(a);                               \
+#define IMP_PYCALLBACK_bool_any(CLASS, PCLASS, CBNAME, Type)            \
+    bool CLASS::CBNAME(Type& a) {                                       \
+        bool rv;                                                        \
+        bool doSave = wxPyRestoreThread();                              \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject((void*)&a, #Type);      \
+            rv = m_myInst.callCallback(Py_BuildValue("(O)", obj));      \
+            Py_DECREF(obj);                                             \
+        }                                                               \
+        else                                                            \
+            rv = PCLASS::CBNAME(a);                                     \
+        wxPySaveThread(doSave);                                         \
+        return rv;                                                      \
+    }                                                                   \
+    bool CLASS::base_##CBNAME(Type& a) {                                \
+        return PCLASS::CBNAME(a);                                       \
     }
 
 //---------------------------------------------------------------------------

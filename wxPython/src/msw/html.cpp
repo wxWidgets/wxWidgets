@@ -163,12 +163,14 @@ public:
     }
 
     void OnExit() {
+        bool doSave = wxPyRestoreThread();
         Py_DECREF(m_tagHandlerClass);
         m_tagHandlerClass = NULL;
         for (size_t x=0; x < m_objArray.GetCount(); x++) {
             PyObject* obj = (PyObject*)m_objArray.Item(x);
             Py_DECREF(obj);
         }
+        wxPySaveThread(doSave);
     };
 
     void FillHandlersTable(wxHtmlWinParser *parser) {
@@ -229,6 +231,7 @@ IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
     if (m_myInst.findCallback("OnLinkClicked")) {
         PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo");
         m_myInst.callCallback(Py_BuildValue("(O)", obj));
+        Py_DECREF(obj);
     }
     else
         wxHtmlWindow::OnLinkClicked(link);
@@ -6273,6 +6276,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
+    { "_wxJoystick","_class_wxJoystick",0},
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
@@ -6469,6 +6473,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxHtmlParser","_wxHtmlWinParser",SwigwxHtmlWinParserTowxHtmlParser},
     { "_wxHtmlParser","_class_wxHtmlParser",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
+    { "_class_wxJoystick","_wxJoystick",0},
     { "_class_wxCommandEvent","_wxCommandEvent",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSizeEvent","_wxSizeEvent",0},

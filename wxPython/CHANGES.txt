@@ -31,6 +31,8 @@ object, (usually a window.)
 
 Added wxNotifyEvent.Allow()
 
+Fixed GOBS of reference leaks.
+
 
 
 New in 2.2.2

@@ -134,11 +134,11 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 #define PYCALLBACK__GCAINTINT(PCLASS, CBNAME)                           \
     void CBNAME(wxGridCellAttr *attr, int a, int b) {                   \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(                                      \
-                Py_BuildValue("(Oii)",                                  \
-                              wxPyConstructObject((void*)attr, "wxGridCellAttr"),    \
-                              a, b));                                   \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject((void*)attr, "wxGridCellAttr");\
+            m_myInst.callCallback(Py_BuildValue("(Oii)", obj, a, b));   \
+            Py_DECREF(obj);                                             \
+        }                                                               \
         else                                                            \
             PCLASS::CBNAME(attr, a, b);                                 \
         wxPySaveThread(doSave);                                         \
@@ -152,11 +152,11 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 #define PYCALLBACK__GCAINT(PCLASS, CBNAME)                              \
     void CBNAME(wxGridCellAttr *attr, int val) {                        \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(                                      \
-                Py_BuildValue("(Oi)",                                   \
-                              wxPyConstructObject((void*)attr, "wxGridCellAttr"),    \
-                              val));                                    \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject((void*)attr, "wxGridCellAttr");\
+            m_myInst.callCallback(Py_BuildValue("(Oi)", obj, val));     \
+            Py_DECREF(obj);                                             \
+        }                                                               \
         else                                                            \
             PCLASS::CBNAME(attr, val);                                  \
         wxPySaveThread(doSave);                                         \
@@ -199,8 +199,9 @@ static char* wxStringErrorMsg = "string type is required for parameter";
             PyObject* ro;                                               \
             ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",a,b));   \
             if (ro) {                                                   \
-                rval = PyString_AsString(PyObject_Str(ro));             \
-                Py_DECREF(ro);                                          \
+                PyObject* str = PyObject_Str(ro);                       \
+                rval = PyString_AsString(str);                          \
+                Py_DECREF(ro);  Py_DECREF(str);                         \
             }                                                           \
         }                                                               \
         wxPySaveThread(doSave);                                         \
@@ -226,8 +227,9 @@ static char* wxStringErrorMsg = "string type is required for parameter";
             PyObject* ro;                                               \
             ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",a,b));   \
             if (ro) {                                                   \
-                rval = PyString_AsString(PyObject_Str(ro));             \
-                Py_DECREF(ro);                                          \
+                PyObject* str = PyObject_Str(ro);                       \
+                rval = PyString_AsString(str);                          \
+                Py_DECREF(ro);  Py_DECREF(str);                         \
             }                                                           \
         } else                                                          \
             rval = PCLASS::CBNAME(a, b);                                \
@@ -300,8 +302,9 @@ static char* wxStringErrorMsg = "string type is required for parameter";
             PyObject* ro;                                               \
             ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",a,b));   \
             if (ro) {                                                   \
-                rval = PyFloat_AsDouble(PyObject_Str(ro));              \
-                Py_DECREF(ro);                                          \
+                PyObject* str = PyObject_Str(ro);                       \
+                rval = PyFloat_AsDouble(str);                           \
+                Py_DECREF(ro);   Py_DECREF(str);                        \
             }                                                           \
         } else                                                          \
             rval = PCLASS::CBNAME(a, b);                                \
@@ -372,8 +375,9 @@ static char* wxStringErrorMsg = "string type is required for parameter";
             PyObject* ro;                                               \
             ro = m_myInst.callCallbackObj(Py_BuildValue("(i)",a));      \
             if (ro) {                                                   \
-                rval = PyString_AsString(PyObject_Str(ro));             \
-                Py_DECREF(ro);                                          \
+                PyObject* str = PyObject_Str(ro);                       \
+                rval = PyString_AsString(str);                          \
+                Py_DECREF(ro);   Py_DECREF(str);                        \
             }                                                           \
         } else                                                          \
             rval = PCLASS::CBNAME(a);                                   \
@@ -710,7 +714,6 @@ public:
     PYCALLBACK__GCAINT(wxGridTableBase, SetColAttr);
 
 
-
     wxString GetValue(int row, int col) {
         bool doSave = wxPyRestoreThread();
         wxString rval;
@@ -718,8 +721,10 @@ public:
             PyObject* ro;
             ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",row,col));
             if (ro) {
-                rval = PyString_AsString(PyObject_Str(ro));
+                PyObject* str = PyObject_Str(ro);
+                rval = PyString_AsString(str);
                 Py_DECREF(ro);
+                Py_DECREF(str);
             }
         }
         wxPySaveThread(doSave);

@@ -67,7 +67,9 @@
             Py_DECREF(arg);
 
             // set ThisOwn
-            PyObject_SetAttrString($target, "thisown", PyInt_FromLong(1));
+            PyObject* one = PyInt_FromLong(1);
+            PyObject_SetAttrString($target, "thisown", one);
+            Py_DECREF(one);
         }
     } else {
         Py_INCREF(Py_None);
@@ -371,8 +373,10 @@ public:
         if (!PyObject_HasAttrString(py, name))
             return NULL;
         PyObject* o = PyObject_GetAttrString(py, name);
-        if (!PyMethod_Check(o) && !PyCFunction_Check(o))
+        if (!PyMethod_Check(o) && !PyCFunction_Check(o)) {
+            Py_DECREF(o);
             return NULL;
+        }
         return o;
     }
 

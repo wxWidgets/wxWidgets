@@ -264,7 +264,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 
 //---------------------------------------------------------------------------
 // Typemap to convert strings to wxColour.  Two string formats are accepted,
-// either a colour name, for a hex colour spec like "#RRGGBB"
+// either a colour name, or a hex colour spec like "#RRGGBB"
 
 %typemap(python,in) wxColour& (wxColour temp) {
     $target = &temp;

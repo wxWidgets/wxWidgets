@@ -19,7 +19,7 @@ class MyParentFrame(wxMDIParentFrame):
         menubar.Append(menu, "&File")
         self.SetMenuBar(menubar)
 
-        #self.CreateStatusBar()
+        self.CreateStatusBar()
 
         EVT_MENU(self, 5000, self.OnNewWindow)
         EVT_MENU(self, 5001, self.OnExit)

@@ -339,6 +339,7 @@ public:
 };
 
 %new wxColour* wxNamedColour(const wxString& colorName);
+
 %{                                      // Alternate 'constructor'
     wxColour* wxNamedColour(const wxString& colorName) {
         return new wxColour(colorName);

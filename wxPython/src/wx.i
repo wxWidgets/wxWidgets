@@ -52,7 +52,7 @@
 //---------------------------------------------------------------------------
 
 
-#define __version__ "0.0.0"   // The real value is now in build.py...
+#define __version__ "0.0.0"   // The real value is now in setup.py...
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;

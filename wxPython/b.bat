@@ -40,9 +40,14 @@ elseiff "%1" == "f" then
 	shift
 	set CMD=%SETUP% %FLAGS% FINAL=1 build_ext --inplace %1 %2 %3 %4 %5 %6 %7 %8 %9
 
+rem "h" --> HYBRID
+elseiff "%1" == "h" then
+	shift
+	set CMD=%SETUP% %FLAGS% HYBRID=1 build_ext --inplace %1 %2 %3 %4 %5 %6 %7 %8 %9
+
 rem (no command arg) --> normal build for development
 else
-	set CMD=%SETUP% %FLAGS% HYBRID=1 build_ext --inplace %1 %2 %3 %4 %5 %6 %7 %8 %9
+	set CMD=%SETUP% %FLAGS% HYBRID=0 build_ext --inplace --debug %1 %2 %3 %4 %5 %6 %7 %8 %9
 endiff
 
 

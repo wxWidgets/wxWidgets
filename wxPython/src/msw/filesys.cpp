@@ -488,7 +488,9 @@ static PyObject *_wrap_wxFSFile_GetStream(PyObject *self, PyObject *args, PyObje
             Py_DECREF(arg);
 
             // set ThisOwn
-            PyObject_SetAttrString(_resultobj, "thisown", PyInt_FromLong(1));
+            PyObject* one = PyInt_FromLong(1);
+            PyObject_SetAttrString(_resultobj, "thisown", one);
+            Py_DECREF(one);
         }
     } else {
         Py_INCREF(Py_None);

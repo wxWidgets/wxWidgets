@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.0b1"
+VERSION          = "2.3b1"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "robin@alldunn.com"
@@ -199,7 +199,7 @@ if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
 
 print 'Preparing CORE...'
 swig_force = force
-swig_args = ['-c++', '-shadow', '-python', '-keyword', '-dascii',
+swig_args = ['-c++', '-shadow', '-python', '-keyword', '-dnone', #'-dascii',
              '-I./src', '-D'+WXPLAT]
 swig_deps = ['src/my_typemaps.i']
 
