@@ -2348,21 +2348,13 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
 
 void wxApp::MacHandleMenuCommand( wxUint32 id )
 {
-        wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
-        wxMenu* menu = NULL ;
-        wxMenuItem* item = NULL ;
-        if ( mbar )
-        {
-            item = mbar->FindItem( id , &menu ) ;
-        }
-        wxCHECK_RET( item != NULL && menu != NULL && mbar != NULL, wxT("error in menu item callback") );
-
-        if (item->IsCheckable())
-        {
-            item->Check( !item->IsChecked() ) ;
-        }
-
-        menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
+    wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+    wxFrame* frame = mbar->GetFrame();
+    wxCHECK_RET( mbar != NULL && frame != NULL, wxT("error in menu item callback") );
+    if ( frame )
+    {
+        frame->ProcessCommand(id);
+    }
 }
 
 #if !TARGET_CARBON

@@ -199,7 +199,8 @@ bool wxFrameBase::ProcessCommand(int id)
         }
     }
 
-    return GetEventHandler()->ProcessEvent(commandEvent);
+    GetEventHandler()->ProcessEvent(commandEvent);
+    return TRUE;
 #else // !wxUSE_MENUS
     return FALSE;
 #endif // wxUSE_MENUS/!wxUSE_MENUS
