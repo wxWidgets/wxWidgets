@@ -751,10 +751,10 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
         if (!getDataTypeInfo(SQL_VARBINARY,typeInfBlob))
             return(FALSE);
         else
-            typeInfInteger.FsqlType = SQL_VARBINARY;
+            typeInfBlob.FsqlType = SQL_VARBINARY;
     }
     else
-        typeInfInteger.FsqlType = SQL_LONGVARBINARY;
+        typeInfBlob.FsqlType = SQL_LONGVARBINARY;
 
 //typeInfBlob.TypeName = "BLOB";
 
