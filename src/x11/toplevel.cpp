@@ -163,6 +163,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
                   FocusChangeMask |
                   ColormapChangeMask |
                   StructureNotifyMask |
+                  ConfigureNotify |
                   PropertyChangeMask
                   );
     
@@ -416,6 +417,11 @@ bool wxSetWMDecorations(Window w, long style)
     {
         wmProp.props |= GR_WM_PROPS_CAPTION ;
         wmProp.flags |= GR_WM_FLAGS_PROPS ;
+
+        // The default dialog style doesn't include any kind
+        // of border, which is a bit odd. Anyway, inclusion
+        // of a caption surely implies a border.
+        style |= wxTHICK_FRAME;
     }
 
     if (style & wxTHICK_FRAME)

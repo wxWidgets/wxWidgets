@@ -113,14 +113,12 @@ void wxTopLevelWindowBase::DoClientToScreen(int *x, int *y) const
 // whole client area
 void wxTopLevelWindowBase::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    // if we're using constraints - do use them
-#if wxUSE_CONSTRAINTS
+    // if we're using constraints or sizers - do use them
     if ( GetAutoLayout() )
     {
         Layout();
     }
     else
-#endif // wxUSE_CONSTRAINTS
     {
         // do we have _exactly_ one child?
         wxWindow *child = (wxWindow *)NULL;
