@@ -981,6 +981,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/notebook.h \
 	wx/generic/panelg.h \
 	wx/generic/prntdlgg.h \
+	wx/generic/printps.h \
 	wx/generic/progdlgg.h \
 	wx/generic/scrolwin.h \
 	wx/generic/spinctlg.h \
@@ -1713,7 +1714,6 @@ COND_TOOLKIT_OS2_GUI_HDR =  \
 @COND_TOOLKIT_COCOA@LOWLEVEL_HDR = 
 COND_TOOLKIT_GTK_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
-	wx/generic/printps.h \
 	wx/unix/fontutil.h \
 	wx/unix/utilsx11.h \
 	wx/generic/paletteg.h
@@ -1744,17 +1744,12 @@ COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/mgl/toplevel.h \
 	wx/mgl/window.h
 @COND_TOOLKIT_MGL@LOWLEVEL_HDR = $(COND_TOOLKIT_MGL_LOWLEVEL_HDR)
-COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
-	wx/generic/caret.h \
-	wx/generic/printps.h \
-	wx/unix/fontutil.h \
-	wx/unix/utilsx11.h
-@COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = $(COND_TOOLKIT_MOTIF_LOWLEVEL_HDR)
+@COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = wx/generic/caret.h \
+@COND_TOOLKIT_MOTIF@	wx/unix/fontutil.h wx/unix/utilsx11.h
 @COND_TOOLKIT_MSW@LOWLEVEL_HDR = 
 @COND_TOOLKIT_OS2@LOWLEVEL_HDR = 
 COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
-	wx/generic/printps.h \
 	wx/unix/fontutil.h \
 	wx/unix/utilsx11.h \
 	src/generic/timer.h \
@@ -2176,6 +2171,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_numdlgg.o \
 	monodll_panelg.o \
 	monodll_progdlgg.o \
+	monodll_printps.o \
 	monodll_renderg.o \
 	monodll_scrlwing.o \
 	monodll_selstore.o \
@@ -2319,6 +2315,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_numdlgg.o \
 	monodll_panelg.o \
 	monodll_progdlgg.o \
+	monodll_printps.o \
 	monodll_renderg.o \
 	monodll_scrlwing.o \
 	monodll_selstore.o \
@@ -2414,6 +2411,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_numdlgg.o \
 	monolib_panelg.o \
 	monolib_progdlgg.o \
+	monolib_printps.o \
 	monolib_renderg.o \
 	monolib_scrlwing.o \
 	monolib_selstore.o \
@@ -2557,6 +2555,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_numdlgg.o \
 	monolib_panelg.o \
 	monolib_progdlgg.o \
+	monolib_printps.o \
 	monolib_renderg.o \
 	monolib_scrlwing.o \
 	monolib_selstore.o \
@@ -2652,6 +2651,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_numdlgg.o \
 	coredll_panelg.o \
 	coredll_progdlgg.o \
+	coredll_printps.o \
 	coredll_renderg.o \
 	coredll_scrlwing.o \
 	coredll_selstore.o \
@@ -2795,6 +2795,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_numdlgg.o \
 	coredll_panelg.o \
 	coredll_progdlgg.o \
+	coredll_printps.o \
 	coredll_renderg.o \
 	coredll_scrlwing.o \
 	coredll_selstore.o \
@@ -2890,6 +2891,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_numdlgg.o \
 	corelib_panelg.o \
 	corelib_progdlgg.o \
+	corelib_printps.o \
 	corelib_renderg.o \
 	corelib_scrlwing.o \
 	corelib_selstore.o \
@@ -3033,6 +3035,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_numdlgg.o \
 	corelib_panelg.o \
 	corelib_progdlgg.o \
+	corelib_printps.o \
 	corelib_renderg.o \
 	corelib_scrlwing.o \
 	corelib_selstore.o \
@@ -3341,8 +3344,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_notebook.o \
 	monodll_access.o \
 	monodll_ownerdrw.o \
-	monodll_printdlg.o \
-	monodll_printwin.o \
 	monodll_radiobox.o \
 	monodll_radiobut.o \
 	monodll_scrolbar.o \
@@ -3729,8 +3730,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_notebook.o \
 	monolib_access.o \
 	monolib_ownerdrw.o \
-	monolib_printdlg.o \
-	monolib_printwin.o \
 	monolib_radiobox.o \
 	monolib_radiobut.o \
 	monolib_scrolbar.o \
@@ -4117,8 +4116,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_notebook.o \
 	coredll_access.o \
 	coredll_ownerdrw.o \
-	coredll_printdlg.o \
-	coredll_printwin.o \
 	coredll_radiobox.o \
 	coredll_radiobut.o \
 	coredll_scrolbar.o \
@@ -4505,8 +4502,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_notebook.o \
 	corelib_access.o \
 	corelib_ownerdrw.o \
-	corelib_printdlg.o \
-	corelib_printwin.o \
 	corelib_radiobox.o \
 	corelib_radiobut.o \
 	corelib_scrolbar.o \
@@ -4628,7 +4623,6 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_caret.o \
-	monodll_printps.o \
 	monodll_dialup.o \
 	monodll_fontenum.o \
 	monodll_fontutil.o \
@@ -4697,7 +4691,6 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_caret.o \
-	monodll_printps.o \
 	monodll_dialup.o \
 	monodll_fontenum.o \
 	monodll_fontutil.o \
@@ -4747,6 +4740,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_palette.o \
 	monodll_pen.o \
 	monodll_popupwin.o \
+	monodll_printdlg.o \
+	monodll_printwin.o \
 	monodll_region.o \
 	monodll_renderer.o \
 	monodll_settings.o \
@@ -4760,7 +4755,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_caret.o \
-	monodll_printps.o \
 	monodll_dialup.o \
 	monodll_fontenum.o \
 	monodll_fontutil.o \
@@ -4800,7 +4794,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_0 = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_0 =  \
 	monolib_caret.o \
-	monolib_printps.o \
 	monolib_dialup.o \
 	monolib_fontenum.o \
 	monolib_fontutil.o \
@@ -4869,7 +4862,6 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_0 =  \
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_0)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_0 =  \
 	monolib_caret.o \
-	monolib_printps.o \
 	monolib_dialup.o \
 	monolib_fontenum.o \
 	monolib_fontutil.o \
@@ -4919,6 +4911,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0 =  \
 	monolib_palette.o \
 	monolib_pen.o \
 	monolib_popupwin.o \
+	monolib_printdlg.o \
+	monolib_printwin.o \
 	monolib_region.o \
 	monolib_renderer.o \
 	monolib_settings.o \
@@ -4932,7 +4926,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0 =  \
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_0 = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0 =  \
 	monolib_caret.o \
-	monolib_printps.o \
 	monolib_dialup.o \
 	monolib_fontenum.o \
 	monolib_fontutil.o \
@@ -4972,7 +4965,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0 =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_8 = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_8 =  \
 	coredll_caret.o \
-	coredll_printps.o \
 	coredll_dialup.o \
 	coredll_fontenum.o \
 	coredll_fontutil.o \
@@ -5041,7 +5033,6 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_8 =  \
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_8)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_8 =  \
 	coredll_caret.o \
-	coredll_printps.o \
 	coredll_dialup.o \
 	coredll_fontenum.o \
 	coredll_fontutil.o \
@@ -5091,6 +5082,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8 =  \
 	coredll_palette.o \
 	coredll_pen.o \
 	coredll_popupwin.o \
+	coredll_printdlg.o \
+	coredll_printwin.o \
 	coredll_region.o \
 	coredll_renderer.o \
 	coredll_settings.o \
@@ -5104,7 +5097,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8 =  \
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_8 = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8 =  \
 	coredll_caret.o \
-	coredll_printps.o \
 	coredll_dialup.o \
 	coredll_fontenum.o \
 	coredll_fontutil.o \
@@ -5144,7 +5136,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8 =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_9 = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_caret.o \
-	corelib_printps.o \
 	corelib_dialup.o \
 	corelib_fontenum.o \
 	corelib_fontutil.o \
@@ -5213,7 +5204,6 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_9 =  \
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_9)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_caret.o \
-	corelib_printps.o \
 	corelib_dialup.o \
 	corelib_fontenum.o \
 	corelib_fontutil.o \
@@ -5263,6 +5253,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_palette.o \
 	corelib_pen.o \
 	corelib_popupwin.o \
+	corelib_printdlg.o \
+	corelib_printwin.o \
 	corelib_region.o \
 	corelib_renderer.o \
 	corelib_settings.o \
@@ -5276,7 +5268,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9 =  \
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_9 = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_caret.o \
-	corelib_printps.o \
 	corelib_dialup.o \
 	corelib_fontenum.o \
 	corelib_fontutil.o \
@@ -8222,8 +8213,8 @@ coredll_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 coredll_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_printdlg.o: $(srcdir)/src/msw/printdlg.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_printdlg.o: $(srcdir)/src/msw/printdlg.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_printdlg.o: $(srcdir)/src/mac/printdlg.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -8231,17 +8222,11 @@ coredll_print.o: $(srcdir)/src/os2/print.cpp
 coredll_printmac.o: $(srcdir)/src/mac/printmac.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1@coredll_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+@COND_USE_GUI_1@coredll_printps.o: $(srcdir)/src/generic/printps.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF_USE_GUI_1@coredll_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-coredll_printwin.o: $(srcdir)/src/msw/printwin.cpp
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_printwin.o: $(srcdir)/src/msw/printwin.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1@coredll_prntbase.o: $(srcdir)/src/common/prntbase.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -10282,8 +10267,8 @@ corelib_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 corelib_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_printdlg.o: $(srcdir)/src/msw/printdlg.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_printdlg.o: $(srcdir)/src/msw/printdlg.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_printdlg.o: $(srcdir)/src/mac/printdlg.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -10291,17 +10276,11 @@ corelib_print.o: $(srcdir)/src/os2/print.cpp
 corelib_printmac.o: $(srcdir)/src/mac/printmac.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1@corelib_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+@COND_USE_GUI_1@corelib_printps.o: $(srcdir)/src/generic/printps.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF_USE_GUI_1@corelib_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-corelib_printwin.o: $(srcdir)/src/msw/printwin.cpp
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_printwin.o: $(srcdir)/src/msw/printwin.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@corelib_prntbase.o: $(srcdir)/src/common/prntbase.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -13019,8 +12998,8 @@ monodll_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 monodll_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_printdlg.o: $(srcdir)/src/msw/printdlg.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_printdlg.o: $(srcdir)/src/msw/printdlg.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_printdlg.o: $(srcdir)/src/mac/printdlg.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -13028,17 +13007,11 @@ monodll_print.o: $(srcdir)/src/os2/print.cpp
 monodll_printmac.o: $(srcdir)/src/mac/printmac.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1@monodll_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_USE_GUI_1@monodll_printps.o: $(srcdir)/src/generic/printps.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-monodll_printwin.o: $(srcdir)/src/msw/printwin.cpp
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_printwin.o: $(srcdir)/src/msw/printwin.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monodll_prntbase.o: $(srcdir)/src/common/prntbase.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -15535,8 +15508,8 @@ monolib_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 monolib_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_printdlg.o: $(srcdir)/src/msw/printdlg.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_printdlg.o: $(srcdir)/src/msw/printdlg.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_printdlg.o: $(srcdir)/src/mac/printdlg.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -15544,17 +15517,11 @@ monolib_print.o: $(srcdir)/src/os2/print.cpp
 monolib_printmac.o: $(srcdir)/src/mac/printmac.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1@monolib_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_USE_GUI_1@monolib_printps.o: $(srcdir)/src/generic/printps.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_printps.o: $(srcdir)/src/generic/printps.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-monolib_printwin.o: $(srcdir)/src/msw/printwin.cpp
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_printwin.o: $(srcdir)/src/msw/printwin.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monolib_prntbase.o: $(srcdir)/src/common/prntbase.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
