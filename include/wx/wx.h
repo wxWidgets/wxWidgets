@@ -73,6 +73,7 @@
 #include "wx/textdlg.h"
 #include "wx/filedlg.h"
 #include "wx/dirdlg.h"
+#include "wx/toolbar.h"
 
 #if wxUSE_VALIDATORS
     #include "wx/valtext.h"

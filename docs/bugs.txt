@@ -105,19 +105,27 @@ IDENTIFIED BY: A.T.Hofkamp
 DATE FIXED: 11/11/1999
 FIXED BY: Vaclav Slavik
 
-BUG NUMBER:             6
-SHORT DESCRIPTION: MSWindows Paths in include files
-DETAILS: I may be wrong, but it looks like all the paths in the
-include files are based on a unix system. The problem is when
-you go to compile VC++6 can't find any of the other includes it
-needs. [Note from JACS: VC++ accepts forward slashes so
-there must be a setup problem.]
-WORKAROUND: Change all the paths in the includes
+BUG NUMBER: 6
+SHORT DESCRIPTION: wxGTK-2.1.11 fails to build under IRIX
+DETAILS: Seems we have a section that says, if we're not Sun, Linux, or
+FreeBSD, then there's something very wrong...
+c++ -c -MMD -D__WXGTK__ -DGTK_NO_CHECK_CASTS -D_REENTRANT -D_IODBC_ -O2
+-I. -I./include -I./include
+-I./src/zlib -I./src/png -I./src/jpeg
+-I/home/rhh/software/gtk+-1.2.3/include
+-I/home/rhh/software/glib-1.2.3/lib/glib/include
+-I/home/rhh/software/glib-1.2.3/include -Wall
+-D"wxINSTALL_PREFIX=\"/home/rhh/software/wxGTK-2.1.11\"" -fPIC -o
+dialup.o ./src/unix/dialup.cpp ./src/unix/dialup.cpp: In method `int
+wxDialUpManagerImpl::CheckIfconfig()':
+./src/unix/dialup.cpp:500: warning: ignoring pragma: warning
+./src/unix/dialup.cpp:527: parse error before `;'
+./src/unix/dialup.cpp:544: confused by earlier errors, bailing out gmake:
+*** [dialup.o] Error 1
 wxWINDOWS VERSION: 2.1.11
-PLATFORMS: wxMSW
-DATE IDENTIFIED: 11/11/1999
-IDENTIFIED BY: Mark A Russell <markarussell@earthlink.net>
-
+PLATFORMS: wxGTK
+DATE IDENTIFIED: 16/11/1999
+IDENTIFIED BY: Randall Hopper
 
 
 ---------------------------END OF BUGLIST-------------------------

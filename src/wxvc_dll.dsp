@@ -992,10 +992,6 @@ SOURCE=.\msw\tbar95.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\tbarmsw.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\textctrl.cpp
 # End Source File
 # Begin Source File
