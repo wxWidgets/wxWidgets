@@ -523,7 +523,7 @@ fi
 
 
 
-if test "x$wx_cv_path_glcanvas" = "x"; then
+if test "x$wx_cv_use_gui" = "x"; then
     { echo "configure: error: Please run configure from the top level directory." 1>&2; exit 1; }
 fi
 

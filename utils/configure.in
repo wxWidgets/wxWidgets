@@ -5,7 +5,7 @@ AC_INIT(Makefile.in)
 
 dnl we need the values the main configure determined for us, so refuse
 dnl to run if we don't have them
-if test "x$wx_cv_path_glcanvas" = "x"; then
+if test "x$wx_cv_use_gui" = "x"; then
     AC_MSG_ERROR([Please run configure from the top level directory.])
 fi
 

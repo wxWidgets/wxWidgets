@@ -5,7 +5,11 @@ AC_INIT(Makefile.in)
 
 dnl we need the values the main configure determined for us, so refuse
 dnl to run if we don't have them
-if test "x$wx_cv_if_gnu_make" = "x"; then
+dnl
+dnl note that the only one we use here if wx_cv_if_gnu_make but we can't test
+dnl for this because it may perfectly well be empty (if we're using GNU make),
+dnl so use something else
+if test "x$wx_cv_path_ifs" = "x"; then
     AC_MSG_ERROR([Please run configure from the top level directory.])
 fi
 
