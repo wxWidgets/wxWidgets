@@ -2392,17 +2392,16 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             }
 
                             HFONT hFont;
-                            wxColour colText, colBack;
                             if ( attr->HasFont() )
                             {
-                                wxFont font = attr->GetFont();
-                                hFont = (HFONT)font.GetResourceHandle();
+                                hFont = GetHfontOf(attr->GetFont());
                             }
                             else
                             {
                                 hFont = 0;
                             }
 
+                            wxColour colText;
                             if ( attr->HasTextColour() )
                             {
                                 colText = attr->GetTextColour();
@@ -2415,16 +2414,14 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             // selection colours should override ours
                             if ( nmcd.uItemState & CDIS_SELECTED )
                             {
-                                DWORD clrBk = ::GetSysColor(COLOR_HIGHLIGHT);
-                                lptvcd->clrTextBk = clrBk;
-
-                                // try to make the text visible
-                                lptvcd->clrText = wxColourToRGB(colText);
-                                lptvcd->clrText |= ~clrBk;
-                                lptvcd->clrText &= 0x00ffffff;
+                                lptvcd->clrTextBk =
+                                    ::GetSysColor(COLOR_HIGHLIGHT);
+                                lptvcd->clrText =
+                                    ::GetSysColor(COLOR_HIGHLIGHTTEXT);
                             }
-                            else
+                            else // !selected
                             {
+                                wxColour colBack;
                                 if ( attr->HasBackgroundColour() )
                                 {
                                     colBack = attr->GetBackgroundColour();
