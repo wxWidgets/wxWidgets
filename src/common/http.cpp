@@ -36,7 +36,7 @@
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxHTTP, wxProtocol)
-IMPLEMENT_PROTOCOL(wxHTTP, "http", "80", TRUE)
+IMPLEMENT_PROTOCOL(wxHTTP, _T("http"), _T("80"), TRUE)
 #endif
 
 #define HTTP_BSIZE 2048
@@ -66,7 +66,7 @@ wxHTTP::~wxHTTP()
 
 wxString wxHTTP::GetContentType()
 {
-  return GetHeader("Content-Type");
+  return GetHeader(_T("Content-Type"));
 }
 
 void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
@@ -104,9 +104,10 @@ void wxHTTP::SendHeaders()
     wxString *str = (wxString *)head->Data();
 
     wxString buf;
-    buf.Printf("%s: %s\n\r", head->GetKeyString(), str->GetData());
+    buf.Printf(_T("%s: %s\n\r"), head->GetKeyString(), str->GetData());
 
-    Write(buf, buf.Len());
+    wxWX2MBbuf cbuf = buf.mb_str();
+    Write(cbuf, strlen(cbuf));
 
     head = head->Next();
   }
@@ -127,7 +128,7 @@ bool wxHTTP::ParseHeaders()
     if (line.Length() == 0)
       break;
 
-    printf("Header: %s\n", WXSTRINGCAST line);
+    wxPrintf(_T("Header: %s\n"), WXSTRINGCAST line);
     int pos = line.Find(':');
     if (pos == -1)
       return FALSE;
@@ -163,7 +164,7 @@ bool wxHTTP::Connect(const wxString& host)
     return FALSE;
   }
 
-  if (!addr->Service("http"))
+  if (!addr->Service(_T("http")))
     addr->Service(80);
 
   return TRUE;
@@ -186,6 +187,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
   char *tmp_buf;
   char buf[HTTP_BSIZE];
+  wxWX2MBbuf pathbuf = path.mb_str();
 
   switch (req) {
   case wxHTTP_GET:
@@ -199,7 +201,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   Notify(FALSE);
   SetFlags(WAITALL);
 
-  sprintf(buf, "%s %s HTTP/1.0\n\r", tmp_buf, (const char *)path);
+  sprintf(buf, "%s %s HTTP/1.0\n\r", tmp_buf, (const char*)pathbuf);
   Write(buf, strlen(buf));
   SendHeaders();
   sprintf(buf, "\n\r");
@@ -213,22 +215,22 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     return FALSE;
   }
 
-  if (!tmp_str.Contains("HTTP/")) {
+  if (!tmp_str.Contains(_T("HTTP/"))) {
     // TODO: support HTTP v0.9 which can have no header.
-    SetHeader("Content-Length", "-1");
-    SetHeader("Content-Type", "none/none");
+    SetHeader(_T("Content-Length"), _T("-1"));
+    SetHeader(_T("Content-Type"), _T("none/none"));
     RestoreState();
     return TRUE;
   }
 
-  wxStringTokenizer token(tmp_str,' ');
+  wxStringTokenizer token(tmp_str,_T(' '));
   wxString tmp_str2;
   bool ret_value;
 
   token.NextToken();
   tmp_str2 = token.NextToken();
 
-  switch (atoi(tmp_str2)) {
+  switch (wxAtoi(tmp_str2)) {
   case 200:
     break;
   default:
@@ -272,9 +274,9 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
   if (!BuildRequest(path, wxHTTP_GET))
     return NULL;
 
-  printf("Len = %s\n", WXSTRINGCAST GetHeader("Content-Length"));
-  if (!GetHeader("Content-Length").IsEmpty())
-    inp_stream->m_httpsize = atoi(WXSTRINGCAST GetHeader("Content-Length"));
+  wxPrintf(_T("Len = %s\n"), WXSTRINGCAST GetHeader(_T("Content-Length")));
+  if (!GetHeader(_T("Content-Length")).IsEmpty())
+    inp_stream->m_httpsize = wxAtoi(WXSTRINGCAST GetHeader(_T("Content-Length")));
 
   return inp_stream;
 }

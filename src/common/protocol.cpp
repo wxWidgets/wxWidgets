@@ -40,7 +40,7 @@
  * --------------------------------------------------------------
  */
 
-wxProtoInfo::wxProtoInfo(const char *name, const char *serv,
+wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
                          const bool need_host1, wxClassInfo *info)
 {
   m_protoname = name;

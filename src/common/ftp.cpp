@@ -50,7 +50,7 @@
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFTP, wxProtocol)
-IMPLEMENT_PROTOCOL(wxFTP, "ftp", "ftp", TRUE)
+IMPLEMENT_PROTOCOL(wxFTP, _T("ftp"), _T("ftp"), TRUE)
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -60,14 +60,14 @@ IMPLEMENT_PROTOCOL(wxFTP, "ftp", "ftp", TRUE)
 wxFTP::wxFTP()
   : wxProtocol()
 {
-  char tmp[256];
+  wxChar tmp[256];
 
   m_lastError = wxPROTO_NOERR;
   m_streaming = FALSE;
 
-  m_user = "anonymous";
+  m_user = _T("anonymous");
   wxGetUserName(tmp, 256);
-  m_passwd.sprintf("%s@",tmp);
+  m_passwd.sprintf(_T("%s@"),tmp);
   wxGetHostName(tmp, 256);
   m_passwd += tmp;
 
@@ -106,13 +106,13 @@ bool wxFTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
     return FALSE;
   }
 
-  command.sprintf("USER %s", (const char *)m_user);
+  command.sprintf(_T("USER %s"), (const wxChar *)m_user);
   if (!SendCommand(command, '3')) {
     Close();
     return FALSE;
   }
 
-  command.sprintf("PASS %s", (const char *)m_passwd);
+  command.sprintf(_T("PASS %s"), (const wxChar *)m_passwd);
   if (!SendCommand(command, '2')) {
     Close();
     return FALSE;
@@ -127,7 +127,7 @@ bool wxFTP::Connect(const wxString& host)
   wxString my_host = host;
 
   addr.Hostname(my_host);
-  addr.Service("ftp");
+  addr.Service(_T("ftp"));
 
   return Connect(addr);
 }
@@ -139,7 +139,7 @@ bool wxFTP::Close()
     return FALSE;
   }
   if (m_connected)
-    SendCommand(wxString("QUIT"), '2');
+    SendCommand(wxString(_T("QUIT")), '2');
   return wxSocketClient::Close();
 }
 
@@ -154,8 +154,9 @@ bool wxFTP::SendCommand(const wxString& command, char exp_ret)
     m_lastError = wxPROTO_STREAMING;
     return FALSE;
   }
-  tmp_str = command + "\r\n";
-  if (Write((char *)tmp_str.GetData(), tmp_str.Length()).Error()) {
+  tmp_str = command + _T("\r\n");
+  wxWX2MBbuf tmp_buf = tmp_str.mb_str();
+  if (Write(MBSTRINGCAST tmp_buf, strlen(tmp_buf)).Error()) {
     m_lastError = wxPROTO_NETERR;
     return FALSE;
   }
@@ -174,7 +175,7 @@ bool wxFTP::GetResult(char exp)
   if (m_lastResult.GetChar(3) == '-') {
     wxString key = m_lastResult.Left((size_t)3);
 
-    key += ' ';
+    key += _T(' ');
 
     while (m_lastResult.Index(key) != 0) {
       if ((m_lastError = GetLine(this, m_lastResult)))
@@ -191,14 +192,14 @@ bool wxFTP::ChDir(const wxString& dir)
 {
   wxString str = dir;
 
-  str.Prepend("CWD ");
+  str.Prepend(_T("CWD "));
   return SendCommand(str, '2');
 }
 
 bool wxFTP::MkDir(const wxString& dir)
 {
   wxString str = dir;
-  str.Prepend("MKD ");
+  str.Prepend(_T("MKD "));
   return SendCommand(str, '2');
 }
 
@@ -206,7 +207,7 @@ bool wxFTP::RmDir(const wxString& dir)
 {
   wxString str = dir;
   
-  str.Prepend("PWD ");
+  str.Prepend(_T("PWD "));
   return SendCommand(str, '2');
 }
 
@@ -214,11 +215,11 @@ wxString wxFTP::Pwd()
 {
   int beg, end;
 
-  if (!SendCommand("PWD", '2'))
+  if (!SendCommand(_T("PWD"), '2'))
     return wxString((char *)NULL);
   
-  beg = m_lastResult.Find('\"',FALSE);
-  end = m_lastResult.Find('\"',TRUE);
+  beg = m_lastResult.Find(_T('\"'),FALSE);
+  end = m_lastResult.Find(_T('\"'),TRUE);
 
   return wxString(beg+1, end);
 }
@@ -227,11 +228,11 @@ bool wxFTP::Rename(const wxString& src, const wxString& dst)
 {
   wxString str;
 
-  str = "RNFR " + src;
+  str = _T("RNFR ") + src;
   if (!SendCommand(str, '3'))
     return FALSE;
 
-  str = "RNTO " + dst;
+  str = _T("RNTO ") + dst;
   return SendCommand(str, '2');
 }
 
@@ -239,7 +240,7 @@ bool wxFTP::RmFile(const wxString& path)
 {
   wxString str;
 
-  str = "DELE ";
+  str = _T("DELE ");
   str += path;
   return SendCommand(str, '2');
 }
@@ -291,17 +292,17 @@ wxSocketClient *wxFTP::GetPort()
   wxString straddr;
   int addr_pos;
 
-  if (!SendCommand("PASV", '2'))
+  if (!SendCommand(_T("PASV"), '2'))
     return NULL;
 
   sin.sa_family = AF_INET;
-  addr_pos = m_lastResult.Find('(');
+  addr_pos = m_lastResult.Find(_T('('));
   if (addr_pos == -1) {
     m_lastError = wxPROTO_PROTERR;
     return NULL;
   }
   straddr = m_lastResult(addr_pos+1, m_lastResult.Length());
-  sscanf((const char *)straddr,"%d,%d,%d,%d,%d,%d",&a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
+  wxSscanf((const wxChar *)straddr,_T("%d,%d,%d,%d,%d,%d"),&a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
   sin.sa_data[2] = (char)a[2];
   sin.sa_data[3] = (char)a[3];
   sin.sa_data[4] = (char)a[4];
@@ -324,7 +325,7 @@ wxSocketClient *wxFTP::GetPort()
 bool wxFTP::Abort(void)
 {
   m_streaming = FALSE;
-  if (!SendCommand("ABOR", '4'))
+  if (!SendCommand(_T("ABOR"), '4'))
     return FALSE;
   return GetResult('2');
 }
@@ -335,7 +336,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
   int pos_size;
   wxInputFTPStream *in_stream;
 
-  if (!SendCommand("TYPE I", '2'))
+  if (!SendCommand(_T("TYPE I"), '2'))
     return NULL;
 
   wxSocketClient *sock = GetPort();
@@ -345,17 +346,17 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
     return NULL;
   }
 
-  tmp_str = "RETR " + path;
+  tmp_str = _T("RETR ") + path;
   if (!SendCommand(tmp_str, '1'))
     return NULL;
 
   in_stream = new wxInputFTPStream(this, sock);
 
-  pos_size = m_lastResult.Index('(');
+  pos_size = m_lastResult.Index(_T('('));
   if (pos_size != wxNOT_FOUND) {
-    wxString str_size = m_lastResult(pos_size+1, m_lastResult.Index(')')-1);
+    wxString str_size = m_lastResult(pos_size+1, m_lastResult.Index(_T(')'))-1);
 
-    in_stream->m_ftpsize = atoi(WXSTRINGCAST str_size);
+    in_stream->m_ftpsize = wxAtoi(WXSTRINGCAST str_size);
   }
 
   return in_stream;
@@ -365,12 +366,12 @@ wxOutputStream *wxFTP::GetOutputStream(const wxString& path)
 {
   wxString tmp_str;
 
-  if (!SendCommand("TYPE I", '2'))
+  if (!SendCommand(_T("TYPE I"), '2'))
     return NULL;
 
   wxSocketClient *sock = GetPort();
 
-  tmp_str = "STOR " + path;
+  tmp_str = _T("STOR ") + path;
   if (!SendCommand(tmp_str, '1'))
     return FALSE;
 
@@ -381,7 +382,7 @@ wxList *wxFTP::GetList(const wxString& wildcard)
 {
   wxList *file_list = new wxList;
   wxSocketBase *sock = GetPort();
-  wxString tmp_str = "NLST";
+  wxString tmp_str = _T("NLST");
 
   if (!wildcard.IsNull())
     tmp_str += wildcard;
