@@ -1931,7 +1931,7 @@ wxListItem::wxListItem(void)
 
 IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxCommandEvent)
 
-wxListEvent::wxListEvent( WXTYPE commandType, int id ):
+wxListEvent::wxListEvent( wxEventType commandType, int id ):
   wxCommandEvent( commandType, id )
 {
   m_code = 0;
