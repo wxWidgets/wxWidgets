@@ -44,7 +44,6 @@ public:
 
     // single selection logic
     virtual void SetSelection(int n) = 0;
-    virtual bool SetStringSelection(const wxString& s);
 
     // don't override this
     virtual void Select(int n) { SetSelection(n); }

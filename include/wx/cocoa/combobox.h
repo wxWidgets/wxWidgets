@@ -81,8 +81,6 @@ public:
     virtual void SetSelection(int);
     // Overlapping methods
     virtual wxString GetStringSelection();
-    // other methods
-    virtual void SetStringSelection(const wxString& selection);
     // wxItemContainer
     virtual void Clear();
     virtual void Delete(int);

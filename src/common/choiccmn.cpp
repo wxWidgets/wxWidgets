@@ -44,21 +44,6 @@ wxChoiceBase::~wxChoiceBase()
 }
 
 // ----------------------------------------------------------------------------
-// selection
-// ----------------------------------------------------------------------------
-
-bool wxChoiceBase::SetStringSelection(const wxString& s)
-{
-    int sel = FindString(s);
-    wxCHECK_MSG( sel != -1, false,
-                 wxT("invalid string in wxChoice::SetStringSelection") );
-
-    Select(sel);
-
-    return true;
-}
-
-// ----------------------------------------------------------------------------
 // misc
 // ----------------------------------------------------------------------------
 

@@ -337,7 +337,7 @@ Sets the label for the given item.
 
 \membersection{wxControlWithItems::SetStringSelection}\label{wxcontrolwithitemssetstringselection}
 
-\func{void}{SetStringSelection}{\param{const wxString\& }{ string}}
+\func{bool}{SetStringSelection}{\param{const wxString\& }{ string}}
 
 Selects the item with the specified string in the control. This doesn't cause
 any command events being emitted.
@@ -345,6 +345,11 @@ any command events being emitted.
 \wxheading{Parameters}
 
 \docparam{string}{The string to select.}
+
+\wxheading{Return value}
+
+\true if the specified string has been selected, \false if it wasn't found in
+the control.
 
 \wxheading{See also}
 

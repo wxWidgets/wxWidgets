@@ -644,16 +644,6 @@ void wxComboBox::SetSelection( int n )
     EnableEvents();
 }
 
-bool wxComboBox::SetStringSelection( const wxString &string )
-{
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid combobox") );
-
-    int res = FindString( string );
-    if (res == -1) return false;
-    SetSelection( res );
-    return true;
-}
-
 wxString wxComboBox::GetValue() const
 {
     GtkEntry *entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );

@@ -305,8 +305,6 @@ public:
     virtual int GetSelection() const;
     void SetSelection(int n) { Select(n); }
 
-    void SetStringSelection(const wxString& WXUNUSED(s)) {  }
-
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
 protected:

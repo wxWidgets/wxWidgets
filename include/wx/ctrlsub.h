@@ -46,7 +46,7 @@ public:
 
     // only for rtti needs (separate name)
     void AppendString( const wxString& item)
-    { Append( item ) ; }
+        { Append( item ); }
 
     // append several items at once to the control
     void Append(const wxArrayString& strings);
@@ -79,6 +79,10 @@ public:
     virtual void Select(int n) = 0;
     virtual int GetSelection() const = 0;
 
+    // set selection to the specified string, return false if not found
+    bool SetStringSelection(const wxString& s);
+
+    // return the selected string or empty string if none
     wxString GetStringSelection() const;
 
     // misc

@@ -58,6 +58,17 @@ wxString wxItemContainer::GetStringSelection() const
     return s;
 }
 
+bool wxItemContainer::SetStringSelection(const wxString& s)
+{
+    const int sel = FindString(s);
+    if ( sel == wxNOT_FOUND )
+        return false;
+
+    Select(sel);
+
+    return true;
+}
+
 wxArrayString wxItemContainer::GetStrings() const
 {
     wxArrayString result ;

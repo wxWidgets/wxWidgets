@@ -721,18 +721,6 @@ wxString wxComboBox::GetStringSelection() const
 #endif
 }
 
-bool wxComboBox::SetStringSelection(const wxString& sel)
-{
-    int s = FindString (sel);
-    if (s > -1)
-        {
-            SetSelection (s);
-            return true;
-        }
-    else
-        return false;
-}
-
 void wxComboBox::SetString(int n, const wxString& s)
 {
 #if USE_HICOMBOBOX

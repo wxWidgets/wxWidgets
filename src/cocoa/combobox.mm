@@ -80,10 +80,6 @@ wxString wxComboBox::GetStringSelection()
     return wxEmptyString;
 }
 
-void wxComboBox::SetStringSelection(const wxString& selection)
-{
-}
-
 void wxComboBox::Clear()
 {
 }
@@ -108,7 +104,7 @@ void wxComboBox::SetString(int, const wxString&)
 
 int wxComboBox::FindString(const wxString&) const
 {
-    return 0;
+    return wxNOT_FOUND;
 }
 
 int wxComboBox::GetSelection() const
