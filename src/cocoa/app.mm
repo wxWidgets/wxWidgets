@@ -239,6 +239,16 @@ void wxApp::CocoaInstallIdleHandler()
     // Call doIdle for EVERYTHING dammit
 // We'd need Foundation/NSConnection.h for this next constant, do we need it?
     [[ NSRunLoop currentRunLoop ] performSelector:@selector(doIdle:) target:m_cocoaAppDelegate argument:NULL order:0 modes:[NSArray arrayWithObjects:NSDefaultRunLoopMode, /* NSConnectionReplyRunLoopMode,*/ NSModalPanelRunLoopMode, /**/NSEventTrackingRunLoopMode,/**/ nil] ];
+    /* Notes:
+    In the Mac OS X implementation of Cocoa, the above method schedules
+    doIdle: to be called from *within* [NSApplication
+    -nextEventMatchingMask:untilDate:inMode:dequeue:].  That is, no
+    NSEvent object is generated and control does not return from that
+    method.  In fact, control will only return from that method for the
+    usual reasons (e.g. a real event is received or the untilDate is reached).
+    This has implications when trying to stop the event loop and return to
+    its caller.  See wxEventLoop::Exit
+    */
 }
 
 void wxApp::CocoaDelegate_applicationWillBecomeActive()
