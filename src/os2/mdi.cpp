@@ -138,6 +138,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     wxTopLevelWindows.Append(this);
 
   SetName(name);
+  wxWindowBase::Show(TRUE); // MDI child frame starts off shown
   m_windowStyle = style;
 
   if (parent) parent->AddChild(this);
