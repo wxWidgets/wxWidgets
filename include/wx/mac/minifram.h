@@ -35,7 +35,7 @@ public:
            const wxString& name = wxFrameNameStr)
   {
       // Use wxFrame constructor in absence of more specific code.
-      Create(parent, id, title, pos, size, style, name);
+      Create(parent, id, title, pos, size, style | wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT , name);
   }
 
   ~wxMiniFrame() {}
