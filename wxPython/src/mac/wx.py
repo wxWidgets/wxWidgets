@@ -1558,12 +1558,7 @@ wxPen        = wxPyPen
 wxScrollbar  = wxScrollBar
 wxPoint2D    = wxPoint2DDouble
 
-# Use Python's bool constants if available, make aliases if not
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
+wxPyAssertionError = wxc.wxPyAssertionError
 
 
 # backwards compatibility
@@ -1574,15 +1569,43 @@ NULL                    = None
 wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
 wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
 wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
-false = FALSE = False
-true = TRUE = True
 
 
 # workarounds for bad wxRTTI names
 __wxPyPtrTypeMap['wxGauge95']    = 'wxGauge'
 
 
-wxPyAssertionError = wxc.wxPyAssertionError
+
+def NewId():
+    import warnings
+    warnings.warn("Use wxNewId instead", DeprecationWarning, 2)
+    return wxNewId()
+
+def RegisterId(ID):
+    import warnings
+    warnings.warn("Use wxRegisterId instead", DeprecationWarning, 2)
+    return wxRegisterId(ID)
+
+
+
+# Use Python's bool constants if available, make aliases if not
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
+class _DeprecatedNonBool:
+    def __init__(self, val, txt):
+        self.__val = val
+        self.__txt = txt
+    def __int__(self):
+        import warnings
+        warnings.warn("Use Python's %s instead" % self.__txt, DeprecationWarning, 3)
+        return self.__val
+
+TRUE  = true  = _DeprecatedNonBool(True, 'True')
+FALSE = false = _DeprecatedNonBool(False, 'False')
 
 
 #----------------------------------------------------------------------

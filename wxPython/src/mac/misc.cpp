@@ -194,43 +194,6 @@ static PyObject *_wrap_wxRegisterId(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
-static PyObject *_wrap_NewId(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    char *_kwnames[] = {  NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":NewId",_kwnames)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (long )wxNewId();
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_RegisterId(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _arg0;
-    char *_kwnames[] = { "id", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:RegisterId",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxRegisterId(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxGetCurrentId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
@@ -5568,8 +5531,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxEndBusyCursor", (PyCFunction) _wrap_wxEndBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBell", (PyCFunction) _wrap_wxBell, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetCurrentId", (PyCFunction) _wrap_wxGetCurrentId, METH_VARARGS | METH_KEYWORDS },
-	 { "RegisterId", (PyCFunction) _wrap_RegisterId, METH_VARARGS | METH_KEYWORDS },
-	 { "NewId", (PyCFunction) _wrap_NewId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegisterId", (PyCFunction) _wrap_wxRegisterId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNewId", (PyCFunction) _wrap_wxNewId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIntersectRect", (PyCFunction) _wrap_wxIntersectRect, METH_VARARGS | METH_KEYWORDS },

@@ -12581,13 +12581,15 @@ static PyObject *_wrap_wxGrid_GetSelectedCells(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    const wxGridCellCoordsArray & _result_ref = wxGrid_GetSelectedCells(_arg0);
-    _result = (wxGridCellCoordsArray *) &_result_ref;
+    _result = new wxGridCellCoordsArray (wxGrid_GetSelectedCells(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = wxGridCellCoordsArray_helper(_result);
+}
+{
+    delete _result;
 }
     return _resultobj;
 }
@@ -12612,13 +12614,15 @@ static PyObject *_wrap_wxGrid_GetSelectionBlockTopLeft(PyObject *self, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    const wxGridCellCoordsArray & _result_ref = wxGrid_GetSelectionBlockTopLeft(_arg0);
-    _result = (wxGridCellCoordsArray *) &_result_ref;
+    _result = new wxGridCellCoordsArray (wxGrid_GetSelectionBlockTopLeft(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = wxGridCellCoordsArray_helper(_result);
+}
+{
+    delete _result;
 }
     return _resultobj;
 }
@@ -12643,13 +12647,15 @@ static PyObject *_wrap_wxGrid_GetSelectionBlockBottomRight(PyObject *self, PyObj
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    const wxGridCellCoordsArray & _result_ref = wxGrid_GetSelectionBlockBottomRight(_arg0);
-    _result = (wxGridCellCoordsArray *) &_result_ref;
+    _result = new wxGridCellCoordsArray (wxGrid_GetSelectionBlockBottomRight(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = wxGridCellCoordsArray_helper(_result);
+}
+{
+    delete _result;
 }
     return _resultobj;
 }
