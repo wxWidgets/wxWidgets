@@ -269,12 +269,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 #else
   wxImageList *imagelist = new wxImageList(32, 32);
   
-  imagelist-> Add( wxBitmap( (const char**) list_xpm ));
-  imagelist-> Add( wxBitmap( (const char**) choice_xpm ));
-  imagelist-> Add( wxBitmap( (const char**) combo_xpm ));
-  imagelist-> Add( wxBitmap( (const char**) text_xpm ));
-  imagelist-> Add( wxBitmap( (const char**) radio_xpm ));
-  imagelist-> Add( wxBitmap( (const char**) gauge_xpm ));
+  imagelist-> Add( wxBitmap( list_xpm ));
+  imagelist-> Add( wxBitmap( choice_xpm ));
+  imagelist-> Add( wxBitmap( combo_xpm ));
+  imagelist-> Add( wxBitmap( text_xpm ));
+  imagelist-> Add( wxBitmap( radio_xpm ));
+  imagelist-> Add( wxBitmap( gauge_xpm ));
 #endif
 
   wxButton *button = (wxButton*)NULL;

@@ -184,21 +184,25 @@ bool wxFrame::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-    if (show)
+    if (show && !m_sizeSet)
     {
-/*
-        wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-        m_sizeSet = FALSE;
-        GetEventHandler()->ProcessEvent( event );
-*/
-
-        // here we give wxFrame a chance to do resize updates
-	// before appearing on screen. resize updates have to
-	// be handled in idle time because of GTK's super smart
-	// resize propagation algorithm.
+        // this yield call is required for a configure event
+        // to be sent by GTK to its windows. this will among
+	// others prompt all GtkScrolledWidgets to calculate
+	// if they need scrollbars which in turn is required
+	// for wxWindows to calculate the client size of its
+	// windows.
 	
         wxYield();
+	
+	// by calling GtkOnSize here, we don't have to call
+	// either after showing the frame, which would entail
+	// much ugly flicker nor from within the size_allocate
+	// handler, because GTK 1.1.X forbids that.
+	
+        GtkOnSize( m_x, m_y, m_width, m_height );
     }
+	
     return wxWindow::Show( show );
 }
 
