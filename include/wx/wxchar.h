@@ -205,15 +205,22 @@ inline WORD __wxMSW_ctype(wxChar ch)
 
 // check whether we should include wchar.h or equivalent
 #if wxUSE_UNICODE
-#undef wxUSE_WCHAR_T
-#define wxUSE_WCHAR_T 1 // wchar_t *must* be available in Unicode mode
+ #undef wxUSE_WCHAR_T
+ #define wxUSE_WCHAR_T 1 // wchar_t *must* be available in Unicode mode
 #elif !defined(wxUSE_WCHAR_T)
-#if defined(__VISUALC__) && (__VISUALC__ < 900)
-#define wxUSE_WCHAR_T 0 // wchar_t is not available for MSVC++ 1.5
-#else
-#define wxUSE_WCHAR_T 1
-#endif
-#endif
+ #if defined(__VISUALC__) && (__VISUALC__ < 900)
+  #define wxUSE_WCHAR_T 0 // wchar_t is not available for MSVC++ 1.5
+ #elif defined(__UNIX__)
+  #if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H)
+   #define wxUSE_WCHAR_T 1
+  #else
+   #define wxUSE_WCHAR_T 0
+  #endif
+ #else
+  // add additional compiler checks if this fails
+  #define wxUSE_WCHAR_T 1
+ #endif
+#endif//wxUSE_UNICODE
 
 #if wxUSE_WCHAR_T
 #ifdef HAVE_WCSTR_H
