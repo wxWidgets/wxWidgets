@@ -62,6 +62,47 @@ public:
     virtual void               SetRows(int nRows);
 
     //
+    // Special overrides for OS/2
+    //
+    virtual wxToolBarToolBase* InsertControl( size_t     nPos
+                                             ,wxControl* pControl
+                                            );
+    virtual wxToolBarToolBase* InsertSeparator(size_t nPos);
+    virtual wxToolBarToolBase* InsertTool( size_t          nPos
+                                          ,int             nId
+                                          ,const wxString& rsLabel
+                                          ,const wxBitmap& rBitmap
+                                          ,const wxBitmap& rBmpDisabled = wxNullBitmap
+                                          ,wxItemKind      eKind = wxITEM_NORMAL
+                                          ,const wxString& rsShortHelp = wxEmptyString
+                                          ,const wxString& rsLongHelp = wxEmptyString
+                                          ,wxObject*       pClientData = NULL
+                                         );
+    wxToolBarToolBase*         InsertTool( size_t          nPos
+                                          ,int             nId
+                                          ,const wxBitmap& rBitmap
+                                          ,const wxBitmap& rBmpDisabled = wxNullBitmap
+                                          ,bool            bToggle = FALSE
+                                          ,wxObject*       pClientData = NULL
+                                          ,const wxString& rsShortHelp = wxEmptyString
+                                          ,const wxString& rsLongHelp = wxEmptyString
+                                         )
+    {
+        return InsertTool( nPos
+                          ,nId
+                          ,wxEmptyString
+                          ,rBitmap
+                          ,rBmpDisabled
+                          ,bToggle ? wxITEM_CHECK : wxITEM_NORMAL
+                          ,rsShortHelp
+                          ,rsLongHelp
+                          ,pClientData
+                         );
+    }
+    virtual bool               DeleteTool(int nId);
+    virtual bool               DeleteToolByPos(size_t nPos);
+
+    //
     // Event handlers
     //
     void OnPaint(wxPaintEvent& event);

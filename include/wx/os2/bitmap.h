@@ -87,11 +87,16 @@ public:
     wxBitmap(const char** ppData) { CreateFromXpm(ppData); }
     wxBitmap(char** ppData) { CreateFromXpm((const char**)ppData); }
 
-    // Load a file or resource
-    wxBitmap( const wxString& rName
+    // Load a resource
+    wxBitmap( int             nId
              ,long            lType = wxBITMAP_TYPE_BMP_RESOURCE
             );
 
+    // For compatiability with other ports, under OS/2 does same as default ctor
+    inline wxBitmap( const wxString& WXUNUSED(rFilename)
+                    ,long            WXUNUSED(lType)
+                   )
+    { Init(); }
     // New constructor for generalised creation from data
     wxBitmap( void* pData
              ,long  lType
@@ -157,7 +162,7 @@ public:
                         ,int   nHeight
                         ,int   nDepth = 1
                        );
-    virtual bool LoadFile( const wxString& rName
+    virtual bool LoadFile( int             nId
                           ,long            lType = wxBITMAP_TYPE_BMP_RESOURCE
                          );
     virtual bool SaveFile( const wxString&  rName
@@ -323,8 +328,7 @@ public:
                         ,int       nDepth = 1
                        );
     virtual bool LoadFile( wxBitmap*       pBitmap
-                          ,const wxString& rName
-                          ,HPS             hPs
+                          ,int             nId
                           ,long            lFlags
                           ,int             nDesiredWidth
                           ,int             nDesiredHeight
@@ -343,8 +347,7 @@ public:
                         ,int         nDepth = 1
                        );
     virtual bool Load( wxGDIImage*     pImage
-                      ,const wxString& rName
-                      ,HPS             hPs
+                      ,int             nId
                       ,long            lFlags
                       ,int             nDesiredWidth
                       ,int             nDesiredHeight
@@ -354,6 +357,14 @@ public:
                       ,int             lType
                      );
 private:
+    inline virtual bool Load( wxGDIImage*     pImage
+                             ,const wxString& rName
+                             ,HPS             hPs
+                             ,long            lFlags
+                             ,int             nDesiredWidth
+                             ,int             nDesiredHeight
+                            )
+    { return FALSE; }
     DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
 }; // end of CLASS wxBitmapHandler
 

@@ -133,6 +133,12 @@ public:
                       ,int             nDesiredWidth
                       ,int             nDesiredHeight
                      ) = 0;
+    virtual bool Load( wxGDIImage*     pImage
+                      ,int             nId
+                      ,long            lFlags
+                      ,int             nDesiredWidth
+                      ,int             nDesiredHeight
+                     ) = 0;
     virtual bool Save( wxGDIImage*     pImage
                       ,const wxString& rName
                       ,int             lType
@@ -142,7 +148,7 @@ protected:
     wxString                        m_sName;
     wxString                        m_sExtension;
     long                            m_lType;
-};
+}; // end of wxGDIImageHandler
 
 // ----------------------------------------------------------------------------
 // wxGDIImage: this class supports GDI image handlers which may be registered
