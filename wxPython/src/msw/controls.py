@@ -3625,6 +3625,10 @@ class ListCtrl(core.Control):
         """AssignImageList(ImageList imageList, int which)"""
         return _controls.ListCtrl_AssignImageList(*args, **kwargs)
 
+    def InReportView(*args, **kwargs):
+        """InReportView() -> bool"""
+        return _controls.ListCtrl_InReportView(*args, **kwargs)
+
     def IsVirtual(*args, **kwargs):
         """IsVirtual() -> bool"""
         return _controls.ListCtrl_IsVirtual(*args, **kwargs)

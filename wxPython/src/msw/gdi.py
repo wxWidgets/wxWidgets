@@ -603,6 +603,14 @@ class Bitmap(GDIObject):
         return _gdi.Bitmap_SetQuality(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    def __eq__(*args, **kwargs):
+        """__eq__(Bitmap other) -> bool"""
+        return _gdi.Bitmap___eq__(*args, **kwargs)
+
+    def __ne__(*args, **kwargs):
+        """__ne__(Bitmap other) -> bool"""
+        return _gdi.Bitmap___ne__(*args, **kwargs)
+
 
 class BitmapPtr(Bitmap):
     def __init__(self, this):

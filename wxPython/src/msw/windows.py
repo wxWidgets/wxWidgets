@@ -27,6 +27,8 @@ class Panel(core.Window):
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
             String name=PanelNameStr) -> bool
+
+        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows.Panel_Create(*args, **kwargs)
 
@@ -70,6 +72,8 @@ class ScrolledWindow(Panel):
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
             String name=PanelNameStr) -> bool
+
+        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows.ScrolledWindow_Create(*args, **kwargs)
 
@@ -238,11 +242,19 @@ class TopLevelWindow(core.Window):
         return _windows.TopLevelWindow_IsFullScreen(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
-        """SetTitle(String title)"""
+        """
+        SetTitle(String title)
+
+        Sets the window's title. Applicable only to frames and dialogs.
+        """
         return _windows.TopLevelWindow_SetTitle(*args, **kwargs)
 
     def GetTitle(*args, **kwargs):
-        """GetTitle() -> String"""
+        """
+        GetTitle() -> String
+
+        Gets the window's title. Applicable only to frames and dialogs.
+        """
         return _windows.TopLevelWindow_GetTitle(*args, **kwargs)
 
     def SetShape(*args, **kwargs):
@@ -288,7 +300,13 @@ class Frame(TopLevelWindow):
         return _windows.Frame_Create(*args, **kwargs)
 
     def GetClientAreaOrigin(*args, **kwargs):
-        """GetClientAreaOrigin() -> Point"""
+        """
+        GetClientAreaOrigin() -> Point
+
+        Get the origin of the client area of the window relative to the
+        window's top left corner (the client area may be shifted because of
+        the borders, scrollbars, other decorations...)
+        """
         return _windows.Frame_GetClientAreaOrigin(*args, **kwargs)
 
     def SendSizeEvent(*args, **kwargs):
@@ -646,6 +664,7 @@ SP_PERMIT_UNSPLIT = _windows.SP_PERMIT_UNSPLIT
 SP_LIVE_UPDATE = _windows.SP_LIVE_UPDATE
 SP_3DSASH = _windows.SP_3DSASH
 SP_3DBORDER = _windows.SP_3DBORDER
+SP_NO_XP_THEME = _windows.SP_NO_XP_THEME
 SP_BORDER = _windows.SP_BORDER
 SP_3D = _windows.SP_3D
 SPLIT_HORIZONTAL = _windows.SPLIT_HORIZONTAL
@@ -1340,11 +1359,25 @@ class VScrolledWindow(Panel):
         return _windows.VScrolledWindow_ScrollToLine(*args, **kwargs)
 
     def ScrollLines(*args, **kwargs):
-        """ScrollLines(int lines) -> bool"""
+        """
+        ScrollLines(int lines) -> bool
+
+        If the platform and window class supports it, scrolls the window by
+        the given number of lines down, if lines is positive, or up if lines
+        is negative.  Returns True if the window was scrolled, False if it was
+        already on top/bottom and nothing was done.
+        """
         return _windows.VScrolledWindow_ScrollLines(*args, **kwargs)
 
     def ScrollPages(*args, **kwargs):
-        """ScrollPages(int pages) -> bool"""
+        """
+        ScrollPages(int pages) -> bool
+
+        If the platform and window class supports it,  scrolls the window by
+        the given number of pages down, if pages is positive, or up if pages
+        is negative.  Returns True if the window was scrolled, False if it was
+        already on top/bottom and nothing was done.
+        """
         return _windows.VScrolledWindow_ScrollPages(*args, **kwargs)
 
     def RefreshLine(*args, **kwargs):
@@ -1356,11 +1389,19 @@ class VScrolledWindow(Panel):
         return _windows.VScrolledWindow_RefreshLines(*args, **kwargs)
 
     def HitTestXT(*args, **kwargs):
-        """HitTestXT(int x, int y) -> int"""
+        """
+        HitTestXT(int x, int y) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _windows.VScrolledWindow_HitTestXT(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pt) -> int"""
+        """
+        HitTest(Point pt) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _windows.VScrolledWindow_HitTest(*args, **kwargs)
 
     def RefreshAll(*args, **kwargs):
@@ -1589,6 +1630,7 @@ class TaskBarIcon(core.EvtHandler):
         """IsOk() -> bool"""
         return _windows.TaskBarIcon_IsOk(*args, **kwargs)
 
+    def __nonzero__(self): return self.IsOk() 
     def IsIconInstalled(*args, **kwargs):
         """IsIconInstalled() -> bool"""
         return _windows.TaskBarIcon_IsIconInstalled(*args, **kwargs)
@@ -3388,9 +3430,12 @@ _windows.PageSetupDialog_swigregister(PageSetupDialogPtr)
 class PrintDialogData(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintDialogData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__() -> PrintDialogData"""
-        newobj = _windows.new_PrintDialogData(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__() -> PrintDialogData
+        __init__(PrintData printData) -> PrintDialogData
+        """
+        newobj = _windows.new_PrintDialogData(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
@@ -3866,9 +3911,12 @@ _windows.PreviewControlBar_swigregister(PreviewControlBarPtr)
 class PrintPreview(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(Printout printout, Printout printoutForPrinting, PrintData data=None) -> PrintPreview"""
-        newobj = _windows.new_PrintPreview(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__(Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PrintPreview
+        __init__(Printout printout, Printout printoutForPrinting, PrintData data) -> PrintPreview
+        """
+        newobj = _windows.new_PrintPreview(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
@@ -3972,9 +4020,12 @@ _windows.PrintPreview_swigregister(PrintPreviewPtr)
 class PyPrintPreview(PrintPreview):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(Printout printout, Printout printoutForPrinting, PrintData data=None) -> PyPrintPreview"""
-        newobj = _windows.new_PyPrintPreview(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__(Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PyPrintPreview
+        __init__(Printout printout, Printout printoutForPrinting, PrintData data) -> PyPrintPreview
+        """
+        newobj = _windows.new_PyPrintPreview(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown

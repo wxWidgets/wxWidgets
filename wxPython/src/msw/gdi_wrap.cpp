@@ -610,6 +610,8 @@ void wxBitmap_SetMaskColour(wxBitmap *self,wxColour const &colour){
             wxMask *mask = new wxMask(*self, colour);
             self->SetMask(mask);
         }
+bool wxBitmap___eq__(wxBitmap *self,wxBitmap const *other){ return other ? (*self == *other) : False; }
+bool wxBitmap___ne__(wxBitmap *self,wxBitmap const *other){ return other ? (*self != *other) : True;  }
 wxMask *new_wxMask(wxBitmap const &bitmap,wxColour const &colour){
             if ( !colour.Ok() )
                 return new wxMask(bitmap, *wxBLACK);
@@ -3603,6 +3605,66 @@ static PyObject *_wrap_Bitmap_SetQuality(PyObject *self, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_Bitmap___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = (wxBitmap *) 0 ;
+    wxBitmap *arg2 = (wxBitmap *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Bitmap___eq__",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxBitmap___eq__(arg1,(wxBitmap const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Bitmap___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = (wxBitmap *) 0 ;
+    wxBitmap *arg2 = (wxBitmap *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Bitmap___ne__",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxBitmap___ne__(arg1,(wxBitmap const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Bitmap_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -4674,7 +4736,10 @@ static PyObject *_wrap_IconBundle_GetIcon(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxIcon, 0);
+    {
+        wxIcon* resultptr = new wxIcon(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxIcon, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14049,7 +14114,10 @@ static PyObject *_wrap_DC_GetBackground(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBrush, 0);
+    {
+        wxBrush* resultptr = new wxBrush(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBrush, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14078,7 +14146,10 @@ static PyObject *_wrap_DC_GetBrush(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBrush, 0);
+    {
+        wxBrush* resultptr = new wxBrush(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBrush, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14107,7 +14178,10 @@ static PyObject *_wrap_DC_GetFont(PyObject *self, PyObject *args, PyObject *kwar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFont, 0);
+    {
+        wxFont* resultptr = new wxFont(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxFont, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14136,7 +14210,10 @@ static PyObject *_wrap_DC_GetPen(PyObject *self, PyObject *args, PyObject *kwarg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPen, 0);
+    {
+        wxPen* resultptr = new wxPen(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxPen, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -18726,6 +18803,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Bitmap_CopyFromCursor", (PyCFunction) _wrap_Bitmap_CopyFromCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_GetQuality", (PyCFunction) _wrap_Bitmap_GetQuality, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_SetQuality", (PyCFunction) _wrap_Bitmap_SetQuality, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Bitmap___eq__", (PyCFunction) _wrap_Bitmap___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Bitmap___ne__", (PyCFunction) _wrap_Bitmap___ne__, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_swigregister", Bitmap_swigregister, METH_VARARGS },
 	 { (char *)"new_Mask", (PyCFunction) _wrap_new_Mask, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Mask_swigregister", Mask_swigregister, METH_VARARGS },

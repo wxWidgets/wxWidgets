@@ -948,7 +948,7 @@ class Timer(core.EvtHandler):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setCallbackInfo(self, Timer)
+        self._setCallbackInfo(self, Timer, 0)
 
     def __del__(self, destroy=_misc.delete_Timer):
         """__del__()"""
@@ -957,7 +957,7 @@ class Timer(core.EvtHandler):
         except: pass
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        """_setCallbackInfo(PyObject self, PyObject _class, int incref=1)"""
         return _misc.Timer__setCallbackInfo(*args, **kwargs)
 
     def SetOwner(*args, **kwargs):
@@ -1008,7 +1008,7 @@ class PyTimer(Timer):
 
 
 EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
-                   
+
 
 class TimerEvent(core.Event):
     def __repr__(self):
@@ -2484,18 +2484,19 @@ class ConfigBase(object):
     class) and you will always use one of its derivations: wx.Config
     or wx.FileConfig.
 
-    wx.ConfigBase organizes the items in a tree-like structure
-    (modeled after the Unix/Dos filesystem). There are groups
-    (directories) and keys (files).  There is always one current
-    group given by the current path.  As in the file system case, to
-    specify a key in the config class you must use a path to it.
-    Config classes also support the notion of the current group,
-    which makes it possible to use relative paths.
+    wx.ConfigBase organizes the items in a tree-like structure,
+    modeled after the Unix/Dos filesystem. There are groups that act
+    like directories and entries, key/value pairs that act like
+    files.  There is always one current group given by the current
+    path.  As in the file system case, to specify a key in the config
+    class you must use a path to it.  Config classes also support the
+    notion of the current group, which makes it possible to use
+    relative paths.
 
-    Keys are pairs "key_name = value" where value may be of string, integer
-    floating point or boolean, you can not store binary data without first
-    encoding it as a string.  For performance reasons items should be kept small,
-    no more than a couple kilobytes.
+    Keys are pairs "key_name = value" where value may be of string,
+    integer floating point or boolean, you can not store binary data
+    without first encoding it as a string.  For performance reasons
+    items should be kept small, no more than a couple kilobytes.
 
     """
     def __init__(self): raise RuntimeError, "No constructor defined"
@@ -2926,7 +2927,7 @@ class FileConfig(ConfigBase):
         """
         __init__(String appName=EmptyString, String vendorName=EmptyString, 
             String localFilename=EmptyString, String globalFilename=EmptyString, 
-            long style=0) -> FileConfig
+            long style=wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE) -> FileConfig
         """
         newobj = _misc.new_FileConfig(*args, **kwargs)
         self.this = newobj.this
@@ -5021,5 +5022,253 @@ class ClipboardLockerPtr(ClipboardLocker):
         self.__class__ = ClipboardLocker
 _misc.ClipboardLocker_swigregister(ClipboardLockerPtr)
 TheClipboard = cvar.TheClipboard
+
+#---------------------------------------------------------------------------
+
+class VideoMode(object):
+    """A simple struct containing video mode parameters for a display"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxVideoMode instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(int width=0, int height=0, int depth=0, int freq=0) -> VideoMode
+
+        A simple struct containing video mode parameters for a display
+        """
+        newobj = _misc.new_VideoMode(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_misc.delete_VideoMode):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def Matches(*args, **kwargs):
+        """
+        Matches(VideoMode other) -> bool
+
+        Returns true if this mode matches the other one in the sense that
+        all non zero fields of the other mode have the same value in this
+        one (except for refresh which is allowed to have a greater value)
+        """
+        return _misc.VideoMode_Matches(*args, **kwargs)
+
+    def GetWidth(*args, **kwargs):
+        """
+        GetWidth() -> int
+
+        Returns the screen width in pixels (e.g. 640*480), 0 means
+        unspecified
+        """
+        return _misc.VideoMode_GetWidth(*args, **kwargs)
+
+    def GetHeight(*args, **kwargs):
+        """
+        GetHeight() -> int
+
+        Returns the screen width in pixels (e.g. 640*480), 0 means
+        unspecified
+        """
+        return _misc.VideoMode_GetHeight(*args, **kwargs)
+
+    def GetDepth(*args, **kwargs):
+        """
+        GetDepth() -> int
+
+        Returns the screen's bits per pixel (e.g. 32), 1 is monochrome
+        and 0 means unspecified/known
+        """
+        return _misc.VideoMode_GetDepth(*args, **kwargs)
+
+    def IsOk(*args, **kwargs):
+        """
+        IsOk() -> bool
+
+        returns true if the object has been initialized
+        """
+        return _misc.VideoMode_IsOk(*args, **kwargs)
+
+    def __nonzero__(self): return self.IsOk() 
+    def __eq__(*args, **kwargs):
+        """__eq__(VideoMode other) -> bool"""
+        return _misc.VideoMode___eq__(*args, **kwargs)
+
+    def __ne__(*args, **kwargs):
+        """__ne__(VideoMode other) -> bool"""
+        return _misc.VideoMode___ne__(*args, **kwargs)
+
+    w = property(_misc.VideoMode_w_get, _misc.VideoMode_w_set)
+    h = property(_misc.VideoMode_h_get, _misc.VideoMode_h_set)
+    bpp = property(_misc.VideoMode_bpp_get, _misc.VideoMode_bpp_set)
+    refresh = property(_misc.VideoMode_refresh_get, _misc.VideoMode_refresh_set)
+
+class VideoModePtr(VideoMode):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = VideoMode
+_misc.VideoMode_swigregister(VideoModePtr)
+
+class Display(object):
+    """Represents a display/monitor attached to the system"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxDisplay instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(size_t index=0) -> Display
+
+        Set up a Display instance with the specified display.  The
+        displays are numbered from 0 to GetCount() - 1, 0 is always the
+        primary display and the only one which is always supported
+        """
+        newobj = _misc.new_Display(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_misc.delete_Display):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def GetCount(*args, **kwargs):
+        """
+        GetCount() -> size_t
+
+        Return the number of available displays.
+        """
+        return _misc.Display_GetCount(*args, **kwargs)
+
+    GetCount = staticmethod(GetCount)
+    def GetFromPoint(*args, **kwargs):
+        """
+        GetFromPoint(Point pt) -> int
+
+        Find the display where the given point lies, return wx.NOT_FOUND
+        if it doesn't belong to any display
+        """
+        return _misc.Display_GetFromPoint(*args, **kwargs)
+
+    GetFromPoint = staticmethod(GetFromPoint)
+    def GetFromWindow(*args, **kwargs):
+        """
+        GetFromWindow(Window window) -> int
+
+        Find the display where the given window lies, return wx.NOT_FOUND
+        if it is not shown at all.
+        """
+        return _misc.Display_GetFromWindow(*args, **kwargs)
+
+    GetFromWindow = staticmethod(GetFromWindow)
+    def IsOk(*args, **kwargs):
+        """
+        IsOk() -> bool
+
+        Return true if the object was initialized successfully
+        """
+        return _misc.Display_IsOk(*args, **kwargs)
+
+    def __nonzero__(self): return self.IsOk() 
+    def GetGeometry(*args, **kwargs):
+        """
+        GetGeometry() -> Rect
+
+        Returns the bounding rectangle of the display whose index was
+        passed to the constructor.
+        """
+        return _misc.Display_GetGeometry(*args, **kwargs)
+
+    def GetName(*args, **kwargs):
+        """
+        GetName() -> String
+
+        Returns the display's name. A name is not available on all platforms.
+        """
+        return _misc.Display_GetName(*args, **kwargs)
+
+    def IsPrimary(*args, **kwargs):
+        """
+        IsPrimary() -> bool
+
+        Returns true if the display is the primary display. The primary
+        display is the one whose index is 0.
+        """
+        return _misc.Display_IsPrimary(*args, **kwargs)
+
+    def GetModes(*args, **kwargs):
+        """
+        GetModes(VideoMode mode=DefaultVideoMode) -> [videoMode...]
+
+        Enumerate all video modes supported by this display matching the
+        given one (in the sense of VideoMode.Match()).
+
+        As any mode matches the default value of the argument and there
+        is always at least one video mode supported by display, the
+        returned array is only empty for the default value of the
+        argument if this function is not supported at all on this
+        platform.
+        """
+        return _misc.Display_GetModes(*args, **kwargs)
+
+    def GetCurrentMode(*args, **kwargs):
+        """
+        GetCurrentMode() -> VideoMode
+
+        Get the current video mode.
+        """
+        return _misc.Display_GetCurrentMode(*args, **kwargs)
+
+    def ChangeMode(*args, **kwargs):
+        """
+        ChangeMode(VideoMode mode=DefaultVideoMode) -> bool
+
+        Change current mode, return true if succeeded, false otherwise
+        """
+        return _misc.Display_ChangeMode(*args, **kwargs)
+
+    def ResetMode(*args, **kwargs):
+        """
+        ResetMode()
+
+        Restore the default video mode (just a more readable synonym)
+        """
+        return _misc.Display_ResetMode(*args, **kwargs)
+
+
+class DisplayPtr(Display):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Display
+_misc.Display_swigregister(DisplayPtr)
+DefaultVideoMode = cvar.DefaultVideoMode
+
+def Display_GetCount(*args, **kwargs):
+    """
+    Display_GetCount() -> size_t
+
+    Return the number of available displays.
+    """
+    return _misc.Display_GetCount(*args, **kwargs)
+
+def Display_GetFromPoint(*args, **kwargs):
+    """
+    Display_GetFromPoint(Point pt) -> int
+
+    Find the display where the given point lies, return wx.NOT_FOUND
+    if it doesn't belong to any display
+    """
+    return _misc.Display_GetFromPoint(*args, **kwargs)
+
+def Display_GetFromWindow(*args, **kwargs):
+    """
+    Display_GetFromWindow(Window window) -> int
+
+    Find the display where the given window lies, return wx.NOT_FOUND
+    if it is not shown at all.
+    """
+    return _misc.Display_GetFromWindow(*args, **kwargs)
 
 

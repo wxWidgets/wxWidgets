@@ -1226,7 +1226,7 @@ class Grid(windows.ScrolledWindow):
     wxGridSelectColumns = _grid.Grid_wxGridSelectColumns
     SelectCells =   wxGridSelectCells
     SelectRows =    wxGridSelectRows
-    SelectColumns = wxGridSelectColumns,
+    SelectColumns = wxGridSelectColumns
 
     def CreateGrid(*args, **kwargs):
         """CreateGrid(int numRows, int numCols, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
@@ -1318,10 +1318,6 @@ class Grid(windows.ScrolledWindow):
     def ForceRefresh(*args, **kwargs):
         """ForceRefresh()"""
         return _grid.Grid_ForceRefresh(*args, **kwargs)
-
-    def Refresh(*args, **kwargs):
-        """Refresh(bool eraseb=True, Rect rect=None)"""
-        return _grid.Grid_Refresh(*args, **kwargs)
 
     def IsEditable(*args, **kwargs):
         """IsEditable() -> bool"""
