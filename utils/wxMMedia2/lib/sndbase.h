@@ -71,9 +71,9 @@ class wxSoundStream {
   virtual ~wxSoundStream();
 
   // Reads "len" bytes from the sound stream.
-  virtual wxSoundStream& Read(void *buffer, size_t len) = 0;
+  virtual wxSoundStream& Read(void *buffer, wxUint32 len) = 0;
   // Writes "len" byte to the sound stream.
-  virtual wxSoundStream& Write(const void *buffer, size_t len) = 0;
+  virtual wxSoundStream& Write(const void *buffer, wxUint32 len) = 0;
   // Returns the best size for IO calls
   virtual wxUint32 GetBestSize() const { return 1024; }
 
@@ -97,7 +97,7 @@ class wxSoundStream {
   virtual void SetDuplexMode(bool duplex) = 0;
 
   wxSoundError GetError() const { return m_snderror; }
-  size_t GetLastAccess() const { return m_lastcount; }
+  wxUint32 GetLastAccess() const { return m_lastcount; }
 
   // This is only useful for device (I think).
   virtual bool QueueFilled() const { return TRUE; }
@@ -110,7 +110,7 @@ class wxSoundStream {
   wxSoundError m_snderror;
 
   // Last access
-  size_t m_lastcount;
+  wxUint32 m_lastcount;
 
   // Event handler
   wxSoundStream *m_handler;

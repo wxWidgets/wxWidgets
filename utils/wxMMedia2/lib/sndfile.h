@@ -25,8 +25,8 @@ class WXDLLEXPORT wxSoundRouterStream: public wxSoundStreamCodec {
   wxSoundRouterStream(wxSoundStream& sndio);
   ~wxSoundRouterStream();
 
-  wxSoundStream& Read(void *buffer, size_t len);
-  wxSoundStream& Write(const void *buffer, size_t len);
+  wxSoundStream& Read(void *buffer, wxUint32 len);
+  wxSoundStream& Write(const void *buffer, wxUint32 len);
 
   bool SetSoundFormat(const wxSoundFormatBase& format);
 
@@ -67,8 +67,8 @@ class wxSoundFileStream: public wxSoundStream {
 
   unsigned long GetLength() const;
 
-  wxSoundStream& Read(void *buffer, size_t len); 
-  wxSoundStream& Write(const void *buffer, size_t len);
+  wxSoundStream& Read(void *buffer, wxUint32 len); 
+  wxSoundStream& Write(const void *buffer, wxUint32 len);
 
   void SetDuplexMode(bool duplex);
 
@@ -90,8 +90,8 @@ class wxSoundFileStream: public wxSoundStream {
   virtual bool PrepareToRecord(unsigned long time) = 0;
   virtual bool FinishRecording() = 0;
 
-  virtual size_t GetData(void *buffer, size_t len) = 0;
-  virtual size_t PutData(const void *buffer, size_t len) = 0;
+  virtual wxUint32 GetData(void *buffer, wxUint32 len) = 0;
+  virtual wxUint32 PutData(const void *buffer, wxUint32 len) = 0;
 
   void OnSoundEvent(int evt);
 };

@@ -126,12 +126,12 @@ bool wxSoundAiff::FinishRecording()
   return FALSE;
 }
 
-size_t wxSoundAiff::GetData(void *buffer, size_t len)
+wxUint32 wxSoundAiff::GetData(void *buffer, wxUint32 len)
 {
   return m_input->Read(buffer, len).LastRead();
 }
 
-size_t wxSoundAiff::PutData(const void *buffer, size_t len)
+wxUint32 wxSoundAiff::PutData(const void *buffer, wxUint32 len)
 {
   return m_output->Write(buffer, len).LastWrite();
 }

@@ -16,6 +16,7 @@
 #include "sndfile.h"
 #include "sndcpcm.h"
 #include "sndulaw.h"
+#include "sndg72x.h"
 
 // --------------------------------------------------------------------------
 // Sound codec router
@@ -33,7 +34,7 @@ wxSoundRouterStream::~wxSoundRouterStream()
     delete m_router;
 }
 
-wxSoundStream& wxSoundRouterStream::Read(void *buffer, size_t len)
+wxSoundStream& wxSoundRouterStream::Read(void *buffer, wxUint32 len)
 {
   if (m_router) {
     m_router->Read(buffer, len);
@@ -47,7 +48,7 @@ wxSoundStream& wxSoundRouterStream::Read(void *buffer, size_t len)
   return *this;
 }
 
-wxSoundStream& wxSoundRouterStream::Write(const void *buffer, size_t len)
+wxSoundStream& wxSoundRouterStream::Write(const void *buffer, wxUint32 len)
 {
   if (m_router) {
     m_router->Write(buffer, len);
@@ -80,6 +81,10 @@ bool wxSoundRouterStream::SetSoundFormat(const wxSoundFormatBase& format)
     break;
   case wxSOUND_ULAW:
     m_router = new wxSoundStreamUlaw(*m_sndio);
+    m_router->SetSoundFormat(format);
+    break;
+  case wxSOUND_G72X:
+    m_router = new wxSoundStreamG72X(*m_sndio);
     m_router->SetSoundFormat(format);
     break;
   }
@@ -230,13 +235,13 @@ bool wxSoundFileStream::Resume()
   return TRUE;
 }
 
-wxSoundStream& wxSoundFileStream::Read(void *buffer, size_t len)
+wxSoundStream& wxSoundFileStream::Read(void *buffer, wxUint32 len)
 {
   m_lastcount = GetData(buffer, len);
   return *this;
 }
 
-wxSoundStream& wxSoundFileStream::Write(const void *buffer, size_t len)
+wxSoundStream& wxSoundFileStream::Write(const void *buffer, wxUint32 len)
 {
   m_lastcount = PutData(buffer, len);
   return *this;
@@ -263,7 +268,7 @@ bool wxSoundFileStream::StopProduction()
 
 void wxSoundFileStream::OnSoundEvent(int evt)
 {
-  size_t len = m_sndio->GetBestSize();
+  wxUint32 len = m_sndio->GetBestSize();
   char *buffer;
 
   buffer = new char[len];

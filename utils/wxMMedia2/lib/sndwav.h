@@ -12,7 +12,9 @@
 #pragma interface "sndwav.h"
 #endif
 
+#include <wx/defs.h>
 #include <wx/stream.h>
+#include <wx/datstrm.h>
 #include "sndbase.h"
 #include "sndcodec.h"
 #include "sndfile.h"
@@ -34,8 +36,15 @@ class wxSoundWave: public wxSoundFileStream {
   bool PrepareToRecord(unsigned long time);
   bool FinishRecording();
 
-  size_t GetData(void *buffer, size_t len);
-  size_t PutData(const void *buffer, size_t len);
+  wxUint32 GetData(void *buffer, wxUint32 len);
+  wxUint32 PutData(const void *buffer, wxUint32 len);
+
+  bool HandlePCM(wxDataInputStream& data, wxUint16 channels,
+                 wxUint32 sample_fq, wxUint32 byte_p_sec,
+                 wxUint16 byte_p_spl, wxUint16 bits_p_spl);
+  bool HandleG721(wxDataInputStream& data, wxUint16 channels,
+                  wxUint32 sample_fq, wxUint32 byte_p_sec,
+                  wxUint16 byte_p_spl, wxUint16 bits_p_spl);
 };
 
 #endif

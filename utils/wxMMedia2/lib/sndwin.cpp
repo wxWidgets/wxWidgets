@@ -379,7 +379,7 @@ wxSoundInfoHeader *wxSoundStreamWin::NextFragmentOutput()
   return m_headers_play[m_current_frag_out];
 }
 
-wxSoundStream& wxSoundStreamWin::Write(const void *buffer, size_t len)
+wxSoundStream& wxSoundStreamWin::Write(const void *buffer, wxUint32 len)
 {
   m_lastcount = 0;
   if (!m_internal->m_output_enabled)
@@ -387,7 +387,7 @@ wxSoundStream& wxSoundStreamWin::Write(const void *buffer, size_t len)
 
   while (len > 0) {
     wxSoundInfoHeader *header;
-    size_t to_copy;
+    wxUint32 to_copy;
 
     header              = NextFragmentOutput();
 
@@ -423,10 +423,10 @@ wxSoundInfoHeader *wxSoundStreamWin::NextFragmentInput()
   return header;
 }
 
-wxSoundStream& wxSoundStreamWin::Read(void *buffer, size_t len)
+wxSoundStream& wxSoundStreamWin::Read(void *buffer, wxUint32 len)
 {
   wxSoundInfoHeader *header;
-  size_t to_copy;
+  wxUint32 to_copy;
 
   m_lastcount = 0;
   if (!m_internal->m_input_enabled)

@@ -19,8 +19,8 @@ class WXDLLEXPORT wxSoundStreamWin : public wxSoundStream {
   wxSoundStreamWin();
   ~wxSoundStreamWin();
 
-  wxSoundStream& Write(const void *buffer, size_t len);
-  wxSoundStream& Read(void *buffer, size_t len); 
+  wxSoundStream& Write(const void *buffer, wxUint32 len);
+  wxSoundStream& Read(void *buffer, wxUint32 len); 
 
   bool SetSoundFormat(wxSoundFormatBase& base);
   void SetDuplexMode(bool on) {}

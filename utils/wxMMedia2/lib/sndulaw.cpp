@@ -82,17 +82,17 @@ wxSoundStreamUlaw::~wxSoundStreamUlaw()
   delete m_router;
 }
 
-wxSoundStream& wxSoundStreamUlaw::Read(void *buffer, size_t len)
+wxSoundStream& wxSoundStreamUlaw::Read(void *buffer, wxUint32 len)
 {
   return *this;
 }
 
-wxSoundStream& wxSoundStreamUlaw::Write(const void *buffer, size_t len)
+wxSoundStream& wxSoundStreamUlaw::Write(const void *buffer, wxUint32 len)
 {
   wxUint16 *old_linear;
   register wxUint16 *linear_buffer;
   register const wxUint8 *ulaw_buffer;
-  register size_t countdown = len;
+  register wxUint32 countdown = len;
 
   old_linear = linear_buffer = new wxUint16[len*2];
   ulaw_buffer = (const wxUint8 *)buffer;

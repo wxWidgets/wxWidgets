@@ -60,11 +60,11 @@ wxUint32 wxSoundStreamOSS::GetBestSize() const
   return m_bufsize;
 }
 
-wxSoundStream& wxSoundStreamOSS::Read(void *buffer, size_t len)
+wxSoundStream& wxSoundStreamOSS::Read(void *buffer, wxUint32 len)
 {
   int ret;
 
-  m_lastcount = (size_t)ret = read(m_fd, buffer, len);
+  m_lastcount = (wxUint32)ret = read(m_fd, buffer, len);
   m_q_filled  = TRUE;
 
   if (ret < 0)
@@ -75,11 +75,11 @@ wxSoundStream& wxSoundStreamOSS::Read(void *buffer, size_t len)
   return *this;
 }
 
-wxSoundStream& wxSoundStreamOSS::Write(const void *buffer, size_t len)
+wxSoundStream& wxSoundStreamOSS::Write(const void *buffer, wxUint32 len)
 {
   int ret;
 
-  m_lastcount = (size_t)ret = write(m_fd, buffer, len);
+  m_lastcount = (wxUint32)ret = write(m_fd, buffer, len);
   m_q_filled  = TRUE;
 
   if (ret < 0)

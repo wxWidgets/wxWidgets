@@ -34,16 +34,16 @@ wxSoundStreamPcm::~wxSoundStreamPcm()
 #include "converter.def"
 #undef SWAP_BYTES
 
-wxSoundStreamPcm::ConverterType s_convert_16_to_8[] = {
+wxSoundStreamPcm::ConverterType s_convert_out_16_to_8[] = {
   Convert_16to8_16_no,
   Convert_16to8_U2S_16_no,
   NULL,
   NULL,
   Convert_16to8_U2S_16_yes,
-  Convert_16to8_16_yes,
+  Convert_16to8_16_yes
 };
 
-wxSoundStreamPcm::ConverterType s_convert_16[] = {
+wxSoundStreamPcm::ConverterType s_convert_out_16[] = {
   NULL,
   Convert_U2S_16_no,
   Convert_U2S_SWAP_16_no,
@@ -52,7 +52,7 @@ wxSoundStreamPcm::ConverterType s_convert_16[] = {
   Convert_SWAP_16_no
 };
 
-wxSoundStreamPcm::ConverterType s_convert_8[] = {
+wxSoundStreamPcm::ConverterType s_convert_out_8[] = {
   NULL,
   Convert_U2S_8,
   Convert_U2S_8,
@@ -61,6 +61,19 @@ wxSoundStreamPcm::ConverterType s_convert_8[] = {
   NULL
 };
 
+wxSoundStreamPcm::ConverterType s_convert_in_8_to_16[] = {
+  Convert_8to16_8,
+  Convert_8to16_U2S_8,
+  Convert_8to16_U2S_SWAP_8,
+  NULL,
+  NULL,
+  Convert_8to16_SWAP_8
+};
+
+wxSoundStreamPcm::ConverterType *s_convert_in_16 = s_convert_out_16;
+
+wxSoundStreamPcm::ConverterType *s_convert_in_8 = s_convert_out_8;
+
 #define CONVERTER 0
 #define CONVERTER_SIGN 1
 #define CONVERTER_SIGN_SWAP 2
@@ -68,8 +81,11 @@ wxSoundStreamPcm::ConverterType s_convert_8[] = {
 #define CONVERTER_SWAP_SIGN 4
 #define CONVERTER_SWAP 5
 
-wxSoundStream& wxSoundStreamPcm::Read(void *buffer, size_t len)
+wxSoundStream& wxSoundStreamPcm::Read(void *buffer, wxUint32 len)
 {
+  wxUint32 real_len;
+  char *tmp_buf;
+
   if (!m_function_in) {
     m_sndio->Read(buffer, len);
     m_lastcount = m_sndio->GetLastAccess();
@@ -77,17 +93,30 @@ wxSoundStream& wxSoundStreamPcm::Read(void *buffer, size_t len)
     return *this;
   }
 
-  // TODO
-  m_sndio->Read(buffer, len);
+  real_len = (m_16_to_8) ? len / 2 : len;
+
+  tmp_buf = new char[real_len];
+
+  m_sndio->Read(tmp_buf, real_len);
   m_lastcount = m_sndio->GetLastAccess();
   m_snderror = m_sndio->GetError();
+  if (m_snderror != wxSOUND_NOERR)
+    return *this;
+
+  m_function_in(tmp_buf, (char *)buffer, m_lastcount);
+
+  delete[] tmp_buf;
+
+  if (m_16_to_8)
+    m_lastcount *= 2;
+
   return *this;
 }
 
-wxSoundStream& wxSoundStreamPcm::Write(const void *buffer, size_t len)
+wxSoundStream& wxSoundStreamPcm::Write(const void *buffer, wxUint32 len)
 {
   char *tmp_buf;
-  size_t len2;
+  wxUint32 len2;
 
   if (!m_function_out)
     return m_sndio->Write(buffer, len);
@@ -109,7 +138,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
 {
   wxSoundFormatBase *new_format;
   wxSoundFormatPcm *pcm_format, *pcm_format2;
-  ConverterType *current_table;
+  ConverterType *current_table_out, *current_table_in;
   int index;
   bool change_sign;
 
@@ -132,11 +161,15 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
   m_16_to_8 = FALSE;
   if (pcm_format->GetBPS() == 16 && pcm_format2->GetBPS() == 8) {
     m_16_to_8 = TRUE;
-    current_table = s_convert_16_to_8;
-  } else if (pcm_format->GetBPS() == 16)
-    current_table = s_convert_16;
-  else
-    current_table = s_convert_8;
+    current_table_out = s_convert_out_16_to_8;
+    current_table_in  = s_convert_in_8_to_16;
+  } else if (pcm_format->GetBPS() == 16) {
+    current_table_out = s_convert_out_16;
+    current_table_in  = s_convert_in_16;
+  } else {
+    current_table_out = s_convert_out_8;
+    current_table_in  = s_convert_in_8;
+  }
 
   change_sign = (pcm_format2->Signed() != pcm_format->Signed());
 
@@ -166,8 +199,8 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
   else
     index = CONVERTER;
 
-  m_function_out = current_table[index];
-//  m_function_in = current_table[index+1];
+  m_function_out = current_table_out[index];
+  m_function_in  = current_table_in[index];
 
   m_sndio->SetSoundFormat(*new_format);
   m_sndformat = new_format;

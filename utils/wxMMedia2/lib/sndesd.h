@@ -25,8 +25,8 @@ class wxSoundStreamESD : public wxSoundStream {
   wxSoundStreamESD(const wxString& hostname = _T("localhost"));
   ~wxSoundStreamESD();
 
-  wxSoundStream& Read(void *buffer, size_t len);
-  wxSoundStream& Write(const void *buffer, size_t len);
+  wxSoundStream& Read(void *buffer, wxUint32 len);
+  wxSoundStream& Write(const void *buffer, wxUint32 len);
 
   bool SetSoundFormat(const wxSoundFormatBase& format);
 

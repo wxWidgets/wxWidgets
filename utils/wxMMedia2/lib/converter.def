@@ -1,5 +1,5 @@
 #define DEFINE_CONV_8(name) \
-static void Convert_##name##_8(const char *buf_in, char *buf_out, size_t len) \
+static void Convert_##name##_8(const char *buf_in, char *buf_out, wxUint32 len) \
 {\
   wxUint16 val; \
 \
@@ -10,7 +10,7 @@ static void Convert_##name##_8(const char *buf_in, char *buf_out, size_t len) \
 #if SWAP_BYTES==0
 
 #define DEFINE_CONV_16(name) \
-static void Convert_##name##_16_no(const char *buf_in, char *buf_out, size_t len) \
+static void Convert_##name##_16_no(const char *buf_in, char *buf_out, wxUint32 len) \
 {\
   wxUint16 val; \
 \
@@ -22,7 +22,7 @@ static void Convert_##name##_16_no(const char *buf_in, char *buf_out, size_t len
 #else
 
 #define DEFINE_CONV_16(name) \
-static void Convert_##name##_16_yes(const char *buf_in, char *buf_out, size_t len) \
+static void Convert_##name##_16_yes(const char *buf_in, char *buf_out, wxUint32 len) \
 {\
   wxUint16 val; \
 \

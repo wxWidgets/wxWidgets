@@ -21,13 +21,13 @@
 
 class wxSoundStreamPcm: public wxSoundStreamCodec {
  public:
-  typedef void (*ConverterType)(const char *buf_in, char *buf_out, size_t len);
+  typedef void (*ConverterType)(const char *buf_in, char *buf_out, wxUint32 len);
 
   wxSoundStreamPcm(wxSoundStream& sndio);
   ~wxSoundStreamPcm();
 
-  wxSoundStream& Read(void *buffer, size_t len);
-  wxSoundStream& Write(const void *buffer, size_t len);
+  wxSoundStream& Read(void *buffer, wxUint32 len);
+  wxSoundStream& Write(const void *buffer, wxUint32 len);
 
   bool SetSoundFormat(const wxSoundFormatBase& format);
 

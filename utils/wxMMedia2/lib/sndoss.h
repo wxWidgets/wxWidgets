@@ -25,8 +25,8 @@ class wxSoundStreamOSS : public wxSoundStream {
   wxSoundStreamOSS(const wxString& dev_name = _T("/dev/dsp"));
   ~wxSoundStreamOSS();
 
-  wxSoundStream& Read(void *buffer, size_t len);
-  wxSoundStream& Write(const void *buffer, size_t len);
+  wxSoundStream& Read(void *buffer, wxUint32 len);
+  wxSoundStream& Write(const void *buffer, wxUint32 len);
   wxUint32 GetBestSize() const;
 
   bool SetSoundFormat(const wxSoundFormatBase& format);

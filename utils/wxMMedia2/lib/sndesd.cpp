@@ -52,11 +52,11 @@ wxSoundStreamESD::~wxSoundStreamESD()
     esd_close(m_fd);
 }
 
-wxSoundStream& wxSoundStreamESD::Read(void *buffer, size_t len)
+wxSoundStream& wxSoundStreamESD::Read(void *buffer, wxUint32 len)
 {
   int ret;
 
-  m_lastcount = (size_t)ret = read(m_fd, buffer, len);
+  m_lastcount = (wxUint32)ret = read(m_fd, buffer, len);
 
   if (ret < 0)
     m_snderror = wxSOUND_IOERR;
@@ -66,11 +66,11 @@ wxSoundStream& wxSoundStreamESD::Read(void *buffer, size_t len)
   return *this;
 }
 
-wxSoundStream& wxSoundStreamESD::Write(const void *buffer, size_t len)
+wxSoundStream& wxSoundStreamESD::Write(const void *buffer, wxUint32 len)
 {
   int ret;
 
-  m_lastcount = (size_t)ret = write(m_fd, buffer, len);
+  m_lastcount = (wxUint32)ret = write(m_fd, buffer, len);
 
   if (ret < 0)
     m_snderror = wxSOUND_IOERR;

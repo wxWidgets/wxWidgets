@@ -32,8 +32,8 @@ class wxSoundAiff: public wxSoundFileStream {
   bool PrepareToRecord(unsigned long time);
   bool FinishRecording();
 
-  size_t GetData(void *buffer, size_t len);
-  size_t PutData(const void *buffer, size_t len);
+  wxUint32 GetData(void *buffer, wxUint32 len);
+  wxUint32 PutData(const void *buffer, wxUint32 len);
 };
 
 #endif

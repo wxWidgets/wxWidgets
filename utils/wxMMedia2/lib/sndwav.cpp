@@ -19,6 +19,7 @@
 #include "sndcodec.h"
 #include "sndfile.h"
 #include "sndpcm.h"
+#include "sndg72x.h"
 #include "sndwav.h"
 
 #define BUILD_SIGNATURE(a,b,c,d) (((wxUint32)a) | (((wxUint32)b) << 8) | (((wxUint32)c) << 16)  | (((wxUint32)d) << 24)) 
@@ -76,6 +77,39 @@ bool wxSoundWave::CanRead()
   return TRUE;
 }
 
+bool wxSoundWave::HandlePCM(wxDataInputStream& data, wxUint16 channels, 
+                            wxUint32 sample_fq, wxUint32 byte_p_sec,
+                            wxUint16 byte_p_spl, wxUint16 bits_p_spl)
+{
+  wxSoundFormatPcm sndformat;
+
+  sndformat.SetSampleRate(sample_fq);
+  sndformat.SetBPS(bits_p_spl);
+  sndformat.SetChannels(channels);
+  sndformat.Signed(TRUE);
+  sndformat.SetOrder(wxLITTLE_ENDIAN);
+
+  if (!SetSoundFormat(sndformat))
+    return FALSE;
+
+  return TRUE;
+}
+
+bool wxSoundWave::HandleG721(wxDataInputStream& data, wxUint16 channels,
+                             wxUint32 sample_fq, wxUint32 byte_p_sec,
+                             wxUint16 byte_p_spl, wxUint16 bits_p_spl)
+{
+  wxSoundFormatG72X sndformat;
+
+  sndformat.SetSampleRate(sample_fq);
+  sndformat.SetG72XType(wxSOUND_G721);
+ 
+  if (!SetSoundFormat(sndformat))
+    return FALSE;
+
+  return TRUE;
+}
+
 bool wxSoundWave::PrepareToPlay()
 {
   wxUint32 signature, len;
@@ -112,21 +146,25 @@ bool wxSoundWave::PrepareToPlay()
     case FMT_SIGNATURE: {  // "fmt "
       wxUint16 format, channels, byte_p_spl, bits_p_spl;
       wxUint32 sample_fq, byte_p_sec;
-      wxSoundFormatPcm sndformat;
 
       data >> format >> channels >> sample_fq 
            >> byte_p_sec >> byte_p_spl >> bits_p_spl;
-      FAIL_WITH(format != 1, wxSOUND_NOCODEC);
-      
-      sndformat.SetSampleRate(sample_fq);
-      sndformat.SetBPS(bits_p_spl);
-      sndformat.SetChannels(channels);
-      sndformat.Signed(TRUE);
-      sndformat.SetOrder(wxLITTLE_ENDIAN);
 
-      if (!SetSoundFormat(sndformat))
+      switch (format) {
+      case 0x01:
+        if (!HandlePCM(data, channels, sample_fq,
+                       byte_p_sec, byte_p_spl, bits_p_spl))
+          return FALSE;
+        break;
+      case 0x40:
+        if (!HandleG721(data, channels, sample_fq,
+                        byte_p_sec, byte_p_spl, bits_p_spl))
+          return FALSE;
+        break;
+      default: 
+        m_snderror = wxSOUND_NOCODEC;
         return FALSE;
-      m_input->SeekI(len-16, wxFromCurrent);
+      }
       break;
     }
     case DATA_SIGNATURE: // "data"
@@ -212,12 +250,12 @@ bool wxSoundWave::FinishRecording()
   return TRUE;
 }
 
-size_t wxSoundWave::GetData(void *buffer, size_t len)
+wxUint32 wxSoundWave::GetData(void *buffer, wxUint32 len)
 {
   return m_input->Read(buffer, len).LastRead();
 }
 
-size_t wxSoundWave::PutData(const void *buffer, size_t len)
+wxUint32 wxSoundWave::PutData(const void *buffer, wxUint32 len)
 {
   return m_output->Write(buffer, len).LastWrite();
 }
