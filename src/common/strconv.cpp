@@ -1513,7 +1513,7 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 #ifdef __WINDOWS__
     static wxMBConv_win32 wxConvLibcObj;
 #else
-    static wxMBConvSystem wxConvLibcObj;
+    static wxMBConvLibc wxConvLibcObj;
 #endif
 
 static wxCSConv wxConvLocalObj(wxFONTENCODING_SYSTEM);
