@@ -37,19 +37,17 @@ extern "C"
 #include "wx/intl.h"
 #include "wx/module.h"
 
-#if defined(__WATCOMC__) && !defined(__DOS__)
-#ifdef LINKAGEMODE
-#undef LINKAGEMODE
-#define LINKAGEMODE __cdecl
+#ifndef TIFFLINKAGEMODE
+  #define TIFFLINKAGEMODE LINKAGEMODE
 #endif
-#endif
+
 //-----------------------------------------------------------------------------
 // wxTIFFHandler
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxTIFFHandler,wxImageHandler)
 
-static tsize_t LINKAGEMODE
+static tsize_t TIFFLINKAGEMODE
 _tiffNullProc(thandle_t WXUNUSED(handle),
           tdata_t WXUNUSED(buf),
           tsize_t WXUNUSED(size))
@@ -57,7 +55,7 @@ _tiffNullProc(thandle_t WXUNUSED(handle),
     return (tsize_t) -1;
 }
 
-static tsize_t LINKAGEMODE
+static tsize_t TIFFLINKAGEMODE
 _tiffReadProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxInputStream *stream = (wxInputStream*) handle;
@@ -65,7 +63,7 @@ _tiffReadProc(thandle_t handle, tdata_t buf, tsize_t size)
     return stream->LastRead();
 }
 
-static tsize_t LINKAGEMODE
+static tsize_t TIFFLINKAGEMODE
 _tiffWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
@@ -73,7 +71,7 @@ _tiffWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
     return stream->LastWrite();
 }
 
-static toff_t LINKAGEMODE
+static toff_t TIFFLINKAGEMODE
 _tiffSeekIProc(thandle_t handle, toff_t off, int whence)
 {
     wxInputStream *stream = (wxInputStream*) handle;
@@ -89,7 +87,7 @@ _tiffSeekIProc(thandle_t handle, toff_t off, int whence)
     return (toff_t)stream->SeekI( (off_t)off, mode );
 }
 
-static toff_t LINKAGEMODE
+static toff_t TIFFLINKAGEMODE
 _tiffSeekOProc(thandle_t handle, toff_t off, int whence)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
@@ -105,20 +103,20 @@ _tiffSeekOProc(thandle_t handle, toff_t off, int whence)
     return (toff_t)stream->SeekO( (off_t)off, mode );
 }
 
-static int LINKAGEMODE
+static int TIFFLINKAGEMODE
 _tiffCloseProc(thandle_t WXUNUSED(handle))
 {
     return 0;  // ?
 }
 
-static toff_t LINKAGEMODE
+static toff_t TIFFLINKAGEMODE
 _tiffSizeProc(thandle_t handle)
 {
     wxStreamBase *stream = (wxStreamBase*) handle;
     return (toff_t) stream->GetSize();
 }
 
-static int LINKAGEMODE
+static int TIFFLINKAGEMODE
 _tiffMapProc(thandle_t WXUNUSED(handle),
              tdata_t* WXUNUSED(pbase),
              toff_t* WXUNUSED(psize))
@@ -126,7 +124,7 @@ _tiffMapProc(thandle_t WXUNUSED(handle),
     return 0;
 }
 
-static void LINKAGEMODE
+static void TIFFLINKAGEMODE
 _tiffUnmapProc(thandle_t WXUNUSED(handle),
                tdata_t WXUNUSED(base),
                toff_t WXUNUSED(size))
