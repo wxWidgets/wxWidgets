@@ -18,6 +18,7 @@
 #	include "wx/mac/carbon/drawer.h"
 #else
 #	include "wx/generic/drawerg.h"
+#	define wxDrawerWindow wxGenericDrawerWindow
 #endif
 
 #endif // _WX_DRAWER_H_BASE_
