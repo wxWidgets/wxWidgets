@@ -62,10 +62,11 @@
 
 #if wxUSE_GUI
 
-WXDLLEXPORT int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
-                                   WXLPARAM lData, WXWPARAM wData,
-                                   int x, int y, int cx, int cy,
-                                   unsigned int flags)
+WXDLLIMPEXP_BASE int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br,
+                                        WXFARPROC outputFunc,
+                                        WXLPARAM lData, WXWPARAM wData,
+                                        int x, int y, int cx, int cy,
+                                        unsigned int flags)
 {
     // VS: There's yet another bug in MSLU: DrawStateW behaves like if it was
     //     expecting char*, not wchar_t* input. We have to use DrawStateA
@@ -109,7 +110,7 @@ static void wxFixOPENFILENAME(LPOPENFILENAME ofn)
 #endif
 }
 
-WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn)
+WXDLLIMPEXP_BASE int wxMSLU_GetOpenFileNameW(void *ofn)
 {
     int ret = GetOpenFileName((LPOPENFILENAME)ofn);
     if ( wxUsingUnicowsDll() && ret != 0 )
@@ -117,7 +118,7 @@ WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn)
     return ret;
 }
 
-WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn)
+WXDLLIMPEXP_BASE int wxMSLU_GetSaveFileNameW(void *ofn)
 {
     int ret = GetSaveFileName((LPOPENFILENAME)ofn);
     if ( wxUsingUnicowsDll() && ret != 0 )
@@ -133,7 +134,8 @@ WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn)
 
 #if wxUSE_BASE
 
-WXDLLEXPORT int wxMSLU__trename(const wxChar *oldname, const wxChar *newname)
+WXDLLIMPEXP_BASE int wxMSLU__trename(const wxChar *oldname,
+                                     const wxChar *newname)
 {
     if ( wxUsingUnicowsDll() )
         return rename(wxConvFile.cWX2MB(oldname), wxConvFile.cWX2MB(newname));
@@ -141,7 +143,7 @@ WXDLLEXPORT int wxMSLU__trename(const wxChar *oldname, const wxChar *newname)
         return _trename(oldname, newname);
 }
 
-WXDLLEXPORT int wxMSLU__tremove(const wxChar *name)
+WXDLLIMPEXP_BASE int wxMSLU__tremove(const wxChar *name)
 {
     if ( wxUsingUnicowsDll() )
         return remove(wxConvFile.cWX2MB(name));
@@ -154,7 +156,7 @@ WXDLLEXPORT int wxMSLU__tremove(const wxChar *name)
     || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
     || ( defined(__BORLANDC__) && (__BORLANDC__ > 0x460) )
 
-WXDLLEXPORT int wxMSLU__wopen(const wxChar *name, int flags, int mode)
+WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name, int flags, int mode)
 {
     if ( wxUsingUnicowsDll() )
 #ifdef __BORLANDC__
@@ -166,7 +168,7 @@ WXDLLEXPORT int wxMSLU__wopen(const wxChar *name, int flags, int mode)
         return _wopen(name, flags, mode);
 }
 
-WXDLLEXPORT int wxMSLU__waccess(const wxChar *name, int mode)
+WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name, int mode)
 {
     if ( wxUsingUnicowsDll() )
         return _access(wxConvFile.cWX2MB(name), mode);
@@ -174,7 +176,7 @@ WXDLLEXPORT int wxMSLU__waccess(const wxChar *name, int mode)
         return _waccess(name, mode);
 }
 
-WXDLLEXPORT int wxMSLU__wmkdir(const wxChar *name)
+WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name)
 {
     if ( wxUsingUnicowsDll() )
         return _mkdir(wxConvFile.cWX2MB(name));
@@ -182,7 +184,7 @@ WXDLLEXPORT int wxMSLU__wmkdir(const wxChar *name)
         return _wmkdir(name);
 }
 
-WXDLLEXPORT int wxMSLU__wrmdir(const wxChar *name)
+WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name)
 {
     if ( wxUsingUnicowsDll() )
         return _rmdir(wxConvFile.cWX2MB(name));
@@ -190,7 +192,7 @@ WXDLLEXPORT int wxMSLU__wrmdir(const wxChar *name)
         return _wrmdir(name);
 }
 
-WXDLLEXPORT int wxMSLU__wstat(const wxChar *name, struct _stat *buffer)
+WXDLLIMPEXP_BASE int wxMSLU__wstat(const wxChar *name, struct _stat *buffer)
 {
     if ( wxUsingUnicowsDll() )
         return _stat((const char*)wxConvFile.cWX2MB(name), buffer);
