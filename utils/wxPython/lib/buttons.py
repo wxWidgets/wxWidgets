@@ -303,6 +303,12 @@ class wxGenBitmapButton(wxGenButton):
 
 
 class __ToggleMixin:
+    def SetToggle(self, flag):
+        self.up = not flag
+
+    def GetToggle(self):
+        return not self.up
+
     def OnLeftDown(self, event):
         if not self.IsEnabled():
             return
@@ -327,6 +333,8 @@ class __ToggleMixin:
             self.Notify()
             self.Refresh()
         event.Skip()
+
+
 
 
 class wxGenToggleButton(__ToggleMixin, wxGenButton):

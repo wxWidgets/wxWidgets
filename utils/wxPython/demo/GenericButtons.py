@@ -64,6 +64,7 @@ class TestPanel(wxPanel):
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
+        b.SetToggle(true)
 
 
     def OnButton(self, event):
