@@ -44,7 +44,6 @@
 // globals
 // ----------------------------------------------------------------------------
 
-wxApp *wxTheApp = NULL;
 wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 
 @interface wxPoserNSApplication : NSApplication
@@ -219,7 +218,6 @@ void wxApp::Exit()
 // ----------------------------------------------------------------------------
 // wxApp Static member initialization
 // ----------------------------------------------------------------------------
-wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)

@@ -82,8 +82,6 @@ static EventTime sleepTime = kEventDurationNoWait ;
 static long sleepTime = 0 ;
 #endif
 
-wxApp *wxTheApp = NULL;
-
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
@@ -1120,9 +1118,6 @@ pascal OSStatus wxMacApplicationEventHandler( EventHandlerCallRef handler , Even
 }
 */
 #endif
-
-// Static member initialization
-wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 wxApp::wxApp()
 {

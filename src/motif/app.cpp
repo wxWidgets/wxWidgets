@@ -66,8 +66,6 @@ static WXWidget wxCreateTopLevelWidget( WXDisplay* display );
 extern wxList wxPendingDelete;
 extern bool wxAddIdleCallback();
 
-wxApp *wxTheApp = NULL;
-
 wxHashTable *wxWidgetHashTable = NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
@@ -271,9 +269,6 @@ int wxEntry( int argc, char *argv[] )
 
     return retValue;
 }
-
-// Static member initialization
-wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 wxApp::wxApp()
 {

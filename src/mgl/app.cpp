@@ -38,12 +38,8 @@
 #include "wx/mgl/private.h"
 
 //-----------------------------------------------------------------------------
-// Global data
+// wxApp::Exit()
 //-----------------------------------------------------------------------------
-
-wxApp *wxTheApp = NULL;
-wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
-
 
 void wxApp::Exit()
 {

@@ -94,7 +94,6 @@ extern wxCursor*                    g_globalCursor;
 
 HAB                                 vHabmain = NULLHANDLE;
 QMSG                                svCurrentMsg;
-wxApp*                              wxTheApp = NULL;
 
 
 HICON wxSTD_FRAME_ICON          = (HICON) NULL;
@@ -661,11 +660,6 @@ bool wxApp::OnInitGui()
 
     return TRUE;
 } // end of wxApp::OnInitGui
-
-//
-// Static member initialization
-//
-wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 wxApp::wxApp()
 {

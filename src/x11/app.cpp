@@ -49,8 +49,6 @@ extern wxList wxPendingDelete;
 wxHashTable *wxWidgetHashTable = NULL;
 wxHashTable *wxClientWidgetHashTable = NULL;
 
-wxApp *wxTheApp = NULL;
-
 // This is set within wxEntryStart -- too early on
 // to put these in wxTheApp
 static bool g_showIconic = FALSE;
@@ -360,9 +358,6 @@ int wxEntry( int argc, char *argv[] )
 
     return retValue;
 };
-
-// Static member initialization
-wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 wxApp::wxApp()
 {
