@@ -64,6 +64,7 @@ wxRemotelyScrolledTreeCtrl::wxRemotelyScrolledTreeCtrl(wxWindow* parent, wxWindo
         const wxSize& sz, long style):
         wxTreeCtrl(parent, id, pt, sz, style)
 {
+	m_companionWindow = NULL;
 }
 
 wxRemotelyScrolledTreeCtrl::~wxRemotelyScrolledTreeCtrl()
@@ -109,9 +110,10 @@ void wxRemotelyScrolledTreeCtrl::SetScrollbars(int pixelsPerUnitX, int pixelsPer
 // Get the view start
 void wxRemotelyScrolledTreeCtrl::GetViewStart(int *x, int *y) const
 {
+    wxScrolledWindow* scrolledWindow = GetScrolledWindow();
+
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
-	    wxScrolledWindow* scrolledWindow = GetScrolledWindow();
 
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
         int x1, y1, x2, y2;
@@ -123,6 +125,12 @@ void wxRemotelyScrolledTreeCtrl::GetViewStart(int *x, int *y) const
         scrolledWindow->GetViewStart(& x2, & y2);
         * y = y2;
     }
+	else
+	{
+		// x is wrong since the horizontal scrollbar is controlled by the
+		// tree control, but we probably don't need it.
+        scrolledWindow->GetViewStart(x, y);
+	}
 }
 
 // In case we're using the generic tree control.
@@ -189,6 +197,10 @@ void wxRemotelyScrolledTreeCtrl::OnExpand(wxTreeEvent& event)
     // If we don't have this, we get some bits of lines still remaining
     if (event.GetEventType() == wxEVT_COMMAND_TREE_ITEM_COLLAPSED)
         Refresh();
+
+	// Pass on the event
+	if (m_companionWindow)
+		m_companionWindow->GetEventHandler()->ProcessEvent(event);
 }
 
 // Adjust the containing wxScrolledWindow's scrollbars appropriately
@@ -317,6 +329,111 @@ void wxRemotelyScrolledTreeCtrl::OnScroll(wxScrollWinEvent& event)
     scrollWin->GetViewStart(& x, & y);
 
     ScrollToLine(-1, y);
+}
+
+/*
+ * wxTreeCompanionWindow
+ *
+ * A window displaying values associated with tree control items.
+ */
+
+IMPLEMENT_CLASS(wxTreeCompanionWindow, wxWindow)
+
+BEGIN_EVENT_TABLE(wxTreeCompanionWindow, wxWindow)
+	EVT_PAINT(wxTreeCompanionWindow::OnPaint)
+	EVT_SCROLLWIN(wxTreeCompanionWindow::OnScroll)
+	EVT_TREE_ITEM_EXPANDED(-1, wxTreeCompanionWindow::OnExpand)
+	EVT_TREE_ITEM_COLLAPSED(-1, wxTreeCompanionWindow::OnExpand)
+END_EVENT_TABLE()
+
+wxTreeCompanionWindow::wxTreeCompanionWindow(wxWindow* parent, wxWindowID id,
+      const wxPoint& pos,
+      const wxSize& sz,
+      long style):
+	wxWindow(parent, id, pos, sz, style)
+{
+	m_treeCtrl = NULL;
+}
+
+void wxTreeCompanionWindow::DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect)
+{
+	// TEST CODE
+#if 1
+	if (m_treeCtrl)
+	{
+		wxString text = m_treeCtrl->GetItemText(id);
+		dc.SetTextForeground(* wxBLACK);
+		dc.SetBackgroundMode(wxTRANSPARENT);
+
+		int textW, textH;
+		dc.GetTextExtent(text, & textW, & textH);
+
+		int x = 5;
+		int y = rect.GetY() + wxMax(0, (rect.GetHeight() - textH) / 2);
+
+		dc.DrawText(text, x, y);
+	}
+#endif
+}
+
+void wxTreeCompanionWindow::OnPaint(wxPaintEvent& event)
+{
+	wxPaintDC dc(this);
+
+    if (!m_treeCtrl)
+        return;
+
+	wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+	dc.SetPen(pen);
+	dc.SetBrush(* wxTRANSPARENT_BRUSH);
+	wxFont font(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+	dc.SetFont(font);
+
+    wxSize clientSize = GetClientSize();
+	wxRect itemRect;
+	int cy=0;
+	wxTreeItemId h, lastH;
+	for(h=m_treeCtrl->GetFirstVisibleItem();h;h=m_treeCtrl->GetNextVisible(h))
+	{
+		if (m_treeCtrl->GetBoundingRect(h, itemRect))
+		{
+			cy = itemRect.GetTop();
+			wxRect drawItemRect(0, cy, clientSize.x, itemRect.GetHeight());
+
+			dc.DrawLine(0, cy, clientSize.x, cy);
+			lastH = h;
+
+			// Draw the actual item
+			DrawItem(dc, h, drawItemRect);
+		}
+	}
+	if (m_treeCtrl->GetBoundingRect(lastH, itemRect))
+	{
+		cy = itemRect.GetBottom();
+		dc.DrawLine(0, cy, clientSize.x, cy);
+	}
+}
+
+void wxTreeCompanionWindow::OnScroll(wxScrollWinEvent& event)
+{
+    int orient = event.GetOrientation();
+    if (orient == wxHORIZONTAL)
+    {
+        // Don't 'skip' or we'd get into infinite recursion
+        return;
+    }
+    if (!m_treeCtrl)
+        return;
+
+	// TODO: scroll the window physically instead of just refreshing.
+	Refresh(TRUE);
+}
+
+void wxTreeCompanionWindow::OnExpand(wxTreeEvent& event)
+{
+	// TODO: something more optimized than simply refresh the whole
+	// window when the tree is expanded/collapsed. Tricky.
+	Refresh();
 }
 
 /*

@@ -96,9 +96,56 @@ public:
     // the height of an item)
     void ScrollToLine(int posHoriz, int posVert);
 
+//// Accessors
+
+	// The companion window is one which will get notified when certain
+	// events happen such as node expansion
+	void SetCompanionWindow(wxWindow* companion) { m_companionWindow = companion; }
+	wxWindow* GetCompanionWindow() const { return m_companionWindow; }
+
+
     DECLARE_EVENT_TABLE()
 protected:
+	wxWindow*	m_companionWindow;
 };
+
+/*
+ * wxTreeCompanionWindow
+ *
+ * A window displaying values associated with tree control items.
+ */
+
+class wxTreeCompanionWindow: public wxWindow
+{
+public:
+    DECLARE_CLASS(wxTreeCompanionWindow)
+
+    wxTreeCompanionWindow(wxWindow* parent, wxWindowID id = -1,
+      const wxPoint& pos = wxDefaultPosition,
+      const wxSize& sz = wxDefaultSize,
+      long style = 0);
+
+//// Overrides
+	virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect);
+
+//// Events
+	void OnPaint(wxPaintEvent& event);    
+    void OnScroll(wxScrollWinEvent& event);
+	void OnExpand(wxTreeEvent& event);
+
+//// Operations
+
+//// Accessors
+	wxRemotelyScrolledTreeCtrl* GetTreeCtrl() const { return m_treeCtrl; };
+	void SetTreeCtrl(wxRemotelyScrolledTreeCtrl* treeCtrl) { m_treeCtrl = treeCtrl; }
+
+//// Data members
+protected:
+	wxRemotelyScrolledTreeCtrl*	m_treeCtrl;
+
+    DECLARE_EVENT_TABLE()
+};
+
 
 /*
  * wxThinSplitterWindow

@@ -84,7 +84,7 @@ protected:
 	wxImageList*	m_imageList;
 };
 
-class TestValueWindow: public wxWindow
+class TestValueWindow: public wxTreeCompanionWindow
 {
 public:
     TestValueWindow(wxWindow* parent, wxWindowID id = -1,
@@ -95,7 +95,6 @@ public:
 //// Overrides
 
 //// Events
-	void OnSize(wxSizeEvent& event);
     
 //// Data members
 protected:

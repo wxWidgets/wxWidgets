@@ -123,6 +123,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 	m_scrolledWindow->EnableScrolling(FALSE, FALSE);
 
+	// Let the two controls know about each other
+	m_valueWindow->SetTreeCtrl(m_tree);
+	m_tree->SetCompanionWindow(m_valueWindow);
+
     // set the frame icon
     SetIcon(wxICON(mondrian));
 
@@ -239,29 +243,23 @@ void TestTree::OnPaint(wxPaintEvent& event)
 	dc.SetPen(pen);
 	dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
+    wxSize clientSize = GetClientSize();
 	wxRect itemRect;
-	if (GetBoundingRect(GetRootItem(), itemRect))
+	int cy=0;
+	wxTreeItemId h, lastH;
+	for(h=GetFirstVisibleItem();h;h=GetNextVisible(h))
 	{
-		int itemHeight = itemRect.GetHeight();
-		wxRect rcClient = GetRect();
-		wxRect itemRect;
-		int cy=0;
-		wxTreeItemId h, lastH;
-		for(h=GetFirstVisibleItem();h;h=GetNextVisible(h))
+		if (GetBoundingRect(h, itemRect))
 		{
-			if (GetBoundingRect(h, itemRect))
-			{
-				cy = itemRect.GetTop();
-				dc.DrawLine(rcClient.x, cy, rcClient.x + rcClient.width, cy);
-				lastH = h;
-				//cy += itemHeight;
-			}
+			cy = itemRect.GetTop();
+			dc.DrawLine(0, cy, clientSize.x, cy);
+			lastH = h;
 		}
-		if (GetBoundingRect(lastH, itemRect))
-		{
-			cy = itemRect.GetBottom();
-			dc.DrawLine(rcClient.x, cy, rcClient.x + rcClient.width, cy);
-		}
+	}
+	if (GetBoundingRect(lastH, itemRect))
+	{
+		cy = itemRect.GetBottom();
+		dc.DrawLine(0, cy, clientSize.x, cy);
 	}
 }
 
@@ -271,19 +269,14 @@ void TestTree::OnPaint(wxPaintEvent& event)
 
 //IMPLEMENT_CLASS(TestValueWindow, wxWindow)
 
-BEGIN_EVENT_TABLE(TestValueWindow, wxWindow)
-	EVT_SIZE(TestValueWindow::OnSize)
+BEGIN_EVENT_TABLE(TestValueWindow, wxTreeCompanionWindow)
 END_EVENT_TABLE()
 
 TestValueWindow::TestValueWindow(wxWindow* parent, wxWindowID id,
       const wxPoint& pos,
       const wxSize& sz,
       long style):
-      wxWindow(parent, id, pos, sz, style)
+      wxTreeCompanionWindow(parent, id, pos, sz, style)
 {
 	SetBackgroundColour(* wxWHITE);
-}
-
-void TestValueWindow::OnSize(wxSizeEvent& event)
-{
 }
