@@ -256,12 +256,14 @@ void wxXmlNode::AddProperty(wxXmlProperty *prop)
 
 bool wxXmlNode::DeleteProperty(const wxString& name)
 {
+    wxXmlProperty *prop;
+
     if (m_properties == NULL)
         return FALSE;
 
     else if (m_properties->GetName() == name)
     {
-        wxXmlProperty *prop = m_properties;
+        prop = m_properties;
         m_properties = prop->GetNext();
         prop->SetNext(NULL);
         delete prop;
@@ -275,7 +277,7 @@ bool wxXmlNode::DeleteProperty(const wxString& name)
         {
             if (p->GetNext()->GetName() == name)
             {
-                wxXmlProperty *prop = p->GetNext();
+                prop = p->GetNext();
                 p->SetNext(prop->GetNext());
                 prop->SetNext(NULL);
                 delete prop;
