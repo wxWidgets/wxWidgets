@@ -135,6 +135,7 @@ class wxPyPrintPreview;
 class wxPyListCtrl;
 class wxPyControl;
 class wxPyPrintout;
+class wxGenericDragImage;
 
 
 #ifdef __WXMAC__
