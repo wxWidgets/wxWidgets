@@ -293,7 +293,7 @@ wxString wxTextCtrl::GetValue() const
     }
     else
     {
-        tmp = gtk_entry_get_text( GTK_ENTRY(m_text) );
+        tmp = wxString(gtk_entry_get_text( GTK_ENTRY(m_text) ),*wxConv_current);
     }
     return tmp;
 }
