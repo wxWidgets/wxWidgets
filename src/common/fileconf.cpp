@@ -220,18 +220,18 @@ wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
             : m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
 {
   // if the path is not absolute, prepend the standard directory to it
-
-  if ( !strLocal.IsEmpty() && !wxIsPathSeparator(strLocal[0u]) )
+  if ( !strLocal.IsEmpty() && !wxIsAbsolutePath(strLocal) )
   {
      m_strLocalFile = GetLocalDir();
      m_strLocalFile << strLocal;
   }
   
-  if ( !strGlobal.IsEmpty() && !wxIsPathSeparator(strGlobal[0u]) )
+  if ( !strGlobal.IsEmpty() && !wxIsAbsolutePath(strGlobal) )
   {
      m_strGlobalFile = GetGlobalDir();
      m_strGlobalFile << strGlobal;
   }
+
   Init();
 }
 
@@ -532,8 +532,8 @@ bool wxFileConfig::Read(wxString   *pstr,
 
   ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
   if (pEntry == NULL) {
-     if(IsRecordingDefaults())
-        Write(szKey,szDefault);
+    if( IsRecordingDefaults() )
+      ((wxFileConfig *)this)->Write(szKey,szDefault);
     *pstr = ExpandEnvVars(szDefault);
     return FALSE;
   }
