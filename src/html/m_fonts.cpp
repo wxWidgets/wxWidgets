@@ -34,7 +34,7 @@ FORCE_LINK_ME(m_fonts)
 TAG_HANDLER_BEGIN(FONT, "FONT")
 
     TAG_HANDLER_VARS
-        wxSortedArrayString m_Faces;
+        wxArrayString m_Faces;
 
     TAG_HANDLER_PROC(tag)
     {
@@ -80,7 +80,7 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
 
             while (tk.HasMoreTokens())
             {
-                if ((index = m_Faces.Index(tk.GetNextToken())) != wxNOT_FOUND)
+                if ((index = m_Faces.Index(tk.GetNextToken(), FALSE)) != wxNOT_FOUND)
                 {
                     m_WParser->SetFontFace(m_Faces[index]);
                     m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));

@@ -147,6 +147,7 @@ wxHTML:
 - added blocking and redirecting capabilities to wxHtmlWindow via
   wxHtmlWindow::OnOpeningURL()
 - fixed alignment handling in tables
+- fixed <font face="..."> handling to be case insensitive
 
 2.3.2
 -----
