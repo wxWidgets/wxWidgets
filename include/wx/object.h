@@ -160,9 +160,10 @@ inline void wxClassInfo::CleanUpClasses() {}
 
 #define DECLARE_DYNAMIC_CLASS(name)           \
  public:                                      \
-  static wxClassInfo sm_class##name;          \
+  static wxClassInfo ms_classInfo;            \
+  static wxObject* wxCreateObject();          \
   virtual wxClassInfo *GetClassInfo() const   \
-   { return &name::sm_class##name; }
+   { return &name::ms_classInfo; }
 
 #define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   \
     DECLARE_NO_ASSIGN_CLASS(name)               \
@@ -182,23 +183,23 @@ inline void wxClassInfo::CleanUpClasses() {}
     // Single inheritance with one base class
 
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename)                 \
- wxObject* wxConstructorFor##name()                             \
+ wxObject* name::wxCreateObject()                             \
   { return new name; }                                          \
- wxClassInfo name::sm_class##name(wxT(#name),                   \
-            &basename::sm_class##basename, NULL,                \
+ wxClassInfo name::ms_classInfo(wxT(#name),                     \
+            &basename::ms_classInfo, NULL,                      \
             (int) sizeof(name),                                 \
-            (wxObjectConstructorFn) wxConstructorFor##name);
+            (wxObjectConstructorFn) name::wxCreateObject);
 
     // Multiple inheritance with two base classes
 
 #define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)    \
- wxObject* wxConstructorFor##name()                             \
+ wxObject* name::wxCreateObject()                             \
   { return new name; }                                          \
- wxClassInfo name::sm_class##name(wxT(#name),                   \
-            &basename1::sm_class##basename1,                    \
-            &basename2::sm_class##basename2,                    \
+ wxClassInfo name::ms_classInfo(wxT(#name),                     \
+            &basename1::ms_classInfo,                           \
+            &basename2::ms_classInfo,                           \
             wxT(#basename2), (int) sizeof(name),                \
-            (wxObjectConstructorFn) wxConstructorFor##name);
+            (wxObjectConstructorFn) name::wxCreateObject);
 
 // -----------------------------------
 // for abstract classes
@@ -207,16 +208,16 @@ inline void wxClassInfo::CleanUpClasses() {}
     // Single inheritance with one base class
 
 #define IMPLEMENT_ABSTRACT_CLASS(name, basename)                \
- wxClassInfo name::sm_class##name(wxT(#name),                   \
-            &basename::sm_class##basename, NULL,                \
+ wxClassInfo name::ms_classInfo(wxT(#name),                     \
+            &basename::ms_classInfo, NULL,                      \
             (int) sizeof(name), (wxObjectConstructorFn) 0);
 
     // Multiple inheritance with two base classes
 
 #define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)   \
- wxClassInfo name::sm_class##name(wxT(#name),                   \
-            &basename1::sm_class##basename1,                    \
-            &basename2::sm_class##basename2,                    \
+ wxClassInfo name::ms_classInfo(wxT(#name),                     \
+            &basename1::ms_classInfo,                           \
+            &basename2::ms_classInfo,                           \
             (int) sizeof(name),                                 \
             (wxObjectConstructorFn) 0);
 
@@ -293,7 +294,7 @@ name##PluginSentinel  m_pluginsentinel;
 #define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
  IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
 
-#define CLASSINFO(name) (&name::sm_class##name)
+#define CLASSINFO(name) (&name::ms_classInfo)
 
 #else // !wxUSE_DYNAMIC_CLASSES
 
@@ -325,19 +326,19 @@ name##PluginSentinel  m_pluginsentinel;
 
 #endif // wxUSE_DYNAMIC_CLASSES
 
-#define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::sm_class##className)
+#define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::ms_classInfo)
 
 // Just seems a bit nicer-looking (pretend it's not a macro)
-#define wxIsKindOf(obj, className) obj->IsKindOf(&className::sm_class##className)
+#define wxIsKindOf(obj, className) obj->IsKindOf(&className::ms_classInfo)
 
 // to be replaced by dynamic_cast<> in the future
 #define wxDynamicCast(obj, className) \
- ((className *) wxCheckDynamicCast((wxObject*)(obj), &className::sm_class##className))
+ ((className *) wxCheckDynamicCast((wxObject*)(obj), &className::ms_classInfo))
 
 // The 'this' pointer is always true, so use this version
 // to cast the this pointer and avoid compiler warnings.
 #define wxDynamicCastThis(className) \
- (IsKindOf(&className::sm_class##className) ? (className *)(this) : (className *)0)
+ (IsKindOf(&className::ms_classInfo) ? (className *)(this) : (className *)0)
 
 #ifdef HAVE_CONST_CAST
 #define wxConstCast(obj, className) const_cast<className *>(obj)

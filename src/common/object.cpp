@@ -68,7 +68,7 @@ const wxClassInfo* wxObject::sm_classParentswxObject[] = { NULL } ;
  wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &wxObject::sm_classwxObject , NULL , NULL , typeid(wxObject*).name() ) ; 
  wxClassTypeInfo s_typeInfowxObject(wxT_OBJECT , &wxObject::sm_classwxObject , NULL , NULL , typeid(wxObject).name() ) ; 
 #else
-wxClassInfo wxObject::sm_classwxObject( wxT("wxObject"), 0, 0,
+wxClassInfo wxObject::ms_classInfo( wxT("wxObject"), 0, 0,
                                         (int) sizeof(wxObject),
                                         (wxObjectConstructorFn) 0 );
 #endif

@@ -54,7 +54,7 @@ void wxModule::RegisterModules()
     {
         classInfo = (wxClassInfo *)node->GetData();
         if ( classInfo->IsKindOf(CLASSINFO(wxModule)) &&
-            (classInfo != (& (wxModule::sm_classwxModule))) )
+            (classInfo != (& (wxModule::ms_classInfo))) )
         {
             wxModule* module = (wxModule *)classInfo->CreateObject();
             RegisterModule(module);
