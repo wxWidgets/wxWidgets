@@ -10,19 +10,37 @@
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
-all:    $(PROGRAM).exe
+#
+# Define inference rules for compiling C++ files.
+#
+{$(THISDIR)}.cpp{$(OPATH)}.obj:
+    @echo $<
+    icc @<<
+    $(CPPFLAGS) /Fo$@ /Tp $<
+    $(THISDIR)\$(@B).cpp
+<<
+
+all:    $(PROGTARGET)
 
 wx:
         cd $(WXDIR)\src\os2
         nmake -f makefile.va FINAL=$(FINAL)
-#        cd $(THISDIR)
+        cd $(THISDIR)
 
 wxclean:
         cd $(WXDIR)\src\os2
         nmake -f makefile.va clean
-#        cd $(THISDIR)
+        cd $(THISDIR)
 
-$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
+$(PROGRAM).obj:: $(OPATH)\$(PROGRAM).obj
+$(OPATH)\$(PROGRAM).obj: $(THISDIR)\$(PROGRAM).cpp
+
+$(PROGRAM).res:: $(PROGRES)
+$(PROGRES):
+    $(RC) -I $(WXDIR)\include -D __VISAGECPP__ -r $(PROGRC) $(PROGRES)
+
+$(PROGRAM).exe:: $(PROGTARGET)
+$(PROGTARGET):   $(OBJECTS) $(PROGRES) $(DUMMYOBJ) $(WXLIB)
     @echo " Link::Linker "
     $(LINK) @<<
         /B" $(LINKFLAGS)" /Fe$@
@@ -30,15 +48,12 @@ $(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
         $(OBJECTS)
         $(LIBS)
 <<
-  $(RC) $(PROGRAM).res $(PROGRAM).exe
-
-$(PROGRAM).res :      $(PROGRAM).rcO $(WXDIR)\include\wx\os2\wx.rc
-    $(RC) -I $(WXDIR)\include -D __VISAGECPP__ -r $(PROGRAM).rcO $(PROGRAM).res
+  $(RC) $(PROGRES) $(PROGTARGET)
 
 clean:
         -erase $(OBJECTS)
-        -erase *.exe
-        -erase *.obj
-        -erase *.res
-        -erase *.map
+        -erase $(OPATH)\*.exe
+        -erase $(OPATH)\*.obj
+        -erase $(OPATH)\*.res
+        -erase $(OPATH)\*.map
 
