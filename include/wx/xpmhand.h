@@ -4,7 +4,7 @@
 // Only wxMSW and wxPM currently defines a separate XPM handler, since
 // mostly Windows and Presentation Manager apps won't need XPMs.
 #if defined(__WXMSW__)
-#include "wx/msw/xpmhand.h"
+#error xpmhand.h is no longer needed since wxImage now handles XPMs.
 #endif
 #if defined(__WXPM__)
 #include "wx/os2/xpmhand.h"
