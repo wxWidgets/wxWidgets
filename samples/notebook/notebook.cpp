@@ -274,15 +274,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     m_btnExit = new wxButton( m_panel, wxID_OK, wxT("&Exit") );
     m_btnExit->SetDefault();
 
-    m_notebook = new MyNotebook(m_panel, ID_NOTEBOOK);
-
     m_text = new wxTextCtrl(m_panel, -1, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
 
     m_logTargetOld = wxLog::SetActiveTarget( new wxLogTextCtrl(m_text) );
-
-    // Create the notebook's panels
-    m_notebook->CreateInitialPages();
 
     // Set sizers
     m_sizerFrame = new wxBoxSizer(wxVERTICAL);
@@ -314,6 +309,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     m_sizerFrame->Add(m_text, 0, wxEXPAND);
 
     ReInitNotebook();
+    m_notebook->CreateInitialPages();
 
     m_panel->SetSizer(m_sizerFrame);
 
@@ -436,7 +432,7 @@ void MyFrame::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnButtonAddPage( wxCommandEvent& WXUNUSED(event) )
 {
-    static size_t s_pageAdded = 0;
+    static unsigned s_pageAdded = 0;
 
     wxPanel *panel = new wxPanel( m_notebook, -1 );
     (void) new wxButton( panel, -1, wxT("First button"),
@@ -450,7 +446,7 @@ void MyFrame::OnButtonAddPage( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnButtonInsertPage( wxCommandEvent& WXUNUSED(event) )
 {
-    static size_t s_pageIns = 0;
+    static unsigned s_pageIns = 0;
 
     wxPanel *panel = m_notebook->CreateUserCreatedPage();
 
