@@ -290,6 +290,16 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
         }
     }
 
+    if ((event.GetKeyCode() == WXK_RETURN))
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_TEXT_ENTER, m_windowId );
+        evt.SetEventObject(this);
+        GtkSpinButton *gsb = GTK_SPIN_BUTTON(m_widget);
+        wxString val = wxGTK_CONV_BACK( gtk_entry_get_text( &gsb->entry ) );
+        evt.SetString( val );
+        if (GetEventHandler()->ProcessEvent(evt)) return;
+    }
+
     event.Skip();
 }
 
