@@ -91,6 +91,15 @@ class wxBitmapButtonPtr(wxButtonPtr):
     def SetBitmapLabel(self, *_args, **_kwargs):
         val = apply(controlsc.wxBitmapButton_SetBitmapLabel,(self,) + _args, _kwargs)
         return val
+    def SetMargins(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_SetMargins,(self,) + _args, _kwargs)
+        return val
+    def GetMarginX(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_GetMarginX,(self,) + _args, _kwargs)
+        return val
+    def GetMarginY(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_GetMarginY,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxBitmapButton instance at %s>" % (self.this,)
 class wxBitmapButton(wxBitmapButtonPtr):

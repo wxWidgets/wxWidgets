@@ -46,9 +46,58 @@ else:
 
 
 #----------------------------------------------------------------------
+# This shows how to catch the Modified event from the wxStyledTextCtrl
+
+class MySTC(wxStyledTextCtrl):
+    def __init__(self, parent, ID, log):
+        wxStyledTextCtrl.__init__(self, parent, ID)
+        self.log = log
+
+        EVT_STC_MODIFIED(self, ID, self.OnModified)
+
+
+    def OnModified(self, evt):
+        self.log.write("""OnModified
+        Mod type:     %s
+        At position:  %d
+        Lines added:  %d
+        Text Length:  %d
+        Text:         %s\n""" % ( self.transModType(evt.GetModificationType()),
+                                  evt.GetPosition(),
+                                  evt.GetLinesAdded(),
+                                  evt.GetLength(),
+                                  evt.GetText() ))
+
+    def transModType(self, modType):
+        st = ""
+        table = [(wxSTC_MOD_INSERTTEXT, "InsertText"),
+                 (wxSTC_MOD_DELETETEXT, "DeleteText"),
+                 (wxSTC_MOD_CHANGESTYLE, "ChangeStyle"),
+                 (wxSTC_MOD_CHANGEFOLD, "ChangeFold"),
+                 (wxSTC_PERFORMED_USER, "UserFlag"),
+                 (wxSTC_PERFORMED_UNDO, "Undo"),
+                 (wxSTC_PERFORMED_REDO, "Redo"),
+                 (wxSTC_LASTSTEPINUNDOREDO, "Last-Undo/Redo"),
+                 (wxSTC_MOD_CHANGEMARKER, "ChangeMarker"),
+                 (wxSTC_MOD_BEFOREINSERT, "B4-Insert"),
+                 (wxSTC_MOD_BEFOREDELETE, "B4-Delete")
+                 ]
+
+        for flag,text in table:
+            if flag & modType:
+                st = st + text + " "
+
+        if not st:
+            st = 'UNKNOWN'
+
+        return st
+
+
+
+#----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    ed = wxStyledTextCtrl(nb, -1)
+    ed = MySTC(nb, -1, log)
 
     ed.SetText(demoText)
     ed.EmptyUndoBuffer()

@@ -659,6 +659,9 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def SetKeywords(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SetKeywords,(self,) + _args, _kwargs)
         return val
+    def SetModEventMask(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetModEventMask,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxStyledTextCtrl instance at %s>" % (self.this,)
 class wxStyledTextCtrl(wxStyledTextCtrlPtr):

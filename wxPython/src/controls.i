@@ -124,6 +124,9 @@ public:
     void SetBitmapSelected(const wxBitmap& bitmap);
     void SetBitmapLabel(const wxBitmap& bitmap);
 
+    void SetMargins(int x, int y) { m_marginX = x; m_marginY = y; }
+    int GetMarginX() const { return m_marginX; }
+    int GetMarginY() const { return m_marginY; }
 };
 
 //----------------------------------------------------------------------

@@ -938,6 +938,89 @@ static PyObject *_wrap_wxBitmapButton_SetBitmapLabel(PyObject *self, PyObject *a
     return _resultobj;
 }
 
+#define wxBitmapButton_SetMargins(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetMargins(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxBitmapButton_SetMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmapButton * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxBitmapButton_SetMargins",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmapButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapButton_SetMargins. Expected _wxBitmapButton_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmapButton_SetMargins(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBitmapButton_GetMarginX(_swigobj)  (_swigobj->GetMarginX())
+static PyObject *_wrap_wxBitmapButton_GetMarginX(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxBitmapButton * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmapButton_GetMarginX",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmapButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapButton_GetMarginX. Expected _wxBitmapButton_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxBitmapButton_GetMarginX(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxBitmapButton_GetMarginY(_swigobj)  (_swigobj->GetMarginY())
+static PyObject *_wrap_wxBitmapButton_GetMarginY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxBitmapButton * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmapButton_GetMarginY",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmapButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapButton_GetMarginY. Expected _wxBitmapButton_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxBitmapButton_GetMarginY(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxCheckBoxTowxControl(void *ptr) {
     wxCheckBox *src;
     wxControl *dest;
@@ -7413,6 +7496,9 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxCheckBox_SetValue", (PyCFunction) _wrap_wxCheckBox_SetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckBox_GetValue", (PyCFunction) _wrap_wxCheckBox_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxCheckBox", (PyCFunction) _wrap_new_wxCheckBox, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmapButton_GetMarginY", (PyCFunction) _wrap_wxBitmapButton_GetMarginY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmapButton_GetMarginX", (PyCFunction) _wrap_wxBitmapButton_GetMarginX, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmapButton_SetMargins", (PyCFunction) _wrap_wxBitmapButton_SetMargins, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmapButton_SetBitmapLabel", (PyCFunction) _wrap_wxBitmapButton_SetBitmapLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmapButton_SetBitmapSelected", (PyCFunction) _wrap_wxBitmapButton_SetBitmapSelected, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmapButton_SetBitmapFocus", (PyCFunction) _wrap_wxBitmapButton_SetBitmapFocus, METH_VARARGS | METH_KEYWORDS },
