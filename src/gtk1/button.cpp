@@ -108,7 +108,11 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     wxControl::SetLabel( label );
 */
 
+#ifdef __WXGTK20__
+    m_widget = gtk_button_new_with_mnemonic("");
+#else
     m_widget = gtk_button_new_with_label("");
+#endif
 
     float x_alignment = 0.5;
     if (HasFlag(wxBU_LEFT))
@@ -167,7 +171,7 @@ void wxButton::SetLabel( const wxString &label )
 
 #ifdef __WXGTK20__
     wxString label2 = PrepareLabelMnemonics( label );
-    gtk_label_set_text_with_mnemonic( GTK_LABEL( BUTTON_CHILD(m_widget) ), wxGTK_CONV( label2 ) );
+    gtk_button_set_label( GTK_BUTTON(m_widget), wxGTK_CONV(label2) );
 #else
     gtk_label_set( GTK_LABEL( BUTTON_CHILD(m_widget) ), wxGTK_CONV( GetLabel() ) );
 #endif
