@@ -481,17 +481,11 @@ wxString wxToolBar::MacGetToolTipString( wxPoint &pt )
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
 {
-    if (!IsShown())
-        return ;
-
     ((wxToolBarTool*)t)->DoEnable( enable ) ;
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 {
-    if (!IsShown())
-        return ;
-
     wxToolBarTool *tool = (wxToolBarTool *)t;
     if ( tool->IsButton() )
     {
