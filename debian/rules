@@ -42,6 +42,9 @@ release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p')
 soversion := $(shell grep '^WX_CURRENT=' configure.in | sed 's/WX_CURRENT=\([0-9]\+\).*/\1/')
 sorelease := $(release:%-$(DEBIAN_WXFLAVOUR)=%).$(soversion)$(addprefix -,$(DEBIAN_WXFLAVOUR))
 
+pydir     := usr/lib/$(python_ver)/site-packages
+wxpydir   := $(pydir)/wx-$(sorelease)-gtk2-unicode
+
 cross_host  = i586-mingw32msvc
 cross_build = $(shell ./config.guess)
 
@@ -150,7 +153,10 @@ control-files-stamp: debian/control
 	done;
 	@for f in docs postinst prerm; do                                    \
 		echo "generating control file $(package_gtk_py_lib).$$f";    \
-		sed -e 's/=PY/$(python_ver)/g;s/=V/$(release)/g;s/=SOV/$(sorelease)/g' \
+		sed -e 's/=PY/$(python_ver)/g;                               \
+			s|=WXPYDIR|$(wxpydir)|g;                             \
+			s/=V/$(release)/g;                                   \
+			s/=SOV/$(sorelease)/g'                               \
 			< debian/libwxgtk-python.$$f                         \
 			> debian/$(package_gtk_py_lib).$$f;                  \
 	done;
@@ -525,11 +531,10 @@ install-gtk-py-lib: build-gtk-py-stamp
 			      UNICODE=1						\
 			      FLAVOUR=$(DEBIAN_WXFLAVOUR)
 
-	find debian/$(package_gtk_py_lib)/usr/lib/$(python_ver)/site-packages	\
-		-name '*.py?' -exec rm '{}' ';'
+	find debian/$(package_gtk_py_lib)/$(pydir) -name '*.py?' -exec rm '{}' ';'
 
 	# This is rather bogus, its included in the main copyright file now though.
-	rm -f debian/$(package_gtk_py_lib)/usr/lib/$(python_ver)/site-packages/wx-$(sorelease)-gtk2-unicode/wx/tools/XRCed/license.txt
+	rm -f debian/$(package_gtk_py_lib)/$(wxpydir)/wx/tools/XRCed/license.txt
 
 install-gtk-py: DH_OPTIONS=-p$(package_gtk_py)
 install-gtk-py: install-gtk-py-lib
@@ -538,9 +543,9 @@ install-gtk-py: install-gtk-py-lib
 	dh_clean -k
 	dh_installdirs
 
-	dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) usr/bin		\
-		usr/lib/$(python_ver)/site-packages/wxversion.py		\
-		usr/lib/$(python_ver)/site-packages/wx.pth
+	dh_movefiles --sourcedir=debian/$(package_gtk_py_lib)			\
+		usr/bin								\
+		$(pydir)/{wxversion.py,wx.pth}
 	rm -r debian/$(package_gtk_py_lib)/usr/bin
 
 	dh_installman debian/wxPython-tools.1
@@ -631,15 +636,11 @@ install-gtk-dbg-py: build-gtk-dbg-py-stamp
 			      UNICODE=1						\
 			      FLAVOUR=$(addsuffix -,$(DEBIAN_WXFLAVOUR))dbg
 
-	find debian/$(package_gtk_dbg_py)/usr/lib/$(python_ver)/site-packages	\
-		-name '*.py?' -exec rm '{}' ';'
-
-	rm -rf usr/bin								\
-	       usr/lib/$(python_ver)/site-packages/wxversion.py			\
-	       usr/lib/$(python_ver)/site-packages/wx.pth
+	find debian/$(package_gtk_dbg_py)/$(pydir) -name '*.py?' -exec rm '{}' ';'
+	rm -rf usr/bin $(pydir)/{wxversion.py,wx.pth}
 
 	# This is rather bogus, its included in the main copyright file now though.
-	rm -f debian/$(package_gtk_dbg_py)/usr/lib/$(python_ver)/site-packages/wx-$(sorelease)-gtk2-unicode/wx/tools/XRCed/license.txt
+	rm -f debian/$(package_gtk_dbg_py)/$(wxpydir)/wx/tools/XRCed/license.txt
 
 
 install-msw-dev: DH_OPTIONS=-p$(package_msw_dev)

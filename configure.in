@@ -64,9 +64,9 @@ WX_SUBVERSION=$WX_VERSION.$wx_subrelease_number
 
 WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_number
 
-WX_CURRENT=4
+WX_CURRENT=3
 WX_REVISION=0
-WX_AGE=1
+WX_AGE=2
 
 
 dnl ------------------------------------------------------------------------
