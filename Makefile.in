@@ -1120,6 +1120,16 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/makegen/*.cpp $(DISTDIR)/utils/makegen
 	cp $(UTILSDIR)/makegen/templates/*.* $(DISTDIR)/utils/makegen/templates
 
+	mkdir $(DISTDIR)/utils/hhp2cached
+	cp $(UTILSDIR)/hhp2cached/*.* $(DISTDIR)/utils/hhp2cached
+
+	mkdir $(DISTDIR)/utils/HelpGen
+	mkdir $(DISTDIR)/utils/HelpGen/src
+	cp $(UTILSDIR)/HelpGen/Makefile.in $(DISTDIR)/utils/HelpGen
+	cp $(UTILSDIR)/HelpGen/src/*.* $(DISTDIR)/utils/HelpGen/src
+
+	cp -R $(UTILSDIR)/dialoged $(DISTDIR)/utils/dialoged
+
 MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc
 	mkdir $(DISTDIR)/misc/afm
