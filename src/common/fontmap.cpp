@@ -34,7 +34,6 @@
     #include "wx/intl.h"
 #endif // PCH
 
-#include "wx/fontutil.h"
 #include "wx/fontmap.h"
 
 #if wxUSE_CONFIG
@@ -43,6 +42,7 @@
 #endif
 
 #if wxUSE_GUI
+    #include "wx/fontutil.h"
     #include "wx/msgdlg.h"
     #include "wx/fontdlg.h"
     #include "wx/choicdlg.h"

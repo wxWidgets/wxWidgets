@@ -44,11 +44,12 @@
 //#define TEST_EXECUTE
 //#define TEST_FILE
 //#define TEST_FILECONF
+#define TEST_FTP
 //#define TEST_HASH
 //#define TEST_LIST
 //#define TEST_LOG
 //#define TEST_LONGLONG
-#define TEST_MIME
+//#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_REGISTRY
 //#define TEST_SOCKETS
@@ -1241,7 +1242,6 @@ static void TestRegistryAssociation()
 
 #include <wx/socket.h>
 #include <wx/protocol/protocol.h>
-#include <wx/protocol/ftp.h>
 #include <wx/protocol/http.h>
 
 static void TestSocketServer()
@@ -1364,17 +1364,33 @@ static void TestSocketClient()
     }
 }
 
+#endif // TEST_SOCKETS
+
+#ifdef TEST_FTP
+
+#include <wx/protocol/ftp.h>
+
 static void TestProtocolFtp()
 {
     puts("*** Testing wxFTP download ***\n");
 
-    wxLog::AddTraceMask(_T("ftp"));
-
-    static const char *hostname = "ftp.wxwindows.org";
-
-    printf("--- Attempting to connect to %s:21...\n", hostname);
-
     wxFTP ftp;
+#if 1
+    static const char *hostname = "ftp.wxwindows.org";
+    static const char *directory = "pub";
+
+    printf("--- Attempting to connect to %s:21 anonymously...\n", hostname);
+#else
+    static const char *hostname = "localhost";
+    static const char *user = "zeitlin";
+    static const char *directory = "/tmp";
+
+    ftp.SetUser(user);
+    ftp.SetPassword("password");
+
+    printf("--- Attempting to connect to %s:21 as %s...\n", hostname, user);
+#endif
+
     if ( !ftp.Connect(hostname) )
     {
         printf("ERROR: failed to connect to %s\n", hostname);
@@ -1383,19 +1399,37 @@ static void TestProtocolFtp()
     {
         printf("--- Connected to %s, current directory is '%s'\n",
                hostname, ftp.Pwd().c_str());
-        if ( !ftp.ChDir(_T("pub")) )
+
+        // test CWD
+        if ( !ftp.ChDir(directory) )
         {
-            puts("ERROR: failed to cd to pub");
+            printf("ERROR: failed to cd to %s\n", directory);
         }
 
+        // test NLIST and LIST
         wxArrayString files;
-        if ( !ftp.GetList(files) )
+        if ( !ftp.GetFilesList(files) )
         {
-            puts("ERROR: failed to get list of files");
+            puts("ERROR: failed to get NLIST of files");
         }
         else
         {
-            printf("List of files under '%s':\n", ftp.Pwd().c_str());
+            printf("Brief list of files under '%s':\n", ftp.Pwd().c_str());
+            size_t count = files.GetCount();
+            for ( size_t n = 0; n < count; n++ )
+            {
+                printf("\t%s\n", files[n].c_str());
+            }
+            puts("End of the file list");
+        }
+
+        if ( !ftp.GetDirList(files) )
+        {
+            puts("ERROR: failed to get LIST of files");
+        }
+        else
+        {
+            printf("Detailed list of files under '%s':\n", ftp.Pwd().c_str());
             size_t count = files.GetCount();
             for ( size_t n = 0; n < count; n++ )
             {
@@ -1409,11 +1443,12 @@ static void TestProtocolFtp()
             puts("ERROR: failed to cd to ..");
         }
 
+        // test RETR
         static const char *filename = "welcome.msg";
         wxInputStream *in = ftp.GetInputStream(filename);
         if ( !in )
         {
-            puts("ERROR: couldn't get input stream");
+            printf("ERROR: couldn't get input stream for %s\n", filename);
         }
         else
         {
@@ -1433,6 +1468,26 @@ static void TestProtocolFtp()
             delete [] data;
             delete in;
         }
+
+        // test some other FTP commands
+        if ( ftp.SendCommand("STAT") != '2' )
+        {
+            puts("ERROR: STAT failed");
+        }
+        else
+        {
+            printf("STAT returned:\n\n%s\n", ftp.GetLastResult().c_str());
+        }
+
+        if ( ftp.SendCommand("HELP SITE") != '2' )
+        {
+            puts("ERROR: HELP SITE failed");
+        }
+        else
+        {
+            printf("The list of site-specific commands:\n\n%s\n",
+                   ftp.GetLastResult().c_str());
+        }
     }
 }
 
@@ -1440,15 +1495,13 @@ static void TestProtocolFtpUpload()
 {
     puts("*** Testing wxFTP uploading ***\n");
 
-    wxLog::AddTraceMask(_T("ftp"));
-
     static const char *hostname = "localhost";
 
     printf("--- Attempting to connect to %s:21...\n", hostname);
 
     wxFTP ftp;
     ftp.SetUser("zeitlin");
-    ftp.SetPassword("insert your password here");
+    ftp.SetPassword("password");
     if ( !ftp.Connect(hostname) )
     {
         printf("ERROR: failed to connect to %s\n", hostname);
@@ -1469,6 +1522,17 @@ static void TestProtocolFtpUpload()
             delete out;
         }
 
+        // send a command to check the remote file
+        if ( ftp.SendCommand(wxString("STAT ") + file1) != '2' )
+        {
+            printf("ERROR: STAT %s failed\n", file1);
+        }
+        else
+        {
+            printf("STAT %s returned:\n\n%s\n",
+                   file1, ftp.GetLastResult().c_str());
+        }
+
         out = ftp.GetOutputStream(file2);
         if ( out )
         {
@@ -1479,7 +1543,7 @@ static void TestProtocolFtpUpload()
     }
 }
 
-#endif // TEST_SOCKETS
+#endif // TEST_FTP
 
 // ----------------------------------------------------------------------------
 // streams
@@ -3858,11 +3922,16 @@ int main(int argc, char **argv)
     if ( 0 )
     {
         TestSocketServer();
-        TestSocketClient();
-        TestProtocolFtp();
     }
-        TestProtocolFtpUpload();
+        TestSocketClient();
 #endif // TEST_SOCKETS
+
+#ifdef TEST_FTP
+    wxLog::AddTraceMask(_T("ftp"));
+    TestProtocolFtp();
+    if ( 0 )
+    TestProtocolFtpUpload();
+#endif // TEST_FTP
 
 #ifdef TEST_STREAMS
     TestMemoryStream();

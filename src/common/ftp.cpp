@@ -2,16 +2,28 @@
 // Name:        ftp.cpp
 // Purpose:     FTP protocol
 // Author:      Guilhem Lavaux
-// Modified by:
+// Modified by: Mark Johnson, wxWindows@mj10777.de
+//              20000917 : RmDir, GetLastResult, GetList
+//              Vadim Zeitlin (numerous fixes and rewrites to all part of the
+//              code, support ASCII/Binary modes, better error reporting, more
+//              robust Abort(), support for arbitrary FTP commands, ...)
 // Created:     07/07/1997
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
 #ifdef __GNUG__
   #pragma implementation "ftp.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -20,49 +32,58 @@
   #pragma hdrstop
 #endif
 
-#include "wx/setup.h"
-
 #if wxUSE_SOCKETS && wxUSE_STREAMS
 
-#ifndef __MWERKS__
-#include <memory.h>
-#endif
-#if defined(__WXMAC__)
-#include "/wx/mac/macsock.h"
-#endif
+#ifndef WX_PRECOMP
+    #include <stdlib.h>
+    #include "wx/string.h"
+    #include "wx/utils.h"
+    #include "wx/log.h"
+    #include "wx/intl.h"
+#endif // WX_PRECOMP
 
-#include <stdlib.h>
-#include "wx/string.h"
-#include "wx/utils.h"
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
 #include "wx/url.h"
 #include "wx/sckstrm.h"
 #include "wx/protocol/protocol.h"
 #include "wx/protocol/ftp.h"
-#include "wx/log.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
+#if defined(__WXMAC__)
+    #include "/wx/mac/macsock.h"
 #endif
+
+#ifndef __MWERKS__
+    #include <memory.h>
+#endif
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
 // the length of FTP status code (3 digits)
 static const size_t LEN_CODE = 3;
 
-#define FTP_BSIZE 1024
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxFTP, wxProtocol)
 IMPLEMENT_PROTOCOL(wxFTP, wxT("ftp"), wxT("ftp"), TRUE)
 
-////////////////////////////////////////////////////////////////
-////// wxFTP constructor and destructor ////////////////////////
-////////////////////////////////////////////////////////////////
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxFTP constructor and destructor
+// ----------------------------------------------------------------------------
 
 wxFTP::wxFTP()
-     : wxProtocol()
 {
     m_lastError = wxPROTO_NOERR;
     m_streaming = FALSE;
+    m_modeSet = FALSE;
 
     m_user = wxT("anonymous");
     m_passwd << wxGetUserId() << wxT('@') << wxGetFullHostName();
@@ -81,52 +102,63 @@ wxFTP::~wxFTP()
     Close();
 }
 
-////////////////////////////////////////////////////////////////
-////// wxFTP connect and login methods /////////////////////////
-////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
+// wxFTP connect and login methods
+// ----------------------------------------------------------------------------
+
 bool wxFTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 {
-  if (!wxProtocol::Connect(addr)) {
-    m_lastError = wxPROTO_NETERR;
-    return FALSE;
-  }
+    if ( !wxProtocol::Connect(addr) )
+    {
+        m_lastError = wxPROTO_NETERR;
+        return FALSE;
+    }
 
-  if (!m_user || !m_passwd) {
-    m_lastError = wxPROTO_CONNERR;
-    return FALSE;
-  }
+    if ( !m_user )
+    {
+        m_lastError = wxPROTO_CONNERR;
+        return FALSE;
+    }
 
-  wxString command;
+    // we should have 220 welcome message
+    if ( !CheckResult('2') )
+    {
+        Close();
+        return FALSE;
+    }
 
-  if (!GetResult('2')) {
-    Close();
-    return FALSE;
-  }
+    wxString command;
+    command.Printf(wxT("USER %s"), m_user.c_str());
+    char rc = SendCommand(command);
+    if ( rc == '2' )
+    {
+        // 230 return: user accepted without password
+        return TRUE;
+    }
 
-  command.sprintf(wxT("USER %s"), (const wxChar *)m_user);
-  if (!SendCommand(command, '3')) {
-    Close();
-    return FALSE;
-  }
+    if ( rc != '3' )
+    {
+        Close();
+        return FALSE;
+    }
 
-  command.sprintf(wxT("PASS %s"), (const wxChar *)m_passwd);
-  if (!SendCommand(command, '2')) {
-    Close();
-    return FALSE;
-  }
+    command.Printf(wxT("PASS %s"), m_passwd.c_str());
+    if ( !CheckCommand(command, '2') )
+    {
+        Close();
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 bool wxFTP::Connect(const wxString& host)
 {
-  wxIPV4address addr;
-  wxString my_host = host;
+    wxIPV4address addr;
+    addr.Hostname(host);
+    addr.Service(wxT("ftp"));
 
-  addr.Hostname(my_host);
-  addr.Service(wxT("ftp"));
-
-  return Connect(addr);
+    return Connect(addr);
 }
 
 bool wxFTP::Close()
@@ -138,7 +170,12 @@ bool wxFTP::Close()
     }
 
     if ( IsConnected() )
-        SendCommand(wxT("QUIT"), '2');
+    {
+        if ( !CheckCommand(wxT("QUIT"), '2') )
+        {
+            wxLogDebug(_T("Failed to close connection gracefully."));
+        }
+    }
 
     return wxSocketClient::Close();
 }
@@ -151,36 +188,38 @@ bool wxFTP::Close()
 // Send command to FTP server
 // ----------------------------------------------------------------------------
 
-bool wxFTP::SendCommand(const wxString& command, char exp_ret)
+char wxFTP::SendCommand(const wxString& command)
 {
-    wxString tmp_str;
-
-    if (m_streaming)
+    if ( m_streaming )
     {
         m_lastError = wxPROTO_STREAMING;
-        return FALSE;
+        return 0;
     }
 
-    tmp_str = command + wxT("\r\n");
+    wxString tmp_str = command + wxT("\r\n");
     const wxWX2MBbuf tmp_buf = tmp_str.mb_str();
     if ( Write(wxMBSTRINGCAST tmp_buf, strlen(tmp_buf)).Error())
     {
         m_lastError = wxPROTO_NETERR;
-        return FALSE;
+        return 0;
     }
 
     wxLogTrace(_T("ftp"), _T("==> %s"), command.c_str());
 
-    return GetResult(exp_ret);
+    return GetResult();
 }
 
 // ----------------------------------------------------------------------------
 // Recieve servers reply
 // ----------------------------------------------------------------------------
 
-bool wxFTP::GetResult(char exp)
+char wxFTP::GetResult()
 {
     wxString code;
+
+    // m_lastResult will contain the entire server response, possibly on
+    // multiple lines
+    m_lastResult.clear();
 
     // we handle multiline replies here according to RFC 959: it says that a
     // reply may either be on 1 line of the form "xyz ..." or on several lines
@@ -194,13 +233,22 @@ bool wxFTP::GetResult(char exp)
     bool endOfReply = FALSE;
     while ( !endOfReply && !badReply )
     {
-        m_lastError = ReadLine(m_lastResult);
+        wxString line;
+        m_lastError = ReadLine(line);
         if ( m_lastError )
-            return FALSE;
+            return 0;
+
+        if ( !m_lastResult.empty() )
+        {
+            // separate from last line
+            m_lastResult += _T('\n');
+        }
+
+        m_lastResult += line;
 
         // unless this is an intermediate line of a multiline reply, it must
         // contain the code in the beginning and '-' or ' ' following it
-        if ( m_lastResult.Len() < LEN_CODE + 1 )
+        if ( line.Len() < LEN_CODE + 1 )
         {
             if ( firstLine )
             {
@@ -209,19 +257,19 @@ bool wxFTP::GetResult(char exp)
             else
             {
                 wxLogTrace(_T("ftp"), _T("<== %s %s"),
-                           code.c_str(), m_lastResult.c_str());
+                           code.c_str(), line.c_str());
             }
         }
         else // line has at least 4 chars
         {
             // this is the char which tells us what we're dealing with
-            wxChar chMarker = m_lastResult.GetChar(LEN_CODE);
+            wxChar chMarker = line.GetChar(LEN_CODE);
 
             if ( firstLine )
             {
-                code = wxString(m_lastResult, LEN_CODE);
+                code = wxString(line, LEN_CODE);
                 wxLogTrace(_T("ftp"), _T("<== %s %s"),
-                           code.c_str(), m_lastResult.c_str() + LEN_CODE + 1);
+                           code.c_str(), line.c_str() + LEN_CODE + 1);
 
                 switch ( chMarker )
                 {
@@ -240,7 +288,7 @@ bool wxFTP::GetResult(char exp)
             }
             else // subsequent line of multiline reply
             {
-                if ( wxStrncmp(m_lastResult, code, LEN_CODE) == 0 )
+                if ( wxStrncmp(line, code, LEN_CODE) == 0 )
                 {
                     if ( chMarker == _T(' ') )
                     {
@@ -248,13 +296,13 @@ bool wxFTP::GetResult(char exp)
                     }
 
                     wxLogTrace(_T("ftp"), _T("<== %s %s"),
-                               code.c_str(), m_lastResult.c_str() + LEN_CODE + 1);
+                               code.c_str(), line.c_str() + LEN_CODE + 1);
                 }
                 else
                 {
                     // just part of reply
                     wxLogTrace(_T("ftp"), _T("<== %s %s"),
-                               code.c_str(), m_lastResult.c_str());
+                               code.c_str(), line.c_str());
                 }
             }
         }
@@ -267,12 +315,59 @@ bool wxFTP::GetResult(char exp)
 
         m_lastError = wxPROTO_PROTERR;
 
+        return 0;
+    }
+
+    // if we got here we must have a non empty code string
+    return code[0u];
+}
+
+// ----------------------------------------------------------------------------
+// wxFTP simple commands
+// ----------------------------------------------------------------------------
+
+bool wxFTP::SetTransferMode(TransferMode transferMode)
+{
+    wxString mode;
+    switch ( transferMode )
+    {
+        default:
+            wxFAIL_MSG(_T("unknown FTP transfer mode"));
+            // fall through
+
+        case BINARY:
+            mode = _T('I');
+            break;
+
+        case ASCII:
+            mode = _T('A');
+            break;
+    }
+
+    if ( !DoSimpleCommand(_T("TYPE"), mode) )
+    {
+        wxLogError(_("Failed to set FTP transfer mode to %s."),
+                   transferMode == ASCII ? _("ASCII") : _("binary"));
+
         return FALSE;
     }
 
-    if ( code.GetChar(0) != exp )
+    m_modeSet = TRUE;
+
+    return TRUE;
+}
+
+bool wxFTP::DoSimpleCommand(const wxChar *command, const wxString& arg)
+{
+    wxString fullcmd = command;
+    if ( !arg.empty() )
     {
-        m_lastError = wxPROTO_PROTERR;
+        fullcmd << _T(' ') << arg;
+    }
+
+    if ( !CheckCommand(fullcmd, '2') )
+    {
+        wxLogDebug(_T("FTP command '%s' failed."), fullcmd.c_str());
 
         return FALSE;
     }
@@ -280,39 +375,32 @@ bool wxFTP::GetResult(char exp)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////
-////// wxFTP low-level methods /////////////////////////////////
-////////////////////////////////////////////////////////////////
 bool wxFTP::ChDir(const wxString& dir)
 {
-  wxString str = dir;
+    // some servers might not understand ".." if they use different directory
+    // tree conventions, but they always understand CDUP - should we use it if
+    // dir == ".."? OTOH, do such servers (still) exist?
 
-  str.Prepend(wxT("CWD "));
-  return SendCommand(str, '2');
+    return DoSimpleCommand(_T("CWD"), dir);
 }
 
 bool wxFTP::MkDir(const wxString& dir)
 {
-  wxString str = dir;
-  str.Prepend(wxT("MKD "));
-  return SendCommand(str, '2');
+    return DoSimpleCommand(_T("MKD"), dir);
 }
 
 bool wxFTP::RmDir(const wxString& dir)
 {
-  wxString str = dir;
-  
-  str.Prepend(wxT("PWD "));
-  return SendCommand(str, '2');
+    return DoSimpleCommand(_T("RMD"), dir);
 }
 
 wxString wxFTP::Pwd()
 {
     wxString path;
 
-    if ( SendCommand(wxT("PWD"), '2') )
+    if ( CheckCommand(wxT("PWD"), '2') )
     {
-        // the result is at least that long if SendCommand() succeeded
+        // the result is at least that long if CheckCommand() succeeded
         const wxChar *p = m_lastResult.c_str() + LEN_CODE + 1;
         if ( *p != _T('"') )
         {
@@ -345,243 +433,304 @@ wxString wxFTP::Pwd()
             }
         }
     }
+    else
+    {
+        wxLogDebug(_T("FTP PWD command failed."));
+    }
 
     return path;
 }
 
 bool wxFTP::Rename(const wxString& src, const wxString& dst)
 {
-  wxString str;
+    wxString str;
 
-  str = wxT("RNFR ") + src;
-  if (!SendCommand(str, '3'))
-    return FALSE;
+    str = wxT("RNFR ") + src;
+    if ( !CheckCommand(str, '3') )
+        return FALSE;
 
-  str = wxT("RNTO ") + dst;
-  return SendCommand(str, '2');
+    str = wxT("RNTO ") + dst;
+
+    return CheckCommand(str, '2');
 }
 
 bool wxFTP::RmFile(const wxString& path)
 {
-  wxString str;
+    wxString str;
+    str = wxT("DELE ") + path;
 
-  str = wxT("DELE ");
-  str += path;
-  return SendCommand(str, '2');
+    return CheckCommand(str, '2');
 }
 
-////////////////////////////////////////////////////////////////
-////// wxFTP download*upload ///////////////////////////////////
-////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
+// wxFTP download and upload
+// ----------------------------------------------------------------------------
 
-class wxInputFTPStream : public wxSocketInputStream {
+class wxInputFTPStream : public wxSocketInputStream
+{
 public:
-  wxFTP *m_ftp;
-  size_t m_ftpsize;
+    wxInputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
+        : wxSocketInputStream(*sock), m_ftp(ftp_clt)
+    {
+    }
 
-  wxInputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
-    : wxSocketInputStream(*sock), m_ftp(ftp_clt) {}
-  size_t GetSize() const { return m_ftpsize; }
-  virtual ~wxInputFTPStream(void)
-  { 
-     if (LastError() == wxStream_NOERROR)
-       m_ftp->GetResult('2');
-     else
-       m_ftp->Abort();
-     delete m_i_socket;
-  }
+    size_t GetSize() const { return m_ftpsize; }
+
+    virtual ~wxInputFTPStream()
+    {
+        if ( LastError() == wxStream_NOERROR )
+        {
+            // wait for "226 transfer completed"
+            m_ftp->CheckResult('2');
+
+            m_ftp->m_streaming = FALSE;
+        }
+        else
+        {
+            m_ftp->Abort();
+        }
+
+        delete m_i_socket;
+    }
+
+    wxFTP *m_ftp;
+    size_t m_ftpsize;
 };
 
-class wxOutputFTPStream : public wxSocketOutputStream {
+class wxOutputFTPStream : public wxSocketOutputStream
+{
 public:
-  wxFTP *m_ftp;
+    wxOutputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
+        : wxSocketOutputStream(*sock), m_ftp(ftp_clt)
+    {
+    }
 
-  wxOutputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
-    : wxSocketOutputStream(*sock), m_ftp(ftp_clt) {}
-  virtual ~wxOutputFTPStream(void)
-  {
-      if ( IsOk() )
-      {
-          // close data connection first, this will generate "transfer
-          // completed" reply
-          delete m_o_socket;
+    virtual ~wxOutputFTPStream(void)
+    {
+        if ( IsOk() )
+        {
+            // close data connection first, this will generate "transfer
+            // completed" reply
+            delete m_o_socket;
 
-          // read this reply
-          m_ftp->GetResult('2');
-      }
-      else
-      {
-          // abort data connection first
-          m_ftp->Abort();
+            // read this reply
+            m_ftp->CheckResult('2');
 
-          // and close it after
-          delete m_o_socket;
-      }
-  }
+            m_ftp->m_streaming = FALSE;
+        }
+        else
+        {
+            // abort data connection first
+            m_ftp->Abort();
+
+            // and close it after
+            delete m_o_socket;
+        }
+    }
+
+    wxFTP *m_ftp;
 };
 
 wxSocketClient *wxFTP::GetPort()
 {
-  wxIPV4address addr;
-  wxSocketClient *client;
-  int a[6];
-  wxString straddr;
-  int addr_pos;
-  wxUint16 port;
-  wxUint32 hostaddr;
+    int a[6];
 
-  if (!SendCommand(wxT("PASV"), '2'))
-    return NULL;
+    if ( !DoSimpleCommand(_T("PASV")) )
+    {
+        wxLogError(_("The FTP server doesn't support passive mode."));
 
-  addr_pos = m_lastResult.Find(wxT('('));
-  if (addr_pos == -1) {
-    m_lastError = wxPROTO_PROTERR;
-    return NULL;
-  }
-  straddr = m_lastResult(addr_pos+1, m_lastResult.Length());
-  wxSscanf((const wxChar *)straddr,wxT("%d,%d,%d,%d,%d,%d"),&a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
+        return NULL;
+    }
 
-  hostaddr = (wxUint16)a[5] << 24 | (wxUint16)a[4] << 16 |
-             (wxUint16)a[3] << 8 | a[2]; 
-  addr.Hostname(hostaddr);
+    const char *addrStart = wxStrchr(m_lastResult, _T('('));
+    if ( !addrStart )
+    {
+        m_lastError = wxPROTO_PROTERR;
 
-  port = (wxUint16)a[0] << 8 | a[1];
-  addr.Service(port);
+        return NULL;
+    }
 
-  client = new wxSocketClient();
-  if (!client->Connect(addr)) {
-    delete client;
-    return NULL;
-  }
-  client->Notify(FALSE);
+    const char *addrEnd = wxStrchr(addrStart, _T(')'));
+    if ( !addrEnd )
+    {
+        m_lastError = wxPROTO_PROTERR;
 
-  return client;
+        return NULL;
+    }
+
+    wxString straddr(addrStart + 1, addrEnd);
+
+    wxSscanf(straddr, wxT("%d,%d,%d,%d,%d,%d"),
+             &a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
+
+    wxUint32 hostaddr = (wxUint16)a[5] << 24 |
+                        (wxUint16)a[4] << 16 |
+                        (wxUint16)a[3] << 8 |
+                        a[2];
+    wxUint16 port = (wxUint16)a[0] << 8 | a[1];
+
+    wxIPV4address addr;
+    addr.Hostname(hostaddr);
+    addr.Service(port);
+
+    wxSocketClient *client = new wxSocketClient();
+    if ( !client->Connect(addr) )
+    {
+        delete client;
+        return NULL;
+    }
+
+    client->Notify(FALSE);
+
+    return client;
 }
 
 bool wxFTP::Abort()
 {
     if ( !m_streaming )
         return TRUE;
-        
+
     m_streaming = FALSE;
-    if ( !SendCommand(wxT("ABOR"), '4') )
+    if ( !CheckCommand(wxT("ABOR"), '4') )
         return FALSE;
 
-    return GetResult('2');
+    return CheckResult('2');
 }
 
 wxInputStream *wxFTP::GetInputStream(const wxString& path)
 {
-  wxString tmp_str;
-  int pos_size;
-  wxInputFTPStream *in_stream;
+    int pos_size;
+    wxInputFTPStream *in_stream;
 
-  if (!SendCommand(wxT("TYPE I"), '2'))
-    return NULL;
+    if ( !m_modeSet && !SetTransferMode(BINARY) )
+        return NULL;
 
-  wxSocketClient *sock = GetPort();
+    wxSocketClient *sock = GetPort();
 
-  if (!sock) {
-    m_lastError = wxPROTO_NETERR;
-    return NULL;
-  }
+    if ( !sock )
+    {
+        m_lastError = wxPROTO_NETERR;
+        return NULL;
+    }
 
-  tmp_str = wxT("RETR ") + wxURL::ConvertFromURI(path);
-  if (!SendCommand(tmp_str, '1'))
-    return NULL;
+    wxString tmp_str = wxT("RETR ") + wxURL::ConvertFromURI(path);
+    if ( !CheckCommand(tmp_str, '1') )
+        return NULL;
 
-  in_stream = new wxInputFTPStream(this, sock);
+    m_streaming = TRUE;
 
-  pos_size = m_lastResult.Index(wxT('('));
-  if (pos_size != wxNOT_FOUND) {
-    wxString str_size = m_lastResult(pos_size+1, m_lastResult.Index(wxT(')'))-1);
+    in_stream = new wxInputFTPStream(this, sock);
 
-    in_stream->m_ftpsize = wxAtoi(WXSTRINGCAST str_size);
-  }
-  sock->SetFlags(wxSOCKET_WAITALL);
+    pos_size = m_lastResult.Index(wxT('('));
+    if ( pos_size != wxNOT_FOUND )
+    {
+        wxString str_size = m_lastResult(pos_size+1, m_lastResult.Index(wxT(')'))-1);
 
-  return in_stream;
+        in_stream->m_ftpsize = wxAtoi(WXSTRINGCAST str_size);
+    }
+
+    sock->SetFlags(wxSOCKET_WAITALL);
+
+    return in_stream;
 }
 
 wxOutputStream *wxFTP::GetOutputStream(const wxString& path)
 {
-  wxString tmp_str;
+    if ( !m_modeSet && !SetTransferMode(BINARY) )
+        return NULL;
 
-  if (!SendCommand(wxT("TYPE I"), '2'))
-    return NULL;
+    wxSocketClient *sock = GetPort();
 
-  wxSocketClient *sock = GetPort();
+    wxString tmp_str = wxT("STOR ") + path;
+    if ( !CheckCommand(tmp_str, '1') )
+        return FALSE;
 
-  tmp_str = wxT("STOR ") + path;
-  if (!SendCommand(tmp_str, '1'))
-    return FALSE;
+    m_streaming = TRUE;
 
-  return new wxOutputFTPStream(this, sock);
+    return new wxOutputFTPStream(this, sock);
 }
 
-bool wxFTP::GetList(wxArrayString& files, const wxString& wildcard)
+// ----------------------------------------------------------------------------
+// FTP directory listing
+// ----------------------------------------------------------------------------
+
+bool wxFTP::GetList(wxArrayString& files,
+                    const wxString& wildcard,
+                    bool details)
 {
     wxSocketBase *sock = GetPort();
-    if ( !sock )
-    {
+    if (!sock)
         return FALSE;
-    }
 
-    wxString line = _T("NLST");
+    // NLST : List of Filenames (including Directory's !)
+    // LIST : depending on BS of FTP-Server
+    //        - Unix    : result like "ls" command
+    //        - Windows : like "dir" command
+    //        - others  : ?
+    wxString line(details ? _T("LIST") : _T("NLST"));
     if ( !!wildcard )
     {
-        // notice that there is no space here
-        line += wildcard;
+        line << _T(' ') << wildcard;
     }
 
-    if ( !SendCommand(line, '1') )
+    if (!CheckCommand(line, '1'))
     {
         return FALSE;
     }
-
     files.Empty();
-
     while ( ReadLine(sock, line) == wxPROTO_NOERR )
     {
         files.Add(line);
     }
-
     delete sock;
 
     // the file list should be terminated by "226 Transfer complete""
-    if ( !GetResult('2') )
+    if ( !CheckResult('2') )
         return FALSE;
 
     return TRUE;
 }
 
-wxList *wxFTP::GetList(const wxString& wildcard)
+#ifdef WXWIN_COMPATIBILITY_2
+// deprecated
+wxList *wxFTP::GetList(const wxString& wildcard, bool details)
 {
-  wxList *file_list = new wxList;
-  wxSocketBase *sock = GetPort();
-  wxString tmp_str = wxT("NLST");
-
-  if (!wildcard.IsNull())
-    tmp_str += wildcard;
-
-  if (!SendCommand(tmp_str, '1')) {
-    delete sock;
-    delete file_list;
-    return NULL;
-  }
-
-  while (GetLine(sock, tmp_str) == wxPROTO_NOERR) {
-    file_list->Append((wxObject *)(new wxString(tmp_str)));
-  }
-
-  if (!GetResult('2')) {
-    delete sock;
-    file_list->DeleteContents(TRUE);
-    delete file_list;
-    return NULL;
-  }
-
-  return file_list;
+ wxSocketBase *sock = GetPort();
+ if (!sock)
+  return FALSE;
+ wxList *file_list = new wxList;
+ wxString line;
+ // NLST : List of Filenames (including Directory's !)
+ // LIST : depending on BS of FTP-Server
+ //        - Unix    : result like "ls" command
+ //        - Windows : like "dir" command
+ //        - others  : ?
+ if (!details)
+  line = _T("NLST");   // Default
+ else
+  line = _T("LIST");
+ if (!wildcard.IsNull())
+  line += wildcard;
+ if (!CheckCommand(line, '1'))
+ {
+  delete sock;
+  delete file_list;
+  return NULL;
+ }
+ while (GetLine(sock, line) == wxPROTO_NOERR)
+ {
+  file_list->Append((wxObject *)(new wxString(line)));
+ }
+ if (!CheckResult('2'))
+ {
+  delete sock;
+  file_list->DeleteContents(TRUE);
+  delete file_list;
+  return NULL;
+ }
+ return file_list;
 }
+#endif // WXWIN_COMPATIBILITY_2
+
 #endif
   // wxUSE_SOCKETS

@@ -74,6 +74,8 @@ enum wxFontEncoding
 // types
 // ----------------------------------------------------------------------------
 
+#if wxUSE_GUI
+
 // This private structure specifies all the parameters needed to create a font
 // with the given encoding on this platform.
 //
@@ -109,5 +111,7 @@ struct WXDLLEXPORT wxNativeEncodingInfo
     bool FromString(const wxString& s);
     wxString ToString() const;
 };
+
+#endif // wxUSE_GUI
 
 #endif // _WX_FONTENC_H_
