@@ -131,8 +131,8 @@ bool wxURL::ParseURL()
 #if wxUSE_SOCKETS
   if (m_useProxy)
   {
-    // We destroy the newly created protocol.
-    CleanData();
+    // destroy the previously created protocol as we'll be using m_proxy
+    delete m_protocol;
 
     // Third, we rebuild the URL.
     m_url = m_protoname + wxT(":");
