@@ -124,18 +124,17 @@ int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render, int to, in
     if(to < hght)
         hght = to;
 
+
     if (!dont_render)
     {
         wxHtmlRenderingInfo rinfo;
         wxDefaultHtmlRenderingStyle rstyle;
         rinfo.SetStyle(&rstyle);
         m_DC->SetBrush(*wxWHITE_BRUSH);
-        m_DC->SetClippingRegion(x, y, m_Width, hght);
         m_Cells->Draw(*m_DC,
                       x, (y - from),
-                      y, pbreak + (y /*- from*/),
+                      y, y + hght,
                       rinfo);
-        m_DC->DestroyClippingRegion();
     }
 
     if (pbreak < m_Cells->GetHeight()) return pbreak;
