@@ -33,7 +33,6 @@
 %import streams.i
 
 %pragma(python) code = "import wx"
-%pragma(python) code = "import string"
 
 //---------------------------------------------------------------------------
 

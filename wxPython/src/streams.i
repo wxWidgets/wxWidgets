@@ -28,7 +28,6 @@
 %import _defs.i
 
 %pragma(python) code = "import wx"
-%pragma(python) code = "import string"
 
 //----------------------------------------------------------------------
 // typemaps for wxInputStream
