@@ -22,7 +22,7 @@
 
 
 #include <wx/wx.h>
-
+#include "SciLexer.h"
 
 //----------------------------------------------------------------------
 // constants and stuff
@@ -596,7 +596,7 @@ private:
 };
 
 
-
+// Event types
 enum {
     wxEVT_STC_CHANGE = 1650,
     wxEVT_STC_STYLENEEDED,
@@ -612,6 +612,20 @@ enum {
     wxEVT_STC_MARGINCLICK,
     wxEVT_STC_NEEDSHOWN
 };
+
+// Modification and action types
+const int wxSTC_MOD_INSERTTEXT = 0x1;
+const int wxSTC_MOD_DELETETEXT = 0x2;
+const int wxSTC_MOD_CHANGESTYLE = 0x4;
+const int wxSTC_MOD_CHANGEFOLD = 0x8;
+const int wxSTC_PERFORMED_USER = 0x10;
+const int wxSTC_PERFORMED_UNDO = 0x20;
+const int wxSTC_PERFORMED_REDO = 0x40;
+const int wxSTC_LASTSTEPINUNDOREDO = 0x100;
+const int wxSTC_MOD_CHANGEMARKER = 0x200;
+const int wxSTC_MOD_BEFOREINSERT = 0x400;
+const int wxSTC_MOD_BEFOREDELETE = 0x800;
+
 
 #ifndef SWIG
 typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
