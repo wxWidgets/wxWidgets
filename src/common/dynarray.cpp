@@ -90,17 +90,17 @@ size_t name::Add(T lItem, CMPFUNC fnCompare)                                \
 #define _WX_DEFINE_BASEARRAY_NOCOMMON(T, name)                              \
 size_t name::IndexForInsert(T lItem, CMPFUNC fnCompare) const               \
 {                                                                           \
-    Predicate p(fnCompare);                                                 \
+    Predicate p((SCMPFUNC)fnCompare);                                       \
     const_iterator it = std::lower_bound(begin(), end(), lItem, p);         \
     return it - begin();                                                    \
 }                                                                           \
                                                                             \
 int name::Index(T lItem, CMPFUNC fnCompare) const                           \
 {                                                                           \
-    size_t n = IndexForInsert(lItem, fnCompare);                            \
-                                                                            \
-    return (n >= size() ||                                                  \
-           (*fnCompare)(&lItem, &(*this)[n])) ? wxNOT_FOUND : (int)n;       \
+    Predicate p((SCMPFUNC)fnCompare);                                       \
+    const_iterator it = std::lower_bound(begin(), end(), lItem, p);         \
+    return (it != end() &&                                                  \
+            p(lItem, *it)) ? (int)(it - begin()) : wxNOT_FOUND;             \
 }                                                                           \
                                                                             \
 void name::Shrink()                                                         \

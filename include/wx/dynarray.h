@@ -86,9 +86,43 @@ typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
 
 #if wxUSE_STL
 
+template<class T>
+class WXDLLIMPEXP_BASE wxArray_SortFunction
+{
+public:
+    typedef int (wxCMPFUNC_CONV *CMPFUNC)(T* pItem1, T* pItem2);
+
+    wxArray_SortFunction(CMPFUNC f) : m_f(f) { }
+    bool operator()(const T& i1, const T& i2)
+      { return m_f((T*)&i1, (T*)&i2) < 0; }
+private:
+    CMPFUNC m_f;
+};
+
+template<class T, typename F>
+class WXDLLIMPEXP_BASE wxSortedArray_SortFunction
+{
+public:
+    typedef F CMPFUNC;
+
+    wxSortedArray_SortFunction(CMPFUNC f) : m_f(f) { }
+    bool operator()(const T& i1, const T& i2)
+      { return m_f(i1, i2) < 0; }
+private:
+    CMPFUNC m_f;
+};
+
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
+   typedef int (wxCMPFUNC_CONV *CMPFUN##name)(T pItem1, T pItem2);  \
+   typedef wxSortedArray_SortFunction<T, CMPFUN##name> name##_Predicate; \
+   _WX_DECLARE_BASEARRAY_2(T, name, name##_Predicate, classexp)
+
+#define  _WX_DECLARE_BASEARRAY_2(T, name, predicate, classexp)      \
 classexp name : public std::vector<T>                               \
 {                                                                   \
+  typedef predicate Predicate;                                      \
+  typedef predicate::CMPFUNC SCMPFUNC;                              \
+  typedef wxArray_SortFunction<T>::CMPFUNC CMPFUNC;                 \
 public:                                                             \
   void Empty() { clear(); }                                         \
   void Clear() { clear(); }                                         \
@@ -120,19 +154,9 @@ protected:                                                          \
                                                                     \
   void Sort(CMPFUNC fCmp)                                           \
   {                                                                 \
-    Predicate p(fCmp);                                              \
+    wxArray_SortFunction<T> p(fCmp);                                \
     std::sort(begin(), end(), p);                                   \
   }                                                                 \
-private:                                                            \
-  class Predicate                                                   \
-  {                                                                 \
-    typedef CMPFUNC fnc;                                            \
-    fnc m_f;                                                        \
-  public:                                                           \
-    Predicate(fnc f) : m_f(f) { }                                   \
-    bool operator()(const T& i1, const T& i2)                       \
-      { return m_f((T*)&i1, (T*)&i2) < 0; /* const cast */ }        \
-  };                                                                \
 }
 
 #else // if !wxUSE_STL
@@ -140,6 +164,7 @@ private:                                                            \
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
 classexp name                                                       \
 {                                                                   \
+  typedef CMPFUNC SCMPFUNC; /* for compatibility wuth wxUSE_STL */  \
 public:                                                             \
   name();                                                           \
   name(const name& array);                                          \
@@ -459,6 +484,7 @@ wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
                        name);                                         \
 classexp name : public base                                           \
 {                                                                     \
+  typedef comptype SCMPFUNC;                                          \
 public:                                                               \
   name(comptype fn defcomp) { m_fnCompare = fn; }                     \
                                                                       \

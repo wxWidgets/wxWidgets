@@ -23,8 +23,10 @@ WXDLLIMPEXP_BASE int wxStringSortDescending(wxString*, wxString*);
 #include "wx/dynarray.h"
 
 typedef int (*CMPFUNCwxString)(wxString*, wxString*);
-WX_DECLARE_USER_EXPORTED_BASEARRAY(wxString, wxBaseArrayStringBase,
-                                   WXDLLIMPEXP_BASE);
+typedef wxString _wxArraywxBaseArrayStringBase;
+_WX_DECLARE_BASEARRAY_2(_wxArraywxBaseArrayStringBase, wxBaseArrayStringBase,
+                        wxArray_SortFunction<wxString>,
+                        class WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_TYPEARRAY(wxString, wxArrayStringBase, 
                                   wxBaseArrayStringBase, WXDLLIMPEXP_BASE);
 _WX_DEFINE_SORTED_TYPEARRAY_2(wxString, wxSortedArrayStringBase, 
