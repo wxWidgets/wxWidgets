@@ -433,14 +433,13 @@ private:
 
     void DeleteTextCtrl();
 
-    // support for additional item images
-    friend class wxTreeItemIndirectData;
+    // support for additional item images which we implement using
+    // wxTreeItemIndirectData technique - see the comments in msw/treectrl.cpp
     void SetIndirectItemData(const wxTreeItemId& item,
-                             wxTreeItemIndirectData *data);
+                             class wxTreeItemIndirectData *data);
     bool HasIndirectData(const wxTreeItemId& item) const;
-
-    // the array storing all item ids which have indirect data
-    wxArrayTreeItemIds m_itemsWithIndirectData;
+    bool IsDataIndirect(wxTreeItemData *data) const
+        { return data->GetId().m_pItem == 0; }
 
     // the hash storing the items attributes (indexed by items ids)
     wxHashTable m_attrs;
@@ -453,6 +452,9 @@ private:
 
     // the starting item for selection with Shift
     WXHTREEITEM m_htSelStart;
+
+    friend class wxTreeItemIndirectData;
+    friend class wxTreeSortHelper;
 
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };

@@ -401,11 +401,12 @@ private:
 //
 // There is only one problem with this: when we retrieve the item's data, we
 // don't know whether we get a pointer to wxTreeItemData or
-// wxTreeItemIndirectData. So we have to maintain a list of all items which
-// have indirect data inside the listctrl itself.
+// wxTreeItemIndirectData. So we always set the item id to an invalid value
+// in this class and the code using the client data checks for it and retrieves
+// the real client data in this case.
 // ----------------------------------------------------------------------------
 
-class wxTreeItemIndirectData
+class wxTreeItemIndirectData : public wxTreeItemData
 {
 public:
     // ctor associates this data with the item and the real item data becomes
@@ -425,7 +426,7 @@ public:
     }
 
     // dtor deletes the associated data as well
-    ~wxTreeItemIndirectData() { delete m_data; }
+    virtual ~wxTreeItemIndirectData() { delete m_data; }
 
     // accessors
         // get the real data associated with the item
@@ -444,6 +445,7 @@ private:
     // all the images associated with the item
     int m_images[wxTreeItemIcon_Max];
 
+    // the real client data
     wxTreeItemData *m_data;
 };
 
@@ -966,14 +968,13 @@ wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
         return NULL;
     }
 
-    if ( HasIndirectData(item) )
+    wxTreeItemData *data = (wxTreeItemData *)tvItem.lParam;
+    if ( IsDataIndirect(data) )
     {
-        return ((wxTreeItemIndirectData *)tvItem.lParam)->GetData();
+        data = ((wxTreeItemIndirectData *)data)->GetData();
     }
-    else
-    {
-        return (wxTreeItemData *)tvItem.lParam;
-    }
+
+    return data;
 }
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
@@ -1013,14 +1014,21 @@ void wxTreeCtrl::SetIndirectItemData(const wxTreeItemId& item,
     // wxTreeItemIndirectData as well
     wxASSERT_MSG( !HasIndirectData(item), wxT("setting indirect data twice?") );
 
-    SetItemData(item, (wxTreeItemData *)data);
-
-    m_itemsWithIndirectData.Add(item);
+    SetItemData(item, data);
 }
 
 bool wxTreeCtrl::HasIndirectData(const wxTreeItemId& item) const
 {
-    return m_itemsWithIndirectData.Index(item) != wxNOT_FOUND;
+    // query the item itself
+    wxTreeViewItem tvItem(item, TVIF_PARAM);
+    if ( !DoGetItem(&tvItem) )
+    {
+        return FALSE;
+    }
+
+    wxTreeItemData *data = (wxTreeItemData *)tvItem.lParam;
+
+    return data && IsDataIndirect(data);
 }
 
 void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
@@ -1738,14 +1746,37 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
 // sorting stuff
 // ----------------------------------------------------------------------------
 
-static int CALLBACK TreeView_CompareCallback(wxTreeItemData *pItem1,
-                                             wxTreeItemData *pItem2,
-                                             wxTreeCtrl *tree)
+// this is just a tiny namespace which is friend to wxTreeCtrl and so can use
+// functions such as IsDataIndirect()
+class wxTreeSortHelper
+{
+public:
+    static int CALLBACK Compare(LPARAM data1, LPARAM data2, LPARAM tree);
+
+private:
+    static wxTreeItemId GetIdFromData(wxTreeCtrl *tree, LPARAM item)
+    {
+        wxTreeItemData *data = (wxTreeItemData *)item;
+        if ( tree->IsDataIndirect(data) )
+        {
+            data = ((wxTreeItemIndirectData *)data)->GetData();
+        }
+
+        return data->GetId();
+    }
+};
+
+int CALLBACK wxTreeSortHelper::Compare(LPARAM pItem1,
+                                       LPARAM pItem2,
+                                       LPARAM htree)
 {
     wxCHECK_MSG( pItem1 && pItem2, 0,
                  wxT("sorting tree without data doesn't make sense") );
 
-    return tree->OnCompareItems(pItem1->GetId(), pItem2->GetId());
+    wxTreeCtrl *tree = (wxTreeCtrl *)htree;
+
+    return tree->OnCompareItems(GetIdFromData(tree, pItem1),
+                                GetIdFromData(tree, pItem2));
 }
 
 int wxTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
@@ -1767,7 +1798,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
     {
         TV_SORTCB tvSort;
         tvSort.hParent = HITEM(item);
-        tvSort.lpfnCompare = (PFNTVCOMPARE)TreeView_CompareCallback;
+        tvSort.lpfnCompare = wxTreeSortHelper::Compare;
         tvSort.lParam = (LPARAM)this;
         TreeView_SortChildrenCB(GetHwnd(), &tvSort, 0 /* reserved */);
     }
@@ -2335,13 +2366,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     wxTreeItemIndirectData *data = (wxTreeItemIndirectData *)
                                                         tv->itemOld.lParam;
                     delete data; // can't be NULL here
-
-                    m_itemsWithIndirectData.Remove(item);
-#if 0
-                    int iIndex = m_itemsWithIndirectData.Index(item);
-                    wxASSERT( iIndex != wxNOT_FOUND) ;
-                    m_itemsWithIndirectData.wxBaseArray::RemoveAt((size_t)iIndex);
-#endif
                 }
                 else
                 {
