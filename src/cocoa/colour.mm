@@ -22,10 +22,12 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
-wxColour::wxColour ()
-:   m_cocoaNSColor(NULL)
+void wxColour::Init()
 {
-    m_red = m_blue = m_green = 0;
+    m_cocoaNSColor = NULL;
+    m_red =
+    m_blue =
+    m_green = 0;
 }
 
 wxColour::wxColour (const wxColour& col)
@@ -47,21 +49,20 @@ wxColour& wxColour::operator =(const wxColour& col)
     return *this;
 }
 
-void wxColour::InitFromName(const wxString& col)
+void wxColour::InitFromName(const wxString& name)
 {
-    wxColour *the_colour = wxTheColourDatabase->FindColour (col);
-    if (the_colour)
+    if ( wxTheColourDatabase )
     {
-        *this = *the_colour;
+        wxColour col = wxTheColourDatabase->Find(name);
+        if ( col.Ok() )
+        {
+            *this = col;
+            return;
+        }
     }
-    else
-    {
-        [m_cocoaNSColor release];
-        m_cocoaNSColor = NULL;
-        m_red = 0;
-        m_green = 0;
-        m_blue = 0;
-    }
+
+    // leave invalid
+    Init();
 }
 
 wxColour::~wxColour ()

@@ -21,11 +21,8 @@
 class WXDLLEXPORT wxColour: public wxObject
 {
 public:
-    DECLARE_DYNAMIC_CLASS(wxColour)
-// ------------------------------------------------------------------------
-// initialization
-// ------------------------------------------------------------------------
-    wxColour();
+    wxColour() { Init(); }
+
     // from RGB
     wxColour( unsigned char red, unsigned char green, unsigned char blue )
     :   m_cocoaNSColor(NULL)
@@ -36,24 +33,19 @@ public:
 
     // implicit conversion from the colour name
     wxColour( const wxString &colourName )
-    :   m_cocoaNSColor(NULL)
     {   InitFromName(colourName); }
     wxColour( const char *colourName )
-    :   m_cocoaNSColor(NULL)
     {   InitFromName(wxString::FromAscii(colourName)); }
 
     // copy ctors and assignment operators
     wxColour( const wxColour& col );
     wxColour& operator = ( const wxColour& col );
 
-    ~wxColour();
+    virtual ~wxColour();
 
-// ------------------------------------------------------------------------
-// Implementation
-// ------------------------------------------------------------------------
     // accessors
     bool Ok() const { return m_cocoaNSColor; }
-    inline WX_NSColor GetNSColor() { return m_cocoaNSColor; }
+    WX_NSColor GetNSColor() { return m_cocoaNSColor; }
 
     unsigned char Red() const { return m_red; }
     unsigned char Green() const { return m_green; }
@@ -62,6 +54,7 @@ public:
     // comparison
     bool operator == (const wxColour& colour) const
     {
+        // VZ: sure we want to compare NSColor objects for equality here?
         return (m_cocoaNSColor == colour.m_cocoaNSColor
             && m_red == colour.m_red
             && m_green == colour.m_green
@@ -69,8 +62,6 @@ public:
     }
     bool operator != (const wxColour& colour) const
     {   return !(*this == colour); }
-
-//  const WXCOLORREF& GetPixel() const { return m_pixel; };
 
     // Set() functions
     void Set( unsigned char red, unsigned char green, unsigned char blue );
@@ -83,6 +74,11 @@ public:
             (unsigned char)(colRGB >> 16));
     }
 
+protected:
+    // puts the object in an invalid, uninitialized state
+    void Init();
+
+    // create the object from name, leaves it uninitialized if it failed
     void InitFromName(const wxString& col);
 
 private:
@@ -90,6 +86,8 @@ private:
     unsigned char m_red;
     unsigned char m_green;
     unsigned char m_blue;
+
+    DECLARE_DYNAMIC_CLASS(wxColour)
 };
 
 #endif // __WX_COCOA_COLOUR_H__
