@@ -402,21 +402,38 @@ void wxComboBox::SetSelection(long from, long to)
     // TODO
 }
 
-void wxComboBox::Append(const wxString& item)
+int wxComboBox::DoAppend(const wxString& item) 
 {
-    // I am not sure what other ports do,
-    // but wxMac chokes on empty entries.
+    return m_choice->DoAppend( item ) ;
+}
 
-    if (!item.IsEmpty())
-        m_choice->DoAppend( item );
+int wxComboBox::DoInsert(const wxString& item, int pos) 
+{
+    return m_choice->DoInsert( item , pos ) ;
+}
+
+void wxComboBox::DoSetItemClientData(int n, void* clientData) 
+{
+    return m_choice->SetClientData( n , clientData ) ;
+}
+
+void* wxComboBox::DoGetItemClientData(int n) const
+{
+    return m_choice->GetClientData( n ) ;
+}
+
+void wxComboBox::DoSetItemClientObject(int n, wxClientData* clientData)
+{
+    return m_choice->SetClientObject( n , clientData ) ;
+}
+
+wxClientData* wxComboBox::DoGetItemClientObject(int n) const 
+{
+    return m_choice->GetClientObject( n ) ;
 }
 
 void wxComboBox::Delete(int n)
 {
-    if ( HasClientObjectData() )
-    {
-        SetClientObject(n, NULL);
-    }
     m_choice->Delete( n );
 }
 
@@ -471,7 +488,13 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
         return FALSE;
 }
 
-void wxComboBox::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 WXUNUSED(controlpart) ) 
+void wxComboBox::SetString(int n, const wxString& s) 
+{
+    m_choice->SetString( n , s ) ;
+}
+
+
+void wxComboBox::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 WXUNUSED(controlpart) , bool WXUNUSED(mouseStillDown)) 
 {
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
     event.SetInt(GetSelection());
