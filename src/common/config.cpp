@@ -226,17 +226,20 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
                                  const wxString& strEntry)
 {
   m_pContainer = (wxConfigBase *)pContainer;
-//  wxString strPath = strEntry.Before(wxCONFIG_PATH_SEPARATOR);
+
+  // the path is everything which precedes the last slash
   wxString strPath = strEntry.BeforeLast(wxCONFIG_PATH_SEPARATOR);
 
-  // special case of "/keyname" when there is nothing before "/"
-  if ( strPath.IsEmpty() && ((!strEntry.IsEmpty()) && strEntry[0] == wxCONFIG_PATH_SEPARATOR ))
+  // except in the special case of "/keyname" when there is nothing before "/"
+  if ( strPath.IsEmpty() &&
+       ((!strEntry.IsEmpty()) && strEntry[0] == wxCONFIG_PATH_SEPARATOR) )
+  {
     strPath = wxCONFIG_PATH_SEPARATOR;
+  }
 
   if ( !strPath.IsEmpty() ) {
     // do change the path
     m_bChanged = TRUE;
-//    m_strName = strEntry.Right(wxCONFIG_PATH_SEPARATOR);
     m_strName = strEntry.AfterLast(wxCONFIG_PATH_SEPARATOR);
     m_strOldPath = m_pContainer->GetPath();
     m_strOldPath += wxCONFIG_PATH_SEPARATOR;
