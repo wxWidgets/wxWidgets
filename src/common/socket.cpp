@@ -76,6 +76,8 @@
     #define PROCESS_EVENTS()
 #endif // wxUSE_GUI/!wxUSE_GUI
 
+#define wxTRACE_Socket _T("wxSocket")
+
 // --------------------------------------------------------------------------
 // wxWin macros
 // --------------------------------------------------------------------------
@@ -777,6 +779,12 @@ bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
     return FALSE;
 
   peer = GSocket_GetPeer(m_socket);
+
+    // copying a null address would just trigger an assert anyway
+
+  if (!peer)
+    return FALSE;
+
   addr_man.SetAddress(peer);
   GAddress_destroy(peer);
 
@@ -1067,26 +1075,32 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
                                wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_SERVER)
 {
-  // Create the socket
-  m_socket = GSocket_new();
+    wxLogTrace( wxTRACE_Socket, _T("Opening wxSocketServer") );
 
-  if (!m_socket)
-    return;
+    m_socket = GSocket_new();
 
-  // Setup the socket as server
-  GSocket_SetLocal(m_socket, addr_man.GetAddress());
-  if (GSocket_SetServer(m_socket) != GSOCK_NOERROR)
-  {
-    GSocket_destroy(m_socket);
-    m_socket = NULL;
-    return;
-  }
+    if (!m_socket)
+    {
+        wxLogTrace( wxTRACE_Socket, _T("*** GSocket_new failed") );
+        return;
+    }
 
-  GSocket_SetTimeout(m_socket, m_timeout * 1000);
-  GSocket_SetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
-                                GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
-                                wx_socket_callback, (char *)this);
+        // Setup the socket as server
 
+    GSocket_SetLocal(m_socket, addr_man.GetAddress());
+    if (GSocket_SetServer(m_socket) != GSOCK_NOERROR)
+    {
+        GSocket_destroy(m_socket);
+        m_socket = NULL;
+
+        wxLogTrace( wxTRACE_Socket, _T("*** GSocket_SetServer failed") );
+        return;
+    }
+
+    GSocket_SetTimeout(m_socket, m_timeout * 1000);
+    GSocket_SetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
+                                  GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
+                                  wx_socket_callback, (char *)this);
 }
 
 // --------------------------------------------------------------------------
@@ -1308,3 +1322,5 @@ IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
 
 #endif
   // wxUSE_SOCKETS
+
+// vi:sts=4:sw=4:et

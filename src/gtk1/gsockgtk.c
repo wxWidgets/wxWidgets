@@ -9,6 +9,7 @@
 
 #if wxUSE_SOCKETS
 
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -79,6 +80,8 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
 {
   gint *m_id = (gint *)(socket->m_gui_dependent);
   int c;
+
+  assert( m_id != NULL );
 
   switch (event)
   {

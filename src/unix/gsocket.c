@@ -172,6 +172,13 @@ GSocket *GSocket_new(void)
   return socket;
 }
 
+void GSocket_close(GSocket *socket)
+{
+    _GSocket_Disable_Events(socket);
+    close(socket->m_fd);
+    socket->m_fd = INVALID_SOCKET;
+}
+
 void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
@@ -208,8 +215,7 @@ void GSocket_Shutdown(GSocket *socket)
   if (socket->m_fd != INVALID_SOCKET)
   {
     shutdown(socket->m_fd, 2);
-    close(socket->m_fd);
-    socket->m_fd = INVALID_SOCKET;
+    GSocket_close(socket);
   }
 
   /* Disable GUI callbacks */
@@ -217,7 +223,6 @@ void GSocket_Shutdown(GSocket *socket)
     socket->m_cbacks[evt] = NULL;
 
   socket->m_detected = GSOCK_LOST_FLAG;
-  _GSocket_Disable_Events(socket);
 }
 
 /* Address handling */
@@ -396,8 +401,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
                    (SOCKLEN_T *) &sck->m_local->m_len) != 0) ||
       (listen(sck->m_fd, 5) != 0))
   {
-    close(sck->m_fd);
-    sck->m_fd = INVALID_SOCKET;
+    GSocket_close(sck);
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
@@ -577,8 +581,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     {
       if (_GSocket_Output_Timeout(sck) == GSOCK_TIMEDOUT)
       {
-        close(sck->m_fd);
-        sck->m_fd = INVALID_SOCKET;
+        GSocket_close(sck);
         /* sck->m_error is set in _GSocket_Output_Timeout */
         return GSOCK_TIMEDOUT;
       }
@@ -610,8 +613,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     /* If connect failed with an error other than EINPROGRESS,
      * then the call to GSocket_Connect has failed.
      */
-    close(sck->m_fd);
-    sck->m_fd = INVALID_SOCKET;
+    GSocket_close(sck);
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
@@ -675,8 +677,7 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
                    sck->m_local->m_addr,
                    (SOCKLEN_T *) &sck->m_local->m_len) != 0))
   {
-    close(sck->m_fd);
-    sck->m_fd    = INVALID_SOCKET;
+    GSocket_close(sck);
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
@@ -1301,7 +1302,7 @@ GAddress *GAddress_copy(GAddress *address)
 
   memcpy(addr2, address, sizeof(GAddress));
 
-  if (address->m_addr)
+  if (address->m_addr && address->m_len > 0)
   {
     addr2->m_addr = (struct sockaddr *)malloc(addr2->m_len);
     if (addr2->m_addr == NULL)
@@ -1640,3 +1641,4 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 
+// vi:sts=4:sw=4:et
