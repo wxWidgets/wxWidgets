@@ -349,3 +349,10 @@ new revision: 1.27; previous revision: 1.26
 done
 
 
+27. Fix assert (and crash in debug) in wxFileConfigGroup::DeleteSubgroupByName
+
+Checking in src/common/fileconf.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/fileconf.cpp,v  <--  fileconf.cpp
+new revision: 1.93; previous revision: 1.92
+done
+
