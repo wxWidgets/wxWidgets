@@ -383,7 +383,7 @@ public:
                  const wxString& vendorName = wxPyEmptyString,
                  const wxString& localFilename = wxPyEmptyString,
                  const wxString& globalFilename = wxPyEmptyString,
-                 long style = 0),
+                 long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE),
         "");
     
     ~wxConfig();
