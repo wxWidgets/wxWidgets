@@ -100,6 +100,7 @@ class MyPanel: public wxPanel
 {
 public:
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
+    virtual ~MyPanel() { wxLog::SetActiveTarget(m_logOld); }
 
 #if wxUSE_CLIPBOARD
     void DoPasteFromClipboard();
@@ -125,6 +126,8 @@ public:
     MyTextCtrl    *m_textrich;
 
     wxTextCtrl    *m_log;
+
+    wxLog         *m_logOld;
 
 private:
     // get the currently focused text control or return the default one is no
@@ -787,9 +790,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                             wxPoint(5,260), wxSize(630,100),
                             wxTE_MULTILINE | wxTE_READONLY /* | wxTE_RICH */);
 
-    wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
-
-    delete old_log;
+    m_logOld = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
 
     // single line text controls
 
@@ -884,7 +885,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 // wxTE_AUTO_URL |
                                 wxHSCROLL);
 
-#if 1
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
@@ -899,16 +899,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
     m_textrich->AppendText(_T("And this should be in blue and the text you ")
                            _T("type should be in blue as well"));
-#else
-    m_textrich->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE,
-                               wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
-    m_textrich->SetDefaultStyle(wxTextAttr(*wxRED));
-    m_textrich->AppendText(_T("Red text\n"));
-    m_textrich->SetDefaultStyle(wxTextAttr(wxNullColour, *wxLIGHT_GREY));
-    m_textrich->AppendText(_T("Red on grey text\n"));
-    m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE));
-    m_textrich->AppendText(_T("Blue on grey text\n"));
-#endif
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )
