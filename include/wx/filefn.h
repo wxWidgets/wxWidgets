@@ -298,20 +298,22 @@ enum wxSeekMode
     #endif
 
     // constants (unless already defined by the user code)
-    #if !defined(O_RDONLY) && !defined(__BORLANDC__) && !defined(__WATCOMC__)
-        #define   O_RDONLY    _O_RDONLY
-        #define   O_WRONLY    _O_WRONLY
-        #define   O_RDWR      _O_RDWR
-        #define   O_EXCL      _O_EXCL
-        #define   O_CREAT     _O_CREAT
-        #define   O_BINARY    _O_BINARY
-    #endif
-
     #if !defined(__BORLANDC__) && !defined(__WATCOMC__)
-        #define   S_IFMT      _S_IFMT
-        #define   S_IFDIR     _S_IFDIR
-        #define   S_IFREG     _S_IFREG
-    #endif // O_RDONLY
+        #ifndef O_RDONLY
+            #define   O_RDONLY    _O_RDONLY
+            #define   O_WRONLY    _O_WRONLY
+            #define   O_RDWR      _O_RDWR
+            #define   O_EXCL      _O_EXCL
+            #define   O_CREAT     _O_CREAT
+            #define   O_BINARY    _O_BINARY
+        #endif
+
+        #ifndef S_IFMT
+            #define   S_IFMT      _S_IFMT
+            #define   S_IFDIR     _S_IFDIR
+            #define   S_IFREG     _S_IFREG
+        #endif
+    #endif
 
     // It's a private define, undefine it so nobody gets tempted to use it
     #undef wxHAS_HUGE_FILES
