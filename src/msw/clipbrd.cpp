@@ -221,7 +221,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 wxBitmap *bitmap = (wxBitmap *)data;
                 HBITMAP hBitmap = (HBITMAP)bitmap->GetHBITMAP();
                 // NULL palette means to use the system one
-                HANDLE hDIB = BitmapToDIB(hBitmap, (HPALETTE)NULL); 
+                HANDLE hDIB = wxBitmapToDIB(hBitmap, (HPALETTE)NULL); 
                 handle = SetClipboardData(CF_DIB, hDIB);
 #endif
                 break;

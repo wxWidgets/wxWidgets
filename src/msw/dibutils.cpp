@@ -82,7 +82,7 @@
  *  mapping for fast performance.
  */
 
-void ClearSystemPalette(void)
+void wxClearSystemPalette(void)
 {
   //*** A dummy palette setup
   struct
@@ -146,7 +146,7 @@ void ClearSystemPalette(void)
  *   bits....
  */
 
-int DibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
+int wxDibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
 {
    HFILE               fh;
    OFSTRUCT            of;
@@ -158,7 +158,7 @@ int DibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
    return 0;
   }
 
-  long size = DibSize(lpbi);
+  long size = wxDibSize(lpbi);
 
   // write file header
   BITMAPFILEHEADER bmf;
@@ -166,7 +166,7 @@ int DibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
   bmf.bfSize = sizeof(bmf) + size;
   bmf.bfReserved1 = 0;
   bmf.bfReserved2 = 0;
-  bmf.bfOffBits = sizeof(bmf) + (char FAR*)(DibPtr(lpbi)) - (char FAR*)lpbi;
+  bmf.bfOffBits = sizeof(bmf) + (char FAR*)(wxDibPtr(lpbi)) - (char FAR*)lpbi;
 #if defined( __WATCOMC__) || defined(__VISUALC__) || defined(__SC__) || defined(__SALFORDC__) || defined(__MWERKS__) || defined(wxUSE_NORLANDER_HEADERS)
   if (_hwrite(fh, (LPCSTR)(&bmf), sizeof(bmf))<0 ||
   _hwrite(fh, (LPCSTR)lpbi, size)<0) {
@@ -187,7 +187,7 @@ int DibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
   return 1;
 }
 
-PDIB DibOpenFile(LPTSTR szFile)
+PDIB wxDibOpenFile(LPTSTR szFile)
 {
    HFILE               fh;
    DWORD               dwLen;
@@ -231,7 +231,7 @@ PDIB DibOpenFile(LPTSTR szFile)
    if (fh == -1)
       return NULL;
 
-   pdib = DibReadBitmapInfo(fh);
+   pdib = wxDibReadBitmapInfo(fh);
 
    if (!pdib)
       return NULL;
@@ -239,7 +239,7 @@ PDIB DibOpenFile(LPTSTR szFile)
     /* How much memory do we need to hold the DIB */
 
     dwBits = pdib->biSizeImage;
-    dwLen  = pdib->biSize + DibPaletteSize(pdib) + dwBits;
+    dwLen  = pdib->biSize + wxDibPaletteSize(pdib) + dwBits;
 
     /* Can we get more memory? */
 
@@ -258,7 +258,7 @@ PDIB DibOpenFile(LPTSTR szFile)
     if (pdib)
     {
       /* read in the bits */
-      _hread(fh, (LPBYTE)pdib + (UINT)pdib->biSize + DibPaletteSize(pdib), dwBits);
+      _hread(fh, (LPBYTE)pdib + (UINT)pdib->biSize + wxDibPaletteSize(pdib), dwBits);
     }
 
     _lclose(fh);
@@ -275,7 +275,7 @@ PDIB DibOpenFile(LPTSTR szFile)
  *  bitmap formats, but will always return a "new" BITMAPINFO.
  */
 
-PDIB DibReadBitmapInfo(HFILE fh)
+PDIB wxDibReadBitmapInfo(HFILE fh)
 {
     DWORD     off;
     int       size;
@@ -336,16 +336,16 @@ PDIB DibReadBitmapInfo(HFILE fh)
             break;
     }
 
-    nNumColors = DibNumColors(&bi);
+    nNumColors = wxDibNumColors(&bi);
 
 #if 0
     if (bi.biSizeImage == 0)
         bi.biSizeImage = DibSizeImage(&bi);
 
     if (bi.biClrUsed == 0)
-        bi.biClrUsed = DibNumColors(&bi);
+        bi.biClrUsed = wxDibNumColors(&bi);
 #else
-    FixBitmapInfo(&bi);
+    wxFixBitmapInfo(&bi);
 #endif
 
     pdib = (PDIB)GlobalAllocPtr(GMEM_MOVEABLE,(LONG)bi.biSize + nNumColors * sizeof(RGBQUAD));
@@ -355,7 +355,7 @@ PDIB DibReadBitmapInfo(HFILE fh)
 
     *pdib = bi;
 
-    pRgb = DibColors(pdib);
+    pRgb = wxDibColors(pdib);
 
     if (nNumColors)
     {
@@ -402,7 +402,7 @@ PDIB DibReadBitmapInfo(HFILE fh)
  *      in the passed palette
  */
 
-BOOL DibSetUsage(PDIB pdib, HPALETTE hpal,UINT wUsage)
+BOOL wxDibSetUsage(PDIB pdib, HPALETTE hpal,UINT wUsage)
 {
     PALETTEENTRY       ape[256];
     RGBQUAD FAR *      pRgb;
@@ -416,14 +416,14 @@ BOOL DibSetUsage(PDIB pdib, HPALETTE hpal,UINT wUsage)
     if (!pdib)
         return FALSE;
 
-    nColors = DibNumColors(pdib);
+    nColors = wxDibNumColors(pdib);
     
-    if (nColors == 3 && DibCompression(pdib) == BI_BITFIELDS)
+    if (nColors == 3 && wxDibCompression(pdib) == BI_BITFIELDS)
         nColors = 0;
 
     if (nColors > 0)
     {
-        pRgb = DibColors(pdib);
+        pRgb = wxDibColors(pdib);
 
         switch (wUsage)
         {
@@ -464,7 +464,7 @@ BOOL DibSetUsage(PDIB pdib, HPALETTE hpal,UINT wUsage)
  *  given number of bits per pixel
  */
 
-PDIB DibCreate(int bits, int dx, int dy)
+PDIB wxDibCreate(int bits, int dx, int dy)
 {
     LPBITMAPINFOHEADER lpbi ;
     DWORD       dwSizeImage;
@@ -616,7 +616,7 @@ static void hmemmove(BYTE _huge *d, BYTE _huge *s, LONG len)
  *  the colors of the given palette.
  */
 
-BOOL DibMapToPalette(PDIB pdib, HPALETTE hpal)
+BOOL wxDibMapToPalette(PDIB pdib, HPALETTE hpal)
 {
    LPBITMAPINFOHEADER  lpbi;
    PALETTEENTRY        pe;
@@ -632,13 +632,13 @@ BOOL DibMapToPalette(PDIB pdib, HPALETTE hpal)
       return FALSE;
 
    lpbi   = (LPBITMAPINFOHEADER)pdib;
-   lpRgb  = DibColors(pdib);
+   lpRgb  = wxDibColors(pdib);
 
    GetObject(hpal,sizeof(int),(LPSTR)&nPalColors);
-   nDibColors = DibNumColors(pdib);
+   nDibColors = wxDibNumColors(pdib);
 
    if ((SizeImage = lpbi->biSizeImage) == 0)
-      SizeImage = DibSizeImage(lpbi);
+      SizeImage = wxDibSizeImage(lpbi);
 
    //
    //  build a xlat table. from the current DIB colors to the given
@@ -647,7 +647,7 @@ BOOL DibMapToPalette(PDIB pdib, HPALETTE hpal)
    for (n=0; n<nDibColors; n++)
       xlat[n] = (BYTE)GetNearestPaletteIndex(hpal,RGB(lpRgb[n].rgbRed,lpRgb[n].rgbGreen,lpRgb[n].rgbBlue));
 
-   lpBits = (LPBYTE)DibPtr(lpbi);
+   lpBits = (LPBYTE)wxDibPtr(lpbi);
    lpbi->biClrUsed = nPalColors;
 
    //
@@ -656,14 +656,14 @@ BOOL DibMapToPalette(PDIB pdib, HPALETTE hpal)
    if (nPalColors > nDibColors)
    {
       GlobalReAllocPtr(lpbi, lpbi->biSize + nPalColors*sizeof(RGBQUAD) + SizeImage, 0);
-      hmemmove((BYTE _huge *)DibPtr(lpbi), (BYTE _huge *)lpBits, SizeImage);
-      lpBits = (LPBYTE)DibPtr(lpbi);
+      hmemmove((BYTE _huge *)wxDibPtr(lpbi), (BYTE _huge *)lpBits, SizeImage);
+      lpBits = (LPBYTE)wxDibPtr(lpbi);
    }
    else if (nPalColors < nDibColors)
    {
-      hmemcpy(DibPtr(lpbi), lpBits, SizeImage);
+      hmemcpy(wxDibPtr(lpbi), lpBits, SizeImage);
       GlobalReAllocPtr(lpbi, lpbi->biSize + nPalColors*sizeof(RGBQUAD) + SizeImage, 0);
-      lpBits = (LPBYTE)DibPtr(lpbi);
+      lpBits = (LPBYTE)wxDibPtr(lpbi);
    }
 
    //
@@ -704,7 +704,7 @@ BOOL DibMapToPalette(PDIB pdib, HPALETTE hpal)
 }
 
 
-HPALETTE MakePalette(const BITMAPINFO FAR* Info, UINT flags)
+HPALETTE wxMakePalette(const BITMAPINFO FAR* Info, UINT flags)
 {
   HPALETTE hPalette;
   const RGBQUAD FAR* rgb = Info->bmiColors;

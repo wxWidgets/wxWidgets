@@ -944,7 +944,7 @@ WXHBITMAP wxToolBarMSW::CreateMappedBitmap(WXHINSTANCE WXUNUSED(hInstance), void
 
 WXHBITMAP wxToolBarMSW::CreateMappedBitmap(WXHINSTANCE hInstance, WXHBITMAP hBitmap)
 {
-  HANDLE hDIB = BitmapToDIB((HBITMAP) hBitmap, 0);
+  HANDLE hDIB = wxBitmapToDIB((HBITMAP) hBitmap, 0);
   if (hDIB)
   {
 #ifdef __WINDOWS_386__

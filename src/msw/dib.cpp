@@ -6,7 +6,7 @@
  *									       *
  *  FUNCTIONS	:                                                              *
  *									       *
- *                ReadDIB()           - Reads a DIB                            *
+ *                wxReadDIB()           - Reads a DIB                            *
  *									       *
  *		  WriteDIB()	      - Writes a global handle in CF_DIB format*
  *					to a file.			       *
@@ -91,8 +91,6 @@ WORD		 PaletteSize (VOID FAR * pv);
 WORD		 DibNumColors (VOID FAR * pv);
 // HANDLE		 DibFromBitmap (HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal);
 BOOL             PASCAL MakeBitmapAndPalette(HDC,HANDLE,HPALETTE *,HBITMAP *);
-HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER);
-BOOL             ReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
 
 /****************************************************************************
  *									    *
@@ -105,7 +103,7 @@ BOOL             ReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
  *									    *
  ****************************************************************************/
 
-BOOL WriteDIB(LPTSTR szFile, HANDLE hdib)
+static BOOL WriteDIB(LPTSTR szFile, HANDLE hdib)
 {
 	BITMAPFILEHEADER	hdr;
 	LPBITMAPINFOHEADER  lpbi;
@@ -156,7 +154,7 @@ BOOL WriteDIB(LPTSTR szFile, HANDLE hdib)
  *									    *
  ****************************************************************************/
 
-WORD PaletteSize(VOID FAR * pv)
+static WORD PaletteSize(VOID FAR * pv)
 {
 	LPBITMAPINFOHEADER lpbi;
 	WORD	       NumColors;
@@ -181,7 +179,7 @@ WORD PaletteSize(VOID FAR * pv)
  *									    *
  ****************************************************************************/
 
-WORD DibNumColors(VOID FAR *pv)
+static WORD DibNumColors(VOID FAR *pv)
 {
 	int 		bits;
 	BITMAPINFOHEADER	*lpbi;
@@ -228,7 +226,7 @@ WORD DibNumColors(VOID FAR *pv)
  ****************************************************************************/
 
 #if NOTHING
-HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal)
+static HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal)
 {
 	BITMAP               bm;
 	BITMAPINFOHEADER     bi;
@@ -356,7 +354,7 @@ HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal)
  *									    *
  ****************************************************************************/
 
-DWORD PASCAL lread(int fh, void far *pv, DWORD ul)
+static DWORD PASCAL lread(int fh, void far *pv, DWORD ul)
 {
 	DWORD     ulT = ul;
 #if defined(WINNT) || defined(__WIN32__) || defined(__WIN32__) || defined(__WXWINE__)
@@ -386,7 +384,7 @@ DWORD PASCAL lread(int fh, void far *pv, DWORD ul)
  *									    *
  ****************************************************************************/
 
-DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul)
+static DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul)
 {
 	DWORD     ulT = ul;
 #if defined(WINNT) || defined(__WIN32__) || defined(__WIN32__) || defined(__WXWINE__)
@@ -420,7 +418,7 @@ DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul)
  *		 FALSE - otherwise
  *
  ****************************************************************************/
-BOOL ReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
+BOOL wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 {
     int fh;
     LPBITMAPINFOHEADER lpbi;
@@ -588,7 +586,7 @@ ErrExit2:
  *                         not valid
  *
  ****************************************************************************/
-BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
+static BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
 			HPALETTE * phPal, HBITMAP * phBitmap)
 {
     LPBITMAPINFOHEADER lpInfo;
@@ -603,7 +601,7 @@ BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
     lpInfo = (LPBITMAPINFOHEADER) GlobalLock(hDIB);
 #endif
 
-    hPalette = MakeDIBPalette(lpInfo);
+    hPalette = wxMakeDIBPalette(lpInfo);
     if ( hPalette )
     {
 	// Need to realize palette for converting DIB to bitmap.
@@ -632,7 +630,7 @@ BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
 
 /****************************************************************************
  *									    *
- *  FUNCTION   : MakeDIBPalette(lpInfo)					    *
+ *  FUNCTION   : wxMakeDIBPalette(lpInfo)					    *
  *									    *
  *  PURPOSE    : Given a BITMAPINFOHEADER, create a palette based on
  *		 the color table.
@@ -642,7 +640,7 @@ BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
  *		 zero - unable to create palette
  *									    *
  ****************************************************************************/
-HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
+HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 {
 #ifdef __WXWINE__
         return (FALSE);
@@ -703,7 +701,7 @@ bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal)
   HBITMAP hBitmap;
   HPALETTE hPalette;
 
-  bool success = (ReadDIB(filename, &hBitmap, &hPalette) != 0);
+  bool success = (wxReadDIB(filename, &hBitmap, &hPalette) != 0);
 
   if (!success)
   {
@@ -782,7 +780,7 @@ wxBitmap *wxLoadBitmap(wxChar *filename, wxPalette **pal)
 //
 //---------------------------------------------------------------------
 
-void InitBitmapInfoHeader (LPBITMAPINFOHEADER lpBmInfoHdr,
+static void InitBitmapInfoHeader (LPBITMAPINFOHEADER lpBmInfoHdr,
                                         DWORD dwWidth,
                                         DWORD dwHeight,
                                           int nBPP)
@@ -815,7 +813,7 @@ void InitBitmapInfoHeader (LPBITMAPINFOHEADER lpBmInfoHdr,
 
 
 
-LPSTR FindDIBBits (LPSTR lpbi)
+LPSTR wxFindDIBBits (LPSTR lpbi)
 {
    return (lpbi + *(LPDWORD)lpbi + PaletteSize (lpbi));
 }
@@ -840,7 +838,7 @@ LPSTR FindDIBBits (LPSTR lpbi)
 //
 //---------------------------------------------------------------------
 
-HANDLE BitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
+HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
 {
    BITMAP             Bitmap;
    BITMAPINFOHEADER   bmInfoHdr;
@@ -882,7 +880,7 @@ HANDLE BitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
 #endif
 
    *lpbmInfoHdr = bmInfoHdr;
-   lpBits       = FindDIBBits ((LPSTR) lpbmInfoHdr);
+   lpBits       = wxFindDIBBits ((LPSTR) lpbmInfoHdr);
 
 
       // Now, we need a DC to hold our bitmap.  If the app passed us
@@ -934,7 +932,7 @@ bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *colourmap)
   if (colourmap)
     hPalette = (HPALETTE) colourmap->GetHPALETTE();
 
-  HANDLE dibHandle = BitmapToDIB((HBITMAP) bitmap->GetHBITMAP(), hPalette);
+  HANDLE dibHandle = wxBitmapToDIB((HBITMAP) bitmap->GetHBITMAP(), hPalette);
   if (dibHandle)
   {
     bool success = (WriteDIB(filename, dibHandle) != 0);

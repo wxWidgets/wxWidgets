@@ -113,7 +113,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
 #if wxUSE_RESOURCE_LOADING_IN_MSW
     HBITMAP hBitmap = 0;
     HPALETTE hPalette = 0;
-    bool success = ReadDIB(WXSTRINGCAST cursor_file, &hBitmap, &hPalette) != 0;
+    bool success = wxReadDIB(WXSTRINGCAST cursor_file, &hBitmap, &hPalette) != 0;
     if (!success)
       return;
     if (hPalette)

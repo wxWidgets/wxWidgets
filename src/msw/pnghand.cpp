@@ -131,9 +131,9 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
   }
   RawImage = 0;
   Palette = 0;
-  lpbi = DibCreate(Depth, Width, Height);
+  lpbi = wxDibCreate(Depth, Width, Height);
   if (lpbi)  {
-    RawImage = (ImagePointerType)DibPtr(lpbi);
+    RawImage = (ImagePointerType)wxDibPtr(lpbi);
     EfeWidth = (long)(((long)Width*Depth + 31) / 32) * 4;
         imageOK = TRUE;
   }
@@ -217,7 +217,7 @@ bool wxPNGReader::SetPalette(wxPalette* colourmap)
    return FALSE;
   ColorType |= (COLORTYPE_PALETTE | COLORTYPE_COLOR);
   Palette = colourmap;
-  return (DibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
+  return (wxDibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
 }
 
 bool
@@ -231,7 +231,7 @@ wxPNGReader::SetPalette(int n, byte *r, byte *g, byte *b)
   if (!b) b = g;
   Palette->Create(n, r, g, b);
   ColorType |= (COLORTYPE_PALETTE | COLORTYPE_COLOR);
-  return (DibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
+  return (wxDibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
 }
 
 bool
@@ -257,7 +257,7 @@ wxPNGReader::SetPalette(int n, rgb_color_struct *rgb_struct)
 
   Palette->Create(n, r, g, b);
   ColorType |= (COLORTYPE_PALETTE | COLORTYPE_COLOR);
-  return (DibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
+  return (wxDibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
 }
 
 void wxPNGReader::NullData()
