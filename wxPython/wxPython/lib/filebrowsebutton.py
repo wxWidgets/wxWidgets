@@ -111,8 +111,10 @@ class FileBrowseButton(wxPanel):
         self.Layout()
         if type( size ) == types.TupleType:
             size = apply( wxSize, size)
-        if size.width != -1 or size.height != -1:
-            self.SetSize(size)
+        self.SetDimensions(-1, -1, size.width, size.height, wxSIZE_USE_EXISTING)
+
+#        if size.width != -1 or size.height != -1:
+#            self.SetSize(size)
 
     def SetBackgroundColour(self,color):
         wxPanel.SetBackgroundColour(self,color)

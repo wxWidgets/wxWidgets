@@ -16,6 +16,8 @@ wxFlexGridSizer but item position is not implicit but explicitly
 specified by row and col, and row/col spanning is supported.
 
 Adapted from code by Niki Spahiev.
+
+If anyone is interested, it would be nice to have this ported to C++.
 """
 
 

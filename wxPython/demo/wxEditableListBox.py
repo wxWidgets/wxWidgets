@@ -9,7 +9,9 @@ class TestPanel(wxPanel):
         self.log = log
 
         self.elb = wxEditableListBox(self, -1, "List of Stuff",
-                                     (50,50), (250, 250))
+                                     (50,50), (250, 250),
+                                     )
+                                     #style=wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE)
 
         self.elb.SetStrings(["This is a nifty ListBox widget",
                              "that is editable by the user.",

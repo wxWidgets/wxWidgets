@@ -26,6 +26,22 @@ from wxPython.wx import *
 # - Rearranged arguments to more closely follow wx conventions
 # - Simplified some of the code
 
+# Cliff Wells, 2002/02/07
+# - Added ColourSelect Event
+
+EVT_COMMAND_COLOURSELECT = wxNewId()
+
+class ColourSelectEvent(wxPyCommandEvent):
+        def __init__(self, id, value):
+                wxPyCommandEvent.__init__(self, id = id)
+                self.SetEventType(EVT_COMMAND_COLOURSELECT)
+                self.value = value
+
+        def GetValue(self):
+                return self.value
+
+def EVT_COLOURSELECT(win, id, func):
+    win.Connect(id, -1, EVT_COMMAND_COLOURSELECT, func)
 
 class ColourSelect(wxButton):
     def __init__(self, parent, id, label = "", bcolour=(0, 0, 0),
@@ -54,6 +70,7 @@ class ColourSelect(wxButton):
         self.SetColour(bcolour)
 
     def OnChange(self):
+        wxPostEvent(self, ColourSelectEvent(self.GetId(), self.GetValue()))
         if self.callback is not None:
             self.callback()
 
@@ -70,3 +87,4 @@ class ColourSelect(wxButton):
 
         if changed:
             self.OnChange() # moved after dlg.Destroy, since who knows what the callback will do...
+
