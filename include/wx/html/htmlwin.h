@@ -217,6 +217,7 @@ protected:
     void OnIdle(wxIdleEvent& event);
 #if wxUSE_CLIPBOARD
     void OnKeyUp(wxKeyEvent& event);
+    void OnDoubleClick(wxMouseEvent& event);
     void OnCopy(wxCommandEvent& event);
     void OnMouseEnter(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);

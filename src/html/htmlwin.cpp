@@ -1018,13 +1018,15 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                 {
                     SetCursor(*s_cur_arrow);
                     if (m_RelatedStatusBar != -1)
-                        m_RelatedFrame->SetStatusText(wxEmptyString, m_RelatedStatusBar);
+                        m_RelatedFrame->SetStatusText(wxEmptyString,
+                                                      m_RelatedStatusBar);
                 }
                 else
                 {
                     SetCursor(*s_cur_hand);
                     if (m_RelatedStatusBar != -1)
-                        m_RelatedFrame->SetStatusText(lnk->GetHref(), m_RelatedStatusBar);
+                        m_RelatedFrame->SetStatusText(lnk->GetHref(),
+                                                      m_RelatedStatusBar);
                 }
                 m_tmpLastLink = lnk;
             }
@@ -1123,19 +1125,38 @@ void wxHtmlWindow::OnMouseLeave(wxMouseEvent& event)
 
 void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
 {
-    if ( event.GetKeyCode() == 'C' && event.ControlDown() )
+    if ( IsSelectionEnabled() &&
+         event.GetKeyCode() == 'C' && event.ControlDown() )
     {
         if ( m_selection )
             CopySelection();
     }
-    else
-        event.Skip();
 }
 
 void wxHtmlWindow::OnCopy(wxCommandEvent& event)
 {
     if ( m_selection )
         CopySelection();
+}
+    
+void wxHtmlWindow::OnDoubleClick(wxMouseEvent& event)
+{
+    // select word under cursor:
+    if ( IsSelectionEnabled() )
+    {
+        wxPoint pos = CalcUnscrolledPosition(event.GetPosition());
+        wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
+        if ( cell )
+        {
+            delete m_selection;
+            m_selection = new wxHtmlSelection();
+            m_selection->Set(cell, cell);
+            RefreshRect(wxRect(CalcScrolledPosition(cell->GetAbsPos()),
+                               wxSize(cell->GetWidth(), cell->GetHeight())));
+        }
+    }
+    else
+        event.Skip();
 }
 #endif
 
@@ -1155,6 +1176,7 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_ERASE_BACKGROUND(wxHtmlWindow::OnEraseBackground)
     EVT_PAINT(wxHtmlWindow::OnPaint)
 #if wxUSE_CLIPBOARD
+    EVT_LEFT_DCLICK(wxHtmlWindow::OnDoubleClick)
     EVT_ENTER_WINDOW(wxHtmlWindow::OnMouseEnter)
     EVT_LEAVE_WINDOW(wxHtmlWindow::OnMouseLeave)
     EVT_KEY_UP(wxHtmlWindow::OnKeyUp)
