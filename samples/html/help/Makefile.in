@@ -17,7 +17,8 @@ VPATH = :$(top_srcdir)/samples/html/help
 
 DATADIRS = helpfiles
 DATAFILES = helpfiles/Index.hhk helpfiles/book1.htm helpfiles/book2.htm \
-        helpfiles/contents.hhc helpfiles/main.htm helpfiles/page2-b.htm helpfiles/testing.hhp   
+	helpfiles/contents.hhc helpfiles/main.htm helpfiles/page2-b.htm helpfiles/testing.hhp \
+	helpfiles/another.hhc helpfiles/another.hhp helpfiles/another.htm
 
 PROGRAM=help
 

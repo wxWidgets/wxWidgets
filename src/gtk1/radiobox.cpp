@@ -67,10 +67,6 @@ static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRad
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
 
-BEGIN_EVENT_TABLE(wxRadioBox, wxControl)
-    EVT_SIZE(wxRadioBox::OnSize)
-END_EVENT_TABLE()
-
 wxRadioBox::wxRadioBox()
 {
 }
@@ -161,11 +157,11 @@ wxRadioBox::~wxRadioBox()
     }
 }
 
-void wxRadioBox::OnSize( wxSizeEvent &event )
+void wxRadioBox::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
+    wxWindow::DoSetSize( x, y, width, height, sizeFlags );
+    
     LayoutItems();
-
-    event.Skip();
 }
 
 wxSize wxRadioBox::LayoutItems()

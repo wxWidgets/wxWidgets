@@ -246,6 +246,7 @@ void wxDialog::Init()
     m_returnCode = 0;
     m_sizeSet = FALSE;
     m_modalShowing = FALSE;
+    m_isFrame = TRUE;
 }
 
 wxDialog::wxDialog( wxWindow *parent,

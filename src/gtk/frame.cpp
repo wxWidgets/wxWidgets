@@ -71,10 +71,20 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) return;
+    if (!win->m_hasVMT)
+        return;
 
     if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
     {
+/*
+        wxPrintf( "OnSize from " );
+        if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+           wxPrintf( win->GetClassInfo()->GetClassName() );
+        wxPrintf( " %d %d %d %d\n", (int)alloc->x,
+                                (int)alloc->y,
+                                (int)alloc->width,
+                                (int)alloc->height );
+*/
         win->m_width = alloc->width;
         win->m_height = alloc->height;
         win->UpdateSize();
@@ -334,6 +344,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
 
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
     EVT_SIZE(wxFrame::OnSize)
+    EVT_IDLE(wxFrame::OnIdle)
     EVT_CLOSE(wxFrame::OnCloseWindow)
     EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
 END_EVENT_TABLE()
@@ -356,6 +367,7 @@ void wxFrame::Init()
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
     m_insertInClientArea = TRUE;
+    m_isFrame = TRUE;
 }
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -429,16 +441,16 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     if (m_parent) m_parent->AddChild( this );
 
+    /* the user resized the frame by dragging etc. */
+    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
+        GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
+
     PostCreation();
 
     /*  we cannot set MWM hints and icons before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
                         GTK_SIGNAL_FUNC(gtk_frame_realized_callback), (gpointer) this );
-
-    /* the user resized the frame by dragging etc. */
-    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
-        GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
 
     /* the only way to get the window size is to connect to this event */
     gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
@@ -775,20 +787,23 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     /* we actually set the size of a frame here and no-where else */
     gtk_widget_set_usize( m_widget, m_width, m_height );
 
-    m_sizeSet = TRUE;
 
-    /* send size event to frame */
+    m_sizeSet = TRUE;
+    
+    // send size event to frame
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
 
-    /* send size event to status bar */
+/*
+    // send size event to status bar
     if (m_frameStatusBar)
     {
         wxSizeEvent event2( wxSize(m_frameStatusBar->m_width,m_frameStatusBar->m_height), m_frameStatusBar->GetId() );
         event2.SetEventObject( m_frameStatusBar );
         m_frameStatusBar->GetEventHandler()->ProcessEvent( event2 );
     }
+*/
 
     m_resizing = FALSE;
 }
@@ -804,9 +819,14 @@ void wxFrame::MakeModal( bool modal )
 void wxFrame::OnInternalIdle()
 {
     if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
+    {
         GtkOnSize( m_x, m_y, m_width, m_height );
-
-    DoMenuUpdates();
+	
+	// we'll come back later
+        if (g_isIdle)
+            wxapp_install_idle_handler();
+	return;
+    }
 
     if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();
 #if wxUSE_TOOLBAR

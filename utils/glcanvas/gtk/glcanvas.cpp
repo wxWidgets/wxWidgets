@@ -34,6 +34,13 @@ extern "C" {
 
 XVisualInfo *g_vi = (XVisualInfo*) NULL;
 
+//-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
 //---------------------------------------------------------------------------
 // wxGLContext
 //---------------------------------------------------------------------------
@@ -152,6 +159,9 @@ gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 static void 
 gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxGLCanvas *win )
 {
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
+
     win->m_exposed = TRUE;
 
     win->GetUpdateRegion().Union( gdk_event->area.x,
@@ -167,6 +177,9 @@ gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_e
 static void 
 gtk_glwindow_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxGLCanvas *win )
 {
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
+
     win->m_exposed = TRUE;
 
     win->GetUpdateRegion().Union( rect->x, rect->y,
@@ -337,4 +350,6 @@ void wxGLCanvas::OnInternalIdle()
         m_exposed = FALSE;
         GetUpdateRegion().Clear();
     }
+    
+    wxWindow::OnInternalIdle();
 }

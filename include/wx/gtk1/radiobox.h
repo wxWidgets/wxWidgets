@@ -42,9 +42,6 @@ extern const char *wxRadioBoxNameStr;
 
 class wxRadioBox: public wxControl
 {
-
-  DECLARE_DYNAMIC_CLASS(wxRadioBox)
-  
 public:
     wxRadioBox();
     inline wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
@@ -91,7 +88,6 @@ public:
     int GetNumberOfRowsOrCols() const;
     void SetNumberOfRowsOrCols( int n );
     
-    void OnSize( wxSizeEvent &event );
     void SetFocus();
     
   // implementation    
@@ -101,12 +97,14 @@ public:
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
     wxSize LayoutItems();
+    void DoSetSize( int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO );
     
     bool             m_alreadySent;
     int              m_majorDim;
     wxList           m_boxes;
     
-  DECLARE_EVENT_TABLE()    
+private:
+    DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };
 
 #endif

@@ -19,23 +19,22 @@
 #include "wx/menu.h"
 #include "wx/menuitem.h"
 
-#ifndef __WXGTK__
 void wxFrame::OnIdle(wxIdleEvent& WXUNUSED(event) )
 {
-  DoMenuUpdates();
+    DoMenuUpdates();
 }
-#endif
 
 // update all menus
 void wxFrame::DoMenuUpdates()
 {
-  wxMenuBar* bar = GetMenuBar();
+    wxMenuBar* bar = GetMenuBar();
 
-  if ( bar != NULL ) {
-    int nCount = bar->GetMenuCount();
-    for (int n = 0; n < nCount; n++)
-      DoMenuUpdates(bar->GetMenu(n), (wxWindow*) NULL);
-  }
+    if ( bar != NULL ) 
+    {
+        int nCount = bar->GetMenuCount();
+        for (int n = 0; n < nCount; n++)
+            DoMenuUpdates(bar->GetMenu(n), (wxWindow*) NULL);
+    }
 }
 
 // update a menu and all submenus recursively
