@@ -28,9 +28,6 @@ public:
     virtual wxString GetPluginsDir() const;
 
 protected:
-    // append "/appname" suffix if the app name is set
-    static wxString AppendAppName(const wxString& dir);
-
     // get the path corresponding to the given standard CSIDL_XXX constant
     static wxString DoGetDirectory(int csidl);
 };

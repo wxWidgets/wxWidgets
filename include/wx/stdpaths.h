@@ -75,6 +75,11 @@ public:
 
     // virtual dtor for the base class
     virtual ~wxStandardPathsBase();
+
+protected:
+    // append "/appname" suffix if the app name is set (doesn't append the
+    // slash if dir already ends with a slash or dot)
+    static wxString AppendAppName(const wxString& dir);
 };
 
 #if defined(__WXMSW__)

@@ -216,22 +216,6 @@ wxString wxStandardPaths::DoGetDirectory(int csidl)
     return dir;
 }
 
-/* static */
-wxString wxStandardPaths::AppendAppName(const wxString& dir)
-{
-    wxString subdir(dir);
-
-    // empty string indicates that an error has occured, don't touch it then
-    if ( !subdir.empty() )
-    {
-        const wxString appname = wxTheApp->GetAppName();
-        if ( !appname.empty() )
-            subdir << _T('\\') << appname;
-    }
-
-    return subdir;
-}
-
 // ----------------------------------------------------------------------------
 // public functions
 // ----------------------------------------------------------------------------
