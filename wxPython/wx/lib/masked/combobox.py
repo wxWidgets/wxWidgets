@@ -88,6 +88,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
         if self._autofit:
             self.SetClientSize(self._CalcSize())
+            self.SetSizeHints(self.GetSize())
 
         if value:
             # ensure value is width of the mask of the control:

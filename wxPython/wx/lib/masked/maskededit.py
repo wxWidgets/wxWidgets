@@ -1915,9 +1915,8 @@ class MaskedEditMixin:
 
             if self._autofit:
 ##                dbg('setting client size to:', self._CalcSize())
-                size = self._CalcSize()
-                self.SetSizeHints(size)
-                self.SetClientSize(size)
+                self.SetClientSize(self._CalcSize())
+                self.SetSizeHints(self.GetSize())
 
             # Set value/type-specific formatting
             self._applyFormatting()
@@ -1992,9 +1991,8 @@ class MaskedEditMixin:
                 self._SetInitialValue()
 
                 if self._autofit:
-                    size = self._CalcSize()
-                    self.SetSizeHints(size)
-                    self.SetClientSize(size)
+                    self.SetClientSize(self._CalcSize())
+                    self.SetSizeHints(self.GetSize())
 
             # Set value/type-specific formatting
             self._applyFormatting()
