@@ -94,6 +94,7 @@
     #endif
 
     class WXDLLEXPORT wxLongLongWx;
+    class WXDLLEXPORT wxULongLongWx;
 #if defined(__VISUALC__) && !defined(__WIN32__)
     #define wxLongLong wxLongLongWx
     #define wxULongLong wxULongLongWx
@@ -874,7 +875,7 @@ public:
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs
 
-    unsigned long m_hi
+    unsigned long m_hi;
     unsigned long m_lo;
 
 #ifdef wxLONGLONG_TEST_MODE
