@@ -344,6 +344,62 @@ WX_NSView wxWindowCocoa::GetNSViewForHiding() const
         :   m_cocoaNSView;
 }
 
+NSPoint wxWindowCocoa::CocoaTransformBoundsToWx(NSPoint pointBounds)
+{
+    // TODO: Handle scrolling offset
+    wxCHECK_MSG(GetNSView(), pointBounds, wxT("Need to have a Cocoa view to do translation"));
+    if([GetNSView() isFlipped])
+        return pointBounds;
+    NSRect ourBounds = [GetNSView() bounds];
+    return NSMakePoint
+    (   pointBounds.x
+    ,   ourBounds.size.height - pointBounds.y
+    );
+}
+
+NSRect wxWindowCocoa::CocoaTransformBoundsToWx(NSRect rectBounds)
+{
+    // TODO: Handle scrolling offset
+    wxCHECK_MSG(GetNSView(), rectBounds, wxT("Need to have a Cocoa view to do translation"));
+    if([GetNSView() isFlipped])
+        return rectBounds;
+    NSRect ourBounds = [GetNSView() bounds];
+    return NSMakeRect
+    (   rectBounds.origin.x
+    ,   ourBounds.size.height - (rectBounds.origin.y + rectBounds.size.height)
+    ,   rectBounds.size.width
+    ,   rectBounds.size.height
+    );
+}
+
+NSPoint wxWindowCocoa::CocoaTransformWxToBounds(NSPoint pointWx)
+{
+    // TODO: Handle scrolling offset
+    wxCHECK_MSG(GetNSView(), pointWx, wxT("Need to have a Cocoa view to do translation"));
+    if([GetNSView() isFlipped])
+        return pointWx;
+    NSRect ourBounds = [GetNSView() bounds];
+    return NSMakePoint
+    (   pointWx.x
+    ,   ourBounds.size.height - pointWx.y
+    );
+}
+
+NSRect wxWindowCocoa::CocoaTransformWxToBounds(NSRect rectWx)
+{
+    // TODO: Handle scrolling offset
+    wxCHECK_MSG(GetNSView(), rectWx, wxT("Need to have a Cocoa view to do translation"));
+    if([GetNSView() isFlipped])
+        return rectWx;
+    NSRect ourBounds = [GetNSView() bounds];
+    return NSMakeRect
+    (   rectWx.origin.x
+    ,   ourBounds.size.height - (rectWx.origin.y + rectWx.size.height)
+    ,   rectWx.size.width
+    ,   rectWx.size.height
+    );
+}
+
 bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 {
     wxLogTrace(wxTRACE_COCOA,wxT("Cocoa_drawRect"));
@@ -363,7 +419,14 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
     // Try replacing the larger rectangle with a list of smaller ones:
     if ([GetNSView() respondsToSelector:@selector(getRectsBeingDrawn:count:)])
         [GetNSView() getRectsBeingDrawn:&rects count:&countRects];
-    m_updateRegion = wxRegion(rects,countRects);
+
+    NSRect *transformedRects = (NSRect*)malloc(sizeof(NSRect)*countRects);
+    for(int i=0; i<countRects; i++)
+    {
+        transformedRects[i] = CocoaTransformBoundsToWx(rects[i]);
+    }
+    m_updateRegion = wxRegion(transformedRects,countRects);
+    free(transformedRects);
 
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
@@ -375,11 +438,14 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 void wxWindowCocoa::InitMouseEvent(wxMouseEvent& event, WX_NSEvent cocoaEvent)
 {
     wxASSERT_MSG([m_cocoaNSView window]==[cocoaEvent window],wxT("Mouse event for different NSWindow"));
+    // Mouse events happen at the NSWindow level so we need to convert
+    // into our bounds coordinates then convert to wx coordinates.
     NSPoint cocoaPoint = [m_cocoaNSView convertPoint:[(NSEvent*)cocoaEvent locationInWindow] fromView:nil];
-    NSRect cocoaRect = [m_cocoaNSView frame];
+    NSPoint pointWx = CocoaTransformBoundsToWx(cocoaPoint);
+    // FIXME: Should we be adjusting for client area origin?
     const wxPoint &clientorigin = GetClientAreaOrigin();
-    event.m_x = (wxCoord)cocoaPoint.x - clientorigin.x;
-    event.m_y = (wxCoord)(cocoaRect.size.height - cocoaPoint.y) - clientorigin.y;
+    event.m_x = (wxCoord)pointWx.x - clientorigin.x;
+    event.m_y = (wxCoord)pointWx.y - clientorigin.y;
 
     event.m_shiftDown = [cocoaEvent modifierFlags] & NSShiftKeyMask;
     event.m_controlDown = [cocoaEvent modifierFlags] & NSControlKeyMask;
@@ -632,13 +698,15 @@ void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
-    wxCHECK_RET(superview,wxT("NSView does not have a superview"));
-    NSRect parentRect = [superview bounds];
 
-    NSRect cocoaRect = NSMakeRect(x,parentRect.size.height-(y+height),width,height);
-    [nsview setFrame: cocoaRect];
+    wxCHECK_RET(GetParent(), wxT("Window can only be placed correctly when it has a parent"));
+
+    NSRect oldFrameRect = [nsview frame];
+    NSRect newFrameRect = GetParent()->CocoaTransformWxToBounds(NSMakeRect(x,y,width,height));
+    [nsview setFrame:newFrameRect];
     // Be sure to redraw the parent to reflect the changed position
-    [superview setNeedsDisplay:YES];
+    [superview setNeedsDisplayInRect:oldFrameRect];
+    [superview setNeedsDisplayInRect:newFrameRect];
 }
 
 void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
@@ -646,14 +714,14 @@ void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
     wxCHECK_RET(superview,wxT("NSView does not have a superview"));
-    NSRect parentRect = [superview bounds];
+    wxCHECK_RET(GetParent(), wxT("Window can only be placed correctly when it has a parent"));
     NSRect frameRect = [nsview frame];
     if(size.x!=-1)
         frameRect.size.width = size.x;
     if(size.y!=-1)
         frameRect.size.height = size.y;
     frameRect.origin.x = pos.x;
-    frameRect.origin.y = parentRect.size.height-(pos.y+frameRect.size.height);
+    frameRect.origin.y = pos.y;
     // Tell Cocoa to change the margin between the bottom of the superview
     // and the bottom of the control.  Keeps the control pinned to the top
     // of its superview so that its position in the wxWidgets coordinate
@@ -662,6 +730,7 @@ void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
         [nsview setAutoresizingMask: NSViewMinYMargin];
     // MUST set the mask before setFrame: which can generate a size event
     // and cause a scroller to be added!
+    frameRect = GetParent()->CocoaTransformWxToBounds(frameRect);
     [nsview setFrame: frameRect];
 }
 
@@ -679,15 +748,13 @@ void wxWindow::DoGetSize(int *w, int *h) const
 void wxWindow::DoGetPosition(int *x, int *y) const
 {
     NSView *nsview = GetNSViewForSuperview();
-    NSView *superview = [nsview superview];
-    wxCHECK_RET(superview,wxT("NSView does not have a superview"));
-    NSRect parentRect = [superview bounds];
 
     NSRect cocoaRect = [nsview frame];
+    NSRect rectWx = GetParent()->CocoaTransformBoundsToWx(cocoaRect);
     if(x)
-        *x=(int)cocoaRect.origin.x;
+        *x=(int)rectWx.origin.x;
     if(y)
-        *y=(int)(parentRect.size.height-(cocoaRect.origin.y+cocoaRect.size.height));
+        *y=(int)rectWx.origin.y;
     wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxWindow=%p::DoGetPosition = (%d,%d)"),this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
 }
 

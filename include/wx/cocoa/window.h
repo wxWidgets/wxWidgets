@@ -111,6 +111,12 @@ protected:
         // NOTE: position is 10,10 to make it "obvious" that it's out of place
         return NSMakeRect(10.0,10.0,WidthDefault(size.x),HeightDefault(size.y));
     }
+    // These functions translate NSPoint or NSRect between the coordinate
+    // system of Cocoa's boudns rect and wx's coordinate system.
+    NSPoint CocoaTransformBoundsToWx(NSPoint pointBounds);
+    NSRect CocoaTransformBoundsToWx(NSRect rectBounds);
+    NSPoint CocoaTransformWxToBounds(NSPoint pointWx);
+    NSRect CocoaTransformWxToBounds(NSRect rectWx);
 #endif //def __OBJC__
 // ------------------------------------------------------------------------
 // Implementation
