@@ -98,10 +98,11 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
     result.clear();
 
     wxCharBuffer buf(LINE_BUF);
+    char *pBuf = buf.data();
     while ( sock->WaitForRead() )
     {
         // peek at the socket to see if there is a CRLF
-        sock->Peek(buf.data(), LINE_BUF);
+        sock->Peek(pBuf, LINE_BUF);
 
         size_t nRead = sock->LastCount();
         if ( !nRead && sock->Error() )
@@ -110,13 +111,13 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
         // look for "\r\n" paying attention to a special case: "\r\n" could
         // have been split by buffer boundary, so check also for \r at the end
         // of the last chunk and \n at the beginning of this one
-        buf.data()[nRead] = '\0';
-        const char *eol = strchr(buf, '\n');
+        pBuf[nRead] = '\0';
+        const char *eol = strchr(pBuf, '\n');
 
         // if we found '\n', is there a '\r' as well?
         if ( eol )
         {
-            if ( eol == buf.data() )
+            if ( eol == pBuf )
             {
                 // check for case of "\r\n" being split
                 if ( result.empty() || result.Last() != _T('\r') )
@@ -132,7 +133,7 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
             else // '\n' in the middle of the buffer
             {
                 // in any case, read everything up to and including '\n'
-                nRead = eol - buf + 1;
+                nRead = eol - pBuf + 1;
 
                 if ( eol[-1] != '\r' )
                 {
@@ -142,12 +143,12 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
             }
         }
 
-        sock->Read(buf.data(), nRead);
+        sock->Read(pBuf, nRead);
         if ( sock->LastCount() != nRead )
             return wxPROTO_NETERR;
 
-        buf.data()[nRead] = '\0';
-        result += wxString::FromAscii(buf);
+        pBuf[nRead] = '\0';
+        result += wxString::FromAscii(pBuf);
 
         if ( eol )
         {
