@@ -206,6 +206,9 @@ protected:
 
     WXHMENU       m_hMenu;
 
+    // Return the MSW position for a wxMenu which is sometimes different from
+    // the wxWindows position.
+    int MSWPositionForWxMenu(wxMenu *menu, int wxpos);
 #if wxUSE_ACCEL
     // the accelerator table for all accelerators in all our menus
     wxAcceleratorTable m_accelTable;

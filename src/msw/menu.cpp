@@ -824,6 +824,27 @@ WXHMENU wxMenuBar::Create()
 #endif
 }
 
+int wxMenuBar::MSWPositionForWxMenu(wxMenu *menu, int wxpos)
+{
+    wxASSERT(menu);
+    wxASSERT(menu->GetHMenu());
+    wxASSERT(m_hMenu);
+    int totalMSWItems = GetMenuItemCount((HMENU)m_hMenu);
+    int i; // For old C++ compatibility
+    for(i=wxpos; i<totalMSWItems; i++)
+    {
+        if(GetSubMenu((HMENU)m_hMenu,i)==(HMENU)menu->GetHMenu())
+            return i;
+    }
+    for(i=0; i<wxpos; i++)
+    {
+        if(GetSubMenu((HMENU)m_hMenu,i)==(HMENU)menu->GetHMenu())
+            return i;
+    }
+    wxFAIL;
+    return -1;
+}
+
 // ---------------------------------------------------------------------------
 // wxMenuBar functions to work with the top level submenus
 // ---------------------------------------------------------------------------
@@ -834,10 +855,11 @@ WXHMENU wxMenuBar::Create()
 void wxMenuBar::EnableTop(size_t pos, bool enable)
 {
     wxCHECK_RET( IsAttached(), wxT("doesn't work with unattached menubars") );
+    wxCHECK_RET( pos < GetMenuCount(), wxT("invalid menu index") );
 
     int flag = enable ? MF_ENABLED : MF_GRAYED;
 
-    EnableMenuItem((HMENU)m_hMenu, pos, MF_BYPOSITION | flag);
+    EnableMenuItem((HMENU)m_hMenu, MSWPositionForWxMenu(GetMenu(pos),pos), MF_BYPOSITION | flag);
 
     Refresh();
 }
@@ -854,8 +876,10 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     }
     //else: have to modify the existing menu
 
+    int mswpos = MSWPositionForWxMenu(GetMenu(pos),pos);
+
     UINT id;
-    UINT flagsOld = ::GetMenuState((HMENU)m_hMenu, pos, MF_BYPOSITION);
+    UINT flagsOld = ::GetMenuState((HMENU)m_hMenu, mswpos, MF_BYPOSITION);
     if ( flagsOld == 0xFFFFFFFF )
     {
         wxLogLastError(wxT("GetMenuState"));
@@ -867,7 +891,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     {
         // HIBYTE contains the number of items in the submenu in this case
         flagsOld &= 0xff;
-        id = (UINT)::GetSubMenu((HMENU)m_hMenu, pos);
+        id = (UINT)::GetSubMenu((HMENU)m_hMenu, mswpos);
     }
     else
     {
@@ -888,7 +912,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     }
     
 #else
-    if ( ::ModifyMenu(GetHmenu(), pos, MF_BYPOSITION | MF_STRING | flagsOld,
+    if ( ::ModifyMenu(GetHmenu(), mswpos, MF_BYPOSITION | MF_STRING | flagsOld,
         id, label) == (int)0xFFFFFFFF )
     {
         wxLogLastError(wxT("ModifyMenu"));
@@ -920,13 +944,15 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 
     if ( IsAttached() )
     {
+        int mswpos = MSWPositionForWxMenu(menuOld,pos);
+
         // can't use ModifyMenu() because it deletes the submenu it replaces
-        if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
+        if ( !::RemoveMenu(GetHmenu(), (UINT)mswpos, MF_BYPOSITION) )
         {
             wxLogLastError(wxT("RemoveMenu"));
         }
 
-        if ( !::InsertMenu(GetHmenu(), (UINT)pos,
+        if ( !::InsertMenu(GetHmenu(), (UINT)mswpos,
                            MF_BYPOSITION | MF_POPUP | MF_STRING,
                            (UINT)GetHmenuOf(menu), title) )
         {
@@ -949,6 +975,12 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
+    // Find out which MSW item before which we'll be inserting before
+    // wxMenuBarBase::Insert is called and GetMenu(pos) is the new menu.
+    int mswpos = (pos == m_menus.GetCount())
+        ?   -1 // append the menu
+        :   MSWPositionForWxMenu(GetMenu(pos),pos);
+
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return FALSE;
 
@@ -977,7 +1009,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
             return FALSE;
         }
 #else
-        if ( !::InsertMenu(GetHmenu(), pos,
+        if ( !::InsertMenu(GetHmenu(), mswpos,
                            MF_BYPOSITION | MF_POPUP | MF_STRING,
                            (UINT)GetHmenuOf(menu), title) )
         {
@@ -1070,7 +1102,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
             }
         }
 #else
-        if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
+        if ( !::RemoveMenu(GetHmenu(), (UINT)MSWPositionForWxMenu(menu,pos), MF_BYPOSITION) )
         {
             wxLogLastError(wxT("RemoveMenu"));
         }
