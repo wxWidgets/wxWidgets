@@ -174,6 +174,12 @@
 
 #ifdef __WXMSW__
 
+// size_t is the same as unsigned int for all Windows compilers we know,
+// so define it if it hadn't been done by configure yet
+#if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
+    #define wxSIZE_T_IS_UINT
+#endif
+
 #if defined(_WIN32) || defined(WIN32) || defined(__NT__)
     #ifndef __WIN32__
         #define __WIN32__
