@@ -1670,8 +1670,29 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
                                 m_textForegroundColour.Blue() );
     image = image.Rotate( rad, wxPoint(0,0) );
     
+    int i_angle = (int) angle;
+    i_angle = i_angle % 360;
+    int xoffset = 0;
+    if ((i_angle >= 90.0) && (i_angle < 270.0))
+        xoffset = image.GetWidth();
+    int yoffset = 0;
+    if ((i_angle >= 0.0) && (i_angle < 180.0))
+        yoffset = image.GetHeight();
+        
+    if ((i_angle >= 0) && (i_angle < 90))
+        yoffset -= (int)( cos(rad)*h );
+    if ((i_angle >= 90) && (i_angle < 180))
+        xoffset -= (int)( sin(rad)*h );    
+    if ((i_angle >= 180) && (i_angle < 270))
+        yoffset -= (int)( cos(rad)*h );
+    if ((i_angle >= 270) && (i_angle < 360))
+        xoffset -= (int)( sin(rad)*h );
+    
+    int i_x = x - xoffset;
+    int i_y = y - yoffset;
+    
     src = image;
-    DoDrawBitmap( src, x /*- (int)(sin(rad)*h)*/ , y-image.GetHeight()+h, true );
+    DoDrawBitmap( src, i_x, i_y, true );
 
 
     // it would be better to draw with non underlined font and draw the line
