@@ -10,6 +10,8 @@
 
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
+# added by glt for my own environment
+WXDIR = D:\wx2\wxWindows
 
 PROGRAM=dbtest
 OBJECTS = $(PROGRAM).obj listdb.obj

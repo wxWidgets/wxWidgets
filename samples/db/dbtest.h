@@ -40,10 +40,10 @@ enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 class CeditorDlg;
 class CparameterDlg;
 
-#ifdef __WXGTK__
-const char paramFilename[] = "../database.cfg";
+#ifdef __UNIX__
+const char paramFilename[] = "../dbtest.cfg";
 #else
-const char paramFilename[] = "database.cfg";
+const char paramFilename[] = "dbtest.cfg";
 #endif
 
 
@@ -102,6 +102,7 @@ typedef struct Cparameters
 	char	ODBCSource[100+1];
 	char	UserName[25+1];
 	char	Password[25+1];
+	char	DirPath[MAX_PATH+1];
 } Cparameters;
 
 
@@ -236,14 +237,15 @@ class CparameterDlg : public wxDialog
 
 		// Pointers to all widgets on the dialog
 		wxStaticText	*pParamODBCSourceMsg;
-		wxListBox	*pParamODBCSourceList;
-		wxStaticText	*pParamUserNameMsg,		*pParamPasswordMsg;
-		wxTextCtrl		*pParamUserNameTxt,		*pParamPasswordTxt;
-		wxButton		*pParamSaveBtn,			*pParamCancelBtn;
+		wxListBox		*pParamODBCSourceList;
+		wxStaticText	*pParamUserNameMsg,		*pParamPasswordMsg,	*pParamDirPathMsg;
+		wxTextCtrl		*pParamUserNameTxt,		*pParamPasswordTxt,	*pParamDirPathTxt;
+		wxButton			*pParamSaveBtn,			*pParamCancelBtn;
 
 	public:
 		CparameterDlg(wxWindow *parent);
 		void    OnCloseWindow(wxCloseEvent& event);
+		void    OnButton( wxCommandEvent &event );
 		void	OnCommand(wxWindow& win, wxCommandEvent& event);
  		void	OnActivate(bool) {};  // necessary for hot keys
 
@@ -264,8 +266,10 @@ DECLARE_EVENT_TABLE()
 #define PARAMETER_DIALOG_NAME_TEXT          404
 #define PARAMETER_DIALOG_PASSWORD_MSG       405
 #define PARAMETER_DIALOG_PASSWORD_TEXT      406
-#define PARAMETER_DIALOG_SAVE               407
-#define PARAMETER_DIALOG_CANCEL             408
+#define PARAMETER_DIALOG_DIRPATH_MSG       407
+#define PARAMETER_DIALOG_DIRPATH_TEXT      408
+#define PARAMETER_DIALOG_SAVE               409
+#define PARAMETER_DIALOG_CANCEL             410
 
 // *************************** CqueryDlg ***************************
 

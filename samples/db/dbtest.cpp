@@ -93,7 +93,6 @@ wxDB	*READONLY_DB;
  * NOTE: The value returned by this function is for temporary use only and
  *       should be copied for long term use
  */
- 
 char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
 {
 	static wxString msg;
@@ -193,12 +192,18 @@ bool DatabaseDemoApp::OnInit()
 	buffer[strlen(buffer)-1] = '\0';
 	strcpy(params.Password,buffer);
 
+	fgets(buffer, sizeof(params.DirPath), paramFile);
+	buffer[strlen(buffer)-1] = '\0';
+	strcpy(params.DirPath,buffer);
+
 	fclose(paramFile);
 
 	// Connect to datasource
 	strcpy(DbConnectInf.Dsn,		params.ODBCSource);	// ODBC data source name (created with ODBC Administrator under Win95/NT)
 	strcpy(DbConnectInf.Uid,		params.UserName);		// database username - must already exist in the data source
 	strcpy(DbConnectInf.AuthStr,	params.Password);		// password database username
+	strcpy(DbConnectInf.defaultDir,params.DirPath);		// path where the table exists (needed for dBase)
+
 	READONLY_DB = GetDbConnection(&DbConnectInf);
 	if (READONLY_DB == 0)
 	{
@@ -286,7 +291,7 @@ void DatabaseDemoFrame::CreateDataTable()
 		return;
 	}
 
-	if (!Contact->CreateTable())
+	if (!Contact->CreateTable(FALSE))
 	{
 		wxEndBusyCursor();
 		wxString tStr;
@@ -307,7 +312,8 @@ void DatabaseDemoFrame::CreateDataTable()
 			success = FALSE;
 		}
 	}
-	wxEndBusyCursor();
+	while (wxIsBusy())
+		wxEndBusyCursor();
 
 	delete Contact;
 
@@ -344,7 +350,7 @@ void DatabaseDemoFrame::BuildParameterDialog(wxWindow *parent)
  *     or creating a table objects which use the same pDb, know that all the objects
  *     will be committed or rolled back when any of the objects has this function call made.
  */
-Ccontact::Ccontact (wxDB *pwxDB) : wxTable(pwxDB ? pwxDB : GetDbConnection(&DbConnectInf),CONTACT_TABLE_NAME,CONTACT_NO_COLS)
+Ccontact::Ccontact (wxDB *pwxDB) : wxTable(pwxDB ? pwxDB : GetDbConnection(&DbConnectInf),CONTACT_TABLE_NAME,CONTACT_NO_COLS,NULL,!QUERY_ONLY,DbConnectInf.defaultDir)
 {
 	// This is used to represent whether the database connection should be released
 	// when this instance of the object is deleted.  If using the same connection
@@ -402,18 +408,20 @@ Ccontact::~Ccontact()
  */
 void Ccontact::SetupColumns()
 {
-	SetColDefs ( 0,"NAME",					DB_DATA_TYPE_VARCHAR,	 Name,					SQL_C_CHAR,			sizeof(Name),				TRUE, TRUE);  // Primary index
-	SetColDefs ( 1,"ADDRESS1",				DB_DATA_TYPE_VARCHAR,	 Addr1,					SQL_C_CHAR,			sizeof(Addr1),				FALSE,TRUE);
-	SetColDefs ( 2,"ADDRESS2",				DB_DATA_TYPE_VARCHAR,	 Addr2,					SQL_C_CHAR,			sizeof(Addr2),				FALSE,TRUE);
-	SetColDefs ( 3,"CITY",					DB_DATA_TYPE_VARCHAR,	 City,					SQL_C_CHAR,			sizeof(City),				FALSE,TRUE);
-	SetColDefs ( 4,"STATE",					DB_DATA_TYPE_VARCHAR,	 State,					SQL_C_CHAR,			sizeof(State),				FALSE,TRUE);
-	SetColDefs ( 5,"POSTAL_CODE",			DB_DATA_TYPE_VARCHAR,	 PostalCode,			SQL_C_CHAR,			sizeof(PostalCode),		FALSE,TRUE);
-	SetColDefs ( 6,"COUNTRY",				DB_DATA_TYPE_VARCHAR,	 Country,				SQL_C_CHAR,			sizeof(Country),			FALSE,TRUE);
-	SetColDefs ( 7,"JOIN_DATE",			DB_DATA_TYPE_DATE,		&JoinDate,				SQL_C_TIMESTAMP,	sizeof(JoinDate),			FALSE,TRUE);
-	SetColDefs ( 8,"NATIVE_LANGUAGE",	DB_DATA_TYPE_INTEGER,	&NativeLanguage,		SQL_C_ENUM,			sizeof(NativeLanguage),	FALSE,TRUE);
-	SetColDefs ( 9,"IS_DEVELOPER",		DB_DATA_TYPE_INTEGER,	&IsDeveloper,			SQL_C_BOOLEAN,		sizeof(bool),				FALSE,TRUE);
-	SetColDefs (10,"CONTRIBUTIONS",		DB_DATA_TYPE_INTEGER,	&Contributions,		SQL_C_USHORT,		sizeof(Contributions),	FALSE,TRUE);
-	SetColDefs (11,"LINES_OF_CODE",		DB_DATA_TYPE_INTEGER,	&LinesOfCode,			SQL_C_ULONG,		sizeof(LinesOfCode),		FALSE,TRUE);
+	// NOTE: Columns now are 8 character names, as that is all dBase can support.  Longer
+	//       names can be used for other database engines
+	SetColDefs ( 0,"NAME",					DB_DATA_TYPE_VARCHAR,	 Name,					SQL_C_CHAR,						sizeof(Name),				TRUE, TRUE);  // Primary index
+	SetColDefs ( 1,"ADDRESS1",				DB_DATA_TYPE_VARCHAR,	 Addr1,					SQL_C_CHAR,						sizeof(Addr1),				FALSE,TRUE);
+	SetColDefs ( 2,"ADDRESS2",				DB_DATA_TYPE_VARCHAR,	 Addr2,					SQL_C_CHAR,						sizeof(Addr2),				FALSE,TRUE);
+	SetColDefs ( 3,"CITY",					DB_DATA_TYPE_VARCHAR,	 City,					SQL_C_CHAR,						sizeof(City),				FALSE,TRUE);
+	SetColDefs ( 4,"STATE",					DB_DATA_TYPE_VARCHAR,	 State,					SQL_C_CHAR,						sizeof(State),				FALSE,TRUE);
+	SetColDefs ( 5,"POSTCODE",				DB_DATA_TYPE_VARCHAR,	 PostalCode,			SQL_C_CHAR,						sizeof(PostalCode),		FALSE,TRUE);
+	SetColDefs ( 6,"COUNTRY",				DB_DATA_TYPE_VARCHAR,	 Country,				SQL_C_CHAR,						sizeof(Country),			FALSE,TRUE);
+	SetColDefs ( 7,"JOINDATE",				DB_DATA_TYPE_DATE,		&JoinDate,				SQL_C_TIMESTAMP,				sizeof(JoinDate),			FALSE,TRUE);
+	SetColDefs ( 8,"IS_DEV",				DB_DATA_TYPE_INTEGER,	&IsDeveloper,			SQL_C_BOOLEAN(IsDeveloper),sizeof(IsDeveloper),		FALSE,TRUE);
+	SetColDefs ( 9,"CONTRIBS",				DB_DATA_TYPE_INTEGER,	&Contributions,		SQL_C_USHORT,					sizeof(Contributions),	FALSE,TRUE);
+	SetColDefs (10,"LINE_CNT",				DB_DATA_TYPE_INTEGER,	&LinesOfCode,			SQL_C_ULONG,					sizeof(LinesOfCode),		FALSE,TRUE);
+	SetColDefs (11,"LANGUAGE",				DB_DATA_TYPE_INTEGER,	&NativeLanguage,		SQL_C_ENUM,						sizeof(NativeLanguage),	FALSE,TRUE);
 }  // Ccontact::SetupColumns
 
 
@@ -488,7 +496,7 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
 	widgetPtrsSet = FALSE;
 
 	// Create the data structure and a new database connection.  
-	// (As there is not a pDb being passed in the constructor, a new database 
+	// (As there is not a pDb being passed in the constructor, a new database
 	// connection is created)
 	Contact = new Ccontact();
 
@@ -500,7 +508,7 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
 
 	// Check if the table exists or not.  If it doesn't, ask the user if they want to 
 	// create the table.  Continue trying to create the table until it exists, or user aborts
-	while (!Contact->pDb->TableExists((char *)CONTACT_TABLE_NAME))
+	while (!Contact->pDb->TableExists((char *)CONTACT_TABLE_NAME,DbConnectInf.Uid,DbConnectInf.defaultDir))
 	{
 		wxString tStr;
 		tStr.Printf("Unable to open the table '%s'.\n\nTable may need to be created...?\n\n",CONTACT_TABLE_NAME);
@@ -620,10 +628,14 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
 	// to achieve a single row (in this case the first name in alphabetical order).
 	
 	// commented out because PostgreSQL can't do this
-  	//Contact->whereStr.Printf("NAME = (SELECT MIN(NAME) FROM %s)",Contact->tableName);
-	
-	// NOTE: (const char*) returns a pointer which may not be valid later, so this is short term use only
-	Contact->where = (char*) (const char*) Contact->whereStr;
+	if (Contact->pDb->Dbms() != dbmsPOSTGRES)
+	{
+		Contact->whereStr.sprintf("NAME = (SELECT MIN(NAME) FROM %s)",Contact->tableName);
+		// NOTE: (const char*) returns a pointer which may not be valid later, so this is short term use only
+		Contact->where = (char*) (const char*) Contact->whereStr;
+	}
+	else
+		Contact->where = 0;
 
 	// Perform the Query to get the result set.  
 	// NOTE: If there are no rows returned, that is a valid result, so Query() would return TRUE.  
@@ -674,6 +686,7 @@ void CeditorDlg::OnButton( wxCommandEvent &event )
   wxWindow *win = (wxWindow*) event.GetEventObject();
   OnCommand( *win, event );
 }
+
 
 void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 {
@@ -780,14 +793,18 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 			}
 		}
 
-  	    // commented out because PostgreSQL can't do this
-		
 		// Previous record not available, retrieve first record in table
-		//Contact->whereStr  = "NAME = (SELECT MIN(NAME) FROM ";
-		//Contact->whereStr += Contact->tableName;
-		//Contact->whereStr += ")";
-		
-		Contact->where = (char*) (const char*) Contact->whereStr;
+		if (Contact->pDb->Dbms() != dbmsPOSTGRES)
+		{
+  			// PostgreSQL can't do this
+			Contact->whereStr  = "NAME = (SELECT MIN(NAME) FROM ";
+			Contact->whereStr += Contact->tableName;
+			Contact->whereStr += ")";
+			Contact->where = (char*) (const char*) Contact->whereStr;
+		}
+		else
+			Contact->where = 0;
+
 		if (!Contact->Query())
 		{
 			wxString tStr;
@@ -912,7 +929,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 							/* char		*windowTitle	*/ "Select contact name",
 							/* char		*tableName		*/ (char *) CONTACT_TABLE_NAME,
 							/* char		*dispCol1		*/ "NAME",
-							/* char		*dispCol2		*/ "JOIN_DATE",
+							/* char		*dispCol2		*/ "JOINDATE",
 							/* char		*where			*/ "",
 							/* char		*orderBy			*/ "NAME",
 							/* bool		distinctValues */ TRUE);
@@ -1115,7 +1132,7 @@ bool CeditorDlg::GetData()
 	Contact->LinesOfCode = atol(pLinesTxt->GetValue());
 
 	Contact->NativeLanguage = (enum Language) pNativeLangChoice->GetSelection();
-	Contact->IsDeveloper = (bool) pDeveloperRadio->GetSelection();
+	Contact->IsDeveloper = pDeveloperRadio->GetSelection() > 0;
 
 	return TRUE;
 }  // CeditorDlg::GetData()
@@ -1139,8 +1156,6 @@ bool CeditorDlg::Save()
 		failed = TRUE;
 
 	// Perform any other required validations necessary before saving
-
-
 	if (!failed)
 	{
 		wxBeginBusyCursor();
@@ -1207,11 +1222,16 @@ bool CeditorDlg::GetNextRec()
 {
 	wxString w;
 
-	// commented out because PostgreSQL can't do this
-	//w  = "NAME = (SELECT MIN(NAME) FROM ";
-	//w += Contact->tableName;
-	// w += " WHERE NAME > '";
-	w = "(NAME > '";
+	if (Contact->pDb->Dbms() != dbmsPOSTGRES)
+	{
+		// PostgreSQL can't do this
+		w  = "NAME = (SELECT MIN(NAME) FROM ";
+		w += Contact->tableName;
+		w += " WHERE NAME > '";
+	}
+	else
+		w = "(NAME > '";
+
 	w += Contact->Name;
 	w += "'";
 
@@ -1238,11 +1258,16 @@ bool CeditorDlg::GetPrevRec()
 {
 	wxString w;
 
-	// commented out because PostgreSQL can't do this
-	//w  = "NAME = (SELECT MAX(NAME) FROM ";
-	//w +=	Contact->tableName;
-	//w += " WHERE NAME < '";
-	w = "(NAME < '";
+	if (Contact->pDb->Dbms() != dbmsPOSTGRES)
+	{
+		// PostgreSQL can't do this
+		w  = "NAME = (SELECT MAX(NAME) FROM ";
+		w +=	Contact->tableName;
+		w += " WHERE NAME < '";
+	}
+	else
+		w = "(NAME < '";
+
 	w += Contact->Name;
 	w += "'";
 
@@ -1269,7 +1294,7 @@ bool CeditorDlg::GetRec(char *whereStr)
 {
 	Contact->where = whereStr;
 	Contact->orderBy = "NAME";
-	
+
 	if (!Contact->Query())
 	{
 		wxString tStr;
@@ -1296,10 +1321,12 @@ bool CeditorDlg::GetRec(char *whereStr)
  */
 
 BEGIN_EVENT_TABLE(CparameterDlg, wxDialog)
+    EVT_BUTTON(PARAMETER_DIALOG_SAVE,  CparameterDlg::OnButton)
+    EVT_BUTTON(PARAMETER_DIALOG_CANCEL,  CparameterDlg::OnButton)
     EVT_CLOSE(CparameterDlg::OnCloseWindow)
 END_EVENT_TABLE()
 
-CparameterDlg::CparameterDlg(wxWindow *parent) : wxDialog (parent, PARAMETER_DIALOG, "ODBC parameter settings", wxPoint(-1, -1), wxSize(400, 275))
+CparameterDlg::CparameterDlg(wxWindow *parent) : wxDialog (parent, PARAMETER_DIALOG, "ODBC parameter settings", wxPoint(-1, -1), wxSize(400, 325))
 {
 	// Since the ::OnCommand() function is overridden, this prevents the widget
 	// detection in ::OnCommand() until all widgets have been initialized to prevent
@@ -1314,6 +1341,9 @@ CparameterDlg::CparameterDlg(wxWindow *parent) : wxDialog (parent, PARAMETER_DIA
 
 	pParamPasswordMsg		= new wxStaticText(this, PARAMETER_DIALOG_PASSWORD_MSG, "Password:", wxPoint(156, 193), wxSize(-1, -1), 0, "ParamPasswordMsg");
 	pParamPasswordTxt		= new wxTextCtrl(this, PARAMETER_DIALOG_PASSWORD_TEXT, "", wxPoint(156, 209), wxSize(140, 25), 0, wxDefaultValidator, "ParamPasswordTxt");
+
+	pParamDirPathMsg		= new wxStaticText(this, PARAMETER_DIALOG_DIRPATH_MSG, "Directory:", wxPoint(10, 243), wxSize(-1, -1), 0, "ParamDirPathMsg");
+	pParamDirPathTxt		= new wxTextCtrl(this, PARAMETER_DIALOG_DIRPATH_TEXT, "", wxPoint(10, 259), wxSize(140, 25), 0, wxDefaultValidator, "ParamDirPathTxt");
 
 	pParamSaveBtn			= new wxButton(this, PARAMETER_DIALOG_SAVE, "&Save",	wxPoint(310,  21), wxSize(70, 35), 0, wxDefaultValidator, "ParamSaveBtn");
 	pParamCancelBtn		= new wxButton(this, PARAMETER_DIALOG_CANCEL, "C&ancel",	wxPoint(310,  66), wxSize(70, 35), 0, wxDefaultValidator, "ParamCancelBtn");
@@ -1354,6 +1384,12 @@ void CparameterDlg::OnCloseWindow(wxCloseEvent& event)
 
 }  // Cparameter::OnCloseWindow()
 
+
+void CparameterDlg::OnButton( wxCommandEvent &event )
+{
+  wxWindow *win = (wxWindow*) event.GetEventObject();
+  OnCommand( *win, event );
+}
 
 void CparameterDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 {
@@ -1396,6 +1432,7 @@ bool CparameterDlg::PutData()
 	pParamODBCSourceList->SetStringSelection(wxGetApp().params.ODBCSource);
 	pParamUserNameTxt->SetValue(wxGetApp().params.UserName);
 	pParamPasswordTxt->SetValue(wxGetApp().params.Password);
+	pParamDirPathTxt->SetValue(wxGetApp().params.DirPath);
 	return TRUE;
 }  // CparameterDlg::PutData()
 
@@ -1437,6 +1474,17 @@ bool CparameterDlg::GetData()
 		return FALSE;
 	}
 	strcpy(wxGetApp().params.Password,tStr);
+
+	tStr = pParamDirPathTxt->GetValue();
+	tStr.Replace("\\","/");
+	if (tStr.Length() > (sizeof(wxGetApp().params.DirPath)-1))
+	{
+		wxString errmsg;
+		errmsg.Printf("DirPath is longer than the data structure to hold it.\n'Cparameter.DirPath' must have a larger character array\nto handle a data source with this long of a name\n\nThe password currently specified is %d characters long.",tStr.Length());
+		wxMessageBox(errmsg,"Internal program error...",wxOK | wxICON_EXCLAMATION);
+		return FALSE;
+	}
+	strcpy(wxGetApp().params.DirPath,tStr);
 	return TRUE;
 }  // CparameterDlg::GetData()
 
@@ -1464,6 +1512,8 @@ bool CparameterDlg::Save()
 	fputs(wxGetApp().params.UserName, paramFile);
 	fputc('\n', paramFile);
 	fputs(wxGetApp().params.Password, paramFile);
+	fputc('\n', paramFile);
+	fputs(wxGetApp().params.DirPath, paramFile);
 	fputc('\n', paramFile);
 	fclose(paramFile);
 
@@ -1566,6 +1616,17 @@ CqueryDlg::CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereA
 	wxString qualName;
 	pQueryCol2Choice->Append("VALUE -->");
 	colInf = pDB->GetColumns(tblName);
+
+	if (!colInf)
+	{
+		wxEndBusyCursor();
+		wxString tStr;
+		tStr  = "ODBC error during GetColumns()\n\n";
+		tStr += GetExtendedDBErrorMsg(__FILE__,__LINE__);
+		wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+		return;
+	}
+
 	for (int i = 0; colInf[i].colName && strlen(colInf[i].colName); i++)
 	{
 		// If there is more than one table being queried, qualify
@@ -1837,7 +1898,8 @@ void CqueryDlg::OnCloseWindow(wxCloseEvent& event)
 	}
 
 	GetParent()->SetFocus();
-	wxEndBusyCursor();
+	while (wxIsBusy())
+		wxEndBusyCursor();
 
 	this->Destroy();
 
@@ -1990,7 +2052,7 @@ void CqueryDlg::ProcessCountBtn()
 
 	if (dbTable == 0)  // wxTable object needs to be created and opened
 	{
-		if (!(dbTable = new wxTable(pDB, masterTableName, 0)))
+		if (!(dbTable = new wxTable(pDB, masterTableName, 0, NULL, !QUERY_ONLY, DbConnectInf.defaultDir)))
 		{
 			wxMessageBox("Memory allocation failed creating a wxTable object.","Error...",wxOK | wxICON_EXCLAMATION);
 			return;
