@@ -1409,7 +1409,7 @@ PyObject* wxGridCellCoordsArray_helper(const wxGridCellCoordsArray& source)
     return list;
 }
 
-PyObject *wxGridCellCoords_asTuple(wxGridCellCoords *self){
+PyObject *wxGridCellCoords_Get(wxGridCellCoords *self){
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetCol()));
@@ -7981,7 +7981,7 @@ static PyObject *_wrap_GridCellCoords___ne__(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GridCellCoords_asTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GridCellCoords_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
     PyObject *result;
@@ -7990,12 +7990,12 @@ static PyObject *_wrap_GridCellCoords_asTuple(PyObject *self, PyObject *args, Py
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GridCellCoords_asTuple",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GridCellCoords_Get",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGridCellCoords,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (PyObject *)wxGridCellCoords_asTuple(arg1);
+        result = (PyObject *)wxGridCellCoords_Get(arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -15697,7 +15697,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GridCellCoords_Set", (PyCFunction) _wrap_GridCellCoords_Set, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GridCellCoords___eq__", (PyCFunction) _wrap_GridCellCoords___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GridCellCoords___ne__", (PyCFunction) _wrap_GridCellCoords___ne__, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GridCellCoords_asTuple", (PyCFunction) _wrap_GridCellCoords_asTuple, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GridCellCoords_Get", (PyCFunction) _wrap_GridCellCoords_Get, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GridCellCoords_swigregister", GridCellCoords_swigregister, METH_VARARGS },
 	 { (char *)"new_Grid", (PyCFunction) _wrap_new_Grid, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_CreateGrid", (PyCFunction) _wrap_Grid_CreateGrid, METH_VARARGS | METH_KEYWORDS },

@@ -190,44 +190,6 @@ class CalendarCtrl(_core.Control):
     As the attributes are specified for each day, they may change when the
     month is changed, so you will often want to update them in an
     EVT_CALENDAR_MONTH event handler.
-
-    Window Styles
-    -------------
-        ==============================   ============================
-        CAL_SUNDAY_FIRST                 Show Sunday as the first day
-                                         in the week
-        CAL_MONDAY_FIRST                 Show Monday as the first day
-                                         in the week
-        CAL_SHOW_HOLIDAYS                Highlight holidays in the
-                                         calendar
-        CAL_NO_YEAR_CHANGE               Disable the year changing
-        CAL_NO_MONTH_CHANGE              Disable the month (and,
-                                         implicitly, the year) changing
-        CAL_SHOW_SURROUNDING_WEEKS       Show the neighbouring weeks in
-                                         the previous and next months
-        CAL_SEQUENTIAL_MONTH_SELECTION   Use alternative, more compact,
-                                         style for the month and year
-                                         selection controls.
-
-    The default calendar style is CAL_SHOW_HOLIDAYS.
-
-    Events
-    -------
-        ===========================    ==============================
-        EVT_CALENDAR                   A day was double clicked in the
-                                       calendar.
-        EVT_CALENDAR_SEL_CHANGED       The selected date changed.
-        EVT_CALENDAR_DAY               The selected day changed.
-        EVT_CALENDAR_MONTH             The selected month changed.
-        EVT_CALENDAR_YEAR              The selected year changed.
-        EVT_CALENDAR_WEEKDAY_CLICKED   User clicked on the week day
-                                       header
-
-    Note that changing the selected date will result in one of
-    EVT_CALENDAR_DAY, MONTH or YEAR events and an EVT_CALENDAR_SEL_CHANGED
-    event.
-        
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -462,15 +424,7 @@ class CalendarCtrl(_core.Control):
 
         Returns 3-tuple with information about the given position on the
         calendar control.  The first value of the tuple is a result code and
-        determines the validity of the remaining two values.  The result codes
-        are:
-
-            ===================    ============================================
-            CAL_HITTEST_NOWHERE    hit outside of anything
-            CAL_HITTEST_HEADER     hit on the header, weekday is valid
-            CAL_HITTEST_DAY        hit on a day in the calendar, date is set.
-            ===================    ============================================
-
+        determines the validity of the remaining two values.
         """
         return _calendar.CalendarCtrl_HitTest(*args, **kwargs)
 
@@ -494,15 +448,15 @@ class CalendarCtrl(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _calendar.CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -531,15 +485,15 @@ def CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs):
     """
     CalendarCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _calendar.CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
