@@ -23,13 +23,13 @@ Constructor.
 
 \membersection{wxHtmlDCRenderer::SetDC}\label{wxhtmldcrenderersetdc}
 
-\func{void}{SetDC}{\param{wxDC* }{dc}, \param{double }{pixel_scale = 1.0}}
+\func{void}{SetDC}{\param{wxDC* }{dc}, \param{double }{pixel\_scale = 1.0}}
 
 Assign DC instance to the renderer.
 
-{\it pixel_scale} can be used when rendering to high-resolution DCs (e.g. printer) to adjust size of pixel metrics.
-(Many dimensions in HTML are given in pixels - e.g. image sizes. 300x300 image would be only one
-inch wide on typical printer. With pixel_scale = 3.0 it would be 3 inches.)
+{\it pixel\_scale} can be used when rendering to high-resolution DCs (e.g. printer) to adjust size of pixel metrics.
+(Many dimensions in HTML are given in pixels -- e.g. image sizes. 300x300 image would be only one
+inch wide on typical printer. With pixel\_scale = 3.0 it would be 3 inches.)
 
 \wxheading{Parameters}
 

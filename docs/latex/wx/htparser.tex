@@ -122,31 +122,6 @@ See wxHtmlWinParser for details.
 
 Returns pointer to the source being parsed.
 
-\membersection{wxHtmlParser::GetTempData}\label{wxhtmlparsergettempdata}
-
-\func{virtual wxList*}{GetTempData}{\void}
-
-This method returns list of wxObjects that represents
-all data allocated by the parser. These can't be freed
-by the destructor because they must be valid as long as
-GetProduct's return value is valid - the caller must
-explicitly call
-
-\begin{verbatim}
-delete (MyParser -> GetTempData());
-\end{verbatim}
-
-to free the memory (this method always sets the list to delete its contents).
-
-\wxheading{Example}
-
-Why is this neccessary? Imagine wxHtmlWinParser: when handling
-a FONT tag it creates some fonts. These fonts are then used by wxHtmlWindow
-to display the text. But the wxHtmWinParser object is needed only when parsing
-the document - it may be deleted then. But fonts CAN'T be deleted - they
-must exist as long as the window is displaying text.
-
-GetTempData() solves the problem.
 
 \membersection{wxHtmlParser::InitParser}\label{wxhtmlparserinitparser}
 

@@ -805,11 +805,11 @@ Returns TRUE if the window is enabled for input, FALSE otherwise.
 
 \constfunc{bool}{IsExposed}{\param{int }{x}, \param{int }{y}}
 
-\constfunc{bool}{IsExposed}{\param{wxPoint }{&pt}}
+\constfunc{bool}{IsExposed}{\param{wxPoint }{\&pt}}
 
 \constfunc{bool}{IsExposed}{\param{int }{x}, \param{int }{y}, \param{int }{w}, \param{int }{h}}
 
-\constfunc{bool}{IsExposed}{\param{wxRect }{&rect}}
+\constfunc{bool}{IsExposed}{\param{wxRect }{\&rect}}
 
 Returns TRUE if the given point or rectange area has been exposed since the
 last repaint. Call this in an paint event handler to optimize redrawing by
@@ -1379,7 +1379,7 @@ For example:
 
 \small{%
 \begin{verbatim}
-  void MyWindow::OnPaint(wxPaintEvent& event)
+  void MyWindow::OnPaint(wxPaintEvent\& event)
   {
       wxPaintDC dc(this);
 
@@ -1399,7 +1399,7 @@ Here is an example of using the \helpref{wxRegionIterator}{wxregioniterator} cla
 {\small%
 \begin{verbatim}
 // Called when window needs to be repainted.
-void MyWindow::OnPaint(wxPaintEvent& event)
+void MyWindow::OnPaint(wxPaintEvent\& event)
 {
   wxPaintDC dc(this);
 
@@ -1539,7 +1539,7 @@ default value is FALSE.}
 
 \membersection{wxWindow::PopupMenu}\label{wxwindowpopupmenu}
 
-\func{bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{const wxPoint& }{pos}}
+\func{bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{const wxPoint\& }{pos}}
 
 \func{bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{int }{x}, \param{int }{y}}
 
@@ -1736,7 +1736,7 @@ from within wxWindow::OnSize functions.}
 Note that this function is actually disabled for wxWindow. It has
 effect for wxDialog, wxFrame, wxPanel and wxScrolledWindow.  Windows
 of other types that need to invoke the Layout algorithm should provide
-an EVT_SIZE handler and call
+an EVT\_SIZE handler and call
 \helpref{wxWindow::Layout}{wxwindowlayout} from within it.
 
 \wxheading{See also}
@@ -2176,7 +2176,7 @@ by wxWindows, or that the current value of the dimension should be used.
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{\bf{SetDimensions(x, y, width, height, sizeFlags=wxSIZE_AUTO)}}{}
+\twocolitem{\bf{SetDimensions(x, y, width, height, sizeFlags=wxSIZE\_AUTO)}}{}
 \twocolitem{\bf{SetSize(size)}}{}
 \twocolitem{\bf{SetPosition(point)}}{}
 \end{twocollist}}

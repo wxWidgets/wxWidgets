@@ -124,7 +124,7 @@ Sets the container's {\it vertical alignment}. This is per-line alignment!
 \twocolitem{{\bf HTML\_ALIGN\_TOP}}{cells are under the line}
 \end{twocollist}
 
-\image{}{alignv.bmp}
+\helponly{\image{}{alignv.bmp}}
 }
 
 \membersection{wxHtmlContainerCell::SetBackgroundColour}\label{wxhtmlcontainercellsetbackgroundcolour}
@@ -168,7 +168,7 @@ combination of following constants:
 \twocolitem{{\bf HTML\_INDENT\_ALL}}{all 4 borders}
 \end{twocollist}
 
-\image{}{indent.bmp}
+\helponly{\image{}{indent.bmp}}
 }
 
 \docparam{units}{Units of {\it i}. This parameter affects interpretation of {\it} value.
@@ -182,7 +182,7 @@ of parent container}
 
 \membersection{wxHtmlContainerCell::SetMinHeight}\label{wxhtmlcontainercellsetminheight}
 
-\func{void}{SetMinHeight}{\param{int }{h}, \param{int }{align = HTML_ALIGN_TOP}}
+\func{void}{SetMinHeight}{\param{int }{h}, \param{int }{align = HTML\_ALIGN\_TOP}}
 
 Sets minimal height of the container.
 
@@ -197,15 +197,15 @@ much smaller area.
 \docparam{h}{The minimal height.}
 
 \docparam{align}{If height of the container is lower than the minimum height, empty space must be inserted
-somewhere in order to ensure minimal height. This parameter is one of {\bf HTML_ALIGN_TOP,
-HTML_ALIGN_BOTTOM, HTML_ALIGN_CENTER} constants. It refers to the {\it contents}, not to the
+somewhere in order to ensure minimal height. This parameter is one of {\bf HTML\_ALIGN\_TOP,
+HTML\_ALIGN\_BOTTOM, HTML\_ALIGN\_CENTER} constants. It refers to the {\it contents}, not to the
 empty place!}
 
 \membersection{wxHtmlContainerCell::SetWidthFloat}\label{wxhtmlcontainercellsetwidthfloat}
 
 \func{void}{SetWidthFloat}{\param{int }{w}, \param{int }{units}}
 
-\func{void}{SetWidthFloat}{\param{const wxHtmlTag\& }{tag}, \param{double }{pixel_scale = 1.0}}
+\func{void}{SetWidthFloat}{\param{const wxHtmlTag\& }{tag}, \param{double }{pixel\_scale = 1.0}}
 
 Sets floating width adjustment.
 
@@ -213,7 +213,7 @@ The normal behaviour of container is that its width is the same as the width of
 parent container (and thus you can have only one sub-container per line).
 You can change this by setting FWA.
 
-{\it pixel_scale} is number of real pixels that equals to 1 HTML pixel.
+{\it pixel\_scale} is number of real pixels that equals to 1 HTML pixel.
 
 \wxheading{Parameters}
 

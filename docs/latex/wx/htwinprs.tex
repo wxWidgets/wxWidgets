@@ -14,8 +14,6 @@ its mail goal is to parse HTML input so that it can be displayed in
 
 \begin{enumerate}
 \item Product of parsing is wxHtmlCell (resp. wxHtmlContainer) object.
-\item This parser produces temporary data! You should call
-\helpref{delete GetTempData()}{wxhtmlparsergettempdata}!
 \end{enumerate}
 
 \wxheading{Derived from}
@@ -63,9 +61,6 @@ Creates font based on current setting (see
 and returns pointer to it.
 (If the font was already created only a pointer is returned.)
 
-Fonts created during parsing are temporary data and are not freed on DoneParser.
-You must call \helpref{delete myparser->GetTempData();}{wxhtmlparsergettempdata}
-to free the memory!
 
 \membersection{wxHtmlWinParser::GetActualColor}\label{wxhtmlwinparsergetactualcolor}
 
@@ -119,6 +114,13 @@ Returns pointer to the DC used during parsing.
 \constfunc{int}{GetFontBold}{\void}
 
 Returns TRUE if actual font is bold, FALSE otherwise.
+
+\membersection{wxHtmlWinParser::GetFontFace}\label{wxhtmlwinparsergetfontface}
+
+\constfunc{wxString}{GetFontFace}{\void}
+
+Returns actual font face name.
+
 
 \membersection{wxHtmlWinParser::GetFontFixed}\label{wxhtmlwinparsergetfontfixed}
 
@@ -176,7 +178,7 @@ title only if some window is associated, otherwise it does nothing)
 
 Opens new container and returns pointer to it (see \helpref{Overview}{cells}).
 
-%
+
 \membersection{wxHtmlWinParser::SetActualColor}\label{wxhtmlwinparsersetactualcolor}
 
 \func{void}{SetActualColor}{\param{const wxColour\& }{clr}}
@@ -192,28 +194,39 @@ Sets default horizontal alignment (see
 \helpref{wxHtmlContainerCell::SetAlignHor}{wxhtmlcontainercellsetalignhor}.)
 Alignment of newly opened container is set to this value.
 
-%\membersection{wxHtmlWinParser::SetContainer}\label{wxhtmlwinparsersetcontainer}
-%
-%\func{wxHtmlContainerCell*}{SetContainer}{\param{wxHtmlContainerCell *}{c}}
-%
-%Allows you to directly set opened container. This is not recommended - you should use OpenContainer
-%whereever possible.
-%
+
+\membersection{wxHtmlWinParser::SetContainer}\label{wxhtmlwinparsersetcontainer}
+
+\func{wxHtmlContainerCell*}{SetContainer}{\param{wxHtmlContainerCell *}{c}}
+
+Allows you to directly set opened container. This is not recommended - you should use OpenContainer
+whereever possible.
+
 
 \membersection{wxHtmlWinParser::SetDC}\label{wxhtmlwinparsersetdc}
 
-\func{virtual void}{SetDC}{\param{wxDC }{*dc}, \param{double }{pixel_scale = 1.0}}
+\func{virtual void}{SetDC}{\param{wxDC }{*dc}, \param{double }{pixel\_scale = 1.0}}
 
-Sets the DC. This must be called before \helpref{Parse}{wxhtmlparserparse}! {\it pixel_scale}
-can be used when rendering to high-resolution DCs (e.g. printer) to adjust size of pixel metrics.
-(Many dimensions in HTML are given in pixels - e.g. image sizes. 300x300 image would be only one
-inch wide on typical printer. With pixel_scale = 3.0 it would be 3 inches.)
+Sets the DC. This must be called before \helpref{Parse}{wxhtmlparserparse}!
+{\it pixel\_scale}  can be used when rendering to high-resolution 
+DCs (e.g. printer) to adjust size of pixel metrics. (Many dimensions in 
+HTML are given in pixels -- e.g. image sizes. 300x300 image would be only one
+inch wide on typical printer. With pixel\_scale = 3.0 it would be 3 inches.)
+
 
 \membersection{wxHtmlWinParser::SetFontBold}\label{wxhtmlwinparsersetfontbold}
 
 \func{void}{SetFontBold}{\param{int }{x}}
 
 Sets bold flag of actualfont. {\it x} is either TRUE of FALSE.
+
+\membersection{wxHtmlWinParser::SetFontFace}\label{wxhtmlwinparsersetfontface}
+
+\func{void}{SetFontFace}{\param{const wxString\& }{face}}
+
+Sets current font face to {\it face}. This affects either fixed size
+font or proportional, depending on context (whether the parser is 
+inside {\tt <TT>} tag or not).
 
 \membersection{wxHtmlWinParser::SetFontFixed}\label{wxhtmlwinparsersetfontfixed}
 
@@ -226,6 +239,7 @@ Sets fixed face flag of actualfont. {\it x} is either TRUE of FALSE.
 \func{void}{SetFontItalic}{\param{int }{x}}
 
 Sets italic flag of actualfont. {\it x} is either TRUE of FALSE.
+
 
 \membersection{wxHtmlWinParser::SetFontSize}\label{wxhtmlwinparsersetfontsize}
 

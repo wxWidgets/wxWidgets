@@ -90,7 +90,7 @@ in both ANSI and Unicode modes could look like:
 \end{verbatim}
 
 Of course, it would be nearly impossibly to write such programs if it had to
-be done this way (try to imagine the number of {\tt #ifdef UNICODE} an average
+be done this way (try to imagine the number of {\tt \#ifdef UNICODE} an average
 program would have had!). Luckily, there is another way - see the next
 section.
 
@@ -104,7 +104,7 @@ In wxWindows, the code fragment froim above should be written instead:
     int len = s.Len();
 \end{verbatim}
 
-What happens here? First of all, you see that there are no more {\tt #ifdef}s
+What happens here? First of all, you see that there are no more {\tt \#ifdef}s
 at all. Instead, we define some types and macros which behave differently in
 the Unicode and ANSI builds and allows us to avoid using conditional
 compilation in the program itself.

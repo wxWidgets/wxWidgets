@@ -4,7 +4,7 @@
 \section{\class{wxTextInputStream}}\label{wxtextinputstream}
 
 This class provides functions that read text datas using an input stream.
-So, you can read \it{text} floats, integers.
+So, you can read {\it text} floats, integers.
 
 The wxTextInputStream correctly reads text files (or streams) in DOS, Macintosh
 and Unix formats and reports a single newline char as a line ending.
@@ -108,7 +108,7 @@ and Unix in their native formats (concerning the line ending).
 
 \membersection{wxTextOutputStream::wxTextOutputStream}\label{wxtextoutputstreamconstr}
 
-\func{}{wxTextOutputStream}{\param{wxOutputStream\&}{ stream}, \param{wxEOL}{ mode = wxEOL_NATIVE}}
+\func{}{wxTextOutputStream}{\param{wxOutputStream\&}{ stream}, \param{wxEOL}{ mode = wxEOL\_NATIVE}}
 
 Constructs a text stream object from an output stream. Only write methods will
 be available.
@@ -117,7 +117,7 @@ be available.
 
 \docparam{stream}{The output stream.}
 
-\docparam{mode}{The end-of-line mode. One of {\bf wxEOL_NATIVE}, {\bf wxEOL_DOS}, {\bf wxEOL_MAC} or {\bf wxEOL_UNIX}.}
+\docparam{mode}{The end-of-line mode. One of {\bf wxEOL\_NATIVE}, {\bf wxEOL\_DOS}, {\bf wxEOL\_MAC} or {\bf wxEOL\_UNIX}.}
 
 \membersection{wxTextOutputStream::\destruct{wxTextOutputStream}}
 
@@ -129,13 +129,13 @@ Destroys the wxTextOutputStream object.
 
 \func{wxEOL}{wxTextOutputStream::GetMode}{\void}
 
-Returns the end-of-line mode. One of {\bf wxEOL_DOS}, {\bf wxEOL_MAC} or {\bf wxEOL_UNIX}.
+Returns the end-of-line mode. One of {\bf wxEOL\_DOS}, {\bf wxEOL\_MAC} or {\bf wxEOL\_UNIX}.
 
 \membersection{wxTextOutputStream::SetMode}
 
-\func{void}{wxTextOutputStream::SetMode}{{\param wxEOL}{ mode = wxEOL_NATIVE}}
+\func{void}{wxTextOutputStream::SetMode}{{\param wxEOL}{ mode = wxEOL\_NATIVE}}
 
-Set the end-of-line mode. One of {\bf wxEOL_NATIVE}, {\bf wxEOL_DOS}, {\bf wxEOL_MAC} or {\bf wxEOL_UNIX}.
+Set the end-of-line mode. One of {\bf wxEOL\_NATIVE}, {\bf wxEOL\_DOS}, {\bf wxEOL\_MAC} or {\bf wxEOL\_UNIX}.
 
 \membersection{wxTextOutputStream::Write8}
 

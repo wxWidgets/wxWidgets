@@ -62,10 +62,10 @@ Renders the cell.
 add this to m\_PosX,m\_PosY when passing coordinates to dc's methods
 Example : {\tt dc -> DrawText("hello", x + m\_PosX, y + m\_PosY)}}
 
-\docparam{view_y1}{y-coord of the first line visible in window. This is
+\docparam{view\_y1}{y-coord of the first line visible in window. This is
 used to optimize rendering speed}
 
-\docparam{view_y2}{y-coord of the last line visible in window. This is
+\docparam{view\_y2}{y-coord of the last line visible in window. This is
 used to optimize rendering speed}
 
 \membersection{wxHtmlCell::DrawInvisible}\label{wxhtmlcelldrawinvisible}
@@ -96,7 +96,7 @@ return pointer to the first cell that matches the condition)
 
 It is recommended way how to obtain pointer to particular cell or
 to cell of some type (e.g. wxHtmlAnchorCell reacts on
-HTML_COND_ISANCHOR condition)
+HTML\_COND\_ISANCHOR condition)
 
 \wxheading{Parameters}
 
@@ -107,9 +107,9 @@ HTML_COND_ISANCHOR condition)
 \wxheading{Defined conditions}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf HTML_COND_ISANCHOR}}{Finds particular anchor. 
+\twocolitem{{\bf HTML\_COND\_ISANCHOR}}{Finds particular anchor. 
 {\it param} is pointer to wxString with name of the anchor.}
-\twocolitem{{\bf HTML_COND_USER}}{User-defined conditions start
+\twocolitem{{\bf HTML\_COND\_USER}}{User-defined conditions start
 from this number.}
 \end{twocollist}
 
@@ -117,15 +117,17 @@ from this number.}
 
 \constfunc{int}{GetDescent}{\void}
 
-Returns descent value of the cell (m_Descent member). See explanation:
+Returns descent value of the cell (m\_Descent member). 
+\helponly{See explanation:
 
 \image{}{descent.bmp}
+}
 
 \membersection{wxHtmlCell::GetHeight}\label{wxhtmlcellgetheight}
 
 \constfunc{int}{GetHeight}{\void}
 
-Returns height of the cell (m_Height member).
+Returns height of the cell (m\_Height member).
 
 \membersection{wxHtmlCell::GetLink}\label{wxhtmlcellgetlink}
 
@@ -139,7 +141,7 @@ See \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo}.
 
 \docparam{x,y}{Coordinates of position where the user pressed mouse button.
 These coordinates are used e.g. by COLORMAP. Values are relative to the
-upper left corner of THIS cell (i.e. from 0 to m_Width or m_Height)}
+upper left corner of THIS cell (i.e. from 0 to m\_Width or m\_Height)}
 
 \membersection{wxHtmlCell::GetNext}\label{wxhtmlcellgetnext}
 
@@ -174,7 +176,7 @@ parent's \helpref{Layout}{wxhtmlcelllayout} was called before!
 
 \constfunc{int}{GetWidth}{\void}
 
-Returns width of the cell (m_Width member).
+Returns width of the cell (m\_Width member).
 
 \membersection{wxHtmlCell::Layout}\label{wxhtmlcelllayout}
 

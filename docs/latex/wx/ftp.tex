@@ -22,7 +22,7 @@
 
 \func{bool}{SendCommand}{\param{const wxString\&}{ command}, \param{char }{ret}}
 
-Send the specified \it{command} to the FTP server. \it{ret} specifies
+Send the specified {\it command} to the FTP server. {\it ret} specifies
 the expected result.
 
 \wxheading{Return value}
@@ -72,7 +72,7 @@ Returns the current FTP working directory.
 
 \func{bool}{Rename}{\param{const wxString\&}{ src}, \param{const wxString\&}{ dst}}
 
-Rename the specified \it{src} element to \it{dst}. Returns TRUE if successful.
+Rename the specified {\it src} element to {\it dst}. Returns TRUE if successful.
 
 % ----------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ Rename the specified \it{src} element to \it{dst}. Returns TRUE if successful.
 
 \func{bool}{RmFile}{\param{const wxString\&}{ path}}
 
-Delete the file specified by \it{path}. Returns TRUE if successful.
+Delete the file specified by {\it path}. Returns TRUE if successful.
 
 % ----------------------------------------------------------------------------
 
@@ -124,8 +124,8 @@ to specify a user and a password.
 \func{wxList *}{GetList}{\param{const wxString\&}{ wildcard}}
 
 The GetList function is quite low-level. It returns the list of the files in
-the current directory. The list can be filtered using the \it{wildcard} string.
-If \it{wildcard} is a NULL string, it will return all files in directory.
+the current directory. The list can be filtered using the {\it wildcard} string.
+If {\it wildcard} is a NULL string, it will return all files in directory.
 
 The form of the list can change from one peer system to another. For example,
 for a UNIX peer system, it will look like this:
@@ -154,7 +154,7 @@ The list is a string list and one node corresponds to a line sent by the peer.
 
 \func{wxOutputStream *}{GetOutputStream}{\param{const wxString\&}{ file}}
 
-Initializes an output stream to the specified \it{file}. The returned
+Initializes an output stream to the specified {\it file}. The returned
 stream has all but the seek functionality of wxStreams. When the user finishes
 writing data, he has to delete the stream to close it.
 

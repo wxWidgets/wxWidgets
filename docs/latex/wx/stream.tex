@@ -24,8 +24,8 @@ None
 
 \func{}{wxStreamBuffer}{\param{wxStreamBase\&}{ stream}, \param{BufMode}{ mode}}
 
-Constructor, creates a new stream buffer using \it{stream} as a parent stream
-and \it{mode} as the IO mode. \it{mode} can be: wxStreamBuffer::read,
+Constructor, creates a new stream buffer using {\it stream} as a parent stream
+and {\it mode} as the IO mode. {\it mode} can be: wxStreamBuffer::read,
 wxStreamBuffer::write, wxStreamBuffer::read\_write.
 
 
@@ -44,7 +44,7 @@ the stream buffers:
 \func{}{wxStreamBuffer}{\param{BufMode}{ mode}}
 
 Constructor, creates a new empty stream buffer which won't flush any data
-to a stream. \it{mode} specifies the type of the buffer (read, write, read\_write).
+to a stream. {\it mode} specifies the type of the buffer (read, write, read\_write).
 This stream buffer has the advantage to be stream independent and to
 work only on memory buffers but it is still compatible with the rest of the
 wxStream classes. You can write, read to this special stream and it will
@@ -96,7 +96,7 @@ It returns the size of the data read. If thereturned size is different of the sp
 
 \func{size\_t}{Read}{\param{wxStreamBuffer *}{buffer}}
 
-Reads a \it{buffer}. The function returns when \it{buffer} is full or when there isn't
+Reads a {\it buffer}. The function returns when {\it buffer} is full or when there isn't
 data anymore in the current buffer.
 
 \wxheading{See also}
@@ -107,7 +107,7 @@ data anymore in the current buffer.
 
 \func{size\_t}{Write}{\param{const void *}{buffer}, \param{size\_t }{size}}
 
-Writes a block of the specified \it{size} using datas of \it{buffer}. The datas
+Writes a block of the specified {\it size} using datas of {\it buffer}. The datas
 are cached in a buffer before being sent in one block to the stream.
 
 \func{size\_t}{Write}{\param{wxStreamBuffer *}{buffer}}
@@ -147,8 +147,8 @@ You aren't directly notified if an error occured during the IO call.
 \constfunc{off\_t}{Tell}{\void}
 
 Gets the current position in the stream. This position is calculated from
-the \it{real} position in the stream and from the internal buffer position: so
-it gives you the position in the \it{real} stream counted from the start of
+the {\it real} position in the stream and from the internal buffer position: so
+it gives you the position in the {\it real} stream counted from the start of
 the stream.
 
 \wxheading{Return value}
@@ -162,7 +162,7 @@ other case.
 
 Changes the current position.
 
-\it{mode} may be one of the following:
+{\it mode} may be one of the following:
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
@@ -271,7 +271,7 @@ Returns the amount of bytes read during the last IO call to the parent stream.
 \func{void}{Fixed}{\param{bool}{ fixed}}
 
 Toggles the fixed flag. Usually this flag is toggled at the same time as 
-\it{flushable}. This flag allows (when it has the FALSE value) or forbids
+{\it flushable}. This flag allows (when it has the FALSE value) or forbids
 (when it has the TRUE value) the stream buffer to resize dynamically the IO buffer.
 
 \wxheading{See also}
@@ -282,7 +282,7 @@ Toggles the fixed flag. Usually this flag is toggled at the same time as
 
 \func{void}{Flushable}{\param{bool}{ flushable}}
 
-Toggles the flushable flag. If \it{flushable} is disabled, no datas are sent
+Toggles the flushable flag. If {\it flushable} is disabled, no datas are sent
 to the parent stream.
 
 \membersection{wxStreamBuffer::FlushBuffer}

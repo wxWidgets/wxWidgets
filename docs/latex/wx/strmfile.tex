@@ -13,8 +13,8 @@ in one aspect, namely when to report that the end of the file has been
 reached. This is documented in \helpref{wxFile::Eof}{wxfileeof} and 
 \helpref{wxFFile::Eof}{wxffileeof} and the behaviour of the stream
 classes reflects this difference, i.e. wxFileInputStream will report
-wxSTREAM_EOF after having read the last byte whereas wxFFileInputStream
-will report wxSTREAM_EOF after trying to read {\it past} the last byte.
+wxSTREAM\_EOF after having read the last byte whereas wxFFileInputStream
+will report wxSTREAM\_EOF after trying to read {\it past} the last byte.
 
 \wxheading{Derived from}
 
@@ -37,11 +37,11 @@ will report wxSTREAM_EOF after trying to read {\it past} the last byte.
 
 \func{}{wxFileInputStream}{\param{const wxString\&}{ ifileName}}
 
-Opens the specified file using its \it{ifilename} name in read-only mode.
+Opens the specified file using its {\it ifilename} name in read-only mode.
 
 \func{}{wxFileInputStream}{\param{wxFile\&}{ file}}
 
-Initializes a file stream in read-only mode using the file I/O object \it{file}.
+Initializes a file stream in read-only mode using the file I/O object {\it file}.
 
 \func{}{wxFileInputStream}{\param{int}{ fd}}
 
@@ -74,8 +74,8 @@ in one aspect, namely when to report that the end of the file has been
 reached. This is documented in \helpref{wxFile::Eof}{wxfileeof} and 
 \helpref{wxFFile::Eof}{wxffileeof} and the behaviour of the stream
 classes reflects this difference, i.e. wxFileInputStream will report
-wxSTREAM_EOF after having read the last byte whereas wxFFileInputStream
-will report wxSTREAM_EOF after trying to read {\it past} the last byte.
+wxSTREAM\_EOF after having read the last byte whereas wxFFileInputStream
+will report wxSTREAM\_EOF after trying to read {\it past} the last byte.
 
 \wxheading{Derived from}
 
@@ -98,16 +98,16 @@ will report wxSTREAM_EOF after trying to read {\it past} the last byte.
 
 \func{}{wxFileOutputStream}{\param{const wxString\&}{ ofileName}}
 
-Creates a new file with \it{ofilename} name and initializes the stream in
+Creates a new file with {\it ofilename} name and initializes the stream in
 write-only mode. 
 
 \func{}{wxFileOutputStream}{\param{wxFile\&}{ file}}
 
-Initializes a file stream in write-only mode using the file I/O object \it{file}.
+Initializes a file stream in write-only mode using the file I/O object {\it file}.
 
 \func{}{wxFileOutputStream}{\param{int}{ fd}}
 
-Initializes a file stream in write-only mode using the file descriptor \it{fd}.
+Initializes a file stream in write-only mode using the file descriptor {\it fd}.
 
 \membersection{wxFileOutputStream::\destruct{wxFileOutputStream}}
 
@@ -145,7 +145,7 @@ Returns TRUE if the stream is initialized and ready.
 \func{}{wxFileStream}{\param{const wxString\&}{ iofileName}}
 
 Initializes a new file stream in read-write mode using the specified 
-\it{iofilename} name.
+{\it iofilename} name.
 
 
 % -----------------------------------------------------------------------------
@@ -163,8 +163,8 @@ in one aspect, namely when to report that the end of the file has been
 reached. This is documented in \helpref{wxFile::Eof}{wxfileeof} and 
 \helpref{wxFFile::Eof}{wxffileeof} and the behaviour of the stream
 classes reflects this difference, i.e. wxFileInputStream will report
-wxSTREAM_EOF after having read the last byte whereas wxFFileInputStream
-will report wxSTREAM_EOF after trying to read {\it past} the last byte.
+wxSTREAM\_EOF after having read the last byte whereas wxFFileInputStream
+will report wxSTREAM\_EOF after trying to read {\it past} the last byte.
 
 \wxheading{Derived from}
 
@@ -224,8 +224,8 @@ in one aspect, namely when to report that the end of the file has been
 reached. This is documented in \helpref{wxFile::Eof}{wxfileeof} and 
 \helpref{wxFFile::Eof}{wxffileeof} and the behaviour of the stream
 classes reflects this difference, i.e. wxFileInputStream will report
-wxSTREAM_EOF after having read the last byte whereas wxFFileInputStream
-will report wxSTREAM_EOF after trying to read {\it past} the last byte.
+wxSTREAM\_EOF after having read the last byte whereas wxFFileInputStream
+will report wxSTREAM\_EOF after trying to read {\it past} the last byte.
 
 \wxheading{Derived from}
 
@@ -248,7 +248,7 @@ will report wxSTREAM_EOF after trying to read {\it past} the last byte.
 
 \func{}{wxFFileOutputStream}{\param{const wxString\&}{ ofileName}}
 
-Creates a new file with \it{ofilename} name and initializes the stream in
+Creates a new file with {\it ofilename} name and initializes the stream in
 write-only mode. 
 
 \func{}{wxFFileOutputStream}{\param{wxFFile\&}{ file}}
@@ -295,6 +295,6 @@ Returns TRUE if the stream is initialized and ready.
 \func{}{wxFFileStream}{\param{const wxString\&}{ iofileName}}
 
 Initializes a new file stream in read-write mode using the specified 
-\it{iofilename} name.
+{\it iofilename} name.
 
 

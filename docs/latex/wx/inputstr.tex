@@ -50,7 +50,7 @@ Returns the first character in the input queue without removing it.
 
 \func{wxInputStream\&}{Read}{\param{void *}{buffer}, \param{size\_t}{ size}}
 
-Reads the specified amount of bytes and stores the data in \it{buffer}.
+Reads the specified amount of bytes and stores the data in {\it buffer}.
 
 \wxheading{Warning}
 
@@ -87,7 +87,7 @@ Returns the current stream position.
 
 \func{size\_t}{Ungetch}{\param{const char*}{ buffer}, \param{size\_t}{ size}}
 
-This function is only useful in \it{read} mode. It is the manager of the "Write-Back"
+This function is only useful in {\it read} mode. It is the manager of the "Write-Back"
 buffer. This buffer acts like a temporary buffer where datas which has to be
 read during the next read IO call are put. This is useful when you get a big
 block of data which you didn't want to read: you can replace them at the top

@@ -53,14 +53,14 @@ to be reestablished: but you don't have to take care of this wxHTTP reestablishe
 \func{void}{SetHeader}{\param{const wxString\&}{ header}, \param{const wxString\&}{ h\_data}}
 
 It sets data of a field to be sent during the next request to the HTTP server. The field
-name is specified by \it{header} and the content by \it{h\_data}.
+name is specified by {\it header} and the content by {\it h\_data}.
 This is a low level function and it assumes that you know what you are doing.
 
 \membersection{wxHTTP::GetHeader}
 
 \func{wxString}{GetHeader}{\param{const wxString\&}{ header}}
 
-Returns the data attached with a field whose name is specified by \it{header}.
+Returns the data attached with a field whose name is specified by {\it header}.
 If the field doesn't exist, it will return an empty string and not a NULL string.
 
 \wxheading{Note}

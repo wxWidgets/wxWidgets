@@ -31,18 +31,20 @@ Returns string with all params.
 Example : tag contains {\tt <FONT SIZE=+2 COLOR="\#000000">}. Call to
 tag.GetAllParams() would return {\tt SIZE=+2 COLOR="\#000000"}.
 
+
 \membersection{wxHtmlTag::GetBeginPos}\label{wxhtmltaggetbeginpos}
 
 \constfunc{int}{GetBeginPos}{\void}
 
 Returns beginning position of the text {\it between} this tag and paired
 ending tag. 
-See explanation (returned position is marked with '^'):
+See explanation (returned position is marked with `|'):
 
 \begin{verbatim}
 bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
-                   ^
+                   |
 \end{verbatim}
+
 
 \membersection{wxHtmlTag::GetEndPos1}\label{wxhtmltaggetendpos1}
 
@@ -50,12 +52,13 @@ bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
 
 Returns ending position of the text {\it between} this tag and paired
 ending tag.
-See explanation (returned position is marked with '^'):
+See explanation (returned position is marked with `|'):
 
 \begin{verbatim}
 bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
-                                        ^
+                                        |
 \end{verbatim}
+
 
 \membersection{wxHtmlTag::GetEndPos2}\label{wxhtmltaggetendpos2}
 
@@ -63,11 +66,11 @@ bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
 
 Returns ending position 2 of the text {\it between} this tag and paired
 ending tag.
-See explanation (returned position is marked with '^'):
+See explanation (returned position is marked with `|'):
 
 \begin{verbatim}
 bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
-                                               ^
+                                               |
 \end{verbatim}
 
 \membersection{wxHtmlTag::GetName}\label{wxhtmltaggetname}
@@ -77,6 +80,7 @@ bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
 Returns tag's name. The name is always in uppercase and it doesn't contain
 '<' or '/' characters. (So the name of {\tt <FONT SIZE=+2>} tag is "FONT"
 and name of {\tt </table>} is "TABLE")
+
 
 \membersection{wxHtmlTag::GetParam}\label{wxhtmltaggetparam}
 

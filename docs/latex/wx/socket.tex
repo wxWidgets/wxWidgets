@@ -411,9 +411,9 @@ Returns a reference to the current object.
 
 \wxheading{Remark/Warning}
 
-wxSocketBase::WriteMsg() will behave as if the wxSOCKET_WAITALL flag was always set
-and it will always ignore the wxSOCKET_NOWAIT flag. The exact behaviour of WriteMsg
-depends on the wxSOCKET_BLOCK flag. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
+wxSocketBase::WriteMsg() will behave as if the wxSOCKET\_WAITALL flag was always set
+and it will always ignore the wxSOCKET\_NOWAIT flag. The exact behaviour of WriteMsg
+depends on the wxSOCKET\_BLOCK flag. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
 
 \wxheading{See also}
 
@@ -450,9 +450,9 @@ Returns a reference to the current object.
 
 \wxheading{Remark/Warning}
 
-wxSocketBase::ReadMsg() will behave as if the wxSOCKET_WAITALL flag was always set
-and it will always ignore the wxSOCKET_NOWAIT flag. The exact behaviour of ReadMsg
-depends on the wxSOCKET_SPEED flag. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
+wxSocketBase::ReadMsg() will behave as if the wxSOCKET\_WAITALL flag was always set
+and it will always ignore the wxSOCKET\_NOWAIT flag. The exact behaviour of ReadMsg
+depends on the wxSOCKET\_SPEED flag. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
 
 \wxheading{See also}
 
@@ -653,7 +653,7 @@ Calls to SaveState / RestoreState can be nested.
 %
 \membersection{wxSocketBase::GetLocal}{wxsocketbasegetlocal}
 
-\constfunc{bool}{GetLocal}{\param{wxSockAddress\& }{addr_man}}
+\constfunc{bool}{GetLocal}{\param{wxSockAddress\& }{addr\_man}}
 
 This function returns the local address field of the socket. The local
 address field contains the complete local address of the socket (local
@@ -668,7 +668,7 @@ It returns TRUE if no errors happened, FALSE otherwise.
 %
 \membersection{wxSocketBase::GetPeer}{wxsocketbasegetlocal}
 
-\constfunc{bool}{GetPeer}{\param{wxSockAddress\& }{addr_man}}
+\constfunc{bool}{GetPeer}{\param{wxSockAddress\& }{addr\_man}}
 
 This function returns the peer address field of the socket. The peer 
 address field contains the complete peer host address of the socket
@@ -881,7 +881,7 @@ functions that take a wxSocketEvent argument.
 
 [TODO:]
 A brief note on how to use events.
-The wxSOCKET_INPUT event is generated when the
+The wxSOCKET\_INPUT event is generated when the
 
 \wxheading{See also}
 
