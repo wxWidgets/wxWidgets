@@ -619,6 +619,25 @@ END_EVENT_TABLE()
 // `Main program' equivalent, creating windows and returning main app frame
 bool DnDApp::OnInit()
 {
+    // load our ressources
+    wxPathList pathList;
+    pathList.Add(".");
+#ifdef __WXMSW__
+    pathList.Add("./Debug");
+    pathList.Add("./Release");
+#endif // wxMSW
+
+    wxString path = pathList.FindValidPath("dnd.wxr");
+    if ( !path )
+    {
+        wxLogError("Can't find the resource file dnd.wxr in the current "
+                   "directory, aborting.");
+
+        return FALSE;
+    }
+
+    wxDefaultResourceTable->ParseResourceFile(path);
+
 #if wxUSE_LIBPNG
     wxImage::AddHandler( new wxPNGHandler );
 #endif
@@ -632,8 +651,6 @@ bool DnDApp::OnInit()
     frame->Show(TRUE);
 
     SetTopWindow(frame);
-
-    wxDefaultResourceTable->ParseResourceFile("dnd.wxr");
 
     return TRUE;
 }
@@ -1299,11 +1316,29 @@ void DnDShapeFrame::OnClearShape(wxCommandEvent& event)
 void DnDShapeFrame::OnCopyShape(wxCommandEvent& event)
 {
     if ( m_shape )
+    {
+        wxClipboardLocker clipLocker;
+        if ( !clipLocker )
+        {
+            wxLogError("Can't open the clipboard");
+
+            return;
+        }
+
         wxTheClipboard->AddData(new DnDShapeDataObject(m_shape));
+    }
 }
 
 void DnDShapeFrame::OnPasteShape(wxCommandEvent& event)
 {
+    wxClipboardLocker clipLocker;
+    if ( !clipLocker )
+    {
+        wxLogError("Can't open the clipboard");
+
+        return;
+    }
+
     DnDShapeDataObject shapeDataObject(NULL);
     if ( wxTheClipboard->GetData(shapeDataObject) )
     {
