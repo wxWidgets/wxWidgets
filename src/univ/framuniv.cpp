@@ -84,10 +84,19 @@ void wxFrame::PositionMenuBar()
     {
         // the menubar is positioned above the client size, hence the negative
         // y coord
-        m_frameMenuBar->SetSize(0, -m_frameMenuBar->GetSize().y,
-                                GetClientSize().x, -1);
+        wxCoord heightMbar = m_frameMenuBar->GetSize().y;
+        m_frameMenuBar->SetSize(0,
+
+// FIXME: why doesn't this work as expected in wxGTK??
+#ifdef __WXGTK__
+                                0,
+#else
+                                -heightMbar,
+#endif
+                                GetClientSize().x, heightMbar);
     }
 }
+
 #endif // wxUSE_MENUS
 
 wxPoint wxFrame::GetClientAreaOrigin() const

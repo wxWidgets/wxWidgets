@@ -749,7 +749,7 @@ void wxFrameGTK::DoGetClientSize( int *width, int *height ) const
     wxWindow::DoGetClientSize( width, height );
     if (height)
     {
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
         /* menu bar */
         if (m_frameMenuBar)
         {
@@ -758,7 +758,7 @@ void wxFrameGTK::DoGetClientSize( int *width, int *height ) const
             else
                 (*height) -= wxPLACE_HOLDER;
         }
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_STATUSBAR
         /* status bar */
@@ -802,7 +802,7 @@ void wxFrameGTK::DoSetClientSize( int width, int height )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
         /* menu bar */
         if (m_frameMenuBar)
         {
@@ -811,7 +811,7 @@ void wxFrameGTK::DoSetClientSize( int width, int height )
             else
                 height += wxPLACE_HOLDER;
         }
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_STATUSBAR
         /* status bar */
@@ -900,7 +900,7 @@ void wxFrameGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
          * this hurts in the eye, but I don't want to call SetSize()
          * because I don't want to call any non-native functions here. */
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
         if (m_frameMenuBar)
         {
             int xx = m_miniEdge;
@@ -917,7 +917,7 @@ void wxFrameGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                                   xx, yy, ww, hh );
             client_area_y_offset += hh;
         }
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_TOOLBAR
         if ((m_frameToolBar) && m_frameToolBar->IsShown() &&
@@ -925,7 +925,7 @@ void wxFrameGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
         {
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
             if (m_frameMenuBar)
             {
                 if (!m_menuBarDetached)
@@ -933,7 +933,7 @@ void wxFrameGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                 else
                     yy += wxPLACE_HOLDER;
             }
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
             m_frameToolBar->m_x = xx;
             m_frameToolBar->m_y = yy;
@@ -1035,9 +1035,9 @@ void wxFrameGTK::OnInternalIdle()
         return;
     }
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
     if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 #if wxUSE_TOOLBAR
     if (m_frameToolBar) m_frameToolBar->OnInternalIdle();
 #endif
