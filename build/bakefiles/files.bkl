@@ -1719,20 +1719,20 @@
     src/generic/htmllbox.cpp
 </set>
 <set var="HTML_HDR">
-    html/forcelnk.h
-    html/helpctrl.h
-    html/helpdata.h
-    html/helpfrm.h
-    html/htmlcell.h
-    html/htmldefs.h
-    html/htmlfilt.h
-    html/htmlpars.h
-    html/htmlproc.h
-    html/htmltag.h
-    html/htmlwin.h
-    html/htmprint.h
-    html/m_templ.h
-    html/winpars.h
+    wx/html/forcelnk.h
+    wx/html/helpctrl.h
+    wx/html/helpdata.h
+    wx/html/helpfrm.h
+    wx/html/htmlcell.h
+    wx/html/htmldefs.h
+    wx/html/htmlfilt.h
+    wx/html/htmlpars.h
+    wx/html/htmlproc.h
+    wx/html/htmltag.h
+    wx/html/htmlwin.h
+    wx/html/htmprint.h
+    wx/html/m_templ.h
+    wx/html/winpars.h
     <!-- wxHTML users: -->
     wx/msw/helpbest.h
     wx/htmllbox.h
