@@ -841,7 +841,7 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
 
     // if pointSize is -1, don't specify any
     wxString sizeSpec;
-    if ( fontSpec == -1 )
+    if ( pointSize == -1 )
     {
         sizeSpec = _T('*');
     }
