@@ -650,8 +650,8 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     wxBoxSizer *sizerAll = new wxBoxSizer(wxHORIZONTAL);
 
     wxButton *btnOk = new wxButton(this, wxID_OK, _T("Ok"));
-    m_btnDetails = new wxButton(this, wxID_MORE, _T("&Details >>"));
     sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
+    m_btnDetails = new wxButton(this, wxID_MORE, _T("&Details >>"));
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
 
     wxIcon icon = wxTheApp->GetStdIcon(style & wxICON_MASK);
@@ -669,6 +669,13 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     sizerTop->Fit(this);
 
     btnOk->SetFocus();
+
+    if ( m_messages.GetCount() == 1 )
+    {
+        // no details... it's easier to disable a button than to change the
+        // dialog layout depending on whether we have details or not
+        m_btnDetails->Disable();
+    }
 
     Centre();
 }
@@ -754,7 +761,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
                                     wxDateTime((time_t)m_times[n]).Format(fmt));
             }
 
-            // let the columns size themselves (TODO does this work under GTK?)
+            // let the columns size themselves
             m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
             m_listctrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
 
