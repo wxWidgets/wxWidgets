@@ -3,13 +3,13 @@
 #
 
 all:
-	cd src; make
+	cd src; $(MAKE)
 
 clean:
-	cd src; make clean
-	cd samples; make clean
-	cd utils; make clean
+	cd src; $(MAKE) clean
+	cd samples; $(MAKE) clean
+	cd utils; $(MAKE) clean
     
 
 samples:
-	cd samples; make
+	cd samples; $(MAKE)
