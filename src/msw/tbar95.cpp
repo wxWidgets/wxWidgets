@@ -1136,8 +1136,6 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
             // get the control rect in our client coords
             wxControl *control = tool->GetControl();
             wxRect rectCtrl = control->GetRect();
-            control->ClientToScreen(&rectCtrl.x, &rectCtrl.y);
-            ScreenToClient(&rectCtrl.x, &rectCtrl.y);
 
             // iterate over all buttons
             TBBUTTON tbb;
