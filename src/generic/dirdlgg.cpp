@@ -50,6 +50,7 @@
 #undef GetFirstChild
 #endif
 
+#ifndef __WXMSW__
 /* XPM */
 static char * icon1_xpm[] = {
 /* width height ncolors chars_per_pixel */
@@ -107,6 +108,8 @@ static char * icon2_xpm[] = {
 "   .............",
 "                ",
 "                "};
+
+#endif // !wxMSW
 
 static const int ID_DIRCTRL = 1000;
 static const int ID_TEXTCTRL = 1001;

@@ -258,7 +258,7 @@ void wxMenu::Append(wxMenuItem *pItem)
     else
     {
 #ifdef __WIN32__
-        if ( id == idMenuTitle )
+        if ( (int)id == idMenuTitle )
         {
             // visually select the menu title
             MENUITEMINFO mii;
@@ -855,7 +855,7 @@ void wxMenuBar::SetLabelTop(int pos, const wxString& label)
     }
 
     if ( ::ModifyMenu(GetHmenu(), pos, MF_BYPOSITION | MF_STRING | flagsOld,
-                      id, label) == 0xFFFFFFFF )
+                      id, label) == (int)0xFFFFFFFF )
     {
         wxLogLastError("ModifyMenu");
     }
@@ -1094,7 +1094,7 @@ void wxMenuBar::Attach(wxFrame *frame)
 void wxMenuBar::Detach()
 {
 //    ::DestroyMenu((HMENU)m_hMenu);
-    m_hMenu = NULL;
+    m_hMenu = (WXHMENU)NULL;
     m_menuBarFrame = NULL;
 }
 

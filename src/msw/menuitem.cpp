@@ -208,7 +208,7 @@ void wxMenuItem::SetName(const wxString& strName)
 
         if ( ::ModifyMenu(hMenu, id,
                           MF_BYCOMMAND | flagsOld,
-                          id, data) == 0xFFFFFFFF )
+                          id, data) == (int)0xFFFFFFFF )
         {
             wxLogLastError(wxT("ModifyMenu"));
         }

@@ -156,15 +156,20 @@ void wxPathList::AddEnvList (const wxString& envVariable)
       wxChar *save_ptr, *token = wxStrtok (s, PATH_TOKS, &save_ptr);
 
       if (token)
-        {
+      {
           Add (copystring (token));
           while (token)
-            {
+          {
               if ((token = wxStrtok ((wxChar *) NULL, PATH_TOKS, &save_ptr)) != NULL)
-                Add (wxString(token));
-            }
-        }
-      delete[]s;
+                  Add (wxString(token));
+          }
+      }
+
+      // suppress warning about unused variable save_ptr when wxStrtok() is a
+      // macro which throws away its third argument
+      save_ptr = token;
+
+      delete [] s;
     }
 }
 
@@ -1572,39 +1577,43 @@ bool wxEndsWithPathSeparator(const wxChar *pszFileName)
 // find a file in a list of directories, returns false if not found
 bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, const wxChar *pszFile)
 {
-  // we assume that it's not empty
-  wxCHECK_MSG( !wxIsEmpty(pszFile), FALSE,
-               _("empty file name in wxFindFileInPath"));
+    // we assume that it's not empty
+    wxCHECK_MSG( !wxIsEmpty(pszFile), FALSE,
+            _("empty file name in wxFindFileInPath"));
 
-  // skip path separator in the beginning of the file name if present
-  if ( wxIsPathSeparator(*pszFile) )
-    pszFile++;
+    // skip path separator in the beginning of the file name if present
+    if ( wxIsPathSeparator(*pszFile) )
+        pszFile++;
 
-  // copy the path (strtok will modify it)
-  wxChar *szPath = new wxChar[wxStrlen(pszPath) + 1];
-  wxStrcpy(szPath, pszPath);
+    // copy the path (strtok will modify it)
+    wxChar *szPath = new wxChar[wxStrlen(pszPath) + 1];
+    wxStrcpy(szPath, pszPath);
 
-  wxString strFile;
-  wxChar *pc, *save_ptr;
-  for ( pc = wxStrtok(szPath, wxPATH_SEP, &save_ptr);
-        pc != NULL;
-        pc = wxStrtok((wxChar *) NULL, wxPATH_SEP, &save_ptr) )
-  {
-    // search for the file in this directory
-    strFile = pc;
-    if ( !wxEndsWithPathSeparator(pc) )
-      strFile += wxFILE_SEP_PATH;
-    strFile += pszFile;
+    wxString strFile;
+    wxChar *pc, *save_ptr;
+    for ( pc = wxStrtok(szPath, wxPATH_SEP, &save_ptr);
+          pc != NULL;
+          pc = wxStrtok((wxChar *) NULL, wxPATH_SEP, &save_ptr) )
+    {
+        // search for the file in this directory
+        strFile = pc;
+        if ( !wxEndsWithPathSeparator(pc) )
+            strFile += wxFILE_SEP_PATH;
+        strFile += pszFile;
 
-    if ( FileExists(strFile) ) {
-      *pStr = strFile;
-      break;
+        if ( FileExists(strFile) ) {
+            *pStr = strFile;
+            break;
+        }
     }
-  }
 
-  delete [] szPath;
+    // suppress warning about unused variable save_ptr when wxStrtok() is a
+    // macro which throws away its third argument
+    save_ptr = pc;
 
-  return pc != NULL;  // if true => we breaked from the loop
+    delete [] szPath;
+
+    return pc != NULL;  // if true => we breaked from the loop
 }
 
 void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,

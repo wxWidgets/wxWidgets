@@ -434,7 +434,6 @@ void wxBell()
 // detect WindowsNT correctly
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-  extern char *wxOsVersion;
   if (majorVsn) *majorVsn = 0;
   if (minorVsn) *minorVsn = 0;
 

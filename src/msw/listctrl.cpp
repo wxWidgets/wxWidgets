@@ -1410,7 +1410,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     if ( !GetEventHandler()->ProcessEvent(event) )
         return FALSE;
 
-    if (hdr1->code == LVN_GETDISPINFO)
+    if ( (int)hdr1->code == LVN_GETDISPINFO)
     {
         LV_DISPINFO *info = (LV_DISPINFO *)lParam;
         if ( info->item.mask & LVIF_TEXT )

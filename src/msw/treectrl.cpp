@@ -1444,7 +1444,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                       "message"), tv->action);
                 }
 
-                bool ing = (hdr->code == TVN_ITEMEXPANDING);
+                bool ing = ((int)hdr->code == TVN_ITEMEXPANDING);
                 eventType = g_events[expand][ing];
 
                 event.m_item = (WXHTREEITEM) tv->itemNew.hItem;

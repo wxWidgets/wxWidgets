@@ -440,7 +440,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         {
             if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
                 height = totHeight + extraHeight;
-            else 
+            else
                 height = heightOld;
         }
 
@@ -718,7 +718,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 {
     bool processed = TRUE;
     if ( msg != WM_KEYDOWN )
-        processed = FALSE;        
+        processed = FALSE;
 
     if ( processed )
     {
@@ -759,7 +759,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                 // fall through
 
             default:
-                processed = FALSE;        
+                processed = FALSE;
         }
 
         if ( processed )

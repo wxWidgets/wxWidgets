@@ -41,7 +41,7 @@
 // ----------------------------------------------------------------------------
 
 // the tooltip parent window
-WXHWND wxToolTip::hwndTT = NULL;
+WXHWND wxToolTip::hwndTT = (WXHWND)NULL;
 
 // ----------------------------------------------------------------------------
 // private classes

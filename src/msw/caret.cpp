@@ -153,8 +153,8 @@ void wxCaret::DoMove()
 {
     if ( m_hasCaret )
     {
-        wxWindow *winFocus = wxWindow::FindFocus();
-        wxASSERT_MSG( winFocus == GetWindow(), wxT("how did we lose focus?") );
+        wxASSERT_MSG( wxWindow::FindFocus() == GetWindow(),
+                      wxT("how did we lose focus?") );
 
         CALL_CARET_API(SetCaretPos, (m_x, m_y));
     }

@@ -360,7 +360,8 @@ bool wxToolBar95::MSWOnNotify(int WXUNUSED(idCtrl),
 
     // the tooltips control created by the toolbar is sometimes Unicode, even in
     // an ANSI application
-    if ( (hdr->code != TTN_NEEDTEXTA) && (hdr->code != TTN_NEEDTEXTW) )
+    int code = (int)hdr->code;
+    if ( (code != TTN_NEEDTEXTA) && (code != TTN_NEEDTEXTW) )
         return FALSE;
 
     HWND toolTipWnd = (HWND)::SendMessage((HWND)GetHWND(), TB_GETTOOLTIPS, 0, 0);
@@ -379,7 +380,7 @@ bool wxToolBar95::MSWOnNotify(int WXUNUSED(idCtrl),
 
     if ( !help.IsEmpty() )
     {
-        if ( hdr->code == TTN_NEEDTEXTA )
+        if ( code == TTN_NEEDTEXTA )
         {
             ttText->lpszText = (wxChar *)help.c_str();
         }

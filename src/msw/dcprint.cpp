@@ -46,15 +46,15 @@ IMPLEMENT_CLASS(wxPrinterDC, wxDC)
 wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_name, const wxString& file, bool interactive, int orientation)
 {
     m_isInteractive = interactive;
-    
+
     if (!file.IsNull() && file != wxT(""))
         m_printData.SetFilename(file);
-    
+
 #if wxUSE_COMMON_DIALOGS
     if (interactive)
     {
         PRINTDLG pd;
-        
+
         pd.lStructSize = sizeof( PRINTDLG );
         pd.hwndOwner=(HWND) NULL;
         pd.hDevMode=(HANDLE)NULL;
@@ -66,7 +66,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
         pd.nMaxPage=0;
         pd.nCopies=1;
         pd.hInstance=(HINSTANCE)NULL;
-        
+
         if ( PrintDlg( &pd ) != 0 )
         {
             m_hDC = (WXHDC) pd.hDC;
@@ -77,7 +77,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
             m_ok = FALSE;
             return;
         }
-        
+
         //     m_dontDelete = TRUE;
     }
     else
@@ -96,7 +96,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
             m_hDC = wxGetPrinterDC(printData);
             m_ok = m_hDC ? TRUE: FALSE;
         }
-        
+
         if (m_hDC)
         {
             //     int width = GetDeviceCaps(m_hDC, VERTRES);
@@ -115,10 +115,10 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printData)
 
     m_hDC = wxGetPrinterDC(printData);
     m_ok = (m_hDC != 0);
-    
+
     if (m_hDC)
         SetMapMode(wxMM_TEXT);
-    
+
     SetBrush(*wxBLACK_BRUSH);
     SetPen(*wxBLACK_PEN);
 }
@@ -127,7 +127,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printData)
 wxPrinterDC::wxPrinterDC(WXHDC theDC)
 {
     m_isInteractive = FALSE;
-    
+
     m_hDC = theDC;
     m_ok = TRUE;
     if (m_hDC)
@@ -161,10 +161,10 @@ bool wxPrinterDC::StartDoc(const wxString& message)
     docinfo.lpszDatatype = NULL;
     docinfo.fwType = 0;
 #endif
-    
+
     if (!m_hDC)
         return FALSE;
-    
+
     int ret =
 #ifndef __WIN32__
         ::StartDoc((HDC) m_hDC, &docinfo);
@@ -179,7 +179,7 @@ bool wxPrinterDC::StartDoc(const wxString& message)
 #endif
 #endif
 #endif
-    
+
 #ifndef __WIN16__
     if (ret <= 0)
     {
@@ -187,7 +187,7 @@ bool wxPrinterDC::StartDoc(const wxString& message)
         wxLogDebug(wxT("wxDC::StartDoc failed with error: %d\n"), lastError);
     }
 #endif
-    
+
     return (ret > 0);
 }
 
@@ -217,7 +217,7 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     LPSTR       lpszDriverName;
     LPSTR       lpszDeviceName;
     LPSTR       lpszPortName;
-    
+
     PRINTDLG    pd;
 
     // Cygwin has trouble believing PRINTDLG is 66 bytes - thinks it is 68
@@ -232,17 +232,17 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     pd.hDevNames      = NULL; // Ditto
     pd.Flags          = PD_RETURNDEFAULT;
     pd.nCopies        = 1;
-    
+
     if (!PrintDlg((LPPRINTDLG)&pd))
     {
         if ( pd.hDevMode )
             GlobalFree(pd.hDevMode);
         if (pd.hDevNames)
             GlobalFree(pd.hDevNames);
-        
+
         return FALSE;
     }
-    
+
     if (pd.hDevNames)
     {
         lpDevNames = (LPDEVNAMES)GlobalLock(pd.hDevNames);
@@ -256,7 +256,7 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
         deviceName = lpszDeviceName;
         portName = lpszPortName;
     }
-    
+
     if (pd.hDevMode)
     {
         GlobalFree(pd.hDevMode);
@@ -276,7 +276,7 @@ WXHDC wxGetPrinterDC(int orientation)
     LPSTR       lpszDriverName;
     LPSTR       lpszDeviceName;
     LPSTR       lpszPortName;
-    
+
     PRINTDLG    pd;
     // __GNUWIN32__ has trouble believing PRINTDLG is 66 bytes - thinks it is 68
 #ifdef __GNUWIN32__
@@ -289,45 +289,45 @@ WXHDC wxGetPrinterDC(int orientation)
     pd.hDevNames      = NULL; // Ditto
     pd.Flags          = PD_RETURNDEFAULT;
     pd.nCopies        = 1;
-    
+
     if (!PrintDlg((LPPRINTDLG)&pd))
     {
         if ( pd.hDevMode )
             GlobalFree(pd.hDevMode);
         if (pd.hDevNames)
             GlobalFree(pd.hDevNames);
-        
+
         return(0);
     }
-    
+
     if (!pd.hDevNames)
     {
         if ( pd.hDevMode )
             GlobalFree(pd.hDevMode);
     }
-    
+
     lpDevNames = (LPDEVNAMES)GlobalLock(pd.hDevNames);
     lpszDriverName = (LPSTR)lpDevNames + lpDevNames->wDriverOffset;
     lpszDeviceName = (LPSTR)lpDevNames + lpDevNames->wDeviceOffset;
     lpszPortName   = (LPSTR)lpDevNames + lpDevNames->wOutputOffset;
     GlobalUnlock(pd.hDevNames);
-    
+
     if ( pd.hDevMode )
     {
         lpDevMode = (DEVMODE*) GlobalLock(pd.hDevMode);
         lpDevMode->dmOrientation = orientation;
         lpDevMode->dmFields |= DM_ORIENTATION;
     }
-    
+
 #ifdef __WIN32__
     hDC = CreateDC(lpszDriverName, lpszDeviceName, lpszPortName, (DEVMODE *)lpDevMode);
 #else
     hDC = CreateDC(lpszDriverName, lpszDeviceName, lpszPortName, (LPSTR)lpDevMode);
 #endif
-    
+
     if (pd.hDevMode && lpDevMode)
         GlobalUnlock(pd.hDevMode);
-    
+
     if (pd.hDevNames)
     {
         GlobalFree(pd.hDevNames);
@@ -347,13 +347,13 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 {
     wxPrintData printData = printDataConst;
     printData.ConvertToNative();
-    
+
     wxChar* driverName = (wxChar*) NULL;
-    
+
     wxString devNameStr = printData.GetPrinterName();
     wxChar* deviceName;
     wxChar* portName = (wxChar*) NULL; // Obsolete in WIN32
-    
+
     if (devNameStr == wxT(""))
         deviceName = (wxChar*) NULL;
     else
@@ -370,22 +370,27 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     {
         // Retrieve the default device name
         wxString portName;
-        bool ret = wxGetDefaultDeviceName(devNameStr, portName);
+#ifdef  __WXDEBUG__
+        bool ret =
+#else   // !Debug
+        (void)
+#endif // Debug/Release
+        wxGetDefaultDeviceName(devNameStr, portName);
 
         wxASSERT_MSG( ret, wxT("Could not get default device name.") );
 
         deviceName = WXSTRINGCAST devNameStr;
     }
-    
+
 #ifdef __WIN32__
     HDC hDC = CreateDC(driverName, deviceName, portName, (DEVMODE *) lpDevMode);
 #else
     HDC hDC = CreateDC(driverName, deviceName, portName, (LPSTR) lpDevMode);
 #endif
-    
+
     if (hDevMode && lpDevMode)
         GlobalUnlock(hDevMode);
-    
+
     return (WXHDC) hDC;
 }
 

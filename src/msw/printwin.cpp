@@ -87,7 +87,11 @@ wxWindowsPrinter::wxWindowsPrinter(wxPrintDialogData *data)
 
 wxWindowsPrinter::~wxWindowsPrinter()
 {
+    // avoids mingw warning about statement with no effect (FreeProcInstance
+    // doesn't do anything under Win32)
+#ifndef __GNUWIN32__
     FreeProcInstance((FARPROC) m_lpAbortProc);
+#endif
 }
 
 bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)

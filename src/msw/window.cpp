@@ -2379,7 +2379,7 @@ bool wxWindow::MSWOnNotify(int WXUNUSED(idCtrl),
 {
 #if wxUSE_TOOLTIPS
     NMHDR* hdr = (NMHDR *)lParam;
-    if ( hdr->code == TTN_NEEDTEXT && m_tooltip )
+    if ( (int)hdr->code == TTN_NEEDTEXT && m_tooltip )
     {
         TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
         ttt->lpszText = (wxChar *)m_tooltip->GetTip().c_str();
@@ -2402,7 +2402,7 @@ bool wxWindow::HandleQueryEndSession(long logOff, bool *mayEnd)
     wxCloseEvent event(wxEVT_QUERY_END_SESSION, -1);
     event.SetEventObject(wxTheApp);
     event.SetCanVeto(TRUE);
-    event.SetLoggingOff(logOff == ENDSESSION_LOGOFF);
+    event.SetLoggingOff(logOff == (long)ENDSESSION_LOGOFF);
 
     bool rc = wxTheApp->ProcessEvent(event);
 
@@ -2425,7 +2425,7 @@ bool wxWindow::HandleEndSession(bool endSession, long logOff)
     wxCloseEvent event(wxEVT_END_SESSION, -1);
     event.SetEventObject(wxTheApp);
     event.SetCanVeto(FALSE);
-    event.SetLoggingOff( (logOff == ENDSESSION_LOGOFF) );
+    event.SetLoggingOff( (logOff == (long)ENDSESSION_LOGOFF) );
     if ( (this == wxTheApp->GetTopWindow()) && // Only send once
         wxTheApp->ProcessEvent(event))
     {
@@ -3567,7 +3567,11 @@ void wxSetKeyboardHook(bool doIt)
     else
     {
         UnhookWindowsHookEx(wxTheKeyboardHook);
+        // avoids mingw warning about statement with no effect (FreeProcInstance
+        // doesn't do anything under Win32)
+#ifndef __GNUWIN32__
         FreeProcInstance(wxTheKeyboardHookProc);
+#endif
     }
 }
 
