@@ -284,7 +284,6 @@ void WXDLLEXPORT wxLogSysError(long lErrCode, const wxChar *szFormat, ...)
 wxLog::wxLog()
 {
     m_bHasMessages = FALSE;
-    m_bVerbose = FALSE;
 }
 
 wxLog *wxLog::GetActiveTarget()
@@ -585,6 +584,7 @@ void wxLogStream::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 wxLog          *wxLog::ms_pLogger      = (wxLog *)NULL;
 bool            wxLog::ms_doLog        = TRUE;
 bool            wxLog::ms_bAutoCreate  = TRUE;
+bool            wxLog::ms_bVerbose     = FALSE;
 
 size_t          wxLog::ms_suspendCount = 0;
 

@@ -158,7 +158,7 @@ public:
     // functions controlling the default wxLog behaviour
         // verbose mode is activated by standard command-line '-verbose'
         // option
-    void SetVerbose(bool bVerbose = TRUE) { m_bVerbose = bVerbose; }
+    static void SetVerbose(bool bVerbose = TRUE) { ms_bVerbose = bVerbose; }
         // should GetActiveTarget() try to create a new log object if the
         // current is NULL?
     static void DontCreateOnDemand();
@@ -179,7 +179,7 @@ public:
 
     // accessors
         // gets the verbose status
-    bool GetVerbose() const { return m_bVerbose; }
+    static bool GetVerbose() { return ms_bVerbose; }
         // get trace mask
     static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
         // is this trace mask in the list?
@@ -199,7 +199,6 @@ public:
 
 protected:
     bool m_bHasMessages; // any messages in the queue?
-    bool m_bVerbose;     // FALSE => ignore LogInfo messages
 
     // the logging functions that can be overriden
         // default DoLog() prepends the time stamp and a prefix corresponding
@@ -216,6 +215,7 @@ private:
     static wxLog      *ms_pLogger;      // currently active log sink
     static bool        ms_doLog;        // FALSE => all logging disabled
     static bool        ms_bAutoCreate;  // create new log targets on demand?
+    static bool        ms_bVerbose;     // FALSE => ignore LogInfo messages
 
     static size_t      ms_suspendCount; // if positive, logs are not flushed
 
