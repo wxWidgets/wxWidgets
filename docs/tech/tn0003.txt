@@ -48,7 +48,8 @@ For Word RTF:
 If you wish to generate documentation for wxHTML Help Viewer
 (or Windows HTML Help), set htmlWorkshopFiles to true in your
 tex2rtf.ini file. See also the wxHTML Notes section in the
-wxWindows manual.
+wxWindows manual. To futher speed-up HTML help books loading
+in your application, you may use hhp2cached (utils/hhp2cached).
 
 src/msw/makefile.vc contains targets for generating various
 formats of documentation. You may like to do something similar if
