@@ -70,6 +70,15 @@ control that is able to display an animated GIF file.
 wx.lib.plot.py: Applied patch from Werner F. Bruhin that allows either
 vertical and/or horizontal gridlines.
 
+wxMSW: Extra space given for top border of wx.StaticBoxSizer so the
+upper line is not cliped when there is no label.
+
+wxMSW: Restored old behaviour of wx.StaticBox.SetBackgroundColour only
+affecting the label.
+
+wxMSW: Fixed missing EVT_RIGHT_DOWN and EVT_TREE_ITEM_RIGHT_CLICK
+events in a wx.TreeCtrl.
+
 
 
 
