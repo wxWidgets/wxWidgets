@@ -287,7 +287,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     }
     else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING))
     {
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__ )
         // Otherwise, the cursor sometimes reverts to the normal cursor
         // during dragging.
         SetResizeCursor();
