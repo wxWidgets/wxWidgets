@@ -1844,7 +1844,7 @@ int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
 }
 
 // add item at the end
-void wxArrayString::Add(const wxString& str)
+size_t wxArrayString::Add(const wxString& str)
 {
   if ( m_autoSort ) {
     // insert the string at the correct position to keep the array sorted
@@ -1869,6 +1869,8 @@ void wxArrayString::Add(const wxString& str)
     wxASSERT_MSG( lo == hi, wxT("binary search broken") );
 
     Insert(str, lo);
+
+    return (size_t)lo;
   }
   else {
     wxASSERT( str.GetStringData()->IsValid() );
@@ -1879,7 +1881,9 @@ void wxArrayString::Add(const wxString& str)
     str.GetStringData()->Lock();
 
     // just append
-    m_pItems[m_nCount++] = (wxChar *)str.c_str();
+    m_pItems[m_nCount] = (wxChar *)str.c_str(); // const_cast
+
+    return m_nCount++;
   }
 }
 
@@ -1887,8 +1891,6 @@ void wxArrayString::Add(const wxString& str)
 void wxArrayString::Insert(const wxString& str, size_t nIndex)
 {
   wxASSERT( str.GetStringData()->IsValid() );
-
-  wxCHECK_RET( !m_autoSort, wxT("can't use this method with sorted arrays") );
 
   wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArrayString::Insert") );
 

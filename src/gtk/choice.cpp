@@ -38,7 +38,7 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
       wxapp_install_idle_handler();
 
     if (!choice->m_hasVMT) return;
@@ -60,6 +60,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxChoice,wxControl)
 
 wxChoice::wxChoice()
 {
+    m_strings = (wxSortedArrayString *)NULL;
 }
 
 bool wxChoice::Create( wxWindow *parent, wxWindowID id,
@@ -76,7 +77,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxChoice creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     m_widget = gtk_option_menu_new();
@@ -88,20 +89,20 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         newSize.y = 26;
     SetSize( newSize.x, newSize.y );
 
+    if ( style & wxCB_SORT )
+    {
+        // if our m_strings != NULL, DoAppend() will check for it and insert
+        // items in the correct order
+        m_strings = new wxSortedArrayString;
+    }
+
     GtkWidget *menu = gtk_menu_new();
 
     for (int i = 0; i < n; i++)
     {
-        m_clientList.Append( (wxObject*) NULL );
-
-        GtkWidget *item = gtk_menu_item_new_with_label( choices[i].mbc_str() );
-        gtk_menu_append( GTK_MENU(menu), item );
-
-        gtk_widget_show( item );
-
-        gtk_signal_connect( GTK_OBJECT( item ), "activate",
-          GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
+        AppendHelper(menu, choices[i]);
     }
+
     gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
 
     m_parent->DoAddChild( this );
@@ -120,6 +121,8 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 wxChoice::~wxChoice()
 {
     Clear();
+
+    delete m_strings;
 }
 
 int wxChoice::DoAppend( const wxString &item )
@@ -127,27 +130,8 @@ int wxChoice::DoAppend( const wxString &item )
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice") );
 
     GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
-    GtkWidget *menu_item = gtk_menu_item_new_with_label( item.mbc_str() );
 
-    gtk_menu_append( GTK_MENU(menu), menu_item );
-
-    if (GTK_WIDGET_REALIZED(m_widget))
-    {
-        gtk_widget_realize( menu_item );
-        gtk_widget_realize( GTK_BIN(menu_item)->child );
-
-        if (m_widgetStyle) ApplyWidgetStyle();
-    }
-
-    gtk_signal_connect( GTK_OBJECT( menu_item ), "activate",
-      GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
-
-    gtk_widget_show( menu_item );
-
-    m_clientList.Append( (wxObject*) NULL );
-
-    // return the index of the item in the control
-    return GetCount() - 1;
+    return AppendHelper(menu, item);
 }
 
 void wxChoice::DoSetClientData( int n, void* clientData )
@@ -204,13 +188,13 @@ void wxChoice::Clear()
 
     if (m_clientDataItemsType == ClientData_Object)
     {
-        wxNode *node = m_clientList.First();   
+        wxNode *node = m_clientList.First();
         while (node)
         {
             wxClientData *cd = (wxClientData*)node->Data();
             if (cd) delete cd;
             node = node->Next();
-	}
+        }
     }
     m_clientList.Clear();
 }
@@ -372,6 +356,58 @@ void wxChoice::ApplyWidgetStyle()
 
         child = child->next;
     }
+}
+
+size_t wxChoice::AppendHelper(GtkWidget *menu, const wxString& item)
+{
+    GtkWidget *menu_item = gtk_menu_item_new_with_label( item.mbc_str() );
+
+    size_t index;
+    if ( m_strings )
+    {
+        // sorted control, need to insert at the correct index
+        index = m_strings->Add(item);
+
+        gtk_menu_insert( GTK_MENU(menu), menu_item, index );
+
+        if ( index )
+        {
+            m_clientList.Insert( m_clientList.Item(index - 1),
+                                 (wxObject*) NULL );
+        }
+        else
+        {
+            // can't use Insert() :-(
+            m_clientList.Append( (wxObject*) NULL );
+        }
+    }
+    else
+    {
+        // normal control, just append
+        gtk_menu_append( GTK_MENU(menu), menu_item );
+
+        m_clientList.Append( (wxObject*) NULL );
+
+        // don't call wxChoice::GetCount() from here because it doesn't work
+        // if we're called from ctor (and GtkMenuShell is still NULL)
+        index = m_clientList.GetCount();
+    }
+
+    if (GTK_WIDGET_REALIZED(m_widget))
+    {
+        gtk_widget_realize( menu_item );
+        gtk_widget_realize( GTK_BIN(menu_item)->child );
+
+        if (m_widgetStyle) ApplyWidgetStyle();
+    }
+
+    gtk_signal_connect( GTK_OBJECT( menu_item ), "activate",
+      GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
+
+    gtk_widget_show( menu_item );
+
+    // return the index of the item in the control
+    return index;
 }
 
 #endif

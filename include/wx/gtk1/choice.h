@@ -30,6 +30,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr )
     {
+        m_strings = (wxSortedArrayString *)NULL;
+
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
     ~wxChoice();
@@ -53,13 +55,13 @@ public:
     wxString GetString( int n ) const;
 
     // implementation
-    wxList   m_clientList;
+    wxList m_clientList;    // contains the client data for the items
 
     void DisableEvents();
     void EnableEvents();
     void AppendCommon( const wxString &item );
     void ApplyWidgetStyle();
-    
+
 protected:
     virtual int DoAppend(const wxString& item);
 
@@ -79,6 +81,13 @@ protected:
         { return(wxWindowBase::DoGetClientObject()); };
 
 private:
+    // common part of Create() and DoAppend()
+    size_t AppendHelper(GtkWidget *menu, const wxString& item);
+
+    // this array is only used for controls with wxCB_SORT style, so only
+    // allocate it if it's needed (hence using pointer)
+    wxSortedArrayString *m_strings;
+
     DECLARE_DYNAMIC_CLASS(wxChoice)
 };
 

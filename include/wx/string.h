@@ -912,8 +912,9 @@ public:
     // sensitive (default). Returns index of the first item matched or
     // wxNOT_FOUND
   int  Index (const wxChar *sz, bool bCase = TRUE, bool bFromEnd = FALSE) const;
-    // add new element at the end
-  void Add(const wxString& str);
+    // add new element at the end (if the array is not sorted), return its
+    // index
+  size_t Add(const wxString& str);
     // add new element at given position
   void Insert(const wxString& str, size_t uiIndex);
     // remove first item matching this value
