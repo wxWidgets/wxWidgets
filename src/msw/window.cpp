@@ -136,16 +136,19 @@
 
 #ifndef VK_OEM_1
     #define VK_OEM_1        0xBA
-    #define VK_OEM_PLUS     0xBB
-    #define VK_OEM_COMMA    0xBC
-    #define VK_OEM_MINUS    0xBD
-    #define VK_OEM_PERIOD   0xBE
     #define VK_OEM_2        0xBF
     #define VK_OEM_3        0xC0
     #define VK_OEM_4        0xDB
     #define VK_OEM_5        0xDC
     #define VK_OEM_6        0xDD
     #define VK_OEM_7        0xDE
+#endif
+
+#ifndef VK_OEM_COMMA
+    #define VK_OEM_PLUS     0xBB
+    #define VK_OEM_COMMA    0xBC
+    #define VK_OEM_MINUS    0xBD
+    #define VK_OEM_PERIOD   0xBE
 #endif
 
 // ---------------------------------------------------------------------------
@@ -697,7 +700,7 @@ void wxWindowMSW::MSWDeviceToLogical (float *x, float *y) const
 // ---------------------------------------------------------------------------
 
 // convert wxHORIZONTAL/wxVERTICAL to SB_HORZ/SB_VERT
-static inline wxDirToWinStyle(int orient)
+static inline int wxDirToWinStyle(int orient)
 {
     return orient == wxHORIZONTAL ? SB_HORZ : SB_VERT;
 }
