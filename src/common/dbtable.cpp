@@ -40,17 +40,22 @@
 #endif
 
 #ifdef DBDEBUG_CONSOLE
-#	include <iostream.h>
+        #include <iostream.h>
 #endif
 
 #ifdef    __BORLANDC__
-  #pragma hdrstop
+        #pragma hdrstop
 #endif  //__BORLANDC__
 
 #if wxMAJOR_VERSION == 2
-#	ifndef WX_PRECOMP
-#		include  "wx/wx.h"
-#	endif //WX_PRECOMP
+        #ifndef WX_PRECOMP
+                #include "wx/string.h"
+                #include "wx/object.h"
+                #include "wx/list.h"
+                #include "wx/utils.h"
+                #include "wx/msgdlg.h"
+	#endif
+	#include "wx/filefn.h"
 #endif
 
 #if wxMAJOR_VERSION == 1
@@ -74,11 +79,6 @@
 	#include "table.h"
 #elif wxMAJOR_VERSION == 2
 	#include "wx/dbtable.h"
-#endif
-
-#ifdef __MWERKS__
-#define stricmp _stricmp
-#define strnicmp _strnicmp
 #endif
 
 #ifdef __UNIX__
@@ -186,7 +186,7 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 	{
 		// Check to see if cursor type is supported
 		pDb->GetNextError(henv, hdbc, hstmtInternal);
-		if (! strcmp(pDb->sqlState, "01S02"))  // Option Value Changed
+		if (! wxStrcmp(pDb->sqlState, "01S02"))  // Option Value Changed
 		{
 			// Datasource does not support static cursors.  Driver
 			// will substitute a cursor type.  Call SQLGetStmtOption()
@@ -943,12 +943,12 @@ bool wxTable::DropTable()
 	{
 		// Check for "Base table not found" error and ignore
 		pDb->GetNextError(henv, hdbc, hstmt);
-		if (strcmp(pDb->sqlState,"S0002"))  // "Base table not found"
+		if (wxStrcmp(pDb->sqlState,"S0002"))  // "Base table not found"
 		{
 			// Check for product specific error codes
-			if (!((pDb->Dbms() == dbmsSYBASE_ASA	&& !strcmp(pDb->sqlState,"42000"))	 ||  // 5.x (and lower?)
-				   (pDb->Dbms() == dbmsMY_SQL			&& !strcmp(pDb->sqlState,"S1000"))	 ||  // untested
-				   (pDb->Dbms() == dbmsPOSTGRES		&& !strcmp(pDb->sqlState,"08S01")))) 	  // untested
+			if (!((pDb->Dbms() == dbmsSYBASE_ASA	&& !wxStrcmp(pDb->sqlState,"42000"))	 ||  // 5.x (and lower?)
+				   (pDb->Dbms() == dbmsMY_SQL			&& !wxStrcmp(pDb->sqlState,"S1000"))	 ||  // untested
+				   (pDb->Dbms() == dbmsPOSTGRES		&& !wxStrcmp(pDb->sqlState,"08S01")))) 	  // untested
 			{
 				pDb->DispNextError();
 				pDb->DispAllErrors(henv, hdbc, hstmt);
@@ -1062,12 +1062,12 @@ bool wxTable::DropIndex(char * idxName)
 	{
 		// Check for "Index not found" error and ignore
 		pDb->GetNextError(henv, hdbc, hstmt);
-		if (strcmp(pDb->sqlState,"S0012"))  // "Index not found"
+		if (wxStrcmp(pDb->sqlState,"S0012"))  // "Index not found"
 		{
 			// Check for product specific error codes
-			if (!((pDb->Dbms() == dbmsSYBASE_ASA	&& !strcmp(pDb->sqlState,"42000"))   ||  // v5.x (and lower?)
-				   (pDb->Dbms() == dbmsSYBASE_ASE	&& !strcmp(pDb->sqlState,"S0002"))   ||  // Base table not found
-				   (pDb->Dbms() == dbmsMY_SQL			&& !strcmp(pDb->sqlState,"42S02"))       // untested
+			if (!((pDb->Dbms() == dbmsSYBASE_ASA	&& !wxStrcmp(pDb->sqlState,"42000"))   ||  // v5.x (and lower?)
+				   (pDb->Dbms() == dbmsSYBASE_ASE	&& !wxStrcmp(pDb->sqlState,"S0002"))   ||  // Base table not found
+				   (pDb->Dbms() == dbmsMY_SQL			&& !wxStrcmp(pDb->sqlState,"42S02"))       // untested
 					))
 			{
 				pDb->DispNextError();
@@ -1104,7 +1104,7 @@ int wxTable::Insert(void)
 	{
 		// Check to see if integrity constraint was violated
 		pDb->GetNextError(henv, hdbc, hstmtInsert);
-		if (! strcmp(pDb->sqlState, "23000"))  // Integrity constraint violated
+		if (! wxStrcmp(pDb->sqlState, "23000"))  // Integrity constraint violated
 			return(DB_ERR_INTEGRITY_CONSTRAINT_VIOL);
 		else
 		{
@@ -1770,7 +1770,7 @@ bool wxTable::SetNull(char *colName)
 	int i;
 	for (i = 0; i < noCols; i++)
 	{
-		if (!stricmp(colName, colDefs[i].ColName))
+		if (!wxStricmp(colName, colDefs[i].ColName))
 			break;
 	}
 

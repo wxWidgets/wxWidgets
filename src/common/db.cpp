@@ -54,9 +54,13 @@
 #endif  //__BORLANDC__
 
 #if wxMAJOR_VERSION == 2
-	#ifndef WX_PRECOMP
-		#include  "wx/string.h"
-	#endif //WX_PRECOMP
+        #ifndef WX_PRECOMP
+                #include "wx/string.h"
+                #include "wx/object.h"
+                #include "wx/list.h"
+                #include "wx/utils.h"
+                #include "wx/msgdlg.h"
+	#endif
 	#include "wx/filefn.h"
 #endif
 
@@ -87,19 +91,9 @@
 DbList WXDLLEXPORT *PtrBegDbList = 0;
 
 #if __WXDEBUG__ > 0
-        #if   wxMAJOR_VERSION == 2
-                #include "wx/object.h"
-                #include "wx/list.h"
-                #include "wx/utils.h"
-                #include "wx/msgdlg.h"
-	#endif
 	extern wxList TablesInUse;
 #endif
 
-#ifdef __MWERKS__
-#define stricmp _stricmp
-#define strnicmp _strnicmp
-#endif
 // SQL Log defaults to be used by GetDbConnection
 enum sqlLog SQLLOGstate				= sqlLogOFF;
 
@@ -908,183 +902,183 @@ void wxDB::logError(char *errMsg, char *SQLState)
 /**********wxDB::TranslateSqlState()  **********/
 int wxDB::TranslateSqlState(char *SQLState)
 {
-	if (!strcmp(SQLState, "01000"))
+	if (!wxStrcmp(SQLState, "01000"))
 		return(DB_ERR_GENERAL_WARNING);
-	if (!strcmp(SQLState, "01002"))
+	if (!wxStrcmp(SQLState, "01002"))
 		return(DB_ERR_DISCONNECT_ERROR);
-	if (!strcmp(SQLState, "01004"))
+	if (!wxStrcmp(SQLState, "01004"))
 		return(DB_ERR_DATA_TRUNCATED);
-	if (!strcmp(SQLState, "01006"))
+	if (!wxStrcmp(SQLState, "01006"))
 		return(DB_ERR_PRIV_NOT_REVOKED);
-	if (!strcmp(SQLState, "01S00"))
+	if (!wxStrcmp(SQLState, "01S00"))
 		return(DB_ERR_INVALID_CONN_STR_ATTR);
-	if (!strcmp(SQLState, "01S01"))
+	if (!wxStrcmp(SQLState, "01S01"))
 		return(DB_ERR_ERROR_IN_ROW);
-	if (!strcmp(SQLState, "01S02"))
+	if (!wxStrcmp(SQLState, "01S02"))
 		return(DB_ERR_OPTION_VALUE_CHANGED);
-	if (!strcmp(SQLState, "01S03"))
+	if (!wxStrcmp(SQLState, "01S03"))
 		return(DB_ERR_NO_ROWS_UPD_OR_DEL);
-	if (!strcmp(SQLState, "01S04"))
+	if (!wxStrcmp(SQLState, "01S04"))
 		return(DB_ERR_MULTI_ROWS_UPD_OR_DEL);
-	if (!strcmp(SQLState, "07001"))
+	if (!wxStrcmp(SQLState, "07001"))
 		return(DB_ERR_WRONG_NO_OF_PARAMS);
-	if (!strcmp(SQLState, "07006"))
+	if (!wxStrcmp(SQLState, "07006"))
 		return(DB_ERR_DATA_TYPE_ATTR_VIOL);
-	if (!strcmp(SQLState, "08001"))
+	if (!wxStrcmp(SQLState, "08001"))
 		return(DB_ERR_UNABLE_TO_CONNECT);
-	if (!strcmp(SQLState, "08002"))
+	if (!wxStrcmp(SQLState, "08002"))
 		return(DB_ERR_CONNECTION_IN_USE);
-	if (!strcmp(SQLState, "08003"))
+	if (!wxStrcmp(SQLState, "08003"))
 		return(DB_ERR_CONNECTION_NOT_OPEN);
-	if (!strcmp(SQLState, "08004"))
+	if (!wxStrcmp(SQLState, "08004"))
 		return(DB_ERR_REJECTED_CONNECTION);
-	if (!strcmp(SQLState, "08007"))
+	if (!wxStrcmp(SQLState, "08007"))
 		return(DB_ERR_CONN_FAIL_IN_TRANS);
-	if (!strcmp(SQLState, "08S01"))
+	if (!wxStrcmp(SQLState, "08S01"))
 		return(DB_ERR_COMM_LINK_FAILURE);
-	if (!strcmp(SQLState, "21S01"))
+	if (!wxStrcmp(SQLState, "21S01"))
 		return(DB_ERR_INSERT_VALUE_LIST_MISMATCH);
-	if (!strcmp(SQLState, "21S02"))
+	if (!wxStrcmp(SQLState, "21S02"))
 		return(DB_ERR_DERIVED_TABLE_MISMATCH);
-	if (!strcmp(SQLState, "22001"))
+	if (!wxStrcmp(SQLState, "22001"))
 		return(DB_ERR_STRING_RIGHT_TRUNC);
-	if (!strcmp(SQLState, "22003"))
+	if (!wxStrcmp(SQLState, "22003"))
 		return(DB_ERR_NUMERIC_VALUE_OUT_OF_RNG);
-	if (!strcmp(SQLState, "22005"))
+	if (!wxStrcmp(SQLState, "22005"))
 		return(DB_ERR_ERROR_IN_ASSIGNMENT);
-	if (!strcmp(SQLState, "22008"))
+	if (!wxStrcmp(SQLState, "22008"))
 		return(DB_ERR_DATETIME_FLD_OVERFLOW);
-	if (!strcmp(SQLState, "22012"))
+	if (!wxStrcmp(SQLState, "22012"))
 		return(DB_ERR_DIVIDE_BY_ZERO);
-	if (!strcmp(SQLState, "22026"))
+	if (!wxStrcmp(SQLState, "22026"))
 		return(DB_ERR_STR_DATA_LENGTH_MISMATCH);
-	if (!strcmp(SQLState, "23000"))
+	if (!wxStrcmp(SQLState, "23000"))
 		return(DB_ERR_INTEGRITY_CONSTRAINT_VIOL);
-	if (!strcmp(SQLState, "24000"))
+	if (!wxStrcmp(SQLState, "24000"))
 		return(DB_ERR_INVALID_CURSOR_STATE);
-	if (!strcmp(SQLState, "25000"))
+	if (!wxStrcmp(SQLState, "25000"))
 		return(DB_ERR_INVALID_TRANS_STATE);
-	if (!strcmp(SQLState, "28000"))
+	if (!wxStrcmp(SQLState, "28000"))
 		return(DB_ERR_INVALID_AUTH_SPEC);
-	if (!strcmp(SQLState, "34000"))
+	if (!wxStrcmp(SQLState, "34000"))
 		return(DB_ERR_INVALID_CURSOR_NAME);
-	if (!strcmp(SQLState, "37000"))
+	if (!wxStrcmp(SQLState, "37000"))
 		return(DB_ERR_SYNTAX_ERROR_OR_ACCESS_VIOL);
-	if (!strcmp(SQLState, "3C000"))
+	if (!wxStrcmp(SQLState, "3C000"))
 		return(DB_ERR_DUPLICATE_CURSOR_NAME);
-	if (!strcmp(SQLState, "40001"))
+	if (!wxStrcmp(SQLState, "40001"))
 		return(DB_ERR_SERIALIZATION_FAILURE);
-	if (!strcmp(SQLState, "42000"))
+	if (!wxStrcmp(SQLState, "42000"))
 		return(DB_ERR_SYNTAX_ERROR_OR_ACCESS_VIOL2);
-	if (!strcmp(SQLState, "70100"))
+	if (!wxStrcmp(SQLState, "70100"))
 		return(DB_ERR_OPERATION_ABORTED);
-	if (!strcmp(SQLState, "IM001"))
+	if (!wxStrcmp(SQLState, "IM001"))
 		return(DB_ERR_UNSUPPORTED_FUNCTION);
-	if (!strcmp(SQLState, "IM002"))
+	if (!wxStrcmp(SQLState, "IM002"))
 		return(DB_ERR_NO_DATA_SOURCE);
-	if (!strcmp(SQLState, "IM003"))
+	if (!wxStrcmp(SQLState, "IM003"))
 		return(DB_ERR_DRIVER_LOAD_ERROR);
-	if (!strcmp(SQLState, "IM004"))
+	if (!wxStrcmp(SQLState, "IM004"))
 		return(DB_ERR_SQLALLOCENV_FAILED);
-	if (!strcmp(SQLState, "IM005"))
+	if (!wxStrcmp(SQLState, "IM005"))
 		return(DB_ERR_SQLALLOCCONNECT_FAILED);
-	if (!strcmp(SQLState, "IM006"))
+	if (!wxStrcmp(SQLState, "IM006"))
 		return(DB_ERR_SQLSETCONNECTOPTION_FAILED);
-	if (!strcmp(SQLState, "IM007"))
+	if (!wxStrcmp(SQLState, "IM007"))
 		return(DB_ERR_NO_DATA_SOURCE_DLG_PROHIB);
-	if (!strcmp(SQLState, "IM008"))
+	if (!wxStrcmp(SQLState, "IM008"))
 		return(DB_ERR_DIALOG_FAILED);
-	if (!strcmp(SQLState, "IM009"))
+	if (!wxStrcmp(SQLState, "IM009"))
 		return(DB_ERR_UNABLE_TO_LOAD_TRANSLATION_DLL);
-	if (!strcmp(SQLState, "IM010"))
+	if (!wxStrcmp(SQLState, "IM010"))
 		return(DB_ERR_DATA_SOURCE_NAME_TOO_LONG);
-	if (!strcmp(SQLState, "IM011"))
+	if (!wxStrcmp(SQLState, "IM011"))
 		return(DB_ERR_DRIVER_NAME_TOO_LONG);
-	if (!strcmp(SQLState, "IM012"))
+	if (!wxStrcmp(SQLState, "IM012"))
 		return(DB_ERR_DRIVER_KEYWORD_SYNTAX_ERROR);
-	if (!strcmp(SQLState, "IM013"))
+	if (!wxStrcmp(SQLState, "IM013"))
 		return(DB_ERR_TRACE_FILE_ERROR);
-	if (!strcmp(SQLState, "S0001"))
+	if (!wxStrcmp(SQLState, "S0001"))
 		return(DB_ERR_TABLE_OR_VIEW_ALREADY_EXISTS);
-	if (!strcmp(SQLState, "S0002"))
+	if (!wxStrcmp(SQLState, "S0002"))
 		return(DB_ERR_TABLE_NOT_FOUND);
-	if (!strcmp(SQLState, "S0011"))
+	if (!wxStrcmp(SQLState, "S0011"))
 		return(DB_ERR_INDEX_ALREADY_EXISTS);
-	if (!strcmp(SQLState, "S0012"))
+	if (!wxStrcmp(SQLState, "S0012"))
 		return(DB_ERR_INDEX_NOT_FOUND);
-	if (!strcmp(SQLState, "S0021"))
+	if (!wxStrcmp(SQLState, "S0021"))
 		return(DB_ERR_COLUMN_ALREADY_EXISTS);
-	if (!strcmp(SQLState, "S0022"))
+	if (!wxStrcmp(SQLState, "S0022"))
 		return(DB_ERR_COLUMN_NOT_FOUND);
-	if (!strcmp(SQLState, "S0023"))
+	if (!wxStrcmp(SQLState, "S0023"))
 		return(DB_ERR_NO_DEFAULT_FOR_COLUMN);
-	if (!strcmp(SQLState, "S1000"))
+	if (!wxStrcmp(SQLState, "S1000"))
 		return(DB_ERR_GENERAL_ERROR);
-	if (!strcmp(SQLState, "S1001"))
+	if (!wxStrcmp(SQLState, "S1001"))
 		return(DB_ERR_MEMORY_ALLOCATION_FAILURE);
-	if (!strcmp(SQLState, "S1002"))
+	if (!wxStrcmp(SQLState, "S1002"))
 		return(DB_ERR_INVALID_COLUMN_NUMBER);
-	if (!strcmp(SQLState, "S1003"))
+	if (!wxStrcmp(SQLState, "S1003"))
 		return(DB_ERR_PROGRAM_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1004"))
+	if (!wxStrcmp(SQLState, "S1004"))
 		return(DB_ERR_SQL_DATA_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1008"))
+	if (!wxStrcmp(SQLState, "S1008"))
 		return(DB_ERR_OPERATION_CANCELLED);
-	if (!strcmp(SQLState, "S1009"))
+	if (!wxStrcmp(SQLState, "S1009"))
 		return(DB_ERR_INVALID_ARGUMENT_VALUE);
-	if (!strcmp(SQLState, "S1010"))
+	if (!wxStrcmp(SQLState, "S1010"))
 		return(DB_ERR_FUNCTION_SEQUENCE_ERROR);
-	if (!strcmp(SQLState, "S1011"))
+	if (!wxStrcmp(SQLState, "S1011"))
 		return(DB_ERR_OPERATION_INVALID_AT_THIS_TIME);
-	if (!strcmp(SQLState, "S1012"))
+	if (!wxStrcmp(SQLState, "S1012"))
 		return(DB_ERR_INVALID_TRANS_OPERATION_CODE);
-	if (!strcmp(SQLState, "S1015"))
+	if (!wxStrcmp(SQLState, "S1015"))
 		return(DB_ERR_NO_CURSOR_NAME_AVAIL);
-	if (!strcmp(SQLState, "S1090"))
+	if (!wxStrcmp(SQLState, "S1090"))
 		return(DB_ERR_INVALID_STR_OR_BUF_LEN);
-	if (!strcmp(SQLState, "S1091"))
+	if (!wxStrcmp(SQLState, "S1091"))
 		return(DB_ERR_DESCRIPTOR_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1092"))
+	if (!wxStrcmp(SQLState, "S1092"))
 		return(DB_ERR_OPTION_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1093"))
+	if (!wxStrcmp(SQLState, "S1093"))
 		return(DB_ERR_INVALID_PARAM_NO);
-	if (!strcmp(SQLState, "S1094"))
+	if (!wxStrcmp(SQLState, "S1094"))
 		return(DB_ERR_INVALID_SCALE_VALUE);
-	if (!strcmp(SQLState, "S1095"))
+	if (!wxStrcmp(SQLState, "S1095"))
 		return(DB_ERR_FUNCTION_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1096"))
+	if (!wxStrcmp(SQLState, "S1096"))
 		return(DB_ERR_INF_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1097"))
+	if (!wxStrcmp(SQLState, "S1097"))
 		return(DB_ERR_COLUMN_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1098"))
+	if (!wxStrcmp(SQLState, "S1098"))
 		return(DB_ERR_SCOPE_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1099"))
+	if (!wxStrcmp(SQLState, "S1099"))
 		return(DB_ERR_NULLABLE_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1100"))
+	if (!wxStrcmp(SQLState, "S1100"))
 		return(DB_ERR_UNIQUENESS_OPTION_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1101"))
+	if (!wxStrcmp(SQLState, "S1101"))
 		return(DB_ERR_ACCURACY_OPTION_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1103"))
+	if (!wxStrcmp(SQLState, "S1103"))
 		return(DB_ERR_DIRECTION_OPTION_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1104"))
+	if (!wxStrcmp(SQLState, "S1104"))
 		return(DB_ERR_INVALID_PRECISION_VALUE);
-	if (!strcmp(SQLState, "S1105"))
+	if (!wxStrcmp(SQLState, "S1105"))
 		return(DB_ERR_INVALID_PARAM_TYPE);
-	if (!strcmp(SQLState, "S1106"))
+	if (!wxStrcmp(SQLState, "S1106"))
 		return(DB_ERR_FETCH_TYPE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1107"))
+	if (!wxStrcmp(SQLState, "S1107"))
 		return(DB_ERR_ROW_VALUE_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1108"))
+	if (!wxStrcmp(SQLState, "S1108"))
 		return(DB_ERR_CONCURRENCY_OPTION_OUT_OF_RANGE);
-	if (!strcmp(SQLState, "S1109"))
+	if (!wxStrcmp(SQLState, "S1109"))
 		return(DB_ERR_INVALID_CURSOR_POSITION);
-	if (!strcmp(SQLState, "S1110"))
+	if (!wxStrcmp(SQLState, "S1110"))
 		return(DB_ERR_INVALID_DRIVER_COMPLETION);
-	if (!strcmp(SQLState, "S1111"))
+	if (!wxStrcmp(SQLState, "S1111"))
 		return(DB_ERR_INVALID_BOOKMARK_VALUE);
-	if (!strcmp(SQLState, "S1C00"))
+	if (!wxStrcmp(SQLState, "S1C00"))
 		return(DB_ERR_DRIVER_NOT_CAPABLE);
-	if (!strcmp(SQLState, "S1T00"))
+	if (!wxStrcmp(SQLState, "S1T00"))
 		return(DB_ERR_TIMEOUT_EXPIRED);
 
 	// No match
@@ -1199,10 +1193,10 @@ bool wxDB::DropView(char *viewName)
 	{
 		// Check for "Base table not found" error and ignore
 		GetNextError(henv, hdbc, hstmt);
-		if (strcmp(sqlState,"S0002"))  // "Base table not found"
+		if (wxStrcmp(sqlState,"S0002"))  // "Base table not found"
 		{
 			// Check for product specific error codes
-			if (!((Dbms() == dbmsSYBASE_ASA	&& !strcmp(sqlState,"42000"))))  // 5.x (and lower?)
+			if (!((Dbms() == dbmsSYBASE_ASA	&& !wxStrcmp(sqlState,"42000"))))  // 5.x (and lower?)
 			{
 				DispNextError();
 				DispAllErrors(henv, hdbc, hstmt);
@@ -1352,7 +1346,7 @@ CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
 
 			// MySQL and Access cannot accept a user name when looking up column names, so we
 			// use the call below that leaves out the user name
-			if (strcmp(userID,"") &&
+			if (wxStrcmp(userID,"") &&
 				 Dbms() != dbmsMY_SQL &&
 				 Dbms() != dbmsACCESS)
 			{
@@ -1451,7 +1445,7 @@ bool wxDB::Catalog(char *userID, char *fileName)
 		userID = userIdUC;
 	}
 
-	if (strcmp(userID,""))
+	if (wxStrcmp(userID,""))
 	{
 		retcode = SQLColumns(hstmt,
 									NULL, 0,											// All qualifiers
@@ -1487,7 +1481,7 @@ bool wxDB::Catalog(char *userID, char *fileName)
 
 	while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
 	{
-		if (strcmp(tblName,tblNameSave))
+		if (wxStrcmp(tblName,tblNameSave))
 		{
 			if (cnt)
 				fputs("\n", fp);
@@ -1583,7 +1577,7 @@ bool wxDB::TableExists(char *tableName, char *userID, char *tablePath)
 
 	// MySQL and Access cannot accept a user name when looking up table names, so we
 	// use the call below that leaves out the user name
-	if (strcmp(userID,"") &&
+	if (wxStrcmp(userID,"") &&
 		 Dbms() != dbmsMY_SQL &&
 		 Dbms() != dbmsACCESS)
 	{
@@ -1711,21 +1705,21 @@ bool wxDB::WriteSqlLog(char *logMsg)
  */
 DBMS wxDB::Dbms(void)
 {
-	if (!strnicmp(dbInf.dbmsName,"Oracle",6))
+	if (!wxStrnicmp(dbInf.dbmsName,"Oracle",6))
 		return(dbmsORACLE);
-	if (!stricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
+	if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
 		return(dbmsSYBASE_ASA);
-	if (!stricmp(dbInf.dbmsName,"SQL Server"))  // Sybase Adaptive Server Enterprise
+	if (!wxStricmp(dbInf.dbmsName,"SQL Server"))  // Sybase Adaptive Server Enterprise
 		return(dbmsSYBASE_ASE);
-	if (!stricmp(dbInf.dbmsName,"Microsoft SQL Server"))
+	if (!wxStricmp(dbInf.dbmsName,"Microsoft SQL Server"))
 		return(dbmsMS_SQL_SERVER);
-	if (!stricmp(dbInf.dbmsName,"MySQL"))
+	if (!wxStricmp(dbInf.dbmsName,"MySQL"))
 		return(dbmsMY_SQL);
-	if (!stricmp(dbInf.dbmsName,"PostgreSQL"))  // v6.5.0
+	if (!wxStricmp(dbInf.dbmsName,"PostgreSQL"))  // v6.5.0
 		return(dbmsPOSTGRES);
-	if (!stricmp(dbInf.dbmsName,"ACCESS"))
+	if (!wxStricmp(dbInf.dbmsName,"ACCESS"))
 		return(dbmsACCESS);
-	if (!strnicmp(dbInf.dbmsName,"DBASE",5))
+	if (!wxStrnicmp(dbInf.dbmsName,"DBASE",5))
 		return(dbmsDBASE);
 	return(dbmsUNIDENTIFIED);
 
@@ -1743,7 +1737,7 @@ wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff)
 	{
 		// The database connection must be for the same datasource
 		// name and must currently not be in use.
-		if (pList->Free && (! strcmp(pDbStuff->Dsn, pList->Dsn)))  // Found a free connection
+		if (pList->Free && (! wxStrcmp(pDbStuff->Dsn, pList->Dsn)))  // Found a free connection
 		{
 			pList->Free = FALSE;
 			return(pList->PtrDb);

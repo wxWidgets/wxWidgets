@@ -349,10 +349,13 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #if !defined(wxStricmp) && !wxUSE_UNICODE
 #  if defined(__BORLANDC__) || defined(__WATCOMC__) || defined(__SALFORDC__) || defined(__VISAGECPP__) || defined(__EMX__)
 #    define wxStricmp stricmp
+#    define wxStrnicmp strnicmp
 #  elif defined(__SC__) || defined(__VISUALC__) || (defined(__MWERKS__) && defined(__INTEL__))
 #    define wxStricmp _stricmp
+#    define wxStrnicmp _strnicmp
 #  elif defined(__UNIX__) || defined(__GNUWIN32__)
 #    define wxStricmp strcasecmp
+#    define wxStrnicmp strncasecmp
 #  elif defined(__MWERKS__) && !defined(__INTEL__)
      // use wxWindows' implementation
 #  else
