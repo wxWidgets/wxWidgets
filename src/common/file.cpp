@@ -576,3 +576,4 @@ void wxTempFile::Discard()
 }
 
 #endif
+

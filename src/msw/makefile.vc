@@ -168,6 +168,7 @@ COMMONOBJS = \
   ..\common\$D\variant.obj \
   ..\common\$D\dlgcmn.obj \
   ..\common\$D\wincmn.obj \
+  ..\common\$D\txtstrm.obj \
   ..\common\$D\wxchar.obj
 
 MSWOBJS = \
@@ -250,7 +251,6 @@ MSWOBJS = \
   ..\msw\$D\tbar95.obj \
   ..\msw\$D\tbarmsw.obj \
   ..\msw\$D\textctrl.obj \
-  ..\msw\$D\txtstrm.obj \
   ..\msw\$D\thread.obj \
   ..\msw\$D\timer.obj \
   ..\msw\$D\tooltip.obj \

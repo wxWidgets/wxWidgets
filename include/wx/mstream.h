@@ -38,3 +38,4 @@ class wxMemoryOutputStream:  public wxOutputStream {
 
 #endif
   // _WX_WXMMSTREAM_H__
+

@@ -87,3 +87,4 @@ class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
 
 #endif
   // _WX_WXFSTREAM_H__
+

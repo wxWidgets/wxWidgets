@@ -30,7 +30,7 @@
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/log.h"
-#include "zlib.h"
+#include "..\zlib\zlib.h"
 
 #define ZSTREAM_BUFFER_SIZE 1024
 

@@ -108,6 +108,14 @@
 #   pragma suppress 571             // Virtual function hiding
 #endif // __SALFORDC__
 
+#ifdef __VISUALC__
+#ifndef WIN32
+// VC1.5 does not have LPTSTR type
+#define LPTSTR LPSTR
+#define LPCTSTR LPCSTR
+#endif
+#endif
+
 // Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
 // so define it ourselves
 #ifdef __DECCXX

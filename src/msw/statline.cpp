@@ -55,12 +55,16 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     wxSize sizeReal = AdjustSize(size);
 
+#ifndef WIN32
+#define SS_SUNKEN 0
+#endif
+
     m_hWnd = (WXHWND)::CreateWindow
                        (
                         _T("STATIC"),
                         "",
                         WS_VISIBLE | WS_CHILD |
-                        SS_GRAYRECT | SS_SUNKEN,// | SS_ETCHEDFRAME,
+                        SS_GRAYRECT | SS_SUNKEN, // | SS_ETCHEDFRAME,
                         pos.x, pos.y, sizeReal.x, sizeReal.y,
                         GetWinHwnd(parent),
                         (HMENU)m_windowId,

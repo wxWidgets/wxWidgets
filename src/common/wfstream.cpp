@@ -177,3 +177,4 @@ wxFileStream::wxFileStream(const wxString& fileName)
 
 #endif
   // wxUSE_STREAMS && wxUSE_FILE
+

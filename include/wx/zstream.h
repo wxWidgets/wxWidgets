@@ -56,3 +56,4 @@ class WXDLLEXPORT wxZlibOutputStream: public wxFilterOutputStream {
 
 #endif
    // _WX_WXZSTREAM_H__
+
