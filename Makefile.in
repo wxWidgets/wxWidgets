@@ -410,6 +410,7 @@ win32install: preinstall
 	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/*.cur \
 			$(top_srcdir)/include/wx/msw/*.ico \
 			$(top_srcdir)/include/wx/msw/*.bmp \
+			$(top_srcdir)/include/wx/msw/wx.manifest \
 			$(top_srcdir)/include/wx/msw/wx.rc \
 				$(includedir)/wx/msw
 	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/gnuwin32/*.h $(includedir)/wx/msw/gnuwin32
