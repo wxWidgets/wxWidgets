@@ -49,11 +49,7 @@ public:
     // override base class (pure) virtuals
     // -----------------------------------
 
-    virtual int MainLoop();
-    virtual void ExitMainLoop();
     virtual bool Initialized();
-    virtual bool Pending();
-    virtual bool Dispatch();
 
     virtual void Exit();
 
