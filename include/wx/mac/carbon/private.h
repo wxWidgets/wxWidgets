@@ -42,6 +42,20 @@
 #include "wx/mac/corefoundation/cfstring.h"
 #endif
 
+#include <FixMath.h>
+#ifndef FixedToInt
+// as macro in FixMath.h for 10.3
+inline Fixed    IntToFixed( int inInt )
+{
+    return (((SInt32) inInt) << 16);
+}
+
+inline int    FixedToInt( Fixed inFixed )
+{
+    return (((SInt32) inFixed) >> 16);
+}
+#endif
+
 #if wxUSE_GUI
 
 #include "wx/window.h"
