@@ -168,8 +168,8 @@ class WXDLLEXPORT wxDC: public wxObject
     virtual void GetTextExtent( const wxString &string, long *width, long *height,
                      long *descent = NULL, long *externalLeading = NULL,
                      wxFont *theFont = NULL, bool use16 = FALSE ) const ;
-    virtual long GetCharWidth(void);
-    virtual long GetCharHeight(void);
+    virtual wxCoord GetCharWidth(void) const;
+    virtual wxCoord GetCharHeight(void) const;
     
     virtual void Clear(void);
             
@@ -200,9 +200,12 @@ class WXDLLEXPORT wxDC: public wxObject
     void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
     
     // the first two must be overridden and called
-    virtual void SetClippingRegion( long x, long y, long width, long height );
+    virtual void SetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
+    virtual void SetClippingRegion( const wxRect& rect );
     virtual void DestroyClippingRegion(void);
+    virtual void GetClippingBox( wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height ) const;
     virtual void GetClippingBox( long *x, long *y, long *width, long *height ) const;
+    virtual void GetClippingBox(wxRect& rect) const;
     
     virtual inline long MinX(void) const { return m_minX; }
     virtual inline long MaxX(void) const { return m_maxX; }
