@@ -123,12 +123,12 @@ bool MyApp::OnInit()
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
-    frame->Show(TRUE);
+    frame->Show(true);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, -1, title)
+       : wxFrame(NULL, wxID_ANY, title)
 {
     // set the frame icon
     SetIcon(wxICON(mondrian));
@@ -173,8 +173,8 @@ MyFrame::MyFrame(const wxString& title)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
