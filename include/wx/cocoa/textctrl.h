@@ -114,6 +114,8 @@ public:
 //    virtual void SelectAll();
     virtual void SetEditable(bool editable);
 
+protected:
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif // __WX_COCOA_TEXTCTRL_H__
