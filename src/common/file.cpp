@@ -267,8 +267,6 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
     DWORD shareMode = 0;
     DWORD disposition = 0;
 
-    int flags = O_BINARY;
-
     switch ( mode )
     {
         case read:
