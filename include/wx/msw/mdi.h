@@ -69,7 +69,8 @@ public:
     // MDI windows menu
     wxMenu* GetWindowMenu() const { return m_windowMenu; };
     void SetWindowMenu(wxMenu* menu) ;
-
+    virtual void DoMenuUpdates(wxMenu* menu = NULL);
+    
     // MDI operations
     // --------------
     virtual void Cascade();
