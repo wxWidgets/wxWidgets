@@ -450,6 +450,9 @@ private:
     // used for dragging
     wxDragImage *m_dragImage;
 
+    // Virtual root item, if wxTR_HIDE_ROOT is set.
+    void* m_pVirtualRoot;
+
     // the starting item for selection with Shift
     WXHTREEITEM m_htSelStart;
 

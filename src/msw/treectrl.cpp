@@ -116,6 +116,7 @@ static HTREEITEM GetItemFromPoint(HWND hwndTV, int x, int y)
 // wrappers for TreeView_GetItem/TreeView_SetItem
 static bool IsItemSelected(HWND hwndTV, HTREEITEM hItem)
 {
+
     TV_ITEM tvi;
     tvi.mask = TVIF_STATE | TVIF_HANDLE;
     tvi.stateMask = TVIS_SELECTED;
@@ -291,6 +292,8 @@ struct wxTreeViewItem : public TV_ITEM
                    UINT mask_,                  // fields which are valid
                    UINT stateMask_ = 0)         // for TVIF_STATE only
     {
+        wxZeroMemory(*this);
+
         // hItem member is always valid
         mask = mask_ | TVIF_HANDLE;
         stateMask = stateMask_;
@@ -298,9 +301,41 @@ struct wxTreeViewItem : public TV_ITEM
     }
 };
 
+// wxVirutalNode is used in place of a single root when 'hidden' root is
+// specified.
+class wxVirtualNode
+{
+public:
+    wxVirtualNode(wxTreeItemData *data)
+    {
+        m_data = data;
+
+        m_tvItem = new wxTreeViewItem(TVI_ROOT, 0);
+    }
+
+    ~wxVirtualNode()
+    {
+        delete m_data;
+        delete m_tvItem;
+    }
+
+    wxTreeItemData *GetData() const { return m_data; }
+    void SetData(wxTreeItemData *data) { delete m_data; m_data = data; }
+
+private:
+    wxTreeViewItem *m_tvItem;
+    wxTreeItemData *m_data;
+};
+
 #ifdef __VISUALC__
 #pragma warning( default : 4097 )
 #endif
+
+// a macro to get the virtual root, returns NULL if none
+#define GET_VIRTUAL_ROOT() ((wxVirtualNode *)m_pVirtualRoot)
+
+// returns TRUE if the item is the virtual root
+#define IS_VIRTUAL_ROOT(item) (HITEM(item) == TVI_ROOT)
 
 // a class which encapsulates the tree traversal logic: it vists all (unless
 // OnVisit() returns FALSE) items under the given one
@@ -345,6 +380,12 @@ public:
 
     virtual bool OnVisit(const wxTreeItemId& item)
     {
+        // can't visit a virtual node.
+        if ( (GetTree()->GetRootItem() == item) && (GetTree()->GetWindowStyle() & wxTR_HIDE_ROOT))
+        {
+            return TRUE;
+        }
+
 #if wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
         if ( GetTree()->IsItemChecked(item) )
 #else
@@ -537,6 +578,7 @@ void wxTreeCtrl::Init()
     m_hasAnyAttr = FALSE;
     m_dragImage = NULL;
     m_htSelStart = 0;
+    m_pVirtualRoot = NULL;
 
     // initialize the global array of events now as it can't be done statically
     // with the wxEVT_XXX values being allocated during run-time only
@@ -691,6 +733,7 @@ wxTreeCtrl::~wxTreeCtrl()
     DeleteTextCtrl();
 
     // delete user data to prevent memory leaks
+    // also deletes hidden root node storage.
     DeleteAllItems();
 
     if (m_ownsImageListNormal) delete m_imageListNormal;
@@ -705,6 +748,9 @@ wxTreeCtrl::~wxTreeCtrl()
 
 bool wxTreeCtrl::DoGetItem(wxTreeViewItem* tvItem) const
 {
+    wxCHECK_MSG( tvItem->hItem != TVI_ROOT, FALSE,
+                 _T("can't retrieve virtual root item") );
+
     if ( !TreeView_GetItem(GetHwnd(), tvItem) )
     {
         wxLogLastError(wxT("TreeView_GetItem"));
@@ -758,7 +804,9 @@ void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)
 {
-    if (m_ownsImageListNormal) delete m_imageListNormal;
+    if (m_ownsImageListNormal)
+        delete m_imageListNormal;
+
     SetAnyImageList(m_imageListNormal = imageList, TVSIL_NORMAL);
     m_ownsImageListNormal = FALSE;
 }
@@ -840,6 +888,9 @@ wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
 
 void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
 {
+    if ( IS_VIRTUAL_ROOT(item) )
+        return;
+
     wxTreeViewItem tvItem(item, TVIF_TEXT);
     tvItem.pszText = (wxChar *)text.c_str();  // conversion is ok
     DoSetItem(&tvItem);
@@ -898,6 +949,12 @@ void wxTreeCtrl::DoSetItemImages(const wxTreeItemId& item,
 int wxTreeCtrl::GetItemImage(const wxTreeItemId& item,
                              wxTreeItemIcon which) const
 {
+    if ( (HITEM(item) == TVI_ROOT) && (m_windowStyle & wxTR_HIDE_ROOT) )
+    {
+        // TODO: Maybe a hidden root can still provide images?
+        return -1;
+    }
+
     if ( HasIndirectData(item) )
     {
         return DoGetItemImageFromData(item, which);
@@ -931,6 +988,12 @@ int wxTreeCtrl::GetItemImage(const wxTreeItemId& item,
 void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
                               wxTreeItemIcon which)
 {
+    if ( IS_VIRTUAL_ROOT(item) )
+    {
+        // TODO: Maybe a hidden root can still store images?
+        return;
+    }
+
     int imageNormal, imageSel;
     switch ( which )
     {
@@ -984,6 +1047,14 @@ void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
 wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
 {
     wxTreeViewItem tvItem(item, TVIF_PARAM);
+
+    // Hidden root may have data.
+    if ( IS_VIRTUAL_ROOT(item) )
+    {
+        return GET_VIRTUAL_ROOT()->GetData();
+    }
+
+    // Visible node.
     if ( !DoGetItem(&tvItem) )
     {
         return NULL;
@@ -1000,6 +1071,11 @@ wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
 {
+    if ( IS_VIRTUAL_ROOT(item) )
+    {
+        GET_VIRTUAL_ROOT()->SetData(data);
+    }
+
     // first, associate this piece of data with this item
     if ( data )
     {
@@ -1054,6 +1130,9 @@ bool wxTreeCtrl::HasIndirectData(const wxTreeItemId& item) const
 
 void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
 {
+    if ( IS_VIRTUAL_ROOT(item) )
+        return;
+
     wxTreeViewItem tvItem(item, TVIF_CHILDREN);
     tvItem.cChildren = (int)has;
     DoSetItem(&tvItem);
@@ -1061,6 +1140,9 @@ void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
 
 void wxTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
 {
+    if ( IS_VIRTUAL_ROOT(item) )
+        return;
+
     wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_BOLD);
     tvItem.state = bold ? TVIS_BOLD : 0;
     DoSetItem(&tvItem);
@@ -1068,6 +1150,9 @@ void wxTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
 
 void wxTreeCtrl::SetItemDropHighlight(const wxTreeItemId& item, bool highlight)
 {
+    if ( IS_VIRTUAL_ROOT(item) )
+        return;
+
     wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_DROPHILITED);
     tvItem.state = highlight ? TVIS_DROPHILITED : 0;
     DoSetItem(&tvItem);
@@ -1075,6 +1160,9 @@ void wxTreeCtrl::SetItemDropHighlight(const wxTreeItemId& item, bool highlight)
 
 void wxTreeCtrl::RefreshItem(const wxTreeItemId& item)
 {
+    if ( IS_VIRTUAL_ROOT(item) )
+        return;
+
     wxRect rect;
     if ( GetBoundingRect(item, rect) )
     {
@@ -1193,6 +1281,10 @@ bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const
 
 wxTreeItemId wxTreeCtrl::GetRootItem() const
 {
+    // Root may be real (visible) or virtual (hidden).
+    if ( GET_VIRTUAL_ROOT() )
+        return TVI_ROOT;
+
     return wxTreeItemId((WXHTREEITEM) TreeView_GetRoot(GetHwnd()));
 }
 
@@ -1206,7 +1298,14 @@ wxTreeItemId wxTreeCtrl::GetSelection() const
 
 wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
 {
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetParent(GetHwnd(), HITEM(item)));
+    HTREEITEM hItem = TreeView_GetParent(GetHwnd(), HITEM(item));
+    if ( !hItem && HasFlag(wxTR_HIDE_ROOT) )
+    {
+        // the top level items should have the virtual root as their parent
+        hItem = TVI_ROOT;
+    }
+
+    return wxTreeItemId((WXHTREEITEM)hItem);
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
@@ -1291,6 +1390,8 @@ void wxTreeCtrl::SetItemCheck(const wxTreeItemId& item, bool check)
 {
     // receive the desired information.
     wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);
+
+    DoGetItem(&tvItem);
 
     // state images are one-based
     tvItem.state = (check ? 2 : 1) << 12;
@@ -1397,7 +1498,16 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                                  int image, int selectedImage,
                                  wxTreeItemData *data)
 {
-    return DoInsertItem(wxTreeItemId((long) (WXHTREEITEM) 0), (long)(WXHTREEITEM) 0,
+
+    if ( m_windowStyle & wxTR_HIDE_ROOT )
+    {
+        // create a virtual root item, the parent for all the others
+        m_pVirtualRoot = new wxVirtualNode(data);
+
+        return TVI_ROOT;
+    }
+
+    return DoInsertItem(wxTreeItemId((WXHTREEITEM) 0), (WXHTREEITEM) 0,
                         text, image, selectedImage, data);
 }
 
@@ -1486,6 +1596,9 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 
 void wxTreeCtrl::DeleteAllItems()
 {
+    // delete stored root item.
+    delete GET_VIRTUAL_ROOT();
+
     if ( !TreeView_DeleteAllItems(GetHwnd()) )
     {
         wxLogLastError(wxT("TreeView_DeleteAllItems"));
@@ -1499,6 +1612,13 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
                   flag == TVE_EXPAND   ||
                   flag == TVE_TOGGLE,
                   wxT("Unknown flag in wxTreeCtrl::DoExpand") );
+
+    // A hidden root can be neither expanded nor collapsed.
+    if ( (HITEM(item) == TVI_ROOT) && (m_windowStyle & wxTR_HIDE_ROOT) )
+    {
+        // No action will be taken.
+        return;
+    }
 
     // TreeView_Expand doesn't send TVN_ITEMEXPAND(ING) messages, so we must
     // emulate them. This behaviour has changed slightly with comctl32.dll
