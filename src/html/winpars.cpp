@@ -199,7 +199,8 @@ void wxHtmlWinParser::AddText(const char* txt)
     if (lng+1 > gs_htmlBufLen)
     {
         gs_htmlBufLen = wxMax(lng+1, wxHTML_BUFLEN);
-        delete gs_htmlBuf;
+        if (gs_htmlBuf)
+          delete [] gs_htmlBuf;
         gs_htmlBuf = new char[gs_htmlBufLen];
     }
     temp = gs_htmlBuf;
@@ -409,8 +410,9 @@ bool wxHtmlTagsModule::OnInit()
 
 void wxHtmlTagsModule::OnExit()
 {
+    if (gs_htmlBuf)
+        delete [] gs_htmlBuf;
     wxHtmlWinParser::RemoveModule(this);
-    delete gs_htmlBuf;
 }
 #endif
 
