@@ -29,7 +29,7 @@ I STRONGLY recommend reading and understanding these macros!!
 #include "wx/html/winpars.h"
 
 #define TAG_HANDLER_BEGIN(name,tags)                                      \
-    class HTML_Handler_##name : public wxHtmlWinTagHandler                \
+    class wxHTML_Handler_##name : public wxHtmlWinTagHandler              \
     {                                                                     \
         public:                                                           \
             wxString GetSupportedTags() {return wxT(tags);}
@@ -41,7 +41,7 @@ I STRONGLY recommend reading and understanding these macros!!
 
 #define TAG_HANDLER_CONSTR(name)                                                \
         public:                                                           \
-        HTML_Handler_##name () : wxHtmlWinTagHandler()
+        wxHTML_Handler_##name () : wxHtmlWinTagHandler()
 
 
 #define TAG_HANDLER_PROC(varib)                                           \
@@ -57,9 +57,9 @@ I STRONGLY recommend reading and understanding these macros!!
 
 
 #define TAGS_MODULE_BEGIN(name)                                           \
-    class HTML_Module##name : public wxHtmlTagsModule                     \
+    class wxHTML_Module##name : public wxHtmlTagsModule                   \
     {                                                                     \
-        DECLARE_DYNAMIC_CLASS(HTML_Module##name )                         \
+        DECLARE_DYNAMIC_CLASS(wxHTML_Module##name )                       \
         public:                                                           \
             void FillHandlersTable(wxHtmlWinParser *parser)               \
                 {
@@ -68,7 +68,7 @@ I STRONGLY recommend reading and understanding these macros!!
 
 
 #define TAGS_MODULE_ADD(handler)                                          \
-                    parser->AddTagHandler(new HTML_Handler_##handler);
+                    parser->AddTagHandler(new wxHTML_Handler_##handler);
 
 
 
@@ -76,7 +76,7 @@ I STRONGLY recommend reading and understanding these macros!!
 #define TAGS_MODULE_END(name)                                             \
                 }                                                         \
     };                                                                    \
-    IMPLEMENT_DYNAMIC_CLASS(HTML_Module##name , wxHtmlTagsModule)
+    IMPLEMENT_DYNAMIC_CLASS(wxHTML_Module##name , wxHtmlTagsModule)
 
 
 
