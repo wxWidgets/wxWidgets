@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gtk/timer.cpp
-// Purpose:
+// Purpose:     wxTimer implementation
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
@@ -16,15 +16,34 @@
 
 #include "gtk/gtk.h"
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// This is a hack to work around a crash in wxGTK which happens (sometimes)
+// when the timer is deleted from the GTK event handler. In this case even
+// though the timer is stopped in its dtor, it is apparently too late to
+// prevent the dead timer from being called from g_timeout_dispatch() during
+// the same iteration of g_main_dispatch(). A better solution must be found,
+// possibly by deferring the timer deletion until later, this is only a
+// temporary hack! (VZ)
+// ----------------------------------------------------------------------------
+
+static wxTimer *gs_timerDead = (wxTimer *)NULL;
+
+// ----------------------------------------------------------------------------
 // wxTimer
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
 
 static gint timeout_callback( gpointer data )
 {
     wxTimer *timer = (wxTimer*)data;
+    if ( timer == gs_timerDead )
+    {
+        // shouldn't be called more than once for the dead timer anyhow
+        gs_timerDead = NULL;
+
+        return FALSE;
+    }
 
     /* when getting called from GDK's timer handler we
        are no longer within GDK's grab on the GUI
@@ -50,6 +69,8 @@ void wxTimer::Init()
 
 wxTimer::~wxTimer()
 {
+    gs_timerDead = this;
+
     wxTimer::Stop();
 }
 
