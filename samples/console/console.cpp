@@ -783,6 +783,14 @@ static void DumpFileName(const wxFileName& fn)
              fn.GetPath(wxPATH_GET_SEPARATOR).c_str());
     wxPrintf(_T("with both:   \t'%s'\n"),
              fn.GetPath(wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME).c_str());
+
+    wxPuts(_T("The directories in the path are:"));
+    wxArrayString dirs = fn.GetDirs();
+    size_t count = dirs.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxPrintf(_T("\t%u: %s\n"), n, dirs[n].c_str());
+    }
 }
 
 static struct FileNameInfo
@@ -5625,6 +5633,8 @@ static void TestStringMatch()
 
 int main(int argc, char **argv)
 {
+    wxApp::CheckBuildOptions(wxBuildOptions());
+
     wxInitializer initializer;
     if ( !initializer )
     {
@@ -5837,10 +5847,11 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    if ( 0 )
+    if ( 1 )
     {
         wxFileName fn;
         fn.Assign("c:\\foo", "bar.baz");
+        fn.Assign("/u/os9-port/Viewer/tvision/WEI2HZ-3B3-14_05-04-00MSC1.asc");
 
         DumpFileName(fn);
     }
@@ -5859,6 +5870,7 @@ int main(int argc, char **argv)
 
 #ifdef TEST_FILETIME
     TestFileGetTimes();
+    if ( 0 )
     TestFileSetTimes();
 #endif // TEST_FILETIME
 
