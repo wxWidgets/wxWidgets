@@ -637,6 +637,7 @@ wxBITMAP_TYPE_PICT_RESOURCE = wxc.wxBITMAP_TYPE_PICT_RESOURCE
 wxBITMAP_TYPE_ICON = wxc.wxBITMAP_TYPE_ICON
 wxBITMAP_TYPE_ICON_RESOURCE = wxc.wxBITMAP_TYPE_ICON_RESOURCE
 wxBITMAP_TYPE_ANI = wxc.wxBITMAP_TYPE_ANI
+wxBITMAP_TYPE_IFF = wxc.wxBITMAP_TYPE_IFF
 wxBITMAP_TYPE_MACCURSOR = wxc.wxBITMAP_TYPE_MACCURSOR
 wxBITMAP_TYPE_MACCURSOR_RESOURCE = wxc.wxBITMAP_TYPE_MACCURSOR_RESOURCE
 wxBITMAP_TYPE_ANY = wxc.wxBITMAP_TYPE_ANY
@@ -1447,6 +1448,8 @@ class wxTimer(wxPyTimer):
 wxColor      = wxColour
 wxNamedColor = wxNamedColour
 wxPen        = wxPyPen
+wxScrollbar  = wxScrollBar
+
 
 # backwards compatibility
 wxNoRefBitmap       = wxBitmap
@@ -1460,11 +1463,12 @@ wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
 # level should set it up to match what GTK is doing at the C level.
-try:
-    import locale
-    locale.setlocale(locale.LC_ALL, "")
-except:
-    pass
+if wxPlatform == "__WXGTK__":
+    try:
+        import locale
+        locale.setlocale(locale.LC_ALL, "")
+    except:
+        pass
 
 
 

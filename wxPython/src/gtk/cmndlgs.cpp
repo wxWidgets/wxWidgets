@@ -1535,6 +1535,241 @@ static PyObject *_wrap_wxFileDialog_GetPaths(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+static void *SwigwxMultiChoiceDialogTowxDialog(void *ptr) {
+    wxMultiChoiceDialog *src;
+    wxDialog *dest;
+    src = (wxMultiChoiceDialog *) ptr;
+    dest = (wxDialog *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxMultiChoiceDialogTowxTopLevelWindow(void *ptr) {
+    wxMultiChoiceDialog *src;
+    wxTopLevelWindow *dest;
+    src = (wxMultiChoiceDialog *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxMultiChoiceDialogTowxWindow(void *ptr) {
+    wxMultiChoiceDialog *src;
+    wxWindow *dest;
+    src = (wxMultiChoiceDialog *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxMultiChoiceDialogTowxEvtHandler(void *ptr) {
+    wxMultiChoiceDialog *src;
+    wxEvtHandler *dest;
+    src = (wxMultiChoiceDialog *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxMultiChoiceDialogTowxObject(void *ptr) {
+    wxMultiChoiceDialog *src;
+    wxObject *dest;
+    src = (wxMultiChoiceDialog *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxMultiChoiceDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxMultiChoiceDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
+static PyObject *_wrap_new_wxMultiChoiceDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMultiChoiceDialog * _result;
+    wxWindow * _arg0;
+    wxString * _arg1;
+    wxString * _arg2;
+    int  _arg3;
+    wxString * _arg4;
+    long  _arg5 = (long ) (wxCHOICEDLG_STYLE);
+    wxPoint * _arg6 = (wxPoint *) &wxDefaultPosition;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _obj4 = 0;
+    wxPoint  temp;
+    PyObject * _obj6 = 0;
+    char *_kwnames[] = { "parent","message","caption","choices","style","pos", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO|lO:new_wxMultiChoiceDialog",_kwnames,&_argo0,&_obj1,&_obj2,&_obj4,&_arg5,&_obj6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxMultiChoiceDialog. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+    if (_obj4)
+{
+    _arg4 = wxString_LIST_helper(_obj4);
+    if (_arg4 == NULL) {
+        return NULL;
+    }
+}
+    if (_obj6)
+{
+    _arg6 = &temp;
+    if (! wxPoint_helper(_obj6, &_arg6))
+        return NULL;
+}
+{
+    if (_obj4) {
+        _arg3 = PyList_Size(_obj4);
+    }
+    else {
+        _arg3 = 0;
+    }
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxMultiChoiceDialog *)new_wxMultiChoiceDialog(_arg0,*_arg1,*_arg2,_arg3,_arg4,_arg5,*_arg6);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMultiChoiceDialog_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    delete [] _arg4;
+}
+    return _resultobj;
+}
+
+#define wxMultiChoiceDialog_SetSelections(_swigobj,_swigarg0)  (_swigobj->SetSelections(_swigarg0))
+static PyObject *_wrap_wxMultiChoiceDialog_SetSelections(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMultiChoiceDialog * _arg0;
+    wxArrayInt * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","selections", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMultiChoiceDialog_SetSelections",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMultiChoiceDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMultiChoiceDialog_SetSelections. Expected _wxMultiChoiceDialog_p.");
+        return NULL;
+        }
+    }
+{
+    if (! PySequence_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "Sequence of integers expected.");
+        return NULL;
+    }
+    _arg1 = new wxArrayInt;
+    int i, len=PySequence_Length(_obj1);
+    for (i=0; i<len; i++) {
+        PyObject* item = PySequence_GetItem(_obj1, i);
+        PyObject* number  = PyNumber_Int(item);
+        _arg1->Add(PyInt_AS_LONG(number));
+        Py_DECREF(item);
+        Py_DECREF(number);
+    }
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMultiChoiceDialog_SetSelections(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static PyObject * wxMultiChoiceDialog_GetSelections(wxMultiChoiceDialog *self) {
+            return wxArrayInt2PyList_helper(self->GetSelections());
+        }
+static PyObject *_wrap_wxMultiChoiceDialog_GetSelections(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxMultiChoiceDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMultiChoiceDialog_GetSelections",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMultiChoiceDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMultiChoiceDialog_GetSelections. Expected _wxMultiChoiceDialog_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (PyObject *)wxMultiChoiceDialog_GetSelections(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static void *SwigwxSingleChoiceDialogTowxDialog(void *ptr) {
     wxSingleChoiceDialog *src;
     wxDialog *dest;
@@ -1588,7 +1823,7 @@ static PyObject *_wrap_new_wxSingleChoiceDialog(PyObject *self, PyObject *args, 
     wxString * _arg2;
     int  _arg3;
     wxString * _arg4;
-    long  _arg5 = (long ) wxOK|wxCANCEL|wxCENTRE;
+    long  _arg5 = (long ) (wxCHOICEDLG_STYLE);
     wxPoint * _arg6 = (wxPoint *) &wxDefaultPosition;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
@@ -3857,6 +4092,9 @@ static PyMethodDef cmndlgscMethods[] = {
 	 { "wxSingleChoiceDialog_GetStringSelection", (PyCFunction) _wrap_wxSingleChoiceDialog_GetStringSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSingleChoiceDialog_GetSelection", (PyCFunction) _wrap_wxSingleChoiceDialog_GetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxSingleChoiceDialog", (PyCFunction) _wrap_new_wxSingleChoiceDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMultiChoiceDialog_GetSelections", (PyCFunction) _wrap_wxMultiChoiceDialog_GetSelections, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMultiChoiceDialog_SetSelections", (PyCFunction) _wrap_wxMultiChoiceDialog_SetSelections, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxMultiChoiceDialog", (PyCFunction) _wrap_new_wxMultiChoiceDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_GetPaths", (PyCFunction) _wrap_wxFileDialog_GetPaths, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_GetFilenames", (PyCFunction) _wrap_wxFileDialog_GetFilenames, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_ShowModal", (PyCFunction) _wrap_wxFileDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
@@ -3929,6 +4167,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxTopLevelWindow","_wxFontDialog",SwigwxFontDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxTextEntryDialog",SwigwxTextEntryDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxMultiChoiceDialog",SwigwxMultiChoiceDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxFileDialog",SwigwxFileDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
@@ -3969,6 +4208,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxFontData",SwigwxFontDataTowxObject},
     { "_wxObject","_wxTextEntryDialog",SwigwxTextEntryDialogTowxObject},
     { "_wxObject","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxObject},
+    { "_wxObject","_wxMultiChoiceDialog",SwigwxMultiChoiceDialogTowxObject},
     { "_wxObject","_wxFileDialog",SwigwxFileDialogTowxObject},
     { "_wxObject","_wxDirDialog",SwigwxDirDialogTowxObject},
     { "_wxObject","_wxColourDialog",SwigwxColourDialogTowxObject},
@@ -3988,6 +4228,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDialog","_wxFontDialog",SwigwxFontDialogTowxDialog},
     { "_wxDialog","_wxTextEntryDialog",SwigwxTextEntryDialogTowxDialog},
     { "_wxDialog","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxDialog},
+    { "_wxDialog","_wxMultiChoiceDialog",SwigwxMultiChoiceDialogTowxDialog},
     { "_wxDialog","_wxFileDialog",SwigwxFileDialogTowxDialog},
     { "_wxDialog","_wxDirDialog",SwigwxDirDialogTowxDialog},
     { "_wxDialog","_wxColourDialog",SwigwxColourDialogTowxDialog},
@@ -4035,6 +4276,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvtHandler","_wxFontDialog",SwigwxFontDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxTextEntryDialog",SwigwxTextEntryDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxEvtHandler},
+    { "_wxEvtHandler","_wxMultiChoiceDialog",SwigwxMultiChoiceDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxFileDialog",SwigwxFileDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxDirDialog",SwigwxDirDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxColourDialog",SwigwxColourDialogTowxEvtHandler},
@@ -4044,6 +4286,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindow","_wxFontDialog",SwigwxFontDialogTowxWindow},
     { "_wxWindow","_wxTextEntryDialog",SwigwxTextEntryDialogTowxWindow},
     { "_wxWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxWindow},
+    { "_wxWindow","_wxMultiChoiceDialog",SwigwxMultiChoiceDialogTowxWindow},
     { "_wxWindow","_wxFileDialog",SwigwxFileDialogTowxWindow},
     { "_wxWindow","_wxDirDialog",SwigwxDirDialogTowxWindow},
     { "_wxWindow","_wxColourDialog",SwigwxColourDialogTowxWindow},
@@ -4058,6 +4301,7 @@ SWIGEXPORT(void) initcmndlgsc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("cmndlgsc", cmndlgscMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxCHOICEDLG_STYLE", PyInt_FromLong((long) wxCHOICEDLG_STYLE));
 	 PyDict_SetItemString(d,"wxFR_DOWN", PyInt_FromLong((long) wxFR_DOWN));
 	 PyDict_SetItemString(d,"wxFR_WHOLEWORD", PyInt_FromLong((long) wxFR_WHOLEWORD));
 	 PyDict_SetItemString(d,"wxFR_MATCHCASE", PyInt_FromLong((long) wxFR_MATCHCASE));

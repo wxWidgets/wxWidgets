@@ -209,6 +209,7 @@ public:
     DEC_PYCALLBACK__STRING(OnSetTitle);
     DEC_PYCALLBACK__CELLINTINT(OnCellMouseHover);
     DEC_PYCALLBACK__CELLINTINTME(OnCellClicked);
+    DEC_PYCALLBACK_BOOL_STRING(OnOpeningURL);
     PYPRIVATE;
 };
 
@@ -216,6 +217,7 @@ IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 IMP_PYCALLBACK__CELLINTINT(wxPyHtmlWindow, wxHtmlWindow, OnCellMouseHover);
 IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
+IMP_PYCALLBACK_BOOL_STRING(wxPyHtmlWindow, wxHtmlWindow, OnOpeningURL);
 
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
@@ -1266,6 +1268,58 @@ static PyObject *_wrap_wxHtmlParser_PopTagHandler(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+#define wxHtmlParser_CanOpenURL(_swigobj,_swigarg0)  (_swigobj->CanOpenURL(_swigarg0))
+static PyObject *_wrap_wxHtmlParser_CanOpenURL(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxHtmlParser * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","url", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlParser_CanOpenURL",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlParser_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlParser_CanOpenURL. Expected _wxHtmlParser_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxHtmlParser_CanOpenURL(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static void *SwigwxHtmlWinParserTowxHtmlParser(void *ptr) {
     wxHtmlWinParser *src;
     wxHtmlParser *dest;
@@ -1286,18 +1340,18 @@ static void *SwigwxHtmlWinParserTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxHtmlWinParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlWinParser * _result;
-    wxWindow * _arg0;
+    wxHtmlWindow * _arg0 = (wxHtmlWindow *) NULL;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "wnd", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxHtmlWinParser",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxHtmlWinParser",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxHtmlWinParser. Expected _wxWindow_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxHtmlWinParser. Expected _wxHtmlWindow_p.");
         return NULL;
         }
     }
@@ -6579,6 +6633,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlWinParser_GetDC", (PyCFunction) _wrap_wxHtmlWinParser_GetDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWinParser_SetDC", (PyCFunction) _wrap_wxHtmlWinParser_SetDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlWinParser", (PyCFunction) _wrap_new_wxHtmlWinParser, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlParser_CanOpenURL", (PyCFunction) _wrap_wxHtmlParser_CanOpenURL, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_PopTagHandler", (PyCFunction) _wrap_wxHtmlParser_PopTagHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_PushTagHandler", (PyCFunction) _wrap_wxHtmlParser_PushTagHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_GetSource", (PyCFunction) _wrap_wxHtmlParser_GetSource, METH_VARARGS | METH_KEYWORDS },

@@ -1308,11 +1308,11 @@ class wxGenericDirCtrl: public wxControl
 {
 public:
     wxGenericDirCtrl(wxWindow *parent, const wxWindowID id = -1,
-                     const wxString &dir = wxDirDialogDefaultFolderStr,
+                     const char* dir = wxDirDialogDefaultFolderStr,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
-                     const wxString& filter = wxEmptyString,
+                     const char* filter = wxEmptyString,
                      int defaultFilter = 0,
                      const char* name = "dirCtrl" );
     %name(wxPreGenericDirCtrl)wxGenericDirCtrl();
@@ -1321,11 +1321,11 @@ public:
     %pragma(python) addtomethod = "wxPreGenericDirCtrl:val._setOORInfo(val)"
 
     bool Create(wxWindow *parent, const wxWindowID id = -1,
-                const wxString &dir = wxDirDialogDefaultFolderStr,
+                const char* dir = wxDirDialogDefaultFolderStr,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
-                const wxString& filter = wxEmptyString,
+                const char* filter = wxEmptyString,
                 int defaultFilter = 0,
                 const char* name = "dirCtrl" );
 

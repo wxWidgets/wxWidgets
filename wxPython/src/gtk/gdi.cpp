@@ -2608,6 +2608,34 @@ static PyObject *_wrap_wxNativeFontInfo_FromXFontName(PyObject *self, PyObject *
     return _resultobj;
 }
 
+#define wxNativeFontInfo_IsDefault(_swigobj)  (_swigobj->IsDefault())
+static PyObject *_wrap_wxNativeFontInfo_IsDefault(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxNativeFontInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxNativeFontInfo_IsDefault",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNativeFontInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNativeFontInfo_IsDefault. Expected _wxNativeFontInfo_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxNativeFontInfo_IsDefault(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxNativeFontInfo_GetXFontName(_swigobj)  (_swigobj->GetXFontName())
 static PyObject *_wrap_wxNativeFontInfo_GetXFontName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2637,6 +2665,58 @@ static PyObject *_wrap_wxNativeFontInfo_GetXFontName(PyObject *self, PyObject *a
 }
 {
     delete _result;
+}
+    return _resultobj;
+}
+
+#define wxNativeFontInfo_SetXFontName(_swigobj,_swigarg0)  (_swigobj->SetXFontName(_swigarg0))
+static PyObject *_wrap_wxNativeFontInfo_SetXFontName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxNativeFontInfo * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","xFontName", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxNativeFontInfo_SetXFontName",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNativeFontInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNativeFontInfo_SetXFontName. Expected _wxNativeFontInfo_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxNativeFontInfo_SetXFontName(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
 }
     return _resultobj;
 }
@@ -11691,7 +11771,9 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxNativeFontInfo_FromString", (PyCFunction) _wrap_wxNativeFontInfo_FromString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNativeFontInfo_Init", (PyCFunction) _wrap_wxNativeFontInfo_Init, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxNativeFontInfo", (PyCFunction) _wrap_new_wxNativeFontInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNativeFontInfo_SetXFontName", (PyCFunction) _wrap_wxNativeFontInfo_SetXFontName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNativeFontInfo_GetXFontName", (PyCFunction) _wrap_wxNativeFontInfo_GetXFontName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNativeFontInfo_IsDefault", (PyCFunction) _wrap_wxNativeFontInfo_IsDefault, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNativeFontInfo_FromXFontName", (PyCFunction) _wrap_wxNativeFontInfo_FromXFontName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCursor_Ok", (PyCFunction) _wrap_wxCursor_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxCursor", (PyCFunction) _wrap_delete_wxCursor, METH_VARARGS | METH_KEYWORDS },
@@ -11900,6 +11982,7 @@ SWIGEXPORT(void) initgdic() {
 	 PyDict_SetItemString(d,"wxFONTFAMILY_MODERN", PyInt_FromLong((long) wxFONTFAMILY_MODERN));
 	 PyDict_SetItemString(d,"wxFONTFAMILY_TELETYPE", PyInt_FromLong((long) wxFONTFAMILY_TELETYPE));
 	 PyDict_SetItemString(d,"wxFONTFAMILY_MAX", PyInt_FromLong((long) wxFONTFAMILY_MAX));
+	 PyDict_SetItemString(d,"wxFONTFAMILY_UNKNOWN", PyInt_FromLong((long) wxFONTFAMILY_UNKNOWN));
 	 PyDict_SetItemString(d,"wxFONTSTYLE_NORMAL", PyInt_FromLong((long) wxFONTSTYLE_NORMAL));
 	 PyDict_SetItemString(d,"wxFONTSTYLE_ITALIC", PyInt_FromLong((long) wxFONTSTYLE_ITALIC));
 	 PyDict_SetItemString(d,"wxFONTSTYLE_SLANT", PyInt_FromLong((long) wxFONTSTYLE_SLANT));

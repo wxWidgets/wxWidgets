@@ -193,8 +193,14 @@ class wxNativeFontInfoPtr :
     def FromXFontName(self, *_args, **_kwargs):
         val = apply(gdic.wxNativeFontInfo_FromXFontName,(self,) + _args, _kwargs)
         return val
+    def IsDefault(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo_IsDefault,(self,) + _args, _kwargs)
+        return val
     def GetXFontName(self, *_args, **_kwargs):
         val = apply(gdic.wxNativeFontInfo_GetXFontName,(self,) + _args, _kwargs)
+        return val
+    def SetXFontName(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo_SetXFontName,(self,) + _args, _kwargs)
         return val
     def Init(self, *_args, **_kwargs):
         val = apply(gdic.wxNativeFontInfo_Init,(self,) + _args, _kwargs)
@@ -1270,6 +1276,7 @@ wxFONTFAMILY_SWISS = gdic.wxFONTFAMILY_SWISS
 wxFONTFAMILY_MODERN = gdic.wxFONTFAMILY_MODERN
 wxFONTFAMILY_TELETYPE = gdic.wxFONTFAMILY_TELETYPE
 wxFONTFAMILY_MAX = gdic.wxFONTFAMILY_MAX
+wxFONTFAMILY_UNKNOWN = gdic.wxFONTFAMILY_UNKNOWN
 wxFONTSTYLE_NORMAL = gdic.wxFONTSTYLE_NORMAL
 wxFONTSTYLE_ITALIC = gdic.wxFONTSTYLE_ITALIC
 wxFONTSTYLE_SLANT = gdic.wxFONTSTYLE_SLANT

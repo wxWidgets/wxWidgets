@@ -81,6 +81,9 @@ class wxControlWithItemsPtr(wxControlPtr):
     def SetClientData(self, *_args, **_kwargs):
         val = apply(controlsc.wxControlWithItems_SetClientData,(self,) + _args, _kwargs)
         return val
+    def AppendItems(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_AppendItems,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxControlWithItems instance at %s>" % (self.this,)
     Number = GetCount
