@@ -91,6 +91,11 @@ WX_END_FLAGS( wxSpinCtrlStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl,"wx/spinbut.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxSpinCtrl)
+    WX_DELEGATE_RANGE( OnSpin , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxSpinEvent )
+    WX_DELEGATE( OnUpdated , wxEVT_COMMAND_SPINCTRL_UPDATED , wxCommandEvent )
+    WX_DELEGATE( OnTextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
+    WX_DELEGATE( OnTextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
+
     WX_PROPERTY( ValueString , wxString , SetValue , GetValue , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) ;
 	WX_PROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Min , int , SetMin, GetMin, 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )

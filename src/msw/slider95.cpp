@@ -84,7 +84,10 @@ WX_END_FLAGS( wxSliderStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider95, wxControl,"wx/scrolbar.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxSlider95)
-	WX_PROPERTY( Value , int , SetValue, GetValue , 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    WX_DELEGATE_RANGE( OnScroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxScrollEvent )
+    WX_DELEGATE( OnUpdated , wxEVT_COMMAND_SLIDER_UPDATED , wxCommandEvent )
+
+    WX_PROPERTY( Value , int , SetValue, GetValue , 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Minimum , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Maximum , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( PageSize , int , SetPageSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))

@@ -97,6 +97,8 @@ WX_END_FLAGS( wxSpinButtonStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinButton, wxControl,"wx/spinbut.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxSpinButton)
+    WX_DELEGATE_RANGE( OnSpin , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxSpinEvent )
+
 	WX_PROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Min , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Max , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))

@@ -264,6 +264,8 @@ WX_END_FLAGS( wxListCtrlStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxListCtrl, wxControl,"wx/listctrl.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxListCtrl)
+    WX_DELEGATE( OnTextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
+
     WX_PROPERTY_FLAGS( WindowStyle , wxListCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 WX_END_PROPERTIES_TABLE()
 

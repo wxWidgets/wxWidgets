@@ -131,15 +131,11 @@ WX_END_FLAGS( wxFrameStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow,"wx/frame.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxFrame)
-	WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_DELEGATE( OnMenu , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
+
+    WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     WX_PROPERTY_FLAGS( WindowStyle , wxFrameStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
     WX_PROPERTY( MenuBar , wxMenuBar * , SetMenuBar , GetMenuBar , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    /*
-	TODO PROPERTIES
-
-		style (wxDEFAULT_FRAME_STYLE)
-		centered (bool, false )
-*/
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxFrame)

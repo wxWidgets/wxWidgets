@@ -91,8 +91,10 @@ WX_END_FLAGS( wxListBoxStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControl,"wx/listbox.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxListBox)
-    // TODO DELEGATES
-	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_DELEGATE( OnSelect , wxEVT_COMMAND_LISTBOX_SELECTED , wxCommandEvent )
+	WX_DELEGATE( OnDoubleClick , wxEVT_COMMAND_LISTBOX_DOUBLECLICKED , wxCommandEvent )
+
+    WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
 	WX_PROPERTY( Selection ,int, SetSelection, GetSelection,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
     WX_PROPERTY_FLAGS( WindowStyle , wxListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
