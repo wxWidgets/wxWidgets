@@ -208,7 +208,7 @@ struct WXDLLEXPORT wxStringData
 
   // VC++ will refuse to inline this function but profiling shows that it
   // is wrong
-#if defined(__VISUALC__) && defined(__WIN32__)
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
   __forceinline
 #endif
   void  Unlock() { if ( !IsEmpty() && --nRefs == 0) free(this);  }
