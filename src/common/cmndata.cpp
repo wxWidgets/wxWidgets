@@ -853,6 +853,16 @@ void wxPrintData::operator=(const wxPrintSetupData& setupData)
 }
 #endif // wxCOMPATIBILITY_WITH_PRINTSETUPDATA
 
+// Is this data OK for showing the print dialog?
+bool wxPrintData::Ok() const
+{
+#ifdef __WXMSW__
+    ((wxPrintData*)this)->ConvertToNative();
+    return (m_devMode != NULL) ;
+#else
+    return TRUE;
+#endif    
+}
 
 // ----------------------------------------------------------------------------
 // Print dialog data
@@ -967,7 +977,8 @@ void wxPrintDialogData::ConvertToNative()
 
     m_printData.SetNativeData((void*) NULL);
 
-    wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
+    // Shouldn't assert; we should be able to test Ok-ness at a higher level
+    //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
 
     pd->hDevNames = (HGLOBAL)(DWORD) m_printData.GetNativeDataDevNames();
 
@@ -1279,7 +1290,8 @@ void wxPageSetupDialogData::ConvertToNative()
 
     m_printData.SetNativeData((void*) NULL);
 
-    wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
+    // Shouldn't assert; we should be able to test Ok-ness at a higher level
+    //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
 
     // Pass the devnames data (created in m_printData.ConvertToNative)
     // to the PRINTDLG structure, since it'll

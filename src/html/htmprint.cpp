@@ -543,6 +543,13 @@ void wxHtmlEasyPrinting::PrinterSetup()
 
 void wxHtmlEasyPrinting::PageSetup()
 {
+    if (!m_PrintData->Ok())
+    {
+        wxMessageBox(_("Sorry, there was a problem: you may need to set a default printer."),
+            _("Page Setup Problem"), wxICON_INFORMATION|wxOK, m_Frame);
+        return;
+    }
+
     m_PageSetupData->SetPrintData(*m_PrintData);
     wxPageSetupDialog pageSetupDialog(m_Frame, m_PageSetupData);
 

@@ -50,6 +50,14 @@ Destructor.
 
 Returns the \helpref{page setup data}{wxpagesetupdialogdata} associated with the dialog.
 
+\membersection{wxPageSetupDialog::Ok}\label{wxpagesetupdialogok}
+
+\constfunc{bool}{Ok}{\void}
+
+Returns TRUE if the print data associated with the dialog data is valid.
+This can return FALSE on Windows if the current printer is not set, for example.
+On all other platforms, it returns TRUE.
+
 \membersection{wxPageSetupDialog::ShowModal}\label{wxpagesetupdialogshowmodal}
 
 \func{int}{ShowModal}{\void}
@@ -217,6 +225,14 @@ Returns the paper size in millimetres.
 \func{wxPrintData\&}{GetPrintData}{\void}
 
 Returns a reference to the \helpref{print data}{wxprintdata} associated with this object.
+
+\membersection{wxPageSetupDialogData::Ok}\label{wxpagesetupdialogdataok}
+
+\constfunc{bool}{Ok}{\void}
+
+Returns TRUE if the print data associated with the dialog data is valid.
+This can return FALSE on Windows if the current printer is not set, for example.
+On all other platforms, it returns TRUE.
 
 \membersection{wxPageSetupDialogData::SetDefaultInfo}\label{wxpagesetupdialogdatasetdefaultinfo}
 

@@ -140,6 +140,9 @@ class WXDLLEXPORT wxPrintData: public wxObject
     bool GetCollate() const { return m_printCollate; };
     int  GetOrientation() const { return m_printOrientation; };
 
+    // Is this data OK for showing the print dialog?
+    bool Ok() const ;
+
     const wxString& GetPrinterName() const { return m_printerName; }
     bool GetColour() const { return m_colour; }
     wxDuplexMode GetDuplex() const { return m_duplexMode; }
@@ -288,6 +291,9 @@ class WXDLLEXPORT wxPrintDialogData: public wxObject
     bool GetEnablePageNumbers() const { return m_printEnablePageNumbers; };
     bool GetEnableHelp() const { return m_printEnableHelp; };
 
+    // Is this data OK for showing the print dialog?
+    bool Ok() const { return m_printData.Ok() ; }
+
     wxPrintData& GetPrintData() { return m_printData; }
     void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
 
@@ -360,6 +366,9 @@ public:
     bool GetEnablePrinter() const { return m_enablePrinter; };
     bool GetDefaultInfo() const { return m_getDefaultInfo; };
     bool GetEnableHelp() const { return m_enableHelp; };
+
+    // Is this data OK for showing the page setup dialog?
+    bool Ok() const { return m_printData.Ok() ; }
 
     // If a corresponding paper type is found in the paper database, will set the m_printData
     // paper size id member as well.

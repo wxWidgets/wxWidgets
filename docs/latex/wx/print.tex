@@ -134,6 +134,14 @@ wxPRINT_QUALITY_DRAFT
 On input you should pass one of these identifiers, but on return you may get back a positive integer
 indicating the current resolution setting.
 
+\membersection{wxPrintData::Ok}\label{wxprintdataok}
+
+\constfunc{bool}{Ok}{\void}
+
+Returns TRUE if the print data is valid for using in print dialogs.
+This can return FALSE on Windows if the current printer is not set, for example.
+On all other platforms, it returns TRUE.
+
 \membersection{wxPrintData::SetCollate}\label{wxprintdatasetcollate}
 
 \func{void}{SetCollate}{\param{bool }{flag}}
@@ -338,6 +346,14 @@ When this function has been called, the ownership of the device context
 is transferred to the application, so it must then be deleted
 explicitly.
 
+\membersection{wxPrintDialog::Ok}\label{wxprintdialogok}
+
+\constfunc{bool}{Ok}{\void}
+
+Returns TRUE if the print data associated with the dialog is valid.
+This can return FALSE on Windows if the current printer is not set, for example.
+On all other platforms, it returns TRUE.
+
 \membersection{wxPrintDialog::ShowModal}\label{wxprintdialogshowmodal}
 
 \func{int}{ShowModal}{\void}
@@ -469,6 +485,14 @@ a concept specific to the application).
 \constfunc{int}{GetToPage}{\void}
 
 Returns the {\it to} page number, as entered by the user.
+
+\membersection{wxPrintDialogData::Ok}\label{wxprintdialogdataok}
+
+\constfunc{bool}{Ok}{\void}
+
+Returns TRUE if the print data is valid for using in print dialogs.
+This can return FALSE on Windows if the current printer is not set, for example.
+On all other platforms, it returns TRUE.
 
 \membersection{wxPrintDialogData::SetCollate}\label{wxprintdialogdatasetcollate}
 
