@@ -46,9 +46,10 @@ MustHaveApp(wxRegion);
 class wxRegion : public wxGDIObject {
 public:
     wxRegion(wxCoord x=0, wxCoord y=0, wxCoord width=0, wxCoord height=0);
-    %name(RegionFromBitmap)wxRegion(const wxBitmap& bmp,
-                                      const wxColour& transColour = wxNullColour,
-                                      int   tolerance = 0);
+    %name(RegionFromBitmap)wxRegion(const wxBitmap& bmp);
+    %name(RegionFromBitmapColour)wxRegion(const wxBitmap& bmp,
+                                          const wxColour& transColour,
+                                          int   tolerance = 0);
 #ifndef __WXMAC__
     %name(RegionFromPoints)wxRegion(int points, wxPoint* points_array,
                                       int fillStyle = wxWINDING_RULE);
@@ -103,9 +104,10 @@ public:
     // with this region.  If the bitmap has a mask then it will be used,
     // otherwise the colour to be treated as transparent may be specified,
     // along with an optional tolerance value.
-    %name(UnionBitmap)bool Union(const wxBitmap& bmp,
-                                 const wxColour& transColour = wxNullColour,
-                                 int   tolerance = 0);
+    %name(UnionBitmap)bool Union(const wxBitmap& bmp);
+    %name(UnionBitmapColour)bool Union(const wxBitmap& bmp,
+                                       const wxColour& transColour,
+                                       int   tolerance = 0);
 };
 
 
