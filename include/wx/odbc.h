@@ -20,9 +20,9 @@
 #ifndef _WX_ODBCH__
 #define _WX_ODBCH__
 
-#ifdef __WXMSW__
-#include <windows.h>
-#endif
+//#ifdef __WXMSW__
+//#include <windows.h>
+//#endif
 
 
 #ifdef __UNIX__
