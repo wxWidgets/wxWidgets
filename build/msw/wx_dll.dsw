@@ -105,6 +105,9 @@ Package=<4>
     Project_Dep_Name adv
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name odbc
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name base
     End Project Dependency
     Begin Project Dependency
