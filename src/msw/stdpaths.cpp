@@ -62,6 +62,14 @@ static const wxChar *TRACE_MASK = _T("stdpaths");
     #define CSIDL_PROGRAM_FILES   0x0026
 #endif
 
+#ifndef SHGFP_TYPE_CURRENT
+    #define SHGFP_TYPE_CURRENT 0
+#endif
+
+#ifndef SHGFP_TYPE_DEFAULT
+    #define SHGFP_TYPE_DEFAULT 1
+#endif
+
 // ----------------------------------------------------------------------------
 // module globals
 // ----------------------------------------------------------------------------
