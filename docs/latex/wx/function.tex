@@ -672,6 +672,10 @@ characters) is centred; if FALSE, the message is left-justified.
 
 <wx/choicdlg.h>
 
+\perlnote{In wxPerl there is just an array reference in place of {\tt n}
+and {\tt choices}, and no {\tt selections} parameter; the function 
+returns an array containing the user selections.}
+
 \membersection{::wxGetNumberFromUser}\label{wxgetnumberfromuser}
 
 \func{long}{wxGetNumberFromUser}{
@@ -790,6 +794,9 @@ characters) is centred; if FALSE, the message is left-justified.
 
 <wx/choicdlg.h>
 
+\perlnote{In wxPerl there is just an array reference in place of {\tt n}
+and {\tt choices}.}
+
 \membersection{::wxGetSingleChoiceIndex}\label{wxgetsinglechoiceindex}
 
 \func{int}{wxGetSingleChoiceIndex}{\param{const wxString\& }{message},\\
@@ -810,6 +817,9 @@ string. If the user pressed cancel, -1 is returned.
 \wxheading{Include files}
 
 <wx/choicdlg.h>
+
+\perlnote{In wxPerl there is just an array reference in place of {\tt n}
+and {\tt choices}.}
 
 \membersection{::wxGetSingleChoiceData}\label{wxgetsinglechoicedata}
 
@@ -837,6 +847,10 @@ elements as {\it choices} or {\it aChoices}!
 \wxheading{Include files}
 
 <wx/choicdlg.h>
+
+\perlnote{In wxPerl there is just an array reference in place of {\tt n}
+and {\tt choices}, and the client data array must have the
+same length as the choices array.}
 
 \membersection{::wxMessageBox}\label{wxmessagebox}
 

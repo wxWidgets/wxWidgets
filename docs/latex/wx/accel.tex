@@ -141,6 +141,10 @@ Loads the accelerator table from a Windows resource (Windows only).
 wxAcceleratorEntry objects, or 3-tuples consisting of flags, keyCode,
 and cmd values like you would construct wxAcceleratorEntry objects with.}
 
+\perlnote{The wxPerl constructor accepts a list of either
+  Wx::AcceleratorEntry objects or references to 3-element arrays
+  ( flags, keyCode, cmd ), like the parameters of Wx::AcceleratorEntry::new.}
+
 \membersection{wxAcceleratorTable::\destruct{wxAcceleratorTable}}
 
 \func{}{\destruct{wxAcceleratorTable}}{\void}

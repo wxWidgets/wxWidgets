@@ -57,6 +57,9 @@ red, blue or green component.
 
 \helpref{wxPalette::Create}{wxpalettecreate}
 
+\perlnote{In wxPerl the third constructor form takes as parameters
+  3 array references ( they must be of the same length ).}
+
 \membersection{wxPalette::\destruct{wxPalette}}
 
 \func{}{\destruct{wxPalette}}{\void}
@@ -136,6 +139,9 @@ TRUE if the operation was successful.
 \wxheading{See also}
 
 \helpref{wxPalette::GetPixel}{wxpalettegetpixel}
+
+\perlnote{In wxPerl this method takes only the {\tt pixel} parameter and
+  returns a 3-element list ( or the empty list upon failure ).}
 
 \membersection{wxPalette::Ok}\label{wxpaletteok}
 

@@ -244,6 +244,9 @@ item is currently invisible.
 {\tt item} and {\tt textOnly} parameters.  The return value is either a
 {\tt wxRect} object or {\tt None}.}
 
+\perlnote{In wxPerl this method only takes the parameters {\tt item} and 
+  {\tt textOnly}, and returns a Wx::Rect ( or undef ).}
+
 \membersection{wxTreeCtrl::GetChildrenCount}\label{wxtreectrlgetchildrencount}
 
 \constfunc{size\_t}{GetChildrenCount}{\param{const wxTreeItemId\&}{ item}, \param{bool}{ recursively = TRUE}}
@@ -284,6 +287,9 @@ Returns an invalid tree item if there are no further children.
 \pythonnote{In wxPython the returned wxTreeItemId and the new cookie
 value are both returned as a tuple containing the two values.}
 
+\perlnote{In wxPerl this method only takes the {\tt item} parameter, and
+  returns a 2-element list ( item, cookie ).}
+
 \membersection{wxTreeCtrl::GetFirstVisibleItem}\label{wxtreectrlgetfirstvisibleitem}
 
 \constfunc{wxTreeItemId}{GetFirstVisibleItem}{\void}
@@ -317,6 +323,15 @@ Returns the tree item data associated with the item.
 \indented{2cm}{\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf GetPyData(item)}}{Returns the Python Object
 associated with the wxTreeItemData for the given item Id.}
+\end{twocollist}}
+}
+
+\perlnote{wxPerl provides the following shortcut method:
+\indented{2cm}{
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf GetPlData( item )}}{Returns the Perl data
+associated with the Wx::TreeItemData ( it is just the same as
+tree->GetItemData( item )->GetData(); ).}
 \end{twocollist}}
 }
 
@@ -375,6 +390,9 @@ Returns an invalid tree item if there are no further children.
 
 \pythonnote{In wxPython the returned wxTreeItemId and the new cookie
 value are both returned as a tuple containing the two values.}
+
+\perlnote{In wxPerl this method returns a 2-element list
+  ( item, cookie ), instead of modifying its parameters.}
 
 \membersection{wxTreeCtrl::GetNextSibling}\label{wxtreectrlgetnextsibling}
 
@@ -455,6 +473,9 @@ Returns the number of selected items.
 \pythonnote{The wxPython version of this method accepts no parameters
 and returns a Python list of {\tt wxTreeItemId}s.}
 
+\perlnote{In wxPerl this method takes no parameters and returns a list of
+ {\tt Wx::TreeItemId}s.}
+
 \membersection{wxTreeCtrl::GetStateImageList}\label{wxtreectrlgetstateimagelist}
 
 \constfunc{wxImageList*}{GetStateImageList}{\void}
@@ -485,6 +506,9 @@ id at this point plus extra information {\it flags}. {\it flags} is a bitlist of
 
 \pythonnote{in wxPython both the wxTreeItemId and the flags are
 returned as a tuple.}
+
+\perlnote{In wxPerl this method only takes the {\tt point} parameter
+  and returns a 2-element list ( item, flags ).}
 
 \membersection{wxTreeCtrl::InsertItem}\label{wxtreectrlinsertitem}
 
@@ -610,6 +634,15 @@ Sets the item client data.
 \indented{2cm}{\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf SetPyData(item, obj)}}{Associate the given Python
 Object with the wxTreeItemData for the given item Id.}
+\end{twocollist}}
+}
+
+\perlnote{wxPerl provides the following shortcut method:
+\indented{2cm}{
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf SetPlData( item, data )}}{Sets the Perl data
+associated with the Wx::TreeItemData ( it is just the same as
+tree->GetItemData( item )->SetData( data ); ).}
 \end{twocollist}}
 }
 
@@ -752,6 +785,10 @@ wxTreeItemData}
 \end{twocollist}}
 }
 
+\perlnote{In wxPerl the constructor accepts as parameter an optional scalar,
+ and stores it as client data. You may retrieve this data by calling
+ {\bf GetData()}, and set it by callling {\bf SetData( data ).}
+}
 
 \membersection{wxTreeItemData::\destruct{wxTreeItemData}}
 

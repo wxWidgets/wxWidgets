@@ -225,12 +225,24 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
+\perlnote{In wxPerl there are three methods instead of a single overloaded
+method:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf FindItem( start, str, partial = FALSE ) }}{}
+\twocolitem{{\bf FindItemData( start, data ) }}{}
+\twocolitem{{\bf FindItemAtPos( start, point, direction )}}{}
+\end{twocollist}
+}}
+
 \membersection{wxListCtrl::GetColumn}\label{wxlistctrlgetcolumn}
 
 \constfunc{bool}{GetColumn}{\param{int }{col}, \param{wxListItem\& }{item}}
 
 Gets information about this column. See \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem} for more
 information.
+
+\perlnote{In wxPerl this method takes only the {\bf col} parameter and
+  returns a Wx::ListItem ( or undef ).}
 
 \membersection{wxListCtrl::GetColumnWidth}\label{wxlistctrlgetcolumnwidth}
 
@@ -280,6 +292,9 @@ before calling this method.
 for the item ID, an optional integer for the column number, and
 returns the wxListItem object.}
 
+\perlnote{In wxPerl this method takes as parameter the {\bf ID} of the item
+and ( optionally ) the column, and returns a Wx::ListItem object.}
+
 \membersection{wxListCtrl::GetItemCount}\label{wxlistctrlgetitemcount}
 
 \constfunc{int}{GetItemCount}{\void}
@@ -301,6 +316,9 @@ Returns the position of the item, in icon or small icon view.
 \pythonnote{The wxPython version of this method accepts only the item
 ID and returns the wxPoint.}
 
+\perlnote{In wxPerl this method takes only the {\bf item} parameter and
+returns a Wx::Point ( or undef ).}
+
 \membersection{wxListCtrl::GetItemRect}\label{wxlistctrlgetitemrect}
 
 \constfunc{bool}{GetItemRect}{\param{long }{item}, \param{wxRect\& }{rect}, \param{int }{code = wxLIST\_RECT\_BOUNDS}}
@@ -311,6 +329,9 @@ Returns the rectangle representing the item's size and position, in client coord
 
 \pythonnote{The wxPython version of this method accepts only the item
 ID and code and returns the wxRect.}
+
+\perlnote{In wxPerl this method takes only the {\bf item} parameter and
+retutrns a Wx::Rect ( or undef ).}
 
 \membersection{wxListCtrl::GetItemSpacing}\label{wxlistctrlgetitemspacing}
 
@@ -432,6 +453,9 @@ wxLIST\_HITTEST\_ONITEMSTATEICON.}
 this method. The first value is the item id and the second is the
 flags value mentioned above.}
 
+\perlnote{In wxPerl this method only takes the {\bf point} parameter
+  and returns a 2-element list ( item, flags ).}
+
 \membersection{wxListCtrl::InsertColumn}\label{wxlistctrlinsertcolumn}
 
 \func{long}{InsertColumn}{\param{long }{col}, \param{wxListItem\& }{info}}
@@ -491,6 +515,17 @@ implements the following methods:\par
 \twocolitem{{\bf InsertImageStringItem(index, label, imageIndex)}}{Insert an image/string item.}
 \end{twocollist}}
 }
+
+\perlnote{In wxPerl there are four methods instead of a single overloaded
+method:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf InsertItem( item )}}{Inserts a Wx::ListItem}
+\twocolitem{{\bf InsertStringItem( index, label )}}{Inserts a string item}
+\twocolitem{{\bf InsertImageItem( index, imageIndex )}}{Inserts an image item}
+\twocolitem{{\bf InsertImageStringItem( index, label, imageIndex )}}{Inserts
+ an item with a string and an image}
+\end{twocollist}
+}}
 
 \membersection{wxListCtrl::ScrollList}\label{wxlistctrlscrolllist}
 
@@ -698,4 +733,8 @@ using this function.
 function to call, so it is not available for programmer use.  Call
 SortItems with a reference to a callable object that expects two
 parameters.}
+
+\perlnote{In wxPerl the comparison function must take just two parameters;
+ however, you may use a closure to achieve an effect similar to the
+ SortItems third parameter.}
 

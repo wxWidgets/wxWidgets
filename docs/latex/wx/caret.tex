@@ -72,6 +72,15 @@ for all carets, so this functions is static).
 
 Get the caret position (in pixels).
 
+\perlnote{In wxPerl there are two methods instead of a single overloaded
+method:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf GetPosition()}}{Returns a Wx::Point}
+\twocolitem{{\bf GetPositionXY()}}{Returns a 2-element list
+ {\tt ( x, y )}}
+\end{twocollist}
+}}
+
 \membersection{wxCaret::GetSize}\label{wxcaretgetsize}
 
 \constfunc{void}{GetSize}{\param{int* }{width}, \param{int* }{height}}
@@ -79,6 +88,15 @@ Get the caret position (in pixels).
 \constfunc{wxSize}{GetSize}{\void}
 
 Get the caret size.
+
+\perlnote{In wxPerl there are two methods instead of a single overloaded
+method:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf GetSize()}}{Returns a Wx::Size}
+\twocolitem{{\bf GetSizeWH()}}{Returns a 2-element list
+ {\tt ( width, height )}}
+\end{twocollist}
+}}
 
 \membersection{wxCaret::GetWindow}\label{wxcaretgetwindow}
 
