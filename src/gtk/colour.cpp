@@ -27,7 +27,7 @@ class wxColourRefData: public wxObjectRefData
 public:
     wxColourRefData();
     ~wxColourRefData();
-    
+
     void FreeColour();
 
 public:
@@ -108,8 +108,15 @@ void wxColour::InitFromName( const wxString &colourName )
         m_refData = new wxColourRefData();
         if (!gdk_color_parse( colourName.mb_str(), &M_COLDATA->m_color ))
         {
-            wxFAIL_MSG( wxT("wxColour: couldn't find colour") );
-      
+            // VZ: asserts are good in general but this one is triggered by
+            //     calling wxColourDatabase::FindColour() with an
+            //     unrecognized colour name and this can't be avoided from the
+            //     user code, so don't give it here
+            //
+            //     a better solution would be to changed code in FindColour()
+
+            //wxFAIL_MSG( wxT("wxColour: couldn't find colour") );
+
             delete m_refData;
             m_refData = (wxObjectRefData *) NULL;
         }
@@ -135,16 +142,16 @@ wxColour& wxColour::operator = ( const wxColour& col )
 bool wxColour::operator == ( const wxColour& col ) const
 {
     if (m_refData == col.m_refData) return TRUE;
-    
+
     if (!m_refData) return FALSE;
     if (!col.m_refData) return FALSE;
-    
+
     GdkColor *own = &(((wxColourRefData*)m_refData)->m_color);
     GdkColor *other = &(((wxColourRefData*)col.m_refData)->m_color);
     if (own->red != other->red) return FALSE;
     if (own->blue != other->blue) return FALSE;
     if (own->green != other->green) return FALSE;
-    
+
     return TRUE;
 }
 
@@ -194,7 +201,7 @@ void wxColour::CalcPixel( GdkColormap *cmap )
     if (!Ok()) return;
 
     if ((M_COLDATA->m_hasPixel) && (M_COLDATA->m_colormap == cmap)) return;
-    
+
     M_COLDATA->FreeColour();
 
 #ifdef __WXGTK20__
@@ -209,7 +216,7 @@ void wxColour::CalcPixel( GdkColormap *cmap )
         M_COLDATA->m_hasPixel = gdk_colormap_alloc_color( cmap, &M_COLDATA->m_color, FALSE, TRUE );
     }
     else
-    { 
+    {
         M_COLDATA->m_hasPixel = gdk_color_alloc( cmap, &M_COLDATA->m_color );
     }
 
