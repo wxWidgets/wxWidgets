@@ -6,11 +6,6 @@
 	<param name="ImageType" value="Folder">
 </OBJECT>
 <UL>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="main page">
-		<param name="Local" value="another.htm">
-		</OBJECT>
-	<UL> 
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Project file">
 			<param name="Local" value="another.hhp">
@@ -19,6 +14,5 @@
 			<param name="Name" value="Contents file">
 			<param name="Local" value="another.hhc">
 		     </OBJECT>
-        </UL>		
 </UL>
 </BODY></HTML>
