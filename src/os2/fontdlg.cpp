@@ -32,35 +32,87 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define wxDIALOG_DEFAULT_X 300
-#define wxDIALOG_DEFAULT_Y 300
-
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
-
-/*
- * wxFontDialog
- */
-wxFontDialog::wxFontDialog()
-{
-    m_dialogParent = NULL;
-}
-
-wxFontDialog::wxFontDialog(wxWindow *parent, const wxFontData& rData)
-{
-    Create(parent, rData);
-}
-
-bool wxFontDialog::Create(wxWindow *parent, const wxFontData& rData)
-{
-    m_dialogParent = parent;
-
-    m_fontData = rData;
-    return TRUE;
-}
 
 int wxFontDialog::ShowModal()
 {
-    // TODO: show (maybe create) the dialog
+    FONTDLG                         vFontDlg;
+    char                            zCurrentFont[FACESIZE];
+    HWND                            hWndFontDlg;
+    FONTMETRICS                     vFm;
+    FACENAMEDESC                    vFn;
+
+    memset(&vFontDlg, '\0', sizeof(FONTDLG));
+    zCurrentFont[0] = '\0';
+
+    //
+    // Set the fontdlg fields
+    //
+    vFontDlg.cbSize         = sizeof(FONTDLG);
+    vFontDlg.hpsScreen      = ::WinGetScreenPS(HWND_DESKTOP);
+    vFontDlg.hpsPrinter     = NULL;
+    vFontDlg.pszFamilyname  = zCurrentFont;
+    vFontDlg.fxPointSize    = MAKEFIXED(12,0);
+    vFontDlg.usFamilyBufLen = FACESIZE;
+    vFontDlg.fl             = FNTS_CENTER;
+    vFontDlg.clrFore        = CLR_BLACK;
+    vFontDlg.clrBack        = CLR_WHITE;
+
+    hWndFontDlg = WinFontDlg( HWND_DESKTOP
+                             ,GetParent()->GetHWND()
+                             ,&vFontDlg
+                            );
+    if (hWndFontDlg && vFontDlg.lReturn == DID_OK)
+    {
+        wxColour                    vColour((unsigned long)0x00000000);
+        wxNativeFontInfo            vInfo;
+
+        m_fontData.fontColour = vColour;
+
+        memset(&vFn, '\0', sizeof(FACENAMEDESC));
+        vFn.usSize        = sizeof(FACENAMEDESC);
+        vFn.usWeightClass = vFontDlg.usWeight;
+        vFn.usWidthClass  = vFontDlg.usWidth;
+
+        memcpy(&vInfo.fa, &vFontDlg.fAttrs, sizeof(FATTRS));
+        memcpy(&vInfo.fn, &vFn, sizeof(FACENAMEDESC));
+
+        //
+        // Debugging
+        //
+        wxFont                      vChosenFont(vInfo);
+        int                         nFamily;
+        int                         nPointSize;
+        int                         nStyle;
+        int                         nWeight;
+        bool                        bUnderlined;
+        wxString                    sFaceName;
+        wxNativeFontInfo*           pInfo;
+
+        nFamily = vChosenFont.GetFamily();
+        nPointSize = vChosenFont.GetPointSize();
+        nStyle = vChosenFont.GetStyle();
+        nWeight = vChosenFont.GetWeight();
+        bUnderlined = vChosenFont.GetUnderlined();
+        sFaceName = vChosenFont.GetFaceName();
+        pInfo = vChosenFont.GetNativeFontInfo();
+
+
+        m_fontData.chosenFont = vChosenFont;
+
+        nFamily = m_fontData.chosenFont.GetFamily();
+        nPointSize = m_fontData.chosenFont.GetPointSize();
+        nStyle = m_fontData.chosenFont.GetStyle();
+        nWeight = m_fontData.chosenFont.GetWeight();
+        bUnderlined = m_fontData.chosenFont.GetUnderlined();
+        sFaceName = m_fontData.chosenFont.GetFaceName();
+        pInfo = m_fontData.chosenFont.GetNativeFontInfo();
+
+        m_fontData.EncodingInfo().facename = vFontDlg.fAttrs.szFacename;
+        m_fontData.EncodingInfo().charset = vFontDlg.fAttrs.usCodePage;
+
+        return wxID_OK;
+    }
     return wxID_CANCEL;
-}
+} // end of wxFontDialg::ShowModal
 

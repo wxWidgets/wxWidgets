@@ -22,20 +22,40 @@
 
 class WXDLLEXPORT wxFontDialog: public wxFontDialogBase
 {
-DECLARE_DYNAMIC_CLASS(wxFontDialog)
 public:
-    wxFontDialog();
-    wxFontDialog(wxWindow *parent, const wxFontData& rData);
+    wxFontDialog() : wxFontDialogBase() { /* must be Create()d later */ }
+    wxFontDialog (wxWindow* pParent) : wxFontDialogBase(pParent) { Create(pParent); }
+    wxFontDialog( wxWindow*         pParent
+                 ,const wxFontData& rData
+                )
+                : wxFontDialogBase( pParent
+                                   ,rData
+                                  )
+    {
+        Create( pParent
+               ,rData
+              );
+    }
 
-    bool Create(wxWindow *parent, const wxFontData& rData);
+    virtual int ShowModal();
 
-    int ShowModal();
-    wxFontData& GetFontData() { return m_fontData; }
-
-//EK protected:
-    wxWindow*   m_dialogParent;
-    wxFontData  m_fontData;
-};
+    //
+    // Deprecated interface, don't use
+    //
+    wxFontDialog( wxWindow*         pParent
+                 ,const wxFontData* pData
+                )
+                : wxFontDialogBase( pParent
+                                   ,pData
+                                  )
+    {
+        Create( pParent
+               ,pData
+              );
+    }
+protected:
+    DECLARE_DYNAMIC_CLASS(wxFontDialog)
+}; // end of CLASS wxFontDialog
 
 #endif
     // _WX_FONTDLG_H_

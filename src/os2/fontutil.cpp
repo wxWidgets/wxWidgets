@@ -453,16 +453,19 @@ void wxOS2SelectMatchingFontByName(
             break;
 
         case wxDECORATIVE:
+            sFaceName = wxT("WarpSans");
+            break;
+
         case wxROMAN:
-            sFaceName = wxT("Tms Rmn");
+            sFaceName = wxT("Times New Roman");
             break;
 
         case wxTELETYPE:
-            sFaceName = wxT("Courier") ;
+            sFaceName = wxT("Courier New") ;
             break;
 
         case wxMODERN:
-            sFaceName = wxT("System VIO") ;
+            sFaceName = wxT("Arial") ;
             break;
 
         case wxSWISS:
@@ -471,7 +474,7 @@ void wxOS2SelectMatchingFontByName(
 
         case wxDEFAULT:
         default:
-            sFaceName = wxT("System VIO") ;
+            sFaceName = wxT("System Proportional") ;
     }
 
     switch (pFont->GetWeight())

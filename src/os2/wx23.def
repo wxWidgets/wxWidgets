@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  F:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1955,7 +1955,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -4302,6 +4302,8 @@ EXPORTS
       ClearData__18wxMimeTypesManagerFv
       ;wxArrayFileTypeInfo::operator=(const wxArrayFileTypeInfo&)
       __as__19wxArrayFileTypeInfoFRC19wxArrayFileTypeInfo
+      ;wxFileType::GetOpenCommand(const wxString&) const
+      GetOpenCommand__10wxFileTypeCFRC8wxString
       ;wxFileType::GetOpenCommand(wxString*,const wxFileType::MessageParameters&) const
       GetOpenCommand__10wxFileTypeCFP8wxStringRCQ2_10wxFileType17MessageParameters
       ;wxFileType::GetMimeType(wxString*) const
@@ -6178,7 +6180,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -12779,12 +12781,6 @@ EXPORTS
       ;wxConstructorForwxFontDialog()
       wxConstructorForwxFontDialog__Fv
       __vft12wxFontDialog8wxObject
-      ;wxFontDialog::Create(wxWindow*,const wxFontData&)
-      Create__12wxFontDialogFP8wxWindowRC10wxFontData
-      ;wxFontDialog::wxFontDialog(wxWindow*,const wxFontData&)
-      __ct__12wxFontDialogFP8wxWindowRC10wxFontData
-      ;wxFontDialog::wxFontDialog()
-      __ct__12wxFontDialogFv
       ;wxFontDialog::ShowModal()
       ShowModal__12wxFontDialogFv
       ;wxFontDialog::sm_classwxFontDialog
