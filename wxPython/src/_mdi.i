@@ -76,7 +76,7 @@ public:
     void SetWindowMenu(wxMenu* menu);
     void SetToolBar(wxToolBar* toolbar);
 #endif
-    void Tile();
+    void Tile(wxOrientation orient = wxHORIZONTAL);
 };
 
 //---------------------------------------------------------------------------
