@@ -153,47 +153,47 @@ public:
 #endif // wxUSE_TOOLTIPS
 
 #if wxUSE_CLIPBOARD
-    void OnPasteFromClipboard( wxCommandEvent &event )
+    void OnPasteFromClipboard( wxCommandEvent& WXUNUSED(event) )
         { m_panel->DoPasteFromClipboard(); }
-    void OnCopyToClipboard( wxCommandEvent &event )
+    void OnCopyToClipboard( wxCommandEvent& WXUNUSED(event) )
         { m_panel->DoCopyToClipboard(); }
 #endif // wxUSE_CLIPBOARD
 
-    void OnAddTextFreeze( wxCommandEvent& event )
+    void OnAddTextFreeze( wxCommandEvent& WXUNUSED(event) )
         { DoAddText(true); }
-    void OnAddText( wxCommandEvent& event )
+    void OnAddText( wxCommandEvent& WXUNUSED(event) )
         { DoAddText(false); }
-    void OnRemoveText( wxCommandEvent& event )
+    void OnRemoveText( wxCommandEvent& WXUNUSED(event) )
         { m_panel->DoRemoveText(); }
-    void OnReplaceText( wxCommandEvent& event )
+    void OnReplaceText( wxCommandEvent& WXUNUSED(event) )
         { m_panel->DoReplaceText(); }
-    void OnSelectText( wxCommandEvent& event )
+    void OnSelectText( wxCommandEvent& WXUNUSED(event) )
         { m_panel->DoSelectText(); }
 
-    void OnMoveToEndOfText( wxCommandEvent &event )
+    void OnMoveToEndOfText( wxCommandEvent& WXUNUSED(event) )
         { m_panel->DoMoveToEndOfText(); }
-    void OnMoveToEndOfEntry( wxCommandEvent &event )
+    void OnMoveToEndOfEntry( wxCommandEvent& WXUNUSED(event) )
         { m_panel->DoMoveToEndOfEntry(); }
 
-    void OnScrollLineDown(wxCommandEvent& event)
+    void OnScrollLineDown(wxCommandEvent& WXUNUSED(event))
     {
         if ( !m_panel->m_textrich->LineDown() )
             wxLogMessage(_T("Already at the bottom"));
     }
 
-    void OnScrollLineUp(wxCommandEvent& event)
+    void OnScrollLineUp(wxCommandEvent& WXUNUSED(event))
     {
         if ( !m_panel->m_textrich->LineUp() )
             wxLogMessage(_T("Already at the top"));
     }
 
-    void OnScrollPageDown(wxCommandEvent& event)
+    void OnScrollPageDown(wxCommandEvent& WXUNUSED(event))
     {
         if ( !m_panel->m_textrich->PageDown() )
             wxLogMessage(_T("Already at the bottom"));
     }
 
-    void OnScrollPageUp(wxCommandEvent& event)
+    void OnScrollPageUp(wxCommandEvent& WXUNUSED(event))
     {
         if ( !m_panel->m_textrich->PageUp() )
             wxLogMessage(_T("Already at the top"));
@@ -232,7 +232,7 @@ public:
         MyTextCtrl::ms_logFocus = event.IsChecked();
     }
 
-    void OnSetText(wxCommandEvent& event)
+    void OnSetText(wxCommandEvent& WXUNUSED(event))
     {
         m_panel->m_text->SetValue(_T("Hello, world (what else did you expect)?"));
     }
@@ -700,7 +700,7 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
     }
 }
 
-void MyTextCtrl::OnTextMaxLen(wxCommandEvent& event)
+void MyTextCtrl::OnTextMaxLen(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("You can't enter more characters into this control."));
 }
@@ -928,17 +928,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
       wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE);
     m_enter->SetClientData((void *)_T("enter"));
 
-#if 0
     m_textrich = new MyTextCtrl(this, -1, _T("Allows more than 30Kb of text\n")
                                 _T("(even under broken Win9x)\n")
                                 _T("and a very very very very very ")
                                 _T("very very very long line to test ")
                                 _T("wxHSCROLL style"),
                                 wxPoint(450, 10), wxSize(230, 230),
-                                wxTE_RICH2 |
-                                wxTE_MULTILINE |
-                                // wxTE_AUTO_URL |
-                                wxHSCROLL);
+                                wxTE_RICH | wxTE_MULTILINE | wxHSCROLL);
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
@@ -953,13 +949,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
     m_textrich->AppendText(_T("And this should be in blue and the text you ")
                            _T("type should be in blue as well"));
-#else
-    m_textrich = new MyTextCtrl(this, -1, _T(""),
-                                wxPoint(450, 10), wxSize(230, 230),
-                                wxTE_RICH2 |
-                                wxTE_MULTILINE |
-                                wxHSCROLL);
-#endif
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )
@@ -1175,7 +1164,8 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 }
 
 #if wxUSE_TOOLTIPS
-void MyFrame::OnSetTooltipDelay(wxCommandEvent& event)
+
+void MyFrame::OnSetTooltipDelay(wxCommandEvent& WXUNUSED(event))
 {
     static long s_delay = 5000;
 
@@ -1196,7 +1186,7 @@ void MyFrame::OnSetTooltipDelay(wxCommandEvent& event)
     wxLogStatus(this, _T("Tooltip delay set to %ld milliseconds"), s_delay);
 }
 
-void MyFrame::OnToggleTooltips(wxCommandEvent& event)
+void MyFrame::OnToggleTooltips(wxCommandEvent& WXUNUSED(event))
 {
     static bool s_enabled = TRUE;
 
@@ -1237,7 +1227,7 @@ void MyFrame::OnSetEnabled(wxCommandEvent& WXUNUSED(event))
     m_panel->m_textrich->Enable(enabled);
 }
 
-void MyFrame::OnFileSave(wxCommandEvent& event)
+void MyFrame::OnFileSave(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_panel->m_textrich->SaveFile(_T("dummy.txt")) )
     {
@@ -1254,7 +1244,7 @@ void MyFrame::OnFileSave(wxCommandEvent& event)
         wxLogStatus(this, _T("Couldn't save the file"));
 }
 
-void MyFrame::OnFileLoad(wxCommandEvent& event)
+void MyFrame::OnFileLoad(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_panel->m_textrich->LoadFile(_T("dummy.txt")) )
         wxLogStatus(this, _T("Successfully loaded file"));
@@ -1262,7 +1252,7 @@ void MyFrame::OnFileLoad(wxCommandEvent& event)
         wxLogStatus(this, _T("Couldn't load the file"));
 }
 
-void MyFrame::OnRichTextTest(wxCommandEvent& event)
+void MyFrame::OnRichTextTest(wxCommandEvent& WXUNUSED(event))
 {
     RichTextFrame* frame = new RichTextFrame(this, _T("Rich Text Editor"));
     frame->Show(TRUE);
@@ -1372,12 +1362,12 @@ RichTextFrame::RichTextFrame(wxWindow* parent, const wxString& title):
 
 // Event handlers
 
-void RichTextFrame::OnClose(wxCommandEvent& event)
+void RichTextFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void RichTextFrame::OnLeftAlign(wxCommandEvent& event)
+void RichTextFrame::OnLeftAlign(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttr attr;
     attr.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
@@ -1389,7 +1379,7 @@ void RichTextFrame::OnLeftAlign(wxCommandEvent& event)
     m_currentPosition = -1;
 }
 
-void RichTextFrame::OnRightAlign(wxCommandEvent& event)
+void RichTextFrame::OnRightAlign(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttr attr;
     attr.SetAlignment(wxTEXT_ALIGNMENT_RIGHT);
@@ -1401,7 +1391,7 @@ void RichTextFrame::OnRightAlign(wxCommandEvent& event)
     m_currentPosition = -1;
 }
 
-void RichTextFrame::OnJustify(wxCommandEvent& event)
+void RichTextFrame::OnJustify(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttr attr;
     attr.SetAlignment(wxTEXT_ALIGNMENT_JUSTIFIED);
@@ -1413,7 +1403,7 @@ void RichTextFrame::OnJustify(wxCommandEvent& event)
     m_currentPosition = -1;
 }
 
-void RichTextFrame::OnCentre(wxCommandEvent& event)
+void RichTextFrame::OnCentre(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttr attr;
     attr.SetAlignment(wxTEXT_ALIGNMENT_CENTRE);
@@ -1425,7 +1415,7 @@ void RichTextFrame::OnCentre(wxCommandEvent& event)
     m_currentPosition = -1;
 }
 
-void RichTextFrame::OnChangeFont(wxCommandEvent& event)
+void RichTextFrame::OnChangeFont(wxCommandEvent& WXUNUSED(event))
 {
     wxFontData data;
 
@@ -1447,7 +1437,7 @@ void RichTextFrame::OnChangeFont(wxCommandEvent& event)
     }
 }
 
-void RichTextFrame::OnChangeTextColour(wxCommandEvent& event)
+void RichTextFrame::OnChangeTextColour(wxCommandEvent& WXUNUSED(event))
 {
     wxColourData data;
     data.SetColour(* wxBLACK);
@@ -1476,7 +1466,7 @@ void RichTextFrame::OnChangeTextColour(wxCommandEvent& event)
     }
 }
 
-void RichTextFrame::OnChangeBackgroundColour(wxCommandEvent& event)
+void RichTextFrame::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
 {
     wxColourData data;
     data.SetColour(* wxWHITE);
@@ -1505,10 +1495,13 @@ void RichTextFrame::OnChangeBackgroundColour(wxCommandEvent& event)
     }
 }
 
-void RichTextFrame::OnLeftIndent(wxCommandEvent& event)
+void RichTextFrame::OnLeftIndent(wxCommandEvent& WXUNUSED(event))
 {
-    wxString indentStr = wxGetTextFromUser(_("Please enter the left indent in tenths of a millimetre."),
-        _("Left Indent"));
+    wxString indentStr = wxGetTextFromUser
+                         (
+                            _("Please enter the left indent in tenths of a millimetre."),
+                            _("Left Indent")
+                         );
     if (!indentStr.IsEmpty())
     {
         int indent = wxAtoi(indentStr);
@@ -1524,10 +1517,13 @@ void RichTextFrame::OnLeftIndent(wxCommandEvent& event)
     }
 }
 
-void RichTextFrame::OnRightIndent(wxCommandEvent& event)
+void RichTextFrame::OnRightIndent(wxCommandEvent& WXUNUSED(event))
 {
-    wxString indentStr = wxGetTextFromUser(_("Please enter the right indent in tenths of a millimetre."),
-        _("Right Indent"));
+    wxString indentStr = wxGetTextFromUser
+                         (
+                            _("Please enter the right indent in tenths of a millimetre."),
+                            _("Right Indent")
+                         );
     if (!indentStr.IsEmpty())
     {
         int indent = wxAtoi(indentStr);
@@ -1543,7 +1539,7 @@ void RichTextFrame::OnRightIndent(wxCommandEvent& event)
     }
 }
 
-void RichTextFrame::OnIdle(wxIdleEvent& event)
+void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
     long insertionPoint = m_textCtrl->GetInsertionPoint();
     if (insertionPoint != m_currentPosition)
