@@ -105,10 +105,7 @@ bool wxControl::OS2CreateControl(
 )
 {
     bool                            bWant3D = FALSE;
-    int                             nX = rPos.x == -1 ? 0 : rPos.x;
-    int                             nY = rPos.y == -1 ? 0 : rPos.y;
-    int                             nW = rSize.x == -1 ? 0 : rSize.x;
-    int                             nH = rSize.y == -1 ? 0 : rSize.y;
+
     //
     // Doesn't do anything at all under OS/2
     //
@@ -134,6 +131,8 @@ bool wxControl::OS2CreateControl(
         zClass = WC_STATIC;
     else if ((strcmp(zClassname, "BUTTON")) == 0)
         zClass = WC_BUTTON;
+    else if ((strcmp(zClassname, "NOTEBOOK")) == 0)
+        zClass = WC_NOTEBOOK;
     dwStyle |= WS_VISIBLE;
 
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
@@ -170,8 +169,11 @@ bool wxControl::OS2CreateControl(
     InheritAttributes();
     SetXComp(0);
     SetYComp(0);
-    if (nW == 0 || nH == 0)
-        SetBestSize(rSize);
+    SetSize( rPos.x
+            ,rPos.y
+            ,rSize.x
+            ,rSize.y
+           );
     return TRUE;
 } // end of wxControl::OS2CreateControl
 

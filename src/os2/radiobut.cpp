@@ -29,6 +29,10 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 
+extern void  wxAssociateWinWithHandle( HWND         hWnd
+                                      ,wxWindowOS2* pWin
+                                     );
+
 void wxRadioButton::Init()
 {
     m_bFocusJustSet = FALSE;
@@ -82,21 +86,16 @@ bool wxRadioButton::Create(
                          ))
         return FALSE;
 
+    wxAssociateWinWithHandle(m_hWnd, this);
     if (HasFlag(wxRB_GROUP))
         SetValue(TRUE);
 
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    SetFont(*pTextFont);
+    SetFont(*wxSMALL_FONT);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x
             ,rSize.y
            );
-    delete pTextFont;
     return TRUE;
 } // end of wxRadioButton::Create
 

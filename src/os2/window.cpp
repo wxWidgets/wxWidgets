@@ -301,6 +301,7 @@ void wxWindowOS2::Init()
     m_bUseCtl3D             = FALSE;
     m_bMouseInWindow        = FALSE;
     m_bLastKeydownProcessed = FALSE;
+    m_bIsActivePage         = TRUE;
 
     //
     // wxWnd
@@ -1646,13 +1647,86 @@ void wxWindowOS2::DoMoveWindow(
         ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
         nY = vRect.yTop - (nY + nHeight);
     }
+
+    //
+    // In the case of a frame whose client is sized, the client cannot be
+    // large than its parent frame minus its borders! This usually happens
+    // when using an autosizer to size a frame to precisely hold client
+    // controls as in the notebook sample.
+    //
+    // In this case, we may need to resize both a frame and its client so we
+    // need a quick calc of the frame border size, then if the frame
+    // (less its borders) is smaller than the client, size the frame to
+    // encompass the client with the appropriate border size.
+    //
+    if (IsKindOf(CLASSINFO(wxFrame)))
+    {
+        RECTL                       vFRect;
+        HWND                        hWndFrame;
+        int                         nWidthFrameDelta = 0;
+        int                         nHeightFrameDelta = 0;
+        int                         nHeightFrame = 0;
+        int                         nWidthFrame = 0;
+        ULONG                       ulFLag = SWP_MOVE;
+        wxFrame*                    pFrame;
+
+        pFrame = wxDynamicCast(this, wxFrame);
+        hWndFrame = pFrame->GetFrame();
+        ::WinQueryWindowRect(hWndFrame, &vRect);
+        ::WinMapWindowPoints(hWndFrame, HWND_DESKTOP, (PPOINTL)&vRect, 2);
+        vFRect = vRect;
+        ::WinCalcFrameRect(hWndFrame, &vRect, TRUE);
+        nWidthFrameDelta = ((vRect.xLeft - vFRect.xLeft) + (vFRect.xRight - vRect.xRight));
+        nHeightFrameDelta = ((vRect.yBottom - vFRect.yBottom) + (vFRect.yTop - vRect.yTop));
+        nWidthFrame = vFRect.xRight - vFRect.xLeft;
+        nHeightFrame = vFRect.yTop - vFRect.yBottom;
+
+        if (nWidth == vFRect.xRight - vFRect.xLeft &&
+            nHeight == vFRect.yTop - vFRect.yBottom)
+        {
+            //
+            // In this case the caller is not aware of OS/2's need to size both
+            // the frame and it's client and is really only moving the window,
+            // not resizeing it.  So move the frame, and back off the sizes
+            // for a proper client fit.
+            //
+            ::WinSetWindowPos( hWndFrame
+                              ,HWND_TOP
+                              ,(LONG)nX - (vRect.xLeft - vFRect.xLeft)
+                              ,(LONG)nY - (vRect.yBottom - vFRect.yBottom)
+                              ,(LONG)0
+                              ,(LONG)0
+                              ,SWP_MOVE
+                             );
+            nX += (vRect.xLeft - vFRect.xLeft);
+            nY += (vRect.yBottom - vFRect.yBottom);
+            nWidth -= nWidthFrameDelta;
+            nHeight -= nHeightFrameDelta;
+        }
+        else
+        {
+            if (nWidth > nWidthFrame - nHeightFrameDelta ||
+                nHeight > nHeightFrame - nHeightFrameDelta)
+            {
+                ::WinSetWindowPos( hWndFrame
+                                  ,HWND_TOP
+                                  ,(LONG)nX - (vRect.xLeft - vFRect.xLeft)
+                                  ,(LONG)nY - (vRect.yBottom - vFRect.yBottom)
+                                  ,(LONG)nWidth + nWidthFrameDelta
+                                  ,(LONG)nHeight + nHeightFrameDelta
+                                  ,SWP_MOVE | SWP_SIZE
+                                 );
+            }
+        }
+    }
+
     ::WinSetWindowPos( GetHwnd()
                       ,HWND_TOP
                       ,(LONG)nX
                       ,(LONG)nY
                       ,(LONG)nWidth
                       ,(LONG)nHeight
-                      ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                      ,SWP_SIZE | SWP_MOVE
                      );
     if (m_vWinSwp.cx == 0 && m_vWinSwp.cy == 0 && m_vWinSwp.fl == 0)
         //
@@ -2853,6 +2927,48 @@ MRESULT wxWindowOS2::OS2WindowProc(
         case WM_CONTROL:
             switch(SHORT2FROMMP(wParam))
             {
+                case BN_CLICKED:
+                    {
+                        HWND                hWnd = ::WinWindowFromID((HWND)GetHwnd(), SHORT1FROMMP(wParam));
+                        wxWindowOS2*        pWin = wxFindWinFromHandle(hWnd);
+
+                        if (!pWin)
+                        {
+                            bProcessed = FALSE;
+                            break;
+                        }
+                        //
+                        // Simulate a WM_COMMAND here, as wxWindows expects all control
+                        // button clicks to generate WM_COMMAND msgs, not WM_CONTROL
+                        //
+                        if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))
+                        {
+                            wxRadioBox*         pRadioBox = wxDynamicCast(pWin, wxRadioBox);
+
+                            pRadioBox->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
+                                                  ,(WXUINT)SHORT1FROMMP(wParam)
+                                                 );
+                        }
+                        if (pWin->IsKindOf(CLASSINFO(wxRadioButton)))
+                        {
+                            wxRadioButton*      pRadioButton = wxDynamicCast(pWin, wxRadioButton);
+
+                            pRadioButton->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
+                                                     ,(WXUINT)SHORT1FROMMP(wParam)
+                                                    );
+                        }
+                        if (pWin->IsKindOf(CLASSINFO(wxCheckBox)))
+                        {
+                            wxCheckBox*         pCheckBox = wxDynamicCast(pWin, wxCheckBox);
+
+                            pCheckBox->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
+                                                  ,(WXUINT)SHORT1FROMMP(wParam)
+                                                 );
+                        }
+                        return 0;
+                    }
+                    break;
+
                 case SPBN_UPARROW:
                 case SPBN_DOWNARROW:
                 case SPBN_CHANGE:
@@ -3322,7 +3438,7 @@ bool wxWindowOS2::HandleKillFocus(
 #endif // wxUSE_CARET
 
 #if wxUSE_TEXTCTRL
-    // 
+    //
     // If it's a wxTextCtrl don't send the event as it will be done
     // after the control gets to process it.
     //
@@ -3334,7 +3450,7 @@ bool wxWindowOS2::HandleKillFocus(
     }
 #endif
 
-    // 
+    //
     // Don't send the event when in the process of being deleted.  This can
     // only cause problems if the event handler tries to access the object.
     //
@@ -3349,7 +3465,7 @@ bool wxWindowOS2::HandleKillFocus(
 
     vEvent.SetEventObject(this);
 
-    // 
+    //
     // wxFindWinFromHandle() may return NULL, it is ok
     //
     vEvent.SetWindow(wxFindWinFromHandle(hWnd));
@@ -3718,7 +3834,9 @@ bool wxWindowOS2::HandlePaint()
     {
         //
         // OS/2 needs to process this right here, not by the default proc
-        // Window's default proc correctly paints everything, OS/2 does not!
+        // Window's default proc correctly paints everything, OS/2 does not.
+        // For decorative panels that typically have no children, we draw
+        // borders.
         //
         HPS                         hPS;
         RECTL                       vRect;
@@ -3746,35 +3864,76 @@ bool wxWindowOS2::HandlePaint()
                                      ,NULL
                                     );
 
-            ::WinFillRect(hPS, &vRect,  GetBackgroundColour().GetPixel());
-            if (m_dwExStyle)
+            if (::WinIsWindowVisible(GetHWND()) && m_bIsActivePage)
             {
-                LINEBUNDLE                      vLineBundle;
+                ::WinFillRect(hPS, &vRect,  GetBackgroundColour().GetPixel());
+                if (m_dwExStyle)
+                {
+                    LINEBUNDLE      vLineBundle;
 
-                vLineBundle.lColor     = 0x00000000; // Black
-                vLineBundle.usMixMode  = FM_OVERPAINT;
-                vLineBundle.fxWidth    = 1;
-                vLineBundle.lGeomWidth = 1;
-                vLineBundle.usType     = LINETYPE_SOLID;
-                vLineBundle.usEnd      = 0;
-                vLineBundle.usJoin     = 0;
-                ::GpiSetAttrs( hPS
-                              ,PRIM_LINE
-                              ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
-                              ,0L
-                              ,&vLineBundle
-                             );
-                ::WinQueryWindowRect(GetHwnd(), &vRect);
-                wxDrawBorder( hPS
-                             ,vRect
-                             ,m_dwExStyle
-                            );
+                    vLineBundle.lColor     = 0x00000000; // Black
+                    vLineBundle.usMixMode  = FM_OVERPAINT;
+                    vLineBundle.fxWidth    = 1;
+                    vLineBundle.lGeomWidth = 1;
+                    vLineBundle.usType     = LINETYPE_SOLID;
+                    vLineBundle.usEnd      = 0;
+                    vLineBundle.usJoin     = 0;
+                    ::GpiSetAttrs( hPS
+                                  ,PRIM_LINE
+                                  ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                                  ,0L
+                                  ,&vLineBundle
+                                 );
+                    ::WinQueryWindowRect(GetHwnd(), &vRect);
+                    wxDrawBorder( hPS
+                                 ,vRect
+                                 ,m_dwExStyle
+                                );
+                }
             }
-            ::WinEndPaint(hPS);
         }
+        ::WinEndPaint(hPS);
         bProcessed = TRUE;
     }
+    else if (!bProcessed &&
+             IsKindOf(CLASSINFO(wxPanel))
+            )
+    {
+        //
+        // Panel with children, usually fills a frame client so no borders.
+        //
+        HPS                         hPS;
+        RECTL                       vRect;
+        wxFrame*                    pFrame;
+        wxWindow*                   pParent;
 
+        hPS = ::WinBeginPaint( GetHwnd()
+                              ,NULLHANDLE
+                              ,&vRect
+                             );
+        if(hPS)
+        {
+            ::GpiCreateLogColorTable( hPS
+                                     ,0L
+                                     ,LCOLF_CONSECRGB
+                                     ,0L
+                                     ,(LONG)wxTheColourDatabase->m_nSize
+                                     ,(PLONG)wxTheColourDatabase->m_palTable
+                                    );
+            ::GpiCreateLogColorTable( hPS
+                                     ,0L
+                                     ,LCOLF_RGB
+                                     ,0L
+                                     ,0L
+                                     ,NULL
+                                    );
+
+            if (::WinIsWindowVisible(GetHWND()) && m_bIsActivePage)
+                ::WinFillRect(hPS, &vRect,  GetBackgroundColour().GetPixel());
+        }
+        ::WinEndPaint(hPS);
+        bProcessed = TRUE;
+    }
     return bProcessed;
 } // end of wxWindowOS2::HandlePaint
 
@@ -4300,62 +4459,69 @@ void wxWindowOS2::MoveChildren(
   int                               nDiff
 )
 {
-    SWP                                 vSwp;
-
-    for (wxWindowList::Node* pNode = GetChildren().GetFirst();
-         pNode;
-         pNode = pNode->GetNext())
+    if (GetAutoLayout())
     {
-        wxWindow*                   pWin = pNode->GetData();
+        Layout();
+    }
+    else
+    {
+        SWP                         vSwp;
 
-        ::WinQueryWindowPos( GetHwndOf(pWin)
-                            ,&vSwp
-                           );
-        if (pWin->IsKindOf(CLASSINFO(wxControl)))
+        for (wxWindowList::Node* pNode = GetChildren().GetFirst();
+             pNode;
+             pNode = pNode->GetNext())
         {
-            wxControl*          pCtrl;
+            wxWindow*               pWin = pNode->GetData();
 
-            //
-            // Must deal with controls that have margins like ENTRYFIELD.  The SWP
-            // struct of such a control will have and origin offset from its intended
-            // position by the width of the margins.
-            //
-            pCtrl = wxDynamicCast(pWin, wxControl);
-            vSwp.y -= pCtrl->GetYComp();
-            vSwp.x -= pCtrl->GetXComp();
-        }
-        ::WinSetWindowPos( GetHwndOf(pWin)
-                          ,HWND_TOP
-                          ,vSwp.x
-                          ,vSwp.y - nDiff
-                          ,vSwp.cx
-                          ,vSwp.cy
-                          ,SWP_MOVE | SWP_SHOW | SWP_ZORDER
-                         );
-        ::WinQueryWindowPos(GetHwndOf(pWin), pWin->GetSwp());
-        if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))
-        {
-            wxRadioBox*     pRadioBox;
+            ::WinQueryWindowPos( GetHwndOf(pWin)
+                                ,&vSwp
+                               );
+            if (pWin->IsKindOf(CLASSINFO(wxControl)))
+            {
+                wxControl*          pCtrl;
 
-            pRadioBox = wxDynamicCast(pWin, wxRadioBox);
-            pRadioBox->AdjustButtons( (int)vSwp.x
-                                     ,(int)vSwp.y - nDiff
-                                     ,(int)vSwp.cx
-                                     ,(int)vSwp.cy
-                                     ,pRadioBox->GetSizeFlags()
-                                    );
-        }
-        if (pWin->IsKindOf(CLASSINFO(wxSlider)))
-        {
-            wxSlider*           pSlider;
+                //
+                // Must deal with controls that have margins like ENTRYFIELD.  The SWP
+                // struct of such a control will have and origin offset from its intended
+                // position by the width of the margins.
+                //
+                pCtrl = wxDynamicCast(pWin, wxControl);
+                vSwp.y -= pCtrl->GetYComp();
+                vSwp.x -= pCtrl->GetXComp();
+            }
+            ::WinSetWindowPos( GetHwndOf(pWin)
+                              ,HWND_TOP
+                              ,vSwp.x
+                              ,vSwp.y - nDiff
+                              ,vSwp.cx
+                              ,vSwp.cy
+                              ,SWP_MOVE | SWP_SHOW | SWP_ZORDER
+                             );
+            ::WinQueryWindowPos(GetHwndOf(pWin), pWin->GetSwp());
+            if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))
+            {
+                wxRadioBox*     pRadioBox;
 
-            pSlider = wxDynamicCast(pWin, wxSlider);
-            pSlider->AdjustSubControls( (int)vSwp.x
-                                       ,(int)vSwp.y - nDiff
-                                       ,(int)vSwp.cx
-                                       ,(int)vSwp.cy
-                                       ,(int)pSlider->GetSizeFlags()
-                                      );
+                pRadioBox = wxDynamicCast(pWin, wxRadioBox);
+                pRadioBox->AdjustButtons( (int)vSwp.x
+                                         ,(int)vSwp.y - nDiff
+                                         ,(int)vSwp.cx
+                                         ,(int)vSwp.cy
+                                         ,pRadioBox->GetSizeFlags()
+                                        );
+            }
+            if (pWin->IsKindOf(CLASSINFO(wxSlider)))
+            {
+                wxSlider*           pSlider;
+
+                pSlider = wxDynamicCast(pWin, wxSlider);
+                pSlider->AdjustSubControls( (int)vSwp.x
+                                           ,(int)vSwp.y - nDiff
+                                           ,(int)vSwp.cx
+                                           ,(int)vSwp.cy
+                                           ,(int)pSlider->GetSizeFlags()
+                                          );
+            }
         }
     }
     Refresh();

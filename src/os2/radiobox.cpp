@@ -36,13 +36,22 @@ MRESULT EXPENTRY wxRadioBtnWndProc( HWND hWnd
                                    ,MPARAM wParam
                                    ,MPARAM lParam
                                   );
+MRESULT EXPENTRY wxRadioBoxWndProc( HWND   hWnd
+                                   ,UINT   uMessage
+                                   ,MPARAM wParam
+                                   ,MPARAM lParam
+                                  );
 
 // ---------------------------------------------------------------------------
 // global vars
 // ---------------------------------------------------------------------------
 
 // the pointer to standard radio button wnd proc
+extern void  wxAssociateWinWithHandle( HWND         hWnd
+                                      ,wxWindowOS2* pWin
+                                     );
 static WXFARPROC                    fnWndProcRadioBtn = NULL;
+static WXFARPROC                    fnWndProcRadioBox = NULL;
 
 // ===========================================================================
 // implementation
@@ -260,20 +269,10 @@ bool wxRadioBox::Create(
 , const wxString&                   rsName
 )
 {
-    //
-    // System fonts are too big in OS/2 and they are blue
-    // We want smaller fonts and black by default.
-    //
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
     wxColour                        vColour;
     LONG                            lColor;
 
     vColour.Set(wxString("BLACK"));
-    lColor = (LONG)vColour.GetPixel();
     m_backgroundColour = pParent->GetBackgroundColour();
     m_nSelectedButton = -1;
     m_nNoItems = 0;
@@ -296,17 +295,14 @@ bool wxRadioBox::Create(
                       ))
         return FALSE;
     if (!OS2CreateControl( "STATIC"
-#if RADIOBTN_PARENT_IS_RADIOBOX
-                          ,SS_GROUPBOX | WS_GROUP | WS_CLIPCHILDREN
-#else
-                          ,SS_GROUPBOX | WS_GROUP | WS_CLIPSIBLINGS
-#endif
+                          ,SS_GROUPBOX
                           ,rPos
                           ,rSize
                           ,rsTitle
                          ))
         return FALSE;
 
+    wxAssociateWinWithHandle(m_hWnd, this);
 #if RADIOBTN_PARENT_IS_RADIOBOX
     HWND                            hWndParent = GetHwnd();
 #else
@@ -322,11 +318,6 @@ bool wxRadioBox::Create(
     m_ahRadioButtons = new WXHWND[nNum];
     m_pnRadioWidth   = new int[nNum];
     m_pnRadioHeight  = new int[nNum];
-
-    if (pTextFont->Ok())
-    {
-        hFont = pTextFont->GetResourceHandle();
-    }
 
     for (int i = 0; i < nNum; i++)
     {
@@ -368,8 +359,9 @@ bool wxRadioBox::Create(
         }
         m_ahRadioButtons[i] = (WXHWND)hWndBtn;
         SubclassRadioButton((WXHWND)hWndBtn);
+        wxAssociateWinWithHandle(hWndBtn, this);
         wxOS2SetFont( hWndBtn
-                     ,*pTextFont
+                     ,*wxSMALL_FONT
                     );
         ::WinSetWindowULong(hWndBtn, QWL_USER, (ULONG)this);
         m_aSubControls.Add(nNewId);
@@ -389,10 +381,19 @@ bool wxRadioBox::Create(
                              ,NULL
                              ,NULL
                             );
-    SetFont(*pTextFont);
+    SetFont(*wxSMALL_FONT);
+    fnWndProcRadioBox = (WXFARPROC)::WinSubclassWindow( GetHwnd()
+                                                       ,(PFNWP)wxRadioBoxWndProc
+                                                      );
+    ::WinSetWindowULong(GetHwnd(), QWL_USER, (ULONG)this);
     lColor = (LONG)vColour.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_FOREGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    ::WinSetPresParam( m_hWnd
+                      ,PP_BORDERDARKCOLOR
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
@@ -400,6 +401,11 @@ bool wxRadioBox::Create(
 
     ::WinSetPresParam( m_hWnd
                       ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    ::WinSetPresParam( m_hWnd
+                      ,PP_BORDERLIGHTCOLOR
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
@@ -411,7 +417,6 @@ bool wxRadioBox::Create(
             ,rSize.x
             ,rSize.y
            );
-    delete pTextFont;
     return TRUE;
 } // end of wxRadioBox::Create
 
@@ -969,10 +974,8 @@ bool wxRadioBox::OS2Command(
         if (nSelectedButton == -1)
         {
             //
-            // Just ignore it - due to a hack with WM_NCHITTEST handling in our
-            // wnd proc, we can receive dummy click messages when we click near
-            // the radiobox edge (this is ugly but Julian wouldn't let me get
-            // rid of this...)
+            // Just ignore it
+            //
             return FALSE;
         }
         if (nSelectedButton != m_nSelectedButton)
@@ -1212,4 +1215,19 @@ MRESULT wxRadioBtnWndProc(
                              ,(MPARAM)lParam
                             );
 } // end of wxRadioBtnWndProc
+
+MRESULT EXPENTRY wxRadioBoxWndProc(
+  HWND                              hWnd
+, UINT                              uMessage
+, MPARAM                            wParam
+, MPARAM                            lParam
+)
+{
+    return (fnWndProcRadioBox( hWnd
+                              ,(ULONG)uMessage
+                              ,(MPARAM)wParam
+                              ,(MPARAM)lParam
+                             )
+           );
+} // end of wxRadioBoxWndProc
 

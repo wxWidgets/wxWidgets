@@ -227,6 +227,10 @@ public:
     void OnIdle(wxIdleEvent& rEvent);
 
 public:
+    // For hidden notebook pages, always TRUE for everything else
+    bool IsActivePage(void) const { return m_bIsActivePage; }
+    void SetActivePage(bool bActive) { m_bIsActivePage = bActive; }
+
     // For implementation purposes - sometimes decorations make the client area
     // smaller
     virtual wxPoint GetClientAreaOrigin(void) const;
@@ -607,6 +611,7 @@ private:
     HWND                            m_hWndScrollBarHorz;
     HWND                            m_hWndScrollBarVert;
     SWP                             m_vWinSwp;
+    bool                            m_bIsActivePage;
 
     // Virtual function hiding supression
     inline virtual bool Reparent(wxWindowBase* pNewParent)

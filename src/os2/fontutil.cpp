@@ -640,12 +640,12 @@ void wxOS2SelectMatchingFontByName(
     //
     pFattrs->usRecordLength  = sizeof(FATTRS);              // Sets size of structure
     pFattrs->lMatch          = pFM[nIndex].lMatch;          // Force match
-    pFattrs->idRegistry      = 0;                           // Registry
-    pFattrs->usCodePage      = 0;                           // Match proper CodePage
-    pFattrs->fsFontUse       = 0;                           // Use only outline fonts
-    pFattrs->fsType          = 0;                           // Use only outline fonts
-    pFattrs->lMaxBaselineExt = 0;                           // Use only outline fonts
-    pFattrs->lAveCharWidth   = 0;                           // Use only outline fonts
+    pFattrs->idRegistry      = 0;
+    pFattrs->usCodePage      = 0;
+    pFattrs->fsFontUse       = 0;
+    pFattrs->fsType          = 0;
+    pFattrs->lMaxBaselineExt = 0;
+    pFattrs->lAveCharWidth   = 0;
     wxStrcpy(pFattrs->szFacename, pFM[nIndex].szFacename);
     if (pFont->GetWeight() == wxNORMAL)
         pFattrs->fsSelection = 0;

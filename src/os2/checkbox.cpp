@@ -29,6 +29,10 @@
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 
+extern void  wxAssociateWinWithHandle( HWND         hWnd
+                                      ,wxWindowOS2* pWin
+                                     );
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -64,6 +68,9 @@ bool wxCheckBox::Create(
 , const wxString&                   rsName
 )
 {
+    LONG                            lColor;
+    bool                            bOk;
+
     if (!CreateControl( pParent
                        ,vId
                        ,rPos
@@ -76,17 +83,27 @@ bool wxCheckBox::Create(
                       ))
         return FALSE;
 
+
     long                            osStyle = BS_AUTOCHECKBOX |
                                               WS_TABSTOP      |
                                               WS_VISIBLE;
 
-    return OS2CreateControl( wxT("BUTTON")
-                            ,osStyle
-                            ,rPos
-                            ,rSize
-                            ,rsLabel
-                            ,0
-                           );
+    bOk = OS2CreateControl( wxT("BUTTON")
+                           ,osStyle
+                           ,rPos
+                           ,rSize
+                           ,rsLabel
+                           ,0
+                          );
+    m_backgroundColour = pParent->GetBackgroundColour();
+    lColor = (LONG)m_backgroundColour.GetPixel();
+    ::WinSetPresParam( m_hWnd
+                      ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    wxAssociateWinWithHandle(m_hWnd, this);
+    return bOk;
 } // end of wxCheckBox::Create
 
 void wxCheckBox::SetLabel(

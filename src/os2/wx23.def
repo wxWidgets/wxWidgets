@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\lib\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -13638,8 +13638,6 @@ EXPORTS
       DeleteAllPages__10wxNotebookFv
       ;wxNotebook::SetPageText(int,const wxString&)
       SetPageText__10wxNotebookFiRC8wxString
-      ;wxNotebook::AdvanceSelection(unsigned long)
-      AdvanceSelection__10wxNotebookFUl
       wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
       ;wxNotebook::ChangePage(int,int)
       ChangePage__10wxNotebookFiT1
@@ -13649,6 +13647,8 @@ EXPORTS
       SetPageSize__10wxNotebookFRC6wxSize
       ;wxNotebook::AddPage(wxWindow*,const wxString&,unsigned long,int)
       AddPage__10wxNotebookFP8wxWindowRC8wxStringUli
+      ;wxNotebook::OS2GetStyle(long,unsigned long*) const
+      OS2GetStyle__10wxNotebookCFlPUl
       ;wxNotebook::OnSize(wxSizeEvent&)
       OnSize__10wxNotebookFR11wxSizeEvent
       ;wxNotebook::SetSelection(int)
@@ -13657,8 +13657,6 @@ EXPORTS
       SetPageImage__10wxNotebookFiT1
       ;wxNotebook::DoPhase(int)
       DoPhase__10wxNotebookFi
-      ;wxNotebook::DeletePage(int)
-      DeletePage__10wxNotebookFi
       ;wxNotebook::GetPageCount() const
       GetPageCount__10wxNotebookCFv
       ;wxNotebook::wxNotebook(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
@@ -13679,8 +13677,6 @@ EXPORTS
       wxConstructorForwxNotebook__Fv
       ;wxConstructorForwxNotebookEvent()
       wxConstructorForwxNotebookEvent__Fv
-      ;wxNotebook::OS2OnNotify(int,void*,void**)
-      OS2OnNotify__10wxNotebookFiPvPPv
       ;wxNotebook::Init()
       Init__10wxNotebookFv
       ;wxNotebook::sm_classwxNotebook
@@ -13688,17 +13684,17 @@ EXPORTS
       wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
       ;wxNotebook::sm_eventTable
       sm_eventTable__10wxNotebook
+      ;wxNotebook::OS2OnScroll(int,unsigned short,unsigned short,unsigned long)
+      OS2OnScroll__10wxNotebookFiUsT2Ul
       __vft10wxNotebook8wxObject
       ;wxNotebook::GetPageImage(int) const
       GetPageImage__10wxNotebookCFi
-      ;wxNotebook::RemovePage(int)
-      RemovePage__10wxNotebookFi
       ;wxNotebook::InsertPage(int,wxWindow*,const wxString&,unsigned long,int)
       InsertPage__10wxNotebookFiP8wxWindowRC8wxStringUlT1
+      ;wxNotebook::DoRemovePage(int)
+      DoRemovePage__10wxNotebookFi
       ;wxNotebook::GetEventTable() const
       GetEventTable__10wxNotebookCFv
-      ;wxNotebook::~wxNotebook()
-      __dt__10wxNotebookFv
       ;wxNotebook::GetRowCount() const
       GetRowCount__10wxNotebookCFv
       ;wxNotebook::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
@@ -13890,6 +13886,7 @@ EXPORTS
       GetRowCount__10wxRadioBoxCFv
       ;wxRadioBox::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,int,const wxString*,int,long,const wxValidator&,const wxString&)
       Create__10wxRadioBoxFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizeT2PC8wxStringT2lRC11wxValidatorT3
+      wxRadioBoxWndProc
       ;wxRadioBox::FindString(const wxString&) const
       FindString__10wxRadioBoxCFRC8wxString
       __vft10wxRadioBox8wxObject

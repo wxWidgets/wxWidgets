@@ -8,155 +8,202 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_NOTEBOOK_H_
-#define _WX_NOTEBOOK_H_
+#ifndef _NOTEBOOK_H
+#define _NOTEBOOK_H
+
+#if wxUSE_NOTEBOOK
 
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/dynarray.h"
-#include "wx/string.h"
-#include "wx/notebook.h"
-
-// ----------------------------------------------------------------------------
-// types
-// ----------------------------------------------------------------------------
-
-// fwd declarations
-class WXDLLEXPORT wxImageList;
-class WXDLLEXPORT wxWindow;
-
-// array of notebook pages
-WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayNBPages);
+#include "wx/control.h"
 
 // ----------------------------------------------------------------------------
 // wxNotebook
 // ----------------------------------------------------------------------------
 
-// FIXME this class should really derive from wxTabCtrl, but the interface is not
-//       exactly the same, so I can't do it right now and instead we reimplement
-//       part of wxTabCtrl here
 class WXDLLEXPORT wxNotebook : public wxNotebookBase
 {
 public:
-  // ctors
-  // -----
-    // default for dynamic class
-  wxNotebook();
-    // the same arguments as for wxControl (@@@ any special styles?)
-  wxNotebook(wxWindow *parent,
-             wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxString& name = "notebook");
-    // Create() function
-  bool Create(wxWindow *parent,
-              wxWindowID id,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long style = 0,
-              const wxString& name = "notebook");
-    // dtor
-  ~wxNotebook();
+    //
+    // Ctors
+    // -----
+    // Default for dynamic class
+    //
+    wxNotebook();
 
-  // accessors
-  // ---------
-    // get number of pages in the dialog
-  int GetPageCount() const;
+    //
+    // the same arguments as for wxControl
+    //
+    wxNotebook( wxWindow*       pParent
+               ,wxWindowID      vId
+               ,const wxPoint&  rPos = wxDefaultPosition
+               ,const wxSize&   rSize = wxDefaultSize
+               ,long            lStyle = 0
+               ,const wxString& rsName = "notebook"
+              );
 
-    // set the currently selected page, return the index of the previously
+    bool Create( wxWindow*       pParent
+                ,wxWindowID      vId
+                ,const wxPoint&  rPos = wxDefaultPosition
+                ,const wxSize&   rSize = wxDefaultSize
+                ,long            lStyle = 0
+                ,const wxString& rsName = "notebook"
+               );
+
+    //
+    // Accessors
+    // ---------
+    // Get number of pages in the dialog
+    //
+           int      GetPageCount(void) const;
+
+    //
+    // Set the currently selected page, return the index of the previously
     // selected one (or -1 on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
-  int SetSelection(int nPage);
-    // cycle thru the tabs
-  void AdvanceSelection(bool bForward = TRUE);
-    // get the currently selected page
-  int GetSelection() const { return m_nSelection; }
+    //
+           int      SetSelection(int nPage);
 
-    // set/get the title of a page
-  bool SetPageText(int nPage, const wxString& strText);
-  wxString GetPageText(int nPage) const;
+    //
+    // Get the currently selected page
+    //
+    inline int      GetSelection(void) const { return m_nSelection; }
 
-  // image list stuff: each page may have an image associated with it. All
-  // the images belong to an image list, so you have to
-  // 1) create an image list
-  // 2) associate it with the notebook
-  // 3) set for each page it's image
+    //
+    // Set/Get the title of a page
+    //
+           bool     SetPageText( int             nPage
+                                ,const wxString& sStrText
+                               );
+           wxString GetPageText(int nPage) const;
+
+    //
+    // Image list stuff: each page may have an image associated with it. All
+    // the images belong to an image list, so you have to
+    // 1) create an image list
+    // 2) associate it with the notebook
+    // 3) set for each page it's image
     // associate image list with a control
-  void SetImageList(wxImageList* imageList);
-    // get pointer (may be NULL) to the associated image list
-  wxImageList* GetImageList() const { return m_pImageList; }
+    //
+           void     SetImageList(wxImageList* pImageList);
 
-    // sets/returns item's image index in the current image list
-  int  GetPageImage(int nPage) const;
-  bool SetPageImage(int nPage, int nImage);
+    //
+    // Sets/returns item's image index in the current image list
+    //
+           int      GetPageImage(int nPage) const;
+           bool     SetPageImage( int nPage
+                                 ,int nImage
+                                );
 
-    // currently it's always 1 because wxGTK doesn't support multi-row
+    //
+    // Currently it's always 1 because wxGTK doesn't support multi-row
     // tab controls
-  int GetRowCount() const;
+    //
+           int      GetRowCount(void) const;
 
-  // control the appearance of the notebook pages
+    //
+    // control the appearance of the notebook pages
     // set the size (the same for all pages)
-  void SetPageSize(const wxSize& size);
-    // set the padding between tabs (in pixels)
-  void SetPadding(const wxSize& padding);
+    //
+           void     SetPageSize(const wxSize& rSize);
 
-  // operations
-  // ----------
-    // remove one page from the notebook
-  bool DeletePage(int nPage);
-    // remove one page from the notebook, without deleting
-  bool RemovePage(int nPage);
-    // remove all pages
-  bool DeleteAllPages();
-    // adds a new page to the notebook (it will be deleted ny the notebook,
+    //
+    // Set the padding between tabs (in pixels)
+    //
+           void     SetPadding(const wxSize& rPadding);
+
+    //
+    // Operations
+    // ----------
+    // Remove all pages
+    //
+           bool     DeleteAllPages(void);
+
+    //
+    // Adds a new page to the notebook (it will be deleted ny the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
-  bool AddPage(wxNotebookPage *pPage,
-               const wxString& strText,
-               bool bSelect = FALSE,
-               int imageId = -1);
-    // the same as AddPage(), but adds it at the specified position
-  bool InsertPage(int nPage,
-                  wxNotebookPage *pPage,
-                  const wxString& strText,
-                  bool bSelect = FALSE,
-                  int imageId = -1);
-    // get the panel which represents the given page
-  wxNotebookPage *GetPage(int nPage) { return m_aPages[nPage]; }
+    //
+           bool     AddPage( wxNotebookPage* pPage
+                            ,const wxString& rsStrText
+                            ,bool            bSelect = FALSE
+                            ,int             nImageId = -1
+                           );
 
+    //
+    // The same as AddPage(), but adds it at the specified position
+    //
+           bool     InsertPage( int nPage
+                               ,wxNotebookPage* pPage
+                               ,const wxString& rsStrText
+                               ,bool            bSelect = FALSE
+                               ,int             nImageId = -1
+                              );
+
+    //
     // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
     // style.
-  void SetTabSize(const wxSize& sz);
+    //
+           void     SetTabSize(const wxSize& rSize);
 
-  // callbacks
-  // ---------
-  void OnSize(wxSizeEvent& event);
-  void OnSelChange(wxNotebookEvent& event);
-  void OnSetFocus(wxFocusEvent& event);
-  void OnNavigationKey(wxNavigationKeyEvent& event);
+    //
+    // Callbacks
+    // ---------
+    //
+    void OnSize(wxSizeEvent& rEvent);
+    void OnSelChange(wxNotebookEvent& rEvent);
+    void OnSetFocus(wxFocusEvent& rEvent);
+    void OnNavigationKey(wxNavigationKeyEvent& rEvent);
 
-  // base class virtuals
-  // -------------------
-  virtual bool OS2OnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-  virtual void SetConstraintSizes(bool recurse = TRUE);
-  virtual bool DoPhase(int nPhase);
+    //
+    // Base class virtuals
+    // -------------------
+    //
+    virtual bool OS2OnScroll( int    nOrientation
+                             ,WXWORD wSBCode
+                             ,WXWORD wPos
+                             ,WXHWND hControl
+                            );
+    virtual void SetConstraintSizes(bool bRecurse = TRUE);
+    virtual bool DoPhase(int nPhase);
 
 protected:
-  // common part of all ctors
-  void Init();
+    //
+    // Common part of all ctors
+    //
+    void                    Init(void);
 
-  // helper functions
-  void ChangePage(int nOldSel, int nSel); // change pages
+    //
+    // Translate wxWin styles to the PM ones
+    //
+    virtual WXDWORD         OS2GetStyle( long     lFlags
+                                        ,WXDWORD* pwExstyle = NULL
+                                       ) const;
 
-  wxImageList  *m_pImageList; // we can have an associated image list
-  wxArrayNBPages  m_aPages;     // array of pages
+    //
+    // Remove one page from the notebook, without deleting
+    //
+    virtual wxNotebookPage* DoRemovePage(int nPage);
 
-  int m_nSelection;           // the current selection (-1 if none)
+    //
+    // Helper functions
+    //
+            void            ChangePage( int nOldSel
+                                       ,int nSel
+                                      ); // change pages
 
-  DECLARE_DYNAMIC_CLASS(wxNotebook)
-  DECLARE_EVENT_TABLE()
-};
+    int                     m_nSelection; // The current selection (-1 if none)
 
-#endif // _WX_NOTEBOOK_H_
+private:
+    wxArrayLong                     m_alPageId;
+    int                             m_nTabSize; // holds the largest tab size
+
+    DECLARE_DYNAMIC_CLASS(wxNotebook)
+    DECLARE_EVENT_TABLE()
+}; // end of CLASS wxNotebook
+
+#endif // wxUSE_NOTEBOOK
+
+#endif // _NOTEBOOK_H
+
