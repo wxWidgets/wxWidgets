@@ -645,6 +645,10 @@ wxSize wxSizer::GetMinWindowSize( wxWindow *window )
                    minSize.y+size.y-client_size.y );
 }
 
+// TODO on mac we need a function that determines how much free space this
+// min size contains, in order to make sure that we have 20 pixels of free
+// space around the controls
+
 // Return a window size that will fit within the screens dimensions
 wxSize wxSizer::FitSize( wxWindow *window )
 {
