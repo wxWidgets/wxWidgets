@@ -1755,13 +1755,56 @@ this default behaviour.
 
 \membersection{::wxKill}\label{wxkill}
 
-\func{int}{wxKill}{\param{long}{ pid}, \param{int}{ sig}}
+\func{int}{wxKill}{\param{long}{ pid}, \param{int}{ sig = wxSIGTERM}, \param{wxKillError }{*rc = NULL}}
 
-Under Unix (the only supported platform), equivalent to the Unix kill function.
-Returns 0 on success, -1 on failure.
+Equivalent to the Unix kill function: send the given signal {\it sig} to the
+process with PID {\it pid}. The valud signal values are
 
-Tip: sending a signal of 0 to a process returns -1 if the process does not exist.
-It does not raise a signal in the receiving process.
+\begin{verbatim}
+enum wxSignal
+{
+    wxSIGNONE = 0,  // verify if the process exists under Unix
+    wxSIGHUP,
+    wxSIGINT,
+    wxSIGQUIT,
+    wxSIGILL,
+    wxSIGTRAP,
+    wxSIGABRT,
+    wxSIGEMT,
+    wxSIGFPE,
+    wxSIGKILL,      // forcefully kill, dangerous!
+    wxSIGBUS,
+    wxSIGSEGV,
+    wxSIGSYS,
+    wxSIGPIPE,
+    wxSIGALRM,
+    wxSIGTERM       // terminate the process gently
+};
+\end{verbatim}
+
+{\tt wxSIGNONE}, {\tt wxSIGKILL} and {\tt wxSIGTERM} have the same meaning
+under both Unix and Windows but all the other signals are equivalent to 
+{\tt wxSIGTERM} under Windows.
+
+Returns 0 on success, -1 on failure. If {\it rc} parameter is not NULL, it will
+be filled with an element of {\tt wxKillError} enum:
+
+\begin{verbatim}
+enum wxKillError
+{
+    wxKILL_OK,              // no error
+    wxKILL_BAD_SIGNAL,      // no such signal
+    wxKILL_ACCESS_DENIED,   // permission denied
+    wxKILL_NO_PROCESS,      // no such process
+    wxKILL_ERROR            // another, unspecified error
+};
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxProcess::Kill}{wxprocesskill},\rtfsp
+\helpref{wxProcess::Exists}{wxprocessexists},\rtfsp
+\helpref{Exec sample}{sampleexex}
 
 \wxheading{Include files}
 

@@ -9,6 +9,14 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "process.h"
 #endif
@@ -20,16 +28,24 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/defs.h"
-#endif
-
 #include "wx/process.h"
+
+// ----------------------------------------------------------------------------
+// event tables and such
+// ----------------------------------------------------------------------------
 
 DEFINE_EVENT_TYPE(wxEVT_END_PROCESS)
 
 IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
+
+// ============================================================================
+// wxProcess implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxProcess creation
+// ----------------------------------------------------------------------------
 
 void wxProcess::Init(wxEvtHandler *parent, int id, bool redirect)
 {
@@ -45,6 +61,10 @@ void wxProcess::Init(wxEvtHandler *parent, int id, bool redirect)
     m_outputStream = NULL;
 #endif // wxUSE_STREAMS
 }
+
+// ----------------------------------------------------------------------------
+// wxProcess termination
+// ----------------------------------------------------------------------------
 
 wxProcess::~wxProcess()
 {
@@ -70,6 +90,10 @@ void wxProcess::Detach()
     SetNextHandler(NULL);
 }
 
+// ----------------------------------------------------------------------------
+// process IO redirection
+// ----------------------------------------------------------------------------
+
 #if wxUSE_STREAMS
 
 void wxProcess::SetPipeStreams(wxInputStream *inputSstream,
@@ -82,3 +106,37 @@ void wxProcess::SetPipeStreams(wxInputStream *inputSstream,
 }
 
 #endif // wxUSE_STREAMS
+
+// ----------------------------------------------------------------------------
+// process killing
+// ----------------------------------------------------------------------------
+
+/* static */
+wxKillError wxProcess::Kill(int pid, wxSignal sig)
+{
+    wxKillError rc;
+    (void)wxKill(pid, sig, &rc);
+
+    return rc;
+}
+
+/* static */
+bool wxProcess::Exists(int pid)
+{
+    switch ( wxProcess::Kill(pid, wxSIGNONE) )
+    {
+        case wxKILL_OK:
+        case wxKILL_ACCESS_DENIED:
+            return TRUE;
+
+        default:
+        case wxKILL_ERROR:
+        case wxKILL_BAD_SIGNAL:
+            wxFAIL_MSG( _T("unexpected wxProcess::Kill() return code") );
+            // fall through
+
+        case wxKILL_NO_PROCESS:
+            return FALSE;
+    }
+}
+

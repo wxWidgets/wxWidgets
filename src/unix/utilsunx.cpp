@@ -135,9 +135,39 @@ void wxUsleep(unsigned long milliseconds)
 // process management
 // ----------------------------------------------------------------------------
 
-int wxKill(long pid, wxSignal sig)
+int wxKill(long pid, wxSignal sig, wxKillError *rc)
 {
-    return kill((pid_t)pid, (int)sig);
+    int err = kill((pid_t)pid, (int)sig);
+    if ( rc )
+    {
+        switch ( err )
+        {
+            case 0:
+                *rc = wxKILL_OK;
+                break;
+
+            case EINVAL:
+                *rc = wxKILL_BAD_SIGNAL;
+                break;
+
+            case EPERM:
+                *rc = wxKILL_ACCESS_DENIED;
+                break;
+
+            case ESRCH:
+                *rc = wxKILL_NO_PROCESS;
+                break;
+
+            default:
+                // this goes against Unix98 docs so log it
+                wxLogDebug(_T("unexpected kill(2) return value %d"), err);
+
+                // something else...
+                *rc = wxKILL_ERROR;
+        }
+    }
+
+    return err;
 }
 
 #define WXEXECUTE_NARGS   127

@@ -180,8 +180,22 @@ enum wxSignal
     // further signals are different in meaning between different Unix systems
 };
 
-// the argument is ignored under Windows - the process is always killed
-WXDLLEXPORT int wxKill(long pid, wxSignal sig = wxSIGTERM);
+enum wxKillError
+{
+    wxKILL_OK,              // no error
+    wxKILL_BAD_SIGNAL,      // no such signal
+    wxKILL_ACCESS_DENIED,   // permission denied
+    wxKILL_NO_PROCESS,      // no such process
+    wxKILL_ERROR            // another, unspecified error
+};
+
+// send the given signal to the process (only NONE and KILL are supported under
+// Windows, all others mean TERM), return 0 if ok and -1 on error
+//
+// return detailed error in rc if not NULL
+WXDLLEXPORT int wxKill(long pid,
+                       wxSignal sig = wxSIGTERM,
+                       wxKillError *rc = NULL);
 
 // Execute a command in an interactive shell window (always synchronously)
 // If no command then just the shell

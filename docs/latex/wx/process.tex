@@ -108,6 +108,68 @@ It returns an output stream correspoding to the input stream of the subprocess.
 If it is NULL, you have not turned on the redirection.
 See \helpref{wxProcess::Redirect}{wxprocessredirect}.
 
+\membersection{wxProcess::Kill}\label{wxprocesskill}
+
+\func{static wxKillError}{Kill}{\param{int}{ pid}, \param{wxSignal}{ signal = wxSIGNONE}}
+
+Send the specified signal to the given process. Possible signal values are:
+
+\begin{verbatim}
+enum wxSignal
+{
+    wxSIGNONE = 0,  // verify if the process exists under Unix
+    wxSIGHUP,
+    wxSIGINT,
+    wxSIGQUIT,
+    wxSIGILL,
+    wxSIGTRAP,
+    wxSIGABRT,
+    wxSIGEMT,
+    wxSIGFPE,
+    wxSIGKILL,      // forcefully kill, dangerous!
+    wxSIGBUS,
+    wxSIGSEGV,
+    wxSIGSYS,
+    wxSIGPIPE,
+    wxSIGALRM,
+    wxSIGTERM       // terminate the process gently
+};
+\end{verbatim}
+
+{\tt wxSIGNONE}, {\tt wxSIGKILL} and {\tt wxSIGTERM} have the same meaning
+under both Unix and Windows but all the other signals are equivalent to 
+{\tt wxSIGTERM} under Windows.
+
+Returns the element of {\tt wxKillError} enum:
+
+\begin{verbatim}
+enum wxKillError
+{
+    wxKILL_OK,              // no error
+    wxKILL_BAD_SIGNAL,      // no such signal
+    wxKILL_ACCESS_DENIED,   // permission denied
+    wxKILL_NO_PROCESS,      // no such process
+    wxKILL_ERROR            // another, unspecified error
+};
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxProcess::Exists}{wxprocessexists},\rtfsp
+\helpref{wxKill}{wxkill},\rtfsp
+\helpref{Exec sample}{sampleexex}
+
+\membersection{wxProcess::Kill}\label{wxprocessexists}
+
+\func{static bool}{Exists}{\param{int}{ pid}}
+
+Returns {\tt TRUE} if the given process exists in the system.
+
+\wxheading{See also}
+
+\helpref{wxProcess::Kill}{wxprocesskill},\rtfsp
+\helpref{Exec sample}{sampleexex}
+
 \membersection{wxProcess::OnTerminate}\label{wxprocessonterminate}
 
 \constfunc{void}{OnTerminate}{\param{int}{ pid}, \param{int}{ status}}

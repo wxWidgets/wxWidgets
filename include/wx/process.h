@@ -16,13 +16,13 @@
     #pragma interface "process.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
 #include "wx/event.h"
 
 #if wxUSE_STREAMS
     #include "wx/stream.h"
 #endif
+
+#include "wx/utils.h"       // for wxSignal
 
 // ----------------------------------------------------------------------------
 // A wxProcess object should be passed to wxExecute - than its OnTerminate()
@@ -31,8 +31,6 @@
 
 class WXDLLEXPORT wxProcess : public wxEvtHandler
 {
-DECLARE_DYNAMIC_CLASS(wxProcess)
-
 public:
     wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = -1)
         { Init(parent, id, FALSE); }
@@ -69,6 +67,12 @@ public:
                         wxInputStream *errStream);
 #endif // wxUSE_STREAMS
 
+    // kill the process with the given PID
+    static wxKillError Kill(int pid, wxSignal sig = wxSIGTERM);
+
+    // test if the given process exists
+    static bool Exists(int pid);
+
 protected:
     void Init(wxEvtHandler *parent, int id, bool redirect);
 
@@ -81,6 +85,8 @@ protected:
 #endif // wxUSE_STREAMS
 
     bool m_redirect;
+
+    DECLARE_DYNAMIC_CLASS(wxProcess)
 };
 
 // ----------------------------------------------------------------------------

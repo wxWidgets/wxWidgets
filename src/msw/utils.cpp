@@ -513,65 +513,204 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
 // process management
 // ----------------------------------------------------------------------------
 
-int wxKill(long pid, wxSignal sig)
+#ifdef __WIN32__
+
+// structure used to pass parameters from wxKill() to wxEnumFindByPidProc()
+struct wxFindByPidParams
 {
-#ifndef __WIN32__
-    return -1;
-#else
-    // This in a work in progress. We need to eliminate the call to wxSleep,
-    // deal with child processes, and also test it :-)
-    HWND hHwnd;
-    HANDLE hProcess;
-    unsigned long code;
-    bool terminateSuccess = TRUE;
+    wxFindByPidParams() { hwnd = 0; pid = 0; }
 
-    hProcess = OpenProcess(PROCESS_TERMINATE | PROCESS_QUERY_INFORMATION,
-                           FALSE, (unsigned long)pid);
-    if (hProcess == NULL)
-        return -1;
+    // the HWND used to return the result
+    HWND hwnd;
 
-    if (sig == wxSIGKILL)
-        terminateSuccess = (TerminateProcess(hProcess, 0) != 0);
-    else if (sig != wxSIGNONE)
+    // the PID we're looking from
+    DWORD pid;
+};
+
+// wxKill helper: EnumWindows() callback which is used to find the first (top
+// level) window belonging to the given process
+BOOL CALLBACK wxEnumFindByPidProc(HWND hwnd, LPARAM lParam)
+{
+    DWORD pid;
+    (void)::GetWindowThreadProcessId(hwnd, &pid);
+
+    wxFindByPidParams *params = (wxFindByPidParams *)lParam;
+    if ( pid == params->pid )
     {
-        hHwnd = ::FindWindow(NULL, NULL);
-        while (hHwnd != 0)
+        // remember the window we found
+        params->hwnd = hwnd;
+
+        // return FALSE to stop the enumeration
+        return FALSE;
+    }
+
+    // continue enumeration
+    return TRUE;
+}
+
+#endif // __WIN32__
+
+int wxKill(long pid, wxSignal sig, wxKillError *krc)
+{
+#ifdef __WIN32__
+    // get the process handle to operate on
+    HANDLE hProcess = ::OpenProcess(SYNCHRONIZE |
+                                    PROCESS_TERMINATE |
+                                    PROCESS_QUERY_INFORMATION,
+                                    FALSE, // not inheritable
+                                    (DWORD)pid);
+    if ( hProcess == NULL )
+    {
+        if ( krc )
         {
-            if (::GetParent(hHwnd) == 0)
+            if ( ::GetLastError() == ERROR_ACCESS_DENIED )
             {
-                unsigned long testpid = 0;
-                GetWindowThreadProcessId(hHwnd, &testpid);
-                if ((unsigned long)pid == testpid)
+                *krc = wxKILL_ACCESS_DENIED;
+            }
+            else
+            {
+                *krc = wxKILL_NO_PROCESS;
+            }
+        }
+
+        return -1;
+    }
+
+    bool ok = TRUE;
+    switch ( sig )
+    {
+        case wxSIGKILL:
+            // kill the process forcefully returning -1 as error code
+            if ( !::TerminateProcess(hProcess, (UINT)-1) )
+            {
+                wxLogSysError(_("Failed to kill process %d"), pid);
+
+                if ( krc )
                 {
-                    PostMessage(hHwnd, WM_QUIT, 0, 0);
-                    // How to make this better?
-                    // If we don't wait, the return value is wrong.
-                    wxSleep(1);
-                    break;
+                    // this is not supposed to happen if we could open the
+                    // process
+                    *krc = wxKILL_ERROR;
+                }
+
+                ok = FALSE;
+            }
+            break;
+
+        case wxSIGNONE:
+            // do nothing, we just want to test for process existence
+            break;
+
+        default:
+            // any other signal means "terminate"
+            {
+                wxFindByPidParams params;
+                params.pid = (DWORD)pid;
+
+                // EnumWindows() has nice semantics: it returns 0 if it found
+                // something or if an error occured and non zero if it
+                // enumerated all the window
+                if ( !::EnumWindows(wxEnumFindByPidProc, (LPARAM)&params) )
+                {
+                    // did we find any window?
+                    if ( params.hwnd )
+                    {
+                        // tell the app to close
+                        //
+                        // NB: this is the harshest way, the app won't have
+                        //     opportunity to save any files, for example, but
+                        //     this is probably what we want here. If not we
+                        //     can also use SendMesageTimeout(WM_CLOSE)
+                        if ( !::PostMessage(params.hwnd, WM_QUIT, 0, 0) )
+                        {
+                            wxLogLastError(_T("PostMessage(WM_QUIT)"));
+                        }
+                    }
+                    else // it was an error then
+                    {
+                        wxLogLastError(_T("EnumWindows"));
+
+                        ok = FALSE;
+                    }
+                }
+                else // no windows for this PID
+                {
+                    if ( krc )
+                    {
+                        *krc = wxKILL_ERROR;
+                    }
+
+                    ok = FALSE;
                 }
             }
-            hHwnd = GetWindow(hHwnd, GW_HWNDNEXT);
+    }
+
+    // the return code
+    DWORD rc;
+
+    if ( ok )
+    {
+        // as we wait for a short time, we can use just WaitForSingleObject()
+        // and not MsgWaitForMultipleObjects()
+        switch ( ::WaitForSingleObject(hProcess, 500 /* msec */) )
+        {
+            case WAIT_OBJECT_0:
+                // process terminated
+                if ( !::GetExitCodeProcess(hProcess, &rc) )
+                {
+                    wxLogLastError(_T("GetExitCodeProcess"));
+                }
+                break;
+
+            default:
+                wxFAIL_MSG( _T("unexpected WaitForSingleObject() return") );
+                // fall through
+
+            case WAIT_FAILED:
+                wxLogLastError(_T("WaitForSingleObject"));
+                // fall through
+
+            case WAIT_TIMEOUT:
+                if ( krc )
+                {
+                    *krc = wxKILL_ERROR;
+                }
+
+                rc = STILL_ACTIVE;
+                break;
         }
     }
-
-    GetExitCodeProcess(hProcess, &code);
-    CloseHandle(hProcess);
-
-    if (sig == wxSIGNONE)
+    else // !ok
     {
-        if (code == STILL_ACTIVE)
-            return 0;
-        else
-            return -1;
+        // just to suppress the warnings about uninitialized variable
+        rc = 0;
     }
-    else
+
+    ::CloseHandle(hProcess);
+
+    // the return code is the same as from Unix kill(): 0 if killed
+    // successfully or -1 on error
+    if ( sig == wxSIGNONE )
     {
-        if (!terminateSuccess || code == STILL_ACTIVE)
-            return -1;
-        else
+        if ( ok && rc == STILL_ACTIVE )
+        {
+            // there is such process => success
             return 0;
+        }
     }
-#endif
+    else // not SIGNONE
+    {
+        if ( ok && rc != STILL_ACTIVE )
+        {
+            // killed => success
+            return 0;
+        }
+    }
+#else // Win15
+    wxFAIL_MSG( _T("not implemented") );
+#endif // Win32/Win16
+
+    // error
+    return -1;
 }
 
 // Execute a program in an Interactive Shell
